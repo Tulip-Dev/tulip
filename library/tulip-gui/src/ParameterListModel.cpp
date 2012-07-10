@@ -41,7 +41,7 @@ bool ParameterListModel::ParamInfosSorter::operator()(ParameterListModel::ParamI
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph, QObject *parent)
   : TulipModel(parent), _graph(graph) {
   ParameterDescription param;
-  std::vector<ParamInfos> outParams;
+  QVector<ParamInfos> outParams;
   // first add in parameters
   forEach(param,params.getParameters()) {
     if (param.getDirection() != OUT_PARAM)
