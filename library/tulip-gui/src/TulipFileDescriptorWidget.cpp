@@ -33,7 +33,7 @@ TulipFileDescriptorWidget::TulipFileDescriptorWidget(QWidget* parent): QWidget(p
   layout()->setSpacing(0);
   layout()->setMargin(0);
   _display = new QLineEdit;
-  static_cast<QLineEdit*>(_display)->setReadOnly(true);
+  static_cast<QLineEdit*>(_display)->setReadOnly(false);
   layout()->addWidget(_display);
   QPushButton* browseBtn = new QPushButton(trUtf8("..."));
   layout()->addWidget(browseBtn);
