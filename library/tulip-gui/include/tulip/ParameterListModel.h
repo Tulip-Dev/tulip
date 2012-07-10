@@ -28,6 +28,7 @@ namespace tlp {
 
 class TLP_QT_SCOPE ParameterListModel : public TulipModel {
   struct ParamInfos {
+    inline ParamInfos() {}
     inline ParamInfos(bool m,const QString &n,const QString &d, const std::string& t): mandatory(m), name(n),desc(d), type(t) {}
     bool mandatory;
     QString name;
@@ -49,7 +50,7 @@ class TLP_QT_SCOPE ParameterListModel : public TulipModel {
     bool operator()(ParamInfos a, ParamInfos b);
   };
 
-  std::vector<ParamInfos> _params;
+  QVector<ParamInfos> _params;
   tlp::DataSet _data;
   tlp::Graph* _graph;
 
