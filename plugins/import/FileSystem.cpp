@@ -47,7 +47,7 @@ public:
   PLUGININFORMATIONS( "File System Directory", "Auber", "16/12/2002", "", "2.0", "Misc")
   FileSystem(tlp::PluginContext* context):ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
     _fileNames(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL),
-    _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL) {
+    _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL), _sizes(NULL) {
     addInParameter<std::string>("dir::directory", paramHelp[0],"");
   }
   ~FileSystem() {}
@@ -80,6 +80,7 @@ public:
     _owners = graph->getProperty<tlp::StringProperty>("Owner");
     _permissions = graph->getProperty<tlp::IntegerProperty>("Permission ID");
     _suffixes = graph->getProperty<tlp::StringProperty>("Suffix");
+    _sizes = graph->getProperty<tlp::IntegerProperty>("Size");
 
     tlp::node rootNode = addFileNode(rootInfo,graph);
 
@@ -132,6 +133,7 @@ private:
     _owners->setNodeValue(n,infos.owner().toStdString());
     _permissions->setNodeValue(n,(int)(infos.permissions()));
     _suffixes->setNodeValue(n,infos.suffix().toStdString());
+    _sizes->setNodeValue(n,infos.size());
     return n;
   }
 
@@ -148,6 +150,7 @@ private:
   tlp::StringProperty *_owners;
   tlp::IntegerProperty *_permissions;
   tlp::StringProperty *_suffixes;
+  tlp::IntegerProperty *_sizes;
 };
 /*@}*/
 PLUGIN(FileSystem)
