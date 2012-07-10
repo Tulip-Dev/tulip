@@ -43,5 +43,7 @@
         <file>ui/panel_button_checked_hover.png</file>
         <file>ui/panel_button_hover.png</file>
         <file>ui/panel_button_pressed.png</file>
+        <file>icons/32/undo.png</file>
+        <file>icons/32/redo.png</file>
     </qresource>
 </RCC>
