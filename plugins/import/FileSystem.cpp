@@ -86,14 +86,11 @@ public:
     if (!rootInfo.isDir())
       return true;
 
-    bool deleteProgress=false;
-
-    if (!pluginProgress) {
-      deleteProgress=true;
-      pluginProgress = new tlp::SimplePluginProgress;
+    if (pluginProgress != NULL) {
+      pluginProgress->progress(0,0);
+      pluginProgress->setComment((QObject::trUtf8("Importing ") + rootInfo.absoluteFilePath()).toStdString());
     }
 
-    pluginProgress->progress(0,100);
     QStack<QPair<QString,tlp::node> > fsStack;
     fsStack.push(QPair<QString,tlp::node>(rootInfo.absoluteFilePath(),rootNode));
 
@@ -101,15 +98,12 @@ public:
       QPair<QString,tlp::node> elem = fsStack.pop();
       QDir currentDir(QDir(elem.first));
 
-      pluginProgress->setComment(("Visiting " + currentDir.absolutePath()).toStdString());
-
       tlp::node parentNode(elem.second);
       QFileInfoList entries(currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
 
       int i=0;
 
       for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
-        pluginProgress->progress(i++,entries.size());
         QFileInfo fileInfos(*it);
         tlp::node fileNode=addFileNode(fileInfos, graph);
         graph->addEdge(parentNode,fileNode);
@@ -118,9 +112,6 @@ public:
           fsStack.push_back(QPair<QString,tlp::node>(fileInfos.absoluteFilePath(),fileNode));
       }
     }
-
-    if (deleteProgress)
-      delete pluginProgress;
 
     return true;
   }
