@@ -48,15 +48,14 @@ static QGLFormat GlInit() {
   tmpFormat.setOverlay(false);
   tmpFormat.setDepth(true);
   tmpFormat.setRgba(true);
-  tmpFormat.setAlpha(true);
-  tmpFormat.setOverlay(false);
+  tmpFormat.setAlpha(false);
   tmpFormat.setStereo(false);
   tmpFormat.setSampleBuffers(true);
   return tmpFormat;
 }
 
 GlMainWidgetGraphicsView::GlMainWidgetGraphicsView(QWidget *parent,GlMainWidget *glMainWidget) : QGraphicsView(new QGraphicsScene(), parent),
-  glMainWidget(glMainWidget), drawNeeded(true) {
+  glSceneItem(NULL), glMainWidget(glMainWidget), viewportWidet(NULL), drawNeeded(true) {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   viewportWidet = new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget());
   setViewport(viewportWidet);
