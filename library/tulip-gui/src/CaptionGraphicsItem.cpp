@@ -78,12 +78,15 @@ void CaptionGraphicsItem::constructConfigWidget() {
   QStringList properties;
   Iterator<PropertyInterface*>* itP=_view->graph()->getLocalObjectProperties();
 
+  int viewMetricIndex=-1;
   while(itP->hasNext()) {
     PropertyInterface *property=itP->next();
 
     if(property->getTypename()=="double") {
       if(property->getName().c_str() == selectedItem)
         index=properties.size();
+      if(property->getName()=="viewMetric")
+        viewMetricIndex=properties.size();
 
       properties << property->getName().c_str() ;
     }
@@ -91,8 +94,12 @@ void CaptionGraphicsItem::constructConfigWidget() {
 
   _confPropertySelectionWidget->addItems(properties);
 
-  if(index!=-1)
+  if(index!=-1){
     _confPropertySelectionWidget->setCurrentIndex(index);
+  }else{
+    if(viewMetricIndex!=-1)
+      _confPropertySelectionWidget->setCurrentIndex(viewMetricIndex);
+  }
 
   connect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
 }
