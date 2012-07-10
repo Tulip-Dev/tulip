@@ -109,7 +109,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
       return QString();
 
     if (index.column() == 0)
-      return QString(pi->getName().c_str());
+      return QString::fromUtf8(pi->getName().c_str());
     else if (index.column() == 1)
       return pi->getTypename().c_str();
     else if (index.column() == 2)
