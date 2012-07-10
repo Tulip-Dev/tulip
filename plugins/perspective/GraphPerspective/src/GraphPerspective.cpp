@@ -141,6 +141,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
+  currentGraphChanged(NULL);
   _ui->workspace->setSingleModeSwitch(_ui->singleModeButton);
   _ui->workspace->setSplitModeSwitch(_ui->splitModeButton);
   _ui->workspace->setSplit3ModeSwitch(_ui->split3ModeButton);
@@ -595,6 +596,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
+  _ui->actionExport->setEnabled(enabled);
 }
 
 void GraphPerspective::CSVImport() {
