@@ -35,12 +35,12 @@ QWidget* LineEditEditorCreator<T>::createWidget(QWidget *parent) const {
 template<typename T>
 void LineEditEditorCreator<T>::setEditorData(QWidget* editor, const QVariant &data,bool,tlp::Graph*) {
   typename T::RealType val = data.value<typename T::RealType>();
-  static_cast<QLineEdit*>(editor)->setText(T::toString(val).c_str());
+  static_cast<QLineEdit*>(editor)->setText(QString::fromUtf8(T::toString(val).c_str()));
 }
 
 template<typename T>
 QVariant LineEditEditorCreator<T>::editorData(QWidget* editor,tlp::Graph*) {
-  std::string strVal = static_cast<QLineEdit*>(editor)->text().toStdString();
+  std::string strVal = std::string(static_cast<QLineEdit*>(editor)->text().toUtf8().data());
   QVariant result;
   typename T::RealType val;
 
@@ -92,7 +92,7 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
   if (prop==NULL)
     return "";
 
-  return prop->getName().c_str();
+  return QString::fromUtf8(prop->getName().c_str());
 }
 
 template<typename ElementType>

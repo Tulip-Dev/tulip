@@ -259,7 +259,7 @@ int GraphHierarchiesModel::columnCount(const QModelIndex&) const {
 bool GraphHierarchiesModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (index.column() == NAME_SECTION) {
     Graph *graph = (Graph *)(index.internalPointer());
-    graph->setAttribute("name",value.toString().toStdString());
+    graph->setAttribute("name", std::string(value.toString().toUtf8().data()));
     return true;
   }
 
@@ -355,14 +355,14 @@ QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const
 
 QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
   std::string name;
-  graph->getAttribute<std::string>("name",name);
+  graph->getAttribute("name",name);
 
   if (name == "") {
     name = (trUtf8("graph_") + QString::number(graph->getId())).toStdString();
-    graph->setAttribute<std::string>("name",name);
+    graph->setAttribute("name",name);
   }
 
-  return name.c_str();
+  return QString::fromUtf8(name.c_str());
 }
 
 void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
