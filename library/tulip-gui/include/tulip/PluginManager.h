@@ -29,44 +29,46 @@ namespace tlp {
 
 class Plugin;
 
+struct TLP_QT_SCOPE PluginVersionInformations {
+  bool isValid;
+
+  QString libraryLocation;
+  QString author;
+  QString version;
+  QString icon;
+  QString description;
+  QString date;
+
+  QStringList dependencies;
+
+  PluginVersionInformations();
+  PluginVersionInformations(const PluginVersionInformations& copy);
+};
+
+struct TLP_QT_SCOPE PluginInformations {
+  QString name;
+  QString category;
+  PluginVersionInformations installedVersion;
+  PluginVersionInformations availableVersion;
+
+  PluginInformations();
+  PluginInformations(const PluginInformations& copy);
+
+  void fillLocalInfos(const tlp::Plugin*info);
+};
+
 class TLP_QT_SCOPE PluginManager {
   static QStringList _markedForInstallation;
 
 public:
   enum PluginLocation {
-    Remote = 0b01,
-    Local = 0b10
+    Remote = 0x01,
+    Local = 0x02
   };
   Q_DECLARE_FLAGS(PluginLocations, PluginLocation)
 
-  struct PluginVersionInformations {
-    bool isValid;
-
-    QString libraryLocation;
-    QString author;
-    QString version;
-    QString icon;
-    QString description;
-    QString date;
-
-    QStringList dependencies;
-
-    PluginVersionInformations();
-    PluginVersionInformations(const PluginVersionInformations& copy);
-  };
   typedef QList<PluginVersionInformations> PluginVersionInformationsList;
 
-  struct PluginInformations {
-    QString name;
-    QString category;
-    PluginVersionInformations installedVersion;
-    PluginVersionInformations availableVersion;
-
-    PluginInformations();
-    PluginInformations(const PluginInformations& copy);
-
-    void fillLocalInfos(const tlp::Plugin*info);
-  };
   typedef QList<PluginInformations> PluginInformationsList;
 
   static void addRemoteLocation(const QString& location);

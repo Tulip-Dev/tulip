@@ -16,7 +16,7 @@
 
 using namespace tlp;
 
-QDebug operator<<(QDebug dbg, const PluginManager::PluginVersionInformations &c) {
+QDebug operator<<(QDebug dbg, const PluginVersionInformations &c) {
   dbg.nospace() << "(author " << c.author << ") "
                 << "(version " << c.version << ") "
                 << "(icon " << c.icon << ") "
@@ -28,7 +28,7 @@ QDebug operator<<(QDebug dbg, const PluginManager::PluginVersionInformations &c)
   return dbg.space();
 }
 
-QDebug operator<<(QDebug dbg, const PluginManager::PluginInformations &c) {
+QDebug operator<<(QDebug dbg, const PluginInformations &c) {
   dbg.nospace() << "(name " << c.name << ") "
                 << "(category " << c.category << ") "
                 << "(installed " << c.installedVersion << ") "
@@ -105,11 +105,11 @@ public:
   }
 
   virtual void parseEndMap() {
-    PluginManager::PluginInformations infos;
+    PluginInformations infos;
     infos.name = _currentMap["name"];
     infos.category = _currentMap["category"];
 
-    PluginManager::PluginVersionInformations versionInfos;
+    PluginVersionInformations versionInfos;
     versionInfos.description = _currentMap["desc"];
     versionInfos.libraryLocation = _location;
     versionInfos.version = _currentMap["release"];
@@ -196,17 +196,17 @@ QStringList PluginManager::markedForRemoval() {
   return TulipSettings::instance().pluginsToRemove();
 }
 
-PluginManager::PluginInformations::PluginInformations() {
+PluginInformations::PluginInformations() {
 }
 
-PluginManager::PluginInformations::PluginInformations(const PluginManager::PluginInformations &copy) {
+PluginInformations::PluginInformations(const PluginInformations &copy) {
   name = copy.name;
   category = copy.category;
   installedVersion = copy.installedVersion;
   availableVersion = copy.availableVersion;
 }
 
-void PluginManager::PluginInformations::fillLocalInfos(const Plugin* info) {
+void PluginInformations::fillLocalInfos(const Plugin* info) {
   name = info->name().c_str();
   category = info->category().c_str();
   installedVersion.description = info->info().c_str();
@@ -225,10 +225,10 @@ void PluginManager::PluginInformations::fillLocalInfos(const Plugin* info) {
 }
 
 
-PluginManager::PluginVersionInformations::PluginVersionInformations(): isValid(false) {
+PluginVersionInformations::PluginVersionInformations(): isValid(false) {
 }
 
-PluginManager::PluginVersionInformations::PluginVersionInformations(const PluginManager::PluginVersionInformations &copy) {
+PluginVersionInformations::PluginVersionInformations(const PluginVersionInformations &copy) {
   libraryLocation = copy.libraryLocation;
   author = copy.author;
   version = copy.version;

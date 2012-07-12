@@ -146,7 +146,7 @@ void PluginsCenter::refreshFilter() {
   QVBoxLayout* lyt = new QVBoxLayout();
 
   foreach(QString cf,_categoryFilters) {
-    foreach(PluginManager::PluginInformations info,PluginManager::listPlugins(PluginManager::Remote | PluginManager::Local,_nameFilter,cf)) {
+    foreach(PluginInformations info,PluginManager::listPlugins(PluginManager::Remote | PluginManager::Local,_nameFilter,cf)) {
       PluginInformationsListItem* item = new PluginInformationsListItem(info);
       connect(item,SIGNAL(focused()),this,SLOT(itemFocused()));
       lyt->addWidget(item);

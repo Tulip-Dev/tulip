@@ -31,10 +31,10 @@ class PluginInformationsListItem: public QWidget {
   Q_OBJECT
   Ui::PluginInformationsListItemData *_ui;
 
-  tlp::PluginManager::PluginInformations _infos;
+  tlp::PluginInformations _infos;
 
 public:
-  explicit PluginInformationsListItem(tlp::PluginManager::PluginInformations, QWidget *parent = NULL);
+  explicit PluginInformationsListItem(tlp::PluginInformations, QWidget *parent = NULL);
   virtual ~PluginInformationsListItem();
 
 public slots:

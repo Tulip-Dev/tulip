@@ -23,14 +23,14 @@
 
 using namespace tlp;
 
-PluginInformationsListItem::PluginInformationsListItem(PluginManager::PluginInformations infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _infos(infos) {
+PluginInformationsListItem::PluginInformationsListItem(PluginInformations infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _infos(infos) {
   _ui->setupUi(this);
   _ui->progressFrame->hide();
   _ui->installFrame->hide();
   _ui->rebootFrame->hide();
   _ui->installationControls->hide();
 
-  PluginManager::PluginVersionInformations versionInfos = infos.installedVersion;
+  PluginVersionInformations versionInfos = infos.installedVersion;
 
   if (!versionInfos.isValid) {
     versionInfos = infos.availableVersion;
