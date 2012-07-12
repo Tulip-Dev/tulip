@@ -51,6 +51,11 @@ QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height) {
   QGLPixelBuffer *glPixelBuffer=new QGLPixelBuffer(width,height,format,GlMainWidget::getFirstQGLWidget());
 
   if(!glPixelBuffer->isValid()) {
+    // We can't create a buffer with requested size so :
+    //   - We search the bigest buffer and remove it
+    //   - We try to allocate smaller buffer
+
+    // Code to search the bigest buffer and delete it
     while(!glPixelBuffer->isValid() && bufferToWidthHeight.size()>0) {
       int widthToRemove=0;
       int heightToRemove=0;
@@ -72,6 +77,7 @@ QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height) {
       glPixelBuffer=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),GlMainWidget::getFirstQGLWidget());
     }
 
+    // Code to allocate smaller buffer
     while(!glPixelBuffer->isValid() && width>0 && height>0) {
       width=width/2;
       height=height/2;
