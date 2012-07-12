@@ -428,19 +428,22 @@ void GraphPerspective::open() {
 
   for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
     ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
+    std::list<std::string> fileExtension(m->fileExtensions());
+    for(std::list<std::string>::const_iterator listIt = fileExtension.begin(); listIt != fileExtension.end(); ++listIt) {
 
-    if(m->fileExtension().empty())
-      continue;
+      if(listIt->empty())
+        continue;
 
-    QString currentFilter = it->c_str() + QString("(.") + m->fileExtension().c_str() + QString(")") + QString("(*.") + m->fileExtension().c_str() + QString(")");
-    filterAny += QString("*.") + m->fileExtension().c_str() + " ";
-    filters += currentFilter;
+      QString currentFilter = it->c_str() + QString("(.") + listIt->c_str() + QString(")") + QString("(*.") + listIt->c_str() + QString(")");
+      filterAny += QString("*.") + listIt->c_str() + " ";
+      filters += currentFilter;
 
-    if(it != exports.end()) {
-      filters += ";;";
+      if(it != exports.end()) {
+        filters += ";;";
+      }
+
+      modules[*listIt] = *it;
     }
-
-    modules[m->fileExtension()] = *it;
     delete m;
   }
 
@@ -453,11 +456,15 @@ void GraphPerspective::open() {
     QFileInfo fileInfo(fileName);
     _lastOpenLocation = fileInfo.absolutePath();
 
-    QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
-    DataSet params;
-    params.set<std::string>("file::filename", std::string(fileName.toUtf8().data()));
-    Graph* g = tlp::importGraph(modules[extension.toStdString()], params);
-    _graphs->addGraph(g);
+    foreach(std::string extension, modules.keys()) {
+      if(fileName.endsWith(QString::fromStdString(extension))) {
+        DataSet params;
+        params.set<std::string>("file::filename", std::string(fileName.toUtf8().data()));
+        Graph* g = tlp::importGraph(modules[extension], params);
+        _graphs->addGraph(g);
+        break;
+      }
+    }
   }
 }
 

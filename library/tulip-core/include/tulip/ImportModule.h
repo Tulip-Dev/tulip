@@ -22,6 +22,9 @@
 
 #include <tulip/Plugin.h>
 
+#include <list>
+#include <string>
+
 /** \addtogroup plugins */
 namespace tlp {
 
@@ -53,8 +56,8 @@ public:
     }
   }
 
-  virtual std::string fileExtension() const {
-    return std::string();
+  virtual std::list<std::string> fileExtensions() const {
+    return std::list<std::string>();
   }
 
   virtual std::string getGroup() const {

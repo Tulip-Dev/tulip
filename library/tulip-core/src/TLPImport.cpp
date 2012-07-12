@@ -1009,8 +1009,11 @@ namespace tlp {
 class TLPImport:public ImportModule {
 public:
   PLUGININFORMATIONS("TLP Import","Auber","16/02/2001","Tlp Import plugin","1.0", "File")
-  virtual std::string fileExtension() const {
-    return "tlp";
+  std::list<std::string> fileExtensions() const {
+    std::list<std::string> l;
+    l.push_back("tlp");
+    l.push_back("tlp.gz");
+    return l;
   }
 
   TLPImport(tlp::PluginContext* context):ImportModule(context) {
