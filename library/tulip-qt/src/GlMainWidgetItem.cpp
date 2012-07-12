@@ -210,6 +210,7 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
   glMainWidget->drawForegroundEntities();
   glMainWidget->drawInteractors();
+  glMainWidget->getScene()->setNoClearBackground(false);
 
   glMatrixMode(GL_MODELVIEW);
   glPopMatrix();
