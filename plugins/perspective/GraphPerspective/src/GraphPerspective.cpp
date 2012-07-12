@@ -429,6 +429,7 @@ void GraphPerspective::open() {
   for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
     ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
     std::list<std::string> fileExtension(m->fileExtensions());
+
     for(std::list<std::string>::const_iterator listIt = fileExtension.begin(); listIt != fileExtension.end(); ++listIt) {
 
       if(listIt->empty())
@@ -444,6 +445,7 @@ void GraphPerspective::open() {
 
       modules[*listIt] = *it;
     }
+
     delete m;
   }
 

@@ -90,6 +90,7 @@ void YajlParseFacade::parse(std::string filename) {
     _parsingSucceeded = false;
     _errorMessage = "file does not exists";
   }
+
   QFile f(filename.c_str());
   parse(&f);
 }

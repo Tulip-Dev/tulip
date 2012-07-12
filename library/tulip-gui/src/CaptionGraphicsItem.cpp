@@ -79,12 +79,14 @@ void CaptionGraphicsItem::constructConfigWidget() {
   Iterator<PropertyInterface*>* itP=_view->graph()->getLocalObjectProperties();
 
   int viewMetricIndex=-1;
+
   while(itP->hasNext()) {
     PropertyInterface *property=itP->next();
 
     if(property->getTypename()=="double") {
       if(property->getName().c_str() == selectedItem)
         index=properties.size();
+
       if(property->getName()=="viewMetric")
         viewMetricIndex=properties.size();
 
@@ -94,9 +96,10 @@ void CaptionGraphicsItem::constructConfigWidget() {
 
   _confPropertySelectionWidget->addItems(properties);
 
-  if(index!=-1){
+  if(index!=-1) {
     _confPropertySelectionWidget->setCurrentIndex(index);
-  }else{
+  }
+  else {
     if(viewMetricIndex!=-1)
       _confPropertySelectionWidget->setCurrentIndex(viewMetricIndex);
   }
