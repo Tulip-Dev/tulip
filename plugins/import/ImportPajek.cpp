@@ -103,8 +103,10 @@ class ImportPajek : public ImportModule {
 
 public :
   PLUGININFORMATIONS("Pajek","Patrick Mary","09/05/2011","Import Pajek","1.0","File")
-  virtual std::string fileExtension() const {
-    return "net";
+  std::list<std::string> fileExtensions() const {
+    std::list<std::string> l;
+    l.push_back("net");
+    return l;
   }
 
   ImportPajek(const tlp::PluginContext* context):ImportModule(context),

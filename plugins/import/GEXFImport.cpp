@@ -66,8 +66,10 @@ public :
 
   ~GEXFImport() {}
 
-  std::string fileExtension() const {
-    return "gexf";
+  std::list<std::string> fileExtensions() const {
+    std::list<std::string> l;
+    l.push_back("gexf");
+    return l;
   }
 
   // import plugins must implement bool importGraph()
