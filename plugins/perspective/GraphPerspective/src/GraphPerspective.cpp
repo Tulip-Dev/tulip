@@ -447,9 +447,12 @@ void GraphPerspective::open() {
   filterAny += ");;";
 
   filters.insert(0, filterAny);
-  QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open Graph"), QString(), filters);
+  QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open Graph"), _lastOpenLocation, filters);
 
   if(!fileName.isEmpty()) {
+    QFileInfo fileInfo(fileName);
+    _lastOpenLocation = fileInfo.absolutePath();
+
     QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
     DataSet params;
     params.set<std::string>("file::filename", std::string(fileName.toUtf8().data()));
