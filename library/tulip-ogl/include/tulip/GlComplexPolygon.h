@@ -155,7 +155,7 @@ public:
   /**
    * Get fill color of GlComplexPolygon
    */
-  Color getFillColor() const{
+  Color getFillColor() const {
     return fillColor;
   }
 
@@ -169,7 +169,7 @@ public:
   /**
    * Get outline color of GlComplexPolygon
    */
-  Color getOutlineColor() const{
+  Color getOutlineColor() const {
     return outlineColor;
   }
 

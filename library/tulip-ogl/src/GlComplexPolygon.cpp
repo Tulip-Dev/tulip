@@ -654,7 +654,7 @@ QVariantList GlComplexPolygon::propertiesQVariant() const {
   return QVariantList() << QVariant::fromValue<Color>(getFillColor()) << QVariant::fromValue<Color>(getOutlineColor());
 }
 //===========================================================
-void GlComplexPolygon::setProperty(const QString &name, const QVariant &value){
+void GlComplexPolygon::setProperty(const QString &name, const QVariant &value) {
   if(name=="fillColor")
     setFillColor(value.value<Color>());
   else if(name=="outlineColor")
