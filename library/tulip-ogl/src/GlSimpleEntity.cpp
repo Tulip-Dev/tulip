@@ -18,6 +18,9 @@
  */
 #include <tulip/GlSimpleEntity.h>
 
+#include <QtCore/QStringList>
+#include <QtCore/QVariantList>
+
 #include <tulip/GlComposite.h>
 
 using namespace std;
@@ -27,6 +30,17 @@ GlSimpleEntity::~GlSimpleEntity() {
   for(std::vector<GlComposite*>::iterator it=parents.begin(); it!=parents.end(); ++it) {
     (*it)->deleteGlEntity(this,false);
   }
+}
+
+QStringList GlSimpleEntity::propertiesNames() const {
+  return QStringList();
+}
+
+QVariantList GlSimpleEntity::propertiesQVariant() const {
+  return QVariantList();
+}
+
+void GlSimpleEntity::setProperty(const QString &, const QVariant &) {
 }
 
 void GlSimpleEntity::addParent(GlComposite *composite) {
