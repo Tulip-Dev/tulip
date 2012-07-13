@@ -30,6 +30,8 @@
 #include <tulip/ParametricCurves.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlShaderProgram.h>
+#include <QtCore/QStringList>
+#include <QtCore/QVariantList>
 
 #ifdef __APPLE_CC__
 #if __APPLE_CC__ < 5400
@@ -642,6 +644,21 @@ void GlComplexPolygon::draw(float,Camera *) {
   glDisableClientState(GL_VERTEX_ARRAY);
 
   glTest(__PRETTY_FUNCTION__);
+}
+//===========================================================
+QStringList GlComplexPolygon::propertiesNames() const {
+  return QStringList() << "fillColor" << "outlineColor";
+}
+//===========================================================
+QVariantList GlComplexPolygon::propertiesQVariant() const {
+  return QVariantList() << QVariant::fromValue<Color>(getFillColor()) << QVariant::fromValue<Color>(getOutlineColor());
+}
+//===========================================================
+void GlComplexPolygon::setProperty(const QString &name, const QVariant &value){
+  if(name=="fillColor")
+    setFillColor(value.value<Color>());
+  else if(name=="outlineColor")
+    setOutlineColor(value.value<Color>());
 }
 //===========================================================
 void GlComplexPolygon::translate(const Coord& vec) {
