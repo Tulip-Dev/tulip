@@ -58,7 +58,7 @@ QModelIndex GlSimpleEntityItemModel::index(int row, int column,const QModelIndex
 }
 
 QVariant GlSimpleEntityItemModel::data(const QModelIndex &index, int role) const {
-  if (role == Qt::DisplayRole){
+  if (role == Qt::DisplayRole) {
     return _entity->propertiesQVariant()[index.row()];
   }
 
