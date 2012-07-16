@@ -92,6 +92,7 @@ INSTALL(FILES
   tulip/SnapshotDialog.h
   tulip/SceneConfigWidget.h
   tulip/SceneLayersConfigWidget.h
+  tulip/GlSimpleEntityItemModel.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
