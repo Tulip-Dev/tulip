@@ -53,6 +53,9 @@ public slots:
   void setEdgesVisible(bool);
   void setLabelsVisible(bool);
   void selectFont();
+
+signals:
+  void settingsChanged();
 };
 }
 

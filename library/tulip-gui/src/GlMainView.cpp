@@ -117,6 +117,9 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
   else if (!quickAccessBarVisible()) {
     _quickAccessBarItem = new QGraphicsProxyWidget();
     _quickAccessBar = new QuickAccessBar(_quickAccessBarItem);
+    connect(_quickAccessBar,SIGNAL(settingsChanged()),_sceneConfigurationWidget,SLOT(resetChanges()));
+    connect(_sceneConfigurationWidget,SIGNAL(settingsApplied()),_quickAccessBar,SLOT(reset()));
+
     _quickAccessBar->setGlMainView(this);
     _quickAccessBarItem->setWidget(_quickAccessBar);
     addToScene(_quickAccessBarItem);

@@ -24,6 +24,7 @@ public:
   explicit SceneConfigWidget(QWidget *parent = NULL);
 
 signals:
+  void settingsApplied();
 
 public slots:
   void setGlMainWidget(tlp::GlMainWidget*);
