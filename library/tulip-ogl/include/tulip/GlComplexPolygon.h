@@ -253,6 +253,10 @@ public:
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
+  const std::vector<std::vector<Coord> > &getPolygonSides() const {
+    return points;
+  }
+
 
 protected:
 
