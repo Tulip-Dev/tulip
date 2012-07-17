@@ -132,4 +132,5 @@ void SceneConfigWidget::applySettings() {
 
   _glMainWidget->draw();
   _ui->applyButton->setEnabled(false);
+  emit settingsApplied();
 }

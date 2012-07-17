@@ -188,6 +188,7 @@ void QuickAccessBar::setBackgroundColor(const QColor& c) {
   if(scene()->getBackgroundColor()!=QColorToColor(c)) {
     scene()->setBackgroundColor(QColorToColor(c));
     _mainView->emitDrawNeededSignal();
+    emit settingsChanged();
   }
 }
 
@@ -195,6 +196,7 @@ void QuickAccessBar::setColorInterpolation(bool f) {
   if(renderingParameters()->isEdgeColorInterpolate()!=f) {
     renderingParameters()->setEdgeColorInterpolate(f);
     _mainView->emitDrawNeededSignal();
+    emit settingsChanged();
   }
 }
 
@@ -224,6 +226,7 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
   }
 
   Observable::unholdObservers();
+  emit settingsChanged();
 }
 
 void QuickAccessBar::setNodeColor(const QColor& c) {
@@ -243,6 +246,7 @@ void QuickAccessBar::setNodeColor(const QColor& c) {
   }
 
   Observable::unholdObservers();
+  emit settingsChanged();
 }
 
 void QuickAccessBar::setEdgesVisible(bool v) {
@@ -250,6 +254,7 @@ void QuickAccessBar::setEdgesVisible(bool v) {
     renderingParameters()->setDisplayEdges(v);
     _ui->showEdgesToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
     _mainView->emitDrawNeededSignal();
+    emit settingsChanged();
   }
 }
 
@@ -257,6 +262,7 @@ void QuickAccessBar::setLabelsVisible(bool v) {
   if(renderingParameters()->isViewNodeLabel()!=v) {
     renderingParameters()->setViewNodeLabel(v);
     _mainView->emitDrawNeededSignal();
+    emit settingsChanged();
   }
 }
 
@@ -289,6 +295,7 @@ void QuickAccessBar::selectFont() {
 
   Observable::unholdObservers();
   updateFontButtonStyle();
+  emit settingsChanged();
 }
 
 void QuickAccessBar::updateFontButtonStyle() {
