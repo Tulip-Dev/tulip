@@ -39,6 +39,7 @@ void ClearableLineEdit::mouseMoveEvent(QMouseEvent* ev) {
 
 void ClearableLineEdit::mousePressEvent(QMouseEvent* ev) {
   QLineEdit::mousePressEvent(ev);
+
   if (pixmapRect().contains(ev->pos())) {
     clear();
     emit textEdited("");
