@@ -29,6 +29,7 @@ QRect ClearableLineEdit::pixmapRect() {
 }
 
 void ClearableLineEdit::mouseMoveEvent(QMouseEvent* ev) {
+  QLineEdit::mouseMoveEvent(ev);
   bool oldValue = _clearButtonHovered;
   _clearButtonHovered = pixmapRect().contains(ev->pos());
 
@@ -37,6 +38,7 @@ void ClearableLineEdit::mouseMoveEvent(QMouseEvent* ev) {
 }
 
 void ClearableLineEdit::mousePressEvent(QMouseEvent* ev) {
+  QLineEdit::mousePressEvent(ev);
   if (pixmapRect().contains(ev->pos())) {
     clear();
     emit textEdited("");
