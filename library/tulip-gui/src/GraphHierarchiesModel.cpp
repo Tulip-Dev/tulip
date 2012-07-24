@@ -495,12 +495,12 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
       return;
   }
   _graphs.push_back(g);
+  setApplicationDefaults(g);
   g->getProperty<ColorProperty>("viewColor")->setMetaValueCalculator(&vColorCalc);
   g->getProperty<StringProperty>("viewLabel")->setMetaValueCalculator(&vLabelCalc);
   g->getProperty<LayoutProperty>("viewLayout")->setMetaValueCalculator(&vLayoutCalc);
   g->getProperty<SizeProperty>("viewSize")->setMetaValueCalculator(&vSizeCalc);
 
-  setApplicationDefaults(g);
   g->addListener(this);
 
   if (_graphs.size() == 1)
