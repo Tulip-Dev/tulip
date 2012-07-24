@@ -19,7 +19,6 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   _ui->parameters->setVisible(false);
   _ui->parameters->setItemDelegate(new TulipItemDelegate);
   setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
-  _ui->settingsButton->setEnabled(tlp::PluginLister::getPluginParameters(pluginName.toStdString()).size()>0);
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
@@ -173,7 +172,6 @@ void AlgorithmRunnerItem::initModel() {
 
   ParameterListModel* model = new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),_graph,_ui->parameters);
   _ui->parameters->setModel(model);
-  _ui->settingsButton->setEnabled(model->rowCount() > 0);
   int h = 10;
 
   for (int i=0; i<model->rowCount(); ++i)
