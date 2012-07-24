@@ -99,6 +99,8 @@ void TableView::readSettings() {
     connect(_model,SIGNAL(columnsInserted(QModelIndex,int,int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
     filterChanged();
   }
+  GraphSortFilterProxyModel* sortModel = static_cast<GraphSortFilterProxyModel*>(_ui->table->model());
+  sortModel->setFilterProperty(_tableViewConfiguration->filteringProperty());
 
   QSet<tlp::PropertyInterface*> visibleProperties = _ui->propertiesEditor->visibleProperties();
 
