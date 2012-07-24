@@ -82,7 +82,10 @@ QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget* w,tlp::Graph* g) {
 
   QComboBox* combo = static_cast<QComboBox*>(w);
   GraphPropertiesModel<PROPTYPE>* model = static_cast<GraphPropertiesModel<PROPTYPE> *>(combo->model());
-  return model->data(model->index(combo->currentIndex(),0),TulipModel::PropertyRole);
+  QVariant var = model->data(model->index(combo->currentIndex(),0),TulipModel::PropertyRole);
+  tlp::PropertyInterface* pi = var.value<tlp::PropertyInterface*>();
+  PROPTYPE* prop = (PROPTYPE*)(pi);
+  return QVariant::fromValue<PROPTYPE*>(prop);
 }
 
 template<typename PROPTYPE>
@@ -90,7 +93,7 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
   PROPTYPE *prop = v.value<PROPTYPE*>();
 
   if (prop==NULL)
-    return "";
+    return QObject::trUtf8("Select a property");
 
   return QString::fromUtf8(prop->getName().c_str());
 }
