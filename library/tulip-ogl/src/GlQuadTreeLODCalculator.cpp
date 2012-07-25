@@ -97,6 +97,7 @@ bool GlQuadTreeLODCalculator::needEntities() {
       addObservers();
       //Need to recompute
       haveToCompute = true;
+      haveToInitObservers=false;
     }
   }
 
