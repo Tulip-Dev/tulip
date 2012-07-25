@@ -92,23 +92,25 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         // so from now we delegate the job to a MouseEdgeSelector object
         // which should intercept the event
         operation = NONE_OP;
-      }else{
+      }
+      else {
 
         bool entityIsSelected = glMainWidget->pickGlEntities((int)editPosition[0] - 3, (int)editPosition[1] - 3, 6, 6, select, layer);
 
         if(!entityIsSelected) {
           // We have click outside an entity
           operation = NONE_OP;
-        }else{
+        }
+        else {
           selectedEntity=circleString->findKey(select[0].getSimpleEntity());
 
           if (qMouseEv->modifiers() &
-    #if defined(__APPLE__)
+#if defined(__APPLE__)
               Qt::AltModifier
-    #else
+#else
               Qt::ControlModifier
-    #endif
-              ) {
+#endif
+             ) {
             operation = DELETE_OP;
             mMouseDelete();
           }
@@ -122,6 +124,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
           return true;
         }
       }
+
       break;
     }
 
@@ -168,23 +171,26 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
   if(e->type() == QEvent::MouseButtonPress) {
     vector<SelectedEntity> selectedEntities;
     glMainWidget->pickGlEntities(qMouseEv->x(), qMouseEv->y(), selectedEntities);
+
     if(selectedEntities.size()!=0)
       if(selectedEntities[0].getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED)
-        if(selectedEntities[0].getSimpleEntity()==&edgeEntity){
+        if(selectedEntities[0].getSimpleEntity()==&edgeEntity) {
           mouseButtonPressOnEdge=true;
           return true;
         }
   }
 
-  if(e->type() == QEvent::MouseButtonRelease){
+  if(e->type() == QEvent::MouseButtonRelease) {
     vector<SelectedEntity> selectedEntities;
     glMainWidget->pickGlEntities(qMouseEv->x(), qMouseEv->y(), selectedEntities);
+
     if(selectedEntities.size()!=0)
       if(selectedEntities[0].getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED)
-        if(selectedEntities[0].getSimpleEntity()==&edgeEntity && mouseButtonPressOnEdge){
+        if(selectedEntities[0].getSimpleEntity()==&edgeEntity && mouseButtonPressOnEdge) {
           mouseButtonPressOnEdge=false;
           return true;
         }
+
     mouseButtonPressOnEdge=false;
   }
 
@@ -580,7 +586,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
 
   bool hasSelection=haveSelection(glMainWidget);
 
-  if(!hasSelection){
+  if(!hasSelection) {
     glMainWidget->getScene()->getGraphLayer()->deleteGlEntity("edgeEntity");
     return false;
   }

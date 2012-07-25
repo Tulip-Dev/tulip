@@ -45,14 +45,15 @@ class EdgeEntity : public GlSimpleEntity {
 
 public :
 
-  void setCoordinates(const Coord &startPos, const Coord &endPos,const std::vector<Coord> &bendsPos){
+  void setCoordinates(const Coord &startPos, const Coord &endPos,const std::vector<Coord> &bendsPos) {
     boundingBox = BoundingBox();
     start=startPos;
     end=endPos;
     bends=bendsPos;
     boundingBox.expand(start);
     boundingBox.expand(end);
-    for(std::vector<Coord>::iterator it=bends.begin();it!=bends.end();++it){
+
+    for(std::vector<Coord>::iterator it=bends.begin(); it!=bends.end(); ++it) {
       boundingBox.expand(*it);
     }
   }
