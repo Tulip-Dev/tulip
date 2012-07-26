@@ -83,6 +83,8 @@ public:
   bool isReservedPropertyName(QString);
   void registerReservedProperty(QString);
 
+  virtual void redrawPanels(bool center=false)=0;
+
 public slots:
 
   virtual bool terminated() {

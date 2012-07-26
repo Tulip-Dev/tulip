@@ -137,6 +137,10 @@ void GraphPerspective::showLogger() {
   _logger->show();
 }
 
+void GraphPerspective::redrawPanels(bool center) {
+  _ui->workspace->redrawPanels(center);
+}
+
 void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;

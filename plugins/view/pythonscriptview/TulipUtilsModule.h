@@ -29,16 +29,24 @@
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
 
+#include <tulip/Perspective.h>
+
 #include <QtGui/QMenu>
 
 static PyObject *
 tuliputils_updateVisualization(PyObject *, PyObject *args) {
+  tlp::Perspective* persp = tlp::Perspective::instance();
+  qDebug() << (void*)persp;
   int i;
 
   if (!PyArg_ParseTuple(args, "|i", &i))
     Py_RETURN_NONE;
 
   bool centerViews = i > 0;
+
+  if (persp != NULL) {
+    persp->redrawPanels(centerViews);
+  }
 
   Py_RETURN_NONE;
 }
