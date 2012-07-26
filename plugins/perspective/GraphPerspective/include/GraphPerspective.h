@@ -73,6 +73,7 @@ public slots:
   void log(QtMsgType,const char*);
   void showLogger();
 
+  virtual void redrawPanels(bool center=false);
   void centerPanelsForGraph(tlp::Graph*);
   void closePanelsForGraph(tlp::Graph* g = NULL);
   void setPythonOutput(bool);

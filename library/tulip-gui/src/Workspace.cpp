@@ -649,6 +649,17 @@ void Workspace::setPageCountLabel(QLabel *l) {
   _pageCountLabel = l;
 }
 
+void Workspace::redrawPanels(bool center) {
+  foreach(WorkspacePanel* panel, _panels) {
+    panel->toggleProgressMode(true);
+    if (center)
+      panel->view()->centerView();
+    else
+      panel->view()->draw(panel);
+    panel->toggleProgressMode(false);
+  }
+}
+
 bool Workspace::isBottomFrameVisible() const {
   return _ui->bottomFrame->isVisible();
 }

@@ -98,6 +98,8 @@ public slots:
   void setBottomFrameVisible(bool);
   void setPageCountLabel(QLabel* l);
 
+  void redrawPanels(bool center=false);
+
 signals:
   void panelFocused(tlp::View*);
   void addPanelRequest(tlp::Graph* g = NULL);
