@@ -652,10 +652,12 @@ void Workspace::setPageCountLabel(QLabel *l) {
 void Workspace::redrawPanels(bool center) {
   foreach(WorkspacePanel* panel, _panels) {
     panel->toggleProgressMode(true);
+
     if (center)
       panel->view()->centerView();
     else
       panel->view()->draw(panel);
+
     panel->toggleProgressMode(false);
   }
 }
