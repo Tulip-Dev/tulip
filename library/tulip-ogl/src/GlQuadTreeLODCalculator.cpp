@@ -47,7 +47,7 @@ BoundingBox computeNewBoundingBox(const BoundingBox &box,const Coord &centerScen
   return BoundingBox(center-size,center+size);
 }
 
-GlQuadTreeLODCalculator::GlQuadTreeLODCalculator() : haveToCompute(true),currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
+GlQuadTreeLODCalculator::GlQuadTreeLODCalculator() : haveToCompute(true), haveToInitObservers(true), currentGraph(NULL),layoutProperty(NULL),sizeProperty(NULL),selectionProperty(NULL) {
 }
 
 GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
@@ -96,6 +96,7 @@ bool GlQuadTreeLODCalculator::needEntities() {
       addObservers();
       //Need to recompute
       haveToCompute = true;
+      haveToInitObservers = false;
     }
   }
 
@@ -149,7 +150,10 @@ void GlQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const 
   if(haveToCompute) {
     // if have to compute : rebuild quadtree
 
-    addObservers();
+    if(haveToInitObservers) {
+      addObservers();
+      haveToInitObservers=false;
+    }
 
     clearCamerasObservers();
 
@@ -608,6 +612,7 @@ void GlQuadTreeLODCalculator::setHaveToCompute() {
     return;
 
   haveToCompute=true;
+  haveToInitObservers=true;
 
   removeObservers();
 }

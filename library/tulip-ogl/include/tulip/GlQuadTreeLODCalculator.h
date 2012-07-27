@@ -143,6 +143,7 @@ protected :
   std::vector<std::vector<SimpleEntityLODUnit> > simpleEntities;
 
   bool haveToCompute;
+  bool haveToInitObservers;
 
   BoundingBox nodesGlobalBoundingBox;
   BoundingBox edgesGlobalBoundingBox;
