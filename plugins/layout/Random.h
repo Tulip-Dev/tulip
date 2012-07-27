@@ -38,7 +38,6 @@
 class Random:public tlp::LayoutAlgorithm {
 public:
   Random(const tlp::PropertyContext& context);
-  ~Random();
 
   bool run();
 };

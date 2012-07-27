@@ -23,20 +23,18 @@ static const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "Boolean" ) \
   HTML_HELP_BODY() \
-  "If true the layout is in 3D else it is computed in 2D" \
+  "If true, the layout is computed in 3D else it is in 2D." \
   HTML_HELP_CLOSE()
 };
 
-LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","1.1","Basic");
+LAYOUTPLUGINOFGROUP(Random,"Random","David Auber","01/12/1999","Ok","1.1","Basic")
 
 using namespace std;
 using namespace tlp;
 
 Random::Random(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
-  addParameter<bool>("3D layout", paramHelp[0], "true");
+  addInParameter<bool>("3D layout", paramHelp[0], "true");
 }
-
-Random::~Random() {}
 
 bool Random::run() {
   bool is3D = true ;
@@ -46,7 +44,6 @@ bool Random::run() {
   }
 
   layoutResult->setAllEdgeValue(vector<Coord>(0));
-  graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
   Iterator<node> *itN=graph->getNodes();
 
   while (itN->hasNext()) {
