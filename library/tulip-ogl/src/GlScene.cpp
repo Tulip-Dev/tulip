@@ -108,10 +108,11 @@ void GlScene::initGlParameters() {
   glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   glDisable(GL_TEXTURE_2D);
 
+#ifndef NDEBUG
   GLenum error = glGetError();
-
   if ( error != GL_NO_ERROR)
     qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+#endif
 }
 
 void GlScene::draw() {
