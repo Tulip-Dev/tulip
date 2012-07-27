@@ -75,6 +75,7 @@ static char hullVertexTable[][7] = {
 
 //====================================================
 void glTest(string message) {
+#ifndef NDEBUG
   unsigned int i = 1;
   GLenum error = glGetError();
 
@@ -86,6 +87,7 @@ void glTest(string message) {
     error = glGetError();
     ++i;
   }
+#endif
 }
 //====================================================
 void setColor(const Color &c) {

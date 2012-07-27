@@ -162,10 +162,12 @@ void Camera::initGl() {
 }
 //====================================================
 void Camera::initLight() {
-  GLuint error = glGetError();
 
+#ifndef NDEBUG
+  GLuint error = glGetError();
   if ( error != GL_NO_ERROR)
     qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << " begin" << endl;
+#endif
 
   GLfloat pos[4];
 
@@ -202,10 +204,12 @@ void Camera::initLight() {
   glLightfv( GL_LIGHT0, GL_LINEAR_ATTENUATION, attL );
   glLightfv( GL_LIGHT0, GL_QUADRATIC_ATTENUATION, attQ );
   glLightfv( GL_LIGHT0, GL_SPECULAR , specular);
-  error = glGetError();
 
+#ifndef NDEBUG
+  error = glGetError();
   if ( error != GL_NO_ERROR)
     qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << "end" << endl;
+#endif
 }
 //====================================================
 void Camera::initProjection(const Vector<int, 4>& viewport,bool reset) {
@@ -264,10 +268,11 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset) {
     glDisable(GL_DEPTH_TEST);
   }
 
+#ifndef NDEBUG
   GLenum error = glGetError();
-
   if ( error != GL_NO_ERROR)
     qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+#endif
 }
 //====================================================
 void Camera::initProjection(bool reset) {
@@ -298,10 +303,12 @@ void Camera::initModelView() {
   glGetFloatv(GL_MODELVIEW_MATRIX, (GLfloat*)&transformMatrix);
   glPopMatrix();
   matrixCoherent=true;
-  GLenum error = glGetError();
 
+#ifndef NDEBUG
+  GLenum error = glGetError();
   if ( error != GL_NO_ERROR)
     qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+#endif
 }
 //====================================================
 void Camera::setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBox) {
