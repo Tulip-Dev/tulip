@@ -36,8 +36,6 @@ Random::Random(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addInParameter<bool>("3D layout", paramHelp[0], "true");
 }
 
-Random::~Random() {}
-
 bool Random::run() {
   bool is3D = true ;
 
@@ -46,7 +44,6 @@ bool Random::run() {
   }
 
   result->setAllEdgeValue(vector<Coord>(0));
-  graph->getLocalProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(1,1,1));
   Iterator<node> *itN=graph->getNodes();
 
   while (itN->hasNext()) {
