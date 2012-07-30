@@ -34,11 +34,11 @@ namespace tlp {
  * \author David Auber auber@tulip-software.org
  * \version 0.0.1 24/01/2003
  */
-template<typename Obj, typename OTYPE>
-struct Circle : public Vector<Obj,2, OTYPE> {
+template<typename Obj>
+struct Circle : public Vector<Obj,2> {
   Circle() {}
-  Circle(const Vector<Obj,2, OTYPE> &pos, Obj radius):Vector<Obj,2, OTYPE>(pos),radius(radius) {}
-  Circle(const Circle &c):Vector<Obj,2, OTYPE>(c),radius(c.radius) {}
+  Circle(const Vector<Obj,2> &pos, Obj radius):Vector<Obj,2>(pos),radius(radius) {}
+  Circle(const Circle &c):Vector<Obj,2>(c),radius(c.radius) {}
   Circle(Obj x,Obj y,Obj radius):radius(radius) {
     (*this)[0]=x;
     (*this)[1]=y;
@@ -46,7 +46,7 @@ struct Circle : public Vector<Obj,2, OTYPE> {
   /**
    * Translate "this" by vector v
    */
-  void translate(const Vector<Obj,2, OTYPE> &v) {
+  void translate(const Vector<Obj,2> &v) {
     (*this)+=v;
   }
   /**
@@ -54,7 +54,7 @@ struct Circle : public Vector<Obj,2, OTYPE> {
    * consists in computing the smallest enclosing circle of the
    * two circle and to store the result in "this".
    */
-  Circle<Obj, OTYPE>& merge(const Circle<Obj, OTYPE> &c);
+  Circle<Obj>& merge(const Circle<Obj> &c);
   /**
    * Radius of the circle
    */
@@ -62,15 +62,15 @@ struct Circle : public Vector<Obj,2, OTYPE> {
   /**
    * Returns true if the circle is include in an other circle, false otherwise.
    */
-  bool isIncludeIn(const Circle<Obj, OTYPE> & circle) const;
+  bool isIncludeIn(const Circle<Obj> & circle) const;
 };
 
 /**
  * Give the instersction of two circles, return false if no intersection exist else put the two points in p1 & p2,
  * if there is only one solution p1 == p2;
  */
-template<typename Obj, typename OTYPE>
-bool intersection(const tlp::Circle<Obj, OTYPE> &c1, const tlp::Circle<Obj, OTYPE> &c2,  tlp::Vector<Obj,2, OTYPE> &sol1,  tlp::Vector<Obj,2, OTYPE> &sol2) {
+template<typename Obj>
+bool intersection(const tlp::Circle<Obj> &c1, const tlp::Circle<Obj> &c2,  tlp::Vector<Obj,2> &sol1,  tlp::Vector<Obj,2> &sol2) {
   double d =  c1.dist(c2);
   double r1 = c1.radius;
   double r2 = c2.radius;
@@ -101,31 +101,31 @@ bool intersection(const tlp::Circle<Obj, OTYPE> &c1, const tlp::Circle<Obj, OTYP
 /**
  * Compute the optimum enclosing circle of 2 circles.
  */
-template<typename Obj, typename OTYPE>
-tlp::Circle<Obj, OTYPE> enclosingCircle(const tlp::Circle<Obj, OTYPE> &,const tlp::Circle<Obj, OTYPE> &);
+template<typename Obj>
+tlp::Circle<Obj> enclosingCircle(const tlp::Circle<Obj> &,const tlp::Circle<Obj> &);
 
 /**
  * Compute the optimum enclosing circle of a set of circles.
  */
-template<typename Obj, typename OTYPE>
-tlp::Circle<Obj, OTYPE> enclosingCircle(const std::vector< tlp::Circle<Obj, OTYPE> > & circles);
+template<typename Obj>
+tlp::Circle<Obj> enclosingCircle(const std::vector< tlp::Circle<Obj> > & circles);
 /**
  * Compute an enclosing circle of a set of circles,
  * this algorithm is an aproximation of the smallest
  * enclosing circle.
  */
-template<typename Obj, typename OTYPE>
-tlp::Circle<Obj, OTYPE> lazyEnclosingCircle(const std::vector< tlp::Circle<Obj, OTYPE> > & circles);
+template<typename Obj>
+tlp::Circle<Obj> lazyEnclosingCircle(const std::vector< tlp::Circle<Obj> > & circles);
 /**
  * Write circle in a stream
  */
-template<typename Obj, typename OTYPE>
-std::ostream& operator<<(std::ostream &os,const tlp::Circle<Obj, OTYPE> &);
+template<typename Obj>
+std::ostream& operator<<(std::ostream &os,const tlp::Circle<Obj> &);
 /*@}*/
 
-typedef Circle<double, long double> Circled;
-typedef Circle<float,  double> Circlef;
-typedef Circle<int,  double> Circlei;
+typedef Circle<double> Circled;
+typedef Circle<float> Circlef;
+typedef Circle<int> Circlei;
 
 }
 

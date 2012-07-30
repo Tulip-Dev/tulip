@@ -35,8 +35,8 @@ namespace tlp {
  *
  * Author : <a href="www.tulip-software.org>Tulip team</a>
  */
-template<typename Obj, typename OTYPE = double>
-struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
+template<typename Obj>
+struct Rectangle : public Array<Vector<Obj,2>,2> {
   /**
     * Create a new invalid rectangle
     */
@@ -73,7 +73,7 @@ struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
   * create a new Rectangle
   * \warning the rectangle must be valid (tested in debug mode)
   */
-  Rectangle(const Vector<Obj,2, OTYPE> &min, const Vector<Obj,2, OTYPE> &max) {
+  Rectangle(const Vector<Obj,2> &min, const Vector<Obj,2> &max) {
     (*this)[0] = min;
     (*this)[1] = max;
     assert(isValid());
@@ -123,7 +123,7 @@ struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
   * Return true if point is stricly inside the AARectangle
   * \warning the rectangle must be valid (tested in debug mode)
   */
-  bool isInside(const Vector<Obj, 2, OTYPE> &p) const {
+  bool isInside(const Vector<Obj, 2> &p) const {
     assert(isValid());
 
     if (p[0] > (*this)[1][0]) return false;
@@ -155,7 +155,7 @@ struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
   * Translate "this" by vector v
   * \warning the rectangle must be valid (tested in debug mode)
   */
-  void translate(const tlp::Vector<Obj,2, OTYPE> &v) {
+  void translate(const tlp::Vector<Obj,2> &v) {
     assert(isValid());
     (*this)[0] += v;
     (*this)[1] += v;
@@ -201,17 +201,17 @@ struct Rectangle : public Array<Vector<Obj,2, OTYPE>,2> {
     * Return the center of a rectangle
     * \warning the rectangle must be valid (tested in debug mode)
     */
-  Vector<Obj, 2, OTYPE> center() const {
+  Vector<Obj, 2> center() const {
     assert(isValid());
     return ((*this)[0] + (*this)[1]) / Obj(2);
   }
 
 };
 
-typedef Rectangle<double, long double> Rectd;
-typedef Rectangle<float, double> Rectf;
-typedef Rectangle<int, double> Recti;
-typedef Rectangle<unsigned int, double> Rectui;
+typedef Rectangle<double> Rectd;
+typedef Rectangle<float> Rectf;
+typedef Rectangle<int> Recti;
+typedef Rectangle<unsigned int> Rectui;
 
 
 /*@}*/
