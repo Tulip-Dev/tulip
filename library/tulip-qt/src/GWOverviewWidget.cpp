@@ -113,8 +113,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
       middle = _observedView->getScene()->getCamera().screenTo3DWorld(middle);
       Camera cover  = _view->getScene()->getCamera();
       Camera cview  = _observedView->getScene()->getCamera();
-      middle = _view->getScene()->getCamera().worldTo2DScreen(middle);
-      //      cerr << "Square center: " << Coord(x, y, z) << endl;
+      middle = _view->getScene()->getCamera().worldTo2DScreen(middle);      
       float dx, dy;
       int resultViewport;
 
@@ -124,8 +123,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
         resultViewport=viewport[3];
 
       dx = (middle[0] - mouseClicX) * resultViewport * cview.getZoomFactor() / (cover.getZoomFactor() * widgetWidth);
-      dy = (middle[1] - (widgetHeight - mouseClicY)) * resultViewport * cview.getZoomFactor() / (cover.getZoomFactor() * widgetHeight);
-      //      cerr << "Translation : " << Coord(dx, dy, dz) << endl;
+      dy = (middle[1] - (widgetHeight - mouseClicY)) * resultViewport * cview.getZoomFactor() / (cover.getZoomFactor() * widgetHeight);      
       _observedView->getScene()->translateCamera((int) dx, (int) dy, 0);
       _observedView->draw();
       return true;
@@ -149,8 +147,7 @@ bool GWOverviewWidget::eventFilter(QObject *obj, QEvent *e) {
   return false;
 }
 //=============================================================================
-void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {
-  //  cerr << __PRETTY_FUNCTION__ << endl;
+void GWOverviewWidget::draw(GlMainWidget *glG,bool graphChanged) {  
   (void) glG;
   assert( glG == _observedView);
 
