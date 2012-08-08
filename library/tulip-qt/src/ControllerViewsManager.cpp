@@ -403,10 +403,11 @@ bool ControllerViewsManager::changeGraph(Graph *graph) {
   if (currentGraph == graph)
     return false;
 
+  currentGraph = graph;
+
   if (!currentView)
     return false;
 
-  currentGraph = graph;
   viewGraph[currentView] = graph;
 
   currentView->setGraph(graph);

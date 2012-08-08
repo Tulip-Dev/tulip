@@ -1128,9 +1128,6 @@ bool MainController::changeGraph(Graph *graph) {
   if(getCurrentGraph()==graph)
     return false;
 
-  if(!getCurrentView())
-    return false;
-
   unsigned int holdCount=Observable::observersHoldCounter();
 
   clearObservers();
