@@ -339,7 +339,7 @@ the :class:`tlp.LayoutAlgorithm` interface in Python.
 %End
 
 %MethodCode
-	sipRes = new std::vector<std::string>(getAlgorithmPluginsListOfType("Color"));
+    sipRes = new std::vector<std::string>(getAlgorithmPluginsListOfType("Layout"));
 %End
 
 //=====================================================================

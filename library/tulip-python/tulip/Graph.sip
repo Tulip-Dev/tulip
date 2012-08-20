@@ -75,6 +75,10 @@ void initializeGraphViewProperties(tlp::Graph *graph) {
         graph->getProperty<tlp::IntegerProperty>("viewShape")->setAllNodeValue(4);
         graph->getProperty<tlp::IntegerProperty>("viewShape")->setAllEdgeValue(0);
     }
+    if (!graph->existProperty("viewLabel")) {
+        graph->getProperty<tlp::StringProperty>("viewLabel")->setAllNodeValue("");
+        graph->getProperty<tlp::StringProperty>("viewLabel")->setAllEdgeValue("");
+    }
     if (!graph->existProperty("viewFont")) {
         graph->getProperty<tlp::StringProperty>("viewFont")->setAllNodeValue(tlp::TulipBitmapDir + "font.ttf");
         graph->getProperty<tlp::StringProperty>("viewFont")->setAllEdgeValue(tlp::TulipBitmapDir + "font.ttf");
@@ -1068,6 +1072,7 @@ Returns the ith predecessor of a node.
 :type node: :class:`tlp.node`
 :param i: the position in the predecessor nodes list (warning : first index is 1 not 0)
 :type i: integer
+:rtype: :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of predecessor nodes
 %End	
 	
@@ -1126,6 +1131,7 @@ Returns the ith successor of a node.
 :type node: :class:`tlp.node`
 :param i: the position in the successor nodes list (warning : first index is 1 not 0)
 :type i: integer
+:rtype: :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of successor nodes
 %End	
 	
