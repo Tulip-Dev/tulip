@@ -65,7 +65,14 @@ class FactoryInterface {
 #include <tulip/Plugin.h>
 %End
 public:
-  virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0;
+
+  virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0 /Factory/;
+
+  void registerPlugin();
+%MethodCode
+    tlp::PluginLister::registerPlugin(sipCpp);
+%End
+
 };
 
 };

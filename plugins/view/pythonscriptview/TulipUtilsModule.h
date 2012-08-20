@@ -28,6 +28,7 @@
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
+#include <tulip/PluginLister.h>
 
 #include <tulip/Perspective.h>
 
@@ -102,89 +103,16 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
   Py_RETURN_NONE;
 }
 
-
-template <typename T>
-static bool pluginExists(const std::string &) {
-//  std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
-
-//  for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
-//    if (it->first == tlp::TemplateFactoryInterface::standardizeName(typeid(T).name()) && it->second->pluginExists(pluginName)) {
-//      return true;
-//    }
-//  }
-
-  return false;
-}
-
-template <typename T>
-static void removePlugin(const std::string &) {
-//  std::map< std::string, tlp::TemplateFactoryInterface* >::iterator it = tlp::TemplateFactoryInterface::allFactories->begin();
-
-//  for (; it != tlp::TemplateFactoryInterface::allFactories->end() ; ++it) {
-//    if (it->first == tlp::TemplateFactoryInterface::standardizeName(typeid(T).name())) {
-//      it->second->removePlugin(pluginName);
-//      return;
-//    }
-//  }
-}
-
-static void removePlugin(const string &pluginName, const string &pluginType) {
-  if (pluginType == "General") {
-    if (pluginExists<tlp::Algorithm>(pluginName)) {
-      removePlugin<tlp::Algorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Layout") {
-    if (pluginExists<tlp::LayoutAlgorithm>(pluginName)) {
-      removePlugin<tlp::LayoutAlgorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Size") {
-    if (pluginExists<tlp::SizeAlgorithm>(pluginName)) {
-      removePlugin<tlp::SizeAlgorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Color") {
-    if (pluginExists<tlp::ColorAlgorithm>(pluginName)) {
-      removePlugin<tlp::ColorAlgorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Measure") {
-    if (pluginExists<tlp::DoubleAlgorithm>(pluginName)) {
-      removePlugin<tlp::DoubleAlgorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Selection") {
-    if (pluginExists<tlp::BooleanAlgorithm>(pluginName)) {
-      removePlugin<tlp::BooleanAlgorithm>(pluginName);
-    }
-  }
-  else if (pluginType == "Import") {
-    if (pluginExists<tlp::ImportModule>(pluginName)) {
-      removePlugin<tlp::ImportModule>(pluginName);
-    }
-  }
-  else if (pluginType == "Export") {
-    if (pluginExists<tlp::ExportModule>(pluginName)) {
-      removePlugin<tlp::ExportModule>(pluginName);
-    }
-  }
-  else if (pluginType == "Interactor") {
-    if (pluginExists<tlp::Interactor>(pluginName)) {
-      removePlugin<tlp::Interactor>(pluginName);
-    }
-  }
-}
-
 static PyObject *
 tuliputils_removePlugin(PyObject *, PyObject *args) {
 
-  char *buf, *buf2;
+  char *buf;
 
-  if (!PyArg_ParseTuple(args, "ss", &buf, &buf2))
+  if (!PyArg_ParseTuple(args, "s", &buf))
     Py_RETURN_NONE;
 
-  removePlugin(buf, buf2);
+  if (tlp::PluginLister::pluginExists(buf))
+    tlp::PluginLister::removePlugin(buf);
 
   Py_RETURN_NONE;
 }

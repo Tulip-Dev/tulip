@@ -235,40 +235,6 @@ QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QStri
                                      const QString &pluginRelease, const QString &pluginGroup) {
 
   QString pluginClass;
-  QString tlpType;
-
-  if (pluginType == "General") {
-    pluginClass = "tlp.Algorithm";
-    tlpType = "Algorithm";
-  }
-  else if (pluginType == "Layout") {
-    pluginClass = "tlp.LayoutAlgorithm";
-    tlpType = "Layout";
-  }
-  else if (pluginType == "Size") {
-    pluginClass = "tlp.SizeAlgorithm";
-    tlpType = "Size";
-  }
-  else if (pluginType == "Measure") {
-    pluginClass = "tlp.DoubleAlgorithm";
-    tlpType = "Double";
-  }
-  else if (pluginType == "Color") {
-    pluginClass = "tlp.ColorAlgorithm";
-    tlpType = "Color";
-  }
-  else if (pluginType == "Selection") {
-    pluginClass = "tlp.BooleanAlgorithm";
-    tlpType = "Boolean";
-  }
-  else if (pluginType == "Import") {
-    pluginClass = "tlp.ImportModule";
-    tlpType = "Import";
-  }
-  else {
-    pluginClass = "tlp.ExportModule";
-    tlpType = "Export";
-  }
 
   QString pluginSkeleton;
   QTextStream textStream(&pluginSkeleton);
@@ -367,12 +333,12 @@ QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QStri
   textStream << "# and updates the GUI to make it accessible through the menus." << endl;
 
   if (pluginGroup == "") {
-    textStream << "tulipplugins.register" << tlpType << "Plugin(\"" << pluginClassName << "\", \""
+    textStream << "tulipplugins.registerPlugin(\"" << pluginClassName << "\", \""
                << pluginName << "\", \"" << pluginAuthor << "\", \"" << pluginDate << "\", \""
                << pluginInfos << "\", \"" <<  pluginRelease <<"\")" << endl;
   }
   else {
-    textStream << "tulipplugins.register" << tlpType << "PluginOfGroup(\"" << pluginClassName << "\", \""
+    textStream << "tulipplugins.registerPluginOfGroup(\"" << pluginClassName << "\", \""
                << pluginName << "\", \"" << pluginAuthor << "\", \"" << pluginDate << "\", \""
                << pluginInfos << "\", \"" <<  pluginRelease << "\", \"" << pluginGroup << "\")" << endl;
   }

@@ -68,7 +68,7 @@ A general algorithm must implement the :class:`tlp.Algorithm` interface as illus
 	
 	# The line below does the magic to register the plugin to the plugin database
 	# and updates the GUI to make it accessible through the menus.
-	tulipplugins.registerAlgorithmPluginOfGroup("GeneralAlgorithmExample", "General Algorithm Demo", "author", "26/07/2011", "infos", "1.0", "Python")
+        tulipplugins.registerPluginOfGroup("GeneralAlgorithmExample", "General Algorithm Demo", "author", "26/07/2011", "infos", "1.0", "Python")
 
 Writing a selection algorithm in Python
 ----------------------------------------
@@ -115,7 +115,7 @@ A selection algorithm must implement the :class:`tlp.BooleanAlgorithm` interface
 	
 	# The line below does the magic to register the plugin to the plugin database
 	# and updates the GUI to make it accessible through the menus.
-	tulipplugins.registerBooleanPluginOfGroup("SelectionAlgorithmExample", "Selection Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
+        tulipplugins.registerPluginOfGroup("SelectionAlgorithmExample", "Selection Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
 
 Writing a color algorithm in Python
 ----------------------------------------		
@@ -162,7 +162,7 @@ A color algorithm must implement the :class:`tlp.ColorAlgorithm` interface as il
 	
 	# The line below does the magic to register the plugin to the plugin database
 	# and updates the GUI to make it accessible through the menus.
-	tulipplugins.registerColorPluginOfGroup("ColorAlgorithmExample", "Color Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
+        tulipplugins.registerPluginOfGroup("ColorAlgorithmExample", "Color Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
 	
 Writing a metric algorithm in Python
 ----------------------------------------	
@@ -209,7 +209,7 @@ A metric algorithm must implement the :class:`tlp.DoubleAlgorithm` interface as 
 	
 	# The line below does the magic to register the plugin to the plugin database
 	# and updates the GUI to make it accessible through the menus.
-	tulipplugins.registerDoublePluginOfGroup("MetricAlgorithmExample", "Metric Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
+        tulipplugins.registerPluginOfGroup("MetricAlgorithmExample", "Metric Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
 
 Writing an integer algorithm in Python
 ----------------------------------------	
@@ -256,7 +256,7 @@ An integer algorithm must implement the :class:`tlp.IntegerAlgorithm` interface 
 	
 	# The line below does the magic to register the plugin to the plugin database
 	# and updates the GUI to make it accessible through the menus.
-	tulipplugins.registerIntegerPluginOfGroup("IntegerAlgorithmExample", "Integer Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
+        tulipplugins.registerPluginOfGroup("IntegerAlgorithmExample", "Integer Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
 	
 Writing a layout algorithm in Python
 ----------------------------------------
@@ -303,7 +303,7 @@ A layout algorithm must implement the :class:`tlp.LayoutAlgorithm` interface as 
 	
 	# The line below does the magic to register the plugin to the plugin database
 	# and updates the GUI to make it accessible through the menus.
-	tulipplugins.registerLayoutPluginOfGroup("LayoutAlgorithmExample", "Layout Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
+        tulipplugins.registerPluginOfGroup("LayoutAlgorithmExample", "Layout Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
 	
 Writing a size algorithm in Python
 ----------------------------------------
@@ -350,7 +350,7 @@ A size algorithm must implement the :class:`tlp.SizeAlgorithm` interface as illu
 	
 	# The line below does the magic to register the plugin to the plugin database
 	# and updates the GUI to make it accessible through the menus.
-	tulipplugins.registerSizePluginOfGroup("SizeAlgorithmExample", "Size Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")	
+        tulipplugins.registerPluginOfGroup("SizeAlgorithmExample", "Size Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
 
 Writing an export module in Python
 -----------------------------------
@@ -390,7 +390,7 @@ An export module must implement the :class:`tlp.ExportModule` interface as illus
 	
 	# The line below does the magic to register the plugin to the plugin database
 	# and updates the GUI to make it accessible through the menus.
-	tulipplugins.registerExportPluginOfGroup("ExportModuleExample", "Export Module Demo", "author", "27/07/2011", "infos", "1.0", "Python")
+        tulipplugins.registerPluginOfGroup("ExportModuleExample", "Export Module Demo", "author", "27/07/2011", "infos", "1.0", "Python")
 
 Writing an import module in Python
 -----------------------------------		
@@ -422,5 +422,5 @@ An import module must implement the :class:`tlp.ImportModule` interface as illus
 	
 	# The line below does the magic to register the plugin to the plugin database
 	# and updates the GUI to make it accessible through the menus.
-	tulipplugins.registerImportPluginOfGroup("ImportModuleExample", "Import Module Demo", "author", "27/07/2011", "infos", "1.0", "Python")
+        tulipplugins.registerPluginOfGroup("ImportModuleExample", "Import Module Demo", "author", "27/07/2011", "infos", "1.0", "Python")
 			

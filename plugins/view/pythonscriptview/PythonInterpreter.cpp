@@ -164,7 +164,7 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserv
 
     if (QApplication::instance()) {
       PythonInterpreter::getInstance()->initConsoleOutput();
-      //PythonInterpreter::getInstance()->loadTulipPythonPlugins();
+      PythonInterpreter::getInstance()->loadTulipPythonPlugins();
     }
 
     break;
@@ -287,9 +287,9 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
       runString("from tulip import *");
       outputActivated = true;
 
-//#ifndef _MSC_VER
-//      loadTulipPythonPlugins();
-//#endif
+#ifndef _MSC_VER
+      loadTulipPythonPlugins();
+#endif
 
       runString(printObjectDictFunction);
       runString(printObjectClassFunction);
@@ -339,6 +339,7 @@ void PythonInterpreter::loadTulipPythonPlugins() {
 }
 
 void PythonInterpreter::loadTulipPythonPlugins(const std::string &pluginsPath) {
+
   QDir pythonPluginsDir(pluginsPath.c_str());
   QStringList nameFilter;
   nameFilter << "*.py";
