@@ -318,6 +318,7 @@ FOREACH(RELEASE ${CPACK_UBUNTU_DISTRIBUTION_RELEASES})
   # debian/source/format
   IF(RELEASE_PACKAGE)
     FILE(WRITE ${DEBIAN_SOURCE_DIR}/debian/source/format "3.0 (quilt)")
+    FILE(WRITE ${DEBIAN_SOURCE_DIR}/debian/source/options "auto-commit\n")
   ELSE()
     FILE(WRITE ${DEBIAN_SOURCE_DIR}/debian/source/format "3.0 (native)")
   ENDIF()
