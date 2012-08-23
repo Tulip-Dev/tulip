@@ -183,8 +183,6 @@ void removeQtInputHook() {
 
 %End
 
-namespace tlp;
-
 %Include View.sip
 %Include NodeLinkDiagramComponent.sip
 %Include TulipGui.sip

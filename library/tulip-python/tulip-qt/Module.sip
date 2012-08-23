@@ -81,8 +81,6 @@ void printErrorMessage(const std::string &errMsg) {
 }
 %End
 
-namespace tlp;
-
 %Import QtCore/QtCoremod.sip
 %Import QtGui/QtGuimod.sip
 %Import QtOpenGL/QtOpenGLmod.sip

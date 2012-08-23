@@ -78,7 +78,6 @@ static void printErrorMessage(const std::string &errMsg) {
 }
 %End
 
-namespace tlp;
 
 %Include GlSimpleEntity.sip
 %Include GlSceneVisitor.sip
