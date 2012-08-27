@@ -87,6 +87,7 @@ void glTest(string message) {
     error = glGetError();
     ++i;
   }
+
 #endif
 }
 //====================================================
