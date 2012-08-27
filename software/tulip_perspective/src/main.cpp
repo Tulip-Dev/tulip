@@ -115,10 +115,11 @@ int main(int argc,char **argv) {
 
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
   QRegExp extraParametersRegexp("^\\-\\-([^=]*)=(.*)");
-  
+
   QRect prefRect(-1, -1, 0, 0);
   bool moveOrResizeNeeded = false;
   QStringList args = QApplication::arguments();
+
   for(int i=1; i < args.size(); ++i) {
     QString a = args[i];
 
@@ -127,21 +128,25 @@ int main(int argc,char **argv) {
       prefRect.setWidth(a.mid(8).toInt());
       continue;
     }
+
     if (a.indexOf("--height=") == 0) {
       moveOrResizeNeeded = true;
       prefRect.setHeight(a.mid(9).toInt());
       continue;
     }
+
     if (a.indexOf("--x=") == 0) {
       moveOrResizeNeeded = true;
       prefRect.setX(a.mid(4).toInt());
       continue;
     }
+
     if (a.indexOf("--y=") == 0) {
       moveOrResizeNeeded = true;
       prefRect.setY(a.mid(4).toInt());
       continue;
     }
+
     if (perspectiveRegexp.exactMatch(a))
       perspectiveName = perspectiveRegexp.cap(1);
     else if (a == "--help")
@@ -217,14 +222,19 @@ int main(int argc,char **argv) {
   // move or resize mainwindow if needed
   if (moveOrResizeNeeded) {
     QRect mwRect = mainWindow->geometry();
+
     if (prefRect.x() == -1)
       prefRect.setX(mwRect.x());
+
     if (prefRect.y() == -1)
       prefRect.setY(mwRect.y());
+
     if (prefRect.width() == 0)
       prefRect.setWidth(mwRect.width());
+
     if (prefRect.height() == 0)
       prefRect.setHeight(mwRect.height());
+
     mainWindow->setGeometry(prefRect);
   }
 

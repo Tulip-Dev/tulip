@@ -110,8 +110,10 @@ void GlScene::initGlParameters() {
 
 #ifndef NDEBUG
   GLenum error = glGetError();
+
   if ( error != GL_NO_ERROR)
     qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+
 #endif
 }
 

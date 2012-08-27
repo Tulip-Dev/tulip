@@ -165,8 +165,10 @@ void Camera::initLight() {
 
 #ifndef NDEBUG
   GLuint error = glGetError();
+
   if ( error != GL_NO_ERROR)
     qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << " begin" << endl;
+
 #endif
 
   GLfloat pos[4];
@@ -207,8 +209,10 @@ void Camera::initLight() {
 
 #ifndef NDEBUG
   error = glGetError();
+
   if ( error != GL_NO_ERROR)
     qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << "end" << endl;
+
 #endif
 }
 //====================================================
@@ -270,8 +274,10 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset) {
 
 #ifndef NDEBUG
   GLenum error = glGetError();
+
   if ( error != GL_NO_ERROR)
     qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+
 #endif
 }
 //====================================================
@@ -306,8 +312,10 @@ void Camera::initModelView() {
 
 #ifndef NDEBUG
   GLenum error = glGetError();
+
   if ( error != GL_NO_ERROR)
     qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+
 #endif
 }
 //====================================================
