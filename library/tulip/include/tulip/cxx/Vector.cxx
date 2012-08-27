@@ -253,17 +253,17 @@ TYPE  VECTORTLP::norm() const {
 
   case 2:
     return tlpsqrt<TYPE>(tlpsqr<TYPE>(x())
-                                +
-                                tlpsqr<TYPE>(y())
-                               );
+                         +
+                         tlpsqr<TYPE>(y())
+                        );
 
   case 3:
     return tlpsqrt<TYPE>(tlpsqr<TYPE>(x())
-                                +
-                                tlpsqr<TYPE>(y())
-                                +
-                                tlpsqr<TYPE>(z())
-                               );
+                         +
+                         tlpsqr<TYPE>(y())
+                         +
+                         tlpsqr<TYPE>(z())
+                        );
 
   default :
     long double tmp = tlpsqr<TYPE>((*this)[0]);
@@ -283,16 +283,16 @@ TYPE  VECTORTLP::dist(const VECTOR &c) const {
 
   case 2:
     return tlpsqrt<TYPE>(tlpsqr<TYPE>(x()-c.x())
-                                +
-                                tlpsqr<TYPE>(y()-c.y()));
+                         +
+                         tlpsqr<TYPE>(y()-c.y()));
 
   case 3:
     return tlpsqrt<TYPE>(tlpsqr<TYPE>(x()-c.x())
-                                +
-                                tlpsqr<TYPE>(y()-c.y())
-                                +
-                                tlpsqr<TYPE>(z()-c.z())
-                               );
+                         +
+                         tlpsqr<TYPE>(y()-c.y())
+                         +
+                         tlpsqr<TYPE>(z()-c.z())
+                        );
 
   default :
     long double tmp = tlpsqr<TYPE>((*this)[0] - c[0]);
