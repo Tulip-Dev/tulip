@@ -329,7 +329,7 @@ FOREACH(RELEASE ${CPACK_UBUNTU_DISTRIBUTION_RELEASES})
   
   FILE(WRITE ${DEBIAN_CHANGELOG}
     "${CPACK_DEBIAN_PACKAGE_NAME} (${CPACK_PACKAGE_VERSION}${CPACK_DEBIAN_PACKAGE_REVISION}~${RELEASE}1) ${RELEASE}; urgency=medium\n\n"
-    "  ${PACKAGE_CHANGELOG}\n\n"
+    "${PACKAGE_CHANGELOG}\n\n"
     " -- ${CPACK_DEBIAN_PACKAGE_MAINTAINER}  ${DATE_TIME}\n")
 
   ##############################################################################
@@ -341,6 +341,6 @@ ENDFOREACH(RELEASE ${CPACK_DEBIAN_DISTRIBUTION_RELEASES})
 
 ##############################################################################
 # dput ppa:your-lp-id/ppa <source.changes>
-ADD_CUSTOM_TARGET(dput ${DPUT_EXECUTABLE} ${DPUT_HOST} ${DEB_SOURCE_CHANGES} 
+ADD_CUSTOM_TARGET(dput ${DPUT_EXECUTABLE} -f ${DPUT_HOST} ${DEB_SOURCE_CHANGES}
                   DEPENDS ${DEB_SOURCE_CHANGES} 
                   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/Debian)

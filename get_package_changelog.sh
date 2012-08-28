@@ -7,11 +7,11 @@ while [ "$input" != "" ]
 do
   if [ "$changelog" = "" ]
   then
-    changelog="$input"
+    changelog="\t$input"
   else
-    changelog="$changelog\n$input"
+    changelog="$changelog\n\t$input"
   fi
   read input
 done
 
-echo "$changelog" 1>&2
+echo -e "$changelog" 1>&2
