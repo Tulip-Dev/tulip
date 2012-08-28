@@ -57,6 +57,9 @@ unsigned int GraphPerspectiveLogger::count() const {
 
 void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
   if (type == QtFatalMsg) {
+#ifndef NDEBUG
+    QString qMsg(msg);
+#endif
     std::cerr<<msg<<std::endl;
     abort();
   }
