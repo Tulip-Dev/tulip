@@ -119,6 +119,7 @@ public:
       if (prop != NULL) {
         rebuildCache();
         int row = rowOf(prop);
+
         if (row >= 0) {
           beginInsertRows(QModelIndex(),row,row);
           endInsertRows();
