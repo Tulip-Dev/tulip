@@ -7,9 +7,9 @@ while [ "$input" != "" ]
 do
   if [ "$changelog" = "" ]
   then
-    changelog="\t$input"
+    changelog="  $input"
   else
-    changelog="$changelog\n\t$input"
+    changelog="$changelog\n  $input"
   fi
   read input
 done
