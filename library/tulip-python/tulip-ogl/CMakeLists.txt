@@ -60,10 +60,17 @@ ADD_CUSTOM_TARGET(touchTulipOglPythonCMakeLists ALL
   COMMENT "touching CMakeLists.txt for Tulip OpenGL Python Bindings (force configure before next build to keep source files list updated)"
   DEPENDS ${LibTulipOglPythonName})
 
+IF(NOT UBUNTU_PPA_BUILD)
 INSTALL(TARGETS ${LibTulipOglPythonName}
-  RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python
-  LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python
-  ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
+        RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
+ELSE()
+INSTALL(TARGETS ${LibTulipOglPythonName}
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
+ENDIF()
 
 ADD_CUSTOM_COMMAND(
   TARGET ${LibTulipOglPythonName}
