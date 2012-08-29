@@ -59,12 +59,21 @@
 
     PyRun_SimpleString(tlpImportHook.c_str());
 
+    bool initQt = true;
+
+// test if there is an X server running on linux
+// special case for PPA build, otherwise Python documentation is not generated
+#if defined(__linux)
+    char *display = getenv("DISPLAY");
+    initQt = (display != NULL);
+#endif
+
     // If there is no QApplication instance, it means that we are working from the classical Python shell
     // or we are executing a script with the interpreter.
     // Instantiate a QApplication but don't run its event loop continually through the exec method.
     // Instead use the same hack as in PyQt4 in order to process qt events when the Python shell
     // is waiting for input.
-    if (!QApplication::instance()) {
+    if (!QApplication::instance() && initQt) {
         installQtInputHook();
         new QApplication(argc, argv);
         if (tlp::TulipPluginsPath.empty()) {
@@ -99,6 +108,7 @@
 
 %ModuleHeaderCode
 #include <string>
+#include <cstdlib>
 #include <QtGui/QApplication>
 
 #include <tulip/InteractorManager.h>
