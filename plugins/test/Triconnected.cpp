@@ -22,7 +22,7 @@
 
 class TriconnectedTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATIONS("Triconneted Test", "Tulip team", "18/04/2012", "Tests whether a graph is triconneted or not.", "1.0", "Connectivity")
+  PLUGININFORMATIONS("Triconnected Test", "Tulip team", "18/04/2012", "Tests whether a graph is triconneted or not.", "1.0", "Connectivity")
   TriconnectedTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
