@@ -44,7 +44,7 @@ static const char * paramHelp[] = {
  */
 class FileSystem:public tlp::ImportModule {
 public:
-  PLUGININFORMATIONS( "File System Directory", "Auber", "16/12/2002", "", "2.0", "Misc")
+  PLUGININFORMATIONS( "File System Directory", "Auber", "16/12/2002", "", "2.1", "Misc")
   FileSystem(tlp::PluginContext* context):ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
     _fileNames(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL),
     _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL), _sizes(NULL) {
@@ -80,7 +80,7 @@ public:
     _owners = graph->getProperty<tlp::StringProperty>("Owner");
     _permissions = graph->getProperty<tlp::IntegerProperty>("Permission ID");
     _suffixes = graph->getProperty<tlp::StringProperty>("Suffix");
-    _sizes = graph->getProperty<tlp::IntegerProperty>("Size");
+    _sizes = graph->getProperty<tlp::DoubleProperty>("Size");
 
     tlp::node rootNode = addFileNode(rootInfo,graph);
 
@@ -150,7 +150,7 @@ private:
   tlp::StringProperty *_owners;
   tlp::IntegerProperty *_permissions;
   tlp::StringProperty *_suffixes;
-  tlp::IntegerProperty *_sizes;
+  tlp::DoubleProperty *_sizes;
 };
 /*@}*/
 PLUGIN(FileSystem)
