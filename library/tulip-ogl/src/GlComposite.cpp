@@ -150,6 +150,9 @@ void GlComposite::deleteGlEntity(const string &key,bool informTheEntity) {
 
   GlSimpleEntity *entity=elements[key];
 
+  if(informTheEntity)
+    entity->removeParent(this);
+
   if(informTheEntity) {
     GlComposite *composite=dynamic_cast<GlComposite *>(entity);
 
@@ -167,7 +170,6 @@ void GlComposite::deleteGlEntity(const string &key,bool informTheEntity) {
       (*it)->glGraphCompositeRemoved(glGraphComposite);
     }
   }
-
   _sortedElements.remove(elements[key]);
   elements.erase(key);
 
