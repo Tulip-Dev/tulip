@@ -113,8 +113,11 @@ GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *i
 }
 //===================================================================
 GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
-  delete fakeScene;
+  if(lodCalculator)
+    lodCalculator->setAttachedLODCalculator(NULL);
   delete lodCalculator;
+
+  delete fakeScene;
 }
 //===================================================================
 void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
