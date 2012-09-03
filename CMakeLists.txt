@@ -149,7 +149,7 @@ ENDIF()
 ## ========================================================
 
 # Qt
-FIND_PACKAGE(Qt4 4.8.0 REQUIRED)
+FIND_PACKAGE(Qt4 4.7.0 REQUIRED)
 SET(QT_USE_QTOPENGL true)
 SET(QT_USE_QTXML true)
 SET(QT_USE_QTNETWORK true)
