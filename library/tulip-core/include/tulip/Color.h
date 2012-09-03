@@ -19,6 +19,10 @@
 #ifndef _COLOR_H
 #define _COLOR_H
 #include <tulip/Vector.h>
+
+// FIXME: Including QVariant here should be replaced by a specific tulip-core header similar to TulipMetaTypes.h
+#include <QtCore/QVariant>
+
 ///
 namespace tlp {
 
