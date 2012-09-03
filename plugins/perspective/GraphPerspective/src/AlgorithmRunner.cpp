@@ -82,7 +82,7 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   _ui->favoritesBox->widget()->layout()->setSpacing(5);
   _ui->favoritesBox->widget()->installEventFilter(this);
 
-  setEnabled(false);
+  _ui->contents->setEnabled(false);
   QToolButton* localModeButton = new QToolButton(_ui->header);
   localModeButton->setMaximumSize(25,25);
   localModeButton->setMinimumSize(25,25);
@@ -109,7 +109,7 @@ AlgorithmRunner::~AlgorithmRunner() {
 }
 
 void AlgorithmRunner::setGraph(Graph* g) {
-  setEnabled(g != NULL);
+  _ui->contents->setEnabled(g != NULL);
   _graph = g;
   foreach(AlgorithmRunnerItem* item, findChildren<AlgorithmRunnerItem*>())
   item->setGraph(g);
