@@ -39,6 +39,7 @@ GlLayer::GlLayer(const std::string& name,Camera *camera,bool workingLayer)
 GlLayer::~GlLayer() {
   if(!sharedCamera)
     delete camera;
+
   composite.removeLayerParent(this);
 }
 

@@ -55,6 +55,7 @@ void AlgorithmRunnerItem::setGraph(Graph* g) {
     std::pair<std::string,tlp::DataType*> it;
     stableForEach(it,dataSet.getValues()) {
       DataType* t = it.second;
+
       if (t != NULL) {
         if (ISPROP(tlp::BooleanProperty*) ||
             ISPROP(tlp::BooleanVectorProperty*) ||
