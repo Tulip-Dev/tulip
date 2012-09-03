@@ -26,7 +26,7 @@
 
 namespace tlp {
 
-class GlSimpleEntityItemModel : public QAbstractItemModel {
+class TLP_QT_SCOPE GlSimpleEntityItemModel : public QAbstractItemModel {
   Q_OBJECT
   Q_ENUMS(SimpleEntityRole)
 
