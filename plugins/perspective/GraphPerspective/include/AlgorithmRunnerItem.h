@@ -38,6 +38,7 @@ class AlgorithmRunnerItem: public QWidget {
   tlp::Graph* _graph;
   bool _localMode;
   QPointF _dragStartPosition;
+  tlp::DataSet _initData;
 
 
 public:
