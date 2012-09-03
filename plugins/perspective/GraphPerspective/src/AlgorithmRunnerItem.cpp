@@ -44,11 +44,41 @@ AlgorithmRunnerItem::~AlgorithmRunnerItem() {
   delete _ui;
 }
 
+#define ISPROP(T) t->getTypeName().compare(typeid(T).name()) == 0
+
 void AlgorithmRunnerItem::setGraph(Graph* g) {
   _graph = g;
 
-  if (_ui->parameters->model() != NULL)
+  if (_ui->parameters->model() != NULL) {
+    ParameterListModel* model = static_cast<ParameterListModel*>(_ui->parameters->model());
+    DataSet dataSet = model->parametersValues();
+    std::pair<std::string,tlp::DataType*> it;
+    stableForEach(it,dataSet.getValues()) {
+      DataType* t = it.second;
+      if (t != NULL) {
+        if (ISPROP(tlp::BooleanProperty*) ||
+            ISPROP(tlp::BooleanVectorProperty*) ||
+            ISPROP(tlp::DoubleProperty*) ||
+            ISPROP(tlp::DoubleVectorProperty*) ||
+            ISPROP(tlp::LayoutProperty*) ||
+            ISPROP(tlp::CoordVectorProperty*) ||
+            ISPROP(tlp::StringProperty*) ||
+            ISPROP(tlp::StringVectorProperty*) ||
+            ISPROP(tlp::IntegerProperty*) ||
+            ISPROP(tlp::IntegerVectorProperty*) ||
+            ISPROP(tlp::SizeProperty*) ||
+            ISPROP(tlp::SizeVectorProperty*) ||
+            ISPROP(tlp::ColorProperty*) ||
+            ISPROP(tlp::ColorVectorProperty*) ||
+            ISPROP(tlp::GraphProperty*)) {
+          dataSet.remove(it.first);
+        }
+      }
+    }
+    _initData = dataSet;
+
     _ui->parameters->setModel(NULL);
+  }
 
   if (_ui->parameters->isVisible())
     initModel();
@@ -198,4 +228,13 @@ void AlgorithmRunnerItem::initModel() {
 
   _ui->parameters->setMinimumSize(_ui->parameters->minimumSize().width(),h);
   _ui->parameters->setMaximumSize(_ui->parameters->maximumSize().width(),h);
+
+  if (!_initData.empty()) {
+    DataSet dataSet = model->parametersValues();
+    std::pair<std::string,tlp::DataType*> it;
+    forEach(it,_initData.getValues()) {
+      dataSet.setData(it.first,it.second);
+    }
+    model->setParametersValues(dataSet);
+  }
 }
