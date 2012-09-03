@@ -115,6 +115,7 @@ GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *i
 GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
   if(lodCalculator)
     lodCalculator->setAttachedLODCalculator(NULL);
+
   delete lodCalculator;
 
   delete fakeScene;

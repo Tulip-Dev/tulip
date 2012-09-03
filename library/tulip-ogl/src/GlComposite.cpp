@@ -170,6 +170,7 @@ void GlComposite::deleteGlEntity(const string &key,bool informTheEntity) {
       (*it)->glGraphCompositeRemoved(glGraphComposite);
     }
   }
+
   _sortedElements.remove(elements[key]);
   elements.erase(key);
 
