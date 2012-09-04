@@ -257,6 +257,9 @@ QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *
 
     addGraph(g);
   }
+
+  QDir::setCurrent(QFileInfo(project->projectFile()).absolutePath());
+
   return rootIds;
 }
 QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
