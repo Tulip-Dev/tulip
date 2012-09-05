@@ -23,8 +23,11 @@
 #include <QtCore/QDebug>
 #include <QtGui/QFileDialog>
 #include <QtGui/QPainter>
+#include <QtGui/QDesktopServices>
 #include <tulip/TulipProject.h>
 
+#include <time.h>
+#include <iostream>
 #include <CrashHandling.h>
 
 #include "TulipPerspectiveCrashHandler.h"
@@ -43,13 +46,15 @@ void SelectionButton::paintEvent(QPaintEvent *e) {
 
 TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::_instance = 0;
 
+
 TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
+  listen(QHostAddress::LocalHost);
+  connect(this,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
 }
 
 TulipPerspectiveProcessHandler &TulipPerspectiveProcessHandler::instance() {
   if (!_instance)
     _instance = new TulipPerspectiveProcessHandler;
-
   return *_instance;
 }
 
@@ -66,6 +71,8 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   foreach(k,parameters.keys())
   args << "--" + k + "=" + parameters[k].toString();
 
+  args << "--port=" + QString::number(serverPort());
+
   QDir appDir(QApplication::applicationDirPath());
 
   QProcess *process = new QProcess;
@@ -76,10 +83,7 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
 #endif
   connect(process,SIGNAL(error(QProcess::ProcessError)),this,SLOT(perspectiveCrashed(QProcess::ProcessError)));
   connect(process,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(perspectiveFinished(int,QProcess::ExitStatus)));
-  process->setReadChannel(QProcess::StandardOutput);
-  process->setReadChannelMode(QProcess::ForwardedChannels);
-  process->setReadChannel(QProcess::StandardError);
-  process->setProcessChannelMode(QProcess::SeparateChannels);
+  process->setProcessChannelMode(QProcess::ForwardedChannels);
   process->start(appDir.absoluteFilePath("tulip_perspective"),args);
   _processInfos[process] = PerspectiveProcessInfos(perspective,parameters,file);
 }
@@ -143,19 +147,5 @@ void TulipPerspectiveProcessHandler::perspectiveFinished(int, QProcess::ExitStat
   _processInfos.remove(process);
 }
 
-void TulipPerspectiveProcessHandler::enableCrashHandling(qlonglong perspectivePid, const QString &perspectiveProjectPath) {
-  QProcess *p;
-  foreach(p,_processInfos.keys()) {
-#ifdef _WIN32
-
-    if (p->pid()->dwProcessId == perspectivePid) {
-#else
-
-    if (p->pid() == perspectivePid) {
-#endif
-      PerspectiveProcessInfos infos = _processInfos[p];
-      infos.projectPath = perspectiveProjectPath;
-      _processInfos[p] = infos;
-    }
-  }
+void TulipPerspectiveProcessHandler::acceptConnection() {
 }

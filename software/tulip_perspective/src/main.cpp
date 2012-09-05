@@ -67,6 +67,7 @@ void usage(const QString &error) {
        << "FILE: a Tulip project file. If a file is specified, the --perspective flag will be ignored and tulip_perspective will look into the project's meta-informations to find the correct perspective to launch." << endl
        << "List of OPTIONS:" << endl
        << "  --perspective=<perspective_name>\tWill use the perspective specified by perspective_name. Perspective will be run with no project file. If a project file has been specified using the FILE option, this flag will be ignored." << endl
+       << "  --geometry=<X,Y,width,height>\tSets the given rectangle as geometry for the main window." << endl
        << "  --help\tDisplays this help message and ignores other options." << endl;
   exit(returnCode);
 }
@@ -112,49 +113,37 @@ int main(int argc,char **argv) {
   progress->setComment(QObject::trUtf8("Cheking arguments").toStdString());
   QString perspectiveName,projectFilePath;
   QVariantMap extraParams;
+  QRect windowGeometry;
+  PerspectiveContext* context = new PerspectiveContext();
 
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
+  QRegExp portRegexp("^\\-\\-port=([0-9]*)");
+  QRegExp geometryRegexp("^\\-\\-geometry=([0-9]*)\\,([0-9]*)\\,([0-9]*)\\,([0-9]*)");
   QRegExp extraParametersRegexp("^\\-\\-([^=]*)=(.*)");
 
-  QRect prefRect(-1, -1, 0, 0);
-  bool moveOrResizeNeeded = false;
   QStringList args = QApplication::arguments();
 
   for(int i=1; i < args.size(); ++i) {
     QString a = args[i];
 
-    if (a.indexOf("--width=") == 0) {
-      moveOrResizeNeeded = true;
-      prefRect.setWidth(a.mid(8).toInt());
-      continue;
-    }
-
-    if (a.indexOf("--height=") == 0) {
-      moveOrResizeNeeded = true;
-      prefRect.setHeight(a.mid(9).toInt());
-      continue;
-    }
-
-    if (a.indexOf("--x=") == 0) {
-      moveOrResizeNeeded = true;
-      prefRect.setX(a.mid(4).toInt());
-      continue;
-    }
-
-    if (a.indexOf("--y=") == 0) {
-      moveOrResizeNeeded = true;
-      prefRect.setY(a.mid(4).toInt());
-      continue;
-    }
-
-    if (perspectiveRegexp.exactMatch(a))
+    if (perspectiveRegexp.exactMatch(a)) {
       perspectiveName = perspectiveRegexp.cap(1);
-    else if (a == "--help")
+    }
+    else if (geometryRegexp.exactMatch(a)) {
+      windowGeometry = QRect(geometryRegexp.cap(1).toInt(),geometryRegexp.cap(2).toInt(),geometryRegexp.cap(3).toInt(),geometryRegexp.cap(4).toInt());
+    }
+    else if (portRegexp.exactMatch(a)) {
+      context->tulipPort = portRegexp.cap(1).toUInt();
+    }
+    else if (a == "--help") {
       usage("");
-    else if(extraParametersRegexp.exactMatch(a))
+    }
+    else if(extraParametersRegexp.exactMatch(a)) {
       extraParams[extraParametersRegexp.cap(1)] = extraParametersRegexp.cap(2);
-    else if (projectFilePath.isNull())
+    }
+    else if (projectFilePath.isNull()) {
       projectFilePath = a;
+    }
   }
 
   TulipProject *project = NULL;
@@ -171,7 +160,6 @@ int main(int argc,char **argv) {
     }
   }
 
-  PerspectiveContext* context = new PerspectiveContext();
 
   if (project == NULL) {
     context->externalFile = projectFilePath;
@@ -201,6 +189,8 @@ int main(int argc,char **argv) {
     usage("Failed to create perspective: " + perspectiveName);
 
   mainWindow->setPerspective(perspective);
+  if (windowGeometry.isValid())
+    mainWindow->setGeometry(windowGeometry);
 
   QString title("Tulip [" + perspectiveName + "]");
 
@@ -218,25 +208,6 @@ int main(int argc,char **argv) {
 #endif
 
   perspective->start(progress);
-
-  // move or resize mainwindow if needed
-  if (moveOrResizeNeeded) {
-    QRect mwRect = mainWindow->geometry();
-
-    if (prefRect.x() == -1)
-      prefRect.setX(mwRect.x());
-
-    if (prefRect.y() == -1)
-      prefRect.setY(mwRect.y());
-
-    if (prefRect.width() == 0)
-      prefRect.setWidth(mwRect.width());
-
-    if (prefRect.height() == 0)
-      prefRect.setHeight(mwRect.height());
-
-    mainWindow->setGeometry(prefRect);
-  }
 
   mainWindow->setWindowTitle(title);
 
