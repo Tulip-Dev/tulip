@@ -189,6 +189,7 @@ int main(int argc,char **argv) {
     usage("Failed to create perspective: " + perspectiveName);
 
   mainWindow->setPerspective(perspective);
+
   if (windowGeometry.isValid())
     mainWindow->setGeometry(windowGeometry);
 

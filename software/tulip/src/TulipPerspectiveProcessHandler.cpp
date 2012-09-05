@@ -55,6 +55,7 @@ TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
 TulipPerspectiveProcessHandler &TulipPerspectiveProcessHandler::instance() {
   if (!_instance)
     _instance = new TulipPerspectiveProcessHandler;
+
   return *_instance;
 }
 
