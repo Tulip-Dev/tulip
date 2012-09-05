@@ -3530,31 +3530,27 @@ if (sipCpp->getAttributes().exist(*a0)) {
 #endif
   } else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::DataSet *>(dataType->value), sipType_tlp_DataSet, NULL);
-    
-  } else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
-    ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::DataSet *>(dataType->value), sipType_tlp_DataSet, NULL);
+    sipRes = sipConvertFromNewType(new tlp::DataSet(*reinterpret_cast<tlp::DataSet *>(dataType->value)), sipType_tlp_DataSet, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::Coord).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::Coord *>(dataType->value), sipType_tlp_Coord, NULL);
+    sipRes = sipConvertFromNewType(new tlp::Coord(*reinterpret_cast<tlp::Coord *>(dataType->value)), sipType_tlp_Coord, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::Color).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::Color *>(dataType->value), sipType_tlp_Color, NULL);
+    sipRes = sipConvertFromNewType(new tlp::Color(*reinterpret_cast<tlp::Color *>(dataType->value)), sipType_tlp_Color, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::Size).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::Size *>(dataType->value), sipType_tlp_Size, NULL);
+    sipRes = sipConvertFromNewType(new tlp::Size(*reinterpret_cast<tlp::Size *>(dataType->value)), sipType_tlp_Size, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::ColorScale).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::ColorScale *>(dataType->value), sipType_tlp_ColorScale, NULL);
+    sipRes = sipConvertFromNewType(new tlp::ColorScale(*reinterpret_cast<tlp::ColorScale *>(dataType->value)), sipType_tlp_ColorScale, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::StringCollection).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::StringCollection *>(dataType->value), sipType_tlp_StringCollection, NULL);
+    sipRes = sipConvertFromNewType(new tlp::StringCollection(*reinterpret_cast<tlp::StringCollection *>(dataType->value)), sipType_tlp_StringCollection, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::PropertyInterface*).name())) {
     ok = true;
@@ -3590,34 +3586,34 @@ if (sipCpp->getAttributes().exist(*a0)) {
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::node>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::node> *>(dataType->value), sipType_std_vector_0100tlp_node, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<tlp::node>(*reinterpret_cast<std::vector<tlp::node> *>(dataType->value)), sipType_std_vector_0100tlp_node, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::set<tlp::node>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::set<tlp::node> *>(dataType->value), sipType_std_set_0100tlp_node, NULL);
+    sipRes = sipConvertFromNewType(new std::set<tlp::node>(*reinterpret_cast<std::set<tlp::node> *>(dataType->value)), sipType_std_set_0100tlp_node, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::edge>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::edge> *>(dataType->value), sipType_std_vector_0100tlp_edge, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<tlp::edge>(*reinterpret_cast<std::vector<tlp::edge> *>(dataType->value)), sipType_std_vector_0100tlp_edge, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::set<tlp::edge>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::set<tlp::edge> *>(dataType->value), sipType_std_set_0100tlp_edge, NULL);
+    sipRes = sipConvertFromNewType(new std::set<tlp::edge>(*reinterpret_cast<std::set<tlp::edge> *>(dataType->value)), sipType_std_set_0100tlp_edge, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Coord>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Coord> *>(dataType->value), sipType_std_vector_0100tlp_Coord, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<tlp::Coord>(*reinterpret_cast<std::vector<tlp::Coord> *>(dataType->value)), sipType_std_vector_0100tlp_Coord, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Color>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Color> *>(dataType->value), sipType_std_vector_0100tlp_Color, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<tlp::Color>(*reinterpret_cast<std::vector<tlp::Color> *>(dataType->value)), sipType_std_vector_0100tlp_Color, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Size>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Size> *>(dataType->value), sipType_std_vector_0100tlp_Size, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<tlp::Size>(*reinterpret_cast<std::vector<tlp::Size> *>(dataType->value)), sipType_std_vector_0100tlp_Size, NULL);
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<std::string>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<std::string> *>(dataType->value), sipType_std_vector_0100std_string, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<std::string>(*reinterpret_cast<std::vector<std::string> *>(dataType->value)), sipType_std_vector_0100std_string, NULL);
   }
   delete dataType;
 }
