@@ -48,6 +48,7 @@ public :
 
   void saved() {
     _needsSaving = false;
+    removeObservers();
     addObserver();
   }
 
