@@ -36,11 +36,12 @@ static const std::string PERSPECTIVE_CATEGORY = QObject::trUtf8("Perspective").t
 
 class TLP_QT_SCOPE PerspectiveContext : public tlp::PluginContext {
 public:
-  PerspectiveContext(): mainWindow(0), project(0) {}
+  PerspectiveContext(): mainWindow(0), project(0), tulipPort(0) {}
   QMainWindow *mainWindow;
   TulipProject *project;
   QString externalFile;
   QVariantMap parameters;
+  quint64 tulipPort;
 };
 
 class TLP_QT_SCOPE Perspective : public QObject, public tlp::Plugin {

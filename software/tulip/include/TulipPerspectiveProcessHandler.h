@@ -25,6 +25,7 @@
 
 #include <QtGui/QPushButton>
 
+#include <QtNetwork/QTcpServer>
 
 // Some utility class used in crash handler dialog designer form
 class SelectionButton: public QPushButton {
@@ -46,7 +47,7 @@ struct PerspectiveProcessInfos {
   QString projectPath;
 };
 
-class TulipPerspectiveProcessHandler: public QObject {
+class TulipPerspectiveProcessHandler: public QTcpServer {
   Q_OBJECT
 
   QMap<QProcess *, PerspectiveProcessInfos> _processInfos;
@@ -54,16 +55,19 @@ class TulipPerspectiveProcessHandler: public QObject {
   static TulipPerspectiveProcessHandler *_instance;
   TulipPerspectiveProcessHandler();
 
+  QThread* _serverThread;
+
 public:
   static TulipPerspectiveProcessHandler &instance();
 
 public slots:
   void createPerspective(const QString &perspective, const QString &file, const QVariantMap &parameters);
-  void enableCrashHandling(qlonglong perspectivePid, const QString &perspectiveProjectPath);
 
 protected slots:
   void perspectiveCrashed(QProcess::ProcessError);
   void perspectiveFinished(int exitCode, QProcess::ExitStatus exitStatus);
+
+  void acceptConnection();
 
 };
 
