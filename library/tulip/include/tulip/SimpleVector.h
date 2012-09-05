@@ -46,7 +46,7 @@ public:
   SimpleVector(const SimpleVector &v):
     beginP(v.beginP),middleP(v.middleP),endP(v.endP) { }
   explicit SimpleVector(size_t s) {
-    begin=0;
+    beginP=0;
     resize(s);
   }
   void resize(size_t s) {
