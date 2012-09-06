@@ -22,6 +22,9 @@
 #include <QtGui/QMainWindow>
 #include <tulip/SimplePluginProgressWidget.h>
 
+#include <QtNetwork/QTcpSocket>
+#include <QtNetwork/QHostAddress>
+
 using namespace tlp;
 
 tlp::Perspective* Perspective::_instance = NULL;
@@ -33,13 +36,27 @@ void Perspective::setInstance(Perspective* p) {
   _instance = p;
 }
 
-Perspective::Perspective(const tlp::PluginContext* c) : _project(NULL), _mainWindow(NULL), _externalFile(QString()), _parameters(QVariantMap()) {
+Perspective::Perspective(const tlp::PluginContext* c) : _project(NULL), _mainWindow(NULL), _externalFile(QString()), _parameters(QVariantMap()), _agentSocket(NULL) {
   if(c != NULL) {
     const PerspectiveContext* perspectiveContext = dynamic_cast<const PerspectiveContext*>(c);
     _mainWindow = perspectiveContext->mainWindow;
     _project = perspectiveContext->project;
     _externalFile = perspectiveContext->externalFile;
     _parameters = perspectiveContext->parameters;
+
+    if (perspectiveContext->tulipPort != 0) {
+      _agentSocket = new QTcpSocket(this);
+      _agentSocket->connectToHost(QHostAddress::LocalHost,perspectiveContext->tulipPort);
+      if (!_agentSocket->waitForConnected(2000)) {
+        _agentSocket->deleteLater();
+        _agentSocket = NULL;
+      }
+    }
+#ifndef NDEBUG
+    else {
+      qWarning("Perspective running in standalone mode");
+    }
+#endif
   }
 }
 
@@ -67,4 +84,10 @@ void Perspective::registerReservedProperty(QString s) {
 }
 bool Perspective::isReservedPropertyName(QString s) {
   return _reservedProperties.contains(s);
+}
+
+void Perspective::showPluginsCenter() {
+  if (_agentSocket == NULL)
+    return;
+  _agentSocket->write("SHOW_AGENT PLUGINS");
 }

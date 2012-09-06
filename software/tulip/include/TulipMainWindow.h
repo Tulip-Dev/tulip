@@ -68,6 +68,8 @@ public slots:
 
   void showOpenProjectWindow();
 
+  void showPluginsCenter();
+
 protected:
   void closeEvent(QCloseEvent *);
 
