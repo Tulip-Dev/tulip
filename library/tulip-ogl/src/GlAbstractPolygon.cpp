@@ -444,9 +444,6 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
     }
   }
 
-  GLfloat normalt[3];
-  glGetFloatv(GL_CURRENT_NORMAL,normalt);
-
   glDisableClientState(GL_VERTEX_ARRAY);
 
   if(canUseVBO) {
