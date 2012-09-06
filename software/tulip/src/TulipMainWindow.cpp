@@ -152,6 +152,7 @@ void TulipMainWindow::showOpenProjectWindow() {
 void TulipMainWindow::showPluginsCenter() {
   if (!isVisible())
     setVisible(true);
+
   raise();
   _ui->pages->setCurrentWidget(_ui->pluginsPage);
 }
@@ -159,6 +160,7 @@ void TulipMainWindow::showPluginsCenter() {
 void TulipMainWindow::showProjectsCenter() {
   if (!isVisible())
     setVisible(true);
+
   raise();
   _ui->pages->setCurrentWidget(_ui->welcomePage);
 }
@@ -166,6 +168,7 @@ void TulipMainWindow::showProjectsCenter() {
 void TulipMainWindow::showAboutCenter() {
   if (!isVisible())
     setVisible(true);
+
   raise();
   _ui->pages->setCurrentWidget(_ui->aboutPage);
 }
@@ -177,9 +180,11 @@ void TulipMainWindow::showTrayMessage(const QString &message) {
 void TulipMainWindow::openProject(const QString &file) {
   raise();
   tlp::TulipProject *project = tlp::TulipProject::openProject(file);
+
   if (project->isValid()) {
     openProjectWith(file, project->perspective(),QVariantMap());
   }
+
   delete project;
 }
 

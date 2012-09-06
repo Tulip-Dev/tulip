@@ -47,15 +47,18 @@ Perspective::Perspective(const tlp::PluginContext* c) : _project(NULL), _mainWin
     if (perspectiveContext->tulipPort != 0) {
       _agentSocket = new QTcpSocket(this);
       _agentSocket->connectToHost(QHostAddress::LocalHost,perspectiveContext->tulipPort);
+
       if (!_agentSocket->waitForConnected(2000)) {
         _agentSocket->deleteLater();
         _agentSocket = NULL;
       }
     }
+
 #ifndef NDEBUG
     else {
       qWarning("Perspective running in standalone mode");
     }
+
 #endif
   }
 }
@@ -89,6 +92,7 @@ bool Perspective::isReservedPropertyName(QString s) {
 void Perspective::sendAgentMessage(const QString& msg) {
   if (_agentSocket == NULL)
     return;
+
   _agentSocket->write(msg.toUtf8());
 }
 

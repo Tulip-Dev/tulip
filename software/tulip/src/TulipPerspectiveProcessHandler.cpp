@@ -162,6 +162,7 @@ void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
   QString data = socket->readAll();
   QStringList tokens = data.split(" ");
   QString args = data.remove(0,tokens[0].length()+1);
+
   if (tokens[0] == "SHOW_AGENT") {
     if (tokens[1] == "PLUGINS")
       emit showPluginsAgent();
