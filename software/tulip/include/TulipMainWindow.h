@@ -69,6 +69,9 @@ public slots:
   void showOpenProjectWindow();
 
   void showPluginsCenter();
+  void showProjectsCenter();
+  void showAboutCenter();
+  void showTrayMessage(const QString& message);
 
 protected:
   void closeEvent(QCloseEvent *);

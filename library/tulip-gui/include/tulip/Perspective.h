@@ -58,6 +58,8 @@ protected:
   QMainWindow *_mainWindow;
   QString _externalFile;
   QVariantMap _parameters;
+
+  void sendAgentMessage(const QString&);
 public:
 
   virtual std::string category() const {
@@ -97,6 +99,11 @@ public slots:
 
 protected slots:
   void showPluginsCenter();
+  void showProjectsPage();
+  void showAboutPage();
+  void showTrayMessage(const QString& s);
+  void openProjectFile(const QString& path);
+  void createPerspective(const QString& name);
 };
 
 }

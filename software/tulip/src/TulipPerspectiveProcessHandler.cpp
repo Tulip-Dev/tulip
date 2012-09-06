@@ -161,9 +161,19 @@ void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
   QTcpSocket* socket = static_cast<QTcpSocket*>(sender());
   QString data = socket->readAll();
   QStringList tokens = data.split(" ");
+  QString args = data.remove(0,tokens[0].length()+1);
   if (tokens[0] == "SHOW_AGENT") {
-    if (tokens[1] == "PLUGINS") {
+    if (tokens[1] == "PLUGINS")
       emit showPluginsAgent();
-    }
+    else if (tokens[1] == "PROJECTS")
+      emit showProjectsAgent();
+    else if (tokens[1] == "ABOUT")
+      emit showAboutAgent();
   }
+  else if (tokens[0] == "TRAY_MESSAGE")
+    emit showTrayMessage(args);
+  else if (tokens[0] == "OPEN_PROJECT")
+    emit openProject(args);
+  else if (tokens[0] == "CREATE_PERSPECTIVE")
+    emit openPerspective(args);
 }

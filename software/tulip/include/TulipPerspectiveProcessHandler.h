@@ -73,6 +73,11 @@ protected slots:
 
 signals:
   void showPluginsAgent();
+  void showProjectsAgent();
+  void showAboutAgent();
+  void showTrayMessage(QString);
+  void openProject(QString);
+  void openPerspective(QString);
 
 };
 

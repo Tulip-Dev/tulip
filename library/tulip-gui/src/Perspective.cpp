@@ -86,8 +86,32 @@ bool Perspective::isReservedPropertyName(QString s) {
   return _reservedProperties.contains(s);
 }
 
-void Perspective::showPluginsCenter() {
+void Perspective::sendAgentMessage(const QString& msg) {
   if (_agentSocket == NULL)
     return;
-  _agentSocket->write("SHOW_AGENT PLUGINS");
+  _agentSocket->write(msg.toUtf8());
+}
+
+void Perspective::showPluginsCenter() {
+  sendAgentMessage("SHOW_AGENT PLUGINS");
+}
+
+void Perspective::showProjectsPage() {
+  sendAgentMessage("SHOW_AGENT PROJECTS");
+}
+
+void Perspective::showAboutPage() {
+  sendAgentMessage("SHOW_AGENT ABOUT");
+}
+
+void Perspective::showTrayMessage(const QString &s) {
+  sendAgentMessage("TRAY_MESSAGE " + s);
+}
+
+void Perspective::openProjectFile(const QString &path) {
+  sendAgentMessage("OPEN_PROJECT " + path);
+}
+
+void Perspective::createPerspective(const QString &name) {
+  sendAgentMessage("CREATE_PERSPECTIVE " + name);
 }
