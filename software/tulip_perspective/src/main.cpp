@@ -205,7 +205,7 @@ int main(int argc,char **argv) {
   }
 
 #ifndef NDEBUG
-  title += " - [ Debug mode enabled ]";
+  title += " - [ Debug mode ]";
 #endif
 
   perspective->start(progress);

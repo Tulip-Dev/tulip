@@ -77,6 +77,11 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   _systemTrayIcon->show();
 
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showPluginsAgent()),this,SLOT(showPluginsCenter()));
+  connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showProjectsAgent()),this,SLOT(showProjectsCenter()));
+  connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showAboutAgent()),this,SLOT(showAboutCenter()));
+  connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showTrayMessage(QString)),this,SLOT(showTrayMessage(QString)));
+  connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openProject(QString)),this,SLOT(openProject(QString)));
+  connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openPerspective(QString)),this,SLOT(createPerspective(QString)));
 }
 
 TulipMainWindow::~TulipMainWindow() {
@@ -151,13 +156,30 @@ void TulipMainWindow::showPluginsCenter() {
   _ui->pages->setCurrentWidget(_ui->pluginsPage);
 }
 
-void TulipMainWindow::openProject(const QString &file) {
-  tlp::TulipProject *project = tlp::TulipProject::openProject(file);
+void TulipMainWindow::showProjectsCenter() {
+  if (!isVisible())
+    setVisible(true);
+  raise();
+  _ui->pages->setCurrentWidget(_ui->welcomePage);
+}
 
+void TulipMainWindow::showAboutCenter() {
+  if (!isVisible())
+    setVisible(true);
+  raise();
+  _ui->pages->setCurrentWidget(_ui->aboutPage);
+}
+
+void TulipMainWindow::showTrayMessage(const QString &message) {
+  showTrayMessage(trUtf8("Perspective"),"\n" + message + "\n\n" + trUtf8("Click to dismiss"),(uint)QSystemTrayIcon::Information,3000);
+}
+
+void TulipMainWindow::openProject(const QString &file) {
+  raise();
+  tlp::TulipProject *project = tlp::TulipProject::openProject(file);
   if (project->isValid()) {
     openProjectWith(file, project->perspective(),QVariantMap());
   }
-
   delete project;
 }
 

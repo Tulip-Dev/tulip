@@ -192,6 +192,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   // Agent actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));
+  connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SLOT(showAboutPage()));
 
   // Setting initial sizes for splitters
   _ui->mainSplitter->setSizes(QList<int>() << 200 << 1000);
@@ -220,6 +221,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
+
+  showTrayMessage("GraphPerspective started");
 
   delete progress;
 }
@@ -426,10 +429,13 @@ void GraphPerspective::saveAs(const QString& path) {
 void GraphPerspective::open() {
   QString filters;
   QMap<std::string, std::string> modules;
-  std::list<std::string> exports = PluginLister::instance()->availablePlugins<ImportModule>();
+  std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
+
+  filters.append("Tulip project (*.tlpx);;");
+
   QString filterAny("Any supported format (");
 
-  for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
+  for(std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
     ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
     std::list<std::string> fileExtension(m->fileExtensions());
 
@@ -442,7 +448,7 @@ void GraphPerspective::open() {
       filterAny += QString("*.") + listIt->c_str() + " ";
       filters += currentFilter;
 
-      if(it != exports.end()) {
+      if(it != imports.end()) {
         filters += ";;";
       }
 
@@ -452,7 +458,7 @@ void GraphPerspective::open() {
     delete m;
   }
 
-  filterAny += ");;";
+  filterAny += " *.tlpx);;";
 
   filters.insert(0, filterAny);
   QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open Graph"), _lastOpenLocation, filters);
@@ -462,7 +468,11 @@ void GraphPerspective::open() {
     _lastOpenLocation = fileInfo.absolutePath();
 
     foreach(std::string extension, modules.keys()) {
-      if(fileName.endsWith(QString::fromStdString(extension))) {
+      if (fileName.endsWith(".tlpx")) {
+        openProjectFile(fileName);
+        break;
+      }
+      else if(fileName.endsWith(QString::fromStdString(extension))) {
         DataSet params;
         params.set<std::string>("file::filename", std::string(fileName.toUtf8().data()));
         Graph* g = tlp::importGraph(modules[extension], params);
