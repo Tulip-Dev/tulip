@@ -24,6 +24,7 @@
 #include <QtGui/QFileDialog>
 #include <QtGui/QPainter>
 #include <QtGui/QDesktopServices>
+#include <QtNetwork/QTcpSocket>
 #include <tulip/TulipProject.h>
 
 #include <time.h>
@@ -31,6 +32,7 @@
 #include <CrashHandling.h>
 
 #include "TulipPerspectiveCrashHandler.h"
+#include "TulipMainWindow.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -52,11 +54,12 @@ TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
   connect(this,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
 }
 
-TulipPerspectiveProcessHandler &TulipPerspectiveProcessHandler::instance() {
-  if (!_instance)
+TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::instance() {
+  if (!_instance) {
     _instance = new TulipPerspectiveProcessHandler;
+  }
 
-  return *_instance;
+  return _instance;
 }
 
 void TulipPerspectiveProcessHandler::createPerspective(const QString &perspective, const QString &file, const QVariantMap &parameters) {
@@ -149,4 +152,18 @@ void TulipPerspectiveProcessHandler::perspectiveFinished(int, QProcess::ExitStat
 }
 
 void TulipPerspectiveProcessHandler::acceptConnection() {
+  QTcpSocket* socket = nextPendingConnection();
+  connect(socket,SIGNAL(readyRead()),this,SLOT(perspectiveReadyRead()));
+  connect(socket,SIGNAL(disconnected()),socket,SLOT(deleteLater()));
+}
+
+void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
+  QTcpSocket* socket = static_cast<QTcpSocket*>(sender());
+  QString data = socket->readAll();
+  QStringList tokens = data.split(" ");
+  if (tokens[0] == "SHOW_AGENT") {
+    if (tokens[1] == "PLUGINS") {
+      emit showPluginsAgent();
+    }
+  }
 }

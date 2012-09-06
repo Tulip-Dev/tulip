@@ -190,9 +190,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonOutput(bool)));
   connect(_ui->searchButton,SIGNAL(clicked(bool)),this,SLOT(setSearchOutput(bool)));
 
-  // D-BUS actions
-  connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SIGNAL(showTulipPluginsCenter()));
-  connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SIGNAL(showTulipAboutPage()));
+  // Agent actions
+  connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));
 
   // Setting initial sizes for splitters
   _ui->mainSplitter->setSizes(QList<int>() << 200 << 1000);

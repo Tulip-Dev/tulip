@@ -75,6 +75,8 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(_ui->welcomePage,SIGNAL(openProject()),this,SLOT(showOpenProjectWindow()));
   connect(_ui->welcomePage,SIGNAL(openFile(QString)),this,SLOT(openProject(QString)));
   _systemTrayIcon->show();
+
+  connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showPluginsAgent()),this,SLOT(showPluginsCenter()));
 }
 
 TulipMainWindow::~TulipMainWindow() {
@@ -141,6 +143,14 @@ void TulipMainWindow::showOpenProjectWindow() {
 
   openProject(filePath);
 }
+
+void TulipMainWindow::showPluginsCenter() {
+  if (!isVisible())
+    setVisible(true);
+  raise();
+  _ui->pages->setCurrentWidget(_ui->pluginsPage);
+}
+
 void TulipMainWindow::openProject(const QString &file) {
   tlp::TulipProject *project = tlp::TulipProject::openProject(file);
 
@@ -152,11 +162,11 @@ void TulipMainWindow::openProject(const QString &file) {
 }
 
 void TulipMainWindow::createPerspective(const QString &name,const QVariantMap &parameters) {
-  TulipPerspectiveProcessHandler::instance().createPerspective(name,"",parameters);
+  TulipPerspectiveProcessHandler::instance()->createPerspective(name,"",parameters);
 }
 void TulipMainWindow::openProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters) {
   TulipSettings::instance().addToRecentDocuments(file);
-  TulipPerspectiveProcessHandler::instance().createPerspective(perspective,file,parameters);
+  TulipPerspectiveProcessHandler::instance()->createPerspective(perspective,file,parameters);
 }
 
 void TulipMainWindow::showTrayMessage(const QString &title, const QString &message, uint icon, uint duration) {

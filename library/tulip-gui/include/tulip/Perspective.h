@@ -27,6 +27,7 @@
 #include <QtCore/QVariant>
 
 class QMainWindow;
+class QTcpSocket;
 
 namespace tlp {
 
@@ -49,6 +50,8 @@ class TLP_QT_SCOPE Perspective : public QObject, public tlp::Plugin {
 
   static tlp::Perspective* _instance;
   QSet<QString> _reservedProperties;
+  QTcpSocket* _agentSocket;
+
 
 protected:
   TulipProject *_project;
@@ -92,22 +95,8 @@ public slots:
     return true;
   }
 
-signals:
-  void showTulipWelcomeScreen();
-  void showTulipPluginsCenter();
-  void showTulipAboutPage();
-
-  void createPerspective(QString name, const QVariantMap &parameters = QVariantMap());
-
-  void openProject(QString);
-  void openProjectWith(QString,QString,const QVariantMap &parameters = QVariantMap());
-
-  void showOpenProjectWindow();
-
-  void addPluginRepository(QString);
-  void removePluginRepository(QString);
-
-  void showTrayMessage(QString title,QString message,uint icon=0,uint duration=10000);
+protected slots:
+  void showPluginsCenter();
 };
 
 }
