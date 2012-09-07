@@ -9,6 +9,6 @@ As a consequence, running a bundler should be achived by respecting those steps:
 
  . Run CMake and compile tulip
  . Run a make install
- . Run the bundler_script <used CMAKE_INSTALL_PREFIX> <dest_dir>
+ . Run the bundler_script <CMAKE_INSTALL_PREFIX> <dest_dir>
 
 Note: bundler scripts should always be called from within their containing directories.
