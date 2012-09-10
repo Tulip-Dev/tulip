@@ -39,6 +39,7 @@ CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
   _confPropertySelectionItem = new QGraphicsProxyWidget(_rondedRectItem);
   _confPropertySelectionItem->setWidget(_confPropertySelectionWidget);
   _confPropertySelectionItem->setPos(5,230);
+  _confPropertySelectionItem->setZValue(2);
 
   _nodesEdgesTextItem = new QGraphicsSimpleTextItem(_rondedRectItem);
 }
@@ -73,22 +74,21 @@ void CaptionGraphicsItem::constructConfigWidget() {
 
   disconnect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
   QString selectedItem=_confPropertySelectionWidget->currentText();
-  int index=-1;
+  bool oldPropertyFound=false;
+  bool viewMetricFound=false;
   _confPropertySelectionWidget->clear();
   QStringList properties;
   Iterator<PropertyInterface*>* itP=_view->graph()->getLocalObjectProperties();
-
-  int viewMetricIndex=-1;
 
   while(itP->hasNext()) {
     PropertyInterface *property=itP->next();
 
     if(property->getTypename()=="double") {
       if(property->getName().c_str() == selectedItem)
-        index=properties.size();
+        oldPropertyFound=true;
 
       if(property->getName()=="viewMetric")
-        viewMetricIndex=properties.size();
+        viewMetricFound=true;
 
       properties << property->getName().c_str() ;
     }
@@ -96,13 +96,16 @@ void CaptionGraphicsItem::constructConfigWidget() {
 
   _confPropertySelectionWidget->addItems(properties);
 
-  if(index!=-1) {
-    _confPropertySelectionWidget->setCurrentIndex(index);
-  }
-  else {
-    if(viewMetricIndex!=-1)
-      _confPropertySelectionWidget->setCurrentIndex(viewMetricIndex);
-  }
+  _confPropertySelectionWidget->insertSeparator(_confPropertySelectionWidget->count());
+
+  if(oldPropertyFound)
+    _confPropertySelectionWidget->addItem(selectedItem);
+  else if(viewMetricFound)
+    _confPropertySelectionWidget->addItem("viewMetric");
+  else
+    _confPropertySelectionWidget->addItem(properties.first());
+
+  _confPropertySelectionWidget->setCurrentIndex(_confPropertySelectionWidget->count()-1);
 
   connect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
 }
@@ -119,6 +122,15 @@ void CaptionGraphicsItem::filterChangedSlot(float begin,float end) {
 }
 
 void CaptionGraphicsItem::selectedPropertyChangedSlot(const QString &propertyName) {
+  disconnect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
+
+  QString currentText=_confPropertySelectionWidget->currentText();
+  _confPropertySelectionWidget->removeItem(_confPropertySelectionWidget->count()-1);
+  _confPropertySelectionWidget->addItem(currentText);
+  _confPropertySelectionWidget->setCurrentIndex(_confPropertySelectionWidget->count()-1);
+
+  connect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
+
   emit selectedPropertyChanged(propertyName.toStdString());
 }
 
