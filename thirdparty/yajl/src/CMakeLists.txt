@@ -48,7 +48,7 @@ SET_TARGET_PROPERTIES(yajl PROPERTIES
 IF(APPLE)
   MESSAGE("INSTALL_NAME_DIR: ${CMAKE_INSTALL_PREFIX}/lib")
   SET_TARGET_PROPERTIES(yajl PROPERTIES
-                        INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+                        INSTALL_NAME_DIR "@executable_path/../lib")
 ENDIF(APPLE)
 
 #### build up an sdk as a post build step
