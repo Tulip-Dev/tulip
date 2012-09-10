@@ -39,6 +39,7 @@
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlTextureManager.h>
 
+#include <QtCore/QString>
 
 using namespace std;
 
@@ -143,7 +144,8 @@ void GlLabel::setTextBeforeRendering(const std::string& text) {
 
   // After we compute width of text
   for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
-    font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
+    std::wstring wide(QString::fromStdString(*it).toStdWString());
+    font->BBox(wide.c_str(),x1,w1,z1,x2,w2,z2);
 
     textWidthVector.push_back(x2-x1);
 
@@ -596,7 +598,8 @@ void GlLabel::draw(float lod, Camera *camera) {
     vector<float>::iterator itW=textWidthVector.begin();
 
     for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
-      font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
+      std::wstring wide(QString::fromStdString(*it).toStdWString());
+      font->BBox(wide.c_str(),x1,w1,z1,x2,w2,z2);
 
       FTPoint shift(-(textBoundingBox[1][0]-textBoundingBox[0][0])/2.-x1+((textBoundingBox[1][0]-textBoundingBox[0][0])-(*itW))*xAlignFactor+(textBoundingBox[1][0]-textBoundingBox[0][0])*xShiftFactor,
                     -textBoundingBox[1][1]+(textBoundingBox[1][1]-textBoundingBox[0][1])/2.+yShift+(textBoundingBox[1][1]-textBoundingBox[0][1])*yShiftFactor);
@@ -606,7 +609,7 @@ void GlLabel::draw(float lod, Camera *camera) {
 
       setMaterial(color);
 
-      font->Render((*it).c_str(),-1,shift);
+      font->Render(wide.c_str(),-1,shift);
 
       if(textureName!="")
         GlTextureManager::getInst().desactivateTexture();
@@ -616,7 +619,7 @@ void GlLabel::draw(float lod, Camera *camera) {
         setMaterial(outlineColor);
       }
 
-      borderFont->Render((*it).c_str(),-1,shift);
+      borderFont->Render(wide.c_str(),-1,shift);
       yShift-=fontSize+5;
       itW++;
     }
