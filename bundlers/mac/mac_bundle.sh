@@ -40,8 +40,6 @@ for lib in libGLEW libjpeg libpng libfreetype libz libstdc++; do
   done
 done
 
-prout() {
 echo 'Generating DMG'
 cd $DEST_DIR
 sh $SRC_DIR/make_dmg.sh "Tulip" "4.0" $DEST_DIR/application
-}
