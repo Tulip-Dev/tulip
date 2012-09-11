@@ -218,6 +218,7 @@ void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool toggle) {
   area->setStyleSheet("#contents { background-color: white; border: 1px solid #C9C9C9; }");
   area->setWidget(interactorWidget);
   _currentInteractorConfigurationItem->setWidget(area);
+  _currentInteractorConfigurationItem->setPos(0,0);
   _view->graphicsView()->scene()->addItem(_currentInteractorConfigurationItem);
   QPropertyAnimation* anim = new QPropertyAnimation(_currentInteractorConfigurationItem,"opacity",_currentInteractorConfigurationItem);
   anim->setStartValue(0);
