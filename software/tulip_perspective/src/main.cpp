@@ -90,8 +90,8 @@ int main(int argc,char **argv) {
   progress->setComment(QObject::trUtf8("Initializing D-Bus").toStdString());
 
 #if defined(__APPLE__)
-  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
-  QDir::setCurrent(QApplication::applicationDirPath());
+  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
+  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
 #endif
 
   // Init Tulip and load plugins
