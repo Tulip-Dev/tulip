@@ -118,11 +118,16 @@ int main(int argc,char **argv) {
 
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
   QRegExp portRegexp("^\\-\\-port=([0-9]*)");
+  QRegExp idRegexp("^\\-\\-id=([0-9]*)");
   QRegExp geometryRegexp("^\\-\\-geometry=([0-9]*)\\,([0-9]*)\\,([0-9]*)\\,([0-9]*)");
   QRegExp extraParametersRegexp("^\\-\\-([^=]*)=(.*)");
 
   QStringList args = QApplication::arguments();
 
+  {
+    QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-0.log");
+    setDumpPath(dumpPath.toStdString());
+  }
   for(int i=1; i < args.size(); ++i) {
     QString a = args[i];
 
@@ -134,6 +139,10 @@ int main(int argc,char **argv) {
     }
     else if (portRegexp.exactMatch(a)) {
       context->tulipPort = portRegexp.cap(1).toUInt();
+    }
+    else if (idRegexp.exactMatch(a)) {
+      QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
+      setDumpPath(dumpPath.toStdString());
     }
     else if (a == "--help") {
       usage("");

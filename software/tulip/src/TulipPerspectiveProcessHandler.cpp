@@ -76,6 +76,8 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   args << "--" + k + "=" + parameters[k].toString();
 
   args << "--port=" + QString::number(serverPort());
+  time_t perspectiveId = time(NULL);
+  args << "--id=" + QString::number(perspectiveId);
 
   QDir appDir(QApplication::applicationDirPath());
 
@@ -89,7 +91,7 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   connect(process,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(perspectiveFinished(int,QProcess::ExitStatus)));
   process->setProcessChannelMode(QProcess::ForwardedChannels);
   process->start(appDir.absoluteFilePath("tulip_perspective"),args);
-  _processInfos[process] = PerspectiveProcessInfos(perspective,parameters,file);
+  _processInfos[process] = PerspectiveProcessInfos(perspective,parameters,file,perspectiveId);
 }
 
 void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) {
@@ -104,6 +106,10 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
           compiler("^" + QString(TLP_COMPILER_HEADER) + " (.*)\n"),
           version("^" + QString(TLP_VERSION_HEADER) + " (.*)\n");
 
+  // TODO: replace reading process by reading file
+  QFile f(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-" + QString::number(infos._perspectiveId) + ".log"));
+  f.open(QIODevice::ReadOnly);
+
   QMap<QRegExp *,QString> envInfos;
   envInfos[&plateform] = "";
   envInfos[&arch] = "";
@@ -113,8 +119,8 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
   QString stackTrace;
   bool grabStackTrace = false;
 
-  while (!process->atEnd()) {
-    QString line(process->readLine());
+  while (!f.atEnd()) {
+    QString line(f.readLine());
 
     if (line.startsWith(TLP_STACK_BEGIN_HEADER)) {
       grabStackTrace = true;
@@ -138,6 +144,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
       }
     }
   }
+  f.close();
 
   crashHandler.setEnvData(envInfos[&plateform],envInfos[&arch],envInfos[&compiler],envInfos[&version],stackTrace);
   crashHandler.setPerspectiveData(infos);
