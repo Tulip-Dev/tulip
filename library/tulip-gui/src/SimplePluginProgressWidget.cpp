@@ -24,12 +24,14 @@
 #include <tulip/Observable.h>
 #include "ui_SimplePluginProgressWidget.h"
 
-namespace tlp {
+using namespace tlp;
 
 SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::WindowFlags f)
-  :QWidget(parent,f), _ui(new Ui::SimplePluginProgressWidgetData) {
+  :QWidget(parent,f), _ui(new Ui::SimplePluginProgressWidgetData), _state(tlp::TLP_CONTINUE) {
   _ui->setupUi(this);
-  _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
+  _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCloseButton));
+  connect(_ui->cancelButton,SIGNAL(clicked()),this,SLOT(cancelClicked()));
+  connect(_ui->previewBox,SIGNAL(toggled(bool)),this,SLOT(setPreview(bool)));
 }
 
 void SimplePluginProgressWidget::checkLastUpdate() {
@@ -37,21 +39,6 @@ void SimplePluginProgressWidget::checkLastUpdate() {
     QApplication::processEvents();
     _lastUpdate = QTime::currentTime();
   }
-}
-
-void SimplePluginProgressWidget::progress_handler(int step, int max_step) {
-  _ui->progressBar->setValue(step);
-  _ui->progressBar->setMaximum(max_step);
-  checkLastUpdate();
-}
-
-void SimplePluginProgressWidget::preview_handler(bool p) {
-  if (p)
-    Observable::unholdObservers();
-  else
-    Observable::holdObservers();
-
-  checkLastUpdate();
 }
 
 void SimplePluginProgressWidget::setComment(const std::string& s) {
@@ -66,6 +53,62 @@ void SimplePluginProgressWidget::setComment(const QString &s) {
 void SimplePluginProgressWidget::setComment(const char *s) {
   setComment(std::string(s));
 }
+
+ProgressState SimplePluginProgressWidget::progress(int step, int max_step) {
+  _ui->progressBar->setValue(step);
+  _ui->progressBar->setMaximum(max_step);
+  checkLastUpdate();
+  return _state;
+}
+
+void SimplePluginProgressWidget::cancel() {
+  _state = tlp::TLP_CANCEL;
+}
+
+void SimplePluginProgressWidget::stop() {
+  _state = tlp::TLP_STOP;
+}
+
+bool SimplePluginProgressWidget::isPreviewMode() const {
+  return _ui->previewBox->isChecked();
+}
+
+void SimplePluginProgressWidget::setPreviewMode(bool drawPreview) {
+  _ui->previewBox->setChecked(drawPreview);
+}
+
+void SimplePluginProgressWidget::showPreview(bool showPreview) {
+  _ui->previewBox->setVisible(showPreview);
+}
+
+ProgressState SimplePluginProgressWidget::state() const {
+  return _state;
+}
+
+std::string SimplePluginProgressWidget::getError() {
+  return _error;
+}
+
+void SimplePluginProgressWidget::setError(const std::string &error) {
+  _error = error;
+}
+
+void SimplePluginProgressWidget::cancelClicked() {
+  cancel();
+}
+
+void SimplePluginProgressWidget::setPreview(bool f) {
+  if (f) {
+    while (Observable::observersHoldCounter() > 0)
+      Observable::unholdObservers();
+  }
+  else
+    Observable::holdObservers();
+}
+
+// ===================
+// DIALOG
+// ===================
 
 SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent): QDialog(parent) {
   setModal(true);
@@ -93,12 +136,38 @@ void SimplePluginProgressDialog::setComment(const char* s) {
   _progress->setComment(s);
 }
 
-void SimplePluginProgressDialog::progress_handler(int step, int max_step) {
-  _progress->progress(step,max_step);
+ProgressState SimplePluginProgressDialog::progress(int step, int max_step) {
+  return _progress->progress(step,max_step);
 }
 
-void SimplePluginProgressDialog::preview_handler(bool f) {
-  _progress->setPreviewMode(f);
+void SimplePluginProgressDialog::cancel() {
+  _progress->cancel();
 }
 
+void SimplePluginProgressDialog::stop() {
+  _progress->stop();
+}
+
+bool SimplePluginProgressDialog::isPreviewMode() const {
+  return _progress->isPreviewMode();
+}
+
+void SimplePluginProgressDialog::setPreviewMode(bool drawPreview) {
+  _progress->setPreviewMode(drawPreview);
+}
+
+void SimplePluginProgressDialog::showPreview(bool showPreview) {
+  _progress->showPreview(showPreview);
+}
+
+ProgressState SimplePluginProgressDialog::state() const {
+  return _progress->state();
+}
+
+std::string SimplePluginProgressDialog::getError() {
+  return _progress->getError();
+}
+
+void SimplePluginProgressDialog::setError(const std::string &error) {
+  _progress->setError(error);
 }
