@@ -23,7 +23,7 @@
 #include <QtGui/QWidget>
 #include <QtCore/QTime>
 
-#include <tulip/SimplePluginProgress.h>
+#include <tulip/PluginProgress.h>
 
 namespace Ui {
 class SimplePluginProgressWidgetData;
@@ -32,12 +32,15 @@ class SimplePluginProgressWidgetData;
 namespace tlp {
 
 
-class TLP_QT_SCOPE SimplePluginProgressWidget: public QWidget, public tlp::SimplePluginProgress {
+class TLP_QT_SCOPE SimplePluginProgressWidget: public QWidget, public tlp::PluginProgress {
   Q_OBJECT
   Ui::SimplePluginProgressWidgetData *_ui;
 
   QTime _lastUpdate;
   void checkLastUpdate();
+
+  std::string _error;
+  tlp::ProgressState _state;
 
 public:
   explicit SimplePluginProgressWidget(QWidget *parent=NULL,Qt::WindowFlags f=0);
@@ -46,12 +49,26 @@ public:
   void setComment(const QString &);
   void setComment(const char *);
 
-protected:
-  virtual void progress_handler(int step, int max_step);
-  virtual void preview_handler(bool);
+  tlp::ProgressState progress(int step, int max_step);
+
+  void cancel();
+  void stop();
+
+  bool isPreviewMode() const;
+  void setPreviewMode(bool drawPreview);
+  void showPreview(bool showPreview);
+
+  tlp::ProgressState state() const;
+
+  std::string getError();
+  void setError(const std::string &error);
+
+protected slots:
+  void cancelClicked();
+  void setPreview(bool);
 };
 
-class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog, public tlp::SimplePluginProgress {
+class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog, public tlp::PluginProgress {
 public:
   explicit SimplePluginProgressDialog(QWidget *parent=NULL);
   virtual ~SimplePluginProgressDialog();
@@ -60,9 +77,19 @@ public:
   void setComment(const QString &);
   void setComment(const char *);
 
-protected:
-  virtual void progress_handler(int step, int max_step);
-  virtual void preview_handler(bool);
+  tlp::ProgressState progress(int step, int max_step);
+
+  void cancel();
+  void stop();
+
+  bool isPreviewMode() const;
+  void setPreviewMode(bool drawPreview);
+  void showPreview(bool showPreview);
+
+  tlp::ProgressState state() const;
+
+  std::string getError();
+  void setError(const std::string &error);
 
 private:
   tlp::SimplePluginProgressWidget *_progress;

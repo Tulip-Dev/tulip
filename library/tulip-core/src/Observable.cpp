@@ -249,8 +249,12 @@ void Observable::holdObservers() {
 //----------------------------------------
 void Observable::unholdObservers() {
   {
-    if (_oHoldCounter == 0)
+    if (_oHoldCounter == 0) {
+#ifndef NDEBUG
       throw ObservableException("unhold call without a previous call to hold");
+#endif
+      return;
+    }
 
     --_oHoldCounter;
     {
