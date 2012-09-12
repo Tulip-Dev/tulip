@@ -528,14 +528,16 @@ void GraphPerspective::selectAll() {
 void GraphPerspective::undo() {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
-  graph->pop();
+  if (graph != NULL)
+    graph->pop();
   Observable::unholdObservers();
 }
 
 void GraphPerspective::redo() {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
-  graph->unpop();
+  if (graph != NULL)
+    graph->unpop();
   Observable::unholdObservers();
 }
 
