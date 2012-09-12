@@ -1,15 +1,31 @@
+!include "MUI.nsh"
+
+; Global installer settings
+Name "Tulip 4.0.0 setup"
 !define MUI_ICON "files\share\tulip\bitmaps\logo32x32.ico"
-!define ZIP2EXE_NAME `Tulip`
-!define ZIP2EXE_OUTFILE `tulip-4.0.0_setup.exe`
-!define ZIP2EXE_COMPRESSOR_LZMA
-!define ZIP2EXE_INSTALLDIR `$PROGRAMFILES\Tulip`
-!include `${NSISDIR}\Contrib\zip2exe\Base.nsh`
-!include `${NSISDIR}\Contrib\zip2exe\Modern.nsh`
+!define MUI_UNICON "files\share\tulip\bitmaps\logo32x32.ico"
+RequestExecutionLevel admin
 
+!define MUI_ABORTWARNING
+
+; Installer pages
 !insertmacro MUI_PAGE_LICENSE "COPYING"
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
 
-!insertmacro SECTION_BEGIN
+; Uninstaller pages
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+
+; Language
+!insertmacro MUI_LANGUAGE "English"
+
+InstallDir $PROGRAMFILES\Tulip
+OutFile "tulip-4.0.0_setup.exe"
+
+Section "Tulip"
  SetShellVarContext all
+ SetOutPath $INSTDIR
 
  File /r files\*.*
  CreateShortCut "$SMPROGRAMS\Tulip\Tulip.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
@@ -19,7 +35,7 @@
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip" "DisplayName" "Tulip"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip" "UninstallString" "$INSTDIR\Uninstall.exe"
  WriteUninstaller "$INSTDIR\Uninstall.exe"
-!insertmacro SECTION_END
+SectionEnd
 
 Section "Uninstall"
   SetShellVarContext all

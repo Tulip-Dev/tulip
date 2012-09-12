@@ -1,4 +1,4 @@
-@echo OFF
+@echo off
 set TULIP_DIR=%1
 set DEST_DIR=%2
 set SRC_DIR=%cd%
@@ -19,3 +19,4 @@ copy "%SRC_DIR%\\..\\..\\COPYING" "%DEST_DIR%\\"
 echo 'Running NSIS generator'
 cd %DEST_DIR%
 makensis Tulip.nsi
+cd %SRC_DIR%
