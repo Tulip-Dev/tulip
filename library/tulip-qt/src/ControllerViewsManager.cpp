@@ -334,7 +334,6 @@ void ControllerViewsManager::createView(QAction *action) {
 //**********************************************************************
 bool ControllerViewsManager::windowActivated(QWidget *widget) {
   //check if that widget (view) is closed
-  QWidgetList widgets = mainWindowFacade.getWorkspace()->windowList();
   std::map<QWidget *, View*>::iterator it = viewWidget.find(widget);
 
   if (it == viewWidget.end())
