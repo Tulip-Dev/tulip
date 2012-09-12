@@ -128,6 +128,7 @@ int main(int argc,char **argv) {
     QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-0.log");
     setDumpPath(dumpPath.toStdString());
   }
+
   for(int i=1; i < args.size(); ++i) {
     QString a = args[i];
 

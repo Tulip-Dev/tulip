@@ -201,6 +201,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   // Open project with model
   QMap<QString,tlp::Graph*> rootIds;
+
   if(!_project->projectFile().isEmpty()) {
     rootIds = _graphs->readProject(_project,progress);
   }
@@ -533,16 +534,20 @@ void GraphPerspective::selectAll() {
 void GraphPerspective::undo() {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
+
   if (graph != NULL)
     graph->pop();
+
   Observable::unholdObservers();
 }
 
 void GraphPerspective::redo() {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
+
   if (graph != NULL)
     graph->unpop();
+
   Observable::unholdObservers();
 }
 
