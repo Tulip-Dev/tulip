@@ -77,7 +77,7 @@ public:
       os << lightRed << " from " << lightGreen << "??";
     }
 
-    os << fillToEndOfLine << defaultTextColor ;
+    os << fillToEndOfLine << defaultTextColor << std::endl;
 
   }
 
