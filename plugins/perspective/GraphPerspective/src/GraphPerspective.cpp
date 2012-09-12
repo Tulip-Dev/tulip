@@ -198,10 +198,15 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->mainSplitter->setSizes(QList<int>() << 200 << 1000);
 
   _mainWindow->show();
+
   // Open project with model
-  QMap<QString,tlp::Graph*> rootIds = _graphs->readProject(_project,progress);
+  QMap<QString,tlp::Graph*> rootIds;
+  if(!_project->projectFile().isEmpty()) {
+    rootIds = _graphs->readProject(_project,progress);
+  }
 
   if (!_externalFile.isEmpty()) {
+
     QFileInfo externalFileInfo(_externalFile);
 
     if (externalFileInfo.exists()) {
