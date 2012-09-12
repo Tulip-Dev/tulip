@@ -38,14 +38,15 @@ public:
 struct PerspectiveProcessInfos {
   PerspectiveProcessInfos() {}
 
-  PerspectiveProcessInfos(const QString name, const QVariantMap &args, const QString &file):
-    name(name), args(args), file(file) {
+  PerspectiveProcessInfos(const QString name, const QVariantMap &args, const QString &file, time_t id):
+    name(name), args(args), file(file), _perspectiveId(id) {
   }
 
   QString name;
   QVariantMap args;
   QString file;
   QString projectPath;
+  time_t _perspectiveId;
 };
 
 class TulipPerspectiveProcessHandler: public QTcpServer {

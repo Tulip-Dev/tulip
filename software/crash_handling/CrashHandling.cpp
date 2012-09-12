@@ -21,12 +21,19 @@
 #include <tulip/TulipRelease.h>
 
 #include <iostream>
+#include <fstream>
 #include <cstring>
 
 #include "CrashHandling.h"
 #include "StackWalker.h"
 
 using namespace std;
+
+static std::string TULIP_DUMP_FILE = "";
+
+void setDumpPath(string s) {
+  TULIP_DUMP_FILE = s;
+}
 
 /*
   Linux/MacOS-specific handling
@@ -57,36 +64,47 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
 #ifndef __APPLE__
 
   sig_ucontext_t * uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
-#ifdef I64
+# ifdef I64
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
-#else
+# else
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.eip); // x86 specific;
-#endif
+# endif
 
 #else
 
   ucontext_t * uc = reinterpret_cast<ucontext_t *>(ucontext);
-#if !defined (I64)
+# if !defined (I64)
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__eip);
-#else
+# else
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__rip);
-#endif
+# endif
 
 #endif
 
-  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+  std::ofstream os;
+  os.open(TULIP_DUMP_FILE.c_str());
+  if (!os.is_open()) {
+    std::cerr << "Could not open " << TULIP_DUMP_FILE << std::endl;
+  }
+  else {
+    std::cerr << "Writing dump stack to " << TULIP_DUMP_FILE << std::endl;
+  }
+
+  os << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
             << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
             << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
             << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
 
-  std::cerr << "Caught signal " << sig << " (" << strsignal(sig) << ")" << std::endl;
+  os << "Caught signal " << sig << " (" << strsignal(sig) << ")" << std::endl;
 
-  std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
+  os << TLP_STACK_BEGIN_HEADER << std::endl;
   StackWalkerGCC sw;
   sw.setCallerAddress(callerAddress);
-  sw.printCallStackToStdErr();
-  std::cerr << TLP_STACK_END_HEADER << std::endl;
-  std::cerr << std::flush;
+  sw.printCallStack(os, 50);
+  os << std::endl << TLP_STACK_END_HEADER << std::endl;
+  os << std::flush;
+  os.close();
+
   installSignalHandler(sig, SIG_DFL);
 }
 
@@ -110,14 +128,24 @@ exception_filter(LPEXCEPTION_POINTERS info) {
   StackWalkerMinGW sw;
   sw.setContext(info->ContextRecord);
 
-  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+  std::ofstream os;
+  os.open(TULIP_DUMP_FILE.c_str());
+  if (!os.is_open()) {
+    std::cerr << "Could not open " << TULIP_DUMP_FILE << std::endl;
+  }
+  else {
+    std::cerr << "Writing dump stack to " << TULIP_DUMP_FILE << std::endl;
+  }
+
+  os << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
             << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
             << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
             << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
-  std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
-  sw.printCallStackToStdErr();
-  std::cerr << TLP_STACK_END_HEADER << std::endl;
-  std::cerr << std::flush;
+  os << TLP_STACK_BEGIN_HEADER << std::endl;
+  sw.printCallStack(os, 50);
+  os << std::endl << TLP_STACK_END_HEADER << std::endl;
+  os << std::flush;
+  os.close();
 
   return 1;
 }
