@@ -26,6 +26,10 @@ rm -fr macos
 cd ..
 cp -r $TULIP_DIR/macos/* .
 
+echo 'Copying license'
+cd $DEST_DIR/application
+cp $SRC_DIR/../../COPYING .
+
 echo 'Copying Frameworks'
 cd $DEST_DIR/application/Tulip.app/Contents/MacOS/tulip/bin
 for cmp in QtOpenGl QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore phonon QtDBus; do
