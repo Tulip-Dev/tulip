@@ -638,7 +638,7 @@ void GlQuadTreeLODCalculator::initCamerasObservers() {
   set<Camera*> treatedCameras;
 
   for(vector<Camera *>::iterator it=cameras.begin(); it!=cameras.end(); ++it) {
-    if(treatedCameras.find(*it)==treatedCameras.end()){
+    if(treatedCameras.find(*it)==treatedCameras.end()) {
       treatedCameras.insert(*it);
       (*it)->addListener(this);
     }
@@ -649,7 +649,7 @@ void GlQuadTreeLODCalculator::clearCamerasObservers() {
   set<Camera*> treatedCameras;
 
   for(vector<Camera *>::iterator it=cameras.begin(); it!=cameras.end(); ++it) {
-    if(treatedCameras.find(*it)==treatedCameras.end()){
+    if(treatedCameras.find(*it)==treatedCameras.end()) {
       treatedCameras.insert(*it);
       (*it)->removeListener(this);
     }
