@@ -223,6 +223,19 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="closeButton">
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>35</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Close</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -507,5 +520,22 @@ font: bold;
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>closeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>TulipPerspectiveCrashHandlerData</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>465</x>
+     <y>111</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>264</x>
+     <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
