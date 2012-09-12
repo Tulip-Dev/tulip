@@ -604,6 +604,7 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
 
       for(vector<Camera *>::iterator it=cameras.begin(); it!=cameras.end(); ++it) {
         if(*it == dynamic_cast<Camera*>(ev.sender())) {
+          (*it)->removeListener(this);
           cameras.erase(it);
           break;
         }
@@ -634,14 +635,24 @@ void GlQuadTreeLODCalculator::treatEvent(const Event &ev) {
 }
 
 void GlQuadTreeLODCalculator::initCamerasObservers() {
+  set<Camera*> treatedCameras;
+
   for(vector<Camera *>::iterator it=cameras.begin(); it!=cameras.end(); ++it) {
-    (*it)->addListener(this);
+    if(treatedCameras.find(*it)==treatedCameras.end()){
+      treatedCameras.insert(*it);
+      (*it)->addListener(this);
+    }
   }
 }
 
 void GlQuadTreeLODCalculator::clearCamerasObservers() {
+  set<Camera*> treatedCameras;
+
   for(vector<Camera *>::iterator it=cameras.begin(); it!=cameras.end(); ++it) {
-    (*it)->removeListener(this);
+    if(treatedCameras.find(*it)==treatedCameras.end()){
+      treatedCameras.insert(*it);
+      (*it)->removeListener(this);
+    }
   }
 }
 
