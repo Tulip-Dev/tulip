@@ -41,13 +41,9 @@ public:
 
   void setGraph(tlp::Graph* g);
 
-  bool isShowNodes() const;
-  bool isShowEdges() const;
   tlp::BooleanProperty* filteringProperty() const;
 
 public slots:
-  void setShowNodes(bool);
-  void setShowEdges(bool);
   void setFilteringProperty(QString);
 
 signals:

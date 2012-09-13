@@ -38,8 +38,8 @@ TableView::~TableView() {
 
 tlp::DataSet TableView::state() const {
   DataSet data;
-  data.set("show_nodes",_tableViewConfiguration->isShowNodes());
-  data.set("show_edges",_tableViewConfiguration->isShowEdges());
+  data.set("show_nodes",_ui->propertiesEditor->isShowNodes());
+  data.set("show_edges",_ui->propertiesEditor->isShowNodes());
   PropertyInterface* pi = _tableViewConfiguration->filteringProperty();
 
   if (pi != NULL)
@@ -54,11 +54,11 @@ void TableView::setState(const tlp::DataSet& data) {
   data.get<bool>("show_nodes",showNodes);
   data.get<bool>("show_edges",showEdges);
 
+  _ui->propertiesEditor->showNodes(showNodes);
+
   if (data.exist("filtering_property"))
     data.get<std::string>("filtering_property",filterPropertyName);
 
-  _tableViewConfiguration->setShowEdges(showEdges);
-  _tableViewConfiguration->setShowNodes(showNodes);
   _tableViewConfiguration->setFilteringProperty(filterPropertyName.c_str());
   readSettings();
 }
@@ -76,6 +76,8 @@ void TableView::setupWidget() {
   _ui->table->horizontalHeader()->setMovable(true);
   connect(_ui->filterEdit,SIGNAL(returnPressed()),this,SLOT(filterChanged()));
   _ui->splitter_2->setSizes(QList<int>() << centralWidget->width()/4 << centralWidget->width()*3/4);
+
+  connect(_ui->propertiesEditor, SIGNAL(showElementTypeChanged()), this, SLOT(readSettings()));
 }
 
 void TableView::graphChanged(tlp::Graph* g) {
@@ -103,11 +105,11 @@ QList<QWidget*> TableView::configurationWidgets() const {
 }
 
 void TableView::readSettings() {
-  if ( (_tableViewConfiguration->isShowNodes() && dynamic_cast<NodesGraphModel*>(_model) == NULL) ||
-       (_tableViewConfiguration->isShowEdges() && dynamic_cast<EdgesGraphModel*>(_model) == NULL)) {
+  if ( (_ui->propertiesEditor->isShowNodes() && dynamic_cast<NodesGraphModel*>(_model) == NULL) ||
+       (_ui->propertiesEditor->isShowEdges() && dynamic_cast<EdgesGraphModel*>(_model) == NULL)) {
     _ui->table->setModel(NULL);
 
-    if (_tableViewConfiguration->isShowNodes())
+    if (_ui->propertiesEditor->isShowNodes())
       _model = new NodesGraphModel(_ui->table);
     else
       _model = new EdgesGraphModel(_ui->table);

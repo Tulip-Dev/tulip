@@ -262,6 +262,11 @@ border-top: 1px solid #C9C9C9;</string>
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ClearableLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/ClearableLineEdit.h</header>
+  </customwidget>
+  <customwidget>
    <class>PropertiesEditor</class>
    <extends>QWidget</extends>
    <header>PropertiesEditor.h</header>
@@ -270,15 +275,8 @@ border-top: 1px solid #C9C9C9;</string>
     <signal>propertyVisibilityChanged(tlp::PropertyInterface*,bool)</signal>
    </slots>
   </customwidget>
-  <customwidget>
-   <class>ClearableLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">tulip/ClearableLineEdit.h</header>
-  </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
  <slots>
   <slot>setPropertyVisible(tlp::PropertyInterface*,bool)</slot>

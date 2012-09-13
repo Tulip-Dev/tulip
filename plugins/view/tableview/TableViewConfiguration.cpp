@@ -27,8 +27,6 @@ using namespace tlp;
 
 TableViewConfiguration::TableViewConfiguration(QWidget *parent): QWidget(parent), _ui(new Ui::TableViewConfiguration) {
   _ui->setupUi(this);
-  connect(_ui->edgesCheck,SIGNAL(toggled(bool)),this,SIGNAL(settingsChanged()));
-  connect(_ui->nodesCheck,SIGNAL(toggled(bool)),this,SIGNAL(settingsChanged()));
   connect(_ui->filteringPropertyCombo,SIGNAL(currentIndexChanged(int)),this,SIGNAL(settingsChanged()));
 }
 
@@ -42,26 +40,10 @@ void TableViewConfiguration::setGraph(tlp::Graph *g) {
   _ui->filteringPropertyCombo->setCurrentIndex(0);
 }
 
-bool TableViewConfiguration::isShowEdges() const {
-  return _ui->edgesCheck->isChecked();
-}
-
-bool TableViewConfiguration::isShowNodes() const {
-  return _ui->nodesCheck->isChecked();
-}
-
 BooleanProperty* TableViewConfiguration::filteringProperty() const {
   GraphPropertiesModel<BooleanProperty>* model = static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->filteringPropertyCombo->model());
   PropertyInterface* pi = model->data(model->index(_ui->filteringPropertyCombo->currentIndex(),0),TulipModel::PropertyRole).value<PropertyInterface*>();
   return dynamic_cast<BooleanProperty*>(pi);
-}
-
-void TableViewConfiguration::setShowNodes(bool f) {
-  _ui->nodesCheck->setChecked(f);
-}
-
-void TableViewConfiguration::setShowEdges(bool f) {
-  _ui->edgesCheck->setChecked(f);
 }
 
 void TableViewConfiguration::setFilteringProperty(QString name) {
