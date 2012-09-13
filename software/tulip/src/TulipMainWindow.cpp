@@ -46,10 +46,9 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   _ui->setupUi(this);
   _pageChoosers.clear();
   _pageChoosers.push_back(_ui->welcomePageChooser);
+  _pageChoosers.push_back(_ui->pluginsPageChooser);
 #if defined(__linux) // disable plugins center on Linux platforms
   _ui->pluginsPageChooser->hide();
-#else
-  _pageChoosers.push_back(_ui->pluginsPageChooser);
 #endif
   _pageChoosers.push_back(_ui->aboutPageChooser);
 
