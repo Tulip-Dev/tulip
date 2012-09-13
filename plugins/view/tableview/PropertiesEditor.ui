@@ -20,13 +20,6 @@ border-width: 4;
 padding: 0px 6px;
 font-size: 12px;
 }
-QPushButton::flat {
-border-image: none;
-border-width: 4;
-padding: 0px 6px;
-font-size: 12px;
-background-color: transparent;
-}
 QPushButton, QComboBox, QLabel {
 color: black;
 }
@@ -48,9 +41,12 @@ QPushButton {
 outline: none;
 margin: 2
 }
+
+
 QComboBox::down-arrow {
 image: url(:/tulip/gui/ui/combobox_arrow.png);
 }
+
 QComboBox:drop-down {
 subcontrol-origin: padding;
 subcontrol-position: top right;
@@ -58,6 +54,7 @@ border-left-style: none;
 border-top-right-radius: 1px;
 border-bottom-right-radius: 1px;
 }
+
 #PropertiesEditor {
 background-color: white;
 border: 0px;
@@ -76,6 +73,14 @@ background-color: #F4F4F4;
 }
 #frame_2 {
 border-right: 0px;
+}
+QPushButton[flat=&quot;true&quot;] {
+font: bold;
+border-image: none;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+background-color: transparent;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -116,6 +121,48 @@ color: #595959;</string>
       </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="nodesButton">
+       <property name="text">
+        <string>Nodes</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">nodeEdgeGroup</string>
+       </attribute>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="edgesButton">
+       <property name="text">
+        <string>Edges</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+       <attribute name="buttonGroup">
+        <string notr="true">nodeEdgeGroup</string>
+       </attribute>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <widget class="QFrame" name="frame_2">
@@ -222,4 +269,7 @@ border-bottom: 1px solid #C9C9C9;</string>
  <slots>
   <slot>showCustomContextMenu(QPoint)</slot>
  </slots>
+ <buttongroups>
+  <buttongroup name="nodeEdgeGroup"/>
+ </buttongroups>
 </ui>

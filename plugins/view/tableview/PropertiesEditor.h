@@ -52,8 +52,15 @@ public:
   QSet<tlp::PropertyInterface*> visibleProperties() const;
 
   void setPropertyChecked(int index, bool state);
+
+  bool isShowNodes();
+  bool isShowEdges();
+
+  void showNodes(bool value);
+  void showEdges(bool value);
 signals:
   void propertyVisibilityChanged(tlp::PropertyInterface*,bool);
+  void showElementTypeChanged();
 
 protected slots:
   void checkStateChanged(QModelIndex,Qt::CheckState);
