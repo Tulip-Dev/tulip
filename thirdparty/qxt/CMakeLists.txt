@@ -5,12 +5,16 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 
 SET(SRCS
   src/qxtspanslider.cpp
+  src/qxtflowview.cpp
+  src/qxtflowview_p.cpp
   src/qxtglobal.cpp
 )
 
 QT4_WRAP_CPP(MOC_SRCS
 src/qxtspanslider.h
 src/qxtspanslider_p.h
+src/qxtflowview_p.h
+src/qxtflowview.h
 )
 
 ADD_LIBRARY(qxt SHARED ${SRCS} ${MOC_SRCS})

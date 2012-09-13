@@ -25,5 +25,9 @@
         <file>icons/16/error.png</file>
         <file>icons/16/view-refresh.png</file>
         <file>icons/16/list-del.png</file>
+        <file>icons/icon-quote.gif</file>
+        <file>icons/forums.png</file>
+        <file>icons/irc.png</file>
+        <file>icons/tutorials.png</file>
     </qresource>
 </RCC>

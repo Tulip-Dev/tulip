@@ -43,7 +43,7 @@ QT4_ADD_RESOURCES(RCC_SRCS resources/TulipAgent.qrc)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../crash_handling)
 
-INCLUDE_DIRECTORIES(include ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(include ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR} ${QxtInclude})
 
 ADD_EXECUTABLE(tulip ${SRCS} ${UI_HEADERS} ${MOC_SRCS} ${RCC_SRCS})
 
@@ -53,7 +53,7 @@ ELSE()
   SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH "$ORIGIN")
 ENDIF()
 
-TARGET_LINK_LIBRARIES(tulip ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES} crash_handling)
+TARGET_LINK_LIBRARIES(tulip ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES} crash_handling qxt)
 
 INSTALL(TARGETS tulip
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app
