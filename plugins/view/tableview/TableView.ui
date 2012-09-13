@@ -236,7 +236,7 @@ border-top: 1px solid #C9C9C9;</string>
            </widget>
           </item>
           <item>
-           <widget class="QTableView" name="table">
+           <widget class="NavigableTableView" name="table">
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
             </property>
@@ -274,6 +274,11 @@ border-top: 1px solid #C9C9C9;</string>
    <slots>
     <signal>propertyVisibilityChanged(tlp::PropertyInterface*,bool)</signal>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>NavigableTableView</class>
+   <extends>QTableView</extends>
+   <header>navigabletableview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
