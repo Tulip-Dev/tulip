@@ -2,7 +2,6 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclu
 
 SET(LIB_SRCS
 TableView.cpp
-TableViewConfiguration.cpp
 PropertiesEditor.cpp
 navigabletableview.cpp
 )
@@ -11,12 +10,10 @@ QT4_WRAP_UI(UI_SRCS
 AddPropertyDialog.ui
 TableView.ui
 PropertiesEditor.ui
-TableViewConfiguration.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
 TableView.h
-TableViewConfiguration.h
 PropertiesEditor.h
 navigabletableview.h
 )
