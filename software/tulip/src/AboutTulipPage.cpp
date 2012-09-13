@@ -51,6 +51,7 @@ public:
     if (!hasIndex(row,column,parent)) {
       return QModelIndex();
     }
+
     return createIndex(row,column);
   }
 
@@ -82,5 +83,6 @@ bool AboutTulipPage::eventFilter(QObject* obj, QEvent* ev) {
     QDesktopServices::openUrl( QUrl("http://tulip.labri.fr/TulipDrupal/?q=node/" + _ui->flowView->model()->data(_ui->flowView->currentIndex()).toString() ));
     return true;
   }
+
   return false;
 }
