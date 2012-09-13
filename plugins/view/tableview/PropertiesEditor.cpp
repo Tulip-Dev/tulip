@@ -281,21 +281,21 @@ QSet<PropertyInterface *> PropertiesEditor::visibleProperties() const {
 }
 
 void PropertiesEditor::setPropertyChecked(int index, bool state) {
-    _sourceModel->setData(_sourceModel->index(index,0),state ? Qt::Checked : Qt::Unchecked,Qt::CheckStateRole);
+  _sourceModel->setData(_sourceModel->index(index,0),state ? Qt::Checked : Qt::Unchecked,Qt::CheckStateRole);
 }
 
 bool PropertiesEditor::isShowNodes() {
-    _ui->nodesButton->isChecked();
+  _ui->nodesButton->isChecked();
 }
 
 bool PropertiesEditor::isShowEdges() {
-    _ui->edgesButton->isChecked();
+  _ui->edgesButton->isChecked();
 }
 
 void PropertiesEditor::showNodes(bool value) {
-    _ui->nodesButton->setChecked(value);
+  _ui->nodesButton->setChecked(value);
 }
 
 void PropertiesEditor::showEdges(bool value) {
-    _ui->edgesButton->setChecked(value);
+  _ui->edgesButton->setChecked(value);
 }

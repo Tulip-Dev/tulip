@@ -5,16 +5,15 @@
 
 class QKeyEvent;
 
-class NavigableTableView : public QTableView
-{
-    Q_OBJECT
+class NavigableTableView : public QTableView {
+  Q_OBJECT
 public:
-    explicit NavigableTableView(QWidget *parent = 0);
-    void keyPressEvent(QKeyEvent *event);
+  explicit NavigableTableView(QWidget *parent = 0);
+  void keyPressEvent(QKeyEvent *event);
 signals:
-    
+
 public slots:
-    
+
 };
 
 #endif // NAVIGABLETABLEVIEW_H

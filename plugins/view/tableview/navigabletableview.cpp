@@ -3,18 +3,17 @@
 #include <QtGui/QKeyEvent>
 
 NavigableTableView::NavigableTableView(QWidget *parent) :
-    QTableView(parent)
-{
+  QTableView(parent) {
 }
 
 void NavigableTableView::keyPressEvent(QKeyEvent *event) {
-    if(event->key() == Qt::Key_Home) {
-        scrollToTop();
-    }
-    else if(event->key() == Qt::Key_End) {
-        scrollToBottom();
-    }
-    else {
-        QTableView::keyPressEvent(event);
-    }
+  if(event->key() == Qt::Key_Home) {
+    scrollToTop();
+  }
+  else if(event->key() == Qt::Key_End) {
+    scrollToBottom();
+  }
+  else {
+    QTableView::keyPressEvent(event);
+  }
 }
