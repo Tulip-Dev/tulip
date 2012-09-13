@@ -87,8 +87,9 @@ void TableView::graphChanged(tlp::Graph* g) {
   // Hide all data in the table view
   if (_model != NULL) {
     for(int i=0; i < _model->columnCount(); ++i) {
-      _ui->table->horizontalHeader()->setSectionHidden(i,true);
-      _ui->table->horizontalHeader()->resizeSection(i,_ui->table->horizontalHeader()->defaultSectionSize());
+      if(_model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString().startsWith("view")) {
+        _ui->propertiesEditor->setPropertyChecked(i, true);
+      }
     }
   }
 }

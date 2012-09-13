@@ -277,3 +277,7 @@ QSet<PropertyInterface *> PropertiesEditor::visibleProperties() const {
 
   return QSet<tlp::PropertyInterface*>();
 }
+
+void PropertiesEditor::setPropertyChecked(int index, bool state) {
+    _sourceModel->setData(_sourceModel->index(index,0),state ? Qt::Checked : Qt::Unchecked,Qt::CheckStateRole);
+}
