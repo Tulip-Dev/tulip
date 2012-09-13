@@ -4,6 +4,7 @@ SET(LIB_SRCS
 TableView.cpp
 TableViewConfiguration.cpp
 PropertiesEditor.cpp
+navigabletableview.cpp
 )
 
 QT4_WRAP_UI(UI_SRCS
@@ -17,6 +18,7 @@ QT4_WRAP_CPP(MOC_SRCS
 TableView.h
 TableViewConfiguration.h
 PropertiesEditor.h
+navigabletableview.h
 )
 
 ADD_LIBRARY(TableView-${TulipVersion} SHARED ${LIB_SRCS} ${MOC_SRCS} ${UI_SRCS})
