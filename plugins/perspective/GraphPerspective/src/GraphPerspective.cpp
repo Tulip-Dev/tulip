@@ -228,6 +228,11 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
 
+#if defined(__linux) // Hide plugins center features on linux
+  _ui->pluginsButton->hide();
+  _ui->menuHelp->removeAction(_ui->actionPlugins_Center);
+#endif
+
   showTrayMessage("GraphPerspective started");
 
   delete progress;
