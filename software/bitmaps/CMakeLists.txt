@@ -5,4 +5,6 @@ DESTINATION ${TulipBitmapInstallDir}
 COMPONENT tulip_app
 )
 
+INSTALL(DIRECTORY samplePictures DESTINATION ${TulipBitmapInstallDir} COMPONENT tulip_app)
+
 ADD_SUBDIRECTORY(colorscales)
