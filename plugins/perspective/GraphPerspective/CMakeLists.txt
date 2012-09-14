@@ -18,6 +18,7 @@ src/HeaderFrame.cpp
 src/ImportWizard.cpp
 src/OutputPanelButton.cpp
 src/PanelSelectionWizard.cpp
+src/PreferencesDialog.cpp
 src/SearchWidget.cpp
 src/ShadowFilter.cpp
 )
@@ -41,6 +42,7 @@ designer/GraphPerspectiveMainWindow.ui
 designer/HeaderFrame.ui
 designer/ImportWizard.ui
 designer/PanelSelectionWizard.ui
+designer/PreferencesDialog.ui
 designer/SearchWidget.ui
 )
 
@@ -61,6 +63,7 @@ include/HeaderFrame.h
 include/ImportWizard.h
 include/OutputPanelButton.h
 include/PanelSelectionWizard.h
+include/PreferencesDialog.h
 include/SearchWidget.h
 )
 

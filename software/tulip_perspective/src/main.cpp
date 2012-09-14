@@ -37,6 +37,7 @@
 #include <tulip/QGlBufferManager.h>
 
 #include "TulipPerspectiveMainWindow.h"
+#include <tulip/TulipSettings.h>
 
 #include <CrashHandling.h>
 
@@ -77,6 +78,8 @@ int main(int argc,char **argv) {
   QApplication tulip_perspective(argc, argv);
   tulip_perspective.setApplicationName(QObject::trUtf8("Tulip"));
   QLocale::setDefault(QLocale(QLocale::English));
+
+  TulipSettings::instance().applyProxySettings();
 
   TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
   mainWindow->setVisible(false);

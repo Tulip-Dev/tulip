@@ -33,6 +33,10 @@
 #include <tulip/GraphModel.h>
 #include <tulip/GraphTableItemDelegate.h>
 #include <tulip/GraphPropertiesModel.h>
+#include <tulip/GlMainView.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/TulipSettings.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -44,6 +48,7 @@
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
 #include "ShadowFilter.h"
+#include "PreferencesDialog.h"
 
 #ifndef NDEBUG
 #include <modeltest.h>
@@ -187,6 +192,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionImport_CSV,SIGNAL(triggered()),this,SLOT(CSVImport()));
   connect(_ui->actionFind_plugins,SIGNAL(triggered()),this,SLOT(findPlugins()));
   connect(_ui->actionNew, SIGNAL(triggered()), this, SLOT(addNewGraph()));
+  connect(_ui->actionPreferences,SIGNAL(triggered()),this,SLOT(openPreferences()));
   connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonOutput(bool)));
   connect(_ui->searchButton,SIGNAL(clicked(bool)),this,SLOT(setSearchOutput(bool)));
 
@@ -685,6 +691,23 @@ void GraphPerspective::setSearchOutput(bool) {
   _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
   _ui->pythonButton->setChecked(false);
   _ui->outputFrame->setVisible(_ui->pythonButton->isChecked() || _ui->searchButton->isChecked());
+}
+
+void GraphPerspective::openPreferences() {
+  PreferencesDialog dlg(_ui->mainWidget);
+  dlg.readSettings();
+  if (dlg.exec() == QDialog::Accepted) {
+    dlg.writeSettings();
+
+    foreach(tlp::View* v, _ui->workspace->panels()) {
+      GlMainView* glMainView = dynamic_cast<tlp::GlMainView*>(v);
+      if (glMainView != NULL) {
+        if (glMainView->getGlMainWidget() != NULL) {
+          glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setSelectionColor(TulipSettings::instance().defaultSelectionColor());
+        }
+      }
+    }
+  }
 }
 
 void GraphPerspective::addNewGraph() {

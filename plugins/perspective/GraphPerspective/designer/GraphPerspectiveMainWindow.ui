@@ -1160,7 +1160,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Preferences...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+P</string>
+    <string>Ctrl+,</string>
    </property>
   </action>
   <action name="actionFull_screen">
@@ -1530,8 +1530,8 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <y>151</y>
     </hint>
     <hint type="destinationlabel">
-     <x>37</x>
-     <y>151</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>

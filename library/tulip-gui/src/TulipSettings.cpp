@@ -37,6 +37,14 @@ const QString TulipSettings::DefaultShapeConfigEntry = "graph/defaults/shape/";
 const QString TulipSettings::DefaultSelectionColorEntry = "graph/defaults/selectioncolor/";
 const QString TulipSettings::FavoriteAlgorithmsEntry = "app/algorithms/favorites";
 
+const QString TulipSettings::ProxyEnabledEntry = "app/proxy/enabled";
+const QString TulipSettings::ProxyTypeEntry = "app/proxy/type";
+const QString TulipSettings::ProxyHostEntry = "app/proxy/host";
+const QString TulipSettings::ProxyPortEntry = "app/proxy/port";
+const QString TulipSettings::ProxyUseAuthEntry = "app/proxy/user";
+const QString TulipSettings::ProxyUsernameEntry = "app/proxy/useAuth";
+const QString TulipSettings::ProxyPasswordEntry = "app/proxy/passwd";
+
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
 
@@ -123,7 +131,7 @@ void TulipSettings::unmarkPluginForRemoval(const QString& pluginLibrary) {
 }
 
 
-QString elementKey(const QString& configEntry, tlp::ElementType elem) {
+QString TulipSettings::elementKey(const QString& configEntry, tlp::ElementType elem) {
   return configEntry + (elem == tlp::NODE ? "node" : "edge");
 }
 
@@ -192,6 +200,78 @@ void TulipSettings::removeFavoriteAlgorithm(const QString& name) {
     lst.removeAll(name);
 
   setFavoriteAlgorithms(lst);
+}
+
+bool TulipSettings::isProxyEnabled() const {
+  return value(ProxyEnabledEntry).toBool();
+}
+
+void TulipSettings::setProxyEnabled(bool f) {
+  setValue(ProxyEnabledEntry,f);
+}
+
+QNetworkProxy::ProxyType TulipSettings::proxyType() const {
+  return (QNetworkProxy::ProxyType)(value(ProxyTypeEntry).toInt());
+}
+
+void TulipSettings::setProxyType(QNetworkProxy::ProxyType t) {
+  setValue(ProxyTypeEntry,(int)t);
+}
+
+QString TulipSettings::proxyHost() const {
+  return value(ProxyHostEntry).toString();
+}
+
+void TulipSettings::setProxyHost(const QString &h) {
+  setValue(ProxyHostEntry,h);
+}
+
+unsigned int TulipSettings::proxyPort() const {
+  return value(ProxyHostEntry).toUInt();
+}
+
+void TulipSettings::setProxyPort(unsigned int p) {
+  setValue(ProxyHostEntry,p);
+}
+
+bool TulipSettings::isUseProxyAuthentification() const {
+  return value(ProxyUseAuthEntry).toBool();
+}
+
+void TulipSettings::setUseProxyAuthentification(bool f) {
+  setValue(ProxyUseAuthEntry,f);
+}
+
+QString TulipSettings::proxyUsername() const {
+  return value(ProxyUsernameEntry).toString();
+}
+
+void TulipSettings::setProxyUsername(const QString &s) {
+  setValue(ProxyUsernameEntry,s);
+}
+
+QString TulipSettings::proxyPassword() const {
+  return value(ProxyPasswordEntry).toString();
+}
+
+void TulipSettings::setProxyPassword(const QString& s) {
+  setValue(ProxyPasswordEntry,s);
+}
+
+void TulipSettings::applyProxySettings() {
+  QNetworkProxy proxy;
+  proxy.setType(QNetworkProxy::NoProxy);
+
+  if (isUseProxyAuthentification()) {
+    proxy.setType(proxyType());
+    proxy.setHostName(proxyHost());
+    proxy.setPort(proxyPort());
+    if (isUseProxyAuthentification()) {
+      proxy.setUser(proxyUsername());
+      proxy.setPassword(proxyPassword());
+    }
+  }
+  QNetworkProxy::setApplicationProxy(proxy);
 }
 
 void TulipSettings::setFavoriteAlgorithms(const QStringList& lst) {

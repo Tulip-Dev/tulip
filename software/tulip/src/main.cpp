@@ -54,6 +54,8 @@ int main(int argc, char **argv) {
   QApplication tulip_agent(argc, argv);
   tulip_agent.setApplicationName("tulip");
 
+  TulipSettings::instance().applyProxySettings();
+
   if (TulipSettings::instance().value("firstRun",true).toBool()) {
     TulipSettings::instance().setValue("firstRun",false);
     TulipSettings::instance().addRemoteLocation(STABLE_LOCATION);

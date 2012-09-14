@@ -435,3 +435,20 @@ QString GraphEditorCreator::displayText(const QVariant& var) const {
   g->getAttribute<std::string>("name",name);
   return name.c_str();
 }
+
+//QStringEditorCreator
+QWidget* QStringEditorCreator::createWidget(QWidget *parent) const {
+  return new QLineEdit(parent);
+}
+
+void QStringEditorCreator::setEditorData(QWidget* w, const QVariant& var, bool, tlp::Graph*) {
+  static_cast<QLineEdit*>(w)->setText(var.toString());
+}
+
+QVariant QStringEditorCreator::editorData(QWidget* w,tlp::Graph*) {
+  return static_cast<QLineEdit*>(w)->text();
+}
+
+QString QStringEditorCreator::displayText(const QVariant& var) const {
+  return var.toString();
+}
