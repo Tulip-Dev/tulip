@@ -19,6 +19,7 @@
 #include "tulip/CaptionGraphicsItem.h"
 
 #include <QtGui/QGraphicsProxyWidget>
+#include <QtGui/QMenu>
 
 #include <tulip/DoubleProperty.h>
 #include <tulip/ColorProperty.h>
@@ -34,14 +35,14 @@ CaptionGraphicsItem::CaptionGraphicsItem(View *view):_view(view) {
   _rondedRectItem->setBrush(QBrush(QColor(255,255,255,180)));
   connect(_rondedRectItem,SIGNAL(filterChanged(float,float)),this,SLOT(filterChangedSlot(float,float)));
 
-  _confPropertySelectionWidget = new QComboBox();
+  _confPropertySelectionWidget = new QPushButton();
   _confPropertySelectionWidget->resize(QSize(120,25));
   _confPropertySelectionItem = new QGraphicsProxyWidget(_rondedRectItem);
   _confPropertySelectionItem->setWidget(_confPropertySelectionWidget);
   _confPropertySelectionItem->setPos(5,230);
   _confPropertySelectionItem->setZValue(2);
-
   _nodesEdgesTextItem = new QGraphicsSimpleTextItem(_rondedRectItem);
+  connect(_confPropertySelectionWidget,SIGNAL(clicked()),this,SLOT(selectPropertyButtonClicked()));
 }
 
 void CaptionGraphicsItem::loadConfiguration() {
@@ -68,50 +69,26 @@ void CaptionGraphicsItem::generateSizeCaption(const vector< pair <double,float> 
 void CaptionGraphicsItem::constructConfigWidget() {
 
   if(_view->graph()==NULL) {
-    _confPropertySelectionWidget->clear();
+    _confPropertySelectionWidget->setText("");
+    _confPropertySelectionWidget->setToolTip("");
     return;
   }
 
-  disconnect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
-  QString selectedItem=_confPropertySelectionWidget->currentText();
-  bool oldPropertyFound=false;
-  bool viewMetricFound=false;
-  _confPropertySelectionWidget->clear();
-  QStringList properties;
-  Iterator<PropertyInterface*>* itP=_view->graph()->getLocalObjectProperties();
-
-  while(itP->hasNext()) {
-    PropertyInterface *property=itP->next();
-
-    if(property->getTypename()=="double") {
-      if(property->getName().c_str() == selectedItem)
-        oldPropertyFound=true;
-
-      if(property->getName()=="viewMetric")
-        viewMetricFound=true;
-
-      properties << property->getName().c_str() ;
-    }
+  QString oldName = _confPropertySelectionWidget->text();
+  QString selectedProp = QString::null;
+  std::string piName;
+  forEach(piName, _view->graph()->getProperties()) {
+    if (_view->graph()->getProperty(piName)->getTypename() != "double")
+      continue;
+    if (selectedProp.isNull() || oldName == piName.c_str())
+      selectedProp = piName.c_str();
   }
-
-  _confPropertySelectionWidget->addItems(properties);
-
-  _confPropertySelectionWidget->insertSeparator(_confPropertySelectionWidget->count());
-
-  if(oldPropertyFound)
-    _confPropertySelectionWidget->addItem(selectedItem);
-  else if(viewMetricFound)
-    _confPropertySelectionWidget->addItem("viewMetric");
-  else
-    _confPropertySelectionWidget->addItem(properties.first());
-
-  _confPropertySelectionWidget->setCurrentIndex(_confPropertySelectionWidget->count()-1);
-
-  connect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
+  _confPropertySelectionWidget->setText(wrappedPropName(selectedProp));
+  _confPropertySelectionWidget->setToolTip(selectedProp);
 }
 
 string CaptionGraphicsItem::usedProperty() {
-  return _confPropertySelectionWidget->currentText().toStdString();
+  return _confPropertySelectionWidget->toolTip().toStdString();
 }
 
 CaptionGraphicsItem::~CaptionGraphicsItem() {
@@ -121,17 +98,29 @@ void CaptionGraphicsItem::filterChangedSlot(float begin,float end) {
   emit filterChanged(begin,end);
 }
 
-void CaptionGraphicsItem::selectedPropertyChangedSlot(const QString &propertyName) {
-  disconnect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
+void CaptionGraphicsItem::selectPropertyButtonClicked() {
+  if (_view->graph() == NULL)
+    return;
+  QMenu menu;
+  std::string piName;
+  forEach(piName, _view->graph()->getProperties()) {
+    if (_view->graph()->getProperty(piName)->getTypename() != "double")
+      continue;
+    menu.addAction(piName.c_str(),this,SLOT(propertySelectedSlot()));
+  }
+  menu.move(QCursor::pos());
+  menu.exec();
+}
 
-  QString currentText=_confPropertySelectionWidget->currentText();
-  _confPropertySelectionWidget->removeItem(_confPropertySelectionWidget->count()-1);
-  _confPropertySelectionWidget->addItem(currentText);
-  _confPropertySelectionWidget->setCurrentIndex(_confPropertySelectionWidget->count()-1);
+void CaptionGraphicsItem::propertySelectedSlot() {
+  QAction* action = static_cast<QAction*>(sender());
+  _confPropertySelectionWidget->setText(wrappedPropName(action->text()));
+  _confPropertySelectionWidget->setToolTip(action->text());
+  emit selectedPropertyChanged(action->text().toStdString());
+}
 
-  connect(_confPropertySelectionWidget,SIGNAL(currentIndexChanged (const QString &)),this,SLOT(selectedPropertyChangedSlot(const QString &)));
-
-  emit selectedPropertyChanged(propertyName.toStdString());
+QString CaptionGraphicsItem::wrappedPropName(const QString &originalName) const {
+  return originalName;
 }
 
 }

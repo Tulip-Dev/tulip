@@ -21,15 +21,15 @@
 
 
 #include <QtGui/QGraphicsItemGroup>
-#include <QtGui/QComboBox>
+//#include <QtGui/QComboBox>
+#include <QtGui/QPushButton>
+#include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtOpenGL/QGLFramebufferObject>
 #include <tulip/View.h>
 #include <tulip/Color.h>
-
 #include "tulip/CaptionGraphicsSubItems.h"
 
 
-#include <QtGui/QGraphicsSceneMouseEvent>
 
 namespace tlp {
 
@@ -66,9 +66,12 @@ signals :
 protected slots :
 
   void filterChangedSlot(float begin, float end);
-  void selectedPropertyChangedSlot(const QString &propertyName);
+  void selectPropertyButtonClicked();
+  void propertySelectedSlot();
+//  void selectedPropertyChangedSlot(const QString &propertyName);
 
 private :
+  QString wrappedPropName(const QString& originalName) const;
 
   void constructConfigWidget();
 
@@ -78,7 +81,8 @@ private :
 
   QGraphicsProxyWidget *_confPropertySelectionItem;
   QGraphicsSimpleTextItem *_nodesEdgesTextItem;
-  QComboBox *_confPropertySelectionWidget;
+//  QComboBox *_confPropertySelectionWidget;
+  QPushButton* _confPropertySelectionWidget;
 };
 
 }
