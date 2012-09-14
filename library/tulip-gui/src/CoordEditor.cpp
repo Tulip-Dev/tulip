@@ -23,7 +23,7 @@
 using namespace tlp;
 
 CoordEditor::CoordEditor(QWidget *parent) :
-  QWidget(parent),
+  QDialog(parent),
   ui(new Ui::CoordEditor) {
   ui->setupUi(this);
   QDoubleValidator *validator = new QDoubleValidator(this);
