@@ -22,6 +22,7 @@
 #include <QtGui/QFileDialog>
 #include <QtGui/QCloseEvent>
 #include <QtGui/QMessageBox>
+#include <QtGui/QClipboard>
 
 #include <tulip/ImportModule.h>
 #include <tulip/Graph.h>
@@ -563,15 +564,62 @@ void GraphPerspective::redo() {
 }
 
 void GraphPerspective::cut() {
-  //TODO implement me
+  copy(_graphs->currentGraph(),true);
 }
 
 void GraphPerspective::paste() {
-  //TODO implement me
+  if (_graphs->currentGraph() == NULL)
+    return;
+
+  Graph* outGraph = _graphs->currentGraph();
+
+  std::stringstream ss;
+  ss << QApplication::clipboard()->text().toStdString();
+
+  Observable::holdObservers();
+  outGraph->push();
+
+  DataSet data;
+  data.set<std::string>("file::data",ss.str());
+  Graph* inGraph = tlp::importGraph("TLP Import",data);
+
+  tlp::copyToGraph(outGraph,inGraph);
+  delete inGraph;
+
+  Observable::unholdObservers();
 }
 
 void GraphPerspective::copy() {
-  //TODO implement me
+  copy(_graphs->currentGraph());
+}
+
+void GraphPerspective::copy(Graph* g, bool deleteAfter) {
+  if (g == NULL)
+    return;
+
+  Observable::holdObservers();
+  g->push();
+
+  BooleanProperty* selection = g->getProperty<BooleanProperty>("viewSelection");
+
+  Graph* copyGraph = tlp::newGraph();
+  tlp::copyToGraph(copyGraph,g,selection);
+
+  std::stringstream ss;
+  DataSet data;
+  tlp::exportGraph(copyGraph,ss,"TLP Export",data);
+  QApplication::clipboard()->setText(ss.str().c_str());
+
+
+  if (deleteAfter) {
+    tlp::node n;
+    stableForEach(n, selection->getNodesEqualTo(true))
+        g->delNode(n);
+  }
+
+  delete copyGraph;
+
+  Observable::unholdObservers();
 }
 
 void GraphPerspective::group() {
@@ -608,10 +656,11 @@ void GraphPerspective::group() {
   Observable::unholdObservers();
 }
 
-void GraphPerspective::createSubGraph() {
+Graph *GraphPerspective::createSubGraph(Graph *graph) {
+  if (graph == NULL)
+    return NULL;
   Observable::holdObservers();
 
-  tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   edge e;
   forEach(e,selection->getEdgesEqualTo(true)) {
@@ -627,8 +676,13 @@ void GraphPerspective::createSubGraph() {
     selection->setNodeValue(src,true);
     selection->setNodeValue(tgt,true);
   }
-  graph->addSubGraph(selection);
+  Graph* result = graph->addSubGraph(selection);
   Observable::unholdObservers();
+  return result;
+}
+
+void GraphPerspective::createSubGraph() {
+  createSubGraph(_graphs->currentGraph());
 }
 
 void GraphPerspective::currentGraphChanged(Graph *graph) {
