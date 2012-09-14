@@ -23,6 +23,7 @@
 #include <tulip/PropertyTypes.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlyphManager.h>
+#include <tulip/TulipRelease.h>
 
 using namespace tlp;
 
@@ -36,6 +37,7 @@ const QString TulipSettings::DefaultSizeConfigEntry = "graph/defaults/size/";
 const QString TulipSettings::DefaultShapeConfigEntry = "graph/defaults/shape/";
 const QString TulipSettings::DefaultSelectionColorEntry = "graph/defaults/selectioncolor/";
 const QString TulipSettings::FavoriteAlgorithmsEntry = "app/algorithms/favorites";
+const QString TulipSettings::FirstRunEntry = QString("app/") + TULIP_MM_RELEASE + "/firstRun";
 
 const QString TulipSettings::ProxyEnabledEntry = "app/proxy/enabled";
 const QString TulipSettings::ProxyTypeEntry = "app/proxy/type";
@@ -272,6 +274,14 @@ void TulipSettings::applyProxySettings() {
     }
   }
   QNetworkProxy::setApplicationProxy(proxy);
+}
+
+bool TulipSettings::isFirstRun() const {
+  return value(FirstRunEntry).toBool();
+}
+
+void TulipSettings::setFirstRun(bool f) {
+  setValue(FirstRunEntry,f);
 }
 
 void TulipSettings::setFavoriteAlgorithms(const QStringList& lst) {
