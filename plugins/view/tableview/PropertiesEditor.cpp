@@ -153,8 +153,10 @@ void PropertiesEditor::setAllNodes() {
     dlg->setWindowTitle(QString::fromUtf8(_contextProperty->getName().c_str()) + trUtf8(": Set all nodes values"));
   }
 
-  if (dlg->exec() == QDialog::Accepted)
+  if (dlg->exec() == QDialog::Accepted) {
+    _graph->push();
     GraphModel::setAllNodeValue(_contextProperty,creator->editorData(w,_graph));
+  }
 
   delete dlg;
 }
@@ -168,8 +170,10 @@ void PropertiesEditor::setAllEdges() {
   QDialog* dlg = editDialog(w,Perspective::instance()->mainWindow());
   dlg->setWindowTitle(QString::fromUtf8(_contextProperty->getName().c_str()) + trUtf8(": Set all edges values"));
 
-  if (dlg->exec() == QDialog::Accepted)
+  if (dlg->exec() == QDialog::Accepted) {
+    _graph->push();
     GraphModel::setAllEdgeValue(_contextProperty,creator->editorData(w,_graph));
+  }
 
   delete dlg;
 }
@@ -285,11 +289,11 @@ void PropertiesEditor::setPropertyChecked(int index, bool state) {
 }
 
 bool PropertiesEditor::isShowNodes() {
-  _ui->nodesButton->isChecked();
+  return _ui->nodesButton->isChecked();
 }
 
 bool PropertiesEditor::isShowEdges() {
-  _ui->edgesButton->isChecked();
+  return _ui->edgesButton->isChecked();
 }
 
 void PropertiesEditor::showNodes(bool value) {
