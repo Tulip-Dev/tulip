@@ -33,6 +33,7 @@ class GraphPerspectiveLogger;
 namespace tlp {
 class GraphHierarchiesModel;
 class View;
+class BooleanProperty;
 }
 
 namespace Ui {
@@ -60,6 +61,10 @@ public:
   tlp::GraphHierarchiesModel* model() const;
 
   GraphPerspectiveLogger* _logger;
+
+  void copy(tlp::Graph*, bool deleteAfter=false);
+
+  tlp::Graph* createSubGraph(tlp::Graph*);
 
 public slots:
   void showFullScreen(bool);
