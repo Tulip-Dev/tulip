@@ -377,14 +377,12 @@ public:
 
     getSpacingParameters(dataSet, nSpacing, lSpacing);
 
-    LayoutProperty tmpLayout(graph);
-
     node n;
     SizeProperty *circleSizes = new SizeProperty(graph);
     forEach(n, tree->getNodes()) {
       const Size& boundingBox = sizes->getNodeValue (n);
-      double diam = 2*sqrt (boundingBox.getW() * boundingBox.getW()/4.0 +
-                            boundingBox.getH() * boundingBox.getH()/4.0);
+      double diam = 2.*sqrt (boundingBox.getW() * boundingBox.getW()/4.0 +
+                             boundingBox.getH() * boundingBox.getH()/4.0);
       circleSizes->setNodeValue (n, Size (static_cast<float>(diam), static_cast<float>(diam), 1.0f));
     }
     sizes = circleSizes;
@@ -400,7 +398,8 @@ public:
     doLayout(root, angles);
 
     delete sizes;
-
+    //clear all bends in the Layout
+    result->setAllEdgeValue(vector<Coord>());
     // forget last temporary graph state
     graph->pop();
 
