@@ -77,6 +77,12 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
   GlNode glNode(n.id);
 
   BoundingBox bb=glNode.getBoundingBox(inputData);
+  BoundingBox bbTmp;
+  BoundingBox includeBB;
+  inputData->glyphs.get(inputData->getElementShape()->getNodeValue(n))->getIncludeBoundingBox(includeBB,n);
+  bbTmp[0]=bb.center()-Coord((bb.width()/2.f)*(includeBB[0][0]*-2.f),(bb.height()/2.f)*(includeBB[0][1]*-2.f),(bb.depth()/2.f)*(includeBB[0][2]*-2.f));
+  bbTmp[1]=bb.center()+Coord((bb.width()/2.f)*(includeBB[1][0]*2.f),(bb.height()/2.f)*(includeBB[1][1]*2.f),(bb.depth()/2.f)*(includeBB[1][2]*2.f));
+  bb=bbTmp;
 
   Coord eyeDirection=camera->getEyes()-camera->getCenter();
   eyeDirection = eyeDirection/eyeDirection.norm();
