@@ -98,7 +98,7 @@ QList<QWidget*> GlMainView::configurationWidgets() const {
 }
 
 void GlMainView::setOverviewVisible(bool display) {
-  if(display){
+  if(display) {
     drawOverview(true);
     _overviewItem->setVisible(display);
   }

@@ -13,13 +13,13 @@ class PreferencesDialog : public QDialog {
   Ui::PreferencesDialog* _ui;
 public:
   explicit PreferencesDialog(QWidget *parent = 0);
-  
+
 signals:
-  
+
 public slots:
   void writeSettings();
   void readSettings();
-  
+
 };
 
 #endif // PREFERENCESDIALOG_H

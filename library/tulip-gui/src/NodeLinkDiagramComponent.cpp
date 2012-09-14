@@ -130,6 +130,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   createScene(graph(), data);
   registerTriggers();
   setOverviewVisible(overviewVisible);
+
   if(overviewItem())
     overviewItem()->setLayerVisible("Foreground",false);
 

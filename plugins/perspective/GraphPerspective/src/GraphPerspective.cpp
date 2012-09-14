@@ -614,7 +614,7 @@ void GraphPerspective::copy(Graph* g, bool deleteAfter) {
   if (deleteAfter) {
     tlp::node n;
     stableForEach(n, selection->getNodesEqualTo(true))
-        g->delNode(n);
+    g->delNode(n);
   }
 
   delete copyGraph;
@@ -659,6 +659,7 @@ void GraphPerspective::group() {
 Graph *GraphPerspective::createSubGraph(Graph *graph) {
   if (graph == NULL)
     return NULL;
+
   Observable::holdObservers();
 
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
@@ -750,11 +751,13 @@ void GraphPerspective::setSearchOutput(bool) {
 void GraphPerspective::openPreferences() {
   PreferencesDialog dlg(_ui->mainWidget);
   dlg.readSettings();
+
   if (dlg.exec() == QDialog::Accepted) {
     dlg.writeSettings();
 
     foreach(tlp::View* v, _ui->workspace->panels()) {
       GlMainView* glMainView = dynamic_cast<tlp::GlMainView*>(v);
+
       if (glMainView != NULL) {
         if (glMainView->getGlMainWidget() != NULL) {
           glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setSelectionColor(TulipSettings::instance().defaultSelectionColor());

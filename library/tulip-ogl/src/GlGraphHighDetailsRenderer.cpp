@@ -135,13 +135,15 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   // If we don't init lod calculator : clone the scene one
   if(!lodCalculator) {
-    if(baseScene){
+    if(baseScene) {
       lodCalculator=baseScene->getCalculator()->clone();
       lodCalculator->setAttachedLODCalculator(baseScene->getCalculator());
-    }else{
+    }
+    else {
       lodCalculator=camera->getScene()->getCalculator()->clone();
       lodCalculator->setAttachedLODCalculator(camera->getScene()->getCalculator());
     }
+
     lodCalculator->setInputData(inputData);
     lodCalculator->setScene(*fakeScene);
   }
