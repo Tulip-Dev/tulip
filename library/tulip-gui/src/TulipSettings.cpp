@@ -268,11 +268,13 @@ void TulipSettings::applyProxySettings() {
     proxy.setType(proxyType());
     proxy.setHostName(proxyHost());
     proxy.setPort(proxyPort());
+
     if (isUseProxyAuthentification()) {
       proxy.setUser(proxyUsername());
       proxy.setPassword(proxyPassword());
     }
   }
+
   QNetworkProxy::setApplicationProxy(proxy);
 }
 

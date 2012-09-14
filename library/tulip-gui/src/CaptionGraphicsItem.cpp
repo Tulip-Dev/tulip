@@ -80,6 +80,7 @@ void CaptionGraphicsItem::constructConfigWidget() {
   forEach(piName, _view->graph()->getProperties()) {
     if (_view->graph()->getProperty(piName)->getTypename() != "double")
       continue;
+
     if (selectedProp.isNull() || oldName == piName.c_str())
       selectedProp = piName.c_str();
   }
@@ -101,11 +102,13 @@ void CaptionGraphicsItem::filterChangedSlot(float begin,float end) {
 void CaptionGraphicsItem::selectPropertyButtonClicked() {
   if (_view->graph() == NULL)
     return;
+
   QMenu menu;
   std::string piName;
   forEach(piName, _view->graph()->getProperties()) {
     if (_view->graph()->getProperty(piName)->getTypename() != "double")
       continue;
+
     menu.addAction(piName.c_str(),this,SLOT(propertySelectedSlot()));
   }
   menu.move(QCursor::pos());

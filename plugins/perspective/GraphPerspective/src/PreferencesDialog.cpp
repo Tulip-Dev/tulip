@@ -12,22 +12,28 @@ PreferencesDialog::PreferencesDialog(QWidget *parent): QDialog(parent), _ui(new 
 
 void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setProxyEnabled(_ui->proxyCheck->isChecked());
+
   switch(_ui->proxyType->currentIndex()) {
   case 0:
     TulipSettings::instance().setProxyType(QNetworkProxy::Socks5Proxy);
     break;
+
   case 1:
     TulipSettings::instance().setProxyType(QNetworkProxy::HttpProxy);
     break;
+
   case 2:
     TulipSettings::instance().setProxyType(QNetworkProxy::HttpCachingProxy);
     break;
+
   case 3:
     TulipSettings::instance().setProxyType(QNetworkProxy::FtpCachingProxy);
     break;
+
   default:
     break;
   }
+
   TulipSettings::instance().setProxyHost(_ui->proxyAddr->text());
   TulipSettings::instance().setProxyPort(_ui->proxyPort->value());
   TulipSettings::instance().setUseProxyAuthentification(_ui->proxyAuthCheck->isChecked());
@@ -49,22 +55,28 @@ void PreferencesDialog::writeSettings() {
 
 void PreferencesDialog::readSettings() {
   _ui->proxyCheck->setChecked(TulipSettings::instance().isProxyEnabled());
+
   switch(TulipSettings::instance().proxyType()) {
   case QNetworkProxy::Socks5Proxy:
     _ui->proxyType->setCurrentIndex(0);
     break;
+
   case QNetworkProxy::HttpProxy:
     _ui->proxyType->setCurrentIndex(1);
     break;
+
   case QNetworkProxy::HttpCachingProxy:
     _ui->proxyType->setCurrentIndex(2);
     break;
+
   case QNetworkProxy::FtpCachingProxy:
     _ui->proxyType->setCurrentIndex(3);
     break;
+
   default:
     break;
   }
+
   _ui->proxyAddr->setText(TulipSettings::instance().proxyHost());
   _ui->proxyPort->setValue(TulipSettings::instance().proxyPort());
   _ui->proxyAuthCheck->setChecked(TulipSettings::instance().isUseProxyAuthentification());
