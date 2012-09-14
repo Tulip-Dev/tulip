@@ -130,7 +130,8 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   createScene(graph(), data);
   registerTriggers();
   setOverviewVisible(overviewVisible);
-  overviewItem()->setLayerVisible("Foreground",false);
+  if(overviewItem())
+    overviewItem()->setLayerVisible("Foreground",false);
 
   setQuickAccessBarVisible(quickAccessBarVisible);
 }
@@ -177,7 +178,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph,DataSet dataSet) {
     scene->addExistingLayer(backgroundLayer);
     scene->addExistingLayer(layer);
     scene->addExistingLayer(foregroundLayer);
-    GlGraphComposite* graphComposite=new GlGraphComposite(graph);
+    GlGraphComposite* graphComposite=new GlGraphComposite(graph,scene);
     scene->getLayer("Main")->addGlEntity(graphComposite,"graph");
     graphComposite->getRenderingParametersPointer()->setViewNodeLabel(true);
     graphComposite->getRenderingParametersPointer()->setEdgeColorInterpolate(false);

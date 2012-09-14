@@ -51,6 +51,7 @@ class TLP_GL_SCOPE GlGraphHighDetailsRenderer : public GlGraphRenderer {
 public:
 
   GlGraphHighDetailsRenderer(const GlGraphInputData *inputData);
+  GlGraphHighDetailsRenderer(const GlGraphInputData *inputData,GlScene *scene);
 
   ~GlGraphHighDetailsRenderer();
 
@@ -69,6 +70,7 @@ protected:
   GlLODCalculator *lodCalculator;
 
 
+  GlScene *baseScene;
   GlScene *fakeScene;
 };
 }

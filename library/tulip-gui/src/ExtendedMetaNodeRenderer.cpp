@@ -65,8 +65,11 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
     //view->setOverviewVisible(false);
     view->setupUi();
     view->setGraph(metaGraph);
-    view->setState(DataSet());
+    view->setOverviewVisible(false);
+    DataSet dataSet;
+    dataSet.set("overviewVisible",false);
     view->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator());
+    view->setState(dataSet);
     metaGraphToViewMap[metaGraph]=view;
 
     metaGraph->addListener(this);
