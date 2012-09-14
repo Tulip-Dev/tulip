@@ -29,7 +29,6 @@
 #include <tulip/ColorButton.h>
 #include <tulip/ColorScaleButton.h>
 #include <tulip/TulipFileDescriptorWidget.h>
-#include <tulip/SizeEditor.h>
 #include <tulip/CoordEditor.h>
 #include <tulip/GlyphRenderer.h>
 #include <tulip/GlGraphStaticData.h>
@@ -108,7 +107,7 @@ QVariant BooleanEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
   CoordEditorCreator
 */
 QWidget* CoordEditorCreator::createWidget(QWidget* parent) const {
-  return new CoordEditor(parent);
+  return new CoordEditor(NULL);
 }
 
 void CoordEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
@@ -117,21 +116,6 @@ void CoordEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp:
 
 QVariant CoordEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   return QVariant::fromValue<tlp::Coord>(static_cast<CoordEditor*>(w)->coord());
-}
-
-/*
-  SizeEditorCreator
-*/
-QWidget* SizeEditorCreator::createWidget(QWidget* parent) const {
-  return new SizeEditor(parent);
-}
-
-void SizeEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
-  static_cast<SizeEditor*>(w)->setSize(v.value<tlp::Size>());
-}
-
-QVariant SizeEditorCreator::editorData(QWidget* w,tlp::Graph*) {
-  return QVariant::fromValue<tlp::Size>(static_cast<SizeEditor*>(w)->size());
 }
 
 /*
