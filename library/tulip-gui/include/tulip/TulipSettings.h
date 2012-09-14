@@ -47,6 +47,7 @@ public:
   static const QString DefaultShapeConfigEntry;
   static const QString DefaultSelectionColorEntry;
   static const QString FavoriteAlgorithmsEntry;
+  static const QString FirstRunEntry;
 
   static const QString ProxyEnabledEntry;
   static const QString ProxyTypeEntry;
@@ -143,6 +144,8 @@ public:
 
   void applyProxySettings();
 
+  bool isFirstRun() const;
+  void setFirstRun(bool);
 
 private:
   TulipSettings();

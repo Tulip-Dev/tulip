@@ -56,8 +56,8 @@ int main(int argc, char **argv) {
 
   TulipSettings::instance().applyProxySettings();
 
-  if (TulipSettings::instance().value("firstRun",true).toBool()) {
-    TulipSettings::instance().setValue("firstRun",false);
+  if (TulipSettings::instance().isFirstRun()) {
+    TulipSettings::instance().setFirstRun(false);
     TulipSettings::instance().addRemoteLocation(STABLE_LOCATION);
     TulipSettings::instance().addRemoteLocation(TESTING_LOCATION);
   }
