@@ -26,6 +26,7 @@
 #include <tulip/Graph.h>
 #include <tulip/Color.h>
 #include <tulip/Size.h>
+#include <QtNetwork/QNetworkProxy>
 
 /**
   * @brief This class provides convenience functions to access the Tulip settings file (using QSettings)
@@ -47,7 +48,17 @@ public:
   static const QString DefaultSelectionColorEntry;
   static const QString FavoriteAlgorithmsEntry;
 
+  static const QString ProxyEnabledEntry;
+  static const QString ProxyTypeEntry;
+  static const QString ProxyHostEntry;
+  static const QString ProxyPortEntry;
+  static const QString ProxyUseAuthEntry;
+  static const QString ProxyUsernameEntry;
+  static const QString ProxyPasswordEntry;
+
   static TulipSettings &instance();
+
+  static QString elementKey(const QString& configEntry, tlp::ElementType elem);
 
   /**
     @brief Retrieves the list of documents recently opened with tulip.
@@ -107,6 +118,31 @@ public:
   QStringList favoriteAlgorithms() const;
   void addFavoriteAlgorithm(const QString&name);
   void removeFavoriteAlgorithm(const QString&name);
+
+  // Proxy settings
+  bool isProxyEnabled() const;
+  void setProxyEnabled(bool);
+
+  QNetworkProxy::ProxyType proxyType() const;
+  void setProxyType(QNetworkProxy::ProxyType);
+
+  QString proxyHost() const;
+  void setProxyHost(const QString&);
+
+  unsigned int proxyPort() const;
+  void setProxyPort(unsigned int);
+
+  bool isUseProxyAuthentification() const;
+  void setUseProxyAuthentification(bool);
+
+  QString proxyUsername() const;
+  void setProxyUsername(const QString&);
+
+  QString proxyPassword() const;
+  void setProxyPassword(const QString&);
+
+  void applyProxySettings();
+
 
 private:
   TulipSettings();

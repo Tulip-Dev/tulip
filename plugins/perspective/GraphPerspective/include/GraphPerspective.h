@@ -78,6 +78,7 @@ public slots:
   void closePanelsForGraph(tlp::Graph* g = NULL);
   void setPythonOutput(bool);
   void setSearchOutput(bool);
+  void openPreferences();
 
 protected slots:
   void currentGraphChanged(tlp::Graph* graph);

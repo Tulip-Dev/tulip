@@ -34,6 +34,7 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<double>(new LineEditEditorCreator<tlp::DoubleType>);
   registerCreator<float>(new LineEditEditorCreator<tlp::FloatType>);
   registerCreator<std::string>(new LineEditEditorCreator<tlp::StringType>);
+  registerCreator<QString>(new QStringEditorCreator);
   registerCreator<tlp::Color>(new ColorEditorCreator);
   registerCreator<tlp::Coord>(new CoordEditorCreator);
   registerCreator<tlp::Size>(new SizeEditorCreator);
