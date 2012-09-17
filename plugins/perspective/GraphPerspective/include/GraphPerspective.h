@@ -81,7 +81,6 @@ public slots:
   virtual void redrawPanels(bool center=false);
   void centerPanelsForGraph(tlp::Graph*);
   void closePanelsForGraph(tlp::Graph* g = NULL);
-  void setPythonOutput(bool);
   void setSearchOutput(bool);
   void openPreferences();
 
