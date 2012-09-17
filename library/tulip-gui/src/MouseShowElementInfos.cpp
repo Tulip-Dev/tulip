@@ -116,7 +116,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
             QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "opacity");
             animation->setDuration(100);
             animation->setStartValue(0.);
-            animation->setEndValue(1.);
+            animation->setEndValue(0.99);
             animation->start();
 
             return true;
