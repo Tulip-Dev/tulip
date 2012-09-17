@@ -61,6 +61,8 @@ void AlgorithmMimeType::run(Graph* g) const {
   }
 
   Observable::holdObservers();
+  g->push();
+
   DataSet dataSet = _params;
   std::pair<std::string,tlp::DataType*> entry;
   forEach(entry, dataSet.getValues()) {
