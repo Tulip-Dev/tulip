@@ -81,6 +81,14 @@ void View::setGraph(tlp::Graph *g) {
   if (_graph != NULL)
     _graph->removeListener(this);
 
+  bool center = false;
+  if (g != _graph) {
+    if (g == NULL)
+      center = true;
+    else if (_graph != NULL && g->getRoot() != _graph->getRoot())
+      center = true;
+  }
+
   _graph = g;
 
   graphChanged(g);
@@ -89,6 +97,9 @@ void View::setGraph(tlp::Graph *g) {
     _graph->addListener(this);
 
   emit graphSet(g);
+
+  if (center)
+    centerView();
 }
 
 void View::treatEvent(const Event& ev) {
