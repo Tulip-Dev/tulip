@@ -566,6 +566,11 @@ void GraphPerspective::redo() {
     graph->unpop();
 
   Observable::unholdObservers();
+
+  foreach(View* v, _ui->workspace->panels()) {
+    if (v->graph() == graph)
+      v->undoCallback();
+  }
 }
 
 void GraphPerspective::cut() {
