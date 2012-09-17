@@ -194,7 +194,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionFind_plugins,SIGNAL(triggered()),this,SLOT(findPlugins()));
   connect(_ui->actionNew, SIGNAL(triggered()), this, SLOT(addNewGraph()));
   connect(_ui->actionPreferences,SIGNAL(triggered()),this,SLOT(openPreferences()));
-  connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonOutput(bool)));
   connect(_ui->searchButton,SIGNAL(clicked(bool)),this,SLOT(setSearchOutput(bool)));
 
   // Agent actions
@@ -736,16 +735,9 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
   }
 }
 
-void GraphPerspective::setPythonOutput(bool) {
-  _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
-  _ui->searchButton->setChecked(false);
-  _ui->outputFrame->setVisible(_ui->pythonButton->isChecked() || _ui->searchButton->isChecked());
-}
-
 void GraphPerspective::setSearchOutput(bool) {
   _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
-  _ui->pythonButton->setChecked(false);
-  _ui->outputFrame->setVisible(_ui->pythonButton->isChecked() || _ui->searchButton->isChecked());
+  _ui->outputFrame->setVisible(_ui->searchButton->isChecked());
 }
 
 void GraphPerspective::openPreferences() {

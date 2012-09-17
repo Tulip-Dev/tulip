@@ -539,7 +539,6 @@ border: 0px;
                   </property>
                  </widget>
                  <widget class="QStackedWidget" name="outputFrame">
-                  <widget class="QWidget" name="pythonPanel"/>
                   <widget class="SearchWidget" name="searchPanel"/>
                  </widget>
                 </widget>
@@ -632,28 +631,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                 </widget>
                </item>
                <item>
-                <widget class="OutputPanelButton" name="pythonButton">
-                 <property name="minimumSize">
-                  <size>
-                   <width>120</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <property name="autoExclusive">
-                  <bool>false</bool>
-                 </property>
-                 <property name="number" stdset="0">
-                  <number>2</number>
-                 </property>
-                 <property name="title" stdset="0">
-                  <string>Python</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="OutputPanelButton" name="searchButton">
                  <property name="minimumSize">
                   <size>
@@ -671,7 +648,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <string>Search</string>
                  </property>
                  <property name="number" stdset="0">
-                  <string>3</string>
+                  <string>2</string>
                  </property>
                 </widget>
                </item>
