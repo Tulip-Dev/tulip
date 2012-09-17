@@ -86,6 +86,7 @@ void View::setGraph(tlp::Graph *g) {
     _graph->removeListener(this);
 
   bool center = false;
+
   if (g != _graph) {
     if (g == NULL)
       center = true;
