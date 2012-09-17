@@ -88,15 +88,18 @@ void CaptionGraphicsItem::constructConfigWidget() {
 
     if (oldName == piName.c_str())
       selectedProp = piName.c_str();
+
     if(piName == "viewMetric")
       findViewMetric = true;
   }
-  if(selectedProp.isNull()){
+
+  if(selectedProp.isNull()) {
     if(findViewMetric)
       selectedProp = "viewMetric";
     else
       selectedProp = firstDoubleMetricName;
   }
+
   _confPropertySelectionWidget->setText(wrappedPropName(selectedProp));
   _confPropertySelectionWidget->setToolTip(selectedProp);
 }
