@@ -74,6 +74,10 @@ void View::showContextMenu(const QPoint &point,const QPointF &scenePoint) {
   }
 }
 
+void View::undoCallback() {
+  centerView();
+}
+
 Graph* View::graph() const {
   return _graph;
 }

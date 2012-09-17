@@ -172,6 +172,12 @@ public slots:
   void showContextMenu(const QPoint& point, const QPointF &scenePoint);
 
   /**
+   * @brief This method is a callback to notify the panel that the pop() method (undo) has just been called on the graph.
+   * By default, this method will make a call to centerView()
+   **/
+  void undoCallback();
+
+  /**
     @brief This method applies settings changed in the configuration widgets
     This method may be called from the overleying system in various situations. The View is expected to apply settings in an optimized way to prevent extra redraws.
     By default, this method does nothing.
