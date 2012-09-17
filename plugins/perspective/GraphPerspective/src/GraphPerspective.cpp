@@ -493,6 +493,7 @@ void GraphPerspective::open() {
         DataSet params;
         params.set<std::string>("file::filename", std::string(fileName.toUtf8().data()));
         Graph* g = tlp::importGraph(modules[extension], params);
+        QDir::setCurrent(QFileInfo(fileName.toUtf8().data()).absolutePath());
         _graphs->addGraph(g);
         break;
       }
