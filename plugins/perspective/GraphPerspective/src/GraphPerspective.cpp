@@ -660,6 +660,9 @@ void GraphPerspective::group() {
 
   graph->createMetaNode(groupedNodes);
 
+  selection->setAllNodeValue(false);
+  selection->setAllEdgeValue(false);
+
   Observable::unholdObservers();
 
   if (!changeGraph)
