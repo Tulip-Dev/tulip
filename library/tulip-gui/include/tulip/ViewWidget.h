@@ -77,6 +77,8 @@ protected slots:
     */
   virtual void currentInteractorChanged(tlp::Interactor*);
 
+  virtual void graphDeleted(Graph *parentGraph);
+
 protected:
   /**
     @brief sets up the central widget.
@@ -109,7 +111,6 @@ protected:
     @see setCentralWidget
     */
   virtual QGraphicsItem* centralItem() const;
-
 
   QPixmap snapshot(const QSize &outputSize=QSize());
 };

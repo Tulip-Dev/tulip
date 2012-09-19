@@ -155,10 +155,6 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) {
   return QPixmap::fromImage(_glMainWidget->createPicture(realSize.width(),realSize.height(),false));
 }
 
-void GlMainView::graphDeleted() {
-  setGraph(NULL);
-}
-
 void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   QAction* a = menu->addAction(trUtf8("Show overview"));
   a->setCheckable(true);
