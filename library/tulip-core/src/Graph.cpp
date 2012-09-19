@@ -389,13 +389,13 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
 
 //=========================================================
 #define CHECK_PROPERTY(T) \
-  if (dataSet->getData(n)->getTypeName().compare(typeid(T*).name()) == 0) {\
+  if (dataSetCopy.getData(n)->getTypeName().compare(typeid(T*).name()) == 0) {\
     T* prop=NULL;\
-    dataSet->getAndFree<T*>(n,prop);\
+    dataSetCopy.getAndFree<T*>(n,prop);\
     T* clone = new T(this,prop->getName());\
     clone->copy(prop);\
     clonedProperties[clone] = prop;\
-    dataSet->set<T*>(n,clone);\
+    dataSetCopy.set<T*>(n,clone);\
     QString copyName = dataSetName + "(" + prop->getName().c_str() + ")";\
     if (existProperty(copyName.toStdString()) && getProperty(copyName.toStdString())->getTypename().compare(prop->getTypename()) != 0)\
       qWarning() << algorithm.c_str() << ": Type mismatch for output property " << copyName;\
@@ -439,10 +439,12 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   QMap<PropertyInterface*,PropertyInterface*> clonedProperties;
   QMap<PropertyInterface*,PropertyInterface*> namedProperties;
 
+  DataSet dataSetCopy; // Create a copy of the dataset in order to leave the original values unchanged after function call
   if (dataSet) {
-    QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSet->toString().c_str();
+     dataSetCopy = *dataSet;
+    QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSetCopy.toString().c_str();
     foreach(std::string n, outParams) {
-      if (!dataSet->exist(n))
+      if (!dataSetCopy.exist(n))
         continue;
 
       CHECK_PI(Boolean)
@@ -455,7 +457,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
     }
   }
 
-  AlgorithmContext* context = new AlgorithmContext(this, dataSet, tmpProgress);
+  AlgorithmContext* context = new AlgorithmContext(this, &dataSetCopy, tmpProgress);
   Algorithm *newAlgo = PluginLister::instance()->getPluginObject<Algorithm>(algorithm, context);
 
   if ((result=newAlgo->check(errorMessage))) {

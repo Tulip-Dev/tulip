@@ -47,6 +47,9 @@ const QString TulipSettings::ProxyUseAuthEntry = "app/proxy/user";
 const QString TulipSettings::ProxyUsernameEntry = "app/proxy/useAuth";
 const QString TulipSettings::ProxyPasswordEntry = "app/proxy/passwd";
 
+const QString TulipSettings::AutomaticPerfectAspectRatioEntry = "graph/auto/ratio";
+const QString TulipSettings::AutomaticMapMetricEntry = "graph/auto/colors";
+
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
 
@@ -284,6 +287,22 @@ bool TulipSettings::isFirstRun() const {
 
 void TulipSettings::setFirstRun(bool f) {
   setValue(FirstRunEntry,f);
+}
+
+bool TulipSettings::isAutomaticMapMetric() const {
+  return value(AutomaticMapMetricEntry,false).toBool();
+}
+
+void TulipSettings::setAutomaticMapMetric(bool f) {
+  setValue(AutomaticMapMetricEntry,f);
+}
+
+bool TulipSettings::isAutomaticRatio() const {
+  return value(AutomaticPerfectAspectRatioEntry,false).toBool();
+}
+
+void TulipSettings::setAutomaticRatio(bool f) {
+  setValue(AutomaticPerfectAspectRatioEntry,f);
 }
 
 void TulipSettings::setFavoriteAlgorithms(const QStringList& lst) {
