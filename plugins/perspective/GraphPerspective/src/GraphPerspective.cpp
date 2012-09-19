@@ -648,6 +648,8 @@ void GraphPerspective::group() {
     return;
   }
 
+  graph->push();
+
   bool changeGraph=false;
 
   if (graph == graph->getRoot()) {
@@ -672,6 +674,8 @@ void GraphPerspective::group() {
 Graph *GraphPerspective::createSubGraph(Graph *graph) {
   if (graph == NULL)
     return NULL;
+
+  graph->push();
 
   Observable::holdObservers();
 
