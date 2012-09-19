@@ -164,7 +164,7 @@ PluginManager::PluginInformationsList PluginManager::listPlugins(PluginLocations
     for (std::list<std::string>::iterator it = localResults.begin(); it != localResults.end(); ++it) {
       const Plugin* info = PluginLister::instance()->pluginInformations(*it);
 
-      if (QString(info->category().c_str()).contains(categoryFilter) && QString(info->name().c_str()).contains(nameFilter)) {
+      if (QString(info->category().c_str()).contains(categoryFilter) && QString(info->name().c_str()).contains(nameFilter, Qt::CaseInsensitive)) {
         nameToInfos[info->name().c_str()].fillLocalInfos(info);
       }
     }
