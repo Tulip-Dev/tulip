@@ -57,6 +57,9 @@ public:
   static const QString ProxyUsernameEntry;
   static const QString ProxyPasswordEntry;
 
+  static const QString AutomaticPerfectAspectRatioEntry;
+  static const QString AutomaticMapMetricEntry;
+
   static TulipSettings &instance();
 
   static QString elementKey(const QString& configEntry, tlp::ElementType elem);
@@ -146,6 +149,12 @@ public:
 
   bool isFirstRun() const;
   void setFirstRun(bool);
+
+  bool isAutomaticMapMetric() const;
+  void setAutomaticMapMetric(bool);
+
+  bool isAutomaticRatio() const;
+  void setAutomaticRatio(bool);
 
 private:
   TulipSettings();

@@ -28,6 +28,7 @@
 #include <tulip/TulipMimes.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/ParameterListModel.h>
+#include <tulip/TulipSettings.h>
 
 using namespace tlp;
 
@@ -192,8 +193,15 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
 }
 
 void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
-  if (PluginLister::instance()->pluginExists<LayoutAlgorithm>(name().toStdString()))
+  if (PluginLister::instance()->pluginExists<LayoutAlgorithm>(name().toStdString())) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
+    if (TulipSettings::instance().isAutomaticRatio()) {
+      LayoutProperty* prop;
+      dataSet.get<LayoutProperty*>("result",prop);
+      prop->perfectAspectRatio();
+    }
+
+  }
   else if (PluginLister::instance()->pluginExists<GraphTest>(name().toStdString())) {
     bool result = true;
     dataSet.get<bool>("result",result);

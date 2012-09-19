@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>957</width>
-    <height>471</height>
+    <height>567</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -153,7 +153,7 @@ color: #595959;</string>
         </property>
         <property name="minimumSize">
          <size>
-          <width>120</width>
+          <width>140</width>
           <height>0</height>
          </size>
         </property>
@@ -345,7 +345,7 @@ color: #595959;</string>
         </property>
         <property name="minimumSize">
          <size>
-          <width>120</width>
+          <width>140</width>
           <height>0</height>
          </size>
         </property>
@@ -487,6 +487,55 @@ border: 0px;
             </font>
            </property>
           </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="automaticFrame">
+     <property name="section" stdset="0">
+      <bool>true</bool>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <item>
+       <widget class="QLabel" name="automaticTitle">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>140</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-weight: bold;</string>
+        </property>
+        <property name="text">
+         <string>Automatic actions</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="automaticContents">
+        <item>
+         <widget class="QCheckBox" name="aspectRatioCheck">
+          <property name="text">
+           <string>Adjust aspect ratio when changing layout</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="colorMappingCheck">
+          <property name="text">
+           <string>Map colors when computing a metric</string>
+          </property>
          </widget>
         </item>
        </layout>

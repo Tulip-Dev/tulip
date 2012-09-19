@@ -51,6 +51,9 @@ void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setDefaultSelectionColor(model->data(model->index(3,1)).value<tlp::Color>());
 
   TulipSettings::instance().applyProxySettings();
+
+  TulipSettings::instance().setAutomaticMapMetric(_ui->colorMappingCheck->isChecked());
+  TulipSettings::instance().setAutomaticRatio(_ui->aspectRatioCheck->isChecked());
 }
 
 void PreferencesDialog::readSettings() {
@@ -92,4 +95,7 @@ void PreferencesDialog::readSettings() {
   model->setData(model->index(2,1),QVariant::fromValue<NodeShape>(NodeShape(TulipSettings::instance().defaultShape(tlp::NODE))));
   model->setData(model->index(2,2),QVariant::fromValue<tlp::EdgeShape>((tlp::EdgeShape)(TulipSettings::instance().defaultShape(tlp::EDGE))));
   model->setData(model->index(3,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor()));
+
+  _ui->aspectRatioCheck->setChecked(TulipSettings::instance().isAutomaticRatio());
+  _ui->colorMappingCheck->setChecked(TulipSettings::instance().isAutomaticMapMetric());
 }

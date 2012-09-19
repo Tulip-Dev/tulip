@@ -90,7 +90,6 @@ int main(int argc,char **argv) {
   progress->show();
 
   progress->progress(0,100);
-  progress->setComment(QObject::trUtf8("Initializing D-Bus").toStdString());
 
 #if defined(__APPLE__)
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
