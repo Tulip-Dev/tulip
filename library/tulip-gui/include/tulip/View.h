@@ -314,8 +314,9 @@ protected slots:
   /**
     @brief Called when the graph associated to the view gets deleted.
     This method should call setGraph to input a new graph pointer (NULL or valid)
+    @param parentGraph The parent of the graph that was just deleted. If there is no parent available (eg. the graph was root), parentGraph is NULL
     */
-  virtual void graphDeleted()=0;
+  virtual void graphDeleted(tlp::Graph* parentGraph)=0;
 
   /**
    * @brief fills the context menu with entries related to the view.

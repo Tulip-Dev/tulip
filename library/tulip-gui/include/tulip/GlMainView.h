@@ -62,7 +62,6 @@ protected slots:
   virtual void glMainViewDrawn(bool graphChanged);
   virtual void sceneRectChanged(const QRectF&);
   void setQuickAccessBarVisible(bool);
-  void graphDeleted();
   void fillContextMenu(QMenu *menu,const QPointF &);
 
 protected:

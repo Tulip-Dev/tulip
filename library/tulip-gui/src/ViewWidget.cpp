@@ -98,6 +98,10 @@ void ViewWidget::currentInteractorChanged(tlp::Interactor *i) {
   i->install(_centralWidget);
 }
 
+void ViewWidget::graphDeleted(Graph *parentGraph) {
+  setGraph(parentGraph);
+}
+
 void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
   assert(w);
   w->setAcceptDrops(true);
