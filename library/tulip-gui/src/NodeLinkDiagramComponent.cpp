@@ -36,6 +36,7 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/Interactor.h>
+#include <tulip/QtGlSceneZoomAndPanAnimator.h>
 
 using namespace tlp;
 using namespace std;
@@ -409,7 +410,16 @@ void NodeLinkDiagramComponent::deleteItem() {
 
 void NodeLinkDiagramComponent::goInsideItem() {
   Graph *metaGraph=graph()->getNodeMetaInfo(node(itemId));
+  Size size=getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize()->getNodeValue(node(itemId));
+  Coord coord=getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout()->getNodeValue(node(itemId));
+  BoundingBox bb;
+  bb.expand(coord-size/2.f);
+  bb.expand(coord+size/2.f);
+  QtGlSceneZoomAndPanAnimator zoomAnPan(getGlMainWidget(), bb);
+  zoomAnPan.animateZoomAndPan();
   this->loadGraphOnScene(metaGraph);
+  emit graphSet(metaGraph);
+  draw(NULL);
 }
 
 void NodeLinkDiagramComponent::ungroupItem() {
