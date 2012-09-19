@@ -187,20 +187,6 @@ void Workspace::panelDestroyed(QObject* obj) {
 
   updateAvailableModes();
 
-  if (!_modeSwitches[currentModeWidget()]->isVisible()) {
-    int maxSize = 0;
-    QWidget* fallbackMode = _ui->startupPage;
-
-    // Current mode is not available, fallback to the largest available mode
-    foreach(QWidget* it, _modeToSlots.keys()) {
-      if (_panels.size() >= _modeToSlots[it].size() && _modeToSlots[it].size() > maxSize) {
-        maxSize = _modeToSlots[it].size();
-        fallbackMode = it;
-      }
-    }
-    switchWorkspaceMode(fallbackMode);
-  }
-
   if (currentModeWidget() == _ui->startupPage) {
     return;
   }
@@ -326,6 +312,20 @@ void Workspace::updatePanels() {
     }
 
     i++;
+  }
+
+  if (!_modeSwitches[currentModeWidget()]->isVisible()) {
+    int maxSize = 0;
+    QWidget* fallbackMode = _ui->startupPage;
+
+    // Current mode is not available, fallback to the largest available mode
+    foreach(QWidget* it, _modeToSlots.keys()) {
+      if (_panels.size() >= _modeToSlots[it].size() && _modeToSlots[it].size() > maxSize) {
+        maxSize = _modeToSlots[it].size();
+        fallbackMode = it;
+      }
+    }
+    switchWorkspaceMode(fallbackMode);
   }
 
   updatePageCountLabel();
