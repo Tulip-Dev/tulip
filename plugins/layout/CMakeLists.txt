@@ -100,6 +100,10 @@ ADD_LIBRARY(SquarifiedTreeMap-${TulipVersion} SHARED SquarifiedTreeMap.cpp)
 TARGET_LINK_LIBRARIES(SquarifiedTreeMap-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(PerfectLayout-${TulipVersion} SHARED PerfectLayout.cpp)
+TARGET_LINK_LIBRARIES(PerfectLayout-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS MixedModel-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT MixedModel)
 INSTALL(TARGETS ConnectedComponentPacking-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ConnectedComponentPacking)
 INSTALL(TARGETS Random-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Random)
@@ -115,3 +119,4 @@ INSTALL(TARGETS Tutte-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMP
 INSTALL(TARGETS Dendrogram-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Dendrogram)
 INSTALL(TARGETS ImprovedWalker-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImprovedWalker)
 INSTALL(TARGETS SquarifiedTreeMap-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SquarifiedTreeMap)
+INSTALL(TARGETS PerfectLayout-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PerfectLayout)
