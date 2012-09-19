@@ -322,9 +322,11 @@ void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
 void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
 #ifndef NDEBUG
   assert(dynamic_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model()));
-  std::string name;
-  g->getAttribute<std::string>("name",name);
-  qDebug() << "Setting graph " << name.c_str() << " for panel " << windowTitle();
+  if(g){
+    std::string name;
+    g->getAttribute<std::string>("name",name);
+    qDebug() << "Setting graph " << name.c_str() << " for panel " << windowTitle();
+  }
 #endif // NDEBUG
 
   tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
