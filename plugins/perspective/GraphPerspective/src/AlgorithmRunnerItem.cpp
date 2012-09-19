@@ -195,6 +195,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
 void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
   if (PluginLister::instance()->pluginExists<LayoutAlgorithm>(name().toStdString())) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
+
     if (TulipSettings::instance().isAutomaticRatio()) {
       LayoutProperty* prop;
       dataSet.get<LayoutProperty*>("result",prop);
@@ -204,6 +205,7 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
   else if (PluginLister::instance()->pluginExists<DoubleAlgorithm>(name().toStdString()) && TulipSettings::instance().isAutomaticMapMetric()) {
     DoubleProperty* prop = NULL;
     dataSet.get<DoubleProperty*>("result",prop);
+
     if (prop != NULL && prop->getName().compare("viewMetric") == 0) {
       DataSet ds;
       PluginLister::getPluginParameters("Color Mapping").buildDefaultDataSet(ds,g);

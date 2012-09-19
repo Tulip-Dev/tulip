@@ -101,7 +101,8 @@ void GlMainView::setOverviewVisible(bool display) {
   if(display) {
     drawOverview(true);
     _overviewItem->setVisible(true);
-  }else{
+  }
+  else {
     if(_overviewItem)
       _overviewItem->setVisible(false);
   }

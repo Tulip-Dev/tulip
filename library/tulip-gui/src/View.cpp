@@ -112,10 +112,12 @@ void View::treatEvent(const Event& ev) {
 #ifndef NDEBUG
     Graph* old = _graph;
 #endif // NDEBUG
+
     if (_graph->getRoot() == _graph)
       graphDeleted(NULL);
     else
       graphDeleted(_graph->getSuperGraph());
+
 #ifndef NDEBUG
 
     if (_graph == old) {

@@ -638,7 +638,7 @@ void GraphPerspective::group() {
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   std::set<node> groupedNodes;
   node n;
-  forEach(n, selection->getNodesEqualTo(true)){
+  forEach(n, selection->getNodesEqualTo(true)) {
     if(graph->isElement(n))
       groupedNodes.insert(n);
   }
