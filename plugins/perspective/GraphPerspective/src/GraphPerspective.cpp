@@ -638,8 +638,10 @@ void GraphPerspective::group() {
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   std::set<node> groupedNodes;
   node n;
-  forEach(n, selection->getNodesEqualTo(true))
-  groupedNodes.insert(n);
+  forEach(n, selection->getNodesEqualTo(true)){
+    if(graph->isElement(n))
+      groupedNodes.insert(n);
+  }
 
   if (groupedNodes.empty()) {
     qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection");
