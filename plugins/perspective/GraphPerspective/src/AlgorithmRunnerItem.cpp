@@ -200,7 +200,16 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
       dataSet.get<LayoutProperty*>("result",prop);
       prop->perfectAspectRatio();
     }
-
+  }
+  else if (PluginLister::instance()->pluginExists<DoubleAlgorithm>(name().toStdString()) && TulipSettings::instance().isAutomaticMapMetric()) {
+    DoubleProperty* prop = NULL;
+    dataSet.get<DoubleProperty*>("result",prop);
+    if (prop != NULL && prop->getName().compare("viewMetric") == 0) {
+      DataSet ds;
+      PluginLister::getPluginParameters("Color Mapping").buildDefaultDataSet(ds,g);
+      std::string errMsg;
+      g->applyAlgorithm("Color Mapping",errMsg,&ds);
+    }
   }
   else if (PluginLister::instance()->pluginExists<GraphTest>(name().toStdString())) {
     bool result = true;
