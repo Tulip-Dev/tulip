@@ -658,6 +658,8 @@ void GraphPerspective::group() {
 
   graph->createMetaNode(groupedNodes);
 
+  Observable::unholdObservers();
+
   if (!changeGraph)
     return;
 
@@ -665,7 +667,6 @@ void GraphPerspective::group() {
     if (v->graph() == graph->getRoot())
       v->setGraph(graph);
   }
-  Observable::unholdObservers();
 }
 
 Graph *GraphPerspective::createSubGraph(Graph *graph) {
