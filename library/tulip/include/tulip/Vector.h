@@ -106,7 +106,7 @@ public:
     set(x, y, z, w);
   }
   explicit inline VECTOR(const Vector<TYPE, 2> &v, const TYPE z, const TYPE w) {
-    set(v, z, w);
+    set(v[0],v[1], z, w);
   }
   explicit inline VECTOR(const Vector<TYPE, 3> &v, const TYPE w) {
     set(v, w);
