@@ -440,8 +440,9 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   QMap<PropertyInterface*,PropertyInterface*> namedProperties;
 
   DataSet dataSetCopy; // Create a copy of the dataset in order to leave the original values unchanged after function call
+
   if (dataSet) {
-     dataSetCopy = *dataSet;
+    dataSetCopy = *dataSet;
     QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSetCopy.toString().c_str();
     foreach(std::string n, outParams) {
       if (!dataSetCopy.exist(n))

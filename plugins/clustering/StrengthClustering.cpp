@@ -385,6 +385,7 @@ bool StrengthClustering::run() {
     if(metric != NULL) {
       mult = *metric;
     }
+
     mult.uniformQuantification(100);
     edge e;
     unsigned int steps = 0, maxSteps = graph->numberOfEdges();
