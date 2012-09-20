@@ -162,7 +162,7 @@ int SceneLayersModel::rowCount(const QModelIndex &parent) const {
   return 0;
 }
 
-int SceneLayersModel::columnCount(const QModelIndex &parent) const {
+int SceneLayersModel::columnCount(const QModelIndex &) const {
   return 3;
 }
 
