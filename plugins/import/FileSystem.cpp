@@ -102,8 +102,6 @@ public:
       tlp::node parentNode(elem.second);
       QFileInfoList entries(currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
 
-      int i=0;
-
       for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
         QFileInfo fileInfos(*it);
         tlp::node fileNode=addFileNode(fileInfos, graph);
