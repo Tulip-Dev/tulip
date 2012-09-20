@@ -638,6 +638,9 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <height>0</height>
                   </size>
                  </property>
+                 <property name="shortcut">
+                  <string>Ctrl+F</string>
+                 </property>
                  <property name="checkable">
                   <bool>true</bool>
                  </property>
