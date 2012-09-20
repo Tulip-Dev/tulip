@@ -43,6 +43,7 @@ public:
   QString externalFile;
   QVariantMap parameters;
   quint64 tulipPort;
+  unsigned int id;
 };
 
 class TLP_QT_SCOPE Perspective : public QObject, public tlp::Plugin {
@@ -51,6 +52,7 @@ class TLP_QT_SCOPE Perspective : public QObject, public tlp::Plugin {
   static tlp::Perspective* _instance;
   QSet<QString> _reservedProperties;
   QTcpSocket* _agentSocket;
+  unsigned int _perspectiveId;
 
 
 protected:
@@ -60,6 +62,7 @@ protected:
   QVariantMap _parameters;
 
   void sendAgentMessage(const QString&);
+  void notifyProjectLocation(const QString& path);
 public:
 
   virtual std::string category() const {

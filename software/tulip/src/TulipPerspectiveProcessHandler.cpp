@@ -54,6 +54,14 @@ TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
   connect(this,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
 }
 
+QProcess *TulipPerspectiveProcessHandler::fromId(unsigned int id) {
+  foreach(QProcess* k, _processInfos.keys()) {
+    if (_processInfos[k]._perspectiveId == id)
+      return k;
+  }
+  return NULL;
+}
+
 TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::instance() {
   if (!_instance) {
     _instance = new TulipPerspectiveProcessHandler;
@@ -146,6 +154,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
   }
 
   f.close();
+  f.remove();
 
   crashHandler.setEnvData(envInfos[&plateform],envInfos[&arch],envInfos[&compiler],envInfos[&version],stackTrace);
   crashHandler.setPerspectiveData(infos);
@@ -185,4 +194,12 @@ void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
     emit openProject(args);
   else if (tokens[0] == "CREATE_PERSPECTIVE")
     emit openPerspective(args);
+  else if (tokens[0] == "PROJECT_LOCATION") {
+    QProcess* p = fromId(tokens[1].toUInt());
+    if (p != NULL) {
+      PerspectiveProcessInfos infos = _processInfos[p];
+      infos.projectPath = args.remove(0,tokens[1].length()+1);
+      _processInfos[p] = infos;
+    }
+  }
 }
