@@ -16,7 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
+#ifdef WIN32
+#define _STDCALL_SUPPORTED
+#define _M_IX86
+#include <windows.h>
 #include <GL/glew.h>
+#endif //WIN32
 
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/AbstractGlCurve.h>
