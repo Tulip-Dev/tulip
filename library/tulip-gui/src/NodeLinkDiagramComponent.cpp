@@ -42,6 +42,12 @@ using namespace tlp;
 using namespace std;
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL),_hasHulls(false) {
+  forceRedrawAction=new QAction(trUtf8("Force redraw"),this);
+  connect(forceRedrawAction,SIGNAL(triggered()),this,SLOT(redraw()));
+  forceRedrawAction->setShortcut(tr("Ctrl+Shift+R"));
+  centerViewAction=new QAction(trUtf8("Center view"),this);
+  connect(centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
+  centerViewAction->setShortcut(tr("Ctrl+Shift+C"));
 }
 
 void NodeLinkDiagramComponent::updateGrid() {
@@ -99,6 +105,10 @@ void NodeLinkDiagramComponent::draw(PluginProgress *pluginProgress) {
 }
 
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
+  graphicsView()->addAction(centerViewAction);
+  graphicsView()->addAction(forceRedrawAction);
+
+
   ParameterDescriptionList gridParameters;
   gridParameters.add<StringCollection>("Grid mode","","No grid;Space divisions;Fixed size",true);
   gridParameters.add<Size>("Grid size","","(1,1,1)",false);
@@ -342,8 +352,8 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
   }
 
   menu->addAction(trUtf8("View"))->setSeparator(true);
-  menu->addAction(trUtf8("Force redraw"),this,SLOT(redraw()));
-  menu->addAction(trUtf8("Center view"),this,SLOT(centerView()));
+  menu->addAction(forceRedrawAction);
+  menu->addAction(centerViewAction);
   menu->addAction(trUtf8("Augmented display"))->setSeparator(true);
   QAction* zOrdering = menu->addAction(trUtf8("Z Ordering"));
   zOrdering->setCheckable(true);
