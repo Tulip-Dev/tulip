@@ -89,8 +89,9 @@ void TulipPerspectiveCrashHandler::reportPosted() {
   QNetworkReply* reply = static_cast<QNetworkReply*>(sender());
 
   if (reply->error() == QNetworkReply::NoError) {
+    QString bugLink = _poster->response();
     _ui->sendReportButton->setText(trUtf8("Report sent"));
-    _ui->errorReportTitle->setText(trUtf8("<b>Report has been sent. Thank you for supporting Tulip !</b>"));
+    _ui->errorReportTitle->setText(trUtf8("<b>Report has been sent. Thank you for supporting Tulip !</b><br/><br/>You can follow your report at this URL: ") + "<a href=\"" + bugLink + "\">" + bugLink + "</a>");
   }
   else {
     _ui->sendReportButton->setText(trUtf8("Error while sending report"));
