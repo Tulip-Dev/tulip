@@ -74,6 +74,9 @@ protected:
   void useHulls(bool hasHulls);
   bool hasHulls() const;
 
+  QAction *centerViewAction;
+  QAction *forceRedrawAction;
+
 };
 }
 
