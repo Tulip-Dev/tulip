@@ -41,7 +41,7 @@ public:
   virtual ~PluginListModel() {
   }
 
-  virtual int columnCount ( const QModelIndex& parent = QModelIndex() ) const {
+  virtual int columnCount ( const QModelIndex& = QModelIndex() ) const {
     return 1;
   }
 
