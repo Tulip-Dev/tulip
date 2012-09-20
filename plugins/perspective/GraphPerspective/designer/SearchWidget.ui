@@ -29,7 +29,7 @@ background-color: #A9A9A9;
     <number>0</number>
    </property>
    <item>
-    <widget class="HeaderFrame" name="headerFrame">
+    <widget class="HeaderFrame" name="headerFrame" native="true">
      <property name="expandable" stdset="0">
       <bool>false</bool>
      </property>
@@ -52,7 +52,7 @@ background-color: #A9A9A9;
         <x>0</x>
         <y>0</y>
         <width>974</width>
-        <height>239</height>
+        <height>226</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -113,7 +113,11 @@ font: bold;
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="TreeViewComboBox" name="graphCombo"/>
+             <widget class="TreeViewComboBox" name="graphCombo">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::AdjustToContents</enum>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="scopeLabel">
@@ -164,7 +168,11 @@ font: bold;
              </widget>
             </item>
             <item row="3" column="1">
-             <widget class="QComboBox" name="resultsStorageCombo"/>
+             <widget class="QComboBox" name="resultsStorageCombo">
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::AdjustToContents</enum>
+              </property>
+             </widget>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="searchTermsLabel">
@@ -182,10 +190,17 @@ font: bold;
             <item row="4" column="1">
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
-               <widget class="QComboBox" name="searchTermACombo"/>
+               <widget class="QComboBox" name="searchTermACombo">
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::AdjustToContents</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QComboBox" name="operatorCombo">
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::AdjustToContents</enum>
+                </property>
                 <item>
                  <property name="text">
                   <string>=</string>
@@ -234,7 +249,11 @@ font: bold;
                </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="searchTermBCombo"/>
+               <widget class="QComboBox" name="searchTermBCombo">
+                <property name="sizeAdjustPolicy">
+                 <enum>QComboBox::AdjustToContents</enum>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QLineEdit" name="customValueEdit">
@@ -359,15 +378,15 @@ font: bold;
  </widget>
  <customwidgets>
   <customwidget>
+   <class>HeaderFrame</class>
+   <extends>QWidget</extends>
+   <header>HeaderFrame.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>TreeViewComboBox</class>
    <extends>QComboBox</extends>
    <header>tulip/TreeViewComboBox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>HeaderFrame</class>
-   <extends>QFrame</extends>
-   <header>HeaderFrame.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
