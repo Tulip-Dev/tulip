@@ -187,10 +187,6 @@ void Workspace::panelDestroyed(QObject* obj) {
 
   updateAvailableModes();
 
-  if (currentModeWidget() == _ui->startupPage) {
-    return;
-  }
-
   updatePanels();
 }
 
@@ -312,6 +308,11 @@ void Workspace::updatePanels() {
     }
 
     i++;
+  }
+
+  if (currentModeWidget() == _ui->startupPage) {
+    updatePageCountLabel();
+    return;
   }
 
   if (!_modeSwitches[currentModeWidget()]->isVisible()) {
