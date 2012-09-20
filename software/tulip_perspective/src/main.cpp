@@ -144,6 +144,7 @@ int main(int argc,char **argv) {
       context->tulipPort = portRegexp.cap(1).toUInt();
     }
     else if (idRegexp.exactMatch(a)) {
+      context->id = idRegexp.cap(1).toUInt();
       QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
       setDumpPath(dumpPath.toStdString());
     }

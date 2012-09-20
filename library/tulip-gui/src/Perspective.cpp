@@ -43,6 +43,7 @@ Perspective::Perspective(const tlp::PluginContext* c) : _project(NULL), _mainWin
     _project = perspectiveContext->project;
     _externalFile = perspectiveContext->externalFile;
     _parameters = perspectiveContext->parameters;
+    _perspectiveId = perspectiveContext->id;
 
     if (perspectiveContext->tulipPort != 0) {
       _agentSocket = new QTcpSocket(this);
@@ -52,14 +53,13 @@ Perspective::Perspective(const tlp::PluginContext* c) : _project(NULL), _mainWin
         _agentSocket->deleteLater();
         _agentSocket = NULL;
       }
+      if (_project != NULL) {
+        notifyProjectLocation(_project->absoluteRootPath());
+      }
     }
-
-#ifndef NDEBUG
     else {
       qWarning("Perspective running in standalone mode");
     }
-
-#endif
   }
 }
 
@@ -92,8 +92,8 @@ bool Perspective::isReservedPropertyName(QString s) {
 void Perspective::sendAgentMessage(const QString& msg) {
   if (_agentSocket == NULL)
     return;
-
   _agentSocket->write(msg.toUtf8());
+  _agentSocket->flush();
 }
 
 void Perspective::showPluginsCenter() {
@@ -118,4 +118,8 @@ void Perspective::openProjectFile(const QString &path) {
 
 void Perspective::createPerspective(const QString &name) {
   sendAgentMessage("CREATE_PERSPECTIVE " + name);
+}
+
+void Perspective::notifyProjectLocation(const QString &path) {
+  sendAgentMessage("PROJECT_LOCATION " + QString::number(_perspectiveId) + " " + path);
 }
