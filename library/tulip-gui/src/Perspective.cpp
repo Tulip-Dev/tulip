@@ -53,6 +53,7 @@ Perspective::Perspective(const tlp::PluginContext* c) : _agentSocket(NULL), _pro
         _agentSocket->deleteLater();
         _agentSocket = NULL;
       }
+
       if (_project != NULL) {
         notifyProjectLocation(_project->absoluteRootPath());
       }
@@ -92,6 +93,7 @@ bool Perspective::isReservedPropertyName(QString s) {
 void Perspective::sendAgentMessage(const QString& msg) {
   if (_agentSocket == NULL)
     return;
+
   _agentSocket->write(msg.toUtf8());
   _agentSocket->flush();
 }

@@ -196,6 +196,7 @@ void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
     emit openPerspective(args);
   else if (tokens[0] == "PROJECT_LOCATION") {
     QProcess* p = fromId(tokens[1].toUInt());
+
     if (p != NULL) {
       PerspectiveProcessInfos infos = _processInfos[p];
       infos.projectPath = args.remove(0,tokens[1].length()+1);
