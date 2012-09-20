@@ -64,6 +64,8 @@ private:
   tlp::SizeProperty * nodeSize;
   std::vector<float> yCoordinates;
   std::vector<float> levelSize;
+  float layerSpacing;
+  float nodeSpacing;
 
 };
 /*@}*/

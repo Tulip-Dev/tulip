@@ -54,7 +54,7 @@ void ConeTreeExtended::computeYCoodinates(tlp::node root) {
   yCoordinates[0] = 0;
 
   for (unsigned int i = 1; i < levelSize.size(); ++i) {
-    yCoordinates[i] = yCoordinates[i-1] + levelSize[i] / 2.0f + levelSize[i-1] / 2.0f;
+    yCoordinates[i] = yCoordinates[i-1] + levelSize[i] / 2.0f + levelSize[i-1] / 2.0f + layerSpacing;
   }
 }
 //===============================================================
@@ -66,7 +66,7 @@ double ConeTreeExtended::treePlace3D(tlp::node n,
 
   if (tree->outdeg(n)==0) {
     const Coord& tmp = Coord(nodeSize->getNodeValue(n));
-    return sqrt(tmp[0]*tmp[0] + tmp[2]*tmp[2])/2.0;
+    return sqrt(tmp[0]*tmp[0] + tmp[2]*tmp[2])/2.0 + nodeSpacing/2.0;
   }
 
   if (tree->outdeg(n)==1) {
@@ -157,14 +157,28 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "default", "horizontal" )   \
   HTML_HELP_BODY() \
   "This parameter enables to choose the orientation of the drawing" \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "float" ) \
+  HTML_HELP_DEF( "default", "0" )   \
+  HTML_HELP_BODY() \
+  "The minimum spacing between two layers" \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "float" ) \
+  HTML_HELP_DEF( "default", "0" )   \
+  HTML_HELP_BODY() \
+  "The minimum spacing between two nodes on the same layer" \
   HTML_HELP_CLOSE()
 };
 }
 #define ORIENTATION "vertical;horizontal;"
 //===============================================================
-ConeTreeExtended::ConeTreeExtended(const tlp::PropertyContext &context):LayoutAlgorithm(context) {
+ConeTreeExtended::ConeTreeExtended(const tlp::PropertyContext &context):LayoutAlgorithm(context), layerSpacing(0), nodeSpacing(0) {
   addNodeSizePropertyParameter(this);
   addParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
+  addParameter<float> ("layer spacing", paramHelp[1], "0");
+  addParameter<float> ("node spacing", paramHelp[2], "0");
 }
 //===============================================================
 ConeTreeExtended::~ConeTreeExtended() {}
@@ -179,6 +193,14 @@ bool ConeTreeExtended::run() {
 
     if (dataSet->get("orientation", tmp)) {
       orientation = tmp.getCurrentString();
+    }
+
+    if (dataSet->exist("layer spacing")) {
+        dataSet->get("layer spacing", layerSpacing);
+    }
+
+    if (dataSet->exist("node spacing")) {
+        dataSet->get("node spacing", nodeSpacing);
     }
   }
 
