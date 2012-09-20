@@ -199,8 +199,7 @@ void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
 }
 
 void QuickAccessBar::takeSnapshot() {
-  SnapshotDialog dialog(*_mainView);
-  dialog.exec();
+  _mainView->openSnapshotDialog();
 }
 
 void QuickAccessBar::setBackgroundColor(const QColor& c) {

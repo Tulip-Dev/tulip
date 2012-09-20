@@ -57,6 +57,7 @@ public slots:
   virtual void centerView();
   void setOverviewVisible(bool);
   void applySettings();
+  void openSnapshotDialog();
 
 protected slots:
   virtual void glMainViewDrawn(bool graphChanged);

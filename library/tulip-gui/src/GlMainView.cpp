@@ -23,6 +23,7 @@
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/QuickAccessBar.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/SnapshotDialog.h>
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QGraphicsView>
 #include "tulip/GlMainWidgetGraphicsItem.h"
@@ -156,11 +157,19 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) {
   return QPixmap::fromImage(_glMainWidget->createPicture(realSize.width(),realSize.height(),false));
 }
 
+void GlMainView::openSnapshotDialog() {
+  SnapshotDialog dlg(*this);
+  dlg.exec();
+}
+
 void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   QAction* a = menu->addAction(trUtf8("Show overview"));
   a->setCheckable(true);
   a->setChecked(overviewVisible());
   connect(a,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
+
+  menu->addAction(trUtf8("Take snapshopt"),this,SLOT(openSnapshotDialog()));
+  menu->addSeparator();
 }
 
 void GlMainView::applySettings() {
