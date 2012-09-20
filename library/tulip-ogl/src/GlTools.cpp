@@ -87,9 +87,10 @@ void glTest(string message) {
     error = glGetError();
     ++i;
   }
+
 #else
-    //fixes unused parameter warning in release mode
-    (void)message;
+  //fixes unused parameter warning in release mode
+  (void)message;
 #endif
 }
 //====================================================
