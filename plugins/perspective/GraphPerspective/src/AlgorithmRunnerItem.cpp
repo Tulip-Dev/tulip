@@ -197,7 +197,7 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
 
     if (TulipSettings::instance().isAutomaticRatio()) {
-      LayoutProperty* prop;
+      LayoutProperty* prop = NULL;
       dataSet.get<LayoutProperty*>("result",prop);
       prop->perfectAspectRatio();
     }
