@@ -379,7 +379,7 @@ bool QuotientClustering::run() {
       layoutName = "GEM (Frick)";
 
     string sizesName="Auto Sizing";
-    quotientGraph->computeProperty(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg);
+    quotientGraph->applyPropertyAlgorithm(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg);
 
     if (mNodes.size() < 300)
       quotientGraph->computeProperty(sizesName, quotientGraph->getLocalProperty<SizeProperty>("viewSize"),errMsg);
