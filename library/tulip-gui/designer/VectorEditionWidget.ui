@@ -60,34 +60,15 @@ margin: 2
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="spacing">
-      <number>0</number>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;You are editing multiple values that will be stored into an array.&lt;br&gt;
+To &lt;b&gt;add&lt;/b&gt; a value, click on the &lt;img src=&quot;:/tulip/gui/icons/64/list-add.png&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; button&lt;br&gt;
+To &lt;b&gt;remove&lt;/b&gt; a value, click on the &lt;img src=&quot;:/tulip/gui/icons/16/list-del.png&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; button
+&lt;/body&gt;
+&lt;/html&gt;</string>
      </property>
-     <item>
-      <widget class="QLabel" name="countLabel">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string> elements</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -174,6 +155,36 @@ height: 30;
         </spacer>
        </item>
       </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="countLabel">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string> elements</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
