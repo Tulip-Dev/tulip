@@ -24,42 +24,42 @@
 using namespace std;
 using namespace tlp;
 void PluginLoaderTxt::start(const string &path) {
-  qDebug() << "Start loading plug-ins in " << path << endl;
+  std::cout << "Start loading plug-ins in " << path << std::endl;
 }
 
 void PluginLoaderTxt::loading(const string &filename) {
-  qDebug() << "loading file : " << filename << endl;
+  std::cout << "loading file : " << filename << endl;
 }
 
 void PluginLoaderTxt::loaded(const Plugin* infos, const std::list <Dependency>& deps) {
-  qDebug() << "Plug-in " << infos->name() << " loaded, Author:"<< infos->author() << " Date: " << infos->date() << " Release:" << infos->release() << " Version: "<< infos->tulipRelease() <<  endl;
+  std::cout << "Plug-in " << infos->name() << " loaded, Author:"<< infos->author() << " Date: " << infos->date() << " Release:" << infos->release() << " Version: "<< infos->tulipRelease() <<  endl;
 
   // ouput dependencies if any
   if (deps.size()) {
     unsigned int i = deps.size();
-    qDebug() << "depending on ";
+    std::cout << "depending on ";
     list<Dependency>::const_iterator itD = deps.begin();
 
     for (i--; itD != deps.end(); ++itD, --i) {
       std::string factoryDepName = (*itD).factoryName;
       std::string pluginDepName = (*itD).pluginName;
-      qDebug() << factoryDepName << " " << pluginDepName;
+      std::cout << factoryDepName << " " << pluginDepName;
 
       if (i > 0)
-        qDebug() << ", ";
+        std::cout << ", ";
       else
-        qDebug() << endl;
+        std::cout << endl;
     }
   }
 }
 
 void PluginLoaderTxt::aborted(const string &filename,const  string &erreurmsg) {
-  qDebug() << "Aborted loading of "<< filename << " Error:" << erreurmsg << endl;
+  std::cout << "Aborted loading of "<< filename << " Error:" << erreurmsg << endl;
 }
 
 void PluginLoaderTxt::finished(bool state,const string &msg) {
   if (state)
-    qDebug() << "Loading complete" << endl;
+    std::cout << "Loading complete" << endl;
   else
-    qDebug() << "Loading error " << msg << endl;
+    std::cout << "Loading error " << msg << endl;
 }
