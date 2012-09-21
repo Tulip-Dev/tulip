@@ -55,6 +55,11 @@ QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
 }
 
 bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
+  if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
+    painter->setBrush(option.palette.highlight());
+    painter->setPen(Qt::transparent);
+    painter->drawRect(option.rect);
+  }
   painter->setBrush(colorToQColor(v.value<tlp::Color>()));
   painter->setPen(Qt::black);
   painter->drawRect(option.rect.x()+6,option.rect.y()+6,option.rect.width()-12,option.rect.height()-12);
