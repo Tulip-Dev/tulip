@@ -444,6 +444,10 @@ void GraphSortFilterProxyModel::treatEvent(const Event& e) {
     invalidateFilter();
 }
 
+BooleanProperty *GraphSortFilterProxyModel::filterProperty() const {
+  return _filterProperty;
+}
+
 /*
  *Event handling
  */

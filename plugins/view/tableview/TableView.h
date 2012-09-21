@@ -40,6 +40,7 @@ class TableView : public tlp::ViewWidget {
   Ui::TableViewWidget* _ui;
 
   tlp::GraphModel* _model;
+  tlp::PropertyInterface* _contextProperty;
 
 public:
   PLUGININFORMATIONS("Spreadsheet","Tulip Team","04/17/2012","Spreadsheet view for raw data","4.0","")
@@ -51,10 +52,16 @@ public:
   void setState(const tlp::DataSet &);
   void setupWidget();
 
+
 public slots:
   void readSettings();
   void setPropertyVisible(tlp::PropertyInterface*,bool);
   void filterChanged();
+  void showCustomContextMenu(const QPoint&);
+
+protected slots:
+  void setFilteredNodesValue();
+  void setFilteredEdgesValue();
 
 protected:
   void graphChanged(tlp::Graph *);

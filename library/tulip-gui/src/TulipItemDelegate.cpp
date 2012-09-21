@@ -22,7 +22,13 @@
 #include <tulip/TulipModel.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipItemEditorCreators.h>
+#include <tulip/GraphModel.h>
+#include <tulip/Perspective.h>
 #include <QtCore/QEvent>
+#include <QtGui/QDialog>
+#include <QtGui/QVBoxLayout>
+#include <QtGui/QDialogButtonBox>
+#include <QtGui/QMainWindow>
 
 using namespace tlp;
 
@@ -196,4 +202,45 @@ bool TulipItemDelegate::eventFilter(QObject *object, QEvent *event) {
 
 void TulipItemDelegate::comboDataChanged() {
   emit commitData(static_cast<QWidget*>(sender()));
+}
+
+
+QDialog* editDialog(QWidget* w, QWidget* parent) {
+  QDialog* dlg = new QDialog(parent);
+  QVBoxLayout* layout = new QVBoxLayout;
+  dlg->setLayout(layout);
+  layout->addWidget(w);
+  QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel|QDialogButtonBox::Ok,Qt::Horizontal);
+  layout->addWidget(buttonBox);
+  QObject::connect(buttonBox,SIGNAL(accepted()),dlg,SLOT(accept()));
+  QObject::connect(buttonBox,SIGNAL(rejected()),dlg,SLOT(reject()));
+  return dlg;
+}
+
+QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,tlp::PropertyInterface* pi, tlp::Graph* g, TulipItemDelegate* delegate) {
+  QVariant defaultValue;
+  if (elType == tlp::NODE)
+    defaultValue = GraphModel::nodeDefaultValue(pi);
+  else
+    defaultValue = GraphModel::edgeDefaultValue(pi);
+
+  TulipItemEditorCreator* creator = delegate->creator(defaultValue.userType());
+  QWidget* w = creator->createWidget(Perspective::instance()->mainWindow());
+  creator->setEditorData(w,defaultValue,g);
+
+  QDialog* dlg = dynamic_cast<QDialog*>(w);
+  if (dlg == NULL) {
+    dlg = editDialog(w,Perspective::instance()->mainWindow());
+    if (elType == NODE)
+      dlg->setWindowTitle(QString::fromUtf8(pi->getName().c_str()) + trUtf8(": Set nodes values"));
+    else
+      dlg->setWindowTitle(QString::fromUtf8(pi->getName().c_str()) + trUtf8(": Set edges values"));
+  }
+
+  QVariant result;
+  if (dlg->exec() == QDialog::Accepted)
+    result = creator->editorData(w,g);
+
+  delete dlg;
+  return result;
 }
