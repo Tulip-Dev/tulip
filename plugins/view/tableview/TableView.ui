@@ -290,6 +290,9 @@ border-left: 1px solid #C9C9C9;</string>
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
             </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
             <property name="sortingEnabled">
              <bool>true</bool>
             </property>
