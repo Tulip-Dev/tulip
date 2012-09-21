@@ -44,7 +44,7 @@ int GlSimpleEntityItemModel::columnCount(const QModelIndex &parent) const {
   return 1;
 }
 
-QModelIndex GlSimpleEntityItemModel::parent(const QModelIndex &child) const {
+QModelIndex GlSimpleEntityItemModel::parent(const QModelIndex &) const {
   return QModelIndex();
 }
 

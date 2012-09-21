@@ -35,15 +35,15 @@ public:
   PictureModel(const QString& picturesPath,QObject* parent=0): QAbstractItemModel(parent), _rootPath(picturesPath) {
   }
 
-  int rowCount(const QModelIndex &parent = QModelIndex()) const {
+  int rowCount(const QModelIndex & = QModelIndex()) const {
     return _rootPath.entryList(QDir::Files).size();
   }
 
-  int columnCount(const QModelIndex &parent = QModelIndex()) const {
+  int columnCount(const QModelIndex & = QModelIndex()) const {
     return 1;
   }
 
-  QModelIndex parent(const QModelIndex &child) const {
+  QModelIndex parent(const QModelIndex &) const {
     return QModelIndex();
   }
 
