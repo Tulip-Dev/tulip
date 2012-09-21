@@ -89,6 +89,8 @@ public:
   bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
   void treatEvent(const tlp::Event&);
+
+  tlp::BooleanProperty* filterProperty() const;
 };
 
 class TLP_QT_SCOPE NodesGraphModel: public GraphModel {

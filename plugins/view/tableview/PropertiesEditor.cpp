@@ -128,58 +128,20 @@ void PropertiesEditor::unCheckAllExcept() {
   }
 }
 
-QDialog* editDialog(QWidget* w, QWidget* parent) {
-  QDialog* dlg = new QDialog(parent);
-  QVBoxLayout* layout = new QVBoxLayout;
-  dlg->setLayout(layout);
-  layout->addWidget(w);
-  QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel|QDialogButtonBox::Ok,Qt::Horizontal);
-  layout->addWidget(buttonBox);
-  QObject::connect(buttonBox,SIGNAL(accepted()),dlg,SLOT(accept()));
-  QObject::connect(buttonBox,SIGNAL(rejected()),dlg,SLOT(reject()));
-  return dlg;
-}
-
 void PropertiesEditor::setAllNodes() {
-  QVariant defaultValue = GraphModel::nodeDefaultValue(_contextProperty);
-  TulipItemEditorCreator* creator = _delegate->creator(defaultValue.userType());
-  QWidget* w = creator->createWidget(Perspective::instance()->mainWindow());
-  creator->setEditorData(w,defaultValue,_graph);
-
-  QDialog* dlg = dynamic_cast<QDialog*>(w);
-
-  if (dlg == NULL) {
-    dlg = editDialog(w,Perspective::instance()->mainWindow());
-    dlg->setWindowTitle(QString::fromUtf8(_contextProperty->getName().c_str()) + trUtf8(": Set all nodes values"));
-  }
-
-  if (dlg->exec() == QDialog::Accepted) {
+  QVariant val = TulipItemDelegate::showEditorDialog(tlp::NODE,_contextProperty,_graph,_delegate);
+  if (val.isValid()) {
     _graph->push();
-    GraphModel::setAllNodeValue(_contextProperty,creator->editorData(w,_graph));
+    GraphModel::setAllNodeValue(_contextProperty,val);
   }
-
-  delete dlg;
 }
 
 void PropertiesEditor::setAllEdges() {
-  QVariant defaultValue = GraphModel::edgeDefaultValue(_contextProperty);
-  TulipItemEditorCreator* creator = _delegate->creator(defaultValue.userType());
-  QWidget* w = creator->createWidget(Perspective::instance()->mainWindow());
-  creator->setEditorData(w,defaultValue,_graph);
-
-  QDialog* dlg = dynamic_cast<QDialog*>(w);
-
-  if (dlg == NULL) {
-    dlg = editDialog(w,Perspective::instance()->mainWindow());
-    dlg->setWindowTitle(QString::fromUtf8(_contextProperty->getName().c_str()) + trUtf8(": Set all edges values"));
-  }
-
-  if (dlg->exec() == QDialog::Accepted) {
+  QVariant val = TulipItemDelegate::showEditorDialog(tlp::EDGE,_contextProperty,_graph,_delegate);
+  if (val.isValid()) {
     _graph->push();
-    GraphModel::setAllEdgeValue(_contextProperty,creator->editorData(w,_graph));
+    GraphModel::setAllEdgeValue(_contextProperty,val);
   }
-
-  delete dlg;
 }
 
 void PropertiesEditor::copyProperty() {
