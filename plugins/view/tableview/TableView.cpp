@@ -102,7 +102,15 @@ void TableView::showCustomContextMenu(const QPoint& p) {
   QMenu menu;
   QFont f;
   f.setBold(true);
-  menu.addAction(_contextProperty->getName().c_str())->setFont(f);
+
+  QAction* title1 = menu.addAction(trUtf8("Selection"));
+  title1->setFont(f);
+  menu.addSeparator();
+  menu.addAction(trUtf8("Map to graph selection"),this,SLOT(mapToGraphSelection()));
+
+  menu.addSeparator();
+  QAction* title2 = menu.addAction(_contextProperty->getName().c_str());
+  title2->setFont(f);
   menu.addSeparator();
   if (_ui->propertiesEditor->isShowNodes()) {
     menu.addAction(trUtf8("Set displayed nodes value"),this,SLOT(setFilteredNodesValue()));
@@ -146,6 +154,26 @@ void TableView::setFilteredEdgesValue() {
     GraphModel::setAllEdgeValue(_contextProperty,val);
   }
   Observable::unholdObservers();
+}
+
+void TableView::mapToGraphSelection() {
+  BooleanProperty* out = graph()->getProperty<BooleanProperty>("viewSelection");
+  if (_ui->propertiesEditor->isShowNodes()) {
+    out->setAllNodeValue(false);
+    QItemSelectionModel *selectionModel = _ui->table->selectionModel();
+    foreach(QModelIndex idx,selectionModel->selectedRows()) {
+      node n(idx.data(TulipModel::ElementIdRole).toUInt());
+      out->setNodeValue(n,true);
+    }
+  }
+  else {
+    out->setAllEdgeValue(false);
+    QItemSelectionModel *selectionModel = _ui->table->selectionModel();
+    foreach(QModelIndex idx,selectionModel->selectedRows()) {
+      edge e(idx.data(TulipModel::ElementIdRole).toUInt());
+      out->setEdgeValue(e,true);
+    }
+  }
 }
 
 void TableView::graphChanged(tlp::Graph* g) {

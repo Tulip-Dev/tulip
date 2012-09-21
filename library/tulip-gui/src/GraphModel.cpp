@@ -131,6 +131,8 @@ QVariant GraphModel::data(const QModelIndex &index, int role) const {
     return isNode();
   else if (role == StringRole)
     return stringValue(_elements[index.row()],(PropertyInterface*)(index.internalPointer()));
+  else if (role == ElementIdRole)
+    return _elements[index.row()];
 
   return QVariant();
 }
