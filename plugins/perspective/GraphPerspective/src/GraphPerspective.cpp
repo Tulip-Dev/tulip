@@ -363,7 +363,7 @@ void GraphPerspective::importGraph() {
       PluginProgress* progress = new SimplePluginProgressDialog(_mainWindow);
       DataSet data;
       data.set<LayoutProperty*>("result",viewLayout);
-      g->applyAlgorithm("Bubble Tree",str,&data,progress);
+      g->applyAlgorithm("Random layout",str,&data,progress);
       delete progress;
     }
 
