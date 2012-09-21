@@ -52,7 +52,7 @@ public:
     return PluginLister::instance()->availablePlugins<PLUGIN>().size();
   }
 
-  QModelIndex parent(const QModelIndex &child) const {
+  QModelIndex parent(const QModelIndex &) const {
     return QModelIndex();
   }
 
@@ -171,7 +171,7 @@ public:
     return item->children.size();
   }
 
-  int columnCount(const QModelIndex &parent = QModelIndex()) const {
+  int columnCount(const QModelIndex & = QModelIndex()) const {
     return 1;
   }
 
