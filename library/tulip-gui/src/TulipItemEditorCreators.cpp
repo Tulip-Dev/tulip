@@ -47,7 +47,7 @@ using namespace tlp;
 /*
   ColorEditorCreator
 */
-QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
+QWidget* ColorEditorCreator::createWidget(QWidget *) const {
   QColorDialog *colorDialog = new QColorDialog(NULL);
   colorDialog->setOptions(colorDialog->options() | QColorDialog::ShowAlphaChannel);
   colorDialog->setModal(true);
@@ -111,7 +111,7 @@ QVariant BooleanEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
 /*
   CoordEditorCreator
 */
-QWidget* CoordEditorCreator::createWidget(QWidget* parent) const {
+QWidget* CoordEditorCreator::createWidget(QWidget*) const {
   return new CoordEditor(NULL);
 }
 
