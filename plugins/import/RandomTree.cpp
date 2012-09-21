@@ -144,7 +144,7 @@ public:
       string errMsg;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
       return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg,
-                                    pluginProgress, &dSet);
+                                           pluginProgress, &dSet);
     }
 
     return true;

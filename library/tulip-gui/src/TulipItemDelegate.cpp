@@ -219,6 +219,7 @@ QDialog* editDialog(QWidget* w, QWidget* parent) {
 
 QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,tlp::PropertyInterface* pi, tlp::Graph* g, TulipItemDelegate* delegate) {
   QVariant defaultValue;
+
   if (elType == tlp::NODE)
     defaultValue = GraphModel::nodeDefaultValue(pi);
   else
@@ -229,8 +230,10 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,tlp::Proper
   creator->setEditorData(w,defaultValue,g);
 
   QDialog* dlg = dynamic_cast<QDialog*>(w);
+
   if (dlg == NULL) {
     dlg = editDialog(w,Perspective::instance()->mainWindow());
+
     if (elType == NODE)
       dlg->setWindowTitle(QString::fromUtf8(pi->getName().c_str()) + trUtf8(": Set nodes values"));
     else
@@ -238,6 +241,7 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,tlp::Proper
   }
 
   QVariant result;
+
   if (dlg->exec() == QDialog::Accepted)
     result = creator->editorData(w,g);
 

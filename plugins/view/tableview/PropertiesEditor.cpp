@@ -130,6 +130,7 @@ void PropertiesEditor::unCheckAllExcept() {
 
 void PropertiesEditor::setAllNodes() {
   QVariant val = TulipItemDelegate::showEditorDialog(tlp::NODE,_contextProperty,_graph,_delegate);
+
   if (val.isValid()) {
     _graph->push();
     GraphModel::setAllNodeValue(_contextProperty,val);
@@ -138,6 +139,7 @@ void PropertiesEditor::setAllNodes() {
 
 void PropertiesEditor::setAllEdges() {
   QVariant val = TulipItemDelegate::showEditorDialog(tlp::EDGE,_contextProperty,_graph,_delegate);
+
   if (val.isValid()) {
     _graph->push();
     GraphModel::setAllEdgeValue(_contextProperty,val);
