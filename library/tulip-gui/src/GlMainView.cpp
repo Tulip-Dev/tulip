@@ -65,6 +65,7 @@ void GlMainView::assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOl
   if(_sceneLayersConfigurationWidget == NULL) {
     _sceneLayersConfigurationWidget = new SceneLayersConfigWidget();
   }
+
   _sceneLayersConfigurationWidget->setGlMainWidget(_glMainWidget);
   connect(_sceneLayersConfigurationWidget,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
 

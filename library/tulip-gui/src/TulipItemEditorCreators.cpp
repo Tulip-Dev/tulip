@@ -60,6 +60,7 @@ bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& op
     painter->setPen(Qt::transparent);
     painter->drawRect(option.rect);
   }
+
   painter->setBrush(colorToQColor(v.value<tlp::Color>()));
   painter->setPen(Qt::black);
   painter->drawRect(option.rect.x()+6,option.rect.y()+6,option.rect.width()-12,option.rect.height()-12);

@@ -96,6 +96,7 @@ void TableView::showCustomContextMenu(const QPoint& p) {
     _contextProperty = _ui->table->indexAt(p).data(TulipModel::PropertyRole).value<tlp::PropertyInterface*>();
   else
     _contextProperty = NULL;
+
   if (_contextProperty == NULL)
     return;
 
@@ -112,6 +113,7 @@ void TableView::showCustomContextMenu(const QPoint& p) {
   QAction* title2 = menu.addAction(_contextProperty->getName().c_str());
   title2->setFont(f);
   menu.addSeparator();
+
   if (_ui->propertiesEditor->isShowNodes()) {
     menu.addAction(trUtf8("Set displayed nodes value"),this,SLOT(setFilteredNodesValue()));
   }
@@ -128,14 +130,16 @@ void TableView::setFilteredNodesValue() {
 
   Observable::holdObservers();
   graph()->push();
+
   if (filterProp != NULL) {
     node n;
     forEach(n,filterProp->getNodesEqualTo(true))
-      GraphModel::setNodeValue(n.id,_contextProperty,val);
+    GraphModel::setNodeValue(n.id,_contextProperty,val);
   }
   else {
     GraphModel::setAllNodeValue(_contextProperty,val);
   }
+
   Observable::unholdObservers();
 }
 
@@ -145,19 +149,22 @@ void TableView::setFilteredEdgesValue() {
 
   Observable::holdObservers();
   graph()->push();
+
   if (filterProp != NULL) {
     edge e;
     forEach(e,filterProp->getEdgesEqualTo(true))
-      GraphModel::setEdgeValue(e.id,_contextProperty,val);
+    GraphModel::setEdgeValue(e.id,_contextProperty,val);
   }
   else {
     GraphModel::setAllEdgeValue(_contextProperty,val);
   }
+
   Observable::unholdObservers();
 }
 
 void TableView::mapToGraphSelection() {
   BooleanProperty* out = graph()->getProperty<BooleanProperty>("viewSelection");
+
   if (_ui->propertiesEditor->isShowNodes()) {
     out->setAllNodeValue(false);
     QItemSelectionModel *selectionModel = _ui->table->selectionModel();
