@@ -63,6 +63,8 @@ protected slots:
   void setFilteredNodesValue();
   void setFilteredEdgesValue();
 
+  void mapToGraphSelection();
+
 protected:
   void graphChanged(tlp::Graph *);
   void graphDeleted();
