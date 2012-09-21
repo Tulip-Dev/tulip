@@ -112,6 +112,14 @@ public:
  *
  * Events are always sent to Listeners first, and then to Observers, even when there is no hold.
  *
+ * If you wish to receive events, you must inherit from Observable, and implement one of two virtual functions.
+ *
+ * If you need to received events without delay, you will be a Listener, and need to implement treatEvent().
+ * You will attach to the object you wish to receive events from using addObserver().
+ *
+ * If you can receive events after a delay, you will be an Observer, and need to implement treatEvents().
+ * You will attach to the object you wish to receive events from using addListener().
+ *
  **/
 class  TLP_SCOPE Observable {
   friend class Event;
@@ -174,7 +182,7 @@ public:
    * @brief removeObserver Removes an observer from this object.
    *
    * The observer will no longer receive events from this object.
-   * @param observer
+   * @param observer The observer to remove from this object.
    */
   void  removeObserver(Observable  * const observerver) const;
 
@@ -182,10 +190,9 @@ public:
    * @brief removeListener Removes a listener from this object.
    *
    * The listener will no longer receive events from this object.
-   * @param listener
+   * @param listener The listener to remove from this object.
    */
   void  removeListener(Observable  * const listener) const;
-
 
   /**
    * @brief getSent gets the number of sent events.
