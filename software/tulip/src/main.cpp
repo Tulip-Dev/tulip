@@ -39,6 +39,8 @@
 #include "PluginLoaderDispatcher.h"
 #include "TulipSplashScreen.h"
 #include "PluginsCenter.h"
+#include "FormPost.h"
+#include <tulip/SystemDefinition.h>
 
 #if defined(__APPLE__)
 #include <sys/types.h>
@@ -48,6 +50,12 @@
 #ifdef interface
 #undef interface
 #endif
+
+void sendUsageStatistics() {
+  QNetworkAccessManager* mgr = new QNetworkAccessManager;
+  QObject::connect(mgr,SIGNAL(finished(QNetworkReply*)),mgr,SLOT(deleteLater()));
+  mgr->get(QNetworkRequest(QUrl(QString("http://tulip.labri.fr/TulipStats/tulip_stats.php?tulip=") + TULIP_RELEASE + "&os=" + OS_PLATFORM)));
+}
 
 int main(int argc, char **argv) {
   start_crash_handler();
@@ -61,6 +69,8 @@ int main(int argc, char **argv) {
     TulipSettings::instance().addRemoteLocation(STABLE_LOCATION);
     TulipSettings::instance().addRemoteLocation(TESTING_LOCATION);
   }
+
+  sendUsageStatistics();
 
   QDir::home().mkpath(tlp::localPluginsPath());
   QLocale::setDefault(QLocale(QLocale::English));
