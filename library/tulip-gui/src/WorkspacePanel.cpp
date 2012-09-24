@@ -392,6 +392,9 @@ void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
   }
 
   _viewConfigurationExpanded = expanded;
+  if (_view != NULL) {
+    _viewConfigurationWidgets->setMaximumSize(_view->graphicsView()->size());
+  }
 }
 
 QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
