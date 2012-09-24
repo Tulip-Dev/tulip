@@ -244,7 +244,7 @@ void PropertiesEditor::toLabels(bool nodes, bool edges) {
   data.set("input",_contextProperty);
   std::string msg;
   StringProperty* result = _graph->getProperty<StringProperty>("viewLabel");
-  _graph->computeProperty<StringProperty>("To labels",result,msg,NULL,&data);
+  _graph->applyPropertyAlgorithm("To labels",result,msg,NULL,&data);
 }
 
 void PropertiesEditor::checkStateChanged(QModelIndex index,Qt::CheckState state) {
