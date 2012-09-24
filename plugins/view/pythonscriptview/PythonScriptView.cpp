@@ -1426,7 +1426,7 @@ void PythonScriptView::reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, 
 }
 
 bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
-  Qt::KeyboardModifier modifier = Qt::ControlModifier;
+  Qt::KeyboardModifiers modifier = Qt::ControlModifier;
 #ifdef __APPLE__
   modifier = Qt::MetaModifier;
 #endif
