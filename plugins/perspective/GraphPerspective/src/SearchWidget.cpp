@@ -134,6 +134,7 @@ QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator
 
 SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SearchWidget) {
   _ui->setupUi(this);
+  setEnabled(false);
   _ui->customValueEdit->hide();
 
   _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(NULL,false,_ui->resultsStorageCombo));
