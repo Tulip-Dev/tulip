@@ -128,6 +128,13 @@ void PropertiesEditor::unCheckAllExcept() {
   }
 }
 
+void PropertiesEditor::showSystemProperties(bool f) {
+  if (f)
+    static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
+  else
+    static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp("^(?!view).*");
+}
+
 void PropertiesEditor::setAllNodes() {
   QVariant val = TulipItemDelegate::showEditorDialog(tlp::NODE,_contextProperty,_graph,_delegate);
 

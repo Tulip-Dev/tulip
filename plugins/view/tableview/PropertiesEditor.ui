@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>442</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -128,41 +128,33 @@ color: #595959;</string>
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="nodesButton">
+      <widget class="QRadioButton" name="nodesButton">
        <property name="text">
         <string>Nodes</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
        </property>
        <property name="checked">
         <bool>true</bool>
        </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">nodeEdgeGroup</string>
-       </attribute>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="edgesButton">
+      <widget class="QRadioButton" name="edgesButton">
        <property name="text">
         <string>Edges</string>
        </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-       <attribute name="buttonGroup">
-        <string notr="true">nodeEdgeGroup</string>
-       </attribute>
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="userPropertiesCheck">
+     <property name="text">
+      <string>Show system properties (view*)</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QFrame" name="frame_2">
@@ -265,9 +257,26 @@ border-bottom: 1px solid #C9C9C9;</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>userPropertiesCheck</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>PropertiesEditor</receiver>
+   <slot>showSystemProperties(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>199</x>
+     <y>82</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showCustomContextMenu(QPoint)</slot>
+  <slot>showSystemProperties(bool)</slot>
  </slots>
  <buttongroups>
   <buttongroup name="nodeEdgeGroup"/>
