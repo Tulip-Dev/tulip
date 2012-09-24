@@ -118,12 +118,14 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     }
     else {
       SelectedEntity selectedEntity;
+
       if(glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->setCursor(QCursor(Qt::CrossCursor));
       }
       else {
         glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
       }
+
       Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
       point = glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(point);
       curPos.set(point[0], point[1], point[2]);

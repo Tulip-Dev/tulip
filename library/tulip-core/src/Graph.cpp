@@ -490,6 +490,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
     foreach(std::string n, outParams) {
       if (!dataSetCopy.exist(n))
         continue;
+
       if (dataSetCopy.getData(n)->getTypeName().compare(typeid(DoubleProperty*).name()) != 0 &&
           dataSetCopy.getData(n)->getTypeName().compare(typeid(DoubleVectorProperty*).name()) != 0 &&
           dataSetCopy.getData(n)->getTypeName().compare(typeid(IntegerProperty*).name()) != 0 &&

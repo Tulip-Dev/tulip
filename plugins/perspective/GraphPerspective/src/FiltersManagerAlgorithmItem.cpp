@@ -68,15 +68,15 @@ void FiltersManagerAlgorithmItem::applyFilter(BooleanProperty* prop) {
   if (model != NULL) {
     DataSet data = model->parametersValues();
     _graph->applyPropertyAlgorithm(_ui->algorithmCombo->currentText().toStdString(),
-        prop,
-        msg,
-        0,
-        &data);
+                                   prop,
+                                   msg,
+                                   0,
+                                   &data);
   }
   else {
     _graph->applyPropertyAlgorithm(_ui->algorithmCombo->currentText().toStdString(),
-        prop,
-        msg);
+                                   prop,
+                                   msg);
   }
 }
 

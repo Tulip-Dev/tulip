@@ -235,9 +235,11 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant&
 
 QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   QFileDialog* dlg = static_cast<QFileDialog*>(w);
+
   if (!dlg->selectedFiles().empty()) {
     return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->selectedFiles()[0],TulipFileDescriptor::File));
   }
+
   return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor());
 }
 

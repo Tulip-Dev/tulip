@@ -98,7 +98,7 @@ bool ImprovedWalker::run() {
     return false;
   }
 
-	
+
 
   node root = tree->getSource();
   orientationType mask = getMask(dataSet);
