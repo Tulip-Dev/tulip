@@ -952,7 +952,7 @@ void PushPopTest::testObserveDelProps() {
 
   PropertyObserverForTest pObserver;
   pObserver.reset();
-  bProp->addPropertyObserver(&pObserver);
+  bProp->addListener(&pObserver);
   CPPUNIT_ASSERT_EQUAL(0u, pObserver.nbProperties());
 
   graph->push();
@@ -963,7 +963,7 @@ void PushPopTest::testObserveDelProps() {
   CPPUNIT_ASSERT(pObserver.found(bProp));
 
   DoubleProperty* dProp = graph->getProperty<DoubleProperty>("double");
-  dProp->addPropertyObserver(&pObserver);
+  dProp->addListener(&pObserver);
   pObserver.reset();
   CPPUNIT_ASSERT_EQUAL(0u, pObserver.nbProperties());
   graph->pop();
