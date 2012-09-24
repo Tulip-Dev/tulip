@@ -141,7 +141,7 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
     toGroup.insert(itn->next());
   }
 
-  node meta = g->createMetaNode(toGroup);
+  g->createMetaNode(toGroup);
   toGroup.clear();
 
   for(unsigned int i = 0; i < 10; ++i) {
@@ -158,7 +158,7 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
     toGroup.insert(itn->next());
   }
 
-  node meta3 = g->createMetaNode(toGroup, false);
+  g->createMetaNode(toGroup, false);
   toGroup.clear();
   delete itn;
 
