@@ -480,7 +480,7 @@ color: white;
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="handleWidth">
-          <number>1</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="docksWidget" native="true">
           <layout class="QVBoxLayout" name="verticalLayout_8">
