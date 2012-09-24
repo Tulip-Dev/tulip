@@ -136,6 +136,7 @@ void WorkspacePanel::setView(tlp::View* view) {
     compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name,NULL);
   }
   _view->setInteractors(compatibleInteractors);
+  _ui->scrollArea->setVisible(!compatibleInteractors.empty());
   _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
   layout()->addWidget(_view->graphicsView());
   refreshInteractorsToolbar();

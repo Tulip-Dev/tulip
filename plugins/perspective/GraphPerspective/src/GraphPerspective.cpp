@@ -157,6 +157,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->workspace->setSplit3ModeSwitch(_ui->split3ModeButton);
   _ui->workspace->setSplit32ModeSwitch(_ui->split32ModeButton);
   _ui->workspace->setGridModeSwitch(_ui->gridModeButton);
+  _ui->workspace->setSixModeSwitch(_ui->sixModeButton);
   _ui->workspace->setPageCountLabel(_ui->pageCountLabel);
   _ui->outputFrame->hide();
   _logger = new GraphPerspectiveLogger(_mainWindow);
