@@ -80,6 +80,9 @@ void TableView::setupWidget() {
 
   setCentralWidget(centralWidget);
   connect(_ui->propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
+  connect(_ui->propertiesEditor,SIGNAL(setAllNodes()),this,SLOT(setFilteredNodesValue()));
+  connect(_ui->propertiesEditor,SIGNAL(setAllEdges()),this,SLOT(setFilteredEdgesValue()));
+  connect(_ui->propertiesEditor,SIGNAL(mapToGraphSelection()),this,SLOT(mapToGraphSelection()));
 
   _ui->table->setItemDelegate(new GraphTableItemDelegate(_ui->table));
   _ui->table->horizontalHeader()->setMovable(true);
@@ -88,45 +91,11 @@ void TableView::setupWidget() {
 
   connect(_ui->propertiesEditor, SIGNAL(showElementTypeChanged()), this, SLOT(readSettings()));
   connect(_ui->filteringPropertyCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(readSettings()));
-  connect(_ui->table,SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showCustomContextMenu(QPoint)));
-}
-
-void TableView::showCustomContextMenu(const QPoint& p) {
-  if (_ui->table->indexAt(p).isValid())
-    _contextProperty = _ui->table->indexAt(p).data(TulipModel::PropertyRole).value<tlp::PropertyInterface*>();
-  else
-    _contextProperty = NULL;
-
-  if (_contextProperty == NULL)
-    return;
-
-  QMenu menu;
-  QFont f;
-  f.setBold(true);
-
-  QAction* title1 = menu.addAction(trUtf8("Selection"));
-  title1->setFont(f);
-  menu.addSeparator();
-  menu.addAction(trUtf8("Map to graph selection"),this,SLOT(mapToGraphSelection()));
-
-  menu.addSeparator();
-  QAction* title2 = menu.addAction(_contextProperty->getName().c_str());
-  title2->setFont(f);
-  menu.addSeparator();
-
-  if (_ui->propertiesEditor->isShowNodes()) {
-    menu.addAction(trUtf8("Set displayed nodes value"),this,SLOT(setFilteredNodesValue()));
-  }
-  else {
-    menu.addAction(trUtf8("Set displayed edges value"),this,SLOT(setFilteredEdgesValue()));
-  }
-
-  menu.exec(QCursor::pos());
 }
 
 void TableView::setFilteredNodesValue() {
   tlp::BooleanProperty* filterProp = static_cast<GraphSortFilterProxyModel*>(_ui->table->model())->filterProperty();
-  QVariant val = TulipItemDelegate::showEditorDialog(NODE,_contextProperty,graph(),static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
+  QVariant val = TulipItemDelegate::showEditorDialog(NODE,_ui->propertiesEditor->contextProperty(),graph(),static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
 
   Observable::holdObservers();
   graph()->push();
@@ -134,10 +103,10 @@ void TableView::setFilteredNodesValue() {
   if (filterProp != NULL) {
     node n;
     forEach(n,filterProp->getNodesEqualTo(true))
-    GraphModel::setNodeValue(n.id,_contextProperty,val);
+    GraphModel::setNodeValue(n.id,_ui->propertiesEditor->contextProperty(),val);
   }
   else {
-    GraphModel::setAllNodeValue(_contextProperty,val);
+    GraphModel::setAllNodeValue(_ui->propertiesEditor->contextProperty(),val);
   }
 
   Observable::unholdObservers();
@@ -145,7 +114,7 @@ void TableView::setFilteredNodesValue() {
 
 void TableView::setFilteredEdgesValue() {
   tlp::BooleanProperty* filterProp = static_cast<GraphSortFilterProxyModel*>(_ui->table->model())->filterProperty();
-  QVariant val = TulipItemDelegate::showEditorDialog(NODE,_contextProperty,graph(),static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
+  QVariant val = TulipItemDelegate::showEditorDialog(EDGE,_ui->propertiesEditor->contextProperty(),graph(),static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
 
   Observable::holdObservers();
   graph()->push();
@@ -153,10 +122,10 @@ void TableView::setFilteredEdgesValue() {
   if (filterProp != NULL) {
     edge e;
     forEach(e,filterProp->getEdgesEqualTo(true))
-    GraphModel::setEdgeValue(e.id,_contextProperty,val);
+    GraphModel::setEdgeValue(e.id,_ui->propertiesEditor->contextProperty(),val);
   }
   else {
-    GraphModel::setAllEdgeValue(_contextProperty,val);
+    GraphModel::setAllEdgeValue(_ui->propertiesEditor->contextProperty(),val);
   }
 
   Observable::unholdObservers();
