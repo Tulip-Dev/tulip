@@ -62,12 +62,12 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   _systemTrayIcon = new QSystemTrayIcon(QIcon(":/tulip/gui/icons/logo32x32.png"),this);
   _systemTrayIcon->setToolTip(trUtf8("Tulip agent"));
   QMenu *systemTrayMenu = new QMenu();
-  systemTrayMenu->addAction(trUtf8("Show"));
-  systemTrayMenu->addAction(trUtf8("Hide"));
+  systemTrayMenu->addAction(trUtf8("Show"),this,SLOT(showProjectsCenter()));
+  systemTrayMenu->addAction(trUtf8("Hide"),this,SLOT(close()));
   systemTrayMenu->addSeparator();
-  systemTrayMenu->addAction(trUtf8("Welcome"));
-  systemTrayMenu->addAction(trUtf8("Plugins center"));
-  systemTrayMenu->addAction(trUtf8("About us"));
+  systemTrayMenu->addAction(trUtf8("Welcome"),this,SLOT(showProjectsCenter()));
+  systemTrayMenu->addAction(trUtf8("Plugins center"),this,SLOT(showPluginsCenter()));
+  systemTrayMenu->addAction(trUtf8("About us"),this,SLOT(showAboutCenter()));
   systemTrayMenu->addSeparator();
   connect(systemTrayMenu->addAction(trUtf8("Exit")), SIGNAL(triggered()),this, SLOT(closeApp()));
   _systemTrayIcon->setContextMenu(systemTrayMenu);
