@@ -48,10 +48,15 @@ void SelectionButton::paintEvent(QPaintEvent *e) {
 
 TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::_instance = 0;
 
-
+#include <QtGui/QDesktopServices>
 TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
   listen(QHostAddress::LocalHost);
   connect(this,SIGNAL(newConnection()),this,SLOT(acceptConnection()));
+  QFile f(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip.lck"));
+  f.open(QIODevice::WriteOnly);
+  f.write(QString::number(serverPort()).toUtf8());
+  f.flush();
+  f.close();
 }
 
 QProcess *TulipPerspectiveProcessHandler::fromId(unsigned int id) {
