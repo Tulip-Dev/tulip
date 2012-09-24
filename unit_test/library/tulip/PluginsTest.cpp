@@ -65,7 +65,7 @@ void PluginsTest::testCircularPlugin() {
   // ensure graph is not empty
   graph->addNode();
   tlp::BooleanProperty sel(graph);
-  CPPUNIT_ASSERT(graph->computeProperty(name, &sel, err));
+  CPPUNIT_ASSERT(graph->applyPropertyAlgorithm(name, &sel, err));
 }
 //==========================================================
 void PluginsTest::testAncestorGraph() {
@@ -88,34 +88,34 @@ void PluginsTest::testAncestorGraph() {
   Graph *child2 = graph->addSubGraph();
 
   //since the property belongs to a descendant graph, this fails
-  bool result = graph->computeProperty(simpleAlgorithm, &sel, err);
+  bool result = graph->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
   //since the property belongs to a descendant of a sibling graph, this fails
-  result = child2->computeProperty(simpleAlgorithm, &sel, err);
+  result = child2->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
   //These will fail because the graph is empty
-  result = child1->computeProperty(simpleAlgorithm, &sel, err);
+  result = child1->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
-  result = grandchild->computeProperty(simpleAlgorithm, &sel, err);
+  result = grandchild->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
   grandchild->addNode();
 
   //now the graph is not empty they will pass
-  result = child1->computeProperty(simpleAlgorithm, &sel, err);
+  result = child1->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, result);
 
-  result = grandchild->computeProperty(simpleAlgorithm, &sel, err);
+  result = grandchild->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, result);
 
   //now testing with an algorithm that does not exists
-  result = child1->computeProperty(invalidAlgorithm, &sel, err);
+  result = child1->applyPropertyAlgorithm(invalidAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
-  result = grandchild->computeProperty(invalidAlgorithm, &sel, err);
+  result = grandchild->applyPropertyAlgorithm(invalidAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 }
 

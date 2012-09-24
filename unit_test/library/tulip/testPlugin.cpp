@@ -35,7 +35,7 @@ public:
   bool run() {
     std::string name = "Test";
     std::string err = "Error";
-    return graph->computeProperty(name, result, err);
+    return graph->applyPropertyAlgorithm(name, result, err);
   }
 };
 PLUGIN(Test)
