@@ -253,7 +253,10 @@ void Workspace::switchWorkspaceMode(QWidget *page) {
 }
 
 void Workspace::updatePageCountLabel() {
-  _pageCountLabel->setText(QString::number(_currentPanelIndex+1) + " / " + QString::number(_panels.size()-1));
+  int current = _currentPanelIndex+1;
+  int total = _panels.size()-currentSlotsCount()+1;
+
+  _pageCountLabel->setText(QString::number(current) + " / " + QString::number(total));
 }
 
 QWidget* Workspace::currentModeWidget() const {
