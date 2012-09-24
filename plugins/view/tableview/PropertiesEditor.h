@@ -58,15 +58,18 @@ public:
 
   void showNodes(bool value);
   void showEdges(bool value);
+
+  tlp::PropertyInterface* contextProperty() const;
 signals:
   void propertyVisibilityChanged(tlp::PropertyInterface*,bool);
   void showElementTypeChanged();
+  void setAllNodes();
+  void setAllEdges();
+  void mapToGraphSelection();
 
 protected slots:
   void checkStateChanged(QModelIndex,Qt::CheckState);
   void showCustomContextMenu(const QPoint&);
-  void setAllNodes();
-  void setAllEdges();
   void copyProperty();
   void newProperty();
   void delProperty();

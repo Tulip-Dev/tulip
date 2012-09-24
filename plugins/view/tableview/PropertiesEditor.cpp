@@ -87,13 +87,20 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   if (_contextProperty == NULL)
     return;
 
+  QString pname = _contextProperty->getName().c_str();
+  if (pname.length()>30) {
+    pname.truncate(30);
+    pname+= "...";
+  }
+
   QMenu menu;
   connect(menu.addAction(trUtf8("Check all")),SIGNAL(triggered()),this,SLOT(checkAll()));
   connect(menu.addAction(trUtf8("Uncheck all")),SIGNAL(triggered()),this,SLOT(unCheckAll()));
-  connect(menu.addAction(trUtf8("Uncheck all except \"") + _contextProperty->getName().c_str() + "\""),SIGNAL(triggered()),this,SLOT(unCheckAllExcept()));
+  connect(menu.addAction(trUtf8("Uncheck all except \"") + pname + "\""),SIGNAL(triggered()),this,SLOT(unCheckAllExcept()));
   menu.addSeparator();
-  connect(menu.addAction(trUtf8("Set all nodes")),SIGNAL(triggered()),this,SLOT(setAllNodes()));
-  connect(menu.addAction(trUtf8("Set all edges")),SIGNAL(triggered()),this,SLOT(setAllEdges()));
+  connect(menu.addAction(trUtf8("Map selected items to graph")),SIGNAL(triggered()),this,SIGNAL(mapToGraphSelection()));
+  connect(menu.addAction(trUtf8("Set all nodes")),SIGNAL(triggered()),this,SIGNAL(setAllNodes()));
+  connect(menu.addAction(trUtf8("Set all edges")),SIGNAL(triggered()),this,SIGNAL(setAllEdges()));
   menu.addSeparator();
   connect(menu.addAction(trUtf8("To labels")),SIGNAL(triggered()),this,SLOT(toLabels()));
   connect(menu.addAction(trUtf8("To labels (nodes only)")),SIGNAL(triggered()),this,SLOT(toNodesLabels()));
@@ -133,24 +140,6 @@ void PropertiesEditor::showSystemProperties(bool f) {
     static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
   else
     static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp("^(?!view).*");
-}
-
-void PropertiesEditor::setAllNodes() {
-  QVariant val = TulipItemDelegate::showEditorDialog(tlp::NODE,_contextProperty,_graph,_delegate);
-
-  if (val.isValid()) {
-    _graph->push();
-    GraphModel::setAllNodeValue(_contextProperty,val);
-  }
-}
-
-void PropertiesEditor::setAllEdges() {
-  QVariant val = TulipItemDelegate::showEditorDialog(tlp::EDGE,_contextProperty,_graph,_delegate);
-
-  if (val.isValid()) {
-    _graph->push();
-    GraphModel::setAllEdgeValue(_contextProperty,val);
-  }
 }
 
 void PropertiesEditor::copyProperty() {
@@ -277,4 +266,8 @@ void PropertiesEditor::showNodes(bool value) {
 
 void PropertiesEditor::showEdges(bool value) {
   _ui->edgesButton->setChecked(value);
+}
+
+PropertyInterface *PropertiesEditor::contextProperty() const {
+  return _contextProperty;
 }
