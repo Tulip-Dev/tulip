@@ -208,6 +208,8 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface * prop) {
     return QVariant::fromValue<NodeShape>(static_cast<IntegerProperty*>(prop)->getNodeValue(n));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str()));
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
+    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str(),TulipFileDescriptor::File));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getNodeValue(n)));
 
@@ -220,6 +222,8 @@ QVariant GraphModel::nodeDefaultValue(PropertyInterface * prop) {
     return QVariant::fromValue<NodeShape>((NodeShape)(static_cast<IntegerProperty*>(prop)->getNodeDefaultValue()));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str()));
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
+    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str(),TulipFileDescriptor::File));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getNodeDefaultValue()));
 
@@ -232,6 +236,8 @@ bool GraphModel::setAllNodeValue(PropertyInterface * prop, QVariant v) {
     static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<NodeShape>().nodeShapeId);
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     static_cast<StringProperty*>(prop)->setAllNodeValue(v.value<TulipFont>().fontFile().toStdString());
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
+    static_cast<StringProperty*>(prop)->setAllNodeValue(v.value<TulipFileDescriptor>().absolutePath.toStdString());
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<LabelPosition>());
 
@@ -249,6 +255,8 @@ bool GraphModel::setNodeValue(unsigned int id, PropertyInterface * prop, QVarian
     static_cast<IntegerProperty*>(prop)->setNodeValue(n,v.value<NodeShape>().nodeShapeId);
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     static_cast<StringProperty*>(prop)->setNodeValue(n,v.value<TulipFont>().fontFile().toStdString());
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
+    static_cast<StringProperty*>(prop)->setNodeValue(n,v.value<TulipFileDescriptor>().absolutePath.toStdString());
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     static_cast<IntegerProperty*>(prop)->setNodeValue(n,v.value<LabelPosition>());
 
@@ -267,6 +275,8 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface * prop) {
     return QVariant::fromValue<EdgeShape>((EdgeShape)(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getEdgeValue(e).c_str()));
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
+    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(static_cast<StringProperty*>(prop)->getEdgeValue(e).c_str(),TulipFileDescriptor::File));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
 
@@ -279,6 +289,8 @@ QVariant GraphModel::edgeDefaultValue(PropertyInterface * prop) {
     return QVariant::fromValue<EdgeShape>((EdgeShape)(static_cast<IntegerProperty*>(prop)->getEdgeDefaultValue()));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getEdgeDefaultValue().c_str()));
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
+    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(static_cast<StringProperty*>(prop)->getEdgeDefaultValue().c_str(),TulipFileDescriptor::File));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<IntegerProperty*>(prop)->getEdgeDefaultValue()));
 
@@ -293,6 +305,8 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface* prop, QVariant
     static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<EdgeShape>());
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     static_cast<StringProperty*>(prop)->setEdgeValue(e,v.value<TulipFont>().fontFile().toStdString());
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
+    static_cast<StringProperty*>(prop)->setEdgeValue(e,v.value<TulipFileDescriptor>().absolutePath.toStdString());
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<LabelPosition>());
 
@@ -308,6 +322,8 @@ bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v) {
     static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeShape>());
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     static_cast<StringProperty*>(prop)->setAllEdgeValue(v.value<TulipFont>().fontFile().toStdString());
+  else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
+    static_cast<StringProperty*>(prop)->setAllEdgeValue(v.value<TulipFileDescriptor>().absolutePath.toStdString());
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<LabelPosition>());
 
