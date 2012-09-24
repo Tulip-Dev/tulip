@@ -103,11 +103,21 @@ IF(TULIP_DIR) # TULIP_DIR is already set
   ENDIF(NOT TULIP_INCLUDE_DIR)
   RETRIEVE_VERSION()
   CHECK_VERSION()
+
 ELSE(TULIP_DIR)
 
   IF(NOT TULIP_INCLUDE_DIR)
     FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h)
+    IF(NOT TULIP_INCLUDE_DIR) # Last resort: use CMAKE_MODULE_PATH/../../include/
+      FOREACH(p ${CMAKE_MODULE_PATH})
+        FIND_PATH(TULIP_INCLUDE_DIR tulip/TulipRelease.h PATHS "${p}/../../include")
+        IF(TULIP_INCLUDE_DIR)
+          BREAK()
+        ENDIF(TULIP_INCLUDE_DIR)
+      ENDFOREACH()
+    ENDIF(NOT TULIP_INCLUDE_DIR)
   ENDIF(NOT TULIP_INCLUDE_DIR)
+
   IF(NOT TULIP_INCLUDE_DIR)
     MESSAGE(FATAL_ERROR "Auto-detecting your Tulip headers installation directory failed. Please try to provide the TULIP_DIR CMake variable poiting to your Tulip installation root directory")
   ELSE()
