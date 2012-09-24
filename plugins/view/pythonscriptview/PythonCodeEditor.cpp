@@ -925,7 +925,7 @@ void PythonCodeEditor::highlightErrors() {
 }
 
 void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
-  Qt::KeyboardModifier modifier = Qt::ControlModifier;
+  Qt::KeyboardModifiers modifier = Qt::ControlModifier;
 #ifdef __APPLE__
   modifier = Qt::MetaModifier;
 #endif
