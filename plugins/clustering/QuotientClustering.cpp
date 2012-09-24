@@ -382,7 +382,7 @@ bool QuotientClustering::run() {
     quotientGraph->applyPropertyAlgorithm(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg);
 
     if (mNodes.size() < 300)
-      quotientGraph->computeProperty(sizesName, quotientGraph->getLocalProperty<SizeProperty>("viewSize"),errMsg);
+      quotientGraph->applyPropertyAlgorithm(sizesName, quotientGraph->getLocalProperty<SizeProperty>("viewSize"),errMsg);
   }
 
   // recursive call if needed
