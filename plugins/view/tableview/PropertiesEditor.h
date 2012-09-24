@@ -77,6 +77,7 @@ protected slots:
   void checkAll();
   void unCheckAll();
   void unCheckAllExcept();
+  void showSystemProperties(bool);
 };
 
 #endif // PROPERTIESEDITOR_H
