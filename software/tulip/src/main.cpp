@@ -23,6 +23,8 @@
 
 #include <QtGui/QApplication>
 #include <QtGui/QMessageBox>
+#include <QtGui/QDesktopServices>
+#include <QtNetwork/QTcpSocket>
 
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLibraryLoader.h>
@@ -57,10 +59,33 @@ void sendUsageStatistics() {
   mgr->get(QNetworkRequest(QUrl(QString("http://tulip.labri.fr/TulipStats/tulip_stats.php?tulip=") + TULIP_RELEASE + "&os=" + OS_PLATFORM)));
 }
 
+void checkTulipRunning() {
+  QFile lockFile(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip.lck"));
+  if (lockFile.exists() && lockFile.open(QIODevice::ReadOnly)) {
+    QString agentPort = lockFile.readAll();
+    bool ok;
+    int n_agentPort = agentPort.toInt(&ok);
+    if (ok) {
+      QTcpSocket sck;
+      sck.connectToHost(QHostAddress::LocalHost,n_agentPort);
+      sck.waitForConnected(1000);
+      if (sck.isOpen()) {
+        sck.write("SHOW_AGENT PROJECTS");
+        sck.flush();
+        sck.close();
+        exit(0);
+      }
+    }
+  }
+  lockFile.close();
+  lockFile.remove();
+}
+
 int main(int argc, char **argv) {
   start_crash_handler();
   QApplication tulip_agent(argc, argv);
   tulip_agent.setApplicationName("tulip");
+  checkTulipRunning();
 
   TulipSettings::instance().applyProxySettings();
 
@@ -118,6 +143,9 @@ int main(int argc, char **argv) {
 #ifdef MEMORYCHECKER_ON
   memory_checker_print_report();
 #endif // MEMORYCHECKER_ON
+
+  QFile f(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip.lck"));
+  f.remove();
 
   return result;
 }
