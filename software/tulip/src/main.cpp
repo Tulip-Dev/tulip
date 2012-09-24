@@ -80,6 +80,13 @@ int main(int argc, char **argv) {
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
 #endif
 
+  foreach (const QString& plugin, tlp::PluginManager::markedForRemoval()) {
+    QFile f(plugin);
+    f.remove();
+    //whether or not the removal succeeded, do not try again
+    tlp::PluginManager::unmarkForRemoval(plugin);
+  }
+
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   //TODO find a cleaner way to achieve this (QDesktopServices is part of QtGui, so it does not belong in TlpTools)
   tlp::TulipPluginsPath = (tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toStdString() +

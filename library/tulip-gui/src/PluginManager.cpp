@@ -215,6 +215,10 @@ QStringList PluginManager::markedForRemoval() {
   return TulipSettings::instance().pluginsToRemove();
 }
 
+void PluginManager::unmarkForRemoval(const QString &file) {
+  TulipSettings::instance().unmarkPluginForRemoval(file);
+}
+
 PluginInformations::PluginInformations() {
 }
 
