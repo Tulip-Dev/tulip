@@ -41,6 +41,7 @@ public slots:
   void focusOut();
   void focusIn();
   void install();
+  void remove();
 
 signals:
   void focused();

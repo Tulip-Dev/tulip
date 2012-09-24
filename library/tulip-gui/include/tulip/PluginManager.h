@@ -82,6 +82,7 @@ public:
 
   static QStringList markedForInstallation();
   static QStringList markedForRemoval();
+  static void unmarkForRemoval(const QString& file);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PluginManager::PluginLocations)
