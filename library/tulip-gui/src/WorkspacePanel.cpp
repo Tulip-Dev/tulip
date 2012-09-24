@@ -391,6 +391,7 @@ void WorkspacePanel::resizeEvent(QResizeEvent* ev) {
   if (_viewConfigurationWidgets) {
     setConfigurationTabExpanded(_viewConfigurationExpanded,false);
   }
+
   resetInteractorsScrollButtonsVisibility();
 
   QWidget::resizeEvent(ev);
@@ -420,6 +421,7 @@ void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
   }
 
   _viewConfigurationExpanded = expanded;
+
   if (_view != NULL) {
     _viewConfigurationWidgets->setMaximumSize(_view->graphicsView()->size());
   }

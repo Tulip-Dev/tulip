@@ -61,14 +61,17 @@ void sendUsageStatistics() {
 
 void checkTulipRunning() {
   QFile lockFile(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip.lck"));
+
   if (lockFile.exists() && lockFile.open(QIODevice::ReadOnly)) {
     QString agentPort = lockFile.readAll();
     bool ok;
     int n_agentPort = agentPort.toInt(&ok);
+
     if (ok) {
       QTcpSocket sck;
       sck.connectToHost(QHostAddress::LocalHost,n_agentPort);
       sck.waitForConnected(1000);
+
       if (sck.state() == QAbstractSocket::ConnectedState) {
         sck.write("SHOW_AGENT PROJECTS");
         sck.flush();
@@ -77,6 +80,7 @@ void checkTulipRunning() {
       }
     }
   }
+
   lockFile.close();
   lockFile.remove();
 }

@@ -50,10 +50,10 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformations infos,
     else
       _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-installed-updated.png"));
 
-      //only show the remove frame for downloaded plugins
-      if(!versionInfos.libraryLocation.isEmpty() && !versionInfos.libraryLocation.contains(tlp::TulipLibDir.c_str())) {
-        _ui->removeFrame->show();
-      }
+    //only show the remove frame for downloaded plugins
+    if(!versionInfos.libraryLocation.isEmpty() && !versionInfos.libraryLocation.contains(tlp::TulipLibDir.c_str())) {
+      _ui->removeFrame->show();
+    }
   }
 
   _ui->icon->setPixmap(QPixmap(versionInfos.icon));
