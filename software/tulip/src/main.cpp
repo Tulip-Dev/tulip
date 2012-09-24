@@ -69,7 +69,7 @@ void checkTulipRunning() {
       QTcpSocket sck;
       sck.connectToHost(QHostAddress::LocalHost,n_agentPort);
       sck.waitForConnected(1000);
-      if (sck.isOpen()) {
+      if (sck.state() == QAbstractSocket::ConnectedState) {
         sck.write("SHOW_AGENT PROJECTS");
         sck.flush();
         sck.close();
