@@ -34,7 +34,7 @@
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/TulipFontWidget.h>
+#include <tulip/TulipFontDialog.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
 #include <QtGui/QColorDialog>
@@ -353,16 +353,16 @@ QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
 
 //TulipFontEditorCreator
 QWidget* TulipFontEditorCreator::createWidget(QWidget* parent) const {
-  return new TulipFontWidget(parent);
+  return new TulipFontDialog(NULL);
 }
 void TulipFontEditorCreator::setEditorData(QWidget*editor, const QVariant&data,bool,tlp::Graph*) {
   TulipFont font =data.value<TulipFont>();
-  TulipFontWidget* fontWidget = static_cast<TulipFontWidget*>(editor);
-  fontWidget->setFont(font);
+  TulipFontDialog* fontWidget = static_cast<TulipFontDialog*>(editor);
+  fontWidget->selectFont(font);
 }
 
 QVariant TulipFontEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
-  TulipFontWidget* fontWidget = static_cast<TulipFontWidget*>(editor);
+  TulipFontDialog* fontWidget = static_cast<TulipFontDialog*>(editor);
   return QVariant::fromValue<TulipFont>(fontWidget->font());
 }
 
