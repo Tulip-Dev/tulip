@@ -486,6 +486,28 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
     delete clone;
   }
 
+  if (dataSet) { // Copy out parameters that are not properties back to the original dataSet
+    foreach(std::string n, outParams) {
+      if (!dataSetCopy.exist(n))
+        continue;
+      if (dataSetCopy.getData(n)->getTypeName().compare(typeid(DoubleProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(DoubleVectorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(IntegerProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(IntegerVectorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(BooleanProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(BooleanVectorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(LayoutProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(CoordVectorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(SizeProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(SizeVectorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(ColorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(ColorVectorProperty*).name()) != 0) {
+        DataType* dt = dataSetCopy.getData(n);
+        dataSet->setData(n,dt);
+      }
+    }
+  }
+
   return result;
 }
 
