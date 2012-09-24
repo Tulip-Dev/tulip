@@ -28,6 +28,7 @@
 #include <QtGui/QGraphicsSceneMouseEvent>
 #include <QtGui/QTabWidget>
 #include <QtGui/QGraphicsSceneContextMenuEvent>
+#include <QtGui/QScrollBar>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ProcessingAnimationItem.h>
@@ -79,6 +80,7 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
     _currentInteractorConfigurationItem(NULL),
     _progressItem(NULL) {
   _ui->setupUi(this);
+  _ui->interactorsFrame->installEventFilter(this);
   _ui->dragHandle->setPanel(this);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
   setView(view);
@@ -168,6 +170,7 @@ void WorkspacePanel::setView(tlp::View* view) {
   _viewConfigurationWidgets->setWidget(viewConfigurationTabs);
   _viewConfigurationWidgets->setZValue(DBL_MAX);
   _view->graphicsView()->scene()->installEventFilter(this);
+  resetInteractorsScrollButtonsVisibility();
 }
 
 bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
@@ -184,6 +187,12 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
     }
   }
 
+  if (obj == _ui->interactorsFrame && ev->type() == QEvent::Wheel) {
+    if (static_cast<QWheelEvent*>(ev)->delta()>0)
+      scrollInteractorsLeft();
+    else
+      scrollInteractorsRight();
+  }
 
   return QWidget::eventFilter(obj,ev);
 }
@@ -314,6 +323,23 @@ void WorkspacePanel::actionChanged() {
   _actionTriggers[action]->setEnabled(action->isEnabled());
 }
 
+void WorkspacePanel::scrollInteractorsRight() {
+  QScrollBar* scrollBar = _ui->scrollArea->horizontalScrollBar();
+  scrollBar->setSliderPosition(scrollBar->sliderPosition()+scrollBar->singleStep());
+}
+
+void WorkspacePanel::scrollInteractorsLeft() {
+  QScrollBar* scrollBar = _ui->scrollArea->horizontalScrollBar();
+  scrollBar->setSliderPosition(scrollBar->sliderPosition()-scrollBar->singleStep());
+}
+
+void WorkspacePanel::resetInteractorsScrollButtonsVisibility() {
+  QScrollBar* scrollBar = _ui->scrollArea->horizontalScrollBar();
+  bool interactorScrollBtnVisible = scrollBar->minimum() != scrollBar->maximum();
+  _ui->interactorsLeft->setVisible(interactorScrollBtnVisible);
+  _ui->interactorsRight->setVisible(interactorScrollBtnVisible);
+}
+
 void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
   _ui->graphCombo->setModel(model);
   connect(_ui->graphCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(graphComboIndexChanged()));
@@ -364,6 +390,7 @@ void WorkspacePanel::resizeEvent(QResizeEvent* ev) {
   if (_viewConfigurationWidgets) {
     setConfigurationTabExpanded(_viewConfigurationExpanded,false);
   }
+  resetInteractorsScrollButtonsVisibility();
 
   QWidget::resizeEvent(ev);
 }

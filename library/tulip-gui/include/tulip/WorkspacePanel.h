@@ -86,6 +86,10 @@ protected slots:
   void setCurrentInteractorConfigurationVisible(bool);
   void actionChanged();
 
+  void scrollInteractorsRight();
+  void scrollInteractorsLeft();
+  void resetInteractorsScrollButtonsVisibility();
+
 protected:
   void progress_handler(int step, int max_step);
   void refreshInteractorsToolbar();

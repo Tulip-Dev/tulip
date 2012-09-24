@@ -41,7 +41,7 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">QFrame[header = &quot;true&quot;], QComboBox, QLabel, QToolButton, QPushButton {
+      <string notr="true">QFrame[header = &quot;true&quot;], QComboBox, QLabel, QToolButton, QPushButton, #interactorsFrame {
 border-image:none;
 background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 stop: 0 #838383,
@@ -174,14 +174,77 @@ background-color: #A9A9A9;
        </widget>
       </item>
       <item>
-       <widget class="QFrame" name="interactorsFrame">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <layout class="QHBoxLayout" name="interactorsLayout">
+        <property name="spacing">
+         <number>0</number>
         </property>
-       </widget>
+        <item>
+         <widget class="QPushButton" name="interactorsLeft">
+          <property name="minimumSize">
+           <size>
+            <width>15</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>15</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/TulipGUIResource.qrc">
+            <normaloff>:/tulip/gui/ui/left_arrow-white.png</normaloff>:/tulip/gui/ui/left_arrow-white.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="interactorsFrame">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>345</width>
+             <height>23</height>
+            </rect>
+           </property>
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="interactorsRight">
+          <property name="minimumSize">
+           <size>
+            <width>15</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>15</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/TulipGUIResource.qrc">
+            <normaloff>:/tulip/gui/ui/right_arrow-white.png</normaloff>:/tulip/gui/ui/right_arrow-white.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <widget class="Line" name="sep2">
@@ -208,6 +271,12 @@ background-color: #A9A9A9;
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
         </property>
         <property name="sizeAdjustPolicy">
          <enum>QComboBox::AdjustToMinimumContentsLength</enum>
@@ -248,7 +317,7 @@ background-color: #A9A9A9;
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/TulipGUIResource.qrc">
           <normaloff>:/tulip/gui/ui/lightclosebutton.png</normaloff>:/tulip/gui/ui/lightclosebutton.png</iconset>
         </property>
         <property name="shortcut">
@@ -273,7 +342,9 @@ background-color: #A9A9A9;
    <header location="global">tulip/DragHandle.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>currentInteractorButton</sender>
@@ -291,8 +362,42 @@ background-color: #A9A9A9;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>interactorsLeft</sender>
+   <signal>clicked()</signal>
+   <receiver>WorkspacePanel</receiver>
+   <slot>scrollInteractorsLeft()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>147</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>472</x>
+     <y>298</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>interactorsRight</sender>
+   <signal>clicked()</signal>
+   <receiver>WorkspacePanel</receiver>
+   <slot>scrollInteractorsRight()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>507</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>472</x>
+     <y>298</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>setCurrentInteractorConfigurationVisible(bool)</slot>
+  <slot>scrollInteractorsRight()</slot>
+  <slot>scrollInteractorsLeft()</slot>
  </slots>
 </ui>
