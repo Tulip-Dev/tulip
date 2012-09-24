@@ -41,6 +41,7 @@
 #include <tulip/GlLabel.h>
 #include <tulip/Perspective.h>
 #include <QtGui/QMainWindow>
+#include <QtGui/QFileDialog>
 
 using namespace tlp;
 
@@ -221,21 +222,28 @@ QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
 /*
   TulipFileDescriptorEditorCreator
   */
-QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget* parent) const {
-  return new TulipFileDescriptorWidget(parent);
+QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
+  QFileDialog* dlg = new QFileDialog(NULL);
+  dlg->setModal(true);
+  return dlg;
 }
 
 void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
-  static_cast<TulipFileDescriptorWidget*>(w)->setData(v.value<TulipFileDescriptor>());
+  TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
+  static_cast<QFileDialog*>(w)->setDirectory(QFileInfo(desc.absolutePath).absolutePath());
 }
 
 QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
-  return QVariant::fromValue<TulipFileDescriptor>(static_cast<TulipFileDescriptorWidget*>(w)->data());
+  QFileDialog* dlg = static_cast<QFileDialog*>(w);
+  if (!dlg->selectedFiles().empty()) {
+    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->selectedFiles()[0],TulipFileDescriptor::File));
+  }
+  return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor());
 }
 
 QString TulipFileDescriptorEditorCreator::displayText(const QVariant& v) const {
   TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
-  return desc.absolutePath;
+  return QFileInfo(desc.absolutePath).fileName();
 }
 
 ///NodeShapeEditorCreator
@@ -352,7 +360,7 @@ QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
 }
 
 //TulipFontEditorCreator
-QWidget* TulipFontEditorCreator::createWidget(QWidget* parent) const {
+QWidget* TulipFontEditorCreator::createWidget(QWidget*) const {
   return new TulipFontDialog(NULL);
 }
 void TulipFontEditorCreator::setEditorData(QWidget*editor, const QVariant&data,bool,tlp::Graph*) {
