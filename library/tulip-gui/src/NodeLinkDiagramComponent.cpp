@@ -42,12 +42,6 @@ using namespace tlp;
 using namespace std;
 
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL),_hasHulls(false) {
-  forceRedrawAction=new QAction(trUtf8("Force redraw"),this);
-  connect(forceRedrawAction,SIGNAL(triggered()),this,SLOT(redraw()));
-  forceRedrawAction->setShortcut(tr("Ctrl+Shift+R"));
-  centerViewAction=new QAction(trUtf8("Center view"),this);
-  connect(centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
-  centerViewAction->setShortcut(tr("Ctrl+Shift+C"));
 }
 
 void NodeLinkDiagramComponent::updateGrid() {
@@ -105,10 +99,6 @@ void NodeLinkDiagramComponent::draw(PluginProgress *pluginProgress) {
 }
 
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
-  graphicsView()->addAction(centerViewAction);
-  graphicsView()->addAction(forceRedrawAction);
-
-
   ParameterDescriptionList gridParameters;
   gridParameters.add<StringCollection>("Grid mode","","No grid;Space divisions;Fixed size",true);
   gridParameters.add<Size>("Grid size","","(1,1,1)",false);
@@ -311,10 +301,6 @@ void NodeLinkDiagramComponent::registerTriggers() {
   }
 }
 
-void NodeLinkDiagramComponent::redraw() {
-  getGlMainWidget()->redraw();
-}
-
 void NodeLinkDiagramComponent::setZOrdering(bool f) {
   getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setElementZOrdered(f);
   centerView();
@@ -329,42 +315,42 @@ void NodeLinkDiagramComponent::showGridControl() {
 }
 
 void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point) {
+  GlMainView::fillContextMenu(menu,point);
+  QFont f;
+  f.setBold(true);
 
-  //Check if a node/edge is under the mouse pointer
-  node tmpNode;
-  edge tmpEdge;
-  bool result;
-  SelectedEntity entity;
-  // look if the mouse pointer is over a node or edge
-  QRect rect=getGlMainWidget()->frameGeometry();
-  result = getGlMainWidget()->pickNodesEdges(point.x()-rect.x(), point.y()-rect.y(), entity);
+  menu->addSeparator();
+  menu->addAction(trUtf8("Augmented display"))->setFont(f);
+  menu->addSeparator();
 
-  if (result) {
-    // Display a context menu
-    isNode = entity.getEntityType() == SelectedEntity::NODE_SELECTED;
-    itemId = entity.getComplexEntityId();
-    std::stringstream sstr;
-    sstr << (isNode ? "Node " : "Edge ") << itemId;
-    menu->addAction(tr(sstr.str().c_str()))->setEnabled(false);
-  }
-  else {
-    menu->addAction(tr("nothing under cursor"))->setEnabled(false);
-  }
-
-  menu->addAction(trUtf8("View"))->setSeparator(true);
-  menu->addAction(forceRedrawAction);
-  menu->addAction(centerViewAction);
-  menu->addAction(trUtf8("Augmented display"))->setSeparator(true);
   QAction* zOrdering = menu->addAction(trUtf8("Z Ordering"));
   zOrdering->setCheckable(true);
   zOrdering->setChecked(getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isElementZOrdered());
   connect(zOrdering,SIGNAL(triggered(bool)),this,SLOT(setZOrdering(bool)));
   menu->addAction(trUtf8("Grid"),this,SLOT(showGridControl()));
 
-  if (result) {
-    menu->addAction(trUtf8(isNode ? "Node " : "Edge "))->setSeparator(true);
+  //Check if a node/edge is under the mouse pointer
+  bool result;
+  SelectedEntity entity;
+  int x = point.x(), y = point.y();
+#ifndef _WIN32 // For some obscure reason, point coordinates should not be shifted when under Win32
+  QRect rect = getGlMainWidget()->frameGeometry();
+  x -= rect.x();
+  y -= rect.y();
+#endif
+  result = getGlMainWidget()->pickNodesEdges(x, y, entity);
 
-    menu->addAction(tr("Add to/Remove from selection"),this,SLOT(addRemoveItemToSelection()));
+  if (result) {
+    menu->addSeparator();
+    isNode = entity.getEntityType() == SelectedEntity::NODE_SELECTED;
+    itemId = entity.getComplexEntityId();
+    if (isNode)
+      menu->addAction(trUtf8("Node #") + QString::number(itemId))->setFont(f);
+    else
+      menu->addAction(trUtf8("Edge #") + QString::number(itemId))->setFont(f);
+    menu->addSeparator();
+
+    menu->addAction(tr("Toggle selection"),this,SLOT(addRemoveItemToSelection()));
     menu->addAction(tr("Select"),this,SLOT(selectItem()));
     menu->addAction(tr("Delete"),this,SLOT(deleteItem()));
 
@@ -379,8 +365,6 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     }
   }
 
-  menu->addSeparator();
-  GlMainView::fillContextMenu(menu,point);
 }
 
 void NodeLinkDiagramComponent::addRemoveItemToSelection() {

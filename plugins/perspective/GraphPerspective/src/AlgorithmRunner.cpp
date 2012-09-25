@@ -40,7 +40,7 @@ protected:
     ExpandableGroupBox::paintEvent(event);
     QPainter painter(this);
     QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/16/favorite.png" : ":/tulip/graphperspective/icons/16/favorite-empty.png"));
-    painter.drawPixmap(25,0,px);
+    painter.drawPixmap(20,0,px);
   }
 };
 

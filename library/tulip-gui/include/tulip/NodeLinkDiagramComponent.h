@@ -55,7 +55,6 @@ public slots:
   void draw(PluginProgress *pluginProgress);
 
 protected slots:
-  void redraw();
   void addRemoveItemToSelection();
   void selectItem();
   void deleteItem();
@@ -73,9 +72,6 @@ protected:
   void loadGraphOnScene(Graph *graph);
   void useHulls(bool hasHulls);
   bool hasHulls() const;
-
-  QAction *centerViewAction;
-  QAction *forceRedrawAction;
 
 };
 }

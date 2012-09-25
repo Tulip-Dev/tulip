@@ -44,6 +44,10 @@ void GlMainView::draw(tlp::PluginProgress*) {
   _glMainWidget->draw();
 }
 
+void GlMainView::redraw() {
+  _glMainWidget->redraw();
+}
+
 void GlMainView::refresh(PluginProgress *) {
   _glMainWidget->draw(false);
 }
@@ -85,6 +89,16 @@ GlOverviewGraphicsItem *GlMainView::overviewItem() const {
 
 void GlMainView::setupWidget() {
   assignNewGlMainWidget(new GlMainWidget(NULL,this),true);
+
+  _forceRedrawAction=new QAction(trUtf8("Force redraw"),this);
+  connect(_forceRedrawAction,SIGNAL(triggered()),this,SLOT(redraw()));
+  _forceRedrawAction->setShortcut(tr("Ctrl+Shift+R"));
+  _centerViewAction=new QAction(trUtf8("Center view"),this);
+  connect(_centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
+  _centerViewAction->setShortcut(tr("Ctrl+Shift+C"));
+
+  graphicsView()->addAction(_centerViewAction);
+  graphicsView()->addAction(_forceRedrawAction);
 }
 
 GlMainWidget* GlMainView::getGlMainWidget() const {
@@ -169,13 +183,20 @@ void GlMainView::openSnapshotDialog() {
 }
 
 void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
+  QFont f;
+  f.setBold(true);
+
+  menu->addAction(trUtf8("View"))->setFont(f);
+  menu->addSeparator();
+  menu->addAction(_forceRedrawAction);
+  menu->addAction(_centerViewAction);
+
   QAction* a = menu->addAction(trUtf8("Show overview"));
   a->setCheckable(true);
   a->setChecked(overviewVisible());
   connect(a,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
 
   menu->addAction(trUtf8("Take snapshopt"),this,SLOT(openSnapshotDialog()));
-  menu->addSeparator();
 }
 
 void GlMainView::applySettings() {
