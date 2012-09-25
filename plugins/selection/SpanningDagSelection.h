@@ -25,7 +25,7 @@ template<typename T>
 class MutableConatainer;
 
 /** \addtogroup selection */
-/*@{*/
+
 
 /**
  * This selection plugins enables to find a subgraph of G that is acyclic.
@@ -40,5 +40,5 @@ public:
   SpanningDagSelection(const tlp::PluginContext* context);
   bool run();
 };
-/*@}*/
+
 #endif

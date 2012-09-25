@@ -29,8 +29,10 @@ class PropertyContext;
 
 typedef AbstractProperty<tlp::ColorType, tlp::ColorType, tlp::ColorAlgorithm> AbstractColorProperty;
 
-/** \addtogroup properties */
-/*@{*/
+/**
+ * @ingroup Graph
+ * @brief The ColorProperty class
+ */
 class TLP_SCOPE ColorProperty:public AbstractColorProperty {
 public :
   ColorProperty (Graph *g, std::string n="") :AbstractColorProperty(g, n) {}
@@ -62,7 +64,7 @@ public :
     return propertyTypename;
   }
 };
-/*@}*/
+
 
 }
 #endif

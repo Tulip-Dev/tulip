@@ -30,11 +30,8 @@
 
 namespace tlp {
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * class to create a polygon
+ * @ingroup OpenGL
+ * @brief class to create a polygon
  */
 class TLP_GL_SCOPE GlPolygon : public GlAbstractPolygon {
 public:
@@ -85,6 +82,6 @@ public:
    */
   virtual Coord& point(const unsigned int i);
 };
-/*@}*/
+
 }
 #endif

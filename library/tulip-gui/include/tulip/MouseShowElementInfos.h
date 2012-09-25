@@ -28,9 +28,6 @@
 
 #include <tulip/InteractorComposite.h>
 
-/** \addtogroup Mouse_interactor */
-/*@{*/
-
 namespace tlp {
 
 class View;
@@ -59,6 +56,6 @@ protected:
 
 }
 
-/*@}*/
+
 
 #endif

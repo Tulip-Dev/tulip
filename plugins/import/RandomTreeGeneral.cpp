@@ -62,7 +62,7 @@ const char * paramHelp[] = {
 
 
 /** \addtogroup import */
-/*@{*/
+
 /// Random General Tree - Import of a random general tree
 /** This plugin enables to create a random general tree
  *
@@ -166,5 +166,5 @@ public:
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(RandomTreeGeneral)

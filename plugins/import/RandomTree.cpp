@@ -55,7 +55,7 @@ const char * paramHelp[] = {
 }
 
 /** \addtogroup import */
-/*@{*/
+
 /// Random Tree - Import of a random tree
 /** This plugin enables to create a random tree
  *
@@ -150,5 +150,5 @@ public:
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(RandomTree)

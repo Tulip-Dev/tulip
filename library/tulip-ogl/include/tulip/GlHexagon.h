@@ -23,11 +23,8 @@
 
 namespace tlp {
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * class to create an hexagon
+ * @ingroup OpenGL
+ * @brief class to create an hexagon
  */
 class TLP_GL_SCOPE GlHexagon : public GlRegularPolygon {
 public:
@@ -48,6 +45,6 @@ public:
   virtual ~GlHexagon();
 
 };
-/*@}*/
+
 }
 #endif

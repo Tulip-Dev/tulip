@@ -29,13 +29,11 @@
 
 namespace tlp {
 
-/**
- * \addtogroup basic
- */
 #define MATRIX tlp::Matrix<Obj,SIZE>
 
-/*@{*/
+
 /**
+ * @ingroup Structures
  * \brief class for mathematical square matrix
  *
  * Enables to create a Square Matrix of Obj with a
@@ -181,7 +179,7 @@ inline Vector<Obj,SIZE> operator*(const Vector<Obj,SIZE> &vec, const tlp::Matrix
 template<typename Obj, unsigned int SIZE>
 inline Vector<Obj,SIZE> operator*( const Matrix<Obj, SIZE> &, const Vector<Obj,SIZE> &vec);
 
-/*@}*/
+
 
 }
 

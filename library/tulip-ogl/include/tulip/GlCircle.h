@@ -28,10 +28,7 @@
 namespace tlp {
 
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * \brief General class used to render circles as GlEntity.
  *
  * This class is a generic class to render circles as GlEntity.
@@ -60,7 +57,7 @@ public:
    */
   virtual void getXML(std::string &outString);
 };
-/*@}*/
+
 }
 
 #endif

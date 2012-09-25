@@ -27,9 +27,8 @@
 
 namespace tlp {
 
-/** \addtogroup plugins */
-/*@{*/
 /**
+ * @ingroup Plugins
  * @brief Represents a single Tulip plug-in.
  */
 struct Dependency {
@@ -105,7 +104,7 @@ public:
     addDependency(tlp::demangleTlpClassName(typeid(Ty).name()).c_str(), name, release);
   }
 };
-/*@}*/
+
 
 }
 #endif

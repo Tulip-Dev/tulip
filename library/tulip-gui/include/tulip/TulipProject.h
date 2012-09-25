@@ -63,7 +63,7 @@ namespace tlp {
 
   @warning TulipProject paths ALWAYS use the "/" character as a directory separator. This is OS-independant.
 
-  @example A file called graph.tlp located at the top-level directory will be identified by the "/graph.tlp" path while the file "graph.tlp" located in the "data" directory will be identified by "/data/graph.tlp".
+  @note A file called graph.tlp located at the top-level directory will be identified by the "/graph.tlp" path while the file "graph.tlp" located in the "data" directory will be identified by "/data/graph.tlp".
   */
 class TLP_QT_SCOPE TulipProject: public QObject {
   Q_OBJECT

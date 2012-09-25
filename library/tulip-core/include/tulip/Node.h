@@ -22,13 +22,15 @@
 #include <tulip/tuliphash.h>
 #include <climits>
 
-/**
- * \addtogroup graphs
- */
 namespace tlp {
 
-/*@{*/
-/// class node
+/**
+ * @ingroup Graph
+ * @brief The node struct represents an node in a Graph object.
+ * A node is represented by its id (unsigned int). A node is considered invalid when id == UINT_MAX
+ * Any operation performed on a node (getting out edges etc), is available into the tlp::Graph object.
+ * @see tlp::edge
+ */
 struct node {
   unsigned int id;
   node():id(UINT_MAX) {}
@@ -46,7 +48,7 @@ struct node {
     return id!=UINT_MAX;
   }
 };
-/*@}*/
+
 }
 
 #ifndef DOXYGEN_NOTFOR_DEVEL

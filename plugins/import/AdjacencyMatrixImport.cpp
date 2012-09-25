@@ -42,7 +42,7 @@ const char * paramHelp[] = {
 }
 
 /** \addtogroup import */
-/*@{*/
+
 /** This plugin enables to import a graph coded with a matrix
  *
  *  File format:
@@ -237,5 +237,5 @@ public:
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(AdjacencyMatrixImport)

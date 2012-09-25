@@ -38,11 +38,8 @@ struct OcclusionTest;
 enum LabelPosition {ON_CENTER = 0, ON_TOP = 1, ON_BOTTOM = 2, ON_LEFT = 3, ON_RIGHT = 4};
 
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * Create a entity Label
+ * @ingroup OpenGL
+ * @brief Create a entity Label
  */
 class TLP_GL_SCOPE GlLabel : public GlSimpleEntity {
 public :
@@ -408,6 +405,6 @@ private :
   std::vector<float> textWidthVector;
   BoundingBox textBoundingBox;
 };
-/*@}*/
+
 }
 #endif

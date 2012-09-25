@@ -92,9 +92,6 @@ inline void printGraph(std::ostream &os, tlp::Graph *graph) {
 #endif //DOXYGEN_NOTFOR_DEVEL
 
 namespace tlp {
-/** \addtogroup export */
-/*@{*/
-/// Export plugin for TLP format.
 /**
  * This plugin records a Tulip graph structure in a file using the TLP format.
  * TLP is the Tulip Software Graph Format.
@@ -588,5 +585,5 @@ public:
   }
 };
 PLUGIN(TLPExport)
-/*@}*/
+
 }

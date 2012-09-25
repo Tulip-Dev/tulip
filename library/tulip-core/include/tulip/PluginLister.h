@@ -30,10 +30,8 @@
 namespace tlp {
 class PluginContext;
 
-/** @addtogroup plugins
- @{ **/
-
 /**
+ * @ingroup Plugins
  * @brief This abstract class provides a more complete interface for plugin factories, including plugin creation.
  *
  **/
@@ -48,6 +46,10 @@ public:
   virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0;
 };
 
+/**
+ * @ingroup Plugins
+ * @brief The PluginLister class
+ */
 class TLP_SCOPE PluginLister {
 private:
   struct PluginDescription {
@@ -191,8 +193,6 @@ protected:
    **/
   static std::string getPluginRelease(std::string name);
 };
-
-/*@}*/
 
 }
 

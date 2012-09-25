@@ -40,8 +40,10 @@ class Graph;
 typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> AbstractLayoutProperty;
 typedef MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> LayoutMinMaxProperty;
 
-/** \addtogroup properties */
-/*@{*/
+/**
+ * @ingroup Graph
+ * @brief The LayoutProperty class
+ */
 class TLP_SCOPE LayoutProperty : public LayoutMinMaxProperty {
 public:
 
@@ -317,7 +319,7 @@ public :
 
 typedef CoordVectorProperty LayoutVectorProperty;
 
-/*@}*/
+
 
 }
 #endif

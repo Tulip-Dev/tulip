@@ -22,10 +22,7 @@
 #include <tulip/tulipconf.h>
 
 namespace tlp {
-/**
- * @addtogroup iterators
- */
-/*@{*/
+
 #ifndef DOXYGEN_NOTFOR_DEVEL
 extern TLP_SCOPE void incrNumIterators();
 extern TLP_SCOPE void decrNumIterators();
@@ -84,7 +81,7 @@ private:
   Iterator<unsigned int> *it;
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
-/*@}*/
+
 #ifdef _MSC_VER
 
 #include <tulip/Edge.h>

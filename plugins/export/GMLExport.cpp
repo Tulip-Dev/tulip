@@ -51,9 +51,6 @@ void printSize(ostream &os,const Size &v) {
   printFloat(os,"d ",v.getD());
 }
 
-/** \addtogroup export */
-/*@{*/
-/// Export plugin for GML format.
 /**
  * This plugin records a Tulip graph structure using the GML File format.
  * This format is the file format used by Graphlet.
@@ -169,5 +166,5 @@ public:
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(GMLExport)

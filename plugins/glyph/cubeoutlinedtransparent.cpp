@@ -54,7 +54,7 @@ void drawBox(const Color &borderColor,float borderWidth,const std::string &textu
 
 
 /** \addtogroup glyph */
-/*@{*/
+
 /// A 3D glyph.
 /** This glyph draws a transparent cube using the "viewBorderColor" node
  * property value to draw its edges.
@@ -129,4 +129,4 @@ public:
 PLUGIN(EECubeOutlinedTransparent)
 
 
-/*@}*/
+

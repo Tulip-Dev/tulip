@@ -25,10 +25,6 @@
 #include <tulip/DoubleProperty.h>
 
 namespace tlp {
-/**
- * @addtogroup iterators
- */
-/*@{*/
 class Graph;
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -82,6 +78,6 @@ struct SortTargetEdgeIterator : public StableIterator<tlp::edge> {
   ///
   ~SortTargetEdgeIterator() {}
 };
-/*@}*/
+
 }
 #endif

@@ -24,8 +24,6 @@
 #include <tulip/TulipPluginHeaders.h>
 
 
-/** \addtogroup clustering */
-/*@{*/
 /** This plugin allow the discretization and the filtering of the distribution of
 * a node metric using convolution.
 *
@@ -58,7 +56,7 @@ private:
   int histosize,threshold,width;
   tlp::DoubleProperty *metric;
 };
-/*@}*/
+
 #endif
 
 

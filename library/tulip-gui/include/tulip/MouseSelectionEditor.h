@@ -30,9 +30,6 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
 
-/** \addtogroup Mouse_interactor */
-/*@{*/
-
 namespace tlp {
 
 /// This interactor allows to move/rotate/stretch the current selection layout
@@ -99,6 +96,6 @@ private:
 };
 
 }
-/*@}*/
+
 
 #endif

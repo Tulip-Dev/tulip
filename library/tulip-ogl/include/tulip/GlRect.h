@@ -24,10 +24,7 @@
 
 namespace tlp {
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * \brief This is a general class for the rendering of 2D rectangles.
  *
  * This class is used as a 2D HUD for the rendering of 2D rectangles.
@@ -124,6 +121,6 @@ public:
   virtual void draw(float lod,Camera *camera);
 
 };
-/*@}*/
+
 }
 #endif

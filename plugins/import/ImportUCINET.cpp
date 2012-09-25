@@ -7,7 +7,7 @@
 #include <cstring>
 #include <tulip/TulipPluginHeaders.h>
 
-/*@{*/
+
 /** \file
  *  \brief - Import UCINET DL format graph file.
  *  This plugin imports a graph from a file in UCINET DL input format,</br>

@@ -27,8 +27,7 @@ class QKeyEvent;
 namespace tlp {
 
 class Graph;
-/** \addtogroup Mouse_interactor */
-/*@{*/
+
 class TLP_QT_SCOPE MouseBoxZoomer : public GLInteractorComponent {
 private:
   Qt::MouseButton mButton;
@@ -48,7 +47,7 @@ private:
   bool started;
   Graph *graph;
 };
-/*@}*/
+
 
 }
 #endif //MOUSEZOOMBOX_H

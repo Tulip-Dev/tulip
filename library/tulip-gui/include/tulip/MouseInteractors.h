@@ -28,8 +28,6 @@
 
 namespace tlp {
 
-/** \addtogroup Mouse_interactor */
-/*@{*/
 /** An interactor class allowing to zoom and pan using the mouse wheel.
  */
 class TLP_QT_SCOPE MousePanNZoomNavigator:public InteractorComponent {
@@ -73,7 +71,7 @@ public:
     return new MouseNKeysNavigator();
   }
 };
-/*@}*/
+
 
 }
 #endif

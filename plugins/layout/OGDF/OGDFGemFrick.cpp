@@ -96,7 +96,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 
 // comments below have been extracted from OGDF/src/energybased/GEMLayout.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /// An implementations of the GEM Layout.
 /**
  * Fast force-directed layout algorithm (GEMLayout) based on Frick et al.'s algorithm
@@ -148,7 +148,7 @@ public:
   void beforeCall();
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFGemFrick)
 

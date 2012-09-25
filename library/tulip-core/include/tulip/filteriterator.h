@@ -25,12 +25,7 @@
 
 namespace tlp {
 /**
-  * \addtogroup iterator
-  */
-/*@{*/
-/**
   * @class FilterIterator
-  * @ingroup iterators
   * @brief Iterator that enables to filter an other Iterator
   * @param it the iterator that should be filtered
   * @param filter the functor that enables to test wheter or not an element is filtered
@@ -86,7 +81,6 @@ private:
 };
 /**
   * @class MPFilterIterator
-  * @ingroup iterators
   * @brief MPFilterIterator implements memory pool for FilterIterator
   * @warning never inherit from that class
   * @see FilterIterator
@@ -98,6 +92,6 @@ public:
     FilterIterator<TYPE, FILTER>(it, filter) {
   }
 };
-/*@}*/
+
 }
 #endif // FILTERITERATOR_H

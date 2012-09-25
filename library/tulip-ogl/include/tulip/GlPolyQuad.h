@@ -32,10 +32,7 @@
 namespace tlp {
 
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * \brief General class used to render a connected group of quadrilaterals (textured or not) that shares edges as GlEntity
  *
  * This generic class is used  to render a connected group of quadrilaterals (textured or not) that shares edges as GlEntity
@@ -150,7 +147,7 @@ private :
   int outlineWidth;
   Color outlineColor;
 };
-/*@}*/
+
 
 }
 #endif /* GLPOLYQUAD_H_ */

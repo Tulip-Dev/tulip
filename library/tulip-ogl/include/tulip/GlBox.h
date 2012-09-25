@@ -28,11 +28,7 @@
 
 namespace tlp {
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- *
+ * @ingroup OpenGL
  *\brief General class used to render boxes as GlEntity.
  *
  * This class is a generic class to render boxes as GlEntity.
@@ -163,6 +159,6 @@ protected:
   bool generated;
   GLuint buffers[5];
 };
-/*@}*/
+
 }
 #endif

@@ -25,10 +25,6 @@
 //===============================================================================
 namespace tlp {
 /**
-  * \addtogroup iterator
-  */
-/*@{*/
-/**
   * \brief that class implement a default functor that always return true
   *
   * @see UniqueIterator
@@ -122,6 +118,6 @@ public:
     UniqueIterator<TYPE, TOCHECKFUNCTOR>(it, checkFunctor) {
   }
 };
-/*@}*/
+
 }
 #endif // UNIQUEITERATOR_H

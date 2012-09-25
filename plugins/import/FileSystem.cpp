@@ -37,7 +37,7 @@ static const char * paramHelp[] = {
 }
 
 /** \addtogroup import */
-/*@{*/
+
 /// Import a tree representation of a file system directory.
 /** This plugin enables to capture in a tree the full hierarchy of
  *  of a given file system directory
@@ -150,5 +150,5 @@ private:
   tlp::StringProperty *_suffixes;
   tlp::DoubleProperty *_sizes;
 };
-/*@}*/
+
 PLUGIN(FileSystem)

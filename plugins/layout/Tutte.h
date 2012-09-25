@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup layout */
-/*@{*/
+
 /** This plugin is an implementation of the Tutte layout for 3-Connected graph
  *  algorithm first published as:
  *
@@ -42,5 +42,5 @@ public:
   bool run();
   bool check(std::string &);
 };
-/*@}*/
+
 #endif

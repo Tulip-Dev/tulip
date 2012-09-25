@@ -29,10 +29,7 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
-/**
-* \addtogroup iterators
-*/
-/*@{*/
+
 class Graph;
 class GraphImpl;
 struct node;
@@ -258,7 +255,7 @@ public:
   bool hasNext();
 };
 //============================================================
-/*@}*/
+
 }
 #endif // DOXYGEN_NOTFOR_DEVEL
 #endif

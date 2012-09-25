@@ -63,7 +63,7 @@ const char * paramHelp[] = {
 
 // comments below have been extracted from OGDF/src/energybased/SpringEmbedderKK.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * Implementation of Kamada-Kaway layout algorithm.
  *
@@ -152,6 +152,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFKamadaKawai)

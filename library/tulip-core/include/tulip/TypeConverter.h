@@ -31,12 +31,6 @@ namespace tlp {
 
 struct PropertyInterface;
 
-
-/**
- * \addtogroup types
- */
-/*@{*/
-
 bool stringToColor(std::string &str,Color &col);
 bool stringToSize(std::string &str,Size &siz);
 bool stringToCoord(std::string &str,Coord &coo);
@@ -51,7 +45,7 @@ std::string propertyType(PropertyInterface *propertyName);
 std::string propertyNodeDefaultValue(PropertyInterface *propertyName);
 std::string propertyEdgeDefaultValue(PropertyInterface *propertyName);
 
-/*@}*/
+
 
 }
 #endif

@@ -30,11 +30,7 @@
 
 namespace tlp {
 /**
- * \addtogroup basic
- */
-
-/*@{*/
-/**
+ * @ingroup Structures
  * \brief class for mathematical vector
  *
  * Enables to create a Vector of Obj with a
@@ -115,7 +111,7 @@ public:
 
 
 
-/*@}*/
+
 }
 
 #endif

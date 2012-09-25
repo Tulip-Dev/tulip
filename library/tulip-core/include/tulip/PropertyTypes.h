@@ -217,5 +217,5 @@ template class AbstractVectorProperty<CoordVectorType, tlp::PointType>;
 #endif
 }
 
-/*@}*/
+
 #endif

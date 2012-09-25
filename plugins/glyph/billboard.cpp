@@ -33,7 +33,7 @@ using namespace std;
 using namespace tlp;
 
 /** \addtogroup glyph */
-/*@{*/
+
 /// A 2D glyph.
 /**
  * This glyph draws a textured square using the "viewTexture"
@@ -127,4 +127,4 @@ Coord Billboard::getAnchor(const Coord & vector ) const {
     return v;
 }
 //========================================================
-/*@}*/
+

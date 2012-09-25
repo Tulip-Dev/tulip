@@ -29,9 +29,8 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup graph_test */
-/*@{*/
 /**
+ * @ingroup Checks
  * @brief @brief Performs a test of connexity on the graph, and provides a function to make a graph connected.
  * From Wikipedia: "A graph is said to be connected if every pair of vertices in the graph are connected." (i.e. there is a path between every pair of vertices).
  **/
@@ -108,5 +107,5 @@ private:
 };
 
 }
-/*@}*/
+
 #endif

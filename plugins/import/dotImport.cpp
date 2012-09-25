@@ -50,7 +50,7 @@ static const char * paramHelp[] = {
 }
 
 /** \addtogroup import */
-/*@{*/
+
 /** This plugin enables to import a graph coded with in dot format
  *
  *  File format:
@@ -108,5 +108,5 @@ public:
     return _dotyy.pStatus != TLP_CANCEL;
   }
 };
-/*@}*/
+
 PLUGIN(DotImport)

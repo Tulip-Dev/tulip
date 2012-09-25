@@ -29,8 +29,10 @@ class GraphAbstract;
 
 typedef AbstractProperty<tlp::GraphType, tlp::EdgeSetType> AbstractGraphProperty;
 
-/** \addtogroup properties */
-/*@{*/
+/**
+ * @ingroup Graph
+ * @brief The GraphProperty class
+ */
 class TLP_SCOPE GraphProperty : public AbstractGraphProperty {
   friend class GraphAbstract;
 
@@ -68,7 +70,7 @@ private:
   MutableContainer<std::set<node> > referencedGraph;
   const std::set<edge>& getReferencedEdges(const edge) const;
 };
-/*@}*/
+
 
 }
 #endif

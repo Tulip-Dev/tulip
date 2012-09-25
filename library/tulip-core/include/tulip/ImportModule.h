@@ -25,7 +25,6 @@
 #include <list>
 #include <string>
 
-/** \addtogroup plugins */
 namespace tlp {
 
 static const std::string IMPORT_CATEGORY = QObject::trUtf8("Import").toStdString();
@@ -33,11 +32,11 @@ static const std::string IMPORT_CATEGORY = QObject::trUtf8("Import").toStdString
 class PluginProgress;
 class Graph;
 class DataSet;
-/*@{*/
+
 
 /**
-* @brief Base class for import plug-ins.
-*
+ * @addtogroup Plugins
+ * @brief Base class for import plug-ins.
 **/
 class ImportModule : public tlp::Plugin {
 public:
@@ -94,6 +93,6 @@ public:
   DataSet *dataSet;
 };
 
-/*@}*/
+
 }
 #endif

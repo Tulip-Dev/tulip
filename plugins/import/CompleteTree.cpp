@@ -56,7 +56,7 @@ static const char * paramHelp[] = {
 
 
 /** \addtogroup import */
-/*@{*/
+
 /// Complete Tree - Import of a complete tree
 /** This plugin enables to create a complete tree
  *
@@ -121,5 +121,5 @@ public:
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(CompleteTree)

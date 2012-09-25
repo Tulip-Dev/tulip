@@ -34,11 +34,11 @@ template<class itType >
 struct Iterator;
 class PropertyObserver;
 
-/**
- * \defgroup properties Properties
- */
-/*@{*/
 //=============================================================
+/**
+ * @ingroup Graph
+ * @brief The PropertyInterface class
+ */
 class TLP_SCOPE PropertyInterface: public Observable {
   friend class PropertyManager;
 protected:

@@ -25,9 +25,6 @@
 #include <tulip/GlScene.h>
 #include <tulip/GlLines.h>
 
-/** \addtogroup Mouse_interactor */
-/*@{*/
-
 namespace tlp {
 
 class LayoutProperty;
@@ -135,6 +132,6 @@ private:
 };
 
 }
-/*@}*/
+
 
 #endif

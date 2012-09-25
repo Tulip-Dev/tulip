@@ -29,10 +29,8 @@ namespace tlp {
 class PropertyInterface;
 //=========================================================
 
-/** \addtogroup properties */
-/*@{*/
-/// Observer for Property
 /**
+ * @ingroup Observation
  * The Observer pattern is described in the lecture notes and pp293-304
  * of Design Patterns by Gamma, Helm, Johnson, and Vlissides. It is a
  * framework for handling state dependency between observer and observed
@@ -54,7 +52,7 @@ public:
 protected:
   void treatEvent(const Event& ev);
 };
-/*@}*/
+
 }
 
 #endif

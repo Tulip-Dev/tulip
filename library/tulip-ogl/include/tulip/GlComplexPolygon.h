@@ -53,10 +53,7 @@ void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData);
 void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData);
 
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * Class to create a complex polygon (concave polygon or polygon with hole)
  * If you want to create a complex polygon you have 4 constructors :
  * Constructors with vector of coords : to create a complex polygon without hole
@@ -300,6 +297,6 @@ protected:
   std::vector<int> quadBorderPosition;
   std::vector<float> quadBorderTexFactor;
 };
-/*@}*/
+
 }
 #endif

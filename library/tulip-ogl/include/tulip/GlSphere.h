@@ -29,10 +29,7 @@
 namespace tlp {
 
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * Class to create a sphere with GlEntity system
  */
 class TLP_GL_SCOPE GlSphere : public GlSimpleEntity {
@@ -113,7 +110,7 @@ private:
   Coord rot;
 
 };
-/*@}*/
+
 
 }
 
