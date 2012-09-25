@@ -21,10 +21,7 @@
 #include <tulip/Iterator.h>
 
 namespace tlp {
-/**
- * @addtogroup iterators
- */
-/*@{*/
+
 /**
 * @brief This Iterator iterates over the sequence formed by the concatenation of the sequences it is given.
 * @warning This class takes ownership of the Iterators it is given.
@@ -66,6 +63,6 @@ private :
   Iterator<itType> *itOne;
   Iterator<itType> *itTwo;
 };
-/*@}*/
+
 }
 #endif

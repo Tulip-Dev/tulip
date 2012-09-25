@@ -37,7 +37,7 @@ const char * paramHelp[] = {
 
 // comments below have been extracted from OGDF/src/upward/VisibilityLayout.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * Implementation of visibility layout algorithm.
  *
@@ -124,6 +124,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFVisibility)

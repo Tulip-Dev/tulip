@@ -27,8 +27,6 @@ class QKeyEvent;
 namespace tlp {
 
 class Graph;
-/** \addtogroup Mouse_interactor */
-/*@{*/
 class TLP_QT_SCOPE MouseSelector:public GLInteractorComponent {
 public:
   enum SelectionMode {
@@ -56,7 +54,7 @@ protected:
   Graph *graph;
   SelectionMode _mode;
 };
-/*@}*/
+
 
 }
 #endif

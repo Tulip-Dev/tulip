@@ -20,13 +20,16 @@
 #define Tulip_EDGE_H
 #include <climits>
 #include <tulip/tuliphash.h>
-/**
- * \addtogroup graphs
- */
+
 namespace tlp {
 
-/*@{*/
-/// class edge
+/**
+ * @ingroup Graph
+ * @brief The edge struct represents an edge in a Graph object.
+ * An edge is represented by its id (unsigned int). An edge is considered invalid when id == UINT_MAX
+ * Any operation performed on an edge (getting the source, target etc), is available into the tlp::Graph object.
+ * @see tlp::node
+ */
 struct edge {
   unsigned int id;
   edge():id(UINT_MAX) {}
@@ -44,7 +47,7 @@ struct edge {
     return id!=UINT_MAX;
   }
 };
-/*@}*/
+
 }
 
 #ifndef DOXYGEN_NOTFOR_DEVEL

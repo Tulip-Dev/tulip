@@ -24,8 +24,6 @@
 
 namespace tlp {
 
-/** \addtogroup Mouse_interactor */
-/*@{*/
 class TLP_QT_SCOPE MouseNodeBuilder:public InteractorComponent {
 
 public:
@@ -38,6 +36,6 @@ public:
 private:
   QEvent::Type _eventType;
 };
-/*@}*/
+
 }
 #endif

@@ -24,7 +24,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup layout */
-/*@{*/
+
 /// An implementation of a spring-embedder layout.
 /** This plugin is an implementation of the GEM-2d layout
  *  algorithm first published as:
@@ -167,5 +167,5 @@ private:
   unsigned int max_iter; // the max number of iterations
 
 };
-/*@}*/
+
 #endif

@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <tulip/TulipPluginHeaders.h>
 
-/*@{*/
+
 /** \file
  *  \brief - Import Pajek format graph file.
  *  This plugin imports a graph from a file (.net) in Pajek input format,</br>

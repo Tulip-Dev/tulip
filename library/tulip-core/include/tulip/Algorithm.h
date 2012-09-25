@@ -24,9 +24,6 @@
 #include <tulip/Plugin.h>
 #include <tulip/PluginContext.h>
 
-/**
- * \addtogroup plugins
- */
 namespace tlp {
 
 static const std::string ALGORITHM_CATEGORY = QObject::trUtf8("Algorithm").toStdString();
@@ -35,9 +32,10 @@ class PluginProgress;
 class Graph;
 class DataSet;
 
-/*@{*/
+
 /**
  * @brief This abstract class describes a basic algorithm plugin.
+ * @ingroup Plugins
  * It inherits on WithParameter and WithDependency for convenience.
  * Basic functionality consists in checking the algorithm can run on the current Graph (e.g. is the graph simple ?),
  * running the algorithm and resetting the algorithm to re-apply it.
@@ -102,7 +100,7 @@ public :
   DataSet *dataSet;
 };
 
-/*@}*/
+
 
 }
 #endif

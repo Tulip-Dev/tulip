@@ -30,7 +30,7 @@ typedef TLP_HASH_MAP<tlp::node, double> MapNode;
 typedef std::pair<tlp::node, double> PairNodeF;
 typedef std::vector<PairNodeF> PairVector;
 /** \addtogroup layout */
-/*@{*/
+
 /// SquarifiedTreeMap.h - An implementation of a squarified treemap layout.
 /** This plugin is an implementation of TreeMap and Squarified treemap layout.
  *
@@ -97,5 +97,5 @@ private:
   */
   void   computeNodesSize(tlp::node n);
 };
-/*@}*/
+
 #endif

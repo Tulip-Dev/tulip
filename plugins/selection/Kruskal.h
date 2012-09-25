@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup selection */
-/*@{*/
+
 
 /// This selection plugins implements the so called Kruskal algorithm. This algorithm enables to find a minimum spanning tree in a connected graph.
 /**
@@ -45,5 +45,5 @@ public:
   bool run();
   bool check(std::string &);
 };
-/*@}*/
+
 #endif

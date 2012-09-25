@@ -23,7 +23,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup layout */
-/*@{*/
+
 
 /** This plug-in implement the bubble tree drawing algorithm
  *  first published as:
@@ -66,7 +66,7 @@ private:
   tlp::SizeProperty *nodeSize;
   bool nAlgo;
 };
-/*@}*/
+
 #endif
 
 

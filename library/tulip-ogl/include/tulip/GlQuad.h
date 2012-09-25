@@ -26,10 +26,7 @@
 
 namespace tlp {
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * \brief Utility class to render a quadrilateral .
  *
  * This is an utility class class for rendering a quadrilateral.
@@ -120,6 +117,6 @@ public:
 
 
 };
-/*@}*/
+
 }
 #endif

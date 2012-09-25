@@ -25,10 +25,7 @@
 namespace tlp {
 
 /**
-   * \addtogroup basic
-   */
-/*@{*/
-/**
+ * @ingroup Structures
  * \brief class for rectangle
  *
  * Enables to both create and manipulate a 2D Axis Aligned Rectangle
@@ -214,6 +211,6 @@ typedef Rectangle<int, double> Recti;
 typedef Rectangle<unsigned int, double> Rectui;
 
 
-/*@}*/
+
 }
 #endif

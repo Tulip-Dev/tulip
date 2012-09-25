@@ -27,11 +27,7 @@ class PluginContext;
 static const std::string PROPERTY_ALGORITHM_CATEGORY = QObject::trUtf8("Property").toStdString();
 
 /**
- * \addtogroup plugins
- */
-/*@{*/
-///
-/**
+ * @ingroup Plugins
  * @brief This base class describes plug-ins who only modify one property, e.g. selection.
  **/
 class TLP_SCOPE PropertyAlgorithm: public tlp::Algorithm {
@@ -57,7 +53,7 @@ public:
       dataSet->get("result", result);
   }
 };
-/*@}*/
+
 
 }
 #endif

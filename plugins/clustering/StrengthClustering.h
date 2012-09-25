@@ -26,7 +26,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup clustering */
-/*@{*/
+
 /**
 * This plugin performs a single-linkage clustering.
 * The similarity measure used here is the Strength Metric computed on edges.
@@ -58,5 +58,5 @@ private:
 //  bool subgraphsLayout;
 //  bool quotientLayout;
 };
-/*@}*/
+
 #endif

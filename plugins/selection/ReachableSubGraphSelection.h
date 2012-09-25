@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup selection */
-/*@{*/
+
 /**
  * This selection plugin enables to find all nodes and edges at a fixed distance of a set of nodes.
  * It takes three parameters :
@@ -41,7 +41,7 @@ public:
   ~ReachableSubGraphSelection();
   bool run();
 };
-/*@}*/
+
 #endif
 
 

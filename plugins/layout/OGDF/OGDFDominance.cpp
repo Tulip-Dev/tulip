@@ -38,7 +38,7 @@ const char * paramHelp[] = {
 
 // comments below have been extracted from OGDF/src/upward/DominanceLayout.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /// An implementation of dominance layout algorithm.
 /**
  *
@@ -124,6 +124,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFDominance)

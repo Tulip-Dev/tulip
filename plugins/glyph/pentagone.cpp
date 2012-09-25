@@ -47,7 +47,7 @@ void drawPentagon(const Color &fillColor,const Color &borderColor,float borderWi
 }
 
 /** \addtogroup glyph */
-/*@{*/
+
 /// A 2D glyph
 /**
  * This glyph draws a textured pentagone using the "viewTexture"

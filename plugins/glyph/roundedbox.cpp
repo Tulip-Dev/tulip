@@ -149,7 +149,7 @@ const string roundedBoxOutlineGeometryShaderSrc =
   ;
 
 /** @addtogroup glyph */
-/*@{*/
+
 /// A 2D glyph.
 /**
  * This glyph draws a rounded box, meaning a rectangle with rounded corners.
@@ -383,4 +383,4 @@ Coord RoundedBox::getAnchor(const Coord &vector) const {
 
 PLUGIN(RoundedBox)
 
-/*@}*/
+

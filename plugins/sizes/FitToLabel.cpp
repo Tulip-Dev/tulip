@@ -49,7 +49,7 @@ static const char * paramHelp[] = { HTML_HELP_OPEN()
 }
 
 /** \addtogroup size */
-/*@{*/
+
 /// FitToLabel.cpp - Compute size of elements according to the size of the displayed label.
 /**
  *  version 1.0.0 : Tulip Team, Complete rewrite
@@ -105,5 +105,5 @@ public:
   }
   //====================================================
 };
-/*@}*/
+
 PLUGIN(FitToLabel)

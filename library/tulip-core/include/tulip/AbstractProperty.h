@@ -36,12 +36,9 @@ namespace tlp {
 class GraphView;
 
 //==============================================================
-/**
- * \defgroup properties Properties
- */
-/*@{*/
 
 /**
+ * @ingroup Graph
  * @brief This class is used to store a property of a graph.
  * It implements PropertyInterface and add new methods
  * to deal with two distinct type of values :
@@ -540,7 +537,7 @@ public:
    **/
   void resizeEdgeValue(const edge e, size_t size, typename eltType::RealType elt = eltType::defaultValue());
 };
-/*@}*/
+
 
 }
 #if !defined(_MSC_VER) || defined(DLL_TULIP) //When using VC++, we only want to include this when we are in the TULIP dll. With any other compiler, include it all the time

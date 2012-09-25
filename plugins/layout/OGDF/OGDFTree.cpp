@@ -78,7 +78,7 @@ const char * paramHelp[] = {
 
 // comments below have been extracted from OGDF/src/tree/TreeLayout.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * Linear time layout algorithm for trees (TreeLayout)
  * based on Walker's algorithm
@@ -191,6 +191,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFTree)

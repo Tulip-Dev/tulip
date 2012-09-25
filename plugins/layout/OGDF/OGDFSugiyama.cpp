@@ -114,7 +114,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 
 // comments below have been extracted from OGDF/src/layered/sugiyama.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * Implementation of Sugiyama algorithm (classes Hierarchy,
  * Level, SugiyamaLayout)
@@ -261,6 +261,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFSugiyama)

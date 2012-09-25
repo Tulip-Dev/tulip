@@ -23,7 +23,7 @@
 #include <string>
 
 namespace tlp {
-/*@{*/
+
 //=======================================
 /**
  * @class TulipException

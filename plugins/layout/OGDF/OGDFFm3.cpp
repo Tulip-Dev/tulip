@@ -239,7 +239,7 @@ const char * paramHelp[] = {HTML_HELP_OPEN()
 
 // comments below have been extracted from OGDF/src/energybased/FMMMLayout.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * This is an implementation of Fast Multipole Multilevel Method (FM^3).
  * \author Stefan Hachul
@@ -290,7 +290,7 @@ public:
   void beforeCall();
   void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes);
 };
-/*@}*/
+
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
  creation,informations, release, groupe*/

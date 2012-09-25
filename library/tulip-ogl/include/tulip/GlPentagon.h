@@ -23,11 +23,8 @@
 
 namespace tlp {
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * class to create an pentagon
+ * @ingroup OpenGL
+ * @brief class to create an pentagon
  */
 class TLP_GL_SCOPE GlPentagon : public GlRegularPolygon {
 public:
@@ -48,6 +45,6 @@ public:
   virtual ~GlPentagon();
 
 };
-/*@}*/
+
 }
 #endif

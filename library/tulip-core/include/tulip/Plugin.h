@@ -26,12 +26,7 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginContext.h>
 
-/**
- * \addtogroup plugins
- */
 namespace tlp {
-
-/*@{*/
 
 /**
  * @brief Splits the string and returns everything befor the first dot ('.').
@@ -52,6 +47,8 @@ TLP_SCOPE std::string getMajor(const std::string &release);
 TLP_SCOPE std::string getMinor(const std::string &release);
 
 /**
+ * @ingroup Plugins
+ *
  * @brief Base interface for plug-in description.
  *
  * This class is not intented to be subclassed by plug-ins themselves, but by the factories who create the plug-ins.
@@ -172,6 +169,9 @@ public:
   virtual int id() const;
 };
 
+/**
+ * @ingroup Plugins
+ */
 #define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
 std::string name() const { return NAME; } \
 std::string author() const { return AUTHOR; }\
@@ -185,6 +185,9 @@ std::string group() const { return GROUP; }
 //This include is here because the PluginLister needs to know the Plugin type, and the PLUGIN macro needs to know the PluginLister.
 #include <tulip/PluginLister.h>
 namespace tlp {
+/**
+ * @ingroup Plugins
+ */
 #define PLUGIN(C) \
 class C##Factory : public tlp::FactoryInterface { \
 public:            \
@@ -202,7 +205,7 @@ extern "C" {                                            \
 C##Factory C##FactoryInitializer;               \
 }
 
-/*@}*/
+
 }
 
 #endif //TULIP_PLUGIN_H

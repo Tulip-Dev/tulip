@@ -187,7 +187,7 @@ public slots:
   /**
     @brief Reset the visualization to the center.
     This method is called after major changes into the data structure. At this point, the user point of view should be reset and brought back to a point where all the data can be seen.
-    @example For a 3D visualization, this method could be implemented by centering the camera. For a table, this could be done by setting the scroll bar to the top position etc
+    @note For a 3D visualization, this method could be implemented by centering the camera. For a table, this could be done by setting the scroll bar to the top position etc
     @note By default, this method does nothing.
     */
   virtual void centerView();

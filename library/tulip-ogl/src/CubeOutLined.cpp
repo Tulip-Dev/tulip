@@ -23,8 +23,6 @@ using namespace std;
 
 namespace tlp {
 
-/** \addtogroup glyph */
-/*@{*/
 /// A 3D glyph.
 /** This glyph draws a textured cube using the "viewTexture" node
  * property value. If this property has no value, the cube is then colored
@@ -46,7 +44,7 @@ tlp::GlBox* tlp::CubeOutLined::box=NULL;
 
 namespace tlp {
 PLUGIN(CubeOutLined)
-/*@}*/
+
 
 //===================================================================================
 CubeOutLined::CubeOutLined(tlp::PluginContext* context): Glyph(context) {

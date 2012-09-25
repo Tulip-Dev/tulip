@@ -31,10 +31,7 @@ namespace tlp {
 class GlLabel;
 
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * \brief A base class to draw an axis with graduations
  *
  * This class allow to render an axis with graduations. This class is there for code factorisation
@@ -243,7 +240,7 @@ protected :
   float maxCaptionWidth;
   float maxGraduationLabelWidth;
 };
-/*@}*/
+
 }
 
 #endif /* GLAXIS_H_ */

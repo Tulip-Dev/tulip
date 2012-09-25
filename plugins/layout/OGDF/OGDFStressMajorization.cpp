@@ -69,7 +69,7 @@ const char * paramHelp[] = {
 
 // comments below have been extracted from OGDF/src/energybased/StressMajorizationSimple.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * Implementation of stress-majorization layout algorithm.
  *
@@ -161,6 +161,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFStressMajorization)

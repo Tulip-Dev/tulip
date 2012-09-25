@@ -23,10 +23,7 @@
 #include <tulip/Vector.h>
 namespace tlp {
 /**
- * \addtogroup basic
- */
-/*@{*/
-/**
+ * @ingroup Structures
  * \brief class for circle
  *
  * Enables to both create and manipulate a circle
@@ -121,7 +118,7 @@ tlp::Circle<Obj, OTYPE> lazyEnclosingCircle(const std::vector< tlp::Circle<Obj, 
  */
 template<typename Obj, typename OTYPE>
 std::ostream& operator<<(std::ostream &os,const tlp::Circle<Obj, OTYPE> &);
-/*@}*/
+
 
 typedef Circle<double, long double> Circled;
 typedef Circle<float,  double> Circlef;

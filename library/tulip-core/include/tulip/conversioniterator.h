@@ -23,10 +23,6 @@
 //
 namespace tlp {
 /**
-  * \addtogroup iterator
-  */
-/*@{*/
-/**
   * @class ConversionIterator
   * @ingroup Iterators
   * @brief Iterator that enables to convert an Iterator of type TYPEIN to an Iterator if type TYPEOUT
@@ -74,6 +70,6 @@ public:
     ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>(it, convFunctor) {
   }
 };
-/*@}*/
+
 }
 #endif // CONVERSIONITERATOR_H

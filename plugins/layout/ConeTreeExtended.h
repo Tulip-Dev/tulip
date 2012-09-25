@@ -22,7 +22,7 @@
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 /** \addtogroup layout */
-/*@{*/
+
 /// ConeTreeExtended.h - An implementation of the cone tree layout.
 /** This plugin is an extension of the Cone tree layout
  *  algorithm first published as:
@@ -67,7 +67,7 @@ private:
   std::vector<float> levelSize;
 
 };
-/*@}*/
+
 #endif
 
 

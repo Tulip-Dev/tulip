@@ -31,9 +31,6 @@
 #define TEMPLATEVECTOR template <typename TYPE, unsigned int SIZE, typename OTYPE>
 
 namespace tlp {
-/**
- * \addtogroup basic
- */
 
 template<typename TYPE, typename OTYPE>
 inline OTYPE tlpsqr(const TYPE a) {
@@ -50,8 +47,9 @@ inline double tlpsqrt<double, long double>(long double a) {
   return static_cast<double>(sqrtl(a));
 }
 
-/*@{*/
+
 /**
+ * @ingroup Structures
  * \brief class for mathematical vector
  *
  * Enables to create a Vector of TYPE (must be a numeric basic type) with a
@@ -492,7 +490,7 @@ typedef Vector<float,  3, double> Vec3f;
   * @brief typedef for 4D vector of float
   */
 typedef Vector<float,  4, double> Vec4f;
-/*@}*/
+
 
 #ifdef _MSC_VER
 template struct Array<float, 1>;

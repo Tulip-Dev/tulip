@@ -32,8 +32,11 @@ class Graph;
 class PropertyContext;
 
 typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> IntegerMinMaxProperty;
-/** \addtogroup properties */
-/*@{*/
+
+/**
+ * @ingroup Graph
+ * @brief The IntegerProperty class
+ */
 class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 
 public :
@@ -82,7 +85,7 @@ public :
   }
 
 };
-/*@}*/
+
 
 }
 #endif

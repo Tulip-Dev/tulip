@@ -26,12 +26,10 @@
 #include <tulip/tulipconf.h>
 
 namespace tlp {
-/**
- * @addtogroup basic
- */
-/*@{*/
+
 /**
  * @brief Fixed-size array encapsulation.
+ * @ingroup Structures
  * In debug mode, a bound check is performed at each access.
  *
  * @author : David Auber auber@tulip-software.org
@@ -52,7 +50,7 @@ std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &);
 //template <typename Obj,unsigned int SIZE>
 //QDebug operator<<(QDebug dbg,const Array<Obj,SIZE>& s);
 
-/*@}*/
+
 }
 
 #include "cxx/Array.cxx"

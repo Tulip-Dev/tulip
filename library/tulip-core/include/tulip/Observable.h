@@ -25,15 +25,11 @@
 #include <set>
 
 namespace tlp {
-/**
-  * \addtogroup observable
-  */
-/*@{*/
-
 
 class Observable;
 //=======================================
 /**
+  * @ingroup Observation
   * @brief Event is the base class for all events used in the Observation mechanism.
   *
   * An Event is characterized by its type. The base Event class only carries informations as to the type of event, nothing specific.
@@ -478,7 +474,7 @@ private:
   static bool init();
 };
 
-/*@}*/
+
 }
 
 #endif

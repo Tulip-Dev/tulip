@@ -50,6 +50,7 @@ enum ElementType {
 };
 
 /**
+ * @ingroup Graph
  * @brief Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
  * This function uses the "TLP Import" import plugin, and will fail if it is not loaded (By default this plugin is linked into the library and should be loaded).
  *
@@ -61,6 +62,7 @@ enum ElementType {
 TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* progress = NULL);
 
 /**
+ * @ingroup Graph
  * @brief Saves the corresponding root graph and all its subgraphs to a file using the tlp format. Extension of the file can be either .tlp (human-readable text file) or .tlp.gz (gzipped text file).
  *
  * This function checks the file name for the '.gz' extension and uses a compressed output if found.
@@ -74,6 +76,7 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* pr
 TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginProgress* progress = NULL);
 
 /**
+ * @ingroup Graph
  * @brief Exports a graph using the specified export plugin with parameters stored in the DataSet.
  *
  * You determine the destination, whether by using a fstream, or by saving the contents of the stream to the destination of your choice.
@@ -88,6 +91,7 @@ TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginP
 TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL);
 
 /**
+ * @ingroup Graph
  * @brief Imports a graph using the specified import plugin with the parameters stored in the DataSet.
  *
  * If no graph is passed, then a new graph will be created. You can pass a graph in order to import data into it.
@@ -102,6 +106,7 @@ TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::
 TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL,Graph *newGraph=NULL);
 
 /**
+ * @ingroup Graph
  * @brief Creates a new, empty graph.
  *
  * This is a simple method factory to create a Graph implementation (remember, Graph is only an interface).
@@ -113,6 +118,7 @@ TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, Plugin
 TLP_SCOPE Graph* newGraph();
 
 /**
+ * @ingroup Graph
  * @brief Creates and returns an empty subgraph of the given graph.
  *
  * @deprecated this function should not be used anymore, please use Graph::addSubGraph() instead.
@@ -124,6 +130,7 @@ TLP_SCOPE Graph* newGraph();
 TLP_SCOPE _DEPRECATED Graph* newSubGraph(Graph *graph, std::string name = "unnamed");
 
 /**
+ * @ingroup Graph
  * @brief Creates and returns a subgraph of the graph that is equal to root (a clone subgraph).
  *
  * @deprecated this function should not be used anymore, please use Graph::addCloneSubGraph() instead.
@@ -135,6 +142,7 @@ TLP_SCOPE _DEPRECATED Graph* newSubGraph(Graph *graph, std::string name = "unnam
 TLP_SCOPE _DEPRECATED Graph* newCloneSubGraph(Graph *graph, std::string name = "unnamed");
 
 /**
+ * @ingroup Graph
  * Appends the selected part of the graph inG (properties, nodes and edges) into the graph outG.
  * If no selection is done (inSel=NULL), the whole inG graph is appended.
  * The output selection is used to select the appended nodes & edges
@@ -143,6 +151,7 @@ TLP_SCOPE _DEPRECATED Graph* newCloneSubGraph(Graph *graph, std::string name = "
 TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=NULL, BooleanProperty* outSelection=NULL );
 
 /**
+ * @ingroup Graph
  * Removes the selected part of the graph ioG (properties values, nodes and edges).
  * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
  * \warning The selection is extended to all selected edge ends.
@@ -150,11 +159,7 @@ TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSel
 TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=NULL);
 
 /**
- * \defgroup graphs Graphs
- */
-/*@{*/
-/// Interface for a graph
-/**
+ * @ingroup Graph
  * The class Graph is the interface of a Graph in the Tulip Library.
  */
 class TLP_SCOPE Graph : public Observable {
@@ -877,7 +882,10 @@ protected:
   TLP_HASH_MAP<std::string, tlp::PropertyInterface*> circularCalls;
 };
 
-/// Event class for specific events on Graph
+/**
+ * @ingroup Observation
+ * Event class for specific events on Graph
+ **/
 class TLP_SCOPE GraphEvent :public Event {
 public:
   // be careful about the ordering of the constants
@@ -1012,7 +1020,7 @@ protected:
 
 ///Print the graph (only nodes and edges) in ostream, in the tulip format
 TLP_SCOPE std::ostream& operator<< (std::ostream &,const tlp::Graph *);
-/*@}*/
+
 //================================================================================
 // Specilization of some template class
 //================================================================================

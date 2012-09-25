@@ -28,10 +28,8 @@ class Graph;
 struct edge;
 struct node;
 
-/** \addtogroup graph_test */
-/*@{*/
-
 /**
+ * @ingroup Checks
  * @brief Provides functions to test if a graph is Outer Planar.
  *
  * From Wikipedia: "An OuterPlanar Graph is a graph that can be drawn in the plane without crossings in such a way that all of the vertices belong to the unbounded face of the drawing.
@@ -70,7 +68,7 @@ private:
    **/
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };
-/*@}*/
+
 }
 
 #endif

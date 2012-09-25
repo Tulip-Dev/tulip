@@ -31,8 +31,10 @@ class PropertyContext;
 
 typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> DoubleMinMaxProperty;
 
-/** \addtogroup properties */
-/*\@{*/
+/**
+ * @ingroup Graph
+ * @brief The DoubleProperty class
+ */
 class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
 public :
   DoubleProperty (Graph *, std::string n="");
@@ -82,7 +84,7 @@ public :
   }
 
 };
-/*@}*/
+
 
 }
 #endif

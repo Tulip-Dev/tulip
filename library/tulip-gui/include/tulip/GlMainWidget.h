@@ -35,8 +35,6 @@ namespace tlp {
 
 class GlCompositeHierarchyManager;
 
-/** \addtogroup Tulip_Widgets */
-/*@{*/
 /** \brief Widget of visualisation
  *
  * This widget provide a simple system to display visualisation
@@ -351,5 +349,5 @@ private :
 
 }
 
-/*@}*/
+
 #endif

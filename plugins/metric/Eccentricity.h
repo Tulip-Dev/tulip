@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugin compute the eccentricity/closeness centrality of each node
  *
  * Eccentricity is the maximum distance to go from a node to all others.
@@ -60,5 +60,5 @@ private:
   bool directed;
 
 };
-/*@}*/
+
 #endif

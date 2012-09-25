@@ -27,8 +27,7 @@ class QKeyEvent;
 namespace tlp {
 
 class Graph;
-/** \addtogroup Mouse_interactor */
-/*@{*/
+
 class TLP_QT_SCOPE MouseEdgeSelector:public InteractorComponent {
 private:
   unsigned int x,y;
@@ -44,7 +43,7 @@ public:
     return new MouseEdgeSelector();
   }
 };
-/*@}*/
+
 
 }
 #endif

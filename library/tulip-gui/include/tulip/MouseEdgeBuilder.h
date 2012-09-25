@@ -29,8 +29,6 @@ namespace tlp {
 class Graph;
 class LayoutProperty;
 
-/** \addtogroup Mouse_interactor */
-/*@{*/
 class TLP_QT_SCOPE MouseEdgeBuilder:public GLInteractorComponent, private Observable {
 private:
   node source;
@@ -53,7 +51,7 @@ public:
     return new MouseEdgeBuilder();
   }
 };
-/*@}*/
+
 
 }
 #endif

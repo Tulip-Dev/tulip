@@ -28,8 +28,11 @@ namespace tlp {
 class PropertyContext;
 
 typedef AbstractProperty<tlp::StringType, tlp::StringType, tlp::StringAlgorithm> AbstractStringProperty;
-/** \addtogroup properties */
-/*\@{*/
+
+/**
+ * @ingroup Graph
+ * @brief The StringProperty class
+ */
 class TLP_SCOPE StringProperty:public AbstractStringProperty {
 public :
   StringProperty (Graph *g, std::string n="") :AbstractStringProperty(g, n) {}

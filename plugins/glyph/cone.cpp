@@ -46,7 +46,7 @@ void drawCone() {
 }
 
 /** \addtogroup glyph */
-/*@{*/
+
 /// A 3D glyph.
 /**
  * This glyph draws a textured cone using the "viewTexture" node

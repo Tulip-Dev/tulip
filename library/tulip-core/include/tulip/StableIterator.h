@@ -25,10 +25,6 @@
 
 namespace tlp {
 /**
- * @addtogroup iterators
- */
-/*@{*/
-/**
   * @class StableIterator
   * @brief Stores the elements of an iterator and iterates on a copy.
   *
@@ -110,6 +106,6 @@ protected :
   **/
   typename std::vector<itType>::const_iterator copyIterator;
 };
-/*@}*/
+
 }
 #endif

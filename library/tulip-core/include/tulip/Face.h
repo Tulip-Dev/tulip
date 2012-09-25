@@ -24,13 +24,8 @@
 
 #include <climits>
 
-/**
- * \addtogroup graphs
- */
 namespace tlp {
 
-/*@{*/
-/// class face
 struct Face {
   unsigned int id;
   Face():id(UINT_MAX) {}
@@ -45,7 +40,7 @@ struct Face {
     return id!=UINT_MAX;
   }
 };
-/*@}*/
+
 }
 
 #ifndef DOXYGEN_NOTFOR_DEVEL

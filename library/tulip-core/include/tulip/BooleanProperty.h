@@ -26,8 +26,11 @@
 namespace tlp {
 
 class PropertyContext;
-/** \addtogroup properties */
-/*@{*/
+
+/**
+ * @ingroup Graph
+ * @brief The BooleanProperty class
+ */
 class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::BooleanType, tlp::BooleanAlgorithm> {
 public :
   BooleanProperty (Graph *g, std::string n="") :AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(g, n) {}
@@ -75,5 +78,5 @@ public :
 };
 
 }
-/*@}*/
+
 #endif

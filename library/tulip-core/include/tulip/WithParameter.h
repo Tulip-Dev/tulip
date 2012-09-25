@@ -31,13 +31,9 @@ class DataSet;
 template<class itType >
 struct Iterator;
 
-/** \addtogroup plugins */
-/*@{*/
-/*
- * @brief indicates the direction type of a parameter
- **/
 enum ParameterDirection { IN_PARAM=0, OUT_PARAM = 1, INOUT_PARAM = 2 };
 /**
+ * @ingroup Plugins
  * @brief Describes a parameter with a type, default value, whether or not is it mandatory and a help string describing what this parameter should be used for.
  **/
 class TLP_SCOPE ParameterDescription {
@@ -80,6 +76,7 @@ public:
 };
 
 /**
+  * @ingroup Plugins
   * @brief This class describes parameters taken by a plugin.
   *
   * It is used by WithParameter to store parameters.
@@ -212,6 +209,7 @@ addParameter<int>("colormodel",paramHelp[1]);
 */
 
 /**
+ * @ingroup Plugins
  * @brief This class describes parameters on a plug-in.
  *
  * These parameters can be of any type, and are used to generate a GUI that will be shown when the plug-in in invoked by the user.
@@ -300,7 +298,7 @@ protected:
    **/
   ParameterDescriptionList parameters;
 };
-/*@}*/
+
 
 }
 #endif

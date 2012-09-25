@@ -30,10 +30,8 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup graph_test */
-/*@{*/
-
 /**
+ * @ingroup Checks
  * @brief performs tests to check zhether a graph is planar.
  * From wikipedia: "A planar graph is a graph that can be embedded in the plane, i.e., it can be drawn on the plane in such a way that its edges intersect only at their endpoints."
  **/
@@ -99,7 +97,7 @@ private:
    **/
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };
-/*@}*/
+
 
 }
 #endif

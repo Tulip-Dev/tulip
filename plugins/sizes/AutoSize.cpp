@@ -22,7 +22,7 @@
 using namespace tlp;
 
 /** \addtogroup size */
-/*@{*/
+
 /// AutoSize.cpp - Compute size in order to prevent node-node overlapping
 /**
  * This plug-ins compute size of nodes and edges such that, node-node overlapping do not exists (if it is possible).
@@ -100,5 +100,5 @@ private:
   }
 
 };
-/*@}*/
+
 PLUGIN(AutoSize)

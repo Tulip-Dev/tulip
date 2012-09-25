@@ -26,10 +26,8 @@
 namespace tlp {
 class Graph;
 
-/** \addtogroup graph_test */
-/*@{*/
-
 /**
+ * @ingroup Checks
  * @brief Performs a test of biconnexity on the graph, and provides a function to make a graph biconnected.
  * From Wikipedia: "A biconnected graph is connected and nonseparable, meaning that if any vertex were to be removed, the graph will remain connected."
  **/
@@ -92,5 +90,5 @@ private:
   TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
 };
 }
-/*@}*/
+
 #endif

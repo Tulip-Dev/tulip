@@ -49,7 +49,7 @@ void drawBox(const Color &fillColor,const std::string &textureName, float lod, G
 }
 
 /** \addtogroup glyph */
-/*@{*/
+
 /// A 3D glyph.
 /** This glyph draws a textured cube using the "viewTexture" node
  * property value. If this property has no value, the cube is then colored

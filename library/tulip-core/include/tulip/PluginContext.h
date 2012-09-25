@@ -28,14 +28,10 @@ class Graph;
 class PropertyInterface;
 class PluginProgress;
 
-/**
- * \defgroup plugins Plugins
- */
-/*@{*/
-
 class PluginContext {
 public:
   /**
+   * @ingroup Plugins
    * @brief required for dynamic casting
    *
    **/
@@ -54,7 +50,7 @@ public :
   ///
   ~AlgorithmContext() {}
 };
-/*@}*/
+
 
 }
 #endif

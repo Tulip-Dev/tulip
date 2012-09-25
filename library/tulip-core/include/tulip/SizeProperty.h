@@ -31,9 +31,9 @@ class PropertyContext;
 typedef AbstractProperty<tlp::SizeType, tlp::SizeType, tlp::SizeAlgorithm> AbstractSizeProperty;
 
 /**
- * \addtogroup properties
+ * @ingroup Graph
+ * @brief The SizeProperty class
  */
-/*@{*/
 class TLP_SCOPE SizeProperty:public AbstractSizeProperty {
 
 public :
@@ -82,7 +82,7 @@ public :
   }
 
 };
-/*@}*/
+
 
 }
 #endif

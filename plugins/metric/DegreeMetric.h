@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugin compute the degree of each node
  *
  *  \note This plug-in exists to obtain a uniform interface in the
@@ -37,5 +37,5 @@ public:
   DegreeMetric(const tlp::PluginContext* context);
   bool run();
 };
-/*@}*/
+
 #endif

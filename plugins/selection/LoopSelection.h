@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup selection */
-/*@{*/
+
 
 /**
  * This selection plugins enables to find loops in a graph
@@ -37,7 +37,7 @@ public:
   LoopSelection(const tlp::PluginContext* context);
   bool run();
 };
-/*@}*/
+
 #endif
 
 

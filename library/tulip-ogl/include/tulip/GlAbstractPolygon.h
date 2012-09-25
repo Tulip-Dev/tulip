@@ -30,12 +30,10 @@
 #include <tulip/GlTools.h>
 
 namespace tlp {
+
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * class to create a abstract polygon
+ * @ingroup OpenGL
+ * @brief class to create a abstract polygon
  */
 class TLP_GL_SCOPE GlAbstractPolygon : public GlSimpleEntity {
 public:
@@ -227,6 +225,6 @@ protected:
   bool generated;
   GLuint buffers[7];
 };
-/*@}*/
+
 }
 #endif

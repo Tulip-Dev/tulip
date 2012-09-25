@@ -53,7 +53,7 @@ void drawGlyph(const Color& glyphColor, const string& texture,
 
 
 /** \addtogroup glyph */
-/*@{*/
+
 /// A 2D glyph.
 /**
  * This glyph draws a textured square using the "viewTexture" node

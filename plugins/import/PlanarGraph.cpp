@@ -47,7 +47,7 @@ struct Triangle {
 }
 //=============================================================
 /** \addtogroup import */
-/*@{*/
+
 /// Planar Graph - Import of planer graph
 /** This plugin enables to create a planar graph
  *
@@ -117,5 +117,5 @@ public:
     return  pluginProgress->state()!=TLP_CANCEL;
   }
 };
-/*@}*/
+
 PLUGIN(PlanarGraph)

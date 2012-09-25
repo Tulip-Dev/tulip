@@ -22,12 +22,10 @@
 #include <tulip/GlRegularPolygon.h>
 
 namespace tlp {
+
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * class to create a triangle
+ * @ingroup OpenGL
+ * @brief class to create a triangle
  */
 class TLP_GL_SCOPE GlTriangle : public GlRegularPolygon {
 public:
@@ -48,6 +46,6 @@ public:
   virtual ~GlTriangle();
 
 };
-/*@}*/
+
 }
 #endif
