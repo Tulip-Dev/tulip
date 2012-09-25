@@ -32,7 +32,6 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 
 // comments below have been extracted from OGDF/src/misclayout/BallonLayout.cpp
 /** \addtogroup layout */
-/
 /// Layout for trees that can also be applied to general graphs.
 /**
  *
