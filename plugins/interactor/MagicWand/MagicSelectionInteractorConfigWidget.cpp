@@ -100,7 +100,7 @@ void MagicSelectionInteractorConfigWidget::setGraph(tlp::Graph* graph) {
   updateAvailableProperties();
 }
 
-void MagicSelectionInteractorConfigWidget::treatEvents(const vector &) {
+void MagicSelectionInteractorConfigWidget::treatEvents(const vector<Event> &) {
   updateAvailableProperties();
 }
 
