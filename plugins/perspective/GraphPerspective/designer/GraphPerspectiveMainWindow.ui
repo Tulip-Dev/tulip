@@ -610,7 +610,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="minimumSize">
                   <size>
                    <width>120</width>
-                   <height>0</height>
+                   <height>20</height>
                   </size>
                  </property>
                  <property name="toolTip">
@@ -625,11 +625,11 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="autoExclusive">
                   <bool>false</bool>
                  </property>
-                 <property name="number" stdset="0">
-                  <number>1</number>
-                 </property>
                  <property name="title" stdset="0">
                   <string>Expose</string>
+                 </property>
+                 <property name="number" stdset="0">
+                  <number>1</number>
                  </property>
                 </widget>
                </item>
@@ -638,7 +638,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="minimumSize">
                   <size>
                    <width>120</width>
-                   <height>0</height>
+                   <height>20</height>
                   </size>
                  </property>
                  <property name="shortcut">
@@ -650,11 +650,11 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="autoExclusive">
                   <bool>false</bool>
                  </property>
+                 <property name="number" stdset="0">
+                  <number>2</number>
+                 </property>
                  <property name="title" stdset="0">
                   <string>Search</string>
-                 </property>
-                 <property name="number" stdset="0">
-                  <string>2</string>
                  </property>
                 </widget>
                </item>
@@ -893,7 +893,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1071</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1305,15 +1305,15 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </slots>
   </customwidget>
   <customwidget>
-   <class>OutputPanelButton</class>
-   <extends>QToolButton</extends>
-   <header>OutputPanelButton.h</header>
-  </customwidget>
-  <customwidget>
    <class>SearchWidget</class>
    <extends>QWidget</extends>
    <header>SearchWidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>OutputPanelButton</class>
+   <extends>QPushButton</extends>
+   <header>OutputPanelButton.h</header>
   </customwidget>
  </customwidgets>
  <resources>
@@ -1494,22 +1494,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <hint type="destinationlabel">
      <x>974</x>
      <y>354</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>exposeModeButton</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>workspace</receiver>
-   <slot>expose(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>553</x>
-     <y>696</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>779</x>
-     <y>353</y>
     </hint>
    </hints>
   </connection>

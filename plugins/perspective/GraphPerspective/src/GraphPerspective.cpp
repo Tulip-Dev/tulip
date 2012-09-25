@@ -721,6 +721,12 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
   _ui->actionExport->setEnabled(enabled);
+
+  if (graph == NULL) {
+    _ui->searchButton->setChecked(false);
+    setSearchOutput(false);
+  }
+  _ui->searchButton->setEnabled(enabled);
 }
 
 void GraphPerspective::CSVImport() {
@@ -757,9 +763,10 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
   }
 }
 
-void GraphPerspective::setSearchOutput(bool) {
-  _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
-  _ui->outputFrame->setVisible(_ui->searchButton->isChecked());
+void GraphPerspective::setSearchOutput(bool f) {
+  if (f)
+    _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
+  _ui->outputFrame->setVisible(f);
 }
 
 void GraphPerspective::openPreferences() {

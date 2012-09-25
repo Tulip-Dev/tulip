@@ -301,6 +301,7 @@ void WorkspacePanel::refreshInteractorsToolbar() {
     foreach(Interactor* i, compatibleInteractors) {
       QPushButton* button = new QPushButton();
       button->setMinimumSize(22,22);
+      button->setFlat(true);
       button->setMaximumSize(22,22);
       button->setIcon(i->action()->icon());
       button->setToolTip(i->action()->text());

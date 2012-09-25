@@ -90,10 +90,6 @@ void HeaderFrame::expand(bool e) {
 void HeaderFrame::setExpanded(bool e) {
   _expanded = e;
 
-  foreach(QWidget* w, findChildren<QWidget*>())
-
-  if (w != _ui->expandButton) w->setEnabled(e);
-
   QWidget *pw = parentWidget();
 
   if (!pw)
@@ -129,7 +125,11 @@ bool HeaderFrame::isExpanded() const {
 }
 
 QWidget *HeaderFrame::expandControl() const {
-  return _ui->expandButton;
+    return _ui->expandButton;
+}
+
+QWidget *HeaderFrame::mainFrame() const {
+    return _ui->mainFrame;
 }
 
 void HeaderFrame::insertWidget(QWidget* w) {

@@ -60,13 +60,13 @@ border-width: 4;
 padding: 0px 6px;
 font-size: 12px;
 }
-QPushButton {
+QPushButton:flat {
 border-image: none;
 background-color: white;
 border: 1px solid &quot;#E9E9E9&quot;;
 color: black;
 outline: none;
-margin: 2
+/*margin: 2*/
 }
 QPushButton:hover {
 border-image: none;

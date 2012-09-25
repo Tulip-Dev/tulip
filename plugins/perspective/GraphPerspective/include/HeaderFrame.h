@@ -54,6 +54,7 @@ public:
   bool isExpanded() const;
 
   QWidget *expandControl() const;
+  QWidget* mainFrame() const;
 
 public slots:
   void setTitle(const QString &title);
