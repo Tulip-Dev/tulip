@@ -29,6 +29,7 @@
 #include <QtGui/QTabWidget>
 #include <QtGui/QGraphicsSceneContextMenuEvent>
 #include <QtGui/QScrollBar>
+#include <QtGui/QHBoxLayout>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ProcessingAnimationItem.h>
