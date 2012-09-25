@@ -69,30 +69,33 @@ void loadTextureFromQImage(QImage &image,GlTexture &glTexture) {
   unsigned int height=image.height();
 
   bool isSprite=false;
-  if(width!=height){
+
+  if(width!=height) {
     bool widthPowerOfTwo=false;
     bool heightPowerOfTwo=false;
 
-    for(unsigned int i=1;i<=width;i*=2){
+    for(unsigned int i=1; i<=width; i*=2) {
       if(i==width)
         widthPowerOfTwo=true;
     }
 
-    for(unsigned int i=1;i<=height;i*=2){
+    for(unsigned int i=1; i<=height; i*=2) {
       if(i==height)
         heightPowerOfTwo=true;
     }
 
-    if(widthPowerOfTwo && heightPowerOfTwo){
+    if(widthPowerOfTwo && heightPowerOfTwo) {
       isSprite=true;
     }
   }
 
   int spriteNumber=1;
-  if(isSprite){
-    if(width>height){
+
+  if(isSprite) {
+    if(width>height) {
       spriteNumber=width/height;
-    }else{
+    }
+    else {
       spriteNumber=height/width;
     }
   }
@@ -108,7 +111,7 @@ void loadTextureFromQImage(QImage &image,GlTexture &glTexture) {
 
   glGenTextures(spriteNumber, textureNum);  //FIXME: handle case where no memory is available to load texture
 
-  if(!isSprite){
+  if(!isSprite) {
     glBindTexture(GL_TEXTURE_2D, textureNum[0]);
 
     glTexture.id[0]=textureNum[0];
@@ -118,17 +121,22 @@ void loadTextureFromQImage(QImage &image,GlTexture &glTexture) {
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  }else{
+  }
+  else {
     QImage *images=new QImage[spriteNumber];
-    if(width>height){
+
+    if(width>height) {
       QRect rect(0,0,height,height);
-      for(int i=0;i<spriteNumber;i++){
+
+      for(int i=0; i<spriteNumber; i++) {
         images[i]=image.copy(rect);
         rect.translate(height,0);
       }
-    }else{
+    }
+    else {
       QRect rect(0,0,width,width);
-      for(int i=0;i<spriteNumber;i++){
+
+      for(int i=0; i<spriteNumber; i++) {
         images[i]=image.copy(rect);
         rect.translate(0,width);
       }
@@ -137,7 +145,7 @@ void loadTextureFromQImage(QImage &image,GlTexture &glTexture) {
     width=images[0].width();
     height=images[0].height();
 
-    for(int i=0;i<spriteNumber;i++){
+    for(int i=0; i<spriteNumber; i++) {
       glBindTexture(GL_TEXTURE_2D, textureNum[i]);
 
       glTexture.id[i]=textureNum[i];
@@ -148,6 +156,7 @@ void loadTextureFromQImage(QImage &image,GlTexture &glTexture) {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
+
     delete[] images;
   }
 }
