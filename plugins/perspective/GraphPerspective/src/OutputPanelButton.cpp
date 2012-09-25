@@ -21,7 +21,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QApplication>
 
-OutputPanelButton::OutputPanelButton(QWidget *parent): QToolButton(parent), _number(0) {
+OutputPanelButton::OutputPanelButton(QWidget *parent): QPushButton(parent), _number(0) {
 }
 
 QSize OutputPanelButton::sizeHint() const {
@@ -36,10 +36,13 @@ QSize OutputPanelButton::sizeHint() const {
   return s.expandedTo(QApplication::globalStrut());
 }
 
+#include <iostream>
+
 void OutputPanelButton::paintEvent(QPaintEvent* event) {
-  QToolButton::paintEvent(event);
+  QPushButton::paintEvent(event);
+
   const QFontMetrics fm = fontMetrics();
-  const int baseLine = (height() - fm.height() + 1) / 2 + fm.ascent();
+  int baseLine = (height() - fm.height() + 1) / 2 + fm.ascent();
   const int numberWidth = fm.width(QString::number(_number));
 
   QPainter p(this);
@@ -50,6 +53,10 @@ void OutputPanelButton::paintEvent(QPaintEvent* event) {
   if (!isChecked())
     p.setPen(Qt::black);
 
+#ifdef __APPLE__ // On MacOS: force the baseLine to 2 to get the text drawn in the button
+  baseLine = 2;
+#endif
   int leftPart = 22;
+
   p.drawText(leftPart, baseLine, width()-leftPart, height()-baseLine*2, Qt::AlignCenter | Qt::AlignVCenter, fm.elidedText(_title, Qt::ElideMiddle, width() - leftPart - 1));
 }

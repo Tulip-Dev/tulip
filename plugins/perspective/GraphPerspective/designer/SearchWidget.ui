@@ -17,8 +17,8 @@
    </sizepolicy>
   </property>
   <property name="styleSheet">
-   <string notr="true">#SearchWidget {
-background-color: #A9A9A9;
+   <string notr="true">.QWidget, QScrollArea, .QFrame {
+background-color: white;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">

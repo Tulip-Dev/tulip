@@ -20,9 +20,9 @@
 #ifndef OUTPUTPANELBUTTON_H
 #define OUTPUTPANELBUTTON_H
 
-#include <QtGui/QToolButton>
+#include <QtGui/QPushButton>
 
-class OutputPanelButton : public QToolButton {
+class OutputPanelButton : public QPushButton {
   Q_OBJECT
 
   Q_PROPERTY(int number READ number WRITE setNumber)
