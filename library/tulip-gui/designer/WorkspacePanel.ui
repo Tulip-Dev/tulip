@@ -200,6 +200,12 @@ background-color: #A9A9A9;
         </item>
         <item>
          <widget class="QScrollArea" name="scrollArea">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -217,7 +223,7 @@ background-color: #A9A9A9;
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>345</width>
+             <width>69</width>
              <height>23</height>
             </rect>
            </property>
