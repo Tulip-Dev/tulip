@@ -43,6 +43,7 @@ public:
   void setGraph(tlp::Graph* graph);
 
   virtual void observableDestroyed(tlp::Observable* ) {}
+  virtual void treatEvents(const std::vector &);
   virtual void update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator);
 
   QString propertyName() const;
