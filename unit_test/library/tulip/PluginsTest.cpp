@@ -36,6 +36,14 @@ using namespace tlp;
 
 CPPUNIT_TEST_SUITE_REGISTRATION( PluginsTest );
 
+#if defined(_WIN32)
+  const std::string suffix = "dll";
+#elif defined(__APPLE__)
+  const std::string suffix = "dylib";
+#else
+  const std::string suffix = "so";
+#endif
+
 //==========================================================
 void PluginsTest::setUp() {
   graph = tlp::newGraph();
@@ -49,7 +57,7 @@ void PluginsTest::testloadPlugin() {
   // plugin does not exist yet
   CPPUNIT_ASSERT(!tlp::PluginLister::pluginExists("Test"));
   PluginLoaderTxt loader;
-  PluginLibraryLoader::loadPluginLibrary("./testPlugin.so", &loader);
+  PluginLibraryLoader::loadPluginLibrary("./testPlugin."+suffix, &loader);
   // plugin should exist now
   CPPUNIT_ASSERT(tlp::PluginLister::pluginExists("Test"));
   list<Dependency> deps = tlp::PluginLister::instance()->getPluginDependencies("Test");
@@ -69,7 +77,7 @@ void PluginsTest::testCircularPlugin() {
 }
 //==========================================================
 void PluginsTest::testAncestorGraph() {
-  PluginLibraryLoader::loadPluginLibrary("./testPlugin2.so");
+  PluginLibraryLoader::loadPluginLibrary("./testPlugin2."+suffix);
   string simpleAlgorithm = "Test2";
   string invalidAlgorithm = "Test3";
   string err;
