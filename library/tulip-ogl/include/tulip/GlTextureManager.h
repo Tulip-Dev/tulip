@@ -40,13 +40,6 @@ struct GlTexture {
   unsigned int spriteNumber;
 };
 
-struct TextureInfo {
-  bool hasAlpha;
-  unsigned int  width;
-  unsigned int  height;
-  unsigned char *data;
-};
-
 /** \brief Class to manage textures
  * Singleton class to load/store textures need by OpenGL rendering
  */
@@ -98,11 +91,6 @@ public:
    * Check if a texture fo the given name exists in the current context
    */
   bool existsTexture(const std::string& filename);
-
-  /**
-   * Load texture with textureName from Raw data
-   */
-  bool loadTextureFromRawData(const std::string &textureName, int width, int height, bool hasAlpha, unsigned char *data);
   /**
    * Load texture with given name
    */
@@ -164,8 +152,6 @@ private:
    * empty private constructor for singleton
    */
   GlTextureManager();
-
-  bool loadTexture(const std::string&,const TextureInfo &,GlTexture &);
 
   static GlTextureManager* inst;
 
