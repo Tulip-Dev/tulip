@@ -21,16 +21,27 @@
 
 #include <tulip/tulipconf.h>
 
-#include "ui_SnapshotDialog.h"
+#include <QtGui/QDialog>
+
+
+
+namespace Ui{
+class SnapshotDialogData;
+}
+
+class QGraphicsScene;
+class QGraphicsPixmapItem;
 
 namespace tlp {
 
 class LockLabel;
 class GlMainView;
 
-class TLP_QT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData {
+class TLP_QT_SCOPE SnapshotDialog : public QDialog{
 
   Q_OBJECT
+
+
 
 public :
 
@@ -56,6 +67,7 @@ protected :
 
   void sizeSpinBoxValueChanged();
 
+  Ui::SnapshotDialogData *ui;
   GlMainView *view;
 
   QGraphicsScene *scene;
