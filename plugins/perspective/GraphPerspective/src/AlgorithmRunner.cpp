@@ -23,7 +23,7 @@
 
 #include <QtGui/QDropEvent>
 #include <QtGui/QPainter>
-#include <QtGui/QPushButton>
+#include <QtGui/QToolButton>
 
 #include <tulip/TulipMimes.h>
 #include <tulip/PluginModel.h>
@@ -48,7 +48,7 @@ protected:
 
 using namespace tlp;
 
-void buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelIndex& parent, QPushButton* localModeButton, bool root = false) {
+void buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelIndex& parent, QToolButton* localModeButton, bool root = false) {
   for (int i=0; i<model->rowCount(parent); ++i) {
     QModelIndex index = model->index(i,0,parent);
     QString name = model->data(index).toString();
@@ -83,15 +83,14 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   _ui->favoritesBox->widget()->installEventFilter(this);
 
   _ui->contents->setEnabled(false);
-  QPushButton* localModeButton = new QPushButton(_ui->header);
+  QToolButton* localModeButton = new QToolButton(_ui->header);
   localModeButton->setMaximumSize(25,25);
   localModeButton->setMinimumSize(25,25);
   localModeButton->setCheckable(true);
   localModeButton->setChecked(true);
   localModeButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
-  localModeButton->setIconSize(QSize(24,24));
+  localModeButton->setIconSize(QSize(22,22));
   localModeButton->setToolTip(trUtf8("Always store result in local property"));
-  localModeButton->setFlat(true);
   _ui->header->mainFrame()->layout()->addWidget(localModeButton);
 
   PluginModel<tlp::Algorithm> model;
