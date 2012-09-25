@@ -42,6 +42,9 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   tlp::QuickAccessBar* _quickAccessBar;
   QGraphicsProxyWidget* _quickAccessBarItem;
 
+  QAction *_centerViewAction;
+  QAction *_forceRedrawAction;
+
 public:
   GlMainView();
   virtual ~GlMainView();
@@ -52,6 +55,7 @@ public:
 
 public slots:
   virtual void draw(tlp::PluginProgress* pluginProgress);
+  void redraw();
   virtual void refresh(PluginProgress *pluginProgress);
   virtual void drawOverview(bool generatePixmap=true);
   virtual void centerView();
