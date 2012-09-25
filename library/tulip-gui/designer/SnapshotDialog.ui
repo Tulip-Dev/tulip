@@ -335,7 +335,7 @@ p, li { white-space: pre-wrap; }
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>Save as ...</string>
+          <string>Save as...</string>
          </property>
          <property name="default">
           <bool>true</bool>
