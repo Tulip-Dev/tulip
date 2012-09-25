@@ -344,10 +344,12 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     menu->addSeparator();
     isNode = entity.getEntityType() == SelectedEntity::NODE_SELECTED;
     itemId = entity.getComplexEntityId();
+
     if (isNode)
       menu->addAction(trUtf8("Node #") + QString::number(itemId))->setFont(f);
     else
       menu->addAction(trUtf8("Edge #") + QString::number(itemId))->setFont(f);
+
     menu->addSeparator();
 
     menu->addAction(tr("Toggle selection"),this,SLOT(addRemoveItemToSelection()));

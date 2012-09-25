@@ -37,11 +37,11 @@ using namespace tlp;
 CPPUNIT_TEST_SUITE_REGISTRATION( PluginsTest );
 
 #if defined(_WIN32)
-  const std::string suffix = "dll";
+const std::string suffix = "dll";
 #elif defined(__APPLE__)
-  const std::string suffix = "dylib";
+const std::string suffix = "dylib";
 #else
-  const std::string suffix = "so";
+const std::string suffix = "so";
 #endif
 
 //==========================================================

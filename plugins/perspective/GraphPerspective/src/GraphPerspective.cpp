@@ -726,6 +726,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
     _ui->searchButton->setChecked(false);
     setSearchOutput(false);
   }
+
   _ui->searchButton->setEnabled(enabled);
 }
 
@@ -766,6 +767,7 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
 void GraphPerspective::setSearchOutput(bool f) {
   if (f)
     _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
+
   _ui->outputFrame->setVisible(f);
 }
 

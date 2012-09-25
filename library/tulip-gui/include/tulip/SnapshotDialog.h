@@ -25,7 +25,7 @@
 
 
 
-namespace Ui{
+namespace Ui {
 class SnapshotDialogData;
 }
 
@@ -37,7 +37,7 @@ namespace tlp {
 class LockLabel;
 class GlMainView;
 
-class TLP_QT_SCOPE SnapshotDialog : public QDialog{
+class TLP_QT_SCOPE SnapshotDialog : public QDialog {
 
   Q_OBJECT
 
