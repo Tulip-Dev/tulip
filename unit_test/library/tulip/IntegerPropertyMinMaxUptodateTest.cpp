@@ -21,7 +21,7 @@
 #include <iostream>
 
 #include <cppunit/TestCaller.h>
-#include "IntegerPropertyMinMaxUpdateTest.h"
+#include "IntegerPropertyMinMaxUptodateTest.h"
 
 using namespace tlp;
 using namespace std;
