@@ -31,8 +31,6 @@
 
 namespace tlp {
 
-class OpenGlErrorViewer;
-
 struct GlTexture {
   GLuint *id;
   int height;
@@ -62,15 +60,6 @@ public:
       inst=new GlTextureManager();
 
     return *inst;
-  }
-
-  /**
-   * Change the error viewer and return the old one
-   */
-  OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer) {
-    OpenGlErrorViewer *oldErrorViewer=this->errorViewer;
-    this->errorViewer=errorViewer;
-    return oldErrorViewer;
   }
 
   /**
@@ -154,8 +143,6 @@ private:
   GlTextureManager();
 
   static GlTextureManager* inst;
-
-  OpenGlErrorViewer *errorViewer;
 
   unsigned long currentContext;
 
