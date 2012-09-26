@@ -40,6 +40,7 @@ class PropertiesEditor : public QWidget {
 
   Ui::PropertiesEditor* _ui;
   tlp::PropertyInterface* _contextProperty;
+  QList<tlp::PropertyInterface*> _contextPropertyList;
   tlp::Graph* _graph;
   tlp::TulipItemDelegate* _delegate;
   tlp::GraphPropertiesModel<tlp::PropertyInterface>* _sourceModel;

@@ -83,6 +83,10 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
 
 void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   _contextProperty = _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface*>();
+  _contextPropertyList.clear();
+  foreach(QModelIndex sidx, _ui->tableView->selectionModel()->selectedRows()) {
+    _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface*>();
+  }
 
   if (_contextProperty == NULL)
     return;
@@ -110,7 +114,15 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
   connect(menu.addAction(trUtf8("New")),SIGNAL(triggered()),this,SLOT(newProperty()));
   QAction* delAction = menu.addAction(trUtf8("Delete"));
-  delAction->setEnabled(!Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str()));
+  bool enabled = true;
+  foreach(PropertyInterface* pi, _contextPropertyList) {
+    if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str())) {
+      enabled = false;
+      break;
+    }
+  }
+  delAction->setEnabled(enabled);
+
   connect(delAction,SIGNAL(triggered()),this,SLOT(delProperty()));
   menu.addSeparator();
   menu.addAction(trUtf8("Cancel"));
@@ -212,7 +224,8 @@ void PropertiesEditor::newProperty() {
 }
 
 void PropertiesEditor::delProperty() {
-  _contextProperty->getGraph()->delLocalProperty(_contextProperty->getName());
+  foreach(PropertyInterface* pi, _contextPropertyList)
+    pi->getGraph()->delLocalProperty(pi->getName());
 }
 
 void PropertiesEditor::toLabels() {
