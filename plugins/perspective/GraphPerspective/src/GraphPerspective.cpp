@@ -433,7 +433,6 @@ void GraphPerspective::saveAs(const QString& path) {
     if (!path.isEmpty()) {
       saveAs(path);
     }
-
     return;
   }
 
@@ -442,6 +441,7 @@ void GraphPerspective::saveAs(const QString& path) {
   QMap<Graph*,QString> rootIds = _graphs->writeProject(_project,&progress);
   _ui->workspace->writeProject(_project,rootIds,&progress);
   _project->write(path,&progress);
+  TulipSettings::instance().addToRecentDocuments(path);
 }
 
 void GraphPerspective::open() {
@@ -488,6 +488,7 @@ void GraphPerspective::open() {
     foreach(std::string extension, modules.keys()) {
       if (fileName.endsWith(".tlpx")) {
         openProjectFile(fileName);
+        TulipSettings::instance().addToRecentDocuments(fileInfo.absoluteFilePath());
         break;
       }
       else if(fileName.endsWith(QString::fromStdString(extension))) {
