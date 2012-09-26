@@ -95,6 +95,12 @@ void PoolMemoryAllocator::init()
 	initThread();
 }
 
+void PoolMemoryAllocator::initThread() {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+	pthread_setspecific(s_tpKey,calloc(eTableSize,sizeof(MemElemPtr)));
+#endif
+}
+
 void PoolMemoryAllocator::cleanup()
 {
 	BlockChainPtr p = s_blocks;
@@ -109,6 +115,14 @@ void PoolMemoryAllocator::cleanup()
 	pthread_key_delete(s_tpKey);
 #endif
 	delete s_criticalSection;
+#endif
+}
+
+PoolMemoryAllocator::MemElemPtr* PoolMemoryAllocator::getFreeBytesPtr(size_t nBytes) {
+  #if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+  return ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
+#else
+  return s_tp+nBytes;
 #endif
 }
 

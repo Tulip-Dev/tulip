@@ -75,8 +75,7 @@ namespace ogdf {
  * way (throwing an InsufficientMemoryException) by defining the
  * macro \c #OGDF_MALLOC_NEW_DELETE in a class declaration.
  */
-
-class OGDF_EXPORT PoolMemoryAllocator
+class PoolMemoryAllocator
 {
 	struct MemElem {
 		MemElem *m_next;
@@ -106,28 +105,19 @@ public:
 	~PoolMemoryAllocator() { }
 
 	//! Initializes the memory manager.
-    static void init();
-
-    static void initThread() {
-#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
-		pthread_setspecific(s_tpKey,calloc(eTableSize,sizeof(MemElemPtr)));
-#endif
-	}
+	static OGDF_EXPORT void init();
+	static OGDF_EXPORT void initThread();
 
 	//! Frees all memory blocks allocated by the memory manager.
-    static void cleanup();
+	static OGDF_EXPORT void cleanup();
 
-    static bool checkSize(size_t nBytes) {
+	static size_t checkSize(size_t nBytes) {
 		return nBytes < eTableSize;
 	}
 
 	//! Allocates memory of size \a nBytes.
-    static void *allocate(size_t nBytes) {
-#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
-		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
-#else
-		MemElemPtr *pFreeBytes = s_tp+nBytes;
-#endif
+	static void *allocate(size_t nBytes) {
+	        MemElemPtr *pFreeBytes = getFreeBytesPtr(nBytes);
 		if (OGDF_LIKELY(*pFreeBytes != 0)) {
 			MemElemPtr p = *pFreeBytes;
 			*pFreeBytes = p->m_next;
@@ -138,12 +128,8 @@ public:
 	}
 
 	//! Deallocates memory at address \a p which is of size \a nBytes.
-    static void deallocate(size_t nBytes, void *p) {
-#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
-		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
-#else
-		MemElemPtr *pFreeBytes = s_tp+nBytes;
-#endif
+	static void deallocate(size_t nBytes, void *p) {
+		MemElemPtr *pFreeBytes = getFreeBytesPtr(nBytes);
 		MemElemPtr(p)->m_next = *pFreeBytes;
 		*pFreeBytes = MemElemPtr(p);
 	}
@@ -155,27 +141,23 @@ public:
 	 * each element separately, since the whole chain can be concatenated with the
 	 * free list, requiring only constant effort.
 	 */
-    static void deallocateList(size_t nBytes, void *pHead, void *pTail) {
-#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
-		MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
-#else
-		MemElemPtr *pFreeBytes = s_tp+nBytes;
-#endif
+	static void deallocateList(size_t nBytes, void *pHead, void *pTail) {
+		MemElemPtr *pFreeBytes = getFreeBytesPtr(nBytes);
 		MemElemPtr(pTail)->m_next = *pFreeBytes;
 		*pFreeBytes = MemElemPtr(pHead);
 	}
 
-    static void flushPool();
-    static void flushPool(__uint16 nBytes);
+	static OGDF_EXPORT void flushPool();
+	static OGDF_EXPORT void flushPool(__uint16 nBytes);
 
-	//! Returns the total amount of memory (in bytes) allocated from the system.
-    static size_t memoryAllocatedInBlocks();
+	//! Returns the total amount of memory (in bytes) allocated from the system
+	static OGDF_EXPORT size_t memoryAllocatedInBlocks();
 
 	//! Returns the total amount of memory (in bytes) available in the global free lists.
-    static size_t memoryInGlobalFreeList();
+	static OGDF_EXPORT size_t memoryInGlobalFreeList();
 
 	//! Returns the total amount of memory (in bytes) available in the thread's free lists.
-    static size_t memoryInThreadFreeList();
+	static OGDF_EXPORT size_t memoryInThreadFreeList();
 
 private:
 	static int slicesPerBlock(__uint16 nBytes) {
@@ -188,18 +170,20 @@ private:
 		return (eBlockSize-sizeof(MemElemPtr))/(nWords*sizeof(MemElemPtr));
 	}
 
-	static void incVectorSlot(PoolElement &pe);
+	static OGDF_EXPORT void incVectorSlot(PoolElement &pe);
 
-	static void flushPoolSmall(__uint16 nBytes);
-	static MemElemExPtr collectGroups(
+	static OGDF_EXPORT void flushPoolSmall(__uint16 nBytes);
+	static OGDF_EXPORT MemElemExPtr collectGroups(
 		__uint16 nBytes,
 		MemElemPtr &pRestHead,
 		MemElemPtr &pRestTail,
 		int &nRest);
 
-	static void *fillPool(MemElemPtr &pFreeBytes, __uint16 nBytes);
+	static OGDF_EXPORT void *fillPool(MemElemPtr &pFreeBytes, __uint16 nBytes);
 
-	static MemElemPtr allocateBlock(__uint16 nBytes);
+	static OGDF_EXPORT MemElemPtr allocateBlock(__uint16 nBytes);
+
+	static OGDF_EXPORT MemElemPtr* getFreeBytesPtr(size_t nbytes);
 
 	static PoolElement s_pool[eTableSize];
 	static MemElemPtr s_freeVectors;
