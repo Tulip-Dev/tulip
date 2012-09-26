@@ -82,15 +82,16 @@ private:
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
 
+}
+
+
 #ifdef _MSC_VER
 
 #include <tulip/Edge.h>
 #include <tulip/Node.h>
 
-template struct TLP_SCOPE Iterator<edge>;
-template struct TLP_SCOPE Iterator<node>;
+template struct TLP_SCOPE tlp::Iterator<tlp::edge>;
+template struct TLP_SCOPE tlp::Iterator<tlp::node>;
 #endif
-
-}
 #endif
 

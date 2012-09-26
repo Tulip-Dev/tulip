@@ -86,6 +86,14 @@ static double round(double d) {
   return floor(d + 0.5);
 }
 
+static double fabs(int i) {
+	return fabs((double)i);
+}
+
+static float strtof(const char* cptr, char** endptr) {
+	return strtod(cptr, endptr);
+}
+
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //MSVC has a different name for pretty_function
 #  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround
 #  define cbrt(arg) pow((double)arg, 1.0/3) //VC does not have cbrt, little workaround
