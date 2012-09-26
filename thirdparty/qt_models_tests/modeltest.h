@@ -39,7 +39,6 @@
 **
 ****************************************************************************/
 
-
 #ifndef MODELTEST_H
 #define MODELTEST_H
 
@@ -47,7 +46,9 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QStack>
 
-class ModelTest : public QObject
+#include "modeltest_export.h"
+
+class MODEL_TESTS_SCOPE ModelTest : public QObject
 {
   Q_OBJECT
 
