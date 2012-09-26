@@ -136,6 +136,12 @@ public:
     memcpy( &((*this)[0]), (void*)&(v.array[0]), 2 * sizeof(TYPE) );
     (*this)[2] = z;
   }
+  inline void set(const Vector<TYPE, 2, OTYPE> &v, const TYPE z, const TYPE w) {
+    assert(SIZE>3);
+    memcpy( &((*this)[0]), (void*)&(v.array[0]), 2 * sizeof(TYPE) );
+    (*this)[2] = z;
+	(*this)[3] = w;
+  }
   inline void set(const Vector<TYPE, 3, OTYPE> &v, const TYPE w) {
     assert(SIZE>3);
     memcpy( &((*this)[0]), (void*)&(v.array[0]), 3 * sizeof(TYPE) );

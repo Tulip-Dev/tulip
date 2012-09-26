@@ -237,7 +237,7 @@ bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
       QGraphicsSceneMouseEvent* mouseEv = static_cast<QGraphicsSceneMouseEvent*>(ev);
       QPointF itemPos = mouseEv->scenePos();
       int itemPerLine = floor(width()/(previewSize().width() + MARGIN));
-      int nbLines = ceil(_items.size()/itemPerLine);
+      int nbLines = _items.size()/itemPerLine;
       int line = itemPos.y() / (previewSize().height()+MARGIN);
       line = std::min<int>(nbLines, line);
       int col = itemPos.x() / (previewSize().width()+MARGIN);
