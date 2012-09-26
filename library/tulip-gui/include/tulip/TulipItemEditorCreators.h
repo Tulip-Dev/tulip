@@ -61,7 +61,7 @@ public:
 };
 
 template<typename T>
-class TLP_QT_SCOPE LineEditEditorCreator: public StringDisplayEditorCreator<T> {
+class LineEditEditorCreator: public StringDisplayEditorCreator<T> {
 public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
@@ -84,7 +84,7 @@ public:
 };
 
 template<typename PROP>
-class TLP_QT_SCOPE PropertyEditorCreator: public tlp::TulipItemEditorCreator {
+class PropertyEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
@@ -151,7 +151,7 @@ public:
 };
 
 template<typename ElementType>
-class TLP_QT_SCOPE VectorEditorCreator : public tlp::TulipItemEditorCreator {
+class VectorEditorCreator : public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget* parent) const;
   virtual void setEditorData(QWidget* editor, const QVariant& data,bool,tlp::Graph*);
