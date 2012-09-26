@@ -206,9 +206,8 @@ void GlLabel::setFontName(const std::string &name) {
     delete font;
     delete borderFont;
 
-    fontName=TulipBitmapDir + "font.ttf";
-    font=new FTPolygonFont(fontName.c_str());
-    borderFont=new FTGLOutlineFont(fontName.c_str());
+    font=new FTPolygonFont((TulipBitmapDir + "font.ttf").c_str());
+    borderFont=new FTGLOutlineFont((TulipBitmapDir + "font.ttf").c_str());
   }
 }
 //============================================================
