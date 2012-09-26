@@ -205,14 +205,13 @@ GENERATE_PERLMOD       = NO
 #---------------------------------------------------------------------------
 # Configuration options related to the preprocessor
 #---------------------------------------------------------------------------
-ENABLE_PREPROCESSING   = NO
+ENABLE_PREPROCESSING   = YES
 MACRO_EXPANSION        = NO
 EXPAND_ONLY_PREDEF     = NO
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = library/tulip-core/include/ \
                          library/tulip-ogl/include/ \
-                         library/tulip-gui/include/ \
-                         /usr/include
+                         library/tulip-gui/include/
 
 INCLUDE_FILE_PATTERNS  =
 PREDEFINED             =
