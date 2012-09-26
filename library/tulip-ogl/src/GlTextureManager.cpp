@@ -20,7 +20,6 @@
 #include <GL/glew.h>
 
 #include <tulip/GlTextureManager.h>
-#include <tulip/OpenGlErrorViewer.h>
 #include <QtGui/QImage>
 #include <QtOpenGL/QGLWidget>
 
@@ -41,7 +40,7 @@ tlp::GlTextureManager* tlp::GlTextureManager::inst=0;
 using namespace std;
 
 namespace tlp {
-GlTextureManager::GlTextureManager():errorViewer(new OpenGlErrorViewer),animationFrame(0) {
+GlTextureManager::GlTextureManager():animationFrame(0) {
 }
 //====================================================================
 void GlTextureManager::changeContext(unsigned long context) {
