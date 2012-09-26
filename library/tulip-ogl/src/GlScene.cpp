@@ -22,9 +22,6 @@
 #include <cstdlib>
 #include <climits>
 #include <stdio.h>
-#include <sys/time.h>
-#include <unistd.h>
-
 
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
