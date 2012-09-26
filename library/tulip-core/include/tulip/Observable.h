@@ -315,7 +315,7 @@ protected:
   /**
   * @brief use for old observer tulip compatibility
   */
-  tlp::Iterator<Observable *> * _DEPRECATED getObservables() const;
+  _DEPRECATED  tlp::Iterator<tlp::Observable *> * getObservables() const;
 
   /**
   * @brief use for old observer tulip compatibility
