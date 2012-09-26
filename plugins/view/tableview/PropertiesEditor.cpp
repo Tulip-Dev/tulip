@@ -103,7 +103,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   connect(menu.addAction(trUtf8("Uncheck all")),SIGNAL(triggered()),this,SLOT(unCheckAll()));
   connect(menu.addAction(trUtf8("Uncheck all except \"") + pname + "\""),SIGNAL(triggered()),this,SLOT(unCheckAllExcept()));
   menu.addSeparator();
-  connect(menu.addAction(trUtf8("Map selected items to graph")),SIGNAL(triggered()),this,SIGNAL(mapToGraphSelection()));
+  connect(menu.addAction(trUtf8("Map visible items to graph")),SIGNAL(triggered()),this,SIGNAL(mapToGraphSelection()));
   connect(menu.addAction(trUtf8("Set all nodes")),SIGNAL(triggered()),this,SIGNAL(setAllNodes()));
   connect(menu.addAction(trUtf8("Set all edges")),SIGNAL(triggered()),this,SIGNAL(setAllEdges()));
   menu.addSeparator();
