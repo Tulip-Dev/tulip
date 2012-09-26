@@ -46,6 +46,18 @@
 using namespace tlp;
 
 /*
+ * Base class
+ */
+bool TulipItemEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant &) const {
+  if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
+    painter->setBrush(option.palette.highlight());
+    painter->setPen(Qt::transparent);
+    painter->drawRect(option.rect);
+  }
+  return false;
+}
+
+/*
   ColorEditorCreator
 */
 QWidget* ColorEditorCreator::createWidget(QWidget *) const {
@@ -56,12 +68,7 @@ QWidget* ColorEditorCreator::createWidget(QWidget *) const {
 }
 
 bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
-  if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
-    painter->setBrush(option.palette.highlight());
-    painter->setPen(Qt::transparent);
-    painter->drawRect(option.rect);
-  }
-
+  TulipItemEditorCreator::paint(painter,option,v);
   painter->setBrush(colorToQColor(v.value<tlp::Color>()));
   painter->setPen(Qt::black);
   painter->drawRect(option.rect.x()+6,option.rect.y()+6,option.rect.width()-12,option.rect.height()-12);
@@ -92,6 +99,7 @@ QRect checkRect(const QStyleOptionViewItem &option,const QRect& bounding, QWidge
 }
 
 bool BooleanEditorCreator::paint(QPainter *p, const QStyleOptionViewItem &option, const QVariant &variant) const {
+  TulipItemEditorCreator::paint(p,option,variant);
   QCheckBox cb;
   QStyleOptionViewItem opt(option);
   opt.rect = checkRect(option,option.rect,&cb);
@@ -174,6 +182,7 @@ QWidget* ColorScaleEditorCreator::createWidget(QWidget* parent) const {
 }
 
 bool ColorScaleEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& var) const {
+  TulipItemEditorCreator::paint(painter,option,var);
   ColorScaleButton::paintScale(painter,option.rect,var.value<ColorScale>());
   return true;
 }
@@ -230,25 +239,59 @@ QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
 
 void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
   TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
-  static_cast<QFileDialog*>(w)->setDirectory(QFileInfo(desc.absolutePath).absolutePath());
+  QFileDialog* dlg = static_cast<QFileDialog*>(w);
+  dlg->setDirectory(QFileInfo(desc.absolutePath).absolutePath());
+  if (desc.type == TulipFileDescriptor::Directory)
+    dlg->setFileMode(QFileDialog::Directory);
 }
 
 QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   QFileDialog* dlg = static_cast<QFileDialog*>(w);
 
-  if (!dlg->selectedFiles().empty()) {
+  if (dlg->fileMode() == QFileDialog::Directory) {
+    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->directory().absolutePath(),TulipFileDescriptor::Directory));
+  }
+  else if (!dlg->selectedFiles().empty()) {
     return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->selectedFiles()[0],TulipFileDescriptor::File));
   }
 
   return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor());
 }
 
-QString TulipFileDescriptorEditorCreator::displayText(const QVariant& v) const {
-  TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
-  return QFileInfo(desc.absolutePath).fileName();
-}
+bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
+  TulipItemEditorCreator::paint(painter,option,v);
+  QRect rect = option.rect;
+  TulipFileDescriptor fileDesc = v.value<TulipFileDescriptor>();
+  QFileInfo fileInfo(fileDesc.absolutePath);
+  QIcon icon;
+  QString text;
+  if (fileInfo.isFile()) {
+    icon = QApplication::style()->standardIcon(QStyle::SP_FileIcon);
+    text = fileInfo.fileName();
+  }
+  else if (fileInfo.isDir()) {
+    icon = QApplication::style()->standardIcon(QStyle::SP_DirIcon);
+    QDir d1 = fileInfo.dir();
+    d1.cdUp();
+    text = fileInfo.absoluteFilePath().remove(0,d1.absolutePath().length()-1);
+  }
 
-///NodeShapeEditorCreator
+  int iconSize = rect.height()-4;
+  painter->drawPixmap(rect.x() + 2, rect.y() + 2, iconSize, iconSize, icon.pixmap(iconSize));
+  int textXPos = rect.x() + iconSize + 5;
+
+  if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
+    painter->setPen(option.palette.highlightedText().color());
+    painter->setBrush(option.palette.highlightedText());
+  }
+  else {
+    painter->setPen(option.palette.text().color());
+    painter->setBrush(option.palette.text());
+  }
+  painter->drawText(textXPos, rect.y() + 2, rect.width() - textXPos, rect.height()-4,Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, QFileInfo(fileDesc.absolutePath).fileName());
+
+  return true;
+}
 
 QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
   QComboBox* combobox = new QComboBox(parent);
@@ -278,6 +321,7 @@ QString NodeShapeEditorCreator::displayText(const QVariant & data) const {
 }
 
 bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
+  TulipItemEditorCreator::paint(painter,option,data);
 
   QStyleOptionViewItemV4 opt = option;
   opt.features |= QStyleOptionViewItemV2::HasDecoration;
@@ -323,6 +367,8 @@ QString EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const
 }
 
 bool EdgeExtremityShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
+  TulipItemEditorCreator::paint(painter,option,data);
+
   QStyleOptionViewItemV4 opt = option;
   opt.features |= QStyleOptionViewItemV2::HasDecoration;
   QPixmap pixmap = EdgeExtremityGlyphRenderer::getInst().render(data.value<EdgeExtremityShape>().edgeExtremityShapeId);

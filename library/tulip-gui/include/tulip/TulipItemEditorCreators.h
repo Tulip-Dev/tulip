@@ -34,9 +34,7 @@ class TLP_QT_SCOPE TulipItemEditorCreator {
 public:
   virtual ~TulipItemEditorCreator() {}
   virtual QWidget* createWidget(QWidget*) const=0;
-  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const {
-    return false;
-  }
+  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
   virtual QString displayText(const QVariant &) const {
     return "";
   }
@@ -123,7 +121,7 @@ public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
-  virtual QString displayText(const QVariant &) const;
+  virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &) const;
 };
 
 class TLP_QT_SCOPE NodeShapeEditorCreator: public tlp::TulipItemEditorCreator {
