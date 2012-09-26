@@ -92,6 +92,7 @@ void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
     return;
 
   _contextGraph = (tlp::Graph*)index.internalPointer();
+  static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(_contextGraph);
   createPanel();
   _contextGraph = NULL;
 }
@@ -120,10 +121,15 @@ void GraphHierarchiesEditor::delGraph() {
 
   GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
 
-  if (_contextGraph->getRoot() == _contextGraph)
+  if (_contextGraph->getRoot() == _contextGraph) {
     delete _contextGraph;
-  else
+    static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(NULL);
+  }
+  else {
+    tlp::Graph* sg = _contextGraph->getSuperGraph();
     _contextGraph->getSuperGraph()->delSubGraph(_contextGraph);
+    static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(sg);
+  }
 }
 
 void GraphHierarchiesEditor::delAllGraph() {
@@ -132,10 +138,15 @@ void GraphHierarchiesEditor::delAllGraph() {
 
   GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
 
-  if (_contextGraph->getRoot() == _contextGraph)
+  if (_contextGraph->getRoot() == _contextGraph) {
     delete _contextGraph;
-  else
+    static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(NULL);
+  }
+  else {
+    tlp::Graph* sg = _contextGraph->getSuperGraph();
     _contextGraph->getSuperGraph()->delAllSubGraphs(_contextGraph);
+    static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(sg);
+  }
 
 }
 
