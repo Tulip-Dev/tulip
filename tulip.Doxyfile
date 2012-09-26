@@ -112,7 +112,7 @@ WARN_LOGFILE           = doc/warnings.txt
 
 INPUT                  = library
 INPUT_ENCODING         = UTF-8
-FILE_PATTERNS           = *.h *.cpp *.cxx
+FILE_PATTERNS           = *.h *.cxx
 RECURSIVE              = YES
 EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
