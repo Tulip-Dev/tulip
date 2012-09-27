@@ -59,6 +59,7 @@ public:
   void setGraph(tlp::Graph* graph) {
     if (_graph == graph)
       return;
+
     beginResetModel();
 
     if (_graph != NULL)
