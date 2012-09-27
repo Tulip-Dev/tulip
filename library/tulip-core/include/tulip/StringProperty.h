@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_STRING_H
 #define TULIP_STRING_H
 
@@ -71,3 +73,4 @@ public :
 /*\@}*/
 }
 #endif
+///@endcond

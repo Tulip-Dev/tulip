@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLYPHPREVIEWGENERATOR_H
 #define GLYPHPREVIEWGENERATOR_H
@@ -71,3 +73,4 @@ private:
 };
 }
 #endif // GLYPHPREVIEWGENERATOR_H
+///@endcond

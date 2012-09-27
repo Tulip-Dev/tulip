@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 //@TLPGEOLICENCE#
 
 #ifndef _TLP_VECTORCAST_H
@@ -115,3 +117,4 @@ public:
 }
 
 #endif
+///@endcond

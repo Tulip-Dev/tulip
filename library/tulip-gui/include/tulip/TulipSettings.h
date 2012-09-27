@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIPSETTINGS_H
 #define TULIPSETTINGS_H
@@ -164,3 +166,4 @@ private:
 };
 
 #endif // TULIPSETTINGS_H
+///@endcond

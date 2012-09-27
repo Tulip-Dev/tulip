@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef CAPTIONGRAPHICSSUBITEMS_H
 #define CAPTIONGRAPHICSSUBITEMS_H
 
@@ -224,3 +226,4 @@ protected :
 }
 
 #endif // CAPTIONGRAPHICSSUB_H
+///@endcond

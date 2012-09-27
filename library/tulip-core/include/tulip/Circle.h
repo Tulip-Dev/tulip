@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TLP_GEO_CIRCLE_H
 #define TLP_GEO_CIRCLE_H
 
@@ -128,3 +130,4 @@ typedef Circle<int,  double> Circlei;
 
 #include "cxx/Circle.cxx"
 #endif
+///@endcond

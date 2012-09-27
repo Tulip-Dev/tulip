@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _TLPQTTOOLS_H
 #define _TLPQTTOOLS_H
 
@@ -104,3 +106,4 @@ TLP_QT_SCOPE QString localPluginsPath();
 #endif
 
 
+///@endcond

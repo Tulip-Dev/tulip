@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_NODE_H
 #define Tulip_NODE_H
 #include <tulip/tulipconf.h>
@@ -75,3 +77,4 @@ template<> struct less<tlp::node> {
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif
+///@endcond

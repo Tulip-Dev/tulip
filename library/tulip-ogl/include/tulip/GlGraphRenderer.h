@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLGRAPHRENDERER_H
 #define Tulip_GLGRAPHRENDERER_H
 
@@ -93,3 +95,4 @@ protected:
 }
 
 #endif
+///@endcond

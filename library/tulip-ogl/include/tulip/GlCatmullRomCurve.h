@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 
 #ifndef GLCATMULLROMCURVE_H_
@@ -94,3 +96,4 @@ private :
 
 #endif /* GLCATMULLROMCURVE_H_ */
 
+///@endcond

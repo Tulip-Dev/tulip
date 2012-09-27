@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _TULIPWITHPARAMETER
 #define _TULIPWITHPARAMETER
 
@@ -302,3 +304,4 @@ protected:
 
 }
 #endif
+///@endcond

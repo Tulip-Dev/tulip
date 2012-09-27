@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef MOUSEOBJECT_H
 #define MOUSEOBJECT_H
@@ -75,3 +77,4 @@ public:
 
 }
 #endif
+///@endcond

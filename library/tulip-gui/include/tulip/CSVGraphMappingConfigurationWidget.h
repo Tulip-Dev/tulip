@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 #define CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 
@@ -139,3 +141,4 @@ signals:
 };
 }
 #endif // CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
+///@endcond

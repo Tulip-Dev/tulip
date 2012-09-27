@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef SYSTEMDEFINITION_H
 #define SYSTEMDEFINITION_H
 
@@ -44,3 +46,4 @@
 #endif
 
 #endif // SYSTEMDEFINITION_H
+///@endcond

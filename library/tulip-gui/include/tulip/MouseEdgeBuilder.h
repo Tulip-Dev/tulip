@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MOUSEADDEDGE_H
 #define MOUSEADDEDGE_H
 #include <vector>
@@ -84,3 +86,4 @@ public:
 
 }
 #endif
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLLINE_H
 #define GLLINE_H
@@ -120,3 +122,4 @@ protected:
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _TulipTypeConverter_H
 #define _TulipTypeConverter_H
 
@@ -49,3 +51,4 @@ std::string propertyEdgeDefaultValue(PropertyInterface *propertyName);
 
 }
 #endif
+///@endcond

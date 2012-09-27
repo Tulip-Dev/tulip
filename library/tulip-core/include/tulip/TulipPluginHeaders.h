@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef __TULIPPLUGININCLUDE_H
 #define __TULIPPLUGININCLUDE_H
 
@@ -39,3 +41,4 @@
 #include <tulip/TreeTest.h>
 #include <tulip/ForEach.h>
 #endif
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 //@TLPGEOLICENCE#
 #ifndef TLP_RECTANGLE_H
 #define TLP_RECTANGLE_H
@@ -214,3 +216,4 @@ typedef Rectangle<unsigned int, double> Rectui;
 
 }
 #endif
+///@endcond

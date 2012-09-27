@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GL_CONVEX_HULL_H
 #define GL_CONVEX_HULL_H
 
@@ -127,3 +129,4 @@ struct ConvexHullItem {
 
 }
 #endif
+///@endcond

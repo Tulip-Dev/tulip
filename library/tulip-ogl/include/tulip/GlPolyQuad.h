@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLPOLYQUAD_H_
 #define GLPOLYQUAD_H_
@@ -151,3 +153,4 @@ private :
 
 }
 #endif /* GLPOLYQUAD_H_ */
+///@endcond

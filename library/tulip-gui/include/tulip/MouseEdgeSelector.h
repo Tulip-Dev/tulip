@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MOUSEEDGESELECTION_H
 #define MOUSEEDGESELECTION_H
 
@@ -47,3 +49,4 @@ public:
 
 }
 #endif
+///@endcond

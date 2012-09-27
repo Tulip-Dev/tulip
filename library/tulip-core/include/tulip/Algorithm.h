@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _CLUSTERING_H
 #define _CLUSTERING_H
 
@@ -104,3 +106,4 @@ public :
 
 }
 #endif
+///@endcond

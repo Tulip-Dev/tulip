@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef SIMPLEPLUGINPROGRESS_H
 #define SIMPLEPLUGINPROGRESS_H
@@ -57,3 +59,4 @@ private:
 };
 }
 #endif // SIMPLEPLUGINPROGRESS_H
+///@endcond

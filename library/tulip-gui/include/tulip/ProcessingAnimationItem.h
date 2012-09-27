@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef PROCESSINGANIMATIONITEM_H
 #define PROCESSINGANIMATIONITEM_H
 
@@ -49,3 +51,4 @@ protected slots:
 };
 
 #endif // PROCESSINGANIMATIONITEM_H
+///@endcond

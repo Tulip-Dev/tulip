@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef OBSERVABLE_H
 #define OBSERVABLE_H
 
@@ -478,3 +480,4 @@ private:
 }
 
 #endif
+///@endcond

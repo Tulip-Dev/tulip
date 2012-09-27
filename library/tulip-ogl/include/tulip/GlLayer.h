@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLLAYER_H
 #define Tulip_GLLAYER_H
 
@@ -227,3 +229,4 @@ private:
 }
 
 #endif // Tulip_GLLAYER_H
+///@endcond

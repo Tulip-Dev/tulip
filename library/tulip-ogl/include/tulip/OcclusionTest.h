@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_OCCLUSIONTEST_H
 #define Tulip_OCCLUSIONTEST_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -81,3 +83,4 @@ struct TLP_GL_SCOPE OcclusionTest {
 
 #endif //DOXYGEN_NOTFOR_DEVEL
 #endif
+///@endcond

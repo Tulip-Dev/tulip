@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLGRAPHINPUTDATA_H
 #define Tulip_GLGRAPHINPUTDATA_H
 
@@ -423,3 +425,4 @@ protected:
 }
 
 #endif
+///@endcond

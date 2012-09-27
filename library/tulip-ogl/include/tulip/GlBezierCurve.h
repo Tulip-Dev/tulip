@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLBEZIERCURVE_H_
 #define GLBEZIERCURVE_H_
@@ -25,13 +27,13 @@
 namespace tlp {
 
 /**
- * \brief A class to draw Bézier curves
+ * \brief A class to draw BÃ©zier curves
  *
- * This class allows to draw Bézier curves defined by an arbitrary number of control points.
- * Bézier curves are named after their inventor, Dr. Pierre Bézier. He was an engineer with the
- * Renault car company and set out in the early 1960’s to develop a curve formulation which would
+ * This class allows to draw BÃ©zier curves defined by an arbitrary number of control points.
+ * BÃ©zier curves are named after their inventor, Dr. Pierre BÃ©zier. He was an engineer with the
+ * Renault car company and set out in the early 1960âs to develop a curve formulation which would
  * lend itself to shape design.
- * Bézier curves are widely used in computer graphics to model smooth curves. A Bézier curve is
+ * BÃ©zier curves are widely used in computer graphics to model smooth curves. A BÃ©zier curve is
  * completely contained in the convex hull of its control points and passes through its first and
  * last control points. The curve is also always tangent to the first and last convex hull polygon segments.
  * In addition, the curve shape tends to follow the polygon shape.
@@ -81,3 +83,4 @@ private :
 
 }
 #endif /* GLBEZIERCURVE_H_ */
+///@endcond

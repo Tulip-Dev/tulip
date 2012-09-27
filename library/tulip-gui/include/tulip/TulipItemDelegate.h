@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPITEMDELEGATE_H
 #define TULIPITEMDELEGATE_H
 
@@ -68,3 +70,4 @@ protected slots:
 #include "cxx/TulipItemDelegate.cxx"
 
 #endif // TULIPITEMDELEGATE_H
+///@endcond

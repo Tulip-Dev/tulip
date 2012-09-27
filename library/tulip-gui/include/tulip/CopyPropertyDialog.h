@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef COPYPROPERTYDIALOG_H
 #define COPYPROPERTYDIALOG_H
 
@@ -112,3 +114,4 @@ private slots:
 };
 }
 #endif // COPYPROPERTYDIALOG_H
+///@endcond

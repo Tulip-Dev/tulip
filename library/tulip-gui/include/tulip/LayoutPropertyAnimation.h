@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef LAYOUTPROPERTYANIMATION_H_
 #define LAYOUTPROPERTYANIMATION_H_
 
@@ -47,3 +49,4 @@ private:
 }
 
 #endif /* LAYOUTPROPERTYANIMATION_H_ */
+///@endcond

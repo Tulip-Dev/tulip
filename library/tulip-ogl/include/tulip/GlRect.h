@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GL_RECT_H
 #define GL_RECT_H
@@ -124,3 +126,4 @@ public:
 
 }
 #endif
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef COLORSCALEBUTTON_H
 #define COLORSCALEBUTTON_H
 
@@ -45,3 +47,4 @@ protected slots:
 
 }
 #endif // COLORSCALEBUTTON_H
+///@endcond

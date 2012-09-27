@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_ITERATOR_H
 #define TULIP_ITERATOR_H
 
@@ -95,3 +97,4 @@ template struct TLP_SCOPE tlp::Iterator<tlp::node>;
 #endif
 #endif
 
+///@endcond

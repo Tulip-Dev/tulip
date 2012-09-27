@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GRAPHNEEDSSAVINGOBSERVER_H
 #define GRAPHNEEDSSAVINGOBSERVER_H
 
@@ -128,3 +130,4 @@ private:
 };
 
 #endif //GRAPHNEEDSSAVINGOBSERVER_H
+///@endcond

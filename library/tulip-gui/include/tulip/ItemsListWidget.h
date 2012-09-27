@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef ITEMSDIALOGLIST_H
 #define ITEMSDIALOGLIST_H
@@ -89,3 +91,4 @@ private:
 #endif
 
 
+///@endcond

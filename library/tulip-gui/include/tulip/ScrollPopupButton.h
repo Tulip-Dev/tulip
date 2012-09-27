@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef SCROLLPOPUPBUTTON_H
 #define SCROLLPOPUPBUTTON_H
@@ -54,3 +56,4 @@ protected:
 };
 
 #endif // SCROLLPOPUPBUTTON_H
+///@endcond

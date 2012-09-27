@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef QUAZIPFACADE_H
 #define QUAZIPFACADE_H
 
@@ -60,3 +62,4 @@ public:
 };
 
 #endif // QUAZIPFACADE_H
+///@endcond

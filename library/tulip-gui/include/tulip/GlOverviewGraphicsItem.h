@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GLOVERVIEWGRAPHICSITEM_H
 #define GLOVERVIEWGRAPHICSITEM_H
 
@@ -73,3 +75,4 @@ private :
 }
 
 #endif // GLOVERVIEWGRAPHICSITEM_H
+///@endcond

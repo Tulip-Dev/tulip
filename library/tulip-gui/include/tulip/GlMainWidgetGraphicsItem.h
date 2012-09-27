@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GLMAINWIDGETGRAPHICSITEM_H
 #define GLMAINWIDGETGRAPHICSITEM_H
 
@@ -87,3 +89,4 @@ private :
 }
 
 #endif // GLMAINWIDGETGRAPHICSITEM_H
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TREEVIEWCOMBOBOX_H
 #define TREEVIEWCOMBOBOX_H
@@ -40,3 +42,4 @@ public slots:
 };
 
 #endif // TREEVIEWCOMBOBOX_H
+///@endcond

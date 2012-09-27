@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_LAYOUT_H
 #define TULIP_LAYOUT_H
 
@@ -224,7 +226,7 @@ public:
   * @param e the graph edge on which to compute its length
   *
   * @warning this function only measure the length of the polyline between bends,
-  * when using curves like Bézier etc... the result will not be the length of the curve.
+  * when using curves like BÃ©zier etc... the result will not be the length of the curve.
   **/
   double edgeLength(const edge e) const;
 
@@ -323,3 +325,4 @@ typedef CoordVectorProperty LayoutVectorProperty;
 
 }
 #endif
+///@endcond

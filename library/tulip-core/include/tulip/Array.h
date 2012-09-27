@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 //@TLPGEOLICENCE#
 
 #ifndef _TLP_GEO_ARRAY_H
@@ -56,3 +58,4 @@ std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &);
 #include "cxx/Array.cxx"
 
 #endif
+///@endcond

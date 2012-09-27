@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLOFFSCREENRENDERER_H_
 #define GLOFFSCREENRENDERER_H_
@@ -131,3 +133,4 @@ private :
 
 
 #endif /* GLOFFSCREENRENDERER_H_ */
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GLTOOLS_H
 #define GLTOOLS_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -57,3 +59,4 @@ TLP_GL_SCOPE float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>& gl
 
 #endif //DOXYGEN_NOTFOR_DEVEL
 #endif
+///@endcond

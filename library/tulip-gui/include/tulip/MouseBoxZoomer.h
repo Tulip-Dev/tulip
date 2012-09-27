@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MOUSEZOOMBOX_H
 #define MOUSEZOOMBOX_H
 
@@ -51,3 +53,4 @@ private:
 
 }
 #endif //MOUSEZOOMBOX_H
+///@endcond

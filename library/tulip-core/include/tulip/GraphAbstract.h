@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_SUPERGRAPHABSTRACT_H
 #define TULIP_SUPERGRAPHABSTRACT_H
 
@@ -134,3 +136,4 @@ private:
 #endif // DOXYGEN_NOTFOR_USER
 
 #endif
+///@endcond

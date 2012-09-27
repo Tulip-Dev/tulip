@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 //@TLPGEOLICENCE#
 
 #ifndef _TLP_GEO_MATRIX_H
@@ -185,3 +187,4 @@ inline Vector<Obj,SIZE> operator*( const Matrix<Obj, SIZE> &, const Vector<Obj,S
 
 #include "cxx/Matrix.cxx"
 #endif
+///@endcond

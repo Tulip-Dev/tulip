@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLBOX_H
 #define Tulip_GLBOX_H
 
@@ -162,3 +164,4 @@ protected:
 
 }
 #endif
+///@endcond

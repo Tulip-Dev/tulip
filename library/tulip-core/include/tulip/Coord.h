@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_COORD_H
 #define TULIP_COORD_H
 
@@ -29,3 +31,4 @@ typedef  Vec3f Coord;
 }
 
 #endif
+///@endcond

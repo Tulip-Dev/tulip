@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIPFONTWIDGET_H
 #define TULIPFONTWIDGET_H
@@ -44,3 +46,4 @@ private slots:
 };
 }
 #endif // TULIPFONTWIDGET_H
+///@endcond

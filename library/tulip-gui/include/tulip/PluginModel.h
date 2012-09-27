@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef PLUGINMODEL_H
 #define PLUGINMODEL_H
@@ -232,3 +234,4 @@ public:
 }
 
 #endif // PLUGINMODEL_H
+///@endcond

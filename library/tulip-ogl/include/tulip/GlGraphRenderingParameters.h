@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLGRAPHRENDERINGPARAMETERS_H
 #define Tulip_GLGRAPHRENDERINGPARAMETERS_H
 
@@ -417,3 +419,4 @@ private:
 }
 
 #endif // Tulip_GLGRAPH_H
+///@endcond

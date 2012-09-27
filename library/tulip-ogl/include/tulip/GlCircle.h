@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLCIRCLE_H
 #define GLCIRCLE_H
@@ -61,3 +63,4 @@ public:
 }
 
 #endif
+///@endcond

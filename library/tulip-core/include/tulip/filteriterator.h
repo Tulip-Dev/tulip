@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef FILTERITERATOR_H
 #define FILTERITERATOR_H
 
@@ -95,3 +97,4 @@ public:
 
 }
 #endif // FILTERITERATOR_H
+///@endcond

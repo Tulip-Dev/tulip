@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef _EXPORTMODULE_H
 #define _EXPORTMODULE_H
@@ -82,3 +84,4 @@ public:
 
 }
 #endif
+///@endcond

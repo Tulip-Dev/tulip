@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef CSVCONTENTHANDLER_H_
 #define CSVCONTENTHANDLER_H_
 #include <string>
@@ -50,3 +52,4 @@ public:
 };
 }
 #endif /* CSVCONTENTHANDLER_H_ */
+///@endcond

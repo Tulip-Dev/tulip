@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLEPSFEEDBACKBUILDER_H
 #define Tulip_GLEPSFEEDBACKBUILDER_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -123,3 +125,4 @@ private:
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLEPSFEEDBACKBUILDER_H
+///@endcond

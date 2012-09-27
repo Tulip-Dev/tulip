@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _COLOR_H
 #define _COLOR_H
 #include <tulip/Vector.h>
@@ -156,3 +158,4 @@ TLP_BEGIN_HASH_NAMESPACE {
 
 #endif
 
+///@endcond

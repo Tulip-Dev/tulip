@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _TLP_GLLINES
 #define _TLP_GLLINES
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -62,3 +64,4 @@ private:
 }
 #endif //DOXYGEN_NOTFOR_DEVEL
 #endif
+///@endcond

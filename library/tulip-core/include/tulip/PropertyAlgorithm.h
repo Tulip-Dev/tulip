@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef PROPERTYALGORITHM_H
 #define PROPERTYALGORITHM_H
@@ -119,3 +121,4 @@ protected:
 }
 
 #endif // PROPERTYALGORITHM_H
+///@endcond

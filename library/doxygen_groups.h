@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef DOXYGEN_GROUPS_H
 #define DOXYGEN_GROUPS_H
@@ -56,3 +58,4 @@
  */
 
 #endif // DOXYGEN_GROUPS_H
+///@endcond

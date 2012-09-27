@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #include <tulip/Iterator.h>
 #include <tulip/tulipconf.h>
 #include <tulip/Edge.h>
@@ -105,3 +107,4 @@ private :
 }
 #endif
 #endif //DOXYGEN_NOTFOR_DEVEL
+///@endcond

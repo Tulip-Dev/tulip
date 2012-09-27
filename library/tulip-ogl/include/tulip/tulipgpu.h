@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPGPU_H
 #define TULIPGPU_H
 
@@ -95,3 +97,4 @@ TLP_GL_SCOPE bool getGpuOutPropertyValues(tlp::SizeProperty& prop, const tlp::Gr
 }
 
 #endif
+///@endcond

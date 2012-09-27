@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIP_PLANARITYIMPL_H
 #define TULIP_PLANARITYIMPL_H
@@ -236,3 +238,4 @@ std::list<tlp::edge> posDFS(tlp::Graph *sG, tlp::MutableContainer<int> &dfsPos);
 
 #endif
 #endif
+///@endcond

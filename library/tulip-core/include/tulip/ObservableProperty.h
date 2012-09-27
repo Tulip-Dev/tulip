@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef PROPERTYOBSERVABLE_H
 #define PROPERTYOBSERVABLE_H
 
@@ -57,3 +59,4 @@ protected:
 
 #endif
 
+///@endcond

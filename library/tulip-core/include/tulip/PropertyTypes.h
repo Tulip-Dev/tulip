@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TYPES_H
 #define TYPES_H
 
@@ -219,3 +221,4 @@ template class AbstractVectorProperty<CoordVectorType, tlp::PointType>;
 
 
 #endif
+///@endcond

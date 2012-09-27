@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _TLPRETURNTYPE_
 #define _TLPRETURNTYPE_
 
@@ -132,3 +134,4 @@ struct StoredType {
 #endif
 #endif
 #endif
+///@endcond

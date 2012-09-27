@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef ABSTRACT_PROPERTY_H
 #define ABSTRACT_PROPERTY_H
 
@@ -544,3 +546,4 @@ public:
 # include "cxx/AbstractProperty.cxx"
 #endif
 #endif
+///@endcond

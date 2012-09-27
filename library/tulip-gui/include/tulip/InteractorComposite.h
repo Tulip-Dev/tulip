@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef INTERACTORCOMPOSITE_H
 #define INTERACTORCOMPOSITE_H
 
@@ -130,3 +132,4 @@ public slots:
 
 }
 #endif // INTERACTORCOMPOSITE_H
+///@endcond

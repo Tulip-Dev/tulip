@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLLODCALCULATOR_H
 #define Tulip_GLLODCALCULATOR_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -183,3 +185,4 @@ protected :
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // Tulip_GLLODCALCULATOR_H
+///@endcond

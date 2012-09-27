@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef CONVERSIONITERATOR_H
 #define CONVERSIONITERATOR_H
 #include <tulip/Iterator.h>
@@ -73,3 +75,4 @@ public:
 
 }
 #endif // CONVERSIONITERATOR_H
+///@endcond

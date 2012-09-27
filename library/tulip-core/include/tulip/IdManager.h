@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 #ifndef _TULIPIDMANAGER_H
@@ -164,3 +166,4 @@ std::ostream& operator<<(std::ostream &,const IdManager &);
 
 #endif
 #endif //DOXYGEN_NOTFOR_DEVEL
+///@endcond

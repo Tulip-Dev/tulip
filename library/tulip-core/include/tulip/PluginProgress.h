@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TLP_PROGRESS
 #define TLP_PROGRESS
 
@@ -147,3 +149,4 @@ public:
 
 }
 #endif
+///@endcond

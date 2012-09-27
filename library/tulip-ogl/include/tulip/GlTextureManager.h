@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLTEXTUREMANAGER_H
 #define Tulip_GLTEXTUREMANAGER_H
 
@@ -156,3 +158,4 @@ private:
 }
 
 #endif // Tulip_GLTEXTUREMANAGER_H
+///@endcond

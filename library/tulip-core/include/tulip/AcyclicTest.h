@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIP_ACYCLICITY_TEST_H
 #define TULIP_ACYCLICITY_TEST_H
@@ -102,3 +104,4 @@ private:
 }
 
 #endif //TULIP_ACYCLICITY_TEST_H
+///@endcond

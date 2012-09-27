@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef PLUGINMANAGER_H
 #define PLUGINMANAGER_H
 
@@ -89,3 +91,4 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(PluginManager::PluginLocations)
 }
 
 #endif //PLUGINMANAGER_H
+///@endcond

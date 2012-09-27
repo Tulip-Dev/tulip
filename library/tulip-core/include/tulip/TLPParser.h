@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <iostream>
@@ -475,3 +477,4 @@ struct TLPParser {
 //=====================================================================================
 
 #endif // DOXYGEN_NOTFOR_DEVEL
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GL_HCVXHULL_H
 #define GL_HCVXHULL_H
 
@@ -105,3 +107,4 @@ private:
 }
 
 #endif
+///@endcond

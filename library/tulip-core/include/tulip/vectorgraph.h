@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef VECTORGRAPH_H
 #define VECTORGRAPH_H
@@ -677,3 +679,4 @@ bool EdgeProperty<TYPE>::isValid() const {
 #endif
 }
 #endif // VECTORGRAPH_H
+///@endcond

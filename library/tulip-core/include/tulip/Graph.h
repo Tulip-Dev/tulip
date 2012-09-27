@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_SUPERGRAPH_H
 #define Tulip_SUPERGRAPH_H
 
@@ -660,7 +662,7 @@ public:
    */
   virtual Iterator<std::string>* getLocalProperties() const=0;
   /**
-   * Returns an iterator on the names of the properties inherited from the graph���s ancestors.
+   * Returns an iterator on the names of the properties inherited from the graphï¿½ï¿½ï¿½s ancestors.
    */
   virtual Iterator<std::string>* getInheritedProperties() const=0;
   /**
@@ -672,7 +674,7 @@ public:
    */
   virtual Iterator<PropertyInterface*>* getLocalObjectProperties() const=0;
   /**
-   * Returns an iterator on the properties inherited from the graph���s ancestors.
+   * Returns an iterator on the properties inherited from the graphï¿½ï¿½ï¿½s ancestors.
    */
   virtual Iterator<PropertyInterface*>* getInheritedObjectProperties() const=0;
   /**
@@ -1042,3 +1044,4 @@ TLP_BEGIN_HASH_NAMESPACE {
 #include <tulip/PropertyInterface.h>
 #include "cxx/Graph.cxx"
 #endif
+///@endcond

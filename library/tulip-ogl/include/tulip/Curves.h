@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef CURVES_H
 #define CURVES_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -88,3 +90,4 @@ TLP_GL_SCOPE void buildCurvePoints (const std::vector<Coord> &vertices,
 }
 #endif //DOXYGEN_NOTFOR_DEVEL
 #endif
+///@endcond

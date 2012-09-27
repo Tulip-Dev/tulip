@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPMODEL_H
 #define TULIPMODEL_H
 
@@ -51,3 +53,4 @@ signals:
 }
 
 #endif // TULIPMODEL_H
+///@endcond

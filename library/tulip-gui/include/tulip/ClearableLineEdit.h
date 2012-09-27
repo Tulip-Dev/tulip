@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef CLEARABLELINEEDIT_H
 #define CLEARABLELINEEDIT_H
@@ -41,3 +43,4 @@ protected:
 
 
 #endif // CLEARABLELINEEDIT_H
+///@endcond
