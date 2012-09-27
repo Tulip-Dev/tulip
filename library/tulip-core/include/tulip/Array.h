@@ -38,7 +38,7 @@ namespace tlp {
  * @version 0.0.1 24/01/2003
  */
 template <typename Obj,unsigned int SIZE>
-struct TLP_SCOPE Array {
+struct Array {
   Obj array[SIZE];
   inline Obj  operator[](const unsigned int i) const;
   inline Obj& operator[](const unsigned int i);
@@ -51,8 +51,6 @@ std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &);
 
 //template <typename Obj,unsigned int SIZE>
 //QDebug operator<<(QDebug dbg,const Array<Obj,SIZE>& s);
-
-
 }
 
 #include "cxx/Array.cxx"

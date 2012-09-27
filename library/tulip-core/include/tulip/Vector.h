@@ -64,7 +64,7 @@ inline double tlpsqrt<double, long double>(long double a) {
  * \version 0.0.1 24/01/2003
  */
 template <typename TYPE, unsigned int SIZE, typename OTYPE = double>
-class TLP_SCOPE Vector:public Array<TYPE,SIZE> {
+class Vector:public Array<TYPE,SIZE> {
 public:
   inline VECTOR() {
     memset( &((*this)[0]), 0, SIZE * sizeof(TYPE) );
@@ -435,18 +435,17 @@ TEMPLATEVECTOR
 inline VECTOR operator-(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
 inline VECTOR operator-(const VECTOR &, const TYPE );
-TEMPLATEVECTOR
-//inline VECTOR operator-(const VECTOR &, const OTYPE );
 //TEMPLATEVECTOR
+//inline VECTOR operator-(const VECTOR &, const OTYPE );
 
-
+TEMPLATEVECTOR
 inline VECTOR operator/(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
 inline VECTOR operator/(const VECTOR &, const TYPE );
-TEMPLATEVECTOR
-//inline VECTOR operator/(const VECTOR &, const OTYPE );
 //TEMPLATEVECTOR
+//inline VECTOR operator/(const VECTOR &, const OTYPE );
 
+TEMPLATEVECTOR
 inline VECTOR operator^(const VECTOR &, const VECTOR &);
 TEMPLATEVECTOR
 inline VECTOR operator-(const VECTOR&);
@@ -498,70 +497,6 @@ typedef Vector<float,  3, double> Vec3f;
   * @brief typedef for 4D vector of float
   */
 typedef Vector<float,  4, double> Vec4f;
-
-
-#ifdef _MSC_VER
-template struct Array<float, 1>;
-template struct Array<float, 2>;
-template struct Array<float, 3>;
-template struct Array<float, 4>;
-template struct Array<float, 5>;
-template class Vector<float, 1>;
-template class Vector<float, 2>;
-template class Vector<float, 3>;
-template class Vector<float, 4>;
-template class Vector<float, 5>;
-
-template struct Array<int, 1>;
-template struct Array<int, 2>;
-template struct Array<int, 3>;
-template struct Array<int, 4>;
-template struct Array<int, 5>;
-template class Vector<int, 1>;
-template class Vector<int, 2>;
-template class Vector<int, 3>;
-template class Vector<int, 4>;
-template class Vector<int, 5>;
-
-template struct Array<bool, 1>;
-template struct Array<bool, 2>;
-template struct Array<bool, 3>;
-template struct Array<bool, 4>;
-template struct Array<bool, 5>;
-
-template struct Array<double, 1>;
-template struct Array<double, 2>;
-template struct Array<double, 3>;
-template struct Array<double, 4>;
-template struct Array<double, 5>;
-template class Vector<double, 1>;
-template class Vector<double, 2>;
-template class Vector<double, 3>;
-template class Vector<double, 4>;
-template class Vector<double, 5>;
-template class Vector<long double, 1>;
-template class Vector<long double, 2>;
-template class Vector<long double, 3>;
-
-template struct Array<tlp::Vector<double,1>,1>;
-template struct Array<tlp::Vector<double,2>,2>;
-template struct Array<tlp::Vector<double,3>,3>;
-template struct Array<tlp::Vector<double,4>,4>;
-
-template struct Array<tlp::Vector<long double, 4>,4>;
-template struct Array<tlp::Vector<long double, 3>,3>;
-template struct Array<tlp::Vector<long double, 2>,2>;
-template struct Array<tlp::Vector<long double, 1>,1>;
-
-template struct Array<tlp::Vector<float,1>,1>;
-template struct Array<tlp::Vector<float,2>,2>;
-template struct Array<tlp::Vector<float,3>,3>;
-template struct Array<tlp::Vector<float,4>,4>;
-
-template struct Array<tlp::Vector<int,2>,2>;
-
-template class tlp::Vector<unsigned char ,4>;
-#endif
 }
 
 #ifdef _MSC_VER
