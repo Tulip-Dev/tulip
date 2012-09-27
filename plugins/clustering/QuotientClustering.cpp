@@ -94,9 +94,9 @@ const char * paramHelp[] = {
 #define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
 //================================================================================
 QuotientClustering::QuotientClustering(PluginContext* context):Algorithm(context) {
-  addDependency<LayoutAlgorithm>("Circular", "1.1");
-  addDependency<LayoutAlgorithm>("GEM (Frick)", "1.2");
-  addDependency<SizeAlgorithm>("Auto Sizing", "1.0");
+  addDependency("Circular", "1.1");
+  addDependency("GEM (Frick)", "1.2");
+  addDependency("Auto Sizing", "1.0");
   addInParameter<bool>("oriented", paramHelp[0], "true");
   addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
   addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS);

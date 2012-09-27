@@ -346,7 +346,7 @@ public:
   TreeRadial(const PluginContext* context):LayoutAlgorithm(context), tree(NULL) {
     addNodeSizePropertyParameter(this);
     addSpacingParameters(this);
-    addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
+    addDependency("Tree Leaf", "1.0");
   }
 
   bool run() {
