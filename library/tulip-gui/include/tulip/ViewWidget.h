@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef VIEWWIDGET_H
 #define VIEWWIDGET_H
 
@@ -118,3 +120,4 @@ protected:
 }
 
 #endif // VIEWWIDGET_H
+///@endcond

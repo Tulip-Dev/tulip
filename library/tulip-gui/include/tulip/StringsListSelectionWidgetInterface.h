@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef STRINGLISTSELECTIONWIDGETINTERFACE_H_
 #define STRINGLISTSELECTIONWIDGETINTERFACE_H_
@@ -58,3 +60,4 @@ public :
 }
 
 #endif /* STRINGLISTSELECTIONWIDGETINTERFACE_H_ */
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #include <string>
 
@@ -92,3 +94,4 @@ public:
 protected:
   yajl_gen_t* _generator;
 };
+///@endcond

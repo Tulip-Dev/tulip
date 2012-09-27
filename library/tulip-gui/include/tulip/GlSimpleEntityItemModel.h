@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLSIMPLEENTITYITEMMODEL_H
 #define GLSIMPLEENTITYITEMMODEL_H
@@ -64,3 +66,4 @@ protected :
 }
 
 #endif // GLSIMPLEENTITYITEMMODEL_H
+///@endcond

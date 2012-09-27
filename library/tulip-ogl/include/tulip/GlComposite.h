@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef COMPOSITE_H
 #define COMPOSITE_H
 
@@ -167,3 +169,4 @@ protected:
 
 }
 #endif
+///@endcond

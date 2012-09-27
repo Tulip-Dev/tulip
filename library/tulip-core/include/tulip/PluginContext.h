@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef _PLUGINCONTEXT
 #define _PLUGINCONTEXT
@@ -62,3 +64,4 @@ public :
 
 
 
+///@endcond

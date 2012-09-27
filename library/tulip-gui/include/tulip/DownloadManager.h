@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #include <QtCore/QObject>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtCore/QUrl>
@@ -40,3 +42,4 @@ public:
 public slots:
   void downloadFinished(QNetworkReply *reply);
 };
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_BOUNDINGBOX_H
 #define Tulip_BOUNDINGBOX_H
 
@@ -184,3 +186,4 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
 }
 
 #endif // Tulip_BOUNDINGBOX_H
+///@endcond

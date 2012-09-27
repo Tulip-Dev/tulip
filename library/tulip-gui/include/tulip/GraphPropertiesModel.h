@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GRAPHPROPERTIESMODEL_H
 #define GRAPHPROPERTIESMODEL_H
@@ -146,3 +148,4 @@ public:
 
 
 #endif // GRAPHPROPERTIESMODEL_H
+///@endcond

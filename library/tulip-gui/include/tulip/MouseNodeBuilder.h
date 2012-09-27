@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MOUSEADDNODE_H
 #define MOUSEADDNODE_H
 
@@ -39,3 +41,4 @@ private:
 
 }
 #endif
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _Tulip_SNAPSHOTDIALOG_H
 #define _Tulip_SNAPSHOTDIALOG_H
 
@@ -88,3 +90,4 @@ protected :
 
 
 
+///@endcond

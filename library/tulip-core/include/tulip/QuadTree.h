@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef QUADTREE_H
 #define QUADTREE_H
 
@@ -248,3 +250,4 @@ private:
 
 #endif // QUADTREE_H
 
+///@endcond

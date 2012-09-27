@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_METAGRAPH_H
 #define TULIP_METAGRAPH_H
 
@@ -75,3 +77,4 @@ private:
 }
 #endif
 
+///@endcond

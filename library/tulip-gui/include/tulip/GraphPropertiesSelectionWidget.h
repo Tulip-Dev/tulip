@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GRAPHPROPERTYSELECTIONWIDGET_H_
 #define GRAPHPROPERTYSELECTIONWIDGET_H_
@@ -99,3 +101,4 @@ private :
 }
 
 #endif /* GRAPHPROPERTYSELECTIONWIDGET_H_ */
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef _TLP_MIMES_H
 #define _TLP_MIMES_H
@@ -82,3 +84,4 @@ private:
 };
 
 #endif //_TLP_MIMES_H
+///@endcond

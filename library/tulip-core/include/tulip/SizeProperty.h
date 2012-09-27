@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_SIZES_H
 #define TULIP_SIZES_H
 
@@ -87,3 +89,4 @@ public :
 }
 #endif
 
+///@endcond

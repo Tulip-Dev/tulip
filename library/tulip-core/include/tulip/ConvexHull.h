@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TLP_GEO_CONVEX_HULL_H
 #define TLP_GEO_CONVEX_HULL_H
 #include <vector>
@@ -42,3 +44,4 @@ TLP_SCOPE void convexHull (const std::vector<Coord> &points,
 
 }
 #endif
+///@endcond

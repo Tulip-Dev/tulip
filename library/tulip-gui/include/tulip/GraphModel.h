@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GRAPHMODEL_H
 #define GRAPHMODEL_H
@@ -129,3 +131,4 @@ protected:
 }
 
 #endif // GRAPHMODEL_H
+///@endcond

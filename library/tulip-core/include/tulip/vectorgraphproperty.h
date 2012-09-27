@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef VECTORGRAPHPROPERTY_H
 #define VECTORGRAPHPROPERTY_H
 #include <algorithm>
@@ -236,3 +238,4 @@ private:
 
 }
 #endif // VECTORGRAPHPROPERTY_H
+///@endcond

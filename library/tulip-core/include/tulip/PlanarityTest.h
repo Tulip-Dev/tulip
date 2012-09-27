@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIP_PLANARITYTESTX_H
 #define TULIP_PLANARITYTESTX_H
@@ -101,3 +103,4 @@ private:
 
 }
 #endif
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef DOUBLESTRINGSLISTSELECTIONWIDGET_H_
 #define DOUBLESTRINGSLISTSELECTIONWIDGET_H_
@@ -75,3 +77,4 @@ private :
 }
 
 #endif /* DOUBLESTRINGSLISTSELECTIONWIDGET_H_ */
+///@endcond

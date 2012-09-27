@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GLHEXAGON_H
 #define GLHEXAGON_H
 
@@ -48,3 +50,4 @@ public:
 
 }
 #endif
+///@endcond

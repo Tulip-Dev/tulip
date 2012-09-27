@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLSIMPLEENTITY_H
 #define Tulip_GLSIMPLEENTITY_H
 
@@ -167,3 +169,4 @@ protected:
 }
 
 #endif // Tulip_GLSIMPLEENTITY_H
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef EDGEEXTREMITYGLYPH_H_
 #define EDGEEXTREMITYGLYPH_H_
@@ -57,3 +59,4 @@ protected:
 }
 
 #endif /* EDGEEXTREMITYGLYPH_H_ */
+///@endcond

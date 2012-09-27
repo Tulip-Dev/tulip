@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef COLORSCALECONFIGDIALOG_H_
 #define COLORSCALECONFIGDIALOG_H_
@@ -82,3 +84,4 @@ private :
 }
 
 #endif /* COLORSCALECONFIGDIALOG_H_ */
+///@endcond

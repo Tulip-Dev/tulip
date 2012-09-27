@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #include <tulip/GlOpenUniformCubicBSpline.h>
 
@@ -52,3 +54,4 @@ private :
 };
 
 }
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLPOLYGON_H
 #define GLPOLYGON_H
@@ -85,3 +87,4 @@ public:
 
 }
 #endif
+///@endcond

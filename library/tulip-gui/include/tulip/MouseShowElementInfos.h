@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _Tulip_MOUSESHOWELEMENTINFOS_H
 #define _Tulip_MOUSESHOWELEMENTINFOS_H
 
@@ -59,3 +61,4 @@ protected:
 
 
 #endif
+///@endcond

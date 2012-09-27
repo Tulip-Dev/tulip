@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GLYPH_H
 #define GLYPH_H
 
@@ -117,3 +119,4 @@ int id() const { return ID; }
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif //GLYPH_H
+///@endcond

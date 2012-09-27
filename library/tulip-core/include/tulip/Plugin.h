@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIP_PLUGIN_H
 #define TULIP_PLUGIN_H
@@ -209,3 +211,4 @@ C##Factory C##FactoryInitializer;               \
 }
 
 #endif //TULIP_PLUGIN_H
+///@endcond

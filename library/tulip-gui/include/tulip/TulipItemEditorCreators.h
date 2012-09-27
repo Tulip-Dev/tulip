@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPITEMEDITORCREATORS_H
 #define TULIPITEMEDITORCREATORS_H
 
@@ -205,3 +207,4 @@ template class tlp::StringDisplayEditorCreator<tlp::SizeType>;
 #include "cxx/TulipItemEditorCreators.cxx"
 
 #endif // TULIPITEMEDITORCREATORS_H
+///@endcond

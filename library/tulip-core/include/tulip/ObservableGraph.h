@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GRAPHOBSERVABLE_H
 #define GRAPHOBSERVABLE_H
 #include <list>
@@ -96,3 +98,4 @@ protected:
 
 #endif
 
+///@endcond

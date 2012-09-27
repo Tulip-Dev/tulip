@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef CONSOLE_UTILS
 #define CONSOLE_UTILS
@@ -527,3 +529,4 @@ inline std::ostream& fillToEndOfLine(std::ostream& s) {
 }
 
 #endif
+///@endcond

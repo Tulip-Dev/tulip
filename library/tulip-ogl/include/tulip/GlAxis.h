@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLAXIS_H_
 #define GLAXIS_H_
@@ -244,3 +246,4 @@ protected :
 }
 
 #endif /* GLAXIS_H_ */
+///@endcond

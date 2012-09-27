@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLSCENEZOOMANDPAN_H_
 #define GLSCENEZOOMANDPAN_H_
@@ -123,3 +125,4 @@ protected :
 }
 
 #endif /* GLSCENEZOOMANDPAN_H_ */
+///@endcond

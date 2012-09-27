@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TLP_PLUGINLOADERTXT
 #define TLP_PLUGINLOADERTXT
 #include <tulip/PluginLoader.h>
@@ -32,3 +34,4 @@ struct TLP_SCOPE PluginLoaderTxt:public PluginLoader {
 
 }
 #endif
+///@endcond

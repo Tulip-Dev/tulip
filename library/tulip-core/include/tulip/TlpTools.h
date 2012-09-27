@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _TLPTOOLS_H
 #define _TLPTOOLS_H
 
@@ -51,3 +53,4 @@ TLP_SCOPE std::string demangleTlpClassName(const char *className);
 }
 
 #endif
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_PLUGINLISTER_H
 #define TULIP_PLUGINLISTER_H
 
@@ -197,3 +199,4 @@ protected:
 }
 
 #endif //TULIP_PLUGINLISTER_H
+///@endcond

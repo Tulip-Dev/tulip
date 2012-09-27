@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _PERSPECTIVE_H
 #define _PERSPECTIVE_H
 
@@ -112,3 +114,4 @@ protected slots:
 }
 
 #endif //_PERSPECTIVE_H
+///@endcond

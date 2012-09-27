@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLGRAPHSTATICDATA_H
 #define Tulip_GLGRAPHSTATICDATA_H
 
@@ -46,3 +48,4 @@ public:
 }
 
 #endif // Tulip_GLGRAPHSTATICDATA_H
+///@endcond

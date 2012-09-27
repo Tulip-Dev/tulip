@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLSPHERE_H
 #define Tulip_GLSPHERE_H
 
@@ -115,3 +117,4 @@ private:
 }
 
 #endif // Tulip_GLSCENE_H
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_SUPERGRAPHIMPL_H
 #define Tulip_SUPERGRAPHIMPL_H
 
@@ -143,3 +145,4 @@ private :
 #endif
 
 #endif
+///@endcond

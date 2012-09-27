@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIPFONTDIALOG_H
 #define TULIPFONTDIALOG_H
@@ -52,3 +54,4 @@ protected slots:
 }
 
 #endif // TULIPFONTDIALOG_H
+///@endcond

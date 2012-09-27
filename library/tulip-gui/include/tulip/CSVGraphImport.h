@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef CSVGRAPHIMPORT_H
 #define CSVGRAPHIMPORT_H
 
@@ -299,3 +301,4 @@ protected:
 
 }
 #endif // CSVGRAPHIMPORT_H
+///@endcond

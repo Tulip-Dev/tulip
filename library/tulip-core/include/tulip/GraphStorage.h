@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GRAPHSTORAGE_H
 #define GRAPHSTORAGE_H
@@ -413,3 +415,4 @@ private :
 };
 }
 #endif // GRAPHSTORAGE_H
+///@endcond

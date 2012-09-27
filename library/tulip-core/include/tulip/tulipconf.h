@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPCONF_H
 #define TULIPCONF_H
 #include <QtCore/QDebug>
@@ -170,3 +172,4 @@ static float strtof(const char* cptr, char** endptr) {
 QDebug TLP_SCOPE operator<<(QDebug,const std::string&);
 
 #endif //TULIPCONF_H
+///@endcond

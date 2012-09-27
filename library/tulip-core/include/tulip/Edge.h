@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_EDGE_H
 #define Tulip_EDGE_H
 #include <climits>
@@ -75,3 +77,4 @@ struct less<tlp::edge> {
 }
 #endif
 #endif
+///@endcond

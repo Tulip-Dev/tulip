@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIPTABLEWIDGETITEMDELEGATE_H_
 #define TULIPTABLEWIDGETITEMDELEGATE_H_
@@ -36,3 +38,4 @@ public:
 };
 
 #endif /* TULIPTABLEWIDGETITEMDELEGATE_H_ */
+///@endcond

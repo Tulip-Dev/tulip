@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef COLORSCALE_H_
 #define COLORSCALE_H_
@@ -143,3 +145,4 @@ protected:
 }
 
 #endif /* COLORSCALE_H_ */
+///@endcond

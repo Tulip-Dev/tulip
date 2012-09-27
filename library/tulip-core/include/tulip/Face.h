@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef Tulip_FACE_H
 #define Tulip_FACE_H
@@ -67,3 +69,4 @@ template<> struct less<tlp::Face> {
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif
+///@endcond

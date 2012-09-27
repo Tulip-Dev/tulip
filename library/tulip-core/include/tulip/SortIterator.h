@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_SORTITERATOR_H
 #define TULIP_SORTITERATOR_H
 #include <vector>
@@ -81,3 +83,4 @@ struct SortTargetEdgeIterator : public StableIterator<tlp::edge> {
 
 }
 #endif
+///@endcond

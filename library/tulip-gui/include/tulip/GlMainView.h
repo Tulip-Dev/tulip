@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLMAINVIEW_H
 #define Tulip_GLMAINVIEW_H
 
@@ -79,3 +81,4 @@ protected:
 }
 
 #endif /* GLMAINVIEW_H_ */
+///@endcond

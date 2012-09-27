@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef _DRAGHANDLE_H
 #define _DRAGHANDLE_H
@@ -44,3 +46,4 @@ private:
 
 }
 #endif //_DRAGHANDLE_H
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef DOUBLEPROPERTYANIMATION_H
 #define DOUBLEPROPERTYANIMATION_H
@@ -39,3 +41,4 @@ protected:
 }
 
 #endif // DOUBLEPROPERTYANIMATION_H
+///@endcond

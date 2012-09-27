@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_OPENGLERRORVIEWER_H
 #define Tulip_OPENGLERRORVIEWER_H
 
@@ -53,3 +55,4 @@ public :
 }
 
 #endif
+///@endcond

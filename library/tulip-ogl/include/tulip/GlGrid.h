@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef _Tulip_GLGRID_H_
 #define _Tulip_GLGRID_H_
@@ -95,3 +97,4 @@ protected:
 
 }
 #endif
+///@endcond

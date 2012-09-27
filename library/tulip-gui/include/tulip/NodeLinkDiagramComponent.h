@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _Tulip_NODELINKDIAGRAMCOMPONENT_H
 #define _Tulip_NODELINKDIAGRAMCOMPONENT_H
 
@@ -83,3 +85,4 @@ protected:
 
 
 
+///@endcond

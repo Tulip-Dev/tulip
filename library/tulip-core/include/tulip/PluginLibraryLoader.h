@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef PLUGINLIBLOADER_H
 #define PLUGINLIBLOADER_H
 
@@ -46,15 +48,15 @@ public:
   * once for the glyph folder, and once for the interactors folder.
   *
   * lib/tulip/
-  * ├── glyphs
-  * │   ├── libBillboard-4.0.0.so
-  * │   └── libWindow-4.0.0.so
-  * ├── interactors
-  * │   ├── libInteractorAddEdge-4.0.0.so
-  * │   └── libInteractorSelectionModifier-4.0.0.so
-  * ├── libAdjacencyMatrixImport-4.0.0.so
-  * ├── libColorMapping-4.0.0.so
-  * ├── libCompleteGraph-4.0.0.so
+  * âââ glyphs
+  * âÂ Â  âââ libBillboard-4.0.0.so
+  * âÂ Â  âââ libWindow-4.0.0.so
+  * âââ interactors
+  * âÂ Â  âââ libInteractorAddEdge-4.0.0.so
+  * âÂ Â  âââ libInteractorSelectionModifier-4.0.0.so
+  * âââ libAdjacencyMatrixImport-4.0.0.so
+  * âââ libColorMapping-4.0.0.so
+  * âââ libCompleteGraph-4.0.0.so
   *
   *
   * @param plug A PluginLoader to output what is going on. Defaults to 0.
@@ -106,3 +108,4 @@ private:
 }
 #endif //DOXYGEN_NOTFOR_USER
 #endif //PLUGINLIBLOADER_H
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef PROPERTY_INTERFACE_H
 #define PROPERTY_INTERFACE_H
 
@@ -357,3 +359,4 @@ TLP_BEGIN_HASH_NAMESPACE {
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif // PROPERTY_INTERFACE_H
+///@endcond

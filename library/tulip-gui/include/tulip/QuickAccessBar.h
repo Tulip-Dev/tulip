@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef QUICKACCESSBAR_H
 #define QUICKACCESSBAR_H
@@ -79,3 +81,4 @@ signals:
 }
 
 #endif // QUICKACCESSBAR_H
+///@endcond

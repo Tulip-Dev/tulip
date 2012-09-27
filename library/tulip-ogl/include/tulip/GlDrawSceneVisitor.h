@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLDRAWSCENEVISITOR_H
 #define Tulip_GLDRAWSCENEVISITOR_H
 
@@ -48,3 +50,4 @@ private:
 }
 
 #endif // Tulip_GLDRAWSCENEVISITOR_H
+///@endcond

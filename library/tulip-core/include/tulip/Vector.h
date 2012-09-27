@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 //@TLPGEOLICENCE#
 
 #ifndef _TLP_GEO_VECTOR_H
@@ -669,3 +671,4 @@ TLP_BEGIN_HASH_NAMESPACE {
 
 #include "cxx/Vector.cxx"
 #endif
+///@endcond

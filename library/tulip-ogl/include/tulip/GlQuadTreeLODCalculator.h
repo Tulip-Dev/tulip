@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_QLQUADTREELODCALCULATOR_H
 #define Tulip_QLQUADTREELODCALCULATOR_H
 
@@ -143,3 +145,4 @@ protected :
 }
 
 #endif // Tulip_QTQUADTREELODCALCULATOR_H
+///@endcond

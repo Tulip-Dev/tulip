@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_STABLEITERATOR_H
 #define TULIP_STABLEITERATOR_H
 #include <tulip/Iterator.h>
@@ -109,3 +111,4 @@ protected :
 
 }
 #endif
+///@endcond

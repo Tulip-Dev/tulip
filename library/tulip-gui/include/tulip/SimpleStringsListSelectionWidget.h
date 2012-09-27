@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef SIMPLESTRINGSLISTSELECTIONWIDGET_H_
 #define SIMPLESTRINGSLISTSELECTIONWIDGET_H_
@@ -71,3 +73,4 @@ private :
 }
 
 #endif /* SIMPLESTRINGSLISTSELECTIONWIDGET_H_ */
+///@endcond

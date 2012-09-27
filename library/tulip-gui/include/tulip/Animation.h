@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef ANIMATION_H_
 #define ANIMATION_H_
 
@@ -45,3 +47,4 @@ public slots:
 }
 
 #endif /* ANIMATION_H_ */
+///@endcond

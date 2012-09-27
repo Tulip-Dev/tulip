@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef CSVIMPORTCONFIGURATIONWIDGET_H
 #define CSVIMPORTCONFIGURATIONWIDGET_H
 
@@ -291,3 +293,4 @@ private:
 
 }
 #endif // CSVIMPORTCONFIGURATIONWIDGET_H
+///@endcond

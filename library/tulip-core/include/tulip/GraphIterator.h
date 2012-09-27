@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_GGRAPHITERATOR_H
 #define TULIP_GGRAPHITERATOR_H
 #include <tulip/Iterator.h>
@@ -259,3 +261,4 @@ public:
 }
 #endif // DOXYGEN_NOTFOR_DEVEL
 #endif
+///@endcond

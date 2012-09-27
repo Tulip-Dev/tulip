@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MINMAXPROPERTY_H
 #define MINMAXPROPERTY_H
 
@@ -137,3 +139,4 @@ protected:
 #include "cxx/minmaxproperty.cxx"
 
 #endif //MINMAXPROPERTY_H
+///@endcond

@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TLP_PLUGINLOADER
 #define TLP_PLUGINLOADER
 #include <list>
@@ -38,3 +40,4 @@ struct TLP_SCOPE PluginLoader {
 
 }
 #endif
+///@endcond

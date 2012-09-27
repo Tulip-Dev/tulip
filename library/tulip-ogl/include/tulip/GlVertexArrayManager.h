@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLVERTEXARRAYMANAGER_H
 #define Tulip_GLVERTEXARRAYMANAGER_H
 
@@ -217,3 +219,4 @@ protected:
 }
 
 #endif
+///@endcond

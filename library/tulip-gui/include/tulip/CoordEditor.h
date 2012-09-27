@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef COORDEDITOR_H
 #define COORDEDITOR_H
@@ -56,3 +58,4 @@ private slots:
 }
 
 #endif // COORDEDITOR_H
+///@endcond

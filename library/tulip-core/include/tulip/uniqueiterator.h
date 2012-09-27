@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef UNIQUEITERATOR_H
 #define UNIQUEITERATOR_H
 #include <set>
@@ -121,3 +123,4 @@ public:
 
 }
 #endif // UNIQUEITERATOR_H
+///@endcond
