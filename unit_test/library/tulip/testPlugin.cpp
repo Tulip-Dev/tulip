@@ -28,7 +28,7 @@ class Test : public tlp::BooleanAlgorithm {
 public:
   PLUGININFORMATIONS("Test","Jezequel","03/11/2004","0","1.0", "")
   Test(tlp::PluginContext* context) : tlp::BooleanAlgorithm(context) {
-    addDependency<tlp::BooleanAlgorithm>("Test", "1.0");
+    addDependency("Test", "1.0");
     addInParameter<int>("testParameter", "no help for you :)", "0", false);
   }
   ~Test() {}
