@@ -314,6 +314,11 @@ void NodeLinkDiagramComponent::showGridControl() {
   emit drawNeeded();
 }
 
+void NodeLinkDiagramComponent::requestChangeGraph(Graph *graph){
+  this->loadGraphOnScene(graph);
+  emit graphSet(graph);
+}
+
 void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point) {
   GlMainView::fillContextMenu(menu,point);
   QFont f;
@@ -415,6 +420,7 @@ void NodeLinkDiagramComponent::goInsideItem() {
   zoomAnPan.animateZoomAndPan();
   this->loadGraphOnScene(metaGraph);
   emit graphSet(metaGraph);
+  centerView();
   draw(NULL);
 }
 

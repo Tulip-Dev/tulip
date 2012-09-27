@@ -55,6 +55,7 @@ public:
 
 public slots:
   void draw(PluginProgress *pluginProgress);
+  void requestChangeGraph(Graph *graph);
 
 protected slots:
   void addRemoveItemToSelection();
