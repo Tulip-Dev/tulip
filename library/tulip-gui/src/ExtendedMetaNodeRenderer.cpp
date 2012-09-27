@@ -113,8 +113,10 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
 
   if(viewport[2]==0)
     viewport[2]=1;
+
   if(viewport[3]==0)
     viewport[3]=1;
+
   view->getGlMainWidget()->resizeGL(camera->getViewport()[2],camera->getViewport()[3]);
   scene->setViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
 

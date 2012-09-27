@@ -314,7 +314,7 @@ void NodeLinkDiagramComponent::showGridControl() {
   emit drawNeeded();
 }
 
-void NodeLinkDiagramComponent::requestChangeGraph(Graph *graph){
+void NodeLinkDiagramComponent::requestChangeGraph(Graph *graph) {
   this->loadGraphOnScene(graph);
   emit graphSet(graph);
 }

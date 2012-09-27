@@ -170,7 +170,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   bool vertexArrayManagerActivated=inputData->getGlVertexArrayManager()->isActivated();
 
-  if(vertexArrayManagerActivated){
+  if(vertexArrayManagerActivated) {
     // VertexArrayManager begin
     if(!selectionDrawActivate) {
       inputData->getGlVertexArrayManager()->activate(true);
