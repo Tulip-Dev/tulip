@@ -99,6 +99,14 @@ STRING_CMP(StartsWithOperator,a.startsWith(b))
 STRING_CMP(EndsWithOperator,a.endsWith(b))
 STRING_CMP(ContainsOperator,a.contains(b))
 
+class MatchesOperator: public StringSearchOperator {
+public:
+  bool compareStrings(const QString &a, const QString &b) {
+    QRegExp regexp(b);
+    return regexp.exactMatch(a);
+  }
+};
+
 #define NUM_CMP(NAME,CMP) class NAME : public NumericSearchOperator { \
 public:\
   bool compareDoubles(double a, double b) { return a CMP b; }\
@@ -119,7 +127,8 @@ QVector<SearchOperator*> SearchWidget::NUMERIC_OPERATORS = QVector<SearchOperato
     << new LesserEqualOperator
     << new StartsWithOperator
     << new EndsWithOperator
-    << new ContainsOperator;
+    << new ContainsOperator
+    << new MatchesOperator;
 
 QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator*>()
     << new StringEqualsOperator
@@ -130,7 +139,8 @@ QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator
     << NULL
     << new StartsWithOperator
     << new EndsWithOperator
-    << new ContainsOperator;
+    << new ContainsOperator
+    << new MatchesOperator;
 
 SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SearchWidget) {
   _ui->setupUi(this);
@@ -169,16 +179,11 @@ void SearchWidget::setGraph(Graph *g) {
     _ui->resultsCountLabel->setText("");
   }
 
-  static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->resultsStorageCombo->model())->setGraph(g);
-
+  _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(g,false,_ui->resultsStorageCombo));
+  _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(g,false,_ui->searchTermACombo));
+  _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Custom value"),g,false,_ui->searchTermBCombo));
   _ui->resultsStorageCombo->setCurrentIndex(0);
-
-  static_cast<GraphPropertiesModel<PropertyInterface>*>(_ui->searchTermACombo->model())->setGraph(g);
-
   _ui->searchTermACombo->setCurrentIndex(0);
-
-  static_cast<GraphPropertiesModel<PropertyInterface>*>(_ui->searchTermBCombo->model())->setGraph(g);
-
   _ui->searchTermBCombo->setCurrentIndex(0);
 }
 
