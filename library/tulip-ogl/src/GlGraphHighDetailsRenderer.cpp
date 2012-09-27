@@ -168,13 +168,17 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   GlEdge::clearEdgeWidthLodSystem();
 
-  // VertexArrayManager begin
-  if(!selectionDrawActivate) {
-    inputData->getGlVertexArrayManager()->activate(true);
-    inputData->getGlVertexArrayManager()->beginRendering();
-  }
-  else {
-    inputData->getGlVertexArrayManager()->activate(false);
+  bool vertexArrayManagerActivated=inputData->getGlVertexArrayManager()->isActivated();
+
+  if(vertexArrayManagerActivated){
+    // VertexArrayManager begin
+    if(!selectionDrawActivate) {
+      inputData->getGlVertexArrayManager()->activate(true);
+      inputData->getGlVertexArrayManager()->beginRendering();
+    }
+    else {
+      inputData->getGlVertexArrayManager()->activate(false);
+    }
   }
 
   // VertexArrayManager update
@@ -350,7 +354,8 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   }
 
   if(!selectionDrawActivate) {
-    inputData->getGlVertexArrayManager()->endRendering();
+    if(vertexArrayManagerActivated)
+      inputData->getGlVertexArrayManager()->endRendering();
   }
   else {
     selectionDrawActivate=false;
