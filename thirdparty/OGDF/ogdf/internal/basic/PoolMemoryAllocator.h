@@ -77,7 +77,7 @@ namespace ogdf {
  */
 class PoolMemoryAllocator
 {
-	struct MemElem {
+    struct OGDF_EXPORT MemElem {
 		MemElem *m_next;
 	};
 	struct MemElemEx {
