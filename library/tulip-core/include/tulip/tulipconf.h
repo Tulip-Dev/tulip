@@ -87,11 +87,11 @@ static double round(double d) {
 }
 
 static double fabs(int i) {
-	return fabs((double)i);
+  return fabs((double)i);
 }
 
 static float strtof(const char* cptr, char** endptr) {
-	return strtod(cptr, endptr);
+  return strtod(cptr, endptr);
 }
 
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //MSVC has a different name for pretty_function

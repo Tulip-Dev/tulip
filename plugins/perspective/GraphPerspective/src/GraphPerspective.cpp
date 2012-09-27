@@ -433,6 +433,7 @@ void GraphPerspective::saveAs(const QString& path) {
     if (!path.isEmpty()) {
       saveAs(path);
     }
+
     return;
   }
 

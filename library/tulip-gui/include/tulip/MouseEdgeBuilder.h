@@ -31,54 +31,54 @@ class LayoutProperty;
 
 class TLP_QT_SCOPE MouseEdgeBuilder:public GLInteractorComponent, public Observable {
 private:
-    node _source;
-    bool _started;
-    Coord _startPos,_curPos;
-    std::vector<Coord> _bends;
-    Graph *_graph;
-    LayoutProperty *_layoutProperty;
+  node _source;
+  bool _started;
+  Coord _startPos,_curPos;
+  std::vector<Coord> _bends;
+  Graph *_graph;
+  LayoutProperty *_layoutProperty;
 
 protected:
-    /**
-     * @brief addLink Adds a link between a source and destination nodes. Adds an edge by default
-     * @param source
-     * @param dest
-     */
-    virtual void addLink(QObject *, const node source, const node dest);
-    /**
-     * @brief source gets the source node.
-     * @return
-     */
-    node source()const{
-        return _source;
-    }
-    /**
-     * @brief bends returns the bends list.
-     * @return
-     */
-    const std::vector<Coord>& bends()const{
-        return _bends;
-    }
-    /**
-     * @brief setBends updates the bends list.
-     * @param bends
-     */
-    void setBends(const std::vector<Coord>& bends){
-        _bends = bends;
-    }
+  /**
+   * @brief addLink Adds a link between a source and destination nodes. Adds an edge by default
+   * @param source
+   * @param dest
+   */
+  virtual void addLink(QObject *, const node source, const node dest);
+  /**
+   * @brief source gets the source node.
+   * @return
+   */
+  node source()const {
+    return _source;
+  }
+  /**
+   * @brief bends returns the bends list.
+   * @return
+   */
+  const std::vector<Coord>& bends()const {
+    return _bends;
+  }
+  /**
+   * @brief setBends updates the bends list.
+   * @param bends
+   */
+  void setBends(const std::vector<Coord>& bends) {
+    _bends = bends;
+  }
 
 public:
-    MouseEdgeBuilder();
-    bool draw(GlMainWidget *);
-    bool eventFilter(QObject *, QEvent *);
-    void initObserver(Graph *);
-    void clearObserver();
+  MouseEdgeBuilder();
+  bool draw(GlMainWidget *);
+  bool eventFilter(QObject *, QEvent *);
+  void initObserver(Graph *);
+  void clearObserver();
 
-    void treatEvent(const Event&);
+  void treatEvent(const Event&);
 
-    InteractorComponent *clone() {
-        return new MouseEdgeBuilder();
-    }
+  InteractorComponent *clone() {
+    return new MouseEdgeBuilder();
+  }
 };
 
 
