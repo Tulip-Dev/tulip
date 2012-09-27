@@ -76,7 +76,7 @@ public:
     addInParameter<int>("maxsize",paramHelp[1],"100");
     addInParameter<int>("maxdegree",paramHelp[2],"5");
     addInParameter<bool>("tree layout",paramHelp[3],"false");
-    addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
+    addDependency("Tree Leaf", "1.0");
   }
   ~RandomTreeGeneral() {
   }

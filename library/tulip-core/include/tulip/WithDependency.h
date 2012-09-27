@@ -35,10 +35,6 @@ namespace tlp {
  */
 struct Dependency {
   /**
-   * @brief The typename of the dependency (e.g. DoubleAlgorithm)
-   */
-  std::string factoryName;
-  /**
    * @brief The name of the plug-in, as registered in the Tulip plug-in system.
    */
   std::string pluginName;
@@ -54,9 +50,8 @@ struct Dependency {
    * @param pName The name of the plug-in, as registered in the Tulip plug-in system.
    * @param pRelease The required version of the plug-in.
    */
-  Dependency(std::string fName, std::string pName,
+  Dependency(std::string pName,
              std::string pRelease) {
-    factoryName = fName;
     pluginName = pName;
     pluginRelease = pRelease;
   }
@@ -73,7 +68,7 @@ protected:
    * @brief The inner list of dependencies.
    */
   std::list<Dependency> _dependencies;
-
+public:
   /**
    * @brief Adds a dependency upon another plug-in.
    *
@@ -81,12 +76,10 @@ protected:
    * @param name The name of the plug-in, as registered in the Tulip plug-in system.
    * @param release The required version of the plug-in.
    */
-  void addDependency(const char* factory, const char *name,
-                     const char *release) {
-    _dependencies.push_back(Dependency(factory, name, release));
+  void addDependency(const char *name,const char *release) {
+    _dependencies.push_back(Dependency(name, release));
   }
 
-public:
   /**
    * @brief Gets the list of Dependencies of this plug-in.
    *
@@ -96,15 +89,6 @@ public:
     return _dependencies;
   }
 
-  /**
-   * @brief Adds a dependency upon another plug-in.
-   * The parameters should be null-terminated strings, or NULL.
-   * @param name The name of the plug-in, as registered in the Tulip plug-in system.
-   * @param release The required version of the plug-in.
-   */
-  template<typename Ty> void addDependency(const char* name, const char* release) {
-    addDependency(tlp::demangleTlpClassName(typeid(Ty).name()).c_str(), name, release);
-  }
 };
 
 
