@@ -117,6 +117,10 @@ public:
    */
   void activate(bool act);
 
+  bool isActivated() {
+    return activated;
+  }
+
   /**
    * This function is call when you want to activate line rendering of a specific edge
    */
