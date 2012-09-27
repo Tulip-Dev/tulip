@@ -83,7 +83,7 @@ SnapshotDialog::SnapshotDialog(GlMainView &v,QWidget *parent):QDialog(parent),ui
 }
 
 SnapshotDialog::~SnapshotDialog() {
-delete ui;
+  delete ui;
 }
 
 void SnapshotDialog::resizeEvent(QResizeEvent *) {
