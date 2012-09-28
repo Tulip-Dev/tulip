@@ -154,12 +154,12 @@ public:
   /**
    * @return The major Tulip version the plug-in was built with.
    */
-  std::string tulipMajor() const;
+  virtual std::string tulipMajor() const;
 
   /**
    * @return Return the minor Tulip version this plug-in was built with.
    */
-  std::string tulipMinor() const;
+  virtual std::string tulipMinor() const;
 
   /**
   * @brief Returns the ID of the glyph this factory builds.
