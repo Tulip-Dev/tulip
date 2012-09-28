@@ -27,6 +27,7 @@
 #include <set>
 #include <cassert>
 
+#include <tulip/tulipconf.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/vectorgraphproperty.h>
