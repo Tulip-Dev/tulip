@@ -20,6 +20,10 @@ target_link_libraries(packagePlugins ${QT_LIBRARIES}
                       ${OGDFLibrary}
                       quazip)
 
+IF(NOT WIN32)
+  target_link_libraries(packagePlugins pthread)
+ENDIF()
+
 IF(TULIP_GENERATE_PLUGINSERVER_TOOLS)
   INSTALL(TARGETS packagePlugins DESTINATION ${TulipBinInstallDir} COMPONENT plugin_server)
   INSTALL(TARGETS pushPlugins DESTINATION ${TulipBinInstallDir} COMPONENT plugin_server)
