@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef _TLPTOOLS_H
 #define _TLPTOOLS_H
@@ -34,6 +33,8 @@ extern TLP_SCOPE std::string TulipBitmapDir;
 extern TLP_SCOPE std::string TulipShareDir;
 
 /**
+ * @ingroup Plugins
+ *
  * @brief Initializes the Tulip library.
  * Looks for the Tulip plug-ins directory, and loads the plug-ins from it.
  * The plug-ins directory can be defined in different ways, given by order of prevalence :
@@ -44,6 +45,8 @@ extern TLP_SCOPE std::string TulipShareDir;
 extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
 
 /**
+ * @ingroup Plugins
+ *
  * @brief Demangles the name of a C++ class defined in the tlp namespace.
  * Simply removes the 'tlp::' prefix from the class name.
  * @return string The demangled name of a Tulip C++ class.
@@ -53,4 +56,3 @@ TLP_SCOPE std::string demangleTlpClassName(const char *className);
 }
 
 #endif
-///@endcond
