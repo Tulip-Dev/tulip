@@ -80,8 +80,8 @@ void TableView::setupWidget() {
 
   setCentralWidget(centralWidget);
   connect(_ui->propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
-  connect(_ui->propertiesEditor,SIGNAL(setAllNodes()),this,SLOT(setFilteredNodesValue()));
-  connect(_ui->propertiesEditor,SIGNAL(setAllEdges()),this,SLOT(setFilteredEdgesValue()));
+  connect(_ui->propertiesEditor,SIGNAL(setFilteredNodes()),this,SLOT(setFilteredNodesValue()));
+  connect(_ui->propertiesEditor,SIGNAL(setFilteredEdges()),this,SLOT(setFilteredEdgesValue()));
   connect(_ui->propertiesEditor,SIGNAL(mapToGraphSelection()),this,SLOT(mapToGraphSelection()));
 
   _ui->table->setItemDelegate(new GraphTableItemDelegate(_ui->table));

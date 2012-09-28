@@ -64,8 +64,8 @@ public:
 signals:
   void propertyVisibilityChanged(tlp::PropertyInterface*,bool);
   void showElementTypeChanged();
-  void setAllNodes();
-  void setAllEdges();
+  void setFilteredNodes();
+  void setFilteredEdges();
   void mapToGraphSelection();
 
 protected slots:
@@ -82,6 +82,8 @@ protected slots:
   void unCheckAll();
   void unCheckAllExcept();
   void showSystemProperties(bool);
+  void setAllNodes();
+  void setAllEdges();
 };
 
 #endif // PROPERTIESEDITOR_H

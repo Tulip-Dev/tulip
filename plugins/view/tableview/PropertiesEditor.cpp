@@ -103,9 +103,12 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   connect(menu.addAction(trUtf8("Uncheck all")),SIGNAL(triggered()),this,SLOT(unCheckAll()));
   connect(menu.addAction(trUtf8("Uncheck all except \"") + pname + "\""),SIGNAL(triggered()),this,SLOT(unCheckAllExcept()));
   menu.addSeparator();
+  connect(menu.addAction(trUtf8("Set all nodes")),SIGNAL(triggered()),this,SLOT(setAllNodes()));
+  connect(menu.addAction(trUtf8("Set all edges")),SIGNAL(triggered()),this,SLOT(setAllEdges()));
+  menu.addSeparator();
   connect(menu.addAction(trUtf8("Map visible items to graph")),SIGNAL(triggered()),this,SIGNAL(mapToGraphSelection()));
-  connect(menu.addAction(trUtf8("Set all nodes")),SIGNAL(triggered()),this,SIGNAL(setAllNodes()));
-  connect(menu.addAction(trUtf8("Set all edges")),SIGNAL(triggered()),this,SIGNAL(setAllEdges()));
+  connect(menu.addAction(trUtf8("Set displayed nodes")),SIGNAL(triggered()),this,SIGNAL(setFilteredNodes()));
+  connect(menu.addAction(trUtf8("Set displayed edges")),SIGNAL(triggered()),this,SIGNAL(setFilteredEdges()));
   menu.addSeparator();
   connect(menu.addAction(trUtf8("To labels")),SIGNAL(triggered()),this,SLOT(toLabels()));
   connect(menu.addAction(trUtf8("To labels (nodes only)")),SIGNAL(triggered()),this,SLOT(toNodesLabels()));
@@ -153,6 +156,22 @@ void PropertiesEditor::showSystemProperties(bool f) {
     static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
   else
     static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp("^(?!view).*");
+}
+
+void PropertiesEditor::setAllNodes() {
+  QVariant val = TulipItemDelegate::showEditorDialog(NODE,_contextProperty,_graph,static_cast<TulipItemDelegate*>(_delegate));
+  Observable::holdObservers();
+  _graph->push();
+  GraphModel::setAllNodeValue(_contextProperty,val);
+  Observable::unholdObservers();
+}
+
+void PropertiesEditor::setAllEdges() {
+  QVariant val = TulipItemDelegate::showEditorDialog(EDGE,_contextProperty,_graph,static_cast<TulipItemDelegate*>(_delegate));
+  Observable::holdObservers();
+  _graph->push();
+  GraphModel::setAllEdgeValue(_contextProperty,val);
+  Observable::unholdObservers();
 }
 
 void PropertiesEditor::copyProperty() {
