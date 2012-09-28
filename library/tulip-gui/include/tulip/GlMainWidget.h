@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 
 #ifndef Tulip_GLMAINWIDGET_H
@@ -37,28 +36,40 @@ namespace tlp {
 
 class GlCompositeHierarchyManager;
 
-/** \brief Widget of visualisation
+/** @ingroup OpenGL
+ * @brief This widget provide a simple system to visualize data/graph with OpenGL 3D engine
  *
- * This widget provide a simple system to display visualisation
+ * This widget is an interface between Qt Widget system and tulip OpenGL engine
+ * The central object of GlMainWidget is the GlScene member
+ * @see GlScene
+ *
+ * To use this class you have to :
+ *   - create a GlMainWidget
+ *   - get the GlScene with getScene() function
+ *   - add GlLayer and GlEntity to this scene
+ *   - call centerScene() to compute a good GlCamera
+ *   - see the result
+ *
+ * @see GlLayer
+ * @see GlEntity
+ *
+ *
  * If you only want to visualise a graph, you can call the setGraph function
- * But in other cases you can directly use the GlScene of the GlMainWidget
- * \see GlScene
  *
- * After scene construction you can perform some operation on GlMainWidgte :
+ *
+ * After scene construction you can perform some operation on GlMainWidget :
  * - Selection with doSelect() and selectGlEntities()
  * - Image output with getImage(), createPicture(), outputSVG() and outputEPS()
  * - Texture output with createTexture()
  * - others operation on GlScene and QGlWidget
- *
  */
-
 class TLP_QT_SCOPE GlMainWidget : public QGLWidget {
   Q_OBJECT
 
 public:
   /**
-    * \brief Configure the rendering process ( see render function)
-    * \see render
+    * @brief Configure the rendering process ( see render function)
+    * @see render
     **/
   enum RenderingOption {
     RenderScene=0x1, /** Force to render the graph even if there is a previous buffered render. You need to call this option if the graph is updated to regenerate the buffer. If not set try to use the last buffered graph render, if there is no valid buffer this flag is forced. **/
@@ -67,41 +78,50 @@ public:
   Q_DECLARE_FLAGS ( RenderingOptions, RenderingOption )
 
   /**
-   * Construct the GlMainWidget
+   * @brief Constructor of GlMainWidget
+   *
+   * Create a GlMainWidget with the GlScene associated to it
+   * @param parent Qt Widget parent system
+   * @param view if you want to link this GlMainWidget to a view : use this parameter
    */
   GlMainWidget(QWidget *parent,View *view=NULL);
   ~GlMainWidget();
 
   /**
-   * Get the scene of this glMainWidget
+   * @brief Get the GlScene of this GlMainWidget
+   * You have to add yours GlLayer and GlEntity to this GlScene
+   * At the construction this GlScene is empty
+   * @see GlScene
+   * @see GlScene::createLayer(const std::string &name)
+   * @see GlLayer::addGlEntity(GlSimpleEntity *entity,const std::string& name)
    */
   tlp::GlScene* getScene() {
     return &scene;
   }
 
-  /** \brief select nodes and edges in a region of the screen
+  /** @brief Select nodes and edges in a region of the screen
    *
-   *  select all nodes and edges lying in the area of the screen of given width and height,
+   *  Select all nodes and edges lying in the area of the screen of given width and height,
    *  and with its upper-left corner at (x,y)
-   *  \param sNode filled by the method with the nodes found in the region
-   *  \param sEdge filled by the method with the edges found in the region
+   *  @param selectedNode filled by the method with the nodes found in the region
+   *  @param selectedEdge filled by the method with the edges found in the region
    */
   void pickNodesEdges(const int x, const int y,
                       const int width, const int height,
                       std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
                       tlp::GlLayer* layer=NULL);
-  /** \brief select a node or edge at a point
-   *  select either a node or edge at point (x,y)
-   *  \param type tells what has been found: NODE, EDGE
-   *  \return true if something has been found, false otherwise
+  /** @brief Select a node or edge at a point
+   *  Select either a node or edge at point (x,y)
+   *  @param type tells what has been found: NODE, EDGE
+   *  @return true if something has been found, false otherwise
    */
   bool pickNodesEdges(const int x, const int y,
                       SelectedEntity &selectedEntity,
                       tlp::GlLayer* layer=NULL);
 
   /**
-   * @deprecated this function should not be used anymore, please use pickNodesEdges instead.
-   **/
+   * @deprecated this function should not be used anymore, use pickNodesEdges()
+   */
   _DEPRECATED void doSelect(const int x, const int y,
                             const int width, const int height,
                             std::vector<tlp::node> &sNode, std::vector<tlp::edge> &sEdge,
@@ -120,8 +140,8 @@ public:
   }
 
   /**
-   * @deprecated this function should not be used anymore, please use pickNodesEdges instead.
-   **/
+   * @deprecated this function should not be used anymore, use pickNodesEdges()
+   */
   _DEPRECATED bool doSelect(const int x, const int y,
                             tlp::ElementType &type,
                             tlp::node &n,tlp::edge &e,
@@ -145,36 +165,53 @@ public:
   }
 
   /**
-   * \brief EPS output of a GlGraph
+   * @brief EPS output of the GlMainWidget
    */
   bool outputEPS(int size, int doSort, const char *filename);
   /**
-   * \brief SVG output of a GlGraph
+   * @brief SVG output of the GlMainWidget
    */
   bool outputSVG(int size, const char* filename);
 
   /**
-   * Compute real texture size with given height and width
+   * @brief Compute texture size in power of two with given height and width
+   * For example if you set width to 94 and height to 256, this function set textureRealWidth to 128 and textureRealHeight to 256
    */
   static void getTextureRealSize(int width, int height, int &textureRealWidth, int &textureRealHeight);
 
   /**
-   * Take a snapshot of the Widget and put it in an OpenGl texture
+   * @brief Take a snapshot of the Widget and put it in an OpenGl texture
+   * @param width power of two number (for example 256)
+   * @param height power of two number (for example 256)
+   * You can use this texture with Tulip texture system
+   * @see GlTextureManager
    */
   QGLFramebufferObject *createTexture(const std::string &textureName,int width, int height);
   /**
-   * Take a snapshot of the Widget and put it in a picture
+   * @brief Take a snapshot of the Widget and put it in a picture
+   * @param width size
+   * @param height size
+   * @param center if true this function call a centerScene() before picture output
    */
   void createPicture(const std::string &pictureName,int width, int height,bool center=true);
 
   /**
    * Take a snapshot of the Widget and return it
+   * @param width size
+   * @param height size
+   * @param center if true this function call a centerScene() before picture output
    */
   QImage createPicture(int width, int height, bool center=true);
 
   /**
-   * Function to do picking on entities.  It just calls
-   * selectEntities on the GlScene instance.
+   * @brief Function to do picking on entities.
+   * It just calls selectEntities on the GlScene instance.
+   * @param x screen coordinates
+   * @param y screen coordinates
+   * @param width screen size
+   * @param height screen size
+   * @param pickedEntities filled with entity under the selection screen rectangle
+   * @param layer if you want to do the selection only on one GlLayer
    */
   bool pickGlEntities(const int x, const int y,
                       const int width, const int height,
@@ -182,9 +219,12 @@ public:
                       &pickedEntities,
                       tlp::GlLayer* layer=NULL);
   /**
-   * Function to do picking on entities.  It just calls
-   * selectEntities on the GlScene instance with a small window of
-   * twelve pixels.
+   * @brief Function to do picking on entities.
+   * It just calls selectEntities on the GlScene instance with a small window of twelve pixels.
+   * @param x screen coordinates
+   * @param y screen coordinates
+   * @param pickedEntities filled with entity under the selection screen rectangle
+   * @param layer if you want to do the selection only on one GlLayer
    */
   bool pickGlEntities(const int x, const int y,
                       std::vector<SelectedEntity>
@@ -192,7 +232,7 @@ public:
                       tlp::GlLayer* layer=NULL);
 
   /**
-   * @deprecated this function should not be used anymore, please use pickGlEntities instead.
+   * @deprecated this function should not be used anymore, please use pickGlEntities() instead.
    */
   _DEPRECATED bool selectGlEntities(const int x, const int y,
                                     const int width, const int height,
@@ -213,7 +253,7 @@ public:
   }
 
   /**
-   * @deprecated this function should not be used anymore, please use pickGlEntities instead.
+   * @deprecated this function should not be used anymore, please use pickGlEntities() instead.
    */
   _DEPRECATED bool selectGlEntities(const int x, const int y,
                                     std::vector<GlSimpleEntity*> &pickedEntities,
@@ -233,7 +273,8 @@ public:
   }
 
   /**
-   * Grab the image of this widget
+   * Grab the FrameBuffer of this GlMainWidget
+   * @param withAlpha use alpha chanel
    */
   virtual QImage grabFrameBuffer(bool withAlpha = false);
 
@@ -259,10 +300,10 @@ public:
   void  drawInteractors();
 
   /**
-    * \brief This function performs all the rendering process of the graph.
-    *   Use this function only for advanced purpose, if you want to perform simple rendering use the draw or redraw functions instead.
-    * \param options Configure the rendering process, see the RenderingOption documentation for more informations on each rendering option effect.
-    * \see RenderingOption
+    * @brief This function performs all the rendering process of the graph.
+    * Use this function only for advanced purpose, if you want to perform simple rendering use the draw or redraw functions instead.
+    * @param options Configure the rendering process, see the RenderingOption documentation for more informations on each rendering option effect.
+    * @see RenderingOption
     **/
   void render(RenderingOptions options=RenderingOptions(RenderScene|SwapBuffers), bool checkVisibility=true);
 
@@ -285,7 +326,7 @@ private:
 
 public slots:
   /**
-   * Draw the graph, the augmented dispaly and the interactors
+   * Draw the GlScene and the interactors
    */
   void draw(bool graphChanged=true);
   /**
@@ -353,4 +394,3 @@ private :
 
 
 #endif
-///@endcond
