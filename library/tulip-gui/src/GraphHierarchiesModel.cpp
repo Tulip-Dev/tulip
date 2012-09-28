@@ -128,7 +128,7 @@ static ViewSizeCalculator vSizeCalc;
 
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
-      borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape";
+                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape";
 
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
@@ -173,6 +173,7 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   if (!g->existProperty(tgtShape)) {
     g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(50);
   }
+
   if (!g->existProperty(srcShape)) {
     g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(51);
   }

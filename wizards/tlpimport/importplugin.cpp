@@ -16,14 +16,19 @@ const char * paramHelp[] = {
 };
 */
 //================================================================================
-%ProjectName:c%::%ProjectName:c%(tlp::PluginContext* context):ImportModule(context) {
+%ProjectName:
+c%::%ProjectName:
+c%(tlp::PluginContext* context):ImportModule(context) {
 //    addParameter<unsigned int>("shifting", paramHelp[0], 0, false);
 //    addParameter<DoubleProperty>("Edge weights", paramHelp[0], 0, false);
 }
 //================================================================================
-%ProjectName:c%::~%ProjectName:c%() {
+%ProjectName:
+c%::~%ProjectName:
+c%() {
 }
 //================================================================================
-bool %ProjectName:c%::importGraph() {
+bool %ProjectName:
+c%::importGraph() {
 }
 //================================================================================

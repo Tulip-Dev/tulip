@@ -7,8 +7,10 @@
 class %ProjectName:c%:public tlp::%AlgorithmType%Algorithm {
 public:
   PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
-  %ProjectName:c%(tlp::PluginContext* context);
-  ~%ProjectName:c%();
+%ProjectName:
+  c%(tlp::PluginContext* context);
+~%ProjectName:
+  c%();
   bool run();
   bool check(std::string &);
 };
