@@ -16,10 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
-
-//@TLPGEOLICENCE#
-
 #ifndef _TLP_GEO_ARRAY_H
 #define _TLP_GEO_ARRAY_H
 
@@ -33,21 +29,49 @@ namespace tlp {
  * @brief Fixed-size array encapsulation.
  * @ingroup Structures
  * In debug mode, a bound check is performed at each access.
+ * Stream operators implementations are provided.
  *
  * @author : David Auber auber@tulip-software.org
- * @version 0.0.1 24/01/2003
  */
 template <typename Obj,unsigned int SIZE>
 struct Array {
+  /**
+   * @brief array The underlying array of data.
+   */
   Obj array[SIZE];
+
+  /**
+   * @brief operator [] Read-only accessor.
+   * @param i The index of the element to read.
+   * @return The element at index i.
+   */
   inline Obj  operator[](const unsigned int i) const;
+
+  /**
+   * @brief operator [] Write accessor.
+   * @param i The index at which to write a value.
+   * @return A reference to the value at index i.
+   */
   inline Obj& operator[](const unsigned int i);
 };
 
 template <typename Obj,unsigned int SIZE>
+/**
+ * @brief operator << stream operator to easily print an array, or save it to a file.
+ * @param os The stream to output to.
+ * @param array The array to output.
+ * @return The stream to output to, to chain calls.
+ */
 std::ostream& operator<<(std::ostream &os,const Array<Obj,SIZE> &array);
+
 template <typename Obj,unsigned int SIZE>
-std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &);
+/**
+ * @brief operator >> stream operator to easily read an array
+ * @param is The stream to read from.
+ * @param array A reference to an array, that will be written to.
+ * @return The stream to read from, to chain calls.
+ */
+std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &array);
 
 //template <typename Obj,unsigned int SIZE>
 //QDebug operator<<(QDebug dbg,const Array<Obj,SIZE>& s);
@@ -56,4 +80,3 @@ std::istream& operator>>(std::istream &is, Array<Obj,SIZE> &);
 #include "cxx/Array.cxx"
 
 #endif
-///@endcond
