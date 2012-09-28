@@ -27,6 +27,7 @@
 #include <tulip/StringProperty.h>
 #include <tulip/Algorithm.h>
 #include <tulip/ImportModule.h>
+#include <tulip/ExportModule.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/IntegerProperty.h>
