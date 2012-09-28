@@ -123,8 +123,10 @@ public:
   PluginType* getPluginObject(const std::string& name, tlp::PluginContext* context) {
     Plugin* p = getPluginObject(name,context);
     PluginType* result = dynamic_cast<PluginType*>(getPluginObject(name, context));
+
     if (result == NULL && p != NULL)
       delete p;
+
     return result;
   }
 

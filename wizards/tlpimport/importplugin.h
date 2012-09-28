@@ -7,8 +7,10 @@
 class %ProjectName:c%: public tlp::ImportModule {
 public:
   PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
-  %ProjectName:c%(tlp::PluginContext* context);
-  ~%ProjectName:c%();
+%ProjectName:
+  c%(tlp::PluginContext* context);
+~%ProjectName:
+  c%();
   bool importGraph();
 };
 

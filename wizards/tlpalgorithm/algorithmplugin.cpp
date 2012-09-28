@@ -16,23 +16,30 @@ const char * paramHelp[] = {
 };
 */
 //================================================================================
-%ProjectName:c%::%ProjectName:c%(tlp::PluginContext* context):Algorithm(context) {
+%ProjectName:
+c%::%ProjectName:
+c%(tlp::PluginContext* context):Algorithm(context) {
 //    addParameter<unsigned int>("shifting", paramHelp[0], 0, false);
 //    addParameter<DoubleProperty>("Edge weights", paramHelp[0], 0, false);
 }
 //================================================================================
-%ProjectName:c%::~%ProjectName:c%() {
+%ProjectName:
+c%::~%ProjectName:
+c%() {
 }
 //================================================================================
-bool %ProjectName:c% ::run() {
-    return true;
+bool %ProjectName:
+c% ::run() {
+  return true;
 }
 //================================================================================
-bool %ProjectName:c%::check(string &erreurMsg) {
-    erreurMsg="";
-    return true;
+bool %ProjectName:
+c%::check(string &erreurMsg) {
+  erreurMsg="";
+  return true;
 }
 //================================================================================
-void %ProjectName:c%::reset() {
+void %ProjectName:
+c%::reset() {
 }
 //================================================================================

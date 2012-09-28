@@ -81,14 +81,14 @@ public:
   }
 
 protected:
-    enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
+  enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
 
-  EditOperation operation()const{
-      return _operation;
+  EditOperation operation()const {
+    return _operation;
   }
 
-  tlp::edge getEdge()const{
-      return mEdge;
+  tlp::edge getEdge()const {
+    return mEdge;
   }
 
   void stopEdition();
@@ -113,7 +113,7 @@ private:
 
   void initProxies(GlMainWidget *glMainWidget);
   void saveInfo();
-  void restoreInfo();  
+  void restoreInfo();
 
 
   EditOperation _operation;

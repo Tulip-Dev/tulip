@@ -9,15 +9,15 @@
 
 class %ProjectName:c%;
 
-class %ProjectName:c%ConfigWidget : public QWidget, public Ui::%ProjectName:c%ConfigWidgetData
-{
-Q_OBJECT
+class %ProjectName:c%ConfigWidget : public QWidget, public Ui::%ProjectName:c%ConfigWidgetData {
+  Q_OBJECT
 
 public:
 
-%ProjectName:c%ConfigWidget(%ProjectName:c% *view);
-void setData(tlp::DataSet dataSet);
-void getData(tlp::DataSet *dataSet);
+%ProjectName:
+c%ConfigWidget(%ProjectName:c% *view);
+  void setData(tlp::DataSet dataSet);
+  void getData(tlp::DataSet *dataSet);
 
 protected slots:
 
@@ -25,7 +25,8 @@ protected slots:
 
 protected :
 
-%ProjectName:c% *view;
+%ProjectName:
+  c% *view;
 
 };
 

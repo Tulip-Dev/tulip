@@ -16,14 +16,19 @@ const char * paramHelp[] = {
 };
 */
 //================================================================================
-%ProjectName:c%::%ProjectName:c%(tlp::PluginContext* context):ExportModule(context) {
+%ProjectName:
+c%::%ProjectName:
+c%(tlp::PluginContext* context):ExportModule(context) {
 //    addParameter<unsigned int>("shifting", paramHelp[0], 0, false);
 }
 //================================================================================
-%ProjectName:c%::~%ProjectName:c%() {
+%ProjectName:
+c%::~%ProjectName:
+c%() {
 }
 //================================================================================
-bool %ProjectName:c%::exportGraph(std::ostream &os) {
+bool %ProjectName:
+c%::exportGraph(std::ostream &os) {
 }
 //================================================================================
 string Untitled::fileExtension() const {

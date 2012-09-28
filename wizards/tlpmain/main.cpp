@@ -7,8 +7,8 @@
 using namespace std;
 using namespace tlp;
 
-int main(int argc,char ** argv ){
-  
+int main(int argc,char ** argv ) {
+
   tlp::initTulipLib();
 
   PluginLoaderTxt txtLoader;
