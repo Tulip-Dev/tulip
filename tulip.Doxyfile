@@ -214,7 +214,7 @@ INCLUDE_PATH           = library/tulip-core/include/ \
                          library/tulip-gui/include/
 
 INCLUDE_FILE_PATTERNS  =
-PREDEFINED             = TLP_SCOPE="" TLP_QT_SCOPE="" TLP_GL_SCOPE=""
+PREDEFINED             = TLP_SCOPE="" TLP_QT_SCOPE="" TLP_GL_SCOPE="" _DEPRECATED=""
 EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 
