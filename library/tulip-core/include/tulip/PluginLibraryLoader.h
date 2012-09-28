@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef PLUGINLIBLOADER_H
 #define PLUGINLIBLOADER_H
@@ -31,6 +30,8 @@
 namespace tlp {
 
 /**
+ * @ingroup Plugins
+ *
  * @brief This class takes care of the actual loading of the libraries.
  * You can use it to load a single plugin (loadPluginLibrary) or all the plugins in a given folder (loadPlugins).0
  *
@@ -49,11 +50,11 @@ public:
   *
   * lib/tulip/
   * âââ glyphs
-  * âÂ Â  âââ libBillboard-4.0.0.so
-  * âÂ Â  âââ libWindow-4.0.0.so
+  * âÂ Â  âââ libBillboard-4.0.0.so
+  * âÂ Â  âââ libWindow-4.0.0.so
   * âââ interactors
-  * âÂ Â  âââ libInteractorAddEdge-4.0.0.so
-  * âÂ Â  âââ libInteractorSelectionModifier-4.0.0.so
+  * âÂ Â  âââ libInteractorAddEdge-4.0.0.so
+  * âÂ Â  âââ libInteractorSelectionModifier-4.0.0.so
   * âââ libAdjacencyMatrixImport-4.0.0.so
   * âââ libColorMapping-4.0.0.so
   * âââ libCompleteGraph-4.0.0.so
@@ -108,4 +109,3 @@ private:
 }
 #endif //DOXYGEN_NOTFOR_USER
 #endif //PLUGINLIBLOADER_H
-///@endcond
