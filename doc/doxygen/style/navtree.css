@@ -1,6 +1,7 @@
 #nav-tree .children_ul {
   margin:0;
   padding:4px;
+  padding-left:40px;
 }
 
 #nav-tree ul {
