@@ -109,4 +109,3 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
   return is;
 }
 //=================================================================
-
