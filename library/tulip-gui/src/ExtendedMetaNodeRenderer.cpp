@@ -62,7 +62,6 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
   }
   else {
     view=new NodeLinkDiagramComponent;
-    //view->setOverviewVisible(false);
     view->setupUi();
     view->setGraph(metaGraph);
     view->setOverviewVisible(false);
@@ -111,11 +110,8 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
   viewport[2]*=2;
   viewport[3]*=2;
 
-  if(viewport[2]==0)
-    viewport[2]=1;
-
-  if(viewport[3]==0)
-    viewport[3]=1;
+  if(viewport[2]==0 || viewport[3]==0)
+    return;
 
   view->getGlMainWidget()->resizeGL(camera->getViewport()[2],camera->getViewport()[3]);
   scene->setViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
