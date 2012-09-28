@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef OBSERVABLE_H
 #define OBSERVABLE_H
@@ -64,6 +63,7 @@ private:
 };
 //=======================================
 /**
+ * @ingroup Observation
   * @class ObservableException
   * @brief ObservableException is the base class of all exceptions sent by the Observable/Listener/Observer system.
   *
@@ -78,6 +78,7 @@ public:
 };
 
 /**
+ * @ingroup Observation
  * @brief The Observable class is the base of Tulip's observation system.
  *
  * Each class that wishes to send or receive notifications needs to inherit from Observable.
@@ -476,8 +477,6 @@ private:
   static bool init();
 };
 
-
 }
 
 #endif
-///@endcond
