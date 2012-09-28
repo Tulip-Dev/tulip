@@ -186,7 +186,7 @@ public:
  * @param GROUP The plugin's group (tlp::Plugin::group()). If the plugin does not belong to any group, set GROUP to "".
  *
  * @see tlp::Plugin
- * @see tlp::PLUGIN
+ * @see PLUGIN
  */
 #define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
 std::string name() const { return NAME; } \
@@ -221,7 +221,7 @@ PLUGIN(MyPlugin) // Register MyPlugin into Tulip
 @endcode
  *
  * @see tlp::Plugin
- * @see tlp::PLUGININFORMATIONS
+ * @see PLUGININFORMATIONS
  */
 #define PLUGIN(C) \
 class C##Factory : public tlp::FactoryInterface { \
