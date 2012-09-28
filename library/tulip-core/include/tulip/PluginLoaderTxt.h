@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TLP_PLUGINLOADERTXT
 #define TLP_PLUGINLOADERTXT
@@ -24,6 +23,9 @@
 
 namespace tlp {
 
+/**
+ * @brief A simple implementation of tlp::PluginLoader to display load state into the console
+ */
 struct TLP_SCOPE PluginLoaderTxt:public PluginLoader {
   virtual void start(const std::string &path);
   virtual void loading(const std::string &filename);
@@ -34,4 +36,3 @@ struct TLP_SCOPE PluginLoaderTxt:public PluginLoader {
 
 }
 #endif
-///@endcond
