@@ -29,7 +29,7 @@ using namespace std;
 //========================================================================================
 MouseEdgeBendEditor::MouseEdgeBendEditor()
   :glMainWidget(NULL),layer(NULL),targetTriangle(Coord(0,0,0),Size(1,1,1)),circleString(NULL),mouseButtonPressOnEdge(false) {
-  operation = NONE_OP;
+  _operation = NONE_OP;
   _copyLayout = NULL;
   _copySizes = NULL;
   _copyRotation = NULL;
@@ -68,7 +68,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
   // Double click to create a new control point
   if(e->type() == QEvent::MouseButtonDblClick &&  qMouseEv->button() == Qt::LeftButton && haveSelection(glMainWidget)) {
-    operation = NEW_OP;
+    _operation = NEW_OP;
     mMouseCreate(qMouseEv->x(), qMouseEv->y(), glMainWidget);
     return true;
   }
@@ -91,7 +91,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         // event occurs outside the selection rectangle
         // so from now we delegate the job to a MouseEdgeSelector object
         // which should intercept the event
-        operation = NONE_OP;
+        _operation = NONE_OP;
       }
       else {
 
@@ -99,7 +99,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
         if(!entityIsSelected) {
           // We have click outside an entity
-          operation = NONE_OP;
+          _operation = NONE_OP;
         }
         else {
           selectedEntity=circleString->findKey(select[0].getSimpleEntity());
@@ -111,11 +111,11 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
               Qt::ControlModifier
 #endif
              ) {
-            operation = DELETE_OP;
+            _operation = DELETE_OP;
             mMouseDelete();
           }
           else {
-            operation = TRANSLATE_OP;
+            _operation = TRANSLATE_OP;
             glMainWidget->setCursor(QCursor(Qt::SizeAllCursor));
             initEdition();
             mode = COORD;
@@ -144,7 +144,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseButtonRelease &&
       qMouseEv->button() == Qt::LeftButton &&
-      operation != NONE_OP) {
+      _operation != NONE_OP) {
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
     if(selectedEntity=="targetTriangle") {
@@ -196,10 +196,10 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
   if  (e->type() == QEvent::MouseMove) {
     if(qMouseEv->buttons() == Qt::LeftButton &&
-        operation != NONE_OP) {
+        _operation != NONE_OP) {
       GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 
-      switch (operation) {
+      switch (_operation) {
       case TRANSLATE_OP:
         mMouseTranslate(qMouseEv->x(), qMouseEv->y(), glMainWidget);
         return true;
@@ -228,7 +228,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 //========================================================================================
 bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
   if (computeBendsCircles(glMainWidget)) {
-    if(operation == NONE_OP)
+    if(_operation == NONE_OP)
       glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
 
     if(!layer) {
@@ -302,10 +302,10 @@ void MouseEdgeBendEditor::initEdition() {
 }
 //========================================================================================
 void MouseEdgeBendEditor::undoEdition() {
-  if (operation == NONE_OP) return;
+  if (_operation == NONE_OP) return;
 
   restoreInfo();
-  operation = NONE_OP;
+  _operation = NONE_OP;
   delete _copyLayout;
   _copyLayout = NULL;
   delete _copySizes;
@@ -315,9 +315,9 @@ void MouseEdgeBendEditor::undoEdition() {
 }
 //========================================================================================
 void MouseEdgeBendEditor::stopEdition() {
-  if (operation == NONE_OP) return;
+  if (_operation == NONE_OP) return;
 
-  operation = NONE_OP;
+  _operation = NONE_OP;
   delete _copyLayout;
   _copyLayout = NULL;
   delete _copySizes;
