@@ -215,8 +215,8 @@ div.line.glow {
 span.lineno {
 	padding-right: 4px;
 	text-align: right;
-	border-right: 2px solid #0F0;
-	background-color: #E8E8E8;
+	border-right: 2px solid #33b5e5;
+	background-color: #F9F9F9;
         white-space: pre;
 }
 span.lineno a {
@@ -565,14 +565,18 @@ background-image: linear-gradient(to top, #0099CC 0%, #2FADDB 100%);
 
 }
 
-.memproto a:visited {
+.memproto a.el:visited {
   color: white;
   text-decoration: underline;
 }
 
 .memproto a.el {
-  color: #33B5E5;
+  color: white;
   text-decoration: underline;
+}
+
+dl.reflist a:visited {
+  color: red; 
 }
 
 .memdoc, dl.reflist dd {
