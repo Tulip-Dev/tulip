@@ -19,9 +19,8 @@
 
 #ifndef Tulip_NODE_H
 #define Tulip_NODE_H
-#include <tulip/tulipconf.h>
-#include <tulip/tuliphash.h>
 #include <climits>
+#include <tulip/tuliphash.h>
 
 namespace tlp {
 
