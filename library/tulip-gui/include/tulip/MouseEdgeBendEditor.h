@@ -80,8 +80,23 @@ public:
     return new MouseEdgeBendEditor();
   }
 
+protected:
+    enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
+
+  EditOperation operation()const{
+      return _operation;
+  }
+
+  tlp::edge getEdge()const{
+      return mEdge;
+  }
+
+  void stopEdition();
+  void initEdition();
+  void undoEdition();
+
 private:
-  enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
+
   enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
 
   Graph *_graph;
@@ -98,12 +113,10 @@ private:
 
   void initProxies(GlMainWidget *glMainWidget);
   void saveInfo();
-  void restoreInfo();
-  void initEdition();
-  void undoEdition();
-  void stopEdition();
+  void restoreInfo();  
 
-  EditOperation operation;
+
+  EditOperation _operation;
   OperationTarget mode;
 
   Coord editPosition;
@@ -119,7 +132,7 @@ private:
   Graph *edgeBendsGraph;
   std::vector <SelectedEntity> select;
   bool edgeSelected;
-  edge mEdge;
+  tlp::edge mEdge;
   node mNode;
   Coord start, end;
   std::string selectedEntity;
