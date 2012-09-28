@@ -206,15 +206,15 @@ GENERATE_PERLMOD       = NO
 # Configuration options related to the preprocessor
 #---------------------------------------------------------------------------
 ENABLE_PREPROCESSING   = YES
-MACRO_EXPANSION        = NO
-EXPAND_ONLY_PREDEF     = NO
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES
 SEARCH_INCLUDES        = YES
 INCLUDE_PATH           = library/tulip-core/include/ \
                          library/tulip-ogl/include/ \
                          library/tulip-gui/include/
 
 INCLUDE_FILE_PATTERNS  =
-PREDEFINED             =
+PREDEFINED             = TLP_SCOPE="" TLP_QT_SCOPE="" TLP_GL_SCOPE=""
 EXPAND_AS_DEFINED      =
 SKIP_FUNCTION_MACROS   = YES
 

@@ -18,12 +18,16 @@ h1.groupheader {
 
 h2.groupheader {
 	border-bottom: 1px solid #AAAFB3;
-	color: #5A6065;
-	font-size: 150%;
-	font-weight: normal;
+	color: #444;
+	background-color: #F9F9F9;
+	font-family: Roboto, arial, sans-serif;
+	font-size: 25px;
+	font-weight: 500;
 	margin-top: 1.75em;
-	padding-top: 8px;
-	padding-bottom: 4px;
+	margin-bottom: 20px;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 	width: 100%;
 }
 
@@ -111,7 +115,7 @@ a {
 }
 
 .contents a:visited {
-	color: #747C83;
+	color: #656C72;
 }
 
 a:hover {
@@ -135,6 +139,7 @@ a.qindexHL {
 
 a.el {
 	font-weight: bold;
+	color: #656C72;
 }
 
 a.elRef {
@@ -223,21 +228,11 @@ span.lineno a:hover {
 }
 
 div.ah {
-	background-color: black;
-	font-weight: bold;
-	color: #ffffff;
-	margin-bottom: 3px;
-	margin-top: 3px;
-	padding: 0.2em;
-	border: solid thin #333;
-	border-radius: 0.5em;
-	-webkit-border-radius: .5em;
-	-moz-border-radius: .5em;
-	box-shadow: 2px 2px 3px #999;
-	-webkit-box-shadow: 2px 2px 3px #999;
-	-moz-box-shadow: rgba(0, 0, 0, 0.15) 2px 2px 2px;
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#000),color-stop(0.3, #444));
-	background-image: -moz-linear-gradient(center top, #eee 0%, #444 40%, #000);
+  color: white;
+  background-color: #A9A9A9;
+  font-weight: bold;
+  margin-top: 15px;
+  margin-bottom: 10px;
 }
 
 div.groupHeader {
@@ -424,7 +419,7 @@ table.memberdecls {
 }
 
 .memberdecls td, .fieldtable tr {
-	-webkit-transition-property: background-color, box-shadow;
+/*	-webkit-transition-property: background-color, box-shadow;
 	-webkit-transition-duration: 0.5s;
 	-moz-transition-property: background-color, box-shadow;
 	-moz-transition-duration: 0.5s;
@@ -433,7 +428,8 @@ table.memberdecls {
 	-o-transition-property: background-color, box-shadow;
 	-o-transition-duration: 0.5s;
 	transition-property: background-color, box-shadow;
-	transition-duration: 0.5s;
+	transition-duration: 0.5s;*/
+background-color: white;
 }
 
 .memberdecls td.glow, .fieldtable tr.glow {
@@ -483,9 +479,10 @@ table.memberdecls {
 /* Styles for detailed member documentation */
 
 .memtemplate {
-	font-size: 80%;
-	color: #747C83;
-	font-weight: normal;
+	font-size: 90%;
+	color: white;
+/* 	font-weight: normal; */
+	font-style: italic;
 	margin-left: 9px;
 }
 
@@ -522,6 +519,7 @@ table.memberdecls {
 .memname {
         font-weight: bold;
         margin-left: 6px;
+	color: white;
 }
 
 .memname td {
@@ -533,12 +531,25 @@ table.memberdecls {
         border-left: 1px solid #C1C5C8;
         border-right: 1px solid #C1C5C8;
         padding: 6px 0px 6px 0px;
-        color: #404448;
+        color: white;
         font-weight: bold;
-        text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.9);
-        background-image:url('nav_f.png');
-        background-repeat:repeat-x;
-        background-color: #EBECED;
+/* IE10 Consumer Preview */ 
+background-image: -ms-linear-gradient(bottom, #0099CC 0%, #2FADDB 100%);
+
+/* Mozilla Firefox */ 
+background-image: -moz-linear-gradient(bottom, #0099CC 0%, #2FADDB 100%);
+
+/* Opera */ 
+background-image: -o-linear-gradient(bottom, #0099CC 0%, #2FADDB 100%);
+
+/* Webkit (Safari/Chrome 10) */ 
+background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #0099CC), color-stop(1, #2FADDB));
+
+/* Webkit (Chrome 11+) */ 
+background-image: -webkit-linear-gradient(bottom, #0099CC 0%, #2FADDB 100%);
+
+/* W3C Markup, IE10 Release Preview */ 
+background-image: linear-gradient(to top, #0099CC 0%, #2FADDB 100%);
         /* opera specific markup */
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
         border-top-right-radius: 4px;
@@ -554,16 +565,23 @@ table.memberdecls {
 
 }
 
+.memproto a:visited {
+  color: white;
+  text-decoration: underline;
+}
+
+.memproto a.el {
+  color: #33B5E5;
+  text-decoration: underline;
+}
+
 .memdoc, dl.reflist dd {
         border-bottom: 1px solid #C1C5C8;      
         border-left: 1px solid #C1C5C8;      
         border-right: 1px solid #C1C5C8; 
         padding: 6px 10px 2px 10px;
-        background-color: #FCFCFC;
+        background-color: #E9E9E9;
         border-top-width: 0;
-        background-image:url('nav_g.png');
-        background-repeat:repeat-x;
-        background-color: #FFFFFF;
         /* opera specific markup */
         border-bottom-left-radius: 4px;
         border-bottom-right-radius: 4px;
@@ -595,9 +613,15 @@ dl.reflist dd {
 	white-space: nowrap;
 }
 
+div.memproto .paramname {
+  color: #dcd69b;
+  white-space: nowrap;
+  font-weight: bold;
+}
 .paramname {
-	color: #602020;
-	white-space: nowrap;
+  color: #b02e20;
+  white-space: nowrap;
+  font-weight: bold;
 }
 .paramname em {
 	font-style: normal;
@@ -826,17 +850,26 @@ table.fieldtable {
 
 .navpath ul
 {
-	font-size: 11px;
-	background-image:url('tab_b.png');
-	background-repeat:repeat-x;
-	background-position: 0 -5px;
-	height:30px;
-	line-height:30px;
-	color:#ABB1B5;
-	border:solid 1px #D4D6D8;
-	overflow:hidden;
-	margin:0px;
-	padding:0px;
+	font-size: 15px;
+/* IE10 Consumer Preview */ 
+  background-image: -ms-linear-gradient(bottom, #EBEBEB 0%, #F2F3F3 100%);
+/* Mozilla Firefox */ 
+  background-image: -moz-linear-gradient(bottom, #EBEBEB 0%, #F2F3F3 100%);
+/* Opera */ 
+  background-image: -o-linear-gradient(bottom, #EBEBEB 0%, #F2F3F3 100%);
+/* Webkit (Safari/Chrome 10) */ 
+  background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #EBEBEB), color-stop(1, #F2F3F3));
+/* Webkit (Chrome 11+) */ 
+  background-image: -webkit-linear-gradient(bottom, #EBEBEB 0%, #F2F3F3 100%);
+/* W3C Markup, IE10 Release Preview */ 
+  background-image: linear-gradient(to top, #EBEBEB 0%, #F2F3F3 100%);
+  height:40px;
+  line-height:40px;
+  color:#33b5e5;
+  border:solid 1px #D4D6D8;
+  overflow:hidden;
+  margin:0px;
+  padding:0px;
 }
 
 .navpath li
@@ -847,7 +880,7 @@ table.fieldtable {
 	padding-right:15px;
 	background-image:url('bc_s.png');
 	background-repeat:no-repeat;
-	background-position:right;
+	background-position: right bottom;
 	color:#5B6166;
 }
 
@@ -859,13 +892,13 @@ table.fieldtable {
 	outline: none;
 	color: #454A4E;
 	font-family: 'Lucida Grande',Geneva,Helvetica,Arial,sans-serif;
-	text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.9);
+/* 	text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.9); */
 	text-decoration: none;        
 }
 
 .navpath li.navelem a:hover
 {
-	color:#93999F;
+	color:#33b5e5;
 }
 
 .navpath li.footer

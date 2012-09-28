@@ -1,7 +1,7 @@
 #nav-tree .children_ul {
   margin:0;
   padding:4px;
-  padding-left:40px;
+  padding-left:4px;
 }
 
 #nav-tree ul {
@@ -21,10 +21,11 @@
 }
 
 #nav-tree .selected {
-  background-image: url('tab_a.png');
-  background-repeat:repeat-x;
-  color: #fff;
-  text-shadow: 0px 1px 1px rgba(0, 0, 0, 1.0);
+/*   background-image: url('tab_a.png'); */
+/*   background-repeat:repeat-x; */
+  background-color: #33b5e5;
+  color: white;
+/*   text-shadow: 0px 1px 1px rgba(0, 0, 0, 1.0); */
 }
 
 #nav-tree img {

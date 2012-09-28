@@ -63,7 +63,9 @@ struct Dependency {
 };
 
 /**
+ * @ingroup Plugins
  * @brief Describes the dependencies of a plug-in on other plug-ins, identified by their name and their version number.
+ *
  * This allows to have a plug-in inner workings depend on other plug-ins without linking them statically, or hoping depended plug-in will be there.
  */
 class WithDependency {
