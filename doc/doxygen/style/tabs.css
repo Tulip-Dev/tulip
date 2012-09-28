@@ -1,0 +1,59 @@
+.tabs, .tabs2, .tabs3 {
+    background-color: #F9F9F9;
+    width: 100%;
+    z-index: 101;
+    font-size: 12px;
+    font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+    border-bottom: 1px solid #C9C9C9;
+}
+
+.tabs2 {
+    font-size: 12px;
+}
+.tabs3 {
+    font-size: 12px;
+}
+
+.tablist {
+    margin: 0;
+    padding: 0;
+    display: table;
+}
+
+.tablist li {
+    float: left;
+    display: table-cell;
+    line-height: 36px;
+    list-style: none;
+}
+
+.tablist a {
+    display: block;
+    padding: 0 20px;
+    font-weight: bold;
+    border: 1px solid transparent;
+    border-top: 0px;
+    border-bottom: 0px;
+}
+
+.tabs3 .tablist a {
+    padding: 0 10px;
+    
+}
+
+.tablist a:hover {
+    text-decoration: none;
+    background-color: #C9C9C9;
+    border: 1px solid #A9A9A9;
+    border-top: 0px;
+    border-bottom: 0px;
+}
+
+.tablist li.current a {
+    background-color: green;
+    background-color: #898989;
+    border: 1px solid transparent;
+    border-top: 0px;
+    border-bottom: 0px;
+    color: white;
+}
