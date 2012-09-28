@@ -44,7 +44,6 @@ void ExpandableGroupBox::setExpanded(bool e) {
   setStyleSheet(styleSheet());
 
   if (_widget) {
-    qWarning("prout");
     _widget->setVisible(e);
   }
 }
