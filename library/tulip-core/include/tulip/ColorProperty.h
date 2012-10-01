@@ -29,7 +29,7 @@ namespace tlp {
 
 class PropertyContext;
 
-typedef AbstractProperty<tlp::ColorType, tlp::ColorType, tlp::ColorAlgorithm> AbstractColorProperty;
+typedef AbstractProperty<tlp::ColorType, tlp::ColorType> AbstractColorProperty;
 
 /**
  * @ingroup Graph

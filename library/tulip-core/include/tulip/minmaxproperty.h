@@ -26,17 +26,17 @@
 
 namespace tlp {
 
-template<class Tnode, class Tedge, class TPROPERTY>
+template<class Tnode, class Tedge>
 class AbstractProperty;
 
-template<typename nodeType, typename edgeType, typename algorithmType>
+template<typename nodeType, typename edgeType>
 /**
  * @brief Abstracts the computation of minimal and maximal values on node and edge values of properties.
  *
  * The value is lazily computed on first request..
  * The value is cached, and the cache is invalidated whenever it cannot be simply updated.
  **/
-class MinMaxProperty : public tlp::AbstractProperty<nodeType, edgeType, algorithmType> {
+class MinMaxProperty : public tlp::AbstractProperty<nodeType, edgeType> {
 public:
   /**
    * @brief Constructs a MinMaxProperty.

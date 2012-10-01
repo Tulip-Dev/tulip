@@ -33,7 +33,7 @@ namespace tlp {
 class Graph;
 class PropertyContext;
 
-typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> IntegerMinMaxProperty;
+typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType> IntegerMinMaxProperty;
 
 /**
  * @ingroup Graph
@@ -69,7 +69,7 @@ public :
   int compare(const edge e1, const edge e2) const;
 
 protected:
-  virtual void clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> &);
+  virtual void clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType> &);
 
 private:
   // override Observable::treatEvent

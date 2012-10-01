@@ -31,7 +31,7 @@ namespace tlp {
 
 class PropertyContext;
 
-typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> DoubleMinMaxProperty;
+typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType> DoubleMinMaxProperty;
 
 /**
  * @ingroup Graph
@@ -44,7 +44,7 @@ public :
   void nodesUniformQuantification(unsigned int);
   void edgesUniformQuantification(unsigned int);
 
-  virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> &);
+  virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType> &);
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );

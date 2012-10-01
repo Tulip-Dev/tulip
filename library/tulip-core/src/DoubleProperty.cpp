@@ -30,14 +30,14 @@ const string DoubleVectorProperty::propertyTypename="vector<double>";
 //=============================================================
 // Predefined Meta Value Calculators
 //=============================================================
-typedef void (*DoubleNodePredefinedCalculator) (AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric,
+typedef void (*DoubleNodePredefinedCalculator) (AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric,
     node mN, Graph* sg);
 
-typedef void (*DoubleEdgePredefinedCalculator) (AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, edge mE,
+typedef void (*DoubleEdgePredefinedCalculator) (AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, edge mE,
     Iterator<edge>* itE);
 
 // average values
-static void computeNodeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg) {
+static void computeNodeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, node mN, Graph* sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -58,7 +58,7 @@ static void computeNodeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
     metric->setNodeValue(mN, value/nbNodes);
 }
 
-static void computeEdgeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, edge mE, Iterator<edge>* itE) {
+static void computeEdgeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, edge mE, Iterator<edge>* itE) {
   double value = 0;
   unsigned int nbEdges = 0;
 
@@ -73,7 +73,7 @@ static void computeEdgeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
 }
 
 // sum values
-static void computeNodeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg) {
+static void computeNodeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, node mN, Graph* sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -90,7 +90,7 @@ static void computeNodeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   metric->setNodeValue(mN, value);
 }
 
-static void computeEdgeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, edge mE, Iterator<edge>* itE) {
+static void computeEdgeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, edge mE, Iterator<edge>* itE) {
   double value = 0;
 
   while(itE->hasNext()) {
@@ -102,7 +102,7 @@ static void computeEdgeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
 }
 
 // max values
-static void computeNodeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg) {
+static void computeNodeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, node mN, Graph* sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -122,7 +122,7 @@ static void computeNodeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   metric->setNodeValue(mN, value);
 }
 
-static void computeEdgeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, edge mE, Iterator<edge>* itE) {
+static void computeEdgeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, edge mE, Iterator<edge>* itE) {
   double value = -DBL_MAX;
 
   while(itE->hasNext()) {
@@ -136,7 +136,7 @@ static void computeEdgeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
 }
 
 // min values
-static void computeNodeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg) {
+static void computeNodeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, node mN, Graph* sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -156,7 +156,7 @@ static void computeNodeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   metric->setNodeValue(mN, value);
 }
 
-static void computeEdgeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, edge mE, Iterator<edge>* itE) {
+static void computeEdgeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, edge mE, Iterator<edge>* itE) {
   double value = DBL_MAX;
 
   while(itE->hasNext()) {
@@ -186,7 +186,7 @@ DoubleEdgePredefinedCalculator edgeCalculators[] = {
   computeEdgeMinValue
 };
 
-class DoublePropertyPredefinedCalculator :public AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>::MetaValueCalculator {
+class DoublePropertyPredefinedCalculator :public AbstractProperty<tlp::DoubleType, tlp::DoubleType>::MetaValueCalculator {
   DoubleNodePredefinedCalculator nodeCalc;
   DoubleEdgePredefinedCalculator edgeCalc;
 
@@ -195,17 +195,17 @@ public:
                                        DoubleProperty::AVG_CALC,
                                      DoubleProperty::PredefinedMetaValueCalculator eCalc =
                                        DoubleProperty::AVG_CALC)
-    :AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>::MetaValueCalculator(),
+    :AbstractProperty<tlp::DoubleType, tlp::DoubleType>::MetaValueCalculator(),
      nodeCalc(nodeCalculators[(int) nCalc]),
      edgeCalc(edgeCalculators[(int) eCalc]) {}
 
-  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, node mN, Graph* sg,
+  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, node mN, Graph* sg,
                         Graph*) {
     if (nodeCalc)
       nodeCalc(metric, mN, sg);
   }
 
-  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm>* metric, edge mE,
+  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* metric, edge mE,
                         Iterator<edge>* itE, Graph*) {
     if (edgeCalc)
       edgeCalc(metric, mE, itE);
@@ -316,7 +316,7 @@ void DoubleProperty::edgesUniformQuantification(unsigned int k) {
   delete itE;
 }
 //====================================================================
-void DoubleProperty::clone_handler(AbstractProperty< DoubleType, DoubleType, DoubleAlgorithm >& proxyC) {
+void DoubleProperty::clone_handler(AbstractProperty< DoubleType, DoubleType>& proxyC) {
   DoubleProperty *proxy=(DoubleProperty *)&proxyC;
   nodeValueUptodate = proxy->nodeValueUptodate;
   edgeValueUptodate = proxy->edgeValueUptodate;
