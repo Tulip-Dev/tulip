@@ -69,8 +69,10 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
   if (_contextIndex.isValid()) {
     _contextGraph = (tlp::Graph*)_contextIndex.internalPointer();
     QMenu menu;
-    menu.addAction(_ui->actionExport);
     menu.addAction(_ui->actionCreate_panel);
+    menu.addSeparator();
+    menu.addAction(_ui->actionExport);
+    menu.addAction(_ui->actionSave_to_file);
     menu.addSeparator();
     menu.addAction(_ui->actionRename);
     menu.addAction(_ui->actionAdd_sub_graph);
@@ -176,6 +178,10 @@ void GraphHierarchiesEditor::exportGraph() {
 
 void GraphHierarchiesEditor::renameGraph() {
   _ui->hierarchiesTree->edit(_contextIndex);
+}
+
+void GraphHierarchiesEditor::saveGraphToFile() {
+  tlp::Perspective::typedInstance<GraphPerspective>()->saveGraphToFile(_contextGraph);
 }
 
 void GraphHierarchiesEditor::repackHeaders() {
