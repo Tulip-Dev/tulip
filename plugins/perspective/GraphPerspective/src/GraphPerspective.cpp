@@ -282,15 +282,18 @@ void GraphPerspective::showFullScreen(bool f) {
 void GraphPerspective::exportGraph(Graph* g) {
   if (g == NULL)
     g = _graphs->currentGraph();
+
   if (g == NULL)
     return;
 
   ExportWizard wizard(_mainWindow);
+
   if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() || wizard.outputFile().isEmpty())
     return;
 
   std::fstream os;
   os.open(wizard.outputFile().toUtf8().data(),std::fstream::out);
+
   if (!os.is_open()) {
     QMessageBox::critical(_mainWindow,trUtf8("File error"),trUtf8("Cannot open output file for writing: ") + wizard.outputFile());
     return;
@@ -299,9 +302,11 @@ void GraphPerspective::exportGraph(Graph* g) {
   DataSet data = wizard.parameters();
   PluginProgress* prg = progress();
   bool result = tlp::exportGraph(g,os,wizard.algorithm().toStdString(),data,prg);
+
   if (!result) {
     QMessageBox::critical(_mainWindow,trUtf8("Export error"),trUtf8("Failed to export to format") + wizard.algorithm());
   }
+
   delete prg;
 }
 

@@ -132,25 +132,27 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
   camera->initGl();
 }
 
-GlMainView* ExtendedMetaNodeRenderer::createView(Graph* metaGraph)const{
-    GlMainView* view=new NodeLinkDiagramComponent;
-    view->setupUi();
-    view->setGraph(metaGraph);
-    view->setOverviewVisible(false);
-    DataSet dataSet;
-    dataSet.set("overviewVisible",false);
-    view->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator());
-    view->setState(dataSet);
-    return view;
+GlMainView* ExtendedMetaNodeRenderer::createView(Graph* metaGraph)const {
+  GlMainView* view=new NodeLinkDiagramComponent;
+  view->setupUi();
+  view->setGraph(metaGraph);
+  view->setOverviewVisible(false);
+  DataSet dataSet;
+  dataSet.set("overviewVisible",false);
+  view->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator());
+  view->setState(dataSet);
+  return view;
 }
 
-GlMainView* ExtendedMetaNodeRenderer::viewForGraph(Graph* metaGraph)const{
-    std::map<Graph *,GlMainView *>::const_iterator it = metaGraphToViewMap.find(metaGraph);
-    if(it  != metaGraphToViewMap.end()){
-        return it->second;
-    }else{
-        return NULL;
-    }
+GlMainView* ExtendedMetaNodeRenderer::viewForGraph(Graph* metaGraph)const {
+  std::map<Graph *,GlMainView *>::const_iterator it = metaGraphToViewMap.find(metaGraph);
+
+  if(it  != metaGraphToViewMap.end()) {
+    return it->second;
+  }
+  else {
+    return NULL;
+  }
 }
 
 void ExtendedMetaNodeRenderer::treatEvent(const Event &e) {

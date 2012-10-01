@@ -105,7 +105,7 @@ public:
     for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin(); it!=_sortedElements.end(); ++it) {
       (*it)->setStencil(stencil);
     }
-  }  
+  }
 
   /**
    * @brief Set if at the destruction of composite, components well be deleted
