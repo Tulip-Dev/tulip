@@ -44,7 +44,7 @@ class Interactor;
 /**
   @ingroup Plugins
 
-  @class View plugins provide a way to dynamically add to a Tulip plateform various ways to visualize a graph.
+  @brief View plugins provide a way to dynamically add to a Tulip plateform various ways to visualize a graph.
 
   A view takes the following elements as inputs:
   @li A graph which contains the data to be displayed.
