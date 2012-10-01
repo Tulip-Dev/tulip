@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef _TULIPREFLECT
 #define _TULIPREFLECT
@@ -34,6 +33,7 @@ namespace tlp {
 
 class Graph;
 
+///@cond DOXYGEN_HIDDEN
 // basic interface to embed a data of any type
 struct TLP_SCOPE DataMem {
   DataMem() {}
@@ -48,20 +48,32 @@ template<typename TYPE> struct TypedValueContainer: public DataMem {
   ~TypedValueContainer() {
   }
 };
+///@endcond
 
-// Basic class to embed a value of any type
-// in a data set
+/**
+ * @brief Describes a value of any type
+ */
 struct DataType :public DataMem {
   DataType() {}
   DataType(void *value):value(value) {}
-  // return a deep copy of this
+
+  /**
+   * @return A deep copy of the stored value.
+   */
   virtual DataType *clone() const = 0;
-  // must return the typeid().name of the type of the embedded value
+
+  /**
+   * @return The C++ typename of the stored element
+   */
   virtual std::string getTypeName() const = 0;
-  // pointer to the embedded value
+
+  /**
+   * @brief The actual pointer to the element's data
+   */
   void *value;
 };
 
+///@cond DOXYGEN_HIDDEN
 // template class to embed value of known type
 template<typename T>
 struct TypedData :public DataType {
@@ -134,16 +146,19 @@ public :
   TLP_HASH_MAP<std::string, DataTypeSerializer*> otnTodts;
 
 };
+///@endcond
 
 /**
- * @brief A container which can store data of any type, as long as it has a well-defined copy constructor.
+ * @ingroup Structures
+ * @brief A container that can store data from any type.
+ *
+ * The DataSet aggregate data of various types into a single structure and map each value to a key (std::string) describing its name.
+ * DataSet is mainly used in plugins. When creating a plugin, one can add input parameters (using tlp::WithParameter methods) and retrieve them from the dataSet member variable once they have been set by the user.
  **/
 class TLP_SCOPE DataSet {
-  /**
-   * @brief Internal list of key-value pairs.
-   **/
+   //Internal list of key-value pairs.
   std::list< std::pair<std::string, DataType*> > data;
-  /** management of data serialization
+  /* management of data serialization
       two hashmap to retrieve data serializer from their
       type names and output type names
       tnTodsts => typename to data type serializer
@@ -154,8 +169,13 @@ class TLP_SCOPE DataSet {
 public:
   DataSet() {}
   DataSet(const DataSet &set);
-  DataSet& operator=(const DataSet &set);
   ~DataSet();
+
+  /**
+   * @brief Performs a deep copy of a DataSet into another
+   */
+  DataSet& operator=(const DataSet &set);
+
   /**
    * @brief Returns the stored value associated with the given key.
    * The stored value is a copy of the original value that was set.
@@ -166,10 +186,7 @@ public:
    * @return bool Whether there is a value associated with given key or not.
    **/
   template<typename T> bool get(const std::string &key, T& value) const;
-  /** Returns a copy of the value of the variable with name str.
-     Type are checked in Debug Mode.
-     If the variable str doesn't exist return false else true.
-     The data is removed after the call. */
+
   /**
    * @brief Returns the stored value, and deletes the stored copy.
    * If no value is found, nothing is deleted.
@@ -189,39 +206,82 @@ public:
    * @return void
    **/
   template<typename T> void set(const std::string &key, const T& value);
-  /** register a serializer for a known type */
+
+  /**
+   * @brief Registers a serializer for a known type
+   *
+   * Serializers are used to write/read from std::ostream objects when saving DataSet instances.
+  */
   template<typename T> static void registerDataTypeSerializer(const DataTypeSerializer &serializer) {
     registerDataTypeSerializer(std::string(typeid(T).name()), serializer.clone());
   }
-  /** write an embedded value */
-  void writeData(std::ostream& os, const std::string& prop,
-                 const DataType* dt) const;
-  /** static version used for serialization */
+
+  /**
+   * @brief write an embedded value
+  */
+  void writeData(std::ostream& os, const std::string& prop,const DataType* dt) const;
+
+  /**
+   * @brief Serializes a DataSet into a stream
+   */
   static void write(std::ostream& os, const DataSet& ds);
-  /** read an embedded value */
-  bool readData(std::istream& is, const std::string& prop,
-                const std::string& outputTypeName);
-  /** static version used for serialization */
+
+  /**
+   * @brief Read a value and stores it into the specified type
+   */
+  bool readData(std::istream& is, const std::string& prop, const std::string& outputTypeName);
+
+  /**
+   * @brief Reads a stream and stores its contents into a DataSet
+   */
   static bool read(std::istream& is, DataSet& ds);
-  /** return true if str exists else false.*/
+
+  /**
+   * @param str the name of the member to look for
+   * @return true if str exists into the DataSet.
+   */
   bool exist(const std::string &str) const;
-  /** remove a named pair */
+
+  /**
+   * @brief Removes an element from the DataSet
+   * @param str the name of the element to remove
+   */
   void remove(const std::string &str);
-  /** return an untyped value if any */
+
+  /**
+   * @param str The name of the element to retrieve
+   * @return A untyped value for a given element name. NULL if the element does not exist
+   */
   DataType* getData(const std::string &str) const;
-  /** set from an untyped value */
+
+  /**
+   * @brief Set from an untyped value
+   */
   void setData(const std::string &str, const DataType* value);
-  /** Returns an iterator on all values */
+
+  /**
+   * @return An iterator over stored values as a std::pair name => untyped value
+   */
   tlp::Iterator< std::pair<std::string, DataType*> > *getValues() const;
-  /** Returns the number of registered values */
+
+  /**
+   * @brief Returns the number of registered values
+   */
   unsigned int size() const;
-  /** Indicates whether the set is empty of not */
+
+  /**
+   * @brief Indicates whether the set is empty of not
+   */
   bool empty() const;
 
-  /** Return the data type serializer associated to the given typename.
-      Returns NULL if no serializer is found */
+  /**
+   * @return the data type serializer associated to the given typename. NULL if no serializer is found
+   */
   static DataTypeSerializer *typenameToSerializer(const std::string &name);
 
+  /**
+   * @return A std::string representation of a DataSet
+   */
   std::string toString() const;
 };
 
@@ -230,6 +290,3 @@ public:
 #include "cxx/DataSet.cxx"
 
 #endif
-
-
-///@endcond
