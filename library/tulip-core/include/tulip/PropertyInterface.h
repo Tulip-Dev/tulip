@@ -400,6 +400,7 @@ protected:
 };
 
 /**
+ * @ingroup Observation
  * @brief Contains additional informations about events on a property,
  * such as the property it happened on, the node/edge eventually concerned and such.
  * It also contains the detailed type of the event.
