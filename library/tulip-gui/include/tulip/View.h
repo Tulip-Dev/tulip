@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef VIEW_H
 #define VIEW_H
@@ -43,6 +42,8 @@ static const std::string VIEW_CATEGORY = QObject::trUtf8("Panel").toStdString();
 class Interactor;
 
 /**
+  @ingroup Plugins
+
   @class View plugins provide a way to dynamically add to a Tulip plateform various ways to visualize a graph.
 
   A view takes the following elements as inputs:
@@ -331,4 +332,3 @@ protected slots:
 }
 
 #endif /* VIEW_H_ */
-///@endcond
