@@ -1,5 +1,6 @@
 .tabs, .tabs2, .tabs3 {
     background-color: #F9F9F9;
+    height: 40px;
     width: 100%;
     z-index: 101;
     font-size: 12px;
@@ -27,9 +28,12 @@
 
 .tablist li {
     float: left;
+    text-align: center;
     display: table-cell;
     line-height: 36px;
     list-style: none;
+    width: 180px;
+    margin-left: 10px;
 }
 
 .tablist a {
