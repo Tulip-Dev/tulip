@@ -91,7 +91,7 @@ protected :
  * This class is used to render entities and graph in OpenGL
  * If you want to render entities and graph, you have to use GlLayer system. You just have to create GlLayer and add entities in.
  * @see GlLayer
- * @see GlEntity
+ * @see GlSimpleEntity
  *
  *
  * After adding layers you can do a centerScene() and a draw()
