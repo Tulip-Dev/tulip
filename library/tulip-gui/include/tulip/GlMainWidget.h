@@ -51,7 +51,7 @@ class GlCompositeHierarchyManager;
  *   - see the result
  *
  * @see GlLayer
- * @see GlEntity
+ * @see GlSimpleEntity
  *
  *
  * If you only want to visualise a graph, you can call the setGraph function

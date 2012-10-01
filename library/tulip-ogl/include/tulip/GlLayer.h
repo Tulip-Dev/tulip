@@ -42,7 +42,7 @@ class GlGraphComposite;
  * Layers are used with GlScene : you can add a layer to a scene and a scene can have many layers
  * @see Camera
  * @see GlComposite
- * @see GlEntity
+ * @see GlSimpleEntity
  * @see GlScene
  *
  *

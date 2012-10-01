@@ -35,7 +35,7 @@ namespace tlp {
  * \brief GlSimpleEntity used to agregate other GlEntity
  *
  * This class provide basic container to manage other GlEntity
- * @see GlEntity
+ * @see GlSimpleEntity
  */
 class TLP_GL_SCOPE GlComposite : public GlSimpleEntity {
 
