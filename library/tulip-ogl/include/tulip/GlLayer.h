@@ -38,9 +38,9 @@ class GlGraphComposite;
  * @ingroup OpenGL
  * @brief A GlLayer is like an 2D drawing software layer system
  *
- * A layer is an entity with a GlCamera and a GlComposite to store GlEntity
+ * A layer is an entity with a Camera and a GlComposite to store GlEntity
  * Layers are used with GlScene : you can add a layer to a scene and a scene can have many layers
- * @see GlCamera
+ * @see Camera
  * @see GlComposite
  * @see GlEntity
  * @see GlScene
