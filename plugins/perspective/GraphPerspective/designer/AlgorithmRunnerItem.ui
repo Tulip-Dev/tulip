@@ -224,6 +224,9 @@ background-color: white;
 }
 QTableView {
 background-color: white;
+}
+QToolTip {
+background-color: white;
 }</string>
      </property>
      <property name="frameShape">
