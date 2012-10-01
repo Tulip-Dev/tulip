@@ -70,6 +70,7 @@ public slots:
   void showFullScreen(bool);
   void importGraph();
   void exportGraph(tlp::Graph*g = NULL);
+  void saveGraphToFile(tlp::Graph*g = NULL);
   void createPanel(tlp::Graph* g = NULL);
   void save();
   void saveAs(const QString& path=QString::null);

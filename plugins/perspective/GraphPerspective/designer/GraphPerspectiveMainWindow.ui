@@ -893,7 +893,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1071</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -906,7 +906,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <addaction name="actionSave_Project_as"/>
     <addaction name="separator"/>
     <addaction name="actionImport"/>
-    <addaction name="actionExport"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -1263,6 +1262,18 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+H</string>
+   </property>
+  </action>
+  <action name="actionSave_graph_to_file">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save graph to file</string>
+   </property>
+   <property name="toolTip">
+    <string>Writes the graph into a file</string>
    </property>
   </action>
  </widget>

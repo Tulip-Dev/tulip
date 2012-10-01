@@ -46,6 +46,7 @@
 
 #include "GraphPerspectiveLogger.h"
 #include "ImportWizard.h"
+#include "ExportWizard.h"
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
 #include "ShadowFilter.h"
@@ -176,6 +177,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
   connect(_ui->actionImport,SIGNAL(triggered()),this,SLOT(importGraph()));
   connect(_ui->actionExport,SIGNAL(triggered()),this,SLOT(exportGraph()));
+  connect(_ui->actionSave_graph_to_file,SIGNAL(triggered()),this,SLOT(saveGraphToFile()));
   connect(_ui->workspace,SIGNAL(panelFocused(tlp::View*)),this,SLOT(panelFocused(tlp::View*)));
   connect(_ui->actionSave_Project,SIGNAL(triggered()),this,SLOT(save()));
   connect(_ui->actionSave_Project_as,SIGNAL(triggered()),this,SLOT(saveAs()));
@@ -278,6 +280,32 @@ void GraphPerspective::showFullScreen(bool f) {
 }
 
 void GraphPerspective::exportGraph(Graph* g) {
+  if (g == NULL)
+    g = _graphs->currentGraph();
+  if (g == NULL)
+    return;
+
+  ExportWizard wizard(_mainWindow);
+  if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() || wizard.outputFile().isEmpty())
+    return;
+
+  std::fstream os;
+  os.open(wizard.outputFile().toUtf8().data(),std::fstream::out);
+  if (!os.is_open()) {
+    QMessageBox::critical(_mainWindow,trUtf8("File error"),trUtf8("Cannot open output file for writing: ") + wizard.outputFile());
+    return;
+  }
+
+  DataSet data = wizard.parameters();
+  PluginProgress* prg = progress();
+  bool result = tlp::exportGraph(g,os,wizard.algorithm().toStdString(),data,prg);
+  if (!result) {
+    QMessageBox::critical(_mainWindow,trUtf8("Export error"),trUtf8("Failed to export to format") + wizard.algorithm());
+  }
+  delete prg;
+}
+
+void GraphPerspective::saveGraphToFile(Graph *g) {
   if (g == NULL)
     g = _graphs->currentGraph();
 
