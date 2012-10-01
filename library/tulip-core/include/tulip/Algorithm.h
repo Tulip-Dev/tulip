@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef _CLUSTERING_H
 #define _CLUSTERING_H
@@ -36,11 +35,11 @@ class DataSet;
 
 
 /**
- * @brief This abstract class describes a basic algorithm plugin.
  * @ingroup Plugins
+ * @brief This abstract class describes a basic algorithm plugin.
+ *
  * It inherits on WithParameter and WithDependency for convenience.
- * Basic functionality consists in checking the algorithm can run on the current Graph (e.g. is the graph simple ?),
- * running the algorithm and resetting the algorithm to re-apply it.
+ * Basic functionality consists in checking the algorithm can run on the current Graph (e.g. is the graph simple ?), running the algorithm and resetting the algorithm to re-apply it.
  * The algorithm can and should report progress and which task it is performing if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, ...).
  */
 class Algorithm : public tlp::Plugin {
@@ -102,8 +101,5 @@ public :
   DataSet *dataSet;
 };
 
-
-
 }
 #endif
-///@endcond
