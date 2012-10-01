@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TLP_PROGRESS
 #define TLP_PROGRESS
@@ -27,7 +26,16 @@
 namespace tlp {
 
 /**
- * @enum tlp::ProgressState Describes what the plug-in should do.
+ * @ingroup Plugins
+ *
+ * @brief This enum describes callback actions for the underleying system when calling tlp::PluginProgress::progress();
+ * @list
+ * @li TLP_CONTINUE: tells that the process monitored by the the progress should continue.
+ * @li TLP_CANCEL: The process should be cancelled, reverting all changes since it was started.
+ * @li TLP_STOP: The process should stop, leaving all the changes made since the beginning
+ * @endlist
+ *
+ * @see tlp::PluginProgress
  **/
 enum ProgressState {
   /** The plugin should continue its execution. */
@@ -39,30 +47,13 @@ enum ProgressState {
 };
 
 /**
-  * @brief Interface to notify and control the progression of a process.
-  *
-  * To notify the progression use the progress function. You can ask
-  * @code
-  * PluginProgress *progress = new QtProgress(parentWidget, \"Awesome task #1\");
-  * progress->setComment("First step");
-  * for(int i = 0 ; i<50 ;++i){
-  * //Perform some actions
-  * //.....
-  *
-  * //Check internal state
-  * if(progress->state()!=TLP_CONTINUE){
-  * //User want to stop the process
-  * break;
-  * }
-  *
-  * //Notify progression.
-  * progress->progress(i,50);
-  * }
-  *
-  * //Delete the progress once you're done with it
-  * delete progress;
-  * @endcode
-  **/
+ * @ingroup Plugins
+ * @brief PluginProcess subclasses are meant to notify about the progress state of some process (typically a plugin)
+ *
+ * PluginProgress are mainly used alongside with tlp::Plugin instances to give user a visual feedback about the progress of the plugin.
+ * Every plugin in tulip got a pluginProgress member they can call to give progress feedbacks. When running, the plugin should make a call to tlp::PluginProgress::progress() indicating the current state of the compuation.
+ * The tlp::PluginProgress returns a tlp::ProgressState indicating what behavior the underleying system should have (see tlp::ProgressState for details)
+ **/
 class TLP_SCOPE PluginProgress {
 public:
   virtual ~PluginProgress() {}
@@ -72,7 +63,8 @@ public:
    *
    * @param step The current step number.
    * @param max_step The total number of steps.
-   * @return :ProgressState a value indicating whether the progress has been stopped, cancelled, or will continue.
+   * @return tlp::ProgressState a value indicating whether the progress has been stopped, cancelled, or will continue.
+   * @see tlp::ProgressState
    **/
   virtual ProgressState progress(int step, int max_step)=0;
 
@@ -118,7 +110,7 @@ public:
   /**
    * @brief Gets the current internal state of the PluginProgress.
    *
-   * @return :ProgressState The current state.
+   * @return tlp::ProgressState The current state.
    **/
   virtual ProgressState state() const=0;
 
@@ -149,4 +141,3 @@ public:
 
 }
 #endif
-///@endcond
