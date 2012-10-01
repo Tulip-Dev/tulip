@@ -157,7 +157,7 @@ public :
  * DataSet is mainly used in plugins. When creating a plugin, one can add input parameters (using tlp::WithParameter methods) and retrieve them from the dataSet member variable once they have been set by the user.
  **/
 class TLP_SCOPE DataSet {
-   //Internal list of key-value pairs.
+  //Internal list of key-value pairs.
   std::list< std::pair<std::string, DataType*> > data;
   /* management of data serialization
       two hashmap to retrieve data serializer from their
