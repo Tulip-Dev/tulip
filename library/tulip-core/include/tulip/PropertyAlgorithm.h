@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
-
 
 #ifndef PROPERTYALGORITHM_H
 #define PROPERTYALGORITHM_H
@@ -31,10 +29,12 @@ class PluginContext;
 class BooleanProperty;
 static const std::string BOOLEAN_ALGORITHM_CATEGORY = QObject::trUtf8("Filtering").toStdString();
 
-/// Interface for selection plug-ins
+/**
+ * @ingroup Plugins
+ * @brief The boolean algorithm takes a graph as input and output its results as a tlp::BooleanProperty
+ */
 class TLP_SCOPE BooleanAlgorithm : public TemplateAlgorithm<tlp::BooleanProperty> {
 protected:
-  ///
   BooleanAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
     return BOOLEAN_ALGORITHM_CATEGORY;
@@ -44,10 +44,12 @@ protected:
 class ColorProperty;
 static const std::string COLOR_ALGORITHM_CATEGORY = QObject::trUtf8("Coloring").toStdString();
 
-/// Interface for color plug-ins
+/**
+ * @ingroup Plugins
+ * @brief The color algorithm takes a graph as input and output its results as a tlp::ColorProperty
+ */
 class TLP_SCOPE ColorAlgorithm : public TemplateAlgorithm<tlp::ColorProperty> {
 protected:
-  ///
   ColorAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
     return COLOR_ALGORITHM_CATEGORY;
@@ -57,7 +59,10 @@ protected:
 class DoubleProperty;
 static const std::string DOUBLE_ALGORITHM_CATEGORY = QObject::trUtf8("Metric").toStdString();
 
-/// Interface for metric plug-ins
+/**
+ * @ingroup Plugins
+ * @brief The double algorithm takes a graph as input and output its results as a tlp::DoubleProperty
+ */
 class TLP_SCOPE DoubleAlgorithm : public TemplateAlgorithm<tlp::DoubleProperty> {
 protected:
   ///
@@ -70,10 +75,12 @@ protected:
 class IntegerProperty;
 static const std::string INTEGER_ALGORITHM_CATEGORY = QObject::trUtf8("Metric").toStdString();
 
-/// Interface for int plug-ins
+/**
+ * @ingroup Plugins
+ * @brief The integer algorithm takes a graph as input and output its results as a tlp::IntegerProperty
+ */
 class TLP_SCOPE IntegerAlgorithm : public TemplateAlgorithm<tlp::IntegerProperty> {
 protected:
-  ///
   IntegerAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
     return INTEGER_ALGORITHM_CATEGORY;
@@ -83,7 +90,10 @@ protected:
 class LayoutProperty;
 static const std::string LAYOUT_ALGORITHM_CATEGORY = QObject::trUtf8("Layout").toStdString();
 
-/// Interface for layout plug-ins
+/**
+ * @ingroup Plugins
+ * @brief The layout algorithm takes a graph as input and output its results as a tlp::LayoutProperty
+ */
 class TLP_SCOPE LayoutAlgorithm : public TemplateAlgorithm<tlp::LayoutProperty> {
 protected:
   ///
@@ -96,10 +106,12 @@ protected:
 class SizeProperty;
 static const std::string SIZE_ALGORITHM_CATEGORY = QObject::trUtf8("Resizing").toStdString();
 
-/// Interface for size plug-ins
+/**
+ * @ingroup Plugins
+ * @brief The size algorithm takes a graph as input and output its results as a tlp::SizeProperty
+ */
 class TLP_SCOPE SizeAlgorithm : public TemplateAlgorithm<tlp::SizeProperty> {
 protected:
-  ///
   SizeAlgorithm (const tlp::PluginContext*);
   virtual std::string category() const {
     return SIZE_ALGORITHM_CATEGORY;
@@ -109,7 +121,10 @@ protected:
 class StringProperty;
 static const std::string STRING_ALGORITHM_CATEGORY = QObject::trUtf8("Labeling").toStdString();
 
-/// Interface for string plug-ins
+/**
+ * @ingroup Plugins
+ * @brief The string algorithm takes a graph as input and output its results as a tlp::StringProperty
+ */
 class TLP_SCOPE StringAlgorithm : public TemplateAlgorithm<tlp::StringProperty> {
 protected:
   ///
@@ -121,4 +136,3 @@ protected:
 }
 
 #endif // PROPERTYALGORITHM_H
-///@endcond

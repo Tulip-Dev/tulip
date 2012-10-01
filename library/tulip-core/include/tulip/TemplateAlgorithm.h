@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
-
 
 #ifndef TULIP_PROPERTY_H
 #define TULIP_PROPERTY_H
@@ -30,22 +28,34 @@ static const std::string PROPERTY_ALGORITHM_CATEGORY = QObject::trUtf8("Property
 
 /**
  * @ingroup Plugins
- * @brief This base class describes plug-ins who only modify one property, e.g. selection.
+ * @brief A non-template interface for tlp::TemplateAlgorithm
+ * @see tlp::TemplateAlgorithm
  **/
 class TLP_SCOPE PropertyAlgorithm: public tlp::Algorithm {
 public :
-  /**
-   * @brief Builds a new plug-in that modifies a single property.
-   *
-   * @param context The context containing the graph and PropertyInterface this plug-in has access to, as well as a PluginProgress.
-   **/
   PropertyAlgorithm(const tlp::PluginContext* context):Algorithm(context) {}
-
   virtual std::string category() const {
     return PROPERTY_ALGORITHM_CATEGORY;
   }
 };
 
+/**
+ * @ingroup Plugins
+ * @brief The TemplateAlgorithm class describes a plugin that can operate on a single graph's property.
+ * @param Property The property template arguments gives the type of the property the algorithm operates on.
+ *
+ * A TemplateAlgorithm takes a graph as input (plus additional parameters defined via tlp::WithParameter) and outputs its results in a tlp::PropertyInterface subclass.
+ * The output property is defined as an output parameter named "result" and as a class member called result.
+ *
+ * @warning Subclassing TemplateAlgorithm is not recommended since template specifications are available for every Tulip property types.
+ *
+ * @see tlp::BooleanAlgorithm
+ * @see tlp::StringAlgorithm
+ * @see tlp::DoubleAlgorithm
+ * @see tlp::IntegerAlgorithm
+ * @see tlp::LayoutAlgorithm
+ * @see tlp::SizeAlgorithm
+ */
 template<class Property>
 class TLP_SCOPE TemplateAlgorithm : public PropertyAlgorithm {
 public:
@@ -59,4 +69,3 @@ public:
 
 }
 #endif
-///@endcond
