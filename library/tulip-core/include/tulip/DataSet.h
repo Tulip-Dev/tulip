@@ -51,6 +51,7 @@ template<typename TYPE> struct TypedValueContainer: public DataMem {
 ///@endcond
 
 /**
+ * @ingroup Structures
  * @brief Describes a value of any type
  */
 struct DataType :public DataMem {

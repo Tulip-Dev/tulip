@@ -144,6 +144,7 @@ protected:
 };
 
 /**
+ * @ingroup Plugins
  * @brief The InteractorLister class lists compatible interactors for a given tlp::View
  */
 class TLP_QT_SCOPE InteractorLister {

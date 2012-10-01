@@ -24,6 +24,7 @@
 namespace tlp {
 
 /**
+ * @ingroup Plugins
  * @brief A simple implementation of tlp::PluginLoader to display load state into the console
  */
 struct TLP_SCOPE PluginLoaderTxt:public PluginLoader {
