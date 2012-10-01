@@ -31,16 +31,16 @@
 namespace tlp {
 
 template <>
-void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue);
+void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue);
 
 template <>
-void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::computeMinMaxNode(Graph *sg);
+void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg);
 
 class PropertyContext;
 class Graph;
 
-typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> AbstractLayoutProperty;
-typedef MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> LayoutMinMaxProperty;
+typedef AbstractProperty<tlp::PointType, tlp::LineType> AbstractLayoutProperty;
+typedef MinMaxProperty<tlp::PointType, tlp::LineType> LayoutMinMaxProperty;
 
 /**
  * @ingroup Graph
@@ -298,7 +298,7 @@ public:
 
 protected:
 
-  virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> &);
+  virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &);
 
 private:
   void resetBoundingBox();

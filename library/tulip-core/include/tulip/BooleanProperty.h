@@ -33,9 +33,9 @@ class PropertyContext;
  * @ingroup Graph
  * @brief The BooleanProperty class
  */
-class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::BooleanType, tlp::BooleanAlgorithm> {
+class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::BooleanType> {
 public :
-  BooleanProperty (Graph *g, std::string n="") :AbstractProperty<BooleanType,BooleanType, BooleanAlgorithm>(g, n) {}
+  BooleanProperty (Graph *g, std::string n="") :AbstractProperty<BooleanType,BooleanType>(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   static const std::string propertyTypename;

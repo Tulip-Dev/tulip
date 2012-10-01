@@ -29,7 +29,7 @@ namespace tlp {
 
 class PropertyContext;
 
-typedef AbstractProperty<tlp::StringType, tlp::StringType, tlp::StringAlgorithm> AbstractStringProperty;
+typedef AbstractProperty<tlp::StringType, tlp::StringType> AbstractStringProperty;
 
 /**
  * @ingroup Graph

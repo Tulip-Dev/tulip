@@ -33,7 +33,7 @@ IntegerProperty::IntegerProperty (Graph *sg, std::string n):IntegerMinMaxPropert
   sg->addListener(this);
 }
 //====================================================================
-void IntegerProperty::clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> &proxyC) {
+void IntegerProperty::clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType> &proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     IntegerProperty *proxy=(IntegerProperty *)&proxyC;
     nodeValueUptodate = proxy->nodeValueUptodate;
