@@ -98,44 +98,44 @@ public:
    */
   void setMetaNodeRenderer(GlMetaNodeRenderer *renderer,bool deleteOldMetaNodeRenderer=true) {
     if(deleteOldMetaNodeRenderer)
-      delete metaNodeRenderer;
+      delete _metaNodeRenderer;
 
-    metaNodeRenderer = renderer;
+    _metaNodeRenderer = renderer;
   }
 
   /**
    * Set if the meta node renderer must be deleted at destructor
    */
   void setDeleteMetaNodeRendererAtDestructor(bool deleteAtDestructor) {
-    deleteMetaNodeRendererAtDestructor=deleteAtDestructor;
+    _deleteMetaNodeRendererAtDestructor=deleteAtDestructor;
   }
 
   /**
    * Return metaNode renderer
    */
   GlMetaNodeRenderer *getMetaNodeRenderer() const {
-    return metaNodeRenderer;
+    return _metaNodeRenderer;
   }
 
   /**
    * Return glEdgeDisplayManager
    */
   GlVertexArrayManager *getGlVertexArrayManager() const {
-    return glVertexArrayManager;
+    return _glVertexArrayManager;
   }
 
   /**
    * Set glEdgeDisplayManager
    */
   void setGlVertexArrayManager(GlVertexArrayManager * manager) {
-    glVertexArrayManager=manager;
+    _glVertexArrayManager=manager;
   }
 
   /**
    * Set if GlVertexArrayManager must be deleted in destructor
    */
   void deleteGlVertexArrayManagerInDestructor(bool del) {
-    deleteGlVertexArrayManager=del;
+    _deleteGlVertexArrayManager=del;
   }
 
   /**
@@ -144,7 +144,7 @@ public:
    */
   template<typename T>
   T* getProperty(PropertyName propertyName) const {
-    T* property=dynamic_cast<T*>(propertiesMap.find(propertyName)->second);
+    T* property=dynamic_cast<T*>(_propertiesMap.find(propertyName)->second);
     return property;
   }
 
@@ -153,13 +153,13 @@ public:
    * See PropertyName enum for more details on available properties
    */
   void setProperty(PropertyName propertyName,PropertyInterface *property) {
-    _properties.erase(propertiesMap[propertyName]);
-    propertiesMap[propertyName]=property;
+    _properties.erase(_propertiesMap[propertyName]);
+    _propertiesMap[propertyName]=property;
     _properties.insert(property);
 
-    for(std::map<std::string,PropertyName>::iterator it=propertiesNameMap.begin(); it!=propertiesNameMap.end(); ++it) {
+    for(std::map<std::string,PropertyName>::iterator it=_propertiesNameMap.begin(); it!=_propertiesNameMap.end(); ++it) {
       if((*it).second==propertyName) {
-        propertiesNameMap.erase(it);
+        _propertiesNameMap.erase(it);
         break;
       }
     }
@@ -398,6 +398,11 @@ public:
     return _properties;
   }
 
+  /**
+   * @brief reloadGraphProperties restore the properties of the GlGraphInputData from the the graph.
+   */
+  void reloadGraphProperties();
+
 public :
 
   Graph* graph;
@@ -411,14 +416,14 @@ protected:
 
   std::set<PropertyInterface*> _properties;
 
-  bool deleteGlVertexArrayManager;
+  bool _deleteGlVertexArrayManager;
 
-  std::map<PropertyName,PropertyInterface*> propertiesMap;
-  std::map<std::string,PropertyName> propertiesNameMap;
+  std::map<PropertyName,PropertyInterface*> _propertiesMap;
+  std::map<std::string,PropertyName> _propertiesNameMap;
 
-  bool deleteMetaNodeRendererAtDestructor;
-  GlMetaNodeRenderer *metaNodeRenderer;
-  GlVertexArrayManager *glVertexArrayManager;
+  bool _deleteMetaNodeRendererAtDestructor;
+  GlMetaNodeRenderer *_metaNodeRenderer;
+  GlVertexArrayManager *_glVertexArrayManager;
 
 
 };

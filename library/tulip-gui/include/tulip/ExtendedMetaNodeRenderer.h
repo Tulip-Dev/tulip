@@ -53,6 +53,22 @@ protected :
 
   void treatEvent(const Event&);
 
+  /**
+   * @brief createView creates and initialize the GlMainView object used to render the metanode.
+   *
+   * Override this method if you want to use a different view to render metanodes in a subclasses.
+   * @param metaGraph the graph to display in the view.
+   * @return the initialized view.
+   */
+  virtual GlMainView* createView(Graph* metaGraph)const;
+
+  /**
+   * @brief viewForGraph search and returns the GlMainView used to render the given metagraph.
+   * @param metaGraph the metagraph.
+   * @return the GlMainView or NULL if there is no GlMainView associated to it.
+   */
+  GlMainView* viewForGraph(Graph* metaGraph)const;
+
 
 private :
 
