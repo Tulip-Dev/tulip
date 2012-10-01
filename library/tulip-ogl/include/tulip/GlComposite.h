@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef COMPOSITE_H
 #define COMPOSITE_H
@@ -35,72 +34,70 @@ namespace tlp {
  * @ingroup OpenGL
  * \brief GlSimpleEntity used to agregate other GlEntity
  *
- * GlSimpleEntity used to agregate other GlEntity
- * This class provide basic function to manage other entity
+ * This class provide basic container to manage other GlEntity
+ * @see GlEntity
  */
 class TLP_GL_SCOPE GlComposite : public GlSimpleEntity {
 
 
 public:
+
+  /**
+   * @brief Constructor
+   * @param deleteComponentsInDestructor if true : call delete on components when the GlComposite is delete
+   */
   GlComposite(bool deleteComponentsInDestructor=true);
+
+  /**
+   * @brief Destructor
+   */
   ~GlComposite();
 
   /**
-   * Add a layer parent to this entity
-   */
-  virtual void addLayerParent(GlLayer *layer);
-
-  /**
-   * Remove a layer parent to this entity
-   */
-  virtual void removeLayerParent(GlLayer *layer);
-
-  /**
-   * Clear the composite, if deleteElems is true, composite's entities are delete
+   * @brief Clear the composite
+   *
+   * If deleteElems is true, composite's entities are delete
    */
   void reset(bool deleteElems);
   /**
-   * Add new entity with name : key.
+   * @brief Add new entity with name : key.
+   *
    * The composite does not takes the entity's ownership, i.e. it is not its responsibility to delete it.
    */
   void addGlEntity(GlSimpleEntity *entity, const std::string &key);
   /**
-   * Remove entity with name : key
+   * @brief Remove entity with name : key
+   *
    * The entity is not deleted
    */
   void deleteGlEntity(const std::string &key,bool informTheEntity=true);
   /**
-   * Remove given entity
+   * @brief Remove given entity
+   *
    * The entity is not deleted
    */
   void deleteGlEntity(GlSimpleEntity *entity,bool informTheEntity=true);
   /**
-   * Find name of given entity
+   * @brief Find name of given entity
    */
   std::string findKey(GlSimpleEntity *entity);
   /**
-   * Find entity with name : key
+   * @brief Find entity with name : key
    */
   GlSimpleEntity* findGlEntity(const std::string &key);
   /**
-   * Return map of entities in composite
+   * @brief Return map of entities in composite
    */
   const std::map<std::string, GlSimpleEntity*> &
   getGlEntities () const {
     return elements;
   }
-  /**
-   * Call when a child of the composite is modified
-   */
-  void notifyModified(GlSimpleEntity *entity);
 
   /**
-   * \attention This function do nothing, GlComposite is a GlSimpleEntity so draw function must be define
-   */
-  virtual void draw(float,Camera *) {}
-
-  /**
-   * Set stencil number for all composite's children
+   * @brief Set stencil number for all composite's children
+   *
+   * For more informations on stencil  :
+   * @see GlSimpleEntity
    */
   virtual void setStencil(int stencil) {
     this->stencil=stencil;
@@ -108,7 +105,31 @@ public:
     for(std::list<GlSimpleEntity*>::iterator it=_sortedElements.begin(); it!=_sortedElements.end(); ++it) {
       (*it)->setStencil(stencil);
     }
+  }  
+
+  /**
+   * @brief Set if at the destruction of composite, components well be deleted
+   */
+  void setDeleteComponentsInDestructor(bool deleteComponentsInDestructor) {
+    this->deleteComponentsInDestructor=deleteComponentsInDestructor;
   }
+
+  /**
+   * @brief translate the composite with children
+   */
+  virtual void translate(const Coord &mouvement);
+
+  /**
+   * @brief Function to export data in outString (in XML format)
+   */
+  virtual void getXML(std::string &outString);
+
+  /**
+   * @brief Function to set data with inString (in XML format)
+   */
+  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+
+///@cond DOXYGEN_HIDDEN
 
   /**
    * Function used to visit composite's children
@@ -138,26 +159,26 @@ public:
   }
 
   /**
-   * Set if at the destruction of composite, components well be deleted
+   * Add a layer parent to this entity
    */
-  void setDeleteComponentsInDestructor(bool deleteComponentsInDestructor) {
-    this->deleteComponentsInDestructor=deleteComponentsInDestructor;
-  }
+  virtual void addLayerParent(GlLayer *layer);
 
   /**
-   * translate the composite with children
+   * Remove a layer parent to this entity
    */
-  virtual void translate(const Coord &mouvement);
+  virtual void removeLayerParent(GlLayer *layer);
 
   /**
-   * Function to export data in outString (in XML format)
+   * Call when a child of the composite is modified
    */
-  virtual void getXML(std::string &outString);
+  void notifyModified(GlSimpleEntity *entity);
 
   /**
-   * Function to set data with inString (in XML format)
+   * \attention This function do nothing, GlComposite is a GlSimpleEntity so draw function must be define
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  virtual void draw(float,Camera *) {}
+
+///@endcond
 
 protected:
 
@@ -169,4 +190,3 @@ protected:
 
 }
 #endif
-///@endcond
