@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef Tulip_SUPERGRAPH_H
 #define Tulip_SUPERGRAPH_H
@@ -42,7 +41,7 @@ template<class C>struct Iterator;
 /**
  * @enum This Enum describes the possible types of an element of the graph.
  *
- * It is used for instance for functions that can return an edge or a node, to distinguish between the two cases.
+ * It is used in functions that can return an edge or a node, to distinguish between the two cases.
  **/
 enum ElementType {
   /** This element describes a node **/
@@ -163,6 +162,39 @@ TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=NULL);
 /**
  * @ingroup Graph
  * The class Graph is the interface of a Graph in the Tulip Library.
+ *
+ * There are a few principles to know when working with a Tulip Graph.
+ *
+ * Every edge is directed in a Tulip Graph.
+ * You can choose to ignore this, but every edge has a source and destination.
+ *
+ * Inheritance
+ *
+ * Subgraphs inherit from their parent graph.
+ * This is true of nodes and edges; every node and edge in a subgraph also exists in each of its parent graphs.
+ * This is also true of properties; every property in a graph exist in all of its subgraphs, except if it has been replaced
+ * by a local property.
+ *
+ * For instance, ig you have the following graph hierarchy:
+ * root
+ *  / \
+ * A   B
+ *
+ * Every node in A is in root, and every node in B is in root.
+ * Nodes can be in A and root but not B; or in B and root but not A.
+ *
+ * For instance, imagine a graph. You want to compare it to its Delaunay triangulation.
+ * You need to create a subgraph that is a clone of the original (say this is A) to keep the original graph,
+ * and another copy (say this one is B) on which you will perform the delaunay triangulation.
+ *
+ * B will have none of the original edges, and A will have only the original edges.
+ *
+ * As for properties; let's imagine the same graph hierarchy.
+ * You want to compare two different layouts on the same graph.
+ * You need to create two clone subgraphs, on each you make the 'viewLayout' property local.
+ * This results in A and B having different values for the layout, but everything else in common.
+ * You then can apply two different algorithms on A and B (e.g. Bubble Tree and Tree Radial).
+ *
  */
 class TLP_SCOPE Graph : public Observable {
 
@@ -185,8 +217,7 @@ public:
    *
    * * use buildDefaultDataSet on the plugin object if you have an instance of it
    *
-   * * call getPluginParameters() with the name of the plugin on the right PluginLister
-   * (there cannot be a static method that directly returns this from the plugin name as a name can be used for plugins of different types).
+   * * call getPluginParameters() with the name of the plugin on the PluginLister
    *
    *
    * If an error occurs, a message describing the error should be stored in errorMessage.
@@ -227,6 +258,7 @@ public:
    **/
   virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
                              unsigned int id = 0)=0;
+
   /**
    * @brief Creates and returns a new named sub-graph of this graph.
    *
@@ -234,6 +266,7 @@ public:
    * @return :Graph* The newly created subgraph.
    **/
   Graph *addSubGraph(std::string name);
+
   /**
    * @brief Creates and returns a subgraph of this graph that contains all its elements.
    *
@@ -243,45 +276,98 @@ public:
   virtual Graph* addCloneSubGraph(std::string name = "unnamed");
 
   /**
-   *  Creates and returns a new sub-graph of the graph
-   *  induced by a set of nodes. The sub-graph contains all
-   *  the nodes of the set and all the existing edges between
-   *  two nodes of the set including self-loops.
-   *  If the parentSubGraph argument is not null,
-   *  it will be the parent of the induced sub-graph instead of this.
+   * @brief Creates and returns a new sub-graph of the graph induced by a set of nodes.
+   * Every node contained in the given set of nodes is added to the subgraph.
+   * Every edge connecting any two nodes in the set of given nodes is also added.
+   * @param nodeSet The nodes to add to the subgraph. All the edges between these nodes are added too.
+   * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the Graph this method is called on.
+   * @return The newly created subgraph.
    */
   Graph *inducedSubGraph(const std::set<node>& nodeSet,
                          Graph* parentSubGraph = NULL);
+
   /**
-   * Deletes a sub-graph of this graph.
-   * The sub-graph's sub-graphs become sub-graphs of the graph.
+   * @brief Deletes a sub-graph of this graph.
+   * All subgraphs of the removed graph are re-parented to this graph.
+   * For instance, with a graph hierarchy as follows :
+   * root
+   * / \
+   * A  B
+   *    /|\
+   *   C D E
+   *
+   * @code root->delSubGraph(B);
+   * would result in the following hierarchy:
+   *  root
+   * / | \\
+   * A C D E
+   *
+   * @param graph The subgraph to delete.
+   *
+   * @see delAllSubGraphs() if you want to remove all descendants of a graph.
    */
-  virtual void delSubGraph(Graph *)=0;
+  virtual void delSubGraph(Graph *graph)=0;
+
   /**
-   * Deletes a sub-graph of this graph and all its sub-graphs.
+   * @brief Deletes a sub-graph of this graph and all of its sub-graphs.
+   ** For instance, with a graph hierarchy as follows :
+   * root
+   * / \
+   * A  B
+   *    /|\
+   *   C D E
+   *
+   * @codeline root->delSubGraph(B);
+   * would result in the following hierarchy:
+   *  root
+   *   |
+   *   A
+   *
+   * @param graph The subgraph to delete.
+   * @see delSubGraph() if you want to keep the descendants of the subgraph to remove.
    */
-  virtual void delAllSubGraphs(Graph *)=0;
+  virtual void delAllSubGraphs(Graph *graph)=0;
+
   /**
-   * Returns the parent of the graph,
-   *  if it has no parent (is the root graph), it returns itself.
+   * @brief Returns the parent of the graph. If called on the root graph, it returns itself.
+   * @return The parent of this graph (or itself if it is the root graph).
+   * @see getRoot() to directly retrieve the root graph.
    */
   virtual Graph* getSuperGraph()const =0;
+
   /**
-   * Returns the root graph of the graph hierarchy.
+   * @brief Gets the root graph of the graph hierarchy.
+   * @return The root graph of the graph hierarchy.
    */
   virtual Graph* getRoot() const =0;
+
   /**
-   * Sets the parent of the graph (use very carefully)
-   * Standard users should never use this function.
+   * @cond DOXYGEN_HIDDEN
+   * @brief Sets the parent of a graph.
+   * @warning ONLY USE IF YOU KNOW EXACTLY WHAT YOU ARE DOING.
+   * @endcond
    */
   virtual void setSuperGraph(Graph *)=0;
+
   /**
-   * Returns an iterator on all the sub-graphs of the graph.
+   * @brief Gets an iterator on all the sub-graphs of the graph.
+   * For instance, in the followong graph hierarchy:
+   ** root
+   * / \
+   * A  B
+   *    /|\
+   *   C D E
+   *
+   * @codeline root->getSubGraphs();
+   * Will return an iterator over A and B, but not C, D and E.
+   * @return An iterator over this graph's direct subgraphs.
    */
   virtual Iterator<Graph *> * getSubGraphs() const=0;
+
   /**
-    This method returns the nth subgraph.
-    Since order cannot be ensured in every implementation, this method should be equivalent to:
+   * @brief This method returns the nth subgraph.
+   * Since subgraphs order cannot be ensured in every implementation, this method should be equivalent to:
+   * @code
     int i=0;
     Iterator<Graph *> *it = g->getSubGraphs();
     while (it->hasNext()) {
@@ -293,163 +379,272 @@ public:
     }
     delete it;
     return NULL;
+    @endcode
+   * @param n the index of the subgraph to retrieve.
+   * @return The n-th subgraph.
    */
   virtual Graph *getNthSubGraph(unsigned int n) const;
+
   /**
-    Return the number of direct sub-graphs
+   * @brief Return the number of direct sub-graphs.
+   * For instance, in the followong graph hierarchy:
+   * root
+   * / \
+   * A  B
+   *    /|\
+   *   C D E
+   *
+   * @codeline root->numberOfSubGraphs();
+   * Will return 2.
+   * @return The number of direct subgraphs.
+   * @see numberOfDescendantGraphs() to count in the whole hierarchy.
    */
   virtual unsigned int numberOfSubGraphs() const=0;
+
   /**
-    Return the number of descendant graphs
+   * @brief Return the number of descendant sub-graphs.
+   * For instance, in the followong graph hierarchy:
+   * root
+   * / \
+   * A  B
+   *    /|\
+   *   C D E
+   *
+   * @codeline root->numberOfSubGraphs();
+   * Will return 5.
+   * @return The number of descendants subgraphs.
+   * @see numberOfSubGraphs() to count only direct subgraphs.
    */
   virtual unsigned int numberOfDescendantGraphs() const=0;
+
   /**
-   * Indicates if the graph argument is a direct sub-graph.
+   * @brief Indicates if the graph argument is a direct sub-graph.
+   * @param subGraph The graph to check is a subgraph of this graph.
+   * @return Whether subGraph is a direct subgraph of this graph.
+   * @see isDescendantGraph() to search in the whole hierarchy.
    */
-  virtual bool isSubGraph(const Graph* sg) const=0;
+  virtual bool isSubGraph(const Graph* subGraph) const=0;
+
   /**
-   * Indicates if the graph argument is a descendant of this graph.
+   * @brief Indicates if the graph argument is a descendant of this graph.
+   * @param subGraph The graph to check is a descendant of this graph.
+   * @return Whether subGraph is a descendant of this graph.
+   * @see isSubGraph to search only in direct subgraphs.
    */
-  virtual bool isDescendantGraph(const Graph* sg) const=0;
+  virtual bool isDescendantGraph(const Graph* subGraph) const=0;
+
   /**
-   * Returns a pointer on the sub-graph with the corresponding id
+   * @brief Returns a pointer on the sub-graph with the corresponding id
    * or NULL if there is no sub-graph with that id.
+   * @param id The id of the subgraph to retrieve.
+   * @return A subgraph of the given id, or null if no such subgraph exists on this graph.
+   * @see getDescendantGraph(unsigned int) to search in the whole hierarchy.
    */
   virtual Graph* getSubGraph(unsigned int id) const=0;
+
   /**
-   * Returns a pointer on the sub-graph with the corresponding name
+   * @brief Returns a pointer on the sub-graph with the corresponding name
    * or NULL if there is no sub-graph with that name.
+   * @param name The name of the subgraph to retrieve.
+   * @return A Graph named name, or NULL if no such subgraph exists on this graph.
+   * @see getDescendantGraph(const std::string &) to search in the whole hierarchy.
    */
   virtual Graph* getSubGraph(const std::string &name) const=0;
+
   /**
-   * Returns a pointer on the descendant with the corresponding id
+   * @brief Returns a pointer on the descendant with the corresponding id
    * or NULL if there is no descendant  with that id.
+   * @param id The id of the descendant graph to retrieve.
+   * @return A graph with the given id, or NULL if no such graph exists in this graph's descendants.
+   * @see getSubGraph(unsigned int) to search only in direct subgraphs.
    */
   virtual Graph* getDescendantGraph(unsigned int id) const=0;
+
   /**
-   * Returns a pointer on the first descendant graph with the corresponding name
+   * @brief Returns a pointer on the first descendant graph with the corresponding name
    * or NULL if there is no descendant graph with that name.
+   * @param name The name of the descendant graph to look for.
+   * @return A graph named name, or NULL if there is no such graph in this graph's descendants.
+   * @see getSubGraph(const std::string &) to search only in direct subgraphs.
    */
   virtual Graph* getDescendantGraph(const std::string &name) const=0;
   //==============================================================================
   // Modification of the graph structure
   //==============================================================================
   /**
-   * Adds a new node in the graph and returns it. This node is also added in all
-   * the graph ancestors to maintain the sub-graph relation between graphs.
+   * @brief Adds a new node in the graph and returns it. This node is also added in all
+   * the ancestor graphs.
+   * @return The newly added node.
+   * @see addNodes() if you want to add more than one node.
    */
   virtual node addNode()=0;
+
   /**
-   * Adds new nodes in the graph and returns them the addedNodes vector.
-   * The new nodes are also added in all
-   * the graph ancestors to maintain the sub-graph relation between graphs.
-   * Warning the addedNodes vector is cleared before adding nodes
+   * @brief Adds new nodes in the graph and returns them in the addedNodes vector.
+   * The new nodes are also added in all the ancestor graphs.
+   *
+   * @param nbNodes The number of nodes to add.
+   * @param addedNodes The newly added nodes. This vector is cleared before being filled.
+   * @see addNode() to add a single node.
    */
   virtual void addNodes(unsigned int nbNodes, std::vector<node>& addedNodes)=0;
+
   /**
-   * Adds an existing node in the graph. This node is also added in all
-   * the graph ancestors to maintain the sub-graph relation between graphs.
-   * Warning, the node must be an element of the graph hierarchy, thus it must be
-   * an element of the root graph.
-   * Warning : One can't add an existing node to the root graph.
+   * @brief Adds an existing node in the graph. This node is also added in all the ancestor graphs.
+   * This node must exists in the graph hierarchy (which means it must exist in the root graph).
+   * You cannot add a node to the root graph this way (as it must already be an element of the root graph).
+   * @warning Using this method on the root graph will display a warning on the console.
+   *
+   * @param n The node to add to a subgraph. This node must exist in the root graph.
+   * @see addNode() to add a new node to a graph.
    */
-  virtual void addNode(const node)=0;
+  virtual void addNode(const node n)=0;
+
   /**
-   * Adds existing nodes in the graph. The nodes are also added in all
-   * the graph ancestors to maintain the sub-graph relation between graphs.
-   * Warning, the added nodes must be elements of the graph hierarchy,
-   * thus they must be elements of the root graph.
-   * Warning : One can't add existing nodes to the root graph.
+   * @brief Adds existing nodes in the graph. The nodes are also added in all the ancestor graphs.
+   * as with addNode(const tlp::node), the nodes must exist in the graph hierarchy and thus exist in the root graph,
+   * and node cannot be added this way to the root graph.
+
+   * @warning Using this method on the root graph will display a warning on the console.
+   * @warning The graph does not take ownership of the Iterator.
+   *
+   * @param nodes An iterator over nodes to add to this subgraph. The graph does not takes ownership of this iterator.
    */
   virtual void addNodes(Iterator<node>* nodes)=0;
+
   /**
-   * Deletes a node in the graph. This node is also removed in
-   * the sub-graphs hierarchy of the current graph to maintain
-   * the sub-graph relation between graphs.
-   * If deleteInAllGraphs is true, the node is deleted
-   * in the whole hierarchy of graphs.
+   * @brief Deletes a node in the graph.
+   * This node is also removed in the sub-graphs hierarchy of the current graph.
+   * @param n The node to delete.
+   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
+   * @see delNodes() to remove multiple nodes.
    */
   virtual void delNode(const node n, bool deleteInAllGraphs = false)=0;
+
   /**
-   * Deletes nodes in the graph. These nodes are also removed in
-   * the sub-graphs hierarchy of the current graph to maintain
-   * the sub-graph relation between graphs.
-   * If deleteInAllGraphs is true, these nodes are  deleted
-   * in the whole hierarchy of graphs.
-   * It is the responsibility of the caller to delete the iterator.
+   * @brief Deletes nodes in the graph.
+   * Thess nodes are also removed in the sub-graphs hierarchy of the current graph.
+   * @warning the graph does not take ownership of the Iterator.
+   * @param it The nodes to delete.
+   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
+   * @see delNode() to remove a single node.
    */
-  virtual void delNodes(Iterator<node>* itN, bool deleteInAllGraphs = false)=0;
+  virtual void delNodes(Iterator<node>* it, bool deleteInAllGraphs = false)=0;
+
   /**
-   * Adds a new edge in the graph and returns it. This edge is also added in all
-   * the super-graph of the graph to maintain the sub-graph relation between graphs.
+   * @brief Adds a new edge in the graph
+   * This edge is also added in all the super-graph of the graph.
+   * @param source The source of the edge.
+   * @param target The target of the edge.
+   * @return The newly added edge.
+   * @see addEdges() to add multiple edges at once.
    */
-  virtual edge addEdge(const node, const node )=0;
+  virtual edge addEdge(const node source, const node target)=0;
+
   /**
-   * Adds new edges in the graph and returns them the addedNodes vector.
-   * The new nodes are also added in all
-   * the graph ancestors to maintain the sub-graph relation between graphs.
-   * Warning : the addedEdges vector is cleared before adding edges
+   * @brief Adds new edges in the graph and returns them the addedEdges vector.
+   * The new edges are also added in all the graph ancestors.
+   *
+   * @warning If the edges vector contains a node that does not belong to this graph,
+   * undefined behavior will ensue.
+   * @param edges A vector describing between which nodes to add edges.
+   * The first element of the pair is the source, the second is the destination.
+   * @param addedEdges The newly added edges. This vector is cleared before being filled.
+   *
    */
   virtual void addEdges(const std::vector<std::pair<node, node> >& edges,
                         std::vector<edge>& addedEdges)=0;
+
   /**
-   * Adds an existing edge in the graph. This edge is also added in all
-   * the graph's ancestors to maintain the sub-graph relation between graphs.
-   * Warning, the edge must be an element of the graph hierarchy, thus it must be
+   * @brief Adds an existing edge in the graph. This edge is also added in all
+   * the ancestor graphs.
+   * The edge must be an element of the graph hierarchy, thus it must be
    * an element of the root graph.
-   * Warning : One can't add an existing edge to the root graph.
+   * @warning Using this method on the root graph will display a warning on the console.
+   * @param e The edge to add to this subgraph.
+   * @see addEgdes() to add more than one edge at once.
+   * @see addNode() to add nodes.
    */
-  virtual void addEdge(const edge )=0;
+  virtual void addEdge(const edge e)=0;
+
   /**
-   * Adds existing edges in the graph. The edges are also added in all
-   * the graph ancestors to maintain the sub-graph relation between graphs.
-   * Warning, the added edges must be elements of the graph hierarchy,
+   * @brief Adds existing edges in the graph. The edges are also added in all
+   * the ancestor graphs.
+   * The added edges must be elements of the graph hierarchy,
    * thus they must be elements of the root graph.
-   * Warning : One can't add existing edges to the root graph.
+   * @warning Using this method on the root graph will display a warning on the console.
+   * @warning The graph does not take ownership of the iterator.
+   * @param edges The edges to add on this subgraph.
    */
   virtual void addEdges(Iterator<edge>* edges)=0;
+
   /**
-   * Deletes an edge in the graph. The edge is also removed in
-   * the sub-graphs hierarchy of the current graph to maintain
-   * the sub-graph relation between graphs.
-   * If deleteInAllGraphs is true, the edge is deleted
-   * in the whole hierarchy of graphs.
+   * @brief Deletes an edge in the graph. The edge is also removed in
+   * the sub-graphs hierarchy.
    * The ordering of remaining edges is preserved.
+   * @param e The edge to delete.
+   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
    */
   virtual void delEdge(const edge e, bool deleteInAllGraphs = false)=0;
+
   /**
-   * Deletes edges in the graph. These edges are also removed in
-   * the sub-graphs hierarchy of the current graph to maintain
-   * the sub-graph relation between graphs.
-   * If deleteInAllGraphs is true, the edges are deleted
-   * in the whole hierarchy of graphs.
+   * @brief Deletes edges in the graph. These edges are also removed in the sub-graphs hierarchy.
    * The ordering of remaining edges is preserved.
-   * It is the responsibility of the caller to delete the iterator.
+   * @warning The graph does not take ownership of the Iterator.
+   * @param itE
+   * @param deleteInAllGraphs  Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
    */
   virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false)=0;
+
   /**
-   * Sets the order of the edges around a node. This operation
-   * ensures that adjacent edges of a node will
+   * @brief Sets the order of the edges around a node.
+   * This operation ensures that adjacent edges of a node will
    * be ordered as they are in the vector of edges given in parameter.
+   *
+   * This can be useful if you want to make sure you retrieve the edges in a specific order when iterating upon them.
+   * @param n The node whose edges to order.
+   * @param edges The edges, in the order you want them.
    */
-  virtual void setEdgeOrder(const node,const std::vector<edge> & )=0;
+  virtual void setEdgeOrder(const node n,const std::vector<edge> &edges)=0;
+
   /**
-   * Swaps two edges in the adjacency list of a node.
+   * @brief Swaps two edges in the adjacency list of a node.
+   * @param n The node on whoch to swap the edges order.
+   * @param e1 The first edge, that will take the second edge's position.
+   * @param e2 The second edge, that will take the first edge's position.
    */
-  virtual void swapEdgeOrder(const node,const edge , const edge )=0;
-  /// Sets the source of an existing edge.
-  virtual void setSource(const edge, const node) = 0;
-  /// Sets the target of an existing edge.
-  virtual void setTarget(const edge, const node) = 0;
-  /// Sets both the source and target of an existing edge.
-  virtual void setEnds(const edge, const node source, const node target) = 0;
+  virtual void swapEdgeOrder(const node n,const edge e1, const edge e2)=0;
+
   /**
-   *  Reverses the direction of an edge, the source becomes the target and the target
+   * @brief Sets the source of an edge to be the given node.
+   * @param e The edge to change the source of.
+   * @param source The new source of the edge.
+   */
+  virtual void setSource(const edge e, const node source) = 0;
+
+  /**
+   * @brief Sets the target of an edge to be the given node.
+   * @param e The edge to change the target of.
+   * @param target The new target of the edge.
+   */
+  virtual void setTarget(const edge e, const node target) = 0;
+
+  /**
+   * @brief Sets both the source and the target of an edge.
+   * @param e The edge to set the source and target of.
+   * @param source The new source of the edge.
+   * @param target The new target of the edge.
+   */
+  virtual void setEnds(const edge e, const node source, const node target) = 0;
+
+  /**
+   * @brief Reverses the direction of an edge, the source becomes the target and the target
    *  becomes the source.
-   *  Warning : The ordering is global to the entire graph hierarchy. Thus, by changing
+   * @warning The ordering is global to the entire graph hierarchy. Thus, by changing
    *  the ordering of a graph you change the ordering of the hierarchy.
+   * @param e The edge top reverse.
    */
-  virtual void reverse(const edge)=0;
+  virtual void reverse(const edge e)=0;
   // Attempts to reserve enough space to store nodes.
   // Only defined on root graph.
   virtual void reserveNodes(unsigned int nbNodes) = 0;
@@ -466,72 +661,271 @@ public:
    **/
   virtual tlp::node getSource() const;
 
-  /// Returns an existing node of the graph.
+  /**
+   * @brief Gets a node on the graph.
+   * @return Any node of the graph.
+   */
   virtual node getOneNode() const =0;
-  /// Returns an iterator on the nodes.
+
+  /**
+   * @brief Gets an iterator over this graph's nodes.
+   * @return An iterator over all the nodes of this graph.
+   * @see getInNodes()
+   * @see getOutNodes()
+   * @see getInOutNodes()
+   * @see getEdges()
+   */
   virtual Iterator<node>* getNodes() const =0;
-  /// Returns the ith predecessor of a node.
-  virtual node getInNode(const node,unsigned int )const =0;
-  /// Returns an iterator on the predecessors of a node.
-  virtual Iterator<node>* getInNodes(const node) const =0;
-  /// Returns the ith successor of a node.
-  virtual node getOutNode(const node,unsigned int) const =0;
-  /// Returns an iterator on the successors of a node.
-  virtual Iterator<node>* getOutNodes(const node) const =0;
-  /// Returns an iterator on the neighbours of a node.
-  virtual Iterator<node>* getInOutNodes(const node) const =0;
-  /// Returns the underlying graph of a meta node.
-  virtual Graph* getNodeMetaInfo(const node) const = 0;
-  /// Returns an iterator on the edges.
+
+  /**
+   * @brief Gets the i-th node in the input nodes of a given node.
+   * An input node 'in' of a node 'N' is the source of an edge going from
+   * 'in' to 'N'. e.g.
+   * @code
+   * node in = graph->addNode();
+   * node N = graph->addNode();
+   * graph->addEdge(in, N);
+   * //in == graph->getInNode(N, 0);
+   * @endcode
+   *
+   * If you have 5 input nodes on a node N, then
+   * @codeline graph->getInNode(2);
+   * will return the second of those nodes.
+   * It will ignore the output nodes of this node.
+   * @param n The node to get an input node of.
+   * @param i The index of the input node to get.
+   * @return The i-th input node of the given node.
+   * @see getInNodes()
+   * @see getInEdges()
+   */
+  virtual node getInNode(const node n,unsigned int i)const =0;
+
+  /**
+   * @brief Gets an iterator over the input nodes of a node.
+   * @param n The node to get the input nodes of.
+   * @return An iterator over the input nodes of a node.
+   * @see getInNode()
+   * @see getInOutNodes()
+   * @see getInEdges()
+   */
+  virtual Iterator<node>* getInNodes(const node n) const =0;
+
+  /**
+   * @brief Gets the i-th node in the output nodes of a given node.
+   * An output node 'out' of a node 'N' is the target of an edge going from
+   * 'N' to 'out'. e.g.
+   * @code
+   * node N = graph->addNode();
+   * node out = graph->addNode();
+   * graph->addEdge(N, out);
+   * //out == graph->getOutNode(N, 0);
+   * @endcode
+   *
+   * If you have 5 output nodes on a node N, then
+   * @codeline graph->getOutNode(2);
+   * will return the second of those nodes.
+   * It will ignore the input nodes of this node.
+   * @param n The node to get an output node of.
+   * @param i The index of the output node to get.
+   * @return The i-th output node of the given node.
+   * @see getOutNodes()
+   * @see getOutEdges()
+   */
+  virtual node getOutNode(const node n,unsigned int i) const =0;
+
+  /**
+   * @brief Gets an iterator over the output nodes of a node.
+   * @param n The node to get the output nodes of.
+   * @return An iterator over the output nodes of a node.
+   * @see getOutNode()
+   * @see getInOutNodes()
+   * @see getOutEdges()
+   */
+  virtual Iterator<node>* getOutNodes(const node n) const =0;
+
+  /**
+   * @brief Gets an iterator over the neighbors of a given node.
+   * @param n The node to retrieve the neighbors of.
+   * @return An iterator over the node's neighbors.
+   */
+  virtual Iterator<node>* getInOutNodes(const node n) const =0;
+
+  /**
+   * @brief Gets the underlying graph of a meta node.
+   * @param metaNode The metanode.
+   * @return The Graph pointed to by the metanode.
+   * @see getEdgeMetaInfo()
+   */
+  virtual Graph* getNodeMetaInfo(const node metaNode) const = 0;
+
+  /**
+   * @brief Get an iterator over all the graph's edges.
+   * @return An iterator over all the graph's edges.
+   * @see getInEdges()
+   * @see getOutEdges()
+   * @see getInOutEdges()
+   */
   virtual Iterator<edge>* getEdges() const =0;
-  /// Returns an existing edge of the graph.
+
+  /**
+   * @brief Gets an edge of the graph.
+   * @return Any one of the graph's edges.
+   */
   virtual edge getOneEdge() const =0;
-  /// Returns an iterator on the outgoing edges of a node.
-  virtual Iterator<edge>* getOutEdges(const node) const =0;
-  /// Returns an iterator on the incoming and outgoing edges of a node.
-  virtual Iterator<edge>* getInOutEdges(const node) const =0;
-  /// Returns an iterator on the incoming edges of a node.
-  virtual Iterator<edge>* getInEdges(const node) const =0;
-  /// Returns an iterator on the underlying edges of a meta edge.
-  virtual Iterator<edge>* getEdgeMetaInfo(const edge) const =0;
+
+  /**
+   * @brief Gets an iterator over the output edges of a node.
+   * @param n The node to get the output edges from.
+   * @return An iterator over the node's output edges.
+   * @see getEdges()
+   * @see getOutEdges()
+   * @see getInOutEdges()
+   */
+  virtual Iterator<edge>* getOutEdges(const node n) const =0;
+
+  /**
+   * @brief Gets an iterator over the edges of a node.
+   * @param n The node to get the edges from.
+   * @return An iterator over the node's edges.
+   * @see getEdges()
+   * @see getOutEdges()
+   * @see getInEdges()
+   */
+  virtual Iterator<edge>* getInOutEdges(const node n) const =0;
+
+  /**
+   * @brief Gets an iterator over the input edges of a node.
+   * @param n The node to get the input edges from.
+   * @return An iterator over the node's input edges.
+   * @see getEdges()
+   * @see getOutEdges()
+   * @see getInOutEdges()
+   */
+  virtual Iterator<edge>* getInEdges(const node n) const =0;
+
+  /**
+   * @brief Gets an iterator over the edges composing a meta edge.
+   * @param metaEdge The metaEdge to get the real edges of.
+   * @return An Iterator over the edges composing the metaEdge.
+   * @see getNodeMetaInfo()
+   */
+  virtual Iterator<edge>* getEdgeMetaInfo(const edge metaEdge) const =0;
   //================================================================================
   // Graph, nodes and edges informations about the graph stucture
   //================================================================================
-  /// Returns the graph's id. This id is unique.
+  /**
+   * @brief Gets the unique identifier of the graph.
+   * @return The unique identifier of this graph.
+   */
   unsigned int getId() const {
     return id;
   }
-  /// Returns the number of nodes in the graph.
+
+  /**
+   * @brief Gets the number of nodes in this graph.
+   * @return The number of nodes in this graph.
+   * @see numberOfEdges()
+   */
   virtual unsigned int numberOfNodes()const =0;
-  /// Returns the number of edges in the graph.
+
+  /**
+   * @brief Gets the number of edges in this graph.
+   * @return The number of edges in this graph.
+   * @see numberOfNodes()
+   */
   virtual unsigned int numberOfEdges()const =0;
-  /// Returns the degree of a node.
-  virtual unsigned int deg(const node)const =0;
-  /// Returns the incoming degree of a node.
-  virtual unsigned int indeg(const node)const =0;
-  /// Returns the outgoing degree of a node.
-  virtual unsigned int outdeg(const node)const =0;
-  /// Returns the source of the edge.
-  virtual node source(const edge)const =0;
-  /// Returns the target of the edge.
-  virtual node target(const edge)const =0;
-  /// Returns the source and target of the edge
-  /// as the first and second of the returned pair.
-  virtual const std::pair<node, node>& ends(const edge)const=0;
-  /// Returns the opposite node for n in the edge e.
-  virtual node opposite(const edge, const node)const =0;
-  /// Returns true if the node is an element of the graph.
-  virtual bool isElement(const node ) const =0;
-  /// Returns true if the node is a meta node.
-  virtual bool isMetaNode(const node ) const =0;
-  /// Returns true if the edge is an element of the graph.
-  virtual bool isElement(const edge ) const =0;
-  /// Returns true if the edge is a meta edge.
-  virtual bool isMetaEdge(const edge ) const =0;
-  /** Returns the edge if it exists an edge between two nodes.
+
+  /**
+   * @param n The node to get the degree of.
+   * @return The degree of the given node.
+   */
+  virtual unsigned int deg(const node n)const =0;
+
+  /**
+   * @brief Get the input degree of a node.
+   * @param n The node to get the input degree of.
+   * @return The input degree of the given node.
+   */
+  virtual unsigned int indeg(const node n)const =0;
+
+  /**
+   * @brief Get the output degree of a node.
+   * @param n The node to get the output degree of.
+   * @return The output degree of the given node.
+   */
+  virtual unsigned int outdeg(const node n)const =0;
+
+  /**
+   * @brief Gets the source of an edge.
+   * @param e The edge to get the source of.
+   * @return The source of the given edge.
+   */
+  virtual node source(const edge e)const =0;
+
+  /**
+   * @brief Gets the target of an edge.
+   * @param e The edge to get the target of.
+   * @return The target of the given edge.
+   */
+  virtual node target(const edge e)const =0;
+
+  /**
+   * @brief Gets the source and the target of an edge.
+   * @param e The edge to get the ends of.
+   * @return A pair whose first element is the source, and second is the target.
+   */
+  virtual const std::pair<node, node>& ends(const edge e)const=0;
+
+  /**
+   * @brief Gets the opposite node  of n through e.
+   * @param e The edge linking the two nodes.
+   * @param n The node at one end of e.
+   * @return The node at the other end of e.
+   */
+  virtual node opposite(const edge e, const node n)const =0;
+
+  /**
+   * @brief Checks if an element belongs to this graph.
+   * @param n The node to check if it is an element of the graph.
+   * @return Whether or not the element belongs to the graph.
+   */
+  virtual bool isElement(const node n) const =0;
+
+  /**
+   * @brief Checks is a node is a meta node.
+   * @param n The node to check if it is a meta node.
+   * @return Whether or not the node is a meta node.
+   */
+  virtual bool isMetaNode(const node n) const =0;
+
+  /**
+   * @brief Checks if an element belongs to this graph.
+   * @param e The edge to check if it is an element of the graph.
+   * @return Whether or not the element belongs to the graph.
+   */
+  virtual bool isElement(const edge e) const =0;
+
+  /**
+   * @brief Checks is an edge is a meta edge.
+   * @param e The edge to check if it is a meta edge.
+   * @return Whether or not the edge is a meta edge.
+   */
+  virtual bool isMetaEdge(const edge e) const =0;
+
+  /**
+   * Returns the edge if it exists an edge between two nodes.
    *  The 'directed' flag indicates if the direction of the edge
    *  (from source to target) must be taken in to account.
    *  If no edge is found, returns an invalid edge.
+   *
+   * @brief If an edge exists between the two given nodes, return it.
+   * If specified, include and edge that goes from target to source.
+   * @warning this function always returns an edge, you need to check if this edge is valid with
+   * edge::isValid().
+   * @param source The source of the hypothetical edge.
+   * @param target The target of the hypothetical edge.
+   * @param directed Whether to include edges going from target to source.
+   * @return An edge that is only valid if it exists.
    */
   virtual edge existEdge(const node source, const node target,
                          bool directed = true) const =0;
@@ -539,62 +933,113 @@ public:
   // Access to the graph attributes and to the node/edge property.
   //================================================================================
   /**
-   * Sets the string identifier of the graph
+   * @brief Sets the name of the graph.
+   * The name does not have to be unique, it is used for convenience.
+   * @param name The new name of the graph.
    */
   virtual void setName(const std::string &name) = 0;
+
   /**
-   * Returns the string identifier of the graph
+   * @brief Retrieves the name of the graph.
+   * @return The name of the graph.
    */
   virtual std::string getName() const = 0;
 
-  /// Returns graph attributes.
+  /**
+   * @brief Gets the attributes of the graph.
+   *
+   * The attributes contains the name and any user-defined value.
+   * @return The attributes of the graph.
+   */
   const DataSet & getAttributes() const {
     return (const_cast<Graph *>(this))->getNonConstAttributes();
   }
-  /// Get an attribute of the graph; returns true if a value was found
-  /// false if not.
+
+  /**
+   * @brief Gets an attribute on the graph.
+   * @param name The name of the attribute to set.
+   * @param value The value to set.
+   * @return Whether the setting of the attribute was sucessful.
+   */
   template<typename ATTRIBUTETYPE>
   bool getAttribute(const std::string &name, ATTRIBUTETYPE& value) const;
-  /// Untyped accessor returning a copy.
+
+  /**
+   * @brief Gets a copy of the attribute.
+   * @param name The name of the attribute to retrieve.
+   * @return A copy of the attribute to retrieve.
+   */
   DataType* getAttribute(const std::string& name) const;
-  /// Sets an attribute of the graph.
+
+  /**
+   * @brief Sets an attribute on the graph.
+   * @param name The name of the attribute to set.
+   * @param value The value to set on this attribute.
+   */
   template<typename ATTRIBUTETYPE>
   void setAttribute(const std::string &name,const ATTRIBUTETYPE &value);
-  /// Sets attritute from an untyped value.
+
+  /**
+   * @brief Sets an attribute on the graph.
+   * @param name The name of the attribute to set.
+   * @param value The value to set.
+   */
   void setAttribute(const std::string &name, const DataType* value);
-  /// Removes an existing attribute.
+
+  /**
+   * @brief Removes an attribute on the graph.
+   * @param name The name of the attribute to remove.
+   */
   void removeAttribute(const std::string &name) {
     notifyRemoveAttribute(name);
     getNonConstAttributes().remove(name);
   }
-  /// Returns if the attribute exist.
+
+  /**
+   * @brief Checks if an attribute exists.
+   * @param name The name of the attribute to check for.
+   * @return Whether the attribute exists.
+   */
   bool attributeExist(const std::string &name) {
     return getAttributes().exist(name);
   }
+
   /**
-   *  Adds a property to the graph.
-   *  Be aware that the PropertyInterface will now belong to the graph object;
-   *  and so it will be deleted automatically. Using of delete on that property
-   *  will cause a segmentation violation (use delLocalProperty instead).
+   * @brief Adds a property to the graph.
+   * The graph takes ownership of the property. If you want to delete it, use
+   * Graph::delLocalProperty().
+   * @param name The name that will identify the newly added property.
+   * @param prop The property to add.
    */
   virtual  void addLocalProperty(const std::string &name, PropertyInterface *prop)=0;
+
   /**
-   * Returns a pointer to a PropertyInterface which is in the graph properties pool.
-   * The real type of the PropertyInterface is tested with the template parameter.
-   * If the PropertyInterface is not in the pool, a new one is created and returned.
-   * Using of delete on that property will cause an abort of the program
-   * (use delLocalProperty instead).
+   * @brief Gets a property on this graph.
+   * The name of a property indentifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such porperty exists and it is created.
+   *
+   * The graph keeps ownership of the property, if you wish to remove it fgrom the graph use
+   * Graph::delLocalProperty().
+   * @warning using the wrong template parameter will cause a segmentation fault.
+   * @param name The name of the property, which identifies it in the graph's property collection.
+   * @return The property of given name.
    */
   template<typename PropertyType>
   PropertyType* getLocalProperty(const std::string &name);
 
   /**
-   * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool.
-   * The real type of the PropertyInterface is tested with the propertyType string parameter.
-   * If the PropertyInterface is not in the pool, a new one is created and returned.
-   * If the type parameter is not a valid property type this function returns a NULL pointer.
-   * Using of delete on that property will cause an abort of the program
-   * (use delLocalProperty instead).
+   * @brief Gets a property on this graph.
+   * This forwards the call to the template version of getProperty(), with the correct template parameter deduced from the propertyType parameter.
+   *
+   * The graph keeps ownership of the property, if you wish to remove it fgrom the graph use
+   * Graph::delLocalProperty().
+   *
+   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return NULL.
+   * @param propertyName The name of the property to retrieve.
+   * @param propertyType A string describing the type of the property.
+   * @return The property of given name.
+   * @see getLocalProperty().
    */
   PropertyInterface *getLocalProperty(const std::string& propertyName, const std::string& propertyType);
 
@@ -1024,7 +1469,7 @@ protected:
 TLP_SCOPE std::ostream& operator<< (std::ostream &,const tlp::Graph *);
 
 //================================================================================
-// Specilization of some template class
+// these three functions allow to use tlp::Graph as a key in a hash-based data structure (e.g. hashmap).
 //================================================================================
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
@@ -1044,4 +1489,3 @@ TLP_BEGIN_HASH_NAMESPACE {
 #include <tulip/PropertyInterface.h>
 #include "cxx/Graph.cxx"
 #endif
-///@endcond
