@@ -31,6 +31,8 @@
  * 5/ Please remember that code comments should NEVER begin with /** (use /* instead) in order to exclude them from doxygen.
  */
 
+#define DOXYGEN // Used to separate licence from groups definitions
+
 /**
  * @defgroup Checks Model Checking
  * @brief Graph model checking
