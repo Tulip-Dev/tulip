@@ -42,7 +42,7 @@ ExtendedMetaNodeRenderer::ExtendedMetaNodeRenderer(GlGraphInputData *inputData):
 }
 
 ExtendedMetaNodeRenderer::~ExtendedMetaNodeRenderer() {
-clearViews();
+  clearViews();
 }
 
 void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
@@ -139,7 +139,7 @@ GlMainView* ExtendedMetaNodeRenderer::createView(Graph* metaGraph)const {
   DataSet dataSet;
   dataSet.set("overviewVisible",false);
   view->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator());
-  view->setState(dataSet);  
+  view->setState(dataSet);
   bool viewMetaLabels = inputData->renderingParameters()->isViewMetaLabel();//Checks if user want to see metanode labels
   view->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(viewMetaLabels);
   view->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(viewMetaLabels);
@@ -164,11 +164,12 @@ void ExtendedMetaNodeRenderer::treatEvent(const Event &e) {
   }
 }
 
-void ExtendedMetaNodeRenderer::clearViews(){
-    for(map<Graph *,GlMainView *>::iterator it=metaGraphToViewMap.begin(); it!=metaGraphToViewMap.end(); ++it) {
-      delete (*it).second;
-    }
-    metaGraphToViewMap.clear();
+void ExtendedMetaNodeRenderer::clearViews() {
+  for(map<Graph *,GlMainView *>::iterator it=metaGraphToViewMap.begin(); it!=metaGraphToViewMap.end(); ++it) {
+    delete (*it).second;
+  }
+
+  metaGraphToViewMap.clear();
 }
 
 }
