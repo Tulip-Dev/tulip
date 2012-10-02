@@ -54,6 +54,22 @@ protected:
   QGraphicsProxyWidget *_informationsWidgetItem;
 
   QTableView* tableView() const;
+
+  /**
+   * @brief buildModel create and returns the model to visualize edit elements parameters.
+   * @param elementType the type of the element can be NODE or EDGE
+   * @param elementId elementId the id of the element
+   * @param parent the parent for the model creation.
+   * @return
+   */
+  virtual QAbstractItemModel* buildModel(ElementType elementType, unsigned int elementId, QObject *parent)const;
+  /**
+   * @brief elementName returns the title of the element.
+   * @param elementType the type of the element can be NODE or EDGE
+   * @param elementId the id of the element
+   * @return
+   */
+  virtual QString elementName(ElementType elementType, unsigned int elementId)const;
 };
 
 }
