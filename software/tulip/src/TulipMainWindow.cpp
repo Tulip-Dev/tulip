@@ -90,6 +90,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
 
   if (QApplication::arguments().size() > 1) {
     QString path = QApplication::arguments()[1];
+
     if (QFileInfo(path).exists())
       openProject(path);
   }
@@ -199,8 +200,10 @@ void TulipMainWindow::openProject(const QString &file) {
   }
   else {
     QString perspectiveName = QString::null;
+
     if (PluginLister::instance()->availablePlugins<tlp::Perspective>().size() > 1) {
       PerspectiveSelectionDialog dlg;
+
       if (dlg.exec() == QDialog::Accepted) {
         perspectiveName = dlg.perspectiveName();
       }

@@ -289,6 +289,7 @@ void SearchWidget::graphIndexChanged(int) {
 
 void SearchWidget::termAChanged() {
   tlp::PropertyInterface* prop = term(_ui->searchTermACombo);
+
   if (_ui->customValueEdit->isVisible())
     updateOperators(prop, _ui->customValueEdit->text());
   else
@@ -313,6 +314,7 @@ void SearchWidget::updateOperators(tlp::PropertyInterface *a, tlp::PropertyInter
 
 void SearchWidget::updateOperators(PropertyInterface *a, const QString &b) {
   bool isCustomValueDouble = false;
+
   if (b.isEmpty())
     isCustomValueDouble = true;
   else
