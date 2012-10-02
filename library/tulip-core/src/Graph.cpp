@@ -515,9 +515,9 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
 //=========================================================
 bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
                                         PropertyInterface* prop,
-                                        std::string &msg,
+                                        std::string &errorMessage,
                                         tlp::PluginProgress *progress,
-                                        tlp::DataSet *data) {
+                                        tlp::DataSet *parameters) {
   bool result;
   tlp::AlgorithmContext context;
 
@@ -533,7 +533,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     }
 
     if (currentGraph != prop->getGraph()) {
-      msg = "The passed property does not belong to the graph";
+      errorMessage = "The passed property does not belong to the graph";
       return false;
     }
   }
@@ -547,14 +547,14 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   if (it != circularCalls.end() && (*it).second == prop) {
 #ifndef NDEBUG
-    qWarning() << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg;
+    qWarning() << "Circular call of " << __PRETTY_FUNCTION__ << " " << errorMessage;
 #endif
     return false;
   }
 
   // nothing to do if the graph is empty
   if (numberOfNodes() == 0) {
-    msg= "The graph is empty";
+    errorMessage= "The graph is empty";
     return false;
   }
 
@@ -565,17 +565,17 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   else
     tmpProgress=progress;
 
-  bool hasData = data != NULL;
+  bool hasData = parameters != NULL;
 
   if (!hasData)
-    data = new tlp::DataSet();
+    parameters = new tlp::DataSet();
 
   // add prop as result in dataset
-  data->set<PropertyInterface *>("result", prop);
+  parameters->set<PropertyInterface *>("result", prop);
 
   context.pluginProgress = tmpProgress;
   context.graph = this;
-  context.dataSet = data;
+  context.dataSet = parameters;
 
   tlp::Observable::holdObservers();
   circularCalls[algorithm] = prop;
@@ -584,7 +584,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     tlp::PluginLister::instance()->getPluginObject<PropertyAlgorithm>(algorithm, &context);
 
   if (tmpAlgo != NULL) {
-    result = tmpAlgo->check(msg);
+    result = tmpAlgo->check(errorMessage);
 
     if (result) {
       tmpAlgo->run();
@@ -593,7 +593,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     delete tmpAlgo;
   }
   else {
-    msg = "No algorithm available with this name";
+    errorMessage = "No algorithm available with this name";
     result=false;
   }
 
@@ -604,9 +604,9 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   if (hasData)
     // remove result from dataset
-    data->remove("result");
+    parameters->remove("result");
   else
-    delete data;
+    delete parameters;
 
   return result;
 }

@@ -165,10 +165,11 @@ TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=NULL);
  *
  * There are a few principles to know when working with a Tulip Graph.
  *
+ * @chapter Directed
  * Every edge is directed in a Tulip Graph.
  * You can choose to ignore this, but every edge has a source and destination.
  *
- * Inheritance
+ * @chapter Inheritance
  *
  * Subgraphs inherit from their parent graph.
  * This is true of nodes and edges; every node and edge in a subgraph also exists in each of its parent graphs.
@@ -194,6 +195,13 @@ TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=NULL);
  * You need to create two clone subgraphs, on each you make the 'viewLayout' property local.
  * This results in A and B having different values for the layout, but everything else in common.
  * You then can apply two different algorithms on A and B (e.g. Bubble Tree and Tree Radial).
+ *
+ * @chapter Meta Nodes
+ * A meta node is a node representing a subgraph of the current graph.
+ *
+ * @chapter Undo Redo
+ * The Tulip Graph object supports for undo and redo of modifications.
+ *The operations affect the whole graph hierarchy, and cannot be limited to a subgraph.
  *
  */
 class TLP_SCOPE Graph : public Observable {
@@ -1008,10 +1016,22 @@ public:
    * @brief Adds a property to the graph.
    * The graph takes ownership of the property. If you want to delete it, use
    * Graph::delLocalProperty().
-   * @param name The name that will identify the newly added property.
+   * @param name The unique identifier of the property.
    * @param prop The property to add.
    */
   virtual  void addLocalProperty(const std::string &name, PropertyInterface *prop)=0;
+
+  /**
+   * @brief Gets an existing property.
+   * In DEBUG mode an assertion checks the existence of the property.
+   *
+   * The graph keeps ownership of the property, if you wish to remove it from the graph use
+   * Graph::delLocalProperty().
+   *
+   * @param name The unique identifier of the property.
+   * @return An existing property, or NULL if no property with the given name exists.
+   */
+  virtual PropertyInterface* getProperty(const std::string& name) const = 0;
 
   /**
    * @brief Gets a property on this graph.
@@ -1022,21 +1042,36 @@ public:
    * The graph keeps ownership of the property, if you wish to remove it fgrom the graph use
    * Graph::delLocalProperty().
    * @warning using the wrong template parameter will cause a segmentation fault.
-   * @param name The name of the property, which identifies it in the graph's property collection.
+   * @param The unique identifier of the property.
    * @return The property of given name.
    */
   template<typename PropertyType>
   PropertyType* getLocalProperty(const std::string &name);
 
   /**
-   * @brief Gets a property on this graph.
-   * This forwards the call to the template version of getProperty(), with the correct template parameter deduced from the propertyType parameter.
+   * @brief Gets a property on this graph or one of its ancestors.
+   * If the property already exists on the graph or in one of its ancestors, it is returned.
+   * Otherwise a new property is created on this graph.
    *
-   * The graph keeps ownership of the property, if you wish to remove it fgrom the graph use
+   * The graph keeps ownership of the property, if you wish to remove it from the graph use
    * Graph::delLocalProperty().
    *
    * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return NULL.
-   * @param propertyName The name of the property to retrieve.
+   * @param name The unique identifier of the property.
+   * @return An existing property, or a new one if none exists with the given name.
+   */
+  template<typename PropertyType>
+  PropertyType* getProperty(const std::string &name);
+
+  /**
+   * @brief Gets a property on this graph, and this graph only.
+   * This forwards the call to the template version of getLocalProperty(), with the correct template parameter deduced from the propertyType parameter.
+   *
+   * The graph keeps ownership of the property, if you wish to remove it from the graph use
+   * Graph::delLocalProperty().
+   *
+   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return NULL.
+   * @param propertyName The unique identifier of the property.
    * @param propertyType A string describing the type of the property.
    * @return The property of given name.
    * @see getLocalProperty().
@@ -1044,178 +1079,284 @@ public:
   PropertyInterface *getLocalProperty(const std::string& propertyName, const std::string& propertyType);
 
   /**
-   * Computes a property on the current graph
-   * using an external named algorithm (plug-in).
-   * The computed values will be stored in result. Warning: previous values stored in result will be deleted.
-   * If the function returns false, an error message is stored in msg.
-   * One can give a PluginProgress to the algorithm in order to have some feedback or to stop
-   * the algorithm during its computation. One can give parameters to the algorithm
-   * using the DataSet. In some cases algorithms can use this DataSet in order
-   * to return some external information (not stored in result).
+   * @brief Gets a property on this graph or one of its ancestors.
+   * This forwards the call to the template version of getProperty(), with the correct template parameter deduced from the propertyType parameter.
+   *
+   * The graph keeps ownership of the property, if you wish to remove it from the graph use
+   * Graph::delLocalProperty().
+   *
+   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return NULL.
+   * @param propertyName The unique identifier of the property.
+   * @param propertyType A string describing the type of the property.
+   * @return The property of given name.
+   * @see getProperty().
+   */
+  PropertyInterface *getProperty(const std::string& propertyName, const std::string& propertyType);
+
+  /**
+   * @brief Checks if a property exists in this graph or one of its ancestors.
+   * @param The unique identifier of the property.
+   * @return Whether a property with the given name exists.
+   */
+  virtual  bool existProperty(const std::string& name) const = 0;
+
+  /**
+   * @brief Checks if a property exists in this graph.
+   * @param The unique identifier of the property.
+   * @return Whether a property with the given name exists.
+   */
+  virtual  bool existLocalProperty(const std::string& name) const = 0;
+
+  /**
+   * @brief Removes and deletes a property from this graph.
+   * The property is removed from the graph's property pool, meaning its name can now be used by another property.
+   * The object is deleted and the memory freed.
+   * @param name The unique identifier of the property.
+   */
+  virtual  void delLocalProperty(const std::string& name)=0;
+
+  /**
+   * @brief Gets an iterator over the names of the local properties of this graph.
+   * @return An iterator over this graph's properties names.
+   */
+  virtual Iterator<std::string>* getLocalProperties() const=0;
+
+  /**
+   * @brief Gets an iterator over the local properties of this graph.
+   * @return An iterator over this graph's properties.
+   */
+  virtual Iterator<PropertyInterface*>* getLocalObjectProperties() const=0;
+
+  /**
+   * @brief Gets an iterator over the names of the properties inherited from this graph's ancestors,
+   * excluding this graph's local properties.
+   * @return An iterator over the names of the properties this graph inherited.
+   */
+  virtual Iterator<std::string>* getInheritedProperties() const=0;
+
+  /**
+   * @brief Gets an iterator over the properties inherited from this graph's ancestors,
+   * excluding this graph's local properties.
+   * @return An iterator over the properties this graph inherited.
+   */
+  virtual Iterator<PropertyInterface*>* getInheritedObjectProperties() const=0;
+
+  /**
+   * @brief Gets an iterator over the names of all the properties attached to this graph,
+   * whether they are local or inherited.
+   * @return An iterator over the names of all the properties attached to this graph.
+   */
+  virtual Iterator<std::string>* getProperties() const=0;
+
+  /**
+   * @brief Gets an iterator over the properties attached to this graph,
+   * whether they are local or inherited.
+   * @return An iterator over all of the properties attached to this graph.
+   */
+  virtual Iterator<PropertyInterface*>* getObjectProperties() const=0;
+
+  /**
+   * @brief Runs a plugin on the graph, whose result is a property.
+   *
+   * @param algorithm The name of the plugin to run.
+   * @param result The property in which to put the results. All previous values will be erased.
+   * @param errorMessage Stores the error message if the plugin fails.
+   * @param progress A means of feedback during the plugin execution. Some plugins support being stopped or cancelled through this.
+   * @param parameters The parameters of the algorithm. Some algorithms use this DataSet to output some additional informations.
+   * @return Whether the plugin executed successfully or not. If not, check the error message.
+   *
+   * @see PluginLister::getPluginParameters() to retrieve the list of default parameters for the pligin.
    */
   bool applyPropertyAlgorithm(const std::string &algorithm,
                               PropertyInterface* result,
-                              std::string &msg,
+                              std::string &errorMessage,
                               PluginProgress *progress=NULL,
-                              DataSet *data=NULL);
+                              DataSet *parameters=NULL);
   /**
-   * obsolete version of the previous one
+   * @cond DOXYGEN_HIDDEN
+   *
+   * @deprecated Use applyPropertyAlgorithm() instead.
+   *
+   * @endcond
    */
   template<typename PropertyType>
   _DEPRECATED bool computeProperty(const std::string &algorithm,
                                    PropertyType* result, std::string &msg,
                                    PluginProgress *progress=NULL, DataSet *data=NULL);
-  /**
-   * Returns a pointer to a PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-   * The real type of the PropertyInterface is tested with the template parameter.
-   * If the PropertyInterface is not in the pool, it creates a new one and returns it.
-   * Using of delete on that property will cause a segmentation violation
-   * (use delLocalProperty instead).
-   */
-  template<typename PropertyType>
-  PropertyType* getProperty(const std::string &name);
-  /**
-   * Returns a pointer on an existing property. If the property does not
-   * exist return NULL.
-   * In DEBUG the existence of a property is checked using an assertion.
-   */
-  virtual PropertyInterface* getProperty(const std::string& name) const = 0;
-  /**
-   * Try to returns a pointer to a PropertyInterface PropertyInterface which is in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-   * The real type of the PropertyInterface is tested with the propertyType string parameter.
-   * If the PropertyInterface is not in the pool, a new one is created and returned.
-   * If the type parameter is not a valid property type this function returns a NULL pointer.
-   * Using of delete on that property will cause an abort of the program
-   * (use delLocalProperty instead).
-   */
-  PropertyInterface *getProperty(const std::string& propertyName, const std::string& propertyType);
-  /**
-   *  Returns true if a property of that name exists
-   *  in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-   */
-  virtual  bool existProperty(const std::string& name) const = 0;
-  /**
-   * Returns true if a property of that name exists in the graph properties pool.
-   */
-  virtual  bool existLocalProperty(const std::string& name) const = 0;
-  /**
-   * Removes and deletes the property associated to name in the graph properties pool.
-   */
-  virtual  void delLocalProperty(const std::string& name)=0;
-  /**
-   * Returns an iterator on the names of the properties local to the graph.
-   */
-  virtual Iterator<std::string>* getLocalProperties() const=0;
-  /**
-   * Returns an iterator on the names of the properties inherited from the graphï¿½ï¿½ï¿½s ancestors.
-   */
-  virtual Iterator<std::string>* getInheritedProperties() const=0;
-  /**
-   * Returns an iterator on the name of all the properties attached to the graph.
-   */
-  virtual Iterator<std::string>* getProperties() const=0;
-  /**
-   * Returns an iterator on the properties local to the graph.
-   */
-  virtual Iterator<PropertyInterface*>* getLocalObjectProperties() const=0;
-  /**
-   * Returns an iterator on the properties inherited from the graphï¿½ï¿½ï¿½s ancestors.
-   */
-  virtual Iterator<PropertyInterface*>* getInheritedObjectProperties() const=0;
-  /**
-   * Returns an iterator on all the properties attached to the graph.
-   */
-  virtual Iterator<PropertyInterface*>* getObjectProperties() const=0;
 
   // observation mechanism
-  /**
-   * Register a new observer
-   */
   void _DEPRECATED addGraphObserver(Observable *) const;
-  /**
-   * Remove an observer
-   */
   void _DEPRECATED removeGraphObserver(Observable *) const;
 
   // updates management
-  /*
-   * Marks the state of the current root graph in the hierarchy.
-   * The next updates will be recorded in order to be undone at the
-   * next call of the pop method. Be careful that all the updates are undone
-   * except those who affect the ordering of edges.
-   * If the argument unpopAllowed is set to false, the next updates
-   * could not be replayed after undone. If some previously undone
-   * updates exist they could no longer be replayed.
-   * If the argument propertiesToPreserveOnPop is not null, all the updates
-   * occuring for the elements of this vector will be preserved during
-   * the next call of the pop method.
+  /**
+   * @brief Saves the current state of the whole graph hierarchy and allows to revert to this state later on, using pop().
+   * All modifications except those altering the ordering of the edges will be undone.
+   *
+   * This allows to undo/redo modifications on a graph.
+   * This is mostly useful from a user interface point of view, but some algorithms use this mechanism to clean up before finishing.
+   * For instance:
+   * @code
+   * Graph* graph = tlp::newGraph();
+   * DoubleProperty* prop = graph->getProperty<DoubleProperty>("metric");
+   * string errorMessage;
+   *
+   * //our super metric stuff we want to kee
+   * DoubleProperty* superProperty = graph->getProperty<DoubleProperty>("superStuff");
+   * vector<PropertyInterface*> propertiesToKeep;
+   * propertiesToKeep.push_back(superProperty);
+   *
+   *
+   * //apply some metric
+   * graph->applyPropertyAlgorithm("Degree", prop, errorMessage);
+   *
+   * // save this state to be able to revert to it later
+   * //however we do not want to allow to unpop(), which would go forward again to the state where prop contains 'Depth'.
+   * //this saves some memory.
+   * //Also we always want to keep the value of our super property, so we pass it in the collection of properties to leave unaffected by the pop().
+   * graph->push(false, propertiesToKeep);
+   *
+   * //compute the quality of this metric, or whatever makes sense
+   * int degreeQuality = prop->getMax();
+   *
+   * //compute another metric
+   * graph->applyPropertyAlgorithm("Depth", prop, errorMessage);
+   *
+   * //compute our secret metric, that depends on depth
+   * graph->applyPropertyAlgorithm("MySuperSecretAlgorithm", superProperty, errorMessage);
+   *
+   * //compute its quality
+   * int depthQuality = prop->getMax();
+   *
+   * //if the degree was better, revert back to the state where its contents were in prop.
+   * if(degreeQuality > depthQuality) {
+   *    //this does not affect superProperty, as we told the system not to consider it when recording modifications to potentially revert.
+   *    graph->pop();
+   * }
+   *
+   * //do some stuff using our high quality metric
+   * ColorProperty* color = graph->getProperty("viewColor");
+   * graph->applyPropertyAlgorithm("Color Mapping", color, errorMessage);
+   *
+   * @endcode
+   *
+   * @param unpopAllowed Whether or not to allow to re-do the modifications once they are undone.
+   * @param propertiesToPreserveOnPop A collection of properties whose state to preserve when using pop().
+   * @see pop()
+   * @see unpop()
+   * @see canPop()
+   * @see canUnPop()
+   * @see canPopThenUnPop()
    */
   virtual void push(bool unpopAllowed = true,
                     std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL)=0;
-  /*
-   * Restores a previously marked state of the current root graph
-   * in the hierarchy. The restored state does not remain marked.
-   * If the argument unpopAllowed is set to false then
-   * the undone updates could not be replayed.
+
+  /**
+   * @brief Undoes modifications and reverts the whole graph hierarchy back to a previous state.
+   *
+   * @param unpopAllowed Whether or not it is possible to redo what will be undoe by this call.
    */
   virtual void pop(bool unpopAllowed = true)=0;
-  /*
-   * Marks again the current state of the root graph hierarchy
-   * and replays the last updates previously undone.
+
+  /**
+   * @brief Re-perform actions that were undone using pop().
+   *
+   * For instance:
+   * @code
+   * DoubleProperty* prop = graph->getProperty<DoubleProperty>("metric");
+   * string errorMessage;
+   *
+   * //apply some metric
+   * graph->applyPropertyAlgorithm("Degree", prop, errorMessage);
+   *
+   * // save this state to be able to revert to it later
+   * graph->push();
+   *
+   * //compute the quality of this metric, or whatever makes sense
+   * int degreeQuality = prop->getMax();
+   *
+   * //compute another metric
+   * graph->applyPropertyAlgorithm("Depth", prop, errorMessage);
+   *
+   * //compute its quality
+   * int depthQuality = prop->getMax();
+   *
+   * //if the degree was better, revert back to the state where its contents were in prop.
+   * if(degreeQuality > depthQuality) {
+   *    graph->pop();
+   * }
+   *
+   * ...
+   *
+   * //revert back to the depth for some reason.
+   * graph->unpop();
+   * @endcode
    */
   virtual void unpop()=0;
-  /*
-   * Returns true if a previously marked state can be restored.
+
+  /**
+   * @brief Checks if there is a state to revert to.
+   * @return Whether there was a previous call to push() that was not yet pop()'ed.
    */
   virtual bool canPop()=0;
-  /*
-   * Returns true if some previously undone updates can be replayed.
+
+  /**
+   * @brief Checks if the last undone modifications can be redone.
+   * @return Whether it is possible to re-do modifications that have been undone by pop().
    */
   virtual bool canUnpop()=0;
-  /*
-   * Returns true if the current state updates can be undone then replayed.
+
+  /**
+   * @brief Checks if it is possible to call pop() and then unPop(), to undo then re-do modifications.
+   * @return Whether it is possible to undo and then redo.
    */
   virtual bool canPopThenUnpop()=0;
 
   // meta nodes management
   /**
-   * Closes a set of existing nodes into a metanode and returns it.
-   * Edges from nodes in the set to other nodes are replaced with
-   * edges from the metanode to the other nodes.
-   * Warning: this method will failed when called on the root graph.
+   * @brief Creates a meta-node from a set of nodes.
+   * Every edges from any node in the set to another node of the graph will be replaced with meta edges
+   * from the meta node to the other nodes.
+   * @warning This method will fail when called on the root graph.
    *
-   * \param nodeSet: a set of existing nodes
-   * \param multiEdges: indicates if a meta edge will be created for each underlying edge
-   * \param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
+   * @param nodeSet The nodes to put into the meta node.
+   * @param multiEdges Whether a meta edge should be created for each underlying edge.
+   * @param delAllEdge Whether the underlying edges will be removed from the whole hierarchy.
+   * @return The newly created meta node.
    */
   node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+
   /**
-   * Populates a quotient graph with one meta node
+   *  @brief Populates a quotient graph with one meta node
    * for each iterated graph.
    *
-   * \param itS: a Graph iterator, (typically a subgraph iterator)
-   * \param quotientGraph: the graph that will contain the meta nodes
-   * \param metaNodes: will contains all the added meta nodes after the call
+   * @param itS a Graph iterator, (typically a subgraph iterator)
+   * @param quotientGraph the graph that will contain the meta nodes
+   * @param metaNodes will contains all the added meta nodes after the call
    *
    */
   void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
                        std::vector<node>& metaNodes);
   /**
-   * Closes an existing subgraph into a metanode.  Edges from nodes
+   * @brief Closes an existing subgraph into a metanode.  Edges from nodes
    * in the subgraph to nodes outside the subgraph are replaced with
    * edges from the metanode to the nodes outside the subgraph.
-   * Warning: this method will failed when called on the root graph.
+   * @warning this method will fail when called on the root graph.
    *
-   * \param subGraph: an existing subgraph
-   * \param multiEdges: indicates if a meta edge will be created for each underlying edge
-   * \param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
+   * @param subGraph an existing subgraph
+   * @param multiEdges indicates if a meta edge will be created for each underlying edge
+   * @param delAllEdge indicates if the underlying edges will be removed from the entire hierarchy
    */
   node createMetaNode(Graph* subGraph, bool multiEdges = true, bool delAllEdge = true);
+
   /**
-   * Opens a metanode and replaces all edges between that
+   * @brief Opens a metanode and replaces all edges between that
    * meta node and other nodes in the graph.
+   *
+   * @warning this method will fail when called on the root graph.
+   *
+   * @param n The meta node to open.
    * @param updateProperties If set to true, open meta node will update inner nodes layout, color, size, etc
-   * Warning: this method will failed when called on the root graph.
    */
   void openMetaNode(node n, bool updateProperties=true);
 
@@ -1469,7 +1610,7 @@ protected:
 TLP_SCOPE std::ostream& operator<< (std::ostream &,const tlp::Graph *);
 
 //================================================================================
-// these three functions allow to use tlp::Graph as a key in a hash-based data structure (e.g. hashmap).
+// these functions allow to use tlp::Graph as a key in a hash-based data structure (e.g. hashmap).
 //================================================================================
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
