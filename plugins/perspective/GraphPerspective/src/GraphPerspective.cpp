@@ -215,17 +215,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     rootIds = _graphs->readProject(_project,progress);
   }
 
-  if (!_externalFile.isEmpty()) {
-
-    QFileInfo externalFileInfo(_externalFile);
-
-    if (externalFileInfo.exists()) {
-      progress->setComment((trUtf8("Loading ") + externalFileInfo.fileName()).toStdString());
-      DataSet dataSet;
-      dataSet.set("file::filename", std::string(externalFileInfo.absoluteFilePath().toUtf8().data()));
-      Graph *externalGraph = tlp::importGraph("TLP Import", dataSet, progress);
-      _graphs->addGraph(externalGraph);
-    }
+  if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
+    open(_externalFile);
   }
 
   _ui->graphHierarchiesEditor->setModel(_graphs);
@@ -478,7 +469,7 @@ void GraphPerspective::saveAs(const QString& path) {
   TulipSettings::instance().addToRecentDocuments(path);
 }
 
-void GraphPerspective::open() {
+void GraphPerspective::open(QString fileName) {
   QString filters;
   QMap<std::string, std::string> modules;
   std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
@@ -513,7 +504,9 @@ void GraphPerspective::open() {
   filterAny += " *.tlpx);;";
 
   filters.insert(0, filterAny);
-  QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open Graph"), _lastOpenLocation, filters);
+
+  if (fileName.isNull()) // If open() was called without a parameter, open the file dialog
+    fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open Graph"), _lastOpenLocation, filters);
 
   if(!fileName.isEmpty()) {
     QFileInfo fileInfo(fileName);

@@ -50,7 +50,7 @@ class GraphPerspective : public tlp::Perspective {
   QString _lastOpenLocation;
 
 public:
-  PLUGININFORMATIONS("Tulip", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "Hierarchy")
+  PLUGININFORMATIONS("Tulip", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "")
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/desktop.png";
   }
@@ -74,7 +74,7 @@ public slots:
   void createPanel(tlp::Graph* g = NULL);
   void save();
   void saveAs(const QString& path=QString::null);
-  void open();
+  void open(QString fileName = QString::null);
 
   void log(QtMsgType,const char*);
   void showLogger();
