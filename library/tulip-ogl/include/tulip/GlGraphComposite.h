@@ -47,6 +47,9 @@ class Graph;
  * After that you can change some visualize parameters throw GlGraphRenderingParameters class
  * @see GlGraphRenderingParameters
  * @see getRenderingParametersPointer()
+ *
+ * To render the graph in OpenGL, GlGraphComposite use a GlGraphRenderer. So if you want to change the system to render the graph, you have to create a new GlGraphRender
+ * @see GlGraphRenderer
  */
 class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public Observable {
 
