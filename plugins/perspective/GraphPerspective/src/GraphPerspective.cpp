@@ -277,7 +277,7 @@ void GraphPerspective::exportGraph(Graph* g) {
   if (g == NULL)
     return;
 
-  ExportWizard wizard(_mainWindow);
+  ExportWizard wizard(g,_mainWindow);
 
   if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() || wizard.outputFile().isEmpty())
     return;

@@ -35,8 +35,9 @@ class ExportWizard: public QWizard {
   Q_OBJECT
 
   Ui::ExportWizard* _ui;
+  tlp::Graph* _graph;
 public:
-  explicit ExportWizard(QWidget *parent = NULL);
+  explicit ExportWizard(tlp::Graph* g, QWidget *parent = NULL);
   virtual ~ExportWizard();
 
   QString algorithm() const;
