@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef Tulip_BOUNDINGBOX_H
 #define Tulip_BOUNDINGBOX_H
@@ -26,6 +25,7 @@
 
 namespace tlp {
 /**
+ * \ingroup Structures
  * \brief This class represents the 3D bounding box of an object.
  * It is mostly used to determine whether or not two object are in a state of collision.
  *
@@ -35,23 +35,27 @@ namespace tlp {
  * Below is a crude ASCII-art description of the axes we use in our 3D world and the points where the min and max are thus positioned.
  * Through the rest of this class's documentation, it will be assumed that this is the convention.
  *
- *     y
- *    |
- *    |
- *    |_____ x
- *   /
- *  /
- * z
  *
- *    _________ B
- *   /        /|
- *  /        / |
- * /________/  |
- * |        |  |
- * |        |  |
- * |        | /
- * |________|/
- * A
+ * @verbatim
+      y
+     |
+     |
+     |_____ x
+    /
+   /
+  z
+
+     _________ B
+    /        /|
+   /        / |
+  /________/  |
+  |        |  |
+  |        |  |
+  |        | /
+  |________|/
+  A
+
+  @endverbatim
  *
  *
  * Author : <a href="www.tulip-software.org">Tulip team</a>
@@ -167,15 +171,19 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   *
   * Crude ASCII art again, sorry for your eyes.
   *
-  *   6_________ 7
-  *   /|       /|
-  *  / |      / |
-  *3/__|_____/2 |
-  * |  |_____|__|
-  * |  /4    |  /5
-  * | /      | /
-  * |/_______|/
-  * 0        1
+  * @verbatim
+
+     6_________ 7
+     /|       /|
+    / |      / |
+  3/__|_____/2 |
+   |  |_____|__|
+   |  /4    |  /5
+   | /      | /
+   |/_______|/
+   0        1
+
+   @endverbatim
   *
   * @param bb A vector in which to put the points of the bounding box.
   * @return void
@@ -186,4 +194,3 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
 }
 
 #endif // Tulip_BOUNDINGBOX_H
-///@endcond
