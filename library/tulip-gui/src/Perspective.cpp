@@ -68,10 +68,6 @@ Perspective::~Perspective() {
   delete _project;
 }
 
-bool Perspective::isCompatible(tlp::TulipProject *) {
-  return false;
-}
-
 PluginProgress* Perspective::progress() {
   SimplePluginProgressDialog* dlg = new SimplePluginProgressDialog(_mainWindow);
   dlg->show();
