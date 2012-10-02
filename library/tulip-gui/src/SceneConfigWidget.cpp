@@ -21,6 +21,7 @@
 
 #include <QtCore/QDebug>
 #include <QtGui/QMainWindow>
+#include <QtGui/QApplication>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Perspective.h>
@@ -98,7 +99,7 @@ void SceneConfigWidget::resetChanges() {
   _ui->backgroundColorButton->setTulipColor(_glMainWidget->getScene()->getBackgroundColor());
   _ui->selectionColorButton->setTulipColor(renderingParameters->getSelectionColor());
 
-  QApplication::processEvents();
+//  QApplication::processEvents();
   _resetting = false;
 }
 
