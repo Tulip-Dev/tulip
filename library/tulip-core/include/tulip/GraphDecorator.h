@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -27,7 +27,7 @@
 
 namespace tlp {
 
-class TLP_SCOPE GraphDecorator : public Graph {  // non-orientï¿½, planaire
+class TLP_SCOPE GraphDecorator : public Graph {  // non-orientÃ¯Â¿Â½, planaire
 public:
   GraphDecorator(Graph* s) {
     assert(s);

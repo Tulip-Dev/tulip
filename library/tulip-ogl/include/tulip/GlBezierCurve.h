@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -27,13 +27,13 @@
 namespace tlp {
 
 /**
- * \brief A class to draw BÃ©zier curves
+ * \brief A class to draw BÃÂ©zier curves
  *
- * This class allows to draw BÃ©zier curves defined by an arbitrary number of control points.
- * BÃ©zier curves are named after their inventor, Dr. Pierre BÃ©zier. He was an engineer with the
- * Renault car company and set out in the early 1960âs to develop a curve formulation which would
+ * This class allows to draw BÃÂ©zier curves defined by an arbitrary number of control points.
+ * BÃÂ©zier curves are named after their inventor, Dr. Pierre BÃÂ©zier. He was an engineer with the
+ * Renault car company and set out in the early 1960Ã¢ÂÂs to develop a curve formulation which would
  * lend itself to shape design.
- * BÃ©zier curves are widely used in computer graphics to model smooth curves. A BÃ©zier curve is
+ * BÃÂ©zier curves are widely used in computer graphics to model smooth curves. A BÃÂ©zier curve is
  * completely contained in the convex hull of its control points and passes through its first and
  * last control points. The curve is also always tangent to the first and last convex hull polygon segments.
  * In addition, the curve shape tends to follow the polygon shape.
