@@ -403,6 +403,22 @@ public:
    */
   void reloadGraphProperties();
 
+  /**
+   * @brief renderingParameters return a pointer on the rendering parameters.
+   * @return
+   */
+  GlGraphRenderingParameters* renderingParameters()const{
+      return parameters;
+  }
+
+  /**
+   * @brief setRenderingParameters set the pointer on the rendering parameters.
+   * @param newParameters
+   */
+  void setRenderingParameters(GlGraphRenderingParameters* newParameters){
+        parameters = newParameters;
+  }
+
 public :
 
   Graph* graph;
