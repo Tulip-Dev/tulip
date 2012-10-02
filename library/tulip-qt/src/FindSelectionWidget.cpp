@@ -23,7 +23,6 @@
 #include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/IntegerProperty.h>
-#include <QtCore/qregexp.h>
 
 using namespace tlp;
 
@@ -34,6 +33,7 @@ FindSelectionWidget::FindSelectionWidget(Graph *graph, std::string& currentPrope
   setupUi(this);
   insertProperties(currentProperty);
   propertyChanged(-1);
+
 }
 
 static bool IsEvaluableProxy( PropertyInterface *p) {
@@ -278,6 +278,7 @@ void FindSelectionWidget::evalEdges(PropertyInterface *p, int mode,
 
 void FindSelectionWidget::find(BooleanProperty *selP) {
   PropertyInterface * p = getProperty();
+
   int mode  = getMode();
   std::string fv = filterValue->text().toUtf8().data();
   int op = getOperation();

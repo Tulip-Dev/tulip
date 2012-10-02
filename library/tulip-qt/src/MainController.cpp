@@ -336,7 +336,7 @@ void MainController::setData(Graph *graph,DataSet dataSet) {
   Observable::holdObservers();
   Graph *newGraph=graph;
 
-  // If graph don't have valid layoutProperty : we apply random layout
+  // If graph does not have a valid layoutProperty: we apply random layout
   Iterator<node>* itn = newGraph->getProperty<LayoutProperty>("viewLayout")->getNonDefaultValuatedNodes();
 
   if (!itn->hasNext() && newGraph->numberOfNodes()>1) {
