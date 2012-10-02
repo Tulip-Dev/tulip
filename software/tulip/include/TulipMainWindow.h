@@ -95,12 +95,4 @@ private:
   QVector<QObject *> _pageChoosers;
 };
 
-class PerspectiveSelectionDialog: public QDialog {
-  Q_OBJECT
-public:
-  PerspectiveSelectionDialog(QWidget *parent=NULL);
-  QString selectedPerspectiveName;
-
-};
-
 #endif // TULIPMAINWINDOW_H

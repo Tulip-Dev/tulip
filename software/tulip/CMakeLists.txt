@@ -14,6 +14,7 @@ SET(SRCS
   src/TulipPerspectiveProcessHandler.cpp
   src/TulipPerspectiveCrashHandler.cpp
   src/FormPost.cpp
+  src/PerspectiveSelectionDialog.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
@@ -25,6 +26,7 @@ QT4_WRAP_UI(UI_HEADERS
   designer/TulipWelcomePage.ui
   designer/PluginInformationsListItem.ui
   designer/TulipPerspectiveCrashHandler.ui
+  designer/PerspectiveSelectionDialog.ui
 )
 
 QT4_WRAP_CPP(MOC_SRCS
@@ -37,6 +39,7 @@ QT4_WRAP_CPP(MOC_SRCS
   include/TulipPerspectiveProcessHandler.h
   include/TulipPerspectiveCrashHandler.h
   include/FormPost.h
+  include/PerspectiveSelectionDialog.h
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS resources/TulipAgent.qrc)
