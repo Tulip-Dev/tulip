@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef Tulip_GLGRAPHCOMPOSITE_H
 #define Tulip_GLGRAPHCOMPOSITE_H
@@ -36,49 +35,77 @@ namespace tlp {
 
 class Graph;
 
-/** \brief Class use to represent a graph
+/**
+ * @ingroup OpenGL
+ * @brief Class use to visualize graph in OpenGL Tulip engine
  *
- * GlComposite use to represent a graph with nodes, metanodes and edges
+ * GlSimpleEntity specialisation used to visualize graph in GlScene system
+ * @see GlSimpleEntity
+ * @see GlScene
+ *
+ * To visualize graph you have to create a new GlGraphComposite and add it to a GlLayer of a GlScene
+ * After that you can change some visualize parameters throw GlGraphRenderingParameters class
+ * @see GlGraphRenderingParameters
+ * @see getRenderingParametersPointer()
  */
 class TLP_GL_SCOPE GlGraphComposite : public GlComposite, public Observable {
 
 public:
 
   /**
-   * Build a GlGraphComposite with the graph data
+   * @brief Build a GlGraphComposite with the graph data
+   *
    * You can specify a GlGraphRenderer, if you don't do this a GlGraphHighDetailsRenderer will be used to display the graph
    */
   GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer=NULL);
 
+  /**
+   * @brief Build a GlGraphComposite with the graph data
+   *
+   * Is better to use the other one constructor
+   *
+   * This graph composite is associated to the scene passed in parameter
+   */
   GlGraphComposite(Graph* graph, GlScene *scene);
 
+  /**
+   * @brief Destructor
+   */
   ~GlGraphComposite();
 
   /**
-   * Return the rendering parameters use for rendering
+   * @brief Return a copy of rendering parameters use for rendering
+   *
+   * So after you have to call setRenderingParameters
    */
   const GlGraphRenderingParameters& getRenderingParameters();
   /**
-   * Set the rendering parameters use for rendering
+   * @brief Set the rendering parameters use for rendering
    */
   void setRenderingParameters(const GlGraphRenderingParameters &parameter);
 
   /**
-   * Return a pointer on rendering parameters used for rendering
+   * @brief Return a pointer on rendering parameters used for rendering
+   *
+   * With this function you don't have to call setRenderingParameters() function
    */
   GlGraphRenderingParameters* getRenderingParametersPointer();
 
   /**
-   * Return the inputData use by the composite
+   * @brief Return the inputData use by the composite
+   *
+   * In GlGraphInputData you have properties used to render the graph
    */
   GlGraphInputData* getInputData();
 
   /**
-   * Return the graph used by this GlGraphComposite
+   * @brief Return the graph used by this GlGraphComposite
    */
   Graph *getGraph() {
     return inputData.getGraph();
   }
+
+///@cond DOXYGEN_HIDDEN
 
   /**
    * Function used to visit composite's children
@@ -122,19 +149,25 @@ public:
     return graphRenderer;
   }
 
+///@endcond
+
   /**
-   * Function to export data in outString (in XML format)
+   * @brief Function to export data in outString (in XML format)
    */
   virtual void getXML(std::string &outString);
 
   /**
-   * Function to set data with inString (in XML format)
+   * @brief Function to set data with inString (in XML format)
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
 protected:
-  // override Observable::treatEvent
+
+///@cond DOXYGEN_HIDDEN
+
   void treatEvent(const Event& evt);
+
+///@endcond
 
   GlGraphRenderingParameters parameters;
   GlGraphInputData inputData;
@@ -149,4 +182,3 @@ protected:
 }
 
 #endif
-///@endcond
