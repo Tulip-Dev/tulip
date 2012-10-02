@@ -33,7 +33,7 @@
 using namespace tlp;
 using namespace std;
 
-ExportWizard::ExportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::ExportWizard) {
+ExportWizard::ExportWizard(Graph *g, QWidget *parent): QWizard(parent), _ui(new Ui::ExportWizard), _graph(g) {
   _ui->setupUi(this);
   button(QWizard::FinishButton)->setEnabled(false);
 
@@ -65,7 +65,7 @@ void ExportWizard::algorithmSelected(const QModelIndex& index) {
   QAbstractItemModel* newModel = NULL;
 
   if (PluginLister::pluginExists(alg.toStdString())) {
-    newModel = new ParameterListModel(PluginLister::getPluginParameters(alg.toStdString()));
+    newModel = new ParameterListModel(PluginLister::getPluginParameters(alg.toStdString()),_graph);
   }
 
   _ui->parametersList->setModel(newModel);
