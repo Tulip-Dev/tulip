@@ -36,6 +36,7 @@ namespace tlp {
 class GlMainWidget;
 }
 
+
 namespace tlp {
 class TLP_QT_SCOPE GlMainWidgetGraphicsItem : public QGraphicsObject {
   Q_OBJECT
@@ -73,6 +74,10 @@ protected :
   void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
   void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
   void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
+  void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+  void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+  void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
+  void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 protected slots:
   void glMainWidgetDraw(GlMainWidget *,bool);
