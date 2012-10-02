@@ -32,6 +32,7 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GlGraphComposite.h>
 
 using namespace std;
 
@@ -41,9 +42,7 @@ ExtendedMetaNodeRenderer::ExtendedMetaNodeRenderer(GlGraphInputData *inputData):
 }
 
 ExtendedMetaNodeRenderer::~ExtendedMetaNodeRenderer() {
-  for(map<Graph *,GlMainView *>::iterator it=metaGraphToViewMap.begin(); it!=metaGraphToViewMap.end(); ++it) {
-    delete (*it).second;
-  }
+clearViews();
 }
 
 void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
@@ -140,7 +139,10 @@ GlMainView* ExtendedMetaNodeRenderer::createView(Graph* metaGraph)const {
   DataSet dataSet;
   dataSet.set("overviewVisible",false);
   view->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator());
-  view->setState(dataSet);
+  view->setState(dataSet);  
+  bool viewMetaLabels = inputData->renderingParameters()->isViewMetaLabel();//Checks if user want to see metanode labels
+  view->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(viewMetaLabels);
+  view->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(viewMetaLabels);
   return view;
 }
 
@@ -162,4 +164,13 @@ void ExtendedMetaNodeRenderer::treatEvent(const Event &e) {
   }
 }
 
+void ExtendedMetaNodeRenderer::clearViews(){
+    for(map<Graph *,GlMainView *>::iterator it=metaGraphToViewMap.begin(); it!=metaGraphToViewMap.end(); ++it) {
+      delete (*it).second;
+    }
+    metaGraphToViewMap.clear();
 }
+
+}
+
+

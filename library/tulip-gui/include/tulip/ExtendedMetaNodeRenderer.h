@@ -43,11 +43,17 @@ public:
   virtual void render(node n,float lod,Camera* camera);
 
   virtual void setInputData(GlGraphInputData *data) {
+    clearViews();//Need to regenerate views
     inputData=data;
   }
   virtual GlGraphInputData *getInputData() {
     return inputData;
   }
+
+  /**
+   * @brief clearViews delete all the view created to render metanodes.
+   */
+  void clearViews();
 
 protected :
 
