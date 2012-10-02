@@ -458,6 +458,8 @@ private:
 
   bool clearBufferAtDraw;
 
+  bool inDraw;
+
 public:
 
   ///@cond DOXYGEN_HIDDEN
