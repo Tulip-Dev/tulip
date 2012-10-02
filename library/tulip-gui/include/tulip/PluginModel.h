@@ -214,6 +214,12 @@ public:
       f.setBold(true);
       return f;
     }
+    else if (role == Qt::DecorationRole && tlp::PluginLister::pluginExists(item->name.toStdString())) {
+      const tlp::Plugin* p = tlp::PluginLister::pluginInformations(item->name.toStdString());
+      QIcon icon(p->icon().c_str());
+      delete p;
+      return icon;
+    }
 
     return QVariant();
   }
