@@ -289,7 +289,10 @@ void SearchWidget::graphIndexChanged(int) {
 
 void SearchWidget::termAChanged() {
   tlp::PropertyInterface* prop = term(_ui->searchTermACombo);
-  updateOperators(prop, term(_ui->searchTermBCombo));
+  if (_ui->customValueEdit->isVisible())
+    updateOperators(prop, _ui->customValueEdit->text());
+  else
+    updateOperators(prop, term(_ui->searchTermBCombo));
 }
 
 void SearchWidget::termBChanged() {
@@ -309,9 +312,13 @@ void SearchWidget::updateOperators(tlp::PropertyInterface *a, tlp::PropertyInter
 }
 
 void SearchWidget::updateOperators(PropertyInterface *a, const QString &b) {
-  bool isCustomValueInt = false;
-  b.toInt(&isCustomValueInt);
-  setNumericOperatorsEnabled(dynamic_cast<tlp::DoubleProperty*>(a) != NULL && isCustomValueInt);
+  bool isCustomValueDouble = false;
+  if (b.isEmpty())
+    isCustomValueDouble = true;
+  else
+    b.toDouble(&isCustomValueDouble);
+
+  setNumericOperatorsEnabled(dynamic_cast<tlp::DoubleProperty*>(a) != NULL && isCustomValueDouble);
 }
 
 void SearchWidget::setNumericOperatorsEnabled(bool e) {
