@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef Tulip_GLSIMPLEENTITY_H
 #define Tulip_GLSIMPLEENTITY_H
@@ -34,40 +33,44 @@ namespace tlp {
 class GlComposite;
 
 /**
- * Base class for all simple entity (entity who not need GraphInputData
+ * @ingroup OpenGL
+ * @brief Base class for all Tulip OpenGL entities
+ *
+ * Other Tulip entities inherit for this class.
+ *
+ * You don't have to create a GlSimpleEntity, you have to use GlLine, GlRect or GlSphere for example
+ *
+ * To GlSimpleEntity manipulation :
+ * @see GlLayer
+ * @see GlScene
  */
 class TLP_GL_SCOPE GlSimpleEntity : public GlEntity {
 
 public:
 
+  /**
+   * @brief Constructor
+   */
   GlSimpleEntity():visible(true),stencil(0xFFFF) {}
 
+  /**
+   * @brief Destructor
+   */
   virtual ~GlSimpleEntity();
 
   /**
-   * Draw function
-   */
-  virtual void draw(float lod,Camera* camera) = 0;
-
-  /**
-   * Accept visitor function
-   */
-  virtual void acceptVisitor(GlSceneVisitor *visitor) {
-    visitor->visit(this);
-  }
-
-  /**
-   * Set if entity is visible
+   * @brief Set if entity is visible
    */
   virtual void setVisible(bool visible);
   /**
-   * Return if entity is visible
+   * @brief Return if entity is visible
    */
   bool isVisible() const {
     return visible;
   }
   /**
-   * Set stencil number of the entity
+   * @brief Set stencil number of the entity
+   *
    * Stencil is an OpenGl system to ensure that other entity can't be displayed above this entity; it's a "guaranted visibility" system.
    * A small number causes a guaranted visibility
    * Default value in Tulip is 0xFFFF (greater integer)
@@ -77,14 +80,30 @@ public:
     this->stencil=stencil;
   }
   /**
-   * Return stencil number of entity
+   * @brief Return stencil number of entity
+   *
+   * @see setStencil()
    */
   int getStencil() {
     return stencil;
   }
 
+///@cond DOXYGEN_HIDDEN
+
   /**
-   * Return the entity boundingbox
+   * @brief Draw function
+   */
+  virtual void draw(float lod,Camera* camera) = 0;
+
+  /**
+   * @brief Accept visitor function
+   */
+  virtual void acceptVisitor(GlSceneVisitor *visitor) {
+    visitor->visit(this);
+  }
+
+  /**
+   * @brief Return the entity boundingbox
    */
   virtual BoundingBox getBoundingBox() {
     return boundingBox;
@@ -155,6 +174,8 @@ public:
     return parents[0];
   }
 
+///@endcond
+
 protected:
 
   bool visible;
@@ -169,4 +190,4 @@ protected:
 }
 
 #endif // Tulip_GLSIMPLEENTITY_H
-///@endcond
+
