@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -31,7 +31,7 @@ namespace tlp {
  * \brief A class to draw open uniform cubic B-splines
  *
  *  A B-spline is a convenient form for representing complicated, smooth curves. A cubic uniform B-spline is a
- *  piecewise collection of cubic BÃ©zier curves, connected end to end. A cubic B-spline is C^2 continuous, meaning there is no discontinuities in curvature.
+ *  piecewise collection of cubic BÃÂ©zier curves, connected end to end. A cubic B-spline is C^2 continuous, meaning there is no discontinuities in curvature.
  *  B-splines have local control : parameters of a B-spline only affect a small part of the entire spline.
  *  A B-spline is qualified as open when it passes through its first and last control points.
  *

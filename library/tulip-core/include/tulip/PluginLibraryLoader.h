@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -49,15 +49,15 @@ public:
   * once for the glyph folder, and once for the interactors folder.
   *
   * lib/tulip/
-  * âââ glyphs
-  * âÂ Â  âââ libBillboard-4.0.0.so
-  * âÂ Â  âââ libWindow-4.0.0.so
-  * âââ interactors
-  * âÂ Â  âââ libInteractorAddEdge-4.0.0.so
-  * âÂ Â  âââ libInteractorSelectionModifier-4.0.0.so
-  * âââ libAdjacencyMatrixImport-4.0.0.so
-  * âââ libColorMapping-4.0.0.so
-  * âââ libCompleteGraph-4.0.0.so
+  * Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ glyphs
+  * Ã¢ÂÂÃ Ã  Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libBillboard-4.0.0.so
+  * Ã¢ÂÂÃ Ã  Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libWindow-4.0.0.so
+  * Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ interactors
+  * Ã¢ÂÂÃ Ã  Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libInteractorAddEdge-4.0.0.so
+  * Ã¢ÂÂÃ Ã  Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libInteractorSelectionModifier-4.0.0.so
+  * Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libAdjacencyMatrixImport-4.0.0.so
+  * Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libColorMapping-4.0.0.so
+  * Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libCompleteGraph-4.0.0.so
   *
   *
   * @param plug A PluginLoader to output what is going on. Defaults to 0.

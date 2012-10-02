@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -226,7 +226,7 @@ public:
   * @param e the graph edge on which to compute its length
   *
   * @warning this function only measure the length of the polyline between bends,
-  * when using curves like BÃ©zier etc... the result will not be the length of the curve.
+  * when using curves like BÃÂ©zier etc... the result will not be the length of the curve.
   **/
   double edgeLength(const edge e) const;
 
