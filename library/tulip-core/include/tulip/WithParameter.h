@@ -220,9 +220,9 @@ private:
 
 
 #define HTML_HELP_OPEN() "<!DOCTYPE html><html><head>\
-<style type=\"text/css\">.body { background-color: white; font-family: \"Segoe UI\", Candara, \"Bitstream Vera Sans\", \"DejaVu Sans\", \"Bitstream Vera Sans\", \"Trebuchet MS\", Verdana, \"Verdana Ref\", sans-serif; }\
-    .paramtable { width: 100%; border: 0px; border-bottom: 1px solid #C9C9C9; background-color: #F9F9F9; padding: 5px; }\
-    .help { color: #595959; font-style: italic; font-size: 90%; }</style>\
+<style type=\"text/css\">.body { font-family: \"Segoe UI\", Candara, \"Bitstream Vera Sans\", \"DejaVu Sans\", \"Bitstream Vera Sans\", \"Trebuchet MS\", Verdana, \"Verdana Ref\", sans-serif; }\
+    .paramtable { width: 100%; border: 0px; border-bottom: 1px solid #C9C9C9; padding: 5px; }\
+    .help { font-style: italic; font-size: 90%; }</style>\
 </head><body><table border=\"0\" class=\"paramtable\">"
 
 #define HTML_HELP_DEF(A,B) "<tr><td><b>"A"</b><td>"B"</td></tr>"
