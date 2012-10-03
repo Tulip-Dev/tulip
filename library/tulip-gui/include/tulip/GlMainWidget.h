@@ -304,6 +304,7 @@ public:
     * Use this function only for advanced purpose, if you want to perform simple rendering use the draw or redraw functions instead.
     * @param options Configure the rendering process, see the RenderingOption documentation for more informations on each rendering option effect.
     * @see RenderingOption
+    * @param checkVisibility If check visibility is set as true : the engine check if GlMainWidget QWidget is visible. If set at false : the engine render the scene in all cases
     **/
   void render(RenderingOptions options=RenderingOptions(RenderScene|SwapBuffers), bool checkVisibility=true);
 
