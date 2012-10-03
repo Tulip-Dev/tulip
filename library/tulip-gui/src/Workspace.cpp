@@ -446,9 +446,10 @@ void Workspace::dropEvent(QDropEvent* event) {
 
 bool Workspace::handleDragEnterEvent(QEvent* e, const QMimeData* mimedata) {
   if(dynamic_cast<const GraphMimeType*>(mimedata) != NULL || dynamic_cast<const PanelMimeType*>(mimedata) != NULL || dynamic_cast<const AlgorithmMimeType*>(mimedata) !=  NULL) {
-    e->accept();    
+    e->accept();
     return true;
   }
+
   return false;
 }
 
