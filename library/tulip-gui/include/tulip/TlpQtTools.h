@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef _TLPQTTOOLS_H
 #define _TLPQTTOOLS_H
@@ -101,9 +100,17 @@ TLP_QT_SCOPE QGLFramebufferObject *createQGLFramebufferObject(int width, int hei
 
 TLP_QT_SCOPE QString localPluginsPath();
 
+/**
+ @brief Sets up environment when creating an executable using Tulip libraries
+ This method performs basic operations when starting a software using Tulip:
+ @list
+ @li It initializes the tulip library
+ @li it checks plugins to be discarded and uninstalls them
+ @li It loads plugins from the application path
+ @endlist
+ */
+extern TLP_SCOPE void initTulipSoftware(PluginLoader *loader, bool removeDiscardedPlugins=false);
+
 }
 
 #endif
-
-
-///@endcond
