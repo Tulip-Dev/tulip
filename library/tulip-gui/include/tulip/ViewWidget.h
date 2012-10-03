@@ -75,8 +75,9 @@ public slots:
 
 protected slots:
   /**
-    @see View::currentInteractorChanged()
     By default, the current interactor gets installed over the central widget.
+
+    @see View::currentInteractorChanged()
     */
   virtual void currentInteractorChanged(tlp::Interactor*);
 
@@ -84,7 +85,7 @@ protected slots:
 
 protected:
   /**
-    @brief sets up the central widget.
+    @brief Sets up the central widget.
     This is similar to View::setupUi in the sense that the purpose of setupWidget is to construct the GUI element.
     @warning This method MUST call the setCentralWidget to provide the ViewWidget with a valid widget.
     */

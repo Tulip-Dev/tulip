@@ -89,6 +89,7 @@ private :
   bool _graphChanged;
   int width, height;
   unsigned char *renderingStore;
+  QImage _lastImage;
 };
 
 }
