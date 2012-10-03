@@ -21,6 +21,7 @@
 #include <tulip/Camera.h>
 #include <tulip/GlSceneVisitor.h>
 #include <tulip/GlScene.h>
+#include <tulip/GlGraphComposite.h>
 
 using namespace std;
 
@@ -95,6 +96,11 @@ void GlLayer::addGlEntity(GlSimpleEntity *entity,const std::string& name) {
 
   if(scene)
     scene->notifyModifyLayer(this->name,this);
+}
+
+void GlLayer::addGraph(tlp::Graph *graph, const string &name) {
+  GlGraphComposite* graphComposite=new GlGraphComposite(graph,scene);
+  addGlEntity(graphComposite,name);
 }
 
 void GlLayer::deleteGlEntity(const std::string &key) {

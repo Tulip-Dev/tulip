@@ -110,7 +110,7 @@ WARN_LOGFILE           = doc/warnings.txt
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 
-INPUT                  = library doc/doxygen/
+INPUT                  = library doc/doxygen/ demos
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS           = *.h *.cxx
 RECURSIVE              = YES
@@ -118,7 +118,7 @@ EXCLUDE                =
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       =
 EXCLUDE_SYMBOLS        =
-EXAMPLE_PATH           =
+EXAMPLE_PATH           = demos/
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             = doc/doxygen/images

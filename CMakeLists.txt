@@ -75,7 +75,7 @@ SET(LibTulipGUIName "tulip-gui-${TulipMMVersion}")
 SET(LibTulipOGDFName "tulip-ogdf-${TulipMMVersion}")
 SET(LibStlPythonName "stlpython")
 SET(LibTulipCorePythonName "tulip-core-python-${TulipMMVersion}")
-SET(${TulipLibs} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipOGDFName})
+SET(TulipLibs ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipOGDFName})
 
 ## ========================================================
 ## Configure file for uninstall target
@@ -347,6 +347,7 @@ ADD_SUBDIRECTORY(plugins)
 ADD_SUBDIRECTORY(textures)
 ADD_SUBDIRECTORY(externalplugins)
 ADD_SUBDIRECTORY(doc)
+ADD_SUBDIRECTORY(demos)
 IF(BUILD_TESTS)
   ADD_SUBDIRECTORY(unit_test)
 ENDIF()
