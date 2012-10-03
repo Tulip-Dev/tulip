@@ -30,6 +30,7 @@
 
 namespace tlp {
 
+class Graph;
 class GlScene;
 class GlSceneVisitor;
 class GlGraphComposite;
@@ -132,6 +133,13 @@ public:
    * @brief Add an entity to GlComposite of the layer
    */
   void addGlEntity(GlSimpleEntity *entity,const std::string& name);
+
+  /**
+   * @brief A Convienience function that adds a graph to the layer
+   *
+   * This method will automatically create a GlGraphComposite entity and add it to the layer.
+   */
+  void addGraph(tlp::Graph* graph, const std::string& name);
 
   /**
    * @brief Remove entity with name : key
