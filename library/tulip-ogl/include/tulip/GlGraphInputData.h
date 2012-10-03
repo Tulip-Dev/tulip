@@ -144,7 +144,7 @@ public:
    */
   template<typename T>
   T* getProperty(PropertyName propertyName) const {
-    T* property=dynamic_cast<T*>(_propertiesMap.find(propertyName)->second);
+    T* property=static_cast<T*>(_propertiesMap.find(propertyName)->second);
     return property;
   }
 
