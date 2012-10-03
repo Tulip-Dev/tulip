@@ -446,10 +446,8 @@ void Workspace::dropEvent(QDropEvent* event) {
 
 bool Workspace::handleDragEnterEvent(QEvent* e, const QMimeData* mimedata) {
   if(dynamic_cast<const GraphMimeType*>(mimedata) != NULL || dynamic_cast<const PanelMimeType*>(mimedata) != NULL || dynamic_cast<const AlgorithmMimeType*>(mimedata) !=  NULL) {
-    e->accept();
-    return true;
+    e->accept();    
   }
-
   return false;
 }
 
@@ -462,10 +460,12 @@ bool Workspace::handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel
     return false;
 
   if (graphMime != NULL && graphMime->graph()) {
-    if (panel != NULL)
+    if (panel != NULL) {
       panel->view()->setGraph(graphMime->graph());
-    else
+    }
+    else {
       emit(addPanelRequest(graphMime->graph()));
+    }
   }
 
   else if (panelMime) {
