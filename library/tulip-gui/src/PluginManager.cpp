@@ -35,6 +35,9 @@
 
 using namespace tlp;
 
+const QString PluginManager::STABLE_LOCATION = QString("http://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_RELEASE;
+const QString PluginManager::TESTING_LOCATION = QString("http://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_RELEASE;
+
 QDebug operator<<(QDebug dbg, const PluginVersionInformations &c) {
   dbg.nospace() << "(author " << c.author << ") "
                 << "(version " << c.version << ") "

@@ -75,6 +75,7 @@ SET(LibTulipGUIName "tulip-gui-${TulipMMVersion}")
 SET(LibTulipOGDFName "tulip-ogdf-${TulipMMVersion}")
 SET(LibStlPythonName "stlpython")
 SET(LibTulipCorePythonName "tulip-core-python-${TulipMMVersion}")
+SET(${TulipLibs} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipOGDFName})
 
 ## ========================================================
 ## Configure file for uninstall target

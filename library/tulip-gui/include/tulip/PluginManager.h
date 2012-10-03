@@ -69,6 +69,9 @@ public:
   };
   Q_DECLARE_FLAGS(PluginLocations, PluginLocation)
 
+  static const QString STABLE_LOCATION;
+  static const QString TESTING_LOCATION;
+
   typedef QList<PluginVersionInformations> PluginVersionInformationsList;
 
   typedef QList<PluginInformations> PluginInformationsList;
