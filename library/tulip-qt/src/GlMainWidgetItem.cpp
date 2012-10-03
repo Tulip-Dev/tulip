@@ -227,39 +227,47 @@ void GlMainWidgetItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 }
 
 void GlMainWidgetItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, event->buttons(), event->modifiers());
-  QApplication::sendEvent(glMainWidget,eventModif);
+    QMouseEvent eventModif(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, event->buttons(), event->modifiers());
+    QApplication::sendEvent(glMainWidget,&eventModif);
+    event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetItem::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonPress,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
-  QApplication::sendEvent(glMainWidget,eventModif);
+    QMouseEvent eventModif(QEvent::MouseButtonPress,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
+    QApplication::sendEvent(glMainWidget,&eventModif);
+    event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonDblClick,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
-  QApplication::sendEvent(glMainWidget,eventModif);
+    QMouseEvent eventModif(QEvent::MouseButtonDblClick,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
+    QApplication::sendEvent(glMainWidget,&eventModif);
+    event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
-  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseButtonRelease,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
-  QApplication::sendEvent(glMainWidget,eventModif);
+    QMouseEvent eventModif(QEvent::MouseButtonRelease,QPoint(event->pos().x(),event->pos().y()), event->button(), event->buttons(), event->modifiers());
+    QApplication::sendEvent(glMainWidget,&eventModif);
+    event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetItem::wheelEvent(QGraphicsSceneWheelEvent *event) {
-  QWheelEvent *eventModif=new QWheelEvent(QPoint(event->pos().x(),event->pos().y()), event->delta(),event->buttons(), event->modifiers(),event->orientation());
-  QApplication::sendEvent(glMainWidget,eventModif);
+    QWheelEvent eventModif(QPoint(event->pos().x(),event->pos().y()), event->delta(),event->buttons(), event->modifiers(),event->orientation());
+    QApplication::sendEvent(glMainWidget,&eventModif);
+    event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetItem::hoverMoveEvent(QGraphicsSceneHoverEvent * event) {
-  QMouseEvent *eventModif=new QMouseEvent(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, Qt::NoButton, event->modifiers());
-  QApplication::sendEvent(glMainWidget,eventModif);
+    QMouseEvent eventModif(QEvent::MouseMove,QPoint(event->pos().x(),event->pos().y()), Qt::NoButton, Qt::NoButton, event->modifiers());
+    QApplication::sendEvent(glMainWidget,&eventModif);
+    event->setAccepted(eventModif.isAccepted());
 }
 
 void GlMainWidgetItem::contextMenuEvent(QGraphicsSceneContextMenuEvent * event) {
-  QContextMenuEvent *eventModif = new QContextMenuEvent(static_cast<QContextMenuEvent::Reason>(event->reason()), QPoint(event->pos().x(),event->pos().y()));
-  QApplication::sendEvent(glMainWidget,eventModif);
+    QContextMenuEvent eventModif(static_cast<QContextMenuEvent::Reason>(event->reason()), QPoint(event->pos().x(),event->pos().y()));
+    QApplication::sendEvent(glMainWidget,&eventModif);
+    event->setAccepted(eventModif.isAccepted());
 }
+
 
 bool GlMainWidgetItem::eventFilter(QObject *, QEvent *evt) {
   if (evt->type() == QEvent::CursorChange)
