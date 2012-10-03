@@ -89,7 +89,9 @@ protected :
  *
  * The GlScene class is the core of the tulip rendering system
  * This class is used to render entities and graph in OpenGL
- * If you want to render entities and graph, you have to use GlLayer system. You just have to create GlLayer and add entities in.
+ *
+ * If you want to render entities and graph, you have to use GlLayer system. You just have to create GlLayer and add GlEntity in.
+ * If you create more than one GlLayer, layers are rendered one after one, so the first GlLayer added is rendered in first.
  * @see GlLayer
  * @see GlSimpleEntity
  *
