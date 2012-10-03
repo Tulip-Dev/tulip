@@ -52,8 +52,8 @@ struct MyGraphicsView: public QGraphicsView {
       scene()->update();
 
     // Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed when maximizing or minimizing the graphics view)
-    QMouseEvent *eventModif = new QMouseEvent(QEvent::MouseMove,QPoint(size().width()/2, size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-    QApplication::sendEvent(this, eventModif);
+    QMouseEvent eventModif(QEvent::MouseMove,QPoint(size().width()/2, size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    QApplication::sendEvent(this, &eventModif);
   }
 };
 
