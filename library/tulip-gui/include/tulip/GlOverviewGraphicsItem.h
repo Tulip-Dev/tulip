@@ -70,6 +70,8 @@ private :
 
   static std::map<std::pair<int,int>,QGLFramebufferObject*> framebufferObjects;
 
+  std::vector<Camera> _oldCameras;
+
 };
 
 }

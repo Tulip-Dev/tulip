@@ -133,8 +133,20 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
 
-  // Center the scene
-  baseScene.centerScene();
+  if(generatePixmap || _oldCameras.size()==0){
+    // Center the scene
+    baseScene.centerScene();
+    _oldCameras.clear();
+    for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
+      _oldCameras.push_back((*it).second->getCamera());
+    }
+  }else{
+    unsigned int i=0;
+    for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
+      (*it).second->getCamera()=_oldCameras[i];
+      ++i;
+    }
+  }
 
   // Project camera bounding box
   Camera &overviewCamera=baseScene.getGraphCamera();
