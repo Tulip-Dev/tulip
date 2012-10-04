@@ -759,6 +759,12 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
 }
 
 void GraphPerspective::CSVImport() {
+  bool mustDeleteGraph = false;
+  if (_graphs->size()==0) {
+    _graphs->addGraph(tlp::newGraph());
+    mustDeleteGraph = true;
+  }
+
   if (_graphs->currentGraph() == NULL)
     return;
 
@@ -768,8 +774,16 @@ void GraphPerspective::CSVImport() {
   Observable::holdObservers();
   int result = wizard.exec();
 
-  if (result == QDialog::Rejected)
-    _graphs->currentGraph()->pop();
+  if (result == QDialog::Rejected) {
+    if (mustDeleteGraph) {
+      Graph* g = _graphs->currentGraph();
+      _graphs->removeGraph(g);
+      delete g;
+    }
+    else {
+      _graphs->currentGraph()->pop();
+    }
+  }
 
   Observable::unholdObservers();
 }
