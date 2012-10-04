@@ -380,35 +380,8 @@ void GraphPerspective::importGraph() {
 
     _graphs->addGraph(g);
 
-    LayoutProperty* viewLayout = g->getProperty<LayoutProperty>("viewLayout");
-    Iterator<node>* it = viewLayout->getNonDefaultValuatedNodes();
-
-    if (!it->hasNext()) {
-      std::string str;
-      PluginProgress* progress = new SimplePluginProgressDialog(_mainWindow);
-      DataSet data;
-      data.set<LayoutProperty*>("result",viewLayout);
-      g->applyAlgorithm("Random layout",str,&data,progress);
-      delete progress;
-    }
-
-    delete it;
-
-    View* firstPanel = NULL;
-    foreach(QString panelName, QStringList() << "Spreadsheet" << "Node Link Diagram view") {
-      View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
-
-      if (firstPanel == NULL)
-        firstPanel = view;
-
-      view->setupUi();
-      view->setGraph(g);
-      view->setState(DataSet());
-      _ui->workspace->addPanel(view);
-    }
-    _ui->workspace->setActivePanel(firstPanel);
-    _ui->workspace->switchToSplitMode();
-    _ui->graphHierarchiesEditor->repackHeaders();
+    applyRandomLayout(g);
+    showStartPanels(g);
   }
 }
 
@@ -765,26 +738,71 @@ void GraphPerspective::CSVImport() {
     mustDeleteGraph = true;
   }
 
-  if (_graphs->currentGraph() == NULL)
+  Graph* g = _graphs->currentGraph();
+
+  if (g == NULL)
     return;
 
   CSVImportWizard wizard(_mainWindow);
-  wizard.setGraph(_graphs->currentGraph());
-  _graphs->currentGraph()->push();
+  wizard.setGraph(g);
+  g->push();
   Observable::holdObservers();
   int result = wizard.exec();
 
   if (result == QDialog::Rejected) {
     if (mustDeleteGraph) {
-      Graph* g = _graphs->currentGraph();
       _graphs->removeGraph(g);
       delete g;
     }
     else {
-      _graphs->currentGraph()->pop();
+      g->pop();
     }
   }
+  else {
+    applyRandomLayout(g);
+    bool openPanels = true;
+    foreach(View* v, _ui->workspace->panels()) {
+      if (v->graph() == g) {
+        openPanels = false;
+        break;
+      }
+    }
+    if (openPanels)
+      showStartPanels(g);
+  }
 
+  Observable::unholdObservers();
+}
+
+void GraphPerspective::showStartPanels(Graph *g) {
+  View* firstPanel = NULL;
+  foreach(QString panelName, QStringList() << "Spreadsheet" << "Node Link Diagram view") {
+    View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
+    if (firstPanel == NULL)
+      firstPanel = view;
+    view->setupUi();
+    view->setGraph(g);
+    view->setState(DataSet());
+    _ui->workspace->addPanel(view);
+  }
+  _ui->workspace->setActivePanel(firstPanel);
+  _ui->workspace->switchToSplitMode();
+  _ui->graphHierarchiesEditor->repackHeaders();
+}
+
+void GraphPerspective::applyRandomLayout(Graph* g) {
+  Observable::holdObservers();
+  LayoutProperty* viewLayout = g->getProperty<LayoutProperty>("viewLayout");
+  Iterator<node>* it = viewLayout->getNonDefaultValuatedNodes();
+
+  if (!it->hasNext()) {
+    std::string str;
+    PluginProgress* progress = new SimplePluginProgressDialog(_mainWindow);
+    DataSet data;
+    data.set<LayoutProperty*>("result",viewLayout);
+    g->applyAlgorithm("Random layout",str,&data,progress);
+    delete progress;
+  }
   Observable::unholdObservers();
 }
 

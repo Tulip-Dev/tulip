@@ -49,6 +49,9 @@ class GraphPerspective : public tlp::Perspective {
   void reserveDefaultProperties();
   QString _lastOpenLocation;
 
+  void showStartPanels(tlp::Graph*);
+  void applyRandomLayout(tlp::Graph*);
+
 public:
   PLUGININFORMATIONS("Tulip", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "")
   std::string icon() const {
