@@ -35,6 +35,7 @@
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/DrawingTools.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -171,11 +172,11 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   }
 
   if (!g->existProperty(tgtShape)) {
-    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(-1);
+    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(50);
   }
 
   if (!g->existProperty(srcShape)) {
-    g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(-1);
+    g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
   }
 }
 
