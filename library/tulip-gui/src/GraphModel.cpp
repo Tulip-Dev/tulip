@@ -273,6 +273,10 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface * prop) {
 
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
     return QVariant::fromValue<EdgeShape>((EdgeShape)(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewTgtAnchorShape")
+    return QVariant::fromValue<EdgeExtremityShape>(EdgeExtremityShape(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewSrcAnchorShape")
+    return QVariant::fromValue<EdgeExtremityShape>(EdgeExtremityShape(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getEdgeValue(e).c_str()));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
@@ -287,6 +291,10 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface * prop) {
 QVariant GraphModel::edgeDefaultValue(PropertyInterface * prop) {
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
     return QVariant::fromValue<EdgeShape>((EdgeShape)(static_cast<IntegerProperty*>(prop)->getEdgeDefaultValue()));
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewTgtAnchorShape")
+    return QVariant::fromValue<EdgeExtremityShape>(EdgeExtremityShape(static_cast<IntegerProperty*>(prop)->getEdgeDefaultValue()));
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewSrcAnchorShape")
+    return QVariant::fromValue<EdgeExtremityShape>(EdgeExtremityShape(static_cast<IntegerProperty*>(prop)->getEdgeDefaultValue()));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getEdgeDefaultValue().c_str()));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
@@ -303,6 +311,10 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface* prop, QVariant
 
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
     static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<EdgeShape>());
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewTgtAnchorShape")
+    static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<EdgeExtremityShape>().edgeExtremityShapeId);
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewSrcAnchorShape")
+    static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<EdgeExtremityShape>().edgeExtremityShapeId);
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     static_cast<StringProperty*>(prop)->setEdgeValue(e,v.value<TulipFont>().fontFile().toStdString());
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
@@ -320,6 +332,10 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface* prop, QVariant
 bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v) {
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
     static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeShape>());
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewTgtAnchorShape")
+    static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape>().edgeExtremityShapeId);
+  else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewSrcAnchorShape")
+    static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape>().edgeExtremityShapeId);
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
     static_cast<StringProperty*>(prop)->setAllEdgeValue(v.value<TulipFont>().fontFile().toStdString());
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
