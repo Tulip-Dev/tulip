@@ -266,6 +266,7 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
     if (i->name() > item->name()) {
       break;
     }
+
     ++itemPos;
   }
   static_cast<QBoxLayout*>(_ui->favoritesBox->widget()->layout())->insertWidget(itemPos,item);

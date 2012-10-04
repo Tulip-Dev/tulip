@@ -95,7 +95,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
 
             ElementType eltType = selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED?NODE:EDGE;
 
-            tableView()->setModel(buildModel(eltType,selectedEntity.getComplexEntityId(),_informationsWidget));            
+            tableView()->setModel(buildModel(eltType,selectedEntity.getComplexEntityId(),_informationsWidget));
             title->setText(elementName(eltType,selectedEntity.getComplexEntityId()));
 
 
@@ -151,6 +151,6 @@ QAbstractItemModel* MouseShowElementInfos::buildModel(ElementType elementType,un
 }
 
 QString MouseShowElementInfos::elementName(ElementType elementType, unsigned int elementId)const {
-    QString elementTypeLabel = elementType==NODE?QString("Node"):QString("Edge");
+  QString elementTypeLabel = elementType==NODE?QString("Node"):QString("Edge");
   return elementTypeLabel +" #" + QString::number(elementId);
 }

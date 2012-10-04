@@ -242,6 +242,7 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant&
   TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
   QFileDialog* dlg = static_cast<QFileDialog*>(w);
   QString path;
+
   if (desc.absolutePath.isEmpty())
     path = QDir::currentPath();
   else

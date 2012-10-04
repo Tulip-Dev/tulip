@@ -124,6 +124,7 @@ void GraphHierarchiesEditor::delGraph() {
   if (_contextGraph == NULL && _ui->hierarchiesTree->selectionModel()->selectedRows(0).size()>0) {
     _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
   }
+
   if (_contextGraph == NULL)
     return;
 
@@ -138,6 +139,7 @@ void GraphHierarchiesEditor::delGraph() {
     _contextGraph->getSuperGraph()->delSubGraph(_contextGraph);
     static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(sg);
   }
+
   _contextGraph=NULL;
 }
 
@@ -145,6 +147,7 @@ void GraphHierarchiesEditor::delAllGraph() {
   if (_contextGraph == NULL && _ui->hierarchiesTree->selectionModel()->selectedRows(0).size()>0) {
     _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
   }
+
   if (_contextGraph == NULL)
     return;
 

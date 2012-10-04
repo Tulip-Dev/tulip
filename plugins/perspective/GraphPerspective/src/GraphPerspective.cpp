@@ -733,6 +733,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
 
 void GraphPerspective::CSVImport() {
   bool mustDeleteGraph = false;
+
   if (_graphs->size()==0) {
     _graphs->addGraph(tlp::newGraph());
     mustDeleteGraph = true;
@@ -767,6 +768,7 @@ void GraphPerspective::CSVImport() {
         break;
       }
     }
+
     if (openPanels)
       showStartPanels(g);
   }
@@ -778,8 +780,10 @@ void GraphPerspective::showStartPanels(Graph *g) {
   View* firstPanel = NULL;
   foreach(QString panelName, QStringList() << "Spreadsheet" << "Node Link Diagram view") {
     View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
+
     if (firstPanel == NULL)
       firstPanel = view;
+
     view->setupUi();
     view->setGraph(g);
     view->setState(DataSet());
@@ -803,6 +807,7 @@ void GraphPerspective::applyRandomLayout(Graph* g) {
     g->applyAlgorithm("Random layout",str,&data,progress);
     delete progress;
   }
+
   Observable::unholdObservers();
 }
 
