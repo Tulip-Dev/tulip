@@ -171,11 +171,11 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   }
 
   if (!g->existProperty(tgtShape)) {
-    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(50);
+    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(-1);
   }
 
   if (!g->existProperty(srcShape)) {
-    g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(51);
+    g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(-1);
   }
 }
 
