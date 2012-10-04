@@ -191,6 +191,9 @@
    <property name="toolTip">
     <string>Deletes the selected graph and its subgraphs</string>
    </property>
+   <property name="shortcut">
+    <string>Shift+Del</string>
+   </property>
   </action>
   <action name="actionCreate_panel">
    <property name="icon">
