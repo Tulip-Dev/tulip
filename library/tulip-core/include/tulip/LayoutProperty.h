@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TULIP_LAYOUT_H
 #define TULIP_LAYOUT_H
@@ -44,17 +43,10 @@ typedef MinMaxProperty<tlp::PointType, tlp::LineType> LayoutMinMaxProperty;
 
 /**
  * @ingroup Graph
- * @brief The LayoutProperty class
+ * @brief A graph property that maps a tlp::Coord value to graph nodes and std::vector<tlp::Coord> for edges.
  */
 class TLP_SCOPE LayoutProperty : public LayoutMinMaxProperty {
 public:
-
-  /**
-  * LayoutProperty constructor
-  *
-  * @param graph The graph on wich to attach that layout property
-  * @param name The string identifier of that layout property
-  **/
   LayoutProperty(Graph *graph, std::string name="", bool updateOnEdgeReversal=true);
 
   // override some PropertyInterface methods
@@ -307,6 +299,10 @@ private:
   void treatEvent(const Event&);
 };
 
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps a std::vector<tlp::Coord> value to graph elements.
+ */
 class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> {
 public :
   CoordVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<CoordVectorType, tlp::PointType>(g, n) {}
@@ -325,4 +321,3 @@ typedef CoordVectorProperty LayoutVectorProperty;
 
 }
 #endif
-///@endcond

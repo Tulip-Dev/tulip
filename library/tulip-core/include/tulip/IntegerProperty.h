@@ -37,35 +37,24 @@ typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType> IntegerMinMaxProperty
 
 /**
  * @ingroup Graph
- * @brief The IntegerProperty class
+ * @brief A graph property that maps an integer value to graph elements.
  */
 class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 
 public :
   IntegerProperty(Graph *, std::string n = "");
 
-  // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
   std::string getTypename() const {
     return propertyTypename;
   }
-
-
-  // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const int &v);
   virtual void setEdgeValue(const edge e, const int &v);
   virtual void setAllNodeValue(const int &v);
   virtual void setAllEdgeValue(const int &v);
 
-  /**
-    * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
-    **/
   int compare(const node n1, const node n2) const;
-
-  /**
-    * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
-    **/
   int compare(const edge e1, const edge e2) const;
 
 protected:
@@ -76,6 +65,10 @@ private:
   void treatEvent(const Event&);
 };
 
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps a std::vector<int> value to graph elements.
+ */
 class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {
 public :
   IntegerVectorProperty(Graph *g, std::string n =""):AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
