@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 
 #ifndef GLBEZIERCURVE_H_
@@ -27,13 +26,14 @@
 namespace tlp {
 
 /**
- * \brief A class to draw BÃÂ©zier curves
+ * @ingroup OpenGL
+ * @brief A class to draw Bezier curves
  *
- * This class allows to draw BÃÂ©zier curves defined by an arbitrary number of control points.
- * BÃÂ©zier curves are named after their inventor, Dr. Pierre BÃÂ©zier. He was an engineer with the
- * Renault car company and set out in the early 1960Ã¢ÂÂs to develop a curve formulation which would
+ * This class allows to draw Bezier curves defined by an arbitrary number of control points.
+ * Bezier curves are named after their inventor, Dr. Pierre Bezier. He was an engineer with the
+ * Renault car company and set out in the early 1960's to develop a curve formulation which would
  * lend itself to shape design.
- * BÃÂ©zier curves are widely used in computer graphics to model smooth curves. A BÃÂ©zier curve is
+ * Bezier curves are widely used in computer graphics to model smooth curves. A Bezier curve is
  * completely contained in the convex hull of its control points and passes through its first and
  * last control points. The curve is also always tangent to the first and last convex hull polygon segments.
  * In addition, the curve shape tends to follow the polygon shape.
@@ -46,14 +46,14 @@ public:
   GlBezierCurve();
 
   /**
-   * GlBezierCurve constructor
+   * @brief GlBezierCurve constructor
    *
-   * \param controlPoints a vector of control points (size must be greater or equal to 2)
-   * \param startColor the color at the start of the curve
-   * \param endColor the color at the end of the curve
-   * \param startSize the width at the start of the curve
-   * \param endSize the width at the end of the curve
-   * \param nbCurvePoints the number of curve points to generate
+   * @param controlPoints a vector of control points (size must be greater or equal to 2)
+   * @param startColor the color at the start of the curve
+   * @param endColor the color at the end of the curve
+   * @param startSize the width at the start of the curve
+   * @param endSize the width at the end of the curve
+   * @param nbCurvePoints the number of curve points to generate
    */
   GlBezierCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
                 const float &startSize, const float &endSize, const unsigned int nbCurvePoints = 100);
@@ -83,4 +83,3 @@ private :
 
 }
 #endif /* GLBEZIERCURVE_H_ */
-///@endcond
