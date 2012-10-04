@@ -67,6 +67,7 @@ public:
 
 protected slots:
   void cancelClicked();
+  void stopClicked();
   void setPreview(bool);
 };
 
