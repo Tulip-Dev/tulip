@@ -49,20 +49,19 @@ public:
   * once for the glyph folder, and once for the interactors folder.
   *
   * lib/tulip/
-  * Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ glyphs
-  * Ã¢ÂÂÃ Ã  Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libBillboard-4.0.0.so
-  * Ã¢ÂÂÃ Ã  Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libWindow-4.0.0.so
-  * Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ interactors
-  * Ã¢ÂÂÃ Ã  Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libInteractorAddEdge-4.0.0.so
-  * Ã¢ÂÂÃ Ã  Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libInteractorSelectionModifier-4.0.0.so
-  * Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libAdjacencyMatrixImport-4.0.0.so
-  * Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libColorMapping-4.0.0.so
-  * Ã¢ÂÂÃ¢ÂÂÃ¢ÂÂ libCompleteGraph-4.0.0.so
+  * -> glyphs
+  *      |-> libBillboard-4.0.0.so
+  *      |-> libWindow-4.0.0.so
+  * -> interactors
+  *      |-> libInteractorAddEdge-4.0.0.so
+  *      |-> libInteractorSelectionModifier-4.0.0.so
+  * -> libAdjacencyMatrixImport-4.0.0.so
+  * -> libColorMapping-4.0.0.so
+  * -> libCompleteGraph-4.0.0.so
   *
   *
-  * @param plug A PluginLoader to output what is going on. Defaults to 0.
-  * @param folder A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
-  * @return void
+  * @param loader A PluginLoader to output what is going on. Defaults to 0.
+  * @param pluginPath A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
   *
   **/
   static void loadPlugins(PluginLoader *loader = NULL, std::string pluginPath = "");
