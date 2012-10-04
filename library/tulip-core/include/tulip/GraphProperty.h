@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TULIP_METAGRAPH_H
 #define TULIP_METAGRAPH_H
@@ -33,7 +32,9 @@ typedef AbstractProperty<tlp::GraphType, tlp::EdgeSetType> AbstractGraphProperty
 
 /**
  * @ingroup Graph
- * @brief The GraphProperty class
+ * @brief A graph property that maps a tlp::Graph* value to graph elements.
+ *
+ * @warning This property is mainly used into the meta node engine. Using GraphProperty outside of this system is strongly discouraged since it could lead to unwanted behavior.
  */
 class TLP_SCOPE GraphProperty : public AbstractGraphProperty {
   friend class GraphAbstract;
@@ -76,5 +77,3 @@ private:
 
 }
 #endif
-
-///@endcond

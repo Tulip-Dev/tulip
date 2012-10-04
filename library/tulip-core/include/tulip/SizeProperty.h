@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TULIP_SIZES_H
 #define TULIP_SIZES_H
@@ -34,7 +33,7 @@ typedef AbstractProperty<tlp::SizeType, tlp::SizeType> AbstractSizeProperty;
 
 /**
  * @ingroup Graph
- * @brief The SizeProperty class
+ * @brief A graph property that maps a tlp::Size value to graph elements.
  */
 class TLP_SCOPE SizeProperty:public AbstractSizeProperty {
 
@@ -58,9 +57,6 @@ public :
   virtual void setNodeValue(const node n, const Size &v);
   virtual void setAllNodeValue(const Size &v);
 
-  /**
-    * @brief Compare sizes of n1 and n2 using their volume.
-    **/
   int compare(const node n1, const node n2)const;
 
 protected:
@@ -72,6 +68,10 @@ private:
   void computeMinMax(Graph * sg=NULL);
 };
 
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps a std::vector<tlp::Size> value to graph elements.
+ */
 class TLP_SCOPE SizeVectorProperty:public AbstractVectorProperty<tlp::SizeVectorType, tlp::SizeType> {
 public :
   SizeVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<SizeVectorType, SizeType>(g, n) {}
@@ -88,5 +88,3 @@ public :
 
 }
 #endif
-
-///@endcond

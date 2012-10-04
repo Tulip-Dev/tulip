@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TULIP_METRIC_H
 #define TULIP_METRIC_H
@@ -35,7 +34,7 @@ typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType> DoubleMinMaxProperty;
 
 /**
  * @ingroup Graph
- * @brief The DoubleProperty class
+ * @brief A graph property that maps a double value to graph elements.
  */
 class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
 public :
@@ -46,7 +45,6 @@ public :
 
   virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType> &);
 
-  // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
   std::string getTypename() const {
@@ -54,7 +52,6 @@ public :
   }
 
 
-  // override some AbstractProperty methods
   virtual void setNodeValue(const node n, const double &v);
   virtual void setEdgeValue(const edge e, const double &v);
   virtual void setAllNodeValue(const double &v);
@@ -75,6 +72,11 @@ private:
 
 };
 
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps a std::vector<double> value to graph elements.
+ */
+
 class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> {
 public :
   DoubleVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
@@ -90,4 +92,3 @@ public :
 
 }
 #endif
-///@endcond

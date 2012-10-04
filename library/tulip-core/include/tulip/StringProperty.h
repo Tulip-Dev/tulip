@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TULIP_STRING_H
 #define TULIP_STRING_H
@@ -33,7 +32,7 @@ typedef AbstractProperty<tlp::StringType, tlp::StringType> AbstractStringPropert
 
 /**
  * @ingroup Graph
- * @brief The StringProperty class
+ * @brief A graph property that maps a std::string value to graph elements.
  */
 class TLP_SCOPE StringProperty:public AbstractStringProperty {
 public :
@@ -46,18 +45,14 @@ public :
     return propertyTypename;
   }
 
-
-  /**
-    * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
-    **/
   int compare(const node n1,const node n2)const;
-
-  /**
-    * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
-    **/
   int compare(const edge e1,const edge e2)const;
 };
 
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps a std::vector<std::string> value to graph elements.
+ */
 class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType> {
 public :
   StringVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
@@ -73,4 +68,3 @@ public :
 /*\@}*/
 }
 #endif
-///@endcond
