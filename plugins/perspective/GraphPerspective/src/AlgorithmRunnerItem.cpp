@@ -193,7 +193,9 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
 }
 
 void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
-  if (PluginLister::instance()->pluginExists<LayoutAlgorithm>(name().toStdString())) {
+  PluginLister* pluginLister = PluginLister::instance();
+
+  if (pluginLister->pluginExists<LayoutAlgorithm>(name().toStdString())) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
 
     if (TulipSettings::instance().isAutomaticRatio()) {
@@ -202,7 +204,12 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
       prop->perfectAspectRatio();
     }
   }
-  else if (PluginLister::instance()->pluginExists<DoubleAlgorithm>(name().toStdString()) && TulipSettings::instance().isAutomaticMapMetric()) {
+  else if (pluginLister->pluginExists<Algorithm>(name().toStdString()) &&
+           !pluginLister->pluginExists<PropertyAlgorithm>(name().toStdString()) &&
+           !pluginLister->pluginExists<GraphTest>(name().toStdString())) {
+    Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
+  }
+  else if (pluginLister->pluginExists<DoubleAlgorithm>(name().toStdString()) && TulipSettings::instance().isAutomaticMapMetric()) {
     DoubleProperty* prop = NULL;
     dataSet.get<DoubleProperty*>("result",prop);
 
@@ -213,7 +220,7 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
       g->applyAlgorithm("Color Mapping",errMsg,&ds);
     }
   }
-  else if (PluginLister::instance()->pluginExists<GraphTest>(name().toStdString())) {
+  else if (pluginLister->pluginExists<GraphTest>(name().toStdString())) {
     bool result = true;
     dataSet.get<bool>("result",result);
     std::string gname;
