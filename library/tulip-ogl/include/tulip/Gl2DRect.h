@@ -76,19 +76,10 @@ public:
    */
   virtual ~Gl2DRect() {}
 
-  /**
-   * @brief Return the bounding box
-   */
   virtual BoundingBox getBoundingBox();
 
-  /**
-   * @brief Draw the rectangle
-   */
   virtual void draw(float lod,Camera *camera);
 
-  /**
-   * @brief Translate entity
-   */
   virtual void translate(const Coord& mouvement);
 
   /**
@@ -106,14 +97,8 @@ public:
    */
   virtual void setCoordinates(float bottom, float left, float width, float height);
 
-  /**
-   * @brief Function to export data in outString (in XML format)
-   */
   virtual void getXML(std::string &outString);
 
-  /**
-   * @brief Function to set data with inString (in XML format)
-   */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
 protected:
