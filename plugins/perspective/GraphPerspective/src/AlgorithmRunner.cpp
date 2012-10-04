@@ -260,7 +260,14 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   }
 
   item->setFavorite(true);
-  _ui->favoritesBox->widget()->layout()->addWidget(item);
+  int itemPos = 0;
+  foreach(AlgorithmRunnerItem* i, _ui->favoritesBox->widget()->findChildren<AlgorithmRunnerItem*>()) {
+    if (i->name() > item->name()) {
+      break;
+    }
+    ++itemPos;
+  }
+  static_cast<QBoxLayout*>(_ui->favoritesBox->widget()->layout())->insertWidget(itemPos,item);
   _favorites+=item;
   item->installEventFilter(this);
   item->setAcceptDrops(true);

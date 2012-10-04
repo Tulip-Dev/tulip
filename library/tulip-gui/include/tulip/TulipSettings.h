@@ -121,7 +121,7 @@ public:
   tlp::Color defaultSelectionColor();
   void setDefaultSelectionColor(const tlp::Color& color);
 
-  QStringList favoriteAlgorithms() const;
+  QSet<QString> favoriteAlgorithms() const;
   void addFavoriteAlgorithm(const QString&name);
   void removeFavoriteAlgorithm(const QString&name);
 
@@ -162,7 +162,7 @@ private:
   TulipSettings();
   static TulipSettings *_instance;
 
-  void setFavoriteAlgorithms(const QStringList& lst);
+  void setFavoriteAlgorithms(const QSet<QString> &lst);
 };
 
 #endif // TULIPSETTINGS_H
