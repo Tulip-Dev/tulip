@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef _CLUSTERING_H
-#define _CLUSTERING_H
+#ifndef _ALGORITHM_H
+#define _ALGORITHM_H
 
 #include <list>
 #include <string>

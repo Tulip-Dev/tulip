@@ -20,8 +20,8 @@
 
 //@TLPGEOLICENCE#
 
-#ifndef _TLP_GEO_VECTOR_H
-#define _TLP_GEO_VECTOR_H
+#ifndef _TLP_VECTOR_H
+#define _TLP_VECTOR_H
 
 #include <cassert>
 #include <tulip/Array.h>
