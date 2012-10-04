@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef Tulip_GL2DRECT_H
 #define Tulip_GL2DRECT_H
@@ -29,69 +28,91 @@ namespace tlp {
 /**
  * @ingroup OpenGL
  *
- * \brief Create a 2D rectangle
+ * @brief Create a 2D rectangle
  *
  * This rect add screen percentage system (for example you can create a rectangle that start on (10%,10%) and finish on (90%90%)
  * If you whan a simple 2D rectangle with normal coordinates use GlRect class
+ * @see GlRect
  */
 class TLP_GL_SCOPE Gl2DRect : public GlRect {
 
 public:
+  /**
+   * @brief Don't use this constructor
+   */
   Gl2DRect();
 
   /**
-   * Constructor : with top/bottom/left/right coords, textureName and if inPercent is true coords are in percent
+   * @brief Constructor
+   *
+   * @param top coordinate
+   * @param bottom coordinate
+   * @param left coordinate
+   * @param right coordinate
+   * @param textureName path to a texture
+   * @param inPercent if true : top/bottom/left/right is used as in percent parameters
    */
   Gl2DRect(float top,float bottom,float left, float right,
            const std::string& textureName,
            bool inPercent=false);
 
   /**
-   * Constructor : with bottom/left height,width coords, textureName and if xInv/yInv is true coords viewport - coord
+   * @brief Constructor
+   *
+   * @param top coordinate
+   * @param bottom coordinate
+   * @param left coordinate
+   * @param right coordinate
+   * @param textureName path to a texture
+   * @param xInv if true : use viewportX - left and viewportX - right
+   * @param yInv if true : use viewportY - top and viewportY - bottom
    */
   Gl2DRect(float bottom,float left,float height, float width,
            const std::string& textureName,
            bool xInv, bool yInv);
 
+  /**
+   * @brief Destructor
+   */
   virtual ~Gl2DRect() {}
 
   /**
-   * Return the bounding box
+   * @brief Return the bounding box
    */
   virtual BoundingBox getBoundingBox();
 
   /**
-   * Draw the rectangle
+   * @brief Draw the rectangle
    */
   virtual void draw(float lod,Camera *camera);
 
   /**
-   * Translate entity
+   * @brief Translate entity
    */
   virtual void translate(const Coord& mouvement);
 
   /**
-   * Set texture of the GlRectTextured
+   * @brief Set texture
    */
   virtual void setTexture(const std::string &name);
 
   /**
-   * Get texture of the GlRectTextured
+   * @brief Get texture
    */
   virtual std::string getTexture();
 
   /**
-   * Set coordinates of rectangle
+   * @brief Set coordinates of rectangle
    */
   virtual void setCoordinates(float bottom, float left, float width, float height);
 
   /**
-   * Function to export data in outString (in XML format)
+   * @brief Function to export data in outString (in XML format)
    */
   virtual void getXML(std::string &outString);
 
   /**
-   * Function to set data with inString (in XML format)
+   * @brief Function to set data with inString (in XML format)
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
@@ -109,4 +130,3 @@ protected:
 
 }
 #endif
-///@endcond
