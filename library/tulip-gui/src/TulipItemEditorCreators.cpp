@@ -241,7 +241,13 @@ QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
 void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
   TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
   QFileDialog* dlg = static_cast<QFileDialog*>(w);
-  dlg->setDirectory(QFileInfo(desc.absolutePath).absolutePath());
+  QString path;
+  if (desc.absolutePath.isEmpty())
+    path = QDir::currentPath();
+  else
+    path = QFileInfo(desc.absolutePath).absolutePath();
+
+  dlg->setDirectory(path);
 
   if (desc.type == TulipFileDescriptor::Directory)
     dlg->setFileMode(QFileDialog::Directory);
