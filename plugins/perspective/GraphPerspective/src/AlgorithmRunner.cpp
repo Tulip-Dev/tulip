@@ -174,6 +174,7 @@ void AlgorithmRunner::setFilter(QString filter) {
     if (group != _ui->favoritesBox)
       filterGroup(group,filter);
   }
+  filterGroup(_ui->favoritesBox,filter);
 }
 
 bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
