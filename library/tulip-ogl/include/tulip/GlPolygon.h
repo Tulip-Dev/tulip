@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 
 #ifndef GLPOLYGON_H
@@ -33,19 +32,20 @@
 namespace tlp {
 /**
  * @ingroup OpenGL
- * @brief class to create a polygon
+ * @brief Class to create a polygon GlEntity
+ *
  */
 class TLP_GL_SCOPE GlPolygon : public GlAbstractPolygon {
 public:
   /**
-   * Constructor where specify if the polygon is filled, is outlines and the outline size
+   * @brief Constructor where specify if the polygon is filled, is outlines the texture name and the outline size
    */
   GlPolygon(const bool filled = true,
             const bool outlined= true,
             const std::string &textureName="",
             const float outlineSize = 1);
   /**
-   * Constructor with a vector of point, a vector of fill color, a vector of outline color and if the polygon is filled, is outlined and the outline size
+   * @brief Constructor with a vector of point, a vector of fill color, a vector of outline color and if the polygon is filled, is outlined and the outline size
    */
   GlPolygon(const std::vector<Coord> &points,
             const std::vector<Color> &fillColors,
@@ -55,7 +55,7 @@ public:
             const std::string &textureName="",
             const float outlineSize = 1);
   /**
-   * Constructor with a number of point, a number of fill color, a number of outline color and if the polygon is filled, outlined and the ouline size
+   * @brief Constructor with a number of point, a number of fill color, a number of outline color and if the polygon is filled, outlined and the ouline size
    */
   GlPolygon(const unsigned int nbPoints,
             const unsigned int nbFillColors,
@@ -67,24 +67,23 @@ public:
   virtual ~GlPolygon();
 
   /**
-   * Change number of point of the polygon
+   * @brief Change number of point of the polygon
    */
   virtual void resizePoints(const unsigned int nbPoints);
   /**
-   * Change number of colors of the polygon
+   * @brief Change number of colors of the polygon
    */
   virtual void resizeColors(const unsigned int nbColors);
 
   /**
-   * return the ith point
+   * @brief return the ith point
    */
   virtual const Coord& point(const unsigned int i) const;
   /**
-   * return the ith point
+   * @brief return the ith point
    */
   virtual Coord& point(const unsigned int i);
 };
 
 }
 #endif
-///@endcond
