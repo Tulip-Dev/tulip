@@ -36,6 +36,9 @@
 
 GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData), _contextGraph(NULL) {
   _ui->setupUi(this);
+  _ui->hierarchiesTree->addAction(_ui->actionDelete_All);
+  _ui->actionDelete_All->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
   QToolButton* linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
   linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/link.png"));
@@ -118,6 +121,9 @@ void GraphHierarchiesEditor::cloneSubGraph() {
 }
 
 void GraphHierarchiesEditor::delGraph() {
+  if (_contextGraph == NULL && _ui->hierarchiesTree->selectionModel()->selectedRows(0).size()>0) {
+    _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  }
   if (_contextGraph == NULL)
     return;
 
@@ -132,9 +138,13 @@ void GraphHierarchiesEditor::delGraph() {
     _contextGraph->getSuperGraph()->delSubGraph(_contextGraph);
     static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(sg);
   }
+  _contextGraph=NULL;
 }
 
 void GraphHierarchiesEditor::delAllGraph() {
+  if (_contextGraph == NULL && _ui->hierarchiesTree->selectionModel()->selectedRows(0).size()>0) {
+    _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  }
   if (_contextGraph == NULL)
     return;
 
@@ -150,6 +160,7 @@ void GraphHierarchiesEditor::delAllGraph() {
     static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(sg);
   }
 
+  _contextGraph=NULL;
 }
 
 void GraphHierarchiesEditor::createPanel() {
