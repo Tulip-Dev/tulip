@@ -93,9 +93,12 @@ void GlMainView::setupWidget() {
   _forceRedrawAction=new QAction(trUtf8("Force redraw"),this);
   connect(_forceRedrawAction,SIGNAL(triggered()),this,SLOT(redraw()));
   _forceRedrawAction->setShortcut(tr("Ctrl+Shift+R"));
+  _forceRedrawAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
   _centerViewAction=new QAction(trUtf8("Center view"),this);
   connect(_centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
   _centerViewAction->setShortcut(tr("Ctrl+Shift+C"));
+  _centerViewAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
   graphicsView()->addAction(_centerViewAction);
   graphicsView()->addAction(_forceRedrawAction);
