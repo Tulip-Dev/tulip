@@ -325,7 +325,7 @@ public:
    *    /|\
    *   C D E
    *
-   * @codeline root->delSubGraph(B);
+   * @codeline root->delSubGraph(B); @endcode
    * would result in the following hierarchy:
    *  root
    *   |
@@ -366,7 +366,7 @@ public:
    *    /|\
    *   C D E
    *
-   * @codeline root->getSubGraphs();
+   * @codeline root->getSubGraphs(); @endcode
    * Will return an iterator over A and B, but not C, D and E.
    * @return An iterator over this graph's direct subgraphs.
    */
@@ -387,7 +387,7 @@ public:
     }
     delete it;
     return NULL;
-    @endcode
+   * @endcode
    * @param n the index of the subgraph to retrieve.
    * @return The n-th subgraph.
    */
@@ -402,7 +402,7 @@ public:
    *    /|\
    *   C D E
    *
-   * @codeline root->numberOfSubGraphs();
+   * @codeline root->numberOfSubGraphs(); @endcode
    * Will return 2.
    * @return The number of direct subgraphs.
    * @see numberOfDescendantGraphs() to count in the whole hierarchy.
@@ -418,7 +418,7 @@ public:
    *    /|\
    *   C D E
    *
-   * @codeline root->numberOfSubGraphs();
+   * @codeline root->numberOfSubGraphs(); @endcode
    * Will return 5.
    * @return The number of descendants subgraphs.
    * @see numberOfSubGraphs() to count only direct subgraphs.
@@ -697,7 +697,7 @@ public:
    * @endcode
    *
    * If you have 5 input nodes on a node N, then
-   * @codeline graph->getInNode(2);
+   * @codeline graph->getInNode(2); @endcode
    * will return the second of those nodes.
    * It will ignore the output nodes of this node.
    * @param n The node to get an input node of.
@@ -730,7 +730,7 @@ public:
    * @endcode
    *
    * If you have 5 output nodes on a node N, then
-   * @codeline graph->getOutNode(2);
+   * @codeline graph->getOutNode(2); @endcode
    * will return the second of those nodes.
    * It will ignore the input nodes of this node.
    * @param n The node to get an output node of.
