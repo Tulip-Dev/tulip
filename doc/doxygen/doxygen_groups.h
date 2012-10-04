@@ -34,6 +34,13 @@
 #define DOXYGEN // Used to separate licence from groups definitions
 
 /**
+ * @mainpage Welcome to Tulip's documentation.
+ * You can jump right in with \ref graph_display/graph_display.cpp "one of our code examples", or browse the documentation by module.
+ *
+ * See for instance the documentation for the @ref Graph.
+ */
+
+/**
  * @defgroup Checks Model Checking
  * @brief Graph model checking
  * Classes in this group allow to perform various checks on a graph data structure.
