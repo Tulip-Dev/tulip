@@ -39,6 +39,8 @@ class GlComposite;
  * Other Tulip entities inherit for this class.
  *
  * You don't have to create a GlSimpleEntity, you have to use GlLine, GlRect or GlSphere for example
+ * @see Gl2DRect
+ * @see GlPolygon
  *
  * To GlSimpleEntity manipulation :
  * @see GlLayer
@@ -88,25 +90,43 @@ public:
     return stencil;
   }
 
-///@cond DOXYGEN_HIDDEN
-
   /**
    * @brief Draw function
+   *
+   * @warning You don't have to call this function, the Tulip OpenGL engine call it.
    */
   virtual void draw(float lod,Camera* camera) = 0;
+
+  /**
+   * @brief Return the entity boundingbox
+   *
+   * @warning You don't have to call this function, the Tulip OpenGL engine call it.
+   */
+  virtual BoundingBox getBoundingBox() {
+    return boundingBox;
+  }
+
+  /**
+   * @brief Save the entity in outString (in XML format)
+   *
+   * @warning You don't have to call this function, the Tulip OpenGL engine call it.
+   */
+  virtual void getXML(std::string &outString) =0;
+
+  /**
+   * @brief Load entity with inString (in XML format)
+   *
+   * @warning You don't have to call this function, the Tulip OpenGL engine call it.
+   */
+  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition) =0;
+
+///@cond DOXYGEN_HIDDEN
 
   /**
    * @brief Accept visitor function
    */
   virtual void acceptVisitor(GlSceneVisitor *visitor) {
     visitor->visit(this);
-  }
-
-  /**
-   * @brief Return the entity boundingbox
-   */
-  virtual BoundingBox getBoundingBox() {
-    return boundingBox;
   }
 
   /**
@@ -156,16 +176,6 @@ public:
    * virtual fucntion : Translate entity of vector translation
    */
   virtual void translate(const Coord &) {}
-
-  /**
-   * Save the entity in outString (in XML format)
-   */
-  virtual void getXML(std::string &outString) =0;
-
-  /**
-   * Load entity with inString (in XML format)
-   */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition) =0;
 
   GlComposite* getParent() const {
     if (parents.size()==0)
