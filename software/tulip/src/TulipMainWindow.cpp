@@ -107,6 +107,10 @@ void TulipMainWindow::closeApp() {
 
 void TulipMainWindow::closeEvent(QCloseEvent *e) {
   e->ignore();
+  if (TulipSettings::instance().value("app/showsystraynotif",true).toBool()) {
+    showTrayMessage(trUtf8("Tulip"),trUtf8("Tulip is still running.\nTo show the Tulip window again, click Tulip icon located into your notification area.\n\nNote: This message will be displayed only once."),QSystemTrayIcon::Information,3000);
+    TulipSettings::instance().setValue("app/showsystraynotif",false);
+  }
   hide();
 }
 
