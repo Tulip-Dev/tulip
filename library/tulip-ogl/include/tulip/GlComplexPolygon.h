@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 
 #ifndef GLCOMPLEXPOLYGON_H
@@ -56,7 +55,7 @@ void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VE
 
 /**
  * @ingroup OpenGL
- * Class to create a complex polygon (concave polygon or polygon with hole)
+ * @brief Class to create a complex polygon (concave polygon or polygon with hole)
  * If you want to create a complex polygon you have 4 constructors :
  * Constructors with vector of coords : to create a complex polygon without hole
  *   - In this case you have two constructor : with and without outline color
@@ -109,85 +108,82 @@ class TLP_GL_SCOPE GlComplexPolygon : public GlSimpleEntity {
 
 public:
   /**
-   * Default constructor
-   * \warning don't use this constructor if you want to create a complex polygon, see others constructors
+   * @brief Default constructor
+   * @warning don't use this constructor if you want to create a complex polygon, see others constructors
    */
   GlComplexPolygon() {}
   /**
-   * Constructor with a vector of coords, a fill color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
-   * and a textureName if you want
+   * @brief Constructor with a vector of coords, a fill color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
    */
   GlComplexPolygon(const std::vector<Coord> &coords,Color fcolor,int polygonEdgesType=0,const std::string &textureName = "");
   /**
-   *  Constructor with a vector of coords, a fill color, an outline color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves)
-   * and a textureName if you want
+   * @brief Constructor with a vector of coords, a fill color, an outline color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
    */
   GlComplexPolygon(const std::vector<Coord> &coords,Color fcolor,Color ocolor,int polygonEdgesType=0,const std::string &textureName = "");
   /**
-   * Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color,
-   * a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
+   * @brief Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
    */
   GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,int polygonEdgesType=0,const std::string &textureName = "");
   /**
-   * Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color, an outline color
-   * a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
+   * @brief Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color, an outline color a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
    */
   GlComplexPolygon(const std::vector<std::vector<Coord> >&coords,Color fcolor,Color ocolor,int polygonEdgesType=0,const std::string &textureName = "");
 
   virtual ~GlComplexPolygon() {}
 
   /**
-   * Draw the complex polygon
+   * @brief Draw the complex polygon
    */
   virtual void draw(float lod,Camera *camera);
 
   /**
-   * Set if the polygon is outlined or not
+   * @brief Set if the polygon is outlined or not
    */
   void setOutlineMode(const bool);
 
   /**
-   * Set size of outline
+   * @brief Set size of outline
    */
   void setOutlineSize(double size);
 
   /**
-   * Get fill color of GlComplexPolygon
+   * @brief Get fill color of GlComplexPolygon
    */
   Color getFillColor() const {
     return fillColor;
   }
 
   /**
-   * Set fill color of GlComplexPolygon
+   * @brief Set fill color of GlComplexPolygon
    */
   void setFillColor(const Color &color) {
     fillColor=color;
   }
 
   /**
-   * Get outline color of GlComplexPolygon
+   * @brief Get outline color of GlComplexPolygon
    */
   Color getOutlineColor() const {
     return outlineColor;
   }
 
   /**
-   * Set outline color of GlComplexPolygon
+   * @brief Set outline color of GlComplexPolygon
    */
   void setOutlineColor(const Color &color) {
     outlineColor=color;
   }
 
   /**
-   * Get the texture zoom factor
+   * @brief Get the texture zoom factor
    */
   float getTextureZoom() {
     return textureZoom;
   }
 
   /**
-   * Set the texture zoom factor
+   * @brief Set the texture zoom factor
+   *
    * By default if you have a polygon with a size bigger than (1,1,0) the texture will be repeated
    * If you want to don't have this texture repeat you have to modify texture zoom
    * For example if you have a polygon with coords ((0,0,0),(5,0,0),(5,5,0),(0,5,0)) you can set texture zoom to 5. to don't have texture repeat
@@ -198,17 +194,18 @@ public:
   }
 
   /**
-   * Get the textureName
+   * @brief Get the textureName
    */
   std::string getTextureName();
 
   /**
-   * Set the textureName
+   * @brief Set the textureName
    */
   void setTextureName(const std::string &name);
 
   /**
-   * Draw a thick (textured) border around the polygon.
+   * @brief Draw a thick (textured) border around the polygon.
+   *
    * The graphic card must support geometry shader to make this feature to work.
    * The position parameter determines the way the border is drawn (depending on the polygon points ordering):
    *     - 0 : the border is drawn outside (or inside) the polygon
@@ -222,7 +219,7 @@ public:
                           const float texCoordFactor = 1.f, const int polygonId = 0);
 
   /**
-   * Desactivate the textured quad border
+   * @brief Desactivate the textured quad border
    */
   void desactivateQuadBorder(const int polygonId = 0);
 
@@ -233,22 +230,22 @@ public:
   void setProperty(const QString &name, const QVariant &value);
 
   /**
-   * Translate entity
+   * @brief Translate entity
    */
   virtual void translate(const Coord& mouvement);
 
   /**
-   * Function to export data and type outString (in XML format)
+   * @brief Function to export data and type outString (in XML format)
    */
   virtual void getXML(std::string &outString);
 
   /**
-   * Function to export data in outString (in XML format)
+   * @brief Function to export data in outString (in XML format)
    */
   virtual void getXMLOnlyData(std::string &outString);
 
   /**
-   * Function to set data with inString (in XML format)
+   * @brief Function to set data with inString (in XML format)
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
@@ -260,11 +257,11 @@ public:
 protected:
 
   /**
-   * Add a new point in polygon
+   * @brief Add a new point in polygon
    */
   virtual void addPoint(const Coord& point);
   /**
-   * Begin a new hole in the polygon
+   * @brief Begin a new hole in the polygon
    */
   virtual void beginNewHole();
 
@@ -302,4 +299,3 @@ protected:
 
 }
 #endif
-///@endcond
