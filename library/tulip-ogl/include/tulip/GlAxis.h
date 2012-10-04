@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 
 #ifndef GLAXIS_H_
@@ -34,7 +33,7 @@ class GlLabel;
 
 /**
  * @ingroup OpenGL
- * \brief A base class to draw an axis with graduations
+ * @brief A base class to draw an axis with graduations
  *
  * This class allow to render an axis with graduations. This class is there for code factorisation
  * and should not be used directly. Use derivated classes instead : GlQuantitativeAxis for a numerical
@@ -50,123 +49,125 @@ public :
   enum CaptionLabelPosition {LEFT, RIGHT, BELOW, ABOVE};
 
   /**
-   * GlAxis constructor
+   * @brief GlAxis constructor
    *
-   * \param axisName the name of the axis
-     * \param axisBaseCoord the base coord of the axis (if the axis is horizontal, it is the the left end, if vertical it is the down end)
-     * \param axisLength the length of the axis
-     * \param axisOrientation the orientation of the axis, 2 possible values (HORIZONTAL_AXIS or VERTICAL_AXIS)
-     * \param axisColor the color of the axis
+   * @param axisName the name of the axis
+   * @param axisBaseCoord the base coord of the axis (if the axis is horizontal, it is the the left end, if vertical it is the down end)
+   * @param axisLength the length of the axis
+   * @param axisOrientation the orientation of the axis, 2 possible values (HORIZONTAL_AXIS or VERTICAL_AXIS)
+   * @param axisColor the color of the axis
    */
   GlAxis(const std::string &axisName, const Coord &axisBaseCoord, const float axisLength,
          const AxisOrientation &axisOrientation, const Color &axisColor);
 
   /**
-   * GlAxis destructor
+   * @brief GlAxis destructor
    */
   virtual ~GlAxis();
 
   /**
-   * Method which returns the base coordinates of the axis
+   * @brief Method which returns the base coordinates of the axis
    */
   Coord getAxisBaseCoord() const {
     return axisBaseCoord;
   }
   /**
-   * Method which returns the length of the axis
+   * @brief Method which returns the length of the axis
    */
   float getAxisLength() const {
     return axisLength;
   }
   /**
-   * Method which returns the name of the axis
+   * @brief Method which returns the name of the axis
    */
   std::string getAxisName() const {
     return axisName;
   }
   /**
-   * Method which returns the orientation of the axis
+   * @brief Method which returns the orientation of the axis
    */
   AxisOrientation getAxisOrientation() const {
     return axisOrientation;
   }
   /**
-   * Method which returns the width of the axis graduations
+   * @brief Method which returns the width of the axis graduations
    */
   float getAxisGradsWidth() const {
     return axisGradsWidth;
   }
   /**
-   * Method which returns the distance between the axis graduations
+   * @brief Method which returns the distance between the axis graduations
    */
   float getSpaceBetweenAxisGrads() const {
     return spaceBetweenAxisGrads;
   }
   /**
-   * Method which returns the axis graduations labels height
+   * @brief Method which returns the axis graduations labels height
    */
   float getLabelHeight() const {
     return labelHeight;
   }
 
   /**
-   * Method which returns the max axis graduations labels width
+   * @brief Method which returns the max axis graduations labels width
    */
   float getMaxLabelWidth() const {
     return maxGraduationLabelWidth;
   }
 
   /**
-   * Method which returns the color of the axis
+   * @brief Method which returns the color of the axis
    */
   Color getAxisColor() const {
     return axisColor;
   }
 
   /**
-   * Method to set the axis name
+   * @brief Method to set the axis name
    */
   void setAxisName(const std::string &axisName) {
     this->axisName = axisName;
   }
   /**
-   * Method to set the axis length
+   * @brief Method to set the axis length
    */
   void setAxisLength(const float axisLength) {
     this->axisLength = axisLength;
   }
   /**
-   * Method to set the axis color
+   * @brief Method to set the axis color
    */
   void setAxisColor(const Color &axisColor) {
     this->axisColor = axisColor;
   }
   /**
-   * Methods to set the axis graduations Width
+   * @brief Methods to set the axis graduations Width
    */
   void setAxisGradsWidth(const float axisGradsWidth) {
     this->axisGradsWidth = axisGradsWidth;
   }
 
   /**
-   * Methods to set the max caption width
+   * @brief Methods to set the max caption width
    */
   void setMaxCaptionWidth(const float maxCaptionWidth) {
     this->maxCaptionWidth = maxCaptionWidth;
   }
 
   /**
-   * Method to update the axis drawing. It has to be called when one (ore more) of the setters methods above has been used
+   * @brief Method to update the axis drawing.
+   *
+   * It has to be called when one (ore more) of the setters methods above has been used
    * This method erase the whole axis drawing and redraw the axis line and the caption (if any)
    * The axis graduations have to be reset by calling setAxisGraduations
    */
   virtual void updateAxis();
 
   /**
-   * Method to set the axis graduations. No need to call updateAxis after calling this method.
+   * @brief Method to set the axis graduations. No need to call updateAxis after calling this method.
    *
-   * \param axisGradsLabels the labels of the graduations, they will be equally spaced on the axis
-   * \param axisGradsLabelsPosition the relative position of the axis graduations label. Two possible values : LEFT_OR_BELOW (if the axis is horizontal, labels will be on the left of the axis, otherwise below) or RIGHT_OR_ABOVE
+   * @param axisGradsLabels the labels of the graduations, they will be equally spaced on the axis
+   * @param axisGradsLabelsPosition the relative position of the axis graduations label. Two possible values : LEFT_OR_BELOW (if the axis is horizontal, labels will be on the left of the axis, otherwise below) or RIGHT_OR_ABOVE
    *
    */
   void setAxisGraduations(const std::vector<std::string> &axisGradsLabels,
@@ -178,23 +179,24 @@ public :
   }
 
   /**
-   * Method which adds a caption to the axis. No need to call updateAxis after calling this method.
+   * @brief Method which adds a caption to the axis. No need to call updateAxis after calling this method.
    *
-   * \param captionPos the relative position of the caption. Two possible values : LEFT_OR_BELOW (if the axis is vertical, caption will be below of the axis, otherwise on the left) or RIGHT_OR_ABOVE
-   * \param captionHeight the caption text height
-   * \param captionFrame if true the caption will be framed
-   * \param maxCaptionWidth fill this parameter if you want to restrain the caption width
-   * \param captionOffset fill this parameter if you want to fix the offset between the axis and the caption
-   * \param caption if this parameter is filled, use this value as caption text, otherwise the caption text will be the axis name
+   * @param captionPos the relative position of the caption. Two possible values : LEFT_OR_BELOW (if the axis is vertical, caption will be below of the axis, otherwise on the left) or RIGHT_OR_ABOVE
+   * @param captionHeight the caption text height
+   * @param captionFrame if true the caption will be framed
+   * @param maxCaptionWidth fill this parameter if you want to restrain the caption width
+   * @param captionOffset fill this parameter if you want to fix the offset between the axis and the caption
+   * @param caption if this parameter is filled, use this value as caption text, otherwise the caption text will be the axis name
    */
   void addCaption(const CaptionLabelPosition &captionPos, const float captionHeight, const bool captionFrame = false,
                   const float maxCaptionWidth = 0, const float captionOffset = 0, const std::string caption = "");
 
   /**
-   * Method to set the axis graduations labels size.
-   *   This method can be used if you want axis with same labels size
+   * @brief Method to set the axis graduations labels size.
    *
-   * \param height the height for labels
+   * This method can be used if you want axis with same labels size
+   *
+   * @param height the height for labels
    *
    */
   void setGradsLabelsHeight(float height);
@@ -246,4 +248,3 @@ protected :
 }
 
 #endif /* GLAXIS_H_ */
-///@endcond
