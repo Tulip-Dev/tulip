@@ -81,6 +81,7 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
     _currentInteractorConfigurationItem(NULL),
     _progressItem(NULL) {
   _ui->setupUi(this);
+  _ui->actionClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _ui->interactorsFrame->installEventFilter(this);
   _ui->dragHandle->setPanel(this);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
@@ -139,6 +140,7 @@ void WorkspacePanel::setView(tlp::View* view) {
   _view->setInteractors(compatibleInteractors);
   _ui->scrollArea->setVisible(!compatibleInteractors.empty());
   _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+  _view->graphicsView()->addAction(_ui->actionClose);
   layout()->addWidget(_view->graphicsView());
   refreshInteractorsToolbar();
 
