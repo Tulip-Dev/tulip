@@ -16,6 +16,6 @@ QString PerspectiveSelectionDialog::perspectiveName() const {
   return _perspective;
 }
 
-void PerspectiveSelectionDialog::selectionChanged(const QModelIndex &a, const QModelIndex &b) {
+void PerspectiveSelectionDialog::selectionChanged(const QModelIndex &a, const QModelIndex &) {
   _perspective = a.data().toString();
 }
