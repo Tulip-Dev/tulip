@@ -468,7 +468,6 @@ void WorkspacePanel::setOverlayMode(bool m) {
 
 
 void WorkspacePanel::dragEnterEvent(QDragEnterEvent * evt){
-    std::cout<<__PRETTY_FUNCTION__<<std::endl;
     handleDragEnterEvent(evt,evt->mimeData());
     setOverlayMode(true);
 }
