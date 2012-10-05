@@ -374,12 +374,7 @@ WorkspacePanel* Workspace::panelForScene(QObject *obj) {
 }
 
 bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
-    if (ev->type() == QEvent::ChildAdded || ev->type() == 70) {
-        QObject* childObj = static_cast<QChildEvent*>(ev)->child();        
-        QGraphicsView* graphicsView = dynamic_cast<QGraphicsView*>(childObj);
-
-    }
-    else if (ev->type() == QEvent::ChildRemoved) {
+    if (ev->type() == QEvent::ChildRemoved) {
         QObject* childObj = static_cast<QChildEvent*>(ev)->child();
         childObj->removeEventFilter(this);
         QGraphicsView* graphicsView = dynamic_cast<QGraphicsView*>(childObj);
