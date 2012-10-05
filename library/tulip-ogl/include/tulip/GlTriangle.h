@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef GLTRIANGLE_H
 #define GLTRIANGLE_H
@@ -27,12 +26,12 @@ namespace tlp {
 
 /**
  * @ingroup OpenGL
- * @brief class to create a triangle
+ * @brief Class to create a triangle
  */
 class TLP_GL_SCOPE GlTriangle : public GlRegularPolygon {
 public:
   /**
-   * Constructor
+   * @brief Constructor
    */
   GlTriangle(const Coord &position,
              const Size &size,
@@ -43,7 +42,9 @@ public:
              const std::string &textureName="",
              float outlineSize=1.);
   /**
-   * Default empty destructor
+   * @brief Default empty destructor
+   *
+   * @warning Don't use this constructor
    */
   virtual ~GlTriangle();
 
@@ -51,4 +52,3 @@ public:
 
 }
 #endif
-///@endcond
