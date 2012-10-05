@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,16 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_ITERATOR_H
 #define TULIP_ITERATOR_H
 
 #include <tulip/tulipconf.h>
 
 namespace tlp {
-/**
- * @addtogroup iterators
- */
-/*@{*/
+
 #ifndef DOXYGEN_NOTFOR_DEVEL
 extern TLP_SCOPE void incrNumIterators();
 extern TLP_SCOPE void decrNumIterators();
@@ -84,16 +83,18 @@ private:
   Iterator<unsigned int> *it;
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
-/*@}*/
+
+}
+
+
 #ifdef _MSC_VER
 
 #include <tulip/Edge.h>
 #include <tulip/Node.h>
 
-template struct TLP_SCOPE Iterator<edge>;
-template struct TLP_SCOPE Iterator<node>;
+template struct TLP_SCOPE tlp::Iterator<tlp::edge>;
+template struct TLP_SCOPE tlp::Iterator<tlp::node>;
+#endif
 #endif
 
-}
-#endif
-
+///@endcond

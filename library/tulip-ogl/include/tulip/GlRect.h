@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -17,6 +17,7 @@
  *
  */
 
+
 #ifndef GL_RECT_H
 #define GL_RECT_H
 
@@ -24,10 +25,7 @@
 
 namespace tlp {
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * \brief This is a general class for the rendering of 2D rectangles.
  *
  * This class is used as a 2D HUD for the rendering of 2D rectangles.
@@ -41,11 +39,6 @@ public:
    * Constructor : with topLeft/bottomRight coords, topLeft/bottomRight colors and if GlRect is filled/outlined
    */
   GlRect(const Coord &topLeftPos, const Coord &bottomRightPos, const Color &topLeftCol, const Color &bottomRightCol, bool filled=true, bool outlined=false);
-
-  /**
-   * Constructor : with center coords and size, fill color and outline color
-   */
-  //GlRect(const Coord &center, const Size &size, const Color &fillColor, const Color &outlineColor);
 
   /**
    * Constructor : with center coords and size, fill color and outline color
@@ -118,12 +111,9 @@ public:
    */
   bool inRect(double x, double y);
 
-  /**
-   * Draw the GlRect
-   */
   virtual void draw(float lod,Camera *camera);
 
 };
-/*@}*/
+
 }
 #endif

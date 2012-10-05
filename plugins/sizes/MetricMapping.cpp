@@ -94,7 +94,7 @@ static const string rangeSizeErrorMsg = "max size must be greater than min size"
 static const string rangeMetricErrorMsg = "All values are the same";
 static const string AREA_PROPORTIONAL = "Area Proportional";
 /** \addtogroup size */
-/*@{*/
+
 /// Metric Mapping - Compute size of elements according to a metric.
 /** This plugin enables to set the size of the graph's elements
  *  according to a metric.
@@ -304,5 +304,5 @@ private:
   bool nodeoredge;
   std::string proportional;
 };
-/*@}*/
+
 PLUGIN(MetricSizeMapping)

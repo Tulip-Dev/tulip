@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPMETATYPES_H
 #define TULIPMETATYPES_H
 
@@ -152,3 +154,4 @@ public:
 }
 
 #endif // TULIPMETATYPES_H
+///@endcond

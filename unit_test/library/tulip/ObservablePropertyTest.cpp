@@ -67,7 +67,7 @@ public:
     else {
       reset();
 
-      for (int i=0; i<events.size(); ++i) {
+      for (unsigned int i=0; i<events.size(); ++i) {
         observables.insert(events[i].sender());
       }
     }
@@ -240,7 +240,7 @@ void ObservablePropertyTest::addObservers() {
   for (unsigned int i = 0; i < 7; ++i) {
     props[i]->addObserver(observer);
     CPPUNIT_ASSERT(observer->nbObservables() == 0);
-    props[i]->addPropertyObserver(pObserver);
+    props[i]->addListener(pObserver);
     CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   }
 }
@@ -409,7 +409,7 @@ void ObservablePropertyTest::testRemoveObserver() {
 
   for(unsigned int i = 0; i < 7; ++i) {
     props[i]->removeObserver(observer);
-    props[i]->removePropertyObserver(pObserver);
+    props[i]->removeListener(pObserver);
     CPPUNIT_ASSERT(props[i]->countObservers() == 0);
     //CPPUNIT_ASSERT(props[i]->countPropertyObservers() == 0); same as above
   }
@@ -443,7 +443,7 @@ void ObservablePropertyTest::testObserverWhenRemoveObservable() {
   CPPUNIT_ASSERT(props[0]->countListeners() == 1);
   CPPUNIT_ASSERT(props[0]->countObservers() == 1);
   PropertyObserverTest* pObserverTmp=new PropertyObserverTest();
-  props[0]->addPropertyObserver(pObserverTmp);
+  props[0]->addListener(pObserverTmp);
   CPPUNIT_ASSERT(props[0]->countListeners() == 2);
   CPPUNIT_ASSERT(props[0]->countObservers() == 1);
   delete pObserverTmp;

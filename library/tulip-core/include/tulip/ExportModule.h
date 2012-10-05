@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef _EXPORTMODULE_H
 #define _EXPORTMODULE_H
@@ -24,8 +26,6 @@
 #include <tulip/Plugin.h>
 
 
-/** \addtogroup plugins */
-
 namespace tlp {
 
 static const std::string EXPORT_CATEGORY = QObject::trUtf8("Export").toStdString();
@@ -33,8 +33,11 @@ static const std::string EXPORT_CATEGORY = QObject::trUtf8("Export").toStdString
 class Graph;
 class DataSet;
 class PluginProgress;
-/*@{*/
-/// Interface for exportModule plug-ins
+
+/**
+ * @ingroup Plugins
+ * @brief The ExportModule class
+ */
 class ExportModule: public tlp::Plugin {
 public:
   ///
@@ -78,6 +81,7 @@ public:
   DataSet *dataSet;
 };
 
-/*@}*/
+
 }
 #endif
+///@endcond

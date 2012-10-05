@@ -45,5 +45,6 @@
         <file>ui/panel_button_pressed.png</file>
         <file>icons/32/undo.png</file>
         <file>icons/32/redo.png</file>
+        <file>icons/32/document-export.png</file>
     </qresource>
 </RCC>

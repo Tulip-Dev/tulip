@@ -66,7 +66,7 @@ const char * paramHelp[] = {
 
 /** \addtogroup layout */
 // comments below have been extracted from OGDF/src/energybased/DavidsonHarelLayout.cpp
-/*@{*/
+
 /// An implementation for DavidsonHarel layout
 /**
  *
@@ -175,6 +175,6 @@ public:
   ~OGDFDavidsonHarel() {}
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFDavidsonHarel)

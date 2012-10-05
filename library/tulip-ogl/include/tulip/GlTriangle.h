@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,23 +16,22 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef GLTRIANGLE_H
 #define GLTRIANGLE_H
 
 #include <tulip/GlRegularPolygon.h>
 
 namespace tlp {
+
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * class to create a triangle
+ * @ingroup OpenGL
+ * @brief Class to create a triangle
  */
 class TLP_GL_SCOPE GlTriangle : public GlRegularPolygon {
 public:
   /**
-   * Constructor
+   * @brief Constructor
    */
   GlTriangle(const Coord &position,
              const Size &size,
@@ -43,11 +42,13 @@ public:
              const std::string &textureName="",
              float outlineSize=1.);
   /**
-   * Default empty destructor
+   * @brief Default empty destructor
+   *
+   * @warning Don't use this constructor
    */
   virtual ~GlTriangle();
 
 };
-/*@}*/
+
 }
 #endif

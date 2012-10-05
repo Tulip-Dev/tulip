@@ -25,7 +25,7 @@ using namespace std;
 using namespace tlp;
 
 /** \addtogroup layout */
-/*@{*/
+
 /// An implementation of a radial drawing of trees.
 /**
  * This algorithm is inspired from
@@ -346,7 +346,7 @@ public:
   TreeRadial(const PluginContext* context):LayoutAlgorithm(context), tree(NULL) {
     addNodeSizePropertyParameter(this);
     addSpacingParameters(this);
-    addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
+    addDependency("Tree Leaf", "1.0");
   }
 
   bool run() {
@@ -406,5 +406,5 @@ public:
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(TreeRadial)

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef Tulip_GLCURVE_H
 #define Tulip_GLCURVE_H
@@ -95,3 +97,4 @@ protected:
 };
 }
 #endif
+///@endcond

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLENTITY_H
 #define Tulip_GLENTITY_H
 
@@ -47,3 +49,4 @@ public:
 }
 
 #endif // Tulip_GLENTITY_H
+///@endcond

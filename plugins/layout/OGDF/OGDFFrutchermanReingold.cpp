@@ -84,7 +84,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 
 // comments below have been extracted from OGDF/src/energybased/SpringEmbedderFRExact.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * Implementation of Spring-Embedder (Fruchterman,Reingold)
  * algorithm with exact force computations.
@@ -135,7 +135,7 @@ public:
 
   void beforeCall();
 };
-/*@}*/
+
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
  creation,informations, realease, groupe*/

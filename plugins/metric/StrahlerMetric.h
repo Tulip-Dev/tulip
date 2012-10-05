@@ -29,7 +29,7 @@ struct Strahler {
 };
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugin is an implementation of the Strahler Parameter.
  *  algorithm first published as:
  *
@@ -70,7 +70,7 @@ private:
                            TLP_HASH_MAP<tlp::node,Strahler> &cachedValues);
   bool allNodes;
 };
-/*@}*/
+
 #endif
 
 

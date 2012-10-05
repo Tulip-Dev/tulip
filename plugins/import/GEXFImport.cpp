@@ -32,7 +32,7 @@
 using namespace tlp;
 using namespace std;
 
-/*@{*/
+
 /** \file
  *  \brief - Import GEXF format graph file.
  * This plugin imports a graph from a file in GEXF format,<br/>

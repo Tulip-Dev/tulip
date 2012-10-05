@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef SCENECONFIGWIDGET_H
 #define SCENECONFIGWIDGET_H
@@ -60,3 +62,4 @@ protected:
 }
 
 #endif // SCENECONFIGWIDGET_H
+///@endcond

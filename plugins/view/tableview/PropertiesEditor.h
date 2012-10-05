@@ -40,6 +40,7 @@ class PropertiesEditor : public QWidget {
 
   Ui::PropertiesEditor* _ui;
   tlp::PropertyInterface* _contextProperty;
+  QList<tlp::PropertyInterface*> _contextPropertyList;
   tlp::Graph* _graph;
   tlp::TulipItemDelegate* _delegate;
   tlp::GraphPropertiesModel<tlp::PropertyInterface>* _sourceModel;
@@ -58,15 +59,18 @@ public:
 
   void showNodes(bool value);
   void showEdges(bool value);
+
+  tlp::PropertyInterface* contextProperty() const;
 signals:
   void propertyVisibilityChanged(tlp::PropertyInterface*,bool);
   void showElementTypeChanged();
+  void setFilteredNodes();
+  void setFilteredEdges();
+  void mapToGraphSelection();
 
 protected slots:
   void checkStateChanged(QModelIndex,Qt::CheckState);
   void showCustomContextMenu(const QPoint&);
-  void setAllNodes();
-  void setAllEdges();
   void copyProperty();
   void newProperty();
   void delProperty();
@@ -77,6 +81,9 @@ protected slots:
   void checkAll();
   void unCheckAll();
   void unCheckAllExcept();
+  void showSystemProperties(bool);
+  void setAllNodes();
+  void setAllEdges();
 };
 
 #endif // PROPERTIESEDITOR_H

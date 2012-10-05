@@ -28,7 +28,7 @@
 
 class PythonInterpreter;
 
-/*@{*/
+
 /** \file
  *  \brief Python script view
  *

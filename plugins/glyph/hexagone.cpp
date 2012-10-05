@@ -47,7 +47,7 @@ void drawHexagone(const Color &fillColor,const Color &borderColor,float borderWi
 }
 
 /** \addtogroup glyph */
-/*@{*/
+
 /// A 2D glyph
 /**
  * This glyph draws a textured hexagone using the "viewTexture"
@@ -117,4 +117,4 @@ public:
 };
 
 
-/*@}*/
+

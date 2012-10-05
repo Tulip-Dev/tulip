@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GRAPHPROPERTIESMODEL_H
 #define GRAPHPROPERTIESMODEL_H
@@ -55,6 +57,9 @@ public:
   }
 
   void setGraph(tlp::Graph* graph) {
+    if (_graph == graph)
+      return;
+
     beginResetModel();
 
     if (_graph != NULL)
@@ -146,3 +151,4 @@ public:
 
 
 #endif // GRAPHPROPERTIESMODEL_H
+///@endcond

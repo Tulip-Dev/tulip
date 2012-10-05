@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef GLHEXAGON_H
 #define GLHEXAGON_H
 
@@ -23,16 +24,13 @@
 
 namespace tlp {
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * class to create an hexagon
+ * @ingroup OpenGL
+ * @brief class to create an hexagon in Tulip 3D Engine
  */
 class TLP_GL_SCOPE GlHexagon : public GlRegularPolygon {
 public:
   /**
-   * Constructor
+   * @brief Constructor
    */
   GlHexagon(const Coord &position,
             const Size &size,
@@ -43,11 +41,11 @@ public:
             const std::string &textureName="",
             float outlineSize=1.);
   /**
-   * Default empty destructor
+   * @brief Default empty destructor
    */
   virtual ~GlHexagon();
 
 };
-/*@}*/
+
 }
 #endif

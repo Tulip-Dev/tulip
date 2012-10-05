@@ -21,9 +21,6 @@
 
 #include <QtGui/QHeaderView>
 
-//FIXME: remove me
-#include <QtCore/QDebug>
-
 TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL) {
   _treeView = new QTreeView(this);
   _treeView->setEditTriggers(QTreeView::NoEditTriggers);

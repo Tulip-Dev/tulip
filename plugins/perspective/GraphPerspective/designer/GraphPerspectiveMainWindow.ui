@@ -480,7 +480,7 @@ color: white;
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="handleWidth">
-          <number>1</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="docksWidget" native="true">
           <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -610,11 +610,14 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="minimumSize">
                   <size>
                    <width>120</width>
-                   <height>0</height>
+                   <height>20</height>
                   </size>
                  </property>
                  <property name="toolTip">
                   <string>Switch to expose mode</string>
+                 </property>
+                 <property name="shortcut">
+                  <string>Shift+E</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -622,11 +625,11 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="autoExclusive">
                   <bool>false</bool>
                  </property>
-                 <property name="number" stdset="0">
-                  <number>1</number>
-                 </property>
                  <property name="title" stdset="0">
                   <string>Expose</string>
+                 </property>
+                 <property name="number" stdset="0">
+                  <number>1</number>
                  </property>
                 </widget>
                </item>
@@ -635,8 +638,11 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="minimumSize">
                   <size>
                    <width>120</width>
-                   <height>0</height>
+                   <height>20</height>
                   </size>
+                 </property>
+                 <property name="shortcut">
+                  <string>Ctrl+F</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -644,11 +650,11 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="autoExclusive">
                   <bool>false</bool>
                  </property>
+                 <property name="number" stdset="0">
+                  <number>2</number>
+                 </property>
                  <property name="title" stdset="0">
                   <string>Search</string>
-                 </property>
-                 <property name="number" stdset="0">
-                  <string>2</string>
                  </property>
                 </widget>
                </item>
@@ -686,6 +692,9 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
                  </property>
+                 <property name="shortcut">
+                  <string>Shift+Left</string>
+                 </property>
                 </widget>
                </item>
                <item>
@@ -711,6 +720,9 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="icon">
                   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
+                 </property>
+                 <property name="shortcut">
+                  <string>Shift+Right</string>
                  </property>
                 </widget>
                </item>
@@ -842,6 +854,26 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QPushButton" name="sixModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                   <normaloff>:/tulip/gui/ui/six_screen.png</normaloff>:/tulip/gui/ui/six_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -874,7 +906,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <addaction name="actionSave_Project_as"/>
     <addaction name="separator"/>
     <addaction name="actionImport"/>
-    <addaction name="actionExport"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -1233,6 +1264,18 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Ctrl+Alt+H</string>
    </property>
   </action>
+  <action name="actionSave_graph_to_file">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save graph to file</string>
+   </property>
+   <property name="toolTip">
+    <string>Writes the graph into a file</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -1269,18 +1312,19 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <slot>nextPage()</slot>
     <slot>previousPage()</slot>
     <slot>expose(bool)</slot>
+    <slot>switchToSixMode()</slot>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>OutputPanelButton</class>
-   <extends>QToolButton</extends>
-   <header>OutputPanelButton.h</header>
   </customwidget>
   <customwidget>
    <class>SearchWidget</class>
    <extends>QWidget</extends>
    <header>SearchWidget.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>OutputPanelButton</class>
+   <extends>QPushButton</extends>
+   <header>OutputPanelButton.h</header>
   </customwidget>
  </customwidgets>
  <resources>
@@ -1465,22 +1509,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </hints>
   </connection>
   <connection>
-   <sender>exposeModeButton</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>workspace</receiver>
-   <slot>expose(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>553</x>
-     <y>696</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>779</x>
-     <y>353</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>undoButton</sender>
    <signal>clicked()</signal>
    <receiver>actionUndo</receiver>
@@ -1509,6 +1537,22 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <hint type="destinationlabel">
      <x>-1</x>
      <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sixModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSixMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1057</x>
+     <y>695</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>574</x>
+     <y>343</y>
     </hint>
    </hints>
   </connection>

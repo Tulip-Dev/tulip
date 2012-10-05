@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _TLPGRAPHMEASEURE_H
 #define _TLPGRAPHMEASEURE_H
 
@@ -89,3 +91,4 @@ TLP_SCOPE unsigned int maxDistance(const Graph *graph, const node n, MutableCont
 TLP_SCOPE void reachableNodes(const Graph *graph, const node startNode, std::set<node> &result, unsigned int maxDistance, EDGE_TYPE direction = UNDIRECTED);
 }
 #endif
+///@endcond

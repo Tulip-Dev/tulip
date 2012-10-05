@@ -89,12 +89,16 @@ bool ImprovedWalker::run() {
 
   graph->push(false, &propsToPreserve);
 
+  result->setAllEdgeValue(vector<Coord>());
+
   tree = TreeTest::computeTree(graph, pluginProgress);
 
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
     graph->pop();
     return false;
   }
+
+
 
   node root = tree->getSource();
   orientationType mask = getMask(dataSet);

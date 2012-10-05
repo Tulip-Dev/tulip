@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MOUSEADDNODE_H
 #define MOUSEADDNODE_H
 
@@ -24,8 +26,6 @@
 
 namespace tlp {
 
-/** \addtogroup Mouse_interactor */
-/*@{*/
 class TLP_QT_SCOPE MouseNodeBuilder:public InteractorComponent {
 
 public:
@@ -38,6 +38,7 @@ public:
 private:
   QEvent::Type _eventType;
 };
-/*@}*/
+
 }
 #endif
+///@endcond

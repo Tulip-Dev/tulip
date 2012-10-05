@@ -84,7 +84,7 @@ class DelaunayTriangulation : public tlp::Algorithm {
 public :
 
   DelaunayTriangulation(tlp::PluginContext *context) : Algorithm(context) {
-    addParameter<bool>("simplices", "If checked, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d).", "false");
+    addInParameter<bool>("simplices", "If checked, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d).", "false");
   }
 
   PLUGININFORMATIONS("Delaunay triangulation","Antoine LAMBERT","","","1.0","Triangulation")

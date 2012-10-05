@@ -34,20 +34,34 @@
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/TulipFontWidget.h>
+#include <tulip/TulipFontDialog.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
 #include <QtGui/QColorDialog>
 #include <tulip/GlLabel.h>
 #include <tulip/Perspective.h>
 #include <QtGui/QMainWindow>
+#include <QtGui/QFileDialog>
 
 using namespace tlp;
 
 /*
+ * Base class
+ */
+bool TulipItemEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant &) const {
+  if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
+    painter->setBrush(option.palette.highlight());
+    painter->setPen(Qt::transparent);
+    painter->drawRect(option.rect);
+  }
+
+  return false;
+}
+
+/*
   ColorEditorCreator
 */
-QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
+QWidget* ColorEditorCreator::createWidget(QWidget *) const {
   QColorDialog *colorDialog = new QColorDialog(NULL);
   colorDialog->setOptions(colorDialog->options() | QColorDialog::ShowAlphaChannel);
   colorDialog->setModal(true);
@@ -55,6 +69,7 @@ QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
 }
 
 bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
+  TulipItemEditorCreator::paint(painter,option,v);
   painter->setBrush(colorToQColor(v.value<tlp::Color>()));
   painter->setPen(Qt::black);
   painter->drawRect(option.rect.x()+6,option.rect.y()+6,option.rect.width()-12,option.rect.height()-12);
@@ -85,6 +100,7 @@ QRect checkRect(const QStyleOptionViewItem &option,const QRect& bounding, QWidge
 }
 
 bool BooleanEditorCreator::paint(QPainter *p, const QStyleOptionViewItem &option, const QVariant &variant) const {
+  TulipItemEditorCreator::paint(p,option,variant);
   QCheckBox cb;
   QStyleOptionViewItem opt(option);
   opt.rect = checkRect(option,option.rect,&cb);
@@ -106,7 +122,7 @@ QVariant BooleanEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
 /*
   CoordEditorCreator
 */
-QWidget* CoordEditorCreator::createWidget(QWidget* parent) const {
+QWidget* CoordEditorCreator::createWidget(QWidget*) const {
   return new CoordEditor(NULL);
 }
 
@@ -167,6 +183,7 @@ QWidget* ColorScaleEditorCreator::createWidget(QWidget* parent) const {
 }
 
 bool ColorScaleEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& var) const {
+  TulipItemEditorCreator::paint(painter,option,var);
   ColorScaleButton::paintScale(painter,option.rect,var.value<ColorScale>());
   return true;
 }
@@ -215,24 +232,77 @@ QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
 /*
   TulipFileDescriptorEditorCreator
   */
-QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget* parent) const {
-  return new TulipFileDescriptorWidget(parent);
+QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
+  QFileDialog* dlg = new QFileDialog(NULL);
+  dlg->setModal(true);
+  return dlg;
 }
 
 void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
-  static_cast<TulipFileDescriptorWidget*>(w)->setData(v.value<TulipFileDescriptor>());
+  TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
+  QFileDialog* dlg = static_cast<QFileDialog*>(w);
+  QString path;
+
+  if (desc.absolutePath.isEmpty())
+    path = QDir::currentPath();
+  else
+    path = QFileInfo(desc.absolutePath).absolutePath();
+
+  dlg->setDirectory(path);
+
+  if (desc.type == TulipFileDescriptor::Directory)
+    dlg->setFileMode(QFileDialog::Directory);
 }
 
 QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
-  return QVariant::fromValue<TulipFileDescriptor>(static_cast<TulipFileDescriptorWidget*>(w)->data());
+  QFileDialog* dlg = static_cast<QFileDialog*>(w);
+
+  if (dlg->fileMode() == QFileDialog::Directory) {
+    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->directory().absolutePath(),TulipFileDescriptor::Directory));
+  }
+  else if (!dlg->selectedFiles().empty()) {
+    return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->selectedFiles()[0],TulipFileDescriptor::File));
+  }
+
+  return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor());
 }
 
-QString TulipFileDescriptorEditorCreator::displayText(const QVariant& v) const {
-  TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
-  return desc.absolutePath;
-}
+bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
+  TulipItemEditorCreator::paint(painter,option,v);
+  QRect rect = option.rect;
+  TulipFileDescriptor fileDesc = v.value<TulipFileDescriptor>();
+  QFileInfo fileInfo(fileDesc.absolutePath);
+  QIcon icon;
+  QString text;
 
-///NodeShapeEditorCreator
+  if (fileInfo.isFile()) {
+    icon = QApplication::style()->standardIcon(QStyle::SP_FileIcon);
+    text = fileInfo.fileName();
+  }
+  else if (fileInfo.isDir()) {
+    icon = QApplication::style()->standardIcon(QStyle::SP_DirIcon);
+    QDir d1 = fileInfo.dir();
+    d1.cdUp();
+    text = fileInfo.absoluteFilePath().remove(0,d1.absolutePath().length()-1);
+  }
+
+  int iconSize = rect.height()-4;
+  painter->drawPixmap(rect.x() + 2, rect.y() + 2, iconSize, iconSize, icon.pixmap(iconSize));
+  int textXPos = rect.x() + iconSize + 5;
+
+  if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
+    painter->setPen(option.palette.highlightedText().color());
+    painter->setBrush(option.palette.highlightedText());
+  }
+  else {
+    painter->setPen(option.palette.text().color());
+    painter->setBrush(option.palette.text());
+  }
+
+  painter->drawText(textXPos, rect.y() + 2, rect.width() - textXPos, rect.height()-4,Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, QFileInfo(fileDesc.absolutePath).fileName());
+
+  return true;
+}
 
 QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
   QComboBox* combobox = new QComboBox(parent);
@@ -262,6 +332,7 @@ QString NodeShapeEditorCreator::displayText(const QVariant & data) const {
 }
 
 bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
+  TulipItemEditorCreator::paint(painter,option,data);
 
   QStyleOptionViewItemV4 opt = option;
   opt.features |= QStyleOptionViewItemV2::HasDecoration;
@@ -285,9 +356,11 @@ QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const {
 
   for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
     std::string glyphName(*it);
-    int glyphIndex = EdgeExtremityGlyphManager::getInst().glyphId(glyphName);
+    const tlp::Plugin* infos = PluginLister::pluginInformations(glyphName);
+    int glyphIndex = infos->id();
     //Create the glyph entry
     combobox->addItem(EdgeExtremityGlyphRenderer::getInst().render(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
+    delete infos;
   }
 
   return combobox;
@@ -307,6 +380,8 @@ QString EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const
 }
 
 bool EdgeExtremityShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {
+  TulipItemEditorCreator::paint(painter,option,data);
+
   QStyleOptionViewItemV4 opt = option;
   opt.features |= QStyleOptionViewItemV2::HasDecoration;
   QPixmap pixmap = EdgeExtremityGlyphRenderer::getInst().render(data.value<EdgeExtremityShape>().edgeExtremityShapeId);
@@ -346,17 +421,17 @@ QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
 }
 
 //TulipFontEditorCreator
-QWidget* TulipFontEditorCreator::createWidget(QWidget* parent) const {
-  return new TulipFontWidget(parent);
+QWidget* TulipFontEditorCreator::createWidget(QWidget*) const {
+  return new TulipFontDialog(NULL);
 }
 void TulipFontEditorCreator::setEditorData(QWidget*editor, const QVariant&data,bool,tlp::Graph*) {
   TulipFont font =data.value<TulipFont>();
-  TulipFontWidget* fontWidget = static_cast<TulipFontWidget*>(editor);
-  fontWidget->setFont(font);
+  TulipFontDialog* fontWidget = static_cast<TulipFontDialog*>(editor);
+  fontWidget->selectFont(font);
 }
 
 QVariant TulipFontEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
-  TulipFontWidget* fontWidget = static_cast<TulipFontWidget*>(editor);
+  TulipFontDialog* fontWidget = static_cast<TulipFontDialog*>(editor);
   return QVariant::fromValue<TulipFont>(fontWidget->font());
 }
 

@@ -138,7 +138,6 @@ QT4_WRAP_CPP(MOC_SRCS
   ../include/tulip/ItemsListWidget.h
   ../include/tulip/NodeLinkDiagramComponent.h
   ../include/tulip/Perspective.h
-  ../include/tulip/PluginManager.h
   ../include/tulip/PropertyCreationDialog.h
   ../include/tulip/QtGlSceneZoomAndPanAnimator.h
   ../include/tulip/SimplePluginProgressWidget.h

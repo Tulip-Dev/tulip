@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GRAPHMODEL_H
 #define GRAPHMODEL_H
@@ -89,6 +91,8 @@ public:
   bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const;
 
   void treatEvent(const tlp::Event&);
+
+  tlp::BooleanProperty* filterProperty() const;
 };
 
 class TLP_QT_SCOPE NodesGraphModel: public GraphModel {
@@ -127,3 +131,4 @@ protected:
 }
 
 #endif // GRAPHMODEL_H
+///@endcond

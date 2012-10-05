@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_SORTITERATOR_H
 #define TULIP_SORTITERATOR_H
 #include <vector>
@@ -25,10 +27,6 @@
 #include <tulip/DoubleProperty.h>
 
 namespace tlp {
-/**
- * @addtogroup iterators
- */
-/*@{*/
 class Graph;
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -82,6 +80,7 @@ struct SortTargetEdgeIterator : public StableIterator<tlp::edge> {
   ///
   ~SortTargetEdgeIterator() {}
 };
-/*@}*/
+
 }
 #endif
+///@endcond

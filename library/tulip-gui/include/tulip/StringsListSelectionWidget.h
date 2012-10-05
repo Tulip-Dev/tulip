@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef STRINGLISTSELECTIONWIDGET_H_
 #define STRINGLISTSELECTIONWIDGET_H_
@@ -150,3 +152,4 @@ private:
 }
 
 #endif /* STRINGLISTSELECTIONWIDGET_H_ */
+///@endcond

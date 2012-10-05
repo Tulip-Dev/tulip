@@ -191,6 +191,9 @@
    <property name="toolTip">
     <string>Deletes the selected graph and its subgraphs</string>
    </property>
+   <property name="shortcut">
+    <string>Shift+Del</string>
+   </property>
   </action>
   <action name="actionCreate_panel">
    <property name="icon">
@@ -219,6 +222,18 @@
   <action name="actionRename">
    <property name="text">
     <string>Rename</string>
+   </property>
+  </action>
+  <action name="actionSave_to_file">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save to file</string>
+   </property>
+   <property name="toolTip">
+    <string>Writes the graph into the selected file</string>
    </property>
   </action>
  </widget>
@@ -395,6 +410,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSave_to_file</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>saveGraphToFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>activeGraphSelected(QModelIndex)</slot>
@@ -407,5 +438,6 @@
   <slot>exportGraph()</slot>
   <slot>renameGraph()</slot>
   <slot>doubleClicked(QModelIndex)</slot>
+  <slot>saveGraphToFile()</slot>
  </slots>
 </ui>

@@ -51,8 +51,8 @@ HierarchicalGraph::HierarchicalGraph(const tlp::PluginContext* context):LayoutAl
   addNodeSizePropertyParameter(this);
   addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
   addSpacingParameters(this);
-  addDependency<DoubleAlgorithm>("Dag Level", "1.0");
-  addDependency<LayoutAlgorithm>("Hierarchical Tree (R-T Extended)", "1.1");
+  addDependency("Dag Level", "1.0");
+  addDependency("Hierarchical Tree (R-T Extended)", "1.1");
 }
 //================================================================================
 HierarchicalGraph::~HierarchicalGraph() {}

@@ -50,13 +50,12 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
 
       // loop over dependencies
       for (; itD != dependencies.end(); ++itD) {
-        std::string factoryDepName = (*itD).factoryName;
         std::string pluginDepName = (*itD).pluginName;
 
         if (!PluginLister::pluginExists(pluginDepName)) {
           if (loader)
             loader->aborted(pluginName, " '" + pluginName + "' will be removed, it depends on missing " +
-                            tlp::demangleTlpClassName(factoryDepName.c_str()) + " '" + pluginDepName + "'.");
+                            "'" + pluginDepName + "'.");
 
           PluginLister::removePlugin(pluginName);
           depsNeedCheck = true;
@@ -70,7 +69,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
             tlp::getMinor(release) != tlp::getMinor(releaseDep)) {
           if (loader) {
             loader->aborted(pluginName, " '" + pluginName + "' will be removed, it depends on release " +
-                            releaseDep + " of " + tlp::demangleTlpClassName(factoryDepName.c_str()) + " '" + pluginDepName + "' but " +
+                            releaseDep + " of" + " '" + pluginDepName + "' but " +
                             release + " is loaded.");
           }
 

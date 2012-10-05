@@ -93,8 +93,8 @@ class VoronoiDiagram : public tlp::Algorithm {
 public :
 
   VoronoiDiagram(tlp::PluginContext *context) : tlp::Algorithm(context) {
-    addParameter<bool>("voronoi cells", "If checked, a subgraph will be added for each computed voronoi cell.", "false");
-    addParameter<bool>("connect", "If checked, original graph nodes will be connected to the vertices of their voronoi cell.", "false");
+    addInParameter<bool>("voronoi cells", "If checked, a subgraph will be added for each computed voronoi cell.", "false");
+    addInParameter<bool>("connect", "If checked, original graph nodes will be connected to the vertices of their voronoi cell.", "false");
   }
 
   PLUGININFORMATIONS("Voronoi diagram","Antoine LAMBERT","","","1.0","Triangulation")

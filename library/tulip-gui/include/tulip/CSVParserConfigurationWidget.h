@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef CSVPARSERCONFIGURATIONWIDGET_H
 #define CSVPARSERCONFIGURATIONWIDGET_H
 
@@ -79,3 +81,4 @@ signals:
 };
 }
 #endif // CSVPARSERCONFIGURATIONWIDGET_H
+///@endcond

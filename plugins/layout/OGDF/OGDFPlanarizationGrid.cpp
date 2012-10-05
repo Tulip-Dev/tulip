@@ -60,7 +60,7 @@ const char * paramHelp[] = {
 
 // comments below have been extracted from OGDF/src/planarity/PlanarizationGridLayout.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * Implements planarization with grid layout.
  *
@@ -146,6 +146,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFPlanarizationGrid)

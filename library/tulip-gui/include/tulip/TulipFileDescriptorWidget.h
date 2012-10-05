@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPFILEDESCRIPTORWIDGET_H
 #define TULIPFILEDESCRIPTORWIDGET_H
 
@@ -38,3 +40,4 @@ protected slots:
 };
 
 #endif // TULIPFILEDESCRIPTORWIDGET_H
+///@endcond

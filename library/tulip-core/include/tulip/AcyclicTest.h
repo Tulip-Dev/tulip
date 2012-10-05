@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -28,6 +28,8 @@ class Graph;
 class BooleanProperty;
 
 /**
+ * @ingroup Checks
+ *
  * @brief Stores all the added informations on self loops.
  *
  * Self loops are removed by adding two nodes and three edges.
@@ -45,10 +47,9 @@ public:
   edge e1,e2,e3,old;
 };
 
-/** \addtogroup graph_test */
-/*@{*/
-
 /**
+ * @ingroup Checks
+ *
  * @brief This class provides tests for acyclicity on a graph.
  * Results are cached in a map of graphs and result.
  * This class observes the graphs that have been tested to remove the result from this graph if it is modified.
@@ -101,5 +102,5 @@ private:
   virtual void treatEvent(const Event&);
 };
 }
-/*@}*/
+
 #endif //TULIP_ACYCLICITY_TEST_H

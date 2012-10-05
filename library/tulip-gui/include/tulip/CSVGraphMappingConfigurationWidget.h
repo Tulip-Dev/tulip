@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 #define CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 
@@ -63,7 +65,7 @@ private:
 /**
   * @brief Combo box for property selection and creation in a graph.
   *
-  * If the combo box is editable and if user enter the name of a property that doesn't exists this will create it.
+  * If the combo box is editable and if user enter the name of a property that does not exist this will create it.
   * A popup will querry user for the type of the property to create.
   * There is no way to delete a created property in this widget.
   **/
@@ -139,3 +141,4 @@ signals:
 };
 }
 #endif // CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
+///@endcond

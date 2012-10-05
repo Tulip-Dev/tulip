@@ -62,7 +62,7 @@ const char * paramHelp[] = {
 
 
 /** \addtogroup import */
-/*@{*/
+
 /// Random General Tree - Import of a random general tree
 /** This plugin enables to create a random general tree
  *
@@ -76,7 +76,7 @@ public:
     addInParameter<int>("maxsize",paramHelp[1],"100");
     addInParameter<int>("maxdegree",paramHelp[2],"5");
     addInParameter<bool>("tree layout",paramHelp[3],"false");
-    addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
+    addDependency("Tree Leaf", "1.0");
   }
   ~RandomTreeGeneral() {
   }
@@ -159,12 +159,12 @@ public:
       DataSet dSet;
       string errMsg;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-      return graph->computeProperty("Tree Leaf", layout, errMsg,
-                                    pluginProgress, &dSet);
+      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg,
+                                           pluginProgress, &dSet);
     }
 
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(RandomTreeGeneral)

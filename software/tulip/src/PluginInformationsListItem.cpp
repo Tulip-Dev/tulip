@@ -17,8 +17,11 @@
  *
  */
 #include "PluginInformationsListItem.h"
-#include <QtGui/QPainter>
 #include "ui_PluginInformationsListItem.h"
+
+#include <tulip/TlpTools.h>
+
+#include <QtGui/QPainter>
 #include <QtNetwork/QNetworkReply>
 
 using namespace tlp;
@@ -27,6 +30,7 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformations infos,
   _ui->setupUi(this);
   _ui->progressFrame->hide();
   _ui->installFrame->hide();
+  _ui->removeFrame->hide();
   _ui->rebootFrame->hide();
   _ui->installationControls->hide();
 
@@ -45,6 +49,11 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformations infos,
 
     else
       _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-installed-updated.png"));
+
+    //only show the remove frame for downloaded plugins
+    if(!versionInfos.libraryLocation.isEmpty() && !versionInfos.libraryLocation.contains(tlp::TulipLibDir.c_str())) {
+      _ui->removeFrame->show();
+    }
   }
 
   _ui->icon->setPixmap(QPixmap(versionInfos.icon));
@@ -73,6 +82,12 @@ void PluginInformationsListItem::install() {
   _ui->installFrame->hide();
   _ui->progressFrame->show();
   PluginManager::markForInstallation(_infos.name,this,SLOT(downloadProgress(qint64,qint64)));
+  _ui->rebootFrame->show();
+}
+
+void PluginInformationsListItem::remove() {
+  _ui->removeFrame->hide();
+  PluginManager::markForRemoval(_infos.installedVersion.libraryLocation);
   _ui->rebootFrame->show();
 }
 

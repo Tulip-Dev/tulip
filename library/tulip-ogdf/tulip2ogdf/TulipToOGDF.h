@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef         TULIPTOOGDF_H_
 #define         TULIPTOOGDF_H_
@@ -76,3 +78,4 @@ private:
 };
 
 #endif      /* !TULIPTOOGDF_H_ */
+///@endcond

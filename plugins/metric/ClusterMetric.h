@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugin is an implementation of the Algorithm Parameter.
  *  algorithm published in :
  *
@@ -50,7 +50,7 @@ private:
   double getEdgeValue(const tlp::edge n);
   void buildSubGraph(tlp::node n, tlp::node startNode,std::set<tlp::node> &selected,unsigned int depth);
 };
-/*@}*/
+
 #endif
 
 

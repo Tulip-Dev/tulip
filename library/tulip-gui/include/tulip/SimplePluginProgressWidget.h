@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef SIMPLEPLUGINPROGRESSWIDGET_H
 #define SIMPLEPLUGINPROGRESSWIDGET_H
 
@@ -65,6 +67,7 @@ public:
 
 protected slots:
   void cancelClicked();
+  void stopClicked();
   void setPreview(bool);
 };
 
@@ -98,3 +101,4 @@ private:
 }
 
 #endif // SIMPLEPLUGINPROGRESSWIDGET_H
+///@endcond

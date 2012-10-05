@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef WORKSPACE_H
 #define WORKSPACE_H
 
@@ -82,6 +84,8 @@ public slots:
   void setSplit32ModeSwitch(QWidget*);
   void switchToGridMode();
   void setGridModeSwitch(QWidget*);
+  void switchToSixMode();
+  void setSixModeSwitch(QWidget*);
 
   void nextPage();
   void previousPage();
@@ -114,13 +118,14 @@ protected slots:
   void uncheckExposeButton();
   QWidget* suitableMode(QWidget* oldMode);
   WorkspacePanel* panelForScene(QObject* obj);
+  void swapPanelsRequested(WorkspacePanel* panel);
 
 protected:
   virtual void dragEnterEvent(QDragEnterEvent* event);
   virtual void dropEvent(QDropEvent* event);
 
   bool handleDragEnterEvent(QEvent* e, const QMimeData* mimedata);
-  bool handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel = NULL);
+  bool handleDropEvent(const QMimeData* mimedata);
 
   bool eventFilter(QObject *, QEvent *);
 
@@ -131,3 +136,4 @@ protected:
 }
 
 #endif // WORKSPACE_H
+///@endcond

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,25 +16,38 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _Tulip_SNAPSHOTDIALOG_H
 #define _Tulip_SNAPSHOTDIALOG_H
 
 #include <tulip/tulipconf.h>
 
-#include "ui_SnapshotDialog.h"
+#include <QtGui/QDialog>
+
+
+
+namespace Ui {
+class SnapshotDialogData;
+}
+
+class QGraphicsScene;
+class QGraphicsPixmapItem;
 
 namespace tlp {
 
 class LockLabel;
-class GlMainView;
+class View;
 
-class TLP_QT_SCOPE SnapshotDialog : public QDialog,public Ui::SnapshotDialogData {
+class TLP_QT_SCOPE SnapshotDialog : public QDialog {
 
   Q_OBJECT
 
+
+
 public :
 
-  SnapshotDialog(GlMainView &v,QWidget *parent=NULL);
+  SnapshotDialog(View &v,QWidget *parent=NULL);
   ~SnapshotDialog();
 
 public slots :
@@ -56,7 +69,8 @@ protected :
 
   void sizeSpinBoxValueChanged();
 
-  GlMainView *view;
+  Ui::SnapshotDialogData *ui;
+  View *view;
 
   QGraphicsScene *scene;
   QGraphicsPixmapItem *pixmapItem;
@@ -76,3 +90,4 @@ protected :
 
 
 
+///@endcond

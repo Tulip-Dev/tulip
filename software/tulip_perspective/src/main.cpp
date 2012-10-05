@@ -23,6 +23,8 @@
 #include <QtGui/QMessageBox>
 #include <QtGui/QDesktopServices>
 
+#include <CrashHandling.h>
+
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TlpTools.h>
@@ -35,11 +37,14 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/QGlBufferManager.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipSettings.h>
+#include <tulip/WorkspacePanel.h>
+#include <tulip/View.h>
+#include <tulip/GlMainView.h>
+#include <tulip/GlMainWidget.h>
 
 #include "TulipPerspectiveMainWindow.h"
-#include <tulip/TulipSettings.h>
-
-#include <CrashHandling.h>
 
 #include <iostream>
 
@@ -50,10 +55,6 @@
 using namespace std;
 using namespace tlp;
 
-#include <tulip/WorkspacePanel.h>
-#include <tulip/View.h>
-#include <tulip/GlMainView.h>
-#include <tulip/GlMainWidget.h>
 void usage(const QString &error) {
   int returnCode = 0;
 
@@ -75,41 +76,24 @@ void usage(const QString &error) {
 
 int main(int argc,char **argv) {
   start_crash_handler();
+
   QApplication tulip_perspective(argc, argv);
   tulip_perspective.setApplicationName(QObject::trUtf8("Tulip"));
-  QLocale::setDefault(QLocale(QLocale::English));
 
-  TulipSettings::instance().applyProxySettings();
-
+  // Create perspective's window
   TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
   mainWindow->setVisible(false);
 
+  // Progress bar dialog
   SimplePluginProgressDialog *progress = new SimplePluginProgressDialog(mainWindow);
   progress->setWindowTitle(QObject::trUtf8("Tulip"));
   progress->resize(500,progress->height());
   progress->show();
 
+  // Init tulip
   progress->progress(0,100);
-  progress->setComment(QObject::trUtf8("Initializing D-Bus").toStdString());
-
-#if defined(__APPLE__)
-  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
-  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
-#endif
-
-  // Init Tulip and load plugins
-  progress->progress(25,100);
-  progress->setComment(QObject::trUtf8("Loading plugins").toStdString());
-  tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
-  tlp::TulipPluginsPath = QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/lib/tulip/").toStdString() +
-                          tlp::PATH_DELIMITER + tlp::TulipPluginsPath +
-                          tlp::PATH_DELIMITER + tlp::getPluginLocalInstallationDir().toStdString();
-
-  tlp::PluginLibraryLoader::loadPlugins();
-  tlp::PluginLister::checkLoadedPluginsDependencies(0);
-  tlp::InteractorLister::initInteractorsDependencies();
-  tlp::GlyphManager::getInst().loadGlyphPlugins();
-  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
+  progress->setComment(QObject::trUtf8("Initializing tulip"));
+  tlp::initTulipSoftware(NULL);
 
   // Check arguments
   progress->progress(60,100);
@@ -127,10 +111,8 @@ int main(int argc,char **argv) {
 
   QStringList args = QApplication::arguments();
 
-  {
-    QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-0.log");
-    setDumpPath(dumpPath.toStdString());
-  }
+  QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-0.log");
+  setDumpPath(dumpPath.toStdString());
 
   for(int i=1; i < args.size(); ++i) {
     QString a = args[i];
@@ -145,6 +127,7 @@ int main(int argc,char **argv) {
       context->tulipPort = portRegexp.cap(1).toUInt();
     }
     else if (idRegexp.exactMatch(a)) {
+      context->id = idRegexp.cap(1).toUInt();
       QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
       setDumpPath(dumpPath.toStdString());
     }

@@ -47,8 +47,9 @@
 #include <QtCore/QHash>
 #include <QtCore/QList>
 
+#include "modeltest_export.h"
 
-class DynamicTreeModel : public QAbstractItemModel
+class MODEL_TESTS_SCOPE DynamicTreeModel : public QAbstractItemModel
 {
   Q_OBJECT
 
@@ -93,7 +94,7 @@ private:
 };
 
 
-class ModelChangeCommand : public QObject
+class MODEL_TESTS_SCOPE ModelChangeCommand : public QObject
 {
   Q_OBJECT
 public:
@@ -125,7 +126,7 @@ protected:
 
 typedef QList<ModelChangeCommand*> ModelChangeCommandList;
 
-class ModelInsertCommand : public ModelChangeCommand
+class MODEL_TESTS_SCOPE ModelInsertCommand : public ModelChangeCommand
 {
   Q_OBJECT
 
@@ -138,7 +139,7 @@ public:
 };
 
 
-class ModelMoveCommand : public ModelChangeCommand
+class MODEL_TESTS_SCOPE ModelMoveCommand : public ModelChangeCommand
 {
   Q_OBJECT
 public:
@@ -164,7 +165,7 @@ protected:
 /**
   A command which does a move and emits a reset signal.
 */
-class ModelResetCommand : public ModelMoveCommand
+class MODEL_TESTS_SCOPE ModelResetCommand : public ModelMoveCommand
 {
   Q_OBJECT
 public:
@@ -180,7 +181,7 @@ public:
 /**
   A command which does a move and emits a beginResetModel and endResetModel signals.
 */
-class ModelResetCommandFixed : public ModelMoveCommand
+class MODEL_TESTS_SCOPE ModelResetCommandFixed : public ModelMoveCommand
 {
   Q_OBJECT
 public:

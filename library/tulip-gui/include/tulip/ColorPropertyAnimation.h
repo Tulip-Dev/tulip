@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef COLORPROPERTYANIMATION_H_
 #define COLORPROPERTYANIMATION_H_
 
@@ -29,3 +31,4 @@ typedef TLP_QT_SCOPE VectorPropertyAnimation<tlp::ColorProperty, tlp::Color, uns
 }
 
 #endif /* COLORPROPERTYANIMATION_H_ */
+///@endcond

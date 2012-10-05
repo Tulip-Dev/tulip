@@ -42,7 +42,7 @@ void minV(tlp::Coord &res, const tlp::Coord &cmp) {
  * @brief This template specialization provides specific computation for min and max values of Layout properties (they are specific in that they use the control points of the edges)
  **/
 template <>
-void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::computeMinMaxNode(Graph *sg) {
+void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg) {
 #ifndef NDEBUG
   qWarning() << __PRETTY_FUNCTION__;
 #endif
@@ -91,7 +91,7 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::c
  * @brief This template specialization provides specific computation for min and max values of Layout properties (they are specific in that they use the control points of the edges)
  **/
 template <>
-void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue) {
+void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = nodeValueUptodate.begin();
 
   if (it != nodeValueUptodate.end()) {
@@ -513,7 +513,7 @@ void LayoutProperty::perfectAspectRatio() {
 }
 
 //=================================================================================
-void LayoutProperty::clone_handler(AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>& proxyC) {
+void LayoutProperty::clone_handler(AbstractProperty<tlp::PointType, tlp::LineType>& proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     LayoutProperty *proxy=(LayoutProperty *)&proxyC;
     nodeValueUptodate = proxy->nodeValueUptodate;

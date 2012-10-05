@@ -54,7 +54,7 @@ void DragHandle::mouseMoveEvent(QMouseEvent* ev) {
   mimedata->setPanel(_panel);
   drag->setMimeData(mimedata);
   drag->setPixmap(_panel->view()->snapshot(QSize(100,100)));
-  Qt::DropAction dropaction = drag->exec(Qt::MoveAction);
+  drag->exec(Qt::MoveAction);
 }
 
 void DragHandle::setPanel(tlp::WorkspacePanel* panel) {

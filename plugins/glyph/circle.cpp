@@ -47,7 +47,7 @@ void drawCircle(const Color &fillColor,const Color &borderColor,float borderWidt
 }
 
 /** \addtogroup glyph */
-/*@{*/
+
 /// A 2D glyph.
 /**
  * This glyph draws a textured disc using the "viewTexture" node

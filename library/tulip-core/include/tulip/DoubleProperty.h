@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef TULIP_METRIC_H
 #define TULIP_METRIC_H
 
@@ -29,10 +30,12 @@ namespace tlp {
 
 class PropertyContext;
 
-typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> DoubleMinMaxProperty;
+typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType> DoubleMinMaxProperty;
 
-/** \addtogroup properties */
-/*\@{*/
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps a double value to graph elements.
+ */
 class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
 public :
   DoubleProperty (Graph *, std::string n="");
@@ -40,9 +43,8 @@ public :
   void nodesUniformQuantification(unsigned int);
   void edgesUniformQuantification(unsigned int);
 
-  virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::DoubleAlgorithm> &);
+  virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType> &);
 
-  // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
   std::string getTypename() const {
@@ -50,7 +52,6 @@ public :
   }
 
 
-  // override some AbstractProperty methods
   virtual void setNodeValue(const node n, const double &v);
   virtual void setEdgeValue(const edge e, const double &v);
   virtual void setAllNodeValue(const double &v);
@@ -71,6 +72,11 @@ private:
 
 };
 
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps a std::vector<double> value to graph elements.
+ */
+
 class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> {
 public :
   DoubleVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
@@ -82,7 +88,7 @@ public :
   }
 
 };
-/*@}*/
+
 
 }
 #endif

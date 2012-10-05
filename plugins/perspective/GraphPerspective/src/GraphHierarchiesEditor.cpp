@@ -36,6 +36,9 @@
 
 GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData), _contextGraph(NULL) {
   _ui->setupUi(this);
+  _ui->hierarchiesTree->addAction(_ui->actionDelete_All);
+  _ui->actionDelete_All->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
   QToolButton* linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
   linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/link.png"));
@@ -69,8 +72,10 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
   if (_contextIndex.isValid()) {
     _contextGraph = (tlp::Graph*)_contextIndex.internalPointer();
     QMenu menu;
-    menu.addAction(_ui->actionExport);
     menu.addAction(_ui->actionCreate_panel);
+    menu.addSeparator();
+    menu.addAction(_ui->actionExport);
+    menu.addAction(_ui->actionSave_to_file);
     menu.addSeparator();
     menu.addAction(_ui->actionRename);
     menu.addAction(_ui->actionAdd_sub_graph);
@@ -92,6 +97,7 @@ void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
     return;
 
   _contextGraph = (tlp::Graph*)index.internalPointer();
+  static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(_contextGraph);
   createPanel();
   _contextGraph = NULL;
 }
@@ -115,28 +121,49 @@ void GraphHierarchiesEditor::cloneSubGraph() {
 }
 
 void GraphHierarchiesEditor::delGraph() {
+  if (_contextGraph == NULL && _ui->hierarchiesTree->selectionModel()->selectedRows(0).size()>0) {
+    _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  }
+
   if (_contextGraph == NULL)
     return;
 
   GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
 
-  if (_contextGraph->getRoot() == _contextGraph)
+  if (_contextGraph->getRoot() == _contextGraph) {
     delete _contextGraph;
-  else
+    static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(NULL);
+  }
+  else {
+    tlp::Graph* sg = _contextGraph->getSuperGraph();
     _contextGraph->getSuperGraph()->delSubGraph(_contextGraph);
+    static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(sg);
+  }
+
+  _contextGraph=NULL;
 }
 
 void GraphHierarchiesEditor::delAllGraph() {
+  if (_contextGraph == NULL && _ui->hierarchiesTree->selectionModel()->selectedRows(0).size()>0) {
+    _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  }
+
   if (_contextGraph == NULL)
     return;
 
   GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
 
-  if (_contextGraph->getRoot() == _contextGraph)
+  if (_contextGraph->getRoot() == _contextGraph) {
     delete _contextGraph;
-  else
+    static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(NULL);
+  }
+  else {
+    tlp::Graph* sg = _contextGraph->getSuperGraph();
     _contextGraph->getSuperGraph()->delAllSubGraphs(_contextGraph);
+    static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(sg);
+  }
 
+  _contextGraph=NULL;
 }
 
 void GraphHierarchiesEditor::createPanel() {
@@ -165,6 +192,10 @@ void GraphHierarchiesEditor::exportGraph() {
 
 void GraphHierarchiesEditor::renameGraph() {
   _ui->hierarchiesTree->edit(_contextIndex);
+}
+
+void GraphHierarchiesEditor::saveGraphToFile() {
+  tlp::Perspective::typedInstance<GraphPerspective>()->saveGraphToFile(_contextGraph);
 }
 
 void GraphHierarchiesEditor::repackHeaders() {

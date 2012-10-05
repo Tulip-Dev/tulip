@@ -27,7 +27,7 @@ using namespace tlp;
 //=======================================
 PathLengthMetric::PathLengthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), leafMetric(NULL) {
   // Leaf metric needed
-  addDependency<DoubleAlgorithm>("Leaf", "1.0");
+  addDependency("Leaf", "1.0");
 }
 
 // structure below is used to implement dfs loop

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 //@TLPGEOLICENCE#
 
 #ifndef _TLP_GEO_MATRIX_H
@@ -29,13 +31,11 @@
 
 namespace tlp {
 
-/**
- * \addtogroup basic
- */
 #define MATRIX tlp::Matrix<Obj,SIZE>
 
-/*@{*/
+
 /**
+ * @ingroup Structures
  * \brief class for mathematical square matrix
  *
  * Enables to create a Square Matrix of Obj with a
@@ -181,9 +181,10 @@ inline Vector<Obj,SIZE> operator*(const Vector<Obj,SIZE> &vec, const tlp::Matrix
 template<typename Obj, unsigned int SIZE>
 inline Vector<Obj,SIZE> operator*( const Matrix<Obj, SIZE> &, const Vector<Obj,SIZE> &vec);
 
-/*@}*/
+
 
 }
 
 #include "cxx/Matrix.cxx"
 #endif
+///@endcond

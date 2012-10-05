@@ -56,7 +56,7 @@ static const char * paramHelp[] = {
 
 
 /** \addtogroup import */
-/*@{*/
+
 /// Complete Tree - Import of a complete tree
 /** This plugin enables to create a complete tree
  *
@@ -69,7 +69,7 @@ public:
     addInParameter<unsigned int>("depth",paramHelp[0],"5");
     addInParameter<unsigned int>("degree",paramHelp[1],"2");
     addInParameter<bool>("tree layout",paramHelp[2],"false");
-    addDependency<LayoutAlgorithm>("Tree Leaf", "1.0");
+    addDependency("Tree Leaf", "1.0");
   }
   ~CompleteTree() {
   }
@@ -114,12 +114,12 @@ public:
       DataSet dSet;
       string errMsg;
       LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
-      return graph->computeProperty("Tree Leaf", layout, errMsg,
-                                    pluginProgress, &dSet);
+      return graph->applyPropertyAlgorithm("Tree Leaf", layout, errMsg,
+                                           pluginProgress, &dSet);
     }
 
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(CompleteTree)

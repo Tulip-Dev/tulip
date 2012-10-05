@@ -35,6 +35,7 @@
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/DrawingTools.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -128,7 +129,7 @@ static ViewSizeCalculator vSizeCalc;
 
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
-                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor";
+                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape";
 
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
@@ -168,6 +169,14 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   if (!g->existProperty(borderColor)) {
     g->getProperty<ColorProperty>(borderColor)->setAllNodeValue(TulipSettings::instance().defaultColor(tlp::NODE));
     g->getProperty<ColorProperty>(borderColor)->setAllEdgeValue(TulipSettings::instance().defaultColor(tlp::EDGE));
+  }
+
+  if (!g->existProperty(tgtShape)) {
+    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(50);
+  }
+
+  if (!g->existProperty(srcShape)) {
+    g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
   }
 }
 

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef FILTERITERATOR_H
 #define FILTERITERATOR_H
 
@@ -25,12 +27,7 @@
 
 namespace tlp {
 /**
-  * \addtogroup iterator
-  */
-/*@{*/
-/**
   * @class FilterIterator
-  * @ingroup iterators
   * @brief Iterator that enables to filter an other Iterator
   * @param it the iterator that should be filtered
   * @param filter the functor that enables to test wheter or not an element is filtered
@@ -86,7 +83,6 @@ private:
 };
 /**
   * @class MPFilterIterator
-  * @ingroup iterators
   * @brief MPFilterIterator implements memory pool for FilterIterator
   * @warning never inherit from that class
   * @see FilterIterator
@@ -98,6 +94,7 @@ public:
     FilterIterator<TYPE, FILTER>(it, filter) {
   }
 };
-/*@}*/
+
 }
 #endif // FILTERITERATOR_H
+///@endcond

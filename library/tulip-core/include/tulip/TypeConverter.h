@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _TulipTypeConverter_H
 #define _TulipTypeConverter_H
 
@@ -31,12 +33,6 @@ namespace tlp {
 
 struct PropertyInterface;
 
-
-/**
- * \addtogroup types
- */
-/*@{*/
-
 bool stringToColor(std::string &str,Color &col);
 bool stringToSize(std::string &str,Size &siz);
 bool stringToCoord(std::string &str,Coord &coo);
@@ -51,7 +47,8 @@ std::string propertyType(PropertyInterface *propertyName);
 std::string propertyNodeDefaultValue(PropertyInterface *propertyName);
 std::string propertyEdgeDefaultValue(PropertyInterface *propertyName);
 
-/*@}*/
+
 
 }
 #endif
+///@endcond

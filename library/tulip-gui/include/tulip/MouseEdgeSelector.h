@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MOUSEEDGESELECTION_H
 #define MOUSEEDGESELECTION_H
 
@@ -27,8 +29,7 @@ class QKeyEvent;
 namespace tlp {
 
 class Graph;
-/** \addtogroup Mouse_interactor */
-/*@{*/
+
 class TLP_QT_SCOPE MouseEdgeSelector:public InteractorComponent {
 private:
   unsigned int x,y;
@@ -44,7 +45,8 @@ public:
     return new MouseEdgeSelector();
   }
 };
-/*@}*/
+
 
 }
 #endif
+///@endcond

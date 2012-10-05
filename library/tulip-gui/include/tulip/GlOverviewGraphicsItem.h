@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GLOVERVIEWGRAPHICSITEM_H
 #define GLOVERVIEWGRAPHICSITEM_H
 
@@ -68,8 +70,11 @@ private :
 
   static std::map<std::pair<int,int>,QGLFramebufferObject*> framebufferObjects;
 
+  std::vector<Camera> _oldCameras;
+
 };
 
 }
 
 #endif // GLOVERVIEWGRAPHICSITEM_H
+///@endcond

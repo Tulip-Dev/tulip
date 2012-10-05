@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TLP_GEO_CONVEX_HULL_H
 #define TLP_GEO_CONVEX_HULL_H
 #include <vector>
@@ -24,20 +26,13 @@
 namespace tlp {
 
 /**
- * \addtogroup basic
- */
-/*@{*/
-/**
+ * @ingroup Graph
  * \brief function for convex hull manipulation
- *
- * Contains functions for computing, merging, intersecting, and
- * testing convex hulls.
  *
  * \author : Daniel Archambault archam@cs.ubc.ca,
  *
  * \version 0.0.3 26/06/2006
- */
-/**
+ *
  * Compute the convex hull and return a list of indexes for the
  * points on the convex hull in counterclockwise order.  The convexHull
  * vector is automatically cleared.  The algorithm runs in O(nlgn) time.
@@ -45,7 +40,8 @@ namespace tlp {
 TLP_SCOPE void convexHull (const std::vector<Coord> &points,
                            std::vector<unsigned int> &convexHull);
 
-/*@}*/
+
 
 }
 #endif
+///@endcond

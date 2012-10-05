@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,16 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef CONVERSIONITERATOR_H
 #define CONVERSIONITERATOR_H
 #include <tulip/Iterator.h>
 #include <tulip/memorypool.h>
 //
 namespace tlp {
-/**
-  * \addtogroup iterator
-  */
-/*@{*/
 /**
   * @class ConversionIterator
   * @ingroup Iterators
@@ -74,6 +72,7 @@ public:
     ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>(it, convFunctor) {
   }
 };
-/*@}*/
+
 }
 #endif // CONVERSIONITERATOR_H
+///@endcond

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef PROPERTY_INTERFACE_H
 #define PROPERTY_INTERFACE_H
 
@@ -34,11 +35,21 @@ template<class itType >
 struct Iterator;
 class PropertyObserver;
 
-/**
- * \defgroup properties Properties
- */
-/*@{*/
 //=============================================================
+/**
+ * @ingroup Graph
+ * @brief PropertyInterface describes the interface of a graph property.
+ *
+ * The intent of a property is to hold a value for each node and edge (e.g. the degree of the nodes).
+ *
+ * A property can be used in two different ways :
+ * Either it is attached to a graph; and in this case creating and deleting the property is handled by the graph
+ * (@see Graph::getProperty()).
+ *
+ * Either is is detached from a graph, and you have to handle creation and deletion yourself.
+ * This is most useful for some algorithms that need a temporary property, but do not want the property to appear on the graph
+ * after the computation.
+ */
 class TLP_SCOPE PropertyInterface: public Observable {
   friend class PropertyManager;
 protected:
@@ -51,232 +62,326 @@ public:
   PropertyInterface();
 
   virtual ~PropertyInterface();
+
   /**
-   * Removes the value stored for the node given in parameter.
-   * The new value for the node is the default one.
+   * @brief Erases the value stored for the given node.
+   * The new value for the node is the default value.
    */
   virtual void erase(const node) = 0;
+
   /**
-   * Removes the value stored for the edge given in parameter.
-   * The new value for the edge is the default one.
+   * @brief Erases the value stored for the given edge.
+   * The new value for the edge is the default value.
    */
   virtual void erase(const edge) = 0;
+
   /**
-   * Sets the value of a node (first argument) in the current property (this)
-   * with the value of the node (second argument) defined in prop (third argument)
-   * If the fourth argument is set to true, the value will be copied only if
-   * it is not the default value.
-   * Returns true if a copy has been done
+   * @brief Copies the value of a node in another property to a node in this property.
+   * @param destination The node whose value will be set.
+   * @param source The node whose value to copy.
+   * @param property The property from which to copy the source node value.
+   * @param ifNotDefault If true, the copy will only be performed if the source node's value is not the default value.
+   * @return True if the copy was performed, false otherwise.
    */
-  virtual bool copy(const node dst, const node src, PropertyInterface *prop,
+  virtual bool copy(const node destination, const node source, PropertyInterface *property,
                     bool ifNotDefault = false) =0;
   /**
-   * Sets the value of an edge (first argument) in the current property (this)
-   * with the value of the edge (second argument) defined in prop (third argument)
-   * defined in this property (this).
-   * If the fourth argument is set to true, the value will be copied only if
-   * it is not the default value.
-   * Returns true if a copy has been done
+   * @brief Copies the value of an edge in another property to an edge in this property.
+   * @param destination The edge whose value will be set.
+   * @param source The edge whose value to copy.
+   * @param property The property from which to copy the source edge value.
+   * @param ifNotDefault If true, the copy will only be performed if the source edge's value is not the default value.
+   * @return True if the copy was performed, false otherwise.
    */
-  virtual bool copy(const edge dst, const edge src, PropertyInterface *prop,
+  virtual bool copy(const edge destination, const edge source, PropertyInterface *property,
                     bool ifNotDefault = false) =0;
+
   /**
-   * Copies the values held by the property argument on this property
+   * @brief Copies the values of the passed property to this property.
+   * @param source The property from which to copy values.
    */
-  virtual void copy(PropertyInterface* prop) = 0;
+  virtual void copy(PropertyInterface* source) = 0;
+
   /**
-    * Creates an object of the same real type of the current property, in the
-    * the graph (first parameter) with the name (second parameter).
-    * Values are not copied.
-    */
-  virtual PropertyInterface* clonePrototype(Graph *, const std::string&) =0;
+   * @brief Creates a property of the same type (e.g. tlp::DoubleProperty) in the graph.
+   * The new property will not contain a copy of this property's values.
+   * @param graph The Graph in which to create the new property.
+   * @param name The name of the new property.
+   * @return The newly created property.
+   */
+
+  virtual PropertyInterface* clonePrototype(Graph *graph, const std::string& name) =0;
+
   /**
-    * Returns a string describing the type of the property.
-    * i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
-    */
+   * @brief Gets a string describing the type of the property (e.g. "graph", "double", "layout", "string", "integer", "color", "size").
+   * @return The name of this property's type.
+   */
   virtual std::string getTypename() const = 0;
 
   /**
-    * Returns the name of the property.
-    */
+   * @brief Gets the name of the property (e.g. viewLayout).
+   * @return The name of this property.
+   */
   const std::string& getName() const {
     return name;
   }
 
   /**
-  * Returns the graph on which the property has been defined.
-  * WARNING : If the property is inherited the graph could be different
-  * that the one used to get that property.
-  */
+   * @cond DOXYGEN_HIDDEN
+   * @brief Gets the graph on which this property has been defined.
+   * This is an internal function and its behavior can change.
+   * DO NOT USE UNLESS YOU KNOW WHAT YOU ARE DOING.
+   *
+   * Be wary that is might be a different graph that the one you used to get this property.
+   * For instance:
+   * @code
+   * Graph* g = tlp::newGraph();
+   * Graph*sub = g->addCloneSubGraph();
+   *
+   * IntegerProperty* prop = g->getProperty<IntegerProperty>("test");
+   * //prop->getGraph() returns g
+   *
+   * IntegerProperty* prop2 = sub->getProperty<IntegerProperty>("test");
+   * //prop2->getGraph() returns g
+   * @endcode
+   *
+   * This is due to the inheritance system of the properties.
+   *
+   * @return The Graph this property is local to.
+   * @endcond
+   */
   tlp::Graph * getGraph() const {
     return graph;
   }
 
   /**
-  * Returns a string representation of the node default value.
-  */
-  virtual std::string getNodeDefaultStringValue() const = 0;
-  /**
-   * Clears all nodes registered values, and sets a new node default value
-   * in converting the given string representation of a value.
-   * Returns true if the given string representation has been successfully converted to a value, false otherwise.
-   */
-  virtual bool setAllNodeStringValue( const std::string & v ) = 0;
-  /**
-  * Returns a string representation of the edge default value.
-  */
-  virtual std::string getEdgeDefaultStringValue() const = 0;
-  /**
-   * Clears all edges registered values, and sets a new edge default value
-   * in converting the given string representation of a value.
-   * Returns true if the given string representation has been successfully converted to a value, false otherwise.
-   */
-  virtual bool setAllEdgeStringValue( const std::string & v ) = 0;
-  /**
-   * Returns a string conversion of the value registered for the given node.
+   * @brief Gets a string representation of the node default value.
+   * @param n The node to get the value of.
+   * @return A string representation of the node default value.
    */
   virtual std::string getNodeStringValue( const node n ) const = 0;
+
   /**
-   * Registers a new value for the given node in converting
-   * the given string representation.
-   * Returns true if the given string representation has been successfully converted to a value, false otherwise.
-   */
-  virtual bool setNodeStringValue( const node n, const std::string & v ) = 0;
-  /**
-   * Returns a string conversion of the value registered for the given edge.
+   * @brief Gets a string representation of the edge default value.
+   * @param e The edge to get the value of.
+   * @return A string representation of the edge default value.
    */
   virtual std::string getEdgeStringValue( const edge e ) const = 0;
+
   /**
-   * Registers a new value for the given edge in converting
-   * the given string representation.
-   * Returns true if the given string representation has been successfully converted to a value, false otherwise.
+   * @brief Sets a new value on the node, described by the string parameter.
+   * @param n The node on which to set the new value.
+   * @param value A string describing the value to set on the node.
+   * @return Whether the string was a correct representation for this property's type. If not, the value is not set.
    */
-  virtual bool setEdgeStringValue( const edge e, const std::string & v ) = 0;
+  virtual bool setNodeStringValue( const node n, const std::string & value ) = 0;
+
   /**
-   * Returns a pointer to a DataMem structure embedding the node default value
-   * WARNING: it is of the caller responsibility to delete the returned structure.
-  */
+   * @brief Sets a new value on the edge, described by the string parameter.
+   * @param e The edge on which to set value on.
+   * @param value A string describing the value to set on the edge.
+   * @return Whether the string was a correct representation for this property's type. If not, the value is not set.
+   */
+  virtual bool setEdgeStringValue( const edge e, const std::string & value ) = 0;
+
+  /**
+   * @brief Gets a string representation of the node default value.
+   * @return A string representation of the node default value.
+   */
+  virtual std::string getNodeDefaultStringValue() const = 0;
+
+  /**
+   * @brief Gets a string representation of the edge default value.
+   * @return A string representation of the edge default value.
+   */
+  virtual std::string getEdgeDefaultStringValue() const = 0;
+
+  /**
+   * @brief Sets all the nodes value to the value described by the string. For some types, some parsing will be necessary (e.g. LayoutPorperty).
+   * All previous values are lost.
+   * @param value A string describing the new value to set on all the nodes.
+   * @return Whether the given string was a correct representation for this property's type. If not, the values are not set.
+   */
+  virtual bool setAllNodeStringValue( const std::string & value ) = 0;
+
+  /**
+   * @brief Sets all the edges value to the value described by the string. For some types, some parsing will be necessary (e.g. LayoutPorperty).
+   * All previous values are lost.
+   * @param value A string describing the new value to set on all the edges.
+   * @return Whether the given string was a correct representation for this property's type. If not, the values are not set.
+   */
+  virtual bool setAllEdgeStringValue( const std::string & value ) = 0;
+
+  /**
+   * @brief Gets a pointer to the tlp::DataMem structure that contains the node default value.
+   * @return The DataMem structure containing the node default value.
+   * @warning The ownership of this pointer is given to the caller.
+   */
   virtual DataMem* getNodeDefaultDataMemValue() const = 0;
+
   /**
-   * Clears all nodes registered values, and set a new node default value
-   * using the value embedded in the pointed DataMem structure.
+   * @brief Gets a pointer to the tlp::DataMem structure that contains the edge default value.
+   * @return The DataMem structure containing the edge default value.
+   * @warning The ownership of this pointer is given to the caller.
    */
-  virtual void setAllNodeDataMemValue(const DataMem* v ) = 0;
-  /**
-   * Returns a pointer to a DataMem structure embedding the edge default value
-   * WARNING: the caller have the responsibility to delete the returned structure.
-  */
   virtual DataMem* getEdgeDefaultDataMemValue() const = 0;
+
   /**
-   * Clears all edges registered values, and set a new edge default value
-   * using the value embedded in the pointed DataMem structure.
+   * @brief Sets all the nodes value to the value contained in the given DataMem structure.
+   * All previous values are lost.
+   * @param value The value to set on all the nodes.
+   */
+  virtual void setAllNodeDataMemValue(const DataMem* value) = 0;
+
+  /**
+   * @brief Sets all the edges value to the value contained in the given DataMem structure.
+   * All previous values are lost.
+   * @param value The value to set on all the edges.
    */
   virtual void setAllEdgeDataMemValue(const DataMem* v ) = 0;
+
   /**
-  * Returns a pointer to a DataMem structure embedding the node registered value
-  * WARNING: it is of the caller responsibility to delete the returned structure.
-  */
-  virtual DataMem* getNodeDataMemValue( const node n ) const = 0;
-  /**
-   * Returns a NULL pointer if the given node registered value is the default
-   * else returns a pointer to a DataMem structure embedding the value
-   * WARNING: it is of the caller responsibility to delete the returned structure.
-  */
-  virtual DataMem* getNonDefaultDataMemValue( const node n ) const = 0;
-  /**
-   * Registers a new value for the given node
-   * using the value embedded in the pointed DataMem structure.
+   * @brief Gets the node value, contained in a tlp::DataMem structure.
+   * @param n The node to get the value of.
+   * @return The value of the node, in a tlp::DataMem.
+   *
+   * @warning The ownership of this pointer is given to the caller.
    */
-  virtual void setNodeDataMemValue( const node n, const DataMem* v) = 0;
+  virtual DataMem* getNodeDataMemValue( const node n ) const = 0;
+
   /**
-  * Returns a pointer to a DataMem structure embedding the edge registered value
-  * WARNING: it is of the caller responsibility to delete the returned structure.
-  */
+   * @brief Gets the edge value, contained in a tlp::DataMem structure.
+   * @param n The edge to get the value of.
+   * @return The value of the edge, in a tlp::DataMem.
+   *
+   * @warning The ownership of this pointer is given to the caller.
+   */
   virtual DataMem* getEdgeDataMemValue( const edge e ) const = 0;
+
   /**
-   * Returns a NULL pointer if the given edge registered value is the default
-   * else returns a pointer to a DataMem structure embedding the value.
-   * WARNING: it is of the caller responsibility to delete the returned structure.
-  */
+   * @brief Returns the value in a DataMem if it is not default, otherwise returns NULL.
+   * @param n The node to get the value of.
+   * @return The value of the node if it is not default, or NULL.
+   *
+   * @warning The ownership of this pointer is given to the caller.
+   */
+  virtual DataMem* getNonDefaultDataMemValue( const node n ) const = 0;
+
+  /**
+   * @brief Returns the value in a DataMem if it is not default, otherwise returns NULL.
+   * @param e The edge to get the value of.
+   * @return The value of the edge if it is not default, or NULL.
+   *
+   * @warning The ownership of this pointer is given to the caller.
+   */
   virtual DataMem* getNonDefaultDataMemValue( const edge e ) const = 0;
+
   /**
-   * Registers a new value for the given node
-   * using the value embedded in the pointed DataMem structure.
+   * @brief Sets the node value.
+   * @param n The node to set the value of.
+   * @param value The value to set to this node.
+   */
+  virtual void setNodeDataMemValue( const node n, const DataMem* value) = 0;
+
+  /**
+   * @brief Sets the edge value.
+   * @param e The edge to set the value of.
+   * @param value The value to set to this edge.
    */
   virtual void setEdgeDataMemValue( const edge e, const DataMem* v) = 0;
+
   /**
-   * Returns an iterator on all nodes whose value is different
-   * from the default value. When the pointer to the graph is not NULL
-   * only the nodes owned by this graph are returned by the iterator.
-   * WARNING: it is of the caller responsibility to delete the returned iterator.
+   * @brief Gets an Iterator on all non-default valuated nodes.
+   * When given a Graph as parameter, only nodes belonging to this graph are iterated over.
+   * @return An Iterator over nodes whose value is not default.
+   *
+   * @warning The ownership of the iterator is given to the caller.
    */
   virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* = NULL) const = 0;
+
   /**
-   * Returns an iterator on all edges whose value is different
-   * from the default value. When the pointer to the graph is not NULL
-   * only the edges owned by this graph are returned by the iterator.
-   * WARNING: it is of the caller responsibility to delete the returned iterator.
+   * @brief Gets an Iterator on all non-default valuated edges.
+   * When given a Graph as parameter, only edges belonging to this graph are iterated over.
+   * @return An Iterator over edges whose value is not default.
+   *
+   * @warning The ownership of the iterator is given to the caller.
    */
   virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* = NULL) const = 0;
-  /**
-   * Sets a computed value for the meta node mN pointing to the sub-graph sg
-   * mg is the graph owning the meta node
-   */
-  virtual void computeMetaValue(node mN, Graph* sg, Graph* mg)=0;
-  /**
-   * Sets a computed value for the meta edge mE representing the edges
-   * from the iterator itE.
-   * mg is the graph owning the meta edge.
-   */
-  virtual void computeMetaValue(edge mE, tlp::Iterator<edge>* itE, Graph* mg)=0;
 
-  // superclass of further MetaValueCalculator
+  /**
+   * @brief Sets the value of the metanode to a computed value.
+   *
+   * The value is computed by this property's MetaValueCalculator.
+   * @param metaNode The metanode to compute a value on.
+   * @param subgraph The subgraph pointed by the metanode.
+   * @param metaGraph The graph who owns the meta node.
+   */
+  virtual void computeMetaValue(node metaNode, Graph* subgraph, Graph* metaGraph)=0;
+
+  /**
+   * @brief Sets the value of the metaedge to a computed value.
+   * @param metaEdge The meta edge to compute a value on.
+   * @param it The edges represented by the meta edge.
+   * @param metaGraph The graph who owns the meta edge.
+   */
+  virtual void computeMetaValue(edge metaEdge, tlp::Iterator<edge>* it, Graph* metaGraph)=0;
+
+  /**
+   * @brief Base class for computing values on meta nodes and edges.
+   */
   class MetaValueCalculator {
   public:
     virtual ~MetaValueCalculator() {}
   };
 
-
   /**
-   * Returns the meta value calculator associated to this property.
+   * @brief Gets the MetaValueCalculator of this property.
+   * @return The MetaValueCalculator of this property
    */
   MetaValueCalculator* getMetaValueCalculator() {
     return metaValueCalculator;
   }
 
   /**
-   * Sets the meta value calculator.
-   * Be careful that its destruction is not managed by the property.
+   * @brief Sets the Calculator for meta nodes and edges.
+   * @param calculator The object containing the logic for computing the meta values for the nodes and edges.
+   *
+   * @warning The ownership of the MetaValueCalculator is not taken by the property.
    */
-  virtual void setMetaValueCalculator(MetaValueCalculator* mvCalc) {
-    metaValueCalculator = mvCalc;
+  virtual void setMetaValueCalculator(MetaValueCalculator* calculator) {
+    metaValueCalculator = calculator;
   }
 
   /**
-   * Registers a new property observer.
+   * @brief Adds a Listener to this property.
+   * @deprecated Use addListener instead.
    */
   void _DEPRECATED addPropertyObserver(Observable *pObs) {
     addListener(pObs);
   }
 
   /**
-   * Removes a registered property observer.
+   * @brief Removes a Listener from this property.
+   * @deprecated Use removeListener instead.
    */
   void _DEPRECATED removePropertyObserver(Observable *pObs) {
     removeListener(pObs);
   }
 
   /**
-    * @brief Compare value of the node n1 to the value of the node n2.
-    *
-    * @return Return 0 if values are equal otherwise a number different from 0 is returned, with its sign indicating whether the value ot the node n1 is considered greater than the comparing value of the node n2(positive sign), or smaller (negative sign).
-    **/
+   * @brief Compares the value this property holds for the two given nodes.
+   * @param n1 The first node to compare the value of.
+   * @param n2 The second node to compare the value of.
+   * @return 0 if the values are identical, a positive value if n1 is greater than n2, and a negative value if n1 is less than n2.
+   */
   virtual int compare(const node n1,const node n2) const = 0;
+
   /**
-    * @brief Compare value of the edge e1 to the value of the edge e2.
-    *
-    * @return Return 0 if values are equal otherwise a number different from 0 is returned, with its sign indicating whether the value of edge e1 is considered greater than the comparing value of the edge e2 (positive sign), or smaller (negative sign).
-    **/
+   * @brief Compares the value this property holds for the two given edges.
+   * @param e1 The first edge to compare the value of.
+   * @param e2 The second edge to compare the value of.
+   * @return 0 if the values are identical, a positive value if e1 is greater than e2, and a negative value if e1 is less than e2.
+   */
   virtual int compare(const edge e1,const edge e2) const = 0;
 
 protected:
@@ -294,7 +399,12 @@ protected:
   void notifyDestroy();
 };
 
-/// Event class for specific events on PropertyInterface
+/**
+ * @ingroup Observation
+ * @brief Contains additional informations about events on a property,
+ * such as the property it happened on, the node/edge eventually concerned and such.
+ * It also contains the detailed type of the event.
+ */
 class TLP_SCOPE PropertyEvent :public Event {
 public:
 
@@ -339,7 +449,7 @@ protected:
 }
 
 //================================================================================
-// Specilization of some template class
+// these functions allow to use tlp::PropertyInterface as a key in a hash-based data structure (e.g. hashmap).
 //================================================================================
 #ifndef DOXYGEN_NOTFOR_DEVEL
 

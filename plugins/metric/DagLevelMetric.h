@@ -21,7 +21,7 @@
 
 #include <tulip/TulipPluginHeaders.h>
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugin is an implementation of a DAG layer decomposition
  *
  *  \note This algorithm works on general DAG, the complexity is in O(|E|+|V|);
@@ -35,5 +35,5 @@ public:
   bool run();
   bool check(std::string& erreurMsg);
 };
-/*@}*/
+
 #endif

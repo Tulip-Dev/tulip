@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _DRAWINGTOOLS_H
 #define _DRAWINGTOOLS_H
 
@@ -137,3 +139,4 @@ TLP_SCOPE tlp::Coord computePolygonCentroid(const std::vector<tlp::Coord> &point
 
 
 #endif
+///@endcond

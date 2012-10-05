@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef PLUGINMANAGER_H
 #define PLUGINMANAGER_H
 
@@ -67,6 +69,9 @@ public:
   };
   Q_DECLARE_FLAGS(PluginLocations, PluginLocation)
 
+  static const QString STABLE_LOCATION;
+  static const QString TESTING_LOCATION;
+
   typedef QList<PluginVersionInformations> PluginVersionInformationsList;
 
   typedef QList<PluginInformations> PluginInformationsList;
@@ -82,9 +87,11 @@ public:
 
   static QStringList markedForInstallation();
   static QStringList markedForRemoval();
+  static void unmarkForRemoval(const QString& file);
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PluginManager::PluginLocations)
 }
 
 #endif //PLUGINMANAGER_H
+///@endcond

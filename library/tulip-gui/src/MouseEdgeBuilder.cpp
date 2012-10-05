@@ -36,7 +36,7 @@
 using namespace std;
 using namespace tlp;
 
-MouseEdgeBuilder::MouseEdgeBuilder():source(node()),started(false),graph(NULL),layoutProperty(NULL) {}
+MouseEdgeBuilder::MouseEdgeBuilder():_source(node()),_started(false),_graph(NULL),_layoutProperty(NULL) {}
 
 bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
@@ -52,14 +52,14 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     LayoutProperty* mLayout = inputData->getElementLayout();
 
     if (qMouseEv->buttons()==Qt::LeftButton) {
-      if (!started) {
+      if (!_started) {
         bool result=glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity);
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
-          started=true;
+          _started=true;
           initObserver(_graph);
-          source=node(selectedEntity.getComplexEntityId());
-          curPos=startPos=mLayout->getNodeValue(source);
+          _source=node(selectedEntity.getComplexEntityId());
+          _curPos=_startPos=mLayout->getNodeValue(_source);
           return true;
         }
 
@@ -70,20 +70,17 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           Observable::holdObservers();
-          started=false;
+          _started=false;
           clearObserver();
           // allow to undo
           _graph->push();
-          edge newEdge = _graph->addEdge(source, node(selectedEntity.getComplexEntityId()));
-          mLayout->setEdgeValue(newEdge, bends);
-
-          bends.clear();
+          addLink(widget,_source,node(selectedEntity.getComplexEntityId()));
           Observable::unholdObservers();
 
         }
         else {
           Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
-          bends.push_back(glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(point));
+          _bends.push_back(glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(point));
           glMainWidget->redraw();
         }
       }
@@ -92,9 +89,9 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
     }
 
     if (qMouseEv->buttons()==Qt::MidButton) {
-      bends.clear();
-      started=false;
-      source=node();
+      _bends.clear();
+      _started=false;
+      _source=node();
       clearObserver();
       glMainWidget->draw();
       return true;
@@ -104,17 +101,31 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
   if  (e->type() == QEvent::MouseMove) {
     QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
 
-    if (!started) {
+    if (!_started) {
       SelectedEntity selectedEntity;
       bool hoveringOverNode = glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED;
 
-      if (!hoveringOverNode)
+      if (!hoveringOverNode) {
+        glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
         return false;
+      }
+      else {
+        glMainWidget->setCursor(QCursor(Qt::CrossCursor));
+      }
     }
     else {
+      SelectedEntity selectedEntity;
+
+      if(glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+        glMainWidget->setCursor(QCursor(Qt::CrossCursor));
+      }
+      else {
+        glMainWidget->setCursor(QCursor(Qt::ArrowCursor));
+      }
+
       Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
       point = glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(point);
-      curPos.set(point[0], point[1], point[2]);
+      _curPos.set(point[0], point[1], point[2]);
       glMainWidget->redraw();
     }
 
@@ -125,14 +136,14 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 }
 
 bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
-  if (!started) return false;
+  if (!_started) return false;
 
   glDisable(GL_STENCIL_TEST);
   glMainWidget->getScene()->getGraphCamera().initGl();
   vector<Coord> lineVertices;
-  lineVertices.push_back(startPos);
-  lineVertices.insert(lineVertices.end(), bends.begin(), bends.end());
-  lineVertices.push_back(curPos);
+  lineVertices.push_back(_startPos);
+  lineVertices.insert(lineVertices.end(), _bends.begin(), _bends.end());
+  lineVertices.push_back(_curPos);
   vector<Color> lineColors;
   lineColors.resize(lineVertices.size(), Color(255,0,0,255));
   GlLine editedEdge(lineVertices, lineColors);
@@ -142,38 +153,48 @@ bool MouseEdgeBuilder::draw(GlMainWidget *glMainWidget) {
 
 void MouseEdgeBuilder::initObserver(Graph *newGraph) {
   newGraph->addListener(this);
-  graph=newGraph;
-  layoutProperty=newGraph->getProperty<LayoutProperty>("viewLayout");
-  layoutProperty->addListener(this);
+  _graph=newGraph;
+  _layoutProperty=newGraph->getProperty<LayoutProperty>("viewLayout");
+  _layoutProperty->addListener(this);
 }
 
 void MouseEdgeBuilder::clearObserver() {
-  if(graph)
-    graph->removeListener(this);
+  if(_graph)
+    _graph->removeListener(this);
 
-  graph=NULL;
+  _graph=NULL;
 
-  if(layoutProperty)
-    layoutProperty->removeListener(this);
+  if(_layoutProperty)
+    _layoutProperty->removeListener(this);
 
-  layoutProperty=NULL;
+  _layoutProperty=NULL;
 }
 
 void MouseEdgeBuilder::treatEvent(const Event& evt) {
   if (typeid(evt) == typeid(GraphEvent)) {
     const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
 
-    if(graphEvent && graphEvent->getType() == GraphEvent::TLP_DEL_NODE && graphEvent->getNode() == source) {
-      bends.clear();
-      started=false;
+    if(graphEvent && graphEvent->getType() == GraphEvent::TLP_DEL_NODE && graphEvent->getNode() == _source) {
+      _bends.clear();
+      _started=false;
       clearObserver();
     }
   }
   else {
     const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&evt);
 
-    if(propertyEvent && propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE && propertyEvent->getNode() == source && propertyEvent->getProperty() == layoutProperty) {
-      startPos=layoutProperty->getNodeValue(source);
+    if(propertyEvent && propertyEvent->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE && propertyEvent->getNode() == _source && propertyEvent->getProperty() == _layoutProperty) {
+      _startPos=_layoutProperty->getNodeValue(_source);
     }
   }
+}
+
+void MouseEdgeBuilder::addLink(QObject *widget, const node source, const node target) {
+  GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+  Graph * g = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+
+  LayoutProperty* mLayout = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
+  edge newEdge = g->addEdge(source, target);
+  mLayout->setEdgeValue(newEdge, bends());
+  _bends.clear();
 }

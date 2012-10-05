@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef Tulip_GLSIMPLEENTITY_H
 #define Tulip_GLSIMPLEENTITY_H
 
@@ -32,40 +33,59 @@ namespace tlp {
 class GlComposite;
 
 /**
- * Base class for all simple entity (entity who not need GraphInputData
+ * @ingroup OpenGL
+ * @brief Base class for all Tulip OpenGL entities
+ *
+ * Other Tulip entities inherit for this class.
+ *
+ * You don't have to create a GlSimpleEntity, you have to use GlLine, GlRect or GlSphere for example
+ * @see Gl2DRect
+ * @see GlPolygon
+ * @see GlAxis
+ * @see GlBezierCurve
+ * @see GlBox
+ * @see GlCatmullRomCurve
+ * @see GlCircle
+ * @see GlComplexPolygon
+ * @see GlGrid
+ * @see GlHexagon
+ * @see GlLabel
+ * @see GlSphere
+ * @see GlPentagon
+ * @see GlTriangle
+ * @see GlOpenUniformCubicBSpline
+ *
+ * To GlSimpleEntity manipulation :
+ * @see GlLayer
+ * @see GlScene
  */
 class TLP_GL_SCOPE GlSimpleEntity : public GlEntity {
 
 public:
 
+  /**
+   * @brief Constructor
+   */
   GlSimpleEntity():visible(true),stencil(0xFFFF) {}
 
+  /**
+   * @brief Destructor
+   */
   virtual ~GlSimpleEntity();
 
   /**
-   * Draw function
-   */
-  virtual void draw(float lod,Camera* camera) = 0;
-
-  /**
-   * Accept visitor function
-   */
-  virtual void acceptVisitor(GlSceneVisitor *visitor) {
-    visitor->visit(this);
-  }
-
-  /**
-   * Set if entity is visible
+   * @brief Set if entity is visible
    */
   virtual void setVisible(bool visible);
   /**
-   * Return if entity is visible
+   * @brief Return if entity is visible
    */
   bool isVisible() const {
     return visible;
   }
   /**
-   * Set stencil number of the entity
+   * @brief Set stencil number of the entity
+   *
    * Stencil is an OpenGl system to ensure that other entity can't be displayed above this entity; it's a "guaranted visibility" system.
    * A small number causes a guaranted visibility
    * Default value in Tulip is 0xFFFF (greater integer)
@@ -75,17 +95,51 @@ public:
     this->stencil=stencil;
   }
   /**
-   * Return stencil number of entity
+   * @brief Return stencil number of entity
+   *
+   * @see setStencil()
    */
   int getStencil() {
     return stencil;
   }
 
   /**
-   * Return the entity boundingbox
+   * @brief Draw function
+   *
+   * @warning You don't have to call this function, the Tulip OpenGL engine call it.
+   */
+  virtual void draw(float lod,Camera* camera) = 0;
+
+  /**
+   * @brief Return the entity boundingbox
+   *
+   * @warning You don't have to call this function, the Tulip OpenGL engine call it.
    */
   virtual BoundingBox getBoundingBox() {
     return boundingBox;
+  }
+
+  /**
+   * @brief Save the entity in outString (in XML format)
+   *
+   * @warning You don't have to call this function, the Tulip OpenGL engine call it.
+   */
+  virtual void getXML(std::string &outString) =0;
+
+  /**
+   * @brief Load entity with inString (in XML format)
+   *
+   * @warning You don't have to call this function, the Tulip OpenGL engine call it.
+   */
+  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition) =0;
+
+///@cond DOXYGEN_HIDDEN
+
+  /**
+   * @brief Accept visitor function
+   */
+  virtual void acceptVisitor(GlSceneVisitor *visitor) {
+    visitor->visit(this);
   }
 
   /**
@@ -136,22 +190,14 @@ public:
    */
   virtual void translate(const Coord &) {}
 
-  /**
-   * Save the entity in outString (in XML format)
-   */
-  virtual void getXML(std::string &outString) =0;
-
-  /**
-   * Load entity with inString (in XML format)
-   */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition) =0;
-
   GlComposite* getParent() const {
     if (parents.size()==0)
       return NULL;
 
     return parents[0];
   }
+
+///@endcond
 
 protected:
 
@@ -167,3 +213,4 @@ protected:
 }
 
 #endif // Tulip_GLSIMPLEENTITY_H
+

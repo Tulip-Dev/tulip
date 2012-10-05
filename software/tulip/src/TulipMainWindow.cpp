@@ -31,12 +31,14 @@
 #include <tulip/TlpTools.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipProject.h>
+#include <tulip/PluginModel.h>
 #include <QtGui/QScrollArea>
 
 #include "ui_TulipMainWindow.h"
 #include "TulipPerspectiveProcessHandler.h"
 #include "TulipWelcomePage.h"
 #include "PerspectiveItemWidget.h"
+#include "PerspectiveSelectionDialog.h"
 
 using namespace tlp;
 
@@ -62,12 +64,12 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   _systemTrayIcon = new QSystemTrayIcon(QIcon(":/tulip/gui/icons/logo32x32.png"),this);
   _systemTrayIcon->setToolTip(trUtf8("Tulip agent"));
   QMenu *systemTrayMenu = new QMenu();
-  systemTrayMenu->addAction(trUtf8("Show"));
-  systemTrayMenu->addAction(trUtf8("Hide"));
+  systemTrayMenu->addAction(trUtf8("Show"),this,SLOT(showProjectsCenter()));
+  systemTrayMenu->addAction(trUtf8("Hide"),this,SLOT(close()));
   systemTrayMenu->addSeparator();
-  systemTrayMenu->addAction(trUtf8("Welcome"));
-  systemTrayMenu->addAction(trUtf8("Plugins center"));
-  systemTrayMenu->addAction(trUtf8("About us"));
+  systemTrayMenu->addAction(trUtf8("Welcome"),this,SLOT(showProjectsCenter()));
+  systemTrayMenu->addAction(trUtf8("Plugins center"),this,SLOT(showPluginsCenter()));
+  systemTrayMenu->addAction(trUtf8("About us"),this,SLOT(showAboutCenter()));
   systemTrayMenu->addSeparator();
   connect(systemTrayMenu->addAction(trUtf8("Exit")), SIGNAL(triggered()),this, SLOT(closeApp()));
   _systemTrayIcon->setContextMenu(systemTrayMenu);
@@ -85,6 +87,13 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showTrayMessage(QString)),this,SLOT(showTrayMessage(QString)));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openProject(QString)),this,SLOT(openProject(QString)));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openPerspective(QString)),this,SLOT(createPerspective(QString)));
+
+  if (QApplication::arguments().size() > 1) {
+    QString path = QApplication::arguments()[1];
+
+    if (QFileInfo(path).exists())
+      openProject(path);
+  }
 }
 
 TulipMainWindow::~TulipMainWindow() {
@@ -98,6 +107,12 @@ void TulipMainWindow::closeApp() {
 
 void TulipMainWindow::closeEvent(QCloseEvent *e) {
   e->ignore();
+
+  if (TulipSettings::instance().value("app/showsystraynotif",true).toBool()) {
+    showTrayMessage(trUtf8("Tulip"),trUtf8("Tulip is still running.\nTo show the Tulip window again, click Tulip icon located into your notification area.\n\nNote: This message will be displayed only once."),QSystemTrayIcon::Information,3000);
+    TulipSettings::instance().setValue("app/showsystraynotif",false);
+  }
+
   hide();
 }
 
@@ -188,6 +203,24 @@ void TulipMainWindow::openProject(const QString &file) {
 
   if (project->isValid()) {
     openProjectWith(file, project->perspective(),QVariantMap());
+  }
+  else {
+    QString perspectiveName = QString::null;
+
+    if (PluginLister::instance()->availablePlugins<tlp::Perspective>().size() > 1) {
+      PerspectiveSelectionDialog dlg;
+
+      if (dlg.exec() == QDialog::Accepted) {
+        perspectiveName = dlg.perspectiveName();
+      }
+    }
+    else {
+      std::string stdName = *(PluginLister::instance()->availablePlugins<tlp::Perspective>().begin());
+      perspectiveName = stdName.c_str();
+    }
+
+    if (!perspectiveName.isNull())
+      TulipPerspectiveProcessHandler::instance()->createPerspective(perspectiveName,file,QVariantMap());
   }
 
   delete project;

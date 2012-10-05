@@ -356,15 +356,15 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
   }
 }
 //----------------------------------------
-void Observable::addObserver(Observable * const obs) const {
-  assert(obs != NULL);
+void Observable::addObserver(Observable * const observer) const {
+  assert(observer != NULL);
   queuedEvent = false;
-  addOnlooker(*obs, OBSERVER);
+  addOnlooker(*observer, OBSERVER);
 }
 //----------------------------------------
-void Observable::addListener(Observable * const obs) const {
-  assert(obs != NULL);
-  addOnlooker(*obs, LISTENER);
+void Observable::addListener(Observable * const listener) const {
+  assert(listener != NULL);
+  addOnlooker(*listener, LISTENER);
 }
 //----------------------------------------
 void Observable::observableDeleted() {
@@ -536,14 +536,14 @@ void Observable::removeOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) 
   }
 }
 //----------------------------------------
-void Observable::removeObserver(Observable  * const obs) const {
-  assert(obs != NULL);
-  removeOnlooker(*obs, OBSERVER);
+void Observable::removeObserver(Observable  * const observerver) const {
+  assert(observerver != NULL);
+  removeOnlooker(*observerver, OBSERVER);
 }
 //----------------------------------------
-void Observable::removeListener(Observable  * const obs) const {
-  assert(obs != NULL);
-  removeOnlooker(*obs, LISTENER);
+void Observable::removeListener(Observable  * const listener) const {
+  assert(listener != NULL);
+  removeOnlooker(*listener, LISTENER);
 }
 //----------------------------------------
 void Observable::notifyObservers() {

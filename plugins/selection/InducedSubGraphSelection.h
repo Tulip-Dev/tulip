@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup selection */
-/*@{*/
+
 /// This selection plugins enables to find a subgraph induced by a set of nodes.
 /**
  * Let V' a subset of nodes, G' is an induced subgraph of G if all edges
@@ -38,7 +38,7 @@ public:
   InducedSubGraphSelection(const tlp::PluginContext* context);
   bool run();
 };
-/*@}*/
+
 #endif
 
 

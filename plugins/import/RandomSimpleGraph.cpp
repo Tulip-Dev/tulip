@@ -86,7 +86,7 @@ const char * paramHelp[] = {
 }
 
 /** \addtogroup import */
-/*@{*/
+
 /// Random Simple Graph - Import of a random simple graph
 /** This plugin enables to create a random simple graph
  *
@@ -163,5 +163,5 @@ public:
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(RandomSimpleGraph)

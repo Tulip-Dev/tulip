@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -35,6 +35,8 @@
 namespace tlp {
 
 /**
+  @ingroup Plugins
+
   @brief The TulipProject object handles the content of a Tulip project.
 
   All tulip projects contain a set of defined static meta-informations:
@@ -63,7 +65,7 @@ namespace tlp {
 
   @warning TulipProject paths ALWAYS use the "/" character as a directory separator. This is OS-independant.
 
-  @example A file called graph.tlp located at the top-level directory will be identified by the "/graph.tlp" path while the file "graph.tlp" located in the "data" directory will be identified by "/data/graph.tlp".
+  @note A file called graph.tlp located at the top-level directory will be identified by the "/graph.tlp" path while the file "graph.tlp" located in the "data" directory will be identified by "/data/graph.tlp".
   */
 class TLP_QT_SCOPE TulipProject: public QObject {
   Q_OBJECT
@@ -76,6 +78,7 @@ public:
 
   /**
     @brief Starts a new TulipProject from scratch
+
     This method builds up a new TulipProject file without taking any input.
     @see openProject()
     */
@@ -83,6 +86,7 @@ public:
 
   /**
     @brief Opens a previously saved tulip project file
+
     This method will unpack a tulip project file into some directory and allow the user to manipulate the files.
     @see TulipProject::save()
     @param file The file to open.
@@ -93,6 +97,7 @@ public:
 
   /**
     @brief Restores a project which has already been extracted into path
+
     @warning Using several TulipProject instances on the same directory may result in undefined behavior. This method should only be used for crash handling purposes.
     @param path The path where the archive was previously extracted
     @return a pointer to a TulipProject object.
@@ -102,6 +107,7 @@ public:
 
   /**
     @brief Writes files in the TulipProject into a packed archive.
+
     This method packs every file in the project into a single archive.
     @note This method DOES NOT close the project. It only  commits changes to the specified file. A TulipProject is only closed when destroyed.
     @param file Absolute path where files should be packed.
@@ -112,6 +118,7 @@ public:
 
   /**
     @brief Lists entries in a directory
+
     @see QDir documentation for a complete description of filtering arguments
     @param path The path to scan. @see TulipProject
     @return The list of files and directories present in the given directory
@@ -120,6 +127,7 @@ public:
 
   /**
     @brief Lists entries in a directory
+
     @see QDir documentation for a complete description of filtering arguments
     @param path The path to scan. @see TulipProject
     @return The list of files and directories present in the given directory
@@ -128,6 +136,7 @@ public:
 
   /**
     @brief Checks if the specified file/folder exists
+
     @param path The path to check.
     @return true if the path exists.
     */
@@ -135,6 +144,7 @@ public:
 
   /**
     @brief Recursively creates the specified path.
+
     Created folders will be empty
     @return true if path was successfully created.
     */
@@ -142,6 +152,7 @@ public:
 
   /**
     @brief Checks if the given path is a directory.
+
     @param path The path to check. @see TulipProject
     @return true/false wether the path is a directory.
     */
@@ -149,6 +160,7 @@ public:
 
   /**
     @brief Removes a file from the project.
+
     If the given path points to a directory, or if the file does not exist, this method will fail and return false
     @param path The path to delete. @see TulipProject
     */
@@ -156,6 +168,7 @@ public:
 
   /**
     @brief Removes a directory from the project.
+
     If the given file points to a file, or if the directory does not exist, or if the directory is not empty, this method will fail and return false.
     @see removeAllDir to remove a non-empty directory.
     @param path The path to delete. @see TulipProject
@@ -164,6 +177,7 @@ public:
 
   /**
     @brief Removes a directory and all its content from the project.
+
     If the given file points to a file, or if the directory does not exist, this method will fail and return false.
     @warning This will remove every file stored in the specified directory.
     @param path The path to delete. @see TulipProject
@@ -172,6 +186,7 @@ public:
 
   /**
     @brief Copies a file from the local filesystem into the project
+
     @param source The absolute path of the file to copy
     @param destination The project path where to copy the file
     @return false if copy failed
@@ -180,6 +195,7 @@ public:
 
   /**
     @brief Creates a empty file
+
     This method is similar to the UNIX's touch shell command. Except it won't renew the file's creation date if the file already exists.
     @param file the file to create
     @return true if file creation was sucessful.
@@ -188,6 +204,7 @@ public:
 
   /**
     @brief Gets a STL file stream (R/W access mode) to the given path.
+
     @warning This method does not check if the given path is a directory or a file. User might get an invalid filestream.
     @param path The path to open. @see TulipProject
     @return an opened filestream on the given path.
@@ -196,6 +213,7 @@ public:
 
   /**
     @brief Gets a Qt I/O device (R/W access mode) to the given path.
+
     @warning This method does not check if the given path is a directory or a file. User might get an invalid filestream.
     @warning User SHOULD NOT cast the QIODevice returned by this method into any of its subclass since the implementation might change in future versions.
     @param path The path to open. @see TulipProject
@@ -205,6 +223,7 @@ public:
 
   /**
     @brief Returns the last error raised.
+
     @note The returned string is null if no error was raised.
     */
   QString lastError() const {
@@ -213,6 +232,7 @@ public:
 
   /**
     @brief Check if the object is a valid TulipProject.
+
     @warning Calling methods on invalid TulipProject instances may result in undefined behavior.
     */
   bool isValid() const {
@@ -221,6 +241,7 @@ public:
 
   /**
     @brief Return the archive file associated with this project.
+
     If the project has been opened from an existing file or if the write method has already been called, this method will return the last file path specified.
     In other cases, this method will return an empty string.
     */
@@ -230,6 +251,7 @@ public:
 
   /**
     @brief This method returns the real absolute path corresponding to / in the TulipProject.
+
     This can be used to create a TulipProject directly from a path.
     @warning Using several TulipProject instances at the same time on the same path may result in undefined behavior.
     */
@@ -240,28 +262,41 @@ public:
     @brief the name of the project
     */
   Q_PROPERTY(QString name READ name WRITE setName)
+  /**
+   * @see name
+   */
   QString name() const;
 
   /**
     @brief User-written description of the project
     */
   Q_PROPERTY(QString description READ description WRITE setDescription)
+  /**
+   * @see description
+   */
   QString description() const;
 
   /**
     @brief Name of the author
     */
   Q_PROPERTY(QString author READ author WRITE setAuthor)
+  /**
+   * @see author
+   */
   QString author() const;
 
   /**
-    @brief name of the perspective associated to the project.
-    When user open a project from Tulip, this porperty is first read to identify find kind of perspective plugin should be launched to
+    @brief Name of the perspective associated to the project.
+
+    When the user open a project from Tulip, this porperty is first read to identify find kind of perspective plugin should be launched to
     open the project
 
     @warning If the perspective name associated to the project is invalid or correspond to a missing plugin, tulip may not be able to open the file.
     */
   Q_PROPERTY(QString perspective READ perspective WRITE setPerspective)
+  /**
+   * @see perspective
+   */
   QString perspective() const;
 
   /**
@@ -277,9 +312,21 @@ public:
   QString toAbsolutePath(const QString &relativePath);
 
 public slots:
+  /**
+   * @see name
+   */
   void setName(const QString &);
+  /**
+   * @see description
+   */
   void setDescription(const QString &);
+  /**
+   * @see author
+   */
   void setAuthor(const QString &);
+  /**
+   * @see perspective
+   */
   void setPerspective(const QString &);
 
 private:

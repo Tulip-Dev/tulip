@@ -662,22 +662,6 @@ background-color: rgba(255,255,255,100);
    </hints>
   </connection>
   <connection>
-   <sender>screenshotButton</sender>
-   <signal>clicked()</signal>
-   <receiver>QuickAccessBar</receiver>
-   <slot>takeSnapshot()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>15</x>
-     <y>16</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>549</x>
-     <y>17</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>showEdgesToggle</sender>
    <signal>clicked(bool)</signal>
    <receiver>QuickAccessBar</receiver>
@@ -717,6 +701,22 @@ background-color: rgba(255,255,255,100);
    <hints>
     <hint type="sourcelabel">
      <x>605</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>screenshotButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>takeSnapshot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
      <y>16</y>
     </hint>
     <hint type="destinationlabel">

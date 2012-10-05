@@ -25,7 +25,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup clustering */
-/*@{*/
+
 class HierarchicalClustering:public tlp::Algorithm {
 public:
   PLUGININFORMATIONS("Hierarchical","David Auber","27/01/2000","Alpha","1.0", "Clustering")
@@ -37,7 +37,7 @@ public:
 private :
   bool split (tlp::DoubleProperty*, std::list<tlp::node> &);
 };
-/*@}*/
+
 
 #endif
 

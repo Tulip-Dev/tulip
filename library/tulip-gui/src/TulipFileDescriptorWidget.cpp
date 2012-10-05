@@ -54,10 +54,10 @@ void TulipFileDescriptorWidget::browse() {
     _data.absolutePath = result;
 
   setData(_data);
-  QKeyEvent* ev1 = new QKeyEvent(QEvent::KeyPress,Qt::Key_Enter,Qt::NoModifier);
-  QKeyEvent* ev2 = new QKeyEvent(QEvent::KeyRelease,Qt::Key_Enter,Qt::NoModifier);
-  QApplication::sendEvent(_display,ev1);
-  QApplication::sendEvent(_display,ev2);
+  QKeyEvent ev1(QEvent::KeyPress,Qt::Key_Enter,Qt::NoModifier);
+  QKeyEvent ev2(QEvent::KeyRelease,Qt::Key_Enter,Qt::NoModifier);
+  QApplication::sendEvent(_display,&ev1);
+  QApplication::sendEvent(_display,&ev2);
 }
 
 void TulipFileDescriptorWidget::setData(TulipFileDescriptor desc) {

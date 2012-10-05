@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLLINE_H
 #define GLLINE_H
@@ -31,11 +33,9 @@
 #include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
+
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * \brief This is a general class to render an OpenGL laine
  * This class is use to render an OpenGl line
  */
@@ -116,9 +116,10 @@ protected:
   unsigned char factor;
   unsigned int pattern;
 };
-/*@}*/
+
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif
+///@endcond

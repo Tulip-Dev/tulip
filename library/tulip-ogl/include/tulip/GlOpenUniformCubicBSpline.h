@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -17,6 +17,7 @@
  *
  */
 
+
 #ifndef GLUNIFORMCUBICBSPLINE_H_
 #define GLUNIFORMCUBICBSPLINE_H_
 
@@ -26,30 +27,34 @@
 namespace tlp {
 
 /**
- * \brief A class to draw open uniform cubic B-splines
+ * @ingroup OpenGL
+ * @brief A class to draw open uniform cubic B-splines
  *
- *  A B-spline is a convenient form for representing complicated, smooth curves. A cubic uniform B-spline is a
- *  piecewise collection of cubic Bézier curves, connected end to end. A cubic B-spline is C^2 continuous, meaning there is no discontinuities in curvature.
- *  B-splines have local control : parameters of a B-spline only affect a small part of the entire spline.
- *  A B-spline is qualified as open when it passes through its first and last control points.
+ * A B-spline is a convenient form for representing complicated, smooth curves. A cubic uniform B-spline is a
+ * piecewise collection of cubic Bezier curves, connected end to end. A cubic B-spline is C^2 continuous, meaning there is no discontinuities in curvature.
+ * B-splines have local control : parameters of a B-spline only affect a small part of the entire spline.
+ * A B-spline is qualified as open when it passes through its first and last control points.
  *
  */
 class TLP_GL_SCOPE GlOpenUniformCubicBSpline : public AbstractGlCurve {
 
 public:
 
-
+  /**
+   * @brief Constructor
+   * @warning Don't use it, see other construstor
+   */
   GlOpenUniformCubicBSpline();
 
   /**
-   * GlOpenUniformCubicBSpline constructor
+   * @brief GlOpenUniformCubicBSpline constructor
    *
-   * \param controlPoints a vector of control points (size must be greater or equal to 4)
-   * \param startColor the color at the start of the curve
-   * \param endColor the color at the end of the curve
-   * \param startSize the width at the start of the curve
-   * \param endSize the width at the end of the curve
-   * \param nbCurvePoints the number of curve points to generate
+   * @param controlPoints a vector of control points (size must be greater or equal to 4)
+   * @param startColor the color at the start of the curve
+   * @param endColor the color at the end of the curve
+   * @param startSize the width at the start of the curve
+   * @param endSize the width at the end of the curve
+   * @param nbCurvePoints the number of curve points to generate
   */
   GlOpenUniformCubicBSpline(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
                             const float startSize, const float endSize, const unsigned int nbCurvePoints = 200);

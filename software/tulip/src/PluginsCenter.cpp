@@ -52,11 +52,11 @@ PluginsCenter::PluginsCenter(QWidget *parent): QWidget(parent), _ui(new Ui::Plug
   _ui->setupUi(this);
 
   QStringList remoteLocs = TulipSettings::instance().remoteLocations();
-  _ui->stableCheck->setChecked(remoteLocs.contains(STABLE_LOCATION));
-  _ui->testingCheck->setChecked(remoteLocs.contains(TESTING_LOCATION));
+  _ui->stableCheck->setChecked(remoteLocs.contains(PluginManager::STABLE_LOCATION));
+  _ui->testingCheck->setChecked(remoteLocs.contains(PluginManager::TESTING_LOCATION));
 
   foreach(QString s,remoteLocs) {
-    if (s != STABLE_LOCATION && s != TESTING_LOCATION)
+    if (s != PluginManager::STABLE_LOCATION && s != PluginManager::TESTING_LOCATION)
       _ui->remoteLocationsList->addItem(s);
   }
 }
@@ -210,16 +210,16 @@ void PluginsCenter::itemFocused() {
 
 void PluginsCenter::testingChecked(bool f) {
   if (f)
-    TulipSettings::instance().addRemoteLocation(TESTING_LOCATION);
+    TulipSettings::instance().addRemoteLocation(PluginManager::TESTING_LOCATION);
   else
-    TulipSettings::instance().removeRemoteLocation(TESTING_LOCATION);
+    TulipSettings::instance().removeRemoteLocation(PluginManager::TESTING_LOCATION);
 }
 
 void PluginsCenter::stableChecked(bool f) {
   if (f)
-    TulipSettings::instance().addRemoteLocation(STABLE_LOCATION);
+    TulipSettings::instance().addRemoteLocation(PluginManager::STABLE_LOCATION);
   else
-    TulipSettings::instance().removeRemoteLocation(STABLE_LOCATION);
+    TulipSettings::instance().removeRemoteLocation(PluginManager::STABLE_LOCATION);
 }
 
 void PluginsCenter::repoAdded() {

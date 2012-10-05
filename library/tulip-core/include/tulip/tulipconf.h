@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPCONF_H
 #define TULIPCONF_H
 #include <QtCore/QDebug>
@@ -39,15 +41,17 @@
 
 #if defined(_MSC_VER)
 // disable some annoying Visual Studio warnings
-#pragma warning(disable: 4251)
-#pragma warning(disable: 4275)
-#pragma warning(disable: 4244)
-#pragma warning(disable: 4355)
-#pragma warning(disable: 4800)
-#pragma warning(disable: 4503)
-// disable deprecated warnings when compiling the tulip dlls
+#pragma warning(disable: 4251) //member is not dllexport
+#pragma warning(disable: 4275) //base class is not dllexport
+#pragma warning(disable: 4244) //conversion to (or from) smaller integer type
+#pragma warning(disable: 4355) //'this' pointer used in initializer list
+#pragma warning(disable: 4800) //non-bool value coerced into bool (e.g. bool a = 5;)
+#pragma warning(disable: 4503) //decorated name too long, truncated
+#pragma warning(disable: 4344) //template specialisation results in different function being called (getProperty<>)
+// disable deprecated warnings when compiling the tulip dlls, as MSVC is overly verbose with deprecation
+// (even if a deprecated function is not used, warnings are issued)
 #if defined(DLL_TULIP) || defined(DLL_TULIP_GL) || defined(DLL_TULIP_QT) || defined(DLL_TULIP_QT2)
-#pragma warning(disable: 4996)
+#pragma warning(disable: 4996) //deprecated functions
 #endif
 //MSVC 2010 has a different keyword for typeof, and deprecated
 #  if _MSC_VER >= 1600
@@ -84,6 +88,14 @@ static double floor(unsigned int i) {
 
 static double round(double d) {
   return floor(d + 0.5);
+}
+
+static double fabs(int i) {
+  return fabs((double)i);
+}
+
+static float strtof(const char* cptr, char** endptr) {
+  return strtod(cptr, endptr);
 }
 
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //MSVC has a different name for pretty_function
@@ -162,3 +174,4 @@ static double round(double d) {
 QDebug TLP_SCOPE operator<<(QDebug,const std::string&);
 
 #endif //TULIPCONF_H
+///@endcond

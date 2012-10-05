@@ -31,6 +31,7 @@ struct MyGraphicsView: public QGraphicsView {
   QGraphicsItem* _centralItem;
 
   MyGraphicsView(): QGraphicsView(new QGraphicsScene()), _centralItem(NULL) {
+      setAcceptDrops(false);
   }
 
   void resizeEvent(QResizeEvent *event) {
@@ -52,9 +53,9 @@ struct MyGraphicsView: public QGraphicsView {
       scene()->update();
 
     // Hack : send a mouse event to force redraw of the scene (otherwise artifacts was displayed when maximizing or minimizing the graphics view)
-    QMouseEvent *eventModif = new QMouseEvent(QEvent::MouseMove,QPoint(size().width()/2, size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
-    QApplication::sendEvent(this, eventModif);
-  }
+    QMouseEvent eventModif(QEvent::MouseMove,QPoint(size().width()/2, size().height()/2), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+    QApplication::sendEvent(this, &eventModif);
+  }  
 };
 
 static QGLFormat GlInit() {
@@ -88,8 +89,7 @@ QGraphicsView* ViewWidget::graphicsView() const {
 void ViewWidget::setupUi() {
   _graphicsView = new MyGraphicsView();
   _graphicsView->setFrameStyle(QFrame::NoFrame);
-  _graphicsView->scene()->setBackgroundBrush(Qt::green);
-  _graphicsView->installEventFilter(this);
+  _graphicsView->scene()->setBackgroundBrush(Qt::green);  
   setupWidget();
   assert(_centralWidget);
 }
@@ -98,9 +98,12 @@ void ViewWidget::currentInteractorChanged(tlp::Interactor *i) {
   i->install(_centralWidget);
 }
 
+void ViewWidget::graphDeleted(Graph *parentGraph) {
+  setGraph(parentGraph);
+}
+
 void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
   assert(w);
-  w->setAcceptDrops(true);
   QGraphicsItem *oldCentralItem = _centralWidgetItem;
   QWidget *oldCentralWidget = _centralWidget;
 

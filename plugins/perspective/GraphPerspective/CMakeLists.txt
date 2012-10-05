@@ -6,6 +6,7 @@ src/AlgorithmRunner.cpp
 src/AlgorithmRunnerItem.cpp
 src/ControlFrame.cpp
 src/ExpandableGroupBox.cpp
+src/ExportWizard.cpp
 src/GraphPerspectiveLogger.cpp
 src/FiltersManager.cpp
 src/FiltersManagerItem.cpp
@@ -41,6 +42,7 @@ designer/GraphHierarchiesEditor.ui
 designer/GraphPerspectiveMainWindow.ui
 designer/HeaderFrame.ui
 designer/ImportWizard.ui
+designer/ExportWizard.ui
 designer/PanelSelectionWizard.ui
 designer/PreferencesDialog.ui
 designer/SearchWidget.ui
@@ -50,6 +52,7 @@ QT4_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/AlgorithmRunnerItem.h
 include/ExpandableGroupBox.h
+include/ExportWizard.h
 include/FiltersManager.h
 include/FiltersManagerItem.h
 include/AbstractFiltersManagerItem.h

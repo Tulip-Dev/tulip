@@ -33,11 +33,11 @@ using namespace std;
 using namespace tlp;
 
 Random::Random(const tlp::PluginContext* context):LayoutAlgorithm(context) {
-  addInParameter<bool>("3D layout", paramHelp[0], "true");
+  addInParameter<bool>("3D layout", paramHelp[0], "false");
 }
 
 bool Random::run() {
-  bool is3D = true ;
+  bool is3D = false ;
 
   if ( dataSet!=NULL ) {
     dataSet->get("3D layout", is3D);
@@ -57,9 +57,4 @@ bool Random::run() {
 
   delete itN;
   return true;
-}
-
-bool Random::check(std::string &erreurMsg) {
-  erreurMsg="";
-  return (true);
 }

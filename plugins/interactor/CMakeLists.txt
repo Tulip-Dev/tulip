@@ -36,6 +36,10 @@ ADD_LIBRARY(InteractorEditEdgeBends-${TulipVersion} SHARED InteractorEditEdgeBen
 TARGET_LINK_LIBRARIES(InteractorEditEdgeBends-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(InteractorDeleteElement-${TulipVersion} SHARED InteractorDeleteElement.cpp)
+TARGET_LINK_LIBRARIES(InteractorDeleteElement-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS InteractorNavigation-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorNavigation)
 INSTALL(TARGETS InteractorGetInformation-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorGetInformation)
 INSTALL(TARGETS InteractorSelection-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorSelection)
@@ -44,3 +48,4 @@ INSTALL(TARGETS InteractorRectangleZoom-${TulipVersion} DESTINATION ${TulipPlugi
 INSTALL(TARGETS InteractorAddNode-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorAddNode)
 INSTALL(TARGETS InteractorAddEdge-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorAddEdge)
 INSTALL(TARGETS InteractorEditEdgeBends-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorEditEdgeBends)
+INSTALL(TARGETS InteractorDeleteElement-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT InteractorDeleteElement)

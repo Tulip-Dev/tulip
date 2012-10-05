@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 //@TLPGEOLICENCE#
 
 #ifndef _TLP_VECTORCAST_H
@@ -30,11 +32,7 @@
 
 namespace tlp {
 /**
- * \addtogroup basic
- */
-
-/*@{*/
-/**
+ * @ingroup Structures
  * \brief class for mathematical vector
  *
  * Enables to create a Vector of Obj with a
@@ -115,7 +113,8 @@ public:
 
 
 
-/*@}*/
+
 }
 
 #endif
+///@endcond

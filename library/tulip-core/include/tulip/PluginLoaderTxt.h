@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,12 +16,17 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef TLP_PLUGINLOADERTXT
 #define TLP_PLUGINLOADERTXT
 #include <tulip/PluginLoader.h>
 
 namespace tlp {
 
+/**
+ * @ingroup Plugins
+ * @brief A simple implementation of tlp::PluginLoader to display load state into the console
+ */
 struct TLP_SCOPE PluginLoaderTxt:public PluginLoader {
   virtual void start(const std::string &path);
   virtual void loading(const std::string &filename);

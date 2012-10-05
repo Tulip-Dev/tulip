@@ -32,6 +32,7 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GlGraphComposite.h>
 
 using namespace std;
 
@@ -41,9 +42,7 @@ ExtendedMetaNodeRenderer::ExtendedMetaNodeRenderer(GlGraphInputData *inputData):
 }
 
 ExtendedMetaNodeRenderer::~ExtendedMetaNodeRenderer() {
-  for(map<Graph *,GlMainView *>::iterator it=metaGraphToViewMap.begin(); it!=metaGraphToViewMap.end(); ++it) {
-    delete (*it).second;
-  }
+  clearViews();
 }
 
 void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
@@ -61,17 +60,8 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
     view=metaGraphToViewMap[metaGraph];
   }
   else {
-    view=new NodeLinkDiagramComponent;
-    //view->setOverviewVisible(false);
-    view->setupUi();
-    view->setGraph(metaGraph);
-    view->setOverviewVisible(false);
-    DataSet dataSet;
-    dataSet.set("overviewVisible",false);
-    view->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator());
-    view->setState(dataSet);
+    view = createView(metaGraph);
     metaGraphToViewMap[metaGraph]=view;
-
     metaGraph->addListener(this);
   }
 
@@ -111,6 +101,9 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
   viewport[2]*=2;
   viewport[3]*=2;
 
+  if(viewport[2]==0 || viewport[3]==0)
+    return;
+
   view->getGlMainWidget()->resizeGL(camera->getViewport()[2],camera->getViewport()[3]);
   scene->setViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
 
@@ -120,6 +113,7 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
   float baseNorm=(scene->getGraphLayer()->getCamera().getEyes()-scene->getGraphLayer()->getCamera().getCenter()).norm();
   Camera newCamera=scene->getGraphLayer()->getCamera();
   Camera *oldCamera=new Camera(scene,true);
+  newCamera.setScene(scene);
   *oldCamera=newCamera;
   newCamera.setScene(scene);
   newCamera.setUp(camera->getUp());
@@ -137,6 +131,32 @@ void ExtendedMetaNodeRenderer::render(node n,float,Camera* camera) {
   camera->initGl();
 }
 
+GlMainView* ExtendedMetaNodeRenderer::createView(Graph* metaGraph)const {
+  GlMainView* view=new NodeLinkDiagramComponent;
+  view->setupUi();
+  view->setGraph(metaGraph);
+  view->setOverviewVisible(false);
+  DataSet dataSet;
+  dataSet.set("overviewVisible",false);
+  view->getGlMainWidget()->getScene()->setCalculator(new GlCPULODCalculator());
+  view->setState(dataSet);
+  bool viewMetaLabels = inputData->renderingParameters()->isViewMetaLabel();//Checks if user want to see metanode labels
+  view->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(viewMetaLabels);
+  view->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(viewMetaLabels);
+  return view;
+}
+
+GlMainView* ExtendedMetaNodeRenderer::viewForGraph(Graph* metaGraph)const {
+  std::map<Graph *,GlMainView *>::const_iterator it = metaGraphToViewMap.find(metaGraph);
+
+  if(it  != metaGraphToViewMap.end()) {
+    return it->second;
+  }
+  else {
+    return NULL;
+  }
+}
+
 void ExtendedMetaNodeRenderer::treatEvent(const Event &e) {
   if(e.type() == Event::TLP_DELETE) {
     delete metaGraphToViewMap[(Graph*)(e.sender())];
@@ -144,4 +164,14 @@ void ExtendedMetaNodeRenderer::treatEvent(const Event &e) {
   }
 }
 
+void ExtendedMetaNodeRenderer::clearViews() {
+  for(map<Graph *,GlMainView *>::iterator it=metaGraphToViewMap.begin(); it!=metaGraphToViewMap.end(); ++it) {
+    delete (*it).second;
+  }
+
+  metaGraphToViewMap.clear();
 }
+
+}
+
+

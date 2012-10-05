@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup clustering */
-/*@{*/
+
 class QuotientClustering:public tlp::Algorithm {
 public:
   PLUGININFORMATIONS("Quotient Clustering","David Auber","13/06/2001","OK","1.3", "Clustering")
@@ -32,7 +32,7 @@ public:
   bool check(std::string &);
   void reset();
 };
-/*@}*/
+
 #endif
 
 

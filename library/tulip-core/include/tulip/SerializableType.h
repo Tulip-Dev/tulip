@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef SERIALIZABLETYPE_H
 #define SERIALIZABLETYPE_H
@@ -127,3 +129,4 @@ public:
 }
 
 #endif // SERIALIZABLETYPE_H
+///@endcond

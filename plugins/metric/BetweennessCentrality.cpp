@@ -44,7 +44,7 @@ static const char * paramHelp[] = {
 };
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugin is an implementation of betweeness centrality parameter.
  *  (see http://en.wikipedia.org/wiki/Centrality#Betweenness_centrality for more details)
  *
@@ -203,5 +203,5 @@ public:
     return pluginProgress->state()!=TLP_CANCEL;
   }
 };
-/*@}*/
+
 PLUGIN(BetweennessCentrality)

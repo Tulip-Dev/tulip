@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MOUSEZOOMBOX_H
 #define MOUSEZOOMBOX_H
 
@@ -27,8 +29,7 @@ class QKeyEvent;
 namespace tlp {
 
 class Graph;
-/** \addtogroup Mouse_interactor */
-/*@{*/
+
 class TLP_QT_SCOPE MouseBoxZoomer : public GLInteractorComponent {
 private:
   Qt::MouseButton mButton;
@@ -48,7 +49,8 @@ private:
   bool started;
   Graph *graph;
 };
-/*@}*/
+
 
 }
 #endif //MOUSEZOOMBOX_H
+///@endcond

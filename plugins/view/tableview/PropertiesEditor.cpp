@@ -83,17 +83,32 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
 
 void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   _contextProperty = _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface*>();
+  _contextPropertyList.clear();
+  foreach(QModelIndex sidx, _ui->tableView->selectionModel()->selectedRows()) {
+    _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface*>();
+  }
 
   if (_contextProperty == NULL)
     return;
 
+  QString pname = _contextProperty->getName().c_str();
+
+  if (pname.length()>30) {
+    pname.truncate(30);
+    pname+= "...";
+  }
+
   QMenu menu;
   connect(menu.addAction(trUtf8("Check all")),SIGNAL(triggered()),this,SLOT(checkAll()));
   connect(menu.addAction(trUtf8("Uncheck all")),SIGNAL(triggered()),this,SLOT(unCheckAll()));
-  connect(menu.addAction(trUtf8("Uncheck all except \"") + _contextProperty->getName().c_str() + "\""),SIGNAL(triggered()),this,SLOT(unCheckAllExcept()));
+  connect(menu.addAction(trUtf8("Uncheck all except \"") + pname + "\""),SIGNAL(triggered()),this,SLOT(unCheckAllExcept()));
   menu.addSeparator();
   connect(menu.addAction(trUtf8("Set all nodes")),SIGNAL(triggered()),this,SLOT(setAllNodes()));
   connect(menu.addAction(trUtf8("Set all edges")),SIGNAL(triggered()),this,SLOT(setAllEdges()));
+  menu.addSeparator();
+  connect(menu.addAction(trUtf8("Map visible items to graph")),SIGNAL(triggered()),this,SIGNAL(mapToGraphSelection()));
+  connect(menu.addAction(trUtf8("Set displayed nodes")),SIGNAL(triggered()),this,SIGNAL(setFilteredNodes()));
+  connect(menu.addAction(trUtf8("Set displayed edges")),SIGNAL(triggered()),this,SIGNAL(setFilteredEdges()));
   menu.addSeparator();
   connect(menu.addAction(trUtf8("To labels")),SIGNAL(triggered()),this,SLOT(toLabels()));
   connect(menu.addAction(trUtf8("To labels (nodes only)")),SIGNAL(triggered()),this,SLOT(toNodesLabels()));
@@ -102,7 +117,15 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
   connect(menu.addAction(trUtf8("New")),SIGNAL(triggered()),this,SLOT(newProperty()));
   QAction* delAction = menu.addAction(trUtf8("Delete"));
-  delAction->setEnabled(!Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str()));
+  bool enabled = true;
+  foreach(PropertyInterface* pi, _contextPropertyList) {
+    if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str())) {
+      enabled = false;
+      break;
+    }
+  }
+  delAction->setEnabled(enabled);
+
   connect(delAction,SIGNAL(triggered()),this,SLOT(delProperty()));
   menu.addSeparator();
   menu.addAction(trUtf8("Cancel"));
@@ -128,54 +151,27 @@ void PropertiesEditor::unCheckAllExcept() {
   }
 }
 
-QDialog* editDialog(QWidget* w, QWidget* parent) {
-  QDialog* dlg = new QDialog(parent);
-  QVBoxLayout* layout = new QVBoxLayout;
-  dlg->setLayout(layout);
-  layout->addWidget(w);
-  QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel|QDialogButtonBox::Ok,Qt::Horizontal);
-  layout->addWidget(buttonBox);
-  QObject::connect(buttonBox,SIGNAL(accepted()),dlg,SLOT(accept()));
-  QObject::connect(buttonBox,SIGNAL(rejected()),dlg,SLOT(reject()));
-  return dlg;
+void PropertiesEditor::showSystemProperties(bool f) {
+  if (f)
+    static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
+  else
+    static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp("^(?!view).*");
 }
 
 void PropertiesEditor::setAllNodes() {
-  QVariant defaultValue = GraphModel::nodeDefaultValue(_contextProperty);
-  TulipItemEditorCreator* creator = _delegate->creator(defaultValue.userType());
-  QWidget* w = creator->createWidget(Perspective::instance()->mainWindow());
-  creator->setEditorData(w,defaultValue,_graph);
-
-  QDialog* dlg = dynamic_cast<QDialog*>(w);
-
-  if (dlg == NULL) {
-    dlg = editDialog(w,Perspective::instance()->mainWindow());
-    dlg->setWindowTitle(QString::fromUtf8(_contextProperty->getName().c_str()) + trUtf8(": Set all nodes values"));
-  }
-
-  if (dlg->exec() == QDialog::Accepted) {
-    _graph->push();
-    GraphModel::setAllNodeValue(_contextProperty,creator->editorData(w,_graph));
-  }
-
-  delete dlg;
+  QVariant val = TulipItemDelegate::showEditorDialog(NODE,_contextProperty,_graph,static_cast<TulipItemDelegate*>(_delegate));
+  Observable::holdObservers();
+  _graph->push();
+  GraphModel::setAllNodeValue(_contextProperty,val);
+  Observable::unholdObservers();
 }
 
 void PropertiesEditor::setAllEdges() {
-  QVariant defaultValue = GraphModel::edgeDefaultValue(_contextProperty);
-  TulipItemEditorCreator* creator = _delegate->creator(defaultValue.userType());
-  QWidget* w = creator->createWidget(Perspective::instance()->mainWindow());
-  creator->setEditorData(w,defaultValue,_graph);
-
-  QDialog* dlg = editDialog(w,Perspective::instance()->mainWindow());
-  dlg->setWindowTitle(QString::fromUtf8(_contextProperty->getName().c_str()) + trUtf8(": Set all edges values"));
-
-  if (dlg->exec() == QDialog::Accepted) {
-    _graph->push();
-    GraphModel::setAllEdgeValue(_contextProperty,creator->editorData(w,_graph));
-  }
-
-  delete dlg;
+  QVariant val = TulipItemDelegate::showEditorDialog(EDGE,_contextProperty,_graph,static_cast<TulipItemDelegate*>(_delegate));
+  Observable::holdObservers();
+  _graph->push();
+  GraphModel::setAllEdgeValue(_contextProperty,val);
+  Observable::unholdObservers();
 }
 
 void PropertiesEditor::copyProperty() {
@@ -247,7 +243,8 @@ void PropertiesEditor::newProperty() {
 }
 
 void PropertiesEditor::delProperty() {
-  _contextProperty->getGraph()->delLocalProperty(_contextProperty->getName());
+  foreach(PropertyInterface* pi, _contextPropertyList)
+  pi->getGraph()->delLocalProperty(pi->getName());
 }
 
 void PropertiesEditor::toLabels() {
@@ -269,7 +266,7 @@ void PropertiesEditor::toLabels(bool nodes, bool edges) {
   data.set("input",_contextProperty);
   std::string msg;
   StringProperty* result = _graph->getProperty<StringProperty>("viewLabel");
-  _graph->computeProperty<StringProperty>("To labels",result,msg,NULL,&data);
+  _graph->applyPropertyAlgorithm("To labels",result,msg,NULL,&data);
 }
 
 void PropertiesEditor::checkStateChanged(QModelIndex index,Qt::CheckState state) {
@@ -302,4 +299,8 @@ void PropertiesEditor::showNodes(bool value) {
 
 void PropertiesEditor::showEdges(bool value) {
   _ui->edgesButton->setChecked(value);
+}
+
+PropertyInterface *PropertiesEditor::contextProperty() const {
+  return _contextProperty;
 }

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TLP_GEO_CIRCLE_H
 #define TLP_GEO_CIRCLE_H
 
@@ -23,10 +25,7 @@
 #include <tulip/Vector.h>
 namespace tlp {
 /**
- * \addtogroup basic
- */
-/*@{*/
-/**
+ * @ingroup Structures
  * \brief class for circle
  *
  * Enables to both create and manipulate a circle
@@ -121,7 +120,7 @@ tlp::Circle<Obj, OTYPE> lazyEnclosingCircle(const std::vector< tlp::Circle<Obj, 
  */
 template<typename Obj, typename OTYPE>
 std::ostream& operator<<(std::ostream &os,const tlp::Circle<Obj, OTYPE> &);
-/*@}*/
+
 
 typedef Circle<double, long double> Circled;
 typedef Circle<float,  double> Circlef;
@@ -131,3 +130,4 @@ typedef Circle<int,  double> Circlei;
 
 #include "cxx/Circle.cxx"
 #endif
+///@endcond

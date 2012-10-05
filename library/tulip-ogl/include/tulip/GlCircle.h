@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -17,6 +17,7 @@
  *
  */
 
+
 #ifndef GLCIRCLE_H
 #define GLCIRCLE_H
 
@@ -28,18 +29,18 @@
 namespace tlp {
 
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * \brief General class used to render circles as GlEntity.
+ * @ingroup OpenGL
+ * @brief Class used to render circles as GlEntity.
  *
- * This class is a generic class to render circles as GlEntity.
+ * If you want a circle : use this class
  */
 class TLP_GL_SCOPE GlCircle : public GlRegularPolygon {
 public:
   /**
-   * Constructor
+   * @brief Constructor
+   *
+   * @param startAngle if start angle is equal to 0, the circle construction begin with the top center point
+   * @param segment number of triangle used to render the circle
    */
   GlCircle(const Coord &center = Coord(0,0,0),
            float radius = 1.,
@@ -51,16 +52,16 @@ public:
            unsigned int segments = 10);
 
   /**
-   * Write-acess Accessor to the center, the radius and the startAngle of the circle.
+   * @brief Write-acess Accessor to the center, the radius and the startAngle of the circle.
    */
   void set(const Coord &center, float radius, float startAngle);
 
   /**
-   * Function to export data in XML
+   * @brief Function to export data in XML
    */
   virtual void getXML(std::string &outString);
 };
-/*@}*/
+
 }
 
 #endif

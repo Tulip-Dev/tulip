@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef SIZEEDITOR_H
 #define SIZEEDITOR_H
 
@@ -47,3 +49,4 @@ public slots:
 }
 
 #endif // SIZEEDITOR_H
+///@endcond

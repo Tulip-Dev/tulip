@@ -36,13 +36,14 @@ void Perspective::setInstance(Perspective* p) {
   _instance = p;
 }
 
-Perspective::Perspective(const tlp::PluginContext* c) : _project(NULL), _mainWindow(NULL), _externalFile(QString()), _parameters(QVariantMap()), _agentSocket(NULL) {
+Perspective::Perspective(const tlp::PluginContext* c) : _agentSocket(NULL), _project(NULL), _mainWindow(NULL), _externalFile(QString()), _parameters(QVariantMap()) {
   if(c != NULL) {
     const PerspectiveContext* perspectiveContext = dynamic_cast<const PerspectiveContext*>(c);
     _mainWindow = perspectiveContext->mainWindow;
     _project = perspectiveContext->project;
     _externalFile = perspectiveContext->externalFile;
     _parameters = perspectiveContext->parameters;
+    _perspectiveId = perspectiveContext->id;
 
     if (perspectiveContext->tulipPort != 0) {
       _agentSocket = new QTcpSocket(this);
@@ -52,23 +53,19 @@ Perspective::Perspective(const tlp::PluginContext* c) : _project(NULL), _mainWin
         _agentSocket->deleteLater();
         _agentSocket = NULL;
       }
-    }
 
-#ifndef NDEBUG
+      if (_project != NULL) {
+        notifyProjectLocation(_project->absoluteRootPath());
+      }
+    }
     else {
       qWarning("Perspective running in standalone mode");
     }
-
-#endif
   }
 }
 
 Perspective::~Perspective() {
   delete _project;
-}
-
-bool Perspective::isCompatible(tlp::TulipProject *) {
-  return false;
 }
 
 PluginProgress* Perspective::progress() {
@@ -94,6 +91,7 @@ void Perspective::sendAgentMessage(const QString& msg) {
     return;
 
   _agentSocket->write(msg.toUtf8());
+  _agentSocket->flush();
 }
 
 void Perspective::showPluginsCenter() {
@@ -118,4 +116,8 @@ void Perspective::openProjectFile(const QString &path) {
 
 void Perspective::createPerspective(const QString &name) {
   sendAgentMessage("CREATE_PERSPECTIVE " + name);
+}
+
+void Perspective::notifyProjectLocation(const QString &path) {
+  sendAgentMessage("PROJECT_LOCATION " + QString::number(_perspectiveId) + " " + path);
 }

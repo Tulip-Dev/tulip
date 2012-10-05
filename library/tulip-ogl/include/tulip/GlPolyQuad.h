@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLPOLYQUAD_H_
 #define GLPOLYQUAD_H_
@@ -32,10 +34,7 @@
 namespace tlp {
 
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * \brief General class used to render a connected group of quadrilaterals (textured or not) that shares edges as GlEntity
  *
  * This generic class is used  to render a connected group of quadrilaterals (textured or not) that shares edges as GlEntity
@@ -150,7 +149,8 @@ private :
   int outlineWidth;
   Color outlineColor;
 };
-/*@}*/
+
 
 }
 #endif /* GLPOLYQUAD_H_ */
+///@endcond

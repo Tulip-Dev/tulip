@@ -23,7 +23,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugins assigns id to nodes and edges. The ids are those used by tulip.
  *
  */
@@ -33,7 +33,7 @@ public:
   IdMetric(const tlp::PluginContext* context);
   bool run();
 };
-/*@}*/
+
 
 
 #endif

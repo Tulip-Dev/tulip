@@ -41,7 +41,6 @@ public:
   Random(const tlp::PluginContext* context);
 
   bool run();
-  bool check(std::string& erreurMsg);
 };
 
 #endif

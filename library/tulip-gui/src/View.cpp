@@ -74,12 +74,25 @@ void View::showContextMenu(const QPoint &point,const QPointF &scenePoint) {
   }
 }
 
+void View::undoCallback() {
+  centerView();
+}
+
 Graph* View::graph() const {
   return _graph;
 }
 void View::setGraph(tlp::Graph *g) {
   if (_graph != NULL)
     _graph->removeListener(this);
+
+  bool center = false;
+
+  if (g != _graph) {
+    if (g == NULL)
+      center = true;
+    else if (_graph != NULL && g->getRoot() != _graph->getRoot())
+      center = true;
+  }
 
   _graph = g;
 
@@ -89,6 +102,9 @@ void View::setGraph(tlp::Graph *g) {
     _graph->addListener(this);
 
   emit graphSet(g);
+
+  if (center)
+    centerView();
 }
 
 void View::treatEvent(const Event& ev) {
@@ -96,7 +112,12 @@ void View::treatEvent(const Event& ev) {
 #ifndef NDEBUG
     Graph* old = _graph;
 #endif // NDEBUG
-    graphDeleted();
+
+    if (_graph->getRoot() == _graph)
+      graphDeleted(NULL);
+    else
+      graphDeleted(_graph->getSuperGraph());
+
 #ifndef NDEBUG
 
     if (_graph == old) {

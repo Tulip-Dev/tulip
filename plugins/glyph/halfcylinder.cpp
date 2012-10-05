@@ -38,7 +38,7 @@ using namespace tlp;
  * node property value. If this property has no value, the half cylinder
  * is then colored using the "viewColor" node property value.
  */
-/*@{*/
+
 
 //=================================================================================================
 class HalfCylinder : public Glyph {
@@ -118,4 +118,4 @@ Coord HalfCylinder::getAnchor(const Coord &vector) const {
   return Coord(x,y,z);
 }
 //=================================================================================================
-/*@}*/
+

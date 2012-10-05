@@ -21,7 +21,7 @@
 
 
 /** \addtogroup layout */
-/*@{*/
+
 /** This plugin is an implementation of the planar polyline graph
  *  drawing algorithm, the mixed model algorithm, first published as:
  *
@@ -94,5 +94,5 @@ private:
   tlp::SizeProperty *sizeResult;
   tlp::IntegerProperty *glyphResult;
 };
-/*@}*/
+
 #endif

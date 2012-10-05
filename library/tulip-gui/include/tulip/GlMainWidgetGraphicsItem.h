@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GLMAINWIDGETGRAPHICSITEM_H
 #define GLMAINWIDGETGRAPHICSITEM_H
 
@@ -33,6 +35,7 @@
 namespace tlp {
 class GlMainWidget;
 }
+
 
 namespace tlp {
 class TLP_QT_SCOPE GlMainWidgetGraphicsItem : public QGraphicsObject {
@@ -71,6 +74,10 @@ protected :
   void hoverMoveEvent(QGraphicsSceneHoverEvent * event);
   void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event);
   void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
+  void dragEnterEvent(QGraphicsSceneDragDropEvent *event);
+  void dragLeaveEvent(QGraphicsSceneDragDropEvent *event);
+  void dragMoveEvent(QGraphicsSceneDragDropEvent *event);
+  void dropEvent(QGraphicsSceneDragDropEvent *event);
 
 protected slots:
   void glMainWidgetDraw(GlMainWidget *,bool);
@@ -82,8 +89,10 @@ private :
   bool _graphChanged;
   int width, height;
   unsigned char *renderingStore;
+  QImage _lastImage;
 };
 
 }
 
 #endif // GLMAINWIDGETGRAPHICSITEM_H
+///@endcond

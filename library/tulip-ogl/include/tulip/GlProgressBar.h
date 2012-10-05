@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLPROGRESSBAR_H_
 #define GLPROGRESSBAR_H_
@@ -68,3 +70,4 @@ private :
 
 }
 #endif /* GLPROGRESSBAR_H_ */
+///@endcond

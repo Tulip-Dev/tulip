@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -18,6 +18,7 @@
  */
 
 
+
 #ifndef GLCATMULLROMCURVE_H_
 #define GLCATMULLROMCURVE_H_
 
@@ -29,7 +30,8 @@ namespace tlp {
 
 
 /**
- * \brief A class to draw a Catmull-Rom curve
+ * @ingroup OpenGL
+ * @brief A class to draw a Catmull-Rom curve
  *
  * This class allow to draw a Catmull-Rom curve, a smooth curve which passes through all its control points.
  * Catmull-Rom splines are a family of cubic interpolating splines formulated such that the tangent at each
@@ -46,16 +48,16 @@ public :
   GlCatmullRomCurve();
 
   /**
-   * GlCatmullRomCurve constructor
+   * @brief GlCatmullRomCurve constructor
    *
-   * \param controlPoints a vector of control points (size must be greater or equal to 4)
-   * \param startColor the color at the start of the curve
-   * \param endColor the color at the end of the curve
-   * \param startSize the width at the start of the curve
-   * \param endSize the width at the end of the curve
-   * \param closedCurve if true, the curve will be closed and a bezier segment will be drawn between the last and first control point
-   * \param paramType curve parameterization type (GlCatmullRomCurve::UNIFORM | GlCatmullRomCurve::CENTRIPETAL | GlCatmullRomCurve::CHORD_LENGTH (default))
-   * \param nbCurvePoints the number of curve points to generate
+   * @param controlPoints a vector of control points (size must be greater or equal to 4)
+   * @param startColor the color at the start of the curve
+   * @param endColor the color at the end of the curve
+   * @param startSize the width at the start of the curve
+   * @param endSize the width at the end of the curve
+   * @param closedCurve if true, the curve will be closed and a bezier segment will be drawn between the last and first control point
+   * @param paramType curve parameterization type (GlCatmullRomCurve::UNIFORM | GlCatmullRomCurve::CENTRIPETAL | GlCatmullRomCurve::CHORD_LENGTH (default))
+   * @param nbCurvePoints the number of curve points to generate
    */
   GlCatmullRomCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
                     const float startSize, const float endSize, const bool closedCurve = false,

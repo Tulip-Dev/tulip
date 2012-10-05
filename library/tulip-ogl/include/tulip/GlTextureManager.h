@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLTEXTUREMANAGER_H
 #define Tulip_GLTEXTUREMANAGER_H
 
@@ -31,20 +33,11 @@
 
 namespace tlp {
 
-class OpenGlErrorViewer;
-
 struct GlTexture {
   GLuint *id;
   int height;
   int width;
   unsigned int spriteNumber;
-};
-
-struct TextureInfo {
-  bool hasAlpha;
-  unsigned int  width;
-  unsigned int  height;
-  unsigned char *data;
 };
 
 /** \brief Class to manage textures
@@ -72,15 +65,6 @@ public:
   }
 
   /**
-   * Change the error viewer and return the old one
-   */
-  OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer) {
-    OpenGlErrorViewer *oldErrorViewer=this->errorViewer;
-    this->errorViewer=errorViewer;
-    return oldErrorViewer;
-  }
-
-  /**
    * Change the current OpenGl context (each OpenGl window have a different OpenGl context)
    */
   void changeContext(unsigned long context);
@@ -98,11 +82,6 @@ public:
    * Check if a texture fo the given name exists in the current context
    */
   bool existsTexture(const std::string& filename);
-
-  /**
-   * Load texture with textureName from Raw data
-   */
-  bool loadTextureFromRawData(const std::string &textureName, int width, int height, bool hasAlpha, unsigned char *data);
   /**
    * Load texture with given name
    */
@@ -165,11 +144,7 @@ private:
    */
   GlTextureManager();
 
-  bool loadTexture(const std::string&,const TextureInfo &,GlTexture &);
-
   static GlTextureManager* inst;
-
-  OpenGlErrorViewer *errorViewer;
 
   unsigned long currentContext;
 
@@ -183,3 +158,4 @@ private:
 }
 
 #endif // Tulip_GLTEXTUREMANAGER_H
+///@endcond
