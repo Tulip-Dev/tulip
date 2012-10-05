@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 
 #ifndef _Tulip_GLGRID_H_
@@ -31,57 +30,58 @@
 #include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
-/** \brief General class used to render grids as augmented displays.
+/**
+ * @ingroup OpenGL
+ * @brief General class used to render grids as GlSimpleEntity.
  *
- * This class is a generic class to render grids as augmented displays.
- * It does not uses the basic parameters of the GlAugmentedDisplay(position and color).
  */
 class TLP_GL_SCOPE GlGrid : public GlSimpleEntity {
 
 public:
 
   /**
-   * Constructor
+   * @brief Constructor
+   * @warning Don't use this constructor : see other constructor
    */
   GlGrid() {}
 
   /**
-   * Constructor
+   * @brief Constructor
    *
-   * \param frontTopLeft The minimum of the bounding box of the grid.
-   * \param backBottomRight The maximum of the bounding box of the grid.
-   * \param cell The size of a single cell of the grid.
-   * \param color The color of the lines of the grid.
-   * \param displays The dimensions of the grid to display.
-   * \param hollowGrid Indicates if the grid chould be hollowed.
+   * @param frontTopLeft The minimum of the bounding box of the grid.
+   * @param backBottomRight The maximum of the bounding box of the grid.
+   * @param cell The size of a single cell of the grid.
+   * @param color The color of the lines of the grid.
+   * @param displays The dimensions of the grid to display.
+   * @param hollowGrid Indicates if the grid chould be hollowed.
    */
   GlGrid(const Coord& frontTopLeft, const Coord& backBottomRight,
          const Size& cell, const Color& color, bool displays[3]);
   /**
-   * Virtual function used to draw the grid.
+   * @brief Virtual function used to draw the grid.
    */
   virtual void draw(float lod,Camera *camera);
   /**
-   * Accessor in reading to the dimensions to display.
+   * @brief Accessor in reading to the dimensions to display.
    */
   void getDisplayDim(bool displayDim[3]) const;
   /**
-   * Accessor in writing to the dimensions to display.
+   * @brief Accessor in writing to the dimensions to display.
    */
   void setDisplayDim(bool displayDim[3]);
 
   /**
-   * Translate entity
+   * @brief Translate entity
    */
   virtual void translate(const Coord& mouvement);
 
   /**
-   * Function to export data in outString (in XML format)
+   * @brief Function to export data in outString (in XML format)
    */
   virtual void getXML(std::string &outString);
 
   /**
-   * Function to set data with inString (in XML format)
+   * @brief Function to set data with inString (in XML format)
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
@@ -97,4 +97,3 @@ protected:
 
 }
 #endif
-///@endcond
