@@ -45,44 +45,44 @@ const QString DATASET_MIME_TYPE=QString("application/x-tulip-mime;value=\"datase
  */
 class TLP_QT_SCOPE GraphMimeType : public QMimeData {
 public:
-    GraphMimeType():QMimeData(),_graph(NULL){}
-    void setGraph(tlp::Graph* graph) {
-        _graph = graph;
-    }
+  GraphMimeType():QMimeData(),_graph(NULL) {}
+  void setGraph(tlp::Graph* graph) {
+    _graph = graph;
+  }
 
-    tlp::Graph* graph() const {
-        return _graph;
-    }
+  tlp::Graph* graph() const {
+    return _graph;
+  }
 
-    QStringList formats()const;
+  QStringList formats()const;
 
 private:
-    tlp::Graph* _graph;
+  tlp::Graph* _graph;
 };
 
 class TLP_QT_SCOPE AlgorithmMimeType : public QMimeData {
-    Q_OBJECT
+  Q_OBJECT
 
-    QString _algorithm;
-    tlp::DataSet _params;
+  QString _algorithm;
+  tlp::DataSet _params;
 public:
 
 
 
-    AlgorithmMimeType(QString algorithmName, const tlp::DataSet& data);
-    void run(tlp::Graph*) const;
+  AlgorithmMimeType(QString algorithmName, const tlp::DataSet& data);
+  void run(tlp::Graph*) const;
 
-    QString algorithm() const {
-        return _algorithm;
-    }
-    tlp::DataSet params() const {
-        return _params;
-    }
+  QString algorithm() const {
+    return _algorithm;
+  }
+  tlp::DataSet params() const {
+    return _params;
+  }
 
-    QStringList formats()const;
+  QStringList formats()const;
 
 signals:
-    void mimeRun(tlp::Graph*,tlp::DataSet) const;
+  void mimeRun(tlp::Graph*,tlp::DataSet) const;
 };
 
 class TLP_QT_SCOPE PanelMimeType : public QMimeData {
@@ -90,18 +90,18 @@ public:
 
 
 
-    void setPanel(tlp::WorkspacePanel* panel) {
-        _panel = panel;
-    }
+  void setPanel(tlp::WorkspacePanel* panel) {
+    _panel = panel;
+  }
 
-    tlp::WorkspacePanel* panel() const {
-        return _panel;
-    }
+  tlp::WorkspacePanel* panel() const {
+    return _panel;
+  }
 
-    QStringList formats()const;
+  QStringList formats()const;
 
 private:
-    tlp::WorkspacePanel* _panel;
+  tlp::WorkspacePanel* _panel;
 };
 }
 #endif //_TLP_MIMES_H

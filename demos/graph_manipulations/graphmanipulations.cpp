@@ -11,10 +11,10 @@
 using namespace std;
 using namespace tlp;
 
-int main(int argc,char ** argv ){
+int main(int argc,char ** argv ) {
   //instanciate the QApplication
   QCoreApplication app(argc, argv);
-  
+
   /*
    * Let's create the following graph
    *
@@ -63,12 +63,14 @@ int main(int argc,char ** argv ){
   label->setNodeValue(e, "E");
 
   DoubleProperty* metric = myGraph->getProperty<DoubleProperty>("degree");
+
   //if the degree plugin is available, let's call it.
   if(tlp::PluginLister::instance()->pluginExists("Degree")) {
     //now compute the degree of the nodes.
     string errorMessage;
     //this calls the Tulip plugin 'Degree'.
     bool success = myGraph->applyPropertyAlgorithm("Degree", metric, errorMessage);
+
     if(!success) {
       std::cout << errorMessage << std::endl;
     }
@@ -86,7 +88,7 @@ int main(int argc,char ** argv ){
 
   //saveGraph is a shortcut ofr exportGraph that uses the TLP export.
   tlp::saveGraph(myGraph, "mygraph.tlp");
-  
+
   return EXIT_SUCCESS;
 }
 

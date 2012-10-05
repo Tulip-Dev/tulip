@@ -16,12 +16,12 @@ PLUGIN(CliqueImport)
 
 //a description of the parameter, that will appear in the GUI to explain how the parameter influences the plugin.
 const char * nodeCountDescription =
-    // number of nodes (equivalent to degree)
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "unsigned int" ) \
-    HTML_HELP_BODY() \
-    "How many nodes the clique will contain" \
-     HTML_HELP_CLOSE();
+  // number of nodes (equivalent to degree)
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
+  HTML_HELP_BODY() \
+  "How many nodes the clique will contain" \
+  HTML_HELP_CLOSE();
 
 CliqueImport::CliqueImport(tlp::PluginContext* context):ImportModule(context) {
   //how many nodes we want in our clique
