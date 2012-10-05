@@ -53,6 +53,7 @@ class GlComposite;
  * @see GlSphere
  * @see GlPentagon
  * @see GlTriangle
+ * @see GlOpenUniformCubicBSpline
  *
  * To GlSimpleEntity manipulation :
  * @see GlLayer
