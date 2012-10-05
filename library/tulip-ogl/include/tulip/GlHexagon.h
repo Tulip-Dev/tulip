@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef GLHEXAGON_H
 #define GLHEXAGON_H
@@ -26,12 +25,12 @@
 namespace tlp {
 /**
  * @ingroup OpenGL
- * @brief class to create an hexagon
+ * @brief class to create an hexagon in Tulip 3D Engine
  */
 class TLP_GL_SCOPE GlHexagon : public GlRegularPolygon {
 public:
   /**
-   * Constructor
+   * @brief Constructor
    */
   GlHexagon(const Coord &position,
             const Size &size,
@@ -42,7 +41,7 @@ public:
             const std::string &textureName="",
             float outlineSize=1.);
   /**
-   * Default empty destructor
+   * @brief Default empty destructor
    */
   virtual ~GlHexagon();
 
@@ -50,4 +49,3 @@ public:
 
 }
 #endif
-///@endcond
