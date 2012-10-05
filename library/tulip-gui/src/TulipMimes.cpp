@@ -95,14 +95,14 @@ void AlgorithmMimeType::run(Graph* g) const {
   Observable::unholdObservers();
 }
 
-QStringList GraphMimeType::formats()const{
-    return QMimeData::formats()<<GRAPH_MIME_TYPE;
+QStringList GraphMimeType::formats()const {
+  return QMimeData::formats()<<GRAPH_MIME_TYPE;
 }
 
-QStringList AlgorithmMimeType::formats()const{
-    return QMimeData::formats()<<ALGORITHM_NAME_MIME_TYPE<<DATASET_MIME_TYPE;
+QStringList AlgorithmMimeType::formats()const {
+  return QMimeData::formats()<<ALGORITHM_NAME_MIME_TYPE<<DATASET_MIME_TYPE;
 }
 
-QStringList PanelMimeType::formats()const{
-    return QMimeData::formats()<<WORKSPACE_PANEL_MIME_TYPE;
+QStringList PanelMimeType::formats()const {
+  return QMimeData::formats()<<WORKSPACE_PANEL_MIME_TYPE;
 }

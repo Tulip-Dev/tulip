@@ -63,6 +63,7 @@ public :
     Check if the event is a mouse event
     */
     QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
+
     if(qMouseEv != NULL) {
       GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
 
@@ -78,7 +79,8 @@ public :
         */
         if(_informationWidgetItem->isVisible()) {
           _informationWidgetItem->setVisible(false);
-        }else{
+        }
+        else {
 
           /*
           Select entities under the mouse cursor
@@ -86,6 +88,7 @@ public :
           And pickNodesEdges return true if you click on node or edge
           */
           SelectedEntity selectedEntity;
+
           if (glMainView->getGlMainWidget()->pickNodesEdges(qMouseEv->x(),qMouseEv->y(),selectedEntity)) {
 
             /*
@@ -165,7 +168,7 @@ public:
                                    +"You can zoom and pan and display informations if you click on a node/edge.");
   }
 
-  ~InteractorPlugin(){
+  ~InteractorPlugin() {
     delete _configurationLabel;
   }
 
