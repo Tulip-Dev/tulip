@@ -1,27 +1,57 @@
-#ifndef Tulip_%ProjectName:c%_VIEW_H
-#define Tulip_%ProjectName:c%_VIEW_H
+#ifndef %ProjectName:u%_H
+#define %ProjectName:u%_H
 
-#include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/%BaseView%.h>
 
-#include "%ProjectName:c%ConfigWidget.h"
+@if "%BaseView%" == "View"
+#include <QtGui/QGraphicsView>
+@endif
 
-class %ProjectName:c% : public tlp::NodeLinkDiagramComponent {
-  Q_OBJECT
+class %ProjectName:c%: public tlp::%BaseView% {
+  @if "%BaseView%" == "View"
+  QGraphicsView* _graphicsView;
+  @endif
+
 public:
   PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
-%ProjectName:
-  c%(const tlp::PluginContext* context = NULL);
-virtual ~%ProjectName:
-  c%() {}
+public:
+  %ProjectName:c%();
+  virtual ~%ProjectName:c%();
 
-  tlp::DataSet state() const;
-  void setState(const tlp::DataSet&);
-  QList<QWidget*> configurationWidgets() const;
+  virtual QList<QWidget*> configurationWidgets() const;
+  virtual void applySettings();
 
-private :
-%ProjectName:
-  c%ConfigWidget *configWidget;
+  virtual tlp::DataSet state() const;
+  virtual void setState(const tlp::DataSet&);
+
+  @if "%BaseView%" == "View"
+  virtual void setupUi()=0;
+  virtual QGraphicsView* graphicsView() const=0;
+  virtual QGraphicsItem* centralItem() const;
+  @endif
+
+  @if "%BaseView%" == "ViewWidget"
+  virtual void setupWidget();
+  @endif
+
+  @if "%BaseView%" != "GlMainView"
+  virtual void centerView();
+  virtual void draw(tlp::PluginProgress* pluginProgress);
+  virtual void refresh(tlp::PluginProgress* pluginProgress);
+  virtual QPixmap snapshot(const QSize& outputSize=QSize());
+  @endif
+
+protected:
+  virtual void interactorsInstalled(const QList<tlp::Interactor*>& interactors);
+  virtual void currentInteractorChanged(tlp::Interactor*);
+
+  virtual void graphChanged(tlp::Graph*)=0;
+  @if "%BaseView%" == "View"
+  virtual void graphDeleted(tlp::Graph* parentGraph)=0;
+  @endif
+
+  virtual void fillContextMenu(QMenu*,const QPointF &);
 };
 
-#endif
+#endif // %ProjectName:u%_H

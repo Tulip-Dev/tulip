@@ -6,30 +6,27 @@ using namespace tlp;
 using namespace std;
 
 /*
-const char * paramHelp[] = {
-    // number of clusters
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "unsigned int" ) \
-    HTML_HELP_BODY() \
-    "Determine the number of desired clusters, if 0 the algorithm will find determine the optimal number of clusters" \
-     HTML_HELP_CLOSE(),
-};
-*/
-//================================================================================
-%ProjectName:
-c%::%ProjectName:
-c%(tlp::PluginContext* context):ExportModule(context) {
-//    addParameter<unsigned int>("shifting", paramHelp[0], 0, false);
+ Plugin constructor: declare dependencies and input/output parameters here
+ */
+%ProjectName:c%::%ProjectName:c%(tlp::PluginContext* context): ExportModule(context) {
+//  addInParameter<ParameterType>("Name","Help string","Default value");
+//  addDependency("name", "version");
 }
-//================================================================================
-%ProjectName:
-c%::~%ProjectName:
-c%() {
+
+%ProjectName:c%::~%ProjectName:c%() {
 }
-//================================================================================
-bool %ProjectName:
-c%::exportGraph(std::ostream &os) {
+
+/*
+ Executes the plugin and returns true if sucessful
+ */
+bool %ProjectName:c%::exportGraph(std::ostream &os) {
+  return true;
 }
-//================================================================================
-string Untitled::fileExtension() const {
+
+/*
+ Returns the file extension associated to this kind of export method
+ */
+std::string %ProjectName:c%::fileExtension() const {
+  return "";
 }
+

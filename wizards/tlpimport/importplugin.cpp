@@ -1,34 +1,31 @@
 #include "%ProjectName:l%.%CppHeaderSuffix%"
 
-PLUGIN(%ProjectName:c%)
+PLUGIN(%ProjectName:c%);
 
 using namespace tlp;
 using namespace std;
 
 /*
-const char * paramHelp[] = {
-    // number of clusters
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "unsigned int" ) \
-    HTML_HELP_BODY() \
-    "Determine the number of desired clusters, if 0 the algorithm will find determine the optimal number of clusters" \
-     HTML_HELP_CLOSE(),
-};
-*/
-//================================================================================
-%ProjectName:
-c%::%ProjectName:
-c%(tlp::PluginContext* context):ImportModule(context) {
-//    addParameter<unsigned int>("shifting", paramHelp[0], 0, false);
-//    addParameter<DoubleProperty>("Edge weights", paramHelp[0], 0, false);
+ Plugin constructor: declare dependencies and input/output parameters here
+ */
+%ProjectName:c%::%ProjectName:c%(tlp::PluginContext* context): ImportModule(context) {
+//  addInParameter<ParameterType>("Name","Help string","Default value");
+//  addDependency("name", "version");
 }
-//================================================================================
-%ProjectName:
-c%::~%ProjectName:
-c%() {
+
+%ProjectName:c%::~%ProjectName:c%() {
 }
-//================================================================================
-bool %ProjectName:
-c%::importGraph() {
+
+/*
+ Executes the plugin and returns true if sucessful
+ */
+bool %ProjectName:c%::importGraph() {
+  return true;
 }
-//================================================================================
+
+/*
+ Returns the file extensions associated to this kind of import method
+ */
+std::list<std::string> %ProjectName:c%::fileExtensions() const {
+  return std::list<std::string>();
+}
