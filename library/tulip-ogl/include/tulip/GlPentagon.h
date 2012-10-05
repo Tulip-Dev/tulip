@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef GLPENTAGON_H
 #define GLPENTAGON_H
@@ -31,7 +30,7 @@ namespace tlp {
 class TLP_GL_SCOPE GlPentagon : public GlRegularPolygon {
 public:
   /**
-   * Constructor
+   * @brief Constructor
    */
   GlPentagon(const Coord &position,
              const Size &size,
@@ -42,7 +41,9 @@ public:
              const std::string &textureName="",
              float outlineSize=1.);
   /**
-   * Default empty destructor
+   * @brief Default empty destructor
+   *
+   * @warning Don't use this constructor
    */
   virtual ~GlPentagon();
 
@@ -50,4 +51,3 @@ public:
 
 }
 #endif
-///@endcond
