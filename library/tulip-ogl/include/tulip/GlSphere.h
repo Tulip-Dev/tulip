@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef Tulip_GLSPHERE_H
 #define Tulip_GLSPHERE_H
@@ -32,74 +31,81 @@ namespace tlp {
 
 /**
  * @ingroup OpenGL
- * Class to create a sphere with GlEntity system
+ * @brief Class to create a sphere with GlEntity system
  */
 class TLP_GL_SCOPE GlSphere : public GlSimpleEntity {
 
 public:
 
-  GlSphere() {}
   /**
-   * Create a sphere with a position, a radius a fill color and multiple rotation (if you want)
+   * @brief Constructor
+   *
+   * @warning Don't use this constructor
+   */
+  GlSphere() {}
+
+  /**
+   * @brief Create a sphere with a position, a radius a fill color and multiple rotation (if you want)
    */
   GlSphere(const Coord &position,float radius,const Color &color=Color(0,0,0,255),float rotX=0,float rotY=0,float rotZ=0);
+
   /**
-      * Create a sphere with a position, a radius, a texture, an alphe and multiple rotation (if you want)
-      */
+   * @brief Create a sphere with a position, a radius, a texture, an alphe and multiple rotation (if you want)
+   */
   GlSphere(const Coord &position,float radius,const std::string& textureFile,int alpha=255,float rotX=0,float rotY=0,float rotZ=0);
 
   /**
-   * Draw the sphere
+   * @brief Draw the sphere
    */
   virtual void draw(float lod,Camera *camera);
 
   /**
-   * Translate entity
+   * @brief Translate entity
    */
   virtual void translate(const Coord& mouvement);
 
   /**
-   * Get absolute position
+   * @brief Get absolute position
    */
   const Coord& getPosition() const {
     return position;
   }
 
   /**
-   * Set absolute position
+   * @brief Set absolute position
    */
   void setPosition(const Coord& pos) {
     position = pos;
   }
 
   /**
-   * Set the texture name
+   * @brief Set the texture name
    */
   virtual void setTexture(const std::string &texture) {
     textureFile=texture;
   }
 
   /**
-   * Get the color
+   * @brief Get the color
    */
   const Color& getColor() const {
     return color;
   }
 
   /**
-   * Set the color
+   * @brief Set the color
    */
   void setColor(const Color &newColor) {
     color = newColor;
   }
 
   /**
-   * Function to export data in outString (in XML format)
+   * @brief Function to export data in outString (in XML format)
    */
   virtual void getXML(std::string &outString);
 
   /**
-   * Function to set data with inString (in XML format)
+   * @brief Function to set data with inString (in XML format)
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
@@ -117,4 +123,3 @@ private:
 }
 
 #endif // Tulip_GLSCENE_H
-///@endcond
