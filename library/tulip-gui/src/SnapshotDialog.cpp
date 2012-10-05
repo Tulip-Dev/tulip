@@ -20,14 +20,14 @@
 #include "tulip/SnapshotDialog.h"
 #include "ui_SnapshotDialog.h"
 
-#include <tulip/GlMainView.h>
-#include <tulip/GlMainWidget.h>
+#include <tulip/View.h>
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QImageWriter>
 #include <QtGui/QFileDialog>
 #include <QtGui/QGraphicsPixmapItem>
 #include <QtGui/QClipboard>
+#include <QtGui/QGraphicsScene>
 
 using namespace std;
 
@@ -66,11 +66,11 @@ protected :
 
 };
 
-SnapshotDialog::SnapshotDialog(GlMainView &v,QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(&v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
+SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(&v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
   ui->setupUi(this);
 
-  ui->widthSpinBox->setValue(view->getGlMainWidget()->rect().width());
-  ui->heightSpinBox->setValue(view->getGlMainWidget()->rect().height());
+  ui->widthSpinBox->setValue(view->centralItem()->scene()->sceneRect().width());
+  ui->heightSpinBox->setValue(view->centralItem()->scene()->sceneRect().height());
 
   sizeSpinBoxValueChanged();
 
