@@ -37,7 +37,7 @@ class QGraphicsPixmapItem;
 namespace tlp {
 
 class LockLabel;
-class GlMainView;
+class View;
 
 class TLP_QT_SCOPE SnapshotDialog : public QDialog {
 
@@ -47,7 +47,7 @@ class TLP_QT_SCOPE SnapshotDialog : public QDialog {
 
 public :
 
-  SnapshotDialog(GlMainView &v,QWidget *parent=NULL);
+  SnapshotDialog(View &v,QWidget *parent=NULL);
   ~SnapshotDialog();
 
 public slots :
@@ -70,7 +70,7 @@ protected :
   void sizeSpinBoxValueChanged();
 
   Ui::SnapshotDialogData *ui;
-  GlMainView *view;
+  View *view;
 
   QGraphicsScene *scene;
   QGraphicsPixmapItem *pixmapItem;
