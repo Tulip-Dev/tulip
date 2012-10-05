@@ -118,13 +118,14 @@ protected slots:
   void uncheckExposeButton();
   QWidget* suitableMode(QWidget* oldMode);
   WorkspacePanel* panelForScene(QObject* obj);
+  void swapPanelsRequested(WorkspacePanel* panel);
 
 protected:
   virtual void dragEnterEvent(QDragEnterEvent* event);
   virtual void dropEvent(QDropEvent* event);
 
   bool handleDragEnterEvent(QEvent* e, const QMimeData* mimedata);
-  bool handleDropEvent(const QMimeData* mimedata, WorkspacePanel* panel = NULL);
+  bool handleDropEvent(const QMimeData* mimedata);
 
   bool eventFilter(QObject *, QEvent *);
 
