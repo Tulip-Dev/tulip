@@ -131,11 +131,11 @@ int Workspace::addPanel(tlp::View* view) {
     if (_model != NULL)
         panel->setGraphsModel(_model);
 
-    //  panel->installEventFilter(this);
     panel->setWindowTitle(panelTitle(panel));
     connect(panel,SIGNAL(drawNeeded()),this,SLOT(viewNeedsDraw()));
     connect(panel,SIGNAL(swapWithPanels(WorkspacePanel*)),this,SLOT(swapPanelsRequested(WorkspacePanel*)));
     connect(panel,SIGNAL(destroyed(QObject*)),this,SLOT(panelDestroyed(QObject*)));
+    view->graphicsView()->installEventFilter(this);
 
     // Add it to the list
     _panels.push_back(panel);
