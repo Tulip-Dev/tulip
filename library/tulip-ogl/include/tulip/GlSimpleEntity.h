@@ -41,6 +41,18 @@ class GlComposite;
  * You don't have to create a GlSimpleEntity, you have to use GlLine, GlRect or GlSphere for example
  * @see Gl2DRect
  * @see GlPolygon
+ * @see GlAxis
+ * @see GlBezierCurve
+ * @see GlBox
+ * @see GlCatmullRomCurve
+ * @see GlCircle
+ * @see GlComplexPolygon
+ * @see GlGrid
+ * @see GlHexagon
+ * @see GlLabel
+ * @see GlSphere
+ * @see GlPentagon
+ * @see GlTriangle
  *
  * To GlSimpleEntity manipulation :
  * @see GlLayer
