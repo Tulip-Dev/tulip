@@ -65,6 +65,8 @@ public:
   explicit WorkspacePanel(tlp::View* view, QWidget* parent=NULL);
   virtual ~WorkspacePanel();
 
+  bool eventFilter(QObject *, QEvent *);
+
   tlp::View* view() const;
   QString viewName() const;
   bool isProgressMode() const;
@@ -79,6 +81,7 @@ public slots:
 
 signals:
   void drawNeeded();
+  void swapWithPanels(WorkspacePanel* panel);
 
 protected slots:
   void hideConfigurationTab();
@@ -95,8 +98,16 @@ protected slots:
 protected:
   void progress_handler(int step, int max_step);
   void refreshInteractorsToolbar();
-  bool eventFilter(QObject *, QEvent *);
+
   void resizeEvent(QResizeEvent *);
+
+  void dragEnterEvent(QDragEnterEvent *);  
+  void dropEvent(QDropEvent *);
+  void dragLeaveEvent(QDragLeaveEvent *);
+
+  bool handleDragEnterEvent(QEvent* e, const QMimeData* mimedata);
+  bool handleDropEvent(const QMimeData* mimedata);
+
 };
 
 }
