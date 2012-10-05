@@ -185,6 +185,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph,DataSet dataSet) {
     graphComposite->getRenderingParametersPointer()->setViewNodeLabel(true);
     graphComposite->getRenderingParametersPointer()->setEdgeColorInterpolate(false);
     graphComposite->getRenderingParametersPointer()->setNodesStencil(0x0002);
+    graphComposite->getRenderingParametersPointer()->setNodesLabelStencil(0x0001);
     scene->centerScene();
   }
   else {
