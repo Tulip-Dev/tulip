@@ -45,6 +45,7 @@ int main(int argc,char ** argv ){
 
 
   //now in color. 'viewColor' is the Tulip GUI's default color property, so when we load it we will see the color immediately
+  //If 'viewColor' did not exist before, this creates it.
   ColorProperty* color = myGraph->getProperty<ColorProperty>("viewColor");
   color->setNodeValue(a, Color(255, 0, 0));
   color->setNodeValue(b, Color(0, 255, 0));
