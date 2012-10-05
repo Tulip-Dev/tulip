@@ -84,6 +84,7 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
   _ui->actionClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _ui->interactorsFrame->installEventFilter(this);
   _ui->dragHandle->setPanel(this);
+  _ui->graphCombo->installEventFilter(this);
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
   setView(view);
   setAttribute(Qt::WA_DeleteOnClose);
@@ -196,6 +197,10 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
       scrollInteractorsLeft();
     else
       scrollInteractorsRight();
+  }
+
+  if (obj == _ui->graphCombo && ev->type() == QEvent::Wheel) {
+    return true;
   }
 
   return QWidget::eventFilter(obj,ev);
