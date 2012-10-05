@@ -31,7 +31,7 @@ const char * paramHelp[] = {
 
 // comments below have been extracted from OGDF/src/upward/UpwardPlanarizationLayout.h
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * upward planarization layout algorithm.
  *
@@ -104,6 +104,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFUpwardPlanarization)

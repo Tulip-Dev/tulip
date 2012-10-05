@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPMODEL_H
 #define TULIPMODEL_H
 
@@ -35,7 +37,8 @@ public:
     PropertyRole = Qt::UserRole+2,
     IsNodeRole = Qt::UserRole+3,
     StringRole = Qt::UserRole+4,
-    MandatoryRole = Qt::UserRole+5
+    MandatoryRole = Qt::UserRole+5,
+    ElementIdRole = Qt::UserRole+6
   };
 
   explicit TulipModel(QObject *parent=NULL);
@@ -50,3 +53,4 @@ signals:
 }
 
 #endif // TULIPMODEL_H
+///@endcond

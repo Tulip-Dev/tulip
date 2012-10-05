@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef __TULIPPLUGININCLUDE_H
 #define __TULIPPLUGININCLUDE_H
 
@@ -25,6 +27,7 @@
 #include <tulip/StringProperty.h>
 #include <tulip/Algorithm.h>
 #include <tulip/ImportModule.h>
+#include <tulip/ExportModule.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/IntegerProperty.h>
@@ -39,3 +42,4 @@
 #include <tulip/TreeTest.h>
 #include <tulip/ForEach.h>
 #endif
+///@endcond

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #include <tulip/Iterator.h>
 #include <tulip/tulipconf.h>
 #include <tulip/Edge.h>
@@ -31,9 +33,6 @@ namespace tlp {
 struct node;
 class Graph;
 
-/** \addtogroup iterators */
-/*@{*/
-
 /**
   * That function enables to obtain the next edge on a face of the embedding. It uses
   * the EdgeMapIterators.
@@ -46,7 +45,6 @@ TLP_SCOPE edge nextFaceEdge(Graph* g, edge source, node target);
 
 /**
   * @class NodeMapIterator
-  * @ingroup Iterators
   * @brief Iterator that enables to traverse the graph taking into account the ordering of edges aroung nodes
   * @param sg the considered graph
   * @param source the node from witch one arrives on target
@@ -76,7 +74,6 @@ private :
 
 /**
   * @class EdgeMapIterator
-  * @ingroup Iterators
   * @brief Iterator that enables to traverse the graph taking into account the ordering of edges aroung nodes
   * @param sg the considered graph
   * @param source the edge from witch one arrives on target
@@ -105,8 +102,9 @@ private :
   unsigned int pos;
   bool finished;
 };
-/*@}*/
+
 
 }
 #endif
 #endif //DOXYGEN_NOTFOR_DEVEL
+///@endcond

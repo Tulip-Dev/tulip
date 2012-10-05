@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef PLUGINLIBLOADER_H
 #define PLUGINLIBLOADER_H
 
@@ -29,6 +30,8 @@
 namespace tlp {
 
 /**
+ * @ingroup Plugins
+ *
  * @brief This class takes care of the actual loading of the libraries.
  * You can use it to load a single plugin (loadPluginLibrary) or all the plugins in a given folder (loadPlugins).0
  *
@@ -46,20 +49,19 @@ public:
   * once for the glyph folder, and once for the interactors folder.
   *
   * lib/tulip/
-  * ├── glyphs
-  * │   ├── libBillboard-4.0.0.so
-  * │   └── libWindow-4.0.0.so
-  * ├── interactors
-  * │   ├── libInteractorAddEdge-4.0.0.so
-  * │   └── libInteractorSelectionModifier-4.0.0.so
-  * ├── libAdjacencyMatrixImport-4.0.0.so
-  * ├── libColorMapping-4.0.0.so
-  * ├── libCompleteGraph-4.0.0.so
+  * -> glyphs
+  *      |-> libBillboard-4.0.0.so
+  *      |-> libWindow-4.0.0.so
+  * -> interactors
+  *      |-> libInteractorAddEdge-4.0.0.so
+  *      |-> libInteractorSelectionModifier-4.0.0.so
+  * -> libAdjacencyMatrixImport-4.0.0.so
+  * -> libColorMapping-4.0.0.so
+  * -> libCompleteGraph-4.0.0.so
   *
   *
-  * @param plug A PluginLoader to output what is going on. Defaults to 0.
-  * @param folder A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
-  * @return void
+  * @param loader A PluginLoader to output what is going on. Defaults to 0.
+  * @param pluginPath A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
   *
   **/
   static void loadPlugins(PluginLoader *loader = NULL, std::string pluginPath = "");

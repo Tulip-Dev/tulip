@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef VECTORGRAPH_H
 #define VECTORGRAPH_H
@@ -25,6 +27,7 @@
 #include <set>
 #include <cassert>
 
+#include <tulip/tulipconf.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/vectorgraphproperty.h>
@@ -677,3 +680,4 @@ bool EdgeProperty<TYPE>::isValid() const {
 #endif
 }
 #endif // VECTORGRAPH_H
+///@endcond

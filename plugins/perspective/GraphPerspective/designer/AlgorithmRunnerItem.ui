@@ -41,7 +41,7 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="spacing">
-       <number>0</number>
+       <number>2</number>
       </property>
       <property name="leftMargin">
        <number>0</number>
@@ -79,6 +79,9 @@
          <iconset resource="../resources/GraphPerspective.qrc">
           <normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</iconset>
         </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item>
@@ -106,6 +109,9 @@
           <normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</iconset>
         </property>
         <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
          <bool>true</bool>
         </property>
        </widget>
@@ -217,6 +223,9 @@ QHeaderView {
 background-color: white;
 }
 QTableView {
+background-color: white;
+}
+QToolTip {
 background-color: white;
 }</string>
      </property>

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -30,7 +30,7 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
 
   std::string propName;
   forEach(propName,_graph->getInheritedProperties()) {
-#ifndef NDEBUG
+#ifdef NDEBUG
 
     if (propName == "viewMetaGraph")
       continue;
@@ -43,7 +43,7 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
     }
   }
   forEach(propName,_graph->getLocalProperties()) {
-#ifndef NDEBUG
+#ifdef NDEBUG
 
     if (propName == "viewMetaGraph")
       continue;

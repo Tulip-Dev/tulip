@@ -22,7 +22,7 @@
 
 // comments below have been extracted from OGDF/src/energybased/multilevelmixer/MMEExampleNoTwistLayout.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /// useable example of the Modular Multilevel Mixer
 /**
  *
@@ -79,6 +79,6 @@ public:
   ~OGDFMMMExampleNoTwistLayout() {}
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFMMMExampleNoTwistLayout)

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_SUPERGRAPHIMPL_H
 #define Tulip_SUPERGRAPHIMPL_H
 
@@ -98,7 +100,7 @@ public:
   virtual bool canPopThenUnpop();
 
   // observer interface
-  void update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end);
+  void treatEvents(const  std::vector<Event> &);
   void observableDestroyed(Observable*);
 
   // for subgraph id management
@@ -143,3 +145,4 @@ private :
 #endif
 
 #endif
+///@endcond

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -109,4 +109,3 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
   return is;
 }
 //=================================================================
-

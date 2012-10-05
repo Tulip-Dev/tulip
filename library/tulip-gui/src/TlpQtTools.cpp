@@ -16,16 +16,19 @@
  * See the GNU General Public License for more details.
  *
  */
+#include "tulip/TlpQtTools.h"
+
 #include <QtOpenGL/QGLPixelBuffer>
 #include <QtGui/QColorDialog>
 #include <QtGui/QMessageBox>
-
-#include "tulip/TlpQtTools.h"
+#include <QtGui/QDesktopServices>
+#include <QtCore/QDir>
+#include <QtGui/QApplication>
 
 #include <tulip/DataSet.h>
-
-#include "tulip/Interactor.h"
-#include "tulip/View.h"
+#include <tulip/TulipSettings.h>
+#include <tulip/Interactor.h>
+#include <tulip/View.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -35,7 +38,10 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/SystemDefinition.h>
-#include <QDesktopServices>
+#include <tulip/TlpTools.h>
+#include <tulip/PluginManager.h>
+#include <tulip/GlyphManager.h>
+#include <tulip/EdgeExtremityGlyphManager.h>
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -157,5 +163,47 @@ QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFrame
 QString localPluginsPath() {
   return QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/");
 }
+
+void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
+  QLocale::setDefault(QLocale(QLocale::English));
+  TulipSettings::instance().applyProxySettings();
+
+  if (TulipSettings::instance().isFirstRun()) {
+    TulipSettings::instance().setFirstRun(false);
+    TulipSettings::instance().addRemoteLocation(PluginManager::STABLE_LOCATION);
+    TulipSettings::instance().addRemoteLocation(PluginManager::TESTING_LOCATION);
+  }
+
+  QDir::home().mkpath(tlp::localPluginsPath());
+  QLocale::setDefault(QLocale(QLocale::English));
+
+#if defined(__APPLE__)
+  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
+  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
+#endif
+
+  if (removeDiscardedPlugins) {
+    foreach (const QString& plugin, tlp::PluginManager::markedForRemoval()) {
+      QFile f(plugin);
+      f.remove();
+      tlp::PluginManager::unmarkForRemoval(plugin); // whether or not the removal succeeded, do not try again
+    }
+  }
+
+  tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
+  tlp::TulipPluginsPath = (tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toStdString() +
+                          tlp::PATH_DELIMITER +
+                          tlp::TulipPluginsPath +
+                          tlp::PATH_DELIMITER +
+                          tlp::getPluginLocalInstallationDir().toStdString();
+
+  // Load plugins
+  tlp::PluginLibraryLoader::loadPlugins(loader);
+  tlp::PluginLister::checkLoadedPluginsDependencies(loader);
+  tlp::InteractorLister::initInteractorsDependencies();
+  tlp::GlyphManager::getInst().loadGlyphPlugins();
+  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
+}
+
 
 }

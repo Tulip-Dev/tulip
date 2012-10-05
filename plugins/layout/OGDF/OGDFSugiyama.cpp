@@ -24,6 +24,13 @@
 #include <ogdf/layered/MedianHeuristic.h>
 #include <ogdf/layered/SplitHeuristic.h>
 #include <ogdf/layered/FastHierarchyLayout.h>
+#include <ogdf/layered/CoffmanGrahamRanking.h>
+#include <ogdf/layered/SiftingHeuristic.h>
+#include <ogdf/layered/GreedyInsertHeuristic.h>
+#include <ogdf/layered/GreedySwitchHeuristic.h>
+#include <ogdf/layered/OptimalHierarchyLayout.h>
+#include <ogdf/layered/FastSimpleHierarchyLayout.h>
+
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
@@ -51,7 +58,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
                              HTML_HELP_BODY()
-                             "If false, adjust the distance of each layer to the longest edge."
+                             "If false, adjust the distance of each layer to the longest edge (only for FastHierarchyLayout)."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "bool" )
@@ -85,36 +92,52 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "StringCollection")
-                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> LongestPathRanking : <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking : <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths.")
+                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> CoffmanGrahamRanking: <FONT COLOR=\"black\"> The coffman graham ranking algorithm. <BR> <FONT COLOR=\"red\"> LongestPathRanking: <FONT COLOR=\"black\"> the well-known longest-path ranking algorithm. <BR> <FONT COLOR=\"red\"> OptimalRanking: <FONT COLOR=\"black\"> the LP-based algorithm for computing a node ranking with minimal edge lengths.")
                              HTML_HELP_DEF( "default", "LongestPathRanking " )
                              HTML_HELP_BODY()
                              "Sets the option for the node ranking (layer assignment)."
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
                              HTML_HELP_DEF( "type", "StringCollection")
-                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> BarycenterHeuristic : <FONT COLOR=\"black\"> the barycenter heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> MedianHeuristic : <FONT COLOR=\"black\"> the median heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> SplitHeuristic : <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
+                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> BarycenterHeuristic: <FONT COLOR=\"black\"> the barycenter heuristic for 2-layer crossing minimization. <BR><FONT COLOR=\"red\"> GreedyInsertHeuristic: <FONT COLOR=\"black\"> The greedy-insert heuristic for 2-layer crossing minimization. <BR><FONT COLOR=\"red\"> GreedySwitchHeuristic: <FONT COLOR=\"black\"> The greedy-switch heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> MedianHeuristic: <FONT COLOR=\"black\"> the median heuristic for 2-layer crossing minimization. <BR><FONT COLOR=\"red\"> SiftingHeuristic: <FONT COLOR=\"black\"> The sifting heuristic for 2-layer crossing minimization. <BR> <FONT COLOR=\"red\"> SplitHeuristic: <FONT COLOR=\"black\"> the split heuristic for 2-layer crossing minimization.")
                              HTML_HELP_DEF( "default", "BarycenterHeuristic " )
                              HTML_HELP_BODY()
                              "Sets the module option for the two-layer crossing minimization."
+                             HTML_HELP_CLOSE(),
+                             HTML_HELP_OPEN()
+                             HTML_HELP_DEF( "type", "StringCollection")
+                             HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> FastHierarchyLayout: <FONT COLOR=\"black\"> Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.. <BR> <FONT COLOR=\"red\"> FastSimpleHierarchyLayout: <FONT COLOR=\"black\"> Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf.")
+                             HTML_HELP_DEF( "default", "FastHierarchyLayout" )
+                             HTML_HELP_BODY()
+                             "The hierarchy layout module that computes the final layout."
                              HTML_HELP_CLOSE()
                            };
 }
 
 
 #define ELT_RANKING "Ranking"
-#define ELT_RANKINGLIST "LongestPathRanking;OptimalRanking"
+#define ELT_RANKINGLIST "LongestPathRanking;OptimalRanking;CoffmanGrahamRanking"
 #define ELT_LONGESTPATHRANKING 0
 #define ELT_OPTIMALRANKING 1
+#define ELT_COFFMANGRAHAMRANKING 2
 
 #define ELT_TWOLAYERCROSS "Two-layer crossing minimization"
-#define ELT_TWOLAYERCROSSLIST "BarycenterHeuristic;MedianHeuristic;SplitHeuristic"
+#define ELT_TWOLAYERCROSSLIST "BarycenterHeuristic;MedianHeuristic;SplitHeuristic;SiftingHeuristic;GreedyInsertHeuristic;GreedySwitchHeuristic"
 #define ELT_BARYCENTER 0
 #define ELT_MEDIAN 1
 #define ELT_SPLIT 2
+#define ELT_SIFTING 3
+#define ELT_GREEDYINSERT 4
+#define ELT_GREEDYSWITCH 5
+
+#define ELT_HIERARCHYLAYOUT "Layout"
+#define ELT_HIERARCHYLAYOUTLIST "FastHierarchyLayout;FastSimpleHierarchyLayout"
+#define ELT_FASTHIERARCHY 0
+#define ELT_FASTSIMPLEHIERARCHY 1
 
 // comments below have been extracted from OGDF/src/layered/sugiyama.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * Implementation of Sugiyama algorithm (classes Hierarchy,
  * Level, SugiyamaLayout)
@@ -163,28 +186,28 @@ class OGDFSugiyama : public OGDFLayoutPluginBase {
 public:
 
   OGDFSugiyama(const tlp::PluginContext *context) :OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()) {
-    addParameter<int>("fails", paramHelp[0], "4");
-    addParameter<int>("runs", paramHelp[1], "15");
-    addParameter<double>("node distance", paramHelp[2], "3");
-    addParameter<double>("layer distance", paramHelp[3], "3");
-    addParameter<bool>("fixed layer distance", paramHelp[4], "true");
-    addParameter<bool>("transpose", paramHelp[5], "false");
-    addParameter<bool>("arrangeCCs", paramHelp[6], "true");
-    addParameter<double>("minDistCC", paramHelp[7], "20");
-    addParameter<double>("pageRatio", paramHelp[8], "1.0");
-    addParameter<bool>("alignBaseClasses", paramHelp[9], "false");
-    addParameter<bool>("alignSiblings", paramHelp[10], "false");
-    addParameter<StringCollection>(ELT_RANKING, paramHelp[11], ELT_RANKINGLIST);
-    addParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[12], ELT_TWOLAYERCROSSLIST);
+    addInParameter<int>("fails", paramHelp[0], "4");
+    addInParameter<int>("runs", paramHelp[1], "15");
+    addInParameter<double>("node distance", paramHelp[2], "3");
+    addInParameter<double>("layer distance", paramHelp[3], "3");
+    addInParameter<bool>("fixed layer distance", paramHelp[4], "true");
+    addInParameter<bool>("transpose", paramHelp[5], "true");
+    addInParameter<bool>("arrangeCCs", paramHelp[6], "true");
+    addInParameter<double>("minDistCC", paramHelp[7], "20");
+    addInParameter<double>("pageRatio", paramHelp[8], "1.0");
+    addInParameter<bool>("alignBaseClasses", paramHelp[9], "false");
+    addInParameter<bool>("alignSiblings", paramHelp[10], "false");
+    addInParameter<StringCollection>(ELT_RANKING, paramHelp[11], ELT_RANKINGLIST);
+    addInParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[12], ELT_TWOLAYERCROSSLIST);
+    addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT, paramHelp[13], ELT_HIERARCHYLAYOUTLIST);
   }
 
   ~OGDFSugiyama() {}
 
-  PLUGININFORMATIONS("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.4","Hierarchical")
+  PLUGININFORMATIONS("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.5","Hierarchical")
 
   void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
-    ogdf::FastHierarchyLayout *fhl = new FastHierarchyLayout();
 
     if (dataSet != NULL) {
       int ival = 0;
@@ -197,15 +220,6 @@ public:
 
       if (dataSet->get("runs", ival))
         sugiyama->runs(ival);
-
-      if (dataSet->get("node distance", dval))
-        fhl->nodeDistance(dval);
-
-      if (dataSet->get("layer distance", dval))
-        fhl->layerDistance(dval);
-
-      if (dataSet->get("fixed layer distance", bval))
-        fhl->fixedLayerDistance(bval);
 
       if (dataSet->get("arrangeCCS", bval))
         sugiyama->arrangeCCs(bval);
@@ -226,9 +240,11 @@ public:
         if (sc.getCurrent() == ELT_LONGESTPATHRANKING) {
           sugiyama->setRanking(new ogdf::LongestPathRanking());
         }
-        else {
+        else if(sc.getCurrent() == ELT_OPTIMALRANKING) {
           sugiyama->setRanking(new ogdf::OptimalRanking());
         }
+        else
+          sugiyama->setRanking(new ogdf::CoffmanGrahamRanking());
       }
 
       if (dataSet->get(ELT_TWOLAYERCROSS, sc)) {
@@ -238,14 +254,39 @@ public:
         else if (sc.getCurrent() == ELT_MEDIAN) {
           sugiyama->setCrossMin(new ogdf::MedianHeuristic());
         }
-        else {
+        else if(sc.getCurrent()==ELT_SPLIT) {
           sugiyama->setCrossMin(new ogdf::SplitHeuristic());
+        }
+        else if(sc.getCurrent()==ELT_SIFTING) {
+          sugiyama->setCrossMin(new ogdf::SiftingHeuristic());
+        }
+        else if(sc.getCurrent()==ELT_GREEDYINSERT) {
+          sugiyama->setCrossMin(new ogdf::GreedyInsertHeuristic());
+        }
+        else
+          sugiyama->setCrossMin(new ogdf::GreedySwitchHeuristic());
+      }
+
+      if(dataSet->get(ELT_HIERARCHYLAYOUT, sc)) {
+        double nodeDistance = 3;
+        double layerDistance = 3;
+        bool fixedLayerDistance = true;
+        dataSet->get("node distance", nodeDistance);
+        dataSet->get("layer distance", layerDistance);
+        dataSet->get("fixed layer distance", fixedLayerDistance);
+
+        if(sc.getCurrent()==ELT_FASTHIERARCHY) {
+          ogdf::FastHierarchyLayout *fhl = new FastHierarchyLayout();
+          fhl->nodeDistance(nodeDistance);
+          fhl->layerDistance(layerDistance);
+          fhl->fixedLayerDistance(fixedLayerDistance);
+          sugiyama->setLayout(fhl);
+        }
+        else {
+          sugiyama->setLayout(new ogdf::FastSimpleHierarchyLayout(static_cast<int>(nodeDistance), static_cast<int>(layerDistance)));
         }
       }
     }
-
-    sugiyama->setLayout(fhl);
-
   }
 
   void afterCall() {
@@ -261,6 +302,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFSugiyama)

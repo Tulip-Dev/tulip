@@ -22,7 +22,7 @@
 
 // comments below have been extracted from OGDF/src/energybased/multilevelmixer/MMEExampleNiceLayout.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /// useable example of the Modular Multilevel Mixer
 /**
  * This example is tuned for nice drawings for most types of graphs.
@@ -76,6 +76,6 @@ public:
   ~OGDFMMMExampleNiceLayout() {}
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFMMMExampleNiceLayout)

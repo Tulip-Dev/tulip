@@ -506,8 +506,7 @@ void GraphImpl::delPreviousRecorders() {
   previousRecorders.clear();
 }
 //----------------------------------------------------------------
-void GraphImpl::update(std::set<Observable *>::iterator,
-                       std::set<Observable *>::iterator) {
+void GraphImpl::treatEvents(const  std::vector<Event> &) {
   // an update occurs in the graph hierarchy
   // so delete the previous recorders
   delPreviousRecorders();

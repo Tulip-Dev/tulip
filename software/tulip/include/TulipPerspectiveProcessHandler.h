@@ -59,6 +59,8 @@ class TulipPerspectiveProcessHandler: public QTcpServer {
 
   QThread* _serverThread;
 
+  QProcess *fromId(unsigned int);
+
 public:
   static TulipPerspectiveProcessHandler *instance();
 

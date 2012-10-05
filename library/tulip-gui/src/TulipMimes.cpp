@@ -25,6 +25,9 @@
 
 using namespace tlp;
 
+
+
+
 AlgorithmMimeType::AlgorithmMimeType(QString algorithmName, const DataSet &data): _algorithm(algorithmName), _params(data) {
 }
 
@@ -61,6 +64,8 @@ void AlgorithmMimeType::run(Graph* g) const {
   }
 
   Observable::holdObservers();
+  g->push();
+
   DataSet dataSet = _params;
   std::pair<std::string,tlp::DataType*> entry;
   forEach(entry, dataSet.getValues()) {
@@ -88,4 +93,16 @@ void AlgorithmMimeType::run(Graph* g) const {
   emit mimeRun(g,dataSet);
 
   Observable::unholdObservers();
+}
+
+QStringList GraphMimeType::formats()const{
+    return QMimeData::formats()<<GRAPH_MIME_TYPE;
+}
+
+QStringList AlgorithmMimeType::formats()const{
+    return QMimeData::formats()<<ALGORITHM_NAME_MIME_TYPE<<DATASET_MIME_TYPE;
+}
+
+QStringList PanelMimeType::formats()const{
+    return QMimeData::formats()<<WORKSPACE_PANEL_MIME_TYPE;
 }

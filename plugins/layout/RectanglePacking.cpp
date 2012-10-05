@@ -24,7 +24,7 @@
 using namespace std;
 using namespace tlp;
 
-RectanglePacking::RectanglePacking(int numberRects) : firstSequence(new RectangleRelativePositionList()), placesOfRectanglesInSecondSequence(new int[numberOfRectangles]),
+RectanglePacking::RectanglePacking(int numberRects) : firstSequence(new RectangleRelativePositionList()), placesOfRectanglesInSecondSequence(new int[numberRects]),
   numberOfPositionnedRectangles(0), numberOfRectangles(numberRects), bestPlaceInFirstSequence(INT_MAX), bestPlaceInSecondSequence(INT_MAX),
   newRectangleWidth(FLT_MAX), newRectangleHeight(FLT_MAX), newRectangleLeftAbscissa(FLT_MAX),
   newRectangleLowOrdinate(FLT_MAX), bestRectangleLeftAbscissa(FLT_MAX), bestRectangleLowOrdinate(FLT_MAX), maxWidthOfBoundingBox(FLT_MAX),

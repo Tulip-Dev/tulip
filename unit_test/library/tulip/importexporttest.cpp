@@ -146,7 +146,7 @@ Graph* ImportExportTest::createSimpleGraph() const {
 
   DoubleProperty* id = original->getProperty<DoubleProperty>("id");
   string msg;
-  original->computeProperty<DoubleProperty>("Id", id, msg);
+  original->applyPropertyAlgorithm("Id", id, msg);
 
   return original;
 }

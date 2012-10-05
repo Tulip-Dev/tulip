@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugins assigns random values to nodes and edges. the values are between 0 and 1.
  *
  */
@@ -32,7 +32,7 @@ public:
   RandomMetric(const tlp::PluginContext* context);
   bool run();
 };
-/*@}*/
+
 #endif
 
 

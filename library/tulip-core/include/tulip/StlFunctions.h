@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef _TLPSTLFUNCTIONS_H
 #define _TLPSTLFUNCTIONS_H
@@ -41,3 +43,4 @@ private:
 }
 #endif
 #endif // DOXYGEN_NOTFOR_DEVEL
+///@endcond

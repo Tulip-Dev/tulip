@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugin is an implementation of the connected component decompostion algorithm. each
  *  node and edge that belongs to the same component receive the same value.
  *
@@ -37,5 +37,5 @@ public:
   ~ConnectedComponent();
   bool run();
 };
-/*@}*/
+
 #endif

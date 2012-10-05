@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugin is an implementation of the Strength Parameter.
  *  algorithm first published in :
  *
@@ -46,5 +46,5 @@ private:
   double s(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V);
   double s(const TLP_HASH_SET<tlp::node> &U);
 };
-/*@}*/
+
 #endif

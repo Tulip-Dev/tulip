@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_INT_H
 #define TULIP_INT_H
 
@@ -31,46 +33,42 @@ namespace tlp {
 class Graph;
 class PropertyContext;
 
-typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> IntegerMinMaxProperty;
-/** \addtogroup properties */
-/*@{*/
+typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType> IntegerMinMaxProperty;
+
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps an integer value to graph elements.
+ */
 class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 
 public :
   IntegerProperty(Graph *, std::string n = "");
 
-  // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
   std::string getTypename() const {
     return propertyTypename;
   }
-
-
-  // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const int &v);
   virtual void setEdgeValue(const edge e, const int &v);
   virtual void setAllNodeValue(const int &v);
   virtual void setAllEdgeValue(const int &v);
 
-  /**
-    * @brief Specific implementation of AbstractProperty::compare(node n1,node n2)
-    **/
   int compare(const node n1, const node n2) const;
-
-  /**
-    * @brief Specific implementation of AbstractProperty::compare(edge e1,edge e2)
-    **/
   int compare(const edge e1, const edge e2) const;
 
 protected:
-  virtual void clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::IntegerAlgorithm> &);
+  virtual void clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType> &);
 
 private:
   // override Observable::treatEvent
   void treatEvent(const Event&);
 };
 
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps a std::vector<int> value to graph elements.
+ */
 class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {
 public :
   IntegerVectorProperty(Graph *g, std::string n =""):AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
@@ -82,7 +80,8 @@ public :
   }
 
 };
-/*@}*/
+
 
 }
 #endif
+///@endcond

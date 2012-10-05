@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef EDGEEXTREMITYGLYPHMANAGER_H_
 #define EDGEEXTREMITYGLYPHMANAGER_H_
@@ -81,3 +83,4 @@ private:
 };
 }
 #endif /* EDGEEXTREMITYGLYPHMANAGER_H_ */
+///@endcond

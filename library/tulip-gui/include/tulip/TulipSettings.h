@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIPSETTINGS_H
 #define TULIPSETTINGS_H
@@ -56,6 +58,9 @@ public:
   static const QString ProxyUseAuthEntry;
   static const QString ProxyUsernameEntry;
   static const QString ProxyPasswordEntry;
+
+  static const QString AutomaticPerfectAspectRatioEntry;
+  static const QString AutomaticMapMetricEntry;
 
   static TulipSettings &instance();
 
@@ -116,7 +121,7 @@ public:
   tlp::Color defaultSelectionColor();
   void setDefaultSelectionColor(const tlp::Color& color);
 
-  QStringList favoriteAlgorithms() const;
+  QSet<QString> favoriteAlgorithms() const;
   void addFavoriteAlgorithm(const QString&name);
   void removeFavoriteAlgorithm(const QString&name);
 
@@ -147,11 +152,18 @@ public:
   bool isFirstRun() const;
   void setFirstRun(bool);
 
+  bool isAutomaticMapMetric() const;
+  void setAutomaticMapMetric(bool);
+
+  bool isAutomaticRatio() const;
+  void setAutomaticRatio(bool);
+
 private:
   TulipSettings();
   static TulipSettings *_instance;
 
-  void setFavoriteAlgorithms(const QStringList& lst);
+  void setFavoriteAlgorithms(const QSet<QString> &lst);
 };
 
 #endif // TULIPSETTINGS_H
+///@endcond

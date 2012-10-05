@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef TULIP_PLUGINLISTER_H
 #define TULIP_PLUGINLISTER_H
 
@@ -30,24 +31,31 @@
 namespace tlp {
 class PluginContext;
 
-/** @addtogroup plugins
- @{ **/
-
 /**
- * @brief This abstract class provides a more complete interface for plugin factories, including plugin creation.
+ * @ingroup Plugins
+ * @brief The base class for plugin factories.
  *
+ * A plugin factory handles the creation process of a tlp::Plugin subclass. This class should never be used directly. See the PLUGIN macro for additional informations.
+ * @see PLUGIN
  **/
 class FactoryInterface {
 public:
-  /**
-   * @brief Creates a new Algorithm object.
-   *
-   * @param context The context for the new plug-in.
-   * @return PluginObject* A newly created algorithm plug-in.
-   **/
   virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0;
 };
 
+/**
+ * @ingroup Plugins
+ *
+ * @brief The PluginLister class is a singleton used to list plugins currently loaded into Tulip and retrieve informations about them.
+ *
+ * This class holds various methods to check informations about plugins currently loaded into Tulip. You can use it to list plugins, get dependencies informations or create an instance of a plugin.
+ *
+ * @note Since a plugin name is unique, Plugins are mainly identified by their name (tlp::Plugin::name()) when interfaced with the plugin lister.
+ *
+ * @see tlp::Plugin
+ * @see tlp::PluginLoader
+ * @see tlp::PluginLibraryLoader
+ */
 class TLP_SCOPE PluginLister {
 private:
   struct PluginDescription {
@@ -82,6 +90,13 @@ public:
    **/
   static tlp::Plugin* getPluginObject(const std::string& name, tlp::PluginContext* context);
 
+  /**
+   * @brief Checks if a plugin of a given type is loaded
+   * This method checks the plugin "pluginName" is currently loaded into Tulip and if it's of type PluginType.
+   * @param PluginType the class type of the plugin
+   * @param pluginName the name of the plugin
+   * @return true if a matching plugin is currently loaded into Tulip.
+   */
   template<typename PluginType>
   bool pluginExists(const std::string &pluginName) {
     const Plugin* p = getPluginObject(pluginName,NULL);
@@ -94,9 +109,25 @@ public:
     return result;
   }
 
+  /**
+   * @brief Similar to tlp::PluginLister::getPluginObject() but returns a typed instance
+   *
+   * This method instantiate a plugin from its name and returns it casted into the given type.
+   *
+   * @param name The plugin's name
+   * @param context The context to give to the plugin
+   *
+   * @return The plugin instance. If there is no such plugin or if the plugin does not match the required type, this method returns NULL
+   */
   template<typename PluginType>
   PluginType* getPluginObject(const std::string& name, tlp::PluginContext* context) {
-    return dynamic_cast<PluginType*>(getPluginObject(name, context));
+    Plugin* p = getPluginObject(name,context);
+    PluginType* result = dynamic_cast<PluginType*>(getPluginObject(name, context));
+
+    if (result == NULL && p != NULL)
+      delete p;
+
+    return result;
   }
 
 
@@ -173,6 +204,12 @@ public:
    **/
   static void removePlugin(const std::string &name);
 
+  /**
+   * @brief Registers a plugin into Tulip
+   *
+   * @warning This method should only be called by tlp::FactoryInterface subclasses
+   * @see PLUGIN
+   */
   static void registerPlugin(FactoryInterface* objectFactory);
 
 protected:
@@ -191,8 +228,6 @@ protected:
    **/
   static std::string getPluginRelease(std::string name);
 };
-
-/*@}*/
 
 }
 

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,17 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifndef _CLUSTERING_H
-#define _CLUSTERING_H
+
+#ifndef _ALGORITHM_H
+#define _ALGORITHM_H
 
 #include <list>
 #include <string>
 #include <tulip/Plugin.h>
 #include <tulip/PluginContext.h>
 
-/**
- * \addtogroup plugins
- */
 namespace tlp {
 
 static const std::string ALGORITHM_CATEGORY = QObject::trUtf8("Algorithm").toStdString();
@@ -35,12 +33,13 @@ class PluginProgress;
 class Graph;
 class DataSet;
 
-/*@{*/
+
 /**
+ * @ingroup Plugins
  * @brief This abstract class describes a basic algorithm plugin.
+ *
  * It inherits on WithParameter and WithDependency for convenience.
- * Basic functionality consists in checking the algorithm can run on the current Graph (e.g. is the graph simple ?),
- * running the algorithm and resetting the algorithm to re-apply it.
+ * Basic functionality consists in checking the algorithm can run on the current Graph (e.g. is the graph simple ?), running the algorithm and resetting the algorithm to re-apply it.
  * The algorithm can and should report progress and which task it is performing if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, ...).
  */
 class Algorithm : public tlp::Plugin {
@@ -101,8 +100,6 @@ public :
    */
   DataSet *dataSet;
 };
-
-/*@}*/
 
 }
 #endif

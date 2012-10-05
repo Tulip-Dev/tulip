@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIP_SIMPLETEST_H
 #define TULIP_SIMPLETEST_H
@@ -27,9 +29,8 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup graph_test */
-/*@{*/
 /**
+ * @ingroup Checks
  * @brief Performs test to check if a graph is Simple.
  * From Wikipedia: "A simple graph is an undirected graph that has no loops and no more than one edge between any two different vertices."
  **/
@@ -87,7 +88,8 @@ private:
    **/
   TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
 };
-/*@}*/
+
 
 }
 #endif
+///@endcond

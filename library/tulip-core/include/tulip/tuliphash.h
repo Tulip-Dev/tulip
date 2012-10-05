@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TLP_HASH_H
 #define TLP_HASH_H
 
@@ -105,3 +107,4 @@ TLP_BEGIN_HASH_NAMESPACE {
 } TLP_END_HASH_NAMESPACE
 
 #endif
+///@endcond

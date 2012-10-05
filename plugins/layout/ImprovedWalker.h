@@ -30,7 +30,7 @@ class OrientableSizeProxy;
 class ImprovedWalkerIterator;
 
 /** \addtogroup layout */
-/*@{*/
+
 /** This plugin is an implementation of a linear Walker's algorithm:
  *
  *  Christoph Buchheim and Michael Junger and Sebastian Leipert,
@@ -187,5 +187,5 @@ inline tlp::node ImprovedWalker::findCommonAncestor(tlp::node left, tlp::node ri
   else
     return defaultAncestor;
 }
-/*@}*/
+
 #endif

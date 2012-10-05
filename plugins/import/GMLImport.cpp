@@ -536,7 +536,7 @@ const char * paramHelp[] = {
 
 
 /** \addtogroup import */
-/*@{*/
+
 /// Import plugin for GML format.
 /**
  * This plugin imports a graph structure recorded using the GML File format.
@@ -580,6 +580,6 @@ public:
     return true;
   }
 };
-/*@}*/
+
 
 PLUGIN(GMLImport)

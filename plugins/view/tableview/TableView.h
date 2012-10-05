@@ -51,16 +51,22 @@ public:
   void setState(const tlp::DataSet &);
   void setupWidget();
 
+
 public slots:
   void readSettings();
   void setPropertyVisible(tlp::PropertyInterface*,bool);
   void filterChanged();
+
 
 protected:
   void graphChanged(tlp::Graph *);
   void graphDeleted();
 
 protected slots:
+  void setFilteredNodesValue();
+  void setFilteredEdgesValue();
+  void mapToGraphSelection();
+
   void columnsInserted(const QModelIndex&,int,int);
 };
 

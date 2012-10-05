@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIP_TRICONNECTEDTEST_H
 #define TULIP_TRICONNECTEDTEST_H
@@ -27,10 +29,8 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup graph_test */
-/*@{*/
-
 /**
+ * @ingroup Checks
  * @brief Provides functions to test if a graph is Triconnected.
  **/
 class TLP_SCOPE TriconnectedTest : private Observable {
@@ -68,7 +68,8 @@ private:
    **/
   TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
 };
-/*@}*/
+
 
 }
 #endif
+///@endcond

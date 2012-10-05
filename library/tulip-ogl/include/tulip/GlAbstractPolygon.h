@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -17,6 +17,7 @@
  *
  */
 
+
 #ifndef GLABSTRACTPOLYGON_H
 #define GLABSTRACTPOLYGON_H
 
@@ -30,15 +31,17 @@
 #include <tulip/GlTools.h>
 
 namespace tlp {
+
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * class to create a abstract polygon
+ * @ingroup OpenGL
+ * @brief class to create a abstract polygon
+ * @warning You don't have to use this class, it's only a base class for some others entities
  */
 class TLP_GL_SCOPE GlAbstractPolygon : public GlSimpleEntity {
 public:
+
+  ///@cond DOXYGEN_HIDDEN
+
   /**
    * Constructor
    */
@@ -100,10 +103,14 @@ public:
    */
   void setFillColor(unsigned int i, const Color &color);
 
+  ///@endcond
+
   /**
-   * Set color used to filling the whole polygon
+   * @brief Set color used to filling the whole polygon
    */
   void setFillColor(const Color &color);
+
+  ///@cond DOXYGEN_HIDDEN
 
   /**
    * Get the ith color used to outlining the polygon
@@ -115,30 +122,34 @@ public:
    */
   void setOutlineColor(unsigned int i, const Color &color);
 
+  ///@endcond
+
   /**
-   * Set the color used to outlining the whole polygon
+   * @brief Set the color used to outlining the whole polygon
    */
   void setOutlineColor(const Color &color);
 
   /**
-   * Get the textureName
+   * @brief Get the textureName
    */
   std::string getTextureName();
 
   /**
-   * Set the textureName
+   * @brief Set the textureName
    */
   void setTextureName(const std::string &name);
 
   /**
-   * Get the outline size
+   * @brief Get the outline size
    */
   float getOutlineSize();
 
   /**
-   * Set the outline size
+   * @brief Set the outline size
    */
   void setOutlineSize(float size);
+
+  ///@cond DOXYGEN_HIDDEN
 
   /**
    * Get the lod outline value, below this lod value outline will not be displayed
@@ -175,7 +186,11 @@ public:
    */
   virtual void setWithXML(const std::string &outString, unsigned int &currentPosition);
 
+  ///@endcond
+
 protected:
+
+  ///@cond DOXYGEN_HIDDEN
 
   /**
    * set Coords of the polygon
@@ -207,6 +222,8 @@ protected:
    */
   virtual void clearGenerated();
 
+  ///@endcond
+
   PolygonMode polygonMode;
   std::vector<Coord> points;
   std::vector<Color> fillColors;
@@ -227,6 +244,7 @@ protected:
   bool generated;
   GLuint buffers[7];
 };
-/*@}*/
+
 }
 #endif
+

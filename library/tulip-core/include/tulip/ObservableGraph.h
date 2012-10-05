@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GRAPHOBSERVABLE_H
 #define GRAPHOBSERVABLE_H
 #include <list>
@@ -32,9 +34,8 @@ class Graph;
 
 //=========================================================
 
-/** \addtogroup graphs */
-/*@{*/
 /**
+ * @ingroup Observation
  * \class GraphObserver
  * \brief That class receives a message (call back/handler function)
  * after each modification of a Graph.
@@ -51,7 +52,7 @@ class Graph;
  *
  * The Observer pattern is described pp293-304 of the book 'Design Patterns' by Gamma, Helm, Johnson, and Vlissides.
  *
- * \example PrintObserver This is a small example of an observer that displays a message on the standard output each time a
+ * PrintObserver This is a small example of an observer that displays a message on the standard output each time a
  * a node is added to a graph.
  * \code
  * class PrintObs : public GraphObserver {
@@ -91,9 +92,10 @@ public:
 protected:
   void treatEvent(const Event&);
 };
-/*@}*/
+
 }
 
 
 #endif
 
+///@endcond

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 //@TLPGEOLICENCE#
 #ifndef TLP_RECTANGLE_H
 #define TLP_RECTANGLE_H
@@ -25,10 +27,7 @@
 namespace tlp {
 
 /**
-   * \addtogroup basic
-   */
-/*@{*/
-/**
+ * @ingroup Structures
  * \brief class for rectangle
  *
  * Enables to both create and manipulate a 2D Axis Aligned Rectangle
@@ -214,6 +213,7 @@ typedef Rectangle<int, double> Recti;
 typedef Rectangle<unsigned int, double> Rectui;
 
 
-/*@}*/
+
 }
 #endif
+///@endcond

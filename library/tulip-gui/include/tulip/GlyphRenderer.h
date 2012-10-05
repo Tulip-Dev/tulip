@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,11 +16,16 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLYPHPREVIEWGENERATOR_H
 #define GLYPHPREVIEWGENERATOR_H
 #include <map>
+
 #include <QtGui/QPixmap>
+
+#include <tulip/tulipconf.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 
@@ -71,3 +76,4 @@ private:
 };
 }
 #endif // GLYPHPREVIEWGENERATOR_H
+///@endcond

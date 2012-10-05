@@ -93,16 +93,11 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
 
             QLabel* title = _informationsWidget->findChild<QLabel*>();
 
-            if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-              title->setText(trUtf8("Node"));
-              tableView()->setModel(new GraphNodeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
-            }
-            else {
-              title->setText(trUtf8("Edge"));
-              tableView()->setModel(new GraphEdgeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
-            }
+            ElementType eltType = selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED?NODE:EDGE;
 
-            title->setText(title->text() + " #" + QString::number(selectedEntity.getComplexEntityId()));
+            tableView()->setModel(buildModel(eltType,selectedEntity.getComplexEntityId(),_informationsWidget));
+            title->setText(elementName(eltType,selectedEntity.getComplexEntityId()));
+
 
             QPoint position=qMouseEv->pos();
 
@@ -116,7 +111,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
             QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "opacity");
             animation->setDuration(100);
             animation->setStartValue(0.);
-            animation->setEndValue(1.);
+            animation->setEndValue(0.99);
             animation->start();
 
             return true;
@@ -144,4 +139,18 @@ void MouseShowElementInfos::viewChanged(View * view) {
   _view=viewWidget;
   connect(_view,SIGNAL(graphSet(tlp::Graph*)),_informationsWidgetItem,SLOT(close()));
   _view->graphicsView()->scene()->addItem(_informationsWidgetItem);
+}
+
+QAbstractItemModel* MouseShowElementInfos::buildModel(ElementType elementType,unsigned int elementId,QObject* parent)const {
+  if(elementType == NODE) {
+    return new GraphNodeElementModel(view()->graph(),elementId,parent);
+  }
+  else {
+    return new GraphEdgeElementModel(view()->graph(),elementId,parent);
+  }
+}
+
+QString MouseShowElementInfos::elementName(ElementType elementType, unsigned int elementId)const {
+  QString elementTypeLabel = elementType==NODE?QString("Node"):QString("Edge");
+  return elementTypeLabel +" #" + QString::number(elementId);
 }

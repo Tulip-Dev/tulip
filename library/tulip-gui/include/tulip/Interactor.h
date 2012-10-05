@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef _INTERACTOR_H
 #define _INTERACTOR_H
 
@@ -35,7 +36,8 @@ static const std::string INTERACTOR_CATEGORY = QObject::trUtf8("Interactor").toS
 class View;
 
 /**
-  @class Interactor provides a way to handle user inputs over a view.
+  @ingroup Plugins
+  @brief Interactor provides a way to handle user inputs over a view.
   Basically, The interactor class is an overlay to the Qt's event filtering mechanism. It adds several features like the ability to define priorities, custom cursors, etc
 
   When an interactor is constructed, the following methods are called in this order:
@@ -141,6 +143,10 @@ protected:
   }
 };
 
+/**
+ * @ingroup Plugins
+ * @brief The InteractorLister class lists compatible interactors for a given tlp::View
+ */
 class TLP_QT_SCOPE InteractorLister {
   static QMap<std::string,QList<std::string> > _compatibilityMap;
 public:
@@ -148,6 +154,25 @@ public:
   static QList<std::string> compatibleInteractors(const std::string& viewName);
 };
 
+/**
+ * @ingroup Plugins
+ * @def INTERACTORPLUGINVIEWEXTENSION(CLASS_NAME,STRING_CLASS_NAME,BASE_INTERACTOR_STRING_NAME,VIEW_STRING_NAME,AUTHOR,DATE,DESCRIPTION,VERSION)
+ *
+ * @brief Copy an existing Tulip interactor and sets it compatible with a given View.
+ *
+ * This macro is used when you're making your own View and want to use an existing interactor with it. Interactors are declared to be compatible with a list of View. This macro extends the compatibility of an existing interactor by subclassing it.
+ *
+ * @note: This macro used the same interactor priority as the base interactor. To define your own priority, see INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY
+ *
+ * @param CLASS_NAME The name of the interactor class to generate.
+ * @param STRING_CLASS_NAME The name of the interactor plugin to generate (see tlp::Plugin::name())
+ * @param BASE_INTERACTOR_STRING_NAME The name of the interactor to extend
+ * @param VIEW_STRING_NAME The name of the View to set the interactor compatible with
+ * @param AUTHOR see tlp::Plugin::author()
+ * @param DATE see tlp::Plugin::date()
+ * @param DESCRIPTION see tlp::Plugin::info()
+ * @param VERSION see tlp::Plugin::version()
+ */
 #define INTERACTORPLUGINVIEWEXTENSION(CLASS_NAME,STRING_CLASS_NAME,BASE_INTERACTOR_STRING_NAME,VIEW_STRING_NAME,AUTHOR,DATE,DESCRIPTION,VERSION)\
 class CLASS_NAME : public tlp::Interactor {\
   mutable tlp::Interactor* _component;\
@@ -180,6 +205,13 @@ public:\
 };\
 PLUGIN(CLASS_NAME)
 
+/**
+ * @ingroup Plugins
+ * @def INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CLASS_NAME,STRING_CLASS_NAME,BASE_INTERACTOR_STRING_NAME,VIEW_STRING_NAME,AUTHOR,DATE,DESCRIPTION,VERSION,PRIORITY)
+ * @brief Similar to INTERACTORPLUGINVIEWEXTENSION but allows to define the generated interactor's priority.
+ * @see tlp::Interactor::priority()
+ * @see INTERACTORPLUGINVIEWEXTENSION
+ */
 #define INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(CLASS_NAME,STRING_CLASS_NAME,BASE_INTERACTOR_STRING_NAME,VIEW_STRING_NAME,AUTHOR,DATE,DESCRIPTION,VERSION,PRIORITY)     \
 class CLASS_NAME : public tlp::Interactor {\
   mutable tlp::Interactor* _component;\

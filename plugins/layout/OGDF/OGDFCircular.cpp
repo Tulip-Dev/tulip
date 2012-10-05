@@ -47,7 +47,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 }
 
 // comments below have been extracted from OGDF/src/misclayout/CircularLayout.cpp
-/*@{*/
+
 /// An implementation of the circular layout
 /**
  *
@@ -127,6 +127,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFCircular)

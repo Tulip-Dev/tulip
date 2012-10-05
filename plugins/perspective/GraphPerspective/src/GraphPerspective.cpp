@@ -46,6 +46,7 @@
 
 #include "GraphPerspectiveLogger.h"
 #include "ImportWizard.h"
+#include "ExportWizard.h"
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
 #include "ShadowFilter.h"
@@ -157,6 +158,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->workspace->setSplit3ModeSwitch(_ui->split3ModeButton);
   _ui->workspace->setSplit32ModeSwitch(_ui->split32ModeButton);
   _ui->workspace->setGridModeSwitch(_ui->gridModeButton);
+  _ui->workspace->setSixModeSwitch(_ui->sixModeButton);
   _ui->workspace->setPageCountLabel(_ui->pageCountLabel);
   _ui->outputFrame->hide();
   _logger = new GraphPerspectiveLogger(_mainWindow);
@@ -175,6 +177,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
   connect(_ui->actionImport,SIGNAL(triggered()),this,SLOT(importGraph()));
   connect(_ui->actionExport,SIGNAL(triggered()),this,SLOT(exportGraph()));
+  connect(_ui->actionSave_graph_to_file,SIGNAL(triggered()),this,SLOT(saveGraphToFile()));
   connect(_ui->workspace,SIGNAL(panelFocused(tlp::View*)),this,SLOT(panelFocused(tlp::View*)));
   connect(_ui->actionSave_Project,SIGNAL(triggered()),this,SLOT(save()));
   connect(_ui->actionSave_Project_as,SIGNAL(triggered()),this,SLOT(saveAs()));
@@ -194,7 +197,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionFind_plugins,SIGNAL(triggered()),this,SLOT(findPlugins()));
   connect(_ui->actionNew, SIGNAL(triggered()), this, SLOT(addNewGraph()));
   connect(_ui->actionPreferences,SIGNAL(triggered()),this,SLOT(openPreferences()));
-  connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonOutput(bool)));
   connect(_ui->searchButton,SIGNAL(clicked(bool)),this,SLOT(setSearchOutput(bool)));
 
   // Agent actions
@@ -213,17 +215,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     rootIds = _graphs->readProject(_project,progress);
   }
 
-  if (!_externalFile.isEmpty()) {
-
-    QFileInfo externalFileInfo(_externalFile);
-
-    if (externalFileInfo.exists()) {
-      progress->setComment((trUtf8("Loading ") + externalFileInfo.fileName()).toStdString());
-      DataSet dataSet;
-      dataSet.set("file::filename", std::string(externalFileInfo.absoluteFilePath().toUtf8().data()));
-      Graph *externalGraph = tlp::importGraph("TLP Import", dataSet, progress);
-      _graphs->addGraph(externalGraph);
-    }
+  if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
+    open(_externalFile);
   }
 
   _ui->graphHierarchiesEditor->setModel(_graphs);
@@ -278,6 +271,37 @@ void GraphPerspective::showFullScreen(bool f) {
 }
 
 void GraphPerspective::exportGraph(Graph* g) {
+  if (g == NULL)
+    g = _graphs->currentGraph();
+
+  if (g == NULL)
+    return;
+
+  ExportWizard wizard(g,_mainWindow);
+
+  if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() || wizard.outputFile().isEmpty())
+    return;
+
+  std::fstream os;
+  os.open(wizard.outputFile().toUtf8().data(),std::fstream::out);
+
+  if (!os.is_open()) {
+    QMessageBox::critical(_mainWindow,trUtf8("File error"),trUtf8("Cannot open output file for writing: ") + wizard.outputFile());
+    return;
+  }
+
+  DataSet data = wizard.parameters();
+  PluginProgress* prg = progress();
+  bool result = tlp::exportGraph(g,os,wizard.algorithm().toStdString(),data,prg);
+
+  if (!result) {
+    QMessageBox::critical(_mainWindow,trUtf8("Export error"),trUtf8("Failed to export to format") + wizard.algorithm());
+  }
+
+  delete prg;
+}
+
+void GraphPerspective::saveGraphToFile(Graph *g) {
   if (g == NULL)
     g = _graphs->currentGraph();
 
@@ -356,35 +380,8 @@ void GraphPerspective::importGraph() {
 
     _graphs->addGraph(g);
 
-    LayoutProperty* viewLayout = g->getProperty<LayoutProperty>("viewLayout");
-    Iterator<node>* it = viewLayout->getNonDefaultValuatedNodes();
-
-    if (!it->hasNext()) {
-      std::string str;
-      PluginProgress* progress = new SimplePluginProgressDialog(_mainWindow);
-      DataSet data;
-      data.set<LayoutProperty*>("result",viewLayout);
-      g->applyAlgorithm("Bubble Tree",str,&data,progress);
-      delete progress;
-    }
-
-    delete it;
-
-    View* firstPanel = NULL;
-    foreach(QString panelName, QStringList() << "Spreadsheet" << "Node Link Diagram view") {
-      View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
-
-      if (firstPanel == NULL)
-        firstPanel = view;
-
-      view->setupUi();
-      view->setGraph(g);
-      view->setState(DataSet());
-      _ui->workspace->addPanel(view);
-    }
-    _ui->workspace->setActivePanel(firstPanel);
-    _ui->workspace->switchToSplitMode();
-    _ui->graphHierarchiesEditor->repackHeaders();
+    applyRandomLayout(g);
+    showStartPanels(g);
   }
 }
 
@@ -442,9 +439,10 @@ void GraphPerspective::saveAs(const QString& path) {
   QMap<Graph*,QString> rootIds = _graphs->writeProject(_project,&progress);
   _ui->workspace->writeProject(_project,rootIds,&progress);
   _project->write(path,&progress);
+  TulipSettings::instance().addToRecentDocuments(path);
 }
 
-void GraphPerspective::open() {
+void GraphPerspective::open(QString fileName) {
   QString filters;
   QMap<std::string, std::string> modules;
   std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
@@ -479,7 +477,9 @@ void GraphPerspective::open() {
   filterAny += " *.tlpx);;";
 
   filters.insert(0, filterAny);
-  QString fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open Graph"), _lastOpenLocation, filters);
+
+  if (fileName.isNull()) // If open() was called without a parameter, open the file dialog
+    fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open Graph"), _lastOpenLocation, filters);
 
   if(!fileName.isEmpty()) {
     QFileInfo fileInfo(fileName);
@@ -488,12 +488,14 @@ void GraphPerspective::open() {
     foreach(std::string extension, modules.keys()) {
       if (fileName.endsWith(".tlpx")) {
         openProjectFile(fileName);
+        TulipSettings::instance().addToRecentDocuments(fileInfo.absoluteFilePath());
         break;
       }
       else if(fileName.endsWith(QString::fromStdString(extension))) {
         DataSet params;
         params.set<std::string>("file::filename", std::string(fileName.toUtf8().data()));
         Graph* g = tlp::importGraph(modules[extension], params);
+        QDir::setCurrent(QFileInfo(fileName.toUtf8().data()).absolutePath());
         _graphs->addGraph(g);
         break;
       }
@@ -551,6 +553,11 @@ void GraphPerspective::undo() {
     graph->pop();
 
   Observable::unholdObservers();
+
+  foreach(View* v, _ui->workspace->panels()) {
+    if (v->graph() == graph)
+      v->undoCallback();
+  }
 }
 
 void GraphPerspective::redo() {
@@ -561,6 +568,11 @@ void GraphPerspective::redo() {
     graph->unpop();
 
   Observable::unholdObservers();
+
+  foreach(View* v, _ui->workspace->panels()) {
+    if (v->graph() == graph)
+      v->undoCallback();
+  }
 }
 
 void GraphPerspective::cut() {
@@ -628,13 +640,17 @@ void GraphPerspective::group() {
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   std::set<node> groupedNodes;
   node n;
-  forEach(n, selection->getNodesEqualTo(true))
-  groupedNodes.insert(n);
+  forEach(n, selection->getNodesEqualTo(true)) {
+    if(graph->isElement(n))
+      groupedNodes.insert(n);
+  }
 
   if (groupedNodes.empty()) {
     qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection");
     return;
   }
+
+  graph->push();
 
   bool changeGraph=false;
 
@@ -646,6 +662,11 @@ void GraphPerspective::group() {
 
   graph->createMetaNode(groupedNodes);
 
+  selection->setAllNodeValue(false);
+  selection->setAllEdgeValue(false);
+
+  Observable::unholdObservers();
+
   if (!changeGraph)
     return;
 
@@ -653,12 +674,13 @@ void GraphPerspective::group() {
     if (v->graph() == graph->getRoot())
       v->setGraph(graph);
   }
-  Observable::unholdObservers();
 }
 
 Graph *GraphPerspective::createSubGraph(Graph *graph) {
   if (graph == NULL)
     return NULL;
+
+  graph->push();
 
   Observable::holdObservers();
 
@@ -700,20 +722,91 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
   _ui->actionExport->setEnabled(enabled);
+
+  if (graph == NULL) {
+    _ui->searchButton->setChecked(false);
+    setSearchOutput(false);
+  }
+
+  _ui->searchButton->setEnabled(enabled);
 }
 
 void GraphPerspective::CSVImport() {
-  if (_graphs->currentGraph() == NULL)
+  bool mustDeleteGraph = false;
+
+  if (_graphs->size()==0) {
+    _graphs->addGraph(tlp::newGraph());
+    mustDeleteGraph = true;
+  }
+
+  Graph* g = _graphs->currentGraph();
+
+  if (g == NULL)
     return;
 
   CSVImportWizard wizard(_mainWindow);
-  wizard.setGraph(_graphs->currentGraph());
-  _graphs->currentGraph()->push();
+  wizard.setGraph(g);
+  g->push();
   Observable::holdObservers();
   int result = wizard.exec();
 
-  if (result == QDialog::Rejected)
-    _graphs->currentGraph()->pop();
+  if (result == QDialog::Rejected) {
+    if (mustDeleteGraph) {
+      _graphs->removeGraph(g);
+      delete g;
+    }
+    else {
+      g->pop();
+    }
+  }
+  else {
+    applyRandomLayout(g);
+    bool openPanels = true;
+    foreach(View* v, _ui->workspace->panels()) {
+      if (v->graph() == g) {
+        openPanels = false;
+        break;
+      }
+    }
+
+    if (openPanels)
+      showStartPanels(g);
+  }
+
+  Observable::unholdObservers();
+}
+
+void GraphPerspective::showStartPanels(Graph *g) {
+  View* firstPanel = NULL;
+  foreach(QString panelName, QStringList() << "Spreadsheet" << "Node Link Diagram view") {
+    View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
+
+    if (firstPanel == NULL)
+      firstPanel = view;
+
+    view->setupUi();
+    view->setGraph(g);
+    view->setState(DataSet());
+    _ui->workspace->addPanel(view);
+  }
+  _ui->workspace->setActivePanel(firstPanel);
+  _ui->workspace->switchToSplitMode();
+  _ui->graphHierarchiesEditor->repackHeaders();
+}
+
+void GraphPerspective::applyRandomLayout(Graph* g) {
+  Observable::holdObservers();
+  LayoutProperty* viewLayout = g->getProperty<LayoutProperty>("viewLayout");
+  Iterator<node>* it = viewLayout->getNonDefaultValuatedNodes();
+
+  if (!it->hasNext()) {
+    std::string str;
+    PluginProgress* progress = new SimplePluginProgressDialog(_mainWindow);
+    DataSet data;
+    data.set<LayoutProperty*>("result",viewLayout);
+    g->applyAlgorithm("Random layout",str,&data,progress);
+    delete progress;
+  }
 
   Observable::unholdObservers();
 }
@@ -736,16 +829,11 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
   }
 }
 
-void GraphPerspective::setPythonOutput(bool) {
-  _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
-  _ui->searchButton->setChecked(false);
-  _ui->outputFrame->setVisible(_ui->pythonButton->isChecked() || _ui->searchButton->isChecked());
-}
+void GraphPerspective::setSearchOutput(bool f) {
+  if (f)
+    _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
 
-void GraphPerspective::setSearchOutput(bool) {
-  _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
-  _ui->pythonButton->setChecked(false);
-  _ui->outputFrame->setVisible(_ui->pythonButton->isChecked() || _ui->searchButton->isChecked());
+  _ui->outputFrame->setVisible(f);
 }
 
 void GraphPerspective::openPreferences() {

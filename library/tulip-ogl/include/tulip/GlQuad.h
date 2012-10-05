@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _GLQUAD_H
 #define _GLQUAD_H
 
@@ -26,10 +28,7 @@
 
 namespace tlp {
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
+ * @ingroup OpenGL
  * \brief Utility class to render a quadrilateral .
  *
  * This is an utility class class for rendering a quadrilateral.
@@ -120,6 +119,7 @@ public:
 
 
 };
-/*@}*/
+
 }
 #endif
+///@endcond

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef Tulip_GLGRAPHRENDERER_H
 #define Tulip_GLGRAPHRENDERER_H
 
@@ -28,33 +29,42 @@ namespace tlp {
 class Graph;
 
 
-/** \brief Class used by GlGraphComposite to display the graph
+/**
+ * @ingroup OpenGL
+ * @brief Class used by GlGraphComposite to render the graph in OpenGL
  *
- * This class is used by GlGraphComposite to display into OpenGL the graph contained by the GlGraphComposite
+ * To create a graph renderer, you have to implement two functions : draw() and selectEntities()
+ * @see GlGraphComposite
  */
 class TLP_GL_SCOPE GlGraphRenderer {
 
 public:
 
   /**
-   * Constructor
-   * \param inputData : GlGraphInputData used by renderer to display the graph
+   * @brief Constructor
+   * \param inputData : GlGraphInputData used by renderer to display the graph (in input data you have pointers on properties used to render nodes/edges
    * \param parameters : GlGraphRenderingParameters used by renderer to display the graph
    */
   GlGraphRenderer(const GlGraphInputData *inputData):inputData(inputData),graphModified(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
   }
 
+  /**
+   * @brief Destructor
+   */
   virtual ~GlGraphRenderer() {}
 
   /**
-   * This function is call by GlGraphComposite to draw the graph
+   * @brief This function is call by GlGraphComposite to draw the graph
+   *
+   * If you reimplement this function you have to render nodes/edges. It's the most important function of GlGraphRenderer
+   *
    * \param lod : lod used to this Rendering
    * \param camera : camera used to this rendering
    */
   virtual void draw(float lod,Camera* camera) = 0;
 
   /**
-   * This function is call by GlGraphComposite to selected entities into the graph
+   * @brief This function is call by GlGraphComposite to selected entities into the graph
    * \param type : type of selected entities
    * \param x : x of the selected zone
    * \param y : y of the selected zone
@@ -65,12 +75,12 @@ public:
   virtual void selectEntities(Camera *camera,RenderingEntitiesFlag type,int x, int y, int w, int h, std::vector<SelectedEntity>& selectedEntities) = 0;
 
   /**
-   * You can use this funtion if you want to inject a visitor on the graph
+   * @brief You can use this funtion if you want to inject a visitor on the graph
    */
   virtual void visitGraph(GlSceneVisitor *visitor,bool visitHiddenEntities=false);
 
   /**
-   * This function set if the content of the graph is modified
+   * @brief This function set if the content of the graph is modified
    */
   void setGraphModified(bool graphModified) {
     this->graphModified=graphModified;

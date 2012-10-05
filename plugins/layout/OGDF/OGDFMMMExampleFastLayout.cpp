@@ -22,7 +22,7 @@
 
 // comments below have been extracted from OGDF/src/energybased/multilevelmixer/MMEExampleFastLayout.cpp
 /** \addtogroup layout */
-/*@{*/
+
 ///  useable example of the Modular Multilevel Mixer
 /**
  * An example Layout using the Modular Mutlievel Mixer.
@@ -77,6 +77,6 @@ public:
   ~OGDFMMMExampleFastLayout() {}
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFMMMExampleFastLayout)

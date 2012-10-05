@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef TULIP_LAYOUT_H
 #define TULIP_LAYOUT_H
 
@@ -29,28 +30,23 @@
 namespace tlp {
 
 template <>
-void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue);
+void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue);
 
 template <>
-void tlp::MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm>::computeMinMaxNode(Graph *sg);
+void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg);
 
 class PropertyContext;
 class Graph;
 
-typedef AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> AbstractLayoutProperty;
-typedef MinMaxProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> LayoutMinMaxProperty;
+typedef AbstractProperty<tlp::PointType, tlp::LineType> AbstractLayoutProperty;
+typedef MinMaxProperty<tlp::PointType, tlp::LineType> LayoutMinMaxProperty;
 
-/** \addtogroup properties */
-/*@{*/
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps a tlp::Coord value to graph nodes and std::vector<tlp::Coord> for edges.
+ */
 class TLP_SCOPE LayoutProperty : public LayoutMinMaxProperty {
 public:
-
-  /**
-  * LayoutProperty constructor
-  *
-  * @param graph The graph on wich to attach that layout property
-  * @param name The string identifier of that layout property
-  **/
   LayoutProperty(Graph *graph, std::string name="", bool updateOnEdgeReversal=true);
 
   // override some PropertyInterface methods
@@ -222,7 +218,7 @@ public:
   * @param e the graph edge on which to compute its length
   *
   * @warning this function only measure the length of the polyline between bends,
-  * when using curves like Bézier etc... the result will not be the length of the curve.
+  * when using curves like BÃÂ©zier etc... the result will not be the length of the curve.
   **/
   double edgeLength(const edge e) const;
 
@@ -294,7 +290,7 @@ public:
 
 protected:
 
-  virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType, tlp::LayoutAlgorithm> &);
+  virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &);
 
 private:
   void resetBoundingBox();
@@ -303,6 +299,10 @@ private:
   void treatEvent(const Event&);
 };
 
+/**
+ * @ingroup Graph
+ * @brief A graph property that maps a std::vector<tlp::Coord> value to graph elements.
+ */
 class TLP_SCOPE CoordVectorProperty:public AbstractVectorProperty<tlp::CoordVectorType, tlp::PointType> {
 public :
   CoordVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<CoordVectorType, tlp::PointType>(g, n) {}
@@ -317,7 +317,7 @@ public :
 
 typedef CoordVectorProperty LayoutVectorProperty;
 
-/*@}*/
+
 
 }
 #endif

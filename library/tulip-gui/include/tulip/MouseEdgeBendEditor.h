@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MOUSEEDGEBENDEDITION_H
 #define MOUSEEDGEBENDEDITION_H
 
@@ -24,9 +26,6 @@
 #include <tulip/GLInteractor.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlLines.h>
-
-/** \addtogroup Mouse_interactor */
-/*@{*/
 
 namespace tlp {
 
@@ -81,8 +80,23 @@ public:
     return new MouseEdgeBendEditor();
   }
 
-private:
+protected:
   enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};
+
+  EditOperation operation()const {
+    return _operation;
+  }
+
+  tlp::edge getEdge()const {
+    return mEdge;
+  }
+
+  void stopEdition();
+  void initEdition();
+  void undoEdition();
+
+private:
+
   enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
 
   Graph *_graph;
@@ -100,11 +114,9 @@ private:
   void initProxies(GlMainWidget *glMainWidget);
   void saveInfo();
   void restoreInfo();
-  void initEdition();
-  void undoEdition();
-  void stopEdition();
 
-  EditOperation operation;
+
+  EditOperation _operation;
   OperationTarget mode;
 
   Coord editPosition;
@@ -120,7 +132,7 @@ private:
   Graph *edgeBendsGraph;
   std::vector <SelectedEntity> select;
   bool edgeSelected;
-  edge mEdge;
+  tlp::edge mEdge;
   node mNode;
   Coord start, end;
   std::string selectedEntity;
@@ -135,6 +147,7 @@ private:
 };
 
 }
-/*@}*/
+
 
 #endif
+///@endcond

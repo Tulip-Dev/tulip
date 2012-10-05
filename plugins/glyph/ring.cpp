@@ -111,7 +111,7 @@ void drawGlyph(const Color& glyohColor, const string& texture,
 }
 
 /** \addtogroup glyph */
-/*@{*/
+
 /// A 2D glyph
 /**
  * This glyph draws a textured disc with a circular hole using the

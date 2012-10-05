@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLCONVEXGRAPHHULL_H_
 #define GLCONVEXGRAPHHULL_H_
@@ -83,3 +85,4 @@ private:
 }
 
 #endif /* GLCONVEXGRAPHHULL_H_ */
+///@endcond

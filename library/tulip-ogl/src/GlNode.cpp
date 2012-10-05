@@ -201,8 +201,6 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
   else
     glScalef(nodeSize[0], nodeSize[1],nodeSize[2]);
 
-  data->glyphs.get(data->getElementShape()->getNodeValue(n))->draw(n,lod);
-
   if (selected) {
     OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
     selectionBox->setStencil(data->parameters->getSelectedNodesStencil()-1);
@@ -210,6 +208,8 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
     selectionBox->draw(10,NULL);
     OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
   }
+
+  data->glyphs.get(data->getElementShape()->getNodeValue(n))->draw(n,lod);
 
   glPopMatrix();
 

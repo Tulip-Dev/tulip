@@ -58,7 +58,7 @@ const char * paramHelp[] = {
 
 // comments below have been extracted from OGDF/src/energybased/FastMultipoleEmbedder.cpp
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * Implementation of class FastMultipoleEmbedder.
  *
@@ -144,6 +144,6 @@ public:
   }
 
 };
-/*@}*/
+
 
 PLUGIN(OGDFFastMultipoleEmbedder)

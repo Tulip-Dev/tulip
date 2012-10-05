@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIPPARALLELANIMATIONGROUP_H
 #define TULIPPARALLELANIMATIONGROUP_H
 
@@ -34,3 +36,4 @@ protected:
 }
 
 #endif // TULIPPARALLELANIMATIONGROUP_H
+///@endcond

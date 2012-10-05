@@ -349,12 +349,12 @@ StrengthClustering::StrengthClustering(PluginContext* context):DoubleAlgorithm(c
   addInParameter<DoubleProperty>("metric", paramHelp[0], "", false);
 //  addInParameter<bool>("layout subgraphs", paramHelp[1], "true");
 //  addInParameter<bool>("layout quotient graph", paramHelp[2], "true");
-//  addDependency<Algorithm>("Quotient Clustering", "1.3");
-//  addDependency<DoubleAlgorithm>("Connected Component", "1.0");
-  addDependency<DoubleAlgorithm>("Strength", "1.0");
-//  addDependency<LayoutAlgorithm>("Circular", "1.1");
-//  addDependency<LayoutAlgorithm>("GEM (Frick)", "1.1");
-//  addDependency<SizeAlgorithm>("Auto Sizing", "1.0");
+//  addDependency("Quotient Clustering", "1.3");
+//  addDependency("Connected Component", "1.0");
+  addDependency("Strength", "1.0");
+//  addDependency("Circular", "1.1");
+//  addDependency("GEM (Frick)", "1.1");
+//  addDependency("Auto Sizing", "1.0");
 }
 
 //==============================================================================
@@ -382,7 +382,10 @@ bool StrengthClustering::run() {
     if (pluginProgress)
       pluginProgress->setComment("Computing Strength metric X specified metric on edges ...");
 
-    mult = *metric;
+    if(metric != NULL) {
+      mult = *metric;
+    }
+
     mult.uniformQuantification(100);
     edge e;
     unsigned int steps = 0, maxSteps = graph->numberOfEdges();

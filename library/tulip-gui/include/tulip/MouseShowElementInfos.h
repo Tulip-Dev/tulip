@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef _Tulip_MOUSESHOWELEMENTINFOS_H
 #define _Tulip_MOUSESHOWELEMENTINFOS_H
 
@@ -27,9 +29,6 @@
 #include <tulip/GlScene.h>
 
 #include <tulip/InteractorComposite.h>
-
-/** \addtogroup Mouse_interactor */
-/*@{*/
 
 namespace tlp {
 
@@ -55,10 +54,27 @@ protected:
   QGraphicsProxyWidget *_informationsWidgetItem;
 
   QTableView* tableView() const;
+
+  /**
+   * @brief buildModel create and returns the model to visualize edit elements parameters.
+   * @param elementType the type of the element can be NODE or EDGE
+   * @param elementId elementId the id of the element
+   * @param parent the parent for the model creation.
+   * @return
+   */
+  virtual QAbstractItemModel* buildModel(ElementType elementType, unsigned int elementId, QObject *parent)const;
+  /**
+   * @brief elementName returns the title of the element.
+   * @param elementType the type of the element can be NODE or EDGE
+   * @param elementId the id of the element
+   * @return
+   */
+  virtual QString elementName(ElementType elementType, unsigned int elementId)const;
 };
 
 }
 
-/*@}*/
+
 
 #endif
+///@endcond

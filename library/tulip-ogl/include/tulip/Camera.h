@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef TLPCAMERA_H
 #define TLPCAMERA_H
 
@@ -32,159 +33,184 @@ namespace tlp {
 class GlScene;
 
 /**
+ * \ingroup OpenGL
  * \brief Tulip OpenGL camera object
  *
  * This camera can be a 2D or 3D camera
  * After setup you can do some basic operation :
  *  - Move, rotate, strafeLeftRight and strafeUpDown to modify poitn of view
- *  - You can directly modify camera infor mation with setSceneRadius, setZoomFactor, setEyes, setCenter and setUp
- *  - You can transform screen coordinates to 3D world coordinates with screenTo3DWorld function and vise versa with worldTo2DScreen function
+ *  - You can directly modify camera parameters with setSceneRadius, setZoomFactor, setEyes, setCenter and setUp
+ *  - You can transform screen coordinates to 3D world coordinates with screenTo3DWorld() function and 3D world coordinates to screen coordinates with worldTo2DScreen() function
+ * A camera is a main component of GlLayer and GlScene
+ * @see GlLayer
+ * @see GlScene
  */
 class TLP_GL_SCOPE Camera : public Observable {
 public:
 
   /**
-   * Constructor
+   * @brief Constructor
+   * @param scene A layer is attached to a scene so we have to specify it in the constructor
+   * @param center 3D coordinates of point visualized by the camera
+   * @param eye 3D position of the camera
+   * @param up normalized up 3D coordinates of the camera
+   * @param zoomFactor level of zoom of the camera
+   * @param sceneRadius scene radius of the camera
    */
   Camera(GlScene* scene,Coord center=Coord(0,0,0),
          Coord eyes=Coord(0,0,10), Coord up=Coord(0,-1,0),
          double zoomFactor=0.5, double sceneRadius=10);
   /**
-   * Constructor : use for 2D camera
+   * @brief Constructor : used to create a 2D camera
    */
   Camera(GlScene* scene,bool d3);
 
   Camera& operator=(const Camera& camera);
 
   /**
-   * Destructor
+   * @brief Destructor
    */
   ~Camera();
 
   /**
-   * Set the camera's scene : the viewport is store in the scene, so we must attach camera to a scene
+   * @brief Set the camera's scene
+   * The viewport is store in the scene, so we must attach camera to a scene
    */
   void setScene(GlScene *scene);
+
   /**
-   * Return the camera's scene
+   * @brief Return the camera's scene
    */
   GlScene *getScene() const {
     return scene;
   }
 
   /**
-   * Return the camera bounding box : this bounding box is the part of the scene visualized by this camera.
+   * @brief Return the camera bounding box
+   *
+   * This bounding box is the part of the scene visualized by this camera.
    */
   BoundingBox getBoundingBox() const;
 
   /**
-   * This moves the camera forward or backward depending on the speed
+   * @brief This function moves the camera forward or backward depending on the speed
    */
   void move(float speed);
   /**
-   * This strafes the camera left and right depending on the speed (-/+)
+   * @brief This function strafes the camera left and right depending on the speed (-/+)
    */
   void strafeLeftRight(float speed);
   /**
-   * This strafes the camera up and down depending on the speed (-/+)
+   * @brief This function strafes the camera up and down depending on the speed (-/+)
    */
   void strafeUpDown(float speed);
   /**
-   * This rotates the camera's eyes around the center depending on the values passed in.
+   * @brief This function rotates the camera's eyes around the center depending on the values passed in.
    */
   void rotate(float angle, float x, float y, float z);
 
   /**
-   * Return if the camera is a 3D one
+   * @brief Return if the camera is a 3D one
    */
   bool is3D() const {
     return d3;
   }
 
   /**
-   * Return the viewport of the attached scene
+   * @brief Return the viewport of the attached scene
    */
   Vector<int, 4> getViewport() const;
 
   /**
-   * Init Gl parameters
-   */
-  void initGl();
-
-  /**
-   * Init light
-   */
-  void initLight();
-
-  /**
-   * Init projection with the gived viewport. Load identity matrix if reset is set as true
-   */
-  void initProjection(const Vector<int, 4>& viewport,bool reset=true);
-
-  /**
-   * Init projection with the scene viewport. Load identity matrix if reset is set as true
-   */
-  void initProjection(bool reset=true);
-
-  /**
-   * Init modelview
-   */
-  void initModelView();
-
-  /**
-   * Set the scene radius
-   */
-  void setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBox=BoundingBox());
-  /**
-   * Return the scene radius
+   * @brief Return the scene radius
    */
   double getSceneRadius() const {
     return sceneRadius;
   }
 
   /**
-   * Set the zoom factor
+   * @brief Set the zoom factor
+   *
+   * level of zoom of the camera
    */
   void setZoomFactor(double zoomFactor);
   /**
-   * Return the zoom factor
+   * @brief Return the zoom factor
+   *
+   * level of zoom of the camera
    */
   double getZoomFactor() const {
     return zoomFactor;
   }
 
   /**
-   * Set the eye
+   * @brief Set the eye
+   *
+   * 3D position of the camera
    */
   void setEyes(const Coord& eyes);
   /**
-   * Return the eyes
+   * @brief Return the eyes
+   *
+   * 3D position of the camera
    */
   Coord getEyes() const {
     return eyes;
   }
 
   /**
-   * Set the center
+   * @brief Set the center
+   *
+   * 3D coordinates of point visualized by the camera
    */
   void setCenter(const Coord& center);
   /**
-   * Return the center
+   * @brief Return the center
+   *
+   * 3D coordinates of point visualized by the camera
    */
   Coord getCenter() const {
     return center;
   }
 
   /**
-   * Set the up vector
+   * @brief Set the up vector
+   *
+   * normalized up 3D coordinates of the camera
    */
   void setUp(const Coord& up);
   /**
-   * Return the up vector
+   * @brief Return the up vector
+   *
+   * normalized up 3D coordinates of the camera
    */
   Coord getUp() const {
     return up;
   }
+
+  /**
+   * @brief Return the 3D world coordinate for the given screen point
+   * \warning This function set up the projection and modelview matrix
+   */
+  Coord screenTo3DWorld(const Coord &point) const;
+
+  /**
+   * @brief Return the screen position for the given 3D coordinate
+   * \warning This function set up the projection and modelview matrix
+   */
+  Coord worldTo2DScreen(const Coord &obj) const;
+
+  /**
+   * @brief Function to export data in outString (in XML format)
+   */
+  virtual void getXML(std::string &outString);
+
+  /**
+   * @brief Function to set data with inString (in XML format)
+   */
+  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+
+///@cond DOXYGEN_HIDDEN
 
   /**
    * Get the modelview matrix
@@ -218,26 +244,36 @@ public:
   void getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> &transformMatrix) const;
 
   /**
-   * Return the 3D world coordinate for the given screen point
-   * \warning This function set up the projection and modelview matrix
+   * @brief Init Gl parameters
    */
-  Coord screenTo3DWorld(const Coord &point) const;
+  void initGl();
 
   /**
-   * Return the screen position for the given 3D coordinate
-   * \warning This function set up the projection and modelview matrix
+   * @brief Init light
    */
-  Coord worldTo2DScreen(const Coord &obj) const;
+  void initLight();
 
   /**
-   * Function to export data in outString (in XML format)
+   * @brief Init projection with the gived viewport. Load identity matrix if reset is set as true
    */
-  virtual void getXML(std::string &outString);
+  void initProjection(const Vector<int, 4>& viewport,bool reset=true);
 
   /**
-   * Function to set data with inString (in XML format)
+   * @brief Init projection with the scene viewport. Load identity matrix if reset is set as true
    */
-  virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
+  void initProjection(bool reset=true);
+
+  /**
+   * @brief Init modelview
+   */
+  void initModelView();
+
+  /**
+   * @brief Set the scene radius
+   */
+  void setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBox=BoundingBox());
+
+///@endcond
 
 private:
 

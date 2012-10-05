@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GRAPHELEMENTMODEL_H
 #define GRAPHELEMENTMODEL_H
 
@@ -89,3 +91,4 @@ public :
 }
 
 #endif // GRAPHELEMENTMODEL_H
+///@endcond

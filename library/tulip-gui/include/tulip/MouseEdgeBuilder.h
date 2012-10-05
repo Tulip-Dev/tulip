@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MOUSEADDEDGE_H
 #define MOUSEADDEDGE_H
 #include <vector>
@@ -29,16 +31,43 @@ namespace tlp {
 class Graph;
 class LayoutProperty;
 
-/** \addtogroup Mouse_interactor */
-/*@{*/
-class TLP_QT_SCOPE MouseEdgeBuilder:public GLInteractorComponent, private Observable {
+class TLP_QT_SCOPE MouseEdgeBuilder:public GLInteractorComponent, public Observable {
 private:
-  node source;
-  bool started;
-  Coord startPos,curPos;
-  std::vector<Coord> bends;
-  Graph *graph;
-  LayoutProperty *layoutProperty;
+  node _source;
+  bool _started;
+  Coord _startPos,_curPos;
+  std::vector<Coord> _bends;
+  Graph *_graph;
+  LayoutProperty *_layoutProperty;
+
+protected:
+  /**
+   * @brief addLink Adds a link between a source and destination nodes. Adds an edge by default
+   * @param source
+   * @param dest
+   */
+  virtual void addLink(QObject *, const node source, const node dest);
+  /**
+   * @brief source gets the source node.
+   * @return
+   */
+  node source()const {
+    return _source;
+  }
+  /**
+   * @brief bends returns the bends list.
+   * @return
+   */
+  const std::vector<Coord>& bends()const {
+    return _bends;
+  }
+  /**
+   * @brief setBends updates the bends list.
+   * @param bends
+   */
+  void setBends(const std::vector<Coord>& bends) {
+    _bends = bends;
+  }
 
 public:
   MouseEdgeBuilder();
@@ -53,7 +82,8 @@ public:
     return new MouseEdgeBuilder();
   }
 };
-/*@}*/
+
 
 }
 #endif
+///@endcond

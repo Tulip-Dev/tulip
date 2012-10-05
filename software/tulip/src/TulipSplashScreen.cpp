@@ -22,6 +22,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QApplication>
 #include <QtCore/QPropertyAnimation>
+#include <QtCore/QDir>
 
 #include <tulip/TlpTools.h>
 #include <tulip/Plugin.h>
@@ -29,8 +30,7 @@
 using namespace tlp;
 
 TulipSplashScreen::TulipSplashScreen(): PluginLoader(), QSplashScreen(), _fileCounter(0) {
-  setPixmap(QPixmap((tlp::TulipBitmapDir + "/logo.bmp").c_str()));
-
+  setPixmap(QPixmap(QDir(QApplication::applicationDirPath()).absoluteFilePath("../share/tulip/bitmaps/logo.bmp")));
   setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
   QPropertyAnimation *fadeInAnimation = new QPropertyAnimation(this,"windowOpacity");
   fadeInAnimation->setStartValue(0);

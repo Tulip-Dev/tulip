@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef PLUGINMODEL_H
 #define PLUGINMODEL_H
@@ -41,7 +43,7 @@ public:
   virtual ~PluginListModel() {
   }
 
-  virtual int columnCount ( const QModelIndex& parent = QModelIndex() ) const {
+  virtual int columnCount ( const QModelIndex& = QModelIndex() ) const {
     return 1;
   }
 
@@ -52,7 +54,7 @@ public:
     return PluginLister::instance()->availablePlugins<PLUGIN>().size();
   }
 
-  QModelIndex parent(const QModelIndex &child) const {
+  QModelIndex parent(const QModelIndex &) const {
     return QModelIndex();
   }
 
@@ -171,7 +173,7 @@ public:
     return item->children.size();
   }
 
-  int columnCount(const QModelIndex &parent = QModelIndex()) const {
+  int columnCount(const QModelIndex & = QModelIndex()) const {
     return 1;
   }
 
@@ -212,6 +214,12 @@ public:
       f.setBold(true);
       return f;
     }
+    else if (role == Qt::DecorationRole && tlp::PluginLister::pluginExists(item->name.toStdString())) {
+      const tlp::Plugin* p = tlp::PluginLister::pluginInformations(item->name.toStdString());
+      QIcon icon(p->icon().c_str());
+      delete p;
+      return icon;
+    }
 
     return QVariant();
   }
@@ -232,3 +240,4 @@ public:
 }
 
 #endif // PLUGINMODEL_H
+///@endcond

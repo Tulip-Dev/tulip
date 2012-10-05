@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -17,6 +17,7 @@
  *
  */
 
+
 #ifndef TULIP_CONNECTEDTEST_H
 #define TULIP_CONNECTEDTEST_H
 
@@ -29,9 +30,8 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup graph_test */
-/*@{*/
 /**
+ * @ingroup Checks
  * @brief @brief Performs a test of connexity on the graph, and provides a function to make a graph connected.
  * From Wikipedia: "A graph is said to be connected if every pair of vertices in the graph are connected." (i.e. there is a path between every pair of vertices).
  **/
@@ -108,5 +108,5 @@ private:
 };
 
 }
-/*@}*/
+
 #endif

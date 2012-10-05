@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef PROPERTYOBSERVABLE_H
 #define PROPERTYOBSERVABLE_H
 
@@ -29,10 +31,8 @@ namespace tlp {
 class PropertyInterface;
 //=========================================================
 
-/** \addtogroup properties */
-/*@{*/
-/// Observer for Property
 /**
+ * @ingroup Observation
  * The Observer pattern is described in the lecture notes and pp293-304
  * of Design Patterns by Gamma, Helm, Johnson, and Vlissides. It is a
  * framework for handling state dependency between observer and observed
@@ -54,8 +54,9 @@ public:
 protected:
   void treatEvent(const Event& ev);
 };
-/*@}*/
+
 }
 
 #endif
 
+///@endcond

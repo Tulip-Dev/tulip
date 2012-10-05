@@ -141,7 +141,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 
   if (!PluginLister::pluginExists(format)) {
     qWarning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
-               << "\" doesn't exists (or is not loaded)" << endl;
+               << "\" does not exist (or is not loaded)" << endl;
     return NULL;
   }
 
@@ -194,7 +194,7 @@ bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &
                       DataSet &dataSet, PluginProgress *progress) {
   if (!PluginLister::pluginExists(format)) {
     qWarning() << "libtulip: " << __FUNCTION__ << ": export plugin \"" << format
-               << "\" doesn't exists (or is not loaded)" << endl;
+               << "\" does not exist (or is not loaded)" << endl;
     return false;
   }
 
@@ -389,13 +389,13 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
 
 //=========================================================
 #define CHECK_PROPERTY(T) \
-  if (dataSet->getData(n)->getTypeName().compare(typeid(T*).name()) == 0) {\
+  if (dataSetCopy.getData(n)->getTypeName().compare(typeid(T*).name()) == 0) {\
     T* prop=NULL;\
-    dataSet->getAndFree<T*>(n,prop);\
+    dataSetCopy.getAndFree<T*>(n,prop);\
     T* clone = new T(this,prop->getName());\
     clone->copy(prop);\
     clonedProperties[clone] = prop;\
-    dataSet->set<T*>(n,clone);\
+    dataSetCopy.set<T*>(n,clone);\
     QString copyName = dataSetName + "(" + prop->getName().c_str() + ")";\
     if (existProperty(copyName.toStdString()) && getProperty(copyName.toStdString())->getTypename().compare(prop->getTypename()) != 0)\
       qWarning() << algorithm.c_str() << ": Type mismatch for output property " << copyName;\
@@ -411,7 +411,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
                            DataSet *dataSet, PluginProgress *progress) {
   if (!PluginLister::pluginExists(algorithm)) {
     qWarning() << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
-               << "\" doesn't exists (or is not loaded)" << endl;
+               << "\" does not exist (or is not loaded)" << endl;
     return false;
   }
 
@@ -439,10 +439,13 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   QMap<PropertyInterface*,PropertyInterface*> clonedProperties;
   QMap<PropertyInterface*,PropertyInterface*> namedProperties;
 
+  DataSet dataSetCopy; // Create a copy of the dataset in order to leave the original values unchanged after function call
+
   if (dataSet) {
-    QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSet->toString().c_str();
+    dataSetCopy = *dataSet;
+    QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSetCopy.toString().c_str();
     foreach(std::string n, outParams) {
-      if (!dataSet->exist(n))
+      if (!dataSetCopy.exist(n))
         continue;
 
       CHECK_PI(Boolean)
@@ -455,7 +458,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
     }
   }
 
-  AlgorithmContext* context = new AlgorithmContext(this, dataSet, tmpProgress);
+  AlgorithmContext* context = new AlgorithmContext(this, &dataSetCopy, tmpProgress);
   Algorithm *newAlgo = PluginLister::instance()->getPluginObject<Algorithm>(algorithm, context);
 
   if ((result=newAlgo->check(errorMessage))) {
@@ -483,15 +486,38 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
     delete clone;
   }
 
+  if (dataSet) { // Copy out parameters that are not properties back to the original dataSet
+    foreach(std::string n, outParams) {
+      if (!dataSetCopy.exist(n))
+        continue;
+
+      if (dataSetCopy.getData(n)->getTypeName().compare(typeid(DoubleProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(DoubleVectorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(IntegerProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(IntegerVectorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(BooleanProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(BooleanVectorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(LayoutProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(CoordVectorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(SizeProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(SizeVectorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(ColorProperty*).name()) != 0 &&
+          dataSetCopy.getData(n)->getTypeName().compare(typeid(ColorVectorProperty*).name()) != 0) {
+        DataType* dt = dataSetCopy.getData(n);
+        dataSet->setData(n,dt);
+      }
+    }
+  }
+
   return result;
 }
 
 //=========================================================
 bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
                                         PropertyInterface* prop,
-                                        std::string &msg,
+                                        std::string &errorMessage,
                                         tlp::PluginProgress *progress,
-                                        tlp::DataSet *data) {
+                                        tlp::DataSet *parameters) {
   bool result;
   tlp::AlgorithmContext context;
 
@@ -507,7 +533,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     }
 
     if (currentGraph != prop->getGraph()) {
-      msg = "The passed property does not belong to the graph";
+      errorMessage = "The passed property does not belong to the graph";
       return false;
     }
   }
@@ -521,14 +547,14 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   if (it != circularCalls.end() && (*it).second == prop) {
 #ifndef NDEBUG
-    qWarning() << "Circular call of " << __PRETTY_FUNCTION__ << " " << msg;
+    qWarning() << "Circular call of " << __PRETTY_FUNCTION__ << " " << errorMessage;
 #endif
     return false;
   }
 
   // nothing to do if the graph is empty
   if (numberOfNodes() == 0) {
-    msg= "The graph is empty";
+    errorMessage= "The graph is empty";
     return false;
   }
 
@@ -539,17 +565,17 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   else
     tmpProgress=progress;
 
-  bool hasData = data != NULL;
+  bool hasData = parameters != NULL;
 
   if (!hasData)
-    data = new tlp::DataSet();
+    parameters = new tlp::DataSet();
 
   // add prop as result in dataset
-  data->set<PropertyInterface *>("result", prop);
+  parameters->set<PropertyInterface *>("result", prop);
 
   context.pluginProgress = tmpProgress;
   context.graph = this;
-  context.dataSet = data;
+  context.dataSet = parameters;
 
   tlp::Observable::holdObservers();
   circularCalls[algorithm] = prop;
@@ -558,7 +584,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     tlp::PluginLister::instance()->getPluginObject<PropertyAlgorithm>(algorithm, &context);
 
   if (tmpAlgo != NULL) {
-    result = tmpAlgo->check(msg);
+    result = tmpAlgo->check(errorMessage);
 
     if (result) {
       tmpAlgo->run();
@@ -567,7 +593,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     delete tmpAlgo;
   }
   else {
-    msg = "No algorithm available with this name";
+    errorMessage = "No algorithm available with this name";
     result=false;
   }
 
@@ -578,9 +604,9 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   if (hasData)
     // remove result from dataset
-    data->remove("result");
+    parameters->remove("result");
   else
-    delete data;
+    delete parameters;
 
   return result;
 }

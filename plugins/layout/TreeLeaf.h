@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * \file
  * \brief An implementation of a simple tree layout.
@@ -62,6 +62,6 @@ private:
   void computeLevelHeights(tlp::Graph* tree, tlp::node n, unsigned int depth,
                            OrientableSizeProxy *oriSize);
 };
-/*@}*/
+
 #endif
 

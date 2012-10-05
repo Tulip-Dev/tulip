@@ -60,7 +60,7 @@ const char * paramHelp[] = {
  */
 
 /** \addtogroup import */
-/*@{*/
+
 /// Grid Approximation - Import of a grid approximation
 /** This plugin enables to create a gride approximation
  *
@@ -145,5 +145,5 @@ public:
     return  pluginProgress->state()!=TLP_CANCEL;
   }
 };
-/*@}*/
+
 PLUGIN(SmallWorldGraph)

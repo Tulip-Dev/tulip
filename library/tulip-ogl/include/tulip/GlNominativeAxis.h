@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLNOMINATIVEAXIS_H_
 #define GLNOMINATIVEAXIS_H_
@@ -92,3 +94,4 @@ private :
 }
 
 #endif /* GLNOMINATIVEAXIS_H_ */
+///@endcond

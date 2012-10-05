@@ -28,7 +28,7 @@ class OrientableCoord;
 class OrientableSizeProxy;
 
 /** \addtogroup layout */
-/*@{*/
+
 /** This plugin is an implementation of a dendrogram, an extended implementation
  *  of a "Bio representation" which includes variable orientation
  *  and variable node sizelayout.
@@ -78,7 +78,7 @@ private:
   void computeLevelHeights(tlp::Graph* tree, tlp::node n, unsigned int depth,
                            OrientableSizeProxy *oriSize);
 };
-/*@}*/
+
 #endif
 
 

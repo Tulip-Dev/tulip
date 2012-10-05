@@ -1,0 +1,63 @@
+.tabs, .tabs2, .tabs3 {
+    background-color: #F9F9F9;
+    height: 40px;
+    width: 100%;
+    z-index: 101;
+    font-size: 12px;
+    font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
+    padding-bottom: 5px;
+/*     border-bottom: 1px solid #C9C9C9; */
+}
+
+.tabs2 {
+    font-size: 12px;
+    border: 0px;
+    border-bottom: 5px transparent;
+}
+.tabs3 {
+    font-size: 12px;
+    border: 0px;
+    border-bottom: 5px transparent;
+}
+
+.tablist {
+    margin: 0;
+    padding: 0;
+    display: table;
+}
+
+.tablist li {
+    float: left;
+    text-align: center;
+    display: table-cell;
+    line-height: 36px;
+    list-style: none;
+    width: 180px;
+    margin-left: 10px;
+}
+
+.tablist a {
+    display: block;
+    padding: 0 20px;
+    font-weight: bold;
+    border: 0px;
+    border-bottom: 5px transparent;
+}
+
+.tabs3 .tablist a {
+    padding: 0 10px;
+}
+
+.tablist a:hover {
+    text-decoration: none;
+    border: 0px;
+    border-bottom: 5px solid #C9C9C9;
+}
+.tabs3 .tablist a {
+    padding: 0 10px;
+    border: 0px;
+}
+.tablist li.current a {
+    border: 0px;
+    border-bottom: 5px solid #33b5e5;
+}

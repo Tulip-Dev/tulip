@@ -31,9 +31,6 @@ class PluginsCenterData;
 
 class PluginInformationsListItem;
 
-static const QString STABLE_LOCATION = QString("http://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_RELEASE;
-static const QString TESTING_LOCATION = QString("http://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_RELEASE;
-
 class PluginsCenter: public QWidget {
   Q_OBJECT
 

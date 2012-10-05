@@ -64,7 +64,7 @@ const char * paramHelp[] = {
 }
 
 /** \addtogroup import */
-/*@{*/
+
 /// Random Graph - Import of a random graph
 /** This plugin enables to create a random graph
  *
@@ -134,5 +134,5 @@ public:
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(RandomGraph)

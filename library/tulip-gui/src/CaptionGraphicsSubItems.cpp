@@ -257,7 +257,7 @@ void CaptionGraphicsBackgroundItem::updateCaption(float begin ,float end) {
 }
 
 bool CaptionGraphicsBackgroundItem::sceneEvent ( QEvent * event ) {
-  if(event->type()==QEvent::QEvent::GraphicsSceneMousePress) {
+  if(event->type()==QEvent::GraphicsSceneMousePress) {
     if(((QGraphicsSceneMouseEvent*)event)->button()==Qt::LeftButton) {
       activateInteractions(!_interactionsActivated);
       return true;

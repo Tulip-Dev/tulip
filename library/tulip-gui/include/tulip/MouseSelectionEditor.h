@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef MOUSEMOVESELECTION_H
 #define MOUSEMOVESELECTION_H
 
@@ -29,9 +31,6 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
-
-/** \addtogroup Mouse_interactor */
-/*@{*/
 
 namespace tlp {
 
@@ -99,6 +98,7 @@ private:
 };
 
 }
-/*@}*/
+
 
 #endif
+///@endcond

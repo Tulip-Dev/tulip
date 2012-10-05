@@ -116,7 +116,7 @@ void drawTree() {
 }
 
 /** \addtogroup glyph */
-/*@{*/
+
 /// A 3D glyph.
 /** This glyph draws a christmas tree special for christmas release of 2008
  */
@@ -166,4 +166,4 @@ public:
 
 
 
-/*@}*/
+

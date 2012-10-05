@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef Tulip_GLCOMPLEXEENTITY_H
 #define Tulip_GLCOMPLEXEENTITY_H
 
@@ -61,3 +63,4 @@ public:
 }
 
 #endif // Tulip_GLCOMPLEXEENTITY_H
+///@endcond

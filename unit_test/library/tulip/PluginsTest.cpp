@@ -36,6 +36,14 @@ using namespace tlp;
 
 CPPUNIT_TEST_SUITE_REGISTRATION( PluginsTest );
 
+#if defined(_WIN32)
+const std::string suffix = "dll";
+#elif defined(__APPLE__)
+const std::string suffix = "dylib";
+#else
+const std::string suffix = "so";
+#endif
+
 //==========================================================
 void PluginsTest::setUp() {
   graph = tlp::newGraph();
@@ -49,13 +57,12 @@ void PluginsTest::testloadPlugin() {
   // plugin does not exist yet
   CPPUNIT_ASSERT(!tlp::PluginLister::pluginExists("Test"));
   PluginLoaderTxt loader;
-  PluginLibraryLoader::loadPluginLibrary("./testPlugin.so", &loader);
+  PluginLibraryLoader::loadPluginLibrary("./testPlugin."+suffix, &loader);
   // plugin should exist now
   CPPUNIT_ASSERT(tlp::PluginLister::pluginExists("Test"));
   list<Dependency> deps = tlp::PluginLister::instance()->getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
   CPPUNIT_ASSERT_EQUAL(size_t(1), deps.size());
-  CPPUNIT_ASSERT_EQUAL(string("BooleanAlgorithm"), deps.front().factoryName);
   CPPUNIT_ASSERT_EQUAL(string("Test"), deps.front().pluginName);
 }
 //==========================================================
@@ -65,11 +72,11 @@ void PluginsTest::testCircularPlugin() {
   // ensure graph is not empty
   graph->addNode();
   tlp::BooleanProperty sel(graph);
-  CPPUNIT_ASSERT(graph->computeProperty(name, &sel, err));
+  CPPUNIT_ASSERT(graph->applyPropertyAlgorithm(name, &sel, err));
 }
 //==========================================================
 void PluginsTest::testAncestorGraph() {
-  PluginLibraryLoader::loadPluginLibrary("./testPlugin2.so");
+  PluginLibraryLoader::loadPluginLibrary("./testPlugin2."+suffix);
   string simpleAlgorithm = "Test2";
   string invalidAlgorithm = "Test3";
   string err;
@@ -88,34 +95,34 @@ void PluginsTest::testAncestorGraph() {
   Graph *child2 = graph->addSubGraph();
 
   //since the property belongs to a descendant graph, this fails
-  bool result = graph->computeProperty(simpleAlgorithm, &sel, err);
+  bool result = graph->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
   //since the property belongs to a descendant of a sibling graph, this fails
-  result = child2->computeProperty(simpleAlgorithm, &sel, err);
+  result = child2->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
   //These will fail because the graph is empty
-  result = child1->computeProperty(simpleAlgorithm, &sel, err);
+  result = child1->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
-  result = grandchild->computeProperty(simpleAlgorithm, &sel, err);
+  result = grandchild->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
   grandchild->addNode();
 
   //now the graph is not empty they will pass
-  result = child1->computeProperty(simpleAlgorithm, &sel, err);
+  result = child1->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, result);
 
-  result = grandchild->computeProperty(simpleAlgorithm, &sel, err);
+  result = grandchild->applyPropertyAlgorithm(simpleAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, result);
 
   //now testing with an algorithm that does not exists
-  result = child1->computeProperty(invalidAlgorithm, &sel, err);
+  result = child1->applyPropertyAlgorithm(invalidAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 
-  result = grandchild->computeProperty(invalidAlgorithm, &sel, err);
+  result = grandchild->applyPropertyAlgorithm(invalidAlgorithm, &sel, err);
   CPPUNIT_ASSERT_MESSAGE(err, !result);
 }
 
@@ -130,7 +137,6 @@ void PluginsTest::pluginInformations() {
   std::list<Dependency> dependencies = PluginLister::instance()->getPluginDependencies("Test");
   CPPUNIT_ASSERT_EQUAL(size_t(1), dependencies.size());
   CPPUNIT_ASSERT_EQUAL(string("Test"), dependencies.begin()->pluginName);
-  CPPUNIT_ASSERT_EQUAL(string("BooleanAlgorithm"), dependencies.begin()->factoryName);
   CPPUNIT_ASSERT_EQUAL(string("1.0"), dependencies.begin()->pluginRelease);
 
   tlp::ParameterDescriptionList parameters = PluginLister::instance()->getPluginParameters("Test");

@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef WORKSPACEPANEL_H
 #define WORKSPACEPANEL_H
 
@@ -63,6 +65,8 @@ public:
   explicit WorkspacePanel(tlp::View* view, QWidget* parent=NULL);
   virtual ~WorkspacePanel();
 
+  bool eventFilter(QObject *, QEvent *);
+
   tlp::View* view() const;
   QString viewName() const;
   bool isProgressMode() const;
@@ -77,6 +81,7 @@ public slots:
 
 signals:
   void drawNeeded();
+  void swapWithPanels(WorkspacePanel* panel);
 
 protected slots:
   void hideConfigurationTab();
@@ -86,13 +91,26 @@ protected slots:
   void setCurrentInteractorConfigurationVisible(bool);
   void actionChanged();
 
+  void scrollInteractorsRight();
+  void scrollInteractorsLeft();
+  void resetInteractorsScrollButtonsVisibility();
+
 protected:
   void progress_handler(int step, int max_step);
   void refreshInteractorsToolbar();
-  bool eventFilter(QObject *, QEvent *);
+
   void resizeEvent(QResizeEvent *);
+
+  void dragEnterEvent(QDragEnterEvent *);  
+  void dropEvent(QDropEvent *);
+  void dragLeaveEvent(QDragLeaveEvent *);
+
+  bool handleDragEnterEvent(QEvent* e, const QMimeData* mimedata);
+  bool handleDropEvent(const QMimeData* mimedata);
+
 };
 
 }
 
 #endif // WORKSPACEPANEL_H
+///@endcond

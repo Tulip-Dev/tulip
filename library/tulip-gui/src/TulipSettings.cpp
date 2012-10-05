@@ -47,6 +47,9 @@ const QString TulipSettings::ProxyUseAuthEntry = "app/proxy/user";
 const QString TulipSettings::ProxyUsernameEntry = "app/proxy/useAuth";
 const QString TulipSettings::ProxyPasswordEntry = "app/proxy/passwd";
 
+const QString TulipSettings::AutomaticPerfectAspectRatioEntry = "graph/auto/ratio";
+const QString TulipSettings::AutomaticMapMetricEntry = "graph/auto/colors";
+
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
 
@@ -182,26 +185,20 @@ void TulipSettings::setDefaultSelectionColor(const tlp::Color& color) {
   setValue(DefaultSelectionColorEntry,value);
 }
 
-QStringList TulipSettings::favoriteAlgorithms() const {
-  return value(FavoriteAlgorithmsEntry,QStringList()).toStringList();
+QSet<QString> TulipSettings::favoriteAlgorithms() const {
+  return value(FavoriteAlgorithmsEntry,QStringList()).toStringList().toSet();
 }
 
 void TulipSettings::addFavoriteAlgorithm(const QString& name) {
-  QStringList lst = favoriteAlgorithms();
-
-  if (!lst.contains(name))
-    lst+=name;
-
-  setFavoriteAlgorithms(lst);
+  QSet<QString> favAlgs = favoriteAlgorithms();
+  favAlgs.insert(name);
+  setFavoriteAlgorithms(favAlgs);
 }
 
 void TulipSettings::removeFavoriteAlgorithm(const QString& name) {
-  QStringList lst = favoriteAlgorithms();
-
-  if (lst.contains(name))
-    lst.removeAll(name);
-
-  setFavoriteAlgorithms(lst);
+  QSet<QString> favAlgs = favoriteAlgorithms();
+  favAlgs.remove(name);
+  setFavoriteAlgorithms(favAlgs);
 }
 
 bool TulipSettings::isProxyEnabled() const {
@@ -286,6 +283,22 @@ void TulipSettings::setFirstRun(bool f) {
   setValue(FirstRunEntry,f);
 }
 
-void TulipSettings::setFavoriteAlgorithms(const QStringList& lst) {
-  setValue(FavoriteAlgorithmsEntry,lst);
+bool TulipSettings::isAutomaticMapMetric() const {
+  return value(AutomaticMapMetricEntry,false).toBool();
+}
+
+void TulipSettings::setAutomaticMapMetric(bool f) {
+  setValue(AutomaticMapMetricEntry,f);
+}
+
+bool TulipSettings::isAutomaticRatio() const {
+  return value(AutomaticPerfectAspectRatioEntry,false).toBool();
+}
+
+void TulipSettings::setAutomaticRatio(bool f) {
+  setValue(AutomaticPerfectAspectRatioEntry,f);
+}
+
+void TulipSettings::setFavoriteAlgorithms(const QSet<QString>& lst) {
+  setValue(FavoriteAlgorithmsEntry,(QStringList)(lst.toList()));
 }

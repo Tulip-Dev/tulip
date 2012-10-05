@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef SIZEPROPERTYANIMATION_H_
 #define SIZEPROPERTYANIMATION_H_
 
@@ -27,3 +29,4 @@ typedef VectorPropertyAnimation<tlp::SizeProperty, tlp::Size, float, 3> SizeProp
 }
 
 #endif /* SIZEPROPERTYANIMATION_H_ */
+///@endcond

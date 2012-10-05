@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef MOUSEOBJECT_H
 #define MOUSEOBJECT_H
@@ -28,8 +30,6 @@
 
 namespace tlp {
 
-/** \addtogroup Mouse_interactor */
-/*@{*/
 /** An interactor class allowing to zoom and pan using the mouse wheel.
  */
 class TLP_QT_SCOPE MousePanNZoomNavigator:public InteractorComponent {
@@ -73,7 +73,8 @@ public:
     return new MouseNKeysNavigator();
   }
 };
-/*@}*/
+
 
 }
 #endif
+///@endcond

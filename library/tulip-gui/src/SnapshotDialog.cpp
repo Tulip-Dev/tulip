@@ -18,15 +18,16 @@
  */
 
 #include "tulip/SnapshotDialog.h"
+#include "ui_SnapshotDialog.h"
 
-#include <tulip/GlMainView.h>
-#include <tulip/GlMainWidget.h>
+#include <tulip/View.h>
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QImageWriter>
 #include <QtGui/QFileDialog>
 #include <QtGui/QGraphicsPixmapItem>
 #include <QtGui/QClipboard>
+#include <QtGui/QGraphicsScene>
 
 using namespace std;
 
@@ -65,23 +66,24 @@ protected :
 
 };
 
-SnapshotDialog::SnapshotDialog(GlMainView &v,QWidget *parent):QDialog(parent),view(&v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
-  setupUi(this);
+SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(&v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
+  ui->setupUi(this);
 
-  widthSpinBox->setValue(view->getGlMainWidget()->rect().width());
-  heightSpinBox->setValue(view->getGlMainWidget()->rect().height());
+  ui->widthSpinBox->setValue(view->centralItem()->scene()->sceneRect().width());
+  ui->heightSpinBox->setValue(view->centralItem()->scene()->sceneRect().height());
 
   sizeSpinBoxValueChanged();
 
-  connect(widthSpinBox,SIGNAL(valueChanged(int)),this,SLOT(widthSpinBoxValueChanged(int)));
-  connect(heightSpinBox,SIGNAL(valueChanged(int)),this,SLOT(heightSpinBoxValueChanged(int)));
-  connect(copybutton, SIGNAL(clicked()), this, SLOT(copyClicked()));
+  connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),this,SLOT(widthSpinBoxValueChanged(int)));
+  connect(ui->heightSpinBox,SIGNAL(valueChanged(int)),this,SLOT(heightSpinBoxValueChanged(int)));
+  connect(ui->copybutton, SIGNAL(clicked()), this, SLOT(copyClicked()));
 
   lockLabel=new LockLabel();
-  lockLayout->addWidget(lockLabel);
+  ui->lockLayout->addWidget(lockLabel);
 }
 
 SnapshotDialog::~SnapshotDialog() {
+  delete ui;
 }
 
 void SnapshotDialog::resizeEvent(QResizeEvent *) {
@@ -96,11 +98,11 @@ void SnapshotDialog::accept() {
 
   this->setEnabled(false);
 
-  QPixmap pixmap=view->snapshot(QSize(widthSpinBox->value(),heightSpinBox->value()));
+  QPixmap pixmap=view->snapshot(QSize(ui->widthSpinBox->value(),ui->heightSpinBox->value()));
 
   QImage image(pixmap.toImage());
 
-  if(!image.save(fileName,0,qualitySpinBox->value())) {
+  if(!image.save(fileName,0,ui->qualitySpinBox->value())) {
     QMessageBox::critical(this,"Snapshot cannot be saved","Snapshot cannot be saved in file : "+fileName);
   }
   else {
@@ -115,7 +117,7 @@ void SnapshotDialog::widthSpinBoxValueChanged(int value) {
   inSizeSpinBoxValueChanged=true;
 
   if(lockLabel->isLocked()) {
-    heightSpinBox->setValue(value/ratio);
+    ui->heightSpinBox->setValue(value/ratio);
   }
   else {
     sizeSpinBoxValueChanged();
@@ -131,7 +133,7 @@ void SnapshotDialog::heightSpinBoxValueChanged(int value) {
   inSizeSpinBoxValueChanged=true;
 
   if(lockLabel->isLocked()) {
-    widthSpinBox->setValue(value*ratio);
+    ui->widthSpinBox->setValue(value*ratio);
   }
   else {
     sizeSpinBoxValueChanged();
@@ -156,24 +158,24 @@ QString SnapshotDialog::browseClicked() {
 }
 
 void SnapshotDialog::fileNameTextChanged(const QString &text) {
-  okButton->setEnabled(text.isEmpty()?false:true);
+  ui->okButton->setEnabled(text.isEmpty()?false:true);
 }
 
 void SnapshotDialog::sizeSpinBoxValueChanged() {
 
-  float viewRatio=((float)graphicsView->width())/((float)graphicsView->height());
-  float imageRatio=((float)widthSpinBox->value())/((float)heightSpinBox->value());
+  float viewRatio=((float)ui->graphicsView->width())/((float)ui->graphicsView->height());
+  float imageRatio=((float)ui->widthSpinBox->value())/((float)ui->heightSpinBox->value());
 
   QPixmap pixmap;
 
   if(viewRatio>imageRatio) {
-    pixmap=view->snapshot(QSize((graphicsView->height()-2)*imageRatio,graphicsView->height()-7));
+    pixmap=view->snapshot(QSize((ui->graphicsView->height()-2)*imageRatio,ui->graphicsView->height()-7));
   }
   else {
-    pixmap=view->snapshot(QSize(graphicsView->width()-2,(graphicsView->width()-2)/imageRatio));
+    pixmap=view->snapshot(QSize(ui->graphicsView->width()-2,(ui->graphicsView->width()-2)/imageRatio));
   }
 
-  ratio=((float)widthSpinBox->value())/((float)heightSpinBox->value());
+  ratio=((float)ui->widthSpinBox->value())/((float)ui->heightSpinBox->value());
 
   if(pixmapItem==NULL) {
     delete pixmapItem;
@@ -182,13 +184,13 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
 
   scene=new QGraphicsScene();
   scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
-  graphicsView->setScene(scene);
+  ui->graphicsView->setScene(scene);
   pixmapItem=scene->addPixmap(pixmap);
-  pixmapItem->setPos(graphicsView->sceneRect().center()-pixmapItem->boundingRect().center());
+  pixmapItem->setPos(ui->graphicsView->sceneRect().center()-pixmapItem->boundingRect().center());
 }
 
 void SnapshotDialog::copyClicked() {
-  QPixmap pixmap=view->snapshot(QSize(widthSpinBox->value(),heightSpinBox->value()));
+  QPixmap pixmap=view->snapshot(QSize(ui->widthSpinBox->value(),ui->heightSpinBox->value()));
 
   QClipboard *clipboard = QApplication::clipboard();
   clipboard->setPixmap(pixmap);

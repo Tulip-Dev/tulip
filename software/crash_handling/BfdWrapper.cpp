@@ -245,8 +245,6 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
     bfd_get_symbol_info(abfd, sym, &syminfo);
 
     if (syminfo.type == 'T' || syminfo.type == 'W') {
-      int status;
-
       bool matched = string(syminfo.name) == string(mangledSymbol);
 
       if (matched) {

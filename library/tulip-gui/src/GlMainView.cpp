@@ -23,6 +23,7 @@
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/QuickAccessBar.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/SnapshotDialog.h>
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QGraphicsView>
 #include "tulip/GlMainWidgetGraphicsItem.h"
@@ -43,6 +44,10 @@ void GlMainView::draw(tlp::PluginProgress*) {
   _glMainWidget->draw();
 }
 
+void GlMainView::redraw() {
+  _glMainWidget->redraw();
+}
+
 void GlMainView::refresh(PluginProgress *) {
   _glMainWidget->draw(false);
 }
@@ -60,14 +65,20 @@ void GlMainView::drawOverview(bool generatePixmap) {
 
 void GlMainView::assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOldGlMainWidget) {
   _glMainWidget=glMainWidget;
+
+  if(_sceneLayersConfigurationWidget == NULL) {
+    _sceneLayersConfigurationWidget = new SceneLayersConfigWidget();
+  }
+
+  _sceneLayersConfigurationWidget->setGlMainWidget(_glMainWidget);
+  connect(_sceneLayersConfigurationWidget,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
+
   setCentralWidget(_glMainWidget,deleteOldGlMainWidget);
   GlMainWidgetGraphicsItem *glMainWidgetGraphicsItem=dynamic_cast<GlMainWidgetGraphicsItem*>(centralItem());
   delete _sceneConfigurationWidget;
   _sceneConfigurationWidget = new SceneConfigWidget();
   _sceneConfigurationWidget->setGlMainWidget(_glMainWidget);
-  _sceneLayersConfigurationWidget = new SceneLayersConfigWidget();
-  _sceneLayersConfigurationWidget->setGlMainWidget(_glMainWidget);
-  connect(_sceneLayersConfigurationWidget,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
+
   connect(glMainWidgetGraphicsItem,SIGNAL(widgetPainted(bool)),this,SLOT(glMainViewDrawn(bool)));
   connect(graphicsView()->scene(),SIGNAL(sceneRectChanged(QRectF)),this,SLOT(sceneRectChanged(QRectF)));
 }
@@ -78,6 +89,19 @@ GlOverviewGraphicsItem *GlMainView::overviewItem() const {
 
 void GlMainView::setupWidget() {
   assignNewGlMainWidget(new GlMainWidget(NULL,this),true);
+
+  _forceRedrawAction=new QAction(trUtf8("Force redraw"),this);
+  connect(_forceRedrawAction,SIGNAL(triggered()),this,SLOT(redraw()));
+  _forceRedrawAction->setShortcut(tr("Ctrl+Shift+R"));
+  _forceRedrawAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
+  _centerViewAction=new QAction(trUtf8("Center view"),this);
+  connect(_centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
+  _centerViewAction->setShortcut(tr("Ctrl+Shift+C"));
+  _centerViewAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
+  graphicsView()->addAction(_centerViewAction);
+  graphicsView()->addAction(_forceRedrawAction);
 }
 
 GlMainWidget* GlMainView::getGlMainWidget() const {
@@ -100,7 +124,11 @@ QList<QWidget*> GlMainView::configurationWidgets() const {
 void GlMainView::setOverviewVisible(bool display) {
   if(display) {
     drawOverview(true);
-    _overviewItem->setVisible(display);
+    _overviewItem->setVisible(true);
+  }
+  else {
+    if(_overviewItem)
+      _overviewItem->setVisible(false);
   }
 }
 
@@ -152,15 +180,26 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) {
   return QPixmap::fromImage(_glMainWidget->createPicture(realSize.width(),realSize.height(),false));
 }
 
-void GlMainView::graphDeleted() {
-  setGraph(NULL);
+void GlMainView::openSnapshotDialog() {
+  SnapshotDialog dlg(*this);
+  dlg.exec();
 }
 
 void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
+  QFont f;
+  f.setBold(true);
+
+  menu->addAction(trUtf8("View"))->setFont(f);
+  menu->addSeparator();
+  menu->addAction(_forceRedrawAction);
+  menu->addAction(_centerViewAction);
+
   QAction* a = menu->addAction(trUtf8("Show overview"));
   a->setCheckable(true);
   a->setChecked(overviewVisible());
   connect(a,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
+
+  menu->addAction(trUtf8("Take snapshopt"),this,SLOT(openSnapshotDialog()));
 }
 
 void GlMainView::applySettings() {

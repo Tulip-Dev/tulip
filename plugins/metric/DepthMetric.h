@@ -23,7 +23,7 @@
 
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugins compute for each node n, the maximum path-length between n and the other node.
  *  The graph must be acyclic.
  *
@@ -40,5 +40,5 @@ private:
   double getNodeValue(const tlp::node n);
   tlp::DoubleProperty* edgeWeight;
 };
-/*@}*/
+
 #endif

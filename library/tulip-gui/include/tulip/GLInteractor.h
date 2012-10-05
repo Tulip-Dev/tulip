@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef GLINTERACTOR_H
 #define GLINTERACTOR_H
 
@@ -50,3 +52,4 @@ public slots:
 }
 
 #endif // GLINTERACTOR_H
+///@endcond

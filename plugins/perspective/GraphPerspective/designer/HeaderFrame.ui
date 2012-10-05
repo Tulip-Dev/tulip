@@ -23,13 +23,24 @@
    </size>
   </property>
   <property name="styleSheet">
-   <string notr="true">QFrame[header = &quot;true&quot;], QComboBox, QLabel, QToolButton, QPushButton {
+   <string notr="true">#mainFrame, .QWidget {
 border-image:none;
 background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 stop: 0 #838383,
 stop: 0.4 #707070,
 stop: 0.401 #636363,
 stop: 1 #4a4a4a);
+border: 0px;
+color: white;
+}
+QComboBox, QToolButton, QPushButton {
+border-image:none;
+background-color: transparent;
+border: 0px;
+color: white;
+}
+QLabel {
+border-image:none;
 border: 0px;
 color: white;
 }
@@ -60,15 +71,14 @@ stop: 1 #3e3e3e);
 border: 0px;
 color: white;
 }
+
 #expandButton {
 image: url(&quot;:/tulip/gui/ui/arrowup.png&quot;);
 }
 #expandButton::checked {
 image: url(&quot;:/tulip/gui/ui/arrowdown.png&quot;);
 }
-QComboBox,QLabel {
-height:20px;
-}
+
 QComboBox::down-arrow {
 image: url(&quot;:/tulip/gui/ui/down_arrow-white.png&quot;);
 }
@@ -99,66 +109,72 @@ border: 1px solid #C9C9C9;
     <number>0</number>
    </property>
    <item>
-    <widget class="QComboBox" name="menusCombo">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>25</height>
-      </size>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLabel" name="titleLabel">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>25</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QToolButton" name="expandButton">
-     <property name="minimumSize">
-      <size>
-       <width>25</width>
-       <height>25</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>25</width>
-       <height>25</height>
-      </size>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>22</width>
-       <height>22</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
+    <widget class="QFrame" name="mainFrame">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QComboBox" name="menusCombo">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="titleLabel">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="expandButton">
+        <property name="minimumSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>

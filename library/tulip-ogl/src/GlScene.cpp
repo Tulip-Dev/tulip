@@ -22,9 +22,6 @@
 #include <cstdlib>
 #include <climits>
 #include <stdio.h>
-#include <sys/time.h>
-#include <unistd.h>
-
 
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
@@ -51,7 +48,7 @@ namespace tlp {
 //====================================================
 
 GlScene::GlScene(GlLODCalculator *calculator)
-  :backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL),graphLayer(NULL), clearBufferAtDraw(true) {
+  :backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL),graphLayer(NULL), clearBufferAtDraw(true),inDraw(false) {
 
   if(calculator!=NULL)
     lodCalculator=calculator;
@@ -119,6 +116,11 @@ void GlScene::initGlParameters() {
 
 void GlScene::draw() {
 
+  if(inDraw)
+    assert(false);
+
+  inDraw=true;
+
   initGlParameters();
 
 #ifdef ENABLE_RENDERING_TIME_DISPLAY
@@ -183,6 +185,8 @@ void GlScene::draw() {
   gettimeofday(&currentTime, 0);
   qDebug() << "scene draw time : " << (int)((currentTime.tv_usec-lastTime.tv_usec)) << " ms" << endl;
 #endif
+
+  inDraw=false;
 }
 
 /******************************************************************************

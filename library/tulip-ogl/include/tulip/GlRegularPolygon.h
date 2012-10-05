@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,23 +16,26 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef GLREGULARPOLYGON_H
 #define GLREGULARPOLYGON_H
 
 #include <tulip/GlPolygon.h>
 
 namespace tlp {
+
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- * class to create a regular polygon
+ * @ingroup OpenGL
+ * @brief class to create a regular polygon
  */
 class TLP_GL_SCOPE GlRegularPolygon : public GlPolygon {
 public:
   /**
-   * Constructor
+   * @brief Constructor
+   *
+   * The outline is the border of the regular polygon
+   *
+   * The fill is inside the regular polygon
    */
   GlRegularPolygon(const Coord &position,
                    const Size &size,
@@ -44,27 +47,29 @@ public:
                    const std::string &textureName="",
                    float outlineSize=1.);
   /**
-   * Default empty destructor
+   * @brief Destructor
    */
   virtual ~GlRegularPolygon();
 
   /**
-   * Set the start angle
+   * @brief Set the start angle in degree
+   *
+   * If the start angle is 0 : the regular polygon begin at the top middle point
    */
   void setStartAngle(float angle);
 
   /**
-   * Get the number of Sides
+   * @brief Get the number of Sides
    */
   unsigned int getNumberOfSides();
 
   /**
-   * Set the number of sides (use setNumberOfSides)
+   * @brief Set the number of sides (use setNumberOfSides)
    */
   void resizePoints(const unsigned int number);
 
   /**
-   * Set the number of sides
+   * @brief Set the number of sides
    */
   void setNumberOfSides(unsigned int number);
 
@@ -79,6 +84,6 @@ protected :
   float startAngle;
 
 };
-/*@}*/
+
 }
 #endif

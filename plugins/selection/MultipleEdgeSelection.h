@@ -21,7 +21,7 @@
 
 #include <tulip/TulipPluginHeaders.h>
 /** \addtogroup selection */
-/*@{*/
+
 
 /**
  * This selection plugins enables to find the multiple-edges and parallel-edges in a graph.
@@ -38,7 +38,7 @@ public:
   MultipleEdgeSelection(const tlp::PluginContext* context);
   bool run();
 };
-/*@}*/
+
 #endif
 
 

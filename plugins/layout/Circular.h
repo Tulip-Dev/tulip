@@ -22,7 +22,7 @@
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup layout */
-/*@{*/
+
 /**
  * This plugin is an implementation of a circular layout that takes
  * node size into account.  It manages size of nodes and use a standard dfs
@@ -52,5 +52,5 @@ public:
   Circular(const tlp::PluginContext* context);
   bool run();
 };
-/*@}*/
+
 #endif

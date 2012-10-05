@@ -195,7 +195,7 @@ using namespace std;
 using namespace tlp;
 
 /** \addtogroup metric */
-/*@{*/
+
 /** This plugin is an implementation of a biconnected component decomposition algorithm. It assigns
  *  the same value to all the edges in the same component.
  *
@@ -225,6 +225,6 @@ public:
     return true;
   }
 };
-/*@}*/
+
 //=============================================================================================
 PLUGIN(BiconnectedComponent)

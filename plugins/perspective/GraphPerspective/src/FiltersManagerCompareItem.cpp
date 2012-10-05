@@ -278,13 +278,13 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
     else if (elType == E_DoubleAlgorithm) {
       DoubleProperty* prop = new DoubleProperty(_graph);
       string msg;
-      _graph->computeProperty<DoubleProperty>(combo->currentText().toStdString(), prop, msg);
+      _graph->applyPropertyAlgorithm(combo->currentText().toStdString(), prop, msg);
       comparisonProperties << prop;
     }
     else if (elType == E_StringAlgorithm) {
       StringProperty* prop = new StringProperty(_graph);
       string msg;
-      _graph->computeProperty<StringProperty>(combo->currentText().toStdString(), prop, msg);
+      _graph->applyPropertyAlgorithm(combo->currentText().toStdString(), prop, msg);
       comparisonProperties << prop;
     }
     else if (elType == E_CustomValue) {

@@ -40,7 +40,7 @@ protected:
     ExpandableGroupBox::paintEvent(event);
     QPainter painter(this);
     QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/16/favorite.png" : ":/tulip/graphperspective/icons/16/favorite-empty.png"));
-    painter.drawPixmap(25,0,px);
+    painter.drawPixmap(20,0,px);
   }
 };
 
@@ -91,7 +91,7 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   localModeButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
   localModeButton->setIconSize(QSize(22,22));
   localModeButton->setToolTip(trUtf8("Always store result in local property"));
-  _ui->header->insertWidget(localModeButton);
+  _ui->header->mainFrame()->layout()->addWidget(localModeButton);
 
   PluginModel<tlp::Algorithm> model;
   buildTreeUi(_ui->contents, &model, QModelIndex(), localModeButton, true);
@@ -174,6 +174,7 @@ void AlgorithmRunner::setFilter(QString filter) {
     if (group != _ui->favoritesBox)
       filterGroup(group,filter);
   }
+  filterGroup(_ui->favoritesBox,filter);
 }
 
 bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
@@ -260,7 +261,15 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
   }
 
   item->setFavorite(true);
-  _ui->favoritesBox->widget()->layout()->addWidget(item);
+  int itemPos = 0;
+  foreach(AlgorithmRunnerItem* i, _ui->favoritesBox->widget()->findChildren<AlgorithmRunnerItem*>()) {
+    if (i->name() > item->name()) {
+      break;
+    }
+
+    ++itemPos;
+  }
+  static_cast<QBoxLayout*>(_ui->favoritesBox->widget()->layout())->insertWidget(itemPos,item);
   _favorites+=item;
   item->installEventFilter(this);
   item->setAcceptDrops(true);

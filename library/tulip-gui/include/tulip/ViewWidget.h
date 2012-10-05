@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef VIEWWIDGET_H
 #define VIEWWIDGET_H
 
@@ -27,13 +28,15 @@ class QGraphicsItem;
 namespace tlp {
 
 /**
-  @class ViewWidget provides convenience functions to allow the user to build a view plugin that displays a QWidget as its main element.
+  @ingroup Plugins
+
+  @brief ViewWidget provides convenience functions to allow the user to build a view plugin that displays a QWidget as its main element.
 
   The ViewWidget class will build a QGraphicsView that sets a widget as the background of the whole panel.
-  Sublassing ViewWidget means that you'll have to provide a centralWidget (@see setCentralWidget) that will take up the whole panel and be drawn in the background.
+  Sublassing ViewWidget means that you'll have to provide a centralWidget (see ViewWidget::setCentralWidget) that will take up the whole panel and be drawn in the background.
   You can use the addToScene() and removeFromScene() methods to edit the QGraphicsItems that will drawn over the widget.
 
-  By default, when an interactor gets active on a ViewWidget, it gets installed on the centralWidget (@see Interactor::install)
+  By default, when an interactor gets active on a ViewWidget, it gets installed on the centralWidget (see Interactor::install)
 
   @note When creating a ViewWidget, you should overload setupWidget instead of setupUi. If you still want to implement setupUi, you must call the ViewWidget::setupUi() method first.
   */
@@ -72,14 +75,17 @@ public slots:
 
 protected slots:
   /**
-    @see View::currentInteractorChanged()
     By default, the current interactor gets installed over the central widget.
+
+    @see View::currentInteractorChanged()
     */
   virtual void currentInteractorChanged(tlp::Interactor*);
 
+  virtual void graphDeleted(Graph *parentGraph);
+
 protected:
   /**
-    @brief sets up the central widget.
+    @brief Sets up the central widget.
     This is similar to View::setupUi in the sense that the purpose of setupWidget is to construct the GUI element.
     @warning This method MUST call the setCentralWidget to provide the ViewWidget with a valid widget.
     */
@@ -109,7 +115,6 @@ protected:
     @see setCentralWidget
     */
   virtual QGraphicsItem* centralItem() const;
-
 
   QPixmap snapshot(const QSize &outputSize=QSize());
 };

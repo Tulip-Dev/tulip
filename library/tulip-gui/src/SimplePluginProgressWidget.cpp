@@ -20,6 +20,7 @@
 #include <QtGui/QStylePainter>
 #include <QtCore/QDebug>
 #include <QtCore/QTime>
+#include <iostream>
 
 #include <tulip/Observable.h>
 #include "ui_SimplePluginProgressWidget.h"
@@ -29,14 +30,16 @@ using namespace tlp;
 SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::WindowFlags f)
   :QWidget(parent,f), _ui(new Ui::SimplePluginProgressWidgetData), _state(tlp::TLP_CONTINUE) {
   _ui->setupUi(this);
-  _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCloseButton));
+  _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogDiscardButton));
+  _ui->stopButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
   connect(_ui->cancelButton,SIGNAL(clicked()),this,SLOT(cancelClicked()));
+  connect(_ui->stopButton,SIGNAL(clicked()),this,SLOT(stopClicked()));
   connect(_ui->previewBox,SIGNAL(toggled(bool)),this,SLOT(setPreview(bool)));
 }
 
 void SimplePluginProgressWidget::checkLastUpdate() {
-  if (_lastUpdate.msecsTo(QTime::currentTime()) > 1000/5) {
-    QApplication::processEvents();
+  if (_lastUpdate.msecsTo(QTime::currentTime()) > 1000) {
+    QApplication::processEvents(QEventLoop::AllEvents,1000);
     _lastUpdate = QTime::currentTime();
   }
 }
@@ -95,6 +98,10 @@ void SimplePluginProgressWidget::setError(const std::string &error) {
 
 void SimplePluginProgressWidget::cancelClicked() {
   cancel();
+}
+
+void SimplePluginProgressWidget::stopClicked() {
+  stop();
 }
 
 void SimplePluginProgressWidget::setPreview(bool f) {

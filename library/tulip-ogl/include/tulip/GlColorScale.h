@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef GLCOLORSCALE_H_
 #define GLCOLORSCALE_H_
@@ -94,3 +96,4 @@ private:
 }
 
 #endif /* GLCOLORSCALE_H_ */
+///@endcond

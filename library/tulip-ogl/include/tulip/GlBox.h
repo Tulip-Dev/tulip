@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef Tulip_GLBOX_H
 #define Tulip_GLBOX_H
 
@@ -28,121 +29,110 @@
 
 namespace tlp {
 /**
- * \addtogroup GlEntities
- */
-/*@{*/
-/**
- *
- *\brief General class used to render boxes as GlEntity.
- *
- * This class is a generic class to render boxes as GlEntity.
+ * @ingroup OpenGL
+ * @brief General class used to render boxes as GlSimpleEntity.
  */
 class TLP_GL_SCOPE GlBox : public GlSimpleEntity {
 
 public:
 
   /**
-   * The default constructor
-   *
-   * \attention It's usage is forbidden.
+   * @brief Don't use this constructor
    */
   GlBox();
 
   /**
-   * Constructor from size
+   * @brief Constructor
    *
-   * \param position The center of the box.
-   * \param size The length of each dimension of the box.
-   * \param fillColor The fill color of the box.
-   * \param outlineColor The outline color of the box
-   * \param filled Fill the box ?
-   * \param outlined outline the box ?
-   * \param outlineSize The size of the outline
+   * @param position The center of the box.
+   * @param size The length of each dimension of the box.
+   * @param fillColor The fill color of the box.
+   * @param outlineColor The outline color of the box
+   * @param filled Fill the box ?
+   * @param outlined outline the box ?
+   * @param outlineSize The size of the outline
    */
   GlBox(const Coord& position, const Size &size, const Color& fillColor, const Color &outlineColor,bool filled=true, bool outlined=true, const std::string &textureName="",float outlineSize=1.);
 
   /**
-   * Destructor.
+   * @brief Destructor.
    */
   virtual ~GlBox();
 
-  /**
-   * Virtual function used to draw the box.
-   */
   virtual void draw(float lod,Camera *camera);
 
   /**
-   * Accessor in reading to the size.
+   * @brief Accessor in reading to the size.
    */
   Size getSize() const;
 
   /**
-   * Accessor in writing to the size of the box
+   * @brief Accessor in writing to the size of the box
    */
   void setSize(const Size& size);
 
   /**
-   * Accessor in reading to the position.
+   * @brief Accessor in reading to the position.
    */
   Coord* getPosition() const;
 
   /**
-   * Accessor in writing to the position.
+   * @brief Accessor in writing to the position.
    */
   void setPosition(const Coord& position);
 
   /**
-   * Accessor in reading to the fill color.
+   * @brief Accessor in reading to the fill color.
    */
   Color getFillColor() const;
 
   /**
-   * Accessor in writing to the fill color of the box
+   * @brief Accessor in writing to the fill color of the box
    */
   void setFillColor(const Color& color);
 
   /**
-   * Accessor in reading to the outline color.
+   * @brief Accessor in reading to the outline color.
    */
   Color getOutlineColor() const;
 
   /**
-   * Accessor in writing to the outline color of the box
+   * @brief Accessor in writing to the outline color of the box
    */
   void setOutlineColor(const Color& color);
 
   /**
-   * Accessor in reading to the outline size.
+   * @brief Accessor in reading to the outline size.
    */
   float getOutlineSize() const;
 
   /**
-   * Accessor in writing to the outline size of the box
+   * @brief Accessor in writing to the outline size of the box
    */
   void setOutlineSize(float size);
 
   /**
-   * Accessor in reading to the texture name.
+   * @brief Accessor in reading to the texture name.
    */
   std::string getTextureName() const;
 
   /**
-   * Accessor in writing to the texture name of the box
+   * @brief Accessor in writing to the texture name of the box
    */
   void setTextureName(const std::string& textureName);
 
   /**
-   * Translate entity
+   * @brief Translate entity
    */
   virtual void translate(const Coord& mouvement);
 
   /**
-   * Function to export data in outString (in XML format)
+   * @brief Function to export data in outString (in XML format)
    */
   virtual void getXML(std::string &outString);
 
   /**
-   * Function to set data with inString (in XML format)
+   * @brief Function to set data with inString (in XML format)
    */
   virtual void setWithXML(const std::string &inString, unsigned int &currentPosition);
 
@@ -163,6 +153,6 @@ protected:
   bool generated;
   GLuint buffers[5];
 };
-/*@}*/
+
 }
 #endif

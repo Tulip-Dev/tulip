@@ -100,6 +100,10 @@ void MagicSelectionInteractorConfigWidget::setGraph(tlp::Graph* graph) {
   updateAvailableProperties();
 }
 
+void MagicSelectionInteractorConfigWidget::treatEvents(const vector<Event> &) {
+  updateAvailableProperties();
+}
+
 void MagicSelectionInteractorConfigWidget::selectedPropertyChanged(const QString& propertyName) {
   if(_currentProperty) {
     _currentProperty->removeObserver(this);
@@ -151,8 +155,4 @@ double MagicSelectionInteractorConfigWidget::lowerBound() const {
 
 double MagicSelectionInteractorConfigWidget::upperBound() const {
   return overValue->value();
-}
-
-void MagicSelectionInteractorConfigWidget::update(std::set< tlp::Observable* >::iterator, std::set< tlp::Observable* >::iterator) {
-  updateAvailableProperties();
 }

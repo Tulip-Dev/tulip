@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef VIEW_H
 #define VIEW_H
 
@@ -41,7 +42,9 @@ static const std::string VIEW_CATEGORY = QObject::trUtf8("Panel").toStdString();
 class Interactor;
 
 /**
-  @class View plugins provide a way to dynamically add to a Tulip plateform various ways to visualize a graph.
+  @ingroup Plugins
+
+  @brief View plugins provide a way to dynamically add to a Tulip plateform various ways to visualize a graph.
 
   A view takes the following elements as inputs:
   @li A graph which contains the data to be displayed.
@@ -172,6 +175,12 @@ public slots:
   void showContextMenu(const QPoint& point, const QPointF &scenePoint);
 
   /**
+   * @brief This method is a callback to notify the panel that the pop() method (undo) has just been called on the graph.
+   * By default, this method will make a call to centerView()
+   **/
+  void undoCallback();
+
+  /**
     @brief This method applies settings changed in the configuration widgets
     This method may be called from the overleying system in various situations. The View is expected to apply settings in an optimized way to prevent extra redraws.
     By default, this method does nothing.
@@ -181,7 +190,7 @@ public slots:
   /**
     @brief Reset the visualization to the center.
     This method is called after major changes into the data structure. At this point, the user point of view should be reset and brought back to a point where all the data can be seen.
-    @example For a 3D visualization, this method could be implemented by centering the camera. For a table, this could be done by setting the scroll bar to the top position etc
+    @note For a 3D visualization, this method could be implemented by centering the camera. For a table, this could be done by setting the scroll bar to the top position etc
     @note By default, this method does nothing.
     */
   virtual void centerView();
@@ -308,8 +317,9 @@ protected slots:
   /**
     @brief Called when the graph associated to the view gets deleted.
     This method should call setGraph to input a new graph pointer (NULL or valid)
+    @param parentGraph The parent of the graph that was just deleted. If there is no parent available (eg. the graph was root), parentGraph is NULL
     */
-  virtual void graphDeleted()=0;
+  virtual void graphDeleted(tlp::Graph* parentGraph)=0;
 
   /**
    * @brief fills the context menu with entries related to the view.

@@ -44,6 +44,7 @@ TulipProject::TulipProject(): _isValid(false) {
 TulipProject::TulipProject(const QString &path)
   : _rootDir(path),
     _dataDir(_rootDir.absoluteFilePath(DATA_DIR_NAME)), _isValid(true) {
+  writeMetaInfos();
 }
 
 TulipProject::~TulipProject() {

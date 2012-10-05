@@ -58,7 +58,7 @@ public:
       observables.insert(events[0].sender());
     }
     else {
-      for (int i=0; i<events.size(); ++i) {
+      for (unsigned int i=0; i<events.size(); ++i) {
         observables.insert(events[i].sender());
       }
     }

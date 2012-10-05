@@ -63,6 +63,7 @@ protected slots:
   void createPanel();
   void exportGraph();
   void renameGraph();
+  void saveGraphToFile();
 };
 
 #endif // GRAPHHIERARCHIESEDITOR_H

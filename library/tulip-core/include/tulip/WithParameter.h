@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef _TULIPWITHPARAMETER
 #define _TULIPWITHPARAMETER
 
@@ -31,14 +32,35 @@ class DataSet;
 template<class itType >
 struct Iterator;
 
-/** \addtogroup plugins */
-/*@{*/
-/*
- * @brief indicates the direction type of a parameter
- **/
-enum ParameterDirection { IN_PARAM=0, OUT_PARAM = 1, INOUT_PARAM = 2 };
 /**
- * @brief Describes a parameter with a type, default value, whether or not is it mandatory and a help string describing what this parameter should be used for.
+ * @ingroup Plugins
+ * @brief The ParameterDirection enum describes how a parameter is passed to a plugin
+ * The parameter can be seen as passing parameters to a C++ functions and works as follow:
+ * @list
+ * @li IN_PARAM: The parameter is passes by value
+ * @li OUT_PARAM: The parameter is a return value
+ * @li INOUT_PARAM: The parameter is passed by reference.
+ * @endlist
+ */
+enum ParameterDirection { IN_PARAM=0, OUT_PARAM = 1, INOUT_PARAM = 2 };
+
+/**
+ * @ingroup Plugins
+ * @brief Describes a plugin's parameter.
+ *
+ * A plugin parameter consists of the following informations:
+ * @list
+ * @li A name (std::string) which can be used to retrieve the value of the parameter when running the plugin.
+ * @li A type (std::string) which is the C++ typename of the parameter.
+ * @li A help string (std::string) which gives additional information about the parameter and its possible values.
+ * @li A default value which is mapped on the parameter if no value has been entered by the user.
+ * @li The mandatory flag (bool) which tells if the parameter is optional or not.
+ * @li A ParameterDirection (enum).
+ * @endlist
+ *
+ * @see tlp::ParameterDirection
+ * @see tlp::ParameterDescriptionList
+ * @see tlp::WithParameter
  **/
 class TLP_SCOPE ParameterDescription {
 private:
@@ -56,30 +78,52 @@ public:
     : name(name), type(type), help(help),
       defaultValue(defaultValue), mandatory(mandatory), direction(direction) {
   }
+  /**
+   * @return The parameter's name
+   */
   const std::string& getName() const {
     return name;
   }
+  /**
+   * @return The parameter's C++ type name
+   */
   const std::string& getTypeName() const {
     return type;
   }
+  /**
+   * @return The parameter's help string
+   */
   const std::string& getHelp() const {
     return help;
   }
+  /**
+   * @return The parameter's default value.
+   */
   const std::string& getDefaultValue() const {
     return defaultValue;
   }
+  /**
+   * @brief Sets the parameter's default value.
+   */
   void setDefaultValue(const std::string& defVal) {
     defaultValue = defVal;
   }
+  /**
+   * @return Whether the parameter is mandatory or not.
+   */
   bool isMandatory() {
     return mandatory;
   }
+  /**
+   * @return The parameter's direction
+   */
   ParameterDirection getDirection() const {
     return direction;
   }
 };
 
 /**
+  * @ingroup Plugins
   * @brief This class describes parameters taken by a plugin.
   *
   * It is used by WithParameter to store parameters.
@@ -96,6 +140,7 @@ struct TLP_SCOPE ParameterDescriptionList {
     * @param help The help string of this parameter. Defaults to std::string().
     * @param defaultValue The default value of this parameter. Defaults to std::string().
     * @param isMandatory Whether this parameter is mandatory or optional. Defaults to true.
+    * @param direction The parameter's direction (see tlp::ParameterDirection for details)
     * @return void
     **/
   template<typename T> void add(const std::string& parameterName,
@@ -173,45 +218,21 @@ private:
   std::vector<ParameterDescription> parameters;
 };
 
-// Standard ParameterDescriptionList's HTML Help
 
-#define HTML_HELP_OPEN()  "<table><tr><td>" \
-"<table CELLSPACING=5 bgcolor=\"#EEEEEE\">"
-#define HTML_HELP_DEF(A,B)  "<tr><td><b>" A "</b></td><td><FONT COLOR=\"red\">" B "</td></tr>"
-#define HTML_HELP_BODY()  "</table></td><td>"
-#define HTML_HELP_CLOSE() "</td></tr></table>"
+#define HTML_HELP_OPEN() "<!DOCTYPE html><html><head>\
+<style type=\"text/css\">.body { font-family: \"Segoe UI\", Candara, \"Bitstream Vera Sans\", \"DejaVu Sans\", \"Bitstream Vera Sans\", \"Trebuchet MS\", Verdana, \"Verdana Ref\", sans-serif; }\
+    .paramtable { width: 100%; border: 0px; border-bottom: 1px solid #C9C9C9; padding: 5px; }\
+    .help { font-style: italic; font-size: 90%; }</style>\
+</head><body><table border=\"0\" class=\"paramtable\">"
 
-/*
- * Usage :
- *
- * const char * paramHelp[] = {
- * // property
- * HTML_HELP_OPEN() \
- * HTML_HELP_DEF( "type", "DoubleProperty" ) \
- * HTML_HELP_BODY() \
- * "This metricProxy is used to affect scalar values to graph items." \
- * "The meaning of theses values depends on the chosen color model." \
- * HTML_HELP_CLOSE(),
- *
- * // colormodel
- * HTML_HELP_OPEN() \
- * HTML_HELP_DEF( "type", "int" ) \
- * HTML_HELP_DEF( "values", "[0,1]" ) \
- * HTML_HELP_DEF( "default", "0" ) \
- * HTML_HELP_BODY() \
- * "This value defines the type of color interpolation. The following values are valid:" \
- * "<ul><li>0: linear mapping on hue;</li><li>1: RGB interpolation</li></ul>" \
- * HTML_HELP_CLOSE(),
-};
+#define HTML_HELP_DEF(A,B) "<tr><td><b>"A"</b><td>"B"</td></tr>"
 
-...
-addParameter<DoubleProperty>("property",paramHelp[0]);
-addParameter<int>("colormodel",paramHelp[1]);
-...
+#define HTML_HELP_BODY() "</table><p class=\"help\">"
 
-*/
+#define HTML_HELP_CLOSE() "</p></body></html>"
 
 /**
+ * @ingroup Plugins
  * @brief This class describes parameters on a plug-in.
  *
  * These parameters can be of any type, and are used to generate a GUI that will be shown when the plug-in in invoked by the user.
@@ -300,7 +321,7 @@ protected:
    **/
   ParameterDescriptionList parameters;
 };
-/*@}*/
+
 
 }
 #endif

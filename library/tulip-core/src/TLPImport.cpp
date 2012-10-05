@@ -994,9 +994,6 @@ const char * paramHelp[] = {
 #endif //DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
 
-/** \addtogroup import */
-/*@{*/
-/// Import plugin for TLP format.
 /**
  * This plugin imports a Tulip graph structure recorded in a file
  * using the TLP format.
@@ -1082,5 +1079,5 @@ public:
   }
 };
 PLUGIN(TLPImport)
-/*@}*/
+
 }

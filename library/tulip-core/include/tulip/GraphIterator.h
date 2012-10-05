@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_GGRAPHITERATOR_H
 #define TULIP_GGRAPHITERATOR_H
 #include <tulip/Iterator.h>
@@ -29,10 +31,7 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
-/**
-* \addtogroup iterators
-*/
-/*@{*/
+
 class Graph;
 class GraphImpl;
 struct node;
@@ -258,7 +257,8 @@ public:
   bool hasNext();
 };
 //============================================================
-/*@}*/
+
 }
 #endif // DOXYGEN_NOTFOR_DEVEL
 #endif
+///@endcond

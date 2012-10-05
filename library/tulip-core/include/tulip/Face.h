@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef Tulip_FACE_H
 #define Tulip_FACE_H
@@ -24,13 +26,8 @@
 
 #include <climits>
 
-/**
- * \addtogroup graphs
- */
 namespace tlp {
 
-/*@{*/
-/// class face
 struct Face {
   unsigned int id;
   Face():id(UINT_MAX) {}
@@ -45,7 +42,7 @@ struct Face {
     return id!=UINT_MAX;
   }
 };
-/*@}*/
+
 }
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
@@ -72,3 +69,4 @@ template<> struct less<tlp::Face> {
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif
+///@endcond

@@ -28,6 +28,7 @@
 #include <tulip/TulipMimes.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/ParameterListModel.h>
+#include <tulip/TulipSettings.h>
 
 using namespace tlp;
 
@@ -192,9 +193,34 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
 }
 
 void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
-  if (PluginLister::instance()->pluginExists<LayoutAlgorithm>(name().toStdString()))
+  PluginLister* pluginLister = PluginLister::instance();
+
+  if (pluginLister->pluginExists<LayoutAlgorithm>(name().toStdString())) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
-  else if (PluginLister::instance()->pluginExists<GraphTest>(name().toStdString())) {
+
+    if (TulipSettings::instance().isAutomaticRatio()) {
+      LayoutProperty* prop = NULL;
+      dataSet.get<LayoutProperty*>("result",prop);
+      prop->perfectAspectRatio();
+    }
+  }
+  else if (pluginLister->pluginExists<Algorithm>(name().toStdString()) &&
+           !pluginLister->pluginExists<PropertyAlgorithm>(name().toStdString()) &&
+           !pluginLister->pluginExists<GraphTest>(name().toStdString())) {
+    Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
+  }
+  else if (pluginLister->pluginExists<DoubleAlgorithm>(name().toStdString()) && TulipSettings::instance().isAutomaticMapMetric()) {
+    DoubleProperty* prop = NULL;
+    dataSet.get<DoubleProperty*>("result",prop);
+
+    if (prop != NULL && prop->getName().compare("viewMetric") == 0) {
+      DataSet ds;
+      PluginLister::getPluginParameters("Color Mapping").buildDefaultDataSet(ds,g);
+      std::string errMsg;
+      g->applyAlgorithm("Color Mapping",errMsg,&ds);
+    }
+  }
+  else if (pluginLister->pluginExists<GraphTest>(name().toStdString())) {
     bool result = true;
     dataSet.get<bool>("result",result);
     std::string gname;

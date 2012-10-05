@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_STABLEITERATOR_H
 #define TULIP_STABLEITERATOR_H
 #include <tulip/Iterator.h>
@@ -24,10 +26,6 @@
 #include <cstdlib>
 
 namespace tlp {
-/**
- * @addtogroup iterators
- */
-/*@{*/
 /**
   * @class StableIterator
   * @brief Stores the elements of an iterator and iterates on a copy.
@@ -110,6 +108,7 @@ protected :
   **/
   typename std::vector<itType>::const_iterator copyIterator;
 };
-/*@}*/
+
 }
 #endif
+///@endcond

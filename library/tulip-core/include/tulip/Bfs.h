@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef Bfs_H
 #define Bfs_H
@@ -45,3 +47,4 @@ private :
 };
 }
 #endif
+///@endcond

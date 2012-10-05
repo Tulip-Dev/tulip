@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef UNIQUEITERATOR_H
 #define UNIQUEITERATOR_H
 #include <set>
@@ -24,10 +26,6 @@
 
 //===============================================================================
 namespace tlp {
-/**
-  * \addtogroup iterator
-  */
-/*@{*/
 /**
   * \brief that class implement a default functor that always return true
   *
@@ -122,6 +120,7 @@ public:
     UniqueIterator<TYPE, TOCHECKFUNCTOR>(it, checkFunctor) {
   }
 };
-/*@}*/
+
 }
 #endif // UNIQUEITERATOR_H
+///@endcond

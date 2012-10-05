@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef CSVDATALOADER_H_
 #define CSVDATALOADER_H_
@@ -153,3 +155,4 @@ private:
 };
 }
 #endif /* CSVDATALOADER_H_ */
+///@endcond

@@ -183,6 +183,58 @@ border-top: 0px;
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
+       <widget class="QFrame" name="removeFrame">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="removeButton">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normalon>:/tulip/app/icons/16/package-purge.png</normalon>
+            </iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>689</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
        <widget class="QFrame" name="installFrame">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <property name="margin">
@@ -326,8 +378,25 @@ background-color: #bed452;
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>removeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>PluginInformationsListItemData</receiver>
+   <slot>remove()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>69</x>
+     <y>200</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>418</x>
+     <y>147</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>install()</slot>
+  <slot>remove()</slot>
  </slots>
 </ui>

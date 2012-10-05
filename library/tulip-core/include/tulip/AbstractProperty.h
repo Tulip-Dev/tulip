@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #ifndef ABSTRACT_PROPERTY_H
 #define ABSTRACT_PROPERTY_H
 
@@ -36,24 +37,20 @@ namespace tlp {
 class GraphView;
 
 //==============================================================
-/**
- * \defgroup properties Properties
- */
-/*@{*/
 
 /**
- * @brief This class is used to store a property of a graph.
- * It implements PropertyInterface and add new methods
- * to deal with two distinct type of values :
- * - Tnode node value
- * - Tedge edge value
+ * @ingroup Graph
+ * @brief This class extends upon PropertyInterface, and adds type-safe methods to
+ * get and set the node and edge values, through the magic of template programming.
  *
- * An AbstractProperty can be connected or not to a PropertyAlgorithm.
- * In the first case it can be seen as buffer beetween the property and the user.
- * In the second case it is only a memory area for storing data.
- * An AbstractProperty is an Observable (through PropertyInterface), so it can be observed by others objects.
+ * Nodes and Edges can have different types (e.g. tlp::LayoutProperty has tlp::PointType as node type and tlp::LineType as edge type),
+ * but most of the time they have the same type (e.g. tlp::DoubleProperty, tlp::IntegerProperty).
+ *
+ * Some of the pure virtual functions of PropertyInterface are implemented in this class (e.g. erase()).
+ *
+ * The actual data is stored in this class, and it manages the default values.
  */
-template <class Tnode, class Tedge, class TPROPERTY = PropertyAlgorithm >
+template <class Tnode, class Tedge>
 class TLP_SCOPE AbstractProperty : public PropertyInterface {
   friend class Graph;
   friend class GraphView;
@@ -61,24 +58,21 @@ class TLP_SCOPE AbstractProperty : public PropertyInterface {
 public:
   AbstractProperty(Graph *, std::string n = "");
 
-
   /**
-   * @brief Returns the default node value of the property.
-   *
-   * @return :RealType The default value applied to nodes.
-   **/
+   * @brief Gets the default node value of the property.
+   * @return The default value of nodes.
+   */
   typename Tnode::RealType getNodeDefaultValue() const;
 
   /**
-   * @brief Returns the default edge value of the property.
-   *
-   * @return :RealType The default value applied to edges.
+   * @brief Gets the default edge value of the property.
+   * @return The default value of edges.
    **/
   typename Tedge::RealType getEdgeDefaultValue() const;
 
   /**
    * @brief Returns the value associated with the node n in this property.
-   * If there is no value, it returns the default ndoe value.
+   * If there is no value, it returns the default node value.
    *
    * @param n The node for which we want to get the value of the property.
    * @return :StoredType< Tnode::RealType >::ReturnedConstValue The value of the property for this node.
@@ -99,7 +93,6 @@ public:
    *
    * @param n The node to set the value of.
    * @param v The value to affect for this node.
-   * @return void
    **/
   virtual void setNodeValue(const node n, const typename Tnode::RealType &v);
 
@@ -108,7 +101,6 @@ public:
    *
    * @param e The edge to set the value of.
    * @param v The value to affect for this edge.
-   * @return void
    **/
   virtual void setEdgeValue(const edge e, const typename Tedge::RealType &v);
 
@@ -116,7 +108,7 @@ public:
    * @brief Sets the value of all nodes and notify the observers.
    *
    * @param v The value to set to all nodes.
-   * @return void
+   *
    **/
   virtual void setAllNodeValue(const typename Tnode::RealType &v);
 
@@ -124,7 +116,7 @@ public:
    * @brief Sets the value of all edges and notify the observers.
    *
    * @param v The value to set to all edges.
-   * @return void
+   *
    **/
   virtual void setAllEdgeValue(const typename Tedge::RealType &v);
   //=================================================================================
@@ -133,7 +125,7 @@ public:
    * @brief Resets the value of a node to the default value.
    *
    * @param n The node to reset the value of.
-   * @return void
+   *
    **/
   virtual void erase(const node n) {
     setNodeValue(n, nodeDefaultValue);
@@ -144,13 +136,24 @@ public:
    * @brief Resets the value of an edge to the default value.
    *
    * @param e The edge to reset the value of.
-   * @return void
+   *
    **/
   virtual void erase(const edge e) {
     setEdgeValue(e, edgeDefaultValue);
   }
   //=================================================================================
-  virtual AbstractProperty<Tnode,Tedge,TPROPERTY>& operator =(AbstractProperty<Tnode,Tedge,TPROPERTY> &prop) {
+  /**
+   * @brief This operator overload allows to copy a property using the following syntax :
+   *
+   * @code
+   * IntegerProperty* shape = graph->getProperty<IntegerProperty>("viewShape");
+   * IntegerProperty* backup = graph->getProperty<IntegerProperty>("shapeBackup");
+   * *backup = *shape; // all the values from 'shape' will be copied into 'backup'.
+   * @endcode
+   * @param prop The property nto copy the values from.
+   * @return This property with the values copied.
+   */
+  virtual AbstractProperty<Tnode,Tedge>& operator =(AbstractProperty<Tnode,Tedge> &prop) {
     if (this!= &prop) {
       if (graph == NULL) graph = prop.graph;
 
@@ -204,7 +207,7 @@ public:
     return *this;
   }
   //=================================================================================
-  // Untyped accessors inherited from PropertyInterface
+  // Untyped accessors inherited from PropertyInterface, documentation is inherited
   virtual std::string getNodeDefaultStringValue() const {
     typename Tnode::RealType v = getNodeDefaultValue();
     return Tnode::toString( v );
@@ -257,40 +260,15 @@ public:
     setAllEdgeValue( v );
     return true;
   }
-  /**
-   * @brief Returns an iterator on all nodes whose value is different from the default value.
-   * When the pointer to the graph is not NULL, only the nodes owned by this graph are returned by the iterator.
-   * @warning Ownership of the iterator belongs to the caller, i.e. the caller must delete the operator.
-   *
-   * @param g If not NULL, only iterate on nodes from this Graph. Defaults to NULL.
-   * @return :Iterator< tlp::node >* A new Iterator on nodes whose value is not default.
-   **/
   virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const;
-  /**
-   * @brief Returns an iterator on all edges whose value is different from the default value.
-   * When the pointer to the graph is not NULL, only the edges owned by this graph are returned by the iterator.
-   * @warning Ownership of the iterator belongs to the caller, i.e. the caller must delete the operator.
-   *
-   * @param g If not NULL, only iterate on edges from this Graph. Defaults to NULL.
-   * @return :Iterator< tlp::node >* A new Iterator on edges whose value is not default.
-   **/
   virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const;
-  /**
-   * @brief Copies the value held by a property on a node to another node on this property.
-   *
-   * @param destination The node to copy the value to.
-   * @param source The node to copy the value from.
-   * @param property The property holding the value to copy.
-   * @param ifNotDefault Whether to ignore default-valuated nodes or not. Defaults to false.
-   * @return void
-   **/
   virtual bool copy(const node destination, const node source, PropertyInterface *property,
                     bool ifNotDefault = false) {
     if (property == NULL)
       return false;
 
-    tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* tp =
-      dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
+    tlp::AbstractProperty<Tnode,Tedge>* tp =
+      dynamic_cast<tlp::AbstractProperty<Tnode,Tedge>*>(property);
     assert(tp);
     bool notDefault;
     typename StoredType<typename Tnode::RealType>::ReturnedValue value =
@@ -302,22 +280,13 @@ public:
     setNodeValue(destination, value);
     return true;
   }
-  /**
-   * @brief Copies the value held by a property on an edge to another edge on this property.
-   *
-   * @param destination The edge to copy the value to.
-   * @param source The edge to copy the value from.
-   * @param property The property holding the value to copy.
-   * @param ifNotDefault Whether to ignore default-valuated nodes or not. Defaults to false.
-   * @return void
-   **/
   virtual bool copy(const edge destination, const edge source, PropertyInterface *property,
                     bool ifNotDefault = false) {
     if (property == NULL)
       return false;
 
-    tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* tp =
-      dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
+    tlp::AbstractProperty<Tnode,Tedge>* tp =
+      dynamic_cast<tlp::AbstractProperty<Tnode,Tedge>*>(property);
     assert(tp);
     bool notDefault;
     typename StoredType<typename Tedge::RealType>::ReturnedValue value =
@@ -329,14 +298,9 @@ public:
     setEdgeValue(destination, value);
     return true;
   }
-  /**
-   * @brief Copies the values held by a property on this property
-   * @param the property to copy
-   * @return void
-   **/
   virtual void copy(PropertyInterface* property) {
-    tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>* prop =
-      dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>*>(property);
+    tlp::AbstractProperty<Tnode,Tedge>* prop =
+      dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge>*>(property);
     assert(prop != NULL);
     *this = *prop;
   }
@@ -389,33 +353,25 @@ public:
   // and mg is the graph owning mN
   virtual void computeMetaValue(node n, Graph* sg, Graph* mg) {
     if (metaValueCalculator)
-      ((typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *)
+      ((typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *)
        metaValueCalculator)->computeMetaValue(this, n, sg, mg);
   }
   // mE is the meta edge, itE is an iterator on the underlying edges
   // mg is the graph owning mE
   virtual void computeMetaValue(edge e, tlp::Iterator<edge>* itE, Graph* mg) {
     if (metaValueCalculator)
-      ((typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *)metaValueCalculator)->computeMetaValue(this, e, itE, mg);
+      ((typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *)metaValueCalculator)->computeMetaValue(this, e, itE, mg);
   }
   virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *mvCalc) {
-    if (mvCalc && !dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *>(mvCalc)) {
-      qWarning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... invalid conversion of " << typeid(mvCalc).name() << "into " << typeid(typename tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::MetaValueCalculator *).name();
+    if (mvCalc && !dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *>(mvCalc)) {
+      qWarning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... invalid conversion of " << typeid(mvCalc).name() << "into " << typeid(typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *).name();
       abort();
     }
 
     metaValueCalculator = mvCalc;
   }
 
-
-  /**
-    * @brief Default implementation of PropertyInterface::compare(node n1,node n2)
-    **/
   int compare(const node n1, const node n2) const;
-
-  /**
-    * @brief Default implementation of PropertyInterface::compare(edge e1,edge e2)
-    **/
   int compare(const edge e1, const edge e2) const;
 
 
@@ -427,24 +383,22 @@ public:
     // computes the value of the meta node mN of the graph mg
     // for the property prop, according to the values associated
     // to the underlying nodes i.e the nodes of the subgraph sg.
-    virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
-                                  TPROPERTY>*, node,
+    virtual void computeMetaValue(AbstractProperty<Tnode, Tedge>*,
+                                  node,
                                   Graph*, Graph*) {}
     // computes the value of the meta node mE of the graph mg
     // for the property prop, according to the values associated
     // to the underlying edges given by the iterator itE.
     // The method do not have to delete the iterator
-    virtual void computeMetaValue(AbstractProperty<Tnode, Tedge,
-                                  TPROPERTY>*,
+    virtual void computeMetaValue(AbstractProperty<Tnode, Tedge>*,
                                   edge, tlp::Iterator<edge>*,
                                   Graph*) {}
   };
 
 protected:
-  typedef PropertyAlgorithm PAlgorithm;
   //=================================================================================
   ///Enable to clone part of sub_class
-  virtual void clone_handler(AbstractProperty<Tnode,Tedge,TPROPERTY> &) {}
+  virtual void clone_handler(AbstractProperty<Tnode,Tedge> &) {}
 
   MutableContainer<typename Tnode::RealType> nodeProperties;
   MutableContainer<typename Tedge::RealType> edgeProperties;
@@ -463,7 +417,7 @@ public:
    * @param n The node to set a value of.
    * @param i The index at which the value should be set.
    * @param v The value to set.
-   * @return void
+   *
    **/
   void setNodeEltValue(const node n, unsigned int i, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v);
   /**
@@ -479,14 +433,14 @@ public:
    *
    * @param n The node to add a value to.
    * @param v The value to append at the end of the vector.
-   * @return void
+   *
    **/
   void pushBackNodeEltValue(const node n, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v);
   /**
    * @brief Removes the value at the end of the vector associated to node n, and notify the observers of a modification.
    *
    * @param n The node to remove a value from.
-   * @return void
+   *
    **/
   void popBackNodeEltValue(const node n);
   /**
@@ -495,7 +449,7 @@ public:
    * @param n The node associated to the vector to resize.
    * @param size The new size of the vector.
    * @param elt The default value to set at indices where there was no value before. Defaults to eltType().
-   * @return void
+   *
    **/
   void resizeNodeValue(const node n, size_t size, typename eltType::RealType elt = eltType::defaultValue());
   /**
@@ -504,7 +458,7 @@ public:
    * @param e The edge to set the value of.
    * @param i The index at which the value should be set.
    * @param v The value to set.
-   * @return void
+   *
    **/
   void setEdgeEltValue(const edge e, unsigned int i, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v);
   /**
@@ -520,15 +474,15 @@ public:
    *
    * @param e The node to add a value to.
    * @param v The value to append at the end of the vector.
-   * @return void
+   *
    **/
   void pushBackEdgeEltValue(const edge e, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v);
   /**
-     * @brief Removes the value at the end of the vector associated to edge e, and notify the observers of a modification.
-     *
-     * @param e The edge to remove a value from.
-     * @return void
-     **/
+   * @brief Removes the value at the end of the vector associated to edge e, and notify the observers of a modification.
+   *
+   * @param e The edge to remove a value from.
+   *
+   **/
   void popBackEdgeEltValue(const edge e);
   /**
    * @brief Resizes the vector associated to edge e, and notify the observers of a modification.
@@ -536,11 +490,11 @@ public:
    * @param e The edge associated to the vector to resize.
    * @param size The new size of the vector.
    * @param elt The default value to set at indices where there was no value before. Defaults to eltType().
-   * @return void
+   *
    **/
   void resizeEdgeValue(const edge e, size_t size, typename eltType::RealType elt = eltType::defaultValue());
 };
-/*@}*/
+
 
 }
 #if !defined(_MSC_VER) || defined(DLL_TULIP) //When using VC++, we only want to include this when we are in the TULIP dll. With any other compiler, include it all the time

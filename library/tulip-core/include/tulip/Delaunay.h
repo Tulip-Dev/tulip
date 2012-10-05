@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef DELAUNAY_H
 #define DELAUNAY_H
 #include <vector>
@@ -26,19 +28,11 @@
 namespace tlp {
 
 /**
- * \addtogroup basic
- */
-/*@{*/
-/**
+ * @ingroup Graph
  * \brief functions for Delaunay Triangulations
- *
- * Used to triangulate a set of points in the plane
  *
  * \author : David Auber/Daniel Archambault/Antoine Lambert : auber@tulip-software.org
  *
- */
-
-/**
  * Computes the delaunay triangulation and returns the set of delaunay edges in the
  * vector edges and delaunay simplices (triangles in 2d, tetrahedra in 3d) of the triangulation in the vector simplices.
  * Edges and simplices are defined using a indexes into the original
@@ -49,6 +43,10 @@ TLP_SCOPE bool delaunayTriangulation(std::vector<Coord> &points,
                                      std::vector<std::vector<unsigned int> > &simplices,
                                      bool voronoiMode = false);
 
+/**
+ * @ingroup Graph
+ * @brief The VoronoiDiagram class
+ */
 class TLP_SCOPE VoronoiDiagram {
 public:
 
@@ -141,6 +139,7 @@ public:
  */
 TLP_SCOPE bool voronoiDiagram(std::vector<Coord> &sites, VoronoiDiagram &voronoiDiagram);
 
-/*@}*/
+
 }
 #endif
+///@endcond

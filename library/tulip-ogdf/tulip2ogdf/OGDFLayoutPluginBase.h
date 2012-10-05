@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef OGDF_LAYOUT_PLUGIN_BASE
 #define OGDF_LAYOUT_PLUGIN_BASE
 
@@ -49,3 +51,4 @@ protected:
 };
 
 #endif // OGDF_LAYOUT_PLUGIN_BASE
+///@endcond

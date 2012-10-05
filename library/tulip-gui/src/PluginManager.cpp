@@ -35,6 +35,9 @@
 
 using namespace tlp;
 
+const QString PluginManager::STABLE_LOCATION = QString("http://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_RELEASE;
+const QString PluginManager::TESTING_LOCATION = QString("http://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_RELEASE;
+
 QDebug operator<<(QDebug dbg, const PluginVersionInformations &c) {
   dbg.nospace() << "(author " << c.author << ") "
                 << "(version " << c.version << ") "
@@ -164,7 +167,7 @@ PluginManager::PluginInformationsList PluginManager::listPlugins(PluginLocations
     for (std::list<std::string>::iterator it = localResults.begin(); it != localResults.end(); ++it) {
       const Plugin* info = PluginLister::instance()->pluginInformations(*it);
 
-      if (QString(info->category().c_str()).contains(categoryFilter) && QString(info->name().c_str()).contains(nameFilter)) {
+      if (QString(info->category().c_str()).contains(categoryFilter) && QString(info->name().c_str()).contains(nameFilter, Qt::CaseInsensitive)) {
         nameToInfos[info->name().c_str()].fillLocalInfos(info);
       }
     }
@@ -213,6 +216,10 @@ QStringList PluginManager::markedForInstallation() {
 
 QStringList PluginManager::markedForRemoval() {
   return TulipSettings::instance().pluginsToRemove();
+}
+
+void PluginManager::unmarkForRemoval(const QString &file) {
+  TulipSettings::instance().unmarkPluginForRemoval(file);
 }
 
 PluginInformations::PluginInformations() {

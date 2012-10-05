@@ -65,7 +65,7 @@ const char
 };
 }
 /** \addtogroup import */
-/*@{*/
+
 /// Grid - Import a grid.
 /** This plugin enables to create a grid.
  *
@@ -287,5 +287,5 @@ public:
     return true;
   }
 };
-/*@}*/
+
 PLUGIN(Grid)

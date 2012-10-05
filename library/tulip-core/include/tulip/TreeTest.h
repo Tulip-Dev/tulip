@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef TULIP_TREETEST_H
 #define TULIP_TREETEST_H
@@ -29,9 +31,8 @@ namespace tlp {
 
 class Graph;
 
-/** \addtogroup graph_test */
-/*@{*/
 /**
+ * @ingroup Checks
  * @brief Performs test to check whether a graph is a simple or rooted tree.
  * From wikipedia: "A tree is an undirected graph in which any two vertices are connected by exactly one simple path."
  * Free trees have no designated root, while rooted trees do.
@@ -115,7 +116,8 @@ private:
    **/
   TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
 };
-/*@}*/
+
 
 }
 #endif
+///@endcond

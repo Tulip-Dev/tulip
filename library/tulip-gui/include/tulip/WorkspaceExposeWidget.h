@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 
 #ifndef WORKSPACEEXPOSEWIDGET_H
 #define WORKSPACEEXPOSEWIDGET_H
@@ -102,3 +104,4 @@ protected slots:
 
 #endif // WORKSPACEEXPOSEWIDGET_H
 
+///@endcond

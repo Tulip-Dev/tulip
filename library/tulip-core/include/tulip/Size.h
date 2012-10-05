@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TULIP_SIZE_H
 #define TULIP_SIZE_H
 #include <tulip/Vector.h>
@@ -25,3 +27,4 @@ namespace tlp {
 typedef Vec3f Size;
 }
 #endif
+///@endcond

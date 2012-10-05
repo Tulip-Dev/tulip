@@ -1,4 +1,4 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -19,8 +19,8 @@
 #include <iostream>
 #include <cstdlib>
 
-template <class Tnode, class Tedge, class TPROPERTY>
-tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(tlp::Graph *sg, std::string n) {
+template <class Tnode, class Tedge>
+tlp::AbstractProperty<Tnode,Tedge>::AbstractProperty(tlp::Graph *sg, std::string n) {
   graph = sg;
   name = n;
   nodeDefaultValue = Tnode::defaultValue();
@@ -30,69 +30,69 @@ tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::AbstractProperty(tlp::Graph *sg, s
   metaValueCalculator = NULL;
 }
 //=============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-typename Tnode::RealType tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeDefaultValue() const {
+template <class Tnode, class Tedge>
+typename Tnode::RealType tlp::AbstractProperty<Tnode,Tedge>::getNodeDefaultValue() const {
   return nodeDefaultValue;
 }
 //=============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-typename Tedge::RealType tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeDefaultValue() const {
+template <class Tnode, class Tedge>
+typename Tedge::RealType tlp::AbstractProperty<Tnode,Tedge>::getEdgeDefaultValue() const {
   return edgeDefaultValue;
 }
 //=============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNodeValue(const tlp::node n ) const {
+template <class Tnode, class Tedge>
+typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge>::getNodeValue(const tlp::node n ) const {
   assert(n.isValid());
   return nodeProperties.get(n.id);
 }
 //=============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getEdgeValue(const tlp::edge e) const {
+template <class Tnode, class Tedge>
+typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge>::getEdgeValue(const tlp::edge e) const {
   assert(e.isValid());
   return edgeProperties.get(e.id);
 }
 //=============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setNodeValue(const tlp::node n,const typename Tnode::RealType &v) {
+template <class Tnode, class Tedge>
+void tlp::AbstractProperty<Tnode,Tedge>::setNodeValue(const tlp::node n,const typename Tnode::RealType &v) {
   assert(n.isValid());
   notifyBeforeSetNodeValue(n);
   nodeProperties.set(n.id,v);
   notifyAfterSetNodeValue(n);
 }
 //=============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setEdgeValue(const tlp::edge e,const typename Tedge::RealType &v) {
+template <class Tnode, class Tedge>
+void tlp::AbstractProperty<Tnode,Tedge>::setEdgeValue(const tlp::edge e,const typename Tedge::RealType &v) {
   assert(e.isValid());
   notifyBeforeSetEdgeValue(e);
   edgeProperties.set(e.id,v);
   notifyAfterSetEdgeValue(e);
 }
 //=============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllNodeValue(const typename Tnode::RealType &v) {
+template <class Tnode, class Tedge>
+void tlp::AbstractProperty<Tnode,Tedge>::setAllNodeValue(const typename Tnode::RealType &v) {
   notifyBeforeSetAllNodeValue();
   nodeDefaultValue = v;
   nodeProperties.setAll(v);
   notifyAfterSetAllNodeValue();
 }
 //============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-void tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::setAllEdgeValue(const typename Tedge::RealType &v) {
+template <class Tnode, class Tedge>
+void tlp::AbstractProperty<Tnode,Tedge>::setAllEdgeValue(const typename Tedge::RealType &v) {
   notifyBeforeSetAllEdgeValue();
   edgeDefaultValue = v;
   edgeProperties.setAll(v);
   notifyAfterSetAllEdgeValue();
 }
 
-template <class Tnode, class Tedge, class TPROPERTY>
-int tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compare(const node n1,const node n2)const {
+template <class Tnode, class Tedge>
+int tlp::AbstractProperty<Tnode,Tedge>::compare(const node n1,const node n2)const {
   const typename Tnode::RealType& n1Value = getNodeValue(n1);
   const typename Tnode::RealType& n2Value = getNodeValue(n2);
   return (n1Value < n2Value) ? -1 : ((n1Value == n2Value) ? 0 : 1);
 }
 //============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-int tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::compare(const edge e1,const edge e2)const {
+template <class Tnode, class Tedge>
+int tlp::AbstractProperty<Tnode,Tedge>::compare(const edge e1,const edge e2)const {
   const typename Tedge::RealType& e1Value = getEdgeValue(e1);
   const typename Tedge::RealType& e2Value = getEdgeValue(e2);
   return (e1Value < e2Value) ? -1 : ((e1Value == e2Value) ? 0 : 1);
@@ -140,8 +140,8 @@ private:
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
 //============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultValuatedNodes(const Graph* g) const {
+template <class Tnode, class Tedge>
+tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge>::getNonDefaultValuatedNodes(const Graph* g) const {
   tlp::Iterator<tlp::node> *it =
     new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
 
@@ -154,8 +154,8 @@ tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDe
   return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::node>(g, it);
 }
 //============================================================
-template <class Tnode, class Tedge, class TPROPERTY>
-tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,TPROPERTY>::getNonDefaultValuatedEdges(const Graph* g) const {
+template <class Tnode, class Tedge>
+tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge>::getNonDefaultValuatedEdges(const Graph* g) const {
   tlp::Iterator<tlp::edge>* it =
     new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
 

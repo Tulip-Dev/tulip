@@ -18,9 +18,6 @@
  */
 #include "tulip/TulipMetaTypes.h"
 
-//FIXME: remove me
-#include <QtCore/QDebug>
-
 using namespace tlp;
 
 #define CHECK_QVARIANT(TYPE) if (v.userType() == qMetaTypeId<TYPE>()) return new TypedData<TYPE>(new TYPE(v.value<TYPE>()));

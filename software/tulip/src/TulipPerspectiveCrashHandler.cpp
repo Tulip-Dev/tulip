@@ -20,9 +20,12 @@
 
 #include "ui_TulipPerspectiveCrashHandler.h"
 
+#include <QtGui/QMessageBox>
+#include <QtGui/QFileDialog>
 #include <QtNetwork/QNetworkReply>
 #include <QtCore/QFile>
 #include "FormPost.h"
+#include <tulip/TulipProject.h>
 
 static const QString SEPARATOR = "=======================\n";
 
@@ -75,7 +78,7 @@ void TulipPerspectiveCrashHandler::sendReport() {
   _poster->addField("platform",_ui->compilerValue->text());
   _poster->addField("os",_ui->plateformValue->text());
   _poster->addField("os_build",_ui->archValue->text());
-  _poster->addField("steps_to_reproduce",_ui->commentsEdit->toPlainText());
+  _poster->addField("steps_to_reproduce",_ui->commentsEdit->toHtml());
 
   connect(_poster->postData("http://tulip.labri.fr/crash_report/mantis.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
 
@@ -89,8 +92,9 @@ void TulipPerspectiveCrashHandler::reportPosted() {
   QNetworkReply* reply = static_cast<QNetworkReply*>(sender());
 
   if (reply->error() == QNetworkReply::NoError) {
+    QString bugLink = _poster->response();
     _ui->sendReportButton->setText(trUtf8("Report sent"));
-    _ui->errorReportTitle->setText(trUtf8("<b>Report has been sent. Thank you for supporting Tulip !</b>"));
+    _ui->errorReportTitle->setText(trUtf8("<b>Report has been sent. Thank you for supporting Tulip !</b><br/><br/>You can follow your report at this URL: ") + "<a href=\"" + bugLink + "\">" + bugLink + "</a>");
   }
   else {
     _ui->sendReportButton->setText(trUtf8("Error while sending report"));
@@ -103,7 +107,21 @@ void TulipPerspectiveCrashHandler::reportPosted() {
 }
 
 void TulipPerspectiveCrashHandler::saveData() {
+  tlp::TulipProject* project = tlp::TulipProject::restoreProject(_perspectiveInfos.projectPath);
 
+  if (!project->isValid())
+    QMessageBox::critical(this,trUtf8("Error while saving data"),trUtf8("The perspective data could not be retrieved."));
+  else {
+    QString outputPath = QFileDialog::getSaveFileName(this,trUtf8("Save project"),QDir::homePath(),trUtf8("Tulip project (*.tlpx)"));
+
+    if (!outputPath.isNull()) {
+      project->write(outputPath);
+    }
+  }
+
+  delete project;
+  _ui->saveButton->setText(trUtf8("Data saved"));
+  _ui->saveButton->setEnabled(false);
 }
 
 void TulipPerspectiveCrashHandler::setEnvData(const QString &plateform, const QString &arch, const QString &compiler, const QString &version, const QString &stackTrace) {
