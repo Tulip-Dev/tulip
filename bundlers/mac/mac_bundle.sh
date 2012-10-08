@@ -3,6 +3,7 @@
 TULIP_DIR=$1
 DEST_DIR=$2
 SRC_DIR=$(pwd)
+PYTHON_DIR=$(dirname $(which python))/../
 
 echo 'Wiping previous bundles into '$DEST_DIR
 rm -fr $DEST_DIR
@@ -36,6 +37,12 @@ for cmp in QtOpenGl QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore p
   echo "Copying /Library/Frameworks/$cmp".framework to $(pwd)
   cp -r "/Library/Frameworks/$cmp".framework .
 done
+
+cd $DEST_DIR/application/Tulip.app/Contents/MacOS/tulip/lib
+cp $PYTHON_DIR/lib/libpython2.7.dylib .
+mkdir python2.7
+cd python2.7
+cp -r $PYTHON_DIR/lib/python2.7/*.py .
 
 echo 'Copying libraries'
 for lib in libGLEW libjpeg libpng libfreetype libz libstdc++; do
