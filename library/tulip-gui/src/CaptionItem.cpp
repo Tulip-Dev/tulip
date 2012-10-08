@@ -60,17 +60,17 @@ void CaptionItem::initCaption() {
   _captionGraphicsItem->loadConfiguration();
 
   if(_metricProperty)
-    _metricProperty->removeListener(this);
+    _metricProperty->removeObserver(this);
 
   _metricProperty=NULL;
 
   if(_colorProperty)
-    _colorProperty->removeListener(this);
+    _colorProperty->removeObserver(this);
 
   _colorProperty=NULL;
 
   if(_sizeProperty)
-    _sizeProperty->removeListener(this);
+    _sizeProperty->removeObserver(this);
 
   _sizeProperty=NULL;
 
@@ -81,7 +81,7 @@ void CaptionItem::clearObservers() {
 
   if(_graph!=view->graph())
     if(_graph)
-      _graph->removeListener(this);
+      _graph->removeObserver(this);
 
   _graph=view->graph();
 
@@ -93,11 +93,11 @@ void CaptionItem::clearObservers() {
   }
 
   if(_metricProperty)
-    _metricProperty->removeListener(this);
+    _metricProperty->removeObserver(this);
 
   if(_captionGraphicsItem->usedProperty()!="") {
     _metricProperty=view->graph()->getProperty<DoubleProperty>(_captionGraphicsItem->usedProperty());
-    _metricProperty->addListener(this);
+    _metricProperty->addObserver(this);
   }
   else {
     _metricProperty=NULL;
@@ -105,25 +105,25 @@ void CaptionItem::clearObservers() {
 
   if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
     if(_colorProperty)
-      _colorProperty->removeListener(this);
+      _colorProperty->removeObserver(this);
   }
   else {
     if(_sizeProperty)
-      _sizeProperty->removeListener(this);
+      _sizeProperty->removeObserver(this);
 
     _sizeProperty=view->graph()->getProperty<SizeProperty>("viewSize");
-    _sizeProperty->addListener(this);
+    _sizeProperty->addObserver(this);
   }
 
   _colorProperty=view->graph()->getProperty<ColorProperty>("viewColor");
 
   if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
-    _colorProperty->addListener(this);
+    _colorProperty->addObserver(this);
   }
 
   if(_graph) {
-    _graph->removeListener(this);
-    _graph->addListener(this);
+    _graph->removeObserver(this);
+    _graph->addObserver(this);
   }
 }
 
@@ -290,27 +290,27 @@ CaptionGraphicsBackgroundItem *CaptionItem::captionGraphicsItem() {
 
 void CaptionItem::removeObservation(bool remove) {
   if(!remove) {
-    _graph->addListener(this);
-    _metricProperty->addListener(this);
+    _graph->addObserver(this);
+    _metricProperty->addObserver(this);
 
     if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
-      _colorProperty->addListener(this);
+      _colorProperty->addObserver(this);
     }
     else {
-      _sizeProperty->addListener(this);
+      _sizeProperty->addObserver(this);
     }
   }
   else {
-    _graph->removeListener(this);
+    _graph->removeObserver(this);
 
     if(_metricProperty)
-      _metricProperty->removeListener(this);
+      _metricProperty->removeObserver(this);
 
     if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
-      _colorProperty->removeListener(this);
+      _colorProperty->removeObserver(this);
     }
     else {
-      _sizeProperty->removeListener(this);
+      _sizeProperty->removeObserver(this);
     }
   }
 }
@@ -320,14 +320,14 @@ void CaptionItem::applyNewFilter(float begin, float end) {
     return;
 
   emit filtering(true);
-  _graph->removeListener(this);
-  _metricProperty->removeListener(this);
+  _graph->removeObserver(this);
+  _metricProperty->removeObserver(this);
 
   if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
-    _colorProperty->removeListener(this);
+    _colorProperty->removeObserver(this);
   }
   else {
-    _sizeProperty->removeListener(this);
+    _sizeProperty->removeObserver(this);
   }
 
   Observable::holdObservers();
@@ -415,28 +415,44 @@ void CaptionItem::applyNewFilter(float begin, float end) {
 
   Observable::unholdObservers();
 
-  _graph->addListener(this);
-  _metricProperty->addListener(this);
+  _graph->addObserver(this);
+  _metricProperty->addObserver(this);
 
   if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
-    _colorProperty->addListener(this);
+    _colorProperty->addObserver(this);
   }
   else {
-    _sizeProperty->addListener(this);
+    _sizeProperty->addObserver(this);
   }
 
   emit filtering(false);
 }
 
-void CaptionItem::treatEvent(const Event &ev) {
+void CaptionItem::treatEvents(const vector<Event> &ev) {
 
-  if(typeid(ev) == typeid(Event)) {
-    if(ev.type()==Event::TLP_DELETE) {
-      create(_captionType);
-    }
+  bool deleteEvent=false;
+  bool propertyEvent=false;
+  bool graphEvent=false;
+
+  for(vector<Event>::const_iterator it=ev.begin();it!=ev.end();++it){
+
+    PropertyInterface *prop=dynamic_cast<PropertyInterface*>((*it).sender());
+
+    if(typeid(*it)==typeid(Event))
+      if((*it).type()==Event::TLP_DELETE)
+        deleteEvent=true;
+
+    if(prop)
+      propertyEvent=true;
+
+    if(typeid(*it)==typeid(GraphEvent))
+      graphEvent=true;
   }
 
-  if(typeid(ev) == typeid(PropertyEvent)) {
+  if(deleteEvent)
+    create(_captionType);
+
+  if(propertyEvent) {
     if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption)
       generateColorCaption(_captionType);
     else
@@ -451,7 +467,7 @@ void CaptionItem::treatEvent(const Event &ev) {
 
 
 
-  if(typeid(ev) == typeid(GraphEvent)) {
+  if(graphEvent) {
     create(_captionType);
   }
 }
