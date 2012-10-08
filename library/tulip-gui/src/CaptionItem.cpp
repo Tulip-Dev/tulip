@@ -185,6 +185,11 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
     propertyName=_captionGraphicsItem->usedProperty();
   }
 
+  if(metricToColorFiltered.size()<2){
+    metricToColorFiltered.push_back(pair<double,Color>(0.,Color(255,255,255,255)));
+    metricToColorFiltered.push_back(pair<double,Color>(1.,Color(255,255,255,255)));
+  }
+
   generateGradients(metricToColorFiltered,activeGradient,hideGradient);
   _captionGraphicsItem->generateColorCaption(activeGradient,hideGradient,propertyName,minProp,maxProp);
 }
@@ -252,6 +257,14 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
 
   if(metricToSizeFiltered.size()==1) {
     metricToSizeFiltered.push_back(metricToSizeFiltered[0]);
+  }
+
+  if(metricToSizeFiltered.size()<2){
+    metricToSizeFiltered.clear();
+    metricToSizeFiltered.push_back(pair<double,float>(0.,1.));
+    metricToSizeFiltered.push_back(pair<double,float>(1.,1.));
+    _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered,"empty",0.,1.);
+    return;
   }
 
   _captionGraphicsItem->generateSizeCaption(metricToSizeFiltered,_captionGraphicsItem->usedProperty(),minProp,maxProp);
