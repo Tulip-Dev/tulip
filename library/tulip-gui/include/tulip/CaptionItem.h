@@ -57,7 +57,7 @@ public:
 
   CaptionGraphicsBackgroundItem *captionGraphicsItem();
 
-  void treatEvent(const Event &ev);
+  void treatEvents(const std::vector<Event> &ev);
 
 signals :
 
