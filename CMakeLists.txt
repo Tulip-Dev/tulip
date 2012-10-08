@@ -6,6 +6,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
 ## ========================================================
 ## Build type detection
 ## ========================================================
+
 IF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
    SET(CMAKE_DEBUG_MODE TRUE)
 ELSE(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
