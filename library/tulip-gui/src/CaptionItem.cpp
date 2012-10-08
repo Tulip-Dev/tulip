@@ -185,7 +185,7 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
     propertyName=_captionGraphicsItem->usedProperty();
   }
 
-  if(metricToColorFiltered.size()<2){
+  if(metricToColorFiltered.size()<2) {
     metricToColorFiltered.push_back(pair<double,Color>(0.,Color(255,255,255,255)));
     metricToColorFiltered.push_back(pair<double,Color>(1.,Color(255,255,255,255)));
   }
@@ -259,7 +259,7 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
     metricToSizeFiltered.push_back(metricToSizeFiltered[0]);
   }
 
-  if(metricToSizeFiltered.size()<2){
+  if(metricToSizeFiltered.size()<2) {
     metricToSizeFiltered.clear();
     metricToSizeFiltered.push_back(pair<double,float>(0.,1.));
     metricToSizeFiltered.push_back(pair<double,float>(1.,1.));
@@ -434,7 +434,7 @@ void CaptionItem::treatEvents(const vector<Event> &ev) {
   bool propertyEvent=false;
   bool graphEvent=false;
 
-  for(vector<Event>::const_iterator it=ev.begin();it!=ev.end();++it){
+  for(vector<Event>::const_iterator it=ev.begin(); it!=ev.end(); ++it) {
 
     PropertyInterface *prop=dynamic_cast<PropertyInterface*>((*it).sender());
 

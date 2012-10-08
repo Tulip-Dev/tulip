@@ -101,7 +101,7 @@ protected:
 
   void resizeEvent(QResizeEvent *);
 
-  void dragEnterEvent(QDragEnterEvent *);  
+  void dragEnterEvent(QDragEnterEvent *);
   void dropEvent(QDropEvent *);
   void dragLeaveEvent(QDragLeaveEvent *);
 

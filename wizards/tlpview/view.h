@@ -8,50 +8,59 @@
 @endif
 
 class %ProjectName:c%: public tlp::%BaseView% {
+
   @if "%BaseView%" == "View"
-  QGraphicsView* _graphicsView;
+    QGraphicsView* _graphicsView;
+
   @endif
 
 public:
   PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
-public:
-  %ProjectName:c%();
-  virtual ~%ProjectName:c%();
+  public:
+  %ProjectName:
+    c%();
+  virtual ~%ProjectName:
+    c%();
 
-  virtual QList<QWidget*> configurationWidgets() const;
-  virtual void applySettings();
+    virtual QList<QWidget*> configurationWidgets() const;
+    virtual void applySettings();
 
-  virtual tlp::DataSet state() const;
-  virtual void setState(const tlp::DataSet&);
+    virtual tlp::DataSet state() const;
+    virtual void setState(const tlp::DataSet&);
 
-  @if "%BaseView%" == "View"
-  virtual void setupUi()=0;
-  virtual QGraphicsView* graphicsView() const=0;
-  virtual QGraphicsItem* centralItem() const;
-  @endif
+    @if "%BaseView%" == "View"
+    virtual void setupUi()=0;
 
-  @if "%BaseView%" == "ViewWidget"
-  virtual void setupWidget();
-  @endif
+    virtual QGraphicsView* graphicsView() const=0;
+    virtual QGraphicsItem* centralItem() const;
+    @endif
 
-  @if "%BaseView%" != "GlMainView"
-  virtual void centerView();
-  virtual void draw(tlp::PluginProgress* pluginProgress);
-  virtual void refresh(tlp::PluginProgress* pluginProgress);
-  virtual QPixmap snapshot(const QSize& outputSize=QSize());
-  @endif
+    @if "%BaseView%" == "ViewWidget"
+    virtual void setupWidget();
 
-protected:
-  virtual void interactorsInstalled(const QList<tlp::Interactor*>& interactors);
-  virtual void currentInteractorChanged(tlp::Interactor*);
+    @endif
 
-  virtual void graphChanged(tlp::Graph*)=0;
-  @if "%BaseView%" == "View"
-  virtual void graphDeleted(tlp::Graph* parentGraph)=0;
-  @endif
+    @if "%BaseView%" != "GlMainView"
+    virtual void centerView();
 
-  virtual void fillContextMenu(QMenu*,const QPointF &);
-};
+    virtual void draw(tlp::PluginProgress* pluginProgress);
+    virtual void refresh(tlp::PluginProgress* pluginProgress);
+    virtual QPixmap snapshot(const QSize& outputSize=QSize());
+    @endif
+
+  protected:
+    virtual void interactorsInstalled(const QList<tlp::Interactor*>& interactors);
+    virtual void currentInteractorChanged(tlp::Interactor*);
+
+    virtual void graphChanged(tlp::Graph*)=0;
+
+    @if "%BaseView%" == "View"
+    virtual void graphDeleted(tlp::Graph* parentGraph)=0;
+
+    @endif
+
+    virtual void fillContextMenu(QMenu*,const QPointF &);
+  };
 
 #endif // %ProjectName:u%_H

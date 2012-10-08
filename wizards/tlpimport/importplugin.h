@@ -7,8 +7,10 @@ class %ProjectName:c%: public tlp::ImportModule {
 public:
   PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
-  %ProjectName:c%(tlp::PluginContext* context);
-  virtual ~%ProjectName:c%();
+%ProjectName:
+  c%(tlp::PluginContext* context);
+virtual ~%ProjectName:
+  c%();
 
   bool importGraph();
   virtual std::list<std::string> fileExtensions() const;
