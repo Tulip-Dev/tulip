@@ -522,6 +522,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     errorMessage = "Plugin does not exist or is not a property algorithm";
     return false;
   }
+
   parameters->set("result",prop);
   return applyAlgorithm(algorithm,errorMessage,parameters,progress);
 }
