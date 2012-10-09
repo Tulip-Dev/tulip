@@ -54,7 +54,7 @@ bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath
     if (info.isDir()) { // Recurse in directories if they are different from . and ..
       QDir childDir(info.absoluteFilePath());
       QFileInfo childInfo(childDir.absolutePath());
-      zipDirContent(childDir,archive,archivePath + childInfo.fileName() + QDir::separator(),progress);
+      zipDirContent(childDir,archive,archivePath + childInfo.fileName() + "/",progress);
     }
 
     else {
