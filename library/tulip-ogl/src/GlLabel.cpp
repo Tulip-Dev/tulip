@@ -45,10 +45,10 @@ namespace tlp {
 
 static const int SpaceBetweenLine=5;
 
-GlLabel::GlLabel() {
+GlLabel::GlLabel():oldCamera(NULL) {
   init();
 }
-GlLabel::GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign) {
+GlLabel::GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign),oldCamera(NULL) {
   init();
 }
 
@@ -82,6 +82,7 @@ void GlLabel::init() {
   labelsDensity=100;
   billboarded=false;
   sizeForOutAlign = size;
+  oldLod=-1;
 }
 //============================================================
 void GlLabel::setText(const string& text) {
@@ -242,10 +243,29 @@ float GlLabel::getHeightAfterScale() {
   return size[1];
 }
 //============================================================
-void GlLabel::draw(float lod, Camera *camera) {
+void GlLabel::draw(float, Camera *camera) {
 
   if(fontSize<=0)
     return;
+
+  bool computeLOD=false;
+  if(oldLod==-1){
+    computeLOD=true;
+  }else{
+    computeLOD=camera->getEyes()!=oldCamera.getEyes() ||
+        camera->getCenter()!=oldCamera.getCenter() ||
+        camera->getZoomFactor()!=oldCamera.getZoomFactor();
+  }
+
+  float lod=oldLod;
+
+  if(computeLOD){
+    Coord test=camera->screenTo3DWorld(Coord(1,1,1))-camera->screenTo3DWorld(Coord(0,0,0));
+    test=test/test.norm();
+    lod=(camera->worldTo2DScreen(test)-camera->worldTo2DScreen(Coord(0,0,0))).norm();
+    oldLod=lod;
+    oldCamera=*camera;
+  }
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
@@ -274,17 +294,8 @@ void GlLabel::draw(float lod, Camera *camera) {
   if(textVector.size()>1)
     multiLineH=(h-(textVector.size()-1)*4.5)/textVector.size();
 
-  //Here we compute the deformation of the bounding box when we have a rotation on the camera
-  float a=acos(camera->getUp()[1]/sqrt(camera->getUp()[0]*camera->getUp()[0]+camera->getUp()[1]*camera->getUp()[1]));
-
-
-  a=M_PI/4-a;
-
-  if(a<-M_PI/4)
-    a=-M_PI/2-a;
-
   //We compute the size of the text on the screen
-  screenH=static_cast<float>(multiLineH*(lod/(cos(a)*sqrt((lodBoundingBox[1][0]-lodBoundingBox[0][0])*(lodBoundingBox[1][0]-lodBoundingBox[0][0])+(lodBoundingBox[1][1]-lodBoundingBox[0][1])*(lodBoundingBox[1][1]-lodBoundingBox[0][1])+(lodBoundingBox[1][2]-lodBoundingBox[0][2])*(lodBoundingBox[1][2]-lodBoundingBox[0][2])))))/2.f;
+  screenH=(multiLineH*lod)/2.f;
 
   //Scale of the text
   float scaleToApply=1.;
