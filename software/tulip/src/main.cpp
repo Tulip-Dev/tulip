@@ -92,48 +92,6 @@ int main(int argc, char **argv) {
   tulip_agent.setApplicationName("tulip");
   checkTulipRunning();
 
-//  TulipSettings::instance().applyProxySettings();
-
-//  if (TulipSettings::instance().isFirstRun()) {
-//    TulipSettings::instance().setFirstRun(false);
-//    TulipSettings::instance().addRemoteLocation(STABLE_LOCATION);
-//    TulipSettings::instance().addRemoteLocation(TESTING_LOCATION);
-//  }
-
-//  sendUsageStatistics();
-
-//  QDir::home().mkpath(tlp::localPluginsPath());
-//  QLocale::setDefault(QLocale(QLocale::English));
-
-//#if defined(__APPLE__)
-//  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
-//  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
-//#endif
-
-//  foreach (const QString& plugin, tlp::PluginManager::markedForRemoval()) {
-//    QFile f(plugin);
-//    f.remove();
-//    //whether or not the removal succeeded, do not try again
-//    tlp::PluginManager::unmarkForRemoval(plugin);
-//  }
-
-//  tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
-//  //TODO find a cleaner way to achieve this (QDesktopServices is part of QtGui, so it does not belong in TlpTools)
-//  tlp::TulipPluginsPath = (tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toStdString() +
-//                          tlp::PATH_DELIMITER +
-//                          tlp::TulipPluginsPath +
-//                          tlp::PATH_DELIMITER +
-//                          tlp::getPluginLocalInstallationDir().toStdString();
-
-//  // Load plugins
-//  PluginLoaderDispatcher *dispatcher = new PluginLoaderDispatcher();
-//  TulipSplashScreen *splashScreen = new TulipSplashScreen();
-//  PluginLoaderReporter *errorReport = new PluginLoaderReporter();
-//  dispatcher->registerLoader(errorReport);
-//  dispatcher->registerLoader(splashScreen);
-//  tlp::PluginLibraryLoader::loadPlugins(dispatcher);
-//  tlp::PluginLister::checkLoadedPluginsDependencies(dispatcher);
-
   PluginLoaderDispatcher *dispatcher = new PluginLoaderDispatcher();
   TulipSplashScreen *splashScreen = new TulipSplashScreen();
   PluginLoaderReporter *errorReport = new PluginLoaderReporter();
