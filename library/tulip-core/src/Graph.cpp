@@ -396,7 +396,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
     clone->copy(prop);\
     clonedProperties[clone] = prop;\
     dataSetCopy.set<T*>(n,clone);\
-    QString copyName = dataSetName + "(" + prop->getName().c_str() + ")";\
+    QString copyName = dataSetName + " (" + prop->getName().c_str() + ")";\
     if (existProperty(copyName.toStdString()) && getProperty(copyName.toStdString())->getTypename().compare(prop->getTypename()) != 0)\
       qWarning() << algorithm.c_str() << ": Type mismatch for output property " << copyName;\
     else\
@@ -444,6 +444,8 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   if (dataSet) {
     dataSetCopy = *dataSet;
     QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSetCopy.toString().c_str();
+    if (dataSetCopy.toString().empty() || dataSetName.length()>30) // Hard limit to avoid long names in GUI
+      dataSetName = algorithm.c_str();
     foreach(std::string n, outParams) {
       if (!dataSetCopy.exist(n))
         continue;
@@ -522,8 +524,16 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     errorMessage = "Plugin does not exist or is not a property algorithm";
     return false;
   }
+  bool deleteParams = false;
+  if (parameters == NULL) {
+    deleteParams = true;
+    parameters = new DataSet();
+  }
   parameters->set("result",prop);
-  return applyAlgorithm(algorithm,errorMessage,parameters,progress);
+  bool result = applyAlgorithm(algorithm,errorMessage,parameters,progress);
+  if (deleteParams)
+    delete parameters;
+  return result;
 }
 
 tlp::node Graph::getSource() const {
