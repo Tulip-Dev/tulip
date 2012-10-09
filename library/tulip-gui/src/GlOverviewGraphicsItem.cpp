@@ -133,7 +133,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
 
-  if(generatePixmap || _oldCameras.size()==0) {
+  if(generatePixmap || _oldCameras.size()!=layerList.size()) {
     // Center the scene
     baseScene.centerScene();
     _oldCameras.clear();
