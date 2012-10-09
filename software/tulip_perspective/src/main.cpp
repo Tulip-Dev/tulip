@@ -55,6 +55,38 @@
 using namespace std;
 using namespace tlp;
 
+struct PluginLoaderToProgress: public PluginLoader {
+  PluginProgress* _progress;
+
+  int max_step;
+  int step;
+
+  virtual void start(const std::string &path) {
+    step=0;
+    _progress->setComment("Entering " + path);
+  }
+
+  virtual void finished(bool state,const std::string &msg) {
+    if (state)
+      _progress->setComment("Plugin loaded sucessfully");
+    else
+      _progress->setComment(msg);
+  }
+
+  virtual void numberOfFiles(int n) {
+    max_step = n;
+  }
+
+  virtual void loading(const std::string &filename) {
+    step++;
+    _progress->progress(step,max_step);
+    _progress->setComment("Loading " + filename);
+  }
+
+  virtual void loaded(const tlp::Plugin* infos, const std::list <tlp::Dependency>& dependencies) {}
+  virtual void aborted(const std::string &filename,const  std::string &errormsg) {}
+};
+
 void usage(const QString &error) {
   int returnCode = 0;
 
@@ -93,7 +125,10 @@ int main(int argc,char **argv) {
   // Init tulip
   progress->progress(0,100);
   progress->setComment(QObject::trUtf8("Initializing tulip"));
-  tlp::initTulipSoftware(NULL);
+  PluginLoaderToProgress* loader = new PluginLoaderToProgress();
+  loader->_progress = progress;
+  tlp::initTulipSoftware(loader);
+  delete loader;
 
   // Check arguments
   progress->progress(60,100);
