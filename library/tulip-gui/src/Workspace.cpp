@@ -564,7 +564,7 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
     view->setupUi();
     Graph* rootGraph = rootIds[rootId];
     assert(rootGraph);
-    Graph* g = rootGraph->getSubGraph(id.toInt());
+    Graph* g = rootGraph->getDescendantGraph(id.toInt());
 
     if (g == NULL)
       g = rootGraph;
