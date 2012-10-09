@@ -35,7 +35,7 @@ using namespace tlp;
 
 GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, int width, int height):
   QGraphicsObject(),
-  glMainWidget(glMainWidget), _redrawNeeded(true), _graphChanged(true), renderingStore(NULL) {
+  glMainWidget(glMainWidget), _redrawNeeded(true), _graphChanged(true) {
 
   setFlag(QGraphicsItem::ItemIsSelectable, true);
   setFlag(QGraphicsItem::ItemIsFocusable, true);
@@ -52,7 +52,6 @@ GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, i
 }
 
 GlMainWidgetGraphicsItem::~GlMainWidgetGraphicsItem() {
-  delete [] renderingStore;
   delete glMainWidget;
 }
 
@@ -68,8 +67,6 @@ void GlMainWidgetGraphicsItem::resize(int width, int height) {
   glMainWidget->resizeGL(width,height);
   _redrawNeeded = true;
   _graphChanged=true;
-  delete [] renderingStore;
-  renderingStore = new unsigned char[width*height*4];
   prepareGeometryChange();
 }
 
@@ -89,18 +86,6 @@ void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphi
   if(_redrawNeeded) {
     emit widgetPainted(_graphChanged);
   }
-
-  QRectF rect = boundingRect();
-
-  if (pos().x() < 0 || pos().x()+rect.width() > scene()->width() || pos().y() < 0 || pos().y()+rect.height() > scene()->height())
-    _redrawNeeded = true;
-
-  Color backgroundColor = glMainWidget->getScene()->getBackgroundColor();
-  painter->setBrush(QColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]));
-  painter->setPen(Qt::transparent);
-  painter->setRenderHint(QPainter::Antialiasing, true);
-  painter->drawRect(rect);
-  painter->setRenderHint(QPainter::Antialiasing, false);
 
   painter->beginNativePainting();
 
@@ -175,7 +160,6 @@ void GlMainWidgetGraphicsItem::keyPressEvent(QKeyEvent *event) {
   event->setAccepted(eventModif.isAccepted());
 }
 
-
 void GlMainWidgetGraphicsItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event) {
   if(glMainWidget->isEnabled() && glMainWidget->acceptDrops()) {
     QDragEnterEvent proxyDragEnter(event->pos().toPoint(), event->dropAction(), event->mimeData(), event->buttons(), event->modifiers());
@@ -193,8 +177,6 @@ void GlMainWidgetGraphicsItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event
   QApplication::sendEvent(glMainWidget, &proxyDragLeave);
   event->setAccepted(proxyDragLeave.isAccepted());
 }
-
-
 
 void GlMainWidgetGraphicsItem::dragMoveEvent(QGraphicsSceneDragDropEvent *event) {
   if(glMainWidget->isEnabled() && glMainWidget->acceptDrops()) {
