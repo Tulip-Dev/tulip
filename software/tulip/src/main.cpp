@@ -91,6 +91,7 @@ int main(int argc, char **argv) {
   QApplication tulip_agent(argc, argv);
   tulip_agent.setApplicationName("tulip");
   checkTulipRunning();
+  sendUsageStatistics();
 
   PluginLoaderDispatcher *dispatcher = new PluginLoaderDispatcher();
   TulipSplashScreen *splashScreen = new TulipSplashScreen();
