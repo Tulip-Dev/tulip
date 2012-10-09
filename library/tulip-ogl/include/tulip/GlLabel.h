@@ -198,7 +198,7 @@ public :
   /**
    * @brief Draw the Label
    */
-  virtual void draw(float lod,Camera *camera=NULL);
+  virtual void draw(float, Camera *camera=NULL);
 
   /**
    * @brief Translate entity
@@ -442,6 +442,9 @@ private :
   BoundingBox lodBoundingBox;
   int labelsDensity;
   OcclusionTest *occlusionTester;
+
+  Camera oldCamera;
+  float oldLod;
 
   std::vector<std::string> textVector;
   std::vector<float> textWidthVector;
