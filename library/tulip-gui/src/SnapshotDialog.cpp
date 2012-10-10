@@ -84,6 +84,9 @@ SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),ui(new U
   lockLabel=new LockLabel();
   ui->horizontalLayout_2->addWidget(lockLabel);
   lockLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+  ui->okButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogOkButton));
+  ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
 }
 
 SnapshotDialog::~SnapshotDialog() {
