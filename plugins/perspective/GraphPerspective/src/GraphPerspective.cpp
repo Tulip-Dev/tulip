@@ -428,6 +428,8 @@ void GraphPerspective::saveAs(const QString& path) {
     QString path = QFileDialog::getSaveFileName(_mainWindow,trUtf8("Save file"),QString(),"Tulip Project (*.tlpx)");
 
     if (!path.isEmpty()) {
+      if (!path.endsWith(".tlpx"))
+        path+=".tlpx";
       saveAs(path);
     }
 
