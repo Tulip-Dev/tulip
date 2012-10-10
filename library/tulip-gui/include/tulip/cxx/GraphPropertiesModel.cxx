@@ -31,10 +31,8 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   std::string propName;
   forEach(propName,_graph->getInheritedProperties()) {
 #ifdef NDEBUG
-
     if (propName == "viewMetaGraph")
       continue;
-
 #endif
     PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(propName));
 
