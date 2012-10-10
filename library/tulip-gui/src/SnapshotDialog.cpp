@@ -18,16 +18,18 @@
  */
 
 #include "tulip/SnapshotDialog.h"
-#include "ui_SnapshotDialog.h"
 
 #include <tulip/View.h>
 
+#include <QtGui/QLabel>
+#include <QtCore/QEvent>
 #include <QtGui/QMessageBox>
 #include <QtGui/QImageWriter>
 #include <QtGui/QFileDialog>
 #include <QtGui/QGraphicsPixmapItem>
 #include <QtGui/QClipboard>
 #include <QtGui/QGraphicsScene>
+#include "ui_SnapshotDialog.h"
 
 using namespace std;
 
@@ -66,6 +68,7 @@ protected :
 
 };
 
+
 SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(&v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
   ui->setupUi(this);
 
@@ -79,7 +82,8 @@ SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),ui(new U
   connect(ui->copybutton, SIGNAL(clicked()), this, SLOT(copyClicked()));
 
   lockLabel=new LockLabel();
-  ui->lockLayout->addWidget(lockLabel);
+  ui->horizontalLayout_2->addWidget(lockLabel);
+  lockLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 
 SnapshotDialog::~SnapshotDialog() {
