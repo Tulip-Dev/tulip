@@ -37,6 +37,10 @@ SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::Wind
   connect(_ui->previewBox,SIGNAL(toggled(bool)),this,SLOT(setPreview(bool)));
 }
 
+SimplePluginProgressWidget::~SimplePluginProgressWidget() {
+  delete _ui;
+}
+
 void SimplePluginProgressWidget::checkLastUpdate() {
   if (_lastUpdate.msecsTo(QTime::currentTime()) > 1000) {
     QApplication::processEvents(QEventLoop::AllEvents,1000);
