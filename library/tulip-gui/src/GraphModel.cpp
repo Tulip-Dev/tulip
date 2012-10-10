@@ -151,11 +151,11 @@ bool GraphModel::setData(const QModelIndex &index, const QVariant &value, int ro
 void GraphModel::treatEvent(const Event& ev) {
   if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
     const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+    if (graphEv->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY || graphEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY) {
 #ifdef NDEBUG
       if (graphEv->getPropertyName() == "viewMetaGraph")
         return;
 #endif
-    if (graphEv->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY || graphEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY) {
       beginInsertColumns(QModelIndex(),columnCount(),columnCount());
       PropertyInterface* prop = _graph->getProperty(graphEv->getPropertyName());
       _properties.push_back(prop);
@@ -163,6 +163,10 @@ void GraphModel::treatEvent(const Event& ev) {
       endInsertColumns();
     }
     else if (graphEv->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY || graphEv->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY) {
+#ifdef NDEBUG
+      if (graphEv->getPropertyName() == "viewMetaGraph")
+        return;
+#endif
       PropertyInterface* prop = _graph->getProperty(graphEv->getPropertyName());
       int col = _properties.indexOf(prop);
       beginRemoveColumns(QModelIndex(),col,col);
