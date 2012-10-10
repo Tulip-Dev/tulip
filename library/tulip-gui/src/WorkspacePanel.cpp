@@ -175,6 +175,7 @@ void WorkspacePanel::setView(tlp::View* view) {
   }
 
   _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());
+  _viewConfigurationWidgets->installEventFilter(this);
   _viewConfigurationWidgets->setWidget(viewConfigurationTabs);
   _viewConfigurationWidgets->setZValue(DBL_MAX);
   _view->graphicsView()->scene()->installEventFilter(this);
@@ -192,6 +193,9 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
 
     else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded && dynamic_cast<QTabBar*>(obj) != NULL) {
       setConfigurationTabExpanded(true);
+    }
+    else if (ev->type() == QEvent::Wheel && dynamic_cast<QTabBar*>(obj) != NULL) {
+      return true;
     }
   }
 
