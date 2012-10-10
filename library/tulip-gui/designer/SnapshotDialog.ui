@@ -219,6 +219,12 @@ font: bold;
                <height>16777215</height>
               </size>
              </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>2000</number>
+             </property>
             </widget>
            </item>
            <item row="1" column="1">
@@ -240,6 +246,12 @@ font: bold;
                <width>300</width>
                <height>16777215</height>
               </size>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>2000</number>
              </property>
             </widget>
            </item>
@@ -263,6 +275,12 @@ font: bold;
                <width>300</width>
                <height>16777215</height>
               </size>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
              </property>
             </widget>
            </item>
