@@ -396,7 +396,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
     clone->copy(prop);\
     clonedProperties[clone] = prop;\
     dataSetCopy.set<T*>(n,clone);\
-    QString copyName = dataSetName + " (" + prop->getName().c_str() + ")";\
+    QString copyName = dataSetName + "(" + prop->getName().c_str() + ")";\
     if (existProperty(copyName.toStdString()) && getProperty(copyName.toStdString())->getTypename().compare(prop->getTypename()) != 0)\
       qWarning() << algorithm.c_str() << ": Type mismatch for output property " << copyName;\
     else\
@@ -444,8 +444,6 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   if (dataSet) {
     dataSetCopy = *dataSet;
     QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSetCopy.toString().c_str();
-    if (dataSetCopy.toString().empty() || dataSetName.length()>30) // Hard limit to avoid long names in GUI
-      dataSetName = algorithm.c_str();
     foreach(std::string n, outParams) {
       if (!dataSetCopy.exist(n))
         continue;
@@ -520,19 +518,96 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
                                         std::string &errorMessage,
                                         tlp::PluginProgress *progress,
                                         tlp::DataSet *parameters) {
-  if (!PluginLister::instance()->pluginExists<tlp::PropertyAlgorithm>(algorithm)) {
-    errorMessage = "Plugin does not exist or is not a property algorithm";
+  bool result;
+  tlp::AlgorithmContext context;
+
+  // check if this is a subgraph of prop->graph
+  if (getRoot() != prop->getGraph()) {
+    tlp::Graph *currentGraph = this;
+
+    while(currentGraph->getSuperGraph() != currentGraph) {
+      if (currentGraph == prop->getGraph())
+        break;
+
+      currentGraph = currentGraph->getSuperGraph();
+    }
+
+    if (currentGraph != prop->getGraph()) {
+      errorMessage = "The passed property does not belong to the graph";
+      return false;
+    }
+  }
+
+#ifndef NDEBUG
+  qWarning() << __PRETTY_FUNCTION__;
+#endif
+
+  TLP_HASH_MAP<std::string, PropertyInterface *>::const_iterator it =
+    circularCalls.find(algorithm);
+
+  if (it != circularCalls.end() && (*it).second == prop) {
+#ifndef NDEBUG
+    qWarning() << "Circular call of " << __PRETTY_FUNCTION__ << " " << errorMessage;
+#endif
     return false;
   }
-  bool deleteParams = false;
-  if (parameters == NULL) {
-    deleteParams = true;
-    parameters = new DataSet();
+
+  // nothing to do if the graph is empty
+  if (numberOfNodes() == 0) {
+    errorMessage= "The graph is empty";
+    return false;
   }
-  parameters->set("result",prop);
-  bool result = applyAlgorithm(algorithm,errorMessage,parameters,progress);
-  if (deleteParams)
+
+  tlp::PluginProgress *tmpProgress;
+
+  if (progress==NULL)
+    tmpProgress=new tlp::SimplePluginProgress();
+  else
+    tmpProgress=progress;
+
+  bool hasData = parameters != NULL;
+
+  if (!hasData)
+    parameters = new tlp::DataSet();
+
+  // add prop as result in dataset
+  parameters->set<PropertyInterface *>("result", prop);
+
+  context.pluginProgress = tmpProgress;
+  context.graph = this;
+  context.dataSet = parameters;
+
+  tlp::Observable::holdObservers();
+  circularCalls[algorithm] = prop;
+  tlp::AlgorithmContext tmpContext(context);
+  Algorithm *tmpAlgo =
+    tlp::PluginLister::instance()->getPluginObject<PropertyAlgorithm>(algorithm, &context);
+
+  if (tmpAlgo != NULL) {
+    result = tmpAlgo->check(errorMessage);
+
+    if (result) {
+      tmpAlgo->run();
+    }
+
+    delete tmpAlgo;
+  }
+  else {
+    errorMessage = "No algorithm available with this name";
+    result=false;
+  }
+
+  circularCalls.erase(algorithm);
+  tlp::Observable::unholdObservers();
+
+  if (progress==NULL) delete tmpProgress;
+
+  if (hasData)
+    // remove result from dataset
+    parameters->remove("result");
+  else
     delete parameters;
+
   return result;
 }
 
