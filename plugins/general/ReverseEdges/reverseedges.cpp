@@ -31,7 +31,7 @@ bool ReverseEdges::run() {
   graph->push();
   int step = 0, max_step = graph->numberOfEdges();
   edge e;
-  stableForEach(e, selection->getEdgesEqualTo(true)) {
+  forEach(e, selection->getEdgesEqualTo(true)) {
     ProgressState state = pluginProgress->progress(step++, max_step);
     result = state == TLP_CONTINUE;
     if (state == TLP_CANCEL) {
@@ -41,11 +41,7 @@ bool ReverseEdges::run() {
     else if (state == TLP_STOP) {
       break;
     }
-    node src = graph->source(e);
-    node tgt = graph->target(e);
-    graph->delEdge(e,true);
-    edge newEdge = graph->addEdge(tgt,src);
-    selection->setEdgeValue(newEdge,true);
+    graph->reverse(e);
   }
 
   if (deleteSelection)
