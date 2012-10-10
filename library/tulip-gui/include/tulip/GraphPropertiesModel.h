@@ -102,11 +102,6 @@ public:
     if (graphEvent == NULL)
       return;
 
-#ifdef NDEBUG
-      if (graphEvent->getPropertyName() == "viewMetaGraph")
-        return;
-#endif
-
     if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
 
       PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(graphEvent->getPropertyName()));
