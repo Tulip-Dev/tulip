@@ -153,6 +153,11 @@ void TableView::mapToGraphSelection() {
 }
 
 void TableView::graphChanged(tlp::Graph* g) {
+  QSet<QString> visibleProperties;
+  foreach(tlp::PropertyInterface* pi, _ui->propertiesEditor->visibleProperties()) {
+    visibleProperties.insert(pi->getName().c_str());
+  }
+
   GraphPropertiesModel<BooleanProperty>* model = new GraphPropertiesModel<BooleanProperty>(trUtf8("No filtering"),g,false,_ui->filteringPropertyCombo);
   _ui->filteringPropertyCombo->setModel(model);
   _ui->filteringPropertyCombo->setCurrentIndex(0);
@@ -164,9 +169,13 @@ void TableView::graphChanged(tlp::Graph* g) {
   //Show all the properties whose name starts with 'view'
   if (_model != NULL) {
     for(int i=0; i < _model->columnCount(); ++i) {
-      if(_model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString().startsWith("view")) {
-        _ui->propertiesEditor->setPropertyChecked(i, true);
+      QString propName = _model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
+      bool checked = propName.startsWith("view");
+      if (!visibleProperties.isEmpty()) {
+        checked = visibleProperties.contains(propName);
       }
+      qDebug() << "Setting " << i << "( " << propName << ") to " << checked;
+      _ui->propertiesEditor->setPropertyChecked(i, checked);
     }
   }
 }

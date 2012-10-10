@@ -52,6 +52,10 @@ void GraphModel::setGraph(Graph* g) {
     _graph->addObserver(this);
     PropertyInterface* pi;
     forEach(pi, _graph->getObjectProperties()) {
+#ifdef NDEBUG
+      if (pi->getName() == "viewMetaGraph")
+        continue;
+#endif
       _properties.push_back(pi);
       pi->addListener(this);
     }
@@ -147,7 +151,10 @@ bool GraphModel::setData(const QModelIndex &index, const QVariant &value, int ro
 void GraphModel::treatEvent(const Event& ev) {
   if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
     const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
-
+#ifdef NDEBUG
+      if (graphEv->getPropertyName() == "viewMetaGraph")
+        return;
+#endif
     if (graphEv->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY || graphEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY) {
       beginInsertColumns(QModelIndex(),columnCount(),columnCount());
       PropertyInterface* prop = _graph->getProperty(graphEv->getPropertyName());

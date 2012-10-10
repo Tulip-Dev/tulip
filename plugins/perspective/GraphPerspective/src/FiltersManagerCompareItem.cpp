@@ -104,7 +104,7 @@ void FiltersManagerCompareItem::fillCombo(QComboBox* combo) {
   if (_graph != NULL) {
     string s;
     forEach(s,_graph->getProperties()) {
-#ifndef NDEBUG
+#ifdef NDEBUG
 
       if (s == "viewMetaGraph")
         continue;

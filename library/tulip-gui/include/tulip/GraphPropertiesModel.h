@@ -98,11 +98,16 @@ public:
     }
 
     const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+#ifdef NDEBUG
+      if (graphEvent->getPropertyName() == "viewMetaGraph")
+        return;
+#endif
 
     if (graphEvent == NULL)
       return;
 
     if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
+
       PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(graphEvent->getPropertyName()));
 
       if (prop != NULL) {
