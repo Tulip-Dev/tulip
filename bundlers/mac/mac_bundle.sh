@@ -43,6 +43,7 @@ cp $PYTHON_DIR/lib/libpython2.7.dylib .
 mkdir python2.7
 cd python2.7
 cp -r $PYTHON_DIR/lib/python2.7/*.py .
+cd ..
 
 echo 'Copying libraries'
 for lib in libGLEW libfreetype libz libstdc++; do
