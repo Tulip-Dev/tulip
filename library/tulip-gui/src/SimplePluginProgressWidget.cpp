@@ -100,6 +100,18 @@ void SimplePluginProgressWidget::setError(const std::string &error) {
   _error = error;
 }
 
+void SimplePluginProgressWidget::setCancelButtonVisible(bool v) {
+  _ui->cancelButton->setVisible(v);
+}
+
+void SimplePluginProgressWidget::setStopButtonVisible(bool v) {
+  _ui->stopButton->setVisible(v);
+}
+
+void SimplePluginProgressWidget::setPreviewButtonVisible(bool v) {
+  _ui->previewBox->setVisible(v);
+}
+
 void SimplePluginProgressWidget::cancelClicked() {
   cancel();
 }
@@ -181,4 +193,16 @@ std::string SimplePluginProgressDialog::getError() {
 
 void SimplePluginProgressDialog::setError(const std::string &error) {
   _progress->setError(error);
+}
+
+void SimplePluginProgressDialog::setCancelButtonVisible(bool v) {
+  _progress->setCancelButtonVisible(v);
+}
+
+void SimplePluginProgressDialog::setStopButtonVisible(bool v) {
+  _progress->setStopButtonVisible(v);
+}
+
+void SimplePluginProgressDialog::setPreviewButtonVisible(bool v) {
+  _progress->setPreviewButtonVisible(v);
 }
