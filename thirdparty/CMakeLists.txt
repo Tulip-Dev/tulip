@@ -50,8 +50,6 @@ IF(WIN32)
   INSTALL_EXTERNAL_LIB("QtXml4.dll" qt)
   INSTALL_EXTERNAL_LIB("QtWebKit4.dll" qt)
   INSTALL_EXTERNAL_LIB("glew*.dll" glew)
-  INSTALL_EXTERNAL_LIB("jpeg*.dll" jpeg)
-  INSTALL_EXTERNAL_LIB("libpng*.dll" png)
   INSTALL_EXTERNAL_LIB("python2*.dll" python)
   INSTALL_EXTERNAL_LIB("libintl*.dll" intl)
 
