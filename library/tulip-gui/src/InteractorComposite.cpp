@@ -100,8 +100,8 @@ void InteractorComposite::install(QObject* target) {
 
   if (target != NULL)
     foreach(InteractorComponent* i, _components) {
-      i->init();
       target->installEventFilter(i);
+      i->init();
     }
 }
 void InteractorComposite::uninstall() {

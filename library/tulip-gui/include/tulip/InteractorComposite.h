@@ -38,7 +38,7 @@ class TLP_QT_SCOPE InteractorComponent: public QObject {
 public:
 
   /**
-   * @brief The init() method is called before the component gets installed on a target. Note that this method is called before any event from could have been retrieved.
+   * @brief The init() method is called after the component gets installed on a target. Note that this method is called before any event from could have been retrieved.
    */
   virtual void init();
 
