@@ -63,13 +63,16 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
 
   tlp::GlMainWidget* _glMainWidget;
   tlp::GlOverviewGraphicsItem* _overviewItem;
-  tlp::SceneConfigWidget* _sceneConfigurationWidget;
-  tlp::SceneLayersConfigWidget* _sceneLayersConfigurationWidget;
   tlp::QuickAccessBar* _quickAccessBar;
   QGraphicsProxyWidget* _quickAccessBarItem;
 
   QAction *_centerViewAction;
   QAction *_forceRedrawAction;
+
+protected :
+
+  tlp::SceneConfigWidget* _sceneConfigurationWidget;
+  tlp::SceneLayersConfigWidget* _sceneLayersConfigurationWidget;
 
 public:
   GlMainView();
