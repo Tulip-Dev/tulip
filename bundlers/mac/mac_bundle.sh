@@ -45,7 +45,7 @@ cd python2.7
 cp -r $PYTHON_DIR/lib/python2.7/*.py .
 
 echo 'Copying libraries'
-for lib in libGLEW libjpeg libpng libfreetype libz libstdc++; do
+for lib in libGLEW libfreetype libz libstdc++; do
   for search_path in /usr/lib /opt/local/lib /usr/X11/lib; do
     [ "$(ls $search_path/$lib*.dylib 2> /dev/null)" != "" ] && cp $search_path/$lib*.dylib .
   done
