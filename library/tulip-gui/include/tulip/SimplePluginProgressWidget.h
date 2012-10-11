@@ -66,6 +66,11 @@ public:
   std::string getError();
   void setError(const std::string &error);
 
+public slots:
+  void setCancelButtonVisible(bool);
+  void setStopButtonVisible(bool);
+  void setPreviewButtonVisible(bool);
+
 protected slots:
   void cancelClicked();
   void stopClicked();
@@ -73,6 +78,7 @@ protected slots:
 };
 
 class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog, public tlp::PluginProgress {
+  Q_OBJECT
 public:
   explicit SimplePluginProgressDialog(QWidget *parent=NULL);
   virtual ~SimplePluginProgressDialog();
@@ -94,6 +100,11 @@ public:
 
   std::string getError();
   void setError(const std::string &error);
+
+public slots:
+  void setCancelButtonVisible(bool v);
+  void setStopButtonVisible(bool v);
+  void setPreviewButtonVisible(bool v);
 
 private:
   tlp::SimplePluginProgressWidget *_progress;

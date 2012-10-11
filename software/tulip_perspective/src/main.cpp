@@ -83,8 +83,8 @@ struct PluginLoaderToProgress: public PluginLoader {
     _progress->setComment("Loading " + filename);
   }
 
-  virtual void loaded(const tlp::Plugin* infos, const std::list <tlp::Dependency>& dependencies) {}
-  virtual void aborted(const std::string &filename,const  std::string &errormsg) {}
+  virtual void loaded(const tlp::Plugin*, const std::list <tlp::Dependency>&) {}
+  virtual void aborted(const std::string &,const  std::string &) {}
 };
 
 void usage(const QString &error) {
@@ -118,6 +118,9 @@ int main(int argc,char **argv) {
 
   // Progress bar dialog
   SimplePluginProgressDialog *progress = new SimplePluginProgressDialog(mainWindow);
+  progress->setStopButtonVisible(false);
+  progress->setCancelButtonVisible(false);
+  progress->setPreviewButtonVisible(false);
   progress->setWindowTitle(QObject::trUtf8("Tulip"));
   progress->resize(500,progress->height());
   progress->show();
