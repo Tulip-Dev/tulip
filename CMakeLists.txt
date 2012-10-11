@@ -163,6 +163,9 @@ INCLUDE(${QT_USE_FILE})
 # Freetype
 FIND_PACKAGE(Freetype REQUIRED)
 
+# ZLIB
+FIND_PACKAGE(ZLIB REQUIRED)
+
 # Yajl
 SET(YAJL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/api ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/yajl ${CMAKE_CURRENT_BUILD_DIR}/thirdparty/yajl/yajl-2.0.1/include)
 
