@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef INTERACTORCOMPOSITE_H
 #define INTERACTORCOMPOSITE_H
@@ -27,23 +26,48 @@
 namespace tlp {
 
 /**
-  @class InteractorComposite represent a handler item inside an InteractorComposite
+  @class InteractorComposite represent an event handler stored inside an InteractorComposite
 
-  @see InteractorComposite for details.
+  This is meant to be focused on event handling only. An InteractorComponent should respond to user inputs in its eventFilter method and return true to avoid further propagation of the event to other components.
+  This system is inherited from Qt event handling, see QObject::eventFilter() for details.
   */
 class TLP_QT_SCOPE InteractorComponent: public QObject {
   Q_OBJECT
 
   View* _view;
-
 public:
+
+  /**
+   * @brief The init() method is called before the component gets installed on a target. Note that this method is called before any event from could have been retrieved.
+   */
   virtual void init();
+
+  /**
+   * @brief The main event handling method.
+   * See QObject::eventFilter for details.
+   * @note The target object is the one on which the InteractorComponent has been installed.
+   */
   virtual bool eventFilter(QObject*, QEvent*);
+
+  /**
+   * @brief This method is called after the component is uninstalled from its target.
+   */
   virtual void clear() {}
 
+  /**
+   * @brief setView is called when the InteractorComposite is installed on a new view.
+   * @see InteractorComposite::setView
+   */
   void setView(View* view);
+
+  /**
+   * @return The view on which the interactor is installed (NULL if none)
+   */
   View* view() const;
 
+  /**
+   * @brief A callback method after setView was called.
+   */
   virtual void viewChanged(View *) {}
 };
 
@@ -132,4 +156,3 @@ public slots:
 
 }
 #endif // INTERACTORCOMPOSITE_H
-///@endcond
