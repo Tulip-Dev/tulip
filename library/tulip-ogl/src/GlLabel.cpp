@@ -141,6 +141,10 @@ void GlLabel::setText(const string& text) {
   }
 }
 //============================================================
+const std::string& GlLabel::getText() const {
+  return text;
+}
+//============================================================
 void GlLabel::setPosition(const Coord &position) {
   centerPosition=position;
 }

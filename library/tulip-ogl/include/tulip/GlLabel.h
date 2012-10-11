@@ -84,6 +84,12 @@ public :
   void setText(const std::string& text);
 
   /**
+   * @brief getText gets the text of this label.
+   * @return The text of this label.
+   */
+  const std::string& getText() const;
+
+  /**
    * @brief Set the position used to render the label
    */
   void setPosition(const Coord &position);
