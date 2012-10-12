@@ -123,7 +123,8 @@ public:
     while (ok) {
       if (pluginProgress->progress(i%100,100)!=TLP_CONTINUE) break;
 
-      i++;
+      ++i;
+      graph->clear();
       node n=graph->addNode();
       ok = !buildNode(n,maxSize);
 
