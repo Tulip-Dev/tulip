@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <time.h>
+#include <ctime>
 #include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
@@ -81,7 +81,7 @@ public:
   }
 
   bool importGraph() {
-    srand(clock());
+    srand(time(NULL));
     unsigned int nbNodes  = 5;
     unsigned int nbEdges  = 9;
 
@@ -120,15 +120,14 @@ public:
     }
 
     vector<node> tmpVect(nbNodes);
-
+    graph->reserveNodes(nbNodes);
     for (unsigned int i=0; i<nbNodes; ++i) {
       tmpVect[i]=graph->addNode();
     }
 
-    set<edgeS>::const_iterator it;
-
-    for (it=myGraph.begin(); it!=myGraph.end(); ++it)   {
-      graph->addEdge(tmpVect[(*it).source],tmpVect[(*it).target]);
+    graph->reserveEdges(myGraph.size());
+    for (set<edgeS>::const_iterator it=myGraph.begin(); it!=myGraph.end(); ++it)   {
+      graph->addEdge(tmpVect[it->source],tmpVect[it->target]);
     }
 
     return true;
