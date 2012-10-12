@@ -25,7 +25,10 @@ int main(int argc,char**argv) {
   QCoreApplication app(argc,argv);
   QProcess process;
   QProcessEnvironment env = process.processEnvironment();
-  env.insert("DYLD_LIBRARY_PATH",QCoreApplication::applicationDirPath() + "/tulip/lib:" + env.value("DYLD_LIBRARY_PATH"));
+
+  env.insert("DYLD_LIBRARY_PATH",QCoreApplication::applicationDirPath() + "/tulip/lib");
+  env.insert("DYLD_FRAMEWORK_PATH",QCoreApplication::applicationDirPath() + "/../Frameworks");
+
   process.setProcessEnvironment(env);
   process.start(QCoreApplication::applicationDirPath() + "/tulip/bin/tulip");
   process.waitForFinished(-1);

@@ -32,20 +32,14 @@ cd $DEST_DIR/application
 cp $SRC_DIR/../../COPYING .
 
 echo 'Copying Frameworks'
-cd $DEST_DIR/application/Tulip.app/Contents/MacOS/
-for cmp in QtOpenGl QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore phonon QtDBus; do
+cd $DEST_DIR/application/Tulip.app/Contents/Frameworks/
+for cmp in QtOpenGl QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore phonon QtDBus Python; do
   echo "Copying /Library/Frameworks/$cmp".framework to $(pwd)
   cp -r "/Library/Frameworks/$cmp".framework .
 done
 
-cd $DEST_DIR/application/Tulip.app/Contents/MacOS/tulip/lib
-cp $PYTHON_DIR/lib/libpython2.7.dylib .
-mkdir python2.7
-cd python2.7
-cp -r $PYTHON_DIR/lib/python2.7/*.py .
-cd ..
-
 echo 'Copying libraries'
+cd $DEST_DIR/application/Tulip.app/Contents/MacOS/tulip/lib
 for lib in libGLEW libfreetype libz libstdc++; do
   for search_path in /usr/lib /opt/local/lib /usr/X11/lib; do
     [ "$(ls $search_path/$lib*.dylib 2> /dev/null)" != "" ] && cp $search_path/$lib*.dylib .
