@@ -316,6 +316,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
   }
 
   MutableContainer<node> nodeTrl;
+  nodeTrl.setAll(node());
   // loop on selected nodes
   Iterator<node> * nodeIt =
     inSel ? inSel->getNonDefaultValuatedNodes(inG) : inG->getNodes();
