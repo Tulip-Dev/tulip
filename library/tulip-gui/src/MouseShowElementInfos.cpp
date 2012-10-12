@@ -45,6 +45,8 @@ MouseShowElementInfos::MouseShowElementInfos() {
 
 void MouseShowElementInfos::clear() {
   _informationsWidgetItem->setVisible(false);
+  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
+  glMainView->getGlMainWidget()->setCursor(QCursor());
 }
 
 QTableView* MouseShowElementInfos::tableView() const {

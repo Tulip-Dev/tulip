@@ -81,6 +81,8 @@ public:
   InteractorComponent *clone() {
     return new MouseEdgeBuilder();
   }
+
+  void clear();
 };
 
 

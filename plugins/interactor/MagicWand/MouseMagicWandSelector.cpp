@@ -21,6 +21,7 @@
 #include <iostream>
 #include <QtGui/QMouseEvent>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlMainView.h>
 #include <tulip/GlGraphComposite.h>
 #include "MagicSelectionInteractorConfigWidget.h"
 
@@ -155,6 +156,11 @@ void MouseMagicWandSelector::setView(View* view) {
   if(view) {
     configWidget->setGraph(view->graph());
   }
+}
+
+void MouseMagicWandSelector::clear() {
+  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
+  glMainView->getGlMainWidget()->setCursor(QCursor());
 }
 
 bool MouseMagicWandSelector::shouldSelectvalue(double originalValue, double newValue) const {

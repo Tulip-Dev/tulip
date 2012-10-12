@@ -96,6 +96,8 @@ void MouseSelectionEditor::clear() {
     glMainWidget->getScene()->removeLayer(layer,false);
     delete layer;
     layer=NULL;
+
+    glMainWidget->setCursor(QCursor());
   }
 }
 //========================================================================================

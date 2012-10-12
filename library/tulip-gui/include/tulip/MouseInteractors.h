@@ -55,6 +55,7 @@ public:
   InteractorComponent *clone() {
     return new MouseElementDeleter();
   }
+  void clear();
 };
 
 /** An interactor class to translate/rotate using keys or mouse movements,
@@ -72,6 +73,7 @@ public:
   InteractorComponent *clone() {
     return new MouseNKeysNavigator();
   }
+  void clear();
 };
 
 

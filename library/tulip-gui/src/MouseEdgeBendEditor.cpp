@@ -56,6 +56,8 @@ void MouseEdgeBendEditor::clear() {
     circleString=NULL;
 
     glMainWidget->getScene()->getGraphLayer()->deleteGlEntity("edgeEntity");
+
+    glMainWidget->setCursor(QCursor());
   }
 }
 //========================================================================================

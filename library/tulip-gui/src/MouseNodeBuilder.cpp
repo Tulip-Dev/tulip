@@ -27,6 +27,7 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlMainView.h>
 
 #include <tulip/MouseNodeBuilder.h>
 
@@ -83,4 +84,9 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
   }
 
   return false;
+}
+
+void MouseNodeBuilder::clear() {
+  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
+  glMainView->getGlMainWidget()->setCursor(QCursor());
 }

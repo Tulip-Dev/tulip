@@ -35,6 +35,7 @@ public:
   InteractorComponent *clone() {
     return new MouseNodeBuilder(_eventType);
   }
+  void clear();
 private:
   QEvent::Type _eventType;
 };
