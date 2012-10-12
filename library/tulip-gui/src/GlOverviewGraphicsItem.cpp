@@ -146,7 +146,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     unsigned int i=0;
 
     for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
-      (*it).second->getCamera()=_oldCameras[i];
+      (*it).second->getCamera().loadCameraParametersWith(_oldCameras[i]);
       ++i;
     }
   }

@@ -86,6 +86,13 @@ public:
   }
 
   /**
+   * @brief Load this camera parameters (eye, center, zoom factor) with an other camera parameters
+   */
+  void loadCameraParametersWith(const Camera &camera){
+    *this=camera;
+  }
+
+  /**
    * @brief Return the camera bounding box
    *
    * This bounding box is the part of the scene visualized by this camera.
