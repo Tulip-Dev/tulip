@@ -43,6 +43,7 @@ public:
     return new MouseMagicWandSelector(configWidget);
   }
   virtual void setView(View* view);
+  void clear();
 };
 
 }

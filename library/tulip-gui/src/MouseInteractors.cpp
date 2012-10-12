@@ -33,6 +33,7 @@
 #include "tulip/View.h"
 #include <tulip/Observable.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlMainView.h>
 
 using namespace tlp;
 using namespace std;
@@ -170,6 +171,11 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
   }
 
   return false;
+}
+
+void MouseElementDeleter::clear() {
+  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
+  glMainView->getGlMainWidget()->setCursor(QCursor());
 }
 //===============================================================
 class MouseRotXRotY:public InteractorComponent {
@@ -444,4 +450,9 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   return MousePanNZoomNavigator::eventFilter(widget, e);
+}
+
+void MouseNKeysNavigator::clear() {
+  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
+  glMainView->getGlMainWidget()->setCursor(QCursor());
 }
