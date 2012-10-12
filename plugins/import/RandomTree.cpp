@@ -16,14 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <time.h>
+#include <ctime>
 #include <tulip/TulipPluginHeaders.h>
-#include <tulip/StableIterator.h>
 
 using namespace std;
 using namespace tlp;
-
-
 
 namespace {
 
@@ -62,6 +59,26 @@ const char * paramHelp[] = {
  *  User can specify the minimal/maximal numbers of nodes used to build of the tree.
  */
 class RandomTree:public ImportModule {
+
+    bool buildNode(node n, unsigned int sizeM) {
+      if (graph->numberOfNodes()>sizeM+2) return false;
+
+      bool result=true;
+      int randNumber=rand();
+
+      if (randNumber>RAND_MAX/2) {
+        node n1,n2;
+        n1=graph->addNode();
+        n2=graph->addNode();
+        graph->addEdge(n,n1);
+        graph->addEdge(n,n2);
+        result= result && buildNode(n1,sizeM);
+        result= result && buildNode(n2,sizeM);
+      }
+
+      return result;
+    }
+
 public:
   PLUGININFORMATIONS("Uniform Random Binary Tree","Auber","16/02/2001","","1.1","Graphs")
   RandomTree(tlp::PluginContext* context):ImportModule(context) {
@@ -70,30 +87,9 @@ public:
     addInParameter<bool>("tree layout",paramHelp[2],"false");
     addDependency("Tree Leaf", "1.0");
   }
-  ~RandomTree() {
-  }
-
-  bool buildNode(node n, unsigned int sizeM) {
-    if (graph->numberOfNodes()>sizeM+2) return false;
-
-    bool result=true;
-    int randNumber=rand();
-
-    if (randNumber>RAND_MAX/2) {
-      node n1,n2;
-      n1=graph->addNode();
-      n2=graph->addNode();
-      graph->addEdge(n,n1);
-      graph->addEdge(n,n2);
-      result= result && buildNode(n1,sizeM);
-      result= result && buildNode(n2,sizeM);
-    }
-
-    return result;
-  }
 
   bool importGraph() {
-    srand(clock());
+    srand(time(NULL));
     unsigned int minSize  = 100;
     unsigned int maxSize  = 1000;
     bool needLayout = false;
@@ -128,7 +124,6 @@ public:
       if (pluginProgress->progress(i%100,100)!=TLP_CONTINUE) break;
 
       i++;
-      graph->clear();
       node n=graph->addNode();
       ok = !buildNode(n,maxSize);
 

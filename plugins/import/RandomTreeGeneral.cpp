@@ -16,14 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <time.h>
+#include <ctime>
 #include <tulip/TulipPluginHeaders.h>
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 using namespace tlp;
-
-
 
 namespace {
 
@@ -69,41 +67,42 @@ const char * paramHelp[] = {
  *  User can specify the minimal/maximal number of nodes and the maximal degree.
  */
 class RandomTreeGeneral:public ImportModule {
+
+    bool buildNode(node n,unsigned int sizeM,int arityMax) {
+      if (graph->numberOfNodes()>=sizeM) return true;
+
+      bool result=true;
+      int randNumber=rand();
+      int i = 0;
+
+      while (randNumber < RAND_MAX/pow(2.0,1.0+i))
+        ++i;
+
+      i = i % arityMax;
+      graph->reserveNodes(i);
+      graph->reserveEdges(i);
+      for (; i>0; --i) {
+        node n1;
+        n1=graph->addNode();
+        graph->addEdge(n,n1);
+        result= result && buildNode(n1,sizeM,arityMax);
+      }
+
+      return result;
+    }
+
 public:
   PLUGININFORMATIONS("Random General Tree","Auber","16/02/2001","","1.1","Graphs")
   RandomTreeGeneral(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<int>("minsize",paramHelp[0],"10");
-    addInParameter<int>("maxsize",paramHelp[1],"100");
-    addInParameter<int>("maxdegree",paramHelp[2],"5");
+    addInParameter<unsigned>("minsize",paramHelp[0],"10");
+    addInParameter<unsigned>("maxsize",paramHelp[1],"100");
+    addInParameter<unsigned>("maxdegree",paramHelp[2],"5");
     addInParameter<bool>("tree layout",paramHelp[3],"false");
     addDependency("Tree Leaf", "1.0");
   }
-  ~RandomTreeGeneral() {
-  }
-  bool buildNode(node n,unsigned int sizeM,int arityMax) {
-    if (graph->numberOfNodes()>sizeM) return true;
-
-    bool result=true;
-    int randNumber=rand();
-    int i = 0;
-
-    while (randNumber < RAND_MAX/pow(2.0,1.0+i))
-      ++i;
-
-    i = i % arityMax;
-
-    for (; i>0; i--) {
-      node n1;
-      n1=graph->addNode();
-      graph->addEdge(n,n1);
-      result= result && buildNode(n1,sizeM,arityMax);
-    }
-
-    return result;
-  }
 
   bool importGraph() {
-    srand(clock());
+    srand(time(NULL));
 
     unsigned int sizeMin  = 10;
     unsigned int sizeMax  = 100;
@@ -131,6 +130,13 @@ public:
       return false;
     }
 
+    if (sizeMax < sizeMin) {
+      if (pluginProgress)
+        pluginProgress->setError("Error: maxsize must be greater than minsize");
+
+      return false;
+    }
+
     bool ok=true;
     int i=0;
     unsigned int nbTest=0;
@@ -142,11 +148,9 @@ public:
         if (pluginProgress->progress((i/100)%100,100)!=TLP_CONTINUE) break;
       }
 
-      i++;
-      graph->clear();
+      ++i;
       node n=graph->addNode();
       ok=!buildNode(n,sizeMax,arityMax);
-      ok=false;
 
       if (graph->numberOfNodes()<sizeMin) ok=true;
     }
