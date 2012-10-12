@@ -267,7 +267,7 @@ PythonInterpreter::PythonInterpreter() : runningScript(false), consoleDialog(NUL
       addModuleSearchPath(pythonPluginsPathHome);
 
 #if defined(__APPLE__)
-      addModuleSearchPath(tlp::TulipLibDir + "../Frameworks/python", true);
+      addModuleSearchPath(tlp::TulipLibDir + "../lib/python", true);
 #elif defined(WIN32)
       addModuleSearchPath(tlp::TulipLibDir + "../bin/python", true);
 #else
