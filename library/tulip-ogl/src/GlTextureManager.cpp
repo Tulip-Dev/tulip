@@ -23,17 +23,6 @@
 #include <QtGui/QImage>
 #include <QtOpenGL/QGLWidget>
 
-extern "C" {
-#include <stdio.h>
-
-#ifdef HAVE_LIBJPEG
-#include <jpeglib.h>
-#endif
-#ifdef HAVE_LIBPNG
-#include <png.h>
-#endif
-}
-
 //====================================================
 tlp::GlTextureManager* tlp::GlTextureManager::inst=0;
 
