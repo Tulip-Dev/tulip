@@ -149,6 +149,7 @@ public:
       }
 
       ++i;
+      graph->clear();
       node n=graph->addNode();
       ok=!buildNode(n,sizeMax,arityMax);
 
