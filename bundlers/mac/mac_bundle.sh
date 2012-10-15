@@ -3,7 +3,6 @@
 TULIP_DIR=$1
 DEST_DIR=$2
 SRC_DIR=$(pwd)
-PYTHON_DIR=$(dirname $(which python))/../
 
 echo 'Wiping previous bundles into '$DEST_DIR
 rm -fr $DEST_DIR
@@ -14,18 +13,21 @@ cp $SRC_DIR/background.png .background/
 rm -fr *
 
 echo 'Creating base directories'
-mkdir -p Tulip.app/Contents/{MacOS,Resources,Frameworks,PlugIns,SharedSupport}
+cd $DEST_DIR/application
+mkdir -p Tulip.app/Contents/{MacOS,Resources,Frameworks}
 cd Tulip.app/Contents
 cp "$SRC_DIR/Info.plist" .
 cp "$SRC_DIR/tulip.icns" "Resources/"
-mkdir MacOS/tulip
-cd MacOS/tulip
 
 echo 'Copying binaries'
+cd $DEST_DIR/application/Tulip.app/Contents/MacOS
+mkdir tulip
+cd tulip
 cp -r $TULIP_DIR/* .
+mv macos/* ..
+chmod +x ../tulip_launcher
 rm -fr macos
-cd ..
-cp -r $TULIP_DIR/macos/* .
+rm -fr include/
 
 echo 'Copying license'
 cd $DEST_DIR/application
@@ -33,7 +35,7 @@ cp $SRC_DIR/../../COPYING .
 
 echo 'Copying Frameworks'
 cd $DEST_DIR/application/Tulip.app/Contents/Frameworks/
-for cmp in QtOpenGl QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore phonon QtDBus Python; do
+for cmp in QtOpenGl QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore phonon QtDBus; do
   echo "Copying /Library/Frameworks/$cmp".framework to $(pwd)
   cp -r "/Library/Frameworks/$cmp".framework .
 done

@@ -1,0 +1,5 @@
+#!/bin/sh
+
+wd="${0%/*}"
+cd $wd/tulip/bin
+DYLD_LIBRARY_PATH=$wd/tulip/lib DYLD_FRAMEWORK_PATH=$wd/../Frameworks ./tulip
