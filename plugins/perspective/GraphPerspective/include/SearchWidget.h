@@ -66,6 +66,10 @@ protected slots:
   void updateOperators(tlp::PropertyInterface* a, tlp::PropertyInterface* b);
   void updateOperators(tlp::PropertyInterface* a, const QString& b);
   void setNumericOperatorsEnabled(bool e);
+
+protected:
+  void dragEnterEvent(QDragEnterEvent *);
+  void dropEvent(QDropEvent *);
 };
 
 #endif // SEARCHWIDGET_H

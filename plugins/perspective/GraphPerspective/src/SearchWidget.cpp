@@ -164,7 +164,22 @@ void SearchWidget::setModel(tlp::GraphHierarchiesModel *model) {
 
 void SearchWidget::currentGraphChanged(tlp::Graph *g) {
   GraphHierarchiesModel* graphsModel = static_cast<GraphHierarchiesModel*>(_ui->graphCombo->model());
-  _ui->graphCombo->setCurrentIndex(graphsModel->indexOf(g).row());
+  QModelIndex idx = graphsModel->indexOf(g);
+  _ui->graphCombo->setRootModelIndex(idx.parent());
+  _ui->graphCombo->setCurrentIndex(idx.row());
+}
+
+void searchForIndex(QComboBox* combo, const QString& s) {
+  combo->setCurrentIndex(0);
+  if (!s.isNull()) {
+    QAbstractItemModel* model = combo->model();
+    for(int i = 0; i < model->rowCount(); ++i) {
+      if (model->index(i,0).data().toString() == s) {
+        combo->setCurrentIndex(i);
+        break;
+      }
+    }
+  }
 }
 
 void SearchWidget::setGraph(Graph *g) {
@@ -179,12 +194,37 @@ void SearchWidget::setGraph(Graph *g) {
     _ui->resultsCountLabel->setText("");
   }
 
+  QString oldStorageName = QString::null;
+  QString oldTermAName = QString::null;
+  QString oldTermBName = QString::null;
+  if (_ui->resultsStorageCombo->model() != NULL) {
+    oldStorageName = _ui->resultsStorageCombo->currentText();
+  }
+  if (_ui->searchTermACombo->model() != NULL) {
+    oldTermAName = _ui->searchTermACombo->currentText();
+  }
+  if (_ui->searchTermBCombo->model() != NULL) {
+    oldTermBName = _ui->searchTermBCombo->currentText();
+  }
+
   _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(g,false,_ui->resultsStorageCombo));
   _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(g,false,_ui->searchTermACombo));
   _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Custom value"),g,false,_ui->searchTermBCombo));
-  _ui->resultsStorageCombo->setCurrentIndex(0);
-  _ui->searchTermACombo->setCurrentIndex(0);
-  _ui->searchTermBCombo->setCurrentIndex(0);
+
+  if (!oldStorageName.isNull())
+    searchForIndex(_ui->resultsStorageCombo,oldStorageName);
+  else
+    searchForIndex(_ui->resultsStorageCombo,"viewSelection");
+
+  if (!oldTermAName.isNull())
+    searchForIndex(_ui->searchTermACombo,oldTermAName);
+  else
+    searchForIndex(_ui->searchTermACombo,"viewMetric");
+
+  if (!oldTermBName.isNull())
+    searchForIndex(_ui->searchTermBCombo,oldTermBName);
+  else
+    searchForIndex(_ui->searchTermBCombo,trUtf8("Custom value"));
 }
 
 void SearchWidget::search() {
@@ -329,6 +369,24 @@ void SearchWidget::setNumericOperatorsEnabled(bool e) {
 
     if (_ui->operatorCombo->currentIndex() == i && !e)
       _ui->operatorCombo->setCurrentIndex(0);
+  }
+}
+
+#include <QtGui/QDropEvent>
+#include <tulip/TulipMimes.h>
+
+void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
+  const GraphMimeType* mimeType = dynamic_cast<const GraphMimeType*>(dragEv->mimeData());
+  if (mimeType != NULL) {
+    dragEv->accept();
+  }
+}
+
+void SearchWidget::dropEvent(QDropEvent* dropEv) {
+  const GraphMimeType* mimeType = dynamic_cast<const GraphMimeType*>(dropEv->mimeData());
+  if (mimeType != NULL) {
+    currentGraphChanged(mimeType->graph());
+    dropEv->accept();
   }
 }
 
