@@ -20,8 +20,8 @@
 
 template<typename PropType, typename NodeType, typename EdgeType>
 CachedPropertyAnimation<PropType, NodeType, EdgeType>::CachedPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out,
-    tlp::BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges) :
-  PropertyAnimation<PropType, NodeType, EdgeType> (graph, start, end, out, selection, frameCount, computeNodes, computeEdges) {
+    tlp::BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges,QObject* parent) :
+  PropertyAnimation<PropType, NodeType, EdgeType> (graph, start, end, out, selection, frameCount, computeNodes, computeEdges,parent) {
 
   if (this->_computeNodes) {
     tlp::node n;

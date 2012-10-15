@@ -25,9 +25,9 @@ using namespace std;
 using namespace tlp;
 
 LayoutPropertyAnimation::LayoutPropertyAnimation(Graph *g, LayoutProperty *start, LayoutProperty *end, LayoutProperty *out,
-    BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges) :
+    BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges,QObject* parent) :
   CachedPropertyAnimation<LayoutProperty, Coord, vector<Coord> > (g, start, end, out, selection, frameCount, computeNodes,
-      computeEdges) {
+      computeEdges,parent) {
 }
 
 Coord LayoutPropertyAnimation::getNodeFrameValue(const Coord &startValue, const Coord &endValue, int frame) {

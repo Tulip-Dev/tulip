@@ -20,8 +20,8 @@
 
 template<typename PropType, typename RealType, typename VectorType, unsigned int SIZE>
 VectorPropertyAnimation<PropType, RealType, VectorType, SIZE>::VectorPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end,
-    PropType *out, tlp::BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges) :
-  CachedPropertyAnimation<PropType, RealType, RealType> (graph, start, end, out, selection, frameCount, computeNodes, computeEdges) {
+    PropType *out, tlp::BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges,QObject* parent) :
+  CachedPropertyAnimation<PropType, RealType, RealType> (graph, start, end, out, selection, frameCount, computeNodes, computeEdges,parent) {
 
   assert(frameCount > 1);
 

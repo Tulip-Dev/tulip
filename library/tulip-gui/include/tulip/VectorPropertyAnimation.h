@@ -29,7 +29,7 @@ template<typename PropType, typename RealType, typename VectorType, unsigned int
 class VectorPropertyAnimation: public CachedPropertyAnimation<PropType, RealType, RealType> {
 public:
   VectorPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out, tlp::BooleanProperty *selection = NULL, int frameCount = 1,
-                          bool computeNodes = true, bool computeEdges = true);
+                          bool computeNodes = true, bool computeEdges = true, QObject* parent=NULL);
 
   virtual ~VectorPropertyAnimation() {}
 

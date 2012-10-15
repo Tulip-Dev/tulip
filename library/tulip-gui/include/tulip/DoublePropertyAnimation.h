@@ -30,7 +30,7 @@ namespace tlp {
 class TLP_QT_SCOPE DoublePropertyAnimation:public CachedPropertyAnimation<tlp::DoubleProperty, double, double> {
 public:
   DoublePropertyAnimation(tlp::Graph *graph, tlp::DoubleProperty *start, tlp::DoubleProperty *end, tlp::DoubleProperty *out,
-                          tlp::BooleanProperty *selection = NULL, int frameCount = 1, bool computeNodes = true, bool computeEdges = false);
+                          tlp::BooleanProperty *selection = NULL, int frameCount = 1, bool computeNodes = true, bool computeEdges = false,QObject* parent=NULL);
   ~DoublePropertyAnimation() {}
 
 protected:
