@@ -79,6 +79,7 @@ signals:
   void showProjectsAgent();
   void showAboutAgent();
   void showTrayMessage(QString);
+  void showErrorMessage(QString,QString);
   void openProject(QString);
   void openPerspective(QString);
 

@@ -25,14 +25,15 @@
 #include <QtCore/QFile>
 #include <QtCore/QProcess>
 #include <QtCore/QDir>
+#include <QtGui/QScrollArea>
 
+#include <tulip/PythonVersionChecker.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Perspective.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipProject.h>
 #include <tulip/PluginModel.h>
-#include <QtGui/QScrollArea>
 
 #include "ui_TulipMainWindow.h"
 #include "TulipPerspectiveProcessHandler.h"
@@ -46,6 +47,16 @@ TulipMainWindow* TulipMainWindow::_instance = NULL;
 
 TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
   _ui->setupUi(this);
+
+  _errorMessage = new QLabel();
+  QLabel* errorIcon = new QLabel();
+  errorIcon->setMaximumSize(16,16);
+  errorIcon->setMinimumSize(16,16);
+  errorIcon->setPixmap(QPixmap(":/tulip/app/icons/16/dialog-error.png"));
+  _ui->statusBar->insertWidget(0,errorIcon);
+  _ui->statusBar->insertWidget(1,_errorMessage);
+
+  _ui->statusBar->setVisible(false);
   _pageChoosers.clear();
   _pageChoosers.push_back(_ui->welcomePageChooser);
   _pageChoosers.push_back(_ui->pluginsPageChooser);
@@ -85,6 +96,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showProjectsAgent()),this,SLOT(showProjectsCenter()));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showAboutAgent()),this,SLOT(showAboutCenter()));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showTrayMessage(QString)),this,SLOT(showTrayMessage(QString)));
+  connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showErrorMessage(QString,QString)),this,SLOT(showErrorMessage(QString,QString)));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openProject(QString)),this,SLOT(openProject(QString)));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openPerspective(QString)),this,SLOT(createPerspective(QString)));
 
@@ -93,6 +105,17 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
 
     if (QFileInfo(path).exists())
       openProject(path);
+  }
+
+  QString installedPython = PythonVersionChecker::installedVersion();
+  if (installedPython.isNull()) {
+    showErrorMessage(trUtf8("Python"),trUtf8("Failed to retrieve python version\n\nCheck your python installation"));
+  }
+  else if (PythonVersionChecker::compiledVersion() != PythonVersionChecker::installedVersion()) {
+    showErrorMessage(trUtf8("Python"),trUtf8("Python version mismatch. Please install python ")
+                    + PythonVersionChecker::compiledVersion()
+                    + trUtf8(" for bindings to work properly.\n\nDetected version is ")
+                    + installedPython);
   }
 }
 
@@ -239,6 +262,12 @@ void TulipMainWindow::showTrayMessage(const QString &title, const QString &messa
     return;
 
   _systemTrayIcon->showMessage(title,message,(QSystemTrayIcon::MessageIcon)icon,duration);
+}
+
+void TulipMainWindow::showErrorMessage(const QString &title, const QString &message) {
+  _ui->statusBar->setVisible(true);
+  showTrayMessage(title,message,QSystemTrayIcon::Critical,10000);
+  _errorMessage->setText(message);
 }
 
 void TulipMainWindow::pluginErrorMessage(const QString &message) {

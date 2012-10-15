@@ -215,6 +215,13 @@ protected slots:
   void showTrayMessage(const QString& s);
 
   /**
+   * @brief Send a message to the Tulip agent to make him display an error message that will be shown in the system notification as well as on the welcome page.
+   * @param title The message's title.
+   * @param s The message to display.
+   */
+  void showErrorMessage(const QString& title, const QString& s);
+
+  /**
    * @brief Send a message to the Tulip agent to make him open a new Tulip Project.
    * @param path the absolute path of the project file.
    */

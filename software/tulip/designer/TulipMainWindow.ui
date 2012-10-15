@@ -19,55 +19,46 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QToolButton, QPushButton, QComboBox {
-    border-image: url(:/tulip/gui/ui/btn_26.png) 4;
-    border-width: 4;
-    padding: 0px 6px;
-    font-size: 12px;
+border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
 }
-
 QToolButton, QPushButton, QComboBox, QLabel {
-    color: black;
+color: black;
 }
-
 QToolButton:hover, QPushButton:hover, QComboBox:hover {
-    border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
 }
-
 QToolButton:disabled, QPushButton:disabled, QComboBox::disabled {
-	color:gray;
+color:gray;
 }
-
 QToolButton:pressed, QPushButton:pressed{
-    border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
+border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
 }
-
- QPushButton::menu-indicator{
-    subcontrol-origin: margin;
-	subcontrol-position: center right;
-	right: 4px;
- }
-
- QPushButton{
-	outline: none;
-	margin: 2
- }
-
- /*QComboBox QAbstractItemView {
-    background-color:white;
-}*/
-
- QComboBox::down-arrow {
-     image: url(:/tulip/gui/ui/combobox_arrow.png);
- }
-QComboBox:drop-down
-{
-     subcontrol-origin: padding;
-     subcontrol-position: top right;
-     border-left-style: none; 
-     border-top-right-radius: 1px;
-     border-bottom-right-radius: 1px;
+QPushButton::menu-indicator{
+subcontrol-origin: margin;
+subcontrol-position: center right;
+right: 4px;
 }
-</string>
+QPushButton{
+outline: none;
+margin: 2
+}
+QComboBox::down-arrow {
+image: url(:/tulip/gui/ui/combobox_arrow.png);
+}
+QComboBox:drop-down{
+subcontrol-origin: padding;
+subcontrol-position: top right;
+border-left-style: none; 
+border-top-right-radius: 1px;
+border-bottom-right-radius: 1px;
+}
+QStatusBar QLabel {
+color: rgb(210,29,33);
+font: bold;
+}</string>
   </property>
   <property name="toolButtonStyle">
    <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -323,6 +314,7 @@ QToolButton:pressed {
     </item>
    </layout>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <customwidgets>
   <customwidget>

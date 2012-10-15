@@ -193,6 +193,8 @@ void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
     else if (tokens[1] == "ABOUT")
       emit showAboutAgent();
   }
+  else if (tokens[0] == "ERROR_MESSAGE")
+    emit showErrorMessage(tokens[1],args.remove(0,tokens[1].length()+1));
   else if (tokens[0] == "TRAY_MESSAGE")
     emit showTrayMessage(args);
   else if (tokens[0] == "OPEN_PROJECT")
