@@ -22,6 +22,7 @@
 #include <QtGui/QMainWindow>
 #include <tulip/SimplePluginProgressWidget.h>
 
+#include <QtCore/QProcess>
 #include <QtNetwork/QTcpSocket>
 #include <QtNetwork/QHostAddress>
 
@@ -115,7 +116,14 @@ void Perspective::showErrorMessage(const QString &title, const QString &s) {
 }
 
 void Perspective::openProjectFile(const QString &path) {
-  sendAgentMessage("OPEN_PROJECT " + path);
+  if (_agentSocket != NULL) {
+    sendAgentMessage("OPEN_PROJECT " + path);
+  }
+  else { // on standalone mode, spawn a new standalone perspective
+    QProcess::startDetached(QApplication::applicationFilePath(),
+                            QStringList() << path);
+
+  }
 }
 
 void Perspective::createPerspective(const QString &name) {
