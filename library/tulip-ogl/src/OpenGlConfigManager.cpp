@@ -24,8 +24,7 @@
 #include <GL/glew.h>
 
 #include <tulip/OpenGlConfigManager.h>
-
-#include <tulip/OpenGlErrorViewer.h>
+#include <QtGui/QMessageBox>
 
 #include <iostream>
 #include <cstdlib>
@@ -46,7 +45,7 @@ OpenGlConfigManager& OpenGlConfigManager::getInst() {
 }
 
 OpenGlConfigManager::OpenGlConfigManager():
-  errorViewer(new OpenGlErrorViewer()),glewIsInit(false),
+  glewIsInit(false),
   driversAreChecked(false), antialiased(true) {
 }
 
@@ -55,12 +54,6 @@ void OpenGlConfigManager::initGlew() {
     glewExperimental=true;
     glewIsInit = (glewInit() == GLEW_OK);
   }
-}
-
-OpenGlErrorViewer *OpenGlConfigManager::setErrorViewer(OpenGlErrorViewer *errorViewer) {
-  OpenGlErrorViewer *oldErrorViewer=this->errorViewer;
-  this->errorViewer=errorViewer;
-  return oldErrorViewer;
 }
 
 void OpenGlConfigManager::checkDrivers() {
@@ -80,13 +73,7 @@ void OpenGlConfigManager::checkDrivers() {
     ati=true;
 
   if(!nvidia && !ati) {
-    errorViewer->displayErrorWithAskAgain("Graphics card warning","Warning :\n\n"
-                                          "Your graphics card is not powerful enough\n"
-                                          "or it is not configured with the correct driver\n"
-                                          "to suit the Tulip graphics rendering needs.\n\n"
-                                          "If you have an ATI or NVIDIA graphics card,\n"
-                                          "we recommend to install the official driver\n"
-                                          "to benefit from an optimal graphics rendering.");
+    QMessageBox::warning(NULL,QObject::trUtf8("Graphics card warning"), QObject::trUtf8("Your graphics card is not powerful enough or is not configured with the proper drivers. For optimal performances, make sure to install the properietary drivers corresponding to your graphics card model."));
   }
 }
 

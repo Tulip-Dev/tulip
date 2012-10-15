@@ -50,8 +50,6 @@
 
 namespace tlp {
 
-class OpenGlErrorViewer;
-
 /** \brief Singleton used to manage OpenGl configuration
  *
  * Singleton used to manage OpenGl configuration
@@ -64,11 +62,6 @@ public:
    * Return the current instance. If instance doesn't exist, create it.
    */
   static OpenGlConfigManager &getInst();
-
-  /**
-   * Change the error viewer and return the old one.
-   */
-  OpenGlErrorViewer *setErrorViewer(OpenGlErrorViewer *errorViewer);
 
   /**
    * Check if system has good graphics card drivers.
@@ -138,8 +131,6 @@ private:
   OpenGlConfigManager();
 
   static OpenGlConfigManager* inst;
-
-  OpenGlErrorViewer *errorViewer;
 
   bool glewIsInit;
   bool driversAreChecked;
