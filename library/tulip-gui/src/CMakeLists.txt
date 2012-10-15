@@ -36,7 +36,6 @@ SET(SRCS
   PropertyCreationDialog.cpp
   QGlBufferManager.cpp
   QtGlSceneZoomAndPanAnimator.cpp
-  QtOpenGlErrorViewer.cpp
   QuaZIPFacade.cpp
   SimplePluginProgressWidget.cpp
   SimpleStringsListSelectionWidget.cpp
@@ -106,7 +105,6 @@ QT4_WRAP_UI(UI_HEADERS
   ../designer/CSVParserConfigurationWidget.ui
   ../designer/DoubleStringsListSelectionWidget.ui
   ../designer/PropertyCreationDialog.ui
-  ../designer/QtOpenGlErrorViewerWithAskAgainDialog.ui
   ../designer/SimplePluginProgressWidget.ui
   ../designer/SimpleStringsListSelectionWidget.ui
   ../designer/SizeEditor.ui
