@@ -34,8 +34,8 @@ void decrNumIterators() {
   NumIterators--;
 }
 
-void NodeIteratorObserver::treatEvent(const Event& evt) {
-  switch(evt.type()) {
+void NodeIteratorObserver::treatEvent(const Event& evt) {  
+  switch(static_cast<const GraphEvent*>(&evt)->getType()) {
   case GraphEvent::TLP_ADD_NODE:
   case GraphEvent::TLP_DEL_NODE:
 
@@ -48,7 +48,7 @@ void NodeIteratorObserver::treatEvent(const Event& evt) {
 }
 
 void EdgeIteratorObserver::treatEvent(const Event& evt) {
-  switch(evt.type()) {
+  switch(static_cast<const GraphEvent*>(&evt)->getType()) {
   case GraphEvent::TLP_ADD_EDGE:
   case GraphEvent::TLP_DEL_EDGE:
 
