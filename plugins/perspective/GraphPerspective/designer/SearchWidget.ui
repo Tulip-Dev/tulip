@@ -16,6 +16,9 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
   <property name="styleSheet">
    <string notr="true">.QWidget, QScrollArea, .QFrame {
 background-color: white;
@@ -51,8 +54,8 @@ background-color: white;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>974</width>
-        <height>226</height>
+        <width>989</width>
+        <height>221</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -62,7 +65,7 @@ font: bold;
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="spacing">
-        <number>-1</number>
+        <number>6</number>
        </property>
        <property name="leftMargin">
         <number>8</number>
