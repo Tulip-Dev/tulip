@@ -29,5 +29,6 @@
         <file>icons/forums.png</file>
         <file>icons/irc.png</file>
         <file>icons/tutorials.png</file>
+        <file>icons/16/dialog-error.png</file>
     </qresource>
 </RCC>

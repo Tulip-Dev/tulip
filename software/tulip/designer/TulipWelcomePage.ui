@@ -112,7 +112,7 @@ QToolButton:pressed {
           <x>0</x>
           <y>0</y>
           <width>688</width>
-          <height>612</height>
+          <height>617</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3"/>
@@ -239,8 +239,7 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;
 
 &lt;body&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot;color:#dc4d4f;  font-size:medium;&quot;&gt;Unable to fetch latest headlines from Tulip website.&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot;color:#dc4d4f;  font-size:medium;&quot;&gt;Please check your network.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot;color:#0411FF;  font-size:medium;&quot;&gt;Fetching Tulip headlines...&lt;/span&gt;&lt;/p&gt;
 
 &lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -262,8 +261,8 @@ p, li { white-space: pre-wrap; }
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>238</width>
-           <height>353</height>
+           <width>232</width>
+           <height>352</height>
           </rect>
          </property>
         </widget>

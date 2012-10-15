@@ -2,6 +2,8 @@ IF(ENABLE_RENDERING_TIME_DISPLAY)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DENABLE_RENDERING_TIME_DISPLAY")
 ENDIF(ENABLE_RENDERING_TIME_DISPLAY)
 
+ADD_DEFINITIONS(-DTLP_PYTHON="${PYTHON_VERSION}")
+
 SET(SRCS
   ColorScaleConfigDialog.cpp
   ColorScaleWidget.cpp
@@ -94,6 +96,7 @@ SET(SRCS
   SceneLayersConfigWidget.cpp
   TreeViewComboBox.cpp
   GlSimpleEntityItemModel.cpp
+  PythonVersionChecker.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS

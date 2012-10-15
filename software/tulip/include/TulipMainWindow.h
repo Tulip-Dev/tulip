@@ -32,6 +32,7 @@ namespace tlp {
 class PluginInformations;
 }
 class PluginsCenter;
+class QLabel;
 
 /**
   @brief The window used in the tulip_app process to display the Welcome, plugins center and getting help screens.
@@ -42,6 +43,8 @@ class TulipMainWindow: public QMainWindow {
 
   static TulipMainWindow* _instance;
   TulipMainWindow(QWidget *parent=NULL);
+
+  QLabel* _errorMessage;
 
 public:
   static TulipMainWindow* instance() {
@@ -59,6 +62,7 @@ public slots:
   void closeApp();
   void pluginErrorMessage(const QString &message);
   void showTrayMessage(const QString &title, const QString &message, uint icon, uint duration);
+  void showErrorMessage(const QString& title, const QString& message);
 
   void createPerspective(const QString &name);
   void createPerspective(const QString &name, const QVariantMap &parameters);

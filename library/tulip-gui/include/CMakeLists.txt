@@ -92,6 +92,7 @@ INSTALL(FILES
   tulip/SceneConfigWidget.h
   tulip/SceneLayersConfigWidget.h
   tulip/GlSimpleEntityItemModel.h
+  tulip/PythonVersionChecker.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

@@ -110,6 +110,10 @@ void Perspective::showTrayMessage(const QString &s) {
   sendAgentMessage("TRAY_MESSAGE " + s);
 }
 
+void Perspective::showErrorMessage(const QString &title, const QString &s) {
+  sendAgentMessage("ERROR_MESSAGE " + title + " " + s);
+}
+
 void Perspective::openProjectFile(const QString &path) {
   sendAgentMessage("OPEN_PROJECT " + path);
 }
