@@ -174,7 +174,6 @@ void TableView::graphChanged(tlp::Graph* g) {
       if (!visibleProperties.isEmpty()) {
         checked = visibleProperties.contains(propName);
       }
-      qDebug() << "Setting " << i << "( " << propName << ") to " << checked;
       _ui->propertiesEditor->setPropertyChecked(i, checked);
     }
   }
