@@ -292,7 +292,7 @@ void GraphPerspective::exportGraph(Graph* g) {
   }
 
   DataSet data = wizard.parameters();
-  PluginProgress* prg = progress();
+  PluginProgress* prg = progress(NoProgressOption);
   bool result = tlp::exportGraph(g,os,wizard.algorithm().toStdString(),data,prg);
 
   if (!result) {
@@ -345,15 +345,15 @@ void GraphPerspective::importGraph() {
 
     if (!wizard.algorithm().isNull()) {
       DataSet data = wizard.parameters();
-      PluginProgress* prg = progress();
+      PluginProgress* prg = progress(NoProgressOption);
       g = tlp::importGraph(wizard.algorithm().toStdString(),data,prg);
-      delete prg;
 
       if (g == NULL) {
-        QMessageBox::critical(_mainWindow,trUtf8("Import error"),wizard.algorithm() + trUtf8(" failed to import data"));
+        QMessageBox::critical(_mainWindow,trUtf8("Import error"),"<i>" + wizard.algorithm() + trUtf8("</i> failed to import data.<br/><br/><b>") + prg->getError().c_str() + "</b>");
+        delete prg;
         return;
       }
-
+      delete prg;
       std::string name;
 
       if (!g->getAttribute<std::string>("name",name)) {
