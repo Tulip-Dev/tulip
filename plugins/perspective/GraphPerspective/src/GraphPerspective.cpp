@@ -194,6 +194,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionCopy,SIGNAL(triggered()),this,SLOT(copy()));
   connect(_ui->actionGroup_elements,SIGNAL(triggered()),this,SLOT(group()));
   connect(_ui->actionCreate_sub_graph,SIGNAL(triggered()),this,SLOT(createSubGraph()));
+  connect(_ui->actionClone_sub_graph,SIGNAL(triggered()),this,SLOT(cloneSubGraph()));
+  connect(_ui->actionCreate_empty_sub_graph,SIGNAL(triggered()),this,SLOT(addEmptySubGraph()));
   connect(_ui->actionImport_CSV,SIGNAL(triggered()),this,SLOT(CSVImport()));
   connect(_ui->actionFind_plugins,SIGNAL(triggered()),this,SLOT(findPlugins()));
   connect(_ui->actionNew, SIGNAL(triggered()), this, SLOT(addNewGraph()));
@@ -709,6 +711,22 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
 
 void GraphPerspective::createSubGraph() {
   createSubGraph(_graphs->currentGraph());
+}
+
+void GraphPerspective::cloneSubGraph() {
+  if (_graphs->currentGraph() == NULL)
+    return;
+  tlp::BooleanProperty* prop = new tlp::BooleanProperty(_graphs->currentGraph());
+  prop->setAllNodeValue(true);
+  prop->setAllEdgeValue(true);
+  _graphs->currentGraph()->addSubGraph(prop);
+  delete prop;
+}
+
+void GraphPerspective::addEmptySubGraph() {
+  if (_graphs->currentGraph() == NULL)
+    return;
+  _graphs->currentGraph()->addSubGraph();
 }
 
 void GraphPerspective::currentGraphChanged(Graph *graph) {

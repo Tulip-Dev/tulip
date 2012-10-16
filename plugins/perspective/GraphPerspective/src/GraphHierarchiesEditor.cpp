@@ -78,7 +78,9 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
     menu.addAction(_ui->actionSave_to_file);
     menu.addSeparator();
     menu.addAction(_ui->actionRename);
+    menu.addSeparator();
     menu.addAction(_ui->actionAdd_sub_graph);
+    menu.addAction(_ui->actionCreate_induced_sub_graph);
     menu.addAction(_ui->actionClone_subgraph);
     menu.addSeparator();
 
@@ -118,6 +120,13 @@ void GraphHierarchiesEditor::cloneSubGraph() {
   prop->setAllEdgeValue(true);
   _contextGraph->addSubGraph(prop);
   delete prop;
+}
+
+void GraphHierarchiesEditor::addInducedSubGraph() {
+  if (_contextGraph == NULL)
+    return;
+  GraphPerspective* persp = GraphPerspective::typedInstance<GraphPerspective>();
+  persp->createSubGraph(_contextGraph);
 }
 
 void GraphHierarchiesEditor::delGraph() {
