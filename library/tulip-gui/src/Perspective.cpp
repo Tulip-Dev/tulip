@@ -69,8 +69,11 @@ Perspective::~Perspective() {
   delete _project;
 }
 
-PluginProgress* Perspective::progress() {
+PluginProgress* Perspective::progress(ProgressOptions options)  {
   SimplePluginProgressDialog* dlg = new SimplePluginProgressDialog(_mainWindow);
+  dlg->setPreviewButtonVisible(options.testFlag(IsPreviewable));
+  dlg->setCancelButtonVisible(options.testFlag(IsCancellable));
+  dlg->setStopButtonVisible(options.testFlag(IsStoppable));
   dlg->show();
   QApplication::processEvents();
   return dlg;

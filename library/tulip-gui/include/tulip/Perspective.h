@@ -110,6 +110,14 @@ protected:
   QVariantMap _parameters;
 
 public:
+  enum ProgressOption {
+    NoProgressOption = 0x0,
+    IsPreviewable = 0x1,
+    IsCancellable = 0x2,
+    IsStoppable = 0x4
+  };
+  Q_DECLARE_FLAGS(ProgressOptions,ProgressOption)
+
   virtual std::string category() const {
     return PERSPECTIVE_CATEGORY;
   }
@@ -158,7 +166,7 @@ public:
    * This method allows lower-level widgets to create top-level progress bars directly from the Perspective.
    * @return
    */
-  virtual tlp::PluginProgress* progress();
+  virtual PluginProgress *progress(ProgressOptions options = ProgressOptions(IsPreviewable | IsStoppable | IsCancellable));
 
   /**
    * @return The Perspective's main window.
@@ -233,6 +241,7 @@ protected slots:
    */
   void createPerspective(const QString& name);
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(Perspective::ProgressOptions)
 
 }
 
