@@ -94,13 +94,13 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   foreach(QString s, TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/archive.png"),s);
+    _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/archive.png"),s,this,SLOT(openRecentFile()));
   }
   _ui->menuOpen_recent_file->addSeparator();
   foreach(QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s);
+    _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s,this,SLOT(openRecentFile()));
   }
 }
 
@@ -903,6 +903,11 @@ void GraphPerspective::addNewGraph() {
   Graph* g = tlp::newGraph();
   _graphs->addGraph(g);
   showStartPanels(g);
+}
+
+void GraphPerspective::openRecentFile() {
+  QAction* action = static_cast<QAction*>(sender());
+  open(action->text());
 }
 
 PLUGIN(GraphPerspective)

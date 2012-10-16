@@ -114,6 +114,7 @@ protected slots:
   void logCleared();
   void findPlugins();
   void addNewGraph();
+  void openRecentFile();
 
 protected:
   bool eventFilter(QObject *, QEvent *);
