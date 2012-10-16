@@ -22,7 +22,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#include <thirdparty/gzstream/gzstream.h>
+#include <gzstream.h>
 
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>

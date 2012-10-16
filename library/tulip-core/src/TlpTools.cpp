@@ -25,7 +25,7 @@
 #include <unistd.h>
 #endif
 
-#include <thirdparty/gzstream/gzstream.h>
+#include <gzstream.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoader.h>
 #include <tulip/PropertyTypes.h>
