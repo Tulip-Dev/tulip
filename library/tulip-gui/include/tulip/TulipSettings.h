@@ -45,6 +45,7 @@ public:
   static const QString RecentDocumentsConfigEntry;
   static const QString PluginsToRemoveConfigEntry;
   static const QString DefaultColorConfigEntry;
+  static const QString DefaultLabelColorConfigEntry;
   static const QString DefaultSizeConfigEntry;
   static const QString DefaultShapeConfigEntry;
   static const QString DefaultSelectionColorEntry;
@@ -111,6 +112,9 @@ public:
 
   tlp::Color defaultColor(tlp::ElementType elem);
   void setDefaultColor(tlp::ElementType elem, const tlp::Color& color);
+
+  tlp::Color defaultLabelColor();
+  void setDefaultLabelColor(const tlp::Color& color);
 
   tlp::Size defaultSize(tlp::ElementType elem);
   void setDefaultSize(tlp::ElementType elem, const tlp::Size& size);
