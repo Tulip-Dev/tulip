@@ -359,22 +359,9 @@ void GraphPerspective::importGraph() {
       std::string name;
 
       if (!g->getAttribute<std::string>("name",name)) {
-        name = wizard.algorithm().toStdString() + " - " + wizard.parameters().toString();
-        // remove parameters subtype prefix if any
-        std::string::size_type pos = name.find("::");
-
-        while (pos != std::string::npos) {
-          std::string::size_type qpos =  name.rfind('\'', pos);
-
-          if (qpos != std::string::npos) {
-            name.replace(qpos + 1, pos + 1 - qpos, "");
-            pos = name.find("::", qpos + 1);
-          }
-          else
-            break;
-        }
-
-        g->setAttribute<std::string>("name",name);
+        QString n = wizard.algorithm() + " - " + wizard.parameters().toString().c_str();
+        n.replace(QRegExp("[\\w]*::"),""); // remove words before "::"
+        g->setAttribute<std::string>("name",n.toStdString());
       }
     }
     else {
