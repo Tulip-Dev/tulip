@@ -10,6 +10,12 @@
     <height>567</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>567</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Tulip settings</string>
   </property>
@@ -382,12 +388,6 @@ border: 0px;
           </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
-          </property>
-          <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
-          </property>
-          <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
           </property>
           <property name="editTriggers">
            <set>QAbstractItemView::AllEditTriggers</set>
