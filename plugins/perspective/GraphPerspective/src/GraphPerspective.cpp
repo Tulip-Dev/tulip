@@ -160,6 +160,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->workspace->setGridModeSwitch(_ui->gridModeButton);
   _ui->workspace->setSixModeSwitch(_ui->sixModeButton);
   _ui->workspace->setPageCountLabel(_ui->pageCountLabel);
+  _ui->workspace->setExposeModeSwitch(_ui->exposeModeButton);
   _ui->outputFrame->hide();
   _logger = new GraphPerspectiveLogger(_mainWindow);
   _ui->loggerFrame->installEventFilter(this);

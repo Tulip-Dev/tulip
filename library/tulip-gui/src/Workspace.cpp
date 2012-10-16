@@ -356,6 +356,10 @@ void Workspace::previousPage() {
   updatePanels();
 }
 
+void Workspace::setExposeModeSwitch(QPushButton* b) {
+  _ui->exposeButton = b;
+}
+
 void Workspace::setActivePanel(tlp::View* view) {
   int newIndex = panels().indexOf(view);
   _currentPanelIndex = newIndex;
