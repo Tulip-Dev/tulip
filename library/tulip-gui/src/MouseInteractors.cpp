@@ -25,7 +25,8 @@
 #endif
 #include <QtGui/qcursor.h>
 #include <QtGui/qevent.h>
-#include <QPinchGesture>
+#include <QtGui/QPinchGesture>
+#include <QtGui/QGraphicsView>
 
 #include "tulip/Graph.h"
 #include "tulip/MouseInteractors.h"
@@ -453,6 +454,4 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 void MouseNKeysNavigator::clear() {
-  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
-  glMainView->getGlMainWidget()->setCursor(QCursor());
 }
