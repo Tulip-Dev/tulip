@@ -48,6 +48,10 @@ class GraphPerspective : public tlp::Perspective {
 
   void reserveDefaultProperties();
   QString _lastOpenLocation;
+  QString _recentDocumentsSettingsKey;
+
+  void buildRecentDocumentsMenu();
+  void addRecentDocument(const QString &path);
 
   void showStartPanels(tlp::Graph*);
   void applyRandomLayout(tlp::Graph*);
