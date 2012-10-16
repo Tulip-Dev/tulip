@@ -209,28 +209,35 @@ QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph* g) {
   if (g == NULL)
     return QModelIndex();
 
-  QVector<Graph*> hierarchy;
-  Graph* child = g;
-
-  do {
-    hierarchy.push_front(g);
-    child = child->getSuperGraph();
-  }
-  while (child != child->getRoot());
-
   QModelIndex result;
 
-  foreach(Graph* child, hierarchy) {
-    Graph* parent = child->getSuperGraph();
-    unsigned int n = 0;
+  if (g->getRoot() == g) { // Peculiar case for root graphs
+    result = createIndex(_graphs.indexOf(g),0,g);
+    _indexCache[g] = result;
+  }
+  else {
+    QVector<Graph*> hierarchy;
+    Graph* child = g;
 
-    for (n=0; n<parent->numberOfSubGraphs(); ++n) {
-      if (parent->getNthSubGraph(n) == child)
-        break;
+    do {
+      hierarchy.push_front(g);
+      child = child->getSuperGraph();
     }
+    while (child != child->getRoot());
 
-    result = createIndex(n,0,child);
-    _indexCache[child] = result;
+
+    foreach(Graph* child, hierarchy) {
+      Graph* parent = child->getSuperGraph();
+      unsigned int n = 0;
+
+      for (n=0; n<parent->numberOfSubGraphs(); ++n) {
+        if (parent->getNthSubGraph(n) == child)
+          break;
+      }
+
+      result = createIndex(n,0,child);
+      _indexCache[child] = result;
+    }
   }
 
   return result;
