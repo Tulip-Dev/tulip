@@ -412,6 +412,7 @@ bool HierarchicalGraph::run() {
 
   // push a temporary graph state (not redoable)
   graph->push(false);
+  result->setAllEdgeValue(std::vector<tlp::Coord>());
 
   //========================================================================
   // Build a clone of this graph
