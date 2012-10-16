@@ -223,7 +223,7 @@ font-size: 10px;</string>
             <item>
              <widget class="QCheckBox" name="labelsFitCheck">
               <property name="text">
-               <string>Fit labels into their respective node</string>
+               <string>Fit labels into their respective nodes</string>
               </property>
              </widget>
             </item>
@@ -472,7 +472,7 @@ font-size: 10px;
             <item>
              <widget class="QCheckBox" name="edgesArrowCheck">
               <property name="text">
-               <string>Show arrows on oriented edges</string>
+               <string>Show arrows on edges</string>
               </property>
              </widget>
             </item>
