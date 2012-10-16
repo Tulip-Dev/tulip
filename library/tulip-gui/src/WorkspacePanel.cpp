@@ -359,7 +359,7 @@ void WorkspacePanel::resetInteractorsScrollButtonsVisibility() {
 }
 
 void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
-  _ui->graphCombo->setModel(model);
+  _ui->graphCombo->setGraphsModel(model);
   connect(_ui->graphCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(graphComboIndexChanged()));
 }
 
