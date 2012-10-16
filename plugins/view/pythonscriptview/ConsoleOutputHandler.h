@@ -96,8 +96,6 @@ public slots :
         cursor = textBrowser->document()->find(rx, cursor);
       }
     }
-
-    QApplication::processEvents();
   }
 
 };
