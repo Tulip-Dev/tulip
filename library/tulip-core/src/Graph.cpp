@@ -20,7 +20,7 @@
 #include <iomanip>
 #include <fstream>
 
-#include <thirdparty/gzstream/gzstream.h>
+#include <gzstream.h>
 
 #include <QtCore/QDateTime>
 
