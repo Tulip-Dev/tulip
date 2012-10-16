@@ -104,6 +104,8 @@ protected slots:
   void copy();
   void group();
   void createSubGraph();
+  void cloneSubGraph();
+  void addEmptySubGraph();
   void CSVImport();
   void logCleared();
   void findPlugins();

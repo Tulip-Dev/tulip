@@ -58,6 +58,7 @@ protected slots:
 
   void addSubGraph();
   void cloneSubGraph();
+  void addInducedSubGraph();
   void delGraph();
   void delAllGraph();
   void createPanel();

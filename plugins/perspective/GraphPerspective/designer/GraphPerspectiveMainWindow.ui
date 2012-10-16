@@ -926,7 +926,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <addaction name="actionCancel_selection"/>
     <addaction name="separator"/>
     <addaction name="actionGroup_elements"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreate_empty_sub_graph"/>
     <addaction name="actionCreate_sub_graph"/>
+    <addaction name="actionClone_sub_graph"/>
     <addaction name="separator"/>
     <addaction name="actionImport_CSV"/>
     <addaction name="separator"/>
@@ -1153,7 +1156,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
    </property>
    <property name="text">
-    <string>Create sub-graph</string>
+    <string>Create induced sub-graph</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
@@ -1274,6 +1277,16 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="toolTip">
     <string>Writes the graph into a file</string>
+   </property>
+  </action>
+  <action name="actionCreate_empty_sub_graph">
+   <property name="text">
+    <string>Create empty sub-graph</string>
+   </property>
+  </action>
+  <action name="actionClone_sub_graph">
+   <property name="text">
+    <string>Clone sub-graph</string>
    </property>
   </action>
  </widget>

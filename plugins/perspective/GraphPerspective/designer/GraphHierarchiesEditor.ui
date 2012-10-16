@@ -154,7 +154,7 @@
   </layout>
   <action name="actionAdd_sub_graph">
    <property name="text">
-    <string>Add sub-graph</string>
+    <string>Create empty sub-graph</string>
    </property>
    <property name="toolTip">
     <string>Create an empty sub-graph</string>
@@ -234,6 +234,21 @@
    </property>
    <property name="toolTip">
     <string>Writes the graph into the selected file</string>
+   </property>
+  </action>
+  <action name="actionCreate_induced_sub_graph">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create induced sub-graph</string>
+   </property>
+   <property name="toolTip">
+    <string>Creates a subgraph from the selected elements</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+G</string>
    </property>
   </action>
  </widget>
@@ -426,6 +441,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionCreate_induced_sub_graph</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>addInducedSubGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>activeGraphSelected(QModelIndex)</slot>
@@ -439,5 +470,6 @@
   <slot>renameGraph()</slot>
   <slot>doubleClicked(QModelIndex)</slot>
   <slot>saveGraphToFile()</slot>
+  <slot>addInducedSubGraph()</slot>
  </slots>
 </ui>
