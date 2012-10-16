@@ -129,7 +129,9 @@ static ViewSizeCalculator vSizeCalc;
 
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
-                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape";
+                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
+      labelColor = "viewLabelColor", labelPosition = "viewLabelPosition", rotation = "viewRotation", labelRotation = "viewLabelRotation",
+      srcAnchorSize = "viewSrcAnchorSize", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
 
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
@@ -178,6 +180,42 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   if (!g->existProperty(srcShape)) {
     g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
   }
+
+  if (!g->existProperty(labelColor)) {
+    g->getProperty<ColorProperty>(labelColor)->setAllNodeValue(TulipSettings::instance().defaultLabelColor());
+    g->getProperty<ColorProperty>(labelColor)->setAllEdgeValue(TulipSettings::instance().defaultLabelColor());
+  }
+
+  if (!g->existProperty(labelPosition)) {
+    g->getProperty<IntegerProperty>(labelPosition)->setAllNodeValue(ON_CENTER);
+    g->getProperty<IntegerProperty>(labelPosition)->setAllEdgeValue(ON_CENTER);
+  }
+
+  if (!g->existProperty(rotation)) {
+    g->getProperty<DoubleProperty>(rotation)->setAllNodeValue(0);
+    g->getProperty<DoubleProperty>(rotation)->setAllEdgeValue(0);
+  }
+
+  if (!g->existProperty(labelRotation)) {
+    g->getProperty<DoubleProperty>(labelRotation)->setAllNodeValue(0);
+    g->getProperty<DoubleProperty>(labelRotation)->setAllEdgeValue(0);
+  }
+
+  if (!g->existProperty(srcAnchorSize)) {
+    g->getProperty<SizeProperty>(srcAnchorSize)->setAllNodeValue(Size(1,1,0));
+    g->getProperty<SizeProperty>(srcAnchorSize)->setAllEdgeValue(Size(1,1,0));
+  }
+
+  if (!g->existProperty(tgtAnchorSize)) {
+    g->getProperty<SizeProperty>(tgtAnchorSize)->setAllNodeValue(Size(1,1,0));
+    g->getProperty<SizeProperty>(tgtAnchorSize)->setAllEdgeValue(Size(1,1,0));
+  }
+
+  if (!g->existProperty(texture)) {
+    g->getProperty<StringProperty>(texture)->setAllNodeValue("");
+    g->getProperty<StringProperty>(texture)->setAllEdgeValue("");
+  }
+
 }
 
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent), _currentGraph(NULL) {

@@ -33,6 +33,7 @@ const QString TulipSettings::RemoteLocationsConfigEntry = "app/remote_locations"
 const QString TulipSettings::RecentDocumentsConfigEntry = "app/recent_documents";
 const QString TulipSettings::PluginsToRemoveConfigEntry = "app/pluginsToRemove";
 const QString TulipSettings::DefaultColorConfigEntry = "graph/defaults/color/";
+const QString TulipSettings::DefaultLabelColorConfigEntry = "graph/defaults/color/labels";
 const QString TulipSettings::DefaultSizeConfigEntry = "graph/defaults/size/";
 const QString TulipSettings::DefaultShapeConfigEntry = "graph/defaults/shape/";
 const QString TulipSettings::DefaultSelectionColorEntry = "graph/defaults/selectioncolor/";
@@ -150,6 +151,18 @@ tlp::Color TulipSettings::defaultColor(tlp::ElementType elem) {
 void TulipSettings::setDefaultColor(tlp::ElementType elem, const tlp::Color& color) {
   QString value = tlp::ColorType::toString(color).c_str();
   setValue(elementKey(DefaultColorConfigEntry,elem),value);
+}
+
+Color TulipSettings::defaultLabelColor() {
+  QString val = value(DefaultLabelColorConfigEntry,"(54, 54, 54)").toString();
+  Color result;
+  ColorType::fromString(result,val.toStdString());
+  return result;
+}
+
+void TulipSettings::setDefaultLabelColor(const Color &color) {
+  QString value = tlp::ColorType::toString(color).c_str();
+  setValue(DefaultLabelColorConfigEntry,value);
 }
 
 tlp::Size TulipSettings::defaultSize(tlp::ElementType elem) {
