@@ -29,6 +29,8 @@
 #include <QtGui/QInputDialog>
 #include <QtGui/QMessageBox>
 
+#include <QtGui/QLabel>
+#include <tulip/PythonVersionChecker.h>
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
@@ -350,11 +352,28 @@ QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QStri
 
 PLUGIN(PythonScriptView)
 
-PythonScriptView::PythonScriptView(tlp::PluginContext *) : pythonInterpreter(NULL),graph(NULL), scriptStopped(false), runningScript(false), dontTreatFocusIn(false) {}
+PythonScriptView::PythonScriptView(tlp::PluginContext *) : pythonInterpreter(NULL),graph(NULL), scriptStopped(false), runningScript(false), dontTreatFocusIn(false) {
+  _viewEnabled = PythonVersionChecker::isPythonVersionMatching();
+}
 
 PythonScriptView::~PythonScriptView() {}
 
 void PythonScriptView::setupWidget() {
+  if (!_viewEnabled) {
+    QString installedPython = PythonVersionChecker::installedVersion();
+    QLabel* centralLabel = new QLabel();
+    centralLabel->setText(QString("<p><img src=\":/icons/dialog-error.png\"/></p>\n") +
+        "<p>There is a problem with your python installation.<br/>\n" +
+        "Please check that python is installed on your system and that the python executable is accessible from your <b>PATH</b> environment variable</p>\n" +
+        "<p>Required python version: <b>" + PythonVersionChecker::compiledVersion() + "</b></p>\n" +
+                           "<p>Detected python version: " + (installedPython.isNull() ? "<i>Python not detected</i>" : "<b>" + installedPython + "</b>") + "</p>");
+    centralLabel->setWordWrap(true);
+    centralLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    centralLabel->setStyleSheet("color: rgb(54,54,54); background-color: white;");
+    setCentralWidget(centralLabel);
+    return;
+  }
+
   viewWidget = new PythonScriptViewWidget(this);
   connect(viewWidget->runScriptButton, SIGNAL(clicked()), this, SLOT(executeCurrentScript()));
   connect(viewWidget->pauseScriptButton, SIGNAL(clicked()), this, SLOT(pauseCurrentScript()));
@@ -394,11 +413,15 @@ string& replaceAll(string& context, const string& from, const string& to) {
 }
 
 void PythonScriptView::graphChanged(Graph *graph) {
+  if (!_viewEnabled)
+    return;
   this->graph = graph;
   viewWidget->setGraph(graph);
 }
 
 void PythonScriptView::setState(const tlp::DataSet &dataSet) {
+  if (!_viewEnabled)
+    return;
 
   if (viewWidget->mainScriptsTabWidget->count() == 0) {
 
@@ -550,6 +573,8 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
 }
 
 DataSet PythonScriptView::state() const {
+  if (!_viewEnabled)
+    return DataSet();
 
   DataSet ret;
   DataSet *dataSet = &ret;
@@ -1426,6 +1451,8 @@ void PythonScriptView::reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, 
 }
 
 bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
+  if (!_viewEnabled)
+    return false;
   Qt::KeyboardModifiers modifier = Qt::ControlModifier;
 #ifdef __APPLE__
   modifier = Qt::MetaModifier;

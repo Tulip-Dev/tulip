@@ -31,3 +31,7 @@ QString PythonVersionChecker::installedVersion() {
 QString PythonVersionChecker::compiledVersion() {
   return TLP_PYTHON;
 }
+
+bool PythonVersionChecker::isPythonVersionMatching() {
+  return compiledVersion() == installedVersion();
+}
