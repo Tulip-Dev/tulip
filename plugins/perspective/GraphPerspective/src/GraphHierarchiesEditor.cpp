@@ -59,7 +59,7 @@ bool GraphHierarchiesEditor::synchronized() const {
 
 void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   _ui->hierarchiesTree->setModel(model);
-  _ui->hierarchiesTree->header()->resizeSections(QHeaderView::ResizeToContents);
+  _ui->hierarchiesTree->header()->resizeSection(0,100);
 }
 
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
@@ -205,12 +205,6 @@ void GraphHierarchiesEditor::renameGraph() {
 
 void GraphHierarchiesEditor::saveGraphToFile() {
   tlp::Perspective::typedInstance<GraphPerspective>()->saveGraphToFile(_contextGraph);
-}
-
-void GraphHierarchiesEditor::repackHeaders() {
-  for (int i=0; i<_ui->hierarchiesTree->model()->columnCount(); ++i) {
-    _ui->hierarchiesTree->resizeColumnToContents(i);
-  }
 }
 
 void GraphHierarchiesEditor::setSynchronized(bool f) {
