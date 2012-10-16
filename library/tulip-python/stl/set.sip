@@ -175,7 +175,11 @@ template<TYPE>
        }
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
+#if PY_MAJOR_VERSION >= 3
             if (!PyLong_Check(item)) {
+#else
+            if (!PyLong_Check(item) && !PyInt_Check(item)) {
+#endif
                 printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
                 return 0;
             }
@@ -187,7 +191,16 @@ template<TYPE>
    std::set<int> *s = new std::set<int>();
    
    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+#if PY_MAJOR_VERSION >= 3
        s->insert(PyLong_AsLong(PyList_GET_ITEM(sipPy, i)));
+#else
+       PyObject *item = PyList_GET_ITEM(sipPy, i);
+       if (PyLong_Check(item)) {
+           s->insert(PyLong_AsLong(item));
+       } else {
+           s->insert(PyInt_AsLong(item));
+       }
+#endif
    }
 
    *sipCppPtr = s;
@@ -230,7 +243,11 @@ template<TYPE>
        }
        for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
             PyObject *item = PyList_GET_ITEM(sipPy, i);
+#if PY_MAJOR_VERSION >= 3
             if (!PyLong_Check(item)) {
+#else
+            if (!PyLong_Check(item) && !PyInt_Check(item)) {
+#endif
                 printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
                 return 0;
             }
@@ -242,7 +259,16 @@ template<TYPE>
    std::set<unsigned int> *s = new std::set<unsigned int>();
 
    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+#if PY_MAJOR_VERSION >= 3
        s->insert(PyLong_AsUnsignedLong(PyList_GET_ITEM(sipPy, i)));
+#else
+       PyObject *item = PyList_GET_ITEM(sipPy, i);
+       if (PyLong_Check(item)) {
+           s->insert(PyLong_AsUnsignedLong(item));
+       } else {
+           s->insert(PyInt_AsUnsignedLongMask(item));
+       }
+#endif
    }
 
    *sipCppPtr = s;
