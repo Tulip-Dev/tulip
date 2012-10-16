@@ -143,6 +143,8 @@ private :
 
   bool dontTreatFocusIn;
 
+  bool _viewEnabled;
+
 };
 
 #endif /* PYTHONSCRIPTVIEW_H_ */

@@ -10,6 +10,7 @@ class TLP_QT_SCOPE PythonVersionChecker {
 public:
   static QString installedVersion();
   static QString compiledVersion();
+  static bool isPythonVersionMatching();
 };
 }
 
