@@ -330,6 +330,41 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
 
+  if(e->type() == QEvent::KeyPress){
+    // first ensure that something is selected
+    bool hasSelection = false;
+    node no;
+    forEach(no, _selection->getNodesEqualTo(true, _graph)) {
+      hasSelection = true;
+      break;
+    }
+
+    if (!hasSelection) {
+      edge ed;
+      forEach(ed, _selection->getEdgesEqualTo(true, _graph)) {
+        hasSelection = true;
+        break;
+      }
+    }
+
+    if(hasSelection){
+      switch(((QKeyEvent*)e)->key()){
+      case Qt::Key_Left:
+        mMouseTranslate(editPosition[0]-1, editPosition[1], glMainWidget);
+        break;
+      case Qt::Key_Right:
+        mMouseTranslate(editPosition[0]+1, editPosition[1], glMainWidget);
+        break;
+      case Qt::Key_Up:
+        mMouseTranslate(editPosition[0], editPosition[1]-1, glMainWidget);
+        break;
+      case Qt::Key_Down:
+        mMouseTranslate(editPosition[0], editPosition[1]+1, glMainWidget);
+        break;
+      }
+    }
+  }
+
   if  (e->type() == QEvent::MouseMove &&
        ((QMouseEvent *) e)->buttons() & Qt::LeftButton &&
        operation != NONE) {
