@@ -35,6 +35,7 @@ namespace Ui {
 class Workspace;
 }
 
+class QPushButton;
 class QLabel;
 namespace tlp {
 class PluginProgress;
@@ -89,6 +90,7 @@ public slots:
 
   void nextPage();
   void previousPage();
+  void setExposeModeSwitch(QPushButton *);
   void expose(bool);
   void showExposeMode();
   void hideExposeMode();

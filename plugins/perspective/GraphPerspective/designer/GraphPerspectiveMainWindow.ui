@@ -1556,6 +1556,22 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>exposeModeButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>workspace</receiver>
+   <slot>expose(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>144</x>
+     <y>695</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>575</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>setPythonOutput(bool)</slot>
