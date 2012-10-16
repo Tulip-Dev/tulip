@@ -30,15 +30,21 @@
 class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
   Q_OBJECT
   QTreeView* _treeView;
+  bool itemExpanded;
 
 public:
   explicit TreeViewComboBox(QWidget *parent = NULL);
+
+  void setGraphsModel(QAbstractItemModel * model);
+
   virtual void showPopup();
+  virtual void hidePopup();
 
   QModelIndex selectedIndex() const;
 
 public slots:
   void selectIndex(const QModelIndex&);
+  void expandedItem();
 };
 
 #endif // TREEVIEWCOMBOBOX_H
