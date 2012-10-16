@@ -447,6 +447,9 @@ void Camera::getXML(string &outString) {
 }
 //====================================================
 void Camera::setWithXML(const string &inString, unsigned int &currentPosition) {
+
+  cout << currentPosition << endl;
+
   GlXMLTools::enterDataNode(inString,currentPosition);
 
   Coord bbTmp;
@@ -457,10 +460,14 @@ void Camera::setWithXML(const string &inString, unsigned int &currentPosition) {
   GlXMLTools::setWithXML(inString,currentPosition,"zoomFactor",zoomFactor);
   GlXMLTools::setWithXML(inString,currentPosition,"sceneRadius",sceneRadius);
   GlXMLTools::setWithXML(inString,currentPosition,"d3",d3);
-  GlXMLTools::setWithXML(inString,currentPosition,"sceneBoundingBox0",bbTmp);
-  sceneBoundingBox.expand(bbTmp);
-  GlXMLTools::setWithXML(inString,currentPosition,"sceneBoundingBox1",bbTmp);
-  sceneBoundingBox.expand(bbTmp);
+  if(GlXMLTools::checkNextXMLtag(inString,currentPosition,"sceneBoundingBox0")){
+    GlXMLTools::setWithXML(inString,currentPosition,"sceneBoundingBox0",bbTmp);
+    sceneBoundingBox.expand(bbTmp);
+  }
+  if(GlXMLTools::checkNextXMLtag(inString,currentPosition,"sceneBoundingBox1")){
+    GlXMLTools::setWithXML(inString,currentPosition,"sceneBoundingBox1",bbTmp);
+    sceneBoundingBox.expand(bbTmp);
+  }
 
   GlXMLTools::leaveDataNode(inString,currentPosition);
 }
