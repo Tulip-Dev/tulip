@@ -42,20 +42,20 @@ public:
 %Docstring
 tlp.WithDependency.getDependencies() -> list of tlp.Dependency
 %End
-        void addDependency(const std::string & algorithm,const std::string & release );
-    %Docstring
-    tlp.WithParameter.addBooleanAlgorithmDependency(algorithm, release )
+    void addDependency(const std::string & algorithm,const std::string & release );
+%Docstring
+tlp.WithParameter.addBooleanAlgorithmDependency(algorithm, release )
 
-    Add a dependency on a boolean algorithm.
+Add a dependency on a boolean algorithm.
 
-    :param name: the name of the algorithm
-    :type name: string
-    :param release: the version of the algortihm
-    :type release: string
-    %End
+:param name: the name of the algorithm
+:type name: string
+:param release: the version of the algortihm
+:type release: string
+%End
 
-    %MethodCode
-        sipCpp->addDependency((*a0).c_str(), (*a1).c_str());
-    %End
+%MethodCode
+    sipCpp->addDependency((*a0).c_str(), (*a1).c_str());
+%End
 };
 };

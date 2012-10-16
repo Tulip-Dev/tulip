@@ -45,6 +45,7 @@ typedef std::pair<tlp::node, tlp::node> std_pair_0100tlp_node_0100tlp_node;
 
 extern void releaseGraphWrapper(tlp::Graph *graph);
 extern void releaseGraphHierarchyWrappers(tlp::Graph *graph);
+extern void initializeGraphViewProperties(tlp::Graph *graph);
 %End
 
 %ModuleCode
@@ -58,6 +59,45 @@ void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
         releaseGraphHierarchyWrappers(sg);
     }
     releaseGraphWrapper(graph);
+}
+
+void initializeGraphViewProperties(tlp::Graph *graph) {
+    if (!graph->existProperty("viewSize")) {
+        graph->getProperty<tlp::SizeProperty>("viewSize")->setAllNodeValue(tlp::Size(1,1,1));
+        graph->getProperty<tlp::SizeProperty>("viewSize")->setAllEdgeValue(tlp::Size(0.125,0.125,0.5));
+    }
+    if (!graph->existProperty("viewColor")) {
+        graph->getProperty<tlp::ColorProperty>("viewColor")->setAllNodeValue(tlp::Color(255,0,0));
+        graph->getProperty<tlp::ColorProperty>("viewColor")->setAllEdgeValue(tlp::Color(0,0,0));
+    }
+    if (!graph->existProperty("viewShape")) {
+        graph->getProperty<tlp::IntegerProperty>("viewShape")->setAllNodeValue(4);
+        graph->getProperty<tlp::IntegerProperty>("viewShape")->setAllEdgeValue(0);
+    }
+    if (!graph->existProperty("viewLabel")) {
+        graph->getProperty<tlp::StringProperty>("viewLabel")->setAllNodeValue("");
+        graph->getProperty<tlp::StringProperty>("viewLabel")->setAllEdgeValue("");
+    }
+    if (!graph->existProperty("viewFont")) {
+        graph->getProperty<tlp::StringProperty>("viewFont")->setAllNodeValue(tlp::TulipBitmapDir + "font.ttf");
+        graph->getProperty<tlp::StringProperty>("viewFont")->setAllEdgeValue(tlp::TulipBitmapDir + "font.ttf");
+    }
+    if (!graph->existProperty("viewFontSize")) {
+        graph->getProperty<tlp::IntegerProperty>("viewFontSize")->setAllNodeValue(18);
+        graph->getProperty<tlp::IntegerProperty>("viewFontSize")->setAllEdgeValue(18);
+    }
+    if (!graph->existProperty("viewSrcAnchorShape")) {
+        graph->getProperty<tlp::IntegerProperty>("viewSrcAnchorShape")->setAllEdgeValue(UINT_MAX);
+    }
+    if (!graph->existProperty("viewSrcAnchorSize")) {
+        graph->getProperty<tlp::SizeProperty>("viewSrcAnchorSize")->setAllEdgeValue(tlp::Size(0.25,0.25,0.25));
+    }
+    if (!graph->existProperty("viewTgtAnchorShape")) {
+        graph->getProperty<tlp::IntegerProperty>("viewTgtAnchorShape")->setAllEdgeValue(50);
+    }
+    if (!graph->existProperty("viewTgtAnchorSize")) {
+        graph->getProperty<tlp::SizeProperty>("viewTgtAnchorSize")->setAllEdgeValue(tlp::Size(0.25,0.25,0.25));
+    }
 }
 %End
 
@@ -1025,6 +1065,7 @@ Returns the ith predecessor of a node.
 :type node: :class:`tlp.node`
 :param i: the position in the predecessor nodes list (warning : first index is 1 not 0)
 :type i: integer
+:rtype: :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of predecessor nodes
 %End	
 	
@@ -1083,6 +1124,7 @@ Returns the ith successor of a node.
 :type node: :class:`tlp.node`
 :param i: the position in the successor nodes list (warning : first index is 1 not 0)
 :type i: integer
+:rtype: :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of successor nodes
 %End	
 	
@@ -3014,31 +3056,27 @@ if (sipCpp->getAttributes().exist(*a0)) {
 #endif
   } else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::DataSet *>(dataType->value), sipType_tlp_DataSet, NULL);
-    
-  } else if (dataType->getTypeName() == std::string(typeid(tlp::DataSet).name())) {
-    ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::DataSet *>(dataType->value), sipType_tlp_DataSet, NULL);
+    sipRes = sipConvertFromNewType(new tlp::DataSet(*reinterpret_cast<tlp::DataSet *>(dataType->value)), sipType_tlp_DataSet, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::Coord).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::Coord *>(dataType->value), sipType_tlp_Coord, NULL);
+    sipRes = sipConvertFromNewType(new tlp::Coord(*reinterpret_cast<tlp::Coord *>(dataType->value)), sipType_tlp_Coord, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::Color).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::Color *>(dataType->value), sipType_tlp_Color, NULL);
+    sipRes = sipConvertFromNewType(new tlp::Color(*reinterpret_cast<tlp::Color *>(dataType->value)), sipType_tlp_Color, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::Size).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::Size *>(dataType->value), sipType_tlp_Size, NULL);
+    sipRes = sipConvertFromNewType(new tlp::Size(*reinterpret_cast<tlp::Size *>(dataType->value)), sipType_tlp_Size, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::ColorScale).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::ColorScale *>(dataType->value), sipType_tlp_ColorScale, NULL);
+    sipRes = sipConvertFromNewType(new tlp::ColorScale(*reinterpret_cast<tlp::ColorScale *>(dataType->value)), sipType_tlp_ColorScale, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::StringCollection).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<tlp::StringCollection *>(dataType->value), sipType_tlp_StringCollection, NULL);
+    sipRes = sipConvertFromType(new tlp::StringCollection(*reinterpret_cast<tlp::StringCollection *>(dataType->value)), sipType_tlp_StringCollection, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(tlp::PropertyInterface*).name())) {
     ok = true;
@@ -3074,34 +3112,35 @@ if (sipCpp->getAttributes().exist(*a0)) {
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::node>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::node> *>(dataType->value), sipType_std_vector_0100tlp_node, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<tlp::node>(*reinterpret_cast<std::vector<tlp::node> *>(dataType->value)), sipType_std_vector_0100tlp_node, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::set<tlp::node>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::set<tlp::node> *>(dataType->value), sipType_std_set_0100tlp_node, NULL);
+    sipRes = sipConvertFromNewType(new std::set<tlp::node>(*reinterpret_cast<std::set<tlp::node> *>(dataType->value)), sipType_std_set_0100tlp_node, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::edge>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::edge> *>(dataType->value), sipType_std_vector_0100tlp_edge, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<tlp::edge>(*reinterpret_cast<std::vector<tlp::edge> *>(dataType->value)), sipType_std_vector_0100tlp_edge, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::set<tlp::edge>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::set<tlp::edge> *>(dataType->value), sipType_std_set_0100tlp_edge, NULL);
+    sipRes = sipConvertFromNewType(new std::set<tlp::edge>(*reinterpret_cast<std::set<tlp::edge> *>(dataType->value)), sipType_std_set_0100tlp_edge, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Coord>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Coord> *>(dataType->value), sipType_std_vector_0100tlp_Coord, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<tlp::Coord>(*reinterpret_cast<std::vector<tlp::Coord> *>(dataType->value)), sipType_std_vector_0100tlp_Coord, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Color>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Color> *>(dataType->value), sipType_std_vector_0100tlp_Color, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<tlp::Color>(*reinterpret_cast<std::vector<tlp::Color> *>(dataType->value)), sipType_std_vector_0100tlp_Color, NULL);
     
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<tlp::Size>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<tlp::Size> *>(dataType->value), sipType_std_vector_0100tlp_Size, NULL); 
+    sipRes = sipConvertFromNewType(new std::vector<tlp::Size>(*reinterpret_cast<std::vector<tlp::Size> *>(dataType->value)), sipType_std_vector_0100tlp_Size, NULL);
+
   } else if (dataType->getTypeName() == std::string(typeid(std::vector<std::string>).name())) {
     ok = true;
-    sipRes = sipConvertFromType(reinterpret_cast<std::vector<std::string> *>(dataType->value), sipType_std_vector_0100std_string, NULL);
+    sipRes = sipConvertFromNewType(new std::vector<std::string>(*reinterpret_cast<std::vector<std::string> *>(dataType->value)), sipType_std_vector_0100std_string, NULL);
   }
   delete dataType;
 }
@@ -3155,6 +3194,12 @@ Creates and returns a new empty graph.
 :rtype: :class:`tlp.Graph`
 %End
 
+%MethodCode
+    sipRes = tlp::newGraph();
+    initializeGraphViewProperties(sipRes);
+%End
+
+
 //===========================================================================================
 
 tlp::Graph *loadGraph(const std::string &filename) /TransferBack/;
@@ -3167,7 +3212,11 @@ Returns a new graph or :const:`None` if the import fails.
 :param filename: the path to the tlp file
 :type filename: string
 :rtype: :class:`tlp.Graph`
+%End
 
+%MethodCode
+    sipRes = tlp::loadGraph(*a0);
+    initializeGraphViewProperties(sipRes);
 %End
 
 //===========================================================================================
@@ -3210,6 +3259,7 @@ Returns a new graph or None if the import fails.
 %MethodCode
 	if (pluginExists<tlp::ImportModule>(*a0)) {
 		sipRes = tlp::importGraph(*a0, *a1, 0);
+        initializeGraphViewProperties(sipRes);
 	} else {
 		sipIsErr = 1;
 		std::string msg = "No Tulip import plugin named  ";
@@ -3249,6 +3299,7 @@ Returns a new graph or None if the import fails.
 %MethodCode
     if (pluginExists<tlp::ImportModule>(*a0)) {
         sipRes = tlp::importGraph(*a0, *a1, 0, a2);
+        initializeGraphViewProperties(sipRes);
     } else {
         sipIsErr = 1;
         std::string msg = "No Tulip import plugin named  ";
