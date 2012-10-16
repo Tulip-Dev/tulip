@@ -398,8 +398,14 @@ template<T1, T2*>
         itm1 = PyTuple_GetItem(sipPy, 0);
         itm2 = PyTuple_GetItem(sipPy, 1);
 
+
+#if PY_MAJOR_VERSION >= 3
         bool ok = PyLong_Check(itm1);
         ok = ok && PyLong_Check(itm2);
+#else
+        bool ok = (PyLong_Check(itm1) || PyInt_Check(itm1));
+        ok = ok && (PyLong_Check(itm2) || PyInt_Check(itm2));
+#endif
 
         if (!ok) {
             return 0;
@@ -414,8 +420,24 @@ template<T1, T2*>
     int t1State = 0;
     int t2State = 0;
 
-    unsigned int ui1 = PyLong_AsUnsignedLong(itm1);
-    unsigned int ui2 = PyLong_AsUnsignedLong(itm2);
+    unsigned int ui1 = 0;
+    unsigned int ui2 = 0;
+
+#if PY_MAJOR_VERSION >= 3
+    ui1 = PyLong_AsUnsignedLong(itm1);
+    ui2 = PyLong_AsUnsignedLong(itm2);
+#else
+    if (PyLong_Check(itm1)) {
+        ui1 = PyLong_AsUnsignedLong(itm1);
+    } else {
+        ui1 = PyInt_AsUnsignedLongMask(itm1);
+    }
+    if (PyLong_Check(itm2)) {
+        ui2 = PyLong_AsUnsignedLong(itm2);
+    } else {
+        ui2 = PyInt_AsUnsignedLongMask(itm2);
+    }
+#endif
 
     std::pair<unsigned int, unsigned int> *p = new std::pair<unsigned int, unsigned int>(ui1, ui2);
 
