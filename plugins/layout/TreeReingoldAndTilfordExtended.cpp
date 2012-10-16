@@ -409,6 +409,13 @@ bool TreeReingoldAndTilfordExtended::run() {
     if(!dataSet->get("compact layout", compactLayout))
       compactLayout = true;
   }
+  bool deleteLenghtMetric = false;
+  if (lengthMetric == NULL) {
+    lengthMetric = new IntegerProperty(graph);
+    lengthMetric->setAllNodeValue(1);
+    lengthMetric->setAllEdgeValue(1);
+    deleteLenghtMetric = true;
+  }
 
   //use bounding circles if specified
   if (boundingCircles) {
@@ -442,6 +449,8 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   if (pluginProgress && pluginProgress->state() != TLP_CONTINUE) {
     graph->pop();
+    if (deleteLenghtMetric)
+      delete lengthMetric;
     return false;
   }
 
@@ -512,6 +521,8 @@ bool TreeReingoldAndTilfordExtended::run() {
   if (boundingCircles)
     delete sizes;
 
+  if (deleteLenghtMetric)
+    delete lengthMetric;
   return true;
 }
 //=============================================================================
