@@ -521,7 +521,9 @@ void GraphPerspective::open(QString fileName) {
         DataSet params;
         params.set<std::string>("file::filename", std::string(fileName.toUtf8().data()));
         addRecentDocument(fileName);
-        Graph* g = tlp::importGraph(modules[extension], params);
+        PluginProgress* prg = progress(NoProgressOption);
+        Graph* g = tlp::importGraph(modules[extension], params, prg);
+        delete prg;
         QDir::setCurrent(QFileInfo(fileName.toUtf8().data()).absolutePath());
         _graphs->addGraph(g);
         break;
@@ -834,7 +836,6 @@ void GraphPerspective::showStartPanels(Graph *g) {
   }
   _ui->workspace->setActivePanel(firstPanel);
   _ui->workspace->switchToSplitMode();
-  _ui->graphHierarchiesEditor->repackHeaders();
 }
 
 void GraphPerspective::applyRandomLayout(Graph* g) {
@@ -899,8 +900,9 @@ void GraphPerspective::openPreferences() {
 }
 
 void GraphPerspective::addNewGraph() {
-  _graphs->addGraph(tlp::newGraph());
-  _ui->graphHierarchiesEditor->repackHeaders();
+  Graph* g = tlp::newGraph();
+  _graphs->addGraph(g);
+  showStartPanels(g);
 }
 
 PLUGIN(GraphPerspective)
