@@ -161,6 +161,14 @@ public :
     outString.append("<"+name+">"+str.str()+"</"+name+">\n");
   }
 
+
+  static bool checkNextXMLtag(const std::string &inString, unsigned int &currentPosition, const std::string &name){
+    unsigned int tmp=currentPosition;
+    goToNextCaracter(inString,tmp);
+    std::string nameTag=inString.substr(tmp,name.size()+2);
+    return (nameTag=="<"+name+">");
+  }
+
   /**
    * Set an Object with the given XML
    */
