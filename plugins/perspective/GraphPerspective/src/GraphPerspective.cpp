@@ -60,7 +60,7 @@
 
 using namespace tlp;
 
-GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)), _logger(NULL) {
+GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
 #ifndef NDEBUG
   new ModelTest(_graphs,this);
 #endif /* NDEBUG */
@@ -87,6 +87,33 @@ void GraphPerspective::reserveDefaultProperties() {
   registerReservedProperty("viewTgtAnchorShape");
   registerReservedProperty("viewTgtAnchorSize");
   registerReservedProperty("viewAnimationFrame");
+}
+
+void GraphPerspective::buildRecentDocumentsMenu() {
+  _ui->menuOpen_recent_file->clear();
+  foreach(QString s, TulipSettings::instance().recentDocuments()) {
+    if (!QFileInfo(s).exists())
+      continue;
+    _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/archive.png"),s);
+  }
+  _ui->menuOpen_recent_file->addSeparator();
+  foreach(QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
+    if (!QFileInfo(s).exists())
+      continue;
+    _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s);
+  }
+}
+
+void GraphPerspective::addRecentDocument(const QString& path) {
+  QStringList recents = TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList();
+  if (recents.contains(path))
+    return;
+  recents += path;
+  if (recents.size()>10)
+    recents.pop_front();
+  TulipSettings::instance().setValue(_recentDocumentsSettingsKey,recents);
+  TulipSettings::instance().sync();
+  buildRecentDocumentsMenu();
 }
 
 void graphPerspectiveLogger(QtMsgType type, const char* msg) {
@@ -236,6 +263,9 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->menuHelp->removeAction(_ui->actionPlugins_Center);
 #endif
 
+  // fill menu with recent documents
+  buildRecentDocumentsMenu();
+
   showTrayMessage("GraphPerspective started");
 
   delete progress;
@@ -300,6 +330,10 @@ void GraphPerspective::exportGraph(Graph* g) {
   if (!result) {
     QMessageBox::critical(_mainWindow,trUtf8("Export error"),trUtf8("Failed to export to format") + wizard.algorithm());
   }
+  else {
+    addRecentDocument(wizard.outputFile());
+  }
+
 
   delete prg;
 }
@@ -486,6 +520,7 @@ void GraphPerspective::open(QString fileName) {
       else if(fileName.endsWith(QString::fromStdString(extension))) {
         DataSet params;
         params.set<std::string>("file::filename", std::string(fileName.toUtf8().data()));
+        addRecentDocument(fileName);
         Graph* g = tlp::importGraph(modules[extension], params);
         QDir::setCurrent(QFileInfo(fileName.toUtf8().data()).absolutePath());
         _graphs->addGraph(g);

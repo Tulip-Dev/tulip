@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1071</width>
-    <height>710</height>
+    <height>709</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -896,19 +896,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionNew"/>
-    <addaction name="actionOpen_Project"/>
-    <addaction name="actionSave_Project"/>
-    <addaction name="actionSave_Project_as"/>
-    <addaction name="separator"/>
-    <addaction name="actionImport"/>
-    <addaction name="separator"/>
-    <addaction name="actionExit"/>
-   </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>Edit</string>
@@ -949,6 +936,29 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     </property>
     <addaction name="actionAbout_us"/>
     <addaction name="actionPlugins_Center"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuOpen_recent_file">
+     <property name="title">
+      <string>Open recent</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/GraphPerspective.qrc">
+       <normaloff>:/tulip/graphperspective/icons/16/document-open-recent.png</normaloff>:/tulip/graphperspective/icons/16/document-open-recent.png</iconset>
+     </property>
+    </widget>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen_Project"/>
+    <addaction name="menuOpen_recent_file"/>
+    <addaction name="actionSave_Project"/>
+    <addaction name="actionSave_Project_as"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>

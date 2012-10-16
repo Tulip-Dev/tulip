@@ -46,5 +46,8 @@
         <file>icons/32/undo.png</file>
         <file>icons/32/redo.png</file>
         <file>icons/32/document-export.png</file>
+        <file>icons/16/document-open-recent.png</file>
+        <file>icons/16/archive.png</file>
+        <file>icons/16/empty-file.png</file>
     </qresource>
 </RCC>
