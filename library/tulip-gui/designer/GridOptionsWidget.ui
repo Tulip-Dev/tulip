@@ -55,9 +55,6 @@ border: 1px solid #C9C9C9;
         <attribute name="horizontalHeaderStretchLastSection">
          <bool>true</bool>
         </attribute>
-        <attribute name="verticalHeaderVisible">
-         <bool>false</bool>
-        </attribute>
        </widget>
       </item>
      </layout>
