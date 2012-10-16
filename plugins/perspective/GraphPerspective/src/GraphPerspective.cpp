@@ -228,6 +228,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionNew, SIGNAL(triggered()), this, SLOT(addNewGraph()));
   connect(_ui->actionPreferences,SIGNAL(triggered()),this,SLOT(openPreferences()));
   connect(_ui->searchButton,SIGNAL(clicked(bool)),this,SLOT(setSearchOutput(bool)));
+  connect(_ui->workspace,SIGNAL(importGraphRequest()),this,SLOT(importGraph()));
 
   // Agent actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));

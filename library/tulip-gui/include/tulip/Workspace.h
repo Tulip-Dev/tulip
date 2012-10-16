@@ -109,6 +109,7 @@ public slots:
 signals:
   void panelFocused(tlp::View*);
   void addPanelRequest(tlp::Graph* g = NULL);
+  void importGraphRequest();
 
 protected slots:
   void viewNeedsDraw();
@@ -121,6 +122,7 @@ protected slots:
   QWidget* suitableMode(QWidget* oldMode);
   WorkspacePanel* panelForScene(QObject* obj);
   void swapPanelsRequested(WorkspacePanel* panel);
+  void updateStartupMode();
 
 protected:
   virtual void dragEnterEvent(QDragEnterEvent* event);
