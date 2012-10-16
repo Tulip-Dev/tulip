@@ -35,6 +35,7 @@
 #include <tulip/WorkspacePanel.h>
 #include <tulip/TulipProject.h>
 #include <tulip/TulipMimes.h>
+#include <tulip/GraphHierarchiesModel.h>
 
 #include <QtCore/QDebug>
 
@@ -55,6 +56,7 @@ Workspace::Workspace(QWidget *parent)
   _pageCountLabel = _ui->pagesLabel;
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
+  connect(_ui->importButton,SIGNAL(clicked()),this,SIGNAL(importGraphRequest()));
   connect(_ui->exposeMode,SIGNAL(exposeFinished()),this,SLOT(hideExposeMode()));
 
   // This map allows us to know how much slots we have for each mode and which widget corresponds to those slots
@@ -86,11 +88,16 @@ Workspace::~Workspace() {
 }
 
 void Workspace::setModel(tlp::GraphHierarchiesModel* model) {
+  if (_model != NULL) {
+    disconnect(_model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(updateStartupMode()));
+  }
+
   _model = model;
 
   if (_model != NULL) {
     foreach(WorkspacePanel* panel,_panels)
     panel->setGraphsModel(_model);
+    connect(_model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(updateStartupMode()));
   }
 }
 
@@ -250,6 +257,7 @@ void Workspace::setSixModeSwitch(QWidget* w) {
 void Workspace::switchWorkspaceMode(QWidget *page) {
   _ui->workspaceContents->setCurrentWidget(page);
   _ui->bottomFrame->setEnabled(page != _ui->startupPage);
+  updateStartupMode();
   updatePanels();
 }
 
@@ -633,4 +641,12 @@ void Workspace::swapPanelsRequested(WorkspacePanel* panel) {
     _panels.swap(_panels.indexOf(sourcePanel), _panels.indexOf(panel));
     updatePanels();
   }
+}
+
+void Workspace::updateStartupMode() {
+  if (currentModeWidget() == _ui->startupPage && _model != NULL) {
+    _ui->startupImportFrame->setVisible(_model->empty());
+    _ui->startupMainFrame->setVisible(!_model->empty());
+  }
+
 }

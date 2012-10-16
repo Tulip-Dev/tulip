@@ -79,5 +79,6 @@
         <file>ui/right_arrow-white.png</file>
         <file>ui/six_screen.png</file>
         <file>icons/16/clipboard.png</file>
+        <file>icons/64/document-import.png</file>
     </qresource>
 </RCC>

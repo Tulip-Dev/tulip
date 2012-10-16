@@ -81,6 +81,9 @@ public:
   QList<tlp::Graph *> graphs() const {
     return _graphs;
   }
+  bool empty() const {
+    return size()==0;
+  }
 
   // Methods re-implemented from QAbstractItemModel
   QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
