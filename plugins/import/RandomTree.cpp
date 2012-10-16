@@ -61,7 +61,7 @@ const char * paramHelp[] = {
 class RandomTree:public ImportModule {
 
     bool buildNode(node n, unsigned int sizeM) {
-      if (graph->numberOfNodes()>sizeM+2) return false;
+      if (graph->numberOfNodes()>=sizeM+2) return false;
 
       bool result=true;
       int randNumber=rand();
