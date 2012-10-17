@@ -233,7 +233,7 @@ protected slots:
    * @brief Send a message to the Tulip agent to make him open a new Tulip Project.
    * @param path the absolute path of the project file.
    */
-  void openProjectFile(const QString& path);
+  virtual void openProjectFile(const QString& path);
 
   /**
    * @brief Send a message to the Tulip agent to make him open a new Perspective without a project.

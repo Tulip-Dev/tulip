@@ -49,7 +49,6 @@
 #include "ExportWizard.h"
 #include "PanelSelectionWizard.h"
 #include "GraphHierarchiesEditor.h"
-#include "ShadowFilter.h"
 #include "PreferencesDialog.h"
 
 #ifndef NDEBUG
@@ -144,26 +143,21 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
 
   if(obj == _mainWindow && ev->type() == QEvent::Close) {
     if(_graphs->needsSaving()) {
-      QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified, do you want to save your changes ?"),
-                                           QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
-
-      if(answer == QMessageBox::Yes) {
+      QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified, do you want to save your changes ?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
+      if(answer == QMessageBox::Yes)
         save();
-      }
       else if(answer == QMessageBox::Cancel) {
         ev->ignore();
         return true;
       }
     }
   }
-
   return false;
 }
 
 void GraphPerspective::showLogger() {
   if (_logger->count()==0)
     return;
-
   QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
   pos.setX(pos.x()+_ui->loggerFrame->width());
   pos.setY(std::min<int>(_mainWindow->mapToGlobal(_mainWindow->pos()).y()+mainWindow()->height()-_logger->height(),pos.y()));
@@ -195,7 +189,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_logger,SIGNAL(cleared()),this,SLOT(logCleared()));
 
   qInstallMsgHandler(graphPerspectiveLogger);
-  _mainWindow->installEventFilter(new ShadowFilter(this));
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),_ui->algorithmRunner,SLOT(setGraph(tlp::Graph*)));
@@ -533,6 +526,20 @@ void GraphPerspective::open(QString fileName) {
   }
 }
 
+void GraphPerspective::openProjectFile(const QString &path) {
+  if (_graphs->empty()) {
+    PluginProgress* prg = progress(NoProgressOption);
+    delete _project;
+    _project = TulipProject::openProject(path,prg);
+    QMap<QString,tlp::Graph*> rootIds = _graphs->readProject(_project,prg);
+    _ui->workspace->readProject(_project,rootIds,prg);
+    delete prg;
+  }
+  else {
+    Perspective::openProjectFile(path);
+  }
+}
+
 void GraphPerspective::deleteSelectedElements() {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
@@ -614,20 +621,16 @@ void GraphPerspective::paste() {
     return;
 
   Graph* outGraph = _graphs->currentGraph();
-
   std::stringstream ss;
   ss << QApplication::clipboard()->text().toStdString();
 
   Observable::holdObservers();
   outGraph->push();
-
   DataSet data;
   data.set<std::string>("file::data",ss.str());
   Graph* inGraph = tlp::importGraph("TLP Import",data);
-
   tlp::copyToGraph(outGraph,inGraph);
   delete inGraph;
-
   Observable::unholdObservers();
 }
 

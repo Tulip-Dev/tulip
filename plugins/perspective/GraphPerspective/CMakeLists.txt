@@ -21,7 +21,6 @@ src/OutputPanelButton.cpp
 src/PanelSelectionWizard.cpp
 src/PreferencesDialog.cpp
 src/SearchWidget.cpp
-src/ShadowFilter.cpp
 )
 
 QT4_ADD_RESOURCES(RCC_SRCS

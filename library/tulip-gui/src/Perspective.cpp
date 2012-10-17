@@ -123,9 +123,7 @@ void Perspective::openProjectFile(const QString &path) {
     sendAgentMessage("OPEN_PROJECT " + path);
   }
   else { // on standalone mode, spawn a new standalone perspective
-    QProcess::startDetached(QApplication::applicationFilePath(),
-                            QStringList() << path);
-
+    QProcess::startDetached(QApplication::applicationFilePath(),QStringList() << path);
   }
 }
 

@@ -53,6 +53,7 @@ using namespace tlp;
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL), _pageCountLabel(NULL) {
   _ui->setupUi(this);
+  _ui->startupMainFrame->hide();
   _pageCountLabel = _ui->pagesLabel;
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
