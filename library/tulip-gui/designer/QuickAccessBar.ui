@@ -107,7 +107,7 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Show/Hide nodes color caption</string>
+      <string>Map nodes color on metric</string>
      </property>
      <property name="statusTip">
       <string>Show/Hide nodes color caption</string>
@@ -145,7 +145,7 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Show/Hide nodes size caption</string>
+      <string>Map nodes size on metric</string>
      </property>
      <property name="statusTip">
       <string>Show/Hide nodes size caption</string>
@@ -183,7 +183,7 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Show/Hide edges color caption</string>
+      <string>Map edges color on metric</string>
      </property>
      <property name="statusTip">
       <string>Show/Hide edges color caption</string>
@@ -221,7 +221,7 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Show/Hide edges size caption</string>
+      <string>Map edges size on metric</string>
      </property>
      <property name="statusTip">
       <string>Show/Hide edges size caption</string>
