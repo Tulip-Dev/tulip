@@ -20,6 +20,21 @@
 #include "tulip/TreeViewComboBox.h"
 
 #include <QtGui/QHeaderView>
+#include <QtGui/QStyledItemDelegate>
+#include <QtGui/QPainter>
+#include <QtGui/QStyleOptionViewItem>
+
+class TreeViewDelegate: public QStyledItemDelegate {
+public:
+  TreeViewDelegate(QObject* parent = 0): QStyledItemDelegate(parent) {
+  }
+
+  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
+    QSize result = QStyledItemDelegate::sizeHint(option,index);
+    result.setHeight(result.height()+10);
+    return result;
+  }
+};
 
 TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL), _expandingItem(false) {
   _treeView = new QTreeView(this);
@@ -32,6 +47,7 @@ TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeVie
   connect(_treeView, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(itemExpanded()));
   connect(_treeView, SIGNAL(expanded(const QModelIndex &)), this, SLOT(itemExpanded()));
   setView(_treeView);
+  _treeView->setItemDelegate(new TreeViewDelegate(_treeView));
 }
 
 void TreeViewComboBox::setGraphsModel(QAbstractItemModel *model) {
