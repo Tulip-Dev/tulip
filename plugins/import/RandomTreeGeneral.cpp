@@ -94,9 +94,9 @@ class RandomTreeGeneral:public ImportModule {
 public:
   PLUGININFORMATIONS("Random General Tree","Auber","16/02/2001","","1.1","Graphs")
   RandomTreeGeneral(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned>("minsize",paramHelp[0],"10");
-    addInParameter<unsigned>("maxsize",paramHelp[1],"100");
-    addInParameter<unsigned>("maxdegree",paramHelp[2],"5");
+    addInParameter<unsigned>("Minimum size",paramHelp[0],"10");
+    addInParameter<unsigned>("Maximum size",paramHelp[1],"100");
+    addInParameter<unsigned>("Maximal node's degree",paramHelp[2],"5");
     addInParameter<bool>("tree layout",paramHelp[3],"false");
     addDependency("Tree Leaf", "1.0");
   }
@@ -110,29 +110,39 @@ public:
     bool needLayout = false;
 
     if (dataSet!=NULL) {
-      dataSet->get("minsize", sizeMin);
-      dataSet->get("maxsize", sizeMax);
-      dataSet->get("maxdegree", arityMax);
-      dataSet->get("tree layout", needLayout);
+        if(dataSet->exist("Minimum size"))
+            dataSet->get("Minimum size", sizeMin);
+        else
+            dataSet->get("minsize", sizeMin);   //keep old parameter name for backward compatibility
+        if(dataSet->exist("Maximum size"))
+            dataSet->get("Maximum size", sizeMax);
+        else
+            dataSet->get("maxsize", sizeMax); //keep old parameter name for backward compatibility
+        if(dataSet->exist("Maximal node's degree"))
+            dataSet->get("Maximal node's degree", arityMax);
+        else
+            dataSet->get("maxdegree", arityMax); //keep old parameter name for backward compatibility
+
+        dataSet->get("tree layout", needLayout);
     }
 
     if (arityMax < 1) {
       if (pluginProgress)
-        pluginProgress->setError("Error: maxdegree must be a strictly positive integer");
+          pluginProgress->setError("Error: maximum node's degree must be a strictly positive integer");
 
       return false;
     }
 
     if (sizeMax < 1) {
       if (pluginProgress)
-        pluginProgress->setError("Error: maxsize must be a strictly positive integer");
+        pluginProgress->setError("Error: maximum size must be a strictly positive integer");
 
       return false;
     }
 
     if (sizeMax < sizeMin) {
       if (pluginProgress)
-        pluginProgress->setError("Error: maxsize must be greater than minsize");
+        pluginProgress->setError("Error: maximum size must be greater than minimum size");
 
       return false;
     }
