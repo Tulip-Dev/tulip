@@ -98,14 +98,8 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showTrayMessage(QString)),this,SLOT(showTrayMessage(QString)));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(showErrorMessage(QString,QString)),this,SLOT(showErrorMessage(QString,QString)));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openProject(QString)),this,SLOT(openProject(QString)));
+  connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openProjectWith(QString,QString)),this,SLOT(openProjectWith(QString,QString)));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openPerspective(QString)),this,SLOT(createPerspective(QString)));
-
-  if (QApplication::arguments().size() > 1) {
-    QString path = QApplication::arguments()[1];
-
-    if (QFileInfo(path).exists())
-      openProject(path);
-  }
 
   QString installedPython = PythonVersionChecker::installedVersion();
   if (installedPython.isNull()) {

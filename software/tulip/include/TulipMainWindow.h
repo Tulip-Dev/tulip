@@ -68,7 +68,7 @@ public slots:
   void createPerspective(const QString &name, const QVariantMap &parameters);
 
   void openProject(const QString &file);
-  void openProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters);
+  void openProjectWith(const QString &file, const QString &perspective, const QVariantMap &parameters = QVariantMap());
 
   void showOpenProjectWindow();
 

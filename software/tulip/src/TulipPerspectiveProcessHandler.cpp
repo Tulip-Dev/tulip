@@ -182,8 +182,9 @@ void TulipPerspectiveProcessHandler::acceptConnection() {
 void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
   QTcpSocket* socket = static_cast<QTcpSocket*>(sender());
   QString data = socket->readAll();
-  QStringList tokens = data.split(" ");
-  QString args = data.remove(0,tokens[0].length()+1);
+  QStringList tokens = data.split("\t");
+  QString args = QString(data).remove(0,tokens[0].length()+1); // arguments except first one
+  QString args2 = QString(args).remove(0,tokens[1].length()+1); // arguments except two firsts
 
   if (tokens[0] == "SHOW_AGENT") {
     if (tokens[1] == "PLUGINS")
@@ -194,11 +195,15 @@ void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
       emit showAboutAgent();
   }
   else if (tokens[0] == "ERROR_MESSAGE")
-    emit showErrorMessage(tokens[1],args.remove(0,tokens[1].length()+1));
+    emit showErrorMessage(tokens[1],args2);
   else if (tokens[0] == "TRAY_MESSAGE")
     emit showTrayMessage(args);
-  else if (tokens[0] == "OPEN_PROJECT")
+  else if (tokens[0] == "OPEN_PROJECT") {
     emit openProject(args);
+  }
+  else if (tokens[0] == "OPEN_PROJECT_WITH") {
+    emit openProjectWith(args2,tokens[1]);
+  }
   else if (tokens[0] == "CREATE_PERSPECTIVE")
     emit openPerspective(args);
   else if (tokens[0] == "PROJECT_LOCATION") {
@@ -206,7 +211,7 @@ void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
 
     if (p != NULL) {
       PerspectiveProcessInfos infos = _processInfos[p];
-      infos.projectPath = args.remove(0,tokens[1].length()+1);
+      infos.projectPath = args2;
       _processInfos[p] = infos;
     }
   }
