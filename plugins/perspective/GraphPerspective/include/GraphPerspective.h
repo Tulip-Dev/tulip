@@ -57,6 +57,8 @@ class GraphPerspective : public tlp::Perspective {
   void applyRandomLayout(tlp::Graph*);
 
 public:
+  GraphPerspectiveLogger* _logger;
+
   PLUGININFORMATIONS("Tulip", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "")
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/desktop.png";
@@ -66,11 +68,7 @@ public:
   virtual ~GraphPerspective();
   virtual void start(tlp::PluginProgress *);
   tlp::GraphHierarchiesModel* model() const;
-
-  GraphPerspectiveLogger* _logger;
-
   void copy(tlp::Graph*, bool deleteAfter=false);
-
   tlp::Graph* createSubGraph(tlp::Graph*);
 
 public slots:
@@ -82,6 +80,7 @@ public slots:
   void save();
   void saveAs(const QString& path=QString::null);
   void open(QString fileName = QString::null);
+  virtual void openProjectFile(const QString &path);
 
   void log(QtMsgType,const char*);
   void showLogger();
