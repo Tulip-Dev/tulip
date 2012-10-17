@@ -282,6 +282,11 @@ float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<floa
         + ((eye[2] < src[0][2]) << 4)
         + ((eye[2] > src[6][2]) << 5);
   assert(pos<=42);
+
+  //If pos==0 : camera are inside the entity so we return a arbitrary lod
+  if(pos==0)
+    return 10.;
+
   num=hullVertexTable[pos][0];
 
   if(num==0)
