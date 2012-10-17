@@ -46,7 +46,6 @@ class SearchWidget : public QWidget {
   SearchOperator* searchOperator();
   bool isNumericComparison();
 
-
 public:
   explicit SearchWidget(QWidget *parent = 0);
   virtual ~SearchWidget();
@@ -66,6 +65,7 @@ protected slots:
   void updateOperators(tlp::PropertyInterface* a, tlp::PropertyInterface* b);
   void updateOperators(tlp::PropertyInterface* a, const QString& b);
   void setNumericOperatorsEnabled(bool e);
+  void updateEditorWidget();
 
 protected:
   void dragEnterEvent(QDragEnterEvent *);

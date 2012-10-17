@@ -49,6 +49,15 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
 
   CHECK_QVARIANT(StringCollection);
 
+  if (v.userType() == qMetaTypeId<NodeShape>()) {
+    NodeShape desc = v.value<NodeShape>();
+    return new TypedData<uint>(new uint(desc.nodeShapeId));
+  }
+  if (v.userType() == qMetaTypeId<EdgeExtremityShape>()) {
+    EdgeExtremityShape desc = v.value<EdgeExtremityShape>();
+    return new TypedData<uint>(new uint(desc.edgeExtremityShapeId));
+  }
+
   if (v.userType() == qMetaTypeId<TulipFileDescriptor>()) {
     TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
     return new TypedData<std::string>(new std::string(desc.absolutePath.toUtf8().data()));

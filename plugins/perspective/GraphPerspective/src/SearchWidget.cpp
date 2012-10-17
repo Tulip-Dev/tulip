@@ -145,7 +145,8 @@ QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator
 SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SearchWidget) {
   _ui->setupUi(this);
   setEnabled(false);
-  _ui->customValueEdit->hide();
+  _ui->tableWidget->hide();
+  _ui->tableWidget->setItemDelegate(new TulipItemDelegate(_ui->tableWidget));
 
   _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(NULL,false,_ui->resultsStorageCombo));
   _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(NULL,false,_ui->searchTermACombo));
@@ -237,19 +238,26 @@ void SearchWidget::search() {
   tlp::PropertyInterface* b = NULL;
   bool deleteTermB = false;
 
-  if (_ui->customValueEdit->isVisible()) {
+  if (_ui->tableWidget->isVisible()) {
     deleteTermB = true;
 
     if (isNumericComparison()) {
       DoubleProperty* doubleProp = new DoubleProperty(g);
-      doubleProp->setAllNodeValue(_ui->customValueEdit->text().toInt());
-      doubleProp->setAllEdgeValue(_ui->customValueEdit->text().toInt());
+      doubleProp->setAllNodeValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toInt());
+      doubleProp->setAllEdgeValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toInt());
       b = doubleProp;
     }
     else {
       StringProperty* stringProp = new StringProperty(g);
-      stringProp->setAllNodeValue(_ui->customValueEdit->text().toStdString());
-      stringProp->setAllEdgeValue(_ui->customValueEdit->text().toStdString());
+      DataType* tulipData = TulipMetaTypes::qVariantToDataType(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole));
+      if(tulipData == NULL) {
+        qWarning() << "could not convert this type correctly " << _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole) << ", please report this as a bug";
+      }
+      DataTypeSerializer* serializer = DataSet::typenameToSerializer(tulipData->getTypeName());
+      stringstream temp;
+      serializer->writeData(temp, tulipData);
+      stringProp->setAllNodeValue(temp.str());
+      stringProp->setAllEdgeValue(temp.str());
       b = stringProp;
     }
   }
@@ -330,21 +338,25 @@ void SearchWidget::graphIndexChanged(int) {
 void SearchWidget::termAChanged() {
   tlp::PropertyInterface* prop = term(_ui->searchTermACombo);
 
-  if (_ui->customValueEdit->isVisible())
-    updateOperators(prop, _ui->customValueEdit->text());
-  else
+  if (_ui->tableWidget->isVisible()) {
+    updateEditorWidget();
+    updateOperators(prop, _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toString());
+  }
+  else {
     updateOperators(prop, term(_ui->searchTermBCombo));
+  }
 }
 
 void SearchWidget::termBChanged() {
   if (_ui->searchTermBCombo->currentIndex() != 0) {
-    _ui->customValueEdit->hide();
+    _ui->tableWidget->hide();
     tlp::PropertyInterface* prop = term(_ui->searchTermBCombo);
     updateOperators(term(_ui->searchTermACombo),prop);
   }
   else {
-    _ui->customValueEdit->show();
-    updateOperators(term(_ui->searchTermACombo),_ui->customValueEdit->text());
+    _ui->tableWidget->show();
+    updateEditorWidget();
+    updateOperators(term(_ui->searchTermACombo), _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toString());
   }
 }
 
@@ -370,6 +382,19 @@ void SearchWidget::setNumericOperatorsEnabled(bool e) {
     if (_ui->operatorCombo->currentIndex() == i && !e)
       _ui->operatorCombo->setCurrentIndex(0);
   }
+}
+
+void SearchWidget::updateEditorWidget() {
+  QVariant defaultValue;
+  tlp::PropertyInterface* prop = term(_ui->searchTermACombo);
+  int scopeIndex = _ui->scopeCombo->currentIndex();
+  if (scopeIndex == 1 || scopeIndex == 0)
+    defaultValue = GraphModel::nodeDefaultValue(prop);
+  else
+    defaultValue = GraphModel::edgeDefaultValue(prop);
+
+  _ui->tableWidget->item(0, 0)->setData(Qt::EditRole, defaultValue);
+  _ui->tableWidget->item(0, 0)->setData(Qt::DisplayRole, defaultValue);
 }
 
 #include <QtGui/QDropEvent>
