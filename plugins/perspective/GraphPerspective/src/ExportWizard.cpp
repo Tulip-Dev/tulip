@@ -99,8 +99,29 @@ void ExportWizard::updateFinishButton() {
 }
 
 void ExportWizard::pathChanged(QString s) {
+  QString selectedExport = QString::null;
   _ui->algFrame->setEnabled(!s.isEmpty());
   button(QWizard::FinishButton)->setEnabled(!s.isEmpty());
+
+  std::list<std::string> modules = PluginLister::instance()->availablePlugins<ExportModule>();
+  for(std::list<std::string>::iterator it = modules.begin(); it != modules.end(); ++it) {
+    ExportModule* p = PluginLister::instance()->getPluginObject<ExportModule>(*it,NULL);
+    if (s.endsWith(p->fileExtension().c_str())) {
+      selectedExport = it->c_str();
+      delete p;
+      break;
+    }
+    delete p;
+  }
+
+  if (selectedExport.isNull())
+    return;
+
+  PluginModel<tlp::ExportModule>* model = static_cast<PluginModel<tlp::ExportModule>*>(_ui->importModules->model());
+  QModelIndexList results = model->match(_ui->importModules->rootIndex(), Qt::DisplayRole, selectedExport, 1, Qt::MatchExactly | Qt::MatchRecursive);
+  if (results.size()==0)
+    return;
+  _ui->importModules->setCurrentIndex(results[0]);
 }
 
 void ExportWizard::browseButtonClicked() {
