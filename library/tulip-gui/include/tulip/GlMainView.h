@@ -63,7 +63,6 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
 
   tlp::GlMainWidget* _glMainWidget;
   tlp::GlOverviewGraphicsItem* _overviewItem;
-  tlp::QuickAccessBar* _quickAccessBar;
   QGraphicsProxyWidget* _quickAccessBarItem;
 
   QAction *_centerViewAction;
@@ -71,6 +70,7 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
 
 protected :
 
+  tlp::QuickAccessBar* _quickAccessBar;
   tlp::SceneConfigWidget* _sceneConfigurationWidget;
   tlp::SceneLayersConfigWidget* _sceneLayersConfigurationWidget;
 
