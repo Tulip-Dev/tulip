@@ -31,7 +31,7 @@
 using namespace tlp;
 
 
-GlMainView::GlMainView(): _glMainWidget(NULL), _overviewItem(NULL), _quickAccessBar(NULL), _quickAccessBarItem(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL) {
+GlMainView::GlMainView(): _glMainWidget(NULL), _overviewItem(NULL), _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL) {
 }
 
 GlMainView::~GlMainView() {
