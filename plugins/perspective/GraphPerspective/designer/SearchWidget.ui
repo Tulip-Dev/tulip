@@ -273,17 +273,58 @@ font: bold;
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="customValueEdit">
-                <property name="styleSheet">
-                 <string notr="true">QLineEdit {
-border: 1px solid #C9C9C9;
-background-color: white;
-color: black;
-}</string>
+               <widget class="QTableWidget" name="tableWidget">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
                 </property>
-                <property name="placeholderText">
-                 <string>Enter custom value...</string>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>30</height>
+                 </size>
                 </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Plain</enum>
+                </property>
+                <property name="lineWidth">
+                 <number>0</number>
+                </property>
+                <property name="midLineWidth">
+                 <number>0</number>
+                </property>
+                <property name="showGrid">
+                 <bool>false</bool>
+                </property>
+                <property name="cornerButtonEnabled">
+                 <bool>false</bool>
+                </property>
+                <attribute name="horizontalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="verticalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
+                <row>
+                 <property name="text">
+                  <string>New Row</string>
+                 </property>
+                </row>
+                <column>
+                 <property name="text">
+                  <string>New Column</string>
+                 </property>
+                </column>
+                <item row="0" column="0">
+                 <property name="text">
+                  <string>a</string>
+                 </property>
+                </item>
                </widget>
               </item>
              </layout>
@@ -338,7 +379,7 @@ font: bold;
                <string>Search</string>
               </property>
               <property name="icon">
-               <iconset resource="../resources/GraphPerspective.qrc">
+               <iconset>
                 <normaloff>:/tulip/graphperspective/icons/22/edit-find.png</normaloff>:/tulip/graphperspective/icons/22/edit-find.png</iconset>
               </property>
               <property name="shortcut">
@@ -406,10 +447,7 @@ font: bold;
    <header>tulip/TreeViewComboBox.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources/GraphPerspective.qrc"/>
-  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>graphCombo</sender>
@@ -451,22 +489,6 @@ font: bold;
    <hints>
     <hint type="sourcelabel">
      <x>374</x>
-     <y>154</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>494</x>
-     <y>271</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>customValueEdit</sender>
-   <signal>textChanged(QString)</signal>
-   <receiver>SearchWidget</receiver>
-   <slot>termBChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>699</x>
      <y>154</y>
     </hint>
     <hint type="destinationlabel">
