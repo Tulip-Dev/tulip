@@ -37,7 +37,6 @@
 static PyObject *
 tuliputils_updateVisualization(PyObject *, PyObject *args) {
   tlp::Perspective* persp = tlp::Perspective::instance();
-  qDebug() << (void*)persp;
   int i;
 
   if (!PyArg_ParseTuple(args, "|i", &i))
