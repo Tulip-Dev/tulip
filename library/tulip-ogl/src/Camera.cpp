@@ -448,8 +448,6 @@ void Camera::getXML(string &outString) {
 //====================================================
 void Camera::setWithXML(const string &inString, unsigned int &currentPosition) {
 
-  cout << currentPosition << endl;
-
   GlXMLTools::enterDataNode(inString,currentPosition);
 
   Coord bbTmp;
