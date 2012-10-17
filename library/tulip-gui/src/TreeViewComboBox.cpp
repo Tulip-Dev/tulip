@@ -21,7 +21,7 @@
 
 #include <QtGui/QHeaderView>
 
-TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL), itemExpanded(false) {
+TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL), _expandingItem(false) {
   _treeView = new QTreeView(this);
   _treeView->setEditTriggers(QTreeView::NoEditTriggers);
   _treeView->setAlternatingRowColors(true);
@@ -29,9 +29,8 @@ TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeVie
   _treeView->setRootIsDecorated(false);
   _treeView->setAllColumnsShowFocus(true);
   _treeView->header()->setVisible(false);
-  _treeView->setMinimumHeight(200);
-  connect(_treeView, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(expandedItem()));
-  connect(_treeView, SIGNAL(expanded(const QModelIndex &)), this, SLOT(expandedItem()));
+  connect(_treeView, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(itemExpanded()));
+  connect(_treeView, SIGNAL(expanded(const QModelIndex &)), this, SLOT(itemExpanded()));
   setView(_treeView);
 }
 
@@ -49,11 +48,10 @@ void TreeViewComboBox::showPopup() {
 }
 
 void TreeViewComboBox::hidePopup() {
-    if (itemExpanded) {
-        itemExpanded = false;
-    } else {
-        QComboBox::hidePopup();
-    }
+  if (_expandingItem)
+    _expandingItem = false;
+  else
+    QComboBox::hidePopup();
 }
 
 void TreeViewComboBox::selectIndex(const QModelIndex& index) {
@@ -61,18 +59,16 @@ void TreeViewComboBox::selectIndex(const QModelIndex& index) {
   setCurrentIndex(index.row());
 }
 
-void TreeViewComboBox::expandedItem(){
-    itemExpanded = true;
+void TreeViewComboBox::itemExpanded(){
+  _expandingItem = true;
 }
 
 QModelIndex TreeViewComboBox::selectedIndex() const {
   QModelIndex current = model()->index(currentIndex(),0,rootModelIndex());
   QModelIndex selected = view()->selectionModel()->currentIndex();
 
-  if (!selected.isValid()) {
+  if (!selected.isValid())
     return current;
-  }
 
   return selected;
-
 }
