@@ -81,6 +81,7 @@ signals:
   void showTrayMessage(QString);
   void showErrorMessage(QString,QString);
   void openProject(QString);
+  void openProjectWith(QString,QString);
   void openPerspective(QString);
 
 };

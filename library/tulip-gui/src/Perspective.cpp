@@ -99,28 +99,28 @@ void Perspective::sendAgentMessage(const QString& msg) {
 }
 
 void Perspective::showPluginsCenter() {
-  sendAgentMessage("SHOW_AGENT PLUGINS");
+  sendAgentMessage("SHOW_AGENT\tPLUGINS");
 }
 
 void Perspective::showProjectsPage() {
-  sendAgentMessage("SHOW_AGENT PROJECTS");
+  sendAgentMessage("SHOW_AGENT\tPROJECTS");
 }
 
 void Perspective::showAboutPage() {
-  sendAgentMessage("SHOW_AGENT ABOUT");
+  sendAgentMessage("SHOW_AGENT\tABOUT");
 }
 
 void Perspective::showTrayMessage(const QString &s) {
-  sendAgentMessage("TRAY_MESSAGE " + s);
+  sendAgentMessage("TRAY_MESSAGE\t" + s);
 }
 
 void Perspective::showErrorMessage(const QString &title, const QString &s) {
-  sendAgentMessage("ERROR_MESSAGE " + title + " " + s);
+  sendAgentMessage("ERROR_MESSAGE\t" + title + " " + s);
 }
 
 void Perspective::openProjectFile(const QString &path) {
   if (_agentSocket != NULL) {
-    sendAgentMessage("OPEN_PROJECT " + path);
+    sendAgentMessage("OPEN_PROJECT\t" + path);
   }
   else { // on standalone mode, spawn a new standalone perspective
     QProcess::startDetached(QApplication::applicationFilePath(),QStringList() << path);
@@ -128,9 +128,9 @@ void Perspective::openProjectFile(const QString &path) {
 }
 
 void Perspective::createPerspective(const QString &name) {
-  sendAgentMessage("CREATE_PERSPECTIVE " + name);
+  sendAgentMessage("CREATE_PERSPECTIVE\t" + name);
 }
 
 void Perspective::notifyProjectLocation(const QString &path) {
-  sendAgentMessage("PROJECT_LOCATION " + QString::number(_perspectiveId) + " " + path);
+  sendAgentMessage("PROJECT_LOCATION\t" + QString::number(_perspectiveId) + " " + path);
 }
