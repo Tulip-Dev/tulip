@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>473</width>
-    <height>66</height>
+    <height>69</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -86,7 +86,7 @@
         </size>
        </property>
        <property name="toolTip">
-        <string>Cancel priocess and revert changes</string>
+        <string>Cancel process and revert changes</string>
        </property>
        <property name="iconSize">
         <size>
