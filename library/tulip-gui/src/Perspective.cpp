@@ -128,7 +128,12 @@ void Perspective::openProjectFile(const QString &path) {
 }
 
 void Perspective::createPerspective(const QString &name) {
-  sendAgentMessage("CREATE_PERSPECTIVE\t" + name);
+  if (_agentSocket != NULL) {
+    sendAgentMessage("CREATE_PERSPECTIVE\t" + name);
+  }
+  else { // on standalone mode, spawn a new standalone perspective
+    QProcess::startDetached(QApplication::applicationFilePath(),QStringList() << "--perspective=" + name);
+  }
 }
 
 void Perspective::notifyProjectLocation(const QString &path) {

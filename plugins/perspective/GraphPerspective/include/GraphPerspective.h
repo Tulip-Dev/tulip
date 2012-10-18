@@ -113,6 +113,7 @@ protected slots:
   void logCleared();
   void findPlugins();
   void addNewGraph();
+  void newProject();
   void openRecentFile();
 
 protected:

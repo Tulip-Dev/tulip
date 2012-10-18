@@ -218,7 +218,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionCreate_empty_sub_graph,SIGNAL(triggered()),this,SLOT(addEmptySubGraph()));
   connect(_ui->actionImport_CSV,SIGNAL(triggered()),this,SLOT(CSVImport()));
   connect(_ui->actionFind_plugins,SIGNAL(triggered()),this,SLOT(findPlugins()));
-  connect(_ui->actionNew, SIGNAL(triggered()), this, SLOT(addNewGraph()));
+  connect(_ui->actionNew_graph, SIGNAL(triggered()), this, SLOT(addNewGraph()));
+  connect(_ui->actionNewProject, SIGNAL(triggered()), this, SLOT(newProject()));
   connect(_ui->actionPreferences,SIGNAL(triggered()),this,SLOT(openPreferences()));
   connect(_ui->searchButton,SIGNAL(clicked(bool)),this,SLOT(setSearchOutput(bool)));
   connect(_ui->workspace,SIGNAL(importGraphRequest()),this,SLOT(importGraph()));
@@ -907,6 +908,10 @@ void GraphPerspective::addNewGraph() {
   Graph* g = tlp::newGraph();
   _graphs->addGraph(g);
   showStartPanels(g);
+}
+
+void GraphPerspective::newProject() {
+  createPerspective(name().c_str());
 }
 
 void GraphPerspective::openRecentFile() {
