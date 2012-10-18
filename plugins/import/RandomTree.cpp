@@ -82,8 +82,8 @@ class RandomTree:public ImportModule {
 public:
   PLUGININFORMATIONS("Uniform Random Binary Tree","Auber","16/02/2001","","1.1","Graphs")
   RandomTree(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("minsize",paramHelp[0],"100");
-    addInParameter<unsigned int>("maxsize",paramHelp[1],"1000");
+    addInParameter<unsigned int>("Minimum size",paramHelp[0],"100");
+    addInParameter<unsigned int>("Maximum size",paramHelp[1],"1000");
     addInParameter<bool>("tree layout",paramHelp[2],"false");
     addDependency("Tree Leaf", "1.0");
   }
@@ -95,27 +95,31 @@ public:
     bool needLayout = false;
 
     if (dataSet!=NULL) {
-      dataSet->get("minsize", minSize);
-      dataSet->get("maxsize", maxSize);
-      dataSet->get("tree layout", needLayout);
+        if(dataSet->exist("Minimum size"))
+            dataSet->get("Minimum size", minSize);
+        else
+            dataSet->get("minsize", minSize);   //keep old name for backward compatibility
+        if(dataSet->exist("Maximum size"))
+            dataSet->get("Maximum size", maxSize);
+        else
+            dataSet->get("maxsize", maxSize); //keep old name for backward compatibility
+
+        dataSet->get("tree layout", needLayout);
     }
 
-    if (maxSize == 0) {
+    if (maxSize < 1) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: maxsize cannot be null"));
+        pluginProgress->setError("Error: maximum size must be a strictly positive integer");
 
       return false;
     }
 
-    if (minSize > maxSize) {
+    if (maxSize < minSize) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: maxsize must be greater than minsize"));
+        pluginProgress->setError("Error: maximum size must be greater than minimum size");
 
       return false;
     }
-
-    if (pluginProgress)
-      pluginProgress->showPreview(false);
 
     bool ok=true;
     int i=0;
