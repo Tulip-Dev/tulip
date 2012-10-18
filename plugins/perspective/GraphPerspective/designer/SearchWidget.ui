@@ -117,6 +117,12 @@ font: bold;
             </item>
             <item row="0" column="1">
              <widget class="TreeViewComboBox" name="graphCombo">
+              <property name="maximumSize">
+               <size>
+                <width>350</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
               </property>
@@ -137,6 +143,12 @@ font: bold;
             </item>
             <item row="1" column="1">
              <widget class="QComboBox" name="scopeCombo">
+              <property name="maximumSize">
+               <size>
+                <width>350</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
               </property>
@@ -172,6 +184,12 @@ font: bold;
             </item>
             <item row="3" column="1">
              <widget class="QComboBox" name="resultsStorageCombo">
+              <property name="maximumSize">
+               <size>
+                <width>350</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
               </property>
@@ -200,6 +218,12 @@ font: bold;
                   <verstretch>0</verstretch>
                  </sizepolicy>
                 </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>350</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                </widget>
               </item>
               <item>
@@ -209,6 +233,12 @@ font: bold;
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>350</width>
+                  <height>16777215</height>
+                 </size>
                 </property>
                 <item>
                  <property name="text">
@@ -269,6 +299,12 @@ font: bold;
                   <horstretch>0</horstretch>
                   <verstretch>0</verstretch>
                  </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>350</width>
+                  <height>16777215</height>
+                 </size>
                 </property>
                </widget>
               </item>
@@ -338,6 +374,12 @@ font: bold;
             </item>
             <item row="2" column="1">
              <widget class="QComboBox" name="selectionModeCombo">
+              <property name="maximumSize">
+               <size>
+                <width>350</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
               </property>
