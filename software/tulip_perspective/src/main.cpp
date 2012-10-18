@@ -84,7 +84,9 @@ struct PluginLoaderToProgress: public PluginLoader {
   }
 
   virtual void loaded(const tlp::Plugin*, const std::list <tlp::Dependency>&) {}
-  virtual void aborted(const std::string &,const  std::string &) {}
+  virtual void aborted(const std::string& fileName,const  std::string& errorMsg) {
+    std::cerr << "[Warning] Failed to import " << fileName << ": " << errorMsg << std::endl;
+  }
 };
 
 void usage(const QString &error) {
