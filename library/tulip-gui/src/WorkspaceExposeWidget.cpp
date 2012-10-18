@@ -112,7 +112,7 @@ QSize WorkspaceExposeWidget::previewSize() {
 
 const int WorkspaceExposeWidget::MARGIN = 50;
 
-WorkspaceExposeWidget::WorkspaceExposeWidget(QWidget *parent): QGraphicsView(parent), _positionAnimation(NULL), _selectedItem(NULL), _placeholderItem(NULL) {
+WorkspaceExposeWidget::WorkspaceExposeWidget(QWidget *parent): QGraphicsView(parent), _positionAnimation(NULL), _selectedItem(NULL), _placeholderItem(NULL), _switchToSingleMode(false) {
   setScene(new QGraphicsScene);
   setSceneRect(0,0,width(),height());
   setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -127,6 +127,10 @@ QVector<WorkspacePanel*> WorkspaceExposeWidget::panels() const {
   foreach(PreviewItem* item, _items)
   result << item->panel();
   return result;
+}
+
+bool WorkspaceExposeWidget::isSwitchToSingleMode() const {
+  return _switchToSingleMode;
 }
 
 void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels, int currentPanelIndex) {
@@ -279,6 +283,7 @@ bool WorkspaceExposeWidget::event(QEvent *event) {
 void WorkspaceExposeWidget::itemOpened() {
   PreviewItem* item = static_cast<PreviewItem*>(sender());
   _currentPanelIndex = _items.indexOf(item);
+  _switchToSingleMode = true;
   finish();
 }
 
