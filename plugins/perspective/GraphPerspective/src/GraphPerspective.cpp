@@ -771,6 +771,8 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
+  _ui->actionCreate_empty_sub_graph->setEnabled(enabled);
+  _ui->actionClone_sub_graph->setEnabled(enabled);
   _ui->actionExport->setEnabled(enabled);
 
   if (graph == NULL) {
