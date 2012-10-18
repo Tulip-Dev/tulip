@@ -27,6 +27,33 @@ namespace tlp {
 
 /**
  * @ingroup Plugins
+ * @brief The ProgressPreviewHandler class handles the way a process handled by a PluginProgress is handled
+ *
+ * When PluginProgress::setPreview() is called, the associated ProgressPreviewHandler will be enabled. Allowing it to implement custom behavior to allow the user to preview the result of the underleying process
+ * Once enabled, the progressStateChanged method will be called back each time PluginProgress::progress is called to allow synchronizing the preview with progression.
+ */
+class ProgressPreviewHandler {
+  bool _enabled;
+public:
+  virtual ~ProgressPreviewHandler();
+
+  void setEnabled(bool);
+  bool isEnabled() const;
+
+  /**
+   * @brief @brief Called back after PluginProgress::progress has been invoked.
+   */
+  virtual void progressStateChanged(int step,int max_step)=0;
+
+protected:
+  /**
+   * @brief Called back after PluginProgress::setPreview has been invoked.
+   */
+  virtual void previewStateChanged(bool)=0;
+};
+
+/**
+ * @ingroup Plugins
  *
  * @brief This enum describes callback actions for the underleying system when calling tlp::PluginProgress::progress();
  * @list
@@ -55,18 +82,25 @@ enum ProgressState {
  * The tlp::PluginProgress returns a tlp::ProgressState indicating what behavior the underleying system should have (see tlp::ProgressState for details)
  **/
 class TLP_SCOPE PluginProgress {
+  ProgressPreviewHandler* _previewHandler;
+
 public:
-  virtual ~PluginProgress() {}
+  PluginProgress();
+  virtual ~PluginProgress();
+  void setPreviewHandler(ProgressPreviewHandler*);
 
   /**
    * @brief Notifies the progression of the process.
    *
    * @param step The current step number.
    * @param max_step The total number of steps.
+   *
+   * * @warning For default previsualisation handling to work, be sure to call PluginProgress::progress in this method (the return value can be ignored)
+   *
    * @return tlp::ProgressState a value indicating whether the progress has been stopped, cancelled, or will continue.
    * @see tlp::ProgressState
    **/
-  virtual ProgressState progress(int step, int max_step)=0;
+  virtual ProgressState progress(int step, int max_step);
 
   /**
    * @brief Sets the state flag to cancel, notifying to the process that the user wants to cancel it.
@@ -94,10 +128,11 @@ public:
   /**
    * @brief The preview mode redraws the graph while applying the algorithm, making it slower.
    *
+   * @warning For default previsualisation handling to work, be sure to call PluginProgress::setPreviewMode in this method
    * @param drawPreview Whether the preview should be drawn.
    * @return void
    **/
-  virtual void setPreviewMode(bool drawPreview)=0;
+  virtual void setPreviewMode(bool drawPreview);
 
   /**
    * @brief This tells the widget if it should show a preview checkbox, allowing the user to decide if the algorithm should draw a preview or not.

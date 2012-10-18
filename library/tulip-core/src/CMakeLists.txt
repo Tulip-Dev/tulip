@@ -67,7 +67,8 @@ WithParameter.cpp
 YajlFacade.cpp
 PluginLister.cpp
 tulipconf.cpp
-TulipException.cpp)
+TulipException.cpp
+PluginProgress.cpp)
 
 IF(CHECK_MEMORY)
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} MemoryChecker.cpp)

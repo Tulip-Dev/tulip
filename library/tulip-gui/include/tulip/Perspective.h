@@ -191,6 +191,12 @@ public:
    */
   virtual void redrawPanels(bool center=false)=0;
 
+  /**
+   * @brief Tells the perspective that the visualizations for a given graph should be centered.
+   * @note By default, this method does nothing.
+   */
+  virtual void centerPanelsForGraph(tlp::Graph*);
+
 public slots:
   /**
    * @brief Called when the user wants to close the application.

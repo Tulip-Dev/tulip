@@ -22,6 +22,7 @@
 #include <QtCore/QTime>
 #include <iostream>
 
+#include <tulip/Perspective.h>
 #include <tulip/Observable.h>
 #include "ui_SimplePluginProgressWidget.h"
 
@@ -62,6 +63,7 @@ void SimplePluginProgressWidget::setComment(const char *s) {
 }
 
 ProgressState SimplePluginProgressWidget::progress(int step, int max_step) {
+  PluginProgress::progress(step,max_step);
   _ui->progressBar->setValue(step);
   _ui->progressBar->setMaximum(max_step);
   checkLastUpdate();
@@ -81,6 +83,7 @@ bool SimplePluginProgressWidget::isPreviewMode() const {
 }
 
 void SimplePluginProgressWidget::setPreviewMode(bool drawPreview) {
+  PluginProgress::setPreviewMode(drawPreview);
   _ui->previewBox->setChecked(drawPreview);
 }
 
@@ -160,6 +163,7 @@ void SimplePluginProgressDialog::setComment(const char* s) {
 }
 
 ProgressState SimplePluginProgressDialog::progress(int step, int max_step) {
+  PluginProgress::progress(step,max_step);
   return _progress->progress(step,max_step);
 }
 
@@ -176,6 +180,7 @@ bool SimplePluginProgressDialog::isPreviewMode() const {
 }
 
 void SimplePluginProgressDialog::setPreviewMode(bool drawPreview) {
+  PluginProgress::setPreviewMode(drawPreview);
   _progress->setPreviewMode(drawPreview);
 }
 

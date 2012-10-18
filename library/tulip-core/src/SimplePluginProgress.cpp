@@ -24,6 +24,7 @@ SimplePluginProgress::SimplePluginProgress(): _state(TLP_CONTINUE),
   _preview(false) {
 }
 ProgressState SimplePluginProgress::progress(int step, int max_step) {
+  PluginProgress::progress(step,max_step);
   progress_handler(step,max_step);
   return _state;
 }
@@ -41,6 +42,8 @@ bool SimplePluginProgress::isPreviewMode() const {
 }
 //====================================================
 void SimplePluginProgress::setPreviewMode(bool b) {
+  PluginProgress::setPreviewMode(b);
+
   if (b == _preview) return;
 
   _preview = b;

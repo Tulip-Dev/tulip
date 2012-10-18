@@ -86,6 +86,10 @@ QMainWindow* Perspective::mainWindow() const {
 void Perspective::registerReservedProperty(QString s) {
   _reservedProperties.insert(s);
 }
+
+void Perspective::centerPanelsForGraph(Graph *){
+}
+
 bool Perspective::isReservedPropertyName(QString s) {
   return _reservedProperties.contains(s);
 }

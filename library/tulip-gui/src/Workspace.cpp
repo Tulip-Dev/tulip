@@ -203,9 +203,7 @@ void Workspace::panelDestroyed(QObject* obj) {
 
 void Workspace::viewNeedsDraw() {
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(sender());
-  panel->toggleProgressMode(true);
-  panel->view()->draw(panel);
-  panel->toggleProgressMode(false);
+  panel->view()->draw(NULL);
 }
 
 void Workspace::switchToStartupMode() {
@@ -629,14 +627,10 @@ void Workspace::setPageCountLabel(QLabel *l) {
 
 void Workspace::redrawPanels(bool center) {
   foreach(WorkspacePanel* panel, _panels) {
-    panel->toggleProgressMode(true);
-
     if (center)
       panel->view()->centerView();
     else
-      panel->view()->draw(panel);
-
-    panel->toggleProgressMode(false);
+      panel->view()->draw(NULL);
   }
 }
 
