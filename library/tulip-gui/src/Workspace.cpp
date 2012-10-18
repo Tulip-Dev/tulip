@@ -256,6 +256,9 @@ void Workspace::setSixModeSwitch(QWidget* w) {
 }
 
 void Workspace::switchWorkspaceMode(QWidget *page) {
+  if (currentModeWidget() == page)
+    return;
+
   _ui->workspaceContents->setCurrentWidget(page);
   _ui->bottomFrame->setEnabled(page != _ui->startupPage);
   updateStartupMode();
@@ -472,9 +475,15 @@ void Workspace::hideExposeMode() {
   QVector<WorkspacePanel*> newPanels = _ui->exposeMode->panels();
   _panels.clear();
   foreach(WorkspacePanel* p, newPanels)
-  _panels.push_back(p);
+    _panels.push_back(p);
   _currentPanelIndex = _ui->exposeMode->currentPanelIndex();
-  switchWorkspaceMode(suitableMode(_oldWorkspaceMode));
+  if (!_ui->exposeMode->isSwitchToSingleMode()) {
+    switchWorkspaceMode(suitableMode(_oldWorkspaceMode));
+  }
+  else {
+    updateAvailableModes();
+    switchToSingleMode();
+  }
   updatePageCountLabel();
 }
 

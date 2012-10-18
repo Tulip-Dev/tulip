@@ -68,6 +68,7 @@ class TLP_QT_SCOPE WorkspaceExposeWidget : public QGraphicsView {
   QList<PreviewItem*> _items;
   PreviewItem* _selectedItem;
   QGraphicsRectItem* _placeholderItem;
+  bool _switchToSingleMode;
 
   int _currentPanelIndex;
 
@@ -82,6 +83,8 @@ public:
   explicit WorkspaceExposeWidget(QWidget *parent = NULL);
   int currentPanelIndex() const;
   QVector<WorkspacePanel*> panels() const;
+
+  bool isSwitchToSingleMode() const;
 
 public slots:
   void setData(const QVector<WorkspacePanel*>& panels, int currentPanelIndex);
