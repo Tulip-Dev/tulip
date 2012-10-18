@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Import</string>
+   <string>Export</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
@@ -59,7 +59,7 @@ border: 0px;
   </property>
   <widget class="QWizardPage" name="choosePluginPage">
    <property name="title">
-    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/32/document-export.png&quot; width=32 height=32/&gt; Graph importing Wizard</string>
+    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/32/document-export.png&quot; width=32 height=32/&gt; Graph exporting Wizard</string>
    </property>
    <attribute name="pageId">
     <string notr="true">0</string>
