@@ -1169,7 +1169,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
    </property>
    <property name="text">
-    <string>Create induced sub-graph</string>
+    <string>Create sub-graph from selection</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
