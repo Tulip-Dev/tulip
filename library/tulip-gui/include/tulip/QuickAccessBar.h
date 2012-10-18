@@ -37,7 +37,7 @@ class GlGraphRenderingParameters;
 class GlGraphInputData;
 class GlScene;
 
-class QuickAccessBar : public QWidget {
+class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   Q_OBJECT
 
   Ui::QuickAccessBar* _ui;
