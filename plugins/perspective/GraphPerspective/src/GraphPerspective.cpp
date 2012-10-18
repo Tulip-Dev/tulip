@@ -578,8 +578,20 @@ void GraphPerspective::selectAll() {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
-  selection->setAllEdgeValue(true);
-  selection->setAllNodeValue(true);
+  if (graph == graph->getRoot()) {
+    selection->setAllEdgeValue(true);
+    selection->setAllNodeValue(true);
+  }
+  else {
+    node n;
+    forEach(n, graph->getNodes()) {
+      selection->setNodeValue(n,true);
+    }
+    edge e;
+    forEach(e, graph->getEdges()) {
+      selection->setEdgeValue(e,true);
+    }
+  }
   Observable::unholdObservers();
 }
 
