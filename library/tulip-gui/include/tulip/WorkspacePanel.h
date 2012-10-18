@@ -43,9 +43,8 @@ class View;
 class Interactor;
 class GraphHierarchiesModel;
 
-class TLP_QT_SCOPE WorkspacePanel : public QFrame, public tlp::SimplePluginProgress {
+class TLP_QT_SCOPE WorkspacePanel : public QFrame {
   Q_OBJECT
-  Q_PROPERTY(bool progressMode READ isProgressMode WRITE toggleProgressMode)
 
   Ui::WorkspacePanel* _ui;
   tlp::View* _view;
@@ -56,7 +55,6 @@ class TLP_QT_SCOPE WorkspacePanel : public QFrame, public tlp::SimplePluginProgr
   QGraphicsProxyWidget* _viewConfigurationWidgets;
   bool _viewConfigurationExpanded;
   QGraphicsProxyWidget* _currentInteractorConfigurationItem;
-  QGraphicsObject* _progressItem;
 
   QPointF configurationTabPosition(bool expanded) const;
   void setConfigurationTabExpanded(bool expanded, bool animate=true);
@@ -69,10 +67,8 @@ public:
 
   tlp::View* view() const;
   QString viewName() const;
-  bool isProgressMode() const;
 
 public slots:
-  void toggleProgressMode(bool p);
   void setView(tlp::View* view);
   void setCurrentInteractor(tlp::Interactor*);
   void setGraphsModel(tlp::GraphHierarchiesModel*);
@@ -96,7 +92,6 @@ protected slots:
   void resetInteractorsScrollButtonsVisibility();
 
 protected:
-  void progress_handler(int step, int max_step);
   void refreshInteractorsToolbar();
 
   void resizeEvent(QResizeEvent *);

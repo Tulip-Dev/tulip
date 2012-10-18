@@ -389,6 +389,26 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
 }
 
 //=========================================================
+class AlgorithmPreviewHandler: public ProgressPreviewHandler {
+  QMap<tlp::PropertyInterface*,tlp::PropertyInterface*> _propertiesMap;
+public:
+  AlgorithmPreviewHandler(const QMap<tlp::PropertyInterface*,tlp::PropertyInterface*>& propertiesMap): _propertiesMap(propertiesMap) {
+  }
+  void progressStateChanged(int, int) {
+    foreach(tlp::PropertyInterface* clone, _propertiesMap.keys()) {
+      tlp::PropertyInterface* orig = _propertiesMap[clone];
+      orig->copy(clone);
+    }
+  }
+protected:
+  void previewStateChanged(bool f) {
+    if (f)
+      Observable::unholdObservers();
+    else
+      Observable::holdObservers();
+  }
+};
+
 #define CHECK_PROPERTY(T) \
   if (dataSetCopy.getData(n)->getTypeName().compare(typeid(T*).name()) == 0) {\
     T* prop=NULL;\
@@ -463,6 +483,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   Algorithm *newAlgo = PluginLister::instance()->getPluginObject<Algorithm>(algorithm, context);
 
   if ((result=newAlgo->check(errorMessage))) {
+    tmpProgress->setPreviewHandler(new AlgorithmPreviewHandler(clonedProperties));
     QDateTime start = QDateTime::currentDateTime();
     newAlgo->run();
     qDebug() << algorithm.c_str() << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";

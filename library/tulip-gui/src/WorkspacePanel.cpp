@@ -79,8 +79,7 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
     _overlayRect(NULL),
     _viewConfigurationWidgets(NULL),
     _viewConfigurationExpanded(false),
-    _currentInteractorConfigurationItem(NULL),
-    _progressItem(NULL) {
+    _currentInteractorConfigurationItem(NULL) {
   _ui->setupUi(this);
   _ui->actionClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _ui->interactorsFrame->installEventFilter(this);
@@ -265,38 +264,8 @@ void WorkspacePanel::interactorActionTriggered() {
   setCurrentInteractor(interactor);
 }
 
-bool WorkspacePanel::isProgressMode() const {
-  return _progressItem != NULL;
-}
-
-void WorkspacePanel::toggleProgressMode(bool p) {
-  assert(view() && view()->graphicsView() && view()->graphicsView()->scene());
-
-  if (p && _progressItem == NULL)  {
-    _progressItem = new ProgressItem(_view->graphicsView()->scene());
-    _view->graphicsView()->scene()->addItem(_progressItem);
-    QPropertyAnimation* progressFadeIn = new QPropertyAnimation(_progressItem,"opacity",_progressItem);
-    progressFadeIn->setStartValue(0);
-    progressFadeIn->setEndValue(1);
-    progressFadeIn->setDuration(800);
-    progressFadeIn->start(QAbstractAnimation::DeleteWhenStopped);
-  }
-  else if (!p && _progressItem != NULL) {
-    _view->graphicsView()->scene()->removeItem(_progressItem);
-    delete _progressItem;
-    _progressItem = NULL;
-  }
-}
-
 void WorkspacePanel::hideConfigurationTab() {
   setConfigurationTabExpanded(false);
-}
-
-void WorkspacePanel::progress_handler(int,int) {
-  if (!isProgressMode())
-    toggleProgressMode(true);
-
-  QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
 }
 
 void WorkspacePanel::refreshInteractorsToolbar() {
