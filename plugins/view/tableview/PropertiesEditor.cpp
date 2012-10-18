@@ -145,9 +145,7 @@ void PropertiesEditor::unCheckAll() {
 
 void PropertiesEditor::unCheckAllExcept() {
   for(int i=0; i<_sourceModel->rowCount(); ++i) {
-    QModelIndex index = _sourceModel->index(i,0);
-    Qt::CheckState state = ( _sourceModel->data(index).toString() == QString(_contextProperty->getName().c_str()) ? Qt::Checked : Qt::Unchecked);
-    _sourceModel->setData(index,state,Qt::CheckStateRole);
+    setPropertyChecked(i,_sourceModel->index(i,0).data().toString() == _contextProperty->getName().c_str());
   }
 }
 
