@@ -338,7 +338,8 @@ void SearchWidget::graphIndexChanged(int) {
 void SearchWidget::termAChanged() {
   tlp::PropertyInterface* prop = term(_ui->searchTermACombo);
 
-  if (_ui->tableWidget->isVisible()) {
+  //isHidden checks if the widget was set hidden; using isVisible would check if the widget is currently displayed
+  if (!_ui->tableWidget->isHidden()) {
     updateEditorWidget();
     updateOperators(prop, _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toString());
   }
