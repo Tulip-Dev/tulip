@@ -251,13 +251,23 @@ void SearchWidget::search() {
       StringProperty* stringProp = new StringProperty(g);
       DataType* tulipData = TulipMetaTypes::qVariantToDataType(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole));
       if(tulipData == NULL) {
-        qWarning() << "could not convert this type correctly " << _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole) << ", please report this as a bug";
+        qCritical() << "could not convert this type correctly " << _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole) << ", please report this as a bug";
       }
       DataTypeSerializer* serializer = DataSet::typenameToSerializer(tulipData->getTypeName());
+      if(serializer == NULL) {
+        qCritical() << "no type serializer found for " << tulipData->getTypeName() << ", please report this as a bug";
+      }
+
       stringstream temp;
       serializer->writeData(temp, tulipData);
-      stringProp->setAllNodeValue(temp.str());
-      stringProp->setAllEdgeValue(temp.str());
+      QString serializedValue = temp.str().c_str();
+
+      //Tulip serializers add quotes around the serialized value, remove them for comparison
+      if(serializedValue.startsWith('"') && serializedValue.endsWith('"')) {
+        serializedValue = serializedValue.mid(1, serializedValue.length()-2);
+      }
+      stringProp->setAllNodeValue(serializedValue.toStdString());
+      stringProp->setAllEdgeValue(serializedValue.toStdString());
       b = stringProp;
     }
   }
