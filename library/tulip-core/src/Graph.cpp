@@ -1001,6 +1001,9 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   }
 
   delete itE;
+
+
+
   // propagate all cluster local properties
   PropertyInterface* property;
   forEach(property, cluster->getLocalObjectProperties()) {
@@ -1009,7 +1012,14 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
         property == graphRot)
       continue;
 
-    PropertyInterface *graphProp = graph->getProperty(property->getName());
+    PropertyInterface *graphProp = NULL;
+
+    if (graph->existProperty(property->getName()) &&
+        graph->getProperty(property->getName())->getTypename() == property->getTypename())
+      graphProp = graph->getProperty(property->getName());
+    else
+      graphProp = property->clonePrototype(graph, property->getName());
+
     itN = cluster->getNodes();
 
     while(itN->hasNext()) {
