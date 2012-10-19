@@ -132,8 +132,8 @@
                    <string>...</string>
                   </property>
                   <property name="icon">
-                   <iconset resource="TulipQtResource.qrc">
-                    <normaloff>:/arrow_two_head.png</normaloff>:/arrow_two_head.png</iconset>
+                   <iconset resource="../resources/TulipGUIResource.qrc">
+                    <normaloff>:/tulip/gui/icons/arrow_two_head.png</normaloff>:/tulip/gui/icons/arrow_two_head.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -498,8 +498,7 @@ color scale</string>
   </layout>
  </widget>
  <resources>
-  <include location="../../../software/tulip/designer/TulipResource.qrc"/>
-  <include location="TulipQtResource.qrc"/>
+  <include location="../resources/TulipGUIResource.qrc"/>
  </resources>
  <connections>
   <connection>
