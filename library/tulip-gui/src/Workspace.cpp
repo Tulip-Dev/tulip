@@ -39,10 +39,6 @@
 
 #include <QtCore/QDebug>
 
-#ifndef NDEBUG
-#include <modeltest.h>
-#endif /* NDEBUG */
-
 #include "ui_Workspace.h"
 
 using namespace tlp;
