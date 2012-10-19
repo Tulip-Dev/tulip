@@ -35,6 +35,7 @@ namespace tlp {
 class ProgressPreviewHandler {
   bool _enabled;
 public:
+  ProgressPreviewHandler();
   virtual ~ProgressPreviewHandler();
 
   void setEnabled(bool);
