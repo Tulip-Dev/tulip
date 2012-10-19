@@ -144,7 +144,7 @@ void GlLabel::setTextBeforeRendering(const std::string& text) {
 
   // After we compute width of text
   for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
-    std::wstring wide(QString::fromStdString(*it).toStdWString());
+    std::wstring wide(QString::fromUtf8(it->c_str()).toStdWString());
     font->BBox(wide.c_str(),x1,w1,z1,x2,w2,z2);
 
     textWidthVector.push_back(x2-x1);
@@ -598,7 +598,7 @@ void GlLabel::draw(float lod, Camera *camera) {
     vector<float>::iterator itW=textWidthVector.begin();
 
     for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
-      std::wstring wide(QString::fromStdString(*it).toStdWString());
+      std::wstring wide(QString::fromUtf8(it->c_str()).toStdWString());
       font->BBox(wide.c_str(),x1,w1,z1,x2,w2,z2);
 
       FTPoint shift(-(textBoundingBox[1][0]-textBoundingBox[0][0])/2.-x1+((textBoundingBox[1][0]-textBoundingBox[0][0])-(*itW))*xAlignFactor+(textBoundingBox[1][0]-textBoundingBox[0][0])*xShiftFactor,
