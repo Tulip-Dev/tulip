@@ -51,18 +51,11 @@
 #include "GraphHierarchiesEditor.h"
 #include "PreferencesDialog.h"
 
-#ifndef NDEBUG
-#include <modeltest.h>
-#endif
-
 #include <QtCore/QDebug>
 
 using namespace tlp;
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
-#ifndef NDEBUG
-  new ModelTest(_graphs,this);
-#endif /* NDEBUG */
   Q_INIT_RESOURCE(GraphPerspective);
 }
 

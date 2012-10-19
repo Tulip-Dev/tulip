@@ -65,6 +65,7 @@ QWidget* ColorEditorCreator::createWidget(QWidget *) const {
   QColorDialog *colorDialog = new QColorDialog(NULL);
   colorDialog->setOptions(colorDialog->options() | QColorDialog::ShowAlphaChannel);
   colorDialog->setModal(true);
+  colorDialog->move(QCursor::pos());
   return colorDialog;
 }
 
@@ -235,6 +236,7 @@ QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
 QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
   QFileDialog* dlg = new QFileDialog(NULL);
   dlg->setModal(true);
+  dlg->move(QCursor::pos());
   return dlg;
 }
 

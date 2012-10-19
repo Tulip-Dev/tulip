@@ -54,8 +54,8 @@ background-color: white;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>989</width>
-        <height>221</height>
+        <width>974</width>
+        <height>233</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -322,6 +322,13 @@ font: bold;
                   <height>30</height>
                  </size>
                 </property>
+                <property name="styleSheet">
+                 <string notr="true">QTableView {
+background-color: #F9F9F9;
+border: 1px solid #C9C9C9;
+color: black;
+}</string>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::NoFrame</enum>
                 </property>
@@ -343,6 +350,9 @@ font: bold;
                 <attribute name="horizontalHeaderVisible">
                  <bool>false</bool>
                 </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
                 <attribute name="verticalHeaderVisible">
                  <bool>false</bool>
                 </attribute>
@@ -358,7 +368,7 @@ font: bold;
                 </column>
                 <item row="0" column="0">
                  <property name="text">
-                  <string>a</string>
+                  <string/>
                  </property>
                 </item>
                </widget>
