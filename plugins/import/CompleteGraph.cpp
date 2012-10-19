@@ -21,16 +21,12 @@
 using namespace std;
 using namespace tlp;
 
-/**
- * TODO Add documentation
- **/
-
 namespace {
 
 const char * paramHelp[] = {
   // nodes
   HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "int" ) \
+  HTML_HELP_DEF( "type", "unsigned int" ) \
   HTML_HELP_DEF( "default", "5" ) \
   HTML_HELP_BODY() \
   "Number of nodes in the final graph." \
@@ -54,12 +50,10 @@ public:
     addInParameter<unsigned int>("nodes",paramHelp[0],"5");
     addInParameter<bool>("undirected",paramHelp[1],"true");
   }
-  ~CompleteGraph() {
-  }
 
   bool importGraph() {
     unsigned int nbNodes  = 5;
-    bool undirected = false;
+    bool undirected = true;
 
     if (dataSet!=NULL) {
       dataSet->get("nodes", nbNodes);
@@ -68,7 +62,7 @@ public:
 
     if (nbNodes == 0) {
       if (pluginProgress)
-        pluginProgress->setError(string("Error: number of nodes cannot be null"));
+        pluginProgress->setError("Error: number of nodes must be greater than 0");
 
       return false;
     }
@@ -78,9 +72,14 @@ public:
 
     vector<node> nodes(nbNodes);
 
+    graph->reserveNodes(nbNodes);
     for (size_t j=0; j<nbNodes; ++j)
       nodes[j] = graph->addNode();
 
+    if(undirected)
+        graph->reserveEdges(nbNodes-1);
+    else
+        graph->reserveEdges(2*(nbNodes-1));
     for (size_t i=0; i < nbNodes-1; ++i)
       for (size_t j = i+1; j < nbNodes; ++j) {
         graph->addEdge(nodes[i], nodes[j]);
