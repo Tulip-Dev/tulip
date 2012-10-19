@@ -68,7 +68,7 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* pr
  *
  * This function checks the file name for the '.gz' extension and uses a compressed output if found.
  *
- * This function uses the "TLP Import" export plugin, and will fail if it is not loaded (by default this plugin is linked into the library and should be loaded).
+ * This function uses the "TLP Export" export plugin, and will fail if it is not loaded (by default this plugin is linked into the library and should be loaded).
  *
  * @param graph the graph to save.
  * @param filename the file to save the graph to.
