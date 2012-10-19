@@ -484,7 +484,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   if ((result=newAlgo->check(errorMessage))) {
     tmpProgress->setPreviewHandler(new AlgorithmPreviewHandler(clonedProperties));
     QDateTime start = QDateTime::currentDateTime();
-    newAlgo->run();
+    result = newAlgo->run();
     qDebug() << algorithm.c_str() << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
   }
 
