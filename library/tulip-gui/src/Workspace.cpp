@@ -199,7 +199,11 @@ void Workspace::panelDestroyed(QObject* obj) {
 
 void Workspace::viewNeedsDraw() {
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(sender());
-  panel->view()->draw(NULL);
+  if (_autoCenterViews) {
+    panel->view()->centerView();
+  }
+  else
+    panel->view()->draw();
 }
 
 void Workspace::switchToStartupMode() {
@@ -626,8 +630,12 @@ void Workspace::redrawPanels(bool center) {
     if (center)
       panel->view()->centerView();
     else
-      panel->view()->draw(NULL);
+      panel->view()->draw();
   }
+}
+
+void Workspace::setAutoCenterPanelsOnDraw(bool f) {
+  _autoCenterViews = f;
 }
 
 bool Workspace::isBottomFrameVisible() const {

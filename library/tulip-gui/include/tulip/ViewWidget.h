@@ -71,7 +71,7 @@ public slots:
     @brief Reimplemented from View::draw()
     By default, this method does nothing. We assume the widget is automatically repainted by Qt's windowing manager
     */
-  virtual void draw(tlp::PluginProgress*) { }
+  virtual void draw() { }
 
 protected slots:
   /**

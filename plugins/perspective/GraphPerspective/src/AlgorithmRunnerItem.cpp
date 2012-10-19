@@ -137,8 +137,10 @@ void AlgorithmRunnerItem::run(Graph *g) {
   std::string errorMessage;
   PluginProgress* progress = Perspective::instance()->progress();
   g->push();
+  Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(true);
   bool result = g->applyAlgorithm(_pluginName.toStdString(),errorMessage,&dataSet,progress);
   delete progress;
+  Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(false);
 
   if (!result) {
     g->pop();
