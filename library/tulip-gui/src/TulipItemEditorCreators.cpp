@@ -235,8 +235,9 @@ QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
   */
 QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
   QFileDialog* dlg = new QFileDialog(NULL);
+  dlg->setOption(QFileDialog::DontUseNativeDialog,false);
   dlg->setModal(true);
-  dlg->setMinimumSize(300,300);
+  dlg->setMinimumSize(300,400);
   dlg->move(QCursor::pos());
   return dlg;
 }
@@ -253,8 +254,10 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant&
 
   dlg->setDirectory(path);
 
-  if (desc.type == TulipFileDescriptor::Directory)
+  if (desc.type == TulipFileDescriptor::Directory) {
     dlg->setFileMode(QFileDialog::Directory);
+    dlg->setOption(QFileDialog::ShowDirsOnly);
+  }
 }
 
 QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
