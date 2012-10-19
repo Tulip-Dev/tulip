@@ -638,6 +638,7 @@ void GraphPerspective::paste() {
   tlp::copyToGraph(outGraph,inGraph);
   delete inGraph;
   Observable::unholdObservers();
+  centerPanelsForGraph(outGraph);
 }
 
 void GraphPerspective::copy() {
