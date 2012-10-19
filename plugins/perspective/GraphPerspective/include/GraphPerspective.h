@@ -91,6 +91,8 @@ public slots:
   void setSearchOutput(bool);
   void openPreferences();
 
+  void setAutoCenterPanelsOnDraw(bool f);
+
 protected slots:
   void currentGraphChanged(tlp::Graph* graph);
   void refreshDockExpandControls();

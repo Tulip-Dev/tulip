@@ -42,8 +42,6 @@ bool SimplePluginProgress::isPreviewMode() const {
 }
 //====================================================
 void SimplePluginProgress::setPreviewMode(bool b) {
-  PluginProgress::setPreviewMode(b);
-
   if (b == _preview) return;
 
   _preview = b;

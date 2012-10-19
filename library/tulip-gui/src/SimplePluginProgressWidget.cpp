@@ -83,7 +83,6 @@ bool SimplePluginProgressWidget::isPreviewMode() const {
 }
 
 void SimplePluginProgressWidget::setPreviewMode(bool drawPreview) {
-  PluginProgress::setPreviewMode(drawPreview);
   _ui->previewBox->setChecked(drawPreview);
 }
 
@@ -180,7 +179,6 @@ bool SimplePluginProgressDialog::isPreviewMode() const {
 }
 
 void SimplePluginProgressDialog::setPreviewMode(bool drawPreview) {
-  PluginProgress::setPreviewMode(drawPreview);
   _progress->setPreviewMode(drawPreview);
 }
 

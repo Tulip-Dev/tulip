@@ -190,8 +190,9 @@ public slots:
   /**
     @brief Reset the visualization to the center.
     This method is called after major changes into the data structure. At this point, the user point of view should be reset and brought back to a point where all the data can be seen.
-    @note For a 3D visualization, this method could be implemented by centering the camera. For a table, this could be done by setting the scroll bar to the top position etc
-    @note By default, this method does nothing.
+    @note It is expected for the view to be redrawn when calling centerView
+    For a 3D visualization, this method could be implemented by centering the camera. For a table, this could be done by setting the scroll bar to the top position etc
+    By default, this method calls draw().
     */
   virtual void centerView();
 
@@ -226,19 +227,15 @@ public slots:
   /**
     @brief Asks the view to draw.
     A call to draw() means that internal data has most probably been modified and that the View should take that into account when drawing.
-    @warning the pluginProgress given to this method should be used with extra caution. This object ios meant to give the user a visual feedback when view is getting refreshed.
-    Depending on the overleying system, calling pluginProgress->progress may trigger a call to QApplication::processEvents which will probably cause major slow downs.
     */
-  virtual void draw(tlp::PluginProgress* pluginProgress)=0;
+  virtual void draw()=0;
 
   /**
     @brief Refresh the View's panel.
     Calling refresh() means that no internal data has been modified. This can happen when the view's panel gets resized, restored etc
-    @warning the pluginProgress given to this method should be used with extra caution. This object ios meant to give the user a visual feedback when view is getting refreshed.
-    Depending on the overleying system, calling pluginProgress->progress may trigger a call to QApplication::processEvents which will probably cause major slow downs.
     */
-  inline virtual void refresh(tlp::PluginProgress* pluginProgress) {
-    draw(pluginProgress);
+  inline virtual void refresh() {
+    draw();
   }
 
   /**

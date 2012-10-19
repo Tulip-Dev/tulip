@@ -62,6 +62,7 @@ class TLP_QT_SCOPE Workspace: public QWidget {
   QString panelTitle(tlp::WorkspacePanel*) const;
 
   QLabel* _pageCountLabel;
+  bool _autoCenterViews;
 
 public:
   explicit Workspace(QWidget *parent = NULL);
@@ -105,6 +106,8 @@ public slots:
   void setPageCountLabel(QLabel* l);
 
   void redrawPanels(bool center=false);
+
+  void setAutoCenterPanelsOnDraw(bool);
 
 signals:
   void panelFocused(tlp::View*);

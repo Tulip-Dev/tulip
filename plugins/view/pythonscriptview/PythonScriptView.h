@@ -78,7 +78,7 @@ public :
     return runningScript;
   }
 
-  void draw(tlp::PluginProgress *) {}
+  void draw() {}
 
   void graphDeleted() {
     this->graph = NULL;

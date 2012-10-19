@@ -33,24 +33,13 @@ namespace tlp {
  * Once enabled, the progressStateChanged method will be called back each time PluginProgress::progress is called to allow synchronizing the preview with progression.
  */
 class ProgressPreviewHandler {
-  bool _enabled;
 public:
-  ProgressPreviewHandler();
   virtual ~ProgressPreviewHandler();
-
-  void setEnabled(bool);
-  bool isEnabled() const;
 
   /**
    * @brief @brief Called back after PluginProgress::progress has been invoked.
    */
   virtual void progressStateChanged(int step,int max_step)=0;
-
-protected:
-  /**
-   * @brief Called back after PluginProgress::setPreview has been invoked.
-   */
-  virtual void previewStateChanged(bool)=0;
 };
 
 /**
@@ -129,11 +118,10 @@ public:
   /**
    * @brief The preview mode redraws the graph while applying the algorithm, making it slower.
    *
-   * @warning For default previsualisation handling to work, be sure to call PluginProgress::setPreviewMode in this method
    * @param drawPreview Whether the preview should be drawn.
    * @return void
    **/
-  virtual void setPreviewMode(bool drawPreview);
+  virtual void setPreviewMode(bool drawPreview)=0;
 
   /**
    * @brief This tells the widget if it should show a preview checkbox, allowing the user to decide if the algorithm should draw a preview or not.

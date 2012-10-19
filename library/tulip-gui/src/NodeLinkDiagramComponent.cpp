@@ -93,9 +93,9 @@ void NodeLinkDiagramComponent::updateGrid() {
   getGlMainWidget()->getScene()->getLayer("Main")->addGlEntity(_grid,"Node Link Diagram Component grid");
 }
 
-void NodeLinkDiagramComponent::draw(PluginProgress *pluginProgress) {
+void NodeLinkDiagramComponent::draw() {
   updateGrid();
-  GlMainView::draw(pluginProgress);
+  GlMainView::draw();
 }
 
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
@@ -423,7 +423,7 @@ void NodeLinkDiagramComponent::goInsideItem() {
   this->loadGraphOnScene(metaGraph);
   emit graphSet(metaGraph);
   centerView();
-  draw(NULL);
+  draw();
 }
 
 void NodeLinkDiagramComponent::ungroupItem() {

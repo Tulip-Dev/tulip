@@ -399,12 +399,11 @@ public:
       tlp::PropertyInterface* orig = _propertiesMap[clone];
       orig->copy(clone);
     }
-  }
-protected:
-  void previewStateChanged(bool f) {
-    if (f)
+
+    unsigned int hc = Observable::observersHoldCounter();
+    for (unsigned int i=0;i<hc;++i)
       Observable::unholdObservers();
-    else
+    for (unsigned int i=0;i<hc;++i)
       Observable::holdObservers();
   }
 };

@@ -54,7 +54,7 @@ public:
   tlp::DataSet state() const;
 
 public slots:
-  void draw(PluginProgress *pluginProgress);
+  void draw();
   void requestChangeGraph(Graph *graph);
 
 protected slots:

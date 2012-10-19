@@ -40,7 +40,7 @@ GlMainView::~GlMainView() {
   delete _overviewItem;
 }
 
-void GlMainView::draw(tlp::PluginProgress*) {
+void GlMainView::draw() {
   _glMainWidget->draw();
 }
 
@@ -48,7 +48,7 @@ void GlMainView::redraw() {
   _glMainWidget->redraw();
 }
 
-void GlMainView::refresh(PluginProgress *) {
+void GlMainView::refresh() {
   _glMainWidget->draw(false);
 }
 
@@ -109,8 +109,7 @@ GlMainWidget* GlMainView::getGlMainWidget() const {
 }
 
 void GlMainView::centerView() {
-  getGlMainWidget()->getScene()->centerScene();
-  emit drawNeeded();
+  getGlMainWidget()->centerScene();
 }
 
 void GlMainView::glMainViewDrawn(bool graphChanged) {

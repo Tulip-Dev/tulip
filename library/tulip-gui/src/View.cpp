@@ -61,7 +61,7 @@ void View::setCurrentInteractor(tlp::Interactor *i) {
   currentInteractorChanged(i);
 
   //We need a refresh here to clear last interactor displayed arnd init the next one
-  refresh(NULL);
+  refresh();
 }
 void View::currentInteractorChanged(tlp::Interactor *i) {
   i->install(graphicsView());
@@ -139,6 +139,7 @@ void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
 }
 
 void View::centerView() {
+  draw();
 }
 
 /*

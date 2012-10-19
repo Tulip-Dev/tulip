@@ -86,7 +86,7 @@ public slots:
   /**
    * @brief Calls GlMainWidget::draw();
    */
-  virtual void draw(tlp::PluginProgress* pluginProgress);
+  virtual void draw();
 
   /**
    * @brief Calls GlMainWidget::redraw();
@@ -96,7 +96,7 @@ public slots:
   /**
    * @brief Calls GlMainWidget::redraw();
    */
-  virtual void refresh(PluginProgress *pluginProgress);
+  virtual void refresh();
 
   /**
    * @brief Force the overview to be redrawn. Since GlMainView already detects graph's modifications, this method should not be called manually to avoid extra rendering.

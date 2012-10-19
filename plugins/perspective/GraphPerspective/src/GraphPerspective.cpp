@@ -912,6 +912,10 @@ void GraphPerspective::openPreferences() {
   }
 }
 
+void GraphPerspective::setAutoCenterPanelsOnDraw(bool f) {
+  _ui->workspace->setAutoCenterPanelsOnDraw(f);
+}
+
 void GraphPerspective::addNewGraph() {
   Graph* g = tlp::newGraph();
   _graphs->addGraph(g);
