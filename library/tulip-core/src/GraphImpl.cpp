@@ -202,6 +202,7 @@ edge GraphImpl::restoreEdge(edge newEdge, const node src, const node tgt) {
 }
 //----------------------------------------------------------------
 edge GraphImpl::addEdge(const node src, const node tgt) {
+  assert(src.isValid()&&tgt.isValid());
   edge newEdge = storage.addEdge(src, tgt);
   notifyAddEdge(newEdge);
   return newEdge;
