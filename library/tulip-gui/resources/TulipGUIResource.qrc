@@ -80,5 +80,6 @@
         <file>ui/six_screen.png</file>
         <file>icons/16/clipboard.png</file>
         <file>icons/64/document-import.png</file>
+        <file>icons/arrow_two_head.png</file>
     </qresource>
 </RCC>

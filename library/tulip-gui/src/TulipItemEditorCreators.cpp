@@ -236,6 +236,7 @@ QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
 QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
   QFileDialog* dlg = new QFileDialog(NULL);
   dlg->setModal(true);
+  dlg->setMinimumSize(300,300);
   dlg->move(QCursor::pos());
   return dlg;
 }
