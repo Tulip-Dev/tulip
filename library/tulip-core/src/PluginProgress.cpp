@@ -26,6 +26,10 @@ void PluginProgress::setPreviewMode(bool drawPreview) {
     _previewHandler->setEnabled(drawPreview);
 }
 
+
+ProgressPreviewHandler::ProgressPreviewHandler():_enabled(false){
+}
+
 ProgressPreviewHandler::~ProgressPreviewHandler() {
 }
 
