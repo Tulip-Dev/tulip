@@ -226,9 +226,6 @@ int main(int argc,char **argv) {
 
   mainWindow->setPerspective(perspective);
 
-  if (windowGeometry.isValid())
-    mainWindow->setGeometry(windowGeometry);
-
   QString title("Tulip [" + perspectiveName + "]");
 
   if (project) {
@@ -247,6 +244,12 @@ int main(int argc,char **argv) {
   perspective->start(progress);
 
   mainWindow->setWindowTitle(title);
+
+  // the delay of geometry update until perspective execution
+  // seems to ensure that the four parameters (x,y,w,h)
+  // are taken into account
+  if (windowGeometry.isValid())
+    mainWindow->setGeometry(windowGeometry);
 
   int result = tulip_perspective.exec();
   delete perspective;
