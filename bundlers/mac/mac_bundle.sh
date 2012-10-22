@@ -50,4 +50,4 @@ done
 
 echo 'Generating DMG'
 cd $DEST_DIR
-sh $SRC_DIR/make_dmg.sh "Tulip" "4.0" $DEST_DIR/application
+sh $SRC_DIR/make_dmg.sh "Tulip" "4.1" $DEST_DIR/application
