@@ -53,6 +53,7 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
     NodeShape desc = v.value<NodeShape>();
     return new TypedData<uint>(new uint(desc.nodeShapeId));
   }
+
   if (v.userType() == qMetaTypeId<EdgeExtremityShape>()) {
     EdgeExtremityShape desc = v.value<EdgeExtremityShape>();
     return new TypedData<uint>(new uint(desc.edgeExtremityShapeId));

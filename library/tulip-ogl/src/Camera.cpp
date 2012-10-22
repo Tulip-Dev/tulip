@@ -458,11 +458,13 @@ void Camera::setWithXML(const string &inString, unsigned int &currentPosition) {
   GlXMLTools::setWithXML(inString,currentPosition,"zoomFactor",zoomFactor);
   GlXMLTools::setWithXML(inString,currentPosition,"sceneRadius",sceneRadius);
   GlXMLTools::setWithXML(inString,currentPosition,"d3",d3);
-  if(GlXMLTools::checkNextXMLtag(inString,currentPosition,"sceneBoundingBox0")){
+
+  if(GlXMLTools::checkNextXMLtag(inString,currentPosition,"sceneBoundingBox0")) {
     GlXMLTools::setWithXML(inString,currentPosition,"sceneBoundingBox0",bbTmp);
     sceneBoundingBox.expand(bbTmp);
   }
-  if(GlXMLTools::checkNextXMLtag(inString,currentPosition,"sceneBoundingBox1")){
+
+  if(GlXMLTools::checkNextXMLtag(inString,currentPosition,"sceneBoundingBox1")) {
     GlXMLTools::setWithXML(inString,currentPosition,"sceneBoundingBox1",bbTmp);
     sceneBoundingBox.expand(bbTmp);
   }

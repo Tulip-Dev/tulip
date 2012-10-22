@@ -18,9 +18,11 @@ bool ReverseEdges::run() {
 
   BooleanProperty* selection = NULL;
   bool deleteSelection = false;
+
   if (dataSet->exist("Selection")) {
     dataSet->get<BooleanProperty*>("Selection",selection);
   }
+
   if (selection == NULL) {
     deleteSelection = true;
     selection = new BooleanProperty(graph);
@@ -34,6 +36,7 @@ bool ReverseEdges::run() {
   forEach(e, selection->getEdgesEqualTo(true)) {
     ProgressState state = pluginProgress->progress(step++, max_step);
     result = state == TLP_CONTINUE;
+
     if (state == TLP_CANCEL) {
       graph->pop();
       break;
@@ -41,6 +44,7 @@ bool ReverseEdges::run() {
     else if (state == TLP_STOP) {
       break;
     }
+
     graph->reverse(e);
   }
 

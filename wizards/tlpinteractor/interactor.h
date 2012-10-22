@@ -8,28 +8,30 @@
 @endif
 @if "%BaseInteractor%" == "Interactor"
 #include <tulip/InteractorComposite.h>
-@endif
+  @endif
 
-class %ProjectName:c%Composite: public tlp::%BaseInteractor%Composite {
-  Q_OBJECT
-public:
-  PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
+  class %ProjectName:c%Composite: public tlp::%BaseInteractor%Composite {
+    Q_OBJECT
+  public:
+    PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
-  %ProjectName:c%Composite(const tlp::PluginContext*);
-  virtual ~%ProjectName:c%Composite();
+    %ProjectName:
+      c%Composite(const tlp::PluginContext*);
+    virtual ~%ProjectName:
+      c%Composite();
 
-  virtual void construct();
+      virtual void construct();
 
-  virtual bool isCompatible(const std::string& viewName);
-  virtual QWidget* configurationWidget() const;
-  virtual unsigned int priority() const;
-  virtual QCursor cursor() const;
+      virtual bool isCompatible(const std::string& viewName);
+      virtual QWidget* configurationWidget() const;
+      virtual unsigned int priority() const;
+      virtual QCursor cursor() const;
 
-public slots:
-  virtual void undoIsDone();
+    public slots:
+      virtual void undoIsDone();
 
-signals:
-};
+    signals:
+    };
 
 class %ProjectName:c%Component: public tlp::%BaseInteractor%Component {
   Q_OBJECT
@@ -40,10 +42,11 @@ public:
   virtual void viewChanged(tlp::View *);
   virtual bool eventFilter(QObject*, QEvent*);
 
-@if "%BaseInteractor%" == "GLInteractor"
+  @if "%BaseInteractor%" == "GLInteractor"
   virtual bool draw(tlp::GlMainWidget*);
+
   virtual bool compute(tlp::GlMainWidget*);
-@endif
+  @endif
 
 public slots:
 

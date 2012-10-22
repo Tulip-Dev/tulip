@@ -53,6 +53,7 @@ Interactor* View::currentInteractor() const {
 void View::setCurrentInteractor(tlp::Interactor *i) {
   if (_currentInteractor) {
     _currentInteractor->uninstall();
+
     if (graphicsView() != NULL)
       graphicsView()->setCursor(QCursor()); // Force reset cursor when interactor is changed
   }

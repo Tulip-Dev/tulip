@@ -51,11 +51,13 @@ TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeVie
 }
 
 void TreeViewComboBox::setGraphsModel(QAbstractItemModel *model) {
-    setModel(model);
-    for(int i=1; i<model->columnCount(); ++i)
-      _treeView->hideColumn(i);
-    _treeView->expandAll();
-    _treeView->setItemsExpandable(true);
+  setModel(model);
+
+  for(int i=1; i<model->columnCount(); ++i)
+    _treeView->hideColumn(i);
+
+  _treeView->expandAll();
+  _treeView->setItemsExpandable(true);
 }
 
 void TreeViewComboBox::showPopup() {
@@ -75,7 +77,7 @@ void TreeViewComboBox::selectIndex(const QModelIndex& index) {
   setCurrentIndex(index.row());
 }
 
-void TreeViewComboBox::itemExpanded(){
+void TreeViewComboBox::itemExpanded() {
   _expandingItem = true;
 }
 

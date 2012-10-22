@@ -102,14 +102,15 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openPerspective(QString)),this,SLOT(createPerspective(QString)));
 
   QString installedPython = PythonVersionChecker::installedVersion();
+
   if (installedPython.isNull()) {
     showErrorMessage(trUtf8("Python"),trUtf8("Failed to retrieve python version\n\nCheck your python installation"));
   }
   else if (PythonVersionChecker::compiledVersion() != PythonVersionChecker::installedVersion()) {
     showErrorMessage(trUtf8("Python"),trUtf8("Python version mismatch. Please install python ")
-                    + PythonVersionChecker::compiledVersion()
-                    + trUtf8(" for bindings to work properly.\n\nDetected version is ")
-                    + installedPython);
+                     + PythonVersionChecker::compiledVersion()
+                     + trUtf8(" for bindings to work properly.\n\nDetected version is ")
+                     + installedPython);
   }
 }
 

@@ -86,23 +86,29 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   foreach(QString s, TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists())
       continue;
+
     _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/archive.png"),s,this,SLOT(openRecentFile()));
   }
   _ui->menuOpen_recent_file->addSeparator();
   foreach(QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
+
     _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s,this,SLOT(openRecentFile()));
   }
 }
 
 void GraphPerspective::addRecentDocument(const QString& path) {
   QStringList recents = TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList();
+
   if (recents.contains(path))
     return;
+
   recents += path;
+
   if (recents.size()>10)
     recents.pop_front();
+
   TulipSettings::instance().setValue(_recentDocumentsSettingsKey,recents);
   TulipSettings::instance().sync();
   buildRecentDocumentsMenu();
@@ -137,6 +143,7 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
   if(obj == _mainWindow && ev->type() == QEvent::Close) {
     if(_graphs->needsSaving()) {
       QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified, do you want to save your changes ?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
+
       if(answer == QMessageBox::Yes)
         save();
       else if(answer == QMessageBox::Cancel) {
@@ -145,12 +152,14 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
       }
     }
   }
+
   return false;
 }
 
 void GraphPerspective::showLogger() {
   if (_logger->count()==0)
     return;
+
   QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
   pos.setX(pos.x()+_ui->loggerFrame->width());
   pos.setY(std::min<int>(_mainWindow->mapToGlobal(_mainWindow->pos()).y()+mainWindow()->height()-_logger->height(),pos.y()));
@@ -377,6 +386,7 @@ void GraphPerspective::importGraph() {
         delete prg;
         return;
       }
+
       delete prg;
       std::string name;
 
@@ -442,6 +452,7 @@ void GraphPerspective::saveAs(const QString& path) {
     if (!path.isEmpty()) {
       if (!path.endsWith(".tlpx"))
         path+=".tlpx";
+
       saveAs(path);
     }
 
@@ -571,6 +582,7 @@ void GraphPerspective::selectAll() {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+
   if (graph == graph->getRoot()) {
     selection->setAllEdgeValue(true);
     selection->setAllNodeValue(true);
@@ -585,6 +597,7 @@ void GraphPerspective::selectAll() {
       selection->setEdgeValue(e,true);
     }
   }
+
   Observable::unholdObservers();
 }
 
@@ -751,6 +764,7 @@ void GraphPerspective::createSubGraph() {
 void GraphPerspective::cloneSubGraph() {
   if (_graphs->currentGraph() == NULL)
     return;
+
   tlp::BooleanProperty* prop = new tlp::BooleanProperty(_graphs->currentGraph());
   prop->setAllNodeValue(true);
   prop->setAllEdgeValue(true);
@@ -761,6 +775,7 @@ void GraphPerspective::cloneSubGraph() {
 void GraphPerspective::addEmptySubGraph() {
   if (_graphs->currentGraph() == NULL)
     return;
+
   _graphs->currentGraph()->addSubGraph();
 }
 

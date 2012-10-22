@@ -125,6 +125,7 @@ void GraphHierarchiesEditor::cloneSubGraph() {
 void GraphHierarchiesEditor::addInducedSubGraph() {
   if (_contextGraph == NULL)
     return;
+
   GraphPerspective* persp = GraphPerspective::typedInstance<GraphPerspective>();
   persp->createSubGraph(_contextGraph);
 }

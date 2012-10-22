@@ -121,11 +121,13 @@ public:
 
     vector<node> tmpVect(nbNodes);
     graph->reserveNodes(nbNodes);
+
     for (unsigned int i=0; i<nbNodes; ++i) {
       tmpVect[i]=graph->addNode();
     }
 
     graph->reserveEdges(myGraph.size());
+
     for (set<edgeS>::const_iterator it=myGraph.begin(); it!=myGraph.end(); ++it)   {
       graph->addEdge(tmpVect[it->source],tmpVect[it->target]);
     }

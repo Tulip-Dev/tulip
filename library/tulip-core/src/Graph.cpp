@@ -401,9 +401,11 @@ public:
     }
 
     unsigned int hc = Observable::observersHoldCounter();
-    for (unsigned int i=0;i<hc;++i)
+
+    for (unsigned int i=0; i<hc; ++i)
       Observable::unholdObservers();
-    for (unsigned int i=0;i<hc;++i)
+
+    for (unsigned int i=0; i<hc; ++i)
       Observable::holdObservers();
   }
 };

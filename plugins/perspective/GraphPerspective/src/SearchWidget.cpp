@@ -172,8 +172,10 @@ void SearchWidget::currentGraphChanged(tlp::Graph *g) {
 
 void searchForIndex(QComboBox* combo, const QString& s) {
   combo->setCurrentIndex(0);
+
   if (!s.isNull()) {
     QAbstractItemModel* model = combo->model();
+
     for(int i = 0; i < model->rowCount(); ++i) {
       if (model->index(i,0).data().toString() == s) {
         combo->setCurrentIndex(i);
@@ -198,12 +200,15 @@ void SearchWidget::setGraph(Graph *g) {
   QString oldStorageName = QString::null;
   QString oldTermAName = QString::null;
   QString oldTermBName = QString::null;
+
   if (_ui->resultsStorageCombo->model() != NULL) {
     oldStorageName = _ui->resultsStorageCombo->currentText();
   }
+
   if (_ui->searchTermACombo->model() != NULL) {
     oldTermAName = _ui->searchTermACombo->currentText();
   }
+
   if (_ui->searchTermBCombo->model() != NULL) {
     oldTermBName = _ui->searchTermBCombo->currentText();
   }
@@ -250,10 +255,13 @@ void SearchWidget::search() {
     else {
       StringProperty* stringProp = new StringProperty(g);
       DataType* tulipData = TulipMetaTypes::qVariantToDataType(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole));
+
       if(tulipData == NULL) {
         qCritical() << "could not convert this type correctly " << _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole) << ", please report this as a bug";
       }
+
       DataTypeSerializer* serializer = DataSet::typenameToSerializer(tulipData->getTypeName());
+
       if(serializer == NULL) {
         qCritical() << "no type serializer found for " << tulipData->getTypeName() << ", please report this as a bug";
       }
@@ -266,6 +274,7 @@ void SearchWidget::search() {
       if(serializedValue.startsWith('"') && serializedValue.endsWith('"')) {
         serializedValue = serializedValue.mid(1, serializedValue.length()-2);
       }
+
       stringProp->setAllNodeValue(serializedValue.toStdString());
       stringProp->setAllEdgeValue(serializedValue.toStdString());
       b = stringProp;
@@ -399,6 +408,7 @@ void SearchWidget::updateEditorWidget() {
   QVariant defaultValue;
   tlp::PropertyInterface* prop = term(_ui->searchTermACombo);
   int scopeIndex = _ui->scopeCombo->currentIndex();
+
   if (scopeIndex == 1 || scopeIndex == 0)
     defaultValue = GraphModel::nodeDefaultValue(prop);
   else
@@ -413,6 +423,7 @@ void SearchWidget::updateEditorWidget() {
 
 void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
   const GraphMimeType* mimeType = dynamic_cast<const GraphMimeType*>(dragEv->mimeData());
+
   if (mimeType != NULL) {
     dragEv->accept();
   }
@@ -420,6 +431,7 @@ void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
 
 void SearchWidget::dropEvent(QDropEvent* dropEv) {
   const GraphMimeType* mimeType = dynamic_cast<const GraphMimeType*>(dropEv->mimeData());
+
   if (mimeType != NULL) {
     currentGraphChanged(mimeType->graph());
     dropEv->accept();

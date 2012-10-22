@@ -60,24 +60,24 @@ const char * paramHelp[] = {
  */
 class RandomTree:public ImportModule {
 
-    bool buildNode(node n, unsigned int sizeM) {
-      if (graph->numberOfNodes()>=sizeM+2) return false;
+  bool buildNode(node n, unsigned int sizeM) {
+    if (graph->numberOfNodes()>=sizeM+2) return false;
 
-      bool result=true;
-      int randNumber=rand();
+    bool result=true;
+    int randNumber=rand();
 
-      if (randNumber>RAND_MAX/2) {
-        node n1,n2;
-        n1=graph->addNode();
-        n2=graph->addNode();
-        graph->addEdge(n,n1);
-        graph->addEdge(n,n2);
-        result= result && buildNode(n1,sizeM);
-        result= result && buildNode(n2,sizeM);
-      }
-
-      return result;
+    if (randNumber>RAND_MAX/2) {
+      node n1,n2;
+      n1=graph->addNode();
+      n2=graph->addNode();
+      graph->addEdge(n,n1);
+      graph->addEdge(n,n2);
+      result= result && buildNode(n1,sizeM);
+      result= result && buildNode(n2,sizeM);
     }
+
+    return result;
+  }
 
 public:
   PLUGININFORMATIONS("Uniform Random Binary Tree","Auber","16/02/2001","","1.1","Graphs")
@@ -95,16 +95,17 @@ public:
     bool needLayout = false;
 
     if (dataSet!=NULL) {
-        if(dataSet->exist("Minimum size"))
-            dataSet->get("Minimum size", minSize);
-        else
-            dataSet->get("minsize", minSize);   //keep old name for backward compatibility
-        if(dataSet->exist("Maximum size"))
-            dataSet->get("Maximum size", maxSize);
-        else
-            dataSet->get("maxsize", maxSize); //keep old name for backward compatibility
+      if(dataSet->exist("Minimum size"))
+        dataSet->get("Minimum size", minSize);
+      else
+        dataSet->get("minsize", minSize);   //keep old name for backward compatibility
 
-        dataSet->get("tree layout", needLayout);
+      if(dataSet->exist("Maximum size"))
+        dataSet->get("Maximum size", maxSize);
+      else
+        dataSet->get("maxsize", maxSize); //keep old name for backward compatibility
+
+      dataSet->get("tree layout", needLayout);
     }
 
     if (maxSize < 1) {

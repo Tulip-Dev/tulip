@@ -73,13 +73,15 @@ public:
     vector<node> nodes(nbNodes);
 
     graph->reserveNodes(nbNodes);
+
     for (size_t j=0; j<nbNodes; ++j)
       nodes[j] = graph->addNode();
 
     if(undirected)
-        graph->reserveEdges(nbNodes-1);
+      graph->reserveEdges(nbNodes-1);
     else
-        graph->reserveEdges(2*(nbNodes-1));
+      graph->reserveEdges(2*(nbNodes-1));
+
     for (size_t i=0; i < nbNodes-1; ++i)
       for (size_t j = i+1; j < nbNodes; ++j) {
         graph->addEdge(nodes[i], nodes[j]);

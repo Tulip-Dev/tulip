@@ -489,9 +489,10 @@ bool PythonInterpreter::runGraphScript(const string &module, const string &funct
     const sipAPIDef *sipApi = get_sip_api();
 
     if(sipApi == NULL) {
-        QMessageBox::critical(NULL, QObject::trUtf8("failed to initalize Python"), QObject::trUtf8("SIP could not be initialized (sipApi is null)"));
-        return false;
+      QMessageBox::critical(NULL, QObject::trUtf8("failed to initalize Python"), QObject::trUtf8("SIP could not be initialized (sipApi is null)"));
+      return false;
     }
+
     // Getting proper sipWrapperType
     const sipTypeDef* kpTypeDef     = sipApi->api_find_type("tlp::Graph");
 

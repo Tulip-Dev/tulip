@@ -13,6 +13,7 @@ QString PythonVersionChecker::installedVersion() {
     pythonCheck.setReadChannel(QProcess::StandardError);
     QString result = pythonCheck.readAll();
     QRegExp versionRegexp(".*([0-9]*\\.[0-9]*)\\..*");
+
     if (versionRegexp.exactMatch(result)) {
       QString installedVersion = versionRegexp.cap(1);
       return installedVersion;

@@ -363,10 +363,10 @@ void PythonScriptView::setupWidget() {
     QString installedPython = PythonVersionChecker::installedVersion();
     QLabel* centralLabel = new QLabel();
     centralLabel->setText(QString("<p><img src=\":/icons/dialog-error.png\"/></p>\n") +
-        "<p>There is a problem with your python installation.<br/>\n" +
-        "Please check that python is installed on your system and that the python executable is accessible from your <b>PATH</b> environment variable</p>\n" +
-        "<p>Required python version: <b>" + PythonVersionChecker::compiledVersion() + "</b></p>\n" +
-                           "<p>Detected python version: " + (installedPython.isNull() ? "<i>Python not detected</i>" : "<b>" + installedPython + "</b>") + "</p>");
+                          "<p>There is a problem with your python installation.<br/>\n" +
+                          "Please check that python is installed on your system and that the python executable is accessible from your <b>PATH</b> environment variable</p>\n" +
+                          "<p>Required python version: <b>" + PythonVersionChecker::compiledVersion() + "</b></p>\n" +
+                          "<p>Detected python version: " + (installedPython.isNull() ? "<i>Python not detected</i>" : "<b>" + installedPython + "</b>") + "</p>");
     centralLabel->setWordWrap(true);
     centralLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     centralLabel->setStyleSheet("color: rgb(54,54,54); background-color: white;");
@@ -415,6 +415,7 @@ string& replaceAll(string& context, const string& from, const string& to) {
 void PythonScriptView::graphChanged(Graph *graph) {
   if (!_viewEnabled)
     return;
+
   this->graph = graph;
   viewWidget->setGraph(graph);
 }
@@ -1453,6 +1454,7 @@ void PythonScriptView::reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, 
 bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
   if (!_viewEnabled)
     return false;
+
   Qt::KeyboardModifiers modifier = Qt::ControlModifier;
 #ifdef __APPLE__
   modifier = Qt::MetaModifier;
