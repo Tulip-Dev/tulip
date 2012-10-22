@@ -30,7 +30,7 @@ namespace tlp {
 
 class GlMainView;
 
-class GlOverviewGraphicsItem : public QObject, public QGraphicsRectItem {
+class TLP_QT_SCOPE GlOverviewGraphicsItem : public QObject, public QGraphicsRectItem {
 
   Q_OBJECT
 
