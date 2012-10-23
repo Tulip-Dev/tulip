@@ -686,6 +686,7 @@ void GraphPerspective::group() {
   }
 
   if (groupedNodes.empty()) {
+    Observable::unholdObservers();
     qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection");
     return;
   }
