@@ -304,10 +304,9 @@ bool TulipProject::readMetaInfos() {
 
     QDomElement e = n.toElement();
 
-    const char *propName = e.tagName().toStdString().c_str();
-
-    if (property(propName).isValid())
-      setProperty(propName,e.text());
+    // On MacOS, converting e.tagName() to a const char* only lives for the duration of the QString, to avoid the char* to be NULL, we don't use temporary variables
+    if (property(e.tagName().toStdString().c_str()).isValid())
+      setProperty(e.tagName().toStdString().c_str(),e.text());
   }
 
   return true;
