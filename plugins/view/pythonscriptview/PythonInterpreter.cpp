@@ -30,6 +30,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QPushButton>
 #include <QtCore/QTime>
+#include <QtCore/QLibrary>
 
 #include <cstdio>
 #ifndef WIN32
@@ -317,6 +318,20 @@ PythonInterpreter::~PythonInterpreter() {
   processQtEvents = false;
 
   if (interpreterInit()) {
+    consoleOuputString = "";
+
+    // This is a hack to prevent segfaults when the PyQt4 module has been imported
+    // during the Python session. Seems there is some garbage collection issue
+    // on Qt objects wrapped by SIP. After looking at the SIP source code, the
+    // segfault is raised when the sipQtSupport->qt_find_sipslot function is called.
+    // So reset the sipQtSupport pointer to NULL, this way the problematic function will no
+    // more be called when the Python interpreter is finalized.
+    runString("sys.stdout.write(sip.__file__)");
+    QString sipModulePath = QString(consoleOuputString.c_str());
+    sipQtAPI **sipQtSupport = reinterpret_cast<sipQtAPI **>(QLibrary::resolve(sipModulePath, "sipQtSupport"));
+    *sipQtSupport = NULL;
+
+    runString("sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__;\n");
 #ifndef WIN32
     PyEval_ReleaseLock();
     PyEval_RestoreThread(mainThreadState);

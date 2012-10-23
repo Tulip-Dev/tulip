@@ -18,7 +18,9 @@
  */
 
 #if defined(__GNUC__) && __GNUC__ >= 4 && ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) || (__GNUC_MINOR__ >= 3))
-#pragma GCC diagnostic ignored "-Wunused-variable"
+#define UNUSED __attribute__((unused))
+#else
+#define UNUSED
 #endif
 
 #ifndef AUTOCOMPLETIONDATABASE_H_
@@ -32,7 +34,7 @@
 
 #include "APIDataBase.h"
 
-static char sepChar[] = {' ', '\t', '=', '(', '[', '{' , ',', '*', '+', '/', '^', '-', 0};
+static char sepChar[] UNUSED = {' ', '\t', '=', '(', '[', '{' , ',', '*', '+', '/', '^', '-', 0};
 
 class AutoCompletionDataBase {
 
