@@ -184,6 +184,12 @@ void GlMainView::openSnapshotDialog() {
   dlg.exec();
 }
 
+void GlMainView::undoCallback() {
+  std::cout << "prout" << std::endl;
+  getGlMainWidget()->getScene()->centerScene();
+  draw();
+}
+
 void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   QFont f;
   f.setBold(true);
