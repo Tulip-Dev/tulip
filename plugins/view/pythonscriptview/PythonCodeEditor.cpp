@@ -964,7 +964,8 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
     findReplaceDialog->setFindMode(false);
   }
   else if ((e->key() == Qt::Key_Space && e->modifiers() == modifier) || e->text() == ".") {
-    QPlainTextEdit::keyPressEvent(e);
+	if (e->text() == ".")
+		QPlainTextEdit::keyPressEvent(e);
     QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
 
     if (!textBeforeCursor.contains('#'))
