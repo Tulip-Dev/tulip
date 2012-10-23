@@ -18,7 +18,9 @@
  */
 
 #if defined(__GNUC__) && __GNUC__ >= 4 && ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) || (__GNUC_MINOR__ >= 3))
-#pragma GCC diagnostic ignored "-Wunused-variable"
+#define UNUSED __attribute__((unused))
+#else
+#define UNUSED
 #endif
 
 #ifndef PYTHONINTERPRETER_H_
@@ -61,7 +63,7 @@ static const char pythonReservedCharacters[] = {'#', '%', '/', '+', '-', '&', '*
     '(', ')', '[', ']', '.', 0
                                                };
 
-static const char *pythonKeywords[] = {
+static const char *pythonKeywords[] UNUSED = {
   "def", "class","from", "in", "and", "or", "not", "is", "with", "assert",
   "for", "while", "if", "elif", "import", "True", "False", "pass", "exec",
   "else", "None", "print", "global", "return", "break", "continue", "as",
