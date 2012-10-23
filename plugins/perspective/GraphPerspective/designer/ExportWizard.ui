@@ -68,7 +68,7 @@ border: 0px;
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>&lt;br /&gt;Export a graph from your graph hierarchies using one of the serialization method listed below&lt;br/&gt;Once you're done, click &lt;b&gt;Finish&lt;/b&gt; to export your graph.&lt;br/&gt; </string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;Export a graph from your graph hierarchies using one of the serialization methods listed below. &lt;br/&gt;When using one of the JSON or TLP methods, the whole hierarchy (from the root graph) is exported.&lt;br/&gt;Once you're done, click &lt;span style=&quot; font-weight:600;&quot;&gt;Finish&lt;/span&gt; to export your graph.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
