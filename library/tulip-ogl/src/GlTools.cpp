@@ -23,6 +23,7 @@
 #include <tulip/BoundingBox.h>
 #include <iostream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 namespace tlp {
@@ -79,14 +80,21 @@ void glTest(string message) {
   unsigned int i = 1;
   GLenum error = glGetError();
 
-  while (error != GL_NO_ERROR) {
-    if (i==1) qWarning() << "[OpenGL ERROR] : " << message << endl;
+  stringstream errorStream;
+  bool haveError=false;
 
-    qWarning() << "[" << i << "] ========> : " << gluErrorString(error) <<  endl;
-    assert (error == GL_NO_ERROR);
+  while (error != GL_NO_ERROR) {
+    haveError=true;
+    if (i==1)
+      errorStream << "[OpenGL ERROR] : " << message << endl;
+
+    errorStream << "[" << i << "] ========> : " << gluErrorString(error) <<  endl;
     error = glGetError();
     ++i;
   }
+
+  if(haveError)
+    qFatal( errorStream.str().c_str());
 
 #else
   //fixes unused parameter warning in release mode
