@@ -24,13 +24,15 @@
 #include <tulip/ImportModule.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/ForEach.h>
-
 #include <tulip/JsonTokens.h>
-
 #include <tulip/YajlFacade.h>
+#include <tulip/GraphProperty.h>
 
 using namespace std;
 using namespace tlp;
+
+typedef std::map<uint, uint> TemporaryGraphValue;
+typedef std::map<std::string, TemporaryGraphValue > TemporaryGraphProperty;
 
 class TlpJsonGraphParser : public YajlParseFacade {
 public:
@@ -61,6 +63,23 @@ public:
     _parsingPropertyDefaultEdgeValue(false),
     _parsingPropertyDefaultNodeValue(false),
     _waitingForGraphId(false) {
+  }
+
+  void setGraphPropertiesValues() {
+    for(std::map<tlp::Graph*, TemporaryGraphProperty>::const_iterator graphIterator = _graphProperties.begin();
+        graphIterator != _graphProperties.end();
+        ++graphIterator) {
+      for(TemporaryGraphProperty::const_iterator propertyIterator = graphIterator->second.begin();
+          propertyIterator != graphIterator->second.end();
+          ++propertyIterator) {
+        tlp::GraphProperty* prop = graphIterator->first->getProperty<tlp::GraphProperty>(propertyIterator->first);
+        for(TemporaryGraphValue::const_iterator valueIterator = propertyIterator->second.begin();
+            valueIterator != propertyIterator->second.end();
+            ++valueIterator) {
+          prop->setNodeValue(tlp::node(valueIterator->first), _graph->getDescendantGraph(valueIterator->second));
+        }
+      }
+    }
   }
 
   virtual void parseStartArray() {
@@ -104,7 +123,6 @@ public:
   virtual void parseMapKey(const std::string& value) {
     if(_parsingProperties && !_parsingPropertyNodeValues && !_parsingPropertyEdgeValues && !_parsingPropertyDefaultEdgeValue && !_parsingPropertyDefaultNodeValue && _propertyName.empty()) {
       _propertyName = value;
-//         qDebug() << "now parsing property: " << propertyName << std::endl;
     }
 
     if(_currentProperty && value == NodesValuesToken) {
@@ -169,7 +187,6 @@ public:
     }
 
     if(!_parsingPropertyNodeValues && !_parsingPropertyEdgeValues && !_propertyName.empty()) {
-//       qDebug() << "finished parsing property '" << _propertyName << "'" << endl;
       _currentProperty = NULL;
       _propertyName = string();
     }
@@ -201,7 +218,9 @@ public:
     if(!_parsingSubgraph.empty()) {
       --_parsingSubgraph.top();
 
+      //finished parsing the subgraphs
       if(_parsingSubgraph.top() == 0) {
+        setGraphPropertiesValues();
         _parsingSubgraph.pop();
         _graph = _graph->getSuperGraph();
       }
@@ -297,13 +316,16 @@ public:
       if(_parsingPropertyType && !_propertyName.empty()) {
         _parsingPropertyType = false;
 
-        //       qDebug() << "getting new property: " << propertyName << "(" << value << ")" << std::sendl;
-        //       qDebug() << "of type: " << value << std::endl;
         if(_progress) {
           _progress->setComment("parsing property: '" + _propertyName + "'");
         }
 
         _currentProperty = _graph->getLocalProperty(_propertyName, value);
+
+        if(value == "graph") {
+          _graphProperties[_graph] = TemporaryGraphProperty();
+          _graphProperties[_graph][_propertyName] = TemporaryGraphValue();
+        }
 
         if(!_currentProperty) {
           qCritical() << "The property '" << _propertyName << "' of type: '" << value << "' could not be created" << endl;
@@ -314,21 +336,23 @@ public:
         if(_parsingPropertyDefaultNodeValue) {
           _currentProperty->setAllNodeStringValue(value);
           _parsingPropertyDefaultNodeValue = false;
-          //       qDebug() << "of default node value: " << value << std::endl;
         }
 
         if(_parsingPropertyDefaultEdgeValue) {
           _currentProperty->setAllEdgeStringValue(value);
           _parsingPropertyDefaultEdgeValue = false;
-          //       qDebug() << "of default edge value: " << value << std::endl;
         }
 
         if(_parsingPropertyNodeValues) {
+          //if parsing a graphproperty, add it in the temporary buffer so the values are correctly set afterwards
+          if(_graphProperties[_graph].find(_currentProperty->getName()) != _graphProperties[_graph].end()) {
+            _graphProperties[_graph][_currentProperty->getName()].insert(std::pair<uint, uint>(_currentIdentifier, atoi(value.c_str())));
+          }
+
           assert(_currentIdentifier != UINT_MAX);
           assert(_currentProperty);
           node n(_currentIdentifier);
           _currentProperty->setNodeStringValue(n, value);
-          //       qDebug() << "setting node value: " << n.id << " " << value << "; "<< currentProperty->getNodeStringValue(n) << endl;;
         }
 
         if(_parsingPropertyEdgeValues) {
@@ -405,6 +429,9 @@ private:
   bool _parsingPropertyDefaultNodeValue;
 
   bool _waitingForGraphId;
+
+  //ugly workaround for GraphProperties as they do not support set*StringValue
+  std::map<tlp::Graph*, TemporaryGraphProperty> _graphProperties;
 };
 
 /**
@@ -457,8 +484,10 @@ class TlpJsonImport : public ImportModule, YajlProxy {
 public:
   PLUGININFORMATIONS("JSON Import", "Charles Huet", "18/05/2011", "Tulip JSON format", "1.0", "File")
 
-  virtual std::string fileExtension() const {
-    return "json";
+  virtual std::list<std::string> fileExtensions() const {
+    std::list<std::string> l;
+    l.push_back("json");
+    return l;
   }
 
   TlpJsonImport(tlp::PluginContext* context) : ImportModule(context) {
@@ -477,9 +506,7 @@ public:
       dataSet->get<string>("file::filename", filename);
 
       _proxy = new YajlParseFacade(_progress);
-//       QTime t = QTime::currentTime();
       parse(filename);
-//       qDebug() << "msecs: " << t.msecsTo(QTime::currentTime()) << endl;
     }
 
     pluginProgress->setError(_proxy->errorMessage());
