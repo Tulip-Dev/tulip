@@ -97,7 +97,8 @@ public:
     //initialization of the maps from old ID to new ID here, before entering saveGraph (as it is recursive).
     node n;
     int i = 0;
-    forEach(n, graph->getNodes()) {
+    // the export only works for the root graph
+    forEach(n, graph->getRoot()->getNodes()) {
       _newNodeId.set(n.id, i++);
     }
 
