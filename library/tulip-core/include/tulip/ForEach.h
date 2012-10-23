@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef Tulip_FOREACH_H
 #define Tulip_FOREACH_H
@@ -64,6 +63,16 @@ inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
 /**
  * @brief Allows to iterate on the nodes or edges of a Graph in a clear and concise way.
  * It also avoid having to manage a tulip Iterator, whose deletion is often forgotten.
+ *
+ * This code shows how forEach can be used instead of an Iterator to iterate over a Graph's nodes
+ * @code
+ * node n;
+ * forEach(n, graph->getNodes()) {
+ *   // Do something with node n
+ * }
+ * @endcode
+ *
+ * This macro can be used with any Iterator subclass as it's based on the existence of the next() and hasNext() methods
  */
 #define forEach(A, B) \
 for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
@@ -78,4 +87,3 @@ for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
   for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(new StableIterator<TYPEOF(A) >(B));  tlp::_tlp_if_test(A, _it_foreach);)
 
 #endif
-///@endcond
