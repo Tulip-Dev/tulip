@@ -37,6 +37,7 @@ class AlgorithmRunner: public QWidget {
 
   Ui::AlgorithmRunner* _ui;
   tlp::Graph* _graph;
+  QToolButton* _localModeButton;
 
   QList<AlgorithmRunnerItem*> _favorites;
 
@@ -47,6 +48,8 @@ public:
 public slots:
   void setGraph(tlp::Graph*);
   void findPlugins();
+
+  void refreshPluginsList();
 
 protected slots:
   void setFilter(QString);

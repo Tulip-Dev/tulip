@@ -93,6 +93,8 @@ public slots:
 
   void setAutoCenterPanelsOnDraw(bool f);
 
+  void pluginsListChanged();
+
 protected slots:
   void currentGraphChanged(tlp::Graph* graph);
   void refreshDockExpandControls();

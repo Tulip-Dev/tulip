@@ -72,6 +72,58 @@ void buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelInd
   }
 }
 
+void insertItem(QWidget* w, const QString& name, QToolButton* localModeButton) {
+  const Plugin* plugin = PluginLister::pluginInformations(name.toStdString());
+  QString category = plugin->category().c_str();
+  QString group = plugin->group().c_str();
+  delete plugin;
+
+  ExpandableGroupBox* categoryBox = NULL, *groupBox = NULL;
+  foreach(ExpandableGroupBox* box, w->findChildren<ExpandableGroupBox*>()) {
+    if (box->title() ==  category) {
+      categoryBox = box;
+      break;
+    }
+  }
+
+  if (categoryBox==NULL)
+    return;
+
+  if (!group.isEmpty()) {
+    foreach(ExpandableGroupBox* box, categoryBox->findChildren<ExpandableGroupBox*>()) {
+      if (box->title() == group) {
+        groupBox = box;
+        break;
+      }
+    }
+  }
+  if (groupBox == NULL) {
+    groupBox = categoryBox;
+  }
+
+  AlgorithmRunnerItem* item = new AlgorithmRunnerItem(name);
+  QObject::connect(localModeButton,SIGNAL(clicked(bool)),item,SLOT(setLocalMode(bool)));
+  groupBox->layout()->addWidget(item);
+}
+
+void refreshTreeUi(QWidget* w, QToolButton* localModeButton) {
+  QStringList visibleItems;
+  foreach(AlgorithmRunnerItem* i, w->findChildren<AlgorithmRunnerItem*>()) {
+    if (PluginLister::instance()->pluginExists(i->name().toStdString()))
+      visibleItems.push_back(i->name());
+    else
+      i->deleteLater();
+  }
+
+  std::list<std::string> installedPlugins = PluginLister::instance()->availablePlugins<tlp::Algorithm>();
+  for(std::list<std::string>::iterator it = installedPlugins.begin(); it != installedPlugins.end(); ++it) {
+    std::string name = *it;
+    if (!visibleItems.contains(name.c_str())) {
+      insertItem(w, name.c_str(),localModeButton);
+    }
+  }
+}
+
 AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::AlgorithmRunner), _graph(NULL) {
   _ui->setupUi(this);
   _ui->favoritesBox->setWidget(new QWidget());
@@ -83,18 +135,18 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   _ui->favoritesBox->widget()->installEventFilter(this);
 
   _ui->contents->setEnabled(false);
-  QToolButton* localModeButton = new QToolButton(_ui->header);
-  localModeButton->setMaximumSize(25,25);
-  localModeButton->setMinimumSize(25,25);
-  localModeButton->setCheckable(true);
-  localModeButton->setChecked(true);
-  localModeButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
-  localModeButton->setIconSize(QSize(22,22));
-  localModeButton->setToolTip(trUtf8("Always store result in local property"));
-  _ui->header->mainFrame()->layout()->addWidget(localModeButton);
+  _localModeButton = new QToolButton(_ui->header);
+  _localModeButton->setMaximumSize(25,25);
+  _localModeButton->setMinimumSize(25,25);
+  _localModeButton->setCheckable(true);
+  _localModeButton->setChecked(true);
+  _localModeButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
+  _localModeButton->setIconSize(QSize(22,22));
+  _localModeButton->setToolTip(trUtf8("Always store result in local property"));
+  _ui->header->mainFrame()->layout()->addWidget(_localModeButton);
 
   PluginModel<tlp::Algorithm> model;
-  buildTreeUi(_ui->contents, &model, QModelIndex(), localModeButton, true);
+  buildTreeUi(_ui->contents, &model, QModelIndex(), _localModeButton, true);
   _ui->contents->layout()->addItem(new QSpacerItem(0,0,QSizePolicy::Minimum,QSizePolicy::Expanding));
   foreach(AlgorithmRunnerItem* i, findChildren<AlgorithmRunnerItem*>()) {
     connect(i,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
@@ -118,6 +170,10 @@ void AlgorithmRunner::setGraph(Graph* g) {
 void AlgorithmRunner::findPlugins() {
   _ui->searchBox->selectAll();
   _ui->searchBox->setFocus(Qt::ShortcutFocusReason);
+}
+
+void AlgorithmRunner::refreshPluginsList() {
+  refreshTreeUi(_ui->contents,_localModeButton);
 }
 
 void AlgorithmRunner::favorized(bool f) {
