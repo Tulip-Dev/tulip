@@ -633,21 +633,19 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 }
 
 tlp::node Graph::getSource() const {
-  node source(UINT_MAX);
-
+  node source;
   Iterator<node> *it = getNodes();
-
+  bool found=false;
   while (it->hasNext()) {
     source=it->next();
-
     if (indeg(source) == 0) {
+      found=true;
       break;
     }
   }
-
   delete it;
 
-  return source;
+  return found?source:node();
 }
 
 DataType* Graph::getAttribute(const std::string& name) const {
