@@ -123,6 +123,8 @@ public slots:
    */
   void openSnapshotDialog();
 
+  void undoCallback();
+
 protected slots:
   virtual void glMainViewDrawn(bool graphChanged);
   virtual void sceneRectChanged(const QRectF&);

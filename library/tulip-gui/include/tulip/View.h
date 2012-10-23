@@ -178,7 +178,7 @@ public slots:
    * @brief This method is a callback to notify the panel that the pop() method (undo) has just been called on the graph.
    * By default, this method will make a call to centerView()
    **/
-  void undoCallback();
+  virtual void undoCallback();
 
   /**
     @brief This method applies settings changed in the configuration widgets
