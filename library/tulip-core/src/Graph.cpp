@@ -634,18 +634,11 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
 tlp::node Graph::getSource() const {
   node source;
-  Iterator<node> *it = getNodes();
-  bool found=false;
-  while (it->hasNext()) {
-    source=it->next();
-    if (indeg(source) == 0) {
-      found=true;
-      break;
-    }
+  forEach(source, getNodes()) {
+    if (indeg(source) == 0)
+      return source;
   }
-  delete it;
-
-  return found?source:node();
+  return node();
 }
 
 DataType* Graph::getAttribute(const std::string& name) const {
