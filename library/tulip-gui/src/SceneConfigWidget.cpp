@@ -27,6 +27,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/TulipSettings.h>
 #include "ui_SceneConfigWidget.h"
+#include <tulip/GraphPropertiesModel.h>
 
 using namespace tlp;
 
@@ -59,7 +60,6 @@ void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
 void SceneConfigWidget::resetChanges() {
   _resetting = true;
 
-  _ui->labelsOrderingCombo->clear();
   _ui->scrollArea->setEnabled(_glMainWidget != NULL);
 
   if (_glMainWidget == NULL || _glMainWidget->getScene()->getGlGraphComposite() == NULL || _glMainWidget->getScene()->getGlGraphComposite()->getGraph() == NULL)
@@ -69,21 +69,13 @@ void SceneConfigWidget::resetChanges() {
   GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
 
   // NODES
-  _ui->labelsOrderingCombo->addItem(trUtf8("Disable ordering"));
-  int i=1;
-  std::string propName;
-  forEach(propName,graph->getProperties()) {
-    PropertyInterface* pi = graph->getProperty(propName);
+  GraphPropertiesModel<DoubleProperty>* model = new GraphPropertiesModel<DoubleProperty>(trUtf8("Disable ordering"),graph);
+  _ui->labelsOrderingCombo->setModel(model);
+  if (renderingParameters->getElementOrderingProperty() == NULL)
+    _ui->labelsOrderingCombo->setCurrentIndex(0);
+  else
+    _ui->labelsOrderingCombo->setCurrentIndex(model->rowOf(renderingParameters->getElementOrderingProperty()));
 
-    if (dynamic_cast<DoubleProperty*>(pi) != NULL) {
-      _ui->labelsOrderingCombo->addItem(propName.c_str());
-
-      if (renderingParameters->getElementOrderingProperty() == pi)
-        _ui->labelsOrderingCombo->setCurrentIndex(i);
-
-      i++;
-    }
-  }
   _ui->labelsFitCheck->setChecked(renderingParameters->isLabelScaled());
   _ui->labelsDensitySlider->setValue(renderingParameters->getLabelsDensity());
   _ui->labelSizesSpanSlider->setLowerValue(renderingParameters->getMinSizeOfLabel());
@@ -129,12 +121,12 @@ void SceneConfigWidget::applySettings() {
   GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
 
   // NODES
-  DoubleProperty* orderingProperty = NULL;
-
-  if (_ui->labelsOrderingCombo->currentIndex() != 0 && _glMainWidget->getScene()->getGlGraphComposite()->getGraph())
-    orderingProperty = _glMainWidget->getScene()->getGlGraphComposite()->getGraph()->getProperty<DoubleProperty>(_ui->labelsOrderingCombo->currentText().toStdString());
-
-  renderingParameters->setElementOrderingProperty(orderingProperty);
+  if (_ui->labelsOrderingCombo->currentIndex()==0)
+    renderingParameters->setElementOrderingProperty(NULL);
+  else {
+    GraphPropertiesModel<DoubleProperty>* model = static_cast<GraphPropertiesModel<DoubleProperty> *>(_ui->labelsOrderingCombo->model());
+    renderingParameters->setElementOrderingProperty(dynamic_cast<DoubleProperty*>(model->index(_ui->labelsOrderingCombo->currentIndex(),0).data(TulipModel::PropertyRole).value<PropertyInterface*>()));
+  }
   renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());
   renderingParameters->setLabelsDensity(_ui->labelsDensitySlider->value());
   renderingParameters->setMinSizeOfLabel(_ui->labelSizesSpanSlider->lowerValue());

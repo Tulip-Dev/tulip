@@ -156,7 +156,10 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
 
 template<typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowOf(PROPTYPE* pi) const {
-  return _properties.indexOf(pi);
+  int result = _properties.indexOf(pi);
+  if (!_placeholder.isNull())
+    ++result;
+  return result;
 }
 
 template<typename PROPTYPE>
