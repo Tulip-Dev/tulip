@@ -112,7 +112,7 @@ void refreshTreeUi(QWidget* w, QToolButton* localModeButton) {
     if (PluginLister::instance()->pluginExists(i->name().toStdString()))
       visibleItems.push_back(i->name());
     else
-      i->deleteLater();
+      delete i;
   }
 
   std::list<std::string> installedPlugins = PluginLister::instance()->availablePlugins<tlp::Algorithm>();
