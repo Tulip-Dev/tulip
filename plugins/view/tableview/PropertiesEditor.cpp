@@ -16,32 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
-
-/**
- *
- * This file is part of Tulip (www.tulip-software.org)
- *
- * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
- *
- * Tulip is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * Tulip is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
-
 #include "PropertiesEditor.h"
 
 #include <tulip/Perspective.h>
 #include <tulip/GraphModel.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/CopyPropertyDialog.h>
+#include <tulip/PropertyCreationDialog.h>
 #include <tulip/TulipItemDelegate.h>
 #include <QtGui/QSortFilterProxyModel>
 #include <QtGui/QMenu>
@@ -52,7 +33,6 @@
 #include <QtGui/QMessageBox>
 
 #include "ui_PropertiesEditor.h"
-#include "ui_AddPropertyDialog.h"
 
 Q_DECLARE_METATYPE(Qt::CheckState)
 
@@ -177,67 +157,7 @@ void PropertiesEditor::copyProperty() {
 }
 
 void PropertiesEditor::newProperty() {
-  Ui::AddPropertyDialog ui;
-  QDialog dlg;
-  ui.setupUi(&dlg);
-
-  if (dlg.exec() == QDialog::Accepted && ui.comboBox->currentIndex() > 0 && !ui.lineEdit->text().isEmpty()) {
-    std::string name = ui.lineEdit->text().toStdString();
-
-    if (_graph->existProperty(name))
-      QMessageBox::critical(NULL,trUtf8("Property already exists"),trUtf8("Graph already contains a property named ") + ui.lineEdit->text());
-
-    switch (ui.comboBox->currentIndex()) {
-    case 1:
-      _graph->getProperty<IntegerProperty>(name);
-      break;
-
-    case 2:
-      _graph->getProperty<IntegerVectorProperty>(name);
-      break;
-
-    case 3:
-      _graph->getProperty<BooleanProperty>(name);
-      break;
-
-    case 4:
-      _graph->getProperty<BooleanVectorProperty>(name);
-      break;
-
-    case 5:
-      _graph->getProperty<LayoutProperty>(name);
-      break;
-
-    case 6:
-      _graph->getProperty<CoordVectorProperty>(name);
-      break;
-
-    case 7:
-      _graph->getProperty<StringProperty>(name);
-      break;
-
-    case 8:
-      _graph->getProperty<StringVectorProperty>(name);
-      break;
-
-    case 9:
-      _graph->getProperty<SizeProperty>(name);
-      break;
-
-    case 10:
-      _graph->getProperty<SizeVectorProperty>(name);
-      break;
-
-    case 11:
-      _graph->getProperty<ColorProperty>(name);
-      break;
-
-    case 12:
-      _graph->getProperty<ColorVectorProperty>(name);
-      break;
-    }
-
-  }
+  PropertyCreationDialog::createNewProperty(_graph, Perspective::instance()->mainWindow());
 }
 
 void PropertiesEditor::delProperty() {
