@@ -1,7 +1,7 @@
 !include "MUI.nsh"
 
 ; Global installer settings
-Name "Tulip 4.1.0"
+Name "Tulip"
 !define MUI_ICON "files\share\tulip\bitmaps\logo32x32.ico"
 !define MUI_UNICON "files\share\tulip\bitmaps\logo32x32.ico"
 RequestExecutionLevel admin
@@ -21,7 +21,7 @@ RequestExecutionLevel admin
 !insertmacro MUI_LANGUAGE "English"
 
 InstallDir $PROGRAMFILES\Tulip
-OutFile "tulip-4.1.0_setup.exe"
+OutFile "tulip_setup.exe"
 
 Section "Tulip"
  SetShellVarContext all
