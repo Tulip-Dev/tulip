@@ -916,6 +916,10 @@ void GraphPerspective::setAutoCenterPanelsOnDraw(bool f) {
   _ui->workspace->setAutoCenterPanelsOnDraw(f);
 }
 
+void GraphPerspective::pluginsListChanged() {
+  _ui->algorithmRunner->refreshPluginsList();
+}
+
 void GraphPerspective::addNewGraph() {
   Graph* g = tlp::newGraph();
   _graphs->addGraph(g);
