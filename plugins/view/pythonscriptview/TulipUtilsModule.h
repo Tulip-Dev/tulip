@@ -23,6 +23,8 @@
 #include "PythonIncludes.h"
 #include "PythonInterpreter.h"
 #include "PythonScriptView.h"
+#include "../../perspective/GraphPerspective/include/GraphPerspective.h"
+
 
 #include <tulip/GlMainWidget.h>
 #include <tulip/PropertyAlgorithm.h>
@@ -118,6 +120,10 @@ tuliputils_removePlugin(PyObject *, PyObject *args) {
 
 static PyObject *
 tuliputils_updatePluginsMenus(PyObject *, PyObject *) {
+  GraphPerspective* gPersp = dynamic_cast<GraphPerspective*>(tlp::Perspective::instance());
+  if (gPersp) {
+      gPersp->pluginsListChanged();
+  }
   Py_RETURN_NONE;
 }
 

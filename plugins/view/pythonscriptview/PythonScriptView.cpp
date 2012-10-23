@@ -238,6 +238,31 @@ QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QStri
 
   QString pluginClass;
 
+  if (pluginType == "General") {
+    pluginClass = "tlp.Algorithm";
+  }
+  else if (pluginType == "Layout") {
+    pluginClass = "tlp.LayoutAlgorithm";
+  }
+  else if (pluginType == "Size") {
+    pluginClass = "tlp.SizeAlgorithm";
+  }
+  else if (pluginType == "Measure") {
+    pluginClass = "tlp.DoubleAlgorithm";
+  }
+  else if (pluginType == "Color") {
+    pluginClass = "tlp.ColorAlgorithm";
+  }
+  else if (pluginType == "Selection") {
+    pluginClass = "tlp.BooleanAlgorithm";
+  }
+  else if (pluginType == "Import") {
+    pluginClass = "tlp.ImportModule";
+  }
+  else {
+    pluginClass = "tlp.ExportModule";
+  }
+
   QString pluginSkeleton;
   QTextStream textStream(&pluginSkeleton);
 
@@ -1172,72 +1197,53 @@ void PythonScriptView::saveModule() {
 }
 
 bool PythonScriptView::checkAndGetPluginInfosFromSrcCode(const QString &pluginCode, QString &pluginName, QString &pluginClassName, QString &pluginType, QString &pluginClass) {
+  pluginClass = "";
+  pluginClassName = "";
+  pluginName = "";
+  pluginType = "";
   QString s = "tulipplugins.register";
   int idx1 = pluginCode.indexOf(s);
 
-  if (idx1 == -1) {
-    return false;
-  }
-  else {
-    idx1 += s.length();
-    int idx2 = pluginCode.indexOf("Plugin", idx1);
-    QString tlpType = pluginCode.mid(idx1, idx2 - idx1);
-    pluginType = pluginCode.mid(idx1, idx2 - idx1);
-    pluginClass = "";
-    pluginClassName = "";
-    pluginName = "";
-
-    if (tlpType == "Algorithm") {
-      pluginClass = "tlp.Algorithm";
-      pluginType = "General";
-    }
-    else if (tlpType == "Layout") {
-      pluginClass = "tlp.LayoutAlgorithm";
-      pluginType = tlpType;
-    }
-    else if (tlpType == "Size") {
-      pluginType = tlpType;
-      pluginClass = "tlp.SizeAlgorithm";
-    }
-    else if (tlpType == "Color") {
-      pluginType = tlpType;
-      pluginClass = "tlp.ColorAlgorithm";
-    }
-    else if (tlpType == "Double") {
-      pluginType = "Measure";
-      pluginClass = "tlp.DoubleAlgorithm";
-    }
-    else if (tlpType == "Boolean") {
-      pluginType = "Selection";
-      pluginClass = "tlp.BooleanAlgorithm";
-    }
-    else if (tlpType == "Import") {
-      pluginType = tlpType;
-      pluginClass = "tlp.ImportModule";
-    }
-    else {
-      pluginType = "Export";
-      pluginClass = "tlp.ExportModule";
-    }
-
+  if (idx1 != -1) {
     ostringstream oss;
-    oss << "^.*class ([a-zA-Z_][a-zA-Z0-9_]*)\\(" << pluginClass.toStdString() << "\\).*$";
+    oss << "^.*class ([a-zA-Z_][a-zA-Z0-9_]*)\\(([^,]+)\\).*$";
     QRegExp rx(oss.str().c_str());
 
     if (rx.indexIn(pluginCode) != -1) {
       pluginClassName = rx.cap(1);
+      pluginClass = rx.cap(2);
     }
 
+    if (pluginClass == "tlp.Algorithm") {
+        pluginType = "General";
+    } else if (pluginClass == "tlp.ColorAlgorithm") {
+        pluginType = "Color";
+    } else if (pluginClass == "tlp.LayoutAlgorithm") {
+        pluginType = "Layout";
+    } else if (pluginClass == "tlp.DoubleAlgorithm") {
+        pluginType = "Measure";
+    } else if (pluginClass == "tlp.SizeAlgorithm") {
+        pluginType = "Size";
+    } else if (pluginClass == "tlp.BooleanAlgorithm") {
+        pluginType = "Selection";
+    } else if (pluginClass == "tlp.ImportModule") {
+        pluginType = "Import";
+    } else {
+        pluginType = "Export";
+    }
+
+
     oss.str("");
-    oss << "^.*register" << tlpType.toStdString() << "Plugin.*\\(.*,.*\"([^,]+)\",.*$";
+    oss << "^.*registerPlugin.*\\(.*,.*\"([^,]+)\",.*$";
     rx.setPattern(oss.str().c_str());
 
     if (rx.indexIn(pluginCode) != -1) {
       pluginName = rx.cap(1);
     }
+    return true;
   }
 
-  return true;
+  return false;
 }
 
 void PythonScriptView::loadPythonPlugin() {
@@ -1612,7 +1618,6 @@ void PythonScriptView::registerPythonPlugin(bool clear) {
   PythonInterpreter::getInstance()->runString("tulipplugins.setTestMode(False)");
   ostringstream oss;
   string pluginFile = viewWidget->getPluginEditor(tabIdx)->getFileName().toStdString();
-  string pluginType = editedPluginsType[pluginFile];
 
   oss << "import " << moduleName.toStdString() << endl;
   oss << "plugin = " << moduleName.toStdString() << "." << editedPluginsClassName[pluginFile] << "(tlp.AlgorithmContext())";
