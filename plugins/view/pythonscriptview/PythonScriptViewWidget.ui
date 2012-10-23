@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>540</width>
-    <height>628</height>
+    <width>538</width>
+    <height>626</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -169,7 +169,7 @@
       </widget>
       <widget class="QWidget" name="tab_8">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <attribute name="title">
         <string>Tulip plugin editor</string>
@@ -195,6 +195,7 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
+          <zorder>pluginsTabWidget</zorder>
          </widget>
         </item>
         <item>
@@ -400,7 +401,7 @@
    <item>
     <widget class="QFrame" name="pluginControlFrame">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="minimumSize">
       <size>

@@ -55,7 +55,7 @@ QT4_ADD_RESOURCES(pythonscriptview_RCC_SRCS ${pythonscriptview_RCC})
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_LIB_SRCS} ${pythonscriptview_MOC_SRCS} ${pythonscriptview_UI_SRCS} ${pythonscriptview_RCC_SRCS})
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipGUIName} GraphPerspective-${TulipVersion})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_LIBRARIES})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
 IF(LINUX)
