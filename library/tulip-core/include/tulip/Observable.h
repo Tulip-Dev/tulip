@@ -478,8 +478,9 @@ private:
 };
 
 /**
- * @brief The ObserverLocker class is a convinience class to automatically hold and unhold observers. It perform a call to Observable::holdObserver() at it's creation and a call to Observable::unholdObserver() at it's destruction.
- * You can use it if you had to hold observers in a function with multiple return points to avoid to call Observable::unholdObserver() for each of them.
+ * @brief The ObserverLocker class is a convenience class to automatically hold and unhold observers.
+ * It performs a call to Observable::holdObserver() at its creation and a call to Observable::unholdObserver() at its destruction.
+ * You can use it if you have to hold observers in a function with multiple return points to avoid to call Observable::unholdObserver() for each of them.
  * @code
  * void myFunc(){
  *  ObserverLocker locker;//Automatically call Observable::holdObserver()
