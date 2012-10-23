@@ -7,7 +7,6 @@ navigabletableview.cpp
 )
 
 QT4_WRAP_UI(UI_SRCS
-AddPropertyDialog.ui
 TableView.ui
 PropertiesEditor.ui
 )
