@@ -17,18 +17,17 @@
  *
  */
 
+#include <sstream>
+
+#include <QtCore/QDate>
+
 #include <tulip/ForEach.h>
 #include <tulip/ExportModule.h>
 #include <tulip/Graph.h>
 #include <tulip/DataSet.h>
 #include <tulip/MutableContainer.h>
-
-#include <tulip/JsonTokens.h>
-
-#include <sstream>
-
-#include <QDate>
 #include <tulip/YajlFacade.h>
+#include <tulip/JsonTokens.h>
 
 using namespace std;
 using namespace tlp;
