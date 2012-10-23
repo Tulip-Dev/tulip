@@ -24,6 +24,7 @@
 #include <QtGui/QTextBrowser>
 #include <QtGui/QTextBlock>
 #include <QtGui/QApplication>
+#include <QtCore/QTime>
 
 
 #include <iostream>
@@ -34,7 +35,10 @@ class ConsoleOutputHandler : public QObject {
 
 public:
 
-  ConsoleOutputHandler() {}
+  ConsoleOutputHandler() {
+	timer.start();
+  }
+  
 
 public slots :
 
@@ -95,9 +99,17 @@ public slots :
 
         cursor = textBrowser->document()->find(rx, cursor);
       }
+	  if (timer.elapsed() >= 50) {
+		QApplication::processEvents();
+		timer.start();
+	  }
     }
   }
 
+private:
+
+	QTime timer;
+  
 };
 
 class ConsoleOutputEmitter : public QObject {
