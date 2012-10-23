@@ -66,6 +66,9 @@ public:
   std::string getError();
   void setError(const std::string &error);
 
+protected:
+  void closeEvent(QCloseEvent *);
+
 public slots:
   void setCancelButtonVisible(bool);
   void setStopButtonVisible(bool);
@@ -100,6 +103,9 @@ public:
 
   std::string getError();
   void setError(const std::string &error);
+
+protected:
+  void closeEvent(QCloseEvent *);
 
 public slots:
   void setCancelButtonVisible(bool v);
