@@ -18,6 +18,7 @@
  */
 #include "tulip/SimplePluginProgressWidget.h"
 #include <QtGui/QStylePainter>
+#include <QtGui/QCloseEvent>
 #include <QtCore/QDebug>
 #include <QtCore/QTime>
 #include <iostream>
@@ -100,6 +101,10 @@ std::string SimplePluginProgressWidget::getError() {
 
 void SimplePluginProgressWidget::setError(const std::string &error) {
   _error = error;
+}
+
+void SimplePluginProgressWidget::closeEvent(QCloseEvent* ev) {
+  ev->ignore();
 }
 
 void SimplePluginProgressWidget::setCancelButtonVisible(bool v) {
@@ -196,6 +201,10 @@ std::string SimplePluginProgressDialog::getError() {
 
 void SimplePluginProgressDialog::setError(const std::string &error) {
   _progress->setError(error);
+}
+
+void SimplePluginProgressDialog::closeEvent(QCloseEvent * ev) {
+  ev->ignore();
 }
 
 void SimplePluginProgressDialog::setCancelButtonVisible(bool v) {
