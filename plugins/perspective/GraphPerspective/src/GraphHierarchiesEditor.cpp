@@ -51,6 +51,11 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent)
   _ui->header->insertWidget(linkButton);
   _linkButton = linkButton;
   _ui->hierarchiesTree->installEventFilter(this);
+
+  connect(_ui->hierarchiesTree, SIGNAL(collapsed(const QModelIndex &)),
+          this, SLOT(resizeFirstColumnToContent()));
+  connect(_ui->hierarchiesTree, SIGNAL(expanded(const QModelIndex &)),
+          this, SLOT(resizeFirstColumnToContent()));
 }
 
 bool GraphHierarchiesEditor::synchronized() const {
@@ -60,6 +65,7 @@ bool GraphHierarchiesEditor::synchronized() const {
 void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   _ui->hierarchiesTree->setModel(model);
   _ui->hierarchiesTree->header()->resizeSection(0,100);
+  resizeFirstColumnToContent();
 }
 
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
@@ -210,9 +216,15 @@ void GraphHierarchiesEditor::saveGraphToFile() {
 void GraphHierarchiesEditor::setSynchronized(bool f) {
   _linkButton->setChecked(f);
 }
+
 void GraphHierarchiesEditor::setSynchronizeButtonVisible(bool f) {
   _linkButton->setVisible(f);
 }
+
 void GraphHierarchiesEditor::setAddPanelButtonVisible(bool f) {
   _ui->addPanelButton->setVisible(f);
+}
+
+void GraphHierarchiesEditor::resizeFirstColumnToContent() {
+  _ui->hierarchiesTree->resizeColumnToContents(0);
 }
