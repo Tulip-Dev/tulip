@@ -466,32 +466,11 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
 
   QImage resultImage;
 
-#ifndef WITHOUT_QT_PICTURE_OUTPUT
-  GlMainWidget::getFirstQGLWidget()->makeCurrent();
-  scene.setViewport(0,0,width,height);
-
-  if(center)
-    scene.ajustSceneToSize(width,height);
-
-  QGLPixelBuffer *glFrameBuf=QGlPixelBufferManager::getInst().getPixelBuffer(width,height);
-
-  glFrameBuf->makeCurrent();
-
-  computeInteractors();
-  scene.draw();
-  drawInteractors();
-
-
-
-  resultImage=glFrameBuf->toImage();
-#else
   makeCurrent();
   scene.setViewport(0,0,width,height);
 
   if(center)
     scene.ajustSceneToSize(width,height);
-
-  scene.prerenderMetaNodes();
 
   unsigned char *image = (unsigned char *)malloc(width*height*3*sizeof(unsigned char));
   computeInteractors();
@@ -518,7 +497,6 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
   painter.end();
   free(image);
   resultImage= pm.toImage();
-#endif
 
   scene.setViewport(0,0,oldWidth,oldHeight);
 
