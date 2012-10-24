@@ -6,7 +6,7 @@
 
 using namespace tlp;
 
-%ProjectName:c%::%ProjectName:c%(): %BaseView%() {
+%ProjectName:c%::%ProjectName:c%(const tlp::PluginContext* context): %BaseView%() {
 }
 
 %ProjectName:c%::~%ProjectName:c%() {
