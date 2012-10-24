@@ -73,6 +73,39 @@ struct SelectedEntity {
   SelectedEntityType getEntityType() const {
     return entityType;
   }
+  /**
+   * @brief getNode is a convenience method to perform the check on the selected element type and return the corresponding node object. It's equivalent to
+   * @code
+   * if(getComplexEntityType()==NODE_SELECTED){
+   *    return node(getComplexEntityId())
+   * }
+   * @endcode
+   * @return the selected node if the entity type is correct or an invalid node else.
+   */
+  node getNode()const{
+      if(entityType == NODE_SELECTED){
+          return node(complexEntityId);
+      }else{
+          return node();
+      }
+  }
+
+  /**
+   * @brief getEdge is a convenience method to perform the check on the selected element type and return the corresponding edge object. It's equivalent to
+   * @code
+   * if(getComplexEntityType()==EDGE_SELECTED){
+   *    return edge(getComplexEntityId())
+   * }
+   * @endcode
+   * @return the selected edge if the entity type is correct or an invalid edge else.
+   */
+  edge getEdge()const{
+      if(entityType == EDGE_SELECTED){
+          return edge(complexEntityId);
+      }else{
+          return edge();
+      }
+  }
 
 protected :
 

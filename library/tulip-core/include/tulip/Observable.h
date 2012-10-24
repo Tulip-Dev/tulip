@@ -477,6 +477,32 @@ private:
   static bool init();
 };
 
+/**
+ * @brief The ObserverLocker class is a convenience class to automatically hold and unhold observers.
+ * It performs a call to Observable::holdObserver() at its creation and a call to Observable::unholdObserver() at its destruction.
+ * You can use it if you have to hold observers in a function with multiple return points to avoid to call Observable::unholdObserver() for each of them.
+ * @code
+ * void myFunc(){
+ *  ObserverLocker locker;//Automatically call Observable::holdObserver()
+ *
+ *  if(someTest()){
+ *      someOperation1();
+ *      return;//No need to call Observable::unholdObserver() it will be called with the destruction of the locker object
+ *  }
+ *
+ * }
+ * @endcode
+ *
+ */
+class TLP_SCOPE ObserverLocker{
+public :
+    ObserverLocker(){
+        Observable::holdObservers();
+}
+    ~ObserverLocker(){
+        Observable::unholdObservers();
+    }
+};
 }
 
 #endif
