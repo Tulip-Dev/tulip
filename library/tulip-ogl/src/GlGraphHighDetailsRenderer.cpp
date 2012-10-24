@@ -431,10 +431,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
   Graph *graph=inputData->getGraph();
   BooleanProperty *selectionProperty=inputData->getElementSelected();
   bool viewOutScreenLabel=inputData->parameters->isViewOutScreenLabel();
-  DoubleProperty *metric=NULL;
-
-  if(graph->existProperty("viewMetric"))
-    metric=graph->getProperty<DoubleProperty>("viewMetric");
+  DoubleProperty *metric=inputData->parameters->getElementOrderingProperty();
 
   vector<pair<node,float> > nodesMetricOrdered;
   vector<pair<edge,float> > edgesMetricOrdered;
@@ -471,7 +468,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       n.id=(*it).id;
 
       if(selectionProperty->getNodeValue(n)==drawSelected) {
-        if(!inputData->parameters->isElementOrdered() || !metric) {
+        if(!metric) {
           // Not metric ordered
           if((!graph->isMetaNode(n) && viewNodeLabel) || graph->isMetaNode(n)) {
             glNode.id=n.id;
@@ -489,12 +486,8 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
     // If not Metric ordered : a this point selected nodes are draw
 
-    if(inputData->parameters->isElementOrdered()) {
+    if(metric) {
       // Draw selected nodes label with metric ordering
-      if(inputData->parameters->getElementOrderingProperty()) {
-        metric = inputData->parameters->getElementOrderingProperty();
-      }
-
       GreatThanNode ltn;
       ltn.metric=metric;
       sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
@@ -517,7 +510,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       e.id=(*it).id;
 
       if(selectionProperty->getEdgeValue(e) == drawSelected) {
-        if(!inputData->parameters->isElementOrdered() || !metric) {
+        if(!metric) {
           // Not metric ordered
           glEdge.id=e.id;
           glEdge.drawLabel(occlusionTest,inputData,(*it).lod,(Camera *)(layerLODUnit.camera));
@@ -530,11 +523,8 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
     }
 
     // If not Metric ordered : a this point selected edges are draw
-    if(inputData->parameters->isElementOrdered()) {
+    if(metric) {
       // Draw selected edges label with metric ordering
-      if(inputData->parameters->getElementOrderingProperty()) {
-        metric = inputData->parameters->getElementOrderingProperty();
-      }
 
       GreatThanEdge lte;
       lte.metric=metric;
