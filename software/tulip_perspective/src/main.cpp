@@ -25,6 +25,7 @@
 
 #include <CrashHandling.h>
 
+#include <tulip/TulipRelease.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TlpTools.h>
@@ -111,8 +112,15 @@ void usage(const QString &error) {
 int main(int argc,char **argv) {
   start_crash_handler();
 
+  QString title("Tulip ");
+  // show patch number only if needed
+  if (TULIP_INT_RELEASE % 10)
+    title += TULIP_RELEASE;
+  else
+    title += TULIP_MM_RELEASE;
+
   QApplication tulip_perspective(argc, argv);
-  tulip_perspective.setApplicationName(QObject::trUtf8("Tulip"));
+  tulip_perspective.setApplicationName(title);
 
   // Create perspective's window
   TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
@@ -123,7 +131,7 @@ int main(int argc,char **argv) {
   progress->setStopButtonVisible(false);
   progress->setCancelButtonVisible(false);
   progress->setPreviewButtonVisible(false);
-  progress->setWindowTitle(QObject::trUtf8("Tulip"));
+  progress->setWindowTitle(title);
   progress->resize(500,progress->height());
   progress->show();
 
@@ -226,15 +234,13 @@ int main(int argc,char **argv) {
 
   mainWindow->setPerspective(perspective);
 
-  QString title("Tulip [" + perspectiveName + "]");
+  title += QString(" [") + perspectiveName + "]";
 
   if (project) {
-    title += " - ";
-
     if (!project->name().isNull())
-      title += project->name();
-    else
-      title += projectFilePath;
+      title += QString(" - ") + project->name();
+    else if (!projectFilePath.isEmpty())
+      title += QString(" - ") + projectFilePath;
   }
 
 #ifndef NDEBUG
