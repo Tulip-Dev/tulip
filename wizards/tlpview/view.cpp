@@ -105,3 +105,5 @@ void %ProjectName:c%::fillContextMenu(QMenu* menu,const QPointF& point) {
   @endif
   // fill up context menu
 }
+
+PLUGIN(%ProjectName:c%)
