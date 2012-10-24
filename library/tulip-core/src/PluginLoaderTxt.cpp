@@ -41,8 +41,7 @@ void PluginLoaderTxt::loaded(const Plugin* infos, const std::list <Dependency>& 
     list<Dependency>::const_iterator itD = deps.begin();
 
     for (i--; itD != deps.end(); ++itD, --i) {
-      std::string pluginDepName = (*itD).pluginName;
-
+      std::cout << itD->pluginName;;
       if (i > 0)
         std::cout << ", ";
       else
