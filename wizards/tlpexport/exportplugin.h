@@ -7,10 +7,8 @@ class %ProjectName:c%: public tlp::ExportModule {
 public:
   PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
-%ProjectName:
-  c%(tlp::PluginContext* context);
-virtual ~%ProjectName:
-  c%();
+  %ProjectName:c%(tlp::PluginContext* context);
+  virtual ~%ProjectName:c%();
 
   bool exportGraph(std::ostream & fileOut);
   std::string fileExtension() const;
