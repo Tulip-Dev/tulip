@@ -19,10 +19,8 @@ public:
 PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
 public:
-%ProjectName:
-  c%();
-virtual ~%ProjectName:
-  c%();
+  %ProjectName:c%();
+  virtual ~%ProjectName:c%();
 
   virtual QList<QWidget*> configurationWidgets() const;
   virtual void applySettings();

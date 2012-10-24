@@ -8,10 +8,8 @@ public:
 
   PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
-%ProjectName:
-  c%(tlp::PluginContext* context);
-virtual ~%ProjectName:
-  c%();
+  %ProjectName:c%(tlp::PluginContext* context);
+  virtual ~%ProjectName:c%();
 
   bool run();
   bool check(std::string &);
