@@ -223,7 +223,7 @@ font: bold;
               <number>1</number>
              </property>
              <property name="maximum">
-              <number>2000</number>
+              <number>5000</number>
              </property>
             </widget>
            </item>
@@ -251,7 +251,7 @@ font: bold;
               <number>1</number>
              </property>
              <property name="maximum">
-              <number>2000</number>
+              <number>5000</number>
              </property>
             </widget>
            </item>

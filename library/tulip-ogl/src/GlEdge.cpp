@@ -373,18 +373,18 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
     static GlCatmullRomCurve catmull;
     static GlOpenUniformCubicBSpline bspline;
     AbstractGlCurve *curve = NULL;
-    unsigned int nbCurvePoints = 200;
+    unsigned int nbCurvePoints = 20;
 
     if (shape == BEZIERSHAPE || shape == BEZIERSHAPE + L3D_BIT) {
       curve = &bezier;
     }
     else if (shape == SPLINESHAPE || shape == SPLINESHAPE + L3D_BIT) {
       curve = &catmull;
-      nbCurvePoints = 200;
+      nbCurvePoints = 20;
     }
     else {
       curve = &bspline;
-      nbCurvePoints = 200;
+      nbCurvePoints = 20;
     }
 
     bool fisheyeActivated = GlShaderProgram::getCurrentActiveShader() && GlShaderProgram::getCurrentActiveShader()->getName() == "fisheye";
@@ -618,18 +618,18 @@ void GlEdge::getVertices(const GlGraphInputData *data,
   if ((vertices.size() > 2 && data->getElementShape()->getEdgeValue(e) == BEZIERSHAPE) ||
       (vertices.size() == 3 && data->getElementShape()->getEdgeValue(e) == CUBICBSPLINE)) {
     vector<Coord> curvePoints;
-    computeBezierPoints(vertices, curvePoints, 200);
+    computeBezierPoints(vertices, curvePoints, 20);
     vertices = curvePoints;
   }
   else if (vertices.size() > 2 && data->getElementShape()->getEdgeValue(e) == SPLINESHAPE) {
     vector<Coord> curvePoints;
-    computeCatmullRomPoints(vertices, curvePoints, false, 200);
+    computeCatmullRomPoints(vertices, curvePoints, false, 20);
     vertices = curvePoints;
   }
 
   if (vertices.size() > 2 && data->getElementShape()->getEdgeValue(e) == CUBICBSPLINE) {
     vector<Coord> curvePoints;
-    computeOpenUniformBsplinePoints(vertices, curvePoints, 3, 200);
+    computeOpenUniformBsplinePoints(vertices, curvePoints, 3, 20);
     vertices = curvePoints;
   }
 
