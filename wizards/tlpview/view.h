@@ -55,7 +55,7 @@ protected:
   virtual void graphChanged(tlp::Graph*)=0;
 
   @if "%BaseView%" == "View"
-  virtual void graphDeleted(tlp::Graph* parentGraph)=0;
+  virtual void graphDeleted(tlp::Graph* parentGraph);
 
   @endif
 
