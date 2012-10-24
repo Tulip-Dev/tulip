@@ -36,9 +36,9 @@ class ConsoleOutputHandler : public QObject {
 public:
 
   ConsoleOutputHandler() {
-	timer.start();
+    timer.start();
   }
-  
+
 
 public slots :
 
@@ -99,17 +99,18 @@ public slots :
 
         cursor = textBrowser->document()->find(rx, cursor);
       }
-	  if (timer.elapsed() >= 50) {
-		QApplication::processEvents();
-		timer.start();
-	  }
+
+      if (timer.elapsed() >= 50) {
+        QApplication::processEvents();
+        timer.start();
+      }
     }
   }
 
 private:
 
-	QTime timer;
-  
+  QTime timer;
+
 };
 
 class ConsoleOutputEmitter : public QObject {

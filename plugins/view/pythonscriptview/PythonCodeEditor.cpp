@@ -966,6 +966,7 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
   else if ((e->key() == Qt::Key_Space && e->modifiers() == modifier) || e->text() == ".") {
     if (e->text() == ".")
       QPlainTextEdit::keyPressEvent(e);
+
     QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
 
     if (!textBeforeCursor.contains('#'))
