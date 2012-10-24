@@ -19,7 +19,7 @@ public:
 PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
 public:
-  %ProjectName:c%();
+  %ProjectName:c%(const tlp::PluginContext* context = NULL);
   virtual ~%ProjectName:c%();
 
   virtual QList<QWidget*> configurationWidgets() const;
