@@ -466,7 +466,6 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
 
   QImage resultImage;
 
-#ifndef WITHOUT_QT_PICTURE_OUTPUT
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
   scene.setViewport(0,0,width,height);
 
@@ -481,44 +480,7 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
   scene.draw();
   drawInteractors();
 
-
-
   resultImage=glFrameBuf->toImage();
-#else
-  makeCurrent();
-  scene.setViewport(0,0,width,height);
-
-  if(center)
-    scene.ajustSceneToSize(width,height);
-
-  scene.prerenderMetaNodes();
-
-  unsigned char *image = (unsigned char *)malloc(width*height*3*sizeof(unsigned char));
-  computeInteractors();
-  scene.draw();
-  drawInteractors();
-  glFlush();
-  glFinish();
-  glPixelStorei(GL_PACK_ALIGNMENT,1);
-  glReadPixels(0,0,width,height,GL_RGB,GL_UNSIGNED_BYTE,image);
-
-  QPixmap pm(width,height);
-  QPainter painter;
-  painter.begin(&pm);
-
-  for (int y=0; y<height; y++) {
-    for (int x=0; x<width; x++) {
-      painter.setPen(QColor(image[(height-y-1)*width*3+(x)*3],
-                            image[(height-y-1)*width*3+(x)*3+1],
-                            image[(height-y-1)*width*3+(x)*3+2]));
-      painter.drawPoint(x,y);
-    }
-  }
-
-  painter.end();
-  free(image);
-  resultImage= pm.toImage();
-#endif
 
   scene.setViewport(0,0,oldWidth,oldHeight);
 
@@ -541,7 +503,7 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
 
   //The QGlPixelBuffer returns the wrong image format QImage::Format_ARGB32_Premultiplied. We need to create an image from original data with the right format QImage::Format_ARGB32.
   //We need to clone the data as when the image var will be destroy at the end of the function it's data will be destroyed too and the newly created image object will have invalid data pointer.
-  return QImage(resultImage.bits(),resultImage.width(),resultImage.height(),QImage::Format_ARGB32).copy();
+  return QImage(resultImage.bits(),resultImage.width(),resultImage.height(),QImage::Format_ARGB32).convertToFormat(QImage::Format_RGB32);
 }
 
 void GlMainWidget::centerScene() {
