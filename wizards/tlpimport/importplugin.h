@@ -9,8 +9,7 @@ public:
 
 %ProjectName:
   c%(tlp::PluginContext* context);
-virtual ~%ProjectName:
-  c%();
+  virtual ~%ProjectName:c%();
 
   bool importGraph();
   virtual std::list<std::string> fileExtensions() const;
