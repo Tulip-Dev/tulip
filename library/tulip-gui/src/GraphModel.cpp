@@ -156,9 +156,16 @@ void GraphModel::treatEvent(const Event& ev) {
       if (graphEv->getPropertyName() == "viewMetaGraph")
         return;
 #endif
-      beginInsertColumns(QModelIndex(),columnCount(),columnCount());
-      PropertyInterface* prop = _graph->getProperty(graphEv->getPropertyName());
-      _properties.push_back(prop);
+      // insert in respect with alphabetic order
+      std::string propName = graphEv->getPropertyName();
+      int pos = 0;
+      for(; pos < _properties.size(); ++pos) {
+	if (propName < _properties[pos]->getName())
+	  break;
+      }
+      beginInsertColumns(QModelIndex(), pos, pos);
+      PropertyInterface* prop = _graph->getProperty(propName);
+      _properties.insert(pos, prop);
       prop->addListener(this);
       endInsertColumns();
     }
