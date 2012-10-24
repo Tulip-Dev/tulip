@@ -185,7 +185,6 @@ void GlMainView::openSnapshotDialog() {
 }
 
 void GlMainView::undoCallback() {
-  std::cout << "prout" << std::endl;
   getGlMainWidget()->getScene()->centerScene();
   draw();
 }
