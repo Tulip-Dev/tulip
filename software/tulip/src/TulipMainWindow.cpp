@@ -27,6 +27,7 @@
 #include <QtCore/QDir>
 #include <QtGui/QScrollArea>
 
+#include <tulip/TulipRelease.h>
 #include <tulip/PythonVersionChecker.h>
 #include <tulip/PluginLister.h>
 #include <tulip/Perspective.h>
@@ -66,6 +67,16 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   _pageChoosers.push_back(_ui->aboutPageChooser);
 
   _ui->mainLogo->setPixmap(QPixmap((tlp::TulipBitmapDir + "/welcomelogo.bmp").c_str()));
+  // set title
+  QString title("Tulip ");
+  // show patch number only if needed
+  if (TULIP_INT_RELEASE % 10)
+    title += TULIP_RELEASE;
+  else
+    title += TULIP_MM_RELEASE;
+  setWindowTitle(title);
+  _ui->mainTitle->setText(QString("<html><head/><body><p align=\"center\"><span style=\" font-family:'MS Shell Dlg 2'; font-size:18pt; font-weight:600;\">") +
+			  title + "</span></p></body></html>");
 
   connect(_ui->welcomePageChooser,SIGNAL(clicked()),this,SLOT(pageChooserClicked()));
   connect(_ui->pluginsPageChooser,SIGNAL(clicked()),this,SLOT(pageChooserClicked()));
@@ -107,9 +118,9 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   }
   else if (PythonVersionChecker::compiledVersion() != PythonVersionChecker::installedVersion()) {
     showErrorMessage(trUtf8("Python"),trUtf8("Python version mismatch. Please install python ")
-                    + PythonVersionChecker::compiledVersion()
-                    + trUtf8(" for bindings to work properly.\n\nDetected version is ")
-                    + installedPython);
+		     + PythonVersionChecker::compiledVersion()
+		     + trUtf8(" for bindings to work properly.\n\nDetected version is ")
+		     + installedPython);
   }
 }
 
