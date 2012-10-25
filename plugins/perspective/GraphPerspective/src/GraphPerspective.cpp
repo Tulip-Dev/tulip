@@ -23,6 +23,8 @@
 #include <QtGui/QCloseEvent>
 #include <QtGui/QMessageBox>
 #include <QtGui/QClipboard>
+#include <QtGui/QDropEvent>
+#include <QtCore/QUrl>
 
 #include <tulip/ImportModule.h>
 #include <tulip/Graph.h>
@@ -131,6 +133,18 @@ void GraphPerspective::findPlugins() {
 }
 
 bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
+  if(ev->type() == QEvent::DragEnter) {
+      QDragEnterEvent* dragEvent = dynamic_cast<QDragEnterEvent*>(ev);
+      if(dragEvent->mimeData()->hasUrls()) {
+          dragEvent->accept();
+      }
+  }
+  if(ev->type() == QEvent::Drop) {
+      QDropEvent* dropEvent = dynamic_cast<QDropEvent*>(ev);
+      foreach(const QUrl& url, dropEvent->mimeData()->urls()) {
+          open(url.toLocalFile());
+      }
+  }
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
     showLogger();
 
@@ -179,6 +193,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _logger = new GraphPerspectiveLogger(_mainWindow);
   _ui->loggerFrame->installEventFilter(this);
   _mainWindow->installEventFilter(this);
+  _mainWindow->setAcceptDrops(true);
   connect(_logger,SIGNAL(cleared()),this,SLOT(logCleared()));
 
   qInstallMsgHandler(graphPerspectiveLogger);
