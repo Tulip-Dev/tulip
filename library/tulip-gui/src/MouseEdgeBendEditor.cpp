@@ -28,11 +28,8 @@ using namespace std;
 
 //========================================================================================
 MouseEdgeBendEditor::MouseEdgeBendEditor()
-  :glMainWidget(NULL),layer(NULL),targetTriangle(Coord(0,0,0),Size(1,1,1)),circleString(NULL),mouseButtonPressOnEdge(false),edgeEntity(NULL) {
+  :glMainWidget(NULL),layer(NULL),edgeEntity(NULL),targetTriangle(Coord(0,0,0),Size(1,1,1)),circleString(NULL),mouseButtonPressOnEdge(false) {
   _operation = NONE_OP;
-  _copyLayout = NULL;
-  _copySizes = NULL;
-  _copyRotation = NULL;
 
   basicCircle.resizePoints(30); //circle
   basicCircle.setFillMode(true);
@@ -119,9 +116,9 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
             mMouseDelete();
           }
           else {
+            _graph->push();
             _operation = TRANSLATE_OP;
             glMainWidget->setCursor(QCursor(Qt::SizeAllCursor));
-            initEdition();
             mode = COORD;
           }
 
@@ -129,12 +126,6 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
         }
       }
 
-      break;
-    }
-
-    case Qt::MidButton : {
-      undoEdition();
-      return true;
       break;
     }
 
@@ -166,7 +157,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       }
     }
 
-    stopEdition();
+    _operation = NONE_OP;
     glMainWidget->setCursor(QCursor(Qt::PointingHandCursor));
     glMainWidget->redraw();
     return true;
@@ -270,67 +261,6 @@ bool MouseEdgeBendEditor::compute(GlMainWidget *glMainWidget) {
 //========================================================================================
 bool MouseEdgeBendEditor::draw(GlMainWidget*) {
   return true;
-}
-//========================================================================================
-void MouseEdgeBendEditor::restoreInfo() {
-  assert(_copyLayout != NULL);
-  assert(_copySizes != NULL);
-  assert(_copyRotation != NULL);
-  edge e;
-  forEach(e, _selection->getEdgesEqualTo(true, _graph)) {
-    _rotation->setEdgeValue(e, _copyRotation->getEdgeValue(e));
-    _layout->setEdgeValue(e, _copyLayout->getEdgeValue(e));
-    _sizes->setEdgeValue(e, _copySizes->getEdgeValue(e));
-  }
-}
-//========================================================================================
-void MouseEdgeBendEditor::saveInfo() {
-  assert(_copyLayout == NULL);
-  assert(_copySizes == NULL);
-  assert(_copyRotation == NULL);
-  _copyRotation = new DoubleProperty(_graph);
-  _copyLayout   = new LayoutProperty(_graph);
-  _copySizes    = new SizeProperty(_graph);
-  edge e;
-  forEach(e, _selection->getEdgesEqualTo(true, _graph)) {
-    _copyRotation->setEdgeValue(e, _rotation->getEdgeValue(e));
-    _copyLayout->setEdgeValue(e, _layout->getEdgeValue(e));
-    _copySizes->setEdgeValue(e, _sizes->getEdgeValue(e));
-  }
-}
-//========================================================================================
-void MouseEdgeBendEditor::initEdition() {
-  // allow to undo
-  _graph->push();
-  saveInfo();
-}
-//========================================================================================
-void MouseEdgeBendEditor::undoEdition() {
-  if (_operation == NONE_OP) return;
-
-  restoreInfo();
-  _operation = NONE_OP;
-  delete _copyLayout;
-  _copyLayout = NULL;
-  delete _copySizes;
-  _copySizes = NULL;
-  delete _copyRotation;
-  _copyRotation = NULL;
-}
-//========================================================================================
-void MouseEdgeBendEditor::stopEdition() {
-  if (_operation == NONE_OP) return;
-
-  _operation = NONE_OP;
-  delete _copyLayout;
-  _copyLayout = NULL;
-  delete _copySizes;
-  _copySizes = NULL;
-  delete _copyRotation;
-  _copyRotation = NULL;
-  selectedEntity="";
-  computeSrcTgtEntities(glMainWidget);
-  glMainWidget->draw(false);
 }
 //========================================================================================
 void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
