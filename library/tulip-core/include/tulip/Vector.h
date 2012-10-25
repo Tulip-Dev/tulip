@@ -504,6 +504,9 @@ typedef Vector<float,  4, double> Vec4f;
 static double sqrt(tlp::Vector<float, 5>& v) {
   return sqrt((double)v[0]);
 }
+
+  template class TLP_SCOPE tlp::Vector<unsigned char, 4>;
+
 #endif
 
 TLP_BEGIN_HASH_NAMESPACE {
@@ -601,6 +604,7 @@ TLP_BEGIN_HASH_NAMESPACE {
       return hash_vector(v);
     }
   };
+
 
 } TLP_END_HASH_NAMESPACE
 
