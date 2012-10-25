@@ -27,8 +27,8 @@ Graph management
 
 .. autofunction:: tulip::tlp.removeFromGraph
 
-Graph measures
-^^^^^^^^^^^^^^^
+Graph measures and functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autofunction:: tulip::tlp.averagePathLength
 
@@ -45,6 +45,10 @@ Graph measures
 .. autofunction:: tulip::tlp.maxDistance
 
 .. autofunction:: tulip::tlp.reachableNodes
+
+.. autofunction:: tulip::tlp.bfs
+
+.. autofunction:: tulip::tlp.dfs
 
 Geometry
 ^^^^^^^^
@@ -238,6 +242,10 @@ from the graph while iterating on its nodes/edges/subgraphs.
 .. automethod:: tulip::tlp.Graph.getOutNodes
 
 .. automethod:: tulip::tlp.Graph.getInOutNodes
+
+.. automethod:: tulip::tlp.Graph.bfs
+
+.. automethod:: tulip::tlp.Graph.dfs
 
 .. automethod:: tulip::tlp.Graph.getNodeMetaInfo
 

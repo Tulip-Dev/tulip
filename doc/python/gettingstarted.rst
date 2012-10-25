@@ -12,7 +12,7 @@ A lightweight Python IDE can be accessed through the graphical interface of Tuli
 the graph currently visualized. Starting Tulip 3.6, it is integrated as a view plugin named "Python Script view"
 and can be accessed through the "View" menu. The interface of this component is composed of four tabs :
 
-	* the "Script editor" tab (see :ref:`Figure 1`) that allows to write scripts that can be applied to the
+        * the "Script editor" tab (see :ref:`Figure 1<fig1>`) that allows to write scripts that can be applied to the
 	  graph currently loaded in Tulip. To do so, the "main(graph)" has to be defined
           and is used as the script entry point. The graph currently loaded is wrapped 
           as a :class:`tlp.Graph` object and provided as parameter of the "main" function.
@@ -20,31 +20,35 @@ and can be accessed through the "View" menu. The interface of this component is 
           in the lower part of the interface. Once started, the script execution can be
           stopped at any time.
 
+.. _fig1:
 .. figure:: pythonScriptViewGUI1.png
    :align: center
 
    Figure 1: Screenshot of the "Script editor" tab from the Tulip Python Script view.
 
-	* the "Modules editor" tab (see :ref:`Figure 2`) that enables to write and edit 
+        * the "Modules editor" tab (see :ref:`Figure 2<fig2>`) that enables to write and edit
 	  Python modules that can be immediately imported in the main script.
 
+.. _fig2:
 .. figure:: pythonScriptViewGUI2.png
    :align: center
 
    Figure 2: Screenshot of the "Modules editor" tab from the Tulip Python Script view.
 
-	* the "Interactive session" tab (see :ref:`Figure 3`) that provides an interactive
+        * the "Interactive session" tab (see :ref:`Figure 3<fig3>`) that provides an interactive
           Python shell. The graph currently loaded in Tulip is wrapped to a :class:`tlp.Graph`
           object and bound to the "graph" variable.
 
+.. _fig3:
 .. figure:: pythonScriptViewGUI3.png
    :align: center
 
    Figure 3: Screenshot of the "Interactive session" tab from the Tulip Python Script view.
 
-       * The "Tulip plugin editor" tab (see :ref:`Figure 4`) that allows to develop Tulip plugins in Python and registers them immediately in the interface to test them.
+       * The "Tulip plugin editor" tab (see :ref:`Figure 4<fig4>`) that allows to develop Tulip plugins in Python and registers them immediately in the interface to test them.
          Different kinds of plugins can be develop : General Algorithms, Property Algorithms, Import plugins and Export plugins. 
 
+.. _fig4:
 .. figure:: pythonScriptViewGUI4.png
    :align: center
 
