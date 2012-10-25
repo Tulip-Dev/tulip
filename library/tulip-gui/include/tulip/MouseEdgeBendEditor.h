@@ -123,7 +123,7 @@ private:
 
   GlLayer *layer;
   std::vector<tlp::GlCircle> circles;
-  EdgeEntity edgeEntity;
+  EdgeEntity *edgeEntity;
   std::vector<Coord> coordinates;
   GlCircle basicCircle;
   GlTriangle targetTriangle;
