@@ -113,6 +113,7 @@ int main(int argc,char **argv) {
   start_crash_handler();
 
   QString title("Tulip ");
+
   // show patch number only if needed
   if (TULIP_INT_RELEASE % 10)
     title += TULIP_RELEASE;
