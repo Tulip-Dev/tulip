@@ -97,6 +97,27 @@ TLP_SCOPE void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selectio
     DoubleProperty *weight = NULL,
     PluginProgress *pluginProgress = NULL);
 
+
+/**
+ * @brief Performs a breadth-first search on a graph.
+ * @param graph The graph to traverse with a BFS.
+ * @param root The node from whom to start the BFS. If not provided, the root
+ * node will be assigned to a source node in the graph (node with input degree equals to 0).
+ * If there is no source node in the graph, a random node will be picked.
+ * @return A vector containing the nodes of the graph in the order they have been visited by the BFS.
+ */
+TLP_SCOPE std::vector<node> bfs(const Graph *graph, node root = node());
+
+/**
+ * @brief Performs a depth-first search on a graph.
+ * @param graph The graph to traverse with a DFS.
+ * @param root The node from whom to start the DFS. If not provided, the root
+ * node will be assigned to a source node in the graph (node with input degree equals to 0).
+ * If there is no source node in the graph, a random node will be picked.
+ * @return A vector containing the nodes of the graph in the order they have been visited by the DFS.
+ */
+TLP_SCOPE std::vector<node> dfs(const Graph *graph, node root = node());
+
 }
 #endif
 ///@endcond

@@ -105,6 +105,9 @@ public:
   virtual void setName(const std::string &name);
   virtual std::string getName() const;
 
+  virtual Iterator<node>* bfs(const node root = node()) const;
+  virtual Iterator<node>* dfs(const node root = node()) const;
+
 protected:
   DataSet& getNonConstAttributes();
   void setSuperGraph(Graph *);

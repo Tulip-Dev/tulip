@@ -173,6 +173,7 @@ void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
 %Include ObservableGraph.sip
 %Include Graph.sip
 %Include GraphMeasure.sip
+%Include GraphTools.sip
 %Include PluginLoader.sip
 %Include PluginLoaderTxt.sip
 

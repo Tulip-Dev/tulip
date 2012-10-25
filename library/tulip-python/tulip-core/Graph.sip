@@ -1195,6 +1195,56 @@ Returns an iterator on the neighbours of a node.
 
 //===========================================================================================
 
+    tlp::Iterator<tlp::node>* bfs(const tlp::node root = tlp::node()) const /TransferBack/;
+%Docstring
+tlp.Graph.bfs([root])
+
+.. versionadded:: 4.2
+
+Returns an iterator performing a breadth-first search on the graph.
+
+:param root: The node from whom to start the BFS. If not provided, the root node will be assigned to a source node in the graph (node with input degree equals to 0). If there is no source node in the graph, a random node will be picked.
+:type root: :class:`tlp.node`
+:rtype: a Tulip iterator on :class:`tlp.node` objects in the BFS order.
+:throws: an exception if the provided root node does not belong to the graph.
+%End
+
+%MethodCode
+    if (!a0->isValid() || sipCpp->isElement(*a0)) {
+        // tlp::Graph::bfs returns a StableIterator
+        sipRes = sipCpp->bfs(*a0);
+    } else {
+        sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+    }
+%End
+
+//===========================================================================================
+
+    tlp::Iterator<tlp::node>* dfs(const tlp::node root = tlp::node()) const /TransferBack/;
+%Docstring
+tlp.Graph.dfs([root])
+
+.. versionadded:: 4.2
+
+Returns an iterator performing a depth-first search on the graph.
+
+:param root: The node from whom to start the DFS. If not provided, the root node will be assigned to a source node in the graph (node with input degree equals to 0). If there is no source node in the graph, a random node will be picked.
+:type root: :class:`tlp.node`
+:rtype: a Tulip iterator on :class:`tlp.node` objects in the DFS order.
+:throws: an exception if the provided root node does not belong to the graph.
+%End
+
+%MethodCode
+    if (!a0->isValid() || sipCpp->isElement(*a0)) {
+        // tlp::Graph::dfs returns a StableIterator
+        sipRes = sipCpp->dfs(*a0);
+    } else {
+        sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+    }
+%End
+
+//===========================================================================================
+
 	tlp::Graph* getNodeMetaInfo(const tlp::node node) const;
 %Docstring
 tlp.Graph.getNodeMetaInfo(node)
