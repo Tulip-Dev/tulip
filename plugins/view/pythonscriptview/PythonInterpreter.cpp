@@ -319,7 +319,8 @@ PythonInterpreter::~PythonInterpreter() {
     runString("sys.stdout.write(sip.__file__)");
     QString sipModulePath = QString(consoleOuputString.c_str());
     sipQtAPI **sipQtSupport = reinterpret_cast<sipQtAPI **>(QLibrary::resolve(sipModulePath, "sipQtSupport"));
-    *sipQtSupport = NULL;
+    if (sipQtSupport)
+      *sipQtSupport = NULL;
 
     runString("sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__;\n");
 #ifndef WIN32
