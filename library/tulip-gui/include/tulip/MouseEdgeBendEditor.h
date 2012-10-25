@@ -91,10 +91,6 @@ protected:
     return mEdge;
   }
 
-  void stopEdition();
-  void initEdition();
-  void undoEdition();
-
 private:
 
   enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
@@ -107,13 +103,8 @@ private:
   SizeProperty *_sizes;
   IntegerProperty *_shape;
   CoordVectorProperty *_coordsVectorProperty;
-  LayoutProperty *_copyLayout;
-  SizeProperty *_copySizes;
-  DoubleProperty *_copyRotation;
 
   void initProxies(GlMainWidget *glMainWidget);
-  void saveInfo();
-  void restoreInfo();
 
 
   EditOperation _operation;
