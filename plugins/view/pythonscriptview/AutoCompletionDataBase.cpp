@@ -741,8 +741,22 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
     currentType = getClassAttributeType(className, expr);
   }
 
-  if (currentType == "" && expr.indexOf(".") != -1) {
-    QStringList parts = expr.split(".");
+  QString cleanExpr = expr;
+  int parenLevel = 0;
+  for (int i = 0 ; i < cleanExpr.length() ; ++i) {
+      if (cleanExpr[i] == '(') {
+          parenLevel += 1;
+      } else if (cleanExpr[i] == ')') {
+          parenLevel -= 1;
+      } else if (cleanExpr[i] == '.') {
+          if (parenLevel > 0) {
+              cleanExpr[i] = '_';
+          }
+      }
+  }
+  
+  if (currentType == "" && cleanExpr.indexOf(".") != -1) {
+    QStringList parts = cleanExpr.split(".");
     int i = 0;
     foreach(QString p, parts) {
       if (i==0) {
