@@ -41,6 +41,7 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<float>(new LineEditEditorCreator<tlp::FloatType>);
   registerCreator<std::string>(new LineEditEditorCreator<tlp::StringType>);
   registerCreator<QString>(new QStringEditorCreator);
+  registerCreator<QStringList>(new QStringListEditorCreator);
   registerCreator<tlp::Color>(new ColorEditorCreator);
   registerCreator<tlp::Coord>(new CoordEditorCreator);
   registerCreator<tlp::Size>(new CoordEditorCreator);
@@ -86,12 +87,13 @@ tlp::TulipItemEditorCreator* TulipItemDelegate::creator(int typeId) const {
   return _creators[typeId];
 }
 
-QWidget* TulipItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem&, const QModelIndex& index) const {
+QWidget* TulipItemDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index) const {
   QVariant v = index.model()->data(index);
   TulipItemEditorCreator *c = creator(v.userType());
 
-  if (!c)
-    return NULL;
+  if (c == NULL) {
+    return QStyledItemDelegate::createEditor(parent, option, index);
+  }
 
   QWidget* w = c->createWidget(parent);
   return w;
@@ -103,8 +105,9 @@ QString TulipItemDelegate::displayText(const QVariant &value, const QLocale &loc
 
   TulipItemEditorCreator *c = creator(value.userType());
 
-  if (c)
+  if (c != NULL) {
     return c->displayText(value);
+  }
 
   return QStyledItemDelegate::displayText(value,locale);
 }

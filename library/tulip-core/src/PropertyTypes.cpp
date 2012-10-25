@@ -572,6 +572,47 @@ bool StringVectorType::read(istream& is, RealType & v) {
   }
 }
 
+// QStringListType
+void QStringListType::write(ostream& oss, const TypeInterface::RealType& t) {
+  StringVectorType::RealType stdVect(t.size());
+  int i=0;
+  foreach(QString s, t) {
+    stdVect[i] = s.toStdString();
+    ++i;
+  }
+  StringVectorType::write(oss,stdVect);
+}
+
+bool QStringListType::read(istream& iss, TypeInterface::RealType& t) {
+  StringVectorType::RealType stdVect;
+  if (!StringVectorType::read(iss,stdVect))
+    return false;
+  for (unsigned int i=0;i<stdVect.size();++i)
+    t.push_back(stdVect[i].c_str());
+  return true;
+}
+
+void QStringType::write(ostream& oss, const QString& t) {
+  StringType::write(oss,t.toStdString());
+}
+
+bool QStringType::read(istream& iss, QString& t) {
+  std::string s;
+  if (!StringType::read(iss,s))
+    return false;
+  t = s.c_str();
+  return true;
+}
+
+string QStringType::toString(const QString& s) {
+  return s.toStdString();
+}
+
+bool QStringType::fromString(QString& s, const string& str) {
+  s = QString(str.c_str());
+  return true;
+}
+
 // ColorType
 Color ColorType::undefinedValue() {
   return Color(255,255,255,255);
@@ -720,7 +761,8 @@ void tlp::initTypeSerializers() {
 
   DataSet::registerDataTypeSerializer<StringVectorType::RealType>(KnownTypeSerializer<StringVectorType>("stringvector"));
 
+  DataSet::registerDataTypeSerializer<QStringListType::RealType>(KnownTypeSerializer<QStringListType>("qstringlist"));
+
   DataSet::registerDataTypeSerializer<DataSet>(DataSetTypeSerializer());
+
 }
-
-

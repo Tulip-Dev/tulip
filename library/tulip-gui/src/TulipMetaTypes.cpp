@@ -49,6 +49,9 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
 
   CHECK_QVARIANT(StringCollection);
 
+  CHECK_QVARIANT(QStringType::RealType);
+  CHECK_QVARIANT(QStringListType::RealType);
+
   if (v.userType() == qMetaTypeId<NodeShape>()) {
     NodeShape desc = v.value<NodeShape>();
     return new TypedData<uint>(new uint(desc.nodeShapeId));
@@ -110,5 +113,9 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   CHECK_DATATYPE(tlp::ColorScale)
 
   CHECK_DATATYPE(tlp::StringCollection)
+
+  // Qt built-in types
+  CHECK_DATATYPE(QStringListType::RealType)
+  CHECK_DATATYPE(QStringType::RealType)
   return QVariant();
 }

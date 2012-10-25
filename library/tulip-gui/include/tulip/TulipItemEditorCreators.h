@@ -195,6 +195,14 @@ public:
   QString displayText(const QVariant &) const;
 };
 
+class TLP_QT_SCOPE QStringListEditorCreator: public tlp::TulipItemEditorCreator {
+public:
+  QWidget* createWidget(QWidget* parent) const;
+  void setEditorData(QWidget*w, const QVariant& var, bool, tlp::Graph*);
+  QVariant editorData(QWidget*,tlp::Graph*);
+  QString displayText(const QVariant &) const;
+};
+
 }
 
 
