@@ -109,6 +109,8 @@ public:
   virtual Iterator<node>* getInNodes(const node n) const;
   virtual Iterator<node>* getOutNodes(const node n) const;
   virtual Iterator<node>* getInOutNodes(const node n) const;
+  virtual Iterator<node>* bfs(const node root = node()) const;
+  virtual Iterator<node>* dfs(const node root = node()) const;
   virtual Iterator<edge>* getEdges() const;
   virtual Iterator<edge>* getOutEdges(const node n) const;
   virtual Iterator<edge>* getInOutEdges(const node n) const;

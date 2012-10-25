@@ -24,6 +24,7 @@
 #include <tulip/GraphView.h>
 #include <tulip/GraphImpl.h>
 #include <tulip/ConcatIterator.h>
+#include <tulip/GraphTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -616,4 +617,14 @@ std::string GraphAbstract::getName() const {
   std::string name;
   getAttribute("name", name);
   return name;
+}
+
+Iterator<node>* GraphAbstract::bfs(const node root) const {
+    vector<node> bfsResult = tlp::bfs(this, root);
+    return new StableIterator<tlp::node>(new StlIterator<node, std::vector<tlp::node>::iterator>(bfsResult.begin(), bfsResult.end()));
+}
+
+Iterator<node>* GraphAbstract::dfs(const node root) const {
+    vector<node> dfsResult = tlp::dfs(this, root);
+    return new StableIterator<tlp::node>(new StlIterator<node, std::vector<tlp::node>::iterator>(dfsResult.begin(), dfsResult.end()));
 }

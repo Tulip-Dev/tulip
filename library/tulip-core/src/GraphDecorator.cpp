@@ -386,32 +386,34 @@ Iterator<node>* GraphDecorator::getOutNodes(const node n) const {
 Iterator<node>* GraphDecorator::getInOutNodes(const node n) const {
   return graph_component->getInOutNodes(n);
 }
-
+//============================================================
+Iterator<node>* GraphDecorator::bfs(const node root) const {
+    return graph_component->bfs(root);
+}
+//============================================================
+Iterator<node>* GraphDecorator::dfs(const node root) const {
+    return graph_component->dfs(root);
+}
 //============================================================
 Iterator<edge>* GraphDecorator::getEdges() const {
   return graph_component->getEdges();
 }
-
 //============================================================
 Iterator<edge>* GraphDecorator::getOutEdges(const node n) const {
   return graph_component->getOutEdges(n);
 }
-
 //============================================================
 Iterator<edge>* GraphDecorator::getInOutEdges(const node n) const {
   return graph_component->getInOutEdges(n);
 }
-
 //============================================================
 Iterator<edge>* GraphDecorator::getInEdges(const node n) const {
   return graph_component->getInEdges(n);
 }
-
 //============================================================
 Iterator<edge>* GraphDecorator::getEdgeMetaInfo(const edge e) const {
   return graph_component->getEdgeMetaInfo(e);
 }
-
 //============================================================
 DataSet& GraphDecorator::getNonConstAttributes() {
   return graph_component->getNonConstAttributes();

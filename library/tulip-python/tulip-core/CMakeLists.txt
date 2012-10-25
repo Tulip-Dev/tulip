@@ -23,6 +23,7 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/GraphEvent.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/GraphProperty.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/GraphMeasure.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/GraphTools.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ImportModule.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/IntegerPropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Iterator.sip
