@@ -517,3 +517,33 @@ QVariant QStringEditorCreator::editorData(QWidget* w,tlp::Graph*) {
 QString QStringEditorCreator::displayText(const QVariant& var) const {
   return var.toString();
 }
+
+QWidget *QStringListEditorCreator::createWidget(QWidget *) const {
+  VectorEditionWidget* w = new VectorEditionWidget(NULL);
+  w->setWindowFlags(Qt::Dialog);
+  w->setWindowModality(Qt::ApplicationModal);
+  return w;
+}
+
+//QStringListEditorCreator
+void QStringListEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool, Graph *) {
+  QStringList strList = var.toStringList();
+  QVector<QVariant> vect(strList.length());
+  int i=0;
+  foreach(QString s, strList) {
+    vect[i++] = s;
+  }
+  static_cast<VectorEditionWidget*>(w)->setVector(vect,qMetaTypeId<QString>());
+}
+
+QVariant QStringListEditorCreator::editorData(QWidget* w, Graph*) {
+  QVector<QVariant> vect = static_cast<VectorEditionWidget*>(w)->vector();
+  QStringList lst;
+  foreach(QVariant v, vect)
+    lst.push_back(v.toString());
+  return lst;
+}
+
+QString QStringListEditorCreator::displayText(const QVariant &var) const {
+  return QStringListType::toString(var.toStringList()).c_str();
+}

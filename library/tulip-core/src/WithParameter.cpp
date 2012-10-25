@@ -30,6 +30,8 @@
 #include <tulip/ColorScale.h>
 #include <tulip/ForEach.h>
 
+#include <QtCore/QStringList>
+
 using namespace tlp;
 using namespace std;
 
@@ -108,6 +110,8 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
     const string& type = param.getTypeName();
     const string& defaultValue = param.getDefaultValue();
 
+    CHECK_TYPE(QStringListType);
+    CHECK_TYPE(QStringType);
     CHECK_TYPE(tlp::BooleanType);
     CHECK_TYPE(tlp::IntegerType);
     CHECK_TYPE(tlp::UnsignedIntegerType);

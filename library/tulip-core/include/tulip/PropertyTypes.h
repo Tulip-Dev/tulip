@@ -37,6 +37,7 @@
 #include <tulip/AbstractProperty.h>
 #include <tulip/TypeInterface.h>
 #include <tulip/SerializableType.h>
+#include <QtCore/QStringList>
 
 namespace tlp {
 
@@ -97,6 +98,20 @@ public:
 
 typedef SerializableVectorType<int,false> IntegerVectorType;
 
+class TLP_SCOPE QStringListType: public TypeInterface<QStringList> {
+public:
+  static void write(std::ostream&, const RealType&);
+  static bool read(std::istream&, RealType&);
+  FORWARD_STRING_METHODS(QStringListType)
+};
+
+class TLP_SCOPE QStringType: public TypeInterface<QString> {
+public:
+  static void write(std::ostream&, const RealType&);
+  static bool read(std::istream&, RealType&);
+  static std::string toString(const RealType &);
+  static bool fromString(RealType &, const std::string &);
+};
 
 class TLP_SCOPE BooleanType: public TypeInterface<bool> {
 public:

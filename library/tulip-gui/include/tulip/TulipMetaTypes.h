@@ -131,6 +131,7 @@ Q_DECLARE_METATYPE(EdgeExtremityShape)
 Q_DECLARE_METATYPE(tlp::LabelPosition)
 Q_DECLARE_METATYPE(tlp::TulipFont)
 
+Q_DECLARE_METATYPE(QStringList)
 
 namespace tlp {
 class TLP_QT_SCOPE TulipMetaTypes {
