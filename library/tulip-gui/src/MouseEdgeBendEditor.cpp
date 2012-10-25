@@ -28,7 +28,7 @@ using namespace std;
 
 //========================================================================================
 MouseEdgeBendEditor::MouseEdgeBendEditor()
-  :glMainWidget(NULL),layer(NULL),targetTriangle(Coord(0,0,0),Size(1,1,1)),circleString(NULL),mouseButtonPressOnEdge(false) {
+  :glMainWidget(NULL),layer(NULL),targetTriangle(Coord(0,0,0),Size(1,1,1)),circleString(NULL),mouseButtonPressOnEdge(false),edgeEntity(NULL) {
   _operation = NONE_OP;
   _copyLayout = NULL;
   _copySizes = NULL;
@@ -56,6 +56,8 @@ void MouseEdgeBendEditor::clear() {
     circleString=NULL;
 
     glMainWidget->getScene()->getGraphLayer()->deleteGlEntity("edgeEntity");
+    delete edgeEntity;
+    edgeEntity=NULL;
 
     glMainWidget->setCursor(QCursor());
   }
@@ -176,7 +178,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
     if(selectedEntities.size()!=0)
       if(selectedEntities[0].getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED)
-        if(selectedEntities[0].getSimpleEntity()==&edgeEntity) {
+        if(selectedEntities[0].getSimpleEntity()==edgeEntity) {
           mouseButtonPressOnEdge=true;
           return true;
         }
@@ -188,7 +190,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
     if(selectedEntities.size()!=0)
       if(selectedEntities[0].getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED)
-        if(selectedEntities[0].getSimpleEntity()==&edgeEntity && mouseButtonPressOnEdge) {
+        if(selectedEntities[0].getSimpleEntity()==edgeEntity && mouseButtonPressOnEdge) {
           mouseButtonPressOnEdge=false;
           return true;
         }
@@ -416,7 +418,7 @@ void MouseEdgeBendEditor::mMouseDelete() {
 
     coordinates.erase(CoordIt);
     circles.erase(circleIt);
-    edgeEntity.setCoordinates(start,end,coordinates);
+    edgeEntity->setCoordinates(start,end,coordinates);
     Observable::holdObservers();
     // allow to undo
     _graph->push();
@@ -613,7 +615,10 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
       ++CoordIt;
     }
 
-    edgeEntity.setCoordinates(start,end,coordinates);
+    if(!edgeEntity)
+      edgeEntity=new EdgeEntity;
+    edgeEntity->setCoordinates(start,end,coordinates);
+    glMainWidget->getScene()->getGraphLayer()->addGlEntity(edgeEntity,"edgeEntity");
   }
   else {
     int complexPolygonGlyphId = GlyphManager::getInst().glyphId("2D - Complex Polygon");
@@ -666,8 +671,6 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
 
   for(unsigned int i=0; i<circles.size(); ++i)
     circleString->addGlEntity(&circles[i], IntegerType::toString(i));
-
-  glMainWidget->getScene()->getGraphLayer()->addGlEntity(&edgeEntity,"edgeEntity");
 
   return hasSelection;
 }
