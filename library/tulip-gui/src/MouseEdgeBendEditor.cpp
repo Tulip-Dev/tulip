@@ -60,6 +60,12 @@ void MouseEdgeBendEditor::clear() {
   }
 }
 //========================================================================================
+
+void MouseEdgeBendEditor::stopEdition(){
+    _operation = NONE_OP;
+}
+
+//========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
   QMouseEvent * qMouseEv = (QMouseEvent *) e;
@@ -547,7 +553,6 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
 
     if(!edgeEntity)
       edgeEntity=new EdgeEntity;
-
     edgeEntity->setCoordinates(start,end,coordinates);
     glMainWidget->getScene()->getGraphLayer()->addGlEntity(edgeEntity,"edgeEntity");
   }
