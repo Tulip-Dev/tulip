@@ -791,8 +791,8 @@ struct WebImport:public ImportModule {
       // remove http:// prefix
       server = server.substr(7);
 
-    // remove / prfix
-    if (server[0] == 0)
+    // remove / prefix
+    if (server[0] == '/')
       server = server.substr(1);
 
     if (server[server.size() - 1] == '/')
