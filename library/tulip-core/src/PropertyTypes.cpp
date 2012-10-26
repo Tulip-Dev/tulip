@@ -573,7 +573,7 @@ bool StringVectorType::read(istream& is, RealType & v) {
 }
 
 // QStringListType
-void QStringListType::write(ostream& oss, const TypeInterface::RealType& t) {
+void QStringListType::write(ostream& oss, const RealType& t) {
   StringVectorType::RealType stdVect(t.size());
   int i=0;
   foreach(QString s, t) {
@@ -583,7 +583,7 @@ void QStringListType::write(ostream& oss, const TypeInterface::RealType& t) {
   StringVectorType::write(oss,stdVect);
 }
 
-bool QStringListType::read(istream& iss, TypeInterface::RealType& t) {
+bool QStringListType::read(istream& iss, RealType& t) {
   StringVectorType::RealType stdVect;
   if (!StringVectorType::read(iss,stdVect))
     return false;
