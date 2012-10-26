@@ -28,7 +28,7 @@
 namespace tlp {
 
 template<typename PropType, typename NodeType, typename EdgeType>
-class TLP_QT_SCOPE PropertyAnimation: public Animation {
+class PropertyAnimation: public Animation {
 public:
   PropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out,
                     tlp::BooleanProperty *selection = 0, int frameCount = 1, bool computeNodes = true, bool computeEdges = true, QObject* parent=NULL);
