@@ -143,12 +143,7 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
 
   getEdgeSize(data,e,srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
 
-  float lodSize;
-
-  if(!orthoProjection)
-    lodSize = getEdgeWidthLod(Coord(0,0,0),edgeSize,camera);
-  else
-    lodSize = getEdgeWidthLod(data->getElementLayout()->getNodeValue(source),edgeSize,camera);
+  float lodSize = getEdgeWidthLod(data->getElementLayout()->getNodeValue(source),edgeSize,camera);
 
   bool selected = data->getElementSelected()->getEdgeValue(e);
 
@@ -181,7 +176,7 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
   unsigned nbBends = bends.size();
 
-  if(lodSize>-5 && lodSize<5 && data->getGlVertexArrayManager()->renderingIsBegin() && (!data->parameters->getFeedbackRender())) {
+  if(lodSize>-1 && lodSize<1 && data->getGlVertexArrayManager()->renderingIsBegin() && (!data->parameters->getFeedbackRender())) {
     data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
     return;
   }
@@ -746,24 +741,14 @@ float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
                               const Size &edgeSize,Camera *camera) {
   if(!orthoProjection) {
     if(haveToComputeEdgeWidthBaseLod) {
-      // This code is here because screenTo3DWorld function modify current projection
-      // ==>
-      Matrix<float, 4> transformMatrix;
       Vector<int, 4> viewport = camera->getViewport();
-      camera->getTransformMatrix(transformMatrix);
-      Coord pScr = projectPoint(Coord(0,0,0), transformMatrix, viewport);
-      pScr[0] = static_cast<float>(viewport[2]);
-      pScr[1] = static_cast<float>(viewport[3]) - 1.0f;
-      MatrixGL tmp(transformMatrix);
-      tmp.inverse();
-      Coord worldPosition=unprojectPoint(pScr, tmp, viewport);
-      // <==
+      Matrix<float, 4> transformMatrix;
 
-      Matrix<float, 4u> projectionMatrix;
-      Matrix<float, 4u> modelviewMatrix;
-      camera->getProjectionMatrix(projectionMatrix);
-      camera->getModelviewMatrix(modelviewMatrix);
-      edgeWidthBaseLod=projectSize(worldPosition, Size(1, 1, 1), projectionMatrix, modelviewMatrix,camera->getViewport());
+      camera->getTransformMatrix(viewport,transformMatrix);
+
+      edgeWidthBaseLod=((projectPoint(Coord(1,0,0), transformMatrix, viewport) - Coord(viewport[0], viewport[1]))
+                        -(projectPoint(Coord(0,0,0), transformMatrix, viewport) - Coord(viewport[0], viewport[1]))).norm();
+
       haveToComputeEdgeWidthBaseLod=false;
     }
 
