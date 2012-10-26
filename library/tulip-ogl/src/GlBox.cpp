@@ -299,7 +299,7 @@ void GlBox::draw(float lod,Camera *) {
 
   glDisableClientState(GL_VERTEX_ARRAY);
 
-  if(canUseVBO){
+  if(canUseVBO) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   }
