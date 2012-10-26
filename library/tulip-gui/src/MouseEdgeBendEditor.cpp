@@ -60,6 +60,12 @@ void MouseEdgeBendEditor::clear() {
   }
 }
 //========================================================================================
+
+void MouseEdgeBendEditor::stopEdition(){
+    _operation = NONE_OP;
+}
+
+//========================================================================================
 bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
   QMouseEvent * qMouseEv = (QMouseEvent *) e;

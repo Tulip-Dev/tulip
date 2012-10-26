@@ -91,6 +91,8 @@ protected:
     return mEdge;
   }
 
+  void stopEdition();
+
 private:
 
   enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
