@@ -26,7 +26,7 @@
 
 namespace tlp {
 
-typedef TLP_QT_SCOPE VectorPropertyAnimation<tlp::ColorProperty, tlp::Color, unsigned char, 4> ColorPropertyAnimation;
+typedef VectorPropertyAnimation<tlp::ColorProperty, tlp::Color, unsigned char, 4> ColorPropertyAnimation;
 
 }
 
