@@ -61,8 +61,8 @@ void MouseEdgeBendEditor::clear() {
 }
 //========================================================================================
 
-void MouseEdgeBendEditor::stopEdition(){
-    _operation = NONE_OP;
+void MouseEdgeBendEditor::stopEdition() {
+  _operation = NONE_OP;
 }
 
 //========================================================================================
@@ -553,6 +553,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
 
     if(!edgeEntity)
       edgeEntity=new EdgeEntity;
+
     edgeEntity->setCoordinates(start,end,coordinates);
     glMainWidget->getScene()->getGraphLayer()->addGlEntity(edgeEntity,"edgeEntity");
   }
