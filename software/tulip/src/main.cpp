@@ -60,7 +60,8 @@ void sendUsageStatistics() {
   mgr->get(QNetworkRequest(QUrl(QString("http://tulip.labri.fr/TulipStats/tulip_stats.php?tulip=") + TULIP_RELEASE + "&os=" + OS_PLATFORM)));
 }
 
-void sendAgentMessage(int port, const QString& message) {
+bool sendAgentMessage(int port, const QString& message) {
+  bool result = true;
   QTcpSocket sck;
   sck.connectToHost(QHostAddress::LocalHost,port);
   sck.waitForConnected(1000);
@@ -69,8 +70,12 @@ void sendAgentMessage(int port, const QString& message) {
     sck.write(message.toUtf8());
     sck.flush();
   }
+  else {
+    result = false;
+  }
 
   sck.close();
+  return result;
 }
 
 void checkTulipRunning(const QString& perspName, const QString& fileToOpen) {
@@ -81,9 +86,7 @@ void checkTulipRunning(const QString& perspName, const QString& fileToOpen) {
     bool ok;
     int n_agentPort = agentPort.toInt(&ok);
 
-    if (ok) {
-      sendAgentMessage(n_agentPort,"SHOW_AGENT\tPROJECTS");
-
+    if (ok && sendAgentMessage(n_agentPort,"SHOW_AGENT\tPROJECTS")) {
       // if a file was passed as argument, forward it to the running instance
       if (!fileToOpen.isNull()) { // open the file passed as argument
         if (!perspName.isNull()) {
