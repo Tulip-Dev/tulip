@@ -65,7 +65,7 @@ int EdgeExtremityGlyphManager::glyphId(string name) {
 }
 //====================================================
 void EdgeExtremityGlyphManager::loadGlyphPlugins() {
-  std::list<std::string> plugins = PluginLister::instance()->availablePlugins<Glyph>();
+  std::list<std::string> plugins = PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>();
 
   for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string pluginName = *it;
