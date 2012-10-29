@@ -61,9 +61,6 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   _pageChoosers.clear();
   _pageChoosers.push_back(_ui->welcomePageChooser);
   _pageChoosers.push_back(_ui->pluginsPageChooser);
-#if defined(__linux) // disable plugins center on Linux platforms
-  _ui->pluginsPageChooser->hide();
-#endif
   _pageChoosers.push_back(_ui->aboutPageChooser);
 
   _ui->mainLogo->setPixmap(QPixmap((tlp::TulipBitmapDir + "/welcomelogo.bmp").c_str()));
