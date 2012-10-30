@@ -338,7 +338,8 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
             break;
         }
 
-      }else{
+      }
+      else {
         if(!displayEdges)
           continue;
 
