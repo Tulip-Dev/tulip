@@ -319,9 +319,13 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
       // Complex entities
       ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)((*it).entity);
 
-      if((*it).isNode && (selectionType & RenderingNodes)!=0) {
+
+      if((*it).isNode) {
         if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
           if(selectionDrawActivate) {
+            if((selectionType & RenderingNodes)==0)
+              continue;
+
             (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,SelectedEntity::NODE_SELECTED);
             glLoadName(*selectionCurrentId);
             (*selectionCurrentId)++;
@@ -333,15 +337,15 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
           if(renderOnlyOneNode)
             break;
         }
-        else {
-          continue;
-        }
-      }
-      else if((selectionType & RenderingEdges)!=0 && !renderOnlyOneNode) {
+
+      }else{
         if(!displayEdges)
           continue;
 
         if(selectionDrawActivate) {
+          if((selectionType & RenderingEdges)==0)
+            continue;
+
           (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,entity->id,SelectedEntity::EDGE_SELECTED);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;

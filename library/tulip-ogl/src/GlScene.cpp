@@ -45,6 +45,47 @@ using namespace std;
 
 namespace tlp {
 
+/** \brief Storage class for Z ordering
+ * Storage class for Z ordering
+ */
+struct EntityWithDistance {
+
+  EntityWithDistance(const double &dist,EntityLODUnit *entity)
+    :distance(dist),entity(entity),isComplexEntity(false) {
+  }
+  EntityWithDistance(const double &dist,ComplexEntityLODUnit *entity,bool isNode)
+    :distance(dist),entity(entity),isComplexEntity(true),isNode(isNode) {
+  }
+
+  double distance;
+  EntityLODUnit *entity;
+  bool isComplexEntity;
+  bool isNode;
+};
+
+/** \brief Comparator to order entities with Z
+ * Comparator to order entities with Z
+ */
+struct entityWithDistanceCompare {
+  static const GlGraphInputData *inputData;
+  bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const {
+    if(e1.distance>e2.distance)
+      return true;
+
+    if(e1.distance<e2.distance)
+      return false;
+
+    BoundingBox &bb1 = e1.entity->boundingBox;
+    BoundingBox &bb2 = e2.entity->boundingBox;
+
+    if(bb1[1][0] - bb1[0][0] > bb2[1][0] - bb2[0][0])
+      return false;
+    else
+      return true;
+
+  }
+};
+
 //====================================================
 
 GlScene::GlScene(GlLODCalculator *calculator)
@@ -171,12 +212,40 @@ void GlScene::draw() {
     // Draw simple entities
     vector<SimpleEntityLODUnit>::iterator it;
 
-    for( it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
-      if((*it).lod<0)
-        continue;
+    if(!getGlGraphComposite()->getInputData()->parameters->isElementZOrdered()){
+      for( it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
+        if((*it).lod<0)
+          continue;
 
-      glStencilFunc(GL_LEQUAL,(((*it).entity))->getStencil(), 0xFFFF);
-      ((*it).entity)->draw((*it).lod,camera);
+        glStencilFunc(GL_LEQUAL,(((*it).entity))->getStencil(), 0xFFFF);
+        ((*it).entity)->draw((*it).lod,camera);
+      }
+    }else{
+
+      entityWithDistanceCompare::inputData=glGraphComposite->getInputData();
+      multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
+      Coord camPos=camera->getEyes();
+      BoundingBox bb;
+      double dist;
+
+      for( it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
+        if((*it).lod<0)
+          continue;
+
+        bb = (*it).boundingBox;
+        Coord middle((bb[1] + bb[0])/2.f);
+        dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
+        dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
+        dist+=(((double)middle[2])-((double)camPos[2]))*(((double)middle[2])-((double)camPos[2]));
+        entitiesSet.insert(EntityWithDistance(dist,&(*it)));
+      }
+
+      for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin(); it!=entitiesSet.end(); ++it) {
+        // Simple entities
+        GlSimpleEntity *entity = (((SimpleEntityLODUnit*)((*it).entity))->entity);
+        glStencilFunc(GL_LEQUAL,entity->getStencil(),0xFFFF);
+        entity->draw((*it).entity->lod,camera);
+      }
     }
   }
 
