@@ -96,6 +96,10 @@ QString AlgorithmRunnerItem::name() const {
   return _pluginName;
 }
 
+tlp::Graph *AlgorithmRunnerItem::graph() const {
+    return _graph;
+}
+
 template<typename PROP>
 void asLocal(QVariant var, DataSet& data, Graph* g) {
   if (var.userType() == qMetaTypeId<PROP*>()) {

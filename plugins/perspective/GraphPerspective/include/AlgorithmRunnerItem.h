@@ -47,6 +47,7 @@ public:
 
   QString name() const;
   QString python() const;
+  tlp::Graph *graph() const;
   tlp::DataSet data() const;
 
   void setFavorite(bool);
