@@ -36,6 +36,8 @@ static const std::string BOOLEAN_ALGORITHM_CATEGORY = QObject::trUtf8("Filtering
 class TLP_SCOPE BooleanAlgorithm : public TemplateAlgorithm<tlp::BooleanProperty> {
 protected:
   BooleanAlgorithm (const tlp::PluginContext*);
+
+public:
   virtual std::string category() const {
     return BOOLEAN_ALGORITHM_CATEGORY;
   }
@@ -51,6 +53,7 @@ static const std::string COLOR_ALGORITHM_CATEGORY = QObject::trUtf8("Coloring").
 class TLP_SCOPE ColorAlgorithm : public TemplateAlgorithm<tlp::ColorProperty> {
 protected:
   ColorAlgorithm (const tlp::PluginContext*);
+public:
   virtual std::string category() const {
     return COLOR_ALGORITHM_CATEGORY;
   }
@@ -67,6 +70,7 @@ class TLP_SCOPE DoubleAlgorithm : public TemplateAlgorithm<tlp::DoubleProperty> 
 protected:
   ///
   DoubleAlgorithm (const tlp::PluginContext*);
+public:
   virtual std::string category() const {
     return DOUBLE_ALGORITHM_CATEGORY;
   }
@@ -82,6 +86,7 @@ static const std::string INTEGER_ALGORITHM_CATEGORY = QObject::trUtf8("Metric").
 class TLP_SCOPE IntegerAlgorithm : public TemplateAlgorithm<tlp::IntegerProperty> {
 protected:
   IntegerAlgorithm (const tlp::PluginContext*);
+public:
   virtual std::string category() const {
     return INTEGER_ALGORITHM_CATEGORY;
   }
@@ -98,6 +103,7 @@ class TLP_SCOPE LayoutAlgorithm : public TemplateAlgorithm<tlp::LayoutProperty> 
 protected:
   ///
   LayoutAlgorithm (const tlp::PluginContext*);
+public:
   virtual std::string category() const {
     return LAYOUT_ALGORITHM_CATEGORY;
   }
@@ -113,6 +119,7 @@ static const std::string SIZE_ALGORITHM_CATEGORY = QObject::trUtf8("Resizing").t
 class TLP_SCOPE SizeAlgorithm : public TemplateAlgorithm<tlp::SizeProperty> {
 protected:
   SizeAlgorithm (const tlp::PluginContext*);
+public:
   virtual std::string category() const {
     return SIZE_ALGORITHM_CATEGORY;
   }
@@ -129,6 +136,7 @@ class TLP_SCOPE StringAlgorithm : public TemplateAlgorithm<tlp::StringProperty> 
 protected:
   ///
   StringAlgorithm (const tlp::PluginContext*);
+public:
   virtual std::string category() const {
     return STRING_ALGORITHM_CATEGORY;
   }
