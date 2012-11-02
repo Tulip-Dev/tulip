@@ -64,6 +64,7 @@ INSTALL(FILES
   tulip/InteractorComposite.h
   tulip/ProcessingAnimationItem.h
   tulip/Workspace.h
+  tulip/WorkspacePanel.h
   tulip/PlaceHolderWidget.h
   tulip/ExtendedMetaNodeRenderer.h
   tulip/TulipFileDescriptorWidget.h
