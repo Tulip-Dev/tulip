@@ -20,7 +20,9 @@
 #define NODELINKDIAGRAMCOMPONENTINTERACTOR_H
 
 #include <QtGui/QLabel>
+
 #include <tulip/GLInteractor.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 namespace tlp {
 
@@ -47,11 +49,8 @@ public :
     _label->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
   }
 
-  virtual bool isCompatible(const std::string &viewName) {
-    if(viewName=="Node Link Diagram view")
-      return true;
-
-    return false;
+  virtual bool isCompatible(const std::string &viewName) const {
+    return (viewName==NodeLinkDiagramComponent::viewName);
   }
 
   virtual QWidget* configurationWidget() const {
