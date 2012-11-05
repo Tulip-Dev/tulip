@@ -67,7 +67,7 @@ public:
     @brief Checks the compatibility between the interactor and the given view (identified by its name).
     If this method returns true, it's very likely that the interactor will be installed on the associated view.
     */
-  virtual bool isCompatible(const std::string& viewName)=0;
+  virtual bool isCompatible(const std::string& viewName) const=0;
 
   /**
     @return the configuration widget used to set up the interactor.
@@ -185,7 +185,7 @@ public:\
   std::string tulipRelease() const { return std::string(TULIP_RELEASE); }\
   std::string group() const { return getComponent()->group(); }\
   CLASS_NAME(const PluginContext *):_component(NULL) {}\
-  bool isCompatible(const std::string& viewName) { return viewName == VIEW_STRING_NAME; }\
+  bool isCompatible(const std::string& viewName) const { return viewName == VIEW_STRING_NAME; }\
   QWidget* configurationWidget() const { return getComponent()->configurationWidget(); }\
   unsigned int priority() const { return getComponent()->priority(); }\
   QAction* action() const { return getComponent()->action(); }\
@@ -224,7 +224,7 @@ public:\
   std::string tulipRelease() const { return std::string(TULIP_RELEASE); }\
   std::string group() const { return getComponent()->group(); }\
   CLASS_NAME(const PluginContext *):_component(NULL) {}\
-  bool isCompatible(const std::string& viewName) { return viewName == VIEW_STRING_NAME; }\
+  bool isCompatible(const std::string& viewName) const { return viewName == VIEW_STRING_NAME; }\
   QWidget* configurationWidget() const { return getComponent()->configurationWidget(); }\
   unsigned int priority() const { return PRIORITY; }\
   QAction* action() const { return getComponent()->action(); }\

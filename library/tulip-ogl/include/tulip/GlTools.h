@@ -30,7 +30,7 @@
 
 namespace tlp {
 typedef Matrix<float, 4> MatrixGL;
-TLP_GL_SCOPE void glTest(std::string message = "(no description)");
+TLP_GL_SCOPE void glTest(const std::string &message = std::string("(no description)"));
 TLP_GL_SCOPE void setColor(const Color &c);
 TLP_GL_SCOPE void setColor(GLfloat *);
 TLP_GL_SCOPE void setMaterial(const Color &c);

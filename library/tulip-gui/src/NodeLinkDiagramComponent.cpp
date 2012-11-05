@@ -41,6 +41,8 @@
 using namespace tlp;
 using namespace std;
 
+const string NodeLinkDiagramComponent::viewName("Node Link Diagram view");
+
 NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL),_hasHulls(false) {
 }
 
