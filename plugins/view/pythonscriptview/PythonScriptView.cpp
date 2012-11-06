@@ -607,7 +607,7 @@ DataSet PythonScriptView::state() const {
     PythonCodeEditor *codeEditor = viewWidget->getCurrentMainScriptEditor();
 
     if (codeEditor) {
-        dataSet->set("main script file", codeEditor->getFileName());
+        dataSet->set("main script file", codeEditor->getFileName().toStdString());
         string scriptCode = viewWidget->getCurrentMainScriptCode();
         dataSet->set("script code", scriptCode);
     }
