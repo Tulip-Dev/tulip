@@ -144,6 +144,7 @@ void GraphHierarchiesEditor::delGraph() {
     return;
 
   GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
+  _contextGraph->push();
 
   if (_contextGraph->getRoot() == _contextGraph) {
     delete _contextGraph;
@@ -167,7 +168,7 @@ void GraphHierarchiesEditor::delAllGraph() {
     return;
 
   GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
-
+  _contextGraph->push();
   if (_contextGraph->getRoot() == _contextGraph) {
     delete _contextGraph;
     static_cast<tlp::GraphHierarchiesModel*>(_ui->hierarchiesTree->model())->setCurrentGraph(NULL);
