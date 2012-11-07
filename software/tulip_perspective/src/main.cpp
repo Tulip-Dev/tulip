@@ -130,7 +130,7 @@ int main(int argc,char **argv) {
   SimplePluginProgressDialog *progress = new SimplePluginProgressDialog(mainWindow);
   progress->setStopButtonVisible(false);
   progress->setCancelButtonVisible(false);
-  progress->setPreviewButtonVisible(false);
+  progress->showPreview(false);
   progress->setWindowTitle(title);
   progress->resize(500,progress->height());
   progress->show();

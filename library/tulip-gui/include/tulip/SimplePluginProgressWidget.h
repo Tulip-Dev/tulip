@@ -72,7 +72,6 @@ protected:
 public slots:
   void setCancelButtonVisible(bool);
   void setStopButtonVisible(bool);
-  void setPreviewButtonVisible(bool);
 
 protected slots:
   void cancelClicked();
@@ -110,7 +109,6 @@ protected:
 public slots:
   void setCancelButtonVisible(bool v);
   void setStopButtonVisible(bool v);
-  void setPreviewButtonVisible(bool v);
 
 private:
   tlp::SimplePluginProgressWidget *_progress;
