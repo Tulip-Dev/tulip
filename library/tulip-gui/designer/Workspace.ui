@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1088</width>
-    <height>637</height>
+    <width>1086</width>
+    <height>635</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -42,7 +42,7 @@ background-color: white;
 }</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="startupPage">
       <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -66,7 +66,7 @@ background-color: white;
                </sizepolicy>
               </property>
               <property name="icon">
-               <iconset resource="../resources/TulipGUIResource.qrc">
+               <iconset>
                 <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
               </property>
               <property name="iconSize">
@@ -128,7 +128,7 @@ p, li { white-space: pre-wrap; }
                <string/>
               </property>
               <property name="icon">
-               <iconset resource="../resources/TulipGUIResource.qrc">
+               <iconset>
                 <normaloff>:/tulip/gui/icons/64/list-add.png</normaloff>:/tulip/gui/icons/64/list-add.png</iconset>
               </property>
               <property name="iconSize">
@@ -315,9 +315,15 @@ p, li { white-space: pre-wrap; }
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
+         <property name="handleWidth">
+          <number>3</number>
+         </property>
          <widget class="QSplitter" name="split3PageVerticalSplitter">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
           </property>
           <widget class="PlaceHolderWidget" name="split3PagePanel1" native="true"/>
           <widget class="PlaceHolderWidget" name="split3PagePanel2" native="true"/>
@@ -337,10 +343,16 @@ p, li { white-space: pre-wrap; }
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
+         <property name="handleWidth">
+          <number>3</number>
+         </property>
          <widget class="PlaceHolderWidget" name="split32Panel1" native="true"/>
          <widget class="QSplitter" name="split32VerticalSplitter">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
           </property>
           <widget class="PlaceHolderWidget" name="split32Panel2" native="true"/>
           <widget class="PlaceHolderWidget" name="split32Panel3" native="true"/>
@@ -396,7 +408,7 @@ p, li { white-space: pre-wrap; }
          <string>Expose</string>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/expose.png</normaloff>:/tulip/gui/ui/expose.png</iconset>
         </property>
         <property name="shortcut">
@@ -441,7 +453,7 @@ p, li { white-space: pre-wrap; }
          <string>Previous</string>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
         </property>
         <property name="shortcut">
@@ -476,7 +488,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
         </property>
         <property name="shortcut">
@@ -521,7 +533,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -559,7 +571,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/split_screen.png</normaloff>:/tulip/gui/ui/split_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -591,7 +603,7 @@ p, li { white-space: pre-wrap; }
          </size>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/split3_2_screen.png</normaloff>:/tulip/gui/ui/split3_2_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -617,7 +629,7 @@ p, li { white-space: pre-wrap; }
          <string>3 panels per page</string>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/split3_screen.png</normaloff>:/tulip/gui/ui/split3_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -649,7 +661,7 @@ p, li { white-space: pre-wrap; }
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -681,7 +693,7 @@ p, li { white-space: pre-wrap; }
          </size>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/six_screen.png</normaloff>:/tulip/gui/ui/six_screen.png</iconset>
         </property>
         <property name="shortcut">
@@ -710,9 +722,7 @@ p, li { white-space: pre-wrap; }
    <header location="global">tulip/WorkspaceExposeWidget.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>gridModeButton</sender>
