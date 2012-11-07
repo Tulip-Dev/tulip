@@ -675,7 +675,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
 #ifndef __APPLE__
     painter.drawText(tooltipRect, _toolTipText);
 #else
-    painter.drawText(tooltipRect, Qt::AlignLeft, toolTipText);
+    painter.drawText(tooltipRect, Qt::AlignLeft, _toolTipText);
 #endif
   }
 
