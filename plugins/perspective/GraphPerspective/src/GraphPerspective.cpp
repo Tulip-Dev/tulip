@@ -464,6 +464,7 @@ void GraphPerspective::saveAs(const QString& path) {
   }
 
   SimplePluginProgressDialog progress(_mainWindow);
+  progress.showPreview(false);
   progress.show();
   QMap<Graph*,QString> rootIds = _graphs->writeProject(_project,&progress);
   _ui->workspace->writeProject(_project,rootIds,&progress);

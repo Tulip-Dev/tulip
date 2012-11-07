@@ -115,10 +115,6 @@ void SimplePluginProgressWidget::setStopButtonVisible(bool v) {
   _ui->stopButton->setVisible(v);
 }
 
-void SimplePluginProgressWidget::setPreviewButtonVisible(bool v) {
-  _ui->previewBox->setVisible(v);
-}
-
 void SimplePluginProgressWidget::cancelClicked() {
   cancel();
 }
@@ -213,8 +209,4 @@ void SimplePluginProgressDialog::setCancelButtonVisible(bool v) {
 
 void SimplePluginProgressDialog::setStopButtonVisible(bool v) {
   _progress->setStopButtonVisible(v);
-}
-
-void SimplePluginProgressDialog::setPreviewButtonVisible(bool v) {
-  _progress->setPreviewButtonVisible(v);
 }
