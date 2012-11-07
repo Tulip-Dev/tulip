@@ -54,8 +54,9 @@ void TreeViewComboBox::setGraphsModel(QAbstractItemModel *model) {
     setModel(model);
     for(int i=1; i<model->columnCount(); ++i)
       _treeView->hideColumn(i);
-    _treeView->expandAll();
     _treeView->setItemsExpandable(true);
+    _treeView->expandAll();
+    connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
 }
 
 void TreeViewComboBox::showPopup() {
@@ -87,4 +88,8 @@ QModelIndex TreeViewComboBox::selectedIndex() const {
     return current;
 
   return selected;
+}
+
+void TreeViewComboBox::rowsInserted(const QModelIndex &parent, int, int) {
+    _treeView->setExpanded(parent, true);
 }

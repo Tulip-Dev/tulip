@@ -45,6 +45,7 @@ public:
 public slots:
   void selectIndex(const QModelIndex&);
   void itemExpanded();
+  void rowsInserted(const QModelIndex &, int, int);
 };
 
 #endif // TREEVIEWCOMBOBOX_H
