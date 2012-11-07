@@ -27,6 +27,7 @@
 #include <tulip/Plugin.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLibraryLoader.h>
+#include <tulip/Observable.h>
 
 namespace tlp {
 class PluginContext;
@@ -56,7 +57,7 @@ public:
  * @see tlp::PluginLoader
  * @see tlp::PluginLibraryLoader
  */
-class TLP_SCOPE PluginLister {
+class TLP_SCOPE PluginLister : public Observable {
 private:
   struct PluginDescription {
     FactoryInterface* factory;
@@ -213,6 +214,11 @@ public:
   static void registerPlugin(FactoryInterface* objectFactory);
 
 protected:
+
+
+  void sendPluginAddedEvent(const std::string &pluginName);
+  void sendPluginRemovedEvent(const std::string &pluginName);
+
   static PluginLister* _instance;
 
   /**
@@ -227,6 +233,34 @@ protected:
    * @return :string The version number, ussually formatted as X[.Y], where X is the major, and Y the minor.
    **/
   static std::string getPluginRelease(std::string name);
+};
+
+class TLP_SCOPE PluginEvent : public Event {
+public:
+
+  enum PluginEventType {
+    TLP_ADD_PLUGIN = 0,
+    TLP_REMOVE_PLUGIN = 1
+  };
+
+  // constructor for node/edge events
+  PluginEvent(PluginEventType pluginEvtType, std::string pluginName)
+      : Event(*(tlp::PluginLister::instance()), Event::TLP_MODIFICATION),
+        evtType(pluginEvtType), pluginName(pluginName) {}
+
+  PluginEventType getType() const {
+    return evtType;
+  }
+
+  std::string getPluginName() const {
+      return pluginName;
+  }
+
+protected:
+
+  PluginEventType evtType;
+  std::string pluginName;
+
 };
 
 }
