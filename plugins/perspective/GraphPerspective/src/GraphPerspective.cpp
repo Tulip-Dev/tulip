@@ -42,7 +42,7 @@
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PythonInterpreter.h>
-#include <tulip/APIDatabase.h>
+#include <tulip/APIDataBase.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
