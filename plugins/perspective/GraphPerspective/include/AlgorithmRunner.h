@@ -21,6 +21,7 @@
 
 #include <QtGui/QWidget>
 #include <tulip/DataSet.h>
+#include <tulip/PluginModel.h>
 
 class QToolButton;
 namespace Ui {
@@ -40,6 +41,10 @@ class AlgorithmRunner: public QWidget {
   QToolButton* _localModeButton;
 
   QList<AlgorithmRunnerItem*> _favorites;
+
+  void refreshTreeUi(QWidget* w);
+  void buildTreeUi(QWidget* w, tlp::PluginModel<tlp::Algorithm>* model, const QModelIndex& parent, bool root = false);
+  void insertItem(QWidget* w, const QString& name);
 
 public:
   explicit AlgorithmRunner(QWidget* parent = NULL);

@@ -39,6 +39,18 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   _ui->parameters->setVisible(false);
   _ui->parameters->setItemDelegate(new TulipItemDelegate);
   setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
+
+  static QPixmap cppPix(":/tulip/graphperspective/icons/16/cpp.png");
+  static QPixmap pythonPix(":/tulip/graphperspective/icons/16/python.png");
+  const Plugin *plugin = PluginLister::instance()->pluginInformations(pluginName.toStdString());
+  if (plugin->programmingLanguage() == "Python") {
+      _ui->languageLabel->setPixmap(pythonPix);
+      _ui->languageLabel->setToolTip("Plugin written in Python");
+  } else {
+      _ui->languageLabel->setPixmap(cppPix);
+      _ui->languageLabel->setToolTip("Plugin written in C++");
+  }
+  delete plugin;
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {

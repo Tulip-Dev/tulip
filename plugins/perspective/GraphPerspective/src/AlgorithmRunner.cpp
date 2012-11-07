@@ -26,7 +26,6 @@
 #include <QtGui/QToolButton>
 
 #include <tulip/TulipMimes.h>
-#include <tulip/PluginModel.h>
 #include <tulip/TulipSettings.h>
 
 struct FavoriteBox: public ExpandableGroupBox {
@@ -59,7 +58,7 @@ static ExpandableGroupBox *createGroupBox(QString name, bool root = false) {
     return groupBox;
 }
 
-void buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelIndex& parent, QToolButton* localModeButton, bool root = false) {
+void AlgorithmRunner::buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelIndex& parent, bool root) {
     for (int i=0; i<model->rowCount(parent); ++i) {
         QModelIndex index = model->index(i,0,parent);
         QString name = model->data(index).toString();
@@ -67,17 +66,17 @@ void buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model, const QModelInd
         if (model->rowCount(index) > 0) {
             ExpandableGroupBox* groupBox = createGroupBox(name, root);
             w->layout()->addWidget(groupBox);
-            buildTreeUi(groupBox->widget(),model,index,localModeButton);
+            buildTreeUi(groupBox->widget(),model,index);
         }
         else {
             AlgorithmRunnerItem* item = new AlgorithmRunnerItem(name);
-            QObject::connect(localModeButton,SIGNAL(clicked(bool)),item,SLOT(setLocalMode(bool)));
+            QObject::connect(_localModeButton,SIGNAL(clicked(bool)),item,SLOT(setLocalMode(bool)));
             w->layout()->addWidget(item);
         }
     }
 }
 
-void insertItem(QWidget* w, const QString& name, QToolButton* localModeButton) {
+void AlgorithmRunner::insertItem(QWidget* w, const QString& name) {
     const Plugin* plugin = PluginLister::pluginInformations(name.toStdString());
     QString category = plugin->category().c_str();
     QString group = plugin->group().c_str();
@@ -120,7 +119,8 @@ void insertItem(QWidget* w, const QString& name, QToolButton* localModeButton) {
     }
 
     AlgorithmRunnerItem* item = new AlgorithmRunnerItem(name);
-    QObject::connect(localModeButton,SIGNAL(clicked(bool)),item,SLOT(setLocalMode(bool)));
+    QObject::connect(_localModeButton,SIGNAL(clicked(bool)),item,SLOT(setLocalMode(bool)));
+    QObject::connect(item,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
     QVBoxLayout *groupLayout = static_cast<QVBoxLayout*>(groupBox->widget()->layout());
     int index = 0;
     while (index < groupLayout->count()) {
@@ -133,13 +133,15 @@ void insertItem(QWidget* w, const QString& name, QToolButton* localModeButton) {
     groupLayout->insertWidget(index, item);
 }
 
-void refreshTreeUi(QWidget* w, QToolButton* localModeButton) {
+void AlgorithmRunner::refreshTreeUi(QWidget* w) {
     QStringList visibleItems;
     foreach(AlgorithmRunnerItem* i, w->findChildren<AlgorithmRunnerItem*>()) {
         if (PluginLister::instance()->pluginExists(i->name().toStdString()))
             visibleItems.push_back(i->name());
-        else
+        else {
+            _favorites.removeAll(i);
             delete i;
+        }
     }
 
     foreach(ExpandableGroupBox* gb, w->findChildren<ExpandableGroupBox*>()) {
@@ -152,7 +154,7 @@ void refreshTreeUi(QWidget* w, QToolButton* localModeButton) {
     for(std::list<std::string>::iterator it = installedPlugins.begin(); it != installedPlugins.end(); ++it) {
         std::string name = *it;
         if (!visibleItems.contains(name.c_str())) {
-            insertItem(w, name.c_str(),localModeButton);
+            insertItem(w, name.c_str());
         }
     }
 }
@@ -179,7 +181,7 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
     _ui->header->mainFrame()->layout()->addWidget(_localModeButton);
 
     PluginModel<tlp::Algorithm> model;
-    buildTreeUi(_ui->contents, &model, QModelIndex(), _localModeButton, true);
+    buildTreeUi(_ui->contents, &model, QModelIndex(), true);
     _ui->contents->layout()->addItem(new QSpacerItem(0,0,QSizePolicy::Minimum,QSizePolicy::Expanding));
     foreach(AlgorithmRunnerItem* i, findChildren<AlgorithmRunnerItem*>()) {
         connect(i,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
@@ -209,7 +211,7 @@ void AlgorithmRunner::findPlugins() {
 }
 
 void AlgorithmRunner::refreshPluginsList() {
-    refreshTreeUi(_ui->contents,_localModeButton);
+    refreshTreeUi(_ui->contents);
     setGraph(_graph);
 }
 

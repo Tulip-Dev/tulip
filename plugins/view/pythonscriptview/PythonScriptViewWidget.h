@@ -20,83 +20,101 @@
 #ifndef PYTHONSCRIPTVIEWWIDGET_H_
 #define PYTHONSCRIPTVIEWWIDGET_H_
 
-#include "ui_PythonScriptViewWidget.h"
-#include <QtGui/QAction>
+#include <QtGui/QWidget>
+#include <QtCore/QUrl>
 
-#include "PythonCodeEditor.h"
+namespace Ui {
+class PythonScriptViewWidget;
+}
 
-#include <tulip/Graph.h>
+namespace tlp {
+class PythonCodeEditor;
+class Graph;
+class PythonEditorsTabWidget;
+}
 
 class QToolBar;
-
+class QAction;
 class PythonScriptView;
+class QTextBrowser;
+class QToolButton;
+class QLabel;
+class QProgressBar;
 
-class PythonScriptViewWidget : public QWidget, public Ui::PythonScriptViewWidgetData {
+class PythonScriptViewWidget : public QWidget {
 
-  Q_OBJECT
+    Q_OBJECT
+
+    Ui::PythonScriptViewWidget *_ui;
+    PythonScriptView *_pythonScriptView;
+    QToolBar *_mainScriptToolBar;
+    QToolBar *_modulesToolBar;
+    QAction *_newMainScriptAction;
+    QAction *_loadMainScriptAction;
+    QAction *_saveMainScriptAction;
+    QAction *_newStringModuleAction;
+    QAction *_newFileModuleAction;
+    QAction *_loadModuleAction;
+    QAction *_saveModuleAction;
+
 
 public :
 
-  PythonScriptViewWidget(PythonScriptView *view, QWidget *parent=NULL);
+    PythonScriptViewWidget(PythonScriptView *view, QWidget *parent=NULL);
 
-  void showEvent(QShowEvent *);
-  void resizeEvent(QResizeEvent *);
+    void showEvent(QShowEvent *);
+    void resizeEvent(QResizeEvent *);
 
-  int addMainScriptEditor(const QString &fileName="");
-  int addModuleEditor(const QString &fileName="");
-  int addPluginEditor(const QString &fileName="");
+    void setMainTabWidgetIndex(int idx);
 
-  PythonCodeEditor *getMainScriptEditor(int idx) const;
-  PythonCodeEditor *getCurrentMainScriptEditor() const;
-  PythonCodeEditor *getModuleEditor(int idx) const;
-  PythonCodeEditor *getCurrentModuleEditor() const;
-  PythonCodeEditor *getPluginEditor(int idx) const;
-  PythonCodeEditor *getCurrentPluginEditor() const;
+    tlp::PythonEditorsTabWidget *getScriptsTabWidget() const;
+    tlp::PythonEditorsTabWidget *getModulesTabWidget() const;
 
-  std::string getCurrentMainScriptCode() const;
-  std::string getMainScriptCode(int idx) const;
-  std::string getModuleCode(int idx) const;
-  std::string getPluginCode(int idx) const;
+    int addMainScriptEditor(const QString &fileName="");
+    int addModuleEditor(const QString &fileName="");
 
-  void setGraph(tlp::Graph *graph);
+    int numberOfScriptEditors() const;
+    int numberOfModulesEditors() const;
+
+    int getCurrentMainScriptEditorIndex() const;
+    int getCurrentModuleEditorIndex() const;
+    tlp::PythonCodeEditor *getMainScriptEditor(int idx) const;
+    tlp::PythonCodeEditor *getCurrentMainScriptEditor() const;
+    tlp::PythonCodeEditor *getModuleEditor(int idx) const;
+    tlp::PythonCodeEditor *getCurrentModuleEditor() const;
+
+    void setCurrentScriptEditor(int idx);
+    void setCurrentModuleEditor(int idx);
+
+    QString getScriptEditorTabText(int idx) const;
+    QString getModuleEditorTabText(int idx) const;
+    void setScriptEditorTabText(int idx, const QString &tabText);
+    void setModuleEditorTabText(int idx, const QString &tabText);
+
+    void setScriptEditorTabToolTip(int idx, const QString &tooltip);
+    void setModuleEditorTabToolTip(int idx, const QString &tooltip);
+
+    void setGraph(tlp::Graph *graph);
+
+    void indicateErrors(const QMap<QString, QVector<int> > &errorLines);
+
+    void clearErrorIndicators();
+
+    QTextBrowser *consoleWidget() const;
+    QToolButton *runScriptButton() const;
+    QToolButton *pauseScriptButton() const;
+    QToolButton *stopScriptButton() const;
+    QLabel *scriptStatusLabel() const;
+    QProgressBar *progressBar() const;
 
 public slots :
 
-  void decreaseFontSize();
-  void increaseFontSize();
-  void mainScriptTextChanged();
-  void moduleScriptTextChanged();
-  void pluginScriptTextChanged();
-  void resizeToolBars();
+    void decreaseFontSize();
+    void increaseFontSize();
+    void resizeToolBars();
+    void currentTabChanged(int index);
+    void scrollToEditorLine(const QUrl & link);
 
-  void currentTabChanged(int index);
-
-  void scrollToEditorLine(const QUrl & link);
-
-public :
-
-  QAction *newMainScriptAction;
-  QAction *loadMainScriptAction;
-  QAction *saveMainScriptAction;
-  QAction *newStringModuleAction;
-  QAction *newFileModuleAction;
-  QAction *loadModuleAction;
-  QAction *saveModuleAction;
-  QAction *newPluginAction;
-  QAction *loadPluginAction;
-  QAction *savePluginAction;
-
-
-  QToolBar *mainScriptToolBar;
-  QToolBar *modulesToolBar;
-  QToolBar *pluginsToolBar;
-
-private :
-
-  int fontZoom;
-
-  PythonScriptView *pythonScriptView;
-  static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 };
 
 #endif /* PYTHONSCRIPTVIEWWIDGET_H_ */

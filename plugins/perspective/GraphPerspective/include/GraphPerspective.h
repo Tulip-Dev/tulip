@@ -22,6 +22,7 @@
 #include <QtCore/QModelIndex>
 #include <QtCore/QPoint>
 #include <tulip/Perspective.h>
+#include <tulip/Observable.h>
 
 
 class QAction;
@@ -40,7 +41,7 @@ namespace Ui {
 class GraphPerspectiveMainWindowData;
 }
 
-class GraphPerspective : public tlp::Perspective {
+class GraphPerspective : public tlp::Perspective, tlp::Observable {
   Q_OBJECT
   Ui::GraphPerspectiveMainWindowData *_ui;
   tlp::GraphHierarchiesModel *_graphs;
@@ -71,6 +72,8 @@ public:
   void copy(tlp::Graph*, bool deleteAfter=false);
   tlp::Graph* createSubGraph(tlp::Graph*);
 
+  void treatEvent(const tlp::Event &);
+
 public slots:
   void showFullScreen(bool);
   void importGraph();
@@ -89,11 +92,15 @@ public slots:
   void centerPanelsForGraph(tlp::Graph*);
   void closePanelsForGraph(tlp::Graph* g = NULL);
   void setSearchOutput(bool);
+  void setPythonPanel(bool);
   void openPreferences();
 
   void setAutoCenterPanelsOnDraw(bool f);
 
   void pluginsListChanged();
+
+  void setWorkspaceMode();
+  void setDevelopMode();
 
 protected slots:
   void currentGraphChanged(tlp::Graph* graph);
