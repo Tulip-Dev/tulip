@@ -62,13 +62,13 @@ public:
    * @brief Gets the default node value of the property.
    * @return The default value of nodes.
    */
-  typename Tnode::RealType getNodeDefaultValue() const;
+  virtual typename Tnode::RealType getNodeDefaultValue() const;
 
   /**
    * @brief Gets the default edge value of the property.
    * @return The default value of edges.
    **/
-  typename Tedge::RealType getEdgeDefaultValue() const;
+  virtual typename Tedge::RealType getEdgeDefaultValue() const;
 
   /**
    * @brief Returns the value associated with the node n in this property.
@@ -77,7 +77,7 @@ public:
    * @param n The node for which we want to get the value of the property.
    * @return :StoredType< Tnode::RealType >::ReturnedConstValue The value of the property for this node.
    **/
-  typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue getNodeValue(const node n ) const;
+  virtual typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue getNodeValue(const node n ) const;
 
   /**
    * @brief Returns the value associated to the edge e in this property.
@@ -86,7 +86,7 @@ public:
    * @param e The edge for which we want to get the value of the property.
    * @return :StoredType< Tedge::RealType >::ReturnedConstValue The value of the property for this edge.
    **/
-  typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue getEdgeValue(const edge e) const;
+  virtual typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue getEdgeValue(const edge e) const;
 
   /**
    * @brief Sets the value of a node and notify the observers of a modification.
