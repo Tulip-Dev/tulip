@@ -42,10 +42,6 @@
 #    define _CRT_NOFORCE_MANIFEST 1
 #  endif
 #  include <Python.h>
-#  include <frameobject.h>
-#  include <structmember.h>
-#  include <import.h>
-#  include <sip.h>
 #  define _DEBUG
 # else
 #  include <Python.h>
