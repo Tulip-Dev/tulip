@@ -39,6 +39,7 @@ QT4_ADD_RESOURCES(${LibTulipPythonName}_RCC_SRCS ../resources/TulipPython.qrc)
 ADD_LIBRARY(${LibTulipPythonName} SHARED ${${LibTulipPythonName}_LIB_SRCS} ${${LibTulipPythonName}_MOC_SRCS} ${${LibTulipPythonName}_UI_SRCS} ${${LibTulipPythonName}_RCC_SRCS})
 
 TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipCoreName})
+TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${LibTulipGUIName})
 TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${QT_LIBRARIES})
 TARGET_LINK_LIBRARIES(${LibTulipPythonName} ${PYTHON_LIBRARY})
 

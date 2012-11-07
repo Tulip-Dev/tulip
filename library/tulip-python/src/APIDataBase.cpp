@@ -64,17 +64,6 @@ APIDataBase::APIDataBase() {
   addApiEntry("dict.viewkeys()");
   addApiEntry("dict.viewvalues()");
 
-  loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulip.api");
-  loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
-  loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipogl.api");
-
-  PythonInterpreter::getInstance()->setOutputEnabled(false);
-  if (PythonInterpreter::getInstance()->runString("import PyQt4.QtGui")) {
-    loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipqt.api");
-    loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/PyQt4.api");
-  }
-  PythonInterpreter::getInstance()->setOutputEnabled(false);
-
 }
 
 void APIDataBase::loadApiFile(const QString &apiFilePath) {

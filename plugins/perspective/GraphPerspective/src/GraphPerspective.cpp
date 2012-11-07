@@ -42,6 +42,7 @@
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PythonInterpreter.h>
+#include <tulip/APIDatabase.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -281,9 +282,18 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // fill menu with recent documents
   buildRecentDocumentsMenu();
 
+  APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulip.api");
+  APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
+  APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipogl.api");
+
+  PythonInterpreter::getInstance()->setOutputEnabled(false);
+  if (PythonInterpreter::getInstance()->runString("import PyQt4.QtGui")) {
+    APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipqt.api");
+    APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/PyQt4.api");
+  }
+  PythonInterpreter::getInstance()->setOutputEnabled(false);
+  
   showTrayMessage("GraphPerspective started");
-
-
 
   delete progress;
 }

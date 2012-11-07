@@ -3,7 +3,9 @@
 
 #include <QtGui/QTabWidget>
 
-class PythonTabWidget : public QTabWidget {
+#include <tulip/tulipconf.h>
+
+class TLP_PYTHON_SCOPE PythonTabWidget : public QTabWidget {
 
 public :
 
