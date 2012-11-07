@@ -112,6 +112,8 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
       currentLoader->loaded(informations, informations->dependencies());
     }
 
+    instance()->sendPluginAddedEvent(pluginName);
+
   }
   else {
     if (currentLoader != NULL) {
@@ -124,8 +126,17 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
   delete informations;
 }
 
+void tlp::PluginLister::sendPluginAddedEvent(const std::string &pluginName) {
+    sendEvent(PluginEvent(PluginEvent::TLP_ADD_PLUGIN, pluginName));
+}
+
+void tlp::PluginLister::sendPluginRemovedEvent(const std::string &pluginName) {
+  sendEvent(PluginEvent(PluginEvent::TLP_REMOVE_PLUGIN, pluginName));
+}
+
 void tlp::PluginLister::removePlugin(const std::string &name) {
   instance()->_plugins.erase(name);
+  instance()->sendPluginRemovedEvent(name);
 }
 
 tlp::Plugin* tlp::PluginLister::getPluginObject(const std::string& name, PluginContext* context) {
