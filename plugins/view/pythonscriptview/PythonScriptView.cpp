@@ -233,7 +233,7 @@ PythonScriptView::PythonScriptView(tlp::PluginContext *) : _viewWidget(NULL), _p
 }
 
 PythonScriptView::~PythonScriptView() {
-    delete _viewWidget;
+  //  delete _viewWidget;
 }
 
 void PythonScriptView::setupWidget() {
