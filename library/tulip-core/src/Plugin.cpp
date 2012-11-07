@@ -66,3 +66,7 @@ int Plugin::id() const {
 std::string Plugin::icon() const {
   return ":/tulip/gui/icons/logo32x32.png";
 }
+
+std::string Plugin::programmingLanguage() const {
+    return "C++";
+}
