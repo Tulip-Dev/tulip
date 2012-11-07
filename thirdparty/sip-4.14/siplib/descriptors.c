@@ -17,8 +17,6 @@
  */
 
 
-#include <Python.h>
-
 #include "sip.h"
 #include "sipint.h"
 

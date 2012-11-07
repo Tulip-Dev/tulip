@@ -18,7 +18,6 @@
  */
 
 
-#include <Python.h>
 #include <assert.h>
 #include <string.h>
 
