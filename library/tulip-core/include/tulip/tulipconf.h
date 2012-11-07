@@ -161,6 +161,17 @@ static float strtof(const char* cptr, char** endptr) {
 #endif
 
 #ifdef _WIN32
+#  ifdef DLL_TULIP_PYTHON
+#    define TLP_PYTHON_SCOPE       __declspec(dllexport)
+#  else
+#    define TLP_PYTHON_SCOPE       __declspec(dllimport)
+#  endif
+#endif
+#ifndef TLP_PYTHON_SCOPE
+#  define TLP_PYTHON_SCOPE
+#endif
+
+#ifdef _WIN32
 #  ifdef DLL_TULIP_OGDF
 #    define TLP_OGDF_SCOPE         __declspec(dllexport)
 #  else

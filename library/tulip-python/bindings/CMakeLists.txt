@@ -1,0 +1,3 @@
+ADD_SUBDIRECTORY(stl)
+ADD_SUBDIRECTORY(tulip-core)
+

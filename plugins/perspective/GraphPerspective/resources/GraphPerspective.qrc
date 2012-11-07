@@ -49,5 +49,13 @@
         <file>icons/16/document-open-recent.png</file>
         <file>icons/16/archive.png</file>
         <file>icons/16/empty-file.png</file>
+        <file>icons/48/desktop.png</file>
+        <file>icons/48/python.png</file>
+        <file>icons/48/doc_new.png</file>
+        <file>icons/48/doc_export.png</file>
+        <file>icons/48/doc_plus.png</file>
+        <file>icons/48/doc_import.png</file>
+        <file>icons/16/cpp.png</file>
+        <file>icons/16/python.png</file>
     </qresource>
 </RCC>

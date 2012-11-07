@@ -20,130 +20,103 @@
 #ifndef PYTHONSCRIPTVIEW_H_
 #define PYTHONSCRIPTVIEW_H_
 
-#include "PythonScriptViewWidget.h"
-
 #include <QtCore/QObject>
-#include <QtCore/QDateTime>
+#include <QtCore/QMap>
 #include <tulip/ViewWidget.h>
 
+class QTabWidget;
+
+namespace tlp {
 class PythonInterpreter;
+class PythonCodeEditor;
+}
 
-
-/** \file
- *  \brief Python script view
- *
- *  This view aims to manipulate and modify a Tulip graph through the use of Python scripts.
- *  Indeed, bindings for the Tulip C++ library have been developed in order to offer its features
- *  to the Python world. The main functionalities have been wrapped, the most important ones being
- *  graph and properties manipulation (for instance : adding nodes/edges to a graph, creating a property,
- *  getting/setting property values associated to graph elements, ...) but also the ability to call
- *  algorithms.
- *
- *  The view allows to write a script that will operate on the graph currently loaded in Tulip.
- *  Its graphical interface contains the following components :
- *    - a nice script editor with syntax highlighting and auto-completion
- *      - some buttons to start / stop the current edited script
- *      - a console output widget
- *
- *  Even if the scripting feature works quite well, the bindings are still in development so crashes
- *  could occur if one write a script that unfortunately corrupts the graph data model.
- */
+class PythonScriptViewWidget;
 
 class PythonScriptView : public tlp::ViewWidget {
 
-  Q_OBJECT
+    Q_OBJECT
+
+    PythonScriptViewWidget *_viewWidget;
+    tlp::PythonInterpreter *_pythonInterpreter;
+    tlp::Graph *_graph;
+
+    bool _scriptStopped;
+    bool _runningScript;
 
 public :
 
-  PLUGININFORMATIONS("Python Script view", "Antoine Lambert", "04/2010", "Python Script View", "0.7", "")
+    PLUGININFORMATIONS("Python Script view", "Antoine Lambert", "04/2010",
+                       "This view aims to manipulate and modify a Tulip graph through the use of Python scripts.\n"
+                       "Bindings for the Tulip-Core C++ library have been developed in order to offer its features "
+                       "to the Python world. The main functionalities have been wrapped, the most important ones being "
+                       "graph and properties manipulation (for instance : adding nodes/edges to a graph, creating a property, "
+                       "getting/setting property values associated to graph elements, ...) but also the ability to call "
+                       "algorithms.\n\n"
+                       "The view allows to write a script that will operate on the graphs currently loaded in Tulip.\n"
+                       "Its graphical interface contains the following components :\n"
+                       "   - a nice script editor with syntax highlighting and auto-completion\n"
+                       "   - some buttons to start / stop the current edited script\n"
+                       "   - a console output widget\n"
+                       , "0.7", "")
 
-  PythonScriptView(tlp::PluginContext *);
-  ~PythonScriptView();
+    PythonScriptView(tlp::PluginContext *);
+    ~PythonScriptView();
 
-  void setupWidget();
+    void setupWidget();
 
-  void graphChanged(tlp::Graph *graph);
+    void graphChanged(tlp::Graph *_graph);
 
-  void setState(const tlp::DataSet&);
+    void setState(const tlp::DataSet&);
 
-  tlp::DataSet state() const;
+    tlp::DataSet state() const;
 
-  tlp::Graph* getGraph() {
-    return graph;
-  }
+    tlp::Graph* getGraph() {
+        return _graph;
+    }
 
-  bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
 
-  bool isRunningScript() const {
-    return runningScript;
-  }
+    bool isRunningScript() const {
+        return _runningScript;
+    }
 
-  void draw() {}
+    void draw() {}
 
-  void graphDeleted() {
-    this->graph = NULL;
-  }
+    void graphDeleted() {
+        _graph = NULL;
+    }
 
 public slots:
 
-  void pauseCurrentScript();
+    void pauseCurrentScript();
 
 private slots :
 
-  void newScript();
-  void loadScript();
-  void saveScript();
-  void saveImportAllScripts();
-  void executeCurrentScript();
-  void stopCurrentScript();
-  void newStringModule();
-  void newFileModule();
-  void loadModule();
-  void saveModuleToFile();
-  void newPythonPlugin();
-  void loadPythonPlugin();
-  void savePythonPlugin();
-
-  void registerPythonPlugin(bool clear=true);
-
-  void closeMainScriptTabRequested(int tab);
-  void closeModuleTabRequested(int tab);
-  void closePluginTabRequested(int tab);
+    void newScript();
+    void loadScript();
+    void saveScript();
+    void saveImportAllScripts();
+    void executeCurrentScript();
+    void stopCurrentScript();
+    void newStringModule();
+    void newFileModule();
+    void loadModule();
+    void checkErrors(bool clear=true);
 
 private :
 
-  bool loadScript(const QString &fileName, bool clear=true);
-  void saveScript(int tabIdx, bool clear=true);
-  bool loadModule(const QString &fileName, bool clear=true);
-  bool loadModuleFromSrcCode(const std::string &moduleName, const std::string &moduleSrcCode);
-  void saveModule();
-  void saveModule(int tabIdx, const bool reload=false) ;
-  bool loadPythonPlugin(const QString &fileName, bool clear=true);
-  bool loadPythonPluginFromSrcCode(const std::string &moduleName, const std::string &pluginSrcCode, bool clear=true);
-  void savePythonPlugin(int tabIdx) ;
-  void saveAllModules();
-  bool reloadAllModules() const;
-  void indicateErrors() const;
-  void clearErrorIndicators() const;
-  bool checkAndGetPluginInfosFromSrcCode(const QString &pluginSrcCode, QString &pluginName, QString &pluginClassName, QString &pluginType, QString &pluginClass);
-  void reloadCodeInEditorIfNeeded(PythonCodeEditor *codeEditor, QTabWidget *tabWidget, int index);
-  QString findFile(const QString &filePath);
-
-  PythonScriptViewWidget *viewWidget;
-  PythonInterpreter *pythonInterpreter;
-  tlp::Graph *graph;
-
-  std::map<std::string, std::string> editedPluginsClassName;
-  std::map<std::string, std::string> editedPluginsType;
-  std::map<std::string, std::string> editedPluginsName;
-  std::map<QString, QDateTime> lastModifiedFile;
-
-  bool scriptStopped;
-  bool runningScript;
-
-  bool dontTreatFocusIn;
-
-  bool _viewEnabled;
+    bool loadScript(const QString &fileName, bool clear=true);
+    void saveScript(int tabIdx, bool clear=true);
+    bool loadModule(const QString &fileName, bool clear=true);
+    bool loadModuleFromSrcCode(const QString &moduleName, const QString &moduleSrcCode);
+    void saveModule();
+    void saveModule(int tabIdx, const bool reload=false);
+    void saveAllModules();
+    bool reloadAllModules() const;
+    void indicateErrors() const;
+    void clearErrorIndicators() const;
+    QString findFile(const QString &filePath);
 
 };
 

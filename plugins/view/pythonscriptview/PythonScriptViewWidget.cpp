@@ -17,59 +17,77 @@
  *
  */
 
-#include "PythonInterpreter.h"
-#include "PythonScriptViewWidget.h"
-#include "PythonScriptView.h"
+
 
 #include <QtCore/QFile>
 #include <QtGui/QToolBar>
 #include <QtGui/QIcon>
+#include <QtGui/QTextBlock>
 #include <QtWebKit/QWebView>
 
-GragKeyboardFocusEventFilter PythonScriptViewWidget::keyboardFocusEventFilter;
+#include <tulip/PythonInterpreter.h>
+#include <tulip/PythonCodeEditor.h>
 
-PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), fontZoom(0) , pythonScriptView(view) {
-  setupUi(this);
-  consoleOutputWidget->installEventFilter(&keyboardFocusEventFilter);
-  mainScriptToolBar = new QToolBar(mainScriptToolBarWidget);
-  newMainScriptAction = mainScriptToolBar->addAction(QIcon(":/icons/doc_new.png"), "New main script");
-  loadMainScriptAction = mainScriptToolBar->addAction(QIcon(":/icons/doc_import.png"), "Load main script from file");
-  saveMainScriptAction = mainScriptToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save main script to file");
+#include "PythonScriptViewWidget.h"
+#include "PythonScriptView.h"
+#include "ui_PythonScriptViewWidget.h"
 
-  modulesToolBar = new QToolBar(modulesToolBarWidget);
-  modulesToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-  newStringModuleAction = modulesToolBar->addAction(QIcon(":/icons/doc_plus.png"), "New string module");
-  newFileModuleAction = modulesToolBar->addAction(QIcon(":/icons/doc_new.png"), "New file module");
-  loadModuleAction = modulesToolBar->addAction(QIcon(":/icons/doc_import.png"), "Import module from file");
-  saveModuleAction = modulesToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save module to file");
+using namespace tlp;
 
-  pluginsToolBar = new QToolBar(pluginsToolBarWidget);
-  pluginsToolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
-  newPluginAction = pluginsToolBar->addAction(QIcon(":/icons/doc_plus.png"), "New Tulip plugin");
-  loadPluginAction = pluginsToolBar->addAction(QIcon(":/icons/doc_import.png"), "Import Tulip plugin from file");
-  savePluginAction = pluginsToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save Tulip plugin to file");
+class GragKeyboardFocusEventFilter : public QObject {
+public :
+    bool eventFilter(QObject *, QEvent *event) {
+        if (event->type() == QEvent::ShortcutOverride) {
+            event->accept();
+            return true;
+        }
 
-  modulesTabWidget->clear();
-  mainScriptsTabWidget->clear();
-  pluginsTabWidget->clear();
+        return false;
+    }
+};
+
+static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
+
+PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), _ui(new Ui::PythonScriptViewWidget),  _pythonScriptView(view) {
+  _ui->setupUi(this);
+  _ui->consoleOutputWidget->installEventFilter(&keyboardFocusEventFilter);
+  _mainScriptToolBar = new QToolBar(_ui->mainScriptToolBarWidget);
+  _newMainScriptAction = _mainScriptToolBar->addAction(QIcon(":/icons/doc_new.png"), "New main script");
+  _loadMainScriptAction = _mainScriptToolBar->addAction(QIcon(":/icons/doc_import.png"), "Load main script from file");
+  _saveMainScriptAction = _mainScriptToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save main script to file");
+
+  _modulesToolBar = new QToolBar(_ui->modulesToolBarWidget);
+  _newStringModuleAction = _modulesToolBar->addAction(QIcon(":/icons/doc_plus.png"), "New string module");
+  _newFileModuleAction = _modulesToolBar->addAction(QIcon(":/icons/doc_new.png"), "New file module");
+  _loadModuleAction = _modulesToolBar->addAction(QIcon(":/icons/doc_import.png"), "Import module from file");
+  _saveModuleAction = _modulesToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save module to file");
+
+  _ui->modulesTabWidget->clear();
+  _ui->mainScriptsTabWidget->clear();
   QList<int> sizes;
   sizes.push_back(550);
   sizes.push_back(150);
-  splitter->setSizes(sizes);
-  splitter->setCollapsible(0, false);
-  pluginControlFrame->hide();
+  _ui->splitter->setSizes(sizes);
+  _ui->splitter->setCollapsible(0, false);
 
-  pluginsInfosWidget->appendHtml(QString("When the plugin development is finished, you can copy the associated Python file ")
-                                 + "to <b>" + pythonPluginsPath.c_str() + "</b> or <b> "
-                                 + pythonPluginsPathHome.c_str() +"</b> and it will be automatically loaded at Tulip startup");
-
-  connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(resizeToolBars()));
-  connect(decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
-  connect(increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
-  connect(decreaseFontSizeButton2, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
-  connect(increaseFontSizeButton2, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
-  connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
-  connect(consoleOutputWidget, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(scrollToEditorLine(const QUrl &)));
+  connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(resizeToolBars()));
+  connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
+  connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
+  connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
+  connect(_ui->consoleOutputWidget, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(scrollToEditorLine(const QUrl &)));
+  connect(_ui->runScriptButton, SIGNAL(clicked()), view, SLOT(executeCurrentScript()));
+  connect(_ui->pauseScriptButton, SIGNAL(clicked()), view, SLOT(pauseCurrentScript()));
+  connect(_ui->stopScriptButton, SIGNAL(clicked()), view, SLOT(stopCurrentScript()));
+  connect(_newMainScriptAction, SIGNAL(triggered()), view, SLOT(newScript()));
+  connect(_loadMainScriptAction, SIGNAL(triggered()), view, SLOT(loadScript()));
+  connect(_saveMainScriptAction, SIGNAL(triggered()), view, SLOT(saveScript()));
+  connect(_newStringModuleAction, SIGNAL(triggered()), view, SLOT(newStringModule()));
+  connect(_newFileModuleAction, SIGNAL(triggered()), view, SLOT(newFileModule()));
+  connect(_loadModuleAction, SIGNAL(triggered()), view, SLOT(loadModule()));
+  connect(_saveModuleAction, SIGNAL(triggered()), view, SLOT(saveModule()));
+  connect(_ui->modulesTabWidget, SIGNAL(fileSaved(int)), view, SLOT(checkErrors()));
+  connect(_ui->modulesTabWidget, SIGNAL(filesReloaded()), _ui->mainScriptsTabWidget, SLOT(reloadCodeInEditorsIfNeeded()));
+  connect(_ui->mainScriptsTabWidget, SIGNAL(filesReloaded()), _ui->modulesTabWidget, SLOT(reloadCodeInEditorsIfNeeded()));
 
   QString docRootPath = QString(tlp::TulipShareDir.c_str()) + "../doc/tulip-python/html/index.html";
 
@@ -83,30 +101,9 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
 #else
     webView->load(QUrl("file://"+docRootPath));
 #endif
-    tabWidget->addTab(webView, "Documentation");
+    _ui->tabWidget->addTab(webView, "Documentation");
   }
 
-}
-
-std::string PythonScriptViewWidget::getCurrentMainScriptCode() const {
-  return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->currentWidget())->getCleanCode().toStdString();
-}
-
-std::string PythonScriptViewWidget::getMainScriptCode(int idx) const {
-  return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(idx))->getCleanCode().toStdString();
-}
-
-std::string PythonScriptViewWidget::getModuleCode(int idx) const {
-  return static_cast<PythonCodeEditor *>(modulesTabWidget->widget(idx))->getCleanCode().toStdString();
-}
-
-std::string PythonScriptViewWidget::getPluginCode(int idx) const {
-  std::string code = static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(idx))->toPlainText().replace("\r\n", "\n").toStdString();
-
-  if (code[code.size()-1] != '\n')
-    code += "\n";
-
-  return  code;
 }
 
 void PythonScriptViewWidget::resizeEvent(QResizeEvent *e) {
@@ -119,176 +116,145 @@ void PythonScriptViewWidget::showEvent(QShowEvent *e) {
   resizeToolBars();
 }
 
+tlp::PythonEditorsTabWidget *PythonScriptViewWidget::getScriptsTabWidget() const {
+    return _ui->mainScriptsTabWidget;
+}
+
+tlp::PythonEditorsTabWidget *PythonScriptViewWidget::getModulesTabWidget() const {
+    return _ui->modulesTabWidget;
+}
+
 void PythonScriptViewWidget::resizeToolBars() {
-  modulesToolBar->resize(modulesToolBarWidget->size());
-  mainScriptToolBar->resize(mainScriptToolBarWidget->size());
-  pluginsToolBar->resize(pluginsToolBarWidget->size());
+  _modulesToolBar->resize(_ui->modulesToolBarWidget->size());
+  _mainScriptToolBar->resize(_ui->mainScriptToolBarWidget->size());
+}
+
+void PythonScriptViewWidget::indicateErrors(const QMap<QString, QVector<int> > &errorLines) {
+    _ui->mainScriptsTabWidget->indicateErrors(errorLines);
+    _ui->modulesTabWidget->indicateErrors(errorLines);
+}
+
+void PythonScriptViewWidget::clearErrorIndicators() {
+    _ui->mainScriptsTabWidget->clearErrorIndicators();
+    _ui->modulesTabWidget->clearErrorIndicators();
+}
+
+QTextBrowser *PythonScriptViewWidget::consoleWidget() const {
+    return _ui->consoleOutputWidget;
+}
+
+QToolButton *PythonScriptViewWidget::runScriptButton() const {
+    return _ui->runScriptButton;
+}
+
+QToolButton *PythonScriptViewWidget::pauseScriptButton() const {
+    return _ui->pauseScriptButton;
+}
+
+QToolButton *PythonScriptViewWidget::stopScriptButton() const {
+    return _ui->stopScriptButton;
+}
+
+QLabel *PythonScriptViewWidget::scriptStatusLabel() const {
+    return _ui->scriptStatusLabel;
+}
+
+QProgressBar *PythonScriptViewWidget::progressBar() const {
+    return _ui->progressBar;
+}
+
+void PythonScriptViewWidget::setMainTabWidgetIndex(int idx) {
+    _ui->tabWidget->setCurrentIndex(idx);
+}
+
+int PythonScriptViewWidget::numberOfScriptEditors() const {
+    return _ui->mainScriptsTabWidget->count();
+}
+
+int PythonScriptViewWidget::numberOfModulesEditors() const {
+    return _ui->modulesTabWidget->count();
+}
+
+void PythonScriptViewWidget::setCurrentScriptEditor(int idx) {
+    _ui->mainScriptsTabWidget->setCurrentIndex(idx);
+}
+
+void PythonScriptViewWidget::setCurrentModuleEditor(int idx) {
+    _ui->modulesTabWidget->setCurrentIndex(idx);
+}
+
+QString PythonScriptViewWidget::getScriptEditorTabText(int idx) const {
+    return _ui->mainScriptsTabWidget->tabText(idx);
+}
+
+QString PythonScriptViewWidget::getModuleEditorTabText(int idx) const {
+    return _ui->modulesTabWidget->tabText(idx);
+}
+
+void PythonScriptViewWidget::setScriptEditorTabText(int idx, const QString &tabText) {
+    _ui->mainScriptsTabWidget->setTabText(idx, tabText);
+}
+
+void PythonScriptViewWidget::setModuleEditorTabText(int idx, const QString &tabText) {
+    _ui->modulesTabWidget->setTabText(idx, tabText);
+}
+
+void PythonScriptViewWidget::setScriptEditorTabToolTip(int idx, const QString &tooltip) {
+    _ui->mainScriptsTabWidget->setTabToolTip(idx, tooltip);
+}
+
+void PythonScriptViewWidget::setModuleEditorTabToolTip(int idx, const QString &tooltip) {
+    _ui->modulesTabWidget->setTabToolTip(idx, tooltip);
 }
 
 int PythonScriptViewWidget::addMainScriptEditor(const QString &fileName) {
-  PythonCodeEditor *codeEditor = new PythonCodeEditor();
-  codeEditor->setGraph(pythonScriptView->getGraph());
-  codeEditor->setFileName(fileName);
-  codeEditor->installEventFilter(pythonScriptView);
-  codeEditor->setFocus(Qt::ActiveWindowFocusReason);
-  connect(codeEditor, SIGNAL(textChanged()), this, SLOT(mainScriptTextChanged()));
-  int idx = mainScriptsTabWidget->addTab(codeEditor, "");
-  mainScriptsTabWidget->setCurrentIndex(idx);
-  return idx;
+    return _ui->mainScriptsTabWidget->addEditor(fileName);
 }
 
 int PythonScriptViewWidget::addModuleEditor(const QString &fileName) {
-  PythonCodeEditor *codeEditor = new PythonCodeEditor();
-  codeEditor->setModuleEditor(true);
-  codeEditor->setGraph(pythonScriptView->getGraph());
-  codeEditor->setFileName(fileName);
-  codeEditor->installEventFilter(pythonScriptView);
-  codeEditor->setFocus(Qt::ActiveWindowFocusReason);
-  connect(codeEditor, SIGNAL(textChanged()), this, SLOT(moduleScriptTextChanged()));
-  int idx = modulesTabWidget->addTab(codeEditor, "");
-  modulesTabWidget->setCurrentIndex(idx);
-  return idx;
+    return _ui->modulesTabWidget->addEditor(fileName);
 }
 
-int PythonScriptViewWidget::addPluginEditor(const QString &fileName) {
-  PythonCodeEditor *codeEditor = new PythonCodeEditor();
-  codeEditor->setGraph(pythonScriptView->getGraph());
-  codeEditor->setFileName(fileName);
-  codeEditor->installEventFilter(pythonScriptView);
-  codeEditor->setFocus(Qt::ActiveWindowFocusReason);
-  connect(codeEditor, SIGNAL(textChanged()), this, SLOT(pluginScriptTextChanged()));
-  int idx = pluginsTabWidget->addTab(codeEditor, "");
-  pluginsTabWidget->setCurrentIndex(idx);
-  return idx;
+int PythonScriptViewWidget::getCurrentMainScriptEditorIndex() const {
+    return _ui->mainScriptsTabWidget->currentIndex();
+}
+
+int PythonScriptViewWidget::getCurrentModuleEditorIndex() const {
+    return _ui->modulesTabWidget->currentIndex();
 }
 
 PythonCodeEditor *PythonScriptViewWidget::getCurrentMainScriptEditor() const {
-  return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->currentWidget());
+    return _ui->mainScriptsTabWidget->getCurrentEditor();
 }
 
 PythonCodeEditor *PythonScriptViewWidget::getCurrentModuleEditor() const {
-  return static_cast<PythonCodeEditor *>(modulesTabWidget->currentWidget());
+  return _ui->modulesTabWidget->getCurrentEditor();
 }
 
 PythonCodeEditor *PythonScriptViewWidget::getMainScriptEditor(int idx) const {
-  if (idx < mainScriptsTabWidget->count()) {
-    return static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(idx));
-  }
-  else {
-    return NULL;
-  }
+    return _ui->mainScriptsTabWidget->getEditor(idx);
 }
 
 PythonCodeEditor *PythonScriptViewWidget::getModuleEditor(int idx) const {
-  if (idx < modulesTabWidget->count()) {
-    return static_cast<PythonCodeEditor *>(modulesTabWidget->widget(idx));
-  }
-  else {
-    return NULL;
-  }
-}
-
-PythonCodeEditor *PythonScriptViewWidget::getPluginEditor(int idx) const {
-  if (idx < pluginsTabWidget->count()) {
-    return static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(idx));
-  }
-  else {
-    return NULL;
-  }
-}
-
-PythonCodeEditor *PythonScriptViewWidget::getCurrentPluginEditor() const {
-  return static_cast<PythonCodeEditor *>(pluginsTabWidget->currentWidget());
+  return _ui->modulesTabWidget->getEditor(idx);
 }
 
 void PythonScriptViewWidget::decreaseFontSize() {
-  for (int i = 0 ; i < mainScriptsTabWidget->count() ; ++i) {
-    static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(i))->zoomOut();
-  }
-
-  for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
-    static_cast<PythonCodeEditor *>(modulesTabWidget->widget(i))->zoomOut();
-  }
-
-  for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
-    static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(i))->zoomOut();
-  }
-
-  pythonShellWidget->zoomOut();
-  --fontZoom;
+    _ui->mainScriptsTabWidget->decreaseFontSize();
+    _ui->modulesTabWidget->decreaseFontSize();
 }
 
 void PythonScriptViewWidget::increaseFontSize() {
-  for (int i = 0 ; i < mainScriptsTabWidget->count() ; ++i) {
-    static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(i))->zoomIn();
-  }
-
-  for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
-    static_cast<PythonCodeEditor *>(modulesTabWidget->widget(i))->zoomIn();
-  }
-
-  for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
-    static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(i))->zoomIn();
-  }
-
-  pythonShellWidget->zoomIn();
-  ++fontZoom;
-}
-
-void PythonScriptViewWidget::mainScriptTextChanged() {
-
-  if (QObject::sender() != mainScriptsTabWidget->widget(mainScriptsTabWidget->currentIndex()))
-    return;
-
-  QString curTabText = mainScriptsTabWidget->tabText(mainScriptsTabWidget->currentIndex());
-
-  if (curTabText == "")
-    return;
-
-  if (!curTabText.contains("no file") && curTabText[curTabText.size() -1] != '*') {
-    curTabText += "*";
-    mainScriptsTabWidget->setTabText(mainScriptsTabWidget->currentIndex(), curTabText);
-  }
-}
-
-void PythonScriptViewWidget::moduleScriptTextChanged() {
-
-  if (QObject::sender() != modulesTabWidget->widget(modulesTabWidget->currentIndex()))
-    return;
-
-  QString curTabText = modulesTabWidget->tabText(modulesTabWidget->currentIndex());
-
-  if (curTabText == "")
-    return;
-
-  if (curTabText[curTabText.size() -1] != '*') {
-    curTabText += "*";
-    modulesTabWidget->setTabText(modulesTabWidget->currentIndex(), curTabText);
-  }
-}
-
-void PythonScriptViewWidget::pluginScriptTextChanged() {
-
-  if (QObject::sender() != pluginsTabWidget->widget(pluginsTabWidget->currentIndex()))
-    return;
-
-  QString curTabText = pluginsTabWidget->tabText(pluginsTabWidget->currentIndex());
-
-  if (curTabText == "")
-    return;
-
-  if (curTabText[curTabText.size() -1] != '*') {
-    curTabText += "*";
-    pluginsTabWidget->setTabText(pluginsTabWidget->currentIndex(), curTabText);
-  }
+    _ui->mainScriptsTabWidget->increaseFontSize();
+    _ui->modulesTabWidget->increaseFontSize();
 }
 
 void PythonScriptViewWidget::currentTabChanged(int index) {
   static int lastTabIndex = 0;
-  static QList<int> lastSizes = splitter->sizes();
+  static QList<int> lastSizes = _ui->splitter->sizes();
 
   if (lastTabIndex < 2) {
-    lastSizes = splitter->sizes();
+    lastSizes = _ui->splitter->sizes();
   }
 
   QList<int> sizes;
@@ -296,53 +262,34 @@ void PythonScriptViewWidget::currentTabChanged(int index) {
   if (index >= 2) {
     sizes.push_back(height());
     sizes.push_back(0);
-    runScriptButton->setEnabled(false);
+    _ui->runScriptButton->setEnabled(false);
   }
   else {
-    runScriptButton->setEnabled(true);
+    _ui->runScriptButton->setEnabled(true);
     sizes = lastSizes;
   }
 
-  splitter->setSizes(sizes);
+  _ui->splitter->setSizes(sizes);
 
-  if (index >= 3) {
-    scriptControlFrame->hide();
-
-    if (index == 3) {
-      pluginControlFrame->show();
-    }
-    else {
-      pluginControlFrame->hide();
-    }
+  if (index >= 2) {
+    _ui->scriptControlFrame->hide();
   }
   else {
-    scriptControlFrame->show();
-    pluginControlFrame->hide();
+    _ui->scriptControlFrame->show();
   }
 
   lastTabIndex = index;
 }
 
 void PythonScriptViewWidget::setGraph(tlp::Graph *graph) {
-  for (int i = 0 ; i < mainScriptsTabWidget->count() ; ++i) {
-    static_cast<PythonCodeEditor *>(mainScriptsTabWidget->widget(i))->setGraph(graph);
+  for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
+    getMainScriptEditor(i)->getAutoCompletionDb()->setGraph(graph);
   }
 
-  for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
-    static_cast<PythonCodeEditor *>(modulesTabWidget->widget(i))->setGraph(graph);
+  for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i) {
+    getModuleEditor(i)->getAutoCompletionDb()->setGraph(graph);
   }
 
-  for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
-    static_cast<PythonCodeEditor *>(pluginsTabWidget->widget(i))->setGraph(graph);
-  }
-
-  pythonShellWidget->setGraph(graph);
-}
-
-static void scrollToLine(PythonCodeEditor *codeEditor, int line) {
-  QTextBlock block = codeEditor->document()->findBlockByLineNumber(line);
-  codeEditor->setTextCursor(QTextCursor(block));
-  codeEditor->centerCursor();
 }
 
 void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
@@ -351,41 +298,31 @@ void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
   int line = strList.at(1).toInt()-1;
 
   if (file == "<unnamed script>") {
-    tabWidget->setCurrentIndex(0);
-    scrollToLine(getCurrentMainScriptEditor(), line);
+    _ui->tabWidget->setCurrentIndex(0);
+    getCurrentMainScriptEditor()->scrollToLine(line);
     return;
   }
 
-  for (int i = 0 ; i < mainScriptsTabWidget->count() ; ++i) {
+  for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
     PythonCodeEditor *codeEditor = getMainScriptEditor(i);
 
     if (file == codeEditor->getFileName()) {
-      tabWidget->setCurrentIndex(0);
-      mainScriptsTabWidget->setCurrentIndex(i);
-      scrollToLine(codeEditor, line);
+      _ui->tabWidget->setCurrentIndex(0);
+      _ui->mainScriptsTabWidget->setCurrentIndex(i);
+      codeEditor->scrollToLine(line);
       return;
     }
   }
 
-  for (int i = 0 ; i < modulesTabWidget->count() ; ++i) {
+  for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i) {
     PythonCodeEditor *codeEditor = getModuleEditor(i);
 
     if (file == codeEditor->getFileName()) {
-      tabWidget->setCurrentIndex(1);
-      modulesTabWidget->setCurrentIndex(i);
-      scrollToLine(codeEditor, line);
+      _ui->tabWidget->setCurrentIndex(1);
+      _ui->modulesTabWidget->setCurrentIndex(i);
+      codeEditor->scrollToLine(line);
       return;
     }
   }
 
-  for (int i = 0 ; i < pluginsTabWidget->count() ; ++i) {
-    PythonCodeEditor *codeEditor = getPluginEditor(i);
-
-    if (file == codeEditor->getFileName()) {
-      tabWidget->setCurrentIndex(3);
-      pluginsTabWidget->setCurrentIndex(i);
-      scrollToLine(codeEditor, line);
-      return;
-    }
-  }
 }

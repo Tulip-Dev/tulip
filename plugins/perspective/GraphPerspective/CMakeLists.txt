@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 SET(LIB_SRCS
 src/AbstractFiltersManagerItem.cpp
@@ -20,6 +20,9 @@ src/ImportWizard.cpp
 src/OutputPanelButton.cpp
 src/PanelSelectionWizard.cpp
 src/PreferencesDialog.cpp
+src/PythonPanel.cpp
+src/PythonPluginCreationDialog.cpp
+src/PythonPluginsIDE.cpp
 src/SearchWidget.cpp
 )
 
@@ -44,6 +47,9 @@ designer/ImportWizard.ui
 designer/ExportWizard.ui
 designer/PanelSelectionWizard.ui
 designer/PreferencesDialog.ui
+designer/PythonPanel.ui
+designer/PythonPluginCreationDialog.ui
+designer/PythonPluginsIDE.ui
 designer/SearchWidget.ui
 )
 
@@ -66,12 +72,21 @@ include/ImportWizard.h
 include/OutputPanelButton.h
 include/PanelSelectionWizard.h
 include/PreferencesDialog.h
+include/PythonPanel.h
+include/PythonPluginCreationDialog.h
+include/PythonPluginsIDE.h
 include/SearchWidget.h
 )
 
+SET(QT_USE_QTWEBKIT true)
+
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 
-TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${LibTulipPythonName})
+TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
+IF(LINUX)
+TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${QT_QTWEBKIT_LIBRARY_RELEASE})
+ENDIF(LINUX)
 
 INSTALL(TARGETS GraphPerspective-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT GraphPerspective)
 

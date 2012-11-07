@@ -40,6 +40,8 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/TulipSettings.h>
+#include <tulip/PluginLister.h>
+#include <tulip/PythonInterpreter.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -230,11 +232,17 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionNewProject, SIGNAL(triggered()), this, SLOT(newProject()));
   connect(_ui->actionPreferences,SIGNAL(triggered()),this,SLOT(openPreferences()));
   connect(_ui->searchButton,SIGNAL(clicked(bool)),this,SLOT(setSearchOutput(bool)));
+  connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonPanel(bool)));
   connect(_ui->workspace,SIGNAL(importGraphRequest()),this,SLOT(importGraph()));
+  connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
+  connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(setWorkspaceMode()));
 
   // Agent actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));
   connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SLOT(showAboutPage()));
+
+  tlp::PluginLister::instance()->addListener(this);
+  PythonInterpreter::getInstance()->setDefaultConsoleWidget(_ui->pythonPanel->consoleWidget());
 
   // Setting initial sizes for splitters
   _ui->mainSplitter->setSizes(QList<int>() << 200 << 1000);
@@ -256,6 +264,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->workspace->setModel(_graphs);
   _ui->workspace->readProject(_project,rootIds,progress);
   _ui->searchPanel->setModel(_graphs);
+  _ui->pythonPanel->setModel(_graphs);
+  _ui->developFrame->setProject(_project);
+  _ui->pythonPanel->setPanelButton(_ui->pythonButton);
+
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
@@ -270,6 +282,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   buildRecentDocumentsMenu();
 
   showTrayMessage("GraphPerspective started");
+
+
 
   delete progress;
 }
@@ -543,6 +557,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
     _project = TulipProject::openProject(path,prg);
     QMap<QString,tlp::Graph*> rootIds = _graphs->readProject(_project,prg);
     _ui->workspace->readProject(_project,rootIds,prg);
+    _ui->developFrame->setProject(_project);
     delete prg;
   }
   else {
@@ -800,6 +815,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
 
   if (graph == NULL) {
     _ui->searchButton->setChecked(false);
+    _ui->pythonButton->setChecked(false);
     setSearchOutput(false);
   }
 
@@ -904,10 +920,21 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
 }
 
 void GraphPerspective::setSearchOutput(bool f) {
-  if (f)
+  if (f) {
     _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
+    _ui->pythonButton->setChecked(false);
+  }
 
   _ui->outputFrame->setVisible(f);
+}
+
+void GraphPerspective::setPythonPanel(bool f) {
+    if (f) {
+      _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
+      _ui->searchButton->setChecked(false);
+    }
+
+    _ui->outputFrame->setVisible(f);
 }
 
 void GraphPerspective::openPreferences() {
@@ -950,6 +977,24 @@ void GraphPerspective::newProject() {
 void GraphPerspective::openRecentFile() {
   QAction* action = static_cast<QAction*>(sender());
   open(action->text());
+}
+
+void GraphPerspective::treatEvent(const tlp::Event &message) {
+    if (dynamic_cast<const tlp::PluginEvent*>(&message)) {
+        pluginsListChanged();
+    }
+}
+
+void GraphPerspective::setWorkspaceMode() {
+    _ui->workspaceButton->setChecked(true);
+    _ui->developButton->setChecked(false);
+    _ui->centralWidget->setCurrentIndex(0);
+}
+
+void GraphPerspective::setDevelopMode() {
+    _ui->workspaceButton->setChecked(false);
+    _ui->developButton->setChecked(true);
+    _ui->centralWidget->setCurrentIndex(1);
 }
 
 PLUGIN(GraphPerspective)
