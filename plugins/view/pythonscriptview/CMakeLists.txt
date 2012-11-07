@@ -56,6 +56,7 @@ ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_LIB_SRCS}
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipGUIName} GraphPerspective-${TulipVersion})
+
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_LIBRARIES})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
 IF(LINUX)
@@ -63,7 +64,7 @@ TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY_REL
 ENDIF(LINUX)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
-ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName})
+ADD_DEPENDENCIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName} GraphPerspective-${TulipVersion})
 
 INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT tulip_python)
 
