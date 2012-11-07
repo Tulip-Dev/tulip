@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>DoubleStringsListRelationDialogData</class>
- <widget class="QDialog" name="DoubleStringsListRelationDialogData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="DoubleStringsListRelationDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,44 +10,44 @@
     <height>339</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
+  <layout class="QVBoxLayout">
+   <property name="spacing">
     <number>6</number>
    </property>
+   <property name="margin">
+    <number>9</number>
+   </property>
    <item>
-    <widget class="QFrame" name="frame" >
-     <property name="frameShape" >
+    <widget class="QFrame" name="frame">
+     <property name="frameShape">
       <enum>QFrame::Box</enum>
      </property>
-     <property name="frameShadow" >
+     <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
+     <layout class="QVBoxLayout">
+      <property name="spacing">
        <number>6</number>
       </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
       <item>
-       <widget class="QLabel" name="label" >
-        <property name="font" >
+       <widget class="QLabel" name="label">
+        <property name="font">
          <font>
           <weight>75</weight>
           <italic>false</italic>
           <bold>true</bold>
          </font>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Move values to your preferred colors</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
@@ -55,27 +56,27 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>6</number>
        </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>40</height>
@@ -84,22 +85,22 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="upButton" >
-         <property name="text" >
+        <widget class="QPushButton" name="upButton">
+         <property name="text">
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../../library/tulip-qt/designer/TulipQtResource.qrc">
-           <normaloff>:/up.png</normaloff>:/up.png</iconset>
+          <iconset resource="../../library/tulip-gui/resources/TulipGUIResource.qrc">
+           <normaloff>:/tulip/gui/icons/16/go-up.png</normaloff>:/tulip/gui/icons/16/go-up.png</iconset>
          </property>
         </widget>
        </item>
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>40</height>
@@ -108,22 +109,22 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="downButton" >
-         <property name="text" >
+        <widget class="QPushButton" name="downButton">
+         <property name="text">
           <string/>
          </property>
          <property name="icon">
-          <iconset resource="../../library/tulip-qt/designer/TulipQtResource.qrc">
-           <normaloff>:/down.png</normaloff>:/down.png</iconset>
+          <iconset resource="../../library/tulip-gui/resources/TulipGUIResource.qrc">
+           <normaloff>:/tulip/gui/icons/16/go-down.png</normaloff>:/tulip/gui/icons/16/go-down.png</iconset>
          </property>
         </widget>
        </item>
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>40</height>
@@ -134,32 +135,32 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>6</number>
        </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item>
-        <widget class="QLabel" name="label_2" >
-         <property name="font" >
+        <widget class="QLabel" name="label_2">
+         <property name="font">
           <font>
            <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Values</string>
          </property>
-         <property name="alignment" >
+         <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="firstListWidget" >
-         <property name="dragDropMode" >
+        <widget class="QListWidget" name="firstListWidget">
+         <property name="dragDropMode">
           <enum>QAbstractItemView::InternalMove</enum>
          </property>
         </widget>
@@ -167,35 +168,35 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
+      <layout class="QVBoxLayout">
+       <property name="spacing">
         <number>6</number>
        </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
        <item>
-        <widget class="QLabel" name="label_3" >
-         <property name="font" >
+        <widget class="QLabel" name="label_3">
+         <property name="font">
           <font>
            <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
-         <property name="text" >
+         <property name="text">
           <string>Colors</string>
          </property>
-         <property name="alignment" >
+         <property name="alignment">
           <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="secondListWidget" >
-         <property name="dragDropMode" >
+        <widget class="QListWidget" name="secondListWidget">
+         <property name="dragDropMode">
           <enum>QAbstractItemView::InternalMove</enum>
          </property>
-         <property name="selectionMode" >
+         <property name="selectionMode">
           <enum>QAbstractItemView::NoSelection</enum>
          </property>
         </widget>
@@ -205,19 +206,19 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
+     </property>
+     <property name="margin">
+      <number>0</number>
      </property>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>40</width>
          <height>20</height>
@@ -226,18 +227,18 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="cancelButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
         <string>Cancel</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="okButton" >
-       <property name="text" >
+      <widget class="QPushButton" name="okButton">
+       <property name="text">
         <string>Ok</string>
        </property>
-       <property name="default" >
+       <property name="default">
         <bool>true</bool>
        </property>
       </widget>
@@ -246,6 +247,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections/>
 </ui>
