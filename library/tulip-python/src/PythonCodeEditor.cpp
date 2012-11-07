@@ -435,11 +435,11 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), _h
   setWordWrapMode(QTextOption::NoWrap);
   QTextCharFormat format = currentCharFormat();
 #if defined(WIN32)
-  currentFont.setFamily("Courier New");
-  currentFont.setPointSize(8);
+  _currentFont.setFamily("Courier New");
+  _currentFont.setPointSize(8);
 #elif defined(__APPLE__)
-  currentFont.setFamily("Menlo");
-  currentFont.setPointSize(12);
+  _currentFont.setFamily("Menlo");
+  _currentFont.setPointSize(12);
 #else
   _currentFont.setFamily("Monospace");
   _currentFont.setPointSize(8);
