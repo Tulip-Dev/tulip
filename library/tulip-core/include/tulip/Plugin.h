@@ -168,6 +168,9 @@ public:
   * @return int the id of the glyph.
   **/
   virtual int id() const;
+
+  virtual std::string programmingLanguage() const;
+
 };
 
 /**
