@@ -66,17 +66,17 @@ MACRO(RETRIEVE_VERSION)
 
     STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9]*)"
             "\\1"
-           TULIP_VERSION_MAJOR
+           TULIP_MAJOR_VERSION
            ${TULIP_VERSION})
 
     STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9]*)"
             "\\2"
-           TULIP_VERSION_MINOR
+           TULIP_MINOR_VERSION
            ${TULIP_VERSION})
 
     STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9]*)"
             "\\3"
-           TULIP_VERSION_PATCH
+           TULIP_PATCH_VERSION
            ${TULIP_VERSION})
   ENDIF(TULIP_INCLUDE_DIR)
 ENDMACRO(RETRIEVE_VERSION)
@@ -137,6 +137,7 @@ ELSE()
 ENDIF()
 MARK_AS_ADVANCED(TULIP_LIBRARIES_DIR)
 SET(TULIP_PLUGINS_DIR ${TULIP_DIR}/lib/tulip)
+SET(TULIP_SHARE_DIR ${TULIP_DIR}/share/tulip)
 MARK_AS_ADVANCED(TULIP_PLUGINS_DIR)
 SET(TULIP_FOUND true)
 
