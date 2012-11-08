@@ -260,7 +260,7 @@ void PythonShellWidget::updateAutoCompletionList(bool) {
   QString lineNotTrimmed = textCursor().block().text().mid(_currentPs.length());
   QString line = rtrim(textCursor().block().text()).mid(_currentPs.length());
 
-  if (lineNotTrimmed[lineNotTrimmed.length()-1] != ' ' && lineNotTrimmed[lineNotTrimmed.length()-1] != '\t') {
+  if (!lineNotTrimmed.isEmpty() && lineNotTrimmed[lineNotTrimmed.length()-1] != ' ' && lineNotTrimmed[lineNotTrimmed.length()-1] != '\t') {
     QStringList context = ltrim(line).split(".");
 
     for (int i = 0 ; i < context.count() ; ++i) {
