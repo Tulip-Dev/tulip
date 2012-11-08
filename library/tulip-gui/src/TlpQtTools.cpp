@@ -195,6 +195,14 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
                           tlp::PATH_DELIMITER +
                           tlp::TulipPluginsPath +
                           tlp::PATH_DELIMITER +
+                          tlp::TulipPluginsPath + "/glyph" +
+                          tlp::PATH_DELIMITER +
+                          tlp::TulipPluginsPath + "/interactor" +
+                          tlp::PATH_DELIMITER +
+                          tlp::TulipPluginsPath + "/view" +
+                          tlp::PATH_DELIMITER +
+                          tlp::TulipPluginsPath + "/perspective" +
+                          tlp::PATH_DELIMITER +
                           tlp::getPluginLocalInstallationDir().toStdString();
 
   // Load plugins

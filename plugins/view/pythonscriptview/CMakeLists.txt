@@ -43,7 +43,7 @@ ENDIF(LINUX)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
 
-INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT tulip_python)
+INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipViewPluginsInstallDir} COMPONENT tulip_python)
 
 
 ENDIF(SIP_OK)
