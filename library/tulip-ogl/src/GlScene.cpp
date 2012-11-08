@@ -212,7 +212,7 @@ void GlScene::draw() {
     // Draw simple entities
     vector<SimpleEntityLODUnit>::iterator it;
 
-    if(!getGlGraphComposite()->getInputData()->parameters->isElementZOrdered()){
+    if(getGlGraphComposite() && !getGlGraphComposite()->getInputData()->parameters->isElementZOrdered()){
       for( it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
         if((*it).lod<0)
           continue;
