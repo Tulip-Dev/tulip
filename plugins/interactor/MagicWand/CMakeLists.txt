@@ -14,5 +14,5 @@ ADD_LIBRARY(InteractorMagicSelection-${TulipVersion} SHARED ${SRCS} ${UI_HEADERS
 TARGET_LINK_LIBRARIES(InteractorMagicSelection-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
 
 INSTALL(TARGETS InteractorMagicSelection-${TulipVersion}
-  DESTINATION ${TulipPluginsInstallDir}
+  DESTINATION ${TulipInteractorPluginsInstallDir}
   COMPONENT tulip_gui_plugins)

@@ -88,5 +88,5 @@ IF(LINUX)
 TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${QT_QTWEBKIT_LIBRARY_RELEASE})
 ENDIF(LINUX)
 
-INSTALL(TARGETS GraphPerspective-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT GraphPerspective)
+INSTALL(TARGETS GraphPerspective-${TulipVersion} DESTINATION ${TulipPerspectivePluginsInstallDir} COMPONENT GraphPerspective)
 
