@@ -32,6 +32,8 @@
 #include <cstdio>
 #ifndef WIN32
 #include <dlfcn.h>
+#else
+#include <windows.h>
 #endif
 
 #include "tulip/PythonInterpreter.h"
@@ -155,26 +157,28 @@ const char *PythonInterpreter::pythonKeywords[] = {
 PythonInterpreter PythonInterpreter::_instance;
 
 #ifdef _MSC_VER
-BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
-    switch (ul_reason_for_call) {
-    case DLL_PROCESS_ATTACH:
+extern "C" {
+	BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
+		switch (ul_reason_for_call) {
+			case DLL_PROCESS_ATTACH:
+			
+			if (QApplication::instance()) {
+				PythonInterpreter::getInstance()->initConsoleOutput();
+				PythonInterpreter::getInstance()->loadTulipPythonPlugins();
+			}
 
-        if (QApplication::instance()) {
-            PythonInterpreter::getInstance()->initConsoleOutput();
-            PythonInterpreter::getInstance()->loadTulipPythonPlugins();
-        }
+			break;
 
-        break;
+		case DLL_THREAD_ATTACH:
+		case DLL_THREAD_DETACH:
+			break;
 
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-        break;
+		case DLL_PROCESS_DETACH:
+			break;
+		}
 
-    case DLL_PROCESS_DETACH:
-        break;
-    }
-
-    return TRUE;
+		return TRUE;
+	}
 }
 #endif
 
@@ -275,7 +279,7 @@ PythonInterpreter::PythonInterpreter() : _runningScript(false), _defaultConsoleW
             inittuliputils();
 
             runString("import sys; import scriptengine ; import tuliputils ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
-
+			
             // Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
             // and if the site module is not present on the host system
             // Disable output while trying to import the module to not confuse the user
@@ -340,9 +344,9 @@ PythonInterpreter *PythonInterpreter::getInstance() {
 }
 
 void PythonInterpreter::initConsoleOutput() {
-    consoleOuputHandler = new ConsoleOutputHandler();
-    consoleOuputEmitter = new ConsoleOutputEmitter();
-    QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
+	consoleOuputHandler = new ConsoleOutputHandler();
+	consoleOuputEmitter = new ConsoleOutputEmitter();
+	QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
 }
 
 void PythonInterpreter::loadTulipPythonPlugins() {
