@@ -291,7 +291,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipqt.api");
     APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/PyQt4.api");
   }
-  PythonInterpreter::getInstance()->setOutputEnabled(false);
+  PythonInterpreter::getInstance()->setOutputEnabled(true);
   
   showTrayMessage("GraphPerspective started");
 
