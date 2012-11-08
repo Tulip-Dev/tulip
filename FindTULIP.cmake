@@ -23,6 +23,10 @@
 # TULIP_LIBRARIES: Contains path to the Tulip libraries
 # TULIP_LIBRARIES_DIR: Contains path to the Tulip libraries
 # TULIP_PLUGINS_DIR: Path where Tulip plugins are located
+# TULIP_GLYPH_PLUGINS_DIR: Path where Tulip glyph plugins are located
+# TULIP_INTERACTOR_PLUGINS_DIR: Path where Tulip interaction plugins are located
+# TULIP_VIEW_PLUGINS_DIR: Path where Tulip view plugins are located
+# TULIP_PERSPECTIVE_PLUGINS_DIR: Path where Tulip perspective plugins are located
 # TULIP_CORE_LIBRARY: The path to the TulipCore module library.
 # TULIP_OGL_LIBRARY: The path to the TulipOGL module library.
 # TULIP_GUI_LIBRARY: The path to the TulipGUI module library.
