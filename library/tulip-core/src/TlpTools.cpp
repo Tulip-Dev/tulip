@@ -21,8 +21,19 @@
 #include <locale.h>
 
 #ifndef _WIN32
+#include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#endif
+
+#ifdef _WIN32
+#include <windows.h>
+#ifdef _MSC_VER
+#include <dbghelp.h>
+#endif
+#else
+#include <dirent.h>
+#include <dlfcn.h>
 #endif
 
 #include <gzstream.h>
@@ -54,6 +65,63 @@ const char tlp::PATH_DELIMITER = ';';
 #else
 const char tlp::PATH_DELIMITER = ':';
 #endif
+
+// A function that retrieves the Tulip libraries directory based on
+// the path of the loaded shared library libtulip-core-X.Y.[dll, so, dylib]
+extern "C" {
+
+  std::string getTulipLibDir() {
+    std::string tulipLibDir;
+    std::string libTulipName;
+
+#ifdef _WIN32
+#ifdef __MINGW32__
+    libTulipName = "libtulip-core-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dll";
+#else
+    libTulipName = "tulip-core-" + getMajor(TULIP_RELEASE) + "_" + getMinor(TULIP_RELEASE) + ".dll";
+#endif
+    HMODULE hmod = GetModuleHandle(libTulipName.c_str());
+
+    if (hmod != NULL) {
+      TCHAR szPath[512 + 1];
+      DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
+
+      if (dwLen > 0) {
+        std::string tmp = szPath;
+        std::replace(tmp.begin(), tmp.end(), '\\', '/');
+        tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
+      }
+    }
+
+#else
+#ifdef __APPLE__
+    libTulipName = "libtulip-core-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dylib";
+#else
+    libTulipName = "libtulip-core-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".so";
+#endif
+    void *ptr;
+    void *symbol;
+    Dl_info info;
+
+    ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
+
+    if (ptr != NULL) {
+      symbol = dlsym(ptr, "getTulipLibDir");
+
+      if (symbol != NULL) {
+        if (dladdr(symbol, &info)) {
+          std::string tmp = info.dli_fname;
+          tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
+        }
+      }
+    }
+
+#endif
+    return tulipLibDir;
+  }
+
+}
+
 //=========================================================
 void tlp::initTulipLib(const char* appDirPath) {
   // first we must ensure that the parsing of float or double
@@ -87,8 +155,14 @@ void tlp::initTulipLib(const char* appDirPath) {
 
 #endif
     }
-    else
-      TulipLibDir=string(_TULIP_LIB_DIR);
+    else {
+        // if no appDirPath is provided, retrieve dynamically the Tulip lib dir
+        TulipLibDir = getTulipLibDir();
+
+        // if no results (should not happen with a clean Tulip install), fall back in the default value provided during compilation
+        if (TulipLibDir.empty())
+          TulipLibDir = string(_TULIP_LIB_DIR);
+    }
   }
   else
     TulipLibDir=string(getEnvTlp);

@@ -22,13 +22,17 @@ using namespace tlp;
 using namespace std;
 
 std::string tlp::getMinor(const std::string &release) {
-  size_t pos = release.find('.');
+  char sep = '.';
+#ifdef _MSC_VER
+  sep = '_';
+#endif
+  size_t pos = release.find(sep);
 
   //if there is no minor version number, return a default '0'
   if (pos == std::string::npos)
     return std::string("0");
 
-  unsigned int rpos = release.rfind('.');
+  size_t rpos = release.rfind(sep);
 
   //if there is only one dot, return everything after it
   if (pos == rpos)
@@ -39,7 +43,11 @@ std::string tlp::getMinor(const std::string &release) {
 }
 
 std::string tlp::getMajor(const std::string &release) {
-  unsigned int pos = release.find('.');
+  char sep = '.';
+#ifdef _MSC_VER
+  sep = '_';
+#endif
+  size_t pos = release.find(sep);
   return release.substr(0, pos);
 }
 
