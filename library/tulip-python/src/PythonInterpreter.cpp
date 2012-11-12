@@ -96,14 +96,9 @@ static const QString printObjectClassFunction =
 
 #if PY_MAJOR_VERSION >= 3
 static QString convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
-    QString ret;
-    Py_ssize_t dataSize = PyUnicode_GET_DATA_SIZE(pyUnicodeObj);
-    const char* data = PyUnicode_AS_DATA(pyUnicodeObj);
-
-    for (Py_ssize_t i = 0 ; i < dataSize ; ++i) {
-        ret += QString(data+i);
-    }
-
+    PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
+    QString ret = QString::fromUtf8(PyBytes_AsString(utf8Str));
+    Py_DECREF(utf8Str);
     return ret;
 }
 #endif
@@ -215,7 +210,10 @@ PythonInterpreter::PythonInterpreter() : _runningScript(false), _defaultConsoleW
 
     PySys_SetArgv(argc, argv);
 
-    runString("import sys");
+    importModule("sys");
+    reloadModule("sys");
+    runString("sys.setdefaultencoding('utf-8')");
+
 
 #if PY_MAJOR_VERSION >= 3
     PyObject *pName = PyUnicode_FromString("__main__");
@@ -228,7 +226,7 @@ PythonInterpreter::PythonInterpreter() : _runningScript(false), _defaultConsoleW
     PyObject *pVersion = PyRun_String("str(sys.version_info[0])+\".\"+str(sys.version_info[1])", Py_eval_input, pMainDict, pMainDict);
 
 #if PY_MAJOR_VERSION >= 3
-    pythonVersion = convertPythonUnicodeObjectToStdString(pVersion);
+    _pythonVersion = convertPythonUnicodeObjectToStdString(pVersion);
 #else
     _pythonVersion = QString(PyString_AsString(pVersion));
 #endif
@@ -432,7 +430,7 @@ bool PythonInterpreter::runString(const QString &pythonCode, const QString &scri
     timer.start();
     int ret = 0;
     holdGIL();
-    ret = PyRun_SimpleString(pythonCode.toStdString().c_str());
+    ret = PyRun_SimpleString(pythonCode.toUtf8().data());
 
     if (PyErr_Occurred()) {
         PyErr_Print();

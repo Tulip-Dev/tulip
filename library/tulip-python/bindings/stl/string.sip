@@ -26,7 +26,7 @@
 %MappedType std::string
 {
 %TypeHeaderCode
-	// Include the library interface to the type being mapped.
+// Include the library interface to the type being mapped.
 #include <string>
 %End
 
@@ -35,7 +35,7 @@
 #if PY_MAJOR_VERSION >= 3
         return PyUnicode_Check(sipPy);
 #else
-		return PyString_Check(sipPy);
+        return PyString_Check(sipPy);
 #endif
 	}
 

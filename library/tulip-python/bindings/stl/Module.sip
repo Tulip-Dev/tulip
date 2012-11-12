@@ -46,12 +46,9 @@ void printErrorMessage(const std::string &errMsg) {
 
 #if PY_MAJOR_VERSION >= 3
 std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
-    std::string ret;
-    Py_ssize_t dataSize = PyUnicode_GET_DATA_SIZE(pyUnicodeObj);
-    const char* data = PyUnicode_AS_DATA(pyUnicodeObj);
-    for (Py_ssize_t i = 0 ; i < dataSize ; ++i) {
-        ret += std::string(data+i);
-    }
+    PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
+    std::string ret(PyBytes_AsString(utf8Str));
+    Py_DECREF(utf8Str);
     return ret;
 }
 #endif
