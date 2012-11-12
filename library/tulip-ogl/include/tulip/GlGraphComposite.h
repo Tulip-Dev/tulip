@@ -152,6 +152,11 @@ public:
     return graphRenderer;
   }
 
+  /**
+   * @brief setRenderer Delete the old renderer and replace it by the new one. If the new renderer is equal to NULL create a GlGraphHighDetailsRenderer.
+   */
+  void setRenderer(tlp::GlGraphRenderer*);
+
 ///@endcond
 
   /**
