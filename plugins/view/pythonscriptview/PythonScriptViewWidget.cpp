@@ -208,11 +208,17 @@ void PythonScriptViewWidget::setModuleEditorTabToolTip(int idx, const QString &t
 }
 
 int PythonScriptViewWidget::addMainScriptEditor(const QString &fileName) {
-    return _ui->mainScriptsTabWidget->addEditor(fileName);
+    int idx = _ui->mainScriptsTabWidget->addEditor(fileName);
+    getMainScriptEditor(idx)->installEventFilter(_pythonScriptView);
+    getMainScriptEditor(idx)->getAutoCompletionDb()->setGraph(_pythonScriptView->getGraph());
+    return idx;
 }
 
 int PythonScriptViewWidget::addModuleEditor(const QString &fileName) {
-    return _ui->modulesTabWidget->addEditor(fileName);
+    int idx = _ui->modulesTabWidget->addEditor(fileName);
+    getModuleEditor(idx)->installEventFilter(_pythonScriptView);
+    getModuleEditor(idx)->getAutoCompletionDb()->setGraph(_pythonScriptView->getGraph());
+    return idx;
 }
 
 int PythonScriptViewWidget::getCurrentMainScriptEditorIndex() const {
