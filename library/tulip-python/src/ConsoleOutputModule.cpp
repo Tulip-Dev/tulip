@@ -78,7 +78,7 @@ scriptengine_ConsoleOutput_write(PyObject *self, PyObject *o) {
     if(!PyArg_ParseTuple(o, "s", &buf))
         return NULL;
 
-    QString output(buf);
+    QString output(QString::fromUtf8(buf));
 
     if (reinterpret_cast<scriptengine_ConsoleOutput *>(self)->stderrflag) {
         if (mainScriptFileName != "") {
