@@ -50,7 +50,7 @@ template<typename T>
 class TLP_QT_SCOPE StringDisplayEditorCreator: public TulipItemEditorCreator {
 public:
   inline QString displayText(const QVariant& v) const {
-    return T::toString(v.value<typename T::RealType>()).c_str();
+    return QString::fromUtf8(T::toString(v.value<typename T::RealType>()).c_str());
   }
 };
 
