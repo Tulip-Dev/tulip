@@ -277,7 +277,7 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
             oss << "module" << i;
 
             while (modulesDataSet.get(oss.str(), module)) {
-                bool moduleLoaded = loadModule(module.c_str(), false);
+	        bool moduleLoaded = loadModule(QString::fromUtf8(module.c_str()), false);
 
                 if (!moduleLoaded) {
                     string moduleSrc;
@@ -286,7 +286,7 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
 
                     if (modulesDataSet.get(oss.str(), moduleSrc)) {
                         replaceAll(moduleSrc, "    ", "\t");
-                        QFileInfo fileInfo(module.c_str());
+                        QFileInfo fileInfo(QString::fromUtf8(module.c_str()));
                         loadModuleFromSrcCode(fileInfo.fileName(), moduleSrc.c_str());
                     }
                 }
@@ -310,13 +310,13 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
             oss << "main_script" << i;
 
             while (mainScriptsDataSet.get(oss.str(), mainScript)) {
-                mainScriptLoaded = loadScript(mainScript.c_str(), false);
+	        mainScriptLoaded = loadScript(QString::fromUtf8(mainScript.c_str()), false);
 
                 if (!mainScriptLoaded) {
                     string mainScriptSrc;
                     oss.str("");
                     oss << "main_script_src" << i;
-                    QFileInfo fileInfo(mainScript.c_str());
+                    QFileInfo fileInfo(QString::fromUtf8(mainScript.c_str()));
 
                     if (mainScriptsDataSet.get(oss.str(), mainScriptSrc)) {
                         int mainScriptId = _viewWidget->addMainScriptEditor();
@@ -348,14 +348,14 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
         else {
 
             if (dataSet.get("main script file", filename)) {
-                mainScriptLoaded = loadScript(filename.c_str(), false);
+	      mainScriptLoaded = loadScript(QString::fromUtf8(filename.c_str()), false);
             }
 
             if (!mainScriptLoaded) {
                 int editorId = _viewWidget->addMainScriptEditor();
                 PythonCodeEditor *codeEditor = _viewWidget->getMainScriptEditor(editorId);
                 codeEditor->setFileName("");
-                QFileInfo fileInfo(filename.c_str());
+                QFileInfo fileInfo(QString::fromUtf8(filename.c_str()));
 
                 if (dataSet.get("script code", scriptCode)) {
                     replaceAll(scriptCode, "    ", "\t");
@@ -386,15 +386,17 @@ DataSet PythonScriptView::state() const {
     PythonCodeEditor *codeEditor = _viewWidget->getCurrentMainScriptEditor();
 
     if (codeEditor) {
-        dataSet->set("main script file", codeEditor->getFileName().toStdString());
-        string scriptCode = _viewWidget->getCurrentMainScriptEditor()->getCleanCode().toStdString();
-        dataSet->set("script code", scriptCode);
+      dataSet->set("main script file",
+		   codeEditor->getFileName().toUtf8().data());
+      string scriptCode = _viewWidget->getCurrentMainScriptEditor()->getCleanCode().toStdString();
+      dataSet->set("script code", scriptCode);
     }
 
     DataSet mainScriptsDataSet;
 
     for (int i = 0 ; i < _viewWidget->numberOfScriptEditors() ; ++i) {
-        string scriptFile = _viewWidget->getMainScriptEditor(i)->getFileName().toStdString();
+      string scriptFile =
+	_viewWidget->getMainScriptEditor(i)->getFileName().toUtf8().data();
 
         if (scriptFile != "")
             const_cast<PythonScriptView*>(this)->saveScript(i);
@@ -414,7 +416,8 @@ DataSet PythonScriptView::state() const {
     DataSet modulesDataSet;
 
     for (int i = 0 ; i < _viewWidget->numberOfModulesEditors() ; ++i) {
-        string moduleFile = _viewWidget->getModuleEditor(i)->getFileName().toStdString();
+        string moduleFile =
+	  _viewWidget->getModuleEditor(i)->getFileName().toUtf8().data();
 
         if (moduleFile != "")
             const_cast<PythonScriptView*>(this)->saveModule(i);
