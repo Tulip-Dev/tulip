@@ -65,7 +65,7 @@ public :
 
     void setupWidget();
 
-    void graphChanged(tlp::Graph *_graph);
+    void graphChanged(tlp::Graph *);
 
     void setState(const tlp::DataSet&);
 
@@ -75,7 +75,7 @@ public :
         return _graph;
     }
 
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *, QEvent *);
 
     bool isRunningScript() const {
         return _runningScript;
