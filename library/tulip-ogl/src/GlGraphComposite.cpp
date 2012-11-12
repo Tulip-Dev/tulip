@@ -181,4 +181,16 @@ void GlGraphComposite::treatEvent(const Event& evt) {
   }
 }
 
+void GlGraphComposite::setRenderer(tlp::GlGraphRenderer* renderer){
+    delete graphRenderer;
+    if(renderer == NULL){
+        graphRenderer = new GlGraphHighDetailsRenderer(&inputData);
+    }else{
+        graphRenderer = renderer;
+    }
+
 }
+
+}
+
+
