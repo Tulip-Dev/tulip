@@ -23,10 +23,23 @@ RequestExecutionLevel admin
 InstallDir $PROGRAMFILES\Tulip
 OutFile "tulip_setup.exe"
 
+Function CheckAndInstallPython 
+  ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\2.7\InstallPath ""
+  IfErrors 0 +2
+	ReadRegStr $0 HKLM SOFTWARE\Wow6432Node\Python\PythonCore\2.7\InstallPath ""
+  IfErrors install end
+  install:
+	MessageBox MB_OK "Your system does not appear to have Python 2.7 installed.$\n$\nIt is now required to run Tulip.$\n$\nPress OK to download Python 2.7 and install it."
+	NSISdl::download http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi python-2.7.3.msi
+	ExecWait '"msiexec" /i "python-2.7.3.msi"'
+	Delete python-2.7.3.msi
+  end:  
+FunctionEnd
+
 Section "Tulip"
  SetShellVarContext all
  SetOutPath $INSTDIR
-
+ Call CheckAndInstallPython
  File /r files\*.*
  CreateShortCut "$SMPROGRAMS\Tulip\Tulip.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
  CreateShortCut "$DESKTOP\Tulip.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
