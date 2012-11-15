@@ -31,7 +31,7 @@
 using namespace tlp;
 
 
-GlMainView::GlMainView(): _glMainWidget(NULL), _overviewItem(NULL), _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL) {
+GlMainView::GlMainView(): _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true), _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL) {
 }
 
 GlMainView::~GlMainView() {
@@ -113,7 +113,8 @@ void GlMainView::centerView() {
 }
 
 void GlMainView::glMainViewDrawn(bool graphChanged) {
-  drawOverview(graphChanged);
+    if(isOverviewVisible)
+        drawOverview(graphChanged);
 }
 
 QList<QWidget*> GlMainView::configurationWidgets() const {
@@ -121,18 +122,17 @@ QList<QWidget*> GlMainView::configurationWidgets() const {
 }
 
 void GlMainView::setOverviewVisible(bool display) {
-  if(display) {
-    drawOverview(true);
-    _overviewItem->setVisible(true);
-  }
-  else {
-    if(_overviewItem)
-      _overviewItem->setVisible(false);
-  }
+    isOverviewVisible=display;
+    if(display) {
+        drawOverview(true);
+        _overviewItem->setVisible(true);
+    }
+    else if(_overviewItem)
+        _overviewItem->setVisible(false);
 }
 
 bool GlMainView::overviewVisible() const {
-  return _overviewItem != NULL && _overviewItem->isVisible();
+  return isOverviewVisible;
 }
 
 void GlMainView::setQuickAccessBarVisible(bool visible) {
