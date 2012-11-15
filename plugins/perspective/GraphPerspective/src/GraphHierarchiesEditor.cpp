@@ -66,6 +66,8 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   _ui->hierarchiesTree->setModel(model);
   _ui->hierarchiesTree->header()->resizeSection(0,100);
   resizeFirstColumnToContent();
+  connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(resizeFirstColumnToContent()));
+  connect(model, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(resizeFirstColumnToContent()));
 }
 
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
