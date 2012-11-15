@@ -102,6 +102,7 @@ private slots :
     void newStringModule();
     void newFileModule();
     void loadModule();
+    void saveModule();
     void checkErrors(bool clear=true);
 
 private :
@@ -110,7 +111,7 @@ private :
     void saveScript(int tabIdx, bool clear=true);
     bool loadModule(const QString &fileName, bool clear=true);
     bool loadModuleFromSrcCode(const QString &moduleName, const QString &moduleSrcCode);
-    void saveModule();
+
     void saveModule(int tabIdx, const bool reload=false);
     void saveAllModules();
     bool reloadAllModules() const;
