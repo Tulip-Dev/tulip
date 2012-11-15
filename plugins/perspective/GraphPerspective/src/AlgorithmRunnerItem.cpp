@@ -22,6 +22,7 @@
 #include "ui_AlgorithmRunnerItem.h"
 
 #include <QtGui/QMouseEvent>
+#include <QtGui/QMessageBox>
 
 #include "GraphPerspective.h"
 #include <tulip/GraphTest.h>
@@ -232,10 +233,10 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
     dataSet.get<DoubleProperty*>("result",prop);
 
     if (prop != NULL && prop->getName().compare("viewMetric") == 0) {
-      DataSet ds;
-      PluginLister::getPluginParameters("Color Mapping").buildDefaultDataSet(ds,g);
       std::string errMsg;
-      g->applyAlgorithm("Color Mapping",errMsg,&ds);
+      g->applyPropertyAlgorithm("Color Mapping",
+				g->getProperty<ColorProperty>("viewColor"),
+				errMsg);
     }
   }
   else if (pluginLister->pluginExists<GraphTest>(name().toStdString())) {
@@ -243,8 +244,17 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
     dataSet.get<bool>("result",result);
     std::string gname;
     g->getAttribute<std::string>("name",gname);
-    qDebug() << gname.c_str() << " - " << name() << (result ? trUtf8(": sucess") : trUtf8(": failure"));
-    // TODO : add a dialog here
+    std::stringstream sstr;
+    sstr << name().toStdString() << (result ? " succeed" : " failed") << "\n on " <<  gname;
+    if (result) {
+      qDebug() << sstr.str().c_str();
+      QMessageBox::information(parentWidget(), "Tulip test result",
+			       sstr.str().c_str());
+    } else {
+      qWarning() << sstr.str().c_str();
+      QMessageBox::warning(parentWidget(), "Tulip test result",
+			   sstr.str().c_str());
+    }
   }
 }
 
