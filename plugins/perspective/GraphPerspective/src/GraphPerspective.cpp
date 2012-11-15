@@ -901,12 +901,9 @@ void GraphPerspective::applyRandomLayout(Graph* g) {
 
   if (!it->hasNext()) {
     std::string str;
-    PluginProgress* progress = new SimplePluginProgressDialog(_mainWindow);
-    DataSet data;
-    data.set<LayoutProperty*>("result",viewLayout);
-    g->applyAlgorithm("Random layout",str,&data,progress);
-    delete progress;
+    g->applyPropertyAlgorithm("Random layout", viewLayout, str);
   }
+  delete it;
 
   Observable::unholdObservers();
 }
