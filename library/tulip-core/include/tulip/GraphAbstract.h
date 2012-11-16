@@ -43,8 +43,13 @@ protected:
 public:
   virtual ~GraphAbstract();
   virtual void clear();
-  virtual Graph *addSubGraph(BooleanProperty *selection=0,
-                             unsigned int id = 0);
+  virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
+			     std::string name = "unnamed");
+  // used to force the id of the newly created subgraph
+  // when importing (tlp/tlpjson)
+  Graph *addSubGraph(unsigned int id,
+		     BooleanProperty *selection=NULL,
+		     std::string name = "");
   virtual void delSubGraph(Graph *);
   virtual void delAllSubGraphs(Graph *);
   virtual Graph* getSuperGraph()const;

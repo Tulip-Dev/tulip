@@ -24,6 +24,7 @@
 
 #include <gzstream.h>
 
+#include <tulip/GraphAbstract.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -495,10 +496,8 @@ struct TLPGraphBuilder:public TLPTrue {
   }
   bool addCluster(int id, const std::string& name, int supergraphId=0) {
     if (clusterIndex[supergraphId]) {
-      BooleanProperty sel(clusterIndex[supergraphId]);
-      sel.setAllNodeValue(false);
-      sel.setAllEdgeValue(false);
-      clusterIndex[id] = clusterIndex[supergraphId]->addSubGraph(&sel, id);
+      clusterIndex[id] =
+	((GraphAbstract *) clusterIndex[supergraphId])->addSubGraph(id);
 
       if (name.size())
         clusterIndex[id]->setAttribute("name", name);
