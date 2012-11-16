@@ -21,6 +21,7 @@
 #include <stack>
 
 #include <tulip/Graph.h>
+#include <tulip/GraphAbstract.h>
 #include <tulip/ImportModule.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/ForEach.h>
@@ -230,7 +231,7 @@ public:
   virtual void parseInteger(long long integerVal) {
     if(_waitingForGraphId) {
       if(integerVal > 0) {
-        _graph = _graph->addSubGraph(0, integerVal);
+        _graph = ((GraphAbstract *)_graph)->addSubGraph(integerVal);
         _dataSet = &const_cast<DataSet&>(_graph->getAttributes());
       }
 

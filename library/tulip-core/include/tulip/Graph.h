@@ -251,7 +251,7 @@ public:
    **/
   virtual  void clear()=0;
 
-  /**
+ /**
    * @brief Creates and returns a new sub-graph of this graph.
    *
    * If a BooleanProperty is provided, all the nodes and edges for which it is true will be added to the subgraph.
@@ -261,11 +261,11 @@ public:
    * It is only used by the Graph loading as subgraphs ids are preserved when saving/loading a Graph.
    *
    * @param selection The elements to add to the new subgraph. Defaults to 0.
-   * @param id The ID you wish to assign to the Graph. It is strongly advised to leave this as default and let Tulip manage subgraph IDs. Defaults to 0.
+   * @param name The name of the newly created subgraph. Defaults to "unnamed".
    * @return :Graph* The newly created subgraph.
    **/
   virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
-                             unsigned int id = 0)=0;
+                             std::string name = "unnamed")=0;
 
   /**
    * @brief Creates and returns a new named sub-graph of this graph.

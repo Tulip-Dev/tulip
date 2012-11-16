@@ -182,15 +182,17 @@ Remove all nodes, edges and subgraphs from the graph .
 
 //===========================================================================================
 
-	tlp::Graph *addSubGraph(tlp::BooleanProperty *selection=0);
+	tlp::Graph *addSubGraph(tlp::BooleanProperty *selection=0, std::string name = "unnamed");
 %Docstring
-tlp.Graph.addSubGraph([selection = None])
+tlp.Graph.addSubGraph([selection = None, name = "unnamed"])
 
 Creates and returns a new sub-graph. The elements of the new sub-graph are those 
 selected in the selection. If there is no selection an empty sub-graph is returned.
 
 :param selection: a Boolean property whose selected elements will be added to the sub-graph
 :type selection: :class:`tlp.BooleanProperty`
+:param name: The name of the newly created subgraph. Defaults to "unnamed".
+:type name: string
 :rtype: :class:`tlp.Graph`
 %End
 
