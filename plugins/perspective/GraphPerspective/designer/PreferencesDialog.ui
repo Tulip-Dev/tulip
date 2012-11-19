@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>957</width>
-    <height>567</height>
+    <height>580</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>0</width>
-    <height>567</height>
+    <height>580</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -535,6 +535,16 @@ border: 0px;
          <widget class="QCheckBox" name="colorMappingCheck">
           <property name="text">
            <string>Map colors when computing a metric</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="resultPropertyStoredCheck">
+          <property name="text">
+           <string>Store computed result property of an algorithm in a specific property</string>
+          </property>
+          <property name="toolTip">
+           <string>The contents of the result property of an algorithm (viewMetric for example) will be stored in a new property automatically named using the values of the parameters of the algorithm</string>
           </property>
          </widget>
         </item>

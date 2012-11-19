@@ -22,8 +22,6 @@
 
 #include <gzstream.h>
 
-#include <QtCore/QDateTime>
-
 #include <tulip/ForEach.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
@@ -386,44 +384,6 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
   delete edgeIt;
 }
 
-//=========================================================
-class AlgorithmPreviewHandler: public ProgressPreviewHandler {
-  QMap<tlp::PropertyInterface*,tlp::PropertyInterface*> _propertiesMap;
-public:
-  AlgorithmPreviewHandler(const QMap<tlp::PropertyInterface*,tlp::PropertyInterface*>& propertiesMap): _propertiesMap(propertiesMap) {
-  }
-  void progressStateChanged(int, int) {
-    foreach(tlp::PropertyInterface* clone, _propertiesMap.keys()) {
-      tlp::PropertyInterface* orig = _propertiesMap[clone];
-      orig->copy(clone);
-    }
-
-    unsigned int hc = Observable::observersHoldCounter();
-    for (unsigned int i=0;i<hc;++i)
-      Observable::unholdObservers();
-    for (unsigned int i=0;i<hc;++i)
-      Observable::holdObservers();
-  }
-};
-
-#define CHECK_PROPERTY(T) \
-  if (dataSetCopy.getData(n)->getTypeName().compare(typeid(T*).name()) == 0) {\
-    T* prop=NULL;\
-    dataSetCopy.getAndFree<T*>(n,prop);\
-    T* clone = new T(this,prop->getName());\
-    clone->copy(prop);\
-    clonedProperties[clone] = prop;\
-    dataSetCopy.set<T*>(n,clone);\
-    QString copyName = dataSetName + "(" + prop->getName().c_str() + ")";\
-    if (existProperty(copyName.toStdString()) && getProperty(copyName.toStdString())->getTypename().compare(prop->getTypename()) != 0)\
-      qWarning() << algorithm.c_str() << ": Type mismatch for output property " << copyName;\
-    else\
-      namedProperties[prop] = getProperty<T>(copyName.toStdString());\
-  }
-#define CHECK_PI(P)\
-  CHECK_PROPERTY(P##Property)\
-  CHECK_PROPERTY(P##VectorProperty)
-
 bool Graph::applyAlgorithm(const std::string &algorithm,
                            std::string &errorMessage,
                            DataSet *dataSet, PluginProgress *progress) {
@@ -443,90 +403,17 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   }
   else tmpProgress = progress;
 
-  // Parse every output parameters. If we have a PropertyInterface, we will use a temporary clone in order to avoid getting duplicate pointers between in and out parameters
-  QList<std::string> outParams;
-  ParameterDescriptionList paramList = PluginLister::getPluginParameters(algorithm);
-  ParameterDescription desc;
-  forEach(desc, paramList.getParameters()) {
-    if (desc.getDirection() != OUT_PARAM)
-      continue;
-
-    outParams+=desc.getName();
-  }
-
-  QMap<PropertyInterface*,PropertyInterface*> clonedProperties;
-  QMap<PropertyInterface*,PropertyInterface*> namedProperties;
-
-  DataSet dataSetCopy; // Create a copy of the dataset in order to leave the original values unchanged after function call
-
-  if (dataSet) {
-    dataSetCopy = *dataSet;
-    QString dataSetName = QString(algorithm.c_str()) + " - " +  dataSetCopy.toString().c_str();
-    foreach(std::string n, outParams) {
-      if (!dataSetCopy.exist(n))
-        continue;
-
-      CHECK_PI(Boolean)
-      CHECK_PI(Double)
-      CHECK_PI(Layout)
-      CHECK_PI(String)
-      CHECK_PI(Integer)
-      CHECK_PI(Size)
-      CHECK_PI(Color)
-    }
-  }
-
-  AlgorithmContext* context = new AlgorithmContext(this, &dataSetCopy, tmpProgress);
+  AlgorithmContext* context = new AlgorithmContext(this, dataSet, tmpProgress);
   Algorithm *newAlgo = PluginLister::instance()->getPluginObject<Algorithm>(algorithm, context);
 
   if ((result=newAlgo->check(errorMessage))) {
-    tmpProgress->setPreviewHandler(new AlgorithmPreviewHandler(clonedProperties));
-    QDateTime start = QDateTime::currentDateTime();
     result = newAlgo->run();
-    qDebug() << algorithm.c_str() << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
   }
 
   delete newAlgo;
 
-  if (deletePluginProgress) delete tmpProgress;
-
-  // restore temporary properties and free memory
-  foreach(PropertyInterface* clone, clonedProperties.keys()) {
-    PropertyInterface* prop = clonedProperties[clone];
-
-    if (result) {
-      prop->copy(clone);
-      PropertyInterface* namedCopy = namedProperties[prop];
-
-      if (namedCopy != NULL)
-        namedCopy->copy(prop);
-    }
-
-    delete clone;
-  }
-
-  if (dataSet) { // Copy out parameters that are not properties back to the original dataSet
-    foreach(std::string n, outParams) {
-      if (!dataSetCopy.exist(n))
-        continue;
-
-      if (dataSetCopy.getData(n)->getTypeName().compare(typeid(DoubleProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(DoubleVectorProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(IntegerProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(IntegerVectorProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(BooleanProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(BooleanVectorProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(LayoutProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(CoordVectorProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(SizeProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(SizeVectorProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(ColorProperty*).name()) != 0 &&
-          dataSetCopy.getData(n)->getTypeName().compare(typeid(ColorVectorProperty*).name()) != 0) {
-        DataType* dt = dataSetCopy.getData(n);
-        dataSet->setData(n,dt);
-      }
-    }
-  }
+  if (deletePluginProgress)
+    delete tmpProgress;
 
   return result;
 }
