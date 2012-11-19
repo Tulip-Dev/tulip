@@ -54,6 +54,7 @@ void PreferencesDialog::writeSettings() {
 
   TulipSettings::instance().setAutomaticMapMetric(_ui->colorMappingCheck->isChecked());
   TulipSettings::instance().setAutomaticRatio(_ui->aspectRatioCheck->isChecked());
+  TulipSettings::instance().setResultPropertyStored(_ui->resultPropertyStoredCheck->isChecked());
 }
 
 void PreferencesDialog::readSettings() {
@@ -98,4 +99,5 @@ void PreferencesDialog::readSettings() {
 
   _ui->aspectRatioCheck->setChecked(TulipSettings::instance().isAutomaticRatio());
   _ui->colorMappingCheck->setChecked(TulipSettings::instance().isAutomaticMapMetric());
+  _ui->resultPropertyStoredCheck->setChecked(TulipSettings::instance().isResultPropertyStored());
 }

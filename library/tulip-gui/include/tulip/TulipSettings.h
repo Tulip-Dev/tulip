@@ -62,6 +62,7 @@ public:
 
   static const QString AutomaticPerfectAspectRatioEntry;
   static const QString AutomaticMapMetricEntry;
+  static const QString ResultPropertyStoredEntry;
 
   static TulipSettings &instance();
 
@@ -161,6 +162,9 @@ public:
 
   bool isAutomaticRatio() const;
   void setAutomaticRatio(bool);
+
+  bool isResultPropertyStored() const;
+  void setResultPropertyStored(bool);
 
 private:
   TulipSettings();

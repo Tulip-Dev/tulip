@@ -51,6 +51,8 @@ const QString TulipSettings::ProxyPasswordEntry = "app/proxy/passwd";
 const QString TulipSettings::AutomaticPerfectAspectRatioEntry = "graph/auto/ratio";
 const QString TulipSettings::AutomaticMapMetricEntry = "graph/auto/colors";
 
+const QString TulipSettings::ResultPropertyStoredEntry = "graph/auto/result";
+
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
 
@@ -314,4 +316,12 @@ void TulipSettings::setAutomaticRatio(bool f) {
 
 void TulipSettings::setFavoriteAlgorithms(const QSet<QString>& lst) {
   setValue(FavoriteAlgorithmsEntry,(QStringList)(lst.toList()));
+}
+
+bool TulipSettings::isResultPropertyStored() const {
+  return value(ResultPropertyStoredEntry,false).toBool();
+}
+
+void TulipSettings::setResultPropertyStored(bool f) {
+  setValue(ResultPropertyStoredEntry,f);
 }

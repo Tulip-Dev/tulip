@@ -134,6 +134,40 @@ void copyToLocal(DataSet& data, Graph* g) {
   asLocal<BooleanProperty>(var,data,g);
   asLocal<StringProperty>(var,data,g);
 }
+
+// simple structure to hold an output property parameter
+// while running an algorithm
+struct OutPropertyParam {
+  std::string name; // the name of the parameter
+  PropertyInterface* dest; // the destination property
+  PropertyInterface* tmp;  // the temporary property
+
+  OutPropertyParam(const std::string& pName)
+  : name(pName), dest(NULL), tmp(NULL) {}
+};
+
+class AlgorithmPreviewHandler: public ProgressPreviewHandler {
+  const std::vector<OutPropertyParam>& outPropParams;
+public:
+  AlgorithmPreviewHandler(std::vector<OutPropertyParam>& opp):
+    outPropParams(opp) {
+  }
+  void progressStateChanged(int, int) {
+    std::vector<OutPropertyParam>::const_iterator it = outPropParams.begin();
+    for (; it != outPropParams.end(); ++it) {
+      it->dest->copy(it->tmp);
+    }
+
+    unsigned int hc = Observable::observersHoldCounter();
+    for (unsigned int i=0;i<hc;++i)
+      Observable::unholdObservers();
+    for (unsigned int i=0;i<hc;++i)
+      Observable::holdObservers();
+  }
+};
+
+#define TN( T )   typeid(T).name()
+
 void AlgorithmRunnerItem::run(Graph *g) {
   initModel();
 
@@ -151,17 +185,87 @@ void AlgorithmRunnerItem::run(Graph *g) {
   if (_localMode)
     copyToLocal(dataSet, g);
 
-  std::string errorMessage;
-  PluginProgress* progress = Perspective::instance()->progress();
+  std::string algorithm = _pluginName.toStdString();
+  // use temporary output properties
+  // to ease the undo in case of failure
+  std::vector<OutPropertyParam> outPropertyParams;
+  ParameterDescriptionList paramList = PluginLister::getPluginParameters(algorithm);
+  ParameterDescription desc;
+  forEach(desc, paramList.getParameters()) {
+    if (desc.getDirection() == IN_PARAM)
+      continue;
+
+    std::string typeName(desc.getTypeName());
+
+    // forget non property out param
+    if (typeName != TN(PropertyInterface*)
+	&& typeName != TN(BooleanProperty)
+	&& typeName != TN(DoubleProperty)
+	&& typeName != TN(LayoutProperty)
+	&& typeName != TN(StringProperty)
+	&& typeName != TN(IntegerProperty)
+	&& typeName != TN(SizeProperty)
+	&& typeName != TN(ColorProperty))
+      continue;
+
+    OutPropertyParam outPropParam(desc.getName());
+    // get destination property
+    dataSet.get(desc.getName(), outPropParam.dest);
+    // clone it in a not registered (because unnamed)
+    // temporary property
+    outPropParam.tmp =
+      outPropParam.dest->clonePrototype(outPropParam.dest->getGraph(), "");
+
+    // set the temporary as the destination property
+    dataSet.set(desc.getName(), outPropParam.tmp);
+    outPropertyParams.push_back(outPropParam);
+
+    if (desc.getDirection() == OUT_PARAM) {
+      outPropParam.tmp->setAllNodeDataMemValue(outPropParam.dest->getNodeDefaultDataMemValue());
+      outPropParam.tmp->setAllEdgeDataMemValue(outPropParam.dest->getEdgeDefaultDataMemValue());
+    }
+    else
+      // inout property
+      outPropParam.tmp->copy(outPropParam.dest);
+  }
+
   g->push();
   Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(true);
-  bool result = g->applyAlgorithm(_pluginName.toStdString(),errorMessage,&dataSet,progress);
+  std::string errorMessage;
+  PluginProgress* progress = Perspective::instance()->progress();
+  // set preview handler if needed
+  if (!outPropertyParams.empty())
+    progress->setPreviewHandler(new AlgorithmPreviewHandler(outPropertyParams));
+  // take time before run
+  QDateTime start = QDateTime::currentDateTime();
+  bool result = g->applyAlgorithm(algorithm,errorMessage,&dataSet,progress);
+  // display spent time
+  qDebug() << algorithm.c_str() << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
   delete progress;
   Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(false);
 
   if (!result) {
     g->pop();
     qCritical() << name() << ": " << errorMessage.c_str();
+  }
+
+  // copy or cleanup out properties
+  std::vector<OutPropertyParam>::const_iterator it = outPropertyParams.begin();
+  for (; it != outPropertyParams.end(); ++it) {
+    if (result) {
+      it->dest->copy(it->tmp);
+      if (it->name == "result" &&
+	  TulipSettings::instance().isResultPropertyStored()) {
+	// store the result property values in an automatically named property
+	std::string storedResultName = algorithm + " - " +  dataSet.toString()
+	  + "(" + it->dest->getName() + ")";
+	PropertyInterface* storedResultProp =
+	  it->dest->clonePrototype(it->dest->getGraph(),
+					    storedResultName);
+	storedResultProp->copy(it->tmp);
+      }
+    }
+    delete it->tmp;
   }
 
   afterRun(g,dataSet);
