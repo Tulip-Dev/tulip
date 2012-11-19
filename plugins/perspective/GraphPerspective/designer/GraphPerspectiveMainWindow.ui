@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1059</width>
-    <height>697</height>
+    <width>1057</width>
+    <height>695</height>
    </rect>
   </property>
   <property name="contextMenuPolicy">
@@ -21,17 +21,18 @@
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QPushButton, QComboBox, QToolButton {
+   <string notr="true">QPushButton, QComboBox {
 border-image: url(:/tulip/gui/ui/btn_26.png) 4;
 border-width: 4;
 padding: 0px 6px;
 font-size: 12px;
 }
+
 #mainWidget{
 background-color:white;
 }
 
-QPushButton::flat {
+QPushButton::flat{
 border-image: none;
 border-width: 4;
 padding: 0px 6px;
@@ -61,7 +62,7 @@ subcontrol-position: center right;
 right: 4px;
 }
 
-QPushButton, QToolButton {
+QPushButton {
 outline: none;
 margin: 2
 }
@@ -1015,7 +1016,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1059</width>
+     <width>1057</width>
      <height>23</height>
     </rect>
    </property>
