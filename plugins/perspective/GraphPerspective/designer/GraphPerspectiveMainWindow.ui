@@ -877,7 +877,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>Switch to full screen mode</string>
+                  <string>Switch to 1-panel mode</string>
                  </property>
                  <property name="icon">
                   <iconset>
@@ -923,7 +923,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>Switch to 3-panels mode</string>
+                  <string>Switch to 2top-1bottom-panels mode</string>
                  </property>
                  <property name="icon">
                   <iconset>
@@ -946,7 +946,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>Switch to 3-panels mode</string>
+                  <string>Switch to 1left-2right-panels mode</string>
                  </property>
                  <property name="icon">
                   <iconset>
@@ -990,6 +990,9 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <width>24</width>
                    <height>24</height>
                   </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 6-panels mode</string>
                  </property>
                  <property name="icon">
                   <iconset>
