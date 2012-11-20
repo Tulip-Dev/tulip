@@ -577,8 +577,10 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
     _saveNeeded.remove(g);
 
     if (_currentGraph == g) {
-      if (_graphs.size() == 0)
-        setCurrentGraph(NULL);
+      if (_graphs.size() == 0) {
+	_currentGraph = NULL;
+	emit currentGraphChanged(_currentGraph);
+      }
       else
         setCurrentGraph(_graphs[0]);
     }
