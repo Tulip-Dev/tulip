@@ -53,6 +53,8 @@ const QString TulipSettings::AutomaticMapMetricEntry = "graph/auto/colors";
 
 const QString TulipSettings::ResultPropertyStoredEntry = "graph/auto/result";
 
+const QString TulipSettings::RunningTimeComputedEntry = "graph/auto/time";
+
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
 
@@ -324,4 +326,12 @@ bool TulipSettings::isResultPropertyStored() const {
 
 void TulipSettings::setResultPropertyStored(bool f) {
   setValue(ResultPropertyStoredEntry,f);
+}
+
+bool TulipSettings::isRunningTimeComputed() const {
+  return value(RunningTimeComputedEntry,false).toBool();
+}
+
+void TulipSettings::setRunningTimeComputed(bool f) {
+  setValue(RunningTimeComputedEntry,f);
 }

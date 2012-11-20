@@ -186,6 +186,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
     copyToLocal(dataSet, g);
 
   std::string algorithm = _pluginName.toStdString();
+  std::string algoAndParams = algorithm + " - " + dataSet.toString();
   // use temporary output properties
   // to ease the undo in case of failure
   std::vector<OutPropertyParam> outPropertyParams;
@@ -240,7 +241,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
   QDateTime start = QDateTime::currentDateTime();
   bool result = g->applyAlgorithm(algorithm,errorMessage,&dataSet,progress);
   // display spent time
-  qDebug() << algorithm.c_str() << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+  if (TulipSettings::instance().isRunningTimeComputed())
+    qDebug() << algoAndParams << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
   delete progress;
   Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(false);
 
@@ -257,7 +259,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
       if (it->name == "result" &&
 	  TulipSettings::instance().isResultPropertyStored()) {
 	// store the result property values in an automatically named property
-	std::string storedResultName = algorithm + " - " +  dataSet.toString()
+	std::string storedResultName = algoAndParams
 	  + "(" + it->dest->getName() + ")";
 	PropertyInterface* storedResultProp =
 	  it->dest->clonePrototype(it->dest->getGraph(),
