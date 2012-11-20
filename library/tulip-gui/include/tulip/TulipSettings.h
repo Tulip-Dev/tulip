@@ -63,6 +63,7 @@ public:
   static const QString AutomaticPerfectAspectRatioEntry;
   static const QString AutomaticMapMetricEntry;
   static const QString ResultPropertyStoredEntry;
+  static const QString RunningTimeComputedEntry;
 
   static TulipSettings &instance();
 
@@ -165,6 +166,9 @@ public:
 
   bool isResultPropertyStored() const;
   void setResultPropertyStored(bool);
+
+  bool isRunningTimeComputed() const;
+  void setRunningTimeComputed(bool);
 
 private:
   TulipSettings();
