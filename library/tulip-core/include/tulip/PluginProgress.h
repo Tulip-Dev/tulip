@@ -32,7 +32,7 @@ namespace tlp {
  * When PluginProgress::setPreview() is called, the associated ProgressPreviewHandler will be enabled. Allowing it to implement custom behavior to allow the user to preview the result of the underleying process
  * Once enabled, the progressStateChanged method will be called back each time PluginProgress::progress is called to allow synchronizing the preview with progression.
  */
-class ProgressPreviewHandler {
+class TLP_SCOPE ProgressPreviewHandler {
 public:
   virtual ~ProgressPreviewHandler();
 
