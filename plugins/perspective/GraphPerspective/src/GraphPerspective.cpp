@@ -184,11 +184,17 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
   currentGraphChanged(NULL);
+  _ui->singleModeButton->setEnabled(false);
   _ui->workspace->setSingleModeSwitch(_ui->singleModeButton);
+  _ui->splitModeButton->setEnabled(false);
   _ui->workspace->setSplitModeSwitch(_ui->splitModeButton);
+  _ui->split3ModeButton->setEnabled(false);
   _ui->workspace->setSplit3ModeSwitch(_ui->split3ModeButton);
+  _ui->split32ModeButton->setEnabled(false);
   _ui->workspace->setSplit32ModeSwitch(_ui->split32ModeButton);
+  _ui->gridModeButton->setEnabled(false);
   _ui->workspace->setGridModeSwitch(_ui->gridModeButton);
+  _ui->sixModeButton->setEnabled(false);
   _ui->workspace->setSixModeSwitch(_ui->sixModeButton);
   _ui->workspace->setPageCountLabel(_ui->pageCountLabel);
   _ui->workspace->setExposeModeSwitch(_ui->exposeModeButton);
@@ -822,6 +828,12 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionCreate_empty_sub_graph->setEnabled(enabled);
   _ui->actionClone_sub_graph->setEnabled(enabled);
   _ui->actionExport->setEnabled(enabled);
+  _ui->singleModeButton->setEnabled(enabled);
+  _ui->splitModeButton->setEnabled(enabled);
+  _ui->split3ModeButton->setEnabled(enabled);
+  _ui->split32ModeButton->setEnabled(enabled);
+  _ui->gridModeButton->setEnabled(enabled);
+  _ui->sixModeButton->setEnabled(enabled);
 
   if (graph == NULL) {
     _ui->searchButton->setChecked(false);
