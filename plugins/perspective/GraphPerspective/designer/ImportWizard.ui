@@ -68,7 +68,7 @@ border: 0px;
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>&lt;br /&gt;Import a new graph hierarchy into your project by selecting one of the graph generation methods listed below.&lt;br/&gt;Once you're done, click &lt;b&gt;Next&lt;/b&gt; to proceed to the panel selection or &lt;b&gt;Finish&lt;/b&gt; to import your graph without visualizing it.&lt;br/&gt; </string>
+       <string>&lt;br /&gt;Import a graph hierarchy into your project by selecting and parameterizing one of the graph import methods listed below.&lt;br/&gt;Then click &lt;b&gt;Finish&lt;/b&gt; to import your graph and visualize it using the &lt;b&gt;Node Link Diagram&lt;/b&gt; and &lt;b&gt;Spreadsheet&lt;/b&gt; standard views.&lt;br/&gt; </string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
