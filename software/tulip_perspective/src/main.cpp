@@ -193,7 +193,7 @@ int main(int argc,char **argv) {
   TulipProject *project = NULL;
   QString error;
 
-  if (!projectFilePath.isNull()) {
+  if (!projectFilePath.isNull() && projectFilePath.endsWith(".tlpx")) {
     project = TulipProject::openProject(projectFilePath,progress);
 
     if (!project->isValid()) {
