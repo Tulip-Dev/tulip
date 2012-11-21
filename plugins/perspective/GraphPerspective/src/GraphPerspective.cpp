@@ -263,10 +263,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     rootIds = _graphs->readProject(_project,progress);
   }
 
-  if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
-    open(_externalFile);
-  }
-
+  // these ui initializations are needed here
+  // in case of a call to showStartPanels in the open method
   _ui->graphHierarchiesEditor->setModel(_graphs);
   _ui->workspace->setModel(_graphs);
   _ui->workspace->readProject(_project,rootIds,progress);
@@ -275,6 +273,9 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->developFrame->setProject(_project);
   _ui->pythonPanel->setPanelButton(_ui->pythonButton);
 
+  if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
+    open(_externalFile);
+  }
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
@@ -560,6 +561,7 @@ void GraphPerspective::open(QString fileName) {
         delete prg;
         QDir::setCurrent(QFileInfo(fileName.toUtf8().data()).absolutePath());
         _graphs->addGraph(g);
+	showStartPanels(g);
         break;
       }
     }
