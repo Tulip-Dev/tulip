@@ -1,3 +1,2 @@
 add_subdirectory(library)
-
-#add_subdirectory(plugins)
+add_subdirectory(plugins)
