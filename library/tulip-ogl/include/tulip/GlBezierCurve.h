@@ -56,11 +56,11 @@ public:
    * @param nbCurvePoints the number of curve points to generate
    */
   GlBezierCurve(const std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor,
-                const float &startSize, const float &endSize, const unsigned int nbCurvePoints = 100);
+                const float &startSize, const float &endSize, const unsigned int nbCurvePoints = 200);
 
   ~GlBezierCurve();
 
-  void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=100);
+  void drawCurve(std::vector<Coord> &controlPoints, const Color &startColor, const Color &endColor, const float startSize, const float endSize, const unsigned int nbCurvePoints=200);
 
 protected :
 
@@ -69,15 +69,6 @@ protected :
   void computeCurvePointsOnCPU(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, unsigned int nbCurvePoints);
 
   std::string genCurveVertexShaderSpecificCode();
-
-  void setCurveVertexShaderRenderingSpecificParameters();
-
-  void cleanupAfterCurveVertexShaderRendering();
-
-private :
-
-  static void buildPascalTriangleTexture();
-  static GLuint pascalTriangleTextureId;
 
 };
 

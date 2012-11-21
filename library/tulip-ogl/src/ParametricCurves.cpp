@@ -134,20 +134,54 @@ void buildPascalTriangle(unsigned int n, vector<vector<double> > &pascalTriangle
   }
 }
 
-static vector<vector<double> > pascalTriangle;
+static map<double, vector<double> > tCoeffs;
+static map<double, vector<double> > sCoeffs;
+static map<unsigned int, unsigned int> computedCoefficients;
+
+static void computeCoefficients(double t, unsigned int nbControlPoints) {
+    double s = (1.0 - t);
+#ifdef _OPENMP
+    #pragma omp critical
+#endif
+    if (tCoeffs.find(t) == tCoeffs.end()) {
+        vector<double> tCoeff, sCoeff;
+        for (size_t i = 0 ; i < nbControlPoints ; ++i) {
+            tCoeff.push_back(pow(t, static_cast<double>(i)));
+            sCoeff.push_back(pow(s, static_cast<double>(i)));
+        }
+        tCoeffs[t] = tCoeff;
+        sCoeffs[t] = sCoeff;
+    } else {
+        vector<double> &tCoeff = tCoeffs[t];
+        vector<double> &sCoeff = sCoeffs[t];
+        if (tCoeff.size() < nbControlPoints) {
+            size_t oldSize = tCoeff.size();
+            for (size_t i = oldSize ; i < nbControlPoints ; ++i) {
+                tCoeff.push_back(pow(t, static_cast<double>(i)));
+                sCoeff.push_back(pow(s, static_cast<double>(i)));
+            }
+        }
+    }
+}
 
 Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
-  unsigned int nbControlPoints = controlPoints.size();
-  double s = (1.0 - t);
+
+  size_t nbControlPoints = controlPoints.size();
+
+  computeCoefficients(t, nbControlPoints);
+
   Vector<double, 3> bezierPoint;
   bezierPoint[0] = bezierPoint[1] = bezierPoint[2] = 0;
-
+  double curCoeff = 1.0;
+  double r = static_cast<double>(nbControlPoints);
   for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
     Vector<double, 3> controlPoint;
     controlPoint[0] = controlPoints[i][0];
     controlPoint[1] = controlPoints[i][1];
     controlPoint[2] = controlPoints[i][2];
-    bezierPoint += controlPoint * pascalTriangle[nbControlPoints - 1][i] * pow(static_cast<double>(t), static_cast<double>(i)) * pow(s, static_cast<double>(nbControlPoints - 1 - i));
+    bezierPoint += controlPoint * curCoeff * tCoeffs[static_cast<double>(t)][i] * sCoeffs[t][nbControlPoints - 1 - i];
+    double c = static_cast<double>(i+1);
+    curCoeff *= (r -c)/c;
   }
 
   return Coord(bezierPoint[0], bezierPoint[1], bezierPoint[2]);
@@ -171,14 +205,12 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
     break;
 
   default:
-    buildPascalTriangle(controlPoints.size(), pascalTriangle);
     curvePoints.resize(nbCurvePoints);
     float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
-
-    for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
+    for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
       float curStep = i * h;
       curvePoints[i] = computeBezierPoint(controlPoints, curStep);
     }
