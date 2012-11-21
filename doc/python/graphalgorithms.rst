@@ -75,7 +75,7 @@ Calling a property algorithm on a graph
 
 To call a property algorithm on a graph, you must use specific methods from the 
 :class:`tlp.Graph` class. There is one method per type of property to compute
-like for instance :meth:`tlp.Graph.computeBooleanProperty`, :meth:`tlp.Graph.computeLayoutProperty`, ...
+like for instance :meth:`tlp.Graph.applyBooleanAlgorithm`, :meth:`tlp.Graph.applyLayoutAlgorithm`, ...
 
 As an illustration, we will call the "Hierarchical Graph" layout algorithm, that can be used to draw a tree.
 
@@ -108,5 +108,5 @@ is bound to a "graph" variable::
 	viewLayout = graph.getLayoutProperty("viewLayout")
 	
 	# call the layout algorithm and store the result in viewLayout
-	graph.computeLayoutProperty("Hierarchical Graph", viewLayout, dataSet)
+        graph.applyLayoutAlgorithm("Hierarchical Graph", viewLayout, dataSet)
 

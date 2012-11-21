@@ -392,6 +392,20 @@ Application of algorithms
 
 .. automethod:: tulip::tlp.Graph.applyAlgorithm
 
+.. automethod:: tulip::tlp.Graph.applyBooleanAlgorithm
+
+.. automethod:: tulip::tlp.Graph.applyColorAlgorithm
+
+.. automethod:: tulip::tlp.Graph.applyDoubleAlgorithm
+
+.. automethod:: tulip::tlp.Graph.applyIntegerAlgorithm
+
+.. automethod:: tulip::tlp.Graph.applyLayoutAlgorithm
+
+.. automethod:: tulip::tlp.Graph.applySizeAlgorithm
+
+.. automethod:: tulip::tlp.Graph.applyStringAlgorithm
+
 .. automethod:: tulip::tlp.Graph.computeBooleanProperty
 
 .. automethod:: tulip::tlp.Graph.computeColorProperty
