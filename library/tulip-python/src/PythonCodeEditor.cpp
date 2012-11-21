@@ -1196,7 +1196,8 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   int stop = 0;
 
   for (int i = textBeforeCursor.length() ; i >=0 ;  --i) {
-    if (textBeforeCursor[i] == '\t' || textBeforeCursor[i] == ' ' || textBeforeCursor[i] == '.') {
+      if (textBeforeCursor[i] == '\t' || textBeforeCursor[i] == ' ' || textBeforeCursor[i] == '.' ||
+          textBeforeCursor[i] == '(' || textBeforeCursor[i] == '[') {
       stop = i+1;
       break;
     }

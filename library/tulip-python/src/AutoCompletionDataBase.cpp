@@ -23,6 +23,9 @@
 
 #include <tulip/StringCollection.h>
 #include <tulip/PluginLister.h>
+#include <tulip/PropertyAlgorithm.h>
+#include <tulip/ImportModule.h>
+#include <tulip/ExportModule.h>
 
 #include "tulip/AutoCompletionDataBase.h"
 #include "tulip/PythonInterpreter.h"
@@ -1076,7 +1079,7 @@ static QSet<QString> tryAlgorithmContext(const QString &context, const QString &
     int pos1 = context.indexOf(algoContext);
     int pos2 = pos1 + algoContext.length();
 
-    if (context.indexOf(",", pos2) == -1 && (algoType.isEmpty() || context.mid(0, pos1) != "tlp")) {
+    if (context.indexOf(",", pos2) == -1) {
       QString prefix = context.mid(pos2);
       ret = getAlgorithmPluginsListOfType(algoType, prefix);
     }
@@ -1087,11 +1090,24 @@ static QSet<QString> tryAlgorithmContext(const QString &context, const QString &
 
 static QSet<QString> getTulipAlgorithmListIfContext(const QString &context) {
   QSet<QString> ret;
-  ret = tryAlgorithmContext(context, ".applyAlgorithm(", "Algorithm");
+  ret = tryAlgorithmContext(context, ".applyAlgorithm(", tlp::ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
+
+  ret = tryAlgorithmContext(context, ".importGraph(", tlp::IMPORT_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".exportGraph(", tlp::EXPORT_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
 
   ret = tryAlgorithmContext(context, ".getDefaultPluginParameters(");
 
@@ -1099,43 +1115,85 @@ static QSet<QString> getTulipAlgorithmListIfContext(const QString &context) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeBooleanProperty(", "BooleanAlgorithm");
+  ret = tryAlgorithmContext(context, ".computeBooleanProperty(", tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeColorProperty(", "ColorAlgorithm");
+  ret = tryAlgorithmContext(context, ".applyBooleanAlgorithm(", tlp::BOOLEAN_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeDoubleProperty(", "DoubleAlgorithm");
+  ret = tryAlgorithmContext(context, ".computeColorProperty(", tlp::COLOR_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeIntegerProperty(", "IntegerAlgorithm");
+  ret = tryAlgorithmContext(context, ".applyColorAlgorithm(", tlp::COLOR_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeLayoutProperty(", "LayoutAlgorithm");
+  ret = tryAlgorithmContext(context, ".computeDoubleProperty(", tlp::DOUBLE_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeSizeProperty(", "SizeAlgorithm");
+  ret = tryAlgorithmContext(context, ".applyDoubleAlgorithm(", tlp::DOUBLE_ALGORITHM_CATEGORY.c_str());
 
   if (!ret.empty()) {
     return ret;
   }
 
-  ret = tryAlgorithmContext(context, ".computeStringProperty(", "StringAlgorithm");
+  ret = tryAlgorithmContext(context, ".computeIntegerProperty(", tlp::INTEGER_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".applyIntegerAlgorithm(", tlp::INTEGER_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".computeLayoutProperty(", tlp::LAYOUT_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".applyLayoutAlgorithm(", tlp::LAYOUT_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".computeSizeProperty(", tlp::SIZE_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".applySizeAlgorithm(", tlp::SIZE_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".computeStringProperty(", tlp::STRING_ALGORITHM_CATEGORY.c_str());
+
+  if (!ret.empty()) {
+    return ret;
+  }
+
+  ret = tryAlgorithmContext(context, ".applyStringAlgorithm(", tlp::STRING_ALGORITHM_CATEGORY.c_str());
 
   return ret;
 }
