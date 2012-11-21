@@ -212,9 +212,8 @@ ELSE(OPENMP_FOUND)
   ENDIF(WIN32)
 ENDIF(OPENMP_FOUND)
 
-# Python (not required)
-# Try to find Python (interpreter and library) in the first place
-# If Python is present, try to find if SIP and its dev tools are installed on the host system.
+# Python
+# After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
 # If not, compile the SIP version located in thirdparty.
 FIND_PACKAGE(PythonInterp REQUIRED)
 IF(PYTHONINTERP_FOUND)
