@@ -42,7 +42,7 @@ class BasicPluginsTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testImportGml);
   CPPUNIT_TEST(testExportGml);
   CPPUNIT_TEST(testImportFileSystem);
-  CPPUNIT_TEST(testImportAdjacencyMatrix);
+  //CPPUNIT_TEST(testImportAdjacencyMatrix);
   CPPUNIT_TEST(testImportPajek);
   CPPUNIT_TEST(testImportUCINET);
   CPPUNIT_TEST(testMetricColorMapping);
