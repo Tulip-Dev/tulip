@@ -3842,9 +3842,9 @@ Returns a new graph or None if the import fails.
 
 //===========================================================================================
 
-    bool exportGraph(tlp::Graph *graph, const std::string &outputFilePath, const std::string &exportPluginName, tlp::DataSet dataSet = tlp::DataSet());
+    bool exportGraph(const std::string &exportPluginName, tlp::Graph *graph, const std::string &outputFilePath, tlp::DataSet dataSet = tlp::DataSet());
 %Docstring
-tlp.exportGraph(graph, outputFilePath, exportPluginName, dataSet)
+tlp.exportGraph(exportPluginName, graph, outputFilePath[, dataSet])
 
 Exports a graph to a file using a Tulip export plugin (must be loaded).
 
@@ -3858,16 +3858,19 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
 :type dataSet: :class:`tlp.DataSet`
 :rtype: boolean
 :throws: an exception if the requested export plugin is not registered in the plugins database. 
+
+.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
+             able to call import modules (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
-	if (pluginExists<tlp::ExportModule>(*a2)) {
-		std::ofstream ofs((*a1).c_str());
+    if (pluginExists<tlp::ExportModule>(*a0)) {
+        std::ofstream ofs((*a2).c_str());
 		if (ofs.is_open()) {
-			sipRes = tlp::exportGraph(a0, ofs, *a2, *a3);
+            sipRes = tlp::exportGraph(a1, ofs, *a0, *a3);
 		} else {
 			std::string msg = "Export error : The specified file path (";
-			msg += *a1;
+            msg += *a2;
 			msg += ") is not valid.";  
 			printErrorMessage(msg);
 			sipRes = false;
@@ -3876,7 +3879,7 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
 	} else {
         sipIsErr = -1;
 		std::string msg = "No Tulip export plugin named  ";
-		msg += *a1;
+        msg += *a0;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
 	}	
