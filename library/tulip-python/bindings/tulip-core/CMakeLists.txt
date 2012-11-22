@@ -108,7 +108,7 @@ TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${PYTHON_LIBRARY})
 ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
                   COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_LIST_FILE}
                   COMMENT "touching CMakeLists.txt for Tulip Python Bindings (force configure before next build to keep source files list updated)"
-                  DEPENDS ${LibTulipCorePythonBindingsName})
+                  DEPENDS ${LibTulipCorePythonBindingsName} VERBATIM)
 
 IF(NOT UBUNTU_PPA_BUILD)
 INSTALL(TARGETS ${LibTulipCorePythonBindingsName}
