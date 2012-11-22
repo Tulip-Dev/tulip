@@ -207,7 +207,7 @@ public:
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const {
     TreeItem* item = (TreeItem*)index.internalPointer();
 
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
       return item->name;
     else if (role == Qt::FontRole && !index.parent().parent().isValid()) {
       QFont f;
