@@ -27,7 +27,7 @@ ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/../siplib/sip.h
 							-d ${CMAKE_CURRENT_BINARY_DIR}/../siplib
                      
                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../siplib/sip.h.in
-				   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../)
+                                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../ VERBATIM)
 
 ADD_EXECUTABLE(sip ${sip_SRCS})
 
