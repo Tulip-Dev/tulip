@@ -32,7 +32,7 @@ TARGET_LINK_LIBRARIES(json_reformat yajl_s)
 GET_TARGET_PROPERTY(binPath json_reformat LOCATION)
 
 ADD_CUSTOM_COMMAND(TARGET json_reformat POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir})
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir} VERBATIM)
 
 IF (NOT WIN32)
   INSTALL(TARGETS json_reformat RUNTIME DESTINATION bin)
