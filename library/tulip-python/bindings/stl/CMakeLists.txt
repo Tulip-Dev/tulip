@@ -49,7 +49,7 @@ TARGET_LINK_LIBRARIES(${LibStlPythonBindingsName} ${PYTHON_LIBRARY})
 ADD_CUSTOM_TARGET(touchStlPythonCMakeLists ALL
                   COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_LIST_FILE}
                   COMMENT "touching CMakeLists.txt for Stl Python Bindings (force configure before next build to keep source files list updated)"
-                  DEPENDS ${LibStlPythonBindingsName})
+                  DEPENDS ${LibStlPythonBindingsName} VERBATIM)
 
 IF(NOT UBUNTU_PPA_BUILD)
 INSTALL(TARGETS ${LibStlPythonBindingsName}
