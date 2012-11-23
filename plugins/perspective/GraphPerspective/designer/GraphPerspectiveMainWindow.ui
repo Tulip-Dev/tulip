@@ -1427,7 +1427,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionClone_sub_graph">
    <property name="text">
-    <string>Clone sub-graph</string>
+    <string>Create clone sub-graph</string>
    </property>
   </action>
   <action name="actionNew_graph">
