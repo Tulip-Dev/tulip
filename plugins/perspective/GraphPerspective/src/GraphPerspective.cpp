@@ -588,6 +588,7 @@ void GraphPerspective::deleteSelectedElements() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
 
+  graph->push();
   tlp::Iterator<edge>* itEdges = selection->getEdgesEqualTo(true);
   graph->delEdges(itEdges, false);
   delete itEdges;
@@ -603,6 +604,7 @@ void GraphPerspective::invertSelection() {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+  graph->push();
   selection->reverse();
   Observable::unholdObservers();
 }
@@ -611,6 +613,7 @@ void GraphPerspective::cancelSelection() {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+  graph->push();
   selection->setAllEdgeValue(false);
   selection->setAllNodeValue(false);
   Observable::unholdObservers();
@@ -620,6 +623,7 @@ void GraphPerspective::selectAll() {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+  graph->push();
   if (graph == graph->getRoot()) {
     selection->setAllEdgeValue(true);
     selection->setAllNodeValue(true);
@@ -789,7 +793,7 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
     selection->setNodeValue(src,true);
     selection->setNodeValue(tgt,true);
   }
-  Graph* result = graph->addSubGraph(selection);
+  Graph* result = graph->addSubGraph(selection, "selection sub-graph");
   Observable::unholdObservers();
   return result;
 }
@@ -801,17 +805,18 @@ void GraphPerspective::createSubGraph() {
 void GraphPerspective::cloneSubGraph() {
   if (_graphs->currentGraph() == NULL)
     return;
-  tlp::BooleanProperty* prop = new tlp::BooleanProperty(_graphs->currentGraph());
-  prop->setAllNodeValue(true);
-  prop->setAllEdgeValue(true);
-  _graphs->currentGraph()->addSubGraph(prop);
-  delete prop;
+  tlp::BooleanProperty prop(_graphs->currentGraph());
+  prop.setAllNodeValue(true);
+  prop.setAllEdgeValue(true);
+  _graphs->currentGraph()->push();
+  _graphs->currentGraph()->addSubGraph(&prop, "clone sub-graph");
 }
 
 void GraphPerspective::addEmptySubGraph() {
   if (_graphs->currentGraph() == NULL)
     return;
-  _graphs->currentGraph()->addSubGraph();
+  _graphs->currentGraph()->push();
+  _graphs->currentGraph()->addSubGraph(NULL, "empty sub-graph");
 }
 
 void GraphPerspective::currentGraphChanged(Graph *graph) {
