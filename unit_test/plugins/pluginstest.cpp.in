@@ -34,14 +34,16 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 #endif
+  // many plugins are qt dependent so they need a QApplication
+  // which must be created before the call to initTulipLib
+  // to avoid any reset of LC_NUMERIC inited by this call
+  QApplication app(argc, argv);
   tlp::initTulipLib();
   tlp::PluginLoader* pLoader = NULL;
 #ifndef NDEBUG
   tlp::PluginLoaderTxt loader;
   pLoader = &loader;
 #endif
-  // many plugins are qt dependent so they need a QApplication
-  QApplication app(argc, argv);
   tlp::PluginLibraryLoader::loadPlugins(pLoader);   // library side plugins
 
   //CPPUNIT_NS::QtUi::TestRunner runner;
