@@ -37,8 +37,24 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   _ui->setupUi(this);
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
   _ui->algorithmName->setText(pluginName);
-  _ui->parameters->setVisible(false);
-  _ui->parameters->setItemDelegate(new TulipItemDelegate);
+  const Plugin* pInfos = PluginLister::pluginInformations(pluginName.toStdString());
+  std::string infos = pInfos->info();
+  // show infos in tooltip only if it contains more than one word
+  // and does not contain the plugin name
+  if (infos.find(' ') != std::string::npos)
+    _ui->algorithmName->setToolTip(QString("<table><tr><td>%1</td></tr><tr><td>%2</tr></td></table>").arg(pluginName).arg(infos.c_str()));
+  else
+    _ui->algorithmName->setToolTip(pluginName);
+  delete pInfos;
+  // initialize parameters only if needed
+  if (PluginLister::getPluginParameters(pluginName.toStdString()).size() > 0) {
+    _ui->playButton->setToolTip("Apply algorithm using the current settings");
+    _ui->parameters->setVisible(false);
+    _ui->parameters->setItemDelegate(new TulipItemDelegate);
+  } else {
+    _ui->playButton->setToolTip("Apply algorithm");
+    _ui->settingsButton->setVisible(false);
+  }
   setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
 
   static QPixmap cppPix(":/tulip/graphperspective/icons/16/cpp.png");
