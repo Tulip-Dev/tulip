@@ -412,7 +412,7 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
   if (index.column() == 0)
     const_cast<GraphHierarchiesModel*>(this)->_indexCache[graph] = index;
 
-  if (role == Qt::DisplayRole || role == Qt::EditRole || role == Qt::ToolTipRole) {
+  if (role == Qt::DisplayRole || role == Qt::EditRole) {
     if (index.column() == NAME_SECTION)
       return generateName(graph);
     else if (index.column() == ID_SECTION)
@@ -421,6 +421,10 @@ QVariant GraphHierarchiesModel::data(const QModelIndex &index, int role) const {
       return graph->numberOfNodes();
     else if (index.column() == EDGES_SECTION)
       return graph->numberOfEdges();
+  }
+
+  else if (role == Qt::ToolTipRole) {
+    return QString("<table><tr><td>%1</td></tr><tr><td>Id = %2, Nodes = %3, Edges= %4</tr></td></table>").arg(generateName(graph)).arg(graph->getId()).arg(graph->numberOfNodes()).arg(graph->numberOfEdges());
   }
 
   else if (role == GraphRole) {
