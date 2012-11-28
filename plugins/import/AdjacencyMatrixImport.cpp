@@ -93,7 +93,7 @@ public:
 
   bool formatError(const char* s, int curLine) {
     std::stringstream ess;
-    ess <<  "Error parsing '" << s << "' at line :" << curLine;
+    ess <<  "Error parsing '" << s << "' at line :" << curLine + 1;
     pluginProgress->setError(ess.str());
     qWarning() << pluginProgress->getError();
     return false;
@@ -132,8 +132,6 @@ public:
       bool itemFound = false;
       bool andFound = false;
 
-      curLine++;
-
       while (lines.good()) {
         string valString;
         ValType type;
@@ -152,7 +150,7 @@ public:
               return formatError(valString.c_str(), curLine);
 
             type = TLP_AND;
-            curNode--;
+            --curNode;
             andFound = true;
             itemFound = false;
             continue;
@@ -224,7 +222,7 @@ public:
             }
           }
 
-          curNode++;
+          ++curNode;
         }
 
         andFound = false;
@@ -232,9 +230,18 @@ public:
 
       if (andFound)
         return formatError("&", curLine);
+
+      ++curLine;
     }
 
-    return true;
+    // final check:
+    // number of lines must be equal to number of nodes
+    if (curLine == nodes.size())
+      return true;
+
+    pluginProgress->setError(std::string("The number of lines in file ") + name2 + "\n is different from the number of found nodes.");
+    qWarning() << pluginProgress->getError();
+    return false;
   }
 };
 

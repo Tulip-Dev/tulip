@@ -161,7 +161,7 @@ void BasicPluginsTest::testImportFileSystem() {
   CPPUNIT_ASSERT(g == graph);
 }
 //==========================================================
-/*void BasicPluginsTest::testImportAdjacencyMatrix() {
+void BasicPluginsTest::testImportAdjacencyMatrix() {
   DataSet ds;
   ds.set("file::name", string("data/toto.txt"));
   Graph* g = importGraph("Adjacency Matrix", ds, NULL, graph);
@@ -169,7 +169,7 @@ void BasicPluginsTest::testImportFileSystem() {
   ds.set("file::name", string("data/adj_mat.txt"));
   g = importGraph("Adjacency Matrix", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
-  }*/
+}
 //==========================================================
 void BasicPluginsTest::testImportPajek() {
   // test all data/*.net files
