@@ -36,10 +36,12 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )  \
   HTML_HELP_BODY() \
-  "If true the node mesure will be normalized unweight not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2) "  \
-  "If true the node mesure will be normalized unweight directed     : m(n) = c(n) / (#V - 1)(#V - 2) " \
-  "If true the edge mesure will be normalized unweight not directed : m(e) = 2*c(n) / (#V / 2)(#V / 2) "  \
-  "If true the edge mesure will be normalized unweight directed     : m(n) = c(n) / (#V / 2)(#V / 2) " \
+  "If true the node measure will be normalized<br/>" \
+  " - if not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2)<br/>"  \
+  " - if directed     : m(n) = c(n) / (#V - 1)(#V - 2)<br/>"    \
+  "If true the edge measure will be normalized<br/>" \
+  " - if not directed : m(e) = 2*c(e) / (#V / 2)(#V / 2)<br/>"	\
+  " - if directed     : m(e) = c(e) / (#V / 2)(#V / 2)" \
   HTML_HELP_CLOSE()
 };
 
@@ -175,9 +177,8 @@ public:
         //In the undirected case, the metric must be divided by two, then
         if(norm)
           result->setNodeValue(s,result->getNodeValue(s)/((n-1.0)*(n-2.0)));
-        else {
-          if(!directed) result->setNodeValue(s,result->getNodeValue(s)/2.0);
-        }
+	if(!directed)
+	  result->setNodeValue(s,result->getNodeValue(s)/2.0);
       }
 
       delete it;
@@ -187,13 +188,10 @@ public:
       while(itE->hasNext()) {
         edge e = itE->next();
 
-        if(norm) {
-          if(directed)
-            result->setEdgeValue(e,4.0*result->getEdgeValue(e)/(n*n));
-          else
-            result->setEdgeValue(e,2.0*result->getEdgeValue(e)/(n*n));
-        }
-        else if(!directed) result->setEdgeValue(e,result->getEdgeValue(e)/(2.0));
+        if(norm)
+	  result->setEdgeValue(e,4.0*result->getEdgeValue(e)/(n*n));
+	if(!directed)
+	  result->setEdgeValue(e,result->getEdgeValue(e)/(2.0));
       }
 
       delete itE;
