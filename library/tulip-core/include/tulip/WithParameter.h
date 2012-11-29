@@ -317,6 +317,14 @@ struct TLP_SCOPE WithParameter {
                                 bool isMandatory = true) {
     addInParameter<T>(name, help, defaultValue, isMandatory);
   }
+
+  /**
+   * @brief indicates whether the embedded parameters require some user input
+   *
+   * @return true if an input parameter or a property output parameter exists
+   **/
+  bool inputRequired() const;
+  
 protected:
 
   /**
