@@ -161,3 +161,29 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
   }
 }
 
+bool WithParameter::inputRequired() const {
+  ParameterDescription param;
+  forEach(param, parameters.getParameters()) {
+    if (param.getDirection() != OUT_PARAM)
+      return true;
+    const string& type = param.getTypeName();
+    if (type.compare(typeid(tlp::BooleanProperty).name()) == 0)
+      return true;
+    if (type.compare(typeid(tlp::ColorProperty).name()) == 0)
+      return true;
+    if (type.compare(typeid(tlp::DoubleProperty).name()) == 0)
+      return true;
+    if (type.compare(typeid(tlp::IntegerProperty).name()) == 0)
+      return true;
+    if (type.compare(typeid(tlp::LayoutProperty).name()) == 0)
+      return true;
+    if (type.compare(typeid(tlp::SizeProperty).name()) == 0)
+      return true;
+    if (type.compare(typeid(tlp::StringProperty).name()) == 0)
+      return true;
+    if (type.compare(typeid(tlp::PropertyInterface*).name()) == 0)
+      return true;
+  }
+  return false;
+}
+
