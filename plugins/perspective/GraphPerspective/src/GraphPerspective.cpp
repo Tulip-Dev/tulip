@@ -61,7 +61,7 @@
 
 using namespace tlp;
 
-GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(0), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
+GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(NULL), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
   Q_INIT_RESOURCE(GraphPerspective);
 }
 
@@ -125,6 +125,8 @@ void GraphPerspective::log(QtMsgType type, const char* msg) {
 
 GraphPerspective::~GraphPerspective() {
   qInstallMsgHandler(0);
+  if(_ui!=NULL)
+      delete _ui;
 }
 
 void GraphPerspective::logCleared() {
