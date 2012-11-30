@@ -80,7 +80,7 @@ class RandomTree:public ImportModule {
     }
 
 public:
-  PLUGININFORMATIONS("Uniform Random Binary Tree","Auber","16/02/2001","","1.1","Graphs")
+  PLUGININFORMATIONS("Uniform Random Binary Tree","Auber","16/02/2001","","1.1","Graph")
   RandomTree(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<unsigned int>("Minimum size",paramHelp[0],"100");
     addInParameter<unsigned int>("Maximum size",paramHelp[1],"1000");
