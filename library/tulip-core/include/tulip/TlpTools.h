@@ -55,6 +55,25 @@ extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
  */
 TLP_SCOPE std::string demangleTlpClassName(const char *className);
 
+/**
+ * @brief Returns an istream to read from a gzipped file (uses gzstream lib).
+ * The stream has to be deleted after use.
+ * @param name The name of the file to read from.
+ * @param open_mode The mode to open the file with. Defaults to std::ios::in.
+ * @return istream gzipped input stream from a file.
+ */
+TLP_SCOPE std::istream *getIgzstream(const char *name, int open_mode = std::ios::in);
+
+/**
+ * @brief Returns an ostream to write to a gzipped file (uses gzstream lib).
+ * The stream has to be deleted after use.
+ * @warning Don't forget to check the stream with ios::bad()!
+ * @param name The name of the file to write to.
+ * @param open_mode The mode to open the file with. Defaults to std::ios::out.
+ * @return ostream gzipped output stream to a file.
+ */
+TLP_SCOPE std::ostream *getOgzstream(const char *name, int open_mode = std::ios::out);
+
 }
 
 #endif

@@ -25,6 +25,7 @@
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/ParameterListModel.h>
 #include <tulip/ExportModule.h>
+#include <tulip/ImportModule.h>
 #include <tulip/ForEach.h>
 
 #include <tulip/GraphHierarchiesModel.h>
@@ -37,17 +38,17 @@ ExportWizard::ExportWizard(Graph *g, QWidget *parent): QWizard(parent), _ui(new 
   _ui->setupUi(this);
   button(QWizard::FinishButton)->setEnabled(false);
 
-  PluginModel<tlp::ExportModule>* model = new PluginModel<tlp::ExportModule>(_ui->importModules);
+  PluginModel<tlp::ExportModule>* model = new PluginModel<tlp::ExportModule>(_ui->exportModules);
 
-  _ui->importModules->setModel(model);
-  _ui->importModules->setRootIndex(model->index(0, 0));
-  _ui->importModules->expandAll();
-  connect(_ui->importModules->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(algorithmSelected(QModelIndex)));
+  _ui->exportModules->setModel(model);
+  _ui->exportModules->setRootIndex(model->index(0, 0));
+  _ui->exportModules->expandAll();
+  connect(_ui->exportModules->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(algorithmSelected(QModelIndex)));
 
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
   connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
   _ui->parametersList->verticalHeader()->setResizeMode(QHeaderView::Fixed);
-  connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton), SLOT(click()));
+  connect(_ui->exportModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton), SLOT(click()));
 
   _ui->parametersFrame->hide();
   updateFinishButton();
@@ -75,8 +76,8 @@ void ExportWizard::algorithmSelected(const QModelIndex& index) {
 }
 
 QString ExportWizard::algorithm() const {
-  if (_ui->importModules->selectionModel()->hasSelection())
-    return _ui->importModules->selectionModel()->selectedIndexes()[0].data().toString();
+  if (_ui->exportModules->selectionModel()->hasSelection())
+    return _ui->exportModules->selectionModel()->selectedIndexes()[0].data().toString();
 
   return QString::null;
 }
@@ -103,25 +104,59 @@ void ExportWizard::pathChanged(QString s) {
   _ui->algFrame->setEnabled(!s.isEmpty());
   button(QWizard::FinishButton)->setEnabled(!s.isEmpty());
 
-  std::list<std::string> modules = PluginLister::instance()->availablePlugins<ExportModule>();
-  for(std::list<std::string>::iterator it = modules.begin(); it != modules.end(); ++it) {
-    ExportModule* p = PluginLister::instance()->getPluginObject<ExportModule>(*it,NULL);
-    if (s.endsWith(p->fileExtension().c_str())) {
-      selectedExport = it->c_str();
+  std::list<std::string> modules =
+    PluginLister::instance()->availablePlugins<ExportModule>();
+  std::list<std::string> imports =
+    PluginLister::instance()->availablePlugins<ImportModule>();
+  for(std::list<std::string>::iterator itm = modules.begin(); itm != modules.end(); ++itm) {
+    ExportModule* p =
+      PluginLister::instance()->getPluginObject<ExportModule>(*itm,NULL);
+    std::string extension = p->fileExtension();
+    if (s.endsWith(extension.c_str())) {
+      selectedExport = itm->c_str();
       delete p;
       break;
     }
+    // add special case to allow export *.gz
+    extension += ".gz";
+    if (s.endsWith((extension).c_str())) {
+      // look for a corresponding import module supporting the gz extension
+      for(std::list<std::string>::const_iterator it = imports.begin();
+	  it != imports.end(); ++it) {
+	ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
+	std::list<std::string> extensions(m->fileExtensions());
+	for(std::list<std::string>::const_iterator ite = extensions.begin();
+	    ite != extensions.end(); ++ite) {
+	  if (extension == *ite) {
+	    // found it
+	    selectedExport = itm->c_str();
+	    break;
+	  }
+	}
+	delete m;
+	if (selectedExport != NULL) {
+	  break;
+	}
+      }
+      if (selectedExport != NULL) {
+	break;
+	delete p;
+      }
+    }
+
     delete p;
   }
 
-  if (selectedExport.isNull())
+  if (selectedExport.isNull()) {
+    _ui->exportModules->clearSelection();
     return;
+  }
 
-  PluginModel<tlp::ExportModule>* model = static_cast<PluginModel<tlp::ExportModule>*>(_ui->importModules->model());
-  QModelIndexList results = model->match(_ui->importModules->rootIndex(), Qt::DisplayRole, selectedExport, 1, Qt::MatchExactly | Qt::MatchRecursive);
+  PluginModel<tlp::ExportModule>* model = static_cast<PluginModel<tlp::ExportModule>*>(_ui->exportModules->model());
+  QModelIndexList results = model->match(_ui->exportModules->rootIndex(), Qt::DisplayRole, selectedExport, 1, Qt::MatchExactly | Qt::MatchRecursive);
   if (results.size()==0)
     return;
-  _ui->importModules->setCurrentIndex(results[0]);
+  _ui->exportModules->setCurrentIndex(results[0]);
 }
 
 void ExportWizard::browseButtonClicked() {

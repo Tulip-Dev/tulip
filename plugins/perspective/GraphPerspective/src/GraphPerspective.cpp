@@ -26,6 +26,7 @@
 #include <QtGui/QDropEvent>
 #include <QtCore/QUrl>
 
+#include <tulip/TlpTools.h>
 #include <tulip/ImportModule.h>
 #include <tulip/Graph.h>
 #include <tulip/ExportModule.h>
@@ -349,18 +350,25 @@ void GraphPerspective::exportGraph(Graph* g) {
   if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() || wizard.outputFile().isEmpty())
     return;
 
-  std::fstream os;
-  os.open(wizard.outputFile().toUtf8().data(),std::fstream::out);
+  std::ostream *os;
+  std::string filename = wizard.outputFile().toUtf8().data();
 
-  if (!os.is_open()) {
+  if (filename.rfind(".gz") == (filename.length() - 3))
+    os = tlp::getOgzstream(filename.c_str());
+  else
+    os = new std::ofstream(filename.c_str());
+
+  if (os->fail()) {
     QMessageBox::critical(_mainWindow,trUtf8("File error"),trUtf8("Cannot open output file for writing: ") + wizard.outputFile());
+    delete os;
     return;
   }
 
   DataSet data = wizard.parameters();
   PluginProgress* prg = progress(NoProgressOption);
-  bool result = tlp::exportGraph(g,os,wizard.algorithm().toStdString(),data,prg);
-
+  bool result = tlp::exportGraph(g,*os,wizard.algorithm().toStdString(),data,prg);
+  delete os;
+  
   if (!result) {
     QMessageBox::critical(_mainWindow,trUtf8("Export error"),trUtf8("Failed to export to format") + wizard.algorithm());
   }
