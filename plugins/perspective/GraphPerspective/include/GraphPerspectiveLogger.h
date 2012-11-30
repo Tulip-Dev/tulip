@@ -39,7 +39,7 @@ class GraphPerspectiveLogger: public QFrame {
   QString iconForType(QtMsgType);
 public:
   GraphPerspectiveLogger(QWidget* parent = NULL);
-
+  ~GraphPerspectiveLogger();
   QPixmap icon();
   unsigned int count() const;
   void log(QtMsgType,const char*);

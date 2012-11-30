@@ -37,6 +37,7 @@
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/Interactor.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
+#include <tulip/GlCompositeHierarchyManager.h>
 
 using namespace tlp;
 using namespace std;
@@ -111,7 +112,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   gridParameters.add<bool>("Z grid","","true",false);
   ParameterListModel* model = new ParameterListModel(gridParameters,NULL,this);
 
-  Ui::GridOptionsWidget* ui = new Ui::GridOptionsWidget;
+  Ui::GridOptionsWidget* ui = new Ui::GridOptionsWidget; //ui never deleted => memory leak!
   _gridOptions = new QDialog(graphicsView());
   ui->setupUi(_gridOptions);
   ui->tableView->setModel(model);

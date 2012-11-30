@@ -35,7 +35,7 @@ class PythonPluginCreationDialog : public QDialog  {
 public:
 
   PythonPluginCreationDialog(QWidget *parent = 0);
-
+  ~PythonPluginCreationDialog();
   QString getPluginFileName() const;
 
   QString getPluginType() const;

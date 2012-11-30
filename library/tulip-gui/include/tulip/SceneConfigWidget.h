@@ -23,7 +23,6 @@
 #define SCENECONFIGWIDGET_H
 
 #include <QtGui/QWidget>
-#include <QtGui/QAbstractButton>
 #include <tulip/tulipconf.h>
 
 namespace Ui {
@@ -43,6 +42,7 @@ class TLP_QT_SCOPE SceneConfigWidget : public QWidget {
 
 public:
   explicit SceneConfigWidget(QWidget *parent = NULL);
+  ~SceneConfigWidget();
 
 signals:
   void settingsApplied();

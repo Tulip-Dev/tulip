@@ -47,6 +47,7 @@ class PythonPluginsIDE : public QWidget {
 public :
 
     explicit PythonPluginsIDE(QWidget *parent = 0);
+    ~PythonPluginsIDE();
 
     void setProject(tlp::TulipProject *project);
 

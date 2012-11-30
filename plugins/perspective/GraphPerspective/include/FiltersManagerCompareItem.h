@@ -79,6 +79,7 @@ class FiltersManagerCompareItem: public AbstractFiltersManagerItem {
 
 public:
   explicit FiltersManagerCompareItem(QWidget* parent = NULL);
+  ~FiltersManagerCompareItem();
   void applyFilter(tlp::BooleanProperty*);
   QString title() const;
 

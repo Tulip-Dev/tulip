@@ -45,6 +45,10 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new 
   _ui->labelsShowAllLabel->installEventFilter(this);
 }
 
+SceneConfigWidget::~SceneConfigWidget() {
+    delete _ui;
+}
+
 void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
   if (_glMainWidget != NULL)
     disconnect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));

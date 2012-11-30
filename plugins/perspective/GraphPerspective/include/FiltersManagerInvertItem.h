@@ -31,6 +31,7 @@ class FiltersManagerInvertItem: public AbstractFiltersManagerItem {
   Ui::FiltersManagerInvertItem* _ui;
 public:
   explicit FiltersManagerInvertItem(QWidget* parent = NULL);
+  ~FiltersManagerInvertItem();
   void applyFilter(tlp::BooleanProperty*);
   QString title() const;
 };

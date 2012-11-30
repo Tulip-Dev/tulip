@@ -335,13 +335,13 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     if(currentSpecInteractorComponent->eventFilter(widget,e))
       return true;
   }
-
+  GlMainWidget *glmainwidget = static_cast<GlMainWidget *>(widget);
   if (e->type() == QEvent::MouseButtonPress) {
     if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
-      oldCursor=((QWidget*)widget)->cursor();
+      oldCursor=glmainwidget->cursor();
       InteractorComponent *currentMouse;
       // give focus so we can catch key events
-      ((GlMainWidget *)widget)->setFocus();
+      glmainwidget->setFocus();
 
       if (((QMouseEvent *) e)->modifiers() &
 #if defined(__APPLE__)
@@ -355,7 +355,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
         currentMouse = new MouseRotXRotY();
       else {
         currentMouse = new MouseMove();
-        ((QWidget*)widget)->setCursor(QCursor(Qt::ClosedHandCursor));
+        glmainwidget->setCursor(QCursor(Qt::ClosedHandCursor));
       }
 
       bool result = currentMouse->eventFilter(widget, e);
@@ -370,62 +370,62 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonRelease) {
-    ((QWidget*)widget)->setCursor(oldCursor);
-    delete currentSpecInteractorComponent;
-    currentSpecInteractorComponent=NULL;
-    return true;
+      glmainwidget->setCursor(oldCursor);
+      delete currentSpecInteractorComponent;
+      currentSpecInteractorComponent=NULL;
+      return true;
   }
 
   if (e->type() == QEvent::KeyPress) {
     int delta = (((QKeyEvent *) e)->isAutoRepeat() ? 3 : 1);
-    GlMainWidget *g = (GlMainWidget *) widget;
+
 
     switch(((QKeyEvent *) e)->key()) {
     case Qt::Key_Left:
-      g->getScene()->translateCamera(delta * 2,0,0);
+      glmainwidget->getScene()->translateCamera(delta * 2,0,0);
       break;
 
     case Qt::Key_Right:
-      g->getScene()->translateCamera(-1 * delta * 2,0,0);
+      glmainwidget->getScene()->translateCamera(-1 * delta * 2,0,0);
       break;
 
     case Qt::Key_Up:
-      g->getScene()->translateCamera(0,-1 * delta * 2,0);
+      glmainwidget->getScene()->translateCamera(0,-1 * delta * 2,0);
       break;
 
     case Qt::Key_Down:
-      g->getScene()->translateCamera(0,delta * 2,0);
+      glmainwidget->getScene()->translateCamera(0,delta * 2,0);
       break;
 
     case Qt::Key_PageUp:
-      g->getScene()->zoom(delta);
+      glmainwidget->getScene()->zoom(delta);
       break;
 
     case Qt::Key_PageDown:
-      g->getScene()->zoom(-1 * delta);
+      glmainwidget->getScene()->zoom(-1 * delta);
       break;
 
     case Qt::Key_Home:
-      g->getScene()->translateCamera(0,0,-1 * delta * 2);
+      glmainwidget->getScene()->translateCamera(0,0,-1 * delta * 2);
       break;
 
     case Qt::Key_End:
-      g->getScene()->translateCamera(0,0,delta * 2);
+      glmainwidget->getScene()->translateCamera(0,0,delta * 2);
       break;
 
     case Qt::Key_Insert:
-      g->getScene()->rotateScene(0,0,-1 * delta * 2);
+      glmainwidget->getScene()->rotateScene(0,0,-1 * delta * 2);
       break;
 
     case Qt::Key_Delete :
-      g->getScene()->rotateScene(0,0,delta * 2);
+     glmainwidget->getScene()->rotateScene(0,0,delta * 2);
       break;
 
     default:
       return false;
     }
 
-    g->draw();
+    glmainwidget->draw();
     return true;
   }
 

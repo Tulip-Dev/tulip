@@ -69,6 +69,10 @@ ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale& colorScale,
   setColorScale(colorScale);
 }
 
+ColorScaleConfigDialog::~ColorScaleConfigDialog() {
+    delete _ui;
+}
+
 void ColorScaleConfigDialog::accept() {
   vector<Color> colors;
   bool gradient = true;

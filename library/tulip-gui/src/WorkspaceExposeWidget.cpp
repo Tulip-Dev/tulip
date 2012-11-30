@@ -19,7 +19,7 @@
 
 #include "tulip/WorkspaceExposeWidget.h"
 
-#include <math.h>
+#include <cmath>
 
 #include <QtCore/QEvent>
 #include <QtCore/QDebug>

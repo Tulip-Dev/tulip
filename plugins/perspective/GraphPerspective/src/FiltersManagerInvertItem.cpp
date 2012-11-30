@@ -30,6 +30,12 @@ FiltersManagerInvertItem::FiltersManagerInvertItem(QWidget* parent): AbstractFil
   _ui->setupUi(this);
   connect(_ui->elementCombo,SIGNAL(currentIndexChanged(int)),this,SIGNAL(titleChanged()));
 }
+
+FiltersManagerInvertItem::~FiltersManagerInvertItem() {
+    delete _ui;
+}
+
+
 void FiltersManagerInvertItem::applyFilter(BooleanProperty* prop) {
   int i = _ui->elementCombo->currentIndex();
 

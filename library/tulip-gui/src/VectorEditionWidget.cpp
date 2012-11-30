@@ -30,6 +30,10 @@ VectorEditionWidget::VectorEditionWidget(QWidget *parent): QWidget(parent), _ui(
   _ui->list->setItemDelegate(new TulipItemDelegate(_ui->list));
 }
 
+VectorEditionWidget::~VectorEditionWidget() {
+    delete _ui;
+}
+
 void VectorEditionWidget::setVector(const QVector<QVariant> &d, int userType) {
   _userType = userType;
   _ui->list->clear();

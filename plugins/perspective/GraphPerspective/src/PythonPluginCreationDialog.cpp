@@ -37,6 +37,10 @@ PythonPluginCreationDialog::PythonPluginCreationDialog(QWidget *parent) : QDialo
   _ui->date->setText(currentDate.toString("dd/MM/yyyy"));
 }
 
+PythonPluginCreationDialog::~PythonPluginCreationDialog() {
+    delete _ui;
+}
+
 void PythonPluginCreationDialog::validateForm() {
   if (_ui->pluginFileName->text().isEmpty()) {
     QMessageBox::critical(this, "Error", "No file has been selected to save the plugin source code.");

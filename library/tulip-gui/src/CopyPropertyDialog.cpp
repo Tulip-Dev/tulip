@@ -64,6 +64,10 @@ CopyPropertyDialog::CopyPropertyDialog(QWidget* parent)
   checkValidity();
 }
 
+CopyPropertyDialog::~CopyPropertyDialog() {
+    delete ui;
+}
+
 void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source) {
   _graph = graph;
   _source = source;

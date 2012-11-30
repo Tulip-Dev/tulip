@@ -47,6 +47,11 @@ FiltersManagerAlgorithmItem::FiltersManagerAlgorithmItem(QWidget* parent): Abstr
 
   updateGraphModel(_ui->algorithmParams,QString::null,_graph);
 }
+
+FiltersManagerAlgorithmItem::~FiltersManagerAlgorithmItem(){
+    delete _ui;
+}
+
 void FiltersManagerAlgorithmItem::algorithmSelected(int i) {
   _ui->algorithmParams->setEnabled(i != 0);
   QString algName = QString::null;

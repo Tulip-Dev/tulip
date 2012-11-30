@@ -18,7 +18,7 @@
  */
 #include "tulip/Workspace.h"
 
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <string>

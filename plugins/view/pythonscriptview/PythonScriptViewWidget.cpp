@@ -106,6 +106,10 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
 
 }
 
+PythonScriptViewWidget::~PythonScriptViewWidget(){
+    delete _ui;
+}
+
 void PythonScriptViewWidget::resizeEvent(QResizeEvent *e) {
   QWidget::resizeEvent(e);
   resizeToolBars();

@@ -38,6 +38,7 @@ class TLP_QT_SCOPE VectorEditionWidget:public QWidget {
 
 public:
   explicit VectorEditionWidget(QWidget* parent=0);
+  ~VectorEditionWidget();
   void setVector(const QVector<QVariant>& d, int userType);
   QVector<QVariant> vector() const;
 
