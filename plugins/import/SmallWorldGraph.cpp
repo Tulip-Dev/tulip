@@ -68,7 +68,7 @@ const char * paramHelp[] = {
  */
 class SmallWorldGraph:public ImportModule {
 public:
-  PLUGININFORMATIONS("Grid Approximation","Auber","25/06/2002","","1.0","Graphs")
+  PLUGININFORMATIONS("Grid Approximation","Auber","25/06/2002","","1.0","Graph")
   SmallWorldGraph(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<unsigned int>("nodes",paramHelp[0],"200");
     addInParameter<unsigned int>("degree",paramHelp[1],"10");

@@ -73,7 +73,7 @@ const char
  */
 class Grid: public ImportModule {
 public:
-  PLUGININFORMATIONS("Grid","Jonathan Dubois","02/12/2003","","2.0","Graphs")
+  PLUGININFORMATIONS("Grid","Jonathan Dubois","02/12/2003","","2.0","Graph")
   Grid(tlp::PluginContext* context) :
     ImportModule(context) {
     addInParameter<unsigned int> ("width", paramHelp[0], "10");
