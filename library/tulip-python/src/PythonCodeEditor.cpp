@@ -243,6 +243,10 @@ FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent) : 
   connect(_ui->textToFind, SIGNAL(textChanged(const QString &)), this, SLOT(textToFindChanged()));
 }
 
+FindReplaceDialog::~FindReplaceDialog() {
+    delete _ui;
+}
+
 void FindReplaceDialog::setTextToFind(const QString &text) {
   _ui->textToFind->setText(text);
 }

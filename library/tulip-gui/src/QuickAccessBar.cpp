@@ -104,6 +104,7 @@ QuickAccessBar::~QuickAccessBar() {
     delete _captions[2];
     delete _captions[3];
   }
+  delete _ui;
 }
 
 void QuickAccessBar::setGlMainView(GlMainView* v) {

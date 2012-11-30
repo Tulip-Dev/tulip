@@ -25,7 +25,6 @@
 #include <tulip/ColorScale.h>
 
 #include <QtGui/QDialog>
-#include <QtCore/QString>
 
 namespace Ui {
 class ColorScaleDialog;
@@ -43,6 +42,7 @@ class TLP_QT_SCOPE ColorScaleConfigDialog : public QDialog {
 
 public :
   ColorScaleConfigDialog(const ColorScale &colorScale = ColorScale(), QWidget *parent = NULL);
+  ~ColorScaleConfigDialog();
   void setColorScale(const ColorScale &colorScale);
   ColorScale getColorScale() const;
 

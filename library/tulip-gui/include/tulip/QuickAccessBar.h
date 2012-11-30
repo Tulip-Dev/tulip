@@ -23,9 +23,11 @@
 #define QUICKACCESSBAR_H
 
 #include <QtGui/QWidget>
-#include <tulip/tulipconf.h>
-#include <tulip/ScrollPopupButton.h>
+
 #include <tulip/CaptionItem.h>
+#include <tulip/tulipconf.h>
+
+class QGraphicsItem;
 
 namespace Ui {
 class QuickAccessBar;

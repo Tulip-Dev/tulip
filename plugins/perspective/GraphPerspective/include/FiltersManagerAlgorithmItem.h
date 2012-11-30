@@ -31,6 +31,7 @@ class FiltersManagerAlgorithmItem: public AbstractFiltersManagerItem {
   Ui::FiltersManagerAlgorithmItem* _ui;
 public:
   explicit FiltersManagerAlgorithmItem(QWidget* parent = NULL);
+  ~FiltersManagerAlgorithmItem();
   void applyFilter(tlp::BooleanProperty*);
   QString title() const;
 protected slots:

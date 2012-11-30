@@ -21,6 +21,10 @@ PythonPanel::PythonPanel(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonP
     tlp::PythonInterpreter::getInstance()->runString(setCurrentGraphFunction);
 }
 
+PythonPanel::~PythonPanel(){
+    delete _ui;
+}
+
 QAbstractScrollArea *PythonPanel::consoleWidget() {
     return _ui->consoleWidget;
 }

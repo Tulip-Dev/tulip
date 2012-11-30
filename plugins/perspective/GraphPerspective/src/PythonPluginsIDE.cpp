@@ -218,6 +218,9 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
     connect(_ui->pluginsTabWidget, SIGNAL(tabAboutToBeDeleted(int)), this, SLOT(closePluginTabRequested(int)));
 }
 
+PythonPluginsIDE::~PythonPluginsIDE() {
+    delete _ui;
+}
 
 int PythonPluginsIDE::addModuleEditor(const QString &fileName) {
     return _ui->modulesTabWidget->addEditor(fileName);

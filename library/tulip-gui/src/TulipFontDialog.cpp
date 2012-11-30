@@ -43,6 +43,10 @@ TulipFontDialog::TulipFontDialog(QWidget *parent): QDialog(parent), _ui(new Ui::
 
 }
 
+TulipFontDialog::~TulipFontDialog() {
+    delete _ui;
+}
+
 TulipFont TulipFontDialog::font() const {
   TulipFont result;
   result.setFontName(_ui->nameList->currentItem()->text());

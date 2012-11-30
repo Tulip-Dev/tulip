@@ -27,7 +27,7 @@ class PythonPanel : public QWidget {
 public :
 
     explicit PythonPanel(QWidget *parent = 0);
-
+    ~PythonPanel();
     void setModel(tlp::GraphHierarchiesModel* model);
 
     void setPanelButton(OutputPanelButton *button);

@@ -64,6 +64,7 @@ class TLP_QT_SCOPE CopyPropertyDialog : public QDialog {
   Q_OBJECT
 public:
   CopyPropertyDialog(QWidget *parent = NULL);
+  ~CopyPropertyDialog();
 
   /**
     * @brief Init dialog with required parameters. To make the copy this dialog need to have a valid source property and destination graph.

@@ -33,7 +33,7 @@ using namespace std;
 using namespace tlp;
 
 MouseShowElementInfos::MouseShowElementInfos() {
-  Ui::ElementInformationsWidget* ui = new Ui::ElementInformationsWidget;
+  Ui::ElementInformationsWidget* ui = new Ui::ElementInformationsWidget; //memory leak: ui never deleted
   _informationsWidget=new QWidget();
   _informationsWidget->installEventFilter(this);
   ui->setupUi(_informationsWidget);
