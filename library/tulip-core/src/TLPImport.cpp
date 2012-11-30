@@ -22,8 +22,6 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#include <gzstream.h>
-
 #include <tulip/GraphAbstract.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
@@ -1041,7 +1039,7 @@ public:
       size=infoEntry.st_size;
 
       if (filename.rfind(".gz") == (filename.length() - 3)) {
-        input = new igzstream(filename.c_str(), std::ios::in);
+        input = tlp::getIgzstream(filename.c_str());
         size *= 4;
       }
       else

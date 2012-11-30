@@ -138,7 +138,7 @@ border: 0px;
            </widget>
           </item>
           <item>
-           <widget class="QTreeView" name="importModules">
+           <widget class="QTreeView" name="exportModules">
             <property name="styleSheet">
              <string notr="true"> QTreeView::branch {
  border-image: url(none.png) 0;

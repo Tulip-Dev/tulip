@@ -20,9 +20,8 @@
 #include <iomanip>
 #include <fstream>
 
-#include <gzstream.h>
-
 #include <tulip/ForEach.h>
+#include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
 #include <tulip/BooleanProperty.h>
@@ -121,7 +120,7 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
   ostream *os;
 
   if (filename.rfind(".gz") == (filename.length() - 3))
-    os = new ogzstream(filename.c_str(), std::ios::out);
+    os =  tlp::getOgzstream(filename.c_str());
   else
     os = new ofstream(filename.c_str());
 

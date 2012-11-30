@@ -238,3 +238,13 @@ std::string tlp::demangleTlpClassName(const char* className) {
 #else
 #error define symbols demangling function
 #endif
+
+//=========================================================
+std::istream *tlp::getIgzstream(const char *name, int open_mode) {
+  return new igzstream(name, open_mode);
+}
+
+std::ostream *tlp::getOgzstream(const char *name, int open_mode) {
+  return new ogzstream(name, open_mode);
+}
+
