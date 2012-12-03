@@ -84,6 +84,10 @@ protected slots:
   void showSystemProperties(bool);
   void setAllNodes();
   void setAllEdges();
+  void displayedPropertiesInserted(const QModelIndex &parent, int start,
+				   int end);
+  void displayedPropertiesRemoved(const QModelIndex &parent, int start,
+				  int end);
 };
 
 #endif // PROPERTIESEDITOR_H
