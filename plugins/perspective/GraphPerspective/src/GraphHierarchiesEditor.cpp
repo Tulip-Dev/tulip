@@ -109,8 +109,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
 void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
   if (!index.isValid() || index.internalPointer() == NULL)
     return;
-
-  _contextGraph = (tlp::Graph*)index.internalPointer();
+  _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
   _model->setCurrentGraph(_contextGraph);
   createPanel();
   _contextGraph = NULL;
