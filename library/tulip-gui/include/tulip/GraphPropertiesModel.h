@@ -109,7 +109,7 @@ public:
       if (prop != NULL) {
         int row = rowOf(prop);
         beginRemoveRows(QModelIndex(),row,row);
-        _properties.remove(row);
+        _properties.remove(_properties.indexOf(prop));
         _removingRows = true;
       }
     }

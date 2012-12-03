@@ -115,6 +115,7 @@ void GraphPerspective::addRecentDocument(const QString& path) {
 }
 
 void graphPerspectiveLogger(QtMsgType type, const char* msg) {
+  std::cerr << msg << std::endl;
   static_cast<GraphPerspective*>(Perspective::instance())->log(type,msg);
 }
 void GraphPerspective::log(QtMsgType type, const char* msg) {

@@ -100,8 +100,11 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   bool enabled = true;
   foreach(PropertyInterface* pi, _contextPropertyList) {
     if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str())) {
-      enabled = false;
-      break;
+      // Enable deletion of reserved properties when on a subgraph and that properties are local
+      if (_graph == _graph->getRoot() || !_graph->existLocalProperty(pi->getName())) {
+        enabled = false;
+        break;
+      }
     }
   }
   delAction->setEnabled(enabled);
