@@ -39,6 +39,7 @@ class GraphHierarchiesEditor : public QWidget {
   tlp::Graph* _contextGraph;
   QModelIndex _contextIndex;
   QAbstractButton* _linkButton;
+  tlp::GraphHierarchiesModel* _model;
 
 public:
   explicit GraphHierarchiesEditor(QWidget *parent = NULL);
