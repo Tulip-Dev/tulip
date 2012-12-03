@@ -25,6 +25,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QTextDocument>
 #include <QtGui/QToolButton>
+#include <QtGui/QSortFilterProxyModel>
 
 #include <tulip/Perspective.h>
 #include <tulip/BooleanProperty.h>
@@ -63,7 +64,9 @@ bool GraphHierarchiesEditor::synchronized() const {
 }
 
 void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
-  _ui->hierarchiesTree->setModel(model);
+  QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(_ui->hierarchiesTree);
+  proxyModel->setSourceModel(model);
+  _ui->hierarchiesTree->setModel(proxyModel);
   _ui->hierarchiesTree->header()->resizeSection(0,100);
   resizeFirstColumnToContent();
   connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(resizeFirstColumnToContent()));
