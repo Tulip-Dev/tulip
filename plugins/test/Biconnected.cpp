@@ -22,7 +22,7 @@
 
 class BiconnectedTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATIONS("Is Biconnected", "Tulip team", "18/04/2012", "Tests whether a graph is biconnected or not.", "1.0", "Topological Test")
+  PLUGININFORMATIONS("Biconnected", "Tulip team", "18/04/2012", "Tests whether a graph is biconnected or not.", "1.0", "Topological Test")
   BiconnectedTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 

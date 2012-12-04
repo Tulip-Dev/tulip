@@ -22,7 +22,7 @@
 
 class AcyclicTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATIONS("Is Acyclic", "Tulip team", "18/04/2012", "Tests whether a graph is acyclic or not.", "1.0", "Topological Test")
+  PLUGININFORMATIONS("Acyclic", "Tulip team", "18/04/2012", "Tests whether a graph is acyclic or not.", "1.0", "Topological Test")
   AcyclicTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
