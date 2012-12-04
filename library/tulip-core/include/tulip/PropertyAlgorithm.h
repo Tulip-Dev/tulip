@@ -27,7 +27,7 @@ namespace tlp {
 class PluginContext;
 
 class BooleanProperty;
-static const std::string BOOLEAN_ALGORITHM_CATEGORY = QObject::trUtf8("Filtering").toStdString();
+static const std::string BOOLEAN_ALGORITHM_CATEGORY = QObject::trUtf8("Selection").toStdString();
 
 /**
  * @ingroup Plugins
@@ -60,7 +60,7 @@ public:
 };
 
 class DoubleProperty;
-static const std::string DOUBLE_ALGORITHM_CATEGORY = QObject::trUtf8("Metric").toStdString();
+static const std::string DOUBLE_ALGORITHM_CATEGORY = QObject::trUtf8("Measure").toStdString();
 
 /**
  * @ingroup Plugins
@@ -77,7 +77,7 @@ public:
 };
 
 class IntegerProperty;
-static const std::string INTEGER_ALGORITHM_CATEGORY = QObject::trUtf8("Metric").toStdString();
+static const std::string INTEGER_ALGORITHM_CATEGORY = QObject::trUtf8("Measure").toStdString();
 
 /**
  * @ingroup Plugins
