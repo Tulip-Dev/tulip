@@ -136,6 +136,11 @@ bool MouseShowElementInfos::pick(int x, int y, SelectedEntity &selectedEntity) {
 }
 
 void MouseShowElementInfos::viewChanged(View * view) {
+  if (view == NULL) {
+    _view = NULL;
+    return;
+  }
+
   ViewWidget *viewWidget=dynamic_cast<ViewWidget*>(view);
   assert(viewWidget);
   _view=viewWidget;
