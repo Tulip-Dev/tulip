@@ -118,8 +118,8 @@ void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
 void GraphHierarchiesEditor::addSubGraph() {
   if (_contextGraph == NULL)
     return;
-
-  _contextGraph->addSubGraph();
+  _contextGraph->push();
+  _contextGraph->addSubGraph("empty sub-graph");
 }
 
 void GraphHierarchiesEditor::cloneSubGraph() {
@@ -129,7 +129,8 @@ void GraphHierarchiesEditor::cloneSubGraph() {
   tlp::BooleanProperty* prop = new tlp::BooleanProperty(_contextGraph);
   prop->setAllNodeValue(true);
   prop->setAllEdgeValue(true);
-  _contextGraph->addSubGraph(prop);
+  _contextGraph->push();
+  _contextGraph->addSubGraph(prop,"clone sub-graph");
   delete prop;
 }
 
