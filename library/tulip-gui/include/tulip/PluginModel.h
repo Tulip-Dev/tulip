@@ -115,6 +115,7 @@ class PluginModel : public tlp::TulipModel {
       std::string name = *it;
       const Plugin* plugin = PluginLister::instance()->pluginInformations(name);
       pluginTree[plugin->category().c_str()][plugin->group().c_str()].append(name.c_str());
+      delete plugin;
     }
 
     foreach(QString cat, pluginTree.keys()) {
