@@ -41,7 +41,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   std::string infos = plugin->info();
   // show infos in tooltip only if it contains more than one word
   if (infos.find(' ') != std::string::npos)
-    _ui->algorithmName->setToolTip(QString("<table><tr><td>%1</td></tr><tr><td>%2</tr></td></table>").arg(pluginName).arg(infos.c_str()));
+    _ui->algorithmName->setToolTip(QString("<table><tr><td>%1 :</td></tr><tr><td><i>%2</td></tr></table>").arg(pluginName).arg(infos.c_str()));
   else
     _ui->algorithmName->setToolTip(pluginName);
   // initialize parameters only if needed
