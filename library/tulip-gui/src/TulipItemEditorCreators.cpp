@@ -89,35 +89,22 @@ QVariant ColorEditorCreator::editorData(QWidget *editor,tlp::Graph*) {
   BooleanEditorCreator
 */
 QWidget* BooleanEditorCreator::createWidget(QWidget* parent) const {
-  return new QCheckBox(parent);
+  return new QComboBox(parent);
 }
 
-QRect checkRect(const QStyleOptionViewItem &option,const QRect& bounding, QWidget* widget) {
-  QStyleOptionButton opt;
-  opt.QStyleOption::operator=(option);
-  opt.rect = bounding;
-  QStyle *style = widget ? widget->style() : QApplication::style();
-  return style->subElementRect(QStyle::SE_ViewItemCheckIndicator, &opt, widget);
-}
-
-bool BooleanEditorCreator::paint(QPainter *p, const QStyleOptionViewItem &option, const QVariant &variant) const {
-  TulipItemEditorCreator::paint(p,option,variant);
-  QCheckBox cb;
-  QStyleOptionViewItem opt(option);
-  opt.rect = checkRect(option,option.rect,&cb);
-  opt.state |= variant.toBool() ? QStyle::State_On : QStyle::State_Off;
-  opt.state = opt.state & ~QStyle::State_HasFocus;
-  QStyle* style = cb.style();
-  style->drawPrimitive(QStyle::PE_IndicatorViewItemCheck,&opt,p,&cb);
-  return true;
-}
-
-void BooleanEditorCreator::setEditorData(QWidget* editor, const QVariant &data, bool, tlp::Graph*) {
-  static_cast<QCheckBox*>(editor)->setChecked(!data.toBool());
+void BooleanEditorCreator::setEditorData(QWidget* editor, const QVariant &v, bool, tlp::Graph*) {
+  QComboBox* cb = static_cast<QComboBox*>(editor);
+  cb->addItem("false");
+  cb->addItem("true");
+  cb->setCurrentIndex(v.toBool() ? 1 : 0);
 }
 
 QVariant BooleanEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
-  return static_cast<QCheckBox*>(editor)->isChecked();
+  return static_cast<QComboBox*>(editor)->currentIndex() == 1;
+}
+
+QString BooleanEditorCreator::displayText(const QVariant& v) const {
+  return v.toBool() ? "true" : "false";
 }
 
 /*
