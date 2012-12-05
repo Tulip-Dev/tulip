@@ -73,9 +73,9 @@ public:
 class TLP_QT_SCOPE BooleanEditorCreator: public TulipItemEditorCreator {
 public:
   virtual QWidget* createWidget(QWidget*) const;
-  virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant &) const;
   virtual void setEditorData(QWidget*,const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
+  virtual QString displayText(const QVariant &) const;
 };
 
 class TLP_QT_SCOPE CoordEditorCreator: public StringDisplayEditorCreator<tlp::PointType> {
