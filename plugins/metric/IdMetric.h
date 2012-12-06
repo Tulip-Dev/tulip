@@ -29,7 +29,7 @@
  */
 class IdMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Id","David Auber","06/04/2000","Alpha","1.0","Misc")
+  PLUGININFORMATIONS("Id","David Auber","06/04/2000","Assigns their Tulip id to nodes adn edges.","1.0","Misc")
   IdMetric(const tlp::PluginContext* context);
   bool run();
 };

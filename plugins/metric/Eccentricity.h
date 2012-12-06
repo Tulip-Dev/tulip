@@ -48,7 +48,7 @@
  */
 class EccentricityMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Eccentricity","Auber/Munzner","18/06/2004","Alpha","2.0","Graph")
+  PLUGININFORMATIONS("Eccentricity","Auber/Munzner","18/06/2004","Computes the eccentricity/closeness centrality of each node.","2.0","Graph")
   EccentricityMetric(const tlp::PluginContext* context);
   ~EccentricityMetric();
   bool run();

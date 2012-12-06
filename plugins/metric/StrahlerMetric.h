@@ -30,8 +30,8 @@ struct Strahler {
 
 /** \addtogroup metric */
 
-/** This plugin is an implementation of the Strahler Parameter.
- *  algorithm first published as:
+/** This plugin is an implementation of the Strahler numbers computation,
+ *  first published as:
  *
  *  A.N. Strahler, \n
  *  "Hypsomic analysis of erosional topography",\n
@@ -50,13 +50,13 @@ struct Strahler {
  *  the algorithm automatically choose the nodes with higher outdegree as
  *  starting nodes.
  *
- *  The algorithm use the (bool)"viewSelection" property to determine
+ *  The algorithm use the "viewSelection" boolean property to determine
  *  the starting nodes.
  *
  */
 class StrahlerMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Strahler","David Auber","06/04/2000","Alpha","1.0","Graph")
+  PLUGININFORMATIONS("Strahler","David Auber","06/04/2000","Computes the Strahler numbers.","1.0","Graph")
   StrahlerMetric(const tlp::PluginContext* context);
   bool run();
   bool check(std::string &);
