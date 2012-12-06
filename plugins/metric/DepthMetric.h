@@ -32,7 +32,7 @@
  */
 class DepthMetric :public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Depth","David Auber","15/02/2001","Alpha","1.1","Tree")
+  PLUGININFORMATIONS("Depth","David Auber","15/02/2001","Compute for each node n on an acyclic graph,\nthe maximum path-length between n and the other node.","1.1","Hierarchical")
   DepthMetric(const tlp::PluginContext* context);
   bool run();
   bool check(std::string &);
