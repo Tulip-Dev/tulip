@@ -206,7 +206,7 @@ using namespace tlp;
  */
 class BiconnectedComponent:public DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Biconnected Component","David Auber","03/01/2005","Alpha","1.0","Component")
+  PLUGININFORMATIONS("Biconnected Component","David Auber","03/01/2005","Implements a biconnected component decomposition.","1.0","Component")
   BiconnectedComponent(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
   bool run() {
     MutableContainer<int> compo;

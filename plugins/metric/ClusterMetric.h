@@ -23,8 +23,7 @@
 
 /** \addtogroup metric */
 
-/** This plugin is an implementation of the Algorithm Parameter.
- *  algorithm published in :
+/** This plugin computes the Cluster metric described in :
  *
  *  Y. Chiricota. F.Jourdan, an G.Melancon \n
  *  "Software component capture using graph clustering",\n
@@ -34,14 +33,12 @@
  *  Extended to unbounded depth (for the neigbors) :
  *
  *  \note This algorithm works on general graphs. The algorithm use the parameter
- *  depth in order to determine the depth of the neighbors. If no depth
- *  is given, the plugins automatically popup a qt windows to ask the user for this
- *  parameter.
+ *  depth in order to determine the depth of the neighbors.
  *
  */
 class ClusterMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Cluster","David Auber","26/02/2003","Beta","1.0","Graph")
+  PLUGININFORMATIONS("Cluster","David Auber","26/02/2003","Computes the Cluster metric described in\nY. Chiricota. F.Jourdan, an G.Melancon\n'Software component capture using graph clustering',\nIWPC 2002","1.0","Graph")
   ClusterMetric(const tlp::PluginContext* context);
   bool run();
 

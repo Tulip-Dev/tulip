@@ -28,7 +28,7 @@ struct NodeInfo {
   int minAttach;
 };
 
-/** This plugin is an implementation of the Stongly connected algorithm.
+/** This plugin is an implementation of a strongly connected components decomposition.
  *
  *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
  *  strongly connected component they have the same value else they have a
@@ -37,7 +37,7 @@ struct NodeInfo {
  */
 class StrongComponent:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Strongly Connected Component","David Auber","12/06/2001","Alpha","1.0","Component")
+  PLUGININFORMATIONS("Strongly Connected Component","David Auber","12/06/2001","Implements a strongly connected components decomposition.","1.0","Component")
   StrongComponent(const tlp::PluginContext* context);
   ~StrongComponent();
   bool run();

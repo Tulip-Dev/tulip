@@ -32,7 +32,7 @@
  */
 class ConnectedComponent:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Connected Component","David Auber","01/07/2002","Alpha","1.0","Component")
+  PLUGININFORMATIONS("Connected Component","David Auber","01/07/2002","Implements the connected component decompostion.","1.0","Component")
   ConnectedComponent(const tlp::PluginContext* context);
   ~ConnectedComponent();
   bool run();

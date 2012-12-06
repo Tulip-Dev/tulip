@@ -23,8 +23,7 @@
 
 /** \addtogroup metric */
 
-/** This plugin is an implementation of the Strength Parameter.
- *  algorithm first published in :
+/** This plugin computes the Strength metric described in :
  *
  *  Y. Chiricota. F.Jourdan, and G.Melancon\n
  *  "Software component capture using graph clustering", \n
@@ -34,7 +33,7 @@
  */
 class StrengthMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Strength","David Auber","26/02/2003","Alpha","1.0","Graph")
+  PLUGININFORMATIONS("Strength","David Auber","26/02/2003","Computes the Strength metric described in\nY. Chiricota. F.Jourdan, an G.Melancon\n'Software component capture using graph clustering',\nIWPC 2002","1.0","Graph")
   StrengthMetric(const tlp::PluginContext* context);
   ~StrengthMetric();
   double getNodeValue(const tlp::node n);

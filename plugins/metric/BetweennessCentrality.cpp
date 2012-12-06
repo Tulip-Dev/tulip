@@ -78,7 +78,7 @@ static const char * paramHelp[] = {
  */
 class BetweennessCentrality:public DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Betweenness Centrality","David Auber","03/01/2005","Alpha","1.2","Graph")
+  PLUGININFORMATIONS("Betweenness Centrality","David Auber","03/01/2005","Computes the betweeness centrality.","1.2","Graph")
   BetweennessCentrality(const PluginContext* context):DoubleAlgorithm(context) {
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
