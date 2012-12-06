@@ -368,7 +368,7 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
     std::string gname;
     g->getAttribute<std::string>("name",gname);
     std::stringstream sstr;
-    sstr << name().toStdString() << (result ? " succeed" : " failed") << "\n on " <<  gname;
+    sstr << name().toStdString() << (result ? " test succeed" : " test failed") << "\n on " <<  gname;
     if (result) {
       qDebug() << sstr.str().c_str();
       QMessageBox::information(parentWidget(), "Tulip test result",
