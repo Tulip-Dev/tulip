@@ -148,7 +148,7 @@ void BasicPluginsTest::testExportGml() {
   Graph* g = importGraph("Planar Graph", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
   std::stringstream os;
-  CPPUNIT_ASSERT(exportGraph(graph, os, "GML format", ds, NULL));
+  CPPUNIT_ASSERT(exportGraph(graph, os, "GML Export", ds, NULL));
 }
 //==========================================================
 void BasicPluginsTest::testImportFileSystem() {
