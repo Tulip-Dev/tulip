@@ -268,7 +268,10 @@ void AlgorithmRunnerItem::run(Graph *g) {
   std::vector<OutPropertyParam>::const_iterator it = outPropertyParams.begin();
   for (; it != outPropertyParams.end(); ++it) {
     if (result) {
+      // copy computed property in the original output property
       it->dest->copy(it->tmp);
+      // restore it in the dataset
+      dataSet.set(it->name, it->dest);
       if (it->name == "result" &&
 	  TulipSettings::instance().isResultPropertyStored()) {
 	// store the result property values in an automatically named property
@@ -276,7 +279,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 	  + "(" + it->dest->getName() + ")";
 	PropertyInterface* storedResultProp =
 	  it->dest->clonePrototype(it->dest->getGraph(),
-					    storedResultName);
+				   storedResultName);
 	storedResultProp->copy(it->tmp);
       }
     }
@@ -332,6 +335,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
 
 void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
   PluginLister* pluginLister = PluginLister::instance();
+  std::string stdName = name().toStdString();
 
   if (pluginLister->pluginExists<LayoutAlgorithm>(name().toStdString())) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
