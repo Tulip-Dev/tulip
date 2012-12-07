@@ -62,13 +62,13 @@ const char * paramHelp[] = {
 /** \addtogroup import */
 
 /// Grid Approximation - Import of a grid approximation
-/** This plugin enables to create a gride approximation
+/** This plugin enables to create a grid approximation
  *
  *  User can specify the number of nodes and their average degree.
  */
 class SmallWorldGraph:public ImportModule {
 public:
-  PLUGININFORMATIONS("Grid Approximation","Auber","25/06/2002","","1.0","Graph")
+  PLUGININFORMATIONS("Grid Approximation","Auber","25/06/2002","Imports a new grid approximation graph.","1.0","Graph")
   SmallWorldGraph(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<unsigned int>("nodes",paramHelp[0],"200");
     addInParameter<unsigned int>("degree",paramHelp[1],"10");

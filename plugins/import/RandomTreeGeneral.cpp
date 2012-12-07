@@ -92,7 +92,7 @@ class RandomTreeGeneral:public ImportModule {
     }
 
 public:
-  PLUGININFORMATIONS("Random General Tree","Auber","16/02/2001","","1.1","Graph")
+  PLUGININFORMATIONS("Random General Tree","Auber","16/02/2001","Imports a new randomly generated tree.","1.1","Graph")
   RandomTreeGeneral(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<unsigned>("Minimum size",paramHelp[0],"10");
     addInParameter<unsigned>("Maximum size",paramHelp[1],"100");

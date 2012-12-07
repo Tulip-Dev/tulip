@@ -48,14 +48,14 @@ struct Triangle {
 //=============================================================
 /** \addtogroup import */
 
-/// Planar Graph - Import of planer graph
+/// Planar Graph - Import of a planar graph
 /** This plugin enables to create a planar graph
  *
  *  User can specify the number of nodes.
  */
 class PlanarGraph:public ImportModule {
 public:
-  PLUGININFORMATIONS("Planar Graph","Auber","25/06/2005","","1.0","Graph")
+  PLUGININFORMATIONS("Planar Graph","Auber","25/06/2005","Imports a new randomly generated planar graph.","1.0","Graph")
   PlanarGraph(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "30");
   }

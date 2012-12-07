@@ -38,13 +38,13 @@ static const char * paramHelp[] = {
 
 /** \addtogroup import */
 
-/// Import a tree representation of a file system directory.
+/// Imports a tree representation of a file system directory.
 /** This plugin enables to capture in a tree the full hierarchy of
  *  of a given file system directory
  */
 class FileSystem:public tlp::ImportModule {
 public:
-  PLUGININFORMATIONS( "File System Directory", "Auber", "16/12/2002", "", "2.1", "Misc")
+  PLUGININFORMATIONS( "File System Directory", "Auber", "16/12/2002", "Imports a tree representation of a file system directory.", "2.1", "Misc")
   FileSystem(tlp::PluginContext* context):ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
     _fileNames(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL),
     _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL), _sizes(NULL) {
