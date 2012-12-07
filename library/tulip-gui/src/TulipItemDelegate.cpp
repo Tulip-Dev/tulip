@@ -29,6 +29,7 @@
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QDialogButtonBox>
 #include <QtGui/QMainWindow>
+#include <QtGui/QLabel>
 
 using namespace tlp;
 
@@ -208,18 +209,6 @@ void TulipItemDelegate::comboDataChanged() {
 }
 
 
-QDialog* editDialog(QWidget* w, QWidget* parent) {
-  QDialog* dlg = new QDialog(parent);
-  QVBoxLayout* layout = new QVBoxLayout;
-  dlg->setLayout(layout);
-  layout->addWidget(w);
-  QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel|QDialogButtonBox::Ok,Qt::Horizontal);
-  layout->addWidget(buttonBox);
-  QObject::connect(buttonBox,SIGNAL(accepted()),dlg,SLOT(accept()));
-  QObject::connect(buttonBox,SIGNAL(rejected()),dlg,SLOT(reject()));
-  return dlg;
-}
-
 QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,tlp::PropertyInterface* pi, tlp::Graph* g, TulipItemDelegate* delegate) {
   QVariant defaultValue;
 
@@ -235,12 +224,18 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,tlp::Proper
   QDialog* dlg = dynamic_cast<QDialog*>(w);
 
   if (dlg == NULL) {
-    dlg = editDialog(w,Perspective::instance()->mainWindow());
-
-    if (elType == NODE)
-      dlg->setWindowTitle(QString::fromUtf8(pi->getName().c_str()) + trUtf8(": Set nodes values"));
-    else
-      dlg->setWindowTitle(QString::fromUtf8(pi->getName().c_str()) + trUtf8(": Set edges values"));
+    // create a dialog on the fly
+    dlg = new QDialog(Perspective::instance()->mainWindow());
+    dlg->setWindowTitle(elType == NODE ? "Set nodes values"
+			: "Set edges values");
+    QVBoxLayout* layout = new QVBoxLayout;
+    dlg->setLayout(layout);
+    layout->addWidget(new QLabel(pi->getName().c_str()));
+    layout->addWidget(w);
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel|QDialogButtonBox::Ok,Qt::Horizontal);
+    layout->addWidget(buttonBox);
+    QObject::connect(buttonBox,SIGNAL(accepted()),dlg,SLOT(accept()));
+    QObject::connect(buttonBox,SIGNAL(rejected()),dlg,SLOT(reject()));
   }
 
   QVariant result;
