@@ -233,6 +233,7 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,tlp::Proper
     layout->addWidget(new QLabel(pi->getName().c_str()));
     layout->addWidget(w);
     QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel|QDialogButtonBox::Ok,Qt::Horizontal);
+    QWidget::setTabOrder(w, buttonBox);
     layout->addWidget(buttonBox);
     QObject::connect(buttonBox,SIGNAL(accepted()),dlg,SLOT(accept()));
     QObject::connect(buttonBox,SIGNAL(rejected()),dlg,SLOT(reject()));
