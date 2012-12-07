@@ -66,7 +66,7 @@ static const char * paramHelp[] = {
  */
 class DotImport:public ImportModule {
 public:
-  PLUGININFORMATIONS("graphviz","Gerald Gainant", "01/03/2004","Import plugin for dot files",".01","File")
+  PLUGININFORMATIONS("graphviz","Gerald Gainant", "01/03/2004","Imports a new graph from a file (.dot) in the dot input format.","1.0","File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("dot");

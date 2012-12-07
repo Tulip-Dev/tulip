@@ -66,14 +66,14 @@ const char
 }
 /** \addtogroup import */
 
-/// Grid - Import a grid.
+/// Grid - Import of a grid.
 /** This plugin enables to create a grid.
  *
  *  User can specify the connectivity of each nodes in the grid, spacing between nodes and if opposite nodes are connected.
  */
 class Grid: public ImportModule {
 public:
-  PLUGININFORMATIONS("Grid","Jonathan Dubois","02/12/2003","","2.0","Graph")
+  PLUGININFORMATIONS("Grid","Jonathan Dubois","02/12/2003","Imports a new grid structured graph.","2.0","Graph")
   Grid(tlp::PluginContext* context) :
     ImportModule(context) {
     addInParameter<unsigned int> ("width", paramHelp[0], "10");

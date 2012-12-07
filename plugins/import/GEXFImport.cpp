@@ -56,10 +56,9 @@ class GEXFImport : public ImportModule {
 
 public :
 
-  PLUGININFORMATIONS("GEXF","Antoine LAMBERT","05/05/2010","GEXF Import Plugin","1.0","File")
+  PLUGININFORMATIONS("GEXF","Antoine LAMBERT","05/05/2010","Imports a new graph from a file in the GEXF input format.","1.0","File")
   GEXFImport(const PluginContext*  context):ImportModule(context) {
     // add a file parameter for the plugin
-    // when the plugin will be called, a file chooser will be automatically created by Tulip
     addInParameter<string>("file::filename","","");
     addInParameter<bool>("Curved edges","", "false");
   }

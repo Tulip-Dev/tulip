@@ -102,7 +102,7 @@ bool tokenize(const string& str, vector<string>& tokens, const string& delimiter
 class ImportPajek : public ImportModule {
 
 public :
-  PLUGININFORMATIONS("Pajek","Patrick Mary","09/05/2011","Import Pajek","1.0","File")
+  PLUGININFORMATIONS("Pajek","Patrick Mary","09/05/2011","Imports a new graph from a file (.net) in Pajek input format.","1.0","File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("net");
