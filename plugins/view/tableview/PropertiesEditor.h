@@ -54,16 +54,9 @@ public:
 
   void setPropertyChecked(int index, bool state);
 
-  bool isShowNodes();
-  bool isShowEdges();
-
-  void showNodes(bool value);
-  void showEdges(bool value);
-
   tlp::PropertyInterface* contextProperty() const;
 signals:
   void propertyVisibilityChanged(tlp::PropertyInterface*,bool);
-  void showElementTypeChanged();
   void setFilteredNodes();
   void setFilteredEdges();
   void mapToGraphSelection();

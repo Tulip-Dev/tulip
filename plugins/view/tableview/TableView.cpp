@@ -37,8 +37,8 @@ TableView::~TableView() {
 
 tlp::DataSet TableView::state() const {
   DataSet data;
-  data.set("show_nodes",_ui->propertiesEditor->isShowNodes());
-  data.set("show_edges",_ui->propertiesEditor->isShowNodes());
+  data.set("show_nodes",_ui->eltTypeCombo->currentIndex() == 0);
+  data.set("show_edges",_ui->eltTypeCombo->currentIndex() == 1);
 
   GraphPropertiesModel<BooleanProperty>* model = static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->filteringPropertyCombo->model());
   PropertyInterface* pi = model->data(model->index(_ui->filteringPropertyCombo->currentIndex(),0),TulipModel::PropertyRole).value<PropertyInterface*>();
@@ -50,12 +50,11 @@ tlp::DataSet TableView::state() const {
 }
 
 void TableView::setState(const tlp::DataSet& data) {
-  bool showNodes = true, showEdges = false;
+  bool showNodes = true;
   std::string filterPropertyName = "";
   data.get<bool>("show_nodes",showNodes);
-  data.get<bool>("show_edges",showEdges);
 
-  _ui->propertiesEditor->showNodes(showNodes);
+  _ui->eltTypeCombo->setCurrentIndex(showNodes ? 0 : 1);
 
   if (data.exist("filtering_property"))
     data.get<std::string>("filtering_property",filterPropertyName);
@@ -89,7 +88,10 @@ void TableView::setupWidget() {
   connect(_ui->filterEdit,SIGNAL(returnPressed()),this,SLOT(filterChanged()));
   _ui->splitter_2->setSizes(QList<int>() << centralWidget->width()/4 << centralWidget->width()*3/4);
 
-  connect(_ui->propertiesEditor, SIGNAL(showElementTypeChanged()), this, SLOT(readSettings()));
+  _ui->eltTypeCombo->addItem("Nodes");
+  _ui->eltTypeCombo->addItem("Edges");
+  _ui->eltTypeCombo->setCurrentIndex(0);
+  connect(_ui->eltTypeCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(readSettings()));
   connect(_ui->filteringPropertyCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(readSettings()));
 }
 
@@ -134,7 +136,7 @@ void TableView::setFilteredEdgesValue() {
 void TableView::mapToGraphSelection() {
   BooleanProperty* out = graph()->getProperty<BooleanProperty>("viewSelection");
 
-  if (_ui->propertiesEditor->isShowNodes()) {
+  if (_ui->eltTypeCombo->currentIndex() == 0 /* nodes */) {
     out->setAllNodeValue(false);
     QItemSelectionModel *selectionModel = _ui->table->selectionModel();
     foreach(QModelIndex idx,selectionModel->selectedRows()) {
@@ -158,7 +160,7 @@ void TableView::graphChanged(tlp::Graph* g) {
     visibleProperties.insert(pi->getName().c_str());
   }
 
-  GraphPropertiesModel<BooleanProperty>* model = new GraphPropertiesModel<BooleanProperty>(trUtf8("No filtering"),g,false,_ui->filteringPropertyCombo);
+  GraphPropertiesModel<BooleanProperty>* model = new GraphPropertiesModel<BooleanProperty>(trUtf8("no selection"),g,false,_ui->filteringPropertyCombo);
   _ui->filteringPropertyCombo->setModel(model);
   _ui->filteringPropertyCombo->setCurrentIndex(0);
 
@@ -184,11 +186,11 @@ void TableView::graphDeleted() {
 }
 
 void TableView::readSettings() {
-  if ( (_ui->propertiesEditor->isShowNodes() && dynamic_cast<NodesGraphModel*>(_model) == NULL) ||
-       (_ui->propertiesEditor->isShowEdges() && dynamic_cast<EdgesGraphModel*>(_model) == NULL)) {
+  if ( ((_ui->eltTypeCombo->currentIndex() == 0) && dynamic_cast<NodesGraphModel*>(_model) == NULL) ||
+       ((_ui->eltTypeCombo->currentIndex() == 1) && dynamic_cast<EdgesGraphModel*>(_model) == NULL)) {
     _ui->table->setModel(NULL);
 
-    if (_ui->propertiesEditor->isShowNodes())
+    if (_ui->eltTypeCombo->currentIndex() == 0)
       _model = new NodesGraphModel(_ui->table);
     else
       _model = new EdgesGraphModel(_ui->table);
@@ -221,6 +223,7 @@ void TableView::columnsInserted(const QModelIndex&, int start, int end) {
     PropertyInterface* pi = model->headerData(c,Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
     setPropertyVisible(pi,false);
   }
+  
 }
 
 void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {

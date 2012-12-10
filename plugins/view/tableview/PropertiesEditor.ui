@@ -104,6 +104,12 @@ background-color: transparent;
       </property>
       <item>
        <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -121,30 +127,6 @@ color: #595959;</string>
       </item>
      </layout>
     </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QRadioButton" name="nodesButton">
-       <property name="text">
-        <string>Nodes</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="edgesButton">
-       <property name="text">
-        <string>Edges</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
    <item>
     <widget class="QCheckBox" name="userPropertiesCheck">
@@ -278,7 +260,4 @@ border-bottom: 1px solid #C9C9C9;</string>
   <slot>showCustomContextMenu(QPoint)</slot>
   <slot>showSystemProperties(bool)</slot>
  </slots>
- <buttongroups>
-  <buttongroup name="nodeEdgeGroup"/>
- </buttongroups>
 </ui>

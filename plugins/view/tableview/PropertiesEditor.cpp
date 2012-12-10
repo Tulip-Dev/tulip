@@ -40,8 +40,6 @@ using namespace tlp;
 
 PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _graph(NULL), _delegate(new tlp::TulipItemDelegate), _sourceModel(NULL) {
   _ui->setupUi(this);
-  connect(_ui->edgesButton, SIGNAL(toggled(bool)), this, SIGNAL(showElementTypeChanged()));
-  connect(_ui->nodesButton, SIGNAL(toggled(bool)), this, SIGNAL(showElementTypeChanged()));
 }
 
 PropertiesEditor::~PropertiesEditor() {
@@ -117,7 +115,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
   connect(delAction,SIGNAL(triggered()),this,SLOT(delProperty()));
   menu.addSeparator();
-  menu.addAction(trUtf8("Cancel"));
+  menu.addAction(trUtf8("Hide this menu"));
   menu.exec(QCursor::pos());
 }
 
@@ -233,22 +231,6 @@ QSet<PropertyInterface *> PropertiesEditor::visibleProperties() const {
 
 void PropertiesEditor::setPropertyChecked(int index, bool state) {
   _sourceModel->setData(_sourceModel->index(index,0),state ? Qt::Checked : Qt::Unchecked,Qt::CheckStateRole);
-}
-
-bool PropertiesEditor::isShowNodes() {
-  return _ui->nodesButton->isChecked();
-}
-
-bool PropertiesEditor::isShowEdges() {
-  return _ui->edgesButton->isChecked();
-}
-
-void PropertiesEditor::showNodes(bool value) {
-  _ui->nodesButton->setChecked(value);
-}
-
-void PropertiesEditor::showEdges(bool value) {
-  _ui->edgesButton->setChecked(value);
 }
 
 PropertyInterface *PropertiesEditor::contextProperty() const {
