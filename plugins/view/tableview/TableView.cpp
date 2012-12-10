@@ -173,9 +173,11 @@ void TableView::graphChanged(tlp::Graph* g) {
     for(int i=0; i < _model->columnCount(); ++i) {
       QString propName = _model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
       bool checked = propName.startsWith("view");
+
       if (!visibleProperties.isEmpty()) {
         checked = visibleProperties.contains(propName);
       }
+
       _ui->propertiesEditor->setPropertyChecked(i, checked);
     }
   }
@@ -223,7 +225,7 @@ void TableView::columnsInserted(const QModelIndex&, int start, int end) {
     PropertyInterface* pi = model->headerData(c,Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
     setPropertyVisible(pi,false);
   }
-  
+
 }
 
 void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {

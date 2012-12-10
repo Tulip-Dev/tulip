@@ -156,12 +156,12 @@ void tlp::initTulipLib(const char* appDirPath) {
 #endif
     }
     else {
-        // if no appDirPath is provided, retrieve dynamically the Tulip lib dir
-        TulipLibDir = getTulipLibDir();
+      // if no appDirPath is provided, retrieve dynamically the Tulip lib dir
+      TulipLibDir = getTulipLibDir();
 
-        // if no results (should not happen with a clean Tulip install), fall back in the default value provided during compilation
-        if (TulipLibDir.empty())
-          TulipLibDir = string(_TULIP_LIB_DIR);
+      // if no results (should not happen with a clean Tulip install), fall back in the default value provided during compilation
+      if (TulipLibDir.empty())
+        TulipLibDir = string(_TULIP_LIB_DIR);
     }
   }
   else

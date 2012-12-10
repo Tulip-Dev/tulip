@@ -87,8 +87,8 @@ public:
 template<typename PLUGIN>
 class PluginModel : public tlp::TulipModel {
   struct TreeItem {
-  TreeItem(QString name, QString infos = QString::null,
-	   TreeItem* parent = NULL): name(name), infos(infos), parent(parent) {}
+    TreeItem(QString name, QString infos = QString::null,
+             TreeItem* parent = NULL): name(name), infos(infos), parent(parent) {}
     virtual ~TreeItem() {
       foreach(TreeItem* c, children)
       delete c;
@@ -124,26 +124,28 @@ class PluginModel : public tlp::TulipModel {
       TreeItem* catItem = _root->addChild(cat);
 
       foreach(QString group, pluginTree[cat].keys()) {
-	TreeItem* groupItem = catItem;
+        TreeItem* groupItem = catItem;
 
-	if ((group != "") && (pluginTree[cat].keys().size() > 1))
-	  groupItem = catItem->addChild(group);
+        if ((group != "") && (pluginTree[cat].keys().size() > 1))
+          groupItem = catItem->addChild(group);
 
-	// sort in case insensitive alphabetic order
-	std::sort(pluginTree[cat][group].begin(),
-		  pluginTree[cat][group].end(), QStringCaseCmp);
+        // sort in case insensitive alphabetic order
+        std::sort(pluginTree[cat][group].begin(),
+                  pluginTree[cat][group].end(), QStringCaseCmp);
 
-	foreach(QString alg, pluginTree[cat][group]) {
-	  const Plugin* plugin =
-	    PluginLister::instance()->pluginInformations(alg.toStdString());
-	  std::string infos = plugin->info();
-	  // set infos only if they contain more than one word
-	  if (infos.find(' ') != std::string::npos)
-	    groupItem->addChild(alg, infos.c_str());
-	  else
-	    groupItem->addChild(alg);
-	  delete plugin;
-	}
+        foreach(QString alg, pluginTree[cat][group]) {
+          const Plugin* plugin =
+            PluginLister::instance()->pluginInformations(alg.toStdString());
+          std::string infos = plugin->info();
+
+          // set infos only if they contain more than one word
+          if (infos.find(' ') != std::string::npos)
+            groupItem->addChild(alg, infos.c_str());
+          else
+            groupItem->addChild(alg);
+
+          delete plugin;
+        }
       }
     }
   }
@@ -217,9 +219,9 @@ public:
       return item->name;
     else if (role == Qt::ToolTipRole) {
       if (item->infos.isNull())
-	return item->name;
+        return item->name;
       else
-	return QString("<table><tr><td>%1</td></tr><tr><td><i>%2</i></td></tr></table>").arg(item->name + " :").arg(item->infos);
+        return QString("<table><tr><td>%1</td></tr><tr><td><i>%2</i></td></tr></table>").arg(item->name + " :").arg(item->infos);
     }
     else if (role == Qt::FontRole && !index.parent().parent().isValid()) {
       QFont f;

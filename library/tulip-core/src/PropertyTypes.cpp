@@ -585,10 +585,13 @@ void QStringListType::write(ostream& oss, const RealType& t) {
 
 bool QStringListType::read(istream& iss, RealType& t) {
   StringVectorType::RealType stdVect;
+
   if (!StringVectorType::read(iss,stdVect))
     return false;
-  for (unsigned int i=0;i<stdVect.size();++i)
+
+  for (unsigned int i=0; i<stdVect.size(); ++i)
     t.push_back(stdVect[i].c_str());
+
   return true;
 }
 
@@ -598,8 +601,10 @@ void QStringType::write(ostream& oss, const QString& t) {
 
 bool QStringType::read(istream& iss, QString& t) {
   std::string s;
+
   if (!StringType::read(iss,s))
     return false;
+
   t = s.c_str();
   return true;
 }

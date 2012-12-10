@@ -330,7 +330,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
 
-  if(e->type() == QEvent::KeyPress){
+  if(e->type() == QEvent::KeyPress) {
     // first ensure that something is selected
     bool hasSelection = false;
     node no;
@@ -347,17 +347,20 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       }
     }
 
-    if(hasSelection){
-      switch(((QKeyEvent*)e)->key()){
+    if(hasSelection) {
+      switch(((QKeyEvent*)e)->key()) {
       case Qt::Key_Left:
         mMouseTranslate(editPosition[0]-1, editPosition[1], glMainWidget);
         break;
+
       case Qt::Key_Right:
         mMouseTranslate(editPosition[0]+1, editPosition[1], glMainWidget);
         break;
+
       case Qt::Key_Up:
         mMouseTranslate(editPosition[0], editPosition[1]-1, glMainWidget);
         break;
+
       case Qt::Key_Down:
         mMouseTranslate(editPosition[0], editPosition[1]+1, glMainWidget);
         break;

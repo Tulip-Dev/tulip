@@ -56,9 +56,9 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
   // of the displayed properties filtering
   connect(_ui->lineEdit,SIGNAL(textChanged(QString)),model,SLOT(setFilterFixedString(QString)));
   connect(model,SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-	  this,SLOT(displayedPropertiesRemoved(const QModelIndex&, int, int)));
+          this,SLOT(displayedPropertiesRemoved(const QModelIndex&, int, int)));
   connect(model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-	  this,SLOT(displayedPropertiesInserted(const QModelIndex&, int, int)));
+          this,SLOT(displayedPropertiesInserted(const QModelIndex&, int, int)));
   _ui->tableView->setModel(model);
   connect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(checkStateChanged(QModelIndex,Qt::CheckState)));
   _ui->tableView->resizeColumnsToContents();
@@ -146,8 +146,9 @@ void PropertiesEditor::showSystemProperties(bool f) {
 // properties inserted when filtering
 // are visible according to their CheckState
 void PropertiesEditor::displayedPropertiesInserted(const QModelIndex &parent,
-						  int start, int end) {
+    int start, int end) {
   QSortFilterProxyModel* model = static_cast<QSortFilterProxyModel*>(sender());
+
   for(; start <= end; ++start) {
     QModelIndex sIndex = model->mapToSource(model->index(start, 0, parent));
     PropertyInterface* pi = _sourceModel->data(sIndex, TulipModel::PropertyRole).value<PropertyInterface*>();
@@ -158,11 +159,12 @@ void PropertiesEditor::displayedPropertiesInserted(const QModelIndex &parent,
 // properties removed when filtering
 // are no longer visible
 void PropertiesEditor::displayedPropertiesRemoved(const QModelIndex &parent,
-						  int start, int end) {
+    int start, int end) {
   QSortFilterProxyModel* model = static_cast<QSortFilterProxyModel*>(sender());
+
   for(; start <= end; ++start) {
     PropertyInterface* pi = _sourceModel->data(model->mapToSource(model->index(start, 0, parent)), TulipModel::PropertyRole).value<PropertyInterface*>();
-  emit propertyVisibilityChanged(pi, false);
+    emit propertyVisibilityChanged(pi, false);
   }
 }
 

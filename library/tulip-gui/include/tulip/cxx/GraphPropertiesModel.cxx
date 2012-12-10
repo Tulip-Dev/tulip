@@ -31,8 +31,10 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   std::string propName;
   forEach(propName,_graph->getInheritedProperties()) {
 #ifdef NDEBUG
+
     if (propName == "viewMetaGraph")
       continue;
+
 #endif
     PROPTYPE* prop = dynamic_cast<PROPTYPE*>(_graph->getProperty(propName));
 
@@ -157,8 +159,10 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
 template<typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowOf(PROPTYPE* pi) const {
   int result = _properties.indexOf(pi);
+
   if (!_placeholder.isNull())
     ++result;
+
   return result;
 }
 

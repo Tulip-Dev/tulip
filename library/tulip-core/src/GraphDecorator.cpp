@@ -27,7 +27,7 @@ void GraphDecorator::clear() {
 
 //============================================================
 Graph *GraphDecorator::addSubGraph(BooleanProperty *selection,
-				   std::string name) {
+                                   std::string name) {
   Graph* sg = graph_component->addSubGraph(selection, name);
   notifyBeforeAddSubGraph(sg);
   notifyAfterAddSubGraph(sg);
@@ -388,11 +388,11 @@ Iterator<node>* GraphDecorator::getInOutNodes(const node n) const {
 }
 //============================================================
 Iterator<node>* GraphDecorator::bfs(const node root) const {
-    return graph_component->bfs(root);
+  return graph_component->bfs(root);
 }
 //============================================================
 Iterator<node>* GraphDecorator::dfs(const node root) const {
-    return graph_component->dfs(root);
+  return graph_component->dfs(root);
 }
 //============================================================
 Iterator<edge>* GraphDecorator::getEdges() const {

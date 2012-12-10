@@ -66,6 +66,7 @@ bool sendAgentMessage(int port, const QString& message) {
   QTcpSocket sck;
   sck.connectToHost(QHostAddress::LocalHost,port);
   sck.waitForConnected(1000);
+
   if (sck.state() == QAbstractSocket::ConnectedState) {
     sck.write(message.toUtf8());
     sck.flush();
@@ -73,6 +74,7 @@ bool sendAgentMessage(int port, const QString& message) {
   else {
     result = false;
   }
+
   sck.close();
   return result;
 }
@@ -98,6 +100,7 @@ void checkTulipRunning(const QString& perspName, const QString& fileToOpen) {
       else if (!perspName.isNull()) { // open the perspective passed as argument
         sendAgentMessage(n_agentPort,"CREATE_PERSPECTIVE\t" + perspName);
       }
+
       exit(0);
     }
   }
@@ -115,8 +118,10 @@ int main(int argc, char **argv) {
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
   QString perspName;
   QString fileToOpen;
-  for(int i=1;i<QApplication::arguments().size();++i) {
+
+  for(int i=1; i<QApplication::arguments().size(); ++i) {
     QString s = QApplication::arguments()[i];
+
     if (perspectiveRegexp.exactMatch(s)) {
       perspName = perspectiveRegexp.cap(1);
     }

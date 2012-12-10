@@ -32,100 +32,100 @@ namespace tlp {
 
 class TLP_PYTHON_SCOPE PythonInterpreter {
 
-    PythonInterpreter();
-    ~PythonInterpreter();
+  PythonInterpreter();
+  ~PythonInterpreter();
 
-    void holdGIL();
-    void releaseGIL();
-    void loadTulipPythonPlugins(const QString &pluginsPath);
+  void holdGIL();
+  void releaseGIL();
+  void loadTulipPythonPlugins(const QString &pluginsPath);
 
-    static PythonInterpreter _instance;
+  static PythonInterpreter _instance;
 
-    bool _runningScript;
-    QSet<QString> _currentImportPaths;
-    QAbstractScrollArea *_defaultConsoleWidget;
-    QString _pythonVersion;
+  bool _runningScript;
+  QSet<QString> _currentImportPaths;
+  QAbstractScrollArea *_defaultConsoleWidget;
+  QString _pythonVersion;
 
 public :
 
-    static const QString pythonPluginsPath;
-    static const QString pythonPluginsPathHome;
-    static const char pythonReservedCharacters[];
-    static const char *pythonKeywords[];
+  static const QString pythonPluginsPath;
+  static const QString pythonPluginsPathHome;
+  static const char pythonReservedCharacters[];
+  static const char *pythonKeywords[];
 
-    static PythonInterpreter *getInstance();
+  static PythonInterpreter *getInstance();
 
-    bool interpreterInit() ;
+  bool interpreterInit() ;
 
-    bool importModule(const QString &moduleName);
+  bool importModule(const QString &moduleName);
 
-    bool registerNewModuleFromString(const QString &moduleName, const QString &moduleSrcCode);
+  bool registerNewModuleFromString(const QString &moduleName, const QString &moduleSrcCode);
 
-    bool runString(const QString &pyhtonCode, const QString &scriptFilePath="");
+  bool runString(const QString &pyhtonCode, const QString &scriptFilePath="");
 
-    bool runGraphScript(const QString &module, const QString &function, tlp::Graph *graph, const QString &scriptFilePath="");
+  bool runGraphScript(const QString &module, const QString &function, tlp::Graph *graph, const QString &scriptFilePath="");
 
-    bool functionExists(const QString &moduleName, const QString &functionName);
+  bool functionExists(const QString &moduleName, const QString &functionName);
 
-    void addModuleSearchPath(const QString &path, const bool beforeOtherPaths = false);
+  void addModuleSearchPath(const QString &path, const bool beforeOtherPaths = false);
 
-    void deleteModule(const QString &moduleName);
+  void deleteModule(const QString &moduleName);
 
-    bool reloadModule(const QString &moduleName);
+  bool reloadModule(const QString &moduleName);
 
-    void stopCurrentScript();
+  void stopCurrentScript();
 
-    void pauseCurrentScript(const bool pause=true);
+  void pauseCurrentScript(const bool pause=true);
 
-    bool isScriptPaused() const;
+  bool isScriptPaused() const;
 
-    void setProcessQtEventsDuringScriptExecution(bool processQtEvents);
+  void setProcessQtEventsDuringScriptExecution(bool processQtEvents);
 
-    bool isRunningScript() const {
-        return _runningScript;
-    }
+  bool isRunningScript() const {
+    return _runningScript;
+  }
 
-    QString getPythonVersionStr() const {
-        return _pythonVersion;
-    }
+  QString getPythonVersionStr() const {
+    return _pythonVersion;
+  }
 
-    double getPythonVersion() const;
+  double getPythonVersion() const;
 
-    QString getPythonShellBanner();
+  QString getPythonShellBanner();
 
-    void setDefaultSIGINTHandler();
+  void setDefaultSIGINTHandler();
 
-    QVector<QString> getImportedModulesList();
+  QVector<QString> getImportedModulesList();
 
-    QVector<QString> getBaseTypesForType(const QString &type);
+  QVector<QString> getBaseTypesForType(const QString &type);
 
-    QVector<QString> getGlobalDictEntries(const QString &prefixFilter = "");
+  QVector<QString> getGlobalDictEntries(const QString &prefixFilter = "");
 
-    QVector<QString> getObjectDictEntries(const QString &objectName, const QString &prefixFilter = "");
+  QVector<QString> getObjectDictEntries(const QString &objectName, const QString &prefixFilter = "");
 
-    QString getVariableType(const QString &varName);
+  QString getVariableType(const QString &varName);
 
-    void setDefaultConsoleWidget(QAbstractScrollArea *consoleWidget);
+  void setDefaultConsoleWidget(QAbstractScrollArea *consoleWidget);
 
-    void setConsoleWidget(QAbstractScrollArea *consoleWidget);
+  void setConsoleWidget(QAbstractScrollArea *consoleWidget);
 
-    void resetConsoleWidget();
+  void resetConsoleWidget();
 
-    void initConsoleOutput();
+  void initConsoleOutput();
 
-    void loadTulipPythonPlugins();
+  void loadTulipPythonPlugins();
 
-    QString getStandardOutput() const;
+  QString getStandardOutput() const;
 
-    QString getStandardErrorOutput() const;
+  QString getStandardErrorOutput() const;
 
-    void clearOutputBuffers();
+  void clearOutputBuffers();
 
-    void setOutputEnabled(const bool enableOutput);
+  void setOutputEnabled(const bool enableOutput);
 
-    bool outputEnabled() const;
+  bool outputEnabled() const;
 
-    void sendOutputToConsole(const QString &output, bool stdErr);
+  void sendOutputToConsole(const QString &output, bool stdErr);
 
 };
 

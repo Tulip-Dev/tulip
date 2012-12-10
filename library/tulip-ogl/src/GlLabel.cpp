@@ -253,17 +253,19 @@ void GlLabel::draw(float, Camera *camera) {
     return;
 
   bool computeLOD=false;
-  if(oldLod==-1){
+
+  if(oldLod==-1) {
     computeLOD=true;
-  }else{
+  }
+  else {
     computeLOD=camera->getEyes()!=oldCamera.getEyes() ||
-        camera->getCenter()!=oldCamera.getCenter() ||
-        camera->getZoomFactor()!=oldCamera.getZoomFactor();
+               camera->getCenter()!=oldCamera.getCenter() ||
+               camera->getZoomFactor()!=oldCamera.getZoomFactor();
   }
 
   float lod=oldLod;
 
-  if(computeLOD){
+  if(computeLOD) {
     Coord test=camera->screenTo3DWorld(Coord(1,1,1))-camera->screenTo3DWorld(Coord(0,0,0));
     test=test/test.norm();
     lod=(camera->worldTo2DScreen(test)-camera->worldTo2DScreen(Coord(0,0,0))).norm();

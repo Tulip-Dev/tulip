@@ -53,8 +53,10 @@ void GraphModel::setGraph(Graph* g) {
     PropertyInterface* pi;
     forEach(pi, _graph->getObjectProperties()) {
 #ifdef NDEBUG
+
       if (pi->getName() == "viewMetaGraph")
         continue;
+
 #endif
       _properties.push_back(pi);
       pi->addListener(this);
@@ -151,18 +153,23 @@ bool GraphModel::setData(const QModelIndex &index, const QVariant &value, int ro
 void GraphModel::treatEvent(const Event& ev) {
   if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
     const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+
     if (graphEv->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY || graphEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY) {
 #ifdef NDEBUG
+
       if (graphEv->getPropertyName() == "viewMetaGraph")
         return;
+
 #endif
       // insert in respect with alphabetic order
       std::string propName = graphEv->getPropertyName();
       int pos = 0;
+
       for(; pos < _properties.size(); ++pos) {
-	if (propName < _properties[pos]->getName())
-	  break;
+        if (propName < _properties[pos]->getName())
+          break;
       }
+
       beginInsertColumns(QModelIndex(), pos, pos);
       PropertyInterface* prop = _graph->getProperty(propName);
       _properties.insert(pos, prop);
@@ -171,8 +178,10 @@ void GraphModel::treatEvent(const Event& ev) {
     }
     else if (graphEv->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY || graphEv->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY) {
 #ifdef NDEBUG
+
       if (graphEv->getPropertyName() == "viewMetaGraph")
         return;
+
 #endif
       PropertyInterface* prop = _graph->getProperty(graphEv->getPropertyName());
       int col = _properties.indexOf(prop);

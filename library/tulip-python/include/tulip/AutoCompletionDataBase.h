@@ -31,23 +31,23 @@ namespace tlp {
 
 class TLP_PYTHON_SCOPE AutoCompletionDataBase {
 
-    QSet<QString> getSubGraphsListIfContext(const QString &context, const QString &editedFunction) const ;
-    QSet<QString> getGraphPropertiesListIfContext(const QString &context, const QString &editedFunction) const ;
-    QSet<QString> getPluginParametersListIfContext(const QString &context, const QString &editedFunction) const;
-    QString getClassAttributeType(const QString &className, const QString &classAttribute) const;
+  QSet<QString> getSubGraphsListIfContext(const QString &context, const QString &editedFunction) const ;
+  QSet<QString> getGraphPropertiesListIfContext(const QString &context, const QString &editedFunction) const ;
+  QSet<QString> getPluginParametersListIfContext(const QString &context, const QString &editedFunction) const;
+  QString getClassAttributeType(const QString &className, const QString &classAttribute) const;
 
-    tlp::Graph *_graph;
-    APIDataBase *_apiDb;
-    QSet<QString> _globalAutoCompletionList;
-    QHash<QString, QSet<QString> > _functionAutoCompletionList;
-    QHash<QString, QHash<QString, QString> > _varToType;
-    QHash<QString, QHash<QString, QString> > _classAttributeToType;
-    QHash<QString, QHash<QString, QString> > _varToPluginName;
-    QHash<QString, QHash<QString, QSet<QString> > > _pluginParametersDataSet;
-    QHash<QString, QString> _iteratorType;
-    QHash<QString, QSet<QString> > _classContents;
-    QHash<QString, QSet<QString> > _classBases;
-    QString _lastFoundType;
+  tlp::Graph *_graph;
+  APIDataBase *_apiDb;
+  QSet<QString> _globalAutoCompletionList;
+  QHash<QString, QSet<QString> > _functionAutoCompletionList;
+  QHash<QString, QHash<QString, QString> > _varToType;
+  QHash<QString, QHash<QString, QString> > _classAttributeToType;
+  QHash<QString, QHash<QString, QString> > _varToPluginName;
+  QHash<QString, QHash<QString, QSet<QString> > > _pluginParametersDataSet;
+  QHash<QString, QString> _iteratorType;
+  QHash<QString, QSet<QString> > _classContents;
+  QHash<QString, QSet<QString> > _classBases;
+  QString _lastFoundType;
 
 public :
 

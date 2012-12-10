@@ -324,7 +324,7 @@ struct TLP_SCOPE WithParameter {
    * @return true if an input parameter or a property output parameter exists
    **/
   bool inputRequired() const;
-  
+
 protected:
 
   /**

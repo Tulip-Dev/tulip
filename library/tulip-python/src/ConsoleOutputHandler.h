@@ -77,6 +77,7 @@ public slots :
 
         cursor = textBrowser->document()->find(rx, cursor);
       }
+
       if (timer.elapsed() >= 50) {
         QApplication::processEvents();
         timer.start();
@@ -86,7 +87,7 @@ public slots :
 
 private:
 
-    QTime timer;
+  QTime timer;
 
 };
 
@@ -109,7 +110,7 @@ public:
   }
 
   QAbstractScrollArea *consoleWidget() const {
-      return _consoleWidget;
+    return _consoleWidget;
   }
 
   void setOutputActivated(bool outputActivated) {

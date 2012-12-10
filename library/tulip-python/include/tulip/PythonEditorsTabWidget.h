@@ -12,51 +12,51 @@ class PythonCodeEditor;
 
 class TLP_PYTHON_SCOPE PythonEditorsTabWidget : public QTabWidget {
 
-    Q_OBJECT
+  Q_OBJECT
 
-    int _fontZoom;
-    bool _dontTreatFocusIn;
-    bool reloadCodeInEditorIfNeeded(int index);
+  int _fontZoom;
+  bool _dontTreatFocusIn;
+  bool reloadCodeInEditorIfNeeded(int index);
 
 public:
 
-    explicit PythonEditorsTabWidget(QWidget *parent = 0);
+  explicit PythonEditorsTabWidget(QWidget *parent = 0);
 
-    int addEditor(const QString &fileName = "");
+  int addEditor(const QString &fileName = "");
 
-    PythonCodeEditor *getCurrentEditor() const;
+  PythonCodeEditor *getCurrentEditor() const;
 
-    PythonCodeEditor *getEditor(int) const;
+  PythonCodeEditor *getEditor(int) const;
 
-    void indicateErrors(const QMap<QString, QVector<int> > &errorLines);
+  void indicateErrors(const QMap<QString, QVector<int> > &errorLines);
 
-    void clearErrorIndicators();
+  void clearErrorIndicators();
 
-    bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *);
 
-    void saveCurrentEditorContentToFile();
+  void saveCurrentEditorContentToFile();
 
-    void saveEditorContentToFile(int);
+  void saveEditorContentToFile(int);
 
-    void increaseFontSize();
+  void increaseFontSize();
 
-    void decreaseFontSize();
+  void decreaseFontSize();
 
 signals:
 
-    void tabAboutToBeDeleted(int);
+  void tabAboutToBeDeleted(int);
 
-    void fileSaved(int);
+  void fileSaved(int);
 
-    void filesReloaded();
+  void filesReloaded();
 
 public slots:
 
-    void scriptTextChanged();
+  void scriptTextChanged();
 
-    void reloadCodeInEditorsIfNeeded();
+  void reloadCodeInEditorsIfNeeded();
 
-    void closeTabRequested(int tab);
+  void closeTabRequested(int tab);
 
 };
 

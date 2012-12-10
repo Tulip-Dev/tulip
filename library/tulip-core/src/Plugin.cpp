@@ -76,5 +76,5 @@ std::string Plugin::icon() const {
 }
 
 std::string Plugin::programmingLanguage() const {
-    return "C++";
+  return "C++";
 }

@@ -34,7 +34,7 @@ void decrNumIterators() {
   NumIterators--;
 }
 
-void NodeIteratorObserver::treatEvent(const Event& evt) {  
+void NodeIteratorObserver::treatEvent(const Event& evt) {
   switch(static_cast<const GraphEvent*>(&evt)->getType()) {
   case GraphEvent::TLP_ADD_NODE:
   case GraphEvent::TLP_DEL_NODE:

@@ -61,8 +61,8 @@ void MouseEdgeBendEditor::clear() {
 }
 //========================================================================================
 
-void MouseEdgeBendEditor::stopEdition(){
-    _operation = NONE_OP;
+void MouseEdgeBendEditor::stopEdition() {
+  _operation = NONE_OP;
 }
 
 //========================================================================================
@@ -154,13 +154,15 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
       if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->getScene()->getGlGraphComposite()->getGraph()->setEnds(mEdge,glMainWidget->getScene()->getGlGraphComposite()->getGraph()->ends(mEdge).first,node(selectedEntity.getComplexEntityId()));
       }
-    }else if(selectedEntity=="sourceCircle") {
+    }
+    else if(selectedEntity=="sourceCircle") {
       SelectedEntity selectedEntity;
 
       if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->getScene()->getGlGraphComposite()->getGraph()->setEnds(mEdge,node(selectedEntity.getComplexEntityId()),glMainWidget->getScene()->getGlGraphComposite()->getGraph()->ends(mEdge).second);
       }
     }
+
     selectedEntity="";
 
     _operation = NONE_OP;
@@ -553,6 +555,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
 
     if(!edgeEntity)
       edgeEntity=new EdgeEntity;
+
     edgeEntity->setCoordinates(start,end,coordinates);
     glMainWidget->getScene()->getGraphLayer()->addGlEntity(edgeEntity,"edgeEntity");
   }

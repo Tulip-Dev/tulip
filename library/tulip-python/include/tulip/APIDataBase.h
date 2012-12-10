@@ -31,13 +31,13 @@ namespace tlp {
 
 class TLP_PYTHON_SCOPE APIDataBase {
 
-    APIDataBase();
+  APIDataBase();
 
-    QHash<QString, QSet<QString> > _dictContent;
-    QHash<QString, QString> _returnType;
-    QHash<QString, QVector<QVector<QString> > > _paramTypes;
+  QHash<QString, QSet<QString> > _dictContent;
+  QHash<QString, QString> _returnType;
+  QHash<QString, QVector<QVector<QString> > > _paramTypes;
 
-    static APIDataBase _instance;
+  static APIDataBase _instance;
 
 public :
 

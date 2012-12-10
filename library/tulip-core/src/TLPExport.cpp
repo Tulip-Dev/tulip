@@ -140,26 +140,26 @@ public:
           ++progress;
           node current = getNode(itN->next());
 
-	  if (!beginNode.isValid()) {
-	    beginNode = previousNode = current;
-	    os << " " << beginNode.id;
-	  }
-	  else {
-	    if (current.id == previousNode.id + 1) {
-	      previousNode = current;
+          if (!beginNode.isValid()) {
+            beginNode = previousNode = current;
+            os << " " << beginNode.id;
+          }
+          else {
+            if (current.id == previousNode.id + 1) {
+              previousNode = current;
 
-	      if (!itN->hasNext())
-		os << ".." << current.id;
-	    }
-	    else {
-	      if (previousNode != beginNode) {
-		os << ".." << previousNode.id;
-	      }
+              if (!itN->hasNext())
+                os << ".." << current.id;
+            }
+            else {
+              if (previousNode != beginNode) {
+                os << ".." << previousNode.id;
+              }
 
-	      os  << " " << current.id;
-	      beginNode = previousNode = current;
-	    }
-	  }
+              os  << " " << current.id;
+              beginNode = previousNode = current;
+            }
+          }
         }
 
         os << ")" << endl;
@@ -179,26 +179,26 @@ public:
           ++progress;
           edge current = getEdge(itE->next());
 
-	  if (!beginEdge.isValid()) {
-	    beginEdge = previousEdge = current;
-	    os << " " << beginEdge.id;
-	  }
-	  else {
-	    if (current.id == previousEdge.id + 1) {
-	      previousEdge = current;
+          if (!beginEdge.isValid()) {
+            beginEdge = previousEdge = current;
+            os << " " << beginEdge.id;
+          }
+          else {
+            if (current.id == previousEdge.id + 1) {
+              previousEdge = current;
 
-	      if (!itE->hasNext())
-		os << ".." << current.id;
-	    }
-	    else {
-	      if (previousEdge != beginEdge) {
-		os << ".." << previousEdge.id;
-	      }
+              if (!itE->hasNext())
+                os << ".." << current.id;
+            }
+            else {
+              if (previousEdge != beginEdge) {
+                os << ".." << previousEdge.id;
+              }
 
-	      os  << " " << current.id;
-	      beginEdge = previousEdge = current;
-	    }
-	  }
+              os  << " " << current.id;
+              beginEdge = previousEdge = current;
+            }
+          }
         }
 
         os << ")" << endl;
@@ -215,21 +215,21 @@ public:
 
       switch(nbElts) {
       case 0:
-	os << "(nodes)" << endl;
-	break;
+        os << "(nodes)" << endl;
+        break;
 
       case 1:
-	os << "(nodes 0)" << endl;
-	break;
+        os << "(nodes 0)" << endl;
+        break;
 
       case 2:
-	os << "(nodes 0 1)" << endl;
-	break;
+        os << "(nodes 0 1)" << endl;
+        break;
 
       default:
-	os << "(nodes 0.." << nbElts - 1 << ")" << endl;
+        os << "(nodes 0.." << nbElts - 1 << ")" << endl;
       }
- 
+
       nbElts = graph->numberOfEdges();
       os << "(nb_edges " << nbElts << ")" << endl;
 
@@ -283,15 +283,21 @@ public:
       while (itN->hasNext()) {
         ++nonDefaultvaluatedElementCount;
         itN->next();
-      } delete itN;
+      }
+
+      delete itN;
 
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
 
       while (itE->hasNext()) {
         ++nonDefaultvaluatedElementCount;
         itE->next();
-      } delete itE;
-    } delete itP;
+      }
+
+      delete itE;
+    }
+
+    delete itP;
 
     itP=graph->getLocalObjectProperties();
     PropertyInterface *prop;

@@ -139,29 +139,35 @@ static map<double, vector<double> > sCoeffs;
 static map<unsigned int, unsigned int> computedCoefficients;
 
 static void computeCoefficients(double t, unsigned int nbControlPoints) {
-    double s = (1.0 - t);
+  double s = (1.0 - t);
 #ifdef _OPENMP
-    #pragma omp critical
+  #pragma omp critical
 #endif
-    if (tCoeffs.find(t) == tCoeffs.end()) {
-        vector<double> tCoeff, sCoeff;
-        for (size_t i = 0 ; i < nbControlPoints ; ++i) {
-            tCoeff.push_back(pow(t, static_cast<double>(i)));
-            sCoeff.push_back(pow(s, static_cast<double>(i)));
-        }
-        tCoeffs[t] = tCoeff;
-        sCoeffs[t] = sCoeff;
-    } else {
-        vector<double> &tCoeff = tCoeffs[t];
-        vector<double> &sCoeff = sCoeffs[t];
-        if (tCoeff.size() < nbControlPoints) {
-            size_t oldSize = tCoeff.size();
-            for (size_t i = oldSize ; i < nbControlPoints ; ++i) {
-                tCoeff.push_back(pow(t, static_cast<double>(i)));
-                sCoeff.push_back(pow(s, static_cast<double>(i)));
-            }
-        }
+
+  if (tCoeffs.find(t) == tCoeffs.end()) {
+    vector<double> tCoeff, sCoeff;
+
+    for (size_t i = 0 ; i < nbControlPoints ; ++i) {
+      tCoeff.push_back(pow(t, static_cast<double>(i)));
+      sCoeff.push_back(pow(s, static_cast<double>(i)));
     }
+
+    tCoeffs[t] = tCoeff;
+    sCoeffs[t] = sCoeff;
+  }
+  else {
+    vector<double> &tCoeff = tCoeffs[t];
+    vector<double> &sCoeff = sCoeffs[t];
+
+    if (tCoeff.size() < nbControlPoints) {
+      size_t oldSize = tCoeff.size();
+
+      for (size_t i = oldSize ; i < nbControlPoints ; ++i) {
+        tCoeff.push_back(pow(t, static_cast<double>(i)));
+        sCoeff.push_back(pow(s, static_cast<double>(i)));
+      }
+    }
+  }
 }
 
 Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
@@ -174,6 +180,7 @@ Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
   bezierPoint[0] = bezierPoint[1] = bezierPoint[2] = 0;
   double curCoeff = 1.0;
   double r = static_cast<double>(nbControlPoints);
+
   for (size_t i = 0 ; i < controlPoints.size() ; ++i) {
     Vector<double, 3> controlPoint;
     controlPoint[0] = controlPoints[i][0];
@@ -210,6 +217,7 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
+
     for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
       float curStep = i * h;
       curvePoints[i] = computeBezierPoint(controlPoints, curStep);

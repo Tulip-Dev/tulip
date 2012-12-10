@@ -14,22 +14,25 @@ static const char *pythonVersion[]  = {
 };
 
 static bool isPythonVersionInstalled(const QString &pythonVersion) {
-	QString win32RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-	QString win64RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-	QSettings win32Settings(win32RegKey, QSettings::NativeFormat);
-	QSettings win64Settings(win64RegKey, QSettings::NativeFormat);
-	return win32Settings.value("Default").toString() != "" || win64Settings.value("Default").toString() != "";
+  QString win32RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+  QString win64RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+  QSettings win32Settings(win32RegKey, QSettings::NativeFormat);
+  QSettings win64Settings(win64RegKey, QSettings::NativeFormat);
+  return win32Settings.value("Default").toString() != "" || win64Settings.value("Default").toString() != "";
 }
 
 static QString getInstalledPythonVersionIfAny() {
-	int i = 0;
-	while (pythonVersion[i]) {
-		if (isPythonVersionInstalled(pythonVersion[i])) {
-			return pythonVersion[i];
-		}
-		++i;
-	}
-	return "";
+  int i = 0;
+
+  while (pythonVersion[i]) {
+    if (isPythonVersionInstalled(pythonVersion[i])) {
+      return pythonVersion[i];
+    }
+
+    ++i;
+  }
+
+  return "";
 }
 #endif
 
@@ -37,41 +40,48 @@ static QString getInstalledPythonVersionIfAny() {
 QString PythonVersionChecker::installedVersion() {
 #ifndef WIN32
   QProcess pythonCheck;
-  pythonCheck.start(QString("python")+compiledVersion(),QStringList() << "--version");  
+  pythonCheck.start(QString("python")+compiledVersion(),QStringList() << "--version");
   pythonCheck.waitForFinished(-1);
 
   if (pythonCheck.exitStatus() != QProcess::NormalExit) {
-      pythonCheck.start(QString("python"),QStringList() << "--version");
-      pythonCheck.waitForFinished(-1);
+    pythonCheck.start(QString("python"),QStringList() << "--version");
+    pythonCheck.waitForFinished(-1);
 
-      if (pythonCheck.exitStatus() == QProcess::NormalExit) {	
-        pythonCheck.setReadChannel(QProcess::StandardError);
-        QString result = pythonCheck.readAll();
-        QRegExp versionRegexp(".*([0-9]*\\.[0-9]*)\\..*");
-        if (versionRegexp.exactMatch(result)) {
-          QString installedVersion = versionRegexp.cap(1);
-          return installedVersion;
-        }
-        else {
-          qWarning() << QObject::trUtf8("Error parsing python version");
-        }
+    if (pythonCheck.exitStatus() == QProcess::NormalExit) {
+      pythonCheck.setReadChannel(QProcess::StandardError);
+      QString result = pythonCheck.readAll();
+      QRegExp versionRegexp(".*([0-9]*\\.[0-9]*)\\..*");
+
+      if (versionRegexp.exactMatch(result)) {
+        QString installedVersion = versionRegexp.cap(1);
+        return installedVersion;
       }
       else {
-        qWarning() << QObject::trUtf8("Python installation not found");
+        qWarning() << QObject::trUtf8("Error parsing python version");
       }
-  } else {
-      return compiledVersion();
+    }
+    else {
+      qWarning() << QObject::trUtf8("Python installation not found");
+    }
   }
+  else {
+    return compiledVersion();
+  }
+
 #else
-	if (isPythonVersionInstalled(compiledVersion())) {
-		return compiledVersion();
-	}
-	QString installedPythonVersion = getInstalledPythonVersionIfAny();
-	if (!installedPythonVersion.isEmpty()) {
-		return installedPythonVersion;
-	}
-#endif  
-  
+
+  if (isPythonVersionInstalled(compiledVersion())) {
+    return compiledVersion();
+  }
+
+  QString installedPythonVersion = getInstalledPythonVersionIfAny();
+
+  if (!installedPythonVersion.isEmpty()) {
+    return installedPythonVersion;
+  }
+
+#endif
+
   return QString::null;
 }
 

@@ -335,7 +335,9 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
     if(currentSpecInteractorComponent->eventFilter(widget,e))
       return true;
   }
+
   GlMainWidget *glmainwidget = static_cast<GlMainWidget *>(widget);
+
   if (e->type() == QEvent::MouseButtonPress) {
     if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
       oldCursor=glmainwidget->cursor();
@@ -370,10 +372,10 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonRelease) {
-      glmainwidget->setCursor(oldCursor);
-      delete currentSpecInteractorComponent;
-      currentSpecInteractorComponent=NULL;
-      return true;
+    glmainwidget->setCursor(oldCursor);
+    delete currentSpecInteractorComponent;
+    currentSpecInteractorComponent=NULL;
+    return true;
   }
 
   if (e->type() == QEvent::KeyPress) {
@@ -418,7 +420,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       break;
 
     case Qt::Key_Delete :
-     glmainwidget->getScene()->rotateScene(0,0,delta * 2);
+      glmainwidget->getScene()->rotateScene(0,0,delta * 2);
       break;
 
     default:

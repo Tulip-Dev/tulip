@@ -19,34 +19,34 @@ class OutputPanelButton;
 class PythonPanel : public QWidget {
 
 
-    Q_OBJECT
-    Ui::PythonPanel *_ui;
-    OutputPanelButton *_button;
-    QPropertyAnimation *_animation;
+  Q_OBJECT
+  Ui::PythonPanel *_ui;
+  OutputPanelButton *_button;
+  QPropertyAnimation *_animation;
 
 public :
 
-    explicit PythonPanel(QWidget *parent = 0);
-    ~PythonPanel();
-    void setModel(tlp::GraphHierarchiesModel* model);
+  explicit PythonPanel(QWidget *parent = 0);
+  ~PythonPanel();
+  void setModel(tlp::GraphHierarchiesModel* model);
 
-    void setPanelButton(OutputPanelButton *button);
+  void setPanelButton(OutputPanelButton *button);
 
-    QAbstractScrollArea *consoleWidget();
+  QAbstractScrollArea *consoleWidget();
 
 private slots:
 
-    void graphComboIndexChanged();
+  void graphComboIndexChanged();
 
-    void clearConsole();
+  void clearConsole();
 
-    void newOutputInConsole();
+  void newOutputInConsole();
 
-    void stopButtonAnimation();
+  void stopButtonAnimation();
 
 private:
 
-    void startButtonAnimation();
+  void startButtonAnimation();
 
 };
 

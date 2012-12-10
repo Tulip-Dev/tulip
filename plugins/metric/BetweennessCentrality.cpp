@@ -40,7 +40,7 @@ static const char * paramHelp[] = {
   " - if not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2)<br/>"  \
   " - if directed     : m(n) = c(n) / (#V - 1)(#V - 2)<br/>"    \
   "If true the edge measure will be normalized<br/>" \
-  " - if not directed : m(e) = 2*c(e) / (#V / 2)(#V / 2)<br/>"	\
+  " - if not directed : m(e) = 2*c(e) / (#V / 2)(#V / 2)<br/>"  \
   " - if directed     : m(e) = c(e) / (#V / 2)(#V / 2)" \
   HTML_HELP_CLOSE()
 };
@@ -177,8 +177,9 @@ public:
         //In the undirected case, the metric must be divided by two, then
         if(norm)
           result->setNodeValue(s,result->getNodeValue(s)/((n-1.0)*(n-2.0)));
-	if(!directed)
-	  result->setNodeValue(s,result->getNodeValue(s)/2.0);
+
+        if(!directed)
+          result->setNodeValue(s,result->getNodeValue(s)/2.0);
       }
 
       delete it;
@@ -189,9 +190,10 @@ public:
         edge e = itE->next();
 
         if(norm)
-	  result->setEdgeValue(e,4.0*result->getEdgeValue(e)/(n*n));
-	if(!directed)
-	  result->setEdgeValue(e,result->getEdgeValue(e)/(2.0));
+          result->setEdgeValue(e,4.0*result->getEdgeValue(e)/(n*n));
+
+        if(!directed)
+          result->setEdgeValue(e,result->getEdgeValue(e)/(2.0));
       }
 
       delete itE;

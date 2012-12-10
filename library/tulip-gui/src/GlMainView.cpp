@@ -113,8 +113,8 @@ void GlMainView::centerView() {
 }
 
 void GlMainView::glMainViewDrawn(bool graphChanged) {
-    if(isOverviewVisible)
-        drawOverview(graphChanged);
+  if(isOverviewVisible)
+    drawOverview(graphChanged);
 }
 
 QList<QWidget*> GlMainView::configurationWidgets() const {
@@ -122,13 +122,14 @@ QList<QWidget*> GlMainView::configurationWidgets() const {
 }
 
 void GlMainView::setOverviewVisible(bool display) {
-    isOverviewVisible=display;
-    if(display) {
-        drawOverview(true);
-        _overviewItem->setVisible(true);
-    }
-    else if(_overviewItem)
-        _overviewItem->setVisible(false);
+  isOverviewVisible=display;
+
+  if(display) {
+    drawOverview(true);
+    _overviewItem->setVisible(true);
+  }
+  else if(_overviewItem)
+    _overviewItem->setVisible(false);
 }
 
 bool GlMainView::overviewVisible() const {

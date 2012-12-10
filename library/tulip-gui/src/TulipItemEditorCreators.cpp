@@ -527,7 +527,7 @@ QVariant QStringListEditorCreator::editorData(QWidget* w, Graph*) {
   QVector<QVariant> vect = static_cast<VectorEditionWidget*>(w)->vector();
   QStringList lst;
   foreach(QVariant v, vect)
-    lst.push_back(v.toString());
+  lst.push_back(v.toString());
   return lst;
 }
 

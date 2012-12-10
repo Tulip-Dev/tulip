@@ -65,7 +65,7 @@ CopyPropertyDialog::CopyPropertyDialog(QWidget* parent)
 }
 
 CopyPropertyDialog::~CopyPropertyDialog() {
-    delete ui;
+  delete ui;
 }
 
 void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source) {

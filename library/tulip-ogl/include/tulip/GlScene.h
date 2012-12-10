@@ -82,12 +82,13 @@ struct SelectedEntity {
    * @endcode
    * @return the selected node if the entity type is correct or an invalid node else.
    */
-  node getNode()const{
-      if(entityType == NODE_SELECTED){
-          return node(complexEntityId);
-      }else{
-          return node();
-      }
+  node getNode()const {
+    if(entityType == NODE_SELECTED) {
+      return node(complexEntityId);
+    }
+    else {
+      return node();
+    }
   }
 
   /**
@@ -99,12 +100,13 @@ struct SelectedEntity {
    * @endcode
    * @return the selected edge if the entity type is correct or an invalid edge else.
    */
-  edge getEdge()const{
-      if(entityType == EDGE_SELECTED){
-          return edge(complexEntityId);
-      }else{
-          return edge();
-      }
+  edge getEdge()const {
+    if(entityType == EDGE_SELECTED) {
+      return edge(complexEntityId);
+    }
+    else {
+      return edge();
+    }
   }
 
 protected :

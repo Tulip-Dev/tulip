@@ -92,23 +92,29 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   foreach(QString s, TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists())
       continue;
+
     _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/archive.png"),s,this,SLOT(openRecentFile()));
   }
   _ui->menuOpen_recent_file->addSeparator();
   foreach(QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
+
     _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s,this,SLOT(openRecentFile()));
   }
 }
 
 void GraphPerspective::addRecentDocument(const QString& path) {
   QStringList recents = TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList();
+
   if (recents.contains(path))
     return;
+
   recents += path;
+
   if (recents.size()>10)
     recents.pop_front();
+
   TulipSettings::instance().setValue(_recentDocumentsSettingsKey,recents);
   TulipSettings::instance().sync();
   buildRecentDocumentsMenu();
@@ -126,8 +132,9 @@ void GraphPerspective::log(QtMsgType type, const char* msg) {
 
 GraphPerspective::~GraphPerspective() {
   qInstallMsgHandler(0);
+
   if(_ui!=NULL)
-      delete _ui;
+    delete _ui;
 }
 
 void GraphPerspective::logCleared() {
@@ -141,23 +148,27 @@ void GraphPerspective::findPlugins() {
 
 bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
   if(ev->type() == QEvent::DragEnter) {
-      QDragEnterEvent* dragEvent = dynamic_cast<QDragEnterEvent*>(ev);
-      if(dragEvent->mimeData()->hasUrls()) {
-          dragEvent->accept();
-      }
+    QDragEnterEvent* dragEvent = dynamic_cast<QDragEnterEvent*>(ev);
+
+    if(dragEvent->mimeData()->hasUrls()) {
+      dragEvent->accept();
+    }
   }
+
   if(ev->type() == QEvent::Drop) {
-      QDropEvent* dropEvent = dynamic_cast<QDropEvent*>(ev);
-      foreach(const QUrl& url, dropEvent->mimeData()->urls()) {
-          open(url.toLocalFile());
-      }
+    QDropEvent* dropEvent = dynamic_cast<QDropEvent*>(ev);
+    foreach(const QUrl& url, dropEvent->mimeData()->urls()) {
+      open(url.toLocalFile());
+    }
   }
+
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
     showLogger();
 
   if(obj == _mainWindow && ev->type() == QEvent::Close) {
     if(_graphs->needsSaving()) {
       QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified, do you want to save your changes ?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
+
       if(answer == QMessageBox::Yes)
         save();
       else if(answer == QMessageBox::Cancel) {
@@ -166,12 +177,14 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
       }
     }
   }
+
   return false;
 }
 
 void GraphPerspective::showLogger() {
   if (_logger->count()==0)
     return;
+
   QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
   pos.setX(pos.x()+_ui->loggerFrame->width());
   pos.setY(std::min<int>(_mainWindow->mapToGlobal(_mainWindow->pos()).y()+mainWindow()->height()-_logger->height(),pos.y()));
@@ -298,12 +311,14 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipogl.api");
 
   PythonInterpreter::getInstance()->setOutputEnabled(false);
+
   if (PythonInterpreter::getInstance()->runString("import PyQt4.QtGui")) {
     APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipqt.api");
     APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/PyQt4.api");
   }
+
   PythonInterpreter::getInstance()->setOutputEnabled(true);
-  
+
   showTrayMessage("GraphPerspective started");
 
   delete progress;
@@ -371,7 +386,7 @@ void GraphPerspective::exportGraph(Graph* g) {
   PluginProgress* prg = progress(NoProgressOption);
   bool result = tlp::exportGraph(g,*os,wizard.algorithm().toStdString(),data,prg);
   delete os;
-  
+
   if (!result) {
     QMessageBox::critical(_mainWindow,trUtf8("Export error"),trUtf8("Failed to export to format") + wizard.algorithm());
   }
@@ -434,6 +449,7 @@ void GraphPerspective::importGraph() {
         delete prg;
         return;
       }
+
       delete prg;
       std::string name;
 
@@ -499,6 +515,7 @@ void GraphPerspective::saveAs(const QString& path) {
     if (!path.isEmpty()) {
       if (!path.endsWith(".tlpx"))
         path+=".tlpx";
+
       saveAs(path);
     }
 
@@ -572,7 +589,7 @@ void GraphPerspective::open(QString fileName) {
         delete prg;
         QDir::setCurrent(QFileInfo(fileName.toUtf8().data()).absolutePath());
         _graphs->addGraph(g);
-	showStartPanels(g);
+        showStartPanels(g);
         break;
       }
     }
@@ -635,6 +652,7 @@ void GraphPerspective::selectAll() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
+
   if (graph == graph->getRoot()) {
     selection->setAllEdgeValue(true);
     selection->setAllNodeValue(true);
@@ -649,6 +667,7 @@ void GraphPerspective::selectAll() {
       selection->setEdgeValue(e,true);
     }
   }
+
   Observable::unholdObservers();
 }
 
@@ -816,6 +835,7 @@ void GraphPerspective::createSubGraph() {
 void GraphPerspective::cloneSubGraph() {
   if (_graphs->currentGraph() == NULL)
     return;
+
   tlp::BooleanProperty prop(_graphs->currentGraph());
   prop.setAllNodeValue(true);
   prop.setAllEdgeValue(true);
@@ -826,6 +846,7 @@ void GraphPerspective::cloneSubGraph() {
 void GraphPerspective::addEmptySubGraph() {
   if (_graphs->currentGraph() == NULL)
     return;
+
   _graphs->currentGraph()->push();
   _graphs->currentGraph()->addSubGraph(NULL, "empty sub-graph");
 }
@@ -933,6 +954,7 @@ void GraphPerspective::applyRandomLayout(Graph* g) {
     std::string str;
     g->applyPropertyAlgorithm("Random layout", viewLayout, str);
   }
+
   delete it;
 
   Observable::unholdObservers();
@@ -966,12 +988,12 @@ void GraphPerspective::setSearchOutput(bool f) {
 }
 
 void GraphPerspective::setPythonPanel(bool f) {
-    if (f) {
-      _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
-      _ui->searchButton->setChecked(false);
-    }
+  if (f) {
+    _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
+    _ui->searchButton->setChecked(false);
+  }
 
-    _ui->outputFrame->setVisible(f);
+  _ui->outputFrame->setVisible(f);
 }
 
 void GraphPerspective::openPreferences() {
@@ -1017,21 +1039,21 @@ void GraphPerspective::openRecentFile() {
 }
 
 void GraphPerspective::treatEvent(const tlp::Event &message) {
-    if (dynamic_cast<const tlp::PluginEvent*>(&message)) {
-        pluginsListChanged();
-    }
+  if (dynamic_cast<const tlp::PluginEvent*>(&message)) {
+    pluginsListChanged();
+  }
 }
 
 void GraphPerspective::setWorkspaceMode() {
-    _ui->workspaceButton->setChecked(true);
-    _ui->developButton->setChecked(false);
-    _ui->centralWidget->setCurrentIndex(0);
+  _ui->workspaceButton->setChecked(true);
+  _ui->developButton->setChecked(false);
+  _ui->centralWidget->setCurrentIndex(0);
 }
 
 void GraphPerspective::setDevelopMode() {
-    _ui->workspaceButton->setChecked(false);
-    _ui->developButton->setChecked(true);
-    _ui->centralWidget->setCurrentIndex(1);
+  _ui->workspaceButton->setChecked(false);
+  _ui->developButton->setChecked(true);
+  _ui->centralWidget->setCurrentIndex(1);
 }
 
 PLUGIN(GraphPerspective)
