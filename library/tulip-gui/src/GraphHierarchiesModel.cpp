@@ -130,8 +130,8 @@ static ViewSizeCalculator vSizeCalc;
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
                     borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
-      labelColor = "viewLabelColor", labelPosition = "viewLabelPosition", rotation = "viewRotation", labelRotation = "viewLabelRotation",
-      srcAnchorSize = "viewSrcAnchorSize", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
+                    labelColor = "viewLabelColor", labelPosition = "viewLabelPosition", rotation = "viewRotation", labelRotation = "viewLabelRotation",
+                    srcAnchorSize = "viewSrcAnchorSize", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
 
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
@@ -582,8 +582,8 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
 
     if (_currentGraph == g) {
       if (_graphs.size() == 0) {
-	_currentGraph = NULL;
-	emit currentGraphChanged(_currentGraph);
+        _currentGraph = NULL;
+        emit currentGraphChanged(_currentGraph);
       }
       else
         setCurrentGraph(_graphs[0]);

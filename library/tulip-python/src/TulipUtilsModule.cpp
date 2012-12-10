@@ -110,14 +110,14 @@ tuliputils_removePlugin(PyObject *, PyObject *args) {
 
 static PyObject *
 tuliputils_setProcessQtEvents(PyObject *, PyObject *o) {
-    int i;
+  int i;
 
-    if(!PyArg_ParseTuple(o, "i", &i))
-        return NULL;
+  if(!PyArg_ParseTuple(o, "i", &i))
+    return NULL;
 
-    PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(i > 0);
+  PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(i > 0);
 
-    Py_RETURN_NONE;
+  Py_RETURN_NONE;
 }
 
 static PyMethodDef tulipUtilsMethods[] = {

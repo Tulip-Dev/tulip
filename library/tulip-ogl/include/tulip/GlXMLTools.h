@@ -162,7 +162,7 @@ public :
   }
 
 
-  static bool checkNextXMLtag(const std::string &inString, unsigned int &currentPosition, const std::string &name){
+  static bool checkNextXMLtag(const std::string &inString, unsigned int &currentPosition, const std::string &name) {
     unsigned int tmp=currentPosition;
     goToNextCaracter(inString,tmp);
     std::string nameTag=inString.substr(tmp,name.size()+2);

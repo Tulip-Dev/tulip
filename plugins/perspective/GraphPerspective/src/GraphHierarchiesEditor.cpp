@@ -109,6 +109,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
 void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
   if (!index.isValid() || index.internalPointer() == NULL)
     return;
+
   _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
   _model->setCurrentGraph(_contextGraph);
   createPanel();
@@ -118,6 +119,7 @@ void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
 void GraphHierarchiesEditor::addSubGraph() {
   if (_contextGraph == NULL)
     return;
+
   _contextGraph->push();
   _contextGraph->addSubGraph("empty sub-graph");
 }
@@ -137,6 +139,7 @@ void GraphHierarchiesEditor::cloneSubGraph() {
 void GraphHierarchiesEditor::addInducedSubGraph() {
   if (_contextGraph == NULL)
     return;
+
   GraphPerspective* persp = GraphPerspective::typedInstance<GraphPerspective>();
   persp->createSubGraph(_contextGraph);
 }

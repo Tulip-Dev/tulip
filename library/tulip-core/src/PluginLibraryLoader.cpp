@@ -64,6 +64,7 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) 
     if (loader) {
       loader->finished(true, getInstance()->message);
     }
+
     PluginLister::currentLoader = NULL;
   }
 }

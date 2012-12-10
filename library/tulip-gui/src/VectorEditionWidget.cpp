@@ -31,7 +31,7 @@ VectorEditionWidget::VectorEditionWidget(QWidget *parent): QWidget(parent), _ui(
 }
 
 VectorEditionWidget::~VectorEditionWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void VectorEditionWidget::setVector(const QVector<QVariant> &d, int userType) {

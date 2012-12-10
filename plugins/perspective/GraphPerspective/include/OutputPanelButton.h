@@ -47,7 +47,7 @@ public:
   }
 
   QColor glowColor() const {
-      return _glowColor;
+    return _glowColor;
   }
 
   QSize sizeHint() const;

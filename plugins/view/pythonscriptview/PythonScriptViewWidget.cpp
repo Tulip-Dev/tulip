@@ -36,14 +36,14 @@ using namespace tlp;
 
 class GragKeyboardFocusEventFilter : public QObject {
 public :
-    bool eventFilter(QObject *, QEvent *event) {
-        if (event->type() == QEvent::ShortcutOverride) {
-            event->accept();
-            return true;
-        }
-
-        return false;
+  bool eventFilter(QObject *, QEvent *event) {
+    if (event->type() == QEvent::ShortcutOverride) {
+      event->accept();
+      return true;
     }
+
+    return false;
+  }
 };
 
 static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
@@ -106,8 +106,8 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
 
 }
 
-PythonScriptViewWidget::~PythonScriptViewWidget(){
-    delete _ui;
+PythonScriptViewWidget::~PythonScriptViewWidget() {
+  delete _ui;
 }
 
 void PythonScriptViewWidget::resizeEvent(QResizeEvent *e) {
@@ -121,11 +121,11 @@ void PythonScriptViewWidget::showEvent(QShowEvent *e) {
 }
 
 tlp::PythonEditorsTabWidget *PythonScriptViewWidget::getScriptsTabWidget() const {
-    return _ui->mainScriptsTabWidget;
+  return _ui->mainScriptsTabWidget;
 }
 
 tlp::PythonEditorsTabWidget *PythonScriptViewWidget::getModulesTabWidget() const {
-    return _ui->modulesTabWidget;
+  return _ui->modulesTabWidget;
 }
 
 void PythonScriptViewWidget::resizeToolBars() {
@@ -134,107 +134,107 @@ void PythonScriptViewWidget::resizeToolBars() {
 }
 
 void PythonScriptViewWidget::indicateErrors(const QMap<QString, QVector<int> > &errorLines) {
-    _ui->mainScriptsTabWidget->indicateErrors(errorLines);
-    _ui->modulesTabWidget->indicateErrors(errorLines);
+  _ui->mainScriptsTabWidget->indicateErrors(errorLines);
+  _ui->modulesTabWidget->indicateErrors(errorLines);
 }
 
 void PythonScriptViewWidget::clearErrorIndicators() {
-    _ui->mainScriptsTabWidget->clearErrorIndicators();
-    _ui->modulesTabWidget->clearErrorIndicators();
+  _ui->mainScriptsTabWidget->clearErrorIndicators();
+  _ui->modulesTabWidget->clearErrorIndicators();
 }
 
 QTextBrowser *PythonScriptViewWidget::consoleWidget() const {
-    return _ui->consoleOutputWidget;
+  return _ui->consoleOutputWidget;
 }
 
 QToolButton *PythonScriptViewWidget::runScriptButton() const {
-    return _ui->runScriptButton;
+  return _ui->runScriptButton;
 }
 
 QToolButton *PythonScriptViewWidget::pauseScriptButton() const {
-    return _ui->pauseScriptButton;
+  return _ui->pauseScriptButton;
 }
 
 QToolButton *PythonScriptViewWidget::stopScriptButton() const {
-    return _ui->stopScriptButton;
+  return _ui->stopScriptButton;
 }
 
 QLabel *PythonScriptViewWidget::scriptStatusLabel() const {
-    return _ui->scriptStatusLabel;
+  return _ui->scriptStatusLabel;
 }
 
 QProgressBar *PythonScriptViewWidget::progressBar() const {
-    return _ui->progressBar;
+  return _ui->progressBar;
 }
 
 void PythonScriptViewWidget::setMainTabWidgetIndex(int idx) {
-    _ui->tabWidget->setCurrentIndex(idx);
+  _ui->tabWidget->setCurrentIndex(idx);
 }
 
 int PythonScriptViewWidget::numberOfScriptEditors() const {
-    return _ui->mainScriptsTabWidget->count();
+  return _ui->mainScriptsTabWidget->count();
 }
 
 int PythonScriptViewWidget::numberOfModulesEditors() const {
-    return _ui->modulesTabWidget->count();
+  return _ui->modulesTabWidget->count();
 }
 
 void PythonScriptViewWidget::setCurrentScriptEditor(int idx) {
-    _ui->mainScriptsTabWidget->setCurrentIndex(idx);
+  _ui->mainScriptsTabWidget->setCurrentIndex(idx);
 }
 
 void PythonScriptViewWidget::setCurrentModuleEditor(int idx) {
-    _ui->modulesTabWidget->setCurrentIndex(idx);
+  _ui->modulesTabWidget->setCurrentIndex(idx);
 }
 
 QString PythonScriptViewWidget::getScriptEditorTabText(int idx) const {
-    return _ui->mainScriptsTabWidget->tabText(idx);
+  return _ui->mainScriptsTabWidget->tabText(idx);
 }
 
 QString PythonScriptViewWidget::getModuleEditorTabText(int idx) const {
-    return _ui->modulesTabWidget->tabText(idx);
+  return _ui->modulesTabWidget->tabText(idx);
 }
 
 void PythonScriptViewWidget::setScriptEditorTabText(int idx, const QString &tabText) {
-    _ui->mainScriptsTabWidget->setTabText(idx, tabText);
+  _ui->mainScriptsTabWidget->setTabText(idx, tabText);
 }
 
 void PythonScriptViewWidget::setModuleEditorTabText(int idx, const QString &tabText) {
-    _ui->modulesTabWidget->setTabText(idx, tabText);
+  _ui->modulesTabWidget->setTabText(idx, tabText);
 }
 
 void PythonScriptViewWidget::setScriptEditorTabToolTip(int idx, const QString &tooltip) {
-    _ui->mainScriptsTabWidget->setTabToolTip(idx, tooltip);
+  _ui->mainScriptsTabWidget->setTabToolTip(idx, tooltip);
 }
 
 void PythonScriptViewWidget::setModuleEditorTabToolTip(int idx, const QString &tooltip) {
-    _ui->modulesTabWidget->setTabToolTip(idx, tooltip);
+  _ui->modulesTabWidget->setTabToolTip(idx, tooltip);
 }
 
 int PythonScriptViewWidget::addMainScriptEditor(const QString &fileName) {
-    int idx = _ui->mainScriptsTabWidget->addEditor(fileName);
-    getMainScriptEditor(idx)->installEventFilter(_pythonScriptView);
-    getMainScriptEditor(idx)->getAutoCompletionDb()->setGraph(_pythonScriptView->getGraph());
-    return idx;
+  int idx = _ui->mainScriptsTabWidget->addEditor(fileName);
+  getMainScriptEditor(idx)->installEventFilter(_pythonScriptView);
+  getMainScriptEditor(idx)->getAutoCompletionDb()->setGraph(_pythonScriptView->getGraph());
+  return idx;
 }
 
 int PythonScriptViewWidget::addModuleEditor(const QString &fileName) {
-    int idx = _ui->modulesTabWidget->addEditor(fileName);
-    getModuleEditor(idx)->installEventFilter(_pythonScriptView);
-    getModuleEditor(idx)->getAutoCompletionDb()->setGraph(_pythonScriptView->getGraph());
-    return idx;
+  int idx = _ui->modulesTabWidget->addEditor(fileName);
+  getModuleEditor(idx)->installEventFilter(_pythonScriptView);
+  getModuleEditor(idx)->getAutoCompletionDb()->setGraph(_pythonScriptView->getGraph());
+  return idx;
 }
 
 int PythonScriptViewWidget::getCurrentMainScriptEditorIndex() const {
-    return _ui->mainScriptsTabWidget->currentIndex();
+  return _ui->mainScriptsTabWidget->currentIndex();
 }
 
 int PythonScriptViewWidget::getCurrentModuleEditorIndex() const {
-    return _ui->modulesTabWidget->currentIndex();
+  return _ui->modulesTabWidget->currentIndex();
 }
 
 PythonCodeEditor *PythonScriptViewWidget::getCurrentMainScriptEditor() const {
-    return _ui->mainScriptsTabWidget->getCurrentEditor();
+  return _ui->mainScriptsTabWidget->getCurrentEditor();
 }
 
 PythonCodeEditor *PythonScriptViewWidget::getCurrentModuleEditor() const {
@@ -242,7 +242,7 @@ PythonCodeEditor *PythonScriptViewWidget::getCurrentModuleEditor() const {
 }
 
 PythonCodeEditor *PythonScriptViewWidget::getMainScriptEditor(int idx) const {
-    return _ui->mainScriptsTabWidget->getEditor(idx);
+  return _ui->mainScriptsTabWidget->getEditor(idx);
 }
 
 PythonCodeEditor *PythonScriptViewWidget::getModuleEditor(int idx) const {
@@ -250,13 +250,13 @@ PythonCodeEditor *PythonScriptViewWidget::getModuleEditor(int idx) const {
 }
 
 void PythonScriptViewWidget::decreaseFontSize() {
-    _ui->mainScriptsTabWidget->decreaseFontSize();
-    _ui->modulesTabWidget->decreaseFontSize();
+  _ui->mainScriptsTabWidget->decreaseFontSize();
+  _ui->modulesTabWidget->decreaseFontSize();
 }
 
 void PythonScriptViewWidget::increaseFontSize() {
-    _ui->mainScriptsTabWidget->increaseFontSize();
-    _ui->modulesTabWidget->increaseFontSize();
+  _ui->mainScriptsTabWidget->increaseFontSize();
+  _ui->modulesTabWidget->increaseFontSize();
 }
 
 void PythonScriptViewWidget::currentTabChanged(int index) {

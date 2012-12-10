@@ -70,7 +70,7 @@ ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale& colorScale,
 }
 
 ColorScaleConfigDialog::~ColorScaleConfigDialog() {
-    delete _ui;
+  delete _ui;
 }
 
 void ColorScaleConfigDialog::accept() {

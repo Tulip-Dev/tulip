@@ -37,14 +37,14 @@ using namespace tlp;
 
 class GragKeyboardFocusEventFilter : public QObject {
 public :
-    bool eventFilter(QObject *, QEvent *event) {
-        if (event->type() == QEvent::ShortcutOverride) {
-            event->accept();
-            return true;
-        }
-
-        return false;
+  bool eventFilter(QObject *, QEvent *event) {
+    if (event->type() == QEvent::ShortcutOverride) {
+      event->accept();
+      return true;
     }
+
+    return false;
+  }
 };
 
 static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
@@ -55,21 +55,21 @@ namespace tlp {
 
 class LineNumberArea : public QWidget {
 public:
-    LineNumberArea(PythonCodeEditor *editor) : QWidget(editor) {
-        codeEditor = editor;
-    }
+  LineNumberArea(PythonCodeEditor *editor) : QWidget(editor) {
+    codeEditor = editor;
+  }
 
-    QSize sizeHint() const {
-        return QSize(codeEditor->lineNumberAreaWidth(), 0);
-    }
+  QSize sizeHint() const {
+    return QSize(codeEditor->lineNumberAreaWidth(), 0);
+  }
 
 protected:
-    void paintEvent(QPaintEvent *event) {
-        codeEditor->lineNumberAreaPaintEvent(event);
-    }
+  void paintEvent(QPaintEvent *event) {
+    codeEditor->lineNumberAreaPaintEvent(event);
+  }
 
 private:
-    PythonCodeEditor *codeEditor;
+  PythonCodeEditor *codeEditor;
 };
 
 }
@@ -244,7 +244,7 @@ FindReplaceDialog::FindReplaceDialog(QPlainTextEdit *editor, QWidget *parent) : 
 }
 
 FindReplaceDialog::~FindReplaceDialog() {
-    delete _ui;
+  delete _ui;
 }
 
 void FindReplaceDialog::setTextToFind(const QString &text) {
@@ -552,7 +552,7 @@ void PythonCodeEditor::updateLineNumberArea(const QRect &rect, int dy) {
     _lineNumberArea->scroll(0, dy);
   else
     _lineNumberArea->update(0, rect.y(), _lineNumberArea->width(),
-                           rect.height());
+                            rect.height());
 
   if (rect.contains(viewport()->rect()))
     updateLineNumberAreaWidth();
@@ -993,7 +993,8 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
   }
   else if ((e->key() == Qt::Key_Space && e->modifiers() == modifier) || e->text() == ".") {
     if (e->text() == ".")
-        QPlainTextEdit::keyPressEvent(e);
+      QPlainTextEdit::keyPressEvent(e);
+
     QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
 
     if (!textBeforeCursor.contains('#'))
@@ -1200,8 +1201,8 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
   int stop = 0;
 
   for (int i = textBeforeCursor.length() ; i >=0 ;  --i) {
-      if (textBeforeCursor[i] == '\t' || textBeforeCursor[i] == ' ' || textBeforeCursor[i] == '.' ||
-          textBeforeCursor[i] == '(' || textBeforeCursor[i] == '[') {
+    if (textBeforeCursor[i] == '\t' || textBeforeCursor[i] == ' ' || textBeforeCursor[i] == '.' ||
+        textBeforeCursor[i] == '(' || textBeforeCursor[i] == '[') {
       stop = i+1;
       break;
     }
@@ -1502,49 +1503,54 @@ void PythonCodeEditor::insertFromMimeData(const QMimeData * source) {
 }
 
 bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
-    QFile file(filePath);
+  QFile file(filePath);
 
-    if (!file.exists())
-        return false;
+  if (!file.exists())
+    return false;
 
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-    QFileInfo fileInfo(file);
+  file.open(QIODevice::ReadOnly | QIODevice::Text);
+  QFileInfo fileInfo(file);
 
-    QString scriptCode;
+  QString scriptCode;
 
-    while (!file.atEnd()) {
-        scriptCode += file.readLine();
+  while (!file.atEnd()) {
+    scriptCode += file.readLine();
+  }
+
+  file.close();
+
+  _lastSavedTime = fileInfo.lastModified();
+
+  if (filePath == getFileName() && !toPlainText().isEmpty()) {
+    if (scriptCode != getCleanCode() && QMessageBox::question(NULL, "File changed on disk", QString("The file ") + filePath + " has been modified by another editor. Do you want to reload it ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
+      setPlainText(scriptCode);
     }
-    file.close();
-
-    _lastSavedTime = fileInfo.lastModified();
-    if (filePath == getFileName() && !toPlainText().isEmpty()) {
-        if (scriptCode != getCleanCode() && QMessageBox::question(NULL, "File changed on disk", QString("The file ") + filePath + " has been modified by another editor. Do you want to reload it ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
-            setPlainText(scriptCode);
-        } else {
-            return false;
-        }
-    } else {
-        setFileName(filePath);
-        setPlainText(scriptCode);
+    else {
+      return false;
     }
+  }
+  else {
+    setFileName(filePath);
+    setPlainText(scriptCode);
+  }
 
-    return true;
+  return true;
 }
 
 bool PythonCodeEditor::saveCodeToFile() {
-    QFile file(getFileName());
-    QFileInfo fileInfo(file);
+  QFile file(getFileName());
+  QFileInfo fileInfo(file);
 
-    if (getFileName() == fileInfo.absoluteFilePath() && file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QTextStream out(&file);
-        out << getCleanCode();
-        file.close();
-        QFileInfo fileInfo(file);
-        _lastSavedTime = fileInfo.lastModified();
-        return true;
-    }
-    return false;
+  if (getFileName() == fileInfo.absoluteFilePath() && file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    QTextStream out(&file);
+    out << getCleanCode();
+    file.close();
+    QFileInfo fileInfo(file);
+    _lastSavedTime = fileInfo.lastModified();
+    return true;
+  }
+
+  return false;
 }
 
 void PythonCodeEditor::scrollToLine(int line) {

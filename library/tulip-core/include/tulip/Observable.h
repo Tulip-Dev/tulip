@@ -494,14 +494,14 @@ private:
  * @endcode
  *
  */
-class TLP_SCOPE ObserverLocker{
+class TLP_SCOPE ObserverLocker {
 public :
-    ObserverLocker(){
-        Observable::holdObservers();
-}
-    ~ObserverLocker(){
-        Observable::unholdObservers();
-    }
+  ObserverLocker() {
+    Observable::holdObservers();
+  }
+  ~ObserverLocker() {
+    Observable::unholdObservers();
+  }
 };
 }
 

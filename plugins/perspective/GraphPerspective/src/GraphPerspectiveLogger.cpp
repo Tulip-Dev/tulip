@@ -28,8 +28,8 @@ GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent): QFrame(parent),
   connect(_ui->clearButton,SIGNAL(clicked()),this,SLOT(clear()));
 }
 
-GraphPerspectiveLogger::~GraphPerspectiveLogger(){
-    delete _ui;
+GraphPerspectiveLogger::~GraphPerspectiveLogger() {
+  delete _ui;
 }
 
 QString GraphPerspectiveLogger::iconForType(QtMsgType type) {

@@ -89,10 +89,12 @@ void GraphAbstract::setSubGraphToKeep(Graph* sg) {
 }
 //=========================================================================
 Graph *GraphAbstract::addSubGraph(unsigned int id, BooleanProperty *selection,
-				  std::string name) {
+                                  std::string name) {
   Graph *tmp = new GraphView(this, selection, id);
+
   if (!name.empty())
     tmp->setAttribute("name", name);
+
   notifyBeforeAddSubGraph(tmp);
   subgraphs.push_back(tmp);
   notifyAfterAddSubGraph(tmp);
@@ -100,7 +102,7 @@ Graph *GraphAbstract::addSubGraph(unsigned int id, BooleanProperty *selection,
 }
 //=========================================================================
 Graph *GraphAbstract::addSubGraph(BooleanProperty *selection,
-				  std::string name) {
+                                  std::string name) {
   return addSubGraph(0, selection, name);
 }
 //=========================================================================
@@ -628,11 +630,11 @@ std::string GraphAbstract::getName() const {
 }
 
 Iterator<node>* GraphAbstract::bfs(const node root) const {
-    vector<node> bfsResult = tlp::bfs(this, root);
-    return new StableIterator<tlp::node>(new StlIterator<node, std::vector<tlp::node>::iterator>(bfsResult.begin(), bfsResult.end()));
+  vector<node> bfsResult = tlp::bfs(this, root);
+  return new StableIterator<tlp::node>(new StlIterator<node, std::vector<tlp::node>::iterator>(bfsResult.begin(), bfsResult.end()));
 }
 
 Iterator<node>* GraphAbstract::dfs(const node root) const {
-    vector<node> dfsResult = tlp::dfs(this, root);
-    return new StableIterator<tlp::node>(new StlIterator<node, std::vector<tlp::node>::iterator>(dfsResult.begin(), dfsResult.end()));
+  vector<node> dfsResult = tlp::dfs(this, root);
+  return new StableIterator<tlp::node>(new StlIterator<node, std::vector<tlp::node>::iterator>(dfsResult.begin(), dfsResult.end()));
 }

@@ -266,12 +266,15 @@ MATRIX tlp::operator-(const MATRIX &mat1 ,const MATRIX &mat2) {
 template<typename Obj,unsigned int SIZE>
 MATRIX tlp::operator*(const MATRIX &mat1 ,const MATRIX &mat2) {
   MATRIX result;
+
   for (unsigned int i=0; i<SIZE; ++i)
     for (unsigned int j=0; j<SIZE; ++j) {
       result[i][j] = mat1[i][0] * mat2[0][j];
+
       for (unsigned int k=1; k<SIZE; ++k)
         result[i][j] += mat1[i][k] * mat2[k][j];
     }
+
   return result;
 }
 //=====================================================================================

@@ -32,7 +32,7 @@ FiltersManagerInvertItem::FiltersManagerInvertItem(QWidget* parent): AbstractFil
 }
 
 FiltersManagerInvertItem::~FiltersManagerInvertItem() {
-    delete _ui;
+  delete _ui;
 }
 
 

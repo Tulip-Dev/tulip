@@ -199,6 +199,7 @@ void Workspace::panelDestroyed(QObject* obj) {
 
 void Workspace::viewNeedsDraw() {
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(sender());
+
   if (_autoCenterViews) {
     panel->view()->centerView();
   }
@@ -473,8 +474,9 @@ void Workspace::hideExposeMode() {
   QVector<WorkspacePanel*> newPanels = _ui->exposeMode->panels();
   _panels.clear();
   foreach(WorkspacePanel* p, newPanels)
-    _panels.push_back(p);
+  _panels.push_back(p);
   _currentPanelIndex = _ui->exposeMode->currentPanelIndex();
+
   if (!_ui->exposeMode->isSwitchToSingleMode()) {
     switchWorkspaceMode(suitableMode(_oldWorkspaceMode));
   }
@@ -482,6 +484,7 @@ void Workspace::hideExposeMode() {
     updateAvailableModes();
     switchToSingleMode();
   }
+
   updatePageCountLabel();
 }
 

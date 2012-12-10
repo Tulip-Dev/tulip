@@ -9,11 +9,11 @@ class TLP_PYTHON_SCOPE PythonTabWidget : public QTabWidget {
 
 public :
 
-    explicit PythonTabWidget(QWidget *parent = 0);
+  explicit PythonTabWidget(QWidget *parent = 0);
 
 protected:
 
-    void paintEvent(QPaintEvent * event);
+  void paintEvent(QPaintEvent * event);
 
 };
 

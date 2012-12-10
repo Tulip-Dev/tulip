@@ -10,8 +10,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent): QDialog(parent), _ui(new 
   _ui->graphDefaultsTable->setItemDelegate(new tlp::TulipItemDelegate(_ui->graphDefaultsTable));
 }
 
-PreferencesDialog::~PreferencesDialog(){
-    delete _ui;
+PreferencesDialog::~PreferencesDialog() {
+  delete _ui;
 }
 
 void PreferencesDialog::writeSettings() {

@@ -44,7 +44,7 @@ TulipFontDialog::TulipFontDialog(QWidget *parent): QDialog(parent), _ui(new Ui::
 }
 
 TulipFontDialog::~TulipFontDialog() {
-    delete _ui;
+  delete _ui;
 }
 
 TulipFont TulipFontDialog::font() const {

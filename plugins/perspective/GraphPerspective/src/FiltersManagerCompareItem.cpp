@@ -187,8 +187,8 @@ FiltersManagerCompareItem::FiltersManagerCompareItem(QWidget* parent): AbstractF
   connect(_ui->alg2Params, SIGNAL(destroyed()), _ui->alg2Params->itemDelegate(), SLOT(deleteLater()));
 }
 
-FiltersManagerCompareItem::~FiltersManagerCompareItem(){
-    delete _ui;
+FiltersManagerCompareItem::~FiltersManagerCompareItem() {
+  delete _ui;
 }
 
 void FiltersManagerCompareItem::elementChanged() {

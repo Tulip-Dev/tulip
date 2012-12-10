@@ -227,7 +227,7 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,tlp::Proper
     // create a dialog on the fly
     dlg = new QDialog(Perspective::instance()->mainWindow());
     dlg->setWindowTitle(elType == NODE ? "Set nodes values"
-			: "Set edges values");
+                        : "Set edges values");
     QVBoxLayout* layout = new QVBoxLayout;
     dlg->setLayout(layout);
     layout->addWidget(new QLabel(pi->getName().c_str()));

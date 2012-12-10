@@ -212,7 +212,7 @@ void GlScene::draw() {
     // Draw simple entities
     vector<SimpleEntityLODUnit>::iterator it;
 
-    if(getGlGraphComposite() && !getGlGraphComposite()->getInputData()->parameters->isElementZOrdered()){
+    if(getGlGraphComposite() && !getGlGraphComposite()->getInputData()->parameters->isElementZOrdered()) {
       for( it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
         if((*it).lod<0)
           continue;
@@ -220,7 +220,8 @@ void GlScene::draw() {
         glStencilFunc(GL_LEQUAL,(((*it).entity))->getStencil(), 0xFFFF);
         ((*it).entity)->draw((*it).lod,camera);
       }
-    }else{
+    }
+    else {
 
       entityWithDistanceCompare::inputData=glGraphComposite->getInputData();
       multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;

@@ -46,7 +46,7 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new 
 }
 
 SceneConfigWidget::~SceneConfigWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
@@ -75,6 +75,7 @@ void SceneConfigWidget::resetChanges() {
   // NODES
   GraphPropertiesModel<DoubleProperty>* model = new GraphPropertiesModel<DoubleProperty>(trUtf8("Disable ordering"),graph);
   _ui->labelsOrderingCombo->setModel(model);
+
   if (renderingParameters->getElementOrderingProperty() == NULL)
     _ui->labelsOrderingCombo->setCurrentIndex(0);
   else
@@ -131,6 +132,7 @@ void SceneConfigWidget::applySettings() {
     GraphPropertiesModel<DoubleProperty>* model = static_cast<GraphPropertiesModel<DoubleProperty> *>(_ui->labelsOrderingCombo->model());
     renderingParameters->setElementOrderingProperty(dynamic_cast<DoubleProperty*>(model->index(_ui->labelsOrderingCombo->currentIndex(),0).data(TulipModel::PropertyRole).value<PropertyInterface*>()));
   }
+
   renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());
   renderingParameters->setLabelsDensity(_ui->labelsDensitySlider->value());
   renderingParameters->setMinSizeOfLabel(_ui->labelSizesSpanSlider->lowerValue());

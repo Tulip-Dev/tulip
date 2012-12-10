@@ -38,7 +38,7 @@ PythonPluginCreationDialog::PythonPluginCreationDialog(QWidget *parent) : QDialo
 }
 
 PythonPluginCreationDialog::~PythonPluginCreationDialog() {
-    delete _ui;
+  delete _ui;
 }
 
 void PythonPluginCreationDialog::validateForm() {

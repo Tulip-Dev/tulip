@@ -29,34 +29,34 @@ class QTextDocument;
 
 class PythonCodeHighlighter : public QSyntaxHighlighter {
 
-    struct HighlightingRule {
-        QRegExp pattern;
-        QTextCharFormat format;
-    };
+  struct HighlightingRule {
+    QRegExp pattern;
+    QTextCharFormat format;
+  };
 
-    QVector<HighlightingRule> _highlightingRules;
-    QTextCharFormat _keywordFormat;
-    QTextCharFormat _classFormat;
-    QTextCharFormat _commentFormat;
-    QTextCharFormat _quotationFormat;
-    QTextCharFormat _functionFormat;
-    QTextCharFormat _numberFormat;
-    QTextCharFormat _tlpApiFormat;
-    QTextCharFormat _qtApiFormat;
+  QVector<HighlightingRule> _highlightingRules;
+  QTextCharFormat _keywordFormat;
+  QTextCharFormat _classFormat;
+  QTextCharFormat _commentFormat;
+  QTextCharFormat _quotationFormat;
+  QTextCharFormat _functionFormat;
+  QTextCharFormat _numberFormat;
+  QTextCharFormat _tlpApiFormat;
+  QTextCharFormat _qtApiFormat;
 
-    bool _shellMode;
+  bool _shellMode;
 
 public:
 
-    explicit PythonCodeHighlighter(QTextDocument *parent = 0);
+  explicit PythonCodeHighlighter(QTextDocument *parent = 0);
 
-    void setShellMode(const bool shellMode) {
-        _shellMode = shellMode;
-    }
+  void setShellMode(const bool shellMode) {
+    _shellMode = shellMode;
+  }
 
 protected:
 
-    void highlightBlock(const QString &text);
+  void highlightBlock(const QString &text);
 
 };
 

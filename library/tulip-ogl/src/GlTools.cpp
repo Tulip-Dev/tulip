@@ -85,6 +85,7 @@ void glTest(const string &message) {
 
   while (error != GL_NO_ERROR) {
     haveError=true;
+
     if (i==1)
       errorStream << "[OpenGL ERROR] : " << message << endl;
 

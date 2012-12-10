@@ -245,15 +245,15 @@ public:
 
   // constructor for node/edge events
   PluginEvent(PluginEventType pluginEvtType, std::string pluginName)
-      : Event(*(tlp::PluginLister::instance()), Event::TLP_MODIFICATION),
-        evtType(pluginEvtType), pluginName(pluginName) {}
+    : Event(*(tlp::PluginLister::instance()), Event::TLP_MODIFICATION),
+      evtType(pluginEvtType), pluginName(pluginName) {}
 
   PluginEventType getType() const {
     return evtType;
   }
 
   std::string getPluginName() const {
-      return pluginName;
+    return pluginName;
   }
 
 protected:

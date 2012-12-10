@@ -148,9 +148,9 @@ public:
                     const Color &/* borderColor */, float /* lod */) {
     glDisable(GL_LIGHTING);
     GlowSphere::drawGlyph(glyphColor,
-			  edgeExtGlGraphInputData->getElementSize()->getNodeValue(n),
-			  edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
-			  edgeExtGlGraphInputData->parameters->getTexturePath());
+                          edgeExtGlGraphInputData->getElementSize()->getNodeValue(n),
+                          edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+                          edgeExtGlGraphInputData->parameters->getTexturePath());
   }
 };
 

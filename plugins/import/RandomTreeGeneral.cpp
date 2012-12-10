@@ -68,28 +68,29 @@ const char * paramHelp[] = {
  */
 class RandomTreeGeneral:public ImportModule {
 
-    bool buildNode(node n,unsigned int sizeM,int arityMax) {
-      if (graph->numberOfNodes()>=sizeM) return true;
+  bool buildNode(node n,unsigned int sizeM,int arityMax) {
+    if (graph->numberOfNodes()>=sizeM) return true;
 
-      bool result=true;
-      int randNumber=rand();
-      int i = 0;
+    bool result=true;
+    int randNumber=rand();
+    int i = 0;
 
-      while (randNumber < RAND_MAX/pow(2.0,1.0+i))
-        ++i;
+    while (randNumber < RAND_MAX/pow(2.0,1.0+i))
+      ++i;
 
-      i = i % arityMax;
-      graph->reserveNodes(i);
-      graph->reserveEdges(i);
-      for (; i>0; --i) {
-        node n1;
-        n1=graph->addNode();
-        graph->addEdge(n,n1);
-        result= result && buildNode(n1,sizeM,arityMax);
-      }
+    i = i % arityMax;
+    graph->reserveNodes(i);
+    graph->reserveEdges(i);
 
-      return result;
+    for (; i>0; --i) {
+      node n1;
+      n1=graph->addNode();
+      graph->addEdge(n,n1);
+      result= result && buildNode(n1,sizeM,arityMax);
     }
+
+    return result;
+  }
 
 public:
   PLUGININFORMATIONS("Random General Tree","Auber","16/02/2001","Imports a new randomly generated tree.","1.1","Graph")
@@ -110,25 +111,27 @@ public:
     bool needLayout = false;
 
     if (dataSet!=NULL) {
-        if(dataSet->exist("Minimum size"))
-            dataSet->get("Minimum size", sizeMin);
-        else
-            dataSet->get("minsize", sizeMin);   //keep old parameter name for backward compatibility
-        if(dataSet->exist("Maximum size"))
-            dataSet->get("Maximum size", sizeMax);
-        else
-            dataSet->get("maxsize", sizeMax); //keep old parameter name for backward compatibility
-        if(dataSet->exist("Maximal node's degree"))
-            dataSet->get("Maximal node's degree", arityMax);
-        else
-            dataSet->get("maxdegree", arityMax); //keep old parameter name for backward compatibility
+      if(dataSet->exist("Minimum size"))
+        dataSet->get("Minimum size", sizeMin);
+      else
+        dataSet->get("minsize", sizeMin);   //keep old parameter name for backward compatibility
 
-        dataSet->get("tree layout", needLayout);
+      if(dataSet->exist("Maximum size"))
+        dataSet->get("Maximum size", sizeMax);
+      else
+        dataSet->get("maxsize", sizeMax); //keep old parameter name for backward compatibility
+
+      if(dataSet->exist("Maximal node's degree"))
+        dataSet->get("Maximal node's degree", arityMax);
+      else
+        dataSet->get("maxdegree", arityMax); //keep old parameter name for backward compatibility
+
+      dataSet->get("tree layout", needLayout);
     }
 
     if (arityMax < 1) {
       if (pluginProgress)
-          pluginProgress->setError("Error: maximum node's degree must be a strictly positive integer");
+        pluginProgress->setError("Error: maximum node's degree must be a strictly positive integer");
 
       return false;
     }

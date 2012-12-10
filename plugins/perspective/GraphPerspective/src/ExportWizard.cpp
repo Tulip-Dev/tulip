@@ -108,39 +108,47 @@ void ExportWizard::pathChanged(QString s) {
     PluginLister::instance()->availablePlugins<ExportModule>();
   std::list<std::string> imports =
     PluginLister::instance()->availablePlugins<ImportModule>();
+
   for(std::list<std::string>::iterator itm = modules.begin(); itm != modules.end(); ++itm) {
     ExportModule* p =
       PluginLister::instance()->getPluginObject<ExportModule>(*itm,NULL);
     std::string extension = p->fileExtension();
+
     if (s.endsWith(extension.c_str())) {
       selectedExport = itm->c_str();
       delete p;
       break;
     }
+
     // add special case to allow export *.gz
     extension += ".gz";
+
     if (s.endsWith((extension).c_str())) {
       // look for a corresponding import module supporting the gz extension
       for(std::list<std::string>::const_iterator it = imports.begin();
-	  it != imports.end(); ++it) {
-	ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
-	std::list<std::string> extensions(m->fileExtensions());
-	for(std::list<std::string>::const_iterator ite = extensions.begin();
-	    ite != extensions.end(); ++ite) {
-	  if (extension == *ite) {
-	    // found it
-	    selectedExport = itm->c_str();
-	    break;
-	  }
-	}
-	delete m;
-	if (selectedExport != NULL) {
-	  break;
-	}
+          it != imports.end(); ++it) {
+        ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
+        std::list<std::string> extensions(m->fileExtensions());
+
+        for(std::list<std::string>::const_iterator ite = extensions.begin();
+            ite != extensions.end(); ++ite) {
+          if (extension == *ite) {
+            // found it
+            selectedExport = itm->c_str();
+            break;
+          }
+        }
+
+        delete m;
+
+        if (selectedExport != NULL) {
+          break;
+        }
       }
+
       if (selectedExport != NULL) {
-	break;
-	delete p;
+        break;
+        delete p;
       }
     }
 
@@ -154,8 +162,10 @@ void ExportWizard::pathChanged(QString s) {
 
   PluginModel<tlp::ExportModule>* model = static_cast<PluginModel<tlp::ExportModule>*>(_ui->exportModules->model());
   QModelIndexList results = model->match(_ui->exportModules->rootIndex(), Qt::DisplayRole, selectedExport, 1, Qt::MatchExactly | Qt::MatchRecursive);
+
   if (results.size()==0)
     return;
+
   _ui->exportModules->setCurrentIndex(results[0]);
 }
 

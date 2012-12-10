@@ -127,7 +127,7 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
 }
 
 void tlp::PluginLister::sendPluginAddedEvent(const std::string &pluginName) {
-    sendEvent(PluginEvent(PluginEvent::TLP_ADD_PLUGIN, pluginName));
+  sendEvent(PluginEvent(PluginEvent::TLP_ADD_PLUGIN, pluginName));
 }
 
 void tlp::PluginLister::sendPluginRemovedEvent(const std::string &pluginName) {

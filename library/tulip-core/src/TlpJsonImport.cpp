@@ -74,6 +74,7 @@ public:
           propertyIterator != graphIterator->second.end();
           ++propertyIterator) {
         tlp::GraphProperty* prop = graphIterator->first->getProperty<tlp::GraphProperty>(propertyIterator->first);
+
         for(TemporaryGraphValue::const_iterator valueIterator = propertyIterator->second.begin();
             valueIterator != propertyIterator->second.end();
             ++valueIterator) {

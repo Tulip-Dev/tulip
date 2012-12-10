@@ -30,35 +30,35 @@ namespace tlp {
 
 class TLP_PYTHON_SCOPE PythonShellWidget : public PythonCodeEditor {
 
-    Q_OBJECT
+  Q_OBJECT
 
-    QString _currentPs;
-    QString _currentCodeLines;
+  QString _currentPs;
+  QString _currentCodeLines;
 
-    QVector<QString> _history;
-    int _currentHistoryPos;
+  QVector<QString> _history;
+  int _currentHistoryPos;
 
 public :
 
-    explicit PythonShellWidget(QWidget *parent = 0);
+  explicit PythonShellWidget(QWidget *parent = 0);
 
 protected:
 
-    void keyPressEvent(QKeyEvent * e);
+  void keyPressEvent(QKeyEvent * e);
 
-    bool isCursorOnLastLine();
+  bool isCursorOnLastLine();
 
-    void executeCurrentLines();
+  void executeCurrentLines();
 
-    void showEvent(QShowEvent * event);
+  void showEvent(QShowEvent * event);
 
 public slots:
 
-    void insert(const QString &txt, const bool atEnd = false);
+  void insert(const QString &txt, const bool atEnd = false);
 
 protected slots:
 
-    void updateAutoCompletionList(bool dotContext=false);
+  void updateAutoCompletionList(bool dotContext=false);
 
 };
 
