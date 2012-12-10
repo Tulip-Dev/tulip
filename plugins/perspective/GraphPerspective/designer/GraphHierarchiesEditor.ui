@@ -201,7 +201,7 @@
      <normaloff>:/tulip/graphperspective/icons/16/view-open.png</normaloff>:/tulip/graphperspective/icons/16/view-open.png</iconset>
    </property>
    <property name="text">
-    <string>Create panel</string>
+    <string>Add panel</string>
    </property>
    <property name="toolTip">
     <string>Open a new visualization panel</string>
