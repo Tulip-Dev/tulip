@@ -200,9 +200,9 @@ std::fstream *TulipProject::stdFileStream(const QString &path) {
   return result;
 }
 
-QIODevice *TulipProject::fileStream(const QString &path) {
+QIODevice *TulipProject::fileStream(const QString &path, QIODevice::OpenMode mode) {
   QFile *result = new QFile(toAbsolutePath(path));
-  result->open(QIODevice::ReadWrite);
+  result->open(mode);
   return result;
 }
 

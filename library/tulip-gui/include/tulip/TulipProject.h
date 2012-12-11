@@ -217,9 +217,10 @@ public:
     @warning This method does not check if the given path is a directory or a file. User might get an invalid filestream.
     @warning User SHOULD NOT cast the QIODevice returned by this method into any of its subclass since the implementation might change in future versions.
     @param path The path to open. @see TulipProject
+    @param mode The opening mode as described in the Qt documentation.
     @return an opened Qt device on the given path.
     */
-  QIODevice *fileStream(const QString &path);
+  QIODevice *fileStream(const QString &path, QIODevice::OpenMode mode=QIODevice::ReadWrite);
 
   /**
     @brief Returns the last error raised.
