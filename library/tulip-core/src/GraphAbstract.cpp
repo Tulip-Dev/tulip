@@ -426,28 +426,6 @@ void GraphAbstract::reverse(const edge e) {
   root->reverse(e);
 }
 //=========================================================================
-edge GraphAbstract::existEdge(const node n1, const node n2,
-                              bool directed) const {
-  Iterator<edge> *it;
-
-  if (directed)
-    it = getOutEdges(n1);
-  else
-    it = getInOutEdges(n1);
-
-  while (it->hasNext()) {
-    edge e(it->next());
-
-    if (opposite(e, n1) == n2) {
-      delete it;
-      return e;
-    }
-  }
-
-  delete it;
-  return edge();
-}
-//=========================================================================
 void GraphAbstract::delEdges(Iterator<edge>* itE, bool deleteInAllGraphs) {
   assert(itE != NULL);
 

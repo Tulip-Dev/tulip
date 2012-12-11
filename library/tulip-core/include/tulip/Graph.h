@@ -919,7 +919,7 @@ public:
   virtual bool isElement(const node n) const =0;
 
   /**
-   * @brief Checks is a node is a meta node.
+   * @brief Checks if a node is a meta node.
    * @param n The node to check if it is a meta node.
    * @return Whether or not the node is a meta node.
    */
@@ -933,29 +933,48 @@ public:
   virtual bool isElement(const edge e) const =0;
 
   /**
-   * @brief Checks is an edge is a meta edge.
+   * @brief Checks if an edge is a meta edge.
    * @param e The edge to check if it is a meta edge.
    * @return Whether or not the edge is a meta edge.
    */
   virtual bool isMetaEdge(const edge e) const =0;
 
   /**
-   * Returns the edge if it exists an edge between two nodes.
-   *  The 'directed' flag indicates if the direction of the edge
-   *  (from source to target) must be taken in to account.
-   *  If no edge is found, returns an invalid edge.
-   *
-   * @brief If an edge exists between the two given nodes, return it.
-   * If specified, include and edge that goes from target to source.
-   * @warning this function always returns an edge, you need to check if this edge is valid with
-   * edge::isValid().
+   * @brief Checks if an edge exists between two given nodes.
    * @param source The source of the hypothetical edge.
    * @param target The target of the hypothetical edge.
-   * @param directed Whether to include edges going from target to source.
+   * @param directed When set to false edges from target to source are also considered
+   * @return true if such an edge exists
+   */
+  virtual bool hasEdge(const node source, const node target,
+		       bool directed = true) const {
+    return existEdge(source, target, directed).isValid();
+  }
+
+
+  /**
+   * @brief Returns all the edges between two nodes.
+   * @param source The source of the hypothetical edges.
+   * @param target The target of the hypothetical edges.
+   * @param directed When set to false edges from target to source are also considered
+   * @return a vector of existing edges
+   */
+  virtual std::vector<edge> getEdges(const node source, const node target,
+				     bool directed = true) const=0;
+
+  /**
+   * @brief Returns the first edge found between the two given nodes.
+   * @warning This function always returns an edge,
+   * you need to check if this edge is valid with edge::isValid().
+   * @param source The source of the hypothetical edge.
+   * @param target The target of the hypothetical edge.
+   * @param directed When set to false
+   * an edge from target to source may also be returned
    * @return An edge that is only valid if it exists.
    */
   virtual edge existEdge(const node source, const node target,
-                         bool directed = true) const =0;
+			 bool directed = true) const=0;
+
   //================================================================================
   // Access to the graph attributes and to the node/edge property.
   //================================================================================
@@ -1482,8 +1501,6 @@ protected:
   void notifyDestroy(Graph*) {
     notifyDestroy();
   }
-
-protected:
 
   unsigned int id;
   TLP_HASH_MAP<std::string, tlp::PropertyInterface*> circularCalls;
