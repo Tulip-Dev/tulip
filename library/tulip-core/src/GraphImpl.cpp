@@ -139,6 +139,12 @@ bool GraphImpl::isElement(const edge e) const {
   return storage.isElement(e);
 }
 //----------------------------------------------------------------
+edge GraphImpl::existEdge(const node src, const node tgt,
+			  bool directed) const {
+  std::vector<edge> edges;
+  return storage.getEdges(src, tgt, directed, edges, true) ? edges[0] : edge();
+}
+//----------------------------------------------------------------
 unsigned int GraphImpl::getSubGraphId(unsigned int id) {
   if (id == 0)
     return graphIds.get();
@@ -374,6 +380,13 @@ Iterator<edge>* GraphImpl::getInOutEdges(const node n) const {
 void GraphImpl::getInOutEdges(const node n, std::vector<edge>& edges,
                               bool loopsOnlyOnce) const {
   storage.getInOutEdges(n, edges, loopsOnlyOnce);
+}
+//----------------------------------------------------------------
+std::vector<edge> GraphImpl::getEdges(const node src, const node tgt,
+				      bool directed) const {
+  std::vector<edge> edges;
+  storage.getEdges(src, tgt, directed, edges);
+  return edges;
 }
 //----------------------------------------------------------------
 unsigned int GraphImpl::deg(const node n) const {

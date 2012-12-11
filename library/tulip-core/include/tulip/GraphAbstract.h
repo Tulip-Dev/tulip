@@ -24,6 +24,7 @@
 #ifndef DOXYGEN_NOTFOR_USER
 
 #include <set>
+#include <vector>
 #include <tulip/Graph.h>
 #include <tulip/DataSet.h>
 
@@ -79,7 +80,6 @@ public:
   virtual const std::pair<node, node>& ends(const edge) const;
   virtual void setEnds(const edge, const node, const node);
   virtual node opposite(const edge, const node)const;
-  virtual edge existEdge(const node , const node, bool)const;
   virtual void reverse(const edge);
   virtual bool isMetaEdge(const edge) const;
   virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;

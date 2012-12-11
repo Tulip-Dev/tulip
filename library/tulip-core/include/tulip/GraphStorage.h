@@ -156,6 +156,19 @@ public:
   Iterator<edge>* getInEdges(node n) const;
   //=======================================================
   /**
+   * @brief Returns if edges exist between two nodes
+   * @param source The source of the hypothetical edges.
+   * @param target The target of the hypothetical edges.
+   * @param directed When set to false edges from target to source are also considered
+   * @param edges The vector of edges to fill up with the edges found
+   * @param onlyFirst If true only the first edge found will be returned
+   * @return true if an edge has been bound
+   */
+  bool getEdges(const node source, const node target, bool directed,
+		std::vector<edge>& edges, bool onlyFirst = false) const;
+  
+  //=======================================================
+  /**
    * @brief Return a Tulip Iterator on adjacent nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */

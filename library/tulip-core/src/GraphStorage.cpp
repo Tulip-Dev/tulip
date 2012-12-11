@@ -310,6 +310,32 @@ void GraphStorage::getInOutEdges(node n, std::vector<edge>& edges,
   }
 }
 //=======================================================
+bool GraphStorage::getEdges(node src, node tgt, bool directed,
+			    std::vector<edge>& vEdges,
+			    bool onlyFirst) const {
+  SimpleVector<edge>::const_iterator it = nodes[src.id].edges.begin();
+  edge previous;
+  bool result = false;
+
+  while(it != nodes[src.id].edges.end()) {
+    edge e = (*it);
+
+    // loops appear twice
+    if (e != previous) {
+      const std::pair<node, node>& eEnds = edges[e.id];
+      if (eEnds.second == tgt || (!directed && eEnds.first == tgt)) {
+	vEdges.push_back(e);
+	if (onlyFirst)
+	  return true;
+	result = true;
+      }
+    }
+    previous = e;
+    ++it;
+  }
+  return result;
+}
+//=======================================================
 Iterator<edge>* GraphStorage::getOutEdges(node n) const {
   return new IOEdgeContainerIterator<IO_OUT>(n, nodes[n.id].edges, edges);
 }
