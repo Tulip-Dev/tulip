@@ -140,7 +140,7 @@ bool GraphImpl::isElement(const edge e) const {
 }
 //----------------------------------------------------------------
 edge GraphImpl::existEdge(const node src, const node tgt,
-			  bool directed) const {
+                          bool directed) const {
   std::vector<edge> edges;
   return storage.getEdges(src, tgt, directed, edges, true) ? edges[0] : edge();
 }
@@ -383,7 +383,7 @@ void GraphImpl::getInOutEdges(const node n, std::vector<edge>& edges,
 }
 //----------------------------------------------------------------
 std::vector<edge> GraphImpl::getEdges(const node src, const node tgt,
-				      bool directed) const {
+                                      bool directed) const {
   std::vector<edge> edges;
   storage.getEdges(src, tgt, directed, edges);
   return edges;

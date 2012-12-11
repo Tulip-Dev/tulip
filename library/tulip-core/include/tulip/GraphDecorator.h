@@ -63,9 +63,9 @@ public:
   virtual node opposite(const edge e, const node n)const;
   virtual edge existEdge(const node n, const node m, bool directed = true)const;
   virtual bool hasEdge(const node source, const node target,
-		       bool directed = true) const;
+                       bool directed = true) const;
   virtual std::vector<edge> getEdges(const node source, const node target,
-				     bool directed = true) const;
+                                     bool directed = true) const;
   virtual const std::pair<node, node>& ends(const edge e) const;
   virtual void setEnds(const edge, const node, const node);
   virtual void reverse(const edge e);

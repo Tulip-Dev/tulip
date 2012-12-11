@@ -68,7 +68,7 @@ public:
   bool isElement(const node ) const;
   bool isElement(const edge ) const;
   edge existEdge(const node source, const node target,
-		 bool directed) const;
+                 bool directed) const;
   unsigned int numberOfNodes() const;
   unsigned int numberOfEdges() const;
   //=========================================================================
@@ -85,7 +85,7 @@ public:
   Iterator<edge>* getOutEdges(const node) const;
   Iterator<edge>* getInOutEdges(const node) const;
   std::vector<edge> getEdges(const node source, const node target,
-			     bool directed = true) const;
+                             bool directed = true) const;
   //=========================================================================
   // only implemented on a root graph
   virtual void reserveNodes(unsigned int nbNodes);
