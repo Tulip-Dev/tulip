@@ -165,8 +165,8 @@ public:
    * @return true if an edge has been bound
    */
   bool getEdges(const node source, const node target, bool directed,
-		std::vector<edge>& edges, bool onlyFirst = false) const;
-  
+                std::vector<edge>& edges, bool onlyFirst = false) const;
+
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on adjacent nodes of the node n

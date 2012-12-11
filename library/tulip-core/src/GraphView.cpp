@@ -91,18 +91,21 @@ bool GraphView::isElement(const edge e) const {
 }
 //----------------------------------------------------------------
 edge GraphView::existEdge(const node src, const node tgt,
-			  bool directed) const {
+                          bool directed) const {
   if (!nodeAdaptativeFilter.get(src.id) ||
       !nodeAdaptativeFilter.get(tgt.id))
     return edge();
+
   std::vector<edge> edges;
+
   if (((GraphImpl *)getRoot())->getEdges(src, tgt, directed, edges)) {
     for(std::vector<edge>::iterator ite = edges.begin();
-	ite != edges.end(); ++ite) {
+        ite != edges.end(); ++ite) {
       if(edgeAdaptativeFilter.get(ite->id))
-	return *ite;
+        return *ite;
     }
   }
+
   return edge();
 }
 //----------------------------------------------------------------
@@ -508,16 +511,18 @@ Iterator<edge>* GraphView::getInOutEdges(const node n)const {
 }
 //----------------------------------------------------------------
 std::vector<edge> GraphView::getEdges(const node src, const node tgt,
-				      bool directed) const {
+                                      bool directed) const {
   std::vector<edge> edges;
+
   if (nodeAdaptativeFilter.get(src.id) && nodeAdaptativeFilter.get(tgt.id) &&
       ((GraphImpl *)getRoot())->getEdges(src, tgt, directed, edges)) {
     for(std::vector<edge>::iterator ite = edges.begin();
-	ite != edges.end(); ++ite) {
+        ite != edges.end(); ++ite) {
       if(!edgeAdaptativeFilter.get(ite->id))
-	ite = edges.erase(ite);
+        ite = edges.erase(ite);
     }
   }
+
   return edges;
 }
 //----------------------------------------------------------------

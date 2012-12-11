@@ -146,13 +146,13 @@ node GraphDecorator::opposite(const edge e, const node n)const {
 
 //============================================================
 bool GraphDecorator::hasEdge(const node n, const node m,
-                               bool directed) const {
+                             bool directed) const {
   return graph_component->hasEdge(n, m, directed);
 }
 
 //============================================================
 std::vector<edge> GraphDecorator::getEdges(const node n, const node m,
-					   bool directed) const {
+    bool directed) const {
   return graph_component->getEdges(n, m, directed);
 }
 

@@ -947,7 +947,7 @@ public:
    * @return true if such an edge exists
    */
   virtual bool hasEdge(const node source, const node target,
-		       bool directed = true) const {
+                       bool directed = true) const {
     return existEdge(source, target, directed).isValid();
   }
 
@@ -960,7 +960,7 @@ public:
    * @return a vector of existing edges
    */
   virtual std::vector<edge> getEdges(const node source, const node target,
-				     bool directed = true) const=0;
+                                     bool directed = true) const=0;
 
   /**
    * @brief Returns the first edge found between the two given nodes.
@@ -973,7 +973,7 @@ public:
    * @return An edge that is only valid if it exists.
    */
   virtual edge existEdge(const node source, const node target,
-			 bool directed = true) const=0;
+                         bool directed = true) const=0;
 
   //================================================================================
   // Access to the graph attributes and to the node/edge property.

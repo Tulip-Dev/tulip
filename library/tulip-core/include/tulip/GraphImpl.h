@@ -51,7 +51,7 @@ public:
   bool isElement(const node ) const;
   bool isElement(const edge ) const;
   edge existEdge(const node source, const node target,
-		 bool directed = true) const;
+                 bool directed = true) const;
   node addNode();
   void addNodes(unsigned int nb, std::vector<node>& addedNodes);
   void addNode(const node);
@@ -75,9 +75,9 @@ public:
   Iterator<edge>* getOutEdges(const node )const;
   Iterator<edge>* getInOutEdges(const node )const;
   std::vector<edge> getEdges(const node source, const node target,
-			     bool directed = true) const;
+                             bool directed = true) const;
   bool getEdges(const node source, const node target, bool directed,
-		std::vector<edge>& edges) const {
+                std::vector<edge>& edges) const {
     return storage.getEdges(source, target, directed, edges);
   }
   // to ensure that loops appear only once
