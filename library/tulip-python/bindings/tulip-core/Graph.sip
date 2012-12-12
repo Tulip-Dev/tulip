@@ -1653,8 +1653,39 @@ Returns :const:`True` if the edge is a meta-edge.
 %Docstring
 tlp.Graph.existEdge(node1, node2[, directed=True])
 
-Returns the edge if it exists an edge between two nodes.
+Returns the first edge found between two nodes.
 If no edge is found, returns an invalid edge.
+
+:param node1: an existing node of the graph
+:type node1: :class:`tlp.node`
+:param node2: an existing node of the graph
+:type node2: :class:`tlp.node`
+:param directed: indicates if the direction of the edge (from source to target) must be taken in to account
+:type directed: boolean
+:rtype: :class:`tlp.edge`
+:throws: an exception if one of the nodes does not belong to the graph
+%End	
+	
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		if (sipCpp->isElement(*a1)) {
+			sipRes = new tlp::edge(sipCpp->existEdge(*a0, *a1, a2));
+		} else {
+			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+		}
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
+
+//===========================================================================================
+
+	bool hasEdge(const tlp::node node1, const tlp::node node2, bool directed=true) const ;
+%Docstring
+tlp.Graph.hasEdge(node1, node2[, directed=True])
+
+Returns true if it exists an edge between two nodes.
+If no edge is found, returns false.
 
 :param node1: an existing node of the graph
 :type node1: :class:`tlp.node`
@@ -1669,7 +1700,38 @@ If no edge is found, returns an invalid edge.
 %MethodCode
 	if (sipCpp->isElement(*a0)) {
 		if (sipCpp->isElement(*a1)) {
-			sipRes = new tlp::edge(sipCpp->existEdge(*a0, *a1, a2));
+			sipRes = sipCpp->hasEdge(*a0, *a1, a2);
+		} else {
+			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+		}
+	} else {
+		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+	}
+%End
+
+//===========================================================================================
+
+	std::vector<tlp::edge> getEdges(const tlp::node node1, const tlp::node node2, bool directed=true) const ;
+%Docstring
+tlp.Graph.getEdges(node1, node2[, directed=True])
+
+Returns the edges found between two nodes.
+If no edge is found, returns edges is empty.
+
+:param node1: an existing node of the graph
+:type node1: :class:`tlp.node`
+:param node2: an existing node of the graph
+:type node2: :class:`tlp.node`
+:param directed: indicates if the direction of the edge (from source to target) must be taken in to account
+:type directed: boolean
+:rtype: boolean
+:throws: an exception if one of the nodes does not belong to the graph
+%End	
+	
+%MethodCode
+	if (sipCpp->isElement(*a0)) {
+		if (sipCpp->isElement(*a1)) {
+			sipRes = new std::vector<tlp::edge>(sipCpp->getEdges(*a0, *a1, a2));
 		} else {
 			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
 		}
