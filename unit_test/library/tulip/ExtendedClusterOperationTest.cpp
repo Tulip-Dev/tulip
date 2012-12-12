@@ -46,9 +46,11 @@ void ExtendedClusterOperationTest::setUp() {
 
   edges.push_back(graph->addEdge(nodes[0], nodes[1]));
   edges.push_back(graph->addEdge(nodes[0], nodes[2]));
+  edges.push_back(graph->addEdge(nodes[0], nodes[3]));
   edges.push_back(graph->addEdge(nodes[1], nodes[3]));
   edges.push_back(graph->addEdge(nodes[1], nodes[4]));
   edges.push_back(graph->addEdge(nodes[2], nodes[3]));
+  edges.push_back(graph->addEdge(nodes[4], nodes[0]));
 
   quotient = graph->addCloneSubGraph();
 
@@ -74,8 +76,39 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT(!quotient->isElement(nodes[1]));
   CPPUNIT_ASSERT(quotient->existEdge(meta, nodes[4]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(meta, nodes[2]).isValid());
-  CPPUNIT_ASSERT(quotient->existEdge(meta, nodes[3]).isValid());
-  CPPUNIT_ASSERT_EQUAL(4u, quotient->numberOfEdges());
+  std::vector<edge> mEdges = quotient->getEdges(meta, nodes[3]);
+  CPPUNIT_ASSERT(mEdges.size() == 2);
+  Iterator<edge>* ite = quotient->getEdgeMetaInfo(mEdges[0]);
+  CPPUNIT_ASSERT(ite->next() == edges[2]);
+  CPPUNIT_ASSERT(ite->hasNext() == false);
+  delete ite;
+  ite = quotient->getEdgeMetaInfo(mEdges[1]);
+  CPPUNIT_ASSERT(ite->next() == edges[3]);
+  CPPUNIT_ASSERT(ite->hasNext() == false);
+  delete ite;
+  
+  mEdges.clear();
+  mEdges = quotient->getEdges(meta, nodes[4]);
+  CPPUNIT_ASSERT(mEdges.size() == 1);
+  ite = quotient->getEdgeMetaInfo(mEdges[0]);
+  CPPUNIT_ASSERT(ite->next() == edges[4]);
+  CPPUNIT_ASSERT(ite->hasNext() == false);
+  delete ite;
+  mEdges.clear();
+  mEdges = quotient->getEdges(meta, nodes[4], false);
+  CPPUNIT_ASSERT(mEdges.size() == 2);
+  ite = quotient->getEdgeMetaInfo(mEdges[0]);
+  edge e = ite->next();
+  CPPUNIT_ASSERT(e == edges[4] || e == edges[6]);
+  CPPUNIT_ASSERT(ite->hasNext() == false);
+  delete ite;
+  ite = quotient->getEdgeMetaInfo(mEdges[1]);
+  e = ite->next();
+  CPPUNIT_ASSERT(e == edges[4] || e == edges[6]);
+  CPPUNIT_ASSERT(ite->hasNext() == false);
+  delete ite;
+  
+  CPPUNIT_ASSERT_EQUAL(6u, quotient->numberOfEdges());
   CPPUNIT_ASSERT_EQUAL(6u, graph->numberOfNodes());
 
   Graph *cluster = quotient->getNodeMetaInfo(meta);
@@ -163,10 +196,10 @@ void ExtendedClusterOperationTest::testOpenMetaNode() {
   CPPUNIT_ASSERT(!graph->isElement(meta));
 
   CPPUNIT_ASSERT_EQUAL(5u, graph->numberOfNodes());
-  CPPUNIT_ASSERT_EQUAL(5u, graph->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL(7u, graph->numberOfEdges());
 
   CPPUNIT_ASSERT_EQUAL(5u, quotient->numberOfNodes());
-  CPPUNIT_ASSERT_EQUAL(5u, quotient->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL(7u, quotient->numberOfEdges());
 
   CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[1]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[2]).isValid());
@@ -192,10 +225,10 @@ void ExtendedClusterOperationTest::testOpenMetaNodes() {
   CPPUNIT_ASSERT(!graph->isElement(meta2));
 
   CPPUNIT_ASSERT_EQUAL(5u, graph->numberOfNodes());
-  CPPUNIT_ASSERT_EQUAL(5u, graph->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL(7u, graph->numberOfEdges());
 
   CPPUNIT_ASSERT_EQUAL(5u, quotient->numberOfNodes());
-  CPPUNIT_ASSERT_EQUAL(5u, quotient->numberOfEdges());
+  CPPUNIT_ASSERT_EQUAL(7u, quotient->numberOfEdges());
 
   CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[1]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(nodes[0], nodes[2]).isValid());
