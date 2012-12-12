@@ -537,7 +537,7 @@ node Ordering::getLastOfQ(Face f, node pred, node n, edge e) {
 
   while(!done) {
     for(unsigned int l = 0 ; l < q.size()-1 ; ++l)
-      if(Gp->existEdge(q[l],tmp2, false).isValid()) {
+      if(Gp->hasEdge(q[l],tmp2, false)) {
         done = true;
         break;
       }
@@ -576,7 +576,7 @@ node Ordering::getLastOfP(Face f,node pred, node n, edge e) {
 
   while(!done) {
     for(unsigned int l = 0 ; l < p.size()-1 ; ++l)
-      if(Gp->existEdge(p[l], tmp2, false).isValid()) {
+      if(Gp->hasEdge(p[l], tmp2, false)) {
         done = true;
         break;
       }
@@ -609,7 +609,7 @@ vector<node> Ordering::getPathFrom(vector<node> fn, int from) {
     i=(l+i-1)%l;
   }
 
-  if (res.size()==1 || !Gp->existEdge(res[0],fn[i], false).isValid())
+  if (res.size()==1 || !Gp->hasEdge(res[0],fn[i], false))
     res.push_back(fn[i]);
 
   return res;
@@ -1589,7 +1589,7 @@ void Ordering::init_v1( vector<node> fn) {
       i = (l+i-1)%l;
     }
 
-    if (v1.size() == 1 || !Gp->existEdge(v1[0],fn[i], false).isValid()) {
+    if (v1.size() == 1 || !Gp->hasEdge(v1[0],fn[i], false)) {
       v1.push_back(fn[i]);
       cpt2++;
     }
