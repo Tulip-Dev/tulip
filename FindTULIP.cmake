@@ -31,6 +31,7 @@
 # TULIP_OGL_LIBRARY: The path to the TulipOGL module library.
 # TULIP_GUI_LIBRARY: The path to the TulipGUI module library.
 # TULIP_OGDF_LIBRARY: The path to the TulipOGDF module library.
+# TULIP_PYTHON_LIBRARY: The path to the TulipPython module library.
 # TULIP_SHARE_DIR: Installation path for resources
 # TULIP_VERSION: Complete version string.
 # TULIP_MAJOR_VERSION: Major version digit.
@@ -175,12 +176,17 @@ FIND_LIBRARY(TULIP_OGDF_LIBRARY "tulip-ogdf-${TULIP_MAJOR_VERSION}${TulipVersion
              PATHS ${TULIP_LIBRARIES_DIR}
              NO_DEFAULT_PATH)
 
-IF((TULIP_OGL_LIBRARY AND NOT TULIP_CORE_LIBRARY) OR (TULIP_GUI_LIBRARY AND NOT TULIP_OGL_LIBRARY) OR (TULIP_OGDF_LIBRARY AND NOT TULIP_CORE_LIBRARY))
+FIND_LIBRARY(TULIP_PYTHON_LIBRARY "tulip-python-${TULIP_MAJOR_VERSION}${TulipVersionSeparator}${TULIP_MINOR_VERSION}"
+             PATHS ${TULIP_LIBRARIES_DIR}
+             NO_DEFAULT_PATH)
+
+IF((TULIP_OGL_LIBRARY AND NOT TULIP_CORE_LIBRARY) OR (TULIP_GUI_LIBRARY AND NOT TULIP_OGL_LIBRARY) OR (TULIP_OGDF_LIBRARY AND NOT TULIP_CORE_LIBRARY) OR (TULIP_PYTHON_LIBRARY AND NOT TULIP_CORE_LIBRARY))
   MESSAGE("Dependency check between Tulip libraries failed. Detected libraries are:")
   MESSAGE("TulipCore: ${TULIP_CORE_LIBRARY}")
   MESSAGE("TulipOGL: ${TULIP_OGL_LIBRARY} (depends on TulipCore)")
   MESSAGE("TulipGUI: ${TULIP_GUI_LIBRARY} (depends on TulipOGL)")
   MESSAGE("TulipOGDF: ${TULIP_OGDF_LIBRARY} (depends on TulipCore)")
+ MESSAGE("TulipPython: ${TULIP_PYTHON_LIBRARY} (depends on TulipCore)")
   MESSAGE(FATAL_ERROR "Please check that dependencies for detected libraries are met.")
 ENDIF()
 
@@ -204,5 +210,9 @@ IF(TULIP_OGDF_LIBRARY)
   MARK_AS_ADVANCED(TULIP_OGDF_LIBRARY)
   SET(TULIP_LIBRARIES ${TULIP_LIBRARIES} ${TULIP_OGDF_LIBRARY})
 ENDIF(TULIP_OGDF_LIBRARY)
+
+IF(TULIP_PYTHON_LIBRARY)
+  MARK_AS_ADVANCED(TULIP_PYTHON_LIBRARY)
+ENDIF(TULIP_PYTHON_LIBRARY)
 
 SET(TULIP_USE_FILE "${TULIP_DIR}/share/tulip/TulipUseFile.cmake")
