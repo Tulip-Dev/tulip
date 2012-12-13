@@ -21,6 +21,9 @@
 #define TULIP_PROPERTY_H
 
 #include <tulip/Algorithm.h>
+#include <tulip/Graph.h>
+
+#include <sstream>
 
 namespace tlp {
 class PluginContext;
@@ -61,8 +64,22 @@ class TLP_SCOPE TemplateAlgorithm : public PropertyAlgorithm {
 public:
   Property* result;
   TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context), result(NULL) {
-    if (dataSet != NULL)
-      dataSet->get("result", result);
+    if (dataSet != NULL) {
+      if(!dataSet->exist("result")) {
+          std::stringstream propname;
+          propname << "result";
+          uint number = 0;
+          while(graph->existProperty(propname.str())) {
+              propname.clear();
+              propname << "result" << number;
+              ++number;
+          }
+          result = graph->getProperty<Property>(propname.str());
+      }
+      else {
+        dataSet->get("result", result);
+      }
+    }
   }
 };
 
