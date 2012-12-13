@@ -86,4 +86,61 @@ for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
 #define stableForEach(A, B)  \
   for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(new StableIterator<TYPEOF(A) >(B));  tlp::_tlp_if_test(A, _it_foreach);)
 
+#if defined(__GXX_EXPERIMENTAL_CXX0X__)
+namespace tlp {
+
+template<typename T>
+class iterator_t  {
+public:
+  enum IteratorType {
+    Begin = 0,
+    End = 1
+  };
+
+  iterator_t(tlp::Iterator<T>* it, IteratorType begin = End) : _finished(false), _iteratorType(begin), _it(it) {
+    if(_iteratorType == Begin) {
+      _current = _it->next();
+    }
+  }
+
+  ~iterator_t() {
+    if(_iteratorType == Begin) {
+      delete _it;
+    }
+  }
+
+  bool operator!=(const iterator_t&) const {
+    return !_finished;
+  }
+
+  const iterator_t& operator++() {
+    _finished = !_it->hasNext();
+    _current = _it->next();
+    return *this;
+  }
+
+  T operator*() const {
+    return _current;
+  }
+
+protected:
+  bool _finished;
+  IteratorType _iteratorType;
+  tlp::Iterator<T>* _it;
+  T _current;
+};
+
+template<typename T>
+iterator_t<T> begin(tlp::Iterator<T>* it) {
+  return iterator_t<T>(it, iterator_t<T>::Begin);
+}
+
+template<typename T>
+iterator_t<T> end(tlp::Iterator<T>* it) {
+  return iterator_t<T>(it);
+}
+
+}
+#endif //__GXX_EXPERIMENTAL_CXX0X__
+
 #endif
