@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1057</width>
+    <width>1200</width>
     <height>695</height>
    </rect>
   </property>
@@ -1019,8 +1019,8 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1057</width>
-     <height>23</height>
+     <width>1200</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
