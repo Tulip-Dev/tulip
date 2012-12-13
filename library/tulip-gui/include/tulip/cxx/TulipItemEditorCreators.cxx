@@ -36,6 +36,7 @@ template<typename T>
 void LineEditEditorCreator<T>::setEditorData(QWidget* editor, const QVariant &data,bool,tlp::Graph*) {
   typename T::RealType val = data.value<typename T::RealType>();
   static_cast<QLineEdit*>(editor)->setText(QString::fromUtf8(T::toString(val).c_str()));
+  static_cast<QLineEdit*>(editor)->selectAll();
 }
 
 template<typename T>
