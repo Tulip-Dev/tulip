@@ -66,15 +66,17 @@ public:
   TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context), result(NULL) {
     if (dataSet != NULL) {
       if(!dataSet->exist("result")) {
-          std::stringstream propname;
-          propname << "result";
-          uint number = 0;
-          while(graph->existProperty(propname.str())) {
-              propname.clear();
-              propname << "result" << number;
-              ++number;
-          }
-          result = graph->getProperty<Property>(propname.str());
+        std::stringstream propname;
+        propname << "result";
+        uint number = 0;
+
+        while(graph->existProperty(propname.str())) {
+          propname.clear();
+          propname << "result" << number;
+          ++number;
+        }
+
+        result = graph->getProperty<Property>(propname.str());
       }
       else {
         dataSet->get("result", result);
