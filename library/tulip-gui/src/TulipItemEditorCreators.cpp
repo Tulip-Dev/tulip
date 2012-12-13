@@ -495,6 +495,7 @@ QWidget* QStringEditorCreator::createWidget(QWidget *parent) const {
 
 void QStringEditorCreator::setEditorData(QWidget* w, const QVariant& var, bool, tlp::Graph*) {
   static_cast<QLineEdit*>(w)->setText(var.toString());
+  static_cast<QLineEdit*>(w)->selectAll();
 }
 
 QVariant QStringEditorCreator::editorData(QWidget* w,tlp::Graph*) {
