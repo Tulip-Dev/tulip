@@ -38,7 +38,7 @@ class TableView : public tlp::ViewWidget {
   Q_OBJECT
 
   Ui::TableViewWidget* _ui;
-
+  PropertiesEditor* propertiesEditor;
   tlp::GraphModel* _model;
 
 public:
@@ -50,7 +50,7 @@ public:
   tlp::DataSet state() const;
   void setState(const tlp::DataSet &);
   void setupWidget();
-
+  QList<QWidget*> configurationWidgets() const;
 
 public slots:
   void readSettings();
