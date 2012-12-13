@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>401</width>
     <height>442</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Properties</string>
@@ -81,6 +87,12 @@ border-width: 4;
 padding: 0px 6px;
 font-size: 12px;
 background-color: transparent;
+}
+QTableView::indicator:checked {
+image: url(:/tulip/gui/icons/eye.png);
+}
+QTableView::indicator:unchecked {
+image: url(:/tulip/gui/icons/eye_disabled.png);
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -130,8 +142,14 @@ color: #595959;</string>
    </item>
    <item>
     <widget class="QCheckBox" name="userPropertiesCheck">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
-      <string>Show system properties (view*)</string>
+      <string>Show visual properties (view*)</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -171,12 +189,24 @@ color: black;
 border-bottom: 1px solid #C9C9C9;</string>
         </property>
         <property name="placeholderText">
-         <string>Filter properties names</string>
+         <string>filter column properties by name</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QTableView" name="tableView">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>400</width>
+          <height>300</height>
+         </size>
+        </property>
         <property name="contextMenuPolicy">
          <enum>Qt::CustomContextMenu</enum>
         </property>

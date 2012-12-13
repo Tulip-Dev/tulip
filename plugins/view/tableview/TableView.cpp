@@ -29,6 +29,7 @@
 using namespace tlp;
 
 TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), _model(NULL) {
+  propertiesEditor = new PropertiesEditor();
 }
 
 TableView::~TableView() {
@@ -78,15 +79,14 @@ void TableView::setupWidget() {
   _ui->setupUi(centralWidget);
 
   setCentralWidget(centralWidget);
-  connect(_ui->propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
-  connect(_ui->propertiesEditor,SIGNAL(setFilteredNodes()),this,SLOT(setFilteredNodesValue()));
-  connect(_ui->propertiesEditor,SIGNAL(setFilteredEdges()),this,SLOT(setFilteredEdgesValue()));
-  connect(_ui->propertiesEditor,SIGNAL(mapToGraphSelection()),this,SLOT(mapToGraphSelection()));
+  connect(propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
+  connect(propertiesEditor,SIGNAL(setFilteredNodes()),this,SLOT(setFilteredNodesValue()));
+  connect(propertiesEditor,SIGNAL(setFilteredEdges()),this,SLOT(setFilteredEdgesValue()));
+  connect(propertiesEditor,SIGNAL(mapToGraphSelection()),this,SLOT(mapToGraphSelection()));
 
   _ui->table->setItemDelegate(new GraphTableItemDelegate(_ui->table));
   _ui->table->horizontalHeader()->setMovable(true);
   connect(_ui->filterEdit,SIGNAL(returnPressed()),this,SLOT(filterChanged()));
-  _ui->splitter_2->setSizes(QList<int>() << centralWidget->width()/4 << centralWidget->width()*3/4);
 
   _ui->eltTypeCombo->addItem("Nodes");
   _ui->eltTypeCombo->addItem("Edges");
@@ -95,9 +95,14 @@ void TableView::setupWidget() {
   connect(_ui->filteringPropertyCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(readSettings()));
 }
 
+QList<QWidget*> TableView::configurationWidgets() const {
+  return QList<QWidget*>() << propertiesEditor;
+}
+
+
 void TableView::setFilteredNodesValue() {
   tlp::BooleanProperty* filterProp = static_cast<GraphSortFilterProxyModel*>(_ui->table->model())->filterProperty();
-  QVariant val = TulipItemDelegate::showEditorDialog(NODE,_ui->propertiesEditor->contextProperty(),graph(),static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
+  QVariant val = TulipItemDelegate::showEditorDialog(NODE,propertiesEditor->contextProperty(),graph(),static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
 
   Observable::holdObservers();
   graph()->push();
@@ -105,10 +110,10 @@ void TableView::setFilteredNodesValue() {
   if (filterProp != NULL) {
     node n;
     forEach(n,filterProp->getNodesEqualTo(true))
-    GraphModel::setNodeValue(n.id,_ui->propertiesEditor->contextProperty(),val);
+    GraphModel::setNodeValue(n.id,propertiesEditor->contextProperty(),val);
   }
   else {
-    GraphModel::setAllNodeValue(_ui->propertiesEditor->contextProperty(),val);
+    GraphModel::setAllNodeValue(propertiesEditor->contextProperty(),val);
   }
 
   Observable::unholdObservers();
@@ -116,7 +121,7 @@ void TableView::setFilteredNodesValue() {
 
 void TableView::setFilteredEdgesValue() {
   tlp::BooleanProperty* filterProp = static_cast<GraphSortFilterProxyModel*>(_ui->table->model())->filterProperty();
-  QVariant val = TulipItemDelegate::showEditorDialog(EDGE,_ui->propertiesEditor->contextProperty(),graph(),static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
+  QVariant val = TulipItemDelegate::showEditorDialog(EDGE,propertiesEditor->contextProperty(),graph(),static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
 
   Observable::holdObservers();
   graph()->push();
@@ -124,10 +129,10 @@ void TableView::setFilteredEdgesValue() {
   if (filterProp != NULL) {
     edge e;
     forEach(e,filterProp->getEdgesEqualTo(true))
-    GraphModel::setEdgeValue(e.id,_ui->propertiesEditor->contextProperty(),val);
+    GraphModel::setEdgeValue(e.id,propertiesEditor->contextProperty(),val);
   }
   else {
-    GraphModel::setAllEdgeValue(_ui->propertiesEditor->contextProperty(),val);
+    GraphModel::setAllEdgeValue(propertiesEditor->contextProperty(),val);
   }
 
   Observable::unholdObservers();
@@ -156,7 +161,7 @@ void TableView::mapToGraphSelection() {
 
 void TableView::graphChanged(tlp::Graph* g) {
   QSet<QString> visibleProperties;
-  foreach(tlp::PropertyInterface* pi, _ui->propertiesEditor->visibleProperties()) {
+  foreach(tlp::PropertyInterface* pi, propertiesEditor->visibleProperties()) {
     visibleProperties.insert(pi->getName().c_str());
   }
 
@@ -164,7 +169,7 @@ void TableView::graphChanged(tlp::Graph* g) {
   _ui->filteringPropertyCombo->setModel(model);
   _ui->filteringPropertyCombo->setCurrentIndex(0);
 
-  _ui->propertiesEditor->setGraph(g);
+  propertiesEditor->setGraph(g);
 
   _ui->frame->hide();
 
@@ -178,7 +183,7 @@ void TableView::graphChanged(tlp::Graph* g) {
         checked = visibleProperties.contains(propName);
       }
 
-      _ui->propertiesEditor->setPropertyChecked(i, checked);
+      propertiesEditor->setPropertyChecked(i, checked);
     }
   }
 }
@@ -211,7 +216,7 @@ void TableView::readSettings() {
   PropertyInterface* pi = model->data(model->index(_ui->filteringPropertyCombo->currentIndex(),0),TulipModel::PropertyRole).value<PropertyInterface*>();
   sortModel->setFilterProperty(dynamic_cast<BooleanProperty*>(pi));
 
-  QSet<tlp::PropertyInterface*> visibleProperties = _ui->propertiesEditor->visibleProperties();
+  QSet<tlp::PropertyInterface*> visibleProperties = propertiesEditor->visibleProperties();
 
   for (int i=0; i < _model->columnCount(); ++i) {
     _ui->table->setColumnHidden(i,!visibleProperties.contains(_model->headerData(i, Qt::Horizontal, TulipModel::PropertyRole).value<tlp::PropertyInterface*>()));
