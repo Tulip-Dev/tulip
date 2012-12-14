@@ -22,6 +22,7 @@
 #include "ui_TableView.h"
 #include "PropertiesEditor.h"
 
+#include <tulip/Observable.h>
 #include <tulip/GraphModel.h>
 #include <tulip/GraphTableItemDelegate.h>
 #include <QtGui/QMenu>
@@ -36,13 +37,27 @@ TableView::~TableView() {
   delete _ui;
 }
 
-tlp::DataSet TableView::state() const {
-  DataSet data;
-  data.set("show_nodes",_ui->eltTypeCombo->currentIndex() == 0);
-  data.set("show_edges",_ui->eltTypeCombo->currentIndex() == 1);
+#define NODES_DISPLAYED (_ui->eltTypeCombo->currentIndex() == 0)
+#define EDGES_DISPLAYED (_ui->eltTypeCombo->currentIndex() == 1)
 
+tlp::BooleanProperty* TableView::getFilteringProperty() const {
   GraphPropertiesModel<BooleanProperty>* model = static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->filteringPropertyCombo->model());
   PropertyInterface* pi = model->data(model->index(_ui->filteringPropertyCombo->currentIndex(),0),TulipModel::PropertyRole).value<PropertyInterface*>();
+  return pi ? static_cast<BooleanProperty*>(pi) : NULL;
+}
+
+bool TableView::hasEffectiveFiltering() {
+  GraphSortFilterProxyModel* sortModel = static_cast<GraphSortFilterProxyModel*>(_ui->table->model());
+
+  return sortModel->rowCount() != sortModel->sourceModel()->rowCount();
+}
+
+tlp::DataSet TableView::state() const {
+  DataSet data;
+  data.set("show_nodes", NODES_DISPLAYED);
+  data.set("show_edges", EDGES_DISPLAYED);
+
+  BooleanProperty* pi = getFilteringProperty();
 
   if (pi != NULL)
     data.set("filtering_property",pi->getName());
@@ -80,12 +95,12 @@ void TableView::setupWidget() {
 
   setCentralWidget(centralWidget);
   connect(propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
-  connect(propertiesEditor,SIGNAL(setFilteredNodes()),this,SLOT(setFilteredNodesValue()));
-  connect(propertiesEditor,SIGNAL(setFilteredEdges()),this,SLOT(setFilteredEdgesValue()));
   connect(propertiesEditor,SIGNAL(mapToGraphSelection()),this,SLOT(mapToGraphSelection()));
 
   _ui->table->setItemDelegate(new GraphTableItemDelegate(_ui->table));
   _ui->table->horizontalHeader()->setMovable(true);
+  connect(_ui->table, SIGNAL(customContextMenuRequested (const QPoint &)),
+          SLOT(showCustomContextMenu(const QPoint&)));
   connect(_ui->filterEdit,SIGNAL(returnPressed()),this,SLOT(filterChanged()));
 
   _ui->eltTypeCombo->addItem("Nodes");
@@ -99,65 +114,6 @@ QList<QWidget*> TableView::configurationWidgets() const {
   return QList<QWidget*>() << propertiesEditor;
 }
 
-
-void TableView::setFilteredNodesValue() {
-  tlp::BooleanProperty* filterProp = static_cast<GraphSortFilterProxyModel*>(_ui->table->model())->filterProperty();
-  QVariant val = TulipItemDelegate::showEditorDialog(NODE,propertiesEditor->contextProperty(),graph(),static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
-
-  Observable::holdObservers();
-  graph()->push();
-
-  if (filterProp != NULL) {
-    node n;
-    forEach(n,filterProp->getNodesEqualTo(true))
-    GraphModel::setNodeValue(n.id,propertiesEditor->contextProperty(),val);
-  }
-  else {
-    GraphModel::setAllNodeValue(propertiesEditor->contextProperty(),val);
-  }
-
-  Observable::unholdObservers();
-}
-
-void TableView::setFilteredEdgesValue() {
-  tlp::BooleanProperty* filterProp = static_cast<GraphSortFilterProxyModel*>(_ui->table->model())->filterProperty();
-  QVariant val = TulipItemDelegate::showEditorDialog(EDGE,propertiesEditor->contextProperty(),graph(),static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
-
-  Observable::holdObservers();
-  graph()->push();
-
-  if (filterProp != NULL) {
-    edge e;
-    forEach(e,filterProp->getEdgesEqualTo(true))
-    GraphModel::setEdgeValue(e.id,propertiesEditor->contextProperty(),val);
-  }
-  else {
-    GraphModel::setAllEdgeValue(propertiesEditor->contextProperty(),val);
-  }
-
-  Observable::unholdObservers();
-}
-
-void TableView::mapToGraphSelection() {
-  BooleanProperty* out = graph()->getProperty<BooleanProperty>("viewSelection");
-
-  if (_ui->eltTypeCombo->currentIndex() == 0 /* nodes */) {
-    out->setAllNodeValue(false);
-    QItemSelectionModel *selectionModel = _ui->table->selectionModel();
-    foreach(QModelIndex idx,selectionModel->selectedRows()) {
-      node n(idx.data(TulipModel::ElementIdRole).toUInt());
-      out->setNodeValue(n,true);
-    }
-  }
-  else {
-    out->setAllEdgeValue(false);
-    QItemSelectionModel *selectionModel = _ui->table->selectionModel();
-    foreach(QModelIndex idx,selectionModel->selectedRows()) {
-      edge e(idx.data(TulipModel::ElementIdRole).toUInt());
-      out->setEdgeValue(e,true);
-    }
-  }
-}
 
 void TableView::graphChanged(tlp::Graph* g) {
   QSet<QString> visibleProperties;
@@ -212,9 +168,7 @@ void TableView::readSettings() {
 
   GraphSortFilterProxyModel* sortModel = static_cast<GraphSortFilterProxyModel*>(_ui->table->model());
 
-  GraphPropertiesModel<BooleanProperty>* model = static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->filteringPropertyCombo->model());
-  PropertyInterface* pi = model->data(model->index(_ui->filteringPropertyCombo->currentIndex(),0),TulipModel::PropertyRole).value<PropertyInterface*>();
-  sortModel->setFilterProperty(dynamic_cast<BooleanProperty*>(pi));
+  sortModel->setFilterProperty(getFilteringProperty());
 
   QSet<tlp::PropertyInterface*> visibleProperties = propertiesEditor->visibleProperties();
 
@@ -271,6 +225,229 @@ void TableView::filterChanged() {
 
   sortModel->setProperties(props);
   sortModel->setFilterFixedString(filter);
+}
+
+
+void TableView::setAllFilteredValue(PropertyInterface* prop) {
+  QVariant val =
+    TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE,
+					prop, graph(),
+					static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
+
+  if (hasEffectiveFiltering()) {
+    QAbstractItemModel* model = _ui->table->model();
+    int nbRows = model->rowCount();
+    for (int row = 0; row < nbRows; ++row) {
+      if (NODES_DISPLAYED)
+	GraphModel::setNodeValue(model->index(row, 0).data(TulipModel::ElementIdRole).toUInt(),
+			       prop, val);
+      else
+	GraphModel::setEdgeValue(model->index(row, 0).data(TulipModel::ElementIdRole).toUInt(),
+				 prop, val);	
+    }
+  }
+  else {
+    if (NODES_DISPLAYED)
+      GraphModel::setAllNodeValue(prop,val);
+    else
+      GraphModel::setAllEdgeValue(prop,val);
+  }
+}
+
+void TableView::mapToGraphSelection() {
+  BooleanProperty* out = graph()->getProperty<BooleanProperty>("viewSelection");
+
+  if (NODES_DISPLAYED) {
+    out->setAllNodeValue(false);
+    QItemSelectionModel *selectionModel = _ui->table->selectionModel();
+    foreach(QModelIndex idx,selectionModel->selectedRows()) {
+      node n(idx.data(TulipModel::ElementIdRole).toUInt());
+      out->setNodeValue(n,true);
+    }
+  }
+  else {
+    out->setAllEdgeValue(false);
+    QItemSelectionModel *selectionModel = _ui->table->selectionModel();
+    foreach(QModelIndex idx,selectionModel->selectedRows()) {
+      edge e(idx.data(TulipModel::ElementIdRole).toUInt());
+      out->setEdgeValue(e,true);
+    }
+  }
+}
+
+void TableView::delHighlightedRows() {
+  Graph* g = graph();
+  QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
+
+  for (QList<QModelIndex>::const_iterator itIdx = rows.begin();
+       itIdx != rows.end(); ++itIdx) {
+    if (NODES_DISPLAYED)
+      g->delNode(node(itIdx->data(TulipModel::ElementIdRole).toUInt()));
+    else
+      g->delEdge(edge(itIdx->data(TulipModel::ElementIdRole).toUInt()));
+  }
+}
+
+void TableView::toggleHighlightedRows() {
+  Graph* g = graph();
+  BooleanProperty *selection =
+    g->getProperty<BooleanProperty>("viewSelection");
+  QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
+
+  for (QList<QModelIndex>::const_iterator itIdx = rows.begin();
+       itIdx != rows.end(); ++itIdx) {
+    if (NODES_DISPLAYED) {
+      node n(itIdx->data(TulipModel::ElementIdRole).toUInt());
+      selection->setNodeValue(n, !selection->getNodeValue(n));
+    } else {
+    edge e(itIdx->data(TulipModel::ElementIdRole).toUInt());
+    selection->setEdgeValue(e, !selection->getEdgeValue(e));
+    }
+  }
+}
+
+void TableView::selectHighlightedRows() {
+  Graph* g = graph();
+  BooleanProperty *selection =
+    g->getProperty<BooleanProperty>("viewSelection");
+  QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
+
+  for (QList<QModelIndex>::const_iterator itIdx = rows.begin();
+       itIdx != rows.end(); ++itIdx) {
+    if (NODES_DISPLAYED)
+      selection->setNodeValue(node(itIdx->data(TulipModel::ElementIdRole).toUInt()), true);
+    else
+    selection->setEdgeValue(edge(itIdx->data(TulipModel::ElementIdRole).toUInt()), true);
+  }
+}
+
+void TableView::setAllHighlightedRows(PropertyInterface* prop) {
+  Graph* g = graph();
+  QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
+
+  QVariant val =
+    TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE,
+					prop, g,
+					static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
+
+  for (QList<QModelIndex>::const_iterator itIdx = rows.begin();
+       itIdx != rows.end(); ++itIdx) {
+    if (NODES_DISPLAYED)
+      GraphModel::setNodeValue(itIdx->data(TulipModel::ElementIdRole).toUInt(),
+			       prop, val);
+    else
+      GraphModel::setEdgeValue(itIdx->data(TulipModel::ElementIdRole).toUInt(),
+			       prop, val);
+  }
+}
+
+void TableView::showCustomContextMenu(const QPoint & pos) {
+  QModelIndex idx = _ui->table->indexAt(pos);
+  unsigned int eltId = idx.data(TulipModel::ElementIdRole).toUInt();
+
+  bool hasFiltering = hasEffectiveFiltering();
+  QString eltsName(NODES_DISPLAYED ? tr("nodes") : tr("edges"));
+  std::string propName = _model->headerData(idx.column(), Qt::Horizontal, Qt::DisplayRole).toString().toUtf8().data();
+  QModelIndexList highlightedRows =
+    _ui->table->selectionModel()->selectedRows();
+
+  QMenu contextMenu;
+  QAction* action = contextMenu.addAction(propName.c_str());
+  action->setEnabled(false);
+  contextMenu.addSeparator();
+  QAction* setAll;
+  QAction* filteredSetAll = NULL;
+  QAction* highlightedSetAll = NULL;
+  QAction* toLabels;
+  QAction* filteredToLabels = NULL;
+  QAction* highlightedToLabels = NULL;
+  if (!hasFiltering && highlightedRows.size() == 1) {
+    setAll = contextMenu.addAction(tr("Set all ")  + eltsName + ' ' + tr("values"));
+    toLabels = contextMenu.addAction(tr("Set all values as labels"));
+  } else {
+    QMenu* subMenu = contextMenu.addMenu(tr("Set values of "));
+    setAll = subMenu->addAction(tr("All") + ' ' + eltsName);
+    if (hasFiltering)
+      filteredSetAll = subMenu->addAction(tr("Filtered") + ' ' + eltsName);
+    if (highlightedRows.size() > 1)
+      highlightedSetAll = subMenu->addAction(tr("Rows highlighted") + ' '
+					     + eltsName);
+    subMenu = contextMenu.addMenu(tr("Set values as labels of "));
+    toLabels = subMenu->addAction(tr("All") + ' ' + eltsName);
+    if (hasFiltering)
+      filteredToLabels = subMenu->addAction(tr("Filtered") + ' ' + eltsName);
+    if (highlightedRows.size() > 1)
+      highlightedToLabels = subMenu->addAction(tr("Rows highlighted") + ' '
+					       + eltsName);
+  }
+  contextMenu.addSeparator();
+  action = contextMenu.addAction(highlightedRows.size() > 1 ?
+				 (tr("Rows highlighted") + ' ' + eltsName) :
+				 QString(NODES_DISPLAYED ? "Node #%1" : "Edge #%1").arg(eltId));
+  action->setEnabled(false);
+  contextMenu.addSeparator();
+  QAction* toggleAction = contextMenu.addAction(tr("Toggle selection"));
+  QAction* selectAction = contextMenu.addAction(tr("Select"));
+  QAction* deleteAction = contextMenu.addAction(tr("Delete"));
+
+  contextMenu.setStyleSheet("QMenu::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+
+  // display the menu with the mouse inside to allow
+  // keyboard navigation
+  action = contextMenu.exec(QCursor::pos() - QPoint(5,5));
+
+  if (!action)
+    return;
+
+  // hold/unhold observers
+  tlp::ObserverLocker ol;
+
+  // allow to undo
+  graph()->push();
+
+  if (action == deleteAction) {
+    // delete elts corresponding to highlighted rows
+    delHighlightedRows();
+    // no more highlighted rows
+    _ui->table->clearSelection();
+    return;
+  }
+    
+  if (action == toggleAction) {
+    // select/deselect elts corresponding to highlighted rows
+    toggleHighlightedRows();
+    return;
+  }
+
+  if (action == selectAction) {
+    // select elts corresponding to highlighted rows
+    selectHighlightedRows();
+    return;
+  }
+
+  if (action == setAll || action == filteredSetAll) {
+    // set values for all rows elts
+    setAllFilteredValue(graph()->getProperty(propName));
+    return;
+  }
+
+  if (action == highlightedSetAll) {
+    // set values for elts corresponding to highlighted rows
+    setAllHighlightedRows(graph()->getProperty(propName));
+    return;
+  }
+
+  if (action == toLabels || action == filteredToLabels) {
+    // set values as labels
+      setAllFilteredValue(graph()->getProperty("viewLabel"));
+    return;
+  }
+
+  if (action == highlightedToLabels) {
+    // set values as labels for elts corresponding to highlighted rows
+    setAllHighlightedRows(graph()->getProperty("viewLabel"));
+    return;
+  }
 }
 
 PLUGIN(TableView)

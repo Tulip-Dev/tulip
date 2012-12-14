@@ -75,6 +75,7 @@
         <file>icons/20/node_size_interpolation.png</file>
         <file>icons/eye.png</file>
         <file>icons/eye_disabled.png</file>
+        <file>icons/eye_partially_disabled.png</file>
         <file>ui/left_arrow-white.png</file>
         <file>ui/right_arrow-white.png</file>
         <file>ui/six_screen.png</file>

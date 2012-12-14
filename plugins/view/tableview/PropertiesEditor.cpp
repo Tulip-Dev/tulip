@@ -83,24 +83,14 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   }
 
   QMenu menu;
-  connect(menu.addAction(trUtf8("Check all")),SIGNAL(triggered()),this,SLOT(checkAll()));
-  connect(menu.addAction(trUtf8("Uncheck all")),SIGNAL(triggered()),this,SLOT(unCheckAll()));
-  connect(menu.addAction(trUtf8("Uncheck all except \"") + pname + "\""),SIGNAL(triggered()),this,SLOT(unCheckAllExcept()));
+  menu.setStyleSheet("QMenu::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+  menu.addAction(pname)->setEnabled(false);
   menu.addSeparator();
-  connect(menu.addAction(trUtf8("Set all nodes")),SIGNAL(triggered()),this,SLOT(setAllNodes()));
-  connect(menu.addAction(trUtf8("Set all edges")),SIGNAL(triggered()),this,SLOT(setAllEdges()));
-  menu.addSeparator();
-  connect(menu.addAction(trUtf8("Map visible items to graph")),SIGNAL(triggered()),this,SIGNAL(mapToGraphSelection()));
-  connect(menu.addAction(trUtf8("Set displayed nodes")),SIGNAL(triggered()),this,SIGNAL(setFilteredNodes()));
-  connect(menu.addAction(trUtf8("Set displayed edges")),SIGNAL(triggered()),this,SIGNAL(setFilteredEdges()));
-  menu.addSeparator();
-  connect(menu.addAction(trUtf8("To labels")),SIGNAL(triggered()),this,SLOT(toLabels()));
-  connect(menu.addAction(trUtf8("To labels (nodes only)")),SIGNAL(triggered()),this,SLOT(toNodesLabels()));
-  connect(menu.addAction(trUtf8("To labels (edges only)")),SIGNAL(triggered()),this,SLOT(toEdgesLabels()));
+  connect(menu.addAction(trUtf8("Set other properties not visible")),SIGNAL(triggered()),this,SLOT(setPropsNotVisibleExcept()));
   menu.addSeparator();
   connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
   connect(menu.addAction(trUtf8("New")),SIGNAL(triggered()),this,SLOT(newProperty()));
-  QAction* delAction = menu.addAction(trUtf8("Delete"));
+  QAction* delAction = NULL;
   bool enabled = true;
   foreach(PropertyInterface* pi, _contextPropertyList) {
     if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str())) {
@@ -111,32 +101,31 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
       }
     }
   }
-  delAction->setEnabled(enabled);
-
-  connect(delAction,SIGNAL(triggered()),this,SLOT(delProperty()));
-  menu.addSeparator();
-  menu.addAction(trUtf8("Hide this menu"));
+  if (enabled) {
+    menu.addAction(trUtf8("Delete"));
+    connect(delAction,SIGNAL(triggered()),this,SLOT(delProperty()));
+  }
   menu.exec(QCursor::pos());
 }
 
-void PropertiesEditor::checkAll() {
+void PropertiesEditor::setPropsVisibility(int state) {
+  if (state == Qt::PartiallyChecked)
+    return;
+  _ui->propsVisibilityCheck->setTristate(false);
   for(int i=0; i<_sourceModel->rowCount(); ++i)
-    _sourceModel->setData(_sourceModel->index(i,0),Qt::Checked,Qt::CheckStateRole);
+    _sourceModel->setData(_sourceModel->index(i,0), state,
+			  Qt::CheckStateRole);
 }
 
-void PropertiesEditor::unCheckAll() {
-  for(int i=0; i<_sourceModel->rowCount(); ++i) {
-    _sourceModel->setData(_sourceModel->index(i,0),Qt::Unchecked,Qt::CheckStateRole);
-  }
-}
-
-void PropertiesEditor::unCheckAllExcept() {
+void PropertiesEditor::setPropsNotVisibleExcept() {
   for(int i=0; i<_sourceModel->rowCount(); ++i) {
     setPropertyChecked(i,_sourceModel->index(i,0).data().toString() == _contextProperty->getName().c_str());
   }
+  _ui->propsVisibilityCheck->setTristate(true);
+  _ui->propsVisibilityCheck->setCheckState(Qt::PartiallyChecked);
 }
 
-void PropertiesEditor::showSystemProperties(bool f) {
+void PropertiesEditor::showVisualProperties(bool f) {
   if (f)
     static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
   else

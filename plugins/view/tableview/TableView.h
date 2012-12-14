@@ -21,6 +21,7 @@
 #define TABLEVIEW_H
 
 #include <tulip/ViewWidget.h>
+#include <tulip/BooleanProperty.h>
 #include <QtCore/QModelIndex>
 
 namespace Ui {
@@ -56,6 +57,8 @@ public slots:
   void readSettings();
   void setPropertyVisible(tlp::PropertyInterface*,bool);
   void filterChanged();
+  tlp::BooleanProperty* getFilteringProperty() const;
+  bool hasEffectiveFiltering();
 
 
 protected:
@@ -63,11 +66,15 @@ protected:
   void graphDeleted();
 
 protected slots:
-  void setFilteredNodesValue();
-  void setFilteredEdgesValue();
+  void setAllFilteredValue(tlp::PropertyInterface*);
+  void delHighlightedRows();
+  void toggleHighlightedRows();
+  void selectHighlightedRows();
+  void setAllHighlightedRows(tlp::PropertyInterface*);
   void mapToGraphSelection();
 
   void columnsInserted(const QModelIndex&,int,int);
+  void showCustomContextMenu(const QPoint & pos);
 };
 
 #endif // TABLEVIEW_H

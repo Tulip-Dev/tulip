@@ -93,6 +93,15 @@ image: url(:/tulip/gui/icons/eye.png);
 }
 QTableView::indicator:unchecked {
 image: url(:/tulip/gui/icons/eye_disabled.png);
+}
+#propsVisibilityCheck::indicator:checked {
+image: url(:/tulip/gui/icons/eye.png);
+}
+#propsVisibilityCheck::indicator:indeterminate {
+image: url(:/tulip/gui/icons/eye_partially_disabled.png);
+}
+#propsVisibilityCheck::indicator:unchecked {
+image: url(:/tulip/gui/icons/eye_disabled.png);
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -101,7 +110,7 @@ image: url(:/tulip/gui/icons/eye_disabled.png);
    </property>
    <item>
     <widget class="QFrame" name="frame">
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="leftMargin">
        <number>5</number>
       </property>
@@ -137,23 +146,67 @@ color: #595959;</string>
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="userPropertiesCheck">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Show visual properties (view*)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="frame_3">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QCheckBox" name="propsVisibilityCheck">
+           <property name="toolTip">
+            <string>set visibility of all properties</string>
+           </property>
+           <property name="text">
+            <string>All properties</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
      </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="userPropertiesCheck">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Show visual properties (view*)</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
     </widget>
    </item>
    <item>
@@ -189,7 +242,7 @@ color: black;
 border-bottom: 1px solid #C9C9C9;</string>
         </property>
         <property name="placeholderText">
-         <string>filter column properties by name</string>
+         <string>filter shown properties by name</string>
         </property>
        </widget>
       </item>
@@ -273,11 +326,11 @@ border-bottom: 1px solid #C9C9C9;</string>
    <sender>userPropertiesCheck</sender>
    <signal>clicked(bool)</signal>
    <receiver>PropertiesEditor</receiver>
-   <slot>showSystemProperties(bool)</slot>
+   <slot>showVisualProperties(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>199</x>
-     <y>82</y>
+     <x>204</x>
+     <y>69</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
@@ -285,9 +338,26 @@ border-bottom: 1px solid #C9C9C9;</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>propsVisibilityCheck</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>PropertiesEditor</receiver>
+   <slot>setPropsVisibility(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>86</x>
+     <y>84</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-40</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showCustomContextMenu(QPoint)</slot>
   <slot>showSystemProperties(bool)</slot>
+  <slot>checkAll(bool)</slot>
  </slots>
 </ui>
