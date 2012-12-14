@@ -101,26 +101,31 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
       }
     }
   }
+
   if (enabled) {
     menu.addAction(trUtf8("Delete"));
     connect(delAction,SIGNAL(triggered()),this,SLOT(delProperty()));
   }
+
   menu.exec(QCursor::pos());
 }
 
 void PropertiesEditor::setPropsVisibility(int state) {
   if (state == Qt::PartiallyChecked)
     return;
+
   _ui->propsVisibilityCheck->setTristate(false);
+
   for(int i=0; i<_sourceModel->rowCount(); ++i)
     _sourceModel->setData(_sourceModel->index(i,0), state,
-			  Qt::CheckStateRole);
+                          Qt::CheckStateRole);
 }
 
 void PropertiesEditor::setPropsNotVisibleExcept() {
   for(int i=0; i<_sourceModel->rowCount(); ++i) {
     setPropertyChecked(i,_sourceModel->index(i,0).data().toString() == _contextProperty->getName().c_str());
   }
+
   _ui->propsVisibilityCheck->setTristate(true);
   _ui->propsVisibilityCheck->setCheckState(Qt::PartiallyChecked);
 }
