@@ -326,11 +326,9 @@ void NodeLinkDiagramComponent::requestChangeGraph(Graph *graph) {
 
 void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point) {
   GlMainView::fillContextMenu(menu,point);
-  QFont f;
-  f.setBold(true);
 
   menu->addSeparator();
-  menu->addAction(trUtf8("Augmented display"))->setFont(f);
+  menu->addAction(trUtf8("Augmented display"))->setEnabled(false);
   menu->addSeparator();
 
   QAction* zOrdering = menu->addAction(trUtf8("Z Ordering"));
@@ -355,10 +353,8 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     isNode = entity.getEntityType() == SelectedEntity::NODE_SELECTED;
     itemId = entity.getComplexEntityId();
 
-    if (isNode)
-      menu->addAction(trUtf8("Node #") + QString::number(itemId))->setFont(f);
-    else
-      menu->addAction(trUtf8("Edge #") + QString::number(itemId))->setFont(f);
+    menu->addAction((isNode ? trUtf8("Node #") : trUtf8("Edge #"))
+		    + QString::number(itemId))->setEnabled(false);
 
     menu->addSeparator();
 
@@ -376,7 +372,6 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
       }
     }
   }
-
 }
 
 void NodeLinkDiagramComponent::addRemoveItemToSelection() {

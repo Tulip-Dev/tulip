@@ -71,6 +71,7 @@ void View::currentInteractorChanged(tlp::Interactor *i) {
 
 void View::showContextMenu(const QPoint &point,const QPointF &scenePoint) {
   QMenu menu;
+  menu.setStyleSheet("QMenu::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
   fillContextMenu(&menu,scenePoint);
 
   if (menu.actions().size()>0) {

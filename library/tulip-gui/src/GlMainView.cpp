@@ -191,10 +191,7 @@ void GlMainView::undoCallback() {
 }
 
 void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
-  QFont f;
-  f.setBold(true);
-
-  menu->addAction(trUtf8("View"))->setFont(f);
+  menu->addAction(trUtf8("View"))->setEnabled(false);
   menu->addSeparator();
   menu->addAction(_forceRedrawAction);
   menu->addAction(_centerViewAction);
