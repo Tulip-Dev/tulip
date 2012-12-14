@@ -354,7 +354,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     itemId = entity.getComplexEntityId();
 
     menu->addAction((isNode ? trUtf8("Node #") : trUtf8("Edge #"))
-		    + QString::number(itemId))->setEnabled(false);
+                    + QString::number(itemId))->setEnabled(false);
 
     menu->addSeparator();
 
