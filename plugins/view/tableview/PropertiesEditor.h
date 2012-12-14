@@ -71,10 +71,9 @@ protected slots:
   void toNodesLabels();
   void toEdgesLabels();
   void toLabels(bool nodes, bool edges);
-  void checkAll();
-  void unCheckAll();
-  void unCheckAllExcept();
-  void showSystemProperties(bool);
+  void setPropsVisibility(int);
+  void setPropsNotVisibleExcept();
+  void showVisualProperties(bool);
   void setAllNodes();
   void setAllEdges();
   void displayedPropertiesInserted(const QModelIndex &parent, int start,
