@@ -505,7 +505,7 @@ public :
 };
 
 // deprecated name of this class
- _DEPRECATED_TYPEDEF(ObserverHolder, ObserverLocker);
+_DEPRECATED_TYPEDEF(ObserverHolder, ObserverLocker);
 
 }
 
