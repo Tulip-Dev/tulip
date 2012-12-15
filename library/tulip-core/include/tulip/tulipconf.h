@@ -56,6 +56,7 @@
 //MSVC 2010 has a different keyword for typeof, and deprecated
 #  if _MSC_VER >= 1600
 #    define _DEPRECATED __declspec(deprecated)
+#    define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef _DEPRECATED type deprecated_type
 #    define TYPEOF decltype
 #  else
 //MSVC 2008 must use Boost's typeof
@@ -113,11 +114,13 @@ static float strtof(const char* cptr, char** endptr) {
 //clang does not define __GNUC_MINOR__, thus having a separate clang #elif seems cleaner than adding defined() in the #else
 #elif __clang__
 #  define _DEPRECATED __attribute__ ((deprecated))
+#  define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef type deprecated_type _DEPRECATED
 #  define stdext __gnu_cxx
 
 //for GCC 4.X
 #else
 #    define _DEPRECATED __attribute__ ((deprecated))
+#    define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef type deprecated_type _DEPRECATED
 #    define stdext __gnu_cxx
 #  if  (__GNUC_MINOR__ < 4 && __GNUC__ < 4)
 #    include <ext/stl_hash_fun.h>
