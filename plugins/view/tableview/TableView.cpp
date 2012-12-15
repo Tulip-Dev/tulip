@@ -410,7 +410,7 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
     return;
 
   // hold/unhold observers
-  tlp::ObserverLocker ol;
+  tlp::ObserverHolder oh;
 
   // allow to undo
   graph()->push();
