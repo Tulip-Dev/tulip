@@ -186,7 +186,7 @@ void PropertiesEditor::newProperty() {
 
 void PropertiesEditor::delProperty() {
   foreach(PropertyInterface* pi, _contextPropertyList)
-    pi->getGraph()->delLocalProperty(pi->getName());
+  pi->getGraph()->delLocalProperty(pi->getName());
 }
 
 void PropertiesEditor::toLabels() {
