@@ -99,7 +99,12 @@ public:
 
   iterator_t(tlp::Iterator<T>* it, IteratorType begin = End) : _finished(false), _iteratorType(begin), _it(it) {
     if(_iteratorType == Begin) {
-      _current = _it->next();
+      if(_it->hasNext()) {
+        _current = _it->next();
+      }
+      else {
+        _finished = true;
+      }
     }
   }
 
