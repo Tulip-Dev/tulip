@@ -85,7 +85,7 @@ public:
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-  bool setData(const QModelIndex &index, const QVariant &value, int role);
+  bool setData(const QModelIndex &quiindex, const QVariant &value, int role);
 
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event& evt) {
@@ -111,6 +111,7 @@ public:
         beginRemoveRows(QModelIndex(),row,row);
         _properties.remove(_properties.indexOf(prop));
         _removingRows = true;
+	_checkedProperties.remove(prop);
       }
     }
     else if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
@@ -131,7 +132,7 @@ public:
           endInsertRows();
         }
       }
-    }
+    } 
   }
 
   int rowOf(PROPTYPE*) const;
