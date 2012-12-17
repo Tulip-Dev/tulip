@@ -90,7 +90,6 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   menu.addSeparator();
   connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
   connect(menu.addAction(trUtf8("New")),SIGNAL(triggered()),this,SLOT(newProperty()));
-  QAction* delAction = NULL;
   bool enabled = true;
   foreach(PropertyInterface* pi, _contextPropertyList) {
     if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str())) {
@@ -103,8 +102,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   }
 
   if (enabled) {
-    menu.addAction(trUtf8("Delete"));
-    connect(delAction,SIGNAL(triggered()),this,SLOT(delProperty()));
+    connect(menu.addAction(trUtf8("Delete")),SIGNAL(triggered()),this,SLOT(delProperty()));
   }
 
   menu.exec(QCursor::pos());
@@ -188,7 +186,7 @@ void PropertiesEditor::newProperty() {
 
 void PropertiesEditor::delProperty() {
   foreach(PropertyInterface* pi, _contextPropertyList)
-  pi->getGraph()->delLocalProperty(pi->getName());
+    pi->getGraph()->delLocalProperty(pi->getName());
 }
 
 void PropertiesEditor::toLabels() {
