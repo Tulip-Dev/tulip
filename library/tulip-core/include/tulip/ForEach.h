@@ -115,7 +115,8 @@ public:
 
   const iterator_t& operator++() {
     _finished = !_it->hasNext();
-    _current = _it->next();
+    if(!finished)
+      _current = _it->next();
     return *this;
   }
 
