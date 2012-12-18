@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>733</width>
-    <height>661</height>
+    <width>729</width>
+    <height>657</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -19,20 +19,26 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
   <property name="styleSheet">
-   <string notr="true">
+   <string notr="true">QTabWidget:pane {
+border: 0px; 
+}
 
 QTabBar::tab {
    color: #333;
 border: 1px solid #000;
-border-top-left-radius: 11px;
-border-top-right-radius: 11px;
+/*border-top-left-radius: 11px;
+border-top-right-radius: 11px;*/
 border-bottom: none;
 padding: 5px;
 background: qradialgradient(cx: 0.3, cy: -0.4,
 fx: 0.3, fy: -0.4,
 radius: 1.35, stop: 0 #fff, stop: 1 #888);
 min-width:120px;
+height:14px;
 font:bold;
 }
 
@@ -57,8 +63,9 @@ QTabBar::tab:selected {
     <widget class="QSplitter" name="splitter">
      <property name="styleSheet">
       <string notr="true">QSplitter, QFrame {
-     background-color:rgba(73, 73, 73, 255);
-}</string>
+    background-color:#838383;
+}
+</string>
      </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -68,7 +75,7 @@ QTabBar::tab:selected {
      </property>
      <widget class="PythonTabWidget" name="tabWidget">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -88,7 +95,7 @@ QTabBar::tab:selected {
 </string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_8">
        <property name="enabled">
@@ -96,7 +103,7 @@ QTabBar::tab:selected {
        </property>
        <property name="styleSheet">
         <string notr="true">#tab_8 {
-     background-color:rgba(73, 73, 73, 255);
+     background-color:#838383;
 }</string>
        </property>
        <attribute name="title">
@@ -324,7 +331,7 @@ font:normal;
 }
 
 #pluginsTabWidget {
-     background-color:rgba(73, 73, 73, 255);
+     background-color:#838383;
 }</string>
           </property>
           <property name="currentIndex">
@@ -353,7 +360,7 @@ font:normal;
       <widget class="QWidget" name="tab_2">
        <property name="styleSheet">
         <string notr="true">#tab_2 {
-background-color:rgba(73, 73, 73, 255);
+background-color:#838383;
 }</string>
        </property>
        <attribute name="title">
@@ -628,6 +635,9 @@ QToolButton:pressed {
           <property name="styleSheet">
            <string notr="true">QTabBar::tab {
 font:normal;
+}
+#modulesTabWidget {
+background-color:#838383;
 }</string>
           </property>
           <property name="currentIndex">

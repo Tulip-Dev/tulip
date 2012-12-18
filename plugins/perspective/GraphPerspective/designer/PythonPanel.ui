@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>809</width>
-    <height>617</height>
+    <width>807</width>
+    <height>615</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,11 +18,15 @@
 background-color: white;
 }
 
+QTabWidget:pane {
+border: 0px; 
+}
+
 QTabBar::tab {
    color: #333;
 border: 1px solid #000;
-border-top-left-radius: 11px;
-border-top-right-radius: 11px;
+/*border-top-left-radius: 11px;
+border-top-right-radius: 11px;*/
 border-bottom: none;
 padding: 2px;
 background: qradialgradient(cx: 0.3, cy: -0.4,
@@ -202,15 +206,15 @@ QTabBar::tab:selected {
  </widget>
  <customwidgets>
   <customwidget>
-   <class>HeaderFrame</class>
-   <extends>QWidget</extends>
-   <header>HeaderFrame.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>PythonTabWidget</class>
    <extends>QTabWidget</extends>
    <header location="global">tulip/PythonTabWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>HeaderFrame</class>
+   <extends>QWidget</extends>
+   <header>HeaderFrame.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

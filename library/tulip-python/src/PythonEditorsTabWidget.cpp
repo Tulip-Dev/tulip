@@ -11,6 +11,7 @@ PythonEditorsTabWidget::PythonEditorsTabWidget(QWidget *parent) : QTabWidget(par
 
 int PythonEditorsTabWidget::addEditor(const QString &fileName) {
   PythonCodeEditor *codeEditor = new PythonCodeEditor();
+
   QFileInfo fileInfo(fileName);
   codeEditor->loadCodeFromFile(fileName);
   codeEditor->analyseScriptCode(true);
@@ -18,6 +19,7 @@ int PythonEditorsTabWidget::addEditor(const QString &fileName) {
   codeEditor->installEventFilter(this);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(scriptTextChanged()));
   int idx = addTab(codeEditor, fileInfo.fileName());
+  std::cout << (unsigned long) codeEditor->layout() << std::endl;
   setTabToolTip(idx, fileInfo.absoluteFilePath());
   setCurrentIndex(idx);
 
