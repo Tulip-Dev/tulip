@@ -19,6 +19,8 @@
 #include "tulip/CaptionGraphicsItem.h"
 
 #include <QtGui/QGraphicsProxyWidget>
+#include <QtGui/QGraphicsView>
+#include <QtGui/QApplication>
 #include <QtGui/QMenu>
 
 #include <tulip/DoubleProperty.h>
@@ -125,10 +127,24 @@ void CaptionGraphicsItem::selectPropertyButtonClicked() {
     if (_view->graph()->getProperty(piName)->getTypename() != "double")
       continue;
 
-    menu.addAction(piName.c_str(),this,SLOT(propertySelectedSlot()));
+    QAction* action =
+      menu.addAction(piName.c_str(),this,SLOT(propertySelectedSlot()));
+    if (_confPropertySelectionWidget->text() == QString(piName.c_str()))
+      menu.setActiveAction(action);
+
   }
-  menu.move(QCursor::pos());
-  menu.exec();
+  // set a combo like stylesheet
+  QPalette palette = QComboBox().palette();
+  menu.setStyleSheet(QString("QMenu::item {color: %1; background-color: %2;} QMenu::item:selected {color: %3; background-color: %4}").arg(palette.color(QPalette::Active, QPalette::Text).name()).arg(palette.color(QPalette::Active, QPalette::Base).name()).arg(palette.color(QPalette::Active, QPalette::HighlightedText).name()).arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
+
+  // compute a combo like position
+  // to popup the menu
+  QWidget* pViewport = QApplication::widgetAt(QCursor::pos());
+  QWidget* pView = pViewport->parentWidget();
+  QGraphicsView* pGraphicsView = qobject_cast<QGraphicsView*>(pView);
+  QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(_confPropertySelectionItem->mapToScene(_confPropertySelectionItem->subWidgetRect(_confPropertySelectionWidget).bottomLeft())));
+
+  menu.exec(popupPos);
 }
 
 void CaptionGraphicsItem::propertySelectedSlot() {
