@@ -24,14 +24,14 @@ static QString PYTHON_MODULES_FILES(PYTHON_MODULES_PATH + "/files");
 
 class GragKeyboardFocusEventFilter : public QObject {
 public :
-    bool eventFilter(QObject *, QEvent *event) {
-        if (event->type() == QEvent::ShortcutOverride) {
-            event->accept();
-            return true;
-        }
-
-        return false;
+  bool eventFilter(QObject *, QEvent *event) {
+    if (event->type() == QEvent::ShortcutOverride) {
+      event->accept();
+      return true;
     }
+
+    return false;
+  }
 };
 
 static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
@@ -204,7 +204,7 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
 
   if (docRoot.exists()) {
     QWebView *webView = new QWebView();
-        webView->installEventFilter(&keyboardFocusEventFilter);
+    webView->installEventFilter(&keyboardFocusEventFilter);
 #ifdef WIN32
     webView->load(QUrl("file:///"+docRootPath));
 #else
