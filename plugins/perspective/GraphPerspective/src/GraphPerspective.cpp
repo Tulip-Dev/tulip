@@ -364,6 +364,7 @@ void GraphPerspective::exportGraph(Graph* g) {
     return;
 
   ExportWizard wizard(g,_mainWindow);
+  wizard.setWindowTitle(QString("Export of graph \"") + g->getName().c_str() + '"');
 
   if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() || wizard.outputFile().isEmpty())
     return;
