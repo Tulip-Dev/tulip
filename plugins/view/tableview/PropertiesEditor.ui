@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>401</width>
-    <height>442</height>
+    <height>460</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -257,7 +257,7 @@ border-bottom: 1px solid #C9C9C9;</string>
         <property name="minimumSize">
          <size>
           <width>400</width>
-          <height>300</height>
+          <height>320</height>
          </size>
         </property>
         <property name="contextMenuPolicy">
