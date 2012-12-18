@@ -64,6 +64,7 @@ public slots:
 protected:
   void graphChanged(tlp::Graph *);
   void graphDeleted();
+  bool eventFilter(QObject* obj, QEvent* event);
 
 protected slots:
   void setAllFilteredValue(tlp::PropertyInterface*);

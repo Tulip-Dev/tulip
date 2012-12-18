@@ -94,7 +94,23 @@ void TableView::setState(const tlp::DataSet& data) {
   readSettings();
 }
 
+bool TableView::eventFilter(QObject* obj, QEvent* event) {
+  if (event->type() == QEvent::Resize) {
+    // ensure automatic resize of the viewport
+    QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event);
+    graphicsView()->viewport()->setFixedSize(resizeEvent->size());
+    return true;
+  }
+  else {
+    // standard event processing
+    return QObject::eventFilter(obj, event);
+  }
+}
+
 void TableView::setupWidget() {
+  // install this as event filter
+  // for automatic resizing of the viewport
+  graphicsView()->viewport()->parentWidget()->installEventFilter(this);
   QWidget* centralWidget = new QWidget();
   _ui->setupUi(centralWidget);
 
