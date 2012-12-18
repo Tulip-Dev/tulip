@@ -38,7 +38,9 @@ public:
 
   virtual bool run() {
     bool result = test();
-    dataSet->set<bool>("result",result);
+    if (dataSet) {
+        dataSet->set<bool>("result",result);
+    }
     return true;
   }
 
