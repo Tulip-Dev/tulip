@@ -51,6 +51,7 @@ public:
 
   void setGraph(tlp::Graph* g);
   QSet<tlp::PropertyInterface*> visibleProperties() const;
+  
 
   void setPropertyChecked(int index, bool state);
 

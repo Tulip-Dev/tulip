@@ -71,6 +71,7 @@ protected slots:
   void toggleHighlightedRows();
   void selectHighlightedRows();
   void setAllHighlightedRows(tlp::PropertyInterface*);
+  void setMatchProperty();
   void mapToGraphSelection();
 
   void columnsInserted(const QModelIndex&,int,int);

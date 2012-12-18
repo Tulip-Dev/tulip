@@ -207,7 +207,14 @@ color: #595959;</string>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="eltTypeCombo"/>
+            <widget class="QComboBox" name="eltTypeCombo">
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::AdjustToContents</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLabel" name="filteringLabel">
@@ -223,6 +230,12 @@ color: #595959;</string>
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::AdjustToContents</enum>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -281,9 +294,15 @@ padding-top: 5px;
            </item>
            <item>
             <widget class="ClearableLineEdit" name="filterEdit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="minimumSize">
               <size>
-               <width>0</width>
+               <width>120</width>
                <height>24</height>
               </size>
              </property>
@@ -301,32 +320,47 @@ border-left: 1px solid #C9C9C9;</string>
             </widget>
            </item>
            <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>in</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="matchPropertyButton">
+             <property name="layoutDirection">
+              <enum>Qt::RightToLeft</enum>
+             </property>
+             <property name="text">
+              <string>Any</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+               <normaloff>:/tulip/gui/ui/combobox_arrow.png</normaloff>:/tulip/gui/ui/combobox_arrow.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>column</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
-             </property>
              <property name="sizeHint" stdset="0">
               <size>
                <width>40</width>
-               <height>0</height>
+               <height>20</height>
               </size>
              </property>
             </spacer>
            </item>
           </layout>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>in any column</string>
-           </property>
-           <property name="margin">
-            <number>5</number>
-           </property>
-          </widget>
          </item>
          <item>
           <widget class="Line" name="line">
@@ -377,7 +411,9 @@ border-left: 1px solid #C9C9C9;</string>
    <header>navigabletableview.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections/>
  <slots>
   <slot>setPropertyVisible(tlp::PropertyInterface*,bool)</slot>
