@@ -30,9 +30,20 @@ public :
 
   explicit PythonTabWidget(QWidget *parent = 0);
 
+  void setDrawTabBarBgGradient(const bool drawGradient) {
+      _drawGradient = drawGradient;
+  }
+
+  void setTextColor(const QColor &textColor) {
+      _textColor = textColor;
+  }
+
 protected:
 
   void paintEvent(QPaintEvent * event);
+
+  bool _drawGradient;
+  QColor _textColor;
 
 };
 

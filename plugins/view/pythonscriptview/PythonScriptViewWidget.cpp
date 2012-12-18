@@ -50,6 +50,7 @@ static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 
 PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), _ui(new Ui::PythonScriptViewWidget),  _pythonScriptView(view) {
   _ui->setupUi(this);
+  _ui->tabWidget->setTextColor(QColor(200, 200, 200));
   _ui->consoleOutputWidget->installEventFilter(&keyboardFocusEventFilter);
   _mainScriptToolBar = new QToolBar(_ui->mainScriptToolBarWidget);
   _newMainScriptAction = _mainScriptToolBar->addAction(QIcon(":/icons/doc_new.png"), "New main script");

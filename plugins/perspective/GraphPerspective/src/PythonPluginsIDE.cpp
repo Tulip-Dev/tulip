@@ -22,6 +22,20 @@ static QString PYTHON_PLUGINS_PATH(PYTHON_PATH+"/plugins");
 static QString PYTHON_PLUGINS_FILES(PYTHON_PLUGINS_PATH + "/files");
 static QString PYTHON_MODULES_FILES(PYTHON_MODULES_PATH + "/files");
 
+class GragKeyboardFocusEventFilter : public QObject {
+public :
+    bool eventFilter(QObject *, QEvent *event) {
+        if (event->type() == QEvent::ShortcutOverride) {
+            event->accept();
+            return true;
+        }
+
+        return false;
+    }
+};
+
+static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
+
 static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QString &pluginType,
     const QString &pluginName, const QString &pluginAuthor,
     const QString &pluginDate, const QString &pluginInfos,
@@ -172,6 +186,8 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
   _pythonInterpreter(PythonInterpreter::getInstance()),
   _dontTreatFocusIn(false), _project(NULL) {
   _ui->setupUi(this);
+  _ui->tabWidget->setDrawTabBarBgGradient(true);
+  _ui->tabWidget->setTextColor(QColor(200, 200, 200));
   _ui->modulesTabWidget->clear();
   _ui->pluginsTabWidget->clear();
   QList<int> sizes;
@@ -188,6 +204,7 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
 
   if (docRoot.exists()) {
     QWebView *webView = new QWebView();
+        webView->installEventFilter(&keyboardFocusEventFilter);
 #ifdef WIN32
     webView->load(QUrl("file:///"+docRootPath));
 #else

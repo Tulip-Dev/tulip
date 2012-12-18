@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>524</width>
-    <height>612</height>
+    <width>520</width>
+    <height>608</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,17 +20,22 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QTabBar::tab {
+   <string notr="true">QTabWidget:pane {
+border: 0px; 
+}
+
+QTabBar::tab {
    color: #333;
 border: 1px solid #000;
-border-top-left-radius: 11px;
-border-top-right-radius: 11px;
+/*border-top-left-radius: 11px;
+border-top-right-radius: 11px;*/
 border-bottom: none;
 padding: 5px;
 background: qradialgradient(cx: 0.3, cy: -0.4,
 fx: 0.3, fy: -0.4,
 radius: 1.35, stop: 0 #fff, stop: 1 #888);
 min-width:120px;
+height:14px;
 font:bold;
 }
 
@@ -119,7 +124,7 @@ border-bottom-right-radius: 1px;
     <widget class="QSplitter" name="splitter">
      <property name="styleSheet">
       <string notr="true">QSplitter, QFrame {
-background-color:rgba(73, 73, 73, 255);
+background-color:#838383;
 }
 
 </string>
@@ -160,7 +165,7 @@ background-color:rgba(73, 73, 73, 255);
       <widget class="QWidget" name="tab">
        <property name="styleSheet">
         <string notr="true">#tab {
-     background-color:rgba(73, 73, 73, 255);
+    background-color:#838383;
 }
 </string>
        </property>
@@ -290,7 +295,7 @@ QTabWidget::pane { /* The tab widget frame */
       <widget class="QWidget" name="tab_2">
        <property name="styleSheet">
         <string notr="true">#tab_2 { /* The tab widget frame */
-     background-color:rgba(73, 73, 73, 255);
+     background-color:#838383;
 }</string>
        </property>
        <attribute name="title">
