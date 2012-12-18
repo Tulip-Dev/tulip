@@ -202,14 +202,16 @@ void TableView::readSettings() {
   for (int i=0; i < _model->columnCount(); ++i) {
     PropertyInterface* pi =
       _model->headerData(i, Qt::Horizontal, TulipModel::PropertyRole).value<tlp::PropertyInterface*>();
+
     if (!visibleProperties.contains(pi))
       _ui->table->setColumnHidden(i, true);
+
     /*else {
       QString propName = tlpStringToQString(pi->getName());
       int i = 1;
       for (; i < _ui->matchPropertyCombo->count(); ++i) {
-	if (_ui->matchPropertyCombo->itemText(i) > propName)
-	  break;
+    if (_ui->matchPropertyCombo->itemText(i) > propName)
+    break;
       }
       _ui->matchPropertyCombo->insertItem(i, propName);
       }*/
@@ -242,11 +244,11 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
   for (; i < _ui->matchPropertyCombo->count(); ++i) {
     if (v) {
       if (_ui->matchPropertyCombo->itemText(i) > propName)
-	break;
+  break;
     } else
       if (_ui->matchPropertyCombo->itemText(i) == propName)
-	break;
-	}
+  break;
+  }
 
   if (v)
     _ui->matchPropertyCombo->insertItem(i, propName);
@@ -278,10 +280,12 @@ void TableView::setMatchProperty() {
   foreach(PropertyInterface* pi, propertiesEditor->visibleProperties()) {
     QString propName = tlpStringToQString(pi->getName());
     int i = 0;
+
     for (; i < props.size(); ++i) {
       if (props[i] > propName)
-	break;
+        break;
     }
+
     props.insert(i, propName);
   }
 
@@ -292,7 +296,8 @@ void TableView::setMatchProperty() {
     if (_ui->matchPropertyButton->text() == prop) {
       action = menu.addAction(prop);
       menu.setActiveAction(action);
-    } else
+    }
+    else
       menu.addAction(prop);
   }
 
@@ -300,7 +305,7 @@ void TableView::setMatchProperty() {
 
   // set a combo like stylesheet
   menu.setStyleSheet(QString("QMenu::item {border-image: none; border-width: 4; padding: 0px 6px; font-size: 12px; color: %1; background-color: %2;} QMenu::item:selected {color: %3; background-color: %4}").arg(palette.color(QPalette::Active, QPalette::Text).name()).arg(palette.color(QPalette::Active, QPalette::Base).name()).arg(palette.color(QPalette::Active, QPalette::HighlightedText).name()).arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
-  
+
   // compute a combo like position
   // to popup the menu
   QWidget* pViewport = QApplication::widgetAt(QCursor::pos());
@@ -311,7 +316,8 @@ void TableView::setMatchProperty() {
   QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(pGraphicsItem->mapToScene(((QGraphicsProxyWidget *) pGraphicsItem)->subWidgetRect(_ui->matchPropertyButton).bottomLeft())));
 
   action = menu.exec(popupPos);
-  if (action){
+
+  if (action) {
     if (action->text() == "-- Any --")
       _ui->matchPropertyButton->setText("Any");
     else
@@ -325,6 +331,7 @@ void TableView::filterChanged() {
   QVector<PropertyInterface*> props;
 
   Graph* g = graph();
+
   /*if (_ui->matchPropertyCombo->currentIndex() == 0) {
     // Any
     for (int i=1; i < _ui->matchPropertyCombo->count(); ++i) {
@@ -335,11 +342,12 @@ void TableView::filterChanged() {
       // a visible column
       props += g->getProperty(QStringToTlpString(_ui->matchPropertyCombo->currentText()));*/
   if (_ui->matchPropertyButton->text() == "Any") {
-      for (int i=0; i < _model->columnCount(); ++i) {
-	if (!_ui->table->horizontalHeader()->isSectionHidden(i))
-	  props += _model->headerData(i,Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
-      }
-  } else 
+    for (int i=0; i < _model->columnCount(); ++i) {
+      if (!_ui->table->horizontalHeader()->isSectionHidden(i))
+        props += _model->headerData(i,Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
+    }
+  }
+  else
     // a visible column
     props +=
       g->getProperty(QStringToTlpString(_ui->matchPropertyButton->text()));

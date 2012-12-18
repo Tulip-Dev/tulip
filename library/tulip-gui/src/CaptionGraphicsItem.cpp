@@ -129,6 +129,7 @@ void CaptionGraphicsItem::selectPropertyButtonClicked() {
 
     QAction* action =
       menu.addAction(piName.c_str(),this,SLOT(propertySelectedSlot()));
+
     if (_confPropertySelectionWidget->text() == QString(piName.c_str()))
       menu.setActiveAction(action);
 

@@ -278,8 +278,8 @@ void CaptionItem::generateGradients(const vector<pair <double,Color> > &metricTo
 
   for(vector<pair<double,Color> >::const_iterator it=metricToColorFiltered.begin(); it!=metricToColorFiltered.end(); ++it) {
     float position= (maxProp-minProp) ?
-      (1.-((*it).first-minProp)/(maxProp-minProp)) :
-      0.0;
+                    (1.-((*it).first-minProp)/(maxProp-minProp)) :
+                    0.0;
     color=(*it).second;
     activeGradient.setColorAt(position,QColor(color[0],color[1],color[2],255));
     hideGradient.setColorAt(position,QColor(color[0],color[1],color[2],100));
