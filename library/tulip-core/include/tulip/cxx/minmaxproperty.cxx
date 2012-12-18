@@ -112,6 +112,10 @@ void tlp::MinMaxProperty<nodeType, edgeType>::computeMinMaxNode(Graph* graph) {
 
   unsigned int sgi = graph->getId();
 
+  // be careful to empty graph
+  if (maxN2 < minN2)
+    minN2 = maxN2;
+
   nodeValueUptodate[sgi]=true;
   minNode[sgi] = minN2;
   maxNode[sgi] = maxN2;
@@ -137,6 +141,10 @@ void tlp::MinMaxProperty<nodeType, edgeType>::computeMinMaxEdge(Graph* graph) {
   delete edgeIterator;
 
   unsigned int sgi = graph->getId();
+
+  // be careful to no edges graph
+  if (maxE2 < minE2)
+    minE2 = maxE2;
 
   edgeValueUptodate[sgi]=true;
   minEdge[sgi]=minE2;
