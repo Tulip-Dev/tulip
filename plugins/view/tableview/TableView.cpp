@@ -99,6 +99,13 @@ bool TableView::eventFilter(QObject* obj, QEvent* event) {
     // ensure automatic resize of the viewport
     QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event);
     graphicsView()->viewport()->setFixedSize(resizeEvent->size());
+    // same for PropertiesEditor
+    QSize pSize = propertiesEditor->parentWidget()->parentWidget()->size();
+    pSize.setHeight(resizeEvent->size().height() - 30);
+    propertiesEditor->parentWidget()->parentWidget()->resize(pSize);
+    pSize = propertiesEditor->size();
+    pSize.setHeight(resizeEvent->size().height() - 40);
+    propertiesEditor->resize(pSize);
     return true;
   }
   else {

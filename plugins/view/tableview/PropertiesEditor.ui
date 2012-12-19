@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -94,13 +94,13 @@ image: url(:/tulip/gui/icons/eye.png);
 QTableView::indicator:unchecked {
 image: url(:/tulip/gui/icons/eye_disabled.png);
 }
-#propsVisibilityCheck::indicator:checked {
+QCheckBox::indicator:checked {
 image: url(:/tulip/gui/icons/eye.png);
 }
 #propsVisibilityCheck::indicator:indeterminate {
 image: url(:/tulip/gui/icons/eye_partially_disabled.png);
 }
-#propsVisibilityCheck::indicator:unchecked {
+QcheckBox::indicator:unchecked {
 image: url(:/tulip/gui/icons/eye_disabled.png);
 }</string>
   </property>
@@ -147,6 +147,19 @@ color: #595959;</string>
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="propsVisibilityCheck">
+        <property name="toolTip">
+         <string>Set visibility of all properties</string>
+        </property>
+        <property name="text">
+         <string>All properties</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="userPropertiesCheck">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -154,8 +167,11 @@ color: #595959;</string>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="toolTip">
+         <string>Set visibility of visual rendering properties</string>
+        </property>
         <property name="text">
-         <string>Show visual properties (view*)</string>
+         <string>Visual properties (view*)</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -177,32 +193,6 @@ color: #595959;</string>
          <property name="margin">
           <number>0</number>
          </property>
-         <item>
-          <widget class="QCheckBox" name="propsVisibilityCheck">
-           <property name="toolTip">
-            <string>set visibility of all properties</string>
-           </property>
-           <property name="text">
-            <string>All properties</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
         </layout>
        </widget>
       </item>
@@ -249,7 +239,7 @@ border-bottom: 1px solid #C9C9C9;</string>
       <item>
        <widget class="QTableView" name="tableView">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
