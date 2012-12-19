@@ -602,6 +602,7 @@ void PythonPluginsIDE::writePluginFileToProject(const QString &fileName, const Q
   QIODevice *fs = _project->fileStream(projectFile);
   fs->write(fileContent.toUtf8());
   fs->close();
+  delete fs;
 
   if (!_project->projectFile().isEmpty()) {
     _project->write(_project->projectFile());
@@ -619,6 +620,7 @@ void PythonPluginsIDE::writeModuleFileToProject(const QString &fileName, const Q
   QIODevice *fs = _project->fileStream(projectFile);
   fs->write(fileContent.toUtf8());
   fs->close();
+  delete fs;
 
   if (!_project->projectFile().isEmpty()) {
     _project->write(_project->projectFile());
@@ -880,6 +882,8 @@ QString PythonPluginsIDE::readProjectFile(const QString &filePath) {
     currentLine = fs->readLine();
   }
 
+  fs->close();
+  delete fs;
   return content;
 }
 
