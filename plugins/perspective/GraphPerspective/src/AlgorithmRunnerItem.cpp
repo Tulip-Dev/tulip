@@ -39,12 +39,15 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   const Plugin *plugin = PluginLister::instance()->pluginInformations(pluginName.toStdString());
   // split pluginName after the second word if needed
   QStringList words = pluginName.split(' ');
+
   if (words.size() > 3) {
     QString name = pluginName;
     name.replace(words[1] + ' ', words[1] + '\n');
     _ui->playButton->setText(name);
-  } else
+  }
+  else
     _ui->playButton->setText(pluginName);
+
   _ui->playButton->setStyleSheet ("text-align: left");
   QString tooltip(QString("Apply '") + pluginName + "'");
   // initialize parameters only if needed
@@ -55,14 +58,17 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
     _ui->parameters->setItemDelegate(new TulipItemDelegate);
   }
   else {
-     _ui->settingsButton->setVisible(false);
+    _ui->settingsButton->setVisible(false);
   }
+
   std::string infos = plugin->info();
+
   // show infos in tooltip only if it contains more than one word
   if (infos.find(' ') != std::string::npos)
     _ui->playButton->setToolTip(QString("<table><tr><td>%1:</td></tr><tr><td><i>%2</i></td></tr></table>").arg(tooltip).arg(infos.c_str()));
   else
     _ui->playButton->setToolTip(tooltip);
+
   setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
 
   static QPixmap cppPix(":/tulip/graphperspective/icons/16/cpp.png");
