@@ -607,6 +607,8 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
 
   QDomDocument doc;
   doc.setContent(workspaceXml);
+  workspaceXml->close();
+  delete workspaceXml;
   QDomElement root = doc.documentElement();
   int current = root.attribute("current","0").toInt();
   int mode = root.attribute("mode","-1").toInt();
