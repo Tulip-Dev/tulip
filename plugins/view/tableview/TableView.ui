@@ -363,13 +363,6 @@ border-left: 1px solid #C9C9C9;</string>
           </layout>
          </item>
          <item>
-          <widget class="Line" name="line">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="NavigableTableView" name="table">
            <property name="contextMenuPolicy">
             <enum>Qt::CustomContextMenu</enum>
