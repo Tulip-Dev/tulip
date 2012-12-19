@@ -36,28 +36,33 @@ using namespace tlp;
 AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _localMode(true) {
   _ui->setupUi(this);
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
-  _ui->algorithmName->setText(pluginName);
   const Plugin *plugin = PluginLister::instance()->pluginInformations(pluginName.toStdString());
-  std::string infos = plugin->info();
-
-  // show infos in tooltip only if it contains more than one word
-  if (infos.find(' ') != std::string::npos)
-    _ui->algorithmName->setToolTip(QString("<table><tr><td>%1 :</td></tr><tr><td><i>%2</td></tr></table>").arg(pluginName).arg(infos.c_str()));
-  else
-    _ui->algorithmName->setToolTip(pluginName);
-
+  // split pluginName after the second word if needed
+  QStringList words = pluginName.split(' ');
+  if (words.size() > 3) {
+    QString name = pluginName;
+    name.replace(words[1] + ' ', words[1] + '\n');
+    _ui->playButton->setText(name);
+  } else
+    _ui->playButton->setText(pluginName);
+  _ui->playButton->setStyleSheet ("text-align: left");
+  QString tooltip(QString("Apply '") + pluginName + "'");
   // initialize parameters only if needed
   _ui->parameters->setVisible(false);
 
   if (plugin->inputRequired()) {
-    _ui->playButton->setToolTip("Apply algorithm using the current settings");
+    tooltip +=  " with current settings";
     _ui->parameters->setItemDelegate(new TulipItemDelegate);
   }
   else {
-    _ui->playButton->setToolTip("Apply algorithm");
-    _ui->settingsButton->setVisible(false);
+     _ui->settingsButton->setVisible(false);
   }
-
+  std::string infos = plugin->info();
+  // show infos in tooltip only if it contains more than one word
+  if (infos.find(' ') != std::string::npos)
+    _ui->playButton->setToolTip(QString("<table><tr><td>%1:</td></tr><tr><td><i>%2</i></td></tr></table>").arg(tooltip).arg(infos.c_str()));
+  else
+    _ui->playButton->setToolTip(tooltip);
   setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
 
   static QPixmap cppPix(":/tulip/graphperspective/icons/16/cpp.png");
