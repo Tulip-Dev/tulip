@@ -43,7 +43,7 @@ void uploadfolder(const QString& origin, WebDavManager& manager) {
       std::cout << "could not open file! :'(" << std::endl;
     }
   }
-  foreach(const QString& element, originDir.entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDotAndDotDot)) {
+  foreach(const QString& element, originDir.entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDot | QDir::NoDotDot)) {
     uploadfolder(origin + "/" + element, manager);
   }
 }

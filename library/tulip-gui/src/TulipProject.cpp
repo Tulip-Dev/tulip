@@ -187,10 +187,10 @@ bool TulipProject::copy(const QString &source, const QString &destination) {
   return QFile::copy(source,toAbsolutePath(destination));
 }
 
-std::fstream *TulipProject::stdFileStream(const QString &path) {
+std::fstream *TulipProject::stdFileStream(const QString &path, std::ios_base::openmode mode) {
   QString filePath(toAbsolutePath(path));
   std::fstream *result = new std::fstream();
-  result->open(filePath.toUtf8().data(), std::fstream::in | std::fstream::out | std::fstream::app);
+  result->open(filePath.toUtf8().data(), mode);
 
   if (!result->is_open()) {
     delete result;
@@ -342,7 +342,7 @@ bool TulipProject::removeAllDirPrivate(const QString &path) {
     return false;
 
   QDir dir(pathInfo.absoluteFilePath());
-  QFileInfoList entries(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
+  QFileInfoList entries(dir.entryInfoList(QDir::NoDot | QDir::NoDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
 
   for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
     QFileInfo info(*it);

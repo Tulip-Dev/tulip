@@ -151,7 +151,7 @@ void ColorScaleConfigDialog::loadTulipImageColorScales() {
 
   if(colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
     QDir dir(colorscaleDirectory.absoluteFilePath());
-    dir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
+    dir.setFilter(QDir::Files | QDir::NoDot | QDir::NoDotDot);
     QFileInfoList list = dir.entryInfoList();
 
     for (int i = 0; i < list.size(); ++i) {
