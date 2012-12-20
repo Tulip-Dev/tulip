@@ -203,19 +203,21 @@ public:
   bool touch(const QString& path);
 
   /**
-    @brief Gets a STL file stream (R/W access mode) to the given path.
+    @brief Gets a STL file stream (default to R/W access mode) to the given path.
 
     @warning This method does not check if the given path is a directory or a file. User might get an invalid filestream.
+    @warning It is up to the user to delete the std::fstream returned.
     @param path The path to open. @see TulipProject
     @return an opened filestream on the given path.
     */
-  std::fstream *stdFileStream(const QString &path);
+  std::fstream *stdFileStream(const QString &path, std::ios_base::openmode=std::fstream::in | std::fstream::out | std::fstream::app);
 
   /**
-    @brief Gets a Qt I/O device (R/W access mode) to the given path.
+    @brief Gets a Qt I/O device (default to R/W access mode) to the given path.
 
     @warning This method does not check if the given path is a directory or a file. User might get an invalid filestream.
     @warning User SHOULD NOT cast the QIODevice returned by this method into any of its subclass since the implementation might change in future versions.
+    @warning It is up to the user to delete the QIODevice returned.
     @param path The path to open. @see TulipProject
     @param mode The opening mode as described in the Qt documentation.
     @return an opened Qt device on the given path.

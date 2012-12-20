@@ -100,7 +100,7 @@ public:
       QDir currentDir(QDir(elem.first));
 
       tlp::node parentNode(elem.second);
-      QFileInfoList entries(currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
+      QFileInfoList entries(currentDir.entryInfoList(QDir::NoDot | QDir::NoDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
 
       for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
         QFileInfo fileInfos(*it);

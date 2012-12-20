@@ -43,7 +43,7 @@ void copy(QIODevice &in,QIODevice &out) {
 
 
 bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath, tlp::PluginProgress *progress) {
-  QFileInfoList entries = currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst);
+  QFileInfoList entries = currentDir.entryInfoList(QDir::NoDot | QDir::NoDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst);
   QFileInfo info;
   progress->setComment(("Compressing directory " + currentDir.absolutePath()).toStdString());
   int i=0;
