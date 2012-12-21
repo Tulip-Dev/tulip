@@ -88,6 +88,7 @@ GlOverviewGraphicsItem *GlMainView::overviewItem() const {
 }
 
 void GlMainView::setupWidget() {
+  graphicsView()->viewport()->parentWidget()->installEventFilter(this);
   assignNewGlMainWidget(new GlMainWidget(NULL,this),true);
 
   _forceRedrawAction=new QAction(trUtf8("Force redraw"),this);
@@ -206,4 +207,26 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
 
 void GlMainView::applySettings() {
   _sceneConfigurationWidget->applySettings();
+}
+
+bool GlMainView::eventFilter(QObject* obj, QEvent* event) {
+  if (event->type() == QEvent::Resize) {
+    // ensure automatic resize of the viewport
+    QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event);
+    graphicsView()->viewport()->setFixedSize(resizeEvent->size());
+    // same for the configuration widgets
+    QSize sSize =
+      _sceneConfigurationWidget->parentWidget()->parentWidget()->size();
+    sSize.setHeight(resizeEvent->size().height() - 50);
+    _sceneConfigurationWidget->parentWidget()->parentWidget()->resize(sSize);
+    sSize = _sceneConfigurationWidget->size();
+    sSize.setHeight(resizeEvent->size().height() - 60);
+    _sceneConfigurationWidget->resize(sSize);
+    _sceneLayersConfigurationWidget->resize(sSize);
+    return true;
+  }
+  else {
+    // standard event processing
+    return QObject::eventFilter(obj, event);
+  }
 }
