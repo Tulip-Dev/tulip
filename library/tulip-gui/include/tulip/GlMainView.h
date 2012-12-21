@@ -136,6 +136,7 @@ protected:
   virtual void setupWidget();
   bool quickAccessBarVisible() const;
   void assignNewGlMainWidget(GlMainWidget *glMainWidget,bool deleteOldGlMainWidget=true);
+  bool eventFilter(QObject* obj, QEvent* event);
 
   tlp::GlOverviewGraphicsItem* overviewItem() const;
 };
