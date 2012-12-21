@@ -100,7 +100,7 @@ image: url(:/tulip/gui/icons/eye.png);
 #propsVisibilityCheck::indicator:indeterminate {
 image: url(:/tulip/gui/icons/eye_partially_disabled.png);
 }
-QcheckBox::indicator:unchecked {
+QCheckBox::indicator:unchecked {
 image: url(:/tulip/gui/icons/eye_disabled.png);
 }</string>
   </property>
