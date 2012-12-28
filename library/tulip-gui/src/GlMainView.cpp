@@ -215,19 +215,22 @@ bool GlMainView::eventFilter(QObject* obj, QEvent* event) {
     graphicsView()->viewport()->setFixedSize(resizeEvent->size());
     // same for the configuration widgets
     QList<QWidget *> list = configurationWidgets();
-   if(!list.isEmpty()) {   //test if the current view has a configuration widget
-    QWidget *pqw = list.first()->parentWidget()->parentWidget();
-    QSize sSize = pqw->size();
-    sSize.setHeight(resizeEvent->size().height() - 50);
-    pqw->resize(sSize);
-    sSize.setHeight(resizeEvent->size().height() - 60);
-    sSize = list.first()->size();
-    foreach(QWidget *c, list) {   //resize each configuration widget
+
+    if(!list.isEmpty()) {   //test if the current view has a configuration widget
+      QWidget *pqw = list.first()->parentWidget()->parentWidget();
+      QSize sSize = pqw->size();
+      sSize.setHeight(resizeEvent->size().height() - 50);
+      pqw->resize(sSize);
+      sSize.setHeight(resizeEvent->size().height() - 60);
+      sSize = list.first()->size();
+      foreach(QWidget *c, list) {   //resize each configuration widget
         c->resize(sSize);
-     }
-   }
+      }
+    }
+
     return true;
   }
-    // standard event processing
-    return ViewWidget::eventFilter(obj, event);
+
+  // standard event processing
+  return ViewWidget::eventFilter(obj, event);
 }
