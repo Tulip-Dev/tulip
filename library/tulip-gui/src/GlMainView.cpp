@@ -197,10 +197,9 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addAction(_forceRedrawAction);
   menu->addAction(_centerViewAction);
 
-  QAction* a = menu->addAction(trUtf8("Show overview"));
+  QAction* a = menu->addAction(trUtf8("Show overview"),this,SLOT(setOverviewVisible(bool)));
   a->setCheckable(true);
   a->setChecked(overviewVisible());
-  connect(a,SIGNAL(triggered(bool)),this,SLOT(setOverviewVisible(bool)));
 
   menu->addAction(trUtf8("Take snapshopt"),this,SLOT(openSnapshotDialog()));
 }
@@ -215,18 +214,20 @@ bool GlMainView::eventFilter(QObject* obj, QEvent* event) {
     QResizeEvent *resizeEvent = static_cast<QResizeEvent *>(event);
     graphicsView()->viewport()->setFixedSize(resizeEvent->size());
     // same for the configuration widgets
-    QSize sSize =
-      _sceneConfigurationWidget->parentWidget()->parentWidget()->size();
+    QList<QWidget *> list = configurationWidgets();
+   if(!list.isEmpty()) {   //test if the current view has a configuration widget
+    QWidget *pqw = list.first()->parentWidget()->parentWidget();
+    QSize sSize = pqw->size();
     sSize.setHeight(resizeEvent->size().height() - 50);
-    _sceneConfigurationWidget->parentWidget()->parentWidget()->resize(sSize);
-    sSize = _sceneConfigurationWidget->size();
+    pqw->resize(sSize);
     sSize.setHeight(resizeEvent->size().height() - 60);
-    _sceneConfigurationWidget->resize(sSize);
-    _sceneLayersConfigurationWidget->resize(sSize);
+    sSize = list.first()->size();
+    foreach(QWidget *c, list) {   //resize each configuration widget
+        c->resize(sSize);
+     }
+   }
     return true;
   }
-  else {
     // standard event processing
-    return QObject::eventFilter(obj, event);
-  }
+    return ViewWidget::eventFilter(obj, event);
 }
