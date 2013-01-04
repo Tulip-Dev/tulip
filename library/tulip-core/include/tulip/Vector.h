@@ -609,5 +609,10 @@ TLP_BEGIN_HASH_NAMESPACE {
 } TLP_END_HASH_NAMESPACE
 
 #include "cxx/Vector.cxx"
+
+// fix for bug #3598871: allow use of VECTOR keyword in other software
+#undef VECTOR
+#undef TEMPLATEVECTOR
+
 #endif
 ///@endcond

@@ -346,4 +346,5 @@ TYPE  VECTORTLP::dist(const VECTOR &c) const {
     return(tlpsqrt<TYPE, OTYPE>(tmp));
   }
 }
-//=======================================================================
+
+#undef VECTORTLP
