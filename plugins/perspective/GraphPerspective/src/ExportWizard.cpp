@@ -147,8 +147,8 @@ void ExportWizard::pathChanged(QString s) {
       }
 
       if (selectedExport != NULL) {
-        break;
         delete p;
+        break;
       }
     }
 
