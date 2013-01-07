@@ -60,7 +60,7 @@ struct dfsFreeTreeStruct {
   Iterator<node>* neighbours;
 
   dfsFreeTreeStruct(node root = node(), node from = node(),
-		    Iterator<node>* it = NULL):
+                    Iterator<node>* it = NULL):
     curRoot(root), cameFrom(from), neighbours(it) {}
   ~dfsFreeTreeStruct() {
     if (neighbours)
