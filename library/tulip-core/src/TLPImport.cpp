@@ -251,11 +251,9 @@ struct TLPGraphBuilder:public TLPTrue {
 
     if (_graph->isElement(e) && clusterIndex[clusterId]) {
       //qWarning() << "setEdgeValue...." << "edge:" << edgeId << " cluster " << clusterId << " " << propertyName << " " << propertyType << " value=\""<< value<<"\"  ";
-      bool result=false;
-
       if (propertyType==GRAPH || propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
         std::set<edge> v;
-        result = EdgeSetType::fromString(v, value);
+        bool result = EdgeSetType::fromString(v, value);
 
         if (result)
           clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setEdgeValue(e, v);
@@ -417,11 +415,9 @@ struct TLPGraphBuilder:public TLPTrue {
   bool setAllEdgeValue(int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
     if (clusterIndex[clusterId]) {
       //qWarning() << "setAllEdgeValue.." << endl;
-      bool result=false;
-
       if (propertyType==GRAPH|| propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
         std::set<edge> v;
-        result = EdgeSetType::fromString(v, value);
+        bool result = EdgeSetType::fromString(v, value);
 
         if (result)
           clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllEdgeValue(v);
@@ -535,8 +531,8 @@ struct TLPNodesBuilder:public TLPFalse {
 //=================================================================================
 struct TLPEdgeBuilder:public TLPFalse {
   TLPGraphBuilder *graphBuilder;
-  int parameter[3];
   int nbParameter;
+  int parameter[3];
   TLPEdgeBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder), nbParameter(0) {}
   bool addInt(const int id)  {
     if (nbParameter<3) {
@@ -844,7 +840,7 @@ struct TLPPropertyBuilder:public TLPFalse {
   bool setAllNodeValue(const std::string& value)  {
     return graphBuilder->setAllNodeValue(clusterId,propertyType,propertyName, (std::string&) value);
   }
-  bool setAllEdgeValue(const std::string value)  {
+  bool setAllEdgeValue(const std::string& value)  {
     return graphBuilder->setAllEdgeValue(clusterId,propertyType,propertyName, (std::string&) value);
   }
   bool addStruct(const std::string& structName,TLPBuilder*&newBuilder);

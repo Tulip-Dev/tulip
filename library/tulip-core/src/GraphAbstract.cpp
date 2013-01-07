@@ -289,7 +289,7 @@ Graph* GraphAbstract::getDescendantGraph(const string &name) const {
     if ((sg = (*it)->getDescendantGraph(name)))
       return sg;
 
-    it++;
+    ++it;
   }
 
   return NULL;

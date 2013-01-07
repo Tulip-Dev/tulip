@@ -93,8 +93,8 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
     subGraphsToDelete.begin();
 
   while(itds != subGraphsToDelete.end()) {
-    set<Graph*>::const_iterator its = (*itds).second.begin();
-    set<Graph*>::const_iterator ite = (*itds).second.end();
+    set<Graph*>::const_iterator its = itds->second.begin();
+    set<Graph*>::const_iterator ite = itds->second.end();
 
     while(its != ite) {
       // avoid subgraphs deletion of graph to delete
@@ -111,11 +111,11 @@ void GraphUpdatesRecorder::deleteDeletedObjects() {
     propertiesToDelete.begin();
 
   while(itdp != propertiesToDelete.end()) {
-    set<PropertyRecord>::const_iterator itp =  (*itdp).second.begin();
-    set<PropertyRecord>::const_iterator ite = (*itdp).second.end();
+    set<PropertyRecord>::const_iterator itp =  itdp->second.begin();
+    set<PropertyRecord>::const_iterator ite = itdp->second.end();
 
     while(itp != ite) {
-      delete ((*itp).prop);
+      delete (itp->prop);
       ++itp;
     }
 
@@ -258,8 +258,8 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
           rn = itnv->second.recordedNodes = new MutableContainer<bool>();
       }
 
-      set<node>::const_iterator itn = (*itan).second.begin();
-      set<node>::const_iterator itne = (*itan).second.end();
+      set<node>::const_iterator itn = itan->second.begin();
+      set<node>::const_iterator itne = itan->second.end();
 
       while(itn != itne) {
         node n(*itn);
@@ -333,8 +333,8 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
           re = itnv->second.recordedEdges = new MutableContainer<bool>();
       }
 
-      set<edge>::const_iterator ite = (*iten).second.begin();
-      set<edge>::const_iterator itee = (*iten).second.end();
+      set<edge>::const_iterator ite = iten->second.begin();
+      set<edge>::const_iterator itee = iten->second.end();
 
       while(ite != itee) {
         edge e(*ite);
@@ -366,7 +366,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
 
     while (itav != oldAttributeValues.end()) {
       Graph* g = itav->first;
-      Iterator<pair<string, DataType*> > *itv = (*itav).second.getValues();
+      Iterator<pair<string, DataType*> > *itv = itav->second.getValues();
       const DataSet& gAttValues = g->getAttributes();
       DataSet& nAttValues = newAttributeValues[g];
 
@@ -606,12 +606,12 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     propsToDel.begin();
 
   while(itpg != propsToDel.end()) {
-    Graph* g = (Graph*) (*itpg).first;
-    set<PropertyRecord>::const_iterator itp = (*itpg).second.begin();
-    set<PropertyRecord>::const_iterator itpe = (*itpg).second.end();
+    Graph* g = (Graph*) itpg->first;
+    set<PropertyRecord>::const_iterator itp = itpg->second.begin();
+    set<PropertyRecord>::const_iterator itpe = itpg->second.end();
 
     while(itp != itpe) {
-      g->delLocalProperty((*itp).name);
+      g->delLocalProperty(itp->name);
       ++itp;
     }
 
@@ -625,9 +625,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     subGraphsToDel.begin();
 
   while(its != subGraphsToDel.end()) {
-    Graph* g = (Graph*) (*its).first;
-    set<Graph*>::const_iterator itg = (*its).second.begin();
-    set<Graph*>::const_iterator itge = (*its).second.end();
+    Graph* g = (Graph*) its->first;
+    set<Graph*>::const_iterator itg = its->second.begin();
+    set<Graph*>::const_iterator itge = its->second.end();
 
     while(itg != itge) {
       Graph* sg = (*itg);
@@ -720,9 +720,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   its = subGraphsToAdd.begin();
 
   while(its != subGraphsToAdd.end()) {
-    Graph* g = (Graph*) (*its).first;
-    set<Graph*>::const_iterator itg = (*its).second.begin();
-    set<Graph*>::const_iterator itge = (*its).second.end();
+    Graph* g = (Graph*) its->first;
+    set<Graph*>::const_iterator itg = its->second.begin();
+    set<Graph*>::const_iterator itge = its->second.end();
 
     while(itg != itge) {
       Graph* sg = *itg;
@@ -791,7 +791,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     updatedEdgesEnds.begin();
 
   while(itee != updatedEdgesEnds.end()) {
-    g->setEnds((*itee).first, (*itee).second.first, (*itee).second.second);
+    g->setEnds(itee->first, itee->second.first, itee->second.second);
     ++itee;
   }
 
@@ -851,12 +851,12 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   itpg = propsToAdd.begin();
 
   while(itpg != propsToAdd.end()) {
-    Graph* g = (Graph*) (*itpg).first;
-    set<PropertyRecord>::const_iterator itp = (*itpg).second.begin();
-    set<PropertyRecord>::const_iterator itpe = (*itpg).second.end();
+    Graph* g = (Graph*) itpg->first;
+    set<PropertyRecord>::const_iterator itp = itpg->second.begin();
+    set<PropertyRecord>::const_iterator itpe = itpg->second.end();
 
     while(itp != itpe) {
-      g->addLocalProperty((*itp).name, (*itp).prop);
+      g->addLocalProperty(itp->name, itp->prop);
       ++itp;
     }
 
@@ -871,7 +871,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
   while(itdv != nodeDefaultValues.end()) {
     PropertyInterface* prop = itdv->first;
-    prop->setAllNodeDataMemValue((*itdv).second);
+    prop->setAllNodeDataMemValue(itdv->second);
     ++itdv;
   }
 
@@ -882,7 +882,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
   while(itdv != edgeDefaultValues.end()) {
     PropertyInterface* prop = itdv->first;
-    prop->setAllEdgeDataMemValue((*itdv).second);
+    prop->setAllEdgeDataMemValue(itdv->second);
     ++itdv;
   }
 
@@ -930,7 +930,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
   while (itav != attValues.end()) {
     Graph* g = itav->first;
-    Iterator<pair<string, DataType*> > *itv = (*itav).second.getValues();
+    Iterator<pair<string, DataType*> > *itv = itav->second.getValues();
 
     while(itv->hasNext()) {
       pair<string, DataType*> pval = itv->next();
@@ -965,9 +965,9 @@ bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface* prop) {
         addedProperties.find(g);
 
       if (it != addedProperties.end() &&
-          ((*it).second.find(p) != (*it).second.end()))
+          (it->second.find(p) != it->second.end()))
         // the property is no longer recorded
-        (*it).second.erase(p);
+        it->second.erase(p);
 
       return true;
     }
@@ -983,12 +983,12 @@ bool GraphUpdatesRecorder::isAddedOrDeletedProperty(Graph* g,
     addedProperties.find(g);
 
   if (it != addedProperties.end() &&
-      ((*it).second.find(p) != (*it).second.end()))
+      (it->second.find(p) != it->second.end()))
     return true;
 
   it = deletedProperties.find(g);
   return it != deletedProperties.end() &&
-         ((*it).second.find(p) != (*it).second.end());
+         (it->second.find(p) != it->second.end());
 }
 
 
@@ -1102,7 +1102,7 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
         if (ite == oldEdgesEnds.end())
           deletedEdgesEnds.set(e, new std::pair<node, node>(eEnds));
         else {
-          deletedEdgesEnds.set(e, new std::pair<node, node>((*ite).second));
+          deletedEdgesEnds.set(e, new std::pair<node, node>(ite->second));
           // remove from oldEdgesEnds
           oldEdgesEnds.erase(ite);
           // remove from newEdgesEnds
@@ -1148,9 +1148,9 @@ void GraphUpdatesRecorder::reverseEdge(Graph* g, edge e) {
 
     if (itne != newEdgesEnds.end()) {
       // revert ends of itne
-      node src = (*itne).second.first;
-      (*itne).second.first = (*itne).second.second;
-      (*itne).second.second = src;
+      node src = itne->second.first;
+      itne->second.first = itne->second.second;
+      itne->second.second = src;
     }
     else {   // update reverted edges
       set<edge>::iterator it = revertedEdges.find(e);
@@ -1232,8 +1232,8 @@ void GraphUpdatesRecorder::delSubGraph(Graph* g, Graph* sg) {
 
   // remove sg from addedSubGraphs if it is a newly added subgraph
   if (it != addedSubGraphs.end() &&
-      ((*it).second.find(sg) != (*it).second.end())) {
-    (*it).second.erase(sg);
+      (it->second.find(sg) != it->second.end())) {
+    it->second.erase(sg);
     // but set its subgraphs as added in its supergraph
     Iterator<Graph *> *itss = sg->getSubGraphs();
 
@@ -1285,9 +1285,9 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
     addedProperties.find(g);
 
   // remove p from addedProperties if it is a newly added one
-  if (it != addedProperties.end() && ((*it).second.find(p) != (*it).second.end())) {
+  if (it != addedProperties.end() && (it->second.find(p) != it->second.end())) {
     // the property is no longer recorded
-    (*it).second.erase(p);
+    it->second.erase(p);
     return;
   }
 

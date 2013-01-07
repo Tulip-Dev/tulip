@@ -1235,14 +1235,14 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 
         while(itnme != itnmeEnd) {
           Graph* graph = this;
-          node tgt = (*itnme).first;
+          node tgt(itnme->first);
 
           // add edge in the right graph
           if (!isElement(src) || !isElement(tgt))
             graph = super;
 
           edge mE = graph->addEdge(src, tgt);
-          metaInfo->setEdgeValue(mE, (*itnme).second);
+          metaInfo->setEdgeValue(mE, itnme->second);
           // compute meta edge values
           PropertyInterface *property;
           forEach(property, graph->getObjectProperties()) {

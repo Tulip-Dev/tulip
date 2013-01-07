@@ -77,11 +77,6 @@ static const char * paramHelp[] = {
 };
 }
 
-// workaround for G++ bug for <<
-inline void printGraph(std::ostream &os, tlp::Graph *graph) {
-  os << graph << endl;
-}
-
 #endif //DOXYGEN_NOTFOR_DEVEL
 
 namespace tlp {

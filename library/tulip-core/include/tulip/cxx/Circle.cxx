@@ -117,6 +117,8 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
     unsigned b1,b2;
     tlp::Circle<Obj, OTYPE> result;
 
+    OptimumCircleHull() {}
+
     static tlp::Circle<Obj, OTYPE> enclosingCircle(const tlp::Circle<Obj, OTYPE> &c1,const tlp::Circle<Obj, OTYPE> &c2,const tlp::Circle<Obj, OTYPE> &c3) {
       Obj a1 = c1[0];
       Obj b1 = c1[1];
