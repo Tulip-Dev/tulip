@@ -200,18 +200,17 @@ void GlEPSFeedBackBuilder::lineResetToken(GLfloat *data) {
 void GlEPSFeedBackBuilder::polygonToken(GLfloat *data) {
   int nvertices =(int) *data;
   GLfloat red, green, blue;
-  int smooth;
   Feedback3Dcolor *vertex = (Feedback3Dcolor *)(data+1);
 
   if (nvertices > 0) {
     red = vertex[0].red;
     green = vertex[0].green;
     blue = vertex[0].blue;
-    smooth = 0;
+    bool smooth = false;
 
     for(int i = 1; i < nvertices; i++) {
       if (red != vertex[i].red || green != vertex[i].green || blue != vertex[i].blue) {
-        smooth = 1;
+        smooth = true;
         break;
       }
     }

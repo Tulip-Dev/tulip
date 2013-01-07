@@ -46,12 +46,12 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
   handler->begin();
   ifstream csvFile(_fileName.c_str(),ifstream::in|ifstream::binary);
 
-  //Real row number used to
-  unsigned int row = 0;
-  //Read row number
-  unsigned int columnMax = 0;
-
   if (csvFile) {
+    //Real row number used to
+    unsigned int row = 0;
+    //Read row number
+    unsigned int columnMax = 0;
+
     csvFile.seekg(0, std::ios_base::end);
     // get position = file size
     unsigned long fileSize = csvFile.tellg(), readSize = 0;

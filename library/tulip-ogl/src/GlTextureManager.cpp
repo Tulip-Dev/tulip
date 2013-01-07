@@ -176,13 +176,13 @@ void GlTextureManager::registerExternalTexture(const std::string &textureName, c
 //====================================================================
 void GlTextureManager::deleteTexture(const string& name) {
   for(ContextAndTextureMap::iterator it=texturesMap.begin(); it!=texturesMap.end(); ++it) {
-    TextureUnit::iterator it2=(*it).second.find(name);
+    TextureUnit::iterator it2=it->second.find(name);
 
-    if(it2!=(*it).second.end()) {
-      for(unsigned int i=0; i<(*it2).second.spriteNumber; ++i)
-        glDeleteTextures(1,&((*it2).second.id[i]));
+    if(it2!=it->second.end()) {
+      for(unsigned int i=0; i<it2->second.spriteNumber; ++i)
+        glDeleteTextures(1,&(it2->second.id[i]));
 
-      (*it).second.erase(name);
+      it->second.erase(name);
     }
   }
 }
