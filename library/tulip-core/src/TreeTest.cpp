@@ -59,8 +59,8 @@ struct dfsFreeTreeStruct {
   node cameFrom;
   Iterator<node>* neighbours;
 
-  dfsFreeTreeStruct() {}
-  dfsFreeTreeStruct(node root, node from, Iterator<node>* it):
+  dfsFreeTreeStruct(node root = node(), node from = node(),
+		    Iterator<node>* it = NULL):
     curRoot(root), cameFrom(from), neighbours(it) {}
   ~dfsFreeTreeStruct() {
     if (neighbours)

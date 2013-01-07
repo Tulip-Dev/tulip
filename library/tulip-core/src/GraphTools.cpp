@@ -52,7 +52,6 @@ void makeProperDag(Graph* graph,list<node> &addedNodes,
   //we now transform the dag in a proper Dag, two linked nodes of a proper dag
   //must have a difference of one of dag level metric.
   node tmp1,tmp2;
-  string tmpString;
   vector<edge> sgEdges(graph->numberOfEdges());
   Iterator<edge> *itE=graph->getEdges();
 

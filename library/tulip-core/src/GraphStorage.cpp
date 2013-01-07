@@ -139,8 +139,8 @@ const GraphStorageIdsMemento* GraphStorage::getIdsMemento() {
  * @brief restore a state of the ids management
  */
 void GraphStorage::restoreIdsMemento(const GraphStorageIdsMemento *memento) {
-  nodeIds.restoreState(((IdsMemento *)memento)->nodeIds);
-  edgeIds.restoreState(((IdsMemento *)memento)->edgeIds);
+  nodeIds.restoreState(static_cast<const IdsMemento*>(memento)->nodeIds);
+  edgeIds.restoreState(static_cast<const IdsMemento*>(memento)->edgeIds);
 }
 //=======================================================
 /**

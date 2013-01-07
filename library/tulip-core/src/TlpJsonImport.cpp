@@ -441,7 +441,7 @@ private:
  **/
 class YajlProxy : public YajlParseFacade {
 public:
-  YajlProxy(tlp::PluginProgress* progress = NULL) : YajlParseFacade(progress) {
+  YajlProxy(tlp::PluginProgress* progress = NULL) : YajlParseFacade(progress), _proxy(NULL) {
   }
   virtual ~YajlProxy() {
   }

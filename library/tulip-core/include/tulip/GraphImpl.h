@@ -108,8 +108,7 @@ public:
   virtual bool canPopThenUnpop();
 
   // observer interface
-  void treatEvents(const  std::vector<Event> &);
-  void observableDestroyed(Observable*);
+  void treatEvents(const std::vector<Event> &);
 
   // for subgraph id management
   unsigned int getSubGraphId(unsigned int id);

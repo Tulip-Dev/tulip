@@ -527,13 +527,6 @@ void GraphImpl::treatEvents(const  std::vector<Event> &) {
   unobserveUpdates();
 }
 //----------------------------------------------------------------
-void GraphImpl::observableDestroyed(Observable*) {
-  // a sub graph has been removed
-  // so delete the previous recorders
-  delPreviousRecorders();
-  unobserveUpdates();
-}
-//----------------------------------------------------------------
 void GraphImpl::observeUpdates(Graph *g) {
   g->addObserver(this);
   observedGraphs.push_front(g);

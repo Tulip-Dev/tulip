@@ -100,13 +100,12 @@ extern "C" {
     libTulipName = "libtulip-core-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".so";
 #endif
     void *ptr;
-    void *symbol;
     Dl_info info;
 
     ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
 
     if (ptr != NULL) {
-      symbol = dlsym(ptr, "getTulipLibDir");
+      void* symbol = dlsym(ptr, "getTulipLibDir");
 
       if (symbol != NULL) {
         if (dladdr(symbol, &info)) {

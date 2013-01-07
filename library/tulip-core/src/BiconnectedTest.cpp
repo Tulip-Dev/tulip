@@ -150,10 +150,10 @@ void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
   dfsNumber.setAll(-1);
   MutableContainer<node> supergraph;
   supergraph.setAll(node());
-  unsigned int count = 0;
   node root = graph->getOneNode();
 
   if (root.isValid()) {
+    unsigned int count = 0;
     makeBiconnectedDFS(graph, root, low, dfsNumber, supergraph, count, addedEdges);
   }
 }
