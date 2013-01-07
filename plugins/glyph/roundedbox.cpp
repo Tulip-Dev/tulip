@@ -303,7 +303,6 @@ void RoundedBox::draw(node n, float lod) {
     GlPolygon *polygon = roundedSquare;
 
     if (size[0] != size[1]) {
-      //FIXME memory leak: createRoundedRect() creates a new GlPolygon
       polygon = createRoundedRect(size);
     }
 
@@ -312,6 +311,9 @@ void RoundedBox::draw(node n, float lod) {
     polygon->setOutlineSize(outlineWidth);
     polygon->setTextureName(texture);
     polygon->draw(lod,NULL);
+    if (polygon != roundedSquare)
+      // because createRoundedRect() creates a new GlPolygon
+      delete polygon;
   }
   else {
 
