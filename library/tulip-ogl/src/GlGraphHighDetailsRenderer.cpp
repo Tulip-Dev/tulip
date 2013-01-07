@@ -42,7 +42,7 @@ namespace tlp {
 struct EntityWithDistance {
 
   EntityWithDistance(const double &dist,EntityLODUnit *entity)
-    :distance(dist),entity(entity),isComplexEntity(false) {
+    :distance(dist),entity(entity),isComplexEntity(false),isNode(false) {
   }
   EntityWithDistance(const double &dist,ComplexEntityLODUnit *entity,bool isNode)
     :distance(dist),entity(entity),isComplexEntity(true),isNode(isNode) {
@@ -208,26 +208,26 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
     //draw nodes and metanodes
     for(vector<ComplexEntityLODUnit>::iterator it =layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
-      if((*it).lod<=0)
+      if(it->lod<=0)
         continue;
 
       if(filteringProperty) {
-        if(filteringProperty->getNodeValue(node((*it).id)))
+        if(filteringProperty->getNodeValue(node(it->id)))
           continue;
       }
 
-      if((!graph->isMetaNode(node((*it).id)) && displayNodes) || (graph->isMetaNode(node((*it).id)) && displayMetaNodes)) {
+      if((!graph->isMetaNode(node(it->id)) && displayNodes) || (graph->isMetaNode(node(it->id)) && displayMetaNodes)) {
         if(selectionDrawActivate) {
           if((selectionType & RenderingNodes)==0)
             continue;
 
-          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,SelectedEntity::NODE_SELECTED);
+          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->id,SelectedEntity::NODE_SELECTED);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }
 
-        glNode.id=(*it).id;
-        glNode.draw((*it).lod,inputData,camera);
+        glNode.id=it->id;
+        glNode.draw(it->lod,inputData,camera);
 
         if(renderOnlyOneNode)
           break;
@@ -241,11 +241,11 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     if(!renderOnlyOneNode) {
       //draw edges
       for(vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
-        if((*it).lod<=0)
+        if(it->lod<=0)
           continue;
 
         if(filteringProperty) {
-          if(filteringProperty->getEdgeValue(edge((*it).id)))
+          if(filteringProperty->getEdgeValue(edge(it->id)))
             continue;
         }
 
@@ -256,13 +256,13 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
           if((selectionType & RenderingEdges)==0)
             continue;
 
-          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,(*it).id,SelectedEntity::EDGE_SELECTED);
+          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->id,SelectedEntity::EDGE_SELECTED);
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }
 
-        glEdge.id=(*it).id;
-        glEdge.draw((*it).lod,inputData,camera);
+        glEdge.id=it->id;
+        glEdge.draw(it->lod,inputData,camera);
       }
     }
 
@@ -278,15 +278,15 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingNodes)!=0)) {
       // Colect complex entities
       for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
-        if((*it).lod<0)
+        if(it->lod<0)
           continue;
 
         if(filteringProperty) {
-          if(filteringProperty->getNodeValue(node((*it).id)))
+          if(filteringProperty->getNodeValue(node(it->id)))
             continue;
         }
 
-        bb=(*it).boundingBox;
+        bb=it->boundingBox;
         Coord middle((bb[1]+bb[0])/2.f);
         dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
         dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
@@ -297,15 +297,15 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
     if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingEdges)!=0)) {
       for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
-        if((*it).lod<0)
+        if(it->lod<0)
           continue;
 
         if(filteringProperty) {
-          if(filteringProperty->getEdgeValue(edge((*it).id)))
+          if(filteringProperty->getEdgeValue(edge(it->id)))
             continue;
         }
 
-        bb = (*it).boundingBox;
+        bb = it->boundingBox;
         Coord middle((bb[0] + bb[1])/2.f);
         dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
         dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
@@ -317,10 +317,10 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     // Draw
     for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin(); it!=entitiesSet.end(); ++it) {
       // Complex entities
-      ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)((*it).entity);
+      ComplexEntityLODUnit *entity=(ComplexEntityLODUnit*)(it->entity);
 
 
-      if((*it).isNode) {
+      if(it->isNode) {
         if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
           if(selectionDrawActivate) {
             if((selectionType & RenderingNodes)==0)
@@ -462,15 +462,15 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
     node n;
 
     for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.nodesLODVector.begin(); it!=layerLODUnit.nodesLODVector.end(); ++it) {
-      if((*it).lod<0 && !viewOutScreenLabel)
+      if(it->lod<0 && !viewOutScreenLabel)
         continue;
 
-      float lod=(*it).lod;
+      float lod=it->lod;
 
       if(viewOutScreenLabel && lod<0)
         lod=-lod;
 
-      n.id=(*it).id;
+      n.id=it->id;
 
       if(selectionProperty->getNodeValue(n)==drawSelected) {
         if(!metric) {
@@ -498,8 +498,8 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
 
       for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin(); it!=nodesMetricOrdered.end(); ++it) {
-        glNode.id=(*it).first.id;
-        glNode.drawLabel(occlusionTest,inputData,(*it).second,(Camera *)(layerLODUnit.camera));
+        glNode.id=it->first.id;
+        glNode.drawLabel(occlusionTest,inputData,it->second,(Camera *)(layerLODUnit.camera));
       }
     }
   }
@@ -509,20 +509,20 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
     edge e;
 
     for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.edgesLODVector.begin(); it!=layerLODUnit.edgesLODVector.end(); ++it) {
-      if((*it).lod<0 && !viewOutScreenLabel)
+      if(it->lod<0 && !viewOutScreenLabel)
         continue;
 
-      e.id=(*it).id;
+      e.id=it->id;
 
       if(selectionProperty->getEdgeValue(e) == drawSelected) {
         if(!metric) {
           // Not metric ordered
           glEdge.id=e.id;
-          glEdge.drawLabel(occlusionTest,inputData,(*it).lod,(Camera *)(layerLODUnit.camera));
+          glEdge.drawLabel(occlusionTest,inputData,it->lod,(Camera *)(layerLODUnit.camera));
         }
         else {
           // Metric ordered
-          edgesMetricOrdered.push_back(pair<edge,float>(e,(*it).lod));
+          edgesMetricOrdered.push_back(pair<edge,float>(e,it->lod));
         }
       }
     }
@@ -536,8 +536,8 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
 
       for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin(); it!=edgesMetricOrdered.end(); ++it) {
-        glEdge.id=(*it).first.id;
-        glEdge.drawLabel(occlusionTest,inputData,(*it).second,(Camera *)(layerLODUnit.camera));
+        glEdge.id=it->first.id;
+        glEdge.drawLabel(occlusionTest,inputData,it->second,(Camera *)(layerLODUnit.camera));
       }
     }
   }

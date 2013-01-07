@@ -103,7 +103,7 @@ GlScene::~GlScene() {
   delete lodCalculator;
 
   for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    delete (*it).second;
+    delete it->second;
   }
 }
 
@@ -184,7 +184,7 @@ void GlScene::draw() {
     lodVisitor = new GlLODSceneVisitor(lodCalculator, NULL);
 
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-      (*it).second->acceptVisitor(lodVisitor);
+      it->second->acceptVisitor(lodVisitor);
     }
 
     delete lodVisitor;
@@ -213,12 +213,12 @@ void GlScene::draw() {
     vector<SimpleEntityLODUnit>::iterator it;
 
     if(getGlGraphComposite() && !getGlGraphComposite()->getInputData()->parameters->isElementZOrdered()) {
-      for( it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
-        if((*it).lod<0)
+      for( it = itLayer->simpleEntitiesLODVector.begin(); it!= itLayer->simpleEntitiesLODVector.end(); ++it) {
+        if(it->lod<0)
           continue;
 
-        glStencilFunc(GL_LEQUAL,(((*it).entity))->getStencil(), 0xFFFF);
-        ((*it).entity)->draw((*it).lod,camera);
+        glStencilFunc(GL_LEQUAL,((it->entity))->getStencil(), 0xFFFF);
+        (it->entity)->draw(it->lod,camera);
       }
     }
     else {
@@ -229,11 +229,11 @@ void GlScene::draw() {
       BoundingBox bb;
       double dist;
 
-      for( it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
-        if((*it).lod<0)
+      for( it = itLayer->simpleEntitiesLODVector.begin(); it!=itLayer->simpleEntitiesLODVector.end(); ++it) {
+        if(it->lod<0)
           continue;
 
-        bb = (*it).boundingBox;
+        bb = it->boundingBox;
         Coord middle((bb[1] + bb[0])/2.f);
         dist=(((double)middle[0])-((double)camPos[0]))*(((double)middle[0])-((double)camPos[0]));
         dist+=(((double)middle[1])-((double)camPos[1]))*(((double)middle[1])-((double)camPos[1]));
@@ -243,9 +243,9 @@ void GlScene::draw() {
 
       for(multiset<EntityWithDistance,entityWithDistanceCompare>::iterator it=entitiesSet.begin(); it!=entitiesSet.end(); ++it) {
         // Simple entities
-        GlSimpleEntity *entity = (((SimpleEntityLODUnit*)((*it).entity))->entity);
+        GlSimpleEntity *entity = (((SimpleEntityLODUnit*)(it->entity))->entity);
         glStencilFunc(GL_LEQUAL,entity->getStencil(),0xFFFF);
-        entity->draw((*it).entity->lod,camera);
+        entity->draw(it->entity->lod,camera);
       }
     }
   }
@@ -286,7 +286,7 @@ GlLayer *GlScene::createLayerBefore(const std::string &layerName,const std::stri
   GlLayer *oldLayer=getLayer(layerName);
 
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).first==beforeLayerWithName) {
+    if(it->first==beforeLayerWithName) {
       newLayer=new GlLayer(layerName);
       layersList.insert(it,pair<string,GlLayer*>(layerName,newLayer));
       newLayer->setScene(this);
@@ -311,7 +311,7 @@ GlLayer *GlScene::createLayerAfter(const std::string &layerName,const std::strin
   GlLayer *oldLayer=getLayer(layerName);
 
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).first==afterLayerWithName) {
+    if(it->first==afterLayerWithName) {
       ++it;
       newLayer=new GlLayer(layerName);
       layersList.insert(it,pair<string,GlLayer*>(layerName,newLayer));
@@ -352,7 +352,7 @@ bool GlScene::addExistingLayerBefore(GlLayer *layer, const std::string &beforeLa
   GlLayer *oldLayer=getLayer(layer->getName());
 
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).first==beforeLayerWithName) {
+    if(it->first==beforeLayerWithName) {
       layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
       layer->setScene(this);
 
@@ -377,7 +377,7 @@ bool GlScene::addExistingLayerAfter(GlLayer *layer, const std::string &afterLaye
   GlLayer *oldLayer=getLayer(layer->getName());
 
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).first==afterLayerWithName) {
+    if(it->first==afterLayerWithName) {
       ++it;
       layersList.insert(it,pair<string,GlLayer*>(layer->getName(),layer));
       layer->setScene(this);
@@ -400,8 +400,8 @@ bool GlScene::addExistingLayerAfter(GlLayer *layer, const std::string &afterLaye
 
 GlLayer *GlScene::getLayer(const std::string& name) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).first==name) {
-      return (*it).second;
+    if(it->first==name) {
+      return it->second;
     }
   }
 
@@ -410,12 +410,12 @@ GlLayer *GlScene::getLayer(const std::string& name) {
 
 void GlScene::removeLayer(const std::string& name,bool deleteLayer) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).first==name) {
+    if(it->first==name) {
       if (hasOnlookers())
-        sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,name,(*it).second));
+        sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,name,it->second));
 
       if(deleteLayer)
-        delete (*it).second;
+        delete it->second;
 
       layersList.erase(it);
       return;
@@ -425,12 +425,12 @@ void GlScene::removeLayer(const std::string& name,bool deleteLayer) {
 
 void GlScene::removeLayer(GlLayer *layer,bool deleteLayer) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).second==layer) {
+    if(it->second==layer) {
       if (hasOnlookers())
         sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELLAYER,layer->getName(),layer));
 
       if(deleteLayer)
-        delete (*it).second;
+        delete it->second;
 
       layersList.erase(it);
       return;
@@ -467,8 +467,8 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
     visitor=new GlBoundingBoxSceneVisitor(NULL);
 
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera()))
-      (*it).second->acceptVisitor(visitor);
+    if(it->second->getCamera().is3D() && (!it->second->useSharedCamera()))
+      it->second->acceptVisitor(visitor);
   }
 
   BoundingBox boundingBox(visitor->getBoundingBox());
@@ -584,7 +584,7 @@ void GlScene::ajustSceneToSize(int width, int height) {
   computeAjustSceneToSize(width,height, &center, &eye, &sceneRadius,NULL,NULL,&sceneBoundingBox,&zoomFactor);
 
   for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    Camera &camera=(*it).second->getCamera();
+    Camera &camera=it->second->getCamera();
     camera.setCenter(center);
 
     camera.setSceneRadius(sceneRadius,sceneBoundingBox);
@@ -598,8 +598,8 @@ void GlScene::ajustSceneToSize(int width, int height) {
 void GlScene::zoomXY(int step, const int x, const int y) {
 
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera()))
-      (*it).second->getCamera().setZoomFactor((*it).second->getCamera().getZoomFactor() * pow(1.1,step));
+    if(it->second->getCamera().is3D() && (!it->second->useSharedCamera()))
+      it->second->getCamera().setZoomFactor(it->second->getCamera().getZoomFactor() * pow(1.1,step));
   }
 
   if (step < 0) step *= -1;
@@ -611,41 +611,41 @@ void GlScene::zoomXY(int step, const int x, const int y) {
 
 void GlScene::zoom(float,const Coord& dest) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera())) {
-      (*it).second->getCamera().setEyes(dest + ((*it).second->getCamera().getEyes() - (*it).second->getCamera().getCenter()));
-      (*it).second->getCamera().setCenter(dest);
+    if(it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
+      it->second->getCamera().setEyes(dest + (it->second->getCamera().getEyes() - it->second->getCamera().getCenter()));
+      it->second->getCamera().setCenter(dest);
     }
   }
 }
 
 void GlScene::translateCamera(const int x, const int y, const int z) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera())) {
+    if(it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
       Coord v1(0, 0, 0);
       Coord v2(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
-      v1 = (*it).second->getCamera().screenTo3DWorld(v1);
-      v2 = (*it).second->getCamera().screenTo3DWorld(v2);
+      v1 = it->second->getCamera().screenTo3DWorld(v1);
+      v2 = it->second->getCamera().screenTo3DWorld(v2);
       Coord move = v2 - v1;
-      (*it).second->getCamera().setEyes((*it).second->getCamera().getEyes() + move);
-      (*it).second->getCamera().setCenter((*it).second->getCamera().getCenter() + move);
+      it->second->getCamera().setEyes(it->second->getCamera().getEyes() + move);
+      it->second->getCamera().setCenter(it->second->getCamera().getCenter() + move);
     }
   }
 }
 
 void GlScene::zoom(int step) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera())) {
-      (*it).second->getCamera().setZoomFactor((*it).second->getCamera().getZoomFactor() * pow(1.1, step));
+    if(it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
+      it->second->getCamera().setZoomFactor(it->second->getCamera().getZoomFactor() * pow(1.1, step));
     }
   }
 }
 
 void GlScene::rotateScene(const int x, const int y, const int z) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-    if((*it).second->getCamera().is3D() && (!(*it).second->useSharedCamera())) {
-      (*it).second->getCamera().rotate(static_cast<float>(x/360.0 * M_PI), 1.0f, 0, 0);
-      (*it).second->getCamera().rotate(static_cast<float>(y/360.0 * M_PI), 0, 1.0f, 0);
-      (*it).second->getCamera().rotate(static_cast<float>(z/360.0 * M_PI), 0, 0, 1.0f);
+    if(it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
+      it->second->getCamera().rotate(static_cast<float>(x/360.0 * M_PI), 1.0f, 0, 0);
+      it->second->getCamera().rotate(static_cast<float>(y/360.0 * M_PI), 0, 1.0f, 0);
+      it->second->getCamera().rotate(static_cast<float>(z/360.0 * M_PI), 0, 0, 1.0f);
     }
   }
 }
@@ -682,7 +682,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
     layerInScene=false;
 
     for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end() && layerInScene; ++it) {
-      if((*it).second==layer)
+      if(it->second==layer)
         layerInScene=true;
     }
   }
@@ -704,7 +704,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
   if(layerInScene) {
     if(selectLODCalculator->needEntities()) {
       for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-        (*it).second->acceptVisitor(lodVisitor);
+        it->second->acceptVisitor(lodVisitor);
       }
     }
   }
@@ -779,13 +779,13 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
       vector<SimpleEntityLODUnit>::iterator it;
 
       for(it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
-        if((*it).lod<0)
+        if(it->lod<0)
           continue;
 
-        idToEntity[id]=SelectedEntity((*it).entity);
+        idToEntity[id]=SelectedEntity(it->entity);
         glLoadName(id);
         id++;
-        (((*it).entity))->draw(20.,camera);
+        ((it->entity))->draw(20.,camera);
       }
     }
 
@@ -793,10 +793,10 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
       vector<SimpleEntityLODUnit>::iterator it;
 
       for(it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
-        if((*it).lod<0)
+        if(it->lod<0)
           continue;
 
-        GlGraphComposite *composite=dynamic_cast<GlGraphComposite*>((*it).entity);
+        GlGraphComposite *composite=dynamic_cast<GlGraphComposite*>(it->entity);
 
         if(composite) {
           compositesToRender.push_back(composite);
@@ -958,14 +958,14 @@ void GlScene::getXML(string &out) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
 
     // Don't save working layers
-    if((*it).second->isAWorkingLayer())
+    if(it->second->isAWorkingLayer())
       continue;
 
     GlXMLTools::beginChildNode(out,"GlLayer");
 
-    GlXMLTools::createProperty(out, "name", (*it).first);
+    GlXMLTools::createProperty(out, "name", it->first);
 
-    (*it).second->getXML(out);
+    it->second->getXML(out);
 
     GlXMLTools::endChildNode(out,"GlLayer");
   }
@@ -991,14 +991,14 @@ void GlScene::getXMLOnlyForCameras(string &out) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
 
     // Don't save working layers
-    if((*it).second->isAWorkingLayer())
+    if(it->second->isAWorkingLayer())
       continue;
 
     GlXMLTools::beginChildNode(out,"GlLayer");
 
-    GlXMLTools::createProperty(out, "name", (*it).first);
+    GlXMLTools::createProperty(out, "name", it->first);
 
-    (*it).second->getXMLOnlyForCameras(out);
+    it->second->getXMLOnlyForCameras(out);
 
     GlXMLTools::endChildNode(out,"GlLayer");
   }

@@ -175,7 +175,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     vector<SelectedEntity> selectedEntities;
     glMainWidget->pickGlEntities(qMouseEv->x(), qMouseEv->y(), selectedEntities);
 
-    if(selectedEntities.size()!=0)
+    if(!selectedEntities.empty())
       if(selectedEntities[0].getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED)
         if(selectedEntities[0].getSimpleEntity()==edgeEntity) {
           mouseButtonPressOnEdge=true;
@@ -187,7 +187,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
     vector<SelectedEntity> selectedEntities;
     glMainWidget->pickGlEntities(qMouseEv->x(), qMouseEv->y(), selectedEntities);
 
-    if(selectedEntities.size()!=0)
+    if(!selectedEntities.empty())
       if(selectedEntities[0].getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED)
         if(selectedEntities[0].getSimpleEntity()==edgeEntity && mouseButtonPressOnEdge) {
           mouseButtonPressOnEdge=false;

@@ -426,10 +426,6 @@ Vector<int, 4> Camera::getViewport() const {
 }
 //====================================================
 void Camera::getXML(string &outString) {
-  stringstream strZF;
-  stringstream strSR;
-  stringstream strD3;
-
   GlXMLTools::beginDataNode(outString);
   GlXMLTools::getXML(outString,"center",center);
   GlXMLTools::getXML(outString,"eyes",eyes);

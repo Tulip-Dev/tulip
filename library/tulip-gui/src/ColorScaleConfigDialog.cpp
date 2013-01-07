@@ -184,13 +184,10 @@ void ColorScaleConfigDialog::pressButtonBrowse() {
 }
 
 void ColorScaleConfigDialog::displaySavedGradientPreview() {
-  QString gradientFilePath;
-
-  bool gradient = true;
-
   if (_ui->savedColorScalesList->count() > 0 && _ui->savedColorScalesList->currentItem()) {
     QList<QColor> colorsList;
     QString savedColorScaleId = _ui->savedColorScalesList->currentItem()->text();
+    bool gradient = true;
 
     if (tulipImageColorScales.find(savedColorScaleId) != tulipImageColorScales.end()) {
       vector<Color> colors = tulipImageColorScales[savedColorScaleId];
