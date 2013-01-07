@@ -311,6 +311,7 @@ void RoundedBox::draw(node n, float lod) {
     polygon->setOutlineSize(outlineWidth);
     polygon->setTextureName(texture);
     polygon->draw(lod,NULL);
+
     if (polygon != roundedSquare)
       // because createRoundedRect() creates a new GlPolygon
       delete polygon;
