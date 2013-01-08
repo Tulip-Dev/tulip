@@ -638,7 +638,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       continue;
     }
 
-    if (graphPropRegexp.indexIn(line) != -1) {
+    if (_graph && graphPropRegexp.indexIn(line) != -1) {
       QString expr = line.mid(graphPropRegexp.indexIn(line), graphPropRegexp.matchedLength());
       QString varName = expr.mid(0, expr.indexOf("["));
       QString propName = expr.mid(expr.indexOf("\"")+1, expr.lastIndexOf("\"") - expr.indexOf("\"") - 1);
@@ -657,7 +657,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
     }
 
 
-    if (graphPropAccessRegexp.indexIn(line) != -1) {
+    if (_graph && graphPropAccessRegexp.indexIn(line) != -1) {
       QString expr = line.mid(graphPropAccessRegexp.indexIn(line), graphPropAccessRegexp.matchedLength());
       int pos = expr.indexOf("[");
       QString varName = expr.mid(0, pos);
