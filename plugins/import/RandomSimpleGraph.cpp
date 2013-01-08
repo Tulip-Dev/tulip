@@ -50,15 +50,7 @@ struct less<edgeS> {
       ds=d.target;
     }
 
-    if (cs<ds) return true;
-
-    if (cs>ds) return false;
-
-    if (ct<dt) return true;
-
-    if (ct>dt) return false;
-
-    return false;
+    return (cs < ds) || ((cs == ds) && (ct < dt));
   }
 };
 }
