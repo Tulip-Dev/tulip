@@ -50,7 +50,7 @@ template<>
 struct less<couple> {
   bool operator()(const couple &c,const couple &d) {
     return (c.r < d.r) ||
-      ((c.r == d.r) && (c.p < d.p));
+           ((c.r == d.r) && (c.p < d.p));
   }
 };
 }

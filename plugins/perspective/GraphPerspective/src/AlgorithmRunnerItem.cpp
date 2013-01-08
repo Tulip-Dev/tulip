@@ -381,7 +381,7 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
   }
   else if (pluginLister->pluginExists<DoubleAlgorithm>(stdName) &&
-	   TulipSettings::instance().isAutomaticMapMetric()) {
+           TulipSettings::instance().isAutomaticMapMetric()) {
     DoubleProperty* prop = NULL;
     dataSet.get<DoubleProperty*>("result",prop);
 
