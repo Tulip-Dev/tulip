@@ -139,7 +139,7 @@ public:
           const char *start= valString.c_str();
           char *res;
           double valDouble = strtod(start, &res);
-	  ValType type;
+          ValType type;
 
           if (res!=start) {
             type = TLP_DOUBLE;

@@ -31,7 +31,7 @@ template<>
 struct less<edgeS> {
   bool operator()(const edgeS &c,const edgeS &d) const {
     return (c.source < d.source) ||
-      ((c.source == d.source) && (c.target<d.target));
+           ((c.source == d.source) && (c.target<d.target));
   }
 };
 }
