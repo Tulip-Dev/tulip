@@ -75,7 +75,10 @@
 #  include <frameobject.h>
 #  include <structmember.h>
 #  include <import.h>
+#  pragma GCC diagnostic push
+#  pragma GCC diagnostic ignored "-pedantic"
 #  include <sip.h>
+#  pragma GCC diagnostic pop
 # endif
 
 static const sipAPIDef *get_sip_api() {
