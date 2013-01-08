@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>450</width>
-    <height>683</height>
+    <width>380</width>
+    <height>409</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Scene</string>
@@ -80,81 +86,93 @@ background-color: #F4F4F4;
     <number>10</number>
    </property>
    <item>
-     <widget class="QFrame" name="horizontalFrame_2">
-       <property name="sizePolicy">
-	 <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-	 </sizepolicy>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-	   <item>
-	     <widget class="QLabel" name="title">
-	       <property name="styleSheet">
-		 <string notr="true">font-weight: bold;
+    <widget class="QFrame" name="horizontalFrame_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QLabel" name="title">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-weight: bold;
 		 color: #595959;</string>
-	       </property>
-	       <property name="text">
-		 <string>&lt;font size=&quot;5&quot;&gt;Scene rendering settings&lt;/font&gt;</string>
-	       </property>
-	     </widget>
-	   </item>
-	   <item>
-	     <widget class="QPushButton" name="applyButton">
-	       <property name="sizePolicy">
-		 <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-		   <horstretch>0</horstretch>
-		   <verstretch>0</verstretch>
-		 </sizepolicy>
-	       </property>
-	       <property name="toolTip">
-		 <string>Apply changes</string>
-	       </property>
-	       <property name="styleSheet">
-		 <string notr="true">font-weight: bold;
+        </property>
+        <property name="text">
+         <string>&lt;font size=&quot;5&quot;&gt;Scene rendering settings&lt;/font&gt;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="applyButton">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="toolTip">
+         <string>Apply changes</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-weight: bold;
 		 font-size: 10px;</string>
-	       </property>
-	       <property name="text">
-		 <string/>
-	       </property>
-	       <property name="icon">
-		 <iconset resource="../resources/TulipGUIResource.qrc">
-		 <normaloff>:/tulip/gui/icons/24/view-refresh.png</normaloff>:/tulip/gui/icons/24/view-refresh.png</iconset>
-	       </property>
-	       <property name="iconSize">
-		 <size>
-		   <width>24</width>
-		   <height>24</height>
-		 </size>
-	       </property>
-	       <property name="flat">
-		 <bool>true</bool>
-	       </property>
-	     </widget>
-	   </item>
-         </layout>
-     </widget>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/icons/24/view-refresh.png</normaloff>:/tulip/gui/icons/24/view-refresh.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
-     <widget class="Line" name="line">
-       <property name="maximumSize">
-	 <size>
-           <width>16777215</width>
-           <height>1</height>
-	 </size>
-       </property>
-       <property name="orientation">
-	 <enum>Qt::Horizontal</enum>
-       </property>
-     </widget>
+    <widget class="Line" name="line">
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>1</height>
+      </size>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QScrollArea" name="scrollArea">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOff</enum>
+      <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -164,9 +182,15 @@ background-color: #F4F4F4;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>417</width>
-        <height>668</height>
+        <width>343</width>
+        <height>487</height>
        </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="leftMargin">
@@ -183,16 +207,13 @@ background-color: #F4F4F4;
        </property>
        <item>
         <widget class="QFrame" name="labelsFrame">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
          </property>
-         <property name="section" stdset="0">
-          <bool>true</bool>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
            <widget class="QLabel" name="labelsFrameTitle">
             <property name="minimumSize">
@@ -202,7 +223,8 @@ background-color: #F4F4F4;
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">font-weight: bold;</string>
+             <string notr="true">font-weight: bold;
+background-color: rgb(160, 160, 160);</string>
             </property>
             <property name="text">
              <string>Labels</string>
@@ -213,203 +235,241 @@ background-color: #F4F4F4;
            </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="labelsFrameContents">
-            <property name="spacing">
-             <number>10</number>
-            </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QComboBox" name="labelsOrderingCombo"/>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="labelsFitCheck">
+             <widget class="QLabel" name="label_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="text">
-               <string>Fit labels into their respective nodes</string>
+               <string>Metric ordering</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QFrame" name="verticalFrame">
-              <property name="subsection" stdset="0">
-               <bool>true</bool>
+             <widget class="QComboBox" name="labelsOrderingCombo">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_3">
-               <item>
-                <widget class="QLabel" name="labelsDensityLabel">
-                 <property name="text">
-                  <string>Density:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <spacer name="verticalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeType">
-                  <enum>QSizePolicy::Fixed</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>5</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
-                <widget class="QFrame" name="horizontalFrame">
-                 <property name="styleSheet">
-                  <string notr="true">QLabel {
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="labelsFitCheck">
+            <property name="text">
+             <string>Fit labels into their respective nodes</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="verticalFrame">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="subsection" stdset="0">
+             <bool>true</bool>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QLabel" name="labelsDensityLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Density</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="horizontalFrame">
+               <property name="styleSheet">
+                <string notr="true">QLabel {
 font-weight: bold;
 font-size: 10px;
 }</string>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QLabel" name="labelsDisabledLabel">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="text">
+                   <string>No label</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labelsNoOverlapLabel">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="text">
+                   <string>No overlap</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labelsShowAllLabel">
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="text">
+                   <string>Show all</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSlider" name="labelsDensitySlider">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimum">
+                <number>-100</number>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::TicksAbove</enum>
+               </property>
+               <property name="tickInterval">
+                <number>100</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="verticalFrame_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="subsection" stdset="0">
+             <bool>true</bool>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QLabel" name="labelSizesLabel">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Size limits</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <item>
+                <widget class="QLabel" name="labelsMinSizeLabel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
                  </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_3">
-                  <item>
-                   <widget class="QLabel" name="labelsDisabledLabel">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="text">
-                     <string>No label</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelsNoOverlapLabel">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="text">
-                     <string>No overlap</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="labelsShowAllLabel">
-                    <property name="cursor">
-                     <cursorShape>PointingHandCursor</cursorShape>
-                    </property>
-                    <property name="text">
-                     <string>Show all</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
+                 <property name="minimumSize">
+                  <size>
+                   <width>25</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>100</string>
+                 </property>
                 </widget>
                </item>
                <item>
-                <widget class="QSlider" name="labelsDensitySlider">
+                <widget class="QxtSpanSlider" name="labelSizesSpanSlider">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
                  <property name="minimum">
-                  <number>-100</number>
+                  <number>1</number>
                  </property>
                  <property name="maximum">
-                  <number>100</number>
+                  <number>200</number>
                  </property>
                  <property name="orientation">
                   <enum>Qt::Horizontal</enum>
                  </property>
-                 <property name="tickPosition">
-                  <enum>QSlider::TicksAbove</enum>
-                 </property>
-                 <property name="tickInterval">
-                  <number>100</number>
-                 </property>
                 </widget>
                </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QFrame" name="verticalFrame_2">
-              <property name="subsection" stdset="0">
-               <bool>true</bool>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_4">
                <item>
-                <widget class="QLabel" name="labelSizesLabel">
+                <widget class="QLabel" name="labelsMaxSizeLabel">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="minimumSize">
+                  <size>
+                   <width>25</width>
+                   <height>0</height>
+                  </size>
+                 </property>
                  <property name="text">
-                  <string>Size limits:</string>
+                  <string>100</string>
                  </property>
                 </widget>
                </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout">
-                 <item>
-                  <widget class="QLabel" name="labelsMinSizeLabel">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>25</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string>100</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QxtSpanSlider" name="labelSizesSpanSlider">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimum">
-                    <number>1</number>
-                   </property>
-                   <property name="maximum">
-                    <number>200</number>
-                   </property>
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="labelsMaxSizeLabel">
-                   <property name="sizePolicy">
-                    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                     <horstretch>0</horstretch>
-                     <verstretch>0</verstretch>
-                    </sizepolicy>
-                   </property>
-                   <property name="minimumSize">
-                    <size>
-                     <width>25</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string>100</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
               </layout>
-             </widget>
-            </item>
-           </layout>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -417,7 +477,7 @@ font-size: 10px;
        <item>
         <widget class="QFrame" name="edgesFrame">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -429,33 +489,34 @@ font-size: 10px;
           <enum>QFrame::Raised</enum>
          </property>
          <property name="section" stdset="0">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
-          <item>
-           <widget class="QLabel" name="edgesFrameTitle">
-            <property name="minimumSize">
-             <size>
-              <width>80</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">font-weight: bold;</string>
-            </property>
-            <property name="text">
-             <string>Edges</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-            </property>
-           </widget>
-          </item>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
           <item>
            <layout class="QVBoxLayout" name="edgesFrameContents">
             <property name="spacing">
              <number>10</number>
             </property>
+            <item>
+             <widget class="QLabel" name="edgesFrameTitle">
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font-weight: bold;
+background-color: rgb(160, 160, 160);</string>
+              </property>
+              <property name="text">
+               <string>Edges</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QCheckBox" name="edges3DCheck">
               <property name="sizePolicy">
@@ -472,7 +533,7 @@ font-size: 10px;
             <item>
              <widget class="QCheckBox" name="edgesArrowCheck">
               <property name="text">
-               <string>Show arrows on edges</string>
+               <string>Show arrows</string>
               </property>
              </widget>
             </item>
@@ -497,14 +558,26 @@ font-size: 10px;
        </item>
        <item>
         <widget class="QFrame" name="sceneFrame">
-         <property name="section" stdset="0">
-          <bool>true</bool>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <property name="section" stdset="0">
+          <bool>false</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
            <widget class="QLabel" name="label">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -516,7 +589,8 @@ font-size: 10px;
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">font-weight: bold;</string>
+             <string notr="true">font-weight: bold;
+background-color: rgb(160, 160, 160);</string>
             </property>
             <property name="text">
              <string>Colors</string>
@@ -594,122 +668,8 @@ font-size: 10px;
    </slots>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections>
-  <connection>
-   <sender>labelSizesSpanSlider</sender>
-   <signal>lowerValueChanged(int)</signal>
-   <receiver>labelsMinSizeLabel</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>275</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>103</x>
-     <y>276</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>labelSizesSpanSlider</sender>
-   <signal>upperValueChanged(int)</signal>
-   <receiver>labelsMaxSizeLabel</receiver>
-   <slot>setNum(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>276</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>379</x>
-     <y>276</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>labelsOrderingCombo</sender>
-   <signal>currentIndexChanged(QString)</signal>
-   <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>86</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>212</x>
-     <y>279</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>labelsFitCheck</sender>
-   <signal>stateChanged(int)</signal>
-   <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>119</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>212</x>
-     <y>279</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>labelsDensitySlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>213</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>212</x>
-     <y>279</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>labelSizesSpanSlider</sender>
-   <signal>lowerValueChanged(int)</signal>
-   <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>281</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>212</x>
-     <y>279</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>labelSizesSpanSlider</sender>
-   <signal>upperValueChanged(int)</signal>
-   <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>241</x>
-     <y>281</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>212</x>
-     <y>279</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>edges3DCheck</sender>
    <signal>stateChanged(int)</signal>
