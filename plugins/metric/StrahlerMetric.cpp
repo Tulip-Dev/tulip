@@ -18,7 +18,7 @@
  */
 
 #include <cmath>
-#include <stdio.h>
+#include <cstdio>
 #include <tulip/StringProperty.h>
 #include "StrahlerMetric.h"
 
@@ -49,35 +49,19 @@ struct equal_to<couple> {
 template<>
 struct less<couple> {
   bool operator()(const couple &c,const couple &d) {
-    if (c.r<d.r) return true;
-
-    if (c.r>d.r) return false;
-
-    if (c.p<d.p) return true;
-
-    if (c.p>d.p) return false;
-
-    return false;
+    return (c.r < d.r) ||
+      ((c.r == d.r) && (c.p < d.p));
   }
 };
 }
 
-int max(int i1,int i2) {
-  if (i1>i2) return i1;
-  else return i2;
-}
-
-int min(int i1,int i2) {
-  if (i1<i2) return i1;
-  else return i2;
-}
 struct StackEval {
   StackEval(int f,int u):freeS(f),usedS(u) {}
   int freeS,usedS;
 };
 
 struct GreaterStackEval {
-  bool operator()(const StackEval e1,const StackEval e2) {
+  bool operator()(const StackEval& e1,const StackEval& e2) {
     return (e1.freeS>e2.freeS);
   }
 };
@@ -162,7 +146,7 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
 
   for (list<StackEval>::iterator it=tmpEval.begin(); it!=tmpEval.end(); ++it) {
     result.usedStack+=it->usedS;
-    result.stacks=max(result.stacks,it->freeS+it->usedS);
+    result.stacks=std::max(result.stacks,it->freeS+it->usedS);
     result.stacks-=it->usedS;
   }
 
