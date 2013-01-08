@@ -519,7 +519,7 @@ font-size: 10px;
              <string notr="true">font-weight: bold;</string>
             </property>
             <property name="text">
-             <string>Scene</string>
+             <string>Colors</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
