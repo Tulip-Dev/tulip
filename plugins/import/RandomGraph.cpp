@@ -30,15 +30,8 @@ namespace std {
 template<>
 struct less<edgeS> {
   bool operator()(const edgeS &c,const edgeS &d) const {
-    if (c.source<d.source) return true;
-
-    if (c.source>d.source) return false;
-
-    if (c.target<d.target) return true;
-
-    if (c.target>d.target) return false;
-
-    return false;
+    return (c.source < d.source) ||
+      ((c.source == d.source) && (c.target<d.target));
   }
 };
 }
