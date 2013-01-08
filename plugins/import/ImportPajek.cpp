@@ -109,8 +109,9 @@ public :
     return l;
   }
 
-  ImportPajek(const tlp::PluginContext* context):ImportModule(context),
-    expectedLine(NET_UNKNOWN) {
+  ImportPajek(const tlp::PluginContext* context):
+    ImportModule(context), nbNodes(0), weights(NULL), labels(NULL),
+    layout(NULL), sizes(NULL), expectedLine(NET_UNKNOWN) {
     addInParameter<string>("file::filename", paramHelp[0],"");
   }
 
@@ -351,7 +352,7 @@ public :
 
   bool importGraph() {
     string filename;
-    string coord;
+
     dataSet->get<string>("file::filename", filename);
 
     if (filename.empty()) {

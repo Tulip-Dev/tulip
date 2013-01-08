@@ -284,7 +284,7 @@ bool QuotientClustering::run() {
 
             if (dynamic_cast<DoubleProperty *>(property) &&
                 // try to avoid view... properties
-                (pName.find("view") != 0 || pName == "viewMetric")) {
+                (pName.compare(0, 4, "view") != 0 || pName == "viewMetric")) {
               DoubleProperty *metric = graph->getProperty<DoubleProperty>(pName);
               double value = metric->getEdgeValue(mE);
 

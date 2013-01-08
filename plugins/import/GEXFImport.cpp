@@ -57,7 +57,9 @@ class GEXFImport : public ImportModule {
 public :
 
   PLUGININFORMATIONS("GEXF","Antoine LAMBERT","05/05/2010","Imports a new graph from a file in the GEXF input format.","1.0","File")
-  GEXFImport(const PluginContext*  context):ImportModule(context) {
+  GEXFImport(const PluginContext*  context):ImportModule(context),
+    viewLayout(NULL), viewSize(NULL), viewColor(NULL), viewLabel(NULL),
+    viewShape(NULL) {
     // add a file parameter for the plugin
     addInParameter<string>("file::filename","","");
     addInParameter<bool>("Curved edges","", "false");
@@ -139,10 +141,8 @@ public :
 
     // Special case : some GEXF files declare edges before nodes
     // so we have to add edges once nodes have been parsed
-    if (edgesTmp.size() > 0) {
-      for (size_t i = 0 ; i < edgesTmp.size() ; ++i) {
-        graph->addEdge(nodesMap[edgesTmp[i].first], nodesMap[edgesTmp[i].second]);
-      }
+    for (size_t i = 0 ; i < edgesTmp.size() ; ++i) {
+      graph->addEdge(nodesMap[edgesTmp[i].first], nodesMap[edgesTmp[i].second]);
     }
 
     // nodes shape will be circle
@@ -381,7 +381,7 @@ public :
     string tgtId = xmlReader.attributes().value("target").toString().toStdString();
 
     // Check if nodes have been parsed
-    if (nodesMap.size() > 0) {
+    if (!nodesMap.empty()) {
       // add an edge in the graph we are building
       edge e = graph->addEdge(nodesMap[srcId], nodesMap[tgtId]);
 

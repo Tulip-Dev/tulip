@@ -29,10 +29,6 @@ using namespace tlp;
 #define uint unsigned int
 #endif
 
-#ifdef _WIN32
-#define uint unsigned int
-#endif
-
 namespace {
 #include "dotImportParser.h"
 #include "dotImportLexer.h"

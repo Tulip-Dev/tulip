@@ -327,8 +327,8 @@ void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tl
 
       if (newRatio < ratio) {  //we finish to build that row
         break;
-        unTreated.push_back(*it);
-        unTreatedSurface += nodesSize.get(it->id);
+        /*unTreated.push_back(*it);
+	  unTreatedSurface += nodesSize.get(it->id);*/
       }
       else {
         ratio = newRatio;
