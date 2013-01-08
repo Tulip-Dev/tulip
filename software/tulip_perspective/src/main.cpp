@@ -69,7 +69,7 @@ struct PluginLoaderToProgress: public PluginLoader {
 
   virtual void finished(bool state,const std::string &msg) {
     if (state)
-      _progress->setComment("Plugin loaded sucessfully");
+      _progress->setComment("Plugin successfully loaded");
     else
       _progress->setComment(msg);
   }
@@ -146,7 +146,7 @@ int main(int argc,char **argv) {
 
   // Check arguments
   progress->progress(60,100);
-  progress->setComment(QObject::trUtf8("Cheking arguments").toStdString());
+  progress->setComment(QObject::trUtf8("Checking arguments").toStdString());
   QString perspectiveName,projectFilePath;
   QVariantMap extraParams;
   QRect windowGeometry;
