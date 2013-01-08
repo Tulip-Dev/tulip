@@ -19,7 +19,6 @@ int PythonEditorsTabWidget::addEditor(const QString &fileName) {
   codeEditor->installEventFilter(this);
   connect(codeEditor, SIGNAL(textChanged()), this, SLOT(scriptTextChanged()));
   int idx = addTab(codeEditor, fileInfo.fileName());
-  std::cout << (unsigned long) codeEditor->layout() << std::endl;
   setTabToolTip(idx, fileInfo.absoluteFilePath());
   setCurrentIndex(idx);
 
