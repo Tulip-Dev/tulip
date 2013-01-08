@@ -134,12 +134,12 @@ public:
 
       while (lines.good()) {
         string valString;
-        ValType type;
 
         if ( lines >> valString) {
           const char *start= valString.c_str();
           char *res;
           double valDouble = strtod(start, &res);
+	  ValType type;
 
           if (res!=start) {
             type = TLP_DOUBLE;

@@ -68,7 +68,7 @@ struct GMLGraphBuilder:public GMLTrue {
 
     return edge();
   }
-  bool setNodeValue(int nodeId, const string propertyName, string value) {
+  bool setNodeValue(int nodeId, const string& propertyName, const string& value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<StringProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
@@ -76,7 +76,7 @@ struct GMLGraphBuilder:public GMLTrue {
 
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, double value) {
+  bool setNodeValue(int nodeId, const string& propertyName, const double& value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<DoubleProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
@@ -84,7 +84,7 @@ struct GMLGraphBuilder:public GMLTrue {
 
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, int value) {
+  bool setNodeValue(int nodeId, const string& propertyName, int value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<IntegerProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
@@ -92,7 +92,7 @@ struct GMLGraphBuilder:public GMLTrue {
 
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, bool value) {
+  bool setNodeValue(int nodeId, const string& propertyName, bool value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<BooleanProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
@@ -100,7 +100,7 @@ struct GMLGraphBuilder:public GMLTrue {
 
     return false;
   }
-  bool setNodeCoordValue(int nodeId, const string propertyName, Coord value) {
+  bool setNodeCoordValue(int nodeId, const string& propertyName, const Coord& value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<LayoutProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
@@ -108,7 +108,7 @@ struct GMLGraphBuilder:public GMLTrue {
 
     return false;
   }
-  bool setNodeSizeValue(int nodeId, const string propertyName, Size value) {
+  bool setNodeSizeValue(int nodeId, const string& propertyName, const Size& value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<SizeProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;
@@ -116,7 +116,7 @@ struct GMLGraphBuilder:public GMLTrue {
 
     return false;
   }
-  bool setNodeValue(int nodeId, const string propertyName, Color value) {
+  bool setNodeValue(int nodeId, const string& propertyName, const Color& value) {
     if (_graph->isElement(nodeIndex[nodeId])) {
       _graph->getLocalProperty<ColorProperty>(propertyName)->setNodeValue(nodeIndex[nodeId],value);
       return true;

@@ -61,7 +61,6 @@ EqualValueClustering::EqualValueClustering(tlp::PluginContext* context):Algorith
 }
 //===============================================================================
 bool EqualValueClustering::run() {
-  string tmp1,tmp2;
   PropertyInterface *property=NULL;
   StringCollection eltTypes(ELT_TYPES);
   bool connected = false;

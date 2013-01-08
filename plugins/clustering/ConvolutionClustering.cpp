@@ -267,7 +267,7 @@ void ConvolutionClustering::getClusters(const std::vector<int> &ranges) {
 //================================================================================
 bool ConvolutionClustering::run() {
   histosize=128;
-  string tmp1,tmp2;
+
   metric=graph->getProperty<DoubleProperty>("viewMetric");
   autoSetParameter();
   getHistogram();

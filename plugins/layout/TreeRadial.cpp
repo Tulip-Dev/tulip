@@ -66,8 +66,8 @@ public:
     unsigned int depth;
     Iterator<node>* neighbours;
 
-    dfsNodeRadiiStruct() {}
-    dfsNodeRadiiStruct(node n, float r, unsigned int d, Iterator<node>* it):
+    dfsNodeRadiiStruct(node n = node(), float r = 0, unsigned int d = 0,
+		       Iterator<node>* it = NULL):
       current(n), radius(r), depth(d), neighbours(it) {}
   };
 
@@ -176,8 +176,8 @@ public:
     unsigned int depth;
     Iterator<node>* neighbours;
 
-    dfsAngularSpreadStruct() {}
-    dfsAngularSpreadStruct(node n, unsigned int d, Iterator<node>* it):
+    dfsAngularSpreadStruct(node n = node(), unsigned int d = 0,
+			   Iterator<node>* it = NULL):
       current(n), cAngle(0), depth(d), neighbours(it) {}
   };
 
@@ -270,9 +270,9 @@ public:
     unsigned int depth;
     Iterator<node>* neighbours;
 
-    dfsDoLayoutStruct() {}
-    dfsDoLayoutStruct(node n, double bAngle, double eAngle, double spread,
-                      bool flag, unsigned int d, Iterator<node>* it):
+    dfsDoLayoutStruct(node n = node(), double bAngle = 0, double eAngle = 0,
+		      double spread = 0, bool flag = false, unsigned int d = 0,
+		      Iterator<node>* it = NULL):
       current(n), startAngle(bAngle), endAngle(eAngle),
       sAngle(eAngle - bAngle), nSpread(spread),
       checkAngle(flag), depth(d), neighbours(it) {}

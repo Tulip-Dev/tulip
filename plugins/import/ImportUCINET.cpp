@@ -640,7 +640,7 @@ public :
           metrics.push_back(graph->getProperty<DoubleProperty>(defaultMetric));
         }
         else {
-          if (metrics.size() == 0) {
+          if (metrics.empty()) {
             // create metrics with default name
             for (unsigned int i = 0; i < nm; ++i) {
               stringstream sstr;

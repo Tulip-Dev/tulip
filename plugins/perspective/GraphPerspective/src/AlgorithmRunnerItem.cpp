@@ -366,7 +366,7 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
   PluginLister* pluginLister = PluginLister::instance();
   std::string stdName = name().toStdString();
 
-  if (pluginLister->pluginExists<LayoutAlgorithm>(name().toStdString())) {
+  if (pluginLister->pluginExists<LayoutAlgorithm>(stdName)) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
 
     if (TulipSettings::instance().isAutomaticRatio()) {
@@ -375,12 +375,13 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
       prop->perfectAspectRatio();
     }
   }
-  else if (pluginLister->pluginExists<Algorithm>(name().toStdString()) &&
-           !pluginLister->pluginExists<PropertyAlgorithm>(name().toStdString()) &&
-           !pluginLister->pluginExists<GraphTest>(name().toStdString())) {
+  else if (pluginLister->pluginExists<Algorithm>(stdName) &&
+           !pluginLister->pluginExists<PropertyAlgorithm>(stdName) &&
+           !pluginLister->pluginExists<GraphTest>(stdName)) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
   }
-  else if (pluginLister->pluginExists<DoubleAlgorithm>(name().toStdString()) && TulipSettings::instance().isAutomaticMapMetric()) {
+  else if (pluginLister->pluginExists<DoubleAlgorithm>(stdName) &&
+	   TulipSettings::instance().isAutomaticMapMetric()) {
     DoubleProperty* prop = NULL;
     dataSet.get<DoubleProperty*>("result",prop);
 
@@ -391,13 +392,13 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
                                 errMsg);
     }
   }
-  else if (pluginLister->pluginExists<GraphTest>(name().toStdString())) {
+  else if (pluginLister->pluginExists<GraphTest>(stdName)) {
     bool result = true;
     dataSet.get<bool>("result",result);
     std::string gname;
     g->getAttribute<std::string>("name",gname);
     std::stringstream sstr;
-    sstr << name().toStdString() << (result ? " test succeed" : " test failed") << "\n on " <<  gname;
+    sstr << stdName << (result ? " test succeed" : " test failed") << "\n on " <<  gname;
 
     if (result) {
       qDebug() << sstr.str().c_str();

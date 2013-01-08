@@ -172,16 +172,14 @@ float RectanglePacking::calculateRatio() {
 
 
 void RectanglePacking::coordinatesOfNewRectangle(list<RectangleRelativePosition>::iterator itRectLeftOrBelowOfNewRect, int, int positionInSecondSequence) {
-
-  float rightAbscissa;
-  float highOrdinate;
-
   if(placesOfRectanglesInSecondSequence[itRectLeftOrBelowOfNewRect->rectangleNumber-1] >= positionInSecondSequence) {
+    float highOrdinate;
     if((highOrdinate = itRectLeftOrBelowOfNewRect->rectangleLowOrdinate + itRectLeftOrBelowOfNewRect->rectangleHeight) > newRectangleLowOrdinate) {
       newRectangleLowOrdinate = highOrdinate ;
     }
   }
   else {
+    float rightAbscissa;
     if((rightAbscissa= itRectLeftOrBelowOfNewRect->rectangleLeftAbscissa + itRectLeftOrBelowOfNewRect->rectangleWidth) > newRectangleLeftAbscissa) {
       newRectangleLeftAbscissa = rightAbscissa;
     }
@@ -218,16 +216,14 @@ void RectanglePacking::dimensionsBoundingBoxOfNewRectangleAndRectanglesLeftOrBel
 
 
 void RectanglePacking::modificationCoordinatesRectanglesRightOrAboveNewRectangleInFonctionNewRectangle(list<RectangleRelativePosition>::iterator itRectOfSequenceToReposition, int positionInSecondSequence) {
-
-  float rightAbscissa;
-  float highOrdinate;
-
   if(placesOfRectanglesInSecondSequence[itRectOfSequenceToReposition->rectangleNumber-1] < positionInSecondSequence ) {
+    float highOrdinate;
     if((highOrdinate = newRectangleLowOrdinate + newRectangleHeight) > itRectOfSequenceToReposition->rectangleTemporaryLowOrdinate) {
       itRectOfSequenceToReposition->rectangleTemporaryLowOrdinate = highOrdinate;
     }
   }
   else {
+    float rightAbscissa;
     if((rightAbscissa = newRectangleLeftAbscissa + newRectangleWidth) > itRectOfSequenceToReposition->rectangleTemporaryLeftAbscissa) {
       itRectOfSequenceToReposition->rectangleTemporaryLeftAbscissa = rightAbscissa;
     }
@@ -422,9 +418,6 @@ void RectanglePacking::endOfColumn(float & widthTemp, float & heightTemp, bool &
 }
 
 void RectanglePacking::continueLine(vector<Rectangle<float> >::iterator itr, float & widthTemp,float & heightTemp, bool & boolWidth, bool & boolHeight) {
-
-  float ratio;
-
   if((widthTemp==0) && (newRectangleWidth>bestWidthOfBoundingBox)) {
     (*itr)[0][0] = 0;
     (*itr)[1][0] = newRectangleWidth;
@@ -432,6 +425,8 @@ void RectanglePacking::continueLine(vector<Rectangle<float> >::iterator itr, flo
     (*itr)[1][1] = bestHeightOfBoundingBox+newRectangleHeight;
     bestWidthOfBoundingBox = newRectangleWidth;
     bestHeightOfBoundingBox += newRectangleHeight;
+
+    float ratio;
 
     if(bestHeightOfBoundingBox>bestWidthOfBoundingBox)
       ratio = bestHeightOfBoundingBox/bestWidthOfBoundingBox;
@@ -461,9 +456,6 @@ void RectanglePacking::continueLine(vector<Rectangle<float> >::iterator itr, flo
 }
 
 void RectanglePacking::continueColumn(vector<Rectangle<float> >::iterator itr, float & widthTemp,float & heightTemp, bool & boolWidth, bool & boolHeight) {
-
-  float ratio;
-
   if((heightTemp==0) && (newRectangleHeight>bestHeightOfBoundingBox)) {
     (*itr)[0][0] = bestWidthOfBoundingBox;
     (*itr)[1][0] = bestWidthOfBoundingBox+newRectangleWidth;
@@ -471,6 +463,8 @@ void RectanglePacking::continueColumn(vector<Rectangle<float> >::iterator itr, f
     (*itr)[1][1] = newRectangleHeight;
     bestHeightOfBoundingBox = newRectangleHeight;
     bestWidthOfBoundingBox += newRectangleWidth;
+
+    float ratio;
 
     if(bestHeightOfBoundingBox>bestWidthOfBoundingBox)
       ratio = bestHeightOfBoundingBox/bestWidthOfBoundingBox;
