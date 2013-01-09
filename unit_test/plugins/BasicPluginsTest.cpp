@@ -61,7 +61,7 @@ bool BasicPluginsTest::computeProperty(const std::string &algorithm,
 
   string errorMsg;
   DataSet ds;
-  bool result = graph->computeProperty(algorithm, prop, errorMsg);
+  bool result = graph->applyPropertyAlgorithm(algorithm, prop, errorMsg);
 
   if (deleteProp)
     delete prop;
