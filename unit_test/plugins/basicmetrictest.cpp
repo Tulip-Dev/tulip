@@ -40,7 +40,7 @@ bool BasicMetricTest::computeProperty(const std::string &algorithm,
     prop = new PropType(graph);
 
   std::string errorMsg;
-  bool result = graph->computeProperty(algorithm, prop, errorMsg);
+  bool result = graph->applyPropertyAlgorithm(algorithm, prop, errorMsg);
 
   if (deleteProp)
     delete prop;
