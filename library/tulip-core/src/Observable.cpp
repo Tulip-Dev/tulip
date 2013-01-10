@@ -554,7 +554,7 @@ void Observable::notifyObservers() {
     throw ObservableException("notifyObservers called on a deleted Observable");
   }
 
-  if(hasOnlookers())
+  if (_oGraph.indeg(_n) > 0) // hasOnlookers
     sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
 //----------------------------------------
