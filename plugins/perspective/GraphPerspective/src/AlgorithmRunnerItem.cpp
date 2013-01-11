@@ -288,6 +288,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   if (!result) {
     g->pop();
     qCritical() << name() << ": " << errorMessage.c_str();
+    QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
   }
 
   // copy or cleanup out properties
