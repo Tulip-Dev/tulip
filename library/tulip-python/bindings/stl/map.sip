@@ -17,12 +17,6 @@
  *
  */
 
-// +-------------------------------------------------------------------------+
-// | Tulip Python Bindings                                                   |
-// | inspired from bindings by the Booggie project development team          |
-// | (http://booggie.org/)                                                   |
-// +-------------------------------------------------------------------------+
-
 template<T1, T2>
 %MappedType std::map<T1, T2> /DocType="dict-of-T1-T2"/ {
 %TypeHeaderCode
@@ -35,13 +29,16 @@ template<T1, T2>
 	PyObject *val = NULL;
 	Py_ssize_t pos = 0;
 
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	if (sipIsErr == NULL) {
 		if (!PyDict_Check(sipPy)) {
 			return 0;
 		}
 		while (PyDict_Next(sipPy, &pos, &key, &val)) {
-			bool ok = sipCanConvertToType(key, sipType_T1, SIP_NOT_NONE);
-			ok = ok && sipCanConvertToType(val, sipType_T2, SIP_NOT_NONE);
+            bool ok = sipCanConvertToType(key, kpTypeDef1, SIP_NOT_NONE);
+            ok = ok && sipCanConvertToType(val, kpTypeDef2, SIP_NOT_NONE);
 			if (!ok) {
 				return 0;
 			}
@@ -56,20 +53,20 @@ template<T1, T2>
 		int t1State = 0;
 		int t2State = 0;
 		
-		T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(key, sipType_T1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-		T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, sipType_T2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+        T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(key, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
+        T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 		
 		if (*sipIsErr) {
 			delete map;		
-			sipReleaseType(t1, sipType_T1, t1State);
-			sipReleaseType(t2, sipType_T2, t2State);
+            sipReleaseType(t1, kpTypeDef1, t1State);
+            sipReleaseType(t2, kpTypeDef2, t2State);
 			return 0;
 		}
 		
 		(*map)[*t1] = *t2;
 		
-		sipReleaseType(t1, sipType_T1, t1State);
-		sipReleaseType(t2, sipType_T2, t2State);
+        sipReleaseType(t1, kpTypeDef1, t1State);
+        sipReleaseType(t2, kpTypeDef2, t2State);
 	}
 	
 	*sipCppPtr = map;
@@ -77,6 +74,10 @@ template<T1, T2>
 %End
 
 %ConvertFromTypeCode
+
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	PyObject *pyDict = NULL;
 	pyDict = PyDict_New();
 	if (pyDict == NULL) {
@@ -89,8 +90,8 @@ template<T1, T2>
 		T1 *cppKey = new T1(it->first);
 		T2 *cppVal = new T2(it->second);
 		
-		key = sipConvertFromNewType(cppKey, sipType_T1, sipTransferObj);
-		val = sipConvertFromNewType(cppVal, sipType_T2, sipTransferObj);
+        key = sipConvertFromNewType(cppKey, kpTypeDef1, sipTransferObj);
+        val = sipConvertFromNewType(cppVal, kpTypeDef2, sipTransferObj);
 		
 		if (key == NULL || val == NULL || PyDict_SetItem(pyDict, key, val) < 0) {
 			Py_DECREF(pyDict);
@@ -129,13 +130,16 @@ template<T1, T2>
 	PyObject *val = NULL;
 	Py_ssize_t pos = 0;
 
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	if (sipIsErr == NULL) {
 		if (!PyDict_Check(sipPy)) {
 			return 0;
 		}
 		while (PyDict_Next(sipPy, &pos, &key, &val)) {
-			bool ok = sipCanConvertToType(key, sipType_T1, SIP_NOT_NONE);
-			ok = ok && sipCanConvertToType(val, sipType_T2, SIP_NOT_NONE);
+            bool ok = sipCanConvertToType(key, kpTypeDef1, SIP_NOT_NONE);
+            ok = ok && sipCanConvertToType(val, kpTypeDef2, SIP_NOT_NONE);
 			if (!ok) {
 				return 0;
 			}
@@ -149,20 +153,20 @@ template<T1, T2>
 		int t1State = 0;
 		int t2State = 0;
 		
-		T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(key, sipType_T1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-		T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, sipType_T2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+        T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(key, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
+        T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 		
 		if (*sipIsErr) {
 			delete map;
-			sipReleaseType(t1, sipType_T1, t1State);
-			sipReleaseType(t2, sipType_T2, t2State);
+            sipReleaseType(t1, kpTypeDef1, t1State);
+            sipReleaseType(t2, kpTypeDef2, t2State);
 			return 0;
 		}
 		
 		(*map)[*t1] = t2;
 		
-		sipReleaseType(t1, sipType_T1, t1State);
-		sipReleaseType(t2, sipType_T2, t2State);
+        sipReleaseType(t1, kpTypeDef1, t1State);
+        sipReleaseType(t2, kpTypeDef2, t2State);
 	}
 	
 	*sipCppPtr = map;
@@ -170,6 +174,10 @@ template<T1, T2>
 %End
 
 %ConvertFromTypeCode
+
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	PyObject *pyDict = NULL;
 	pyDict = PyDict_New();
 	if (pyDict == NULL) {
@@ -182,8 +190,8 @@ template<T1, T2>
 		T1 *cppKey = new T1(it->first);
 		T2 *cppVal = it->second;
 		
-		key = sipConvertFromNewType(cppKey, sipType_T1, sipTransferObj);
-		val = sipConvertFromType(cppVal, sipType_T2, sipTransferObj);
+        key = sipConvertFromNewType(cppKey, kpTypeDef1, sipTransferObj);
+        val = sipConvertFromType(cppVal, kpTypeDef2, sipTransferObj);
 		
 		if (key == NULL || val == NULL || PyDict_SetItem(pyDict, key, val) < 0) {
 			Py_DECREF(pyDict);
@@ -221,13 +229,15 @@ template<T2>
 	PyObject *val = NULL;
 	Py_ssize_t pos = 0;
 
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	if (sipIsErr == NULL) {
 		if (!PyDict_Check(sipPy)) {
 			return 0;
 		}
 		while (PyDict_Next(sipPy, &pos, &key, &val)) {
 			bool ok = PyFloat_Check(key);
-			ok = ok && sipCanConvertToType(val, sipType_T2, SIP_NOT_NONE);
+            ok = ok && sipCanConvertToType(val, kpTypeDef2, SIP_NOT_NONE);
 			if (!ok) {
 				return 0;
 			}
@@ -242,17 +252,17 @@ template<T2>
 		int t2State = 0;
 		
 		float t1 = PyFloat_AsDouble(key);
-		T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, sipType_T2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+        T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 		
 		if (*sipIsErr) {
 			delete map;		
-			sipReleaseType(t2, sipType_T2, t2State);
+            sipReleaseType(t2, kpTypeDef2, t2State);
 			return 0;
 		}
 		
 		(*map)[t1] = *t2;
 		
-		sipReleaseType(t2, sipType_T2, t2State);
+        sipReleaseType(t2, kpTypeDef2, t2State);
 	}
 	
 	*sipCppPtr = map;
@@ -260,6 +270,9 @@ template<T2>
 %End
 
 %ConvertFromTypeCode
+
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	PyObject *pyDict = NULL;
 	pyDict = PyDict_New();
 	if (pyDict == NULL) {
@@ -273,7 +286,7 @@ template<T2>
 		T2 *cppVal = new T2(it->second);
 		
 		key = PyFloat_FromDouble(cppKey);
-		val = sipConvertFromNewType(cppVal, sipType_T2, sipTransferObj);
+        val = sipConvertFromNewType(cppVal, kpTypeDef2, sipTransferObj);
 		
 		if (key == NULL || val == NULL || PyDict_SetItem(pyDict, key, val) < 0) {
 			Py_DECREF(pyDict);

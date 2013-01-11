@@ -17,12 +17,6 @@
  *
  */
 
-// +-------------------------------------------------------------------------+
-// | Tulip Python Bindings                                                   |
-// | inspired from bindings by the Booggie project development team          |
-// | (http://booggie.org/)                                                   |
-// +-------------------------------------------------------------------------+
-
 template<T1, T2>
 %MappedType std::pair<T1, T2> /DocType="(T1, T2)"/{
 %TypeHeaderCode
@@ -33,6 +27,9 @@ template<T1, T2>
 	PyObject *itm1 = NULL;
 	PyObject *itm2 = NULL;
 	
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	if (sipIsErr == NULL) {
 		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
 			return 0;
@@ -40,8 +37,8 @@ template<T1, T2>
 		itm1 = PyTuple_GetItem(sipPy, 0);
 		itm2 = PyTuple_GetItem(sipPy, 1);
 	
-		bool ok = sipCanConvertToType(itm1, sipType_T1, SIP_NOT_NONE);
-		ok = ok && sipCanConvertToType(itm2, sipType_T2, SIP_NOT_NONE);
+        bool ok = sipCanConvertToType(itm1, kpTypeDef1, SIP_NOT_NONE);
+        ok = ok && sipCanConvertToType(itm2, kpTypeDef2, SIP_NOT_NONE);
 				
 		if (!ok) {
 			return 0;
@@ -56,25 +53,29 @@ template<T1, T2>
 	int t1State = 0;
 	int t2State = 0;
 	
-	T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, sipType_T1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-	T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, sipType_T2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+    T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
+    T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 
 	if (*sipIsErr) {
-		sipReleaseType(t1, sipType_T1, t1State);
-		sipReleaseType(t2, sipType_T2, t2State);	
+        sipReleaseType(t1, kpTypeDef1, t1State);
+        sipReleaseType(t2, kpTypeDef2, t2State);
 		return 0;
 	}
 
 	std::pair<T1, T2> *p = new std::pair<T1, T2>(*t1, *t2);
 	
-	sipReleaseType(t1, sipType_T1, t1State);
-	sipReleaseType(t2, sipType_T2, t2State);
+    sipReleaseType(t1, kpTypeDef1, t1State);
+    sipReleaseType(t2, kpTypeDef2, t2State);
 
 	*sipCppPtr = p;
 	return sipGetState(sipTransferObj);
 %End
 
 %ConvertFromTypeCode
+
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	PyObject *pyTuple = PyTuple_New(2);
 	
 	if (pyTuple == NULL) {
@@ -87,8 +88,8 @@ template<T1, T2>
 	T1 *first = new T1(sipCpp->first);
 	T2 *second = new T2(sipCpp->second);
 	
-	pyFirst = sipConvertFromNewType(first, sipType_T1, sipTransferObj);
-	pySecond = sipConvertFromNewType(second, sipType_T2, sipTransferObj);
+    pyFirst = sipConvertFromNewType(first, kpTypeDef1, sipTransferObj);
+    pySecond = sipConvertFromNewType(second, kpTypeDef2, sipTransferObj);
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
@@ -125,6 +126,9 @@ template<T1*, T2*>
 	PyObject *itm1 = NULL;
 	PyObject *itm2 = NULL;
 	
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	if (sipIsErr == NULL) {
 		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
 			return 0;
@@ -132,8 +136,8 @@ template<T1*, T2*>
 		itm1 = PyTuple_GetItem(sipPy, 0);
 		itm2 = PyTuple_GetItem(sipPy, 1);
 	
-		bool ok = sipCanConvertToType(itm1, sipType_T1, SIP_NOT_NONE);
-		ok = ok && sipCanConvertToType(itm2, sipType_T2, SIP_NOT_NONE);
+        bool ok = sipCanConvertToType(itm1, kpTypeDef1, SIP_NOT_NONE);
+        ok = ok && sipCanConvertToType(itm2, kpTypeDef2, SIP_NOT_NONE);
 			
 		if (!ok) {
 			return 0;
@@ -148,19 +152,19 @@ template<T1*, T2*>
 	int t1State = 0;
 	int t2State = 0;
 	
-	T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, sipType_T1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-	T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, sipType_T2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+    T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
+    T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 
 	if (*sipIsErr) {
-		sipReleaseType(t1, sipType_T1, t1State);
-		sipReleaseType(t2, sipType_T2, t2State);
+        sipReleaseType(t1, kpTypeDef1, t1State);
+        sipReleaseType(t2, kpTypeDef2, t2State);
 		return 0;
 	}
 
 	std::pair<T1*, T2*> *p = new std::pair<T1*, T2*>(t1, t2);
 	
-	sipReleaseType(t1, sipType_T1, t1State);
-	sipReleaseType(t2, sipType_T2, t2State);
+    sipReleaseType(t1, kpTypeDef1, t1State);
+    sipReleaseType(t2, kpTypeDef2, t2State);
 
 	*sipCppPtr = p;
 	return sipGetState(sipTransferObj);
@@ -168,6 +172,9 @@ template<T1*, T2*>
 
 %ConvertFromTypeCode
 	PyObject *pyTuple = PyTuple_New(2);
+
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
 	
 	if (pyTuple == NULL) {
 		return 0;
@@ -179,8 +186,8 @@ template<T1*, T2*>
 	T1 *first = sipCpp->first;
 	T2 *second = sipCpp->second;
 	
-	pyFirst = sipConvertFromType(first, sipType_T1, sipTransferObj);
-	pySecond = sipConvertFromType(second, sipType_T2, sipTransferObj);
+    pyFirst = sipConvertFromType(first, kpTypeDef1, sipTransferObj);
+    pySecond = sipConvertFromType(second, kpTypeDef2, sipTransferObj);
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
@@ -212,7 +219,10 @@ template<T1*, T2>
 %ConvertToTypeCode
 	PyObject *itm1 = NULL;	
 	PyObject *itm2 = NULL;
-	
+
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	if (sipIsErr == NULL) {
 		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
 			return 0;
@@ -220,8 +230,8 @@ template<T1*, T2>
 		itm1 = PyTuple_GetItem(sipPy, 0);
 		itm2 = PyTuple_GetItem(sipPy, 1);
 	
-		bool ok = sipCanConvertToType(itm1, sipType_T1, SIP_NOT_NONE);
-		ok = ok && sipCanConvertToType(itm2, sipType_T2, SIP_NOT_NONE);
+        bool ok = sipCanConvertToType(itm1, kpTypeDef1, SIP_NOT_NONE);
+        ok = ok && sipCanConvertToType(itm2, kpTypeDef2, SIP_NOT_NONE);
 		
 		if (!ok) {
 			return 0;
@@ -236,19 +246,19 @@ template<T1*, T2>
 	int t1State = 0;
 	int t2State = 0;
 	
-	T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, sipType_T1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-	T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, sipType_T2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+    T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
+    T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 
 	if (*sipIsErr) {
-		sipReleaseType(t1, sipType_T1, t1State);
-		sipReleaseType(t2, sipType_T2, t2State);
+        sipReleaseType(t1, kpTypeDef1, t1State);
+        sipReleaseType(t2, kpTypeDef2, t2State);
 		return 0;
 	}
 
 	std::pair<T1*, T2> *p = new std::pair<T1*, T2>(t1, *t2);
 	
-	sipReleaseType(t1, sipType_T1, t1State);
-	sipReleaseType(t2, sipType_T2, t2State);
+    sipReleaseType(t1, kpTypeDef1, t1State);
+    sipReleaseType(t2, kpTypeDef2, t2State);
 
 	*sipCppPtr = p;
 	return sipGetState(sipTransferObj);
@@ -257,6 +267,9 @@ template<T1*, T2>
 %ConvertFromTypeCode
 	PyObject *pyTuple = PyTuple_New(2);
 	
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	if (pyTuple == NULL) {
 		return 0;
 	}
@@ -267,8 +280,8 @@ template<T1*, T2>
 	T1 *first = sipCpp->first;
 	T2 *second = new T2(sipCpp->second);
 	
-	pyFirst = sipConvertFromType(first, sipType_T1, sipTransferObj);
-	pySecond = sipConvertFromNewType(second, sipType_T2, sipTransferObj);
+    pyFirst = sipConvertFromType(first, kpTypeDef1, sipTransferObj);
+    pySecond = sipConvertFromNewType(second, kpTypeDef2, sipTransferObj);
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
@@ -302,6 +315,9 @@ template<T1, T2*>
 	PyObject *itm1 = NULL;
 	PyObject *itm2 = NULL;
 	
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	if (sipIsErr == NULL) {
 		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
 			return 0;
@@ -309,8 +325,8 @@ template<T1, T2*>
 		itm1 = PyTuple_GetItem(sipPy, 0);
 		itm2 = PyTuple_GetItem(sipPy, 1);
 	
-		bool ok = sipCanConvertToType(itm1, sipType_T1, SIP_NOT_NONE);
-		ok = ok && sipCanConvertToType(itm2, sipType_T2, SIP_NOT_NONE);
+        bool ok = sipCanConvertToType(itm1, kpTypeDef1, SIP_NOT_NONE);
+        ok = ok && sipCanConvertToType(itm2, kpTypeDef2, SIP_NOT_NONE);
 			
 		if (!ok) {
 			return 0;
@@ -325,19 +341,19 @@ template<T1, T2*>
 	int t1State = 0;
 	int t2State = 0;
 	
-	T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, sipType_T1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-	T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, sipType_T2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+    T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
+    T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 
 	if (*sipIsErr) {
-		sipReleaseType(t1, sipType_T1, t1State);
-		sipReleaseType(t2, sipType_T2, t2State);
+        sipReleaseType(t1, kpTypeDef1, t1State);
+        sipReleaseType(t2, kpTypeDef2, t2State);
 		return 0;
 	}
 
 	std::pair<T1, T2*> *p = new std::pair<T1, T2*>(*t1, t2);
 	
-	sipReleaseType(t1, sipType_T1, t1State);
-	sipReleaseType(t2, sipType_T2, t2State);
+    sipReleaseType(t1, kpTypeDef1, t1State);
+    sipReleaseType(t2, kpTypeDef2, t2State);
 
 	*sipCppPtr = p;
 	return sipGetState(sipTransferObj);
@@ -346,6 +362,9 @@ template<T1, T2*>
 %ConvertFromTypeCode
 	PyObject *pyTuple = PyTuple_New(2);
 	
+    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
+    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+
 	if (pyTuple == NULL) {
 		return 0;
 	}
@@ -356,8 +375,8 @@ template<T1, T2*>
 	T1 *first = new T1(sipCpp->first);
 	T2 *second = sipCpp->second;
 	
-	pyFirst = sipConvertFromNewType(first, sipType_T1, sipTransferObj);
-	pySecond = sipConvertFromType(second, sipType_T2, sipTransferObj);
+    pyFirst = sipConvertFromNewType(first, kpTypeDef1, sipTransferObj);
+    pySecond = sipConvertFromType(second, kpTypeDef2, sipTransferObj);
 	
 	if (pyFirst == NULL || pySecond == NULL || PyTuple_SetItem(pyTuple, 0, pyFirst)) {
 		if (pyFirst) 
@@ -382,7 +401,7 @@ template<T1, T2*>
 %End
 };
 
-%MappedType std::pair<unsigned int, unsigned int> /DocType="(int, int)"/{
+%MappedType std::pair<unsigned int, unsigned int> /DocType="(uint, uint)"/{
 %TypeHeaderCode
 #include <utility>
 %End

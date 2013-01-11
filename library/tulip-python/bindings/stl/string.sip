@@ -17,12 +17,6 @@
  *
  */
 
-// +-------------------------------------------------------------------------+
-// | Tulip Python Bindings                                                   |
-// | inspired from bindings by the Booggie project development team          |
-// | (http://booggie.org/)                                                   |
-// +-------------------------------------------------------------------------+
-
 %MappedType std::string
 {
 %TypeHeaderCode
