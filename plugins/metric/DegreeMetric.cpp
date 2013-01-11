@@ -110,7 +110,7 @@ bool DegreeMetric::run() {
       double sum = 0;
       edge e;
       forEach(e, graph->getEdges())
-	sum += fabs(weights->getEdgeValue(e));
+      sum += fabs(weights->getEdgeValue(e));
       normalization = (sum / double(graph->numberOfEdges())) * double(graph->numberOfNodes() - 1);
 
       if (fabs(normalization) < 1E-9) normalization = 1.0;
@@ -161,18 +161,22 @@ bool DegreeMetric::check(std::string& errorMsg) {
 
   if (dataSet!=NULL) {
     dataSet->get("metric", weights);
+
     if (weights && !weights->getEdgeDefaultValue()) {
       Iterator<edge> *itE = weights->getNonDefaultValuatedEdges();
+
       if (!itE->hasNext()) {
-	errorMsg = "Cannot compute a weighted degree with a null weight value\nfor all edges";
-	delete itE;
-	return false;
+        errorMsg = "Cannot compute a weighted degree with a null weight value\nfor all edges";
+        delete itE;
+        return false;
       }
+
       delete itE;
     }
   }
+
   return true;
 }
-  
 
-	
+
+
