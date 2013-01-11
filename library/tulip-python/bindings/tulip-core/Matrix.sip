@@ -29,7 +29,10 @@
 namespace tlp {
 typedef tlp::Matrix<float, 4> Mat4f;
 };
+typedef std::vector<float> vectorFloat;
 %End
+
+typedef std::vector<float> vectorFloat;
 
 namespace tlp {
 
@@ -43,7 +46,7 @@ class Mat4f {
     
     Mat4f(const tlp::Mat4f&a);
       
-   	//Mat4f(const std::vector<std::vector<float> > &covarianceMatrix);
+    Mat4f(const std::vector<vectorFloat> &covarianceMatrix);
      
     tlp::Mat4f& fill(float obj);
      

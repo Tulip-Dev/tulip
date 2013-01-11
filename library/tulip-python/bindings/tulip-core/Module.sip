@@ -211,5 +211,60 @@ void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
 %Include Constants.sip
 %Include Delaunay.sip
 
+// force generation of wrappers for specialized template classes
+typedef std::vector<tlp::Graph*> vectorGraphType;
+typedef std::list<tlp::Graph*> listGraphType;
+typedef std::set<tlp::Graph*> setGraphType;
 
+typedef std::vector<tlp::node> vectorNodeType;
+typedef std::list<tlp::node> listNodeType;
+typedef std::set<tlp::node> setNodeType;
 
+typedef std::vector<tlp::edge> vectorEdgeType;
+typedef std::list<tlp::edge> listEdgeType;
+typedef std::set<tlp::edge> setEdgeType;
+
+typedef std::vector<tlp::Color> vectorColorType;
+typedef std::list<tlp::Color> listColorType;
+typedef std::set<tlp::Color> setColorType;
+
+typedef std::vector<tlp::Coord> vectorCoordType;
+typedef std::list<tlp::Coord> listCoordType;
+typedef std::set<tlp::Coord> setCoordType;
+
+typedef std::vector<tlp::Size> vectorSizeType;
+typedef std::list<tlp::Size> listSizeType;
+typedef std::set<tlp::Size> setSizeType;
+
+typedef std::vector<tlp::DataSet> vectorDataSetType;
+typedef std::list<tlp::DataSet> listDataSetType;
+
+typedef std::vector<tlp::ColorScale> vectorColorScaleType;
+typedef std::list<tlp::ColorScale> listColorScaleType;
+
+typedef std::vector<tlp::StringCollection> vectorStringCollectionType;
+typedef std::list<tlp::StringCollection> listStringCollectionType;
+
+typedef std::vector<tlp::BooleanProperty*> vectorBooleanPropertyType;
+typedef std::list<tlp::BooleanProperty*> listBooleanPropertyType;
+
+typedef std::vector<tlp::ColorProperty*> vectorColorPropertyType;
+typedef std::list<tlp::ColorProperty*> listColorPropertyType;
+
+typedef std::vector<tlp::DoubleProperty*> vectorDoublePropertyType;
+typedef std::list<tlp::DoubleProperty*> listDoublePropertyType;
+
+typedef std::vector<tlp::IntegerProperty*> vectorIntegerPropertyType;
+typedef std::list<tlp::IntegerProperty*> listIntegerPropertyType;
+
+typedef std::vector<tlp::LayoutProperty*> vectorLayoutPropertyType;
+typedef std::list<tlp::LayoutProperty*> listLayoutPropertyType;
+
+typedef std::vector<tlp::SizeProperty*> vectorSizePropertyType;
+typedef std::list<tlp::SizeProperty*> listSizePropertyType;
+
+typedef std::vector<tlp::StringProperty*> vectorStringPropertyType;
+typedef std::list<tlp::StringProperty*> listStringPropertyType;
+
+typedef std::vector<tlp::PropertyInterface*> vectorPropertyInterfaceType;
+typedef std::list<tlp::PropertyInterface*> listPropertyInterfaceType;

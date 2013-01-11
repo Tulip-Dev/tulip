@@ -1,19 +1,19 @@
 %ModuleHeaderCode
 #include <tulip/Delaunay.h>
-typedef std::pair<unsigned int, unsigned int> std_pair_1900_1900;
-typedef std::vector<unsigned int> std_vector_1900;
-typedef std::vector<std_pair_1900_1900> std_vector_0100std_pair_1900_1900;
-typedef std::vector<std_vector_1900> std_vector_0100std_vector_1900;
+typedef std::pair<unsigned int, unsigned int> pairUintUint;
+typedef std::vector<unsigned int> vectorUint;
+typedef std::vector<pairUintUint> vector_pairUintUint;
+typedef std::vector<vectorUint> vector_vectorUint;
 %End
 
-typedef std::pair<unsigned int, unsigned int> std_pair_1900_1900;
-typedef std::vector<unsigned int> std_vector_1900;
-typedef std::vector<std_pair_1900_1900> std_vector_0100std_pair_1900_1900;
-typedef std::vector<std_vector_1900> std_vector_0100std_vector_1900;
+typedef std::pair<unsigned int, unsigned int> pairUintUint;
+typedef std::vector<unsigned int> vectorUint;
+typedef std::vector<pairUintUint> vector_pairUintUint;
+typedef std::vector<vectorUint> vector_vectorUint;
 
 namespace tlp {
 
-std::pair<std_vector_0100std_pair_1900_1900, std_vector_0100std_vector_1900> delaunayTriangulation(std::vector<tlp::Coord> &points);
+std::pair<vector_pairUintUint, vector_vectorUint> delaunayTriangulation(std::vector<tlp::Coord> &points);
 %Docstring
 tlp.delaunayTriangulation(points)
 
@@ -100,7 +100,7 @@ Returns the ith voronoi vertex.
 :rtype: :class:`tlp.Coord`
 %End
 
-  const std_pair_1900_1900 &edge(const unsigned int edgeIdx);
+  const pairUintUint &edge(const unsigned int edgeIdx);
 %Docstring
 tlp.VoronoiDiagram.edge(edgeIdx)
 
@@ -119,7 +119,7 @@ Returns the ith voronoi cell. A cell is defined by a list of indexes in the voro
 
 :param cellIdx: the index of the cell to return
 :type cellIdx: integer
-:rtype: list of integer
+:rtype: set of integer
 %End
 
   unsigned int degreeOfVertex(const unsigned int vertexIdx);
@@ -133,7 +133,7 @@ Returns the degree (number of incident edges) of the ith voronoi vertex
 :rtype: integer
 %End
 
-  std::vector<std_pair_1900_1900> voronoiEdgesForSite(const unsigned int siteIdx);
+  std::vector<pairUintUint> voronoiEdgesForSite(const unsigned int siteIdx);
 %Docstring
 tlp.VoronoiDiagram.voronoiEdgesForSite(siteIdx)
 
@@ -152,7 +152,7 @@ Returns the cell associated to the ith site.
 
 :param siteIdx: the index of the site on which to return the cell
 :type siteIdx: integer
-:rtype: list of integer
+:rtype: set of integer
 %End
 
 };

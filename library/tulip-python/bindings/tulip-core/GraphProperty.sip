@@ -55,7 +55,7 @@ tlp.GraphProperty.getEdgeDefaultValue() -> list of tlp.edge
 
 	const std::set<tlp::edge> getEdgeValue(const tlp::edge edge) ;
 %Docstring
-tlp.GraphProperty.getEdgeValue(tlp.edge) -> list of tlp.edge
+tlp.GraphProperty.getEdgeValue(tlp.edge) -> set of tlp.edge
 %End
 	
 %MethodCode
@@ -78,7 +78,7 @@ tlp.GraphProperty.getEdgeValue(tlp.edge) -> list of tlp.edge
 
 	void setEdgeValue(const tlp::edge edge, const std::set<tlp::edge> &val);
 %Docstring
-tlp.GraphProperty.setEdgeValue(tlp.edge, list of tlp.edge)
+tlp.GraphProperty.setEdgeValue(tlp.edge, set of tlp.edge)
 %End
 	
 %MethodCode
@@ -93,7 +93,7 @@ tlp.GraphProperty.setEdgeValue(tlp.edge, list of tlp.edge)
 
 	void setAllEdgeValue(const std::set<tlp::edge> &val);
 %Docstring
-tlp.GraphProperty.setAllEdgeValue(list of tlp.edge)
+tlp.GraphProperty.setAllEdgeValue(set of tlp.edge)
 %End
 	
 	
