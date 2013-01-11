@@ -25,7 +25,7 @@
 
 namespace tlp {
 
-class PluginContext{
+class PluginContext {
 %TypeHeaderCode
 #include <tulip/PluginContext.h>
 %End

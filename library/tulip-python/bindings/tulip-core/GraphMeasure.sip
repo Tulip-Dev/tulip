@@ -156,7 +156,7 @@ at distance less or equal to a maximum one.
 :type maxDistance: integer
 :param direction: specify if the graph must be directed or not
 :type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED  
-:rtype: list of :class:`tlp.node`
+:rtype: set of :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph
 %End 
 

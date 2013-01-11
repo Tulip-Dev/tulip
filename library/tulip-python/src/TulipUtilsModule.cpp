@@ -57,25 +57,28 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
     scriptName.replace(".py", "");
 
     if (PythonInterpreter::getInstance()->runString(QString("import ") + scriptName)) {
-      const sipAPIDef *sipApi = get_sip_api();
 
-      // Getting proper sipWrapperType
-      const sipTypeDef* kpTypeDef     = sipApi->api_find_type("tlp::Graph");
-
-      // Checking if the Python object wraps a tlp::Graph instance
-      if (sipApi->api_can_convert_to_type(o, kpTypeDef, SIP_NOT_NONE)) {
-        int state = 0;
-        int err = 0;
-
-        // Unwrapping C++ instance
-        tlp::Graph *graph = reinterpret_cast<tlp::Graph *>(sipApi->api_convert_to_type(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
-
-        if (!PythonInterpreter::getInstance()->runGraphScript(scriptName, "main", graph)) {
-          PyErr_SetString(PyExc_Exception, (std::string("An exception occurred when executing the ") + std::string(s) + " script").c_str());
-          return NULL;
+        if (!sipAPI) {
+            sipAPI = getSipAPI();
         }
-      }
-      else {
+
+        // Getting proper sipWrapperType
+        const sipTypeDef* kpTypeDef = sipFindType("tlp::Graph");
+
+        // Checking if the Python object wraps a tlp::Graph instance
+        if (sipCanConvertToType(o, kpTypeDef, SIP_NOT_NONE)) {
+            int state = 0;
+            int err = 0;
+
+            // Unwrapping C++ instance
+            tlp::Graph *graph = reinterpret_cast<tlp::Graph *>(sipConvertToType(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
+
+            if (!PythonInterpreter::getInstance()->runGraphScript(scriptName, "main", graph)) {
+                PyErr_SetString(PyExc_Exception, (std::string("An exception occurred when executing the ") + std::string(s) + " script").c_str());
+            return NULL;
+        }
+
+    } else {
         PyErr_SetString(PyExc_TypeError, "Second parameter of the runGraphScript function must be of type tlp.Graph");
         return NULL;
       }
@@ -152,8 +155,5 @@ inittuliputils(void) {
   PyObject *m = Py_InitModule("tuliputils", tulipUtilsMethods);
   _PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
 #endif
-
-  if (m == NULL)
-    return;
 }
 

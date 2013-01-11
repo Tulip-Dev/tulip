@@ -26,7 +26,7 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
   }
 
   painter.setPen(_textColor);
-  painter.setFont(QFont("Arial", static_cast<int>(12 * tabBar()->height() / 27.0), QFont::DemiBold));
+  painter.setFont(QFont("Arial", static_cast<int>(12 * tabBar()->height() / 27.0)));
   int firstLabelWidth = static_cast<int>(120 * tabBar()->height() / 27.0);
   int imageWidth = static_cast<int>(30 * tabBar()->height() / 27.0);
   int secondLabelWidth = static_cast<int>(120 * tabBar()->height() / 27.0);
