@@ -17,12 +17,6 @@
  *
  */
 
-// +-------------------------------------------------------------------------+
-// | Tulip Python Bindings                                                   |
-// | inspired from bindings by the Booggie project development team          |
-// | (http://booggie.org/)                                                   |
-// +-------------------------------------------------------------------------+
-
 %Module stl
 
 %ModuleHeaderCode
@@ -62,4 +56,8 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
 %Include vector.sip
 %Include map.sip
 %Include ostream.sip
+
+typedef std::vector<std::string> vectorStringType;
+typedef std::list<std::string> listStringType;
+typedef std::set<std::string> setStringType;
 
