@@ -55,7 +55,7 @@ public:
   PLUGININFORMATIONS("To labels","Ludwig Fiolka","2012/03/16","Map a property on nodes/edges labels","1.0","")
   ToLabels(const tlp::PluginContext* context): StringAlgorithm(context) {
     addInParameter<PropertyInterface*>("input",paramHelp[0],"viewMetric",true);
-    addInParameter<BooleanProperty>("selection",paramHelp[1],"");
+    addInParameter<BooleanProperty>("selection",paramHelp[1],"",false);
     addInParameter<bool>("nodes",paramHelp[2],"true");
     addInParameter<bool>("edges",paramHelp[3],"true");
   }
