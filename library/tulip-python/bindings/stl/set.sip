@@ -17,283 +17,605 @@
  *
  */
 
-// +-------------------------------------------------------------------------+
-// | Tulip Python Bindings                                                   |
-// | inspired for bindings by the Booggie project development team           |
-// | (http://booggie.org/)                                                   |
-// +-------------------------------------------------------------------------+
-
 template<TYPE>
-%MappedType std::set<TYPE> /DocType="list-of-TYPE"/{
+%MappedType std::set<TYPE> /DocType="set-of-TYPE"/{
 %TypeHeaderCode
 #include <set>
 %End
 
-
-%ConvertToTypeCode
-
-   // Check if type is compatible
-   if (sipIsErr == NULL) {
-   	   if (!PyList_Check(sipPy)) {
-          return 0;
-       }
-       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
-            PyObject *item = PyList_GET_ITEM(sipPy, i);
-            if (!sipCanConvertToType(item, sipType_TYPE, SIP_NOT_NONE)) {
-                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
-                return 0;
-            }
-       }
-       return 1;
-   }
- 
-   // Convert Python list of TYPE to  std::set<TYPE>
-   std::set<TYPE> *s = new std::set<TYPE>();
-   
-   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
-       int state;
-       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), sipType_TYPE, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
-
-	   if (*sipIsErr) {
-          sipReleaseType(p, sipType_TYPE, state);
-          delete s;
-          return 0;
-       }		
-
-       s->insert(*p);
-
-       sipReleaseType(p, sipType_TYPE, state);       
-   }
-
-   *sipCppPtr = s;
-   return sipGetState(sipTransferObj);
-%End
-
-
-
 %ConvertFromTypeCode
    PyObject *l;
 
-   // Create the Python list of the correct length.
-   if ((l = PyList_New(sipCpp -> size())) == NULL) {
+   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+
+   // Create an empty Python set
+   if ((l = PySet_New(NULL)) == NULL) {
        return NULL;
    }
 
    // Go through each element in the C++ instance and convert it to a
-   // wrapped P2d.
-   int i = 0;
+   // wrapper object.
    for (std::set<TYPE>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
        TYPE *cpp = new TYPE(*it);
        PyObject *pobj;
 
        // Get the Python wrapper for the Type instance, creating a new
        // one if necessary, and handle any ownership transfer.
-       if ((pobj = sipConvertFromNewType(cpp, sipType_TYPE, sipTransferObj)) == NULL) {
-           // There was an error so garbage collect the Python list.
+       if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == NULL) {
+           // There was an error so garbage collect the Python set.
            Py_XDECREF(l);
            return NULL;
        }
 
-       // Add the wrapper to the list.
-       PyList_SET_ITEM(l, i++, pobj);
+       // Add the wrapper to the set.
+       PySet_Add(l, pobj);
    }
 
-   // Return the Python list.
+   // Return the Python set.
    return l;
+%End
+
+%ConvertToTypeCode
+
+   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+
+   // Check if type is compatible
+   if (sipIsErr == NULL) {
+       if (!PySet_Check(sipPy)) {
+          return 0;
+       }
+       PyObject *iterator = PyObject_GetIter(sipPy);
+       PyObject *item = NULL;
+
+       while (item = PyIter_Next(iterator)) {
+           if (!sipCanConvertToType(item, kpTypeDef, SIP_NOT_NONE)) {
+               //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
+               Py_DECREF(item);
+               Py_DECREF(iterator);
+               return 0;
+           }
+           Py_DECREF(item);
+       }
+       Py_DECREF(iterator);
+       return 1;
+   }
+ 
+   // Convert Python set of TYPE to  std::set<TYPE>
+   std::set<TYPE> *s = new std::set<TYPE>();
+   
+   PyObject *iterator = PyObject_GetIter(sipPy);
+   PyObject *item = NULL;
+   while (item = PyIter_Next(iterator)) {
+       int state;
+       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
+
+       if (*sipIsErr) {
+            Py_DECREF(item);
+            Py_DECREF(iterator);
+            sipReleaseType(p, kpTypeDef, state);
+            delete s;
+            return 0;
+       }		
+
+       s->insert(*p);
+       Py_DECREF(item);
+       sipReleaseType(p, kpTypeDef, state);
+   }
+   Py_DECREF(iterator);
+   *sipCppPtr = s;
+   return sipGetState(sipTransferObj);
 %End
 
 };
 
-%MappedType std::set<double> /DocType="list-of-float"/ {
+template<TYPE>
+%MappedType std::set<TYPE*> /DocType="set-of-TYPE"/{
 %TypeHeaderCode
 #include <set>
+%End
+
+%ConvertFromTypeCode
+   PyObject *l;
+
+   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+
+   // Create an empty Python set.
+   if ((l = PySet_New(NULL)) == NULL) {
+       return NULL;
+   }
+
+   // Go through each element in the C++ instance and convert it to a
+   // wrapper object.
+   for (std::set<TYPE*>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
+       TYPE *cpp = *it;
+       PyObject *pobj;
+
+       // Get the Python wrapper for the Type instance, creating a new
+       // one if necessary, and handle any ownership transfer.
+       if ((pobj = sipConvertFromType(cpp, kpTypeDef, sipTransferObj)) == NULL) {
+           // There was an error so garbage collect the Python set.
+           Py_XDECREF(l);
+           return NULL;
+       }
+
+       // Add the wrapper to the set.
+       PySet_Add(l, pobj);
+   }
+
+   // Return the Python set.
+   return l;
+%End
+
+%ConvertToTypeCode
+
+   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+
+   // Check if type is compatible
+   if (sipIsErr == NULL) {
+       if (!PySet_Check(sipPy)) {
+          return 0;
+       }
+       PyObject *iterator = PyObject_GetIter(sipPy);
+       PyObject *item = NULL;
+       while (item = PyIter_Next(iterator)) {
+            if (!sipCanConvertToType(item, kpTypeDef, SIP_NOT_NONE)) {
+                //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
+                Py_DECREF(item);
+                Py_DECREF(iterator);
+                return 0;
+            }
+            Py_DECREF(item);
+       }
+       Py_DECREF(iterator);
+       return 1;
+   }
+ 
+   // Convert Python list of TYPE to  std::set<TYPE>
+   std::set<TYPE*> *s = new std::set<TYPE*>();
+   
+   PyObject *iterator = PyObject_GetIter(sipPy);
+   PyObject *item = NULL;
+   while (item = PyIter_Next(iterator)) {
+       int state;
+       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
+
+       if (*sipIsErr) {
+            Py_DECREF(item);
+            Py_DECREF(iterator);
+            sipReleaseType(p, kpTypeDef, state);
+            delete s;
+            return 0;
+       }		
+
+       s->insert(p);
+       Py_DECREF(item);
+       sipReleaseType(p, kpTypeDef, state);
+   }
+   Py_DECREF(iterator);
+   *sipCppPtr = s;
+   return sipGetState(sipTransferObj);
+%End
+
+};
+
+%MappedType std::set<double> /DocType="set-of-double"/ {
+%TypeHeaderCode
+#include <set>
+%End
+
+%ConvertFromTypeCode
+   PyObject *l;
+
+   // Create an empty Python set.
+   if ((l = PySet_New(NULL)) == NULL) {
+       return NULL;
+   }    
+
+   // Go through each element in the C++ instance and convert it to a
+   // wrapper object.
+    for (std::set<double>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
+       // Add the wrapper to the list.
+       PySet_Add(l, PyFloat_FromDouble(*it));
+   }
+
+   // Return the Python set.
+   return l;
 %End
 
 %ConvertToTypeCode
    // Check if type is compatible
    if (sipIsErr == NULL) {
-   	   if (!PyList_Check(sipPy)) {
+       if (!PySet_Check(sipPy)) {
           return 0;
        }
-       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
-            PyObject *item = PyList_GET_ITEM(sipPy, i);
+       PyObject *iterator = PyObject_GetIter(sipPy);
+       PyObject *item = NULL;
+       while (item = PyIter_Next(iterator)) {
             if (!PyNumber_Check(item)) {
-                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to double");
+                //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to double");
+                Py_DECREF(item);
+                Py_DECREF(iterator);
                 return 0;
             }
+            Py_DECREF(item);
        }
+       Py_DECREF(iterator);
        return 1;
    }
  
-   // Convert Python list of numbers to a std::set<double>
+   // Convert Python set of numbers to a std::set<double>
    std::set<double> *s = new std::set<double>();
    
-   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
-       PyObject *f = PyNumber_Float(PyList_GET_ITEM(sipPy, i));
+   PyObject *iterator = PyObject_GetIter(sipPy);
+   PyObject *item = NULL;
+   while (item = PyIter_Next(iterator)) {
+       PyObject *f = PyNumber_Float(item);
        s->insert(PyFloat_AsDouble(f));
-       Py_XDECREF(f);       
+       Py_XDECREF(f);
+       Py_DECREF(item);
    }
+   Py_DECREF(iterator);
 
    *sipCppPtr = s;
    return sipGetState(sipTransferObj);
 %End   
 
+};
+
+%MappedType std::set<float> /DocType="set-of-float"/ {
+%TypeHeaderCode
+#include <set>
+%End
+
 %ConvertFromTypeCode
    PyObject *l;
 
-   // Create the Python list of the correct length.
-   if ((l = PyList_New(sipCpp -> size())) == NULL) {
+   // Create an empty Python set.
+   if ((l = PySet_New(NULL)) == NULL) {
        return NULL;
    }    
 
    // Go through each element in the C++ instance and convert it to a
-   // wrapped object.
-   int i = 0;
-    for (std::set<double>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
+   // wrapper object.
+    for (std::set<float>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
        // Add the wrapper to the list.
-       PyList_SET_ITEM(l, i++, PyFloat_FromDouble(*it));
+       PySet_Add(l, PyFloat_FromDouble(*it));
    }
 
-   // Return the Python list.
+   // Return the Python set.
    return l;
-%End
-
-
-};
-
-
-%MappedType std::set<int> /DocType="list-of-int"/ {
-%TypeHeaderCode
-#include <set>
 %End
 
 %ConvertToTypeCode
    // Check if type is compatible
    if (sipIsErr == NULL) {
-   	   if (!PyList_Check(sipPy)) {
+       if (!PySet_Check(sipPy)) {
           return 0;
        }
-       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
-            PyObject *item = PyList_GET_ITEM(sipPy, i);
+       PyObject *iterator = PyObject_GetIter(sipPy);
+       PyObject *item = NULL;
+       while (item = PyIter_Next(iterator)) {
+            if (!PyNumber_Check(item)) {
+                //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to float");
+                Py_DECREF(item);
+                Py_DECREF(iterator);
+                return 0;
+            }
+            Py_DECREF(item);
+       }
+       Py_DECREF(iterator);
+       return 1;
+   }
+ 
+   // Convert Python set of numbers to a std::set<float>
+   std::set<float> *s = new std::set<float>();
+   
+   PyObject *iterator = PyObject_GetIter(sipPy);
+   PyObject *item = NULL;
+   while (item = PyIter_Next(iterator)) {
+       PyObject *f = PyNumber_Float(item);
+       s->insert(static_cast<float>(PyFloat_AsDouble(f)));
+       Py_XDECREF(f);
+       Py_DECREF(item);
+   }
+   Py_DECREF(iterator);
+
+   *sipCppPtr = s;
+   return sipGetState(sipTransferObj);
+%End   
+
+};
+
+%MappedType std::set<int> /DocType="set-of-int"/ {
+%TypeHeaderCode
+#include <set>
+%End
+
+%ConvertFromTypeCode
+   PyObject *l;
+
+   // Create an empty Python set.
+   if ((l = PySet_New(NULL)) == NULL) {
+       return NULL;
+   }
+
+   // Go through each element in the C++ instance and convert it to a
+   // wrapper object.
+   for (std::set<int>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
+       // Add the wrapper to the list.
+       PySet_Add(l, PyLong_FromLong(*it));
+   }
+
+   // Return the Python set.
+   return l;
+%End
+
+%ConvertToTypeCode
+   // Check if type is compatible
+   if (sipIsErr == NULL) {
+       if (!PySet_Check(sipPy)) {
+          return 0;
+       }
+       PyObject *iterator = PyObject_GetIter(sipPy);
+       PyObject *item = NULL;
+       while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
             if (!PyLong_Check(item)) {
 #else
             if (!PyLong_Check(item) && !PyInt_Check(item)) {
 #endif
-                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
+                //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
+                Py_DECREF(item);
+                Py_DECREF(iterator);
                 return 0;
             }
+            Py_DECREF(item);
        }
+       Py_DECREF(iterator);
        return 1;
    }
  
-   // Convert Python list of integers to a std::set<int>
+   // Convert Python set of integers to a std::set<int>
    std::set<int> *s = new std::set<int>();
    
-   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+   PyObject *iterator = PyObject_GetIter(sipPy);
+   PyObject *item = NULL;
+   while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
-       s->insert(PyLong_AsLong(PyList_GET_ITEM(sipPy, i)));
+       s->insert(static_cast<int>(PyLong_AsLong(item)));
 #else
-       PyObject *item = PyList_GET_ITEM(sipPy, i);
+       if (PyLong_Check(item)) {
+           s->insert(static_cast<int>(PyLong_AsLong(item)));
+       } else {
+           s->insert(static_cast<int>(PyInt_AsLong(item)));
+       }
+#endif
+       Py_DECREF(item);
+   }
+
+   Py_DECREF(iterator);
+   *sipCppPtr = s;
+   return sipGetState(sipTransferObj);
+%End
+
+};
+
+%MappedType std::set<long> /DocType="set-of-long"/ {
+%TypeHeaderCode
+#include <set>
+%End
+
+%ConvertFromTypeCode
+   PyObject *l;
+
+   // Create an empty Python set.
+   if ((l = PySet_New(NULL)) == NULL) {
+       return NULL;
+   }
+
+   // Go through each element in the C++ instance and convert it to a
+   // wrapper object.
+   for (std::set<long>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
+       // Add the wrapper to the list.
+       PySet_Add(l, PyLong_FromLong(*it));
+   }
+
+   // Return the Python set.
+   return l;
+%End
+
+%ConvertToTypeCode
+   // Check if type is compatible
+   if (sipIsErr == NULL) {
+       if (!PySet_Check(sipPy)) {
+          return 0;
+       }
+       PyObject *iterator = PyObject_GetIter(sipPy);
+       PyObject *item = NULL;
+       while (item = PyIter_Next(iterator)) {
+#if PY_MAJOR_VERSION >= 3
+            if (!PyLong_Check(item)) {
+#else
+            if (!PyLong_Check(item) && !PyInt_Check(item)) {
+#endif
+                //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to long");
+                Py_DECREF(item);
+                Py_DECREF(iterator);
+                return 0;
+            }
+            Py_DECREF(item);
+       }
+       Py_DECREF(iterator);
+       return 1;
+   }
+ 
+   // Convert Python set of integers to a std::set<long>
+   std::set<long> *s = new std::set<long>();
+   
+   PyObject *iterator = PyObject_GetIter(sipPy);
+   PyObject *item = NULL;
+   while (item = PyIter_Next(iterator)) {
+#if PY_MAJOR_VERSION >= 3
+       s->insert(PyLong_AsLong(item));
+#else
        if (PyLong_Check(item)) {
            s->insert(PyLong_AsLong(item));
        } else {
            s->insert(PyInt_AsLong(item));
        }
 #endif
+       Py_DECREF(item);
    }
 
+   Py_DECREF(iterator);
    *sipCppPtr = s;
    return sipGetState(sipTransferObj);
 %End
 
+};
+
+%MappedType std::set<unsigned int> /DocType="set-of-uint"/ {
+%TypeHeaderCode
+#include <set>
+%End
 
 %ConvertFromTypeCode
    PyObject *l;
 
-   // Create the Python list of the correct length.
-   if ((l = PyList_New(sipCpp -> size())) == NULL) {
+   // Create an empty Python set.
+   if ((l = PySet_New(NULL)) == NULL) {
        return NULL;
    }
 
    // Go through each element in the C++ instance and convert it to a
-   // wrapped object.
-   int i = 0;
-   for (std::set<int>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
+   // wrapper object.
+   for (std::set<unsigned int>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
        // Add the wrapper to the list.
-       PyList_SET_ITEM(l, i++, PyLong_FromLong(*it));
+       PySet_Add(l, PyLong_FromUnsignedLong(*it));
    }
 
-   // Return the Python list.
+   // Return the Python set.
    return l;
-%End
-
-};
-
-%MappedType std::set<unsigned int> /DocType="list-of-int"/ {
-%TypeHeaderCode
-#include <set>
 %End
 
 %ConvertToTypeCode
    // Check if type is compatible
    if (sipIsErr == NULL) {
-       if (!PyList_Check(sipPy)) {
+       if (!PySet_Check(sipPy)) {
           return 0;
        }
-       for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
-            PyObject *item = PyList_GET_ITEM(sipPy, i);
+       PyObject *iterator = PyObject_GetIter(sipPy);
+       PyObject *item = NULL;
+       while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
             if (!PyLong_Check(item)) {
 #else
             if (!PyLong_Check(item) && !PyInt_Check(item)) {
 #endif
-                printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to int");
+                //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to unsigned int");
+                Py_DECREF(item);
+                Py_DECREF(iterator);
                 return 0;
             }
+              Py_DECREF(item);
        }
+       Py_DECREF(iterator);
        return 1;
    }
 
-   // Convert Python list of integers to a std::set<int>
+   // Convert Python set of integers to a std::set<unsigned int>
    std::set<unsigned int> *s = new std::set<unsigned int>();
 
-   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
+   PyObject *iterator = PyObject_GetIter(sipPy);
+   PyObject *item = NULL;
+   while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
-       s->insert(PyLong_AsUnsignedLong(PyList_GET_ITEM(sipPy, i)));
+       s->insert(static_cast<unsigned int>(PyLong_AsUnsignedLong(item)));
 #else
-       PyObject *item = PyList_GET_ITEM(sipPy, i);
+       if (PyLong_Check(item)) {
+           s->insert(static_cast<unsigned int>(PyLong_AsUnsignedLong(item)));
+       } else {
+           s->insert(static_cast<unsigned int>(PyInt_AsUnsignedLongMask(item)));
+       }
+#endif
+       Py_DECREF(item);
+   }
+   Py_DECREF(iterator);
+   *sipCppPtr = s;
+   return sipGetState(sipTransferObj);
+%End
+
+};
+
+%MappedType std::set<unsigned long> /DocType="set-of-ulong"/ {
+%TypeHeaderCode
+#include <set>
+%End
+
+%ConvertFromTypeCode
+   PyObject *l;
+
+   // Create an empty Python set.
+   if ((l = PySet_New(NULL)) == NULL) {
+       return NULL;
+   }
+
+   // Go through each element in the C++ instance and convert it to a
+   // wrapper object.
+   for (std::set<unsigned long>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
+       // Add the wrapper to the list.
+       PySet_Add(l, PyLong_FromUnsignedLong(*it));
+   }
+
+   // Return the Python set.
+   return l;
+%End
+
+%ConvertToTypeCode
+   // Check if type is compatible
+   if (sipIsErr == NULL) {
+       if (!PySet_Check(sipPy)) {
+          return 0;
+       }
+       PyObject *iterator = PyObject_GetIter(sipPy);
+       PyObject *item = NULL;
+       while (item = PyIter_Next(iterator)) {
+#if PY_MAJOR_VERSION >= 3
+            if (!PyLong_Check(item)) {
+#else
+            if (!PyLong_Check(item) && !PyInt_Check(item)) {
+#endif
+                //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to unsigned long");
+                Py_DECREF(item);
+                Py_DECREF(iterator);
+                return 0;
+            }
+              Py_DECREF(item);
+       }
+       Py_DECREF(iterator);
+       return 1;
+   }
+
+   // Convert Python set of integers to a std::set<unsigned long>
+   std::set<unsigned long> *s = new std::set<unsigned long>();
+
+   PyObject *iterator = PyObject_GetIter(sipPy);
+   PyObject *item = NULL;
+   while (item = PyIter_Next(iterator)) {
+#if PY_MAJOR_VERSION >= 3
+       s->insert(PyLong_AsUnsignedLong(item));
+#else
        if (PyLong_Check(item)) {
            s->insert(PyLong_AsUnsignedLong(item));
        } else {
            s->insert(PyInt_AsUnsignedLongMask(item));
        }
 #endif
+       Py_DECREF(item);
    }
-
+   Py_DECREF(iterator);
    *sipCppPtr = s;
    return sipGetState(sipTransferObj);
-%End
-
-
-%ConvertFromTypeCode
-   PyObject *l;
-
-   // Create the Python list of the correct length.
-   if ((l = PyList_New(sipCpp -> size())) == NULL) {
-       return NULL;
-   }
-
-   // Go through each element in the C++ instance and convert it to a
-   // wrapped object.
-   int i = 0;
-   for (std::set<unsigned int>::iterator it = sipCpp->begin(); it != sipCpp->end(); ++it) {
-       // Add the wrapper to the list.
-       PyList_SET_ITEM(l, i++, PyLong_FromUnsignedLong(*it));
-   }
-
-   // Return the Python list.
-   return l;
 %End
 
 };
