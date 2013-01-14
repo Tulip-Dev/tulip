@@ -67,10 +67,6 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
 
 void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   _contextProperty = _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface*>();
-  _contextPropertyList.clear();
-  foreach(QModelIndex sidx, _ui->tableView->selectionModel()->selectedRows()) {
-    _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface*>();
-  }
 
   if (_contextProperty == NULL)
     return;
@@ -83,22 +79,52 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   }
 
   QMenu menu;
-  menu.setStyleSheet("QMenu::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+  menu.setProperty("mainMenu", true);
+  menu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
   menu.addAction(pname)->setEnabled(false);
   menu.addSeparator();
   connect(menu.addAction(trUtf8("Set other properties not visible")),SIGNAL(triggered()),this,SLOT(setPropsNotVisibleExcept()));
   menu.addSeparator();
-  connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
-  connect(menu.addAction(trUtf8("New")),SIGNAL(triggered()),this,SLOT(newProperty()));
-  bool enabled = true;
-  foreach(PropertyInterface* pi, _contextPropertyList) {
-    if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str())) {
-      // Enable deletion of reserved properties when on a subgraph and that properties are local
-      if (_graph == _graph->getRoot() || !_graph->existLocalProperty(pi->getName())) {
-        enabled = false;
-        break;
-      }
-    }
+  bool enabled = (pname != "viewLabel");
+  QMenu* subMenu = menu.addMenu(trUtf8("To labels of"));
+  QAction* action = subMenu->addAction(trUtf8("All"));
+  if (enabled)
+    connect(action,SIGNAL(triggered()),this,SLOT(toLabels()));
+  else
+    action->setEnabled(false);
+  action = subMenu->addAction(trUtf8("All nodes"));
+  if (enabled)
+    connect(action,SIGNAL(triggered()),this,SLOT(toNodesLabels()));
+  else
+    action->setEnabled(false);
+  action = subMenu->addAction(trUtf8("All edges"));
+  if (enabled)
+    connect(action,SIGNAL(triggered()),this,SLOT(toEdgesLabels()));
+  else
+    action->setEnabled(false);
+  action = subMenu->addAction(trUtf8("All selected"));
+  if (enabled)
+    connect(action,SIGNAL(triggered()),this,SLOT(toSelectedLabels()));
+  else
+    action->setEnabled(false);
+  action = subMenu->addAction(trUtf8("All selected nodes"));
+  if (enabled)
+    connect(action,SIGNAL(triggered()),this,SLOT(toSelectedNodesLabels()));
+  else
+    action->setEnabled(false);
+  action = subMenu->addAction(trUtf8("All selected edges"));
+  if (enabled)
+    connect(action,SIGNAL(triggered()),this,SLOT(toSelectedEdgesLabels()));
+  else
+    action->setEnabled(false);
+  menu.addSeparator();
+    connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
+    connect(menu.addAction(trUtf8("New")),SIGNAL(triggered()),this,SLOT(newProperty()));
+  enabled = true;
+  if (Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str())) {
+    // Enable deletion of reserved properties when on a subgraph and that properties are local
+    if (_graph == _graph->getRoot() || !_graph->existLocalProperty(_contextProperty->getName()))
+      enabled = false;
   }
 
   if (enabled) {
@@ -190,24 +216,40 @@ void PropertiesEditor::delProperty() {
 }
 
 void PropertiesEditor::toLabels() {
-  toLabels(true,true);
+  toLabels(_contextProperty, true, true);
 }
 
 void PropertiesEditor::toNodesLabels() {
-  toLabels(true,false);
+  toLabels(_contextProperty, true, false);
 }
 
 void PropertiesEditor::toEdgesLabels() {
-  toLabels(false,true);
+  toLabels(_contextProperty, false,true);
 }
 
-void PropertiesEditor::toLabels(bool nodes, bool edges) {
+void PropertiesEditor::toSelectedLabels() {
+  toLabels(_contextProperty, true, true, true);
+}
+
+void PropertiesEditor::toSelectedNodesLabels() {
+  toLabels(_contextProperty, true, false, true);
+}
+
+void PropertiesEditor::toSelectedEdgesLabels() {
+  toLabels(_contextProperty, false, true, true);
+}
+
+void PropertiesEditor::toLabels(PropertyInterface* prop, bool nodes, bool edges, bool selectedOnly) {
   DataSet data;
   data.set("nodes",nodes);
   data.set("edges",edges);
-  data.set("input",_contextProperty);
+  data.set("input", prop);
+  if (selectedOnly)
+    data.set("selection", _graph->getProperty<BooleanProperty>("viewSelection"));
+    
   std::string msg;
   StringProperty* result = _graph->getProperty<StringProperty>("viewLabel");
+  _graph->push();
   _graph->applyPropertyAlgorithm("To labels",result,msg,NULL,&data);
 }
 
