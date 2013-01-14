@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>729</width>
-    <height>657</height>
+    <width>727</width>
+    <height>655</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -95,7 +95,7 @@ QTabBar::tab:selected {
 </string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_8">
        <property name="enabled">
