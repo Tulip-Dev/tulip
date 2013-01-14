@@ -3354,7 +3354,7 @@ edges from the metanode to the other nodes.
             }
     }
     if (sipIsErr != -1) {
-        sipCpp->createMetaNode(*a0, a1, a2);
+        sipRes = new tlp::node(sipCpp->createMetaNode(*a0, a1, a2));
     }
 %End
 
@@ -3415,7 +3415,7 @@ point to an empty subgraph.
             }
         }
         if (sipIsErr != -1) {
-            sipCpp->createMetaNode(a0, a1, a2);
+            sipRes = new tlp::node(sipCpp->createMetaNode(a0, a1, a2));
         }
     }
 %End
