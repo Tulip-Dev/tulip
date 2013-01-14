@@ -105,6 +105,8 @@ extern void printErrorMessage(const std::string &errMsg);
 
 extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
 
+extern const sipTypeDef *getSipType(const char *sipTypename);
+
 %End
 
 %ModuleCode
@@ -142,6 +144,14 @@ void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
         sipTransferTo(pyObj, pyObj);
         sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyObj);
         sipCommonDtor(wrapper);
+    }
+}
+
+const sipTypeDef *getSipType(const char *sipTypename) {
+    if (sipResolveTypedef(sipTypename)) {
+         return sipFindType(sipResolveTypedef(sipTypename));
+    } else {
+         return sipFindType(sipTypename);
     }
 }
 

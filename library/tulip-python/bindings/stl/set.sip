@@ -26,7 +26,11 @@ template<TYPE>
 %ConvertFromTypeCode
    PyObject *l;
 
-   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+   const sipTypeDef* kpTypeDef = getSipType("TYPE");
+
+   if (!kpTypeDef) {
+       return NULL;
+   }
 
    // Create an empty Python set
    if ((l = PySet_New(NULL)) == NULL) {
@@ -57,7 +61,11 @@ template<TYPE>
 
 %ConvertToTypeCode
 
-   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+   const sipTypeDef* kpTypeDef = getSipType("TYPE");
+
+   if (!kpTypeDef) {
+       return 0;
+   }
 
    // Check if type is compatible
    if (sipIsErr == NULL) {
@@ -108,7 +116,7 @@ template<TYPE>
 
 };
 
-template<TYPE>
+template<TYPE*>
 %MappedType std::set<TYPE*> /DocType="set-of-TYPE"/{
 %TypeHeaderCode
 #include <set>
@@ -117,7 +125,11 @@ template<TYPE>
 %ConvertFromTypeCode
    PyObject *l;
 
-   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+   const sipTypeDef* kpTypeDef = getSipType("TYPE");
+
+   if (!kpTypeDef) {
+       return NULL;
+   }
 
    // Create an empty Python set.
    if ((l = PySet_New(NULL)) == NULL) {
@@ -148,7 +160,11 @@ template<TYPE>
 
 %ConvertToTypeCode
 
-   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+   const sipTypeDef* kpTypeDef = getSipType("TYPE");
+
+   if (!kpTypeDef) {
+       return 0;
+   }
 
    // Check if type is compatible
    if (sipIsErr == NULL) {

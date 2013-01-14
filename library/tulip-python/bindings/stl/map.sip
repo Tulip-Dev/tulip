@@ -29,8 +29,17 @@ template<T1, T2>
 	PyObject *val = NULL;
 	Py_ssize_t pos = 0;
 
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return 0;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return 0;
+    }
 
 	if (sipIsErr == NULL) {
 		if (!PyDict_Check(sipPy)) {
@@ -75,8 +84,17 @@ template<T1, T2>
 
 %ConvertFromTypeCode
 
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return NULL;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return NULL;
+    }
 
 	PyObject *pyDict = NULL;
 	pyDict = PyDict_New();
@@ -130,8 +148,17 @@ template<T1, T2>
 	PyObject *val = NULL;
 	Py_ssize_t pos = 0;
 
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return 0;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return 0;
+    }
 
 	if (sipIsErr == NULL) {
 		if (!PyDict_Check(sipPy)) {
@@ -177,8 +204,17 @@ template<T1, T2>
 
 %ConvertFromTypeCode
 
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return NULL;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return NULL;
+    }
 
 	PyObject *pyDict = NULL;
 	pyDict = PyDict_New();
@@ -231,7 +267,11 @@ template<T2>
 	PyObject *val = NULL;
 	Py_ssize_t pos = 0;
 
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return 0;
+    }
 
 	if (sipIsErr == NULL) {
 		if (!PyDict_Check(sipPy)) {
@@ -273,7 +313,11 @@ template<T2>
 
 %ConvertFromTypeCode
 
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return NULL;
+    }
 
 	PyObject *pyDict = NULL;
 	pyDict = PyDict_New();

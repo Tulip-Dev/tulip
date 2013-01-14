@@ -21,7 +21,10 @@
 
 %ModuleHeaderCode
 #include <string>
+
 extern void printErrorMessage(const std::string &errMsg);
+
+extern const sipTypeDef *getSipType(const char *sipTypename);
 
 #if PY_MAJOR_VERSION >= 3
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
@@ -36,6 +39,14 @@ void printErrorMessage(const std::string &errMsg) {
     pythonCode += errMsg;
     pythonCode += "\\n\")";
     PyRun_SimpleString(pythonCode.c_str());
+}
+
+const sipTypeDef *getSipType(const char *sipTypename) {
+    if (sipResolveTypedef(sipTypename)) {
+         return sipFindType(sipResolveTypedef(sipTypename));
+    } else {
+         return sipFindType(sipTypename);
+    }
 }
 
 #if PY_MAJOR_VERSION >= 3
