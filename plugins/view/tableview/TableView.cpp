@@ -203,25 +203,12 @@ void TableView::readSettings() {
 
   QSet<tlp::PropertyInterface*> visibleProperties = propertiesEditor->visibleProperties();
 
-  //_ui->matchPropertyCombo->clear();
-  //_ui->matchPropertyCombo->addItem("Any");
-
   for (int i=0; i < _model->columnCount(); ++i) {
     PropertyInterface* pi =
       _model->headerData(i, Qt::Horizontal, TulipModel::PropertyRole).value<tlp::PropertyInterface*>();
 
     if (!visibleProperties.contains(pi))
       _ui->table->setColumnHidden(i, true);
-
-    /*else {
-      QString propName = tlpStringToQString(pi->getName());
-      int i = 1;
-      for (; i < _ui->matchPropertyCombo->count(); ++i) {
-    if (_ui->matchPropertyCombo->itemText(i) > propName)
-    break;
-      }
-      _ui->matchPropertyCombo->insertItem(i, propName);
-      }*/
   }
 }
 
@@ -246,24 +233,6 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
       break;
     }
   }
-
-  /*int i = 1;
-  for (; i < _ui->matchPropertyCombo->count(); ++i) {
-    if (v) {
-      if (_ui->matchPropertyCombo->itemText(i) > propName)
-  break;
-    } else
-      if (_ui->matchPropertyCombo->itemText(i) == propName)
-  break;
-  }
-
-  if (v)
-    _ui->matchPropertyCombo->insertItem(i, propName);
-  else {
-    if (_ui->matchPropertyCombo->currentIndex() == i)
-      _ui->matchPropertyCombo->setCurrentIndex(0);
-    _ui->matchPropertyCombo->removeItem(i);
-    }*/
 
   if (_ui->matchPropertyButton->text() == propName)
     // set to Any
@@ -339,15 +308,6 @@ void TableView::filterChanged() {
 
   Graph* g = graph();
 
-  /*if (_ui->matchPropertyCombo->currentIndex() == 0) {
-    // Any
-    for (int i=1; i < _ui->matchPropertyCombo->count(); ++i) {
-      props += g->getProperty(QStringToTlpString(_ui->matchPropertyCombo->itemText(i)));
-    }
-  } else
-    if (_ui->matchPropertyCombo->currentIndex() > 0)
-      // a visible column
-      props += g->getProperty(QStringToTlpString(_ui->matchPropertyCombo->currentText()));*/
   if (_ui->matchPropertyButton->text() == "Any") {
     for (int i=0; i < _model->columnCount(); ++i) {
       if (!_ui->table->horizontalHeader()->isSectionHidden(i))
