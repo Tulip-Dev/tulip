@@ -177,7 +177,7 @@ template<TYPE>
    PyObject *item = NULL;
    while (item = PyIter_Next(iterator)) {
        int state;
-       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
+       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, NULL, SIP_NOT_NONE, &state, sipIsErr));
 
        if (*sipIsErr) {
             Py_DECREF(item);
@@ -186,6 +186,8 @@ template<TYPE>
             delete s;
             return 0;
        }		
+
+       sipTransferTo(item, item);
 
        s->insert(p);
        Py_DECREF(item);

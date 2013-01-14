@@ -154,7 +154,7 @@ template<T1, T2>
 		int t2State = 0;
 		
         T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(key, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-        T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+        T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(val, kpTypeDef2, NULL, SIP_NOT_NONE, &t2State, sipIsErr));
 		
 		if (*sipIsErr) {
 			delete map;
@@ -163,6 +163,8 @@ template<T1, T2>
 			return 0;
 		}
 		
+        sipTransferTo(val, val);
+
 		(*map)[*t1] = t2;
 		
         sipReleaseType(t1, kpTypeDef1, t1State);
