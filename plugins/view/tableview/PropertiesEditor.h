@@ -54,6 +54,8 @@ public:
 
 
   void setPropertyChecked(int index, bool state);
+  void toLabels(tlp::PropertyInterface* prop,
+		bool nodes, bool edges, bool selectedOnly = false);
 
   tlp::PropertyInterface* contextProperty() const;
 signals:
@@ -71,7 +73,9 @@ protected slots:
   void toLabels();
   void toNodesLabels();
   void toEdgesLabels();
-  void toLabels(bool nodes, bool edges);
+  void toSelectedLabels();
+  void toSelectedNodesLabels();
+  void toSelectedEdgesLabels();
   void setPropsVisibility(int);
   void setPropsNotVisibleExcept();
   void showVisualProperties(bool);
