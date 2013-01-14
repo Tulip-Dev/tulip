@@ -167,7 +167,8 @@ template<TYPE*>
    v->reserve(PyList_GET_SIZE(sipPy));
    for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
        int state;
-       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(PyList_GET_ITEM(sipPy, i), kpTypeDef, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
+       PyObject *item = PyList_GET_ITEM(sipPy, i);
+       TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, NULL, SIP_NOT_NONE, &state, sipIsErr));
 
        if (*sipIsErr) {
           sipReleaseType(p, kpTypeDef, state);
@@ -175,6 +176,7 @@ template<TYPE*>
           return 0;
        }		
 
+       sipTransferTo(item, item);
        v->push_back(p);
 
        sipReleaseType(p, kpTypeDef, state);

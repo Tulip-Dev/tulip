@@ -152,14 +152,17 @@ template<T1*, T2*>
 	int t1State = 0;
 	int t2State = 0;
 	
-    T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-    T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+    T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, NULL, SIP_NOT_NONE, &t1State, sipIsErr));
+    T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, NULL, SIP_NOT_NONE, &t2State, sipIsErr));
 
 	if (*sipIsErr) {
         sipReleaseType(t1, kpTypeDef1, t1State);
         sipReleaseType(t2, kpTypeDef2, t2State);
 		return 0;
 	}
+
+    sipTransferTo(itm1, itm1);
+    sipTransferTo(itm2, itm2);
 
 	std::pair<T1*, T2*> *p = new std::pair<T1*, T2*>(t1, t2);
 	
@@ -246,7 +249,7 @@ template<T1*, T2>
 	int t1State = 0;
 	int t2State = 0;
 	
-    T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
+    T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, NULL, SIP_NOT_NONE, &t1State, sipIsErr));
     T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
 
 	if (*sipIsErr) {
@@ -254,6 +257,8 @@ template<T1*, T2>
         sipReleaseType(t2, kpTypeDef2, t2State);
 		return 0;
 	}
+
+    sipTransferTo(itm1, itm1);
 
 	std::pair<T1*, T2> *p = new std::pair<T1*, T2>(t1, *t2);
 	
@@ -342,13 +347,15 @@ template<T1, T2*>
 	int t2State = 0;
 	
     T1 *t1 = reinterpret_cast<T1 *>(sipConvertToType(itm1, kpTypeDef1, sipTransferObj, SIP_NOT_NONE, &t1State, sipIsErr));
-    T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, sipTransferObj, SIP_NOT_NONE, &t2State, sipIsErr));
+    T2 *t2 = reinterpret_cast<T2 *>(sipConvertToType(itm2, kpTypeDef2, NULL, SIP_NOT_NONE, &t2State, sipIsErr));
 
 	if (*sipIsErr) {
         sipReleaseType(t1, kpTypeDef1, t1State);
         sipReleaseType(t2, kpTypeDef2, t2State);
 		return 0;
 	}
+
+    sipTransferTo(itm2, itm2);
 
 	std::pair<T1, T2*> *p = new std::pair<T1, T2*>(*t1, t2);
 	
