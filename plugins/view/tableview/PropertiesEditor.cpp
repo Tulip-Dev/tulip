@@ -107,12 +107,12 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedLabels()));
   else
     action->setEnabled(false);
-  action = subMenu->addAction(trUtf8("All selected nodes"));
+  action = subMenu->addAction(trUtf8("Selected nodes"));
   if (enabled)
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedNodesLabels()));
   else
     action->setEnabled(false);
-  action = subMenu->addAction(trUtf8("All selected edges"));
+  action = subMenu->addAction(trUtf8("Selected edges"));
   if (enabled)
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedEdgesLabels()));
   else
@@ -211,31 +211,37 @@ void PropertiesEditor::newProperty() {
 }
 
 void PropertiesEditor::delProperty() {
-  foreach(PropertyInterface* pi, _contextPropertyList)
-  pi->getGraph()->delLocalProperty(pi->getName());
+  _graph->push();
+  _contextProperty->getGraph()->delLocalProperty(_contextProperty->getName());
 }
 
 void PropertiesEditor::toLabels() {
+  _graph->push();
   toLabels(_contextProperty, true, true);
 }
 
 void PropertiesEditor::toNodesLabels() {
+  _graph->push();
   toLabels(_contextProperty, true, false);
 }
 
 void PropertiesEditor::toEdgesLabels() {
+  _graph->push();
   toLabels(_contextProperty, false,true);
 }
 
 void PropertiesEditor::toSelectedLabels() {
+  _graph->push();
   toLabels(_contextProperty, true, true, true);
 }
 
 void PropertiesEditor::toSelectedNodesLabels() {
+  _graph->push();
   toLabels(_contextProperty, true, false, true);
 }
 
 void PropertiesEditor::toSelectedEdgesLabels() {
+  _graph->push();
   toLabels(_contextProperty, false, true, true);
 }
 
@@ -248,8 +254,9 @@ void PropertiesEditor::toLabels(PropertyInterface* prop, bool nodes, bool edges,
     data.set("selection", _graph->getProperty<BooleanProperty>("viewSelection"));
     
   std::string msg;
+  // _graph->push() must be done outside of this method
+  // to allow call from TabelView.cpp
   StringProperty* result = _graph->getProperty<StringProperty>("viewLabel");
-  _graph->push();
   _graph->applyPropertyAlgorithm("To labels",result,msg,NULL,&data);
 }
 

@@ -363,26 +363,27 @@ void TableView::filterChanged() {
   sortModel->setFilterFixedString(filter);
 }
 
-void TableView::setAllFilteredValue(PropertyInterface* prop) {
+void TableView::setAllValues(PropertyInterface* prop, bool selectedOnly) {
   QVariant val =
     TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE,
                                         prop, graph(),
                                         static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
+  
+  if (selectedOnly) {
+    BooleanProperty* selection = graph()->getProperty<BooleanProperty>("viewSelection");
 
-  if (hasEffectiveFiltering()) {
-    QAbstractItemModel* model = _ui->table->model();
-    int nbRows = model->rowCount();
-
-    for (int row = 0; row < nbRows; ++row) {
-      if (NODES_DISPLAYED)
-        GraphModel::setNodeValue(model->index(row, 0).data(TulipModel::ElementIdRole).toUInt(),
-                                 prop, val);
-      else
-        GraphModel::setEdgeValue(model->index(row, 0).data(TulipModel::ElementIdRole).toUInt(),
-                                 prop, val);
+    if (NODES_DISPLAYED) {
+      node n;
+      forEach(n, selection->getNonDefaultValuatedNodes(graph())) {
+	GraphModel::setNodeValue(n.id, prop, val);
+      }
+    } else {
+      edge e;
+      forEach(e, selection->getNonDefaultValuatedEdges(graph())) {
+        GraphModel::setEdgeValue(e.id, prop, val);
+      }
     }
-  }
-  else {
+  } else {
     if (NODES_DISPLAYED)
       GraphModel::setAllNodeValue(prop,val);
     else
@@ -478,6 +479,22 @@ void TableView::setAllHighlightedRows(PropertyInterface* prop) {
   }
 }
 
+void TableView::setLabelsOfHighlightedRows(PropertyInterface *prop) {
+  QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
+
+  StringProperty* label = graph()->getProperty<StringProperty>("viewLabel");
+  for (QList<QModelIndex>::const_iterator itIdx = rows.begin();
+       itIdx != rows.end(); ++itIdx) {
+    if (NODES_DISPLAYED) {
+      node n(itIdx->data(TulipModel::ElementIdRole).toUInt());
+      label->setNodeStringValue(n, prop->getNodeStringValue(n));
+    } else {
+	edge e(itIdx->data(TulipModel::ElementIdRole).toUInt());
+	label->setEdgeStringValue(e, prop->getEdgeStringValue(e));
+    }
+  }
+}
+
 void TableView::showCustomContextMenu(const QPoint & pos) {
   if (_ui->table->model()->rowCount() == 0)
     return;
@@ -485,60 +502,50 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
   QModelIndex idx = _ui->table->indexAt(pos);
   unsigned int eltId = idx.data(TulipModel::ElementIdRole).toUInt();
 
-  bool hasFiltering = hasEffectiveFiltering();
-  QString eltsName(NODES_DISPLAYED ? tr("nodes") : tr("edges"));
+  QString eltsName(NODES_DISPLAYED ? trUtf8("nodes") : trUtf8("edges"));
   std::string propName = _model->headerData(idx.column(), Qt::Horizontal, Qt::DisplayRole).toString().toUtf8().data();
   QModelIndexList highlightedRows =
     _ui->table->selectionModel()->selectedRows();
 
   QMenu contextMenu;
+  contextMenu.setProperty("mainMenu", true);
+  // the style sheet below allow to display as "title" items
+  // the coontextMenu disabled items
+  contextMenu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+
   QAction* action = contextMenu.addAction(propName.c_str());
   action->setEnabled(false);
   contextMenu.addSeparator();
   QAction* setAll;
-  QAction* filteredSetAll = NULL;
+  QAction* selectedSetAll = NULL;
   QAction* highlightedSetAll = NULL;
   QAction* toLabels;
-  QAction* filteredToLabels = NULL;
+  QAction* selectedToLabels = NULL;
   QAction* highlightedToLabels = NULL;
 
-  if (!hasFiltering && highlightedRows.size() == 1) {
-    setAll = contextMenu.addAction(tr("Set all ")  + eltsName + ' ' + tr("values"));
-    toLabels = contextMenu.addAction(tr("Set all values as labels"));
-  }
-  else {
-    QMenu* subMenu = contextMenu.addMenu(tr("Set values of "));
-    setAll = subMenu->addAction(tr("All") + ' ' + eltsName);
+  QMenu* subMenu = contextMenu.addMenu(trUtf8("Set values of "));
+  setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName);
 
-    if (hasFiltering)
-      filteredSetAll = subMenu->addAction(tr("Filtered") + ' ' + eltsName);
+  selectedSetAll = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName);
 
-    if (highlightedRows.size() > 1)
-      highlightedSetAll = subMenu->addAction(tr("Rows highlighted") + ' '
-                                             + eltsName);
+  highlightedSetAll = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(eltId)));
 
-    subMenu = contextMenu.addMenu(tr("Set values as labels of "));
-    toLabels = subMenu->addAction(tr("All") + ' ' + eltsName);
+  subMenu = contextMenu.addMenu(trUtf8("To labels of "));
+  toLabels = subMenu->addAction(trUtf8("All") + ' ' + eltsName);
 
-    if (hasFiltering)
-      filteredToLabels = subMenu->addAction(tr("Filtered") + ' ' + eltsName);
+  selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName);
 
-    if (highlightedRows.size() > 1)
-      highlightedToLabels = subMenu->addAction(tr("Rows highlighted") + ' '
-                            + eltsName);
-  }
+  highlightedToLabels = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(eltId)));
 
   contextMenu.addSeparator();
   action = contextMenu.addAction(highlightedRows.size() > 1 ?
-                                 (tr("Rows highlighted") + ' ' + eltsName) :
+                                 (trUtf8("Rows highlighted") + ' ' + eltsName) :
                                  QString(NODES_DISPLAYED ? "Node #%1" : "Edge #%1").arg(eltId));
   action->setEnabled(false);
   contextMenu.addSeparator();
-  QAction* toggleAction = contextMenu.addAction(tr("Toggle selection"));
-  QAction* selectAction = contextMenu.addAction(tr("Select"));
-  QAction* deleteAction = contextMenu.addAction(tr("Delete"));
-
-  contextMenu.setStyleSheet("QMenu::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+  QAction* toggleAction = contextMenu.addAction(trUtf8("Toggle selection"));
+  QAction* selectAction = contextMenu.addAction(trUtf8("Select"));
+  QAction* deleteAction = contextMenu.addAction(trUtf8("Delete"));
 
   // display the menu with the mouse inside to allow
   // keyboard navigation
@@ -573,9 +580,14 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
     return;
   }
 
-  if (action == setAll || action == filteredSetAll) {
+  if (action == setAll) {
+    setAllValues(graph()->getProperty(propName), false);
+    return;
+  }
+
+  if (action == selectedSetAll) {
     // set values for all rows elts
-    setAllFilteredValue(graph()->getProperty(propName));
+    setAllValues(graph()->getProperty(propName), true);
     return;
   }
 
@@ -585,15 +597,23 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
     return;
   }
 
-  if (action == toLabels || action == filteredToLabels) {
+  if (action == toLabels) {
+    bool nodes = NODES_DISPLAYED;
+    propertiesEditor->toLabels(graph()->getProperty(propName), nodes, !nodes);
+    return;
+  }
+
+  if (action == selectedToLabels) {
     // set values as labels
-    setAllFilteredValue(graph()->getProperty("viewLabel"));
+    bool nodes = NODES_DISPLAYED;
+    propertiesEditor->toLabels(graph()->getProperty(propName), nodes, !nodes,
+			       true);
     return;
   }
 
   if (action == highlightedToLabels) {
     // set values as labels for elts corresponding to highlighted rows
-    setAllHighlightedRows(graph()->getProperty("viewLabel"));
+    setLabelsOfHighlightedRows(graph()->getProperty(propName));
     return;
   }
 }
