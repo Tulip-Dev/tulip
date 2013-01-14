@@ -328,22 +328,24 @@ void TableView::setAllValues(PropertyInterface* prop, bool selectedOnly) {
     TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE,
                                         prop, graph(),
                                         static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
-  
+
   if (selectedOnly) {
     BooleanProperty* selection = graph()->getProperty<BooleanProperty>("viewSelection");
 
     if (NODES_DISPLAYED) {
       node n;
       forEach(n, selection->getNonDefaultValuatedNodes(graph())) {
-	GraphModel::setNodeValue(n.id, prop, val);
+        GraphModel::setNodeValue(n.id, prop, val);
       }
-    } else {
+    }
+    else {
       edge e;
       forEach(e, selection->getNonDefaultValuatedEdges(graph())) {
         GraphModel::setEdgeValue(e.id, prop, val);
       }
     }
-  } else {
+  }
+  else {
     if (NODES_DISPLAYED)
       GraphModel::setAllNodeValue(prop,val);
     else
@@ -443,14 +445,16 @@ void TableView::setLabelsOfHighlightedRows(PropertyInterface *prop) {
   QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
   StringProperty* label = graph()->getProperty<StringProperty>("viewLabel");
+
   for (QList<QModelIndex>::const_iterator itIdx = rows.begin();
        itIdx != rows.end(); ++itIdx) {
     if (NODES_DISPLAYED) {
       node n(itIdx->data(TulipModel::ElementIdRole).toUInt());
       label->setNodeStringValue(n, prop->getNodeStringValue(n));
-    } else {
-	edge e(itIdx->data(TulipModel::ElementIdRole).toUInt());
-	label->setEdgeStringValue(e, prop->getEdgeStringValue(e));
+    }
+    else {
+      edge e(itIdx->data(TulipModel::ElementIdRole).toUInt());
+      label->setEdgeStringValue(e, prop->getEdgeStringValue(e));
     }
   }
 }
@@ -567,7 +571,7 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
     // set values as labels
     bool nodes = NODES_DISPLAYED;
     propertiesEditor->toLabels(graph()->getProperty(propName), nodes, !nodes,
-			       true);
+                               true);
     return;
   }
 
