@@ -34,7 +34,11 @@ template<TYPE>
 %ConvertFromTypeCode
    PyObject *l;
 
-   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+   const sipTypeDef* kpTypeDef = getSipType("TYPE");
+
+   if (!kpTypeDef) {
+       return NULL;
+   }
 
    // Create the Python list of the correct length.
    if ((l = PyList_New(sipCpp -> size())) == NULL) {
@@ -66,7 +70,11 @@ template<TYPE>
 
 %ConvertToTypeCode
 
-   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+   const sipTypeDef* kpTypeDef = getSipType("TYPE");
+
+   if (!kpTypeDef) {
+       return 0;
+   }
 
    // Check if type is compatible
    if (sipIsErr == NULL) {
@@ -115,7 +123,11 @@ template<TYPE*>
 %ConvertFromTypeCode
    PyObject *l;
 
-   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+   const sipTypeDef* kpTypeDef = getSipType("TYPE");
+
+   if (!kpTypeDef) {
+       return NULL;
+   }
 
    // Create the Python list of the correct length.
    if ((l = PyList_New(sipCpp -> size())) == NULL) {
@@ -145,7 +157,11 @@ template<TYPE*>
 
 %ConvertToTypeCode
 
-   const sipTypeDef* kpTypeDef = sipFindType("TYPE");
+   const sipTypeDef* kpTypeDef = getSipType("TYPE");
+
+   if (!kpTypeDef) {
+       return 0;
+   }
 
    // Check if type is compatible
    if (sipIsErr == NULL) {

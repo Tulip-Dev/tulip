@@ -27,8 +27,17 @@ template<T1, T2>
 	PyObject *itm1 = NULL;
 	PyObject *itm2 = NULL;
 	
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return 0;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return 0;
+    }
 
 	if (sipIsErr == NULL) {
 		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
@@ -73,13 +82,22 @@ template<T1, T2>
 
 %ConvertFromTypeCode
 
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return NULL;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return NULL;
+    }
 
 	PyObject *pyTuple = PyTuple_New(2);
 	
 	if (pyTuple == NULL) {
-		return 0;
+        return NULL;
 	}
 	
 	PyObject *pyFirst = NULL;
@@ -102,14 +120,14 @@ template<T1, T2>
 			delete second;
 		Py_XDECREF(pyTuple);
 		
-		return 0;
+        return NULL;
 	}
 	
 	if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
 		Py_XDECREF(pySecond);
 		Py_XDECREF(pyTuple);
 		
-		return 0;
+        return NULL;
 	}
 	
 	return pyTuple;
@@ -126,8 +144,17 @@ template<T1*, T2*>
 	PyObject *itm1 = NULL;
 	PyObject *itm2 = NULL;
 	
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return 0;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return 0;
+    }
 
 	if (sipIsErr == NULL) {
 		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
@@ -176,11 +203,20 @@ template<T1*, T2*>
 %ConvertFromTypeCode
 	PyObject *pyTuple = PyTuple_New(2);
 
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return NULL;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return NULL;
+    }
 	
 	if (pyTuple == NULL) {
-		return 0;
+        return NULL;
 	}
 	
 	PyObject *pyFirst = NULL;
@@ -199,14 +235,14 @@ template<T1*, T2*>
 			Py_XDECREF(pySecond);
 		Py_XDECREF(pyTuple);
 		
-		return 0;
+        return NULL;
 	}
 	
 	if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
 		Py_XDECREF(pySecond);
 		Py_XDECREF(pyTuple);
 		
-		return 0;
+        return NULL;
 	}
 	
 	return pyTuple;
@@ -223,8 +259,17 @@ template<T1*, T2>
 	PyObject *itm1 = NULL;	
 	PyObject *itm2 = NULL;
 
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return 0;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return 0;
+    }
 
 	if (sipIsErr == NULL) {
 		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
@@ -272,11 +317,20 @@ template<T1*, T2>
 %ConvertFromTypeCode
 	PyObject *pyTuple = PyTuple_New(2);
 	
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return NULL;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return NULL;
+    }
 
 	if (pyTuple == NULL) {
-		return 0;
+        return NULL;
 	}
 	
 	PyObject *pyFirst = NULL;
@@ -297,13 +351,13 @@ template<T1*, T2>
 			delete second;
 		Py_XDECREF(pyTuple);
 		
-		return 0;
+        return NULL;
 	}
 	
 	if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
 		Py_XDECREF(pySecond);
 		Py_XDECREF(pyTuple);
-		return 0;
+        return NULL;
 	}
 	
 	return pyTuple;
@@ -320,8 +374,17 @@ template<T1, T2*>
 	PyObject *itm1 = NULL;
 	PyObject *itm2 = NULL;
 	
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return 0;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return 0;
+    }
 
 	if (sipIsErr == NULL) {
 		if (!(PyTuple_Check(sipPy) && PyTuple_Size(sipPy) == 2))
@@ -369,11 +432,20 @@ template<T1, T2*>
 %ConvertFromTypeCode
 	PyObject *pyTuple = PyTuple_New(2);
 	
-    const sipTypeDef* kpTypeDef1 = sipFindType("T1");
-    const sipTypeDef* kpTypeDef2 = sipFindType("T2");
+    const sipTypeDef* kpTypeDef1 = getSipType("T1");
+
+    if (!kpTypeDef1) {
+        return NULL;
+    }
+
+    const sipTypeDef* kpTypeDef2 = getSipType("T2");
+
+    if (!kpTypeDef2) {
+        return NULL;
+    }
 
 	if (pyTuple == NULL) {
-		return 0;
+        return NULL;
 	}
 	
 	PyObject *pyFirst = NULL;
@@ -394,14 +466,14 @@ template<T1, T2*>
 			Py_XDECREF(pySecond);
 		Py_XDECREF(pyTuple);
 		
-		return 0;
+        return NULL;
 	}
 	
 	if (PyTuple_SetItem(pyTuple, 1, pySecond)) {
 		Py_XDECREF(pySecond);
 		Py_XDECREF(pyTuple);
 		
-		return 0;
+        return NULL;
 	}
 	
 	return pyTuple;
