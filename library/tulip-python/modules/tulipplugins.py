@@ -64,13 +64,31 @@ def runPlugin(plugin):
     setProcessQtEvents(False)
     return ret
 
+def importGraph(plugin):
+    setProcessQtEvents(True)
+    ret = plugin.real_importGraph()
+    setProcessQtEvents(False)
+    return ret
+
+def exportGraph(plugin, os):
+    setProcessQtEvents(True)
+    ret = plugin.real_exportGraph(os)
+    setProcessQtEvents(False)
+    return ret
+
 def createPlugin(context, pluginModule, pluginClassName, pluginName, author, date, info, release, group):
     globals()[pluginModule] = __import__(pluginModule, globals(), locals(), [], -1)
 
     plugin = eval(pluginModule + "." + pluginClassName + "(context)", globals(), locals())
-    if plugin.run:
+    if hasattr(plugin, "run"):
         plugin.real_run = plugin.run
         plugin.run = lambda : runPlugin(plugin)
+    elif hasattr(plugin, "importGraph"):
+        plugin.real_importGraph = plugin.importGraph
+        plugin.importGraph = lambda : importGraph(plugin)
+    elif hasattr(plugin, "exportGraph"):
+        plugin.real_exportGraph = plugin.exportGraph
+        plugin.exportGraph = lambda os : exportGraph(plugin, os)
     plugin.name = lambda : pluginName
     plugin.group = lambda : group
     plugin.date = lambda : date
