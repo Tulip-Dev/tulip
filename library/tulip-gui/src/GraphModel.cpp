@@ -519,9 +519,21 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
     unsigned int id = e.first;
 
     if (add) {
-      beginInsertRows(QModelIndex(),_elements.size(),_elements.size());
-      _elements.push_back(id);
-      endInsertRows();
+      if (id > (unsigned int) _elements.size()) {
+	beginInsertRows(QModelIndex(),_elements.size(),_elements.size());
+	_elements.push_back(id);
+	endInsertRows();
+      } else {
+	// insert according to id
+	// to ensure that deleted elements are re-inserted at the
+	// same place on undo (graph->pop())
+	unsigned int idx = id;
+	while(idx && _elements[idx - 1] > id)
+	  --idx;
+	beginInsertRows(QModelIndex(), idx, idx);
+	_elements.insert(idx, id);
+	endInsertRows();
+      }
     }
     else {
       int index = _elements.indexOf(id);
