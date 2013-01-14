@@ -54,7 +54,7 @@ public:
 
   void setPropertyChecked(int index, bool state);
   void toLabels(tlp::PropertyInterface* prop,
-		bool nodes, bool edges, bool selectedOnly = false);
+                bool nodes, bool edges, bool selectedOnly = false);
 
   tlp::PropertyInterface* contextProperty() const;
 signals:

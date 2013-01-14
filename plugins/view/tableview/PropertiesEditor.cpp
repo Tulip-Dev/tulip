@@ -88,39 +88,52 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   bool enabled = (pname != "viewLabel");
   QMenu* subMenu = menu.addMenu(trUtf8("To labels of"));
   QAction* action = subMenu->addAction(trUtf8("All"));
+
   if (enabled)
     connect(action,SIGNAL(triggered()),this,SLOT(toLabels()));
   else
     action->setEnabled(false);
+
   action = subMenu->addAction(trUtf8("All nodes"));
+
   if (enabled)
     connect(action,SIGNAL(triggered()),this,SLOT(toNodesLabels()));
   else
     action->setEnabled(false);
+
   action = subMenu->addAction(trUtf8("All edges"));
+
   if (enabled)
     connect(action,SIGNAL(triggered()),this,SLOT(toEdgesLabels()));
   else
     action->setEnabled(false);
+
   action = subMenu->addAction(trUtf8("All selected"));
+
   if (enabled)
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedLabels()));
   else
     action->setEnabled(false);
+
   action = subMenu->addAction(trUtf8("Selected nodes"));
+
   if (enabled)
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedNodesLabels()));
   else
     action->setEnabled(false);
+
   action = subMenu->addAction(trUtf8("Selected edges"));
+
   if (enabled)
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedEdgesLabels()));
   else
     action->setEnabled(false);
+
   menu.addSeparator();
-    connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
-    connect(menu.addAction(trUtf8("New")),SIGNAL(triggered()),this,SLOT(newProperty()));
+  connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
+  connect(menu.addAction(trUtf8("New")),SIGNAL(triggered()),this,SLOT(newProperty()));
   enabled = true;
+
   if (Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str())) {
     // Enable deletion of reserved properties when on a subgraph and that properties are local
     if (_graph == _graph->getRoot() || !_graph->existLocalProperty(_contextProperty->getName()))
@@ -250,9 +263,10 @@ void PropertiesEditor::toLabels(PropertyInterface* prop, bool nodes, bool edges,
   data.set("nodes",nodes);
   data.set("edges",edges);
   data.set("input", prop);
+
   if (selectedOnly)
     data.set("selection", _graph->getProperty<BooleanProperty>("viewSelection"));
-    
+
   std::string msg;
   // _graph->push() must be done outside of this method
   // to allow call from TabelView.cpp
