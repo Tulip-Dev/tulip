@@ -67,10 +67,11 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
 
 void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   _contextProperty = _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface*>();
-  _contextPropertyList.clear(); 	 
+  _contextPropertyList.clear();
   foreach(QModelIndex sidx, _ui->tableView->selectionModel()->selectedRows()) {
-    _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface*>(); 	 
+    _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface*>();
   }
+
   if (_contextProperty == NULL)
     return;
 
@@ -150,16 +151,18 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   if (enabled && _contextPropertyList.size() > 1) {
     foreach(PropertyInterface* pi, _contextPropertyList) {
       if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str())
-	  && (_graph == _graph->getRoot() || !_graph->existLocalProperty(pi->getName()))) {
-	enabled = false;
-	break;
+          && (_graph == _graph->getRoot() || !_graph->existLocalProperty(pi->getName()))) {
+        enabled = false;
+        break;
       }
     }
+
     if (enabled) {
       menu.addAction(trUtf8("Highlighted properties"))->setEnabled(false);
       connect(menu.addAction(trUtf8("Delete")),SIGNAL(triggered()),this,SLOT(delProperties()));
     }
   }
+
   menu.exec(QCursor::pos());
 }
 
@@ -247,7 +250,7 @@ void PropertiesEditor::delProperty() {
 void PropertiesEditor::delProperties() {
   _graph->push();
   foreach(PropertyInterface* pi, _contextPropertyList)
-    pi->getGraph()->delLocalProperty(pi->getName());
+  pi->getGraph()->delLocalProperty(pi->getName());
 }
 
 void PropertiesEditor::toLabels() {
