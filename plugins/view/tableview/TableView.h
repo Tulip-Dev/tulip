@@ -41,6 +41,7 @@ class TableView : public tlp::ViewWidget {
   Ui::TableViewWidget* _ui;
   PropertiesEditor* propertiesEditor;
   tlp::GraphModel* _model;
+  bool isNewGraph;
 
 public:
   PLUGININFORMATIONS("Spreadsheet","Tulip Team","04/17/2012","Spreadsheet view for raw data","4.0","")

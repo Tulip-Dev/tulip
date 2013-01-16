@@ -34,7 +34,7 @@
 
 using namespace tlp;
 
-TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), _model(NULL) {
+TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), _model(NULL), isNewGraph(false) {
   propertiesEditor = new PropertiesEditor();
 }
 
@@ -90,8 +90,6 @@ void TableView::setState(const tlp::DataSet& data) {
     r=0;
 
   _ui->filteringPropertyCombo->setCurrentIndex(r);
-
-  readSettings();
 }
 
 bool TableView::eventFilter(QObject* obj, QEvent* event) {
@@ -147,6 +145,7 @@ QList<QWidget*> TableView::configurationWidgets() const {
 
 
 void TableView::graphChanged(tlp::Graph* g) {
+  isNewGraph = true;
   QSet<QString> visibleProperties;
   foreach(tlp::PropertyInterface* pi, propertiesEditor->visibleProperties()) {
     visibleProperties.insert(pi->getName().c_str());
@@ -173,6 +172,7 @@ void TableView::graphChanged(tlp::Graph* g) {
       propertiesEditor->setPropertyChecked(i, checked);
     }
   }
+  isNewGraph = false;
 }
 
 void TableView::graphDeleted() {
@@ -180,7 +180,7 @@ void TableView::graphDeleted() {
 }
 
 void TableView::readSettings() {
-  if ( ((_ui->eltTypeCombo->currentIndex() == 0) && dynamic_cast<NodesGraphModel*>(_model) == NULL) ||
+  if ( isNewGraph || ((_ui->eltTypeCombo->currentIndex() == 0) && dynamic_cast<NodesGraphModel*>(_model) == NULL) ||
        ((_ui->eltTypeCombo->currentIndex() == 1) && dynamic_cast<EdgesGraphModel*>(_model) == NULL)) {
     _ui->table->setModel(NULL);
 
