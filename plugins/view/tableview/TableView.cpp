@@ -172,6 +172,7 @@ void TableView::graphChanged(tlp::Graph* g) {
       propertiesEditor->setPropertyChecked(i, checked);
     }
   }
+
   isNewGraph = false;
 }
 
