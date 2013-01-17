@@ -782,6 +782,86 @@ background-color: rgb(160, 160, 160);</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>labelsFitCheck</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>SceneConfigWidget</receiver>
+   <slot>settingsChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>128</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelsOrderingCombo</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>SceneConfigWidget</receiver>
+   <slot>settingsChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>158</x>
+     <y>100</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelsDensitySlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>SceneConfigWidget</receiver>
+   <slot>settingsChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>207</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelSizesSpanSlider</sender>
+   <signal>lowerValueChanged(int)</signal>
+   <receiver>SceneConfigWidget</receiver>
+   <slot>settingsChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>270</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelSizesSpanSlider</sender>
+   <signal>upperValueChanged(int)</signal>
+   <receiver>SceneConfigWidget</receiver>
+   <slot>settingsChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>270</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>settingsChanged()</slot>
