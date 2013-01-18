@@ -249,20 +249,23 @@ void AlgorithmRunnerItem::run(Graph *g) {
     dataSet.get(desc.getName(), outPropParam.dest);
     // clone it in a not registered (because unnamed)
     // temporary property
-    outPropParam.tmp =
-      outPropParam.dest->clonePrototype(outPropParam.dest->getGraph(), "");
-
+    outPropParam.tmp = outPropParam.dest ?
+      outPropParam.dest->clonePrototype(outPropParam.dest->getGraph(), "") :
+      NULL;
     // set the temporary as the destination property
     dataSet.set(desc.getName(), outPropParam.tmp);
-    outPropertyParams.push_back(outPropParam);
+      
+    if (outPropParam.tmp) {
+      outPropertyParams.push_back(outPropParam);
 
-    if (desc.getDirection() == OUT_PARAM) {
-      outPropParam.tmp->setAllNodeDataMemValue(outPropParam.dest->getNodeDefaultDataMemValue());
-      outPropParam.tmp->setAllEdgeDataMemValue(outPropParam.dest->getEdgeDefaultDataMemValue());
+      if (desc.getDirection() == OUT_PARAM) {
+	outPropParam.tmp->setAllNodeDataMemValue(outPropParam.dest->getNodeDefaultDataMemValue());
+	outPropParam.tmp->setAllEdgeDataMemValue(outPropParam.dest->getEdgeDefaultDataMemValue());
+      }
+      else
+	// inout property
+	outPropParam.tmp->copy(outPropParam.dest);
     }
-    else
-      // inout property
-      outPropParam.tmp->copy(outPropParam.dest);
   }
 
   g->push();
