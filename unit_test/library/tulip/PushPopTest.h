@@ -36,6 +36,7 @@ class PushPopTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testSubgraph);
   CPPUNIT_TEST(testPushAddSubgraphsPop);
   CPPUNIT_TEST(testDelSubgraph);
+  CPPUNIT_TEST(testDelAllSgPopUnpop);
   CPPUNIT_TEST(testTests);
   CPPUNIT_TEST(testAddDelProps);
   CPPUNIT_TEST(testObserveDelProps);
@@ -58,6 +59,7 @@ public:
   void testSubgraph();
   void testPushAddSubgraphsPop();
   void testDelSubgraph();
+  void testDelAllSgPopUnpop();
   void testTests();
   void testAddDelProps();
   void testObserveDelProps();

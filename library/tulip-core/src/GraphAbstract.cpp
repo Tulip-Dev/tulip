@@ -143,8 +143,6 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
     // remove from subgraphs
     notifyBeforeDelSubGraph(toRemove);
     subgraphs.erase(it);
-    notifyAfterDelSubGraph(toRemove);
-
     Iterator<Graph *> *itS = toRemove->getSubGraphs();
 
     // add toRemove subgraphs
@@ -153,6 +151,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
     }
 
     delete itS;
+    notifyAfterDelSubGraph(toRemove);
 
     // subGraphToKeep may have change on notifyDelSubGraph
     // see GraphUpdatesRecorder::delSubGraph
