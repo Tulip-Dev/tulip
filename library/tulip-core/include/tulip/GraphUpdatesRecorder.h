@@ -138,10 +138,10 @@ class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver, publi
   // copy of nodes/edges id manager state at stop time
   const GraphStorageIdsMemento* newIdsState;
 
-  // one set of added sub graphs per graph
-  TLP_HASH_MAP<Graph*, std::set<Graph*> > addedSubGraphs;
-  // one set of deleted sub graphs per graph
-  TLP_HASH_MAP<Graph*, std::set<Graph*> > deletedSubGraphs;
+  // one list of (parent graph, added sub-graph)
+  std::list<std::pair<Graph*, Graph*> > addedSubGraphs;
+  // one list of (parent graph, deleted sub-graph)
+  std::list<std::pair<Graph*, Graph*> > deletedSubGraphs;
 
   // one set of added properties per graph
   TLP_HASH_MAP<Graph*,  std::set<PropertyRecord> > addedProperties;

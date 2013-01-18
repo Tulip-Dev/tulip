@@ -837,6 +837,47 @@ void PushPopTest::testDelSubgraph() {
   CPPUNIT_ASSERT(graph->getNthSubGraph(2) == g4);
 }
 
+static void createSubgraphs(Graph *graph, int m, int n) {
+    if (n == 0)
+        return;
+    for (int i = 0 ; i < m ; ++i) {
+        Graph *sg = graph->addCloneSubGraph();
+        createSubgraphs(sg, m, n-1);
+    }
+}
+
+void PushPopTest::testDelAllSgPopUnpop() {
+    // create a hierarchy of sub-graphs
+    // the hierachy has 3 levels with 4 sub-graph per level
+    createSubgraphs(graph, 4, 3);
+
+    // We should have 4 subgraphs for the root graph
+    CPPUNIT_ASSERT(graph->numberOfSubGraphs()==4);
+
+    graph->push();
+
+    Graph *sg = graph->getNthSubGraph(3);
+    graph->delAllSubGraphs(sg);
+
+    // We should have 3 subgraphs for the root graph
+    CPPUNIT_ASSERT(graph->numberOfSubGraphs()==3);
+
+    graph->pop();
+
+    // We should have 4 subgraphs for the root graph
+    CPPUNIT_ASSERT(graph->numberOfSubGraphs()==4);
+
+    graph->unpop();
+
+    // need to grab the value and pop otherwise segfault when tearing down
+    unsigned int nbSg = graph->numberOfSubGraphs();
+    graph->pop();
+
+    // We should have 3 subgraphs for the root graph before the last call to pop
+    CPPUNIT_ASSERT(nbSg==3);
+}
+
+
 void PushPopTest::testTests() {
   node n0 = graph->addNode();
   node n1 = graph->addNode();
