@@ -247,7 +247,7 @@ between two nodes of the set including self-loops.
 
 //===========================================================================================
 
-	void delSubGraph(tlp::Graph *subgraph);
+    void delSubGraph(tlp::Graph *subgraph);
 %Docstring
 tlp.Graph.delSubGraph(subgraph)
 
@@ -258,20 +258,29 @@ Delete a sub-graph of this graph. The sub-graph's sub-graphs become sub-graphs o
 %End
 
 %MethodCode
-    // the sub-graph will be deleted after the call to tlp::Graph::delSubGraph(tlp::Graph *)
-    // we need to release the SIP wrapper associated to the C++ pointer otherwise the following
-    // Python code raises a segmentation fault :
-    // sg = graph.addSubGraph()
-    // graph.delSubGraph(sg)
-    // print sg # or any operation on sg
-    // An execption is now thrown claiming that the underlying C++ object has been deleted
-    releaseGraphWrapper(a0);
-    sipCpp->delSubGraph(a0);
+    if (!a0) {
+        PyErr_SetString(PyExc_TypeError, "Graph.delSubGraph(): argument 1 has unexpected type 'NoneType'");
+        sipIsErr = 1;
+    } else {
+        if (a0->getSuperGraph() != sipCpp) {
+            sipIsErr = throwInvalidSgException(sipCpp, a0);
+        } else {
+            // the sub-graph will be deleted after the call to tlp::Graph::delSubGraph(tlp::Graph *)
+            // we need to release the SIP wrapper associated to the C++ pointer otherwise the following
+            // Python code raises a segmentation fault :
+            // sg = graph.addSubGraph()
+            // graph.delSubGraph(sg)
+            // print sg # or any operation on sg
+            // An exception is now thrown claiming that the underlying C++ object has been deleted
+            releaseGraphWrapper(a0);
+            sipCpp->delSubGraph(a0);
+        }
+    }
 %End
 
 //===========================================================================================
 
-	void delAllSubGraphs(tlp::Graph *subgraph);
+    void delAllSubGraphs(tlp::Graph *subgraph);
 %Docstring
 tlp.Graph.delAllSubGraphs(subgraph)
 
@@ -282,16 +291,26 @@ Delete a sub-graph of this graph and all its sub-graphs.
 %End
 
 %MethodCode
-    // the sub-graphs will be deleted after the call to tlp::Graph::delAllSubGraphs(tlp::Graph *)
-    // we need to release the possible SIP wrappers associated to the C++ pointers otherwise the following
-    // Python code raises a segmentation fault :
-    // sg = graph.addSubGraph()
-    // sg2 = sg.addSubGraph()
-    // graph.delAllSubGraphs(sg2)
-    // print sg2 # or any operation on sg2
-    // An execption is now thrown claiming that the underlying C++ object has been deleted
-    releaseGraphHierarchyWrappers(a0);
-    sipCpp->delAllSubGraphs(a0);
+
+    if (!a0) {
+        PyErr_SetString(PyExc_TypeError, "Graph.delAllSubGraphs(): argument 1 has unexpected type 'NoneType'");
+        sipIsErr = 1;
+    } else {
+        if (a0->getSuperGraph() != sipCpp) {
+            sipIsErr = throwInvalidSgException(sipCpp, a0);
+        } else {
+            // the sub-graphs will be deleted after the call to tlp::Graph::delAllSubGraphs(tlp::Graph *)
+            // we need to release the possible SIP wrappers associated to the C++ pointers otherwise the following
+            // Python code raises a segmentation fault :
+            // sg = graph.addSubGraph()
+            // sg2 = sg.addSubGraph()
+            // graph.delAllSubGraphs(sg2)
+            // print sg2 # or any operation on sg2
+            // An exception is now thrown claiming that the underlying C++ object has been deleted
+            releaseGraphHierarchyWrappers(a0);
+            sipCpp->delAllSubGraphs(a0);
+        }
+    }
 %End
 
 //===========================================================================================
@@ -346,7 +365,7 @@ Returns an iterator on all the sub-graphs of the graph.
 
 //===========================================================================================
 
-	bool isSubGraph(tlp::Graph* graph) const;
+    bool isSubGraph(tlp::Graph* graph) const;
 %Docstring
 tlp.Graph.isSubGraph(graph)
 
@@ -359,7 +378,7 @@ Returns :const:`True` if the graph argument is a direct sub-graph of the graph.
 
 //===========================================================================================
 
-	bool isDescendantGraph(tlp::Graph* graph) const;
+    bool isDescendantGraph(tlp::Graph* graph) const;
 %Docstring
 tlp.Graph.isDescendantGraph(graph)
 
