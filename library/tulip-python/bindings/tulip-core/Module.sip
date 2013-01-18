@@ -101,6 +101,8 @@ extern int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n);
 
 extern int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e);
 
+extern int throwInvalidSgException(const tlp::Graph *graph, const tlp::Graph *sg);
+
 extern void printErrorMessage(const std::string &errMsg);
 
 extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
@@ -113,22 +115,24 @@ extern const sipTypeDef *getSipType(const char *sipTypename);
 
 int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n) {
     std::ostringstream oss;
-    std::string graphName;
-    graph->getAttribute("name", graphName);
-    oss << "Node with id " << n.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+    oss << "Node with id " << n.id << " does not belong to graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
     PyErr_SetString(PyExc_Exception, oss.str().c_str());
     return -1;
 }
 
 int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e) {
     std::ostringstream oss;
-    std::string graphName;
-    graph->getAttribute("name", graphName);
-    oss << "Edge with id " << e.id << " does not belong to graph \"" << graphName <<"\" (id " << graph->getId() <<")";
+    oss << "Edge with id " << e.id << " does not belong to graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
     PyErr_SetString(PyExc_Exception, oss.str().c_str());
     return -1;
 }
 
+int throwInvalidSgException(const tlp::Graph *graph, const tlp::Graph *sg) {
+    std::ostringstream oss;
+    oss << "Graph \"" << sg->getName() <<"\" (id " << sg->getId() <<") is not a sub-graph of graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
+    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+    return -1;
+}
 
 void printErrorMessage(const std::string &errMsg) {
     std::string pythonCode = "import sys\n"
