@@ -1,9 +1,10 @@
+#include <tulip/PythonInterpreter.h>
+
 #include "PythonPanel.h"
 #include "ui_PythonPanel.h"
 #include "OutputPanelButton.h"
 
 #include <tulip/GraphHierarchiesModel.h>
-#include <tulip/PythonInterpreter.h>
 
 #include <QtCore/QPropertyAnimation>
 

@@ -116,7 +116,7 @@ class Graph : tlp::Observable /Abstract/ {
 %End
 
 %TypeCode
-#include <PythonCppTypesConverter.h>
+#include <tulip/PythonCppTypesConverter.h>
 %End
 
 %Docstring

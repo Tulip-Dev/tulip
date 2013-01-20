@@ -1,5 +1,6 @@
 /**
  *
+ *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
@@ -16,6 +17,9 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#include <tulip/PythonInterpreter.h>
+
 #include "GraphPerspective.h"
 
 #include <QtGui/QMessageBox>
@@ -23,6 +27,8 @@
 #include <QtGui/QCloseEvent>
 #include <QtGui/QMessageBox>
 #include <QtGui/QClipboard>
+
+
 #include <QtGui/QDropEvent>
 #include <QtCore/QUrl>
 
@@ -42,7 +48,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginLister.h>
-#include <tulip/PythonInterpreter.h>
+
 #include <tulip/APIDataBase.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"

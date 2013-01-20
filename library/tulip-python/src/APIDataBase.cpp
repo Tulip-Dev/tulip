@@ -17,6 +17,8 @@
  *
  */
 
+#include <tulip/PythonInterpreter.h>
+
 #include <QtCore/QFile>
 #include <QtCore/QList>
 #include <QtCore/QStringList>
@@ -24,7 +26,6 @@
 #include <QtCore/QTextStream>
 
 #include <tulip/TlpTools.h>
-#include <tulip/PythonInterpreter.h>
 
 using namespace tlp;
 

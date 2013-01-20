@@ -17,7 +17,6 @@
  *
  */
 
-#include "PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 
 #include <tulip/PluginLister.h>
@@ -153,7 +152,7 @@ inittuliputils(void) {
   PyObject *m = PyModule_Create(&tulipUtilsModuleDef);
   _PyImport_FixupBuiltin(m, const_cast<char *>("tuliputils"));
 #else
-  PyObject *m = Py_InitModule("tuliputils", tulipUtilsMethods);
+  Py_InitModule("tuliputils", tulipUtilsMethods);
   _PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
 #endif
 }

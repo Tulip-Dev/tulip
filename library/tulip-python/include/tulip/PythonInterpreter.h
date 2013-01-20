@@ -39,13 +39,15 @@
 #ifndef PYTHONINTERPRETER_H_
 #define PYTHONINTERPRETER_H_
 
+#include <tulip/PythonIncludes.h>
+#include <tulip/PythonCppTypesConverter.h>
+#include <tulip/Graph.h>
+
 #include <QtGui/QDialog>
 #include <QtGui/QPlainTextEdit>
 #include <QtCore/QDir>
 #include <QtCore/QVector>
 #include <QtCore/QSet>
-
-#include <tulip/Graph.h>
 
 namespace tlp {
 
@@ -184,6 +186,8 @@ public :
   void sendOutputToConsole(const QString &output, bool stdErr);
 
 };
+
+#include "PythonInterpreter.cxx"
 
 }
 

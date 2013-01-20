@@ -17,6 +17,10 @@
  *
  */
 
+#include "tulip/PythonInterpreter.h"
+#include "tulip/AutoCompletionDataBase.h"
+#include "tulip/APIDataBase.h"
+
 #include <QtCore/QTextStream>
 #include <QtCore/QRegExp>
 #include <QtCore/QStringList>
@@ -26,10 +30,6 @@
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
-
-#include "tulip/AutoCompletionDataBase.h"
-#include "tulip/PythonInterpreter.h"
-#include "tulip/APIDataBase.h"
 
 using namespace std;
 using namespace tlp;
