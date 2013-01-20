@@ -155,7 +155,7 @@ bool GlTextureManager::loadTexture(const string& filename) {
   if (texturesMap[currentContext].find(filename) != texturesMap[currentContext].end())
     return true;
 
-  QImage image(filename.c_str());
+  QImage image(QString::fromUtf8(filename.c_str()));
   GlTexture texture;
 
   loadTextureFromQImage(image,texture);
