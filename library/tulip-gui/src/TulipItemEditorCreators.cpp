@@ -237,7 +237,7 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant&
   if (desc.absolutePath.isEmpty())
     path = QDir::currentPath();
   else
-    path = QFileInfo(desc.absolutePath).absolutePath();
+      path = QFileInfo(desc.absolutePath).absolutePath();
 
   dlg->setDirectory(path);
 
@@ -292,7 +292,8 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOpti
     painter->setBrush(option.palette.text());
   }
 
-  painter->drawText(textXPos, rect.y() + 2, rect.width() - textXPos, rect.height()-4,Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, QFileInfo(fileDesc.absolutePath).fileName());
+
+  painter->drawText(textXPos, rect.y() + 2, rect.width() - (textXPos - rect.x()), rect.height()-4,Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, QFileInfo(fileDesc.absolutePath).fileName());
 
   return true;
 }

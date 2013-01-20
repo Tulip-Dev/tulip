@@ -51,7 +51,7 @@ void SimplePluginProgressWidget::checkLastUpdate() {
 }
 
 void SimplePluginProgressWidget::setComment(const std::string& s) {
-  setComment(QString(s.c_str()));
+  setComment(QString::fromUtf8(s.c_str()));
 }
 
 void SimplePluginProgressWidget::setComment(const QString &s) {
@@ -60,7 +60,7 @@ void SimplePluginProgressWidget::setComment(const QString &s) {
 }
 
 void SimplePluginProgressWidget::setComment(const char *s) {
-  setComment(std::string(s));
+  setComment(QString::fromUtf8(s));
 }
 
 ProgressState SimplePluginProgressWidget::progress(int step, int max_step) {
