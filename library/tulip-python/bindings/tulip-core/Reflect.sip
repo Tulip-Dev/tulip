@@ -30,7 +30,7 @@ namespace tlp {
 struct DataSet {
 
 %TypeCode
-#include <PythonCppTypesConverter.h>
+#include <tulip/PythonCppTypesConverter.h>
 %End
 
 %Docstring

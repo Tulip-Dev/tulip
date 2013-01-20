@@ -156,6 +156,8 @@ public:
   bool convert(PyObject *pyObject, T *&cppObject) {
     std::string className = demangleClassName(typeid(T).name());
 
+
+
     const sipTypeDef* kTypeDef = sipFindType(className.c_str());
 
     if (kTypeDef && sipCanConvertToType(pyObject, kTypeDef, SIP_NOT_NONE)) {
@@ -435,6 +437,7 @@ static PyObject *getPyObjectFromDataType(const tlp::DataType *dataType) {
   CHECK_CPP_TYPE_CONVERSION(tlp::node)
   CHECK_CPP_TYPE_CONVERSION(tlp::edge)
   CHECK_CPP_TYPE_CONVERSION(tlp::Graph*)
+  CHECK_CPP_TYPE_CONVERSION(tlp::PluginProgress*)
   CHECK_CPP_TYPE_CONVERSION(tlp::DataSet)
   CHECK_CPP_TYPE_CONVERSION(tlp::Coord)
   CHECK_CPP_TYPE_CONVERSION(tlp::Color)

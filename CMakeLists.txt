@@ -271,7 +271,7 @@ SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogl/include/)
 SET(TulipOGDFInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogdf/)
 SET(TulipGUIInclude ${PROJECT_SOURCE_DIR}/library/tulip-gui/include/)
 SET(TulipGUIBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-gui/include/)
-SET(TulipPythonInclude ${PROJECT_SOURCE_DIR}/library/tulip-python/include)
+SET(TulipPythonInclude ${PROJECT_SOURCE_DIR}/library/tulip-python/include ${SIP_INCLUDE_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 
 ## ========================================================
 ## Install paths

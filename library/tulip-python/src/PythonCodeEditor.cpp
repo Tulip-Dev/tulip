@@ -17,6 +17,11 @@
  *
  */
 
+#include "tulip/PythonInterpreter.h"
+#include "tulip/PythonCodeEditor.h"
+#include "tulip/PythonCodeHighlighter.h"
+#include "tulip/ParenMatcherHighlighter.h"
+
 #include <QtGui/QPainter>
 #include <QtGui/QTextBlock>
 #include <QtGui/QApplication>
@@ -25,10 +30,6 @@
 #include <QtGui/QScrollBar>
 #include <QtGui/QMessageBox>
 
-#include "tulip/PythonInterpreter.h"
-#include "tulip/PythonCodeEditor.h"
-#include "tulip/PythonCodeHighlighter.h"
-#include "tulip/ParenMatcherHighlighter.h"
 
 #include "ui_FindReplaceDialog.h"
 

@@ -115,6 +115,12 @@ static const sipAPIDef *getSipAPI() {
 
 static const sipAPIDef *sipAPI = NULL;
 
+static void initSipAPI() {
+    if (!sipAPI) {
+        sipAPI = getSipAPI();
+    }
+}
+
 #define sipMalloc                   sipAPI->api_malloc
 #define sipFree                     sipAPI->api_free
 #define sipBuildResult              sipAPI->api_build_result

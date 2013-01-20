@@ -17,7 +17,8 @@
  *
  */
 
-
+#include <tulip/PythonInterpreter.h>
+#include <tulip/PythonCodeEditor.h>
 
 #include <QtCore/QFile>
 #include <QtGui/QToolBar>
@@ -25,8 +26,7 @@
 #include <QtGui/QTextBlock>
 #include <QtWebKit/QWebView>
 
-#include <tulip/PythonInterpreter.h>
-#include <tulip/PythonCodeEditor.h>
+
 
 #include "PythonScriptViewWidget.h"
 #include "PythonScriptView.h"

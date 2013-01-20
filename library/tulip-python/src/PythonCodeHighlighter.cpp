@@ -17,11 +17,11 @@
  *
  */
 
-#include <QtGui/QTextDocument>
-
-#include "tulip/PythonCodeHighlighter.h"
 #include "tulip/PythonInterpreter.h"
+#include "tulip/PythonCodeHighlighter.h"
 #include "tulip/APIDataBase.h"
+
+#include <QtGui/QTextDocument>
 
 using namespace tlp;
 

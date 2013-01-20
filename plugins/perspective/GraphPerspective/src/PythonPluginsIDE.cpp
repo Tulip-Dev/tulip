@@ -1,10 +1,11 @@
+#include <tulip/PythonInterpreter.h>
+
 #include <QtCore/QFile>
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
 #include <QtGui/QTextBlock>
 #include <QtWebKit/QWebView>
 
-#include <tulip/PythonInterpreter.h>
 #include <tulip/PythonCodeEditor.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipProject.h>

@@ -17,14 +17,8 @@
  *
  */
 
-#include <QtGui/QMessageBox>
-#include <QtGui/QFileDialog>
-#include <QtCore/QTextStream>
-#include <QtCore/QRegExp>
-#include <QtGui/QInputDialog>
-#include <QtGui/QMessageBox>
-
-#include <QtGui/QLabel>
+#include <tulip/PythonInterpreter.h>
+#include <tulip/PythonCodeEditor.h>
 #include <tulip/PythonVersionChecker.h>
 #include <tulip/Graph.h>
 #include <tulip/DoubleProperty.h>
@@ -38,9 +32,16 @@
 #include <tulip/Algorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
-#include <tulip/PythonInterpreter.h>
-#include <tulip/PythonCodeEditor.h>
 #include <tulip/PluginLister.h>
+
+#include <QtGui/QMessageBox>
+#include <QtGui/QFileDialog>
+#include <QtCore/QTextStream>
+#include <QtCore/QRegExp>
+#include <QtGui/QInputDialog>
+#include <QtGui/QMessageBox>
+
+#include <QtGui/QLabel>
 
 #include <sstream>
 
