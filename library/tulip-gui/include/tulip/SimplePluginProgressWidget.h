@@ -52,6 +52,8 @@ public:
   void setComment(const QString &);
   void setComment(const char *);
 
+  void setTitle(const std::string &) {}
+
   tlp::ProgressState progress(int step, int max_step);
 
   void cancel();
@@ -88,6 +90,8 @@ public:
   void setComment(const std::string&);
   void setComment(const QString &);
   void setComment(const char *);
+
+  void setTitle(const std::string &title);
 
   tlp::ProgressState progress(int step, int max_step);
 

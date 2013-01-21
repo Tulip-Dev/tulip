@@ -47,6 +47,8 @@ public:
     _error = error;
   }
   virtual void setComment(const std::string&) {}
+  virtual void setTitle(const std::string&) {}
+
 
 protected:
   virtual void progress_handler(int step, int max_step);

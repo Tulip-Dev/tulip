@@ -162,6 +162,11 @@ void SimplePluginProgressDialog::setComment(const char* s) {
   _progress->setComment(s);
 }
 
+void SimplePluginProgressDialog::setTitle(const std::string &title) {
+  setWindowTitle(QString::fromUtf8(title.c_str()));
+  QApplication::processEvents();
+}
+
 ProgressState SimplePluginProgressDialog::progress(int step, int max_step) {
   PluginProgress::progress(step,max_step);
   return _progress->progress(step,max_step);

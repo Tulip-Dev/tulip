@@ -161,6 +161,15 @@ public:
    **/
   virtual void setComment(const std::string& comment)=0;
 
+  /**
+   * @brief Changes the title of that plugin progress
+   *
+   * @param title the title to set
+   * @return void
+   **/
+  virtual void setTitle(const std::string& title)=0;
+
+
 };
 
 }

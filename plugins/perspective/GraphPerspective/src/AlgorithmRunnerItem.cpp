@@ -272,6 +272,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(true);
   std::string errorMessage;
   PluginProgress* progress = Perspective::instance()->progress();
+  progress->setTitle(algorithm);
 
   // set preview handler if needed
   if (!outPropertyParams.empty())
