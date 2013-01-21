@@ -212,9 +212,10 @@ PythonInterpreter::PythonInterpreter() : _runningScript(false), _defaultConsoleW
   PySys_SetArgv(argc, argv);
 
   importModule("sys");
+#if PY_MAJOR_VERSION < 3
   reloadModule("sys");
   runString("sys.setdefaultencoding('utf-8')");
-
+#endif
 
 #if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString("__main__");
@@ -449,10 +450,6 @@ bool PythonInterpreter::runString(const QString &pythonCode, const QString &scri
 }
 
 
-
-
-
-
 bool PythonInterpreter::callFunction(const QString &module, const QString &function, const tlp::DataSet &parameters) {
   holdGIL();
   bool ok = false;
@@ -466,8 +463,6 @@ bool PythonInterpreter::callFunction(const QString &module, const QString &funct
   releaseGIL();
   return ok;
 }
-
-
 
 
 void PythonInterpreter::addModuleSearchPath(const QString &path, const bool beforeOtherPaths) {
