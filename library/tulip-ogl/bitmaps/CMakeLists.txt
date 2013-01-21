@@ -9,5 +9,6 @@ COMPONENT tulip_ogl)
 
 INSTALL(DIRECTORY
   fonts
+COMPONENT tulip_ogl
 DESTINATION ${TulipBitmapInstallDir}
-COMPONENT tulip_ogl)
+PATTERN ".svn" EXCLUDE)
