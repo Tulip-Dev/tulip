@@ -1,15 +1,23 @@
 from tulip import *
 import facebook
 import tempfile
-import urllib2
+import sys
+if sys.version_info[0] == 3:
+  from urllib.request import urlopen
+else:
+  from urllib2 import urlopen
 import os
 
 def downloadAvatar(url, directory, name):
   ext = url[len(url)-4:]
   fileName = directory+"/"+name+ext
-  if not os.path.isfile(fileName):
-    avatarFile = urllib2.urlopen(url)
-    output = open(fileName,'wb')
+  if sys.version_info[0] < 3:
+    fileNameEnc = fileName.decode(sys.getdefaultencoding()).encode(sys.getfilesystemencoding())
+  else:
+    fileNameEnc = fileName.encode(sys.getfilesystemencoding()) 	
+  if not os.path.isfile(fileNameEnc):
+    avatarFile = urlopen(url)
+    output = open(fileNameEnc,'wb')
     output.write(avatarFile.read())
     output.close()
   return fileName
@@ -71,7 +79,7 @@ def importFacebookGraph(graph, accessToken, pluginProgress, avatarsDlPath):
     
     if len(avatarsDlPath) > 0:
       if pluginProgress:
-	pluginProgress.setComment("Downloading avatar of " + name)
+        pluginProgress.setComment("Downloading avatar of " + name)
       picture = fbGraph.get_object(friend["id"] + "/picture")
       fileName = downloadAvatar(picture["url"], avatarsDlPath, name)
       viewTexture[friendNode] = fileName
@@ -83,7 +91,7 @@ def importFacebookGraph(graph, accessToken, pluginProgress, avatarsDlPath):
     for mfriend in mutualFriends["data"]:
       mfriendNode = friendsMap[str(mfriend["name"])]
       if not graph.existEdge(friendNode, mfriendNode, False).isValid():
-	graph.addEdge(friendNode, mfriendNode)
+        graph.addEdge(friendNode, mfriendNode)
   
   if len(avatarsDlPath) > 0:
     viewShape.setAllNodeValue(tlp.NodeShape.Square)
