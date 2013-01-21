@@ -10,32 +10,32 @@
 #include <QtGui/QWidget>
 
 namespace Ui {
-    class FacebookConnectWidget;
+class FacebookConnectWidget;
 }
 
 class FacebookConnectWidget : public QWidget {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public :
 
-    FacebookConnectWidget(QWidget *parent=0);
+  FacebookConnectWidget(QWidget *parent=0);
 
-    Ui::FacebookConnectWidget *_ui;
+  Ui::FacebookConnectWidget *_ui;
 
-    std::string getAvatarsDlPath() const;
+  std::string getAvatarsDlPath() const;
 
 public slots:
 
-    void pickDirectory();
+  void pickDirectory();
 
-    void activateDownloadPath(bool activate);
+  void activateDownloadPath(bool activate);
 
 };
 
 class FacebookImport : public QObject, public tlp::ImportModule {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public :
 

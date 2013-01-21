@@ -116,9 +116,9 @@ static const sipAPIDef *getSipAPI() {
 static const sipAPIDef *sipAPI = NULL;
 
 static void initSipAPI() {
-    if (!sipAPI) {
-        sipAPI = getSipAPI();
-    }
+  if (!sipAPI) {
+    sipAPI = getSipAPI();
+  }
 }
 
 #define sipMalloc                   sipAPI->api_malloc
