@@ -26,8 +26,18 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/Perspective.h>
 #include <tulip/TulipSettings.h>
-#include "ui_SceneConfigWidget.h"
 #include <tulip/GraphPropertiesModel.h>
+
+// Disable GCC pedantic warnings when including "ui_SceneConfigWidget.h"
+// because it includes qxtspanslider.h which raises a warning
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-pedantic"
+#endif
+#include "ui_SceneConfigWidget.h"
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 using namespace tlp;
 
