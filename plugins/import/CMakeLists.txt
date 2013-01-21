@@ -90,6 +90,9 @@ ADD_LIBRARY(GEXFImport-${TulipVersion} SHARED GEXFImport.cpp)
 TARGET_LINK_LIBRARIES(GEXFImport-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_SUBDIRECTORY(facebook)
+
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS PlanarGraph-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PlanarGraph)
 INSTALL(TARGETS DotImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT DotImport)
 INSTALL(TARGETS Grid-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Grid)
