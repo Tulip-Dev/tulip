@@ -112,9 +112,9 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
   if (what == PyTrace_LINE) {
     if (!scriptPaused && timer.elapsed() >= 50) {
-        if (processQtEvents && QApplication::hasPendingEvents())  {
-            QApplication::processEvents();
-        }
+      if (processQtEvents && QApplication::hasPendingEvents())  {
+        QApplication::processEvents();
+      }
 
       timer.start();
     }

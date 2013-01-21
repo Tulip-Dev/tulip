@@ -57,21 +57,21 @@ bool PythonInterpreter::evalSingleStatementAndGetValue(const QString &pythonStat
   PyObject *pMainModule = PyImport_Import(pName);
   Py_DECREF(pName);
   PyObject *pMainDict = PyModule_GetDict(pMainModule);
-  
+
   PyObject *ret = PyRun_String(pythonStatement.toUtf8().data(), Py_eval_input, pMainDict, pMainDict);
 
   bool ok = false;
 
   initSipAPI();
-  
+
   if (ret) {
     PyObjectToCppObjectConvertor<T> convertor;
     ok = convertor.convert(ret, value);
     Py_DECREF(ret);
   }
-  
+
   releaseGIL();
-  
+
   return ok;
 }
 

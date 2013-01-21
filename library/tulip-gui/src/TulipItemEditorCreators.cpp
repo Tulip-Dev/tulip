@@ -237,7 +237,7 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant&
   if (desc.absolutePath.isEmpty())
     path = QDir::currentPath();
   else
-      path = QFileInfo(desc.absolutePath).absolutePath();
+    path = QFileInfo(desc.absolutePath).absolutePath();
 
   dlg->setDirectory(path);
 
