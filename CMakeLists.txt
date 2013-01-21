@@ -369,4 +369,5 @@ CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 
 INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir})
 INSTALL(FILES FindTULIP.cmake FindGLEW.cmake TulipUseFile.cmake DESTINATION ${TulipShareInstallDir})
-INSTALL(DIRECTORY wizards DESTINATION ${TulipShareInstallDir})
+INSTALL(DIRECTORY wizards DESTINATION ${TulipShareInstallDir}
+  PATTERN ".svn" EXCLUDE)
