@@ -48,6 +48,7 @@ def importFacebookGraph(graph, accessToken, pluginProgress, avatarsDlPath):
   profile = fbGraph.get_object("me")
   
   name = str(profile["name"])
+  graph.setName("Facebook social network of " + name)
   meNode = graph.addNode()
   viewLabel[meNode] = name
   nameProp[meNode] = name
