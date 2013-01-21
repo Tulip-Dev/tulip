@@ -5,7 +5,10 @@
 #include <QtGui/QFileDialog>
 #include <QtWebKit/QWebView>
 #include <QtGui/QVBoxLayout>
-
+#ifndef QT_NO_OPENSSL
+#include <QtNetwork/QSslSocket>
+#endif
+#include <QtGui/QMessageBox>
 
 #include "FacebookImport.h"
 #include "ui_FacebookImport.h"
@@ -64,6 +67,18 @@ std::string FacebookConnectWidget::getAvatarsDlPath() const {
 // import plugins must implement bool importGraph()
 bool FacebookImport::importGraph() {
     if (QApplication::instance()) {
+	
+#ifdef QT_NO_OPENSSL
+		QMessageBox::critical(NULL, "SSL Error", "Qt misses SSL support, required for Facebook authentification.");
+		return false;
+#else	
+		if (!QSslSocket::supportsSsl()) {
+			QMessageBox::critical(NULL, "SSL Error", "Qt seems to miss SSL support, required for Facebook authentification." 
+													 "If you are on Windows platform, you can try to download the Win32 OpenSSL binaries "
+													 "from http://slproweb.com/download/Win32OpenSSL_Light-1_0_1c.exe, install them, and it should solve the issue");
+			return false;
+		}
+	
         QDialog *dialog = new QDialog();
         dialog->setWindowTitle("Connect to your Facebook account");
         QVBoxLayout *layout = new QVBoxLayout;
@@ -90,6 +105,7 @@ bool FacebookImport::importGraph() {
         }
         delete dialog;
         return ret;
+#endif
     } else {
         return false;
     }
