@@ -777,7 +777,7 @@ void GraphPerspective::group() {
 
   if (groupedNodes.empty()) {
     Observable::unholdObservers();
-    qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection");
+    qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection").toUtf8().data();
     return;
   }
 
@@ -786,7 +786,7 @@ void GraphPerspective::group() {
   bool changeGraph=false;
 
   if (graph == graph->getRoot()) {
-    qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. A subgraph has automatically been created");
+    qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. A subgraph has automatically been created").toUtf8().data();
     graph = graph->addCloneSubGraph("groups");
     changeGraph = true;
   }
@@ -821,14 +821,19 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
     node src = graph->source(e);
     node tgt = graph->target(e);
 
-    if (!selection->getNodeValue(src))
-      qDebug() << trUtf8("[Create subgraph] Source n") << src.id << trUtf8(" of e") << e.id << trUtf8(" automatically added to selection.");
+    if (!selection->getNodeValue(src)) {
+      std::stringstream sstr;
+      sstr << trUtf8("[Create subgraph] node #").toUtf8().data() << src.id << trUtf8(" source of edge #").toUtf8().data() << e.id << trUtf8(" automatically added to selection.").toUtf8().data();
+      qDebug() << sstr.str();
+      selection->setNodeValue(src,true);
+    }
 
-    if (!selection->getNodeValue(tgt))
-      qDebug() << trUtf8("[Create subgraph] Target n") << tgt.id << trUtf8(" of e") << e.id << trUtf8(" automatically added to selection.");
-
-    selection->setNodeValue(src,true);
-    selection->setNodeValue(tgt,true);
+    if (!selection->getNodeValue(tgt)) {
+      std::stringstream sstr;
+      sstr << trUtf8("[Create subgraph] node #").toUtf8().data() << tgt.id << trUtf8(" target of edge #").toUtf8().data() << e.id << trUtf8(" automatically added to selection.").toUtf8().data();
+      qDebug() << sstr.str();
+      selection->setNodeValue(tgt,true);
+    }
   }
   Graph* result = graph->addSubGraph(selection, "selection sub-graph");
   Observable::unholdObservers();
