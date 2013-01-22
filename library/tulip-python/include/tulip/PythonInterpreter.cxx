@@ -108,6 +108,7 @@ bool PythonInterpreter::callFunctionAndGetReturnValue(const QString &module, con
   if (ret && retConvertor.convert(ret, returnValue)) {
     ok = true;
   }
+
   decrefPyObject(ret);
   releaseGIL();
   return ok;
