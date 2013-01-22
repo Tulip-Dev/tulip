@@ -22,39 +22,45 @@
 #define Tulip_GLMETANODERENDERER_H
 
 #include <tulip/tulipconf.h>
+#include <tulip/Observable.h>
+#include <map>
 
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/StringProperty.h>
-#include <tulip/BooleanProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/IntegerProperty.h>
-#include <tulip/ColorProperty.h>
 namespace tlp {
 
 class GlGraphInputData;
 class Camera;
+class Graph;
+class GlScene;
 
 /**
- * Class use to render a meta node, this version render nothing
+ * Class used to render a meta node
  */
-class TLP_GL_SCOPE GlMetaNodeRenderer {
+class TLP_GL_SCOPE GlMetaNodeRenderer : public Observable {
 
 public:
 
-  virtual ~GlMetaNodeRenderer() {}
+    GlMetaNodeRenderer(GlGraphInputData *inputData);
 
-  virtual void prerender(node,float,Camera*) {}
-  virtual void render(node,float,Camera*) {}
+    virtual ~GlMetaNodeRenderer();
 
-  virtual bool glMetaNodeHaveToRenderLabels() {
-    return true;
-  }
+    virtual void render(node,float,Camera*);
 
-  virtual void setInputData(GlGraphInputData *) {}
-  virtual GlGraphInputData *getInputData() {
-    return NULL;
-  }
+    virtual void setInputData(GlGraphInputData *inputData);
+
+    virtual GlGraphInputData *getInputData();
+
+protected:
+
+    void clearScenes();
+
+    void treatEvent(const Event&);
+
+    virtual GlScene* createScene(Graph*) const;
+
+private:
+
+    GlGraphInputData *_inputData;
+    std::map<Graph *,GlScene *> _metaGraphToSceneMap;
 
 };
 

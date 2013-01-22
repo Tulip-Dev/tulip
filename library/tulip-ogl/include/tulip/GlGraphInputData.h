@@ -28,16 +28,17 @@
 #include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/ObservableGraph.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ColorProperty.h>
+
 
 namespace tlp {
 
-class LayoutProperty;
-class DoubleProperty;
-class StringProperty;
-class IntegerProperty;
-class BooleanProperty;
-class SizeProperty;
-class ColorProperty;
 class PropertyManager;
 class Graph;
 class Glyph;

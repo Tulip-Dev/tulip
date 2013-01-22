@@ -45,7 +45,6 @@
 #include "tulip/Interactor.h"
 #include <tulip/GlCompositeHierarchyManager.h>
 #include "tulip/GlVertexArrayManager.h"
-#include "tulip/ExtendedMetaNodeRenderer.h"
 
 using namespace std;
 

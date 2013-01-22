@@ -69,7 +69,6 @@ SET(SRCS
   ProcessingAnimationItem.cpp
   Workspace.cpp
   PlaceHolderWidget.cpp
-  ExtendedMetaNodeRenderer.cpp
   TulipFileDescriptorWidget.cpp
   GraphHierarchiesModel.cpp
   CoordEditor.cpp
