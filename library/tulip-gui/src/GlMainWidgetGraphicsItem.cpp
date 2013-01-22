@@ -84,7 +84,7 @@ void GlMainWidgetGraphicsItem::glMainWidgetRedraw(GlMainWidget *) {
 void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
   if(_redrawNeeded) {
-    emit widgetPainted(_graphChanged);
+    emit widgetPainted(true);
   }
 
   painter->beginNativePainting();
