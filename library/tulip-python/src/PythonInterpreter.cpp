@@ -110,7 +110,7 @@ static bool processQtEvents = false;
 QTime timer;
 
 void tlp::decrefPyObject(PyObject *obj) {
-    Py_XDECREF(obj);
+  Py_XDECREF(obj);
 }
 
 int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
@@ -455,26 +455,26 @@ bool PythonInterpreter::runString(const QString &pythonCode, const QString &scri
 }
 
 PyObject* PythonInterpreter::evalPythonStatement(const QString &pythonStatement) {
-    holdGIL();
-  #if PY_MAJOR_VERSION >= 3
-    PyObject *pName = PyUnicode_FromString("__main__");
-  #else
-    PyObject *pName = PyString_FromString("__main__");
-  #endif
-    PyObject *pMainModule = PyImport_Import(pName);
-    decrefPyObject(pName);
-    PyObject *pMainDict = PyModule_GetDict(pMainModule);
+  holdGIL();
+#if PY_MAJOR_VERSION >= 3
+  PyObject *pName = PyUnicode_FromString("__main__");
+#else
+  PyObject *pName = PyString_FromString("__main__");
+#endif
+  PyObject *pMainModule = PyImport_Import(pName);
+  decrefPyObject(pName);
+  PyObject *pMainDict = PyModule_GetDict(pMainModule);
 
-    PyObject *ret = PyRun_String(pythonStatement.toUtf8().data(), Py_eval_input, pMainDict, pMainDict);
+  PyObject *ret = PyRun_String(pythonStatement.toUtf8().data(), Py_eval_input, pMainDict, pMainDict);
 
-    if (PyErr_Occurred()) {
-      PyErr_Print();
-      PyErr_Clear();
-    }
+  if (PyErr_Occurred()) {
+    PyErr_Print();
+    PyErr_Clear();
+  }
 
-    releaseGIL();
+  releaseGIL();
 
-    return ret;
+  return ret;
 }
 
 PyObject* PythonInterpreter::callPythonFunction(const QString &module, const QString &function, const tlp::DataSet &parameters) {
@@ -522,6 +522,7 @@ PyObject* PythonInterpreter::callPythonFunction(const QString &module, const QSt
 
     decrefPyObject(argTup);
   }
+
   releaseGIL();
   return ret;
 }

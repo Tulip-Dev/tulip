@@ -290,6 +290,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   if (!result) {
     g->pop();
+
     if (progress->state() == TLP_CANCEL && errorMessage.empty()) {
       errorMessage = trUtf8("Cancelled by user").toUtf8().data();
       qWarning() << name() << ": " << errorMessage.c_str();
@@ -299,12 +300,13 @@ void AlgorithmRunnerItem::run(Graph *g) {
       qCritical() << name() << ": " << errorMessage.c_str();
       QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
     }
-  } else {
+  }
+  else {
     if (progress->state() == TLP_STOP) {
       errorMessage = trUtf8("Stopped by user").toUtf8().data();
       qWarning() << name() << ": " << errorMessage.c_str();
       QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
-   }
+    }
   }
 
   delete progress;

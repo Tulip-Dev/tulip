@@ -48,10 +48,12 @@ static std::string demangleClassName(const char* className) {
 #elif defined(_MSC_VER)
 static std::string demangleClassName(const char* className) {
   std::string s(className);
+
   if (s.find("class ") == 0) {
-	return std::string(className + 6);
-  } else {
-	return s;
+    return std::string(className + 6);
+  }
+  else {
+    return s;
   }
 }
 #endif
@@ -109,12 +111,14 @@ public:
 
   bool convert(PyObject *pyObject, T &cppObject) {
     std::string className = demangleClassName(typeid(T).name());
-	
+
     void *cppObjPointer = convertSipWrapperToCppType(pyObject, className);
+
     if (cppObjPointer) {
-        cppObject = *reinterpret_cast<T*>(cppObjPointer);
-        return true;
+      cppObject = *reinterpret_cast<T*>(cppObjPointer);
+      return true;
     }
+
     return false;
   }
 
@@ -129,10 +133,12 @@ public:
     std::string className = demangleClassName(typeid(T).name());
 
     void *cppObjPointer = convertSipWrapperToCppType(pyObject, className, true);
+
     if (cppObjPointer) {
-        cppObject = reinterpret_cast<T*>(cppObjPointer);
-        return true;
+      cppObject = reinterpret_cast<T*>(cppObjPointer);
+      return true;
     }
+
     return false;
   }
 };
@@ -216,12 +222,15 @@ public:
 
     T *objCopy = new T(cppObject);
     PyObject *pyObj = convertCppTypeToSipWrapper(objCopy, className, true);
+
     if (pyObj) {
-        pyObject = pyObj;
-        return true;
-    } else {
-        delete objCopy;
+      pyObject = pyObj;
+      return true;
     }
+    else {
+      delete objCopy;
+    }
+
     return false;
   }
 };
@@ -233,12 +242,14 @@ public:
 
   bool convert(T *cppObject, PyObject *&pyObject) {
     std::string className = demangleClassName(typeid(T).name());
-	
+
     PyObject *pyObj = convertCppTypeToSipWrapper(cppObject, className);
+
     if (pyObj) {
-        pyObject = pyObj;
-        return true;
+      pyObject = pyObj;
+      return true;
     }
+
     return false;
   }
 
