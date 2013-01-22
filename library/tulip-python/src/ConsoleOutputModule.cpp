@@ -22,6 +22,7 @@
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
 
+#include "PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 
 using namespace tlp;

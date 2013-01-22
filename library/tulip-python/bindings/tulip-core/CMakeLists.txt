@@ -71,6 +71,8 @@ ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
            
 DISABLE_COMPILER_WARNINGS()
 
+INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipPythonInclude})
 
 SET_SOURCE_FILES_PROPERTIES(siptuliptlpIteratorGraph.cpp
@@ -99,7 +101,7 @@ SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
 ENDIF(WIN32)
 
 TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${LibTulipCoreName})
-TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${PYTHON_LIBRARY})
+TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${LibTulipPythonName})
 
 ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
                   COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_LIST_FILE}

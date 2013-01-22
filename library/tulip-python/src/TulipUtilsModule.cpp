@@ -17,6 +17,7 @@
  *
  */
 
+#include "PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 
 #include <tulip/PluginLister.h>

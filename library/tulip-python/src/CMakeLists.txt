@@ -1,6 +1,8 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
+INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(${LibTulipPythonName}_LIB_SRCS
@@ -16,6 +18,7 @@ SET(${LibTulipPythonName}_LIB_SRCS
     PythonTabWidget.cpp
     ConsoleOutputHandler.h
     PythonEditorsTabWidget.cpp
+    PythonCppTypesConverter.cpp
 )
 
 SET(${LibTulipPythonName}_UI

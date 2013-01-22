@@ -39,7 +39,11 @@
 #ifndef PYTHONINTERPRETER_H_
 #define PYTHONINTERPRETER_H_
 
-#include <tulip/PythonIncludes.h>
+#ifndef PyObject_HEAD
+struct _object;
+typedef _object PyObject;
+#endif
+
 #include <tulip/PythonCppTypesConverter.h>
 #include <tulip/Graph.h>
 
@@ -184,6 +188,11 @@ public :
   bool outputEnabled() const;
 
   void sendOutputToConsole(const QString &output, bool stdErr);
+
+protected:
+
+  PyObject* callPythonFunction(const QString &module, const QString &function, const tlp::DataSet &parameters);
+  PyObject* evalPythonStatement(const QString &pythonStatement);
 
 };
 
