@@ -322,7 +322,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   afterRun(g,dataSet);
 
-  Observable::unholdObservers();
+  while (Observable::observersHoldCounter() > 0)
+    Observable::unholdObservers();
 }
 
 void AlgorithmRunnerItem::setLocalMode(bool m) {
