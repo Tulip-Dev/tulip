@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipGUIInclude} ${TulipOGLInclude} ${TulipCoreBuildInclude} ${QuazipInclude})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipGUIInclude} ${TulipOGLInclude} ${TulipCoreBuildInclude} ${QuazipInclude} ${QT_INCLUDE_DIR})
 
 QT4_WRAP_CPP(pluginPusher_MOC_SRCS WebDavManager.h)
 ADD_EXECUTABLE(pushPlugins PluginPusher.cpp WebDavManager.cpp ${pluginPusher_MOC_SRCS})
