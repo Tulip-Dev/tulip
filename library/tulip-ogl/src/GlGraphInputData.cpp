@@ -45,7 +45,7 @@ GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* para
   if(renderer)
     _metaNodeRenderer=renderer;
   else
-    _metaNodeRenderer=new GlMetaNodeRenderer();
+    _metaNodeRenderer=new GlMetaNodeRenderer(this);
 
   _glVertexArrayManager=new GlVertexArrayManager(this);
 }

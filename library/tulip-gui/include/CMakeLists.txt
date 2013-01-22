@@ -66,7 +66,6 @@ INSTALL(FILES
   tulip/Workspace.h
   tulip/WorkspacePanel.h
   tulip/PlaceHolderWidget.h
-  tulip/ExtendedMetaNodeRenderer.h
   tulip/TulipFileDescriptorWidget.h
   tulip/TreeViewComboBox.h
   tulip/GraphHierarchiesModel.h

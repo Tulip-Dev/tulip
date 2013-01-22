@@ -32,7 +32,6 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/Gl2DRect.h>
-#include <tulip/ExtendedMetaNodeRenderer.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/Interactor.h>
@@ -225,7 +224,6 @@ void NodeLinkDiagramComponent::createScene(Graph *graph,DataSet dataSet) {
     manager->setData(hullsSet);
   }
 
-  scene->getGlGraphComposite()->getInputData()->setMetaNodeRenderer(new ExtendedMetaNodeRenderer(scene->getGlGraphComposite()->getInputData()));
   getGlMainWidget()->emitGraphChanged();
 }
 //==================================================
