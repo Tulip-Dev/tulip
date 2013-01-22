@@ -218,7 +218,7 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
     #pragma omp parallel for
 #endif
 
-    for (unsigned int i = 0 ; i < nbCurvePoints ; ++i) {
+    for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
       float curStep = i * h;
       curvePoints[i] = computeBezierPoint(controlPoints, curStep);
     }

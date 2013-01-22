@@ -47,12 +47,18 @@ static std::string demangleClassName(const char* className) {
 }
 #elif defined(_MSC_VER)
 static std::string demangleClassName(const char* className) {
-  return std::string(className + 6);
+  std::string s(className);
+  if (s.find("class ") == 0) {
+	return std::string(className + 6);
+  } else {
+	return s;
+  }
 }
 #endif
 
 static std::map<std::string, std::string> getTypenamesMap() {
   std::map<std::string, std::string> ret;
+  ret[demangleClassName(typeid(std::string).name())] = "std::string";
   ret[demangleClassName(typeid(std::vector<int>).name())] = "std::vector<int>";
   ret[demangleClassName(typeid(std::vector<unsigned int>).name())] = "std::vector<uint>";
   ret[demangleClassName(typeid(std::vector<long>).name())] = "std::vector<long>";
@@ -126,7 +132,7 @@ public:
 
   bool convert(PyObject *pyObject, T &cppObject) {
     std::string className = demangleClassName(typeid(T).name());
-
+	
     const sipTypeDef* kTypeDef = sipFindType(className.c_str());
 
     if (kTypeDef && sipCanConvertToType(pyObject, kTypeDef, SIP_NOT_NONE)) {
@@ -155,8 +161,6 @@ public:
 
   bool convert(PyObject *pyObject, T *&cppObject) {
     std::string className = demangleClassName(typeid(T).name());
-
-
 
     const sipTypeDef* kTypeDef = sipFindType(className.c_str());
 
@@ -290,7 +294,7 @@ public:
 
   bool convert(const T &cppObject, PyObject *&pyObject) {
     std::string className = demangleClassName(typeid(T).name());
-
+	
     const sipTypeDef* kTypeDef = sipFindType(className.c_str());
 
     if (kTypeDef) {
@@ -318,7 +322,7 @@ public:
 
   bool convert(T *cppObject, PyObject *&pyObject) {
     std::string className = demangleClassName(typeid(T).name());
-
+	
     const sipTypeDef* kTypeDef = sipFindType(className.c_str());
 
     if (kTypeDef) {
