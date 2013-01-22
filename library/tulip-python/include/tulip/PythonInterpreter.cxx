@@ -1,73 +1,17 @@
-static PyObject* callPythonFunction(const QString &module, const QString &function, const tlp::DataSet &parameters) {
-  PyObject *ret = NULL;
-#if PY_MAJOR_VERSION >= 3
-  PyObject *pName = PyUnicode_FromString(module.toStdString().c_str());
-#else
-  PyObject *pName = PyString_FromString(module.toStdString().c_str());
-#endif
-
-  PyObject *pModule = PyImport_Import(pName);
-  Py_DECREF(pName);
-
-  PyObject *pDict = PyModule_GetDict(pModule);
-  Py_DECREF(pModule);
-
-  PyObject *pFunc = PyDict_GetItemString(pDict, function.toStdString().c_str());
-
-  if (PyCallable_Check(pFunc)) {
-    PyObject *argTup = PyTuple_New(parameters.size());
-    int idx = 0;
-    bool paramError = false;
-    std::pair<std::string, DataType*> param;
-    forEach(param, parameters.getValues()) {
-      PyObject *pyParam = getPyObjectFromDataType(param.second);
-
-      if (!pyParam) {
-        paramError = true;
-        break;
-      }
-
-      PyTuple_SetItem(argTup, idx++, pyParam);
-    }
-
-    if (!paramError) {
-      ret = PyObject_CallObject(pFunc, argTup);
-
-      if (PyErr_Occurred()) {
-        PyErr_Print();
-        PyErr_Clear();
-      }
-
-    }
-
-    Py_DECREF(argTup);
-  }
-
-  return ret;
-}
+TLP_PYTHON_SCOPE void decrefPyObject(PyObject *obj);
 
 template<typename T>
 bool PythonInterpreter::evalSingleStatementAndGetValue(const QString &pythonStatement, T &value) {
   holdGIL();
-#if PY_MAJOR_VERSION >= 3
-  PyObject *pName = PyUnicode_FromString("__main__");
-#else
-  PyObject *pName = PyString_FromString("__main__");
-#endif
-  PyObject *pMainModule = PyImport_Import(pName);
-  Py_DECREF(pName);
-  PyObject *pMainDict = PyModule_GetDict(pMainModule);
 
-  PyObject *ret = PyRun_String(pythonStatement.toUtf8().data(), Py_eval_input, pMainDict, pMainDict);
+  PyObject *ret = evalPythonStatement(pythonStatement);
 
   bool ok = false;
-
-  initSipAPI();
 
   if (ret) {
     PyObjectToCppObjectConvertor<T> convertor;
     ok = convertor.convert(ret, value);
-    Py_DECREF(ret);
+    decrefPyObject(ret);
   }
 
   releaseGIL();
@@ -152,19 +96,19 @@ bool PythonInterpreter::callFunctionFourParamsAndGetReturnValue(const QString &m
   return callFunctionAndGetReturnValue(module, function, parameters, returnValue);
 }
 
+void decrefPyObject(PyObject *obj);
+
 template<typename RETURN_TYPE>
 bool PythonInterpreter::callFunctionAndGetReturnValue(const QString &module, const QString &function, const tlp::DataSet &parameters, RETURN_TYPE &returnValue) {
   holdGIL();
   bool ok = false;
-  initSipAPI();
   PyObject *ret = callPythonFunction(module, function, parameters);
   PyObjectToCppObjectConvertor<RETURN_TYPE> retConvertor;
 
   if (ret && retConvertor.convert(ret, returnValue)) {
     ok = true;
   }
-
-  Py_XDECREF(ret);
+  decrefPyObject(ret);
   releaseGIL();
   return ok;
 }

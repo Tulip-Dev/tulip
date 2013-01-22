@@ -17,6 +17,7 @@
  *
  */
 
+#include "PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 #include "ConsoleOutputHandler.h"
 
@@ -96,7 +97,7 @@ static const QString printObjectClassFunction =
 static QString convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
   PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
   QString ret = QString::fromUtf8(PyBytes_AsString(utf8Str));
-  Py_DECREF(utf8Str);
+  decrefPyObject(utf8Str);
   return ret;
 }
 #endif
@@ -107,6 +108,10 @@ static bool scriptPaused = false;
 static bool processQtEvents = false;
 
 QTime timer;
+
+void tlp::decrefPyObject(PyObject *obj) {
+    Py_XDECREF(obj);
+}
 
 int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
@@ -223,7 +228,7 @@ PythonInterpreter::PythonInterpreter() : _runningScript(false), _defaultConsoleW
   PyObject *pName = PyString_FromString("__main__");
 #endif
   PyObject *pMainModule = PyImport_Import(pName);
-  Py_DECREF(pName);
+  decrefPyObject(pName);
   PyObject *pMainDict = PyModule_GetDict(pMainModule);
   PyObject *pVersion = PyRun_String("str(sys.version_info[0])+\".\"+str(sys.version_info[1])", Py_eval_input, pMainDict, pMainDict);
 
@@ -419,7 +424,7 @@ bool PythonInterpreter::functionExists(const QString &moduleName, const QString 
   PyObject *pName = PyString_FromString(moduleName.toStdString().c_str());
 #endif
   PyObject *pModule = PyImport_Import(pName);
-  Py_DECREF(pName);
+  decrefPyObject(pName);
   PyObject *pDict = PyModule_GetDict(pModule);
   PyObject *pFunc = PyDict_GetItemString(pDict, functionName.toStdString().c_str());
   bool ret = (pFunc != NULL && PyCallable_Check(pFunc));
@@ -449,6 +454,77 @@ bool PythonInterpreter::runString(const QString &pythonCode, const QString &scri
   return ret != -1;
 }
 
+PyObject* PythonInterpreter::evalPythonStatement(const QString &pythonStatement) {
+    holdGIL();
+  #if PY_MAJOR_VERSION >= 3
+    PyObject *pName = PyUnicode_FromString("__main__");
+  #else
+    PyObject *pName = PyString_FromString("__main__");
+  #endif
+    PyObject *pMainModule = PyImport_Import(pName);
+    decrefPyObject(pName);
+    PyObject *pMainDict = PyModule_GetDict(pMainModule);
+
+    PyObject *ret = PyRun_String(pythonStatement.toUtf8().data(), Py_eval_input, pMainDict, pMainDict);
+
+    if (PyErr_Occurred()) {
+      PyErr_Print();
+      PyErr_Clear();
+    }
+
+    releaseGIL();
+
+    return ret;
+}
+
+PyObject* PythonInterpreter::callPythonFunction(const QString &module, const QString &function, const tlp::DataSet &parameters) {
+  holdGIL();
+  PyObject *ret = NULL;
+#if PY_MAJOR_VERSION >= 3
+  PyObject *pName = PyUnicode_FromString(module.toStdString().c_str());
+#else
+  PyObject *pName = PyString_FromString(module.toStdString().c_str());
+#endif
+
+  PyObject *pModule = PyImport_Import(pName);
+  decrefPyObject(pName);
+
+  PyObject *pDict = PyModule_GetDict(pModule);
+  decrefPyObject(pModule);
+
+  PyObject *pFunc = PyDict_GetItemString(pDict, function.toStdString().c_str());
+
+  if (PyCallable_Check(pFunc)) {
+    PyObject *argTup = PyTuple_New(parameters.size());
+    int idx = 0;
+    bool paramError = false;
+    std::pair<std::string, DataType*> param;
+    forEach(param, parameters.getValues()) {
+      PyObject *pyParam = getPyObjectFromDataType(param.second);
+
+      if (!pyParam) {
+        paramError = true;
+        break;
+      }
+
+      PyTuple_SetItem(argTup, idx++, pyParam);
+    }
+
+    if (!paramError) {
+      ret = PyObject_CallObject(pFunc, argTup);
+
+      if (PyErr_Occurred()) {
+        PyErr_Print();
+        PyErr_Clear();
+      }
+
+    }
+
+    decrefPyObject(argTup);
+  }
+  releaseGIL();
+  return ret;
+}
 
 bool PythonInterpreter::callFunction(const QString &module, const QString &function, const tlp::DataSet &parameters) {
   holdGIL();
@@ -459,7 +535,7 @@ bool PythonInterpreter::callFunction(const QString &module, const QString &funct
     ok = true;
   }
 
-  Py_XDECREF(ret);
+  decrefPyObject(ret);
   releaseGIL();
   return ok;
 }
@@ -503,13 +579,13 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
 #endif
   // Load the module object
   PyObject *pModule = PyImport_Import(pName);
-  Py_DECREF(pName);
+  decrefPyObject(pName);
 
   // If the module is not __main__, reload it (needed to avoid errors when calling the runGraphScript
   // function from Python)
   if (module != "__main__") {
     PyObject *pModuleReloaded = PyImport_ReloadModule(pModule);
-    Py_DECREF(pModule);
+    decrefPyObject(pModule);
     pModule = pModuleReloaded;
   }
 
@@ -550,9 +626,9 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
     }
 
     _runningScript = false;
-    Py_DECREF(argTup);
-    Py_DECREF(pArgs);
-    Py_DECREF(pModule);
+    decrefPyObject(argTup);
+    decrefPyObject(pArgs);
+    decrefPyObject(pModule);
 
     if (PyErr_Occurred()) {
       PyErr_Print();
