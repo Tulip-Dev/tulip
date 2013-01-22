@@ -32,8 +32,8 @@ using namespace tlp;
 SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::WindowFlags f)
   :QWidget(parent,f), _ui(new Ui::SimplePluginProgressWidgetData), _state(tlp::TLP_CONTINUE) {
   _ui->setupUi(this);
-  _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogDiscardButton));
-  _ui->stopButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
+  _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
+  _ui->stopButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaStop));
   connect(_ui->cancelButton,SIGNAL(clicked()),this,SLOT(cancelClicked()));
   connect(_ui->stopButton,SIGNAL(clicked()),this,SLOT(stopClicked()));
   connect(_ui->previewBox,SIGNAL(toggled(bool)),this,SLOT(setPreview(bool)));
@@ -89,6 +89,7 @@ void SimplePluginProgressWidget::setPreviewMode(bool drawPreview) {
 
 void SimplePluginProgressWidget::showPreview(bool showPreview) {
   _ui->previewBox->setVisible(showPreview);
+  checkLastUpdate();
 }
 
 ProgressState SimplePluginProgressWidget::state() const {
