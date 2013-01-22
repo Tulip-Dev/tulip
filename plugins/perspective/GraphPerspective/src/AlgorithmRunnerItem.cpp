@@ -286,14 +286,28 @@ void AlgorithmRunnerItem::run(Graph *g) {
   if (TulipSettings::instance().isRunningTimeComputed())
     qDebug() << algoAndParams << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
 
-  delete progress;
   Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(false);
 
   if (!result) {
     g->pop();
-    qCritical() << name() << ": " << errorMessage.c_str();
-    QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
+    if (progress->state() == TLP_CANCEL && errorMessage.empty()) {
+      errorMessage = trUtf8("Cancelled by user").toUtf8().data();
+      qWarning() << name() << ": " << errorMessage.c_str();
+      QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
+    }
+    else {
+      qCritical() << name() << ": " << errorMessage.c_str();
+      QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
+    }
+  } else {
+    if (progress->state() == TLP_STOP) {
+      errorMessage = trUtf8("Stopped by user").toUtf8().data();
+      qWarning() << name() << ": " << errorMessage.c_str();
+      QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
+   }
   }
+
+  delete progress;
 
   // copy or cleanup out properties
   std::vector<OutPropertyParam>::const_iterator it = outPropertyParams.begin();
