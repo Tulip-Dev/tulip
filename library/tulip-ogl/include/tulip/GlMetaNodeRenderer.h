@@ -39,28 +39,28 @@ class TLP_GL_SCOPE GlMetaNodeRenderer : public Observable {
 
 public:
 
-    GlMetaNodeRenderer(GlGraphInputData *inputData);
+  GlMetaNodeRenderer(GlGraphInputData *inputData);
 
-    virtual ~GlMetaNodeRenderer();
+  virtual ~GlMetaNodeRenderer();
 
-    virtual void render(node,float,Camera*);
+  virtual void render(node,float,Camera*);
 
-    virtual void setInputData(GlGraphInputData *inputData);
+  virtual void setInputData(GlGraphInputData *inputData);
 
-    virtual GlGraphInputData *getInputData();
+  virtual GlGraphInputData *getInputData();
 
 protected:
 
-    void clearScenes();
+  void clearScenes();
 
-    void treatEvent(const Event&);
+  void treatEvent(const Event&);
 
-    virtual GlScene* createScene(Graph*) const;
+  virtual GlScene* createScene(Graph*) const;
 
 private:
 
-    GlGraphInputData *_inputData;
-    std::map<Graph *,GlScene *> _metaGraphToSceneMap;
+  GlGraphInputData *_inputData;
+  std::map<Graph *,GlScene *> _metaGraphToSceneMap;
 
 };
 
