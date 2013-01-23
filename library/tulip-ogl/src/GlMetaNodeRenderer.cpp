@@ -36,129 +36,130 @@ namespace tlp {
 GlMetaNodeRenderer::GlMetaNodeRenderer(GlGraphInputData *inputData) : _inputData(inputData) {}
 
 GlMetaNodeRenderer::~GlMetaNodeRenderer() {
-    clearScenes();
+  clearScenes();
 }
 
 void GlMetaNodeRenderer::setInputData(GlGraphInputData *inputData) {
-    _inputData = inputData;
+  _inputData = inputData;
 }
 
 GlGraphInputData *GlMetaNodeRenderer::getInputData() {
-    return _inputData;
+  return _inputData;
 }
 
 void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
 
-    GLint renderMode;
-    glGetIntegerv(GL_RENDER_MODE,&renderMode);
+  GLint renderMode;
+  glGetIntegerv(GL_RENDER_MODE,&renderMode);
 
-    if(renderMode==GL_SELECT)
-        return;
+  if(renderMode==GL_SELECT)
+    return;
 
-    Graph *metaGraph = _inputData->getGraph()->getNodeMetaInfo(n);
+  Graph *metaGraph = _inputData->getGraph()->getNodeMetaInfo(n);
 
-    GlScene *scene = NULL;
-    if(_metaGraphToSceneMap.count(metaGraph)!=0) {
-        scene=_metaGraphToSceneMap[metaGraph];
-    }
-    else {
-        scene = createScene(metaGraph);
-        _metaGraphToSceneMap[metaGraph]=scene;
-        metaGraph->addListener(this);
-    }
+  GlScene *scene = NULL;
 
-    bool viewMetaLabels = _inputData->renderingParameters()->isViewMetaLabel();//Checks if user want to see metanode labels
-    scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(viewMetaLabels);
-    scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(viewMetaLabels);
+  if(_metaGraphToSceneMap.count(metaGraph)!=0) {
+    scene=_metaGraphToSceneMap[metaGraph];
+  }
+  else {
+    scene = createScene(metaGraph);
+    _metaGraphToSceneMap[metaGraph]=scene;
+    metaGraph->addListener(this);
+  }
 
-    GlNode glNode(n.id);
+  bool viewMetaLabels = _inputData->renderingParameters()->isViewMetaLabel();//Checks if user want to see metanode labels
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(viewMetaLabels);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(viewMetaLabels);
 
-    BoundingBox bb=glNode.getBoundingBox(_inputData);
-    BoundingBox bbTmp;
-    BoundingBox includeBB;
-    _inputData->glyphs.get(_inputData->getElementShape()->getNodeValue(n))->getIncludeBoundingBox(includeBB,n);
-    bbTmp[0]=bb.center()-Coord((bb.width()/2.f)*(includeBB[0][0]*-2.f),(bb.height()/2.f)*(includeBB[0][1]*-2.f),(bb.depth()/2.f)*(includeBB[0][2]*-2.f));
-    bbTmp[1]=bb.center()+Coord((bb.width()/2.f)*(includeBB[1][0]*2.f),(bb.height()/2.f)*(includeBB[1][1]*2.f),(bb.depth()/2.f)*(includeBB[1][2]*2.f));
-    bb=bbTmp;
+  GlNode glNode(n.id);
 
-    Coord eyeDirection=camera->getEyes()-camera->getCenter();
-    eyeDirection = eyeDirection/eyeDirection.norm();
+  BoundingBox bb=glNode.getBoundingBox(_inputData);
+  BoundingBox bbTmp;
+  BoundingBox includeBB;
+  _inputData->glyphs.get(_inputData->getElementShape()->getNodeValue(n))->getIncludeBoundingBox(includeBB,n);
+  bbTmp[0]=bb.center()-Coord((bb.width()/2.f)*(includeBB[0][0]*-2.f),(bb.height()/2.f)*(includeBB[0][1]*-2.f),(bb.depth()/2.f)*(includeBB[0][2]*-2.f));
+  bbTmp[1]=bb.center()+Coord((bb.width()/2.f)*(includeBB[1][0]*2.f),(bb.height()/2.f)*(includeBB[1][1]*2.f),(bb.depth()/2.f)*(includeBB[1][2]*2.f));
+  bb=bbTmp;
 
-    Camera newCamera2=*camera;
-    newCamera2.setEyes(newCamera2.getCenter()+Coord(0,0,1)*(newCamera2.getEyes()-newCamera2.getCenter()).norm());
-    newCamera2.setUp(Coord(0,1,0));
+  Coord eyeDirection=camera->getEyes()-camera->getCenter();
+  eyeDirection = eyeDirection/eyeDirection.norm();
 
-    Coord first=newCamera2.worldTo2DScreen((Coord)(bb[0]));
-    Coord second=newCamera2.worldTo2DScreen((Coord)(bb[1]));
+  Camera newCamera2=*camera;
+  newCamera2.setEyes(newCamera2.getCenter()+Coord(0,0,1)*(newCamera2.getEyes()-newCamera2.getCenter()).norm());
+  newCamera2.setUp(Coord(0,1,0));
 
-    Coord center=camera->worldTo2DScreen((Coord)(bb[0]+bb[1])/2.f);
-    Coord size=second-first;
+  Coord first=newCamera2.worldTo2DScreen((Coord)(bb[0]));
+  Coord second=newCamera2.worldTo2DScreen((Coord)(bb[1]));
 
-    Vector<int,4> viewport;
-    viewport[0]=center[0]-size[0]/2;
-    viewport[1]=center[1]-size[1]/2;
-    viewport[2]=size[0];
-    viewport[3]=size[1];
+  Coord center=camera->worldTo2DScreen((Coord)(bb[0]+bb[1])/2.f);
+  Coord size=second-first;
 
-    viewport[0]=camera->getViewport()[0]+viewport[0]-viewport[2]/2;
-    viewport[1]=camera->getViewport()[1]+viewport[1]-viewport[3]/2;
-    viewport[2]*=2;
-    viewport[3]*=2;
+  Vector<int,4> viewport;
+  viewport[0]=center[0]-size[0]/2;
+  viewport[1]=center[1]-size[1]/2;
+  viewport[2]=size[0];
+  viewport[3]=size[1];
 
-    if(viewport[2]==0 || viewport[3]==0)
-        return;
+  viewport[0]=camera->getViewport()[0]+viewport[0]-viewport[2]/2;
+  viewport[1]=camera->getViewport()[1]+viewport[1]-viewport[3]/2;
+  viewport[2]*=2;
+  viewport[3]*=2;
 
-    scene->setViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
-    scene->setClearBufferAtDraw(false);
-    scene->centerScene();
+  if(viewport[2]==0 || viewport[3]==0)
+    return;
 
-    float baseNorm=(scene->getGraphLayer()->getCamera().getEyes()-scene->getGraphLayer()->getCamera().getCenter()).norm();
-    Camera newCamera=scene->getGraphLayer()->getCamera();
-    Camera *oldCamera=new Camera(scene,true);
-    newCamera.setScene(scene);
-    *oldCamera=newCamera;
-    newCamera.setScene(scene);
-    newCamera.setUp(camera->getUp());
-    newCamera.setEyes(newCamera.getCenter()+(eyeDirection*baseNorm));
-    newCamera.setZoomFactor(newCamera.getZoomFactor()*0.5);
-    scene->getGraphLayer()->setSharedCamera(&newCamera);
+  scene->setViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+  scene->setClearBufferAtDraw(false);
+  scene->centerScene();
 
-    scene->draw();
+  float baseNorm=(scene->getGraphLayer()->getCamera().getEyes()-scene->getGraphLayer()->getCamera().getCenter()).norm();
+  Camera newCamera=scene->getGraphLayer()->getCamera();
+  Camera *oldCamera=new Camera(scene,true);
+  newCamera.setScene(scene);
+  *oldCamera=newCamera;
+  newCamera.setScene(scene);
+  newCamera.setUp(camera->getUp());
+  newCamera.setEyes(newCamera.getCenter()+(eyeDirection*baseNorm));
+  newCamera.setZoomFactor(newCamera.getZoomFactor()*0.5);
+  scene->getGraphLayer()->setSharedCamera(&newCamera);
 
-    scene->getGraphLayer()->setCamera(oldCamera);
+  scene->draw();
 
-    camera->getScene()->setClearBufferAtDraw(false);
-    camera->getScene()->initGlParameters();
-    camera->getScene()->setClearBufferAtDraw(true);
-    camera->initGl();
+  scene->getGraphLayer()->setCamera(oldCamera);
+
+  camera->getScene()->setClearBufferAtDraw(false);
+  camera->getScene()->initGlParameters();
+  camera->getScene()->setClearBufferAtDraw(true);
+  camera->initGl();
 }
 
 GlScene *GlMetaNodeRenderer::createScene(Graph* metaGraph) const {
-    GlScene *scene = new GlScene (new GlCPULODCalculator());
-    GlLayer* layer=new GlLayer("Main");
-    scene->addExistingLayer(layer);
-    GlGraphComposite* graphComposite=new GlGraphComposite(metaGraph, scene);
-    layer->addGlEntity(graphComposite,"graph");
-    graphComposite->getRenderingParametersPointer()->setViewNodeLabel(true);
-    graphComposite->getRenderingParametersPointer()->setEdgeColorInterpolate(false);
-    graphComposite->getRenderingParametersPointer()->setNodesStencil(0x0002);
-    graphComposite->getRenderingParametersPointer()->setNodesLabelStencil(0x0001);
-    return scene;
+  GlScene *scene = new GlScene (new GlCPULODCalculator());
+  GlLayer* layer=new GlLayer("Main");
+  scene->addExistingLayer(layer);
+  GlGraphComposite* graphComposite=new GlGraphComposite(metaGraph, scene);
+  layer->addGlEntity(graphComposite,"graph");
+  graphComposite->getRenderingParametersPointer()->setViewNodeLabel(true);
+  graphComposite->getRenderingParametersPointer()->setEdgeColorInterpolate(false);
+  graphComposite->getRenderingParametersPointer()->setNodesStencil(0x0002);
+  graphComposite->getRenderingParametersPointer()->setNodesLabelStencil(0x0001);
+  return scene;
 }
 
 void GlMetaNodeRenderer::treatEvent(const Event &e) {
-    if(e.type() == Event::TLP_DELETE) {
-        delete _metaGraphToSceneMap[reinterpret_cast<Graph*>(e.sender())];
-        _metaGraphToSceneMap.erase(reinterpret_cast<Graph*>(e.sender()));
-    }
+  if(e.type() == Event::TLP_DELETE) {
+    delete _metaGraphToSceneMap[reinterpret_cast<Graph*>(e.sender())];
+    _metaGraphToSceneMap.erase(reinterpret_cast<Graph*>(e.sender()));
+  }
 }
 
 void GlMetaNodeRenderer::clearScenes() {
-    for(map<Graph *,GlScene *>::iterator it=_metaGraphToSceneMap.begin(); it!=_metaGraphToSceneMap.end(); ++it) {
-        delete (*it).second;
-    }
+  for(map<Graph *,GlScene *>::iterator it=_metaGraphToSceneMap.begin(); it!=_metaGraphToSceneMap.end(); ++it) {
+    delete (*it).second;
+  }
 
-    _metaGraphToSceneMap.clear();
+  _metaGraphToSceneMap.clear();
 }
 
 }
