@@ -104,6 +104,16 @@ class GraphAPI(object):
     def __init__(self, access_token=None, timeout=None):
         self.access_token = access_token
         self.timeout = timeout
+        try:
+            self.conn = HTTPSConnection('graph.facebook.com', timeout=self.timeout)
+        except TypeError:
+            # Timeout support for Python <2.6
+            if self.timeout:
+                socket.setdefaulttimeout(self.timeout)
+            self.conn = HTTPSConnection('graph.facebook.com')
+
+    def __del__(self):
+        self.conn.close()
 
     def get_object(self, id, **args):
         """Fetchs the given object from the graph."""
@@ -301,49 +311,26 @@ class GraphAPI(object):
                 args["access_token"] = self.access_token
         post_data = None if post_args is None else urlencode(post_args)
         try:
-            file = urlopen("https://graph.facebook.com/" + path + "?" +
-                                   urlencode(args),
-                                   post_data, timeout=self.timeout)
+            self.conn.request('GET', "/" + path + "?" + urlencode(args), post_data)
+            file = self.conn.getresponse()
         except HTTPError as e:
             response = _parse_json(e.read())
             raise GraphAPIError(response)
-        except TypeError:
-            # Timeout support for Python <2.6
-            if self.timeout:
-                socket.setdefaulttimeout(self.timeout)
-            file = urlopen("https://graph.facebook.com/" + path + "?" +
-                                   urlencode(args), post_data)
-        try:
-            if sys.version_info[0] < 3:
-                fileInfo = file.info()
-                if fileInfo.maintype == 'text':
-                    response = _parse_json(file.read())
-                elif fileInfo.maintype == 'image':
-                    mimetype = fileInfo['content-type']
-                    response = {
-						"data": file.read(),
-                        "mime-type": mimetype,
-                        "url": file.url,
-                    }
-                else:
-                    raise GraphAPIError('Maintype was not text or image')
-            else:
-                charsetStr="charset="
-                fileInfo = file.info()
-                mimetype = fileInfo['content-type']
-                if "text" in fileInfo['content-type']:
-                    encoding = mimetype[mimetype.find(charsetStr)+len(charsetStr):]
-                    response = _parse_json(file.readall().decode(encoding))
-                elif "image" in fileInfo['content-type']:
-                    response = {
-                        "data": file.read(),
-                        "mime-type": mimetype,
-                        "url": file.url,
-                }
-                else:
-                    raise GraphAPIError('Maintype was not text or image')
-        finally:
-            file.close()
+
+        charsetStr="charset="
+        mimetype = file.getheader('content-type')
+        if "text" in mimetype:
+            encoding = mimetype[mimetype.find(charsetStr)+len(charsetStr):]
+            response = _parse_json(file.read().decode(encoding))
+        elif "image" in mimetype:
+            response = {
+                "data": file.read(),
+                "mime-type": mimetype,
+                "url": file.getheader('location'),
+            }
+        else:
+            raise GraphAPIError('Maintype was not text or image')
+
         if response and isinstance(response, dict) and response.get("error"):
             raise GraphAPIError(response["error"]["type"],
                                 response["error"]["message"])

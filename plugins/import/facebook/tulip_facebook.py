@@ -7,10 +7,9 @@ if sys.version_info[0] == 3:
 else:
   from urllib2 import urlopen
 import os
+import threading
 
-def downloadAvatar(url, directory, name):
-  ext = url[len(url)-4:]
-  fileName = directory+"/"+name+ext
+def downloadAvatar(url, fileName):
   if sys.version_info[0] < 3:
     fileNameEnc = fileName.decode(sys.getdefaultencoding()).encode(sys.getfilesystemencoding())
   else:
@@ -20,8 +19,23 @@ def downloadAvatar(url, directory, name):
     output = open(fileNameEnc,'wb')
     output.write(avatarFile.read())
     output.close()
-  return fileName
-  
+
+threadsPool = []
+
+def launchAvatarDlThread(url, directory, name):
+    global threadsPool
+    ext = url[len(url)-4:]
+    fileName = directory+"/"+name+ext
+    t = threading.Thread(target=downloadAvatar, args = (url, fileName))
+    threadsPool.append(t)
+    t.start()
+    return fileName
+
+def waitAvatarDlThreads():
+    global threadsPool
+    for t in threadsPool:
+        t.join()
+    threadsPool = []
 
 def getTempDir():
     return tempfile.gettempdir()
@@ -54,10 +68,8 @@ def importFacebookGraph(graph, accessToken, pluginProgress, avatarsDlPath):
   nameProp[meNode] = name
 
   if len(avatarsDlPath) > 0:
-    if pluginProgress:
-      pluginProgress.setComment("Downloading your avatar")
     picture = fbGraph.get_object("me/picture")
-    fileName = downloadAvatar(picture["url"], avatarsDlPath, name)
+    fileName = launchAvatarDlThread(picture["url"], avatarsDlPath, name)
     viewTexture[meNode] = fileName
   
   if pluginProgress:
@@ -79,10 +91,8 @@ def importFacebookGraph(graph, accessToken, pluginProgress, avatarsDlPath):
     friendNode = friendsMap[name]
     
     if len(avatarsDlPath) > 0:
-      if pluginProgress:
-        pluginProgress.setComment("Downloading avatar of " + name)
       picture = fbGraph.get_object(friend["id"] + "/picture")
-      fileName = downloadAvatar(picture["url"], avatarsDlPath, name)
+      fileName = launchAvatarDlThread(picture["url"], avatarsDlPath, name)
       viewTexture[friendNode] = fileName
     
     if pluginProgress:
@@ -108,5 +118,7 @@ def importFacebookGraph(graph, accessToken, pluginProgress, avatarsDlPath):
   
   dataSet = tlp.getDefaultPluginParameters("FM^3 (OGDF)", graph)
   graph.applyLayoutAlgorithm("FM^3 (OGDF)", viewLayout, dataSet)
+
+  waitAvatarDlThreads()
   
   
