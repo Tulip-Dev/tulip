@@ -66,6 +66,7 @@ class TLP_PYTHON_SCOPE PythonInterpreter {
 
   static PythonInterpreter _instance;
 
+  bool _wasInit;
   bool _runningScript;
   QSet<QString> _currentImportPaths;
   QAbstractScrollArea *_defaultConsoleWidget;
