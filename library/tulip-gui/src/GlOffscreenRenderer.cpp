@@ -121,7 +121,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
     firstWidget->makeCurrent();
   }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))	
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 #endif
 
@@ -134,7 +134,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 
 
   if (glFrameBuf == NULL) {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
     QGLFramebufferObjectFormat fboFmt;
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
@@ -169,7 +169,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 
 
   glFrameBuf->bind();
-
+		
   if (centerScene) {
     scene.centerScene();
   }
@@ -188,7 +188,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   scene.draw();
   glFrameBuf->release();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
 
   if (antialiasedFbo)
     QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
