@@ -49,6 +49,8 @@ public:
 
   virtual GlGraphInputData *getInputData();
 
+  GlScene* getSceneForMetaGraph(Graph *g);
+
 protected:
 
   void clearScenes();

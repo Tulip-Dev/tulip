@@ -162,6 +162,10 @@ void GlMetaNodeRenderer::clearScenes() {
   _metaGraphToSceneMap.clear();
 }
 
+GlScene* GlMetaNodeRenderer::getSceneForMetaGraph(Graph *g) {
+    return _metaGraphToSceneMap[g];
+}
+
 }
 
 
