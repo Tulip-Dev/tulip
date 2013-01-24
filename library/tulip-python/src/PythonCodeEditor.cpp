@@ -87,6 +87,7 @@ AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent) : QListWidget(p
   setFrameShape(StyledPanel);
   setFrameShadow(Plain);
   setFocusProxy(parent);
+  installEventFilter(&keyboardFocusEventFilter);
   _activated = false;
   _wasActivated = false;
 }
