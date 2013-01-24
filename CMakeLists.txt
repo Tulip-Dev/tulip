@@ -310,13 +310,6 @@ IF(OPENMP_FOUND AND CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
 ENDIF(OPENMP_FOUND AND CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
 
 ## ========================================================
-## Enable output of rendering time only if OpenMP is enabled
-## ========================================================
-IF(OPENMP_FOUND AND ((NOT CMAKE_DEBUG_MODE) OR DEBUG_OPENMP))
-  SET(ENABLE_RENDERING_TIME_DISPLAY OFF CACHE BOOL "Do you want to enable the rendering time display ? [OFF|ON]")
-ENDIF(OPENMP_FOUND AND ((NOT CMAKE_DEBUG_MODE) OR DEBUG_OPENMP))
-
-## ========================================================
 ## Unit tests
 ## ========================================================
 SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")

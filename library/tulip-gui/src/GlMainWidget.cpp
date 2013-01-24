@@ -26,10 +26,6 @@
 #include <QtOpenGL/QGLFramebufferObject>
 #include <QtOpenGL/QGLFormat>
 
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-#include <omp.h>
-#endif
-
 #include "tulip/GlMainWidget.h"
 
 #include <tulip/Graph.h>

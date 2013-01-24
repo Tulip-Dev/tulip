@@ -21,14 +21,10 @@
 #include <iostream>
 #include <cstdlib>
 #include <climits>
-#include <stdio.h>
+#include <cstdio>
 
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
-
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-#include <omp.h>
-#endif
 
 #include <tulip/GlLODSceneVisitor.h>
 #include <tulip/GlCPULODCalculator.h>
@@ -164,11 +160,6 @@ void GlScene::draw() {
 
   initGlParameters();
 
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-  timeval lastTime;
-  gettimeofday(&lastTime, 0);
-#endif
-
   /**********************************************************************
   LOD Compute
   **********************************************************************/
@@ -249,12 +240,6 @@ void GlScene::draw() {
       }
     }
   }
-
-#ifdef ENABLE_RENDERING_TIME_DISPLAY
-  timeval currentTime;
-  gettimeofday(&currentTime, 0);
-  qDebug() << "scene draw time : " << (int)((currentTime.tv_usec-lastTime.tv_usec)) << " ms" << endl;
-#endif
 
   inDraw=false;
 }
