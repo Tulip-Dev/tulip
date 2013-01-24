@@ -51,7 +51,11 @@ GlAxis::~GlAxis() {
 
 void GlAxis::setAxisGraduations(const std::vector<std::string> &axisGradsLabels, const LabelPosition &axisGradsPosition) {
   this->axisGradsPosition=axisGradsPosition;
-  spaceBetweenAxisGrads = axisLength / (axisGradsLabels.size() - 1);
+  if (axisGradsLabels.size() > 1) {
+    spaceBetweenAxisGrads = axisLength / (axisGradsLabels.size() - 1);
+  } else {
+      spaceBetweenAxisGrads = axisLength;
+  }
   gradsLabelsVector.clear();
 
   if (captionOffset == 0) {
