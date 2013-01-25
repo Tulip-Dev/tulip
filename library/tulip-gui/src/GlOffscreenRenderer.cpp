@@ -121,7 +121,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
     firstWidget->makeCurrent();
   }
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))	
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 #endif
 
@@ -169,7 +169,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 
 
   glFrameBuf->bind();
-		
+
   if (centerScene) {
     scene.centerScene();
   }
