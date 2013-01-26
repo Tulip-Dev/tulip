@@ -1,1 +1,1 @@
-INSTALL(FILES tulip_launcher DESTINATION macos COMPONENT macos)
+INSTALL(FILES tulip_launcher DESTINATION MacOS COMPONENT macos)
