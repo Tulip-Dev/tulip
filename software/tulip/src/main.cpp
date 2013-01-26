@@ -111,8 +111,16 @@ void checkTulipRunning(const QString& perspName, const QString& fileToOpen) {
 
 int main(int argc, char **argv) {
   start_crash_handler();
+  
+
+  
   QApplication tulip_agent(argc, argv);
   tulip_agent.setApplicationName("tulip");
+
+#if defined(__APPLE__)
+	// allows to load qt imageformats plugin
+	QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
+#endif
 
   // Parse arguments
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");

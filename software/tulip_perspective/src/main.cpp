@@ -123,6 +123,11 @@ int main(int argc,char **argv) {
   QApplication tulip_perspective(argc, argv);
   tulip_perspective.setApplicationName(title);
 
+#if defined(__APPLE__)
+	// allows to load qt imageformats plugin
+	QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
+#endif
+
   // Create perspective's window
   TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
   mainWindow->setVisible(false);
