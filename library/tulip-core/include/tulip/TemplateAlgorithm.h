@@ -27,7 +27,7 @@
 
 namespace tlp {
 class PluginContext;
-static const std::string PROPERTY_ALGORITHM_CATEGORY = QObject::trUtf8("Property").toStdString();
+static const std::string PROPERTY_ALGORITHM_CATEGORY = "Property";
 
 /**
  * @ingroup Plugins

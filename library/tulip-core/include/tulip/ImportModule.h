@@ -29,7 +29,7 @@
 
 namespace tlp {
 
-static const std::string IMPORT_CATEGORY = QObject::trUtf8("Import").toStdString();
+static const std::string IMPORT_CATEGORY = "Import";
 
 class PluginProgress;
 class Graph;
@@ -45,7 +45,7 @@ public:
   /**
   * @brief Initializes the DataSet to the one passed in the context.
   *
-  * @param context THe context this import plug-in runs into.
+  * @param context The context this import plug-in runs into.
   **/
   ImportModule (const tlp::PluginContext* context) {
     if(context != NULL) {

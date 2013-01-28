@@ -27,7 +27,7 @@ namespace tlp {
 class PluginContext;
 
 class BooleanProperty;
-static const std::string BOOLEAN_ALGORITHM_CATEGORY = QObject::trUtf8("Selection").toStdString();
+static const std::string BOOLEAN_ALGORITHM_CATEGORY = "Selection";
 
 /**
  * @ingroup Plugins
@@ -44,7 +44,7 @@ public:
 };
 
 class ColorProperty;
-static const std::string COLOR_ALGORITHM_CATEGORY = QObject::trUtf8("Coloring").toStdString();
+static const std::string COLOR_ALGORITHM_CATEGORY = "Coloring";
 
 /**
  * @ingroup Plugins
@@ -60,7 +60,7 @@ public:
 };
 
 class DoubleProperty;
-static const std::string DOUBLE_ALGORITHM_CATEGORY = QObject::trUtf8("Measure").toStdString();
+static const std::string DOUBLE_ALGORITHM_CATEGORY = "Measure";
 
 /**
  * @ingroup Plugins
@@ -77,7 +77,7 @@ public:
 };
 
 class IntegerProperty;
-static const std::string INTEGER_ALGORITHM_CATEGORY = QObject::trUtf8("Measure").toStdString();
+static const std::string INTEGER_ALGORITHM_CATEGORY = "Measure";
 
 /**
  * @ingroup Plugins
@@ -93,7 +93,7 @@ public:
 };
 
 class LayoutProperty;
-static const std::string LAYOUT_ALGORITHM_CATEGORY = QObject::trUtf8("Layout").toStdString();
+static const std::string LAYOUT_ALGORITHM_CATEGORY = "Layout";
 
 /**
  * @ingroup Plugins
@@ -110,7 +110,7 @@ public:
 };
 
 class SizeProperty;
-static const std::string SIZE_ALGORITHM_CATEGORY = QObject::trUtf8("Resizing").toStdString();
+static const std::string SIZE_ALGORITHM_CATEGORY = "Resizing";
 
 /**
  * @ingroup Plugins
@@ -126,7 +126,7 @@ public:
 };
 
 class StringProperty;
-static const std::string STRING_ALGORITHM_CATEGORY = QObject::trUtf8("Labeling").toStdString();
+static const std::string STRING_ALGORITHM_CATEGORY = "Labeling";
 
 /**
  * @ingroup Plugins

@@ -28,7 +28,7 @@
 
 namespace tlp {
 
-static const std::string EXPORT_CATEGORY = QObject::trUtf8("Export").toStdString();
+static const std::string EXPORT_CATEGORY = "Export";
 
 class Graph;
 class DataSet;
