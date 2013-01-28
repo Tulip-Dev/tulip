@@ -616,9 +616,11 @@ void GraphPerspective::openProjectFile(const QString &path) {
     _ui->workspace->readProject(_project,rootIds,prg);
     _ui->developFrame->setProject(_project);
     QMap<QString,tlp::Graph*>::iterator it = rootIds.begin();
+
     for (; it != rootIds.end() ; ++it) {
-        it.value()->setAttribute("file", std::string(path.toUtf8().data()));
+      it.value()->setAttribute("file", std::string(path.toUtf8().data()));
     }
+
     delete prg;
   }
   else {

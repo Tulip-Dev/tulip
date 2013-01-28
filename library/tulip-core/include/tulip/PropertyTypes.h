@@ -188,8 +188,8 @@ DECL_STORED_STRUCT(tlp::ColorVectorType::RealType)
 // template class to automatize definition of serializers
 template<typename T>
 struct KnownTypeSerializer :public TypedDataSerializer<typename T::RealType> {
- KnownTypeSerializer(const std::string& otn):TypedDataSerializer<typename T::RealType>(otn) {}
- KnownTypeSerializer(const char* otn):TypedDataSerializer<typename T::RealType>(std::string(otn)) {}
+  KnownTypeSerializer(const std::string& otn):TypedDataSerializer<typename T::RealType>(otn) {}
+  KnownTypeSerializer(const char* otn):TypedDataSerializer<typename T::RealType>(std::string(otn)) {}
 
   DataTypeSerializer* clone() const {
     return new KnownTypeSerializer<T>(this->outputTypeName);
@@ -204,10 +204,12 @@ struct KnownTypeSerializer :public TypedDataSerializer<typename T::RealType> {
   bool setData(tlp::DataSet& ds, const std::string& prop, const std::string& value) {
     bool result = true;
     typename T::RealType val;
+
     if (value.empty())
       val = T::defaultValue();
     else
       result = T::fromString(val, value);
+
     ds.set<typename T::RealType>(prop, val);
     return result;
   }

@@ -84,34 +84,36 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
     const string& defaultValue = param.getDefaultValue();
 
     DataTypeSerializer* dts = DataSet::typenameToSerializer(type);
+
     if (dts) {
- #ifndef NDEBUG
+#ifndef NDEBUG
       bool result =
 #endif
-	dts->setData(dataSet, name, defaultValue);
+        dts->setData(dataSet, name, defaultValue);
       assert(result);
       continue;
-    } else {
+    }
+    else {
       if (type.compare(typeid(tlp::ColorScale).name()) == 0) {
-	vector<Color> colors;
-	ColorVectorType::fromString(colors, defaultValue);
-	dataSet.set<ColorScale>(name, ColorScale(colors));
-	continue;
+        vector<Color> colors;
+        ColorVectorType::fromString(colors, defaultValue);
+        dataSet.set<ColorScale>(name, ColorScale(colors));
+        continue;
       }
 
       if (type.compare(typeid(tlp::StringCollection).name()) == 0) {
-	StringCollection col;
-	string::size_type lastPos = defaultValue.find_first_not_of(";");
-	string::size_type pos = defaultValue.find_first_of(";", lastPos);
+        StringCollection col;
+        string::size_type lastPos = defaultValue.find_first_not_of(";");
+        string::size_type pos = defaultValue.find_first_of(";", lastPos);
 
-	while (string::npos != pos || string::npos != lastPos) {
-	  col.push_back(defaultValue.substr(lastPos, pos - lastPos));
-	  lastPos = defaultValue.find_first_not_of(";", pos);
-	  pos = defaultValue.find_first_of(";", lastPos);
-	}
+        while (string::npos != pos || string::npos != lastPos) {
+          col.push_back(defaultValue.substr(lastPos, pos - lastPos));
+          lastPos = defaultValue.find_first_not_of(";", pos);
+          pos = defaultValue.find_first_of(";", lastPos);
+        }
 
-	dataSet.set<StringCollection>(name,col);
-	continue;
+        dataSet.set<StringCollection>(name,col);
+        continue;
       }
     }
 
