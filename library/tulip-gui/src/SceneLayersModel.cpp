@@ -211,7 +211,7 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
     else if (id == META_NODES_LABELS_ID) {
       display = trUtf8("Meta nodes labels");
       stencil = parameters->getMetaNodesLabelStencil();
-      visible = parameters->isDisplayMetaNodes();
+      visible = parameters->isViewMetaLabel();
     }
     else if (id == NODES_LABELS_ID) {
       display = trUtf8("Nodes labels");
@@ -300,6 +300,8 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
         p->setViewNodeLabel(visible);
       else if (id == EDGES_LABELS_ID)
         p->setViewEdgeLabel(visible);
+      else if (id == META_NODES_LABELS_ID)
+        p->setViewMetaLabel(visible);
     }
     else if (index.column() == 2) {
       int stencil = (value.value<int>() == (int)(Qt::Checked) ? FULL_STENCIL : NO_STENCIL);
