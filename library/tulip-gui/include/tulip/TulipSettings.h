@@ -28,6 +28,7 @@
 #include <tulip/Graph.h>
 #include <tulip/Color.h>
 #include <tulip/Size.h>
+#include <tulip/GlGraphRenderingParameters.h>
 #include <QtNetwork/QNetworkProxy>
 
 /**
@@ -35,7 +36,7 @@
   * TulipSettings is a wrapper for QSettings providing quick access to common keys provided in the tulip configuration file.
   * This object does not mask any method from the QSettings class, which mean that the user can still access custom keys by invoking the QSettings::value method.
   */
-class TLP_QT_SCOPE TulipSettings: public QSettings {
+class TLP_QT_SCOPE TulipSettings: public QSettings, tlp::GlDefaultSelectionColorManager {
   Q_OBJECT
   Q_ENUMS(DisplayProperty)
 
@@ -124,7 +125,9 @@ public:
   int defaultShape(tlp::ElementType elem);
   void setDefaultShape(tlp::ElementType elem, int shape);
 
+  // in GlDefaultSelectionColorManager interface
   tlp::Color defaultSelectionColor();
+
   void setDefaultSelectionColor(const tlp::Color& color);
 
   QSet<QString> favoriteAlgorithms() const;

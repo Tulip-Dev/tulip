@@ -512,6 +512,18 @@ private:
   BooleanProperty *_displayFilteringProperty;
   DoubleProperty* _elementOrderingProperty;
 };
+
+/** \brief Class to get the default selection color
+ */
+class TLP_GL_SCOPE GlDefaultSelectionColorManager {
+ public:
+   static void setManager(GlDefaultSelectionColorManager *);
+   static tlp::Color getDefaultSelectionColor();
+   virtual tlp::Color defaultSelectionColor()=0;
+
+ private:
+   static GlDefaultSelectionColorManager* manager;
+ };
 }
 
 #endif // Tulip_GLGRAPH_H
