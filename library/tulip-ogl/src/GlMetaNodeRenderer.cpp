@@ -68,6 +68,7 @@ void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
     metaGraph->addListener(this);
   }
 
+  scene->getGlGraphComposite()->setRenderingParameters(*(_inputData->renderingParameters()));
   bool viewMetaLabels = _inputData->renderingParameters()->isViewMetaLabel();//Checks if user want to see metanode labels
   scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(viewMetaLabels);
   scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(viewMetaLabels);
@@ -140,10 +141,6 @@ GlScene *GlMetaNodeRenderer::createScene(Graph* metaGraph) const {
   scene->addExistingLayer(layer);
   GlGraphComposite* graphComposite=new GlGraphComposite(metaGraph, scene);
   layer->addGlEntity(graphComposite,"graph");
-  graphComposite->getRenderingParametersPointer()->setViewNodeLabel(true);
-  graphComposite->getRenderingParametersPointer()->setEdgeColorInterpolate(false);
-  graphComposite->getRenderingParametersPointer()->setNodesStencil(0x0002);
-  graphComposite->getRenderingParametersPointer()->setNodesLabelStencil(0x0001);
   return scene;
 }
 
