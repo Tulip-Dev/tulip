@@ -59,8 +59,10 @@ TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
 
 TulipSettings &TulipSettings::instance() {
-  if (!_instance)
+  if (!_instance) {
     _instance = new TulipSettings;
+    GlDefaultSelectionColorManager::setManager(_instance);
+  }
 
   return *_instance;
 }

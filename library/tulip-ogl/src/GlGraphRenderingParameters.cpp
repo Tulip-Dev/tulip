@@ -20,7 +20,6 @@
 #include <tulip/Vector.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TlpTools.h>
-#include <tulip/PreferenceManager.h>
 
 using namespace tlp;
 
@@ -58,7 +57,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _texturePath(""),
   _edgesMaxSizeToNodesSize(true),
   _feedbackRender(false),
-  _selectionColor(PreferenceManager::getInst().getSelectionColor()),
+  _selectionColor(GlDefaultSelectionColorManager::getDefaultSelectionColor()),
   _displayFilteringProperty(NULL),
   _elementOrderingProperty(NULL) {
 }
@@ -462,4 +461,15 @@ void GlGraphRenderingParameters::setElementOrderingProperty(tlp::DoubleProperty*
 }
 tlp::DoubleProperty* GlGraphRenderingParameters::getElementOrderingProperty() const {
   return _elementOrderingProperty;
+}
+//====================================================
+GlDefaultSelectionColorManager* GlDefaultSelectionColorManager::manager = NULL;
+
+void GlDefaultSelectionColorManager::setManager(GlDefaultSelectionColorManager* mgr) {
+  manager = mgr;
+}
+
+tlp::Color GlDefaultSelectionColorManager::getDefaultSelectionColor() {
+  static Color selectionColor(23, 81, 228);
+  return manager ? manager->defaultSelectionColor() : selectionColor;
 }

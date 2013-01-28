@@ -57,7 +57,6 @@ INSTALL(FILES
   tulip/PluginLoader.h
   tulip/PluginLoaderTxt.h
   tulip/PluginProgress.h
-  tulip/PreferenceManager.h
   tulip/TemplateAlgorithm.h
   tulip/PropertyAlgorithm.h
   tulip/PropertyInterface.h
