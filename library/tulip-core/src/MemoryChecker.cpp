@@ -16,9 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
+#include "tulip/tulipconf.h"
 #include "tulip/MemoryChecker.h"
-
-#include <QtCore/QMap>
+#include <cstring>
+#include <map>
 
 static int miss_count = 0;
 static int hit_count = 0;
@@ -29,7 +30,7 @@ class MemoryChecker {
     size_t _size;
   };
 
-  QMap<void*,StackInfo> _stacks;
+  std::map<void*,StackInfo> _stacks;
 
 public:
   MemoryChecker() {}
@@ -42,20 +43,20 @@ public:
   }
 
   inline void remove(void* ptr) {
-    if (!_stacks.contains(ptr))
-      return;
-
-    StackInfo infos = _stacks[ptr];
-    delete infos._strings;
-    _stacks.remove(ptr);
+    std::map<void*, StackInfo>::iterator it = _stacks.find(ptr);
+    if (it != _stacks.end()) {
+      delete it->second._strings;
+      _stacks.erase(it);
+    }
   }
 
   inline void print() {
-    foreach(void* ptr,_stacks.keys()) {
-      StackInfo infos = _stacks[ptr];
+    for(std::map<void*, StackInfo>::iterator it = _stacks.begin();
+	it != _stacks.end(); ++it) {
+      StackInfo& infos = it->second;
 
       qWarning() << " ======================== ";
-      qWarning() << "Possible memory leak at " << ptr << ": ";
+      qWarning() << "Possible memory leak at " << it->first << ": ";
 
       for (size_t i=0; i<infos._size; ++i)
         qWarning() << infos._strings[i];
@@ -66,9 +67,9 @@ public:
 
   inline void clear() {
     int entries = _stacks.size();
-    foreach(void* ptr,_stacks.keys()) {
-      StackInfo infos = _stacks[ptr];
-      delete infos._strings;
+    for(std::map<void*, StackInfo>::iterator it = _stacks.begin();
+	it != _stacks.end(); ++it) {
+      delete it->second._strings;
     }
     _stacks.clear();
     qWarning() << "Removed " << entries << " into the memory checker";
