@@ -27,7 +27,7 @@
 
 namespace tlp {
 
-static const std::string ALGORITHM_CATEGORY = QObject::trUtf8("Algorithm").toStdString();
+static const std::string ALGORITHM_CATEGORY = "Algorithm";
 
 class PluginProgress;
 class Graph;
