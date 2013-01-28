@@ -37,7 +37,6 @@
 #include <tulip/AbstractProperty.h>
 #include <tulip/TypeInterface.h>
 #include <tulip/SerializableType.h>
-#include <QtCore/QStringList>
 
 namespace tlp {
 
@@ -97,21 +96,6 @@ public:
 };
 
 typedef SerializableVectorType<int,false> IntegerVectorType;
-
-class TLP_SCOPE QStringListType: public TypeInterface<QStringList> {
-public:
-  static void write(std::ostream&, const RealType&);
-  static bool read(std::istream&, RealType&);
-  FORWARD_STRING_METHODS(QStringListType)
-};
-
-class TLP_SCOPE QStringType: public TypeInterface<QString> {
-public:
-  static void write(std::ostream&, const RealType&);
-  static bool read(std::istream&, RealType&);
-  static std::string toString(const RealType &);
-  static bool fromString(RealType &, const std::string &);
-};
 
 class TLP_SCOPE BooleanType: public TypeInterface<bool> {
 public:
@@ -201,7 +185,35 @@ DECL_STORED_STRUCT(tlp::StringType::RealType)
 DECL_STORED_STRUCT(tlp::StringVectorType::RealType)
 DECL_STORED_STRUCT(tlp::ColorVectorType::RealType)
 
-extern TLP_SCOPE void initTypeSerializers();
+// template class to automatize definition of serializers
+template<typename T>
+struct KnownTypeSerializer :public TypedDataSerializer<typename T::RealType> {
+ KnownTypeSerializer(const std::string& otn):TypedDataSerializer<typename T::RealType>(otn) {}
+ KnownTypeSerializer(const char* otn):TypedDataSerializer<typename T::RealType>(std::string(otn)) {}
+
+  DataTypeSerializer* clone() const {
+    return new KnownTypeSerializer<T>(this->outputTypeName);
+  }
+
+  void write(std::ostream& os, const typename T::RealType& v) {
+    T::write(os, v);
+  }
+  bool read(std::istream& iss, typename T::RealType& v) {
+    return T::read(iss, v);
+  }
+  bool setData(tlp::DataSet& ds, const std::string& prop, const std::string& value) {
+    bool result = true;
+    typename T::RealType val;
+    if (value.empty())
+      val = T::defaultValue();
+    else
+      result = T::fromString(val, value);
+    ds.set<typename T::RealType>(prop, val);
+    return result;
+  }
+};
+
+extern void initTypeSerializers();
 #ifdef _MSC_VER
 template class SerializableType<double>;
 template class SerializableType<float>;

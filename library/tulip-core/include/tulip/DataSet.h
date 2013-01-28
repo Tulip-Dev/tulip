@@ -91,6 +91,9 @@ struct TypedData :public DataType {
   }
 };
 
+// forward declaration of DataSet
+ class DataSet;
+
 // Basic class for serialization of DataType embedded value
 struct DataTypeSerializer {
   // the readable type name the serializer is designed for
@@ -103,6 +106,8 @@ struct DataTypeSerializer {
   virtual void writeData(std::ostream& os, const DataType *data)=0;
   // build a DataType embedding value read from input stream
   virtual DataType* readData(std::istream &is)=0;
+  // set a value into a DataSet
+  virtual bool setData(DataSet& ds, const std::string& prop, const std::string& value)=0;
 };
 
 // a template class designs to simplify the developer's work
@@ -127,6 +132,8 @@ struct TypedDataSerializer :public DataTypeSerializer {
 
     return NULL;
   }
+  // set a value into a DataSet
+  virtual bool setData(DataSet& ds, const std::string& prop, const std::string& value)=0;
 };
 
 // This class is there to ensure the destruction of DataTypeSerializer objects

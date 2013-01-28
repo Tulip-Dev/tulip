@@ -23,6 +23,7 @@
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QVariant>
+#include <QtCore/QStringList>
 
 #include <tulip/DataSet.h>
 #include <tulip/Graph.h>
@@ -42,6 +43,7 @@
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlLabel.h>
 #include <tulip/TulipFont.h>
+#include <tulip/PropertyTypes.h>
 
 #include <vector>
 
@@ -150,8 +152,25 @@ class TLP_QT_SCOPE TulipMetaTypes {
 public:
   static tlp::DataType *qVariantToDataType(const QVariant &);
   static QVariant dataTypeToQvariant(tlp::DataType *,const std::string& paramName);
-
 };
+
+class QStringListType: public TypeInterface<QStringList> {
+public:
+  static void write(std::ostream&, const RealType&);
+  static bool read(std::istream&, RealType&);
+  FORWARD_STRING_METHODS(QStringListType)
+};
+
+class QStringType: public TypeInterface<QString> {
+public:
+  static void write(std::ostream&, const RealType&);
+  static bool read(std::istream&, RealType&);
+  static std::string toString(const RealType &);
+  static bool fromString(RealType &, const std::string &);
+};
+
+extern void initQTypeSerializers();
+
 }
 
 #endif // TULIPMETATYPES_H

@@ -42,6 +42,7 @@
 #include <tulip/PluginManager.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/TulipMetaTypes.h>
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -191,6 +192,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   }
 
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
+  initQTypeSerializers();
   tlp::TulipPluginsPath = (tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toStdString() +
                           tlp::PATH_DELIMITER +
                           tlp::TulipPluginsPath +

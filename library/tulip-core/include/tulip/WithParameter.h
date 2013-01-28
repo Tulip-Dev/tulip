@@ -22,6 +22,7 @@
 
 #include <string>
 #include <typeinfo>
+#include <vector>
 
 #include <tulip/tulipconf.h>
 
@@ -213,8 +214,6 @@ struct TLP_SCOPE ParameterDescriptionList {
   }
 private:
   ParameterDescription* getParameter(const std::string& parameterName);
-  template<typename TYPEINTERFACE>
-  void insertData(tlp::DataSet &,const std::string &param,const std::string &defaultValue) const;
   std::vector<ParameterDescription> parameters;
 };
 
