@@ -572,52 +572,6 @@ bool StringVectorType::read(istream& is, RealType & v) {
   }
 }
 
-// QStringListType
-void QStringListType::write(ostream& oss, const RealType& t) {
-  StringVectorType::RealType stdVect(t.size());
-  int i=0;
-  foreach(QString s, t) {
-    stdVect[i] = s.toStdString();
-    ++i;
-  }
-  StringVectorType::write(oss,stdVect);
-}
-
-bool QStringListType::read(istream& iss, RealType& t) {
-  StringVectorType::RealType stdVect;
-
-  if (!StringVectorType::read(iss,stdVect))
-    return false;
-
-  for (unsigned int i=0; i<stdVect.size(); ++i)
-    t.push_back(stdVect[i].c_str());
-
-  return true;
-}
-
-void QStringType::write(ostream& oss, const QString& t) {
-  StringType::write(oss,t.toStdString());
-}
-
-bool QStringType::read(istream& iss, QString& t) {
-  std::string s;
-
-  if (!StringType::read(iss,s))
-    return false;
-
-  t = s.c_str();
-  return true;
-}
-
-string QStringType::toString(const QString& s) {
-  return s.toStdString();
-}
-
-bool QStringType::fromString(QString& s, const string& str) {
-  s = QString(str.c_str());
-  return true;
-}
-
 // ColorType
 Color ColorType::undefinedValue() {
   return Color(255,255,255,255);
@@ -668,57 +622,7 @@ bool ColorType::fromString( RealType & v, const string & s ) {
   return iss >> v;
 }
 
-// template class to automatize definition of serializers
-template<typename T>
-struct KnownTypeSerializer :public TypedDataSerializer<typename T::RealType> {
-  KnownTypeSerializer(const string& otn):TypedDataSerializer<typename T::RealType>(otn) {}
-  KnownTypeSerializer(const char* otn):TypedDataSerializer<typename T::RealType>(string(otn)) {}
-
-  DataTypeSerializer* clone() const {
-    return new KnownTypeSerializer<T>(this->outputTypeName);
-  }
-
-  void write(ostream& os, const typename T::RealType& v) {
-    T::write(os, v);
-  }
-  bool read(istream& iss, typename T::RealType& v) {
-    return T::read(iss, v);
-  }
-};
-
 // some special serializers
-struct UintTypeSerializer :public TypedDataSerializer<unsigned int> {
-  UintTypeSerializer():TypedDataSerializer<unsigned int>("uint") {}
-
-  DataTypeSerializer* clone() const {
-    return new UintTypeSerializer();
-  }
-
-  void write(ostream& os, const unsigned int& v) {
-    os << v;
-  }
-
-  bool read(istream& is, unsigned int& v) {
-    return is >> v;
-  }
-};
-
-struct FloatTypeSerializer :public TypedDataSerializer<float> {
-  FloatTypeSerializer():TypedDataSerializer<float>("float") {}
-
-  DataTypeSerializer* clone() const {
-    return new FloatTypeSerializer();
-  }
-
-  void write(ostream& os, const float& v) {
-    os << v;
-  }
-
-  bool read(istream& is, float& v) {
-    return is >> v;
-  }
-};
-
 struct DataSetTypeSerializer :public TypedDataSerializer<DataSet> {
   DataSetTypeSerializer():TypedDataSerializer<DataSet>("DataSet") {}
 
@@ -733,6 +637,11 @@ struct DataSetTypeSerializer :public TypedDataSerializer<DataSet> {
   bool read(istream& is, DataSet& ds) {
     return DataSet::read(is, ds);
   }
+
+  bool setData(tlp::DataSet&, const std::string&, const std::string&) {
+    // no sense
+    return false;
+  }
 };
 
 void tlp::initTypeSerializers() {
@@ -740,13 +649,15 @@ void tlp::initTypeSerializers() {
 
   DataSet::registerDataTypeSerializer<DoubleType::RealType>(KnownTypeSerializer<DoubleType>("double"));
 
-  DataSet::registerDataTypeSerializer<float>(FloatTypeSerializer());
+  DataSet::registerDataTypeSerializer<FloatType::RealType>(KnownTypeSerializer<FloatType>("float"));
 
   DataSet::registerDataTypeSerializer<BooleanType::RealType>(KnownTypeSerializer<BooleanType>("bool"));
 
   DataSet::registerDataTypeSerializer<IntegerType::RealType>(KnownTypeSerializer<IntegerType>("int"));
 
-  DataSet::registerDataTypeSerializer<unsigned int>(UintTypeSerializer());
+  DataSet::registerDataTypeSerializer<UnsignedIntegerType::RealType>(KnownTypeSerializer<UnsignedIntegerType>("uint"));
+
+  DataSet::registerDataTypeSerializer<LongType::RealType>(KnownTypeSerializer<LongType>("long"));
 
   DataSet::registerDataTypeSerializer<ColorType::RealType>(KnownTypeSerializer<ColorType>("color"));
 
@@ -765,8 +676,6 @@ void tlp::initTypeSerializers() {
   DataSet::registerDataTypeSerializer<LineType::RealType>(KnownTypeSerializer<LineType>("coordvector"));
 
   DataSet::registerDataTypeSerializer<StringVectorType::RealType>(KnownTypeSerializer<StringVectorType>("stringvector"));
-
-  DataSet::registerDataTypeSerializer<QStringListType::RealType>(KnownTypeSerializer<QStringListType>("qstringlist"));
 
   DataSet::registerDataTypeSerializer<DataSet>(DataSetTypeSerializer());
 

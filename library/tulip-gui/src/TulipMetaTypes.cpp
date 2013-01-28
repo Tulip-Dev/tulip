@@ -16,9 +16,58 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <tulip/PropertyTypes.h>
 #include "tulip/TulipMetaTypes.h"
+#include "tulip/TlpQtTools.h"
+
 
 using namespace tlp;
+
+// QStringListType
+void QStringListType::write(std::ostream& oss, const RealType& t) {
+  tlp::StringVectorType::RealType stdVect(t.size());
+  int i=0;
+  foreach(QString s, t) {
+    stdVect[i] = tlp::QStringToTlpString(s);
+    ++i;
+  }
+  StringVectorType::write(oss,stdVect);
+}
+
+bool QStringListType::read(std::istream& iss, RealType& t) {
+  StringVectorType::RealType stdVect;
+
+  if (!StringVectorType::read(iss,stdVect))
+    return false;
+
+  for (unsigned int i=0; i<stdVect.size(); ++i)
+    t.push_back(tlp::tlpStringToQString(stdVect[i]));
+
+  return true;
+}
+
+void QStringType::write(std::ostream& oss, const QString& t) {
+  StringType::write(oss,t.toStdString());
+}
+
+bool QStringType::read(std::istream& iss, QString& t) {
+  std::string s;
+
+  if (!StringType::read(iss,s))
+    return false;
+
+  t = tlp::tlpStringToQString(s);
+  return true;
+}
+
+std::string QStringType::toString(const QString& s) {
+  return tlp::QStringToTlpString(s);
+}
+
+bool QStringType::fromString(QString& s, const std::string& str) {
+  s = tlp::tlpStringToQString(str);
+  return true;
+}
 
 #define CHECK_QVARIANT(TYPE) if (v.userType() == qMetaTypeId<TYPE>()) return new TypedData<TYPE>(new TYPE(v.value<TYPE>()));
 
@@ -119,4 +168,8 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   CHECK_DATATYPE(QStringListType::RealType)
   CHECK_DATATYPE(QStringType::RealType)
   return QVariant();
+}
+
+void tlp::initQTypeSerializers() {
+  DataSet::registerDataTypeSerializer<QStringListType::RealType>(KnownTypeSerializer<QStringListType>("qstringlist"));
 }
