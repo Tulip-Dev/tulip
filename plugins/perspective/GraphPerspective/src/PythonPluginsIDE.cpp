@@ -497,7 +497,7 @@ static bool checkAndGetPluginInfosFromSrcCode(const QString &pluginCode, QString
       pos = rx.indexIn(pluginCode, pos+rx.matchedLength());
     }
 
-    rx.setPattern("^.*registerPlugin.*\\(.*,.*\"([^,]+)\",.*$");
+    rx.setPattern("^.*register.*Plugin.*\\(.*,.*\"([^,]+)\",.*$");
 
     if (rx.indexIn(pluginCode) != -1) {
       pluginName = rx.cap(1);
