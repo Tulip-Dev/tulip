@@ -44,6 +44,7 @@ public:
 
   inline void remove(void* ptr) {
     std::map<void*, StackInfo>::iterator it = _stacks.find(ptr);
+
     if (it != _stacks.end()) {
       delete it->second._strings;
       _stacks.erase(it);
@@ -52,7 +53,7 @@ public:
 
   inline void print() {
     for(std::map<void*, StackInfo>::iterator it = _stacks.begin();
-	it != _stacks.end(); ++it) {
+        it != _stacks.end(); ++it) {
       StackInfo& infos = it->second;
 
       qWarning() << " ======================== ";
@@ -67,10 +68,12 @@ public:
 
   inline void clear() {
     int entries = _stacks.size();
+
     for(std::map<void*, StackInfo>::iterator it = _stacks.begin();
-	it != _stacks.end(); ++it) {
+        it != _stacks.end(); ++it) {
       delete it->second._strings;
     }
+
     _stacks.clear();
     qWarning() << "Removed " << entries << " into the memory checker";
   }

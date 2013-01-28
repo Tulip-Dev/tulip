@@ -92,7 +92,7 @@ struct TypedData :public DataType {
 };
 
 // forward declaration of DataSet
- class DataSet;
+class DataSet;
 
 // Basic class for serialization of DataType embedded value
 struct DataTypeSerializer {

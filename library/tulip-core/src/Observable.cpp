@@ -128,6 +128,7 @@ bool Observable::isAlive(tlp::node n) {
 //----------------------------------
 Observable* Observable::getObject(node n) {
   assert(_oAlive[n]);
+
   if (!_oAlive[n])
     throw ObservableException("That object has been deleted it is no more accessbile");
 
@@ -152,6 +153,7 @@ Event::Event(const Observable &sender, EventType type):
   _sender(sender.getNode()),
   _type(type) {
   assert(_type != TLP_DELETE);
+
   if (_type == TLP_DELETE)
     throw ObservableException("It is forbidden to create a delete events, DeleteEvents are autmotically generated at the observable destruction");
 }
@@ -224,6 +226,7 @@ Observable::~Observable() {
 #endif
   {
     assert(_oAlive[_n]);
+
     if (!_oAlive[_n])
       throw ObservableException("Observable object has already been deleted, possible double free!!!");
 
@@ -315,6 +318,7 @@ void Observable::unholdObservers() {
 Iterator<Observable *> *Observable::getOnlookers() const {
   if (isBound()) {
     assert(_oAlive[_n]);
+
     if (!_oAlive[_n]) {
       throw ObservableException("getObservers called on a deleted Observable");
     }
@@ -331,6 +335,7 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
 #endif
   {
     assert(!isBound() || _oAlive[_n]);
+
     if (isBound() && !_oAlive[_n]) {
       throw ObservableException("addObserver called on a deleted Observable");
     }
@@ -375,6 +380,7 @@ void Observable::addListener(Observable * const listener) const {
 //----------------------------------------
 void Observable::observableDeleted() {
   assert(deleteMsgSent == false);
+
   if (deleteMsgSent) {
     throw ObservableException("Delete message has been sent several time.");
   }
@@ -465,6 +471,7 @@ void Observable::sendEvent(const Event &message) {
       }
 
       assert(_oAlive[backn]);
+
       if (!_oAlive[backn]) {
         throw ObservableException("An observable has been deleted during the notifification of its observer (ie. an observer has deleted its caller during an update)");
       }
@@ -490,6 +497,7 @@ void Observable::sendEvent(const Event &message) {
       }
 
       assert(_oAlive[backn]);
+
       if (!_oAlive[backn]) {
         throw ObservableException("An observable has been deleted during the notifification of its observer (ie. an observer has deleted its caller during an update)");
       }
@@ -531,6 +539,7 @@ void Observable::removeOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) 
 #endif
   {
     assert(_oAlive[_n]);
+
     if (!_oAlive[_n]) {
       throw ObservableException("removeOnlooker called on a deleted Observable");
     }
@@ -561,6 +570,7 @@ void Observable::notifyObservers() {
     return;
 
   assert(_oAlive[_n]);
+
   if (!_oAlive[_n]) {
     throw ObservableException("notifyObservers called on a deleted Observable");
   }
@@ -574,6 +584,7 @@ bool Observable::hasOnlookers() const {
     return false;
 
   assert(_oAlive[_n]);
+
   if (!_oAlive[_n]) {
     throw ObservableException("hasOnlookers called on a deleted Observable");
   }
