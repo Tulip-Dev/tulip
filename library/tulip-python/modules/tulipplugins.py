@@ -155,4 +155,78 @@ def registerPlugin(pluginClassName, pluginName, author, date, info, release):
 
     registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, "")
 
+# For backward compatibility with Tulip 3.x
+
+def registerAlgorithmPlugin(pluginClassName, pluginName, author, date, info, release):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, "")
+
+def registerAlgorithmPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+
+def registerLayoutPlugin(pluginClassName, pluginName, author, date, info, release):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, "")
+
+def registerLayoutPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+
+def registerDoublePlugin(pluginClassName, pluginName, author, date, info, release):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, "")
+
+def registerDoublePluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+
+def registerIntegerPlugin(pluginClassName, pluginName, author, date, info, release):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, "")
+
+def registerIntegerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+
+def registerBooleanPlugin(pluginClassName, pluginName, author, date, info, release):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, "")
+
+def registerBooleanPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+
+def registerSizePlugin(pluginClassName, pluginName, author, date, info, release):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, "")
+
+def registerSizePluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+
+def registerColorPlugin(pluginClassName, pluginName, author, date, info, release):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, "")
+
+def registerColorPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+
+def registerImportPlugin(pluginClassName, pluginName, author, date, info, release):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, "")
+
+def registerImportPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+
+def registerExportPlugin(pluginClassName, pluginName, author, date, info, release):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, "")
+
+def registerExportPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
+
+    registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
+
 
