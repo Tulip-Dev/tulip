@@ -1063,7 +1063,7 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QS
   for (std::list<std::string>::iterator it = pluginNames.begin() ; it != pluginNames.end() ; ++it) {
     tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it, NULL);
 
-    if (plugin->category() == type.toStdString()) {
+    if (type.isEmpty() || plugin->category() == type.toStdString()) {
       QString pluginName = "\"" + QString((*it).c_str()) + "\"";
 
       if (pluginName.startsWith(prefix)) {
