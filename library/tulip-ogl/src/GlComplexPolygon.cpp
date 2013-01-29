@@ -33,6 +33,9 @@
 #include <QtCore/QStringList>
 #include <QtCore/QVariantList>
 
+// FIXME The line below is duplicated of tulip-gui/TulipMetaTypes.h
+Q_DECLARE_METATYPE(tlp::Color)
+
 #ifdef __APPLE_CC__
 #if __APPLE_CC__ < 5400
 // Tiger
@@ -263,7 +266,7 @@ void CALLBACK beginCallback(GLenum which, GLvoid *polygonData) {
 
 void CALLBACK errorCallback(GLenum errorCode) {
   const GLubyte *estring = gluErrorString(errorCode);
-  qWarning() << "Tessellation Error: " << estring << endl;
+  qCritical() << "Tessellation Error: " << estring << endl;
 }
 
 void CALLBACK endCallback(GLvoid *polygonData) {

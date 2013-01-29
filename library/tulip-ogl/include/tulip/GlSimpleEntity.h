@@ -28,6 +28,9 @@
 #include <tulip/GlXMLTools.h>
 #include <tulip/BoundingBox.h>
 
+#include <QtCore/QStringList>
+#include <QtCore/QVariantList>
+
 namespace tlp {
 
 class GlComposite;

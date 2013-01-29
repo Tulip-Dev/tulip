@@ -22,9 +22,6 @@
 #define _COLOR_H
 #include <tulip/Vector.h>
 
-// FIXME: Including QVariant here should be replaced by a specific tulip-core header similar to TulipMetaTypes.h
-#include <QtCore/QVariant>
-
 ///
 namespace tlp {
 
@@ -82,8 +79,6 @@ TLP_SCOPE std::ostream& operator<<(std::ostream &os,const tlp::Color &);
 TLP_SCOPE std::istream& operator>>(std::istream &is, tlp::Color &);
 
 }
-
-Q_DECLARE_METATYPE(tlp::Color)
 
 tlp::Color::Color(const tlp::Vector<unsigned char,4> &v) : tlp::Vector<unsigned char,4>(v) {}
 
