@@ -120,15 +120,15 @@ int main(int argc,char **argv) {
       QDomElement pluginNode = serverDocument.createElement("plugin");
       pluginNode.setAttribute("name",plugin);
       pluginNode.setAttribute("path",component);
-      const Plugin* info = PluginLister::pluginInformations(plugin.toStdString());
-      pluginNode.setAttribute("category",info->category().c_str());
-      pluginNode.setAttribute("author",info->author().c_str());
-      pluginNode.setAttribute("date",info->date().c_str());
-      pluginNode.setAttribute("desc",info->info().c_str());
-      pluginNode.setAttribute("release",info->release().c_str());
-      pluginNode.setAttribute("tulip",info->tulipRelease().c_str());
+      const Plugin& info = PluginLister::pluginInformations(plugin.toStdString());
+      pluginNode.setAttribute("category",info.category().c_str());
+      pluginNode.setAttribute("author",info.author().c_str());
+      pluginNode.setAttribute("date",info.date().c_str());
+      pluginNode.setAttribute("desc",info.info().c_str());
+      pluginNode.setAttribute("release",info.release().c_str());
+      pluginNode.setAttribute("tulip",info.tulipRelease().c_str());
       QDomElement depsNode = serverDocument.createElement("dependencies");
-      std::list<Dependency> deps = PluginLister::getPluginDependencies(info->name());
+      std::list<Dependency> deps = PluginLister::getPluginDependencies(info.name());
 
       for(std::list<Dependency>::iterator it = deps.begin(); it != deps.end(); ++it) {
         QDomElement dep = serverDocument.createElement("dependency");

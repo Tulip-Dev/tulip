@@ -56,7 +56,7 @@ struct TLP_QT_SCOPE PluginInformations {
   PluginInformations();
   PluginInformations(const PluginInformations& copy);
 
-  void fillLocalInfos(const tlp::Plugin*info);
+  void fillLocalInfos(const tlp::Plugin& info);
 };
 
 class TLP_QT_SCOPE PluginManager {

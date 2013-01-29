@@ -73,10 +73,9 @@ public:
         return name.c_str();
       }
       else if (role == Qt::DecorationRole) {
-        const Plugin* p = PluginLister::pluginInformations(name);
-        QPixmap pix(p->icon().c_str());
-        delete p;
-        return pix;
+        const Plugin& p = PluginLister::pluginInformations(name);
+        QPixmap pix(p.icon().c_str());
+	return pix;
       }
     }
 
@@ -115,9 +114,8 @@ class PluginModel : public tlp::TulipModel {
 
     for(std::list<std::string>::iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name = *it;
-      const Plugin* plugin = PluginLister::instance()->pluginInformations(name);
-      pluginTree[plugin->category().c_str()][plugin->group().c_str()].append(name.c_str());
-      delete plugin;
+      const Plugin& plugin = PluginLister::instance()->pluginInformations(name);
+      pluginTree[plugin.category().c_str()][plugin.group().c_str()].append(name.c_str());
     }
 
     foreach(QString cat, pluginTree.keys()) {
@@ -134,17 +132,15 @@ class PluginModel : public tlp::TulipModel {
                   pluginTree[cat][group].end(), QStringCaseCmp);
 
         foreach(QString alg, pluginTree[cat][group]) {
-          const Plugin* plugin =
+          const Plugin& plugin =
             PluginLister::instance()->pluginInformations(alg.toStdString());
-          std::string infos = plugin->info();
+          std::string infos = plugin.info();
 
           // set infos only if they contain more than one word
           if (infos.find(' ') != std::string::npos)
             groupItem->addChild(alg, infos.c_str());
           else
             groupItem->addChild(alg);
-
-          delete plugin;
         }
       }
     }
@@ -229,9 +225,8 @@ public:
       return f;
     }
     else if (role == Qt::DecorationRole && tlp::PluginLister::pluginExists(item->name.toStdString())) {
-      const tlp::Plugin* p = tlp::PluginLister::pluginInformations(item->name.toStdString());
-      QIcon icon(p->icon().c_str());
-      delete p;
+      const tlp::Plugin& p = tlp::PluginLister::pluginInformations(item->name.toStdString());
+      QIcon icon(p.icon().c_str());
       return icon;
     }
 

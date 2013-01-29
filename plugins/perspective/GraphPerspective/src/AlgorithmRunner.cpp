@@ -77,10 +77,9 @@ void AlgorithmRunner::buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model
 }
 
 void AlgorithmRunner::insertItem(QWidget* w, const QString& name) {
-  const Plugin* plugin = PluginLister::pluginInformations(name.toStdString());
-  QString category = plugin->category().c_str();
-  QString group = plugin->group().c_str();
-  delete plugin;
+  const Plugin& plugin = PluginLister::pluginInformations(name.toStdString());
+  QString category = plugin.category().c_str();
+  QString group = plugin.group().c_str();
 
   ExpandableGroupBox* categoryBox = NULL, *groupBox = NULL;
   foreach(ExpandableGroupBox* box, w->findChildren<ExpandableGroupBox*>()) {

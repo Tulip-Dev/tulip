@@ -36,7 +36,7 @@ using namespace tlp;
 AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _localMode(true) {
   _ui->setupUi(this);
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
-  const Plugin *plugin = PluginLister::instance()->pluginInformations(pluginName.toStdString());
+  const Plugin& plugin = PluginLister::instance()->pluginInformations(pluginName.toStdString());
   // split pluginName after the second word if needed
   QStringList words = pluginName.split(' ');
 
@@ -53,7 +53,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   // initialize parameters only if needed
   _ui->parameters->setVisible(false);
 
-  if (plugin->inputRequired()) {
+  if (plugin.inputRequired()) {
     tooltip +=  " with current settings";
     _ui->parameters->setItemDelegate(new TulipItemDelegate);
   }
@@ -61,7 +61,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
     _ui->settingsButton->setVisible(false);
   }
 
-  std::string infos = plugin->info();
+  std::string infos = plugin.info();
 
   // show infos in tooltip only if it contains more than one word
   if (infos.find(' ') != std::string::npos)
@@ -74,7 +74,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   static QPixmap cppPix(":/tulip/graphperspective/icons/16/cpp.png");
   static QPixmap pythonPix(":/tulip/graphperspective/icons/16/python.png");
 
-  if (plugin->programmingLanguage() == "Python") {
+  if (plugin.programmingLanguage() == "Python") {
     _ui->languageLabel->setPixmap(pythonPix);
     _ui->languageLabel->setToolTip("Plugin written in Python");
   }
@@ -82,8 +82,6 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
     _ui->languageLabel->setPixmap(cppPix);
     _ui->languageLabel->setToolTip("Plugin written in C++");
   }
-
-  delete plugin;
 }
 
 AlgorithmRunnerItem::~AlgorithmRunnerItem() {
@@ -359,9 +357,8 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   }
 
   QDrag *drag = new QDrag(this);
-  const Plugin* p = PluginLister::pluginInformations(_pluginName.toStdString().c_str());
-  QPixmap icon(QPixmap(p->icon().c_str()).scaled(64,64));
-  delete p;
+  const Plugin& p = PluginLister::pluginInformations(_pluginName.toStdString().c_str());
+  QPixmap icon(QPixmap(p.icon().c_str()).scaled(64,64));
   QFont f;
   f.setBold(true);
   QFontMetrics metrics(f);

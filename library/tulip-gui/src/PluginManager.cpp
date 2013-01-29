@@ -165,10 +165,10 @@ PluginManager::PluginInformationsList PluginManager::listPlugins(PluginLocations
     std::list<std::string> localResults = PluginLister::instance()->availablePlugins();
 
     for (std::list<std::string>::iterator it = localResults.begin(); it != localResults.end(); ++it) {
-      const Plugin* info = PluginLister::instance()->pluginInformations(*it);
+      const Plugin& info = PluginLister::instance()->pluginInformations(*it);
 
-      if (QString(info->category().c_str()).contains(categoryFilter) && QString(info->name().c_str()).contains(nameFilter, Qt::CaseInsensitive)) {
-        nameToInfos[info->name().c_str()].fillLocalInfos(info);
+      if (QString(info.category().c_str()).contains(categoryFilter) && QString(info.name().c_str()).contains(nameFilter, Qt::CaseInsensitive)) {
+        nameToInfos[info.name().c_str()].fillLocalInfos(info);
       }
     }
   }
@@ -232,16 +232,16 @@ PluginInformations::PluginInformations(const PluginInformations &copy) {
   availableVersion = copy.availableVersion;
 }
 
-void PluginInformations::fillLocalInfos(const Plugin* info) {
-  name = info->name().c_str();
-  category = info->category().c_str();
-  installedVersion.description = info->info().c_str();
-  installedVersion.icon = info->icon().c_str();
-  installedVersion.version = info->release().c_str();
-  installedVersion.date = info->date().c_str();
-  installedVersion.author = info->author().c_str();
-  installedVersion.libraryLocation = PluginLister::getPluginLibrary(info->name()).c_str();
-  std::list<tlp::Dependency> dependencies = PluginLister::instance()->getPluginDependencies(info->name());
+void PluginInformations::fillLocalInfos(const Plugin& info) {
+  name = info.name().c_str();
+  category = info.category().c_str();
+  installedVersion.description = info.info().c_str();
+  installedVersion.icon = info.icon().c_str();
+  installedVersion.version = info.release().c_str();
+  installedVersion.date = info.date().c_str();
+  installedVersion.author = info.author().c_str();
+  installedVersion.libraryLocation = PluginLister::getPluginLibrary(info.name()).c_str();
+  std::list<tlp::Dependency> dependencies = PluginLister::instance()->getPluginDependencies(info.name());
 
   for (std::list<tlp::Dependency>::iterator it = dependencies.begin(); it != dependencies.end(); ++it) {
     installedVersion.dependencies.push_back(it->pluginName.c_str());

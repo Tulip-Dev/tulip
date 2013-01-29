@@ -60,7 +60,7 @@ void PluginsTest::testloadPlugin() {
   PluginLibraryLoader::loadPluginLibrary("./testPlugin."+suffix, &loader);
   // plugin should exist now
   CPPUNIT_ASSERT(tlp::PluginLister::pluginExists("Test"));
-  list<Dependency> deps = tlp::PluginLister::instance()->getPluginDependencies("Test");
+  const list<Dependency>& deps = tlp::PluginLister::instance()->getPluginDependencies("Test");
   // only one dependency (see testPlugin.cpp)
   CPPUNIT_ASSERT_EQUAL(size_t(1), deps.size());
   CPPUNIT_ASSERT_EQUAL(string("Test"), deps.front().pluginName);
@@ -151,16 +151,16 @@ void PluginsTest::pluginInformations() {
   CPPUNIT_ASSERT_EQUAL(string("0"), param.getDefaultValue());
   CPPUNIT_ASSERT_EQUAL(string("i"), param.getTypeName());
 
-  const Plugin* factory(PluginLister::instance()->pluginInformations("Test"));
-  CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory->author());
-  CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory->date());
-  CPPUNIT_ASSERT_EQUAL(string(""), factory->group());
-  CPPUNIT_ASSERT_EQUAL(0, factory->id());
-  CPPUNIT_ASSERT_EQUAL(string("1"), factory->major());
-  CPPUNIT_ASSERT_EQUAL(string("0"), factory->minor());
-  CPPUNIT_ASSERT_EQUAL(string("Test"), factory->name());
-  CPPUNIT_ASSERT_EQUAL(string("1.0"), factory->release());
-  CPPUNIT_ASSERT_EQUAL(tlp::getMajor(TULIP_RELEASE), factory->tulipMajor());
-  CPPUNIT_ASSERT_EQUAL(tlp::getMinor(TULIP_RELEASE), factory->tulipMinor());
-  CPPUNIT_ASSERT_EQUAL(string(TULIP_MM_RELEASE), factory->tulipRelease());
+  const Plugin& factory(PluginLister::instance()->pluginInformations("Test"));
+  CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory.author());
+  CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory.date());
+  CPPUNIT_ASSERT_EQUAL(string(""), factory.group());
+  CPPUNIT_ASSERT_EQUAL(0, factory.id());
+  CPPUNIT_ASSERT_EQUAL(string("1"), factory.major());
+  CPPUNIT_ASSERT_EQUAL(string("0"), factory.minor());
+  CPPUNIT_ASSERT_EQUAL(string("Test"), factory.name());
+  CPPUNIT_ASSERT_EQUAL(string("1.0"), factory.release());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMajor(TULIP_RELEASE), factory.tulipMajor());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMinor(TULIP_RELEASE), factory.tulipMinor());
+  CPPUNIT_ASSERT_EQUAL(string(TULIP_MM_RELEASE), factory.tulipRelease());
 }

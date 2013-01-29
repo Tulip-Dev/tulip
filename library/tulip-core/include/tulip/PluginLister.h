@@ -62,6 +62,12 @@ private:
   struct PluginDescription {
     FactoryInterface* factory;
     std::string library;
+    Plugin* infos;
+
+    ~PluginDescription() {
+      if (infos)
+	delete infos;
+    }
   };
 
 public:
@@ -100,14 +106,10 @@ public:
    */
   template<typename PluginType>
   bool pluginExists(const std::string &pluginName) {
-    const Plugin* p = getPluginObject(pluginName,NULL);
-
-    if (p == NULL)
-      return false;
-
-    bool result = dynamic_cast<const PluginType*>(p) != NULL;
-    delete p;
-    return result;
+    std::map<std::string, PluginDescription>::const_iterator it =
+      _plugins.find(pluginName);
+    return (it != _plugins.end() &&
+	    (dynamic_cast<const PluginType*>(it->second.infos) != NULL));
   }
 
   /**
@@ -121,14 +123,14 @@ public:
    * @return The plugin instance. If there is no such plugin or if the plugin does not match the required type, this method returns NULL
    */
   template<typename PluginType>
-  PluginType* getPluginObject(const std::string& name, tlp::PluginContext* context) {
-    Plugin* p = getPluginObject(name,context);
-    PluginType* result = dynamic_cast<PluginType*>(getPluginObject(name, context));
-
-    if (result == NULL && p != NULL)
-      delete p;
-
-    return result;
+  PluginType* getPluginObject(const std::string& name,
+			      tlp::PluginContext* context) {
+    std::map<std::string, PluginDescription>::const_iterator it =
+      _plugins.find(name);
+    return (it != _plugins.end() &&
+	    (dynamic_cast<const PluginType*>(it->second.infos) != NULL))
+      ? static_cast<PluginType*>(it->second.factory->createPluginObject(context))
+      : NULL;
   }
 
 
@@ -143,14 +145,12 @@ public:
   std::list<std::string> availablePlugins() {
     std::list<std::string> keys;
 
-    for(std::map<std::string , PluginDescription>::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it) {
-      PluginType* plugin = dynamic_cast<PluginType*>(it->second.factory->createPluginObject(NULL));
+    for(std::map<std::string, PluginDescription>::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it) {
+      PluginType* plugin = dynamic_cast<PluginType*>(it->second.infos);
 
       if(plugin != NULL) {
         keys.push_back(it->first);
       }
-
-      delete plugin;
     }
 
     return keys;
@@ -160,9 +160,9 @@ public:
    * @brief Gets more detailed informations about one specific plug-in.
    *
    * @param name The name of the plugin to retrieve informations for.
-   * @return :Plugin* The informations on the plugin.
+   * @return :const Plugin& The informations on the plugin.
    **/
-  static const Plugin* pluginInformations(const std::string& name);
+  static const Plugin& pluginInformations(const std::string& name);
 
   /**
    * @brief Checks if a given name is registered in this factory.
@@ -178,7 +178,7 @@ public:
    * @param name The name of the plug-in to retrieve the parameters of.
    * @return :ParameterDescriptionList The parameters of the plug-in.
    **/
-  static const ParameterDescriptionList getPluginParameters(std::string name);
+  static const ParameterDescriptionList& getPluginParameters(const std::string& name);
 
   /**
    * @brief Gets the dependencies of a plug-in.
@@ -186,7 +186,7 @@ public:
    * @param name The name of the plug-in to retrieve the dependencies of.
    * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The list of dependencies of the plug-in.
    **/
-  static std::list<tlp::Dependency> getPluginDependencies(std::string name);
+  static const std::list<tlp::Dependency>& getPluginDependencies(const std::string& name);
 
   /**
    * @brief Gets the library from which a plug-in has been loaded.
@@ -203,7 +203,7 @@ public:
    * @param name The name of the plug-in to remove.
    * @return void
    **/
-  static void removePlugin(const std::string &name);
+  static void removePlugin(const std::string& name);
 
   /**
    * @brief Registers a plugin into Tulip
@@ -232,7 +232,7 @@ protected:
    * @param name The name of the plug-in to retrieve the version number of.
    * @return :string The version number, ussually formatted as X[.Y], where X is the major, and Y the minor.
    **/
-  static std::string getPluginRelease(std::string name);
+  static std::string getPluginRelease(const std::string& name);
 };
 
 class TLP_SCOPE PluginEvent : public Event {
