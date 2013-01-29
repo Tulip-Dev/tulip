@@ -155,14 +155,14 @@ public:
   static QVariant dataTypeToQvariant(tlp::DataType *,const std::string& paramName);
 };
 
-class QStringListType: public TypeInterface<QStringList> {
+class TLP_QT_SCOPE QStringListType: public TypeInterface<QStringList> {
 public:
   static void write(std::ostream&, const RealType&);
   static bool read(std::istream&, RealType&);
   FORWARD_STRING_METHODS(QStringListType)
 };
 
-class QStringType: public TypeInterface<QString> {
+class TLP_QT_SCOPE QStringType: public TypeInterface<QString> {
 public:
   static void write(std::ostream&, const RealType&);
   static bool read(std::istream&, RealType&);
