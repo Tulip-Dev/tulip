@@ -18,8 +18,7 @@
  */
 
 #include <sstream>
-
-#include <QtCore/QDate>
+#include <time.h>
 
 #include <tulip/ForEach.h>
 #include <tulip/ExportModule.h>
@@ -127,8 +126,14 @@ public:
    * @return void
    **/
   void saveMetaData_V4() {
+    time_t ostime = time(NULL);
+    // get local time
+    struct tm *currTime = localtime(&ostime);
+    // format date
+    char currDate[32];
+    strftime(currDate, 32, "%Y-%m-%d", currTime);
     _writer.writeString("date");
-    _writer.writeString(QDate::currentDate().toString(Qt::ISODate).toStdString());
+    _writer.writeString(currDate);
 
     std::string comment;
     dataSet->get<string>("comment", comment);
