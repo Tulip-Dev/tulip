@@ -31,10 +31,9 @@ PerspectiveItemWidget::PerspectiveItemWidget(const QString& perspectiveName,QWid
   : QWidget(parent), _perspectiveName(perspectiveName), _ui(new Ui::PerspectiveItemData) {
   _ui->setupUi(this);
   _ui->name->setText(_perspectiveName);
-  const tlp::Plugin* info = PluginLister::instance()->pluginInformations(_perspectiveName.toStdString());
-  _ui->description->setText(info->info().c_str());
-  _ui->icon->setPixmap(QPixmap(info->icon().c_str()));
-  delete info;
+  const tlp::Plugin& info = PluginLister::instance()->pluginInformations(_perspectiveName.toStdString());
+  _ui->description->setText(info.info().c_str());
+  _ui->icon->setPixmap(QPixmap(info.icon().c_str()));
 }
 
 void PerspectiveItemWidget::run() {

@@ -49,7 +49,7 @@ PanelSelectionWizard::~PanelSelectionWizard() {
 
 void PanelSelectionWizard::panelSelected (const QModelIndex& index) {
   _currentItem = index.data().toString();
-  _ui->panelDescription->setText(PluginLister::pluginInformations(_currentItem.toStdString())->info().c_str());
+  _ui->panelDescription->setText(PluginLister::pluginInformations(_currentItem.toStdString()).info().c_str());
   button(QWizard::NextButton)->setEnabled(true);
 }
 

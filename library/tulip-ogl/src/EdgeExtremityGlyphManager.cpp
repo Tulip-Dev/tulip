@@ -69,7 +69,7 @@ void EdgeExtremityGlyphManager::loadGlyphPlugins() {
 
   for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string pluginName = *it;
-    int pluginId = PluginLister::pluginInformations(pluginName)->id();
+    int pluginId = PluginLister::pluginInformations(pluginName).id();
     eeglyphIdToName[pluginId] = pluginName;
     nameToEeGlyphId[pluginName] = pluginId;
   }
@@ -88,7 +88,7 @@ void EdgeExtremityGlyphManager::initGlyphList(Graph **graph,
   for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string glyphName = *it;
     EdgeExtremityGlyph *newGlyph = PluginLister::instance()->getPluginObject<EdgeExtremityGlyph>(glyphName, &gc);
-    glyphs.set(PluginLister::pluginInformations(glyphName)->id(), newGlyph);
+    glyphs.set(PluginLister::pluginInformations(glyphName).id(), newGlyph);
   }
 }
 
@@ -97,7 +97,7 @@ void EdgeExtremityGlyphManager::clearGlyphList(Graph **, GlGraphInputData*, Muta
 
   for(std::list<std::string>::const_iterator it = plugins.begin(); it != plugins.end(); ++it) {
     string glyphName = *it;
-    delete glyphs.get(PluginLister::pluginInformations(glyphName)->id());
+    delete glyphs.get(PluginLister::pluginInformations(glyphName).id());
   }
 }
 

@@ -93,8 +93,8 @@ std::list<std::string> tlp::PluginLister::availablePlugins() {
   return keys;
 }
 
-const tlp::Plugin* tlp::PluginLister::pluginInformations(const std::string& name) {
-  return instance()->_plugins.find(name)->second.factory->createPluginObject(NULL);
+const tlp::Plugin& tlp::PluginLister::pluginInformations(const std::string& name) {
+  return *(instance()->_plugins.find(name)->second.infos);
 }
 
 void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
@@ -102,11 +102,10 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
   std::string pluginName = informations->name();
 
   if (!pluginExists(pluginName)) {
-    PluginDescription description;
+    PluginDescription& description = instance()->_plugins[pluginName];
     description.factory = objectFactory;
     description.library = PluginLibraryLoader::getCurrentPluginFileName();
-    instance()->_plugins[pluginName] = description;
-
+    description.infos = informations;
 
     if (currentLoader!=NULL) {
       currentLoader->loaded(informations, informations->dependencies());
@@ -121,9 +120,8 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
       tmpStr += "'" + pluginName + "' plugin";
       currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
     }
+    delete informations;
   }
-
-  delete informations;
 }
 
 void tlp::PluginLister::sendPluginAddedEvent(const std::string &pluginName) {
@@ -149,29 +147,16 @@ tlp::Plugin* tlp::PluginLister::getPluginObject(const std::string& name, PluginC
   return NULL;
 }
 
-const tlp::ParameterDescriptionList tlp::PluginLister::getPluginParameters(std::string name) {
-  assert(instance()->_plugins.find(name) != instance()->_plugins.end());
-  Plugin* plugin = getPluginObject(name, NULL);
-  tlp::ParameterDescriptionList parameters(plugin->getParameters());
-  delete plugin;
-  return parameters;
+const tlp::ParameterDescriptionList& tlp::PluginLister::getPluginParameters(const std::string& name) {
+  return pluginInformations(name).getParameters();
 }
 
-std::string tlp::PluginLister::getPluginRelease(std::string name) {
-  assert(instance()->_plugins.find(name) != instance()->_plugins.end());
-  Plugin* plugin = getPluginObject(name, NULL);
-  std::string release(plugin->release());
-  delete plugin;
-  return release;
+std::string tlp::PluginLister::getPluginRelease(const std::string& name) {
+  return pluginInformations(name).release();
 }
 
-std::list<tlp::Dependency> tlp::PluginLister::getPluginDependencies(std::string name) {
-  assert(instance()->_plugins.find(name) != instance()->_plugins.end());
-  Plugin* plugin = getPluginObject(name, NULL);
-  std::list<tlp::Dependency> dependencies(plugin->dependencies());
-  delete plugin;
-
-  return dependencies;
+const std::list<tlp::Dependency>& tlp::PluginLister::getPluginDependencies(const std::string& name) {
+  return pluginInformations(name).dependencies();
 }
 
 std::string tlp::PluginLister::getPluginLibrary(const std::string& name) {
