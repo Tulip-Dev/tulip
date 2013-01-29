@@ -21,6 +21,7 @@
 #ifndef Tulip_OCCLUSIONTEST_H
 #define Tulip_OCCLUSIONTEST_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
+#include <vector>
 #include <tulip/Rectangle.h>
 
 namespace tlp {
