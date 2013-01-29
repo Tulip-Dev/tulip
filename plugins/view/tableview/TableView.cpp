@@ -205,7 +205,6 @@ void TableView::readSettings() {
     sortModel->setSourceModel(_model);
     _ui->table->setModel(sortModel);
     connect(_model,SIGNAL(columnsInserted(QModelIndex,int,int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
-    connect(_model,SIGNAL(rowsInserted(QModelIndex,int,int)),this,SLOT(rowsInserted(QModelIndex,int,int)));
     connect(_model,SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(dataChanged(const QModelIndex&, const QModelIndex&)));
     filterChanged();
   }
