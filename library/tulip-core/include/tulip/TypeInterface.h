@@ -39,7 +39,7 @@
 
 namespace tlp {
 template<typename T>
-class TLP_SCOPE TypeInterface {
+class TypeInterface {
 public:
   typedef T RealType;
   static RealType undefinedValue() {
