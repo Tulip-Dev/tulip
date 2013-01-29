@@ -109,6 +109,8 @@ extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
 
 extern const sipTypeDef *getSipType(const char *sipTypename);
 
+extern void replaceAll(std::string &s, const std::string& replaceWhat, const std::string& replaceWithWhat);
+
 %End
 
 %ModuleCode
@@ -157,6 +159,14 @@ const sipTypeDef *getSipType(const char *sipTypename) {
     } else {
          return sipFindType(sipTypename);
     }
+}
+
+void replaceAll(std::string &s, const std::string& replaceWhat, const std::string& replaceWithWhat) {
+  while(1) {
+    const int pos = s.find(replaceWhat);
+    if (pos==std::string::npos) break;
+    s.replace(pos,replaceWhat.size(),replaceWithWhat);
+  }
 }
 
 %End

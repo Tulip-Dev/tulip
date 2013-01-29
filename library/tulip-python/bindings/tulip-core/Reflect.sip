@@ -23,8 +23,6 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-
-
 namespace tlp {
 
 struct DataSet {
@@ -130,13 +128,48 @@ Returns the list of keys associated to the values stored in the data set.
 	void __setitem__(const std::string &attributeName, SIP_PYOBJECT po);
 %MethodCode
         tlp::DataType* dataType = sipCpp->getData(*a0);
-        ValueSetter valSetter(sipCpp, *a0);
-        if (!setCppValueFromPyObject(a1, valSetter, dataType)) {
-            sipIsErr = 1;
-            std::string msg = "Object of type ";
-            msg += std::string(a1->ob_type->tp_name);
-            msg += " can not be store in a Tulip dataset.";
-            PyErr_SetString(PyExc_Exception, msg.c_str());
+        if (dataType && dataType->getTypeName() == std::string(typeid(tlp::StringCollection).name()) &&
+#if PY_MAJOR_VERSION >= 3
+        PyUnicode_Check(a1)) {
+#else
+        PyString_Check(a1)) {
+#endif
+            tlp::StringCollection *sc = reinterpret_cast<tlp::StringCollection*>(dataType->value);
+#if PY_MAJOR_VERSION >= 3
+            std::string entry(convertPythonUnicodeObjectToStdString(a1));
+#else
+            std::string entry(PyString_AS_STRING(a1));
+#endif
+
+            std::vector<std::string> values = sc->getValues();
+            if (std::find(values.begin(), values.end(), entry) != values.end()) {
+                sc->setCurrent(entry);
+            } else {
+                sipIsErr = 1;
+                std::string msg = "Value \"";
+                msg += entry;
+                msg += "\" does not exist in the strings collection stored in the \"";
+                msg += ((*a0) + "\" entry in the dataset.\n");
+                msg += "Possible values are : ";
+                for (size_t i = 0 ; i < values.size() ; ++i) {
+                    replaceAll(values[i], "\n", "\\n");
+                    msg += values[i];
+                    if (i != values.size() -1) {
+                        msg += ", ";
+                    }
+                }
+                PyErr_SetString(PyExc_Exception, msg.c_str());
+            }
+
+        } else {
+            ValueSetter valSetter(sipCpp, *a0);
+            if (!setCppValueFromPyObject(a1, valSetter, dataType)) {
+                sipIsErr = 1;
+                std::string msg = "Object of type ";
+                msg += std::string(a1->ob_type->tp_name);
+                msg += " can not be store in a Tulip dataset.";
+                PyErr_SetString(PyExc_Exception, msg.c_str());
+            }
         }
         delete dataType;
 %End
