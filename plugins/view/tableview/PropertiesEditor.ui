@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>401</width>
-    <height>460</height>
+    <width>399</width>
+    <height>458</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -155,7 +155,7 @@ color: #595959;</string>
          <string>All properties</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>926</width>
-    <height>682</height>
+    <width>924</width>
+    <height>680</height>
    </rect>
   </property>
   <property name="styleSheet">
@@ -335,7 +335,7 @@ border-left: 1px solid #C9C9C9;</string>
               <string>Any</string>
              </property>
              <property name="icon">
-              <iconset resource="../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+              <iconset>
                <normaloff>:/tulip/gui/ui/combobox_arrow.png</normaloff>:/tulip/gui/ui/combobox_arrow.png</iconset>
              </property>
             </widget>
@@ -382,6 +382,9 @@ border-left: 1px solid #C9C9C9;</string>
            <property name="cornerButtonEnabled">
             <bool>false</bool>
            </property>
+           <attribute name="verticalHeaderMinimumSectionSize">
+            <number>30</number>
+           </attribute>
           </widget>
          </item>
         </layout>
@@ -404,9 +407,7 @@ border-left: 1px solid #C9C9C9;</string>
    <header>navigabletableview.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
  <slots>
   <slot>setPropertyVisible(tlp::PropertyInterface*,bool)</slot>

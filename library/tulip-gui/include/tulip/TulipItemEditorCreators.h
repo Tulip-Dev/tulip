@@ -41,6 +41,10 @@ public:
     return "";
   }
 
+  virtual QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const {
+    return QSize();
+  }
+
   virtual void setEditorData(QWidget*,const QVariant&,bool isMandatory,tlp::Graph* g=NULL)=0;
   virtual QVariant editorData(QWidget*,tlp::Graph* g=NULL)=0;
 
@@ -50,7 +54,8 @@ template<typename T>
 class TLP_QT_SCOPE StringDisplayEditorCreator: public TulipItemEditorCreator {
 public:
   inline QString displayText(const QVariant& v) const {
-    return QString::fromUtf8(T::toString(v.value<typename T::RealType>()).c_str());
+      QString text = QString::fromUtf8(T::toString(v.value<typename T::RealType>()).c_str());
+      return text;
   }
 };
 
@@ -68,6 +73,16 @@ public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
+};
+
+template<typename T>
+class MultiLinesEditEditorCreator: public StringDisplayEditorCreator<T> {
+public:
+  QWidget* createWidget(QWidget*) const;
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+  virtual QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
+  bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
 };
 
 class TLP_QT_SCOPE BooleanEditorCreator: public TulipItemEditorCreator {
@@ -133,6 +148,7 @@ public:
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
   virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
+  QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 
 class TLP_QT_SCOPE EdgeExtremityShapeEditorCreator: public tlp::TulipItemEditorCreator {

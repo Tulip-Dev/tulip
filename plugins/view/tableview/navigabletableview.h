@@ -25,12 +25,29 @@ class QKeyEvent;
 
 class NavigableTableView : public QTableView {
   Q_OBJECT
+
 public:
+
   explicit NavigableTableView(QWidget *parent = 0);
   void keyPressEvent(QKeyEvent *event);
+
+  void setSendSignalOnResize(bool sendSignalOnResize) {
+      _sendSignalOnResize = sendSignalOnResize;
+  }
+
+protected:
+
+  void 	scrollContentsBy (int dx, int dy);
+  int sizeHintForRow(int row) const;
+  void resizeEvent(QResizeEvent * event);
+
 signals:
 
-public slots:
+  void resizeTableRows();
+
+private:
+
+  bool _sendSignalOnResize;
 
 };
 

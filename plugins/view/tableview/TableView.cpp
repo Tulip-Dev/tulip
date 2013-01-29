@@ -36,6 +36,7 @@ using namespace tlp;
 
 TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), _model(NULL), isNewGraph(false) {
   propertiesEditor = new PropertiesEditor();
+
 }
 
 TableView::~TableView() {
@@ -122,6 +123,8 @@ void TableView::setupWidget() {
   setCentralWidget(centralWidget);
   connect(propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
   connect(propertiesEditor,SIGNAL(mapToGraphSelection()),this,SLOT(mapToGraphSelection()));
+  connect(propertiesEditor,SIGNAL(resizeTableRows()), this, SLOT(resizeTableRows()));
+  connect(_ui->table,SIGNAL(resizeTableRows()), this, SLOT(resizeTableRows()));
 
   _ui->table->setItemDelegate(new GraphTableItemDelegate(_ui->table));
   _ui->table->horizontalHeader()->setMovable(true);
@@ -151,6 +154,8 @@ void TableView::graphChanged(tlp::Graph* g) {
     visibleProperties.insert(pi->getName().c_str());
   }
 
+  _ui->table->setSendSignalOnResize(false);
+
   GraphPropertiesModel<BooleanProperty>* model = new GraphPropertiesModel<BooleanProperty>(trUtf8("no selection"),g,false,_ui->filteringPropertyCombo);
   _ui->filteringPropertyCombo->setModel(model);
   _ui->filteringPropertyCombo->setCurrentIndex(0);
@@ -174,6 +179,8 @@ void TableView::graphChanged(tlp::Graph* g) {
   }
 
   isNewGraph = false;
+
+  _ui->table->setSendSignalOnResize(true);
 }
 
 void TableView::graphDeleted() {
@@ -185,16 +192,21 @@ void TableView::readSettings() {
        ((_ui->eltTypeCombo->currentIndex() == 1) && dynamic_cast<EdgesGraphModel*>(_model) == NULL)) {
     _ui->table->setModel(NULL);
 
+    delete _model;
     if (_ui->eltTypeCombo->currentIndex() == 0)
       _model = new NodesGraphModel(_ui->table);
     else
       _model = new EdgesGraphModel(_ui->table);
+
+
 
     _model->setGraph(graph());
     GraphSortFilterProxyModel* sortModel = new GraphSortFilterProxyModel(_ui->table);
     sortModel->setSourceModel(_model);
     _ui->table->setModel(sortModel);
     connect(_model,SIGNAL(columnsInserted(QModelIndex,int,int)),this,SLOT(columnsInserted(QModelIndex,int,int)));
+    connect(_model,SIGNAL(rowsInserted(QModelIndex,int,int)),this,SLOT(rowsInserted(QModelIndex,int,int)));
+    connect(_model,SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(dataChanged(const QModelIndex&, const QModelIndex&)));
     filterChanged();
   }
 
@@ -211,6 +223,20 @@ void TableView::readSettings() {
     if (!visibleProperties.contains(pi))
       _ui->table->setColumnHidden(i, true);
   }
+
+  if (!isNewGraph) {
+    resizeTableRows();
+  }
+
+}
+
+void TableView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight) {
+    QAbstractItemModel* model = static_cast<QAbstractItemModel*>(sender());
+    for (int i = topLeft.row() ; i <= bottomRight.row() ; ++i) {
+        PropertyInterface* pi = model->headerData(topLeft.column(),Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
+        if (pi->getTypename() == "string" && pi->getName() != "viewTexture" && pi->getName() != "viewFont")
+            _ui->table->resizeRowToContents(i);
+    }
 }
 
 void TableView::columnsInserted(const QModelIndex&, int start, int end) {
@@ -231,7 +257,6 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
   for(int i=0; i < _model->columnCount(); ++i) {
     if (_model->headerData(i,Qt::Horizontal,Qt::DisplayRole).toString() == propName) {
       _ui->table->horizontalHeader()->setSectionHidden(i,!v);
-      break;
     }
   }
 
@@ -581,6 +606,19 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
     setLabelsOfHighlightedRows(graph()->getProperty(propName));
     return;
   }
+}
+
+void TableView::resizeTableRows() {
+    if (!_ui->table->model())
+        return;
+    int top = qMax(0, _ui->table->verticalHeader()->visualIndexAt(0));
+    int bottom = _ui->table->verticalHeader()->visualIndexAt(_ui->table->viewport()->height());
+    if (bottom == -1 || (bottom+10) >= _ui->table->model()->rowCount())
+        bottom = _ui->table->model()->rowCount() - 1;
+    else
+        bottom += 10;
+    for (int i = top ; i <= bottom ; ++i)
+        _ui->table->resizeRowToContents(i);
 }
 
 PLUGIN(TableView)
