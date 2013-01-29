@@ -86,6 +86,7 @@ Q_DECLARE_METATYPE(tlp::DoubleProperty*)
 Q_DECLARE_METATYPE(tlp::DoubleVectorProperty*)
 Q_DECLARE_METATYPE(std::vector<double>)
 
+Q_DECLARE_METATYPE(tlp::Color)
 Q_DECLARE_METATYPE(tlp::ColorProperty*)
 Q_DECLARE_METATYPE(tlp::ColorVectorProperty*)
 Q_DECLARE_METATYPE(std::vector<tlp::Color>)
