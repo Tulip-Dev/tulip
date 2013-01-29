@@ -60,7 +60,7 @@ public slots:
   void filterChanged();
   tlp::BooleanProperty* getFilteringProperty() const;
   bool hasEffectiveFiltering();
-
+  void resizeTableRows();
 
 protected:
   void graphChanged(tlp::Graph *);
@@ -79,7 +79,9 @@ protected slots:
   void mapToGraphSelection();
 
   void columnsInserted(const QModelIndex&,int,int);
+  void rowsInserted(const QModelIndex&,int,int);
   void showCustomContextMenu(const QPoint & pos);
+  void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
 };
 
 #endif // TABLEVIEW_H

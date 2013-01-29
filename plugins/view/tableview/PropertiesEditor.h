@@ -63,6 +63,7 @@ signals:
   void setFilteredNodes();
   void setFilteredEdges();
   void mapToGraphSelection();
+  void resizeTableRows();
 
 protected slots:
   void checkStateChanged(QModelIndex,Qt::CheckState);
@@ -86,6 +87,7 @@ protected slots:
                                    int end);
   void displayedPropertiesRemoved(const QModelIndex &parent, int start,
                                   int end);
+  void emitResizeTableRows();
 };
 
 #endif // PROPERTIESEDITOR_H

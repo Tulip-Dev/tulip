@@ -58,6 +58,7 @@ public:
   QString displayText(const QVariant &value, const QLocale &locale) const;
   void setEditorData(QWidget *editor, const QModelIndex &index) const;
   void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
   bool eventFilter(QObject *object, QEvent *event);
 
