@@ -30,9 +30,9 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
   int firstLabelWidth = static_cast<int>(120 * tabBar()->height() / 27.0);
   int imageWidth = static_cast<int>(30 * tabBar()->height() / 27.0);
   int secondLabelWidth = static_cast<int>(120 * tabBar()->height() / 27.0);
-  QRectF rect(tabBar()->pos().x()+width()-(firstLabelWidth+imageWidth+secondLabelWidth), tabBar()->pos().y(), firstLabelWidth, tabBar()->height());
-  QRectF rect2(tabBar()->pos().x()+width()-(imageWidth+secondLabelWidth), tabBar()->pos().y(), imageWidth, tabBar()->height());
-  QRectF rect3(tabBar()->pos().x()+width()-secondLabelWidth, tabBar()->pos().y(), secondLabelWidth, tabBar()->height());
+  QRectF rect(width()-(firstLabelWidth+imageWidth+secondLabelWidth), tabBar()->pos().y(), firstLabelWidth, tabBar()->height());
+  QRectF rect2(width()-(imageWidth+secondLabelWidth), tabBar()->pos().y(), imageWidth, tabBar()->height());
+  QRectF rect3(width()-secondLabelWidth, tabBar()->pos().y(), secondLabelWidth, tabBar()->height());
   painter.drawText(rect,  Qt::AlignCenter, "Powered by ");
   painter.drawImage(rect2, pythonLogoImg);
   painter.drawText(rect3,  Qt::AlignCenter, QString("Python ") + pythonVersion);
