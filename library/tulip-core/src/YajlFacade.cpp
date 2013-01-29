@@ -21,9 +21,13 @@
 
 #include <yajl_parse.h>
 #include <yajl_gen.h>
-#include <QtCore/QFile>
-#include <stdlib.h>
-#include <QtCore/QDebug>
+#include <errno.h>
+#include <sys/stat.h>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 static int parse_null(void *ctx) {
   YajlParseFacade* facade = (YajlParseFacade*) ctx;
@@ -105,19 +109,43 @@ static int parse_end_array(void *ctx) {
 }
 
 void YajlParseFacade::parse(std::string filename) {
-  if(!QFile::exists(filename.c_str())) {
+  // check if file exists
+  struct stat infoEntry;
+  bool result = (stat(filename.c_str(),&infoEntry) == 0);
+  if (!result) {
+    std::stringstream ess;
+    ess << filename.c_str() << ": " << strerror(errno);
+    _errorMessage = ess.str();
     _parsingSucceeded = false;
-    _errorMessage = "file does not exists";
+    return;
   }
 
-  QFile f(filename.c_str());
-  parse(&f);
+  // open a stream
+  std::ifstream ifs(filename.c_str(),
+		    std::ifstream::in |
+		    // consider file is binary
+		    // to avoid pb using tellg
+		    // on the input stream
+		    std::ifstream::binary);
+
+  // get length of file:
+  ifs.seekg (0, std::ios::end);
+  int fileLength = ifs.tellg();
+  ifs.seekg (0, std::ios::beg);
+
+  // allocate memory:
+  char* fileData = new char[fileLength];
+
+  // read data as a block:
+  ifs.read (fileData, fileLength);
+  ifs.close();
+
+  parse((const unsigned char *) fileData, fileLength);
+  
+  delete[] fileData;
 }
 
-void YajlParseFacade::parse(QIODevice *stream) {
-  stream->open(QIODevice::ReadOnly);
-  QByteArray contents = stream->readAll();
-
+void YajlParseFacade::parse(const unsigned char* data, int length) {
   const yajl_callbacks callbacks = {
     parse_null,
     parse_boolean,
@@ -132,12 +160,10 @@ void YajlParseFacade::parse(QIODevice *stream) {
     parse_end_array
   };
   yajl_handle hand = yajl_alloc(&callbacks, NULL, this);
-  const unsigned char* fileData = (const unsigned char*)contents.constData();
-
-  yajl_status stat  = yajl_parse(hand, fileData, contents.length());
+  yajl_status stat  = yajl_parse(hand, data, length);
 
   if (stat != yajl_status_ok) {
-    unsigned char * str = yajl_get_error(hand, 1, fileData, contents.length());
+    unsigned char * str = yajl_get_error(hand, 1, data, length);
     _parsingSucceeded = false;
     _errorMessage = std::string((const char *)str);
     yajl_free_error(hand, str);
@@ -145,8 +171,6 @@ void YajlParseFacade::parse(QIODevice *stream) {
 
   //   yajl_gen_free(g);
   yajl_free(hand);
-
-  stream->close();
 }
 
 bool YajlParseFacade::parsingSucceeded() const {

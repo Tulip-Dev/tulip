@@ -51,7 +51,7 @@ public:
    * @return void
    **/
   void parse(std::string filename);
-  void parse(QIODevice* stream);
+  void parse(const unsigned char* data, int length);
 
   virtual void parseNull();
   virtual void parseBoolean(bool boolVal);
