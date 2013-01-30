@@ -68,7 +68,7 @@ public:
       if(!dataSet->exist("result")) {
         std::stringstream propname;
         propname << "result";
-        uint number = 0;
+        unsigned number = 0;
 
         while(graph->existProperty(propname.str())) {
           propname.clear();
