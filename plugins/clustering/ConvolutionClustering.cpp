@@ -220,7 +220,7 @@ vector<double> *ConvolutionClustering::getHistogram() {
 }
 //================================================================================
 //void ConvolutionClustering::buildSubGraphs(const vector<int>& ranges){
-//  //  qWarning() << __PRETTY_FUNCTION__ << "...." << flush;
+//  //  tlp::warning() << __PRETTY_FUNCTION__ << "...." << flush;
 //  //build the empty graphs
 //  vector<Graph *> newGraphs(ranges.size()-1);
 //  for (unsigned int i=0; i< ranges.size()-1; ++i) {
@@ -253,7 +253,7 @@ vector<double> *ConvolutionClustering::getHistogram() {
 //      graph->delSubGraph(newGraphs[i]);
 //    }
 //  }
-//  //  qWarning() << " end." << endl;
+//  //  tlp::warning() << " end." << endl;
 //}
 //================================================================================
 void ConvolutionClustering::getClusters(const std::vector<int> &ranges) {

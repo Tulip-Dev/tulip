@@ -204,9 +204,9 @@ void GlLabel::setFontName(const std::string &name) {
 
   if(font->Error() || borderFont->Error()) {
     if(fontName=="")
-      qWarning() << "Error in font loading: no font name" << endl;
+      tlp::warning() << "Error in font loading: no font name" << endl;
     else
-      qWarning() << "Error in font loading: " << fontName << " cannot be loaded" << endl;
+      tlp::warning() << "Error in font loading: " << fontName << " cannot be loaded" << endl;
 
     delete font;
     delete borderFont;

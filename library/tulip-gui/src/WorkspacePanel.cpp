@@ -17,6 +17,7 @@
  *
  */
 #include "tulip/WorkspacePanel.h"
+#include <tulip/TlpQtTools.h>
 
 #include <QtCore/QPropertyAnimation>
 #include <QtGui/QGraphicsView>

@@ -26,6 +26,7 @@
 #include <tulip/Plugin.h>
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
+#include <QtCore/QSet>
 
 class QMainWindow;
 class QTcpSocket;

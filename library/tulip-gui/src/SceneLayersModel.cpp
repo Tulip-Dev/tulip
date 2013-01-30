@@ -22,6 +22,7 @@
 #include <tulip/GlScene.h>
 #include <tulip/GlGraphComposite.h>
 #include <QtGui/QFont>
+#include <QtCore/QVector>
 
 using namespace tlp;
 

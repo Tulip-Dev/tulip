@@ -121,7 +121,7 @@ void GEMLayout::vertexdata_init(const float starttemp) {
 //=========================================================
 void GEMLayout::updateLayout() {
   for (unsigned int i = 0; i < graph->numberOfNodes(); ++i) {
-    //    qWarning() << "pos up ==> :" << _particules[i].pos << endl;
+    //    tlp::warning() << "pos up ==> :" << _particules[i].pos << endl;
     result->setNodeValue(_particules[i].n, _particules[i].pos);
   }
 }
@@ -336,7 +336,7 @@ void GEMLayout::arrange() {
   Iteration         = 0;
 
   while (_temperature > stop_temperature && Iteration < max_iter) {
-    //    qWarning() << "t°:"<< _temperature << "/" << stop_temperature << " it:" << Iteration << endl;
+    //    tlp::warning() << "t°:"<< _temperature << "/" << stop_temperature << " it:" << Iteration << endl;
     if (pluginProgress->progress(Iteration, max_iter/2)!=TLP_CONTINUE) return;
 
     if (pluginProgress->isPreviewMode()) updateLayout();

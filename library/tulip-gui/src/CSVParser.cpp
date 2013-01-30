@@ -17,6 +17,7 @@
  *
  */
 #include "tulip/CSVParser.h"
+#include <tulip/TlpQtTools.h>
 #include <tulip/PluginProgress.h>
 #include <QtGui/QApplication>
 #include <stdexcept>

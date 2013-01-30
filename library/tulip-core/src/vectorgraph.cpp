@@ -646,25 +646,25 @@ const vector<edge>& VectorGraph::edges() const {
 }
 //=======================================================
 void VectorGraph::dump() const {
-  qDebug() << "nodes : ";
+  tlp::debug() << "nodes : ";
   node n;
   forEach(n, getNodes())
-  qDebug() << n.id << " ";
-  qDebug() << endl;
-  qDebug() << "edges: ";
+  tlp::debug() << n.id << " ";
+  tlp::debug() << endl;
+  tlp::debug() << "edges: ";
   edge e;
   forEach(e, getEdges())
-  qDebug() << "e_" << e.id << "(" << source(e).id << "," << target(e).id << ") ";
-  qDebug() << endl;
+  tlp::debug() << "e_" << e.id << "(" << source(e).id << "," << target(e).id << ") ";
+  tlp::debug() << endl;
 
   forEach(n, getNodes()) {
-    qDebug() << "n_" << n << "{";
+    tlp::debug() << "n_" << n << "{";
     edge e;
     forEach(e, getInOutEdges(n)) {
-      qDebug() << "e_" << e.id << " ";
+      tlp::debug() << "e_" << e.id << " ";
     }
-    qDebug() << "}";
-    qDebug() << endl;
+    tlp::debug() << "}";
+    tlp::debug() << endl;
   }
 }
 //=============================================================
@@ -731,7 +731,7 @@ void VectorGraph::integrityTest() {
 //=======================================================
 void VectorGraph::testCond(string str, bool b) {
   if (!b) {
-    qDebug() << str << flush << endl;
+    tlp::debug() << str << flush << endl;
     dump();
     exit(1);
   }

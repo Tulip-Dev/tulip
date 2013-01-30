@@ -186,30 +186,30 @@ Iterator<Observable *> *Observable::getObservables() const {
 }
 //=================================
 void Observable::treatEvents(const  std::vector<Event> & ) {
-  std::cout << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
+  tlp::debug() << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
 }
 //=================================
 void Observable::treatEvent(const Event &) {
-  std::cout << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
+  tlp::debug() << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
 }
 //=================================
 Observable::Observable(): deleteMsgSent(false), queuedEvent(false), _n(node()) {
 #ifndef NDEBUG
   sent = received = 0;
 #endif
-  //cout << "[Observable node] created:" << n.id << "::" << this << endl;
+  //tlp::debug() << "[Observable node] created:" << n.id << "::" << this << endl;
 }
 //----------------------------------
 Observable::Observable(const Observable &):deleteMsgSent(false), queuedEvent(false), _n(node()) {
 #ifndef NDEBUG
   sent = received = 0;
 #endif
-  //cout << "[Observable node] created (copy constructor):" << n.id << "::" << this << endl;
+  //tlp::debug() << "[Observable node] created (copy constructor):" << n.id << "::" << this << endl;
 }
 //----------------------------------
 Observable& Observable::operator=(const Observable &) {
 #ifndef NDEBUG
-  std::cout << "[Observable Warning]: Observable object should reimplement their operator= else nothing is copied" << endl;
+  tlp::debug() << "[Observable Warning]: Observable object should reimplement their operator= else nothing is copied" << endl;
 #endif
   return *this;
 }
@@ -230,16 +230,16 @@ Observable::~Observable() {
     if (!_oAlive[_n])
       throw ObservableException("Observable object has already been deleted, possible double free!!!");
 
-    //cout << "[Observable node] destructor:" << n.id  << "::" << this << endl;
+    //tlp::debug() << "[Observable node] destructor:" << n.id  << "::" << this << endl;
     _oAlive[_n] = false;
 
     if (_oNotifying == 0 && _oUnholding == 0 && _oHoldCounter == 0) {
       _oGraph.delNode(_n);
-      //cout << "[Observable node] deleted:" << n.id << "::" << this << endl;
+      //tlp::debug() << "[Observable node] deleted:" << n.id << "::" << this << endl;
     }
     else {
       _oDelayedDelNode.push_back(_n);
-      //cout << "[Observable node] delayed delete:" << n.id << "::" << this << endl;
+      //tlp::debug() << "[Observable node] delayed delete:" << n.id << "::" << this << endl;
       _oGraph.delEdges(_n);
     }
   }
@@ -357,7 +357,7 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
 #ifndef NDEBUG
 
       if (_oType[link] & type) {
-        cerr << "[Observable Warning]: observer already connected" << endl;
+        tlp::warning() << "[Observable Warning]: observer already connected";
       }
 
 #endif
@@ -459,7 +459,7 @@ void Observable::sendEvent(const Event &message) {
 
     for(itobs = listenerTonotify.begin(); itobs != listenerTonotify.end(); ++itobs) {
       if (itobs->second == _n && message.type() == Event::TLP_DELETE) {
-        std::cout << "[Observable info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
+        tlp::debug() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
         continue;
       }
 
@@ -485,7 +485,7 @@ void Observable::sendEvent(const Event &message) {
 
     for(itobs = observerTonotify.begin(); itobs != observerTonotify.end(); ++itobs) {
       if (itobs->second == _n && message.type() == Event::TLP_DELETE) {
-        std::cout << "[Observable info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
+        tlp::debug() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
         continue;
       }
 
@@ -514,7 +514,7 @@ void Observable::sendEvent(const Event &message) {
 }
 //----------------------------------------
 void Observable::updateObserverGraph() {
-  //cout << __PRETTY_FUNCTION__ << endl << flush;
+  //tlp::debug() << __PRETTY_FUNCTION__ << endl << flush;
   if (_oNotifying == 0 && _oUnholding == 0 && _oHoldCounter == 0) {
     vector<node>::const_iterator itNodes;
 #ifdef _OPENMP

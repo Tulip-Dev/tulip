@@ -51,8 +51,8 @@ void canonicalOrdering(SuperGraph *graph, vector<node> &order) {
   edge e2 = tlp::nextFaceEdge(graph, e, order[1]);
   order[nbNodes-1] = graph->opposite(e2, order[1]);
   SuperGraph *subgraph = tlp::newCloneSubGraph(graph);
-  qWarning() << subgraph->numberOfNodes() << "," << subgraph->numberOfEdges() << endl;
-  //  qWarning() << subgraph << endl;
+  tlp::warning() << subgraph->numberOfNodes() << "," << subgraph->numberOfEdges() << endl;
+  //  tlp::warning() << subgraph << endl;
   set<node> candidates;
   candidates.insert(order[nbNodes -1]);
   candidates.insert(order[0]);

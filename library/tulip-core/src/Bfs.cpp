@@ -66,7 +66,7 @@ void Bfs::computeBfs(Graph * G,BooleanProperty * resultatAlgoSelection, node roo
     nb_n++;
 
     if(!G->isElement(r))
-      qWarning() << "ERROR NODE R NOT IN G";
+      tlp::warning() << "ERROR NODE R NOT IN G";
 
     Iterator<edge> * ite = G->getInOutEdges(r);
 

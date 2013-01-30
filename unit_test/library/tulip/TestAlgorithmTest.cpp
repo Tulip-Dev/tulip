@@ -53,7 +53,7 @@ void TestAlgorithmTest::tearDown() {
 }
 //==========================================================
 void TestAlgorithmTest::testSimple() {
-  qWarning() << __FUNCTION__ << " : not implemented" << endl;
+  tlp::warning() << __FUNCTION__ << " : not implemented" << endl;
 }
 //==========================================================
 void TestAlgorithmTest::testFreeTree() {
@@ -245,5 +245,5 @@ void TestAlgorithmTest::testBiconnected() {
 }
 //==========================================================
 void TestAlgorithmTest::testTriconnected() {
-  qWarning() << __FUNCTION__ << " : not implemented" << endl;
+  tlp::warning() << __FUNCTION__ << " : not implemented" << endl;
 }

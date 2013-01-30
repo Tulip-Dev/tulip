@@ -236,7 +236,7 @@ private:
       return Rectangle<float>(E, H);
 
     default:
-      qWarning() << "ERROR" << __PRETTY_FUNCTION__ ;
+      tlp::warning() << "ERROR" << __PRETTY_FUNCTION__ ;
       exit(1);
     }
   }

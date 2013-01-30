@@ -20,7 +20,6 @@
 
 #ifndef TULIPCONF_H
 #define TULIPCONF_H
-#include <QtCore/QDebug>
 
 /**
  * @brief this file contains various helper macros and functions to have a true cross-platform compilation.
@@ -185,7 +184,40 @@ static float strtof(const char* cptr, char** endptr) {
 #  define TLP_OGDF_SCOPE
 #endif
 
-QDebug TLP_SCOPE operator<<(QDebug,const std::string&);
+#include <ostream>
+
+namespace tlp {
+  /**
+   *
+   * @brief return the ostream used for the output of debug messages
+   */
+  extern TLP_SCOPE std::ostream& debug();
+  /**
+   *
+   * @brief set the ostream used for the output debug messages
+   */
+  extern TLP_SCOPE void setDebugOutput(std::ostream& os);
+  /**
+   *
+   * @brief return the ostream used for the output of warning messages
+   */
+  extern TLP_SCOPE std::ostream& warning();
+  /**
+   *
+   * @brief set the ostream used for the output of warning messages
+   */
+  extern TLP_SCOPE void setWarningOutput(std::ostream& os);
+  /**
+   *
+   * @brief return the ostream used for the output of error messages
+   */
+  extern TLP_SCOPE std::ostream& error();
+  /**
+   *
+   * @brief set the ostream used for the output of error messages
+   */
+  extern TLP_SCOPE void setErrorOutput(std::ostream& os);
+}
 
 #endif //TULIPCONF_H
 ///@endcond

@@ -27,6 +27,7 @@
 #include <QtGui/QApplication>
 #include <QtCore/QLibrary>
 #include <QtCore/QTime>
+#include <QtCore/QTextStream>
 
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>

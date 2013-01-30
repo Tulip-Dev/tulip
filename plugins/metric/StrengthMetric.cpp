@@ -169,7 +169,7 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee ) {
 }
 //=============================================================
 double StrengthMetric::getNodeValue(const tlp::node n ) {
-  //  qWarning() << __PRETTY_FUNCTION__ << endl;
+  //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   if (graph->deg(n)==0) return 0;
 
   double res=0;

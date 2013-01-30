@@ -21,6 +21,7 @@
 #include <tulip/GlTools.h>
 #include <tulip/Matrix.h>
 #include <tulip/BoundingBox.h>
+#include <tulip/TulipException.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -95,7 +96,7 @@ void glTest(const string &message) {
   }
 
   if(haveError)
-    qFatal( errorStream.str().c_str());
+    throw tlp::TulipException(errorStream.str());
 
 #else
   //fixes unused parameter warning in release mode

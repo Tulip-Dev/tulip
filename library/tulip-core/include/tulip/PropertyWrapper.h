@@ -87,7 +87,7 @@ public:
     PROPERTYTYPE* castedInternal = dynamic_cast<PROPERTYTYPE*>(internal);
 
     if(castedInternal == nullptr) {
-      qWarning() << "error: could not convert tulip property to " << tlp::demangleTlpClassName(typeid(PROPERTYTYPE).name());
+      tlp::warning() << "error: could not convert tulip property to " << tlp::demangleTlpClassName(typeid(PROPERTYTYPE).name());
     }
 
     _internal = castedInternal;
@@ -187,7 +187,7 @@ public:
     PROPERTYTYPE* castedInternal = dynamic_cast<PROPERTYTYPE*>(internal);
 
     if(castedInternal == nullptr) {
-      qWarning() << "error: could not convert tulip property to " << tlp::demangleTlpClassName(typeid(PROPERTYTYPE).name());
+      tlp::warning() << "error: could not convert tulip property to " << tlp::demangleTlpClassName(typeid(PROPERTYTYPE).name());
     }
 
     _internal = castedInternal;

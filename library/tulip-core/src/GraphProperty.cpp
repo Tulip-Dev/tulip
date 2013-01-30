@@ -166,7 +166,7 @@ void GraphProperty::treatEvent(const Event& evt) {
 
     if(sg) {
 #ifndef NDEBUG
-      qWarning() << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault";
+      tlp::warning() << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault";
 #endif
 
       if (getNodeDefaultValue() == sg) {

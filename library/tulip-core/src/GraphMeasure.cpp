@@ -41,7 +41,7 @@ inline Iterator<node> *getIt(const Graph *sg, node n, EDGE_TYPE direction) {
     return sg->getInOutNodes(n);
 
   default:
-    qWarning() << __PRETTY_FUNCTION__ << "serious bug...";
+    tlp::warning() << __PRETTY_FUNCTION__ << "serious bug...";
     return 0;
   }
 

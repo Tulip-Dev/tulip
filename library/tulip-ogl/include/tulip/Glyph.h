@@ -38,7 +38,7 @@
 
 namespace tlp {
 
-static const std::string GLYPH_CATEGORY = QObject::trUtf8("Node shape").toStdString();
+static const std::string GLYPH_CATEGORY = "Node shape";
 
 class Graph;
 struct node;

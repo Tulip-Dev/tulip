@@ -1535,7 +1535,7 @@ Ordering::Ordering(PlanarConMap * G, PluginProgress* pluginProgress,
   }
 
   if(nbTours == 1) {
-    qWarning() << "erreur : partition non-initialisée";
+    tlp::warning() << "erreur : partition non-initialisée";
     exit(-1);
   }
 

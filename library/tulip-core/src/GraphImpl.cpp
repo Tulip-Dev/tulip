@@ -61,7 +61,7 @@ static bool integrityTest(Graph *graph) {
     edge e = itE->next();
     edgesTest.insert(e);
     if (!existEdgeE(graph, graph->source(e), graph->target(e), e)) {
-      qWarning() << "edge do not exist in neighbood";
+      tlp::warning() << "edge do not exist in neighbood";
       delete itE;
       return false;
     }
@@ -76,13 +76,13 @@ static bool integrityTest(Graph *graph) {
       edge e = it->next();
       bool found = edgesTest.find(e)!=edgesTest.end();
       if (graph->isElement(e)!=found) {
-  qWarning() << "isElment function not valid";
+  tlp::warning() << "isElment function not valid";
   delete it;
   delete itN;
   return false;
       }
       if (!graph->isElement(e)) {
-  qWarning() << "Adjacency edges are not valid";
+  tlp::warning() << "Adjacency edges are not valid";
   delete it;
   delete itN;
   return false;
@@ -90,7 +90,7 @@ static bool integrityTest(Graph *graph) {
       degree++;
     } delete it;
     if (graph->deg(n) != degree) {
-      qWarning() << "degree failed";
+      tlp::warning() << "degree failed";
       return false;
     }
   }delete itN;
@@ -186,11 +186,11 @@ void GraphImpl::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
 }
 //----------------------------------------------------------------
 void GraphImpl::addNode(const node) {
-  qWarning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph";
 }
 //----------------------------------------------------------------
 void GraphImpl::addNodes(Iterator<node>*) {
-  qWarning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph";
 }
 //----------------------------------------------------------------
 void GraphImpl::reserveNodes(unsigned int nb) {
@@ -235,12 +235,12 @@ void GraphImpl::restoreEdges(const std::vector<edge>& edges,
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdge(const edge e) {
-  qWarning() << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph";
-  qWarning() << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id << ")";
+  tlp::warning() << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph";
+  tlp::warning() << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id << ")";
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdges(Iterator<edge>*) {
-  qWarning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph";
 }
 //----------------------------------------------------------------
 void GraphImpl::reserveEdges(unsigned int nb) {
@@ -443,7 +443,7 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
 
   // not allowed on meta edge
   if (isMetaEdge(e)) {
-    qWarning() << "Warning: invoking Graph::setEnds on meta edge " << e.id;
+    tlp::warning() << "Warning: invoking Graph::setEnds on meta edge " << e.id;
     return;
   }
 

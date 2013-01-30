@@ -19,7 +19,30 @@
 
 #include <tulip/tulipconf.h>
 
-QDebug operator<<(QDebug dbg,const std::string& s) {
-  dbg.nospace() << s.c_str();
-  return dbg.space();
+#include <iostream>
+
+using namespace std;
+
+static std::ostream* debugStream = NULL;
+std::ostream& tlp::debug() {
+  return debugStream ? *debugStream : std::cout;
+}
+void tlp::setDebugOutput(std::ostream& os) {
+  debugStream = &os;
+}
+
+static std::ostream* warningStream = NULL;
+std::ostream& tlp::warning() {
+  return warningStream ? *warningStream : std::cerr;
+}
+void tlp::setWarningOutput(std::ostream& os) {
+  warningStream = &os;
+}
+
+static std::ostream* errorStream = NULL;
+std::ostream& tlp::error() {
+  return errorStream ? *errorStream : std::cerr;
+}
+void tlp::setErrorOutput(std::ostream& os) {
+  errorStream = &os;
 }

@@ -146,7 +146,7 @@ void GlScene::initGlParameters() {
   GLenum error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    qWarning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+    tlp::warning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
 
 #endif
 }
@@ -252,7 +252,7 @@ GlLayer *GlScene::createLayer(const std::string &name) {
   GlLayer *oldLayer=getLayer(name);
 
   if(oldLayer!=NULL) {
-    qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+    tlp::warning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
     removeLayer(oldLayer);
   }
 
@@ -281,7 +281,7 @@ GlLayer *GlScene::createLayerBefore(const std::string &layerName,const std::stri
 
       if(oldLayer!=NULL) {
         removeLayer(oldLayer);
-        qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+        tlp::warning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
       }
 
       break;
@@ -306,7 +306,7 @@ GlLayer *GlScene::createLayerAfter(const std::string &layerName,const std::strin
         sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layerName,newLayer));
 
       if(oldLayer!=NULL) {
-        qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+        tlp::warning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
         removeLayer(oldLayer);
       }
 
@@ -321,7 +321,7 @@ void GlScene::addExistingLayer(GlLayer *layer) {
   GlLayer *oldLayer=getLayer(layer->getName());
 
   if(oldLayer!=NULL) {
-    qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+    tlp::warning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
     removeLayer(oldLayer);
   }
 
@@ -345,7 +345,7 @@ bool GlScene::addExistingLayerBefore(GlLayer *layer, const std::string &beforeLa
         sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
 
       if(oldLayer!=NULL) {
-        qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+        tlp::warning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
         removeLayer(oldLayer);
       }
 
@@ -371,7 +371,7 @@ bool GlScene::addExistingLayerAfter(GlLayer *layer, const std::string &afterLaye
         sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_ADDLAYER,layer->getName(),layer));
 
       if(oldLayer!=NULL) {
-        qWarning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
+        tlp::warning() << "Warning : You have a layer in the scene with same name : old layer will be deleted" << endl;
         removeLayer(oldLayer);
       }
 

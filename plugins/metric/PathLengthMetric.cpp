@@ -132,7 +132,7 @@ bool PathLengthMetric::run() {
   string erreurMsg;
 
   if (!graph->applyPropertyAlgorithm("Leaf", leafMetric, erreurMsg)) {
-    qWarning() << erreurMsg << endl;
+    tlp::warning() << erreurMsg << endl;
     return false;
   }
 

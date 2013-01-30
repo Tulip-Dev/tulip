@@ -108,7 +108,7 @@ Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
   std::string algName = "TLP Import";
 
-  if (QString(filename.c_str()).endsWith("json"))
+  if (filename.rfind(".json") == (filename.length() - 5))
     algName = "JSON Import";
 
   dataSet.set("file::filename", filename);
@@ -135,7 +135,7 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
 Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress, Graph *newGraph) {
 
   if (!PluginLister::pluginExists(format)) {
-    qWarning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
+    tlp::warning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
                << "\" does not exist (or is not loaded)" << endl;
     return NULL;
   }
@@ -188,7 +188,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &format,
                       DataSet &dataSet, PluginProgress *progress) {
   if (!PluginLister::pluginExists(format)) {
-    qWarning() << "libtulip: " << __FUNCTION__ << ": export plugin \"" << format
+    tlp::warning() << "libtulip: " << __FUNCTION__ << ": export plugin \"" << format
                << "\" does not exist (or is not loaded)" << endl;
     return false;
   }
@@ -387,7 +387,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
                            std::string &errorMessage,
                            DataSet *dataSet, PluginProgress *progress) {
   if (!PluginLister::pluginExists(algorithm)) {
-    qWarning() << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
+    tlp::warning() << "libtulip: " << __FUNCTION__ << ": algorithm plugin \"" << algorithm
                << "\" does not exist (or is not loaded)" << endl;
     return false;
   }
@@ -438,21 +438,21 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     }
 
     if (currentGraph != prop->getGraph()) {
-      errorMessage = "The passed property does not belong to the graph";
+      errorMessage = "The property parameter does not belong to the graph";
+#ifndef NDEBUG
+      tlp::error() << __PRETTY_FUNCTION__ << ": " << errorMessage;
+#endif
       return false;
     }
   }
-
-#ifndef NDEBUG
-  qWarning() << __PRETTY_FUNCTION__;
-#endif
 
   TLP_HASH_MAP<std::string, PropertyInterface *>::const_iterator it =
     circularCalls.find(algorithm);
 
   if (it != circularCalls.end() && (*it).second == prop) {
+    errorMessage = std::string("Circular call of ") + __PRETTY_FUNCTION__;
 #ifndef NDEBUG
-    qWarning() << "Circular call of " << __PRETTY_FUNCTION__ << " " << errorMessage;
+    tlp::error() << errorMessage;
 #endif
     return false;
   }
@@ -498,7 +498,10 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     delete tmpAlgo;
   }
   else {
-    errorMessage = "No algorithm available with this name";
+    errorMessage = algorithm + " - No algorithm available with this name";
+#ifndef NDEBUG
+    tlp::error() << __PRETTY_FUNCTION__ << ": " << errorMessage;
+#endif
     result=false;
   }
 
@@ -957,14 +960,14 @@ Graph * Graph::inducedSubGraph(const std::set<node> &nodes,
 //====================================================================================
 node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {
   if (getRoot() == this) {
-    qWarning() << __PRETTY_FUNCTION__;
-    qWarning() << "\t Error: Could not group a set of nodes in the root graph";
+    tlp::warning() << __PRETTY_FUNCTION__;
+    tlp::warning() << "\t Error: Could not group a set of nodes in the root graph";
     return node();
   }
 
   if (nodeSet.empty()) {
-    qWarning() << __PRETTY_FUNCTION__;
-    qWarning() << '\t' << "Warning: Creation of an empty metagraph";
+    tlp::warning() << __PRETTY_FUNCTION__;
+    tlp::warning() << '\t' << "Warning: Creation of an empty metagraph";
   }
 
   // create an induced brother sub graph
@@ -994,8 +997,8 @@ node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool
 //====================================================================================
 node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   if (getRoot() == this) {
-    qWarning() << __PRETTY_FUNCTION__;
-    qWarning() << "\t Error: Could not create a meta node in the root graph";
+    tlp::warning() << __PRETTY_FUNCTION__;
+    tlp::warning() << "\t Error: Could not create a meta node in the root graph";
     return node();
   }
 
@@ -1130,8 +1133,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 //====================================================================================
 void Graph::openMetaNode(node metaNode, bool updateProperties) {
   if (getRoot() == this) {
-    qWarning() << __PRETTY_FUNCTION__;
-    qWarning() << "\t Error: Could not ungroup a meta node in the root graph";
+    tlp::warning() << __PRETTY_FUNCTION__;
+    tlp::warning() << "\t Error: Could not ungroup a meta node in the root graph";
     return;
   }
 
@@ -1327,7 +1330,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
           graphColors->setEdgeValue (addedEdge, edgeColor);
         }
         else
-          qWarning() << "bug exist edge 1";
+          tlp::warning() << "bug exist edge 1";
       }
 
       // }
