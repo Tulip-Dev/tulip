@@ -89,7 +89,7 @@ private:
   PluginLibraryLoader() {}
   bool loadNextPluginLibrary(PluginLoader *loader);
 
-  void initPluginDir(PluginLoader *loader);
+  bool initPluginDir(PluginLoader *loader);
 
   static PluginLibraryLoader* getInstance() {
     if(_instance == NULL) {
