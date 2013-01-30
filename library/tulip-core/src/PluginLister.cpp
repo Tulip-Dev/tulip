@@ -120,6 +120,7 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
       tmpStr += "'" + pluginName + "' plugin";
       currentLoader->aborted(tmpStr, "multiple definitions found; check your plugin librairies.");
     }
+
     delete informations;
   }
 }

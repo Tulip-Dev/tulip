@@ -115,17 +115,17 @@ extern TLP_QT_SCOPE void initTulipSoftware(PluginLoader *loader = NULL, bool rem
 /**
  * @brief redirect tlp::debug() to qDebug()
  */
- TLP_QT_SCOPE void redirectDebugOutputToQDebug();
+TLP_QT_SCOPE void redirectDebugOutputToQDebug();
 
 /**
  * @brief redirect tlp::warning() to qWarning()
  */
- TLP_QT_SCOPE void redirectWarningOutputToQWarning();
+TLP_QT_SCOPE void redirectWarningOutputToQWarning();
 
 /**
  * @brief redirect tlp::error() to qCritical()
  */
- TLP_QT_SCOPE void redirectErrorOutputToQCritical();
+TLP_QT_SCOPE void redirectErrorOutputToQCritical();
 
 }
 

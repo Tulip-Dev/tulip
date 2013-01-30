@@ -233,7 +233,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   redirectWarningOutputToQWarning();
   redirectErrorOutputToQCritical();
   qInstallMsgHandler(graphPerspectiveLogger);
-  
+
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),_ui->algorithmRunner,SLOT(setGraph(tlp::Graph*)));

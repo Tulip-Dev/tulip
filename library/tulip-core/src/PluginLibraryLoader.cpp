@@ -57,13 +57,16 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) 
 
     PluginLister::currentLoader = loader;
     getInstance()->pluginPath = dir;
+
     if (getInstance()->initPluginDir(loader)) {
       if (loader)
-	loader->finished(true, getInstance()->message);
+        loader->finished(true, getInstance()->message);
     }
- #ifndef NDEBUG
+
+#ifndef NDEBUG
     else
       tlp::debug() << "loadPlugins info: " << getInstance()->message.c_str() << std::endl;
+
 #endif
 
     PluginLister::currentLoader = NULL;
@@ -188,33 +191,34 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
       unsigned long idx = lib.rfind('-');
 
       if (idx != std::string::npos) {
-	std::string tulip_release(TULIP_MM_RELEASE);
+        std::string tulip_release(TULIP_MM_RELEASE);
 
-	if (lib.find(tulip_release, idx) == idx + 1) {
-	  loader->loading(findData.cFileName);
+        if (lib.find(tulip_release, idx) == idx + 1) {
+          loader->loading(findData.cFileName);
 
-	  loadPluginLibrary(currentPluginLibrary, loader);
-	}
-	else if (loader)
-	  loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not compatible with Tulip "
-			  + TULIP_RELEASE);
+          loadPluginLibrary(currentPluginLibrary, loader);
+        }
+        else if (loader)
+          loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not compatible with Tulip "
+                          + TULIP_RELEASE);
       }
       else if (loader)
-	loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
+        loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
 
       FindNextFile (hFind, &_infos->FindData);
     }
   }
+
 #else
 
   struct dirent **namelist;
   int n = scandir((const char *) pluginPath.c_str(),
-		  &namelist,
+                  &namelist,
 #if !(defined(__APPLE__) || defined(__FreeBSD__))
-		  (int (*) (const dirent *))
+                  (int (*) (const dirent *))
 #endif
-		  __tulip_select_libs,
-		  alphasort);
+                  __tulip_select_libs,
+                  alphasort);
 
   if (loader!=NULL)
     loader->numberOfFiles(n);
@@ -241,14 +245,14 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
       tulip_release = tulip_release.substr(0, tulip_release.rfind('.') + 1);
 
       if (lib.find(tulip_release, idx) == idx + 1) {
-	if (loader!=NULL)
-	  loader->loading(lib);
+        if (loader!=NULL)
+          loader->loading(lib);
 
-	loadPluginLibrary(currentPluginLibrary, loader);
-	continue;
+        loadPluginLibrary(currentPluginLibrary, loader);
+        continue;
       }
- 
-    std::string suffix = lib.substr(idx + 1);
+
+      std::string suffix = lib.substr(idx + 1);
       idx = suffix.find('.');
 
       if (idx != std::string::npos) {
@@ -285,6 +289,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
     if (loader)
       loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
   }
+
 #endif
   return true;
 }

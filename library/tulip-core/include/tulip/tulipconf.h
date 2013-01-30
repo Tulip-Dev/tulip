@@ -187,36 +187,36 @@ static float strtof(const char* cptr, char** endptr) {
 #include <ostream>
 
 namespace tlp {
-  /**
-   *
-   * @brief return the ostream used for the output of debug messages
-   */
-  extern TLP_SCOPE std::ostream& debug();
-  /**
-   *
-   * @brief set the ostream used for the output debug messages
-   */
-  extern TLP_SCOPE void setDebugOutput(std::ostream& os);
-  /**
-   *
-   * @brief return the ostream used for the output of warning messages
-   */
-  extern TLP_SCOPE std::ostream& warning();
-  /**
-   *
-   * @brief set the ostream used for the output of warning messages
-   */
-  extern TLP_SCOPE void setWarningOutput(std::ostream& os);
-  /**
-   *
-   * @brief return the ostream used for the output of error messages
-   */
-  extern TLP_SCOPE std::ostream& error();
-  /**
-   *
-   * @brief set the ostream used for the output of error messages
-   */
-  extern TLP_SCOPE void setErrorOutput(std::ostream& os);
+/**
+ *
+ * @brief return the ostream used for the output of debug messages
+ */
+extern TLP_SCOPE std::ostream& debug();
+/**
+ *
+ * @brief set the ostream used for the output debug messages
+ */
+extern TLP_SCOPE void setDebugOutput(std::ostream& os);
+/**
+ *
+ * @brief return the ostream used for the output of warning messages
+ */
+extern TLP_SCOPE std::ostream& warning();
+/**
+ *
+ * @brief set the ostream used for the output of warning messages
+ */
+extern TLP_SCOPE void setWarningOutput(std::ostream& os);
+/**
+ *
+ * @brief return the ostream used for the output of error messages
+ */
+extern TLP_SCOPE std::ostream& error();
+/**
+ *
+ * @brief set the ostream used for the output of error messages
+ */
+extern TLP_SCOPE void setErrorOutput(std::ostream& os);
 }
 
 #endif //TULIPCONF_H

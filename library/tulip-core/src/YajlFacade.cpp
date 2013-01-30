@@ -112,6 +112,7 @@ void YajlParseFacade::parse(std::string filename) {
   // check if file exists
   struct stat infoEntry;
   bool result = (stat(filename.c_str(),&infoEntry) == 0);
+
   if (!result) {
     std::stringstream ess;
     ess << filename.c_str() << ": " << strerror(errno);
@@ -122,11 +123,11 @@ void YajlParseFacade::parse(std::string filename) {
 
   // open a stream
   std::ifstream ifs(filename.c_str(),
-		    std::ifstream::in |
-		    // consider file is binary
-		    // to avoid pb using tellg
-		    // on the input stream
-		    std::ifstream::binary);
+                    std::ifstream::in |
+                    // consider file is binary
+                    // to avoid pb using tellg
+                    // on the input stream
+                    std::ifstream::binary);
 
   // get length of file:
   ifs.seekg (0, std::ios::end);
@@ -141,7 +142,7 @@ void YajlParseFacade::parse(std::string filename) {
   ifs.close();
 
   parse((const unsigned char *) fileData, fileLength);
-  
+
   delete[] fileData;
 }
 

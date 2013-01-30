@@ -32,12 +32,12 @@ public:
   void keyPressEvent(QKeyEvent *event);
 
   void setSendSignalOnResize(bool sendSignalOnResize) {
-      _sendSignalOnResize = sendSignalOnResize;
+    _sendSignalOnResize = sendSignalOnResize;
   }
 
 protected:
 
-  void 	scrollContentsBy (int dx, int dy);
+  void  scrollContentsBy (int dx, int dy);
   int sizeHintForRow(int row) const;
   void resizeEvent(QResizeEvent * event);
 

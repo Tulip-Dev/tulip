@@ -326,10 +326,10 @@ QString NodeShapeEditorCreator::displayText(const QVariant & data) const {
 }
 
 QSize NodeShapeEditorCreator::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
-    QVariant data = index.model()->data(index);
-    static QPixmap pixmap = GlyphRenderer::getInst().render(data.value<NodeShape>().nodeShapeId);
-    QFontMetrics fontMetrics(option.font);
-    return QSize(pixmap.width()+fontMetrics.boundingRect(displayText(data)).width()+20, pixmap.height());
+  QVariant data = index.model()->data(index);
+  static QPixmap pixmap = GlyphRenderer::getInst().render(data.value<NodeShape>().nodeShapeId);
+  QFontMetrics fontMetrics(option.font);
+  return QSize(pixmap.width()+fontMetrics.boundingRect(displayText(data)).width()+20, pixmap.height());
 }
 
 bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& data) const {

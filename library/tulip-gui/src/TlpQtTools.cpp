@@ -217,100 +217,103 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
 }
 
-  // tlp::debug redirection
-  class QDebugOStream :public std::ostream {
-    class QDebugStreamBuf :public std::streambuf {
-    protected:
-      virtual int_type overflow(int c) {
-	// should not happen
-	qDebug() << QChar(c);
-	return c;
-      }
-      
-      virtual std::streamsize xsputn(const char *p, std::streamsize n) {
-	qDebug() << QString::fromUtf8(p, n);
-	return n;
-      }
-    };
+// tlp::debug redirection
+class QDebugOStream :public std::ostream {
+  class QDebugStreamBuf :public std::streambuf {
+  protected:
+    virtual int_type overflow(int c) {
+      // should not happen
+      qDebug() << QChar(c);
+      return c;
+    }
 
-    QDebugStreamBuf qDebugBuf;
-
-  public:
-    QDebugOStream() {
-      rdbuf(&qDebugBuf);
+    virtual std::streamsize xsputn(const char *p, std::streamsize n) {
+      qDebug() << QString::fromUtf8(p, n);
+      return n;
     }
   };
 
-  static QDebugOStream* qDebugStream = NULL;
+  QDebugStreamBuf qDebugBuf;
 
-  void redirectDebugOutputToQDebug() {
-    if (qDebugStream == NULL)
-      qDebugStream = new QDebugOStream();
-    tlp::setDebugOutput(*qDebugStream);
+public:
+  QDebugOStream() {
+    rdbuf(&qDebugBuf);
   }
+};
 
-  // tlp::warning redirection
-  class QWarningOStream :public std::ostream {
-    class QWarningStreamBuf :public std::streambuf {
-    protected:
-      virtual int_type overflow(int c) {
-	// should not happen
-	qWarning() << QChar(c);
-	return c;
-      }
-      
-      virtual std::streamsize xsputn(const char *p, std::streamsize n) {
-	qWarning() << QString::fromUtf8(p, n);
-	return n;
-      }
-    };
+static QDebugOStream* qDebugStream = NULL;
 
-    QWarningStreamBuf qWarningBuf;
+void redirectDebugOutputToQDebug() {
+  if (qDebugStream == NULL)
+    qDebugStream = new QDebugOStream();
 
-  public:
-    QWarningOStream() {
-      rdbuf(&qWarningBuf);
+  tlp::setDebugOutput(*qDebugStream);
+}
+
+// tlp::warning redirection
+class QWarningOStream :public std::ostream {
+  class QWarningStreamBuf :public std::streambuf {
+  protected:
+    virtual int_type overflow(int c) {
+      // should not happen
+      qWarning() << QChar(c);
+      return c;
+    }
+
+    virtual std::streamsize xsputn(const char *p, std::streamsize n) {
+      qWarning() << QString::fromUtf8(p, n);
+      return n;
     }
   };
 
-  static QWarningOStream* qWarningStream = NULL;
+  QWarningStreamBuf qWarningBuf;
 
-  void redirectWarningOutputToQWarning() {
-    if (qWarningStream == NULL)
-      qWarningStream = new QWarningOStream();
-    tlp::setWarningOutput(*qWarningStream);
+public:
+  QWarningOStream() {
+    rdbuf(&qWarningBuf);
   }
+};
 
-  // tlp::error redirection
-  class QErrorOStream :public std::ostream {
-    class QErrorStreamBuf :public std::streambuf {
-    protected:
-      virtual int_type overflow(int c) {
-	// should not happen
-	qCritical() << QChar(c);
-	return c;
-      }
-      
-      virtual std::streamsize xsputn(const char *p, std::streamsize n) {
-	qCritical() << QString::fromUtf8(p, n);
-	return n;
-      }
-    };
+static QWarningOStream* qWarningStream = NULL;
 
-    QErrorStreamBuf qErrorBuf;
+void redirectWarningOutputToQWarning() {
+  if (qWarningStream == NULL)
+    qWarningStream = new QWarningOStream();
 
-  public:
-    QErrorOStream() {
-      rdbuf(&qErrorBuf);
+  tlp::setWarningOutput(*qWarningStream);
+}
+
+// tlp::error redirection
+class QErrorOStream :public std::ostream {
+  class QErrorStreamBuf :public std::streambuf {
+  protected:
+    virtual int_type overflow(int c) {
+      // should not happen
+      qCritical() << QChar(c);
+      return c;
+    }
+
+    virtual std::streamsize xsputn(const char *p, std::streamsize n) {
+      qCritical() << QString::fromUtf8(p, n);
+      return n;
     }
   };
 
-  static QErrorOStream* qErrorStream = NULL;
+  QErrorStreamBuf qErrorBuf;
 
-  void redirectErrorOutputToQCritical() {
-    if (qErrorStream == NULL)
-      qErrorStream = new QErrorOStream();
-    tlp::setErrorOutput(*qErrorStream);
+public:
+  QErrorOStream() {
+    rdbuf(&qErrorBuf);
   }
+};
+
+static QErrorOStream* qErrorStream = NULL;
+
+void redirectErrorOutputToQCritical() {
+  if (qErrorStream == NULL)
+    qErrorStream = new QErrorOStream();
+
+  tlp::setErrorOutput(*qErrorStream);
+}
 
 }

@@ -156,7 +156,7 @@ void DataSet::writeData(std::ostream& os, const std::string& prop,
 
   if (it == serializerContainer.tnTodts.end()) {
     tlp::warning() << "Write error: No data type serializer found for mangled type " <<
-               dt->getTypeName();
+                   dt->getTypeName();
     return;
   }
 
@@ -187,7 +187,7 @@ bool DataSet::readData(std::istream& is, const std::string& prop,
 
   if (it == serializerContainer.otnTodts.end()) {
     tlp::warning() << "Read error: No data type serializer found for read type " <<
-               outputTypeName;
+                   outputTypeName;
     return false;
   }
 
