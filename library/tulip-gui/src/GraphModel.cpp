@@ -146,9 +146,11 @@ QVariant GraphModel::data(const QModelIndex &index, int role) const {
 bool GraphModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole) {
     bool ok = setValue(_elements[index.row()],(PropertyInterface*)(index.internalPointer()),value);
+
     if (ok) {
-        emit dataChanged(index, index);
+      emit dataChanged(index, index);
     }
+
     return ok;
   }
 

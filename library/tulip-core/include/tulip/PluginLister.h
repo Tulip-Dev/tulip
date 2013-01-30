@@ -66,7 +66,7 @@ private:
 
     ~PluginDescription() {
       if (infos)
-	delete infos;
+        delete infos;
     }
   };
 
@@ -109,7 +109,7 @@ public:
     std::map<std::string, PluginDescription>::const_iterator it =
       _plugins.find(pluginName);
     return (it != _plugins.end() &&
-	    (dynamic_cast<const PluginType*>(it->second.infos) != NULL));
+            (dynamic_cast<const PluginType*>(it->second.infos) != NULL));
   }
 
   /**
@@ -124,13 +124,13 @@ public:
    */
   template<typename PluginType>
   PluginType* getPluginObject(const std::string& name,
-			      tlp::PluginContext* context) {
+                              tlp::PluginContext* context) {
     std::map<std::string, PluginDescription>::const_iterator it =
       _plugins.find(name);
     return (it != _plugins.end() &&
-	    (dynamic_cast<const PluginType*>(it->second.infos) != NULL))
-      ? static_cast<PluginType*>(it->second.factory->createPluginObject(context))
-      : NULL;
+            (dynamic_cast<const PluginType*>(it->second.infos) != NULL))
+           ? static_cast<PluginType*>(it->second.factory->createPluginObject(context))
+           : NULL;
   }
 
 

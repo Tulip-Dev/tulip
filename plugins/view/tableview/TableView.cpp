@@ -193,6 +193,7 @@ void TableView::readSettings() {
     _ui->table->setModel(NULL);
 
     delete _model;
+
     if (_ui->eltTypeCombo->currentIndex() == 0)
       _model = new NodesGraphModel(_ui->table);
     else
@@ -230,12 +231,14 @@ void TableView::readSettings() {
 }
 
 void TableView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight) {
-    QAbstractItemModel* model = static_cast<QAbstractItemModel*>(sender());
-    for (int i = topLeft.row() ; i <= bottomRight.row() ; ++i) {
-        PropertyInterface* pi = model->headerData(topLeft.column(),Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
-        if (pi->getTypename() == "string" && pi->getName() != "viewTexture" && pi->getName() != "viewFont")
-            _ui->table->resizeRowToContents(i);
-    }
+  QAbstractItemModel* model = static_cast<QAbstractItemModel*>(sender());
+
+  for (int i = topLeft.row() ; i <= bottomRight.row() ; ++i) {
+    PropertyInterface* pi = model->headerData(topLeft.column(),Qt::Horizontal,TulipModel::PropertyRole).value<PropertyInterface*>();
+
+    if (pi->getTypename() == "string" && pi->getName() != "viewTexture" && pi->getName() != "viewFont")
+      _ui->table->resizeRowToContents(i);
+  }
 }
 
 void TableView::columnsInserted(const QModelIndex&, int start, int end) {
@@ -608,16 +611,19 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
 }
 
 void TableView::resizeTableRows() {
-    if (!_ui->table->model())
-        return;
-    int top = qMax(0, _ui->table->verticalHeader()->visualIndexAt(0));
-    int bottom = _ui->table->verticalHeader()->visualIndexAt(_ui->table->viewport()->height());
-    if (bottom == -1 || (bottom+10) >= _ui->table->model()->rowCount())
-        bottom = _ui->table->model()->rowCount() - 1;
-    else
-        bottom += 10;
-    for (int i = top ; i <= bottom ; ++i)
-        _ui->table->resizeRowToContents(i);
+  if (!_ui->table->model())
+    return;
+
+  int top = qMax(0, _ui->table->verticalHeader()->visualIndexAt(0));
+  int bottom = _ui->table->verticalHeader()->visualIndexAt(_ui->table->viewport()->height());
+
+  if (bottom == -1 || (bottom+10) >= _ui->table->model()->rowCount())
+    bottom = _ui->table->model()->rowCount() - 1;
+  else
+    bottom += 10;
+
+  for (int i = top ; i <= bottom ; ++i)
+    _ui->table->resizeRowToContents(i);
 }
 
 PLUGIN(TableView)

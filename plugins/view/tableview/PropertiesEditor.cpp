@@ -174,11 +174,13 @@ void PropertiesEditor::setPropsVisibility(int state) {
 
   _ui->propsVisibilityCheck->setTristate(false);
   disconnect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(emitResizeTableRows()));
+
   for(int i=0; i<_sourceModel->rowCount(); ++i)
     _sourceModel->setData(_sourceModel->index(i,0), state,
                           Qt::CheckStateRole);
-   connect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(emitResizeTableRows()));
-   emitResizeTableRows();
+
+  connect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(emitResizeTableRows()));
+  emitResizeTableRows();
 }
 
 void PropertiesEditor::setPropsNotVisibleExcept() {
@@ -327,5 +329,5 @@ PropertyInterface *PropertiesEditor::contextProperty() const {
 }
 
 void PropertiesEditor::emitResizeTableRows() {
-    emit resizeTableRows();
+  emit resizeTableRows();
 }

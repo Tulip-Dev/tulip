@@ -54,9 +54,9 @@ QVariant LineEditEditorCreator<T>::editorData(QWidget* editor,tlp::Graph*) {
 
 template<typename T>
 QWidget* MultiLinesEditEditorCreator<T>::createWidget(QWidget *parent) const {
-    QTextEdit *edit = new QTextEdit(parent);
-    edit->setFocusPolicy(Qt::StrongFocus);
-    return edit;
+  QTextEdit *edit = new QTextEdit(parent);
+  edit->setFocusPolicy(Qt::StrongFocus);
+  return edit;
 }
 
 template<typename T>
@@ -80,43 +80,45 @@ QVariant MultiLinesEditEditorCreator<T>::editorData(QWidget* editor,tlp::Graph*)
 
 template<typename T>
 QSize MultiLinesEditEditorCreator<T>::sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const {
-    QVariant data = index.model()->data(index);
-    typename T::RealType val = data.value<typename T::RealType>();
-    QString valS = QString::fromUtf8(T::toString(val).c_str());
-    QStringList lines = valS.split(QLatin1Char('\n'));
-    QFontMetrics fontMetrics(option.font);
-    int height = 0;
-    int width = 0;
-    for (int i = 0 ; i < lines.count() ; ++i) {
-        QRect textBB = fontMetrics.boundingRect(lines.at(i));
-        height += textBB.height();
-        width = std::max(width, textBB.width());
-    }
-    return QSize(width, height);
+  QVariant data = index.model()->data(index);
+  typename T::RealType val = data.value<typename T::RealType>();
+  QString valS = QString::fromUtf8(T::toString(val).c_str());
+  QStringList lines = valS.split(QLatin1Char('\n'));
+  QFontMetrics fontMetrics(option.font);
+  int height = 0;
+  int width = 0;
+
+  for (int i = 0 ; i < lines.count() ; ++i) {
+    QRect textBB = fontMetrics.boundingRect(lines.at(i));
+    height += textBB.height();
+    width = std::max(width, textBB.width());
+  }
+
+  return QSize(width, height);
 }
 
 template<typename T>
 bool MultiLinesEditEditorCreator<T>::paint(QPainter* painter, const QStyleOptionViewItem &option, const QVariant &data) const {
-    TulipItemEditorCreator::paint(painter,option,data);
-    QRect rect = option.rect;
-    typename T::RealType val = data.value<typename T::RealType>();
-    QString valS = QString::fromUtf8(T::toString(val).c_str());
-    QStringList lines = valS.split(QLatin1Char('\n'));
+  TulipItemEditorCreator::paint(painter,option,data);
+  QRect rect = option.rect;
+  typename T::RealType val = data.value<typename T::RealType>();
+  QString valS = QString::fromUtf8(T::toString(val).c_str());
+  QStringList lines = valS.split(QLatin1Char('\n'));
 
-    if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
-      painter->setPen(option.palette.highlightedText().color());
-      painter->setBrush(option.palette.highlightedText());
-    }
-    else {
-      painter->setPen(option.palette.text().color());
-      painter->setBrush(option.palette.text());
-    }
+  if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
+    painter->setPen(option.palette.highlightedText().color());
+    painter->setBrush(option.palette.highlightedText());
+  }
+  else {
+    painter->setPen(option.palette.text().color());
+    painter->setBrush(option.palette.text());
+  }
 
-    for (int i = 0 ; i < lines.count() ; ++i) {
-        painter->drawText(rect.x(), rect.y() + i * rect.height()/lines.count(), rect.width(), rect.height()/lines.count(),Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, lines.at(i));
-    }
+  for (int i = 0 ; i < lines.count() ; ++i) {
+    painter->drawText(rect.x(), rect.y() + i * rect.height()/lines.count(), rect.width(), rect.height()/lines.count(),Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, lines.at(i));
+  }
 
-    return true;
+  return true;
 }
 
 template<typename PROPTYPE>

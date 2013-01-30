@@ -24,49 +24,52 @@
 #include <iostream>
 
 NavigableTableView::NavigableTableView(QWidget *parent) :
-    QTableView(parent) , _sendSignalOnResize(true) {
-    horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+  QTableView(parent) , _sendSignalOnResize(true) {
+  horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 }
 
 void NavigableTableView::keyPressEvent(QKeyEvent *event) {
-    if(event->key() == Qt::Key_Home) {
-        scrollToTop();
-    }
-    else if(event->key() == Qt::Key_End) {
-        scrollToBottom();
-    }
-    else {
-        QTableView::keyPressEvent(event);
-    }
+  if(event->key() == Qt::Key_Home) {
+    scrollToTop();
+  }
+  else if(event->key() == Qt::Key_End) {
+    scrollToBottom();
+  }
+  else {
+    QTableView::keyPressEvent(event);
+  }
 }
 
 int NavigableTableView::sizeHintForRow(int row) const {
-    if (!model())
-        return -1;
-    ensurePolished();
-    int left = 0;
-    int right = model()->columnCount();
-    int hint = 0;
+  if (!model())
+    return -1;
 
-    for (int column = left; column < right; ++column) {
+  ensurePolished();
+  int left = 0;
+  int right = model()->columnCount();
+  int hint = 0;
 
-        if (horizontalHeader()->isSectionHidden(column))
-            continue;
+  for (int column = left; column < right; ++column) {
 
-        QModelIndex index = model()->index(row, column);
-        hint = qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).height());
-    }
-    return hint;
+    if (horizontalHeader()->isSectionHidden(column))
+      continue;
+
+    QModelIndex index = model()->index(row, column);
+    hint = qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).height());
+  }
+
+  return hint;
 }
 
 void NavigableTableView::scrollContentsBy (int dx, int dy) {
-    QTableView::scrollContentsBy(dx, dy);
-    emit resizeTableRows();
+  QTableView::scrollContentsBy(dx, dy);
+  emit resizeTableRows();
 }
 
 void NavigableTableView::resizeEvent(QResizeEvent * event) {
-    QTableView::resizeEvent(event);
-    if (_sendSignalOnResize) {
-        emit resizeTableRows();
-    }
+  QTableView::resizeEvent(event);
+
+  if (_sendSignalOnResize) {
+    emit resizeTableRows();
+  }
 }

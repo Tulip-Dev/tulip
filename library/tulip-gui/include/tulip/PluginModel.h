@@ -75,7 +75,7 @@ public:
       else if (role == Qt::DecorationRole) {
         const Plugin& p = PluginLister::pluginInformations(name);
         QPixmap pix(p.icon().c_str());
-	return pix;
+        return pix;
       }
     }
 
