@@ -266,7 +266,7 @@ void CALLBACK beginCallback(GLenum which, GLvoid *polygonData) {
 
 void CALLBACK errorCallback(GLenum errorCode) {
   const GLubyte *estring = gluErrorString(errorCode);
-  qCritical() << "Tessellation Error: " << estring << endl;
+  tlp::error() << "Tessellation Error: " << estring << endl;
 }
 
 void CALLBACK endCallback(GLvoid *polygonData) {

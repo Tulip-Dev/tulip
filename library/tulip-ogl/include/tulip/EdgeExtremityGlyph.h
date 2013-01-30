@@ -33,7 +33,7 @@
 #include <tulip/Glyph.h>
 
 namespace tlp {
-static const std::string EEGLYPH_CATEGORY = QObject::trUtf8("Edge extremity").toStdString();
+static const std::string EEGLYPH_CATEGORY = "Edge extremity";
 
 typedef Matrix<float, 4> MatrixGL;
 class GlGraphInputData;

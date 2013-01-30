@@ -1,6 +1,7 @@
 #include <tulip/PythonInterpreter.h>
 
 #include <QtCore/QFile>
+#include <QtCore/QTextStream>
 #include <QtGui/QMessageBox>
 #include <QtGui/QFileDialog>
 #include <QtGui/QTextBlock>

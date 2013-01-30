@@ -216,7 +216,7 @@ list<LR> * TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR>*L, std::lis
 }
 //=============================================================================
 list<LR> * TreeReingoldAndTilfordExtended::TreePlace(tlp::node n, TLP_HASH_MAP<tlp::node,double> *p) {
-  //qWarning() << "TreeReingoldAndTilfordExtended::TreePlace n id:" << n.id() << endl;
+  //tlp::warning() << "TreeReingoldAndTilfordExtended::TreePlace n id:" << n.id() << endl;
   if (tree->outdeg(n)==0) {
     list<LR> *result = new list<LR>();
     LR tmpLR;
@@ -335,7 +335,7 @@ void TreeReingoldAndTilfordExtended::TreeLevelSizing(tlp::node n, std::map<int,d
 void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *p,
     double x, double y, int level,
     map<int,double> &maxLevelSize) {
-  //qWarning() << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
+  //tlp::warning() << "TreeReingoldAndTilfordExtended::calcLayout" << endl;
   Coord tmpCoord;
 
   if(!compactLayout)
@@ -377,7 +377,7 @@ void TreeReingoldAndTilfordExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::n
     }
   }
 
-  //qWarning() << "TreeReingoldAndTilfordExtended::EndCalcLayout" << endl;
+  //tlp::warning() << "TreeReingoldAndTilfordExtended::EndCalcLayout" << endl;
 }
 //===============================================================
 bool TreeReingoldAndTilfordExtended::run() {

@@ -22,6 +22,7 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ForEach.h>
 #include <tulip/Perspective.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 

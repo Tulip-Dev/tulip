@@ -43,8 +43,8 @@ string EdgeExtremityGlyphManager::glyphName(int id) {
     return eeglyphIdToName[id];
   }
   else {
-    qWarning() << __PRETTY_FUNCTION__ << endl;
-    qWarning() << "Invalid glyph id" << endl;
+    tlp::warning() << __PRETTY_FUNCTION__ << endl;
+    tlp::warning() << "Invalid glyph id" << endl;
     return string("invalid");
   }
 }
@@ -58,8 +58,8 @@ int EdgeExtremityGlyphManager::glyphId(string name) {
     return nameToEeGlyphId[name];
   }
   else {
-    qWarning() << __PRETTY_FUNCTION__ << endl;
-    qWarning() << "Invalid glyph name" << endl;
+    tlp::warning() << __PRETTY_FUNCTION__ << endl;
+    tlp::warning() << "Invalid glyph name" << endl;
     return 0;
   }
 }

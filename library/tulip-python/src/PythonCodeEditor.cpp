@@ -22,6 +22,7 @@
 #include "tulip/PythonCodeHighlighter.h"
 #include "tulip/ParenMatcherHighlighter.h"
 
+#include <QtCore/QTextStream>
 #include <QtGui/QPainter>
 #include <QtGui/QTextBlock>
 #include <QtGui/QApplication>

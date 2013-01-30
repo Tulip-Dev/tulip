@@ -30,6 +30,7 @@
 #include <tulip/GlGraphComposite.h>
 
 #include <tulip/MouseSelectionEditor.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QtGui/qevent.h>
 

@@ -55,7 +55,7 @@ static double clusterGetEdgeValue(Graph *graph,
 }
 //=================================================
 bool ClusterMetric::run() {
-  //  qWarning() << __PRETTY_FUNCTION__ << endl;
+  //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   unsigned int maxDepth = 1;
 
   if (dataSet!=NULL) dataSet->get("depth", maxDepth);

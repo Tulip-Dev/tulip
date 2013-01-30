@@ -167,7 +167,7 @@ protected:
  * }
  * EdgeProperty<double> weight2 = weight; //weight2 and weight are pointing on the same memory addres
  * weight2[g[0]] = 3;
- * qDebug() << weight[g[0]]; //output 3
+ * tlp::debug() << weight[g[0]]; //output 3
  * g.free(weight2); //free the memory, weight and weight2 are no more valid.
  * @endcode
  * @see VectorGraph alloc(EdgeProperty)
@@ -216,7 +216,7 @@ private:
   * }
   * NodeProperty<double> weight2 = weight; //weight2 and weight are pointing on the same memory addres
   * weight2[g[0]] = 3;
-  * qDebug() << weight[g[0]]; //output 3
+  * tlp::debug() << weight[g[0]]; //output 3
   * g.free(weight2); //free the memory, weight and weight2 are no more valid.
   * @endcode
   * @see VectorGraph alloc(NodeProperty)

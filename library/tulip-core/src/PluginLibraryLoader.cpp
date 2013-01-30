@@ -63,7 +63,7 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) 
     }
  #ifndef NDEBUG
     else
-      std::cout << "loadPlugins info: " << getInstance()->message.c_str() << std::endl;
+      tlp::debug() << "loadPlugins info: " << getInstance()->message.c_str() << std::endl;
 #endif
 
     PluginLister::currentLoader = NULL;

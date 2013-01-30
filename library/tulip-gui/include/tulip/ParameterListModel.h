@@ -25,6 +25,7 @@
 #include <tulip/WithParameter.h>
 #include <tulip/DataSet.h>
 #include <tulip/TulipMetaTypes.h>
+#include <QtCore/QVector>
 
 namespace tlp {
 

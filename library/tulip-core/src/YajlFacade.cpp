@@ -274,7 +274,7 @@ std::string YajlWriteFacade::generatedString() {
   yajl_gen_status status = yajl_gen_get_buf(_generator, &buffer, &length);
 
   if(status != yajl_gen_status_ok) {
-    qDebug() << __PRETTY_FUNCTION__ << ": parse error.";
+    tlp::debug() << __PRETTY_FUNCTION__ << ": parse error.";
   }
 
   std::string result((const char*)buffer);

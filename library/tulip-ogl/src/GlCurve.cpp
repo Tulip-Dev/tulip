@@ -65,7 +65,7 @@ tlp::Coord& GlCurve::point(const unsigned int i) {
 }
 //=====================================================
 void GlCurve::draw(float, Camera *) {
-  //    qWarning() << ".";
+  //    tlp::warning() << ".";
 
   glDisable(GL_CULL_FACE);
   glDisable(GL_LIGHTING);

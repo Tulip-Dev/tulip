@@ -58,7 +58,7 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
   edge e;
   node r = nodeWithDfsPos.get(n), u;
   state.set(r.id, VISITED);
-  //  qDebug() << "   " << dfsPosNum.get(r.id) << ": ";
+  //  tlp::debug() << "   " << dfsPosNum.get(r.id) << ": ";
   /// forall_out_edges(e, r)
   StableIterator<edge> it(sG->getOutEdges(r));
 
@@ -151,30 +151,30 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
 //       }
 //       el[w].push_back(e);
 //     }
-//     //    qDebug() << "\n       * FINAL Embed List: ";
-//     //    qDebug() << "[" << embedList[r].size() << " / "
+//     //    tlp::debug() << "\n       * FINAL Embed List: ";
+//     //    tlp::debug() << "[" << embedList[r].size() << " / "
 //     //  << sG->numberOfEdges() << "]\n";
 //     list<node>::const_iterator it= nl.begin();
 //     for(; it!=nl.end();++it) {
 //       node k = *it;
-//       qDebug() << "         " << dfsPosNum.get(k.id) << ": ";
+//       tlp::debug() << "         " << dfsPosNum.get(k.id) << ": ";
 //       list<edge>::const_iterator itE = el[k].begin();
 //       for(;itE!=el[k].end();++itE) {
 //  edge e = *itE;
-//  qDebug() << dfsPosNum.get(sG->target(e).id) << ", ";
+//  tlp::debug() << dfsPosNum.get(sG->target(e).id) << ", ";
 //       }
-//       qDebug() << "\n";
+//       tlp::debug() << "\n";
 //     }
-//     qDebug() << "         List of edges: ";
+//     tlp::debug() << "         List of edges: ";
 
 //     { // due to myforall macro;
 //       BmdListIt<edge> itBm(embedList[r]);
 //       while (itBm.hasNext()) {
 //  edge e = itBm.next();
-//  qDebug() << "(" << dfsPosNum.get(sG->source(e).id) << "," <<
+//  tlp::debug() << "(" << dfsPosNum.get(sG->source(e).id) << "," <<
 //    dfsPosNum.get(sG->target(e).id) << ") ";
 //       }
-//       qDebug() << "\n";
+//       tlp::debug() << "\n";
 //     }
 //   }
 
@@ -759,9 +759,9 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
   for (list<edge>::iterator it = listBackEdges.begin() ; it != listBackEdges.end() ; ++it) {
     edge e = *it;
     node v = sG->source(e);
-//     qDebug() << v.id << endl;
-//     qDebug() << "nodeInD[v].id = " << nodeInD.get(v.id).id << endl;
-//     qDebug() << "dfsPos.get(nodeInD[v].id) = " << dfsPos.get(nodeInD.get(v.id).id) << endl;
+//     tlp::debug() << v.id << endl;
+//     tlp::debug() << "nodeInD[v].id = " << nodeInD.get(v.id).id << endl;
+//     tlp::debug() << "dfsPos.get(nodeInD[v].id) = " << dfsPos.get(nodeInD.get(v.id).id) << endl;
     backEdge[dfsPos.get(nodeInD[v].id)] = e;
   }
 
@@ -803,7 +803,7 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
         else
           n = sG->source(e1);
 
-        //      qWarning() << "-(" << e1.id << ")->" << n.id << flush;
+        //      tlp::warning() << "-(" << e1.id << ")->" << n.id << flush;
         n_tmp = n;
 
         do {
@@ -815,7 +815,7 @@ bool PlanarityTestImpl::isPlanarEmbedding(const tlp::Graph* sG) {
           if (sG->source(e1) == n)
             sens.set(e1.id,true);
 
-          //  qWarning() << "-(" << e1.id << ")->" << n.id << flush;
+          //  tlp::warning() << "-(" << e1.id << ")->" << n.id << flush;
           ++count;
 
           if (count > 2 * sG->numberOfEdges() +1) break; //needed for trees or non biconnected graphs

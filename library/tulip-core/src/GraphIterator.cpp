@@ -40,7 +40,7 @@ void NodeIteratorObserver::treatEvent(const Event& evt) {
   case GraphEvent::TLP_DEL_NODE:
 
     if (hasNext())
-      qWarning() << "Warning: node deleted while iterating !!!";
+      tlp::warning() << "Warning: node deleted while iterating !!!";
 
   default:
     break;
@@ -53,7 +53,7 @@ void EdgeIteratorObserver::treatEvent(const Event& evt) {
   case GraphEvent::TLP_DEL_EDGE:
 
     if (hasNext())
-      qWarning() << "Warning: edge deleted while iterating !!!";
+      tlp::warning() << "Warning: edge deleted while iterating !!!";
 
   default:
     break;

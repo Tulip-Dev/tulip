@@ -169,7 +169,7 @@ void HttpContext::headerReceived() {
 
 void HttpContext::timeout() {
   if (!processed)
-    qWarning() << "time-out occurs" << endl;
+    tlp::warning() << "time-out occurs" << endl;
 
   // if timeout occurs
   // just indicates the we failed during processing
@@ -374,14 +374,14 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
           findUp = urlreference.rfind('/', findUp - 1);
 
           if (findUp==string::npos) {
-            qWarning() << "bad url reference, to much ../" << endl;
+            tlp::warning() << "bad url reference, to much ../" << endl;
             return newUrl;
           }
 
           urlreference = urlreference.substr(0, findUp + 1);
         }
         else {
-          qWarning() << "bad url reference, to much ../" << endl;
+          tlp::warning() << "bad url reference, to much ../" << endl;
           return newUrl;
         }
       }
@@ -596,7 +596,7 @@ struct WebImport:public ImportModule {
   }
   //========================================================
   bool nextUrl(UrlElement & url) {
-    //qWarning() << __PRETTY_FUNCTION__ << endl;
+    //tlp::warning() << __PRETTY_FUNCTION__ << endl;
     while(!toVisit.empty()) {
       url = toVisit.front();
       toVisit.pop_front();
@@ -666,7 +666,7 @@ struct WebImport:public ImportModule {
   //========================================================
   // parsehtml - parse the given html and add to queue
   void parseHtml (UrlElement &url) {
-    //qWarning() << __PRETTY_FUNCTION__ << endl << flush;
+    //tlp::warning() << __PRETTY_FUNCTION__ << endl << flush;
     if (url.data.empty()) return;
 
     string lowercase(url.data);
@@ -721,7 +721,7 @@ struct WebImport:public ImportModule {
         }
 
 #ifndef NDEBUG
-        qWarning() << "Visiting: " << url.server << url.url << " ..." << flush;
+        tlp::warning() << "Visiting: " << url.server << url.url << " ..." << flush;
 #endif
 
         if (url.isRedirected()) {
@@ -729,7 +729,7 @@ struct WebImport:public ImportModule {
 
           if (redirection.isValid()) {
 #ifndef NDEBUG
-            qWarning() << endl << "redirected to " << redirection.server << redirection.url << endl;
+            tlp::warning() << endl << "redirected to " << redirection.server << redirection.url << endl;
 #endif
 
             if (addEdge(url, redirection,  "redirection", redirectionColor))
@@ -737,21 +737,21 @@ struct WebImport:public ImportModule {
                      visitOther || redirection.server == url.server);
           }
           else
-            qWarning() << endl << "invalid redirection" << endl;
+            tlp::warning() << endl << "invalid redirection" << endl;
         }
         else {
           url.load();
           parseHtml(url);
           url.clear();
 #ifndef NDEBUG
-          qWarning() << " done" << endl << flush;
+          tlp::warning() << " done" << endl << flush;
 #endif
         }
       }
 
 #ifndef NDEBUG
       else
-        qWarning() << "Omitting : " << url.server << url.url << " ==> [not html]"<< endl;
+        tlp::warning() << "Omitting : " << url.server << url.url << " ==> [not html]"<< endl;
 
 #endif
     }

@@ -206,9 +206,9 @@ struct TLPGraphBuilder:public TLPTrue {
       n = nodeIndex[nodeId];
 
     if (_graph->isElement(n) && clusterIndex[clusterId]) {
-      //qWarning() << "set node value ....." ;
+      //tlp::warning() << "set node value ....." ;
       if (propertyType==GRAPH || propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
-        //      qWarning() << ".";
+        //      tlp::warning() << ".";
         char *endPtr=NULL;
         const char *startPtr=value.c_str();
         int result=strtol(startPtr,&endPtr,10);
@@ -250,7 +250,7 @@ struct TLPGraphBuilder:public TLPTrue {
       e = edgeIndex[edgeId];
 
     if (_graph->isElement(e) && clusterIndex[clusterId]) {
-      //qWarning() << "setEdgeValue...." << "edge:" << edgeId << " cluster " << clusterId << " " << propertyName << " " << propertyType << " value=\""<< value<<"\"  ";
+      //tlp::warning() << "setEdgeValue...." << "edge:" << edgeId << " cluster " << clusterId << " " << propertyName << " " << propertyType << " value=\""<< value<<"\"  ";
       if (propertyType==GRAPH || propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
         std::set<edge> v;
         bool result = EdgeSetType::fromString(v, value);
@@ -338,7 +338,7 @@ struct TLPGraphBuilder:public TLPTrue {
 
   bool setAllNodeValue(int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
     if (clusterIndex[clusterId]) {
-      //qWarning() << "set all node value ....." ;
+      //tlp::warning() << "set all node value ....." ;
       if (propertyType==GRAPH || propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
         char *endPtr=NULL;
         const char *startPtr=value.c_str();
@@ -414,7 +414,7 @@ struct TLPGraphBuilder:public TLPTrue {
   }
   bool setAllEdgeValue(int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
     if (clusterIndex[clusterId]) {
-      //qWarning() << "setAllEdgeValue.." << endl;
+      //tlp::warning() << "setAllEdgeValue.." << endl;
       if (propertyType==GRAPH|| propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
         std::set<edge> v;
         bool result = EdgeSetType::fromString(v, value);
@@ -1028,7 +1028,7 @@ public:
         std::stringstream ess;
         ess << filename.c_str() << ": " << strerror(errno);
         pluginProgress->setError(ess.str());
-        qWarning() << pluginProgress->getError();
+        tlp::warning() << pluginProgress->getError();
         return false;
       }
 
@@ -1061,7 +1061,7 @@ public:
 
     if (!result) {
       pluginProgress->setError(filename + ": " + pluginProgress->getError());
-      qWarning() << pluginProgress->getError();
+      tlp::warning() << pluginProgress->getError();
     }
 
     if(tmpss)

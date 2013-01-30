@@ -25,6 +25,8 @@
 #include <iostream>
 #include <string>
 #include <cassert>
+#include <climits>
+#include <cstring>
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
 #include <tulip/StoredType.h>

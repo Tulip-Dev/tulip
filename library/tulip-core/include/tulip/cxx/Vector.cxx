@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-
+#include <cstring>
 
 #define VECTORTLP tlp::Vector<TYPE,SIZE, OTYPE>
 
@@ -211,7 +211,7 @@ VECTORTLP tlp::operator^(const VECTORTLP &u, const VECTORTLP &v) {
     break;
 
   default :
-    qWarning() << "cross product not implemented for dimension :" << SIZE;
+    tlp::warning() << "cross product not implemented for dimension :" << SIZE;
     VECTORTLP result;
     return result;
     break;

@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <list>
 #include <algorithm>
 #include <cfloat>
 #include <tulip/ConvexHull.h>

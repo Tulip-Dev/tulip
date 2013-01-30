@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/ParametricCurves.h>
+#include <map>
 
 using namespace std;
 

@@ -330,7 +330,7 @@ public:
         }
 
         if(!_currentProperty) {
-          qCritical() << "The property '" << _propertyName << "' of type: '" << value << "' could not be created" << endl;
+          tlp::error() << "The property '" << _propertyName << "' of type: '" << value << "' could not be created" << endl;
         }
       }
 
@@ -365,7 +365,7 @@ public:
         }
       }
       else {
-        qCritical() << "The property '" << _propertyName << "'was null when trying to fill it";
+        tlp::error() << "The property '" << _propertyName << "'was null when trying to fill it";
       }
     }
 
@@ -381,14 +381,14 @@ public:
         string oldValue;
 
         if(_dataSet->get(_currentAttributeName, oldValue)) {
-          qCritical() << "attribute '" << _currentAttributeName << "' already exists";
+          tlp::error() << "attribute '" << _currentAttributeName << "' already exists";
         }
         else {
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
           _currentAttributeTypeName = string();
 
           if(!result) {
-            qCritical() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str();
+            tlp::error() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str();
           }
         }
       }

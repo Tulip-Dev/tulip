@@ -460,7 +460,7 @@ struct TLPParser {
 
       case COMMENTTOKEN:
 
-        if (displayComment) qDebug() << "Comment line:" << tokenParser->curLine << "->" <<  currentValue.str;
+        if (displayComment) tlp::debug() << "Comment line:" << tokenParser->curLine << "->" <<  currentValue.str;
 
         break;
 

@@ -201,17 +201,17 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
   edgeInT0 = posDFS(g, dfsPosNum);
 
   //forall(e, edgeInT0) {
-  //  qWarning() << "Edge in T0: " ;
+  //  tlp::warning() << "Edge in T0: " ;
   for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); ++it) {
     edge e = *it;
-    //    qWarning() << e.id << ",";
+    //    tlp::warning() << e.id << ",";
     node n = g->source(e);
     node v = g->target(e);
     parent.set(v.id, n);
     T0EdgeIn.set(v.id, e);
   }
 
-  //  qWarning() << endl;
+  //  tlp::warning() << endl;
 
 #ifndef NDEBUG
 
@@ -223,7 +223,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
 #endif
 
 
-  //  qWarning() << "DFS order :" ;
+  //  tlp::warning() << "DFS order :" ;
   //node n;
   //forall_nodes(n, g) {
   Iterator<node> *it1 = g->getNodes();
@@ -231,7 +231,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
   while (it1->hasNext()) {
     node n = it1->next();
     int dfsPos = dfsPosNum.get(n.id);
-    //    qWarning() << "(" << n.id << "," << dfsPos << ")";
+    //    tlp::warning() << "(" << n.id << "," << dfsPos << ")";
     nodeWithDfsPos.set(dfsPos, n);
     largestNeighbor.set(n.id, dfsPos);
     labelB.set(n.id, dfsPos);
@@ -246,7 +246,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
   }
 
   delete it1;
-  //  qWarning() << endl;
+  //  tlp::warning() << endl;
 
   for (int i = 1 ; i <= numberOfNodes ; ++i) {
     node n = nodeWithDfsPos.get(i);
@@ -268,10 +268,10 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
   }
 
   /// DEBUG {
-  // qDebug() << "** Labels (dfs[u], h[u], b[u]): " << endl;
+  // tlp::debug() << "** Labels (dfs[u], h[u], b[u]): " << endl;
   //   for (int i = 1 ; i <= numberOfNodes ; i++) {
   //     node u = nodeWithDfsPos.get(i);
-  //     qDebug() << "(" << dfsPosNum.get(u.id) << "," << largestNeighbor.get(u.id)
+  //     tlp::debug() << "(" << dfsPosNum.get(u.id) << "," << largestNeighbor.get(u.id)
   //   << "," << labelB.get(u.id) << ") " << endl;
   //   }
   //// }
@@ -282,31 +282,31 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
   sortNodesIncreasingOrder(g, labelB, sortedNodes);
 
   /*
-    qWarning() << "Sorted Nodes : ";
+    tlp::warning() << "Sorted Nodes : ";
   for (int i=0; i<=numberOfNodes; ++i)
-    qWarning() << "[" << sortedNodes[i].id << ","  ;
-  qWarning() << endl;
+    tlp::warning() << "[" << sortedNodes[i].id << ","  ;
+  tlp::warning() << endl;
   */
   for (int i = numberOfNodes ; i >= 1 ; i--) {
     node n = sortedNodes[i];
     node v = parent.get(n.id);
 
-    //qWarning() << "[" << n.id << "," << v.id << "]" << endl;
+    //tlp::warning() << "[" << n.id << "," << v.id << "]" << endl;
     if (v != NULL_NODE)
       childrenInT0[v].push_back(n);
   }
 
   /*
-    qDebug() << "** List of children in T:\n";
+    tlp::debug() << "** List of children in T:\n";
     Iterator<node> *it = g->getNodes();
     while (it->hasNext()) {
     node u = it->next();
-    //qWarning() << "  " << dfsPosNum.get(u.id) << ": " ;
+    //tlp::warning() << "  " << dfsPosNum.get(u.id) << ": " ;
     node v;
     for (list<node>::iterator i = childrenInT0[u].begin(); i != childrenInT0[u].end(); i++) {
     node v = *i;
-    qDebug() << dfsPosNum.get(v.id) << "(" << labelB.get(v.id) << "), ";
-    qDebug() << "\n";
+    tlp::debug() << dfsPosNum.get(v.id) << "(" << labelB.get(v.id) << "), ";
+    tlp::debug() << "\n";
     }
     } delete it;
   */
@@ -381,10 +381,10 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode,
 
     BmdLink<node>* tmp = predItem;
     predItem = RBC[oldCNode].cyclicPred(predItem, firstItem);
-    //qDebug() << "tulip predItem : " << predItem->getData().id << endl;
+    //tlp::debug() << "tulip predItem : " << predItem->getData().id << endl;
     predNode = predItem->getData();
-    //qDebug() << "tulip predNode : " << predNode.id << endl;
-    //qDebug() << "tulip tmp : " << tmp->getData().id << endl;
+    //tlp::debug() << "tulip predNode : " << predNode.id << endl;
+    //tlp::debug() << "tulip tmp : " << tmp->getData().id << endl;
     RBC[oldCNode].delItem(tmp);
   }
 
@@ -484,9 +484,9 @@ void PlanarityTestImpl::calcNewRBCFromTerminalNode(node newCNode,
   while (t != n2) {
     parentT = parent.get(t.id);
 
-    //    qDebug() << "Tulip t =  " << t.id << "  : ";
+    //    tlp::debug() << "Tulip t =  " << t.id << "  : ";
     if (isCNode(t)) {
-      //      qDebug() << "Is CNode" << endl;
+      //      tlp::debug() << "Is CNode" << endl;
       t = activeCNodeOf(false, t);
       addOldCNodeRBCToNewRBC(t, newCNode, n, predT, NULL_NODE, nodeList);
       parentT = parent.get(t.id);
@@ -500,7 +500,7 @@ void PlanarityTestImpl::calcNewRBCFromTerminalNode(node newCNode,
       }
     }
     else {
-      //      qDebug() << "Not Is CNode :" << t << endl;
+      //      tlp::debug() << "Not Is CNode :" << t << endl;
       parent.set(t.id, newCNode);
       updateLabelB(t);
 
@@ -525,7 +525,7 @@ void PlanarityTestImpl::calcNewRBCFromTerminalNode(node newCNode,
 }
 //=================================================================
 node PlanarityTestImpl::lastPNode(node n1, node n2) {
-  //  qWarning() << __PRETTY_FUNCTION__ << endl;
+  //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   if (n1 == n2) {
     if (!isCNode(n1))
       return n1;
@@ -885,7 +885,7 @@ bool PlanarityTestImpl::testObstructionFromTerminalNode(Graph *sG,
     node w,
     node terminal,
     node u) {
-  //  qWarning() << __PRETTY_FUNCTION__ << endl;
+  //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   node v = terminal, predV = NULL_NODE;
 
   while (v != u) {
@@ -976,7 +976,7 @@ BmdLink<node>*  PlanarityTestImpl::searchRBC(int dir, BmdLink<node>* it, node n,
  *   traversed.
  */
 node PlanarityTestImpl::findActiveCNode(node u, node w, list<node>& nl) {
-  //  qWarning() << __PRETTY_FUNCTION__ << endl;
+  //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   list<node> traversedNodesInRBC;
   assert(isCNode(parent.get(u.id)));
 

@@ -63,7 +63,7 @@ static void readShaderSourceFile(const string &vertexShaderSourceFilePath, char 
   ifs.open(vertexShaderSourceFilePath.c_str());
 
   if (!ifs.is_open()) {
-    qWarning() << "Error opening file : " << vertexShaderSourceFilePath << endl;
+    tlp::warning() << "Error opening file : " << vertexShaderSourceFilePath << endl;
     return;
   }
 
@@ -252,12 +252,12 @@ void GlShaderProgram::printInfoLog() {
     string shaderCompilationlog = attachedShaders[i]->getCompilationLog();
 
     if (shaderCompilationlog != "") {
-      qDebug() << shaderCompilationlog << endl;
+      tlp::debug() << shaderCompilationlog << endl;
     }
   }
 
   if (programLinkLog != "") {
-    qDebug() << programLinkLog << endl;
+    tlp::debug() << programLinkLog << endl;
   }
 }
 

@@ -56,13 +56,13 @@ public:
         it != _stacks.end(); ++it) {
       StackInfo& infos = it->second;
 
-      qWarning() << " ======================== ";
-      qWarning() << "Possible memory leak at " << it->first << ": ";
+      tlp::warning() << " ======================== ";
+      tlp::warning() << "Possible memory leak at " << it->first << ": ";
 
       for (size_t i=0; i<infos._size; ++i)
-        qWarning() << infos._strings[i];
+        tlp::warning() << infos._strings[i];
 
-      qWarning() << " ======================== ";
+      tlp::warning() << " ======================== ";
     }
   }
 
@@ -75,7 +75,7 @@ public:
     }
 
     _stacks.clear();
-    qWarning() << "Removed " << entries << " into the memory checker";
+    tlp::warning() << "Removed " << entries << " into the memory checker";
   }
 };
 

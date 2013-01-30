@@ -182,8 +182,8 @@ bool EccentricityMetric::run() {
       result->setNodeValue(vecNodes[ni], val);
     }
     double t3 = omp_get_wtime();
-    qDebug() << "omp : " << t2 - t1 << "s" << endl << flush;
-    qDebug() << "sng : " << t3 - t2 << "s" << endl << flush;
+    tlp::debug() << "omp : " << t2 - t1 << "s" << endl << flush;
+    tlp::debug() << "sng : " << t3 - t2 << "s" << endl << flush;
   */
   /*
   Iterator<node> *itN = graph->getNodes();

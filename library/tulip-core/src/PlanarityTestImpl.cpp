@@ -62,10 +62,10 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
 
       if (terminalNodes[comp].size() > 0) {
         // creates a new c-node to represent current component;
-        //  qWarning() << "  *terminal nodes for w = " << dfsPosNum.get(n1.id) << ":\n";
-        //  qWarning() << "    in component (" << dfsPosNum.get(comp.id) << "): ";
+        //  tlp::warning() << "  *terminal nodes for w = " << dfsPosNum.get(n1.id) << ":\n";
+        //  tlp::warning() << "    in component (" << dfsPosNum.get(comp.id) << "): ";
         //  for (list<node>::iterator it2= terminalNodes[comp].begin(); it2!=terminalNodes[comp].end(); ++it2)
-        //    qWarning() << dfsPosNum.get(it2->id) << ",";
+        //    tlp::warning() << dfsPosNum.get(it2->id) << ",";
         node newCNode = sg->addNode();
         dfsPosNum.set(newCNode.id, -(++totalCNodes)); // marks as c-node;
 
@@ -82,7 +82,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
         }
 
         // calculates RBC, label_b, etc, for new c-node;
-        //  qDebug() << "setInfoForNewCNode call " << endl;
+        //  tlp::debug() << "setInfoForNewCNode call " << endl;
         setInfoForNewCNode(sg, n1, newCNode, terminalNodes[comp]);
       }
     }
@@ -103,7 +103,7 @@ bool PlanarityTestImpl::isPlanar(bool embedsg) {
       sg->delNode(n2, true);
   }
 
-  //  qDebug() << "Le sge est " << (planar ? "planaire" : "non planaire") << endl;
+  //  tlp::debug() << "Le sge est " << (planar ? "planaire" : "non planaire") << endl;
   restore();
   //  displayMap(sg);
 #ifndef NDEBUG
@@ -202,7 +202,7 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n,
       // looks for a terminal node, upward in T;
       while (state.get(target.id) != VISITED && state.get(target.id) != TERMINAL) {
 
-        //  qWarning() << dfsPosNum.get(target.id) << "(" << dfsPosNum.get(parent.get(target.id).id) << "), ";
+        //  tlp::warning() << dfsPosNum.get(target.id) << "(" << dfsPosNum.get(parent.get(target.id).id) << "), ";
         assert(target.isValid());
 
         if (isCNode(parent.get(target.id))) {

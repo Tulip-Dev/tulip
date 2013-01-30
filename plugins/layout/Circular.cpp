@@ -80,7 +80,7 @@ void buildDfsOrdering(Graph *sg, vector<node> &vec) {
 }
 //===============================================================================
 vector<node> extractCycle(node n, deque<node> &st) {
-  // qWarning() << __PRETTY_FUNCTION__ << endl;
+  // tlp::warning() << __PRETTY_FUNCTION__ << endl;
   vector<node> result;
   deque<node>::const_reverse_iterator it = st.rbegin();
 
@@ -130,7 +130,7 @@ void dfs(node n, const Graph * sg, deque<node> &st,vector<node> & maxCycle, Muta
 //=======================================================================
 vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
   Graph * g = sg->addCloneSubGraph();
-  qWarning() << __PRETTY_FUNCTION__ << endl;
+  tlp::warning() << __PRETTY_FUNCTION__ << endl;
 
   // compute the connected components's subgraphs
   std::vector<std::set<node> > components;
@@ -222,7 +222,7 @@ bool Circular::run() {
       angleAdjust = true;
     }//end if
 
-    //qWarning() << "*************************" << endl;
+    //tlp::warning() << "*************************" << endl;
 
     vector<node> cycleOrdering;
 

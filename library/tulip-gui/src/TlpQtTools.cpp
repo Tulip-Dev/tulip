@@ -16,8 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <ostream>
 #include "tulip/TlpQtTools.h"
 
+#include <QtCore/QDebug>
 #include <QtOpenGL/QGLPixelBuffer>
 #include <QtGui/QColorDialog>
 #include <QtGui/QMessageBox>
@@ -215,5 +217,100 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
 }
 
+  // tlp::debug redirection
+  class QDebugOStream :public std::ostream {
+    class QDebugStreamBuf :public std::streambuf {
+    protected:
+      virtual int_type overflow(int c) {
+	// should not happen
+	qDebug() << QChar(c);
+	return c;
+      }
+      
+      virtual std::streamsize xsputn(const char *p, std::streamsize n) {
+	qDebug() << QString::fromUtf8(p, n);
+	return n;
+      }
+    };
+
+    QDebugStreamBuf qDebugBuf;
+
+  public:
+    QDebugOStream() {
+      rdbuf(&qDebugBuf);
+    }
+  };
+
+  static QDebugOStream* qDebugStream = NULL;
+
+  void redirectDebugOutputToQDebug() {
+    if (qDebugStream == NULL)
+      qDebugStream = new QDebugOStream();
+    tlp::setDebugOutput(*qDebugStream);
+  }
+
+  // tlp::warning redirection
+  class QWarningOStream :public std::ostream {
+    class QWarningStreamBuf :public std::streambuf {
+    protected:
+      virtual int_type overflow(int c) {
+	// should not happen
+	qWarning() << QChar(c);
+	return c;
+      }
+      
+      virtual std::streamsize xsputn(const char *p, std::streamsize n) {
+	qWarning() << QString::fromUtf8(p, n);
+	return n;
+      }
+    };
+
+    QWarningStreamBuf qWarningBuf;
+
+  public:
+    QWarningOStream() {
+      rdbuf(&qWarningBuf);
+    }
+  };
+
+  static QWarningOStream* qWarningStream = NULL;
+
+  void redirectWarningOutputToQWarning() {
+    if (qWarningStream == NULL)
+      qWarningStream = new QWarningOStream();
+    tlp::setWarningOutput(*qWarningStream);
+  }
+
+  // tlp::error redirection
+  class QErrorOStream :public std::ostream {
+    class QErrorStreamBuf :public std::streambuf {
+    protected:
+      virtual int_type overflow(int c) {
+	// should not happen
+	qCritical() << QChar(c);
+	return c;
+      }
+      
+      virtual std::streamsize xsputn(const char *p, std::streamsize n) {
+	qCritical() << QString::fromUtf8(p, n);
+	return n;
+      }
+    };
+
+    QErrorStreamBuf qErrorBuf;
+
+  public:
+    QErrorOStream() {
+      rdbuf(&qErrorBuf);
+    }
+  };
+
+  static QErrorOStream* qErrorStream = NULL;
+
+  void redirectErrorOutputToQCritical() {
+    if (qErrorStream == NULL)
+      qErrorStream = new QErrorOStream();
+    tlp::setErrorOutput(*qErrorStream);
+  }
 
 }
