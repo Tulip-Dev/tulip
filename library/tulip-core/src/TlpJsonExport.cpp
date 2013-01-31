@@ -38,16 +38,16 @@ using namespace tlp;
  * It iterates over the nodes/edges and returns the new IDs.
  **/
 template<typename TYPE>
-class NewValueIterator : public tlp::Iterator<uint> {
+class NewValueIterator : public tlp::Iterator<unsigned int> {
 public:
-  NewValueIterator(Iterator<TYPE>* iterator, const MutableContainer<uint>& newValues) : _iterator(iterator), _newValues(&newValues) {
+  NewValueIterator(Iterator<TYPE>* iterator, const MutableContainer<unsigned int>& newValues) : _iterator(iterator), _newValues(&newValues) {
   }
 
   ~NewValueIterator() {
     delete _iterator;
   }
 
-  virtual uint next() {
+  virtual unsigned int next() {
     return _newValues->get(_iterator->next().id);
   }
 
@@ -57,7 +57,7 @@ public:
 
 private:
   tlp::Iterator<TYPE>* _iterator;
-  const MutableContainer<uint>* _newValues;
+  const MutableContainer<unsigned int>* _newValues;
 };
 
 /**
@@ -167,12 +167,12 @@ public:
       //saving edges requires writing source and target for every edge
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
-      uint i = 0;
+      unsigned int i = 0;
       forEach(e, graph->getEdges()) {
         _newEdgeId.set(e.id, i++);
 
-        uint source = _newNodeId.get(graph->source(e).id);
-        uint target = _newNodeId.get(graph->target(e).id);
+        unsigned int source = _newNodeId.get(graph->source(e).id);
+        unsigned int target = _newNodeId.get(graph->target(e).id);
 
         _writer.writeArrayOpen();
         _writer.writeInteger(source);
@@ -277,13 +277,13 @@ public:
    * @param iterator An iterator over the values to save.
    * @return void
    **/
-  void writeInterval(const std::string& intervalName, Iterator<uint>* iterator) {
+  void writeInterval(const std::string& intervalName, Iterator<unsigned int>* iterator) {
     _writer.writeString(intervalName);
     _writer.writeArrayOpen();
-    uint intervalBegin = UINT_MAX;
-    uint intervalEnd = UINT_MAX;
-    uint previousId = UINT_MAX;
-    uint currentId = UINT_MAX;
+    unsigned int intervalBegin = UINT_MAX;
+    unsigned int intervalEnd = UINT_MAX;
+    unsigned int previousId = UINT_MAX;
+    unsigned int currentId = UINT_MAX;
     forEach(currentId, iterator) {
       //we don't need/want to do all this on the first time we loop
       if(previousId != UINT_MAX) {
@@ -333,8 +333,8 @@ public:
 
 protected:
   YajlWriteFacade _writer;
-  MutableContainer<uint> _newNodeId;
-  MutableContainer<uint> _newEdgeId;
+  MutableContainer<unsigned int> _newNodeId;
+  MutableContainer<unsigned int> _newEdgeId;
 };
 
 PLUGIN(TlpJsonExport)

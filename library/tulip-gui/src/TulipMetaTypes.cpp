@@ -103,12 +103,12 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
 
   if (v.userType() == qMetaTypeId<NodeShape>()) {
     NodeShape desc = v.value<NodeShape>();
-    return new TypedData<uint>(new uint(desc.nodeShapeId));
+    return new TypedData<unsigned int>(new unsigned int(desc.nodeShapeId));
   }
 
   if (v.userType() == qMetaTypeId<EdgeExtremityShape>()) {
     EdgeExtremityShape desc = v.value<EdgeExtremityShape>();
-    return new TypedData<uint>(new uint(desc.edgeExtremityShapeId));
+    return new TypedData<unsigned int>(new unsigned int(desc.edgeExtremityShapeId));
   }
 
   if (v.userType() == qMetaTypeId<TulipFileDescriptor>()) {
