@@ -721,7 +721,7 @@ struct WebImport:public ImportModule {
         }
 
 #ifndef NDEBUG
-        tlp::warning() << "Visiting: " << url.server << url.url << " ..." << flush;
+        tlp::warning() << "Visiting: " << url.server << url.url << " ..."  << std::endl << flush;
 #endif
 
         if (url.isRedirected()) {

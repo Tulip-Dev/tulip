@@ -40,7 +40,7 @@ void NodeIteratorObserver::treatEvent(const Event& evt) {
   case GraphEvent::TLP_DEL_NODE:
 
     if (hasNext())
-      tlp::warning() << "Warning: node deleted while iterating !!!";
+      tlp::warning() << "Warning: node deleted while iterating !!!" << std::endl;
 
   default:
     break;

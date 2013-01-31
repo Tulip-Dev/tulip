@@ -95,7 +95,7 @@ public:
     std::stringstream ess;
     ess <<  "Error parsing '" << s << "' at line :" << curLine + 1;
     pluginProgress->setError(ess.str());
-    tlp::warning() << pluginProgress->getError();
+    tlp::warning() << pluginProgress->getError() << std::endl;
     return false;
   }
 
@@ -240,7 +240,7 @@ public:
       return true;
 
     pluginProgress->setError(std::string("The number of lines in file ") + name2 + "\n is different from the number of found nodes.");
-    tlp::warning() << pluginProgress->getError();
+    tlp::warning() << pluginProgress->getError() << std::endl;
     return false;
   }
 };

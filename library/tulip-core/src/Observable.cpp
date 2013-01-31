@@ -357,7 +357,7 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
 #ifndef NDEBUG
 
       if (_oType[link] & type) {
-        tlp::warning() << "[Observable Warning]: observer already connected";
+        tlp::warning() << "[Observable Warning]: observer already connected" << std::endl;
       }
 
 #endif

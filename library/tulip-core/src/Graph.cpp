@@ -440,7 +440,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     if (currentGraph != prop->getGraph()) {
       errorMessage = "The property parameter does not belong to the graph";
 #ifndef NDEBUG
-      tlp::error() << __PRETTY_FUNCTION__ << ": " << errorMessage;
+      tlp::error() << __PRETTY_FUNCTION__ << ": " << errorMessage << std::endl;
 #endif
       return false;
     }
@@ -452,7 +452,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   if (it != circularCalls.end() && (*it).second == prop) {
     errorMessage = std::string("Circular call of ") + __PRETTY_FUNCTION__;
 #ifndef NDEBUG
-    tlp::error() << errorMessage;
+    tlp::error() << errorMessage << std::endl;
 #endif
     return false;
   }
@@ -500,7 +500,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   else {
     errorMessage = algorithm + " - No algorithm available with this name";
 #ifndef NDEBUG
-    tlp::error() << __PRETTY_FUNCTION__ << ": " << errorMessage;
+    tlp::error() << __PRETTY_FUNCTION__ << ": " << errorMessage << std::endl;
 #endif
     result=false;
   }
@@ -960,14 +960,14 @@ Graph * Graph::inducedSubGraph(const std::set<node> &nodes,
 //====================================================================================
 node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {
   if (getRoot() == this) {
-    tlp::warning() << __PRETTY_FUNCTION__;
-    tlp::warning() << "\t Error: Could not group a set of nodes in the root graph";
+    tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
+    tlp::warning() << "\t Error: Could not group a set of nodes in the root graph" << std::endl;
     return node();
   }
 
   if (nodeSet.empty()) {
-    tlp::warning() << __PRETTY_FUNCTION__;
-    tlp::warning() << '\t' << "Warning: Creation of an empty metagraph";
+    tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
+    tlp::warning() << '\t' << "Warning: Creation of an empty metagraph" << std::endl;
   }
 
   // create an induced brother sub graph
@@ -997,8 +997,8 @@ node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool
 //====================================================================================
 node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   if (getRoot() == this) {
-    tlp::warning() << __PRETTY_FUNCTION__;
-    tlp::warning() << "\t Error: Could not create a meta node in the root graph";
+    tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
+    tlp::warning() << "\t Error: Could not create a meta node in the root graph" << std::endl;
     return node();
   }
 
@@ -1133,8 +1133,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 //====================================================================================
 void Graph::openMetaNode(node metaNode, bool updateProperties) {
   if (getRoot() == this) {
-    tlp::warning() << __PRETTY_FUNCTION__;
-    tlp::warning() << "\t Error: Could not ungroup a meta node in the root graph";
+    tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
+    tlp::warning() << "\t Error: Could not ungroup a meta node in the root graph" << std::endl;
     return;
   }
 
@@ -1330,7 +1330,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
           graphColors->setEdgeValue (addedEdge, edgeColor);
         }
         else
-          tlp::warning() << "bug exist edge 1";
+          tlp::error() << __PRETTY_FUNCTION__<< ": bug exist edge 1" << std::endl;
       }
 
       // }

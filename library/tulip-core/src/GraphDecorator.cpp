@@ -50,22 +50,22 @@ unsigned int GraphDecorator::numberOfDescendantGraphs() const {
 }
 //============================================================
 void GraphDecorator::restoreSubGraph(Graph *) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::setSubGraphToKeep(Graph *) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::removeSubGraph(Graph*) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::clearSubGraphs() {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
@@ -274,28 +274,28 @@ void GraphDecorator::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
 
 //============================================================
 void GraphDecorator::addNode(const node) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::addNodes(Iterator<node>*) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 node GraphDecorator::restoreNode(node n) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
   return n;
 }
 
 //============================================================
 void GraphDecorator::restoreNodes(const std::vector<node>&) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::removeNode(const node) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
@@ -316,28 +316,28 @@ void GraphDecorator::addEdges(const std::vector<std::pair<node, node> >& edges,
 
 //============================================================
 void GraphDecorator::addEdge(const edge) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 void GraphDecorator::addEdges(Iterator<edge>*) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================
 edge GraphDecorator::restoreEdge(edge e, node, node) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
   return e;
 }
 
 //============================================================
 void GraphDecorator::restoreEdges(const std::vector<edge>&,
                                   const std::vector<std::pair<node, node> >&) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 //============================================================
 void GraphDecorator::removeEdge(const edge) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation";
+  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
 
 //============================================================

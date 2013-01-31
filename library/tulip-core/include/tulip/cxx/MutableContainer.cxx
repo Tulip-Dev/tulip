@@ -64,7 +64,7 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
 
   default:
     assert(false);
-    tlp::warning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     break;
   }
 
@@ -111,7 +111,7 @@ void tlp::MutableContainer<TYPE>::setAll(const TYPE &value) {
 
   default:
     assert(false);
-    tlp::warning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     break;
   }
 
@@ -144,7 +144,7 @@ tlp::IteratorValue* tlp::MutableContainer<TYPE>::findAllValues(const TYPE &value
 
     default:
       assert(false);
-      tlp::warning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+      tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
       return NULL;
     }
   }
@@ -240,7 +240,7 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 
     default:
       assert(false);
-      tlp::warning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+      tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
       break;
     }
   }
@@ -269,7 +269,7 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 
     default:
       assert(false);
-      tlp::warning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+      tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
       break;
     }
 
@@ -362,7 +362,7 @@ typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::
 
   default:
     assert(false);
-    tlp::warning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     return StoredType<TYPE>::get(defaultValue);
     break;
   }
@@ -387,7 +387,7 @@ bool tlp::MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const
 
   default:
     assert(false);
-    tlp::warning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     return false;
   }
 }
@@ -427,7 +427,7 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(c
   default:
     assert(false);
     notDefault = false;
-    tlp::warning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     return StoredType<TYPE>::get(defaultValue);
   }
 }
@@ -499,7 +499,7 @@ void tlp::MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, u
 
   default:
     assert(false);
-    tlp::warning() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)";
+    tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
     break;
   }
 }

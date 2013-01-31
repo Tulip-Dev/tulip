@@ -138,12 +138,12 @@ void DataSet::registerDataTypeSerializer(const std::string& typeName,
     serializerContainer.tnTodts.find(typeName);
 
   if (it != serializerContainer.tnTodts.end())
-    tlp::warning() << "Warning: a data type serializer is already registered for mangled type " << typeName;
+    tlp::warning() << "Warning: a data type serializer is already registered for mangled type " << typeName << std::endl;
 
   it = serializerContainer.otnTodts.find(dts->outputTypeName);
 
   if (it != serializerContainer.otnTodts.end())
-    tlp::warning() << "Warning: a data type serializer is already registered for read type " << dts->outputTypeName;
+    tlp::warning() << "Warning: a data type serializer is already registered for read type " << dts->outputTypeName << std::endl;
 
   serializerContainer.tnTodts[typeName] = serializerContainer.otnTodts[dts->outputTypeName] = dts;
 }
@@ -155,8 +155,7 @@ void DataSet::writeData(std::ostream& os, const std::string& prop,
     serializerContainer.tnTodts.find(dt->getTypeName());
 
   if (it == serializerContainer.tnTodts.end()) {
-    tlp::warning() << "Write error: No data type serializer found for mangled type " <<
-                   dt->getTypeName();
+    tlp::warning() << "Write error: No data type serializer found for mangled type " << dt->getTypeName() << std::endl;
     return;
   }
 
@@ -186,8 +185,7 @@ bool DataSet::readData(std::istream& is, const std::string& prop,
     serializerContainer.otnTodts.find(outputTypeName);
 
   if (it == serializerContainer.otnTodts.end()) {
-    tlp::warning() << "Read error: No data type serializer found for read type " <<
-                   outputTypeName;
+    tlp::warning() << "Read error: No data type serializer found for read type " << outputTypeName << std::endl;
     return false;
   }
 
