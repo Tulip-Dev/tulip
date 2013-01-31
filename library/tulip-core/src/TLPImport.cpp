@@ -1028,7 +1028,7 @@ public:
         std::stringstream ess;
         ess << filename.c_str() << ": " << strerror(errno);
         pluginProgress->setError(ess.str());
-        tlp::warning() << pluginProgress->getError();
+        tlp::warning() << pluginProgress->getError() << std::endl;
         return false;
       }
 
@@ -1061,7 +1061,7 @@ public:
 
     if (!result) {
       pluginProgress->setError(filename + ": " + pluginProgress->getError());
-      tlp::warning() << pluginProgress->getError();
+      tlp::warning() << pluginProgress->getError() << std::endl;
     }
 
     if(tmpss)

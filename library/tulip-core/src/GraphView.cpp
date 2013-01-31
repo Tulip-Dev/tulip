@@ -531,7 +531,7 @@ unsigned int GraphView::numberOfNodes()const {
 }
 //----------------------------------------------------------------
 void GraphView::reserveNodes(unsigned int) {
-  tlp::warning() << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a Sub Graph";
+  tlp::warning() << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a Sub Graph" << std::endl;
 }
 //----------------------------------------------------------------
 unsigned int GraphView::numberOfEdges() const {
@@ -539,7 +539,7 @@ unsigned int GraphView::numberOfEdges() const {
 }
 //----------------------------------------------------------------
 void GraphView::reserveEdges(unsigned int) {
-  tlp::warning() << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a Sub Graph";
+  tlp::warning() << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on a Sub Graph" << std::endl;
 }
 //----------------------------------------------------------------
 bool GraphView::canPop() {

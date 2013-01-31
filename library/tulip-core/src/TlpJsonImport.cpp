@@ -365,7 +365,7 @@ public:
         }
       }
       else {
-        tlp::error() << "The property '" << _propertyName << "'was null when trying to fill it";
+        tlp::error() << "The property '" << _propertyName << "'was null when trying to fill it" << std::endl;
       }
     }
 
@@ -381,14 +381,14 @@ public:
         string oldValue;
 
         if(_dataSet->get(_currentAttributeName, oldValue)) {
-          tlp::error() << "attribute '" << _currentAttributeName << "' already exists";
+          tlp::error() << "attribute '" << _currentAttributeName << "' already exists" << std::endl;
         }
         else {
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
           _currentAttributeTypeName = string();
 
           if(!result) {
-            tlp::error() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str();
+            tlp::error() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str() << std::endl;
           }
         }
       }

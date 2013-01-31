@@ -364,7 +364,7 @@ public:
   }
   virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *mvCalc) {
     if (mvCalc && !dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *>(mvCalc)) {
-      tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... invalid conversion of " << typeid(mvCalc).name() << "into " << typeid(typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *).name();
+      tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... invalid conversion of " << typeid(mvCalc).name() << "into " << typeid(typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *).name() << std::endl;
       abort();
     }
 

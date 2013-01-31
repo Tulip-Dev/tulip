@@ -44,7 +44,7 @@ void minV(tlp::Coord &res, const tlp::Coord &cmp) {
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg) {
 #ifndef NDEBUG
-  tlp::warning() << __PRETTY_FUNCTION__;
+  tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
 #endif
   tlp::Coord maxT(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   tlp::Coord minT(FLT_MAX, FLT_MAX, FLT_MAX);
@@ -172,7 +172,7 @@ public:
     // nothing to do if the subgraph is not linked to the property graph
     if (sg!=layout->getGraph() && !layout->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
-      tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << layout->getName().c_str();
+      tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << layout->getName().c_str() << std::endl;
 #endif
       return;
     }
@@ -805,7 +805,7 @@ double LayoutProperty::averageEdgeLength(const Graph *sg) const {
 //=================================================================================
 unsigned int LayoutProperty::crossingNumber() const {
   tlp::warning() << "!!! Warning: Not Implemented function :";
-  tlp::warning() << __PRETTY_FUNCTION__;
+  tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
   return 0;
 }
 //=================================================================================

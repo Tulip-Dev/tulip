@@ -236,7 +236,7 @@ private:
       return Rectangle<float>(E, H);
 
     default:
-      tlp::warning() << "ERROR" << __PRETTY_FUNCTION__ ;
+      tlp::error() << "ERROR" << __PRETTY_FUNCTION__  << std::endl;
       exit(1);
     }
   }

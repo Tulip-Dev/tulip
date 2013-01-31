@@ -41,7 +41,7 @@ static void computeNodeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
-    tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str();
+    tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
 #endif
     return;
   }
@@ -77,7 +77,7 @@ static void computeNodeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
-    tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str();
+    tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
 #endif
     return;
   }
@@ -106,7 +106,7 @@ static void computeNodeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
-    tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str();
+    tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
 #endif
     return;
   }
@@ -140,7 +140,7 @@ static void computeNodeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
-    tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str();
+    tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " does not compute any value for a subgraph not linked to the graph of the property " << metric->getName().c_str() << std::endl;
 #endif
     return;
   }

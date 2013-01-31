@@ -211,7 +211,7 @@ VECTORTLP tlp::operator^(const VECTORTLP &u, const VECTORTLP &v) {
     break;
 
   default :
-    tlp::warning() << "cross product not implemented for dimension :" << SIZE;
+    tlp::warning() << "cross product not implemented for dimension :" << SIZE << std::endl;
     VECTORTLP result;
     return result;
     break;

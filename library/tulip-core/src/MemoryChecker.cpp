@@ -56,13 +56,13 @@ public:
         it != _stacks.end(); ++it) {
       StackInfo& infos = it->second;
 
-      tlp::warning() << " ======================== ";
-      tlp::warning() << "Possible memory leak at " << it->first << ": ";
+      tlp::warning() << " ======================== " << std::endl;
+      tlp::warning() << "Possible memory leak at " << it->first << ": " << std::endl;
 
       for (size_t i=0; i<infos._size; ++i)
-        tlp::warning() << infos._strings[i];
+        tlp::warning() << infos._strings[i] << std::endl;
 
-      tlp::warning() << " ======================== ";
+      tlp::warning() << " ======================== "  << std::endl  << std::endl;
     }
   }
 
@@ -75,7 +75,7 @@ public:
     }
 
     _stacks.clear();
-    tlp::warning() << "Removed " << entries << " into the memory checker";
+    tlp::warning() << "Removed " << entries << " into the memory checker" << std::endl;
   }
 };
 

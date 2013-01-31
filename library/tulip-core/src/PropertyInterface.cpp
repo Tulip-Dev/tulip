@@ -32,7 +32,7 @@ PropertyInterface::~PropertyInterface() {
   if (graph && !name.empty() &&
       graph->existLocalProperty(name) &&
       graph->getProperty(name) == this) {
-    tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Serious bug; you have deleted a registered graph property named '"  << name.c_str() << "'";
+    tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Serious bug; you have deleted a registered graph property named '"  << name.c_str() << "'" << std::endl;
     abort();
   }
 

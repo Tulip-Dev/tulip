@@ -62,7 +62,7 @@ public:
 
     if (!rootInfo.exists()) {
 #ifndef NDEBUG
-      tlp::warning() << "Provided directory " << rootInfo.absoluteFilePath().toStdString() << " does not exist.";
+      tlp::warning() << "Provided directory " << rootInfo.absoluteFilePath().toStdString() << " does not exist." << std::endl;
 #endif
       return false;
     }
