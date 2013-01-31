@@ -64,6 +64,7 @@ private:
     std::string library;
     Plugin* infos;
 
+  PluginDescription(): factory(NULL), infos(NULL) {}
     ~PluginDescription() {
       if (infos)
         delete infos;
