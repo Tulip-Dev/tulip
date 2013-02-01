@@ -64,7 +64,8 @@
 #  endif
 
 //MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
-#include <math.h>
+#include <cmath>
+#include <cstdlib>
 static double sqrt(int i) {
   return sqrt((double)i);
 }
@@ -103,12 +104,6 @@ static float strtof(const char* cptr, char** endptr) {
 #  define cbrt(arg) pow((double)arg, 1.0/3) //VC does not have cbrt, little workaround
 #  define isnan(x) ((x) != (x)) //you guessed it, this is a C99 feature, and VC++ does not support C99. workaroud this.
 #  define rint(arg) arg > 0 ? (int)std::floor((double)arg) : (int)std::ceil((double)arg) //Hey, nother C99 feature !
-
-//for GCC 3.X
-#elif (__GNUC__ < 3)
-#  define stdext std
-#  define _DEPRECATED
-#  include <stl_hash_fun.h>
 
 //clang does not define __GNUC_MINOR__, thus having a separate clang #elif seems cleaner than adding defined() in the #else
 #elif __clang__

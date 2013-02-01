@@ -17,7 +17,8 @@
  *
  */
 #include <ostream>
-#include "tulip/TlpQtTools.h"
+#include <ios>
+#include <tulip/TlpQtTools.h>
 
 #include <QtCore/QDebug>
 #include <QtOpenGL/QGLPixelBuffer>
