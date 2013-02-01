@@ -150,9 +150,9 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
 
   HANDLE hFind;
   WIN32_FIND_DATA findData;
-  TCHAR currentDirectory[BUFSIZE];
+  TCHAR currentDirectory[256];
   DWORD dwRet;
-  dwRet = GetCurrentDirectory(BUFSIZE, currentDirectory);
+  dwRet = GetCurrentDirectory(256, currentDirectory);
 
   if(dwRet == 0) {
     message = pluginPath + " - Scandir error";
@@ -163,7 +163,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
     DWORD fileAttr = GetFileAttributes(pluginPath.c_str());
 
     if (fileAttr == 0xFFFFFFFF) {
-      message += "Directory not found: " + pluginPath.c_str();
+      message += std::string("Directory not found: ") + pluginPath.c_str();
       return false;
     }
 
@@ -205,7 +205,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
       else if (loader)
         loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
 
-      FindNextFile (hFind, &_infos->FindData);
+      FindNextFile (hFind, &findData);
     }
   }
 
