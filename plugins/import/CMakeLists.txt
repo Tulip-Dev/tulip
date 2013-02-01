@@ -63,7 +63,7 @@ TARGET_LINK_LIBRARIES(SmallWorldGraph-${TulipVersion} ${LibTulipCoreName})
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(FileSystem_SRCS FileSystem.cpp)
 ADD_LIBRARY(FileSystem-${TulipVersion} SHARED ${FileSystem_SRCS})
-TARGET_LINK_LIBRARIES(FileSystem-${TulipVersion} ${LibTulipCoreName})
+TARGET_LINK_LIBRARIES(FileSystem-${TulipVersion} ${LibTulipCoreName} ${QT_QTCORE_LIBRARY})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(WebImport_SRCS WebImport.cpp)
@@ -87,7 +87,7 @@ TARGET_LINK_LIBRARIES(EmptyGraph-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(GEXFImport-${TulipVersion} SHARED GEXFImport.cpp)
-TARGET_LINK_LIBRARIES(GEXFImport-${TulipVersion} ${LibTulipCoreName})
+TARGET_LINK_LIBRARIES(GEXFImport-${TulipVersion} ${LibTulipCoreName} ${QT_QTCORE_LIBRARY})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_SUBDIRECTORY(facebook)
