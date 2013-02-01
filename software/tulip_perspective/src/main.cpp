@@ -25,6 +25,7 @@
 
 #include <CrashHandling.h>
 
+#include <tulip/TulipException.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
@@ -146,7 +147,13 @@ int main(int argc,char **argv) {
   progress->setComment(QObject::trUtf8("Initializing tulip"));
   PluginLoaderToProgress* loader = new PluginLoaderToProgress();
   loader->_progress = progress;
-  tlp::initTulipSoftware(loader);
+  try {
+    tlp::initTulipSoftware(loader);
+  } catch(tlp::TulipException& e) {
+    QMessageBox::warning(0,"Error", e.what());
+    exit(1);
+  }
+
   delete loader;
 
   // Check arguments

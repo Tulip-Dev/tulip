@@ -18,11 +18,13 @@
  */
 
 #include <string>
+#include <sstream>
 #include <locale.h>
+#include <errno.h>
+#include <sys/stat.h>
 
 #ifndef _WIN32
 #include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
 #endif
 
@@ -37,6 +39,7 @@
 #endif
 
 #include <gzstream.h>
+#include <tulip/TulipException.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoader.h>
 #include <tulip/PropertyTypes.h>
@@ -121,6 +124,18 @@ extern "C" {
 
 }
 
+// throw an exception if an expected directory does not exist
+static void checkDirectory(const std::string& dir, bool envSet) {
+  struct stat infoEntry;
+  if (stat(dir.c_str(),&infoEntry) != 0) {
+    std::stringstream ess;
+    ess << "Error - " << dir << ": " << std::endl << strerror(errno);
+    if (envSet)
+      ess << std::endl << "Check your TLP_DIR environment variable";
+    throw TulipException(ess.str());
+  }
+}
+
 //=========================================================
 void tlp::initTulipLib(const char* appDirPath) {
   // first we must ensure that the parsing of float or double
@@ -181,6 +196,10 @@ void tlp::initTulipLib(const char* appDirPath) {
   if (TulipLibDir[TulipLibDir.length() - 1] != '/')
     TulipLibDir+='/';
 
+  // check TulipLibDir exists
+  bool tlpDirSet = (getEnvTlp!=NULL);
+  checkDirectory(TulipLibDir, tlpDirSet);
+
   getEnvTlp=getenv(TULIP_PLUGINS_PATH_VARIABLE);
 
   if (getEnvTlp!=NULL) {
@@ -205,10 +224,15 @@ void tlp::initTulipLib(const char* appDirPath) {
   pos = TulipLibDir.length() - 2;
   pos = TulipLibDir.rfind("/", pos);
   TulipShareDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
+  // check it exists
+  checkDirectory(TulipShareDir, tlpDirSet);
+
   TulipDocProfile=TulipShareDir+"tulip.qhc";
   TulipUserHandBookIndex=TulipShareDir+"userHandbook/html/index.html";
 
   TulipBitmapDir=TulipShareDir+"bitmaps/";
+  // check it exists
+  checkDirectory(TulipBitmapDir, tlpDirSet);
 
   // initialize serializers
   initTypeSerializers();
