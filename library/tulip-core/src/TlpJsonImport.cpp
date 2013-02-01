@@ -32,7 +32,7 @@
 using namespace std;
 using namespace tlp;
 
-typedef std::map<uint, uint> TemporaryGraphValue;
+typedef std::map<unsigned, unsigned> TemporaryGraphValue;
 typedef std::map<std::string, TemporaryGraphValue > TemporaryGraphProperty;
 
 class TlpJsonGraphParser : public YajlParseFacade {
@@ -348,7 +348,7 @@ public:
         if(_parsingPropertyNodeValues) {
           //if parsing a graphproperty, add it in the temporary buffer so the values are correctly set afterwards
           if(_graphProperties[_graph].find(_currentProperty->getName()) != _graphProperties[_graph].end()) {
-            _graphProperties[_graph][_currentProperty->getName()].insert(std::pair<uint, uint>(_currentIdentifier, atoi(value.c_str())));
+            _graphProperties[_graph][_currentProperty->getName()].insert(std::pair<unsigned, unsigned>(_currentIdentifier, atoi(value.c_str())));
           }
 
           assert(_currentIdentifier != UINT_MAX);
