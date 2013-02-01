@@ -127,11 +127,14 @@ extern "C" {
 // throw an exception if an expected directory does not exist
 static void checkDirectory(const std::string& dir, bool envSet) {
   struct stat infoEntry;
+
   if (stat(dir.c_str(),&infoEntry) != 0) {
     std::stringstream ess;
     ess << "Error - " << dir << ": " << std::endl << strerror(errno);
+
     if (envSet)
       ess << std::endl << "Check your TLP_DIR environment variable";
+
     throw TulipException(ess.str());
   }
 }

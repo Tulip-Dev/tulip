@@ -147,9 +147,11 @@ int main(int argc,char **argv) {
   progress->setComment(QObject::trUtf8("Initializing tulip"));
   PluginLoaderToProgress* loader = new PluginLoaderToProgress();
   loader->_progress = progress;
+
   try {
     tlp::initTulipSoftware(loader);
-  } catch(tlp::TulipException& e) {
+  }
+  catch(tlp::TulipException& e) {
     QMessageBox::warning(0,"Error", e.what());
     exit(1);
   }
