@@ -250,9 +250,7 @@ class QDebugOStream :public std::ostream {
   QDebugStreamBuf qDebugBuf;
 
 public:
-  QDebugOStream() {
-    rdbuf(&qDebugBuf);
-  }
+  QDebugOStream():std::ostream(&qDebugBuf) {}
 };
 
 static QDebugOStream* qDebugStream = NULL;
@@ -296,9 +294,7 @@ class QWarningOStream :public std::ostream {
   QWarningStreamBuf qWarningBuf;
 
 public:
-  QWarningOStream() {
-    rdbuf(&qWarningBuf);
-  }
+  QWarningOStream() :std::ostream(&qWarningBuf) {}
 };
 
 static QWarningOStream* qWarningStream = NULL;
@@ -342,9 +338,7 @@ class QErrorOStream :public std::ostream {
   QErrorStreamBuf qErrorBuf;
 
 public:
-  QErrorOStream() {
-    rdbuf(&qErrorBuf);
-  }
+  QErrorOStream():std::ostream(&qErrorBuf) {}
 };
 
 static QErrorOStream* qErrorStream = NULL;
