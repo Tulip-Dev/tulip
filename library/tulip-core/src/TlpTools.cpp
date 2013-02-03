@@ -125,15 +125,13 @@ extern "C" {
 }
 
 // throw an exception if an expected directory does not exist
-static void checkDirectory(const std::string& dir, bool envSet) {
+static void checkDirectory(const std::string& dir) {
   struct stat infoEntry;
 
   if (stat(dir.c_str(),&infoEntry) != 0) {
     std::stringstream ess;
     ess << "Error - " << dir << ": " << std::endl << strerror(errno);
-
-    if (envSet)
-      ess << std::endl << "Check your TLP_DIR environment variable";
+    ess << std::endl << "Check your TLP_DIR environment variable";
 
     throw TulipException(ess.str());
   }
@@ -201,7 +199,8 @@ void tlp::initTulipLib(const char* appDirPath) {
 
   // check TulipLibDir exists
   bool tlpDirSet = (getEnvTlp!=NULL);
-  checkDirectory(TulipLibDir, tlpDirSet);
+  if (tlpDirSet)
+    checkDirectory(TulipLibDir);
 
   getEnvTlp=getenv(TULIP_PLUGINS_PATH_VARIABLE);
 
@@ -228,14 +227,16 @@ void tlp::initTulipLib(const char* appDirPath) {
   pos = TulipLibDir.rfind("/", pos);
   TulipShareDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
   // check it exists
-  checkDirectory(TulipShareDir, tlpDirSet);
+  if (tlpDirSet)
+    checkDirectory(TulipShareDir);
 
   TulipDocProfile=TulipShareDir+"tulip.qhc";
   TulipUserHandBookIndex=TulipShareDir+"userHandbook/html/index.html";
 
   TulipBitmapDir=TulipShareDir+"bitmaps/";
   // check it exists
-  checkDirectory(TulipBitmapDir, tlpDirSet);
+  if (tlpDirSet)
+    checkDirectory(TulipBitmapDir);
 
   // initialize serializers
   initTypeSerializers();
