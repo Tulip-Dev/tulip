@@ -199,6 +199,7 @@ void tlp::initTulipLib(const char* appDirPath) {
 
   // check TulipLibDir exists
   bool tlpDirSet = (getEnvTlp!=NULL);
+
   if (tlpDirSet)
     checkDirectory(TulipLibDir);
 
@@ -226,6 +227,7 @@ void tlp::initTulipLib(const char* appDirPath) {
   pos = TulipLibDir.length() - 2;
   pos = TulipLibDir.rfind("/", pos);
   TulipShareDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
+
   // check it exists
   if (tlpDirSet)
     checkDirectory(TulipShareDir);
@@ -234,6 +236,7 @@ void tlp::initTulipLib(const char* appDirPath) {
   TulipUserHandBookIndex=TulipShareDir+"userHandbook/html/index.html";
 
   TulipBitmapDir=TulipShareDir+"bitmaps/";
+
   // check it exists
   if (tlpDirSet)
     checkDirectory(TulipBitmapDir);
