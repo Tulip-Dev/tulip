@@ -72,7 +72,7 @@ void PluginsTest::testCircularPlugin() {
   // ensure graph is not empty
   graph->addNode();
   tlp::BooleanProperty sel(graph);
-  CPPUNIT_ASSERT(graph->applyPropertyAlgorithm(name, &sel, err));
+  CPPUNIT_ASSERT(graph->applyPropertyAlgorithm(name, &sel, err) == false);
 }
 //==========================================================
 void PluginsTest::testAncestorGraph() {
