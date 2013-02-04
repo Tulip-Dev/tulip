@@ -93,6 +93,7 @@ SET(SRCS
   TreeViewComboBox.cpp
   GlSimpleEntityItemModel.cpp
   PythonVersionChecker.cpp
+  PluginModel.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
