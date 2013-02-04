@@ -29,7 +29,7 @@ namespace tlp {
 /*
  * @brief Build and manage a Qt Model of a list of plugins
  */
-class SimplePluginListModel : public tlp::TulipModel {
+class TLP_QT_SCOPE SimplePluginListModel : public tlp::TulipModel {
 private:
     QList<std::string> _list;
 
