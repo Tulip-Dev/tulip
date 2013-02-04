@@ -29,53 +29,55 @@ SimplePluginListModel::~SimplePluginListModel() {
 }
 
 string SimplePluginListModel::pluginName(const QModelIndex& idx) const {
-    int index = idx.row();
-    if(index > -1 && index < _list.size()) {
-        return _list.at(index);
-    }else{
-        return string();
-    }
+  int index = idx.row();
+
+  if(index > -1 && index < _list.size()) {
+    return _list.at(index);
+  }
+  else {
+    return string();
+  }
 }
 
 QList<std::string> SimplePluginListModel::plugins()const {
-    return _list;
+  return _list;
 }
 
 int SimplePluginListModel::columnCount ( const QModelIndex& ) const {
-    return 1;
+  return 1;
 }
 
 int SimplePluginListModel::rowCount(const QModelIndex &parent) const {
-    if(parent.isValid())
-        return 0;
+  if(parent.isValid())
+    return 0;
 
-    return _list.size();
+  return _list.size();
 }
 
 QModelIndex SimplePluginListModel::parent(const QModelIndex &) const {
-    return QModelIndex();
+  return QModelIndex();
 }
 
 QModelIndex SimplePluginListModel::index(int row, int column,const QModelIndex &parent) const {
-    if(parent.isValid())
-        return QModelIndex();
+  if(parent.isValid())
+    return QModelIndex();
 
-    return createIndex(row, column);
+  return createIndex(row, column);
 }
 
 QVariant SimplePluginListModel::data(const QModelIndex &index, int role) const {
-    if(index.row() < _list.size()) {
-        std::string name(_list[index.row()]);
+  if(index.row() < _list.size()) {
+    std::string name(_list[index.row()]);
 
-        if(role == Qt::DisplayRole) {
-            return name.c_str();
-        }
-        else if (role == Qt::DecorationRole) {
-            const Plugin& p = PluginLister::pluginInformations(name);
-            QPixmap pix(p.icon().c_str());
-            return pix;
-        }
+    if(role == Qt::DisplayRole) {
+      return name.c_str();
     }
+    else if (role == Qt::DecorationRole) {
+      const Plugin& p = PluginLister::pluginInformations(name);
+      QPixmap pix(p.icon().c_str());
+      return pix;
+    }
+  }
 
-    return QVariant();
+  return QVariant();
 }

@@ -238,10 +238,11 @@ struct DOT_ATTR {
 
     if( inRef.mask & STYLE ) {
       if (inRef.style == 1 && !(attr.mask & FILL_COLOR)) {
-	// filled
-	attr.fillcolor = attr.color;
-	attr.mask |= FILL_COLOR;
+        // filled
+        attr.fillcolor = attr.color;
+        attr.mask |= FILL_COLOR;
       }
+
       attr.style = inRef.style;
     }
 
@@ -304,9 +305,10 @@ struct DOT_ATTR {
     }
     else if( inId == "style" ) { // color ?
       if (inValue == "filled")
-	style = 1;
+        style = 1;
       else
-	style = 2;
+        style = 2;
+
       mask |= STYLE;
     }
     else if( inId == "fillcolor" ) { //fill color
@@ -537,9 +539,9 @@ struct DOT_YY {
       Size s( 0.75, 0.5f, 0.5f ); // in inches unit
 
       if ((inAttr.mask & DOT_ATTR::SHAPE ) &&
-	  (inAttr.shape != DEFAULT_SHAPE))
-	// no distorsion if it not the default shape
-	s.setW(0.5);
+          (inAttr.shape != DEFAULT_SHAPE))
+        // no distorsion if it not the default shape
+        s.setW(0.5);
 
       if( inAttr.mask & DOT_ATTR::WIDTH ) s.setW( inAttr.size.getW() );
 
@@ -581,12 +583,14 @@ struct DOT_YY {
       IntegerProperty * shapeP = graph->getProperty<IntegerProperty>(TLP_SHAPE_PROXY_NAME);
 
       for( unsigned int i = 0 ; i < inA.size() ; i++ ) {
-	int shape = DEFAULT_SHAPE;
+        int shape = DEFAULT_SHAPE;
+
         if( inAttr.mask & DOT_ATTR::SHAPE )
-	  shape = inAttr.shape;
-	// default shape is an ellipse
-	// we use a distored circle
-	shapeP->setNodeValue( inA[i],  (shape != DEFAULT_SHAPE) ? shape : 2);
+          shape = inAttr.shape;
+
+        // default shape is an ellipse
+        // we use a distored circle
+        shapeP->setNodeValue( inA[i],  (shape != DEFAULT_SHAPE) ? shape : 2);
       }
     }
 
