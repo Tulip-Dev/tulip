@@ -208,7 +208,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
     g=_graph;
 
   if (g == NULL) {
-    qCritical() << name() << trUtf8(": No graph selected");
+    qCritical() << QStringToTlpString(name()) << trUtf8(": No graph selected");
     return;
   }
 
@@ -290,19 +290,19 @@ void AlgorithmRunnerItem::run(Graph *g) {
     g->pop();
 
     if (progress->state() == TLP_CANCEL && errorMessage.empty()) {
-      errorMessage = trUtf8("Cancelled by user").toUtf8().data();
-      qWarning() << name() << ": " << errorMessage.c_str();
+      errorMessage = QStringToTlpString(trUtf8("Cancelled by user"));
+      qWarning() << QStringToTlpString(name()).c_str() << ": " << errorMessage.c_str();
       QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
     }
     else {
-      qCritical() << name() << ": " << errorMessage.c_str();
+      qCritical() << QStringToTlpString(name()).c_str() << ": " << errorMessage.c_str();
       QMessageBox::critical(parentWidget(), name(), errorMessage.c_str());
     }
   }
   else {
     if (progress->state() == TLP_STOP) {
-      errorMessage = trUtf8("Stopped by user").toUtf8().data();
-      qWarning() << name() << ": " << errorMessage.c_str();
+      errorMessage = QStringToTlpString(trUtf8("Stopped by user"));
+      qWarning() << QStringToTlpString(name()).c_str() << ": " << errorMessage.c_str();
       QMessageBox::warning(parentWidget(), name(), errorMessage.c_str());
     }
   }
