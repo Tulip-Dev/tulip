@@ -407,6 +407,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
 
   if ((result=newAlgo->check(errorMessage))) {
     result = newAlgo->run();
+
     if (!result)
       errorMessage = tmpProgress->getError();
   }
@@ -495,8 +496,9 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
     if (result) {
       result = tmpAlgo->run();
+
       if (!result)
-	errorMessage = tmpProgress->getError();
+        errorMessage = tmpProgress->getError();
     }
 
     delete tmpAlgo;
