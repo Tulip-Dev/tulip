@@ -112,7 +112,7 @@ enum yytokentype {
 #define TLP_COLOR_PROXY_NAME "viewColor"
 #define TLP_BORDERCOLOR_PROXY_NAME "viewBorderColor"
 #define TLP_FONTCOLOR_PROXY_NAME "viewLabelColor"
-#define DEFAULT_SHAPE 1 // ellipse
+#define DEFAULT_SHAPE 1111 // ellipse
 
 
 int yylex( void );
@@ -155,7 +155,7 @@ ShapeAttr ShapeAttrA[] = {
 
   // dot shapes
   {"circle", 2}, // as a sphere
-  {"ellipse", 2}, // as a sphere
+  {"ellipse", DEFAULT_SHAPE}, // as an ellipse (distorsed sphere)
 };
 
 //
@@ -236,7 +236,14 @@ struct DOT_ATTR {
 
     if( inRef.mask & COLOR ) attr.color = inRef.color;
 
-    if( inRef.mask & STYLE ) attr.style = inRef.style;
+    if( inRef.mask & STYLE ) {
+      if (inRef.style == 1 && !(attr.mask & FILL_COLOR)) {
+	// filled
+	attr.fillcolor = attr.color;
+	attr.mask |= FILL_COLOR;
+      }
+      attr.style = inRef.style;
+    }
 
     if( inRef.mask & COMMENT ) attr.comment = inRef.comment;
 
@@ -279,7 +286,7 @@ struct DOT_ATTR {
       tailLabel = inValue;
       mask |= TAIL_LABEL;
     }
-    else if( inId == "fontcolor" ) { //border color
+    else if( inId == "fontcolor" ) { //label color
       Color c;
 
       if( DecodeColor(c,inValue) ) {
@@ -294,6 +301,13 @@ struct DOT_ATTR {
         color = c;
         mask |= COLOR;
       }
+    }
+    else if( inId == "style" ) { // color ?
+      if (inValue == "filled")
+	style = 1;
+      else
+	style = 2;
+      mask |= STYLE;
     }
     else if( inId == "fillcolor" ) { //fill color
       Color c;
@@ -518,7 +532,14 @@ struct DOT_YY {
     // Size
 
     {
-      Size s( 0.75f, 0.5f, 0.5f ); // in inches unit
+      // because default shape is an ellipse
+      // we distorse the size
+      Size s( 0.75, 0.5f, 0.5f ); // in inches unit
+
+      if ((inAttr.mask & DOT_ATTR::SHAPE ) &&
+	  (inAttr.shape != DEFAULT_SHAPE))
+	// no distorsion if it not the default shape
+	s.setW(0.5);
 
       if( inAttr.mask & DOT_ATTR::WIDTH ) s.setW( inAttr.size.getW() );
 
@@ -559,11 +580,14 @@ struct DOT_YY {
     {
       IntegerProperty * shapeP = graph->getProperty<IntegerProperty>(TLP_SHAPE_PROXY_NAME);
 
-      for( unsigned int i = 0 ; i < inA.size() ; i++ )
+      for( unsigned int i = 0 ; i < inA.size() ; i++ ) {
+	int shape = DEFAULT_SHAPE;
         if( inAttr.mask & DOT_ATTR::SHAPE )
-          shapeP->setNodeValue( inA[i], inAttr.shape );
-        else
-          shapeP->setNodeValue( inA[i], DEFAULT_SHAPE );
+	  shape = inAttr.shape;
+	// default shape is an ellipse
+	// we use a distored circle
+	shapeP->setNodeValue( inA[i],  (shape != DEFAULT_SHAPE) ? shape : 2);
+      }
     }
 
     // Comment
