@@ -175,17 +175,20 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
   unsigned nbBends = bends.size();
 
-  if(lodSize>-1 && lodSize<1 && data->getGlVertexArrayManager()->renderingIsBegin() && (!data->parameters->getFeedbackRender())) {
-    data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
-    return;
-  }
-  else if (data->getGlVertexArrayManager()->renderingIsBegin()
-           && !data->parameters->isEdge3D()
-           && !data->parameters->getFeedbackRender()
-           && !data->parameters->isViewArrow()
-           && edgeTexture == "") {
-    data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
-    return;
+  if (data->getGlVertexArrayManager()->renderingIsBegin() &&
+      !data->parameters->getFeedbackRender()) {
+    if(lodSize>-1 && lodSize<1) {
+      if (!data->parameters->isViewArrow() || lodSize <= 0.1) {
+	data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
+	return;
+      }
+    }
+    else if (!data->parameters->isEdge3D()
+	     && !data->parameters->isViewArrow()
+	     && edgeTexture == "") {
+      data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
+      return;
+    }
   }
 
   const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
@@ -268,32 +271,29 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
 
   double lineWidth=data->getElementBorderWidth()->getEdgeValue(e);
 
-  unsigned int startEdgeGlyph = data->getElementSrcAnchorShape()->getEdgeValue(e);
-  //Check if the plugin exists.
-  startEdgeGlyph = data->extremityGlyphs.get(startEdgeGlyph) != NULL?startEdgeGlyph:UINT_MAX;
-
-  unsigned int endEdgeGlyph = data->getElementTgtAnchorShape()->getEdgeValue(e);
-  //Check if the plugin exists.
-  endEdgeGlyph = data->extremityGlyphs.get(endEdgeGlyph)!=NULL ? endEdgeGlyph:UINT_MAX;
-
-  if (startEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
-    displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,selectionOutlineSize,startEdgeGlyph,endEdgeGlyph,
-                 bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
-  }
-  else {
+  if (data->parameters->isViewArrow()) {
+    EdgeExtremityGlyph *startEdgeGlyph = data->extremityGlyphs.get(data->getElementSrcAnchorShape()->getEdgeValue(e));
+    EdgeExtremityGlyph *endEdgeGlyph = data->extremityGlyphs.get(data->getElementTgtAnchorShape()->getEdgeValue(e));
+    if (startEdgeGlyph != NULL) {
+      displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,selectionOutlineSize,startEdgeGlyph, endEdgeGlyph ? endEdgeGlyph->id() : UINT_MAX,
+		   bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
+    }
+    else {
+      beginLineAnchor = srcAnchor;
+    }
+    if (endEdgeGlyph != NULL) {
+      displayArrow(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,selectionOutlineSize,endEdgeGlyph,startEdgeGlyph ? startEdgeGlyph->id() : UINT_MAX,
+		   bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
+    }
+    else {
+      endLineAnchor = tgtAnchor;
+    }
+  } else {
     beginLineAnchor = srcAnchor;
-  }
-
-  if (endEdgeGlyph != UINT_MAX && data->parameters->isViewArrow()) {
-    displayArrow(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,selectionOutlineSize,endEdgeGlyph,startEdgeGlyph,
-                 bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
-  }
-  else {
     endLineAnchor = tgtAnchor;
   }
 
   //Reset in case of drawing extremity glyph that can alterate value
-
   GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getEdgeValue(e));
   //draw Edge
   drawEdge(srcCoord, tgtCoord, beginLineAnchor, endLineAnchor, bends, srcCol, tgtCol,camera->getCenter()-camera->getEyes(),data->parameters->isEdgeColorInterpolate() ,strokeColor,edgeSize,
@@ -773,7 +773,7 @@ void GlEdge::displayArrow(const GlGraphInputData *data,
                           float maxSize,
                           bool selected,
                           float selectionOutlineSize,
-                          int srcEdgeGlyph,
+                          EdgeExtremityGlyph* extremityGlyph,
                           int tgtEdgeGlyph,
                           size_t numberOfBends,
                           const Coord &anchor,
@@ -825,7 +825,6 @@ void GlEdge::displayArrow(const GlGraphInputData *data,
 
   size[0] = std::min(maxGlyphSize, size[0]);
 
-  EdgeExtremityGlyph *extremityGlyph = data->extremityGlyphs.get(srcEdgeGlyph);
   assert(extremityGlyph);
 
   MatrixGL srcTransformationMatrix;
