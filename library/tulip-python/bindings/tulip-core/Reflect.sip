@@ -188,7 +188,7 @@ Returns the list of keys associated to the values stored in the data set.
     }
     delete it;
 	
-    sipRes = getPyObjectFromDataType(dataType);
+    sipRes = getPyObjectFromDataType(dataType, true);
 	
     if (!sipRes) {
         std::ostringstream oss;

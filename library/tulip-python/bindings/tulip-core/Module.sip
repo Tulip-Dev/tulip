@@ -72,6 +72,14 @@
     }
 %End
 
+%PostInitialisationCode
+    std::string tlpTypesAlias =
+            "from tulip import *\n"
+            "tlp.Size = tlp.Vec3f\n"
+            "tlp.Coord = tlp.Vec3f\n"
+            ;
+    PyRun_SimpleString(tlpTypesAlias.c_str());
+%End
 
 %ModuleHeaderCode
 #include <tulip/Graph.h>

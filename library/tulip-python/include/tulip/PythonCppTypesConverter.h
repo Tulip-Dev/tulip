@@ -100,7 +100,7 @@ private :
   std::string key;
 };
 
-TLP_PYTHON_SCOPE PyObject *getPyObjectFromDataType(const tlp::DataType *dataType);
+TLP_PYTHON_SCOPE PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy=false);
 
 TLP_PYTHON_SCOPE bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataType *dataType=NULL);
 
