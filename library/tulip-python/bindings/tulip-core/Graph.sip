@@ -241,9 +241,16 @@ The sub-graph contains all the nodes of the set and all the existing edges
 between two nodes of the set including self-loops.
 
 :param nodeSet: the set of nodes from which to build the induced sub-graph
-:type nodeSet: set of :class:`tlp.node`
+:type nodeSet: list or set of :class:`tlp.node`
 :rtype: :class:`tlp.Graph` 
 %End
+
+// For code compatibility with Tulip-Python 3.X
+   tlp::Graph *inducedSubGraph(const std::vector<tlp::node>& nodeSet);
+%MethodCode
+    sipRes = sipCpp->inducedSubGraph(std::set<tlp::node>(a0->begin(), a0->end()));
+%End
+
 
 //===========================================================================================
 
@@ -3351,7 +3358,7 @@ Closes a set of existing nodes into a metanode and returns it.
 Edges from nodes in the set to other nodes are replaced with
 edges from the metanode to the other nodes.
 
-:param nodeSet: a set of existing nodes
+:param nodeSet: a list or set of existing nodes
 :type nodeSet: set of :class:`tlp.node`
 :param multiEdges: indicates if a meta edge will be created for each underlying edge
 :type multiEdges: boolean
@@ -3375,6 +3382,12 @@ edges from the metanode to the other nodes.
     if (sipIsErr != -1) {
         sipRes = new tlp::node(sipCpp->createMetaNode(*a0, a1, a2));
     }
+%End
+
+// For code-compatibility with Tulip 3.X
+    tlp::node createMetaNode(const std::vector<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+%MethodCode
+    sipRes = new tlp::node(sipCpp->createMetaNode(std::set<tlp::node>(a0->begin(), a0->end()), a1, a2));
 %End
 
 //===========================================================================================	
