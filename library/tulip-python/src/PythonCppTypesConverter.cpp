@@ -247,7 +247,7 @@ T *getCppPointerFromPyObject(PyObject *pyObj) {
     if (!pyObj && dataType && dataType->getTypeName() == std::string(typeid(T).name())) {\
         pyObj = getPyObjectFromCppObject(*(reinterpret_cast<T*>(dataType->value)));\
     }\
-
+ 
 #define CHECK_SIP_CPP_TYPE_CONVERSION(T)\
     if (!pyObj && dataType && dataType->getTypeName() == std::string(typeid(T).name())) {\
         if (noCopy) {\
@@ -256,7 +256,7 @@ T *getCppPointerFromPyObject(PyObject *pyObj) {
             pyObj = getPyObjectFromCppObject(*(reinterpret_cast<T*>(dataType->value)));\
         }\
     }\
-
+ 
 
 PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
   PyObject *pyObj = NULL;

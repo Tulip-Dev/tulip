@@ -179,13 +179,13 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
       !data->parameters->getFeedbackRender()) {
     if(lodSize>-1 && lodSize<1) {
       if (!data->parameters->isViewArrow() || lodSize <= 0.1) {
-	data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
-	return;
+        data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
+        return;
       }
     }
     else if (!data->parameters->isEdge3D()
-	     && !data->parameters->isViewArrow()
-	     && edgeTexture == "") {
+             && !data->parameters->isViewArrow()
+             && edgeTexture == "") {
       data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
       return;
     }
@@ -274,21 +274,24 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   if (data->parameters->isViewArrow()) {
     EdgeExtremityGlyph *startEdgeGlyph = data->extremityGlyphs.get(data->getElementSrcAnchorShape()->getEdgeValue(e));
     EdgeExtremityGlyph *endEdgeGlyph = data->extremityGlyphs.get(data->getElementTgtAnchorShape()->getEdgeValue(e));
+
     if (startEdgeGlyph != NULL) {
       displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,selectionOutlineSize,startEdgeGlyph, endEdgeGlyph ? endEdgeGlyph->id() : UINT_MAX,
-		   bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
+                   bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
     }
     else {
       beginLineAnchor = srcAnchor;
     }
+
     if (endEdgeGlyph != NULL) {
       displayArrow(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,selectionOutlineSize,endEdgeGlyph,startEdgeGlyph ? startEdgeGlyph->id() : UINT_MAX,
-		   bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
+                   bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
     }
     else {
       endLineAnchor = tgtAnchor;
     }
-  } else {
+  }
+  else {
     beginLineAnchor = srcAnchor;
     endLineAnchor = tgtAnchor;
   }
