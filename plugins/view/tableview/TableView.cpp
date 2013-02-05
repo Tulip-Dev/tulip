@@ -624,6 +624,9 @@ void TableView::resizeTableRows() {
 
   for (int i = top ; i <= bottom ; ++i)
     _ui->table->resizeRowToContents(i);
+
+  _ui->table->resizeColumnsToContents();
 }
+
 
 PLUGIN(TableView)
