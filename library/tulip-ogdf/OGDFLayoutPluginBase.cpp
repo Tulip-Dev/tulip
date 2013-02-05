@@ -45,8 +45,89 @@ bool OGDFLayoutPluginBase::run() {
 
   beforeCall();
 
+  try {
   // run the algorithm on the OGDF Graph with attributes
   callOGDFLayoutAlgorithm(gAttributes);
+  } catch (PreconditionViolatedException& pvce) {
+    std::string msg;
+    switch(pvce.exceptionCode()) {
+    case pvcSelfLoop:
+      msg = "graph contains a self-loop";
+      break;
+    case pvcTreeHierarchies:
+      msg = "hierarchies are not only trees";
+      break;
+    case pvcAcyclicHierarchies:
+      msg = "hierarchies are not acyclic";
+      break;
+    case pvcSingleSource:
+      msg = "graph has not a single source";
+      break;
+    case pvcUpwardPlanar:
+      msg = "graph is not upward planar";
+      break;
+    case pvcTree:
+      msg = "graph is not a rooted tree";
+      break;
+    case pvcForest:
+      msg = "graph is not a rooted forest";
+      break;
+    case pvcOrthogonal:
+      msg = "layout is not orthogonal";
+      break;
+    case pvcPlanar:
+      msg = "graph is not planar";
+      break;
+    case pvcClusterPlanar:
+      msg = "graph is not c-planar";
+      break;
+    case pvcNoCopy:
+      msg = "graph is not a copy of the corresponding graph";
+      break;
+    case pvcConnected:
+      msg = "graph is not connected";
+      break;
+    case pvcBiconnected:
+      msg = "graph is not twoconnected";
+      break;
+    default:
+      msg = "unknown error";
+    }
+    pluginProgress->setError(std::string("Error\n") + msg);
+    return false;
+  } catch (AlgorithmFailureException& afce) {
+    std::string msg;
+    switch(afce.exceptionCode()) {
+    case afcIllegalParameter:
+      msg = "function parameter is illegal";
+      break;
+    case afcNoFlow:
+      msg = "min-cost flow could not find a legal flow";
+      break;
+    case afcSort:
+      msg = "sequence not sorted";
+      break;
+    case afcLabel:
+      msg = "labelling failed";
+      break;
+    case afcExternalFace:
+      msg = "external face not correct";
+      break;
+    case afcForbiddenCrossing:
+      msg = "crossing forbidden but necessary";
+      break;
+    case afcTimelimitExceeded:
+      msg = "it took too long";
+      break;
+    case afcNoSolutionFound:
+      msg = "couldn't solve the problem";
+      break;
+    default:
+      msg = "unknown error";
+    }
+    pluginProgress->setError(std::string("Error\n") + msg);
+    return false;
+  }
 
   // retrieve nodes coordinates computed by the OGDF Layout Algorithm
   // and store it in the Tulip Layout Property
