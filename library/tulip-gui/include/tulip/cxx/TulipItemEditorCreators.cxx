@@ -56,6 +56,8 @@ template<typename T>
 QWidget* MultiLinesEditEditorCreator<T>::createWidget(QWidget *parent) const {
   QTextEdit *edit = new QTextEdit(parent);
   edit->setFocusPolicy(Qt::StrongFocus);
+  edit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  edit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   return edit;
 }
 
@@ -94,7 +96,7 @@ QSize MultiLinesEditEditorCreator<T>::sizeHint(const QStyleOptionViewItem & opti
     width = std::max(width, textBB.width());
   }
 
-  return QSize(width, height);
+  return QSize(width+15, height+5);
 }
 
 template<typename T>
