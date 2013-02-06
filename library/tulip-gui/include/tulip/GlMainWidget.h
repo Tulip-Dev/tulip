@@ -343,14 +343,14 @@ public slots:
   void closeEvent(QCloseEvent *e);
 
   /**
-   * @brief Convinience function that call center function on the current scene and draw the view.
+   * @brief Convenience function that call center function on the current scene and draw the view.
    * Same thing than
    * @code
    * getScene()->centerScene();
    * draw();
    * @endcode
   **/
-  void centerScene();
+  void centerScene(bool graphChanged = false);
 
   void emitGraphChanged();
 

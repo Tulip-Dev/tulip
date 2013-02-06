@@ -109,8 +109,8 @@ GlMainWidget* GlMainView::getGlMainWidget() const {
   return _glMainWidget;
 }
 
-void GlMainView::centerView() {
-  getGlMainWidget()->centerScene();
+void GlMainView::centerView(bool graphChanged) {
+  getGlMainWidget()->centerScene(graphChanged);
 }
 
 void GlMainView::glMainViewDrawn(bool graphChanged) {

@@ -191,10 +191,10 @@ public slots:
     @brief Reset the visualization to the center.
     This method is called after major changes into the data structure. At this point, the user point of view should be reset and brought back to a point where all the data can be seen.
     @note It is expected for the view to be redrawn when calling centerView
-    For a 3D visualization, this method could be implemented by centering the camera. For a table, this could be done by setting the scroll bar to the top position etc
+    For a 3D visualization, this method could be implemented by centering the camera. For a table, this could be done by setting the scroll bar to the top position etc...
     By default, this method calls draw().
     */
-  virtual void centerView();
+  virtual void centerView(bool graphChanged = false);
 
 
   /**
@@ -204,7 +204,7 @@ public slots:
   void setInteractors(const QList<tlp::Interactor*>&);
 
   /**
-    @brief defines the active interactor that will recieve user inputs.
+    @brief defines the active interactor that will receive user inputs.
     @note This method will first remove the previously active interactor (if any) using Interactor::uninstall()
     @note Calling this will trigger the View::currentInteractorChanged() callback for custom handling.
     @note Calling View::setCurrentInteractor(NULL) will only remove the previous current interactor.

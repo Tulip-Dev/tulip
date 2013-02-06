@@ -501,9 +501,9 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
   return QImage(resultImage.bits(),resultImage.width(),resultImage.height(),QImage::Format_ARGB32).convertToFormat(QImage::Format_RGB32);
 }
 
-void GlMainWidget::centerScene() {
+void GlMainWidget::centerScene(bool graphChanged) {
   scene.centerScene();
-  draw(false);
+  draw(graphChanged);
 }
 
 void GlMainWidget::emitGraphChanged() {
