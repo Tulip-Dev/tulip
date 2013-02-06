@@ -73,37 +73,37 @@ public:
     * @param firstLine The number of the first line to read. The first line is 0.
     * @param lastLine The number of the last line to read.
     **/
-  CSVSimpleParser(const std::string& fileName,const std::string& separator=std::string(";"),char textDelimiter='"',const std::string& fileEncoding=std::string("UTF-8"),unsigned int firstLine = 0,unsigned int lastLine = UINT_MAX);
+    CSVSimpleParser(const std::string& fileName,const char separator=';', const bool mergesep=false, char textDelimiter='"',const std::string& fileEncoding=std::string("UTF-8"),unsigned int firstLine = 0,unsigned int lastLine = UINT_MAX);
 
   virtual ~CSVSimpleParser();
 
-  std::string fileName()const {
+  inline std::string fileName()const {
     return _fileName;
   }
-  void setFileName(const std::string& fileName) {
+  inline void setFileName(const std::string& fileName) {
     _fileName = fileName;
   }
-  std::string separator()const {
+  inline char separator()const {
     return _separator;
   }
 
-  void setSeparator(const std::string& separator) {
+  inline void setSeparator(const char separator) {
     _separator = separator;
   }
 
-  char textDelimiter()const {
+  inline char textDelimiter()const {
     return _textDelimiter;
   }
 
-  void setTextDelimiter(char delimiter) {
+  inline void setTextDelimiter(char delimiter) {
     _textDelimiter = delimiter;
   }
 
-  std::string fileEncoding()const {
+  inline std::string fileEncoding()const {
     return _fileEncoding;
   }
 
-  void setFileEncoding(const std::string& fileEncoding) {
+  inline void setFileEncoding(const std::string& fileEncoding) {
     _fileEncoding = fileEncoding;
   }
 
@@ -114,7 +114,7 @@ protected:
 
 private:
   void tokenize(const std::string& str, std::vector<std::string>& tokens,
-                const std::string& delimiters,char _textDelimiter, unsigned int numberOfCol);
+                const char delimiters,const bool mergedelim,char _textDelimiter, unsigned int numberOfCol);
   inline std::string convertStringEncoding(const std::string& toConvert,QTextCodec* encoder) {
     return std::string(encoder->toUnicode ( toConvert.c_str() ).toUtf8().data());
   }
@@ -126,11 +126,12 @@ private:
 
   std::string removeQuotesIfAny(const std::string &s,const std::string& rejectedChars);
   std::string _fileName;
-  std::string _separator;
+  char _separator;
   char _textDelimiter;
   std::string _fileEncoding;
   unsigned int _firstLine;
   unsigned int _lastLine;
+  bool _mergesep;
 
 };
 

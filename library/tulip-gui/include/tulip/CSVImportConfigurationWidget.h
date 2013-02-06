@@ -184,7 +184,6 @@ protected:
   void updateWidget();
 
   std::vector<CSVColumn> getPropertiesToImport()const;
-  void changeEvent(QEvent *e);
 
   void updateLineNumbers(bool resetValues);
 
