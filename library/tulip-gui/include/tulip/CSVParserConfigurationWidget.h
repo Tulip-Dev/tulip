@@ -32,16 +32,6 @@ class CSVParserConfigurationWidget;
 
 namespace tlp {
 
-
-class CSVParserConfigurationWidgetEditableComboBox : public QComboBox {
-  Q_OBJECT
-public :
-  CSVParserConfigurationWidgetEditableComboBox(QWidget * parent = NULL);
-protected:
-  //Qt workaround avoiding QDialog to close automatically when pressing return or enter.
-  void keyPressEvent(QKeyEvent *e);
-};
-
 class TLP_QT_SCOPE CSVParserConfigurationWidget : public QWidget {
   Q_OBJECT
 public:
@@ -69,6 +59,7 @@ protected:
 protected slots:
   void changeFileNameButtonPressed();
   void encodingChanged();
+  void changeSeparator(int index);
 
 private:
 
