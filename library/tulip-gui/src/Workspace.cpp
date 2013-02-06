@@ -201,7 +201,8 @@ void Workspace::viewNeedsDraw() {
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(sender());
 
   if (_autoCenterViews) {
-    panel->view()->centerView();
+    // we assume graph has changed
+    panel->view()->centerView(true);
   }
   else
     panel->view()->draw();

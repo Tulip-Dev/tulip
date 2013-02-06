@@ -141,7 +141,7 @@ QList<QWidget*> View::configurationWidgets() const {
 void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
 }
 
-void View::centerView() {
+void View::centerView(bool/* graphChanged */) {
   draw();
 }
 

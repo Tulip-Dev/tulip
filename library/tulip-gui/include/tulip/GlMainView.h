@@ -107,7 +107,7 @@ public slots:
   /**
    * @brief Centers the scene's camera
    */
-  virtual void centerView();
+  virtual void centerView(bool graphChanged = false);
 
   /**
    * @brief Toggles the overview on or off
