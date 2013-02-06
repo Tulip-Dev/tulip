@@ -29,6 +29,7 @@
 #include <tulip/PluginModel.h>
 
 using namespace tlp;
+using namespace std;
 
 PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent)
   : QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _view(NULL), _currentItem(QString::null) {
@@ -37,7 +38,7 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget
   _ui->graphCombo->setModel(_model);
   _ui->graphCombo->selectIndex(_model->indexOf(_model->currentGraph()));
 
-  _ui->panelList->setModel(new PluginListModel<tlp::View>(_ui->panelList));
+  _ui->panelList->setModel(new SimplePluginListModel(QList<string>::fromStdList(PluginLister::instance()->availablePlugins<tlp::View>()),_ui->panelList));
   connect(_ui->panelList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(panelSelected(QModelIndex)));
   connect(_ui->panelList,SIGNAL(doubleClicked(QModelIndex)),button(QWizard::FinishButton),SLOT(click()));
   _ui->panelList->setCurrentIndex(_ui->panelList->model()->index(0,0));
