@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>448</width>
-    <height>208</height>
+    <width>657</width>
+    <height>216</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -126,7 +126,7 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
@@ -137,7 +137,7 @@
            </widget>
           </item>
           <item>
-           <widget class="tlp::CSVParserConfigurationWidgetEditableComboBox" name="separatorComboBox">
+           <widget class="QComboBox" name="separatorComboBox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -148,7 +148,7 @@
              <bool>false</bool>
             </property>
             <property name="maxVisibleItems">
-             <number>4</number>
+             <number>5</number>
             </property>
             <property name="minimumContentsLength">
              <number>1</number>
@@ -173,22 +173,69 @@
               <string>Space</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>Other</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Other</string>
+            </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QLineEdit" name="othersep">
+            <property name="enabled">
+             <bool>false</bool>
             </property>
-            <property name="sizeHint" stdset="0">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>1</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
              <size>
-              <width>40</width>
-              <height>20</height>
+              <width>1</width>
+              <height>1</height>
              </size>
             </property>
-           </spacer>
+            <property name="baseSize">
+             <size>
+              <width>1</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="text">
+             <string notr="true"/>
+            </property>
+            <property name="maxLength">
+             <number>1</number>
+            </property>
+           </widget>
           </item>
          </layout>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item>
          <widget class="QCheckBox" name="mergesep">
@@ -225,7 +272,7 @@
          </widget>
         </item>
         <item>
-         <widget class="tlp::CSVParserConfigurationWidgetEditableComboBox" name="textDelimiterComboBox">
+         <widget class="QComboBox" name="textDelimiterComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -267,13 +314,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>tlp::CSVParserConfigurationWidgetEditableComboBox</class>
-   <extends>QComboBox</extends>
-   <header location="global">tulip/CSVParserConfigurationWidget.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>
