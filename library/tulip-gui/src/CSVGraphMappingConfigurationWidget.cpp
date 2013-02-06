@@ -140,19 +140,6 @@ CSVGraphMappingConfigurationWidget::~CSVGraphMappingConfigurationWidget() {
   delete ui;
 }
 
-void CSVGraphMappingConfigurationWidget::changeEvent(QEvent *e) {
-  QWidget::changeEvent(e);
-
-  switch (e->type()) {
-  case QEvent::LanguageChange:
-    ui->retranslateUi(this);
-    break;
-
-  default:
-    break;
-  }
-}
-
 void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph* graph,const CSVImportParameters& importParameters) {
   this->graph = graph;
   //Init mapping widgets.

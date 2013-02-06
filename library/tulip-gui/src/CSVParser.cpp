@@ -27,13 +27,13 @@
 #include <fstream>
 #include <algorithm>
 #include <cassert>
-#include <math.h>
+#include <cmath>
 using namespace std;
 using namespace tlp;
 
 const string defaultRejectedChars = " \r\n";
 const string spaceChars = " \t\r\n";
-CSVSimpleParser::CSVSimpleParser(const string& fileName,const string& separator,char textDelimiter,const string& fileEncoding,unsigned int firstLine,unsigned int lastLine):_fileName(fileName),_separator(separator),_textDelimiter(textDelimiter),_fileEncoding(fileEncoding),_firstLine(firstLine),_lastLine(lastLine) {
+CSVSimpleParser::CSVSimpleParser(const string& fileName,const char separator, const bool mergesep, char textDelimiter,const string& fileEncoding,unsigned int firstLine,unsigned int lastLine):_fileName(fileName),_separator(separator),_textDelimiter(textDelimiter),_fileEncoding(fileEncoding),_firstLine(firstLine),_lastLine(lastLine),_mergesep(mergesep) {
 }
 
 CSVSimpleParser::~CSVSimpleParser() {
@@ -94,7 +94,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
         //Correct the encoding of the line.
         line = convertStringEncoding(line,codec);
         tokens.clear();
-        tokenize(line, tokens, _separator,_textDelimiter, 0);
+        tokenize(line, tokens, _separator,_mergesep, _textDelimiter, 0);
         unsigned int column = 0;
 
         for (column = 0; column < tokens.size(); ++column) {
@@ -156,7 +156,7 @@ bool CSVSimpleParser::multiplatformgetline ( istream& is, string& str ) {
 }
 
 void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
-                               const string& delimiters,char textDelimiter, unsigned int) {
+                               const char delimiters, const bool mergedelim, char textDelimiter, unsigned int) {
   // Skip delimiters at beginning.
   string::size_type lastPos = 0;
   string::size_type pos = 0;
@@ -174,6 +174,13 @@ void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
 
     //Find the delimiter
     pos = str.find_first_of(delimiters, pos);
+
+    //if merge delimiter, skip the next char if it is a delimiter
+    if(mergedelim) {
+        while(str.at(pos+1)==delimiters)
+            ++pos;
+    }
+
     //Extracting tokens.
     assert(lastPos!=string::npos);
     size_t nbExtractedChars=string::npos;

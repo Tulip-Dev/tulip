@@ -196,19 +196,6 @@ CSVImportConfigurationWidget::~CSVImportConfigurationWidget() {
   delete parser;
 }
 
-void CSVImportConfigurationWidget::changeEvent(QEvent *e) {
-  QWidget::changeEvent(e);
-
-  switch (e->type()) {
-  case QEvent::LanguageChange:
-    ui->retranslateUi(this);
-    break;
-
-  default:
-    break;
-  }
-}
-
 void CSVImportConfigurationWidget::setNewParser(CSVParser *newParser) {
   delete parser;
   parser = newParser;

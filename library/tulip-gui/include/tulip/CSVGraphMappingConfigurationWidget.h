@@ -127,7 +127,6 @@ public:
   bool isValid()const;
 
 protected:
-  void changeEvent(QEvent *e);
   tlp::Graph* graph;
 
 private:

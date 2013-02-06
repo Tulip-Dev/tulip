@@ -55,16 +55,16 @@ public:
 
   std::string getFile()const;
   bool isValid()const;
-  std::string getSeparator()const;
+  char getSeparator()const;
   char getTextSeparator()const;
   std::string getEncoding()const;
   bool invertMatrix()const;
+  bool getMergeSeparator() const;
 
 public slots:
   void setFileToOpen(const QString& fileToOpen);
 protected:
   void fillEncodingComboBox();
-  void changeEvent(QEvent *e);
 
 protected slots:
   void changeFileNameButtonPressed();
@@ -72,7 +72,7 @@ protected slots:
 
 private:
 
-  QString getSeparator(int index)const;
+  char getSeparator(int index)const;
 
   Ui::CSVParserConfigurationWidget *ui;
 

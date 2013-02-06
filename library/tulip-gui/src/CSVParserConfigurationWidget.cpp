@@ -52,10 +52,8 @@ CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent) :
   fillEncodingComboBox();
   //Set the default encoding to UTF8
   ui->encodingComboBox->setCurrentIndex(ui->encodingComboBox->findText(QString("UTF-8")));
-  connect(ui->encodingComboBox,SIGNAL(currentIndexChanged ( int)),this,SIGNAL(parserChanged()));
 
-  //File change
-  connect(ui->fileChooserPushButton,SIGNAL(clicked(bool)),this,SLOT(changeFileNameButtonPressed()));
+  connect(ui->encodingComboBox,SIGNAL(currentIndexChanged ( int)),this,SIGNAL(parserChanged()));
 
   //Invert rows and column
   connect(ui->switchRowColumnCheckBox,SIGNAL(stateChanged ( int )),this,SIGNAL(parserChanged()));
@@ -63,6 +61,10 @@ CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent) :
   //Separator and text delimiters.
   connect(ui->separatorComboBox,SIGNAL(currentIndexChanged ( int)),this,SIGNAL(parserChanged()));
   connect(ui->textDelimiterComboBox,SIGNAL(currentIndexChanged ( int)),this,SIGNAL(parserChanged()));
+  connect(ui->mergesep,SIGNAL(stateChanged(int)),this,SIGNAL(parserChanged()));
+
+  //File change
+  connect(ui->fileChooserPushButton,SIGNAL(clicked(bool)),this,SLOT(changeFileNameButtonPressed()));
 
 }
 
@@ -70,24 +72,11 @@ CSVParserConfigurationWidget::~CSVParserConfigurationWidget() {
   delete ui;
 }
 
-void CSVParserConfigurationWidget::changeEvent(QEvent *e) {
-  QWidget::changeEvent(e);
-
-  switch (e->type()) {
-  case QEvent::LanguageChange:
-    ui->retranslateUi(this);
-    break;
-
-  default:
-    break;
-  }
-}
-
 CSVParser * CSVParserConfigurationWidget::buildParser(unsigned int firstLine, unsigned int lastLine)const {
   CSVParser *parser = NULL;
 
   if(isValid()) {
-    parser = new CSVSimpleParser(getFile(),getSeparator(),getTextSeparator(),getEncoding(),firstLine,lastLine);
+      parser = new CSVSimpleParser(getFile(),getSeparator(),getMergeSeparator(),getTextSeparator(),getEncoding(),firstLine,lastLine);
 
     if(invertMatrix()) {
       parser = new CSVInvertMatrixParser(parser);
@@ -111,22 +100,22 @@ void CSVParserConfigurationWidget::fillEncodingComboBox() {
 }
 
 
-QString CSVParserConfigurationWidget::getSeparator(int index)const {
+char CSVParserConfigurationWidget::getSeparator(int index) const {
   QString text = ui->separatorComboBox->itemText(index);
 
   if(text.compare("Tab")==0) {
-    return QString("\t");
+    return '\t';
   }
   else if(text.compare("Space")==0) {
-    return QString(" ");
+      return ' ';
   }
   else {
-    return text;
+      return text.at(0).toAscii();
   }
 }
 
-string CSVParserConfigurationWidget::getSeparator()const {
-  return QStringToTlpString(getSeparator(ui->separatorComboBox->currentIndex()));
+char CSVParserConfigurationWidget::getSeparator()const {
+  return getSeparator(ui->separatorComboBox->currentIndex());
 }
 
 void CSVParserConfigurationWidget::changeFileNameButtonPressed() {
@@ -153,7 +142,7 @@ void CSVParserConfigurationWidget::setFileToOpen(const QString& fileToOpen) {
           QVector<int> separatorOccurence(ui->separatorComboBox->count());
 
           for(int i = 0 ; i< ui->separatorComboBox->count() ; ++i) {
-            QString separator = getSeparator(i);
+            char separator = getSeparator(i);
             //Count the number of occurence for this separator
             separatorOccurence[i] = line.count(separator);
           }
@@ -163,7 +152,7 @@ void CSVParserConfigurationWidget::setFileToOpen(const QString& fileToOpen) {
           for(int i = 0 ; i< ui->separatorComboBox->count() ; ++i) {
             if(separatorOccurence[i] > currentMaxOccurence) {
               currentMaxOccurence = separatorOccurence[i];
-              //Set as separator the one with the gratest occurence number.
+              //Set as separator the one with the greatest occurence number.
               ui->separatorComboBox->setCurrentIndex(i);
             }
           }
@@ -190,9 +179,14 @@ bool CSVParserConfigurationWidget::isValid()const {
 string CSVParserConfigurationWidget::getEncoding()const {
   return QStringToTlpString(ui->encodingComboBox->currentText());
 }
-char CSVParserConfigurationWidget::getTextSeparator()const {
-  return QStringToTlpString(ui->textDelimiterComboBox->currentText()).at(0);
+char CSVParserConfigurationWidget::getTextSeparator() const {
+    return ui->textDelimiterComboBox->currentText().at(0).toAscii();
 }
+
+bool CSVParserConfigurationWidget::getMergeSeparator() const {
+    return ui->mergesep->isChecked();
+}
+
 bool CSVParserConfigurationWidget::invertMatrix()const {
-  return ui->switchRowColumnCheckBox->checkState() == Qt::Checked;
+  return ui->switchRowColumnCheckBox->isChecked();
 }
