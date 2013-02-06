@@ -23,7 +23,7 @@
 
 #include <tulip/TulipModel.h>
 #include <tulip/TlpQtTools.h>
-#include <QtCore/QString>
+#include <string>
 
 namespace tlp {
 /*
@@ -44,17 +44,6 @@ public:
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
   QList<std::string> plugins()const;
   std::string pluginName(const QModelIndex& index) const;
-};
-
-/*
- * @brief build a Qt Model a all plugins of a given type
- * @see SimplePluginListModel
- */
-template<typename PLUGIN>
-class PluginListModel : public SimplePluginListModel {
-public:
-  explicit PluginListModel(QObject *parent = NULL):SimplePluginListModel(QList<std::string>::fromStdList(PluginLister::instance()->availablePlugins<PLUGIN>()),parent) {
-  }
 };
 
 template<typename PLUGIN>
