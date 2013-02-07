@@ -33,7 +33,7 @@ using namespace tlp;
 
 const string defaultRejectedChars = " \r\n";
 const string spaceChars = " \t\r\n";
-CSVSimpleParser::CSVSimpleParser(const string& fileName,const char separator, const bool mergesep, char textDelimiter,const string& fileEncoding,unsigned int firstLine,unsigned int lastLine):_fileName(fileName),_separator(separator),_textDelimiter(textDelimiter),_fileEncoding(fileEncoding),_firstLine(firstLine),_lastLine(lastLine),_mergesep(mergesep) {
+CSVSimpleParser::CSVSimpleParser(const string& fileName,const QString& separator, const bool mergesep, char textDelimiter,const string& fileEncoding,unsigned int firstLine,unsigned int lastLine):_fileName(fileName),_separator(separator),_textDelimiter(textDelimiter),_fileEncoding(fileEncoding),_firstLine(firstLine),_lastLine(lastLine),_mergesep(mergesep) {
 }
 
 CSVSimpleParser::~CSVSimpleParser() {
@@ -156,11 +156,13 @@ bool CSVSimpleParser::multiplatformgetline ( istream& is, string& str ) {
 }
 
 void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
-                               const char delimiters, const bool mergedelim, char textDelimiter, unsigned int) {
+                               const QString& delimiters, const bool mergedelim, char textDelimiter, unsigned int) {
   // Skip delimiters at beginning.
   string::size_type lastPos = 0;
   string::size_type pos = 0;
   bool quit = false;
+
+  string delim(delimiters.toStdString());
 
   while(!quit) {
     //Don't search tokens in chars sourrounded by text delimiters.
@@ -173,12 +175,12 @@ void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
     }
 
     //Find the delimiter
-    pos = str.find_first_of(delimiters, pos);
+    pos = str.find(delim, pos);
 
     //if merge delimiter, skip the next char if it is a delimiter
     if(mergedelim) {
-        while((pos<str.size()-1)&&(str.at(pos+1)==delimiters))
-            ++pos;
+        while((pos<str.length()-delim.size())&&(str.substr(pos+1, delim.length())==delim))
+            pos+=delim.length();
     }
 
     //Extracting tokens.
