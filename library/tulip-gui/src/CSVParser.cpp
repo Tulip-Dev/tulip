@@ -177,8 +177,8 @@ void CSVSimpleParser::tokenize(const string& str, vector<string>& tokens,
 
     //if merge delimiter, skip the next char if it is a delimiter
     if(mergedelim) {
-      while(str.at(pos+1)==delimiters)
-        ++pos;
+        while((pos<str.size()-1)&&(str.at(pos+1)==delimiters))
+            ++pos;
     }
 
     //Extracting tokens.
