@@ -73,7 +73,7 @@ public:
     * @param firstLine The number of the first line to read. The first line is 0.
     * @param lastLine The number of the last line to read.
     **/
-    CSVSimpleParser(const std::string& fileName,const QString &separator=";", const bool mergesep=false, char textDelimiter='"',const std::string& fileEncoding=std::string("UTF-8"),unsigned int firstLine = 0,unsigned int lastLine = UINT_MAX);
+  CSVSimpleParser(const std::string& fileName,const QString &separator=";", const bool mergesep=false, char textDelimiter='"',const std::string& fileEncoding=std::string("UTF-8"),unsigned int firstLine = 0,unsigned int lastLine = UINT_MAX);
 
   virtual ~CSVSimpleParser();
 

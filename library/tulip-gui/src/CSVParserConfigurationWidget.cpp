@@ -105,10 +105,10 @@ QString CSVParserConfigurationWidget::getSeparator(int index) const {
     return "\t";
   }
   else if(text == "Space") {
-      return " ";
+    return " ";
   }
   else if(text=="Other") {
-      return ui->othersep->text().isEmpty()?" ":ui->othersep->text();
+    return ui->othersep->text().isEmpty()?" ":ui->othersep->text();
   }
   else {
     return text;
