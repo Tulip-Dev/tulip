@@ -1587,7 +1587,7 @@ public:
   }
 
   Graph* getGraph() const {
-    return dynamic_cast<Graph *>(sender());
+    return static_cast<Graph *>(sender());
   }
 
   node getNode() const {
