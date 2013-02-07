@@ -98,24 +98,24 @@ void CSVParserConfigurationWidget::changeSeparator(int index) {
   }
 }
 
-char CSVParserConfigurationWidget::getSeparator(int index) const {
+QString CSVParserConfigurationWidget::getSeparator(int index) const {
   QString text = ui->separatorComboBox->itemText(index);
 
   if(text == "Tab") {
-    return '\t';
+    return "\t";
   }
   else if(text == "Space") {
-    return ' ';
+      return " ";
   }
   else if(text=="Other") {
-    return ui->othersep->text().isEmpty()?' ':ui->othersep->text().at(0).toAscii();
+      return ui->othersep->text().isEmpty()?" ":ui->othersep->text();
   }
   else {
-    return text.at(0).toAscii();
+    return text;
   }
 }
 
-char CSVParserConfigurationWidget::getSeparator()const {
+QString CSVParserConfigurationWidget::getSeparator()const {
   return getSeparator(ui->separatorComboBox->currentIndex());
 }
 
@@ -142,8 +142,8 @@ void CSVParserConfigurationWidget::setFileToOpen(const QString& fileToOpen) {
           //Search for the best matching separator in the default list
           QVector<int> separatorOccurence(ui->separatorComboBox->count());
 
-          for(int i = 0 ; i< ui->separatorComboBox->count() ; ++i) {
-            char separator = getSeparator(i);
+          for(int i=0; i<ui->separatorComboBox->count(); ++i) {
+            QString separator = getSeparator(i);
             //Count the number of occurence for this separator
             separatorOccurence[i] = line.count(separator);
           }

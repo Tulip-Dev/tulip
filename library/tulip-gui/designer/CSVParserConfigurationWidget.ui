@@ -208,17 +208,8 @@
               <height>1</height>
              </size>
             </property>
-            <property name="baseSize">
-             <size>
-              <width>1</width>
-              <height>0</height>
-             </size>
-            </property>
             <property name="text">
              <string notr="true"/>
-            </property>
-            <property name="maxLength">
-             <number>1</number>
             </property>
            </widget>
           </item>

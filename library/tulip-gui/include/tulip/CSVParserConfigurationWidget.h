@@ -45,7 +45,7 @@ public:
 
   std::string getFile()const;
   bool isValid()const;
-  char getSeparator()const;
+  QString getSeparator()const;
   char getTextSeparator()const;
   std::string getEncoding()const;
   bool invertMatrix()const;
@@ -63,7 +63,7 @@ protected slots:
 
 private:
 
-  char getSeparator(int index)const;
+  QString getSeparator(int index)const;
 
   Ui::CSVParserConfigurationWidget *ui;
 
