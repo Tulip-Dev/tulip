@@ -348,9 +348,6 @@ void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
   tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
   QModelIndex graphIndex = model->indexOf(g);
 
-  if (!graphIndex.isValid())
-    graphIndex = model->forceGraphIndex(g);
-
   if (graphIndex == _ui->graphCombo->selectedIndex())
     return;
 
