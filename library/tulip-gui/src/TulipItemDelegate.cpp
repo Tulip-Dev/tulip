@@ -115,6 +115,7 @@ QString TulipItemDelegate::displayText(const QVariant &value, const QLocale &loc
 
 QSize TulipItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
   const QAbstractItemModel *model = index.model();
+
   if (model != NULL) {
     QVariant value = model->data(index);
     TulipItemEditorCreator *c = creator(value.userType());
@@ -123,7 +124,7 @@ QSize TulipItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QMod
       QSize s = c->sizeHint(option, index);
 
       if (s.isValid()) {
-	return s;
+        return s;
       }
     }
   }
