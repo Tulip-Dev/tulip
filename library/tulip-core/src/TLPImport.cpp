@@ -107,9 +107,10 @@ struct TLPGraphBuilder:public TLPTrue {
   virtual ~TLPGraphBuilder() {
   }
 
-  Graph *getSubGraph(unsigned int id) {
-    if (clusterIndex.find(id) != clusterIndex.end()) {
-      return clusterIndex[id];
+  Graph *getSubGraph(int id) {
+    std::map<int,Graph *>::const_iterator it = clusterIndex.find(id);
+    if (it != clusterIndex.end()) {
+      return it->second;
     }
 
     return NULL;
@@ -199,89 +200,135 @@ struct TLPGraphBuilder:public TLPTrue {
 
     return false;
   }
-  bool setNodeValue(int nodeId, int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
+  PropertyInterface* createProperty(int clusterId,
+				    const std::string& propertyType,
+				    const std::string& propertyName,
+				    bool& isGraphProperty) {
+    Graph* g = clusterId ? getSubGraph(clusterId) : _graph;
+    if (g == NULL)
+      return NULL;
+    if (propertyType==GRAPH || propertyType==METAGRAPH) {
+      // METAGRAPH was used in Tulip 2
+      isGraphProperty = true;
+      return g->getProperty<GraphProperty>(propertyName);
+    }
+    if (propertyType==DOUBLE || propertyType==METRIC)
+      // METRIC was used in Tulip 2
+      return g->getProperty<DoubleProperty>(propertyName);
+
+    if (propertyType==LAYOUT)
+      return g->getProperty<LayoutProperty>(propertyName);
+
+    if (propertyType==SIZE)
+      return g->getProperty<SizeProperty>(propertyName);
+
+    if (propertyType==COLOR)
+      return g->getProperty<ColorProperty>(propertyName);
+
+    if (propertyType==INT)
+      return g->getProperty<IntegerProperty>(propertyName);
+
+    if (propertyType==BOOL)
+      return g->getProperty<BooleanProperty>(propertyName);
+
+    if (propertyType==STRING)
+      return g->getProperty<StringProperty>(propertyName);
+
+    if (propertyType==SIZE_VECTOR)
+        return g->getProperty<SizeVectorProperty>(propertyName);
+
+    if (propertyType==COLOR_VECTOR)
+      return g->getProperty<ColorVectorProperty>(propertyName);
+
+    if (propertyType==COORD_VECTOR)
+      return g->getProperty<CoordVectorProperty>(propertyName);
+
+    if (propertyType==DOUBLE_VECTOR)
+      return g->getProperty<DoubleVectorProperty>(propertyName);
+
+    if (propertyType==INT_VECTOR)
+        return g->getProperty<IntegerVectorProperty>(propertyName);
+
+    if (propertyType==BOOL_VECTOR)
+        return g->getProperty<BooleanVectorProperty>(propertyName);
+
+    if (propertyType==STRING_VECTOR)
+        return g->getProperty<StringVectorProperty>(propertyName);
+    return NULL;
+  }
+  bool setNodeValue(int nodeId, PropertyInterface* prop, std::string& value,
+		    bool isGraphProperty) {
     node n(nodeId);
 
     if (version < 2.1)
       n = nodeIndex[nodeId];
 
-    if (_graph->isElement(n) && clusterIndex[clusterId]) {
-      //tlp::warning() << "set node value ....." ;
-      if (propertyType==GRAPH || propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
-        //      tlp::warning() << ".";
-        char *endPtr=NULL;
-        const char *startPtr=value.c_str();
-        int result=strtol(startPtr,&endPtr,10);
+    if (prop->getGraph()->isElement(n)) {
+      const std::string& propertyName = prop->getName();
+      if (propertyName == std::string("viewFont") ||
+	  propertyName == std::string("viewTexture")) {
+	// if needed replace symbolic path by real path
+	size_t pos = value.find("TulipBitmapDir/");
 
-        if (endPtr==startPtr) return false;
+	if (pos!=std::string::npos)
+	  value.replace(pos, 15, TulipBitmapDir);
+      } else {
+	if (isGraphProperty) {
+	  GraphProperty* gProp = static_cast<GraphProperty*>(prop);
+	  char *endPtr=NULL;
+	  const char *startPtr=value.c_str();
+	  int result=strtol(startPtr,&endPtr,10);
 
-        if (clusterIndex.find(result)==clusterIndex.end()) return false;
+	  if (endPtr==startPtr) return false;
 
-        if (result==0)
-          clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setNodeValue(n, 0);
-        else
-          clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setNodeValue(n, clusterIndex[result]);
+	  if (clusterIndex.find(result)==clusterIndex.end()) return false;
 
-        return true;
+	  gProp->setNodeValue(n, result ? clusterIndex[result]: 0);
+
+	  return true;
+	}
       }
-
-      if (propertyType==STRING) {
-        if (propertyName == std::string("viewFont") ||
-            propertyName == std::string("viewTexture")) {
-          // if needed replace symbolic path by real path
-          size_t pos = value.find("TulipBitmapDir/");
-
-          if (pos!=std::string::npos)
-            value.replace(pos, 15, TulipBitmapDir);
-        }
-      }
-
-      return clusterIndex[clusterId]->getProperty(propertyName)->setNodeStringValue(n, value );
+      return prop->setNodeStringValue(n, value );
     }
 
     return false;
-    //cer << "..ok" << endl;
   }
 
-  bool setEdgeValue(int edgeId, int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
+  bool setEdgeValue(int edgeId, PropertyInterface* prop, std::string& value,
+		    bool isGraphProperty) {
     edge e(edgeId);
 
     if (version < 2.1)
       e = edgeIndex[edgeId];
 
-    if (_graph->isElement(e) && clusterIndex[clusterId]) {
-      //tlp::warning() << "setEdgeValue...." << "edge:" << edgeId << " cluster " << clusterId << " " << propertyName << " " << propertyType << " value=\""<< value<<"\"  ";
-      if (propertyType==GRAPH || propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
-        std::set<edge> v;
-        bool result = EdgeSetType::fromString(v, value);
+    if (prop->getGraph()->isElement(e)) {
+      const std::string& propertyName = prop->getName();
+      if (propertyName == std::string("viewFont") ||
+	  propertyName == std::string("viewTexture")) {
+	// if needed replace symbolic path by real path
+	size_t pos = value.find("TulipBitmapDir/");
 
-        if (result)
-          clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setEdgeValue(e, v);
-
-        return result;
+	if (pos!=std::string::npos)
+	  value.replace(pos, 15, TulipBitmapDir);
       }
+      else if ((version < 2.2) &&
+	       (propertyName==std::string("viewSrcAnchorShape") ||
+		propertyName==std::string("viewTgtAnchorShape")))
+	//If we are in the old edge extremities id system we need to convert the ids in the file.
+	return prop->setEdgeStringValue(e, convertOldEdgeExtremitiesValueToNew(value) );
+      else {
+	if (isGraphProperty) {
+	  GraphProperty* gProp = static_cast<GraphProperty*>(prop);
+	  std::set<edge> v;
+	  bool result = EdgeSetType::fromString(v, value);
 
-      if (propertyType==INT) {
-        //If we are in the old edge extremities id system we need to convert the ids in the file.
-        if(version < 2.2) {
-          if(propertyName==std::string("viewSrcAnchorShape") || propertyName==std::string("viewTgtAnchorShape")) {
-            return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setEdgeStringValue(e, convertOldEdgeExtremitiesValueToNew(value) );
-          }
-        }
+	  if (result)
+	    gProp->setEdgeValue(e, v);
+
+	  return result;
+	}
       }
-
-      if (propertyType==STRING) {
-        if (propertyName == std::string("viewFont") ||
-            propertyName == std::string("viewTexture")) {
-          // if needed replace symbolic path by real path
-          size_t pos = value.find("TulipBitmapDir/");
-
-          if (pos!=std::string::npos)
-            value.replace(pos, 15, TulipBitmapDir);
-        }
-      }
-
-      return clusterIndex[clusterId]->getProperty(propertyName)->setEdgeStringValue(e, value );
+      return prop->setEdgeStringValue(e, value);
     }
 
     return false;
@@ -336,157 +383,66 @@ struct TLPGraphBuilder:public TLPTrue {
     }
   }
 
-  bool setAllNodeValue(int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
-    if (clusterIndex[clusterId]) {
-      //tlp::warning() << "set all node value ....." ;
-      if (propertyType==GRAPH || propertyType==METAGRAPH) { // METAGRAPH was used in Tulip 2
-        char *endPtr=NULL;
-        const char *startPtr=value.c_str();
-        int result=strtol(startPtr,&endPtr,10);
+  bool setAllNodeValue(PropertyInterface* prop, std::string& value,
+		       bool isGraphProperty) {
+    if (isGraphProperty) {
+      GraphProperty* gProp = static_cast<GraphProperty*>(prop);
+      char *endPtr=NULL;
+      const char *startPtr=value.c_str();
+      int result=strtol(startPtr,&endPtr,10);
 
-        if (endPtr==startPtr) result =0; //return false;
+      if (endPtr==startPtr) result =0; //return false;
 
-        if (clusterIndex.find(result)==clusterIndex.end()) return false;
+      if (clusterIndex.find(result)==clusterIndex.end()) return false;
 
-        if (result==0)
-          clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllNodeValue(0);
-        else
-          clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllNodeValue(clusterIndex[result]);
+      gProp->setAllNodeValue(result ? clusterIndex[result] : 0);
 
-        return true;
-      }
-
-      if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
-        return clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==LAYOUT)
-        return clusterIndex[clusterId]->getLocalProperty<LayoutProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==SIZE)
-        return clusterIndex[clusterId]->getLocalProperty<SizeProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==COLOR)
-        return clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==INT)
-        return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==BOOL)
-        return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==STRING) {
-        if (propertyName == std::string("viewFont") ||
-            propertyName == std::string("viewTexture")) {
-          // if needed replace symbolic path by real path
-          size_t pos = value.find("TulipBitmapDir/");
-
-          if (pos!=std::string::npos)
-            value.replace(pos, 15, TulipBitmapDir);
-        }
-
-        return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setAllNodeStringValue( value );
-      }
-
-      if (propertyType==SIZE_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<SizeVectorProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==COLOR_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<ColorVectorProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==COORD_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<CoordVectorProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==DOUBLE_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<DoubleVectorProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==INT_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<IntegerVectorProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==BOOL_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<BooleanVectorProperty>(propertyName)->setAllNodeStringValue( value );
-
-      if (propertyType==STRING_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<StringVectorProperty>(propertyName)->setAllNodeStringValue( value );
+      return true;
     }
 
-    return false;
-    //cer << "..ok" << endl;
+    const std::string& propertyName = prop->getName();
+    if (propertyName == std::string("viewFont") ||
+	propertyName == std::string("viewTexture")) {
+      // if needed replace symbolic path by real path
+      size_t pos = value.find("TulipBitmapDir/");
+
+      if (pos!=std::string::npos)
+	value.replace(pos, 15, TulipBitmapDir);
+    }
+    return prop->setAllNodeStringValue( value );
   }
-  bool setAllEdgeValue(int clusterId, const std::string& propertyType, const std::string& propertyName, std::string& value) {
-    if (clusterIndex[clusterId]) {
-      //tlp::warning() << "setAllEdgeValue.." << endl;
-      if (propertyType==GRAPH|| propertyType==METAGRAPH)  { // METAGRAPH was used in Tulip 2
-        std::set<edge> v;
-        bool result = EdgeSetType::fromString(v, value);
+  bool setAllEdgeValue(PropertyInterface* prop, std::string& value,
+		       bool isGraphProperty) {
+    if (isGraphProperty) {
+      GraphProperty* gProp = dynamic_cast<GraphProperty*>(prop);
+      std::set<edge> v;
+      bool result = EdgeSetType::fromString(v, value);
 
-        if (result)
-          clusterIndex[clusterId]->getLocalProperty<GraphProperty>(propertyName)->setAllEdgeValue(v);
+      if (result)
+	gProp->setAllEdgeValue(v);
 
-        return result;
-      }
-
-      if (propertyType==DOUBLE || propertyType==METRIC) // METRIC was used in Tulip 2
-        return clusterIndex[clusterId]->getLocalProperty<DoubleProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==LAYOUT)
-        return clusterIndex[clusterId]->getLocalProperty<LayoutProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==SIZE)
-        return clusterIndex[clusterId]->getLocalProperty<SizeProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==COLOR)
-        return clusterIndex[clusterId]->getLocalProperty<ColorProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==INT) {
-        //If we are in the old edge extremities id system we need to convert the ids in the file.
-        if(version < 2.2) {
-          if(propertyName==std::string("viewSrcAnchorShape") || propertyName==std::string("viewTgtAnchorShape")) {
-            return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllEdgeStringValue( convertOldEdgeExtremitiesValueToNew(value) );
-          }
-        }
-
-        return clusterIndex[clusterId]->getLocalProperty<IntegerProperty>(propertyName)->setAllEdgeStringValue( value );
-      }
-
-      if (propertyType==BOOL)
-        return clusterIndex[clusterId]->getLocalProperty<BooleanProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==STRING) {
-        if (propertyName == std::string("viewFont") ||
-            propertyName == std::string("viewTexture")) {
-          // if needed replace symbolic path by real path
-          size_t pos = value.find("TulipBitmapDir/");
-
-          if (pos!=std::string::npos)
-            value.replace(pos, 15, TulipBitmapDir);
-        }
-
-        return clusterIndex[clusterId]->getLocalProperty<StringProperty>(propertyName)->setAllEdgeStringValue( value );
-      }
-
-      if (propertyType==SIZE_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<SizeVectorProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==COLOR_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<ColorVectorProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==COORD_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<CoordVectorProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==DOUBLE_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<DoubleVectorProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==INT_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<IntegerVectorProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==BOOL_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<BooleanVectorProperty>(propertyName)->setAllEdgeStringValue( value );
-
-      if (propertyType==STRING_VECTOR)
-        return clusterIndex[clusterId]->getLocalProperty<StringVectorProperty>(propertyName)->setAllEdgeStringValue( value );
+      return result;
     }
 
-    return false;
+    const std::string& propertyName = prop->getName();
+    if (dynamic_cast<IntegerProperty*>(prop)) {
+      //If we are in the old edge extremities id system we need to convert the ids in the file.
+      if(version < 2.2) {
+	if(propertyName==std::string("viewSrcAnchorShape") || propertyName==std::string("viewTgtAnchorShape")) {
+	  value = convertOldEdgeExtremitiesValueToNew(value);
+	}
+      }
+    } else {
+      if (propertyName == std::string("viewFont") ||
+	  propertyName == std::string("viewTexture")) {
+	// if needed replace symbolic path by real path
+	size_t pos = value.find("TulipBitmapDir/");
+
+	if (pos!=std::string::npos)
+	  value.replace(pos, 15, TulipBitmapDir);
+      }
+    }
+    return prop->setAllEdgeStringValue( value );
   }
   bool addCluster(int id, const std::string& name, int supergraphId=0) {
     if (clusterIndex[supergraphId]) {
@@ -810,21 +766,30 @@ struct TLPPropertyBuilder:public TLPFalse {
   TLPGraphBuilder *graphBuilder;
   int clusterId;
   std::string propertyType,propertyName;
-  bool typeOk,nameOk;
+  PropertyInterface* property;
+  bool isGraphProperty;
   virtual ~TLPPropertyBuilder() {}
-  TLPPropertyBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder), clusterId(INT_MAX), propertyType(std::string()), propertyName(std::string()), typeOk(false), nameOk(false) {}
+  TLPPropertyBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder), clusterId(INT_MAX), propertyType(std::string()), propertyName(std::string()), property(NULL), isGraphProperty(false) {}
+  void getProperty() {
+    assert(property == NULL);
+    property = graphBuilder->createProperty(clusterId, propertyType,
+					    propertyName, isGraphProperty);
+  }
   bool addInt(const int id)  {
+    assert(id != INT_MAX);
     clusterId = id;
+    if (!propertyType.empty() && !propertyName.empty())
+      getProperty();
     return true;
   }
   bool addString(const std::string &str) {
-    if (!typeOk) {
+    if (propertyType.empty()) {
       propertyType=str;
-      typeOk=true;
     }
-    else if (!nameOk) {
+    else if (propertyName.empty()) {
       propertyName=str;
-      nameOk=true;
+      if (clusterId != INT_MAX)
+	getProperty();
     }
     else
       return false;
@@ -832,20 +797,32 @@ struct TLPPropertyBuilder:public TLPFalse {
     return true;
   }
   bool setNodeValue(int nodeId, const std::string& value)  {
-    return graphBuilder->setNodeValue(nodeId,clusterId,propertyType,propertyName, (std::string&) value);
+    return property ?
+      graphBuilder->setNodeValue(nodeId, property, (std::string&) value,
+				 isGraphProperty) :
+      false;
   }
   bool setEdgeValue(int edgeId, const std::string& value)  {
-    return graphBuilder->setEdgeValue(edgeId,clusterId,propertyType,propertyName, (std::string&) value);
+    return property ?
+      graphBuilder->setEdgeValue(edgeId, property, (std::string&) value,
+				 isGraphProperty) :
+      false;
   }
   bool setAllNodeValue(const std::string& value)  {
-    return graphBuilder->setAllNodeValue(clusterId,propertyType,propertyName, (std::string&) value);
+    return property ?
+      graphBuilder->setAllNodeValue(property, (std::string&) value,
+				    isGraphProperty) :
+      false;
   }
   bool setAllEdgeValue(const std::string& value)  {
-    return graphBuilder->setAllEdgeValue(clusterId,propertyType,propertyName, (std::string&) value);
+    return property ?
+      graphBuilder->setAllEdgeValue(property, (std::string&) value,
+				    isGraphProperty) :
+      false;
   }
   bool addStruct(const std::string& structName,TLPBuilder*&newBuilder);
   bool close() {
-    return true;
+    return property != NULL;
   }
 };
 //=================================================================================
