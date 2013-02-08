@@ -188,13 +188,13 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
       _view->showContextMenu(QCursor::pos(),static_cast<QGraphicsSceneContextMenuEvent*>(ev)->scenePos());
     }
 
-    else if (_view->configurationWidgets().contains(dynamic_cast<QWidget*>(obj)))
+    else if (_view->configurationWidgets().contains(qobject_cast<QWidget*>(obj)))
       return true;
 
-    else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded && dynamic_cast<QTabBar*>(obj) != NULL) {
+    else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded && qobject_cast<QTabBar*>(obj) != NULL) {
       setConfigurationTabExpanded(true);
     }
-    else if (ev->type() == QEvent::Wheel && dynamic_cast<QTabBar*>(obj) != NULL) {
+    else if (ev->type() == QEvent::Wheel && qobject_cast<QTabBar*>(obj) != NULL) {
       return true;
     }
   }
