@@ -186,11 +186,15 @@ Iterator<Observable *> *Observable::getObservables() const {
 }
 //=================================
 void Observable::treatEvents(const  std::vector<Event> & ) {
-  tlp::debug() << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
+#ifndef NDEBUG
+    tlp::debug() << __PRETTY_FUNCTION__ << ": not implemented" << std::endl;
+#endif
 }
 //=================================
 void Observable::treatEvent(const Event &) {
-  tlp::debug() << __PRETTY_FUNCTION__ << " : not implemented" << std::endl;
+#ifndef NDEBUG
+  tlp::debug() << __PRETTY_FUNCTION__ << ": not implemented" << std::endl;
+#endif
 }
 //=================================
 Observable::Observable(): deleteMsgSent(false), queuedEvent(false), _n(node()) {
