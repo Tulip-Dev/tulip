@@ -187,7 +187,7 @@ Iterator<Observable *> *Observable::getObservables() const {
 //=================================
 void Observable::treatEvents(const  std::vector<Event> & ) {
 #ifndef NDEBUG
-    tlp::debug() << __PRETTY_FUNCTION__ << ": not implemented" << std::endl;
+  tlp::debug() << __PRETTY_FUNCTION__ << ": not implemented" << std::endl;
 #endif
 }
 //=================================
