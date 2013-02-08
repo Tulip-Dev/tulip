@@ -58,6 +58,8 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) 
     PluginLister::currentLoader = loader;
     getInstance()->pluginPath = dir;
 
+    // ensure message is empty before plugins directory loading
+    getInstance()->message.clear();
     if (getInstance()->initPluginDir(loader)) {
       if (loader)
         loader->finished(true, getInstance()->message);
