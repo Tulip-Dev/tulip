@@ -18,21 +18,24 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef CSVDATALOADER_H_
 #define CSVDATALOADER_H_
+
 #include <tulip/tulipconf.h>
-#include <string>
+
 #include <vector>
 #include <climits>
 
-#include <QtCore/QTextCodec>
 #include <QtCore/QString>
+
 #include "tulip/CSVContentHandler.h"
+
+class QTextCodec;
+class CSVContentHandler;
+
 namespace tlp {
 
 class PluginProgress;
-
 
 /*
 * @brief Interface for CSV data parser.
@@ -108,9 +111,7 @@ protected:
 private:
   void tokenize(const std::string& str, std::vector<std::string>& tokens,
                 const QString &delimiters, const bool mergedelim, char _textDelimiter, unsigned int numberOfCol);
-  inline std::string convertStringEncoding(const std::string& toConvert,QTextCodec* encoder) {
-    return std::string(encoder->toUnicode ( toConvert.c_str() ).toUtf8().data());
-  }
+  std::string convertStringEncoding(const std::string& toConvert,QTextCodec* encoder);
 
   /**
     * @brief Function to extract a line from a istream. Can handle Linux,Mac and Windows end of line pattern.

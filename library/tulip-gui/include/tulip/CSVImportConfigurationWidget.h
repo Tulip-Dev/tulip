@@ -24,20 +24,22 @@
 #include <QtGui/QWidget>
 #include <QtGui/QValidator>
 #include <QtGui/QTableWidget>
+
 #include <tulip/CSVGraphImport.h>
 #include <tulip/CSVContentHandler.h>
-#include <vector>
-
+#include <tulip/tulipconf.h>
 
 class QComboBox;
 class QCheckBox;
 class QValidator;
 class QLineEdit;
+
 namespace Ui {
 class CSVImportConifgurationWidget;
 }
 
 namespace tlp {
+class CSVParser;
 
 /**
  * @brief Configuration widget for a property.

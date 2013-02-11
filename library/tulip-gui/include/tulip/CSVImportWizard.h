@@ -23,15 +23,21 @@
 
 #include <QtGui/QWizard>
 #include <QtGui/QWizardPage>
-#include <QtGui/QTableWidget>
-#include <QtGui/QHeaderView>
-#include "tulip/CSVParserConfigurationWidget.h"
-#include "tulip/CSVImportConfigurationWidget.h"
-#include "tulip/CSVGraphMappingConfigurationWidget.h"
+
+#include <tulip/Graph.h>
+#include <tulip/CSVGraphImport.h>
+
 namespace Ui {
 class CSVImportWizard;
 }
 namespace tlp {
+
+class CSVParser;
+class CSVParserConfigurationWidget;
+class CSVTableWidget;
+class CSVImportConfigurationWidget;
+class CSVToGraphDataMapping;
+class CSVGraphMappingConfigurationWidget;
 
 /**
   * @brief QWIzardPage encapsulating a CSVParserConfigurationWidget and a preview.
@@ -58,9 +64,8 @@ class CSVImportConfigurationQWizardPage : public QWizardPage {
 public:
   CSVImportConfigurationQWizardPage ( QWidget * parent = NULL );
   void initializePage();
-  CSVImportParameters getImportParameters()const {
-    return importConfigurationWidget->getImportParameters();
-  }
+  CSVImportParameters getImportParameters()const;
+
 private:
   CSVImportConfigurationWidget* importConfigurationWidget;
 };
@@ -71,9 +76,8 @@ public:
   CSVGraphMappingConfigurationQWizardPage ( QWidget * parent = NULL );
   void initializePage();
   bool isComplete() const;
-  CSVToGraphDataMapping* buildMappingObject()const {
-    return graphMappingConfigurationWidget->buildMappingObject();
-  }
+  CSVToGraphDataMapping* buildMappingObject()const;
+
 private:
   CSVGraphMappingConfigurationWidget* graphMappingConfigurationWidget;
 };
@@ -89,11 +93,11 @@ public:
   CSVImportConfigurationQWizardPage* getImportConfigurationPage()const;
   CSVGraphMappingConfigurationQWizardPage* getMappingConfigurationPage()const;
 
-  void setGraph(Graph* graph) {
+inline  void setGraph(Graph* graph) {
     this->graph = graph;
   }
 
-  Graph* getGraph()const {
+inline  Graph* getGraph()const {
     return graph;
   }
 
