@@ -22,16 +22,14 @@
 #define CSVDATALOADER_H_
 
 #include <tulip/tulipconf.h>
+#include <tulip/CSVContentHandler.h>
 
 #include <vector>
 #include <climits>
 
 #include <QtCore/QString>
 
-#include "tulip/CSVContentHandler.h"
-
 class QTextCodec;
-class CSVContentHandler;
 
 namespace tlp {
 
