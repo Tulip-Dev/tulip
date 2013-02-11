@@ -59,18 +59,21 @@ GlNode::GlNode(unsigned int id):id(id) {
 
 BoundingBox GlNode::getBoundingBox(const GlGraphInputData* data) {
   node n=node(id);
+  int nodeRot = data->getElementRotation()->getNodeValue(n);
+  const Size& nodeSize = data->getElementSize()->getNodeValue(n);
+  const Coord& nodeCoord = data->getElementLayout()->getNodeValue(n);
 
-  if(data->getElementRotation()->getNodeValue(n)==0) {
+  if(nodeRot==0) {
     BoundingBox box;
-    box.expand(data->getElementLayout()->getNodeValue(n)-data->getElementSize()->getNodeValue(n)/2.f);
-    box.expand(data->getElementLayout()->getNodeValue(n)+data->getElementSize()->getNodeValue(n)/2.f);
+    box.expand(nodeCoord-nodeSize/2.f);
+    box.expand(nodeCoord+nodeSize/2.f);
     assert(box.isValid());
     return box;
   }
   else {
-    float cosAngle=cos((float)data->getElementRotation()->getNodeValue(n)/180.*M_PI);
-    float sinAngle=sin((float)data->getElementRotation()->getNodeValue(n)/180.*M_PI);
-    Coord tmp1(data->getElementSize()->getNodeValue(n)/2.f);
+    float cosAngle=cos((float)nodeRot/180.*M_PI);
+    float sinAngle=sin((float)nodeRot/180.*M_PI);
+    Coord tmp1(nodeSize/2.f);
     Coord tmp2(tmp1[0] ,-tmp1[1], tmp1[2]);
     Coord tmp3(-tmp1[0],-tmp1[1],-tmp1[2]);
     Coord tmp4(-tmp1[0], tmp1[1],-tmp1[2]);
@@ -79,10 +82,10 @@ BoundingBox GlNode::getBoundingBox(const GlGraphInputData* data) {
     tmp3=Coord(tmp3[0]*cosAngle-tmp3[1]*sinAngle,tmp3[0]*sinAngle+tmp3[1]*cosAngle,tmp3[2]);
     tmp4=Coord(tmp4[0]*cosAngle-tmp4[1]*sinAngle,tmp4[0]*sinAngle+tmp4[1]*cosAngle,tmp4[2]);
     BoundingBox bb;
-    bb.expand(data->getElementLayout()->getNodeValue(n)+tmp1);
-    bb.expand(data->getElementLayout()->getNodeValue(n)+tmp2);
-    bb.expand(data->getElementLayout()->getNodeValue(n)+tmp3);
-    bb.expand(data->getElementLayout()->getNodeValue(n)+tmp4);
+    bb.expand(nodeCoord+tmp1);
+    bb.expand(nodeCoord+tmp2);
+    bb.expand(nodeCoord+tmp3);
+    bb.expand(nodeCoord+tmp4);
     return bb;
   }
 }
