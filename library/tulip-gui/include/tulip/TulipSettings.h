@@ -62,6 +62,7 @@ public:
   static const QString ProxyPasswordEntry;
 
   static const QString AutomaticPerfectAspectRatioEntry;
+  static const QString ViewOrthoEntry;
   static const QString AutomaticMapMetricEntry;
   static const QString ResultPropertyStoredEntry;
   static const QString RunningTimeComputedEntry;
@@ -166,6 +167,9 @@ public:
 
   bool isAutomaticRatio() const;
   void setAutomaticRatio(bool);
+
+  bool isViewOrtho() const;
+  void setViewOrtho(bool);
 
   bool isResultPropertyStored() const;
   void setResultPropertyStored(bool);

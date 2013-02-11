@@ -27,6 +27,7 @@
 #include <QtOpenGL/QGLFormat>
 
 #include "tulip/GlMainWidget.h"
+#include "tulip/TulipSettings.h"
 
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
@@ -99,6 +100,7 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
   grabGesture(Qt::PanGesture);
   grabGesture(Qt::SwipeGesture);
   renderingStore=NULL;
+  getScene()->setViewOrtho(TulipSettings::instance().isViewOrtho());
 #if defined(__APPLE__) && defined(QT_MAC_USE_COCOA)
   // This code is here to bug fix black screen problem on MACOSX with Qt 4.7
   // When we do the first redraw we don't use frame backup but we draw the view

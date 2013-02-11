@@ -532,6 +532,16 @@ border: 0px;
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="viewOrthoCheck">
+          <property name="text">
+           <string>Use Orthogonal projection by default (Central projection if not)</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QCheckBox" name="colorMappingCheck">
           <property name="text">
            <string>Map colors when computing a metric</string>
@@ -540,21 +550,21 @@ border: 0px;
         </item>
         <item>
          <widget class="QCheckBox" name="resultPropertyStoredCheck">
-          <property name="text">
-           <string>Store computed result property of an algorithm in a specific property</string>
-          </property>
           <property name="toolTip">
            <string>The contents of the result property of an algorithm (viewMetric for example) will be stored in a new property automatically named using the values of the parameters of the algorithm</string>
+          </property>
+          <property name="text">
+           <string>Store computed result property of an algorithm in a specific property</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QCheckBox" name="runningTimeComputedCheck">
-          <property name="text">
-           <string>Compute time spent when running an algorithm</string>
-          </property>
           <property name="toolTip">
            <string>The time spent in an algorithm computation will be displayed in the message box</string>
+          </property>
+          <property name="text">
+           <string>Compute time spent when running an algorithm</string>
           </property>
          </widget>
         </item>

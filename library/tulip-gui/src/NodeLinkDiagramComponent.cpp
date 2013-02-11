@@ -325,15 +325,11 @@ void NodeLinkDiagramComponent::requestChangeGraph(Graph *graph) {
 void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point) {
   GlMainView::fillContextMenu(menu,point);
 
-  menu->addSeparator();
-  menu->addAction(trUtf8("Augmented display"))->setEnabled(false);
-  menu->addSeparator();
-
-  QAction* zOrdering = menu->addAction(trUtf8("Z Ordering"));
+  QAction* zOrdering = menu->addAction(trUtf8("Use Z ordering"));
   zOrdering->setCheckable(true);
   zOrdering->setChecked(getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isElementZOrdered());
   connect(zOrdering,SIGNAL(triggered(bool)),this,SLOT(setZOrdering(bool)));
-  menu->addAction(trUtf8("Grid"),this,SLOT(showGridControl()));
+  menu->addAction(trUtf8("Grid display parameters"),this,SLOT(showGridControl()));
 
   //Check if a node/edge is under the mouse pointer
   bool result;
