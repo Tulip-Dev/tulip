@@ -115,6 +115,11 @@ public slots:
   void setOverviewVisible(bool);
 
   /**
+   * @brief Toggles the orthogonal projection on or off, then draws
+   */
+  void setViewOrtho(bool);
+
+  /**
    * @brief Force the settings set in the configuration widgets to be re-applied.
    */
   void applySettings();

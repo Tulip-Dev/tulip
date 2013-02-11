@@ -60,14 +60,20 @@ SceneConfigWidget::~SceneConfigWidget() {
 }
 
 void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
-  if (_glMainWidget != NULL)
+  if (_glMainWidget != NULL) {
     disconnect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));
+    disconnect(_glMainWidget,SIGNAL(viewDrawn(tlp::GlMainWidget *,bool)),this,SLOT(resetChanges()));
+  }    
 
   _glMainWidget = glMainWidget;
 
-  if (_glMainWidget != NULL)
+  if (_glMainWidget != NULL) {
     connect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));
-
+    // we assume that if an outside action causes an update of one
+    // of the rendering parameters managed in this widget, necessarily
+    // a call to _glMainWidget->draw will follow
+    connect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(resetChanges()));
+  }
   resetChanges();
 }
 
@@ -102,9 +108,15 @@ void SceneConfigWidget::resetChanges() {
   _ui->edgesColorInterpolationCheck->setChecked(renderingParameters->isEdgeColorInterpolate());
   _ui->edgesSizeInterpolationCheck->setChecked(renderingParameters->isEdgeSizeInterpolate());
 
-  // SCENE
+  // COLORS
   _ui->backgroundColorButton->setTulipColor(_glMainWidget->getScene()->getBackgroundColor());
   _ui->selectionColorButton->setTulipColor(renderingParameters->getSelectionColor());
+
+  // PROJECTION
+  if (_glMainWidget->getScene()->isViewOrtho())
+    _ui->orthoRadioButton->setChecked(true);
+  else
+    _ui->centralRadioButton->setChecked(true);
 
 //  QApplication::processEvents();
   _resetting = false;
@@ -154,10 +166,12 @@ void SceneConfigWidget::applySettings() {
   renderingParameters->setEdgeColorInterpolate(_ui->edgesColorInterpolationCheck->isChecked());
   renderingParameters->setEdgeSizeInterpolate(_ui->edgesSizeInterpolationCheck->isChecked());
 
-  // SCENE
+  // COLORS
   renderingParameters->setSelectionColor(_ui->selectionColorButton->tulipColor());
   _glMainWidget->getScene()->setBackgroundColor(_ui->backgroundColorButton->tulipColor());
 
+  // PROJECTION
+  _glMainWidget->getScene()->setViewOrtho(_ui->orthoRadioButton->isChecked());
   _glMainWidget->draw();
   _ui->applyButton->setEnabled(false);
   emit settingsApplied();

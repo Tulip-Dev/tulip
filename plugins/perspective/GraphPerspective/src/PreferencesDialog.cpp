@@ -58,6 +58,7 @@ void PreferencesDialog::writeSettings() {
 
   TulipSettings::instance().setAutomaticMapMetric(_ui->colorMappingCheck->isChecked());
   TulipSettings::instance().setAutomaticRatio(_ui->aspectRatioCheck->isChecked());
+  TulipSettings::instance().setViewOrtho(_ui->viewOrthoCheck->isChecked());
   TulipSettings::instance().setResultPropertyStored(_ui->resultPropertyStoredCheck->isChecked());
   TulipSettings::instance().setRunningTimeComputed(_ui->runningTimeComputedCheck->isChecked());
 }
@@ -103,6 +104,7 @@ void PreferencesDialog::readSettings() {
   model->setData(model->index(3,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor()));
 
   _ui->aspectRatioCheck->setChecked(TulipSettings::instance().isAutomaticRatio());
+  _ui->viewOrthoCheck->setChecked(TulipSettings::instance().isViewOrtho());
   _ui->colorMappingCheck->setChecked(TulipSettings::instance().isAutomaticMapMetric());
   _ui->runningTimeComputedCheck->setChecked(TulipSettings::instance().isRunningTimeComputed());
 }

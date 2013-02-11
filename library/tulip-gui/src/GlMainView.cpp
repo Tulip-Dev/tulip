@@ -137,6 +137,11 @@ bool GlMainView::overviewVisible() const {
   return isOverviewVisible;
 }
 
+void GlMainView::setViewOrtho(bool viewOrtho) {
+  getGlMainWidget()->getScene()->setViewOrtho(viewOrtho);
+  _glMainWidget->draw(false);
+}
+
 void GlMainView::setQuickAccessBarVisible(bool visible) {
   if (!visible) {
     delete _quickAccessBar;
@@ -197,11 +202,20 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addAction(_forceRedrawAction);
   menu->addAction(_centerViewAction);
 
+  QAction* viewOrtho = menu->addAction(trUtf8("Use orthogonal projection"));
+  viewOrtho->setCheckable(true);
+  viewOrtho->setChecked(_glMainWidget->getScene()->isViewOrtho());
+  connect(viewOrtho,SIGNAL(triggered(bool)),this,SLOT(setViewOrtho(bool)));
+
+  menu->addAction(trUtf8("Take snapshot"),this,SLOT(openSnapshotDialog()));
+
+  menu->addSeparator();
+  menu->addAction(trUtf8("Augmented display"))->setEnabled(false);
+  menu->addSeparator();
+
   QAction* a = menu->addAction(trUtf8("Show overview"),this,SLOT(setOverviewVisible(bool)));
   a->setCheckable(true);
   a->setChecked(overviewVisible());
-
-  menu->addAction(trUtf8("Take snapshopt"),this,SLOT(openSnapshotDialog()));
 }
 
 void GlMainView::applySettings() {
