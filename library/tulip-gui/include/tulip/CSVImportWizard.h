@@ -93,11 +93,11 @@ public:
   CSVImportConfigurationQWizardPage* getImportConfigurationPage()const;
   CSVGraphMappingConfigurationQWizardPage* getMappingConfigurationPage()const;
 
-inline  void setGraph(Graph* graph) {
+  inline  void setGraph(Graph* graph) {
     this->graph = graph;
   }
 
-inline  Graph* getGraph()const {
+  inline  Graph* getGraph()const {
     return graph;
   }
 

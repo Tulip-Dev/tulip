@@ -63,7 +63,7 @@ void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
   if (_glMainWidget != NULL) {
     disconnect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));
     disconnect(_glMainWidget,SIGNAL(viewDrawn(tlp::GlMainWidget *,bool)),this,SLOT(resetChanges()));
-  }    
+  }
 
   _glMainWidget = glMainWidget;
 
@@ -74,6 +74,7 @@ void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
     // a call to _glMainWidget->draw will follow
     connect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(resetChanges()));
   }
+
   resetChanges();
 }
 
