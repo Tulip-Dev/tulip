@@ -22,15 +22,16 @@
 #define CSVPARSERCONFIGURATIONWIDGET_H
 
 #include <QtGui/QWidget>
-#include <QtGui/QComboBox>
-#include <tulip/CSVParser.h>
-#include <tulip/CSVContentHandler.h>
+
+#include <tulip/tulipconf.h>
 
 namespace Ui {
 class CSVParserConfigurationWidget;
 }
 
 namespace tlp {
+
+class CSVParser;
 
 class TLP_QT_SCOPE CSVParserConfigurationWidget : public QWidget {
   Q_OBJECT

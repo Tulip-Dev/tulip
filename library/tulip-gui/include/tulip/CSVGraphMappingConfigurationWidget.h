@@ -21,11 +21,9 @@
 #ifndef CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 #define CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 
-#include <QtGui/QWidget>
 #include <QtGui/QComboBox>
-#include <tulip/tuliphash.h>
-#include <tulip/CSVGraphImport.h>
-class CSVGraphImport;
+
+#include <tulip/tulipconf.h>
 
 namespace Ui {
 class CSVGraphMappingConfigurationWidget;
@@ -34,7 +32,9 @@ class CSVGraphMappingConfigurationWidget;
 namespace tlp {
 
 class Graph;
-
+class CSVGraphImport;
+class CSVImportParameters;
+class CSVToGraphDataMapping;
 
 /**
   * @brief Combo box used to select a CSV column.

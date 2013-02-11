@@ -19,15 +19,12 @@
 #include "tulip/CSVParser.h"
 #include <tulip/TlpQtTools.h>
 #include <tulip/PluginProgress.h>
-#include <QtGui/QApplication>
-#include <stdexcept>
-
-#include <iostream>
 
 #include <fstream>
-#include <algorithm>
 #include <cassert>
-#include <cmath>
+
+#include <QtCore/QTextCodec>
+
 using namespace std;
 using namespace tlp;
 
@@ -37,6 +34,10 @@ CSVSimpleParser::CSVSimpleParser(const string& fileName,const QString& separator
 }
 
 CSVSimpleParser::~CSVSimpleParser() {
+}
+
+string CSVSimpleParser::convertStringEncoding(const std::string& toConvert,QTextCodec* encoder) {
+  return string(encoder->toUnicode ( toConvert.c_str() ).toUtf8().data());
 }
 
 bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress) {

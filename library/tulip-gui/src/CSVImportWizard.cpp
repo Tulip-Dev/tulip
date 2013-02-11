@@ -16,12 +16,20 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/CSVImportWizard.h"
 #include "ui_CSVImportWizard.h"
-#include <tulip/SimplePluginProgressWidget.h>
+
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QLabel>
+
+#include <tulip/CSVParserConfigurationWidget.h>
+#include <tulip/CSVImportWizard.h>
+#include <tulip/CSVImportConfigurationWidget.h>
+#include <tulip/CSVGraphMappingConfigurationWidget.h>
+#include <tulip/SimplePluginProgressWidget.h>
+#include <tulip/CSVParser.h>
+
 using namespace tlp;
+
 CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage ( QWidget * parent):QWizardPage(parent),parserConfigurationWidget(new CSVParserConfigurationWidget(this)),previewTableWidget(new CSVTableWidget(this)),previewLineNumber(5) {
   QVBoxLayout* vbLayout = new QVBoxLayout();
   vbLayout->setContentsMargins(0,0,0,0);
@@ -35,7 +43,7 @@ CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage ( QWidget
   connect(parserConfigurationWidget,SIGNAL(parserChanged()),this,SLOT(parserChanged()));
   QLabel* noteWidget=new QLabel(this);
   noteWidget->setWordWrap(true);
-  noteWidget->setText(" <em>Note: several (node and/or edge) import operations using a same source file may be required to get all data to be imported and inserted into a same graph.</em>");
+  noteWidget->setText(" <em>Note: several (node and/or edge) import operations using the same source file may be required to get all data to be imported and inserted into a same graph.</em>");
   layout()->addWidget(noteWidget);
 }
 
@@ -62,6 +70,14 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
 
   delete parser;
   emit completeChanged();
+}
+
+//CSVToGraphDataMapping* CSVGraphMappingConfigurationQWizardPage::buildMappingObject()const {
+//  return graphMappingConfigurationWidget->buildMappingObject();
+//}
+
+CSVToGraphDataMapping* CSVGraphMappingConfigurationQWizardPage::buildMappingObject() const {
+  return graphMappingConfigurationWidget->buildMappingObject();
 }
 
 void CSVParsingConfigurationQWizardPage::updatePreview() {
@@ -91,6 +107,10 @@ CSVGraphMappingConfigurationQWizardPage::CSVGraphMappingConfigurationQWizardPage
 
 bool CSVGraphMappingConfigurationQWizardPage::isComplete() const {
   return graphMappingConfigurationWidget->isValid();
+}
+
+CSVImportParameters CSVImportConfigurationQWizardPage::getImportParameters()const {
+  return importConfigurationWidget->getImportParameters();
 }
 
 void CSVGraphMappingConfigurationQWizardPage::initializePage() {

@@ -21,13 +21,12 @@
 #ifndef CSVGRAPHIMPORT_H
 #define CSVGRAPHIMPORT_H
 
-#include <tulip/CSVParser.h>
 #include <tulip/CSVContentHandler.h>
 #include <tulip/Graph.h>
-#include <map>
-#include <QtGui/QWidget>
+#include <tulip/tulipconf.h>
+
 #include <QtGui/QMessageBox>
-#include <tulip/tuliphash.h>
+
 namespace tlp {
 class PropertyInterface;
 

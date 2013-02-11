@@ -17,11 +17,14 @@
  *
  */
 ///@cond DOXYGEN_HIDDEN
-
 #ifndef CSVCONTENTHANDLER_H_
 #define CSVCONTENTHANDLER_H_
+
 #include <string>
+#include <vector>
+
 #include <tulip/tulipconf.h>
+
 namespace tlp {
 /**
  * @brief Interface to inherit to get and treat data from csv files with CSVParser object.
