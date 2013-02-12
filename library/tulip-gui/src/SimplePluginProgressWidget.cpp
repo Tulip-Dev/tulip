@@ -36,7 +36,6 @@ SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::Wind
   _ui->stopButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaStop));
   connect(_ui->cancelButton,SIGNAL(clicked()),this,SLOT(cancelClicked()));
   connect(_ui->stopButton,SIGNAL(clicked()),this,SLOT(stopClicked()));
-  connect(_ui->previewBox,SIGNAL(toggled(bool)),this,SLOT(setPreview(bool)));
 }
 
 SimplePluginProgressWidget::~SimplePluginProgressWidget() {
@@ -122,15 +121,6 @@ void SimplePluginProgressWidget::cancelClicked() {
 
 void SimplePluginProgressWidget::stopClicked() {
   stop();
-}
-
-void SimplePluginProgressWidget::setPreview(bool f) {
-  if (f) {
-    while (Observable::observersHoldCounter() > 0)
-      Observable::unholdObservers();
-  }
-  else
-    Observable::holdObservers();
 }
 
 // ===================
