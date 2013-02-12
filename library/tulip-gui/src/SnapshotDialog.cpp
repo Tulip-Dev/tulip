@@ -69,7 +69,7 @@ protected :
 };
 
 
-SnapshotDialog::SnapshotDialog(View &v,QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(&v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
+SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
   ui->setupUi(this);
 
   ui->widthSpinBox->setValue(view->centralItem()->scene()->sceneRect().width());
