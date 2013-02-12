@@ -165,7 +165,7 @@ public:
     The snapshot is scaled to outputSize. If a null size is given, the snapshot is to be on a 1:1 ratio
     @return A non-null pixmap of the snapshot was correctly taken.
     */
-  virtual QPixmap snapshot(const QSize& outputSize=QSize())=0;
+  virtual QPixmap snapshot(const QSize& outputSize=QSize()) const=0;
 
 public slots:
   /**

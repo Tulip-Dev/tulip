@@ -81,7 +81,7 @@ public:
   tlp::GlMainWidget* getGlMainWidget() const;
   virtual QList<QWidget*> configurationWidgets() const;
   bool overviewVisible() const;
-  QPixmap snapshot(const QSize &outputSize=QSize());
+  QPixmap snapshot(const QSize &outputSize=QSize()) const;
 
 public slots:
   /**

@@ -174,7 +174,7 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
   }
 }
 
-QPixmap GlMainView::snapshot(const QSize &outputSize) {
+QPixmap GlMainView::snapshot(const QSize &outputSize) const {
   if (_glMainWidget == NULL)
     return QPixmap();
 
@@ -187,7 +187,7 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) {
 }
 
 void GlMainView::openSnapshotDialog() {
-  SnapshotDialog dlg(*this);
+  SnapshotDialog dlg(this, getGlMainWidget()->parentWidget());
   dlg.exec();
 }
 

@@ -185,7 +185,7 @@ QGraphicsItem* ViewWidget::centralItem() const {
   return _centralWidgetItem;
 }
 
-QPixmap ViewWidget::snapshot(const QSize &outputSize) {
+QPixmap ViewWidget::snapshot(const QSize &outputSize) const {
   if (_centralWidget == NULL)
     return QPixmap();
 

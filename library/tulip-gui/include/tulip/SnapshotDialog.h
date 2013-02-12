@@ -47,7 +47,7 @@ class TLP_QT_SCOPE SnapshotDialog : public QDialog {
 
 public :
 
-  SnapshotDialog(View &v,QWidget *parent=NULL);
+  SnapshotDialog(const View *v,QWidget *parent=NULL);
   ~SnapshotDialog();
 
 public slots :
@@ -70,7 +70,7 @@ protected :
   void sizeSpinBoxValueChanged();
 
   Ui::SnapshotDialogData *ui;
-  View *view;
+  const View *view;
 
   QGraphicsScene *scene;
   QGraphicsPixmapItem *pixmapItem;

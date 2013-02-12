@@ -45,7 +45,7 @@ public:
 
   virtual void draw(tlp::PluginProgress* pluginProgress);
   virtual void refresh(tlp::PluginProgress* pluginProgress);
-  virtual QPixmap snapshot(const QSize& outputSize=QSize());
+  virtual QPixmap snapshot(const QSize& outputSize=QSize()) const;
   @endif
 
 protected:
