@@ -78,7 +78,6 @@ public slots:
 protected slots:
   void cancelClicked();
   void stopClicked();
-  void setPreview(bool);
 };
 
 class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog, public tlp::PluginProgress {
