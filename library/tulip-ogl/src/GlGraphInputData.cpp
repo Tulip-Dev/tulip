@@ -85,7 +85,8 @@ void GlGraphInputData::reloadGraphProperties() {
     _propertiesNameMap["viewTgtAnchorShape"]=VIEW_TGTANCHORSHAPE;
     _propertiesNameMap["viewTgtAnchorSize"]=VIEW_TGTANCHORSIZE;
     _propertiesNameMap["viewAnimationFrame"]=VIEW_ANIMATIONFRAME;
-  }    
+  }
+
   if(graph) {
     _properties.clear();
     _propertiesMap[VIEW_COLOR]=graph->getProperty<ColorProperty>("viewColor");
