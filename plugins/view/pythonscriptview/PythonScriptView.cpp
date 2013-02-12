@@ -510,7 +510,7 @@ void PythonScriptView::executeCurrentScript() {
         indicateErrors();
       }
 
-      _graph->pop();
+      _graph->pop(false);
     }
 
     _viewWidget->progressBar()->setRange(0,100);
