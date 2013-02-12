@@ -55,6 +55,7 @@ public slots:
 protected slots:
   void contextMenuRequested(const QPoint&);
   void doubleClicked(const QModelIndex&);
+  void clicked(const QModelIndex&);
   void resizeFirstColumnToContent();
 
   void addSubGraph();

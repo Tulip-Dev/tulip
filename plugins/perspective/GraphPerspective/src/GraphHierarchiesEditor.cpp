@@ -57,6 +57,8 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent)
           this, SLOT(resizeFirstColumnToContent()));
   connect(_ui->hierarchiesTree, SIGNAL(expanded(const QModelIndex &)),
           this, SLOT(resizeFirstColumnToContent()));
+  connect(_ui->hierarchiesTree, SIGNAL(clicked(const QModelIndex &)),
+          this, SLOT(clicked(const QModelIndex &)));
 }
 
 bool GraphHierarchiesEditor::synchronized() const {
@@ -104,6 +106,15 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
     menu.exec(_ui->hierarchiesTree->viewport()->mapToGlobal(p));
     _contextGraph = NULL;
   }
+}
+
+void GraphHierarchiesEditor::clicked(const QModelIndex& index) {
+  if (!index.isValid() || index.internalPointer() == NULL)
+    return;
+
+  _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  _model->setCurrentGraph(_contextGraph);
+  _contextGraph = NULL;
 }
 
 void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
