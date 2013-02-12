@@ -42,7 +42,7 @@ class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel, public tlp::O
   tlp::Graph *_currentGraph;
   QMap<const tlp::Graph*,QModelIndex> _indexCache;
   QMap<const tlp::Graph*, GraphNeedsSavingObserver*> _saveNeeded;
-
+  void initIndexCache(tlp::Graph *root);
 
 public:
   bool needsSaving();
@@ -115,6 +115,7 @@ public slots:
 
   QMap<QString,tlp::Graph*> readProject(tlp::TulipProject *,tlp::PluginProgress *);
   QMap<tlp::Graph*,QString> writeProject(tlp::TulipProject *, tlp::PluginProgress *);
+
 };
 
 }
