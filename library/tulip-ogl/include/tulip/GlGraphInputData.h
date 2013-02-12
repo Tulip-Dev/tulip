@@ -147,8 +147,10 @@ public:
   tlp::PropertyInterface* getProperty(const std::string& name) const {
     std::map<std::string, PropertyName>::iterator it =
       _propertiesNameMap.find(name);
+
     if (it != _propertiesNameMap.end())
       return _propertiesMap[it->second];
+
     return NULL;
   }
 
@@ -178,10 +180,12 @@ public:
     std::map<std::string, PropertyName>::iterator it =
       _propertiesNameMap.find(name);
     bool result = it != _propertiesNameMap.end();
+
     if (result)
       setProperty(it->second, property);
+
     return result;
-  }    
+  }
 
   /**
    * Return a pointer on the property used to elementColor
