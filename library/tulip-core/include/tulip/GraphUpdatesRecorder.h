@@ -211,6 +211,8 @@ class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver, publi
   void removeFromEdgeContainer(MutableContainer<std::vector<edge>*>& containers,
                                edge e, node n);
 
+  void removeGraphData(Graph *);
+
   // record new values for all updated properties
   // restartAllowed must be true
   void recordNewValues(GraphImpl*);

@@ -1138,3 +1138,57 @@ void PushPopTest::testMetaNode() {
   CPPUNIT_ASSERT_EQUAL(coord0,  layout->getNodeValue(metaNode));
   CPPUNIT_ASSERT_EQUAL(mColor,  color->getNodeValue(metaNode));
 }
+
+class DeleteObjectsObserver : public Observable {
+
+public :
+
+    vector<Graph *> deletedGraphs;
+    vector<PropertyInterface *> deletedProperties;
+
+
+    void treatEvent(const Event &e) {
+        if (e.type() == Event::TLP_DELETE) {
+            Graph* graph = dynamic_cast<Graph *>(e.sender());
+            if (graph) {
+                deletedGraphs.push_back(graph);
+            }
+            PropertyInterface *prop = dynamic_cast<PropertyInterface *>(e.sender());
+            if (prop) {
+                deletedProperties.push_back(prop);
+            }
+        }
+    }
+
+};
+
+void PushPopTest::testDeletePushPopFalse() {
+
+    // to track object deletion
+    DeleteObjectsObserver delObserver;
+
+    // create a new subgraph in graph and a local property to it
+    // create a new subgraph in the previously created one and a local property to it
+    graph->push();
+    Graph *g1 = graph->addSubGraph("toto");
+    g1->addListener(&delObserver);
+    DoubleProperty *testProp = g1->getLocalProperty<DoubleProperty>("test1");
+    testProp->addListener(&delObserver);
+    Graph *g2 = g1->addSubGraph("titi");
+    g2->addListener(&delObserver);
+    LayoutProperty *testProp2 = g2->getLocalProperty<LayoutProperty>("test2");
+    testProp2->addListener(&delObserver);
+
+    // this call should delete the two created sub-graphs
+    // and the two created properties
+    graph->pop(false);
+
+    // should be equal to 4 as two delete events are sent by deleted sub-graphs : the first one when
+    // the GraphUpdatesRecorder do the updates (removing the newly added sub-graph from the hierarchy),
+    // the second one when the GraphUpdatedsRecorder destructor is called (as we forbid to unpop) as it
+    // will really delete the sub-graph
+    CPPUNIT_ASSERT_EQUAL(size_t(4), delObserver.deletedGraphs.size());
+
+    // same thing for the two deleted properties
+    CPPUNIT_ASSERT_EQUAL(size_t(4), delObserver.deletedProperties.size());
+}
