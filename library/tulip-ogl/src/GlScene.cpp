@@ -153,8 +153,7 @@ void GlScene::initGlParameters() {
 
 void GlScene::draw() {
 
-  if(inDraw)
-    assert(false);
+  assert(inDraw == false);
 
   inDraw=true;
 
