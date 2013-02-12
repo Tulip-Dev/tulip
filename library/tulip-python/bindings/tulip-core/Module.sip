@@ -28,6 +28,8 @@
 // Hack to avoid overriding the tlp Python class (containing all the module classes as
 // nested classes and declared in each module : tulip, tulipogl, tulipqt) in the current
 // global namespace when importing the module the following way : from tulipogl import *
+
+// Plus set up type aliases for tlp.Coord and tlp.Size
 %PreInitialisationCode
     std::string tlpImportHook =
     "try:\n"
@@ -44,6 +46,9 @@
     "   def tlpimporthook(name, globals={}, locals={}, fromlist=[], level=-1):\n"
     "       fullname = name\n"
     "       m = _origimportfunc(name, globals, locals, fromlist, level)\n"
+    "       if m and fullname == \"tulip\":\n"
+    "           m.tlp.Coord = m.tlp.Vec3f\n"
+    "           m.tlp.Size = m.tlp.Vec3f\n"
     "       if fullname == \"tulip\" or fullname == \"tulipogl\" or fullname == \"tulipqt\":\n"
     "           if fromlist and len(fromlist) > 0 and fromlist[0] == \"*\":\n"
     "               curTlpDict = None\n"
@@ -72,21 +77,13 @@
     }
 %End
 
-%PostInitialisationCode
-    std::string tlpTypesAlias =
-            "from tulip import *\n"
-            "tlp.Size = tlp.Vec3f\n"
-            "tlp.Coord = tlp.Vec3f\n"
-            ;
-    PyRun_SimpleString(tlpTypesAlias.c_str());
-%End
-
 %ModuleHeaderCode
 #include <tulip/Graph.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <string>
 #include <sstream>
+#include <iostream>
 
 template <typename T>
 bool pluginExists(std::string pluginName) {
@@ -118,6 +115,10 @@ extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
 extern const sipTypeDef *getSipType(const char *sipTypename);
 
 extern void replaceAll(std::string &s, const std::string& replaceWhat, const std::string& replaceWithWhat);
+
+#if PY_MAJOR_VERSION >= 3
+extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
+#endif
 
 %End
 
@@ -176,6 +177,15 @@ void replaceAll(std::string &s, const std::string& replaceWhat, const std::strin
     s.replace(pos,replaceWhat.size(),replaceWithWhat);
   }
 }
+
+#if PY_MAJOR_VERSION >= 3
+std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
+    PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
+    std::string ret(PyBytes_AsString(utf8Str));
+    Py_DECREF(utf8Str);
+    return ret;
+}
+#endif
 
 %End
 
