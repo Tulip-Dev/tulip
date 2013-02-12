@@ -74,7 +74,8 @@ public:
     VIEW_SRCANCHORSIZE, /**< size of source arrow edge extremity */
     VIEW_TGTANCHORSHAPE, /**< shape of target arrow edge extremity */
     VIEW_TGTANCHORSIZE, /**< size of target arrow edge extremity */
-    VIEW_ANIMATIONFRAME /**< animation frame */
+    VIEW_ANIMATIONFRAME, /**< animation frame */
+    NB_PROPS /** must be the last, give the number of enum props */
   };
 
   /**
@@ -140,31 +141,47 @@ public:
   }
 
   /**
-   * Function to get the pointer for propertyName
+   * Function to get the PropertyInterface* corresponding
+   * to a given name
+   */
+  tlp::PropertyInterface* getProperty(const std::string& name) const {
+    std::map<std::string, PropertyName>::iterator it =
+      _propertiesNameMap.find(name);
+    if (it != _propertiesNameMap.end())
+      return _propertiesMap[it->second];
+    return NULL;
+  }
+
+  /**
+   * Function to get the typed PropertyInterface* for a given propertyName
    * See PropertyName enum for more details on available properties
    */
   template<typename T>
   T* getProperty(PropertyName propertyName) const {
-    T* property=static_cast<T*>(_propertiesMap.find(propertyName)->second);
-    return property;
+    return static_cast<T*>(_propertiesMap[propertyName]);
   }
 
   /**
-   * Function to set the pointer for propertyName
+   * Function to set the PropertyInterface* for a given propertyName
    * See PropertyName enum for more details on available properties
    */
-  void setProperty(PropertyName propertyName,PropertyInterface *property) {
+  void setProperty(PropertyName propertyName, PropertyInterface *property) {
     _properties.erase(_propertiesMap[propertyName]);
     _propertiesMap[propertyName]=property;
     _properties.insert(property);
-
-    for(std::map<std::string,PropertyName>::iterator it=_propertiesNameMap.begin(); it!=_propertiesNameMap.end(); ++it) {
-      if((*it).second==propertyName) {
-        _propertiesNameMap.erase(it);
-        break;
-      }
-    }
   }
+
+  /**
+   * Function to set the PropertyInterface* for a given name
+   */
+  bool setProperty(const std::string& name, PropertyInterface *property) {
+    std::map<std::string, PropertyName>::iterator it =
+      _propertiesNameMap.find(name);
+    bool result = it != _propertiesNameMap.end();
+    if (result)
+      setProperty(it->second, property);
+    return result;
+  }    
 
   /**
    * Return a pointer on the property used to elementColor
@@ -435,8 +452,8 @@ protected:
 
   bool _deleteGlVertexArrayManager;
 
-  std::map<PropertyName,PropertyInterface*> _propertiesMap;
-  std::map<std::string,PropertyName> _propertiesNameMap;
+  PropertyInterface* _propertiesMap[NB_PROPS];
+  static std::map<std::string,PropertyName> _propertiesNameMap;
 
   bool _deleteMetaNodeRendererAtDestructor;
   GlMetaNodeRenderer *_metaNodeRenderer;
