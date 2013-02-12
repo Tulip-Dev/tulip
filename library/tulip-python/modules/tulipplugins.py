@@ -3,6 +3,7 @@ This module provides utility functions to register Tulip plugins written in Pyth
 """
 
 import sys
+import traceback
 if sys.version_info[0] == 3:
     from imp import reload
 from tulip import *
@@ -60,19 +61,34 @@ def initFactory(self):
 
 def runPlugin(plugin):
     setProcessQtEvents(True)
-    ret = plugin.real_run()
+    ret = False
+    try:
+        ret = plugin.real_run()
+    except:
+        if plugin.pluginProgress:
+            plugin.pluginProgress.setError(traceback.format_exc())
     setProcessQtEvents(False)
     return ret
 
 def importGraph(plugin):
+    ret = False
     setProcessQtEvents(True)
-    ret = plugin.real_importGraph()
+    try:
+        ret = plugin.real_importGraph()
+    except:
+        if plugin.pluginProgress:
+            plugin.pluginProgress.setError(traceback.format_exc())
     setProcessQtEvents(False)
     return ret
 
 def exportGraph(plugin, os):
+    ret = False
     setProcessQtEvents(True)
-    ret = plugin.real_exportGraph(os)
+    try:
+        ret = plugin.real_exportGraph(os)
+    except:
+        if plugin.pluginProgress:
+            plugin.pluginProgress.setError(traceback.format_exc())
     setProcessQtEvents(False)
     return ret
 
