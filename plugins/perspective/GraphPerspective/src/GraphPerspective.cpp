@@ -278,7 +278,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   tlp::PluginLister::instance()->addListener(this);
   PythonInterpreter::getInstance()->setDefaultConsoleWidget(_ui->pythonPanel->consoleWidget());
-  PythonInterpreter::getInstance()->importModule("tulip");
 
   // Setting initial sizes for splitters
   _ui->mainSplitter->setSizes(QList<int>() << 200 << 1000);
