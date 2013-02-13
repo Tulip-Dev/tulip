@@ -101,7 +101,6 @@ static float strtof(const char* cptr, char** endptr) {
 
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //MSVC has a different name for pretty_function
 #  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround
-#  define cbrt(arg) pow((double)arg, 1.0/3) //VC does not have cbrt, little workaround
 #  define isnan(x) ((x) != (x)) //you guessed it, this is a C99 feature, and VC++ does not support C99. workaroud this.
 #  define rint(arg) arg > 0 ? (int)std::floor((double)arg) : (int)std::ceil((double)arg) //Hey, nother C99 feature !
 
