@@ -988,10 +988,10 @@ void GraphPerspective::applyRandomLayout(Graph* g) {
 }
 
 void GraphPerspective::centerPanelsForGraph(tlp::Graph* g, bool graphChanged,
-					    bool onlyGlMainView) {
+    bool onlyGlMainView) {
   foreach(View* v, _ui->workspace->panels()) {
     if ((v->graph() == g) &&
-	(!onlyGlMainView || dynamic_cast<tlp::GlMainView*>(v)))
+        (!onlyGlMainView || dynamic_cast<tlp::GlMainView*>(v)))
       v->centerView(graphChanged);
   }
 }
@@ -1011,9 +1011,10 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(tlp::Graph* g, const std:
   bool result = false;
   foreach(View* v, _ui->workspace->panels()) {
     GlMainView* glMainView = dynamic_cast<tlp::GlMainView*>(v);
+
     if (v->graph() == g && glMainView != NULL) {
       if (glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->installProperties(propsMap))
-	result = true;
+        result = true;
     }
   }
   return result;
