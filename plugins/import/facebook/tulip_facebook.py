@@ -86,6 +86,12 @@ def importFacebookGraph(graph, accessToken, pluginProgress, avatarsDlPath):
     viewLabel[friendNode] = name
     graph.addEdge(meNode, friendNode)
   
+  nbFriends = len(friends["data"])
+  i = 0
+
+  if pluginProgress:
+    pluginProgress.progress(i, nbFriends)
+
   for friend in friends["data"]:
     name = str(friend["name"])
     friendNode = friendsMap[name]
@@ -103,6 +109,10 @@ def importFacebookGraph(graph, accessToken, pluginProgress, avatarsDlPath):
       mfriendNode = friendsMap[str(mfriend["name"])]
       if not graph.existEdge(friendNode, mfriendNode, False).isValid():
         graph.addEdge(friendNode, mfriendNode)
+
+    i = i + 1
+    if pluginProgress:
+      pluginProgress.progress(i, nbFriends)
   
   if len(avatarsDlPath) > 0:
     viewShape.setAllNodeValue(tlp.NodeShape.Square)
