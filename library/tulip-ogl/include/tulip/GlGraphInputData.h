@@ -176,16 +176,12 @@ public:
   /**
    * Function to set the PropertyInterface* for a given name
    */
-  bool setProperty(const std::string& name, PropertyInterface *property) {
-    std::map<std::string, PropertyName>::iterator it =
-      _propertiesNameMap.find(name);
-    bool result = it != _propertiesNameMap.end();
+  bool setProperty(const std::string& name, PropertyInterface *property);
 
-    if (result)
-      setProperty(it->second, property);
-
-    return result;
-  }
+  /**
+   * Function to set a bunch of named PropertyInterface*
+   */
+  bool installProperties(const std::map<std::string, tlp::PropertyInterface*>& propsMap);
 
   /**
    * Return a pointer on the property used to elementColor
