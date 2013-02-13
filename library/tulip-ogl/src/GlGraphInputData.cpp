@@ -131,12 +131,14 @@ void GlGraphInputData::reloadGraphProperties() {
 }
 
 bool GlGraphInputData::setProperty(const std::string& name,
-				   PropertyInterface *property) {
+                                   PropertyInterface *property) {
   std::map<std::string, PropertyName>::iterator it =
     _propertiesNameMap.find(name);
   bool result = it != _propertiesNameMap.end();
+
   if (result)
     setProperty(it->second, property);
+
   return result;
 }
 
@@ -144,10 +146,12 @@ bool GlGraphInputData::installProperties(const std::map<std::string, tlp::Proper
   std::map<std::string, tlp::PropertyInterface*>::const_iterator pmIt =
     propsMap.begin();
   bool result = false;
+
   for(; pmIt != propsMap.end(); ++pmIt) {
     if (setProperty(pmIt->first, pmIt->second))
-	  result = true;
+      result = true;
   }
+
   if (result)
     getGlVertexArrayManager()->setHaveToComputeAll(true);
 

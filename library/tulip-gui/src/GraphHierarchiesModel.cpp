@@ -130,7 +130,7 @@ static ViewSizeCalculator vSizeCalc;
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
                     borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
-          labelColor = "viewLabelColor", labelPosition = "viewLabelPosition", label="viewLabel", rotation = "viewRotation", labelRotation = "viewLabelRotation",
+                    labelColor = "viewLabelColor", labelPosition = "viewLabelPosition", label="viewLabel", rotation = "viewRotation", labelRotation = "viewLabelRotation",
                     srcAnchorSize = "viewSrcAnchorSize", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
 
   if (!g->existProperty(shapes)) {

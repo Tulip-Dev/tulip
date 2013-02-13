@@ -650,11 +650,11 @@ struct NodeTypeSerializer : public TypedDataSerializer<node> {
   KnownTypeSerializer<UnsignedIntegerType> *uintSerializer;
 
   NodeTypeSerializer():TypedDataSerializer<node>("node") {
-      uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
+    uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
   }
 
   ~NodeTypeSerializer() {
-      delete uintSerializer;
+    delete uintSerializer;
   }
 
   DataTypeSerializer* clone() const {
@@ -675,16 +675,16 @@ struct NodeTypeSerializer : public TypedDataSerializer<node> {
   }
 };
 
-struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node> >{
+struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node> > {
 
   KnownTypeSerializer<UnsignedIntegerVectorType> *uintVecSerializer;
 
   NodeVectorTypeSerializer():TypedDataSerializer<vector<node> >("nodes") {
-      uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
+    uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
   }
 
   ~NodeVectorTypeSerializer() {
-      delete uintVecSerializer;
+    delete uintVecSerializer;
   }
 
   DataTypeSerializer* clone() const {
@@ -692,7 +692,7 @@ struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node> >{
   }
 
   void write(ostream& os, const vector<node>& vn) {
-      uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(vn));
+    uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(vn));
   }
 
   bool read(istream& is, vector<node>& vn) {
@@ -710,11 +710,11 @@ struct EdgeTypeSerializer : public TypedDataSerializer<edge> {
   KnownTypeSerializer<UnsignedIntegerType> *uintSerializer;
 
   EdgeTypeSerializer():TypedDataSerializer<edge>("edge") {
-      uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
+    uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
   }
 
   ~EdgeTypeSerializer() {
-      delete uintSerializer;
+    delete uintSerializer;
   }
 
   DataTypeSerializer* clone() const {
@@ -735,16 +735,16 @@ struct EdgeTypeSerializer : public TypedDataSerializer<edge> {
   }
 };
 
-struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge> >{
+struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge> > {
 
   KnownTypeSerializer<UnsignedIntegerVectorType> *uintVecSerializer;
 
   EdgeVectorTypeSerializer():TypedDataSerializer<vector<edge> >("edges") {
-      uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
+    uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
   }
 
   ~EdgeVectorTypeSerializer() {
-      delete uintVecSerializer;
+    delete uintVecSerializer;
   }
 
   DataTypeSerializer* clone() const {
@@ -752,7 +752,7 @@ struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge> >{
   }
 
   void write(ostream& os, const vector<edge>& ve) {
-      uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(ve));
+    uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(ve));
   }
 
   bool read(istream& is, vector<edge>& ve) {

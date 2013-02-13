@@ -79,9 +79,10 @@ void APIDataBase::loadApiFile(const QString &apiFilePath) {
   while (!in.atEnd()) {
     QString line = in.readLine();
     addApiEntry(line);
+
     if (line.startsWith("tulip.tlp.Vec3f.")) {
-        addApiEntry(line.replace("Vec3f", "Coord"));
-        addApiEntry(line.replace("Coord", "Size"));
+      addApiEntry(line.replace("Vec3f", "Coord"));
+      addApiEntry(line.replace("Coord", "Size"));
     }
   }
 }

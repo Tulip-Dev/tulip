@@ -190,32 +190,40 @@ public:
     if (!outPropsMap.empty()) {
       // build outPropsMap with initial properties
       std::vector<OutPropertyParam>::const_iterator it = outPropParams.begin();
+
       for (; it != outPropParams.end(); ++it) {
-	const std::string& outPropName = it->dest->getName();
-	if (it->tmp && !outPropName.empty())
-	  outPropsMap[outPropName] = it->dest;
+        const std::string& outPropName = it->dest->getName();
+
+        if (it->tmp && !outPropName.empty())
+          outPropsMap[outPropName] = it->dest;
       }
+
       // restore initial properties
       Perspective::typedInstance<GraphPerspective>()->setGlMainViewPropertiesForGraph(graph, outPropsMap);
     }
   }
-      
+
   void progressStateChanged(int, int) {
     if (!inited) {
       // build outPropsMap with temporary properties
       std::vector<OutPropertyParam>::const_iterator it = outPropParams.begin();
+
       for (; it != outPropParams.end(); ++it) {
-	const std::string& outPropName = it->dest->getName();
-	if (it->tmp && !outPropName.empty())
-	  outPropsMap[outPropName] = it->tmp;
+        const std::string& outPropName = it->dest->getName();
+
+        if (it->tmp && !outPropName.empty())
+          outPropsMap[outPropName] = it->tmp;
       }
+
       inited = true;
+
       if (!outPropsMap.empty() &&
-	  // set temporary properties as drawing properties
-	  (Perspective::typedInstance<GraphPerspective>()->setGlMainViewPropertiesForGraph(graph, outPropsMap) == false))
-	// clear map if there is nothing to do
-	outPropsMap.clear();
+          // set temporary properties as drawing properties
+          (Perspective::typedInstance<GraphPerspective>()->setGlMainViewPropertiesForGraph(graph, outPropsMap) == false))
+        // clear map if there is nothing to do
+        outPropsMap.clear();
     }
+
     // draw with temporary computed properties
     if (!outPropsMap.empty()) {
       Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(graph, true, true);
