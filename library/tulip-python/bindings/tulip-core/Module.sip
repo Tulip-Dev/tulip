@@ -46,9 +46,6 @@
     "   def tlpimporthook(name, globals={}, locals={}, fromlist=[], level=-1):\n"
     "       fullname = name\n"
     "       m = _origimportfunc(name, globals, locals, fromlist, level)\n"
-    "       if m and fullname == \"tulip\":\n"
-    "           m.tlp.Coord = m.tlp.Vec3f\n"
-    "           m.tlp.Size = m.tlp.Vec3f\n"
     "       if fullname == \"tulip\" or fullname == \"tulipogl\" or fullname == \"tulipqt\":\n"
     "           if fromlist and len(fromlist) > 0 and fromlist[0] == \"*\":\n"
     "               curTlpDict = None\n"
@@ -75,6 +72,15 @@
         tlp::initTulipLib();
         tlp::PluginLibraryLoader::loadPlugins();
     }
+%End
+
+%PostInitialisationCode
+    // Set up some type aliases
+    PyObject *moduleDict = PyModule_GetDict(sipModule);
+    PyObject *tlpClass = PyDict_GetItemString(moduleDict, "tlp");
+    PyObject *tlpVec3f = PyObject_GetAttrString(tlpClass, "Vec3f");
+    PyObject_SetAttrString(tlpClass, "Coord", tlpVec3f);
+    PyObject_SetAttrString(tlpClass, "Size", tlpVec3f);
 %End
 
 %ModuleHeaderCode
