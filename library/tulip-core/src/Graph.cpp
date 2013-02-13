@@ -487,7 +487,6 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   tlp::Observable::holdObservers();
   circularCalls[algorithm] = prop;
-  tlp::AlgorithmContext tmpContext(context);
   Algorithm *tmpAlgo =
     tlp::PluginLister::instance()->getPluginObject<PropertyAlgorithm>(algorithm, &context);
 
