@@ -246,6 +246,29 @@ public:
     DataSet attributes = graph->getAttributes();
     pair<string, DataType*> attribute;
     forEach(attribute, attributes.getValues()) {
+      // If nodes and edges are stored as graph attributes
+      // we need to update their id before serializing them
+      // as nodes and edges have been reindexed
+      if (attribute.second->getTypeName() == string(typeid(node).name())) {
+          node *n = reinterpret_cast<node*>(attribute.second->value);
+          n->id = _newNodeId.get(n->id);
+      }
+      else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
+          edge *e = reinterpret_cast<edge*>(attribute.second->value);
+          e->id = _newEdgeId.get(e->id);
+      }
+      else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
+          vector<node> *vn = reinterpret_cast<vector<node>*>(attribute.second->value);
+          for (size_t i = 0 ; i < vn->size() ; ++i) {
+              (*vn)[i].id = _newNodeId.get((*vn)[i].id);
+          }
+      }
+      else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
+          vector<edge> *ve = reinterpret_cast<vector<edge>*>(attribute.second->value);
+          for (size_t i = 0 ; i < ve->size() ; ++i) {
+              (*ve)[i].id = _newEdgeId.get((*ve)[i].id);
+          }
+      }
       DataTypeSerializer* serializer = DataSet::typenameToSerializer(attribute.second->getTypeName());
       _writer.writeString(attribute.first);
       _writer.writeArrayOpen();
