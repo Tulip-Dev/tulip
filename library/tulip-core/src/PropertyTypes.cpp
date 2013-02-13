@@ -32,12 +32,12 @@ GraphType::RealType GraphType::defaultValue() {
   return 0;
 }
 
-void GraphType::write(std::ostream &oss, const RealType &v) {
+void GraphType::write(ostream &oss, const RealType &v) {
   if (v)
     oss << v->getId();
 }
 
-bool GraphType::read(std::istream& iss, RealType& v) {
+bool GraphType::read(istream& iss, RealType& v) {
   unsigned long lv = 0;
   bool ok = iss >> lv;
 
@@ -103,7 +103,7 @@ double DoubleType::defaultValue() {
 }
 
 // add support for inf and -inf
-bool DoubleType::read(std::istream& iss, double& v) {
+bool DoubleType::read(istream& iss, double& v) {
   char c;
   char sign = 0;
 
@@ -124,9 +124,9 @@ bool DoubleType::read(std::istream& iss, double& v) {
       return false;
 
     if (sign == '-')
-      v = -std::numeric_limits<double>::infinity();
+      v = -numeric_limits<double>::infinity();
     else
-      v = std::numeric_limits<double>::infinity();
+      v = numeric_limits<double>::infinity();
 
     return true;
   }
@@ -638,10 +638,132 @@ struct DataSetTypeSerializer :public TypedDataSerializer<DataSet> {
     return DataSet::read(is, ds);
   }
 
-  bool setData(tlp::DataSet&, const std::string&, const std::string&) {
+  bool setData(tlp::DataSet&, const string&, const string&) {
     // no sense
     return false;
   }
+};
+
+// some special serializers
+struct NodeTypeSerializer : public TypedDataSerializer<node> {
+
+  KnownTypeSerializer<UnsignedIntegerType> *uintSerializer;
+
+  NodeTypeSerializer():TypedDataSerializer<node>("node") {
+      uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
+  }
+
+  ~NodeTypeSerializer() {
+      delete uintSerializer;
+  }
+
+  DataTypeSerializer* clone() const {
+    return new NodeTypeSerializer();
+  }
+
+  void write(ostream& os, const node& n) {
+    uintSerializer->write(os, n.id);
+  }
+
+  bool read(istream& is, node& n) {
+    return uintSerializer->read(is, n.id);
+  }
+
+  bool setData(tlp::DataSet&, const string&, const string&) {
+    // no sense
+    return false;
+  }
+};
+
+struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node> >{
+
+  KnownTypeSerializer<UnsignedIntegerVectorType> *uintVecSerializer;
+
+  NodeVectorTypeSerializer():TypedDataSerializer<vector<node> >("nodes") {
+      uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
+  }
+
+  ~NodeVectorTypeSerializer() {
+      delete uintVecSerializer;
+  }
+
+  DataTypeSerializer* clone() const {
+    return new NodeVectorTypeSerializer();
+  }
+
+  void write(ostream& os, const vector<node>& vn) {
+      uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(vn));
+  }
+
+  bool read(istream& is, vector<node>& vn) {
+    return uintVecSerializer->read(is, reinterpret_cast<vector<unsigned int> &>(vn));
+  }
+
+  bool setData(tlp::DataSet&, const string&, const string&) {
+    // no sense
+    return false;
+  }
+};
+
+struct EdgeTypeSerializer : public TypedDataSerializer<edge> {
+
+  KnownTypeSerializer<UnsignedIntegerType> *uintSerializer;
+
+  EdgeTypeSerializer():TypedDataSerializer<edge>("edge") {
+      uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
+  }
+
+  ~EdgeTypeSerializer() {
+      delete uintSerializer;
+  }
+
+  DataTypeSerializer* clone() const {
+    return new EdgeTypeSerializer();
+  }
+
+  void write(ostream& os, const edge& e) {
+    uintSerializer->write(os, e.id);
+  }
+
+  bool read(istream& is, edge& e) {
+    return uintSerializer->read(is, e.id);
+  }
+
+  bool setData(tlp::DataSet&, const string&, const string&) {
+    // no sense
+    return false;
+  }
+};
+
+struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge> >{
+
+  KnownTypeSerializer<UnsignedIntegerVectorType> *uintVecSerializer;
+
+  EdgeVectorTypeSerializer():TypedDataSerializer<vector<edge> >("edges") {
+      uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
+  }
+
+  ~EdgeVectorTypeSerializer() {
+      delete uintVecSerializer;
+  }
+
+  DataTypeSerializer* clone() const {
+    return new EdgeVectorTypeSerializer();
+  }
+
+  void write(ostream& os, const vector<edge>& ve) {
+      uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(ve));
+  }
+
+  bool read(istream& is, vector<edge>& ve) {
+    return uintVecSerializer->read(is, reinterpret_cast<vector<unsigned int> &>(ve));
+  }
+
+  bool setData(tlp::DataSet&, const string&, const string&) {
+    // no sense
+    return false;
+  }
+
 };
 
 void tlp::initTypeSerializers() {
@@ -678,5 +800,13 @@ void tlp::initTypeSerializers() {
   DataSet::registerDataTypeSerializer<StringVectorType::RealType>(KnownTypeSerializer<StringVectorType>("stringvector"));
 
   DataSet::registerDataTypeSerializer<DataSet>(DataSetTypeSerializer());
+
+  DataSet::registerDataTypeSerializer<node>(NodeTypeSerializer());
+
+  DataSet::registerDataTypeSerializer<vector<node> >(NodeVectorTypeSerializer());
+
+  DataSet::registerDataTypeSerializer<edge>(EdgeTypeSerializer());
+
+  DataSet::registerDataTypeSerializer<vector<edge> >(EdgeVectorTypeSerializer());
 
 }

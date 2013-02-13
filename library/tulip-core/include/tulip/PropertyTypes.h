@@ -96,6 +96,7 @@ public:
 };
 
 typedef SerializableVectorType<int,false> IntegerVectorType;
+typedef SerializableVectorType<unsigned int,false> UnsignedIntegerVectorType;
 
 class TLP_SCOPE BooleanType: public TypeInterface<bool> {
 public:
