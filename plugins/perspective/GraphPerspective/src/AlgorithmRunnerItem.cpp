@@ -177,25 +177,49 @@ struct OutPropertyParam {
 };
 
 class AlgorithmPreviewHandler: public ProgressPreviewHandler {
+  Graph* graph;
   const std::vector<OutPropertyParam>& outPropParams;
+  bool inited;
+  std::map<std::string, tlp::PropertyInterface*> outPropsMap;
 public:
-  AlgorithmPreviewHandler(std::vector<OutPropertyParam>& opp):
-    outPropParams(opp) {
+  AlgorithmPreviewHandler(Graph* g, std::vector<OutPropertyParam>& opp):
+    graph(g), outPropParams(opp), inited(false) {
   }
-  void progressStateChanged(int, int) {
-    std::vector<OutPropertyParam>::const_iterator it = outPropParams.begin();
 
-    for (; it != outPropParams.end(); ++it) {
-      it->dest->copy(it->tmp);
+  ~AlgorithmPreviewHandler() {
+    if (!outPropsMap.empty()) {
+      // build outPropsMap with initial properties
+      std::vector<OutPropertyParam>::const_iterator it = outPropParams.begin();
+      for (; it != outPropParams.end(); ++it) {
+	const std::string& outPropName = it->dest->getName();
+	if (it->tmp && !outPropName.empty())
+	  outPropsMap[outPropName] = it->dest;
+      }
+      // restore initial properties
+      Perspective::typedInstance<GraphPerspective>()->setGlMainViewPropertiesForGraph(graph, outPropsMap);
     }
-
-    unsigned int hc = Observable::observersHoldCounter();
-
-    for (unsigned int i=0; i<hc; ++i)
-      Observable::unholdObservers();
-
-    for (unsigned int i=0; i<hc; ++i)
-      Observable::holdObservers();
+  }
+      
+  void progressStateChanged(int, int) {
+    if (!inited) {
+      // build outPropsMap with temporary properties
+      std::vector<OutPropertyParam>::const_iterator it = outPropParams.begin();
+      for (; it != outPropParams.end(); ++it) {
+	const std::string& outPropName = it->dest->getName();
+	if (it->tmp && !outPropName.empty())
+	  outPropsMap[outPropName] = it->tmp;
+      }
+      inited = true;
+      if (!outPropsMap.empty() &&
+	  // set temporary properties as drawing properties
+	  (Perspective::typedInstance<GraphPerspective>()->setGlMainViewPropertiesForGraph(graph, outPropsMap) == false))
+	// clear map if there is nothing to do
+	outPropsMap.clear();
+    }
+    // draw with temporary computed properties
+    if (!outPropsMap.empty()) {
+      Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(graph, true, true);
+    }
   }
 };
 
@@ -267,24 +291,27 @@ void AlgorithmRunnerItem::run(Graph *g) {
   }
 
   g->push();
-  Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(true);
+  //Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(true);
   std::string errorMessage;
   PluginProgress* progress = Perspective::instance()->progress();
   progress->setTitle(algorithm);
 
   // set preview handler if needed
   if (!outPropertyParams.empty())
-    progress->setPreviewHandler(new AlgorithmPreviewHandler(outPropertyParams));
+    progress->setPreviewHandler(new AlgorithmPreviewHandler(g, outPropertyParams));
 
   // take time before run
   QDateTime start = QDateTime::currentDateTime();
   bool result = g->applyAlgorithm(algorithm,errorMessage,&dataSet,progress);
 
+  if (!outPropertyParams.empty())
+    progress->setPreviewHandler(NULL);
+
   // display spent time
   if (TulipSettings::instance().isRunningTimeComputed())
     qDebug() << algoAndParams << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
 
-  Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(false);
+  //Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(false);
 
   if (!result) {
     g->pop();
