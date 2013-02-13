@@ -89,8 +89,9 @@ public slots:
   void showLogger();
 
   virtual void redrawPanels(bool center=false);
-  void centerPanelsForGraph(tlp::Graph*);
+  void centerPanelsForGraph(tlp::Graph*, bool graphChanged = false, bool onlyGlMainView = false);
   void closePanelsForGraph(tlp::Graph* g = NULL);
+  bool setGlMainViewPropertiesForGraph(tlp::Graph* g, const std::map<std::string, tlp::PropertyInterface*>& propsMap);
   void setSearchOutput(bool);
   void setPythonPanel(bool);
   void openPreferences();
