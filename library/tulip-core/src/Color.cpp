@@ -22,6 +22,85 @@
 static void RGBtoHSV(unsigned char r, unsigned char g, unsigned char b, int &h, int &s, int &v);
 static void HSVtoRGB(int h, int s, int v, unsigned char &r, unsigned char &g, unsigned char &b);
 
+const tlp::Color tlp::Color::Amaranth(229, 43, 80);
+const tlp::Color tlp::Color::Amber(255, 191, 0);
+const tlp::Color tlp::Color::Apricot(251, 206, 177);
+const tlp::Color tlp::Color::Aquamarine(127, 255, 212);
+const tlp::Color tlp::Color::Azure(0, 127, 255);
+const tlp::Color tlp::Color::BabyBlue(137, 207, 240);
+const tlp::Color tlp::Color::Beige(245, 245, 220);
+const tlp::Color tlp::Color::Black(0,0,0);
+const tlp::Color tlp::Color::Blue(0,0,255);
+const tlp::Color tlp::Color::BlueGreen(0, 149, 182);
+const tlp::Color tlp::Color::BlueViolet(138, 43, 226);
+const tlp::Color tlp::Color::Blush(222, 93, 131);
+const tlp::Color tlp::Color::Bronze(205, 127, 50);
+const tlp::Color tlp::Color::Brown(150, 75, 0);
+const tlp::Color tlp::Color::Burgundy(128, 0, 32);
+const tlp::Color tlp::Color::Byzantium(112, 41, 99);
+const tlp::Color tlp::Color::Carmine(150, 0, 24);
+const tlp::Color tlp::Color::Cerise(222, 49, 99);
+const tlp::Color tlp::Color::Cerulean(0, 123, 167);
+const tlp::Color tlp::Color::Champagne(247, 231, 206);
+const tlp::Color tlp::Color::ChartreuseGreen(127, 255, 0);
+const tlp::Color tlp::Color::Chocolate(123, 63, 0);
+const tlp::Color tlp::Color::Coffee(111, 78, 55);
+const tlp::Color tlp::Color::Copper(184, 115, 51);
+const tlp::Color tlp::Color::Coral(248, 131, 121);
+const tlp::Color tlp::Color::Crimson(220, 20, 60);
+const tlp::Color tlp::Color::Cyan(0, 255, 255);
+const tlp::Color tlp::Color::DesertSand(237, 201, 175);
+const tlp::Color tlp::Color::ElectricBlue(125, 249, 255);
+const tlp::Color tlp::Color::Erin(0, 255, 63);
+const tlp::Color tlp::Color::Gold(255, 215, 0);
+const tlp::Color tlp::Color::Gray(128, 128, 128);
+const tlp::Color tlp::Color::Green(0, 255, 0);
+const tlp::Color tlp::Color::Harlequin(63, 255, 0);
+const tlp::Color tlp::Color::Indigo(75, 0, 130);
+const tlp::Color tlp::Color::Ivory(255, 255, 240);
+const tlp::Color tlp::Color::Jade(0, 168, 107);
+const tlp::Color tlp::Color::JungleGreen(41, 171, 135);
+const tlp::Color tlp::Color::Lavender(181, 126, 220);
+const tlp::Color tlp::Color::Lemon(255, 247, 0);
+const tlp::Color tlp::Color::Lilac(200, 162, 200);
+const tlp::Color tlp::Color::Lime(191, 255, 0);
+const tlp::Color tlp::Color::Magenta(255, 0, 255);
+const tlp::Color tlp::Color::MagentaRose(255, 0, 175);
+const tlp::Color tlp::Color::Maroon(128, 0, 0);
+const tlp::Color tlp::Color::Mauve(224, 176, 255);
+const tlp::Color tlp::Color::NavyBlue(0, 0, 128);
+const tlp::Color tlp::Color::Olive(128, 128, 0);
+const tlp::Color tlp::Color::Orange(255, 165, 0);
+const tlp::Color tlp::Color::OrangeRed(255, 69, 0);
+const tlp::Color tlp::Color::Orchid(218, 112, 214);
+const tlp::Color tlp::Color::Peach(255, 229, 180);
+const tlp::Color tlp::Color::Pear(209, 226, 49);
+const tlp::Color tlp::Color::Periwinkle(204, 204, 255);
+const tlp::Color tlp::Color::PersianBlue(28, 57, 187);
+const tlp::Color tlp::Color::Pink(255, 192, 203);
+const tlp::Color tlp::Color::Plum(142, 69, 133);
+const tlp::Color tlp::Color::PrussianBlue(0, 49, 83);
+const tlp::Color tlp::Color::Puce(204, 136, 153);
+const tlp::Color tlp::Color::Purple(128, 0, 128);
+const tlp::Color tlp::Color::Raspberry(227, 11, 92);
+const tlp::Color tlp::Color::Red(255, 0, 0);
+const tlp::Color tlp::Color::RedViolet(199, 21, 133);
+const tlp::Color tlp::Color::Rose(255, 0, 127);
+const tlp::Color tlp::Color::Salmon(250, 128, 114);
+const tlp::Color tlp::Color::Sapphire(15, 82, 186);
+const tlp::Color tlp::Color::Scarlet(255, 36, 0);
+const tlp::Color tlp::Color::Silver(192, 192, 192);
+const tlp::Color tlp::Color::SlateGray(112, 128, 144);
+const tlp::Color tlp::Color::SpringBud(167, 252, 0);
+const tlp::Color tlp::Color::SpringGreen(0, 255, 127);
+const tlp::Color tlp::Color::Tan(210, 180, 140);
+const tlp::Color tlp::Color::Taupe(72, 60, 50);
+const tlp::Color tlp::Color::Teal(0, 128, 128);
+const tlp::Color tlp::Color::Turquoise(64, 224, 208);
+const tlp::Color tlp::Color::Violet(238, 130, 238);
+const tlp::Color tlp::Color::Viridian(64, 130, 109);
+const tlp::Color tlp::Color::White(255, 255, 255);
+const tlp::Color tlp::Color::Yellow(255, 255, 0);
 
 //=================================================================
 /*
@@ -85,6 +164,8 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
   return is;
 }
 //=================================================================
+
+
 
 long tlp::Color::getTrueColor() {
   long ret=0;
