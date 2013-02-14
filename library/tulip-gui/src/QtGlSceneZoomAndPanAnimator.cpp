@@ -20,12 +20,13 @@
 #include <QtGui/QApplication>
 #include <QtCore/QTimeLine>
 
-#include "tulip/QtGlSceneZoomAndPanAnimator.h"
+#include <tulip/QtGlSceneZoomAndPanAnimator.h>
+#include <tulip/GlMainWidget.h>
 
 namespace tlp {
 
-QtGlSceneZoomAndPanAnimator::QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const std::string &layerName, const bool optimalPath, const double velocity, const double p) :
-  GlSceneZoomAndPan(glWidget->getScene(), boundingBox, layerName, 0, optimalPath, p), glWidget(glWidget), animationDurationMsec(1000) {
+QtGlSceneZoomAndPanAnimator::QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const double duration, const std::string &layerName, const bool optimalPath, const double velocity, const double p) :
+  GlSceneZoomAndPan(glWidget->getScene(), boundingBox, layerName, 0, optimalPath, p), glWidget(glWidget), animationDurationMsec(duration) {
   if (doZoomAndPan) {
     animationDurationMsec *= S/velocity;
   }
@@ -46,6 +47,8 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
     }
   }
 }
+
+
 
 void QtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(int animationStep) {
   zoomAndPanAnimationStep(animationStep);
