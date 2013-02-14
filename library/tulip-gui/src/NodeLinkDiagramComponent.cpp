@@ -143,6 +143,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
   loadGraphOnScene(graph);
   registerTriggers();
+  centerView();
   emit drawNeeded();
 }
 
@@ -412,7 +413,8 @@ void NodeLinkDiagramComponent::goInsideItem() {
   bb.expand(coord+size/2.f);
   QtGlSceneZoomAndPanAnimator zoomAnPan(getGlMainWidget(), bb);
   zoomAnPan.animateZoomAndPan();
-  this->loadGraphOnScene(metaGraph);
+  loadGraphOnScene(metaGraph);
+  registerTriggers();
   emit graphSet(metaGraph);
   centerView();
   draw();
