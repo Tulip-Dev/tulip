@@ -24,6 +24,8 @@
 #include <QtGui/QPainter>
 #include <QtGui/QStyleOptionViewItem>
 
+#include <iostream>
+
 class TreeViewDelegate: public QStyledItemDelegate {
 public:
   TreeViewDelegate(QObject* parent = 0): QStyledItemDelegate(parent) {
@@ -83,7 +85,7 @@ void TreeViewComboBox::itemExpanded() {
 }
 
 QModelIndex TreeViewComboBox::selectedIndex() const {
-  QModelIndex current = model()->index(currentIndex(),0,rootModelIndex());
+  QModelIndex current = view()->currentIndex();
   QModelIndex selected = view()->selectionModel()->currentIndex();
 
   if (!selected.isValid())
