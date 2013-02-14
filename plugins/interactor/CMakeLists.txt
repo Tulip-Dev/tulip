@@ -17,19 +17,12 @@ ADD_LIBRARY(InteractorSelectionModifier-${TulipVersion} SHARED InteractorSelecti
 TARGET_LINK_LIBRARIES(InteractorSelectionModifier-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_SUBDIRECTORY(MagicWand)
-
-##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(InteractorRectangleZoom-${TulipVersion} SHARED InteractorRectangleZoom.cpp)
 TARGET_LINK_LIBRARIES(InteractorRectangleZoom-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorAddNode-${TulipVersion} SHARED InteractorAddNode.cpp)
-TARGET_LINK_LIBRARIES(InteractorAddNode-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
-
-##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(InteractorAddEdge-${TulipVersion} SHARED InteractorAddEdge.cpp)
-TARGET_LINK_LIBRARIES(InteractorAddEdge-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
+ADD_LIBRARY(InteractorAddNodeEdge-${TulipVersion} SHARED InteractorAddEdge.cpp)
+TARGET_LINK_LIBRARIES(InteractorAddNodeEdge-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(InteractorEditEdgeBends-${TulipVersion} SHARED InteractorEditEdgeBends.cpp)
@@ -45,7 +38,6 @@ INSTALL(TARGETS InteractorGetInformation-${TulipVersion} DESTINATION ${TulipInte
 INSTALL(TARGETS InteractorSelection-${TulipVersion} DESTINATION ${TulipInteractorPluginsInstallDir} COMPONENT InteractorSelection)
 INSTALL(TARGETS InteractorSelectionModifier-${TulipVersion} DESTINATION ${TulipInteractorPluginsInstallDir} COMPONENT InteractorSelectionModifier)
 INSTALL(TARGETS InteractorRectangleZoom-${TulipVersion} DESTINATION ${TulipInteractorPluginsInstallDir} COMPONENT InteractorRectangleZoom)
-INSTALL(TARGETS InteractorAddNode-${TulipVersion} DESTINATION ${TulipInteractorPluginsInstallDir} COMPONENT InteractorAddNode)
-INSTALL(TARGETS InteractorAddEdge-${TulipVersion} DESTINATION ${TulipInteractorPluginsInstallDir} COMPONENT InteractorAddEdge)
+INSTALL(TARGETS InteractorAddNodeEdge-${TulipVersion} DESTINATION ${TulipInteractorPluginsInstallDir} COMPONENT InteractorAddNodeEdge)
 INSTALL(TARGETS InteractorEditEdgeBends-${TulipVersion} DESTINATION ${TulipInteractorPluginsInstallDir} COMPONENT InteractorEditEdgeBends)
 INSTALL(TARGETS InteractorDeleteElement-${TulipVersion} DESTINATION ${TulipInteractorPluginsInstallDir} COMPONENT InteractorDeleteElement)
