@@ -17,18 +17,16 @@
  *
  */
 ///@cond DOXYGEN_HIDDEN
-
-
 #ifndef QTGLSCENEZOOMANDPANANIMATOR_H_
 #define QTGLSCENEZOOMANDPANANIMATOR_H_
 
 #include <QtCore/QObject>
 
-#include <tulip/GlMainWidget.h>
-
-#include "tulip/GlSceneZoomAndPan.h"
+#include <tulip/GlSceneZoomAndPan.h>
 
 namespace tlp {
+
+class GlMainWidget;
 
 /**
  * \brief A convenient class to perform a Zoom and Pan animation on a GlMainWidget
@@ -54,7 +52,7 @@ public :
    * \param velocity animation speed parameter, adjust it according to your needs
    * \param p zoom/pan trade-off parameter, adjust it according to your needs
    */
-  QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const std::string &layerName = "Main", const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6));
+  QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const double duration=1000., const std::string &layerName = "Main", const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6));
 
   /**
    * Method to call to start the Zoom and Pan animation
