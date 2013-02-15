@@ -47,10 +47,10 @@ typedef Vector<int, 2> Vec2i;
 }
 
 typedef struct {
-	tlp::Graph *cc; // the connected component associated to that polyomino
-    int perim; // the perimeter value of the polyomino
-    std::vector<tlp::Vec2i> cells; // the cells of the grid representing the polyomino
-    tlp::BoundingBox ccBB; // the bounding box of the connected component
+  tlp::Graph *cc; // the connected component associated to that polyomino
+  int perim; // the perimeter value of the polyomino
+  std::vector<tlp::Vec2i> cells; // the cells of the grid representing the polyomino
+  tlp::BoundingBox ccBB; // the bounding box of the connected component
 } Polyomino;
 
 class PolyominoPacking : public tlp::LayoutAlgorithm {
@@ -59,36 +59,36 @@ public :
   PLUGININFORMATIONS("Connected Component Packing (Polyomino)", "Antoine LAMBERT", "05/05/11", "A connected component packing layout algorithm", "1.0", "Misc")
   PolyominoPacking(const tlp::PluginContext* context);
 
-	~PolyominoPacking();
+  ~PolyominoPacking();
 
-	bool run();
+  bool run();
 
 private :
 
-	int computeGridStep();
-	void genPolyomino(Polyomino &poly);
-	void fillEdge(tlp::edge e, tlp::Vec2i p, std::vector<tlp::Vec2i> &cells, int dx, int dy);
-	void fillLine(const tlp::Coord &p, const tlp::Coord &q, std::vector<tlp::Vec2i> &cells);
-    bool polyominoFits(Polyomino& info, int x, int y);
-	void placePolyomino(int i, Polyomino &info);
+  int computeGridStep();
+  void genPolyomino(Polyomino &poly);
+  void fillEdge(tlp::edge e, tlp::Vec2i p, std::vector<tlp::Vec2i> &cells, int dx, int dy);
+  void fillLine(const tlp::Coord &p, const tlp::Coord &q, std::vector<tlp::Vec2i> &cells);
+  bool polyominoFits(Polyomino& info, int x, int y);
+  void placePolyomino(int i, Polyomino &info);
 
-	unsigned int margin;
-    unsigned int bndIncrement;
+  unsigned int margin;
+  unsigned int bndIncrement;
 
-	std::vector<Polyomino> polyominos;
-	std::vector<tlp::BoundingBox> ccBBs;
+  std::vector<Polyomino> polyominos;
+  std::vector<tlp::BoundingBox> ccBBs;
 
-	int gridStepSize;
+  int gridStepSize;
 
-    float width;
-    float gridCenter;
-    std::vector<bool> pointSet;
-	std::map<tlp::Graph*, tlp::Vec2i> newPlaces;
+  float width;
+  float gridCenter;
+  std::vector<bool> pointSet;
+  std::map<tlp::Graph*, tlp::Vec2i> newPlaces;
 
-	tlp::LayoutProperty *viewLayout;
-	tlp::SizeProperty *viewSize;
-	tlp::DoubleProperty *viewRotation;
-	tlp::IntegerProperty *viewShape;
+  tlp::LayoutProperty *viewLayout;
+  tlp::SizeProperty *viewSize;
+  tlp::DoubleProperty *viewRotation;
+  tlp::IntegerProperty *viewShape;
 };
 
 #define C 100
@@ -97,11 +97,11 @@ class polyPerimOrdering : public binary_function<Polyomino, Polyomino, bool> {
 
 public :
 
-	polyPerimOrdering() {}
+  polyPerimOrdering() {}
 
-	bool operator()(Polyomino ci1, Polyomino ci2) const {
-		return ci1.perim > ci2.perim;
-	}
+  bool operator()(Polyomino ci1, Polyomino ci2) const {
+    return ci1.perim > ci2.perim;
+  }
 
 };
 
@@ -110,13 +110,13 @@ PLUGIN(PolyominoPacking)
 PolyominoPacking::PolyominoPacking( const PluginContext* context ) : LayoutAlgorithm(context) {
   addInParameter<unsigned int>("margin", "", "1");
   addInParameter<unsigned int>("increment", HTML_HELP_OPEN()                            \
-          HTML_HELP_DEF( "type", "unsigned int" )               \
-          HTML_HELP_DEF( "value", "the increment of the square's side" )                 \
-          HTML_HELP_BODY()                            \
-          "The polyomino packing tries to find a place where the next polyomino will fit by following a square."
-          "If there is not place where the polyomino fits, the square gets bigger and every place gets tried again."\
-          HTML_HELP_CLOSE(),
-          "1");
+                               HTML_HELP_DEF( "type", "unsigned int" )               \
+                               HTML_HELP_DEF( "value", "the increment of the square's side" )                 \
+                               HTML_HELP_BODY()                            \
+                               "The polyomino packing tries to find a place where the next polyomino will fit by following a square."
+                               "If there is not place where the polyomino fits, the square gets bigger and every place gets tried again."\
+                               HTML_HELP_CLOSE(),
+                               "1");
 }
 
 PolyominoPacking::~PolyominoPacking() {
@@ -125,395 +125,432 @@ PolyominoPacking::~PolyominoPacking() {
 
 bool PolyominoPacking::run() {
 
-	margin = 1;
-    bndIncrement = 1;
-    if(dataSet != NULL){
-        dataSet->get("margin", margin);
-        dataSet->get("increment", bndIncrement);
+  margin = 1;
+  bndIncrement = 1;
+
+  if(dataSet != NULL) {
+    dataSet->get("margin", margin);
+    dataSet->get("increment", bndIncrement);
+  }
+
+  viewLayout = graph->getProperty<LayoutProperty>("viewLayout");
+  viewSize = graph->getProperty<SizeProperty>("viewSize");
+  viewRotation = graph->getProperty<DoubleProperty>("viewRotation");
+  viewShape = graph->getProperty<IntegerProperty>("viewShape");
+
+  vector< set<node> > connectedComponents;
+  tlp::ConnectedTest::computeConnectedComponents(graph, connectedComponents);
+
+  vector<Graph *> connectedComponentsSgs;
+
+  for (size_t i = 0 ; i < connectedComponents.size() ; ++i) {
+    connectedComponentsSgs.push_back(graph->inducedSubGraph(connectedComponents[i]));
+  }
+
+  if (connectedComponentsSgs.size() <= 1)
+    return true;
+
+  polyominos.reserve(connectedComponentsSgs.size());
+
+  for (size_t i = 0; i < connectedComponentsSgs.size() ; ++i) {
+    Graph *cc = connectedComponentsSgs[i];
+    BoundingBox ccBB = tlp::computeBoundingBox(cc, viewLayout, viewSize, viewRotation);
+    Polyomino info;
+    info.cc = cc;
+    info.ccBB = ccBB;
+    polyominos.push_back(info);
+  }
+
+  gridStepSize = computeGridStep();
+
+  if (gridStepSize <= 0)
+    return true;
+
+  for (size_t i = 0; i < polyominos.size() ; ++i) {
+    genPolyomino(polyominos[i]);
+  }
+
+  float maxW = 0;
+  float maxH = 0;
+  gridCenter = 0;
+
+  for(size_t i = 0; i < polyominos.size(); ++i) {
+    maxW += polyominos[i].ccBB.width();
+    maxH += polyominos[i].ccBB.height();
+  }
+
+  width = std::max(maxW, maxH);
+  gridCenter = width;
+  width *= 2;
+
+  pointSet = std::vector<bool>(pow(width, 2.f), false);
+
+  std::sort(polyominos.begin(), polyominos.end(), polyPerimOrdering());
+
+  for (size_t i = 0 ; i < polyominos.size() ; ++i) {
+    placePolyomino(i, polyominos[i]);
+  }
+
+  for (size_t i = 0 ; i < polyominos.size() ; ++i) {
+    Coord move = Coord(newPlaces[polyominos[i].cc][0], newPlaces[polyominos[i].cc][1]);
+    node n;
+    forEach(n, (polyominos[i].cc)->getNodes()) {
+      result->setNodeValue(n, viewLayout->getNodeValue(n) + move);
     }
+    edge e;
+    forEach(e, (polyominos[i].cc)->getEdges()) {
+      vector<Coord> bends = viewLayout->getEdgeValue(e);
 
-	viewLayout = graph->getProperty<LayoutProperty>("viewLayout");
-	viewSize = graph->getProperty<SizeProperty>("viewSize");
-	viewRotation = graph->getProperty<DoubleProperty>("viewRotation");
-	viewShape = graph->getProperty<IntegerProperty>("viewShape");
+      for (size_t j = 0 ; j < bends.size() ; ++j) {
+        bends[j] += move;
+      }
 
-	vector< set<node> > connectedComponents;
-	tlp::ConnectedTest::computeConnectedComponents(graph, connectedComponents);
-
-	vector<Graph *> connectedComponentsSgs;
-	for (size_t i = 0 ; i < connectedComponents.size() ; ++i) {
-		connectedComponentsSgs.push_back(graph->inducedSubGraph(connectedComponents[i]));
-	}
-
-	if (connectedComponentsSgs.size() <= 1)
-		return true;
-
-    polyominos.reserve(connectedComponentsSgs.size());
-	for (size_t i = 0; i < connectedComponentsSgs.size() ; ++i) {
-		Graph *cc = connectedComponentsSgs[i];
-		BoundingBox ccBB = tlp::computeBoundingBox(cc, viewLayout, viewSize, viewRotation);
-		Polyomino info;
-		info.cc = cc;
-		info.ccBB = ccBB;
-		polyominos.push_back(info);
-	}
-
-	gridStepSize = computeGridStep();
-
-	if (gridStepSize <= 0)
-		return true;
-
-	for (size_t i = 0; i < polyominos.size() ; ++i) {
-		genPolyomino(polyominos[i]);
-	}
-
-    float maxW = 0;
-    float maxH = 0;
-    gridCenter = 0;
-	for(size_t i = 0; i < polyominos.size(); ++i) {
-      maxW += polyominos[i].ccBB.width();
-      maxH += polyominos[i].ccBB.height();
+      result->setEdgeValue(e, bends);
     }
-    width = std::max(maxW, maxH);
-    gridCenter = width;
-    width *= 2;
+    graph->delSubGraph(polyominos[i].cc);
+  }
 
-    pointSet = std::vector<bool>(pow(width, 2.f), false);
-
-	std::sort(polyominos.begin(), polyominos.end(), polyPerimOrdering());
-
-	for (size_t i = 0 ; i < polyominos.size() ; ++i) {
-		placePolyomino(i, polyominos[i]);
-	}
-
-	for (size_t i = 0 ; i < polyominos.size() ; ++i) {
-		Coord move = Coord(newPlaces[polyominos[i].cc][0], newPlaces[polyominos[i].cc][1]);
-		node n;
-		forEach(n, (polyominos[i].cc)->getNodes()) {
-          result->setNodeValue(n, viewLayout->getNodeValue(n) + move);
-		}
-		edge e;
-		forEach(e, (polyominos[i].cc)->getEdges()) {
-			vector<Coord> bends = viewLayout->getEdgeValue(e);
-			for (size_t j = 0 ; j < bends.size() ; ++j) {
-				bends[j] += move;
-			}
-            result->setEdgeValue(e, bends);
-		}
-		graph->delSubGraph(polyominos[i].cc);
-	}
-
-	return true;
+  return true;
 }
 
 int PolyominoPacking::computeGridStep() {
 
-	double W = 0.0, H = 0.0;
+  double W = 0.0, H = 0.0;
 
-	double a = C * polyominos.size() - 1.0;
-	double b = 0.0;
-	double c = 0.0;
+  double a = C * polyominos.size() - 1.0;
+  double b = 0.0;
+  double c = 0.0;
 
-	for (size_t i = 0; i < polyominos.size() ; ++i) {
-		const BoundingBox &ccBB = polyominos[i].ccBB;
-		W = ccBB[1][0] - ccBB[0][0] + 2 * margin;
-		H = ccBB[1][1] - ccBB[0][1] + 2 * margin;
-		b -= (W + H);
-		c -= (W * H);
-	}
+  for (size_t i = 0; i < polyominos.size() ; ++i) {
+    const BoundingBox &ccBB = polyominos[i].ccBB;
+    W = ccBB[1][0] - ccBB[0][0] + 2 * margin;
+    H = ccBB[1][1] - ccBB[0][1] + 2 * margin;
+    b -= (W + H);
+    c -= (W * H);
+  }
 
-	double d = b * b - 4.0 * a * c;
-	if (d < 0) {
-		return -1;
-	}
+  double d = b * b - 4.0 * a * c;
 
-	double r = sqrt(d);
-	double l1 = (-b + r) / (2 * a);
-	int root = static_cast<int>(l1);
-	if (root == 0) root = 1;
+  if (d < 0) {
+    return -1;
+  }
 
-	return root;
+  double r = sqrt(d);
+  double l1 = (-b + r) / (2 * a);
+  int root = static_cast<int>(l1);
+
+  if (root == 0) root = 1;
+
+  return root;
 }
 
 static int grid(float x, int s) {
-	return static_cast<int>(ceil(x/s));
+  return static_cast<int>(ceil(x/s));
 }
 
 static int round(float f) {
-	if(f>=0) {
-		return static_cast<int>(f + 0.5f);
-	} else {
-		return static_cast<int>(f - 0.5f);
-	}
+  if(f>=0) {
+    return static_cast<int>(f + 0.5f);
+  }
+  else {
+    return static_cast<int>(f - 0.5f);
+  }
 }
 
 template <typename T>
 static T cval(T val, int size) {
-	if (val >= 0) {
-		return (val / size);
-	} else {
-		return (((val+1)/size)-1);
-	}
+  if (val >= 0) {
+    return (val / size);
+  }
+  else {
+    return (((val+1)/size)-1);
+  }
 }
 
 template <typename T>
 static T cell(const T &p, int gridStep) {
-	T ret;
-	ret[0] = cval(p[0], gridStep);
-	ret[1] = cval(p[1], gridStep);
-	return ret;
+  T ret;
+  ret[0] = cval(p[0], gridStep);
+  ret[1] = cval(p[1], gridStep);
+  return ret;
 }
 
 static Vec2i vec3fToVec2i(const Vec3f &c) {
-	Vec2i ret;
-	ret[0] = round(c[0]);
-	ret[1] = round(c[1]);
-	return ret;
+  Vec2i ret;
+  ret[0] = round(c[0]);
+  ret[1] = round(c[1]);
+  return ret;
 }
 
 void PolyominoPacking::genPolyomino(Polyomino &poly) {
 
-	const BoundingBox &ccBB = poly.ccBB;
+  const BoundingBox &ccBB = poly.ccBB;
 
-	int dx = - round(ccBB[0][0]);
-	int dy = - round(ccBB[0][1]);
+  int dx = - round(ccBB[0][0]);
+  int dy = - round(ccBB[0][1]);
 
-	node n;
-	forEach(n, (poly.cc)->getNodes()) {
-		const Coord &nodeCoord = viewLayout->getNodeValue(n);
-		const Size &nodeSize = viewSize->getNodeValue(n);
-		Vec2i point = vec3fToVec2i(nodeCoord);
-		point[0] += dx;
-		point[1] += dy;
-		Vec2i s2;
-		s2[0] = margin + nodeSize[0] / 2;
-		s2[1] = margin + nodeSize[1] / 2;
-		Vec2i LL = point - s2;
-		Vec2i UR = point + s2;
-		LL = cell(LL, gridStepSize);
-		UR = cell(UR, gridStepSize);
+  node n;
+  forEach(n, (poly.cc)->getNodes()) {
+    const Coord &nodeCoord = viewLayout->getNodeValue(n);
+    const Size &nodeSize = viewSize->getNodeValue(n);
+    Vec2i point = vec3fToVec2i(nodeCoord);
+    point[0] += dx;
+    point[1] += dy;
+    Vec2i s2;
+    s2[0] = margin + nodeSize[0] / 2;
+    s2[1] = margin + nodeSize[1] / 2;
+    Vec2i LL = point - s2;
+    Vec2i UR = point + s2;
+    LL = cell(LL, gridStepSize);
+    UR = cell(UR, gridStepSize);
 
-		for (int x = LL[0] ; x <= UR[0] ; ++x) {
-			for (int y = LL[1]; y <= UR[1] ; ++y) {
-				Vec2i cellCoord;
-				cellCoord[0] = x;
-				cellCoord[1] = y;
-				poly.cells.push_back(cellCoord);
-			}
-		}
+    for (int x = LL[0] ; x <= UR[0] ; ++x) {
+      for (int y = LL[1]; y <= UR[1] ; ++y) {
+        Vec2i cellCoord;
+        cellCoord[0] = x;
+        cellCoord[1] = y;
+        poly.cells.push_back(cellCoord);
+      }
+    }
 
-		point = cell(point, gridStepSize);
-		edge e;
-		forEach(e, (poly.cc)->getOutEdges(n)) {
-			fillEdge(e, point, poly.cells, dx, dy);
-		}
-	}
+    point = cell(point, gridStepSize);
+    edge e;
+    forEach(e, (poly.cc)->getOutEdges(n)) {
+      fillEdge(e, point, poly.cells, dx, dy);
+    }
+  }
 
-	int W = grid(ccBB[1][0] - ccBB[0][0] + 2 * margin, gridStepSize);
-	int H = grid(ccBB[1][1] - ccBB[0][1] + 2 * margin, gridStepSize);
-	poly.perim = W + H;
+  int W = grid(ccBB[1][0] - ccBB[0][0] + 2 * margin, gridStepSize);
+  int H = grid(ccBB[1][1] - ccBB[0][1] + 2 * margin, gridStepSize);
+  poly.perim = W + H;
 }
 
 void PolyominoPacking::fillEdge(edge e, Vec2i p, std::vector<Vec2i> &cells, int dx, int dy) {
 
-	Coord pf(p[0], p[1]);
+  Coord pf(p[0], p[1]);
 
-	node src = graph->source(e);
-	node tgt = graph->target(e);
-	const Coord &srcCoord = viewLayout->getNodeValue(src);
-	Coord tgtCoord = viewLayout->getNodeValue(tgt);
-	std::vector<Coord> bends = viewLayout->getEdgeValue(e);
+  node src = graph->source(e);
+  node tgt = graph->target(e);
+  const Coord &srcCoord = viewLayout->getNodeValue(src);
+  Coord tgtCoord = viewLayout->getNodeValue(tgt);
+  std::vector<Coord> bends = viewLayout->getEdgeValue(e);
 
-	if (bends.empty()) {
-		tgtCoord += Coord(dx, dy);
-		tgtCoord = cell(tgtCoord, gridStepSize);
-		fillLine(pf, tgtCoord, cells);
-		return;
-	}
+  if (bends.empty()) {
+    tgtCoord += Coord(dx, dy);
+    tgtCoord = cell(tgtCoord, gridStepSize);
+    fillLine(pf, tgtCoord, cells);
+    return;
+  }
 
-	if (viewShape->getEdgeValue(e) == BEZIERSHAPE) {
-		vector<Coord> controlPoints;
-		controlPoints.push_back(srcCoord);
-		controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
-		controlPoints.push_back(tgtCoord);
-		bends.clear();
-		computeBezierPoints(controlPoints, bends, 20);
-		bends.erase(bends.begin());
-		bends.pop_back();
-	} else if (viewShape->getEdgeValue(e) == CUBICBSPLINE) {
-		vector<Coord> controlPoints;
-		controlPoints.push_back(srcCoord);
-		controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
-		controlPoints.push_back(tgtCoord);
-		bends.clear();
-		computeOpenUniformBsplinePoints(controlPoints, bends, 3, 20);
-		bends.erase(bends.begin());
-		bends.pop_back();
-	} else if (viewShape->getEdgeValue(e) == SPLINESHAPE) {
-		vector<Coord> controlPoints;
-		controlPoints.push_back(srcCoord);
-		controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
-		controlPoints.push_back(tgtCoord);
-		bends.clear();
-		computeCatmullRomPoints(controlPoints, bends, false, 20);
-		bends.erase(bends.begin());
-		bends.pop_back();
-	}
+  if (viewShape->getEdgeValue(e) == BEZIERSHAPE) {
+    vector<Coord> controlPoints;
+    controlPoints.push_back(srcCoord);
+    controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
+    controlPoints.push_back(tgtCoord);
+    bends.clear();
+    computeBezierPoints(controlPoints, bends, 20);
+    bends.erase(bends.begin());
+    bends.pop_back();
+  }
+  else if (viewShape->getEdgeValue(e) == CUBICBSPLINE) {
+    vector<Coord> controlPoints;
+    controlPoints.push_back(srcCoord);
+    controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
+    controlPoints.push_back(tgtCoord);
+    bends.clear();
+    computeOpenUniformBsplinePoints(controlPoints, bends, 3, 20);
+    bends.erase(bends.begin());
+    bends.pop_back();
+  }
+  else if (viewShape->getEdgeValue(e) == SPLINESHAPE) {
+    vector<Coord> controlPoints;
+    controlPoints.push_back(srcCoord);
+    controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
+    controlPoints.push_back(tgtCoord);
+    bends.clear();
+    computeCatmullRomPoints(controlPoints, bends, false, 20);
+    bends.erase(bends.begin());
+    bends.pop_back();
+  }
 
-	Coord curSrc = pf;
+  Coord curSrc = pf;
 
-	for (size_t i = 0; i < bends.size(); ++i) {
-		bends[i] += Coord(dx, dy);
-		bends[i] = cell(bends[i], gridStepSize);
-		fillLine(curSrc, bends[i], cells);
-		curSrc = bends[i];
-	}
+  for (size_t i = 0; i < bends.size(); ++i) {
+    bends[i] += Coord(dx, dy);
+    bends[i] = cell(bends[i], gridStepSize);
+    fillLine(curSrc, bends[i], cells);
+    curSrc = bends[i];
+  }
 
-	tgtCoord += Coord(dx, dy);
-	tgtCoord = cell(tgtCoord, gridStepSize);
-	fillLine(curSrc, tgtCoord, cells);
+  tgtCoord += Coord(dx, dy);
+  tgtCoord = cell(tgtCoord, gridStepSize);
+  fillLine(curSrc, tgtCoord, cells);
 }
 
 void PolyominoPacking::fillLine(const Coord &p, const Coord &q, std::vector<Vec2i> &cells) {
-	int x1 = round(p[0]);
-	int y1 = round(p[1]);
-	int x2 = round(q[0]);
-	int y2 = round(q[1]);
+  int x1 = round(p[0]);
+  int y1 = round(p[1]);
+  int x2 = round(q[0]);
+  int y2 = round(q[1]);
 
-	int dx = x2 - x1;
-	int ax = abs(dx) << 1;
-	int sx = dx < 0 ? -1 : 1;
-	int dy = y2 - y1;
-	int ay = abs(dy) << 1;
-	int sy = dy < 0 ? -1 : 1;
+  int dx = x2 - x1;
+  int ax = abs(dx) << 1;
+  int sx = dx < 0 ? -1 : 1;
+  int dy = y2 - y1;
+  int ay = abs(dy) << 1;
+  int sy = dy < 0 ? -1 : 1;
 
-	int x = x1;
-	int y = y1;
-	if (ax > ay) {
-		int d = ay - (ax >> 1);
-		while (true) {
-			Vec2i cell;
-			cell[0] = x;
-			cell[1] = y;
-			cells.push_back(cell);
-			if (x == x2)
-				return;
-			if (d >= 0) {
-				y += sy;
-				d -= ax;
-			}
-			x += sx;
-			d += ay;
-		}
-	} else {
-		int d = ax - (ay >> 1);
-		while (true) {
-			Vec2i cell;
-			cell[0] = x;
-			cell[1] = y;
-			cells.push_back(cell);
-			if (y == y2)
-				return;
-			if (d >= 0) {
-				x += sx;
-				d -= ay;
-			}
-			y += sy;
-			d += ax;
-		}
-	}
+  int x = x1;
+  int y = y1;
+
+  if (ax > ay) {
+    int d = ay - (ax >> 1);
+
+    while (true) {
+      Vec2i cell;
+      cell[0] = x;
+      cell[1] = y;
+      cells.push_back(cell);
+
+      if (x == x2)
+        return;
+
+      if (d >= 0) {
+        y += sy;
+        d -= ax;
+      }
+
+      x += sx;
+      d += ay;
+    }
+  }
+  else {
+    int d = ax - (ay >> 1);
+
+    while (true) {
+      Vec2i cell;
+      cell[0] = x;
+      cell[1] = y;
+      cells.push_back(cell);
+
+      if (y == y2)
+        return;
+
+      if (d >= 0) {
+        x += sx;
+        d -= ay;
+      }
+
+      y += sy;
+      d += ax;
+    }
+  }
 }
 
 bool PolyominoPacking::polyominoFits(Polyomino& poly, int x, int y) {
-    std::vector<Vec2i> &cells = poly.cells;
-	for (size_t i = 0; i < cells.size() ; ++i) {
-		Vec2i cell = cells[i];
-		cell[0] += x;
-		cell[1] += y;
+  std::vector<Vec2i> &cells = poly.cells;
 
-        assert(cell[0]+gridCenter +  width * (cell[1] +gridCenter) > 0);
-        assert(cell[0]+gridCenter +  width * (cell[1] +gridCenter) < pointSet.size());
+  for (size_t i = 0; i < cells.size() ; ++i) {
+    Vec2i cell = cells[i];
+    cell[0] += x;
+    cell[1] += y;
 
-        if (pointSet[cell[0]+gridCenter +  width * (cell[1] +gridCenter)])
-			return false;
-	}
+    assert(cell[0]+gridCenter +  width * (cell[1] +gridCenter) > 0);
+    assert(cell[0]+gridCenter +  width * (cell[1] +gridCenter) < pointSet.size());
 
-	const BoundingBox &ccBB = poly.ccBB;
-    
-    Vec2i LL = vec3fToVec2i(ccBB[0]);
-    Vec2i place;
-    place[0] = gridStepSize * x - LL[0];
-    place[1] = gridStepSize * y - LL[1];
-    
-    newPlaces[poly.cc] = place;
-    
-    for (size_t i = 0; i < cells.size() ; ++i) {
-      Vec2i cell = cells[i];
-      cell[0] += x;
-      cell[1] += y;
-      pointSet[cell[0]+gridCenter +  width * (cell[1] +gridCenter)] = true;
-    }
-	return true;
+    if (pointSet[cell[0]+gridCenter +  width * (cell[1] +gridCenter)])
+      return false;
+  }
+
+  const BoundingBox &ccBB = poly.ccBB;
+
+  Vec2i LL = vec3fToVec2i(ccBB[0]);
+  Vec2i place;
+  place[0] = gridStepSize * x - LL[0];
+  place[1] = gridStepSize * y - LL[1];
+
+  newPlaces[poly.cc] = place;
+
+  for (size_t i = 0; i < cells.size() ; ++i) {
+    Vec2i cell = cells[i];
+    cell[0] += x;
+    cell[1] += y;
+    pointSet[cell[0]+gridCenter +  width * (cell[1] +gridCenter)] = true;
+  }
+
+  return true;
 }
 
 void PolyominoPacking::placePolyomino(int i, Polyomino &poly) {
-	int x = 0, y = 0;
-	int W = 0, H = 0;
+  int x = 0, y = 0;
+  int W = 0, H = 0;
 
-	const BoundingBox &ccBB = poly.ccBB;
+  const BoundingBox &ccBB = poly.ccBB;
 
-	if (i == 0) {
-		W = grid(ccBB[1][0] - ccBB[0][0] + 2 * margin, gridStepSize);
-		H = grid(ccBB[1][1] - ccBB[0][1] + 2 * margin, gridStepSize);
-        if (polyominoFits(poly, -W / 2, -H / 2))
-          return;
-	}
+  if (i == 0) {
+    W = grid(ccBB[1][0] - ccBB[0][0] + 2 * margin, gridStepSize);
+    H = grid(ccBB[1][1] - ccBB[0][1] + 2 * margin, gridStepSize);
 
-    if (polyominoFits(poly, 0, 0))
+    if (polyominoFits(poly, -W / 2, -H / 2))
       return;
+  }
 
-	W = ceil(ccBB[1][0] - ccBB[0][0]);
-	H = ceil(ccBB[1][1] - ccBB[0][1]);
+  if (polyominoFits(poly, 0, 0))
+    return;
 
-	if (W >= H) {
-		for (int bnd = 1 ; ; bnd += bndIncrement) {
-			x = 0;
-			y = -bnd;
-			for (; x < bnd; ++x)
-              if (polyominoFits(poly, x, y))
-                return;
-			for (; y < bnd; ++y)
-              if (polyominoFits(poly, x, y))
-                return;
-			for (; x > -bnd; --x)
-              if (polyominoFits(poly, x, y))
-                return;
-			for (; y > -bnd; --y)
-              if (polyominoFits(poly, x, y))
-                return;
-			for (; x < 0 ; ++x)
-              if (polyominoFits(poly, x, y))
-                return;
-		}
-	} else {
-		for (int bnd = 1;; bnd += bndIncrement) {
-			y = 0;
-			x = -bnd;
-			for (; y > -bnd; --y)
-              if (polyominoFits(poly, x, y))
-                return;
-			for (; x < bnd; ++x)
-                if (polyominoFits(poly, x, y))
-                  return;
-			for (; y < bnd; ++y)
-              if (polyominoFits(poly, x, y))
-                return;
-			for (; x > -bnd; --x)
-              if (polyominoFits(poly, x, y))
-                return;
-			for (; y > 0; --y)
-              if (polyominoFits(poly, x, y))
-                return;
-		}
-	}
+  W = ceil(ccBB[1][0] - ccBB[0][0]);
+  H = ceil(ccBB[1][1] - ccBB[0][1]);
+
+  if (W >= H) {
+    for (int bnd = 1 ; ; bnd += bndIncrement) {
+      x = 0;
+      y = -bnd;
+
+      for (; x < bnd; ++x)
+        if (polyominoFits(poly, x, y))
+          return;
+
+      for (; y < bnd; ++y)
+        if (polyominoFits(poly, x, y))
+          return;
+
+      for (; x > -bnd; --x)
+        if (polyominoFits(poly, x, y))
+          return;
+
+      for (; y > -bnd; --y)
+        if (polyominoFits(poly, x, y))
+          return;
+
+      for (; x < 0 ; ++x)
+        if (polyominoFits(poly, x, y))
+          return;
+    }
+  }
+  else {
+    for (int bnd = 1;; bnd += bndIncrement) {
+      y = 0;
+      x = -bnd;
+
+      for (; y > -bnd; --y)
+        if (polyominoFits(poly, x, y))
+          return;
+
+      for (; x < bnd; ++x)
+        if (polyominoFits(poly, x, y))
+          return;
+
+      for (; y < bnd; ++y)
+        if (polyominoFits(poly, x, y))
+          return;
+
+      for (; x > -bnd; --x)
+        if (polyominoFits(poly, x, y))
+          return;
+
+      for (; y > 0; --y)
+        if (polyominoFits(poly, x, y))
+          return;
+    }
+  }
 }

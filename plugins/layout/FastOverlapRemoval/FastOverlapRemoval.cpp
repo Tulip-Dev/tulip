@@ -3,12 +3,12 @@
  Email : archam@cs.ubc.ca
  Last modification : 08/12/2004
  This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by  
- the Free Software Foundation; either version 2 of the License, or     
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
  (at your option) any later version.
 */
 /**
- * implementation of Resolve Overlap.  For nodes, history, 
+ * implementation of Resolve Overlap.  For nodes, history,
  * author and licence please see the header file FastOverlapRemoval.h
  */
 
@@ -33,12 +33,12 @@ static const char* paramHelp[] = {
   HTML_HELP_BODY()
   "Overlaps removal type."
   HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()			    \
-  HTML_HELP_DEF("Type", "LayoutProperty")	   \
+  HTML_HELP_OPEN()          \
+  HTML_HELP_DEF("Type", "LayoutProperty")    \
   HTML_HELP_DEF("Values", "Any layout property")   \
-  HTML_HELP_DEF("Default", "viewLayout")	   \
-  HTML_HELP_BODY()				   \
-  "The property used for the input layout of nodes and edges"	   \
+  HTML_HELP_DEF("Default", "viewLayout")     \
+  HTML_HELP_BODY()           \
+  "The property used for the input layout of nodes and edges"    \
   HTML_HELP_CLOSE(),
   // node size
   HTML_HELP_OPEN() \
@@ -49,12 +49,12 @@ static const char* paramHelp[] = {
   "The property used for node's sizes." \
   HTML_HELP_CLOSE(),
   //Rotation
-  HTML_HELP_OPEN()			    \
-  HTML_HELP_DEF("Type", "DoubleProperty")				\
+  HTML_HELP_OPEN()          \
+  HTML_HELP_DEF("Type", "DoubleProperty")       \
   HTML_HELP_DEF("Values", "Any double property used for rotation of nodes on z-axis") \
-  HTML_HELP_DEF("Default", "viewRotation")				\
-  HTML_HELP_BODY()							\
-  "The property used as rotation of nodes on z-axis"			\
+  HTML_HELP_DEF("Default", "viewRotation")        \
+  HTML_HELP_BODY()              \
+  "The property used as rotation of nodes on z-axis"      \
   HTML_HELP_CLOSE(),
   //Iterations
   HTML_HELP_OPEN()          \
@@ -99,29 +99,35 @@ FastOverlapRemoval::FastOverlapRemoval(const tlp::PluginContext* context) :
  * used in the InkScape Open Source Software.
  */
 bool FastOverlapRemoval::run () {
-    tlp::StringCollection stringCollection(OVERLAP_TYPE);
-    stringCollection.setCurrent(0);
+  tlp::StringCollection stringCollection(OVERLAP_TYPE);
+  stringCollection.setCurrent(0);
   LayoutProperty *viewLayout = NULL;
   SizeProperty *viewSize = NULL;
   DoubleProperty *viewRot = NULL;
   double xBorder = 0.;
   double yBorder = 0.;
   int nbPasses = 5;
+
   if (dataSet != NULL) {
     dataSet->get("overlaps removal type", stringCollection);
     dataSet->get("layout", viewLayout);
+
     if (!dataSet->get("bounding box", viewSize))
       // old name of the parameter
       dataSet->get("boundingBox", viewSize);
+
     dataSet->get("rotation", viewRot);
     dataSet->get("number of passes", nbPasses);
     dataSet->get("x border", xBorder);
     dataSet->get("y border", yBorder);
   }
+
   if (viewLayout == NULL)
     viewLayout = graph->getProperty<LayoutProperty> ("viewLayout");
+
   if (viewSize == NULL)
     viewSize = graph->getProperty<SizeProperty> ("viewSize");
+
   if (viewRot == NULL)
     viewRot = graph->getProperty<DoubleProperty> ("viewRotation");
 
@@ -129,18 +135,19 @@ bool FastOverlapRemoval::run () {
   result->setAllEdgeValue(viewLayout->getEdgeDefaultValue());
   edge e;
   forEach(e, viewLayout->getNonDefaultValuatedEdges())
-    result->setEdgeValue(e, viewLayout->getEdgeValue(e));
+  result->setEdgeValue(e, viewLayout->getEdgeValue(e));
 
   SizeProperty size(graph);
+
   for(float passIndex = 1.; passIndex <= nbPasses; ++passIndex) {
     node n;
     // size initialization
     forEach(n, graph->getNodes())
-      size.setNodeValue(n, viewSize->getNodeValue(n) *
-			passIndex/(float)nbPasses);
-    
+    size.setNodeValue(n, viewSize->getNodeValue(n) *
+                      passIndex/(float)nbPasses);
+
     //actually apply fast overlap removal
-    vector<vpsc::Rectangle *>nodeRectangles (graph->numberOfNodes()); 
+    vector<vpsc::Rectangle *>nodeRectangles (graph->numberOfNodes());
     node curNode;
     unsigned int nodeCounter = 0;
     vector<node> nodeOrder(graph->numberOfNodes());
@@ -149,54 +156,59 @@ bool FastOverlapRemoval::run () {
       const Size &sz = size.getNodeValue (curNode);
       double curRot = viewRot->getNodeValue (curNode);
       Size rotSize = Size (sz.getW()*fabs (cos (curRot*M_PI/180.0)) +
-			   sz.getH()*fabs (sin (curRot*M_PI/180.0)),
-			   sz.getW()*fabs (sin (curRot*M_PI/180.0)) +
-			   sz.getH()*fabs (cos (curRot*M_PI/180.0)), 1.0f);
+                           sz.getH()*fabs (sin (curRot*M_PI/180.0)),
+                           sz.getW()*fabs (sin (curRot*M_PI/180.0)) +
+                           sz.getH()*fabs (cos (curRot*M_PI/180.0)), 1.0f);
       double maxX = pos.getX() + rotSize.getW()/2.0;
       double maxY = pos.getY() + rotSize.getH()/2.0;
       double minX = pos.getX() - rotSize.getW()/2.0;
       double minY = pos.getY() - rotSize.getH()/2.0;
-   
-      nodeRectangles[nodeCounter] = 
+
+      nodeRectangles[nodeCounter] =
         new vpsc::Rectangle (minX, maxX, minY, maxY);
       nodeOrder[nodeCounter] = curNode;
       ++nodeCounter;
     }//end forEach
+
     if (stringCollection.getCurrentString() == "X-Y") {
       removeRectangleOverlap(graph->numberOfNodes(),
 #if defined(__APPLE__)
-			    &(nodeRectangles[0]),
-#else	
-			    nodeRectangles.data(),
+                             &(nodeRectangles[0]),
+#else
+                             nodeRectangles.data(),
 #endif
-			    xBorder, yBorder);
-    } else if (stringCollection.getCurrentString() == "X") {
+                             xBorder, yBorder);
+    }
+    else if (stringCollection.getCurrentString() == "X") {
       removeRectangleOverlapX(graph->numberOfNodes(),
 #if defined(__APPLE__)
-			    &(nodeRectangles[0]),
-#else	
-			    nodeRectangles.data(),
+                              &(nodeRectangles[0]),
+#else
+                              nodeRectangles.data(),
 #endif
-			    xBorder);
-    } else {
+                              xBorder);
+    }
+    else {
       removeRectangleOverlapY(graph->numberOfNodes(),
 #if defined(__APPLE__)
-			    &(nodeRectangles[0]),
-#else	
-			    nodeRectangles.data(),
+                              &(nodeRectangles[0]),
+#else
+                              nodeRectangles.data(),
 #endif
-			    yBorder);
+                              yBorder);
     }
+
     for (unsigned int i = 0; i < graph->numberOfNodes(); ++i) {
       Coord newPos (nodeRectangles[i]->getCentreX(),
-		    nodeRectangles[i]->getCentreY(), 0.0);
+                    nodeRectangles[i]->getCentreY(), 0.0);
       LayoutAlgorithm::result->setNodeValue (nodeOrder[i], newPos);
     }//end for
+
     for (unsigned int i = 0; i < graph->numberOfNodes(); ++i)
       delete nodeRectangles[i];
 
   }
-  
+
   return true;
 }//end run
 

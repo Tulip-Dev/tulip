@@ -25,7 +25,7 @@ using namespace tlp;
 using namespace stdext;
 using namespace std;
 
-unsigned int getDist(Graph *g, node n1, node n2){
+unsigned int getDist(Graph *g, node n1, node n2) {
   vector<node> nextNodes;
   TLP_HASH_MAP<node, unsigned int> nodeDepth;
   MutableContainer<bool> alreadyTreated;
@@ -35,21 +35,28 @@ unsigned int getDist(Graph *g, node n1, node n2){
   nodeDepth[n1]=0;
   alreadyTreated.set(n1.id,true);
 
-  for(unsigned int i = 0 ;!found && i < nextNodes.size(); ++i){
+  for(unsigned int i = 0 ; !found && i < nextNodes.size(); ++i) {
     node current = nextNodes[i];
     Iterator<node> * itn = g->getInOutNodes(current);
-    while(itn->hasNext()){
+
+    while(itn->hasNext()) {
       node v = itn->next();
+
       if(alreadyTreated.get(v.id))
-	continue;
+        continue;
+
       alreadyTreated.set(v.id,true);
       nextNodes.push_back(v);
       nodeDepth[v] = nodeDepth[current]+1;
-      if(v == n2){
-	found = true;
-	break;
+
+      if(v == n2) {
+        found = true;
+        break;
       }
-    }delete itn;
+    }
+
+    delete itn;
   }
+
   return nodeDepth[n2];
 }

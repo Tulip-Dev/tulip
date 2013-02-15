@@ -32,38 +32,44 @@ class Blocks;
  */
 class Solver {
 public:
-	virtual void satisfy();
-	virtual void solve();
+  virtual void satisfy();
+  virtual void solve();
 
-	Solver(const unsigned n, Variable* const vs[], const unsigned m, Constraint *cs[]);
-	virtual ~Solver();
-	Constraint** getConstraints(unsigned &m) { m=this->m; return cs; }
-	const Variable* const * getVariables(unsigned &n) { n=this->n; return vs; }
+  Solver(const unsigned n, Variable* const vs[], const unsigned m, Constraint *cs[]);
+  virtual ~Solver();
+  Constraint** getConstraints(unsigned &m) {
+    m=this->m;
+    return cs;
+  }
+  const Variable* const * getVariables(unsigned &n) {
+    n=this->n;
+    return vs;
+  }
 protected:
-	Blocks *bs;
-	unsigned m;
-	Constraint **cs;
-	unsigned n;
-	const Variable* const *vs;
-	void printBlocks();
+  Blocks *bs;
+  unsigned m;
+  Constraint **cs;
+  unsigned n;
+  const Variable* const *vs;
+  void printBlocks();
 private:
-	void refine();
-	bool constraintGraphIsCyclic(const unsigned n, Variable* const vs[]);
-	bool blockGraphIsCyclic();
+  void refine();
+  bool constraintGraphIsCyclic(const unsigned n, Variable* const vs[]);
+  bool blockGraphIsCyclic();
 };
 
 class IncSolver : public Solver {
 public:
-	unsigned splitCnt;
-	void satisfy();
-	void solve();
-	void moveBlocks();
-	void splitBlocks();
-	IncSolver(const unsigned n, Variable* const vs[], const unsigned m, Constraint *cs[]);
+  unsigned splitCnt;
+  void satisfy();
+  void solve();
+  void moveBlocks();
+  void splitBlocks();
+  IncSolver(const unsigned n, Variable* const vs[], const unsigned m, Constraint *cs[]);
 private:
-	typedef std::vector<Constraint*> ConstraintList;
-	ConstraintList inactive;
-	Constraint* mostViolated(ConstraintList &l);
+  typedef std::vector<Constraint*> ConstraintList;
+  ConstraintList inactive;
+  Constraint* mostViolated(ConstraintList &l);
 };
 }
 #endif // SEEN_REMOVEOVERLAP_SOLVE_VPSC_H
