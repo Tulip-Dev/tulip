@@ -990,7 +990,9 @@ void GraphUpdatesRecorder::addNode(Graph* g, node n) {
   }
 
   gnr->elts.set(n, true);
-  addedNodes.set(n, true);
+  if (g->getRoot() == g) {
+    addedNodes.set(n, true);
+  }
 }
 
 void GraphUpdatesRecorder::addEdge(Graph* g, edge e) {
@@ -1002,7 +1004,9 @@ void GraphUpdatesRecorder::addEdge(Graph* g, edge e) {
   }
 
   ger->elts.set(e, true);
-  addedEdgesEnds.set(e, new std::pair<node, node>(g->ends(e)));
+  if (g->getRoot() == g) {
+    addedEdgesEnds.set(e, new std::pair<node, node>(g->ends(e)));
+  }
 }
 
 void GraphUpdatesRecorder::delNode(Graph* g, node n) {
