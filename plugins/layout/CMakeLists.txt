@@ -1,6 +1,8 @@
 ADD_SUBDIRECTORY(OGDF)
+ADD_SUBDIRECTORY(FastOverlapRemoval)
+ADD_SUBDIRECTORY(Grip)
 
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(MixedModel-${TulipVersion} SHARED MixedModel.cpp DatasetTools.cpp)
@@ -104,6 +106,10 @@ ADD_LIBRARY(PerfectLayout-${TulipVersion} SHARED PerfectLayout.cpp)
 TARGET_LINK_LIBRARIES(PerfectLayout-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(PolyominoPacking-${TulipVersion} SHARED PolyominoPacking.cpp)
+TARGET_LINK_LIBRARIES(PolyominoPacking-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS MixedModel-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT MixedModel)
 INSTALL(TARGETS ConnectedComponentPacking-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ConnectedComponentPacking)
 INSTALL(TARGETS Random-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Random)
@@ -120,3 +126,4 @@ INSTALL(TARGETS Dendrogram-${TulipVersion} DESTINATION ${TulipPluginsInstallDir}
 INSTALL(TARGETS ImprovedWalker-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ImprovedWalker)
 INSTALL(TARGETS SquarifiedTreeMap-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT SquarifiedTreeMap)
 INSTALL(TARGETS PerfectLayout-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PerfectLayout)
+INSTALL(TARGETS PolyominoPacking-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PolyominoPacking)
