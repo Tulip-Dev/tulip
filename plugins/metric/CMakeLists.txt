@@ -65,6 +65,30 @@ ADD_LIBRARY(BetweennessCentrality-${TulipVersion} SHARED BetweennessCentrality.c
 TARGET_LINK_LIBRARIES(BetweennessCentrality-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(KCores-${TulipVersion} SHARED KCores.cpp)
+TARGET_LINK_LIBRARIES(KCores-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(LouvainClustering-${TulipVersion} SHARED LouvainClustering.cpp)
+TARGET_LINK_LIBRARIES(LouvainClustering-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(LinkCommunities-${TulipVersion} SHARED LinkCommunities.cpp)
+TARGET_LINK_LIBRARIES(LinkCommunities-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(MCLClustering-${TulipVersion} SHARED MCLClustering.cpp)
+TARGET_LINK_LIBRARIES(MCLClustering-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(PageRank-${TulipVersion} SHARED PageRank.cpp)
+TARGET_LINK_LIBRARIES(PageRank-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(WelshPowell-${TulipVersion} SHARED WelshPowell.cpp)
+TARGET_LINK_LIBRARIES(PageRank-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS Eccentricity-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Eccentricity)
 INSTALL(TARGETS DegreeMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT DegreeMetric)
 INSTALL(TARGETS ClusterMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ClusterMetric)
@@ -81,3 +105,9 @@ INSTALL(TARGETS PathLengthMetric-${TulipVersion} DESTINATION ${TulipPluginsInsta
 INSTALL(TARGETS StrahlerMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrahlerMetric)
 INSTALL(TARGETS RandomMetric-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT RandomMetric)
 INSTALL(TARGETS BetweennessCentrality-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT BetweennessCentrality)
+INSTALL(TARGETS KCores-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT KCores)
+INSTALL(TARGETS LouvainClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT LouvainClustering)
+INSTALL(TARGETS LinkCommunities-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT LinkCommunities)
+INSTALL(TARGETS MCLClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT MCLClustering)
+INSTALL(TARGETS PageRank-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PageRank)
+INSTALL(TARGETS WelshPowell-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT WelshPowell)
