@@ -27,10 +27,10 @@ class CompNodes {
 
 public :
   Graph * graph;
-  CompNodes(Graph *g):graph(g){
+  CompNodes(Graph *g):graph(g) {
   }
-  
-  bool operator()(const node u, const node v){
+
+  bool operator()(const node u, const node v) {
     return graph->deg(u)>graph->deg(v);
   }
 };
@@ -55,23 +55,25 @@ public :
  *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
 */
-class WelshPowell:public DoubleAlgorithm { 
+class WelshPowell:public DoubleAlgorithm {
 public:
 
   PLUGININFORMATIONS("Welsh & Powell","David Auber","03/01/2005","Nodes coloring measure,<br/>values assigned to adjacent nodes are always different.","1.0", "Graph")
 
-  WelshPowell(const tlp::PluginContext *context):DoubleAlgorithm(context){};
- 
-  bool hasNeightboColoredWith(const node n ,const int color, const MutableContainer<int> &colors){
+  WelshPowell(const tlp::PluginContext *context):DoubleAlgorithm(context) {};
+
+  bool hasNeightboColoredWith(const node n ,const int color, const MutableContainer<int> &colors) {
     node u;
     forEach(u, graph->getInOutNodes(n))
-      if(colors.get(u.id) == color)
-	return true;
+
+    if(colors.get(u.id) == color)
+      return true;
+
     return false;
   }
 
@@ -81,36 +83,40 @@ public:
     node n;
     unsigned int i = 0;
     forEach(n,graph->getNodes())
-      toSort[i++]=n;
+    toSort[i++]=n;
     CompNodes cmp(graph);
     sort(toSort.begin(),toSort.end(),cmp);
-  
+
     MutableContainer<int> colors;
     colors.setAll(-1);
     int currentColor = 0;
     unsigned int numberOfColoredNodes = 0;
-    while(numberOfColoredNodes != graph->numberOfNodes()){
+
+    while(numberOfColoredNodes != graph->numberOfNodes()) {
 #ifndef NDEBUG
       cerr << "nbColored :"  << numberOfColoredNodes << endl;
 #endif
-      for(unsigned int i=0;i < toSort.size(); ++i) {
+
+      for(unsigned int i=0; i < toSort.size(); ++i) {
 #ifndef NDEBUG
-	cerr << "i:" <<  i << endl;
+        cerr << "i:" <<  i << endl;
 #endif
-	if((colors.get(toSort[i].id) == -1) && (!hasNeightboColoredWith(toSort[i], currentColor, colors))){
+
+        if((colors.get(toSort[i].id) == -1) && (!hasNeightboColoredWith(toSort[i], currentColor, colors))) {
 #ifndef NDEBUG
-	  cerr << "new node found color : " << currentColor << endl;
+          cerr << "new node found color : " << currentColor << endl;
 #endif
-	  colors.set(toSort[i].id, currentColor);
-	  result->setNodeValue(toSort[i], currentColor);
-	  ++numberOfColoredNodes;
-	}
+          colors.set(toSort[i].id, currentColor);
+          result->setNodeValue(toSort[i], currentColor);
+          ++numberOfColoredNodes;
+        }
       }
+
       ++currentColor;
     }
   }
-  
-  
+
+
   bool run() {
     colorize();
 

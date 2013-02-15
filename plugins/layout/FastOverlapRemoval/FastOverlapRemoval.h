@@ -24,14 +24,14 @@
  *
  * <b>HISTORY</b>
  *
- *  - 2006 Version 1.0: first version by Daniel Archambault, 
+ *  - 2006 Version 1.0: first version by Daniel Archambault,
  *  Department of Computer Science, University of British Columbia
  *
  * <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
  */
@@ -39,14 +39,17 @@
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/MutableContainer.h>
 
-class FastOverlapRemoval:public tlp::LayoutAlgorithm { 
+class FastOverlapRemoval:public tlp::LayoutAlgorithm {
 public:
 
   PLUGININFORMATIONS("Fast Overlap Removal" ,"Daniel Archambault", "08/12/2006", "Remove all nodes overlap.", "1.3", "Misc")
 
   FastOverlapRemoval(const tlp::PluginContext *context);
   inline ~FastOverlapRemoval() {}
-  inline bool check (std::string &errMsg) { errMsg = ""; return true; }
+  inline bool check (std::string &errMsg) {
+    errMsg = "";
+    return true;
+  }
   inline void reset () {}
   bool run();
 };

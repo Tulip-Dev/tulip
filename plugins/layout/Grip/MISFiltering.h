@@ -23,9 +23,9 @@
 #include <tulip/MutableContainer.h>
 #include <tulip/tuliphash.h>
 
-class MISFiltering { 
+class MISFiltering {
 
- public :
+public :
   MISFiltering(tlp::Graph *);
   ~MISFiltering();
 
@@ -34,8 +34,8 @@ class MISFiltering {
 
   std::vector<tlp::node> ordering;
   std::vector<unsigned int> index;
-  
- private :
+
+private :
   unsigned int level;
   tlp::MutableContainer<bool> inLastVi;
   tlp::MutableContainer<bool> inCurVi;
@@ -45,7 +45,7 @@ class MISFiltering {
   TLP_HASH_MAP<unsigned int, TLP_HASH_SET<tlp::node> > levelToNodes;
 
 
-  
+
   void bfsDepth(tlp::node, unsigned int);
   void updateVectors();
 
@@ -53,7 +53,7 @@ class MISFiltering {
   tlp::MutableContainer<bool> removedVisit;
   tlp::MutableContainer<bool> attendedVisit;
   tlp::MutableContainer<bool> visited;
-  
+
   std::vector<tlp::node> toVisit;
 };
 #endif

@@ -66,38 +66,38 @@ public:
 
   PLUGININFORMATIONS("K-Cores", "David Auber","28/05/2006","Nodes measure<br/>often used to evaluate the structure of social networks.","2.0", "Graph")
 
-    KCores(const tlp::PluginContext *context);
-    ~KCores();
-    bool run();
+  KCores(const tlp::PluginContext *context);
+  ~KCores();
+  bool run();
 private:
-    bool peel(tlp::Graph* subgraph, tlp::DoubleProperty* metric,
-	      tlp::DoubleProperty&);
-    bool peelIn(tlp::Graph* subgraph, tlp::DoubleProperty* metric,
-		tlp::DoubleProperty&);
-    bool peelOut(tlp::Graph* subgraph, tlp::DoubleProperty* metric,
-		 tlp::DoubleProperty&);
-    tlp::DoubleProperty* metric;
-    tlp::Graph* subgraph;
+  bool peel(tlp::Graph* subgraph, tlp::DoubleProperty* metric,
+            tlp::DoubleProperty&);
+  bool peelIn(tlp::Graph* subgraph, tlp::DoubleProperty* metric,
+              tlp::DoubleProperty&);
+  bool peelOut(tlp::Graph* subgraph, tlp::DoubleProperty* metric,
+               tlp::DoubleProperty&);
+  tlp::DoubleProperty* metric;
+  tlp::Graph* subgraph;
 
 };
 
 //========================================================================================
 namespace {
 const char * paramHelp[] = {
-    //direction
-    HTML_HELP_OPEN()				 \
-    HTML_HELP_DEF( "type", "String Collection" ) \
-    HTML_HELP_DEF( "default", "InOut" )	 \
-    HTML_HELP_BODY() \
-    "This parameter indicates the direction used to compute K-Cores values."	\
-    HTML_HELP_CLOSE(),
-    // metric
-    HTML_HELP_OPEN()							\
-    HTML_HELP_DEF( "type", "DoubleProperty" )				\
-    HTML_HELP_DEF( "value", "An existing edge metric" )		\
-    HTML_HELP_BODY()							\
-    "An existing edge metric property"\
-    HTML_HELP_CLOSE()
+  //direction
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "String Collection" ) \
+  HTML_HELP_DEF( "default", "InOut" )  \
+  HTML_HELP_BODY() \
+  "This parameter indicates the direction used to compute K-Cores values."  \
+  HTML_HELP_CLOSE(),
+  // metric
+  HTML_HELP_OPEN()              \
+  HTML_HELP_DEF( "type", "DoubleProperty" )       \
+  HTML_HELP_DEF( "value", "An existing edge metric" )   \
+  HTML_HELP_BODY()              \
+  "An existing edge metric property"\
+  HTML_HELP_CLOSE()
 };
 }
 #define DEGREE_TYPE "type"
@@ -106,119 +106,132 @@ const char * paramHelp[] = {
 #define IN 1
 #define OUT 2
 //========================================================================================
-KCores::KCores(const PluginContext *context):DoubleAlgorithm(context){
-    addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
-    addInParameter<DoubleProperty>("metric",paramHelp[1],"",false);
-    addDependency("Degree","1.0");
+KCores::KCores(const PluginContext *context):DoubleAlgorithm(context) {
+  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
+  addInParameter<DoubleProperty>("metric",paramHelp[1],"",false);
+  addDependency("Degree","1.0");
 }
 //========================================================================================
-KCores::~KCores(){}
+KCores::~KCores() {}
 //========================================================================================
 bool KCores::peel(Graph* subgraph, DoubleProperty* metric,
-		  DoubleProperty& wdeg){
-    double k= wdeg.getNodeMin();
-    bool modify = true;
-    bool onePeel = false;
-    while (modify) {
-        modify = false;
-        node n;
-        stableForEach(n,subgraph->getNodes()){
-            if (wdeg.getNodeValue(n) <= k) { //Remove n and decrease its In/Out-neighbors' degree
-                result->setNodeValue(n, k);
-                edge ee;
-                forEach(ee,subgraph->getInOutEdges(n)){
-		  node m = subgraph->opposite(ee,n);
-		  wdeg.setNodeValue(m, wdeg.getNodeValue(m)-(metric ? metric->getEdgeValue(ee) : 1.0));
-                }
-                subgraph->delNode(n);
-                modify = true;
-                onePeel = true;
-            }
+                  DoubleProperty& wdeg) {
+  double k= wdeg.getNodeMin();
+  bool modify = true;
+  bool onePeel = false;
+
+  while (modify) {
+    modify = false;
+    node n;
+    stableForEach(n,subgraph->getNodes()) {
+      if (wdeg.getNodeValue(n) <= k) { //Remove n and decrease its In/Out-neighbors' degree
+        result->setNodeValue(n, k);
+        edge ee;
+        forEach(ee,subgraph->getInOutEdges(n)) {
+          node m = subgraph->opposite(ee,n);
+          wdeg.setNodeValue(m, wdeg.getNodeValue(m)-(metric ? metric->getEdgeValue(ee) : 1.0));
         }
+        subgraph->delNode(n);
+        modify = true;
+        onePeel = true;
+      }
     }
-    return onePeel;
+  }
+
+  return onePeel;
 }
 //========================================================================================
 bool KCores::peelIn(Graph* subgraph, DoubleProperty* metric,
-		    DoubleProperty& wdeg){
-    double k= wdeg.getNodeMin();
-    bool modify = true;
-    bool onePeel = false;
-    while (modify) {
-        modify = false;
-        node n;
-        stableForEach(n,subgraph->getNodes()){
-            if (wdeg.getNodeValue(n) <= k) {//Remove n and decrease its Out-neighbors' degree
-                result->setNodeValue(n, k);
-                edge ee;
-                forEach(ee,subgraph->getOutEdges(n)){
-		  node m = subgraph->opposite(ee,n);
-		  wdeg.setNodeValue(m, wdeg.getNodeValue(m)- (metric ? metric->getEdgeValue(ee) : 1.0));
-                }
-                subgraph->delNode(n);
-                modify = true;
-                onePeel = true;
-            }
+                    DoubleProperty& wdeg) {
+  double k= wdeg.getNodeMin();
+  bool modify = true;
+  bool onePeel = false;
+
+  while (modify) {
+    modify = false;
+    node n;
+    stableForEach(n,subgraph->getNodes()) {
+      if (wdeg.getNodeValue(n) <= k) {//Remove n and decrease its Out-neighbors' degree
+        result->setNodeValue(n, k);
+        edge ee;
+        forEach(ee,subgraph->getOutEdges(n)) {
+          node m = subgraph->opposite(ee,n);
+          wdeg.setNodeValue(m, wdeg.getNodeValue(m)- (metric ? metric->getEdgeValue(ee) : 1.0));
         }
+        subgraph->delNode(n);
+        modify = true;
+        onePeel = true;
+      }
     }
-    return onePeel;
+  }
+
+  return onePeel;
 }
 //========================================================================================
 bool KCores::peelOut(Graph* subgraph, DoubleProperty* metric,
-		     DoubleProperty& wdeg){
-    double k= wdeg.getNodeMin();
-    bool modify = true;
-    bool onePeel = false;
-    while (modify) {
-        modify = false;
-        node n;
-        stableForEach(n,subgraph->getNodes()){
-            if (wdeg.getNodeValue(n) <= k) { //Remove n and decrease its In-neighbors' degree
-                result->setNodeValue(n, k);
-                edge ee;
-                forEach(ee,subgraph->getInEdges(n)){
-		  node m = subgraph->opposite(ee,n);
-		  wdeg.setNodeValue(m, wdeg.getNodeValue(m)- (metric ? metric->getEdgeValue(ee) : 1.0));
-                }
-                subgraph->delNode(n);
-                modify = true;
-                onePeel = true;
-            }
+                     DoubleProperty& wdeg) {
+  double k= wdeg.getNodeMin();
+  bool modify = true;
+  bool onePeel = false;
+
+  while (modify) {
+    modify = false;
+    node n;
+    stableForEach(n,subgraph->getNodes()) {
+      if (wdeg.getNodeValue(n) <= k) { //Remove n and decrease its In-neighbors' degree
+        result->setNodeValue(n, k);
+        edge ee;
+        forEach(ee,subgraph->getInEdges(n)) {
+          node m = subgraph->opposite(ee,n);
+          wdeg.setNodeValue(m, wdeg.getNodeValue(m)- (metric ? metric->getEdgeValue(ee) : 1.0));
         }
+        subgraph->delNode(n);
+        modify = true;
+        onePeel = true;
+      }
     }
-    return onePeel;
+  }
+
+  return onePeel;
 }
 //========================================================================================
-  bool KCores::run() {
-    DoubleProperty* metric = NULL;
-    StringCollection degreeTypes(DEGREE_TYPES);
-    degreeTypes.setCurrent(0);
-    if (dataSet!=NULL) {
-        dataSet->get(DEGREE_TYPE, degreeTypes);
-        dataSet->get("metric", metric);
-    }
+bool KCores::run() {
+  DoubleProperty* metric = NULL;
+  StringCollection degreeTypes(DEGREE_TYPES);
+  degreeTypes.setCurrent(0);
 
-    Graph* subgraph = graph->addCloneSubGraph();
-    DoubleProperty wdeg(subgraph);
-    string errMsg="";
-    subgraph->applyPropertyAlgorithm("Degree",&wdeg,errMsg,pluginProgress,dataSet);
+  if (dataSet!=NULL) {
+    dataSet->get(DEGREE_TYPE, degreeTypes);
+    dataSet->get("metric", metric);
+  }
 
-    switch(degreeTypes.getCurrent()) {
-    case INOUT:
-        while (subgraph->numberOfNodes()>0)
-	  peel(subgraph, metric, wdeg);
-        break;
-    case IN:
-        while (subgraph->numberOfNodes()>0)
-            peelIn(subgraph, metric, wdeg);
-        break;
-    case OUT:
-        while (subgraph->numberOfNodes()>0)
-            peelOut(subgraph, metric, wdeg);
-        break;
-    }
-    graph->delSubGraph(subgraph);
-    return true;
+  Graph* subgraph = graph->addCloneSubGraph();
+  DoubleProperty wdeg(subgraph);
+  string errMsg="";
+  subgraph->applyPropertyAlgorithm("Degree",&wdeg,errMsg,pluginProgress,dataSet);
+
+  switch(degreeTypes.getCurrent()) {
+  case INOUT:
+    while (subgraph->numberOfNodes()>0)
+      peel(subgraph, metric, wdeg);
+
+    break;
+
+  case IN:
+    while (subgraph->numberOfNodes()>0)
+      peelIn(subgraph, metric, wdeg);
+
+    break;
+
+  case OUT:
+    while (subgraph->numberOfNodes()>0)
+      peelOut(subgraph, metric, wdeg);
+
+    break;
+  }
+
+  graph->delSubGraph(subgraph);
+  return true;
 }
 //========================================================================================
 PLUGIN(KCores)

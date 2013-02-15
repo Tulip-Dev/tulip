@@ -55,8 +55,8 @@ static const char * paramHelp[] = {
  *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
 */
@@ -65,95 +65,101 @@ struct PageRank : public DoubleAlgorithm {
 
   PLUGININFORMATIONS("Page Rank","Mohamed Bouklit & David Auber","16/12/10", "Nodes measure<br/>used for links analysis.","2.0","Graph")
 
-PageRank(const PluginContext *context) : DoubleAlgorithm(context) {
-  addInParameter<double>("d", paramHelp[0], "0.85");
-  addInParameter<bool>("directed", paramHelp[0], "true");
-}
-
-bool run() {
-  double d = 0.85;
-  bool directed = true;
-  if ( dataSet!=0 ) {
-    dataSet->get("d",d);
-    dataSet->get("directed",directed);
+  PageRank(const PluginContext *context) : DoubleAlgorithm(context) {
+    addInParameter<double>("d", paramHelp[0], "0.85");
+    addInParameter<bool>("directed", paramHelp[0], "true");
   }
-   
-  if(d <= 0 || d >= 1) return false;
-    
- 
-  double nbNodes = graph->numberOfNodes(); 
-  
-  // Initialize the PageRank
-  MutableContainer<double> R;
-  MutableContainer<double> R2;
-  R.setAll( 1. / nbNodes);
-  
-  
-  for(unsigned int k=0; k < 15*log(nbNodes); ++k) {
+
+  bool run() {
+    double d = 0.85;
+    bool directed = true;
+
+    if ( dataSet!=0 ) {
+      dataSet->get("d",d);
+      dataSet->get("directed",directed);
+    }
+
+    if(d <= 0 || d >= 1) return false;
+
+
+    double nbNodes = graph->numberOfNodes();
+
+    // Initialize the PageRank
+    MutableContainer<double> R;
+    MutableContainer<double> R2;
+    R.setAll( 1. / nbNodes);
+
+
+    for(unsigned int k=0; k < 15*log(nbNodes); ++k) {
 
       //cout<<"[PageRank iteration "<<k<<" ] "<<endl;
       R2.setAll(0.);
 
       edge e;
       forEach(e, graph->getEdges()) {
-          node src = graph->source(e);
-          if(directed){
-              if (graph->outdeg(src) != 0) {
-                  node tgt = graph->target(e);
-                  double prev = R2.get(tgt);
-                  R2.set(tgt, prev + R.get(src) / double(graph->outdeg(src)));
-              }
-          }else{
-              if (graph->deg(src) != 0) {
-                  node tgt = graph->target(e);
-                  double prev = R2.get(tgt);
-                  R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
-              }
-              node src = graph->target(e);
-              if (graph->deg(src) != 0) {
-                  node tgt = graph->source(e);
-                  double prev = R2.get(tgt);
-                  R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
-              }
+        node src = graph->source(e);
+
+        if(directed) {
+          if (graph->outdeg(src) != 0) {
+            node tgt = graph->target(e);
+            double prev = R2.get(tgt);
+            R2.set(tgt, prev + R.get(src) / double(graph->outdeg(src)));
           }
+        }
+        else {
+          if (graph->deg(src) != 0) {
+            node tgt = graph->target(e);
+            double prev = R2.get(tgt);
+            R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
+          }
+
+          node src = graph->target(e);
+
+          if (graph->deg(src) != 0) {
+            node tgt = graph->source(e);
+            double prev = R2.get(tgt);
+            R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
+          }
+        }
       }
 
       node n;
       forEach(n, graph->getNodes())
-              R2.set(n, d * R2.get(n));
+      R2.set(n, d * R2.get(n));
 
       double mu = 0.0;
       forEach(n, graph->getNodes())
-              mu += R.get(n);
+      mu += R.get(n);
       forEach(n, graph->getNodes())
-              mu -= R2.get(n);
+      mu -= R2.get(n);
       forEach(n, graph->getNodes())
-              R2.set(n, R2.get(n) + mu*1.0/nbNodes);
+      R2.set(n, R2.get(n) + mu*1.0/nbNodes);
 
 
       double delta = 0.0;
       forEach(n, graph->getNodes())
-              if (R.get(n) > R2.get(n))
-              delta += R.get(n) - R2.get(n);
-      else 
-      delta += R2.get(n) - R.get(n);
+
+      if (R.get(n) > R2.get(n))
+        delta += R.get(n) - R2.get(n);
+      else
+        delta += R2.get(n) - R.get(n);
 
       forEach(n, graph->getNodes())
-              R.set(n, R2.get(n));
+      R.set(n, R2.get(n));
 
-  }
-  
-  node n;
-  forEach(n, graph->getNodes()) {
+    }
+
+    node n;
+    forEach(n, graph->getNodes()) {
       result->setNodeValue(n, R.get(n));
+    }
+
+    return true;
   }
 
-  return true;
-}
-
-bool check(string &) {
-  return true;
-}
+  bool check(string &) {
+    return true;
+  }
 };
 
 PLUGIN(PageRank)

@@ -43,24 +43,24 @@
  *  <b>LICENCE</b>
  *
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by  
- *  the Free Software Foundation; either version 2 of the License, or     
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
 */
 
-class Grip : public tlp::LayoutAlgorithm { 
+class Grip : public tlp::LayoutAlgorithm {
 
- public:
+public:
 
   PLUGININFORMATIONS("GRIP","Romain Bourqui","01/11/2010","The Graph dRawing with Intelligent Placement layout algorithm.","1.1", "Force Directed")
 
   Grip(const tlp::PluginContext *);
   ~Grip();
-  
+
   bool run();
 
- private :
+private :
   void computeOrdering();
   void firstNodesPlacement();
   void placement();
@@ -72,13 +72,13 @@ class Grip : public tlp::LayoutAlgorithm {
   void updateLocalTemp(tlp::node);
   void init();
   void init_heat(unsigned int);
-  
+
   void seeLayout(unsigned int);
 
   unsigned int rounds(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int);
   void set_nbr_size();
   float sched( int, int, int, int, int);
-  
+
 
   MISFiltering * misf;
   float edgeLength;

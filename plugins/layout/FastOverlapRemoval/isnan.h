@@ -3,7 +3,7 @@
 
 /*
  * Temporary fix for various misdefinitions of isnan().
- * isnan() is becoming undef'd in some .h files. 
+ * isnan() is becoming undef'd in some .h files.
  * #include this last in your .cpp file to get it right.
  *
  * The problem is that isnan and isfinite are part of C99 but aren't part of
@@ -27,11 +27,11 @@
  */
 
 #if defined(__isnan)
-# define isNaN(_a) (__isnan(_a))	/* MacOSX/Darwin definition < 10.4 */
+# define isNaN(_a) (__isnan(_a))  /* MacOSX/Darwin definition < 10.4 */
 #elif defined(WIN32) || defined(_isnan)
-# define isNaN(_a) (_isnan(_a)) 	/* Win32 definition */
+# define isNaN(_a) (_isnan(_a))   /* Win32 definition */
 #elif defined(isnan) || defined(__FreeBSD__)
-# define isNaN(_a) (isnan(_a))		/* GNU definition */
+# define isNaN(_a) (isnan(_a))    /* GNU definition */
 #else
 # define isNaN(_a) (std::isnan(_a))
 #endif
@@ -42,7 +42,7 @@
 
 
 #if defined(__isfinite)
-# define isFinite(_a) (__isfinite(_a))	/* MacOSX/Darwin definition < 10.4 */
+# define isFinite(_a) (__isfinite(_a))  /* MacOSX/Darwin definition < 10.4 */
 #elif defined(isfinite)
 # define isFinite(_a) (isfinite(_a))
 #else
