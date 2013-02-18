@@ -23,77 +23,105 @@
 #include <QtGui/QStyledItemDelegate>
 #include <QtGui/QPainter>
 #include <QtGui/QStyleOptionViewItem>
+#include <QtGui/QMouseEvent>
 
-#include <iostream>
 
 class TreeViewDelegate: public QStyledItemDelegate {
 public:
-  TreeViewDelegate(QObject* parent = 0): QStyledItemDelegate(parent) {
-  }
+    TreeViewDelegate(QObject* parent = 0): QStyledItemDelegate(parent) {
+    }
 
-  QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
-    QSize result = QStyledItemDelegate::sizeHint(option,index);
-    result.setHeight(result.height()+10);
-    return result;
-  }
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
+        QSize result = QStyledItemDelegate::sizeHint(option,index);
+        result.setHeight(result.height()+10);
+        return result;
+    }
 };
 
-TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL), _expandingItem(false) {
-  _treeView = new QTreeView(this);
-  _treeView->setEditTriggers(QTreeView::NoEditTriggers);
-  _treeView->setAlternatingRowColors(true);
-  _treeView->setSelectionBehavior(QTreeView::SelectRows);
-  _treeView->setRootIsDecorated(false);
-  _treeView->setAllColumnsShowFocus(true);
-  _treeView->header()->setVisible(false);
-  connect(_treeView, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(itemExpanded()));
-  connect(_treeView, SIGNAL(expanded(const QModelIndex &)), this, SLOT(itemExpanded()));
-  setView(_treeView);
-  _treeView->setItemDelegate(new TreeViewDelegate(_treeView));
+TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL), _skipNextHide(false), _popupVisible(false) {
+    _treeView = new QTreeView(this);
+    _treeView->setEditTriggers(QTreeView::NoEditTriggers);
+    _treeView->setAlternatingRowColors(true);
+    _treeView->setSelectionBehavior(QTreeView::SelectRows);
+    _treeView->setRootIsDecorated(false);
+    _treeView->setAllColumnsShowFocus(true);
+    _treeView->header()->setVisible(false);
+    _treeView->setItemDelegate(new TreeViewDelegate(_treeView));
+    _treeView->setItemsExpandable(true);
+    setView(_treeView);
+    view()->viewport()->installEventFilter(this);
+    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChanged()));
 }
 
-void TreeViewComboBox::setGraphsModel(QAbstractItemModel *model) {
-  setModel(model);
-
-  for(int i=1; i<model->columnCount(); ++i)
-    _treeView->hideColumn(i);
-
-  _treeView->setItemsExpandable(true);
-  _treeView->expandAll();
-  connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
+void TreeViewComboBox::setModel(QAbstractItemModel *model) {
+    QComboBox::setModel(model);
+    connect(model, SIGNAL(rowsRemoved (const QModelIndex&, int, int)), this , SLOT(rowsRemoved(const QModelIndex&, int, int)));
+    for(int i=1; i<model->columnCount(); ++i)
+        _treeView->hideColumn(i);
 }
 
 void TreeViewComboBox::showPopup() {
-  setRootModelIndex(QModelIndex());
-  QComboBox::showPopup();
+    setRootModelIndex(QModelIndex());
+    _treeView->expandAll();
+    _treeView->resizeColumnToContents(0);
+    QComboBox::showPopup();
+    QWidget *popup = findChild<QFrame*>();
+    if (_treeView->columnWidth(0) > popup->width()) {
+        popup->resize(_treeView->columnWidth(0), popup->height());
+    }
+    _popupVisible = true;
 }
 
 void TreeViewComboBox::hidePopup() {
-  if (_expandingItem)
-    _expandingItem = false;
-  else
-    QComboBox::hidePopup();
+    if (!_popupVisible)
+        return;
+    if (_skipNextHide)
+        _skipNextHide = false;
+    else {
+        QComboBox::hidePopup();
+        selectIndex(view()->currentIndex());
+        _popupVisible = false;
+    }
 }
 
 void TreeViewComboBox::selectIndex(const QModelIndex& index) {
-  setRootModelIndex(index.parent());
-  setCurrentIndex(index.row());
-}
-
-void TreeViewComboBox::itemExpanded() {
-  _expandingItem = true;
+    if (index != _lastIndex) {
+        _lastIndex = index;
+        setRootModelIndex(index.parent());
+        setCurrentIndex(index.row());
+        emit currentItemChanged();
+    }
 }
 
 QModelIndex TreeViewComboBox::selectedIndex() const {
-  QModelIndex current = view()->currentIndex();
-  QModelIndex selected = view()->selectionModel()->currentIndex();
+    QModelIndex current = model()->index(currentIndex(),0,rootModelIndex());
+    QModelIndex selected = view()->currentIndex();
 
-  if (!selected.isValid())
-    return current;
+    if (!selected.isValid())
+        return current;
 
-  return selected;
+    return selected;
 }
 
-void TreeViewComboBox::rowsInserted(const QModelIndex &parent, int, int) {
-  _treeView->setExpanded(parent, true);
+bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event){
+    if (event->type() == QEvent::MouseButtonPress && object == view()->viewport()) {
+        QMouseEvent* mouseEvent = static_cast<QMouseEvent*>(event);
+        QModelIndex index = view()->indexAt(mouseEvent->pos());
+        if (!view()->visualRect(index).contains(mouseEvent->pos()))
+            _skipNextHide = true;
+    }
+    return false;
+}
+
+
+void TreeViewComboBox::rowsRemoved(const QModelIndex &parent, int, int) {
+    QModelIndex currentIndex = selectedIndex();
+    if (currentIndex.isValid())
+        selectIndex(currentIndex);
+    else
+        selectIndex(parent);
+}
+
+void TreeViewComboBox::currentIndexChanged() {
+    selectIndex(selectedIndex());
 }

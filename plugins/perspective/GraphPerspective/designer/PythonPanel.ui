@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>807</width>
-    <height>615</height>
+    <width>803</width>
+    <height>611</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -104,7 +104,7 @@ QTabBar::tab:selected {
             </sizepolicy>
            </property>
            <property name="text">
-            <string>&lt;b&gt;Selected graph:&lt;/b&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Selected graph: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
           </widget>
          </item>
@@ -126,9 +126,22 @@ QTabBar::tab:selected {
             <string>The selected graph will be bound to a Python global variable named &quot;graph&quot;</string>
            </property>
            <property name="sizeAdjustPolicy">
-            <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+            <enum>QComboBox::AdjustToContents</enum>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
@@ -206,27 +219,27 @@ QTabBar::tab:selected {
  </widget>
  <customwidgets>
   <customwidget>
-   <class>PythonTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header location="global">tulip/PythonTabWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>HeaderFrame</class>
    <extends>QWidget</extends>
    <header>HeaderFrame.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>tlp::PythonShellWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">tulip/PythonShellWidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>TreeViewComboBox</class>
    <extends>QComboBox</extends>
    <header>tulip/TreeViewComboBox.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PythonTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header location="global">tulip/PythonTabWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tlp::PythonShellWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">tulip/PythonShellWidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
