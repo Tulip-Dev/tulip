@@ -140,9 +140,8 @@ void WorkspacePanel::setView(tlp::View* view) {
   _view = view;
   _viewName = view->name().c_str();
 
-
   QList<Interactor*> compatibleInteractors;
-  QList<std::string> interactorNames = InteractorLister::compatibleInteractors(_viewName.toStdString());
+  QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
   foreach(std::string name,interactorNames) {
     compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name,NULL);
   }
@@ -154,14 +153,14 @@ void WorkspacePanel::setView(tlp::View* view) {
   refreshInteractorsToolbar();
 
 
-  if (compatibleInteractors.size()>0)
+  if (!compatibleInteractors.empty())
     setCurrentInteractor(compatibleInteractors[0]);
 
   connect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
   connect(_view,SIGNAL(graphSet(tlp::Graph*)),this,SLOT(viewGraphSet(tlp::Graph*)));
   connect(_view,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
 
-  if (_view->configurationWidgets().size()==0)
+  if (_view->configurationWidgets().empty())
     return;
 
   QTabWidget* viewConfigurationTabs = new QTabWidget();
@@ -341,15 +340,11 @@ void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
 }
 
 void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
+assert(dynamic_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model()));
 #ifndef NDEBUG
-  assert(dynamic_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model()));
-
   if(g) {
-    std::string name;
-    g->getAttribute<std::string>("name",name);
-    qDebug() << "Setting graph " << name.c_str() << " for panel " << windowTitle();
+    qDebug() << "Setting graph " << g->getName() << " for panel " << windowTitle();
   }
-
 #endif // NDEBUG
 
   tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
@@ -364,11 +359,8 @@ void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
 void WorkspacePanel::graphComboIndexChanged() {
   tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),TulipModel::GraphRole).value<tlp::Graph*>();
 #ifndef NDEBUG
-
   if (g != NULL) {
-    std::string name;
-    g->getAttribute<std::string>("name",name);
-    qDebug() << "selecting graph " << name << " in view";
+    qDebug() << "selecting graph " << g->getName() << " in view";
   }
 
 #endif /* NDEBUG */
