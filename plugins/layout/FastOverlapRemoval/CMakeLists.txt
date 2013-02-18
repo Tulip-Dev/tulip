@@ -1,7 +1,7 @@
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
 FILE(GLOB LIB_SRCS "*.cpp")
 
-ADD_LIBRARY(FastOverlapRemoval-${TULIP_VERSION} SHARED ${LIB_SRCS})
-TARGET_LINK_LIBRARIES(FastOverlapRemoval-${TULIP_VERSION} ${TULIP_CORE_LIBRARY})
+ADD_LIBRARY(FastOverlapRemoval-${TulipVersion} SHARED ${LIB_SRCS})
+TARGET_LINK_LIBRARIES(FastOverlapRemoval-${TulipVersion} ${TULIP_CORE_LIBRARY})
 
-INSTALL(TARGETS FastOverlapRemoval-${TULIP_VERSION} DESTINATION ${TulipPluginsInstallDir} COMPONENT FastOverlapRemoval)
+INSTALL(TARGETS FastOverlapRemoval-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT FastOverlapRemoval)
