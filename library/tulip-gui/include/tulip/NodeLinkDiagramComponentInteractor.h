@@ -29,7 +29,8 @@ namespace tlp {
 /** \brief Tulip interactor abstract class for NodeLinkDiagramComponent
  *
  */
-class NodeLinkDiagramComponentInteractor  : public GLInteractorComposite {
+class TLP_QT_SCOPE NodeLinkDiagramComponentInteractor
+  : public GLInteractorComposite {
   QLabel* _label;
   unsigned int _priority;
 
@@ -38,32 +39,16 @@ public :
   NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):GLInteractorComposite(QIcon(iconPath),text), _label(NULL), _priority(0) {
   }
 
-  virtual ~NodeLinkDiagramComponentInteractor() {
-    _label->deleteLater();
-  }
+  virtual ~NodeLinkDiagramComponentInteractor();
 
-  void setConfigurationWidgetText(const QString& text) {
-    _label = new QLabel(text);
-    _label->setWordWrap(true);
-    _label->setAlignment(Qt::AlignTop);
-    _label->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-  }
+  void setConfigurationWidgetText(const QString& text);
 
-  virtual bool isCompatible(const std::string &viewName) const {
-    return (viewName==NodeLinkDiagramComponent::viewName);
-  }
+  virtual bool isCompatible(const std::string &viewName) const;
+  virtual QWidget* configurationWidget() const;
 
-  virtual QWidget* configurationWidget() const {
-    return _label;
-  }
+  virtual unsigned int priority() const;
 
-  unsigned int priority() const {
-    return _priority;
-  }
-
-  void setPriority(unsigned int p) {
-    _priority = p;
-  }
+  void setPriority(unsigned int p);
 
 };
 }

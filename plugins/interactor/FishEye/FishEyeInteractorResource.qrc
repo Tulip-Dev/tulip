@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/" >
+	<file>i_fisheye.png</file>
+    </qresource>
+</RCC>

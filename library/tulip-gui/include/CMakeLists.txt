@@ -29,6 +29,7 @@ INSTALL(FILES
   tulip/MouseSelector.h
   tulip/MouseShowElementInfos.h
   tulip/NodeLinkDiagramComponent.h
+  tulip/NodeLinkDiagramComponentInteractor.h
   tulip/Perspective.h
   tulip/PropertyCreationDialog.h
   tulip/QGlBufferManager.h

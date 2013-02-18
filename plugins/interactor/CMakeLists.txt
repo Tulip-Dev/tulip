@@ -1,3 +1,6 @@
+ADD_SUBDIRECTORY(FishEye)
+ADD_SUBDIRECTORY(PathFinder)
+
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------

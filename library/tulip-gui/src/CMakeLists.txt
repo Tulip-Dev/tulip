@@ -30,6 +30,7 @@ SET(SRCS
   MouseSelector.cpp
   MouseShowElementInfos.cpp
   NodeLinkDiagramComponent.cpp
+  NodeLinkDiagramComponentInteractor.cpp
   Perspective.cpp
   PluginManager.cpp
   PropertyCreationDialog.cpp

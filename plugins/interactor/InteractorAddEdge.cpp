@@ -20,10 +20,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseNodeBuilder.h>
 #include <tulip/MouseEdgeBuilder.h>
-
-#include <QtGui/QLabel>
-
-#include "NodeLinkDiagramComponentInteractor.h"
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
 using namespace tlp;
 

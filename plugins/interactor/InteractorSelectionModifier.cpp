@@ -18,11 +18,9 @@
  */
 
 #include <tulip/MouseInteractors.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseSelectionEditor.h>
-#include <QtGui/QLabel>
-
-#include "NodeLinkDiagramComponentInteractor.h"
 
 using namespace tlp;
 
