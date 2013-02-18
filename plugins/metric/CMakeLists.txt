@@ -86,7 +86,7 @@ TARGET_LINK_LIBRARIES(PageRank-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(WelshPowell-${TulipVersion} SHARED WelshPowell.cpp)
-TARGET_LINK_LIBRARIES(PageRank-${TulipVersion} ${LibTulipCoreName})
+TARGET_LINK_LIBRARIES(WelshPowell-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS Eccentricity-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT Eccentricity)
