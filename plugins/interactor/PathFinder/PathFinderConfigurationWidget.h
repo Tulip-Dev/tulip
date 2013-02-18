@@ -16,10 +16,10 @@
 #include <QtGui/QWidget>
 
 class PathFinderConfigurationWidget: public QWidget, public Ui::PathFinderConfigurationData {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    PathFinderConfigurationWidget(QWidget *parent=0);
-    virtual ~PathFinderConfigurationWidget();
+  PathFinderConfigurationWidget(QWidget *parent=0);
+  virtual ~PathFinderConfigurationWidget();
 };
 
 #endif /* PATHFINDERCONFIGURATIONWIDGET_H_ */

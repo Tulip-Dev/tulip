@@ -1063,10 +1063,12 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
 
     // remove edge from nodes newContainers if needed
     std::pair<node, node>* eEnds = addedEdgesEnds.get(e);
+
     if (eEnds) {
-        removeFromEdgeContainer(newContainers, e, eEnds->first);
-        removeFromEdgeContainer(newContainers, e, eEnds->second);
+      removeFromEdgeContainer(newContainers, e, eEnds->first);
+      removeFromEdgeContainer(newContainers, e, eEnds->second);
     }
+
     return;
   }
 
@@ -1211,6 +1213,7 @@ void GraphUpdatesRecorder::afterSetEnds(Graph* g, edge e) {
 void GraphUpdatesRecorder::addSubGraph(Graph* g, Graph* sg) {
   // last added sub-graph will be deleted first during undo/redo
   addedSubGraphs.push_front(std::make_pair(g, sg));
+
   if (restartAllowed)
     sg->addListener(this);
 }

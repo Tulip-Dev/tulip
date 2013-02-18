@@ -40,90 +40,100 @@ class QPushButton;
 * with length limitations.
 */
 class PathFinder: public tlp::GLInteractorComposite {
-    Q_OBJECT
+  Q_OBJECT
 public:
 
   PLUGININFORMATIONS("PathFinder", "Tulip Team", "03/24/2010", "Path finding interactor", "1.0", "Information")
 
-    PathFinder(const tlp::PluginContext *);
-    virtual ~PathFinder();
-    void construct();
-    unsigned int priority() const {return 0;}
-    virtual QWidget *configurationWidget() const;
+  PathFinder(const tlp::PluginContext *);
+  virtual ~PathFinder();
+  void construct();
+  unsigned int priority() const {
+    return 0;
+  }
+  virtual QWidget *configurationWidget() const;
 
-    /**
-     * @return The name of the property used to get the weight values over the edges.
-     */
-    inline std::string getWeightMetricName() const { return this->weightMetric; }
+  /**
+   * @return The name of the property used to get the weight values over the edges.
+   */
+  inline std::string getWeightMetricName() const {
+    return this->weightMetric;
+  }
 
-    /**
-     * @return true if the user chose not to select only one path
-     */
-    inline bool isSelectAllPaths() const { return this->selectAllPaths; }
+  /**
+   * @return true if the user chose not to select only one path
+   */
+  inline bool isSelectAllPaths() const {
+    return this->selectAllPaths;
+  }
 
-    /**
-     * @return The edge orientation used when computing the path.
-     * @see PathAlgorithm::EdgeOrientation
-     */
-    inline PathAlgorithm::EdgeOrientation getEdgeOrientation() const { return this->edgeOrientation; }
+  /**
+   * @return The edge orientation used when computing the path.
+   * @see PathAlgorithm::EdgeOrientation
+   */
+  inline PathAlgorithm::EdgeOrientation getEdgeOrientation() const {
+    return this->edgeOrientation;
+  }
 
-    /**
-     * @return the type of path the user wants to select.
-     * @see PathAlgorithm::PathType
-     */
-    inline PathAlgorithm::PathType getPathsType() const { return this->pathsTypes; }
+  /**
+   * @return the type of path the user wants to select.
+   * @see PathAlgorithm::PathType
+   */
+  inline PathAlgorithm::PathType getPathsType() const {
+    return this->pathsTypes;
+  }
 
-    /**
-     * @return The length tolerance factor when the user doesn't want only the shortest path.
-     */
-    double getTolerance();
+  /**
+   * @return The length tolerance factor when the user doesn't want only the shortest path.
+   */
+  double getTolerance();
 
-    /**
-     * @return The active path highlighters
-     */
-    std::vector<std::string> getActiveHighlighters();
+  /**
+   * @return The active path highlighters
+   */
+  std::vector<std::string> getActiveHighlighters();
 
-    /**
-     * @return The inactive path highlighters
-     */
-    std::vector<std::string> getInactiveHighlighters();
+  /**
+   * @return The inactive path highlighters
+   */
+  std::vector<std::string> getInactiveHighlighters();
 
-    /**
-     * @return All the installed path highlighters
-     */
-    std::vector<std::string> getHighlighters();
+  /**
+   * @return All the installed path highlighters
+   */
+  std::vector<std::string> getHighlighters();
 
-    virtual bool isCompatible(const std::string &viewName) const {
-      return (viewName=="Node Link Diagram view");
-    }
+  virtual bool isCompatible(const std::string &viewName) const {
+    return (viewName=="Node Link Diagram view");
+  }
 
 public slots:
-    void setSelectAllPaths(bool s);
-    void setEdgeOrientation(const QString &orientation);
-    void setPathsType(const QString &pathType);
-    void setWeightMetric(const QString &metric);
-    void setTolerance(int i);
-    void activateTolerance(bool activated);
-    void configureHighlighterButtonPressed();
+  void setSelectAllPaths(bool s);
+  void setEdgeOrientation(const QString &orientation);
+  void setPathsType(const QString &pathType);
+  void setWeightMetric(const QString &metric);
+  void setTolerance(int i);
+  void activateTolerance(bool activated);
+  void configureHighlighterButtonPressed();
 
 private:
-    PathFinderComponent *getPathFinderComponent();
+  PathFinderComponent *getPathFinderComponent();
 
-    std::string weightMetric;
-    bool selectAllPaths;
-    PathAlgorithm::EdgeOrientation edgeOrientation;
-    PathAlgorithm::PathType pathsTypes;
-    bool toleranceActivated;
-    double tolerance;
+  std::string weightMetric;
+  bool selectAllPaths;
+  PathAlgorithm::EdgeOrientation edgeOrientation;
+  PathAlgorithm::PathType pathsTypes;
+  bool toleranceActivated;
+  double tolerance;
 
-    // Used for GUI interaction.
-    std::map<PathAlgorithm::EdgeOrientation, std::string> edgeOrientationLabels;
-    std::map<PathAlgorithm::PathType, std::string> pathsTypesLabels;
+  // Used for GUI interaction.
+  std::map<PathAlgorithm::EdgeOrientation, std::string> edgeOrientationLabels;
+  std::map<PathAlgorithm::PathType, std::string> pathsTypesLabels;
 
-    // GUI elements.
-    PathFinderConfigurationWidget *_configurationWidget;
-    tlp::StringsListSelectionWidget *highlightersListWidget;
-    QPushButton *configureHighlighterBtn;
+  // GUI elements.
+  PathFinderConfigurationWidget *_configurationWidget;
+  tlp::StringsListSelectionWidget *highlightersListWidget;
+  QPushButton *configureHighlighterBtn;
 };
 
 #endif /* PATHFINDER_H_ */

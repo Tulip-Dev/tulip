@@ -23,16 +23,15 @@
 #include <tulip/Node.h>
 #include <vector>
 
-class BendsTools
-{
+class BendsTools {
 public:
-    static  std::vector<tlp::node> bendsSimplification( std::vector<tlp::node> &bends, tlp::LayoutProperty * layout);
+  static  std::vector<tlp::node> bendsSimplification( std::vector<tlp::node> &bends, tlp::LayoutProperty * layout);
 
 private:
-    BendsTools();
+  BendsTools();
 
-    static bool straightLine(tlp::LayoutProperty *  layout, const tlp::node a, const tlp::node b, const tlp::node c);
-    static double cosAlpha(tlp::LayoutProperty *  layout, const tlp::node a, const tlp::node b, const tlp::node c);
+  static bool straightLine(tlp::LayoutProperty *  layout, const tlp::node a, const tlp::node b, const tlp::node c);
+  static double cosAlpha(tlp::LayoutProperty *  layout, const tlp::node a, const tlp::node b, const tlp::node c);
 };
 
 #endif // BENDSTOOLS_H

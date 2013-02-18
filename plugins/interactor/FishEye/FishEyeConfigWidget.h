@@ -1,5 +1,5 @@
 /*
-	  FishEyeConfigWidget.h
+    FishEyeConfigWidget.h
 
    Created on: 4 juin 2009
        Author: Antoine Lambert
@@ -23,19 +23,19 @@ class FishEyeConfigWidget : public QWidget, public Ui::FishEyeConfigWidget {
 
 public :
 
-	FishEyeConfigWidget(QWidget *parent = 0);
+  FishEyeConfigWidget(QWidget *parent = 0);
 
-	int getFishEyeType();
+  int getFishEyeType();
 
-	float getFishEyeRadius();
-	void setFishEyeRadius(const float radius);
+  float getFishEyeRadius();
+  void setFishEyeRadius(const float radius);
 
-	float getFishEyeHeight();
-	void setFishEyeHeight(const float height);
+  float getFishEyeHeight();
+  void setFishEyeHeight(const float height);
 
-	float getFishEyeRadiusIncrementStep();
+  float getFishEyeRadiusIncrementStep();
 
-	float getFishEyeHeightIncrementStep();
+  float getFishEyeHeightIncrementStep();
 
 };
 

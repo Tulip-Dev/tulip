@@ -1,4 +1,4 @@
- //-*-c++-*-
+//-*-c++-*-
 /*
  Author: Ludwig Fiolka
  Email : ludwig.fiolka@inria.fr
@@ -20,34 +20,34 @@
 
 class EnclosingCircleConfigurationWidget: public QWidget, public Ui::EnclosingCircleConfigurationData {
 public:
-	EnclosingCircleConfigurationWidget(QWidget *parent=0): QWidget(parent) {
-		setupUi(this);
-	}
+  EnclosingCircleConfigurationWidget(QWidget *parent=0): QWidget(parent) {
+    setupUi(this);
+  }
 };
 
 class EnclosingCircleHighlighter: public QObject, public PathHighlighter {
-	Q_OBJECT
+  Q_OBJECT
 public:
   inline EnclosingCircleHighlighter(): PathHighlighter("Enclosing circle"), circleColor(200,200,200), outlineColor(0,0,0), alpha(128), inversedColor(false) {}
   void highlight(const PathFinder *parent, tlp::GlMainWidget *glMainWidget, tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt);
-	void draw(tlp::GlMainWidget *glMainWidget);
-	PathHighlighter *clone();
-	bool isConfigurable();
-	QWidget *getConfigurationWidget();
+  void draw(tlp::GlMainWidget *glMainWidget);
+  PathHighlighter *clone();
+  bool isConfigurable();
+  QWidget *getConfigurationWidget();
 
 public slots:
-	void inverseColorRadioChecked(bool checked);
-	void solidColorRadioChecked(bool checked);
-	void colorButtonClicked();
+  void inverseColorRadioChecked(bool checked);
+  void solidColorRadioChecked(bool checked);
+  void colorButtonClicked();
   void alphaChanged(int);
 
 private:
-	tlp::Color circleColor;
-	tlp::Color outlineColor;
+  tlp::Color circleColor;
+  tlp::Color outlineColor;
   int alpha;
-	bool inversedColor;
+  bool inversedColor;
 
-	EnclosingCircleConfigurationWidget *configurationWidget;
+  EnclosingCircleConfigurationWidget *configurationWidget;
 };
 
 #endif /* ENCLOSINGCIRCLEHIGHLIGHTER_H_ */

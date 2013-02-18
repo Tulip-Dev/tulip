@@ -17,24 +17,24 @@ using namespace tlp;
 void ZoomAndPanHighlighter::highlight(const PathFinder*, GlMainWidget *glMainWidget, BooleanProperty *selection, node, node) {
   GlGraphInputData *inputData(getInputData(glMainWidget));
   Graph *graph = glMainWidget->getScene()->getGlGraphComposite()->getGraph();
-	LayoutProperty *layout = inputData->getElementLayout();
+  LayoutProperty *layout = inputData->getElementLayout();
   BoundingBox bbox(computeBoundingBox(graph, layout, inputData->getElementSize(), inputData->getElementRotation(), selection));
 
   QtGlSceneZoomAndPanAnimator animator(glMainWidget, bbox);
-	animator.animateZoomAndPan();
+  animator.animateZoomAndPan();
 }
 
 void ZoomAndPanHighlighter::draw(GlMainWidget*) {
 }
 
 PathHighlighter *ZoomAndPanHighlighter::clone() {
-	return new ZoomAndPanHighlighter;
+  return new ZoomAndPanHighlighter;
 }
 
 bool ZoomAndPanHighlighter::isConfigurable() {
-	return false;
+  return false;
 }
 
 QWidget *ZoomAndPanHighlighter::getConfigurationWidget() {
-	return 0;
+  return 0;
 }

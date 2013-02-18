@@ -92,11 +92,11 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
 }
 
 WorkspacePanel::~WorkspacePanel() {
-   //Ensure the current interactor configuration widget is not deleted by the scrool area.
-    //It is up to the interactor developer to delete its configuration widget.
-    if (_currentInteractorConfigurationItem != NULL) {
-      static_cast<QScrollArea*>(_currentInteractorConfigurationItem->widget())->takeWidget();
-     }
+  //Ensure the current interactor configuration widget is not deleted by the scrool area.
+  //It is up to the interactor developer to delete its configuration widget.
+  if (_currentInteractorConfigurationItem != NULL) {
+    static_cast<QScrollArea*>(_currentInteractorConfigurationItem->widget())->takeWidget();
+  }
 
   delete _ui;
 
@@ -131,7 +131,8 @@ void WorkspacePanel::setView(tlp::View* view) {
     disconnect(_view,SIGNAL(graphSet(tlp::Graph*)),this,SLOT(viewGraphSet(tlp::Graph*)));
     disconnect(_view,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
     delete _view->graphicsView();
-}
+  }
+
   delete _view;
 
   _view = view;
@@ -337,11 +338,13 @@ void WorkspacePanel::setGraphsModel(tlp::GraphHierarchiesModel* model) {
 }
 
 void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
-assert(dynamic_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model()));
+  assert(dynamic_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model()));
 #ifndef NDEBUG
+
   if(g) {
     qDebug() << "Setting graph " << g->getName() << " for panel " << windowTitle();
   }
+
 #endif // NDEBUG
 
   tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
@@ -356,6 +359,7 @@ assert(dynamic_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model()));
 void WorkspacePanel::graphComboIndexChanged() {
   tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),TulipModel::GraphRole).value<tlp::Graph*>();
 #ifndef NDEBUG
+
   if (g != NULL) {
     qDebug() << "selecting graph " << g->getName() << " in view";
   }
