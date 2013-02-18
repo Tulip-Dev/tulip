@@ -25,7 +25,6 @@
 #include <QtGui/QStyleOptionViewItem>
 #include <QtGui/QMouseEvent>
 
-
 class TreeViewDelegate: public QStyledItemDelegate {
 public:
     TreeViewDelegate(QObject* parent = 0): QStyledItemDelegate(parent) {
@@ -79,13 +78,13 @@ void TreeViewComboBox::hidePopup() {
         _skipNextHide = false;
     else {
         QComboBox::hidePopup();
-        selectIndex(view()->currentIndex());
         _popupVisible = false;
+        selectIndex(view()->currentIndex());
     }
 }
 
 void TreeViewComboBox::selectIndex(const QModelIndex& index) {
-    if (index != _lastIndex) {
+    if (!_popupVisible && index != _lastIndex) {
         _lastIndex = index;
         setRootModelIndex(index.parent());
         setCurrentIndex(index.row());
