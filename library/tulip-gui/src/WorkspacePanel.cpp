@@ -92,6 +92,12 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
 }
 
 WorkspacePanel::~WorkspacePanel() {
+   //Ensure the current interactor configuration widget is not deleted by the scrool area.
+    //It is up to the interactor developer to delete its configuration widget.
+    if (_currentInteractorConfigurationItem != NULL) {
+      static_cast<QScrollArea*>(_currentInteractorConfigurationItem->widget())->takeWidget();
+     }
+
   delete _ui;
 
   if (_view != NULL) {
