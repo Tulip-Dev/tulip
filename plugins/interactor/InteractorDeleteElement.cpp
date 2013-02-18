@@ -18,8 +18,7 @@
  */
 
 #include <tulip/MouseInteractors.h>
-
-#include "NodeLinkDiagramComponentInteractor.h"
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
 using namespace tlp;
 
