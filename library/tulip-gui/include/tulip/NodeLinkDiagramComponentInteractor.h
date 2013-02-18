@@ -19,10 +19,9 @@
 #ifndef NODELINKDIAGRAMCOMPONENTINTERACTOR_H
 #define NODELINKDIAGRAMCOMPONENTINTERACTOR_H
 
-#include <QtGui/QLabel>
-
 #include <tulip/GLInteractor.h>
-#include <tulip/NodeLinkDiagramComponent.h>
+
+class QLabel;
 
 namespace tlp {
 
@@ -36,8 +35,7 @@ class TLP_QT_SCOPE NodeLinkDiagramComponentInteractor
 
 public :
 
-  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text):GLInteractorComposite(QIcon(iconPath),text), _label(NULL), _priority(0) {
-  }
+  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text, unsigned int priority=0);
 
   virtual ~NodeLinkDiagramComponentInteractor();
 
@@ -48,7 +46,7 @@ public :
 
   virtual unsigned int priority() const;
 
-  void setPriority(unsigned int p);
+  void setPriority(const unsigned int p);
 
 };
 }

@@ -130,11 +130,8 @@ void WorkspacePanel::setView(tlp::View* view) {
     disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
     disconnect(_view,SIGNAL(graphSet(tlp::Graph*)),this,SLOT(viewGraphSet(tlp::Graph*)));
     disconnect(_view,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
-  }
-
-  if (_view)
     delete _view->graphicsView();
-
+}
   delete _view;
 
   _view = view;
