@@ -1714,6 +1714,8 @@ If no edge is found, returns an invalid edge.
 %Docstring
 tlp.Graph.hasEdge(node1, node2[, directed=True])
 
+.. versionadded:: 4.2
+
 Returns true if it exists an edge between two nodes.
 If no edge is found, returns false.
 
@@ -1744,6 +1746,8 @@ If no edge is found, returns false.
 	std::vector<tlp::edge> getEdges(const tlp::node node1, const tlp::node node2, bool directed=true) const ;
 %Docstring
 tlp.Graph.getEdges(node1, node2[, directed=True])
+
+.. versionadded:: 4.2
 
 Returns the edges found between two nodes.
 If no edge is found, returns edges is empty.
