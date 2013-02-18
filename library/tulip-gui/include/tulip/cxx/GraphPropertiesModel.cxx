@@ -132,7 +132,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
     else if (index.column() == 1)
       return pi->getTypename().c_str();
     else if (index.column() == 2)
-      return (_graph->existLocalProperty(pi->getName()) ? trUtf8("Local") : trUtf8("Inherited"));
+      return (_graph->existLocalProperty(pi->getName()) ? trUtf8("Local") : tr("Inherited from graph ") + QString::number(pi->getGraph()->getId()) + " (" + QString::fromUtf8(pi->getGraph()->getName().c_str()) + ')');
   }
 
   else if (role == Qt::DecorationRole && index.column() == 0 && pi != NULL && !_graph->existLocalProperty(pi->getName()))
