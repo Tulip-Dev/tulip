@@ -28,24 +28,35 @@
 #include <QtGui/QTreeView>
 
 class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
+
   Q_OBJECT
   QTreeView* _treeView;
-  bool _expandingItem;
+  bool _skipNextHide;
+  bool _popupVisible;
+  QModelIndex _lastIndex;
 
 public:
   explicit TreeViewComboBox(QWidget *parent = NULL);
 
-  void setGraphsModel(QAbstractItemModel * model);
+  void setModel(QAbstractItemModel * model);
 
   virtual void showPopup();
   virtual void hidePopup();
 
   QModelIndex selectedIndex() const;
 
+  bool eventFilter(QObject*, QEvent*);
+
 public slots:
+
   void selectIndex(const QModelIndex&);
-  void itemExpanded();
-  void rowsInserted(const QModelIndex &, int, int);
+  void rowsRemoved(const QModelIndex&, int, int);
+  void currentIndexChanged();
+
+signals:
+
+  void currentItemChanged();
+
 };
 
 #endif // TREEVIEWCOMBOBOX_H

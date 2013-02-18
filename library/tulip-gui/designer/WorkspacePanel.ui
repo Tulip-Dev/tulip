@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>945</width>
-    <height>597</height>
+    <width>943</width>
+    <height>595</height>
    </rect>
   </property>
   <property name="acceptDrops">
@@ -182,7 +182,7 @@ background-color: #A9A9A9;
          </size>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/left_arrow-white.png</normaloff>:/tulip/gui/ui/left_arrow-white.png</iconset>
         </property>
        </widget>
@@ -227,7 +227,7 @@ background-color: #A9A9A9;
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>76</width>
+           <width>79</width>
            <height>25</height>
           </rect>
          </property>
@@ -255,7 +255,7 @@ background-color: #A9A9A9;
          </size>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/right_arrow-white.png</normaloff>:/tulip/gui/ui/right_arrow-white.png</iconset>
         </property>
        </widget>
@@ -293,7 +293,7 @@ background-color: #A9A9A9;
          </size>
         </property>
         <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+         <enum>QComboBox::AdjustToContents</enum>
         </property>
        </widget>
       </item>
@@ -331,7 +331,7 @@ background-color: #A9A9A9;
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../resources/TulipGUIResource.qrc">
+         <iconset>
           <normaloff>:/tulip/gui/ui/lightclosebutton.png</normaloff>:/tulip/gui/ui/lightclosebutton.png</iconset>
         </property>
        </widget>
@@ -354,6 +354,7 @@ background-color: #A9A9A9;
    <class>TreeViewComboBox</class>
    <extends>QComboBox</extends>
    <header>tulip/TreeViewComboBox.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>tlp::DragHandle</class>
@@ -361,9 +362,7 @@ background-color: #A9A9A9;
    <header location="global">tulip/DragHandle.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>currentInteractorButton</sender>
@@ -420,8 +419,8 @@ background-color: #A9A9A9;
    <slot>click()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>64</x>
-     <y>297</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>935</x>

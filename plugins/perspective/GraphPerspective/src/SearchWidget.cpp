@@ -144,13 +144,13 @@ QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator
 
 SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SearchWidget) {
   _ui->setupUi(this);
-  setEnabled(false);
   _ui->tableWidget->hide();
   _ui->tableWidget->setItemDelegate(new TulipItemDelegate(_ui->tableWidget));
 
   _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(NULL,false,_ui->resultsStorageCombo));
   _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(NULL,false,_ui->searchTermACombo));
   _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Custom value"),NULL,false,_ui->searchTermBCombo));
+  connect(_ui->graphCombo,SIGNAL(currentItemChanged()),this,SLOT(graphIndexChanged()));
 }
 
 SearchWidget::~SearchWidget() {
@@ -159,8 +159,7 @@ SearchWidget::~SearchWidget() {
 
 void SearchWidget::setModel(tlp::GraphHierarchiesModel *model) {
   _ui->graphCombo->setModel(model);
-  connect(model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
-  currentGraphChanged(model->currentGraph());
+  setGraph(model->currentGraph());
 }
 
 void SearchWidget::currentGraphChanged(tlp::Graph *g) {
@@ -186,8 +185,6 @@ void searchForIndex(QComboBox* combo, const QString& s) {
 }
 
 void SearchWidget::setGraph(Graph *g) {
-  setEnabled(g != NULL);
-
   if (g != NULL) {
     // Force creation of viewSelection to ensure we have at least one boolean property exising in the graph
     g->getProperty<BooleanProperty>("viewSelection");
@@ -349,7 +346,7 @@ void SearchWidget::search() {
   Observable::unholdObservers();
 }
 
-void SearchWidget::graphIndexChanged(int) {
+void SearchWidget::graphIndexChanged() {
   tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),TulipModel::GraphRole).value<tlp::Graph*>();
   setGraph(g);
 }

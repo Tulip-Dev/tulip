@@ -59,7 +59,8 @@ public slots:
   void search();
 
 protected slots:
-  void graphIndexChanged(int);
+
+  void graphIndexChanged();
   void termAChanged();
   void termBChanged();
   void updateOperators(tlp::PropertyInterface* a, tlp::PropertyInterface* b);

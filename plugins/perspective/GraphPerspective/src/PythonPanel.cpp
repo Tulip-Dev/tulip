@@ -19,6 +19,7 @@ PythonPanel::PythonPanel(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonP
   _ui->setupUi(this);
   connect(_ui->clearButton, SIGNAL(clicked()), this, SLOT(clearConsole()));
   connect(_ui->consoleWidget, SIGNAL(textChanged()), this, SLOT(newOutputInConsole()));
+  connect(_ui->graphCombo,SIGNAL(currentItemChanged()),this,SLOT(graphComboIndexChanged()));
   tlp::PythonInterpreter::getInstance()->runString(setCurrentGraphFunction);
 }
 
@@ -31,8 +32,7 @@ QAbstractScrollArea *PythonPanel::consoleWidget() {
 }
 
 void PythonPanel::setModel(tlp::GraphHierarchiesModel* model) {
-  _ui->graphCombo->setGraphsModel(model);
-  connect(_ui->graphCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(graphComboIndexChanged()));
+  _ui->graphCombo->setModel(model);
 }
 
 void PythonPanel::graphComboIndexChanged() {

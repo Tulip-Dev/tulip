@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>989</width>
-    <height>231</height>
+    <width>985</width>
+    <height>227</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -54,8 +54,8 @@ background-color: white;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>974</width>
-        <height>233</height>
+        <width>967</width>
+        <height>242</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -497,26 +497,11 @@ font: bold;
    <class>TreeViewComboBox</class>
    <extends>QComboBox</extends>
    <header>tulip/TreeViewComboBox.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
  <connections>
-  <connection>
-   <sender>graphCombo</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>SearchWidget</receiver>
-   <slot>graphIndexChanged(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>178</x>
-     <y>17</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>494</x>
-     <y>271</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>searchTermACombo</sender>
    <signal>currentIndexChanged(int)</signal>
