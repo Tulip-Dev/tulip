@@ -335,7 +335,7 @@ QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex 
 
   if (parent.isValid())
     g = reinterpret_cast<Graph*>(parent.internalPointer())->getNthSubGraph(row);
-  else
+  else if (row < _graphs.size())
     g = _graphs[row];
 
   if (g == NULL) {
