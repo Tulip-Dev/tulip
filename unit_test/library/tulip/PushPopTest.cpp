@@ -271,6 +271,21 @@ void PushPopTest::testSetValue() {
   prop->setEdgeValue(e0, 2.0);
   CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n1));
   CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeValue(e0));
+  prop->setNodeValue(n1, 4.0);
+  prop->setEdgeValue(e0, 4.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 4.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 4.0);
+
+  graph->pop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 1.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 1.0);
+
+  graph->unpop();
+  CPPUNIT_ASSERT(prop->getNodeValue(n0) == 0.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e0) == 4.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n2) == 2.0);
+  CPPUNIT_ASSERT(prop->getEdgeValue(e1) == 2.0);
+  CPPUNIT_ASSERT(prop->getNodeValue(n1) == 4.0);
 
   graph->push();
   prop->setAllNodeValue(3.0);
@@ -279,7 +294,7 @@ void PushPopTest::testSetValue() {
   CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeValue(n2));
   graph->pop();
   CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n0));
-  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(4.0, prop->getNodeValue(n1));
   CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n2));
 
   graph->unpop();
@@ -296,8 +311,8 @@ void PushPopTest::testSetValue() {
 
   graph->pop();
   CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n0));
-  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n1));
-  CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(4.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(4.0, prop->getEdgeValue(e0));
 
   graph->unpop();
   CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeValue(n0));
@@ -312,8 +327,8 @@ void PushPopTest::testSetValue() {
 
   graph->pop();
   CPPUNIT_ASSERT_EQUAL(0.0, prop->getNodeValue(n0));
-  CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeValue(n1));
-  CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeValue(e0));
+  CPPUNIT_ASSERT_EQUAL(4.0, prop->getNodeValue(n1));
+  CPPUNIT_ASSERT_EQUAL(4.0, prop->getEdgeValue(e0));
 }
 
 //==========================================================
