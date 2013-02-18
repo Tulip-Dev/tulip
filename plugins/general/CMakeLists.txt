@@ -1,1 +1,2 @@
 ADD_SUBDIRECTORY(ReverseEdges)
+ADD_SUBDIRECTORY(EdgeBundling)
