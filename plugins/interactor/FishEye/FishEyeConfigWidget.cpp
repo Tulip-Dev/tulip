@@ -1,5 +1,5 @@
 /*
-	  FishEyeConfigWidget.cpp
+    FishEyeConfigWidget.cpp
 
    Created on: 4 juin 2009
        Author: Antoine Lambert
@@ -17,39 +17,41 @@
 #include "FishEyeConfigWidget.h"
 
 FishEyeConfigWidget::FishEyeConfigWidget(QWidget *parent) : QWidget(parent) {
-	setupUi(this);
+  setupUi(this);
 }
 
 int FishEyeConfigWidget::getFishEyeType() {
-	if (furnasFisheyeRb->isChecked()) {
-		return 1;
-	} else if (auberFishEyeRb->isChecked()){
-		return 2;
-	} else {
-		return 3;
-	}
+  if (furnasFisheyeRb->isChecked()) {
+    return 1;
+  }
+  else if (auberFishEyeRb->isChecked()) {
+    return 2;
+  }
+  else {
+    return 3;
+  }
 }
 
 float FishEyeConfigWidget::getFishEyeRadius() {
-	return (float) radiusValSP->value();
+  return (float) radiusValSP->value();
 }
 
 void FishEyeConfigWidget::setFishEyeRadius(const float radius) {
-	radiusValSP->setValue(radius);
+  radiusValSP->setValue(radius);
 }
 
 float FishEyeConfigWidget::getFishEyeHeight() {
-	return (float) heightValSP->value();
+  return (float) heightValSP->value();
 }
 
 void FishEyeConfigWidget::setFishEyeHeight(const float height) {
-	heightValSP->setValue(height);
+  heightValSP->setValue(height);
 }
 
 float FishEyeConfigWidget::getFishEyeRadiusIncrementStep() {
-	return (float) radiusIncrementStepSP->value();
+  return (float) radiusIncrementStepSP->value();
 }
 
 float FishEyeConfigWidget::getFishEyeHeightIncrementStep() {
-	return (float) heightIncrementStepSP->value();
+  return (float) heightIncrementStepSP->value();
 }

@@ -1,5 +1,5 @@
 /*
-	  FishEyeInteractor.h
+    FishEyeInteractor.h
 
    Created on: 29 mai 2009
        Author: Antoine Lambert
@@ -27,27 +27,33 @@ class FishEyeInteractorComponent : public GLInteractorComponent {
 
 public :
 
-	FishEyeInteractorComponent();
-	FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent);
-	~FishEyeInteractorComponent();
+  FishEyeInteractorComponent();
+  FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent);
+  ~FishEyeInteractorComponent();
 
-	bool eventFilter(QObject *widget, QEvent *e);
+  bool eventFilter(QObject *widget, QEvent *e);
 
-	InteractorComponent *clone() {return new FishEyeInteractorComponent(*this);}
-	bool compute(GlMainWidget *) { return false; }
+  InteractorComponent *clone() {
+    return new FishEyeInteractorComponent(*this);
+  }
+  bool compute(GlMainWidget *) {
+    return false;
+  }
 
   void viewChanged(View *view);
 
-	void setConfigWidget(FishEyeConfigWidget *configWidget) {this->configWidget = configWidget;}
+  void setConfigWidget(FishEyeConfigWidget *configWidget) {
+    this->configWidget = configWidget;
+  }
 
-	bool draw(GlMainWidget *glMainWidget);
+  bool draw(GlMainWidget *glMainWidget);
 
 private :
 
-	FishEyeConfigWidget *configWidget;
-	Coord fisheyeCenter;
-	GlShaderProgram *fisheyeShader;
-	bool activateFishEye;
+  FishEyeConfigWidget *configWidget;
+  Coord fisheyeCenter;
+  GlShaderProgram *fisheyeShader;
+  bool activateFishEye;
 
 };
 
@@ -78,13 +84,15 @@ public :
   FishEyeInteractor(const PluginContext *);
   ~FishEyeInteractor();
 
-	void construct();
+  void construct();
 
   void uninstall();
 
   QWidget *configurationWidget() const;
 
-  unsigned int priority() const {return 0;}
+  unsigned int priority() const {
+    return 0;
+  }
 
   virtual bool isCompatible(const std::string &viewName) const {
     return (viewName=="Node Link Diagram view");
@@ -92,7 +100,7 @@ public :
 
 private :
 
-	FishEyeConfigWidget *fisheyeConfigWidget;
+  FishEyeConfigWidget *fisheyeConfigWidget;
 };
 
 

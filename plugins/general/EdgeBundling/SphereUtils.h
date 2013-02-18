@@ -18,7 +18,7 @@
  */
 
 #ifndef SPHERE_UTILS_H
-#define SPHERE_UTILS_H 
+#define SPHERE_UTILS_H
 
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>

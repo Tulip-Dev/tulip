@@ -1,4 +1,4 @@
- //-*-c++-*-
+//-*-c++-*-
 /*
  Author: Ludwig Fiolka
  Email : ludwig.fiolka@inria.fr
@@ -16,12 +16,12 @@
 
 class ZoomAndPanHighlighter: public PathHighlighter, public QObject {
 public:
-	inline ZoomAndPanHighlighter(): PathHighlighter("Zoom and pan") {}
+  inline ZoomAndPanHighlighter(): PathHighlighter("Zoom and pan") {}
   void highlight(const PathFinder *parent, tlp::GlMainWidget *glMainWidget, tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt);
-	void draw(tlp::GlMainWidget *glMainWidget);
-	PathHighlighter *clone();
-	bool isConfigurable();
-	QWidget *getConfigurationWidget();
+  void draw(tlp::GlMainWidget *glMainWidget);
+  PathHighlighter *clone();
+  bool isConfigurable();
+  QWidget *getConfigurationWidget();
 };
 
 #endif /* ZOOMANDPANHIGHLIGHTER_H_ */

@@ -1,4 +1,4 @@
- //-*-c++-*-
+//-*-c++-*-
 /*
  Author: Ludwig Fiolka
  Email : ludwig.fiolka@inria.fr
@@ -27,33 +27,33 @@ class Graph;
  */
 class PathAlgorithm {
 public:
-	/**
-	 * By default, Tulip works on oriented edges. This behavior can be overloaded by forcing the edges to be Oriented, non oriented or reversed.
-	 */
-	enum EdgeOrientation { Oriented, NonOriented, Reversed };
+  /**
+   * By default, Tulip works on oriented edges. This behavior can be overloaded by forcing the edges to be Oriented, non oriented or reversed.
+   */
+  enum EdgeOrientation { Oriented, NonOriented, Reversed };
 
-	/**
-	 * A path algorithm can look for only one (shortest) path, all the shortest paths or all the paths.
-	 */
-	enum PathType { OneShortest, AllShortest, AllPaths };
+  /**
+   * A path algorithm can look for only one (shortest) path, all the shortest paths or all the paths.
+   */
+  enum PathType { OneShortest, AllShortest, AllPaths };
 
-	/**
-	 * Compute a path between two nodes.
-	 * @param pathType the type of path to look for.
-	 * @param edgesOrientation The edge orientation policy.
-	 * @param src The source node
-	 * @param tgt The target node
-	 * @param result Nodes and edges located in the path will be set to true in a resulting boolean property.
-	 * @param weights The edges weights
-	 * @param tolerance (only when all paths are selected) The length tolerance factor.
-	 * @return
-	 *
-	 * @see PathType
-	 * @see EdgeOrientation
-	 * @see Dikjstra
-	 * @see DFS
-	 */
-	static bool computePath(tlp::Graph *graph, PathType pathType, EdgeOrientation edgesOrientation, tlp::node src, tlp::node tgt, tlp::BooleanProperty *result, tlp::DoubleProperty *weights=0, double tolerance=DBL_MAX);
+  /**
+   * Compute a path between two nodes.
+   * @param pathType the type of path to look for.
+   * @param edgesOrientation The edge orientation policy.
+   * @param src The source node
+   * @param tgt The target node
+   * @param result Nodes and edges located in the path will be set to true in a resulting boolean property.
+   * @param weights The edges weights
+   * @param tolerance (only when all paths are selected) The length tolerance factor.
+   * @return
+   *
+   * @see PathType
+   * @see EdgeOrientation
+   * @see Dikjstra
+   * @see DFS
+   */
+  static bool computePath(tlp::Graph *graph, PathType pathType, EdgeOrientation edgesOrientation, tlp::node src, tlp::node tgt, tlp::BooleanProperty *result, tlp::DoubleProperty *weights=0, double tolerance=DBL_MAX);
 };
 
 #endif /* PATHALGORITHM_H_ */

@@ -31,46 +31,50 @@
 
 class QuadTreeBundle {
 public:
-    static void compute(tlp::Graph *graph, double splitRatio, tlp::LayoutProperty *layout=NULL, tlp::SizeProperty *size=NULL);
-    //=====================================
-    static bool isIn(const tlp::Coord &p, const tlp::Coord &a, const tlp::Coord &b);
+  static void compute(tlp::Graph *graph, double splitRatio, tlp::LayoutProperty *layout=NULL, tlp::SizeProperty *size=NULL);
+  //=====================================
+  static bool isIn(const tlp::Coord &p, const tlp::Coord &a, const tlp::Coord &b);
 
 protected:
-    void createQuadTree(tlp::Graph *graph, tlp::LayoutProperty *layout=NULL, tlp::SizeProperty *size=NULL);
+  void createQuadTree(tlp::Graph *graph, tlp::LayoutProperty *layout=NULL, tlp::SizeProperty *size=NULL);
 private:
-    double minSize;
-    double nbNodesInOriginalGraph;
-    std::vector<tlp::node> resultNode;
-    tlp::LayoutProperty *layout;
-    tlp::SizeProperty   *size;
-    tlp::DoubleProperty *rot;
-    tlp::DoubleProperty *ntype;
-    tlp::Graph * graph;
-    double splitRatio;
-    typedef tlp::Vector<double, 2> Vec2D;
-    struct LessPair {
-        bool operator()( const Vec2D &a, const Vec2D &b) {
-            if ((a-b).norm() < 1E-6) return false;
-            if (a[0] < b[0]) return true;
-            if (a[0] > b[0]) return false;
-            if (a[1] < b[1]) return true;
-            return false;
-        }
-    };
-    typedef std::map<Vec2D, tlp::node, LessPair> MapVecNode;
-    MapVecNode mapN;
-    //=====================================
-    tlp::node splitEdge(tlp::node a, tlp::node b);
-    //=====================================
-    void elmentSplitting(const tlp::Coord &a, const tlp::Coord &b,
-                         const std::vector<tlp::node> &input,
-                         std::vector<tlp::node> &in,
-                         std::vector<tlp::node> &out);
-    //=====================================
-    void recQuad(const tlp::node a,
-                 const tlp::node b,
-                 const tlp::node c,
-                 const tlp::node d,
-                 const std::vector<tlp::node> &input);
+  double minSize;
+  double nbNodesInOriginalGraph;
+  std::vector<tlp::node> resultNode;
+  tlp::LayoutProperty *layout;
+  tlp::SizeProperty   *size;
+  tlp::DoubleProperty *rot;
+  tlp::DoubleProperty *ntype;
+  tlp::Graph * graph;
+  double splitRatio;
+  typedef tlp::Vector<double, 2> Vec2D;
+  struct LessPair {
+    bool operator()( const Vec2D &a, const Vec2D &b) {
+      if ((a-b).norm() < 1E-6) return false;
+
+      if (a[0] < b[0]) return true;
+
+      if (a[0] > b[0]) return false;
+
+      if (a[1] < b[1]) return true;
+
+      return false;
+    }
+  };
+  typedef std::map<Vec2D, tlp::node, LessPair> MapVecNode;
+  MapVecNode mapN;
+  //=====================================
+  tlp::node splitEdge(tlp::node a, tlp::node b);
+  //=====================================
+  void elmentSplitting(const tlp::Coord &a, const tlp::Coord &b,
+                       const std::vector<tlp::node> &input,
+                       std::vector<tlp::node> &in,
+                       std::vector<tlp::node> &out);
+  //=====================================
+  void recQuad(const tlp::node a,
+               const tlp::node b,
+               const tlp::node c,
+               const tlp::node d,
+               const std::vector<tlp::node> &input);
 };
 #endif // QUADTREE_H

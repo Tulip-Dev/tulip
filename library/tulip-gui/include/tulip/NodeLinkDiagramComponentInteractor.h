@@ -29,7 +29,7 @@ namespace tlp {
  *
  */
 class TLP_QT_SCOPE NodeLinkDiagramComponentInteractor
-  : public GLInteractorComposite {
+    : public GLInteractorComposite {
   QLabel* _label;
   unsigned int _priority;
 

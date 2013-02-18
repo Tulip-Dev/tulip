@@ -1,7 +1,7 @@
 #include "PathFinderConfigurationWidget.h"
 
 PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent): QWidget(parent) {
-    setupUi(this);
+  setupUi(this);
 }
 
 PathFinderConfigurationWidget::~PathFinderConfigurationWidget() {}
