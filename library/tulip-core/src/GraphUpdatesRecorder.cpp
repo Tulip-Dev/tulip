@@ -1063,8 +1063,10 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
 
     // remove edge from nodes newContainers if needed
     std::pair<node, node>* eEnds = addedEdgesEnds.get(e);
-    removeFromEdgeContainer(newContainers, e, eEnds->first);
-    removeFromEdgeContainer(newContainers, e, eEnds->second);
+    if (eEnds) {
+        removeFromEdgeContainer(newContainers, e, eEnds->first);
+        removeFromEdgeContainer(newContainers, e, eEnds->second);
+    }
     return;
   }
 
