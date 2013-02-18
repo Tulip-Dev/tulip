@@ -18,8 +18,14 @@
  */
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include <tulip/NodeLinkDiagramComponent.h>
+
+#include <QtGui/QLabel>
 
 using namespace tlp;
+
+NodeLinkDiagramComponentInteractor::NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text, unsigned int priority):GLInteractorComposite(QIcon(iconPath),text), _label(NULL), _priority(priority) {
+}
 
 NodeLinkDiagramComponentInteractor::~NodeLinkDiagramComponentInteractor() {
   delete _label;
@@ -45,6 +51,6 @@ unsigned int NodeLinkDiagramComponentInteractor::priority() const {
   return _priority;
 }
 
-void NodeLinkDiagramComponentInteractor::setPriority(unsigned int p) {
+void NodeLinkDiagramComponentInteractor::setPriority(const unsigned int p) {
   _priority = p;
 }
