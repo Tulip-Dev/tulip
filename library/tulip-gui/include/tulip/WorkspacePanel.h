@@ -21,17 +21,16 @@
 #ifndef WORKSPACEPANEL_H
 #define WORKSPACEPANEL_H
 
-#include <QtCore/QAbstractItemModel>
 #include <QtGui/QFrame>
+#include <QtGui/QAction>
 #include <tulip/tulipconf.h>
-#include <tulip/DataSet.h>
-#include <tulip/SimplePluginProgress.h>
 
 class QDragEnterEvent;
 class QGraphicsObject;
 class QPropertyAnimation;
 class QGraphicsProxyWidget;
 class QGraphicsRectItem;
+class QMimeData;
 
 namespace Ui {
 class WorkspacePanel;
