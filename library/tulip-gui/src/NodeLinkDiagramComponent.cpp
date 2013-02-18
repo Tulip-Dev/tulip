@@ -145,6 +145,7 @@ void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
   registerTriggers();
   centerView();
   emit drawNeeded();
+  drawOverview();
 }
 
 tlp::DataSet NodeLinkDiagramComponent::state() const {
