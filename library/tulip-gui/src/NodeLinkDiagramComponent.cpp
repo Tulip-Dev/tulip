@@ -321,6 +321,7 @@ void NodeLinkDiagramComponent::showGridControl() {
 
 void NodeLinkDiagramComponent::requestChangeGraph(Graph *graph) {
   this->loadGraphOnScene(graph);
+  registerTriggers();
   emit graphSet(graph);
 }
 
