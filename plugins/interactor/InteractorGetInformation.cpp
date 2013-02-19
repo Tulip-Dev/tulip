@@ -33,10 +33,10 @@ public:
   /**
    * Default constructor
    */
-  InteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get information on nodes/edges") {
+  InteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get/Edit informations on node or edge") {
     setPriority(4);
-    setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
-                               "<b>Mouse left</b> click on an element to display its properties");
+    setConfigurationWidgetText(QString("<h3>Get/Edit node or edge informations</h3>")+
+                               "<b>Mouse left click</b> on an element to display its properties.<br/>then <b>Mouse left click</b> on a row to edit the corresponding value.");
   }
 
   /**
