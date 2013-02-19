@@ -34,7 +34,6 @@ View::View()
 
 View::~View() {
   foreach(Interactor* i, _interactors) {
-    i->setView(NULL);
     delete i;
   }
 }
