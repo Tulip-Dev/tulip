@@ -391,7 +391,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       bool find=false;
       for(unsigned int i=0;i<tmpNodes.size();++i){
 	if(graph->isMetaNode(node(tmpNodes[i].getComplexEntityId()))){
-	  metaNode=node(tmpNodes[i].getComplexEntityId());
+      metaNode=node(tmpNodes[i].getComplexEntityId());
 	  find=true;
 	  break;
 	}
@@ -428,6 +428,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 	  colorProp->setNodeValue(metaNode,color);
 	  Observable::unholdObservers();
 	  nldc->requestChangeGraph(metaGraph);
+      nldc->centerView(true);
 	}
       }
       return true;
