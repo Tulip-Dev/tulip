@@ -22,6 +22,7 @@
 #define _Tulip_NODELINKDIAGRAMCOMPONENT_H
 
 #include <tulip/GlMainView.h>
+#include <tulip/Camera.h>
 
 class QDialog;
 
@@ -58,6 +59,7 @@ public:
 public slots:
   void draw();
   void requestChangeGraph(Graph *graph);
+  const Camera& goInsideItem(node meta);
 
 protected slots:
   void addRemoveItemToSelection();
