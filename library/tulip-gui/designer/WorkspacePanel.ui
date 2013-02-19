@@ -111,39 +111,6 @@ border: 1px solid #C9C9C9;
        <number>0</number>
       </property>
       <item>
-       <widget class="QToolButton" name="currentInteractorButton">
-        <property name="minimumSize">
-         <size>
-          <width>130</width>
-          <height>22</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>130</width>
-          <height>22</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Active tool (click to set-up)</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#currentInteractorButton {
-font: bold 10px;
-}</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="Line" name="sep1">
         <property name="minimumSize">
          <size>
@@ -227,7 +194,7 @@ background-color: #A9A9A9;
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>79</width>
+           <width>76</width>
            <height>25</height>
           </rect>
          </property>
@@ -279,6 +246,46 @@ background-color: #A9A9A9;
        </widget>
       </item>
       <item>
+       <widget class="QToolButton" name="currentInteractorButton">
+        <property name="minimumSize">
+         <size>
+          <width>130</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>130</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Active tool (click to configure)</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#currentInteractorButton {
+font: bold 10px;
+}</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextBesideIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="sep4">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="TreeViewComboBox" name="graphCombo">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -295,6 +302,7 @@ background-color: #A9A9A9;
         <property name="sizeAdjustPolicy">
          <enum>QComboBox::AdjustToContents</enum>
         </property>
+        <zorder>currentInteractorButton</zorder>
        </widget>
       </item>
       <item>
