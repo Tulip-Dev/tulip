@@ -323,6 +323,8 @@ void NodeLinkDiagramComponent::requestChangeGraph(Graph *graph) {
   this->loadGraphOnScene(graph);
   registerTriggers();
   emit graphSet(graph);
+  centerView();
+  draw();
 }
 
 void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point) {
@@ -406,10 +408,10 @@ void NodeLinkDiagramComponent::deleteItem() {
     graph()->delEdge(edge(itemId));
 }
 
-void NodeLinkDiagramComponent::goInsideItem() {
-  Graph *metaGraph=graph()->getNodeMetaInfo(node(itemId));
-  Size size=getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize()->getNodeValue(node(itemId));
-  Coord coord=getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout()->getNodeValue(node(itemId));
+const Camera& NodeLinkDiagramComponent::goInsideItem(node meta) {
+  Graph *metaGraph=graph()->getNodeMetaInfo(meta);
+  Size size=getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize()->getNodeValue(meta);
+  Coord coord=getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout()->getNodeValue(meta);
   BoundingBox bb;
   bb.expand(coord-size/2.f);
   bb.expand(coord+size/2.f);
@@ -420,6 +422,11 @@ void NodeLinkDiagramComponent::goInsideItem() {
   emit graphSet(metaGraph);
   centerView();
   draw();
+  return getGlMainWidget()->getScene()->getLayer("Main")->getCamera();
+}
+
+void NodeLinkDiagramComponent::goInsideItem() {
+  goInsideItem(node(itemId));
 }
 
 void NodeLinkDiagramComponent::ungroupItem() {

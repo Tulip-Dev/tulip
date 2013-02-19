@@ -399,36 +399,9 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       if (find) {
 	Graph *metaGraph=graph->getNodeMetaInfo(metaNode);
 	if (metaGraph) {
-	  BoundingBox boundingBox = GlNode(metaNode.id).getBoundingBox(glmainwidget->getScene()->getGlGraphComposite()->getInputData());
-	  Coord middle(boundingBox.center());
-	  Coord size(Coord(boundingBox[1] - boundingBox[0]) / 2.f);
-
-
-	  GlGraphRenderingParameters metaParameters = *glmainwidget->getScene()->getGlGraphComposite()->getInputData()->parameters;
-	  GlGraphInputData metaData(metaGraph,&metaParameters);
-	  BoundingBox bboxes = tlp::computeBoundingBox(metaGraph, metaData.getElementLayout(), metaData.getElementSize(), metaData.getElementRotation());
-	  Coord contentSize(bboxes[1] - bboxes[0]);
-	  if(size[0]/contentSize[0]<size[1]/contentSize[1]){
-	    size[1]*=((size[0]/contentSize[0])/(size[1]/contentSize[1]));
-	  }else
-	    size[0]*=((size[1]/contentSize[1])/(size[0]/contentSize[0]));
-
-	  BoundingBox newBoundingBox(middle-size, middle+size);
-
 	  graphHierarchy.push_back(graph);
-	  ColorProperty *colorProp=graph->getProperty<ColorProperty>("viewColor");
-	  float alphaOrigin=colorProp->getNodeValue(metaNode)[3];
-	  Observable::holdObservers();
-	  MyQtGlSceneZoomAndPanAnimator navigator(glmainwidget,nldc,newBoundingBox,graph,metaNode,0);
-	  navigator.animateZoomAndPan();
-	  cameraHierarchy.push_back(glmainwidget->getScene()->getLayer("Main")->getCamera());
 	  nodeHierarchy.push_back(metaNode);
-	  Color color=colorProp->getNodeValue(metaNode);
-	  color[3]=alphaOrigin;
-	  colorProp->setNodeValue(metaNode,color);
-	  Observable::unholdObservers();
-	  nldc->requestChangeGraph(metaGraph);
-      nldc->centerView(true);
+	  cameraHierarchy.push_back(nldc->goInsideItem(metaNode));
 	}
       }
       return true;
