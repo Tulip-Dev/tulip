@@ -29,12 +29,17 @@
 #include <QtGui/QGraphicsView>
 
 #include "tulip/Graph.h"
+#include "tulip/ColorProperty.h"
 #include "tulip/MouseInteractors.h"
+#include <tulip/GlNode.h>
 #include "tulip/GlMainWidget.h"
 #include "tulip/View.h"
 #include <tulip/Observable.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainView.h>
+#include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/QtGlSceneZoomAndPanAnimator.h>
 
 using namespace tlp;
 using namespace std;
@@ -325,6 +330,42 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
 
   return false;
 }
+
+
+// animation during meta node interaction
+class MyQtGlSceneZoomAndPanAnimator : public tlp::QtGlSceneZoomAndPanAnimator {
+public :
+
+    MyQtGlSceneZoomAndPanAnimator(tlp::GlMainWidget *glWidget,tlp::View *view, const tlp::BoundingBox &boundingBox,tlp::Graph *graph,tlp::node n,const float &color):tlp::QtGlSceneZoomAndPanAnimator(glWidget,boundingBox),view(view),graph(graph),n(n),alphaEnd(color){
+      tlp::ColorProperty *colorProp=graph->getProperty<tlp::ColorProperty>("viewColor");
+      alphaBegin=colorProp->getNodeValue(n)[3];
+    }
+
+protected:
+
+    virtual void zoomAndPanAnimStepSlot(int animationStep);
+
+protected :
+
+    tlp::View *view;
+    tlp::Graph *graph;
+    tlp::node n;
+    float alphaEnd;
+    float alphaBegin;
+
+};
+
+
+void MyQtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(int animationStep){
+    int nbAnimationSteps = animationDurationMsec / 40 + 1;
+    float decAlpha=(alphaEnd-alphaBegin)/nbAnimationSteps;
+    ColorProperty *colorProp=graph->getProperty<ColorProperty>("viewColor");
+    Color color=colorProp->getNodeValue(n);
+    color[3]=alphaBegin+decAlpha*animationStep;
+    colorProp->setNodeValue(n,color);
+    QtGlSceneZoomAndPanAnimator::zoomAndPanAnimationStep(animationStep);
+    view->draw();
+}
 //===============================================================
 bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   if(isGesturing) {
@@ -337,6 +378,98 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   GlMainWidget *glmainwidget = static_cast<GlMainWidget *>(widget);
+  QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+  
+  if (e->type() == QEvent::MouseButtonDblClick &&
+      qMouseEv->button() == Qt::LeftButton) {
+    Graph *graph=glmainwidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+    if (qMouseEv->modifiers()!=Qt::ControlModifier) {
+      vector<SelectedEntity> tmpNodes;
+      vector<SelectedEntity> tmpEdges;
+      glmainwidget->pickNodesEdges(qMouseEv->x()-1,qMouseEv->y()-1,3,3,tmpNodes,tmpEdges);
+      node metaNode;
+      bool find=false;
+      for(unsigned int i=0;i<tmpNodes.size();++i){
+	if(graph->isMetaNode(node(tmpNodes[i].getComplexEntityId()))){
+	  metaNode=node(tmpNodes[i].getComplexEntityId());
+	  find=true;
+	  break;
+	}
+      }
+      if (find) {
+	Graph *metaGraph=graph->getNodeMetaInfo(metaNode);
+	if (metaGraph) {
+	  BoundingBox boundingBox = GlNode(metaNode.id).getBoundingBox(glmainwidget->getScene()->getGlGraphComposite()->getInputData());
+	  Coord middle(boundingBox.center());
+	  Coord size(Coord(boundingBox[1] - boundingBox[0]) / 2.f);
+
+
+	  GlGraphRenderingParameters metaParameters = *glmainwidget->getScene()->getGlGraphComposite()->getInputData()->parameters;
+	  GlGraphInputData metaData(metaGraph,&metaParameters);
+	  BoundingBox bboxes = tlp::computeBoundingBox(metaGraph, metaData.getElementLayout(), metaData.getElementSize(), metaData.getElementRotation());
+	  Coord contentSize(bboxes[1] - bboxes[0]);
+	  if(size[0]/contentSize[0]<size[1]/contentSize[1]){
+	    size[1]*=((size[0]/contentSize[0])/(size[1]/contentSize[1]));
+	  }else
+	    size[0]*=((size[1]/contentSize[1])/(size[0]/contentSize[0]));
+
+	  BoundingBox newBoundingBox(middle-size, middle+size);
+
+	  graphHierarchy.push_back(graph);
+	  ColorProperty *colorProp=graph->getProperty<ColorProperty>("viewColor");
+	  float alphaOrigin=colorProp->getNodeValue(metaNode)[3];
+	  Observable::holdObservers();
+	  MyQtGlSceneZoomAndPanAnimator navigator(glmainwidget,nldc,newBoundingBox,graph,metaNode,0);
+	  navigator.animateZoomAndPan();
+	  cameraHierarchy.push_back(glmainwidget->getScene()->getLayer("Main")->getCamera());
+	  nodeHierarchy.push_back(metaNode);
+	  Color color=colorProp->getNodeValue(metaNode);
+	  color[3]=alphaOrigin;
+	  colorProp->setNodeValue(metaNode,color);
+	  Observable::unholdObservers();
+	  nldc->requestChangeGraph(metaGraph);
+	}
+      }
+      return true;
+    } else {
+      if(!graphHierarchy.empty()){
+	Graph * oldGraph=graphHierarchy.back();
+	graphHierarchy.pop_back();
+	Camera camera=cameraHierarchy.back();
+	cameraHierarchy.pop_back();
+	node n=nodeHierarchy.back();
+	nodeHierarchy.pop_back();
+
+	Observable::holdObservers();
+
+	ColorProperty *colorProp=oldGraph->getProperty<ColorProperty>("viewColor");
+	float alphaOrigin=colorProp->getNodeValue(n)[3];
+	Color color=colorProp->getNodeValue(n);
+	color[3]=0;
+	colorProp->setNodeValue(n,color);
+
+	Observable::unholdObservers();
+
+	nldc->requestChangeGraph(oldGraph);
+	glmainwidget->getScene()->getLayer("Main")->getCamera().setCenter(camera.getCenter());
+	glmainwidget->getScene()->getLayer("Main")->getCamera().setEyes(camera.getEyes());
+	glmainwidget->getScene()->getLayer("Main")->getCamera().setSceneRadius(camera.getSceneRadius());
+	glmainwidget->getScene()->getLayer("Main")->getCamera().setUp(camera.getUp());
+	glmainwidget->getScene()->getLayer("Main")->getCamera().setZoomFactor(camera.getZoomFactor());
+	glmainwidget->draw(false);
+
+	GlBoundingBoxSceneVisitor *visitor;
+	visitor=new GlBoundingBoxSceneVisitor(glmainwidget->getScene()->getGlGraphComposite()->getInputData());
+	glmainwidget->getScene()->getLayer("Main")->acceptVisitor(visitor);
+	BoundingBox boundingBox=visitor->getBoundingBox();
+
+	MyQtGlSceneZoomAndPanAnimator navigator(glmainwidget,nldc,boundingBox,oldGraph,n,alphaOrigin);
+	navigator.animateZoomAndPan();
+
+	return true;
+      }
+    }
+  }
 
   if (e->type() == QEvent::MouseButtonPress) {
     if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
@@ -455,5 +588,10 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   return MousePanNZoomNavigator::eventFilter(widget, e);
 }
 
+void MouseNKeysNavigator::viewChanged(View *view) {
+    nldc=(NodeLinkDiagramComponent*)view;
+}
+
 void MouseNKeysNavigator::clear() {
 }
+
