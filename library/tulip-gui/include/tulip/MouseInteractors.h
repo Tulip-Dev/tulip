@@ -26,7 +26,9 @@
 
 #include <QtGui/qcursor.h>
 
-#include "tulip/InteractorComposite.h"
+#include <tulip/InteractorComposite.h>
+#include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/Camera.h>
 
 namespace tlp {
 
@@ -68,12 +70,23 @@ private:
   QCursor oldCursor;
 public:
   MouseNKeysNavigator() : currentSpecInteractorComponent(NULL) {}
+  MouseNKeysNavigator(const MouseNKeysNavigator&) {}
   ~MouseNKeysNavigator() {}
   bool eventFilter(QObject *, QEvent *);
   InteractorComponent *clone() {
-    return new MouseNKeysNavigator();
+    return new MouseNKeysNavigator(*this);
   }
   void clear();
+  void viewChanged(tlp::View *view);
+
+private :
+
+  // member below are to manage meta node navigation
+  tlp::NodeLinkDiagramComponent *nldc;
+  std::vector<tlp::Graph*> graphHierarchy;
+  std::vector<tlp::Camera> cameraHierarchy;
+  std::vector<tlp::node> nodeHierarchy;
+  std::vector<float> alphaHierarchy;
 };
 
 

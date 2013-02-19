@@ -45,6 +45,8 @@ public:
                                "Z rotation: <ul><li><b>Alt + Mouse left</b> down + left/right moves</li><li> or <b>Insert</b> key</li></ul>" +
                                "Zoom/Unzoom: <ul><li><b>Alt + Mouse left</b> down + up/down moves</li><li> or <b>Pg up/Pg down</b> keys</li></ul>"
 #endif
+			       + "Meta node navigation: <ul><li><b>double Mouse left click</b> go inside the metanode</li>"+
+                                "<li><b>Ctrl + double Mouse left click</b> go outside the metanode</li></ul>"
                               );
   }
 
