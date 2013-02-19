@@ -200,6 +200,19 @@ selected in the selection. If there is no selection an empty sub-graph is return
 :rtype: :class:`tlp.Graph`
 %End
 
+%MethodCode
+    if (!a0 || isValidGraphSelection(sipCpp, a0)) {
+        sipRes = sipCpp->addSubGraph(a0, *a1);
+    } else {
+        sipIsErr = -1;
+        std::ostringstream oss;
+        oss << "The selection provided as parameter to the tlp.Graph.addSubGraph([selection, name]) method is not valid." << std::endl;
+        oss << "It means that some edges extremities are not in the selection." << std::endl;
+        PyErr_SetString(PyExc_Exception, oss.str().c_str());
+    }
+%End
+
+
 //===========================================================================================
 
 	tlp::Graph *addSubGraph(std::string name);
