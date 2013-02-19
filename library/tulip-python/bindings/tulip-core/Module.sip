@@ -108,11 +108,21 @@ bool pluginExists(std::string pluginName) {
         }
 }
 
+template <typename PROP>
+bool canGetProperty(const tlp::Graph *graph, const std::string &propName) {
+    if (!graph->existProperty(propName)) {
+        return true;
+    }
+    return dynamic_cast<PROP*>(graph->getProperty(propName)) != NULL;
+}
+
 extern int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n);
 
 extern int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e);
 
 extern int throwInvalidSgException(const tlp::Graph *graph, const tlp::Graph *sg);
+
+extern int throwPropertyNameExistsException(const tlp::Graph *graph, const std::string &propertyName);
 
 extern void printErrorMessage(const std::string &errMsg);
 
@@ -147,6 +157,14 @@ int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e) {
 int throwInvalidSgException(const tlp::Graph *graph, const tlp::Graph *sg) {
     std::ostringstream oss;
     oss << "Graph \"" << sg->getName() <<"\" (id " << sg->getId() <<") is not a sub-graph of graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
+    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+    return -1;
+}
+
+int throwPropertyNameExistsException(const tlp::Graph *graph, const std::string &propertyName) {
+    tlp::PropertyInterface *prop = graph->getProperty(propertyName);
+    std::ostringstream oss;
+    oss << "A property named \"" << propertyName << "\" of type " << prop->getTypename() << " already exists in graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
     PyErr_SetString(PyExc_Exception, oss.str().c_str());
     return -1;
 }
