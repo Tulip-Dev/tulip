@@ -132,6 +132,8 @@ extern const sipTypeDef *getSipType(const char *sipTypename);
 
 extern void replaceAll(std::string &s, const std::string& replaceWhat, const std::string& replaceWithWhat);
 
+extern bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty *selection);
+
 #if PY_MAJOR_VERSION >= 3
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
 #endif
@@ -200,6 +202,18 @@ void replaceAll(std::string &s, const std::string& replaceWhat, const std::strin
     if (pos==std::string::npos) break;
     s.replace(pos,replaceWhat.size(),replaceWithWhat);
   }
+}
+
+bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty *selection) {
+    tlp::edge e;
+    forEach(e, graph->getEdges()) {
+        if (selection->getEdgeValue(e)) {
+            if (!selection->getNodeValue(graph->source(e)) || !selection->getNodeValue(graph->target(e))) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 #if PY_MAJOR_VERSION >= 3
