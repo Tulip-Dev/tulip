@@ -16,22 +16,21 @@
  * See the GNU General Public License for more details.
  *
  */
-#include<vector>
-#include<tulip/StringCollection.h>
+
+#include <tulip/StringCollection.h>
 
 using namespace std;
 using namespace tlp;
 
-StringCollection::StringCollection() {
-  current = 0;
+StringCollection::StringCollection():current(0) {
+
 }
 
 StringCollection::StringCollection(const std::vector<string> &vectorParam)
-  : _data(vectorParam)  {
-  current = 0;
+    : _data(vectorParam),current(0)  {
 }
 
-StringCollection::StringCollection(const std::string param) {
+StringCollection::StringCollection(const std::string &param):current(0) {
   string temp;
   string::const_iterator itChar = param.begin();
   bool escapeChar = false;
@@ -72,12 +71,10 @@ StringCollection::StringCollection(const std::string param) {
 
   if (temp.size())
     _data.push_back(temp);
-
-  current = 0;
 }
 
 StringCollection::StringCollection(const std::vector<string>&  vectorParam,
-                                   int currentParam)
+                                   const int currentParam)
   : _data(vectorParam) {
   if (currentParam < int(_data.size()))
     current = currentParam;
@@ -86,13 +83,11 @@ StringCollection::StringCollection(const std::vector<string>&  vectorParam,
 }
 
 StringCollection::StringCollection(const std::vector<string>& vectorParam,
-                                   std::string currentString)
-  : _data(vectorParam) {
-  current = 0;
+                                   const std::string &currentString)
+    : _data(vectorParam),current(0) {
 
-  for (vector<string>::const_iterator itS = _data.begin();
-       itS != _data.end(); ++itS, ++current) {
-    if ((*itS) == currentString)
+    for (vector<string>::const_iterator itS = _data.begin();itS != _data.end(); ++itS, ++current) {
+        if ((*itS) == currentString)
       return;
   }
 
@@ -100,7 +95,7 @@ StringCollection::StringCollection(const std::vector<string>& vectorParam,
 }
 
 
-std::string StringCollection::getCurrentString() {
+std::string StringCollection::getCurrentString() const {
   if (current < _data.size())
     return _data.at(current);
 
@@ -108,7 +103,7 @@ std::string StringCollection::getCurrentString() {
 }
 
 
-bool StringCollection::setCurrent(unsigned int param) {
+bool StringCollection::setCurrent(const unsigned int param) {
   if (param < _data.size()) {
     current =  param;
     return true;
@@ -117,7 +112,7 @@ bool StringCollection::setCurrent(unsigned int param) {
   return false;
 }
 
-bool StringCollection::setCurrent(std::string param) {
+bool StringCollection::setCurrent(const string param) {
   for (unsigned int i = 0; i< _data.size(); ++i) {
     if (_data.at(i) == param ) {
       current = i;
@@ -128,7 +123,7 @@ bool StringCollection::setCurrent(std::string param) {
   return false;
 }
 
-int StringCollection::getCurrent() {
+int StringCollection::getCurrent() const {
   return current;
 }
 
