@@ -1,15 +1,20 @@
-/*
-	  NeighbourhoodHighlighterInteractor.h
-
-   Created on: 19 mai 2009
-       Author: Antoine Lambert
-       E-mail: antoine.lambert@labri.fr
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
-
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
  */
 
 #ifndef NEIGHBOURHOODHIGHLIGHTERINTERACTOR_H_
@@ -35,15 +40,6 @@ class AdditionalGlSceneAnimation;
 
  * This interactor plugin allow to get informations regarding the neighbourhood of a node by highlighting
  * the nodes connected to it. A "Bring and Go" feature is also implemented allowing to navigate
- * from close to close in a graph with smooth animations.
- *
- *
- *  <b>LICENCE</b>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
  */
 class NeighborhoodHighlighterInteractor : public GLInteractorComposite {
 
