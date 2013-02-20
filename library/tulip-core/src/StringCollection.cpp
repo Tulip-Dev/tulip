@@ -27,7 +27,7 @@ StringCollection::StringCollection():current(0) {
 }
 
 StringCollection::StringCollection(const std::vector<string> &vectorParam)
-    : _data(vectorParam),current(0)  {
+  : _data(vectorParam),current(0)  {
 }
 
 StringCollection::StringCollection(const std::string &param):current(0) {
@@ -84,10 +84,10 @@ StringCollection::StringCollection(const std::vector<string>&  vectorParam,
 
 StringCollection::StringCollection(const std::vector<string>& vectorParam,
                                    const std::string &currentString)
-    : _data(vectorParam),current(0) {
+  : _data(vectorParam),current(0) {
 
-    for (vector<string>::const_iterator itS = _data.begin();itS != _data.end(); ++itS, ++current) {
-        if ((*itS) == currentString)
+  for (vector<string>::const_iterator itS = _data.begin(); itS != _data.end(); ++itS, ++current) {
+    if ((*itS) == currentString)
       return;
   }
 

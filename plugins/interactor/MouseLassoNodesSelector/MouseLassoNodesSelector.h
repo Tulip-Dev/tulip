@@ -35,7 +35,7 @@ using namespace tlp;
  * By defining a closed polygon with the mouse above the visualization,
  * all nodes under that polygon and edges connecting these nodes will be selected.
  */
-class MouseLassoNodesSelectorInteractor : public NodeLinkDiagramComponentInteractor /* GLInteractorComposite*/ {
+class MouseLassoNodesSelectorInteractor : public NodeLinkDiagramComponentInteractor { /* GLInteractorComposite*/
 
 public :
 
@@ -54,24 +54,26 @@ class MouseLassoNodesSelectorInteractorComponent : public GLInteractorComponent 
 
 public :
 
-	MouseLassoNodesSelectorInteractorComponent();
-	~MouseLassoNodesSelectorInteractorComponent();
+  MouseLassoNodesSelectorInteractorComponent();
+  ~MouseLassoNodesSelectorInteractorComponent();
 
-	bool draw(GlMainWidget *glWidget);
-	bool eventFilter(QObject *obj, QEvent *e);
-	InteractorComponent *clone() { return new MouseLassoNodesSelectorInteractorComponent(); }
+  bool draw(GlMainWidget *glWidget);
+  bool eventFilter(QObject *obj, QEvent *e);
+  InteractorComponent *clone() {
+    return new MouseLassoNodesSelectorInteractorComponent();
+  }
 
 private :
 
   void selectGraphElementsUnderPolygon(GlMainWidget *glWidget);
 
-	std::vector<Coord> polygon;
-	Coord currentPointerScreenCoord;
-	bool drawInteractor;
-	Camera *camera;
-	Graph *graph;
-	BooleanProperty *viewSelection;
-	bool dragStarted;
+  std::vector<Coord> polygon;
+  Coord currentPointerScreenCoord;
+  bool drawInteractor;
+  Camera *camera;
+  Graph *graph;
+  BooleanProperty *viewSelection;
+  bool dragStarted;
 
 };
 

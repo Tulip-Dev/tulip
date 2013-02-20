@@ -92,7 +92,7 @@ void GlMainWidget::clearFirstQGLWidget() {
 
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent,View *view):
-    QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view),widthStored(0),heightStored(0), useFramebufferObject(false), glFrameBuf(NULL) {
+  QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view),widthStored(0),heightStored(0), useFramebufferObject(false), glFrameBuf(NULL) {
   assert(this->isValid());
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true);

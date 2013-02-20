@@ -52,205 +52,232 @@ const float POINT_RADIUS = 3.;
 
 // found on http://local.wasp.uwa.edu.au/~pbourke/geometry/insidepoly/
 bool pointInsidePolygon(const vector<Coord> &polygon, const Coord &point) {
-	unsigned int i, j;
-	bool ret = false;
-	for (i = 0, j = polygon.size() - 1 ; i < polygon.size() ; j = i++) {
-		if ((((polygon[i].getY() <= point.getY()) && (point.getY() < polygon[j].getY())) ||
-				((polygon[j].getY() <= point.getY()) && (point.getY() < polygon[i].getY()))) &&
-				(point.getX() < (polygon[j].getX() - polygon[i].getX()) * (point.getY() - polygon[i].getY()) / (polygon[j].getY() - polygon[i].getY()) + polygon[i].getX()))
-			ret = !ret;
-	}
-	return ret;
+  unsigned int i, j;
+  bool ret = false;
+
+  for (i = 0, j = polygon.size() - 1 ; i < polygon.size() ; j = i++) {
+    if ((((polygon[i].getY() <= point.getY()) && (point.getY() < polygon[j].getY())) ||
+         ((polygon[j].getY() <= point.getY()) && (point.getY() < polygon[i].getY()))) &&
+        (point.getX() < (polygon[j].getX() - polygon[i].getX()) * (point.getY() - polygon[i].getY()) / (polygon[j].getY() - polygon[i].getY()) + polygon[i].getX()))
+      ret = !ret;
+  }
+
+  return ret;
 }
 
 
 bool isPolygonAincludesInB(const vector<Coord> &A, const vector<Coord> &B) {
-	bool ret = true;
-	for (unsigned int i = 0 ; i < A.size() ; ++i) {
-		ret = ret && pointInsidePolygon(B, A[i]);
-		if (!ret) break;
-	}
-	return ret;
+  bool ret = true;
+
+  for (unsigned int i = 0 ; i < A.size() ; ++i) {
+    ret = ret && pointInsidePolygon(B, A[i]);
+
+    if (!ret) break;
+  }
+
+  return ret;
 }
 
 void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon(GlMainWidget *glWidget) {
-	vector<Coord> polygonScr;
-	BoundingBox polygonScrBB;
-	for (unsigned int i = 0 ; i < polygon.size() ; ++i) {
-		polygonScr.push_back(polygon[i]);
-		polygonScrBB.expand(polygonScr[i]);
-	}
-	polygonScr.push_back(polygon[0]);
+  vector<Coord> polygonScr;
+  BoundingBox polygonScrBB;
 
-	int xStart = (int) polygonScrBB[0][0];
-	int yStart = (int) polygonScrBB[0][1];
-	int xEnd = (int) polygonScrBB[1][0];
-	int yEnd = (int) polygonScrBB[1][1];
+  for (unsigned int i = 0 ; i < polygon.size() ; ++i) {
+    polygonScr.push_back(polygon[i]);
+    polygonScrBB.expand(polygonScr[i]);
+  }
+
+  polygonScr.push_back(polygon[0]);
+
+  int xStart = (int) polygonScrBB[0][0];
+  int yStart = (int) polygonScrBB[0][1];
+  int xEnd = (int) polygonScrBB[1][0];
+  int yEnd = (int) polygonScrBB[1][1];
 
   vector<SelectedEntity> tmpNodes;
   vector<SelectedEntity> tmpEdges;
-	glWidget->pickNodesEdges(xStart, glWidget->height() - yEnd, (xEnd - xStart), (yEnd - yStart), tmpNodes, tmpEdges);
-	if (tmpNodes.size() > 0) {
-		vector<node> selectedNodes;
-		GlNode glNode(0);
-		for (unsigned int i = 0 ; i < tmpNodes.size() ; ++i) {
+  glWidget->pickNodesEdges(xStart, glWidget->height() - yEnd, (xEnd - xStart), (yEnd - yStart), tmpNodes, tmpEdges);
+
+  if (tmpNodes.size() > 0) {
+    vector<node> selectedNodes;
+    GlNode glNode(0);
+
+    for (unsigned int i = 0 ; i < tmpNodes.size() ; ++i) {
       glNode.id = tmpNodes[i].getComplexEntityId();
-			BoundingBox nodeBB(glNode.getBoundingBox(glWidget->getScene()->getGlGraphComposite()->getInputData()));
-			float dx = nodeBB[1][0] - nodeBB[0][0];
-			float dy = nodeBB[1][1] - nodeBB[0][1];
-			float dz = nodeBB[1][2] - nodeBB[0][2];
-			const float f = 0.2;
-			nodeBB[0][0] = nodeBB[0][0] + f * dx;
-			nodeBB[0][1] = nodeBB[0][1] + f * dy;
-			nodeBB[0][2] = nodeBB[0][2] + f * dz;
-			nodeBB[1][0] = nodeBB[1][0] - f * dx;
-			nodeBB[1][1] = nodeBB[1][1] - f * dy;
-			nodeBB[1][2] = nodeBB[1][2] - f * dz;
-			vector<float> xVec;
-			vector<float> yVec;
-			Coord nodeBBBLBScr(camera->worldTo2DScreen(Coord(nodeBB[0])));
-			xVec.push_back(nodeBBBLBScr.getX());
-			yVec.push_back(nodeBBBLBScr.getY());
-			Coord nodeBBTLBScr(camera->worldTo2DScreen(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[0][2])));
-			xVec.push_back(nodeBBTLBScr[0]);
-			yVec.push_back(nodeBBTLBScr[1]);
-			Coord nodeBBTRBScr(camera->worldTo2DScreen(Coord(nodeBB[1][0], nodeBB[1][1], nodeBB[0][2])));
-			xVec.push_back(nodeBBTRBScr[0]);
-			yVec.push_back(nodeBBTRBScr[1]);
-			Coord nodeBBBRBScr(camera->worldTo2DScreen(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[0][2])));
-			xVec.push_back(nodeBBBRBScr[0]);
-			yVec.push_back(nodeBBBRBScr[1]);
-			Coord nodeBBBLFScr(camera->worldTo2DScreen(Coord(nodeBB[0][0], nodeBB[0][1], nodeBB[1][2])));
-			xVec.push_back(nodeBBBLFScr[0]);
-			yVec.push_back(nodeBBBLFScr[1]);
-			Coord nodeBBTLFScr(camera->worldTo2DScreen(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[1][2])));
-			xVec.push_back(nodeBBTLFScr[0]);
-			yVec.push_back(nodeBBTLFScr[1]);
-			Coord nodeBBTRFScr(camera->worldTo2DScreen(Coord(nodeBB[1])));
-			xVec.push_back(nodeBBTRFScr[0]);
-			yVec.push_back(nodeBBTRFScr[1]);
-			Coord nodeBBBRFScr(camera->worldTo2DScreen(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[1][2])));
-			xVec.push_back(nodeBBBRFScr[0]);
-			yVec.push_back(nodeBBBRFScr[1]);
-			vector<Coord> quad;
-			quad.push_back(Coord(*min_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
-			quad.push_back(Coord(*min_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
-			quad.push_back(Coord(*max_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
-			quad.push_back(Coord(*max_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
-			quad.push_back(quad[0]);
-			if (isPolygonAincludesInB(quad, polygonScr)) {
+      BoundingBox nodeBB(glNode.getBoundingBox(glWidget->getScene()->getGlGraphComposite()->getInputData()));
+      float dx = nodeBB[1][0] - nodeBB[0][0];
+      float dy = nodeBB[1][1] - nodeBB[0][1];
+      float dz = nodeBB[1][2] - nodeBB[0][2];
+      const float f = 0.2;
+      nodeBB[0][0] = nodeBB[0][0] + f * dx;
+      nodeBB[0][1] = nodeBB[0][1] + f * dy;
+      nodeBB[0][2] = nodeBB[0][2] + f * dz;
+      nodeBB[1][0] = nodeBB[1][0] - f * dx;
+      nodeBB[1][1] = nodeBB[1][1] - f * dy;
+      nodeBB[1][2] = nodeBB[1][2] - f * dz;
+      vector<float> xVec;
+      vector<float> yVec;
+      Coord nodeBBBLBScr(camera->worldTo2DScreen(Coord(nodeBB[0])));
+      xVec.push_back(nodeBBBLBScr.getX());
+      yVec.push_back(nodeBBBLBScr.getY());
+      Coord nodeBBTLBScr(camera->worldTo2DScreen(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[0][2])));
+      xVec.push_back(nodeBBTLBScr[0]);
+      yVec.push_back(nodeBBTLBScr[1]);
+      Coord nodeBBTRBScr(camera->worldTo2DScreen(Coord(nodeBB[1][0], nodeBB[1][1], nodeBB[0][2])));
+      xVec.push_back(nodeBBTRBScr[0]);
+      yVec.push_back(nodeBBTRBScr[1]);
+      Coord nodeBBBRBScr(camera->worldTo2DScreen(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[0][2])));
+      xVec.push_back(nodeBBBRBScr[0]);
+      yVec.push_back(nodeBBBRBScr[1]);
+      Coord nodeBBBLFScr(camera->worldTo2DScreen(Coord(nodeBB[0][0], nodeBB[0][1], nodeBB[1][2])));
+      xVec.push_back(nodeBBBLFScr[0]);
+      yVec.push_back(nodeBBBLFScr[1]);
+      Coord nodeBBTLFScr(camera->worldTo2DScreen(Coord(nodeBB[0][0], nodeBB[1][1], nodeBB[1][2])));
+      xVec.push_back(nodeBBTLFScr[0]);
+      yVec.push_back(nodeBBTLFScr[1]);
+      Coord nodeBBTRFScr(camera->worldTo2DScreen(Coord(nodeBB[1])));
+      xVec.push_back(nodeBBTRFScr[0]);
+      yVec.push_back(nodeBBTRFScr[1]);
+      Coord nodeBBBRFScr(camera->worldTo2DScreen(Coord(nodeBB[1][0], nodeBB[0][1], nodeBB[1][2])));
+      xVec.push_back(nodeBBBRFScr[0]);
+      yVec.push_back(nodeBBBRFScr[1]);
+      vector<Coord> quad;
+      quad.push_back(Coord(*min_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
+      quad.push_back(Coord(*min_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
+      quad.push_back(Coord(*max_element(xVec.begin(), xVec.end()), *max_element(yVec.begin(), yVec.end())));
+      quad.push_back(Coord(*max_element(xVec.begin(), xVec.end()), *min_element(yVec.begin(), yVec.end())));
+      quad.push_back(quad[0]);
+
+      if (isPolygonAincludesInB(quad, polygonScr)) {
         viewSelection->setNodeValue(node(tmpNodes[i].getComplexEntityId()), true);
         selectedNodes.push_back(node(tmpNodes[i].getComplexEntityId()));
-			}
-		}
-		for (unsigned int i = 0 ; i < selectedNodes.size() ; ++i) {
-			for (unsigned int j = i+1 ; j < selectedNodes.size() ; ++j) {
-				edge e = graph->existEdge(selectedNodes[i], selectedNodes[j], false);
-				if (e.isValid()) {
-					viewSelection->setEdgeValue(e, true);
-				}
-			}
-		}
+      }
+    }
 
-	}
+    for (unsigned int i = 0 ; i < selectedNodes.size() ; ++i) {
+      for (unsigned int j = i+1 ; j < selectedNodes.size() ; ++j) {
+        edge e = graph->existEdge(selectedNodes[i], selectedNodes[j], false);
+
+        if (e.isValid()) {
+          viewSelection->setEdgeValue(e, true);
+        }
+      }
+    }
+
+  }
 }
 
 
 bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
   GlMainWidget *glWidget=(GlMainWidget *)(obj);
 
-	if (!glWidget->hasMouseTracking()) {
-		glWidget->setMouseTracking(true);
-	}
+  if (!glWidget->hasMouseTracking()) {
+    glWidget->setMouseTracking(true);
+  }
 
-	QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
+  QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
 
-	if (!me) return false;
+  if (!me) return false;
 
   camera = &glWidget->getScene()->getLayer("Main")->getCamera();
   graph = glWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
   viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
 
-	currentPointerScreenCoord = Coord(me->x(), glWidget->height() - me->y());
+  currentPointerScreenCoord = Coord(me->x(), glWidget->height() - me->y());
 
-	if (me->type() == QEvent::MouseMove) {
-		if (dragStarted) {
-			polygon.push_back(currentPointerScreenCoord);
-			drawInteractor = true;
-			glWidget->redraw();
+  if (me->type() == QEvent::MouseMove) {
+    if (dragStarted) {
+      polygon.push_back(currentPointerScreenCoord);
+      drawInteractor = true;
+      glWidget->redraw();
 
-		}
-		return true;
-	} else if (me->type() == QEvent::MouseButtonPress) {
-		if (me->button() == Qt::LeftButton) {
-			dragStarted = true;
-			polygon.push_back(currentPointerScreenCoord);
-		} else if (me->button() == Qt::RightButton) {
-			dragStarted = false;
-			if (polygon.size() > 0) {
-				polygon.clear();
-				drawInteractor = true;
-				glWidget->redraw();
-			} else {
-				Observable::holdObservers();
+    }
+
+    return true;
+  }
+  else if (me->type() == QEvent::MouseButtonPress) {
+    if (me->button() == Qt::LeftButton) {
+      dragStarted = true;
+      polygon.push_back(currentPointerScreenCoord);
+    }
+    else if (me->button() == Qt::RightButton) {
+      dragStarted = false;
+
+      if (polygon.size() > 0) {
+        polygon.clear();
+        drawInteractor = true;
+        glWidget->redraw();
+      }
+      else {
+        Observable::holdObservers();
         SelectedEntity selectedEntity;
         bool result = glWidget->pickNodesEdges(me->x(), me->y(),  selectedEntity);
+
         if (result && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
           bool sel = viewSelection->getNodeValue(node(selectedEntity.getComplexEntityId()));
           viewSelection->setNodeValue(node(selectedEntity.getComplexEntityId()), !sel);
-				}
-				Observable::unholdObservers();
-			}
-		}
-		return true;
-	} else if (me->type() == QEvent::MouseButtonRelease) {
-		dragStarted = false;
-		if (me->button() == Qt::LeftButton && polygon.size() > 10) {
-			Observable::holdObservers();
-			if (me->modifiers() != Qt::ControlModifier) {
-				viewSelection->setAllNodeValue(false);
-				viewSelection->setAllEdgeValue(false);
-			}
+        }
+
+        Observable::unholdObservers();
+      }
+    }
+
+    return true;
+  }
+  else if (me->type() == QEvent::MouseButtonRelease) {
+    dragStarted = false;
+
+    if (me->button() == Qt::LeftButton && polygon.size() > 10) {
+      Observable::holdObservers();
+
+      if (me->modifiers() != Qt::ControlModifier) {
+        viewSelection->setAllNodeValue(false);
+        viewSelection->setAllEdgeValue(false);
+      }
+
       selectGraphElementsUnderPolygon(glWidget);
-			Observable::unholdObservers();
+      Observable::unholdObservers();
 
-		}
-		polygon.clear();
+    }
 
-	}
+    polygon.clear();
 
-	return false;
+  }
+
+  return false;
 }
 
 bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *glWidget) {
 
-	if (!drawInteractor) {
-		return false;
-	}
+  if (!drawInteractor) {
+    return false;
+  }
 
-	if (polygon.size() > 0) {
+  if (polygon.size() > 0) {
 
-		Camera camera2D(camera->getScene(), false);
+    Camera camera2D(camera->getScene(), false);
 
-		Color backgroundColor = glWidget->getScene()->getBackgroundColor();
-		Color foregroundColor;
-		int bgV = backgroundColor.getV();
-		if (bgV < 128) {
-			foregroundColor = Color(255,255,255);
-		} else {
-			foregroundColor = Color(0,0,0);
-		}
+    Color backgroundColor = glWidget->getScene()->getBackgroundColor();
+    Color foregroundColor;
+    int bgV = backgroundColor.getV();
 
-		glEnable(GL_BLEND);
-		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    if (bgV < 128) {
+      foregroundColor = Color(255,255,255);
+    }
+    else {
+      foregroundColor = Color(0,0,0);
+    }
 
-		camera2D.initGl();
-		GlComplexPolygon complexPolygon(polygon, Color(0,255,0,100), Color(0,255,0));
-		complexPolygon.draw(0,0);
-	}
+    glEnable(GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    camera2D.initGl();
+    GlComplexPolygon complexPolygon(polygon, Color(0,255,0,100), Color(0,255,0));
+    complexPolygon.draw(0,0);
+  }
 
 
-	drawInteractor = false;
+  drawInteractor = false;
 
-	return true;
+  return true;
 }
