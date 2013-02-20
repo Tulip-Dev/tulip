@@ -51,103 +51,111 @@ public :
 
   virtual ~NeighborhoodHighlighterInteractor();
 
-	void construct();
+  void construct();
 
-  QWidget *configurationWidget() const {return configWidget;}
+  QWidget *configurationWidget() const {
+    return configWidget;
+  }
 
-  unsigned int priority() const {return 0;}
+  unsigned int priority() const {
+    return 0;
+  }
 
-    virtual bool isCompatible(const std::string &viewName) const {
-      return (viewName=="Node Link Diagram view");
-    }
+  virtual bool isCompatible(const std::string &viewName) const {
+    return (viewName=="Node Link Diagram view");
+  }
 
 private :
 
-	NeighborhoodHighlighterConfigWidget *configWidget;
+  NeighborhoodHighlighterConfigWidget *configWidget;
 
 };
 
 
 class NeighborhoodHighlighter : public GLInteractorComponent {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	NeighborhoodHighlighter();
+  NeighborhoodHighlighter();
 
-	NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter);
+  NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter);
 
-	~NeighborhoodHighlighter();
+  ~NeighborhoodHighlighter();
 
-	bool eventFilter(QObject *widget, QEvent *e);
+  bool eventFilter(QObject *widget, QEvent *e);
 
-	bool draw(GlMainWidget *glMainWidget);
+  bool draw(GlMainWidget *glMainWidget);
 
-	InteractorComponent *clone() {return new NeighborhoodHighlighter(*this);}
+  InteractorComponent *clone() {
+    return new NeighborhoodHighlighter(*this);
+  }
 
   void viewChanged(View *view);
 
-	void setConfigWidget(NeighborhoodHighlighterConfigWidget *configWidget) {this->configWidget = configWidget;}
+  void setConfigWidget(NeighborhoodHighlighterConfigWidget *configWidget) {
+    this->configWidget = configWidget;
+  }
 
 public slots :
 
-	void updateNeighborhoodGraph();
+  void updateNeighborhoodGraph();
 
-	void morphCircleAlphaAnimStep(int animStep);
+  void morphCircleAlphaAnimStep(int animStep);
 
 private :
 
-	node selectNodeInOriginalGraph(GlMainWidget *glWidget, int x, int y);
+  node selectNodeInOriginalGraph(GlMainWidget *glWidget, int x, int y);
 
-	void buildNeighborhoodGraph(node n, Graph *g);
+  void buildNeighborhoodGraph(node n, Graph *g);
 
-	void computeNeighborhoodGraphCircleLayout();
+  void computeNeighborhoodGraphCircleLayout();
 
-	float computeNeighborhoodGraphRadius(LayoutProperty *neighborhoodGraphLayoutProp);
+  float computeNeighborhoodGraphRadius(LayoutProperty *neighborhoodGraphLayoutProp);
 
-	void cleanupNeighborhoodGraph();
+  void cleanupNeighborhoodGraph();
 
   bool selectInAugmentedDisplayGraph(const int x, const int y, SelectedEntity &);
 
-	void updateNeighborhoodGraphLayoutAndColors();
+  void updateNeighborhoodGraphLayoutAndColors();
 
-	void updateGlNeighborhoodGraph();
+  void updateGlNeighborhoodGraph();
 
-	void computeNeighborhoodGraphBoundingBoxes();
+  void computeNeighborhoodGraphBoundingBoxes();
 
-	void performZoomAndPan(const BoundingBox &destBB, AdditionalGlSceneAnimation *additionalAnimation=NULL);
+  void performZoomAndPan(const BoundingBox &destBB, AdditionalGlSceneAnimation *additionalAnimation=NULL);
 
-	void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps=40);
+  void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps=40);
 
-	Graph *originalGraph;
-	GlGraphComposite *originalGlGraphComposite;
-	node selectedNode;
-	NodeNeighborhoodView *neighborhoodGraph;
-	GlGraphComposite *glNeighborhoodGraph;
+  Graph *originalGraph;
+  GlGraphComposite *originalGlGraphComposite;
+  node selectedNode;
+  NodeNeighborhoodView *neighborhoodGraph;
+  GlGraphComposite *glNeighborhoodGraph;
   Camera *glNeighborhoodCamera;
-	Coord circleCenter;
+  Coord circleCenter;
 
-	node neighborhoodGraphCentralNode;
-	LayoutProperty *neighborhoodGraphLayout;
-	LayoutProperty *neighborhoodGraphCircleLayout;
-	LayoutProperty *neighborhoodGraphOriginalLayout;
-	ColorProperty *neighborhoodGraphColors;
-	ColorProperty *neighborhoodGraphBackupColors;
+  node neighborhoodGraphCentralNode;
+  LayoutProperty *neighborhoodGraphLayout;
+  LayoutProperty *neighborhoodGraphCircleLayout;
+  LayoutProperty *neighborhoodGraphOriginalLayout;
+  ColorProperty *neighborhoodGraphColors;
+  ColorProperty *neighborhoodGraphBackupColors;
 
-	bool centralNodeLocked;
-	bool circleLayoutSet;
-	GlMainWidget *glWidget;
-	node selectedNeighborNode;
-	unsigned int neighborhoodDist;
+  bool centralNodeLocked;
+  bool circleLayoutSet;
+  GlMainWidget *glWidget;
+  node selectedNeighborNode;
+  unsigned int neighborhoodDist;
 
-	NeighborhoodHighlighterConfigWidget *configWidget;
+  NeighborhoodHighlighterConfigWidget *configWidget;
 
-	BoundingBox neighborhoodGraphCircleLayoutBB, neighborhoodGraphOriginalLayoutBB;
+  BoundingBox neighborhoodGraphCircleLayoutBB, neighborhoodGraphOriginalLayoutBB;
 
-	unsigned char circleAlphaValue;
-	unsigned char startAlpha, endAlpha;
-	int nbAnimSteps;
+  unsigned char circleAlphaValue;
+  unsigned char startAlpha, endAlpha;
+  int nbAnimSteps;
 
 };
 

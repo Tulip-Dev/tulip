@@ -32,32 +32,36 @@ class MouseMagnifyingGlassInteractorComponent : public GLInteractorComponent {
 
 public :
 
-	MouseMagnifyingGlassInteractorComponent();
-	MouseMagnifyingGlassInteractorComponent(const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent);
-	~MouseMagnifyingGlassInteractorComponent();
+  MouseMagnifyingGlassInteractorComponent();
+  MouseMagnifyingGlassInteractorComponent(const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent);
+  ~MouseMagnifyingGlassInteractorComponent();
 
-	bool eventFilter(QObject *widget, QEvent *e);
+  bool eventFilter(QObject *widget, QEvent *e);
 
-	InteractorComponent *clone() {return new MouseMagnifyingGlassInteractorComponent(*this);}
-	bool compute(GlMainWidget *) { return false; }
+  InteractorComponent *clone() {
+    return new MouseMagnifyingGlassInteractorComponent(*this);
+  }
+  bool compute(GlMainWidget *) {
+    return false;
+  }
 
-	bool draw(GlMainWidget *glWidget);
+  bool draw(GlMainWidget *glWidget);
 
   void viewChanged(View *view);
 
 private :
 
-	void generateMagnifyingGlassTexture(const Coord &magnifyingGlassCenterScr);
+  void generateMagnifyingGlassTexture(const Coord &magnifyingGlassCenterScr);
 
-	QGLFramebufferObject *fbo;
-	QGLFramebufferObject *fbo2;
-	GlMainWidget *glWidget;
-	Camera *camera;
-	Coord boxCenter;
-	bool drawInteractor;
-	std::string textureName;
-	float radius;
-	float magnifyPower;
+  QGLFramebufferObject *fbo;
+  QGLFramebufferObject *fbo2;
+  GlMainWidget *glWidget;
+  Camera *camera;
+  Coord boxCenter;
+  bool drawInteractor;
+  std::string textureName;
+  float radius;
+  float magnifyPower;
 
 };
 
@@ -85,10 +89,14 @@ public :
 
   MouseMagnifyingGlassInteractor(const tlp::PluginContext *);
 
-	void construct();
+  void construct();
 
-  unsigned int priority() const {return 0;}
-  QWidget *configurationWidget() const {return NULL;}
+  unsigned int priority() const {
+    return 0;
+  }
+  QWidget *configurationWidget() const {
+    return NULL;
+  }
 
   bool isCompatible(const std::string &viewName) const {
     return (viewName=="Node Link Diagram view");

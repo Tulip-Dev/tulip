@@ -27,12 +27,12 @@ class NeighborhoodHighlighterConfigWidget : public QWidget, public Ui::Neighborh
 
 public :
 
-	NeighborhoodHighlighterConfigWidget(QWidget *parent = 0);
+  NeighborhoodHighlighterConfigWidget(QWidget *parent = 0);
 
-	NodeNeighborhoodView::NeighborNodesType getNeighborsType() const;
-	bool computeReachableSubGraph() const;
-	void setCurrentMaxDistanceForReachableNodes(unsigned int distance);
-	bool bringAndGoAnimation1() const;
+  NodeNeighborhoodView::NeighborNodesType getNeighborsType() const;
+  bool computeReachableSubGraph() const;
+  void setCurrentMaxDistanceForReachableNodes(unsigned int distance);
+  bool bringAndGoAnimation1() const;
   std::string propertyToUse() const;
   int numberOfNodesToBring() const;
   void setPropertyToUse(std::string propertyName);

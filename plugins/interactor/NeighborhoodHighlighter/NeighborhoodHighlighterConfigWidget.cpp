@@ -20,29 +20,31 @@
 #include "NeighborhoodHighlighterConfigWidget.h"
 
 NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(QWidget *parent) : QWidget(parent) {
-	setupUi(this);
+  setupUi(this);
 }
 
 NodeNeighborhoodView::NeighborNodesType NeighborhoodHighlighterConfigWidget::getNeighborsType() const {
-	if (outputEdgesRB->isChecked()) {
-		return NodeNeighborhoodView::OUT_NEIGHBORS;
-	} else if (inputEdgesRB->isChecked()) {
-		return NodeNeighborhoodView::IN_NEIGHBORS;
-	} else {
-		return NodeNeighborhoodView::IN_OUT_NEIGHBORS;
-	}
+  if (outputEdgesRB->isChecked()) {
+    return NodeNeighborhoodView::OUT_NEIGHBORS;
+  }
+  else if (inputEdgesRB->isChecked()) {
+    return NodeNeighborhoodView::IN_NEIGHBORS;
+  }
+  else {
+    return NodeNeighborhoodView::IN_OUT_NEIGHBORS;
+  }
 }
 
 bool NeighborhoodHighlighterConfigWidget::computeReachableSubGraph() const {
-	return computeReachableSGCB->isChecked();
+  return computeReachableSGCB->isChecked();
 }
 
 void NeighborhoodHighlighterConfigWidget::setCurrentMaxDistanceForReachableNodes(unsigned int distance) {
-	distanceLineEdit->setText(QString::number(distance));
+  distanceLineEdit->setText(QString::number(distance));
 }
 
 bool NeighborhoodHighlighterConfigWidget::bringAndGoAnimation1() const {
-	return bagAnimation1->isChecked();
+  return bagAnimation1->isChecked();
 }
 
 int NeighborhoodHighlighterConfigWidget::numberOfNodesToBring() const {
