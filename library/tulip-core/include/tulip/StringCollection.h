@@ -22,9 +22,9 @@
 #define STRINGCOLLECTION_H
 
 #include <string>
-
-#include "tulipconf.h"
 #include <vector>
+
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 
@@ -32,11 +32,10 @@ namespace tlp {
  * This class represents a list of selectable string entries that can be used as plugin parameter.
  * The list will appear as a combo box in the Plugin Parameter Dialog from the Tulip GUI.
  */
-struct TLP_SCOPE StringCollection {
+class TLP_SCOPE StringCollection {
 
-private:
-  size_t current;
   std::vector<std::string> _data;
+  size_t current;
 
 public:
 
@@ -57,7 +56,7 @@ public:
    *
    * @param param  a semicolon separated values string ("entry1;...;entryN"). If an entry need to contain a semicolon, you have to escape it the following way : \; .
    */
-  StringCollection(const std::string param);
+  explicit StringCollection(const std::string &param);
 
   /**
    * Initializes a string collection with strings stored in a vector.
@@ -65,7 +64,7 @@ public:
    * @param vectorParam a vector of strings entries for the string collection
    * @param currentParam the index of the current selected string in the vector
    */
-  StringCollection(const std::vector<std::string>&  vectorParam, int currentParam);
+  StringCollection(const std::vector<std::string>&  vectorParam, const int currentParam);
 
   /**
    * Initializes a string collection with strings stored in a vector.
@@ -73,7 +72,7 @@ public:
    * @param vectorParam a vector of strings entries for the string collection
    * @param currentString the current selected string value from the vector
    */
-  StringCollection(const std::vector<std::string>& vectorParam, std::string currentString);
+  StringCollection(const std::vector<std::string>& vectorParam, const std::string &currentString);
 
   /**
   * Returns all the selectable string entries.
@@ -83,7 +82,7 @@ public:
   /**
    * Returns the current selected string value.
    */
-  std::string getCurrentString();
+  std::string getCurrentString() const;
 
   /**
    * Sets the current selected string index.
@@ -91,7 +90,7 @@ public:
    *
    * @param param a valid index in the string collection
    */
-  bool setCurrent(unsigned int param);
+  bool setCurrent(const unsigned int param);
 
   /**
    * Sets the current selected string value.
@@ -99,12 +98,12 @@ public:
    *
    * @param param a string value from the collection
    */
-  bool setCurrent(std::string param);
+  bool setCurrent(const std::string param);
 
   /**
    * Returns the index of the current selected string.
    */
-  int getCurrent();
+  int getCurrent() const;
 
   /**
    * Adds a string value to this string collection.
@@ -118,7 +117,7 @@ public:
   /**
    * Returns true if the collection is empty.
    */
-  inline bool empty() {
+  inline bool empty() const {
     return _data.empty();
   }
 
@@ -127,14 +126,14 @@ public:
    *
    * @param index a valid index in the collection
    */
-  inline std::string at(size_t index) {
+  inline std::string at(const size_t index) const {
     return _data.at(index);
   }
 
   /**
    * Returns the number of strings in the collection.
    */
-  inline size_t size() {
+  inline size_t size() const {
     return _data.size();
   }
 
