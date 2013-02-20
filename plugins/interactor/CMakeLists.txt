@@ -1,6 +1,8 @@
 ADD_SUBDIRECTORY(FishEye)
-ADD_SUBDIRECTORY(PathFinder)
+ADD_SUBDIRECTORY(MouseMagnifyingGlass)
+ADD_SUBDIRECTORY(MouseLassoNodesSelector)
 ADD_SUBDIRECTORY(NeighborhoodHighlighter)
+ADD_SUBDIRECTORY(PathFinder)
 
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude})
 
