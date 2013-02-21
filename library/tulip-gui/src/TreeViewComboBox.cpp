@@ -97,13 +97,7 @@ void TreeViewComboBox::selectIndex(const QModelIndex& index) {
 }
 
 QModelIndex TreeViewComboBox::selectedIndex() const {
-  QModelIndex current = model()->index(currentIndex(),0,rootModelIndex());
-  QModelIndex selected = view()->currentIndex();
-
-  if (!selected.isValid())
-    return current;
-
-  return selected;
+  return model()->index(currentIndex(),0,rootModelIndex());
 }
 
 bool TreeViewComboBox::eventFilter(QObject* object, QEvent* event) {
