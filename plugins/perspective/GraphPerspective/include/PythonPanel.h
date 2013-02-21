@@ -53,6 +53,11 @@ public :
 
   QAbstractScrollArea *consoleWidget();
 
+protected:
+
+  void dragEnterEvent(QDragEnterEvent *);
+  void dropEvent(QDropEvent *);
+
 private slots:
 
   void graphComboIndexChanged();
