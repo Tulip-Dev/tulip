@@ -542,7 +542,7 @@ void GraphHierarchiesModel::initIndexCache(tlp::Graph *root) {
   Graph *sg = NULL;
   int i = 0;
   forEach(sg, root->getSubGraphs()) {
-    _indexCache[sg] = createIndex(i, 0, sg);
+    _indexCache[sg] = createIndex(i++, 0, sg);
     initIndexCache(sg);
   }
 }
