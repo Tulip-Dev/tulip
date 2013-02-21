@@ -217,11 +217,25 @@ QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
   return col[col.getCurrent()].c_str();
 }
 
+// this class is defined to properly catch the return status
+// of a QFileDialog. calling QDialog::result() instead does not work
+class TulipFileDialog :public QFileDialog {
+  public:
+  TulipFileDialog(QWidget* w): QFileDialog(w), ok(QDialog::Rejected) {
+  }
+  ~TulipFileDialog() {}
+  int ok;
+  void done(int res) {
+    ok = res;
+    QFileDialog::done(res);
+  }
+};  
+    
 /*
   TulipFileDescriptorEditorCreator
   */
 QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
-  QFileDialog* dlg = new QFileDialog(Perspective::instance()->mainWindow());
+  QFileDialog* dlg = new TulipFileDialog(Perspective::instance()->mainWindow());
   dlg->setOption(QFileDialog::DontUseNativeDialog, true);
   dlg->setMinimumSize(300,400);
   return dlg;
@@ -250,7 +264,12 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant&
 }
 
 QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
-  QFileDialog* dlg = static_cast<QFileDialog*>(w);
+  TulipFileDialog* dlg = static_cast<TulipFileDialog*>(w);
+
+  int result = dlg->ok;
+
+  if (result == QDialog::Rejected)
+    return QVariant();
 
   if (dlg->fileMode() == QFileDialog::Directory) {
     return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->directory().absolutePath(),TulipFileDescriptor::Directory));
