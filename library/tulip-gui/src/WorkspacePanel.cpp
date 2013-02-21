@@ -369,6 +369,7 @@ void WorkspacePanel::graphComboIndexChanged() {
   if (g != NULL && _view != NULL && g != _view->graph()) {
     _view->setGraph(g);
   }
+
 }
 
 void WorkspacePanel::resizeEvent(QResizeEvent* ev) {
@@ -436,8 +437,6 @@ void WorkspacePanel::setOverlayMode(bool m) {
   }
 }
 
-
-
 void WorkspacePanel::dragEnterEvent(QDragEnterEvent * evt) {
   handleDragEnterEvent(evt,evt->mimeData());
   setOverlayMode(true);
@@ -467,7 +466,7 @@ bool WorkspacePanel::handleDropEvent(const QMimeData* mimedata) {
   const AlgorithmMimeType* algorithmMime = dynamic_cast<const AlgorithmMimeType*>(mimedata);
 
   if (graphMime != NULL && graphMime->graph()) {
-    view()->setGraph(graphMime->graph());
+    viewGraphSet(graphMime->graph());
   }
   else if (panelMime) {
     //Emit swap panels
