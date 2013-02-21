@@ -220,7 +220,7 @@ QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
 // this class is defined to properly catch the return status
 // of a QFileDialog. calling QDialog::result() instead does not work
 class TulipFileDialog :public QFileDialog {
-  public:
+public:
   TulipFileDialog(QWidget* w): QFileDialog(w), ok(QDialog::Rejected) {
   }
   ~TulipFileDialog() {}
@@ -229,8 +229,8 @@ class TulipFileDialog :public QFileDialog {
     ok = res;
     QFileDialog::done(res);
   }
-};  
-    
+};
+
 /*
   TulipFileDescriptorEditorCreator
   */
@@ -257,8 +257,10 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant&
   if (desc.type == TulipFileDescriptor::Directory) {
     dlg->setFileMode(QFileDialog::Directory);
     dlg->setOption(QFileDialog::ShowDirsOnly);
-  } else
+  }
+  else
     dlg->setFileMode(QFileDialog::ExistingFile);
+
   dlg->setModal(true);
   dlg->move(QCursor::pos() - QPoint(150, 200));
 }
