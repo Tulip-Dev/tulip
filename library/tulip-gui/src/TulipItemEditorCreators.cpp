@@ -61,9 +61,9 @@ bool TulipItemEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem
 // this class is defined to properly catch the return status
 // of a QColorDialog. calling QDialog::result() instead does not work
 class TulipColorDialog :public QColorDialog {
-  public:
+public:
   TulipColorDialog(QWidget* w): QColorDialog(w),
-				previousColor(), ok(QDialog::Rejected) {
+    previousColor(), ok(QDialog::Rejected) {
   }
   ~TulipColorDialog() {}
   tlp::Color previousColor;
@@ -72,8 +72,8 @@ class TulipColorDialog :public QColorDialog {
     ok = res;
     QColorDialog::done(res);
   }
-};  
-    
+};
+
 /*
   ColorEditorCreator
 */
@@ -102,9 +102,11 @@ void ColorEditorCreator::setEditorData(QWidget *editor, const QVariant &data, bo
 
 QVariant ColorEditorCreator::editorData(QWidget *editor,tlp::Graph*) {
   TulipColorDialog* dlg = static_cast<TulipColorDialog*>(editor);
+
   if (dlg->ok == QDialog::Rejected)
     // restore the previous color
     return QVariant::fromValue<tlp::Color>(dlg->previousColor);
+
   return QVariant::fromValue<tlp::Color>(QColorToColor(dlg->currentColor()));
 }
 
@@ -479,7 +481,7 @@ void TulipFontEditorCreator::setEditorData(QWidget*editor, const QVariant&data,b
   TulipFontDialog* fontWidget = static_cast<TulipFontDialog*>(editor);
   fontWidget->selectFont(font);
   fontWidget->move(QCursor::pos() - QPoint(fontWidget->width()/2,
-					   fontWidget->height()/2));
+                   fontWidget->height()/2));
 
 }
 

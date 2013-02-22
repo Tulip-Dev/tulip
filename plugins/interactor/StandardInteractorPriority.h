@@ -24,7 +24,7 @@ namespace tlp {
 // List of standard interactors priorities
 // just insert a new one at the right place
 class StandardInteractorPriority {
- public:
+public:
   enum priority {
     None = 0,
     MagnifyingGlass,

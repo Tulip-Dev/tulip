@@ -179,33 +179,34 @@ int main(int argc,char **argv) {
   setDumpPath(dumpPath.toStdString());
 
   for(int i=1; i < args.size(); ++i) {
-      QString a = args[i];
-      if ((a == "--help")||(a=="-h")) {
-          usage("");
-      }
-      else if (perspectiveRegexp.exactMatch(a)) {
-          perspectiveName = perspectiveRegexp.cap(1);
-      }
-      else if(pRegexp.exactMatch(a)) {
-          perspectiveName = args[++i];
-      }
-      else if (geometryRegexp.exactMatch(a)) {
-          windowGeometry = QRect(geometryRegexp.cap(1).toInt(),geometryRegexp.cap(2).toInt(),geometryRegexp.cap(3).toInt(),geometryRegexp.cap(4).toInt());
-      }
-      else if (portRegexp.exactMatch(a)) {
-          context->tulipPort = portRegexp.cap(1).toUInt();
-      }
-      else if (idRegexp.exactMatch(a)) {
-          context->id = idRegexp.cap(1).toUInt();
-          QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
-          setDumpPath(dumpPath.toStdString());
-      }
-      else if(extraParametersRegexp.exactMatch(a)) {
-          extraParams[extraParametersRegexp.cap(1)] = extraParametersRegexp.cap(2);
-      }
-      else if (projectFilePath.isNull()) {
-          projectFilePath = a;
-      }
+    QString a = args[i];
+
+    if ((a == "--help")||(a=="-h")) {
+      usage("");
+    }
+    else if (perspectiveRegexp.exactMatch(a)) {
+      perspectiveName = perspectiveRegexp.cap(1);
+    }
+    else if(pRegexp.exactMatch(a)) {
+      perspectiveName = args[++i];
+    }
+    else if (geometryRegexp.exactMatch(a)) {
+      windowGeometry = QRect(geometryRegexp.cap(1).toInt(),geometryRegexp.cap(2).toInt(),geometryRegexp.cap(3).toInt(),geometryRegexp.cap(4).toInt());
+    }
+    else if (portRegexp.exactMatch(a)) {
+      context->tulipPort = portRegexp.cap(1).toUInt();
+    }
+    else if (idRegexp.exactMatch(a)) {
+      context->id = idRegexp.cap(1).toUInt();
+      QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
+      setDumpPath(dumpPath.toStdString());
+    }
+    else if(extraParametersRegexp.exactMatch(a)) {
+      extraParams[extraParametersRegexp.cap(1)] = extraParametersRegexp.cap(2);
+    }
+    else if (projectFilePath.isNull()) {
+      projectFilePath = a;
+    }
   }
 
   TulipProject *project = NULL;
