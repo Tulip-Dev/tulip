@@ -20,6 +20,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseShowElementInfos.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include "StandardInteractorPriority.h"
 
 using namespace tlp;
 
@@ -34,7 +35,7 @@ public:
    * Default constructor
    */
   InteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get/Edit informations on node or edge") {
-    setPriority(4);
+    setPriority(StandardInteractorPriority::GetInformation);
     setConfigurationWidgetText(QString("<h3>Get/Edit node or edge informations</h3>")+
                                "<b>Mouse left click</b> on an element to display its properties.<br/>then <b>Mouse left click</b> on a row to edit the corresponding value.");
   }

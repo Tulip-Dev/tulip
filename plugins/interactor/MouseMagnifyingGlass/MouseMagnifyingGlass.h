@@ -25,6 +25,7 @@
 
 
 #include <QtOpenGL/QGLFramebufferObject>
+#include "../StandardInteractorPriority.h"
 
 using namespace tlp;
 
@@ -92,7 +93,7 @@ public :
   void construct();
 
   unsigned int priority() const {
-    return 0;
+    return StandardInteractorPriority::MagnifyingGlass;
   }
   QWidget *configurationWidget() const {
     return NULL;

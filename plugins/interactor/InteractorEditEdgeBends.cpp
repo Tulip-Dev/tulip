@@ -21,6 +21,7 @@
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseEdgeBendEditor.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include "StandardInteractorPriority.h"
 
 using namespace tlp;
 
@@ -35,7 +36,7 @@ public:
    * Default constructor
    */
   InteractorEditEdgeBends(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png","Edit edge bends") {
-    setPriority(1);
+    setPriority(StandardInteractorPriority::EditEdgeBends);
     setConfigurationWidgetText(QString("<h3>Edit edge bends interactor</h3>")+
                                "Modify edge bends<br/><br/>"+
                                "Select edge: <ul><li>use rectangle selection</li></ul>" +

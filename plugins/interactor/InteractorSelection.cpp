@@ -20,6 +20,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/MouseSelector.h>
+#include "StandardInteractorPriority.h"
 
 using namespace tlp;
 
@@ -34,9 +35,9 @@ public:
    * Default constructor
    */
   InteractorSelection(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_selection.png","Select nodes/edges in a rectangle") {
-    setPriority(3);
-    setConfigurationWidgetText(QString("<h3>Selection interactor</h3>")+
-                               "Select on rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner.<br/><br/>"+
+    setPriority(StandardInteractorPriority::RectangleSelection);
+    setConfigurationWidgetText(QString("<h3>Selection nodes/edges in a rectangle</h3>")+
+                               "Draw selection rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner,<br/>all graph elements instersecting the rectangle are selected<br/><br/>"+
 #if !defined(__APPLE__)
                                "Add to selection: <ul><li><b>Ctrl + Mouse left</b> click on an element</li></ul>" +
 #else

@@ -22,6 +22,7 @@
 
 #include <tulip/GLInteractor.h>
 
+#include "../StandardInteractorPriority.h"
 #include "PathFinding/Dikjstra/Dikjstra.h"
 
 #define NO_METRIC "None"
@@ -57,7 +58,7 @@ public:
   virtual ~PathFinder();
   void construct();
   unsigned int priority() const {
-    return 0;
+    return tlp::StandardInteractorPriority::PathSelection;
   }
   virtual QWidget *configurationWidget() const;
 

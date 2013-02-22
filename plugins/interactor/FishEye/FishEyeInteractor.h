@@ -24,6 +24,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlShaderProgram.h>
 
+#include "../StandardInteractorPriority.h"
 #include "FishEyeConfigWidget.h"
 
 using namespace tlp;
@@ -96,7 +97,7 @@ public :
   QWidget *configurationWidget() const;
 
   unsigned int priority() const {
-    return 0;
+    return StandardInteractorPriority::FishEye;
   }
 
   virtual bool isCompatible(const std::string &viewName) const {
