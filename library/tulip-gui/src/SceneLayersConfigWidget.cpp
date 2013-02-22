@@ -45,6 +45,6 @@ void SceneLayersConfigWidget::setGlMainWidget(GlMainWidget *glMainWidget) {
 }
 
 void SceneLayersConfigWidget::resizeFirstColumn() {
-    _ui->treeView->resizeColumnToContents(0);
+  _ui->treeView->resizeColumnToContents(0);
 }
 
