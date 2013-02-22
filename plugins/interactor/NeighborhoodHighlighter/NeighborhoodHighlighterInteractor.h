@@ -29,6 +29,7 @@
 
 #include "NeighborhoodHighlighterConfigWidget.h"
 #include "NodeNeighborhoodView.h"
+#include "../StandardInteractorPriority.h"
 
 namespace tlp {
 
@@ -58,7 +59,7 @@ public :
   }
 
   unsigned int priority() const {
-    return 0;
+    return StandardInteractorPriority::NeighborhoodHighlighter;
   }
 
   virtual bool isCompatible(const std::string &viewName) const {

@@ -28,11 +28,12 @@
 #include <tulip/GlNode.h>
 
 #include "MouseLassoNodesSelector.h"
+#include "../StandardInteractorPriority.h"
 
 using namespace std;
 
 MouseLassoNodesSelectorInteractor::MouseLassoNodesSelectorInteractor(const tlp::PluginContext *):NodeLinkDiagramComponentInteractor(":/i_lasso.png", "Select nodes in a freehand drawn region") {
-  setPriority(0);
+  setPriority(tlp::StandardInteractorPriority::FreeHandSelection);
   setConfigurationWidgetText(QString("<h3>Select nodes in a freehand drawn region</h3>")+ "<b>Mouse left</b> down begins the freehand drawing of the selection region,<br/><b>Mouse left</b> up ends the drawing of the region.<br/>All the nodes enclosed in the region are selected and the edges linking them too.");
 }
 

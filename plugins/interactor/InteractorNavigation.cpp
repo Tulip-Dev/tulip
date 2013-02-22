@@ -19,6 +19,7 @@
 
 #include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include "StandardInteractorPriority.h"
 
 using namespace tlp;
 
@@ -33,9 +34,9 @@ public:
    * Default constructor
    */
   InteractorNavigation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png","Navigate in graph") {
-    setPriority(5);
+    setPriority(StandardInteractorPriority::Navigation);
     setConfigurationWidgetText(QString("<h3>Navigate in graph</h3>")+
-                               "3D Navigation in the graph<br><br>"+
+                               "3D Navigation in the graph<br/><br/>"+
                                "Translation: <ul><li><b>Mouse left</b> down + moves</li><li>or <b>Arrow</b> keys down</li></ul>" +
                                "X or Y rotation: <ul><li><b>Shift + Mouse left</b> down + up/down or left/right moves</li></ul>" +
 #if !defined(__APPLE__)

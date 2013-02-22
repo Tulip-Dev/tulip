@@ -21,6 +21,7 @@
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseSelectionEditor.h>
+#include "StandardInteractorPriority.h"
 
 using namespace tlp;
 
@@ -34,9 +35,9 @@ public:
   /**
    * Default constructor
    */
-  InteractorSelectionModifier(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png","Move/Reshape selection") {
-    setPriority(3);
-    setConfigurationWidgetText(QString("<h3>Selection modifier interactor</h3>")+
+  InteractorSelectionModifier(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_move.png","Move/Reshape rectangle selection") {
+    setPriority(StandardInteractorPriority::RectangleSelectionModifier);
+    setConfigurationWidgetText(QString("<h3>Move/Reshape rectangle selection</h3>")+
                                "Modify selection<br/><br/>"+
                                "Resize : <ul><li><b>Mouse left</b> down on triangle + moves</li></ul>" +
                                "<ul><li><b>Mouse left</b> down on square + moves</li></ul>" +

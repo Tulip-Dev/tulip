@@ -19,6 +19,7 @@
 
 #include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include "StandardInteractorPriority.h"
 
 using namespace tlp;
 
@@ -33,7 +34,7 @@ public:
    * Default constructor
    */
   InteractorDeleteElement(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_del.png","Delete nodes or edges") {
-    setPriority(1);
+    setPriority(StandardInteractorPriority::DeleteElement);
     setConfigurationWidgetText(QString("<h3>Delete interactor</h3>")+
                                "<b>Mouse left</b> click on an element to delete it");
   }

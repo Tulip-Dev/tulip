@@ -21,6 +21,7 @@
 #include <tulip/MouseNodeBuilder.h>
 #include <tulip/MouseEdgeBuilder.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+#include "StandardInteractorPriority.h"
 
 using namespace tlp;
 
@@ -35,7 +36,7 @@ public:
    * Default constructor
    */
   InteractorAddEdge(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_addedge.png","Add nodes/edges") {
-    setPriority(1);
+    setPriority(StandardInteractorPriority::AddNodesOrEdges);
     setConfigurationWidgetText("<h3>Add nodes/edges interactor</h3>To add a node: <b>Mouse left</b> click outside any node.<br/>To add an edge: <b>Mouse left</b> click on the source node,<br/>then <b>Mouse left</b> click on the target node.<br/>Any <b>Mouse left</b> click outside a node before the click on the target node will add an edge bend,<br/><b>Mouse middle</b> click will cancel the current edge construction.");
   }
 
