@@ -39,4 +39,12 @@ void SceneLayersConfigWidget::setGlMainWidget(GlMainWidget *glMainWidget) {
   SceneLayersModel* model = new SceneLayersModel(_glMainWidget->getScene(),_ui->treeView);
   _ui->treeView->setModel(model);
   connect(model,SIGNAL(drawNeeded(tlp::GlScene*)),this,SIGNAL(drawNeeded()));
+  connect(_ui->treeView, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(resizeFirstColumn()));
+  connect(_ui->treeView, SIGNAL(expanded(const QModelIndex &)), this, SLOT(resizeFirstColumn()));
+  _ui->treeView->setColumnWidth(0, 110);
 }
+
+void SceneLayersConfigWidget::resizeFirstColumn() {
+    _ui->treeView->resizeColumnToContents(0);
+}
+

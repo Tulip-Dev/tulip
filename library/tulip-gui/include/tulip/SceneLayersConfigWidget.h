@@ -44,8 +44,14 @@ public:
 
   void setGlMainWidget(tlp::GlMainWidget* glMainWidget);
 
+public slots:
+
+  void resizeFirstColumn();
+
 signals:
   void drawNeeded();
+
+
 };
 }
 
