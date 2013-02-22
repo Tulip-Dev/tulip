@@ -206,6 +206,10 @@ QVariant VectorEditorCreator<ElementType>::editorData(QWidget* editor,tlp::Graph
 template<typename ElementType>
 QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) const {
   std::vector<ElementType> v = data.value<std::vector<ElementType> >();
+  if (v.empty())
+    return QString();
+  if (v.size() == 1)
+    return QString("1 element");
   return QString::number(v.size()) + QObject::trUtf8(" elements");
 }
 
