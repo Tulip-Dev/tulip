@@ -93,6 +93,56 @@ background-color: rgba(255,255,255,100);
     <number>0</number>
    </property>
    <item>
+    <widget class="tlp::ColorButton" name="backgroundColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Scene background color</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ColorButton" name="nodeColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Default node color</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="nodesColorCaptionButton">
      <property name="minimumSize">
       <size>
@@ -283,56 +333,6 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="tlp::ColorButton" name="backgroundColorButton">
-     <property name="minimumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Scene background color</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="tlp::ColorButton" name="nodeColorButton">
-     <property name="minimumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Default node color</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="Line" name="sep1">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -358,7 +358,7 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="icon">
       <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/color_interpolation.png</normaloff>:/tulip/gui/icons/20/color_interpolation.png</iconset>
+       <normaloff>:/tulip/gui/icons/20/color_interpolation_disabled.png</normaloff>:/tulip/gui/icons/20/color_interpolation_disabled.png</iconset>
      </property>
      <property name="iconSize">
       <size>
@@ -423,6 +423,41 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="showLabelsToggle">
+     <property name="maximumSize">
+      <size>
+       <width>32</width>
+       <height>32</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Show/Hide node labels</string>
+     </property>
+     <property name="statusTip">
+      <string>Toggle labels display</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/labels_disabled.png</normaloff>:/tulip/gui/icons/20/labels_disabled.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="tlp::ColorButton" name="labelColorButton">
      <property name="minimumSize">
       <size>
@@ -441,41 +476,6 @@ background-color: rgba(255,255,255,100);
      </property>
      <property name="text">
       <string/>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="showLabelsToggle">
-     <property name="maximumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Show/Hide labels</string>
-     </property>
-     <property name="statusTip">
-      <string>Toggle labels display</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/labels.png</normaloff>:/tulip/gui/icons/20/labels.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
      </property>
      <property name="flat">
       <bool>true</bool>

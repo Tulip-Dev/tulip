@@ -45,8 +45,11 @@
         <file>icons/16/media-playback-start.png</file>
         <file>icons/24/view-refresh.png</file>
         <file>icons/20/labels.png</file>
+        <file>icons/20/labels_disabled.png</file>
+        <file>icons/20/labels_enabled.png</file>
         <file>icons/20/camera-photo.png</file>
-        <file>icons/20/color_interpolation.png</file>
+        <file>icons/20/color_interpolation_disabled.png</file>
+        <file>icons/20/color_interpolation_enabled.png</file>
         <file>icons/20/edges_disabled.png</file>
         <file>icons/20/edges_enabled.png</file>
         <file>icons/20/edges_label.png</file>
