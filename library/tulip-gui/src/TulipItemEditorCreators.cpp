@@ -58,14 +58,29 @@ bool TulipItemEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem
   return false;
 }
 
+// this class is defined to properly catch the return status
+// of a QColorDialog. calling QDialog::result() instead does not work
+class TulipColorDialog :public QColorDialog {
+  public:
+  TulipColorDialog(QWidget* w): QColorDialog(w),
+				previousColor(), ok(QDialog::Rejected) {
+  }
+  ~TulipColorDialog() {}
+  tlp::Color previousColor;
+  int ok;
+  void done(int res) {
+    ok = res;
+    QColorDialog::done(res);
+  }
+};  
+    
 /*
   ColorEditorCreator
 */
 QWidget* ColorEditorCreator::createWidget(QWidget *) const {
-  QColorDialog *colorDialog = new QColorDialog(NULL);
+  TulipColorDialog *colorDialog = new TulipColorDialog(Perspective::instance()->mainWindow());
   colorDialog->setOptions(colorDialog->options() | QColorDialog::ShowAlphaChannel);
   colorDialog->setModal(true);
-  colorDialog->move(QCursor::pos());
   return colorDialog;
 }
 
@@ -78,11 +93,19 @@ bool ColorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& op
 }
 
 void ColorEditorCreator::setEditorData(QWidget *editor, const QVariant &data, bool, tlp::Graph*) {
-  static_cast<QColorDialog*>(editor)->setCurrentColor(colorToQColor(data.value<tlp::Color>()));
+  TulipColorDialog* dlg = static_cast<TulipColorDialog*>(editor);
+
+  dlg->previousColor = data.value<tlp::Color>();
+  dlg->setCurrentColor(colorToQColor(dlg->previousColor));
+  dlg->move(QCursor::pos() - QPoint(dlg->width()/2, dlg->height()/2));
 }
 
 QVariant ColorEditorCreator::editorData(QWidget *editor,tlp::Graph*) {
-  return QVariant::fromValue<tlp::Color>(QColorToColor(static_cast<QColorDialog*>(editor)->currentColor()));
+  TulipColorDialog* dlg = static_cast<TulipColorDialog*>(editor);
+  if (dlg->ok == QDialog::Rejected)
+    // restore the previous color
+    return QVariant::fromValue<tlp::Color>(dlg->previousColor);
+  return QVariant::fromValue<tlp::Color>(QColorToColor(dlg->currentColor()));
 }
 
 /*
@@ -236,11 +259,14 @@ public:
   */
 QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
   QFileDialog* dlg = new TulipFileDialog(Perspective::instance()->mainWindow());
+#if defined(__APPLE__)
   dlg->setOption(QFileDialog::DontUseNativeDialog, true);
+#else
+  dlg->setOption(QFileDialog::DontUseNativeDialog, false);
+#endif
   dlg->setMinimumSize(300,400);
   return dlg;
 }
-
 
 void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
   TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
@@ -334,6 +360,7 @@ QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
 
   return combobox;
 }
+
 void NodeShapeEditorCreator::setEditorData(QWidget* editor, const QVariant&data , bool, Graph*) {
   QComboBox* combobox = static_cast<QComboBox*>(editor);
   combobox->setCurrentIndex(combobox->findData(data.value<NodeShape>().nodeShapeId));
@@ -445,17 +472,20 @@ QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
 
 //TulipFontEditorCreator
 QWidget* TulipFontEditorCreator::createWidget(QWidget*) const {
-  return new TulipFontDialog(NULL);
+  return new TulipFontDialog(Perspective::instance()->mainWindow());
 }
 void TulipFontEditorCreator::setEditorData(QWidget*editor, const QVariant&data,bool,tlp::Graph*) {
   TulipFont font =data.value<TulipFont>();
   TulipFontDialog* fontWidget = static_cast<TulipFontDialog*>(editor);
   fontWidget->selectFont(font);
+  fontWidget->move(QCursor::pos() - QPoint(fontWidget->width()/2,
+					   fontWidget->height()/2));
+
 }
 
 QVariant TulipFontEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
   TulipFontDialog* fontWidget = static_cast<TulipFontDialog*>(editor);
-  return QVariant::fromValue<TulipFont>(fontWidget->font());
+  return QVariant::fromValue<TulipFont>(fontWidget->getSelectedFont());
 }
 
 QString TulipFontEditorCreator::displayText(const QVariant & data) const {

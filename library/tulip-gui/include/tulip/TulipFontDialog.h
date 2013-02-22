@@ -36,12 +36,22 @@ class TLP_QT_SCOPE TulipFontDialog : public QDialog {
   Q_OBJECT
 
   Ui::TulipFontDialog* _ui;
+  TulipFont previousFont;
+  int ok;
 
 public:
   explicit TulipFontDialog(QWidget *parent = NULL);
   ~TulipFontDialog();
   TulipFont font() const;
   int fontSize() const;
+  void done(int res) {
+    ok = res;
+    QDialog::done(res);
+  }
+  TulipFont getSelectedFont() const {
+    return ok == QDialog::Accepted ? font() : previousFont;
+  }
+
 
   static TulipFont getFont(QWidget* parent = NULL,const TulipFont& selectedFont=TulipFont());
 
