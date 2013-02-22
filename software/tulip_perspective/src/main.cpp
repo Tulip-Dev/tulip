@@ -104,9 +104,9 @@ void usage(const QString &error) {
        << "If Tulip main process is already running, embedded perspective will run into managed mode." << endl << endl
        << "FILE: a Tulip project file. If a file is specified, the --perspective flag will be ignored and tulip_perspective will look into the project's meta-informations to find the correct perspective to launch." << endl
        << "List of OPTIONS:" << endl
-       << "  --perspective=<perspective_name>\tWill use the perspective specified by perspective_name. Perspective will be run with no project file. If a project file has been specified using the FILE option, this flag will be ignored." << endl
+       << "  --perspective=<perspective_name> (-p perspective_name)\tWill use the perspective specified by perspective_name. Perspective will be run with no project file. If a project file has been specified using the FILE option, this flag will be ignored." << endl
        << "  --geometry=<X,Y,width,height>\tSets the given rectangle as geometry for the main window." << endl
-       << "  --help\tDisplays this help message and ignores other options." << endl;
+       << "  --help (-h)\tDisplays this help message and ignores other options." << endl;
   exit(returnCode);
 }
 
@@ -167,6 +167,7 @@ int main(int argc,char **argv) {
   PerspectiveContext* context = new PerspectiveContext();
 
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
+  QRegExp pRegexp("^\\-p");
   QRegExp portRegexp("^\\-\\-port=([0-9]*)");
   QRegExp idRegexp("^\\-\\-id=([0-9]*)");
   QRegExp geometryRegexp("^\\-\\-geometry=([0-9]*)\\,([0-9]*)\\,([0-9]*)\\,([0-9]*)");
@@ -178,31 +179,33 @@ int main(int argc,char **argv) {
   setDumpPath(dumpPath.toStdString());
 
   for(int i=1; i < args.size(); ++i) {
-    QString a = args[i];
-
-    if (perspectiveRegexp.exactMatch(a)) {
-      perspectiveName = perspectiveRegexp.cap(1);
-    }
-    else if (geometryRegexp.exactMatch(a)) {
-      windowGeometry = QRect(geometryRegexp.cap(1).toInt(),geometryRegexp.cap(2).toInt(),geometryRegexp.cap(3).toInt(),geometryRegexp.cap(4).toInt());
-    }
-    else if (portRegexp.exactMatch(a)) {
-      context->tulipPort = portRegexp.cap(1).toUInt();
-    }
-    else if (idRegexp.exactMatch(a)) {
-      context->id = idRegexp.cap(1).toUInt();
-      QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
-      setDumpPath(dumpPath.toStdString());
-    }
-    else if (a == "--help") {
-      usage("");
-    }
-    else if(extraParametersRegexp.exactMatch(a)) {
-      extraParams[extraParametersRegexp.cap(1)] = extraParametersRegexp.cap(2);
-    }
-    else if (projectFilePath.isNull()) {
-      projectFilePath = a;
-    }
+      QString a = args[i];
+      if ((a == "--help")||(a=="-h")) {
+          usage("");
+      }
+      else if (perspectiveRegexp.exactMatch(a)) {
+          perspectiveName = perspectiveRegexp.cap(1);
+      }
+      else if(pRegexp.exactMatch(a)) {
+          perspectiveName = args[++i];
+      }
+      else if (geometryRegexp.exactMatch(a)) {
+          windowGeometry = QRect(geometryRegexp.cap(1).toInt(),geometryRegexp.cap(2).toInt(),geometryRegexp.cap(3).toInt(),geometryRegexp.cap(4).toInt());
+      }
+      else if (portRegexp.exactMatch(a)) {
+          context->tulipPort = portRegexp.cap(1).toUInt();
+      }
+      else if (idRegexp.exactMatch(a)) {
+          context->id = idRegexp.cap(1).toUInt();
+          QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
+          setDumpPath(dumpPath.toStdString());
+      }
+      else if(extraParametersRegexp.exactMatch(a)) {
+          extraParams[extraParametersRegexp.cap(1)] = extraParametersRegexp.cap(2);
+      }
+      else if (projectFilePath.isNull()) {
+          projectFilePath = a;
+      }
   }
 
   TulipProject *project = NULL;
