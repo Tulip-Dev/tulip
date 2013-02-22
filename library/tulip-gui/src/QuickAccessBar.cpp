@@ -120,11 +120,13 @@ void QuickAccessBar::reset() {
   _ui->nodeColorButton->setTulipColor(inputData()->getElementColor()->getNodeDefaultValue());
   _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
+  _ui->colorInterpolationToggle->setIcon((renderingParameters()->isEdgeColorInterpolate() ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
   _ui->showEdgesToggle->setChecked(renderingParameters()->isDisplayEdges());
   _ui->showEdgesToggle->setIcon((renderingParameters()->isDisplayEdges() ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
   _ui->labelColorButton->setTulipColor(inputData()->getElementLabelColor()->getNodeDefaultValue());
   _ui->labelColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
+  _ui->showLabelsToggle->setIcon((renderingParameters()->isViewNodeLabel() ? QIcon(":/tulip/gui/icons/20/labels_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
   updateFontButtonStyle();
   _resetting = false;
 }
@@ -215,6 +217,7 @@ void QuickAccessBar::setBackgroundColor(const QColor& c) {
 void QuickAccessBar::setColorInterpolation(bool f) {
   if(renderingParameters()->isEdgeColorInterpolate()!=f) {
     renderingParameters()->setEdgeColorInterpolate(f);
+    _ui->colorInterpolationToggle->setIcon((f ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
     _mainView->emitDrawNeededSignal();
     emit settingsChanged();
   }
@@ -281,6 +284,7 @@ void QuickAccessBar::setEdgesVisible(bool v) {
 void QuickAccessBar::setLabelsVisible(bool v) {
   if(renderingParameters()->isViewNodeLabel()!=v) {
     renderingParameters()->setViewNodeLabel(v);
+    _ui->showLabelsToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/labels_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
     _mainView->emitDrawNeededSignal();
     emit settingsChanged();
   }

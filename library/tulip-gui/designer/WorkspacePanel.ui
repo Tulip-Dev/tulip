@@ -259,8 +259,11 @@ background-color: #A9A9A9;
           <height>22</height>
          </size>
         </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
         <property name="toolTip">
-         <string>Active tool (click to configure)</string>
+         <string>Active tool&lt;br/&gt;&lt;i&gt;click to show/hide its configuration panel.&lt;/i&gt;</string>
         </property>
         <property name="styleSheet">
          <string notr="true">#currentInteractorButton {
@@ -299,10 +302,12 @@ font: bold 10px;
           <height>0</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Select a graph to display</string>
+        </property>
         <property name="sizeAdjustPolicy">
          <enum>QComboBox::AdjustToContents</enum>
         </property>
-        <zorder>currentInteractorButton</zorder>
        </widget>
       </item>
       <item>
