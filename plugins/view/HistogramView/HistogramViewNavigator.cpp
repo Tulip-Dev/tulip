@@ -53,7 +53,7 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 	if (histoView->getHistograms().size() == 1) {
 		return false;
 	}
-    cerr << "event : " << e->type() << endl;
+
     if (e->type() == QEvent::MouseMove && histoView->smallMultiplesViewSet()) {
         QMouseEvent *me = static_cast<QMouseEvent *>(e);
         int x = glWidget->width() - me->x();
