@@ -1,7 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
-
-STRING(REGEX REPLACE ".*/" "" PLUGIN_NAME ${CMAKE_CURRENT_SOURCE_DIR})
-STRING(TOLOWER ${PLUGIN_NAME} PLUGIN_NAME)
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(LIB_SRCS
     ParallelCoordinatesView.cpp
@@ -46,6 +43,6 @@ ParallelResource.qrc
 )
 
 ADD_LIBRARY(ParallelCoordinatesView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-TARGET_LINK_LIBRARIES(ParallelCoordinatesView-${TulipVersion} ${TULIP_LIBRARIES} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(ParallelCoordinatesView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 INSTALL(TARGETS ParallelCoordinatesView-${TulipVersion} DESTINATION ${TulipViewPluginsInstallDir} COMPONENT ParallelCoordinatesView)
