@@ -1,20 +1,15 @@
-/**
- *
- * This file is part of Tulip (www.tulip-software.org)
- *
- * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
- *
- * Tulip is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * Tulip is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
+/*
+      HistogramStatistics.h
+
+   Created on: 4 mars 2009
+       Author: Antoine Lambert
+       E-mail: antoine.lambert@labri.fr
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
  */
 
 #ifndef HISTOGRAMSTATISTICS_H_
@@ -23,12 +18,6 @@
 #ifdef  _WIN32
 // compilation pb workaround
 #include <windows.h>
-#endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
 #endif
 
 #include <tulip/tulipconf.h>
@@ -40,61 +29,60 @@
 #include <map>
 
 #include "HistogramView.h"
-#include "HistoStatsConfigWidget.h"
-
 
 namespace tlp {
+
+class HistoStatsConfigWidget;
 
 class KernelFunction : public std::unary_function<double, double> {
 
 public :
     virtual ~KernelFunction(){}
 
-	virtual double operator()(double val) = 0;
+    virtual double operator()(double val) = 0;
 
 };
 
 class HistogramStatistics : public GLInteractorComponent {
 
-	Q_OBJECT
+    Q_OBJECT
 
 public :
 
-	HistogramStatistics();
-	HistogramStatistics(const HistogramStatistics &histoStats);
-	~HistogramStatistics();
+    HistogramStatistics(HistoStatsConfigWidget *ConfigWidget);
+    HistogramStatistics(const HistogramStatistics &histoStats);
+    ~HistogramStatistics();
 
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *glMainWidget);
-	InteractorComponent *clone() {return new HistogramStatistics(*this);}
-	bool compute(GlMainWidget *glMainWidget);
+    bool eventFilter(QObject *, QEvent *);
+    bool draw(GlMainWidget *glMainWidget);
+    InteractorComponent *clone() {return new HistogramStatistics(*this);}
+    bool compute(GlMainWidget *glMainWidget);
 
   void viewChanged(View *view);
-	void setConfigWidget(HistoStatsConfigWidget *histoStatsConfigWidget);
 
 private slots :
 
-	void computeAndDrawInteractor();
-	void computeInteractor();
+    void computeAndDrawInteractor();
+    void computeInteractor();
 
 private :
 
-	void cleanupAxis();
-	void initKernelFunctionsMap();
+    void cleanupAxis();
+    void initKernelFunctionsMap();
 
 protected :
 
-	HistogramView *histoView;
-	HistoStatsConfigWidget *histoStatsConfigWidget;
-	std::map<unsigned int, double> graphPropertyValueSet;
-	double propertyMean;
-	double propertyStandardDeviation;
-	std::vector<Coord> densityEstimationCurvePoints;
-	std::map<std::string, KernelFunction *> kernelFunctionsMap;
-	GlQuantitativeAxis *densityAxis;
-	GlAxis *meanAxis, *standardDeviationPosAxis, *standardDeviationNegAxis;
-	GlAxis *standardDeviation2PosAxis, *standardDeviation2NegAxis;
-	GlAxis *standardDeviation3PosAxis, *standardDeviation3NegAxis;
+    HistogramView *histoView;
+    HistoStatsConfigWidget *histoStatsConfigWidget;
+    std::map<unsigned int, double> graphPropertyValueSet;
+    double propertyMean;
+    double propertyStandardDeviation;
+    std::vector<Coord> densityEstimationCurvePoints;
+    std::map<std::string, KernelFunction *> kernelFunctionsMap;
+    GlQuantitativeAxis *densityAxis;
+    GlAxis *meanAxis, *standardDeviationPosAxis, *standardDeviationNegAxis;
+    GlAxis *standardDeviation2PosAxis, *standardDeviation2NegAxis;
+    GlAxis *standardDeviation3PosAxis, *standardDeviation3NegAxis;
 
 };
 
