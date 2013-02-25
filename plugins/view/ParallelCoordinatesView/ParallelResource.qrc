@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/" >
+	<file>i_axis_swapper.png</file>
+	<file>i_axis_spacer.png</file>
+	<file>i_axis_sliders.png</file>
+	<file>i_element_highlighter.png</file>
+	<file>i_axis_boxplot.png</file>
+	<file>boxplot_legend.png</file>
+	<file>parallel_texture.png</file>
+	<file>parallel_sliders_texture.png</file>
+	<file>parallel_coordinates_view.png</file>
+    </qresource>
+</RCC>
