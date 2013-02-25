@@ -957,7 +957,7 @@ void GraphPerspective::CSVImport() {
 
 void GraphPerspective::showStartPanels(Graph *g) {
   View* firstPanel = NULL;
-  foreach(QString panelName, QStringList() << "Spreadsheet" << "Node Link Diagram view") {
+  foreach(QString panelName, QStringList() << "Spreadsheet view" << "Node Link Diagram view") {
     View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
 
     if (firstPanel == NULL)
