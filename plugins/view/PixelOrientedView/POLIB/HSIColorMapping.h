@@ -30,14 +30,14 @@ class HSIColorMapping : public ColorFunction {
 
 public :
 
-	HSIColorMapping(const HSI& from = HSI(1.5, 1.0, 0.4), const HSI& to = HSI(1.0, 1.0, 1.0));
+  HSIColorMapping(const HSI& from = HSI(1.5, 1.0, 0.4), const HSI& to = HSI(1.0, 1.0, 1.0));
 
-	// value must be normalized
-	RGBA getColor(const double& value, const unsigned int) const;
+  // value must be normalized
+  RGBA getColor(const double& value, const unsigned int) const;
 
 private :
 
-	HSIColorScale hsiColorScale;
+  HSIColorScale hsiColorScale;
 
 };
 

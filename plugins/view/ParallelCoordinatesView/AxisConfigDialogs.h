@@ -42,24 +42,24 @@ namespace tlp {
 // and data ordering (ascendent or not) for a particular quantitative axis
 class QuantitativeAxisConfigDialog : public QDialog {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	QuantitativeAxisConfigDialog(QuantitativeParallelAxis *axis);
-	void closeEvent (QCloseEvent * event);
+  QuantitativeAxisConfigDialog(QuantitativeParallelAxis *axis);
+  void closeEvent (QCloseEvent * event);
 
 private :
 
-	void initAxisPartitionsTable();
+  void initAxisPartitionsTable();
 
-	QuantitativeParallelAxis *axis;
-	QSpinBox *nbGrads;
-	QDoubleSpinBox *doubleAxisMinValue, *doubleAxisMaxValue;
-	QSpinBox *intAxisMinValue, *intAxisMaxValue;
-	QComboBox *axisOrder;
-	QPushButton *okButton;
-	QCheckBox *log10Scale;
+  QuantitativeParallelAxis *axis;
+  QSpinBox *nbGrads;
+  QDoubleSpinBox *doubleAxisMinValue, *doubleAxisMaxValue;
+  QSpinBox *intAxisMinValue, *intAxisMaxValue;
+  QComboBox *axisOrder;
+  QPushButton *okButton;
+  QCheckBox *log10Scale;
 };
 
 
@@ -67,25 +67,25 @@ private :
 // on a particular nominative axis
 class NominalAxisConfigDialog : public QDialog {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	NominalAxisConfigDialog(NominalParallelAxis *axis);
-	void closeEvent (QCloseEvent * event);
+  NominalAxisConfigDialog(NominalParallelAxis *axis);
+  void closeEvent (QCloseEvent * event);
 
 public slots :
 
-	void pressButtonUp();
-	void pressButtonDown();
-	void pressButtonLexOrder();
+  void pressButtonUp();
+  void pressButtonDown();
+  void pressButtonLexOrder();
 
 private :
 
-	NominalParallelAxis *axis;
-	QPushButton *okButton;
-	QHash<QString,itemInfo > hashDataBase;
-	ItemsListWidget *axisLabelsOrder;
+  NominalParallelAxis *axis;
+  QPushButton *okButton;
+  QHash<QString,itemInfo > hashDataBase;
+  ItemsListWidget *axisLabelsOrder;
 };
 
 }

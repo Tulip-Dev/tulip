@@ -37,9 +37,9 @@ namespace tlp {
 
 class ParallelCoordsElementDeleter : public GLInteractorComponent {
 public :
-	ParallelCoordsElementDeleter() {}
-	~ParallelCoordsElementDeleter() {}
-	bool eventFilter(QObject *, QEvent *);
+  ParallelCoordsElementDeleter() {}
+  ~ParallelCoordsElementDeleter() {}
+  bool eventFilter(QObject *, QEvent *);
 };
 
 }

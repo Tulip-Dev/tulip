@@ -54,8 +54,10 @@ void ColorButton::paintEvent(QPaintEvent *event) {
 
 void ColorButton::askColor() {
   QColor newColor(QColorDialog::getColor(_color));
+
   if (!newColor.isValid())
     return;
+
   setColor(newColor);
   repaint();
 }

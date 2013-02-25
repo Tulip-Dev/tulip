@@ -30,24 +30,24 @@ class HistoStatsConfigWidget : public QWidget, public Ui::HistoStatsConfigWidget
 
 public :
 
-	HistoStatsConfigWidget(QWidget *parent = 0);
+  HistoStatsConfigWidget(QWidget *parent = 0);
 
-	void setMinMaxMeanAndSd(double min, double max, double mean, double standardDeviation);
-	bool densityEstimation() const;
-	double getSampleStep() const;
-	double getBandwidth() const;
-	std::string getKernelFunctionName() const;
-	bool displayMeanAndStandardDeviation() const;
-	bool nodesSelection() const;
-	double getSelectionLowerBound() const;
-	double getSelectionUpperBound() const;
+  void setMinMaxMeanAndSd(double min, double max, double mean, double standardDeviation);
+  bool densityEstimation() const;
+  double getSampleStep() const;
+  double getBandwidth() const;
+  std::string getKernelFunctionName() const;
+  bool displayMeanAndStandardDeviation() const;
+  bool nodesSelection() const;
+  double getSelectionLowerBound() const;
+  double getSelectionUpperBound() const;
 
 private :
 
-	double getBoundFromString(const QString &bound) const;
+  double getBoundFromString(const QString &bound) const;
 
-	double min, max;
-	double mean, standardDeviation;
+  double min, max;
+  double mean, standardDeviation;
 
 };
 

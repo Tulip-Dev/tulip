@@ -33,12 +33,12 @@ class HSI {
 
 public :
 
-	HSI(double hue, double saturation, double intensity);
-	HSI(const RGBA &c);
-	double value(double hue_phase) const;
-	RGBA getRGBA() const;
+  HSI(double hue, double saturation, double intensity);
+  HSI(const RGBA &c);
+  double value(double hue_phase) const;
+  RGBA getRGBA() const;
 
-	double hue, saturation, intensity;
+  double hue, saturation, intensity;
 
 };
 
@@ -46,13 +46,13 @@ class HSIColorScale {
 
 public :
 
-	HSIColorScale(const HSI& from, const HSI& to);
-	HSI operator[](double f) const;
+  HSIColorScale(const HSI& from, const HSI& to);
+  HSI operator[](double f) const;
 
 private :
 
-	HSI foot;
-	double hue_range, sat_range, int_range;
+  HSI foot;
+  double hue_range, sat_range, int_range;
 
 };
 

@@ -54,198 +54,242 @@ class GlEditableCurve : public GlSimpleEntity {
 
 public :
 
-	GlEditableCurve(const Coord &startPoint, const Coord &endPoint, const Color &curveColor);
-	GlEditableCurve(const GlEditableCurve &curve);
-	~GlEditableCurve() {}
+  GlEditableCurve(const Coord &startPoint, const Coord &endPoint, const Color &curveColor);
+  GlEditableCurve(const GlEditableCurve &curve);
+  ~GlEditableCurve() {}
 
-	void setXAxisScale(GlQuantitativeAxis *xAxis) {this->xAxis = xAxis;}
-	bool pointBelong(const Coord &point);
-	void addCurveAnchor(const Coord &point);
-	Coord *getCurveAnchorAtPointIfAny(const Coord &point, Camera *camera);
-	void removeCurveAnchor(const Coord &curveAnchor);
-	Coord translateCurveAnchorToPoint(const Coord &curveAnchor, const Coord &targetPoint);
-	float getYCoordForX(const float xCoord);
-	void updateSize(const Coord &newMinPoint, const Coord &newMaxPoint);
-	void resetCurve();
+  void setXAxisScale(GlQuantitativeAxis *xAxis) {
+    this->xAxis = xAxis;
+  }
+  bool pointBelong(const Coord &point);
+  void addCurveAnchor(const Coord &point);
+  Coord *getCurveAnchorAtPointIfAny(const Coord &point, Camera *camera);
+  void removeCurveAnchor(const Coord &curveAnchor);
+  Coord translateCurveAnchorToPoint(const Coord &curveAnchor, const Coord &targetPoint);
+  float getYCoordForX(const float xCoord);
+  void updateSize(const Coord &newMinPoint, const Coord &newMaxPoint);
+  void resetCurve();
 
-	void draw(float lod,Camera* camera);
+  void draw(float lod,Camera* camera);
   void getXML(std::string &) {}
   void setWithXML(const std::string &,unsigned int &) {}
 
-	Coord getMinPoint() const {return minPoint;}
-	Coord getMaxPoint() const {return maxPoint;}
+  Coord getMinPoint() const {
+    return minPoint;
+  }
+  Coord getMaxPoint() const {
+    return maxPoint;
+  }
 
-	Coord getFirstCurvePoint() const {return startPoint;}
-	void setCurveStartPoint(const Coord &startPoint) {this->startPoint = startPoint;}
+  Coord getFirstCurvePoint() const {
+    return startPoint;
+  }
+  void setCurveStartPoint(const Coord &startPoint) {
+    this->startPoint = startPoint;
+  }
 
-	Coord getLastCurvePoint() const {return endPoint;}
-	void setLastCurvePoint(const Coord &endPoint) {this->endPoint = endPoint;}
+  Coord getLastCurvePoint() const {
+    return endPoint;
+  }
+  void setLastCurvePoint(const Coord &endPoint) {
+    this->endPoint = endPoint;
+  }
 
-	std::vector<Coord> getCurvePoints() const {return curvePoints;}
-	void setCurvePoints(const std::vector<Coord> &curvePoints) {this->curvePoints = curvePoints;}
+  std::vector<Coord> getCurvePoints() const {
+    return curvePoints;
+  }
+  void setCurvePoints(const std::vector<Coord> &curvePoints) {
+    this->curvePoints = curvePoints;
+  }
 
-	Color getCurveColor() const {return curveColor;}
-	void setCurveColor(const Color &color) {curveColor = color;}
+  Color getCurveColor() const {
+    return curveColor;
+  }
+  void setCurveColor(const Color &color) {
+    curveColor = color;
+  }
 
 private :
 
-	void init();
+  void init();
 
-	Coord startPoint, endPoint;
-	Coord minPoint, maxPoint;
-	std::vector<Coord> curvePoints;
-	Color curveColor;
-	GlCircle basicCircle;
-	GlQuantitativeAxis *xAxis;
+  Coord startPoint, endPoint;
+  Coord minPoint, maxPoint;
+  std::vector<Coord> curvePoints;
+  Color curveColor;
+  GlCircle basicCircle;
+  GlQuantitativeAxis *xAxis;
 };
 
 class GlSizeScale : public GlSimpleEntity {
 
 public :
-	  enum Orientation {
-	    Horizontal, Vertical
-	  };
+  enum Orientation {
+    Horizontal, Vertical
+  };
 
 
-	GlSizeScale(const float minSize, const float maxSize, const Coord &baseCoord, const float length, const float thickness, const Color &color, Orientation orientation);
-	~GlSizeScale();
+  GlSizeScale(const float minSize, const float maxSize, const Coord &baseCoord, const float length, const float thickness, const Color &color, Orientation orientation);
+  ~GlSizeScale();
 
-	float getSizeAtPos(const Coord &pos);
+  float getSizeAtPos(const Coord &pos);
 
-	void draw(float lod, Camera* camera);
+  void draw(float lod, Camera* camera);
 
-	void translate(const Coord &move);
+  void translate(const Coord &move);
 
   void getXML(std::string &) {}
 
   void setWithXML(const std::string &,unsigned int &) {}
 
-	Coord getBaseCoord() const {return baseCoord;}
+  Coord getBaseCoord() const {
+    return baseCoord;
+  }
 
-	float getThickness() const {return thickness;}
+  float getThickness() const {
+    return thickness;
+  }
 
-	float getLength() const {return length;}
+  float getLength() const {
+    return length;
+  }
 
-	float getMinSize() const {return minSize;}
-	float getMaxSize() const {return maxSize;}
+  float getMinSize() const {
+    return minSize;
+  }
+  float getMaxSize() const {
+    return maxSize;
+  }
 
-	void setMinSize(const float minSize) {this->minSize = minSize;}
-	void setMaxSize(const float maxSize) {this->maxSize = maxSize;}
+  void setMinSize(const float minSize) {
+    this->minSize = minSize;
+  }
+  void setMaxSize(const float maxSize) {
+    this->maxSize = maxSize;
+  }
 
-	void setColor(const Color &color) {this->color = color;}
+  void setColor(const Color &color) {
+    this->color = color;
+  }
 
 private :
 
-	float minSize, maxSize;
-	Coord baseCoord;
-	float length, thickness;
-	Color color;
-	Orientation orientation;
-	GlPolyQuad *polyquad;
-	GlLabel *minLabel, *maxLabel;
+  float minSize, maxSize;
+  Coord baseCoord;
+  float length, thickness;
+  Color color;
+  Orientation orientation;
+  GlPolyQuad *polyquad;
+  GlLabel *minLabel, *maxLabel;
 
 };
 
 class GlGlyphScale : public GlSimpleEntity {
 
 public :
-	  enum Orientation {
-	    Horizontal, Vertical
-	  };
+  enum Orientation {
+    Horizontal, Vertical
+  };
 
 
-	GlGlyphScale(const Coord &baseCoord, const float length, Orientation orientation);
-	~GlGlyphScale();
+  GlGlyphScale(const Coord &baseCoord, const float length, Orientation orientation);
+  ~GlGlyphScale();
 
-	void setGlyphsList(const std::vector<int> &glyphsList);
+  void setGlyphsList(const std::vector<int> &glyphsList);
 
-	int getGlyphAtPos(const Coord &pos);
+  int getGlyphAtPos(const Coord &pos);
 
-	void draw(float lod, Camera* camera);
+  void draw(float lod, Camera* camera);
 
-	void translate(const Coord &move);
+  void translate(const Coord &move);
 
   void getXML(std::string &) {}
 
   void setWithXML(const std::string &,unsigned int &) {}
 
-	Coord getBaseCoord() const {return baseCoord;}
+  Coord getBaseCoord() const {
+    return baseCoord;
+  }
 
-	float getLength() const {return length;}
+  float getLength() const {
+    return length;
+  }
 
 private :
 
-	GlGraphRenderingParameters glyphGraphRenderingParameters;
-	Graph *glyphGraph;
-	LayoutProperty *glyphGraphLayout;
-	SizeProperty *glyphGraphSize;
-	ColorProperty *glyphGraphColor;
-	IntegerProperty *glyphGraphShape;
-	GlGraphInputData *glyphGraphInputData;
-	Coord baseCoord;
-	float length;
-	Orientation orientation;
-	std::map<std::pair<float, float>, int> glyphScaleMap;
-	float size;
+  GlGraphRenderingParameters glyphGraphRenderingParameters;
+  Graph *glyphGraph;
+  LayoutProperty *glyphGraphLayout;
+  SizeProperty *glyphGraphSize;
+  ColorProperty *glyphGraphColor;
+  IntegerProperty *glyphGraphShape;
+  GlGraphInputData *glyphGraphInputData;
+  Coord baseCoord;
+  float length;
+  Orientation orientation;
+  std::map<std::pair<float, float>, int> glyphScaleMap;
+  float size;
 
 };
 
 class HistogramMetricMapping : public GLInteractorComponent {
 
-	enum MappingType {VIEWCOLOR_MAPPING, VIEWBORDERCOLOR_MAPPING, SIZE_MAPPING, GLYPH_MAPPING};
+  enum MappingType {VIEWCOLOR_MAPPING, VIEWBORDERCOLOR_MAPPING, SIZE_MAPPING, GLYPH_MAPPING};
 
 public :
 
-	HistogramMetricMapping();
-	HistogramMetricMapping(const HistogramMetricMapping &histogramMetricMapping);
-	~HistogramMetricMapping();
+  HistogramMetricMapping();
+  HistogramMetricMapping(const HistogramMetricMapping &histogramMetricMapping);
+  ~HistogramMetricMapping();
 
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *glMainWidget);
-	InteractorComponent *clone() {return new HistogramMetricMapping(*this);}
-	bool compute(GlMainWidget *glMainWidget);
+  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget *glMainWidget);
+  InteractorComponent *clone() {
+    return new HistogramMetricMapping(*this);
+  }
+  bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
-	bool pointerUnderScale(const Coord &sceneCoords);
-	void updateGraphWithMapping(Graph *graph, LayoutProperty *histogramLayout);
-	void updateMapping(GlQuantitativeAxis *histoXAxis, unsigned int nbHistogramBins);
+  bool pointerUnderScale(const Coord &sceneCoords);
+  void updateGraphWithMapping(Graph *graph, LayoutProperty *histogramLayout);
+  void updateMapping(GlQuantitativeAxis *histoXAxis, unsigned int nbHistogramBins);
 
 private :
 
-	void initInteractor();
+  void initInteractor();
 
 protected :
 
-	HistogramView *histoView;
-	GlEditableCurve *curve;
-	bool curveDragStarted;
-	Coord *selectedAnchor;
-	ColorScale *colorScale;
-	GlColorScale *glColorScale;
-	GlSizeScale *glSizeScale;
-	GlGlyphScale *glGlyphScale;
-	ColorScaleConfigDialog *colorScaleConfigDialog;
-	SizeScaleConfigDialog *sizeScaleConfigDialog;
-	GlyphScaleConfigDialog *glyphScaleConfigDialog;
-	float lastXAxisLength;
-	GlQuantitativeAxis *histoXAxis;
-	GlPolyQuad *mappinqPolyQuad;
-	float scaleAxisOffset;
+  HistogramView *histoView;
+  GlEditableCurve *curve;
+  bool curveDragStarted;
+  Coord *selectedAnchor;
+  ColorScale *colorScale;
+  GlColorScale *glColorScale;
+  GlSizeScale *glSizeScale;
+  GlGlyphScale *glGlyphScale;
+  ColorScaleConfigDialog *colorScaleConfigDialog;
+  SizeScaleConfigDialog *sizeScaleConfigDialog;
+  GlyphScaleConfigDialog *glyphScaleConfigDialog;
+  float lastXAxisLength;
+  GlQuantitativeAxis *histoXAxis;
+  GlPolyQuad *mappinqPolyQuad;
+  float scaleAxisOffset;
 
-	Graph *glyphMappingGraph;
-	GlGraphRenderingParameters glyphMapppingGraphRenderingParameters;
-	GlGraphInputData *glyphMappingGraphInputData;
+  Graph *glyphMappingGraph;
+  GlGraphRenderingParameters glyphMapppingGraphRenderingParameters;
+  GlGraphInputData *glyphMappingGraphInputData;
 
-	MappingType mappingType;
+  MappingType mappingType;
 
-	QMenu *popupMenu;
-	QMenu *colorMappingMenu;
-	QAction *viewColorMappingAction;
-	QAction *viewBorderColorMappingAction;
-	QAction *sizeMapping;
-	QAction *glyphMapping;
+  QMenu *popupMenu;
+  QMenu *colorMappingMenu;
+  QAction *viewColorMappingAction;
+  QAction *viewBorderColorMappingAction;
+  QAction *sizeMapping;
+  QAction *glyphMapping;
 
-	std::map<MappingType, std::vector<Coord> > curveShapeForMapping;
+  std::map<MappingType, std::vector<Coord> > curveShapeForMapping;
 
 };
 

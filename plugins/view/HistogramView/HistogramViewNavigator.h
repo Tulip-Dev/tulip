@@ -36,22 +36,28 @@ class HistogramViewNavigator : public GLInteractorComponent {
 
 public :
 
-	HistogramViewNavigator();
-	~HistogramViewNavigator();
+  HistogramViewNavigator();
+  ~HistogramViewNavigator();
 
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *) {return false;}
-	InteractorComponent *clone() {return new HistogramViewNavigator();}
-	bool compute(GlMainWidget *) {return false;}
+  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget *) {
+    return false;
+  }
+  InteractorComponent *clone() {
+    return new HistogramViewNavigator();
+  }
+  bool compute(GlMainWidget *) {
+    return false;
+  }
   void viewChanged(View *view);
 
 
 private :
 
-    Histogram *getOverviewUnderPointer(const Coord &sceneCoord) const;
+  Histogram *getOverviewUnderPointer(const Coord &sceneCoord) const;
 
-	HistogramView *histoView;
-	Histogram *selectedHistoOverview;
+  HistogramView *histoView;
+  Histogram *selectedHistoOverview;
 };
 
 }

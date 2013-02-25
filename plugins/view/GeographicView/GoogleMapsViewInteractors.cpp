@@ -45,7 +45,7 @@ GoogleMapViewNavigator::~GoogleMapViewNavigator() {}
 void GoogleMapViewNavigator::viewChanged(View *) {
 }
 
-void trans(Coord &c1,Coord &c2,float angle1, float angle2){
+void trans(Coord &c1,Coord &c2,float angle1, float angle2) {
   float rho1=sqrt(c1[0]*c1[0]+c1[1]*c1[1]+c1[2]*c1[2]);
   float theta1=acos(c1[2]/rho1);
   float phi1=acos(c1[0]/sqrt(c1[0]*c1[0]+c1[1]*c1[1]));
@@ -56,23 +56,27 @@ void trans(Coord &c1,Coord &c2,float angle1, float angle2){
 
   if(c1[1]<0)
     phi1=2*M_PI-phi1;
+
   if(c1[0]==0 && c1[1]==0)
     phi1=0;
 
   if(c2[1]<0)
     phi2=2*M_PI-phi2;
+
   if(c2[0]==0 && c2[1]==0)
     phi2=0;
 
-  if(theta1+angle1>0.001 && theta1+angle1<M_PI && theta2+angle1>0.001 && theta2+angle1<M_PI){
+  if(theta1+angle1>0.001 && theta1+angle1<M_PI && theta2+angle1>0.001 && theta2+angle1<M_PI) {
     theta1+=angle1;
     theta2+=angle1;
-    if(theta2>theta1){
+
+    if(theta2>theta1) {
       float tmp=theta1;
       theta1=theta2;
       theta2=tmp;
     }
   }
+
   phi2+=angle2;
   phi1=phi2;
 
@@ -87,20 +91,22 @@ void trans(Coord &c1,Coord &c2,float angle1, float angle2){
 
 bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   GoogleMapsView *googleMapsView=static_cast<GoogleMapsView*>(view());
+
   if(googleMapsView->viewType()==GoogleMapsView::GoogleRoadMap ||
-     googleMapsView->viewType()==GoogleMapsView::GoogleSatellite ||
-     googleMapsView->viewType()==GoogleMapsView::GoogleTerrain ||
-     googleMapsView->viewType()==GoogleMapsView::GoogleHybrid){
+      googleMapsView->viewType()==GoogleMapsView::GoogleSatellite ||
+      googleMapsView->viewType()==GoogleMapsView::GoogleTerrain ||
+      googleMapsView->viewType()==GoogleMapsView::GoogleHybrid) {
     QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
     QWheelEvent *qWheelEv = dynamic_cast<QWheelEvent *>(e);
 
-    if(qMouseEv || qWheelEv){
+    if(qMouseEv || qWheelEv) {
       GoogleMapsView* googleMapsView=(GoogleMapsView*)(view());
       QApplication::sendEvent(googleMapsView->getGoogleMap(), e);
     }
 
     return false;
-  }else{
+  }
+  else {
     if (e->type() == QEvent::Wheel &&
         (((QWheelEvent *) e)->orientation() == Qt::Vertical)) {
 #define WHEEL_DELTA 120
@@ -112,7 +118,7 @@ bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     }
 
     if (e->type() == QEvent::MouseButtonPress && !inRotation) {
-      if(((QMouseEvent*)e)->button()==Qt::LeftButton){
+      if(((QMouseEvent*)e)->button()==Qt::LeftButton) {
         x = ((QMouseEvent *) e)->x();
         y = ((QMouseEvent *) e)->y();
         inRotation=true;
@@ -121,13 +127,13 @@ bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     }
 
     if(e->type() == QEvent::MouseButtonRelease) {
-      if(((QMouseEvent*)e)->button()==Qt::LeftButton){
+      if(((QMouseEvent*)e)->button()==Qt::LeftButton) {
         inRotation=false;
         return true;
       }
     }
 
-    if (e->type() == QEvent::MouseMove && inRotation){
+    if (e->type() == QEvent::MouseMove && inRotation) {
       GlMainWidget *g = (GlMainWidget *) widget;
       Camera &camera=g->getScene()->getGraphCamera();
       Coord c1=camera.getEyes()-camera.getCenter();
@@ -180,6 +186,7 @@ bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
       return true;
     }
+
     return false;
   }
 }

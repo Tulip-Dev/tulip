@@ -31,13 +31,13 @@ using namespace tlp;
 using namespace std;
 
 PropertyValuesDispatcher::PropertyValuesDispatcher(tlp::Graph *source, tlp::Graph *target,
-                                                   const std::set<std::string> &sourceToTargetProperties, const std::set<std::string> &targetToSourceProperties,
-                                                   tlp::IntegerVectorProperty *graphEntitiesToDisplayedNodes, tlp::BooleanProperty *displayedNodesAreNodes, tlp::IntegerProperty *displayedNodesToGraphEntities):
+    const std::set<std::string> &sourceToTargetProperties, const std::set<std::string> &targetToSourceProperties,
+    tlp::IntegerVectorProperty *graphEntitiesToDisplayedNodes, tlp::BooleanProperty *displayedNodesAreNodes, tlp::IntegerProperty *displayedNodesToGraphEntities):
   PropertyObserver(), GraphObserver(),
   _source(source), _target(target),
-   _graphEntitiesToDisplayedNodes(graphEntitiesToDisplayedNodes), _displayedNodesAreNodes(displayedNodesAreNodes),
-   _displayedNodesToGraphEntities(displayedNodesToGraphEntities), _sourceToTargetProperties(sourceToTargetProperties),
-   _targetToSourceProperties(targetToSourceProperties), _modifying(false) {
+  _graphEntitiesToDisplayedNodes(graphEntitiesToDisplayedNodes), _displayedNodesAreNodes(displayedNodesAreNodes),
+  _displayedNodesToGraphEntities(displayedNodesToGraphEntities), _sourceToTargetProperties(sourceToTargetProperties),
+  _targetToSourceProperties(targetToSourceProperties), _modifying(false) {
   assert(source);
   assert(target);
   assert(graphEntitiesToDisplayedNodes);
@@ -47,10 +47,10 @@ PropertyValuesDispatcher::PropertyValuesDispatcher(tlp::Graph *source, tlp::Grap
   Observable::holdObservers();
   string s;
   forEach (s, source->getProperties())
-      addLocalProperty(source, s);
+  addLocalProperty(source, s);
 
   forEach (s, target->getProperties())
-      addLocalProperty(target, s);
+  addLocalProperty(target, s);
 
   Observable::unholdObservers();
 
@@ -61,34 +61,43 @@ PropertyValuesDispatcher::PropertyValuesDispatcher(tlp::Graph *source, tlp::Grap
 void PropertyValuesDispatcher::afterSetNodeValue(tlp::PropertyInterface *sourceProp, const tlp::node n) {
   if (_modifying)
     return;
+
   _modifying = true;
+
   if (sourceProp->getGraph()->getRoot() == _source->getRoot()) {
     PropertyInterface *targetProp = _target->getProperty(sourceProp->getName());
     vector<int> vect = _graphEntitiesToDisplayedNodes->getNodeValue(n);
+
     for(vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)
       targetProp->setNodeStringValue(node(*it), sourceProp->getNodeStringValue(n));
   }
   else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
     unsigned int id = _displayedNodesToGraphEntities->getNodeValue(n);
+
     if (_displayedNodesAreNodes->getNodeValue(n))
       targetProp->setNodeStringValue(node(id), sourceProp->getNodeStringValue(n));
     else
       targetProp->setEdgeStringValue(edge(id), sourceProp->getNodeStringValue(n));
   }
+
   _modifying = false;
 }
 
 void PropertyValuesDispatcher::afterSetEdgeValue(tlp::PropertyInterface *sourceProp, const tlp::edge e) {
   if (_modifying)
     return;
+
   _modifying = true;
+
   if (sourceProp->getGraph()->getRoot() == _source->getRoot()) {
     PropertyInterface *targetProp = _target->getProperty(sourceProp->getName());
     vector<int> vect = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
+
     for(vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)
       targetProp->setNodeStringValue(node(*it), sourceProp->getEdgeStringValue(e));
   }
+
   _modifying = false;
 }
 
@@ -98,7 +107,7 @@ void PropertyValuesDispatcher::afterSetAllNodeValue(tlp::PropertyInterface *sour
     string val = sourceProp->getNodeDefaultStringValue();
     node n;
     forEach(n, _displayedNodesAreNodes->getNodesEqualTo(true))
-      targetProp->setNodeStringValue(n, val);
+    targetProp->setNodeStringValue(n, val);
   }
   else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
@@ -113,7 +122,7 @@ void PropertyValuesDispatcher::afterSetAllEdgeValue(tlp::PropertyInterface *sour
     string val = sourceProp->getEdgeDefaultStringValue();
     node n;
     forEach(n, _displayedNodesAreNodes->getNodesEqualTo(false))
-      targetProp->setNodeStringValue(n, val);
+    targetProp->setNodeStringValue(n, val);
   }
 }
 
@@ -126,11 +135,11 @@ void PropertyValuesDispatcher::addLocalProperty(tlp::Graph *g, const std::string
     afterSetAllEdgeValue(sourceProp);
     node n;
     forEach(n, sourceProp->getNonDefaultValuatedNodes())
-      afterSetNodeValue(sourceProp,n);
+    afterSetNodeValue(sourceProp,n);
 
     edge e;
     forEach(e, sourceProp->getNonDefaultValuatedEdges())
-        afterSetEdgeValue(sourceProp, e);
+    afterSetEdgeValue(sourceProp, e);
     Observable::unholdObservers();
 
     sourceProp->addListener(this);

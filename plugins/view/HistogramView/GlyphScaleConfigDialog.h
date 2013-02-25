@@ -27,23 +27,23 @@
 
 class GlyphScaleConfigDialog : public QDialog, public Ui::GlyphScaleConfigDialogData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	GlyphScaleConfigDialog(QWidget *parent = 0);
+  GlyphScaleConfigDialog(QWidget *parent = 0);
 
-	std::vector<int> getSelectedGlyphsId() const;
+  std::vector<int> getSelectedGlyphsId() const;
 
-	void showEvent(QShowEvent *event);
+  void showEvent(QShowEvent *event);
 
 private slots :
 
-	void nbGlyphsSpinBoxValueChanged(int value);
+  void nbGlyphsSpinBoxValueChanged(int value);
 
 private :
 
-	QStringList glyphsNameList;
+  QStringList glyphsNameList;
 };
 
 #endif /* GLYPHSCALECONFIGDIALOG_H_ */

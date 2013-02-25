@@ -33,7 +33,7 @@ namespace tlp {
 // Class which allow to render a nominal axis (labels are string)
 class NominalParallelAxis : public ParallelAxis {
 
- public :
+public :
 
   NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy, const std::string &graphPropertyName, const Color &axisColor, const float rotationAngle = 0, const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
 
@@ -47,13 +47,21 @@ class NominalParallelAxis : public ParallelAxis {
 
   void setLabels();
 
-  const std::vector<std::string> &getLabelsOrder() const {return labelsOrder;}
-  void setLabelsOrder(const std::vector<std::string> &labelsOrder) {this->labelsOrder = labelsOrder;}
+  const std::vector<std::string> &getLabelsOrder() const {
+    return labelsOrder;
+  }
+  void setLabelsOrder(const std::vector<std::string> &labelsOrder) {
+    this->labelsOrder = labelsOrder;
+  }
 
-  std::string getTopSliderTextValue() {return " ";}
-  std::string getBottomSliderTextValue() {return " ";}
+  std::string getTopSliderTextValue() {
+    return " ";
+  }
+  std::string getBottomSliderTextValue() {
+    return " ";
+  }
 
- const std::set<unsigned int> &getDataInSlidersRange();
+  const std::set<unsigned int> &getDataInSlidersRange();
   void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset);
 
 private :

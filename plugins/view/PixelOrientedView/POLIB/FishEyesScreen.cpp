@@ -53,7 +53,7 @@ double projectRho(double rho, double R, double k) {
 }
 namespace pocore {
 //==============================================================
-  FishEyesScreen::FishEyesScreen() {
+FishEyesScreen::FishEyesScreen() {
   R = 50.*50./2.0;
   k = 7.;
   fisheyesCenter.fill(0);
@@ -69,7 +69,9 @@ double FishEyesScreen::getRadius() {
 //==============================================================
 void FishEyesScreen::setHeight(double h) {
   k = h;
+
   if (k <= 0.1) k = 0.1;
+
   if (k > 8) k = 8.0;
 }
 void FishEyesScreen::setCenter(double x, double y) {
@@ -77,25 +79,30 @@ void FishEyesScreen::setCenter(double x, double y) {
   fisheyesCenter[1] = y;
 }
 //==============================================================
-  Vec2f FishEyesScreen::project(const Vec2f &p) const {
-    Vec2f dir = p - fisheyesCenter;
+Vec2f FishEyesScreen::project(const Vec2f &p) const {
+  Vec2f dir = p - fisheyesCenter;
   float rho_s = fabs(dir.norm());
+
   if (rho_s > 1E-6) {
     dir /= rho_s;
     float rho = projectRho(rho_s, R, k);
     dir *= rho;
   }
+
   Vec2f result = fisheyesCenter + dir;
   return result;
 }
 //==============================================================
-Vec2f FishEyesScreen::unproject(const Vec2f &p) const{
+Vec2f FishEyesScreen::unproject(const Vec2f &p) const {
   Vec2f dir = p - fisheyesCenter;
   double rho_s = fabs(dir.norm());
+
   if (rho_s > 1E-6) {
     dir /= rho_s;
     double rho = unprojectRho(rho_s, R, k);
+
     if (fabs(rho-rho_s) < 1E-6) return p;
+
     dir *= rho;
   }
 

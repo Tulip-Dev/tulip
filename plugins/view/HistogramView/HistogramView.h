@@ -62,19 +62,19 @@ namespace tlp {
  */
 class HistogramView : public GlMainView {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
   PLUGININFORMATIONS(HistogramView::viewName, "Antoine Lambert", "02/2009",
-		     "The Histogram view allows to create frequency histograms from graph properties (supported types are Metric and Integer).\n"
-		     "By selecting a set of graph properties, frequency histograms are computed and displayed for values associated to nodes (or edges).\n\n"
-		     "This view also allows to map visual properties (colors, sizes, glyphs, ..) of the graph elements with respect to a graph metric in a visual way. These operations can be done with the \"Metric mapping\" interactor. Many interactors are also bundled with the view to perform elements selection, statistical analysis, ...", "1.1", "View")
+                     "The Histogram view allows to create frequency histograms from graph properties (supported types are Metric and Integer).\n"
+                     "By selecting a set of graph properties, frequency histograms are computed and displayed for values associated to nodes (or edges).\n\n"
+                     "This view also allows to map visual properties (colors, sizes, glyphs, ..) of the graph elements with respect to a graph metric in a visual way. These operations can be done with the \"Metric mapping\" interactor. Many interactors are also bundled with the view to perform elements selection, statistical analysis, ...", "1.1", "View")
 
-	static const std::string viewName;
+  static const std::string viewName;
 
   HistogramView(const PluginContext *);
-	~HistogramView();
+  ~HistogramView();
 
   std::string icon() const {
     return ":/histogram_view.png";
@@ -89,26 +89,34 @@ public :
   }
   bool eventFilter(QObject *object,QEvent *event);
   QList<QWidget*> configurationWidgets() const;
-	void setInteractors(const std::list<Interactor *> &interactors);
+  void setInteractors(const std::list<Interactor *> &interactors);
 
-	std::vector<Histogram *> getHistograms() const;
-	bool smallMultiplesViewSet() const {return smallMultiplesView;}
+  std::vector<Histogram *> getHistograms() const;
+  bool smallMultiplesViewSet() const {
+    return smallMultiplesView;
+  }
 
-	void switchFromSmallMultiplesToDetailedView(Histogram *histogramToDetail);
-	void switchFromDetailedViewToSmallMultiples();
-	BoundingBox getSmallMultiplesBoundingBox() const;
-	Histogram *getDetailedHistogram() const {return detailedHistogram;}
+  void switchFromSmallMultiplesToDetailedView(Histogram *histogramToDetail);
+  void switchFromDetailedViewToSmallMultiples();
+  BoundingBox getSmallMultiplesBoundingBox() const;
+  Histogram *getDetailedHistogram() const {
+    return detailedHistogram;
+  }
 
-	void toggleInteractors(const bool activate);
-	bool interactorsEnabled() const {return interactorsActivated;}
+  void toggleInteractors(const bool activate);
+  bool interactorsEnabled() const {
+    return interactorsActivated;
+  }
 
-	ElementType getDataLocation() const {return dataLocation;}
+  ElementType getDataLocation() const {
+    return dataLocation;
+  }
 
-	void updateHistograms(Histogram *detailOverview = NULL);
+  void updateHistograms(Histogram *detailOverview = NULL);
 
 public slots :
 
-	void viewConfigurationChanged();
+  void viewConfigurationChanged();
   void draw();
   void refresh();
   void centerView();
@@ -122,58 +130,58 @@ private :
 
   void interactorsInstalled(const QList<tlp::Interactor*>&);
   void registerTriggers();
-	void initGlWidget(Graph *graph);
-	void buildHistograms();
+  void initGlWidget(Graph *graph);
+  void buildHistograms();
 
-	void updateDetailedHistogramAxis();
-	void destroyHistogramsIfNeeded();
-	void cleanupGlScene();
-	void addEmptyViewLabel();
-	void removeEmptyViewLabel();
+  void updateDetailedHistogramAxis();
+  void destroyHistogramsIfNeeded();
+  void cleanupGlScene();
+  void addEmptyViewLabel();
+  void removeEmptyViewLabel();
 
 
-	ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;
-	HistoOptionsWidget *histoOptionsWidget;
+  ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;
+  HistoOptionsWidget *histoOptionsWidget;
 
-	GlQuantitativeAxis *xAxisDetail, *yAxisDetail;
+  GlQuantitativeAxis *xAxisDetail, *yAxisDetail;
   Graph *_histoGraph, *emptyGraph;
-	GlGraphComposite *emptyGlGraphComposite;
+  GlGraphComposite *emptyGlGraphComposite;
 
-	GlComposite *histogramsComposite, *labelsComposite, *axisComposite;
-	std::map<std::string, Histogram *> histogramsMap;
+  GlComposite *histogramsComposite, *labelsComposite, *axisComposite;
+  std::map<std::string, Histogram *> histogramsMap;
 
-	bool smallMultiplesView;
-	GlLayer *mainLayer;
-	std::vector<std::string> selectedProperties;
+  bool smallMultiplesView;
+  GlLayer *mainLayer;
+  std::vector<std::string> selectedProperties;
 
-	Histogram *detailedHistogram;
-	std::string detailedHistogramPropertyName;
+  Histogram *detailedHistogram;
+  std::string detailedHistogramPropertyName;
 
-	double sceneRadiusBak;
-	double zoomFactorBak;
-	Coord eyesBak;
-	Coord centerBak;
-	Coord upBak;
+  double sceneRadiusBak;
+  double zoomFactorBak;
+  Coord eyesBak;
+  Coord centerBak;
+  Coord upBak;
 
-	GlLabel *noDimsLabel;
-	GlLabel *noDimsLabel2;
-	GlRect *emptyRect;
-	GlRect *emptyRect2;
+  GlLabel *noDimsLabel;
+  GlLabel *noDimsLabel2;
+  GlRect *emptyRect;
+  GlRect *emptyRect2;
 
-	int lastViewWindowWidth, lastViewWindowHeight;
+  int lastViewWindowWidth, lastViewWindowHeight;
 
-	bool interactorsActivated;
+  bool interactorsActivated;
 
-	QMenu *optionsMenu;
-	QAction *centerViewAction;
+  QMenu *optionsMenu;
+  QAction *centerViewAction;
 
-	static GLuint binTextureId;
-	static unsigned int histoViewInstancesCount;
+  static GLuint binTextureId;
+  static unsigned int histoViewInstancesCount;
 
-	bool isConstruct;
-	unsigned int lastNbHistograms;
+  bool isConstruct;
+  unsigned int lastNbHistograms;
 
-	ElementType dataLocation;
+  ElementType dataLocation;
   bool needUpdateHistogram;
 };
 

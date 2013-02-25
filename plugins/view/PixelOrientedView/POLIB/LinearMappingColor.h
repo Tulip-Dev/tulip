@@ -24,17 +24,17 @@
 #include "ColorFunction.h"
 
 namespace pocore {
-  class LinearMappingColor : public ColorFunction {
-  public:
-    LinearMappingColor(const double& min, const double& max);
-    RGBA getColor(const double& value, const unsigned int) const;
-  private:
-    double _min;
-    double _max;
-    unsigned int _nbCol;
-    RGBA startColor;
-    RGBA endColor;
-  };
+class LinearMappingColor : public ColorFunction {
+public:
+  LinearMappingColor(const double& min, const double& max);
+  RGBA getColor(const double& value, const unsigned int) const;
+private:
+  double _min;
+  double _max;
+  unsigned int _nbCol;
+  RGBA startColor;
+  RGBA endColor;
+};
 }
 #endif //LINEARMAPPINGCOLOR_H
 

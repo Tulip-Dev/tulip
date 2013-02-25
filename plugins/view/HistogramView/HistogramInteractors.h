@@ -32,11 +32,13 @@ class HistogramInteractor : public NodeLinkDiagramComponentInteractor {
 
 public :
 
-    HistogramInteractor(const QString &iconPath, const QString &text);
+  HistogramInteractor(const QString &iconPath, const QString &text);
 
-    bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const;
 
-  unsigned int priority() const {return 0;}
+  unsigned int priority() const {
+    return 0;
+  }
 
 };
 
@@ -48,9 +50,11 @@ public :
 
   HistogramInteractorNavigation(const PluginContext *);
 
-    void construct();
+  void construct();
 
-  unsigned int priority() const {return 5;}
+  unsigned int priority() const {
+    return 5;
+  }
 
 };
 
@@ -62,7 +66,7 @@ public :
 
   HistogramInteractorMetricMapping(const PluginContext *);
 
-    void construct();
+  void construct();
 
 };
 
@@ -80,7 +84,7 @@ public :
 
 private :
 
-    HistoStatsConfigWidget *histoStatsConfigWidget;
+  HistoStatsConfigWidget *histoStatsConfigWidget;
 };
 
 }

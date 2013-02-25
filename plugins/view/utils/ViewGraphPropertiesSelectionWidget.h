@@ -37,16 +37,16 @@ class ViewGraphPropertiesSelectionWidget : public QWidget, public Ui::ViewGraphP
 
 public :
 
-	ViewGraphPropertiesSelectionWidget(QWidget *parent = 0);
+  ViewGraphPropertiesSelectionWidget(QWidget *parent = 0);
 
-	void setWidgetParameters(Graph *graph, std::vector<std::string> graphPropertiesTypesFilter);
-	std::vector<std::string> getSelectedGraphProperties();
+  void setWidgetParameters(Graph *graph, std::vector<std::string> graphPropertiesTypesFilter);
+  std::vector<std::string> getSelectedGraphProperties();
 
-	void setWidgetEnabled(const bool enabled);
-	void setSelectedProperties(std::vector<std::string> selectedProperties);
+  void setWidgetEnabled(const bool enabled);
+  void setSelectedProperties(std::vector<std::string> selectedProperties);
 
-	ElementType getDataLocation() const;
-	void setDataLocation(const ElementType location);
+  ElementType getDataLocation() const;
+  void setDataLocation(const ElementType location);
 
   void treatEvent(const Event&);
 
@@ -62,8 +62,8 @@ public slots:
 
 private :
 
-	Graph *graph;
-	std::vector<std::string> graphPropertiesTypesFilter;
+  Graph *graph;
+  std::vector<std::string> graphPropertiesTypesFilter;
   std::vector<std::string> lastSelectedProperties;
 
 };

@@ -28,29 +28,29 @@ using namespace tlp;
 
 class GeolocalisationConfigWidget : public QWidget, public Ui::GeolocalisationConfigWidgetData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
   GeolocalisationConfigWidget(QWidget *parent = 0);
 
-	void setGraph(Graph *graph);
+  void setGraph(Graph *graph);
 
-	void setLatLngGeoLocMethod();
+  void setLatLngGeoLocMethod();
 
-	bool geolocateByAddress() const;
+  bool geolocateByAddress() const;
 
-	bool createLatAndLngProperties() const;
+  bool createLatAndLngProperties() const;
 
-	std::string getAddressGraphPropertyName() const;
+  std::string getAddressGraphPropertyName() const;
 
-	std::string getLatitudeGraphPropertyName() const;
+  std::string getLatitudeGraphPropertyName() const;
 
-	std::string getLongitudeGraphPropertyName() const;
+  std::string getLongitudeGraphPropertyName() const;
 
 public slots :
 
-	void enableDisableComboBoxes();
+  void enableDisableComboBoxes();
 
 
 };

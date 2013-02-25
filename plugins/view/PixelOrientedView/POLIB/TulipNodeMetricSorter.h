@@ -34,47 +34,47 @@ class NodeMetricPropertyOrderRelation {
 
 public :
 
-	NodeMetricPropertyOrderRelation(tlp::Graph *graph, std::string dimName) {
-		nodeProperty = graph->getProperty<PROPERTY>(dimName);
-	}
+  NodeMetricPropertyOrderRelation(tlp::Graph *graph, std::string dimName) {
+    nodeProperty = graph->getProperty<PROPERTY>(dimName);
+  }
 
-	bool operator()(tlp::node n1, tlp::node n2) const {
-		typename PROPERTYTYPE::RealType v1 = nodeProperty->getNodeValue(n1);
-		typename PROPERTYTYPE::RealType v2 = nodeProperty->getNodeValue(n2);
-		return v1 < v2;
-	}
+  bool operator()(tlp::node n1, tlp::node n2) const {
+    typename PROPERTYTYPE::RealType v1 = nodeProperty->getNodeValue(n1);
+    typename PROPERTYTYPE::RealType v2 = nodeProperty->getNodeValue(n2);
+    return v1 < v2;
+  }
 
 private :
 
-	PROPERTY *nodeProperty;
+  PROPERTY *nodeProperty;
 };
 
 class TulipNodeMetricSorter  {
 
 public :
 
-	static TulipNodeMetricSorter *getInstance(tlp::Graph *graph);
+  static TulipNodeMetricSorter *getInstance(tlp::Graph *graph);
 
-	~TulipNodeMetricSorter();
+  ~TulipNodeMetricSorter();
 
-	void sortNodesForProperty(std::string propertyName);
-	void cleanupSortNodesForProperty(std::string propertyName);
-	unsigned int getNbValuesForProperty(std::string propertyName) ;
-	tlp::node getNodeAtRankForProperty(const unsigned int rank, std::string propertyName);
-	unsigned int getNodeRankForProperty(tlp::node n, std::string propertyName);
+  void sortNodesForProperty(std::string propertyName);
+  void cleanupSortNodesForProperty(std::string propertyName);
+  unsigned int getNbValuesForProperty(std::string propertyName) ;
+  tlp::node getNodeAtRankForProperty(const unsigned int rank, std::string propertyName);
+  unsigned int getNodeRankForProperty(tlp::node n, std::string propertyName);
 
 private :
 
-	TulipNodeMetricSorter(tlp::Graph *graph);
+  TulipNodeMetricSorter(tlp::Graph *graph);
 
-	void reset();
+  void reset();
 
-	tlp::Graph *graph;
-	unsigned int lastNbNodes;
-	std::map<std::string, std::vector<tlp::node> > nodeSortingMap;
-	std::map<std::string, unsigned int> nbValuesPropertyMap;
+  tlp::Graph *graph;
+  unsigned int lastNbNodes;
+  std::map<std::string, std::vector<tlp::node> > nodeSortingMap;
+  std::map<std::string, unsigned int> nbValuesPropertyMap;
 
-	static std::map<tlp::Graph *, TulipNodeMetricSorter *> instances;
+  static std::map<tlp::Graph *, TulipNodeMetricSorter *> instances;
 
 };
 

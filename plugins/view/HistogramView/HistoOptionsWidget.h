@@ -29,55 +29,55 @@ namespace tlp {
 
 class HistoOptionsWidget : public QWidget, public Ui::HistoOptionsWidgetData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	HistoOptionsWidget(QWidget *parent = 0);
+  HistoOptionsWidget(QWidget *parent = 0);
 
-	void setWidgetEnabled(const bool enabled);
+  void setWidgetEnabled(const bool enabled);
 
-	void setNbOfHistogramBins(const unsigned int nbOfHistogramBins);
-	unsigned int getNbOfHistogramBins();
+  void setNbOfHistogramBins(const unsigned int nbOfHistogramBins);
+  unsigned int getNbOfHistogramBins();
 
-	void setNbXGraduations(const unsigned int nbXGraduations);
-	unsigned int getNbXGraduations();
+  void setNbXGraduations(const unsigned int nbXGraduations);
+  unsigned int getNbXGraduations();
 
-	void setYAxisIncrementStep(const unsigned int yAxisIncrementStep);
-	unsigned int getYAxisIncrementStep();
+  void setYAxisIncrementStep(const unsigned int yAxisIncrementStep);
+  unsigned int getYAxisIncrementStep();
 
-	void setCumulativeFrequenciesHistogram(const bool cumulHisto);
-	bool cumulativeFrequenciesHisto();
+  void setCumulativeFrequenciesHistogram(const bool cumulHisto);
+  bool cumulativeFrequenciesHisto();
 
-	void setUniformQuantification(const bool uniformQuantification);
-	bool uniformQuantification();
+  void setUniformQuantification(const bool uniformQuantification);
+  bool uniformQuantification();
 
-	void setXAxisLogScale(const bool xAxisLogScale);
-	bool xAxisLogScaleSet() const;
+  void setXAxisLogScale(const bool xAxisLogScale);
+  bool xAxisLogScaleSet() const;
 
-	void setYAxisLogScale(const bool yAxisLogScale);
-	bool yAxisLogScaleSet() const;
+  void setYAxisLogScale(const bool yAxisLogScale);
+  bool yAxisLogScaleSet() const;
 
-	void setBinWidth(const double binWidth);
+  void setBinWidth(const double binWidth);
 
-	Color getBackgroundColor() const;
-	void setBackgroundColor(const Color &color);
+  Color getBackgroundColor() const;
+  void setBackgroundColor(const Color &color);
 
-	bool showGraphEdges() const;
-	void setShowGraphEdges(const bool showGraphEdges);
+  bool showGraphEdges() const;
+  void setShowGraphEdges(const bool showGraphEdges);
 
-	void enableShowGraphEdgesCB(const bool enable);
+  void enableShowGraphEdgesCB(const bool enable);
 
   bool configurationChanged();
 
 private slots :
 
-	void enableOrDisableNbXGraduationsSP(int uniQuantState);
-	void pressBackgroundColorButton();
+  void enableOrDisableNbXGraduationsSP(int uniQuantState);
+  void pressBackgroundColorButton();
 
 public slots :
 
-  void applySettings(){
+  void applySettings() {
     emit(applySettingsSignal());
   }
 

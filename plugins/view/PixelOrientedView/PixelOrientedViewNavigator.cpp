@@ -34,7 +34,7 @@ PixelOrientedViewNavigator::PixelOrientedViewNavigator() : selectedOverview(NULL
 PixelOrientedViewNavigator::~PixelOrientedViewNavigator() {}
 
 void PixelOrientedViewNavigator::viewChanged(View *view) {
-	pixelView = (PixelOrientedView *) view;
+  pixelView = (PixelOrientedView *) view;
 }
 
 bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
@@ -42,64 +42,73 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   if(e->type() != QEvent::MouseButtonDblClick && e->type() != QEvent::MouseMove)
     return false;
 
-	GlMainWidget *glWidget = (GlMainWidget *) widget;
+  GlMainWidget *glWidget = (GlMainWidget *) widget;
 
-	if (!glWidget->hasMouseTracking()) {
-		glWidget->setMouseTracking(true);
-	}
+  if (!glWidget->hasMouseTracking()) {
+    glWidget->setMouseTracking(true);
+  }
 
-	if (!pixelView->smallMultiplesViewSet() && !pixelView->interactorsEnabled()) {
-		pixelView->toggleInteractors(true);
-	}
+  if (!pixelView->smallMultiplesViewSet() && !pixelView->interactorsEnabled()) {
+    pixelView->toggleInteractors(true);
+  }
 
-	if (pixelView->getOverviews().size() == 0) {
-		return false;
-	}
+  if (pixelView->getOverviews().size() == 0) {
+    return false;
+  }
 
-	if (e->type() == QEvent::MouseMove && pixelView->smallMultiplesViewSet()) {
-		QMouseEvent *me = (QMouseEvent *) e;
-		int x = glWidget->width() - me->x();
-		int y = me->y();
-		Coord screenCoords((double) x, (double) y, 0);
+  if (e->type() == QEvent::MouseMove && pixelView->smallMultiplesViewSet()) {
+    QMouseEvent *me = (QMouseEvent *) e;
+    int x = glWidget->width() - me->x();
+    int y = me->y();
+    Coord screenCoords((double) x, (double) y, 0);
     Coord sceneCoords = glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords);
-		PixelOrientedOverview *overviewUnderPointer = getOverviewUnderPointer(sceneCoords);
-		if (overviewUnderPointer != NULL && overviewUnderPointer != selectedOverview) {
-			selectedOverview = overviewUnderPointer;
-		}
-		return true;
-	} else if (e->type() == QEvent::MouseButtonDblClick) {
-		if (selectedOverview != NULL && !selectedOverview->overviewGenerated()) {
-			pixelView->generatePixelOverview(selectedOverview, glWidget);
-			glWidget->draw();
-		} else if (selectedOverview != NULL && pixelView->smallMultiplesViewSet()) {
-			QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedOverview->getBoundingBox());
-			zoomAndPanAnimator.animateZoomAndPan();
-			pixelView->switchFromSmallMultiplesToDetailView(selectedOverview);
-			selectedOverview = NULL;
-		} else if (!pixelView->smallMultiplesViewSet() && pixelView->getOverviews().size() > 1) {
-			pixelView->switchFromDetailViewToSmallMultiples();
-			QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, pixelView->getSmallMultiplesViewBoundingBox());
-			zoomAndPanAnimator.animateZoomAndPan();
-		}
-		return true;
-	}
-	return false;
+    PixelOrientedOverview *overviewUnderPointer = getOverviewUnderPointer(sceneCoords);
+
+    if (overviewUnderPointer != NULL && overviewUnderPointer != selectedOverview) {
+      selectedOverview = overviewUnderPointer;
+    }
+
+    return true;
+  }
+  else if (e->type() == QEvent::MouseButtonDblClick) {
+    if (selectedOverview != NULL && !selectedOverview->overviewGenerated()) {
+      pixelView->generatePixelOverview(selectedOverview, glWidget);
+      glWidget->draw();
+    }
+    else if (selectedOverview != NULL && pixelView->smallMultiplesViewSet()) {
+      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedOverview->getBoundingBox());
+      zoomAndPanAnimator.animateZoomAndPan();
+      pixelView->switchFromSmallMultiplesToDetailView(selectedOverview);
+      selectedOverview = NULL;
+    }
+    else if (!pixelView->smallMultiplesViewSet() && pixelView->getOverviews().size() > 1) {
+      pixelView->switchFromDetailViewToSmallMultiples();
+      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, pixelView->getSmallMultiplesViewBoundingBox());
+      zoomAndPanAnimator.animateZoomAndPan();
+    }
+
+    return true;
+  }
+
+  return false;
 }
 
 PixelOrientedOverview *PixelOrientedViewNavigator::getOverviewUnderPointer(Coord sceneCoords) {
-	PixelOrientedOverview *ret = NULL;
-	vector<PixelOrientedOverview *> overviews = pixelView->getOverviews();
-	vector<PixelOrientedOverview *>::iterator it;
-	for (it = overviews.begin() ; it != overviews.end() ; ++it) {
-		BoundingBox overviewBB = (*it)->getBoundingBox();
-		if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
-			sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1]) {
-			ret = *it;
-			break;
-		}
-	}
+  PixelOrientedOverview *ret = NULL;
+  vector<PixelOrientedOverview *> overviews = pixelView->getOverviews();
+  vector<PixelOrientedOverview *>::iterator it;
 
-	return ret;
+  for (it = overviews.begin() ; it != overviews.end() ; ++it) {
+    BoundingBox overviewBB = (*it)->getBoundingBox();
+
+    if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
+        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1]) {
+      ret = *it;
+      break;
+    }
+  }
+
+  return ret;
 }
 
 }

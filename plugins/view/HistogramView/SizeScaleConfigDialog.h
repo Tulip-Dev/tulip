@@ -26,26 +26,26 @@
 
 class SizeScaleConfigDialog : public QDialog, public Ui::SizeScaleConfigDialogData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	SizeScaleConfigDialog(QWidget *parent = 0);
+  SizeScaleConfigDialog(QWidget *parent = 0);
 
-	bool doMappingOnViewSize() const;
+  bool doMappingOnViewSize() const;
 
-	float getMinSize() const;
-	float getMaxSize() const;
+  float getMinSize() const;
+  float getMaxSize() const;
 
-	bool applySizeMappingOnX() const;
-	bool applySizeMappingOnY() const;
-	bool applySizeMappingOnZ() const;
+  bool applySizeMappingOnX() const;
+  bool applySizeMappingOnY() const;
+  bool applySizeMappingOnZ() const;
 
 private slots :
 
-	void minSizeValueChanged(double newValue);
-	void maxSizeValueChanged(double newValue);
-	void viewSizeRadioButtonToggled(bool checked);
+  void minSizeValueChanged(double newValue);
+  void maxSizeValueChanged(double newValue);
+  void viewSizeRadioButtonToggled(bool checked);
 
 };
 

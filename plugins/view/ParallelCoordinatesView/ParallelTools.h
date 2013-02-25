@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef   	PARALLELTOOLS_H_
-#define   	PARALLELTOOLS_H_
+#ifndef     PARALLELTOOLS_H_
+#define     PARALLELTOOLS_H_
 
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
@@ -75,4 +75,4 @@ Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2
 
 }
 
-#endif 	    /* !PARALLELTOOLS_H_ */
+#endif      /* !PARALLELTOOLS_H_ */

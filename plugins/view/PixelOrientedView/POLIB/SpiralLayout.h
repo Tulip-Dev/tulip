@@ -25,11 +25,11 @@
 
 
 namespace pocore {
-  class SpiralLayout : public LayoutFunction {
-  public:
-    Vec2i  project (const unsigned int id) const;
-    unsigned int unproject (const Vec2i& ) const;
+class SpiralLayout : public LayoutFunction {
+public:
+  Vec2i  project (const unsigned int id) const;
+  unsigned int unproject (const Vec2i& ) const;
 
-  };
+};
 }
 #endif //SPIRALLAYOUT_H

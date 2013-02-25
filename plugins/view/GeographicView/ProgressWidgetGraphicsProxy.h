@@ -26,29 +26,31 @@
 
 class ProgressWidget : public QWidget, public Ui::ProgressWidgetData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	ProgressWidget(QWidget *parent = 0);
+  ProgressWidget(QWidget *parent = 0);
 
-	void setComment(const QString &comment);
+  void setComment(const QString &comment);
 
-	void setProgress(int value, int max);
+  void setProgress(int value, int max);
 
-	bool cancelRequested() const {return cancelClicked;}
+  bool cancelRequested() const {
+    return cancelClicked;
+  }
 
 protected :
 
-	void showEvent(QShowEvent * event);
+  void showEvent(QShowEvent * event);
 
 private slots :
 
-	void cancelButtonClicked();
+  void cancelButtonClicked();
 
 private :
 
-	bool cancelClicked;
+  bool cancelClicked;
 
 };
 
@@ -56,24 +58,26 @@ class ProgressWidgetGraphicsProxy : public QGraphicsProxyWidget {
 
 public :
 
-	ProgressWidgetGraphicsProxy();
+  ProgressWidgetGraphicsProxy();
 
-	void setComment(const QString &comment);
+  void setComment(const QString &comment);
 
-	void setProgress(int value, int max);
+  void setProgress(int value, int max);
 
-	void setFrameColor(const QColor &frameColor) {this->frameColor = frameColor;}
+  void setFrameColor(const QColor &frameColor) {
+    this->frameColor = frameColor;
+  }
 
-	bool cancelRequested() const;
+  bool cancelRequested() const;
 
 protected :
 
-	void paintWindowFrame (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+  void paintWindowFrame (QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
 
 private :
 
-	ProgressWidget *progressWidget;
-	QColor frameColor;
+  ProgressWidget *progressWidget;
+  QColor frameColor;
 };
 
 #endif /* PROGRESSWIDGETGRAPHICSPROXY_H_ */

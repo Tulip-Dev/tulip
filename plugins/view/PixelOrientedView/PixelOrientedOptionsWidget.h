@@ -30,27 +30,27 @@ using namespace tlp;
 
 class PixelOrientedOptionsWidget : public QWidget, public Ui::PixelOrientedOptionsWidgetData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	PixelOrientedOptionsWidget(QWidget *parent = 0);
+  PixelOrientedOptionsWidget(QWidget *parent = 0);
 
-	Color getBackgroundColor() const;
-	void setBackgroundColor(const Color &color);
+  Color getBackgroundColor() const;
+  void setBackgroundColor(const Color &color);
 
-	std::string getLayoutType() const;
-	void setLayoutType(const std::string layoutType);
+  std::string getLayoutType() const;
+  void setLayoutType(const std::string layoutType);
 
   bool configurationChanged();
 
 private slots :
 
-	void pressBackgroundColorButton();
+  void pressBackgroundColorButton();
 
 public slots :
 
-  void applySettings(){
+  void applySettings() {
     emit(applySettingsSignal());
   }
 

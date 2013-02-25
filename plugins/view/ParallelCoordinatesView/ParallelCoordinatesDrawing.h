@@ -38,17 +38,17 @@
 
 namespace tlp {
 
-  class ParallelCoordinatesDrawing : public GlComposite, public GraphObserver, public Observable {
+class ParallelCoordinatesDrawing : public GlComposite, public GraphObserver, public Observable {
 
 public :
 
-	enum LayoutType {PARALLEL=0, CIRCULAR};
+  enum LayoutType {PARALLEL=0, CIRCULAR};
 
-	enum LinesType {STRAIGHT=0, CATMULL_ROM_SPLINE, CUBIC_BSPLINE_INTERPOLATION};
+  enum LinesType {STRAIGHT=0, CATMULL_ROM_SPLINE, CUBIC_BSPLINE_INTERPOLATION};
 
-	enum LinesThickness {THICK=0, THIN};
+  enum LinesThickness {THICK=0, THIN};
 
-	enum HighlightedEltsSetOp {NONE=0, INTERSECTION, UNION};
+  enum HighlightedEltsSetOp {NONE=0, INTERSECTION, UNION};
 
   ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy, Graph *axisPointsGraph);
 
@@ -63,20 +63,44 @@ public :
   void removeAxis(ParallelAxis *axis);
   void addAxis(ParallelAxis *axis);
 
-  void setAxisHeight(const unsigned int axisHeight) {this->height = axisHeight;}
-  void setSpaceBetweenAxis(const unsigned int spaceBetweenAxis) {this->spaceBetweenAxis = spaceBetweenAxis;}
-  void setAxisPointMinSize(const Size &axisPointMinSize) {this->axisPointMinSize = axisPointMinSize;}
-  void setAxisPointMaxSize(const Size &axisPointMaxSize) {this->axisPointMaxSize = axisPointMaxSize;}
-  void setDrawPointsOnAxis(const bool drawPointsOnAxis) {this->drawPointsOnAxis = drawPointsOnAxis;}
-  void setLinesColorAlphaValue(const unsigned int linesColorAlphaValue) {this->linesColorAlphaValue = linesColorAlphaValue;}
-  void setLineTextureFilename(std::string lineTextureFilename) {this->lineTextureFilename = lineTextureFilename;}
-  void setBackgroundColor(const Color &backgroundColor) {this->backgroundColor = backgroundColor;}
-  void setLayoutType(const LayoutType layoutType) {this->layoutType = layoutType;}
-  void setLinesType(const LinesType linesType) {this->linesType = linesType;}
-  void setLinesThickness(const LinesThickness linesThickness) {this->linesThickness = linesThickness;}
+  void setAxisHeight(const unsigned int axisHeight) {
+    this->height = axisHeight;
+  }
+  void setSpaceBetweenAxis(const unsigned int spaceBetweenAxis) {
+    this->spaceBetweenAxis = spaceBetweenAxis;
+  }
+  void setAxisPointMinSize(const Size &axisPointMinSize) {
+    this->axisPointMinSize = axisPointMinSize;
+  }
+  void setAxisPointMaxSize(const Size &axisPointMaxSize) {
+    this->axisPointMaxSize = axisPointMaxSize;
+  }
+  void setDrawPointsOnAxis(const bool drawPointsOnAxis) {
+    this->drawPointsOnAxis = drawPointsOnAxis;
+  }
+  void setLinesColorAlphaValue(const unsigned int linesColorAlphaValue) {
+    this->linesColorAlphaValue = linesColorAlphaValue;
+  }
+  void setLineTextureFilename(std::string lineTextureFilename) {
+    this->lineTextureFilename = lineTextureFilename;
+  }
+  void setBackgroundColor(const Color &backgroundColor) {
+    this->backgroundColor = backgroundColor;
+  }
+  void setLayoutType(const LayoutType layoutType) {
+    this->layoutType = layoutType;
+  }
+  void setLinesType(const LinesType linesType) {
+    this->linesType = linesType;
+  }
+  void setLinesThickness(const LinesThickness linesThickness) {
+    this->linesThickness = linesThickness;
+  }
   std::vector<ParallelAxis *> getAllAxis();
 
-  void resetAxisLayoutNextUpdate() {resetAxisLayout = true;}
+  void resetAxisLayoutNextUpdate() {
+    resetAxisLayout = true;
+  }
   void update(GlMainWidget *glWidget, bool updateWithoutProgressBar = false);
   void updateWithAxisSlidersRange(ParallelAxis *axis, HighlightedEltsSetOp highlightedEltsSetOp = NONE);
 
@@ -86,7 +110,7 @@ public :
   void delEdge(Graph *,const edge );
   void treatEvent(const tlp::Event&);
 
- private :
+private :
 
   void computeResizeFactor();
   void createAxis();

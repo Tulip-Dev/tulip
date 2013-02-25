@@ -53,7 +53,7 @@ public:
 
   virtual QWidget* configurationWidget() const {
     return new QLabel(QString("<h3>Get information interactor</h3>")+
-                  "<b>Mouse left</b> click on an element to display its properties");
+                      "<b>Mouse left</b> click on an element to display its properties");
   }
 
   unsigned int priority() const {
@@ -92,7 +92,7 @@ bool GoogleMapsShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
   if (widget == _informationsWidget && (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress))
     return true;
 
-  if(_informationsWidget->isVisible() && e->type()==QEvent::Wheel){
+  if(_informationsWidget->isVisible() && e->type()==QEvent::Wheel) {
     _informationsWidgetItem->setVisible(false);
     return false;
   }
@@ -156,9 +156,11 @@ bool GoogleMapsShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
             animation->start();
 
             return true;
-          } else if(selectedEntity.getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED){
+          }
+          else if(selectedEntity.getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED) {
 
             GlComplexPolygon *polygon=dynamic_cast<GlComplexPolygon*>(selectedEntity.getSimpleEntity());
+
             if(!polygon)
               return false;
 
@@ -185,7 +187,8 @@ bool GoogleMapsShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
             animation->setStartValue(0.);
             animation->setEndValue(1.);
             animation->start();
-          } else {
+          }
+          else {
             return false;
           }
         }
@@ -198,14 +201,17 @@ bool GoogleMapsShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
 
 bool GoogleMapsShowElementInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
   GoogleMapsView *googleMapsView=dynamic_cast<GoogleMapsView*>(view());
+
   if(googleMapsView->getGoogleMapGraphicsView()->getGlMainWidget()->pickNodesEdges(x,y,selectedEntity))
     return true;
 
   vector<SelectedEntity> selectedEntities;
-  if(googleMapsView->getGoogleMapGraphicsView()->getGlMainWidget()->pickGlEntities(x,y,selectedEntities)){
+
+  if(googleMapsView->getGoogleMapGraphicsView()->getGlMainWidget()->pickGlEntities(x,y,selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
+
   return false;
 }
 
@@ -214,6 +220,7 @@ void GoogleMapsShowElementInfo::viewChanged(View * view) {
     _view = NULL;
     return;
   }
+
   GoogleMapsView *googleMapsView=dynamic_cast<GoogleMapsView*>(view);
   _view=googleMapsView;
   connect(_view,SIGNAL(graphSet(tlp::Graph*)),_informationsWidgetItem,SLOT(close()));

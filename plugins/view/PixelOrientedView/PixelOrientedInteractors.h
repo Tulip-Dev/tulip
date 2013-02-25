@@ -28,13 +28,17 @@ class PixelOrientedInteractor : public GLInteractorComposite {
 
 public :
 
-	PixelOrientedInteractor(const QString &iconPath, const QString &text);
+  PixelOrientedInteractor(const QString &iconPath, const QString &text);
 
-    bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const;
 
-  unsigned int priority() const {return 0;}
+  unsigned int priority() const {
+    return 0;
+  }
 
-  QWidget *configurationWidget() const {return NULL;}
+  QWidget *configurationWidget() const {
+    return NULL;
+  }
 
 };
 
@@ -46,9 +50,11 @@ public :
 
   PixelOrientedInteractorNavigation(const tlp::PluginContext *);
 
-	void construct();
+  void construct();
 
-  unsigned int priority() const {return 5;}
+  unsigned int priority() const {
+    return 5;
+  }
 
   QWidget *configurationWidget() const;
 

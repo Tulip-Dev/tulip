@@ -34,36 +34,40 @@ class TulipGraphDimension : public DimensionBase {
 
 public :
 
-	TulipGraphDimension(tlp::Graph *graph, std::string dimensionName);
-	~TulipGraphDimension();
+  TulipGraphDimension(tlp::Graph *graph, std::string dimensionName);
+  ~TulipGraphDimension();
 
-	unsigned int numberOfItems() const;
-	unsigned int numberOfValues() const;
-	std::string getItemLabelAtRank(const unsigned int rank) const;
-	std::string getItemLabel(const unsigned int itemId) const;
-	double getItemValue(const unsigned int itemId) const;
-	double getItemValueAtRank(const unsigned int rank) const;
-	unsigned int getItemIdAtRank(const unsigned int rank);
-	unsigned int getRankForItem(const unsigned int itemId);
-	double minValue() const;
-	double maxValue() const;
-	std::vector<unsigned int> links(const unsigned int itemId) const;
-	std::string getDimensionName() const {return dimName;}
-	tlp::Graph *getTulipGraph() const {return graph;}
-	void updateNodesRank();
+  unsigned int numberOfItems() const;
+  unsigned int numberOfValues() const;
+  std::string getItemLabelAtRank(const unsigned int rank) const;
+  std::string getItemLabel(const unsigned int itemId) const;
+  double getItemValue(const unsigned int itemId) const;
+  double getItemValueAtRank(const unsigned int rank) const;
+  unsigned int getItemIdAtRank(const unsigned int rank);
+  unsigned int getRankForItem(const unsigned int itemId);
+  double minValue() const;
+  double maxValue() const;
+  std::vector<unsigned int> links(const unsigned int itemId) const;
+  std::string getDimensionName() const {
+    return dimName;
+  }
+  tlp::Graph *getTulipGraph() const {
+    return graph;
+  }
+  void updateNodesRank();
 
 private :
 
-	template <typename PROPERTY>
-	double getNodeValue(const tlp::node n) const;
+  template <typename PROPERTY>
+  double getNodeValue(const tlp::node n) const;
 
-	tlp::Graph *graph;
-	std::string dimName;
-	std::string propertyType;
-	std::vector<tlp::node> dataOrder;
+  tlp::Graph *graph;
+  std::string dimName;
+  std::string propertyType;
+  std::vector<tlp::node> dataOrder;
 
-	TulipNodeMetricSorter *nodeSorter;
-	static std::map<tlp::Graph *, unsigned int> graphDimensionsMap;
+  TulipNodeMetricSorter *nodeSorter;
+  static std::map<tlp::Graph *, unsigned int> graphDimensionsMap;
 
 };
 

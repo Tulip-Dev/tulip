@@ -41,11 +41,15 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
   string s;
   forEach (s, g->getProperties()) {
     string type = g->getProperty(s)->getTypename();
+
     if (type != "double" && type != "int")
       continue;
+
     orderingMetricCombo->addItem(s.c_str());
+
     if (currentString.toStdString().compare(s) == 0)
       currentIndex = i;
+
     ++i;
   }
   _modifyingMetricList = false;
@@ -57,6 +61,7 @@ void MatrixViewConfigurationWidget::orderingMetricComboIndexChanged(int i) {
     return;
 
   string name = "";
+
   if (i > 0)
     name = orderingMetricCombo->itemText(i).toStdString();
 

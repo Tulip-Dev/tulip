@@ -48,13 +48,21 @@ public :
 
   GlGraphComposite *getGlGraphComposite() const; //{return glGraph;}
 
-  std::pair<double, double> getLatLngForNode(node n) {return nodeLatLng[n];}
+  std::pair<double, double> getLatLngForNode(node n) {
+    return nodeLatLng[n];
+  }
 
-  void setNodeLatLng(node n, const std::pair<double, double> &latLng) {nodeLatLng[n] = latLng;}
+  void setNodeLatLng(node n, const std::pair<double, double> &latLng) {
+    nodeLatLng[n] = latLng;
+  }
 
-  void setEdgeBendsLatLng(edge e, const std::vector<std::pair< double, double> > &bendsLatLng) {edgeBendsLatLng[e] = bendsLatLng;}
+  void setEdgeBendsLatLng(edge e, const std::vector<std::pair< double, double> > &bendsLatLng) {
+    edgeBendsLatLng[e] = bendsLatLng;
+  }
 
-  void draw() {scene()->update();}
+  void draw() {
+    scene()->update();
+  }
 
   void setMapTranslationBlocked(const bool mapTranslationBlocked);
 
@@ -62,15 +70,25 @@ public :
 
   void centerMapOnNode(const node n);
 
-  QGLWidget *getGLWidget() {return glWidget;}
+  QGLWidget *getGLWidget() {
+    return glWidget;
+  }
 
-  GlMainWidget *getGlMainWidget() {return glMainWidget;}
+  GlMainWidget *getGlMainWidget() {
+    return glMainWidget;
+  }
 
-  GoogleMaps *getGoogleMapsPage() const {return googleMaps;}
+  GoogleMaps *getGoogleMapsPage() const {
+    return googleMaps;
+  }
 
-  LayoutProperty *getGeoLayout() const {return geoLayout;}
+  LayoutProperty *getGeoLayout() const {
+    return geoLayout;
+  }
 
-  SizeProperty *getGeoSizes() const {return geoViewSize;}
+  SizeProperty *getGeoSizes() const {
+    return geoViewSize;
+  }
 
   void setGeoLayout(LayoutProperty *);
 
@@ -82,9 +100,13 @@ public :
 
   void afterSetAllNodeValue(PropertyInterface*);
 
-  void forceRedraw() {currentMapZoom = 0;}
+  void forceRedraw() {
+    currentMapZoom = 0;
+  }
 
-  GlMainWidgetGraphicsItem *getGlMainWidgetItem() {return glWidgetItem;}
+  GlMainWidgetGraphicsItem *getGlMainWidgetItem() {
+    return glWidgetItem;
+  }
 
   void switchViewType();
 
@@ -96,7 +118,7 @@ public :
     return viewTypeComboBox;
   }
 
-  GlComposite *getPolygon(){
+  GlComposite *getPolygon() {
     return polygonEntity;
   }
 

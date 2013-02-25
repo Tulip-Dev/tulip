@@ -24,8 +24,8 @@ using namespace std;
 
 namespace tlp {
 
-ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent) : QWidget(parent),graph(NULL){
-	setupUi(this);
+ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent) : QWidget(parent),graph(NULL) {
+  setupUi(this);
   connect(applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
 }
 
@@ -42,52 +42,55 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
   this->graph = graph;
 
   if(graph!=NULL && notSameGraph)
-     graph->addListener(this);
+    graph->addListener(this);
 
-	this->graphPropertiesTypesFilter = graphPropertiesTypesFilter;
+  this->graphPropertiesTypesFilter = graphPropertiesTypesFilter;
 
-	vector<string> lastSelectedProperties = getSelectedGraphProperties();
+  vector<string> lastSelectedProperties = getSelectedGraphProperties();
 
-	graphPropertiesSelectionWidget->clearLists();
-	graphPropertiesSelectionWidget->setWidgetParameters(graph, graphPropertiesTypesFilter);
+  graphPropertiesSelectionWidget->clearLists();
+  graphPropertiesSelectionWidget->setWidgetParameters(graph, graphPropertiesTypesFilter);
 
   if (lastSelectedProperties.size() > 0 && graph) {
     Iterator<string> *properties= graph->getProperties();
-		vector<string> stringList;
-		vector<string>::iterator it;
-		string propertyName;
+    vector<string> stringList;
+    vector<string>::iterator it;
+    string propertyName;
 
-		for (it = lastSelectedProperties.begin() ; it != lastSelectedProperties.end() ; ++it) {
-			if (graph->existProperty(*it)) {
-				stringList.push_back(*it);
-			}
-		}
+    for (it = lastSelectedProperties.begin() ; it != lastSelectedProperties.end() ; ++it) {
+      if (graph->existProperty(*it)) {
+        stringList.push_back(*it);
+      }
+    }
 
-		graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
+    graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
 
-		stringList.clear();
+    stringList.clear();
 
-		while (properties->hasNext()) {
-			propertyName = properties->next();
-			if (graph->existProperty(propertyName) && std::find(lastSelectedProperties.begin(), lastSelectedProperties.end(), propertyName) == lastSelectedProperties.end()) {
-				stringList.push_back(propertyName);
-			}
-		}
-		delete properties;
-		graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
-  }else{
+    while (properties->hasNext()) {
+      propertyName = properties->next();
+
+      if (graph->existProperty(propertyName) && std::find(lastSelectedProperties.begin(), lastSelectedProperties.end(), propertyName) == lastSelectedProperties.end()) {
+        stringList.push_back(propertyName);
+      }
+    }
+
+    delete properties;
+    graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
+  }
+  else {
     this->lastSelectedProperties.clear();
   }
 }
 
 vector<string> ViewGraphPropertiesSelectionWidget::getSelectedGraphProperties() {
-	return graphPropertiesSelectionWidget->getSelectedProperties();
+  return graphPropertiesSelectionWidget->getSelectedProperties();
 }
 
 void ViewGraphPropertiesSelectionWidget::setWidgetEnabled(const bool enabled) {
-	groupBox->setEnabled(enabled);
-	groupBox2->setEnabled(enabled);
-	applyButton->setEnabled(enabled);
+  groupBox->setEnabled(enabled);
+  groupBox2->setEnabled(enabled);
+  applyButton->setEnabled(enabled);
 
 }
 
@@ -95,46 +98,52 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> se
   if(!graph)
     return;
 
-	Iterator<string> *properties = graph->getProperties();
-	vector<string> stringList;
-	vector<string> finalStringList;
-	string propertyName;
-	graphPropertiesSelectionWidget->clearLists();
-	while (properties->hasNext()) {
-		propertyName = properties->next();
-		stringList.push_back(propertyName);
-	}
+  Iterator<string> *properties = graph->getProperties();
+  vector<string> stringList;
+  vector<string> finalStringList;
+  string propertyName;
+  graphPropertiesSelectionWidget->clearLists();
 
-	vector<string> selectedPropertiesCopy(selectedProperties);
-	for (unsigned int i = 0 ; i < stringList.size() ; ++i) {
-		if (std::find(selectedProperties.begin(), selectedProperties.end(), stringList[i]) != selectedProperties.end()) {
-				finalStringList.push_back(selectedPropertiesCopy.front());
-				selectedPropertiesCopy.erase(remove(selectedPropertiesCopy.begin(), selectedPropertiesCopy.end(), selectedPropertiesCopy.front()), selectedPropertiesCopy.end());
-		} else {
-			finalStringList.push_back(stringList[i]);
-		}
-	}
-	delete properties;
-	graphPropertiesSelectionWidget->setInputPropertiesList(finalStringList);
-	graphPropertiesSelectionWidget->setOutputPropertiesList(selectedProperties);
+  while (properties->hasNext()) {
+    propertyName = properties->next();
+    stringList.push_back(propertyName);
+  }
+
+  vector<string> selectedPropertiesCopy(selectedProperties);
+
+  for (unsigned int i = 0 ; i < stringList.size() ; ++i) {
+    if (std::find(selectedProperties.begin(), selectedProperties.end(), stringList[i]) != selectedProperties.end()) {
+      finalStringList.push_back(selectedPropertiesCopy.front());
+      selectedPropertiesCopy.erase(remove(selectedPropertiesCopy.begin(), selectedPropertiesCopy.end(), selectedPropertiesCopy.front()), selectedPropertiesCopy.end());
+    }
+    else {
+      finalStringList.push_back(stringList[i]);
+    }
+  }
+
+  delete properties;
+  graphPropertiesSelectionWidget->setInputPropertiesList(finalStringList);
+  graphPropertiesSelectionWidget->setOutputPropertiesList(selectedProperties);
 }
 
 ElementType ViewGraphPropertiesSelectionWidget::getDataLocation() const {
-	if (nodesButton->isChecked()) {
-		return NODE;
-	} else {
-		return EDGE;
-	}
+  if (nodesButton->isChecked()) {
+    return NODE;
+  }
+  else {
+    return EDGE;
+  }
 }
 
 void ViewGraphPropertiesSelectionWidget::setDataLocation(const ElementType location) {
-	if (location == NODE) {
-		edgesButton->setChecked(false);
-		nodesButton->setChecked(true);
-	} else {
-		edgesButton->setChecked(true);
-		nodesButton->setChecked(false);
-	}
+  if (location == NODE) {
+    edgesButton->setChecked(false);
+    nodesButton->setChecked(true);
+  }
+  else {
+    edgesButton->setChecked(true);
+    nodesButton->setChecked(false);
+  }
 }
 
 void ViewGraphPropertiesSelectionWidget::treatEvent(const Event &evt) {
@@ -155,21 +164,23 @@ void ViewGraphPropertiesSelectionWidget::treatEvent(const Event &evt) {
   }
 }
 
-bool ViewGraphPropertiesSelectionWidget::configurationChanged(){
+bool ViewGraphPropertiesSelectionWidget::configurationChanged() {
   vector<string> selectedProperties=getSelectedGraphProperties();
 
-  if(selectedProperties.size()!=lastSelectedProperties.size()){
+  if(selectedProperties.size()!=lastSelectedProperties.size()) {
     lastSelectedProperties=selectedProperties;
     return true;
   }
 
   bool sameSelectedProperties=true;
   vector<string>::iterator itLast=lastSelectedProperties.begin();
-  for(vector<string>::iterator it=selectedProperties.begin();it!=selectedProperties.end();++it){
-    if((*it)!=(*itLast)){
+
+  for(vector<string>::iterator it=selectedProperties.begin(); it!=selectedProperties.end(); ++it) {
+    if((*it)!=(*itLast)) {
       sameSelectedProperties=false;
       break;
     }
+
     ++itLast;
   }
 
@@ -181,7 +192,7 @@ bool ViewGraphPropertiesSelectionWidget::configurationChanged(){
   return false;
 }
 
-void ViewGraphPropertiesSelectionWidget::applySettings(){
+void ViewGraphPropertiesSelectionWidget::applySettings() {
   emit(applySettingsSignal());
 }
 

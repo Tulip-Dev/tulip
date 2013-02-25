@@ -59,6 +59,7 @@ void MatrixView::setState(const DataSet &) {
   clearRedrawTriggers();
 
   setOverviewVisible(true);
+
   if (!_configurationWidget) {
     _configurationWidget = new MatrixViewConfigurationWidget;
     connect(_configurationWidget->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this, SLOT(setBackgroundColor(QColor)));
@@ -70,6 +71,7 @@ void MatrixView::setState(const DataSet &) {
     connect(centerAction,SIGNAL(triggered()),getGlMainWidget(),SLOT(centerScene()));
     graphicsView()->addAction(centerAction);
   }
+
   _configurationWidget->setGraph(graph());
 
   initDisplayedGraph();
@@ -85,7 +87,7 @@ DataSet MatrixView::state() const {
   return DataSet();
 }
 
-QList<QWidget *> MatrixView::configurationWidgets() const{
+QList<QWidget *> MatrixView::configurationWidgets() const {
   //result.push_back(pair<QWidget *, string>(_configurationWidget, "Adjacency Matrix view"));
   return QList<QWidget *>() << _configurationWidget ;
 }
@@ -95,6 +97,7 @@ void MatrixView::draw() {
     normalizeSizes();
     _mustUpdateSizes = false;
   }
+
   if (_mustUpdateLayout) {
     updateLayout();
     _mustUpdateLayout = false;
@@ -131,11 +134,11 @@ void MatrixView::initDisplayedGraph() {
 
   Observable *obs;
   stableForEach (obs, getObservables())
-    obs->removeObserver(this);
+  obs->removeObserver(this);
 
   _matrixGraph = newGraph();
 
-  if(!graph()){
+  if(!graph()) {
     return;
   }
 
@@ -147,11 +150,11 @@ void MatrixView::initDisplayedGraph() {
   Observable::holdObservers();
   node n;
   forEach(n, graph()->getNodes())
-    addNode(graph(), n);
+  addNode(graph(), n);
 
   edge e;
   forEach(e, graph()->getEdges())
-    addEdge(graph(), e);
+  addEdge(graph(), e);
   Observable::unholdObservers();
 
   GlGraphInputData *inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
@@ -182,6 +185,7 @@ void MatrixView::initDisplayedGraph() {
     normalizeSizes();
     _mustUpdateSizes = false;
   }
+
   if (_mustUpdateLayout) {
     updateLayout();
     _mustUpdateLayout = false;
@@ -206,6 +210,7 @@ void MatrixView::normalizeSizes(double maxVal) {
   forEach(n, _matrixGraph->getNodes()) {
     if (!_displayedNodesAreNodes->getNodeValue(n))
       continue;
+
     Size s(originalSizes->getNodeValue(node(_displayedNodesToGraphEntities->getNodeValue(n))));
     matrixSizes->setNodeValue(n, Size(s[0]*maxVal/maxWidth, s[1]*maxVal/maxHeight, 1));
   }
@@ -214,6 +219,7 @@ void MatrixView::normalizeSizes(double maxVal) {
 
 void MatrixView::update(std::set<tlp::Observable *>::iterator begin, std::set<tlp::Observable *>::iterator end) {
   GlGraphInputData *inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
+
   for (set<Observable *>::iterator it = begin; it != end; ++it) {
     if (*it == inputData->getElementSize())
       _mustUpdateSizes = true;
@@ -244,7 +250,7 @@ void MatrixView::addNode(tlp::Graph *, const tlp::node n) {
   }
 }
 
-void MatrixView::addEdge(tlp::Graph *g, const tlp::edge e){
+void MatrixView::addEdge(tlp::Graph *g, const tlp::edge e) {
   _mustUpdateLayout = true;
   _mustUpdateSizes=true;
 
@@ -278,6 +284,7 @@ void MatrixView::delNode(tlp::Graph *,const tlp::node n) {
   _mustUpdateSizes=true;
 
   vector<int> vect = _graphEntitiesToDisplayedNodes->getNodeValue(n);
+
   for (vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)
     _matrixGraph->delNode(node(*it));
 }
@@ -287,6 +294,7 @@ void MatrixView::delEdge(tlp::Graph *,const tlp::edge e) {
   _mustUpdateSizes=true;
 
   vector<int> vect = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
+
   for (vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)
     _matrixGraph->delNode(node(*it));
 
@@ -311,10 +319,11 @@ void MatrixView::updateNodesOrder() {
   int i=0;
   node n;
   forEach(n, graph()->getNodes())
-    _orderedNodes[i++] = n;
+  _orderedNodes[i++] = n;
 
   if (graph()->existProperty(_orderingMetricName)) {
     PropertyInterface *pi = graph()->getProperty(_orderingMetricName);
+
     if (pi->getTypename() == "double") {
       PropertySorter<DoubleProperty> sorter;
       sorter.prop = static_cast<DoubleProperty *>(pi);
@@ -334,6 +343,7 @@ void MatrixView::updateLayout() {
 
   LayoutProperty *layout = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
   Coord horiz(1,0,0), vert(0,-1,0);
+
   for (vector<node>::iterator it = _orderedNodes.begin(); it != _orderedNodes.end(); ++it) {
     vector<int> dispNodes = _graphEntitiesToDisplayedNodes->getNodeValue(node(*it));
     layout->setNodeValue(node(dispNodes[0]), horiz);
@@ -397,6 +407,7 @@ void MatrixView::setOrderingMetric(std::string name) {
     graph()->getProperty(_orderingMetricName)->removeObserver(this);
 
   _orderingMetricName = name;
+
   if (graph()->existProperty(name))
     graph()->getProperty(name)->addObserver(this);
 
@@ -412,11 +423,12 @@ void MatrixView::registerTriggers() {
   foreach (tlp::Observable* obs, triggers()) {
     removeRedrawTrigger(obs);
   }
-  if(_matrixGraph){
+
+  if(_matrixGraph) {
     addRedrawTrigger(_matrixGraph);
     Iterator<string> *it = _matrixGraph->getProperties();
 
-    while(it->hasNext()){
+    while(it->hasNext()) {
       PropertyInterface *property=_matrixGraph->getProperty(it->next());
       addRedrawTrigger(property);
     }
@@ -431,6 +443,7 @@ void MatrixView::addGridBackground() {
 
 void MatrixView::removeGridBackground() {
   GlLayer *backgroundLayer = getGlMainWidget()->getScene()->getLayer("MatrixView_Background");
+
   if (!backgroundLayer) {
     backgroundLayer = new GlLayer("MatrixView_Background", &(getGlMainWidget()->getScene()->getLayer("Main")->getCamera()), true);
     backgroundLayer->clear();

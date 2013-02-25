@@ -51,7 +51,8 @@ void GlMatrixBackgroundGrid::draw(float lod,tlp::Camera* camera) {
 
   int N = _view->graph()->numberOfNodes();
   double startX = max<double>(0.5,floor(topLeft[0])-0.5), startY = min<double>(-0.5,ceil(topLeft[1])+0.5), endX = min<double>(0.5+N,ceil(bottomRight[0])+0.5), endY = max<double>(-0.5-N,floor(bottomRight[1])-0.5);
-  for (double x=startX;x <= endX;++x) {
+
+  for (double x=startX; x <= endX; ++x) {
     vector<Coord> points(2);
     points[0] = Coord(x, startY, 0);
     points[1] = Coord(x, endY, 0);
@@ -62,7 +63,7 @@ void GlMatrixBackgroundGrid::draw(float lod,tlp::Camera* camera) {
     line.draw(lod, camera);
   }
 
-  for (double y=startY;y >= endY; --y) {
+  for (double y=startY; y >= endY; --y) {
     vector<Coord> points(2);
     points[0] = Coord(startX, y, 0);
     points[1] = Coord(endX, y, 0);

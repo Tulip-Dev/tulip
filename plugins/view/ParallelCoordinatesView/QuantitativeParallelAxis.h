@@ -41,7 +41,8 @@ namespace tlp {
 
 
 enum BoxPlotValue {BOTTOM_OUTLIER = 0, FIRST_QUARTILE = 1, MEDIAN = 2, THIRD_QUARTILE = 3,
-				   TOP_OUTLIER = 4, NO_VALUE = 5};
+                   TOP_OUTLIER = 4, NO_VALUE = 5
+                  };
 
 // Class which allows to render a quantitative axis
 // Associated datatypes can be real or integer
@@ -50,11 +51,15 @@ class QuantitativeParallelAxis : public ParallelAxis {
 public :
 
   QuantitativeParallelAxis(const Coord &baseCoord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy,
-						  const std::string &graphPropertyName, const bool ascendingOrder = true, const Color &axisColor = Color(0,0,0),
-              const float rotationAngle = 0, const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
+                           const std::string &graphPropertyName, const bool ascendingOrder = true, const Color &axisColor = Color(0,0,0),
+                           const float rotationAngle = 0, const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
 
-  void setNbAxisGrad(const unsigned int nbAxisGrad) {this->nbAxisGrad = nbAxisGrad;}
-  unsigned int getNbAxisGrad() const {return nbAxisGrad;}
+  void setNbAxisGrad(const unsigned int nbAxisGrad) {
+    this->nbAxisGrad = nbAxisGrad;
+  }
+  unsigned int getNbAxisGrad() const {
+    return nbAxisGrad;
+  }
 
   Coord getPointCoordOnAxisForData(const unsigned int dataIdx);
 
@@ -65,16 +70,27 @@ public :
 
   std::string getAxisDataTypeName() const;
 
-  void setLog10Scale(const bool log10Scale) {this->log10Scale = log10Scale;}
-  bool hasLog10Scale() const {return log10Scale;}
+  void setLog10Scale(const bool log10Scale) {
+    this->log10Scale = log10Scale;
+  }
+  bool hasLog10Scale() const {
+    return log10Scale;
+  }
 
   double getAssociatedPropertyMinValue();
   double getAssociatedPropertyMaxValue();
 
-  void setAxisMinMaxValues(const double min, const double max) {axisMinValue = min ; axisMaxValue = max;}
+  void setAxisMinMaxValues(const double min, const double max) {
+    axisMinValue = min ;
+    axisMaxValue = max;
+  }
 
-  double getAxisMinValue() const {return glQuantitativeAxis->getAxisMinValue();}
-  double getAxisMaxValue() const {return glQuantitativeAxis->getAxisMaxValue();}
+  double getAxisMinValue() const {
+    return glQuantitativeAxis->getAxisMinValue();
+  }
+  double getAxisMaxValue() const {
+    return glQuantitativeAxis->getAxisMaxValue();
+  }
 
   double getValueForAxisCoord(const Coord &axisCoord);
   Coord getAxisCoordForValue(double value);
@@ -85,25 +101,50 @@ public :
   const std::set<unsigned int> &getDataInSlidersRange() ;
   void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset);
 
-  void setBoxPlotHighlightBounds(BoxPlotValue lowBound, BoxPlotValue highBound) {boxPlotLowBound = lowBound ; boxPlotHighBound = highBound;}
+  void setBoxPlotHighlightBounds(BoxPlotValue lowBound, BoxPlotValue highBound) {
+    boxPlotLowBound = lowBound ;
+    boxPlotHighBound = highBound;
+  }
   const std::set<unsigned int> &getDataBetweenBoxPlotBounds();
 
-  bool hasAscendingOrder() const {return glQuantitativeAxis->hasAscendingOrder();}
+  bool hasAscendingOrder() const {
+    return glQuantitativeAxis->hasAscendingOrder();
+  }
   void setAscendingOrder(const bool ascendingOrder);
 
   // Axis BoxPlot methods
-  Coord getBottomOutlierCoord() const {return boxPlotValuesCoord[BOTTOM_OUTLIER];}
-  Coord getFirstQuartileCoord() const {return boxPlotValuesCoord[FIRST_QUARTILE];}
-  Coord getMedianCoord() const {return boxPlotValuesCoord[MEDIAN];}
-  Coord getThirdQuartileCoord() const {return boxPlotValuesCoord[THIRD_QUARTILE];}
-  Coord getTopOutlierCoord() const {return boxPlotValuesCoord[TOP_OUTLIER];}
-  std::string getBottomOutlierStringValue() const {return boxPlotStringValues[BOTTOM_OUTLIER];}
-  std::string getFirstQuartileStringValue() const {return boxPlotStringValues[FIRST_QUARTILE];}
-  std::string getMedianStringValue() const {return boxPlotStringValues[MEDIAN];}
-  std::string getThirdQuartileStringValue() const {return boxPlotStringValues[THIRD_QUARTILE];}
-  std::string getTopOutlierStringValue() const {return boxPlotStringValues[TOP_OUTLIER];}
+  Coord getBottomOutlierCoord() const {
+    return boxPlotValuesCoord[BOTTOM_OUTLIER];
+  }
+  Coord getFirstQuartileCoord() const {
+    return boxPlotValuesCoord[FIRST_QUARTILE];
+  }
+  Coord getMedianCoord() const {
+    return boxPlotValuesCoord[MEDIAN];
+  }
+  Coord getThirdQuartileCoord() const {
+    return boxPlotValuesCoord[THIRD_QUARTILE];
+  }
+  Coord getTopOutlierCoord() const {
+    return boxPlotValuesCoord[TOP_OUTLIER];
+  }
+  std::string getBottomOutlierStringValue() const {
+    return boxPlotStringValues[BOTTOM_OUTLIER];
+  }
+  std::string getFirstQuartileStringValue() const {
+    return boxPlotStringValues[FIRST_QUARTILE];
+  }
+  std::string getMedianStringValue() const {
+    return boxPlotStringValues[MEDIAN];
+  }
+  std::string getThirdQuartileStringValue() const {
+    return boxPlotStringValues[THIRD_QUARTILE];
+  }
+  std::string getTopOutlierStringValue() const {
+    return boxPlotStringValues[TOP_OUTLIER];
+  }
 
- private:
+private:
 
   const std::set<unsigned int> &getDataInRange(float yLowBound, float yHighBound) ;
 

@@ -33,62 +33,66 @@ namespace tlp {
 
 class GoogleMaps : public QWebView {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public :
 
-    GoogleMaps(QWidget *parent = 0);
+  GoogleMaps(QWidget *parent = 0);
 
-    void setMapCenter(double latitude, double longitude);
+  void setMapCenter(double latitude, double longitude);
 
-    int getCurrentMapZoom();
+  int getCurrentMapZoom();
 
-    void setCurrentZoom(int zoom);
+  void setCurrentZoom(int zoom);
 
-    std::pair<double, double> getCurrentMapCenter();
+  std::pair<double, double> getCurrentMapCenter();
 
-    std::string getLatLngForAddress(const QString &address, std::pair<double, double> &latLng, bool skipMultipleResults = false);
+  std::string getLatLngForAddress(const QString &address, std::pair<double, double> &latLng, bool skipMultipleResults = false);
 
-    Coord getPixelPosOnScreenForLatLng(double lat, double lng);
+  Coord getPixelPosOnScreenForLatLng(double lat, double lng);
 
-    Coord mercatorProjection(const Coord &swPixel, const Coord &nePixel, const double latitude, const double longitude);
+  Coord mercatorProjection(const Coord &swPixel, const Coord &nePixel, const double latitude, const double longitude);
 
-    std::pair<double, double> getLatLngForPixelPosOnScreen(int x, int y);
+  std::pair<double, double> getLatLngForPixelPosOnScreen(int x, int y);
 
-    bool pageInit() const {return init;}
+  bool pageInit() const {
+    return init;
+  }
 
-    void setMapBounds(Graph *graph, const std::map<node, std::pair<double, double> > &nodesLatLngs);
+  void setMapBounds(Graph *graph, const std::map<node, std::pair<double, double> > &nodesLatLngs);
 
-    void setMapBounds(Coord nw, Coord se);
+  void setMapBounds(Coord nw, Coord se);
 
-    void panMap(int dx, int dy);
+  void panMap(int dx, int dy);
 
-    std::pair<double, double> getMapCurrentSouthWestLatLng();
+  std::pair<double, double> getMapCurrentSouthWestLatLng();
 
-    std::pair<double, double> getMapCurrentNorthEastLatLng();
+  std::pair<double, double> getMapCurrentNorthEastLatLng();
 
-    int getWorldWidth();
+  int getWorldWidth();
 
-    QWebFrame *getMainFrame() const {return frame;}
+  QWebFrame *getMainFrame() const {
+    return frame;
+  }
 
-    void wheelEvent(QWheelEvent * ev);
+  void wheelEvent(QWheelEvent * ev);
 
-    void mouseMoveEvent(QMouseEvent * ev);
-    void mousePressEvent(QMouseEvent * ev);
+  void mouseMoveEvent(QMouseEvent * ev);
+  void mousePressEvent(QMouseEvent * ev);
 
-    void switchToSatelliteView();
-    void switchToRoadMapView();
-    void switchToTerrainView();
-    void switchToHybridView();
+  void switchToSatelliteView();
+  void switchToRoadMapView();
+  void switchToTerrainView();
+  void switchToHybridView();
 
-    void setProgressWidget(ProgressWidgetGraphicsProxy *progressWidget){
-      this->progressWidget=progressWidget;
-    }
+  void setProgressWidget(ProgressWidgetGraphicsProxy *progressWidget) {
+    this->progressWidget=progressWidget;
+  }
 
-    void setAdresseSelectionDialog(AddressSelectionDialog *addressSelectionDialog,QGraphicsProxyWidget *addresseSelectionProxy){
-      this->addressSelectionDialog=addressSelectionDialog;
-      this->addresseSelectionProxy=addresseSelectionProxy;
-    }
+  void setAdresseSelectionDialog(AddressSelectionDialog *addressSelectionDialog,QGraphicsProxyWidget *addresseSelectionProxy) {
+    this->addressSelectionDialog=addressSelectionDialog;
+    this->addresseSelectionProxy=addresseSelectionProxy;
+  }
 
 private slots :
 

@@ -24,45 +24,55 @@
 using namespace std;
 
 GoogleMapsViewConfigWidget::GoogleMapsViewConfigWidget(QWidget *parent) : QWidget(parent),_oldPolyFileType(None),_oldFileLoaded("") {
-	setupUi(this);
+  setupUi(this);
 }
 
 bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
-  if(polyFileType()!=_oldPolyFileType){
+  if(polyFileType()!=_oldPolyFileType) {
     _oldPolyFileType=polyFileType();
-    switch(_oldPolyFileType){
+
+    switch(_oldPolyFileType) {
     case Default: {
       _oldFileLoaded="";
       break;
     }
+
     case CsvFile: {
       _oldFileLoaded=csvFile->text().toStdString();
       break;
     }
+
     case PolyFile: {
       _oldFileLoaded=polyFile->text().toStdString();
       break;
     }
+
     default :
       break;
     }
+
     return true;
-  }else{
-    switch(_oldPolyFileType){
+  }
+  else {
+    switch(_oldPolyFileType) {
     case CsvFile: {
-      if(_oldFileLoaded!=csvFile->text().toStdString()){
+      if(_oldFileLoaded!=csvFile->text().toStdString()) {
         _oldFileLoaded=csvFile->text().toStdString();
         return true;
       }
+
       break;
     }
+
     case PolyFile: {
-      if(_oldFileLoaded!=polyFile->text().toStdString()){
+      if(_oldFileLoaded!=polyFile->text().toStdString()) {
         _oldFileLoaded=polyFile->text().toStdString();
         return true;
       }
+
       break;
     }
+
     default :
       break;
     }
@@ -74,21 +84,25 @@ bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
 void GoogleMapsViewConfigWidget::setState(const DataSet &dataSet) {
   {
     PolyFileType type;
+
     if (dataSet.get("polyFileType",(int&)type))
-    setPolyFileType(type);
+      setPolyFileType(type);
   }
-  if(dataSet.exist("csvFileName")){
+
+  if(dataSet.exist("csvFileName")) {
     string fileName;
     dataSet.get("csvFileName",fileName);
     csvFile->setText(fileName.c_str());
   }
-  if(dataSet.exist("polyFileName")){
+
+  if(dataSet.exist("polyFileName")) {
     string fileName;
     dataSet.get("polyFileName",fileName);
     polyFile->setText(fileName.c_str());
   }
 
   bool useShared = false;
+
   if (dataSet.get("useSharedLayout",useShared))
     layoutCheckBox->setChecked(useShared);
 
