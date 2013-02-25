@@ -1,28 +1,21 @@
-/**
- *
- * This file is part of Tulip (www.tulip-software.org)
- *
- * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
- *
- * Tulip is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * Tulip is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
+/*
+      HistogramInteractors.h
+
+   Created on: 7 avr. 2009
+       Author: Antoine Lambert
+       E-mail: antoine.lambert@labri.fr
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
  */
 
 #ifndef HISTOGRAMINTERACTORS_H_
 #define HISTOGRAMINTERACTORS_H_
 
-#include <tulip/GLInteractor.h>
-
-#include <string>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
 #include "HistoStatsConfigWidget.h"
 
@@ -30,11 +23,11 @@ using namespace std;
 
 namespace tlp {
 
-class HistogramInteractor : public GLInteractorComposite {
+class HistogramInteractor : public NodeLinkDiagramComponentInteractor {
 
 public :
 
-	HistogramInteractor(const QString &iconPath, const QString &text);
+    HistogramInteractor(const QString &iconPath, const QString &text);
 
     bool isCompatible(const std::string &viewName) const;
 
@@ -50,9 +43,7 @@ public :
 
   HistogramInteractorNavigation(const PluginContext *);
 
-	void construct();
-
-  QWidget *configurationWidget() const;
+    void construct();
 
   unsigned int priority() const {return 5;}
 
@@ -66,9 +57,7 @@ public :
 
   HistogramInteractorMetricMapping(const PluginContext *);
 
-	void construct();
-
-  QWidget *configurationWidget() const;
+    void construct();
 
 };
 
@@ -79,14 +68,14 @@ public :
   PLUGININFORMATIONS("HistogramInteractorStatistics", "Tulip Team", "02/04/2009", "Histogram Statistics Interactor", "1.0", "Information")
 
   HistogramInteractorStatistics(const PluginContext *);
+  ~HistogramInteractorStatistics();
 
-	void construct();
-
-  QWidget *configurationWidget() const;
+  void construct();
+  QWidget* configurationWidget() const;
 
 private :
 
-	HistoStatsConfigWidget *histoStatsConfigWidget;
+    HistoStatsConfigWidget *histoStatsConfigWidget;
 };
 
 }

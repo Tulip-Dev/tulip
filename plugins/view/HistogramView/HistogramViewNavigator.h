@@ -25,15 +25,12 @@
 #include <windows.h>
 #endif
 
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-
 #include <tulip/GLInteractor.h>
 
-#include "Histogram.h"
-#include "HistogramView.h"
-
 namespace tlp {
+
+class Histogram;
+class HistogramView;
 
 class HistogramViewNavigator : public GLInteractorComponent {
 
@@ -51,7 +48,7 @@ public :
 
 private :
 
-	Histogram *getOverviewUnderPointer(Coord sceneCoord);
+    Histogram *getOverviewUnderPointer(const Coord &sceneCoord) const;
 
 	HistogramView *histoView;
 	Histogram *selectedHistoOverview;
