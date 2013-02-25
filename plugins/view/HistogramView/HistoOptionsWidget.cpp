@@ -28,151 +28,160 @@ using namespace std;
 namespace tlp {
 
 HistoOptionsWidget::HistoOptionsWidget(QWidget *parent) : QWidget(parent),oldValueInitialized(false) {
-	setupUi(this);
-	setBackgroundColor(Color(255,255,255));
-	connect(backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
+  setupUi(this);
+  setBackgroundColor(Color(255,255,255));
+  connect(backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
   connect(applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
 }
 
 void HistoOptionsWidget::setWidgetEnabled(const bool enabled) {
-	frame->setEnabled(enabled);
+  frame->setEnabled(enabled);
 }
 
 void HistoOptionsWidget::setNbOfHistogramBins(const unsigned int nbOfHistogramBins) {
-	nbHistoBins->setValue(nbOfHistogramBins);
+  nbHistoBins->setValue(nbOfHistogramBins);
 }
 
 unsigned int HistoOptionsWidget::getNbOfHistogramBins() {
-	return nbHistoBins->value();
+  return nbHistoBins->value();
 }
 
 void HistoOptionsWidget::setNbXGraduations(const unsigned int nbXGrads) {
-	nbXGraduations->setValue(nbXGrads);
+  nbXGraduations->setValue(nbXGrads);
 }
 
 unsigned int HistoOptionsWidget::getNbXGraduations() {
-	return nbXGraduations->value();
+  return nbXGraduations->value();
 }
 
 void HistoOptionsWidget::setYAxisIncrementStep(const unsigned int yAxisIncrementStep) {
-	YAxisIncrementStep->setValue(yAxisIncrementStep);
+  YAxisIncrementStep->setValue(yAxisIncrementStep);
 }
 
 unsigned int HistoOptionsWidget::getYAxisIncrementStep() {
-	return YAxisIncrementStep->value();
+  return YAxisIncrementStep->value();
 }
 
 void HistoOptionsWidget::setCumulativeFrequenciesHistogram(const bool cumulHisto) {
-	cumulFreqHisto->setChecked(cumulHisto);
+  cumulFreqHisto->setChecked(cumulHisto);
 }
 
 bool HistoOptionsWidget::cumulativeFrequenciesHisto() {
-	return cumulFreqHisto->isChecked();
+  return cumulFreqHisto->isChecked();
 }
 
 void HistoOptionsWidget::setUniformQuantification(const bool uniformQuantification) {
-	uniformQuantificationCB->setChecked(uniformQuantification);
+  uniformQuantificationCB->setChecked(uniformQuantification);
 }
 
 bool HistoOptionsWidget::uniformQuantification() {
-	return uniformQuantificationCB->isChecked();
+  return uniformQuantificationCB->isChecked();
 }
 
 void HistoOptionsWidget::enableOrDisableNbXGraduationsSP(int uniQuantState) {
-	bool uniQuantActivated = (uniQuantState == Qt::Checked);
-	nbXGraduations->setEnabled(!uniQuantActivated);
-	xAxisLogscale->setEnabled(!uniQuantActivated);
+  bool uniQuantActivated = (uniQuantState == Qt::Checked);
+  nbXGraduations->setEnabled(!uniQuantActivated);
+  xAxisLogscale->setEnabled(!uniQuantActivated);
 }
 
 void HistoOptionsWidget::setXAxisLogScale(const bool xAxisLogScale) {
-	xAxisLogscale->setChecked(xAxisLogScale);
+  xAxisLogscale->setChecked(xAxisLogScale);
 }
 
 bool HistoOptionsWidget::xAxisLogScaleSet() const {
-	return xAxisLogscale->isChecked();
+  return xAxisLogscale->isChecked();
 }
 
 void HistoOptionsWidget::setYAxisLogScale(const bool yAxisLogScale) {
-	yAxisLogscale->setChecked(yAxisLogScale);
+  yAxisLogscale->setChecked(yAxisLogScale);
 }
 
 bool HistoOptionsWidget::yAxisLogScaleSet() const {
-	return yAxisLogscale->isChecked();
+  return yAxisLogscale->isChecked();
 }
 
 void HistoOptionsWidget::setBinWidth(const double width) {
-	binWidth->setText(QString::number(width));
+  binWidth->setText(QString::number(width));
 }
 
 Color HistoOptionsWidget::getBackgroundColor() const {
-	QString buttonStyleSheet(backColorButton->styleSheet());
-	QString backgroundColorCodeHex(buttonStyleSheet.mid(buttonStyleSheet.indexOf("#") + 1, 6));
-	bool ok;
-	return Color(backgroundColorCodeHex.mid(0, 2).toInt(&ok, 16),
-			backgroundColorCodeHex.mid(2, 2).toInt(&ok, 16),
-			backgroundColorCodeHex.mid(4, 2).toInt(&ok, 16));
+  QString buttonStyleSheet(backColorButton->styleSheet());
+  QString backgroundColorCodeHex(buttonStyleSheet.mid(buttonStyleSheet.indexOf("#") + 1, 6));
+  bool ok;
+  return Color(backgroundColorCodeHex.mid(0, 2).toInt(&ok, 16),
+               backgroundColorCodeHex.mid(2, 2).toInt(&ok, 16),
+               backgroundColorCodeHex.mid(4, 2).toInt(&ok, 16));
 
 }
 
 void HistoOptionsWidget::setBackgroundColor(const Color &color) {
-	QString colorStr;
-	QString str;
-	str.setNum(color.getR(),16);
-	if(str.size()!=2)
-		str.insert(0,"0");
-	colorStr.append(str);
+  QString colorStr;
+  QString str;
+  str.setNum(color.getR(),16);
 
-	str.setNum(color.getG(),16);
-	if(str.size()!=2)
-		str.insert(0,"0");
-	colorStr.append(str);
+  if(str.size()!=2)
+    str.insert(0,"0");
 
-	str.setNum(color.getB(),16);
-	if(str.size()!=2)
-		str.insert(0,"0");
-	colorStr.append(str);
-	backColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
+  colorStr.append(str);
+
+  str.setNum(color.getG(),16);
+
+  if(str.size()!=2)
+    str.insert(0,"0");
+
+  colorStr.append(str);
+
+  str.setNum(color.getB(),16);
+
+  if(str.size()!=2)
+    str.insert(0,"0");
+
+  colorStr.append(str);
+  backColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
 }
 
 void HistoOptionsWidget::pressBackgroundColorButton() {
   QColor newColor(QColorDialog::getColor(backColorButton->palette().color(QPalette::Button)));
-	if (newColor.isValid()) {
-		setBackgroundColor(Color(newColor.red(), newColor.green(), newColor.blue()));
-	}
+
+  if (newColor.isValid()) {
+    setBackgroundColor(Color(newColor.red(), newColor.green(), newColor.blue()));
+  }
 }
 
 bool HistoOptionsWidget::showGraphEdges() const {
-	return showEdgesCB->isChecked();
+  return showEdgesCB->isChecked();
 }
 
 void HistoOptionsWidget::enableShowGraphEdgesCB(const bool enable) {
-	showEdgesCB->setEnabled(enable);
+  showEdgesCB->setEnabled(enable);
 }
 
 void HistoOptionsWidget::setShowGraphEdges(const bool showGraphEdges) {
-	showEdgesCB->setChecked(showGraphEdges);
+  showEdgesCB->setChecked(showGraphEdges);
 }
 
 bool HistoOptionsWidget::configurationChanged() {
   bool confChanged=false;
-  if(oldValueInitialized){
+
+  if(oldValueInitialized) {
     if(oldNbOfHistogramBins!=getNbOfHistogramBins() ||
-       oldNbXGraduations!=getNbXGraduations() ||
-       oldYAxisIncrementStep!=getYAxisIncrementStep() ||
-       oldCumulativeFrequenciesHistogram!=cumulativeFrequenciesHisto() ||
-       oldUniformQuantification!=uniformQuantification() ||
-       oldXAxisLogScale!=xAxisLogScaleSet() ||
-       oldYAxisLogScale!=yAxisLogScaleSet() ||
-       oldBackgroundColor!=getBackgroundColor() ||
-       oldShowGraphEdges!=showGraphEdges() ){
+        oldNbXGraduations!=getNbXGraduations() ||
+        oldYAxisIncrementStep!=getYAxisIncrementStep() ||
+        oldCumulativeFrequenciesHistogram!=cumulativeFrequenciesHisto() ||
+        oldUniformQuantification!=uniformQuantification() ||
+        oldXAxisLogScale!=xAxisLogScaleSet() ||
+        oldYAxisLogScale!=yAxisLogScaleSet() ||
+        oldBackgroundColor!=getBackgroundColor() ||
+        oldShowGraphEdges!=showGraphEdges() ) {
       confChanged=true;
     }
-  }else{
+  }
+  else {
     confChanged=true;
     oldValueInitialized=true;
   }
 
-  if(confChanged){
+  if(confChanged) {
     oldNbOfHistogramBins=getNbOfHistogramBins();
     oldNbXGraduations=getNbXGraduations();
     oldYAxisIncrementStep=getYAxisIncrementStep();

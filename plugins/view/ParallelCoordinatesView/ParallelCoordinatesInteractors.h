@@ -24,197 +24,211 @@
 
 namespace tlp {
 
-  /** \brief Interactor abstract class for ParallelCoordinates
+/** \brief Interactor abstract class for ParallelCoordinates
+ *
+ */
+class ParallelCoordinatesInteractor  : public GLInteractorComposite {
+
+public :
+
+  ParallelCoordinatesInteractor(const QString &iconPath, const QString &text);
+  /**
+   * return if this interactor is compatible with given View
+   */
+  bool isCompatible(const std::string &viewName) const;
+
+};
+
+/** \brief Parallel coordinates interactor to select elements
+  *
+  */
+class InteractorParallelCoordsSelection : public ParallelCoordinatesInteractor {
+
+public:
+
+  PLUGININFORMATIONS("InteractorParallelCoordsSelection", "Tulip Team", "02/04/2009", "Selection Interactor", "1.0", "Selection")
+
+  /**
+   * Default constructor
+   */
+  InteractorParallelCoordsSelection(const tlp::PluginContext *);
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct();
+
+  QWidget *configurationWidget() const;
+
+  unsigned int priority() const {
+    return 3;
+  }
+
+};
+
+/** \brief Parallel coordinates interactor to highlite elements
+ *
+ */
+class InteractorHighLighter  : public ParallelCoordinatesInteractor {
+
+public:
+
+  PLUGININFORMATIONS("InteractorHighLiter", "Tulip Team", "02/04/2009", "Element Highliter Interactor", "1.0", "Information")
+
+  /**
+   * Default constructor
+   */
+  InteractorHighLighter(const tlp::PluginContext *);
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct();
+
+  QWidget *configurationWidget() const;
+
+  unsigned int priority() const {
+    return 0;
+  }
+
+
+
+};
+
+/** \brief Parallel coordinates interactor to swap axis
+ *
+ */
+class InteractorAxisSwapper  : public ParallelCoordinatesInteractor {
+
+public:
+
+  PLUGININFORMATIONS("InteractorAxisSwapper", "Tulip Team", "02/04/2009", "Axis Swap Interactor", "1.0", "Modification")
+
+  /**
+   * Default constructor
+   */
+  InteractorAxisSwapper(const tlp::PluginContext *);
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct();
+
+  QWidget *configurationWidget() const;
+
+  unsigned int priority() const {
+    return 0;
+  }
+
+};
+
+/** \brief Parallel coordinates interactor to have sliders on axis
+ *
+ */
+class InteractorAxisSliders : public ParallelCoordinatesInteractor {
+
+public:
+
+  PLUGININFORMATIONS("InteractorAxisSliders", "Tulip Team", "02/04/2009", "Axis Sliders Interactor", "1.0" ,"Modification")
+
+  /**
+   * Default constructor
+   */
+  InteractorAxisSliders(const tlp::PluginContext *);
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct();
+
+  QWidget *configurationWidget() const;
+
+  unsigned int priority() const {
+    return 0;
+  }
+
+};
+
+/** \brief Parallel coordinates interactor to have boxplot
+ *
+ */
+class InteractorBoxPlot  : public ParallelCoordinatesInteractor {
+
+public:
+
+  PLUGININFORMATIONS("InteractorBoxPlot", "Tulip Team", "02/04/2009", "Box Plot Interactor", "1.0", "Information")
+
+  /**
+   * Default constructor
+   */
+  InteractorBoxPlot(const tlp::PluginContext *);
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct();
+
+  QWidget *configurationWidget() const;
+
+  unsigned int priority() const {
+    return 0;
+  }
+
+};
+
+/** \brief Parallel coordinates interactor to show element properties when clicking on it
    *
    */
-  class ParallelCoordinatesInteractor  : public GLInteractorComposite {
+class InteractorShowElementInfos : public ParallelCoordinatesInteractor {
 
-  public :
+public :
 
-    ParallelCoordinatesInteractor(const QString &iconPath, const QString &text);
-    /**
-     * return if this interactor is compatible with given View
-     */
-    bool isCompatible(const std::string &viewName) const;
+  PLUGININFORMATIONS( "InteractorShowElementInfos", "Tulip Team", "02/04/2009", "Show Element Infos Interactor", "1.0", "Information")
 
-  };
+  /**
+   * Default constructor
+   */
+  InteractorShowElementInfos(const tlp::PluginContext *);
 
-  /** \brief Parallel coordinates interactor to select elements
-    *
-    */
-  class InteractorParallelCoordsSelection : public ParallelCoordinatesInteractor {
+  /**
+   * Construct chain of responsibility
+   */
+  void construct();
 
-  public:
+  QWidget *configurationWidget() const;
 
-    PLUGININFORMATIONS("InteractorParallelCoordsSelection", "Tulip Team", "02/04/2009", "Selection Interactor", "1.0", "Selection")
+  unsigned int priority() const {
+    return 4;
+  }
 
-    /**
-     * Default constructor
-     */
-    InteractorParallelCoordsSelection(const tlp::PluginContext *);
+};
 
-    /**
-     * Construct chain of responsibility
-     */
-    void construct();
-
-    QWidget *configurationWidget() const;
-
-    unsigned int priority() const {return 3;}
-
-  };
-
-  /** \brief Parallel coordinates interactor to highlite elements
+/** \brief Parallel coordinates interactor to modify space between two consecutive axis by using the mouse wheel
    *
    */
-  class InteractorHighLighter  : public ParallelCoordinatesInteractor {
+class InteractorAxisSpacer : public ParallelCoordinatesInteractor {
 
-  public:
+public :
 
-    PLUGININFORMATIONS("InteractorHighLiter", "Tulip Team", "02/04/2009", "Element Highliter Interactor", "1.0", "Information")
+  PLUGININFORMATIONS("InteractorAxisSpacer", "Tulip Team", "02/04/2009", "Axis Spacer Interactor", "1.0", "Modification")
 
-    /**
-     * Default constructor
-     */
-    InteractorHighLighter(const tlp::PluginContext *);
-
-    /**
-     * Construct chain of responsibility
-     */
-    void construct();
-
-    QWidget *configurationWidget() const;
-
-    unsigned int priority() const {return 0;}
-
-
-
-  };
-
-  /** \brief Parallel coordinates interactor to swap axis
-   *
+  /**
+   * Default constructor
    */
-  class InteractorAxisSwapper  : public ParallelCoordinatesInteractor {
+  InteractorAxisSpacer(const tlp::PluginContext *);
 
-  public:
-
-    PLUGININFORMATIONS("InteractorAxisSwapper", "Tulip Team", "02/04/2009", "Axis Swap Interactor", "1.0", "Modification")
-
-    /**
-     * Default constructor
-     */
-    InteractorAxisSwapper(const tlp::PluginContext *);
-
-    /**
-     * Construct chain of responsibility
-     */
-    void construct();
-
-    QWidget *configurationWidget() const;
-
-    unsigned int priority() const {return 0;}
-
-  };
-
-  /** \brief Parallel coordinates interactor to have sliders on axis
-   *
+  /**
+   * Construct chain of responsibility
    */
-  class InteractorAxisSliders : public ParallelCoordinatesInteractor {
+  void construct();
 
-  public:
+  QWidget *configurationWidget() const;
 
-    PLUGININFORMATIONS("InteractorAxisSliders", "Tulip Team", "02/04/2009", "Axis Sliders Interactor", "1.0" ,"Modification")
+  unsigned int priority() const {
+    return 0;
+  }
 
-    /**
-     * Default constructor
-     */
-    InteractorAxisSliders(const tlp::PluginContext *);
-
-    /**
-     * Construct chain of responsibility
-     */
-    void construct();
-
-    QWidget *configurationWidget() const;
-
-    unsigned int priority() const {return 0;}
-
-  };
-
-  /** \brief Parallel coordinates interactor to have boxplot
-   *
-   */
-  class InteractorBoxPlot  : public ParallelCoordinatesInteractor {
-
-  public:
-
-    PLUGININFORMATIONS("InteractorBoxPlot", "Tulip Team", "02/04/2009", "Box Plot Interactor", "1.0", "Information")
-
-    /**
-     * Default constructor
-     */
-    InteractorBoxPlot(const tlp::PluginContext *);
-
-    /**
-     * Construct chain of responsibility
-     */
-    void construct();
-
-    QWidget *configurationWidget() const;
-
-    unsigned int priority() const {return 0;}
-
-  };
-
-  /** \brief Parallel coordinates interactor to show element properties when clicking on it
-     *
-     */
-  class InteractorShowElementInfos : public ParallelCoordinatesInteractor {
-
-  public :
-
-    PLUGININFORMATIONS( "InteractorShowElementInfos", "Tulip Team", "02/04/2009", "Show Element Infos Interactor", "1.0", "Information")
-
-	  /**
-	   * Default constructor
-	   */
-    InteractorShowElementInfos(const tlp::PluginContext *);
-
-	  /**
-	   * Construct chain of responsibility
-	   */
-	  void construct();
-
-    QWidget *configurationWidget() const;
-
-    unsigned int priority() const {return 4;}
-
-  };
-
-  /** \brief Parallel coordinates interactor to modify space between two consecutive axis by using the mouse wheel
-     *
-     */
-  class InteractorAxisSpacer : public ParallelCoordinatesInteractor {
-
-  public :
-
-    PLUGININFORMATIONS("InteractorAxisSpacer", "Tulip Team", "02/04/2009", "Axis Spacer Interactor", "1.0", "Modification")
-
-	  /**
-	   * Default constructor
-	   */
-    InteractorAxisSpacer(const tlp::PluginContext *);
-
-	  /**
-	   * Construct chain of responsibility
-	   */
-	  void construct();
-
-    QWidget *configurationWidget() const;
-
-    unsigned int priority() const {return 0;}
-
-  };
+};
 
 }
 

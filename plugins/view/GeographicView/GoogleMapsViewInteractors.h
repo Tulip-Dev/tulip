@@ -34,7 +34,9 @@ public :
 
   bool isCompatible(const std::string &viewName) const;
 
-  unsigned int priority() const {return 0;}
+  unsigned int priority() const {
+    return 0;
+  }
 
 };
 
@@ -46,9 +48,15 @@ public :
   ~GoogleMapViewNavigator();
 
   bool eventFilter(QObject *, QEvent *);
-  bool draw(GlMainWidget *) {return false;}
-  InteractorComponent *clone() {return new GoogleMapViewNavigator();}
-  bool compute(GlMainWidget *) {return false;}
+  bool draw(GlMainWidget *) {
+    return false;
+  }
+  InteractorComponent *clone() {
+    return new GoogleMapViewNavigator();
+  }
+  bool compute(GlMainWidget *) {
+    return false;
+  }
   void viewChanged(View *);
 
 protected :
@@ -70,7 +78,9 @@ public :
 
   QWidget *configurationWidget() const;
 
-  unsigned int priority() const {return 5;}
+  unsigned int priority() const {
+    return 5;
+  }
 
 };
 

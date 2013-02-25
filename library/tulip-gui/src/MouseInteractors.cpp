@@ -409,7 +409,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
         }
       }
       else  //no double click on a metanode. Do not block event.
-          return false;
+        return false;
 
       return true;
     }

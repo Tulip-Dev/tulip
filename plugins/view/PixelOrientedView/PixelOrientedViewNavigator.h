@@ -42,18 +42,18 @@ class PixelOrientedViewNavigator : public GLInteractorComponent {
 
 public :
 
-	PixelOrientedViewNavigator();
-	~PixelOrientedViewNavigator();
+  PixelOrientedViewNavigator();
+  ~PixelOrientedViewNavigator();
 
-	bool eventFilter(QObject *, QEvent *);
+  bool eventFilter(QObject *, QEvent *);
   void viewChanged(View *view);
 
 private :
 
-	PixelOrientedOverview *getOverviewUnderPointer(Coord sceneCoord);
+  PixelOrientedOverview *getOverviewUnderPointer(Coord sceneCoord);
 
-	PixelOrientedView *pixelView;
-	PixelOrientedOverview *selectedOverview;
+  PixelOrientedView *pixelView;
+  PixelOrientedOverview *selectedOverview;
 
 };
 

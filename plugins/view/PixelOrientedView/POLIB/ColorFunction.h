@@ -23,10 +23,10 @@
 #include "potypes.h"
 
 namespace pocore {
-  class ColorFunction {
-  public:
-    virtual ~ColorFunction(){}
-    virtual RGBA getColor(const double& value, const unsigned int itemId) const = 0;
-  };
+class ColorFunction {
+public:
+  virtual ~ColorFunction() {}
+  virtual RGBA getColor(const double& value, const unsigned int itemId) const = 0;
+};
 }
 #endif //COLORFUNCTION_H

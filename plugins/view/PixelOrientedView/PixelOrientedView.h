@@ -67,22 +67,22 @@ namespace tlp {
  */
 class PixelOrientedView : public GlMainView {
 
-	static const unsigned int MIN_IMAGE_WIDTH = 512;
-	static const unsigned int MIN_IMAGE_HEIGHT = 512;
+  static const unsigned int MIN_IMAGE_WIDTH = 512;
+  static const unsigned int MIN_IMAGE_HEIGHT = 512;
 
-	Q_OBJECT
+  Q_OBJECT
 
   void registerTriggers();
 
 public :
 
   PLUGININFORMATIONS(PixelOrientedView::viewName, "Antoine Lambert", "12/2008",
-		     "The Pixel Oriented view allows to visualize graph properties using pixel oriented visualization techniques.\n"
-		     "This type of visualization aims to use each pixel of the display to visualize one data value and therefore allow the visualization of the largest amount of data possible.\n"
-		     "Pixels are mapped so that neighbor pixels in the data are placed close to each other on the screen.\n"
-		     "The technique uses a linear order on data elements (graph nodes), inferred from a selected property, which can be seen as a map from the data space onto a line segment. The mapping onto a 2D portion of the plane then uses a \"space-filling curve\"", "1.0","View")
+                     "The Pixel Oriented view allows to visualize graph properties using pixel oriented visualization techniques.\n"
+                     "This type of visualization aims to use each pixel of the display to visualize one data value and therefore allow the visualization of the largest amount of data possible.\n"
+                     "Pixels are mapped so that neighbor pixels in the data are placed close to each other on the screen.\n"
+                     "The technique uses a linear order on data elements (graph nodes), inferred from a selected property, which can be seen as a map from the data space onto a line segment. The mapping onto a 2D portion of the plane then uses a \"space-filling curve\"", "1.0","View")
 
-	static const std::string viewName;
+  static const std::string viewName;
 
   PixelOrientedView(const PluginContext *);
   ~PixelOrientedView();
@@ -92,99 +92,105 @@ public :
 
   void setState(const DataSet &dataSet);
   DataSet state() const;
-  Graph *getPixelOrientedGraph() {return pixelOrientedGraph;}
+  Graph *getPixelOrientedGraph() {
+    return pixelOrientedGraph;
+  }
   QList<QWidget *> configurationWidgets() const;
   void interactorsInstalled(const QList<tlp::Interactor*>&);
 
-	void toggleInteractors(const bool activate);
-	bool interactorsEnabled() const {return interactorsActivated;}
-	std::vector<PixelOrientedOverview *> getOverviews();
-	bool smallMultiplesViewSet() const {return smallMultiplesView;}
-	void switchFromSmallMultiplesToDetailView(PixelOrientedOverview *scatterPlot);
-	void switchFromDetailViewToSmallMultiples();
-	BoundingBox getSmallMultiplesViewBoundingBox();
-	void generatePixelOverview(PixelOrientedOverview *pixelOverview, GlMainWidget *glWidget = NULL);  
+  void toggleInteractors(const bool activate);
+  bool interactorsEnabled() const {
+    return interactorsActivated;
+  }
+  std::vector<PixelOrientedOverview *> getOverviews();
+  bool smallMultiplesViewSet() const {
+    return smallMultiplesView;
+  }
+  void switchFromSmallMultiplesToDetailView(PixelOrientedOverview *scatterPlot);
+  void switchFromDetailViewToSmallMultiples();
+  BoundingBox getSmallMultiplesViewBoundingBox();
+  void generatePixelOverview(PixelOrientedOverview *pixelOverview, GlMainWidget *glWidget = NULL);
 
 public slots:
 
   void graphChanged(Graph *graph);
   void draw(PluginProgress *);
   void refresh(PluginProgress *);
-	void init();
+  void init();
 
   void applySettings();
 
 private :
 
-	void initPixelView();
-	void destroyData();
-	void destroyOverviewsIfNeeded();
-	void updateOverviews(const bool updateAll = false);
-	void addEmptyViewLabel();
-	void removeEmptyViewLabel();
-	void centerView();
-	Color getTextColor() const;
+  void initPixelView();
+  void destroyData();
+  void destroyOverviewsIfNeeded();
+  void updateOverviews(const bool updateAll = false);
+  void addEmptyViewLabel();
+  void removeEmptyViewLabel();
+  void centerView();
+  Color getTextColor() const;
 
   Graph *pixelOrientedGraph;
-	GlGraphComposite *graphComposite;
-	GlLayer *mainLayer;
-	GlComposite *overviewsComposite;
+  GlGraphComposite *graphComposite;
+  GlLayer *mainLayer;
+  GlComposite *overviewsComposite;
 
-	PixelOrientedOptionsWidget *optionsWidget;
-	ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;
+  PixelOrientedOptionsWidget *optionsWidget;
+  ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;
 
-	pocore::PixelOrientedMediator *pixelOrientedMediator;
+  pocore::PixelOrientedMediator *pixelOrientedMediator;
 
-	QMenu *menuOptions;
-	QAction *centerViewAction;
+  QMenu *menuOptions;
+  QAction *centerViewAction;
 
-	std::map<std::string, pocore::LayoutFunction *> layoutFunctionsMap;
+  std::map<std::string, pocore::LayoutFunction *> layoutFunctionsMap;
 
-	void initGlWidget();
+  void initGlWidget();
 
-	void initLayoutFunctions();
-	void setColorFunction(pocore::ColorFunction *colorFunction);
-	void setLayoutFunction(pocore::LayoutFunction *layoutFunction);
+  void initLayoutFunctions();
+  void setColorFunction(pocore::ColorFunction *colorFunction);
+  void setLayoutFunction(pocore::LayoutFunction *layoutFunction);
 
-	unsigned int lastNbNodes;
-	std::vector<std::string> selectedGraphProperties;
-	std::map<std::string, PixelOrientedOverview *> overviewsMap;
-	std::map<std::string, bool> overviewGenMap;
- 	std::map<std::string, pocore::TulipGraphDimension *> dataMap;
+  unsigned int lastNbNodes;
+  std::vector<std::string> selectedGraphProperties;
+  std::map<std::string, PixelOrientedOverview *> overviewsMap;
+  std::map<std::string, bool> overviewGenMap;
+  std::map<std::string, pocore::TulipGraphDimension *> dataMap;
 
- 	unsigned int overviewWidth;
- 	unsigned int overviewHeight;
- 	unsigned int minWidth;
- 	float refSize;
+  unsigned int overviewWidth;
+  unsigned int overviewHeight;
+  unsigned int minWidth;
+  float refSize;
 
- 	pocore::HilbertLayout *hilbertLayout;
- 	pocore::SquareLayout *squareLayout;
- 	pocore::SpiralLayout *spiralLayout;
- 	pocore::ZorderLayout *zorderLayout;
+  pocore::HilbertLayout *hilbertLayout;
+  pocore::SquareLayout *squareLayout;
+  pocore::SpiralLayout *spiralLayout;
+  pocore::ZorderLayout *zorderLayout;
 
- 	pocore::TulipNodeColorMapping *tulipNodeColorMapping;
+  pocore::TulipNodeColorMapping *tulipNodeColorMapping;
 
- 	bool smallMultiplesView;
+  bool smallMultiplesView;
 
- 	double sceneRadiusBak;
- 	double zoomFactorBak;
- 	Coord eyesBak;
- 	Coord centerBak;
- 	Coord upBak;
+  double sceneRadiusBak;
+  double zoomFactorBak;
+  Coord eyesBak;
+  Coord centerBak;
+  Coord upBak;
 
- 	GlLabel *detailViewLabel;
- 	PixelOrientedOverview *detailOverview;
- 	std::string detailOverviewPropertyName;
+  GlLabel *detailViewLabel;
+  PixelOrientedOverview *detailOverview;
+  std::string detailOverviewPropertyName;
 
- 	bool newGraphSet;
- 	bool smallMultiplesNeedUpdate;
+  bool newGraphSet;
+  bool smallMultiplesNeedUpdate;
 
- 	int lastViewWindowWidth, lastViewWindowHeight;
+  int lastViewWindowWidth, lastViewWindowHeight;
 
- 	bool center;
- 	bool interactorsActivated;
+  bool center;
+  bool interactorsActivated;
 
-	bool isConstruct;
+  bool isConstruct;
 };
 
 }

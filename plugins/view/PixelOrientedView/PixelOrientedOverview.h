@@ -41,59 +41,73 @@ class PixelOrientedOverview : public GlComposite {
 
 public :
 
-	PixelOrientedOverview(pocore::TulipGraphDimension *data,
-						  pocore::PixelOrientedMediator *pixelOrientedMediator,
-						  Coord blCornerPos,
-						  const std::string &dimName,
-						  const Color &backgroundColor, const Color &textColor);
+  PixelOrientedOverview(pocore::TulipGraphDimension *data,
+                        pocore::PixelOrientedMediator *pixelOrientedMediator,
+                        Coord blCornerPos,
+                        const std::string &dimName,
+                        const Color &backgroundColor, const Color &textColor);
 
-	~PixelOrientedOverview();
+  ~PixelOrientedOverview();
 
-	pocore::TulipGraphDimension *getData() const {return data;}
-	std::string getDimensionName() const {return dimName;}
-	LayoutProperty *getPixelViewLayout() const {return pixelLayout;}
-	SizeProperty *getPixelViewSize() const {return pixelSize;}
+  pocore::TulipGraphDimension *getData() const {
+    return data;
+  }
+  std::string getDimensionName() const {
+    return dimName;
+  }
+  LayoutProperty *getPixelViewLayout() const {
+    return pixelLayout;
+  }
+  SizeProperty *getPixelViewSize() const {
+    return pixelSize;
+  }
 
-	void setBLCorner(const Coord &blCorner);
+  void setBLCorner(const Coord &blCorner);
 
-	void computePixelView(GlMainWidget *glWidget = NULL);
+  void computePixelView(GlMainWidget *glWidget = NULL);
 
-	bool overviewGenerated() const  {return overviewGen;}
+  bool overviewGenerated() const  {
+    return overviewGen;
+  }
 
-	void setBackgroundColor(const Color &color) {backgroundColor = color;}
-	void setTextColor(const Color &color) {textColor = color;}
+  void setBackgroundColor(const Color &color) {
+    backgroundColor = color;
+  }
+  void setTextColor(const Color &color) {
+    textColor = color;
+  }
 
 private :
 
-	void computeBoundingBox() {
-		GlBoundingBoxSceneVisitor glBBSV(NULL);
-		acceptVisitor(&glBBSV);
-		boundingBox = glBBSV.getBoundingBox();
-	}
+  void computeBoundingBox() {
+    GlBoundingBoxSceneVisitor glBBSV(NULL);
+    acceptVisitor(&glBBSV);
+    boundingBox = glBBSV.getBoundingBox();
+  }
 
-	pocore::TulipGraphDimension *data;
-	pocore::PixelOrientedMediator *pixelOrientedMediator;
+  pocore::TulipGraphDimension *data;
+  pocore::PixelOrientedMediator *pixelOrientedMediator;
 
-	GlGraphComposite *graphComposite;
-	LayoutProperty *pixelLayout;
-	SizeProperty *pixelSize;
+  GlGraphComposite *graphComposite;
+  LayoutProperty *pixelLayout;
+  SizeProperty *pixelSize;
 
-	Coord blCornerPos;
-	std::string textureName;
-	std::string dimName;
+  Coord blCornerPos;
+  std::string textureName;
+  std::string dimName;
 
-	GlLabel *clickLabel;
-	GlRect *backgroundRect;
-	GlLabel *overviewLabel;
-	GlRect *frame;
-	GlRect *frame2;
+  GlLabel *clickLabel;
+  GlRect *backgroundRect;
+  GlLabel *overviewLabel;
+  GlRect *frame;
+  GlRect *frame2;
 
-	int overviewId;
-	static int overviewCpt;
+  int overviewId;
+  static int overviewCpt;
 
-	bool overviewGen;
+  bool overviewGen;
 
-	Color backgroundColor, textColor;
+  Color backgroundColor, textColor;
 
 };
 

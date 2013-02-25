@@ -28,17 +28,17 @@ class AddressSelectionDialog : public QDialog, public Ui::AddressSelectionDialog
 
 public :
 
-	AddressSelectionDialog(QWidget *parent = 0);
+  AddressSelectionDialog(QWidget *parent = 0);
 
-	void setBaseAddress(const QString &address);
+  void setBaseAddress(const QString &address);
 
-	void addResultToList(const QString &result);
+  void addResultToList(const QString &result);
 
-	void clearList();
+  void clearList();
 
-	int getPickedResultIdx();
+  int getPickedResultIdx();
 
-	bool rememberAddressChoice() const;
+  bool rememberAddressChoice() const;
 
 };
 

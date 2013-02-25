@@ -24,108 +24,123 @@ using namespace std;
 namespace tlp {
 
 HistoStatsConfigWidget::HistoStatsConfigWidget(QWidget *parent) : QWidget(parent) {
-	setupUi(this);
+  setupUi(this);
 }
 
 double HistoStatsConfigWidget::getSampleStep() const {
-	return sampleStepSB->value();
+  return sampleStepSB->value();
 }
 
 double HistoStatsConfigWidget::getBandwidth() const {
-	return windowWidthSP->value();
+  return windowWidthSP->value();
 }
 
 string HistoStatsConfigWidget::getKernelFunctionName() const {
-	return kernelFunctionsList->currentText().toStdString();
+  return kernelFunctionsList->currentText().toStdString();
 }
 
 bool HistoStatsConfigWidget::densityEstimation() const {
-	return densityEstimationGB->isChecked();
+  return densityEstimationGB->isChecked();
 }
 
 bool HistoStatsConfigWidget::displayMeanAndStandardDeviation() const {
-	return displayMeanAndSdGB->isChecked();
+  return displayMeanAndSdGB->isChecked();
 }
 
 bool HistoStatsConfigWidget::nodesSelection() const {
-	bool ret = nodesSelectionGB->isChecked();
-	if (ret) nodesSelectionGB->setChecked(false);
-	return ret;
+  bool ret = nodesSelectionGB->isChecked();
+
+  if (ret) nodesSelectionGB->setChecked(false);
+
+  return ret;
 }
 
 double HistoStatsConfigWidget::getSelectionLowerBound() const {
-	return getBoundFromString(lowerBoundCB->currentText());
+  return getBoundFromString(lowerBoundCB->currentText());
 }
 
 double HistoStatsConfigWidget::getSelectionUpperBound() const {
-	return getBoundFromString(upperBoundCB->currentText());
+  return getBoundFromString(upperBoundCB->currentText());
 }
 
 void HistoStatsConfigWidget::setMinMaxMeanAndSd(double min, double max, double mean, double standardDeviation) {
-	this->min = min;
-	this->max = max;
-	this->mean = mean;
-	this->standardDeviation = standardDeviation;
-	meanValue->setText(QString::number(mean));
-	standardDeviationValue->setText(QString::number(standardDeviation));
-	lowerBoundCB->clear();
-	upperBoundCB->clear();
-	lowerBoundCB->addItem("min");
-	upperBoundCB->addItem("min");
-	bool m3sdOk = false;
-	bool m2sdOk = false;
-	if ((mean - (3 * standardDeviation)) > min) {
-		lowerBoundCB->addItem("m - 3sd");
-		upperBoundCB->addItem("m - 3sd");
-		m3sdOk = true;
-	}
-	if ((mean - (2 * standardDeviation)) > min) {
-		lowerBoundCB->addItem("m - 2sd");
-		upperBoundCB->addItem("m - 2sd");
-		m2sdOk = true;
-	}
-	lowerBoundCB->addItem("m - sd");
-	upperBoundCB->addItem("m - sd");
-	lowerBoundCB->addItem("m");
-	upperBoundCB->addItem("m");
-	lowerBoundCB->addItem("m + sd");
-	upperBoundCB->addItem("m + sd");
+  this->min = min;
+  this->max = max;
+  this->mean = mean;
+  this->standardDeviation = standardDeviation;
+  meanValue->setText(QString::number(mean));
+  standardDeviationValue->setText(QString::number(standardDeviation));
+  lowerBoundCB->clear();
+  upperBoundCB->clear();
+  lowerBoundCB->addItem("min");
+  upperBoundCB->addItem("min");
+  bool m3sdOk = false;
+  bool m2sdOk = false;
 
-	if (m2sdOk) {
-		lowerBoundCB->addItem("m + 2sd");
-		upperBoundCB->addItem("m + 2sd");
-	}
-	if (m3sdOk) {
-		lowerBoundCB->addItem("m + 3sd");
-		upperBoundCB->addItem("m + 3sd");
-	}
-	lowerBoundCB->addItem("max");
-	upperBoundCB->addItem("max");
+  if ((mean - (3 * standardDeviation)) > min) {
+    lowerBoundCB->addItem("m - 3sd");
+    upperBoundCB->addItem("m - 3sd");
+    m3sdOk = true;
+  }
 
-	lowerBoundCB->setCurrentIndex(lowerBoundCB->findText("m - sd"));
-	upperBoundCB->setCurrentIndex(upperBoundCB->findText("m + sd"));
+  if ((mean - (2 * standardDeviation)) > min) {
+    lowerBoundCB->addItem("m - 2sd");
+    upperBoundCB->addItem("m - 2sd");
+    m2sdOk = true;
+  }
+
+  lowerBoundCB->addItem("m - sd");
+  upperBoundCB->addItem("m - sd");
+  lowerBoundCB->addItem("m");
+  upperBoundCB->addItem("m");
+  lowerBoundCB->addItem("m + sd");
+  upperBoundCB->addItem("m + sd");
+
+  if (m2sdOk) {
+    lowerBoundCB->addItem("m + 2sd");
+    upperBoundCB->addItem("m + 2sd");
+  }
+
+  if (m3sdOk) {
+    lowerBoundCB->addItem("m + 3sd");
+    upperBoundCB->addItem("m + 3sd");
+  }
+
+  lowerBoundCB->addItem("max");
+  upperBoundCB->addItem("max");
+
+  lowerBoundCB->setCurrentIndex(lowerBoundCB->findText("m - sd"));
+  upperBoundCB->setCurrentIndex(upperBoundCB->findText("m + sd"));
 }
 
 double HistoStatsConfigWidget::getBoundFromString(const QString &bound) const {
-	if (bound == "min") {
-		return min;
-	} else if (bound == "m - 3sd") {
-		return (mean - 3 * standardDeviation);
-	} else if (bound == "m - 2sd") {
-		return (mean - 2 * standardDeviation);
-	} else if (bound == "m - sd") {
-		return (mean - standardDeviation);
-	} else if (bound == "m") {
-		return mean;
-	} else if (bound == "m + sd") {
-		return (mean + standardDeviation);
-	} else if (bound == "m + 2sd") {
-		return (mean + 2 * standardDeviation);
-	} else if (bound == "m + 3sd") {
-		return (mean + 3 * standardDeviation);
-	} else {
-		return max;
-	}
+  if (bound == "min") {
+    return min;
+  }
+  else if (bound == "m - 3sd") {
+    return (mean - 3 * standardDeviation);
+  }
+  else if (bound == "m - 2sd") {
+    return (mean - 2 * standardDeviation);
+  }
+  else if (bound == "m - sd") {
+    return (mean - standardDeviation);
+  }
+  else if (bound == "m") {
+    return mean;
+  }
+  else if (bound == "m + sd") {
+    return (mean + standardDeviation);
+  }
+  else if (bound == "m + 2sd") {
+    return (mean + 2 * standardDeviation);
+  }
+  else if (bound == "m + 3sd") {
+    return (mean + 3 * standardDeviation);
+  }
+  else {
+    return max;
+  }
 }
 
 }

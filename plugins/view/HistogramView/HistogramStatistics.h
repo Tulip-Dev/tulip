@@ -42,52 +42,54 @@ class HistoStatsConfigWidget;
 class KernelFunction : public std::unary_function<double, double> {
 
 public :
-    virtual ~KernelFunction(){}
+  virtual ~KernelFunction() {}
 
-    virtual double operator()(double val) = 0;
+  virtual double operator()(double val) = 0;
 
 };
 
 class HistogramStatistics : public GLInteractorComponent {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public :
 
-    HistogramStatistics(HistoStatsConfigWidget *ConfigWidget);
-    HistogramStatistics(const HistogramStatistics &histoStats);
-    ~HistogramStatistics();
+  HistogramStatistics(HistoStatsConfigWidget *ConfigWidget);
+  HistogramStatistics(const HistogramStatistics &histoStats);
+  ~HistogramStatistics();
 
-    bool eventFilter(QObject *, QEvent *);
-    bool draw(GlMainWidget *glMainWidget);
-    InteractorComponent *clone() {return new HistogramStatistics(*this);}
-    bool compute(GlMainWidget *glMainWidget);
+  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget *glMainWidget);
+  InteractorComponent *clone() {
+    return new HistogramStatistics(*this);
+  }
+  bool compute(GlMainWidget *glMainWidget);
 
   void viewChanged(View *view);
 
 private slots :
 
-    void computeAndDrawInteractor();
-    void computeInteractor();
+  void computeAndDrawInteractor();
+  void computeInteractor();
 
 private :
 
-    void cleanupAxis();
-    void initKernelFunctionsMap();
+  void cleanupAxis();
+  void initKernelFunctionsMap();
 
 protected :
 
-    HistogramView *histoView;
-    HistoStatsConfigWidget *histoStatsConfigWidget;
-    std::map<unsigned int, double> graphPropertyValueSet;
-    double propertyMean;
-    double propertyStandardDeviation;
-    std::vector<Coord> densityEstimationCurvePoints;
-    std::map<std::string, KernelFunction *> kernelFunctionsMap;
-    GlQuantitativeAxis *densityAxis;
-    GlAxis *meanAxis, *standardDeviationPosAxis, *standardDeviationNegAxis;
-    GlAxis *standardDeviation2PosAxis, *standardDeviation2NegAxis;
-    GlAxis *standardDeviation3PosAxis, *standardDeviation3NegAxis;
+  HistogramView *histoView;
+  HistoStatsConfigWidget *histoStatsConfigWidget;
+  std::map<unsigned int, double> graphPropertyValueSet;
+  double propertyMean;
+  double propertyStandardDeviation;
+  std::vector<Coord> densityEstimationCurvePoints;
+  std::map<std::string, KernelFunction *> kernelFunctionsMap;
+  GlQuantitativeAxis *densityAxis;
+  GlAxis *meanAxis, *standardDeviationPosAxis, *standardDeviationNegAxis;
+  GlAxis *standardDeviation2PosAxis, *standardDeviation2NegAxis;
+  GlAxis *standardDeviation3PosAxis, *standardDeviation3NegAxis;
 
 };
 

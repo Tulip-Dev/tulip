@@ -74,7 +74,7 @@ void GoogleMapsView::setupUi() {
 
   googleMapsGraphicsView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-	centerViewAction = new QAction("Center view", this);
+  centerViewAction = new QAction("Center view", this);
   connect(centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
 
   _placeholderItem = new QGraphicsRectItem(0,0,1,1);
@@ -83,26 +83,33 @@ void GoogleMapsView::setupUi() {
   googleMapsGraphicsView->scene()->addItem(_placeholderItem);
 }
 
-void GoogleMapsView::viewTypeChanged(QString viewTypeName){
+void GoogleMapsView::viewTypeChanged(QString viewTypeName) {
   QComboBox *comboBox=googleMapsGraphicsView->getViewTypeComboBox();
+
   if (comboBox == NULL)
     return;
 
   disconnect(comboBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(viewTypeChanged(QString)));
 
-  if(viewTypeName=="RoadMap"){
+  if(viewTypeName=="RoadMap") {
     _viewType=GoogleRoadMap;
-  }else if(viewTypeName=="Satellite"){
+  }
+  else if(viewTypeName=="Satellite") {
     _viewType=GoogleSatellite;
-  }else if(viewTypeName=="Terrain"){
+  }
+  else if(viewTypeName=="Terrain") {
     _viewType=GoogleTerrain;
-  }else if(viewTypeName=="Hybrid"){
+  }
+  else if(viewTypeName=="Hybrid") {
     _viewType=GoogleHybrid;
-  }else if(viewTypeName=="Polygon"){
+  }
+  else if(viewTypeName=="Polygon") {
     _viewType=Polygon;
-  }else if(viewTypeName=="Globe"){
+  }
+  else if(viewTypeName=="Globe") {
     _viewType=Globe;
   }
+
   googleMapsGraphicsView->switchViewType();
 
   comboBox->removeItem(0);
@@ -112,7 +119,7 @@ void GoogleMapsView::viewTypeChanged(QString viewTypeName){
   connect(comboBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(viewTypeChanged(QString)));
 }
 
-void GoogleMapsView::fillContextMenu(QMenu *menu, const QPointF &){
+void GoogleMapsView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addAction(centerViewAction);
 }
 
@@ -124,15 +131,17 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
 
   if (graph()->existProperty("latitude") && graph()->existProperty("longitude")) {
     geolocalisationConfigWidget->setLatLngGeoLocMethod();
-		computeGeoLayout();
-	}
-	QTimeLine timeLine(500);
-	timeLine.start();
-	while (timeLine.state() == QTimeLine::Running) {
-		QApplication::processEvents();
-	} 
+    computeGeoLayout();
+  }
 
-  if(dataSet.exist("configurationWidget")){
+  QTimeLine timeLine(500);
+  timeLine.start();
+
+  while (timeLine.state() == QTimeLine::Running) {
+    QApplication::processEvents();
+  }
+
+  if(dataSet.exist("configurationWidget")) {
     DataSet conf;
     dataSet.get("configurationWidget",conf);
     googleMapsViewConfigWidget->setState(conf);
@@ -142,11 +151,12 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
 
   loadStoredPolyInformations(dataSet);
 
-  if(dataSet.exist("viewType")){
+  if(dataSet.exist("viewType")) {
     dataSet.get("viewType",(int&)(_viewType));
   }
 
   string viewTypeName="RoadMap";
+
   if(_viewType==GoogleSatellite)
     viewTypeName="Satellite";
   else if(_viewType==GoogleTerrain)
@@ -157,9 +167,10 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
     viewTypeName="Polygon";
   else if(_viewType==Globe)
     viewTypeName="Globe";
+
   viewTypeChanged(viewTypeName.c_str());
 
-  if(dataSet.exist("cameras")){
+  if(dataSet.exist("cameras")) {
     string cameras;
     dataSet.get("cameras",cameras);
     googleMapsGraphicsView->getGlMainWidget()->getScene()->setWithXML(cameras,graph());
@@ -171,7 +182,7 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
 }
 
 
-DataSet GoogleMapsView::state() const{
+DataSet GoogleMapsView::state() const {
   DataSet dataSet;
   DataSet configurationWidget=googleMapsViewConfigWidget->state();
   dataSet.set("configurationWidget",configurationWidget);
@@ -183,7 +194,7 @@ DataSet GoogleMapsView::state() const{
   return dataSet;
 }
 
-void GoogleMapsView::draw(){
+void GoogleMapsView::draw() {
   googleMapsGraphicsView->draw();
 }
 
@@ -194,14 +205,17 @@ void GoogleMapsView::refresh() {
 void GoogleMapsView::computeGeoLayout() {
   if (geolocalisationConfigWidget->geolocateByAddress()) {
     googleMapsGraphicsView->createLayoutWithAddresses(geolocalisationConfigWidget->getAddressGraphPropertyName(), geolocalisationConfigWidget->createLatAndLngProperties());
-	} else {
+  }
+  else {
     string latProp = geolocalisationConfigWidget->getLatitudeGraphPropertyName();
     string lngProp = geolocalisationConfigWidget->getLongitudeGraphPropertyName();
-		if (latProp != lngProp) {
-			googleMapsGraphicsView->createLayoutWithLatLngs(latProp, lngProp);
-		}
-	}
-	googleMapsGraphicsView->centerView();
+
+    if (latProp != lngProp) {
+      googleMapsGraphicsView->createLayoutWithLatLngs(latProp, lngProp);
+    }
+  }
+
+  googleMapsGraphicsView->centerView();
 }
 
 void GoogleMapsView::centerView() {
@@ -212,49 +226,58 @@ QList<QWidget*> GoogleMapsView::configurationWidgets() const {
   return QList<QWidget*>() << geolocalisationConfigWidget << googleMapsViewConfigWidget << sceneConfigurationWidget << sceneLayersConfigurationWidget;
 }
 
-void GoogleMapsView::applySettings(){
+void GoogleMapsView::applySettings() {
   updateSharedProperties();
   updatePoly();
 }
 
 void GoogleMapsView::updateSharedProperties() {
   GlGraphInputData *inputData=googleMapsGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
-  if(useSharedLayoutProperty!=googleMapsViewConfigWidget->useSharedLayoutProperty()){
+
+  if(useSharedLayoutProperty!=googleMapsViewConfigWidget->useSharedLayoutProperty()) {
     useSharedLayoutProperty=googleMapsViewConfigWidget->useSharedLayoutProperty();
+
     if(useSharedLayoutProperty)
       googleMapsGraphicsView->setGeoLayout(graph()->getProperty<LayoutProperty>("viewLayout"));
     else
       googleMapsGraphicsView->setGeoLayout(new LayoutProperty(graph()));
   }
-  if(useSharedShapeProperty!=googleMapsViewConfigWidget->useSharedShapeProperty()){
+
+  if(useSharedShapeProperty!=googleMapsViewConfigWidget->useSharedShapeProperty()) {
     useSharedShapeProperty=googleMapsViewConfigWidget->useSharedShapeProperty();
+
     if(useSharedShapeProperty)
       googleMapsGraphicsView->setGeoShape(graph()->getProperty<IntegerProperty>("viewShape"));
     else
       googleMapsGraphicsView->setGeoShape(new IntegerProperty(graph()));
   }
-  if(useSharedSizeProperty!=googleMapsViewConfigWidget->useSharedSizeProperty()){
+
+  if(useSharedSizeProperty!=googleMapsViewConfigWidget->useSharedSizeProperty()) {
     useSharedSizeProperty=googleMapsViewConfigWidget->useSharedSizeProperty();
+
     if(useSharedSizeProperty)
       googleMapsGraphicsView->setGeoSizes(graph()->getProperty<SizeProperty>("viewSize"));
     else
       googleMapsGraphicsView->setGeoSizes(new SizeProperty(graph()));
   }
+
   inputData->getGlVertexArrayManager()->setHaveToComputeAll(true);
 }
 
 void GoogleMapsView::updatePoly() {
-  if(googleMapsViewConfigWidget->polyOptionsChanged()){
-    switch(googleMapsViewConfigWidget->polyFileType()){
-    case GoogleMapsViewConfigWidget::CsvFile:{
+  if(googleMapsViewConfigWidget->polyOptionsChanged()) {
+    switch(googleMapsViewConfigWidget->polyFileType()) {
+    case GoogleMapsViewConfigWidget::CsvFile: {
       googleMapsGraphicsView->loadCsvFile(googleMapsViewConfigWidget->getCsvFile());
       break;
     }
-    case GoogleMapsViewConfigWidget::PolyFile:{
+
+    case GoogleMapsViewConfigWidget::PolyFile: {
       googleMapsGraphicsView->loadPolyFile(googleMapsViewConfigWidget->getPolyFile());
       break;
     }
-    default :{
+
+    default : {
       googleMapsGraphicsView->loadDefaultMap();
       break;
     }
@@ -262,15 +285,17 @@ void GoogleMapsView::updatePoly() {
   }
 }
 
-void GoogleMapsView::loadStoredPolyInformations(const DataSet &dataset){
-  if(dataset.exist("polygons")){
+void GoogleMapsView::loadStoredPolyInformations(const DataSet &dataset) {
+  if(dataset.exist("polygons")) {
     DataSet polyConf;
     dataset.get("polygons",polyConf);
     GlComposite *composite=googleMapsGraphicsView->getPolygon();
     const map<string, GlSimpleEntity*> &entities=composite->getGlEntities();
-    for(map<string,GlSimpleEntity*>::const_iterator it=entities.begin();it!=entities.end();++it){
+
+    for(map<string,GlSimpleEntity*>::const_iterator it=entities.begin(); it!=entities.end(); ++it) {
       DataSet entityData;
-      if(polyConf.exist((*it).first)){
+
+      if(polyConf.exist((*it).first)) {
         polyConf.get((*it).first,entityData);
         Color color;
         entityData.get("color",color);
@@ -286,12 +311,14 @@ void GoogleMapsView::saveStoredPolyInformations(DataSet &dataset) const {
   GlComposite *composite=googleMapsGraphicsView->getPolygon();
   DataSet polyConf;
   const map<string, GlSimpleEntity*> &entities=composite->getGlEntities();
-  for(map<string,GlSimpleEntity*>::const_iterator it=entities.begin();it!=entities.end();++it){
+
+  for(map<string,GlSimpleEntity*>::const_iterator it=entities.begin(); it!=entities.end(); ++it) {
     DataSet entityData;
     entityData.set("color",((GlComplexPolygon*)(*it).second)->getFillColor());
     entityData.set("outlineColor",((GlComplexPolygon*)(*it).second)->getOutlineColor());
     polyConf.set((*it).first,entityData);
   }
+
   dataset.set("polygons",polyConf);
 }
 

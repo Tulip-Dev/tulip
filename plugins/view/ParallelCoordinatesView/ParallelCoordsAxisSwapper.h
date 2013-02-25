@@ -41,24 +41,24 @@ namespace tlp {
 class ParallelCoordsAxisSwapper : public GLInteractorComponent {
 
 public :
-	ParallelCoordsAxisSwapper();
-	~ParallelCoordsAxisSwapper();
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *glMainWidget);
+  ParallelCoordsAxisSwapper();
+  ~ParallelCoordsAxisSwapper();
+  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
 private :
 
-	ParallelCoordinatesView *parallelView;
-	ParallelAxis *selectedAxis;
-	ParallelAxis *otherAxisToSwap;
-	Coord initialSelectedAxisCoord;
-	float initialSelectedAxisRotAngle;
-	bool dragStarted;
-	int x,y;
-	GlRect *axisHighlightRect;
-	bool mouseMove;
-	bool axisSwapStarted;
+  ParallelCoordinatesView *parallelView;
+  ParallelAxis *selectedAxis;
+  ParallelAxis *otherAxisToSwap;
+  Coord initialSelectedAxisCoord;
+  float initialSelectedAxisRotAngle;
+  bool dragStarted;
+  int x,y;
+  GlRect *axisHighlightRect;
+  bool mouseMove;
+  bool axisSwapStarted;
 };
 
 }

@@ -44,7 +44,7 @@ public:
   virtual void afterSetAllEdgeValue(tlp::PropertyInterface*);
   virtual void addLocalProperty(tlp::Graph*, const std::string&);
   virtual void treatEvent(const tlp::Event&);
-  
+
 private:
   tlp::Graph *_source;
   tlp::Graph *_target;

@@ -58,24 +58,29 @@ GlComposite *readPolyFile(QString fileName) {
   GlComposite *composite=new GlComposite;
 
   QFile file(fileName);
-  if(!file.open(QIODevice::ReadOnly)){
+
+  if(!file.open(QIODevice::ReadOnly)) {
     return NULL;
   }
+
   string polygonName="";
   vector<vector<Coord> > datas;
   vector<Coord> currentVector;
   bool ok;
   QString line;
-  while(!file.atEnd()){
+
+  while(!file.atEnd()) {
     line=file.readLine();
 
     if(line=="" || line=="\n")
       continue;
 
     line.toUInt(&ok);
-    if(ok){
+
+    if(ok) {
       if(currentVector.size()!=0)
         datas.push_back(currentVector);
+
       currentVector=vector<Coord>();
       continue;
     }
@@ -90,27 +95,29 @@ GlComposite *readPolyFile(QString fileName) {
     float lng;
     float lat;
 
-    for(QStringList::iterator it=strList.begin();it!=strList.end();++it){
+    for(QStringList::iterator it=strList.begin(); it!=strList.end(); ++it) {
       (*it).toDouble(&ok);
-      if(ok){
-        if(!findLng){
+
+      if(ok) {
+        if(!findLng) {
           findLng=true;
           lng=(*it).toDouble();
-        }else{
+        }
+        else {
           findLat=true;
           lat=(*it).toDouble();
         }
       }
     }
 
-    if(!findLat){
+    if(!findLat) {
 
-      if(polygonName!=""){
+      if(polygonName!="") {
 
         if(currentVector.size()!=0)
           datas.push_back(currentVector);
 
-        if(datas.size()!=0){
+        if(datas.size()!=0) {
 
           clearPolygons[polygonName]=datas;
           composite->addGlEntity(new GlComplexPolygon(datas,Color(0,0,0,50),Color(0,0,0,255)),polygonName);
@@ -118,23 +125,28 @@ GlComposite *readPolyFile(QString fileName) {
           currentVector.clear();
         }
       }
+
       polygonName=line.toStdString();
       continue;
     }
 
     if(lat==90.)
       lat=89.999;
+
     double mercatorLatitude=lat*2./360.*M_PI;
     mercatorLatitude=sin(abs(mercatorLatitude));
     mercatorLatitude=log((1.+mercatorLatitude)/(1. - mercatorLatitude))/2.;
+
     if(lat<0)
       mercatorLatitude=0.-mercatorLatitude;
+
     if(mercatorLatitude*360./M_PI < -360)
       mercatorLatitude=-M_PI;
+
     currentVector.push_back(Coord(lng*2.,mercatorLatitude*360./M_PI,0));
   }
 
-  if(polygonName!=""){
+  if(polygonName!="") {
     if(currentVector.size()!=0)
       datas.push_back(currentVector);
 
@@ -150,36 +162,44 @@ GlComposite *readCsvFile(QString fileName) {
   GlComposite *composite=new GlComposite;
 
   QFile file(fileName);
+
   if(!file.open(QIODevice::ReadOnly))
     return NULL;
 
   vector<vector<Coord> > datas;
   vector<Coord> currentVector;
   int lastIndex=0;
-  while(!file.atEnd()){
+
+  while(!file.atEnd()) {
     QString line(file.readLine());
     QStringList strList=line.split("\t");
 
-    if(strList.size()!=3){
+    if(strList.size()!=3) {
       if(currentVector.size()!=0)
         datas.push_back(currentVector);
+
       currentVector=vector<Coord>();
       continue;
     }
 
-    if(strList[0].toInt()!=lastIndex){
+    if(strList[0].toInt()!=lastIndex) {
       if(currentVector.size()!=0)
         datas.push_back(currentVector);
+
       lastIndex=strList[0].toInt();
       currentVector=vector<Coord>();
     }
+
     double mercatorLatitude=strList[1].toDouble();
     mercatorLatitude=sin(abs(mercatorLatitude));
     mercatorLatitude=log((1.+mercatorLatitude)/(1. - mercatorLatitude))/2.;
+
     if(strList[1].toDouble()<0)
       mercatorLatitude=0.-mercatorLatitude;
+
     currentVector.push_back(Coord((strList[2].toDouble())*360./M_PI,mercatorLatitude*360./M_PI,0));
   }
+
   if(datas.size()==0)
     return NULL;
 
@@ -193,23 +213,28 @@ void simplifyPolyFile(QString fileName,float definition) {
   map<string,vector<vector<Coord> > > clearPolygons;
 
   QFile file(fileName);
-  if(!file.open(QIODevice::ReadOnly)){
+
+  if(!file.open(QIODevice::ReadOnly)) {
     return;
   }
+
   string polygonName="";
   vector<vector<Coord> > datas;
   vector<Coord> currentVector;
   bool ok;
-  while(!file.atEnd()){
+
+  while(!file.atEnd()) {
     QString line(file.readLine());
 
     if(line=="" || line=="\n")
       continue;
 
     line.toUInt(&ok);
-    if(ok){
+
+    if(ok) {
       if(currentVector.size()!=0)
         datas.push_back(currentVector);
+
       currentVector=vector<Coord>();
       continue;
     }
@@ -224,33 +249,36 @@ void simplifyPolyFile(QString fileName,float definition) {
     float lng;
     float lat;
 
-    for(QStringList::iterator it=strList.begin();it!=strList.end();++it){
+    for(QStringList::iterator it=strList.begin(); it!=strList.end(); ++it) {
       (*it).toDouble(&ok);
-      if(ok){
-        if(!findLng){
+
+      if(ok) {
+        if(!findLng) {
           findLng=true;
           lng=(*it).toDouble();
-        }else{
+        }
+        else {
           findLat=true;
           lat=(*it).toDouble();
         }
       }
     }
 
-    if(!findLat){
+    if(!findLat) {
 
-      if(polygonName!=""){
+      if(polygonName!="") {
 
         if(currentVector.size()!=0)
           datas.push_back(currentVector);
 
-        if(datas.size()!=0){
+        if(datas.size()!=0) {
 
           clearPolygons[polygonName]=datas;
           datas.clear();
           currentVector.clear();
         }
       }
+
       polygonName=line.toStdString();
       continue;
     }
@@ -258,12 +286,14 @@ void simplifyPolyFile(QString fileName,float definition) {
     double mercatorLatitude=lat*2./360.*M_PI;
     mercatorLatitude=sin(abs(mercatorLatitude));
     mercatorLatitude=log((1.+mercatorLatitude)/(1. - mercatorLatitude))/2.;
+
     if(lat<0)
       mercatorLatitude=0.-mercatorLatitude;
+
     currentVector.push_back(Coord(lng,lat,0));
   }
 
-  if(polygonName!=""){
+  if(polygonName!="") {
     if(currentVector.size()!=0)
       datas.push_back(currentVector);
 
@@ -276,7 +306,8 @@ void simplifyPolyFile(QString fileName,float definition) {
   newName.replace(".poly",QString("_")+QString::number(definition)+".poly");
   cout << "create : " << newName.toStdString() << endl;
   QFile fileW(newName);
-  if(!fileW.open(QIODevice::WriteOnly | QIODevice::Text)){
+
+  if(!fileW.open(QIODevice::WriteOnly | QIODevice::Text)) {
     return;
   }
 
@@ -284,28 +315,32 @@ void simplifyPolyFile(QString fileName,float definition) {
 
   Coord *lastCoord=NULL;
 
-  for(map<string,vector<vector<Coord> > >::iterator it1=clearPolygons.begin();it1!=clearPolygons.end();++it1){
+  for(map<string,vector<vector<Coord> > >::iterator it1=clearPolygons.begin(); it1!=clearPolygons.end(); ++it1) {
     out << (*it1).first.c_str();
 
     unsigned int i=1;
-    for(vector<vector<Coord> >::iterator it2=(*it1).second.begin();it2!=(*it1).second.end();++it2){
+
+    for(vector<vector<Coord> >::iterator it2=(*it1).second.begin(); it2!=(*it1).second.end(); ++it2) {
       out << i << "\n";
 
-      for(vector<Coord>::iterator it3=(*it2).begin();it3!=(*it2).end();++it3){
-        if(lastCoord==NULL){
+      for(vector<Coord>::iterator it3=(*it2).begin(); it3!=(*it2).end(); ++it3) {
+        if(lastCoord==NULL) {
           out << (*it3)[0] << " " << (*it3)[1] << "\n";
           lastCoord=&(*it3);
-        }else{
-          if((*lastCoord).dist(*it3)>definition){
-            if(simplifiedCoord.count(*it3)==0){
+        }
+        else {
+          if((*lastCoord).dist(*it3)>definition) {
+            if(simplifiedCoord.count(*it3)==0) {
               out << (*it3)[0] << " " << (*it3)[1] << "\n";
               lastCoord=&(*it3);
-            }else{
+            }
+            else {
               lastCoord = &simplifiedCoord[*it3];
               out << (*lastCoord)[0] << " " << (*lastCoord)[1] << "\n";
 
             }
-          }else{
+          }
+          else {
             if(simplifiedCoord.count(*it3)==0)
               simplifiedCoord[*it3]=*lastCoord;
           }
@@ -327,24 +362,25 @@ GlSimpleEntity *buildPlanisphereEntity(GlMainWidget *mainWidget) {
   return new GlSphere(Coord(0.,0.,0.),50.,"Planisphere",255,0,0,90);
 }
 
-double latitudeToMercator(double latitude){
+double latitudeToMercator(double latitude) {
   double mercatorLatitude=latitude*M_PI/360.;
   mercatorLatitude=sin(abs(mercatorLatitude));
   mercatorLatitude=log((1.+mercatorLatitude)/(1. - mercatorLatitude))/2.;
 
   if(latitude<0)
     return -mercatorLatitude/M_PI*360.;
+
   return mercatorLatitude/M_PI*360.;
 }
 
-double mercatorToLatitude(double mercator){
+double mercatorToLatitude(double mercator) {
   return atan(sinh(mercator/360.*M_PI)) /M_PI*360.;
 }
 
 
 GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, QGraphicsScene *graphicsScene, QWidget *parent) : QGraphicsView(graphicsScene, parent),
-    _googleMapsView(googleMapsView), graph(NULL),  googleMaps(NULL), globeCameraBackup(NULL,true),geoLayout(NULL), geoViewSize(NULL), geoLayoutBackup(NULL), mapTranslationBlocked(false), mouseDragging(false),
-    geocodingActive(false), cancelGeocoding(false),firstGlobeSwitch(true) {
+  _googleMapsView(googleMapsView), graph(NULL),  googleMaps(NULL), globeCameraBackup(NULL,true),geoLayout(NULL), geoViewSize(NULL), geoLayoutBackup(NULL), mapTranslationBlocked(false), mouseDragging(false),
+  geocodingActive(false), cancelGeocoding(false),firstGlobeSwitch(true) {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   glWidget = new QGLWidget(GlInit(), this, GlMainWidget::getFirstQGLWidget());
   setViewport(glWidget);
@@ -368,9 +404,11 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   googleMaps->setAdresseSelectionDialog(addressSelectionDialog,addresseSelectionProxy);
 
   scene()->addWidget(googleMaps);
+
   while (!googleMaps->pageInit()) {
     QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
   }
+
   glMainWidget = new GlMainWidget(0, googleMapsView);
   glMainWidget->getScene()->setCalculator(new GlCPULODCalculator());
   glMainWidget->getScene()->setBackgroundColor(Color(255,255,255,0));
@@ -399,25 +437,30 @@ GoogleMapsGraphicsView::~GoogleMapsGraphicsView() {
     if (addressSelectionDialog->isVisible()) {
       addressSelectionDialog->accept();
     }
+
     cancelGeocoding = true;
+
     while (geocodingActive) {
       QApplication::processEvents();
     }
   }
+
   cleanup();
   delete glMainWidget;
 }
 
 void GoogleMapsGraphicsView::cleanup() {
-  if(graph){
+  if(graph) {
 
     GlScene *scene=glMainWidget->getScene();
     scene->clearLayersList();
 
     if(geoLayout!=graph->getProperty<LayoutProperty>("viewLayout"))
       delete geoLayout;
+
     if(geoViewSize!=graph->getProperty<SizeProperty>("viewSize"))
       delete geoViewSize;
+
     if(geoViewShape!=graph->getProperty<IntegerProperty>("viewShape"))
       delete geoViewShape;
   }
@@ -449,14 +492,16 @@ void GoogleMapsGraphicsView::setGraph(Graph *graph) {
 static string removeQuotesIfAny(const string &s) {
   if (s[0] == '"' && s[s.length() - 1] == '"') {
     return s.substr(1, s.length() - 2);
-  } else {
+  }
+  else {
     return s;
   }
 }
 
 void GoogleMapsGraphicsView::loadDefaultMap() {
   bool oldPolyVisible=false;
-  if(polygonEntity!=NULL){
+
+  if(polygonEntity!=NULL) {
     oldPolyVisible=polygonEntity->isVisible();
     delete polygonEntity;
   }
@@ -471,16 +516,19 @@ void GoogleMapsGraphicsView::loadDefaultMap() {
 
 void GoogleMapsGraphicsView::loadCsvFile(QString fileName) {
   bool oldPolyVisible=false;
-  if(polygonEntity!=NULL){
+
+  if(polygonEntity!=NULL) {
     oldPolyVisible=polygonEntity->isVisible();
     delete polygonEntity;
   }
 
   polygonEntity = readCsvFile(fileName);
-  if(!polygonEntity){
+
+  if(!polygonEntity) {
     QMessageBox::critical(NULL,"Can't read .poly file","We can't read csv file : "+fileName+"\nVerify the file.");
     return;
   }
+
   polygonEntity->setVisible(oldPolyVisible);
 
   GlScene *scene=glMainWidget->getScene();
@@ -490,18 +538,21 @@ void GoogleMapsGraphicsView::loadCsvFile(QString fileName) {
 
 void GoogleMapsGraphicsView::loadPolyFile(QString fileName) {
   bool oldPolyVisible=false;
-  if(polygonEntity!=NULL){
+
+  if(polygonEntity!=NULL) {
     oldPolyVisible=polygonEntity->isVisible();
     delete polygonEntity;
   }
 
   polygonEntity = readPolyFile(fileName);
+
   //simplifyPolyFile(fileName,0.025);
   //simplifyPolyFile(fileName,0.05);
-  if(!polygonEntity){
+  if(!polygonEntity) {
     QMessageBox::critical(NULL,"Can't read .poly file","We can't read .poly file : "+fileName+"\nVerify the file.");
     return;
   }
+
   polygonEntity->setVisible(oldPolyVisible);
 
   GlScene *scene=glMainWidget->getScene();
@@ -509,8 +560,9 @@ void GoogleMapsGraphicsView::loadPolyFile(QString fileName) {
   layer->addGlEntity(polygonEntity,"polygonMap");
 }
 
-void GoogleMapsGraphicsView::mapToPolygon(){
+void GoogleMapsGraphicsView::mapToPolygon() {
   GlComposite *composite=dynamic_cast<GlComposite*>(polygonEntity);
+
   if(!composite)
     return;
 
@@ -518,33 +570,38 @@ void GoogleMapsGraphicsView::mapToPolygon(){
 
   Iterator<node> *nodesIt = graph->getNodes();
   node n;
+
   while (nodesIt->hasNext() ) {
     n = nodesIt->next();
 
     Coord nodePos=geoLayout->getNodeValue(n);
-    for(map<string,GlSimpleEntity*>::const_iterator it=entities.begin();it!=entities.end();++it){
-      if((*it).second->getBoundingBox().contains(nodePos)){
+
+    for(map<string,GlSimpleEntity*>::const_iterator it=entities.begin(); it!=entities.end(); ++it) {
+      if((*it).second->getBoundingBox().contains(nodePos)) {
         GlComplexPolygon *polygon=dynamic_cast<GlComplexPolygon*>((*it).second);
 
         const vector<vector<Coord> > polygonSides=polygon->getPolygonSides();
 
-        for(vector<vector<Coord> >::const_iterator it2=polygonSides.begin();it2!=polygonSides.end();++it2){
+        for(vector<vector<Coord> >::const_iterator it2=polygonSides.begin(); it2!=polygonSides.end(); ++it2) {
           vector<Coord> polygonSide=(*it2);
           bool oddNodes=false;
           Coord lastCoord=polygonSide[0];
+
           for (vector<Coord>::const_iterator it=(++polygonSide.begin()); it!=polygonSide.end(); ++it) {
             if ((((*it)[1]< nodePos[1] && lastCoord[1]>=nodePos[1])
                  ||   (lastCoord[1]< nodePos[1] && (*it)[1]>=nodePos[1]))
                 &&  ((*it)[0]<=nodePos[0] || lastCoord[0]<=nodePos[0])) {
               oddNodes^=((*it)[0]+(nodePos[1]-(*it)[1])/(lastCoord[1]-(*it)[1])*(lastCoord[0]-(*it)[0])<nodePos[0]);
             }
+
             lastCoord=(*it);
           }
 
-          if(oddNodes){
+          if(oddNodes) {
 
             BoundingBox bb;
-            for(vector<Coord>::const_iterator it3=polygonSides[0].begin();it3!=polygonSides[0].end();++it3){
+
+            for(vector<Coord>::const_iterator it3=polygonSides[0].begin(); it3!=polygonSides[0].end(); ++it3) {
               bb.expand(*it3);
             }
 
@@ -557,6 +614,7 @@ void GoogleMapsGraphicsView::mapToPolygon(){
       }
     }
   }
+
   delete nodesIt;
 }
 
@@ -569,10 +627,12 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(string addressPropertyNam
   geocodingActive = true;
   nodeLatLng.clear();
   Observable::holdObservers();
+
   if (graph->existProperty(addressPropertyName)) {
     StringProperty *addressProperty = graph->getProperty<StringProperty>(addressPropertyName);
     DoubleProperty *latitudeProperty = NULL;
     DoubleProperty *longitudeProperty = NULL;
+
     if (createLatAndLngProps) {
       latitudeProperty = graph->getProperty<DoubleProperty>("latitude");
       longitudeProperty = graph->getProperty<DoubleProperty>("longitude");
@@ -592,26 +652,35 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(string addressPropertyNam
     Iterator<node> *nodesIt = graph->getNodes();
     node n;
     bool grabNextNode = true;
+
     while (nodesIt->hasNext() && !progressWidget->cancelRequested() && !cancelGeocoding) {
       if (grabNextNode) {
         n = nodesIt->next();
         progressWidget->setProgress(++nbNodesProcessed, nbNodes);
       }
+
       grabNextNode = true;
       string addr = removeQuotesIfAny(addressProperty->getNodeValue(n));
+
       if (addr == "") continue;
+
       progressWidget->setComment("Retrieving latitude and longitude for address : \n" + QString(addr.c_str()));
+
       if (nodeLatLng.find(n) == nodeLatLng.end()) {
         string geocodingRequestStatus = googleMaps->getLatLngForAddress(addr.c_str(), latLng, true);
+
         if (geocodingRequestStatus == "OK") {
           nodeLatLng[n] = latLng;
+
           if (createLatAndLngProps) {
             latitudeProperty->setNodeValue(n, latLng.first);
             longitudeProperty->setNodeValue(n, latLng.second);
           }
-        } else if (geocodingRequestStatus == "MULTIPLE_RESULTS") {
+        }
+        else if (geocodingRequestStatus == "MULTIPLE_RESULTS") {
           multipleResultsAddresses.push_back(make_pair(n, addr));
-        } else if (geocodingRequestStatus != "ZERO_RESULTS") {
+        }
+        else if (geocodingRequestStatus != "ZERO_RESULTS") {
           // the number of geocoding requests to the google servers in a short period of time is limited
           // So wait 3,5 seconds before sending a new request to avoid errors
           progressWidget->setFrameColor(Qt::red);
@@ -619,48 +688,62 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(string addressPropertyNam
           draw();
           QTimeLine timeLine(3500);
           timeLine.start();
+
           while (timeLine.state() != QTimeLine::NotRunning) {
             QApplication::processEvents();
           }
+
           progressWidget->setFrameColor(Qt::green);
           grabNextNode = false;
-        } else {
+        }
+        else {
           progressWidget->hide();
           QMessageBox::warning(NULL, "Geolocalisation failed", "No results were found for address : \n" + QString(addr.c_str()));
           progressWidget->show();
         }
 
       }
+
       QApplication::processEvents();
     }
+
     delete nodesIt;
     progressWidget->hide();
 
     for (unsigned int i = 0 ; i < multipleResultsAddresses.size() ; ++i) {
       string addr = multipleResultsAddresses[i].second;
       n = multipleResultsAddresses[i].first;
+
       if (addressesLatLngMap.find(addr) != addressesLatLngMap.end()) {
         latLng = addressesLatLngMap[addr];
         nodeLatLng[n] = latLng;
+
         if (createLatAndLngProps) {
           latitudeProperty->setNodeValue(n, latLng.first);
           longitudeProperty->setNodeValue(n, latLng.second);
         }
-      } else {
+      }
+      else {
         string geocodingRequestStatus = googleMaps->getLatLngForAddress(addr.c_str(), latLng);
+
         if (geocodingRequestStatus != "OK") {
           QTimeLine timeLine(3500);
           timeLine.start();
+
           while (timeLine.state() != QTimeLine::NotRunning) {
             QApplication::processEvents();
           }
+
           --i;
-        } else {
+        }
+        else {
           nodeLatLng[n] = latLng;
+
           if (createLatAndLngProps) {
             latitudeProperty->setNodeValue(n, latLng.first);
             longitudeProperty->setNodeValue(n, latLng.second);
           }
+
           if (addressSelectionDialog->rememberAddressChoice()) {
             addressesLatLngMap[addr] = latLng;
           }
@@ -668,6 +751,7 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(string addressPropertyNam
       }
     }
   }
+
   Observable::unholdObservers();
   geocodingActive = false;
 }
@@ -675,6 +759,7 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(string addressPropertyNam
 void GoogleMapsGraphicsView::createLayoutWithLatLngs(std::string latitudePropertyName, std::string longitudePropertyName) {
   nodeLatLng.clear();
   pair<double, double> latLng;
+
   if (graph->existProperty(latitudePropertyName) &&  graph->existProperty(longitudePropertyName)) {
     DoubleProperty *latitudeProperty = graph->getProperty<DoubleProperty>(latitudePropertyName);
     DoubleProperty *longitudeProperty = graph->getProperty<DoubleProperty>(longitudePropertyName);
@@ -692,6 +777,7 @@ void GoogleMapsGraphicsView::resizeEvent(QResizeEvent *event) {
   scene()->setSceneRect(QRect(QPoint(0, 0), size()));
   googleMaps->resize(width(), height());
   glWidgetItem->resize(width(), height());
+
   if (progressWidget->isVisible()) {
     progressWidget->setPos(width() / 2 - progressWidget->sceneBoundingRect().width() / 2, height() / 2 - progressWidget->sceneBoundingRect().height() / 2);
   }
@@ -712,7 +798,7 @@ void GoogleMapsGraphicsView::paintEvent (QPaintEvent * event) {
 
   if (graph && !geocodingActive) {
 
-    if(googleMaps->isVisible()){
+    if(googleMaps->isVisible()) {
       float worldWidth = googleMaps->getWorldWidth();
       static const double maxLat = 85.05113f;
       Coord swPos = googleMaps->getPixelPosOnScreenForLatLng(-maxLat, 0.0);
@@ -754,9 +840,10 @@ void GoogleMapsGraphicsView::setMapTranslationBlocked(const bool translationBloc
 }
 
 void GoogleMapsGraphicsView::centerView() {
-  if(googleMaps->isVisible()){
+  if(googleMaps->isVisible()) {
     googleMaps->setMapBounds(graph, nodeLatLng);
-  }else{
+  }
+  else {
     glMainWidget->centerScene();
   }
 }
@@ -766,19 +853,19 @@ void GoogleMapsGraphicsView::centerMapOnNode(const node n) {
   }
 }
 
-void GoogleMapsGraphicsView::setGeoLayout(LayoutProperty *property){
+void GoogleMapsGraphicsView::setGeoLayout(LayoutProperty *property) {
   *property=*geoLayout;
   geoLayout=property;
   glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementLayout(geoLayout);
 }
 
-void GoogleMapsGraphicsView::setGeoSizes(SizeProperty *property){
+void GoogleMapsGraphicsView::setGeoSizes(SizeProperty *property) {
   *property=*geoViewSize;
   geoViewSize=property;
   glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementSize(geoViewSize);
 }
 
-void GoogleMapsGraphicsView::setGeoShape(IntegerProperty *property){
+void GoogleMapsGraphicsView::setGeoShape(IntegerProperty *property) {
   *property=*geoViewShape;
   geoViewShape=property;
   glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementShape(geoViewShape);
@@ -805,61 +892,71 @@ void GoogleMapsGraphicsView::afterSetAllNodeValue(PropertyInterface *prop) {
 void getAngle(const Coord& coord,float &theta, float &phi) {
   Coord tmp(coord[1],coord[0],0);
   float lambda = tmp[1];
+
   if ( lambda <= M_PI)
     theta = lambda;
   else
     theta = lambda + 2. * M_PI;
+
   phi = M_PI / 2.0 - tmp[0];
 }
 
-void GoogleMapsGraphicsView::switchViewType(){
+void GoogleMapsGraphicsView::switchViewType() {
   GoogleMapsView::ViewType viewType=_googleMapsView->viewType();
 
   bool enableGoogleMap=false;
   bool enablePolygon=false;
   bool enablePlanisphere = false;
-  switch(viewType){
-  case GoogleMapsView::GoogleRoadMap:{
+
+  switch(viewType) {
+  case GoogleMapsView::GoogleRoadMap: {
     enableGoogleMap=true;
     googleMaps->switchToRoadMapView();
     break;
   }
-  case GoogleMapsView::GoogleSatellite:{
+
+  case GoogleMapsView::GoogleSatellite: {
     enableGoogleMap=true;
     googleMaps->switchToSatelliteView();
     break;
   }
-  case GoogleMapsView::GoogleTerrain:{
+
+  case GoogleMapsView::GoogleTerrain: {
     enableGoogleMap=true;
     googleMaps->switchToTerrainView();
     break;
   }
-  case GoogleMapsView::GoogleHybrid:{
+
+  case GoogleMapsView::GoogleHybrid: {
     enableGoogleMap=true;
     googleMaps->switchToHybridView();
     break;
   }
-  case GoogleMapsView::Polygon:{
+
+  case GoogleMapsView::Polygon: {
     enablePolygon=true;
     break;
   }
-  case GoogleMapsView::Globe:{
+
+  case GoogleMapsView::Globe: {
     enablePlanisphere=true;
     break;
   }
+
   default:
     break;
   }
 
   bool switchToGoogleMap=false;
+
   if(googleMaps->isVisible()!=enableGoogleMap && viewType!=GoogleMapsView::Polygon && viewType!=GoogleMapsView::Globe)
     switchToGoogleMap=true;
 
-  if(planisphereEntity->isVisible()){
+  if(planisphereEntity->isVisible()) {
     globeCameraBackup=glMainWidget->getScene()->getGraphCamera();
   }
 
-  if(geoLayoutBackup!=NULL){
+  if(geoLayoutBackup!=NULL) {
     *geoLayout=*geoLayoutBackup;
     delete geoLayoutBackup;
     geoLayoutBackup=NULL;
@@ -869,7 +966,7 @@ void GoogleMapsGraphicsView::switchViewType(){
 
   Observable::holdObservers();
 
-  if(switchToGoogleMap){
+  if(switchToGoogleMap) {
     BoundingBox bb;
     bb.expand(layer->getCamera().screenTo3DWorld(Coord(0,0,0)));
     bb.expand(layer->getCamera().screenTo3DWorld(Coord(width(),height(),0)));
@@ -885,8 +982,10 @@ void GoogleMapsGraphicsView::switchViewType(){
   }
 
   googleMaps->setVisible(enableGoogleMap);
+
   if(polygonEntity)
     polygonEntity->setVisible(enablePolygon);
+
   planisphereEntity->setVisible(enablePlanisphere);
 
   if(enableGoogleMap)
@@ -894,7 +993,7 @@ void GoogleMapsGraphicsView::switchViewType(){
   else
     layer->setCamera(new Camera(glMainWidget->getScene()));
 
-  if(viewType!=GoogleMapsView::Globe){
+  if(viewType!=GoogleMapsView::Globe) {
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
     node n;
 
@@ -904,7 +1003,8 @@ void GoogleMapsGraphicsView::switchViewType(){
 
       if (nodeLatLng.find(n) != nodeLatLng.end()) {
         geoLayout->setNodeValue(n, Coord(nodeLatLng[n].second*2., latitudeToMercator(nodeLatLng[n].first*2.),0));
-      } else {
+      }
+      else {
         geoLayout->setNodeValue(n, Coord(0,0,0));
       }
     }
@@ -913,9 +1013,11 @@ void GoogleMapsGraphicsView::switchViewType(){
       edge e;
       forEach(e, graph->getEdges()) {
         vector<Coord> edgeBendsCoords;
+
         for (unsigned int i = 0 ; i < edgeBendsLatLng[e].size() ; ++i) {
           edgeBendsCoords.push_back(Coord(edgeBendsLatLng[e][i].second*2., latitudeToMercator(edgeBendsLatLng[e][i].first*2.),0));
         }
+
         geoLayout->setEdgeValue(e, edgeBendsCoords);
       }
     }
@@ -929,7 +1031,7 @@ void GoogleMapsGraphicsView::switchViewType(){
     sceneZoomAndPan.zoomAndPanAnimationStep(1);
   }
 
-  if(viewType==GoogleMapsView::Globe){
+  if(viewType==GoogleMapsView::Globe) {
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
     node n;
     edge e;
@@ -950,23 +1052,26 @@ void GoogleMapsGraphicsView::switchViewType(){
 
         float lambda = tmp[1];
         float theta;
+
         if ( lambda <= M_PI)
           theta = lambda;
         else
           theta = lambda + 2. * M_PI;
+
         float phi = M_PI / 2.0 - tmp[0];
 
         tmp=Coord(50. * sin(phi) * cos(theta),
                   50. * sin(phi) * sin(theta),
                   50. * cos(phi));
         geoLayout->setNodeValue(n, tmp);
-      } else {
+      }
+      else {
         geoLayout->setNodeValue(n, Coord(0,0,0));
       }
     }
 
     forEach(e, graph->getEdges()) {
-      const std::pair<node, node>& eEnds = graph->ends(e); 
+      const std::pair<node, node>& eEnds = graph->ends(e);
       node src = eEnds.first;
       node tgt = eEnds.second;
       Coord srcC(nodeLatLng[src].first*2./360.*M_PI,nodeLatLng[src].second*2./360.*M_PI,0);
@@ -974,14 +1079,17 @@ void GoogleMapsGraphicsView::switchViewType(){
 
       unsigned int bendsNumber=2;
       vector<Coord> bends;
-      for(unsigned int i=0;i<bendsNumber;++i){
+
+      for(unsigned int i=0; i<bendsNumber; ++i) {
         Coord tmp=srcC+((tgtC-srcC)/(bendsNumber+1.f))*((float)i+1);
         float lambda = tmp[1];
         float theta;
+
         if ( lambda <= M_PI)
           theta = lambda;
         else
           theta = lambda + 2. * M_PI;
+
         float phi = M_PI / 2.0 - tmp[0];
 
         Coord tmp1(75. * sin(phi) * cos(theta),
@@ -999,14 +1107,16 @@ void GoogleMapsGraphicsView::switchViewType(){
       edge e;
       forEach(e, graph->getEdges()) {
         vector<Coord> edgeBendsCoords;
+
         for (unsigned int i = 0 ; i < edgeBendsLatLng[e].size() ; ++i) {
           edgeBendsCoords.push_back(Coord(edgeBendsLatLng[e][i].second*2., latitudeToMercator(edgeBendsLatLng[e][i].first*2.),0));
         }
+
         geoLayout->setEdgeValue(e, edgeBendsCoords);
       }
     }
 
-    if(firstGlobeSwitch){
+    if(firstGlobeSwitch) {
       firstGlobeSwitch=false;
 
       glMainWidget->getScene()->centerScene();
@@ -1019,7 +1129,8 @@ void GoogleMapsGraphicsView::switchViewType(){
       globeCameraBackup=camera;
 
       draw();
-    }else{
+    }
+    else {
       Camera &camera=glMainWidget->getScene()->getGraphCamera();
       camera.setEyes(globeCameraBackup.getEyes());
       camera.setCenter(globeCameraBackup.getCenter());

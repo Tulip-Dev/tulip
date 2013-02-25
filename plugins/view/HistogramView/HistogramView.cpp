@@ -45,10 +45,10 @@ const vector<string> propertiesTypesFilter(propertiesTypes, propertiesTypes + nb
 
 template <typename T>
 std::string getStringFromNumber(T number, unsigned int precision = 5) {
-	std::ostringstream oss;
-	oss.precision(precision);
-	oss << number;
-	return oss.str();
+  std::ostringstream oss;
+  oss.precision(precision);
+  oss << number;
+  return oss.str();
 }
 
 namespace tlp {
@@ -62,35 +62,43 @@ unsigned int HistogramView::histoViewInstancesCount(0);
 
 
 HistogramView::HistogramView(const PluginContext *) :
-          propertiesSelectionWidget(NULL), histoOptionsWidget(NULL), xAxisDetail(NULL), yAxisDetail(NULL), _histoGraph(NULL), emptyGraph(NULL),
-					emptyGlGraphComposite(NULL), histogramsComposite(NULL), labelsComposite(NULL), axisComposite(NULL), smallMultiplesView(true), detailedHistogram(NULL),
-					noDimsLabel(NULL), noDimsLabel2(NULL), emptyRect(NULL), emptyRect2(NULL), lastViewWindowWidth(0),
-          lastViewWindowHeight(0), interactorsActivated(false),isConstruct(false), lastNbHistograms(0), dataLocation(NODE),needUpdateHistogram(false)  {
+  propertiesSelectionWidget(NULL), histoOptionsWidget(NULL), xAxisDetail(NULL), yAxisDetail(NULL), _histoGraph(NULL), emptyGraph(NULL),
+  emptyGlGraphComposite(NULL), histogramsComposite(NULL), labelsComposite(NULL), axisComposite(NULL), smallMultiplesView(true), detailedHistogram(NULL),
+  noDimsLabel(NULL), noDimsLabel2(NULL), emptyRect(NULL), emptyRect2(NULL), lastViewWindowWidth(0),
+  lastViewWindowHeight(0), interactorsActivated(false),isConstruct(false), lastNbHistograms(0), dataLocation(NODE),needUpdateHistogram(false)  {
   ++histoViewInstancesCount;
 }
 
 HistogramView::~HistogramView() {
-	if(isConstruct) {
-        if(currentInteractor()!=NULL)
-            currentInteractor()->uninstall();
-		--histoViewInstancesCount;
-		if (histoViewInstancesCount == 0) {
-			GlTextureManager::getInst().deleteTexture(BIN_RECT_TEXTURE);
-			binTextureId = 0;
-		}
-        if (propertiesSelectionWidget!=NULL)
-			delete propertiesSelectionWidget;
-        if (histoOptionsWidget!=NULL)
-			delete histoOptionsWidget;
-        if(emptyGlGraphComposite!=NULL)
-            delete emptyGlGraphComposite;
-        if(labelsComposite!=NULL)
-            delete labelsComposite;
-        if(emptyGraph!=NULL)
-			delete emptyGraph;
-        if(axisComposite!=NULL)
-            delete axisComposite;
-	}
+  if(isConstruct) {
+    if(currentInteractor()!=NULL)
+      currentInteractor()->uninstall();
+
+    --histoViewInstancesCount;
+
+    if (histoViewInstancesCount == 0) {
+      GlTextureManager::getInst().deleteTexture(BIN_RECT_TEXTURE);
+      binTextureId = 0;
+    }
+
+    if (propertiesSelectionWidget!=NULL)
+      delete propertiesSelectionWidget;
+
+    if (histoOptionsWidget!=NULL)
+      delete histoOptionsWidget;
+
+    if(emptyGlGraphComposite!=NULL)
+      delete emptyGlGraphComposite;
+
+    if(labelsComposite!=NULL)
+      delete labelsComposite;
+
+    if(emptyGraph!=NULL)
+      delete emptyGraph;
+
+    if(axisComposite!=NULL)
+      delete axisComposite;
+  }
 }
 
 QList<QWidget*> HistogramView::configurationWidgets() const {
@@ -99,54 +107,60 @@ QList<QWidget*> HistogramView::configurationWidgets() const {
 
 void HistogramView::initGlWidget(Graph *) {
   GlLayer *layer = getGlMainWidget()->getScene()->getLayer("Main");
-	if (layer == NULL) {
-		layer = new GlLayer("Main");
+
+  if (layer == NULL) {
+    layer = new GlLayer("Main");
     getGlMainWidget()->getScene()->addExistingLayer(layer);
-	}
-	mainLayer = layer;
+  }
 
-	cleanupGlScene();
+  mainLayer = layer;
 
-	if (emptyGlGraphComposite == NULL) {
-		emptyGraph = newGraph();
-		emptyGlGraphComposite = new GlGraphComposite(emptyGraph);
-	}
-	mainLayer->addGlEntity(emptyGlGraphComposite, "graph");
+  cleanupGlScene();
 
-	if (histogramsComposite == NULL) {
-		histogramsComposite = new GlComposite();
-		mainLayer->addGlEntity(histogramsComposite, "overviews composite");
-	}
+  if (emptyGlGraphComposite == NULL) {
+    emptyGraph = newGraph();
+    emptyGlGraphComposite = new GlGraphComposite(emptyGraph);
+  }
 
-	if (labelsComposite == NULL) {
-		labelsComposite = new GlComposite();
-		mainLayer->addGlEntity(labelsComposite, "labels composite");
-	}
+  mainLayer->addGlEntity(emptyGlGraphComposite, "graph");
 
-	if (axisComposite == NULL) {
-		axisComposite = new GlComposite();
-	}
+  if (histogramsComposite == NULL) {
+    histogramsComposite = new GlComposite();
+    mainLayer->addGlEntity(histogramsComposite, "overviews composite");
+  }
+
+  if (labelsComposite == NULL) {
+    labelsComposite = new GlComposite();
+    mainLayer->addGlEntity(labelsComposite, "labels composite");
+  }
+
+  if (axisComposite == NULL) {
+    axisComposite = new GlComposite();
+  }
 }
 
 void HistogramView::cleanupGlScene() {
-	if (!smallMultiplesView && detailedHistogram != NULL) {
-		mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
-	}
-	if (axisComposite != NULL) {
-		axisComposite->reset(false);
-	}
-	if (labelsComposite != NULL) {
-		labelsComposite->reset(true);
-	}
-	if (histogramsComposite != NULL) {
-		histogramsComposite->reset(true);
-		histogramsMap.clear();
-	}
+  if (!smallMultiplesView && detailedHistogram != NULL) {
+    mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
+  }
+
+  if (axisComposite != NULL) {
+    axisComposite->reset(false);
+  }
+
+  if (labelsComposite != NULL) {
+    labelsComposite->reset(true);
+  }
+
+  if (histogramsComposite != NULL) {
+    histogramsComposite->reset(true);
+    histogramsMap.clear();
+  }
 }
 
 void HistogramView::setState(const DataSet &dataSet) {
 
-  if(!isConstruct){
+  if(!isConstruct) {
     isConstruct=true;
     getGlMainWidget()->installEventFilter(this);
 
@@ -165,81 +179,100 @@ void HistogramView::setState(const DataSet &dataSet) {
     connect(centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
   }
 
-	if (binTextureId == 0) {
+  if (binTextureId == 0) {
     getGlMainWidget()->makeCurrent();
     binTextureId = getGlMainWidget()->bindTexture(QPixmap(":/histo_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
-		GlTextureManager::getInst().registerExternalTexture(BIN_RECT_TEXTURE, binTextureId);
-	}
+    GlTextureManager::getInst().registerExternalTexture(BIN_RECT_TEXTURE, binTextureId);
+  }
 
   Graph *lastGraph = _histoGraph;
   _histoGraph = graph();
-	destroyHistogramsIfNeeded();
+  destroyHistogramsIfNeeded();
+
   if (lastGraph == NULL || lastGraph != _histoGraph) {
     initGlWidget(graph());
-		detailedHistogram = NULL;
-	}
+    detailedHistogram = NULL;
+  }
+
   propertiesSelectionWidget->setWidgetParameters(graph(), propertiesTypesFilter);
 
-	dataSet.get("lastViewWindowWidth", lastViewWindowWidth);
-	dataSet.get("lastViewWindowHeight", lastViewWindowHeight);
-	dataSet.get("histo detailed name", detailedHistogramPropertyName);
-	Color backgroundColor;
-	if (dataSet.get("backgroundColor", backgroundColor)) {
-		histoOptionsWidget->setBackgroundColor(backgroundColor);
-	}
+  dataSet.get("lastViewWindowWidth", lastViewWindowWidth);
+  dataSet.get("lastViewWindowHeight", lastViewWindowHeight);
+  dataSet.get("histo detailed name", detailedHistogramPropertyName);
+  Color backgroundColor;
+
+  if (dataSet.get("backgroundColor", backgroundColor)) {
+    histoOptionsWidget->setBackgroundColor(backgroundColor);
+  }
 
 
-	map<string, DataSet> histogramParametersMap;
-	DataSet histogramParameters;
-	int i=0;
-	stringstream ss;
-	ss<<i;
-	while (dataSet.get("histo"+ss.str(), histogramParameters)) {
+  map<string, DataSet> histogramParametersMap;
+  DataSet histogramParameters;
+  int i=0;
+  stringstream ss;
+  ss<<i;
 
-		string propertyName;
-		histogramParameters.get("property name", propertyName);
+  while (dataSet.get("histo"+ss.str(), histogramParameters)) {
 
-		selectedProperties.push_back(propertyName);
-		histogramParametersMap[propertyName] = histogramParameters;
+    string propertyName;
+    histogramParameters.get("property name", propertyName);
 
-		ss.str("");
-		ss << ++i;
-	}
+    selectedProperties.push_back(propertyName);
+    histogramParametersMap[propertyName] = histogramParameters;
 
-	propertiesSelectionWidget->setSelectedProperties(selectedProperties);
-	if (selectedProperties.size() > 0) {
-		buildHistograms();
-		for (size_t j = 0 ; j < selectedProperties.size() ; ++j) {
-			unsigned int nbHistogramBins = 0;
-			if (histogramParametersMap[selectedProperties[j]].get("nb histogram bins", nbHistogramBins)) {
-				histogramsMap[selectedProperties[j]]->setNbHistogramBins(nbHistogramBins);
-			}
-			unsigned int nbXGraduations = 0;
-			if (histogramParametersMap[selectedProperties[j]].get("x axis nb graduations", nbXGraduations)) {
-				histogramsMap[selectedProperties[j]]->setNbXGraduations(nbXGraduations);
-			}
-			unsigned int yAxisIncrementStep = 0;
-			if (histogramParametersMap[selectedProperties[j]].get("y axis increment step", yAxisIncrementStep)) {
-				histogramsMap[selectedProperties[j]]->setYAxisIncrementStep(yAxisIncrementStep);
-			}
-			bool cumulativeFrequenciesHisto = false;
-			if (histogramParametersMap[selectedProperties[j]].get("cumulative frequencies histogram", cumulativeFrequenciesHisto)) {
-				histogramsMap[selectedProperties[j]]->setCumulativeHistogram(cumulativeFrequenciesHisto);
-				histogramsMap[selectedProperties[j]]->setLastCumulativeHistogram(cumulativeFrequenciesHisto);
-			}
-			bool uniformQuantification = false;
-			if (histogramParametersMap[selectedProperties[j]].get("uniform quantification", uniformQuantification)) {
-				histogramsMap[selectedProperties[j]]->setUniformQuantification(uniformQuantification);
-			}
-			bool xAxisLogScale = false;
-			if (histogramParametersMap[selectedProperties[j]].get("x axis logscale", xAxisLogScale)) {
-				histogramsMap[selectedProperties[j]]->setXAxisLogScale(xAxisLogScale);
-			}
-			bool yAxisLogScale = false;
-			if (histogramParametersMap[selectedProperties[j]].get("y axis logscale", yAxisLogScale)) {
-				histogramsMap[selectedProperties[j]]->setYAxisLogScale(yAxisLogScale);
-			}
-		}
+    ss.str("");
+    ss << ++i;
+  }
+
+  propertiesSelectionWidget->setSelectedProperties(selectedProperties);
+
+  if (selectedProperties.size() > 0) {
+    buildHistograms();
+
+    for (size_t j = 0 ; j < selectedProperties.size() ; ++j) {
+      unsigned int nbHistogramBins = 0;
+
+      if (histogramParametersMap[selectedProperties[j]].get("nb histogram bins", nbHistogramBins)) {
+        histogramsMap[selectedProperties[j]]->setNbHistogramBins(nbHistogramBins);
+      }
+
+      unsigned int nbXGraduations = 0;
+
+      if (histogramParametersMap[selectedProperties[j]].get("x axis nb graduations", nbXGraduations)) {
+        histogramsMap[selectedProperties[j]]->setNbXGraduations(nbXGraduations);
+      }
+
+      unsigned int yAxisIncrementStep = 0;
+
+      if (histogramParametersMap[selectedProperties[j]].get("y axis increment step", yAxisIncrementStep)) {
+        histogramsMap[selectedProperties[j]]->setYAxisIncrementStep(yAxisIncrementStep);
+      }
+
+      bool cumulativeFrequenciesHisto = false;
+
+      if (histogramParametersMap[selectedProperties[j]].get("cumulative frequencies histogram", cumulativeFrequenciesHisto)) {
+        histogramsMap[selectedProperties[j]]->setCumulativeHistogram(cumulativeFrequenciesHisto);
+        histogramsMap[selectedProperties[j]]->setLastCumulativeHistogram(cumulativeFrequenciesHisto);
+      }
+
+      bool uniformQuantification = false;
+
+      if (histogramParametersMap[selectedProperties[j]].get("uniform quantification", uniformQuantification)) {
+        histogramsMap[selectedProperties[j]]->setUniformQuantification(uniformQuantification);
+      }
+
+      bool xAxisLogScale = false;
+
+      if (histogramParametersMap[selectedProperties[j]].get("x axis logscale", xAxisLogScale)) {
+        histogramsMap[selectedProperties[j]]->setXAxisLogScale(xAxisLogScale);
+      }
+
+      bool yAxisLogScale = false;
+
+      if (histogramParametersMap[selectedProperties[j]].get("y axis logscale", yAxisLogScale)) {
+        histogramsMap[selectedProperties[j]]->setYAxisLogScale(yAxisLogScale);
+      }
+    }
 
   }
 
@@ -248,10 +281,10 @@ void HistogramView::setState(const DataSet &dataSet) {
 
   registerTriggers();
 
-	if (detailedHistogramPropertyName != "") {
-		histogramsMap[detailedHistogramPropertyName]->update();
-		switchFromSmallMultiplesToDetailedView(histogramsMap[detailedHistogramPropertyName]);
-	}
+  if (detailedHistogramPropertyName != "") {
+    histogramsMap[detailedHistogramPropertyName]->update();
+    switchFromSmallMultiplesToDetailedView(histogramsMap[detailedHistogramPropertyName]);
+  }
 }
 
 DataSet HistogramView::state() const {
@@ -259,10 +292,11 @@ DataSet HistogramView::state() const {
   map<string, Histogram *> histogramsMapTmp=map<string, Histogram *>(histogramsMap);
 
   DataSet dataSet;
+
   for (size_t i = 0 ; i < selectedPropertiesTmp.size() ; ++i) {
-		std::stringstream ss;
-		ss << i;
-		DataSet histogramParameters;
+    std::stringstream ss;
+    ss << i;
+    DataSet histogramParameters;
     histogramParameters.set("property name", selectedPropertiesTmp[i]);
     histogramParameters.set("nb histogram bins", histogramsMapTmp[selectedPropertiesTmp[i]]->getNbHistogramBins());
     histogramParameters.set("x axis nb graduations", histogramsMapTmp[selectedPropertiesTmp[i]]->getNbXGraduations());
@@ -272,105 +306,119 @@ DataSet HistogramView::state() const {
     histogramParameters.set("x axis logscale", histogramsMapTmp[selectedPropertiesTmp[i]]->xAxisLogScaleSet());
     histogramParameters.set("y axis logscale", histogramsMapTmp[selectedPropertiesTmp[i]]->yAxisLogScaleSet());
     dataSet.set("histo"+ss.str(), histogramParameters);
-	}
+  }
+
   dataSet.set("lastViewWindowWidth",  getGlMainWidget()->width());
   dataSet.set("lastViewWindowHeight",  getGlMainWidget()->height());
   dataSet.set("backgroundColor", histoOptionsWidget->getBackgroundColor());
-	string histoDetailedNamed = "";
-	if (detailedHistogram != NULL) {
-		histoDetailedNamed = detailedHistogram->getPropertyName();
-	}
+  string histoDetailedNamed = "";
+
+  if (detailedHistogram != NULL) {
+    histoDetailedNamed = detailedHistogram->getPropertyName();
+  }
+
   dataSet.set("histo detailed name", histoDetailedNamed);
   return dataSet;
 }
 
-void HistogramView::fillContextMenu(QMenu *menu, const QPointF &point){
+void HistogramView::fillContextMenu(QMenu *menu, const QPointF &point) {
   menu->addAction(optionsMenu->menuAction());
   menu->addSeparator();
   GlMainView::fillContextMenu(menu,point);
 }
 
 bool HistogramView::eventFilter(QObject *object, QEvent *event) {
-	if (xAxisDetail != NULL && event->type() == QEvent::ToolTip && !detailedHistogram->uniformQuantificationHistogram()) {
-		QHelpEvent *he = static_cast<QHelpEvent *>(event);
+  if (xAxisDetail != NULL && event->type() == QEvent::ToolTip && !detailedHistogram->uniformQuantificationHistogram()) {
+    QHelpEvent *he = static_cast<QHelpEvent *>(event);
     int x = getGlMainWidget()->width() - he->x();
-		int y = he->y();
-		Coord screenCoords((double) x, (double) y, 0);
+    int y = he->y();
+    Coord screenCoords((double) x, (double) y, 0);
     Coord sceneCoords(getGlMainWidget()->getScene()->getLayer("Main")->getCamera().screenTo3DWorld(screenCoords));
-		BoundingBox xAxisBB = xAxisDetail->getBoundingBox();
-		if (sceneCoords.getX() > xAxisBB[0][0] && sceneCoords.getX() < xAxisBB[1][0] &&
-				sceneCoords.getY() > xAxisBB[0][1] && sceneCoords.getY() < xAxisBB[1][1]) {
-			double val = xAxisDetail->getValueForAxisPoint(sceneCoords);
-			string valStr(getStringFromNumber(val));
+    BoundingBox xAxisBB = xAxisDetail->getBoundingBox();
+
+    if (sceneCoords.getX() > xAxisBB[0][0] && sceneCoords.getX() < xAxisBB[1][0] &&
+        sceneCoords.getY() > xAxisBB[0][1] && sceneCoords.getY() < xAxisBB[1][1]) {
+      double val = xAxisDetail->getValueForAxisPoint(sceneCoords);
+      string valStr(getStringFromNumber(val));
       QToolTip::showText(he->globalPos(), QString(valStr.c_str()));
-		}
-    return true;
     }
- return GlMainView::eventFilter(object,event);
+
+    return true;
+  }
+
+  return GlMainView::eventFilter(object,event);
 }
 
 void HistogramView::addEmptyViewLabel() {
 
-	Color backgroundColor(histoOptionsWidget->getBackgroundColor());
+  Color backgroundColor(histoOptionsWidget->getBackgroundColor());
   getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
 
-	Color foregroundColor;
-	int bgV = backgroundColor.getV();
-	if (bgV < 128) {
-		foregroundColor = Color(255,255,255);
-	} else {
-		foregroundColor = Color(0,0,0);
-	}
+  Color foregroundColor;
+  int bgV = backgroundColor.getV();
 
-	if (noDimsLabel == NULL) {
-                noDimsLabel = new GlLabel(Coord(0,0,0), Size(400,200), foregroundColor);
-		noDimsLabel->setText("No graph properties selected.");
-                noDimsLabel2 = new GlLabel(Coord(0,-100,0), Size(700,200), foregroundColor);
+  if (bgV < 128) {
+    foregroundColor = Color(255,255,255);
+  }
+  else {
+    foregroundColor = Color(0,0,0);
+  }
+
+  if (noDimsLabel == NULL) {
+    noDimsLabel = new GlLabel(Coord(0,0,0), Size(400,200), foregroundColor);
+    noDimsLabel->setText("No graph properties selected.");
+    noDimsLabel2 = new GlLabel(Coord(0,-100,0), Size(700,200), foregroundColor);
     noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
-	} else {
-		noDimsLabel->setColor(foregroundColor);
-		noDimsLabel2->setColor(foregroundColor);
-	}
-	mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
-	mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
+  }
+  else {
+    noDimsLabel->setColor(foregroundColor);
+    noDimsLabel2->setColor(foregroundColor);
+  }
+
+  mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
+  mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
 }
 
 void HistogramView::removeEmptyViewLabel() {
-	GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
-	GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
-	if (noDimsLabel != NULL) {
-		mainLayer->deleteGlEntity(noDimsLabel);
-		mainLayer->deleteGlEntity(noDimsLabel2);
-	}
+  GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
+  GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
+
+  if (noDimsLabel != NULL) {
+    mainLayer->deleteGlEntity(noDimsLabel);
+    mainLayer->deleteGlEntity(noDimsLabel2);
+  }
 }
 
 void HistogramView::viewConfigurationChanged() {
   getGlMainWidget()->getScene()->setBackgroundColor(histoOptionsWidget->getBackgroundColor());
-	bool dataLocationChanged = propertiesSelectionWidget->getDataLocation() != dataLocation;
-	if (dataLocationChanged) {
-		histogramsComposite->reset(true);
-		axisComposite->reset(false);
-		histogramsMap.clear();
-		detailedHistogram = NULL;
-	}
-	buildHistograms();
-	
-	if (detailedHistogram != NULL && lastNbHistograms != 0 && !dataLocationChanged) {
-	  
-		detailedHistogram->setNbHistogramBins(histoOptionsWidget->getNbOfHistogramBins());
-		detailedHistogram->setNbXGraduations(histoOptionsWidget->getNbXGraduations());
-		detailedHistogram->setYAxisIncrementStep(histoOptionsWidget->getYAxisIncrementStep());
-		detailedHistogram->setXAxisLogScale(histoOptionsWidget->xAxisLogScaleSet());
-		detailedHistogram->setYAxisLogScale(histoOptionsWidget->yAxisLogScaleSet());
-		detailedHistogram->setCumulativeHistogram(histoOptionsWidget->cumulativeFrequenciesHisto());
-		detailedHistogram->setUniformQuantification(histoOptionsWidget->uniformQuantification());
-		detailedHistogram->setDisplayGraphEdges(histoOptionsWidget->showGraphEdges());
-		detailedHistogram->setLayoutUpdateNeeded();
-		detailedHistogram->update();
-		histoOptionsWidget->setBinWidth(detailedHistogram->getHistogramBinsWidth());
-		histoOptionsWidget->setYAxisIncrementStep(detailedHistogram->getYAxisIncrementStep());
-		
-	}
+  bool dataLocationChanged = propertiesSelectionWidget->getDataLocation() != dataLocation;
+
+  if (dataLocationChanged) {
+    histogramsComposite->reset(true);
+    axisComposite->reset(false);
+    histogramsMap.clear();
+    detailedHistogram = NULL;
+  }
+
+  buildHistograms();
+
+  if (detailedHistogram != NULL && lastNbHistograms != 0 && !dataLocationChanged) {
+
+    detailedHistogram->setNbHistogramBins(histoOptionsWidget->getNbOfHistogramBins());
+    detailedHistogram->setNbXGraduations(histoOptionsWidget->getNbXGraduations());
+    detailedHistogram->setYAxisIncrementStep(histoOptionsWidget->getYAxisIncrementStep());
+    detailedHistogram->setXAxisLogScale(histoOptionsWidget->xAxisLogScaleSet());
+    detailedHistogram->setYAxisLogScale(histoOptionsWidget->yAxisLogScaleSet());
+    detailedHistogram->setCumulativeHistogram(histoOptionsWidget->cumulativeFrequenciesHisto());
+    detailedHistogram->setUniformQuantification(histoOptionsWidget->uniformQuantification());
+    detailedHistogram->setDisplayGraphEdges(histoOptionsWidget->showGraphEdges());
+    detailedHistogram->setLayoutUpdateNeeded();
+    detailedHistogram->update();
+    histoOptionsWidget->setBinWidth(detailedHistogram->getHistogramBinsWidth());
+    histoOptionsWidget->setYAxisIncrementStep(detailedHistogram->getYAxisIncrementStep());
+
+  }
+
   updateHistograms(detailedHistogram);
   getGlMainWidget()->centerScene();
   draw();
@@ -379,53 +427,56 @@ void HistogramView::viewConfigurationChanged() {
 void HistogramView::draw() {
 
 
-	if (detailedHistogram != NULL) {
+  if (detailedHistogram != NULL) {
     needUpdateHistogram=true;
     detailedHistogram->update();
-		updateDetailedHistogramAxis();
-  }else{
+    updateDetailedHistogramAxis();
+  }
+  else {
     updateHistograms();
   }
 
-	if (!smallMultiplesView && detailedHistogram != NULL) {
-		switchFromSmallMultiplesToDetailedView(detailedHistogram);
-	}
+  if (!smallMultiplesView && detailedHistogram != NULL) {
+    switchFromSmallMultiplesToDetailedView(detailedHistogram);
+  }
 
-	if (selectedProperties.size() == 0) {
+  if (selectedProperties.size() == 0) {
     if (interactors().size() > 0) {
       setCurrentInteractor(interactors().front());
-		}
-		if (!smallMultiplesView) {
-			switchFromDetailedViewToSmallMultiples();
-		}
-		removeEmptyViewLabel();
-		addEmptyViewLabel();
+    }
+
+    if (!smallMultiplesView) {
+      switchFromDetailedViewToSmallMultiples();
+    }
+
+    removeEmptyViewLabel();
+    addEmptyViewLabel();
     getGlMainWidget()->getScene()->centerScene();
     getGlMainWidget()->draw();
-		return;
-	}
+    return;
+  }
 
-	if (selectedProperties.size() > 0) {
-		removeEmptyViewLabel();
-	}
+  if (selectedProperties.size() > 0) {
+    removeEmptyViewLabel();
+  }
 
-	if (!smallMultiplesView && (detailedHistogram == NULL || (selectedProperties.size() > 1 && lastNbHistograms == 1))) {
-		switchFromDetailedViewToSmallMultiples();
-	}
+  if (!smallMultiplesView && (detailedHistogram == NULL || (selectedProperties.size() > 1 && lastNbHistograms == 1))) {
+    switchFromDetailedViewToSmallMultiples();
+  }
 
-	if (selectedProperties.size() == 1) {
-		switchFromSmallMultiplesToDetailedView(histogramsMap[selectedProperties[0]]);
-		propertiesSelectionWidget->setWidgetEnabled(true);
-	}
+  if (selectedProperties.size() == 1) {
+    switchFromSmallMultiplesToDetailedView(histogramsMap[selectedProperties[0]]);
+    propertiesSelectionWidget->setWidgetEnabled(true);
+  }
 
-	if (lastNbHistograms != selectedProperties.size()) {
-		centerView();
+  if (lastNbHistograms != selectedProperties.size()) {
+    centerView();
     lastNbHistograms = selectedProperties.size();
     return;
-	}
+  }
 
   getGlMainWidget()->draw();
-	lastNbHistograms = selectedProperties.size();
+  lastNbHistograms = selectedProperties.size();
 }
 
 void HistogramView::refresh() {
@@ -440,72 +491,80 @@ void HistogramView::buildHistograms() {
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
 
-	histogramsComposite->reset(false);
-	labelsComposite->reset(true);
+  histogramsComposite->reset(false);
+  labelsComposite->reset(true);
 
-	selectedProperties = propertiesSelectionWidget->getSelectedGraphProperties();
-	dataLocation = propertiesSelectionWidget->getDataLocation();
+  selectedProperties = propertiesSelectionWidget->getSelectedGraphProperties();
+  dataLocation = propertiesSelectionWidget->getDataLocation();
 
-	if (selectedProperties.size() == 0) {
-		return;
-	}
-	float spaceBetweenOverviews = OVERVIEW_SIZE / 10.;
-	float labelHeight = OVERVIEW_SIZE / 6;
+  if (selectedProperties.size() == 0) {
+    return;
+  }
 
-	float squareRoot = sqrt(selectedProperties.size());
-	const unsigned int N =  (unsigned int) squareRoot + (fmod((float) selectedProperties.size(), squareRoot) == 0. ? 0 : 1);
+  float spaceBetweenOverviews = OVERVIEW_SIZE / 10.;
+  float labelHeight = OVERVIEW_SIZE / 6;
 
-	Color backgroundColor(histoOptionsWidget->getBackgroundColor());
+  float squareRoot = sqrt(selectedProperties.size());
+  const unsigned int N =  (unsigned int) squareRoot + (fmod((float) selectedProperties.size(), squareRoot) == 0. ? 0 : 1);
+
+  Color backgroundColor(histoOptionsWidget->getBackgroundColor());
   getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
 
-	Color foregroundColor;
-	int bgV = backgroundColor.getV();
-	if (bgV < 128) {
-		foregroundColor = Color(255,255,255);
-	} else {
-		foregroundColor = Color(0,0,0);
+  Color foregroundColor;
+  int bgV = backgroundColor.getV();
+
+  if (bgV < 128) {
+    foregroundColor = Color(255,255,255);
+  }
+  else {
+    foregroundColor = Color(0,0,0);
   }
 
   vector<GlLabel *> propertiesLabels;
   float minSize = FLT_MIN;
 
-	for (size_t i = 0 ; i < selectedProperties.size() ; ++i) {
+  for (size_t i = 0 ; i < selectedProperties.size() ; ++i) {
 
-		unsigned int row = i / N;
-		unsigned int col = i % N;
+    unsigned int row = i / N;
+    unsigned int col = i % N;
 
-		Coord overviewBLCorner(col * (OVERVIEW_SIZE + spaceBetweenOverviews), -(labelHeight + row * (OVERVIEW_SIZE + spaceBetweenOverviews + labelHeight)), 0);
-		ostringstream oss;
-		oss << "histogram overview for property " << selectedProperties[i];
+    Coord overviewBLCorner(col * (OVERVIEW_SIZE + spaceBetweenOverviews), -(labelHeight + row * (OVERVIEW_SIZE + spaceBetweenOverviews + labelHeight)), 0);
+    ostringstream oss;
+    oss << "histogram overview for property " << selectedProperties[i];
 
-		if (histogramsMap.find(selectedProperties[i]) == histogramsMap.end()) {
+    if (histogramsMap.find(selectedProperties[i]) == histogramsMap.end()) {
       Histogram *histoOverview = new Histogram(_histoGraph, selectedProperties[i], dataLocation, overviewBLCorner, OVERVIEW_SIZE, backgroundColor, foregroundColor);
-			histogramsMap[selectedProperties[i]] = histoOverview;
-		} else {
-			histogramsMap[selectedProperties[i]]->setDataLocation(dataLocation);
-			histogramsMap[selectedProperties[i]]->setBLCorner(overviewBLCorner);
-			histogramsMap[selectedProperties[i]]->setBackgroundColor(backgroundColor);
-			histogramsMap[selectedProperties[i]]->setTextColor(foregroundColor);
-		}
-		histogramsComposite->addGlEntity(histogramsMap[selectedProperties[i]], oss.str());
+      histogramsMap[selectedProperties[i]] = histoOverview;
+    }
+    else {
+      histogramsMap[selectedProperties[i]]->setDataLocation(dataLocation);
+      histogramsMap[selectedProperties[i]]->setBLCorner(overviewBLCorner);
+      histogramsMap[selectedProperties[i]]->setBackgroundColor(backgroundColor);
+      histogramsMap[selectedProperties[i]]->setTextColor(foregroundColor);
+    }
 
-		GlLabel *propertyLabel = new GlLabel(Coord(overviewBLCorner.getX() + OVERVIEW_SIZE / 2, overviewBLCorner.getY() - labelHeight / 2, 0),
-                                Size((8./10.) * OVERVIEW_SIZE, labelHeight), foregroundColor);
+    histogramsComposite->addGlEntity(histogramsMap[selectedProperties[i]], oss.str());
+
+    GlLabel *propertyLabel = new GlLabel(Coord(overviewBLCorner.getX() + OVERVIEW_SIZE / 2, overviewBLCorner.getY() - labelHeight / 2, 0),
+                                         Size((8./10.) * OVERVIEW_SIZE, labelHeight), foregroundColor);
     propertyLabel->setText(selectedProperties[i]);
     propertiesLabels.push_back(propertyLabel);
+
     if(i==0)
       minSize=propertyLabel->getHeightAfterScale();
-    else{
+    else {
       if(minSize>propertyLabel->getHeightAfterScale())
         minSize=propertyLabel->getHeightAfterScale();
     }
-		labelsComposite->addGlEntity(propertyLabel, selectedProperties[i] + " label");
-		if (selectedProperties.size() == 1 || (detailedHistogramPropertyName == selectedProperties[i])) {
-			detailedHistogram = histogramsMap[selectedProperties[i]];
-		}
+
+    labelsComposite->addGlEntity(propertyLabel, selectedProperties[i] + " label");
+
+    if (selectedProperties.size() == 1 || (detailedHistogramPropertyName == selectedProperties[i])) {
+      detailedHistogram = histogramsMap[selectedProperties[i]];
+    }
   }
 
-  for(vector<GlLabel *>::iterator it=propertiesLabels.begin();it!=propertiesLabels.end();++it){
+  for(vector<GlLabel *>::iterator it=propertiesLabels.begin(); it!=propertiesLabels.end(); ++it) {
     (*it)->setSize(Size((*it)->getSize()[0],minSize));
   }
 }
@@ -513,45 +572,52 @@ void HistogramView::buildHistograms() {
 void HistogramView::updateHistograms(Histogram *detailOverview) {
   needUpdateHistogram=false;
   getGlMainWidget()->makeCurrent();
-	map<string, Histogram *>::iterator it;
-	for (it = histogramsMap.begin() ; it != histogramsMap.end() ; ++it) {
-		if (std::find(selectedProperties.begin(), selectedProperties.end(), it->first) != selectedProperties.end()) {
-			if (it->second != detailOverview) {
-				(it->second)->update();
-			}
-		}
-	}
+  map<string, Histogram *>::iterator it;
+
+  for (it = histogramsMap.begin() ; it != histogramsMap.end() ; ++it) {
+    if (std::find(selectedProperties.begin(), selectedProperties.end(), it->first) != selectedProperties.end()) {
+      if (it->second != detailOverview) {
+        (it->second)->update();
+      }
+    }
+  }
 }
 
 vector<Histogram *> HistogramView::getHistograms() const {
-	vector<Histogram *> ret;
-	map<string, Histogram *>::const_iterator it;
-	for (it = histogramsMap.begin() ; it != histogramsMap.end() ; ++it) {
-		if (std::find(selectedProperties.begin(), selectedProperties.end(), it->first) != selectedProperties.end()) {
-			ret.push_back(it->second);
-		}
-	}
-	return ret;
+  vector<Histogram *> ret;
+  map<string, Histogram *>::const_iterator it;
+
+  for (it = histogramsMap.begin() ; it != histogramsMap.end() ; ++it) {
+    if (std::find(selectedProperties.begin(), selectedProperties.end(), it->first) != selectedProperties.end()) {
+      ret.push_back(it->second);
+    }
+  }
+
+  return ret;
 }
 
 void HistogramView::destroyHistogramsIfNeeded() {
-	vector<string> propertiesToRemove;
-	for (size_t i = 0 ; i  < selectedProperties.size() ; ++i) {
+  vector<string> propertiesToRemove;
+
+  for (size_t i = 0 ; i  < selectedProperties.size() ; ++i) {
     if (!_histoGraph || !_histoGraph->existProperty(selectedProperties[i])) {
-			if (histogramsMap[selectedProperties[i]] == detailedHistogram) {
-				if (!smallMultiplesView) {
-					mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
-				}
-				detailedHistogram = NULL;
-			}
-			propertiesToRemove.push_back(selectedProperties[i]);
-			delete histogramsMap[selectedProperties[i]];
-			histogramsMap.erase(selectedProperties[i]);
-		}
-	}
-	for (size_t i = 0 ; i < propertiesToRemove.size() ; ++i) {
-		selectedProperties.erase(remove(selectedProperties.begin(), selectedProperties.end(), propertiesToRemove[i]), selectedProperties.end());
-	}
+      if (histogramsMap[selectedProperties[i]] == detailedHistogram) {
+        if (!smallMultiplesView) {
+          mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
+        }
+
+        detailedHistogram = NULL;
+      }
+
+      propertiesToRemove.push_back(selectedProperties[i]);
+      delete histogramsMap[selectedProperties[i]];
+      histogramsMap.erase(selectedProperties[i]);
+    }
+  }
+
+  for (size_t i = 0 ; i < propertiesToRemove.size() ; ++i) {
+    selectedProperties.erase(remove(selectedProperties.begin(), selectedProperties.end(), propertiesToRemove[i]), selectedProperties.end());
+  }
 }
 
 void HistogramView::centerView() {
@@ -563,61 +629,62 @@ void HistogramView::switchFromSmallMultiplesToDetailedView(Histogram *histogramT
   if(!histogramToDetail)
     return;
 
-	if (smallMultiplesView) {
+  if (smallMultiplesView) {
     sceneRadiusBak = getGlMainWidget()->getScene()->getGraphCamera().getSceneRadius();
     zoomFactorBak = getGlMainWidget()->getScene()->getGraphCamera().getZoomFactor();
     eyesBak = getGlMainWidget()->getScene()->getGraphCamera().getEyes();
     centerBak = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
     upBak = getGlMainWidget()->getScene()->getGraphCamera().getUp();
-	}
+  }
 
-	mainLayer->deleteGlEntity(histogramsComposite);
-	mainLayer->deleteGlEntity(labelsComposite);
+  mainLayer->deleteGlEntity(histogramsComposite);
+  mainLayer->deleteGlEntity(labelsComposite);
 
-	detailedHistogram = histogramToDetail;
-	detailedHistogramPropertyName = detailedHistogram->getPropertyName();
-	updateDetailedHistogramAxis();
+  detailedHistogram = histogramToDetail;
+  detailedHistogramPropertyName = detailedHistogram->getPropertyName();
+  updateDetailedHistogramAxis();
 
-	mainLayer->addGlEntity(axisComposite, "axis composite");
-	mainLayer->addGlEntity(histogramToDetail->getBinsComposite(), "bins composite");
+  mainLayer->addGlEntity(axisComposite, "axis composite");
+  mainLayer->addGlEntity(histogramToDetail->getBinsComposite(), "bins composite");
 
-	float offset = detailedHistogram->getYAxis()->getMaxLabelWidth() + 90;
-	Coord brCoord(detailedHistogram->getYAxis()->getAxisBaseCoord() - Coord(offset,0,0));
-	Coord tlCoord(detailedHistogram->getYAxis()->getAxisBaseCoord() - Coord(offset + 65,0,0) + Coord(0, detailedHistogram->getYAxis()->getAxisLength()));
-	emptyRect = new GlRect(tlCoord, brCoord, Color(0,0,0,0), Color(0,0,0,0));
+  float offset = detailedHistogram->getYAxis()->getMaxLabelWidth() + 90;
+  Coord brCoord(detailedHistogram->getYAxis()->getAxisBaseCoord() - Coord(offset,0,0));
+  Coord tlCoord(detailedHistogram->getYAxis()->getAxisBaseCoord() - Coord(offset + 65,0,0) + Coord(0, detailedHistogram->getYAxis()->getAxisLength()));
+  emptyRect = new GlRect(tlCoord, brCoord, Color(0,0,0,0), Color(0,0,0,0));
 
-	float offset2 = (detailedHistogram->getXAxis()->getAxisGradsWidth() / 2.) + detailedHistogram->getXAxis()->getLabelHeight();
-	Coord tlCoord2(detailedHistogram->getXAxis()->getAxisBaseCoord() - Coord(0, offset2, 0));
-	Coord brCoord2(detailedHistogram->getXAxis()->getAxisBaseCoord() + Coord(detailedHistogram->getXAxis()->getAxisLength(), 0, 0) - Coord(0, offset2 + 60, 0));
-	emptyRect2 = new GlRect(tlCoord2, brCoord2, Color(0,0,0,0), Color(0,0,0,0));
+  float offset2 = (detailedHistogram->getXAxis()->getAxisGradsWidth() / 2.) + detailedHistogram->getXAxis()->getLabelHeight();
+  Coord tlCoord2(detailedHistogram->getXAxis()->getAxisBaseCoord() - Coord(0, offset2, 0));
+  Coord brCoord2(detailedHistogram->getXAxis()->getAxisBaseCoord() + Coord(detailedHistogram->getXAxis()->getAxisLength(), 0, 0) - Coord(0, offset2 + 60, 0));
+  emptyRect2 = new GlRect(tlCoord2, brCoord2, Color(0,0,0,0), Color(0,0,0,0));
 
-	mainLayer->addGlEntity(emptyRect, "emptyRect");
-	mainLayer->addGlEntity(emptyRect2, "emptyRect2");
+  mainLayer->addGlEntity(emptyRect, "emptyRect");
+  mainLayer->addGlEntity(emptyRect2, "emptyRect2");
 
-	mainLayer->addGlEntity(histogramToDetail->getGlGraphComposite(), "graph");
+  mainLayer->addGlEntity(histogramToDetail->getGlGraphComposite(), "graph");
 
-	toggleInteractors(true);
+  toggleInteractors(true);
 
-	if (smallMultiplesView)
-		centerView();
+  if (smallMultiplesView)
+    centerView();
 
-	smallMultiplesView = false;
+  smallMultiplesView = false;
 
-	if (selectedProperties.size() > 1) {
-		propertiesSelectionWidget->setWidgetEnabled(false);
-	}
-	histoOptionsWidget->setWidgetEnabled(true);
+  if (selectedProperties.size() > 1) {
+    propertiesSelectionWidget->setWidgetEnabled(false);
+  }
 
-	histoOptionsWidget->enableShowGraphEdgesCB(dataLocation == NODE);
-	histoOptionsWidget->setUniformQuantification(detailedHistogram->uniformQuantificationHistogram());
-	histoOptionsWidget->setNbOfHistogramBins(detailedHistogram->getNbHistogramBins());
-	histoOptionsWidget->setBinWidth(detailedHistogram->getHistogramBinsWidth());
-	histoOptionsWidget->setYAxisIncrementStep(detailedHistogram->getYAxisIncrementStep());
-	histoOptionsWidget->setYAxisLogScale(detailedHistogram->yAxisLogScaleSet());
-	histoOptionsWidget->setNbXGraduations(detailedHistogram->getNbXGraduations());
-	histoOptionsWidget->setXAxisLogScale(detailedHistogram->xAxisLogScaleSet());
-	histoOptionsWidget->setCumulativeFrequenciesHistogram(detailedHistogram->cumulativeFrequenciesHistogram());
-	histoOptionsWidget->setShowGraphEdges(detailedHistogram->displayGraphEdges());
+  histoOptionsWidget->setWidgetEnabled(true);
+
+  histoOptionsWidget->enableShowGraphEdgesCB(dataLocation == NODE);
+  histoOptionsWidget->setUniformQuantification(detailedHistogram->uniformQuantificationHistogram());
+  histoOptionsWidget->setNbOfHistogramBins(detailedHistogram->getNbHistogramBins());
+  histoOptionsWidget->setBinWidth(detailedHistogram->getHistogramBinsWidth());
+  histoOptionsWidget->setYAxisIncrementStep(detailedHistogram->getYAxisIncrementStep());
+  histoOptionsWidget->setYAxisLogScale(detailedHistogram->yAxisLogScaleSet());
+  histoOptionsWidget->setNbXGraduations(detailedHistogram->getNbXGraduations());
+  histoOptionsWidget->setXAxisLogScale(detailedHistogram->xAxisLogScaleSet());
+  histoOptionsWidget->setCumulativeFrequenciesHistogram(detailedHistogram->cumulativeFrequenciesHistogram());
+  histoOptionsWidget->setShowGraphEdges(detailedHistogram->displayGraphEdges());
 
   getGlMainWidget()->draw();
 }
@@ -627,105 +694,114 @@ void HistogramView::switchFromDetailedViewToSmallMultiples() {
   if(needUpdateHistogram)
     updateHistograms();
 
-	mainLayer->addGlEntity(emptyGlGraphComposite, "graph");
+  mainLayer->addGlEntity(emptyGlGraphComposite, "graph");
 
-	mainLayer->deleteGlEntity(axisComposite);
-	mainLayer->deleteGlEntity(emptyRect);
-	mainLayer->deleteGlEntity(emptyRect2);
-	delete emptyRect;
-	delete emptyRect2;
-	if (detailedHistogram != NULL) {
-		mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
-	}
+  mainLayer->deleteGlEntity(axisComposite);
+  mainLayer->deleteGlEntity(emptyRect);
+  mainLayer->deleteGlEntity(emptyRect2);
+  delete emptyRect;
+  delete emptyRect2;
 
-	detailedHistogram = NULL;
-	detailedHistogramPropertyName = "";
+  if (detailedHistogram != NULL) {
+    mainLayer->deleteGlEntity(detailedHistogram->getBinsComposite());
+  }
 
-	xAxisDetail = NULL;
-	yAxisDetail = NULL;
-	mainLayer->addGlEntity(histogramsComposite, "overviews composite");
-	mainLayer->addGlEntity(labelsComposite, "labels composite");
+  detailedHistogram = NULL;
+  detailedHistogramPropertyName = "";
+
+  xAxisDetail = NULL;
+  yAxisDetail = NULL;
+  mainLayer->addGlEntity(histogramsComposite, "overviews composite");
+  mainLayer->addGlEntity(labelsComposite, "labels composite");
   getGlMainWidget()->getScene()->getGraphCamera().setSceneRadius(sceneRadiusBak);
   getGlMainWidget()->getScene()->getGraphCamera().setZoomFactor(zoomFactorBak);
   getGlMainWidget()->getScene()->getGraphCamera().setEyes(eyesBak);
   getGlMainWidget()->getScene()->getGraphCamera().setCenter(centerBak);
   getGlMainWidget()->getScene()->getGraphCamera().setUp(upBak);
 
-	smallMultiplesView = true;
+  smallMultiplesView = true;
 
-	toggleInteractors(false);
-	propertiesSelectionWidget->setWidgetEnabled(true);
-	histoOptionsWidget->setWidgetEnabled(false);
+  toggleInteractors(false);
+  propertiesSelectionWidget->setWidgetEnabled(true);
+  histoOptionsWidget->setWidgetEnabled(false);
 
   getGlMainWidget()->draw();
 }
 
 void HistogramView::updateDetailedHistogramAxis() {
-	GlQuantitativeAxis *xAxis = detailedHistogram->getXAxis();
-	GlQuantitativeAxis *yAxis = detailedHistogram->getYAxis();
+  GlQuantitativeAxis *xAxis = detailedHistogram->getXAxis();
+  GlQuantitativeAxis *yAxis = detailedHistogram->getYAxis();
   xAxis->addCaption(GlAxis::BELOW, 100, false, 300, 155, detailedHistogram->getPropertyName());
   yAxis->addCaption(GlAxis::LEFT, 100, false, 300, 155, (dataLocation == NODE ? "number of nodes" : "number of edges"));
+
   if(xAxis->getCaptionHeight()>yAxis->getCaptionHeight())
     xAxis->setCaptionHeight(yAxis->getCaptionHeight(),false);
   else
     yAxis->setCaptionHeight(xAxis->getCaptionHeight(),false);
 
-	axisComposite->reset(false);
-	axisComposite->addGlEntity(xAxis, "x axis");
-	axisComposite->addGlEntity(yAxis, "y axis");
+  axisComposite->reset(false);
+  axisComposite->addGlEntity(xAxis, "x axis");
+  axisComposite->addGlEntity(yAxis, "y axis");
+
   if(xAxis->getSpaceBetweenAxisGrads()>yAxis->getSpaceBetweenAxisGrads())
     xAxis->setGradsLabelsHeight(yAxis->getSpaceBetweenAxisGrads()/2.);
   else
     yAxis->setGradsLabelsHeight(xAxis->getSpaceBetweenAxisGrads()/2.);
-	xAxisDetail = xAxis;
-	yAxisDetail = yAxis;
+
+  xAxisDetail = xAxis;
+  yAxisDetail = yAxis;
 }
 
 BoundingBox HistogramView::getSmallMultiplesBoundingBox() const {
-	GlBoundingBoxSceneVisitor glBBSV(NULL);
-	histogramsComposite->acceptVisitor(&glBBSV);
-	labelsComposite->acceptVisitor(&glBBSV);
-	return glBBSV.getBoundingBox();
+  GlBoundingBoxSceneVisitor glBBSV(NULL);
+  histogramsComposite->acceptVisitor(&glBBSV);
+  labelsComposite->acceptVisitor(&glBBSV);
+  return glBBSV.getBoundingBox();
 }
 
 /*void HistogramView::setInteractors(const std::list<Interactor *> &interactors) {
   for(QList)
   View::setInteractors(interactors);
-	toggleInteractors(false);
+  toggleInteractors(false);
 }*/
 
 void HistogramView::registerTriggers() {
   foreach (tlp::Observable* obs, triggers()) {
     removeRedrawTrigger(obs);
   }
-  if(graph()){
+
+  if(graph()) {
     addRedrawTrigger(graph());
     Iterator<string> *it = graph()->getProperties();
 
-    while(it->hasNext()){
+    while(it->hasNext()) {
       PropertyInterface *property=graph()->getProperty(it->next());
       addRedrawTrigger(property);
     }
   }
 }
 
-void HistogramView::interactorsInstalled(const QList<tlp::Interactor*>&){
+void HistogramView::interactorsInstalled(const QList<tlp::Interactor*>&) {
   toggleInteractors(false);
 }
 
 void HistogramView::toggleInteractors(const bool activate) {
   QList<Interactor *> interactorsList = interactors();
+
   for (QList<Interactor *>::iterator it = interactorsList.begin() ; it != interactorsList.end() ; ++it) {
-		if (!(dynamic_cast<HistogramInteractorNavigation *>(*it))) {
+    if (!(dynamic_cast<HistogramInteractorNavigation *>(*it))) {
       (*it)->action()->setEnabled(activate);
-			if (!activate) {
+
+      if (!activate) {
         (*it)->action()->setChecked(false);
-			}
-		} else if (!activate) {
+      }
+    }
+    else if (!activate) {
       (*it)->action()->setChecked(true);
-		}
-		interactorsActivated = activate;
-	}
+    }
+
+    interactorsActivated = activate;
+  }
 }
 
 void HistogramView::applySettings() {

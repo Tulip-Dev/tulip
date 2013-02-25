@@ -20,27 +20,27 @@
 #include "AddressSelectionDialog.h"
 
 AddressSelectionDialog::AddressSelectionDialog(QWidget *parent) : QDialog(parent) {
-	setupUi(this);
-	connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+  setupUi(this);
+  connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
 }
 
 void AddressSelectionDialog::setBaseAddress(const QString &address) {
-	addressLabel->setText(address);
+  addressLabel->setText(address);
 }
 
 void AddressSelectionDialog::addResultToList(const QString &result) {
-	resultsList->addItem(result);
+  resultsList->addItem(result);
 }
 
 void AddressSelectionDialog::clearList() {
-	resultsList->clear();
-	rememberChoiceCB->setChecked(false);
+  resultsList->clear();
+  rememberChoiceCB->setChecked(false);
 }
 
 bool AddressSelectionDialog::rememberAddressChoice() const {
-	return rememberChoiceCB->isChecked();
+  return rememberChoiceCB->isChecked();
 }
 
 int AddressSelectionDialog::getPickedResultIdx() {
-	return resultsList->currentRow();
+  return resultsList->currentRow();
 }

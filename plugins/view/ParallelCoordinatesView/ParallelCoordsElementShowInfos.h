@@ -37,8 +37,8 @@
 namespace tlp {
 
 class ParallelCoordsElementShowInfos : public MouseShowElementInfos {
-	public :
-    bool pick(int x, int y, SelectedEntity &selectedEntity);
+public :
+  bool pick(int x, int y, SelectedEntity &selectedEntity);
 };
 
 }

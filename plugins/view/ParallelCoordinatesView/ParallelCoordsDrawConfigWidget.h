@@ -31,43 +31,43 @@ namespace tlp {
 
 class ParallelCoordsDrawConfigWidget : public QWidget, public Ui::ParallelCoordsDrawConfigWidgetData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	ParallelCoordsDrawConfigWidget(QWidget *parent = 0);
+  ParallelCoordsDrawConfigWidget(QWidget *parent = 0);
 
-	unsigned int getAxisHeight() const;
-	void setAxisHeight(const unsigned int axisHeight);
-	bool drawPointOnAxis() const;
-	void setDrawPointOnAxis(const bool drawPointOnAxis);
-	Size getAxisPointMinSize() const;
-	void setAxisPointMinSize(const unsigned int axisPointMinSize);
-	Size getAxisPointMaxSize() const;
-	void setAxisPointMaxSize(const unsigned int axisPointMaxSize);
-	bool displayNodesLabels() const;
-	void setLinesColorAlphaValue(unsigned int value);
-	unsigned int getLinesColorAlphaValue() const;
-	Color getBackgroundColor() const;
-	void setBackgroundColor(const Color &color);
-	unsigned int getUnhighlightedEltsColorsAlphaValue() const;
-	void setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue);
-	std::string getLinesTextureFilename() const;
-	void setLinesTextureFilename(const std::string &linesTextureFileName);
+  unsigned int getAxisHeight() const;
+  void setAxisHeight(const unsigned int axisHeight);
+  bool drawPointOnAxis() const;
+  void setDrawPointOnAxis(const bool drawPointOnAxis);
+  Size getAxisPointMinSize() const;
+  void setAxisPointMinSize(const unsigned int axisPointMinSize);
+  Size getAxisPointMaxSize() const;
+  void setAxisPointMaxSize(const unsigned int axisPointMaxSize);
+  bool displayNodesLabels() const;
+  void setLinesColorAlphaValue(unsigned int value);
+  unsigned int getLinesColorAlphaValue() const;
+  Color getBackgroundColor() const;
+  void setBackgroundColor(const Color &color);
+  unsigned int getUnhighlightedEltsColorsAlphaValue() const;
+  void setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue);
+  std::string getLinesTextureFilename() const;
+  void setLinesTextureFilename(const std::string &linesTextureFileName);
 
   bool configurationChanged();
 
 private slots :
 
-	void pressButtonBrowse();
-	void userTextureRbToggled(bool checked);
-	void minAxisPointSizeValueChanged(int newValue);
-	void maxAxisPointSizeValueChanged(int newValue);
-	void pressColorButton();
+  void pressButtonBrowse();
+  void userTextureRbToggled(bool checked);
+  void minAxisPointSizeValueChanged(int newValue);
+  void maxAxisPointSizeValueChanged(int newValue);
+  void pressColorButton();
 
 public slots :
 
-  void applySettings(){
+  void applySettings() {
     emit(applySettingsSignal());
   }
 

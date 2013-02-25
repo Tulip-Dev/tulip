@@ -19,49 +19,49 @@
 
 #include "SizeScaleConfigDialog.h"
 
-SizeScaleConfigDialog::SizeScaleConfigDialog(QWidget *){
-	setupUi(this);
-	connect(minSizeSpinBox, SIGNAL(valueChanged(double)), this, SLOT(minSizeValueChanged(double)));
-	connect(maxSizeSpinBox, SIGNAL(valueChanged(double)), this, SLOT(maxSizeValueChanged(double)));
-	connect(viewSizeRB, SIGNAL(toggled(bool)), this, SLOT(viewSizeRadioButtonToggled(bool)));
+SizeScaleConfigDialog::SizeScaleConfigDialog(QWidget *) {
+  setupUi(this);
+  connect(minSizeSpinBox, SIGNAL(valueChanged(double)), this, SLOT(minSizeValueChanged(double)));
+  connect(maxSizeSpinBox, SIGNAL(valueChanged(double)), this, SLOT(maxSizeValueChanged(double)));
+  connect(viewSizeRB, SIGNAL(toggled(bool)), this, SLOT(viewSizeRadioButtonToggled(bool)));
 }
 
 float SizeScaleConfigDialog::getMinSize() const {
-	return (float) minSizeSpinBox->value();
+  return (float) minSizeSpinBox->value();
 }
 
 float SizeScaleConfigDialog::getMaxSize() const {
-	return (float) maxSizeSpinBox->value();
+  return (float) maxSizeSpinBox->value();
 }
 
 bool SizeScaleConfigDialog::applySizeMappingOnX() const {
-	return xCB->isChecked();
+  return xCB->isChecked();
 }
 
 bool SizeScaleConfigDialog::applySizeMappingOnY() const {
-	return yCB->isChecked();
+  return yCB->isChecked();
 }
 
 bool SizeScaleConfigDialog::applySizeMappingOnZ() const {
-	return zCB->isChecked();
+  return zCB->isChecked();
 }
 
 void SizeScaleConfigDialog::minSizeValueChanged(double newValue) {
-	if (newValue > maxSizeSpinBox->value()) {
-		maxSizeSpinBox->setValue(newValue + 1);
-	}
+  if (newValue > maxSizeSpinBox->value()) {
+    maxSizeSpinBox->setValue(newValue + 1);
+  }
 }
 
 void SizeScaleConfigDialog::maxSizeValueChanged(double newValue) {
-	if (newValue < minSizeSpinBox->value()) {
-		minSizeSpinBox->setValue(newValue - 1);
-	}
+  if (newValue < minSizeSpinBox->value()) {
+    minSizeSpinBox->setValue(newValue - 1);
+  }
 }
 
 bool SizeScaleConfigDialog::doMappingOnViewSize() const {
-	return viewSizeRB->isChecked();
+  return viewSizeRB->isChecked();
 }
 
 void SizeScaleConfigDialog::viewSizeRadioButtonToggled(bool checked) {
-	dimensionsMappingGB->setEnabled(checked);
+  dimensionsMappingGB->setEnabled(checked);
 }

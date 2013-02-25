@@ -27,23 +27,26 @@ using namespace std;
 using namespace tlp;
 
 namespace pocore {
-  //==============================================================
-  SquareLayout::SquareLayout(unsigned int width):_width(width){
-  }
-  //==============================================================
-  unsigned int SquareLayout::unproject(const Vector<int, 2> &point) const {
+//==============================================================
+SquareLayout::SquareLayout(unsigned int width):_width(width) {
+}
+//==============================================================
+unsigned int SquareLayout::unproject(const Vector<int, 2> &point) const {
 
-    int x = point[0] + _width/2;
-    int y = point[1] + _width/2;
-    if (x>int(_width)) return UINT_MAX;
-    if (y>int(_width)) return UINT_MAX;
-    return (unsigned int)y * _width + (unsigned int)x;
-  }
-  //==============================================================
-  Vector<int, 2> SquareLayout::project(const unsigned int id) const{
-    Vector<int, 2> point;
-    point[0] = id % _width - _width/2;
-    point[1] = id / _width - _width/2;
-    return point;
-  }
+  int x = point[0] + _width/2;
+  int y = point[1] + _width/2;
+
+  if (x>int(_width)) return UINT_MAX;
+
+  if (y>int(_width)) return UINT_MAX;
+
+  return (unsigned int)y * _width + (unsigned int)x;
+}
+//==============================================================
+Vector<int, 2> SquareLayout::project(const unsigned int id) const {
+  Vector<int, 2> point;
+  point[0] = id % _width - _width/2;
+  point[1] = id / _width - _width/2;
+  return point;
+}
 }

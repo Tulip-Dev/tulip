@@ -35,61 +35,67 @@ HistogramViewNavigator::HistogramViewNavigator() : histoView(NULL), selectedHist
 HistogramViewNavigator::~HistogramViewNavigator() {}
 
 void HistogramViewNavigator::viewChanged(View *view) {
-	histoView = static_cast<HistogramView *>(view);
+  histoView = static_cast<HistogramView *>(view);
 }
 
 bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
-	GlMainWidget *glWidget = static_cast<GlMainWidget *>(widget);
+  GlMainWidget *glWidget = static_cast<GlMainWidget *>(widget);
 
-	if (!glWidget->hasMouseTracking()) {
-		glWidget->setMouseTracking(true);
-	}
+  if (!glWidget->hasMouseTracking()) {
+    glWidget->setMouseTracking(true);
+  }
 
-	if (!histoView->smallMultiplesViewSet() && !histoView->interactorsEnabled()) {
-		histoView->toggleInteractors(true);
-	}
+  if (!histoView->smallMultiplesViewSet() && !histoView->interactorsEnabled()) {
+    histoView->toggleInteractors(true);
+  }
 
-	if (histoView->getHistograms().size() == 1) {
-		return false;
-	}
+  if (histoView->getHistograms().size() == 1) {
+    return false;
+  }
 
-    if (e->type() == QEvent::MouseMove && histoView->smallMultiplesViewSet()) {
-        QMouseEvent *me = static_cast<QMouseEvent *>(e);
-        int x = glWidget->width() - me->x();
-        int y = me->y();
-        Coord screenCoords(x, y, 0);
-        Coord sceneCoords(glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords));
-        selectedHistoOverview = getOverviewUnderPointer(sceneCoords);
+  if (e->type() == QEvent::MouseMove && histoView->smallMultiplesViewSet()) {
+    QMouseEvent *me = static_cast<QMouseEvent *>(e);
+    int x = glWidget->width() - me->x();
+    int y = me->y();
+    Coord screenCoords(x, y, 0);
+    Coord sceneCoords(glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords));
+    selectedHistoOverview = getOverviewUnderPointer(sceneCoords);
+  }
+  else if (e->type() == QEvent::MouseButtonDblClick) {
+    if (selectedHistoOverview != NULL && histoView->smallMultiplesViewSet()) {
+      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedHistoOverview->getBoundingBox());
+      zoomAndPanAnimator.animateZoomAndPan();
+      histoView->switchFromSmallMultiplesToDetailedView(selectedHistoOverview);
+      selectedHistoOverview = NULL;
     }
-    else if (e->type() == QEvent::MouseButtonDblClick) {
-		if (selectedHistoOverview != NULL && histoView->smallMultiplesViewSet()) {
-			QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedHistoOverview->getBoundingBox());
-			zoomAndPanAnimator.animateZoomAndPan();
-			histoView->switchFromSmallMultiplesToDetailedView(selectedHistoOverview);
-			selectedHistoOverview = NULL;
-		} else if (!histoView->smallMultiplesViewSet()){
-			histoView->switchFromDetailedViewToSmallMultiples();
-			QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, histoView->getSmallMultiplesBoundingBox());
-			zoomAndPanAnimator.animateZoomAndPan();
-		}
-		return true;
-	}
-	return false;
+    else if (!histoView->smallMultiplesViewSet()) {
+      histoView->switchFromDetailedViewToSmallMultiples();
+      QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, histoView->getSmallMultiplesBoundingBox());
+      zoomAndPanAnimator.animateZoomAndPan();
+    }
+
+    return true;
+  }
+
+  return false;
 }
 
 Histogram *HistogramViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) const {
-	Histogram *ret = NULL;
-	vector<Histogram *> overviews = histoView->getHistograms();
-    for (vector<Histogram *>::const_iterator it = overviews.begin() ; it != overviews.end() ; ++it) {
-		BoundingBox overviewBB((*it)->getBoundingBox());
-		if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
-				sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1]) {
-				ret = *it;
-				break;
-		}
-	}
-	return ret;
+  Histogram *ret = NULL;
+  vector<Histogram *> overviews = histoView->getHistograms();
+
+  for (vector<Histogram *>::const_iterator it = overviews.begin() ; it != overviews.end() ; ++it) {
+    BoundingBox overviewBB((*it)->getBoundingBox());
+
+    if (sceneCoords.getX() >= overviewBB[0][0] && sceneCoords.getX() <= overviewBB[1][0] &&
+        sceneCoords.getY() >= overviewBB[0][1] && sceneCoords.getY() <= overviewBB[1][1]) {
+      ret = *it;
+      break;
+    }
+  }
+
+  return ret;
 }
 
 }

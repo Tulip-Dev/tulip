@@ -32,7 +32,7 @@ using namespace tlp;
 
 class GoogleMapsViewConfigWidget : public QWidget, public Ui::GoogleMapsViewConfigWidgetData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
@@ -57,13 +57,16 @@ public :
     return layoutCheckBox->isChecked();
   }
 
-  PolyFileType polyFileType() const{
+  PolyFileType polyFileType() const {
     mapToPolygon->setEnabled(false);
+
     if(useDefaultShape->isChecked())
       return Default;
+
     if(useCsvFile->isChecked())
       return CsvFile;
-    if(usePolyFile->isChecked()){
+
+    if(usePolyFile->isChecked()) {
       mapToPolygon->setEnabled(true);
       return PolyFile;
     }
@@ -71,13 +74,16 @@ public :
     return Default;
   }
 
-  void setPolyFileType(PolyFileType &fileType){
+  void setPolyFileType(PolyFileType &fileType) {
     mapToPolygon->setEnabled(false);
+
     if(fileType==Default)
       useDefaultShape->setChecked(true);
+
     if(fileType==CsvFile)
       useCsvFile->setChecked(true);
-    if(fileType==PolyFile){
+
+    if(fileType==PolyFile) {
       usePolyFile->setChecked(true);
       mapToPolygon->setEnabled(true);
     }
@@ -103,7 +109,7 @@ signals :
 
 public slots:
 
-  void openCsvFileBrowser(){
+  void openCsvFileBrowser() {
     csvFile->setText(QFileDialog::getOpenFileName(NULL,tr("Open csv file"), "./", tr("cvs file (*.*)")));
   }
 

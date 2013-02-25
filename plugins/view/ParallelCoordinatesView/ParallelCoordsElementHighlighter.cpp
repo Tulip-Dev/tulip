@@ -24,19 +24,20 @@ using namespace std;
 namespace tlp {
 
 void ParallelCoordsElementHighlighter::unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView) {
-	parallelView->resetHighlightedElements();
+  parallelView->resetHighlightedElements();
 }
 
 void ParallelCoordsElementHighlighter::selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, bool addToSelection) {
-	parallelView->highlightDataUnderPointer(x, y, addToSelection);
+  parallelView->highlightDataUnderPointer(x, y, addToSelection);
 }
 
 void ParallelCoordsElementHighlighter::selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h, bool addToSelection) {
-	parallelView->highlightDataInRegion(x, y, w, h, addToSelection);
+  parallelView->highlightDataInRegion(x, y, w, h, addToSelection);
 }
 
 ParallelCoordsElementHighlighter::~ParallelCoordsElementHighlighter() {
   ParallelCoordinatesView *parallelView = dynamic_cast<ParallelCoordinatesView *>(view());
+
   if (parallelView)
     parallelView->resetHighlightedElements();
 }

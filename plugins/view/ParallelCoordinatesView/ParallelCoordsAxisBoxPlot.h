@@ -52,32 +52,32 @@ class GlAxisBoxPlot : public GlSimpleEntity {
 
 public :
 
-	GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color& fillColor, const Color& outlineColor);
-	~GlAxisBoxPlot() {}
+  GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color& fillColor, const Color& outlineColor);
+  ~GlAxisBoxPlot() {}
 
-	void draw(float lod,Camera* camera);
+  void draw(float lod,Camera* camera);
 
   void getXML(std::string &) {}
 
   void setWithXML(const std::string &, unsigned int &) {}
 
-	void setHighlightRangeIfAny(Coord sceneCoords);
+  void setHighlightRangeIfAny(Coord sceneCoords);
 
 
 private :
 
   void drawLabel(Coord position, std::string labelName, Camera *camera);
 
-	QuantitativeParallelAxis *axis;
-	Coord bottomOutlierCoord;
-	Coord firstQuartileCoord;
-	Coord medianCoord;
-	Coord thirdQuartileCoord;
-	Coord topOutlierCoord;
-	float boxWidth;
-	Color fillColor, outlineColor;
-	Coord *highlightRangeLowBound;
-	Coord *highlightRangeHighBound;
+  QuantitativeParallelAxis *axis;
+  Coord bottomOutlierCoord;
+  Coord firstQuartileCoord;
+  Coord medianCoord;
+  Coord thirdQuartileCoord;
+  Coord topOutlierCoord;
+  float boxWidth;
+  Color fillColor, outlineColor;
+  Coord *highlightRangeLowBound;
+  Coord *highlightRangeHighBound;
 
 };
 
@@ -85,25 +85,25 @@ class ParallelCoordsAxisBoxPlot : public GLInteractorComponent {
 
 public :
 
-	ParallelCoordsAxisBoxPlot();
-	~ParallelCoordsAxisBoxPlot();
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *glMainWidget);
-	bool compute(GlMainWidget *glMainWidget);
+  ParallelCoordsAxisBoxPlot();
+  ~ParallelCoordsAxisBoxPlot();
+  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget *glMainWidget);
+  bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
 private :
 
-	void buildGlAxisPlot(std::vector<ParallelAxis *> currentAxis);
-	void deleteGlAxisPlot();
+  void buildGlAxisPlot(std::vector<ParallelAxis *> currentAxis);
+  void deleteGlAxisPlot();
 
-	void initOrUpdateBoxPlots();
+  void initOrUpdateBoxPlots();
 
-	ParallelCoordinatesView *parallelView;
-	Graph *currentGraph;
-	std::map<QuantitativeParallelAxis *, GlAxisBoxPlot *> axisBoxPlotMap;
-	ParallelAxis *selectedAxis;
-	unsigned int lastNbAxis;
+  ParallelCoordinatesView *parallelView;
+  Graph *currentGraph;
+  std::map<QuantitativeParallelAxis *, GlAxisBoxPlot *> axisBoxPlotMap;
+  ParallelAxis *selectedAxis;
+  unsigned int lastNbAxis;
 
 };
 

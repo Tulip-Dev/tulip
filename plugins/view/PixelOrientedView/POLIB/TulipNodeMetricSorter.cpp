@@ -31,86 +31,102 @@ namespace pocore {
 map<Graph *, TulipNodeMetricSorter *>TulipNodeMetricSorter::instances;
 
 TulipNodeMetricSorter *TulipNodeMetricSorter::getInstance(Graph *graph) {
-	if (instances.find(graph) == instances.end()) {
-		instances[graph] = new TulipNodeMetricSorter(graph);
-	}
-	return instances[graph];
+  if (instances.find(graph) == instances.end()) {
+    instances[graph] = new TulipNodeMetricSorter(graph);
+  }
+
+  return instances[graph];
 }
 
 TulipNodeMetricSorter::TulipNodeMetricSorter(Graph *graph) : graph(graph) {}
 
 TulipNodeMetricSorter::~TulipNodeMetricSorter() {
-	reset();
-	instances.erase(graph);
+  reset();
+  instances.erase(graph);
 }
 
 void TulipNodeMetricSorter::sortNodesForProperty(string propertyName) {
-	cleanupSortNodesForProperty(propertyName);
-	Iterator<node> *nodeIt = graph->getNodes();
-	while (nodeIt->hasNext()) {
-		nodeSortingMap[propertyName].push_back(nodeIt->next());
-	}
-	delete nodeIt;
+  cleanupSortNodesForProperty(propertyName);
+  Iterator<node> *nodeIt = graph->getNodes();
 
-	string propertyType = graph->getProperty(propertyName)->getTypename();
-	if (propertyType == "double") {
-		sort(nodeSortingMap[propertyName].begin(), nodeSortingMap[propertyName].end(), NodeMetricPropertyOrderRelation<DoubleType, DoubleProperty>(graph, propertyName));
-	} else if (propertyType == "int") {
-		sort(nodeSortingMap[propertyName].begin(), nodeSortingMap[propertyName].end(), NodeMetricPropertyOrderRelation<IntegerType, IntegerProperty>(graph, propertyName));
-	}
+  while (nodeIt->hasNext()) {
+    nodeSortingMap[propertyName].push_back(nodeIt->next());
+  }
+
+  delete nodeIt;
+
+  string propertyType = graph->getProperty(propertyName)->getTypename();
+
+  if (propertyType == "double") {
+    sort(nodeSortingMap[propertyName].begin(), nodeSortingMap[propertyName].end(), NodeMetricPropertyOrderRelation<DoubleType, DoubleProperty>(graph, propertyName));
+  }
+  else if (propertyType == "int") {
+    sort(nodeSortingMap[propertyName].begin(), nodeSortingMap[propertyName].end(), NodeMetricPropertyOrderRelation<IntegerType, IntegerProperty>(graph, propertyName));
+  }
 }
 
 void TulipNodeMetricSorter::cleanupSortNodesForProperty(std::string propertyName) {
-	nodeSortingMap.erase(propertyName);
+  nodeSortingMap.erase(propertyName);
 }
 
 node TulipNodeMetricSorter::getNodeAtRankForProperty(const unsigned int rank, string propertyName) {
-	if (nodeSortingMap.find(propertyName) == nodeSortingMap.end()) {
-		sortNodesForProperty(propertyName);
-	}
-	return nodeSortingMap[propertyName][rank];
+  if (nodeSortingMap.find(propertyName) == nodeSortingMap.end()) {
+    sortNodesForProperty(propertyName);
+  }
+
+  return nodeSortingMap[propertyName][rank];
 }
 
 unsigned int TulipNodeMetricSorter::getNbValuesForProperty(string propertyName)  {
-	if (nbValuesPropertyMap.find(propertyName) == nbValuesPropertyMap.end()) {
-		unsigned int count = 0;
-		string propertyType = graph->getProperty(propertyName)->getTypename();
-		if (propertyType == "double") {
-			set<double> sd;
-			Iterator<node> *nodeIt = graph->getNodes();
-			while (nodeIt->hasNext()) {
-				sd.insert(graph->getProperty<DoubleProperty>(propertyName)->getNodeValue(nodeIt->next()));
-			}
-			delete nodeIt;
-			count = sd.size();
-		} else if (propertyType == "int") {
-			set<int> si;
-			Iterator<node> *nodeIt = graph->getNodes();
-			while (nodeIt->hasNext()) {
-				si.insert(graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(nodeIt->next()));
-			}
-			delete nodeIt;
-			count = si.size();
-		}
-		nbValuesPropertyMap[propertyName] = count;
-	}
-	return nbValuesPropertyMap[propertyName];
+  if (nbValuesPropertyMap.find(propertyName) == nbValuesPropertyMap.end()) {
+    unsigned int count = 0;
+    string propertyType = graph->getProperty(propertyName)->getTypename();
+
+    if (propertyType == "double") {
+      set<double> sd;
+      Iterator<node> *nodeIt = graph->getNodes();
+
+      while (nodeIt->hasNext()) {
+        sd.insert(graph->getProperty<DoubleProperty>(propertyName)->getNodeValue(nodeIt->next()));
+      }
+
+      delete nodeIt;
+      count = sd.size();
+    }
+    else if (propertyType == "int") {
+      set<int> si;
+      Iterator<node> *nodeIt = graph->getNodes();
+
+      while (nodeIt->hasNext()) {
+        si.insert(graph->getProperty<IntegerProperty>(propertyName)->getNodeValue(nodeIt->next()));
+      }
+
+      delete nodeIt;
+      count = si.size();
+    }
+
+    nbValuesPropertyMap[propertyName] = count;
+  }
+
+  return nbValuesPropertyMap[propertyName];
 }
 
 void TulipNodeMetricSorter::reset() {
-	nodeSortingMap.clear();
+  nodeSortingMap.clear();
 }
 
 unsigned int TulipNodeMetricSorter::getNodeRankForProperty(tlp::node n, string propertyName) {
-	if (nodeSortingMap.find(propertyName) == nodeSortingMap.end()) {
-		sortNodesForProperty(propertyName);
-	}
-	for (unsigned int i = 0 ; i < nodeSortingMap[propertyName].size() ; ++i) {
-		if (nodeSortingMap[propertyName][i] == n) {
-			return i;
-		}
-	}
-	return 0;
+  if (nodeSortingMap.find(propertyName) == nodeSortingMap.end()) {
+    sortNodesForProperty(propertyName);
+  }
+
+  for (unsigned int i = 0 ; i < nodeSortingMap[propertyName].size() ; ++i) {
+    if (nodeSortingMap[propertyName][i] == n) {
+      return i;
+    }
+  }
+
+  return 0;
 }
 
 }

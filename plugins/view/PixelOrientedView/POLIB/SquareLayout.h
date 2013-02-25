@@ -23,13 +23,13 @@
 #include "LayoutFunction.h"
 
 namespace pocore {
-  class SquareLayout : public LayoutFunction {
-  public:
-    SquareLayout(unsigned int widht);
-    Vec2i  project (const unsigned int id) const;
-    unsigned int unproject (const Vec2i& ) const;
-  private:
-    unsigned int _width;
-  };
+class SquareLayout : public LayoutFunction {
+public:
+  SquareLayout(unsigned int widht);
+  Vec2i  project (const unsigned int id) const;
+  unsigned int unproject (const Vec2i& ) const;
+private:
+  unsigned int _width;
+};
 }
 #endif //SQUARELAYOUT_H

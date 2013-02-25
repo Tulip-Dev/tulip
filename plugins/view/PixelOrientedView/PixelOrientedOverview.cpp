@@ -58,116 +58,123 @@ namespace tlp {
 int PixelOrientedOverview::overviewCpt(0);
 
 PixelOrientedOverview::PixelOrientedOverview(TulipGraphDimension *data, PixelOrientedMediator *pixelOrientedMediator,
-											 Coord blCornerPos, const std::string &dimName, const Color &backgroundColor, const Color &textColor)
-	: data(data), pixelOrientedMediator(pixelOrientedMediator), blCornerPos(blCornerPos),
-	  dimName(dimName), frame(NULL), frame2(NULL), overviewGen(false), backgroundColor(backgroundColor), textColor(textColor) {
+    Coord blCornerPos, const std::string &dimName, const Color &backgroundColor, const Color &textColor)
+  : data(data), pixelOrientedMediator(pixelOrientedMediator), blCornerPos(blCornerPos),
+    dimName(dimName), frame(NULL), frame2(NULL), overviewGen(false), backgroundColor(backgroundColor), textColor(textColor) {
 
-	if (this->dimName == "") {
-		this->dimName = data->getDimensionName();
-	}
-	overviewId = overviewCpt++;
+  if (this->dimName == "") {
+    this->dimName = data->getDimensionName();
+  }
 
-	textureName = dimName + " texture " + getStringFromNumber(overviewId);
+  overviewId = overviewCpt++;
 
-	unsigned int width = pixelOrientedMediator->getImageWidth();
-	unsigned int height = pixelOrientedMediator->getImageHeight();
+  textureName = dimName + " texture " + getStringFromNumber(overviewId);
 
-	unsigned int labelHeight = height / 4;
+  unsigned int width = pixelOrientedMediator->getImageWidth();
+  unsigned int height = pixelOrientedMediator->getImageHeight();
 
-	Graph *graph = data->getTulipGraph();
-	pixelLayout = new LayoutProperty(graph);
-	pixelSize = new SizeProperty(graph);
-	graphComposite = new GlGraphComposite(graph);
-	setGraphView(graphComposite);
-	GlGraphInputData *glGraphInputData = graphComposite->getInputData();
-	glGraphInputData->setElementLayout(pixelLayout);
-	glGraphInputData->setElementSize(pixelSize);
+  unsigned int labelHeight = height / 4;
 
-	frame = new GlRect(Coord(blCornerPos.getX() - 3, blCornerPos.getY() + height + 3),
-			           Coord(blCornerPos.getX() + width + 3, blCornerPos.getY() - 3),
-			           Color(0, 0, 0), Color(0, 0, 0), false, true);
-	addGlEntity(frame, dimName + "frame");
-	frame2 = new GlRect(Coord(blCornerPos.getX() - 4, blCornerPos.getY() + height + 4),
-			            Coord(blCornerPos.getX() + width + 4, blCornerPos.getY() - 4),
-			            Color(0, 0, 0), Color(0, 0, 0), false, true);
-	addGlEntity(frame2, dimName + "frame 2");
+  Graph *graph = data->getTulipGraph();
+  pixelLayout = new LayoutProperty(graph);
+  pixelSize = new SizeProperty(graph);
+  graphComposite = new GlGraphComposite(graph);
+  setGraphView(graphComposite);
+  GlGraphInputData *glGraphInputData = graphComposite->getInputData();
+  glGraphInputData->setElementLayout(pixelLayout);
+  glGraphInputData->setElementSize(pixelSize);
 
-	backgroundRect = new GlRect(Coord(blCornerPos.getX(), blCornerPos.getY() + height), Coord(blCornerPos.getX() + width, blCornerPos.getY()), Color(255,255,255), Color(255,255,255), true, false);
-	addGlEntity(backgroundRect, "background rect");
-        clickLabel = new GlLabel(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), Size(width, height / 4), Color(0,0,0));
-	clickLabel->setText("Double Click to generate overview");
-	addGlEntity(clickLabel, "label");
+  frame = new GlRect(Coord(blCornerPos.getX() - 3, blCornerPos.getY() + height + 3),
+                     Coord(blCornerPos.getX() + width + 3, blCornerPos.getY() - 3),
+                     Color(0, 0, 0), Color(0, 0, 0), false, true);
+  addGlEntity(frame, dimName + "frame");
+  frame2 = new GlRect(Coord(blCornerPos.getX() - 4, blCornerPos.getY() + height + 4),
+                      Coord(blCornerPos.getX() + width + 4, blCornerPos.getY() - 4),
+                      Color(0, 0, 0), Color(0, 0, 0), false, true);
+  addGlEntity(frame2, dimName + "frame 2");
+
+  backgroundRect = new GlRect(Coord(blCornerPos.getX(), blCornerPos.getY() + height), Coord(blCornerPos.getX() + width, blCornerPos.getY()), Color(255,255,255), Color(255,255,255), true, false);
+  addGlEntity(backgroundRect, "background rect");
+  clickLabel = new GlLabel(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), Size(width, height / 4), Color(0,0,0));
+  clickLabel->setText("Double Click to generate overview");
+  addGlEntity(clickLabel, "label");
 
 
-	computeBoundingBox();
+  computeBoundingBox();
 
-        overviewLabel = new GlLabel(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() - labelHeight / 2), Size(width, labelHeight), textColor);
-	overviewLabel->setText(dimName);
-	addGlEntity(overviewLabel, "overview label");
+  overviewLabel = new GlLabel(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() - labelHeight / 2), Size(width, labelHeight), textColor);
+  overviewLabel->setText(dimName);
+  addGlEntity(overviewLabel, "overview label");
 }
 
 PixelOrientedOverview::~PixelOrientedOverview() {
-	GlTextureManager::getInst().deleteTexture(textureName);
-	reset(true);
+  GlTextureManager::getInst().deleteTexture(textureName);
+  reset(true);
 }
 
 struct NodeCoordXOrdering : public binary_function<pair<node, Coord>, pair<node, Coord>, bool> {
-	bool operator()(pair<node, Coord> p1, pair<node, Coord> p2) {
-		return p1.second.getX() < p2.second.getX();
-	}
+  bool operator()(pair<node, Coord> p1, pair<node, Coord> p2) {
+    return p1.second.getX() < p2.second.getX();
+  }
 };
 
 struct NodeCoordYOrdering : public binary_function<pair<node, Coord>, pair<node, Coord>, bool> {
-	bool operator()(pair<node, Coord> p1, pair<node, Coord> p2) {
-		return p1.second.getY() > p2.second.getY();
-	}
+  bool operator()(pair<node, Coord> p1, pair<node, Coord> p2) {
+    return p1.second.getY() > p2.second.getY();
+  }
 };
 
 void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
 
-	reset(false);
-	if (clickLabel != NULL) {
-		delete clickLabel;
-		clickLabel = NULL;
-	}
-	if (backgroundRect != NULL) {
-		delete backgroundRect;
-		backgroundRect = NULL;
-	}
-	if (frame != NULL) {
-		delete frame;
-		frame = NULL;
-	}
-	if (frame2 != NULL) {
-		delete frame2;
-		frame2 = NULL;
-	}
+  reset(false);
 
-	Graph *graph = data->getTulipGraph();
+  if (clickLabel != NULL) {
+    delete clickLabel;
+    clickLabel = NULL;
+  }
 
-	unsigned int width = pixelOrientedMediator->getImageWidth();
-	unsigned int height = pixelOrientedMediator->getImageHeight();
+  if (backgroundRect != NULL) {
+    delete backgroundRect;
+    backgroundRect = NULL;
+  }
 
-	GlProgressBar *glProgressBar = new GlProgressBar(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), width, height, Color(0,0,255));
-	glProgressBar->setComment("Generating overview ...");
-	addGlEntity(glProgressBar, "progress bar");
-	unsigned int currentStep = 0;
-	unsigned int maxStep = graph->numberOfNodes();
-	unsigned int drawStep = maxStep / 10;
+  if (frame != NULL) {
+    delete frame;
+    frame = NULL;
+  }
 
-	set<int> xCoordSet;
-	for (unsigned int i = 0 ; i < graph->numberOfNodes() ; ++i) {
-		node n = node(data->getItemIdAtRank(i));
-		pocore::Vec2i pos = pixelOrientedMediator->getPixelPosForRank(i);
-		Coord nodeCoord = Coord(pos[0], pos[1], 0);
-		xCoordSet.insert(pos[0]);
-		pixelLayout->setNodeValue(n, nodeCoord);
-		++currentStep;
-		if (glWidget != NULL && currentStep % drawStep == 0) {
-			glProgressBar->progress(currentStep, maxStep);
-			glWidget->draw();
-		}
-	}
+  if (frame2 != NULL) {
+    delete frame2;
+    frame2 = NULL;
+  }
+
+  Graph *graph = data->getTulipGraph();
+
+  unsigned int width = pixelOrientedMediator->getImageWidth();
+  unsigned int height = pixelOrientedMediator->getImageHeight();
+
+  GlProgressBar *glProgressBar = new GlProgressBar(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), width, height, Color(0,0,255));
+  glProgressBar->setComment("Generating overview ...");
+  addGlEntity(glProgressBar, "progress bar");
+  unsigned int currentStep = 0;
+  unsigned int maxStep = graph->numberOfNodes();
+  unsigned int drawStep = maxStep / 10;
+
+  set<int> xCoordSet;
+
+  for (unsigned int i = 0 ; i < graph->numberOfNodes() ; ++i) {
+    node n = node(data->getItemIdAtRank(i));
+    pocore::Vec2i pos = pixelOrientedMediator->getPixelPosForRank(i);
+    Coord nodeCoord = Coord(pos[0], pos[1], 0);
+    xCoordSet.insert(pos[0]);
+    pixelLayout->setNodeValue(n, nodeCoord);
+    ++currentStep;
+
+    if (glWidget != NULL && currentStep % drawStep == 0) {
+      glProgressBar->progress(currentStep, maxStep);
+      glWidget->draw();
+    }
+  }
 
   if (xCoordSet.size() < 2)
     return;
@@ -177,45 +184,45 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   int x2 = *it;
   int size = x2 - x1;
 
-	pixelSize->setAllNodeValue(Size(size,size,size));
+  pixelSize->setAllNodeValue(Size(size,size,size));
 
-	overviewLabel->setColor(textColor);
+  overviewLabel->setColor(textColor);
 
-	GlOffscreenRenderer *glOffscreenRenderer = GlOffscreenRenderer::getInstance();
+  GlOffscreenRenderer *glOffscreenRenderer = GlOffscreenRenderer::getInstance();
 
-	glOffscreenRenderer->setViewPortSize(width, height);
-	glOffscreenRenderer->clearScene();
-	glOffscreenRenderer->setSceneBackgroundColor(backgroundColor);
-	glOffscreenRenderer->addGraphCompositeToScene(graphComposite);
-	glOffscreenRenderer->renderScene(true);
+  glOffscreenRenderer->setViewPortSize(width, height);
+  glOffscreenRenderer->clearScene();
+  glOffscreenRenderer->setSceneBackgroundColor(backgroundColor);
+  glOffscreenRenderer->addGraphCompositeToScene(graphComposite);
+  glOffscreenRenderer->renderScene(true);
 
-	if (glWidget != NULL) {
-		glProgressBar->progress(maxStep, maxStep);
-		glWidget->draw();
-	}
+  if (glWidget != NULL) {
+    glProgressBar->progress(maxStep, maxStep);
+    glWidget->draw();
+  }
 
-	deleteGlEntity(glProgressBar);
-	delete glProgressBar;
+  deleteGlEntity(glProgressBar);
+  delete glProgressBar;
 
-	GLuint textureId = glOffscreenRenderer->getGLTexture(true);
-	GlTextureManager::getInst().deleteTexture(textureName);
-	GlTextureManager::getInst().registerExternalTexture(textureName, textureId);
+  GLuint textureId = glOffscreenRenderer->getGLTexture(true);
+  GlTextureManager::getInst().deleteTexture(textureName);
+  GlTextureManager::getInst().registerExternalTexture(textureName, textureId);
 
-	if (findGlEntity(dimName) == NULL) {
+  if (findGlEntity(dimName) == NULL) {
     addGlEntity(new Gl2DRect(blCornerPos.getY() + pixelOrientedMediator->getImageHeight() , blCornerPos.getY()
-				, blCornerPos.getX(), blCornerPos.getX()
-				+ pixelOrientedMediator->getImageWidth(), textureName), dimName);
-		addGlEntity(overviewLabel, "overview label");
-		computeBoundingBox();
-	}
+                             , blCornerPos.getX(), blCornerPos.getX()
+                             + pixelOrientedMediator->getImageWidth(), textureName), dimName);
+    addGlEntity(overviewLabel, "overview label");
+    computeBoundingBox();
+  }
 
-	overviewGen = true;
+  overviewGen = true;
 }
 
 void PixelOrientedOverview::setBLCorner(const Coord &blCorner) {
-	GlComposite::translate(blCorner - blCornerPos);
-	blCornerPos = blCorner;
-	computeBoundingBox();
+  GlComposite::translate(blCorner - blCornerPos);
+  blCornerPos = blCorner;
+  computeBoundingBox();
 }
 
 }

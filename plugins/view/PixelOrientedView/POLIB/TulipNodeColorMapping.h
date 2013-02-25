@@ -33,13 +33,13 @@ class TulipNodeColorMapping : public ColorFunction {
 
 public :
 
-	TulipNodeColorMapping(tlp::Graph *graph);
+  TulipNodeColorMapping(tlp::Graph *graph);
 
-	RGBA getColor(const double&, const unsigned int itemId) const;
+  RGBA getColor(const double&, const unsigned int itemId) const;
 
 private :
 
-	tlp::Graph *graph;
+  tlp::Graph *graph;
 };
 
 }

@@ -24,73 +24,83 @@
 using namespace std;
 
 PixelOrientedOptionsWidget::PixelOrientedOptionsWidget(QWidget *parent) : QWidget(parent),oldValuesInitialized(false) {
-	setupUi(this);
-	setBackgroundColor(Color(255,255,255));
+  setupUi(this);
+  setBackgroundColor(Color(255,255,255));
   connect(backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
   connect(applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
 }
 
 Color PixelOrientedOptionsWidget::getBackgroundColor() const {
-	QString buttonStyleSheet = backColorButton->styleSheet();
-	QString backgroundColorCodeHex = buttonStyleSheet.mid(buttonStyleSheet.indexOf("#") + 1, 6);
-	bool ok;
-	return Color(backgroundColorCodeHex.mid(0, 2).toInt(&ok, 16),
-			backgroundColorCodeHex.mid(2, 2).toInt(&ok, 16),
-			backgroundColorCodeHex.mid(4, 2).toInt(&ok, 16));
+  QString buttonStyleSheet = backColorButton->styleSheet();
+  QString backgroundColorCodeHex = buttonStyleSheet.mid(buttonStyleSheet.indexOf("#") + 1, 6);
+  bool ok;
+  return Color(backgroundColorCodeHex.mid(0, 2).toInt(&ok, 16),
+               backgroundColorCodeHex.mid(2, 2).toInt(&ok, 16),
+               backgroundColorCodeHex.mid(4, 2).toInt(&ok, 16));
 }
 
 void PixelOrientedOptionsWidget::setBackgroundColor(const Color &color) {
-	QString colorStr;
-	QString str;
-	str.setNum(color.getR(),16);
-	if(str.size()!=2)
-		str.insert(0,"0");
-	colorStr.append(str);
+  QString colorStr;
+  QString str;
+  str.setNum(color.getR(),16);
 
-	str.setNum(color.getG(),16);
-	if(str.size()!=2)
-		str.insert(0,"0");
-	colorStr.append(str);
+  if(str.size()!=2)
+    str.insert(0,"0");
 
-	str.setNum(color.getB(),16);
-	if(str.size()!=2)
-		str.insert(0,"0");
-	colorStr.append(str);
-	backColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
+  colorStr.append(str);
+
+  str.setNum(color.getG(),16);
+
+  if(str.size()!=2)
+    str.insert(0,"0");
+
+  colorStr.append(str);
+
+  str.setNum(color.getB(),16);
+
+  if(str.size()!=2)
+    str.insert(0,"0");
+
+  colorStr.append(str);
+  backColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
 }
 
 void PixelOrientedOptionsWidget::pressBackgroundColorButton() {
   QColor newColor = QColorDialog::getColor(backColorButton->palette().color(QPalette::Button));
-	if (newColor.isValid()) {
-		setBackgroundColor(Color(newColor.red(), newColor.green(), newColor.blue()));
-	}
+
+  if (newColor.isValid()) {
+    setBackgroundColor(Color(newColor.red(), newColor.green(), newColor.blue()));
+  }
 }
 
 
 string PixelOrientedOptionsWidget::getLayoutType() const {
-	return layoutTypeCB->currentText().toStdString();
+  return layoutTypeCB->currentText().toStdString();
 }
 
 void PixelOrientedOptionsWidget::setLayoutType(const string layoutType) {
-	int idx = layoutTypeCB->findText(QString(layoutType.c_str()));
-	if (idx != -1) {
-		layoutTypeCB->setCurrentIndex(idx);
-	}
+  int idx = layoutTypeCB->findText(QString(layoutType.c_str()));
+
+  if (idx != -1) {
+    layoutTypeCB->setCurrentIndex(idx);
+  }
 }
 
 bool PixelOrientedOptionsWidget::configurationChanged() {
   bool confChanged=false;
-  if(oldValuesInitialized){
+
+  if(oldValuesInitialized) {
     if(oldBackgroundColor!=getBackgroundColor() ||
-       oldLayoutType!=getLayoutType() ){
+        oldLayoutType!=getLayoutType() ) {
       confChanged=true;
     }
-  }else{
+  }
+  else {
     confChanged=true;
     oldValuesInitialized=true;
   }
 
-  if(confChanged){
+  if(confChanged) {
     oldBackgroundColor=getBackgroundColor();
     oldLayoutType=getLayoutType();
   }

@@ -49,75 +49,87 @@ class AxisSlider : public GlSimpleEntity {
 
 public :
 
-	AxisSlider(const sliderType type, const Coord &sliderCoord, const float halfWidth, const float halfHeight, const Color &sliderColor, const Color &labelColor, const float rotationAngle = 0);
-	~AxisSlider();
+  AxisSlider(const sliderType type, const Coord &sliderCoord, const float halfWidth, const float halfHeight, const Color &sliderColor, const Color &labelColor, const float rotationAngle = 0);
+  ~AxisSlider();
 
-	void setSliderFillColor(const Color &color);
-	void setSliderOutlineColor(const Color &color);
-	void setSliderLabel(const std::string &label) {sliderLabel->setText(label);}
-	void setRotationAngle(const float rotationAngle) {this->rotationAngle = rotationAngle;}
+  void setSliderFillColor(const Color &color);
+  void setSliderOutlineColor(const Color &color);
+  void setSliderLabel(const std::string &label) {
+    sliderLabel->setText(label);
+  }
+  void setRotationAngle(const float rotationAngle) {
+    this->rotationAngle = rotationAngle;
+  }
 
-	void draw(float lod,Camera *camera);
-	BoundingBox getBoundingBox();
-	Coord getSliderCoord() const { return sliderCoord;}
-	void translate(const Coord &move);
-	void moveToCoord(const Coord &coord) {translate(coord - sliderCoord);}
-	sliderType getSliderType() const { return type;}
-  Color getColor() {return arrowPolygon->getFillColor(0);}
+  void draw(float lod,Camera *camera);
+  BoundingBox getBoundingBox();
+  Coord getSliderCoord() const {
+    return sliderCoord;
+  }
+  void translate(const Coord &move);
+  void moveToCoord(const Coord &coord) {
+    translate(coord - sliderCoord);
+  }
+  sliderType getSliderType() const {
+    return type;
+  }
+  Color getColor() {
+    return arrowPolygon->getFillColor(0);
+  }
 
   void getXML(std::string &)  {}
   void setWithXML(const std::string &, unsigned int &) {}
 
 private :
 
-	sliderType type;
+  sliderType type;
 
-	GlComposite *sliderComposite;
-	GlQuad *sliderQuad;
-	GlPolygon *sliderPolygon;
-	GlPolygon *arrowPolygon;
-	GlLabel *sliderLabel;
-	Coord sliderCoord;
-	float rotationAngle;
+  GlComposite *sliderComposite;
+  GlQuad *sliderQuad;
+  GlPolygon *sliderPolygon;
+  GlPolygon *arrowPolygon;
+  GlLabel *sliderLabel;
+  Coord sliderCoord;
+  float rotationAngle;
 };
 
 class ParallelCoordsAxisSliders : public GLInteractorComponent {
 
 public :
 
-	ParallelCoordsAxisSliders();
-	~ParallelCoordsAxisSliders();
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *glMainWidget);
-	bool compute(GlMainWidget *glMainWidget);
+  ParallelCoordsAxisSliders();
+  ~ParallelCoordsAxisSliders();
+  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget *glMainWidget);
+  bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
 private :
 
-	void initOrUpdateSliders();
-	AxisSlider *getSliderUnderPointer(GlMainWidget *glWidget, ParallelAxis *axis, int x, int y);
-	void updateOtherAxisSliders();
-	void buildGlSliders(std::vector<ParallelAxis *> axis);
-	void deleteGlSliders();
-	void setSlidersColor(const Color &color);
-	void updateSlidersYBoundaries();
+  void initOrUpdateSliders();
+  AxisSlider *getSliderUnderPointer(GlMainWidget *glWidget, ParallelAxis *axis, int x, int y);
+  void updateOtherAxisSliders();
+  void buildGlSliders(std::vector<ParallelAxis *> axis);
+  void deleteGlSliders();
+  void setSlidersColor(const Color &color);
+  void updateSlidersYBoundaries();
 
-	ParallelCoordinatesView *parallelView;
-	Graph *currentGraph;
-	std::map<ParallelAxis *, std::vector<AxisSlider *> > axisSlidersMap;
-	ParallelAxis *selectedAxis;
-	std::vector<ParallelAxis *> lastSelectedAxis;
-	AxisSlider *selectedSlider;
-	bool axisSliderDragStarted;
-	bool pointerBetweenSliders;
-	bool slidersRangeDragStarted;
-	int slidersRangeLength;
-	int xClick, yClick;
-	float lastAxisHeight;
-	unsigned int lastNbAxis;
-	ParallelCoordinatesDrawing::HighlightedEltsSetOp highlightedEltsSetOperation;
-	std::map<ParallelAxis *, std::pair<float, float> > slidersYBoundaries;
-	GlLayer *selectionLayer;
+  ParallelCoordinatesView *parallelView;
+  Graph *currentGraph;
+  std::map<ParallelAxis *, std::vector<AxisSlider *> > axisSlidersMap;
+  ParallelAxis *selectedAxis;
+  std::vector<ParallelAxis *> lastSelectedAxis;
+  AxisSlider *selectedSlider;
+  bool axisSliderDragStarted;
+  bool pointerBetweenSliders;
+  bool slidersRangeDragStarted;
+  int slidersRangeLength;
+  int xClick, yClick;
+  float lastAxisHeight;
+  unsigned int lastNbAxis;
+  ParallelCoordinatesDrawing::HighlightedEltsSetOp highlightedEltsSetOperation;
+  std::map<ParallelAxis *, std::pair<float, float> > slidersYBoundaries;
+  GlLayer *selectionLayer;
 };
 
 

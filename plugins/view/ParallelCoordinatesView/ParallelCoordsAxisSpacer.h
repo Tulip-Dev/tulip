@@ -36,21 +36,21 @@ class ParallelCoordsAxisSpacer : public GLInteractorComponent {
 
 public :
 
-	ParallelCoordsAxisSpacer();
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *glMainWidget);
+  ParallelCoordsAxisSpacer();
+  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
 private :
 
-	void determineAxisRegionAtPos(const Coord &pos);
-	void drawCurrentEditedRegionMarker();
+  void determineAxisRegionAtPos(const Coord &pos);
+  void drawCurrentEditedRegionMarker();
 
-	ParallelCoordinatesView *parallelView;
-	ParallelAxis *selectedAxis;
-	std::pair<ParallelAxis *, ParallelAxis *> neighborsAxis;
-	int x, y;
-	bool dragStarted;
+  ParallelCoordinatesView *parallelView;
+  ParallelAxis *selectedAxis;
+  std::pair<ParallelAxis *, ParallelAxis *> neighborsAxis;
+  int x, y;
+  bool dragStarted;
 
 };
 
