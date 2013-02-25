@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>adjacency_matrix_view.png</file>
+    </qresource>
+</RCC>
