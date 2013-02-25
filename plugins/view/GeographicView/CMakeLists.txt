@@ -34,6 +34,6 @@ QT4_ADD_RESOURCES(LIB_RCC_SRCS
 )
 
 ADD_LIBRARY(GeographicView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-TARGET_LINK_LIBRARIES(GeographicView-${TulipVersion} ${TULIP_LIBRARIES} ${QT_LIBRARIES} ${LIBXML2_LIBRARIES} ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY})
+TARGET_LINK_LIBRARIES(GeographicView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY})
 
 INSTALL(TARGETS GeographicView-${TulipVersion} DESTINATION ${TulipViewPluginsInstallDir} COMPONENT GeographicView)
