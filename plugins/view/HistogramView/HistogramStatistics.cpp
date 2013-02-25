@@ -238,7 +238,6 @@ HistogramStatistics::~HistogramStatistics() {
     for (map<string, KernelFunction *>::iterator it = kernelFunctionsMap.begin() ; it != kernelFunctionsMap.end() ; ++it) {
         delete it->second;
     }
-    disconnect(histoStatsConfigWidget->applyButton, SIGNAL(clicked()), this, SLOT(computeAndDrawInteractor()));
 }
 
 void HistogramStatistics::viewChanged(View *view) {
