@@ -13,5 +13,6 @@
         <file>icons/info.png</file>
         <file>icons/doc_plus.png</file>
         <file>icons/dialog-error.png</file>
+        <file>icons/python.png</file>
     </qresource>
 </RCC>

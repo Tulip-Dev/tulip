@@ -63,6 +63,10 @@ public :
   PythonScriptView(tlp::PluginContext *);
   ~PythonScriptView();
 
+  std::string icon() const {
+    return ":/icons/python.png";
+  }
+
   void setupWidget();
 
   void graphChanged(tlp::Graph *);

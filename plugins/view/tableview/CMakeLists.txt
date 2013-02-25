@@ -17,7 +17,9 @@ PropertiesEditor.h
 navigabletableview.h
 )
 
-ADD_LIBRARY(TableView-${TulipVersion} SHARED ${LIB_SRCS} ${MOC_SRCS} ${UI_SRCS})
+QT4_ADD_RESOURCES(RCC_SRCS TableView.qrc)
+
+ADD_LIBRARY(TableView-${TulipVersion} SHARED ${LIB_SRCS} ${MOC_SRCS} ${UI_SRCS} ${RCC_SRCS})
 
 TARGET_LINK_LIBRARIES(TableView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
