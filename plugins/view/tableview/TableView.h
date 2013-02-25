@@ -44,11 +44,13 @@ class TableView : public tlp::ViewWidget {
   bool isNewGraph;
 
 public:
-  PLUGININFORMATIONS("Spreadsheet","Tulip Team","04/17/2012","Spreadsheet view for raw data","4.0","")
+  PLUGININFORMATIONS("Spreadsheet view","Tulip Team","04/17/2012","Spreadsheet view for raw data","4.0","")
 
   TableView(tlp::PluginContext*);
   virtual ~TableView();
-
+  std::string icon() const {
+    return ":/spreadsheet_view.png";
+  }
   tlp::DataSet state() const;
   void setState(const tlp::DataSet &);
   void setupWidget();

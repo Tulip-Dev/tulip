@@ -52,7 +52,9 @@ public:
                      "1.0", "relational")
 
   NodeLinkDiagramComponent(const tlp::PluginContext* context = NULL);
-
+  std::string icon() const {
+    return ":/tulip/gui/icons/32/node_link_diagram_view.png";
+  }
   void setState(const tlp::DataSet &);
   tlp::DataSet state() const;
 
