@@ -408,6 +408,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
           cameraHierarchy.push_back(nldc->goInsideItem(metaNode));
         }
       }
+      else  //no double click on a metanode. Do not block event.
+          return false;
 
       return true;
     }
