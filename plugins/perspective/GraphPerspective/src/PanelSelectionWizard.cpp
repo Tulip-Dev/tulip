@@ -104,6 +104,10 @@ void PanelSelectionWizard::pageChanged(int id) {
   if (id == startId()) {
     clearView();
     button(QWizard::FinishButton)->setEnabled(true);
+    // temporarily hide the next button
+    button(QWizard::NextButton)->hide();
+    // and display OK instead of Finish
+    button(QWizard::FinishButton)->setText("OK");
   }
 
   if (page(id) == _ui->placeHolder) {
