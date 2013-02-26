@@ -72,7 +72,7 @@ that will be shown when the plug-in in invoked by the user.
             bool inParam = true, bool outParam = false);
 %Docstring
 tlp.WithParameter.addStringParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a string parameter to the plug-in.
 
 :param name: the name of the string parameter to add
@@ -103,7 +103,7 @@ Adds a string parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addStringCollectionParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.StringCollection` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.StringCollection` parameter to add
@@ -135,7 +135,7 @@ Adds a :class:`tlp.StringCollection` parameter to the plug-in.
 			
 %Docstring
 tlp.WithParameter.addIntegerParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds an integer parameter to the plug-in.
 
 :param name: the name of the integer parameter to add
@@ -166,7 +166,7 @@ Adds an integer parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addFloatParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a floating point number parameter to the plug-in.
 
 :param name: the name of the floating point number parameter to add
@@ -197,7 +197,7 @@ Adds a floating point number parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addBooleanParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a boolean parameter to the plug-in.
 
 :param name: the name of the boolean parameter to add
@@ -228,7 +228,7 @@ Adds a boolean parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addDoublePropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.DoubleProperty` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.DoubleProperty` parameter to add
@@ -251,6 +251,39 @@ Adds a :class:`tlp.DoubleProperty` parameter to the plug-in.
 
 // ==================================================================================
 
+    void addDoubleVectorPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
+            bool isMandatory = true,
+            bool inParam = true, bool outParam = false);
+
+%Docstring
+tlp.WithParameter.addDoubleVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
+
+.. versionadded:: 4.2
+
+Adds a :class:`tlp.DoubleVectorProperty` parameter to the plug-in.
+
+:param name: the name of the :class:`tlp.DoubleVectorProperty` parameter to add
+:type name: string
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value (in the form "<property_name>") the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean 
+:param inParam: defines if the parameter is an input one (can be read by the plugin)
+:type inParam: boolean
+:param outParam: defines if the parameter is an output one (can be written by the plugin and retrieved after its execution)
+:type outParam: boolean
+%End			
+			
+%MethodCode
+    addParameter<tlp::DoubleVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+%End
+
+// ==================================================================================
+
     void addIntegerPropertyParameter(const std::string & str,
             const std::string & inHelp = "",
             const std::string & inDefValue = "",
@@ -259,7 +292,7 @@ Adds a :class:`tlp.DoubleProperty` parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addIntegerPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.IntegerProperty` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.IntegerProperty` parameter to add
@@ -282,6 +315,39 @@ Adds a :class:`tlp.IntegerProperty` parameter to the plug-in.
 
 // ==================================================================================
 
+    void addIntegerVectorPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
+            bool isMandatory = true,
+            bool inParam = true, bool outParam = false);
+
+%Docstring
+tlp.WithParameter.addIntegerVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
+
+.. versionadded:: 4.2
+
+Adds a :class:`tlp.IntegerVectorProperty` parameter to the plug-in.
+
+:param name: the name of the :class:`tlp.IntegerProperty` parameter to add
+:type name: string
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value (in the form "<property_name>") the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean 
+:param inParam: defines if the parameter is an input one (can be read by the plugin)
+:type inParam: boolean
+:param outParam: defines if the parameter is an output one (can be written by the plugin and retrieved after its execution)
+:type outParam: boolean
+%End			
+			
+%MethodCode
+    addParameter<tlp::IntegerVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+%End
+
+// ==================================================================================
+
     void addLayoutPropertyParameter(const std::string & str,
             const std::string & inHelp = "",
             const std::string & inDefValue = "",
@@ -290,7 +356,7 @@ Adds a :class:`tlp.IntegerProperty` parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addLayoutPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.LayoutProperty` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.LayoutProperty` parameter to add
@@ -313,6 +379,39 @@ Adds a :class:`tlp.LayoutProperty` parameter to the plug-in.
 
 // ==================================================================================
 
+    void addCoordVectorPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
+            bool isMandatory = true,
+            bool inParam = true, bool outParam = false);
+
+%Docstring
+tlp.WithParameter.addCoordVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
+
+.. versionadded:: 4.2
+
+Adds a :class:`tlp.CoorVectorProperty` parameter to the plug-in.
+
+:param name: the name of the :class:`tlp.LayoutProperty` parameter to add
+:type name: string
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value (in the form "<property_name>") the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean 
+:param inParam: defines if the parameter is an input one (can be read by the plugin)
+:type inParam: boolean
+:param outParam: defines if the parameter is an output one (can be written by the plugin and retrieved after its execution)
+:type outParam: boolean
+%End			
+			
+%MethodCode
+    addParameter<tlp::CoordVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+%End
+
+// ==================================================================================
+
     void addSizePropertyParameter(const std::string & str,
             const std::string & inHelp = "",
             const std::string & inDefValue = "",
@@ -321,7 +420,7 @@ Adds a :class:`tlp.LayoutProperty` parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addSizePropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.SizeProperty` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.SizeProperty` parameter to add
@@ -344,6 +443,39 @@ Adds a :class:`tlp.SizeProperty` parameter to the plug-in.
 
 // ==================================================================================
 
+    void addSizeVectorPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
+            bool isMandatory = true,
+            bool inParam = true, bool outParam = false);
+
+%Docstring
+tlp.WithParameter.addSizeVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
+
+.. versionadded:: 4.2
+
+Adds a :class:`tlp.SizeVectorProperty` parameter to the plug-in.
+
+:param name: the name of the :class:`tlp.SizeVectorProperty` parameter to add
+:type name: string
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value (in the form "<property_name>") the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean
+:param inParam: defines if the parameter is an input one (can be read by the plugin)
+:type inParam: boolean
+:param outParam: defines if the parameter is an output one (can be written by the plugin and retrieved after its execution)
+:type outParam: boolean
+%End			
+			
+%MethodCode
+    addParameter<tlp::SizeVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+%End
+
+// ==================================================================================
+
     void addColorPropertyParameter(const std::string & str,
             const std::string & inHelp = "",
             const std::string & inDefValue = "",
@@ -352,7 +484,7 @@ Adds a :class:`tlp.SizeProperty` parameter to the plug-in.
 			
 %Docstring
 tlp.WithParameter.addColorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.ColorProperty` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.ColorProperty` parameter to add
@@ -375,6 +507,39 @@ Adds a :class:`tlp.ColorProperty` parameter to the plug-in.
 
 // ==================================================================================
 
+    void addColorVectorPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
+            bool isMandatory = true,
+            bool inParam = true, bool outParam = false);
+			
+%Docstring
+tlp.WithParameter.addColorVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
+
+.. versionadded:: 4.2
+
+Adds a :class:`tlp.ColorVectorProperty` parameter to the plug-in.
+
+:param name: the name of the :class:`tlp.ColorVectorProperty` parameter to add
+:type name: string
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value (in the form "<property_name>") the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean 
+:param inParam: defines if the parameter is an input one (can be read by the plugin)
+:type inParam: boolean
+:param outParam: defines if the parameter is an output one (can be written by the plugin and retrieved after its execution)
+:type outParam: boolean
+%End			
+			
+%MethodCode
+    addParameter<tlp::ColorVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+%End
+
+// ==================================================================================
+
     void addBooleanPropertyParameter(const std::string & str,
             const std::string & inHelp = "",
             const std::string & inDefValue = "",
@@ -383,7 +548,7 @@ Adds a :class:`tlp.ColorProperty` parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addBooleanPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.BooleanProperty` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.BooleanProperty` parameter to add
@@ -406,6 +571,39 @@ Adds a :class:`tlp.BooleanProperty` parameter to the plug-in.
 
 // ==================================================================================
 
+    void addBooleanVectorPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
+            bool isMandatory = true,
+            bool inParam = true, bool outParam = false);
+
+%Docstring
+tlp.WithParameter.addBooleanVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
+
+.. versionadded:: 4.2
+
+Adds a :class:`tlp.BooleanVectorProperty` parameter to the plug-in.
+
+:param name: the name of the :class:`tlp.BooleanVectorProperty` parameter to add
+:type name: string
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value (in the form "<property_name>") the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean 
+:param inParam: defines if the parameter is an input one (can be read by the plugin)
+:type inParam: boolean
+:param outParam: defines if the parameter is an output one (can be written by the plugin and retrieved after its execution)
+:type outParam: boolean
+%End			
+			
+%MethodCode
+    addParameter<tlp::BooleanVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+%End
+
+// ==================================================================================
+
     void addStringPropertyParameter(const std::string & str,
             const std::string & inHelp = "",
             const std::string & inDefValue = "",
@@ -414,7 +612,7 @@ Adds a :class:`tlp.BooleanProperty` parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addStringPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.StringProperty` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.StringProperty` parameter to add
@@ -437,6 +635,39 @@ Adds a :class:`tlp.StringProperty` parameter to the plug-in.
 
 // ==================================================================================
 
+    void addStringVectorPropertyParameter(const std::string & str,
+            const std::string & inHelp = "",
+            const std::string & inDefValue = "",
+            bool isMandatory = true,
+            bool inParam = true, bool outParam = false);
+
+%Docstring
+tlp.WithParameter.addStringVectorPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
+
+.. versionadded:: 4.2
+
+Adds a :class:`tlp.StringVectorProperty` parameter to the plug-in.
+
+:param name: the name of the :class:`tlp.StringVectorProperty` parameter to add
+:type name: string
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value (in the form "<property_name>") the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean 
+:param inParam: defines if the parameter is an input one (can be read by the plugin)
+:type inParam: boolean
+:param outParam: defines if the parameter is an output one (can be written by the plugin and retrieved after its execution)
+:type outParam: boolean
+%End			
+			
+%MethodCode
+    addParameter<tlp::StringVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+%End
+
+// ==================================================================================
+
     void addColorParameter(const std::string & str,
             const std::string & inHelp = "",
             const std::string & inDefValue = "",
@@ -445,7 +676,7 @@ Adds a :class:`tlp.StringProperty` parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addColorParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.Color` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.Color` parameter to add
@@ -476,7 +707,7 @@ Adds a :class:`tlp.Color` parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addColorScaleParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.ColorScale` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.ColorScale` parameter to add
@@ -507,7 +738,7 @@ Adds a :class:`tlp.ColorScale` parameter to the plug-in.
 
 %Docstring
 tlp.WithParameter.addPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False])
-			
+
 Adds a :class:`tlp.PropertyInterface` parameter to the plug-in.
 
 :param name: the name of the :class:`tlp.PropertyInterface` parameter to add

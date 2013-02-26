@@ -124,6 +124,13 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
     CHECK_PROPERTY(tlp::IntegerProperty);
     CHECK_PROPERTY(tlp::SizeProperty);
     CHECK_PROPERTY(tlp::ColorProperty);
+    CHECK_PROPERTY(tlp::BooleanVectorProperty);
+    CHECK_PROPERTY(tlp::DoubleVectorProperty);
+    CHECK_PROPERTY(tlp::CoordVectorProperty);
+    CHECK_PROPERTY(tlp::StringVectorProperty);
+    CHECK_PROPERTY(tlp::IntegerVectorProperty);
+    CHECK_PROPERTY(tlp::SizeVectorProperty);
+    CHECK_PROPERTY(tlp::ColorVectorProperty);
 
     if (type.compare(typeid(PropertyInterface*).name()) == 0) {
       if (!g || defaultValue.size()==0 || !g->existProperty(defaultValue))
@@ -157,6 +164,27 @@ bool WithParameter::inputRequired() const {
       return true;
 
     if (type.compare(typeid(tlp::LayoutProperty).name()) == 0)
+      return true;
+
+    if (type.compare(typeid(tlp::SizeProperty).name()) == 0)
+      return true;
+
+    if (type.compare(typeid(tlp::StringProperty).name()) == 0)
+      return true;
+
+    if (type.compare(typeid(tlp::BooleanVectorProperty).name()) == 0)
+      return true;
+
+    if (type.compare(typeid(tlp::ColorVectorProperty).name()) == 0)
+      return true;
+
+    if (type.compare(typeid(tlp::DoubleVectorProperty).name()) == 0)
+      return true;
+
+    if (type.compare(typeid(tlp::IntegerVectorProperty).name()) == 0)
+      return true;
+
+    if (type.compare(typeid(tlp::CoordVectorProperty).name()) == 0)
       return true;
 
     if (type.compare(typeid(tlp::SizeProperty).name()) == 0)

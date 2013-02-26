@@ -92,6 +92,13 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::IntegerProperty*);
   CHECK_QVARIANT(tlp::SizeProperty*);
   CHECK_QVARIANT(tlp::ColorProperty*);
+  CHECK_QVARIANT(tlp::BooleanVectorProperty*);
+  CHECK_QVARIANT(tlp::DoubleVectorProperty*);
+  CHECK_QVARIANT(tlp::CoordVectorProperty*);
+  CHECK_QVARIANT(tlp::StringVectorProperty*);
+  CHECK_QVARIANT(tlp::IntegerVectorProperty*);
+  CHECK_QVARIANT(tlp::SizeVectorProperty*);
+  CHECK_QVARIANT(tlp::ColorVectorProperty*);
   CHECK_QVARIANT(tlp::PropertyInterface*);
 
   CHECK_QVARIANT(ColorScale);
@@ -157,6 +164,13 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   CHECK_DATATYPE(tlp::StringProperty*);
   CHECK_DATATYPE(tlp::IntegerProperty*);
   CHECK_DATATYPE(tlp::SizeProperty*);
+  CHECK_DATATYPE(tlp::ColorProperty*);
+  CHECK_DATATYPE(tlp::BooleanVectorProperty*);
+  CHECK_DATATYPE(tlp::DoubleVectorProperty*);
+  CHECK_DATATYPE(tlp::CoordVectorProperty*);
+  CHECK_DATATYPE(tlp::StringVectorProperty*);
+  CHECK_DATATYPE(tlp::IntegerVectorProperty*);
+  CHECK_DATATYPE(tlp::SizeVectorProperty*);
   CHECK_DATATYPE(tlp::ColorProperty*);
   CHECK_DATATYPE(tlp::PropertyInterface*);
 
