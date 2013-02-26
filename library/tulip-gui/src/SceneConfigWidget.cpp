@@ -90,6 +90,7 @@ void SceneConfigWidget::resetChanges() {
   GlGraphRenderingParameters* renderingParameters = _glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
 
   // NODES
+  delete _ui->labelsOrderingCombo->model();
   GraphPropertiesModel<DoubleProperty>* model = new GraphPropertiesModel<DoubleProperty>(trUtf8("Disable ordering"),graph);
   _ui->labelsOrderingCombo->setModel(model);
 
