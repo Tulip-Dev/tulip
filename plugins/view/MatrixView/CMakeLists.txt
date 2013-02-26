@@ -4,7 +4,6 @@ SET(LIB_SRCS
     MatrixView.cpp
     PropertyValuesDispatcher.cpp
     MatrixViewConfigurationWidget.cpp
-    colorbutton.cpp
     GlMatrixBackgroundGrid.cpp
 )
 
@@ -14,7 +13,6 @@ QT4_WRAP_UI(LIB_UI_HEADERS
 
 QT4_WRAP_CPP(LIB_MOC_SRCS
     MatrixView.h
-    colorbutton.h
     MatrixViewConfigurationWidget.h
 )
 

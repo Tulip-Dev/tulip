@@ -18,24 +18,40 @@
  */
 
 #include "MatrixViewConfigurationWidget.h"
+#include "ui_MatrixViewConfigurationWidget.h"
 
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>
+#include <tulip/Perspective.h>
+
+#include <QtGui/QMainWindow>
 
 using namespace tlp;
 using namespace std;
 
-MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent): QWidget(parent), _modifyingMetricList(false) {
-  setupUi(this);
-  connect(orderingMetricCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(orderingMetricComboIndexChanged(int)));
+MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent): QWidget(parent), _ui(new Ui::MatrixViewConfigurationWidget()), _modifyingMetricList(false) {
+  _ui->setupUi(this);
+  connect(_ui->orderingMetricCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(orderingMetricComboIndexChanged(int)));
+  connect(_ui->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this, SIGNAL(changeBackgroundColor(QColor)));
+  connect(_ui->gridDisplayCombo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(setGridDisplayMode()));
+  connect(_ui->showedgesbox, SIGNAL(clicked(bool)), this, SIGNAL(showEdges(bool)));
+_ui->backgroundColorBtn->setDialogParent(Perspective::instance()->mainWindow());
+}
+
+MatrixViewConfigurationWidget::~MatrixViewConfigurationWidget() {
+    delete _ui;
+}
+
+void MatrixViewConfigurationWidget::setBackgroundColor(const QColor &c) {
+    _ui->backgroundColorBtn->setColor(c);
 }
 
 void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
-  QString firstString = orderingMetricCombo->itemText(0);
-  QString currentString = orderingMetricCombo->currentText();
+  QString firstString = _ui->orderingMetricCombo->itemText(0);
+  QString currentString = _ui->orderingMetricCombo->currentText();
   _modifyingMetricList = true;
-  orderingMetricCombo->clear();
-  orderingMetricCombo->addItem(firstString);
+  _ui->orderingMetricCombo->clear();
+  _ui->orderingMetricCombo->addItem(firstString);
   int currentIndex = 0;
   int i=0;
   string s;
@@ -45,7 +61,7 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
     if (type != "double" && type != "int")
       continue;
 
-    orderingMetricCombo->addItem(s.c_str());
+    _ui->orderingMetricCombo->addItem(s.c_str());
 
     if (currentString.toStdString().compare(s) == 0)
       currentIndex = i;
@@ -53,21 +69,21 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
     ++i;
   }
   _modifyingMetricList = false;
-  orderingMetricCombo->setCurrentIndex(currentIndex);
+  _ui->orderingMetricCombo->setCurrentIndex(currentIndex);
 }
 
 void MatrixViewConfigurationWidget::orderingMetricComboIndexChanged(int i) {
   if (_modifyingMetricList)
     return;
 
-  string name = "";
+  string name("");
 
   if (i > 0)
-    name = orderingMetricCombo->itemText(i).toStdString();
+    name = _ui->orderingMetricCombo->itemText(i).toStdString();
 
   emit metricSelected(name);
 }
 
 GridDisplayMode MatrixViewConfigurationWidget::gridDisplayMode() const {
-  return (GridDisplayMode)gridDisplayCombo->currentIndex();
+  return (GridDisplayMode)_ui->gridDisplayCombo->currentIndex();
 }

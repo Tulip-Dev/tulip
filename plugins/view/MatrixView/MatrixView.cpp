@@ -18,6 +18,7 @@
  */
 
 #include <typeinfo>
+
 #include <QtGui/QGraphicsView>
 
 #include "MatrixView.h"
@@ -42,15 +43,11 @@ using namespace std;
 
 MatrixView::MatrixView(const PluginContext *):
   NodeLinkDiagramComponent(),
-  _matrixGraph(0),
-  _graphEntitiesToDisplayedNodes(0), _displayedNodesToGraphEntities(0), _displayedNodesAreNodes(0), _dispatcher(0),
-  _configurationWidget(0),
-  _mustUpdateSizes(false), _mustUpdateLayout(false),
-  _orderingMetricName("") {
+  _matrixGraph(NULL), _graphEntitiesToDisplayedNodes(NULL), _displayedNodesToGraphEntities(NULL), _displayedNodesAreNodes(NULL), _dispatcher(NULL),
+  _configurationWidget(NULL), _mustUpdateSizes(false), _mustUpdateLayout(false), _orderingMetricName("") {
 }
 
 MatrixView::~MatrixView() {
-  clearRedrawTriggers();
   deleteDisplayedGraph();
 }
 
@@ -61,10 +58,11 @@ void MatrixView::setState(const DataSet &) {
   setOverviewVisible(true);
 
   if (!_configurationWidget) {
-    _configurationWidget = new MatrixViewConfigurationWidget;
-    connect(_configurationWidget->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this, SLOT(setBackgroundColor(QColor)));
+      _configurationWidget = new MatrixViewConfigurationWidget(getGlMainWidget()->parentWidget());
+    connect(_configurationWidget, SIGNAL(changeBackgroundColor(QColor)), this, SLOT(setBackgroundColor(QColor)));
     connect(_configurationWidget, SIGNAL(metricSelected(std::string)), this, SLOT(setOrderingMetric(std::string)));
-    connect(_configurationWidget->gridDisplayCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setGridDisplayMode()));
+    connect(_configurationWidget, SIGNAL(setGridDisplayMode()), this, SLOT(setGridDisplayMode()));
+    connect(_configurationWidget, SIGNAL(showEdges(bool)), this, SLOT(showEdges(bool)));
 
     QAction* centerAction = new QAction(trUtf8("Center"),this);
     centerAction->setShortcut(trUtf8("Ctrl+Shift+C"));
@@ -79,6 +77,11 @@ void MatrixView::setState(const DataSet &) {
   registerTriggers();
 }
 
+void MatrixView::showEdges(bool show) {
+    getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setDisplayEdges(show);
+    emit drawNeeded();
+}
+
 void MatrixView::graphChanged(Graph *) {
   setState(DataSet());
 }
@@ -88,7 +91,6 @@ DataSet MatrixView::state() const {
 }
 
 QList<QWidget *> MatrixView::configurationWidgets() const {
-  //result.push_back(pair<QWidget *, string>(_configurationWidget, "Adjacency Matrix view"));
   return QList<QWidget *>() << _configurationWidget ;
 }
 
@@ -115,15 +117,15 @@ void MatrixView::deleteDisplayedGraph() {
     removeRedrawTrigger(obs);
   }
   delete _matrixGraph;
-  _matrixGraph=0;
+  _matrixGraph=NULL;
   delete _graphEntitiesToDisplayedNodes;
-  _graphEntitiesToDisplayedNodes=0;
+  _graphEntitiesToDisplayedNodes=NULL;
   delete _displayedNodesToGraphEntities;
-  _displayedNodesToGraphEntities=0;
+  _displayedNodesToGraphEntities=NULL;
   delete _displayedNodesAreNodes;
-  _displayedNodesAreNodes=0;
+  _displayedNodesAreNodes=NULL;
   delete _dispatcher;
-  _dispatcher=0;
+  _dispatcher=NULL;
 }
 
 void MatrixView::initDisplayedGraph() {
@@ -178,7 +180,7 @@ void MatrixView::initDisplayedGraph() {
   renderingParameters->setLabelsDensity(100);
   renderingParameters->setAntialiasing(false);
 
-  _configurationWidget->backgroundColorBtn->setColor(colorToQColor(getGlMainWidget()->getScene()->getBackgroundColor()));
+  _configurationWidget->setBackgroundColor(colorToQColor(getGlMainWidget()->getScene()->getBackgroundColor()));
   addGridBackground();
 
   if (_mustUpdateSizes) {
