@@ -247,6 +247,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
   Observable::holdObservers();
   DataSet dataSet = static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues();
 
+  g->push();
+
   if (_localMode)
     copyToLocal(dataSet, g);
 
@@ -298,7 +300,6 @@ void AlgorithmRunnerItem::run(Graph *g) {
     }
   }
 
-  g->push();
   //Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(true);
   std::string errorMessage;
   PluginProgress* progress = Perspective::instance()->progress();
