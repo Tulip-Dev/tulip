@@ -47,7 +47,11 @@ public:
   ~MatrixViewConfigurationWidget();
 
   GridDisplayMode gridDisplayMode() const;
+  void setgridmode(int index);
   void setBackgroundColor(const QColor &);
+  void setDisplayEdges(const bool state);
+  int orderingProperty() const;
+  void setOrderingProperty(int index);
 
 protected slots:
   void orderingMetricComboIndexChanged(int i);

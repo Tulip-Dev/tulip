@@ -22,6 +22,8 @@
 #include <QtGui/QGraphicsView>
 
 #include "MatrixView.h"
+#include "PropertyValuesDispatcher.h"
+#include "GlMatrixBackgroundGrid.h"
 
 #include <tulip/Graph.h>
 #include <tulip/IntegerProperty.h>
@@ -33,10 +35,6 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/ParametricCurves.h>
-
-#include "PropertyValuesDispatcher.h"
-#include "MatrixViewConfigurationWidget.h"
-#include "GlMatrixBackgroundGrid.h"
 
 using namespace tlp;
 using namespace std;
@@ -51,7 +49,7 @@ MatrixView::~MatrixView() {
   deleteDisplayedGraph();
 }
 
-void MatrixView::setState(const DataSet &) {
+void MatrixView::setState(const DataSet &ds) {
 
   clearRedrawTriggers();
 
@@ -73,8 +71,25 @@ void MatrixView::setState(const DataSet &) {
   _configurationWidget->setGraph(graph());
 
   initDisplayedGraph();
-
   registerTriggers();
+
+  bool displayEdges=true;
+  ds.get("show Edges",displayEdges);
+  showEdges(displayEdges);
+  _configurationWidget->setDisplayEdges(displayEdges);
+
+  Color c=getGlMainWidget()->getScene()->getBackgroundColor();
+  ds.get("Background Color", c);
+  _configurationWidget->setBackgroundColor(tlp::colorToQColor(c));
+
+  unsigned grid=0;
+  ds.get("Grid mode", grid);
+  _configurationWidget->setgridmode(grid);
+
+  int orderingindex=0;
+  ds.get("ordering", orderingindex);
+  _configurationWidget->setOrderingProperty(orderingindex);
+
 }
 
 void MatrixView::showEdges(bool show) {
@@ -87,7 +102,12 @@ void MatrixView::graphChanged(Graph *) {
 }
 
 DataSet MatrixView::state() const {
-  return DataSet();
+    DataSet ds;
+    ds.set<bool>("show Edges", getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isDisplayEdges());
+    ds.set<unsigned>("Grid mode", _configurationWidget->gridDisplayMode());
+    ds.set<Color>("Background Color", getGlMainWidget()->getScene()->getBackgroundColor());
+    ds.set<int>("ordering", _configurationWidget->orderingProperty());
+    return ds;
 }
 
 QList<QWidget *> MatrixView::configurationWidgets() const {

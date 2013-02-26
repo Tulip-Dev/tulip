@@ -46,6 +46,10 @@ void MatrixViewConfigurationWidget::setBackgroundColor(const QColor &c) {
     _ui->backgroundColorBtn->setColor(c);
 }
 
+void MatrixViewConfigurationWidget::setDisplayEdges(const bool state) {
+    _ui->showedgesbox->setChecked(state);
+}
+
 void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
   QString firstString = _ui->orderingMetricCombo->itemText(0);
   QString currentString = _ui->orderingMetricCombo->currentText();
@@ -86,4 +90,16 @@ void MatrixViewConfigurationWidget::orderingMetricComboIndexChanged(int i) {
 
 GridDisplayMode MatrixViewConfigurationWidget::gridDisplayMode() const {
   return (GridDisplayMode)_ui->gridDisplayCombo->currentIndex();
+}
+
+int MatrixViewConfigurationWidget::orderingProperty() const {
+  return _ui->orderingMetricCombo->currentIndex();
+}
+
+void MatrixViewConfigurationWidget::setOrderingProperty(int index) {
+  _ui->orderingMetricCombo->setCurrentIndex(index);
+}
+
+void MatrixViewConfigurationWidget::setgridmode(int index) {
+  _ui->gridDisplayCombo->setCurrentIndex(index);
 }
