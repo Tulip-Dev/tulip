@@ -53,6 +53,13 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<tlp::IntegerProperty*>(new PropertyEditorCreator<tlp::IntegerProperty>);
   registerCreator<tlp::SizeProperty*>(new PropertyEditorCreator<tlp::SizeProperty>);
   registerCreator<tlp::ColorProperty*>(new PropertyEditorCreator<tlp::ColorProperty>);
+  registerCreator<tlp::BooleanVectorProperty*>(new PropertyEditorCreator<tlp::BooleanVectorProperty>);
+  registerCreator<tlp::DoubleVectorProperty*>(new PropertyEditorCreator<tlp::DoubleVectorProperty>);
+  registerCreator<tlp::CoordVectorProperty*>(new PropertyEditorCreator<tlp::CoordVectorProperty>);
+  registerCreator<tlp::StringVectorProperty*>(new PropertyEditorCreator<tlp::StringVectorProperty>);
+  registerCreator<tlp::IntegerVectorProperty*>(new PropertyEditorCreator<tlp::IntegerVectorProperty>);
+  registerCreator<tlp::SizeVectorProperty*>(new PropertyEditorCreator<tlp::SizeVectorProperty>);
+  registerCreator<tlp::ColorVectorProperty*>(new PropertyEditorCreator<tlp::ColorVectorProperty>);
   registerCreator<tlp::PropertyInterface*>(new PropertyInterfaceEditorCreator);
   registerCreator<tlp::ColorScale>(new ColorScaleEditorCreator);
   registerCreator<tlp::StringCollection>(new StringCollectionEditorCreator);
