@@ -26,7 +26,7 @@
 
 using namespace tlp;
 
-ColorButton::ColorButton(QWidget *parent): QPushButton(parent), _color(Qt::black), _dialogParent(this) {
+ColorButton::ColorButton(QWidget *parent): QPushButton(parent), _color(Qt::black), _dialogParent(parent) {
   connect(this,SIGNAL(clicked()),this,SLOT(chooseColor()));
   setFocusPolicy(Qt::WheelFocus);
 }
@@ -49,7 +49,6 @@ void ColorButton::paintEvent(QPaintEvent *event) {
   float tickW = width() / 4.;
   float tickH = height() / 4;
   p.setPen(Qt::black);
-  QColor c(_color);
   _color.setAlpha(255);
   p.setBrush(_color);
   p.drawRect(tickW, tickH, tickW * 2, tickH * 2);
