@@ -108,28 +108,28 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
   QFileInfo rootPathInfo(rootPath);
 
   if (rootPathInfo.exists() && !rootPathInfo.isDir()) {
-    progress->setError("root path does not exists or is not a dir");
+    progress->setError("Root path does not exists or is not a dir");
     return false;
   }
 
   QDir rootDir(rootPath);
 
   if (!rootDir.exists() && !rootDir.mkpath(rootPath)) {
-    progress->setError("could not create root path");
+    progress->setError("Could not create root path");
     return false;
   }
 
   QFile archiveFile(archivePath);
 
   if(!archiveFile.exists()) {
-    progress->setError(QString("no such file : " + archivePath).toStdString());
+    progress->setError(QString("No such file : " + archivePath).toUtf8().data());
     return false;
   }
 
   QuaZip archive(archivePath);
 
   if (!archive.open(QuaZip::mdUnzip)) {
-    progress->setError("could not open archive");
+    progress->setError("Could not open archive");
     return false;
   }
 
@@ -140,7 +140,7 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
     deleteProgress = true;
   }
 
-  progress->setComment(("Uncompressing archive " + archivePath).toStdString());
+  progress->setComment(("Uncompressing archive " + archivePath).toUtf8().data());
   int i=0,n=archive.getEntriesCount();
   progress->progress(i,n);
 
