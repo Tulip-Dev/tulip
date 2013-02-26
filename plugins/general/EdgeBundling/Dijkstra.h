@@ -41,7 +41,7 @@ class Dijkstra {
 public:
   //============================================================
   Dijkstra() {
-#ifdef NDEBUG
+#ifdef _OPENMP
     #pragma omp critical(DIKCREATE)
 #endif
     {
@@ -55,7 +55,7 @@ public:
   }
 
   ~Dijkstra() {
-#ifdef NDEBUG
+#ifdef _OPENMP
     #pragma omp critical(DIKCREATE)
 #endif
     {
