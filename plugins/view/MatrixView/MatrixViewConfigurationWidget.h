@@ -20,12 +20,14 @@
 #ifndef MATRIXVIEWCONFIGURATIONWIDGET_H
 #define MATRIXVIEWCONFIGURATIONWIDGET_H
 
-#include "ui_MatrixViewConfigurationWidget.h"
 #include <QtGui/QWidget>
 
 namespace tlp {
 class Graph;
-class PropertyInterface;
+}
+
+namespace Ui {
+class MatrixViewConfigurationWidget;
 }
 
 enum GridDisplayMode {
@@ -34,19 +36,27 @@ enum GridDisplayMode {
   SHOW_ON_ZOOM = 2
 };
 
-class MatrixViewConfigurationWidget: public QWidget, public Ui::MatrixViewConfigurationWidget {
+class MatrixViewConfigurationWidget: public QWidget {
   Q_OBJECT
+
+  Ui::MatrixViewConfigurationWidget* _ui;
+
 public:
   MatrixViewConfigurationWidget(QWidget *parent=0);
   void setGraph(tlp::Graph *);
+  ~MatrixViewConfigurationWidget();
 
   GridDisplayMode gridDisplayMode() const;
+  void setBackgroundColor(const QColor &);
 
 protected slots:
   void orderingMetricComboIndexChanged(int i);
 
 signals:
   void metricSelected(std::string);
+  void changeBackgroundColor(QColor);
+  void setGridDisplayMode();
+  void showEdges(bool);
 
 private:
   bool _modifyingMetricList;

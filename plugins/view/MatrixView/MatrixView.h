@@ -82,11 +82,12 @@ public:
     return _configurationWidget->gridDisplayMode();
   }
 
-public slots:
+private slots:
   void setBackgroundColor(QColor);
   void setOrderingMetric(std::string);
   void setGridDisplayMode();
   void applySettings();
+  void showEdges(bool);
 
 private:
 
