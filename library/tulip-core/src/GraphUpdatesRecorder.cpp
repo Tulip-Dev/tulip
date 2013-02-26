@@ -827,7 +827,12 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     while(ite->hasNext()) {
       edge e(ite->next());
       std::pair<node, node>* eEnds = edgesEnds.get(e);
-      ger->graph->restoreEdge(e, eEnds->first, eEnds->second);
+      if (eEnds) {
+        ger->graph->restoreEdge(e, eEnds->first, eEnds->second);
+      } else {
+        // restoration of an edge in a sub-graph that was already an element of the root graph (i.e., not a newly added edge)
+        ger->graph->restoreEdge(e, ger->graph->getRoot()->source(e), ger->graph->getRoot()->target(e));
+      }
     }
 
     delete ite;
