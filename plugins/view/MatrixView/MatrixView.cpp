@@ -56,7 +56,7 @@ void MatrixView::setState(const DataSet &ds) {
   setOverviewVisible(true);
 
   if (!_configurationWidget) {
-      _configurationWidget = new MatrixViewConfigurationWidget(getGlMainWidget()->parentWidget());
+    _configurationWidget = new MatrixViewConfigurationWidget(getGlMainWidget()->parentWidget());
     connect(_configurationWidget, SIGNAL(changeBackgroundColor(QColor)), this, SLOT(setBackgroundColor(QColor)));
     connect(_configurationWidget, SIGNAL(metricSelected(std::string)), this, SLOT(setOrderingMetric(std::string)));
     connect(_configurationWidget, SIGNAL(setGridDisplayMode()), this, SLOT(setGridDisplayMode()));
@@ -93,8 +93,8 @@ void MatrixView::setState(const DataSet &ds) {
 }
 
 void MatrixView::showEdges(bool show) {
-    getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setDisplayEdges(show);
-    emit drawNeeded();
+  getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setDisplayEdges(show);
+  emit drawNeeded();
 }
 
 void MatrixView::graphChanged(Graph *) {
@@ -102,12 +102,12 @@ void MatrixView::graphChanged(Graph *) {
 }
 
 DataSet MatrixView::state() const {
-    DataSet ds;
-    ds.set<bool>("show Edges", getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isDisplayEdges());
-    ds.set<unsigned>("Grid mode", _configurationWidget->gridDisplayMode());
-    ds.set<Color>("Background Color", getGlMainWidget()->getScene()->getBackgroundColor());
-    ds.set<int>("ordering", _configurationWidget->orderingProperty());
-    return ds;
+  DataSet ds;
+  ds.set<bool>("show Edges", getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isDisplayEdges());
+  ds.set<unsigned>("Grid mode", _configurationWidget->gridDisplayMode());
+  ds.set<Color>("Background Color", getGlMainWidget()->getScene()->getBackgroundColor());
+  ds.set<int>("ordering", _configurationWidget->orderingProperty());
+  return ds;
 }
 
 QList<QWidget *> MatrixView::configurationWidgets() const {

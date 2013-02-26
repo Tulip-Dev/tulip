@@ -35,19 +35,19 @@ MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent): Q
   connect(_ui->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this, SIGNAL(changeBackgroundColor(QColor)));
   connect(_ui->gridDisplayCombo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(setGridDisplayMode()));
   connect(_ui->showedgesbox, SIGNAL(clicked(bool)), this, SIGNAL(showEdges(bool)));
-_ui->backgroundColorBtn->setDialogParent(Perspective::instance()->mainWindow());
+  _ui->backgroundColorBtn->setDialogParent(Perspective::instance()->mainWindow());
 }
 
 MatrixViewConfigurationWidget::~MatrixViewConfigurationWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void MatrixViewConfigurationWidget::setBackgroundColor(const QColor &c) {
-    _ui->backgroundColorBtn->setColor(c);
+  _ui->backgroundColorBtn->setColor(c);
 }
 
 void MatrixViewConfigurationWidget::setDisplayEdges(const bool state) {
-    _ui->showedgesbox->setChecked(state);
+  _ui->showedgesbox->setChecked(state);
 }
 
 void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
