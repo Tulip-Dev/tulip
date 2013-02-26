@@ -139,12 +139,15 @@
           <height>24</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Add a new panel into the workspace&lt;br/&gt;for the data of a graph to select.</string>
+        </property>
         <property name="text">
          <string>Add panel</string>
         </property>
         <property name="icon">
          <iconset resource="../resources/GraphPerspective.qrc">
-          <normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</iconset>
+          <normaloff>:/tulip/graphperspective/icons/16/view-add.png</normaloff>:/tulip/graphperspective/icons/16/view-add.png</iconset>
         </property>
        </widget>
       </item>

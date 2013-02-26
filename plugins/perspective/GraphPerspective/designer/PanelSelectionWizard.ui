@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Open panel</string>
+   <string>Add panel</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
@@ -56,7 +56,7 @@ border: 0px;
   </property>
   <widget class="QWizardPage" name="choosePanelPage">
    <property name="title">
-    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/32/view-open.png&quot; width=32 height=32/&gt; Panel creation Wizard</string>
+    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/32/view-open.png&quot; width=32 height=32/&gt; Panel creation dialog</string>
    </property>
    <attribute name="pageId">
     <string notr="true">0</string>
@@ -68,7 +68,7 @@ border: 0px;
     <item>
      <widget class="QLabel" name="page1HelpLabel">
       <property name="text">
-       <string>&lt;br/&gt;This wizard will guide you through the steps required to create a new panel on the selected graph and display it into the workspace.</string>
+       <string>&lt;br/&gt;Select a type of a new panel to add into the workspace for the data of the selected graph.</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -148,7 +148,7 @@ border: 0px;
             </font>
            </property>
            <property name="text">
-            <string>Panels</string>
+            <string>Panel types</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
