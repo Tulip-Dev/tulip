@@ -70,9 +70,9 @@ public:
   virtual void draw();
   virtual void refresh();
 
-    GridDisplayMode gridDisplayMode() const {
-      return _configurationWidget->gridDisplayMode();
-    }
+  GridDisplayMode gridDisplayMode() const {
+    return _configurationWidget->gridDisplayMode();
+  }
 
   virtual void update(std::set<tlp::Observable *>::iterator,std::set<tlp::Observable *>::iterator);
   virtual void observableDestroyed(tlp::Observable *) {}
