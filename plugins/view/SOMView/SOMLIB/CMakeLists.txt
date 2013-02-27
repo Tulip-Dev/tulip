@@ -1,0 +1,6 @@
+FILE(GLOB LIB_SRCS "*.cpp")
+
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${CMAKE_CURRENT_SOURCE_DIR})
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+ADD_LIBRARY(som STATIC ${LIB_SRCS})
+TARGET_LINK_LIBRARIES(som ${LibTulipCoreName} ${LibTulipOGLName})
