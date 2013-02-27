@@ -40,22 +40,26 @@ class ScatterPlot2DViewNavigator : public GLInteractorComponent {
 
 public :
 
-	ScatterPlot2DViewNavigator();
-	~ScatterPlot2DViewNavigator();
+  ScatterPlot2DViewNavigator();
+  ~ScatterPlot2DViewNavigator();
 
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget*) {return false;}
-	bool compute(GlMainWidget*) {return false;}
+  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget*) {
+    return false;
+  }
+  bool compute(GlMainWidget*) {
+    return false;
+  }
   void viewChanged(View *view);
 
 private :
 
-	ScatterPlot2D *getOverviewUnderPointer(Coord sceneCoord);
+  ScatterPlot2D *getOverviewUnderPointer(Coord sceneCoord);
 
-	ScatterPlot2DView *scatterPlot2dView;
-	ScatterPlot2D *selectedScatterPlotOverview;
+  ScatterPlot2DView *scatterPlot2dView;
+  ScatterPlot2D *selectedScatterPlotOverview;
 
-	GlMainWidget *glWidget;
+  GlMainWidget *glWidget;
 
 };
 

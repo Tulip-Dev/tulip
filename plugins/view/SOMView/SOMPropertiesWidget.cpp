@@ -140,12 +140,15 @@ DataSet SOMPropertiesWidget::getData() const {
 
   //Save current properties.
   vector<string> properties = dimensionConfigurationWidget->propertiesConfigurationWidget->getSelectedProperties();
+
   if (!properties.empty()) {
     //Use QStringList class to store a list in a string
     QStringList stringlist;
+
     for (vector<string>::iterator it = properties.begin(); it != properties.end(); ++it) {
       stringlist.push_back(QString::fromUtf8((*it).c_str()));
     }
+
     data.set<string> ("properties", stringlist.join(";").toStdString());
   }
 
@@ -156,9 +159,11 @@ DataSet SOMPropertiesWidget::getData() const {
   DataSet colorScaleDataSet;
   map<float, Color> colorScaleMap = defaultScale->getColorMap();
   QStringList colorsList;
+
   for (map<float, Color>::iterator it = colorScaleMap.begin(); it != colorScaleMap.end(); ++it) {
     colorsList.push_back(QString::fromUtf8(ColorType::toString(it->second).c_str()));
   }
+
   colorScaleDataSet.set<string> ("colorList", colorsList.join(";").toStdString());
   colorScaleDataSet.set<bool> ("gradient", defaultScale->isGradient());
   data.set("defaultScale", colorScaleDataSet);
@@ -203,6 +208,7 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
 
   //SizeMapping
   data.get("useSizeMapping", boolValue);
+
   if (boolValue) {
     realNodeSizeMappingRadioButton->setChecked(true);
   }
@@ -223,9 +229,11 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
     //Use QString split function to parse string.
     QStringList list = QString::fromUtf8(propertiesString.c_str()).split(";", QString::SkipEmptyParts);
     vector<string> properties;
+
     for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
       properties.push_back((*it).toStdString());
     }
+
     dimensionConfigurationWidget->propertiesConfigurationWidget->setOutputPropertiesList(properties);
   }
 
@@ -241,12 +249,15 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
   QString colorListQString = QString::fromUtf8(colorsList.c_str());
   QStringList colorStringList = colorListQString.split(";");
   vector<Color> colors;
+
   for (QStringList::iterator it = colorStringList.begin(); it != colorStringList.end(); ++it) {
     Color c;
+
     if (ColorType::fromString(c, (*it).toStdString())) {
       colors.push_back(c);
     }
   }
+
   colorScaleDataSet.get("gradient", boolValue);
   //Avoid calling update while data initialization causing segfault
   defaultScale->removeObserver(this);

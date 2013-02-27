@@ -20,7 +20,7 @@
 #include "DiffusionRateFunction.h"
 
 DiffusionRateFunction::DiffusionRateFunction(
-    TimeDecreasingFunction* decreasingFunction) :
+  TimeDecreasingFunction* decreasingFunction) :
   timeFunction(decreasingFunction) {
 
 }
@@ -34,7 +34,7 @@ TimeDecreasingFunction* DiffusionRateFunction::getTimeDecreasingFunction() {
 }
 
 void DiffusionRateFunction::setTimeDecreasingFunction(
-    TimeDecreasingFunction* timeFunction) {
+  TimeDecreasingFunction* timeFunction) {
   if (this->timeFunction) {
     delete this->timeFunction;
   }

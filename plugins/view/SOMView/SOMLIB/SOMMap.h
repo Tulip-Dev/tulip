@@ -48,7 +48,7 @@ public:
    * @return
    */
   SOMMap(Graph* root, unsigned int width, unsigned int height,
-      SOMMapConnectivity connectivity = four, bool oppositeConnected = false);
+         SOMMapConnectivity connectivity = four, bool oppositeConnected = false);
   /**
    * Build a SOM in a new Graph.
    * @param width The width of the grid.
@@ -58,7 +58,7 @@ public:
    * @return
    */
   SOMMap(unsigned int width, unsigned int height,
-      SOMMapConnectivity connectivity = four, bool oppositeConnected = false);
+         SOMMapConnectivity connectivity = four, bool oppositeConnected = false);
   virtual ~SOMMap();
 
   /**

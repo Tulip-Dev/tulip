@@ -27,7 +27,7 @@ public:
   DifusionRateFunctionGaussian(TimeDecreasingFunction* decreasingFunction );
   virtual ~DifusionRateFunctionGaussian();
   double computeSpaceRate(unsigned int distance, unsigned int currentIteration,
-      unsigned int maxIteration, unsigned int inputSampleSize);
+                          unsigned int maxIteration, unsigned int inputSampleSize);
 protected:
 
 };

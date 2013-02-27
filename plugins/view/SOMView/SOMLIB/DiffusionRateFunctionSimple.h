@@ -22,7 +22,7 @@
 
 #include "DiffusionRateFunction.h"
 
-class DiffusionRateFunctionSimple : public DiffusionRateFunction{
+class DiffusionRateFunctionSimple : public DiffusionRateFunction {
 public:
   DiffusionRateFunctionSimple(TimeDecreasingFunction* timeFunction, unsigned int neighborhood);
   virtual ~DiffusionRateFunctionSimple();

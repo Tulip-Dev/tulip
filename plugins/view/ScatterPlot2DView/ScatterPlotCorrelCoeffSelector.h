@@ -47,68 +47,80 @@ class GlEditableComplexPolygon : public GlSimpleEntity {
 
 public :
 
-	GlEditableComplexPolygon(std::vector<Coord> polygonPoints, const Color &color);
+  GlEditableComplexPolygon(std::vector<Coord> polygonPoints, const Color &color);
 
-	void translate(const Coord &move);
-	void draw(float lod,Camera* camera);
-	BoundingBox getBoundingBox();
+  void translate(const Coord &move);
+  void draw(float lod,Camera* camera);
+  BoundingBox getBoundingBox();
   void getXML(std::string &) {}
   void setWithXML(const std::string &, unsigned int &) {}
 
-	unsigned int getNumberOfVertex() const {return polygonPoints.size();}
+  unsigned int getNumberOfVertex() const {
+    return polygonPoints.size();
+  }
 
-	bool pointInsidePolygon(const Coord &point);
-	Coord *getPolygonVertexUnderPointerIfAny(const Coord &pointerScreenCoord, Camera *camera);
-	std::pair<Coord, Coord> *getPolygonSegmentUnderPointerIfAny(const Coord &pointerSceneCoord);
+  bool pointInsidePolygon(const Coord &point);
+  Coord *getPolygonVertexUnderPointerIfAny(const Coord &pointerScreenCoord, Camera *camera);
+  std::pair<Coord, Coord> *getPolygonSegmentUnderPointerIfAny(const Coord &pointerSceneCoord);
 
-	void addPolygonVertex(std::pair<Coord, Coord> polygonSegment, const Coord &newVertex);
-	void removePolygonVertex(const Coord &vertex);
-	void movePolygonVertexToPoint(const Coord &polygonVertex, const Coord &targetPoint);
+  void addPolygonVertex(std::pair<Coord, Coord> polygonSegment, const Coord &newVertex);
+  void removePolygonVertex(const Coord &vertex);
+  void movePolygonVertexToPoint(const Coord &polygonVertex, const Coord &targetPoint);
 
-	void setColor(const Color &color) {this->color = color;}
-	Color getColor() const {return color;}
-	void setSelected(const bool selected) {this->selected = selected;}
-	bool isSelected() const {return selected;}
+  void setColor(const Color &color) {
+    this->color = color;
+  }
+  Color getColor() const {
+    return color;
+  }
+  void setSelected(const bool selected) {
+    this->selected = selected;
+  }
+  bool isSelected() const {
+    return selected;
+  }
 
-	const std::vector<Coord> & getPolygonVertices() const {return polygonPoints;}
+  const std::vector<Coord> & getPolygonVertices() const {
+    return polygonPoints;
+  }
 
 private :
 
-	std::vector<Coord> polygonPoints;
-	Color color;
-	GlCircle basicCircle;
-	bool selected;
+  std::vector<Coord> polygonPoints;
+  Color color;
+  GlCircle basicCircle;
+  bool selected;
 };
 
 class ScatterPlotCorrelCoeffSelector : public GLInteractorComponent {
 
 public :
 
-	ScatterPlotCorrelCoeffSelector(ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget);
-	ScatterPlotCorrelCoeffSelector(const ScatterPlotCorrelCoeffSelector &scatterPlotCorrelCoeffSelector);
-	~ScatterPlotCorrelCoeffSelector();
+  ScatterPlotCorrelCoeffSelector(ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget);
+  ScatterPlotCorrelCoeffSelector(const ScatterPlotCorrelCoeffSelector &scatterPlotCorrelCoeffSelector);
+  ~ScatterPlotCorrelCoeffSelector();
 
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *glMainWidget);
-	bool compute(GlMainWidget *glMainWidget);
+  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget *glMainWidget);
+  bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
 private :
 
-	void getPolygonAndPointUnderPointerIfAny(const Coord &pointerSceneCoord, Camera *camera);
-	void mapPolygonColorToCorrelCoeffOfData(GlEditableComplexPolygon *polygon, GlMainWidget *glWidget);
+  void getPolygonAndPointUnderPointerIfAny(const Coord &pointerSceneCoord, Camera *camera);
+  void mapPolygonColorToCorrelCoeffOfData(GlEditableComplexPolygon *polygon, GlMainWidget *glWidget);
 
-	ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget;
-	ScatterPlot2DView *scatterView;
-	Coord currentPointerSceneCoords;
-	std::vector<Coord> polygonEdit;
-	std::vector<GlEditableComplexPolygon *> polygons;
-	GlCircle basicCircle;
-	GlEditableComplexPolygon *selectedPolygon;
-	Coord *selectedPolygonPoint;
-	bool dragStarted;
-	int x, y;
-	std::map<GlEditableComplexPolygon *, std::pair<std::vector<node>, double > > polygonsToNodesSubsetAndCorrelCoeff;
+  ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget;
+  ScatterPlot2DView *scatterView;
+  Coord currentPointerSceneCoords;
+  std::vector<Coord> polygonEdit;
+  std::vector<GlEditableComplexPolygon *> polygons;
+  GlCircle basicCircle;
+  GlEditableComplexPolygon *selectedPolygon;
+  Coord *selectedPolygonPoint;
+  bool dragStarted;
+  int x, y;
+  std::map<GlEditableComplexPolygon *, std::pair<std::vector<node>, double > > polygonsToNodesSubsetAndCorrelCoeff;
 
 };
 

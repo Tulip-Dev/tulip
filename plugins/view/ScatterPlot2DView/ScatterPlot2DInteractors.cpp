@@ -33,7 +33,7 @@ namespace tlp {
 ScatterPlot2DInteractor::ScatterPlot2DInteractor(const QString &iconPath, const QString &text) : NodeLinkDiagramComponentInteractor(iconPath, text) {}
 
 bool ScatterPlot2DInteractor::isCompatible(const std::string &viewName) const {
-    return (viewName == ScatterPlot2DView::viewName);
+  return (viewName == ScatterPlot2DView::viewName);
 }
 
 INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DInteractorZoom,"ScatterPlot2DZoomInteractor","InteractorRectangleZoom",ScatterPlot2DView::viewName, "Tulip Team" ,"02/04/09","ScatterPlot2D rectangle zoom interactor","1.0",1)
@@ -46,24 +46,24 @@ PLUGIN(ScatterPlot2DInteractorTrendLine)
 PLUGIN(ScatterPlot2DInteractorCorrelCoeffSelector)
 
 ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::PluginContext *) : ScatterPlot2DInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
-    setConfigurationWidgetText(QString("<html><head>")
-                                       +"<title></title>"
-                                       +"</head>"
-                                       +"<body>"
-                                       +"<h3>View navigation interactor</h3>"
-                                       +"<p>This interactor allows to navigate in the scatter plot view.</p>"
-                                       +"<p>When there is more than one graph properties selected, the corresponding scatter plots previews are generated and displayed in a matrix form. By <b>double clicking on a scatter plot, "
-                                       +"this one is displayed in fullscreen </b> in a more detailed way and the others interactors become available. To go back to the scatter plots matrix, double click anywhere in the view.</p>"
-                                       +"<p>Otherwise, this interactor offers the same functionnalities as the one in the \"Node Link Diagram view\". The commands are described below :</p>"
-                                       +"<b>Ctrl + Mouse up/down</b> : zoom<br>"
-                                       +"<b>Ctrl + Mouse left/right</b> : z rotation<br>"
-                                       +"<b>Shift + Mouse</b> : rotation<br>"
-                                       +"<b>Key up/down</b> : up/down<br>"
-                                       +"<b>Key left/right</b> : left/right<br>"
-                                       +"<b>Key page up/down</b> : zoom<br>"
-                                       +"<b>Key insert</b> : rotate<br>"
-                                       +"</body>"
-                                       +"</html>");
+  setConfigurationWidgetText(QString("<html><head>")
+                             +"<title></title>"
+                             +"</head>"
+                             +"<body>"
+                             +"<h3>View navigation interactor</h3>"
+                             +"<p>This interactor allows to navigate in the scatter plot view.</p>"
+                             +"<p>When there is more than one graph properties selected, the corresponding scatter plots previews are generated and displayed in a matrix form. By <b>double clicking on a scatter plot, "
+                             +"this one is displayed in fullscreen </b> in a more detailed way and the others interactors become available. To go back to the scatter plots matrix, double click anywhere in the view.</p>"
+                             +"<p>Otherwise, this interactor offers the same functionnalities as the one in the \"Node Link Diagram view\". The commands are described below :</p>"
+                             +"<b>Ctrl + Mouse up/down</b> : zoom<br>"
+                             +"<b>Ctrl + Mouse left/right</b> : z rotation<br>"
+                             +"<b>Shift + Mouse</b> : rotation<br>"
+                             +"<b>Key up/down</b> : up/down<br>"
+                             +"<b>Key left/right</b> : left/right<br>"
+                             +"<b>Key page up/down</b> : zoom<br>"
+                             +"<b>Key insert</b> : rotate<br>"
+                             +"</body>"
+                             +"</html>");
 }
 
 void ScatterPlot2DInteractorNavigation::construct() {
@@ -81,17 +81,17 @@ void ScatterPlot2DInteractorTrendLine::construct() {
 ScatterPlot2DInteractorCorrelCoeffSelector::ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *) : ScatterPlot2DInteractor(":/tulip/gui/icons/i_magic.png", "Correlation Coefficient Selector"),optionsWidget(NULL) {}
 
 void ScatterPlot2DInteractorCorrelCoeffSelector::construct() {
-	optionsWidget = new ScatterPlotCorrelCoeffSelectorOptionsWidget();
+  optionsWidget = new ScatterPlotCorrelCoeffSelectorOptionsWidget();
   push_back(new ScatterPlotCorrelCoeffSelector(optionsWidget));
   push_back(new MousePanNZoomNavigator);
 }
 
 ScatterPlot2DInteractorCorrelCoeffSelector::~ScatterPlot2DInteractorCorrelCoeffSelector() {
-    delete optionsWidget;
+  delete optionsWidget;
 }
 
 QWidget *ScatterPlot2DInteractorCorrelCoeffSelector::configurationWidget() const {
-	return optionsWidget;
+  return optionsWidget;
 }
 
 }

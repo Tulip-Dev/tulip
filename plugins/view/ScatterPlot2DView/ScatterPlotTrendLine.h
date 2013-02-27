@@ -43,18 +43,18 @@ class ScatterPlotTrendLine : public GLInteractorComponent {
 
 public :
 
-	ScatterPlotTrendLine();
-	~ScatterPlotTrendLine();
+  ScatterPlotTrendLine();
+  ~ScatterPlotTrendLine();
 
-	bool eventFilter(QObject *, QEvent *);
-	bool draw(GlMainWidget *glMainWidget);
-	bool compute(GlMainWidget *glMainWidget);
+  bool eventFilter(QObject *, QEvent *);
+  bool draw(GlMainWidget *glMainWidget);
+  bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
 private :
 
-	ScatterPlot2DView *scatterView;
-	float a, b;
+  ScatterPlot2DView *scatterView;
+  float a, b;
 
 };
 

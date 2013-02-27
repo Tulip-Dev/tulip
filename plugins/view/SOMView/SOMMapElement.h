@@ -32,7 +32,7 @@
 class SOMMapElement: public tlp::GlComposite {
 public:
   SOMMapElement(tlp::Coord position, tlp::Size size, SOMMap *map,
-      tlp::ColorProperty *colorProperty);
+                tlp::ColorProperty *colorProperty);
   virtual ~SOMMapElement();
 
   tlp::Coord getTopLeftPositionForElement(unsigned int x, unsigned int y);
@@ -57,10 +57,10 @@ protected:
   void computeNodeAreaSize();
 
   float computeMaximizedRadiusForHexagone(unsigned int width,
-      unsigned int height, tlp::Size& size);
+                                          unsigned int height, tlp::Size& size);
 
   void buildMainComposite(tlp::Coord topLeft, tlp::Size elementSize,
-      SOMMap* map);
+                          SOMMap* map);
 
   SOMMap* som;
 

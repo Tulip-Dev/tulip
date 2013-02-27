@@ -30,11 +30,13 @@ class ScatterPlot2DInteractor : public NodeLinkDiagramComponentInteractor {
 
 public :
 
-	ScatterPlot2DInteractor(const QString &iconPath, const QString &text);
+  ScatterPlot2DInteractor(const QString &iconPath, const QString &text);
 
-    bool isCompatible(const std::string &viewName) const;
+  bool isCompatible(const std::string &viewName) const;
 
-  unsigned int priority() const {return 0;}
+  unsigned int priority() const {
+    return 0;
+  }
 
 };
 
@@ -46,9 +48,11 @@ public :
 
   ScatterPlot2DInteractorNavigation(const tlp::PluginContext *);
 
-	void construct();
+  void construct();
 
-  unsigned int priority() const {return 5;}
+  unsigned int priority() const {
+    return 5;
+  }
 
 };
 
@@ -60,7 +64,7 @@ public :
 
   ScatterPlot2DInteractorTrendLine(const tlp::PluginContext *);
 
-	void construct();
+  void construct();
 
 };
 
@@ -73,13 +77,13 @@ public :
   ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *);
   ~ScatterPlot2DInteractorCorrelCoeffSelector();
 
-	void construct();
+  void construct();
 
   QWidget *configurationWidget() const;
 
 private :
 
-	ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget;
+  ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget;
 
 };
 

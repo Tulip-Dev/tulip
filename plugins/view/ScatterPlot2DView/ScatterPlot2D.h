@@ -37,73 +37,95 @@ class ScatterPlot2D : public GlComposite {
 
 public :
 
-	ScatterPlot2D(Graph *graph, std::string xDim, std::string yDim, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
-	~ScatterPlot2D();
+  ScatterPlot2D(Graph *graph, std::string xDim, std::string yDim, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
+  ~ScatterPlot2D();
 
-	void setBLCorner(const Coord &blCorner);
-	void setUniformBackgroundColor(const Color &backgroundColor);
-	void mapBackgroundColorToCorrelCoeff(const bool mapBackgroundColor, const Color &minusOneColor, const Color &zeroColor, const Color &oneColor);
-	void setForegroundColor(const Color &foregroundColor);
-	void setSizeProperty(SizeProperty *sizeProperty);
+  void setBLCorner(const Coord &blCorner);
+  void setUniformBackgroundColor(const Color &backgroundColor);
+  void mapBackgroundColorToCorrelCoeff(const bool mapBackgroundColor, const Color &minusOneColor, const Color &zeroColor, const Color &oneColor);
+  void setForegroundColor(const Color &foregroundColor);
+  void setSizeProperty(SizeProperty *sizeProperty);
 
-	const Color &getBackgroundColor() const {return backgroundColor;}
+  const Color &getBackgroundColor() const {
+    return backgroundColor;
+  }
 
-	void generateOverview(GlMainWidget *glWidget = NULL, LayoutProperty *reverseLayout = NULL);
-	bool overviewGenerated() const {return overviewGen;}
+  void generateOverview(GlMainWidget *glWidget = NULL, LayoutProperty *reverseLayout = NULL);
+  bool overviewGenerated() const {
+    return overviewGen;
+  }
 
-	std::string getXDim() const {return xDim;}
-	std::string getYDim() const {return yDim;}
-	Coord getOverviewCenter() const;
-	float getOverviewSize() const {return static_cast<float>(size);}
-	LayoutProperty *getScatterPlotLayout() const {return scatterLayout;}
-	GlQuantitativeAxis *getXAxis() const {return xAxis;}
-	GlQuantitativeAxis *getYAxis() const {return yAxis;}
+  std::string getXDim() const {
+    return xDim;
+  }
+  std::string getYDim() const {
+    return yDim;
+  }
+  Coord getOverviewCenter() const;
+  float getOverviewSize() const {
+    return static_cast<float>(size);
+  }
+  LayoutProperty *getScatterPlotLayout() const {
+    return scatterLayout;
+  }
+  GlQuantitativeAxis *getXAxis() const {
+    return xAxis;
+  }
+  GlQuantitativeAxis *getYAxis() const {
+    return yAxis;
+  }
 
-	double getCorrelationCoefficient() const {return correlationCoeff;}
+  double getCorrelationCoefficient() const {
+    return correlationCoeff;
+  }
 
-	GlGraphComposite *getGlGraphComposite() const {return glGraphComposite;}
-	void setDisplayGraphEdges(const bool displayGraphEdges) {displayEdges = displayGraphEdges;}
+  GlGraphComposite *getGlGraphComposite() const {
+    return glGraphComposite;
+  }
+  void setDisplayGraphEdges(const bool displayGraphEdges) {
+    displayEdges = displayGraphEdges;
+  }
 
 private :
 
-	void computeBoundingBox() {
-		GlBoundingBoxSceneVisitor glBBSV(NULL);
-		acceptVisitor(&glBBSV);
-		boundingBox = glBBSV.getBoundingBox();
-	}
+  void computeBoundingBox() {
+    GlBoundingBoxSceneVisitor glBBSV(NULL);
+    acceptVisitor(&glBBSV);
+    boundingBox = glBBSV.getBoundingBox();
+  }
 
-	void createAxis();
-	void computeScatterPlotLayout(GlMainWidget *glWidget, LayoutProperty *reverseLayout);
-	void clean();
+  void createAxis();
+  void computeScatterPlotLayout(GlMainWidget *glWidget, LayoutProperty *reverseLayout);
+  void clean();
 
-	std::string xDim, yDim;
-	std::string xType, yType;
-	Coord blCorner;
-	unsigned int size;
-	Graph *graph;
-	GlGraphComposite *glGraphComposite;
-	LayoutProperty *scatterLayout;
-	GlQuantitativeAxis *xAxis;
-	GlQuantitativeAxis *yAxis;
-	std::string textureName;
-	GlProgressBar *glProgressBar;
-	int currentStep;
-	int maxStep;
-	int drawStep;
-	bool overviewGen;
-	Color backgroundColor, foregroundColor;
-	GlLabel *clickLabel;
-	GlRect *backgroundRect;
+  std::string xDim, yDim;
+  std::string xType, yType;
+  Coord blCorner;
+  unsigned int size;
+  Graph *graph;
+  GlGraphComposite *glGraphComposite;
+  LayoutProperty *scatterLayout;
+  GlQuantitativeAxis *xAxis;
+  GlQuantitativeAxis *yAxis;
+  std::string textureName;
+  GlProgressBar *glProgressBar;
+  int currentStep;
+  int maxStep;
+  int drawStep;
+  bool overviewGen;
+  Color backgroundColor, foregroundColor;
+  GlLabel *clickLabel;
+  GlRect *backgroundRect;
 
-	bool mapBackgroundColorToCoeff;
-	Color minusOneColor, zeroColor, oneColor;
+  bool mapBackgroundColorToCoeff;
+  Color minusOneColor, zeroColor, oneColor;
 
-	double correlationCoeff;
+  double correlationCoeff;
 
-	bool displayEdges;
+  bool displayEdges;
 
-	int overviewId;
-	static int overviewCpt;
+  int overviewId;
+  static int overviewCpt;
 
 };
 

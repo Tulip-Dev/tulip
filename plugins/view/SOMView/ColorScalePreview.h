@@ -29,12 +29,14 @@
  * When user click on this object he can edit the ColorScale.
  */
 class ColorScalePreview: public QLabel {
-Q_OBJECT
+  Q_OBJECT
 public:
   ColorScalePreview(tlp::ColorScale* colorScale);
   virtual ~ColorScalePreview();
   void setColorScale(tlp::ColorScale* colorScale);
-  tlp::ColorScale* getColorScale(){return currentColorScale;}
+  tlp::ColorScale* getColorScale() {
+    return currentColorScale;
+  }
 
   void resizeEvent (QResizeEvent * event);
   void mousePressEvent ( QMouseEvent * event );

@@ -31,19 +31,19 @@
  */
 class SOMPreviewComposite: public tlp::GlComposite {
 public:
-    /**
-      *@brief Constructor for the SOMPreviewComposite.
-      * @param position The bottom right corner of the preview.
-      * @param size The size of the composite
-      * @param propertyName The name of the displayed properties.
-      * @param colorProperty The property containing colors for each element in the grid.
-      * @param map The SOM grid.
-      * @param colorScale The color scale to use in the preview.
-      * @param minValue The minium value label.
-      * @param maxValue The maximum value label.
-      **/
+  /**
+    *@brief Constructor for the SOMPreviewComposite.
+    * @param position The bottom right corner of the preview.
+    * @param size The size of the composite
+    * @param propertyName The name of the displayed properties.
+    * @param colorProperty The property containing colors for each element in the grid.
+    * @param map The SOM grid.
+    * @param colorScale The color scale to use in the preview.
+    * @param minValue The minium value label.
+    * @param maxValue The maximum value label.
+    **/
   SOMPreviewComposite(tlp::Coord position, tlp::Size size, const std::string& propertyName, tlp::ColorProperty* colorProperty, SOMMap *map,
-      tlp::ColorScale* colorScale, double minValue, double maxValue);
+                      tlp::ColorScale* colorScale, double minValue, double maxValue);
   virtual ~SOMPreviewComposite();
 
   inline std::string getPropertyName() const {
