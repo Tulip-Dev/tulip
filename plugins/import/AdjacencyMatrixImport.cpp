@@ -91,6 +91,10 @@ public:
   ~AdjacencyMatrixImport() {}
   vector<node> nodes;
 
+  std::string icon() const {
+    return ":/tulip/graphperspective/icons/32/import_adj_mat.png";
+  }
+
   bool formatError(const char* s, int curLine) {
     std::stringstream ess;
     ess <<  "Error parsing '" << s << "' at line :" << curLine + 1;

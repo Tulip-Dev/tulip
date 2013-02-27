@@ -73,6 +73,10 @@ public:
   }
   ~DotImport() {}
 
+  std::string icon() const {
+    return ":/tulip/graphperspective/icons/32/import_graphviz.png";
+  }
+
   bool importGraph() {
 
     // Open input stream
