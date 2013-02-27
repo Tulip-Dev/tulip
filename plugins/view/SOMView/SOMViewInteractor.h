@@ -25,12 +25,12 @@
 
 class SOMViewInteractor: public tlp::GLInteractorComposite {
 public:
-	SOMViewInteractor(const QString &iconPath, const QString &text);
-	virtual ~SOMViewInteractor();
+  SOMViewInteractor(const QString &iconPath, const QString &text);
+  virtual ~SOMViewInteractor();
 
-    virtual bool isCompatible(const std::string &viewName) const {
-        return (viewName == "Self Organizing Map");
-	}
+  virtual bool isCompatible(const std::string &viewName) const {
+    return (viewName == "Self Organizing Map");
+  }
 
 };
 
@@ -41,13 +41,15 @@ class SOMViewNavigation: public SOMViewInteractor {
 public:
 
   SOMViewNavigation(tlp::PluginContext *);
-	~SOMViewNavigation();
+  ~SOMViewNavigation();
 
-	virtual void construct();
+  virtual void construct();
 
   QWidget *configurationWidget() const;
 
-  unsigned int priority() const {return 3;}
+  unsigned int priority() const {
+    return 3;
+  }
 };
 
 class SOMViewSelection: public SOMViewInteractor {
@@ -57,13 +59,15 @@ class SOMViewSelection: public SOMViewInteractor {
 public:
 
   SOMViewSelection(tlp::PluginContext *);
-	~SOMViewSelection();
+  ~SOMViewSelection();
 
-	virtual void construct();
+  virtual void construct();
 
   QWidget *configurationWidget() const;
 
-  unsigned int priority() const {return 2;}
+  unsigned int priority() const {
+    return 2;
+  }
 
 };
 
@@ -74,13 +78,15 @@ class SOMViewProperties:public SOMViewInteractor {
 public :
 
   SOMViewProperties(tlp::PluginContext *);
-	~SOMViewProperties();
+  ~SOMViewProperties();
 
-	virtual void construct();
+  virtual void construct();
 
   QWidget *configurationWidget() const;
 
-  unsigned int priority() const {return 1;}
+  unsigned int priority() const {
+    return 1;
+  }
 };
 
 class SOMViewThreshold: public SOMViewInteractor {
@@ -90,13 +96,15 @@ class SOMViewThreshold: public SOMViewInteractor {
 public:
 
   SOMViewThreshold(tlp::PluginContext *);
-	~SOMViewThreshold();
+  ~SOMViewThreshold();
 
-	virtual void construct();
+  virtual void construct();
 
   QWidget *configurationWidget() const;
 
-  unsigned int priority() const {return 0;}
+  unsigned int priority() const {
+    return 0;
+  }
 };
 
 #endif /* SOMVIEWINTERACTOR_H_ */

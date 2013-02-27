@@ -26,7 +26,7 @@ using namespace tlp;
 using namespace std;
 
 void zoomOnScreenRegion(GlMainWidget *glWidget, const BoundingBox &boundingBox, const bool optimalPath,
-    const double velocity, const double p) {
+                        const double velocity, const double p) {
   QtGlSceneZoomAndPanAnimator animator(glWidget, boundingBox,1000,"Main", optimalPath, velocity, p);
   animator.animateZoomAndPan();
 }
@@ -65,6 +65,7 @@ void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget, const BoundingBo
   camera.setEyes(Coord(0, 0, camera.getSceneRadius()));
   camera.setEyes(camera.getEyes() + camera.getCenter());
   camera.setUp(Coord(0, 1., 0));
+
   if (withZoom) {
     camera.setZoomFactor(zoomEnd);
   }

@@ -22,17 +22,17 @@
 
 #include "TimeDecreasingFunction.h"
 
-class TimeDecreasingFunctionSimple :public TimeDecreasingFunction{
+class TimeDecreasingFunctionSimple :public TimeDecreasingFunction {
 public:
   TimeDecreasingFunctionSimple(double initialCoef);
   virtual ~TimeDecreasingFunctionSimple();
   double computeCurrentTimeRate(unsigned int currentIteration,unsigned int maxIteration,unsigned int inputSampleSize);
 
-  double getInitialCoefficient(){
+  double getInitialCoefficient() {
     return initialCoef;
   }
 
-  void setInitialCoefficient(double coef){
+  void setInitialCoefficient(double coef) {
     initialCoef = coef;
   }
 

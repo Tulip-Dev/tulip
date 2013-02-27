@@ -47,7 +47,7 @@ struct CoordXOrdering: public binary_function<Coord, Coord, bool> {
 };
 
 Coord *computeStraightLineIntersection(const Coord line1[2],
-    const Coord line2[2]) {
+                                       const Coord line2[2]) {
 
   Coord *intersectionPoint = NULL;
   bool line1ParallelToXaxis = false;
@@ -65,10 +65,12 @@ Coord *computeStraightLineIntersection(const Coord line1[2],
   float ybl1 = line1[1].getY();
   float al1;
   float bl1;
+
   if ((xbl1 - xal1) != 0) {
     al1 = (ybl1 - yal1) / (xbl1 - xal1);
     bl1 = ybl1 - al1 * xbl1;
-  } else {
+  }
+  else {
     line1ParallelToXaxis = true;
   }
 
@@ -80,10 +82,12 @@ Coord *computeStraightLineIntersection(const Coord line1[2],
   float ybl2 = line2[1].getY();
   float al2;
   float bl2;
+
   if ((xbl2 - xal2) != 0) {
     al2 = (ybl2 - yal2) / (xbl2 - xal2);
     bl2 = ybl2 - al2 * xbl2;
-  } else {
+  }
+  else {
     line2ParallelToXaxis = true;
   }
 
@@ -99,17 +103,21 @@ Coord *computeStraightLineIntersection(const Coord line1[2],
   if (line1ParallelToXaxis && line2ParallelToYaxis) {
     x = xal1;
     y = yal2;
-  } else if (line2ParallelToXaxis && line1ParallelToYaxis) {
+  }
+  else if (line2ParallelToXaxis && line1ParallelToYaxis) {
     x = xal2;
     y = yal1;
-  } else if (line1ParallelToXaxis && !line2ParallelToXaxis) {
+  }
+  else if (line1ParallelToXaxis && !line2ParallelToXaxis) {
     x = xal1;
     y = al2 * x + bl2;
-  } else if (line2ParallelToXaxis && !line1ParallelToXaxis) {
+  }
+  else if (line2ParallelToXaxis && !line1ParallelToXaxis) {
     x = xal2;
     y = al1 * x + bl1;
-  } else if ((!line1ParallelToXaxis && !line2ParallelToXaxis)
-      && (!line1ParallelToYaxis && !line2ParallelToYaxis)) {
+  }
+  else if ((!line1ParallelToXaxis && !line2ParallelToXaxis)
+           && (!line1ParallelToYaxis && !line2ParallelToYaxis)) {
 
     float d1 = (bl2 - bl1);
     float d2 = (al1 - al2);
@@ -117,10 +125,12 @@ Coord *computeStraightLineIntersection(const Coord line1[2],
     if (d2 != 0) {
       x = d1 / d2;
       y = al1 * x + bl1;
-    } else {
+    }
+    else {
       parallelLines = true;
     }
-  } else {
+  }
+  else {
     parallelLines = true;
   }
 
@@ -134,9 +144,9 @@ Coord *computeStraightLineIntersection(const Coord line1[2],
 const float CIRCLE_RADIUS = 5.;
 
 GlEditableCurve::GlEditableCurve(const Coord &start, const Coord &end,
-    const Color &curveColor) :
+                                 const Color &curveColor) :
   startPoint(start), endPoint(end), minPoint(startPoint), maxPoint(endPoint),
-      curveColor(curveColor) {
+  curveColor(curveColor) {
   init();
 }
 
@@ -166,7 +176,7 @@ void GlEditableCurve::draw(float lod, Camera* camera) {
   camera->initGl();
   glDisable(GL_LIGHTING);
   GlLines::glDrawCurve(startPoint, curvePoints, endPoint, 2.,
-      GlLines::TLP_PLAIN, curveColor, curveColor);
+                       GlLines::TLP_PLAIN, curveColor, curveColor);
   glEnable(GL_LIGHTING);
 
   vector<Coord> curvePointsCp(curvePoints);
@@ -202,7 +212,7 @@ bool GlEditableCurve::pointBelong(const Coord &point) {
     double startToPointDist = curvePointsCp[i].dist(point);
     double pointToEndDist = point.dist(curvePointsCp[i + 1]);
     ret = ret || (((startToPointDist + pointToEndDist) - startToEndDist)
-        / startToEndDist < 1E-3);
+                  / startToEndDist < 1E-3);
   }
 
   return ret;
@@ -212,6 +222,7 @@ void GlEditableCurve::addCurveAnchor(const Coord &point) {
   Coord anchorPoint(point);
   anchorPoint.setZ(startPoint.getZ());
   boundingBox.expand(anchorPoint);
+
   if (anchorPoint != startPoint && anchorPoint != endPoint) {
     curvePoints.push_back(anchorPoint);
   }
@@ -223,9 +234,11 @@ Coord *GlEditableCurve::getCurveAnchorAtPointIfAny(const Coord &point) {
   curvePointsCp.insert(curvePointsCp.begin(), startPoint);
   curvePointsCp.push_back(endPoint);
   vector<Coord>::iterator it;
+
   for (it = curvePointsCp.begin(); it != curvePointsCp.end(); ++it) {
     Coord anchorCenter = *it;
     ;
+
     if (point.getX() > (anchorCenter.getX() - CIRCLE_RADIUS) && point.getX()
         < (anchorCenter.getX() + CIRCLE_RADIUS) && point.getY()
         > (anchorCenter.getY() - CIRCLE_RADIUS) && point.getY()
@@ -234,6 +247,7 @@ Coord *GlEditableCurve::getCurveAnchorAtPointIfAny(const Coord &point) {
       break;
     }
   }
+
   return anchor;
 }
 
@@ -244,12 +258,15 @@ Coord GlEditableCurve::translateCurveAnchorToPoint(const Coord &curveAnchor,
 
   if (newAnchorCenter.getX() < minPoint.getX()) {
     newAnchorCenter.setX(minPoint.getX());
-  } else if (newAnchorCenter.getX() > maxPoint.getX()) {
+  }
+  else if (newAnchorCenter.getX() > maxPoint.getX()) {
     newAnchorCenter.setX(maxPoint.getX());
   }
+
   if (newAnchorCenter.getY() < minPoint.getY()) {
     newAnchorCenter.setY(minPoint.getY());
-  } else if (newAnchorCenter.getY() > maxPoint.getY()) {
+  }
+  else if (newAnchorCenter.getY() > maxPoint.getY()) {
     newAnchorCenter.setY(maxPoint.getY());
   }
 
@@ -259,20 +276,23 @@ Coord GlEditableCurve::translateCurveAnchorToPoint(const Coord &curveAnchor,
       == startPoint.getY()) {
     newAnchorCenter.setX(startPoint.getX());
     startPoint = newAnchorCenter;
-  } else if (curveAnchor.getX() == endPoint.getX() && curveAnchor.getY()
-      == endPoint.getY()) {
+  }
+  else if (curveAnchor.getX() == endPoint.getX() && curveAnchor.getY()
+           == endPoint.getY()) {
     newAnchorCenter.setX(endPoint.getX());
     endPoint = newAnchorCenter;
-  } else {
-    std::replace(curvePoints.begin(), curvePoints.end(), curveAnchor,
-        newAnchorCenter);
   }
+  else {
+    std::replace(curvePoints.begin(), curvePoints.end(), curveAnchor,
+                 newAnchorCenter);
+  }
+
   return newAnchorCenter;
 }
 
 void GlEditableCurve::removeCurveAnchor(const Coord &curveAnchor) {
   curvePoints.erase(std::remove(curvePoints.begin(), curvePoints.end(),
-      curveAnchor), curvePoints.end());
+                                curveAnchor), curvePoints.end());
 }
 
 float GlEditableCurve::getYCoordForX(const float xCoord) {
@@ -297,23 +317,28 @@ float GlEditableCurve::getYCoordForX(const float xCoord) {
 
   float ret;
   Coord *intersectionPoint = computeStraightLineIntersection(line1, line2);
+
   if (intersectionPoint != NULL) {
     ret = intersectionPoint->getY();
     delete intersectionPoint;
-  } else {
+  }
+  else {
     ret = line2[1].getY();
   }
+
   return ret;
 }
 
 void GlEditableCurve::updateSize(const Coord &newMinPoint,
-    const Coord &newMaxPoint) {
+                                 const Coord &newMaxPoint) {
   float oldLength = maxPoint.getX() - minPoint.getX();
   float newLength = newMaxPoint.getX() - newMinPoint.getX();
+
   for (unsigned int i = 0; i < curvePoints.size(); ++i) {
     curvePoints[i].setX(newMinPoint.getX() + ((curvePoints[i].getX()
-        - minPoint.getX()) * newLength) / oldLength);
+                        - minPoint.getX()) * newLength) / oldLength);
   }
+
   minPoint = newMinPoint;
   maxPoint = newMaxPoint;
   startPoint.setX(minPoint.getX());
@@ -332,6 +357,7 @@ ColorScale::~ColorScale() {
 
 void ColorScale::setColorScale(const std::vector<Color> colors) {
   colorMap.clear();
+
   if (!colors.empty()) {
     float shift = 1.0f / colors.size()-1;
 
@@ -339,7 +365,8 @@ void ColorScale::setColorScale(const std::vector<Color> colors) {
       if (i == colors.size() - 1 && i * shift != 1.0f) {
         //Ensure that the last color will be set to 1
         colorMap[1.0f] = colors[i];
-      } else {
+      }
+      else {
         colorMap[(float) (i * shift)] = colors[i];
       }
     }
@@ -349,32 +376,39 @@ void ColorScale::setColorScaleFromImage(const std::string &imageFile) {
   QImage gradientImage(imageFile.c_str());
   unsigned int imageHeight = gradientImage.height();
   vector<Color> colors;
+
   for (unsigned int i = 0; i < imageHeight; ++i) {
     QRgb pixelValue = gradientImage.pixel(0, i);
     colors.push_back(Color(qRed(pixelValue), qGreen(pixelValue), qBlue(
-        pixelValue), qAlpha(pixelValue)));
+                             pixelValue), qAlpha(pixelValue)));
   }
+
   std::reverse(colors.begin(), colors.end());
   setColorScale(colors);
 }
 
 Color ColorScale::getColorAtLen(const float pos) const {
   assert(pos >= 0 && pos <= 1);
+
   if (colorMap.size() == 0) {
     return Color(255, 255, 255);
-  } else {
+  }
+  else {
     Color startColor;
     Color endColor;
     float startCoord, endCoord;
     map<float, Color>::const_iterator it = colorMap.begin();
     startCoord = endCoord = it->first;
     startColor = endColor = it->second;
+
     for (++it; it != colorMap.end(); ++it) {
       endColor = it->second;
       endCoord = it->first;
+
       if (pos >= startCoord && pos <= endCoord) {
         break;
-      } else {
+      }
+      else {
         startColor = endColor;
         startCoord = endCoord;
       }
@@ -382,18 +416,20 @@ Color ColorScale::getColorAtLen(const float pos) const {
 
     Color ret;
     double ratio = (pos - startCoord) / (endCoord - startCoord);
+
     for (unsigned int i = 0; i < 3; ++i) {
       ret[i] = (unsigned char) (double(startColor[i]) + (double(endColor[i])
-          - double(startColor[i])) * ratio);
+                                - double(startColor[i])) * ratio);
     }
+
     return ret;
   }
 }
 
 GlColorScale::GlColorScale(const Coord &baseCoord, const float length,
-    const float thickness, Orientation orientation, ColorScale *colorScale) :
+                           const float thickness, Orientation orientation, ColorScale *colorScale) :
   scale(colorScale), baseCoord(baseCoord), length(length),
-      thickness(thickness), colorScalePolyQuad(NULL),orientation(orientation) {
+  thickness(thickness), colorScalePolyQuad(NULL),orientation(orientation) {
   if (colorScale)
     updateDrawing();
 
@@ -404,13 +440,16 @@ GlColorScale::GlColorScale(const GlColorScale &colorScale) {
     scale = new ColorScale(*colorScale.scale);
   else
     scale = NULL;
+
   baseCoord = colorScale.getBaseCoord();
   thickness = colorScale.getThickness();
   length = colorScale.getLength();
   GlPolyQuad *polyQuad = colorScale.getColorScalePolyQuad();
+
   if (polyQuad != NULL) {
     colorScalePolyQuad = new GlPolyQuad(*polyQuad);
-  } else {
+  }
+  else {
     colorScalePolyQuad = NULL;
   }
 }
@@ -430,6 +469,7 @@ void GlColorScale::updateDrawing() {
   if (colorScalePolyQuad != NULL) {
     delete colorScalePolyQuad;
   }
+
   if (!scale)
     return;
 
@@ -441,49 +481,55 @@ void GlColorScale::updateDrawing() {
       Coord quadEdgeStart(baseCoord.getX() - thickness / 2, baseCoord.getY());
       Coord quadEdgeEnd(baseCoord.getX() + thickness / 2, baseCoord.getY());
       colorScalePolyQuad->addQuadEdge(quadEdgeStart, quadEdgeEnd,
-          colorMap.begin()->second);
+                                      colorMap.begin()->second);
 
       Coord quadEdgeStart2(baseCoord.getX() - thickness / 2, baseCoord.getY()
-          + length);
+                           + length);
       Coord quadEdgeEnd2(baseCoord.getX() + thickness / 2, baseCoord.getY()
-          + length);
+                         + length);
       colorScalePolyQuad->addQuadEdge(quadEdgeStart2, quadEdgeEnd2,
-          colorMap.begin()->second);
+                                      colorMap.begin()->second);
 
-    } else {
+    }
+    else {
       Coord quadEdgeStart(baseCoord.getX(), baseCoord.getY() - thickness / 2);
       Coord quadEdgeEnd(baseCoord.getX(), baseCoord.getY() + thickness / 2);
       colorScalePolyQuad->addQuadEdge(quadEdgeStart, quadEdgeEnd,
-          colorMap.begin()->second);
+                                      colorMap.begin()->second);
       Coord quadEdgeStart2(baseCoord.getX() + length, baseCoord.getY()
-          - thickness / 2);
+                           - thickness / 2);
       Coord quadEdgeEnd2(baseCoord.getX() + length, baseCoord.getY()
-          + thickness / 2);
+                         + thickness / 2);
       colorScalePolyQuad->addQuadEdge(quadEdgeStart2, quadEdgeEnd2,
-          colorMap.begin()->second);
+                                      colorMap.begin()->second);
     }
-  } else {
+  }
+  else {
 
     Coord currentMin, currentMax;
     assert(colorMap.begin()->first == 0 );
+
     for (map<float, Color>::iterator colorMapIt = colorMap.begin(); colorMapIt
-        != colorMap.end(); ++colorMapIt) {
+         != colorMap.end(); ++colorMapIt) {
       if (orientation == Vertival) {
         currentMin.set(baseCoord.getX() - thickness / 2, baseCoord.getY()
-            + colorMapIt->first * length);
+                       + colorMapIt->first * length);
         currentMax.set(baseCoord.getX() + thickness / 2, baseCoord.getY()
-            + colorMapIt->first * length);
-      } else {
+                       + colorMapIt->first * length);
+      }
+      else {
         currentMin.set(baseCoord.getX() + colorMapIt->first * length,
-            baseCoord.getY() - thickness / 2, 0);
+                       baseCoord.getY() - thickness / 2, 0);
         currentMax.set(baseCoord.getX() + colorMapIt->first * length,
-            baseCoord.getY() + thickness / 2, 0);
+                       baseCoord.getY() + thickness / 2, 0);
 
       }
+
       colorScalePolyQuad->addQuadEdge(currentMin, currentMax,
-          colorMapIt->second);
+                                      colorMapIt->second);
     }
   }
+
   boundingBox = colorScalePolyQuad->getBoundingBox();
 }
 void GlColorScale::draw(float lod, Camera* camera) {
@@ -495,7 +541,8 @@ void GlColorScale::draw(float lod, Camera* camera) {
 Color GlColorScale::getColorAtPos(Coord pos) {
   if (orientation == GlColorScale::Vertival) {
     return scale->getColorAtLen((pos.getY() - baseCoord.getY()) / length);
-  } else {
+  }
+  else {
     return scale->getColorAtLen((pos.getX() - baseCoord.getX()) / length);
   }
 }

@@ -20,8 +20,8 @@
 #include "ComputeSOMWidget.h"
 
 ComputeSOMWidget::ComputeSOMWidget(QWidget* parent) :
-	QWidget(parent) {
-	setupUi(this);
+  QWidget(parent) {
+  setupUi(this);
 }
 
 ComputeSOMWidget::~ComputeSOMWidget() {

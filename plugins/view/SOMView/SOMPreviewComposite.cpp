@@ -60,10 +60,12 @@ SOMPreviewComposite::SOMPreviewComposite(tlp::Coord position, tlp::Size size, co
   Coord screenshotCoord(position.getX() + spacing, position.getY() + spacing + lColorScaleSize.getH());
 
   Size diff = screenshotMaxSize - screenshotSize;
+
   if (diff.getW() > 0) {
 
     screenshotCoord.setX(screenshotCoord.getX() + diff.getW() / 2);
   }
+
   if (diff.getH() > 0) {
     screenshotCoord.setY(screenshotCoord.getY() + diff.getH() / 2);
   }
@@ -104,21 +106,26 @@ bool SOMPreviewComposite::isElement(GlEntity* entity) {
   deque<GlComposite*> compositeToExplore;
   //Search in the current composite and all internal composites to find the element.
   compositeToExplore.push_back(this);
+
   while (!compositeToExplore.empty()) {
     GlComposite *current = compositeToExplore.front();
     compositeToExplore.pop_front();
 
     map<string, GlSimpleEntity*> displays = current->getGlEntities();
+
     for (map<string, GlSimpleEntity*>::iterator itElements = displays.begin(); itElements != displays.end(); ++itElements) {
       if (itElements->second == entity) {
         return true;
       }
+
       //If the element is a composite add it to the list of composite to explore.
       GlComposite *composite = dynamic_cast<GlComposite*> (itElements->second);
+
       if (composite) {
         compositeToExplore.push_back(composite);
       }
     }
   }
+
   return false;
 }

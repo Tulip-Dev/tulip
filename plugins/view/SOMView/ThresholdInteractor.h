@@ -33,124 +33,124 @@
 
 class Slider {
 public:
-	virtual ~Slider() {
-	}
-	;
-	virtual float getLeftBound() = 0;
-	virtual float getRightBound() = 0;
-	virtual void beginShift() = 0;
-	virtual void shift(float shift)=0;
-	virtual void endShift() = 0;
+  virtual ~Slider() {
+  }
+  ;
+  virtual float getLeftBound() = 0;
+  virtual float getRightBound() = 0;
+  virtual void beginShift() = 0;
+  virtual void shift(float shift)=0;
+  virtual void endShift() = 0;
 };
 
 class ColorScaleSlider: public Slider,
-		public tlp::GlComposite,
-                public tlp::Observable {
+  public tlp::GlComposite,
+  public tlp::Observable {
 public:
-	enum SliderWay {
-		ToLeft, ToRight
-	};
-	ColorScaleSlider(SliderWay way, tlp::Size size,
-			GlLabelledColorScale *colorScale,const std::string& textureName);
-	~ColorScaleSlider();
-	void draw(float lod, tlp::Camera *camera);
-	void setColor(tlp::Color c);
-	tlp::Coord getBasePosition() {
-		return position;
-	}
-	tlp::Size getSize() {
-		return size;
-	}
-	SliderWay getWay() {
-		return way;
-	}
-	void setLinkedSlider(ColorScaleSlider* linkedSlider);
-	ColorScaleSlider* getLinkedSlider() {
-		return linkedSlider;
-	}
-	float getLeftBound();
-	float getRightBound();
-	void beginShift();
-	void shift(float shift);
-	void endShift();
-	double getValue() {
-		return linkedScale->getMinValue() + currentShift
-				* (linkedScale->getMaxValue() - linkedScale->getMinValue());
-	}
-	float getCurrentShift() const {
-		return currentShift;
-	}
+  enum SliderWay {
+    ToLeft, ToRight
+  };
+  ColorScaleSlider(SliderWay way, tlp::Size size,
+                   GlLabelledColorScale *colorScale,const std::string& textureName);
+  ~ColorScaleSlider();
+  void draw(float lod, tlp::Camera *camera);
+  void setColor(tlp::Color c);
+  tlp::Coord getBasePosition() {
+    return position;
+  }
+  tlp::Size getSize() {
+    return size;
+  }
+  SliderWay getWay() {
+    return way;
+  }
+  void setLinkedSlider(ColorScaleSlider* linkedSlider);
+  ColorScaleSlider* getLinkedSlider() {
+    return linkedSlider;
+  }
+  float getLeftBound();
+  float getRightBound();
+  void beginShift();
+  void shift(float shift);
+  void endShift();
+  double getValue() {
+    return linkedScale->getMinValue() + currentShift
+           * (linkedScale->getMaxValue() - linkedScale->getMinValue());
+  }
+  float getCurrentShift() const {
+    return currentShift;
+  }
 
-	void setValue(double value);
-	void update(std::set<Observable *>::iterator begin,
-			std::set<Observable *>::iterator end);
-	void observableDestroyed(Observable *);
+  void setValue(double value);
+  void update(std::set<Observable *>::iterator begin,
+              std::set<Observable *>::iterator end);
+  void observableDestroyed(Observable *);
 protected:
-	void buildComposite(const std::string& textureName);
-	void updatePosition();
-	void computeBoundingBox();
-	SliderWay way;
-	tlp::Coord position;
-	tlp::Size size;
-	tlp::GlPolygon *arrow;
-	tlp::GlQuad *rect;
-	tlp::GlLabel *label;
-	ColorScaleSlider* linkedSlider;
-	GlLabelledColorScale *linkedScale;
+  void buildComposite(const std::string& textureName);
+  void updatePosition();
+  void computeBoundingBox();
+  SliderWay way;
+  tlp::Coord position;
+  tlp::Size size;
+  tlp::GlPolygon *arrow;
+  tlp::GlQuad *rect;
+  tlp::GlLabel *label;
+  ColorScaleSlider* linkedSlider;
+  GlLabelledColorScale *linkedScale;
 
-	float currentShift;
+  float currentShift;
 };
 
 class SliderBar: public Slider, public tlp::GlSimpleEntity {
 
 public:
-	SliderBar(ColorScaleSlider* left, ColorScaleSlider* right,const std::string& textureName);
-	~SliderBar();
-	float getLeftBound();
-	float getRightBound();
-	void beginShift();
-	void shift(float shift);
-	void endShift();
-	void draw(float lod, tlp::Camera *camera);
-  void getXML(std::string &){}
+  SliderBar(ColorScaleSlider* left, ColorScaleSlider* right,const std::string& textureName);
+  ~SliderBar();
+  float getLeftBound();
+  float getRightBound();
+  void beginShift();
+  void shift(float shift);
+  void endShift();
+  void draw(float lod, tlp::Camera *camera);
+  void getXML(std::string &) {}
   void setWithXML(const std::string &, unsigned int &) {}
 
 protected:
-	ColorScaleSlider* left;
-	ColorScaleSlider* right;
-    std::string texture;
-    bool isVisible;
+  ColorScaleSlider* left;
+  ColorScaleSlider* right;
+  std::string texture;
+  bool isVisible;
 };
 
 class ThresholdInteractor: public EditColorScaleInteractor {
 public:
-	ThresholdInteractor();
-	virtual ~ThresholdInteractor();
-	bool draw(tlp::GlMainWidget *glMainWidget);
-	bool eventFilter(QObject *, QEvent *);
-	void setView(View *view);
-	InteractorComponent *clone() {
-		return new ThresholdInteractor();
-	}
+  ThresholdInteractor();
+  virtual ~ThresholdInteractor();
+  bool draw(tlp::GlMainWidget *glMainWidget);
+  bool eventFilter(QObject *, QEvent *);
+  void setView(View *view);
+  InteractorComponent *clone() {
+    return new ThresholdInteractor();
+  }
 protected:
-	void screenSizeChanged(SOMView* somView);
-    void propertyChanged(SOMView* somView,const std::string& propertyName, tlp::DoubleProperty *newProperty);
-	void performSelection(SOMView *somView, tlp::Iterator<node> *it);
-	void buildSliders(SOMView* somView);
-	void clearSliders();
-	void generateSliderTexture(tlp::GlMainWidget* widget);
+  void screenSizeChanged(SOMView* somView);
+  void propertyChanged(SOMView* somView,const std::string& propertyName, tlp::DoubleProperty *newProperty);
+  void performSelection(SOMView *somView, tlp::Iterator<node> *it);
+  void buildSliders(SOMView* somView);
+  void clearSliders();
+  void generateSliderTexture(tlp::GlMainWidget* widget);
 
-	tlp::GlLayer *layer;
+  tlp::GlLayer *layer;
 
-	Slider *mouvingSlider;
-	ColorScaleSlider *rSlider;
-	ColorScaleSlider *lSlider;
-	bool startDrag;
-	int XPosCursor;
+  Slider *mouvingSlider;
+  ColorScaleSlider *rSlider;
+  ColorScaleSlider *lSlider;
+  bool startDrag;
+  int XPosCursor;
 
-	QMutex lock;
-	std::string textureName;
-	GLuint textureId;
+  QMutex lock;
+  std::string textureName;
+  GLuint textureId;
 };
 
 #endif /* THRESHOLDINTERACTOR_H_ */

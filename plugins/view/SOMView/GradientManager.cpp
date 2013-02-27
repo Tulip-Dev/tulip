@@ -32,25 +32,28 @@ GradientManager::~GradientManager() {
 
 void GradientManager::cleanAllGradients() {
   for (map<string, ColorScale*>::iterator it = colorScaleMap.begin(); it
-      != colorScaleMap.end(); ++it) {
+       != colorScaleMap.end(); ++it) {
     delete it->second;
   }
+
   colorScaleMap.clear();
 }
 
 void GradientManager::init(const std::vector<std::string>& properties) {
   //Save old map in order to preserve user definition
   cleanAllGradients();
+
   if (properties.empty())
     return;
 
   int shift =
-      (int) floor((endColorRange - beginColorRange) / properties.size());
+    (int) floor((endColorRange - beginColorRange) / properties.size());
   pair<Color, Color> newColors;
   newColors.first.setV(255);
   newColors.first.setS(255);
   newColors.second.setV(255);
   newColors.second.setS(255);
+
   for (unsigned int i = 0; i < properties.size(); ++i) {
 
     //newColors.second.setS(minSVal);
@@ -72,7 +75,8 @@ void GradientManager::init(const std::vector<std::string>& properties) {
 ColorScale *GradientManager::getColorScale(const std::string& propertyName) {
   if (colorScaleMap.find(propertyName) != colorScaleMap.end()) {
     return colorScaleMap[propertyName];
-  } else
+  }
+  else
     return NULL;
 }
 

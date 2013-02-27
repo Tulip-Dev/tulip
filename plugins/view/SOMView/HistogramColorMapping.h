@@ -57,7 +57,7 @@ class GlEditableCurve: public GlSimpleEntity {
 public:
 
   GlEditableCurve(const Coord &startPoint, const Coord &endPoint,
-      const Color &curveColor);
+                  const Color &curveColor);
   GlEditableCurve(const GlEditableCurve &curve);
   ~GlEditableCurve() {
   }
@@ -67,7 +67,7 @@ public:
   Coord *getCurveAnchorAtPointIfAny(const Coord &point);
   void removeCurveAnchor(const Coord &curveAnchor);
   Coord translateCurveAnchorToPoint(const Coord &curveAnchor,
-      const Coord &targetPoint);
+                                    const Coord &targetPoint);
   float getYCoordForX(const float xCoord);
   void updateSize(const Coord &newMinPoint, const Coord &newMaxPoint);
 
@@ -132,7 +132,7 @@ public:
     Horizontal, Vertival
   };
   GlColorScale(const Coord &baseCoord, const float length,
-      const float thickness, Orientation orientation,ColorScale *colorScale=NULL);
+               const float thickness, Orientation orientation,ColorScale *colorScale=NULL);
   GlColorScale(const GlColorScale &colorScale);
   ~GlColorScale();
 

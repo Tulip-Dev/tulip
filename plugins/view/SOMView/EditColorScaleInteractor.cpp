@@ -35,68 +35,74 @@ EditColorScaleInteractor::EditColorScaleInteractor() :
 EditColorScaleInteractor::~EditColorScaleInteractor() {
   selectionLayer->clear();
   delete selectionLayer;
-	delete colorScale;
+  delete colorScale;
 }
 
 bool EditColorScaleInteractor::eventFilter(QObject *obj, QEvent *event) {
-	tlp::GlMainWidget *glMainWidget = dynamic_cast<tlp::GlMainWidget*> (obj);
-	if (glMainWidget == NULL)
-		return false;
+  tlp::GlMainWidget *glMainWidget = dynamic_cast<tlp::GlMainWidget*> (obj);
 
-	if (event->type() == QEvent::MouseButtonDblClick) {
-		QMouseEvent *me = (QMouseEvent*) event;
-		tlp::GlMainWidget *glMainWidget = dynamic_cast<tlp::GlMainWidget*> (obj);
-		if (!glMainWidget)
-			return false;
+  if (glMainWidget == NULL)
+    return false;
+
+  if (event->type() == QEvent::MouseButtonDblClick) {
+    QMouseEvent *me = (QMouseEvent*) event;
+    tlp::GlMainWidget *glMainWidget = dynamic_cast<tlp::GlMainWidget*> (obj);
+
+    if (!glMainWidget)
+      return false;
 
     glMainWidget->getScene()->getGraphCamera().initGl();
-//		GlLayer layer("sel");
-		selectionLayer->set2DMode();
+//    GlLayer layer("sel");
+    selectionLayer->set2DMode();
     glMainWidget->getScene()->addExistingLayer(selectionLayer);
-		selectionLayer->getCamera().initGl();
-		selectionLayer->addGlEntity(colorScale, "colorScale");
+    selectionLayer->getCamera().initGl();
+    selectionLayer->addGlEntity(colorScale, "colorScale");
 
     std::vector<SelectedEntity> entities;
-		glMainWidget->getScene()->selectEntities(RenderingSimpleEntities, me->pos().x(),
-				me->pos().y(), 2, 2, selectionLayer, entities);
-		bool foundGlColorScale = false;
-		if (!entities.empty()) {
-      for (vector<SelectedEntity>::iterator entityIterator = entities.begin(); entityIterator
-					!= entities.end(); ++entityIterator) {
-        if ((*entityIterator).getSimpleEntity() == colorScale->getGlColorScale()) {
-					ColorScaleConfigDialog dialog(colorScale->getGlColorScale()->getColorScale(),
-							glMainWidget);
-					foundGlColorScale = true;
-					dialog.exec();
-				}
-			}
+    glMainWidget->getScene()->selectEntities(RenderingSimpleEntities, me->pos().x(),
+        me->pos().y(), 2, 2, selectionLayer, entities);
+    bool foundGlColorScale = false;
 
-		}
-		//Empty layer without destructing objects.
-		selectionLayer->deleteGlEntity(colorScale);
+    if (!entities.empty()) {
+      for (vector<SelectedEntity>::iterator entityIterator = entities.begin(); entityIterator
+           != entities.end(); ++entityIterator) {
+        if ((*entityIterator).getSimpleEntity() == colorScale->getGlColorScale()) {
+          ColorScaleConfigDialog dialog(colorScale->getGlColorScale()->getColorScale(),
+                                        glMainWidget);
+          foundGlColorScale = true;
+          dialog.exec();
+        }
+      }
+
+    }
+
+    //Empty layer without destructing objects.
+    selectionLayer->deleteGlEntity(colorScale);
     glMainWidget->getScene()->removeLayer(selectionLayer,false);
 
-		return foundGlColorScale;
-	}
-	return false;
+    return foundGlColorScale;
+  }
+
+  return false;
 }
 void EditColorScaleInteractor::viewChanged(View *view) {
-	SOMView *somView = dynamic_cast<SOMView*> (view);
-	if (somView != NULL) {
-		assert(colorScale == NULL);
-		GlMainWidget* glMainWidget = somView->getMapWidget();
-		Size screenSize(glMainWidget->width() * widthPercent, glMainWidget->height()
-				* heightPercent);
-		Coord bottomLeftScreenCoord((glMainWidget->width() - screenSize.getW()) * .5,
-				glMainWidget->height() * .1, 0);
-		colorScale = new GlLabelledColorScale(bottomLeftScreenCoord, screenSize,
-				somView->getColorScale(), 0, 0, false);
+  SOMView *somView = dynamic_cast<SOMView*> (view);
 
-        propertyChanged(somView,somView->getSelectedProperty(), somView->getSelectedPropertyValues());
-	}
+  if (somView != NULL) {
+    assert(colorScale == NULL);
+    GlMainWidget* glMainWidget = somView->getMapWidget();
+    Size screenSize(glMainWidget->width() * widthPercent, glMainWidget->height()
+                    * heightPercent);
+    Coord bottomLeftScreenCoord((glMainWidget->width() - screenSize.getW()) * .5,
+                                glMainWidget->height() * .1, 0);
+    colorScale = new GlLabelledColorScale(bottomLeftScreenCoord, screenSize,
+                                          somView->getColorScale(), 0, 0, false);
+
+    propertyChanged(somView,somView->getSelectedProperty(), somView->getSelectedPropertyValues());
+  }
 }
 
-bool EditColorScaleInteractor::compute(GlMainWidget *){
+bool EditColorScaleInteractor::compute(GlMainWidget *) {
   SOMView *somView = dynamic_cast<SOMView*> (view());
   assert(somView != NULL);
 
@@ -106,32 +112,36 @@ bool EditColorScaleInteractor::compute(GlMainWidget *){
 
 bool EditColorScaleInteractor::draw(GlMainWidget *glMainWidget) {
   SOMView *somView = dynamic_cast<SOMView*> (view());
-	assert(somView != NULL);
+  assert(somView != NULL);
 
-	if (colorScale) {
-		DoubleProperty *newProperty = somView->getSelectedPropertyValues();        
+  if (colorScale) {
+    DoubleProperty *newProperty = somView->getSelectedPropertyValues();
 
-		if (currentProperty != newProperty) {
-            propertyChanged(somView,somView->getSelectedProperty(), newProperty);
-		}
-		if (colorScale->isVisible()) {
+    if (currentProperty != newProperty) {
+      propertyChanged(somView,somView->getSelectedProperty(), newProperty);
+    }
+
+    if (colorScale->isVisible()) {
       glMainWidget->getScene()->getGraphCamera().initGl();
-			Camera camera2D = Camera(glMainWidget->getScene(), false);
-			camera2D.setScene(glMainWidget->getScene());
-			camera2D.initGl();
+      Camera camera2D = Camera(glMainWidget->getScene(), false);
+      camera2D.setScene(glMainWidget->getScene());
+      camera2D.initGl();
 
       map<string, GlSimpleEntity*> displays = colorScale->getGlEntities();
+
       for (map<string, GlSimpleEntity*>::iterator it = displays.begin(); it!= displays.end(); ++it) {
-				it->second->draw(0, &camera2D);
-			}
-		}
-	}
-	return true;
+        it->second->draw(0, &camera2D);
+      }
+    }
+  }
+
+  return true;
 }
 
 void EditColorScaleInteractor::screenSizeChanged(SOMView* somView) {
-	GlMainWidget* glMainWidget = somView->getMapWidget();
-  if(glMainWidget->width()!=glMainWidgetWidth || glMainWidget->height()!=glMainWidgetHeight){
+  GlMainWidget* glMainWidget = somView->getMapWidget();
+
+  if(glMainWidget->width()!=glMainWidgetWidth || glMainWidget->height()!=glMainWidgetHeight) {
     if (colorScale) {
       Size screenSize(glMainWidget->width() * widthPercent, glMainWidget->height()
                       * heightPercent);
@@ -146,16 +156,18 @@ void EditColorScaleInteractor::screenSizeChanged(SOMView* somView) {
 }
 
 void EditColorScaleInteractor::propertyChanged(SOMView* somView,const string& propertyName, DoubleProperty *propertyValues) {
-    if (propertyValues) {
-		colorScale->setVisible(true);
-        //If the input samples are normalized we need to translate it to unormalized values before displaying it.
-        double minValue = propertyValues->getNodeMin(somView->getSOM());
-        double maxValue = propertyValues->getNodeMax(somView->getSOM());
-        InputSample& inputSample = somView->getInputSample();
-        colorScale->setMinValue(inputSample.isUsingNormalizedValues()?inputSample.unnormalize(minValue,propertyName):minValue);
-        colorScale->setMaxValue(inputSample.isUsingNormalizedValues()?inputSample.unnormalize(maxValue,propertyName):maxValue);
-	} else {
-		colorScale->setVisible(false);
-	}
-    currentProperty = propertyValues;
+  if (propertyValues) {
+    colorScale->setVisible(true);
+    //If the input samples are normalized we need to translate it to unormalized values before displaying it.
+    double minValue = propertyValues->getNodeMin(somView->getSOM());
+    double maxValue = propertyValues->getNodeMax(somView->getSOM());
+    InputSample& inputSample = somView->getInputSample();
+    colorScale->setMinValue(inputSample.isUsingNormalizedValues()?inputSample.unnormalize(minValue,propertyName):minValue);
+    colorScale->setMaxValue(inputSample.isUsingNormalizedValues()?inputSample.unnormalize(maxValue,propertyName):maxValue);
+  }
+  else {
+    colorScale->setVisible(false);
+  }
+
+  currentProperty = propertyValues;
 }

@@ -19,7 +19,7 @@
 
 #include "DiffusionRateFunctionSimple.h"
 DiffusionRateFunctionSimple::DiffusionRateFunctionSimple(
-    TimeDecreasingFunction* timeFunction, unsigned int neighborhood) :
+  TimeDecreasingFunction* timeFunction, unsigned int neighborhood) :
   DiffusionRateFunction(timeFunction), neighborhoodMax(neighborhood) {
 
 }
@@ -34,7 +34,7 @@ double DiffusionRateFunctionSimple::computeSpaceRate(unsigned int distance,
 
   if (distance <= neighborhoodMax)
     return 1 * timeFunction->computeCurrentTimeRate(currentIteration,
-        maxIteration, inputSampleSize);
+           maxIteration, inputSampleSize);
   else
     return 0;
 }

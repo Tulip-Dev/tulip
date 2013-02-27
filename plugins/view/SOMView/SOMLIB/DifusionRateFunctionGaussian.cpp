@@ -22,7 +22,7 @@
 #include <tulip/tulipconf.h>
 
 DifusionRateFunctionGaussian::DifusionRateFunctionGaussian(
-    TimeDecreasingFunction* decreasingFunction) : DiffusionRateFunction(decreasingFunction) {
+  TimeDecreasingFunction* decreasingFunction) : DiffusionRateFunction(decreasingFunction) {
 }
 
 DifusionRateFunctionGaussian::~DifusionRateFunctionGaussian() {
@@ -33,7 +33,7 @@ double DifusionRateFunctionGaussian::computeSpaceRate(unsigned int distance,
     unsigned int inputSampleSize) {
 
   double timeVal = timeFunction->computeCurrentTimeRate(currentIteration,
-      maxIteration, inputSampleSize);
+                   maxIteration, inputSampleSize);
   double value = (sqrt((distance * distance))) / (2 * (timeVal * timeVal));
 
   return exp(-value);

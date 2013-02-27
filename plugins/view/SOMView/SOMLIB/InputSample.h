@@ -35,15 +35,15 @@ class InputSample: public tlp::Observable {
 public:
   InputSample(tlp::Graph *graph = NULL);
   InputSample(tlp::Graph *graph,
-      const std::vector<std::string>& propertiesToListen);
+              const std::vector<std::string>& propertiesToListen);
 
   void setGraph(tlp::Graph *graph);
   void setGraph(tlp::Graph *graph,
-      const std::vector<std::string>& propertiesToListen);
+                const std::vector<std::string>& propertiesToListen);
 
   void setPropertiesToListen(const std::vector<std::string>& propertiesToListen);
   std::vector<std::string> getListenedProperties();
-  virtual ~InputSample();  
+  virtual ~InputSample();
 
   const DynamicVector<double>& getWeight(tlp::node n);
 
@@ -62,7 +62,7 @@ public:
   }
 
   void update(std::set<tlp::Observable *>::iterator begin, std::set<
-      tlp::Observable *>::iterator end);
+              tlp::Observable *>::iterator end);
   void observableDestroyed(Observable *) {
   }
   ;
@@ -85,13 +85,13 @@ public:
   //recover normalized value for val according to meanProperties[propNum] and sdProperties[propNum]
   double normalize(double val,unsigned propNum);
   //convinience function
-  double normalize(double val,const std::string& propertyName){
-      return normalize(val,findIndexForProperty(propertyName));
+  double normalize(double val,const std::string& propertyName) {
+    return normalize(val,findIndexForProperty(propertyName));
   }
   //recover unnormalized value for val according to meanProperties[propNum] and sdProperties[propNum]
   double unnormalize(double val,unsigned propNum);
-  double unnormalize(double val,const std::string& propertyName){
-      return unnormalize(val,findIndexForProperty(propertyName));
+  double unnormalize(double val,const std::string& propertyName) {
+    return unnormalize(val,findIndexForProperty(propertyName));
   }
 
 
@@ -111,7 +111,7 @@ protected:
   void updateSDValue(unsigned int);
   //Compute the mean values of all propertiesList and store them in meanProperties
   void updateAllMeanValues();
-   //Compute the standard deviation values of all propertiesList and store them in sdProperties
+  //Compute the standard deviation values of all propertiesList and store them in sdProperties
   void updateAllSDValues();
 
   //void buildNodeVector(unsigned int i);
@@ -123,7 +123,7 @@ protected:
   //Data sources
   tlp::Graph *rootGraph;
 
-    //Cache for data avoid to create a somVector each time we need
+  //Cache for data avoid to create a somVector each time we need
   //tlp::MutableContainer<DynamicVector<double> > mWeightTab;
   std::map<unsigned int ,DynamicVector<double> > mWeightTab;
 

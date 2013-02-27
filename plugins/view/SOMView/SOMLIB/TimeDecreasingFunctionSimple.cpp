@@ -27,8 +27,8 @@ TimeDecreasingFunctionSimple::~TimeDecreasingFunctionSimple() {
 }
 
 double TimeDecreasingFunctionSimple::computeCurrentTimeRate(
-    unsigned int currentIteration, unsigned int,
-    unsigned int inputSampleSize) {
+  unsigned int currentIteration, unsigned int,
+  unsigned int inputSampleSize) {
 
   //Learning rate
   return initialCoef / (1 + (currentIteration / inputSampleSize));

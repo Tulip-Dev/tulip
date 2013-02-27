@@ -60,43 +60,51 @@ namespace tlp {
 
 class ScatterPlot2DView : public GlMainView {
 
-	Q_OBJECT
+  Q_OBJECT
 
   void registerTriggers();
 
 public :
 
   PLUGININFORMATIONS(ScatterPlot2DView::viewName, "Antoine Lambert", "03/2009",
-		     "The Scatter Plot 2D view allows to create 2d scatter plots of graph nodes from graph properties (supported types are Metric and Integer).\n"
-		     "A scatter plot is a type of mathematical diagram using Cartesian coordinates to display values for two variables for a set of data. The data are displayed as a collection of points, each having the value of one variable determining the position on the horizontal axis and the value of the other variable determining the position on the vertical axis.\n\n"
-		     "By selecting a set of graph properties, a scatter plot matrix will be displayed for each combination of two different properties. Each scatter plot can then be displayed individually in a more detailed way.\n\n"
-		     "A set of interactors are bundled with the view to perform selection, statistical analysis, ...", "1.0", "View")
+                     "The Scatter Plot 2D view allows to create 2d scatter plots of graph nodes from graph properties (supported types are Metric and Integer).\n"
+                     "A scatter plot is a type of mathematical diagram using Cartesian coordinates to display values for two variables for a set of data. The data are displayed as a collection of points, each having the value of one variable determining the position on the horizontal axis and the value of the other variable determining the position on the vertical axis.\n\n"
+                     "By selecting a set of graph properties, a scatter plot matrix will be displayed for each combination of two different properties. Each scatter plot can then be displayed individually in a more detailed way.\n\n"
+                     "A set of interactors are bundled with the view to perform selection, statistical analysis, ...", "1.0", "View")
 
-	static const std::string viewName;
+  static const std::string viewName;
 
   ScatterPlot2DView(const PluginContext *);
   ~ScatterPlot2DView();
   std::string icon() const {
-      return ":/scatter_plot2d_view.png";
-    }
+    return ":/scatter_plot2d_view.png";
+  }
   void setState(const DataSet &dataSet);
   DataSet state() const;
   Graph *getScatterPlotGraph();
   void graphChanged(Graph *graph);
-	void toggleInteractors(const bool activate);
-	bool interactorsEnabled() const {return interactorsActivated;}
+  void toggleInteractors(const bool activate);
+  bool interactorsEnabled() const {
+    return interactorsActivated;
+  }
   QList<QWidget *> configurationWidgets() const;
-	void computeNodeSizes();
-	void buildScatterPlotsMatrix();
-	std::vector<ScatterPlot2D *> getScatterPlots() const;
-	ScatterPlot2D *getDetailedScatterPlot() const {return detailedScatterPlot;}
-	BoundingBox getMatrixBoundingBox();
-	bool matrixViewSet() const {return matrixView;}
-	void setMatrixView(const bool matrixView) {this->matrixView = matrixView;}
-	void generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWidget *glWidget = NULL);
+  void computeNodeSizes();
+  void buildScatterPlotsMatrix();
+  std::vector<ScatterPlot2D *> getScatterPlots() const;
+  ScatterPlot2D *getDetailedScatterPlot() const {
+    return detailedScatterPlot;
+  }
+  BoundingBox getMatrixBoundingBox();
+  bool matrixViewSet() const {
+    return matrixView;
+  }
+  void setMatrixView(const bool matrixView) {
+    this->matrixView = matrixView;
+  }
+  void generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWidget *glWidget = NULL);
 
-	void switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot);
-	void switchFromDetailViewToMatrixView();
+  void switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot);
+  void switchFromDetailViewToMatrixView();
 
 
 public slots :
@@ -117,46 +125,46 @@ private :
 
   void interactorsInstalled(const QList<tlp::Interactor*>&);
   void generateScatterPlots();
-	void initGlWidget(Graph *graph);
-	void destroyOverviewsIfNeeded();
-	void destroyOverviews();
-	void cleanScene();
-	void addEmptyViewLabel();
-	void removeEmptyViewLabel();
+  void initGlWidget(Graph *graph);
+  void destroyOverviewsIfNeeded();
+  void destroyOverviews();
+  void cleanScene();
+  void addEmptyViewLabel();
+  void removeEmptyViewLabel();
 
-	ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;
-	ScatterPlot2DOptionsWidget *optionsWidget;
+  ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;
+  ScatterPlot2DOptionsWidget *optionsWidget;
 
   Graph *scatterPlotGraph, *emptyGraph;
-	GlLayer *mainLayer;
-	GlGraphComposite *glGraphComposite;
-	SizeProperty *scatterPlotSize;
-	std::vector<std::string> selectedGraphProperties;
-	GlComposite *matrixComposite, *axisComposite, *labelsComposite;
-	std::map<std::pair<std::string, std::string>, ScatterPlot2D *>  scatterPlotsMap;
-	ScatterPlot2D *detailedScatterPlot;
-	std::pair<std::string, std::string> detailedScatterPlotPropertyName;
-	std::map<std::pair<std::string, std::string>, bool> scatterPlotsGenMap;
-	bool center;
-	bool matrixView;
-	double sceneRadiusBak;
-	double zoomFactorBak;
-	Coord eyesBak;
-	Coord centerBak;
-	Coord upBak;
-	QMenu *optionsMenu;
-	QAction *centerViewAction;
-	Interactor *scatterPlotViewNavigator;
-	bool matrixUpdateNeeded;
-	bool newGraphSet;
+  GlLayer *mainLayer;
+  GlGraphComposite *glGraphComposite;
+  SizeProperty *scatterPlotSize;
+  std::vector<std::string> selectedGraphProperties;
+  GlComposite *matrixComposite, *axisComposite, *labelsComposite;
+  std::map<std::pair<std::string, std::string>, ScatterPlot2D *>  scatterPlotsMap;
+  ScatterPlot2D *detailedScatterPlot;
+  std::pair<std::string, std::string> detailedScatterPlotPropertyName;
+  std::map<std::pair<std::string, std::string>, bool> scatterPlotsGenMap;
+  bool center;
+  bool matrixView;
+  double sceneRadiusBak;
+  double zoomFactorBak;
+  Coord eyesBak;
+  Coord centerBak;
+  Coord upBak;
+  QMenu *optionsMenu;
+  QAction *centerViewAction;
+  Interactor *scatterPlotViewNavigator;
+  bool matrixUpdateNeeded;
+  bool newGraphSet;
 
-	int lastViewWindowWidth, lastViewWindowHeight;
+  int lastViewWindowWidth, lastViewWindowHeight;
 
-	bool interactorsActivated;
+  bool interactorsActivated;
   bool initialized;
 
-	static GLuint backgroundTextureId;
-	static unsigned int scatterplotViewInstancesCount;
+  static GLuint backgroundTextureId;
+  static unsigned int scatterplotViewInstancesCount;
 
 };
 

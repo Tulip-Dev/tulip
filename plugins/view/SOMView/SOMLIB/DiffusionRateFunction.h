@@ -41,8 +41,8 @@ public:
    * @return the diffusion rate.
    */
   virtual double computeSpaceRate(unsigned int distance,
-      unsigned int currentIteration, unsigned int maxIteration,
-      unsigned int inputSampleSize) = 0;
+                                  unsigned int currentIteration, unsigned int maxIteration,
+                                  unsigned int inputSampleSize) = 0;
   TimeDecreasingFunction* getTimeDecreasingFunction();
   void setTimeDecreasingFunction(TimeDecreasingFunction* timeFunction);
 protected:

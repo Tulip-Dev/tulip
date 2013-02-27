@@ -40,7 +40,7 @@ public:
    * @return
    */
   virtual double computeCurrentTimeRate(unsigned int currentIteration,
-      unsigned int maxIteration, unsigned int inputSampleSize)=0;
+                                        unsigned int maxIteration, unsigned int inputSampleSize)=0;
 };
 
 #endif /* TIMEDECREASINGFUNCTION_H_ */

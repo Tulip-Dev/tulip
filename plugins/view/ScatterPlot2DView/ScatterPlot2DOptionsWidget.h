@@ -31,50 +31,50 @@ namespace tlp {
 
 class ScatterPlot2DOptionsWidget : public QWidget, public Ui::ScatterPlot2DOptionsWidgetData {
 
-	Q_OBJECT
+  Q_OBJECT
 
 public :
 
-	ScatterPlot2DOptionsWidget(QWidget *parent = 0);
+  ScatterPlot2DOptionsWidget(QWidget *parent = 0);
 
-	bool uniformBackground() const;
-	Color getUniformBackgroundColor() const;
-	Color getMinusOneColor() const;
-	Color getZeroColor() const;
-	Color getOneColor() const;
-	void setBackgroundColor(const Color &color);
-	Size getMinSizeMapping() const;
-	Size getMaxSizeMapping() const;
-	void setMinSizeMapping(const float minSize);
-	void setMaxSizeMapping(const float maxSize);
-	bool displayGraphEdges() const;
-    void setDisplayGraphEdges(const bool showEdges);
+  bool uniformBackground() const;
+  Color getUniformBackgroundColor() const;
+  Color getMinusOneColor() const;
+  Color getZeroColor() const;
+  Color getOneColor() const;
+  void setBackgroundColor(const Color &color);
+  Size getMinSizeMapping() const;
+  Size getMaxSizeMapping() const;
+  void setMinSizeMapping(const float minSize);
+  void setMaxSizeMapping(const float maxSize);
+  bool displayGraphEdges() const;
+  void setDisplayGraphEdges(const bool showEdges);
 
   bool configurationChanged();
 
 protected :
 
-	void showEvent(QShowEvent * event);
+  void showEvent(QShowEvent * event);
 
 private slots :
 
-	void pressBackgroundColorButton();
-	void pressMinusOneColorButton();
-	void pressZeroColorButton();
-	void pressOneColorButton();
-	void minSizeSpinBoxValueChanged(int);
-	void maxSizeSpinBoxValueChanged(int);
+  void pressBackgroundColorButton();
+  void pressMinusOneColorButton();
+  void pressZeroColorButton();
+  void pressOneColorButton();
+  void minSizeSpinBoxValueChanged(int);
+  void maxSizeSpinBoxValueChanged(int);
 
 private :
 
-	void setButtonBackgroundColor(QPushButton *button, const Color &color);
-	void changeButtonBackgroundColor(QPushButton *button);
-	void updateColorScale();
-	Color getButtonColor(QPushButton *button) const;
+  void setButtonBackgroundColor(QPushButton *button, const Color &color);
+  void changeButtonBackgroundColor(QPushButton *button);
+  void updateColorScale();
+  Color getButtonColor(QPushButton *button) const;
 
 public slots :
 
-  void applySettings(){
+  void applySettings() {
     emit(applySettingsSignal());
   }
 

@@ -34,7 +34,7 @@
 class SOMView;
 
 class SOMPropertiesWidget: public QWidget, public Ui::SOMPropertiesWidget, public tlp::Observable {
-Q_OBJECT
+  Q_OBJECT
 public:
 
   enum SizeMappingType {

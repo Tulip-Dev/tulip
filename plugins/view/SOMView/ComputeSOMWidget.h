@@ -25,10 +25,10 @@
  * @brief Class configuring properties selected and number of iteration for computing SOM.
  */
 class ComputeSOMWidget: public QWidget, public Ui::SOMComputeWidget {
-Q_OBJECT
+  Q_OBJECT
 public:
-	ComputeSOMWidget(QWidget* parent = NULL);
-	virtual ~ComputeSOMWidget();
+  ComputeSOMWidget(QWidget* parent = NULL);
+  virtual ~ComputeSOMWidget();
 };
 
 #endif /* COMPUTESOMWIDGET_H_ */

@@ -28,11 +28,13 @@
 using namespace tlp;
 
 SOMMapElement::SOMMapElement(tlp::Coord position, tlp::Size size, SOMMap *map,
-    tlp::ColorProperty *colorProperty) :
+                             tlp::ColorProperty *colorProperty) :
   som(map), position(position), size(size) {
   buildMainComposite(position, size, map);
+
   if (colorProperty)
     updateColors(colorProperty);
+
   computeNodeAreaSize();
 }
 
@@ -45,8 +47,10 @@ void SOMMapElement::setData(SOMMap* map, tlp::ColorProperty* colorProperty) {
   reset(true);
   nodesMap.clear();
   buildMainComposite(position, size, som);
+
   if (colorProperty)
     updateColors(colorProperty);
+
   computeNodeAreaSize();
 }
 
@@ -60,7 +64,7 @@ float SOMMapElement::computeMaximizedRadiusForHexagone(unsigned int width,
 }
 
 void SOMMapElement::buildMainComposite(tlp::Coord basePos, tlp::Size gridSize,
-    SOMMap* map) {
+                                       SOMMap* map) {
   reset(true);
 
   SOMMap::SOMMapConnectivity conn = map->getConnectivity();
@@ -72,7 +76,7 @@ void SOMMapElement::buildMainComposite(tlp::Coord basePos, tlp::Size gridSize,
 
     //Compute the best radius
     float r = computeMaximizedRadiusForHexagone(map->getWidth(),
-        map->getHeight(), gridSize);
+              map->getHeight(), gridSize);
 
     float h = r / 2;
     float ri = cos(DEGTORAD(30)) * r;
@@ -94,7 +98,7 @@ void SOMMapElement::buildMainComposite(tlp::Coord basePos, tlp::Size gridSize,
         n = map->getNodeAt(j, i);
         Color c = Color(255, 255, 255, 0);
         tlp::GlCircle *hex = new tlp::GlCircle(center, r, c, c, true, false,
-            M_PI / 2, 6);
+                                               M_PI / 2, 6);
         oss.str("");
         oss << j << "," << i;
         addGlEntity(hex, oss.str());
@@ -102,18 +106,19 @@ void SOMMapElement::buildMainComposite(tlp::Coord basePos, tlp::Size gridSize,
 
       }
     }
-  } else {
+  }
+  else {
 
     Coord elementSize(gridSize.getW() / map->getWidth(), gridSize.getH()
-        / map->getHeight(), 0);
+                      / map->getHeight(), 0);
 
     for (unsigned int i = 0; i < map->getHeight(); ++i) {
       for (unsigned int j = 0; j < map->getWidth(); ++j) {
         Coord topLeft(j * elementSize.getX(), (map->getHeight() - i)
-            * elementSize.getY(), 0);
+                      * elementSize.getY(), 0);
         topLeft += basePos;
         Coord bottomRight(topLeft.getX() + elementSize.getX(), topLeft.getY()
-            - elementSize.getY(), 0);
+                          - elementSize.getY(), 0);
 
         assert(topLeft.getX() < bottomRight.getX() && topLeft.getY()> bottomRight.getY());
         tlp::GlRect *rec = NULL;
@@ -136,7 +141,8 @@ void SOMMapElement::updateColors(ColorProperty *newColor) {
     if (connect == SOMMap::six) {
       GlCircle *hex = (GlCircle*) nodesMap[n];
       hex->setFillColor(newColor->getNodeValue(n));
-    } else {
+    }
+    else {
       GlRect *rect = (GlRect*) nodesMap[n];
       rect->setBottomRightColor(newColor->getNodeValue(n));
       rect->setTopLeftColor(newColor->getNodeValue(n));
@@ -147,10 +153,11 @@ void SOMMapElement::updateColors(ColorProperty *newColor) {
 tlp::Coord SOMMapElement::getTopLeftPositionForElement(unsigned int x,
     unsigned int y) {
   Coord pos;
+
   if (som->getConnectivity() == SOMMap::six) {
 
     float r = computeMaximizedRadiusForHexagone(som->getWidth(),
-        som->getHeight(), size);
+              som->getHeight(), size);
 
     float h = r / 2;
     float ri = cos(DEGTORAD(30)) * r;
@@ -167,11 +174,13 @@ tlp::Coord SOMMapElement::getTopLeftPositionForElement(unsigned int x,
     float top = position.getY() + size.getH();
     pos.setY(top - ys);
 
-  } else {
+  }
+  else {
     pos.set(x * (size.getW() / som->getWidth()), (som->getHeight() - y)
-        * (size.getH() / som->getHeight()), 0);
+            * (size.getH() / som->getHeight()), 0);
     pos += position;
   }
+
   return pos;
 }
 tlp::Size SOMMapElement::getNodeAreaSize() {
@@ -182,12 +191,13 @@ void SOMMapElement::computeNodeAreaSize() {
   if (som->getConnectivity() == SOMMap::six) {
     //Compute the best radius
     float r = computeMaximizedRadiusForHexagone(som->getWidth(),
-        som->getHeight(), size);
+              som->getHeight(), size);
     float ri = cos(DEGTORAD(30)) * r;
 
     nodeAreaSize = Size(2 * ri, r, 0);
-  } else {
+  }
+  else {
     nodeAreaSize.set(size.getW() / som->getWidth(), size.getH()
-        / som->getHeight(), 0);
+                     / som->getHeight(), 0);
   }
 }

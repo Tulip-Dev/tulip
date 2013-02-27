@@ -45,7 +45,7 @@ public:
    * @param diffusionRateFunction The function used to compute the distance rate in function of time.
    */
   SOMAlgorithm(TimeDecreasingFunction* learningRateFunction = NULL,
-      DiffusionRateFunction* diffusionRateFunction = NULL);
+               DiffusionRateFunction* diffusionRateFunction = NULL);
 
   virtual ~SOMAlgorithm();
 
@@ -69,7 +69,7 @@ public:
    * @param pluginProgress The plugin progress.
    */
   void initMap(SOMMap* map, InputSample& inputSample,
-      tlp::PluginProgress *pluginProgress = NULL);
+               tlp::PluginProgress *pluginProgress = NULL);
 
   /**
    * Train the SOM with the given sample. Use numberOfIteration time the entire inputSample to train the SOM. See the train function for more details.
@@ -79,8 +79,8 @@ public:
    * @param pluginProgress
    */
   void trainNInputSample(SOMMap* map, InputSample& inputSample,
-      unsigned int numberOfIteration, tlp::PluginProgress *pluginProgress =
-          NULL);
+                         unsigned int numberOfIteration, tlp::PluginProgress *pluginProgress =
+                           NULL);
 
   /**
    * Train the SOM with the given sample (update value of each SOM node's weight with the input sample see SOM algorithm for more details.). Training process has this order
@@ -95,7 +95,7 @@ public:
    * @param pluginProgress
    */
   void train(SOMMap* map, InputSample& inputSample, unsigned int maxIteration,
-      tlp::PluginProgress *pluginProgress = NULL);
+             tlp::PluginProgress *pluginProgress = NULL);
 
   /**
    * Return a node with the smallest euclidian distance between its weight vector and the given input vector. If there is one or more node with the smallest distance choose one randomly.
@@ -117,8 +117,8 @@ public:
    * @param sampleSize The number of sample.
    */
   void propagateModification(SOMMap* map, const DynamicVector<double>& input,
-      node bmu, unsigned int currentTime, unsigned int maxTime,
-      unsigned int sampleSize);
+                             node bmu, unsigned int currentTime, unsigned int maxTime,
+                             unsigned int sampleSize);
 
   /**
    * Function use to automatically perform initialisation and training on a SOM with a given sample of vector.
@@ -128,7 +128,7 @@ public:
    * @param pluginProgress
    */
   void run(SOMMap* map, InputSample& inputSample, unsigned int nTimes,
-      tlp::PluginProgress *pluginProgress = NULL);
+           tlp::PluginProgress *pluginProgress = NULL);
 
   /**
    * Perform the mapping operation of each node of the input sample on the center tab. At the end each vector of the input sample will be associated with a SOM node.
@@ -139,8 +139,8 @@ public:
    * @param maxElement The maximum number of element linked with a SOM node.
    */
   void computeMapping(SOMMap* map, InputSample& inputSample, std::map<
-      tlp::node, std::set<tlp::node> >& mappingTab, double& medDist,
-      unsigned int& maxElement);
+                      tlp::node, std::set<tlp::node> >& mappingTab, double& medDist,
+                      unsigned int& maxElement);
 
 protected:
 
