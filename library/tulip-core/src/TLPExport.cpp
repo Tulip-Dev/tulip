@@ -106,6 +106,10 @@ public:
   //=====================================================
   ~TLPExport() {
   }
+  //=====================================================
+  std::string icon() const {
+    return ":/tulip/gui/icons/logo32x32.png";
+  }
   //====================================================
   node getNode(node n) {
     return nodeIndex.get(n.id);

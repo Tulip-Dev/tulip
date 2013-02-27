@@ -1006,6 +1006,11 @@ public:
 //    addInParameter<DataSet>(DISPLAYING);
   }
   ~TLPImport() {}
+
+  std::string icon() const {
+    return ":/tulip/gui/icons/logo32x32.png";
+  }
+
   bool importGraph() {
     std::string filename;
     std::string data;
