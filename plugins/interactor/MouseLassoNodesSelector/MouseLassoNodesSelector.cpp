@@ -43,7 +43,6 @@ void MouseLassoNodesSelectorInteractor::construct() {
 }
 
 PLUGIN(MouseLassoNodesSelectorInteractor)
-INTERACTORPLUGINVIEWEXTENSION(ScatterLassoSelectorInteractor,"ScatterLassoSelectorInteractor","MouseLassoNodesSelectorInteractor","Scatter Plot 2D view", "Antoine Lambert" ,"02/04/09","Scatter Plot lasso selector","1.0")
 
 MouseLassoNodesSelectorInteractorComponent::MouseLassoNodesSelectorInteractorComponent() : drawInteractor(false), camera(NULL),dragStarted(false) {}
 

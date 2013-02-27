@@ -20,13 +20,13 @@
 #ifndef SCATTERPLOT2DINTERACTORS_H_
 #define SCATTERPLOT2DINTERACTORS_H_
 
-#include <tulip/GLInteractor.h>
-
-#include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
 namespace tlp {
 
-class ScatterPlot2DInteractor : public GLInteractorComposite {
+class ScatterPlotCorrelCoeffSelectorOptionsWidget;
+
+class ScatterPlot2DInteractor : public NodeLinkDiagramComponentInteractor {
 
 public :
 
@@ -35,8 +35,6 @@ public :
     bool isCompatible(const std::string &viewName) const;
 
   unsigned int priority() const {return 0;}
-
-  QWidget *configurationWidget() const {return NULL;}
 
 };
 
@@ -51,8 +49,6 @@ public :
 	void construct();
 
   unsigned int priority() const {return 5;}
-
-  QWidget *configurationWidget() const;
 
 };
 
@@ -75,6 +71,7 @@ public :
   PLUGININFORMATIONS("ScatterPlot2DInteractorCorrelCoeffSelector", "Tulip Team", "02/04/2009", "Scatter Plot 2D Correlation Coefficient Interactor", "1.0", "Information")
 
   ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *);
+  ~ScatterPlot2DInteractorCorrelCoeffSelector();
 
 	void construct();
 
