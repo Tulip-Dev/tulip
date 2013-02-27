@@ -136,6 +136,10 @@ public :
 
   ~ImportPajek() {}
 
+  std::string icon() const {
+    return ":/tulip/graphperspective/icons/32/import_pajek.png";
+  }
+
   vector<node>    nodes;
   unsigned int nbNodes;
   DoubleProperty *weights;

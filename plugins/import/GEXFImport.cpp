@@ -67,6 +67,10 @@ public :
 
   ~GEXFImport() {}
 
+  std::string icon() const {
+    return ":/tulip/graphperspective/icons/32/import_gephi.png";
+  }
+
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("gexf");

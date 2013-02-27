@@ -248,6 +248,10 @@ public :
 
   ~ImportUCINET() {}
 
+  std::string icon() const {
+    return ":/tulip/graphperspective/icons/32/import_ucinet.png";
+  }
+
   vector<node> nodes;
   unsigned int nbNodes;
   string defaultMetric;
