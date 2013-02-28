@@ -42,7 +42,7 @@ class NodeIterator :public Iterator<node> {
 class EdgeIterator :public Iterator<edge> {
 };
 
-#ifndef NDEBUG
+#if !defined(NDEBUG) && !defined(_OPENMP)
 class NodeIteratorObserver :public NodeIterator, public Observable {
 private:
   // Observable interface
@@ -58,7 +58,7 @@ private:
 //===========================================================
 ///Factorization of code for iterators
 class FactorNodeIterator
-#ifdef NDEBUG
+#if defined(NDEBUG) || defined(_OPENMP)
   :public NodeIterator
 #else
   :public NodeIteratorObserver
@@ -75,7 +75,7 @@ public:
 };
 
 class FactorEdgeIterator
-#ifdef NDEBUG
+#if defined(NDEBUG) || defined(_OPENMP)
   :public EdgeIterator
 #else
   :public EdgeIteratorObserver
@@ -113,7 +113,7 @@ protected:
 class OutNodesIterator:public FactorNodeIterator, public MemoryPool<OutNodesIterator> {
 private:
   Iterator<edge> *it;
-#ifndef NDEBUG
+#if !defined(NDEBUG) && !defined(_OPENMP)
   const Graph *sg;
 #endif
 public:
@@ -127,7 +127,7 @@ public:
 class InNodesIterator:public FactorNodeIterator, public MemoryPool<InNodesIterator> {
 private:
   Iterator<edge> *it;
-#ifndef NDEBUG
+#if !defined(NDEBUG) && !defined(_OPENMP)
   const Graph *sg;
 #endif
 public:
@@ -142,7 +142,7 @@ class InOutNodesIterator:public FactorNodeIterator, public MemoryPool<InOutNodes
 private:
   Iterator<edge> *it;
   node n;
-#ifndef NDEBUG
+#if !defined(NDEBUG) && !defined(_OPENMP)
   const Graph *sg;
 #endif
 public:
@@ -219,14 +219,14 @@ protected:
 //Iterator for the GraphImpl
 //============================================================
 class GraphImplNodeIterator
-#ifdef NDEBUG
+#if defined(NDEBUG) || defined(_OPENMP)
   :public NodeIterator, public MemoryPool<GraphImplNodeIterator>
 #else
   :public NodeIteratorObserver
 #endif
 {
 private:
-#ifndef NDEBUG
+#if !defined(NDEBUG) && !defined(_OPENMP)
   GraphImpl *graph;
 #endif
   Iterator<node> *itId;
@@ -239,14 +239,14 @@ public:
 //=============================================================
 ///Edge iterator for data sg
 class GraphImplEdgeIterator
-#ifdef NDEBUG
+#if defined(NDEBUG) || defined(_OPENMP)
   :public EdgeIterator, public MemoryPool<GraphImplEdgeIterator>
 #else
   :public EdgeIteratorObserver
 #endif
 {
 private:
-#ifndef NDEBUG
+#if !defined(NDEBUG) && !defined(_OPENMP)
   GraphImpl *graph;
 #endif
   Iterator<edge> *itId;
