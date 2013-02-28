@@ -49,7 +49,9 @@ class MatrixView: public tlp::NodeLinkDiagramComponent {
   Q_OBJECT
 public:
 
-  PLUGININFORMATIONS("Adjacency Matrix view", "Ludwig Fiolka", "07/01/2011",
+    static std::string viewName;
+
+  PLUGININFORMATIONS(MatrixView::viewName, "Ludwig Fiolka", "07/01/2011",
                      "In mathematics and computer science, an adjacency matrix is a means of representing which vertices of a graph are adjacent to which other vertices. Another matrix representation for a graph is the incidence matrix.\n"
                      "Specifically, the adjacency matrix of a finite graph G on n vertices is the n x n matrix where the non-diagonal entry aij is the number of edges from vertex i to vertex j, and the diagonal entry aii, depending on the convention, is either once or twice the number of edges (loops) from vertex i to itself.\n"
                      "Undirected graphs often use the former convention of counting loops twice, whereas directed graphs typically use the latter convention.\n"

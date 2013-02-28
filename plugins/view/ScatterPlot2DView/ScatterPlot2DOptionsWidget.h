@@ -72,12 +72,6 @@ private :
   void updateColorScale();
   Color getButtonColor(QPushButton *button) const;
 
-public slots :
-
-  void applySettings() {
-    emit(applySettingsSignal());
-  }
-
 signals :
 
   void applySettingsSignal();

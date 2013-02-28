@@ -34,10 +34,6 @@ public :
 
   bool isCompatible(const std::string &viewName) const;
 
-  unsigned int priority() const {
-    return 0;
-  }
-
 };
 
 class GoogleMapViewNavigator : public MouseNKeysNavigator {
@@ -77,11 +73,7 @@ public :
   void construct();
 
   QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 5;
-  }
-
+  virtual unsigned int priority() const;
 };
 
 #endif /* GOOGLEMAPSVIEWINTERACTORS_H_ */

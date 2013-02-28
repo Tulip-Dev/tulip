@@ -26,15 +26,12 @@
 #endif
 
 #include <tulip/GLInteractor.h>
-
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-
-#include "ScatterPlot2D.h"
-#include "ScatterPlot2DView.h"
-
+#include <tulip/Coord.h>
 
 namespace tlp {
+
+class ScatterPlot2DView;
+class ScatterPlot2D;
 
 class ScatterPlot2DViewNavigator : public GLInteractorComponent {
 
@@ -54,7 +51,7 @@ public :
 
 private :
 
-  ScatterPlot2D *getOverviewUnderPointer(Coord sceneCoord);
+    ScatterPlot2D *getOverviewUnderPointer(const Coord &sceneCoord);
 
   ScatterPlot2DView *scatterPlot2dView;
   ScatterPlot2D *selectedScatterPlotOverview;

@@ -20,13 +20,11 @@
 #ifndef SOMVIEWINTERACTOR_H_
 #define SOMVIEWINTERACTOR_H_
 
-#include <tulip/GLInteractor.h>
-#include <tulip/GlMainWidget.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
-class SOMViewInteractor: public tlp::GLInteractorComposite {
+class SOMViewInteractor: public tlp::NodeLinkDiagramComponentInteractor {
 public:
   SOMViewInteractor(const QString &iconPath, const QString &text);
-  virtual ~SOMViewInteractor();
 
   virtual bool isCompatible(const std::string &viewName) const {
     return (viewName == "Self Organizing Map");
@@ -41,15 +39,8 @@ class SOMViewNavigation: public SOMViewInteractor {
 public:
 
   SOMViewNavigation(tlp::PluginContext *);
-  ~SOMViewNavigation();
 
   virtual void construct();
-
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 3;
-  }
 };
 
 class SOMViewSelection: public SOMViewInteractor {
@@ -59,15 +50,8 @@ class SOMViewSelection: public SOMViewInteractor {
 public:
 
   SOMViewSelection(tlp::PluginContext *);
-  ~SOMViewSelection();
 
   virtual void construct();
-
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 2;
-  }
 
 };
 
@@ -78,15 +62,9 @@ class SOMViewProperties:public SOMViewInteractor {
 public :
 
   SOMViewProperties(tlp::PluginContext *);
-  ~SOMViewProperties();
 
   virtual void construct();
 
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 1;
-  }
 };
 
 class SOMViewThreshold: public SOMViewInteractor {
@@ -96,15 +74,9 @@ class SOMViewThreshold: public SOMViewInteractor {
 public:
 
   SOMViewThreshold(tlp::PluginContext *);
-  ~SOMViewThreshold();
 
   virtual void construct();
 
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 0;
-  }
 };
 
 #endif /* SOMVIEWINTERACTOR_H_ */

@@ -39,7 +39,7 @@ ScatterPlot2DOptionsWidget::ScatterPlot2DOptionsWidget(QWidget *parent) : QWidge
 
   connect(minSizeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(minSizeSpinBoxValueChanged(int)));
   connect(maxSizeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(maxSizeSpinBoxValueChanged(int)));
-  connect(applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
+  connect(applyButton,SIGNAL(clicked()),this,SIGNAL(applySettingsSignal()));
 }
 
 Color ScatterPlot2DOptionsWidget::getButtonColor(QPushButton *button) const {

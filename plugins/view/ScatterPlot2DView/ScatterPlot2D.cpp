@@ -22,6 +22,12 @@
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/Gl2DRect.h>
 #include <tulip/GlOffscreenRenderer.h>
+#include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/GlLabel.h>
+#include <tulip/GlProgressBar.h>
+#include <tulip/GlQuantitativeAxis.h>
+#include <tulip/GlMainWidget.h>
 
 #include "ScatterPlot2D.h"
 

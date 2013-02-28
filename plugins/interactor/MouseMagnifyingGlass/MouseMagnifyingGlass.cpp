@@ -49,11 +49,6 @@ void MouseMagnifyingGlassInteractor::construct() {
 
 PLUGIN(MouseMagnifyingGlassInteractor)
 
-INTERACTORPLUGINVIEWEXTENSION(ParallelCoordinatesMagnifyingGlass,"ParallelCoordinatesMagnifyingGlass","MouseMagnifyingGlassInteractor","Parallel Coordinates view", "Antoine Lambert" ,"02/04/09","Parallel coordinates mangnifying glass","1.0")
-INTERACTORPLUGINVIEWEXTENSION(HistogramMagnifyingGlass,"HistogramMagnifyingGlass","MouseMagnifyingGlassInteractor","Histogram view", "Antoine Lambert" ,"02/04/09","Histogram mangnifying glass","1.0")
-INTERACTORPLUGINVIEWEXTENSION(ScatterPlotMagnifyingGlass,"ScatterPlotMagnifyingGlass","MouseMagnifyingGlassInteractor","Scatter Plot 2D view", "Antoine Lambert" ,"02/04/09","Scatter Plot mangnifying glass","1.0")
-INTERACTORPLUGINVIEWEXTENSION(PixelOrientedMagnifyingGlass,"PixelOrientedMagnifyingGlass","MouseMagnifyingGlassInteractor","Pixel Oriented view", "Antoine Lambert" ,"02/04/09","Pixel Oriented mangnifying glass","1.0")
-
 MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent() : fbo(NULL), fbo2(NULL), camera(NULL),drawInteractor(false), radius(200), magnifyPower(2) {}
 
 MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent(const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent) : fbo(NULL), fbo2(NULL), drawInteractor(false) {

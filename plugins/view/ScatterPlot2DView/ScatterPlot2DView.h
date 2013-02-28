@@ -21,17 +21,12 @@
 #define SCATTERPLOT2DVIEW_H_
 
 #include <tulip/GlMainView.h>
-#include <tulip/GlComposite.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlQuantitativeAxis.h>
+#include <tulip/BoundingBox.h>
+#include <tulip/Coord.h>
 
-#include <QtGui/QMenu>
+#include <GL/gl.h>
 
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"
-#include "ScatterPlot2DOptionsWidget.h"
-#include "ScatterPlot2D.h"
 
 namespace tlp {
 
@@ -57,6 +52,13 @@ namespace tlp {
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  */
+
+class ScatterPlot2D;
+class GlLayer;
+class GlComposite;
+class SizeProperty;
+class GlGraphComposite;
+class ScatterPlot2DOptionsWidget;
 
 class ScatterPlot2DView : public GlMainView {
 

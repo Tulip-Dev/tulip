@@ -95,11 +95,6 @@ QWidget *FishEyeInteractor::configurationWidget() const {
 
 PLUGIN(FishEyeInteractor)
 
-INTERACTORPLUGINVIEWEXTENSION(ParallelCoordinatesFishEye,"ParallelCoordinatesFishEye","FishEyeInteractor","Parallel Coordinates view", "Antoine Lambert" ,"02/04/09","Parallel coordinates fisheye","1.0")
-INTERACTORPLUGINVIEWEXTENSION(HistogramFishEye,"HistogramFishEye","FishEyeInteractor","Histogram view", "Antoine Lambert" ,"02/04/09","Histogram fisheye","1.0")
-INTERACTORPLUGINVIEWEXTENSION(ScatterPlotFishEye,"ScatterPlotFishEye","FishEyeInteractor","Scatter Plot 2D view", "Antoine Lambert" ,"02/04/09","Scatter Plot fisheye","1.0")
-INTERACTORPLUGINVIEWEXTENSION(PixelOrientedFishEye,"PixelOrientedFishEye","FishEyeInteractor","Pixel Oriented view", "Antoine Lambert" ,"02/04/09","Pixel Oriented fisheye","1.0")
-
 FishEyeInteractorComponent::FishEyeInteractorComponent() : fisheyeShader(NULL) {}
 
 FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent) : fisheyeShader(NULL) {

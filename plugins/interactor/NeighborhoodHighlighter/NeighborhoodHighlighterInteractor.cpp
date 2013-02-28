@@ -180,8 +180,6 @@ public :
 const unsigned char maxCircleAlphaValue = 200;
 
 PLUGIN(NeighborhoodHighlighterInteractor)
-INTERACTORPLUGINVIEWEXTENSION(ScatterPlotNeighborhoodHighlighterInteractor,"ScatterPlotNeighborhoodHighlighterInteractor","NeighborhoodHighlighterInteractor","Scatter Plot 2D view", "Antoine Lambert" ,"02/04/09","Node neighborhood highlighter","1.0")
-INTERACTORPLUGINVIEWEXTENSION(HistogramNeighborhoodHighlighterInteractor,"HistogramNeighborhoodHighlighterInteractor","NeighborhoodHighlighterInteractor","Histogram view", "Antoine Lambert" ,"02/04/09","Node neighborhood highlighter","1.0")
 
 NeighborhoodHighlighterInteractor::NeighborhoodHighlighterInteractor(const PluginContext *) : GLInteractorComposite(QIcon(":/i_neighborhood_highlighter.png"), "Highlight node neighborhood"), configWidget(NULL) {}
 

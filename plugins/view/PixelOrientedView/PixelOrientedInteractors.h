@@ -20,25 +20,17 @@
 #ifndef PIXELORIENTEDVIEWINTERACTORS_H_
 #define PIXELORIENTEDVIEWINTERACTORS_H_
 
-#include <tulip/GLInteractor.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
 namespace tlp {
 
-class PixelOrientedInteractor : public GLInteractorComposite {
+class PixelOrientedInteractor : public NodeLinkDiagramComponentInteractor {
 
 public :
 
   PixelOrientedInteractor(const QString &iconPath, const QString &text);
 
   bool isCompatible(const std::string &viewName) const;
-
-  unsigned int priority() const {
-    return 0;
-  }
-
-  QWidget *configurationWidget() const {
-    return NULL;
-  }
 
 };
 
@@ -51,12 +43,6 @@ public :
   PixelOrientedInteractorNavigation(const tlp::PluginContext *);
 
   void construct();
-
-  unsigned int priority() const {
-    return 5;
-  }
-
-  QWidget *configurationWidget() const;
 
 };
 

@@ -26,6 +26,8 @@
 #include "HistoStatsConfigWidget.h"
 #include "HistogramView.h"
 
+#include "../../utils/StandardInteractorPriority.h"
+
 namespace tlp {
 
 HistogramInteractor::HistogramInteractor(const QString &iconPath, const QString &text) : NodeLinkDiagramComponentInteractor(iconPath, text) {}
@@ -34,9 +36,12 @@ bool HistogramInteractor::isCompatible(const std::string &viewName) const {
   return (viewName == HistogramView::viewName);
 }
 
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramInteractorZoom,"HistogramZoomInteractor","InteractorRectangleZoom",HistogramView::viewName, "Tulip Team" ,"02/04/09","Histogram rectangle zoom interactor","1.0",3)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramInteractorGetInformation,"HistogramInteractorGetInformation","InteractorGetInformation",HistogramView::viewName, "Tulip Team" ,"02/04/09","Histogram get information interactor","1.0",1)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramInteractorSelection,"HistogramSelectionInteractor","InteractorSelection",HistogramView::viewName, "Tulip Team" ,"02/04/09","Histogram selection interactor","1.0",2)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramInteractorZoom,"HistogramZoomInteractor","InteractorRectangleZoom",HistogramView::viewName, "Tulip Team" ,"02/04/09","Histogram rectangle zoom interactor","1.0",StandardInteractorPriority::ZoomOnRectangle)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramInteractorGetInformation,"HistogramInteractorGetInformation","InteractorGetInformation",HistogramView::viewName, "Tulip Team" ,"02/04/09","Histogram get information interactor","1.0",StandardInteractorPriority::GetInformation)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramInteractorSelection,"HistogramSelectionInteractor","InteractorSelection",HistogramView::viewName, "Tulip Team" ,"02/04/09","Histogram selection interactor","1.0",StandardInteractorPriority::RectangleSelection)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramFishEye,"HistogramFishEye","FishEyeInteractor",HistogramView::viewName, "Antoine Lambert" ,"02/04/09","Histogram fisheye","1.0",StandardInteractorPriority::FishEye)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramMagnifyingGlass,"HistogramMagnifyingGlass","MouseMagnifyingGlassInteractor",HistogramView::viewName, "Antoine Lambert" ,"02/04/09","Histogram mangnifying glass","1.0",StandardInteractorPriority::MagnifyingGlass)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramNeighborhoodHighlighterInteractor,"HistogramNeighborhoodHighlighterInteractor","NeighborhoodHighlighterInteractor",HistogramView::viewName, "Antoine Lambert" ,"02/04/09","Node neighborhood highlighter","1.0",StandardInteractorPriority::NeighborhoodHighlighter)
 
 PLUGIN(HistogramInteractorNavigation)
 PLUGIN(HistogramInteractorMetricMapping)
@@ -56,6 +61,7 @@ HistogramInteractorNavigation::HistogramInteractorNavigation(const PluginContext
                              +"<b>Key page up/down</b> : zoom<br>"
                              +"<b>Key insert</b> : rotate<br>"
                              +"</body></html>");
+setPriority(StandardInteractorPriority::Navigation);
 }
 
 void HistogramInteractorNavigation::construct() {
@@ -103,6 +109,7 @@ HistogramInteractorMetricMapping::HistogramInteractorMetricMapping(const PluginC
                              +"<img src=\":/HistoColorMapping.png\" width=\"280\" height=\"260\" border=\"0\" alt=\"\"><br />"
                              +"</p>"
                              +"</body></html>");
+setPriority(StandardInteractorPriority::ViewInteractor1);
 }
 
 void HistogramInteractorMetricMapping::construct() {
@@ -111,7 +118,9 @@ void HistogramInteractorMetricMapping::construct() {
   push_back(new MousePanNZoomNavigator);
 }
 
-HistogramInteractorStatistics::HistogramInteractorStatistics(const PluginContext *) : HistogramInteractor(":/i_histo_statistics.png", "Statistics"),histoStatsConfigWidget(NULL) {}
+HistogramInteractorStatistics::HistogramInteractorStatistics(const PluginContext *) : HistogramInteractor(":/i_histo_statistics.png", "Statistics"),histoStatsConfigWidget(NULL) {
+setPriority(StandardInteractorPriority::ViewInteractor2);
+}
 
 HistogramInteractorStatistics::~HistogramInteractorStatistics() {
   delete histoStatsConfigWidget;

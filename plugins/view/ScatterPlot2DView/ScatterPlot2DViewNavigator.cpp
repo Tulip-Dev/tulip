@@ -18,9 +18,13 @@
  */
 
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
+#include <tulip/GlMainWidget.h>
+
+#include <QtGui/QMouseEvent>
 
 #include "ScatterPlot2DView.h"
 #include "ScatterPlot2DViewNavigator.h"
+#include "ScatterPlot2D.h"
 
 
 using namespace std;
@@ -81,7 +85,7 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 
-ScatterPlot2D *ScatterPlot2DViewNavigator::getOverviewUnderPointer(Coord sceneCoords) {
+ScatterPlot2D *ScatterPlot2DViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) {
   ScatterPlot2D *ret = NULL;
   vector<ScatterPlot2D *> overviews = scatterPlot2dView->getScatterPlots();
   vector<ScatterPlot2D *>::iterator it;

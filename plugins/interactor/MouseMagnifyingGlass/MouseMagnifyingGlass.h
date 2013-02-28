@@ -25,7 +25,7 @@
 
 
 #include <QtOpenGL/QGLFramebufferObject>
-#include "../StandardInteractorPriority.h"
+#include "../../utils/StandardInteractorPriority.h"
 
 using namespace tlp;
 

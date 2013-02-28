@@ -36,10 +36,6 @@ public :
 
   bool isCompatible(const std::string &viewName) const;
 
-  unsigned int priority() const {
-    return 0;
-  }
-
 };
 
 class HistogramInteractorNavigation : public HistogramInteractor {
@@ -51,10 +47,6 @@ public :
   HistogramInteractorNavigation(const PluginContext *);
 
   void construct();
-
-  unsigned int priority() const {
-    return 5;
-  }
 
 };
 
