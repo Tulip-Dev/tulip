@@ -23,8 +23,11 @@
 #include <tulip/GlMainView.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/Coord.h>
-
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
+#endif
 
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"
 
