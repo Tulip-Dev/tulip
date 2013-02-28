@@ -32,6 +32,7 @@
 #include "ParallelCoordsAxisSpacer.h"
 
 #include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/ViewNames.h"
 
 using namespace std;
 using namespace tlp;
@@ -40,13 +41,8 @@ using namespace tlp;
 ParallelCoordinatesInteractor::ParallelCoordinatesInteractor(const QString &iconPath, const QString &text):NodeLinkDiagramComponentInteractor(iconPath,text) {}
 
 bool ParallelCoordinatesInteractor::isCompatible(const string &viewName) const {
-  return (viewName == ParallelCoordinatesView::viewName);
+  return (viewName == ViewName::ParallelCoordinatesViewName);
 }
-
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ParallelCoordinatesInteractorNavigation,"ParallelCoordinatesNavigationInteractor","InteractorNavigation",ParallelCoordinatesView::viewName, "Tulip Team" ,"02/04/09","Parallel coordinates navigation interactor","1.0",StandardInteractorPriority::Navigation)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ParallelCoordinatesInteractorZoom,"ParallelCoordinatesZoomInteractor","InteractorRectangleZoom",ParallelCoordinatesView::viewName, "Tulip Team" ,"02/04/09","Parallel coordinates rectangle zoom interactor","1.0",StandardInteractorPriority::ZoomOnRectangle)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ParallelCoordinatesFishEye,"ParallelCoordinatesFishEye","FishEyeInteractor",ParallelCoordinatesView::viewName, "Antoine Lambert" ,"02/04/09","Parallel coordinates fisheye","1.0",StandardInteractorPriority::FishEye)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ParallelCoordinatesMagnifyingGlass,"ParallelCoordinatesMagnifyingGlass","MouseMagnifyingGlassInteractor",ParallelCoordinatesView::viewName, "Antoine Lambert" ,"02/04/09","Parallel coordinates mangnifying glass","1.0",StandardInteractorPriority::MagnifyingGlass)
 
 PLUGIN(InteractorHighLighter)
 PLUGIN(InteractorAxisSwapper)

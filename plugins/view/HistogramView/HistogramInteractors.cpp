@@ -27,21 +27,15 @@
 #include "HistogramView.h"
 
 #include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/ViewNames.h"
 
 namespace tlp {
 
 HistogramInteractor::HistogramInteractor(const QString &iconPath, const QString &text) : NodeLinkDiagramComponentInteractor(iconPath, text) {}
 
 bool HistogramInteractor::isCompatible(const std::string &viewName) const {
-  return (viewName == HistogramView::viewName);
+  return (viewName == ViewName::HistogramViewName);
 }
-
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramInteractorZoom,"HistogramZoomInteractor","InteractorRectangleZoom",HistogramView::viewName, "Tulip Team" ,"02/04/09","Histogram rectangle zoom interactor","1.0",StandardInteractorPriority::ZoomOnRectangle)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramInteractorGetInformation,"HistogramInteractorGetInformation","InteractorGetInformation",HistogramView::viewName, "Tulip Team" ,"02/04/09","Histogram get information interactor","1.0",StandardInteractorPriority::GetInformation)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramInteractorSelection,"HistogramSelectionInteractor","InteractorSelection",HistogramView::viewName, "Tulip Team" ,"02/04/09","Histogram selection interactor","1.0",StandardInteractorPriority::RectangleSelection)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramFishEye,"HistogramFishEye","FishEyeInteractor",HistogramView::viewName, "Antoine Lambert" ,"02/04/09","Histogram fisheye","1.0",StandardInteractorPriority::FishEye)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramMagnifyingGlass,"HistogramMagnifyingGlass","MouseMagnifyingGlassInteractor",HistogramView::viewName, "Antoine Lambert" ,"02/04/09","Histogram mangnifying glass","1.0",StandardInteractorPriority::MagnifyingGlass)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(HistogramNeighborhoodHighlighterInteractor,"HistogramNeighborhoodHighlighterInteractor","NeighborhoodHighlighterInteractor",HistogramView::viewName, "Antoine Lambert" ,"02/04/09","Node neighborhood highlighter","1.0",StandardInteractorPriority::NeighborhoodHighlighter)
 
 PLUGIN(HistogramInteractorNavigation)
 PLUGIN(HistogramInteractorMetricMapping)

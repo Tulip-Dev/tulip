@@ -47,6 +47,7 @@
 #include <sstream>
 
 #include "NeighborhoodHighlighterInteractor.h"
+#include "../../utils/ViewNames.h"
 
 using namespace std;
 
@@ -185,6 +186,14 @@ NeighborhoodHighlighterInteractor::NeighborhoodHighlighterInteractor(const Plugi
 
 NeighborhoodHighlighterInteractor::~NeighborhoodHighlighterInteractor() {
   delete configWidget;
+}
+
+bool NeighborhoodHighlighterInteractor::isCompatible(const std::string &viewName) const {
+  return ((viewName==NodeLinkDiagramComponent::viewName)
+          ||(viewName==ViewName::HistogramViewName)
+          ||(viewName==ViewName::MatrixViewName)
+          ||(viewName==ViewName::ScatterPlot2DViewName)
+          );
 }
 
 void NeighborhoodHighlighterInteractor::construct() {

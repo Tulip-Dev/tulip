@@ -25,6 +25,8 @@
 #include "ThresholdInteractor.h"
 
 #include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/ViewNames.h"
+
 using namespace std;
 using namespace tlp;
 
@@ -34,6 +36,10 @@ PLUGIN(SOMViewProperties)
 PLUGIN(SOMViewThreshold)
 
 SOMViewInteractor::SOMViewInteractor(const QString &iconPath, const QString &text):NodeLinkDiagramComponentInteractor(iconPath,text) {
+}
+
+bool SOMViewInteractor::isCompatible(const std::string &viewName) const {
+  return (viewName == ViewName::SOMViewName);
 }
 
 SOMViewNavigation::SOMViewNavigation(PluginContext *) :

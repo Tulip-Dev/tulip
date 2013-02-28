@@ -38,6 +38,8 @@
 #include "GoogleMaps.h"
 #include "GoogleMapsGraphicsView.h"
 
+#include "../../utils/ViewNames.h"
+
 namespace tlp {
 
 /*@{*/
@@ -63,7 +65,7 @@ class GoogleMapsView : public View {
 
   Q_OBJECT
 
-  PLUGININFORMATIONS(GoogleMapsView::viewName, "Antoine Lambert and Mathiaut Morgan", "06/2012",
+  PLUGININFORMATIONS(ViewName::GoogleMapsViewName, "Antoine Lambert and Mathiaut Morgan", "06/2012",
                      "The Geographic view allows to visualize a geolocalized Tulip graph on top of Google Maps.\n"
                      "If geographic properties are attached to graph nodes (address or latitude/longitude), they are used used to layout the nodes on the map.\n\n"
                      "An interactor for performing selection on graph elements is also bundled with the view.", "2.0","View")
@@ -78,8 +80,6 @@ public :
     Polygon,
     Globe
   };
-
-  static const std::string viewName;
 
   GoogleMapsView(PluginContext *);
   ~GoogleMapsView();

@@ -39,8 +39,6 @@ const float OFFSET_BETWEEN_PREVIEWS = 16;
 
 namespace tlp {
 
-const string ScatterPlot2DView::viewName("Scatter Plot 2D view");
-
 GLuint ScatterPlot2DView::backgroundTextureId(0);
 unsigned int ScatterPlot2DView::scatterplotViewInstancesCount(0);
 

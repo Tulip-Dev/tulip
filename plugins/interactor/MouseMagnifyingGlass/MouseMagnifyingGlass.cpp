@@ -23,8 +23,10 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
+
+#include <QtCore/QEvent>
+#include <QtGui/QMouseEvent>
+#include <QtOpenGL/QGLFramebufferObject>
 
 #include <tulip/GlRect.h>
 #include <tulip/GlMainView.h>
@@ -35,8 +37,10 @@
 #include <sstream>
 
 #include "MouseMagnifyingGlass.h"
+#include "../../utils/ViewNames.h"
 
 using namespace std;
+using namespace tlp;
 
 const float boxHalfSize = 200;
 
@@ -45,6 +49,16 @@ MouseMagnifyingGlassInteractor::MouseMagnifyingGlassInteractor(const tlp::Plugin
 void MouseMagnifyingGlassInteractor::construct() {
   push_back(new MousePanNZoomNavigator());
   push_back(new MouseMagnifyingGlassInteractorComponent());
+}
+
+bool MouseMagnifyingGlassInteractor::isCompatible(const std::string &viewName) const {
+  return ((viewName==NodeLinkDiagramComponent::viewName)
+          ||(viewName==ViewName::HistogramViewName)
+          ||(viewName==ViewName::MatrixViewName)
+          ||(viewName==ViewName::ParallelCoordinatesViewName)
+          ||(viewName==ViewName::PixelOrientedViewName)
+          ||(viewName==ViewName::ScatterPlot2DViewName)
+          );
 }
 
 PLUGIN(MouseMagnifyingGlassInteractor)

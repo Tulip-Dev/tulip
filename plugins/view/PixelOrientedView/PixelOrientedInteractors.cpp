@@ -24,6 +24,7 @@
 #include "PixelOrientedView.h"
 
 #include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/ViewNames.h"
 
 using namespace std;
 
@@ -32,16 +33,10 @@ namespace tlp {
 PixelOrientedInteractor::PixelOrientedInteractor(const QString &iconPath, const QString &text) : NodeLinkDiagramComponentInteractor(iconPath, text) {}
 
 bool PixelOrientedInteractor::isCompatible(const std::string &viewName) const  {
-  return (viewName == PixelOrientedView::viewName);
+  return (viewName == ViewName::PixelOrientedViewName);
 }
 
 PLUGIN(PixelOrientedInteractorNavigation)
-
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(PixelOrientedInteractorZoom,"PixelOrientedZoomInteractor","InteractorRectangleZoom",PixelOrientedView::viewName, "Tulip Team" ,"02/04/09","Pixel Oriented rectangle zoom interactor","1.0",StandardInteractorPriority::ZoomOnRectangle)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(PixelOrientedInteractorGetInformation,"PixelOrientedInteractorGetInformation","InteractorGetInformation",PixelOrientedView::viewName, "Tulip Team" ,"02/04/09","Pixel Oriented get information interactor","1.0",StandardInteractorPriority::GetInformation)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(PixelOrientedInteractorSelection,"PixelOrientedSelectionInteractor","InteractorSelection",PixelOrientedView::viewName, "Tulip Team" ,"02/04/09","Pixel Oriented selection interactor","1.0",StandardInteractorPriority::RectangleSelection)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(PixelOrientedFishEye,"PixelOrientedFishEye","FishEyeInteractor",PixelOrientedView::viewName, "Antoine Lambert" ,"02/04/09","Pixel Oriented fisheye","1.0",StandardInteractorPriority::FishEye)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(PixelOrientedMagnifyingGlass,"PixelOrientedMagnifyingGlass","MouseMagnifyingGlassInteractor",PixelOrientedView::viewName, "Antoine Lambert" ,"02/04/09","Pixel Oriented mangnifying glass","1.0",StandardInteractorPriority::MagnifyingGlass)
 
 PixelOrientedInteractorNavigation::PixelOrientedInteractorNavigation(const PluginContext *) : PixelOrientedInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
     setConfigurationWidgetText(QString("<html><head>")

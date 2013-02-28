@@ -27,6 +27,7 @@
 #include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
 
 #include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/ViewNames.h"
 
 using namespace std;
 
@@ -35,16 +36,8 @@ namespace tlp {
 ScatterPlot2DInteractor::ScatterPlot2DInteractor(const QString &iconPath, const QString &text) : NodeLinkDiagramComponentInteractor(iconPath, text) {}
 
 bool ScatterPlot2DInteractor::isCompatible(const std::string &viewName) const {
-  return (viewName == ScatterPlot2DView::viewName);
+  return (viewName == ViewName::ScatterPlot2DViewName);
 }
-
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DInteractorZoom,"ScatterPlot2DZoomInteractor","InteractorRectangleZoom",ScatterPlot2DView::viewName, "Tulip Team" ,"02/04/09","ScatterPlot2D rectangle zoom interactor","1.0",StandardInteractorPriority::ZoomOnRectangle)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DInteractorGetInformation,"ScatterPlot2DInteractorGetInformation","InteractorGetInformation",ScatterPlot2DView::viewName, "Tulip Team" ,"02/04/09","ScatterPlot2D get information interactor","1.0",StandardInteractorPriority::GetInformation)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DInteractorSelection,"ScatterPlot2DSelectionInteractor","InteractorSelection",ScatterPlot2DView::viewName, "Tulip Team" ,"02/04/09","ScatterPlot2D selection interactor","1.0",StandardInteractorPriority::RectangleSelection)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlotFishEye,"ScatterPlotFishEye","FishEyeInteractor",ScatterPlot2DView::viewName, "Antoine Lambert" ,"02/04/09","Scatter Plot fisheye","1.0",StandardInteractorPriority::FishEye)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlotMagnifyingGlass,"ScatterPlotMagnifyingGlass","MouseMagnifyingGlassInteractor",ScatterPlot2DView::viewName, "Antoine Lambert" ,"02/04/09","Scatter Plot mangnifying glass","1.0",StandardInteractorPriority::MagnifyingGlass)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlotNeighborhoodHighlighterInteractor,"ScatterPlotNeighborhoodHighlighterInteractor","NeighborhoodHighlighterInteractor",ScatterPlot2DView::viewName, "Antoine Lambert" ,"02/04/09","Node neighborhood highlighter","1.0",StandardInteractorPriority::NeighborhoodHighlighter)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DLassoInteractor,"ScatterLassoSelectorInteractor","MouseLassoNodesSelectorInteractor",ScatterPlot2DView::viewName, "Antoine Lambert" ,"02/04/09","Scatter Plot lasso selector","1.0",StandardInteractorPriority::FreeHandSelection)
 
 PLUGIN(ScatterPlot2DInteractorNavigation)
 PLUGIN(ScatterPlot2DInteractorTrendLine)

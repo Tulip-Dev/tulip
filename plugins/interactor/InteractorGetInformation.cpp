@@ -20,7 +20,9 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseShowElementInfos.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+
 #include "../utils/StandardInteractorPriority.h"
+#include "../utils/ViewNames.h"
 
 using namespace tlp;
 
@@ -46,6 +48,14 @@ public:
   void construct() {
     push_back(new MousePanNZoomNavigator);
     push_back(new MouseShowElementInfos);
+  }
+
+  bool isCompatible(const std::string &viewName) const {
+      return ((viewName==NodeLinkDiagramComponent::viewName)
+              ||(viewName==ViewName::HistogramViewName)
+              ||(viewName==ViewName::PixelOrientedViewName)
+              ||(viewName==ViewName::ScatterPlot2DViewName)
+              );
   }
 
 };

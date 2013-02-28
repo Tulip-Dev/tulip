@@ -44,6 +44,9 @@ public :
   MouseLassoNodesSelectorInteractor(const tlp::PluginContext *);
 
   void construct();
+
+  bool isCompatible(const std::string &viewName) const;
+
 };
 
 class MouseLassoNodesSelectorInteractorComponent : public GLInteractorComponent {

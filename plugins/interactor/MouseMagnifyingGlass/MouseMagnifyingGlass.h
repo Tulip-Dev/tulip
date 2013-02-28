@@ -23,11 +23,11 @@
 #include <tulip/GLInteractor.h>
 #include <tulip/GlMainWidget.h>
 
-
-#include <QtOpenGL/QGLFramebufferObject>
 #include "../../utils/StandardInteractorPriority.h"
 
-using namespace tlp;
+class QGLFramebufferObject;
+
+namespace tlp {
 
 class MouseMagnifyingGlassInteractorComponent : public GLInteractorComponent {
 
@@ -99,9 +99,7 @@ public :
     return NULL;
   }
 
-  bool isCompatible(const std::string &viewName) const {
-    return (viewName=="Node Link Diagram view");
-  }
+  bool isCompatible(const std::string &viewName) const;
 };
-
+}
 #endif /* MOUSEMAGNIFYINGGLASS_H_ */

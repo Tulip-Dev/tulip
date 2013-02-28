@@ -63,8 +63,6 @@ static void toggleGraphView(GlGraphComposite *glGraph, bool displayNodes) {
   glGraph->setRenderingParameters (param);
 }
 
-const string ParallelCoordinatesView::viewName("Parallel Coordinates view");
-
 PLUGIN(ParallelCoordinatesView)
 //GRAPHICSVIEWEXTENSION(ParallelCoordinatesGraphicsView, "Parallel Cooordinates graphics view",ParallelCoordinatesView::viewName, "Tulip Team", "16/04/2008", "Parallel GV", "1.0");
 
