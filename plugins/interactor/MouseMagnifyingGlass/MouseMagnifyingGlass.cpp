@@ -58,7 +58,7 @@ bool MouseMagnifyingGlassInteractor::isCompatible(const std::string &viewName) c
           ||(viewName==ViewName::ParallelCoordinatesViewName)
           ||(viewName==ViewName::PixelOrientedViewName)
           ||(viewName==ViewName::ScatterPlot2DViewName)
-          );
+         );
 }
 
 PLUGIN(MouseMagnifyingGlassInteractor)

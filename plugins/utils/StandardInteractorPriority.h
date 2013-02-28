@@ -25,29 +25,29 @@ namespace tlp {
 // just insert a new one at the right place
 class StandardInteractorPriority {
 public:
-    enum priority {
-        None = 0,
-        ViewInteractor1,
-        ViewInteractor2,
-        ViewInteractor3,
-        ViewInteractor4,
-        ViewInteractor5,
-        ViewInteractor6,
-        ViewInteractor7,
-        MagnifyingGlass,
-        FishEye,
-        NeighborhoodHighlighter,
-        ZoomOnRectangle,
-        DeleteElement,
-        EditEdgeBends,
-        AddNodesOrEdges,
-        PathSelection,
-        FreeHandSelection,
-        RectangleSelectionModifier,
-        RectangleSelection,
-        GetInformation,
-        Navigation
-    };
+  enum priority {
+    None = 0,
+    ViewInteractor1,
+    ViewInteractor2,
+    ViewInteractor3,
+    ViewInteractor4,
+    ViewInteractor5,
+    ViewInteractor6,
+    ViewInteractor7,
+    MagnifyingGlass,
+    FishEye,
+    NeighborhoodHighlighter,
+    ZoomOnRectangle,
+    DeleteElement,
+    EditEdgeBends,
+    AddNodesOrEdges,
+    PathSelection,
+    FreeHandSelection,
+    RectangleSelectionModifier,
+    RectangleSelection,
+    GetInformation,
+    Navigation
+  };
 };
 
 }

@@ -48,7 +48,7 @@ public:
   }
 
   bool isCompatible(const std::string &viewName) const {
-      return (viewName==NodeLinkDiagramComponent::viewName);
+    return (viewName==NodeLinkDiagramComponent::viewName);
   }
 
 

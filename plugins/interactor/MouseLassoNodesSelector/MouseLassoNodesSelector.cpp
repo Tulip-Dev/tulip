@@ -40,9 +40,9 @@ MouseLassoNodesSelectorInteractor::MouseLassoNodesSelectorInteractor(const tlp::
 }
 
 bool MouseLassoNodesSelectorInteractor::isCompatible(const std::string &viewName) const {
-    return ((viewName==NodeLinkDiagramComponent::viewName)
-            ||(viewName==ViewName::ScatterPlot2DViewName)
-            );
+  return ((viewName==NodeLinkDiagramComponent::viewName)
+          ||(viewName==ViewName::ScatterPlot2DViewName)
+         );
 }
 
 

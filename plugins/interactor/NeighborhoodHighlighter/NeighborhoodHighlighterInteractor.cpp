@@ -193,7 +193,7 @@ bool NeighborhoodHighlighterInteractor::isCompatible(const std::string &viewName
           ||(viewName==ViewName::HistogramViewName)
           ||(viewName==ViewName::MatrixViewName)
           ||(viewName==ViewName::ScatterPlot2DViewName)
-          );
+         );
 }
 
 void NeighborhoodHighlighterInteractor::construct() {

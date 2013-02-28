@@ -46,9 +46,9 @@ public:
    * Default constructor
    */
   GoogleMapsInteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get information on nodes/edges") {
-      setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
-                                 "<b>Mouse left</b> click on an element to display its properties");
-  setPriority(StandardInteractorPriority::GetInformation);
+    setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
+                               "<b>Mouse left</b> click on an element to display its properties");
+    setPriority(StandardInteractorPriority::GetInformation);
   }
 
   /**

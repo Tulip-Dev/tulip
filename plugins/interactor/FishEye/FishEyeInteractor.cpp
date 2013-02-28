@@ -89,7 +89,7 @@ bool FishEyeInteractor::isCompatible(const std::string &viewName) const {
           ||(viewName==ViewName::ParallelCoordinatesViewName)
           ||(viewName==ViewName::PixelOrientedViewName)
           ||(viewName==ViewName::ScatterPlot2DViewName)
-          );
+         );
 }
 
 void FishEyeInteractor::uninstall() {
