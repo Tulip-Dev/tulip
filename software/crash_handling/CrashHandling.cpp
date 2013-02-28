@@ -73,7 +73,7 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
 #else
 
   ucontext_t * uc = reinterpret_cast<ucontext_t *>(ucontext);
-# if !defined (I64)
+# if defined(__i386__)
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__eip);
 # else
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__rip);
