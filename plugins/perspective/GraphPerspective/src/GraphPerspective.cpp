@@ -27,8 +27,6 @@
 #include <QtGui/QCloseEvent>
 #include <QtGui/QMessageBox>
 #include <QtGui/QClipboard>
-
-
 #include <QtGui/QDropEvent>
 #include <QtCore/QUrl>
 
@@ -53,9 +51,6 @@
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
-#include <fstream>
-#include <iostream>
-
 #include "GraphPerspectiveLogger.h"
 #include "ImportWizard.h"
 #include "ExportWizard.h"
@@ -66,6 +61,7 @@
 #include <QtCore/QDebug>
 
 using namespace tlp;
+using namespace std;
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(NULL), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
   Q_INIT_RESOURCE(GraphPerspective);
@@ -833,21 +829,16 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   edge e;
   forEach(e,selection->getEdgesEqualTo(true)) {
-    node src = graph->source(e);
-    node tgt = graph->target(e);
+    const pair<node, node> &ends = graph->ends(e);
 
-    if (!selection->getNodeValue(src)) {
-      std::stringstream sstr;
-      sstr << trUtf8("[Create subgraph] node #").toUtf8().data() << src.id << trUtf8(" source of edge #").toUtf8().data() << e.id << trUtf8(" automatically added to selection.").toUtf8().data();
-      qDebug() << sstr.str();
-      selection->setNodeValue(src,true);
+    if (!selection->getNodeValue(ends.first)) {
+        qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
+        selection->setNodeValue(ends.first,true);
     }
 
-    if (!selection->getNodeValue(tgt)) {
-      std::stringstream sstr;
-      sstr << trUtf8("[Create subgraph] node #").toUtf8().data() << tgt.id << trUtf8(" target of edge #").toUtf8().data() << e.id << trUtf8(" automatically added to selection.").toUtf8().data();
-      qDebug() << sstr.str();
-      selection->setNodeValue(tgt,true);
+    if (!selection->getNodeValue(ends.second)) {
+      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.second.id) << trUtf8(" target of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
+      selection->setNodeValue(ends.second,true);
     }
   }
   Graph* result = graph->addSubGraph(selection, "selection sub-graph");

@@ -25,7 +25,7 @@
 
 #include <vector>
 
-using namespace tlp;
+namespace tlp {
 
 /*@{*/
 /** \file
@@ -44,10 +44,6 @@ public :
   MouseLassoNodesSelectorInteractor(const tlp::PluginContext *);
 
   void construct();
-
-  virtual bool isCompatible(const std::string &viewName) const {
-    return (viewName=="Node Link Diagram view");
-  }
 };
 
 class MouseLassoNodesSelectorInteractorComponent : public GLInteractorComponent {
@@ -76,5 +72,6 @@ private :
   bool dragStarted;
 
 };
+}
 
 #endif // MOUSEFREEHANDSELECTOR_H

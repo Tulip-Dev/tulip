@@ -24,7 +24,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlShaderProgram.h>
 
-#include "../StandardInteractorPriority.h"
+#include "../../utils/StandardInteractorPriority.h"
 #include "FishEyeConfigWidget.h"
 
 using namespace tlp;

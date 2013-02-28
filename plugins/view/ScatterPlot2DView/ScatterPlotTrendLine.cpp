@@ -20,8 +20,16 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ForEach.h>
 #include <tulip/GlLine.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/GlQuantitativeAxis.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlLabel.h>
+
+#include <QtCore/QEvent>
 
 #include "ScatterPlotTrendLine.h"
+#include "ScatterPlot2DView.h"
+#include "ScatterPlot2D.h"
 
 using namespace std;
 

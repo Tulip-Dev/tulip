@@ -24,24 +24,15 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
-#include <tulip/tulipconf.h>
-#include <tulip/GLInteractor.h>
-#include <tulip/TlpTools.h>
 #include <tulip/GlSimpleEntity.h>
-#include <tulip/GlComplexPolygon.h>
 #include <tulip/GlCircle.h>
-
-#include "ScatterPlot2DView.h"
-#include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
+#include <tulip/GLInteractor.h>
 
 namespace tlp {
+
+class ScatterPlotCorrelCoeffSelectorOptionsWidget;
+class ScatterPlot2DView;
 
 class GlEditableComplexPolygon : public GlSimpleEntity {
 

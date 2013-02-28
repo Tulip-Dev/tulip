@@ -20,18 +20,20 @@
 #ifndef SCATTERPLOTOVERVIEW_H_
 #define SCATTERPLOTOVERVIEW_H_
 
-#include <tulip/Graph.h>
-#include <tulip/GlGraphComposite.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/GlQuantitativeAxis.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlProgressBar.h>
+#include <tulip/GlComposite.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/GlRect.h>
-#include <tulip/GlLabel.h>
 
 namespace tlp {
+
+class SizeProperty;
+class LayoutProperty;
+class GlMainWidget;
+class GlQuantitativeAxis;
+class GlGraphComposite;
+class GlRect;
+class GlLabel;
+class GlProgressBar;
+class Graph;
 
 class ScatterPlot2D : public GlComposite {
 

@@ -29,7 +29,7 @@
 
 #include "NeighborhoodHighlighterConfigWidget.h"
 #include "NodeNeighborhoodView.h"
-#include "../StandardInteractorPriority.h"
+#include "../../utils/StandardInteractorPriority.h"
 
 namespace tlp {
 

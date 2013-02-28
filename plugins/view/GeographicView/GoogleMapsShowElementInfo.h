@@ -20,13 +20,11 @@
 #ifndef GOOGLEMAPSSHOWELEMENTINFO_H
 #define GOOGLEMAPSSHOWELEMENTINFO_H
 
-#include <QtGui/QTableView>
-
 #include <tulip/InteractorComposite.h>
-#include <tulip/GlScene.h>
-#include <tulip/GlComplexPolygon.h>
 
 #include "GoogleMapsView.h"
+
+class QTableView;
 
 namespace tlp {
 

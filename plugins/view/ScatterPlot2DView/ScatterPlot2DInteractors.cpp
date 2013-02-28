@@ -26,6 +26,8 @@
 #include "ScatterPlot2DView.h"
 #include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
 
+#include "../../utils/StandardInteractorPriority.h"
+
 using namespace std;
 
 namespace tlp {
@@ -36,10 +38,13 @@ bool ScatterPlot2DInteractor::isCompatible(const std::string &viewName) const {
   return (viewName == ScatterPlot2DView::viewName);
 }
 
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DInteractorZoom,"ScatterPlot2DZoomInteractor","InteractorRectangleZoom",ScatterPlot2DView::viewName, "Tulip Team" ,"02/04/09","ScatterPlot2D rectangle zoom interactor","1.0",1)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DInteractorGetInformation,"ScatterPlot2DInteractorGetInformation","InteractorGetInformation",ScatterPlot2DView::viewName, "Tulip Team" ,"02/04/09","ScatterPlot2D get information interactor","1.0",2)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DInteractorSelection,"ScatterPlot2DSelectionInteractor","InteractorSelection",ScatterPlot2DView::viewName, "Tulip Team" ,"02/04/09","ScatterPlot2D selection interactor","1.0",3)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterLassoSelectorInteractor,"ScatterLassoSelectorInteractor","MouseLassoNodesSelectorInteractor",ScatterPlot2DView::viewName, "Antoine Lambert" ,"02/04/09","Scatter Plot lasso selector","1.0",4)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DInteractorZoom,"ScatterPlot2DZoomInteractor","InteractorRectangleZoom",ScatterPlot2DView::viewName, "Tulip Team" ,"02/04/09","ScatterPlot2D rectangle zoom interactor","1.0",StandardInteractorPriority::ZoomOnRectangle)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DInteractorGetInformation,"ScatterPlot2DInteractorGetInformation","InteractorGetInformation",ScatterPlot2DView::viewName, "Tulip Team" ,"02/04/09","ScatterPlot2D get information interactor","1.0",StandardInteractorPriority::GetInformation)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DInteractorSelection,"ScatterPlot2DSelectionInteractor","InteractorSelection",ScatterPlot2DView::viewName, "Tulip Team" ,"02/04/09","ScatterPlot2D selection interactor","1.0",StandardInteractorPriority::RectangleSelection)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlotFishEye,"ScatterPlotFishEye","FishEyeInteractor",ScatterPlot2DView::viewName, "Antoine Lambert" ,"02/04/09","Scatter Plot fisheye","1.0",StandardInteractorPriority::FishEye)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlotMagnifyingGlass,"ScatterPlotMagnifyingGlass","MouseMagnifyingGlassInteractor",ScatterPlot2DView::viewName, "Antoine Lambert" ,"02/04/09","Scatter Plot mangnifying glass","1.0",StandardInteractorPriority::MagnifyingGlass)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlotNeighborhoodHighlighterInteractor,"ScatterPlotNeighborhoodHighlighterInteractor","NeighborhoodHighlighterInteractor",ScatterPlot2DView::viewName, "Antoine Lambert" ,"02/04/09","Node neighborhood highlighter","1.0",StandardInteractorPriority::NeighborhoodHighlighter)
+INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(ScatterPlot2DLassoInteractor,"ScatterLassoSelectorInteractor","MouseLassoNodesSelectorInteractor",ScatterPlot2DView::viewName, "Antoine Lambert" ,"02/04/09","Scatter Plot lasso selector","1.0",StandardInteractorPriority::FreeHandSelection)
 
 PLUGIN(ScatterPlot2DInteractorNavigation)
 PLUGIN(ScatterPlot2DInteractorTrendLine)
@@ -64,6 +69,7 @@ ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::
                              +"<b>Key insert</b> : rotate<br>"
                              +"</body>"
                              +"</html>");
+setPriority(StandardInteractorPriority::Navigation);
 }
 
 void ScatterPlot2DInteractorNavigation::construct() {
@@ -71,14 +77,18 @@ void ScatterPlot2DInteractorNavigation::construct() {
   push_back(new MouseNKeysNavigator);
 }
 
-ScatterPlot2DInteractorTrendLine::ScatterPlot2DInteractorTrendLine(const PluginContext *) : ScatterPlot2DInteractor(":/i_scatter_trendline.png", "Trend line") {}
+ScatterPlot2DInteractorTrendLine::ScatterPlot2DInteractorTrendLine(const PluginContext *) : ScatterPlot2DInteractor(":/i_scatter_trendline.png", "Trend line") {
+setPriority(StandardInteractorPriority::ViewInteractor1);
+}
 
 void ScatterPlot2DInteractorTrendLine::construct() {
   push_back(new ScatterPlotTrendLine);
   push_back(new MousePanNZoomNavigator);
 }
 
-ScatterPlot2DInteractorCorrelCoeffSelector::ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *) : ScatterPlot2DInteractor(":/tulip/gui/icons/i_magic.png", "Correlation Coefficient Selector"),optionsWidget(NULL) {}
+ScatterPlot2DInteractorCorrelCoeffSelector::ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *) : ScatterPlot2DInteractor(":/tulip/gui/icons/i_magic.png", "Correlation Coefficient Selector"),optionsWidget(NULL) {
+setPriority(StandardInteractorPriority::ViewInteractor2);
+}
 
 void ScatterPlot2DInteractorCorrelCoeffSelector::construct() {
   optionsWidget = new ScatterPlotCorrelCoeffSelectorOptionsWidget();

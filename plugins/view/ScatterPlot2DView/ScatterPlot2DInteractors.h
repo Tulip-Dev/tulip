@@ -34,10 +34,6 @@ public :
 
   bool isCompatible(const std::string &viewName) const;
 
-  unsigned int priority() const {
-    return 0;
-  }
-
 };
 
 class ScatterPlot2DInteractorNavigation : public ScatterPlot2DInteractor {
@@ -49,10 +45,6 @@ public :
   ScatterPlot2DInteractorNavigation(const tlp::PluginContext *);
 
   void construct();
-
-  unsigned int priority() const {
-    return 5;
-  }
 
 };
 

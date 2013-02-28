@@ -21,7 +21,7 @@
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseSelectionEditor.h>
-#include "StandardInteractorPriority.h"
+#include "../utils/StandardInteractorPriority.h"
 
 using namespace tlp;
 

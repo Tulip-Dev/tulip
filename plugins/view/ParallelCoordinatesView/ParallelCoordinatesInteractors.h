@@ -20,14 +20,14 @@
 #ifndef PARALLELCOORDINATESINTERACTORS_H_
 #define PARALLELCOORDINATESINTERACTORS_H_
 
-#include <tulip/GLInteractor.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 
 namespace tlp {
 
 /** \brief Interactor abstract class for ParallelCoordinates
  *
  */
-class ParallelCoordinatesInteractor  : public GLInteractorComposite {
+class ParallelCoordinatesInteractor  : public NodeLinkDiagramComponentInteractor {
 
 public :
 
@@ -58,12 +58,6 @@ public:
    */
   void construct();
 
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 3;
-  }
-
 };
 
 /** \brief Parallel coordinates interactor to highlite elements
@@ -84,14 +78,6 @@ public:
    * Construct chain of responsibility
    */
   void construct();
-
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 0;
-  }
-
-
 
 };
 
@@ -114,12 +100,6 @@ public:
    */
   void construct();
 
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 0;
-  }
-
 };
 
 /** \brief Parallel coordinates interactor to have sliders on axis
@@ -140,12 +120,6 @@ public:
    * Construct chain of responsibility
    */
   void construct();
-
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 0;
-  }
 
 };
 
@@ -168,12 +142,6 @@ public:
    */
   void construct();
 
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 0;
-  }
-
 };
 
 /** \brief Parallel coordinates interactor to show element properties when clicking on it
@@ -195,12 +163,6 @@ public :
    */
   void construct();
 
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 4;
-  }
-
 };
 
 /** \brief Parallel coordinates interactor to modify space between two consecutive axis by using the mouse wheel
@@ -221,12 +183,6 @@ public :
    * Construct chain of responsibility
    */
   void construct();
-
-  QWidget *configurationWidget() const;
-
-  unsigned int priority() const {
-    return 0;
-  }
 
 };
 

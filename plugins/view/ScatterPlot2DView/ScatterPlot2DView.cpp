@@ -17,18 +17,19 @@
  *
  */
 
-#include <tulip/ForEach.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlGraphComposite.h>
 #include <tulip/GlQuantitativeAxis.h>
-#include <tulip/TlpTools.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlLine.h>
-
-#include <algorithm>
-#include <utility>
+#include <tulip/GlProgressBar.h>
 
 #include <QtCore/QTime>
 
 #include "ScatterPlot2DView.h"
+#include "ScatterPlot2DOptionsWidget.h"
+#include "ScatterPlot2D.h"
 #include "ScatterPlot2DInteractors.h"
 
 using namespace std;

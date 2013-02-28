@@ -22,7 +22,7 @@
 
 #include <tulip/GLInteractor.h>
 
-#include "../StandardInteractorPriority.h"
+#include "../../utils/StandardInteractorPriority.h"
 #include "PathFinding/Dikjstra/Dikjstra.h"
 
 #define NO_METRIC "None"

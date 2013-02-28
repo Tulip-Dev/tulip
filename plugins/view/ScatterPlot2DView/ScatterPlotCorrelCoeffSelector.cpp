@@ -18,13 +18,24 @@
  */
 
 #include <algorithm>
+
 #include <tulip/GlLines.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
+#include <tulip/GlComplexPolygon.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/GlQuantitativeAxis.h>
+#include <tulip/GlLabel.h>
 
 #include <QtGui/QMenu>
+#include <QtCore/QEvent>
+#include <QtGui/QMouseEvent>
 
 #include "ScatterPlotCorrelCoeffSelector.h"
+#include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
+#include "ScatterPlot2DView.h"
+#include "ScatterPlot2D.h"
 
 using namespace std;
 

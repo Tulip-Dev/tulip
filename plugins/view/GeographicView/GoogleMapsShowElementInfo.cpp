@@ -26,21 +26,25 @@
 #include "GoogleMapsViewInteractors.h"
 
 #include <tulip/MouseInteractors.h>
+#include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/GraphElementModel.h>
 #include <tulip/GlSimpleEntityItemModel.h>
+#include <tulip/GlComplexPolygon.h>
 
 using namespace std;
 using namespace tlp;
 
-class GoogleMapsInteractorGetInformation  : public InteractorComposite {
+class GoogleMapsInteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
 
 public:
   PLUGININFORMATIONS("GoogleMapsInteractorGetInformation", "Tulip Team", "06/2012", "Google Map Get Information Interactor", "1.0", "Information")
   /**
    * Default constructor
    */
-  GoogleMapsInteractorGetInformation(const tlp::PluginContext*):InteractorComposite(QIcon(":/tulip/gui/icons/i_select.png"),"Get information on nodes/edges") {
+  GoogleMapsInteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get information on nodes/edges") {
+      setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
+                                 "<b>Mouse left</b> click on an element to display its properties");
   }
 
   /**
@@ -49,11 +53,6 @@ public:
   void construct() {
     push_back(new GoogleMapViewNavigator);
     push_back(new GoogleMapsShowElementInfo);
-  }
-
-  virtual QWidget* configurationWidget() const {
-    return new QLabel(QString("<h3>Get information interactor</h3>")+
-                      "<b>Mouse left</b> click on an element to display its properties");
   }
 
   unsigned int priority() const {
