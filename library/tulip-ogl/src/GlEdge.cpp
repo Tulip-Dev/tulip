@@ -196,11 +196,9 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
 
   if (selected) {
-    glDisable(GL_DEPTH_TEST);
     glStencilFunc(GL_LEQUAL, data->parameters->getSelectedEdgesStencil(), 0xFFFF);
   }
   else {
-    glEnable(GL_DEPTH_TEST);
     glStencilFunc(GL_LEQUAL, data->parameters->getEdgesStencil(), 0xFFFF);
   }
 
