@@ -743,6 +743,8 @@ void ScatterPlot2DView::generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWi
 
 void ScatterPlot2DView::switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot) {
 
+
+
   sceneRadiusBak = getGlMainWidget()->getScene()->getGraphCamera().getSceneRadius();
   zoomFactorBak = getGlMainWidget()->getScene()->getGraphCamera().getZoomFactor();
   eyesBak = getGlMainWidget()->getScene()->getGraphCamera().getEyes();
@@ -765,12 +767,13 @@ void ScatterPlot2DView::switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot)
   toggleInteractors(true);
   matrixView = false;
   detailedScatterPlot = scatterPlot;
-  detailedScatterPlotPropertyName = make_pair(scatterPlot->getYDim(), scatterPlot->getXDim());
+  detailedScatterPlotPropertyName = make_pair(scatterPlot->getXDim(), scatterPlot->getYDim());
   propertiesSelectionWidget->setEnabled(false);
   centerView();
 }
 
 void ScatterPlot2DView::switchFromDetailViewToMatrixView() {
+
   axisComposite->reset(false);
   mainLayer->deleteGlEntity("coeffLabel");
 
