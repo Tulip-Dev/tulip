@@ -102,7 +102,6 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
   node n=node(id);
 
   if (data->getElementSelected()->getNodeValue(n)) {
-    glDisable(GL_DEPTH_TEST);
 
     if(data->getGraph()->isMetaNode(n)) {
       glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil(),0xFFFF);
@@ -112,7 +111,6 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
     }
   }
   else {
-    glEnable(GL_DEPTH_TEST);
 
     if(data->getGraph()->isMetaNode(n)) {
       glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);

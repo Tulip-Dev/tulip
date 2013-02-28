@@ -196,8 +196,6 @@ void GlVertexArrayManager::endRendering() {
   Color selectionColor=inputData->parameters->getSelectionColor();
   glColor4ubv(reinterpret_cast<const GLubyte *>(&selectionColor));
 
-  glDisable(GL_DEPTH_TEST);
-
   // Selected edges point rendering
   glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
   glPointSize(2);
@@ -254,7 +252,6 @@ void GlVertexArrayManager::endRendering() {
 
 
   glEnableClientState(GL_COLOR_ARRAY);
-  glEnable(GL_DEPTH_TEST);
 
   // Edges point rendering
   glStencilFunc(GL_LEQUAL, inputData->parameters->getEdgesStencil(), 0xFFFF);
