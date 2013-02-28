@@ -34,8 +34,8 @@ GoogleMapViewInteractorNavigation::GoogleMapViewInteractorNavigation(const Plugi
 
 }
 
-unsigned int GoogleMapViewInteractorNavigation::priority() const{
-    return StandardInteractorPriority::Navigation;
+unsigned int GoogleMapViewInteractorNavigation::priority() const {
+  return StandardInteractorPriority::Navigation;
 }
 
 void GoogleMapViewInteractorNavigation::construct() {

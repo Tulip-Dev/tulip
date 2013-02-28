@@ -51,7 +51,7 @@ public :
 
 private :
 
-    ScatterPlot2D *getOverviewUnderPointer(const Coord &sceneCoord);
+  ScatterPlot2D *getOverviewUnderPointer(const Coord &sceneCoord);
 
   ScatterPlot2DView *scatterPlot2dView;
   ScatterPlot2D *selectedScatterPlotOverview;

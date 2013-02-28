@@ -55,7 +55,7 @@ HistogramInteractorNavigation::HistogramInteractorNavigation(const PluginContext
                              +"<b>Key page up/down</b> : zoom<br>"
                              +"<b>Key insert</b> : rotate<br>"
                              +"</body></html>");
-setPriority(StandardInteractorPriority::Navigation);
+  setPriority(StandardInteractorPriority::Navigation);
 }
 
 void HistogramInteractorNavigation::construct() {
@@ -103,7 +103,7 @@ HistogramInteractorMetricMapping::HistogramInteractorMetricMapping(const PluginC
                              +"<img src=\":/HistoColorMapping.png\" width=\"280\" height=\"260\" border=\"0\" alt=\"\"><br />"
                              +"</p>"
                              +"</body></html>");
-setPriority(StandardInteractorPriority::ViewInteractor1);
+  setPriority(StandardInteractorPriority::ViewInteractor1);
 }
 
 void HistogramInteractorMetricMapping::construct() {
@@ -113,7 +113,7 @@ void HistogramInteractorMetricMapping::construct() {
 }
 
 HistogramInteractorStatistics::HistogramInteractorStatistics(const PluginContext *) : HistogramInteractor(":/i_histo_statistics.png", "Statistics"),histoStatsConfigWidget(NULL) {
-setPriority(StandardInteractorPriority::ViewInteractor2);
+  setPriority(StandardInteractorPriority::ViewInteractor2);
 }
 
 HistogramInteractorStatistics::~HistogramInteractorStatistics() {

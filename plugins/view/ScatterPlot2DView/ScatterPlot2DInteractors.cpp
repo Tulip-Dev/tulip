@@ -62,7 +62,7 @@ ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::
                              +"<b>Key insert</b> : rotate<br>"
                              +"</body>"
                              +"</html>");
-setPriority(StandardInteractorPriority::Navigation);
+  setPriority(StandardInteractorPriority::Navigation);
 }
 
 void ScatterPlot2DInteractorNavigation::construct() {
@@ -71,7 +71,7 @@ void ScatterPlot2DInteractorNavigation::construct() {
 }
 
 ScatterPlot2DInteractorTrendLine::ScatterPlot2DInteractorTrendLine(const PluginContext *) : ScatterPlot2DInteractor(":/i_scatter_trendline.png", "Trend line") {
-setPriority(StandardInteractorPriority::ViewInteractor1);
+  setPriority(StandardInteractorPriority::ViewInteractor1);
 }
 
 void ScatterPlot2DInteractorTrendLine::construct() {
@@ -80,7 +80,7 @@ void ScatterPlot2DInteractorTrendLine::construct() {
 }
 
 ScatterPlot2DInteractorCorrelCoeffSelector::ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *) : ScatterPlot2DInteractor(":/tulip/gui/icons/i_magic.png", "Correlation Coefficient Selector"),optionsWidget(NULL) {
-setPriority(StandardInteractorPriority::ViewInteractor2);
+  setPriority(StandardInteractorPriority::ViewInteractor2);
 }
 
 void ScatterPlot2DInteractorCorrelCoeffSelector::construct() {

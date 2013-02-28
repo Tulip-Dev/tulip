@@ -67,8 +67,8 @@ public:
   }
 
   bool isCompatible(const std::string &viewName) const {
-      return ((viewName==NodeLinkDiagramComponent::viewName)
-              ||(viewName==ViewName::GoogleMapsViewName));
+    return ((viewName==NodeLinkDiagramComponent::viewName)
+            ||(viewName==ViewName::GoogleMapsViewName));
   }
 
 };

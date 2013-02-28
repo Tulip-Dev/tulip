@@ -44,7 +44,7 @@ bool SOMViewInteractor::isCompatible(const std::string &viewName) const {
 
 SOMViewNavigation::SOMViewNavigation(PluginContext *) :
   SOMViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate") {
-    setPriority(StandardInteractorPriority::Navigation);
+  setPriority(StandardInteractorPriority::Navigation);
 
 }
 
@@ -77,7 +77,7 @@ void SOMViewProperties::construct() {
 
 SOMViewThreshold::SOMViewThreshold(PluginContext *):SOMViewInteractor(":/i_slider.png", "Threshold Selection") {
   setPriority(StandardInteractorPriority::ViewInteractor1);
-    setConfigurationWidgetText(QString("<H1>Threshold Interactor</H1><p>This interactor is used to select nodes with a value between those indicated by the two sliders</p><p>Move the each slider to change the bound.</p><p>Press the Ctrl button to add the new threshold selection to the current selection. If Ctrl is not pressed the old selection will be replaced</p>"));
+  setConfigurationWidgetText(QString("<H1>Threshold Interactor</H1><p>This interactor is used to select nodes with a value between those indicated by the two sliders</p><p>Move the each slider to change the bound.</p><p>Press the Ctrl button to add the new threshold selection to the current selection. If Ctrl is not pressed the old selection will be replaced</p>"));
 }
 
 void SOMViewThreshold::construct() {

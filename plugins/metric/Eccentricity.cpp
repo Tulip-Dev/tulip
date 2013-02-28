@@ -80,8 +80,8 @@ double EccentricityMetric::compute(node n) {
   double val;
 
   val = directed ?
-    tlp::maxDistance(graph, n, distance, DIRECTED) :
-    tlp::maxDistance(graph, n, distance, UNDIRECTED);
+        tlp::maxDistance(graph, n, distance, DIRECTED) :
+        tlp::maxDistance(graph, n, distance, UNDIRECTED);
 
   if(!allPaths)
     return val;
@@ -163,12 +163,12 @@ bool EccentricityMetric::run() {
 
     if(!allPaths && norm)
 #ifdef _OPENMP
-#pragma omp critical(DIAMETER)
+      #pragma omp critical(DIAMETER)
 #endif
-      {
-	if(diameter<res[ni])
-	  diameter=res[ni];
-      }
+    {
+      if(diameter<res[ni])
+        diameter=res[ni];
+    }
   }
 
   for (size_t ni = 0; ni < nbElem; ++ni) {

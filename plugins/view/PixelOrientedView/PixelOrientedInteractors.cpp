@@ -39,7 +39,7 @@ bool PixelOrientedInteractor::isCompatible(const std::string &viewName) const  {
 PLUGIN(PixelOrientedInteractorNavigation)
 
 PixelOrientedInteractorNavigation::PixelOrientedInteractorNavigation(const PluginContext *) : PixelOrientedInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
-    setConfigurationWidgetText(QString("<html><head>")
+  setConfigurationWidgetText(QString("<html><head>")
                              +"<title></title>"
                              +"</head>"
                              +"<body>"
@@ -57,7 +57,7 @@ PixelOrientedInteractorNavigation::PixelOrientedInteractorNavigation(const Plugi
                              +"<b>Key insert</b> : rotate<br>"
                              +"</body>"
                              +"</html>");
-setPriority(StandardInteractorPriority::Navigation);
+  setPriority(StandardInteractorPriority::Navigation);
 }
 
 void PixelOrientedInteractorNavigation::construct() {

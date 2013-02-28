@@ -832,8 +832,8 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
     const pair<node, node> &ends = graph->ends(e);
 
     if (!selection->getNodeValue(ends.first)) {
-        qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
-        selection->setNodeValue(ends.first,true);
+      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
+      selection->setNodeValue(ends.first,true);
     }
 
     if (!selection->getNodeValue(ends.second)) {
