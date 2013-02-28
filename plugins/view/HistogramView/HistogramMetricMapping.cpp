@@ -24,6 +24,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlNode.h>
+#include <tulip/GlMainWidget.h>
 
 #include <QtGui/QToolTip>
 

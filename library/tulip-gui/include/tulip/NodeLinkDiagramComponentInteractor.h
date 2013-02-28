@@ -60,7 +60,6 @@ public :
 
   void setConfigurationWidgetText(const QString& text);
 
-  virtual bool isCompatible(const std::string &viewName) const;
   virtual QWidget* configurationWidget() const;
 
   virtual unsigned int priority() const;

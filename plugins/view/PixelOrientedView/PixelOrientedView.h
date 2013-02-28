@@ -21,10 +21,8 @@
 #define DATACUBEVIEW_H_
 
 #include <tulip/GlMainView.h>
-#include <tulip/GlLabel.h>
 
 #include <QtGui/QWidget>
-#include <QtGui/QMenu>
 
 #include "POLIB/potypes.h"
 #include "POLIB/SpiralLayout.h"
@@ -38,6 +36,7 @@
 #include "POLIB/TulipGraphDimension.h"
 
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"
+#include "../../utils/ViewNames.h"
 
 #include "PixelOrientedOverview.h"
 #include "PixelOrientedOptionsWidget.h"
@@ -76,13 +75,11 @@ class PixelOrientedView : public GlMainView {
 
 public :
 
-  PLUGININFORMATIONS(PixelOrientedView::viewName, "Antoine Lambert", "12/2008",
+  PLUGININFORMATIONS(ViewName::PixelOrientedViewName, "Antoine Lambert", "12/2008",
                      "The Pixel Oriented view allows to visualize graph properties using pixel oriented visualization techniques.\n"
                      "This type of visualization aims to use each pixel of the display to visualize one data value and therefore allow the visualization of the largest amount of data possible.\n"
                      "Pixels are mapped so that neighbor pixels in the data are placed close to each other on the screen.\n"
                      "The technique uses a linear order on data elements (graph nodes), inferred from a selected property, which can be seen as a map from the data space onto a line segment. The mapping onto a 2D portion of the plane then uses a \"space-filling curve\"", "1.0","View")
-
-  static const std::string viewName;
 
   PixelOrientedView(const PluginContext *);
   ~PixelOrientedView();

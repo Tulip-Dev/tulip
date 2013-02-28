@@ -66,8 +66,6 @@ const vector<string> propertiesTypesFilter(propertiesTypes, propertiesTypes + nb
 
 namespace tlp {
 
-const string PixelOrientedView::viewName("Pixel Oriented view");
-
 PLUGIN(PixelOrientedView)
 
 PixelOrientedView::PixelOrientedView(const PluginContext *) :

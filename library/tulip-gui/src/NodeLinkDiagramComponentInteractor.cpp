@@ -39,10 +39,6 @@ void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(const QStrin
   _label->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 }
 
-bool NodeLinkDiagramComponentInteractor::isCompatible(const std::string &viewName) const {
-  return (viewName==NodeLinkDiagramComponent::viewName);
-}
-
 QWidget* NodeLinkDiagramComponentInteractor::configurationWidget() const {
   return _label;
 }

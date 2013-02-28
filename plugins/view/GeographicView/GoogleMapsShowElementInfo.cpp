@@ -32,6 +32,9 @@
 #include <tulip/GlSimpleEntityItemModel.h>
 #include <tulip/GlComplexPolygon.h>
 
+#include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/ViewNames.h"
+
 using namespace std;
 using namespace tlp;
 
@@ -45,6 +48,7 @@ public:
   GoogleMapsInteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get information on nodes/edges") {
       setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
                                  "<b>Mouse left</b> click on an element to display its properties");
+  setPriority(StandardInteractorPriority::GetInformation);
   }
 
   /**
@@ -55,12 +59,8 @@ public:
     push_back(new GoogleMapsShowElementInfo);
   }
 
-  unsigned int priority() const {
-    return 4;
-  }
-
   bool isCompatible(const string &viewName) const {
-    return (viewName==GoogleMapsView::viewName);
+    return (viewName==ViewName::GoogleMapsViewName);
   }
 
 };

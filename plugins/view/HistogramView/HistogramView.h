@@ -21,24 +21,24 @@
 #define HISTOGRAMVIEW_H_
 
 #include <tulip/GlMainView.h>
-#include <tulip/GlComposite.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/SizeProperty.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlQuantitativeAxis.h>
-#include <tulip/GlRect.h>
-#include <tulip/GlLabel.h>
-
-#include <QtGui/QMenu>
 
 #include <vector>
 #include <map>
 
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"
+#include "../../utils/ViewNames.h"
 #include "HistoOptionsWidget.h"
 #include "Histogram.h"
 
+class QMenu;
+
 namespace tlp {
+
+class Graph;
+class GlLayer;
+class GlComposite;
+class Interactor;
+class GlRect;
 
 /*@{*/
 /** \file
@@ -66,12 +66,10 @@ class HistogramView : public GlMainView {
 
 public :
 
-  PLUGININFORMATIONS(HistogramView::viewName, "Antoine Lambert", "02/2009",
+  PLUGININFORMATIONS(ViewName::HistogramViewName, "Antoine Lambert", "02/2009",
                      "The Histogram view allows to create frequency histograms from graph properties (supported types are Metric and Integer).\n"
                      "By selecting a set of graph properties, frequency histograms are computed and displayed for values associated to nodes (or edges).\n\n"
                      "This view also allows to map visual properties (colors, sizes, glyphs, ..) of the graph elements with respect to a graph metric in a visual way. These operations can be done with the \"Metric mapping\" interactor. Many interactors are also bundled with the view to perform elements selection, statistical analysis, ...", "1.1", "View")
-
-  static const std::string viewName;
 
   HistogramView(const PluginContext *);
   ~HistogramView();

@@ -53,6 +53,10 @@ PathFinder::~PathFinder() {
   delete _configurationWidget;
 }
 
+bool PathFinder::isCompatible(const std::string &viewName) const {
+  return (viewName==NodeLinkDiagramComponent::viewName);
+}
+
 void PathFinder::construct() {
   if (view() == NULL)
     return;

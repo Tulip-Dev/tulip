@@ -20,13 +20,14 @@
 #include "GoogleMapsViewInteractors.h"
 
 #include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/ViewNames.h"
 
 using namespace std;
 
 GoogleMapViewInteractor::GoogleMapViewInteractor(const QString &iconPath, const QString &text) : GLInteractorComposite(QIcon(iconPath), text) {}
 
 bool GoogleMapViewInteractor::isCompatible(const std::string &viewName) const {
-  return (viewName == GoogleMapsView::viewName);
+  return (viewName == ViewName::GoogleMapsViewName);
 }
 
 GoogleMapViewInteractorNavigation::GoogleMapViewInteractorNavigation(const PluginContext *) : GoogleMapViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
@@ -199,8 +200,3 @@ bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 PLUGIN(GoogleMapViewInteractorNavigation)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(InteractorSelectionGMV,"GMVSelectionInteractor","InteractorSelection",GoogleMapsView::viewName, "Tulip Team" ,"02/04/09","GMV selection interactor","1.0",StandardInteractorPriority::RectangleSelection)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(InteractorBendsEditorGMV,"GMVBendsInteractor","InteractorEditEdgeBends",GoogleMapsView::viewName, "Tulip Team" ,"02/04/09","GMV bends editor interactor","1.0",StandardInteractorPriority::EditEdgeBends)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(InteractorAddEdgeGMV,"GMVAddEdgeInteractor","InteractorAddEdge",GoogleMapsView::viewName, "Tulip Team" ,"02/04/09","GMV add nodes/edges interactor","1.0",StandardInteractorPriority::AddNodesOrEdges)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(InteractorSelectionModifierGMV,"GMVSelectionModifierInteractor","InteractorSelectionModifier",GoogleMapsView::viewName, "Tulip Team" ,"02/04/09","GMV selection modifier interactor","1.0",StandardInteractorPriority::RectangleSelectionModifier)
-

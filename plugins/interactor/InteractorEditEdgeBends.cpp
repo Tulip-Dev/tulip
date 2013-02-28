@@ -21,7 +21,9 @@
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseEdgeBendEditor.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
+
 #include "../utils/StandardInteractorPriority.h"
+#include "../utils/ViewNames.h"
 
 using namespace tlp;
 
@@ -59,6 +61,12 @@ public:
     push_back(new MousePanNZoomNavigator);
     push_back(new MouseSelector);
     push_back(new MouseEdgeBendEditor);
+  }
+
+  bool isCompatible(const std::string &viewName) const {
+      return ((viewName==NodeLinkDiagramComponent::viewName)
+              ||(viewName==ViewName::GoogleMapsViewName)
+              );
   }
 
 };

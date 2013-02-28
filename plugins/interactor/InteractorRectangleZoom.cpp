@@ -20,7 +20,9 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/MouseBoxZoomer.h>
+
 #include "../utils/StandardInteractorPriority.h"
+#include "../utils/ViewNames.h"
 
 using namespace tlp;
 
@@ -51,6 +53,17 @@ public:
   QCursor cursor() const {
     return QCursor(Qt::CrossCursor);
   }
+
+  bool isCompatible(const std::string &viewName) const {
+      return ((viewName==NodeLinkDiagramComponent::viewName)
+              ||(viewName==ViewName::HistogramViewName)
+              ||(viewName==ViewName::MatrixViewName)
+              ||(viewName==ViewName::ParallelCoordinatesViewName)
+              ||(viewName==ViewName::PixelOrientedViewName)
+              ||(viewName==ViewName::ScatterPlot2DViewName)
+              );
+  }
+
 
 };
 

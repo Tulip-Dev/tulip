@@ -47,6 +47,11 @@ public:
     push_back(new MouseElementDeleter);
   }
 
+  bool isCompatible(const std::string &viewName) const {
+      return (viewName==NodeLinkDiagramComponent::viewName);
+  }
+
+
 };
 
 PLUGIN(InteractorDeleteElement)

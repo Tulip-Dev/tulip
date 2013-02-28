@@ -18,9 +18,9 @@
 */
 
 #include <tulip/OpenGlConfigManager.h>
-
 #include <tulip/ForEach.h>
 #include <tulip/GlLines.h>
+#include <tulip/GlMainWidget.h>
 
 #include <algorithm>
 #include <cstdlib>

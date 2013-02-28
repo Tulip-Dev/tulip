@@ -37,6 +37,8 @@
 #include <SOMAlgorithm.h>
 #include <InputSample.h>
 
+#include "../../utils/ViewNames.h"
+
 using namespace tlp;
 class SOMPreviewComposite;
 class SOMMap;
@@ -55,7 +57,7 @@ class SOMMap;
 class SOMView: public GlMainView {
   Q_OBJECT
 
-  PLUGININFORMATIONS("Self Organizing Map view", "Dubois Jonathan", "02/2009",
+  PLUGININFORMATIONS(ViewName::SOMViewName, "Dubois Jonathan", "02/2009",
                      "The Self Organizing Map view allows to generate self organizing map (also called Kohonen map) from graph data.\n"
                      "The model was first described as an artificial neural network by the Finnish professor Teuvo Kohonen.\n"
                      "This view is useful to visualize high-dimensional data in a low-dimensional representation.\n\n"

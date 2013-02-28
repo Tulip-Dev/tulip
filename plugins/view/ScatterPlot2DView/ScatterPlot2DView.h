@@ -31,6 +31,8 @@
 
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"
 
+#include "../../utils/ViewNames.h"
+
 namespace tlp {
 
 /*@{*/
@@ -71,13 +73,11 @@ class ScatterPlot2DView : public GlMainView {
 
 public :
 
-  PLUGININFORMATIONS(ScatterPlot2DView::viewName, "Antoine Lambert", "03/2009",
+  PLUGININFORMATIONS(ViewName::ScatterPlot2DViewName, "Antoine Lambert", "03/2009",
                      "The Scatter Plot 2D view allows to create 2d scatter plots of graph nodes from graph properties (supported types are Metric and Integer).\n"
                      "A scatter plot is a type of mathematical diagram using Cartesian coordinates to display values for two variables for a set of data. The data are displayed as a collection of points, each having the value of one variable determining the position on the horizontal axis and the value of the other variable determining the position on the vertical axis.\n\n"
                      "By selecting a set of graph properties, a scatter plot matrix will be displayed for each combination of two different properties. Each scatter plot can then be displayed individually in a more detailed way.\n\n"
                      "A set of interactors are bundled with the view to perform selection, statistical analysis, ...", "1.0", "View")
-
-  static const std::string viewName;
 
   ScatterPlot2DView(const PluginContext *);
   ~ScatterPlot2DView();

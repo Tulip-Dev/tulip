@@ -112,9 +112,7 @@ public:
    */
   std::vector<std::string> getHighlighters();
 
-  virtual bool isCompatible(const std::string &viewName) const {
-    return (viewName=="Node Link Diagram view");
-  }
+  virtual bool isCompatible(const std::string &viewName) const;
 
 public slots:
   void setSelectAllPaths(bool s);

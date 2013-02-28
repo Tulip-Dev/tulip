@@ -29,14 +29,11 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/ForEach.h>
-#include <tulip/Interactor.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/ParametricCurves.h>
-
-#include "../../utils/StandardInteractorPriority.h"
 
 using namespace tlp;
 using namespace std;
@@ -50,8 +47,6 @@ MatrixView::MatrixView(const PluginContext *):
 MatrixView::~MatrixView() {
   deleteDisplayedGraph();
 }
-
-string MatrixView::viewName="Adjacency Matrix view";
 
 void MatrixView::setState(const DataSet &ds) {
 
@@ -487,11 +482,3 @@ void MatrixView::applySettings() {
 }
 
 PLUGIN(MatrixView)
-
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(MatrixViewNavigationInteractor, "MatrixView Navigation Interactor" ,"InteractorNavigation", MatrixView::viewName, "Ludwig Fiolka", "07/01/2011", "Stable", "1.0",StandardInteractorPriority::Navigation)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(MatrixViewSelectionInteractor, "MatrixView Selection Interactor" ,"InteractorSelection", MatrixView::viewName, "Ludwig Fiolka", "07/01/2011", "Stable", "1.0",StandardInteractorPriority::RectangleSelection)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(MatrixViewRectangleZoomInteractor, "MatrixView Rectangle Zoom Interactor" ,"InteractorRectangleZoom", MatrixView::viewName, "Ludwig Fiolka", "07/01/2011", "Stable", "1.0",StandardInteractorPriority::ZoomOnRectangle)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(MatrixViewFishEyeInteractor, "Matrix view fish eye interactor", "FishEyeInteractor", MatrixView::viewName, "Tulip Team", "11/06/2009", "Fish eye interactor for Adjacency Matrix view", "1.0", StandardInteractorPriority::FishEye)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(MatrixViewMagnifyInteractor, "Matrix view magnify interactor", "MouseMagnifyingGlassInteractor", MatrixView::viewName, "Tulip Team", "11/06/2009", "Magnify interactor for Adjacency Matrix view", "1.0", StandardInteractorPriority::MagnifyingGlass)
-INTERACTORPLUGINVIEWEXTENSIONWITHPRIORITY(MatrixViewNeightborhood, "Matrix view neighborhood highlighter", "NeighborhoodHighlighterInteractor", MatrixView::viewName, "Tulip Team", "11/06/2009", "Neighborhood interactor for Adjacency Matrix view", "1.0", StandardInteractorPriority::NeighborhoodHighlighter)
-

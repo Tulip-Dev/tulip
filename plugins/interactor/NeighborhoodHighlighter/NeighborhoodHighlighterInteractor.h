@@ -62,9 +62,7 @@ public :
     return StandardInteractorPriority::NeighborhoodHighlighter;
   }
 
-  virtual bool isCompatible(const std::string &viewName) const {
-    return (viewName=="Node Link Diagram view");
-  }
+  virtual bool isCompatible(const std::string &viewName) const;
 
 private :
 

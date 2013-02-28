@@ -21,9 +21,6 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-
 
 #include <GL/glew.h>
 
@@ -32,7 +29,11 @@
 #include <tulip/GlMainView.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 
+#include <QtCore/QEvent>
+#include <QtGui/QMouseEvent>
+
 #include "FishEyeInteractor.h"
+#include "../../utils/ViewNames.h"
 
 using namespace std;
 
@@ -79,6 +80,16 @@ void FishEyeInteractor::construct() {
   FishEyeInteractorComponent *fisheyeInteractorComponent = new FishEyeInteractorComponent();
   fisheyeInteractorComponent->setConfigWidget(fisheyeConfigWidget);
   push_back(fisheyeInteractorComponent);
+}
+
+bool FishEyeInteractor::isCompatible(const std::string &viewName) const {
+  return ((viewName==NodeLinkDiagramComponent::viewName)
+          ||(viewName==ViewName::HistogramViewName)
+          ||(viewName==ViewName::MatrixViewName)
+          ||(viewName==ViewName::ParallelCoordinatesViewName)
+          ||(viewName==ViewName::PixelOrientedViewName)
+          ||(viewName==ViewName::ScatterPlot2DViewName)
+          );
 }
 
 void FishEyeInteractor::uninstall() {

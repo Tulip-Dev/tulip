@@ -21,6 +21,9 @@
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Interactor.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlLabel.h>
+#include <tulip/GlRect.h>
 
 #include <QtGui/QToolTip>
 #include <QtGui/QHelpEvent>
@@ -52,8 +55,6 @@ std::string getStringFromNumber(T number, unsigned int precision = 5) {
 }
 
 namespace tlp {
-
-const string HistogramView::viewName("Histogram view");
 
 PLUGIN(HistogramView)
 

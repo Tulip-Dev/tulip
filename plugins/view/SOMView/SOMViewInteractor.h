@@ -26,9 +26,7 @@ class SOMViewInteractor: public tlp::NodeLinkDiagramComponentInteractor {
 public:
   SOMViewInteractor(const QString &iconPath, const QString &text);
 
-  virtual bool isCompatible(const std::string &viewName) const {
-    return (viewName == "Self Organizing Map");
-  }
+  virtual bool isCompatible(const std::string &viewName) const;
 
 };
 

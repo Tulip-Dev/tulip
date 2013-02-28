@@ -43,8 +43,6 @@
 
 using namespace std;
 
-const string GoogleMapsView::viewName("Geographic view");
-
 GoogleMapsView::GoogleMapsView(PluginContext *) : googleMapsViewConfigWidget(NULL),geolocalisationConfigWidget(NULL),sceneConfigurationWidget(NULL),
   sceneLayersConfigurationWidget(NULL),useSharedLayoutProperty(true),useSharedSizeProperty(true),useSharedShapeProperty(true) {
   _viewType=GoogleRoadMap;
