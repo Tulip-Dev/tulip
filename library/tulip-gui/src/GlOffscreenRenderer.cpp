@@ -205,7 +205,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 }
 
 static QImage convertImage(const QImage &image) {
-    return QImage(image.bits(), image.width(), image.height(), QImage::Format_ARGB32).convertToFormat(QImage::Format_RGB32);
+  return QImage(image.bits(), image.width(), image.height(), QImage::Format_ARGB32).convertToFormat(QImage::Format_RGB32);
 }
 
 QImage GlOffscreenRenderer::getImage() {
