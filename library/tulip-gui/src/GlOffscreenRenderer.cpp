@@ -204,11 +204,15 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   glPopAttrib();
 }
 
+static QImage convertImage(const QImage &image) {
+    return QImage(image.bits(), image.width(), image.height(), QImage::Format_ARGB32).convertToFormat(QImage::Format_RGB32);
+}
+
 QImage GlOffscreenRenderer::getImage() {
   if (!antialiasedFbo)
-    return glFrameBuf->toImage();
+    return convertImage(glFrameBuf->toImage());
   else
-    return glFrameBuf2->toImage();
+    return convertImage(glFrameBuf2->toImage());
 }
 
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
@@ -229,25 +233,17 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-  unsigned char* buff = new unsigned char[getViewportWidth()*getViewportHeight()*4];
-
-  if (!antialiasedFbo)
-    glBindTexture(GL_TEXTURE_2D, glFrameBuf->texture());
-  else
-    glBindTexture(GL_TEXTURE_2D, glFrameBuf2->texture());
-
-  glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+  QImage image = getImage().mirrored();
+  unsigned char *buff = image.bits();
 
   glBindTexture(GL_TEXTURE_2D, textureId);
 
   if (generateMipMaps) {
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_RGBA, GL_UNSIGNED_BYTE, buff);
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_BGRA, GL_UNSIGNED_BYTE, buff);
   }
   else {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, buff);
   }
-
-  delete [] buff;
 
   return textureId;
 
