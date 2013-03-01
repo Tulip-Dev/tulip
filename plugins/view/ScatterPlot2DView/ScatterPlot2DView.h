@@ -23,6 +23,11 @@
 #include <tulip/GlMainView.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/Coord.h>
+
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
 #else
