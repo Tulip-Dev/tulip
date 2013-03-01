@@ -1,4 +1,4 @@
-/*
+/**
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
-
 #ifndef TLP_GEO_CONVEX_HULL_H
 #define TLP_GEO_CONVEX_HULL_H
 #include <vector>
@@ -29,19 +27,28 @@ namespace tlp {
  * @ingroup Graph
  * \brief function for convex hull manipulation
  *
- * \author : Daniel Archambault archam@cs.ubc.ca,
+ * \author : Francois Queyroi queyroi@labri.fr,
  *
- * \version 0.0.3 26/06/2006
+ * \version 0.0.1 31/01/2013
+ *
+ * Compute the convex hull using the QuickHull algorithm in
+ *
+ * "The quickhull algorithm for convex hulls",
+ * Barber, C.B. and Dobkin, D.P. and Huhdanpaa, H.
+ * ACM Transactions on Mathematical Software (TOMS), 1996
+ *
  *
  * Compute the convex hull and return a list of indexes for the
  * points on the convex hull in counterclockwise order.  The convexHull
- * vector is automatically cleared.  The algorithm runs in O(nlgn) time.
+ * vector is automatically cleared.
+ *
+ * The algorithm runs in O(nlgn) time where n is the
+ * number of points.
  */
 TLP_SCOPE void convexHull (const std::vector<Coord> &points,
                            std::vector<unsigned int> &convexHull);
 
-
+/*@}*/
 
 }
 #endif
-///@endcond
