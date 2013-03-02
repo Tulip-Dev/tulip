@@ -250,16 +250,16 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
   if (generateMipMaps) {
 #if defined(_MSC_VER)
-      gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_BGRA_EXT, GL_UNSIGNED_BYTE, buff);
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_BGRA_EXT, GL_UNSIGNED_BYTE, buff);
 #else
-      gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_BGRA, GL_UNSIGNED_BYTE, buff);
+    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_BGRA, GL_UNSIGNED_BYTE, buff);
 #endif
   }
   else {
-      #if defined(_MSC_VER)
+#if defined(_MSC_VER)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, buff);
 #else
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, buff);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, buff);
 #endif
   }
 
