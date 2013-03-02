@@ -19,10 +19,20 @@
 
 #include <sstream>
 
-#include "tulip/GlOffscreenRenderer.h"
-#include "tulip/GlMainWidget.h"
-#include "tulip/GlVertexArrayManager.h"
-#include "tulip/GlGraphComposite.h"
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
+#include <tulip/GlOffscreenRenderer.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlGraphComposite.h>
 
 using namespace std;
 
@@ -239,10 +249,18 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   glBindTexture(GL_TEXTURE_2D, textureId);
 
   if (generateMipMaps) {
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_BGRA, GL_UNSIGNED_BYTE, buff);
+#if defined(_MSC_VER)
+      gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_BGRA_EXT, GL_UNSIGNED_BYTE, buff);
+#else
+      gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_BGRA, GL_UNSIGNED_BYTE, buff);
+#endif
   }
   else {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, buff);
+      #if defined(_MSC_VER)
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, buff);
+#else
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, buff);
+#endif
   }
 
   return textureId;
