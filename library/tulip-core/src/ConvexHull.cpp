@@ -1,3 +1,22 @@
+/*
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
+
 #include <tulip/ConvexHull.h>
 
 #include <stack>
@@ -101,29 +120,6 @@ void hullSet(stack<hullLoopIteration>& loopIterStack,
 
     loopIterStack.push(leftPBloop);
     loopIterStack.push(leftABloop);
-
-
-//    loopIterStack.push(hullLoopIteration());
-//    loopIterStack.top().insertPos = current.insertPos;
-//    pair<Coord,Coord>& segPB = loopIterStack.top().seg;
-//    segPB.first = points[iFurther];
-//    segPB.second = current.seg.second;
-//    list<unsigned int>& leftPB = loopIterStack.top().subset;
-//    for(itS=current.subset.begin();itS!=current.subset.end();++itS){
-//      if(isLeft(points[*itS],segPB))
-//  leftPB.push_front(*itS);
-//    }
-
-//    loopIterStack.push(hullLoopIteration());
-//    loopIterStack.top().insertPos = current.insertPos + 1;
-//    pair<Coord,Coord>& segAP = loopIterStack.top().seg;
-//    segAP.first = current.seg.first;
-//    segAP.second = points[iFurther];
-//    list<unsigned int>& leftAP = loopIterStack.top().subset;
-//    for(itS=current.subset.begin();itS!=current.subset.end();++itS){
-//      if(isLeft(points[*itS], segAP))
-//  leftAP.push_front(*itS);
-//    }
   }
 }
 //================================================================================
