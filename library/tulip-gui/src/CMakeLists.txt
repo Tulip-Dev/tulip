@@ -95,6 +95,7 @@ SET(SRCS
   GlSimpleEntityItemModel.cpp
   PythonVersionChecker.cpp
   PluginModel.cpp
+  GraphNeedsSavingObserver.cpp
 )
 
 QT4_WRAP_UI(UI_HEADERS
