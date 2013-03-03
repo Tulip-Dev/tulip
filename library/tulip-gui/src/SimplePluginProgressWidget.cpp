@@ -16,16 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/SimplePluginProgressWidget.h"
-#include <QtGui/QStylePainter>
 #include <QtGui/QCloseEvent>
-#include <QtCore/QDebug>
-#include <QtCore/QTime>
-#include <iostream>
+#include <QtGui/QStyle>
 
-#include <tulip/Perspective.h>
-#include <tulip/Observable.h>
 #include "ui_SimplePluginProgressWidget.h"
+#include <tulip/SimplePluginProgressWidget.h>
 
 using namespace tlp;
 
