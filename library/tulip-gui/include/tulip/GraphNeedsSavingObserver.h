@@ -16,118 +16,80 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef GRAPHNEEDSSAVINGOBSERVER_H
 #define GRAPHNEEDSSAVINGOBSERVER_H
 
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
-#include <tulip/ObservableProperty.h>
-#include <tulip/Observable.h>
-#include <tulip/Graph.h>
 
-#include <QtGui/qtabwidget.h>
-#include <tulip/PropertyInterface.h>
+#include <QtCore/QObject>
 
-#include <deque>
+namespace tlp {
 
-class GraphNeedsSavingObserver : public QObject, tlp::Observable {
-  Q_OBJECT
+class Graph;
+
+/**
+ * @see Observable
+ *
+ * @brief The GraphNeedsSavingObserver class will observe a graph and tells if it has been modified.
+ *
+ * @li The constructor. Observe the graph given in parameter for modification
+ * @li needsSaving. Returns true is the graph has been modified
+ * @li saved. The graph has been saved, and the status of the class must be reset. needsSaving will return false if called after saved().
+ * @li savingNeeded. Signal send when the status of the graph evolves.
+ *
+ */
+class TLP_QT_SCOPE GraphNeedsSavingObserver : public QObject, Observable {
+
+    Q_OBJECT
+
+    bool _needsSaving;
+    Graph* _graph;
+
+    void addObserver();
+    void removeObservers();
+
 public :
+    /**
+     * @brief GraphNeedsSavingObserver Class constructor
+     * @param graph the graph which needs to be observed for modifications
+     */
+    GraphNeedsSavingObserver(Graph* graph);
 
-  GraphNeedsSavingObserver(tlp::Graph* graph) :_needsSaving(false), _graph(graph) {
-    addObserver();
-  }
+    /**
+      * @brief saved If the graph has been saved, one has to call this method to reset the status of the graph (it does not need to be saved).
+      * to indicate that the graph does not need to be saved until a new modification.
+      */
+    void saved();
+
+    /**
+      * @brief needsSaving Indicates if the graph has been modified, and thus needs to be saved.
+      *
+      * @return true if the graph needs to be saved, false otherwise.
+      */
+    bool needsSaving() const;
 
 protected :
-
-  virtual void treatEvents(const std::vector<tlp::Event>&) {
-    doNeedSaving();
-  }
-
-public :
-
-  void saved() {
-    _needsSaving = false;
-    removeObservers();
-    addObserver();
-  }
-
-  bool needsSaving() const {
-    return _needsSaving;
-  }
+    /**
+      * @see Listener
+      * @see Observer
+      * @see Observable
+      * @see Observable::treatEvents(const std::vector<Event>&)
+      *
+      * @brief treatEvents This function is called when events are sent to Observers, and Observers only.
+      *
+      * @param events The events that happened since the last unHoldObservers().
+      */
+    virtual void treatEvents(const std::vector<Event>&);
 
 signals:
-  void savingNeeded();
 
-private:
+    /**
+     * @brief savingNeeded This signal is sent when the graph needs to be saved (it has been modified).
+     */
 
-  void doNeedSaving() {
-    if(!_needsSaving) {
-      // Stop listening graphs.
-      removeObservers();
-      _needsSaving = true;
-      emit(savingNeeded());
-    }
-  }
+    void savingNeeded();
 
-  /**
-    * @brief Listen all the observable objects in the graph (subgraphs, properties).
-    **/
-  void addObserver() {
-    std::deque<tlp::Graph*> toObserve;
-    toObserve.push_back(_graph);
-
-    while(!toObserve.empty()) {
-      tlp::Graph* current = toObserve.front();
-      current->addObserver(this);
-      toObserve.pop_front();
-
-      //Listen properties.
-      tlp::PropertyInterface* property;
-      forEach(property,current->getLocalObjectProperties()) {
-        property->addObserver(this);
-      }
-
-      //Fetch subgraphs
-      tlp::Graph* subgraphs;
-      forEach(subgraphs,current->getSubGraphs()) {
-        toObserve.push_back(subgraphs);
-      }
-    }
-  }
-
-  /**
-    * @brief  Stop listening all the observable objects in the graph (subgraphs, properties).
-    **/
-  void removeObservers() {
-    std::deque<tlp::Graph*> toUnobserve;
-    toUnobserve.push_back(_graph);
-
-    while(!toUnobserve.empty()) {
-      tlp::Graph* current = toUnobserve.front();
-      toUnobserve.pop_front();
-
-      current->removeObserver(this);
-
-      //Stop listening properties.
-      tlp::PropertyInterface* property;
-      forEach(property,current->getLocalObjectProperties()) {
-        property->removeObserver(this);
-      }
-
-      //Fetch subgraphs
-      tlp::Graph* subgraphs;
-      forEach(subgraphs,current->getSubGraphs()) {
-        toUnobserve.push_back(subgraphs);
-      }
-    }
-  }
-
-  bool _needsSaving;
-  tlp::Graph* _graph;
 };
-
+}
 #endif //GRAPHNEEDSSAVINGOBSERVER_H
-///@endcond
