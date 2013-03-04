@@ -36,6 +36,7 @@
 #include <tulip/TulipMimes.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/GraphNeedsSavingObserver.h>
 
 using namespace std;
 using namespace tlp;
