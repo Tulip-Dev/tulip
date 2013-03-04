@@ -586,7 +586,7 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
     endRemoveRows();
 
     if (_currentGraph == g) {
-      if (_graphs.size() == 0) {
+      if (_graphs.empty()) {
         _currentGraph = NULL;
         emit currentGraphChanged(_currentGraph);
       }
@@ -609,7 +609,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
     delete s;
 
     if (_currentGraph == g) {
-      if (_graphs.size() == 0)
+      if (_graphs.empty())
         _currentGraph = NULL;
       else
         _currentGraph = _graphs[0];
