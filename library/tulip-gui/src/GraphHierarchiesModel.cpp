@@ -234,7 +234,7 @@ GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy):
 }
 
 GraphHierarchiesModel::~GraphHierarchiesModel() {
-    qDeleteAll(_saveNeeded);
+  qDeleteAll(_saveNeeded);
 }
 
 // Cache related methods
@@ -582,8 +582,8 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
     int pos = _graphs.indexOf(g);
     beginRemoveRows(QModelIndex(),pos,pos);
     _graphs.removeAll(g);
-   GraphNeedsSavingObserver *s= _saveNeeded.take(g);
-   delete s;
+    GraphNeedsSavingObserver *s= _saveNeeded.take(g);
+    delete s;
     endRemoveRows();
 
     if (_currentGraph == g) {
