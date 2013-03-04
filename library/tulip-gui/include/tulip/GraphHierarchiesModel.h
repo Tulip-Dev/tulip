@@ -24,12 +24,12 @@
 #include <tulip/tulipconf.h>
 #include <tulip/TulipModel.h>
 #include <tulip/Observable.h>
-#include <tulip/GraphNeedsSavingObserver.h>
 
 #include <QtCore/QList>
 
 namespace tlp {
 class Graph;
+class GraphNeedsSavingObserver;
 class TulipProject;
 class PluginProgress;
 
@@ -82,7 +82,7 @@ public:
     return _graphs;
   }
   bool empty() const {
-    return size()==0;
+    return _graphs.isEmpty();
   }
 
   // Methods re-implemented from QAbstractItemModel
