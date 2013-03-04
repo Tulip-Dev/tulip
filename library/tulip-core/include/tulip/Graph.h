@@ -270,7 +270,7 @@ public:
   /**
    * @brief Creates and returns a new named sub-graph of this graph.
    *
-   * @param name The name of the newly created subgraph. Defaults to "unnamed".
+   * @param name The name of the newly created subgraph.
    * @return :Graph* The newly created subgraph.
    **/
   Graph *addSubGraph(std::string name);
