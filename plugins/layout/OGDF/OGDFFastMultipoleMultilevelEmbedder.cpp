@@ -88,9 +88,11 @@ public:
 
   virtual bool check(std::string &errMsg) {
     bool connected = ConnectedTest::isConnected(graph);
+
     if (!connected) {
-        errMsg = "The graph must be connected.";
+      errMsg = "The graph must be connected.";
     }
+
     return connected;
   }
 
