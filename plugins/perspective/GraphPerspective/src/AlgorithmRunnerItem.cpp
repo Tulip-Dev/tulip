@@ -273,7 +273,14 @@ void AlgorithmRunnerItem::run(Graph *g) {
         && typeName != TN(StringProperty)
         && typeName != TN(IntegerProperty)
         && typeName != TN(SizeProperty)
-        && typeName != TN(ColorProperty))
+        && typeName != TN(ColorProperty)
+        && typeName != TN(BooleanVectorProperty)
+        && typeName != TN(DoubleVectorProperty)
+        && typeName != TN(CoordVectorProperty)
+        && typeName != TN(StringVectorProperty)
+        && typeName != TN(IntegerVectorProperty)
+        && typeName != TN(SizeVectorProperty)
+        && typeName != TN(ColorVectorProperty))
       continue;
 
     OutPropertyParam outPropParam(desc.getName());
@@ -368,6 +375,11 @@ void AlgorithmRunnerItem::run(Graph *g) {
     }
 
     delete it->tmp;
+  }
+
+  if (result) {
+      ParameterListModel* model = static_cast<ParameterListModel*>(_ui->parameters->model());
+      model->setParametersValues(dataSet);
   }
 
   afterRun(g,dataSet);
