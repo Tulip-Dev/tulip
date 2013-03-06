@@ -38,11 +38,11 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   _classFormat.setForeground(Qt::blue);
   _qtApiFormat.setForeground(QColor(0, 110, 40));
 
-  rule.pattern = QRegExp("def [A-Za-z0-9_]+(?=\\()");
+  rule.pattern = QRegExp("def [A-Za-z_][A-Za-z0-9_]+(?=\\()");
   rule.format = _functionFormat;
   _highlightingRules.append(rule);
 
-  rule.pattern = QRegExp("class [A-Za-z]+");
+  rule.pattern = QRegExp("class [A-Za-z_][A-Za-z0-9_]+");
   rule.format = _classFormat;
   _highlightingRules.append(rule);
 
