@@ -18,6 +18,8 @@
  */
 #include <ogdf/energybased/FastMultipoleEmbedder.h>
 
+#include <tulip/ConnectedTest.h>
+
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 namespace {
@@ -83,6 +85,14 @@ public:
   }
 
   ~OGDFFastMultipoleMultiLevelEmbedder() {}
+
+  virtual bool check(std::string &errMsg) {
+    bool connected = ConnectedTest::isConnected(graph);
+    if (!connected) {
+        errMsg = "The graph must be connected.";
+    }
+    return connected;
+  }
 
   void beforeCall() {
     ogdf::FastMultipoleMultilevelEmbedder *fmme = static_cast<ogdf::FastMultipoleMultilevelEmbedder*>(ogdfLayoutAlgo);
