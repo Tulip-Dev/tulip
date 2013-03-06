@@ -403,10 +403,13 @@ void MatrixView::updateLayout() {
     float xMin = min(srcPos[0],tgtPos[0]);
     float dist = (xMax - xMin);
     Coord b(xMin+dist,srcPos[1]+dist/2.,0);
-    std::vector<Coord> bends(3);
+    std::vector<Coord> bends(4);
     bends[0] = srcPos;
-    bends[1] = b;
+    bends[1] = srcPos;
+    bends[1][1] += dist/3. + 1.;
     bends[2] = tgtPos;
+    bends[2][1] += dist/3. + 1.;
+    bends[3] = tgtPos;
     vector<Coord> curvePoints;
     computeBezierPoints(bends,curvePoints,20);
     layout->setEdgeValue(e,curvePoints);
