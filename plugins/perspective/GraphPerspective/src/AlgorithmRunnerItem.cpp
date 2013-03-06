@@ -378,8 +378,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
   }
 
   if (result) {
-      ParameterListModel* model = static_cast<ParameterListModel*>(_ui->parameters->model());
-      model->setParametersValues(dataSet);
+    ParameterListModel* model = static_cast<ParameterListModel*>(_ui->parameters->model());
+    model->setParametersValues(dataSet);
   }
 
   afterRun(g,dataSet);
