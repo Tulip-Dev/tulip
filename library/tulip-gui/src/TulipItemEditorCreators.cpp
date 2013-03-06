@@ -245,6 +245,7 @@ QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
 // this class is defined to properly catch the return status
 // of a QFileDialog. calling QDialog::result() instead does not work
 class TulipFileDialog :public QFileDialog {
+
 public:
   TulipFileDialog(QWidget* w): QFileDialog(w), ok(QDialog::Rejected) {
   }
@@ -347,6 +348,14 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOpti
   painter->drawText(textXPos, rect.y() + 2, rect.width() - (textXPos - rect.x()), rect.height()-4,Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, QFileInfo(fileDesc.absolutePath).fileName());
 
   return true;
+}
+
+QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
+  QVariant data = index.model()->data(index);
+  TulipFileDescriptor fileDesc = data.value<TulipFileDescriptor>();
+  int pixmapWidth = option.rect.height()-4;
+  QFontMetrics fontMetrics(option.font);
+  return QSize(pixmapWidth+fontMetrics.boundingRect(fileDesc.absolutePath).width(), option.rect.height());
 }
 
 QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
