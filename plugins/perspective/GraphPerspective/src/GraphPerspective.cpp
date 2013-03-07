@@ -276,7 +276,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   PythonInterpreter::getInstance()->setDefaultConsoleWidget(_ui->pythonPanel->consoleWidget());
 
   // Setting initial sizes for splitters
-  _ui->mainSplitter->setSizes(QList<int>() << 200 << 1000);
+  _ui->mainSplitter->setSizes(QList<int>() << 350 << 850);
+  _ui->mainSplitter->setStretchFactor(0,0);
+  _ui->mainSplitter->setStretchFactor(1,1);
+  _ui->mainSplitter->setCollapsible(1, false);
 
   _mainWindow->show();
 

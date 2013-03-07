@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>386</width>
-    <height>712</height>
+    <width>384</width>
+    <height>710</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>350</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="styleSheet">
    <string notr="true">#AlgorithmRunner, #contents {
@@ -157,8 +163,8 @@ border: 1px solid &quot;#C9C9C9&quot;;
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>386</width>
-         <height>680</height>
+         <width>384</width>
+         <height>678</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -225,10 +231,7 @@ border: 0px;
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources/GraphPerspective.qrc"/>
-  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>searchBox</sender>
