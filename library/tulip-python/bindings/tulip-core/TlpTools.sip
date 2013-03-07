@@ -27,6 +27,7 @@
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLoaderTxt.h>
+#include <tulip/PythonInterpreter.h>
 %End
 
 namespace tlp {
@@ -98,11 +99,35 @@ by calling the :func:`tlp.initTulipLib` function.
 
 //=====================================================================
 
+void loadPluginsFromDir(const std::string &pluginsDir, tlp::PluginLoader *plug=0);
+%Docstring
+tlp.loadPluginsFromDir(pluginsDir)
+
+.. versionadded:: 4.2
+
+Loads C++ and Python plugins installed in a specific directory.
+%End
+
+%MethodCode
+    std::string oldTlpPluginsPath = tlp::TulipPluginsPath;
+    tlp::TulipPluginsPath = *a0;
+    if (a1) {
+        tlp::PluginLibraryLoader::loadPlugins(a1);
+    } else {
+        tlp::PluginLoaderTxt pluginLoader;
+        tlp::PluginLibraryLoader::loadPlugins(&pluginLoader);
+    }
+    tlp::TulipPluginsPath = oldTlpPluginsPath;
+    tlp::PythonInterpreter::getInstance()->loadTulipPythonPluginsFromDir(a0->c_str());
+%End
+
+//=====================================================================
+
 bool loadPlugin(const std::string &filename, tlp::PluginLoader *plug=0);
 %Docstring
 tlp.loadPlugin(filename)
 
-Loads a C++ plugin from a specific shared library.
+Loads a C++ plugin or a Python plugin from a specific file (shared library or Python source file).
 Returns :const:`True` if the plugin was correctly loaded.
 
 :param filename: the path to the shared library containing the Tulip plugin (file extension : .so on linux, .dylib on mac, .dll on windows)
@@ -111,11 +136,16 @@ Returns :const:`True` if the plugin was correctly loaded.
 %End
 
 %MethodCode
-    if (a1) {
-        tlp::PluginLibraryLoader::loadPluginLibrary(*a0, a1);
+    std::string ext = a0->substr(a0->length()-3);
+    if (ext != ".py") {
+        if (a1) {
+            sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, a1);
+        } else {
+            tlp::PluginLoaderTxt pluginLoader;
+            sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, &pluginLoader);
+        }
     } else {
-        tlp::PluginLoaderTxt pluginLoader;
-        tlp::PluginLibraryLoader::loadPluginLibrary(*a0, &pluginLoader);
+        sipRes = tlp::PythonInterpreter::getInstance()->loadTulipPythonPlugin(a0->c_str());
     }
 %End
 
