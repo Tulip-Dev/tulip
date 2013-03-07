@@ -244,8 +244,12 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
 
   if (fabs(v[2]) < 1e-3) v[2] = 0;
 
-  Coord xu = u / u.norm();
-  Coord xv = v / v.norm();
+  Coord xu(u);
+  if(u.norm()!=0)
+      xu /= u.norm();
+  Coord xv(v);
+  if(v.norm()!=0)
+      xv/=v.norm();
   Coord bi_xu_xv = xu+xv;
 
   float newSize=size;
