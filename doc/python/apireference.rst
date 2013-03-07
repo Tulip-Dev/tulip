@@ -87,6 +87,8 @@ Plugins Management
 
 .. autofunction:: tulip::tlp.loadPlugins
 
+.. autofunction:: tulip::tlp.loadPluginsFromDir
+
 .. autofunction:: tulip::tlp.loadPlugin
 
 .. autofunction:: tulip::tlp.loadPluginsCheckDependencies
