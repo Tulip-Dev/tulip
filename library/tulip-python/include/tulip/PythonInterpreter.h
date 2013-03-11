@@ -63,6 +63,8 @@ class TLP_PYTHON_SCOPE PythonInterpreter {
   void holdGIL();
   void releaseGIL();
 
+
+
   static PythonInterpreter _instance;
 
   bool _wasInit;
@@ -85,6 +87,8 @@ public :
   bool loadTulipPythonPlugin(const QString &pluginPath);
 
   void loadTulipPythonPluginsFromDir(const QString &pluginsPath);
+
+  void loadTulipPythonPluginsFromDefaultDirs();
 
   bool importModule(const QString &moduleName);
 
