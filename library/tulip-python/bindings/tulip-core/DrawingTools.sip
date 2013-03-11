@@ -105,7 +105,7 @@ To get the bounding radius, you have to compute the distance between the two mem
 %End
 
 %MethodCode
-    if (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
+    if (a1 && (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0)))) {
         sipIsErr = 1;
         PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding sphere.");
     } else {
@@ -205,7 +205,7 @@ Returns a list of :class:`tlp.Coord` containing the vertices of the graph convex
 %End
 
 %MethodCode
-    if (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
+    if (a1 && (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0)))) {
         sipIsErr = 1;
         PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its convex hull.");
     } else {
