@@ -166,7 +166,7 @@ extern "C" {
 
       if (QApplication::instance()) {
         PythonInterpreter::getInstance()->initConsoleOutput();
-        PythonInterpreter::getInstance()->loadTulipPythonPlugins();
+        PythonInterpreter::getInstance()->loadTulipPythonPluginsFromDefaultDirs();
       }
 
       break;
@@ -306,7 +306,7 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       sipAPI = getSipAPI();
 
 #ifndef _MSC_VER
-      loadTulipPythonPluginsFromDir();
+      loadTulipPythonPluginsFromDefaultDirs();
 #endif
 
       runString(printObjectDictFunction);
@@ -365,7 +365,7 @@ void PythonInterpreter::initConsoleOutput() {
   QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
 }
 
-void PythonInterpreter::loadTulipPythonPluginsFromDir() {
+void PythonInterpreter::loadTulipPythonPluginsFromDefaultDirs() {
   loadTulipPythonPluginsFromDir(pythonPluginsPath);
   loadTulipPythonPluginsFromDir(pythonPluginsPathHome);
 }
