@@ -139,7 +139,7 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
   return 0;
 }
 
-const QString PythonInterpreter::pythonPluginsPath(QString(tlp::TulipLibDir.c_str()) + "tulip/python/");
+const QString PythonInterpreter::pythonPluginsPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "tulip/python/");
 
 const QString PythonInterpreter::pythonPluginsPathHome(QDir::homePath()+"/.Tulip-"+TULIP_MM_RELEASE+"/plugins/python");
 
@@ -282,11 +282,11 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       addModuleSearchPath(pythonPluginsPathHome);
 
 #if defined(__APPLE__)
-      addModuleSearchPath(QString(tlp::TulipLibDir.c_str()) + "../lib/python", true);
+      addModuleSearchPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "../lib/python", true);
 #elif defined(WIN32)
-      addModuleSearchPath(QString(tlp::TulipLibDir.c_str()) + "../bin/python", true);
+      addModuleSearchPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "../bin/python", true);
 #else
-      addModuleSearchPath(QString(tlp::TulipLibDir.c_str()) + "/python", true);
+      addModuleSearchPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "/python", true);
 #endif
 
       initscriptengine();
