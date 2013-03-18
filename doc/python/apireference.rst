@@ -67,6 +67,10 @@ Geometry
 
 .. autofunction:: tulip::tlp.computeConvexHull
 
+.. autofunction:: tulip::tlp.convexHull2D
+
+.. autofunction:: tulip::tlp.convexHull
+
 .. autofunction:: tulip::tlp.computeLinesIntersection
 
 .. autofunction:: tulip::tlp.computePolygonCentroid

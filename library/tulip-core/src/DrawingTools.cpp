@@ -274,3 +274,71 @@ Coord tlp::computePolygonCentroid(const vector<Coord> &points) {
   Cy *= 1.0f / (6*A);
   return Coord(Cx, Cy);
 }
+
+//======================================================================================================
+
+static void normalize(Vec3f &v) {
+  if (v.norm() != 0)
+    v /= v.norm();
+}
+
+//======================================================================================================
+
+bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatrix) {
+  Coord A, B, C;
+  bool BSet = false;
+
+  // pick three points to define a plane
+  for (size_t i = 0 ; i < points.size() ; ++i) {
+    if (i == 0) {
+      A = points[i];
+    }
+    else if (!BSet && points[i] != A) {
+      B = points[i];
+      BSet = true;
+    }
+    else {
+      // pick a third point non aligned with the two others
+      C = points[i];
+
+      if (((C-A)^(B-A)).norm() > 1e-3) {
+        break;
+      }
+    }
+
+    ++i;
+  }
+
+  Coord a = B -A;
+  Coord b = C -A;
+  normalize(a);
+  normalize(b);
+  Coord c = a^b;
+  normalize(c);
+  b = c^a;
+  normalize(b);
+
+  // compute the distance of each point to the plane
+  for (size_t i = 0 ; i < points.size() ; ++i) {
+    const Coord &D = points[i];
+
+    // if the point is too far from the plane, the layout is not coplanar
+    if (abs(c.dotProduct(D-A)) > 1e-3) {
+      return false;
+    }
+  }
+
+  // compute the inverse transform matrix for projecting the points in the z = 0 plane
+  invTransformMatrix[0][0]=a[0];
+  invTransformMatrix[1][0]=a[1];
+  invTransformMatrix[2][0]=a[2];
+  invTransformMatrix[0][1]=b[0];
+  invTransformMatrix[1][1]=b[1];
+  invTransformMatrix[2][1]=b[2];
+  invTransformMatrix[0][2]=c[0];
+  invTransformMatrix[1][2]=c[1];
+  invTransformMatrix[2][2]=c[2];
+  invTransformMatrix.inverse();
+
+  return true;
+}
