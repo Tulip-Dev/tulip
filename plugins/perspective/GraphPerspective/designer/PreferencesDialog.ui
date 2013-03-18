@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>957</width>
-    <height>585</height>
+    <height>651</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -359,7 +359,7 @@ color: #595959;</string>
          <string notr="true">font-weight: bold;</string>
         </property>
         <property name="text">
-         <string>Graphs</string>
+         <string>Drawing defaults</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
