@@ -72,6 +72,7 @@ void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setDefaultShape(tlp::NODE,model->data(model->index(2,1)).value<NodeShape>().nodeShapeId);
   TulipSettings::instance().setDefaultShape(tlp::EDGE,(int)(model->data(model->index(2,2)).value<tlp::EdgeShape>()));
   TulipSettings::instance().setDefaultSelectionColor(model->data(model->index(3,1)).value<tlp::Color>());
+  TulipSettings::instance().setDefaultSelectionColor(model->data(model->index(3,2)).value<tlp::Color>());
 
   TulipSettings::instance().applyProxySettings();
 
@@ -121,6 +122,7 @@ void PreferencesDialog::readSettings() {
   model->setData(model->index(2,1),QVariant::fromValue<NodeShape>(NodeShape(TulipSettings::instance().defaultShape(tlp::NODE))));
   model->setData(model->index(2,2),QVariant::fromValue<tlp::EdgeShape>((tlp::EdgeShape)(TulipSettings::instance().defaultShape(tlp::EDGE))));
   model->setData(model->index(3,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor()));
+  model->setData(model->index(3,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor()));
 
   _ui->aspectRatioCheck->setChecked(TulipSettings::instance().isAutomaticRatio());
   _ui->viewOrthoCheck->setChecked(TulipSettings::instance().isViewOrtho());
