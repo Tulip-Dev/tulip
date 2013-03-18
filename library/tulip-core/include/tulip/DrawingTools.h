@@ -26,6 +26,7 @@
 #include <tulip/Edge.h>
 #include <tulip/Coord.h>
 #include <tulip/BoundingBox.h>
+#include <tulip/Matrix.h>
 
 namespace tlp {
 
@@ -37,6 +38,8 @@ class LayoutProperty;
 class SizeProperty;
 class DoubleProperty;
 class BooleanProperty;
+
+typedef Matrix<float, 3> Mat3f;
 
 /**
   *
@@ -134,6 +137,15 @@ TLP_SCOPE bool computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> 
  */
 TLP_SCOPE tlp::Coord computePolygonCentroid(const std::vector<tlp::Coord> &points);
 
+//======================================================================================================
+
+/**
+ * Checks if a layout is co-planar, returns true if so.
+ * If the layout is co-planar, the inverse transform matrix is also returned
+ * in order to project the layout in the z=0 plane.
+ *
+ */
+TLP_SCOPE bool isLayoutCoPlanar(const std::vector<Coord> &points, Mat3f &invTransformMatrix);
 
 }
 

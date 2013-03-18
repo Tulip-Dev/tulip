@@ -91,6 +91,7 @@
 #include <sstream>
 #include <iostream>
 
+
 template <typename T>
 bool pluginExists(std::string pluginName) {
         if (typeid(T).name() == typeid(tlp::Algorithm).name()) {
@@ -137,7 +138,6 @@ extern bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty 
 #if PY_MAJOR_VERSION >= 3
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
 #endif
-
 %End
 
 %ModuleCode
@@ -290,6 +290,7 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
 %Include GraphEvent.sip
 %Include Constants.sip
 %Include Delaunay.sip
+%Include ConvexHull.sip
 
 // force generation of wrappers for specialized template classes
 typedef std::vector<tlp::Graph*> vectorGraphType;
