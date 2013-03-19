@@ -58,6 +58,7 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
     // a one shot 500 ms duration timer
     if (timerId)
       killTimer(timerId);
+
     lastX = qMouseEv->x();
     lastY = qMouseEv->y();
     glMW = glw;
