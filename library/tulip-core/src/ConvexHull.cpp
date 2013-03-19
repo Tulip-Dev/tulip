@@ -45,7 +45,8 @@ static bool runQHull(int dim, vector<double> &points,
   // - Qt : triangulated output
   string qhullOptions = "Qt";
   // build qhull command
-  string qhullCommand = string("qhull ") + qhullOptions;
+  string qhullCommand = "qhull ";
+  qhullCommand += qhullOptions;
 
   // run qhull convex hull computation
   int qhullKo = qh_new_qhull(dim, points.size()/dim, &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
