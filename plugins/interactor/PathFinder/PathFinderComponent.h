@@ -40,6 +40,7 @@ struct PathFinderComponent: public tlp::GLInteractorComponent {
   PathFinderComponent(PathFinder *parent);
   virtual ~PathFinderComponent();
   bool eventFilter(QObject *, QEvent *);
+  void timerEvent(QTimerEvent *);
   InteractorComponent *clone();
 
   /**
@@ -60,6 +61,10 @@ private:
   tlp::node tgt;
   PathFinder *parent;
   bool graphPopable;
+  int timerId;
+  int lastX;
+  int lastY;
+  tlp::GlMainWidget *glMW;
 
   std::set<PathHighlighter *> highlighters;
   void runHighlighters(tlp::GlMainWidget *glMainWidget,tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt);

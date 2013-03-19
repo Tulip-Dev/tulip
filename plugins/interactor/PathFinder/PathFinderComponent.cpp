@@ -33,7 +33,7 @@ using namespace std;
 using namespace tlp;
 
 
-PathFinderComponent::PathFinderComponent(PathFinder *parent) : parent(parent), graphPopable(false) {
+PathFinderComponent::PathFinderComponent(PathFinder *parent) : parent(parent), graphPopable(false), timerId(0), glMW(NULL) {
 }
 
 PathFinderComponent::~PathFinderComponent() {
@@ -49,18 +49,28 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
     return false;
 
   if(event->type() == QEvent::MouseMove) {
-    SelectedEntity entity;
-
-    if((glw->pickNodesEdges(qMouseEv->x(),qMouseEv->y(),entity))&&(entity.getEntityType()==SelectedEntity::NODE_SELECTED)) {
-      glw->setCursor(Qt::CrossCursor);
-      return true;
-    }
-    else {
-      glw->setCursor(Qt::ArrowCursor);
-    }
+    // we need to avoid too much calls to
+    // time consuming pickNodesEdges method
+    // so it is called only if the mouse is not moving
+    // during 500ms
+    // so we kill the last timer if needed,
+    // then register the last mouse pos and start
+    // a one shot 500 ms duration timer
+    if (timerId)
+      killTimer(timerId);
+    lastX = qMouseEv->x();
+    lastY = qMouseEv->y();
+    glMW = glw;
+    timerId = startTimer(500);
+    glw->setCursor(Qt::ArrowCursor);
   }
 
   if (event->type() == QEvent::MouseButtonPress) {
+    // kill current timer if needed
+    if (timerId) {
+      killTimer(timerId);
+      timerId = 0;
+    }
 
     Observable::holdObservers();
 
@@ -76,6 +86,7 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
     if (selNodes.size() == 0) {
       src = node();
       tgt = node();
+      glw->setCursor(Qt::ArrowCursor);
     }
     else {
       node tmp(selNodes[0].getComplexEntityId());
@@ -88,6 +99,8 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
         tgt = tmp;
       else
         src = tmp;
+
+      glw->setCursor(Qt::CrossCursor);
     }
 
     selectPath(glw,glw->getScene()->getGlGraphComposite()->getGraph());
@@ -95,9 +108,28 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
     Observable::unholdObservers();
 
     glw->redraw();
+
+    return (src.isValid() || tgt.isValid());
   }
 
   return false;
+}
+
+void PathFinderComponent::timerEvent(QTimerEvent *ev) {
+  if (ev->timerId() == timerId) {
+    // kill the timer to avoid a new event in 500 ms
+    killTimer(timerId);
+    timerId = 0;
+    SelectedEntity entity;
+
+    // check if there is a node at the current mouse pos
+    if((glMW->pickNodesEdges(lastX, lastY,entity))&&(entity.getEntityType()==SelectedEntity::NODE_SELECTED))
+      // find one, show a cross
+      glMW->setCursor(Qt::CrossCursor);
+    else
+      // none show an arrow
+      glMW->setCursor(Qt::ArrowCursor);
+  }
 }
 
 void PathFinderComponent::selectPath(GlMainWidget *glMainWidget, Graph *graph) {
