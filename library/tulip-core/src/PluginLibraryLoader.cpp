@@ -79,7 +79,6 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) 
 #ifdef _WIN32
 bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, PluginLoader *loader) {
   HINSTANCE hDLL = LoadLibrary(filename.c_str());
-
   if (hDLL == NULL) {
     if (loader!=NULL) {
       char *msg;
@@ -104,10 +103,8 @@ bool PluginLibraryLoader::loadPluginLibrary(const std::string & filename, Plugin
         LocalFree(msg);
       }
     }
-
     return false;
   }
-
   return true;
 }
 
@@ -188,7 +185,8 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
       hFind = FindFirstFile ("*.dll", &findData);
     }
 
-    while (hFind != INVALID_HANDLE_VALUE) {
+	BOOL success = hFind != INVALID_HANDLE_VALUE;
+    while (success) {
       std::string currentPluginLibrary = pluginPath +"/"+ findData.cFileName;
       std::string lib(findData.cFileName);
       unsigned long idx = lib.rfind('-');
@@ -208,7 +206,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
       else if (loader)
         loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
 
-      FindNextFile (hFind, &findData);
+      success = FindNextFile (hFind, &findData);
     }
   }
 
