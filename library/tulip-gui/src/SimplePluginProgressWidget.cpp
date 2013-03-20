@@ -18,6 +18,7 @@
  */
 #include <QtGui/QCloseEvent>
 #include <QtGui/QStyle>
+#include <QtGui/QVBoxLayout>
 
 #include "ui_SimplePluginProgressWidget.h"
 #include <tulip/SimplePluginProgressWidget.h>
@@ -122,13 +123,12 @@ void SimplePluginProgressWidget::stopClicked() {
 // DIALOG
 // ===================
 
-SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent): QDialog(parent) {
+SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent): QDialog(parent), _progress(new SimplePluginProgressWidget(this)) {
   setModal(true);
-  QVBoxLayout *mainLayout = new QVBoxLayout;
+  QVBoxLayout *mainLayout = new QVBoxLayout(this);
   mainLayout->setContentsMargins(0,0,0,0);
-  _progress = new SimplePluginProgressWidget(this);
-  mainLayout->addWidget(static_cast<SimplePluginProgressWidget *>(_progress));
-  setLayout(mainLayout);
+  mainLayout->addWidget(_progress);
+  setWindowIcon(QIcon(":/tulip/gui/icons/logo32x32.png"));
   resize(500,height());
 }
 
