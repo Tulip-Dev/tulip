@@ -40,10 +40,6 @@
 # endif
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <tulip/tulipconf.h>
 
 #define BUFFER_OFFSET(bytes) ((GLubyte*) NULL + (bytes))
