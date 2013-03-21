@@ -66,7 +66,7 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
     for (QList<QString>::iterator it = recentDocs.begin(); it != recentDocs.end(); ++it)
       txt += trUtf8(("<p><span><img src=\":/tulip/gui/ui/list_bullet_arrow.png\"></img>   <a href=\"" +
                      *it + "\">" + *it + "</a>" +
-                     "</span></p><p/>").toStdString().c_str());
+                     "</span></p><p/>").toUtf8().data());
 
     _ui->recentDocumentsLabel->setText(txt);
   }
