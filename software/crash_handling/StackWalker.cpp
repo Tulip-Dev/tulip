@@ -21,6 +21,7 @@
 
 
 #include <sstream>
+#include <cstring>
 
 #if defined(__linux) || defined(__APPLE__)
 

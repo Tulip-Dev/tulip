@@ -37,7 +37,7 @@
 Q_DECLARE_METATYPE(tlp::Color)
 
 #ifdef __APPLE_CC__
-#if __APPLE_CC__ < 5400
+#if __APPLE_CC__ < 5400 && ( !defined(__GNUC__) || __GNUC_MINOR__ <= 2)
 // Tiger
 typedef GLvoid (*GLUTesselatorFunction)(...);
 #else
