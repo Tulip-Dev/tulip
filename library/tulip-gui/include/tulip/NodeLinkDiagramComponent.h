@@ -22,13 +22,13 @@
 #define _Tulip_NODELINKDIAGRAMCOMPONENT_H
 
 #include <tulip/GlMainView.h>
+#include <tulip/Camera.h>
 
 class QDialog;
 
 namespace tlp {
 class GlGrid;
 class GlCompositeHierarchyManager;
-class Camera;
 
 class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
   Q_OBJECT
