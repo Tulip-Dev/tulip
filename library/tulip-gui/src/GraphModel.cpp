@@ -416,8 +416,10 @@ QVariant NodesGraphModel::value(unsigned int id, PropertyInterface* prop) const 
 
 bool NodesGraphModel::setValue(unsigned int id, PropertyInterface* prop, QVariant v) const {
   prop->getGraph()->push();
+
   if (setNodeValue(id,prop,v))
     return true;
+
   prop->getGraph()->pop();
   return false;
 }
@@ -448,8 +450,10 @@ QVariant EdgesGraphModel::value(unsigned int id, PropertyInterface* prop) const 
 }
 bool EdgesGraphModel::setValue(unsigned int id, PropertyInterface* prop, QVariant v) const {
   prop->getGraph()->push();
+
   if (setEdgeValue(id,prop,v))
     return true;
+
   prop->getGraph()->pop();
   return false;
 }

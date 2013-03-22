@@ -164,6 +164,7 @@ void MCLClustering::pruneK(node n, unsigned int k) {
   }
 
   set<double>::reverse_iterator it  = orderedVal.rbegin();
+
   while(--k) ++it;
 
   double t = *it;

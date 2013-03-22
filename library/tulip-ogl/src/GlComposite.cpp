@@ -78,6 +78,7 @@ void GlComposite::reset(bool deleteElems) {
       if((*it2)->getScene())
         (*it2)->getScene()->notifyDeletedEntity(*it);
     }
+
     if (deleteElems) {
       delete (*it);
     }
@@ -207,10 +208,10 @@ void GlComposite::deleteGlEntity(GlSimpleEntity *entity,bool informTheEntity) {
       elements.erase(i->first);
 
       for(vector<GlLayer*>::iterator it=layerParents.begin(); it!=layerParents.end(); ++it) {
-          if((*it)->getScene())  {
-            (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
-            (*it)->getScene()->notifyDeletedEntity(entity);
-          }
+        if((*it)->getScene())  {
+          (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
+          (*it)->getScene()->notifyDeletedEntity(entity);
+        }
       }
 
       return;
