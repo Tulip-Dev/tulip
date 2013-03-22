@@ -429,7 +429,12 @@ void GlScene::notifyModifyLayer(const std::string &name,GlLayer *layer) {
 
 void GlScene::notifyModifyEntity(GlSimpleEntity *entity) {
   if (hasOnlookers())
-    sendEvent(GlSceneEvent(*this,entity));
+    sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_MODIFYENTITY, entity));
+}
+
+void GlScene::notifyDeletedEntity(GlSimpleEntity *entity) {
+  if (hasOnlookers())
+    sendEvent(GlSceneEvent(*this,GlSceneEvent::TLP_DELENTITY, entity));
 }
 
 void GlScene::centerScene() {

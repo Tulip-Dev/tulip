@@ -32,25 +32,27 @@ GlSceneEvent::GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,
    layer(layer) {
 }
 
-GlSceneEvent::GlSceneEvent(const GlScene &scene,GlSimpleEntity *entity)
+GlSceneEvent::GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,GlSimpleEntity *entity)
   :Event(scene, Event::TLP_MODIFICATION),
-   sceneEventType(TLP_MODIFYENTITY),
+   sceneEventType(sceneEventType),
    glSimpleEntity(entity) {
 }
 
-GlSimpleEntity *GlSceneEvent::getGlSimpleEntity() {
-  assert(sceneEventType==TLP_MODIFYENTITY);
+GlSimpleEntity *GlSceneEvent::getGlSimpleEntity() const {
   return glSimpleEntity;
 }
 
-std::string GlSceneEvent::getLayerName() {
-  assert(sceneEventType==TLP_ADDLAYER || sceneEventType==TLP_DELLAYER || sceneEventType==TLP_MODIFYLAYER);
+std::string GlSceneEvent::getLayerName() const {
   return layerName;
 }
 
-GlLayer *GlSceneEvent::getLayer() {
-  assert(sceneEventType==TLP_ADDLAYER || sceneEventType==TLP_DELLAYER || sceneEventType==TLP_MODIFYLAYER);
+GlLayer *GlSceneEvent::getLayer() const {
   return layer;
 }
+
+GlSceneEvent::GlSceneEventType GlSceneEvent::getSceneEventType() const {
+  return sceneEventType;
+}
+
 }
 

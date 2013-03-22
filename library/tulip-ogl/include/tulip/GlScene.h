@@ -522,10 +522,11 @@ public:
   void notifyModifyLayer(const std::string &name,GlLayer *layer);
 
   /**
-   * @brief You don't have to call this function
-   * This function is called by GlComposite to send entity modification event
+   * @brief You don't have to call these functions
+   * They are called by GlComposite to send entity modification event
    */
   void notifyModifyEntity(GlSimpleEntity *entity);
+  void notifyDeletedEntity(GlSimpleEntity *entity);
 
   ///@endcond
 

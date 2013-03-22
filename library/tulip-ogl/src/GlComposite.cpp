@@ -74,6 +74,10 @@ void GlComposite::reset(bool deleteElems) {
   }
 
   for(vector<GlSimpleEntity*>::iterator it = toTreat.begin() ; it != toTreat.end() ; ++it) {
+    for(vector<GlLayer*>::iterator it2=layerParents.begin(); it2!=layerParents.end(); ++it2) {
+      if((*it2)->getScene())
+        (*it2)->getScene()->notifyDeletedEntity(*it);
+    }
     if (deleteElems) {
       delete (*it);
     }
@@ -175,9 +179,12 @@ void GlComposite::deleteGlEntity(const string &key,bool informTheEntity) {
   elements.erase(key);
 
   for(vector<GlLayer*>::iterator it=layerParents.begin(); it!=layerParents.end(); ++it) {
-    if((*it)->getScene())
+    if((*it)->getScene()) {
       (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
+      (*it)->getScene()->notifyDeletedEntity(entity);
+    }
   }
+
 }
 //============================================================
 void GlComposite::deleteGlEntity(GlSimpleEntity *entity,bool informTheEntity) {
@@ -200,8 +207,10 @@ void GlComposite::deleteGlEntity(GlSimpleEntity *entity,bool informTheEntity) {
       elements.erase(i->first);
 
       for(vector<GlLayer*>::iterator it=layerParents.begin(); it!=layerParents.end(); ++it) {
-        if((*it)->getScene())
-          (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
+          if((*it)->getScene())  {
+            (*it)->getScene()->notifyModifyLayer((*it)->getName(),(*it));
+            (*it)->getScene()->notifyDeletedEntity(entity);
+          }
       }
 
       return;
