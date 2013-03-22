@@ -162,16 +162,15 @@ void MCLClustering::pruneK(node n, unsigned int k) {
   forEach(e, g.getOutEdges(n)) {
     orderedVal.insert(outW[e]);
   }
-  set<double>::reverse_iterator it  = orderedVal.rbegin();
 
-  for (unsigned int i=0; i < k - 1; ++i, ++it);
+  set<double>::reverse_iterator it  = orderedVal.rbegin();
+  while(--k) ++it;
 
   double t = *it;
   stableForEach(e, g.getOutEdges(n)) {
     if (outW[e] < t) {
-      node src = g.source(e);
-      node tgt = g.target(e);
-      pair<unsigned int, unsigned int> edgeM(src.id, tgt.id);
+      const std::pair<node, node>& eEnds = g.ends(e);
+      pair<unsigned int, unsigned int> edgeM(eEnds.first.id, eEnds.second.id);
       existEdge.erase(edgeM);
       inW[e]  = 0.;
       outW[e] = 0.;
@@ -192,9 +191,8 @@ void MCLClustering::pruneT(node n) {
   stableForEach(e, g.getOutEdges(n)) {
     if (outW[e] < maxV / (2. * double(g.outdeg(n) + 1))) {
       //if (outW[e] < epsilon) {
-      node src = g.source(e);
-      node tgt = g.target(e);
-      pair<unsigned int, unsigned int> edgeM(src.id, tgt.id);
+      const std::pair<node, node>& eEnds = g.ends(e);
+      pair<unsigned int, unsigned int> edgeM(eEnds.first.id, eEnds.second.id);
       existEdge.erase(edgeM);
       inW[e]  = 0.;
       outW[e] = 0.;
@@ -285,8 +283,9 @@ void MCLClustering::init() {
   }
   //add reverse edges
   stableForEach(e, g.getEdges()) {
-    edge tmp = g.addEdge(g.target(e), g.source(e));
-    existEdge[pair<unsigned int, unsigned int>(g.target(e).id, g.source(e).id)] = tmp;
+    const std::pair<node, node>& eEnds = g.ends(e);
+    edge tmp = g.addEdge(eEnds.second, eEnds.first);
+    existEdge[pair<unsigned int, unsigned int>(eEnds.second.id, eEnds.first.id)] = tmp;
     inW[tmp] = inW[e];
   }
   //add loops (Set the maximum of out-edges weights to self-loops weight)
