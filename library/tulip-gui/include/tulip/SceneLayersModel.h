@@ -51,6 +51,8 @@ public:
   Qt::ItemFlags flags(const QModelIndex &index) const;
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+  void treatEvent(const tlp::Event &);
+
 signals:
   void drawNeeded(tlp::GlScene*);
 };

@@ -41,17 +41,19 @@ class GlSimpleEntity;
 class TLP_GL_SCOPE GlSceneEvent : public Event {
 public:
 
-  enum GlSceneEventType {TLP_ADDLAYER=0, TLP_DELLAYER, TLP_MODIFYLAYER, TLP_MODIFYENTITY};
+  enum GlSceneEventType {TLP_ADDLAYER=0, TLP_DELLAYER, TLP_MODIFYLAYER, TLP_MODIFYENTITY, TLP_DELENTITY};
 
   GlSceneEvent(const GlScene &scene,GlSceneEventType sceneEventType,const std::string &layerName,GlLayer *layer);
 
-  GlSceneEvent(const GlScene &scene,GlSimpleEntity *entity);
+  GlSceneEvent(const GlScene &scene, GlSceneEventType sceneEventType, GlSimpleEntity *entity);
 
-  GlSimpleEntity *getGlSimpleEntity();
+  GlSimpleEntity *getGlSimpleEntity() const;
 
-  std::string getLayerName();
+  std::string getLayerName() const;
 
-  GlLayer *getLayer();
+  GlLayer *getLayer() const;
+
+  GlSceneEventType getSceneEventType() const;
 
 protected :
 
