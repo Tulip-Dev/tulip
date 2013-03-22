@@ -43,7 +43,7 @@ const int NO_STENCIL = 0xFFFF;
 const int FULL_STENCIL = 0x0002;
 
 SceneLayersModel::SceneLayersModel(GlScene* scene, QObject *parent): TulipModel(parent), _scene(scene) {
-    _scene->addListener(this);
+  _scene->addListener(this);
 }
 
 QModelIndex SceneLayersModel::index(int row, int column,const QModelIndex &parent) const {
@@ -61,7 +61,8 @@ QModelIndex SceneLayersModel::index(int row, int column,const QModelIndex &paren
   if (!parent.parent().isValid())  {// 1st sublevel, parent is a layer
     GlLayer *layer = reinterpret_cast<GlLayer*>(parent.internalPointer());
     composite = layer->getComposite();
-  } else {// Deeper sublevel, the parent is a composite
+  }
+  else {  // Deeper sublevel, the parent is a composite
     composite = reinterpret_cast<GlComposite*>(parent.internalPointer());
   }
 
@@ -70,6 +71,7 @@ QModelIndex SceneLayersModel::index(int row, int column,const QModelIndex &paren
 
   int i=0;
   std::map<std::string, GlSimpleEntity*> entities = composite->getGlEntities();
+
   for (std::map<std::string,GlSimpleEntity*>::iterator it = entities.begin(); it != entities.end(); ++it) {
     if (i++ == row)
       return createIndex(row,column,it->second);
@@ -388,24 +390,28 @@ Qt::ItemFlags SceneLayersModel::flags(const QModelIndex &index) const {
 }
 
 void SceneLayersModel::treatEvent(const Event &e) {
-    if (e.type() == Event::TLP_MODIFICATION) {
-        const GlSceneEvent *glse = dynamic_cast<const GlSceneEvent *>(&e);
-        if (glse) {
-            emit layoutAboutToBeChanged();
-            // prevent dangling pointers to remain in the model persistent indexes
-            if (glse->getSceneEventType() == GlSceneEvent::TLP_DELENTITY) {
-                QModelIndexList persistentIndexes = persistentIndexList();
-                for (int i = 0 ; i < persistentIndexes.size() ; ++i) {
-                    if (persistentIndexes.at(i).internalPointer() == glse->getGlSimpleEntity()) {
-                        changePersistentIndex(persistentIndexes.at(i), QModelIndex());
-                        break;
-                    }
-                }
-            }
-            emit layoutChanged();
+  if (e.type() == Event::TLP_MODIFICATION) {
+    const GlSceneEvent *glse = dynamic_cast<const GlSceneEvent *>(&e);
 
+    if (glse) {
+      emit layoutAboutToBeChanged();
+
+      // prevent dangling pointers to remain in the model persistent indexes
+      if (glse->getSceneEventType() == GlSceneEvent::TLP_DELENTITY) {
+        QModelIndexList persistentIndexes = persistentIndexList();
+
+        for (int i = 0 ; i < persistentIndexes.size() ; ++i) {
+          if (persistentIndexes.at(i).internalPointer() == glse->getGlSimpleEntity()) {
+            changePersistentIndex(persistentIndexes.at(i), QModelIndex());
+            break;
+          }
         }
+      }
+
+      emit layoutChanged();
+
     }
+  }
 }
 
 
