@@ -150,7 +150,7 @@ void LouvainClustering::createQuotient() {
   forEach(e,graph->getEdges()) {
     const std::pair<node, node>& eEnds = graph->ends(e);
     edge ne = quotient->addEdge(nodeMapping.get(eEnds.first.id),
-				nodeMapping.get(eEnds.second.id));
+                                nodeMapping.get(eEnds.second.id));
     externalWeight->setEdgeValue(ne,metric->getEdgeValue(e));
     m+=metric->getEdgeValue(e);
   }

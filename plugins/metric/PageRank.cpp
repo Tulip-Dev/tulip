@@ -97,7 +97,7 @@ struct PageRank : public DoubleAlgorithm {
 
       edge e;
       forEach(e, graph->getEdges()) {
-	const std::pair<node, node> eEnds = graph->ends(e);
+        const std::pair<node, node> eEnds = graph->ends(e);
         node src = eEnds.first;
 
         if(directed) {
