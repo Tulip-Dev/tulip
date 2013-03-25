@@ -88,8 +88,9 @@ double StrengthMetric::s(const TLP_HASH_SET<tlp::node> &U) {
 }
 //=============================================================
 double StrengthMetric::getEdgeValue(const tlp::edge ee ) {
-  node u=graph->source(ee);
-  node v=graph->target(ee);
+  const std::pair<node, node>& eEnds = graph->ends(ee);
+  node u = eEnds.first;
+  node v = eEnds.second;
   TLP_HASH_SET<node> Nu,Nv,Wuv;
 
   //Compute Nu

@@ -253,8 +253,8 @@ bool QuotientClustering::run() {
     // store opposite edge in opProp
     edge mE;
     forEach(mE, quotientGraph->getEdges()) {
-      edge op = quotientGraph->existEdge(quotientGraph->target(mE),
-                                         quotientGraph->source(mE));
+      const std::pair<node, node>& eEnds = quotientGraph->ends(mE);
+      edge op = quotientGraph->existEdge(eEnds.second, eEnds.first);
 
       if (op.isValid()) {
         opProp->setEdgeValue(op, mE.id);
@@ -416,12 +416,3 @@ bool QuotientClustering::run() {
 
   return true;
 }
-
-//================================================================================
-bool QuotientClustering::check(string &erreurMsg) {
-  erreurMsg="";
-  return true;
-}
-//================================================================================
-void QuotientClustering::reset() {}
-//================================================================================

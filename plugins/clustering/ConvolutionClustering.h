@@ -41,8 +41,6 @@ public:
   ConvolutionClustering(tlp::PluginContext* context);
   ~ConvolutionClustering();
   bool run();
-  bool check(std::string &);
-  void reset();
   std::vector<double> *getHistogram();
   void setParameters(int histosize,int threshold,int width);
   void getParameters(int &histosize,int &threshold,int &width);

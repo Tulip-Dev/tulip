@@ -148,7 +148,9 @@ void LouvainClustering::createQuotient() {
   m=0.0;
   edge e;
   forEach(e,graph->getEdges()) {
-    edge ne = quotient->addEdge(nodeMapping.get(graph->source(e).id),nodeMapping.get(graph->target(e).id));
+    const std::pair<node, node>& eEnds = graph->ends(e);
+    edge ne = quotient->addEdge(nodeMapping.get(eEnds.first.id),
+				nodeMapping.get(eEnds.second.id));
     externalWeight->setEdgeValue(ne,metric->getEdgeValue(e));
     m+=metric->getEdgeValue(e);
   }
@@ -167,7 +169,8 @@ void LouvainClustering::updateQuotient() {
   Graph* sub = quotient->addSubGraph();
   edge e;
   stableForEach(e,quotient->getEdges()) {
-    node qsrc = qclusters.get(quotient->source(e).id);
+    const std::pair<node, node>& eEnds = quotient->ends(e);
+    node qsrc = qclusters.get(eEnds.first.id);
 
     if(!sub->isElement(qsrc)) {
       sub->addNode(qsrc);
@@ -175,7 +178,7 @@ void LouvainClustering::updateQuotient() {
       externalWeight->setNodeValue(qsrc,comToInfo[qsrc].second-comToInfo[qsrc].first*2.0);
     }
 
-    node qtgt = qclusters.get(quotient->target(e).id);
+    node qtgt = qclusters.get(eEnds.second.id);
 
     if(qsrc!=qtgt) {
       if(!sub->isElement(qtgt)) {

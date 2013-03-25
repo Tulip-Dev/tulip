@@ -53,7 +53,6 @@ public:
   ~EccentricityMetric();
   bool run();
   double compute(tlp::node n);
-  bool check(std::string &);
 private:
   bool allPaths;
   bool norm;

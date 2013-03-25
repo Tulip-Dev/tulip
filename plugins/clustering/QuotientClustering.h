@@ -29,8 +29,6 @@ public:
   QuotientClustering(tlp::PluginContext* context);
   ~QuotientClustering();
   bool run();
-  bool check(std::string &);
-  void reset();
 };
 
 #endif

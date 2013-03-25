@@ -48,7 +48,7 @@ bool Kruskal::check(std::string &erreurMsg) {
     return true;
   }
   else {
-    erreurMsg = "The Graph must be connected";
+    erreurMsg = "The graph must be connected.";
     return false;
   }
 }

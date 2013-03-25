@@ -150,7 +150,7 @@ bool DepthMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph))
     return true;
   else {
-    erreurMsg="The Graph must be acyclic";
+    erreurMsg="The graph must be acyclic.";
     return false;
   }
 }

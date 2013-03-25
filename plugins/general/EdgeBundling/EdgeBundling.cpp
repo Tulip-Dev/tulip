@@ -640,14 +640,15 @@ bool EdgeBundling::run() {
 
   // Reinsert multiple edges if any and update their layout
   for (size_t i = 0 ; i < removedEdges.size() ; ++i) {
-    tlp::edge origEdge = oriGraph->existEdge(graph->source(removedEdges[i]), graph->target(removedEdges[i]));
+    const std::pair<node, node>& eEnds = graph->ends(removedEdges[i]);
+    tlp::edge origEdge = oriGraph->existEdge(eEnds.first, eEnds.second);
 
     if (origEdge.isValid()) {
       oriGraph->addEdge(removedEdges[i]);
       layout->setEdgeValue(removedEdges[i], layout->getEdgeValue(origEdge));
     }
     else {
-      origEdge = oriGraph->existEdge(graph->target(removedEdges[i]), graph->source(removedEdges[i]));
+      origEdge = oriGraph->existEdge(eEnds.second, eEnds.first);
       oriGraph->addEdge(removedEdges[i]);
       std::vector<tlp::Coord> bends = layout->getEdgeValue(origEdge);
       std::reverse(bends.begin(), bends.end());

@@ -299,8 +299,3 @@ bool StrahlerMetric::run() {
 
   return pluginProgress->state()!=TLP_CANCEL;
 }
-
-bool StrahlerMetric::check(std::string &erreurMsg) {
-  erreurMsg="";
-  return true;
-}
