@@ -145,7 +145,6 @@ void GlMainView::setViewOrtho(bool viewOrtho) {
 void GlMainView::setQuickAccessBarVisible(bool visible) {
   if (!visible) {
     delete _quickAccessBar;
-    delete _quickAccessBarItem;
     _quickAccessBar = NULL;
     _quickAccessBarItem = NULL;
   }
@@ -160,6 +159,7 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
     _quickAccessBarItem->setWidget(_quickAccessBar);
     addToScene(_quickAccessBarItem);
     _quickAccessBarItem->setZValue(10);
+    sceneRectChanged(QRectF(QPoint(0, 0), graphicsView()->size()));
   }
 }
 
@@ -216,6 +216,10 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   QAction* a = menu->addAction(trUtf8("Show overview"),this,SLOT(setOverviewVisible(bool)));
   a->setCheckable(true);
   a->setChecked(overviewVisible());
+
+  QAction* quickbarAction = menu->addAction(trUtf8("Show quick access bar"),this,SLOT(setQuickAccessBarVisible(bool)));
+  quickbarAction->setCheckable(true);
+  quickbarAction->setChecked(quickAccessBarVisible());
 }
 
 void GlMainView::applySettings() {
