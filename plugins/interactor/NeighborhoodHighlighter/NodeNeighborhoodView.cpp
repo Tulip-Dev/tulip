@@ -103,11 +103,10 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
 
       //removing the edges that are connected to filtered nodes
       for(vector<edge>::iterator it = graphViewEdges.begin(); it != graphViewEdges.end();) {
-        node source = graph_component->source(*it);
-        node target = graph_component->target(*it);
+	const std::pair<node, node>& eEnds = graph_component->ends(*it);
 
-        if(find(graphViewNodes.begin(), graphViewNodes.end(), source) == graphViewNodes.end() ||
-            find(graphViewNodes.begin(), graphViewNodes.end(), target) == graphViewNodes.end()) {
+        if(find(graphViewNodes.begin(), graphViewNodes.end(), eEnds.first) == graphViewNodes.end() ||
+            find(graphViewNodes.begin(), graphViewNodes.end(), eEnds.second) == graphViewNodes.end()) {
           it = graphViewEdges.erase(it);
         }
         else

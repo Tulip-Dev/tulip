@@ -97,26 +97,27 @@ struct PageRank : public DoubleAlgorithm {
 
       edge e;
       forEach(e, graph->getEdges()) {
-        node src = graph->source(e);
+	const std::pair<node, node> eEnds = graph->ends(e);
+        node src = eEnds.first;
 
         if(directed) {
           if (graph->outdeg(src) != 0) {
-            node tgt = graph->target(e);
+            node tgt = eEnds.second;
             double prev = R2.get(tgt);
             R2.set(tgt, prev + R.get(src) / double(graph->outdeg(src)));
           }
         }
         else {
           if (graph->deg(src) != 0) {
-            node tgt = graph->target(e);
+            node tgt = eEnds.second;
             double prev = R2.get(tgt);
             R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
           }
 
-          node src = graph->target(e);
+          node src = eEnds.second;
 
           if (graph->deg(src) != 0) {
-            node tgt = graph->source(e);
+            node tgt = eEnds.first;
             double prev = R2.get(tgt);
             R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
           }

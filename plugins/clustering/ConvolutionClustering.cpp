@@ -292,16 +292,3 @@ bool ConvolutionClustering::run() {
   getClusters(ranges);
   return true;
 }
-//================================================================================
-bool ConvolutionClustering::check(string &erreurMsg) {
-  erreurMsg="";
-  return true;
-}
-//================================================================================
-void ConvolutionClustering::reset() {
-}
-//================================================================================
-
-
-
-

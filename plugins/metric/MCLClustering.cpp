@@ -70,8 +70,6 @@ public:
   MCLClustering(const tlp::PluginContext *);
   ~MCLClustering();
   bool run();
-  bool check(std::string &);
-  void reset();
   void inflate(double r, unsigned int k, node n, bool);
   void pruneK(node n, unsigned int k);
   void pruneT(node n);
@@ -459,12 +457,3 @@ bool MCLClustering::run() {
 
   return true;
 }
-//================================================================================
-bool MCLClustering::check(string &erreurMsg) {
-  erreurMsg="";
-  return true;
-}
-//================================================================================
-void MCLClustering::reset() {
-}
-//================================================================================

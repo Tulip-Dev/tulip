@@ -102,11 +102,10 @@ bool StrongComponent::run() {
 
   while (itE->hasNext()) {
     edge ite=itE->next();
-    node source= graph->source(ite);
-    node target= graph->target(ite);
+    const std::pair<node, node>& eEnds = graph->ends(ite);
 
-    if (result->getNodeValue(source)==result->getNodeValue(target))
-      result->setEdgeValue(ite,result->getNodeValue(source));
+    if (result->getNodeValue(eEnds.first)==result->getNodeValue(eEnds.second))
+      result->setEdgeValue(ite,result->getNodeValue(eEnds.first));
     else
       result->setEdgeValue(ite,curComponent);
   }
@@ -115,12 +114,4 @@ bool StrongComponent::run() {
 
 
   return true;
-}
-
-bool StrongComponent::check(std::string &erreurMsg) {
-  erreurMsg="";
-  return true;
-}
-
-void StrongComponent::reset() {
 }

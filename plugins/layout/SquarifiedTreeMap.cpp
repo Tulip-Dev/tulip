@@ -98,7 +98,7 @@ SquarifiedTreeMap::~SquarifiedTreeMap() {
 //====================================================================
 bool SquarifiedTreeMap::check(std::string& errorMsg) {
   if (!TreeTest::isTree(graph)) {
-    errorMsg = "The Graph must be a Tree";
+    errorMsg = "The graph must be a tree.";
     return false;
   }
 
@@ -111,7 +111,7 @@ bool SquarifiedTreeMap::check(std::string& errorMsg) {
     metric = graph->getProperty<DoubleProperty>("viewMetric");
 
     if (metric->getNodeMin() < 0.) {
-      errorMsg = "Graph's nodes must have positive metric";
+      errorMsg = "Graph's nodes must have a positive metric.";
       return false;
     }
   }

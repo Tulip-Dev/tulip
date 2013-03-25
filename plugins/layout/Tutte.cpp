@@ -193,7 +193,7 @@ bool Tutte::check(std::string &erreurMsg) {
   }
 
   if (!result)
-    erreurMsg="Graph must be Triconnected";
+    erreurMsg="The graph must be triconnected.";
   else
     erreurMsg="";
 

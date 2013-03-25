@@ -42,7 +42,7 @@ bool DagLevelMetric::check(std::string &erreurMsg) {
     return true;
   }
   else {
-    erreurMsg="The Graph must be a acylic";
+    erreurMsg="The graph must be a acylic.";
     return false;
   }
 }

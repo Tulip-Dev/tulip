@@ -59,7 +59,6 @@ public:
   PLUGININFORMATIONS("Strahler","David Auber","06/04/2000","Computes the Strahler numbers.","1.0","Graph")
   StrahlerMetric(const tlp::PluginContext* context);
   bool run();
-  bool check(std::string &);
 
 private:
   Strahler topSortStrahler(tlp::node n,int &curPref,

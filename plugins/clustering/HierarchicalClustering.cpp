@@ -148,12 +148,3 @@ bool HierarchicalClustering::run() {
 
   return true;
 }
-//================================================================================
-bool HierarchicalClustering::check(string &erreurMsg) {
-  erreurMsg="";
-  return true;
-}
-//================================================================================
-void HierarchicalClustering::reset() {
-}
-//================================================================================

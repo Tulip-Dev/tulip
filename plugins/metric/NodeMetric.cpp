@@ -124,7 +124,7 @@ bool NodeMetric::check(std::string &erreurMsg) {
     return true;
   }
   else  {
-    erreurMsg="The Graph must be acyclic";
+    erreurMsg="The graph must be acyclic.";
     return false;
   }
 }
