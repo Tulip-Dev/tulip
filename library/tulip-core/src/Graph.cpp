@@ -108,8 +108,8 @@ Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
   std::string algName = "TLP Import";
 
-  if (filename.rfind(".json") == (filename.length() - 5))
-    algName = "JSON Import";
+  /*if (filename.rfind(".json") == (filename.length() - 5))
+    algName = "JSON Import";*/
 
   dataSet.set("file::filename", filename);
   Graph *sg = tlp::importGraph(algName, dataSet,progress);
