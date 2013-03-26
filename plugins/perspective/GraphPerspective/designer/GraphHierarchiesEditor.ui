@@ -201,7 +201,7 @@
   <action name="actionCreate_panel">
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
-     <normaloff>:/tulip/graphperspective/icons/16/view-open.png</normaloff>:/tulip/graphperspective/icons/16/view-open.png</iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/view-add.png</normaloff>:/tulip/graphperspective/icons/16/view-add.png</iconset>
    </property>
    <property name="text">
     <string>Add panel</string>
