@@ -105,7 +105,6 @@ private:
 
 
   tlp::DoubleProperty* metric;
-  bool isMetric;
 };
 /*@}*/
 
@@ -154,12 +153,11 @@ bool LinkCommunities::run() {
 #endif
 
   metric = NULL;
-  isMetric = false;
   bool group_isthmus = true;
   unsigned int nb_steps = 200;
 
   if(dataSet!=0) {
-    isMetric = dataSet->get("metric",metric);
+    dataSet->get("metric",metric);
     dataSet->get("Group isthmus",group_isthmus);
     dataSet->get("Number of steps",nb_steps);
   }
@@ -242,7 +240,7 @@ void LinkCommunities::createDualGraph() {
 }
 //==============================================================================================================
 void LinkCommunities::computeSimilarities() {
-  if(!isMetric) {
+  if(metric == NULL) {
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
