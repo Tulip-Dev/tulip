@@ -56,8 +56,6 @@ StringCollection.cpp
 StringProperty.cpp
 TLPExport.cpp
 TLPImport.cpp
-TlpJsonExport.cpp
-TlpJsonImport.cpp
 TlpTools.cpp
 TreeTest.cpp
 TriconnectedTest.cpp
