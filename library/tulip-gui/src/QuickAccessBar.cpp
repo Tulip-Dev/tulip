@@ -265,6 +265,7 @@ void QuickAccessBar::setNodeColor(const QColor& c) {
     colors->setNodeValue(n, color);
     hasSelected = true;
   }
+
   if (hasSelected == false)
     colors->setAllNodeValue(color);
 
@@ -283,6 +284,7 @@ void QuickAccessBar::setEdgeColor(const QColor& c) {
     colors->setEdgeValue(e, color);
     hasSelected = true;
   }
+
   if (hasSelected == false)
     colors->setAllEdgeValue(color);
 
