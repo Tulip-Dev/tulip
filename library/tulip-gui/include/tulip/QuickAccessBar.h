@@ -68,6 +68,7 @@ public slots:
   void setColorInterpolation(bool);
   void setLabelColor(const QColor&);
   void setNodeColor(const QColor&);
+  void setEdgeColor(const QColor&);
   void showHideNodesColorCaption();
   void showHideNodesSizeCaption();
   void showHideEdgesColorCaption();

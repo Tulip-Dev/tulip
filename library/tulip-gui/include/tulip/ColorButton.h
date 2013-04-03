@@ -28,15 +28,13 @@
 
 namespace tlp {
 
-class TLP_QT_SCOPE ColorButton : public QPushButton {
+class TLP_QT_SCOPE ChooseColorButton : public QPushButton {
   Q_OBJECT
   Q_PROPERTY(QColor color READ color WRITE setColor)
   Q_PROPERTY(Color tulipColor READ tulipColor WRITE setTulipColor)
 
-  QColor _color;
-  QWidget* _dialogParent;
 public:
-  explicit ColorButton(QWidget *parent = NULL);
+  explicit ChooseColorButton(QWidget *parent = NULL);
 
   QColor color() const;
   Color tulipColor() const;
@@ -44,7 +42,8 @@ public:
   void setDialogParent(QWidget* w);
 
 protected:
-  void paintEvent(QPaintEvent *);
+  QColor _color;
+  QWidget* _dialogParent;
 
 signals:
   void colorChanged(QColor);
@@ -56,6 +55,15 @@ public slots:
 
 protected slots:
   void chooseColor();
+};
+
+class TLP_QT_SCOPE ColorButton : public ChooseColorButton {
+  Q_OBJECT
+
+public:
+  explicit ColorButton(QWidget *parent = NULL): ChooseColorButton(parent) {}
+protected:
+  void paintEvent(QPaintEvent *);
 };
 
 }

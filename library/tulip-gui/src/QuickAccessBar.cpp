@@ -119,6 +119,8 @@ void QuickAccessBar::reset() {
   _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->nodeColorButton->setTulipColor(inputData()->getElementColor()->getNodeDefaultValue());
   _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+  _ui->edgeColorButton->setTulipColor(inputData()->getElementColor()->getEdgeDefaultValue());
+  _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
   _ui->colorInterpolationToggle->setIcon((renderingParameters()->isEdgeColorInterpolate() ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
   _ui->showEdgesToggle->setChecked(renderingParameters()->isDisplayEdges());
@@ -254,19 +256,35 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
 
 void QuickAccessBar::setNodeColor(const QColor& c) {
   Observable::holdObservers();
-  ColorProperty* tmp = new ColorProperty(_mainView->graph());
   ColorProperty* colors = inputData()->getElementColor();
-
-  *tmp = *colors;
-
-  if(colors->getNodeDefaultValue()!=QColorToColor(c)) {
-    colors->setAllNodeValue(QColorToColor(c));
-
-    node n;
-    forEach(n, tmp->getNonDefaultValuatedNodes()) {
-      colors->setNodeValue(n,tmp->getNodeValue(n));
-    }
+  BooleanProperty* selected = inputData()->getElementSelected();
+  bool hasSelected = false;
+  node n;
+  tlp::Color color = QColorToColor(c);
+  forEach(n, selected->getNonDefaultValuatedNodes()) {
+    colors->setNodeValue(n, color);
+    hasSelected = true;
   }
+  if (hasSelected == false)
+    colors->setAllNodeValue(color);
+
+  Observable::unholdObservers();
+  emit settingsChanged();
+}
+
+void QuickAccessBar::setEdgeColor(const QColor& c) {
+  Observable::holdObservers();
+  ColorProperty* colors = inputData()->getElementColor();
+  BooleanProperty* selected = inputData()->getElementSelected();
+  bool hasSelected = false;
+  edge e;
+  tlp::Color color = QColorToColor(c);
+  forEach(e, selected->getNonDefaultValuatedEdges()) {
+    colors->setEdgeValue(e, color);
+    hasSelected = true;
+  }
+  if (hasSelected == false)
+    colors->setAllEdgeValue(color);
 
   Observable::unholdObservers();
   emit settingsChanged();
@@ -328,5 +346,5 @@ void QuickAccessBar::updateFontButtonStyle() {
   _ui->fontButton->setStyleSheet("font-family: " + selectedFont.fontFamily() + "; "
                                  + (selectedFont.isItalic() ? "font-style: italic; " : "")
                                  + (selectedFont.isBold() ? "font-weight: bold; " : ""));
-  _ui->fontButton->setText(selectedFont.fontName() + (selectedFont.isBold() ? " Bold" : "") + (selectedFont.isItalic() ? " Italic" : ""));
+  //_ui->fontButton->setText(selectedFont.fontName() + (selectedFont.isBold() ? " Bold" : "") + (selectedFont.isItalic() ? " Italic" : ""));
 }
