@@ -93,71 +93,21 @@ background-color: rgba(255,255,255,100);
     <number>0</number>
    </property>
    <item>
-    <widget class="tlp::ColorButton" name="backgroundColorButton">
-     <property name="minimumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Scene background color</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="tlp::ColorButton" name="nodeColorButton">
-     <property name="minimumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Default node color</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QPushButton" name="nodesColorCaptionButton">
      <property name="minimumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="toolTip">
-      <string>Map nodes color on metric</string>
+      <string>Show/Hide the caption of the nodes color metric mapping</string>
      </property>
      <property name="statusTip">
       <string>Show/Hide nodes color caption</string>
@@ -181,59 +131,21 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="nodesSizeCaptionButton">
-     <property name="minimumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>32</width>
-       <height>32</height>
-      </size>
-     </property>
-     <property name="toolTip">
-      <string>Map nodes size on metric</string>
-     </property>
-     <property name="statusTip">
-      <string>Show/Hide nodes size caption</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../resources/TulipGUIResource.qrc">
-       <normaloff>:/tulip/gui/icons/20/node_size_interpolation.png</normaloff>:/tulip/gui/icons/20/node_size_interpolation.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>20</width>
-       <height>20</height>
-      </size>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QPushButton" name="edgesColorCaptionButton">
      <property name="minimumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="toolTip">
-      <string>Map edges color on metric</string>
+      <string>Show/Hide the caption of the edges color metric mapping</string>
      </property>
      <property name="statusTip">
       <string>Show/Hide edges color caption</string>
@@ -257,21 +169,59 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="edgesSizeCaptionButton">
+    <widget class="QPushButton" name="nodesSizeCaptionButton">
      <property name="minimumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="toolTip">
-      <string>Map edges size on metric</string>
+      <string>Show/Hide the caption of the nodes size metric mapping</string>
+     </property>
+     <property name="statusTip">
+      <string>Show/Hide nodes size caption</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/node_size_interpolation.png</normaloff>:/tulip/gui/icons/20/node_size_interpolation.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="edgesSizeCaptionButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Show/Hide the caption of the edges size metric mapping</string>
      </property>
      <property name="statusTip">
       <string>Show/Hide edges size caption</string>
@@ -295,17 +245,49 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="QPushButton" name="screenshotButton">
+    <widget class="Line" name="sep1">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ColorButton" name="backgroundColorButton">
      <property name="minimumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set scene background color</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="screenshotButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="toolTip">
@@ -333,18 +315,11 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="Line" name="sep1">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QPushButton" name="colorInterpolationToggle">
      <property name="maximumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="toolTip">
@@ -378,14 +353,14 @@ background-color: rgba(255,255,255,100);
     <widget class="QPushButton" name="showEdgesToggle">
      <property name="minimumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="toolTip">
@@ -416,18 +391,11 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="Line" name="sep3">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QPushButton" name="showLabelsToggle">
      <property name="maximumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="toolTip">
@@ -458,21 +426,98 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="tlp::ColorButton" name="labelColorButton">
+    <widget class="Line" name="sep3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ChooseColorButton" name="nodeColorButton">
      <property name="minimumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>32</width>
-       <height>32</height>
+       <width>26</width>
+       <height>26</height>
       </size>
      </property>
      <property name="toolTip">
-      <string>Labels default color</string>
+      <string>Set color of selected nodes if any, of all nodes if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_node_color.png</normaloff>:/tulip/gui/icons/20/set_node_color.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ChooseColorButton" name="edgeColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set color of selected edges if any, of all nodes if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_edge_color.png</normaloff>:/tulip/gui/icons/20/set_edge_color.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ColorButton" name="labelColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set labels default color</string>
      </property>
      <property name="text">
       <string/>
@@ -485,7 +530,7 @@ background-color: rgba(255,255,255,100);
    <item>
     <widget class="QPushButton" name="fontButton">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -497,10 +542,13 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Labels default font</string>
+      <string>Set Label font</string>
      </property>
      <property name="statusTip">
       <string>Change font for labels</string>
+     </property>
+     <property name="text">
+      <string>Aa</string>
      </property>
     </widget>
    </item>
@@ -522,6 +570,14 @@ background-color: rgba(255,255,255,100);
  <customwidgets>
   <customwidget>
    <class>tlp::ColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">tulip/ColorButton.h</header>
+   <slots>
+    <signal>colorChanged(QColor)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>tlp::ChooseColorButton</class>
    <extends>QPushButton</extends>
    <header location="global">tulip/ColorButton.h</header>
    <slots>
@@ -573,22 +629,6 @@ background-color: rgba(255,255,255,100);
    <hints>
     <hint type="sourcelabel">
      <x>404</x>
-     <y>16</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>549</x>
-     <y>17</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>nodeColorButton</sender>
-   <signal>colorChanged(QColor)</signal>
-   <receiver>QuickAccessBar</receiver>
-   <slot>setNodeColor(QColor)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>94</x>
      <y>16</y>
     </hint>
     <hint type="destinationlabel">
@@ -725,6 +765,38 @@ background-color: rgba(255,255,255,100);
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>nodeColorButton</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setNodeColor(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>353</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edgeColorButton</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setEdgeColor(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>353</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>showHideNodesColorCaption()</slot>
@@ -737,6 +809,7 @@ background-color: rgba(255,255,255,100);
   <slot>scaleFont(int)</slot>
   <slot>setLabelColor(QColor)</slot>
   <slot>setNodeColor(QColor)</slot>
+  <slot>setEdgeColor(QColor)</slot>
   <slot>scaleNodes(int)</slot>
   <slot>setEdgesVisible(bool)</slot>
   <slot>setLabelsVisible(bool)</slot>
