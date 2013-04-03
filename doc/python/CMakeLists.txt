@@ -3,7 +3,7 @@ IF(PYTHONINTERP_FOUND AND SIP_OK)
 IF(SPHINX_FOUND)
 
 ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${SPHINX_EXECUTABLE} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DBIN_DIR=${CMAKE_CURRENT_BINARY_DIR} -DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DSYSTEM_SIP=${SYSTEM_SIP} -DQT_BIN_DIR=${QT_DOC_DIR}/../bin -DMSVC=${MSVC} -P ${CMAKE_CURRENT_SOURCE_DIR}/genSphinxDoc.cmake
-				  DEPENDS ${LibTulipCorePythonBindingsName} ${LibStlPythonBindingsName})
+                                  DEPENDS ${LibTulipCorePythonBindingsName} ${LibStlPythonBindingsName} VERBATIM)
 				  
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "doc;doctrees") 
 
@@ -12,7 +12,7 @@ INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html
   COMPONENT tulip_python_doc)
 																 
 ELSE(SPHINX_FOUND)
-	MESSAGE("Sphinx not found : unable to generate the documentation for the Python bindings.")
+        MESSAGE("Sphinx not found: unable to generate the documentation for the Python bindings.")
 ENDIF(SPHINX_FOUND)
   
 ENDIF(PYTHONINTERP_FOUND AND SIP_OK)
