@@ -236,10 +236,10 @@ void TulipItemDelegate::comboDataChanged() {
 
 
 QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,
-					     tlp::PropertyInterface* pi,
-					     tlp::Graph* g,
-					     TulipItemDelegate* delegate,
-					     QWidget* dialogParent) {
+    tlp::PropertyInterface* pi,
+    tlp::Graph* g,
+    TulipItemDelegate* delegate,
+    QWidget* dialogParent) {
   QVariant defaultValue;
 
   if (elType == tlp::NODE)
@@ -248,8 +248,10 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,
     defaultValue = GraphModel::edgeDefaultValue(pi);
 
   TulipItemEditorCreator* creator = delegate->creator(defaultValue.userType());
+
   if (dialogParent == NULL)
     dialogParent = Perspective::instance()->mainWindow();
+
   QWidget* w = creator->createWidget(dialogParent);
   creator->setEditorData(w,defaultValue,g);
 

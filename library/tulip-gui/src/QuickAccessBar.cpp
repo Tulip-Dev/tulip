@@ -301,7 +301,7 @@ void QuickAccessBar::setEdgeColor(const QColor& c) {
 }
 
 void QuickAccessBar::setAllValues(unsigned int eltType,
-				  PropertyInterface* prop) {
+                                  PropertyInterface* prop) {
   QVariant val =
     TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
                                         prop, _mainView->graph(),
@@ -313,12 +313,14 @@ void QuickAccessBar::setAllValues(unsigned int eltType,
   _mainView->graph()->push();
 
   Observable::holdObservers();
+
   if (eltType == NODE) {
     node n;
     forEach(n, selected->getNonDefaultValuatedNodes(_mainView->graph())) {
       GraphModel::setNodeValue(n.id, prop, val);
       hasSelected = true;
     }
+
     if (hasSelected == false)
       GraphModel::setAllNodeValue(prop, val);
   }
@@ -327,9 +329,11 @@ void QuickAccessBar::setAllValues(unsigned int eltType,
     forEach(e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
       GraphModel::setEdgeValue(e.id, prop, val);
     }
+
     if (hasSelected == false)
       GraphModel::setAllEdgeValue(prop, val);
   }
+
   Observable::unholdObservers();
   emit settingsChanged();
 }
