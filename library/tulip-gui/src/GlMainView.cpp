@@ -56,7 +56,6 @@ void GlMainView::drawOverview(bool generatePixmap) {
   if(_overviewItem == NULL) {
     _overviewItem=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
     addToScene(_overviewItem);
-    _overviewItem->setPos(QPointF(0,0));
     generatePixmap=true;
   }
 
@@ -172,6 +171,8 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     _quickAccessBarItem->setPos(0,rect.height()-_quickAccessBarItem->size().height());
     _quickAccessBarItem->resize(rect.width(),_quickAccessBarItem->size().height());
   }
+  // put overview in the bottom right corner
+  _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
 }
 
 QPixmap GlMainView::snapshot(const QSize &outputSize) const {

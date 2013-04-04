@@ -135,6 +135,49 @@ background-color: #A9A9A9;
        </widget>
       </item>
       <item>
+       <widget class="QToolButton" name="currentInteractorButton">
+        <property name="minimumSize">
+         <size>
+          <width>130</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>130</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string>Active tool&lt;br/&gt;&lt;i&gt;click to show/hide its configuration panel.&lt;/i&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#currentInteractorButton {
+font: bold 10px;
+}</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextBesideIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="Line" name="sep4">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="interactorsLeft">
         <property name="minimumSize">
          <size>
@@ -204,6 +247,7 @@ background-color: #A9A9A9;
            <height>25</height>
           </size>
          </property>
+         <zorder>currentInteractorButton</zorder>
         </widget>
        </widget>
       </item>
@@ -240,49 +284,6 @@ background-color: #A9A9A9;
 background-color: #A9A9A9;
 }</string>
         </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="currentInteractorButton">
-        <property name="minimumSize">
-         <size>
-          <width>130</width>
-          <height>22</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>130</width>
-          <height>22</height>
-         </size>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="toolTip">
-         <string>Active tool&lt;br/&gt;&lt;i&gt;click to show/hide its configuration panel.&lt;/i&gt;</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#currentInteractorButton {
-font: bold 10px;
-}</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="sep4">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
