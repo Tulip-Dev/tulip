@@ -482,7 +482,7 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Set color of selected edges if any, of all nodes if not</string>
+      <string>Set color of selected edges if any, of all edges if not</string>
      </property>
      <property name="text">
       <string/>
@@ -503,7 +503,7 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
-    <widget class="tlp::ColorButton" name="labelColorButton">
+    <widget class="QPushButton" name="nodeShapeButton">
      <property name="minimumSize">
       <size>
        <width>26</width>
@@ -517,10 +517,90 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Set labels default color</string>
+      <string>Set shape of selected nodes if any, of all nodes if not</string>
      </property>
      <property name="text">
       <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_node_shape.png</normaloff>:/tulip/gui/icons/20/set_node_shape.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="edgeShapeButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set shape of selected edges if any, of all edges if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_edge_shape.png</normaloff>:/tulip/gui/icons/20/set_edge_shape.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ChooseColorButton" name="labelColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set label color of selected elements if any, of all elements if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_label_color.png</normaloff>:/tulip/gui/icons/20/set_label_color.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
      <property name="flat">
       <bool>true</bool>
@@ -542,7 +622,7 @@ background-color: rgba(255,255,255,100);
       </size>
      </property>
      <property name="toolTip">
-      <string>Set Label font</string>
+      <string>Set font of elements labels</string>
      </property>
      <property name="statusTip">
       <string>Change font for labels</string>
@@ -789,6 +869,38 @@ background-color: rgba(255,255,255,100);
    <hints>
     <hint type="sourcelabel">
      <x>353</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nodeShapeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setNodeShape()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edgeShapeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setEdgeShape()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
      <y>16</y>
     </hint>
     <hint type="destinationlabel">

@@ -235,7 +235,11 @@ void TulipItemDelegate::comboDataChanged() {
 }
 
 
-QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,tlp::PropertyInterface* pi, tlp::Graph* g, TulipItemDelegate* delegate) {
+QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,
+					     tlp::PropertyInterface* pi,
+					     tlp::Graph* g,
+					     TulipItemDelegate* delegate,
+					     QWidget* dialogParent) {
   QVariant defaultValue;
 
   if (elType == tlp::NODE)
@@ -244,14 +248,16 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,tlp::Proper
     defaultValue = GraphModel::edgeDefaultValue(pi);
 
   TulipItemEditorCreator* creator = delegate->creator(defaultValue.userType());
-  QWidget* w = creator->createWidget(Perspective::instance()->mainWindow());
+  if (dialogParent == NULL)
+    dialogParent = Perspective::instance()->mainWindow();
+  QWidget* w = creator->createWidget(dialogParent);
   creator->setEditorData(w,defaultValue,g);
 
   QDialog* dlg = dynamic_cast<QDialog*>(w);
 
   if (dlg == NULL) {
     // create a dialog on the fly
-    dlg = new QDialog(Perspective::instance()->mainWindow());
+    dlg = new QDialog(dialogParent);
     dlg->setWindowTitle(elType == NODE ? "Set nodes values"
                         : "Set edges values");
     QVBoxLayout* layout = new QVBoxLayout;

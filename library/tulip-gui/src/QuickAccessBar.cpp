@@ -29,6 +29,7 @@
 #include <QtGui/QGraphicsView>
 
 #include <tulip/GraphPropertiesModel.h>
+#include <tulip/GraphModel.h>
 #include <tulip/TulipFontDialog.h>
 #include <tulip/ForEach.h>
 #include <tulip/ColorProperty.h>
@@ -40,6 +41,7 @@
 #include <tulip/GlGraphInputData.h>
 #include <tulip/Perspective.h>
 #include <tulip/SnapshotDialog.h>
+#include <tulip/TulipItemDelegate.h>
 
 class TopPopupComboBox: public QComboBox {
   QListView* _view;
@@ -93,7 +95,7 @@ public:
 using namespace tlp;
 
 QuickAccessBar::QuickAccessBar(QGraphicsItem *quickAccessBarItem, QWidget *parent)
-  : QWidget(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), _mainView(NULL), _oldFontScale(1), _oldNodeScale(1),_captionsInitialized(false) {
+  : QWidget(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), _mainView(NULL), delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1),_captionsInitialized(false) {
   _ui->setupUi(this);
 }
 
@@ -226,6 +228,8 @@ void QuickAccessBar::setColorInterpolation(bool f) {
 }
 
 void QuickAccessBar::setLabelColor(const QColor& c) {
+  _mainView->graph()->push();
+
   Observable::holdObservers();
   ColorProperty* tmp = new ColorProperty(_mainView->graph());
   ColorProperty* colors = inputData()->getElementLabelColor();
@@ -255,6 +259,8 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
 }
 
 void QuickAccessBar::setNodeColor(const QColor& c) {
+  _mainView->graph()->push();
+
   Observable::holdObservers();
   ColorProperty* colors = inputData()->getElementColor();
   BooleanProperty* selected = inputData()->getElementSelected();
@@ -274,6 +280,8 @@ void QuickAccessBar::setNodeColor(const QColor& c) {
 }
 
 void QuickAccessBar::setEdgeColor(const QColor& c) {
+  _mainView->graph()->push();
+
   Observable::holdObservers();
   ColorProperty* colors = inputData()->getElementColor();
   BooleanProperty* selected = inputData()->getElementSelected();
@@ -290,6 +298,48 @@ void QuickAccessBar::setEdgeColor(const QColor& c) {
 
   Observable::unholdObservers();
   emit settingsChanged();
+}
+
+void QuickAccessBar::setAllValues(unsigned int eltType,
+				  PropertyInterface* prop) {
+  QVariant val =
+    TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
+                                        prop, _mainView->graph(),
+                                        delegate, _mainView->getGlMainWidget());
+
+  BooleanProperty* selected = inputData()->getElementSelected();
+  bool hasSelected = false;
+
+  _mainView->graph()->push();
+
+  Observable::holdObservers();
+  if (eltType == NODE) {
+    node n;
+    forEach(n, selected->getNonDefaultValuatedNodes(_mainView->graph())) {
+      GraphModel::setNodeValue(n.id, prop, val);
+      hasSelected = true;
+    }
+    if (hasSelected == false)
+      GraphModel::setAllNodeValue(prop, val);
+  }
+  else {
+    edge e;
+    forEach(e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
+      GraphModel::setEdgeValue(e.id, prop, val);
+    }
+    if (hasSelected == false)
+      GraphModel::setAllEdgeValue(prop, val);
+  }
+  Observable::unholdObservers();
+  emit settingsChanged();
+}
+
+void QuickAccessBar::setNodeShape() {
+  setAllValues(NODE, inputData()->getElementShape());
+}
+
+void QuickAccessBar::setEdgeShape() {
+  setAllValues(EDGE, inputData()->getElementShape());
 }
 
 void QuickAccessBar::setEdgesVisible(bool v) {
@@ -328,6 +378,8 @@ void QuickAccessBar::selectFont() {
 
   if (dlg.exec() != QDialog::Accepted || !dlg.font().exists())
     return;
+
+  _mainView->graph()->push();
 
   Observable::holdObservers();
 
