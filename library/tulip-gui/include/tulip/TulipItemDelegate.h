@@ -35,7 +35,7 @@ class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
   QComboBox* _currentMonitoredCombo;
 
 public:
-  static QVariant showEditorDialog(tlp::ElementType,tlp::PropertyInterface*,tlp::Graph*,TulipItemDelegate*);
+  static QVariant showEditorDialog(tlp::ElementType,tlp::PropertyInterface*,tlp::Graph*,TulipItemDelegate*, QWidget* dialogParent = NULL);
 
   explicit TulipItemDelegate(QObject* parent=NULL);
   virtual ~TulipItemDelegate();

@@ -355,7 +355,7 @@ void TableView::setAllValues(PropertyInterface* prop, bool selectedOnly) {
   QVariant val =
     TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE,
                                         prop, graph(),
-                                        static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
+                                        static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()), (QWidget *) this->centralItem()->parentWidget());
 
   if (selectedOnly) {
     BooleanProperty* selection = graph()->getProperty<BooleanProperty>("viewSelection");

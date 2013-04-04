@@ -54,6 +54,7 @@
         <file>icons/20/edges_enabled.png</file>
         <file>icons/20/edges_label.png</file>
         <file>icons/20/edges_nolabel.png</file>
+        <file>icons/20/set_label_color.png</file>
         <file>icons/20/set_node_color.png</file>
         <file>icons/20/set_edge_color.png</file>
         <file>icons/20/set_node_shape.png</file>

@@ -38,6 +38,7 @@ class GlMainView;
 class GlGraphRenderingParameters;
 class GlGraphInputData;
 class GlScene;
+class TulipItemDelegate;
 
 class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   Q_OBJECT
@@ -45,6 +46,7 @@ class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   Ui::QuickAccessBar* _ui;
   QGraphicsItem *_quickAccessBarItem;
   tlp::GlMainView* _mainView;
+  tlp::TulipItemDelegate* delegate;
   bool _resetting;
   tlp::GlGraphInputData* inputData() const;
   tlp::GlGraphRenderingParameters* renderingParameters() const;
@@ -55,6 +57,7 @@ class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   CaptionItem *_captions[4];
   void updateFontButtonStyle();
   void showHideCaption(CaptionItem::CaptionType captionType);
+  void setAllValues(unsigned int eltType, tlp::PropertyInterface* prop);
 
 public:
   explicit QuickAccessBar(QGraphicsItem *quickAccessBarItem,QWidget *parent = 0);
@@ -69,6 +72,8 @@ public slots:
   void setLabelColor(const QColor&);
   void setNodeColor(const QColor&);
   void setEdgeColor(const QColor&);
+  void setNodeShape();
+  void setEdgeShape();
   void showHideNodesColorCaption();
   void showHideNodesSizeCaption();
   void showHideEdgesColorCaption();
