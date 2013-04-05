@@ -165,11 +165,9 @@ void WorkspacePanel::setView(tlp::View* view) {
   viewConfigurationTabs->setTabsClosable(true);
   connect(viewConfigurationTabs,SIGNAL(tabCloseRequested(int)),this,SLOT(hideConfigurationTab()));
   viewConfigurationTabs->setTabPosition(QTabWidget::West);
-  QFile css(_view->configurationWidgetsStyleSheet());
-  css.open(QIODevice::ReadOnly);
-  viewConfigurationTabs->setStyleSheet(css.readAll());
+  viewConfigurationTabs->setStyleSheet(_view->configurationWidgetsStyleSheet());
   viewConfigurationTabs->findChild<QTabBar*>()->installEventFilter(this);
-  css.close();
+
 
   foreach(QWidget* w, _view->configurationWidgets()) {
     w->installEventFilter(this);
