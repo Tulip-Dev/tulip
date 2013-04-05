@@ -165,7 +165,7 @@ void WorkspacePanel::setView(tlp::View* view) {
   viewConfigurationTabs->setTabsClosable(true);
   connect(viewConfigurationTabs,SIGNAL(tabCloseRequested(int)),this,SLOT(hideConfigurationTab()));
   viewConfigurationTabs->setTabPosition(QTabWidget::West);
-  QFile css(":/tulip/gui/txt/view_configurationtab.css");
+  QFile css(_view->configurationWidgetsStyleSheet());
   css.open(QIODevice::ReadOnly);
   viewConfigurationTabs->setStyleSheet(css.readAll());
   viewConfigurationTabs->findChild<QTabBar*>()->installEventFilter(this);
