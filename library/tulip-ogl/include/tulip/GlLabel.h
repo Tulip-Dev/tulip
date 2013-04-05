@@ -38,6 +38,9 @@ struct OcclusionTest;
 
 enum LabelPosition {ON_CENTER = 0, ON_TOP = 1, ON_BOTTOM = 2, ON_LEFT = 3, ON_RIGHT = 4};
 
+#define MIN_LABEL_POSITION ON_CENTER
+#define MAX_LABEL_POSITION ON_RIGHT
+
 /**
  * @ingroup OpenGL
  * @brief Create a label into Tulip 3D engine
