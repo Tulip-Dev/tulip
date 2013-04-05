@@ -57,8 +57,12 @@
         <file>icons/20/set_label_color.png</file>
         <file>icons/20/set_node_color.png</file>
         <file>icons/20/set_edge_color.png</file>
+         <file>icons/20/set_node_border_color.png</file>
+        <file>icons/20/set_edge_border_color.png</file>
         <file>icons/20/set_node_shape.png</file>
         <file>icons/20/set_edge_shape.png</file>
+        <file>icons/20/set_node_size.png</file>
+        <file>icons/20/set_edge_size.png</file>
         <file>ui/split3_screen.png</file>
         <file>ui/inherited_properties.png</file>
         <file>ui/clearbutton.png</file>

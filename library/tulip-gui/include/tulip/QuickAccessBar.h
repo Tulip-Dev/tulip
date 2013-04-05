@@ -26,6 +26,7 @@
 
 #include <tulip/CaptionItem.h>
 #include <tulip/tulipconf.h>
+#include <tulip/Color.h>
 
 class QGraphicsItem;
 
@@ -39,6 +40,7 @@ class GlGraphRenderingParameters;
 class GlGraphInputData;
 class GlScene;
 class TulipItemDelegate;
+ class ColorProperty;
 
 class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   Q_OBJECT
@@ -58,6 +60,8 @@ class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   void updateFontButtonStyle();
   void showHideCaption(CaptionItem::CaptionType captionType);
   void setAllValues(unsigned int eltType, tlp::PropertyInterface* prop);
+  void setAllColorValues(unsigned int eltType, tlp::ColorProperty* prop,
+			 tlp::Color color);
 
 public:
   explicit QuickAccessBar(QGraphicsItem *quickAccessBarItem,QWidget *parent = 0);
@@ -71,9 +75,13 @@ public slots:
   void setColorInterpolation(bool);
   void setLabelColor(const QColor&);
   void setNodeColor(const QColor&);
+  void setNodeBorderColor(const QColor&);
   void setEdgeColor(const QColor&);
+  void setEdgeBorderColor(const QColor&);
   void setNodeShape();
   void setEdgeShape();
+  void setNodeSize();
+  void setEdgeSize();
   void showHideNodesColorCaption();
   void showHideNodesSizeCaption();
   void showHideEdgesColorCaption();
