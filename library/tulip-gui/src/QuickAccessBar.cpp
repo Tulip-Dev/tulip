@@ -120,8 +120,8 @@ void QuickAccessBar::reset() {
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
   _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-   _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-   _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+  _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+  _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
   _ui->colorInterpolationToggle->setIcon((renderingParameters()->isEdgeColorInterpolate() ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
@@ -258,31 +258,35 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
 }
 
 void QuickAccessBar::setAllColorValues(unsigned int eltType,
-				       ColorProperty* prop, Color color) {
+                                       ColorProperty* prop, Color color) {
   BooleanProperty* selected = inputData()->getElementSelected();
   bool hasSelected = false;
 
   _mainView->graph()->push();
 
   Observable::holdObservers();
+
   if (eltType == NODE) {
     node n;
     forEach(n, selected->getNonDefaultValuatedNodes(_mainView->graph())) {
       prop->setNodeValue(n, color);
       hasSelected = true;
     }
+
     if (hasSelected == false)
       prop->setAllNodeValue(color);
   }
   else {
     edge e;
     forEach(e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
-       prop->setEdgeValue(e, color);
+      prop->setEdgeValue(e, color);
       hasSelected = true;
     }
+
     if (hasSelected == false)
       prop->setAllEdgeValue(color);
   }
+
   Observable::unholdObservers();
   emit settingsChanged();
 }
@@ -297,12 +301,12 @@ void QuickAccessBar::setEdgeColor(const QColor& c) {
 
 void QuickAccessBar::setNodeBorderColor(const QColor& c) {
   setAllColorValues(NODE, inputData()->getElementBorderColor(),
-		    QColorToColor(c));
+                    QColorToColor(c));
 }
 
 void QuickAccessBar::setEdgeBorderColor(const QColor& c) {
   setAllColorValues(EDGE, inputData()->getElementBorderColor(),
-		    QColorToColor(c));
+                    QColorToColor(c));
 }
 
 void QuickAccessBar::setAllValues(unsigned int eltType,
