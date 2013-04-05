@@ -138,11 +138,11 @@ QList<QWidget*> View::configurationWidgets() const {
 }
 
 QString View::configurationWidgetsStyleSheet() const {
-    QFile css(":/tulip/gui/txt/view_configurationtab.css");
-    css.open(QIODevice::ReadOnly);
-    QString style(css.readAll());
-    css.close();
-    return style;
+  QFile css(":/tulip/gui/txt/view_configurationtab.css");
+  css.open(QIODevice::ReadOnly);
+  QString style(css.readAll());
+  css.close();
+  return style;
 }
 
 void View::interactorsInstalled(const QList<tlp::Interactor *> &) {

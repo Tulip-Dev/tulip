@@ -40,7 +40,7 @@ class GlGraphRenderingParameters;
 class GlGraphInputData;
 class GlScene;
 class TulipItemDelegate;
- class ColorProperty;
+class ColorProperty;
 
 class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   Q_OBJECT
@@ -61,7 +61,7 @@ class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   void showHideCaption(CaptionItem::CaptionType captionType);
   void setAllValues(unsigned int eltType, tlp::PropertyInterface* prop);
   void setAllColorValues(unsigned int eltType, tlp::ColorProperty* prop,
-			 tlp::Color color);
+                         tlp::Color color);
 
 public:
   explicit QuickAccessBar(QGraphicsItem *quickAccessBarItem,QWidget *parent = 0);
