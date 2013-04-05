@@ -133,7 +133,7 @@ public:
    * @brief This method can be used to change the configuration widgets' style
    * sheet. From Qt documentation: The style sheet contains a textual description of customizations to the
    *  widget's style, as described in the Qt Style Sheets document. see http://qt-project.org/doc/qt-4.7/stylesheet.html.
-   * @return The path of the css stylesheet to use (usually comes from a qt resource file)
+   * @return The stylesheet to use
    */
   virtual QString configurationWidgetsStyleSheet() const;
 
