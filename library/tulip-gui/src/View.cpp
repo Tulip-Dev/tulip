@@ -16,13 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/View.h"
-
 #include <QtCore/QDebug>
 #include <QtGui/QGraphicsView>
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QMenu>
 
+#include <tulip/View.h>
 #include <tulip/Interactor.h>
 #include <tulip/Graph.h>
 
@@ -135,6 +134,10 @@ void View::treatEvent(const Event& ev) {
 
 QList<QWidget*> View::configurationWidgets() const {
   return QList<QWidget*>();
+}
+
+QString View::configurationWidgetsStyleSheet() const {
+    return ":/tulip/gui/txt/view_configurationtab.css";
 }
 
 void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
