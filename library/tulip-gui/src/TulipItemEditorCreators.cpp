@@ -526,7 +526,12 @@ QVariant TulipLabelPositionEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   return QVariant::fromValue<LabelPosition>((LabelPosition)(static_cast<QComboBox*>(w)->currentIndex()));
 }
 QString TulipLabelPositionEditorCreator::displayText(const QVariant& v) const {
-  return POSITION_LABEL[(int)(v.value<LabelPosition>())];
+  int pos = (int)(v.value<LabelPosition>());
+  if (pos < MIN_LABEL_POSITION || pos > MAX_LABEL_POSITION) {
+    qCritical() << QObject::trUtf8("Invalid value found as label position");
+    return QObject::trUtf8("Invalid label position");
+  } else
+    return POSITION_LABEL[pos];
 }
 
 //GraphEditorCreator
