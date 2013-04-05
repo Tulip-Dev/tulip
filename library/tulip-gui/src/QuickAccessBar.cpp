@@ -119,15 +119,14 @@ void QuickAccessBar::reset() {
   _resetting = true;
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
   _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-  _ui->nodeColorButton->setTulipColor(inputData()->getElementColor()->getNodeDefaultValue());
   _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-  _ui->edgeColorButton->setTulipColor(inputData()->getElementColor()->getEdgeDefaultValue());
-  _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+   _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+   _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+  _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
   _ui->colorInterpolationToggle->setIcon((renderingParameters()->isEdgeColorInterpolate() ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
   _ui->showEdgesToggle->setChecked(renderingParameters()->isDisplayEdges());
   _ui->showEdgesToggle->setIcon((renderingParameters()->isDisplayEdges() ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
-  _ui->labelColorButton->setTulipColor(inputData()->getElementLabelColor()->getNodeDefaultValue());
   _ui->labelColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
   _ui->showLabelsToggle->setIcon((renderingParameters()->isViewNodeLabel() ? QIcon(":/tulip/gui/icons/20/labels_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
@@ -258,46 +257,52 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
   emit settingsChanged();
 }
 
-void QuickAccessBar::setNodeColor(const QColor& c) {
+void QuickAccessBar::setAllColorValues(unsigned int eltType,
+				       ColorProperty* prop, Color color) {
+  BooleanProperty* selected = inputData()->getElementSelected();
+  bool hasSelected = false;
+
   _mainView->graph()->push();
 
   Observable::holdObservers();
-  ColorProperty* colors = inputData()->getElementColor();
-  BooleanProperty* selected = inputData()->getElementSelected();
-  bool hasSelected = false;
-  node n;
-  tlp::Color color = QColorToColor(c);
-  forEach(n, selected->getNonDefaultValuatedNodes()) {
-    colors->setNodeValue(n, color);
-    hasSelected = true;
+  if (eltType == NODE) {
+    node n;
+    forEach(n, selected->getNonDefaultValuatedNodes(_mainView->graph())) {
+      prop->setNodeValue(n, color);
+      hasSelected = true;
+    }
+    if (hasSelected == false)
+      prop->setAllNodeValue(color);
   }
-
-  if (hasSelected == false)
-    colors->setAllNodeValue(color);
-
+  else {
+    edge e;
+    forEach(e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
+       prop->setEdgeValue(e, color);
+      hasSelected = true;
+    }
+    if (hasSelected == false)
+      prop->setAllEdgeValue(color);
+  }
   Observable::unholdObservers();
   emit settingsChanged();
 }
 
+void QuickAccessBar::setNodeColor(const QColor& c) {
+  setAllColorValues(NODE, inputData()->getElementColor(), QColorToColor(c));
+}
+
 void QuickAccessBar::setEdgeColor(const QColor& c) {
-  _mainView->graph()->push();
+  setAllColorValues(EDGE, inputData()->getElementColor(), QColorToColor(c));
+}
 
-  Observable::holdObservers();
-  ColorProperty* colors = inputData()->getElementColor();
-  BooleanProperty* selected = inputData()->getElementSelected();
-  bool hasSelected = false;
-  edge e;
-  tlp::Color color = QColorToColor(c);
-  forEach(e, selected->getNonDefaultValuatedEdges()) {
-    colors->setEdgeValue(e, color);
-    hasSelected = true;
-  }
+void QuickAccessBar::setNodeBorderColor(const QColor& c) {
+  setAllColorValues(NODE, inputData()->getElementBorderColor(),
+		    QColorToColor(c));
+}
 
-  if (hasSelected == false)
-    colors->setAllEdgeValue(color);
-
-  Observable::unholdObservers();
-  emit settingsChanged();
+void QuickAccessBar::setEdgeBorderColor(const QColor& c) {
+  setAllColorValues(EDGE, inputData()->getElementBorderColor(),
+		    QColorToColor(c));
 }
 
 void QuickAccessBar::setAllValues(unsigned int eltType,
@@ -328,6 +333,7 @@ void QuickAccessBar::setAllValues(unsigned int eltType,
     edge e;
     forEach(e, selected->getNonDefaultValuatedEdges(_mainView->graph())) {
       GraphModel::setEdgeValue(e.id, prop, val);
+      hasSelected = true;
     }
 
     if (hasSelected == false)
@@ -344,6 +350,14 @@ void QuickAccessBar::setNodeShape() {
 
 void QuickAccessBar::setEdgeShape() {
   setAllValues(EDGE, inputData()->getElementShape());
+}
+
+void QuickAccessBar::setNodeSize() {
+  setAllValues(NODE, inputData()->getElementSize());
+}
+
+void QuickAccessBar::setEdgeSize() {
+  setAllValues(EDGE, inputData()->getElementSize());
 }
 
 void QuickAccessBar::setEdgesVisible(bool v) {
