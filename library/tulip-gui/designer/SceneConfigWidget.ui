@@ -64,7 +64,7 @@ border-left-style: none;
 border-top-right-radius: 1px;
 border-bottom-right-radius: 1px;
 }
-#scrollAreaWidgetContents, #SceneConfigWidget {
+#scrollArea, #scrollAreaWidgetContents {
 background-color: white;
 border: 0px;
 }
@@ -78,7 +78,6 @@ padding-top: 20px;
 QFrame[ subsection = &quot;true&quot; ] {
 border-top: 1px solid #D9D9D9;
 padding-top: 5px;
-background-color: #F4F4F4;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
