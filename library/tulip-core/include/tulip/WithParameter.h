@@ -224,7 +224,7 @@ private:
     .help { font-style: italic; font-size: 90%; }</style>\
 </head><body><table border=\"0\" class=\"paramtable\">"
 
-#define HTML_HELP_DEF(A,B) "<tr><td><b>"A"</b><td>"B"</td></tr>"
+#define HTML_HELP_DEF(A,B) "<tr><td><b>" A "</b><td>" B "</td></tr>"
 
 #define HTML_HELP_BODY() "</table><p class=\"help\">"
 
