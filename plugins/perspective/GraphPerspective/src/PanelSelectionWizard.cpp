@@ -51,7 +51,8 @@ PanelSelectionWizard::~PanelSelectionWizard() {
 void PanelSelectionWizard::panelSelected (const QModelIndex& index) {
   _currentItem = index.data().toString();
   _ui->panelDescription->setText(PluginLister::pluginInformations(_currentItem.toStdString()).info().c_str());
-  button(QWizard::NextButton)->setEnabled(true);
+  // temporarily do not try to enable the Next button
+  //button(QWizard::NextButton)->setEnabled(true);
 }
 
 tlp::Graph* PanelSelectionWizard::graph() const {
@@ -101,13 +102,14 @@ void PanelSelectionWizard::done(int result) {
 }
 
 void PanelSelectionWizard::pageChanged(int id) {
+  // temporarily disable/hide the Next button
+  button(QWizard::NextButton)->setEnabled(false);
+  button(QWizard::NextButton)->hide();
+  // and display OK instead of Finish
+  setButtonText(QWizard::FinishButton, "OK");
   if (id == startId()) {
     clearView();
     button(QWizard::FinishButton)->setEnabled(true);
-    // temporarily hide the next button
-    button(QWizard::NextButton)->hide();
-    // and display OK instead of Finish
-    button(QWizard::FinishButton)->setText("OK");
   }
 
   if (page(id) == _ui->placeHolder) {
@@ -129,6 +131,6 @@ void PanelSelectionWizard::pageChanged(int id) {
       p->layout()->addWidget(w);
     }
   }
-
-  button(QWizard::NextButton)->setEnabled(nextId()!=-1);
+  // temporarily do not try to enable the Next button
+  //button(QWizard::NextButton)->setEnabled(nextId()!=-1);
 }
