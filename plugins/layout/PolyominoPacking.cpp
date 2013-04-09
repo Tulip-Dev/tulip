@@ -272,7 +272,7 @@ static T cell(const T &p, int gridStep) {
 }
 
 static Vec2i vec3fToVec2i(const Vec3f &c) {
-  return Vec2i((int)std::rint(c[0]), (int)std::rint(c[1]));
+  return Vec2i((int)rint(c[0]), (int)rint(c[1]));
 }
 
 void PolyominoPacking::genPolyomino(Polyomino &poly) {
