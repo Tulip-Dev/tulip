@@ -106,6 +106,7 @@ void PanelSelectionWizard::pageChanged(int id) {
   button(QWizard::NextButton)->setEnabled(false);
   // and display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
+
   if (id == startId()) {
     clearView();
     button(QWizard::FinishButton)->setEnabled(true);
@@ -132,6 +133,7 @@ void PanelSelectionWizard::pageChanged(int id) {
       p->layout()->addWidget(w);
     }
   }
+
   // temporarily do not try to enable the Next button
   //button(QWizard::NextButton)->setEnabled(nextId()!=-1);
 }
