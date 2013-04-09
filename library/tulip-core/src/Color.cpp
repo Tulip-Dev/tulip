@@ -145,7 +145,7 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
 
     bool done = true;
     unsigned int vi = 0;
-    done = ( is >> vi );
+    done = bool( is >> vi );
     outA.array[i] = vi;
 
     if( !done ) {
