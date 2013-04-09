@@ -364,6 +364,10 @@ void QuickAccessBar::setEdgeSize() {
   setAllValues(EDGE, inputData()->getElementSize());
 }
 
+void QuickAccessBar::setNodeLabelPosition() {
+  setAllValues(NODE, inputData()->getElementLabelPosition());
+}
+
 void QuickAccessBar::setEdgesVisible(bool v) {
   if(renderingParameters()->isDisplayEdges() != v) {
     renderingParameters()->setDisplayEdges(v);

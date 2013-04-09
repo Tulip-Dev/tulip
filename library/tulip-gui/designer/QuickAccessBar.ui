@@ -748,6 +748,41 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="labelPositionButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set label position of selected nodes if any, of all nodes if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_label_position.png</normaloff>:/tulip/gui/icons/20/set_label_position.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="fontButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -1105,6 +1140,22 @@ background-color: rgba(255,255,255,100);
    <hints>
     <hint type="sourcelabel">
      <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelPositionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setNodeLabelPosition()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>605</x>
      <y>16</y>
     </hint>
     <hint type="destinationlabel">

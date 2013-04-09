@@ -90,6 +90,7 @@ public slots:
   void setEdgesVisible(bool);
   void setLabelsVisible(bool);
   void selectFont();
+  void setNodeLabelPosition();
 
 signals:
   void settingsChanged();
