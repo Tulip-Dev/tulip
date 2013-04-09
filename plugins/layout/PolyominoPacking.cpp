@@ -42,10 +42,6 @@
 using namespace std;
 using namespace tlp;
 
-namespace tlp {
-typedef Vector<int, 2> Vec2i;
-}
-
 typedef struct {
   tlp::Graph *cc; // the connected component associated to that polyomino
   int perim; // the perimeter value of the polyomino
@@ -276,18 +272,15 @@ static T cell(const T &p, int gridStep) {
 }
 
 static Vec2i vec3fToVec2i(const Vec3f &c) {
-  Vec2i ret;
-  ret[0] = round(c[0]);
-  ret[1] = round(c[1]);
-  return ret;
+  return Vec2i((int)std::rint(c[0]), (int)std::rint(c[1]));
 }
 
 void PolyominoPacking::genPolyomino(Polyomino &poly) {
 
   const BoundingBox &ccBB = poly.ccBB;
 
-  int dx = - round(ccBB[0][0]);
-  int dy = - round(ccBB[0][1]);
+  int dx = - rint(ccBB[0][0]);
+  int dy = - rint(ccBB[0][1]);
 
   node n;
   forEach(n, (poly.cc)->getNodes()) {
@@ -388,10 +381,10 @@ void PolyominoPacking::fillEdge(edge e, Vec2i p, std::vector<Vec2i> &cells, int 
 }
 
 void PolyominoPacking::fillLine(const Coord &p, const Coord &q, std::vector<Vec2i> &cells) {
-  int x1 = round(p[0]);
-  int y1 = round(p[1]);
-  int x2 = round(q[0]);
-  int y2 = round(q[1]);
+  int x1 = rint(p[0]);
+  int y1 = rint(p[1]);
+  int x2 = rint(q[0]);
+  int y2 = rint(q[1]);
 
   int dx = x2 - x1;
   int ax = abs(dx) << 1;
