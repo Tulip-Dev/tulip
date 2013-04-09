@@ -19,8 +19,8 @@
 
 #include <tulip/YajlFacade.h>
 
-#include <yajl_parse.h>
-#include <yajl_gen.h>
+#include <yajl/yajl_parse.h>
+#include <yajl/yajl_gen.h>
 #include <errno.h>
 #include <sys/stat.h>
 #include <cstdlib>
