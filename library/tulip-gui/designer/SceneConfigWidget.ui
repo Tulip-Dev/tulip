@@ -147,19 +147,6 @@ padding-top: 5px;
     </widget>
    </item>
    <item>
-    <widget class="Line" name="line">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>1</height>
-      </size>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QScrollArea" name="scrollArea">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -180,7 +167,7 @@ padding-top: 5px;
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-380</y>
+        <y>0</y>
         <width>347</width>
         <height>702</height>
        </rect>

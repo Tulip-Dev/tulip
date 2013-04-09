@@ -106,24 +106,11 @@ padding-top: 5px;
 		 color: #595959;</string>
         </property>
         <property name="text">
-         <string>&lt;font size=&quot;5&quot;&gt;Adjacency matrix settings&lt;/font&gt;</string>
+         <string>&lt;font size=&quot;5&quot;&gt;Matrix display settings&lt;/font&gt;</string>
         </property>
        </widget>
       </item>
      </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="Line" name="line">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>1</height>
-      </size>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
     </widget>
    </item>
    <item>
@@ -148,8 +135,8 @@ padding-top: 5px;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>418</width>
-        <height>366</height>
+        <width>405</width>
+        <height>392</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -190,8 +177,8 @@ padding-top: 5px;
             </property>
             <property name="font">
              <font>
-              <weight>50</weight>
-              <bold>false</bold>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -199,7 +186,7 @@ padding-top: 5px;
 background-color: rgb(160, 160, 160);</string>
             </property>
             <property name="text">
-             <string>Background color</string>
+             <string>Background</string>
             </property>
            </widget>
           </item>
@@ -215,6 +202,13 @@ background-color: rgb(160, 160, 160);</string>
              <property name="margin">
               <number>0</number>
              </property>
+             <item>
+              <widget class="QLabel" name="label_6">
+               <property name="text">
+                <string>Color</string>
+               </property>
+              </widget>
+             </item>
              <item>
               <widget class="tlp::ColorButton" name="backgroundColorBtn">
                <property name="sizePolicy">
@@ -269,8 +263,8 @@ background-color: rgb(160, 160, 160);</string>
             </property>
             <property name="font">
              <font>
-              <weight>50</weight>
-              <bold>false</bold>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -303,7 +297,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item>
-           <widget class="QFrame" name="labelFrame">
+           <widget class="QFrame" name="orderingFrame">
             <property name="frameShape">
              <enum>QFrame::NoFrame</enum>
             </property>
@@ -374,8 +368,8 @@ p, li { white-space: pre-wrap; }
             </property>
             <property name="font">
              <font>
-              <weight>50</weight>
-              <bold>false</bold>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
@@ -467,8 +461,8 @@ p, li { white-space: pre-wrap; }
            <widget class="QLabel" name="label_5">
             <property name="font">
              <font>
-              <weight>50</weight>
-              <bold>false</bold>
+              <weight>75</weight>
+              <bold>true</bold>
              </font>
             </property>
             <property name="styleSheet">
