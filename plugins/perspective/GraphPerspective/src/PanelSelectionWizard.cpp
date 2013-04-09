@@ -102,14 +102,15 @@ void PanelSelectionWizard::done(int result) {
 }
 
 void PanelSelectionWizard::pageChanged(int id) {
-  // temporarily disable/hide the Next button
+  // temporarily disable the Next button
   button(QWizard::NextButton)->setEnabled(false);
-  button(QWizard::NextButton)->hide();
   // and display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
   if (id == startId()) {
     clearView();
     button(QWizard::FinishButton)->setEnabled(true);
+    // temporarily hide the Next button
+    button(QWizard::NextButton)->hide();
   }
 
   if (page(id) == _ui->placeHolder) {
