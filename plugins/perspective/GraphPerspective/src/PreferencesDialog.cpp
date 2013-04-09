@@ -38,11 +38,11 @@ void PreferencesDialog::writeSettings() {
 
   switch(_ui->proxyType->currentIndex()) {
   case 0:
-    TulipSettings::instance().setProxyType(QNetworkProxy::Socks5Proxy);
+    TulipSettings::instance().setProxyType(QNetworkProxy::HttpProxy);
     break;
 
   case 1:
-    TulipSettings::instance().setProxyType(QNetworkProxy::HttpProxy);
+    TulipSettings::instance().setProxyType(QNetworkProxy::Socks5Proxy);
     break;
 
   case 2:
