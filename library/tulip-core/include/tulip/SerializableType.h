@@ -44,7 +44,7 @@ public:
     oss << v;
   }
   static bool read(std::istream& iss, typename TypeInterface<T>::RealType& v) {
-    return (iss >> v);
+    return bool(iss >> v);
   }
   FORWARD_STRING_METHODS(typename TypeInterface<T>)
 };
