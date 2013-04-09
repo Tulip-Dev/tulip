@@ -20,7 +20,7 @@
    <string>Tulip settings</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+   <iconset>
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
@@ -263,7 +263,14 @@ color: #595959;</string>
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="proxyPort"/>
+            <widget class="QSpinBox" name="proxyPort">
+             <property name="maximum">
+              <number>65535</number>
+             </property>
+             <property name="value">
+              <number>3128</number>
+             </property>
+            </widget>
            </item>
            <item>
             <spacer name="horizontalSpacer_2">
@@ -582,10 +589,7 @@ border: 0px;
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
-  <include location="../resources/GraphPerspective.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>proxyCheck</sender>
