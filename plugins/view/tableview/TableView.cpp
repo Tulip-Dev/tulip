@@ -496,8 +496,10 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
 
   QString eltsName(NODES_DISPLAYED ? trUtf8("nodes") : trUtf8("edges"));
   std::string propName = _model->headerData(idx.column(), Qt::Horizontal, Qt::DisplayRole).toString().toUtf8().data();
+
   if (propName.empty())
     return;
+
   QModelIndexList highlightedRows =
     _ui->table->selectionModel()->selectedRows();
 
