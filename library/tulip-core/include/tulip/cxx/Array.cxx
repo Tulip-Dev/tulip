@@ -74,7 +74,7 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
 
     if (i>0 ) {
       // skip spaces
-      while((ok = (is >> c)) && isspace(c)) {}
+      while((ok = bool(is >> c)) && isspace(c)) {}
 
       if (!ok || c!=',') {
         is.seekg(pos);
@@ -84,11 +84,11 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
     }
 
     // skip spaces
-    while((ok = (is >> c)) && isspace(c)) {}
+    while((ok = bool(is >> c)) && isspace(c)) {}
 
     is.unget();
     bool done = true;
-    done = ( is >> outA.array[i] );
+    done = bool( is >> outA.array[i] );
 
     if( !done ) {
       is.seekg(pos);
