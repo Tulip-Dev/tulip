@@ -199,12 +199,12 @@ color: #595959;</string>
             <widget class="QComboBox" name="proxyType">
              <item>
               <property name="text">
-               <string>HTTP</string>
+               <string>SOCKS 5</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>SOCKS 5</string>
+               <string>HTTP</string>
               </property>
              </item>
              <item>

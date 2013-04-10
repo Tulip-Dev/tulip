@@ -24,6 +24,7 @@
 #include <tulip/SceneConfigWidget.h>
 #include <tulip/SceneLayersConfigWidget.h>
 #include <tulip/Interactor.h>
+#include <tulip/View.h>
 
 #include <QtGui/QGraphicsScene>
 #include <QtGui/QResizeEvent>
