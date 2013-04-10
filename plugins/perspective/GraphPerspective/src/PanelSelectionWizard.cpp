@@ -51,8 +51,10 @@ PanelSelectionWizard::~PanelSelectionWizard() {
 void PanelSelectionWizard::panelSelected (const QModelIndex& index) {
   _currentItem = index.data().toString();
   _ui->panelDescription->setText(PluginLister::pluginInformations(_currentItem.toStdString()).info().c_str());
-  // temporarily do not try to enable the Next button
-  //button(QWizard::NextButton)->setEnabled(true);
+  // NexButton is temporarily hidden
+  // QWizard::HaveNextButtonOnLastPage has been removed
+  // from options property in PanelSelectionWizard.ui
+  button(QWizard::NextButton)->setEnabled(true);
 }
 
 tlp::Graph* PanelSelectionWizard::graph() const {
@@ -102,16 +104,12 @@ void PanelSelectionWizard::done(int result) {
 }
 
 void PanelSelectionWizard::pageChanged(int id) {
-  // temporarily disable the Next button
-  button(QWizard::NextButton)->setEnabled(false);
-  // and display OK instead of Finish
+  // temporarily display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");
 
   if (id == startId()) {
     clearView();
     button(QWizard::FinishButton)->setEnabled(true);
-    // temporarily hide the Next button
-    button(QWizard::NextButton)->hide();
   }
 
   if (page(id) == _ui->placeHolder) {
@@ -134,6 +132,8 @@ void PanelSelectionWizard::pageChanged(int id) {
     }
   }
 
-  // temporarily do not try to enable the Next button
-  //button(QWizard::NextButton)->setEnabled(nextId()!=-1);
+  // NexButton is temporarily hidden
+  // QWizard::HaveNextButtonOnLastPage has been removed
+  // from options property in PanelSelectionWizard.ui
+  button(QWizard::NextButton)->setEnabled(nextId()!=-1);
 }
