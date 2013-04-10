@@ -85,11 +85,12 @@ void PreferencesDialog::writeSettings() {
 }
 
 void PreferencesDialog::readSettings() {
-    _ui->proxyCheck->setChecked(TulipSettings::instance().isProxyEnabled());
-    if(TulipSettings::instance().isProxyEnabled()) {
-        _ui->networkFrame1->setEnabled(true);
-        _ui->networkFrame2->setEnabled(true);
-    }
+  _ui->proxyCheck->setChecked(TulipSettings::instance().isProxyEnabled());
+
+  if(TulipSettings::instance().isProxyEnabled()) {
+    _ui->networkFrame1->setEnabled(true);
+    _ui->networkFrame2->setEnabled(true);
+  }
 
 
   switch(TulipSettings::instance().proxyType()) {
@@ -110,16 +111,18 @@ void PreferencesDialog::readSettings() {
     break;
 
   default:
-      break;
+    break;
   }
 
   _ui->proxyAddr->setText(TulipSettings::instance().proxyHost());
   _ui->proxyPort->setValue(TulipSettings::instance().proxyPort());
   _ui->proxyAuthCheck->setChecked(TulipSettings::instance().isUseProxyAuthentification());
+
   if(TulipSettings::instance().isUseProxyAuthentification()) {
-      _ui->proxyUser->setEnabled(true);
-      _ui->proxyPassword->setEnabled(true);
+    _ui->proxyUser->setEnabled(true);
+    _ui->proxyPassword->setEnabled(true);
   }
+
   _ui->proxyUser->setText(TulipSettings::instance().proxyUsername());
   _ui->proxyPassword->setText(TulipSettings::instance().proxyPassword());
 
