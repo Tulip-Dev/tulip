@@ -243,7 +243,7 @@ QString TulipSettings::proxyHost() const {
 }
 
 void TulipSettings::setProxyHost(const QString &h) {
-    setValue(ProxyHostEntry,h);
+  setValue(ProxyHostEntry,h);
 }
 
 unsigned int TulipSettings::proxyPort() const {
