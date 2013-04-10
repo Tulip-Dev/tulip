@@ -62,7 +62,7 @@ SceneConfigWidget::~SceneConfigWidget() {
 void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
   if (_glMainWidget != NULL) {
     disconnect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));
-    disconnect(_glMainWidget,SIGNAL(viewDrawn(tlp::GlMainWidget *,bool)),this,SLOT(resetChanges()));
+    disconnect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(resetChanges()));
   }
 
   _glMainWidget = glMainWidget;
