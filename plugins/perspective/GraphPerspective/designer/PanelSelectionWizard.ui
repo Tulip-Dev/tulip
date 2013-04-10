@@ -46,7 +46,7 @@ border: 0px;
    <bool>true</bool>
   </property>
   <property name="options">
-   <set>QWizard::ExtendedWatermarkPixmap|QWizard::HaveFinishButtonOnEarlyPages|QWizard::HaveNextButtonOnLastPage|QWizard::NoBackButtonOnStartPage</set>
+   <set>QWizard::ExtendedWatermarkPixmap|QWizard::HaveFinishButtonOnEarlyPages|QWizard::NoBackButtonOnStartPage</set>
   </property>
   <property name="titleFormat">
    <enum>Qt::RichText</enum>
