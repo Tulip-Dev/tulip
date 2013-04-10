@@ -263,7 +263,7 @@ background-color: rgb(160, 160, 160);</string>
           <item>
            <widget class="QCheckBox" name="labelsFitCheck">
             <property name="text">
-             <string>Fit labels into their respective nodes</string>
+             <string>Fit labels size to nodes size</string>
             </property>
            </widget>
           </item>
