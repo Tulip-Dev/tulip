@@ -26,6 +26,7 @@
 #include <tulip/TulipRelease.h>
 
 using namespace tlp;
+using namespace std;
 
 TulipSettings *TulipSettings::_instance = NULL;
 
@@ -242,15 +243,15 @@ QString TulipSettings::proxyHost() const {
 }
 
 void TulipSettings::setProxyHost(const QString &h) {
-  setValue(ProxyHostEntry,h);
+    setValue(ProxyHostEntry,h);
 }
 
 unsigned int TulipSettings::proxyPort() const {
-  return value(ProxyHostEntry).toUInt();
+  return value(ProxyPortEntry).toUInt();
 }
 
 void TulipSettings::setProxyPort(unsigned int p) {
-  setValue(ProxyHostEntry,p);
+  setValue(ProxyPortEntry,p);
 }
 
 bool TulipSettings::isUseProxyAuthentification() const {
@@ -278,10 +279,9 @@ void TulipSettings::setProxyPassword(const QString& s) {
 }
 
 void TulipSettings::applyProxySettings() {
-  QNetworkProxy proxy;
-  proxy.setType(QNetworkProxy::NoProxy);
+  QNetworkProxy proxy(QNetworkProxy::NoProxy);
 
-  if (isUseProxyAuthentification()) {
+  if (isProxyEnabled()) {
     proxy.setType(proxyType());
     proxy.setHostName(proxyHost());
     proxy.setPort(proxyPort());

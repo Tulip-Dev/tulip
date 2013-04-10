@@ -38,11 +38,11 @@ void PreferencesDialog::writeSettings() {
 
   switch(_ui->proxyType->currentIndex()) {
   case 0:
-    TulipSettings::instance().setProxyType(QNetworkProxy::HttpProxy);
+    TulipSettings::instance().setProxyType(QNetworkProxy::Socks5Proxy);
     break;
 
   case 1:
-    TulipSettings::instance().setProxyType(QNetworkProxy::Socks5Proxy);
+    TulipSettings::instance().setProxyType(QNetworkProxy::HttpProxy);
     break;
 
   case 2:
@@ -81,10 +81,16 @@ void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setViewOrtho(_ui->viewOrthoCheck->isChecked());
   TulipSettings::instance().setResultPropertyStored(_ui->resultPropertyStoredCheck->isChecked());
   TulipSettings::instance().setRunningTimeComputed(_ui->runningTimeComputedCheck->isChecked());
+
 }
 
 void PreferencesDialog::readSettings() {
-  _ui->proxyCheck->setChecked(TulipSettings::instance().isProxyEnabled());
+    _ui->proxyCheck->setChecked(TulipSettings::instance().isProxyEnabled());
+    if(TulipSettings::instance().isProxyEnabled()) {
+        _ui->networkFrame1->setEnabled(true);
+        _ui->networkFrame2->setEnabled(true);
+    }
+
 
   switch(TulipSettings::instance().proxyType()) {
   case QNetworkProxy::Socks5Proxy:
@@ -104,12 +110,16 @@ void PreferencesDialog::readSettings() {
     break;
 
   default:
-    break;
+      break;
   }
 
   _ui->proxyAddr->setText(TulipSettings::instance().proxyHost());
   _ui->proxyPort->setValue(TulipSettings::instance().proxyPort());
   _ui->proxyAuthCheck->setChecked(TulipSettings::instance().isUseProxyAuthentification());
+  if(TulipSettings::instance().isUseProxyAuthentification()) {
+      _ui->proxyUser->setEnabled(true);
+      _ui->proxyPassword->setEnabled(true);
+  }
   _ui->proxyUser->setText(TulipSettings::instance().proxyUsername());
   _ui->proxyPassword->setText(TulipSettings::instance().proxyPassword());
 
