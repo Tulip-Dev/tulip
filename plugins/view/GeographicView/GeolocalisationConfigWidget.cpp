@@ -62,7 +62,7 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
   vector<string> stringProperties = getGraphPropertiesListAccordingToType(graph, "string");
 
   for (unsigned int i = 0 ; i < stringProperties.size() ; ++i) {
-    addressPropCB->addItem(QString(stringProperties[i].c_str()));
+    addressPropCB->addItem(QString::fromUtf8(stringProperties[i].c_str()));
   }
 
   latPropCB->clear();
@@ -70,8 +70,8 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
   vector<string> doubleProperties = getGraphPropertiesListAccordingToType(graph, "double");
 
   for (unsigned int i = 0 ; i < doubleProperties.size() ; ++i) {
-    latPropCB->addItem(QString(doubleProperties[i].c_str()));
-    lngPropCB->addItem(QString(doubleProperties[i].c_str()));
+    latPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
+    lngPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
   }
 }
 

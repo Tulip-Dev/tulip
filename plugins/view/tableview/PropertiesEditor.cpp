@@ -78,7 +78,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   if (_contextProperty == NULL)
     return;
 
-  QString pname = _contextProperty->getName().c_str();
+  QString pname = QString::fromUtf8(_contextProperty->getName().c_str());
 
   if (pname.length()>30) {
     pname.truncate(30);

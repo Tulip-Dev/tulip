@@ -23,6 +23,7 @@
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>
 #include <tulip/Perspective.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QtGui/QMainWindow>
 
@@ -65,9 +66,9 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
     if (type != "double" && type != "int")
       continue;
 
-    _ui->orderingMetricCombo->addItem(s.c_str());
+    _ui->orderingMetricCombo->addItem(tlpStringToQString(s));
 
-    if (currentString.toStdString().compare(s) == 0)
+    if (QStringToTlpString(currentString).compare(s) == 0)
       currentIndex = i;
 
     ++i;

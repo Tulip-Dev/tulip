@@ -664,10 +664,10 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(string addressPropertyNam
 
       if (addr == "") continue;
 
-      progressWidget->setComment("Retrieving latitude and longitude for address : \n" + QString(addr.c_str()));
+      progressWidget->setComment("Retrieving latitude and longitude for address : \n" + QString::fromUtf8(addr.c_str()));
 
       if (nodeLatLng.find(n) == nodeLatLng.end()) {
-        string geocodingRequestStatus = googleMaps->getLatLngForAddress(addr.c_str(), latLng, true);
+        string geocodingRequestStatus = googleMaps->getLatLngForAddress(QString::fromUtf8(addr.c_str()), latLng, true);
 
         if (geocodingRequestStatus == "OK") {
           nodeLatLng[n] = latLng;
@@ -698,7 +698,7 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(string addressPropertyNam
         }
         else {
           progressWidget->hide();
-          QMessageBox::warning(NULL, "Geolocalisation failed", "No results were found for address : \n" + QString(addr.c_str()));
+          QMessageBox::warning(NULL, "Geolocalisation failed", "No results were found for address : \n" + QString::fromUtf8(addr.c_str()));
           progressWidget->show();
         }
 
@@ -724,7 +724,7 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(string addressPropertyNam
         }
       }
       else {
-        string geocodingRequestStatus = googleMaps->getLatLngForAddress(addr.c_str(), latLng);
+        string geocodingRequestStatus = googleMaps->getLatLngForAddress(QString::fromUtf8(addr.c_str()), latLng);
 
         if (geocodingRequestStatus != "OK") {
           QTimeLine timeLine(3500);
