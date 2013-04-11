@@ -58,7 +58,7 @@ public:
 
     std::string rootPathStr;
     dataSet->get("dir::directory",rootPathStr);
-    QFileInfo rootInfo(rootPathStr.c_str());
+    QFileInfo rootInfo(QString::fromUtf8(rootPathStr.c_str()));
 
     if (!rootInfo.exists()) {
 #ifndef NDEBUG
