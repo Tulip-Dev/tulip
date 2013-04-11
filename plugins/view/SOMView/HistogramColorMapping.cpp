@@ -373,7 +373,7 @@ void ColorScale::setColorScale(const std::vector<Color> colors) {
   }
 }
 void ColorScale::setColorScaleFromImage(const std::string &imageFile) {
-  QImage gradientImage(imageFile.c_str());
+  QImage gradientImage(QString::fromUtf8(imageFile.c_str()));
   unsigned int imageHeight = gradientImage.height();
   vector<Color> colors;
 
