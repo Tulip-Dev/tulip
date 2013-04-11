@@ -241,7 +241,7 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface * prop) {
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
     return QVariant::fromValue<NodeShape>(static_cast<IntegerProperty*>(prop)->getNodeValue(n));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
-    return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str()));
+    return QVariant::fromValue<TulipFont>(TulipFont::fromFile(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str())));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
     return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str()),TulipFileDescriptor::File));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
@@ -255,7 +255,7 @@ QVariant GraphModel::nodeDefaultValue(PropertyInterface * prop) {
   if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewShape")
     return QVariant::fromValue<NodeShape>((NodeShape)(static_cast<IntegerProperty*>(prop)->getNodeDefaultValue()));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewFont")
-    return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str()));
+    return QVariant::fromValue<TulipFont>(TulipFont::fromFile(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str())));
   else if (dynamic_cast<StringProperty*>(prop) != NULL && prop->getName() == "viewTexture")
     return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str()),TulipFileDescriptor::File));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")

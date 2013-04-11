@@ -46,6 +46,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginLister.h>
+#include <tulip/TlpQtTools.h>
 
 #include <tulip/APIDataBase.h>
 
@@ -316,15 +317,15 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // fill menu with recent documents
   buildRecentDocumentsMenu();
 
-  APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulip.api");
-  APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
-  APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipogl.api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
 
   PythonInterpreter::getInstance()->setOutputEnabled(false);
 
   if (PythonInterpreter::getInstance()->runString("import PyQt4.QtGui")) {
-    APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/tulipqt.api");
-    APIDataBase::getInstance()->loadApiFile(QString(tlp::TulipShareDir.c_str()) + "/apiFiles/PyQt4.api");
+    APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipqt.api");
+    APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/PyQt4.api");
   }
 
   PythonInterpreter::getInstance()->setOutputEnabled(true);
@@ -732,7 +733,7 @@ void GraphPerspective::paste() {
 
   Graph* outGraph = _graphs->currentGraph();
   std::stringstream ss;
-  ss << QApplication::clipboard()->text().toStdString();
+  ss << QStringToTlpString(QApplication::clipboard()->text());
 
   Observable::holdObservers();
   outGraph->push();
@@ -764,7 +765,7 @@ void GraphPerspective::copy(Graph* g, bool deleteAfter) {
   std::stringstream ss;
   DataSet data;
   tlp::exportGraph(copyGraph,ss,"TLP Export",data);
-  QApplication::clipboard()->setText(ss.str().c_str());
+  QApplication::clipboard()->setText(tlpStringToQString(ss.str()));
 
 
   if (deleteAfter) {

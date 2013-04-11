@@ -90,7 +90,7 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   connect(_ui->modulesTabWidget, SIGNAL(filesReloaded()), _ui->mainScriptsTabWidget, SLOT(reloadCodeInEditorsIfNeeded()));
   connect(_ui->mainScriptsTabWidget, SIGNAL(filesReloaded()), _ui->modulesTabWidget, SLOT(reloadCodeInEditorsIfNeeded()));
 
-  QString docRootPath = QString(tlp::TulipShareDir.c_str()) + "../doc/tulip-python/html/index.html";
+  QString docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + "../doc/tulip-python/html/index.html";
 
   QFile docRoot(docRootPath);
 
