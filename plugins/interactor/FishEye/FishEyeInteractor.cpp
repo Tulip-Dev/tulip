@@ -118,7 +118,7 @@ FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorCo
 }
 
 FishEyeInteractorComponent::~FishEyeInteractorComponent() {
-    delete fisheyeShader;
+  delete fisheyeShader;
 }
 
 void FishEyeInteractorComponent::viewChanged(View *view) {
