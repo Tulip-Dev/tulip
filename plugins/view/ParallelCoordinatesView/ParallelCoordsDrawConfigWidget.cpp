@@ -80,7 +80,7 @@ void ParallelCoordsDrawConfigWidget::setLinesTextureFilename(const std::string &
     }
     else {
       userTexture->setChecked(true);
-      userTextureFile->setText(QString(linesTextureFileName.c_str()));
+      userTextureFile->setText(QString::fromUtf8(linesTextureFileName.c_str()));
     }
   }
   else {

@@ -171,7 +171,7 @@ void ParallelCoordinatesConfigDialog::setLinesTextureFilename(const std::string 
     }
     else {
       userTexture->setChecked(true);
-      userTextureFile->setText(QString(linesTextureFileName.c_str()));
+      userTextureFile->setText(QString::fromUtf8(linesTextureFileName.c_str()));
     }
   }
   else {
@@ -297,7 +297,7 @@ void ParallelCoordinatesConfigDialog::restoreBackupConfiguration() {
   gBoxLineTexture->setChecked(linesTextureBak);
   defaultTexture->setChecked(!userTextureBak);
   userTexture->setChecked(userTextureBak);
-  userTextureFile->setText(QString(userTextureFileBak.c_str()));
+  userTextureFile->setText(QString::fromUtf8(userTextureFileBak.c_str()));
   nonHighlightedEltsAlphaValue->setValue(unhighlightedEltsColorsAlphaValueBak);
 }
 

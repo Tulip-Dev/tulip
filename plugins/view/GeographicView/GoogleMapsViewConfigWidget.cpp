@@ -92,13 +92,13 @@ void GoogleMapsViewConfigWidget::setState(const DataSet &dataSet) {
   if(dataSet.exist("csvFileName")) {
     string fileName;
     dataSet.get("csvFileName",fileName);
-    csvFile->setText(fileName.c_str());
+    csvFile->setText(QString::fromUtf8(fileName.c_str()));
   }
 
   if(dataSet.exist("polyFileName")) {
     string fileName;
     dataSet.get("polyFileName",fileName);
-    polyFile->setText(fileName.c_str());
+    polyFile->setText(QString::fromUtf8(fileName.c_str()));
   }
 
   bool useShared = false;
