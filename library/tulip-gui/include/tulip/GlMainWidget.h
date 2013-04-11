@@ -17,22 +17,19 @@
  *
  */
 
-
 #ifndef Tulip_GLMAINWIDGET_H
 #define Tulip_GLMAINWIDGET_H
 
+#include <QtOpenGL/QGLWidget>
+
+#include <tulip/tulipconf.h>
 #include <tulip/GlScene.h>
-
-#include <QtOpenGL/qgl.h>
-#include <QtCore/qpoint.h>
-#include <QtGui/qaction.h>
-#include <QtOpenGL/QGLFramebufferObject>
-
-#include "tulip/View.h"
 
 class QGLFramebufferObject;
 
 namespace tlp {
+
+class View;
 
 class GlCompositeHierarchyManager;
 
@@ -125,19 +122,7 @@ public:
   _DEPRECATED void doSelect(const int x, const int y,
                             const int width, const int height,
                             std::vector<tlp::node> &sNode, std::vector<tlp::edge> &sEdge,
-                            tlp::GlLayer* layer=NULL) {
-    std::vector<SelectedEntity> nodes;
-    std::vector<SelectedEntity> edges;
-    pickNodesEdges(x,y,width,height,nodes,edges,layer);
-
-    for(std::vector<SelectedEntity>::iterator it=nodes.begin(); it!=nodes.end(); ++it) {
-      sNode.push_back(node((*it).getComplexEntityId()));
-    }
-
-    for(std::vector<SelectedEntity>::iterator it=edges.begin(); it!=edges.end(); ++it) {
-      sEdge.push_back(edge((*it).getComplexEntityId()));
-    }
-  }
+                            tlp::GlLayer* layer=NULL);
 
   /**
    * @deprecated this function should not be used anymore, use pickNodesEdges()
@@ -145,24 +130,7 @@ public:
   _DEPRECATED bool doSelect(const int x, const int y,
                             tlp::ElementType &type,
                             tlp::node &n,tlp::edge &e,
-                            tlp::GlLayer* layer=NULL) {
-    SelectedEntity entity;
-    bool foundEntity=pickNodesEdges(x,y,entity,layer);
-
-    if(!foundEntity)
-      return false;
-
-    if(entity.getEntityType()==SelectedEntity::NODE_SELECTED) {
-      n=node(entity.getComplexEntityId());
-      type=NODE;
-    }
-    else {
-      e=edge(entity.getComplexEntityId());
-      type=EDGE;
-    }
-
-    return true;
-  }
+                            tlp::GlLayer* layer=NULL);
 
   /**
    * @brief EPS output of the GlMainWidget

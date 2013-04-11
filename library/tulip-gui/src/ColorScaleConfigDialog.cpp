@@ -28,8 +28,10 @@
 #include <algorithm>
 #include <vector>
 
-#include "tulip/TlpQtTools.h"
-#include "tulip/ColorScaleConfigDialog.h"
+#include <tulip/TlpQtTools.h>
+#include <tulip/ColorScaleConfigDialog.h>
+#include <tulip/TlpTools.h>
+
 #include "ui_ColorScaleConfigDialog.h"
 
 using namespace std;

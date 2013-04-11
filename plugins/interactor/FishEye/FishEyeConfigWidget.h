@@ -22,26 +22,32 @@
 
 #include <QtGui/QWidget>
 
-#include "ui_FishEyeConfigWidget.h"
+namespace Ui {
+class FishEyeConfigWidget;
+}
 
-class FishEyeConfigWidget : public QWidget, public Ui::FishEyeConfigWidget {
+namespace tlp {
+
+class FishEyeConfigWidget : public QWidget {
+
+    Ui::FishEyeConfigWidget* _ui;
 
 public :
 
-  FishEyeConfigWidget(QWidget *parent = 0);
+  FishEyeConfigWidget(QWidget *parent = NULL);
+  ~FishEyeConfigWidget();
 
-  int getFishEyeType();
+  int getFishEyeType() const;
 
-  float getFishEyeRadius();
+  float getFishEyeRadius() const;
   void setFishEyeRadius(const float radius);
 
-  float getFishEyeHeight();
+  float getFishEyeHeight() const;
   void setFishEyeHeight(const float height);
 
-  float getFishEyeRadiusIncrementStep();
-
-  float getFishEyeHeightIncrementStep();
+  float getFishEyeRadiusIncrementStep() const;
+  float getFishEyeHeightIncrementStep() const;
 
 };
-
+}
 #endif /* FISHEYECONFIGWIDGET_H_ */
