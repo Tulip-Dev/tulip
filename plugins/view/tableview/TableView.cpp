@@ -151,7 +151,7 @@ void TableView::graphChanged(tlp::Graph* g) {
   isNewGraph = true;
   QSet<QString> visibleProperties;
   foreach(tlp::PropertyInterface* pi, propertiesEditor->visibleProperties()) {
-    visibleProperties.insert(pi->getName().c_str());
+    visibleProperties.insert(QString::fromUtf8(pi->getName().c_str()));
   }
 
   _ui->table->setSendSignalOnResize(false);
@@ -509,7 +509,7 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
   // as "title" items
   contextMenu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
 
-  QAction* action = contextMenu.addAction(propName.c_str());
+  QAction* action = contextMenu.addAction(QString::fromUtf8(propName.c_str()));
   action->setEnabled(false);
   contextMenu.addSeparator();
   QAction* setAll;
