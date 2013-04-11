@@ -28,7 +28,7 @@ FishEyeConfigWidget::FishEyeConfigWidget(QWidget *parent) : QWidget(parent),_ui(
 }
 
 FishEyeConfigWidget::~FishEyeConfigWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 int FishEyeConfigWidget::getFishEyeType() const {

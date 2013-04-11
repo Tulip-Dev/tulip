@@ -90,9 +90,9 @@ void GlMainWidget::clearFirstQGLWidget() {
 }
 
 bool GlMainWidget::doSelect(const int x, const int y,
-                          ElementType &type,
-                          node &n,edge &e,
-                          GlLayer* layer) {
+                            ElementType &type,
+                            node &n,edge &e,
+                            GlLayer* layer) {
   SelectedEntity entity;
   bool foundEntity=pickNodesEdges(x,y,entity,layer);
 
@@ -112,9 +112,9 @@ bool GlMainWidget::doSelect(const int x, const int y,
 }
 
 void GlMainWidget::doSelect(const int x, const int y,
-                          const int width, const int height,
-                          vector<node> &sNode, vector<edge> &sEdge,
-                          GlLayer* layer) {
+                            const int width, const int height,
+                            vector<node> &sNode, vector<edge> &sEdge,
+                            GlLayer* layer) {
   std::vector<SelectedEntity> nodes;
   std::vector<SelectedEntity> edges;
   pickNodesEdges(x,y,width,height,nodes,edges,layer);

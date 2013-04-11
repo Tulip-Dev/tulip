@@ -30,7 +30,7 @@ namespace tlp {
 
 class FishEyeConfigWidget : public QWidget {
 
-    Ui::FishEyeConfigWidget* _ui;
+  Ui::FishEyeConfigWidget* _ui;
 
 public :
 
