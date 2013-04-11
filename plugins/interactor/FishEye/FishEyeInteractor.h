@@ -21,13 +21,14 @@
 #define FISHEYEINTERACTOR_H_
 
 #include <tulip/GLInteractor.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/GlShaderProgram.h>
+#include <tulip/Coord.h>
 
 #include "../../utils/StandardInteractorPriority.h"
-#include "FishEyeConfigWidget.h"
 
-using namespace tlp;
+namespace tlp {
+
+class FishEyeConfigWidget;
+class GlShaderProgram;
 
 class FishEyeInteractorComponent : public GLInteractorComponent {
 
@@ -107,6 +108,6 @@ private :
   FishEyeConfigWidget *fisheyeConfigWidget;
 };
 
-
+}
 
 #endif /* FISHEYEINTERACTOR_H_ */

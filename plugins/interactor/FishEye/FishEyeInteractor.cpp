@@ -28,14 +28,18 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/GlShaderProgram.h>
+#include <tulip/GlMainWidget.h>
 
 #include <QtCore/QEvent>
 #include <QtGui/QMouseEvent>
 
 #include "FishEyeInteractor.h"
+#include "FishEyeConfigWidget.h"
 #include "../../utils/ViewNames.h"
 
 using namespace std;
+using namespace tlp;
 
 string fisheyeVertexProgram =
   "#version 120\n"
@@ -114,9 +118,7 @@ FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorCo
 }
 
 FishEyeInteractorComponent::~FishEyeInteractorComponent() {
-  if (fisheyeShader != NULL) {
     delete fisheyeShader;
-  }
 }
 
 void FishEyeInteractorComponent::viewChanged(View *view) {

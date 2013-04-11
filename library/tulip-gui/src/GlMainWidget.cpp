@@ -21,14 +21,13 @@
 // compilation pb workaround
 #include <windows.h>
 #endif
-#include <QtGui/qimage.h>
+
 #include <QtOpenGL/QGLPixelBuffer>
 #include <QtOpenGL/QGLFramebufferObject>
 #include <QtOpenGL/QGLFormat>
 
-#include "tulip/GlMainWidget.h"
-#include "tulip/TulipSettings.h"
-
+#include <tulip/GlMainWidget.h>
+#include <tulip/TulipSettings.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlDisplayListManager.h>
@@ -37,11 +36,11 @@
 #include <tulip/GlQuadTreeLODCalculator.h>
 #include <tulip/GLInteractor.h>
 #include <tulip/GlGraphComposite.h>
-
-#include "tulip/QGlPixelBufferManager.h"
-#include "tulip/Interactor.h"
+#include <tulip/QGlPixelBufferManager.h>
+#include <tulip/Interactor.h>
 #include <tulip/GlCompositeHierarchyManager.h>
-#include "tulip/GlVertexArrayManager.h"
+#include <tulip/GlVertexArrayManager.h>
+#include <tulip/View.h>
 
 using namespace std;
 
@@ -88,6 +87,45 @@ QGLWidget* GlMainWidget::getFirstQGLWidget() {
 void GlMainWidget::clearFirstQGLWidget() {
   if(GlMainWidget::firstQGLWidget)
     delete GlMainWidget::firstQGLWidget;
+}
+
+bool GlMainWidget::doSelect(const int x, const int y,
+                          ElementType &type,
+                          node &n,edge &e,
+                          GlLayer* layer) {
+  SelectedEntity entity;
+  bool foundEntity=pickNodesEdges(x,y,entity,layer);
+
+  if(!foundEntity)
+    return false;
+
+  if(entity.getEntityType()==SelectedEntity::NODE_SELECTED) {
+    n=node(entity.getComplexEntityId());
+    type=NODE;
+  }
+  else {
+    e=edge(entity.getComplexEntityId());
+    type=EDGE;
+  }
+
+  return true;
+}
+
+void GlMainWidget::doSelect(const int x, const int y,
+                          const int width, const int height,
+                          vector<node> &sNode, vector<edge> &sEdge,
+                          GlLayer* layer) {
+  std::vector<SelectedEntity> nodes;
+  std::vector<SelectedEntity> edges;
+  pickNodesEdges(x,y,width,height,nodes,edges,layer);
+
+  for(std::vector<SelectedEntity>::iterator it=nodes.begin(); it!=nodes.end(); ++it) {
+    sNode.push_back(node((*it).getComplexEntityId()));
+  }
+
+  for(std::vector<SelectedEntity>::iterator it=edges.begin(); it!=edges.end(); ++it) {
+    sEdge.push_back(edge((*it).getComplexEntityId()));
+  }
 }
 
 //==================================================

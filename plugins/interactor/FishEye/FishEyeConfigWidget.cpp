@@ -17,19 +17,25 @@
  *
  */
 
-#include <iostream>
-
 #include "FishEyeConfigWidget.h"
 
-FishEyeConfigWidget::FishEyeConfigWidget(QWidget *parent) : QWidget(parent) {
-  setupUi(this);
+#include "ui_FishEyeConfigWidget.h"
+
+using namespace tlp;
+
+FishEyeConfigWidget::FishEyeConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::FishEyeConfigWidget) {
+  _ui->setupUi(this);
 }
 
-int FishEyeConfigWidget::getFishEyeType() {
-  if (furnasFisheyeRb->isChecked()) {
+FishEyeConfigWidget::~FishEyeConfigWidget() {
+    delete _ui;
+}
+
+int FishEyeConfigWidget::getFishEyeType() const {
+  if (_ui->furnasFisheyeRb->isChecked()) {
     return 1;
   }
-  else if (auberFishEyeRb->isChecked()) {
+  else if (_ui->auberFishEyeRb->isChecked()) {
     return 2;
   }
   else {
@@ -37,26 +43,26 @@ int FishEyeConfigWidget::getFishEyeType() {
   }
 }
 
-float FishEyeConfigWidget::getFishEyeRadius() {
-  return (float) radiusValSP->value();
+float FishEyeConfigWidget::getFishEyeRadius() const {
+  return (float) _ui->radiusValSP->value();
 }
 
 void FishEyeConfigWidget::setFishEyeRadius(const float radius) {
-  radiusValSP->setValue(radius);
+  _ui->radiusValSP->setValue(radius);
 }
 
-float FishEyeConfigWidget::getFishEyeHeight() {
-  return (float) heightValSP->value();
+float FishEyeConfigWidget::getFishEyeHeight() const {
+  return (float) _ui->heightValSP->value();
 }
 
 void FishEyeConfigWidget::setFishEyeHeight(const float height) {
-  heightValSP->setValue(height);
+  _ui->heightValSP->setValue(height);
 }
 
-float FishEyeConfigWidget::getFishEyeRadiusIncrementStep() {
-  return (float) radiusIncrementStepSP->value();
+float FishEyeConfigWidget::getFishEyeRadiusIncrementStep() const {
+  return (float) _ui->radiusIncrementStepSP->value();
 }
 
-float FishEyeConfigWidget::getFishEyeHeightIncrementStep() {
-  return (float) heightIncrementStepSP->value();
+float FishEyeConfigWidget::getFishEyeHeightIncrementStep() const {
+  return (float) _ui->heightIncrementStepSP->value();
 }
