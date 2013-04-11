@@ -713,7 +713,7 @@ QString PythonScriptView::findFile(const QString &filePath) {
     std::string tlpFile;
 
     if (_graph->getRoot()->getAttribute("file", tlpFile)) {
-      QFileInfo fileInfoTlp(tlpFile.c_str());
+      QFileInfo fileInfoTlp(QString::fromUtf8(tlpFile.c_str()));
       QString newfilepath = fileInfoTlp.absolutePath() + "/" + filename;
       fileInfo = QFileInfo(newfilepath);
 
