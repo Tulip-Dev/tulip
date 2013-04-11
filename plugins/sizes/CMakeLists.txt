@@ -9,10 +9,5 @@ ADD_LIBRARY(AutoSize-${TulipVersion} SHARED AutoSize.cpp)
 TARGET_LINK_LIBRARIES(AutoSize-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(FitToLabels-${TulipVersion} SHARED FitToLabel.cpp)
-TARGET_LINK_LIBRARIES(FitToLabels-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName})
-
-##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS MetricSizeMapping-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT MetricSizeMapping)
 INSTALL(TARGETS AutoSize-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT AutoSize)
-INSTALL(TARGETS FitToLabels-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT FitToLabels)
