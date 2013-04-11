@@ -135,7 +135,7 @@ public:
     (*this)[3] = w;
   }
   inline void set(const Vector<TYPE, 2, OTYPE> &v, const TYPE z) {
-    assert(SIZE>3);
+    assert(SIZE>2);
     memcpy( &((*this)[0]), (void*)&(v.array[0]), 2 * sizeof(TYPE) );
     (*this)[2] = z;
   }
