@@ -52,7 +52,6 @@ class BasicPluginsTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testSpanningDagSelection);
   CPPUNIT_TEST(testSpanningTreeSelection);
   CPPUNIT_TEST(testAutoSize);
-  CPPUNIT_TEST(testFitToLabel);
   CPPUNIT_TEST(testMetricSizeMapping);
   CPPUNIT_TEST(testEqualValueClustering);
   CPPUNIT_TEST(testHierarchicalClustering);
