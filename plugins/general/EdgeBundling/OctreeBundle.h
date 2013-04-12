@@ -43,7 +43,7 @@ private:
   double splitRatio;
   typedef tlp::Vector<double, 3> Vec3D;
   struct LessPair {
-    bool operator()( const tlp::Coord &a, const tlp::Coord &b) {
+    bool operator()( const tlp::Coord &a, const tlp::Coord &b) const {
       if ((a-b).norm() < 1E-6) return false;
 
       if (a[0] < b[0]) return true;
