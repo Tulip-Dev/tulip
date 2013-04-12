@@ -145,6 +145,10 @@ public:
 
 };
 
+typedef Matrix<float,  3> Mat3f;
+typedef Matrix<double, 3> Mat3d;
+typedef Matrix<float,  4> Mat4f;
+typedef Matrix<double, 4> Mat4d;
 
 /**
  * Returns a new matrix equal to the sum of 2 matrices
