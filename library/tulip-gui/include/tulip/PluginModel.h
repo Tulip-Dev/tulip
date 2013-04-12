@@ -21,6 +21,7 @@
 #ifndef PLUGINMODEL_H
 #define PLUGINMODEL_H
 
+#include <QtGui/QIcon>
 #include <tulip/TulipModel.h>
 #include <tulip/TlpQtTools.h>
 #include <string>

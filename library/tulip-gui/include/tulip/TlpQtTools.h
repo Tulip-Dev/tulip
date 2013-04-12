@@ -35,7 +35,7 @@ class QWidget;
 
 namespace tlp {
 
-class PluginLoader;
+struct PluginLoader;
 
 TLP_QT_SCOPE bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QColor &result);
 
