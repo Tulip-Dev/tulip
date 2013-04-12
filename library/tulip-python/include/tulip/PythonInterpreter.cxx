@@ -115,8 +115,6 @@ bool PythonInterpreter::callFunctionFourParamsAndGetReturnValue(const QString &m
   return callFunctionAndGetReturnValue(module, function, parameters, returnValue);
 }
 
-void decrefPyObject(PyObject *obj);
-
 template<typename RETURN_TYPE>
 bool PythonInterpreter::callFunctionAndGetReturnValue(const QString &module, const QString &function, const tlp::DataSet &parameters, RETURN_TYPE &returnValue) {
   holdGIL();
