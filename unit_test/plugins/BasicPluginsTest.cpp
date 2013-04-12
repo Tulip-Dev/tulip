@@ -307,13 +307,6 @@ void BasicPluginsTest::testAutoSize() {
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
-void BasicPluginsTest::testFitToLabel() {
-  StringProperty* label = graph->getProperty<StringProperty>("viewLabel");
-  label->setAllNodeValue("toto");
-  bool result = computeProperty<SizeProperty>("Fit to label");
-  CPPUNIT_ASSERT(result);
-}
-//==========================================================
 void BasicPluginsTest::testMetricSizeMapping() {
   initializeGraph("Planar Graph");
   DoubleProperty metric(graph);
