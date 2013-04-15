@@ -81,14 +81,17 @@ void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source) {
       parent = 0;
     }
 
-    forEach(property,_graph->getLocalObjectProperties()) {
-      //Check if the same type and different name.
-      if(typeid(*property) == typeid(*source) && source->getName() != property->getName()) {
-        ui->localPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
-      }
-
-      if (parent && parent->existProperty(property->getName())) {
-        ui->inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+    forEach(property,_graph->getObjectProperties()) {
+      // type must be the same
+      if (property->getTypename() == source->getTypename()) {
+	// Check if name is different
+	if (source->getName() != property->getName() &&
+	    _graph->existLocalProperty(property->getName()))
+	  ui->localPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+	// check if inherited exists
+	if (parent && parent->existProperty(property->getName())) {
+	  ui->inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+	}
       }
     }
 
@@ -97,13 +100,6 @@ void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source) {
     }
     else {
       ui->localPropertyRadioButton->setEnabled(true);
-    }
-
-    forEach(property,_graph->getInheritedObjectProperties()) {
-      //Check if the same type and different name.
-      if(typeid(*property) == typeid(*source) && source->getName() != property->getName()) {
-        ui->inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
-      }
     }
 
     if(ui->inheritedPropertiesComboBox->count()==0) {
