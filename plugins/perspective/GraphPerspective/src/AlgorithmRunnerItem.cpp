@@ -424,7 +424,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
 
   initModel();
   AlgorithmMimeType* mimeData = new AlgorithmMimeType(name(),static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues());
-  connect(mimeData,SIGNAL(mimeRun(tlp::Graph*,tlp::DataSet)),this,SLOT(afterRun(tlp::Graph*,tlp::DataSet)));
+  connect(mimeData,SIGNAL(mimeRun(tlp::Graph*)),this,SLOT(run(tlp::Graph*)));
   drag->setMimeData(mimeData);
   drag->exec(Qt::CopyAction | Qt::MoveAction);
 }

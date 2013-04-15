@@ -82,7 +82,7 @@ public:
   QStringList formats()const;
 
 signals:
-  void mimeRun(tlp::Graph*,tlp::DataSet) const;
+  void mimeRun(tlp::Graph*) const;
 };
 
 class TLP_QT_SCOPE PanelMimeType : public QMimeData {
