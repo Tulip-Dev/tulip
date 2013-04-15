@@ -244,15 +244,6 @@ static int grid(float x, int s) {
   return static_cast<int>(ceil(x/s));
 }
 
-static int round(float f) {
-  if(f>=0) {
-    return static_cast<int>(f + 0.5f);
-  }
-  else {
-    return static_cast<int>(f - 0.5f);
-  }
-}
-
 template <typename T>
 static T cval(T val, int size) {
   if (val >= 0) {
