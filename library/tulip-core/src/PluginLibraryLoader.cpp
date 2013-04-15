@@ -199,8 +199,8 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
         std::string tulip_release(TULIP_MM_RELEASE);
 
         if (lib.find(tulip_release, idx) == idx + 1) {
-		  if (loader)
-			loader->loading(findData.cFileName);
+          if (loader)
+            loader->loading(findData.cFileName);
 
           loadPluginLibrary(currentPluginLibrary, loader);
         }
