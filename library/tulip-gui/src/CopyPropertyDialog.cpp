@@ -84,14 +84,15 @@ void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source) {
     forEach(property,_graph->getObjectProperties()) {
       // type must be the same
       if (property->getTypename() == source->getTypename()) {
-	// Check if name is different
-	if (source->getName() != property->getName() &&
-	    _graph->existLocalProperty(property->getName()))
-	  ui->localPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
-	// check if inherited exists
-	if (parent && parent->existProperty(property->getName())) {
-	  ui->inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
-	}
+        // Check if name is different
+        if (source->getName() != property->getName() &&
+            _graph->existLocalProperty(property->getName()))
+          ui->localPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+
+        // check if inherited exists
+        if (parent && parent->existProperty(property->getName())) {
+          ui->inheritedPropertiesComboBox->addItem(tlpStringToQString(property->getName()));
+        }
       }
     }
 

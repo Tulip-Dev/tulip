@@ -455,16 +455,18 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
     if (prop != NULL && prop->getName().compare("viewMetric") == 0) {
       std::string errMsg;
       ColorProperty* color;
+
       if (g->existLocalProperty("viewColor"))
-	color = g->getLocalProperty<ColorProperty>("viewColor");
+        color = g->getLocalProperty<ColorProperty>("viewColor");
       else {
-	color = g->getLocalProperty<ColorProperty>("viewColor");
-	ColorProperty* ancestorColor = 
-	  g->getSuperGraph()->getProperty<ColorProperty>("viewColor");
-	// same default values as ancestor property default values
-	color->setAllNodeDataMemValue(ancestorColor->getNodeDefaultDataMemValue());
-	color->setAllEdgeDataMemValue(ancestorColor->getEdgeDefaultDataMemValue());
+        color = g->getLocalProperty<ColorProperty>("viewColor");
+        ColorProperty* ancestorColor =
+          g->getSuperGraph()->getProperty<ColorProperty>("viewColor");
+        // same default values as ancestor property default values
+        color->setAllNodeDataMemValue(ancestorColor->getNodeDefaultDataMemValue());
+        color->setAllEdgeDataMemValue(ancestorColor->getEdgeDefaultDataMemValue());
       }
+
       g->applyPropertyAlgorithm("Color Mapping", color, errMsg);
     }
   }
