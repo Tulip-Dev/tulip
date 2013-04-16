@@ -86,15 +86,15 @@ bool GeolocalisationConfigWidget::geolocateByAddress() const {
 }
 
 string GeolocalisationConfigWidget::getAddressGraphPropertyName() const {
-  return addressPropCB->currentText().toStdString();
+  return string(addressPropCB->currentText().toUtf8().data());
 }
 
 string GeolocalisationConfigWidget::getLatitudeGraphPropertyName() const {
-  return latPropCB->currentText().toStdString();
+  return string(latPropCB->currentText().toUtf8().data());
 }
 
 string GeolocalisationConfigWidget::getLongitudeGraphPropertyName() const {
-  return lngPropCB->currentText().toStdString();
+  return string(lngPropCB->currentText().toUtf8().data());
 }
 
 bool GeolocalisationConfigWidget::createLatAndLngProperties() const {
