@@ -89,6 +89,7 @@ public slots:
   void takeSnapshot();
   void setEdgesVisible(bool);
   void setLabelsVisible(bool);
+  void setLabelsScaled(bool);
   void selectFont();
   void setNodeLabelPosition();
 
