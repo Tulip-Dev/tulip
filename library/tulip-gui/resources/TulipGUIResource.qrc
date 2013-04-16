@@ -47,6 +47,8 @@
         <file>icons/20/labels.png</file>
         <file>icons/20/labels_disabled.png</file>
         <file>icons/20/labels_enabled.png</file>
+        <file>icons/20/labels_scaled_disabled.png</file>
+        <file>icons/20/labels_scaled_enabled.png</file>
         <file>icons/20/camera-photo.png</file>
         <file>icons/20/color_interpolation_disabled.png</file>
         <file>icons/20/color_interpolation_enabled.png</file>

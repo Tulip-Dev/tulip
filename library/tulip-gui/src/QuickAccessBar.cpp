@@ -130,6 +130,8 @@ void QuickAccessBar::reset() {
   _ui->labelColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
   _ui->showLabelsToggle->setIcon((renderingParameters()->isViewNodeLabel() ? QIcon(":/tulip/gui/icons/20/labels_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
+  _ui->labelsScaledToggle->setChecked(renderingParameters()->isLabelScaled());
+  _ui->labelsScaledToggle->setIcon((renderingParameters()->isLabelScaled() ? QIcon(":/tulip/gui/icons/20/labels_scaled_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_scaled_disabled.png")));
   updateFontButtonStyle();
   _resetting = false;
 }
@@ -381,6 +383,15 @@ void QuickAccessBar::setLabelsVisible(bool v) {
   if(renderingParameters()->isViewNodeLabel()!=v) {
     renderingParameters()->setViewNodeLabel(v);
     _ui->showLabelsToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/labels_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
+    _mainView->emitDrawNeededSignal();
+    emit settingsChanged();
+  }
+}
+
+void QuickAccessBar::setLabelsScaled(bool v) {
+  if(renderingParameters()->isLabelScaled()!=v) {
+    renderingParameters()->setLabelScaled(v);
+    _ui->labelsScaledToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/labels_scaled_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_scaled_disabled.png")));
     _mainView->emitDrawNeededSignal();
     emit settingsChanged();
   }

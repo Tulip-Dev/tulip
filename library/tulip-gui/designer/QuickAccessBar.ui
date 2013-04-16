@@ -426,6 +426,41 @@ background-color: rgba(255,255,255,100);
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="labelsScaledToggle">
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Labels size fit or not to nodes size</string>
+     </property>
+     <property name="statusTip">
+      <string>Labels size fit or not to nodes size</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/labels_scaled_disabled.png</normaloff>:/tulip/gui/icons/20/labels_scaled_disabled.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="Line" name="sep3">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -977,6 +1012,22 @@ background-color: rgba(255,255,255,100);
    <signal>clicked(bool)</signal>
    <receiver>QuickAccessBar</receiver>
    <slot>setLabelsVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>440</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelsScaledToggle</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setLabelsScaled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>440</x>
