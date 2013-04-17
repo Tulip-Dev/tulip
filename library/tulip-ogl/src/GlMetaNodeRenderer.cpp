@@ -18,12 +18,23 @@
  */
 #include <tulip/GlMetaNodeRenderer.h>
 
-#include <tulip/OpenGlConfigManager.h>
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
 
-#include <tulip/DrawingTools.h>
-#include <tulip/BoundingBox.h>
-#include <tulip/Camera.h>
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+# if defined(__WIN32__)
+# include <GL/glext.h>
+# endif
+#endif
+
 #include <tulip/GlGraphInputData.h>
+#include <tulip/GlScene.h>
 #include <tulip/GlCPULODCalculator.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlGraphComposite.h>
@@ -153,18 +164,14 @@ void GlMetaNodeRenderer::treatEvent(const Event &e) {
 
 void GlMetaNodeRenderer::clearScenes() {
   for(map<Graph *,GlScene *>::iterator it=_metaGraphToSceneMap.begin(); it!=_metaGraphToSceneMap.end(); ++it) {
-    delete (*it).second;
+    delete it->second;
   }
 
   _metaGraphToSceneMap.clear();
 }
 
 GlScene* GlMetaNodeRenderer::getSceneForMetaGraph(Graph *g) {
-    assert(_metaGraphToSceneMap.find(g)!=_metaGraphToSceneMap.end());
     return _metaGraphToSceneMap[g];
 }
 
 }
-
-
-
