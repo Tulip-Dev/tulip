@@ -102,9 +102,9 @@ void usage(const QString &error) {
   cout << "Usage: tulip_perspective [OPTION] [FILE]" << endl
        << "Run a Tulip Perspective plugin into its dedicated process." << endl
        << "If Tulip main process is already running, embedded perspective will run into managed mode." << endl << endl
-       << "FILE: a Tulip project file. If a file is specified, the --perspective flag will be ignored and tulip_perspective will look into the project's meta-informations to find the correct perspective to launch." << endl
+       << "FILE: a Tulip project file to open. The perspective to use will be read from the project meta-information. If the \"--perspective\" flag is used, tulip_perspective will try to open the file with the given perspective (the project meta-information are ignored)." << endl
        << "List of OPTIONS:" << endl
-       << "  --perspective=<perspective_name> (-p perspective_name)\tWill use the perspective specified by perspective_name. Perspective will be run with no project file. If a project file has been specified using the FILE option, this flag will be ignored." << endl
+       << "  --perspective=<perspective_name> (-p perspective_name)\tStart the perspective specified by perspective_name." << endl
        << "  --geometry=<X,Y,width,height>\tSets the given rectangle as geometry for the main window." << endl
        << "  --help (-h)\tDisplays this help message and ignores other options." << endl << endl
   << "Available perspectives:" << endl;
