@@ -171,8 +171,8 @@ void GlMetaNodeRenderer::clearScenes() {
 }
 
 GlScene* GlMetaNodeRenderer::getSceneForMetaGraph(Graph *g) const {
-    std::map<Graph *,GlScene *>::const_iterator sceneit(_metaGraphToSceneMap.find(g));
-    return (sceneit==_metaGraphToSceneMap.end())?(NULL):(sceneit->second);
+  std::map<Graph *,GlScene *>::const_iterator sceneit(_metaGraphToSceneMap.find(g));
+  return (sceneit==_metaGraphToSceneMap.end())?(NULL):(sceneit->second);
 }
 
 }
