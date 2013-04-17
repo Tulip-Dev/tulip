@@ -54,7 +54,7 @@ void GlMetaNodeRenderer::setInputData(GlGraphInputData *inputData) {
   _inputData = inputData;
 }
 
-GlGraphInputData *GlMetaNodeRenderer::getInputData() {
+GlGraphInputData *GlMetaNodeRenderer::getInputData() const {
   return _inputData;
 }
 
@@ -67,7 +67,6 @@ void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
     return;
 
   Graph *metaGraph = _inputData->getGraph()->getNodeMetaInfo(n);
-
   GlScene *scene = NULL;
 
   if(_metaGraphToSceneMap.count(metaGraph)!=0) {
@@ -75,12 +74,13 @@ void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
   }
   else {
     scene = createScene(metaGraph);
+    assert(scene!=NULL);
     _metaGraphToSceneMap[metaGraph]=scene;
     metaGraph->addListener(this);
   }
 
   scene->getGlGraphComposite()->setRenderingParameters(*(_inputData->renderingParameters()));
-  bool viewMetaLabels = _inputData->renderingParameters()->isViewMetaLabel();//Checks if user want to see metanode labels
+  bool viewMetaLabels = _inputData->renderingParameters()->isViewMetaLabel();//Checks if user wants to see metanode labels
   scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(viewMetaLabels);
   scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(viewMetaLabels);
 
@@ -170,8 +170,9 @@ void GlMetaNodeRenderer::clearScenes() {
   _metaGraphToSceneMap.clear();
 }
 
-GlScene* GlMetaNodeRenderer::getSceneForMetaGraph(Graph *g) {
-    return _metaGraphToSceneMap[g];
+GlScene* GlMetaNodeRenderer::getSceneForMetaGraph(Graph *g) const {
+    std::map<Graph *,GlScene *>::const_iterator sceneit(_metaGraphToSceneMap.find(g));
+    return (sceneit==_metaGraphToSceneMap.end())?(NULL):(sceneit->second);
 }
 
 }
