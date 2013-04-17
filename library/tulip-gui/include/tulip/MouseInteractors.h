@@ -24,7 +24,7 @@
 
 #include <tulip/tulipconf.h>
 
-#include <QtGui/qcursor.h>
+#include <QtGui/QCursor>
 
 #include <tulip/InteractorComposite.h>
 #include <tulip/NodeLinkDiagramComponent.h>
@@ -39,9 +39,6 @@ public:
   MousePanNZoomNavigator():cameraScaleFactor(1), isGesturing(false) {}
   ~MousePanNZoomNavigator() {}
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return new MousePanNZoomNavigator();
-  }
 protected:
   float cameraScaleFactor;
   bool isGesturing;
@@ -54,9 +51,6 @@ public:
   MouseElementDeleter() {}
   ~MouseElementDeleter() {}
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return new MouseElementDeleter();
-  }
   void clear();
 };
 
@@ -70,12 +64,8 @@ private:
   QCursor oldCursor;
 public:
   MouseNKeysNavigator() : currentSpecInteractorComponent(NULL) {}
-  MouseNKeysNavigator(const MouseNKeysNavigator&) {}
   ~MouseNKeysNavigator() {}
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return new MouseNKeysNavigator(*this);
-  }
   void clear();
   void viewChanged(tlp::View *view);
 

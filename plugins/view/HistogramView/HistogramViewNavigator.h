@@ -43,9 +43,6 @@ public :
   bool draw(GlMainWidget *) {
     return false;
   }
-  InteractorComponent *clone() {
-    return new HistogramViewNavigator();
-  }
   bool compute(GlMainWidget *) {
     return false;
   }

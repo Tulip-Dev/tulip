@@ -60,9 +60,6 @@ public :
 
   bool eventFilter(QObject *, QEvent *);
   bool draw(GlMainWidget *glMainWidget);
-  InteractorComponent *clone() {
-    return new HistogramStatistics(*this);
-  }
   bool compute(GlMainWidget *glMainWidget);
 
   void viewChanged(View *view);

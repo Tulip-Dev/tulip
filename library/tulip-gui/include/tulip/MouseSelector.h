@@ -43,9 +43,6 @@ public:
   ~MouseSelector() {}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return new MouseSelector(mButton, kModifier);
-  }
 protected:
   Qt::MouseButton mButton;
   Qt::KeyboardModifier kModifier;

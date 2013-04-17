@@ -40,9 +40,6 @@ public :
 
   bool eventFilter(QObject *widget, QEvent *e);
 
-  InteractorComponent *clone() {
-    return new FishEyeInteractorComponent(*this);
-  }
   bool compute(GlMainWidget *) {
     return false;
   }

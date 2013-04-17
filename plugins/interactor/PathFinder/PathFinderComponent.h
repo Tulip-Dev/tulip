@@ -41,7 +41,6 @@ struct PathFinderComponent: public tlp::GLInteractorComponent {
   virtual ~PathFinderComponent();
   bool eventFilter(QObject *, QEvent *);
   void timerEvent(QTimerEvent *);
-  InteractorComponent *clone();
 
   /**
    * Install a path highlighter. This highlighter is not always activated. The component will ask its interactor parent before triggering an highlighter.

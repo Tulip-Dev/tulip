@@ -38,9 +38,6 @@ public:
   void viewChanged(View *view);
   bool compute(GlMainWidget *);
   bool draw(tlp::GlMainWidget *glMainWidget);
-  InteractorComponent *clone() {
-    return new EditColorScaleInteractor();
-  }
 
 protected:
   virtual void propertyChanged(SOMView* somView,const std::string& propertyName, tlp::DoubleProperty *newProperty);

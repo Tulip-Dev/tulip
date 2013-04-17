@@ -45,9 +45,6 @@ public:
   bool compute(GlMainWidget *glMainWidget);
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return new MouseSelectionEditor();
-  }
 
 private:
   enum EditOperation { NONE=0, ROTATE_Z, ROTATE_XY, STRETCH_X, STRETCH_Y, STRETCH_XY, TRANSLATE, ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT, ALIGN_VERTICALLY, ALIGN_HORIZONTALLY};

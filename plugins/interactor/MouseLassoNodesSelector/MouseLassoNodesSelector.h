@@ -58,9 +58,6 @@ public :
 
   bool draw(GlMainWidget *glWidget);
   bool eventFilter(QObject *obj, QEvent *e);
-  InteractorComponent *clone() {
-    return new MouseLassoNodesSelectorInteractorComponent();
-  }
 
 private :
 

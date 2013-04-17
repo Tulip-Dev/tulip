@@ -32,9 +32,6 @@ public:
   MouseNodeBuilder(QEvent::Type eventType = QEvent::MouseButtonPress):_eventType(eventType) {}
   ~MouseNodeBuilder() {}
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return new MouseNodeBuilder(_eventType);
-  }
   void clear();
 private:
   QEvent::Type _eventType;
