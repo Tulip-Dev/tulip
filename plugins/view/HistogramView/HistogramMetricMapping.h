@@ -244,9 +244,6 @@ public :
 
   bool eventFilter(QObject *, QEvent *);
   bool draw(GlMainWidget *glMainWidget);
-  InteractorComponent *clone() {
-    return new HistogramMetricMapping(*this);
-  }
   bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 

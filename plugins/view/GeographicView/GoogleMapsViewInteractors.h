@@ -47,9 +47,7 @@ public :
   bool draw(GlMainWidget *) {
     return false;
   }
-  InteractorComponent *clone() {
-    return new GoogleMapViewNavigator();
-  }
+
   bool compute(GlMainWidget *) {
     return false;
   }

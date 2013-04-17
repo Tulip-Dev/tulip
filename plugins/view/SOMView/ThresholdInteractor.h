@@ -129,9 +129,6 @@ public:
   bool draw(tlp::GlMainWidget *glMainWidget);
   bool eventFilter(QObject *, QEvent *);
   void setView(View *view);
-  InteractorComponent *clone() {
-    return new ThresholdInteractor();
-  }
 protected:
   void screenSizeChanged(SOMView* somView);
   void propertyChanged(SOMView* somView,const std::string& propertyName, tlp::DoubleProperty *newProperty);

@@ -87,10 +87,6 @@ public :
 
   bool draw(GlMainWidget *glMainWidget);
 
-  InteractorComponent *clone() {
-    return new NeighborhoodHighlighter(*this);
-  }
-
   void viewChanged(View *view);
 
   void setConfigWidget(NeighborhoodHighlighterConfigWidget *configWidget) {

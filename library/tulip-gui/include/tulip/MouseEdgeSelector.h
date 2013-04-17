@@ -41,9 +41,6 @@ public:
   ~MouseEdgeSelector() {}
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return new MouseEdgeSelector();
-  }
 };
 
 

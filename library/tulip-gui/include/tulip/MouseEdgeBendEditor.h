@@ -76,9 +76,6 @@ public:
   bool draw(GlMainWidget *);
   void clear();
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return new MouseEdgeBendEditor();
-  }
 
 protected:
   enum EditOperation { NONE_OP=0, TRANSLATE_OP, NEW_OP, DELETE_OP};

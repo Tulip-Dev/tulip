@@ -190,9 +190,6 @@ public:
   ~MouseRotXRotY() {}
   int x,y;
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return this;
-  }
 };
 
 bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
@@ -234,9 +231,6 @@ public:
   int x,y;
   bool inRotation, inZoom;
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return this;
-  }
 };
 
 bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
@@ -300,9 +294,6 @@ public:
   MouseMove() : x(INT_MAX), y(INT_MAX) {}
   ~MouseMove() {}
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return this;
-  }
 };
 
 bool MouseMove::eventFilter(QObject *widget, QEvent *e) {

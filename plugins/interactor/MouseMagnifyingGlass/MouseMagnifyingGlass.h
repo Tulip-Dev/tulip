@@ -39,9 +39,6 @@ public :
 
   bool eventFilter(QObject *widget, QEvent *e);
 
-  InteractorComponent *clone() {
-    return new MouseMagnifyingGlassInteractorComponent(*this);
-  }
   bool compute(GlMainWidget *) {
     return false;
   }

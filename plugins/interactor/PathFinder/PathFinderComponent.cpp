@@ -169,15 +169,6 @@ void PathFinderComponent::selectPath(GlMainWidget *glMainWidget, Graph *graph) {
 
 }
 
-InteractorComponent *PathFinderComponent::clone() {
-  PathFinderComponent *result = new PathFinderComponent(parent);
-
-  for (set<PathHighlighter *>::iterator it = highlighters.begin(); it != highlighters.end(); ++it)
-    result->addHighlighter((*it)->clone());
-
-  return result;
-}
-
 void PathFinderComponent::runHighlighters(GlMainWidget *glMainWidget,BooleanProperty *selection, node src, node tgt) {
   glMainWidget->getScene()->getGlGraphComposite()->getGraph()->push(true);
   graphPopable = true;

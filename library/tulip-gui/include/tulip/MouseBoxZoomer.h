@@ -40,9 +40,7 @@ public:
   ~MouseBoxZoomer();
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
-  InteractorComponent *clone() {
-    return new MouseBoxZoomer(mButton, kModifier);
-  }
+
 private:
   unsigned int x, y;
   int w, h;

@@ -78,10 +78,6 @@ public:
 
   void treatEvent(const Event&);
 
-  InteractorComponent *clone() {
-    return new MouseEdgeBuilder();
-  }
-
   void clear();
 };
 
