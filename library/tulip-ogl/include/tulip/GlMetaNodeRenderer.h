@@ -47,9 +47,9 @@ public:
 
   virtual void setInputData(GlGraphInputData *inputData);
 
-  virtual GlGraphInputData *getInputData();
+  virtual GlGraphInputData *getInputData() const;
 
-  GlScene* getSceneForMetaGraph(Graph *g);
+  GlScene* getSceneForMetaGraph(Graph *g) const;
 
 protected:
 
