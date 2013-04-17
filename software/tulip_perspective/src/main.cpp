@@ -107,13 +107,16 @@ void usage(const QString &error) {
        << "  --perspective=<perspective_name> (-p perspective_name)\tStart the perspective specified by perspective_name." << endl
        << "  --geometry=<X,Y,width,height>\tSets the given rectangle as geometry for the main window." << endl
        << "  --help (-h)\tDisplays this help message and ignores other options." << endl << endl
-  << "Available perspectives:" << endl;
+       << "Available perspectives:" << endl;
   list<string> perspectives = PluginLister::instance()->availablePlugins<Perspective>();
-  for(list<string>::const_iterator it=perspectives.begin();it!=perspectives.end();++it) {
-      cerr << *it;
-      if((*it)!=perspectives.back())
-          cerr << ", ";
+
+  for(list<string>::const_iterator it=perspectives.begin(); it!=perspectives.end(); ++it) {
+    cerr << *it;
+
+    if((*it)!=perspectives.back())
+      cerr << ", ";
   }
+
   cerr << endl;
 
   exit(returnCode);
