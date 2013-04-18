@@ -29,7 +29,7 @@ namespace tlp {
 
 class Graph;
 class GlScene;
-class OcclusionTest;
+struct OcclusionTest;
 
 /** \brief Class to display graph with old rendering engine
  *

@@ -76,9 +76,6 @@ private:
               tlp::DoubleProperty&);
   bool peelOut(tlp::Graph* subgraph, tlp::DoubleProperty* metric,
                tlp::DoubleProperty&);
-  tlp::DoubleProperty* metric;
-  tlp::Graph* subgraph;
-
 };
 
 //========================================================================================

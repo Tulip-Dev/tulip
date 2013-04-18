@@ -335,10 +335,8 @@ void HierarchicalGraph::computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProper
   //  tlp::warning() << "we clean every added nodes and edges" << endl;
 }
 
-
-namespace {
 //============================================================================
-void dfsRecCall(Graph *sg, vector<node> &vec, MutableContainer<bool> &nodeVisited, node n) {
+/*static void dfsRecCall(Graph *sg, vector<node> &vec, MutableContainer<bool> &nodeVisited, node n) {
   nodeVisited.set(n.id, true);
   vec.push_back(n);
   node dest;
@@ -347,9 +345,9 @@ void dfsRecCall(Graph *sg, vector<node> &vec, MutableContainer<bool> &nodeVisite
       dfsRecCall(sg, vec, nodeVisited, dest);
     }
   }
-}
+  }*/
 //============================================================================
-void buildDfsOrdering(Graph *sg, vector<node> &vec) {
+/*static void buildDfsOrdering(Graph *sg, vector<node> &vec) {
   MutableContainer<bool> nodeVisited;
   nodeVisited.setAll(false);
   node n;
@@ -358,8 +356,7 @@ void buildDfsOrdering(Graph *sg, vector<node> &vec) {
       dfsRecCall(sg, vec, nodeVisited, n);
     }
   }
-}
-}
+  }*/
 //=======================================================================
 bool HierarchicalGraph::run() {
   //make acyclic
