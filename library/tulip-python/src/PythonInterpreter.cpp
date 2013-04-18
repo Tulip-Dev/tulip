@@ -213,7 +213,9 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 #else
     PyThreadState* tcur = PyThreadState_Get() ;
     PyThreadState_Swap(NULL);
+#if PY_MAJOR_VERSION != 3 && PY_MINOR_VERSION != 3 
     PyThreadState_Clear(tcur);
+#endif	
     PyThreadState_Delete(tcur);
 #endif
 
