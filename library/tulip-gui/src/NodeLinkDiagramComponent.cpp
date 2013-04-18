@@ -24,6 +24,7 @@
 #include <QtGui/QActionGroup>
 #include <QtGui/QDialog>
 
+#include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGrid.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/TulipItemDelegate.h>

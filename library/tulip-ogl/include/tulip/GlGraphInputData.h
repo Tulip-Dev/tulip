@@ -25,9 +25,7 @@
 
 #include <tulip/MutableContainer.h>
 
-#include <tulip/GlMetaNodeRenderer.h>
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/ObservableGraph.h>
+#include <tulip/Observable.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/StringProperty.h>
@@ -36,7 +34,6 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 
-
 namespace tlp {
 
 class PropertyManager;
@@ -44,6 +41,8 @@ class Graph;
 class Glyph;
 class EdgeExtremityGlyph;
 class GlVertexArrayManager;
+class GlMetaNodeRenderer;
+class GlGraphRenderingParameters;
 
 /**
  * Class use to store inputData of the graph
@@ -98,12 +97,7 @@ public:
    * Set metaNode renderer
    * If deleteOldMetaNodeRenderer==true : this function delete old meta node renderer
    */
-  void setMetaNodeRenderer(GlMetaNodeRenderer *renderer,bool deleteOldMetaNodeRenderer=true) {
-    if(deleteOldMetaNodeRenderer)
-      delete _metaNodeRenderer;
-
-    _metaNodeRenderer = renderer;
-  }
+  void setMetaNodeRenderer(GlMetaNodeRenderer *renderer,bool deleteOldMetaNodeRenderer=true);
 
   /**
    * Set if the meta node renderer must be deleted at destructor

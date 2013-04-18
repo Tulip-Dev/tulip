@@ -18,8 +18,6 @@
  */
 #include <tulip/OpenGlConfigManager.h>
 
-#include <iostream>
-
 #include <tulip/Graph.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
@@ -28,6 +26,7 @@
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 using namespace std;
 using namespace tlp;

@@ -23,7 +23,7 @@
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/OpenGlConfigManager.h>
-
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Graph.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>

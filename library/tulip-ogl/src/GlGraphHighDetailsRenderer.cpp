@@ -31,6 +31,8 @@
 #include <tulip/GlVertexArrayVisitor.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/OcclusionTest.h>
+#include <tulip/GlEdge.h>
+#include <tulip/GlNode.h>
 
 using namespace std;
 
@@ -106,18 +108,12 @@ public:
 //
 //===================================================================
 
-GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData):GlGraphRenderer(inputData) {
-  lodCalculator=NULL;
-  fakeScene = new GlScene;
+GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData):GlGraphRenderer(inputData),lodCalculator(NULL),baseScene(NULL),fakeScene(new GlScene) {
   fakeScene->createLayer("fakeLayer");
-  baseScene=NULL;
 }
 //===================================================================
-GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData,GlScene *scene):GlGraphRenderer(inputData) {
-  lodCalculator=NULL;
-  fakeScene = new GlScene;
+GlGraphHighDetailsRenderer::GlGraphHighDetailsRenderer(const GlGraphInputData *inputData,GlScene *scene):GlGraphRenderer(inputData),lodCalculator(NULL),baseScene(scene),fakeScene(new GlScene) {
   fakeScene->createLayer("fakeLayer");
-  baseScene=scene;
 }
 //===================================================================
 GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {

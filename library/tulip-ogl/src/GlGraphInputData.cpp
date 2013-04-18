@@ -23,6 +23,7 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GlVertexArrayManager.h>
+#include <tulip/GlMetaNodeRenderer.h>
 
 namespace tlp {
 GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer):
@@ -48,6 +49,14 @@ GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* para
     _metaNodeRenderer=new GlMetaNodeRenderer(this);
 
   _glVertexArrayManager=new GlVertexArrayManager(this);
+}
+
+
+void GlGraphInputData::setMetaNodeRenderer(GlMetaNodeRenderer *renderer,bool deleteOldMetaNodeRenderer) {
+  if(deleteOldMetaNodeRenderer)
+    delete _metaNodeRenderer;
+
+  _metaNodeRenderer = renderer;
 }
 
 GlGraphInputData::~GlGraphInputData() {

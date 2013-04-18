@@ -27,6 +27,7 @@
 #include <tulip/Graph.h>
 #include <tulip/Curves.h>
 #include <tulip/GlShaderProgram.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 using namespace std;
 
@@ -39,9 +40,7 @@ using namespace std;
 
 
 namespace tlp {
-GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *inputData)
-  :inputData(inputData),
-   graph(inputData->getGraph()),
+GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *i):inputData(i),graph(inputData->getGraph()),
    graphObserverActivated(false),
    layoutObserverActivated(false),
    colorObserverActivated(false),
@@ -200,7 +199,7 @@ void GlVertexArrayManager::endRendering() {
   glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
   glPointSize(2);
 
-  if(points1PEdgesSelectedRenderingIndexArray.size()!=0) {
+  if(!points1PEdgesSelectedRenderingIndexArray.empty()) {
     glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
     glDrawElements(GL_POINTS, points1PEdgesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PEdgesSelectedRenderingIndexArray));
   }
@@ -209,14 +208,14 @@ void GlVertexArrayManager::endRendering() {
   glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedNodesStencil(), 0xFFFF);
   glPointSize(2);
 
-  if(points1PNodesSelectedRenderingIndexArray.size()!=0) {
+  if(!points1PNodesSelectedRenderingIndexArray.empty()) {
     glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
     glDrawElements(GL_POINTS, points1PNodesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PNodesSelectedRenderingIndexArray));
   }
 
   glPointSize(4);
 
-  if(points2PNodesSelectedRenderingIndexArray.size()!=0) {
+  if(!points2PNodesSelectedRenderingIndexArray.empty()) {
     glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
     glDrawElements(GL_POINTS, points2PNodesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points2PNodesSelectedRenderingIndexArray));
   }
@@ -225,7 +224,7 @@ void GlVertexArrayManager::endRendering() {
   glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
   glLineWidth(4);
 
-  if(linesSelectedRenderingStartIndexArray.size()!=0) {
+  if(!linesSelectedRenderingStartIndexArray.empty()) {
     glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
     glMultiDrawArrays(GL_LINE_STRIP, &linesSelectedRenderingStartIndexArray[0], &linesSelectedRenderingCountArray[0], linesSelectedRenderingStartIndexArray.size());
   }
@@ -257,7 +256,7 @@ void GlVertexArrayManager::endRendering() {
   glStencilFunc(GL_LEQUAL, inputData->parameters->getEdgesStencil(), 0xFFFF);
   glPointSize(2);
 
-  if(points1PEdgesRenderingIndexArray.size()!=0) {
+  if(!points1PEdgesRenderingIndexArray.empty()) {
     glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
     glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(pointsColorsArray));
     glDrawElements(GL_POINTS, points1PEdgesRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PEdgesRenderingIndexArray));
@@ -266,7 +265,7 @@ void GlVertexArrayManager::endRendering() {
   // Nodes point rendering
   glStencilFunc(GL_LEQUAL, inputData->parameters->getNodesStencil(), 0xFFFF);
 
-  if(points1PNodesRenderingIndexArray.size()!=0) {
+  if(!points1PNodesRenderingIndexArray.empty()) {
     glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
     glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(pointsColorsArray));
     glDrawElements(GL_POINTS, points1PNodesRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points1PNodesRenderingIndexArray));
@@ -274,7 +273,7 @@ void GlVertexArrayManager::endRendering() {
 
   glPointSize(4);
 
-  if(points2PNodesRenderingIndexArray.size()!=0) {
+  if(!points2PNodesRenderingIndexArray.empty()) {
     glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
     glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(pointsColorsArray));
     glDrawElements(GL_POINTS, points2PNodesRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(points2PNodesRenderingIndexArray));

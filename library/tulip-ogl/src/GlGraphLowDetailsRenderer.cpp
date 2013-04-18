@@ -36,8 +36,7 @@ using namespace std;
 
 namespace tlp {
 
-GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(const GlGraphInputData *inputData):GlGraphRenderer(inputData),buildVBO(true) {
-  fakeScene = new GlScene;
+GlGraphLowDetailsRenderer::GlGraphLowDetailsRenderer(const GlGraphInputData *inputData):GlGraphRenderer(inputData),fakeScene(new GlScene),buildVBO(true) {
   fakeScene->createLayer("fakeLayer");
   addObservers();
 }
@@ -69,6 +68,7 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
   size_t i_col = 0;
   edge e;
   forEach(e, graph->getEdges()) {
+      const pair<node, node> &ends = graph->ends(e);
     Color a = color->getEdgeValue(e);
     Color b = color->getEdgeValue(e);
     Vec4f ca, cb;
@@ -80,8 +80,8 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
 
     indices[i_indices++] = i_point;
     colors[i_col++] = a;
-    points[i_point][0] = layout->getNodeValue(graph->source(e))[0];
-    points[i_point++][1] = layout->getNodeValue(graph->source(e))[1];
+    points[i_point][0] = layout->getNodeValue(ends.first)[0];
+    points[i_point++][1] = layout->getNodeValue(ends.first)[1];
 
     vector<Coord> bends = layout->getEdgeValue(e);
 
@@ -99,8 +99,8 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
 
     indices[i_indices++] = i_point;
     colors[i_col++] = b;
-    points[i_point][0] = layout->getNodeValue(graph->target(e))[0];
-    points[i_point++][1] = layout->getNodeValue(graph->target(e))[1];
+    points[i_point][0] = layout->getNodeValue(ends.second)[0];
+    points[i_point++][1] = layout->getNodeValue(ends.second)[1];
 
   }
 }

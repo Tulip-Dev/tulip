@@ -26,6 +26,7 @@
 #include <tulip/Graph.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlTools.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 using namespace std;
 using namespace tlp;

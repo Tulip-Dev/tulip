@@ -46,8 +46,6 @@
 #include <tulip/GlLabel.h>
 #include <tulip/ParametricCurves.h>
 
-#include <iostream>
-
 tlp::GlLabel* tlp::GlEdge::label=0;
 bool tlp::GlEdge::haveToComputeEdgeWidthBaseLod=true;
 bool tlp::GlEdge::orthoProjection=false;
@@ -74,7 +72,7 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData* data) {
 
   const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
 
-  if (bends.size() != 0) {
+  if (!bends.empty()) {
 
     const Size &srcSize = data->getElementSize()->getNodeValue(source);
     const Size &tgtSize = data->getElementSize()->getNodeValue(target);
@@ -82,7 +80,7 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData* data) {
     double tgtRot = data->getElementRotation()->getNodeValue(target);
 
     // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
-    Coord srcAnchor, tgtAnchor, endLineAnchor, tmpAnchor;
+    Coord srcAnchor, tgtAnchor, tmpAnchor;
 
     int srcGlyphId = data->getElementShape()->getNodeValue(source);
     Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);

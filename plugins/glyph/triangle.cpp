@@ -27,7 +27,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlTriangle.h>
-
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
 
