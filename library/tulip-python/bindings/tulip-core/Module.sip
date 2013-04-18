@@ -31,42 +31,6 @@
 
 // Plus set up type aliases for tlp.Coord and tlp.Size
 %PreInitialisationCode
-    std::string tlpImportHook =
-    "try:\n"
-    "   _origimportfunc\n"
-    "except NameError:\n"
-    "   import sys\n"
-#if PY_MAJOR_VERSION >= 3
-    "   import builtins\n"
-    "   _origimportfunc = builtins.__import__\n"
-#else
-    "   import __builtin__\n"
-    "   _origimportfunc = __builtin__.__import__\n"
-#endif
-    "   def tlpimporthook(name, globals={}, locals={}, fromlist=[], level=-1):\n"
-    "       fullname = name\n"
-    "       m = _origimportfunc(name, globals, locals, fromlist, level)\n"
-    "       if fullname == \"tulip\" or fullname == \"tulipogl\" or fullname == \"tulipqt\":\n"
-    "           if fromlist and len(fromlist) > 0 and fromlist[0] == \"*\":\n"
-    "               curTlpDict = None\n"
-    "               if \"tlp\" in locals:\n"
-    "                   curTlpDict = locals[\"tlp\"].__dict__\n"
-    "                   if curTlpDict:\n"
-    "                       m = type(fullname, (object,), dict(m.__dict__))\n"
-    "                       m.tlp = type(\"tlp\", (object,), dict(m.tlp.__dict__))\n"
-    "                       for k in curTlpDict.keys():\n"
-    "                           if not k.startswith(\"_\"):\n"
-    "                               setattr(m.tlp, k, curTlpDict[k])\n"
-    "       return m\n"
-#if PY_MAJOR_VERSION >= 3
-    "   builtins.__import__ = tlpimporthook\n"
-#else
-    "   __builtin__.__import__ = tlpimporthook\n"
-#endif
-     ;
-
-    PyRun_SimpleString(tlpImportHook.c_str());
-
     // Try to load plugins when importing the module from the Python shell
     if (tlp::TulipPluginsPath.empty()) {
         tlp::initTulipLib();
