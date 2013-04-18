@@ -24,15 +24,15 @@ InstallDir $PROGRAMFILES\Tulip
 OutFile "tulip_setup.exe"
 
 Function CheckAndInstallPython 
-  ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\2.7\InstallPath ""
+  ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\3.3\InstallPath ""
   IfErrors 0 +2
-	ReadRegStr $0 HKLM SOFTWARE\Wow6432Node\Python\PythonCore\2.7\InstallPath ""
+	ReadRegStr $0 HKLM SOFTWARE\Wow6432Node\Python\PythonCore\3.3\InstallPath ""
   IfErrors install end
   install:
-	MessageBox MB_OK "Your system does not appear to have Python 2.7 installed.$\n$\nIt is now required to run Tulip.$\n$\nPress OK to download Python 2.7 and install it."
-	NSISdl::download http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi python-2.7.3.msi
-	ExecWait '"msiexec" /i "python-2.7.3.msi"'
-	Delete python-2.7.3.msi
+	MessageBox MB_OK "Your system does not appear to have Python 3.3 installed.$\n$\nIt is now required to run Tulip.$\n$\nPress OK to download Python 3.3 and install it."
+	NSISdl::download http://www.python.org/ftp/python/3.3.1/python-3.3.1.msi python-3.3.1.msi
+	ExecWait '"msiexec" /i "python-3.3.1.msi"'
+	Delete python-3.3.1.msi
   end:  
 FunctionEnd
 
@@ -41,9 +41,10 @@ Section "Tulip"
  SetOutPath $INSTDIR
  Call CheckAndInstallPython
  File /r files\*.*
+ CreateDirectory "$SMPROGRAMS\Tulip"
  CreateShortCut "$SMPROGRAMS\Tulip\Tulip.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
- CreateShortCut "$DESKTOP\Tulip.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
  CreateShortCut "$SMPROGRAMS\Tulip\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+ CreateShortCut "$DESKTOP\Tulip.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
 
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip" "DisplayName" "Tulip"
  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip" "UninstallString" "$INSTDIR\Uninstall.exe"
