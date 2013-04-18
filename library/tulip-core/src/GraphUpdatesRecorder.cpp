@@ -112,7 +112,7 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
       const std::vector<node>& nodes = gEvt->getNodes();
 
       for (unsigned int i = 0; i < nodes.size(); ++i)
-	addNode(graph, nodes[i]);
+        addNode(graph, nodes[i]);
 
       break;
     }
@@ -121,7 +121,7 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
       const std::vector<edge>& edges = gEvt->getEdges();
 
       for (unsigned int i = 0; i < edges.size(); ++i)
-	addEdge(graph, edges[i]);
+        addEdge(graph, edges[i]);
 
       break;
     }
@@ -161,23 +161,23 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
 
       switch(propEvt->getType()) {
       case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
-	beforeSetNodeValue(prop, propEvt->getNode());
-	break;
+        beforeSetNodeValue(prop, propEvt->getNode());
+        break;
 
       case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
-	beforeSetAllNodeValue(prop);
-	break;
+        beforeSetAllNodeValue(prop);
+        break;
 
       case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
-	beforeSetAllEdgeValue(prop);
-	break;
+        beforeSetAllEdgeValue(prop);
+        break;
 
       case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
-	beforeSetEdgeValue(prop, propEvt->getEdge());
-	break;
+        beforeSetEdgeValue(prop, propEvt->getEdge());
+        break;
 
       default:
-	break;
+        break;
       }
     }
   }

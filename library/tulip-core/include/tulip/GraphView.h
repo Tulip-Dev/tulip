@@ -127,7 +127,7 @@ private:
   void delNodeInternal(const node);
   void reverseInternal(const edge, const node src, const node tgt);
   void setEndsInternal(const edge, const node src, const node tgt,
-		       const node newSrc, const node newTgt);
+                       const node newSrc, const node newTgt);
 };
 
 }

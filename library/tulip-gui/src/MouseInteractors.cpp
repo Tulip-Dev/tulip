@@ -48,8 +48,9 @@ using namespace std;
 bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 // according to Qt's doc, this constant has been defined by wheel mouse vendors
 // we need it to interpret the value of QWheelEvent->delta()
- #define WHEEL_DELTA 120
-    GlMainWidget *g = static_cast<GlMainWidget *>(widget);
+#define WHEEL_DELTA 120
+  GlMainWidget *g = static_cast<GlMainWidget *>(widget);
+
   if (e->type() == QEvent::Wheel &&
       (((QWheelEvent *) e)->orientation() == Qt::Vertical)) {
 
