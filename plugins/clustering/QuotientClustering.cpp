@@ -134,7 +134,7 @@ public:
 class EdgeCardinalityCalculator :public IntegerMinMaxProperty::MetaValueCalculator {
 public:
   void computeMetaValue(AbstractProperty<IntegerType, IntegerType>* card,
-			edge mE, Iterator<edge>* itE, Graph*) {
+                        edge mE, Iterator<edge>* itE, Graph*) {
     unsigned int nbEdges = 0;
 
     while(itE->hasNext()) {

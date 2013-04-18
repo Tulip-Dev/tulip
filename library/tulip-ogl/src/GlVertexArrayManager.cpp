@@ -41,18 +41,18 @@ using namespace std;
 
 namespace tlp {
 GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *i):inputData(i),graph(inputData->getGraph()),
-   graphObserverActivated(false),
-   layoutObserverActivated(false),
-   colorObserverActivated(false),
-   activated(true),
-   isBegin(false),
-   toComputeAll(true),
-   toComputeLayout(true),
-   toComputeColor(true),
-   vectorLayoutSizeInit(false),
-   vectorColorSizeInit(false),
-   vectorIndexSizeInit(false),
-   edgesModified(false) {
+  graphObserverActivated(false),
+  layoutObserverActivated(false),
+  colorObserverActivated(false),
+  activated(true),
+  isBegin(false),
+  toComputeAll(true),
+  toComputeLayout(true),
+  toComputeColor(true),
+  vectorLayoutSizeInit(false),
+  vectorColorSizeInit(false),
+  vectorIndexSizeInit(false),
+  edgesModified(false) {
   colorInterpolate=inputData->parameters->isEdgeColorInterpolate();
   sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
 }

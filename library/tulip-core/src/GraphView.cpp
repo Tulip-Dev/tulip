@@ -139,7 +139,7 @@ void GraphView::reverseInternal(const edge e, const node src, const node tgt) {
 }
 //----------------------------------------------------------------
 void GraphView::setEndsInternal(const edge e, const node src, const node tgt,
-				const node newSrc, const node newTgt) {
+                                const node newSrc, const node newTgt) {
   if (isElement(e)) {
     if (isElement(newSrc) && isElement(newTgt)) {
       notifyBeforeSetEnds(e);
