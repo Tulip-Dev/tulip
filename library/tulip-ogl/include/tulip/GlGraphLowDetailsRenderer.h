@@ -27,16 +27,10 @@
 
 #include <tulip/Observable.h>
 
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlGraphInputData.h>
-#include <tulip/GlNode.h>
-#include <tulip/GlEdge.h>
-#include <tulip/GlQuadTreeLODCalculator.h>
-#include <tulip/GlScene.h>
-
 namespace tlp {
 
 class Graph;
+class GlScene;
 
 /** \brief Class to display graph with very simple and very fast renderer
  *

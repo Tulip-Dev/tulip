@@ -18,6 +18,7 @@
  */
 #include <tulip/Glyph.h>
 #include <tulip/GlBox.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 using namespace std;
 

@@ -27,6 +27,7 @@
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlTools.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 using namespace std;
 using namespace tlp;

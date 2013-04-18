@@ -48,10 +48,11 @@ using namespace std;
 bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 // according to Qt's doc, this constant has been defined by wheel mouse vendors
 // we need it to interpret the value of QWheelEvent->delta()
-#define WHEEL_DELTA 120
+ #define WHEEL_DELTA 120
+    GlMainWidget *g = static_cast<GlMainWidget *>(widget);
   if (e->type() == QEvent::Wheel &&
       (((QWheelEvent *) e)->orientation() == Qt::Vertical)) {
-    GlMainWidget *g = (GlMainWidget *) widget;
+
     g->getScene()->zoomXY(((QWheelEvent *) e)->delta() / WHEEL_DELTA,
                           ((QWheelEvent *) e)->x(), ((QWheelEvent *) e)->y());
     g->draw(false);
@@ -59,7 +60,6 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if(e->type() == QEvent::Gesture) {
-    GlMainWidget *g = (GlMainWidget *) widget;
     QGestureEvent* gesture = (QGestureEvent*)e;
     QPointF center;
     //swipe events and pan events are never fired, known Qt bug

@@ -21,7 +21,7 @@
 #include <tulip/StringProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
-
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/Graph.h>

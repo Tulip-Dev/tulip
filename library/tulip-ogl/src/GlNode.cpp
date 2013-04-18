@@ -28,7 +28,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-
+#include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/Glyph.h>
 #include <tulip/GlTools.h>
@@ -120,8 +120,10 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
     }
   }
 
+  ColorProperty *colP=data->getElementColor();
+
   if(data->getGraph()->isMetaNode(n)) {
-    if(!(((data->getElementColor()->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)))
+    if(!(((colP->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)))
       data->getMetaNodeRenderer()->render(n,lod,camera);
   }
 
@@ -129,7 +131,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
   const Size &nodeSize = data->getElementSize()->getNodeValue(n);
 
-  const Color& fillColor = data->getElementColor()->getNodeValue(n);
+  const Color& fillColor = colP->getNodeValue(n);
 
   const Color& strokeColor = data->getElementBorderColor()->getNodeValue(n);
 
@@ -173,11 +175,9 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
       if(size>2)
         size=2;
 
-      const Color& color = selected ? colorSelect2 : fillColor;
-
       OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
       glDisable(GL_LIGHTING);
-      setColor(color);
+      setColor(selected ? colorSelect2 : fillColor);
       glPointSize(size);
       glBegin(GL_POINTS);
       glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.);

@@ -30,6 +30,7 @@
 #include <tulip/Vector.h>
 #include <tulip/GlSceneObserver.h>
 #include <tulip/GlCPULODCalculator.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 namespace tlp {
 
