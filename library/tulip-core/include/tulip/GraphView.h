@@ -125,9 +125,9 @@ private:
   edge addEdgeInternal(edge);
   void delEdgeInternal(const edge);
   void delNodeInternal(const node);
-  void reverse(const edge, const node src, const node tgt);
-  void setEnds(const edge, const node src, const node tgt,
-               const node newSrc, const node newTgt);
+  void reverseInternal(const edge, const node src, const node tgt);
+  void setEndsInternal(const edge, const node src, const node tgt,
+		       const node newSrc, const node newTgt);
 };
 
 }

@@ -434,7 +434,7 @@ void GraphImpl::reverse(const edge e) {
   // propagate edge reversal on subgraphs
   Graph* sg;
   forEach(sg, getSubGraphs()) {
-    ((GraphView*) sg)->reverse(e, eEnds.first, eEnds.second);
+    ((GraphView*) sg)->reverseInternal(e, eEnds.first, eEnds.second);
   }
 }
 //----------------------------------------------------------------
@@ -472,7 +472,7 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
   node nTgt = eEnds.second;
 
   forEach(sg, getSubGraphs()) {
-    ((GraphView*) sg)->setEnds(e, src, tgt, nSrc, nTgt);
+    ((GraphView*) sg)->setEndsInternal(e, src, tgt, nSrc, nTgt);
   }
 }
 //----------------------------------------------------------------

@@ -70,9 +70,9 @@ bool ParameterDescriptionList::isMandatory(const string& name) const {
 #define CHECK_PROPERTY(T)\
 if (type.compare(typeid(T).name()) == 0) {\
   if (!g || defaultValue.size()==0 || !g->existProperty(defaultValue))\
-    dataSet.set<T*>(name,NULL);\
+    dataSet.set(name, (T*) NULL);					      \
   else\
-    dataSet.set<T*>(name,g->getProperty<T>(defaultValue));\
+    dataSet.set(name, (T*) g->getProperty<T>(defaultValue));	\
   continue;\
 }\
  
