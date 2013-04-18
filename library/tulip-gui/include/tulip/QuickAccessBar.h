@@ -82,6 +82,7 @@ public slots:
   void setEdgeShape();
   void setNodeSize();
   void setEdgeSize();
+  void setSizeInterpolation(bool);
   void showHideNodesColorCaption();
   void showHideNodesSizeCaption();
   void showHideEdgesColorCaption();
