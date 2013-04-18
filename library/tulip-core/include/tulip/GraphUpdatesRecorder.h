@@ -98,7 +98,7 @@ namespace tlp {
 class GraphImpl;
 class GraphStorageIdsMemento;
 
-class GraphUpdatesRecorder :public GraphObserver, public PropertyObserver, public Observable {
+class GraphUpdatesRecorder :public Observable {
   friend class GraphImpl;
   //
 #if !defined(NDEBUG)

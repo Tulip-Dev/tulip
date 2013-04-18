@@ -25,7 +25,7 @@ using namespace std;
 using namespace stdext;
 using namespace tlp;
 
-GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart) : GraphObserver(), PropertyObserver(),
+GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart):
 #if !defined(NDEBUG)
   recordingStopped(true),
 #endif
@@ -75,10 +75,112 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
 }
 
 void GraphUpdatesRecorder::treatEvent(const Event& ev) {
-  if (typeid(ev) == typeid(GraphEvent))
-    GraphObserver::treatEvent(ev);
-  else
-    PropertyObserver::treatEvent(ev);
+  if (typeid(ev) == typeid(GraphEvent)) {
+    const GraphEvent* gEvt = static_cast<const GraphEvent*>(&ev);
+    Graph* graph = gEvt->getGraph();
+
+    switch(gEvt->getType()) {
+    case GraphEvent::TLP_ADD_NODE:
+      addNode(graph, gEvt->getNode());
+      break;
+
+    case GraphEvent::TLP_DEL_NODE:
+      delNode(graph, gEvt->getNode());
+      break;
+
+    case GraphEvent::TLP_ADD_EDGE:
+      addEdge(graph, gEvt->getEdge());
+      break;
+
+    case GraphEvent::TLP_DEL_EDGE:
+      delEdge(graph, gEvt->getEdge());
+      break;
+
+    case GraphEvent::TLP_REVERSE_EDGE:
+      reverseEdge(graph, gEvt->getEdge());
+      break;
+
+    case GraphEvent::TLP_BEFORE_SET_ENDS:
+      beforeSetEnds(graph, gEvt->getEdge());
+      break;
+
+    case GraphEvent::TLP_AFTER_SET_ENDS:
+      afterSetEnds(graph, gEvt->getEdge());
+      break;
+
+    case GraphEvent::TLP_ADD_NODES: {
+      const std::vector<node>& nodes = gEvt->getNodes();
+
+      for (unsigned int i = 0; i < nodes.size(); ++i)
+	addNode(graph, nodes[i]);
+
+      break;
+    }
+
+    case GraphEvent::TLP_ADD_EDGES: {
+      const std::vector<edge>& edges = gEvt->getEdges();
+
+      for (unsigned int i = 0; i < edges.size(); ++i)
+	addEdge(graph, edges[i]);
+
+      break;
+    }
+
+    case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
+      addSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
+      break;
+
+    case GraphEvent::TLP_AFTER_DEL_SUBGRAPH:
+      delSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
+      break;
+
+    case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
+      addLocalProperty(graph, gEvt->getPropertyName());
+      break;
+
+    case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:
+      delLocalProperty(graph, gEvt->getPropertyName());
+      break;
+
+    case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
+      beforeSetAttribute(graph, gEvt->getAttributeName());
+      break;
+
+    case GraphEvent::TLP_REMOVE_ATTRIBUTE:
+      removeAttribute(graph, gEvt->getAttributeName());
+
+    default:
+      break;
+    }
+  }
+  else {
+    const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&ev);
+
+    if (propEvt) {
+      PropertyInterface* prop = propEvt->getProperty();
+
+      switch(propEvt->getType()) {
+      case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
+	beforeSetNodeValue(prop, propEvt->getNode());
+	break;
+
+      case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
+	beforeSetAllNodeValue(prop);
+	break;
+
+      case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
+	beforeSetAllEdgeValue(prop);
+	break;
+
+      case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
+	beforeSetEdgeValue(prop, propEvt->getEdge());
+	break;
+
+      default:
+	break;
+      }
+    }
+  }
 }
 
 // delete the objects collected as to be deleted
@@ -894,7 +996,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
     if (itrv->second.recordedNodes) {
       IteratorValue* itv =
-        itrv->second.recordedNodes->findAllValues(NULL, false);
+        itrv->second.recordedNodes->findAllValues(false, false);
 
       while(itv->hasNext()) {
         node n(itv->next());
@@ -906,7 +1008,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
     if (itrv->second.recordedEdges) {
       IteratorValue* itv =
-        itrv->second.recordedEdges->findAllValues(NULL, false);
+        itrv->second.recordedEdges->findAllValues(false, false);
 
       while(itv->hasNext()) {
         edge e(itv->next());

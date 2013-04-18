@@ -121,7 +121,7 @@ unsigned int GraphView::outdeg(const node n) const {
   return outDegree.get(n.id);
 }
 //----------------------------------------------------------------
-void GraphView::reverse(const edge e, const node src, const node tgt) {
+void GraphView::reverseInternal(const edge e, const node src, const node tgt) {
   if (isElement(e)) {
     outDegree.add(src.id, -1);
     inDegree.add(tgt.id, -1);
@@ -133,13 +133,13 @@ void GraphView::reverse(const edge e, const node src, const node tgt) {
     // propagate edge reversal on subgraphs
     Graph* sg;
     forEach(sg, getSubGraphs()) {
-      ((GraphView*) sg)->reverse(e, src, tgt);
+      ((GraphView*) sg)->reverseInternal(e, src, tgt);
     }
   }
 }
 //----------------------------------------------------------------
-void GraphView::setEnds(const edge e, const node src, const node tgt,
-                        const node newSrc, const node newTgt) {
+void GraphView::setEndsInternal(const edge e, const node src, const node tgt,
+				const node newSrc, const node newTgt) {
   if (isElement(e)) {
     if (isElement(newSrc) && isElement(newTgt)) {
       notifyBeforeSetEnds(e);
@@ -160,7 +160,7 @@ void GraphView::setEnds(const edge e, const node src, const node tgt,
       // propagate edge ends update on subgraphs
       Graph* sg;
       forEach(sg, getSubGraphs()) {
-        ((GraphView*) sg)->setEnds(e, src, tgt, newSrc, newTgt);
+        ((GraphView*) sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
       }
     }
     else
