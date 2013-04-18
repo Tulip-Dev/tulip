@@ -67,7 +67,6 @@ private:
   void initCross(tlp::Graph* sg, tlp::node n, tlp::MutableContainer< bool >& visited, int id);
 
   LessThanNode2 lessNode;
-  tlp::SizeProperty *nodeSize;
   std::string orientation;
   float spacing;
   float nodeSpacing;

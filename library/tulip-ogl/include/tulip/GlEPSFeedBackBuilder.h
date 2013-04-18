@@ -110,9 +110,7 @@ private:
 
   std::stringstream stream_out;
 
-  GLfloat clearColor[4];
   GLfloat pointSize;
-  GLfloat lineWidth;
 
   Color fillColor;
   Color strokeColor;

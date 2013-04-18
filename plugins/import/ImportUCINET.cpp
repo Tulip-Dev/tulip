@@ -80,10 +80,6 @@ bool getDouble(double& d, const string& str) {
   return (*endPtr == 0);
 }
 
-bool nocasecmp(const string& str1, const string& str2) {
-  return strcasecmp(str1.c_str(), str2.c_str()) == 0;
-}
-
 bool nocasecmp(const string& str1, const char* str2) {
   return strcasecmp(str1.c_str(), str2) == 0;
 }

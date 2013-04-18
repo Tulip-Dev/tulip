@@ -55,7 +55,6 @@ public:
 
   virtual ~GlTLPFeedBackBuilder() {}
 
-  virtual void begin(Vector<float,4>&) {}
   virtual void colorInfo(GLfloat *) {}
   virtual void beginGlEntity(GLfloat) {}
   virtual void endGlEntity() {}

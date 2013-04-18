@@ -80,8 +80,6 @@ void GlEPSFeedBackBuilder::begin(const Vector<int, 4> &viewport,GLfloat*,GLfloat
   stream_out << endl << lineWidth << " setlinewidth" << endl;
 
   /* Clear the background like OpenGL had it. */
-  //  fprintf(file, "%g %g %g setrgbcolor\n",
-  //    clearColor[0], clearColor[1], clearColor[2]);
   stream_out << "1.0 1.0 1.0 setrgbcolor" << endl;
   stream_out << viewport[0] << " " << viewport[1] << " " << viewport[2] << " " << viewport[3] << " rectfill" << endl << endl;
 }
