@@ -49,11 +49,25 @@ extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
 /**
  * @ingroup Plugins
  *
- * @brief Demangles the name of a C++ class defined in the tlp namespace.
- * Simply removes the 'tlp::' prefix from the class name.
+ * @brief Demangles the name of a C++ class
+ * @param className The mangled name of a class
+ * @param hideTlp a flag to indicate if the 'tlp::' prefix
  * @return string The demangled name of a Tulip C++ class.
  */
-TLP_SCOPE std::string demangleTlpClassName(const char *className);
+ TLP_SCOPE std::string demangleClassName(const char *className,
+					 bool hideTlp = false);
+
+/**
+ * @ingroup Plugins
+ *
+ * @brief Demangles the name of a C++ class defined in the tlp namespace.
+ * @param className The mangled name of a class
+ * @return string The demangled name of a Tulip C++ class
+ * without the tlp:: prefix
+ */
+ inline std::string demangleTlpClassName(const char *className) {
+   return demangleClassName(className, true);
+ }
 
 /**
  * @brief Returns an istream to read from a gzipped file (uses gzstream lib).

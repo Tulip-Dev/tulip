@@ -34,29 +34,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
-
-#if defined(__GNUC__)
-#include <cxxabi.h>
-static std::string demangleClassName(const char* className) {
-  static char demangleBuffer[256];
-  int status;
-  size_t length = 256;
-  abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
-                      &length, &status);
-  return std::string(demangleBuffer);
-}
-#elif defined(_MSC_VER)
-static std::string demangleClassName(const char* className) {
-  std::string s(className);
-
-  if (s.find("class ") == 0) {
-    return std::string(className + 6);
-  }
-  else {
-    return s;
-  }
-}
-#endif
+#include <tulip/TlpTools.h>
 
 TLP_PYTHON_SCOPE void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTypename, const bool transferTo=false);
 TLP_PYTHON_SCOPE PyObject *convertCppTypeToSipWrapper(void *cppObj, const std::string &cppTypename, bool fromNew=false);
@@ -110,7 +88,7 @@ class PyObjectToCppObjectConvertor {
 public:
 
   bool convert(PyObject *pyObject, T &cppObject) {
-    std::string className = demangleClassName(typeid(T).name());
+    std::string className = tlp::demangleClassName(typeid(T).name());
 
     void *cppObjPointer = convertSipWrapperToCppType(pyObject, className);
 
@@ -130,7 +108,7 @@ class PyObjectToCppObjectConvertor<T*> {
 public:
 
   bool convert(PyObject *pyObject, T *&cppObject) {
-    std::string className = demangleClassName(typeid(T).name());
+    std::string className = tlp::demangleClassName(typeid(T).name());
 
     void *cppObjPointer = convertSipWrapperToCppType(pyObject, className, true);
 
@@ -218,7 +196,7 @@ class CppObjectToPyObjectConvertor {
 public:
 
   bool convert(const T &cppObject, PyObject *&pyObject) {
-    std::string className = demangleClassName(typeid(T).name());
+    std::string className = tlp::demangleClassName(typeid(T).name());
 
     T *objCopy = new T(cppObject);
     PyObject *pyObj = convertCppTypeToSipWrapper(objCopy, className, true);
@@ -241,7 +219,7 @@ class CppObjectToPyObjectConvertor<T*> {
 public:
 
   bool convert(T *cppObject, PyObject *&pyObject) {
-    std::string className = demangleClassName(typeid(T).name());
+    std::string className = tlp::demangleClassName(typeid(T).name());
 
     PyObject *pyObj = convertCppTypeToSipWrapper(cppObject, className);
 
