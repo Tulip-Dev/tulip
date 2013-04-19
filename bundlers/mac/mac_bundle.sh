@@ -49,7 +49,7 @@ cp $SRC_DIR/../../COPYING .
 
 echo 'Copying Frameworks'
 cd $DEST_DIR/application/Tulip.app/Contents/Frameworks/
-for cmp in QtOpenGL QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore phonon QtScript QtHelp QtDBus; do
+for cmp in QtOpenGL QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore phonon QtScript QtHelp QtDBus QtDeclarative QtSql; do
   echo "Copying /Library/Frameworks/${cmp}.framework/$cmp" to $(pwd)
   cp "/Library/Frameworks/${cmp}.framework/$cmp" .
 done
