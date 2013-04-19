@@ -1,5 +1,7 @@
 .. py:currentmodule:: tulip
 
+.. _tulippythonplugins:
+
 Writing Tulip plugins in Python
 ===============================
 
