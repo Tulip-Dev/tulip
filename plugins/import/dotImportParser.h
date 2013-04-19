@@ -118,7 +118,7 @@ enum yytokentype {
 int yylex( void );
 void yyerror( char const * ) {}
 extern char * yytext;
-extern int yylen;
+//extern int yylen;
 
 typedef TLP_HASH_MAP<std::string,node> NodeMap;
 typedef std::vector<node> NodeA;

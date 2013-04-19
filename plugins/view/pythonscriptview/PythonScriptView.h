@@ -87,8 +87,9 @@ public :
 
   void draw() {}
 
-  void graphDeleted() {
+  void graphDeleted(tlp::Graph* parent) {
     _graph = NULL;
+    ViewWidget::graphDeleted(parent);
   }
 
 public slots:

@@ -193,7 +193,6 @@ private :
   Graph *edgeAsNodeGraph;
   std::map<edge, node> edgeToNode;
   std::map<node, edge> nodeToEdge;
-  GlGraphComposite *emptyGraphComposite;
   Color backgroundColor;
   Color textColor;
   bool integerScale;

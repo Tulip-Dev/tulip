@@ -104,9 +104,9 @@ inline double square(double x) {
   return x*x;
 }
 
-inline double cube(double x) {
+  /*inline double cube(double x) {
   return x*x*x;
-}
+  }*/
 }
 static void drawComposite(tlp::GlComposite *composite, float lod, tlp::Camera *camera) {
   map<string, tlp::GlSimpleEntity*> glEntities = composite->getGlEntities();

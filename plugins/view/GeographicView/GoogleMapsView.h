@@ -120,6 +120,12 @@ public :
     return _viewType;
   }
 
+  // inherited from View
+  virtual void centerView(bool) {
+    // call the Qt slot declared below
+    centerView();
+  }
+
 public slots :
 
   void computeGeoLayout();
@@ -147,8 +153,6 @@ public slots :
   }
 
   void centerView();
-
-public slots:
 
   void viewTypeChanged(QString viewTypeName);
 

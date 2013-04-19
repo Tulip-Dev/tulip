@@ -35,7 +35,7 @@ namespace tlp {
 
 class GoogleMapsView;
 
-class GoogleMapsGraphicsView : public QGraphicsView, public PropertyObserver, public Observable {
+class GoogleMapsGraphicsView : public QGraphicsView, public Observable {
 
 public :
 
@@ -96,6 +96,8 @@ public :
 
   void setGeoShape(IntegerProperty *);
 
+  void treatEvent(const Event& ev);
+
   void afterSetNodeValue(PropertyInterface*, const node);
 
   void afterSetAllNodeValue(PropertyInterface*);
@@ -153,7 +155,6 @@ private :
   LayoutProperty *geoLayoutBackup;
 
   bool mapTranslationBlocked;
-  bool mouseDragging;
 
   bool geocodingActive;
   bool cancelGeocoding;

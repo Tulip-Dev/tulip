@@ -74,13 +74,10 @@ public:
     return _configurationWidget->gridDisplayMode();
   }
 
-  virtual void update(std::set<tlp::Observable *>::iterator,std::set<tlp::Observable *>::iterator);
-  virtual void observableDestroyed(tlp::Observable *) {}
   virtual void addNode(tlp::Graph *, const tlp::node);
   virtual void addEdge(tlp::Graph *, const tlp::edge );
   virtual void delNode(tlp::Graph *,const tlp::node );
   virtual void delEdge(tlp::Graph *,const tlp::edge );
-  virtual void treatEvent(const tlp::Event&);
 
 private slots:
   void setBackgroundColor(QColor);

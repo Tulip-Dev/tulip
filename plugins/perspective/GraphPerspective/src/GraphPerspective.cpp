@@ -598,7 +598,7 @@ void GraphPerspective::open(QString fileName) {
       }
       else if(fileName.endsWith(QString::fromStdString(extension))) {
         DataSet params;
-        params.set<std::string>("file::filename", std::string(fileName.toUtf8().data()));
+        params.set("file::filename", std::string(fileName.toUtf8().data()));
         addRecentDocument(fileName);
         PluginProgress* prg = progress(NoProgressOption);
         Graph* g = tlp::importGraph(modules[extension], params, prg);
@@ -738,7 +738,7 @@ void GraphPerspective::paste() {
   Observable::holdObservers();
   outGraph->push();
   DataSet data;
-  data.set<std::string>("file::data",ss.str());
+  data.set("file::data", ss.str());
   Graph* inGraph = tlp::importGraph("TLP Import",data);
   tlp::copyToGraph(outGraph,inGraph);
   delete inGraph;
