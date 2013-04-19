@@ -17,6 +17,7 @@
  *
  */
 
+#include <cstring>
 #include <string>
 #include <sstream>
 #include <locale.h>
@@ -249,21 +250,29 @@ void tlp::initTulipLib(const char* appDirPath) {
 // tlp class names demangler
 #if defined(__GNUC__)
 #include <cxxabi.h>
-std::string tlp::demangleTlpClassName(const char* className) {
+std::string tlp::demangleClassName(const char* className,
+				   bool hideTlp) {
   static char demangleBuffer[256];
   int status;
   size_t length = 256;
   abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
                       &length, &status);
   // skip tlp::
-  return std::string(demangleBuffer + 5);
+  if (hideTlp && strstr(demangleBuffer, "tlp::") == demangleBuffer)
+    return std::string(demangleBuffer + 5);
+  return std::string(demangleBuffer);
 }
 #elif defined(_MSC_VER)
 // With Visual Studio, typeid(tlp::T).name() does not return a mangled type name
 // but a human readable type name in the form "class tlp::T"
 // so just remove the first 11 characters to return T
-std::string tlp::demangleTlpClassName(const char* className) {
-  return std::string(className + 11);
+std::string tlp::demangleClassName(const char* className,
+				   bool hideTlp) {
+  char* clName = className;
+  if (strstr(className, "class ") == className)
+    clName += 6;
+  if (hideTlp && strstr(clName, "tlp::") == clName)
+    return std::string(clName + 5);
 }
 #else
 #error define symbols demangling function
