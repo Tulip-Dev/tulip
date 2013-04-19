@@ -21,17 +21,24 @@
 #ifndef Tulip_GLVERTEXARRAYMANAGER_H
 #define Tulip_GLVERTEXARRAYMANAGER_H
 
-#include <cassert>
-#include <iostream>
-#include <tulip/OpenGlConfigManager.h>
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
 
-#include <tulip/tulipconf.h>
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+# if defined(__WIN32__)
+# include <GL/glext.h>
+# endif
+#endif
+
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
-#include <tulip/Size.h>
-#include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
-#include <tulip/PropertyInterface.h>
 
 #include <vector>
 
@@ -41,6 +48,12 @@ class Graph;
 class GlEdge;
 class GlNode;
 class GlGraphInputData;
+class PropertyInterface;
+class ColorProperty;
+class LayoutProperty;
+class SizeProperty;
+class IntegerProperty;
+class DoubleProperty;
 
 /** \brief Class used to render edges/nodes with vertex array
  *
@@ -153,6 +166,13 @@ protected:
 
   GlGraphInputData *inputData;
   Graph *graph;
+  //Store properties used to compute the arrays
+  LayoutProperty* layoutProperty;
+  SizeProperty* sizeProperty;
+  IntegerProperty* shapeProperty;
+  DoubleProperty* rotationProperty;
+  ColorProperty* colorProperty;
+  ColorProperty* borderColorProperty;
   bool graphObserverActivated;
   bool layoutObserverActivated;
   bool colorObserverActivated;
@@ -167,9 +187,10 @@ protected:
   bool vectorColorSizeInit;
   bool vectorIndexSizeInit;
 
+  bool edgesModified;
   bool colorInterpolate;
   bool sizeInterpolate;
-  bool edgesModified;
+
 
   std::vector<Coord> linesCoordsArray;
   std::vector<Color> linesColorsArray;
