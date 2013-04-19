@@ -479,7 +479,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
     parameters = new tlp::DataSet();
 
   // add prop as result in dataset
-  parameters->set<PropertyInterface *>("result", prop);
+  parameters->set("result", prop);
 
   context.pluginProgress = tmpProgress;
   context.graph = this;

@@ -27,7 +27,7 @@ namespace tlp {
 class PluginProgress;
 }
 
-class yajl_gen_t;
+struct yajl_gen_t;
 
 class QIODevice;
 

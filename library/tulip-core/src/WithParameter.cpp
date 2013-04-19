@@ -97,7 +97,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
       if (type.compare(typeid(tlp::ColorScale).name()) == 0) {
         vector<Color> colors;
         ColorVectorType::fromString(colors, defaultValue);
-        dataSet.set<ColorScale>(name, ColorScale(colors));
+        dataSet.set(name, ColorScale(colors));
         continue;
       }
 
@@ -112,7 +112,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
           pos = defaultValue.find_first_of(";", lastPos);
         }
 
-        dataSet.set<StringCollection>(name,col);
+        dataSet.set(name,col);
         continue;
       }
     }
@@ -134,9 +134,9 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
 
     if (type.compare(typeid(PropertyInterface*).name()) == 0) {
       if (!g || defaultValue.size()==0 || !g->existProperty(defaultValue))
-        dataSet.set<PropertyInterface*>(name, NULL);
+        dataSet.set(name, (PropertyInterface*) NULL);
       else
-        dataSet.set<PropertyInterface*>(name, g->getProperty(defaultValue));
+        dataSet.set(name, g->getProperty(defaultValue));
 
       continue;
     }
@@ -198,4 +198,3 @@ bool WithParameter::inputRequired() const {
   }
   return false;
 }
-
