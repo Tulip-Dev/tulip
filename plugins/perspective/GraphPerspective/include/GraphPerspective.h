@@ -89,7 +89,10 @@ public slots:
   void showLogger();
 
   virtual void redrawPanels(bool center=false);
-  void centerPanelsForGraph(tlp::Graph*, bool graphChanged = false, bool onlyGlMainView = false);
+  void centerPanelsForGraph(tlp::Graph*, bool graphChanged, bool onlyGlMainView);
+  void centerPanelsForGraph(tlp::Graph* g) {
+    centerPanelsForGraph(g, false, false);
+  }
   void closePanelsForGraph(tlp::Graph* g = NULL);
   bool setGlMainViewPropertiesForGraph(tlp::Graph* g, const std::map<std::string, tlp::PropertyInterface*>& propsMap);
   void setSearchOutput(bool);

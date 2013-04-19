@@ -60,7 +60,7 @@ public:
     push_back(new MouseNKeysNavigator);
   }
 
-  QCursor cursor() {
+  QCursor cursor() const {
     return QCursor(Qt::OpenHandCursor);
   }
 

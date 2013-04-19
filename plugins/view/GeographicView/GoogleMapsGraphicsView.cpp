@@ -379,7 +379,7 @@ double mercatorToLatitude(double mercator) {
 
 
 GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, QGraphicsScene *graphicsScene, QWidget *parent) : QGraphicsView(graphicsScene, parent),
-  _googleMapsView(googleMapsView), graph(NULL),  googleMaps(NULL), globeCameraBackup(NULL,true),geoLayout(NULL), geoViewSize(NULL), geoLayoutBackup(NULL), mapTranslationBlocked(false), mouseDragging(false),
+  _googleMapsView(googleMapsView), graph(NULL),  googleMaps(NULL), globeCameraBackup(NULL,true),geoLayout(NULL), geoViewSize(NULL), geoLayoutBackup(NULL), mapTranslationBlocked(false),
   geocodingActive(false), cancelGeocoding(false),firstGlobeSwitch(true) {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   glWidget = new QGLWidget(GlInit(), this, GlMainWidget::getFirstQGLWidget());
@@ -886,6 +886,27 @@ void GoogleMapsGraphicsView::afterSetAllNodeValue(PropertyInterface *prop) {
     const Size &nodeSize = viewSize->getNodeValue(graph->getOneNode());
     float sizeFactor = pow((float) 1.3, (int) currentMapZoom);
     geoViewSize->setAllNodeValue(Size(sizeFactor * nodeSize.getW(), sizeFactor * nodeSize.getH(), sizeFactor * nodeSize.getD()));
+  }
+}
+
+void GoogleMapsGraphicsView::treatEvent(const Event& ev) {
+  const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&ev);
+
+  if (propEvt) {
+    PropertyInterface* prop = propEvt->getProperty();
+
+    switch(propEvt->getType()) {
+    case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
+      afterSetNodeValue(prop, propEvt->getNode());
+      break;
+
+    case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
+      afterSetAllNodeValue(prop);
+      break;
+
+    default:
+      break;
+    }
   }
 }
 

@@ -102,10 +102,10 @@ void MatrixView::graphChanged(Graph *) {
 
 DataSet MatrixView::state() const {
   DataSet ds;
-  ds.set<bool>("show Edges", getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isDisplayEdges());
-  ds.set<unsigned>("Grid mode", _configurationWidget->gridDisplayMode());
-  ds.set<Color>("Background Color", getGlMainWidget()->getScene()->getBackgroundColor());
-  ds.set<int>("ordering", _configurationWidget->orderingProperty());
+  ds.set("show Edges", getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isDisplayEdges());
+  ds.set("Grid mode", _configurationWidget->gridDisplayMode());
+  ds.set("Background Color", getGlMainWidget()->getScene()->getBackgroundColor());
+  ds.set("ordering", _configurationWidget->orderingProperty());
   return ds;
 }
 
@@ -152,10 +152,6 @@ void MatrixView::initDisplayedGraph() {
   _mustUpdateSizes = true;
 
   deleteDisplayedGraph();
-
-  Observable *obs;
-  stableForEach (obs, getObservables())
-  obs->removeObserver(this);
 
   _matrixGraph = newGraph();
 
@@ -238,18 +234,6 @@ void MatrixView::normalizeSizes(double maxVal) {
   Observable::unholdObservers();
 }
 
-void MatrixView::update(std::set<tlp::Observable *>::iterator begin, std::set<tlp::Observable *>::iterator end) {
-  GlGraphInputData *inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
-
-  for (set<Observable *>::iterator it = begin; it != end; ++it) {
-    if (*it == inputData->getElementSize())
-      _mustUpdateSizes = true;
-
-    if (graph()->existProperty(_orderingMetricName) && *it == graph()->getProperty(_orderingMetricName))
-      _mustUpdateLayout = true;
-  }
-}
-
 void MatrixView::addNode(tlp::Graph *, const tlp::node n) {
   _mustUpdateLayout = true;
   _mustUpdateSizes=true;
@@ -323,9 +307,6 @@ void MatrixView::delEdge(tlp::Graph *,const tlp::edge e) {
   _edgesMap.remove(e);
 }
 
-void MatrixView::treatEvent(const tlp::Event& evt) {
-  tlp::Observable::treatEvent(evt);
-}
 template<typename PROPTYPE>
 struct PropertySorter {
   PROPTYPE *prop;
