@@ -119,7 +119,6 @@ private:
   GlTriangle targetTriangle;
   GlCircle sourceCircle;
   GlComposite *circleString;
-  Graph *edgeBendsGraph;
   std::vector <SelectedEntity> select;
   bool edgeSelected;
   tlp::edge mEdge;

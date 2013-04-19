@@ -76,7 +76,7 @@ protected:
 
 private:
 
-  void startDrag(QListWidgetItem *item);
+  void beginDrag(QListWidgetItem *item);
   void changeStatus(QListWidgetItem *item);
   void dragMoveOrEnterEvent(QDragMoveEvent *event);
   QPoint startPos;

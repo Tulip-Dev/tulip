@@ -39,14 +39,14 @@ void ItemsListWidget::mouseMoveEvent(QMouseEvent *event) {
 
     if(distance >= QApplication::startDragDistance()) {
       QListWidgetItem *item = currentItem();
-      startDrag(item);
+      beginDrag(item);
     }
   }
 
   QListWidget::mouseMoveEvent(event);
 }
 
-void ItemsListWidget::startDrag(QListWidgetItem *item) {
+void ItemsListWidget::beginDrag(QListWidgetItem *item) {
   if(item) {
     QMimeData *mimeData = new QMimeData;
     mimeData->setText(item->text());
