@@ -268,7 +268,7 @@ std::string tlp::demangleClassName(const char* className,
 // so just remove the first 11 characters to return T
 std::string tlp::demangleClassName(const char* className,
 				   bool hideTlp) {
-  char* clName = className;
+  char* clName = const_cast<char*>(className);
   if (strstr(className, "class ") == className)
     clName += 6;
   if (hideTlp && strstr(clName, "tlp::") == clName)

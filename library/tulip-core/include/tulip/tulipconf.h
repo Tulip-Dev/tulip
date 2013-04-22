@@ -41,12 +41,14 @@
 #if defined(_MSC_VER)
 // disable some annoying Visual Studio warnings
 #pragma warning(disable: 4251) //member is not dllexport
+#pragma warning(disable: 4267) //conversion from 'size_t' to 'type', possible loss of data
 #pragma warning(disable: 4275) //base class is not dllexport
 #pragma warning(disable: 4244) //conversion to (or from) smaller integer type
 #pragma warning(disable: 4355) //'this' pointer used in initializer list
 #pragma warning(disable: 4800) //non-bool value coerced into bool (e.g. bool a = 5;)
 #pragma warning(disable: 4503) //decorated name too long, truncated
 #pragma warning(disable: 4344) //template specialisation results in different function being called (getProperty<>)
+
 // disable deprecated warnings when compiling the tulip dlls, as MSVC is overly verbose with deprecation
 // (even if a deprecated function is not used, warnings are issued)
 #if defined(DLL_TULIP) || defined(DLL_TULIP_GL) || defined(DLL_TULIP_QT) || defined(DLL_TULIP_QT2)
