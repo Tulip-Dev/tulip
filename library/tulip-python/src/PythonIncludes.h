@@ -115,7 +115,7 @@ static const sipAPIDef *getSipAPI() {
 
 static const sipAPIDef *sipAPI = NULL;
 
-static void initSipAPI() {
+inline void initSipAPI() {
   if (!sipAPI) {
     sipAPI = getSipAPI();
   }

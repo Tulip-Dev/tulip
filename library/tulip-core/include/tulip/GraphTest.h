@@ -40,7 +40,7 @@ public:
     bool result = test();
 
     if (dataSet) {
-      dataSet->set<bool>("result",result);
+      dataSet->set("result",result);
     }
 
     return true;

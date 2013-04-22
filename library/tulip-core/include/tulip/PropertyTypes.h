@@ -211,7 +211,7 @@ struct KnownTypeSerializer :public TypedDataSerializer<typename T::RealType> {
     else
       result = T::fromString(val, value);
 
-    ds.set<typename T::RealType>(prop, val);
+    ds.set(prop, val);
     return result;
   }
 };
