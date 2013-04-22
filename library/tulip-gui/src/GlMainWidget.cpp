@@ -383,24 +383,28 @@ bool GlMainWidget::pickGlEntities(const int x, const int y,
 }
 //==================================================
 void GlMainWidget::pickNodesEdges(const int x, const int y,
-                                  const int width ,const int height,
+                                  const int width , const int height,
                                   std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
-                                  GlLayer* layer) {
+                                  GlLayer* layer, bool pickNodes, bool pickEdges) {
   makeCurrent();
-  scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedNodes);
-  scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedEdges);
+  if (pickNodes) {
+    scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedNodes);
+  }
+  if (pickEdges) {
+    scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedEdges);
+  }
 }
 //=====================================================
-bool GlMainWidget::pickNodesEdges(const int x, const int y,SelectedEntity &selectedEntity, GlLayer* layer) {
+bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &selectedEntity, GlLayer* layer, bool pickNodes, bool pickEdges) {
   makeCurrent();
   vector<SelectedEntity> selectedEntities;
 
-  if(scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)) {
+  if(pickNodes && scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
 
-  if(scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)) {
+  if(pickEdges && scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }

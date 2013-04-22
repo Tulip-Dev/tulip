@@ -100,21 +100,29 @@ public:
    *
    *  Select all nodes and edges lying in the area of the screen of given width and height,
    *  and with its upper-left corner at (x,y)
-   *  @param selectedNode filled by the method with the nodes found in the region
-   *  @param selectedEdge filled by the method with the edges found in the region
+   *  @param selectedNodes filled by the method with the nodes found in the region
+   *  @param selectedEdges filled by the method with the edges found in the region
+   *  @param layer specify the layer in which to perform the picking
+   *  @param pickNodes enable or disable the picking of nodes
+   *  @param pickEdges enable or disable the picking of edges
    */
   void pickNodesEdges(const int x, const int y,
                       const int width, const int height,
-                      std::vector<SelectedEntity> &selectedNode, std::vector<SelectedEntity> &seletedEdge,
-                      tlp::GlLayer* layer=NULL);
+                      std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
+                      tlp::GlLayer* layer=NULL, bool pickNodes=true, bool pickEdges=true);
+
   /** @brief Select a node or edge at a point
-   *  Select either a node or edge at point (x,y)
+   *  Try to select at point (x,y) a node in the first place then if no result try to select an edge
    *  @param type tells what has been found: NODE, EDGE
+   *  @param layer specify the layer in which to perform the picking
+   *  @param pickNodes enable or disable the picking of nodes
+   *  @param pickEdges enable or disable the picking of edges
    *  @return true if something has been found, false otherwise
    */
   bool pickNodesEdges(const int x, const int y,
                       SelectedEntity &selectedEntity,
-                      tlp::GlLayer* layer=NULL);
+                      tlp::GlLayer* layer=NULL,
+                      bool pickNodes=true, bool pickEdges=true);
 
   /**
    * @deprecated this function should not be used anymore, use pickNodesEdges()
