@@ -18,6 +18,8 @@
  */
 
 #include <tulip/GlSceneZoomAndPan.h>
+#include <tulip/GlScene.h>
+
 #include <algorithm>
 
 using namespace std;
