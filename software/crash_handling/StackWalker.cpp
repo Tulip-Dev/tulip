@@ -467,7 +467,12 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   STACKFRAME        stack;
   ULONG               frame;
   IMAGEHLP_SYMBOL   *symbol = reinterpret_cast<IMAGEHLP_SYMBOL*>(malloc(sizeof(IMAGEHLP_SYMBOL)+2048*sizeof(TCHAR)));
+#ifdef I64  
+  DWORD64             displacement = 0;
+#else
   DWORD             displacement = 0;
+#endif  
+  DWORD				  displacement2 = 0;
   TCHAR name[1024];
 
   memset( &stack, 0, sizeof( STACKFRAME ) );
@@ -475,16 +480,25 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   symbol->SizeOfStruct  = sizeof( IMAGEHLP_SYMBOL );
   symbol->MaxNameLength = 2048;
 
+#ifndef I64
+  DWORD machine = IMAGE_FILE_MACHINE_I386;
   stack.AddrPC.Offset    = context->Eip;
-  stack.AddrPC.Mode      = AddrModeFlat;
   stack.AddrStack.Offset = context->Esp;
-  stack.AddrStack.Mode   = AddrModeFlat;
   stack.AddrFrame.Offset = context->Ebp;
+#else
+  DWORD machine = IMAGE_FILE_MACHINE_AMD64;
+  stack.AddrPC.Offset    = context->Rip;
+  stack.AddrStack.Offset = context->Rsp;
+  stack.AddrFrame.Offset = context->Rsp;
+#endif
+
+  stack.AddrPC.Mode      = AddrModeFlat;
+  stack.AddrStack.Mode   = AddrModeFlat;
   stack.AddrFrame.Mode   = AddrModeFlat;
 
   for( frame = 0; ; frame++ ) {
     result = StackWalk(
-               IMAGE_FILE_MACHINE_I386,
+               machine,
                process,
                thread,
                &stack,
@@ -520,7 +534,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       symbol_name = symbol->Name;
     }
 
-    if (SymGetLineFromAddr( process, ( ULONG )stack.AddrPC.Offset - 1, &displacement, &image_line )) {
+    if (SymGetLineFromAddr( process, ( ULONG )stack.AddrPC.Offset - 1, &displacement2, &image_line )) {
       file_name = image_line.FileName;
       line = image_line.LineNumber;
     }
