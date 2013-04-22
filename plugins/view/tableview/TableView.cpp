@@ -183,7 +183,7 @@ void TableView::graphChanged(tlp::Graph* g) {
   _ui->table->setSendSignalOnResize(true);
 }
 
-void TableView::graphDeleted() {
+void TableView::graphDeleted(Graph*) {
   setGraph(NULL);
 }
 

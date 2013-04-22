@@ -665,7 +665,24 @@ void ParallelCoordinatesDrawing::delEdge(Graph *,const edge e) {
 }
 
 void ParallelCoordinatesDrawing::treatEvent(const tlp::Event& evt) {
-  tlp::GraphObserver::treatEvent(evt);
+  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+
+  if (gEvt) {
+    Graph* graph = gEvt->getGraph();
+
+    switch(gEvt->getType()) {
+    case GraphEvent::TLP_DEL_NODE:
+      delNode(graph, gEvt->getNode());
+      break;
+
+     case GraphEvent::TLP_DEL_EDGE:
+      delEdge(graph, gEvt->getEdge());
+      break;
+
+    default:
+      break;
+    }
+  }
 }
 
 void ParallelCoordinatesDrawing::removeHighlightedElt(const unsigned int dataId) {

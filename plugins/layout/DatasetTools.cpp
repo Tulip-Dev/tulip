@@ -113,7 +113,7 @@ DataSet setOrientationParameters(int pOrientation) {
   DataSet dataSet;
   StringCollection stringOrientation(ORIENTATION);
   stringOrientation.setCurrent(pOrientation);
-  dataSet.set<StringCollection>(ORIENTATION_ID, stringOrientation);
+  dataSet.set(ORIENTATION_ID, stringOrientation);
   return dataSet;
 }
 

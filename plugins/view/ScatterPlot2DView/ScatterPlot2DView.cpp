@@ -798,7 +798,7 @@ void ScatterPlot2DView::switchFromDetailViewToMatrixView() {
   getGlMainWidget()->draw();
 }
 
-void ScatterPlot2DView::refresh(PluginProgress *) {
+void ScatterPlot2DView::refresh() {
   getGlMainWidget()->redraw();
 }
 

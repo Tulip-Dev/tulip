@@ -66,7 +66,7 @@ public slots:
 
 protected:
   void graphChanged(tlp::Graph *);
-  void graphDeleted();
+  void graphDeleted(tlp::Graph *);
   bool eventFilter(QObject* obj, QEvent* event);
   void setLabels(tlp::PropertyInterface* prop, bool selectionOnly);
   void setAllValues(tlp::PropertyInterface*, bool useFilter);

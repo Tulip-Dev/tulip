@@ -70,7 +70,6 @@ private :
   void reset();
 
   tlp::Graph *graph;
-  unsigned int lastNbNodes;
   std::map<std::string, std::vector<tlp::node> > nodeSortingMap;
   std::map<std::string, unsigned int> nbValuesPropertyMap;
 

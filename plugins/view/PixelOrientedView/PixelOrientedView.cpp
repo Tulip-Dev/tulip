@@ -190,7 +190,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     propertiesSelectionWidget->setWidgetParameters(NULL, propertiesTypesFilter);
 
     center = true;
-    draw(NULL);
+    draw();
     center = false;
 
     return;
@@ -283,7 +283,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     getGlMainWidget()->centerScene();
   }
 
-  draw(NULL);
+  draw();
   center = false;
 
   drawOverview(true);
@@ -471,7 +471,7 @@ void PixelOrientedView::generatePixelOverview(PixelOrientedOverview *pixelOvervi
   overviewGenMap[pixelOverview->getDimensionName()] = true;
 }
 
-void PixelOrientedView::draw(PluginProgress *) {
+void PixelOrientedView::draw() {
   if (pixelOrientedGraph != NULL) {
 
     getGlMainWidget()->getScene()->setBackgroundColor(optionsWidget->getBackgroundColor());
@@ -548,7 +548,7 @@ void PixelOrientedView::draw(PluginProgress *) {
   }
 }
 
-void PixelOrientedView::refresh(PluginProgress *) {
+void PixelOrientedView::refresh() {
   getGlMainWidget()->redraw();
 }
 
@@ -769,7 +769,7 @@ void PixelOrientedView::applySettings() {
   if(propertiesSelectionWidget->configurationChanged() || optionsWidget->configurationChanged()) {
     updateOverviews(true);
     getGlMainWidget()->centerScene();
-    draw(NULL);
+    draw();
   }
 }
 

@@ -107,7 +107,7 @@ public :
     return graph_component->getProperty<Proxytype>(name);
   }
 
-  PropertyInterface* getProperty(const std::string &name) {
+  PropertyInterface* getProperty(const std::string &name) const {
     return graph_component->getProperty(name);
   }
 
