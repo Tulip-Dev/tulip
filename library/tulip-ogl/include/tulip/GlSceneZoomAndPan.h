@@ -18,13 +18,18 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GLSCENEZOOMANDPAN_H_
 #define GLSCENEZOOMANDPAN_H_
 
-#include <tulip/GlScene.h>
+#include <tulip/tulipconf.h>
+#include <tulip/Vector.h>
+#include <tulip/Coord.h>
 
 namespace tlp {
+
+class GlScene;
+class BoundingBox;
+class Camera;
 
 /**
  * \brief A class which encapsulate a Tulip OpenGL scene animation
@@ -34,6 +39,8 @@ namespace tlp {
 class TLP_GL_SCOPE AdditionalGlSceneAnimation {
 
 public :
+
+    virtual ~AdditionalGlSceneAnimation(){}
 
   /**
    * Method to set the total number of animation steps. No need to call it because the GlSceneZoomAndPan class do that task.
@@ -66,6 +73,8 @@ protected :
 class TLP_GL_SCOPE GlSceneZoomAndPan  {
 
 public :
+
+    virtual ~GlSceneZoomAndPan(){}
 
   /**
    * GlSceneZoomAndPan constructor
