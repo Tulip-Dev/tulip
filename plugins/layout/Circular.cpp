@@ -167,7 +167,7 @@ vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
 
 //this inline function computes the radius size given a size
 inline double computeRadius (const Size &s) {
-  return sqrt (s[0]*s[0]/4.0 + s[1]*s[1]/4.0);
+  return std::max(1E-3, sqrt (s[0]*s[0]/4.0 + s[1]*s[1]/4.0));
 }//end computeRad
 
 bool Circular::run() {
