@@ -705,7 +705,7 @@ struct TLPDataSetBuilder: public TLPFalse {
       if (dataSet.get<unsigned int>("_FontsType", ui))
         dataSet.set("fontType", ui);
 
-      graphBuilder->dataSet->set<DataSet>(dataSetName, dataSet);
+      graphBuilder->dataSet->set(dataSetName, dataSet);
     }
 
     return true;
@@ -729,10 +729,11 @@ struct TLPFileInfoBuilder: public TLPFalse {
   }
 
   bool addString(const std::string &str) {
+    std::string theStr(str);
     if (name == AUTHOR)
-      graphBuilder->dataSet->set<std::string>(AUTHOR, str);
+      graphBuilder->dataSet->set(AUTHOR, theStr);
     else if (name == COMMENTS)
-      graphBuilder->dataSet->set<std::string>("text::comments", str);
+      graphBuilder->dataSet->set("text::comments", theStr);
 
     return true;
   }
@@ -751,7 +752,7 @@ struct TLPSceneBuilder: public TLPFalse {
   }
 
   bool addString(const std::string &str) {
-    graphBuilder->dataSet->set<std::string>(SCENE, str);
+    graphBuilder->dataSet->set(SCENE, (std::string) str);
     return true;
   }
   bool close() {
