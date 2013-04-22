@@ -20,8 +20,7 @@
 #include "LinearMappingColor.h"
 
 
-namespace {
-void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
+/*static void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
   int i;
   float f, p, q, t;
 
@@ -74,14 +73,12 @@ void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
     *b = q;
     break;
   }
-}
-}
+  }*/
 
 namespace pocore {
 LinearMappingColor::LinearMappingColor(const double &min, const double &max) :
   _min(min),
-  _max(max),
-  _nbCol(12) {
+  _max(max) {
   startColor[0] = 255;
   startColor[1] = 255;
   startColor[2] = 0;

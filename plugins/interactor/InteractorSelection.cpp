@@ -55,7 +55,7 @@ public:
     push_back(new MouseSelector);
   }
 
-  QCursor cursor() {
+  QCursor cursor() const {
     return Qt::CrossCursor;
   }
 

@@ -342,7 +342,7 @@ DataSet ParallelCoordinatesView::state() const {
 
   string sceneOut;
   getGlMainWidget()->getScene()->getXMLOnlyForCameras(sceneOut);
-  dataSet.set<string>("scene",sceneOut);
+  dataSet.set("scene",sceneOut);
 
   vector<string> selectedProperties=graphProxy->getSelectedProperties();
   DataSet selectedPropertiesData;
@@ -351,7 +351,7 @@ DataSet ParallelCoordinatesView::state() const {
   for (vector<string>::iterator it=selectedProperties.begin(); it != selectedProperties.end(); ++it) {
     std::stringstream s;
     s << i;
-    selectedPropertiesData.set<string>(s.str(), *it);
+    selectedPropertiesData.set(s.str(), *it);
     i++;
   }
 

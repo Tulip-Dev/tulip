@@ -108,14 +108,20 @@ public :
   BoundingBox getSmallMultiplesViewBoundingBox();
   void generatePixelOverview(PixelOrientedOverview *pixelOverview, GlMainWidget *glWidget = NULL);
 
+  void draw();
+  void refresh();
+  // inherited from GlMainView
+  virtual void centerView(bool) {
+    // call the Qt slot declared below
+    centerView();
+  }
+
 public slots:
 
   void graphChanged(Graph *graph);
-  void draw(PluginProgress *);
-  void refresh(PluginProgress *);
   void init();
-
   void applySettings();
+  void centerView();
 
 private :
 
@@ -125,7 +131,6 @@ private :
   void updateOverviews(const bool updateAll = false);
   void addEmptyViewLabel();
   void removeEmptyViewLabel();
-  void centerView();
   Color getTextColor() const;
 
   Graph *pixelOrientedGraph;

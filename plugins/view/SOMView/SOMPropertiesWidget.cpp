@@ -115,28 +115,28 @@ DataSet SOMPropertiesWidget::getData() const {
   DataSet data;
 
   //Save grid state.
-  data.set<unsigned int> ("gridWidth", getGridWidth());
-  data.set<unsigned int> ("gridHeight", getGridHeight());
-  data.set<bool> ("oppositeConnected", getOppositeConnected());
-  data.set<int> ("connectivity", nodeConnectivityComboBox->currentIndex());
+  data.set("gridWidth", getGridWidth());
+  data.set("gridHeight", getGridHeight());
+  data.set("oppositeConnected", getOppositeConnected());
+  data.set("connectivity", nodeConnectivityComboBox->currentIndex());
   //Learning rate properties.
-  data.set<double> ("learningRate", getLearningRateValue());
+  data.set("learningRate", getLearningRateValue());
 
   //Diffusion rate properties.
-  data.set<int> ("diffusionMethod", diffusionRateComputationMethodComboBox->currentIndex());
-  data.set<unsigned int> ("maxDistance", getMaxDistanceValue());
-  data.set<double> ("diffusionRate", getDiffusionRateValue());
+  data.set("diffusionMethod", diffusionRateComputationMethodComboBox->currentIndex());
+  data.set("maxDistance", getMaxDistanceValue());
+  data.set("diffusionRate", getDiffusionRateValue());
 
-  //Representaion properties
-  data.set<bool> ("performMapping", getAutoMapping());
-  data.set<bool> ("linkColors", getLinkColor());
+  //Representation properties
+  data.set("performMapping", getAutoMapping());
+  data.set("linkColors", getLinkColor());
 
   //SizeMapping
-  data.set<bool> ("useSizeMapping", getSizeMapping() == SOMPropertiesWidget::RealNodeSizeMapping);
+  data.set("useSizeMapping", (bool) (getSizeMapping() == SOMPropertiesWidget::RealNodeSizeMapping));
 
   //Animation
-  data.set<bool> ("withAnimation", useAnimation());
-  data.set<unsigned int> ("animationDuration", getAnimationDuration());
+  data.set("withAnimation", useAnimation());
+  data.set("animationDuration", getAnimationDuration());
 
   //Save current properties.
   vector<string> properties = dimensionConfigurationWidget->propertiesConfigurationWidget->getSelectedProperties();
@@ -149,11 +149,11 @@ DataSet SOMPropertiesWidget::getData() const {
       stringlist.push_back(QString::fromUtf8((*it).c_str()));
     }
 
-    data.set<string> ("properties", stringlist.join(";").toStdString());
+    data.set("properties", std::string(stringlist.join(";").toUtf8().data()));
   }
 
   //Save iteration number
-  data.set<unsigned int> ("iterationNumber", dimensionConfigurationWidget->iterationNumberSpinBox->value());
+  data.set("iterationNumber", dimensionConfigurationWidget->iterationNumberSpinBox->value());
 
   //Save color scale
   DataSet colorScaleDataSet;
@@ -164,8 +164,8 @@ DataSet SOMPropertiesWidget::getData() const {
     colorsList.push_back(QString::fromUtf8(ColorType::toString(it->second).c_str()));
   }
 
-  colorScaleDataSet.set<string> ("colorList", colorsList.join(";").toStdString());
-  colorScaleDataSet.set<bool> ("gradient", defaultScale->isGradient());
+  colorScaleDataSet.set("colorList", std::string(colorsList.join(";").toUtf8().data()));
+  colorScaleDataSet.set("gradient", defaultScale->isGradient());
   data.set("defaultScale", colorScaleDataSet);
 
   return data;

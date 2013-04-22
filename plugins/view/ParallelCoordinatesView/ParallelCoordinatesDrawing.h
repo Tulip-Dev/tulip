@@ -38,7 +38,7 @@
 
 namespace tlp {
 
-class ParallelCoordinatesDrawing : public GlComposite, public GraphObserver, public Observable {
+class ParallelCoordinatesDrawing : public GlComposite, public Observable {
 
 public :
 
@@ -127,7 +127,6 @@ private :
   Coord firstAxisPos;
   unsigned int width, height;
   unsigned int spaceBetweenAxis;
-  unsigned int lineWidth;
   unsigned int linesColorAlphaValue;
   bool drawPointsOnAxis;
 

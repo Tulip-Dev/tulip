@@ -62,7 +62,7 @@ public:
     push_back(new MouseSelectionEditor);
   }
 
-  QCursor cursor() {
+  QCursor cursor() const {
     return QCursor(Qt::CrossCursor);
   }
 

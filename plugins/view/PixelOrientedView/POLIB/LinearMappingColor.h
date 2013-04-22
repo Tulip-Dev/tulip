@@ -31,7 +31,6 @@ public:
 private:
   double _min;
   double _max;
-  unsigned int _nbCol;
   RGBA startColor;
   RGBA endColor;
 };

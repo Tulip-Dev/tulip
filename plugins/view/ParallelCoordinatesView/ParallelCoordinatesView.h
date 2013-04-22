@@ -122,6 +122,12 @@ public :
 
   //unsigned int getSpaceBetweenAxis() {return drawConfigWidget->getSpaceBetweenAxis();}
 
+  // inherited from GlMainView
+  virtual void centerView(bool) {
+    // call the Qt slot declared below
+    centerView();
+  }
+
 public slots:
 
   void draw();

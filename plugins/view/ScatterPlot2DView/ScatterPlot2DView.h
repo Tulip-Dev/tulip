@@ -116,15 +116,18 @@ public :
   void switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot);
   void switchFromDetailViewToMatrixView();
 
+  void draw();
+  void refresh();
+  // inherited from GlMainView
+  virtual void centerView(bool) {
+    // call the Qt slot declared below
+    centerView();
+  }
 
 public slots :
 
-  void draw();
-
-  void refresh(PluginProgress *);
   void init();
   void centerView();
-
   void applySettings();
 
 protected slots :

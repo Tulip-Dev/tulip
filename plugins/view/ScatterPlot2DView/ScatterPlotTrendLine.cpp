@@ -72,7 +72,7 @@ ScatterPlotTrendLine:: ~ScatterPlotTrendLine() {}
 
 bool ScatterPlotTrendLine::eventFilter(QObject*, QEvent *e) {
   if (e->type() == QEvent::MouseMove) {
-    scatterView->refresh(NULL);
+    scatterView->refresh();
     return true;
   }
 
@@ -181,7 +181,7 @@ void ScatterPlotTrendLine::viewChanged(View *view) {
 
   scatterView = dynamic_cast<ScatterPlot2DView *>(view);
   compute(0);
-  scatterView->refresh(NULL);
+  scatterView->refresh();
 }
 
 
