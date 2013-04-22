@@ -30,6 +30,10 @@
 
 #include <tulip/InteractorComposite.h>
 
+namespace Ui {
+class ElementInformationsWidget;
+}
+
 namespace tlp {
 
 class View;
@@ -37,8 +41,11 @@ class View;
  * We define a specific interactor to show element graph infos in eltProperties
  */
 class TLP_QT_SCOPE MouseShowElementInfos : public InteractorComponent {
+
+    Ui::ElementInformationsWidget* _ui;
 public:
   MouseShowElementInfos();
+  ~MouseShowElementInfos();
   virtual bool eventFilter(QObject* widget, QEvent* e);
 
   void viewChanged(View *);

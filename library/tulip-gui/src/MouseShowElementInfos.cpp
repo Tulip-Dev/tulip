@@ -32,15 +32,16 @@
 using namespace std;
 using namespace tlp;
 
-MouseShowElementInfos::MouseShowElementInfos() {
-  Ui::ElementInformationsWidget* ui = new Ui::ElementInformationsWidget; //memory leak: ui never deleted
-  _informationsWidget=new QWidget();
+MouseShowElementInfos::MouseShowElementInfos():_ui(new Ui::ElementInformationsWidget),_informationsWidget(new QWidget()),_informationsWidgetItem(new QGraphicsProxyWidget()) {
   _informationsWidget->installEventFilter(this);
-  ui->setupUi(_informationsWidget);
+  _ui->setupUi(_informationsWidget);
   tableView()->setItemDelegate(new TulipItemDelegate);
-  _informationsWidgetItem=new QGraphicsProxyWidget();
   _informationsWidgetItem->setWidget(_informationsWidget);
   _informationsWidgetItem->setVisible(false);
+}
+
+MouseShowElementInfos::~MouseShowElementInfos() {
+    delete _ui;
 }
 
 void MouseShowElementInfos::clear() {
