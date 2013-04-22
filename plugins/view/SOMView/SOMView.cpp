@@ -350,7 +350,7 @@ void SOMView::drawPreviews() {
   int thumbHeight = 50;
   int spacing = 5;
   int pos = 0;
-  int colNumber = (int) ceil(sqrt(propertiesName.size()));
+  int colNumber = (int) ceil(sqrt(double(propertiesName.size())));
 
   for (vector<string>::iterator it = propertiesName.begin(); it != propertiesName.end(); ++it) {
     double minValue;

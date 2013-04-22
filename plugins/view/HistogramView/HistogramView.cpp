@@ -505,7 +505,7 @@ void HistogramView::buildHistograms() {
   float spaceBetweenOverviews = OVERVIEW_SIZE / 10.;
   float labelHeight = OVERVIEW_SIZE / 6;
 
-  float squareRoot = sqrt(selectedProperties.size());
+  float squareRoot = sqrt(double(selectedProperties.size()));
   const unsigned int N =  (unsigned int) squareRoot + (fmod((float) selectedProperties.size(), squareRoot) == 0. ? 0 : 1);
 
   Color backgroundColor(histoOptionsWidget->getBackgroundColor());
