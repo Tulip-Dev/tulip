@@ -369,7 +369,7 @@ void PixelOrientedView::initPixelView() {
 
   if (selectedGraphProperties.size()  == 0) return;
 
-  float squareRoot = sqrt(selectedGraphProperties.size());
+  float squareRoot = sqrt(double(selectedGraphProperties.size()));
   const unsigned int N =  (unsigned int) squareRoot + (fmod((float) selectedGraphProperties.size(), squareRoot) == 0. ? 0 : 1);
 
   for (size_t i = 0 ; i < selectedGraphProperties.size() ; ++i) {
