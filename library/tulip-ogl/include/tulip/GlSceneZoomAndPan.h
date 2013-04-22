@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
-
 #ifndef GLSCENEZOOMANDPAN_H_
 #define GLSCENEZOOMANDPAN_H_
 
@@ -46,7 +44,7 @@ public :
    * Method to set the total number of animation steps. No need to call it because the GlSceneZoomAndPan class do that task.
    *
    */
-  void setNbAnimationSteps(int nbAnimationSteps) {
+ inline void setNbAnimationSteps(int nbAnimationSteps) {
     this->nbAnimationSteps = nbAnimationSteps;
   }
 
@@ -65,10 +63,10 @@ protected :
 /** \brief A convenient class to perform Zoom and Pan animation on Tulip OpenGL scene
  *
  *  This class allow to perform a smooth and efficient zooming and panning on Tulip OpenGL scene.
- *  The algorithm used to perform this task is the one published in : Jarke J. van Wijk and Wim A.A. Nuij, "Smooth and efficient zooming and panning"
- *  For more details, the paper can be downloaded at the following url : www.win.tue.nl/~vanwijk/zoompan.pdf
+ *  The algorithm used to perform this task is the one published in: Jarke J. van Wijk and Wim A.A. Nuij, "Smooth and efficient zooming and panning"
+ *  For more details, the paper can be downloaded at the following url: http://www.win.tue.nl/~vanwijk/zoompan.pdf
  *  Even if this class contains the whole Zoom and Pan implementation, it is not aimed to be used directly because its role is only to compute new camera parameters.
- *  Use the derived class QtGlSceneZoomAndPanAnimator in the tulip-qt library instead to perform the animation.
+ *  Use the derived class QtGlSceneZoomAndPanAnimator in the tulip-gui library instead to perform the animation.
  */
 class TLP_GL_SCOPE GlSceneZoomAndPan  {
 
@@ -99,14 +97,14 @@ public :
   /**
    * Method which return the number of animation steps
    */
-  int getNbAnimationsStep() const {
+  inline int getNbAnimationsStep() const {
     return nbAnimationSteps;
   }
 
   /**
    * Method to set the number of animation steps
    */
-  void setNbAnimationSteps(const int nbAnimationSteps) {
+  inline void setNbAnimationSteps(const int nbAnimationSteps) {
     this->nbAnimationSteps = nbAnimationSteps;
   }
 
@@ -134,4 +132,3 @@ protected :
 }
 
 #endif /* GLSCENEZOOMANDPAN_H_ */
-///@endcond
