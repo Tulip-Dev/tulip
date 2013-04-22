@@ -16,11 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef WIN32
-#define _STDCALL_SUPPORTED
-#define _M_IX86
-#include <windows.h>
-#endif // WIN32
+//#ifdef WIN32
+//#define _STDCALL_SUPPORTED
+//#define _M_IX86
+//#include <windows.h>
+//#endif // WIN32
 #include <GL/glew.h>
 
 #include <tulip/OpenGlConfigManager.h>
