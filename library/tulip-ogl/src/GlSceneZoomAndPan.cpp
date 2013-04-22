@@ -27,14 +27,10 @@ using namespace std;
 namespace tlp {
 
 GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox, const std::string &layerName, const int nbAnimationSteps, const bool optimalPath, const double p) :
-  camera(glScene->getLayer(layerName)->getCamera()),nbAnimationSteps(nbAnimationSteps), optimalPath(optimalPath), p(p), additionalAnimation(NULL) {
+  camera(glScene->getLayer(layerName)->getCamera()),viewport(glScene->getViewport()),nbAnimationSteps(nbAnimationSteps), optimalPath(optimalPath), p(p),
+  camCenterStart(camera.getCenter()),camCenterEnd(Coord(boundingBox.center())),additionalAnimation(NULL) {
 
-  viewport = glScene->getViewport();
-
-  camCenterStart = camera.getCenter();
-  camCenterEnd = Coord(boundingBox.center());
-
-  camCenterEnd[2] = camCenterStart[2];
+    camCenterEnd[2] = camCenterStart[2];
 
   Coord blScene(camera.screenTo3DWorld(Coord(0, 0, 0)));
   Coord trScene(camera.screenTo3DWorld(Coord(viewport[2], viewport[3], 0)));

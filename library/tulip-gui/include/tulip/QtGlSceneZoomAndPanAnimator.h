@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
+
 #ifndef QTGLSCENEZOOMANDPANANIMATOR_H_
 #define QTGLSCENEZOOMANDPANANIMATOR_H_
 
@@ -74,4 +74,3 @@ protected :
 
 
 #endif /* QTGLSCENEZOOMANDPANANIMATOR_H_ */
-///@endcond
