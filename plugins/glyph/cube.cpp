@@ -34,7 +34,7 @@ using namespace std;
 using namespace tlp;
 
 static GlBox* box = NULL;
-void drawBox(const Color &fillColor,const std::string &textureName, float lod, GlGraphInputData *glGraphInputData) {
+void drawBox(const Color &fillColor, const Color &outlineColor, const float outlineSize, const std::string &textureName, float lod, GlGraphInputData *glGraphInputData) {
   if (textureName.size() != 0) {
     const string& texturePath=glGraphInputData->parameters->getTexturePath();
     box->setTextureName(texturePath+textureName);
@@ -43,7 +43,8 @@ void drawBox(const Color &fillColor,const std::string &textureName, float lod, G
     box->setTextureName("");
 
   box->setFillColor(fillColor);
-  box->setOutlineColor(Color(0,0,0,0));
+  box->setOutlineSize(outlineSize);
+  box->setOutlineColor(outlineColor);
 
   box->draw(lod,NULL);
 }
@@ -74,6 +75,8 @@ Cube::~Cube() {
 }
 void Cube::draw(node n, float lod) {
   drawBox(glGraphInputData->getElementColor()->getNodeValue(n),
+          glGraphInputData->getElementBorderColor()->getNodeValue(n),
+          glGraphInputData->getElementBorderWidth()->getNodeValue(n),
           glGraphInputData->getElementTexture()->getNodeValue(n),
           lod, glGraphInputData);
 }
@@ -98,9 +101,11 @@ public:
       box = new GlBox(Coord(0,0,0),Size(1,1,1),Color(0,0,0,255),Color(0,0,0,255));
   }
 
-  void draw(edge, node n, const Color& glyphColor,const Color&, float lod) {
+  void draw(edge e, node n, const Color& glyphColor,const Color& borderColor, float lod) {
     glEnable(GL_LIGHTING);
     drawBox(glyphColor,
+            borderColor,
+            edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
             edgeExtGlGraphInputData->getElementTexture()->getNodeValue(n),
             lod, edgeExtGlGraphInputData);
   }

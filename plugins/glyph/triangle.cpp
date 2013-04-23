@@ -75,23 +75,18 @@ void Triangle::draw(node n,float lod) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     triangle->setTextureName(texturePath+texFile);
-  }
-  else {
+  } else {
     triangle->setTextureName("");
   }
 
-  triangle->setOutlineColor(glGraphInputData->getGraph()->getProperty<ColorProperty>("viewBorderColor")->getNodeValue(n));
+  double lineWidth=glGraphInputData->getElementBorderWidth()->getNodeValue(n);
 
-  if (glGraphInputData->getGraph()->existProperty ("viewBorderWidth")) {
-    double lineWidth=glGraphInputData->getGraph()->getProperty<DoubleProperty>("viewBorderWidth")->getNodeValue(n);
-
-    if (lineWidth < 1e-6)
-      lineWidth=1e-6;
-
+  if (lineWidth > 0) {
+    triangle->setOutlineMode(true);
+    triangle->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
     triangle->setOutlineSize(lineWidth);
-  }
-  else {
-    triangle->setOutlineSize(2.);
+  } else {
+    triangle->setOutlineMode(false);
   }
 
   triangle->draw(lod,NULL);
