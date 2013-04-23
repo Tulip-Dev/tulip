@@ -31,7 +31,6 @@
 #include <tulip/IdManager.h>
 #include <tulip/TreeTest.h>
 
-using namespace stdext;
 using namespace std;
 using namespace tlp;
 

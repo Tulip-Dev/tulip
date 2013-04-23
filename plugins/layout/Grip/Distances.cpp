@@ -22,7 +22,6 @@
 #include <tulip/MutableContainer.h>
 
 using namespace tlp;
-using namespace stdext;
 using namespace std;
 
 unsigned int getDist(Graph *g, node n1, node n2) {

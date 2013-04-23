@@ -26,7 +26,6 @@
 
 using namespace tlp;
 using namespace std;
-using namespace stdext;
 
 MISFiltering::MISFiltering(Graph *g) {
   g_copy = g;
