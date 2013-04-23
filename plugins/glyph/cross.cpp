@@ -57,13 +57,15 @@ void drawCross(const Color &fillColor,
                float borderWidth,
                const std::string &textureName,
                float lod) {
-  if(borderWidth<1e-6f)
-    borderWidth=1e-6f;
 
   cross->setFillColor(fillColor);
-  cross->setOutlineMode(true);
-  cross->setOutlineColor(borderColor);
-  cross->setOutlineSize(borderWidth);
+  if (borderWidth > 0) {
+    cross->setOutlineMode(true);
+    cross->setOutlineColor(borderColor);
+    cross->setOutlineSize(borderWidth);
+  } else {
+    cross->setOutlineMode(false);
+  }
   cross->setTextureName(textureName);
   cross->draw(lod,NULL);
 }

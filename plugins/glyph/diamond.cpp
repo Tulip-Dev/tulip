@@ -40,12 +40,15 @@ void drawDiamond(const Color &fillColor,
                  float borderWidth,
                  const std::string &textureName,
                  float lod) {
-  if(borderWidth<1e-6f)
-    borderWidth=1e-6f;
 
   diamond->setFillColor(fillColor);
-  diamond->setOutlineColor(borderColor);
-  diamond->setOutlineSize(borderWidth);
+  if (borderWidth > 0) {
+    diamond->setOutlineMode(true);
+    diamond->setOutlineColor(borderColor);
+    diamond->setOutlineSize(borderWidth);
+  } else {
+    diamond->setOutlineMode(false);
+  }
   diamond->setTextureName(textureName);
   diamond->draw(lod,NULL);
 }

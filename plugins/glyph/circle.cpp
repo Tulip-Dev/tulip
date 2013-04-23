@@ -37,12 +37,14 @@ using namespace tlp;
 static GlCircle *circle = NULL;
 
 void drawCircle(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
-  if(borderWidth<1e-6f)
-    borderWidth=1e-6f;
-
   circle->setFillColor(fillColor);
-  circle->setOutlineColor(borderColor);
-  circle->setOutlineSize(borderWidth);
+  if (borderWidth > 0) {
+    circle->setOutlineMode(true);
+    circle->setOutlineColor(borderColor);
+    circle->setOutlineSize(borderWidth);
+  } else {
+    circle->setOutlineMode(false);
+  }
   circle->setTextureName(textureName);
   circle->draw(lod,NULL);
 }

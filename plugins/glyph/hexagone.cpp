@@ -35,13 +35,17 @@ using namespace std;
 using namespace tlp;
 
 static GlHexagon *hexagon = NULL;
+
 void drawHexagone(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
-  if(borderWidth<1e-6f)
-    borderWidth=1e-6f;
 
   hexagon->setFillColor(fillColor);
-  hexagon->setOutlineColor(borderColor);
-  hexagon->setOutlineSize(borderWidth);
+  if (borderWidth > 0) {
+    hexagon->setOutlineMode(true);
+    hexagon->setOutlineColor(borderColor);
+    hexagon->setOutlineSize(borderWidth);
+  } else {
+    hexagon->setOutlineMode(false);
+  }
   hexagon->setTextureName(textureName);
   hexagon->draw(lod,NULL);
 }

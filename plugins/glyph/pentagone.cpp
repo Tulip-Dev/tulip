@@ -36,12 +36,15 @@ using namespace tlp;
 
 static GlPentagon *pentagon = NULL;
 void drawPentagon(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
-  if(borderWidth<1e-6f)
-    borderWidth=1e-6f;
 
   pentagon->setFillColor(fillColor);
-  pentagon->setOutlineColor(borderColor);
-  pentagon->setOutlineSize(borderWidth);
+  if (borderWidth > 0) {
+    pentagon->setOutlineMode(true);
+    pentagon->setOutlineColor(borderColor);
+    pentagon->setOutlineSize(borderWidth);
+  } else {
+    pentagon->setOutlineMode(false);
+  }
   pentagon->setTextureName(textureName);
   pentagon->draw(lod,NULL);
 }
