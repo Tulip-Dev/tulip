@@ -64,10 +64,10 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
 #ifndef __APPLE__
 
   sig_ucontext_t * uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
-# ifdef I64
-  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
-# else
+# if defined(__i386__)
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.eip); // x86 specific;
+# else
+  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
 # endif
 
 #else
