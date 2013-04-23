@@ -175,9 +175,14 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
       if(size>2)
         size=2;
 
+      Color pointColor = data->getElementColor()->getNodeValue(n);
+      if (data->getElementBorderWidth()->getNodeValue(n) > 0) {
+          pointColor = data->getElementBorderColor()->getNodeValue(n);
+      }
+
       OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
       glDisable(GL_LIGHTING);
-      setColor(selected ? colorSelect2 : fillColor);
+      setColor(selected ? colorSelect2 : pointColor);
       glPointSize(size);
       glBegin(GL_POINTS);
       glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.);
@@ -318,13 +323,23 @@ void GlNode::getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &po
   node n=node(id);
   const Coord &nodeCoord = inputData->getElementLayout()->getNodeValue(n);
   const Color& fillColor = inputData->getElementColor()->getNodeValue(n);
+  const Color& borderColor = inputData->getElementBorderColor()->getNodeValue(n);
   pointsCoordsArray.push_back(nodeCoord);
-  pointsColorsArray.push_back(fillColor);
+  if (inputData->getElementBorderWidth()->getNodeValue(n) > 0) {
+    pointsColorsArray.push_back(borderColor);
+  } else {
+    pointsColorsArray.push_back(fillColor);
+  }
 }
 
 void GlNode::getColor(GlGraphInputData *inputData,std::vector<Color> &pointsColorsArray) {
   node n=node(id);
   const Color& fillColor = inputData->getElementColor()->getNodeValue(n);
-  pointsColorsArray.push_back(fillColor);
+  const Color& borderColor = inputData->getElementBorderColor()->getNodeValue(n);
+  if (inputData->getElementBorderWidth()->getNodeValue(n) > 0) {
+    pointsColorsArray.push_back(borderColor);
+  } else {
+    pointsColorsArray.push_back(fillColor);
+  }
 }
 }
