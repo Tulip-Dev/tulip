@@ -31,7 +31,13 @@
  */
 
 //VS2010 and later can use C++0x's unordered_map; vs2008 uses boost's tr1 implementation
-#if(defined _MSC_VER && _MSC_VER > 1500)
+#if defined(_MSC_VER) && (_MSC_VER > 1500)
+#  define TLP_USE_UNORDERED_MAP
+#elif defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
+#  define TLP_USE_UNORDERED_MAP
+#endif
+
+#ifdef TLP_USE_UNORDERED_MAP
 #  include <unordered_map>
 #  include <unordered_set>
 #  define TLP_HASH_MAP std::unordered_map

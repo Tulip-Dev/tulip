@@ -31,7 +31,7 @@
 
 //MSVC and GCC in c++11 mode use decltype instead of typeof
 #if !defined(_MSC_VER)
-#  if defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
 #    define TYPEOF decltype
 #  else
 #    define TYPEOF typeof

@@ -29,6 +29,7 @@
 
 #ifndef _MSC_VER
 #include <ext/functional>
+#define compose_fn stdext::compose2
 #else
 
 // Visual Studio lacks compose2, use implementation from boost
@@ -64,14 +65,13 @@ compose_f_gx_hx (const OP1& o1, const OP2& o2, const OP3& o3) {
   return compose_f_gx_hx_t<OP1,OP2,OP3>(o1,o2,o3);
 }
 
-#define compose2 compose_f_gx_hx
+#define compose_fn compose_f_gx_hx
 
 #endif
 
 #include "HistogramStatistics.h"
 
 using namespace std;
-using namespace stdext;
 
 template <class K, class V>
 class map_value_greater_equal : public unary_function<pair<K, V>, bool> {
@@ -499,7 +499,7 @@ void HistogramStatistics::computeInteractor() {
       double lowerBound = histoStatsConfigWidget->getSelectionLowerBound();
       double upperBound = histoStatsConfigWidget->getSelectionUpperBound();
       map<unsigned int, double>::iterator pos = find_if(graphPropertyValueSet.begin(), graphPropertyValueSet.end(),
-          compose2(logical_and<bool>(), map_value_greater_equal<unsigned int, double>(lowerBound),
+          compose_fn(logical_and<bool>(), map_value_greater_equal<unsigned int, double>(lowerBound),
                    map_value_less_equal<unsigned int, double>(upperBound)));
 
       while (pos != graphPropertyValueSet.end()) {
@@ -511,7 +511,7 @@ void HistogramStatistics::computeInteractor() {
         }
 
         pos = find_if(++pos, graphPropertyValueSet.end(),
-                      compose2(logical_and<bool>(), map_value_greater_equal<unsigned int, double>(lowerBound),
+                      compose_fn(logical_and<bool>(), map_value_greater_equal<unsigned int, double>(lowerBound),
                                map_value_less_equal<unsigned int, double>(upperBound)));
       }
 

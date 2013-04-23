@@ -20,7 +20,6 @@
 #include <tulip/ObservableProperty.h>
 #include <tulip/PropertyInterface.h>
 
-using namespace stdext;
 using namespace tlp;
 
 void PropertyObserver::treatEvent(const Event& ev) {

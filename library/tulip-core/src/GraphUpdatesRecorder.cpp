@@ -22,7 +22,6 @@
 #include <tulip/GraphImpl.h>
 
 using namespace std;
-using namespace stdext;
 using namespace tlp;
 
 GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart):
