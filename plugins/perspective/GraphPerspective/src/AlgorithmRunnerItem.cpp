@@ -260,9 +260,6 @@ void AlgorithmRunnerItem::run(Graph *g) {
   ParameterDescriptionList paramList = PluginLister::getPluginParameters(algorithm);
   ParameterDescription desc;
   forEach(desc, paramList.getParameters()) {
-    if (desc.getDirection() == IN_PARAM)
-      continue;
-
     std::string typeName(desc.getTypeName());
 
     // forget non property out param
@@ -282,6 +279,26 @@ void AlgorithmRunnerItem::run(Graph *g) {
         && typeName != TN(SizeVectorProperty)
         && typeName != TN(ColorVectorProperty))
       continue;
+
+    if (desc.getDirection() == IN_PARAM) {
+      if (desc.isMandatory()) {
+	// if it is a mandatory input property
+	// check it is not null
+	PropertyInterface* prop = NULL;
+	dataSet.get(desc.getName(), prop);
+	if (prop == NULL) {
+	  g->pop();
+	  Observable::holdObservers();
+	  QString message("Mandatory property parameter '");
+	  message += desc.getName().c_str();
+	  message += "'<br/> cannot be null";
+	  qCritical() << message;
+	  QMessageBox::critical(parentWidget(), name(), message);
+	  return;
+	}
+      }
+      continue;
+    }
 
     OutPropertyParam outPropParam(desc.getName());
     // get destination property
