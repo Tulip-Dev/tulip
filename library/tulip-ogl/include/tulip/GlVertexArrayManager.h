@@ -173,6 +173,7 @@ protected:
   DoubleProperty* rotationProperty;
   ColorProperty* colorProperty;
   ColorProperty* borderColorProperty;
+  DoubleProperty* borderWidthProperty;
   bool graphObserverActivated;
   bool layoutObserverActivated;
   bool colorObserverActivated;
