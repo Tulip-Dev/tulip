@@ -24,15 +24,15 @@ InstallDir $PROGRAMFILES\Tulip
 OutFile "tulip_setup.exe"
 
 Function CheckAndInstallPython 
-  ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\3.3\InstallPath ""
+  ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\2.7\InstallPath ""
   IfErrors 0 +2
-	ReadRegStr $0 HKLM SOFTWARE\Wow6432Node\Python\PythonCore\3.3\InstallPath ""
+        ReadRegStr $0 HKLM SOFTWARE\Wow6432Node\Python\PythonCore\2.7\InstallPath ""
   IfErrors install end
   install:
-	MessageBox MB_OK "Your system does not appear to have Python 3.3 installed.$\n$\nIt is now required to run Tulip.$\n$\nPress OK to download Python 3.3 and install it."
-	NSISdl::download http://www.python.org/ftp/python/3.3.1/python-3.3.1.msi python-3.3.1.msi
-	ExecWait '"msiexec" /i "python-3.3.1.msi"'
-	Delete python-3.3.1.msi
+        MessageBox MB_OK "Your system does not appear to have Python 2.7 installed.$\n$\nIt is now required to run Tulip.$\n$\nPress OK to download Python 2.7 and install it."
+        NSISdl::download http://www.python.org/ftp/python/2.7.4/python-2.7.4.msi python-2.7.4.msi
+        ExecWait '"msiexec" /i "python-2.7.4.msi"'
+        Delete python-2.7.4.msi
   end:  
 FunctionEnd
 
