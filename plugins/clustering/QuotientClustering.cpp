@@ -219,6 +219,10 @@ bool QuotientClustering::run() {
   forEach(pName, quotientGraph->getProperties()) {
     PropertyInterface *prop = quotientGraph->getProperty(pName);
 
+    //do nothing for viewBorderWidth
+    if(pName == "viewBorderWidth")
+        continue;
+
     if (dynamic_cast<DoubleProperty *>(prop)) {
       prevCalcs[(unsigned long) prop] = prop->getMetaValueCalculator();
       ((DoubleProperty *)prop)->setMetaValueCalculator(nodeFn, edgeFn);
