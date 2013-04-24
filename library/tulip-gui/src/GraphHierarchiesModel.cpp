@@ -63,6 +63,16 @@ public:
   }
 };
 
+// viewBorderWidth
+class ViewBorderWidthCalculator :public AbstractProperty<tlp::DoubleType, tlp::DoubleType>::MetaValueCalculator {
+public:
+  virtual void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* width, node mN,
+                                Graph*, Graph*) {
+    // meta node border width is 1
+    width->setNodeValue(mN, 1);
+  }
+};
+
 // viewLabel
 class ViewLabelCalculator :public AbstractStringProperty::MetaValueCalculator {
 public:
@@ -127,6 +137,7 @@ static ViewColorCalculator vColorCalc;
 static ViewLabelCalculator vLabelCalc;
 static ViewLayoutCalculator vLayoutCalc;
 static ViewSizeCalculator vSizeCalc;
+static ViewBorderWidthCalculator vWidthCalc;
 
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
@@ -567,6 +578,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   g->getProperty<StringProperty>("viewLabel")->setMetaValueCalculator(&vLabelCalc);
   g->getProperty<LayoutProperty>("viewLayout")->setMetaValueCalculator(&vLayoutCalc);
   g->getProperty<SizeProperty>("viewSize")->setMetaValueCalculator(&vSizeCalc);
+  g->getProperty<DoubleProperty>("viewBorderWidth")->setMetaValueCalculator(&vWidthCalc);
 
   g->addListener(this);
 
