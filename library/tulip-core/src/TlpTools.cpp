@@ -273,6 +273,7 @@ std::string tlp::demangleClassName(const char* className,
     clName += 6;
   if (hideTlp && strstr(clName, "tlp::") == clName)
     return std::string(clName + 5);
+  return std::string(clName);
 }
 #else
 #error define symbols demangling function
