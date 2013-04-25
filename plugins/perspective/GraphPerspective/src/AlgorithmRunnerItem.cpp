@@ -451,13 +451,12 @@ void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
   std::string stdName = name().toStdString();
 
   if (pluginLister->pluginExists<LayoutAlgorithm>(stdName)) {
-    Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
-
     if (TulipSettings::instance().isAutomaticRatio()) {
       LayoutProperty* prop = NULL;
       dataSet.get<LayoutProperty*>("result",prop);
       prop->perfectAspectRatio();
     }
+    Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
   }
   else if (pluginLister->pluginExists<Algorithm>(stdName) &&
            !pluginLister->pluginExists<PropertyAlgorithm>(stdName) &&
