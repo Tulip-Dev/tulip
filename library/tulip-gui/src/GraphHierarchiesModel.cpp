@@ -64,7 +64,7 @@ public:
 };
 
 // viewBorderWidth
-class ViewBorderWidthCalculator :public AbstractProperty<tlp::DoubleType, tlp::DoubleType>::MetaValueCalculator {
+class ViewBorderWidthCalculator :public DoubleMinMaxProperty::MetaValueCalculator {
 public:
   virtual void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* width, node mN,
                                 Graph*, Graph*) {
@@ -186,7 +186,7 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   }
 
   if (!g->existProperty(tgtShape)) {
-    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(50);
+    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
   }
 
   if (!g->existProperty(srcShape)) {
