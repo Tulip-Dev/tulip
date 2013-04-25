@@ -182,7 +182,6 @@ void Dikjstra::internalSearchPaths(node n, BooleanProperty *result, DoubleProper
 
     result->setEdgeValue(e, true);
     double dep = depth->getEdgeValue(e) + 1.;
-    #pragma omp critical(DEPTH)
     depth->setEdgeValue(e, dep);
     searchPaths(tgt, result, depth);
   }
