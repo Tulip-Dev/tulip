@@ -29,25 +29,16 @@
 
 namespace tlp {
 
-bool ParameterListModel::ParamInfosSorter::operator()(ParameterListModel::ParamInfos a, ParameterListModel::ParamInfos b) {
-  if (a.mandatory && !b.mandatory)
-    return true;
-  else if (!a.mandatory && b.mandatory)
-    return false;
-
-  return a.name.compare(b.name) < 0;
-}
-
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph, QObject *parent)
   : TulipModel(parent), _graph(graph) {
   ParameterDescription param;
-  QVector<ParamInfos> outParams;
+  QVector<ParameterDescription> outParams;
   // first add in parameters
   forEach(param,params.getParameters()) {
     if (param.getDirection() != OUT_PARAM)
-      _params.push_back(ParamInfos(param.isMandatory(),param.getName().c_str(),param.getHelp().c_str(),param.getTypeName()));
+      _params.push_back(param);
     else
-      outParams.push_back(ParamInfos(param.isMandatory(),param.getName().c_str(),param.getHelp().c_str(),param.getTypeName()));
+      outParams.push_back(param);
   }
 
   // then add out parameters
@@ -79,30 +70,30 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
   if (role == GraphRole)
     return QVariant::fromValue<tlp::Graph*>(_graph);
 
-  ParamInfos infos = _params[index.row()];
+  const ParameterDescription& infos = _params[index.row()];
 
   if (role == Qt::ToolTipRole)
-    return infos.desc;
+    return infos.getHelp().c_str();
   else if (role == Qt::WhatsThisRole)
-    return infos.desc;
+    return infos.getHelp().c_str();
   else if (role == Qt::BackgroundRole) {
-    if (infos.mandatory)
+    if (infos.isMandatory())
       return QColor(255, 255, 222);
     else
       return QColor(222, 255, 222);
   }
   else if (role == Qt::DisplayRole) {
-    tlp::DataType *dataType = _data.getData(infos.name.toStdString());
+    tlp::DataType *dataType = _data.getData(infos.getName());
 
     if (!dataType)
-      return infos.type.c_str();
+      return infos.getTypeName().c_str();
 
-    QVariant result = TulipMetaTypes::dataTypeToQvariant(dataType,infos.name.toStdString());
+    QVariant result = TulipMetaTypes::dataTypeToQvariant(dataType, infos.getName());
     delete dataType;
     return result;
   }
   else if (role == MandatoryRole) {
-    return infos.mandatory;
+    return infos.isMandatory();
   }
 
   return QVariant();
@@ -118,18 +109,23 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
   }
 
   if (orientation == Qt::Vertical) {
-    ParamInfos infos = _params[section];
+    const ParameterDescription& infos = _params[section];
 
-    if (role == Qt::DisplayRole)
-      return infos.getNameForDisplay();
+    if (role == Qt::DisplayRole) {
+      // remove prefix if any
+      size_t pos = infos.getName().find("::");
+      if (pos != std::string::npos)
+	return infos.getName().c_str() + pos + 2;
+      return infos.getName().c_str();
+    }
     else if (role == Qt::BackgroundRole) {
-      if (infos.mandatory)
+      if (infos.isMandatory())
         return QColor(255, 255, 222);
       else
         return QColor(222, 255, 222);
     }
     else if (role == Qt::ToolTipRole)
-      return infos.desc;
+      return infos.getHelp().c_str();
   }
 
   return TulipModel::headerData(section,orientation,role);
@@ -146,12 +142,12 @@ Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
 
 bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole) {
-    ParamInfos infos = _params[index.row()];
+    const ParameterDescription& infos = _params[index.row()];
 
     DataType *dataType = TulipMetaTypes::qVariantToDataType(value);
 
     if (dataType)
-      _data.setData(infos.name.toStdString(),dataType);
+      _data.setData(infos.getName(), dataType);
 
     return (dataType != NULL);
   }

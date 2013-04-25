@@ -30,30 +30,7 @@
 namespace tlp {
 
 class TLP_QT_SCOPE ParameterListModel : public TulipModel {
-  struct ParamInfos {
-    inline ParamInfos() {}
-    inline ParamInfos(bool m,const QString &n,const QString &d, const std::string& t): mandatory(m), name(n),desc(d), type(t) {}
-    bool mandatory;
-    QString name;
-    QString desc;
-    std::string type;
-
-    QString getNameForDisplay() {
-      // if a a subtype prefix exists, don't show it
-      int pos = name.indexOf("::");
-
-      if (pos != -1)
-        return name.mid(pos + 2);
-      else
-        return name;
-    }
-  };
-
-  struct ParamInfosSorter {
-    bool operator()(ParamInfos a, ParamInfos b);
-  };
-
-  QVector<ParamInfos> _params;
+  QVector<ParameterDescription> _params;
   tlp::DataSet _data;
   tlp::Graph* _graph;
 
