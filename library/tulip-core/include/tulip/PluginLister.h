@@ -22,12 +22,11 @@
 
 #include <list>
 #include <string>
-#include <set>
 
 #include <tulip/Plugin.h>
-#include <tulip/TlpTools.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/Observable.h>
+
 
 namespace tlp {
 class PluginContext;
@@ -66,7 +65,6 @@ private:
 
     PluginDescription(): factory(NULL), infos(NULL) {}
     ~PluginDescription() {
-      if (infos)
         delete infos;
     }
   };
@@ -136,11 +134,11 @@ public:
 
 
   /**
-   * @brief Gets the list of plug-ins that registered themselves in this factory.
-   *
-   * @return :Iterator< std::string >* An iterator over the names of the plug-ins registered in this factory.
+   * @brief Gets the list of plugins of a given type (template parameter).   *
+   * @return A std::list<std::string> containing the names of the plugins.
    **/
   static std::list<std::string> availablePlugins();
+
 
   template<typename PluginType>
   std::list<std::string> availablePlugins() {
