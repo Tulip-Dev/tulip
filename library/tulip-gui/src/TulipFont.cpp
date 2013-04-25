@@ -116,7 +116,7 @@ QString TulipFont::fontFamily() const {
   QStringList families = QFontDatabase::applicationFontFamilies(fontId());
   QString family = trUtf8("Unregistered font");
 
-  if (families.size()>0)
+  if (!families.empty())
     family = families[0];
 
   return family;

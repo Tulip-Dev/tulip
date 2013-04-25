@@ -223,7 +223,7 @@ bool WorkspaceExposeWidget::eventFilter(QObject* obj, QEvent* ev) {
       item->panel()->close();
       item->deleteLater();
 
-      if (_items.size()==0)
+      if (_items.empty())
         finish();
       else
         updatePositions();

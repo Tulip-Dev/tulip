@@ -111,10 +111,10 @@ void usage(const QString &error) {
   list<string> perspectives = PluginLister::instance()->availablePlugins<Perspective>();
 
   for(list<string>::const_iterator it=perspectives.begin(); it!=perspectives.end(); ++it) {
-    cerr << *it;
+    cout << *it;
 
     if((*it)!=perspectives.back())
-      cerr << ", ";
+      cout << ", ";
   }
 
   cerr << endl;
@@ -216,7 +216,7 @@ int main(int argc,char **argv) {
     else if(extraParametersRegexp.exactMatch(a)) {
       extraParams[extraParametersRegexp.cap(1)] = extraParametersRegexp.cap(2);
     }
-    else if (projectFilePath.isNull()) {
+    else {
       projectFilePath = a;
     }
   }
@@ -224,32 +224,36 @@ int main(int argc,char **argv) {
   TulipProject *project = NULL;
   QString error;
 
-  if (!projectFilePath.isNull() && projectFilePath.endsWith(".tlpx")) {
+  if(!QFileInfo(projectFilePath).exists()) {
+      usage("File "+projectFilePath+" not found");
+  }
+
+  if (!projectFilePath.isEmpty() && projectFilePath.endsWith(".tlpx")) {
     project = TulipProject::openProject(projectFilePath,progress);
 
     if (!project->isValid()) {
       error = project->lastError();
-      std::cerr << error.toStdString() << std::endl;
       delete project;
       project = NULL;
     }
   }
 
-
   if (project == NULL) {
     context->externalFile = projectFilePath;
     project = TulipProject::newProject();
   }
-  else if (perspectiveName.isNull()) {
+  else if (perspectiveName.isEmpty()) {
     perspectiveName = project->perspective();
+    if(perspectiveName.isEmpty())
+        error = "No perspective given on the command line or in the project file";
+  }
+
+  if (perspectiveName.isEmpty()) {
+      usage("Could not determine the perspective to launch: \n"+ error);
   }
 
   context->project = project;
   context->parameters = extraParams;
-
-  if (perspectiveName.isNull())
-    usage("Could not determine the perspective to launch." + error);
-
   project->setPerspective(perspectiveName);
   // Initialize main window.
   progress->progress(100,100);
@@ -258,17 +262,18 @@ int main(int argc,char **argv) {
 
   // Create perspective object
   Perspective *perspective = PluginLister::instance()->getPluginObject<Perspective>(perspectiveName.toStdString(), context);
+
+  if (perspective==NULL) {
+      usage("Cannot open perspective: " + perspectiveName + "\nWrong plugin type or plugin not found.");
+  }
+
   Perspective::setInstance(perspective);
-
-  if (!perspective)
-    usage("Failed to create perspective: " + perspectiveName);
-
   mainWindow->setPerspective(perspective);
 
   title += QString(" [") + perspectiveName + "]";
 
   if (project) {
-    if (!project->name().isNull())
+    if (!project->name().isEmpty())
       title += QString(" - ") + project->name();
     else if (!projectFilePath.isEmpty())
       title += QString(" - ") + projectFilePath;
