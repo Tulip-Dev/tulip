@@ -224,7 +224,7 @@ int main(int argc,char **argv) {
   TulipProject *project = NULL;
   QString error;
 
-  if(!QFileInfo(projectFilePath).exists()) {
+  if(!projectFilePath.isEmpty() && !QFileInfo(projectFilePath).exists()) {
       usage("File "+projectFilePath+" not found");
   }
 
