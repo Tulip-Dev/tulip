@@ -233,7 +233,7 @@ void PluginsCenter::repoAdded() {
 void PluginsCenter::repoRemoved() {
   QList<QListWidgetItem*> selected = _ui->remoteLocationsList->selectedItems();
 
-  if (selected.size()==0)
+  if (selected.empty())
     return;
 
   QString location = selected.first()->text();

@@ -106,9 +106,7 @@ namespace tlp {
 
 bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QColor &result) {
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-
-  QColor newColor = QColorDialog::getColor(color, parent, title, QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
+ QColor newColor = QColorDialog::getColor(color, parent, title, QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
 
   if(newColor.isValid()) {
     result=newColor;
@@ -117,19 +115,6 @@ bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QCo
   else
     return false;
 
-#else
-
-  bool ok = true;
-  QRgb newColor = QColorDialog::getRgba(qRgba(color.red(),color.green(), color.blue(), color.alpha()), &ok, parent);
-
-  if(ok) {
-    result=QColor(qRed(newColor), qGreen(newColor), qBlue(newColor), qAlpha(newColor));
-    return true;
-  }
-  else
-    return false;
-
-#endif
 }
 
 QString propertyTypeToPropertyTypeLabel(const string& typeName) {

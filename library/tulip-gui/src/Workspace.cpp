@@ -289,7 +289,7 @@ void Workspace::updateAvailableModes() {
     _modeSwitches[page]->setVisible(_panels.size() >= _modeToSlots[page].size());
   }
 
-  bool enableNavigation = _panels.size()>0;
+  bool enableNavigation = !_panels.empty();
   _ui->nextPageButton->setEnabled(enableNavigation);
   _ui->previousPageButton->setEnabled(enableNavigation);
   _ui->exposeButton->setEnabled(enableNavigation);

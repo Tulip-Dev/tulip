@@ -78,6 +78,12 @@ TulipProject *TulipProject::openProject(const QString &file, tlp::PluginProgress
   if (!project->isValid())
     return project;
 
+  if(!QFileInfo(file).exists()) {
+      project->_isValid = false;
+      project->_lastError = "File "+file+" not found";
+      return project;
+  }
+
   if (!QuaZIPFacade::unzip(project->_rootDir.absolutePath(),file,progress)) {
     project->_isValid = false;
     project->_lastError = "Failed to unzip project.";
