@@ -112,7 +112,7 @@ public:
   /**
    * @return Whether the parameter is mandatory or not.
    */
-  bool isMandatory() {
+  bool isMandatory() const {
     return mandatory;
   }
   /**
