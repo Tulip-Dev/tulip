@@ -164,14 +164,26 @@ exception_filter(LPEXCEPTION_POINTERS info) {
   StackWalkerMSVC sw;
   sw.setContext(info->ContextRecord);
 
-  std::cerr << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
+  std::ofstream os;
+  os.open(TULIP_DUMP_FILE.c_str());
+
+  if (!os.is_open()) {
+    std::cerr << "Could not open " << TULIP_DUMP_FILE << std::endl;
+  }
+  else {
+    std::cerr << "Writing dump stack to " << TULIP_DUMP_FILE << std::endl;
+  }
+  
+  os << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
             << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
             << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
             << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
-  std::cerr << TLP_STACK_BEGIN_HEADER << std::endl;
-  sw.printCallStackToStdErr();
-  std::cerr << TLP_STACK_END_HEADER << std::endl;
-  std::cerr << std::flush;
+  os << TLP_STACK_BEGIN_HEADER << std::endl;
+  sw.printCallStack(os, 50);
+  os << std::endl << TLP_STACK_END_HEADER << std::endl;
+  os << std::flush;
+  os.close();
+  
   return 1;
 }
 
