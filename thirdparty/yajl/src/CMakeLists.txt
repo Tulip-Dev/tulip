@@ -64,10 +64,10 @@ CONFIGURE_FILE(api/yajl_version.h.cmake ${incDir}/yajl_version.h)
 FOREACH (header ${PUB_HDRS})
  SET (header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
 
- EXEC_PROGRAM(${CMAKE_COMMAND} ARGS "-E copy_if_different '${header}' '${incDir}'")
+ EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir} OUTPUT_QUIET ERROR_QUIET)
 
- ADD_CUSTOM_COMMAND(TARGET yajl_s POST_BUILD
-     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${header}" "${incDir}")
+ # ADD_CUSTOM_COMMAND(TARGET yajl_s POST_BUILD
+     # COMMAND ${CMAKE_COMMAND} -E copy_if_different "${header}" "${incDir}")
 ENDFOREACH (header ${PUB_HDRS} VERBATIM)
 
 INCLUDE_DIRECTORIES(${incDir}/.. ${incDir})
