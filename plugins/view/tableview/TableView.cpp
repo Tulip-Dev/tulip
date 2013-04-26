@@ -34,10 +34,7 @@
 
 using namespace tlp;
 
-TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), _model(NULL), isNewGraph(false) {
-  propertiesEditor = new PropertiesEditor();
-
-}
+TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), _model(NULL), isNewGraph(false) {}
 
 TableView::~TableView() {
   delete _ui;
@@ -114,6 +111,7 @@ bool TableView::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void TableView::setupWidget() {
+  propertiesEditor = new PropertiesEditor();
   // install this as event filter
   // for automatic resizing of the viewport
   graphicsView()->viewport()->parentWidget()->installEventFilter(this);
