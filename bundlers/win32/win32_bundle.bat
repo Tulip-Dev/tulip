@@ -4,20 +4,12 @@ set DEST_DIR=%2
 set SRC_DIR=%cd%
 
 echo 'Wiping destination directory'
-del /Q /F /S %DEST_DIR%
-mkdir "%DEST_DIR%\\files\\lib"
-mkdir "%DEST_DIR%\\files\\bin"
-mkdir "%DEST_DIR%\\files\\include"
+del /Q /F /S "%DEST_DIR%\\files"
+rd /S /Q "%DEST_DIR%\\files"
+mkdir "%DEST_DIR%\\files
 
 echo 'Copying tulip files'
 xcopy "%TULIP_DIR%" "%DEST_DIR%\\files" /E /Q
-echo 'Deleting tulip unneeded libraries'
-del "%DEST_DIR%\\files\\lib\*.dll.a" /Q
-del "%DEST_DIR%\\files\\lib\tulip\*.dll.a" /Q
-del "%DEST_DIR%\\files\\lib\tulip\glyph\*.dll.a" /Q
-del "%DEST_DIR%\\files\\lib\tulip\interactor\*.dll.a" /Q
-del "%DEST_DIR%\\files\\lib\tulip\perspective\*.dll.a" /Q
-del "%DEST_DIR%\\files\\lib\tulip\view\*.dll.a" /Q
 
 echo 'Copying NSIS script'
 copy "%SRC_DIR%\\Tulip.nsi" "%DEST_DIR%\\"
