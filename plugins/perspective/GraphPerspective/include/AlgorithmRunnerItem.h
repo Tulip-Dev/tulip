@@ -66,7 +66,7 @@ signals:
   void favorized(bool);
 
 protected slots:
-  void afterRun(tlp::Graph*, tlp::DataSet);
+  void afterRun(tlp::Graph*, const tlp::DataSet&);
   void initModel();
 };
 #endif // ALGORITHMRUNNERITEM_H
