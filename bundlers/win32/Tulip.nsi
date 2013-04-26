@@ -40,7 +40,7 @@ Section "Tulip"
  SetShellVarContext all
  SetOutPath $INSTDIR
  Call CheckAndInstallPython
- File /r files\*.*
+ File /r /x *.dll.a /x Qt*d4.dll /x phonond4.dll files\*.*
  CreateDirectory "$SMPROGRAMS\Tulip"
  CreateShortCut "$SMPROGRAMS\Tulip\Tulip.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
  CreateShortCut "$SMPROGRAMS\Tulip\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
