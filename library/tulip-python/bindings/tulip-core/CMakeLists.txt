@@ -90,6 +90,10 @@ SET_SOURCE_FILES_PROPERTIES(siptuliptlpBooleanProperty.cpp
  
 ADD_LIBRARY(${LibTulipCorePythonBindingsName} SHARED ${TULIP_PYTHON_BINDINGS_SRC})
 
+IF(NOT SYSTEM_SIP)
+ADD_DEPENDENCIES(${LibTulipCorePythonBindingsName} ${SIP_LIB})
+ENDIF(NOT SYSTEM_SIP)
+
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
 		      PROPERTIES OUTPUT_NAME tulip PREFIX "")
 
