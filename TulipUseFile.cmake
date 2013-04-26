@@ -89,6 +89,7 @@ ENDMACRO()
 IF(WIN32)
 
 MACRO(INSTALL_EXTERNAL_LIB pattern component)
+  UNSET(results)
   FOREACH(win_path $ENV{CMAKE_LIBRARY_PATH} ${CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR})
     STRING(REPLACE "\\" "/" cmake_path "${win_path}")
     FILE(GLOB match "${cmake_path}/${pattern}")
