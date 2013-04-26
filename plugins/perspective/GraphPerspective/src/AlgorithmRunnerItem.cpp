@@ -245,7 +245,9 @@ void AlgorithmRunnerItem::run(Graph *g) {
   }
 
   Observable::holdObservers();
-  DataSet dataSet = static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues();
+  DataSet originalDataSet = static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues();
+
+  DataSet dataSet(originalDataSet);
 
   g->push();
 
@@ -254,6 +256,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   std::string algorithm = _pluginName.toStdString();
   std::string algoAndParams = algorithm + " - " + dataSet.toString();
+  std::vector<std::string> outNonPropertyParams;
   // use temporary output properties
   // to ease the undo in case of failure
   std::vector<OutPropertyParam> outPropertyParams;
@@ -278,6 +281,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
         && typeName != TN(IntegerVectorProperty)
         && typeName != TN(SizeVectorProperty)
         && typeName != TN(ColorVectorProperty))
+      if (desc.getDirection() != IN_PARAM)
+	outNonPropertyParams.push_back(desc.getName());
       continue;
 
     if (desc.getDirection() == IN_PARAM) {
@@ -394,12 +399,21 @@ void AlgorithmRunnerItem::run(Graph *g) {
     delete it->tmp;
   }
 
-  if (result) {
-    ParameterListModel* model = static_cast<ParameterListModel*>(_ui->parameters->model());
-    model->setParametersValues(dataSet);
-  }
+  afterRun(g, dataSet);
 
-  afterRun(g,dataSet);
+  if (result && !outNonPropertyParams.empty()) {
+    // only show computed value of non property output parameters.
+    // output property params are not taken into account
+    // because they may have been created on the fly
+    // (local properties see copyToLocal function above)
+    // and thus they may be deleted further in case of undo
+    for (unsigned int i = 0; i < outNonPropertyParams.size(); ++i) {
+      tlp::DataType *dataType = dataSet.getData(outNonPropertyParams[i]);
+      originalDataSet.setData(outNonPropertyParams[i], dataType);
+    }
+    ParameterListModel* model = static_cast<ParameterListModel*>(_ui->parameters->model());
+    model->setParametersValues(originalDataSet);
+  }
 
   while (Observable::observersHoldCounter() > 0)
     Observable::unholdObservers();
@@ -446,7 +460,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   drag->exec(Qt::CopyAction | Qt::MoveAction);
 }
 
-void AlgorithmRunnerItem::afterRun(Graph* g, tlp::DataSet dataSet) {
+void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
   PluginLister* pluginLister = PluginLister::instance();
   std::string stdName = name().toStdString();
 
