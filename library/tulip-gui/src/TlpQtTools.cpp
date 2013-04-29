@@ -42,6 +42,7 @@
 #include <tulip/StringProperty.h>
 #include <tulip/SystemDefinition.h>
 #include <tulip/TlpTools.h>
+#include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginManager.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>

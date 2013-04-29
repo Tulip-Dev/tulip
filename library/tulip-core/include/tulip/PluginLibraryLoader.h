@@ -40,6 +40,7 @@ namespace tlp {
 class TLP_SCOPE PluginLibraryLoader {
 public:
 
+#ifndef EMSCRIPTEN
   /**
   * @brief Loads all the plugins in each directory contained in TulipPluginsPath.
   * This function will not look into subfolders of the specified folder.
@@ -74,6 +75,7 @@ public:
    * @return bool Whether the plugin was sucessfully loaded.
    **/
   static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = NULL);
+#endif //EMSCRIPTEN
 
   /**
    * @brief Gets the name of the plug-in library being loaded.
@@ -87,9 +89,11 @@ public:
 
 private:
   PluginLibraryLoader() {}
+#ifndef EMSCRIPTEN
   bool loadNextPluginLibrary(PluginLoader *loader);
 
   bool initPluginDir(PluginLoader *loader);
+#endif
 
   static PluginLibraryLoader* getInstance() {
     if(_instance == NULL) {

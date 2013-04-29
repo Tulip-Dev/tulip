@@ -70,6 +70,7 @@ const char tlp::PATH_DELIMITER = ';';
 const char tlp::PATH_DELIMITER = ':';
 #endif
 
+#ifndef EMSCRIPTEN
 // A function that retrieves the Tulip libraries directory based on
 // the path of the loaded shared library libtulip-core-X.Y.[dll, so, dylib]
 extern "C" {
@@ -278,6 +279,7 @@ std::string tlp::demangleClassName(const char* className,
 #else
 #error define symbols demangling function
 #endif
+#endif // EMSCRIPTEN
 
 //=========================================================
 std::istream *tlp::getIgzstream(const char *name, int open_mode) {

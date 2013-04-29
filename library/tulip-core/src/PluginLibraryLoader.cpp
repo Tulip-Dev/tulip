@@ -39,6 +39,7 @@ using namespace tlp;
 
 PluginLibraryLoader* PluginLibraryLoader::_instance = NULL;
 
+#ifndef EMSCRIPTEN
 void PluginLibraryLoader::loadPlugins(PluginLoader *loader, std::string folder) {
   std::vector<std::string> paths;
   std::stringstream ss(TulipPluginsPath);
@@ -299,4 +300,4 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
 #endif
   return true;
 }
-
+#endif //EMSCRIPTEN

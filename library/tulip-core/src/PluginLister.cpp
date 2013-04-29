@@ -18,6 +18,7 @@
  */
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLoader.h>
+#include <tulip/PluginLibraryLoader.h>
 
 using namespace tlp;
 using namespace std;

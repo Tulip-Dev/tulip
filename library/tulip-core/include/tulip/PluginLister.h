@@ -24,7 +24,7 @@
 #include <string>
 
 #include <tulip/Plugin.h>
-#include <tulip/PluginLibraryLoader.h>
+#include <tulip/PluginLoader.h>
 #include <tulip/Observable.h>
 
 
