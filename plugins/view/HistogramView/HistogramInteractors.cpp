@@ -122,13 +122,19 @@ HistogramInteractorStatistics::~HistogramInteractorStatistics() {
 
 void HistogramInteractorStatistics::construct() {
   histoStatsConfigWidget = new HistoStatsConfigWidget();
-  HistogramStatistics *histoStatistics = new HistogramStatistics(histoStatsConfigWidget);
+  histoStatistics = new HistogramStatistics(histoStatsConfigWidget);
   push_back(histoStatistics);
   push_back(new MousePanNZoomNavigator);
 }
 
 QWidget *HistogramInteractorStatistics::configurationWidget() const {
   return histoStatsConfigWidget;
+}
+
+void HistogramInteractorStatistics::install(QObject *target) {
+    if(target!=NULL) {
+        histoStatistics->computeInteractor();
+    }
 }
 
 }

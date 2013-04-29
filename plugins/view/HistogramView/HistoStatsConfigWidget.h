@@ -22,21 +22,28 @@
 
 #include <QtGui/QWidget>
 
-#include "ui_HistoStatsConfigWidget.h"
+namespace Ui {
+class HistoStatsConfigWidget;
+}
 
 namespace tlp {
 
-class HistoStatsConfigWidget : public QWidget, public Ui::HistoStatsConfigWidget {
+class HistoStatsConfigWidget : public QWidget  {
+
+    Q_OBJECT
+
+    Ui::HistoStatsConfigWidget *_ui;
 
 public :
 
   HistoStatsConfigWidget(QWidget *parent = 0);
+  ~HistoStatsConfigWidget();
 
   void setMinMaxMeanAndSd(double min, double max, double mean, double standardDeviation);
   bool densityEstimation() const;
   double getSampleStep() const;
   double getBandwidth() const;
-  std::string getKernelFunctionName() const;
+  QString getKernelFunctionName() const;
   bool displayMeanAndStandardDeviation() const;
   bool nodesSelection() const;
   double getSelectionLowerBound() const;
@@ -48,6 +55,9 @@ private :
 
   double min, max;
   double mean, standardDeviation;
+
+signals:
+  void computeAndDrawInteractor();
 
 };
 

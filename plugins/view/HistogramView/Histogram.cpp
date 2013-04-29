@@ -23,9 +23,9 @@
 #include <tulip/Gl2DRect.h>
 #include <tulip/ForEach.h>
 #include <tulip/GlOffscreenRenderer.h>
+#include <tulip/GlTextureManager.h>
 
 #include "Histogram.h"
-
 
 using namespace std;
 

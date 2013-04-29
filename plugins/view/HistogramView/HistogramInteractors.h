@@ -22,11 +22,12 @@
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 
-#include "HistoStatsConfigWidget.h"
-
 using namespace std;
 
 namespace tlp {
+
+class HistogramStatistics;
+class HistoStatsConfigWidget;
 
 class HistogramInteractor : public NodeLinkDiagramComponentInteractor {
 
@@ -73,10 +74,12 @@ public :
 
   void construct();
   QWidget* configurationWidget() const;
+  void install(QObject *target);
 
 private :
 
   HistoStatsConfigWidget *histoStatsConfigWidget;
+  HistogramStatistics *histoStatistics;
 };
 
 }

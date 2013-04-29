@@ -27,6 +27,7 @@
 #include <tulip/GlMainWidget.h>
 
 #include <QtGui/QToolTip>
+#include <QtGui/QMenu>
 
 #include <algorithm>
 
