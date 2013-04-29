@@ -17,15 +17,22 @@
 *
 */
 
+#ifdef  _WIN32
+// compilation pb workaround
+#include <windows.h>
+#endif
+
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/ForEach.h>
 #include <tulip/GlLines.h>
 #include <tulip/GlMainWidget.h>
 
 #include <algorithm>
-#include <cstdlib>
+
+#include <QtCore/QEvent>
 
 #include "HistoStatsConfigWidget.h"
+#include "HistogramView.h"
 
 #ifndef _MSC_VER
 #include <ext/functional>
@@ -253,14 +260,14 @@ HistogramStatistics::HistogramStatistics(const HistogramStatistics &histoStats)
 HistogramStatistics::~HistogramStatistics() {
   cleanupAxis();
 
-  for (map<string, KernelFunction *>::iterator it = kernelFunctionsMap.begin() ; it != kernelFunctionsMap.end() ; ++it) {
+  for (map<QString, KernelFunction *>::iterator it = kernelFunctionsMap.begin() ; it != kernelFunctionsMap.end() ; ++it) {
     delete it->second;
   }
 }
 
 void HistogramStatistics::viewChanged(View *view) {
   histoView = (HistogramView *) view;
-  connect(histoStatsConfigWidget->applyButton, SIGNAL(clicked()), this, SLOT(computeAndDrawInteractor()));
+  connect(histoStatsConfigWidget, SIGNAL(computeAndDrawInteractor()), this, SLOT(computeAndDrawInteractor()));
   //computeAndDrawInteractor();
 }
 
@@ -496,6 +503,7 @@ void HistogramStatistics::computeInteractor() {
       Observable::holdObservers();
       BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
       viewSelection->setAllNodeValue(false);
+      viewSelection->setAllEdgeValue(false);
       double lowerBound = histoStatsConfigWidget->getSelectionLowerBound();
       double upperBound = histoStatsConfigWidget->getSelectionUpperBound();
       map<unsigned int, double>::iterator pos = find_if(graphPropertyValueSet.begin(), graphPropertyValueSet.end(),
@@ -523,11 +531,6 @@ void HistogramStatistics::computeInteractor() {
 void HistogramStatistics::computeAndDrawInteractor() {
   computeInteractor();
   histoView->refresh();
-}
-
-bool HistogramStatistics::compute(GlMainWidget *) {
-  computeInteractor();
-  return true;
 }
 
 bool HistogramStatistics::draw(GlMainWidget *glMainWidget) {

@@ -20,24 +20,17 @@
 #ifndef HISTOGRAMSTATISTICS_H_
 #define HISTOGRAMSTATISTICS_H_
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-
-#include <tulip/tulipconf.h>
-#include <tulip/TlpTools.h>
-#include <tulip/GlQuantitativeAxis.h>
 #include <tulip/GLInteractor.h>
-
-#include <algorithm>
+#include <tulip/Coord.h>
 #include <map>
-
-#include "HistogramView.h"
 
 namespace tlp {
 
 class HistoStatsConfigWidget;
+class HistogramView;
+
+class GlAxis;
+class GlQuantitativeAxis;
 
 class KernelFunction : public std::unary_function<double, double> {
 
@@ -60,13 +53,14 @@ public :
 
   bool eventFilter(QObject *, QEvent *);
   bool draw(GlMainWidget *glMainWidget);
-  bool compute(GlMainWidget *glMainWidget);
 
   void viewChanged(View *view);
 
 private slots :
 
   void computeAndDrawInteractor();
+
+public slots:
   void computeInteractor();
 
 private :
@@ -82,7 +76,7 @@ protected :
   double propertyMean;
   double propertyStandardDeviation;
   std::vector<Coord> densityEstimationCurvePoints;
-  std::map<std::string, KernelFunction *> kernelFunctionsMap;
+  std::map<QString, KernelFunction *> kernelFunctionsMap;
   GlQuantitativeAxis *densityAxis;
   GlAxis *meanAxis, *standardDeviationPosAxis, *standardDeviationNegAxis;
   GlAxis *standardDeviation2PosAxis, *standardDeviation2NegAxis;

@@ -27,7 +27,8 @@ QT4_WRAP_CPP(LIB_MOC_SRCS
       HistogramStatistics.h
       HistoOptionsWidget.h
       SizeScaleConfigDialog.h
-      GlyphScaleConfigDialog.h  
+      GlyphScaleConfigDialog.h
+      HistoStatsConfigWidget.h
       ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
 )
 
