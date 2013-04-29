@@ -95,13 +95,13 @@ struct TLPGraphBuilder:public TLPTrue {
   std::map<int,Graph *> clusterIndex;
   DataSet *dataSet;
   bool inTLP;
-  float version;
+  double version;
 
   TLPGraphBuilder(Graph *graph, DataSet *dataSet): _graph(graph),
     dataSet(dataSet) {
     clusterIndex[0]=graph;
     inTLP = false;
-    version = 0;
+    version = 0.0;
   }
 
   virtual ~TLPGraphBuilder() {
@@ -122,7 +122,7 @@ struct TLPGraphBuilder:public TLPTrue {
     if (!version) {
       const char* cptr = str.c_str();
       char* endptr;
-      version = strtof(cptr, &endptr);
+      version = strtod(cptr, &endptr);
       // check for correctness of version parsing and value
       return (endptr != cptr) && (version <= TLP_VERSION);
     }
