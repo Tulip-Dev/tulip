@@ -329,19 +329,20 @@ void RoundedBox::draw(node n, float lod) {
 
     setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
 
+    bool textureOK = false;
     if (texture != "") {
-      GlTextureManager::getInst().activateTexture(texture);
+      textureOK = GlTextureManager::getInst().activateTexture(texture);
     }
 
     roundedBoxShader->activate();
     roundedBoxShader->setUniformFloat("boxWidth", size[0]);
     roundedBoxShader->setUniformFloat("boxHeight", size[1]);
-    roundedBoxShader->setUniformBool("textureActivated", texture != "");
+    roundedBoxShader->setUniformBool("textureActivated", textureOK);
     roundedBoxShader->setUniformTextureSampler("texture", 0);
     glDrawArrays(GL_QUADS, 0, 8);
     roundedBoxShader->desactivate();
 
-    if (texture != "") {
+    if (textureOK) {
       GlTextureManager::getInst().desactivateTexture();
     }
 
