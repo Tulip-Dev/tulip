@@ -244,12 +244,12 @@ QToolButton:pressed {
            <height>75</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Undo the last current graph's modification</string>
+         </property>
          <property name="text">
           <string>Undo</string>
          </property>
-	 <property name="toolTip">
-	   <string>Undo the last current graph's modification</string>
-	 </property>
          <property name="icon">
           <iconset>
            <normaloff>:/tulip/graphperspective/icons/32/undo.png</normaloff>:/tulip/graphperspective/icons/32/undo.png</iconset>
@@ -279,12 +279,12 @@ QToolButton:pressed {
            <height>75</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Redo the last undone modification of the current graph</string>
+         </property>
          <property name="text">
           <string>Redo</string>
          </property>
-	 <property name="toolTip">
-	   <string>Redo the last undone modification of the current graph</string>
-	 </property>
          <property name="icon">
           <iconset>
            <normaloff>:/tulip/graphperspective/icons/32/redo.png</normaloff>:/tulip/graphperspective/icons/32/redo.png</iconset>
@@ -334,12 +334,12 @@ QToolButton:pressed {
            <height>75</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Display the existing graph views</string>
+         </property>
          <property name="text">
           <string>Workspace</string>
          </property>
-	 <property name="toolTip">
-	   <string>Display the existing graph views</string>
-	 </property>
          <property name="icon">
           <iconset>
            <normaloff>:/tulip/graphperspective/icons/48/desktop.png</normaloff>:/tulip/graphperspective/icons/48/desktop.png</iconset>
@@ -375,12 +375,12 @@ QToolButton:pressed {
            <height>75</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Display the Python plugin development framework</string>
+         </property>
          <property name="text">
           <string>Develop</string>
          </property>
-	 <property name="toolTip">
-	   <string>Display the Python plugin development framework</string>
-	 </property>
          <property name="icon">
           <iconset>
            <normaloff>:/tulip/graphperspective/icons/48/python.png</normaloff>:/tulip/graphperspective/icons/48/python.png</iconset>
@@ -457,9 +457,9 @@ color: white;
               <height>16777215</height>
              </size>
             </property>
-	    <property name="toolTip">
-	      <string>Show/Hide the Messages log panel</string>
-	    </property>
+            <property name="toolTip">
+             <string>Show/Hide the Messages log panel</string>
+            </property>
            </widget>
           </item>
          </layout>
@@ -486,12 +486,12 @@ color: white;
            <height>75</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Display the CSV data importing wizard</string>
+         </property>
          <property name="text">
           <string>CSV</string>
          </property>
-	 <property name="toolTip">
-	   <string>Display the CSV data importing wizard</string>
-	 </property>
          <property name="icon">
           <iconset>
            <normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</iconset>
@@ -521,12 +521,12 @@ color: white;
            <height>75</height>
           </size>
          </property>
+         <property name="toolTip">
+          <string>Display the Graph importing wizard</string>
+         </property>
          <property name="text">
           <string>Import</string>
          </property>
-	 <property name="toolTip">
-	   <string>Display the Graph importing wizard</string>
-	 </property>
          <property name="icon">
           <iconset>
            <normaloff>:/tulip/graphperspective/icons/32/document-import.png</normaloff>:/tulip/graphperspective/icons/32/document-import.png</iconset>
@@ -760,6 +760,9 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <height>20</height>
                   </size>
                  </property>
+                 <property name="toolTip">
+                  <string>Show/Hide the graph's elements search panel</string>
+                 </property>
                  <property name="shortcut">
                   <string>Ctrl+F</string>
                  </property>
@@ -775,9 +778,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="title" stdset="0">
                   <string>Search</string>
                  </property>
-		 <property name="toolTip">
-		   <string>Show/Hide the graph's elements search panel</string>
-		 </property>
                 </widget>
                </item>
                <item>
@@ -787,6 +787,9 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                    <width>120</width>
                    <height>20</height>
                   </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Show/Hide the Python interpreter</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+F</string>
@@ -803,9 +806,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                  <property name="title" stdset="0">
                   <string>Python</string>
                  </property>
-		 <property name="toolTip">
-		   <string>Show/Hide the Python interpreter</string>
-		 </property>
                 </widget>
                </item>
                <item>
@@ -1047,7 +1047,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -1584,7 +1584,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </connection>
   <connection>
    <sender>actionExit</sender>
-   <signal>activated()</signal>
+   <signal>triggered()</signal>
    <receiver>GraphPerspectiveMainWindowData</receiver>
    <slot>close()</slot>
    <hints>
