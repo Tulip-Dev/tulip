@@ -506,7 +506,7 @@ void GraphStorage::reverse(const edge e) {
  *  \brief Set the ordering of edges around n according to their order in v.
  */
 void GraphStorage::setEdgeOrder(const node n, const std::vector<edge> &v ) {
-  if (v.size()==0) return;
+  if (v.empty()) return;
 
   MutableContainer<int> isEle;
   isEle.setAll(0);

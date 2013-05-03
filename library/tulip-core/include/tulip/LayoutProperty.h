@@ -280,7 +280,8 @@ public:
   /**
   * Returns the number of crossings in the layout
   **/
-  unsigned int crossingNumber() const;
+  //methods removed until we have a working implementation
+//  unsigned int crossingNumber() const;
 
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node, const Coord &v);

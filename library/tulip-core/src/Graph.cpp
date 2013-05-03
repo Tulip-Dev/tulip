@@ -1384,9 +1384,8 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
         metaNodes.push_back(metaN);
         metaInfo->setNodeValue(metaN, its);
         // compute meta node values
-        string pName;
-        forEach(pName, quotientGraph->getProperties()) {
-          PropertyInterface *property = quotientGraph->getProperty(pName);
+        PropertyInterface *property;
+        forEach(property, quotientGraph->getObjectProperties()) {
           property->computeMetaValue(metaN, its, quotientGraph);
         }
         node n;

@@ -69,7 +69,7 @@ bool ParameterDescriptionList::isMandatory(const string& name) const {
 
 #define CHECK_PROPERTY(T)\
 if (type.compare(typeid(T).name()) == 0) {\
-  if (!g || defaultValue.size()==0 || !g->existProperty(defaultValue))\
+  if (!g || defaultValue.empty() || !g->existProperty(defaultValue))\
     dataSet.set(name, (T*) NULL);               \
   else\
     dataSet.set(name, (T*) g->getProperty<T>(defaultValue));  \
@@ -133,7 +133,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
     CHECK_PROPERTY(tlp::ColorVectorProperty);
 
     if (type.compare(typeid(PropertyInterface*).name()) == 0) {
-      if (!g || defaultValue.size()==0 || !g->existProperty(defaultValue))
+      if (!g || defaultValue.empty() || !g->existProperty(defaultValue))
         dataSet.set(name, (PropertyInterface*) NULL);
       else
         dataSet.set(name, g->getProperty(defaultValue));

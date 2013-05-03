@@ -619,7 +619,7 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
   for (unsigned int i=0; itE->hasNext(); ++i) {
     edge ite=itE->next();
 
-    if (getEdgeValue(ite).size()>0) {
+    if (!getEdgeValue(ite).empty()) {
       if (sg->source(ite)==n)
         adjCoord.push_back(pCE(getEdgeValue(ite).front(), ite));
       else
@@ -686,7 +686,7 @@ vector<double> LayoutProperty::angularResolutions(const node n, const Graph *sg)
   for (unsigned int i=0; itE->hasNext(); ++i) {
     edge ite=itE->next();
 
-    if (getEdgeValue(ite).size()>0) {
+    if (!getEdgeValue(ite).empty()) {
       if (sg->source(ite)==n)
         adjCoord.push_back(getEdgeValue(ite).front());
       else
@@ -803,11 +803,12 @@ double LayoutProperty::averageEdgeLength(const Graph *sg) const {
   return (ret / sg->numberOfEdges());
 }
 //=================================================================================
-unsigned int LayoutProperty::crossingNumber() const {
-  tlp::warning() << "!!! Warning: Not Implemented function :";
-  tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
-  return 0;
-}
+//removed until we have a working implementation
+//unsigned int LayoutProperty::crossingNumber() const {
+//  tlp::warning() << "!!! Warning: Not Implemented function :";
+//  tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
+//  return 0;
+//}
 //=================================================================================
 PropertyInterface* LayoutProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
