@@ -28,6 +28,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
+#include <tulip/SimplePluginProgress.h>
 
 using namespace std;
 using namespace tlp;
