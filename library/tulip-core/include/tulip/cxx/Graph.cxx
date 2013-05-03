@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/SimplePluginProgress.h>
+#include <tulip/PluginProgress.h>
 
 //================================================================================
 template<typename ATTRIBUTETYPE>

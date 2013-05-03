@@ -196,7 +196,7 @@ void PlanarityTestImpl::calculatePartialEmbedding(Graph *sG,
     list<edge>& listBackEdges,
     list<node>& terminalNodes) {
   list<node> traversedNodes, listRepresentants;
-  assert(terminalNodes.size()>0);
+  assert(!terminalNodes.empty());
 
   switch (terminalNodes.size()) {
   case 1: {

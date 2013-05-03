@@ -646,10 +646,10 @@ Only works in 2D, the third coordinate is not taken into account.
 
  //===========================================================================================
   
-  	unsigned int crossingNumber() const;
-%Docstring
-tlp.LayoutProperty.crossingNumber()
+//  	unsigned int crossingNumber() const;
+//%Docstring
+//tlp.LayoutProperty.crossingNumber()
 
-Returns the number of edges crossings in the layout.
-%End 	
+//Returns the number of edges crossings in the layout.
+//%End
   	
