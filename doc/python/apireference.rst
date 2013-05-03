@@ -614,7 +614,7 @@ tlp.LayoutProperty
 
 .. autoclass:: tulip::tlp.LayoutProperty
 	:members: angularResolutions, averageAngularResolution, averageAngularResolution,
-                  averageEdgeLength, center, center, computeEmbedding, computeEmbedding, copy, copy, copy, crossingNumber,
+                  averageEdgeLength, center, center, computeEmbedding, computeEmbedding, copy, copy, copy,
 		  edgeLength, getMin, getMax, normalize, perfectAspectRatio, 
 		  rotateX, rotateX, rotateY, rotateY, rotateZ, rotateZ, scale, scale, translate, translate,      
 		  getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
