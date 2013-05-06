@@ -18,17 +18,13 @@
  */
 #include "tulip/Workspace.h"
 
-#include <cmath>
-#include <iostream>
-#include <sstream>
-#include <string>
-
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsEffect>
-#include <QtGui/QGraphicsSceneDragDropEvent>
-#include <QtXml/QDomDocument>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QGraphicsView>
+#include <QGraphicsEffect>
+#include <QGraphicsSceneDragDropEvent>
+#include <QDomDocument>
+#include <QDebug>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/View.h>
@@ -37,7 +33,10 @@
 #include <tulip/TulipMimes.h>
 #include <tulip/GraphHierarchiesModel.h>
 
-#include <QtCore/QDebug>
+#include <cmath>
+#include <iostream>
+#include <sstream>
+#include <string>
 
 #include "ui_Workspace.h"
 
@@ -532,7 +531,7 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
     data.appendChild(dataText);
     root.appendChild(data);
     doc.appendChild(root);
-    viewDescFile->write(doc.toString().toAscii());
+    viewDescFile->write(doc.toString().toLatin1());
     viewDescFile->close();
     delete viewDescFile;
     i++;
@@ -544,7 +543,7 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
   doc.appendChild(root);
   project->removeFile("/workspace.xml");
   QIODevice* workspaceXml = project->fileStream("/workspace.xml");
-  workspaceXml->write(doc.toString().toAscii());
+  workspaceXml->write(doc.toString().toLatin1());
   workspaceXml->close();
   delete workspaceXml;
 }

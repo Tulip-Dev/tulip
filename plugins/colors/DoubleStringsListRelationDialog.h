@@ -20,7 +20,7 @@
 #ifndef DOUBLESTRINGSLISTRELATIONDIALOG_H_
 #define DOUBLESTRINGSLISTRELATIONDIALOG_H_
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 #include <tulip/Color.h>
 

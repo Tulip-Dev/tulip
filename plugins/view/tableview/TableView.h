@@ -22,7 +22,7 @@
 
 #include <tulip/ViewWidget.h>
 #include <tulip/BooleanProperty.h>
-#include <QtCore/QModelIndex>
+#include <QModelIndex>
 
 namespace Ui {
 class TableViewWidget;

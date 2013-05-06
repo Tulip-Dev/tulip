@@ -22,15 +22,15 @@
 #include "tulip/PythonCodeHighlighter.h"
 #include "tulip/ParenMatcherHighlighter.h"
 
-#include <QtCore/QTextStream>
-#include <QtGui/QPainter>
-#include <QtGui/QTextBlock>
-#include <QtGui/QApplication>
-#include <QtGui/QMainWindow>
-#include <QtGui/QToolTip>
-#include <QtGui/QScrollBar>
-#include <QtGui/QMessageBox>
-
+#include <QTextStream>
+#include <QPainter>
+#include <QTextBlock>
+#include <QApplication>
+#include <QMainWindow>
+#include <QToolTip>
+#include <QScrollBar>
+#include <QMessageBox>
+#include <QMimeData>
 
 #include "ui_FindReplaceDialog.h"
 
@@ -224,7 +224,8 @@ bool AutoCompletionList::eventFilter(QObject *, QEvent *event) {
     }
   }
 
-  _codeEditor->updateAutoCompletionListPosition();
+  if (isVisible())
+    _codeEditor->updateAutoCompletionListPosition();
 
   return false;
 }
@@ -651,7 +652,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
         left += tabStopWidth();
       }
       else {
-        left += fontMetrics().width(QLatin1Char(blockText[i].toAscii()));
+        left += fontMetrics().width(QLatin1Char(blockText[i].toLatin1()));
       }
 
 
@@ -665,7 +666,7 @@ void PythonCodeEditor::paintEvent(QPaintEvent *event) {
       int w = 0;
 
       for (int j = 0 ; j < toolTipLines[i].length() ; ++j) {
-        w += fontMetrics().width(QLatin1Char(toolTipLines[i][j].toAscii()));
+        w += fontMetrics().width(QLatin1Char(toolTipLines[i][j].toLatin1()));
       }
 
       width = std::max(w, width);
@@ -1216,7 +1217,7 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
       pos += tabStopWidth();
     }
     else {
-      pos += fontMetrics().width(QLatin1Char(textBeforeCursor[i].toAscii()));
+      pos += fontMetrics().width(QLatin1Char(textBeforeCursor[i].toLatin1()));
     }
   }
 

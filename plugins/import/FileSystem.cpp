@@ -19,11 +19,11 @@
 
 #include <tulip/TulipPluginHeaders.h>
 
-#include <QtCore/QStack>
-#include <QtCore/QPair>
-#include <QtCore/QDir>
-#include <QtCore/QFileInfo>
-#include <QtCore/QDateTime>
+#include <QStack>
+#include <QPair>
+#include <QDir>
+#include <QFileInfo>
+#include <QDateTime>
 
 namespace {
 static const char * paramHelp[] = {

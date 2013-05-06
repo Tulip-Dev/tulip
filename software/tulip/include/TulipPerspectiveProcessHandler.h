@@ -19,13 +19,13 @@
 #ifndef TULIPPERSPECTIVEPROCESSHANDLER_H
 #define TULIPPERSPECTIVEPROCESSHANDLER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QVariantMap>
-#include <QtCore/QProcess>
+#include <QObject>
+#include <QVariantMap>
+#include <QProcess>
 
-#include <QtGui/QPushButton>
+#include <QPushButton>
 
-#include <QtNetwork/QTcpServer>
+#include <QTcpServer>
 
 // Some utility class used in crash handler dialog designer form
 

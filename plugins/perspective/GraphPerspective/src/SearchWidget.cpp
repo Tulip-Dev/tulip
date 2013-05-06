@@ -18,14 +18,18 @@
  */
 
 #include "SearchWidget.h"
-
 #include "ui_SearchWidget.h"
+
+#include <QStandardItemModel>
+#include <QDropEvent>
+
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/GraphTableItemDelegate.h>
 #include <tulip/GraphModel.h>
-#include <QtGui/QStandardItemModel>
+
+#include <tulip/TulipMimes.h>
 
 using namespace tlp;
 using namespace std;
@@ -414,9 +418,6 @@ void SearchWidget::updateEditorWidget() {
   _ui->tableWidget->item(0, 0)->setData(Qt::EditRole, defaultValue);
   _ui->tableWidget->item(0, 0)->setData(Qt::DisplayRole, defaultValue);
 }
-
-#include <QtGui/QDropEvent>
-#include <tulip/TulipMimes.h>
 
 void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
   const GraphMimeType* mimeType = dynamic_cast<const GraphMimeType*>(dragEv->mimeData());

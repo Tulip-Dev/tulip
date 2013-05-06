@@ -17,19 +17,18 @@
  *
  */
 
+#include "tulip/APIDataBase.h"
+
+#include <QFile>
+#include <QList>
+#include <QStringList>
+#include <QRegExp>
+#include <QTextStream>
+
 #include <tulip/PythonInterpreter.h>
-
-#include <QtCore/QFile>
-#include <QtCore/QList>
-#include <QtCore/QStringList>
-#include <QtCore/QRegExp>
-#include <QtCore/QTextStream>
-
 #include <tulip/TlpTools.h>
 
 using namespace tlp;
-
-#include "tulip/APIDataBase.h"
 
 APIDataBase APIDataBase::_instance;
 

@@ -26,11 +26,11 @@ src/PythonPluginsIDE.cpp
 src/SearchWidget.cpp
 )
 
-QT4_ADD_RESOURCES(RCC_SRCS
+QTX_ADD_RESOURCES(RCC_SRCS
 resources/GraphPerspective.qrc
 OPTIONS -name GraphPerspective)
 
-QT4_WRAP_UI(UI_SRCS
+QTX_WRAP_UI(UI_SRCS
 designer/GraphPerspectiveLogger.ui
 designer/AlgorithmRunner.ui
 designer/AlgorithmRunnerItem.ui
@@ -53,7 +53,7 @@ designer/PythonPluginsIDE.ui
 designer/SearchWidget.ui
 )
 
-QT4_WRAP_CPP(MOC_SRCS
+QTX_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/AlgorithmRunnerItem.h
 include/ExpandableGroupBox.h
@@ -83,10 +83,7 @@ SET(QT_USE_QTWEBKIT true)
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 
 TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${LibTulipPythonName})
-TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
-IF(LINUX)
-TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${QT_QTWEBKIT_LIBRARY_RELEASE})
-ENDIF(LINUX)
+TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${QT_LIBRARIES})
 
 INSTALL(TARGETS GraphPerspective-${TulipVersion} DESTINATION ${TulipPerspectivePluginsInstallDir} COMPONENT GraphPerspective)
 

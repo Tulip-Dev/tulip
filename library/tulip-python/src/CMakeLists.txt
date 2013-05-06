@@ -3,7 +3,7 @@ IF(SIP_OK)
 
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(${LibTulipPythonName}_LIB_SRCS
     ConsoleOutputModule.cpp
@@ -32,9 +32,9 @@ SET(${LibTulipPythonName}_MOC
     ../include/tulip/PythonEditorsTabWidget.h
 )
 
-QT4_WRAP_UI(${LibTulipPythonName}_UI_SRCS ${${LibTulipPythonName}_UI})
-QT4_WRAP_CPP(${LibTulipPythonName}_MOC_SRCS ${${LibTulipPythonName}_MOC})
-QT4_ADD_RESOURCES(${LibTulipPythonName}_RCC_SRCS ../resources/TulipPython.qrc)
+QTX_WRAP_UI(${LibTulipPythonName}_UI_SRCS ${${LibTulipPythonName}_UI})
+QTX_WRAP_CPP(${LibTulipPythonName}_MOC_SRCS ${${LibTulipPythonName}_MOC})
+QTX_ADD_RESOURCES(${LibTulipPythonName}_RCC_SRCS ../resources/TulipPython.qrc)
 
 ADD_LIBRARY(${LibTulipPythonName} SHARED ${${LibTulipPythonName}_LIB_SRCS} ${${LibTulipPythonName}_MOC_SRCS} ${${LibTulipPythonName}_UI_SRCS} ${${LibTulipPythonName}_RCC_SRCS})
 

@@ -29,7 +29,7 @@
 #include <tulip/DoubleProperty.h>
 #include "SOMView.h"
 
-#include <QtCore/QMutex>
+#include <QMutex>
 
 class Slider {
 public:

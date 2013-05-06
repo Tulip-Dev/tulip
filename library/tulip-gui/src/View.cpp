@@ -16,13 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <QtCore/QDebug>
-#include <QtCore/QFile>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QMenu>
 
 #include <tulip/View.h>
+
+#include <QDebug>
+#include <QFile>
+#include <QGraphicsView>
+#include <QGraphicsItem>
+#include <QMenu>
+
 #include <tulip/Interactor.h>
 #include <tulip/Graph.h>
 

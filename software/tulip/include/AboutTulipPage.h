@@ -20,7 +20,7 @@
 #ifndef ABOUTTULIPPAGE_H
 #define ABOUTTULIPPAGE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace Ui {
 class AboutTulipPageData;

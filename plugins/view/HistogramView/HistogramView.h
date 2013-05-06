@@ -31,7 +31,7 @@
 #include "Histogram.h"
 
 #if defined(_MSC_VER)
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 #if defined(__APPLE__)
@@ -40,9 +40,6 @@
 #else
 #include <GL/gl.h>
 #include <GL/glu.h>
-# if defined(__WIN32__)
-# include <GL/glext.h>
-# endif
 #endif
 
 class QMenu;

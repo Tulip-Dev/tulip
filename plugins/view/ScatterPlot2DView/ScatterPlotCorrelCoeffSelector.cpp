@@ -28,9 +28,9 @@
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/GlLabel.h>
 
-#include <QtGui/QMenu>
-#include <QtCore/QEvent>
-#include <QtGui/QMouseEvent>
+#include <QMenu>
+#include <QEvent>
+#include <QMouseEvent>
 
 #include "ScatterPlotCorrelCoeffSelector.h"
 #include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"

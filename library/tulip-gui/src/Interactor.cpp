@@ -18,10 +18,12 @@
  */
 #include "tulip/Interactor.h"
 
+#include <QDebug>
+
 #include <tulip/ForEach.h>
 #include <tulip/View.h>
 #include <tulip/Glyph.h>
-#include <QtCore/QDebug>
+
 
 using namespace std;
 using namespace tlp;

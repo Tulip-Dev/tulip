@@ -23,8 +23,8 @@
 #include <tulip/Graph.h>
 #include <tulip/DataSet.h>
 
-#include <QtGui/QFileDialog>
-#include <QtGui/QMessageBox>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "ui_GoogleMapsViewConfigWidget.h"
 

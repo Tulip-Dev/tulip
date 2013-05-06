@@ -2,7 +2,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/MouseInteractors.h>
 
-#include <QtGui/QApplication>
+#include <QApplication>
 
 using namespace tlp;
 

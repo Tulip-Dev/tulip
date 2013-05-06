@@ -22,7 +22,7 @@
 #ifndef DOUBLESTRINGSLISTSELECTIONWIDGET_H_
 #define DOUBLESTRINGSLISTSELECTIONWIDGET_H_
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include "ui_DoubleStringsListSelectionWidget.h"
 #include "StringsListSelectionWidgetInterface.h"

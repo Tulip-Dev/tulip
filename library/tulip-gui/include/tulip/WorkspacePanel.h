@@ -21,8 +21,9 @@
 #ifndef WORKSPACEPANEL_H
 #define WORKSPACEPANEL_H
 
-#include <QtGui/QFrame>
-#include <QtGui/QAction>
+#include <QFrame>
+#include <QAction>
+
 #include <tulip/tulipconf.h>
 
 class QDragEnterEvent;

@@ -19,12 +19,12 @@
 #include "tulip/GlCompositeHierarchyManager.h"
 
 #include <tulip/Graph.h>
-#include "tulip/GlLayer.h"
-#include "tulip/GlConvexHull.h"
-
-#include <sstream>
+#include <tulip/GlLayer.h>
+#include <tulip/GlConvexHull.h>
 #include <tulip/GlConvexGraphHull.h>
 #include <tulip/LayoutProperty.h>
+
+#include <sstream>
 
 using namespace std;
 

@@ -16,13 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qevent.h>
+#include "tulip/MouseBoxZoomer.h"
+
+#include <QMouseEvent>
 
 #include <tulip/Graph.h>
 #include <tulip/GlMainWidget.h>
@@ -32,7 +29,7 @@
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlGraphComposite.h>
 
-#include "tulip/MouseBoxZoomer.h"
+#include <iostream>
 
 using namespace std;
 using namespace tlp;

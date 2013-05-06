@@ -22,8 +22,8 @@
 #ifndef _TLP_MIMES_H
 #define _TLP_MIMES_H
 
-#include <QtCore/QMimeData>
-#include <QtCore/QStringList>
+#include <QMimeData>
+#include <QStringList>
 
 #include <tulip/tulipconf.h>
 #include <tulip/DataSet.h>

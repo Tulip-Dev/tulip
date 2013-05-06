@@ -1,7 +1,7 @@
 #ifndef %ProjectName:u%_H
 #define %ProjectName:u%_H
 
-#include <QtGui/QIcon>
+#include <QIcon>
 
 @if "%BaseInteractor%" == "GLInteractor"
 #include <tulip/GLInteractor.h>

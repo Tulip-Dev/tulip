@@ -19,11 +19,11 @@
 
 #include "tulip/TreeViewComboBox.h"
 
-#include <QtGui/QHeaderView>
-#include <QtGui/QStyledItemDelegate>
-#include <QtGui/QPainter>
-#include <QtGui/QStyleOptionViewItem>
-#include <QtGui/QMouseEvent>
+#include <QHeaderView>
+#include <QStyledItemDelegate>
+#include <QPainter>
+#include <QStyleOptionViewItem>
+#include <QMouseEvent>
 
 class TreeViewDelegate: public QStyledItemDelegate {
 public:

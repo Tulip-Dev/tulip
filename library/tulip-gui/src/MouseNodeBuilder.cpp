@@ -16,11 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qevent.h>
+
+#include "tulip/MouseNodeBuilder.h"
+
+#include <QMouseEvent>
 
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
@@ -29,7 +28,6 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainView.h>
 
-#include <tulip/MouseNodeBuilder.h>
 
 using namespace tlp;
 using namespace std;

@@ -12,20 +12,20 @@ SET(LIB_SRCS
     ScatterPlotCorrelCoeffSelectorOptionsWidget.cpp
 )
 
-QT4_WRAP_UI(LIB_UI_HEADERS
+QTX_WRAP_UI(LIB_UI_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.ui
     ScatterPlot2DOptionsWidget.ui
     ScatterPlotCorrelCoeffSelectorOptionsWidget.ui
 )
 
-QT4_WRAP_CPP(LIB_MOC_SRCS
+QTX_WRAP_CPP(LIB_MOC_SRCS
     ScatterPlot2DView.h
     ScatterPlot2DOptionsWidget.h
     ScatterPlotCorrelCoeffSelectorOptionsWidget.h
     ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
 )
 
-QT4_ADD_RESOURCES(LIB_RCC_SRCS
+QTX_ADD_RESOURCES(LIB_RCC_SRCS
     ScatterPlotResource.qrc
 )
 

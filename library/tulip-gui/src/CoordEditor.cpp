@@ -18,8 +18,11 @@
  */
 
 #include <tulip/CoordEditor.h>
+
 #include <ui_CoordEditor.h>
+
 #include <cfloat>
+
 using namespace tlp;
 
 CoordEditor::CoordEditor(QWidget *parent) :

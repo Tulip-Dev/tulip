@@ -17,10 +17,12 @@
  *
  */
 #include "tulip/CSVImportConfigurationWidget.h"
-#include <tulip/CSVParser.h>
-
 #include "ui_CSVImportConfigurationWidget.h"
 
+#include <QComboBox>
+#include <QLineEdit>
+
+#include <tulip/CSVParser.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/ColorProperty.h>
@@ -30,9 +32,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
-
-#include <QtGui/QComboBox>
-#include <QtGui/QLineEdit>
 
 using namespace tlp;
 using namespace std;

@@ -21,7 +21,8 @@
 #ifndef COLORSCALEBUTTON_H
 #define COLORSCALEBUTTON_H
 
-#include <QtGui/QPushButton>
+#include <QPushButton>
+
 #include <tulip/ColorScaleConfigDialog.h>
 
 namespace tlp {

@@ -1,6 +1,6 @@
 #include "%ProjectName:l%.%CppHeaderSuffix%"
 
-#include <QtGui/QLabel>
+#include <QLabel>
 
 PLUGIN(%ProjectName:c%Composite);
 

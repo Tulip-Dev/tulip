@@ -19,11 +19,12 @@
 
 #include "tulip/TulipFont.h"
 
-#include <QtGui/QFontDatabase>
-#include <QtCore/QFileInfo>
-#include <QtCore/QDir>
+#include <QFontDatabase>
+#include <QFileInfo>
+#include <QDir>
+#include <QDebug>
+
 #include <tulip/TlpTools.h>
-#include <QtCore/QDebug>
 
 using namespace tlp;
 

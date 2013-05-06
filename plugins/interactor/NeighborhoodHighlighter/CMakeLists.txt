@@ -6,15 +6,15 @@ SET(LIB_SRCS
   NodeNeighborhoodView.cpp
 )
 
-QT4_WRAP_UI(LIB_UI_HEADERS
+QTX_WRAP_UI(LIB_UI_HEADERS
 NeighborhoodHighlighterConfigWidget.ui  
 )
 
-QT4_WRAP_CPP(LIB_MOC_SRCS
+QTX_WRAP_CPP(LIB_MOC_SRCS
 NeighborhoodHighlighterInteractor.h
 )
 
-QT4_ADD_RESOURCES(LIB_RCC_SRCS
+QTX_ADD_RESOURCES(LIB_RCC_SRCS
 NeighborhoodHighlighterResource.qrc
 )
 

@@ -22,13 +22,14 @@
 
 #include "GraphPerspective.h"
 
-#include <QtGui/QMessageBox>
-#include <QtGui/QFileDialog>
-#include <QtGui/QCloseEvent>
-#include <QtGui/QMessageBox>
-#include <QtGui/QClipboard>
-#include <QtGui/QDropEvent>
-#include <QtCore/QUrl>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QCloseEvent>
+#include <QMessageBox>
+#include <QClipboard>
+#include <QDropEvent>
+#include <QUrl>
+#include <QMimeData>
 
 #include <tulip/TlpTools.h>
 #include <tulip/ImportModule.h>
@@ -59,7 +60,7 @@
 #include "GraphHierarchiesEditor.h"
 #include "PreferencesDialog.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
 
 using namespace tlp;
 using namespace std;
@@ -123,19 +124,40 @@ void GraphPerspective::addRecentDocument(const QString& path) {
   buildRecentDocumentsMenu();
 }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+
+void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+    std::cerr << msg.toStdString() << std::endl;
+    static_cast<GraphPerspective*>(Perspective::instance())->log(type, context, msg);
+}
+
+void GraphPerspective::log(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
+    _logger->log(type, context, msg);
+    _ui->loggerIcon->setPixmap(_logger->icon());
+    _ui->loggerMessage->setText(QString::number(_logger->count()));
+}
+
+#else
+
 void graphPerspectiveLogger(QtMsgType type, const char* msg) {
   std::cerr << msg << std::endl;
   static_cast<GraphPerspective*>(Perspective::instance())->log(type,msg);
 }
+
 void GraphPerspective::log(QtMsgType type, const char* msg) {
   _logger->log(type,msg);
   _ui->loggerIcon->setPixmap(_logger->icon());
   _ui->loggerMessage->setText(QString::number(_logger->count()));
 }
 
-GraphPerspective::~GraphPerspective() {
-  qInstallMsgHandler(0);
+#endif
 
+GraphPerspective::~GraphPerspective() {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  qInstallMessageHandler(0);
+#else
+  qInstallMsgHandler(0);
+#endif
   if(_ui!=NULL)
     delete _ui;
 }
@@ -229,7 +251,12 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   redirectDebugOutputToQDebug();
   redirectWarningOutputToQWarning();
   redirectErrorOutputToQCritical();
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  qInstallMessageHandler(graphPerspectiveLogger);
+#else
   qInstallMsgHandler(graphPerspectiveLogger);
+#endif
 
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
@@ -323,7 +350,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   PythonInterpreter::getInstance()->setOutputEnabled(false);
 
-  if (PythonInterpreter::getInstance()->runString("import PyQt4.QtGui")) {
+  if (PythonInterpreter::getInstance()->runString("import PyQt4")) {
     APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipqt.api");
     APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/PyQt4.api");
   }

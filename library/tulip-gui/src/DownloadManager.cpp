@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/DownloadManager.h>
 
 #include <QCoreApplication>
 #include <QFile>
@@ -29,7 +28,9 @@
 #include <QTimer>
 #include <QUrl>
 
-#include <stdio.h>
+#include <tulip/DownloadManager.h>
+
+#include <cstdio>
 
 DownloadManager* DownloadManager::_instance = NULL;
 

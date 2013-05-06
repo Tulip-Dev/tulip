@@ -19,7 +19,7 @@
 #ifndef TULIPPERSPECTIVECRASHHANDLER_H
 #define TULIPPERSPECTIVECRASHHANDLER_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "TulipPerspectiveProcessHandler.h"
 
 class FormPost;

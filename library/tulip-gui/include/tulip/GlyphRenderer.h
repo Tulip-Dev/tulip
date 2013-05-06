@@ -21,9 +21,10 @@
 
 #ifndef GLYPHPREVIEWGENERATOR_H
 #define GLYPHPREVIEWGENERATOR_H
+
 #include <map>
 
-#include <QtGui/QPixmap>
+#include <QPixmap>
 
 #include <tulip/tulipconf.h>
 #include <tulip/Node.h>

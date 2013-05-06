@@ -21,7 +21,8 @@
 #ifndef TULIPWORKSPACE_H
 #define TULIPWORKSPACE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
+
 #include <tulip/tulipconf.h>
 
 namespace tlp {

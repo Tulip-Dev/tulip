@@ -26,7 +26,6 @@
 #include <string>
 
 #include <tulip/OpenGlConfigManager.h>
-
 #include <tulip/tulipconf.h>
 
 namespace tlp {

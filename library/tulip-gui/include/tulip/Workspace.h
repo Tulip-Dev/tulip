@@ -21,10 +21,11 @@
 #ifndef WORKSPACE_H
 #define WORKSPACE_H
 
-#include <QtCore/QMap>
-#include <QtCore/QPair>
-#include <QtGui/QWidget>
-#include <QtCore/QAbstractItemModel>
+#include <QMap>
+#include <QPair>
+#include <QWidget>
+#include <QAbstractItemModel>
+
 #include <tulip/tulipconf.h>
 #include <tulip/DataSet.h>
 #include <tulip/WorkspaceExposeWidget.h>

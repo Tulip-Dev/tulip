@@ -17,14 +17,18 @@
  *
  */
 
-#include <QtCore/QLocale>
-#include <QtCore/QProcess>
-#include <QtCore/QDir>
+#include <QLocale>
+#include <QProcess>
+#include <QDir>
 
-#include <QtGui/QApplication>
-#include <QtGui/QMessageBox>
-#include <QtGui/QDesktopServices>
-#include <QtNetwork/QTcpSocket>
+#include <QApplication>
+#include <QMessageBox>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QStandardPaths>
+#else
+#include <QDesktopServices>
+#endif
+#include <QTcpSocket>
 
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLibraryLoader.h>
@@ -80,8 +84,11 @@ bool sendAgentMessage(int port, const QString& message) {
 }
 
 void checkTulipRunning(const QString& perspName, const QString& fileToOpen) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    QFile lockFile(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0)).filePath("tulip.lck"));
+#else
   QFile lockFile(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip.lck"));
-
+#endif
   if (lockFile.exists() && lockFile.open(QIODevice::ReadOnly)) {
     QString agentPort = lockFile.readAll();
     bool ok;
@@ -174,7 +181,11 @@ int main(int argc, char **argv) {
   memory_checker_print_report();
 #endif // MEMORYCHECKER_ON
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  QFile f(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0)).filePath("tulip.lck"));
+#else
   QFile f(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip.lck"));
+#endif
   f.remove();
 
   return result;

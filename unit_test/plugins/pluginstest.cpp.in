@@ -34,7 +34,7 @@
 #include <tulip/PluginLoaderTxt.h>
 #endif
 #include <tulip/PluginLibraryLoader.h>
-#include <QtGui/qapplication.h>
+#include <QApplication>
 
 int main(int argc, char **argv) {
 #if defined(_GLIBCXX_HAVE_SETENV)

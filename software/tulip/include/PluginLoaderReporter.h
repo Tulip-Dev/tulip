@@ -20,8 +20,8 @@
 #define PLUGINLOADERREPORTER_H
 
 #include <tulip/PluginLoader.h>
-#include <QtCore/QMap>
-#include <QtCore/QString>
+#include <QMap>
+#include <QString>
 
 class PluginLoaderReporter: public tlp::PluginLoader {
 public:

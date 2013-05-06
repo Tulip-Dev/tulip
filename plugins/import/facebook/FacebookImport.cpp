@@ -19,15 +19,15 @@
 
 #include <tulip/PythonInterpreter.h>
 #include <tulip/ForEach.h>
-#include <QtGui/QDialog>
-#include <QtGui/QApplication>
-#include <QtGui/QFileDialog>
-#include <QtWebKit/QWebView>
-#include <QtGui/QVBoxLayout>
+#include <QDialog>
+#include <QApplication>
+#include <QFileDialog>
+#include <QWebView>
+#include <QVBoxLayout>
 #ifndef QT_NO_OPENSSL
-#include <QtNetwork/QSslSocket>
+#include <QSslSocket>
 #endif
-#include <QtGui/QMessageBox>
+#include <QMessageBox>
 
 #include "FacebookImport.h"
 #include "ui_FacebookImport.h"

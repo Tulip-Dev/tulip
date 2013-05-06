@@ -19,18 +19,18 @@
 
 #include "tulip/WorkspaceExposeWidget.h"
 
-#include <cmath>
-
-#include <QtCore/QEvent>
-#include <QtCore/QDebug>
-#include <QtCore/QPropertyAnimation>
-#include <QtCore/QParallelAnimationGroup>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QKeyEvent>
-#include <QtGui/QGraphicsTextItem>
+#include <QEvent>
+#include <QDebug>
+#include <QPropertyAnimation>
+#include <QParallelAnimationGroup>
+#include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
+#include <QGraphicsTextItem>
 
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
+
+#include <cmath>
 
 using namespace tlp;
 

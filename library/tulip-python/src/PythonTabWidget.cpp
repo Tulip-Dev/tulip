@@ -20,9 +20,9 @@
 #include "tulip/PythonInterpreter.h"
 #include "tulip/PythonTabWidget.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QTabBar>
-#include <QtGui/QLinearGradient>
+#include <QPainter>
+#include <QTabBar>
+#include <QLinearGradient>
 
 using namespace tlp;
 

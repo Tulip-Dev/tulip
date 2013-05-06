@@ -20,11 +20,11 @@
 
 #include "ui_AboutTulipPage.h"
 
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/QDir>
-#include <QtCore/QUrl>
+#include <QAbstractItemModel>
+#include <QDir>
+#include <QUrl>
 
-#include <QtGui/QDesktopServices>
+#include <QDesktopServices>
 
 #include <tulip/TlpTools.h>
 

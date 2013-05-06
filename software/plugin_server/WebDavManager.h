@@ -22,12 +22,14 @@
 
 #include <iostream>
 
-#include <QtCore/QObject>
-#include <QtCore/QCoreApplication>
-#include <QtNetwork/QHttp>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
+#include <QObject>
+#include <QCoreApplication>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+#include <QHttp>
+#endif
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 class QDomDocument;
 /**

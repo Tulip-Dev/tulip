@@ -24,7 +24,7 @@
 #include <tulip/Node.h>
 #include "PathFinding/Dikjstra/Dikjstra.h"
 
-#include <QtCore/qobject.h>
+#include <QObject>
 
 namespace tlp {
 class GlMainView;

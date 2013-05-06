@@ -21,7 +21,8 @@
 #ifndef TULIPPARALLELANIMATIONGROUP_H
 #define TULIPPARALLELANIMATIONGROUP_H
 
-#include <QtCore/QParallelAnimationGroup>
+#include <QParallelAnimationGroup>
+
 #include "tulip/tulipconf.h"
 
 namespace tlp {

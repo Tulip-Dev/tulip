@@ -18,12 +18,12 @@
  */
 #include "tulip/TulipFileDescriptorWidget.h"
 
-#include <QtGui/QKeyEvent>
-#include <QtGui/QFileDialog>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QPushButton>
-#include <QtGui/QLineEdit>
-#include <QtGui/QApplication>
+#include <QKeyEvent>
+#include <QFileDialog>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QLineEdit>
+#include <QApplication>
 
 TulipFileDescriptorWidget::TulipFileDescriptorWidget(QWidget* parent): QWidget(parent), _data(TulipFileDescriptor()) {
   _data.absolutePath = "";

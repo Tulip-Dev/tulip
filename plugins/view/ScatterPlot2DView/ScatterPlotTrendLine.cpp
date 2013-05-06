@@ -25,7 +25,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlLabel.h>
 
-#include <QtCore/QEvent>
+#include <QEvent>
 
 #include "ScatterPlotTrendLine.h"
 #include "ScatterPlot2DView.h"

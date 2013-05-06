@@ -21,7 +21,7 @@
 #ifndef CAPTIONITEM_H
 #define CAPTIONITEM_H
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include <tulip/View.h>
 #include <tulip/CaptionGraphicsItem.h>

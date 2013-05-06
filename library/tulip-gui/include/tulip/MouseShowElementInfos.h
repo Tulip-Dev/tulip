@@ -21,13 +21,13 @@
 #ifndef _Tulip_MOUSESHOWELEMENTINFOS_H
 #define _Tulip_MOUSESHOWELEMENTINFOS_H
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QWidget>
-#include <QtGui/QTableView>
-#include <QtGui/QGraphicsProxyWidget>
+#include <QMouseEvent>
+#include <QWidget>
+#include <QTableView>
+#include <QGraphicsProxyWidget>
+
 #include <tulip/ViewWidget.h>
 #include <tulip/GlScene.h>
-
 #include <tulip/InteractorComposite.h>
 
 namespace Ui {

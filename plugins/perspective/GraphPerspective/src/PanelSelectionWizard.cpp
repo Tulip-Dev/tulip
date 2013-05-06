@@ -19,8 +19,8 @@
 #include "PanelSelectionWizard.h"
 #include "ui_PanelSelectionWizard.h"
 
-#include <QtGui/QAbstractButton>
-#include <QtGui/QMouseEvent>
+#include <QAbstractButton>
+#include <QMouseEvent>
 
 #include <tulip/PluginManager.h>
 #include <tulip/View.h>

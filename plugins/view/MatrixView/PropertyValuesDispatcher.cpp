@@ -17,7 +17,7 @@
  *
  */
 
-#include <typeinfo>
+
 #include "PropertyValuesDispatcher.h"
 
 #include <tulip/ForEach.h>
@@ -25,7 +25,8 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/BooleanProperty.h>
 
-#include <assert.h>
+#include <cassert>
+#include <typeinfo>
 
 using namespace tlp;
 using namespace std;

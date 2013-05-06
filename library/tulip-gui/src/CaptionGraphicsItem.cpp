@@ -18,10 +18,10 @@
  */
 #include "tulip/CaptionGraphicsItem.h"
 
-#include <QtGui/QGraphicsProxyWidget>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QApplication>
-#include <QtGui/QMenu>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsView>
+#include <QApplication>
+#include <QMenu>
 
 #include <tulip/DoubleProperty.h>
 #include <tulip/ColorProperty.h>

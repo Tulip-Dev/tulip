@@ -1,6 +1,6 @@
 SET(APPLICATION_NAME graphmanipulations)
 
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(APPLICATION_SRCS graphmanipulations.cpp )

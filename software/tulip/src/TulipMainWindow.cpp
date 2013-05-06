@@ -19,13 +19,13 @@
 
 #include "TulipMainWindow.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QFileDialog>
-#include <QtGui/QCloseEvent>
-#include <QtCore/QFile>
-#include <QtCore/QProcess>
-#include <QtCore/QDir>
-#include <QtGui/QScrollArea>
+#include <QMenu>
+#include <QFileDialog>
+#include <QCloseEvent>
+#include <QFile>
+#include <QProcess>
+#include <QDir>
+#include <QScrollArea>
 
 #include <tulip/TulipRelease.h>
 #include <tulip/PythonVersionChecker.h>

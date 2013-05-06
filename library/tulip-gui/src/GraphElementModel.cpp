@@ -19,7 +19,7 @@
 
 #include <tulip/GraphElementModel.h>
 
-#include <QtGui/QFont>
+#include <QFont>
 
 #include <tulip/ForEach.h>
 #include <tulip/Graph.h>

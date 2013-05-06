@@ -6,11 +6,11 @@ SET(ColorMapping_SRCS
   DoubleStringsListRelationDialog.cpp
 )
 
-QT4_WRAP_UI(ColorMapping_UI_SRCS
+QTX_WRAP_UI(ColorMapping_UI_SRCS
   DoubleStringsListRelationDialog.ui
 )
 
-QT4_WRAP_CPP(ColorMapping_MOC_SRCS
+QTX_WRAP_CPP(ColorMapping_MOC_SRCS
   DoubleStringsListRelationDialog.h
 )
 

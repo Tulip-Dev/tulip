@@ -16,18 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtCore/qstring.h>
-#include <QtCore/qstringlist.h>
-#include <QtGui/qlistview.h>
-#include <QtGui/qpushbutton.h>
-#include <QtGui/qmessagebox.h>
-#include <QtGui/qinputdialog.h>
-#include <QtGui/qlabel.h>
-#include <QtGui/qtabwidget.h>
+
+#include <QString>
+#include <QStringList>
+#include <QListView>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QInputDialog>
+#include <QLabel>
+#include <QTabWidget>
 
 #include "ui_CopyPropertyDialog.h"
 

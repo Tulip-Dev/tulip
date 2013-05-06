@@ -23,7 +23,6 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <tulip/BoundingBox.h>
-
 #include <tulip/GlSceneVisitor.h>
 
 namespace tlp {

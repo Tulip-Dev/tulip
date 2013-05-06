@@ -20,9 +20,9 @@
 #ifndef TULIPSPLASHSCREEN_H
 #define TULIPSPLASHSCREEN_H
 
-#include <QtGui/QSplashScreen>
+#include <QSplashScreen>
 #include <tulip/PluginLoader.h>
-#include <QtCore/QMap>
+#include <QMap>
 
 /**
   @brief a splash screen used when loading plugins.

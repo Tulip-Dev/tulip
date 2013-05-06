@@ -21,13 +21,13 @@
 #include "AxisConfigDialogs.h"
 #include "NominalParallelAxis.h"
 
-#include <QtGui/QMenu>
-#include <QtGui/QMenuBar>
-#include <QtGui/QToolTip>
-#include <QtGui/QImageWriter>
-#include <QtCore/QThread>
-#include <QtCore/QDir>
-#include <QtGui/QGraphicsView>
+#include <QMenu>
+#include <QMenuBar>
+#include <QToolTip>
+#include <QImageWriter>
+#include <QThread>
+#include <QDir>
+#include <QGraphicsView>
 
 #include <tulip/GlTools.h>
 #include <tulip/GlLabel.h>

@@ -26,11 +26,11 @@
 #include <tulip/GraphModel.h>
 #include <tulip/GraphTableItemDelegate.h>
 #include <tulip/TlpQtTools.h>
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QGraphicsProxyWidget>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QApplication>
-#include <QtGui/QMenu>
+#include <QGraphicsItem>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsView>
+#include <QApplication>
+#include <QMenu>
 
 using namespace tlp;
 
@@ -125,7 +125,11 @@ void TableView::setupWidget() {
   connect(_ui->table,SIGNAL(resizeTableRows()), this, SLOT(resizeTableRows()));
 
   _ui->table->setItemDelegate(new GraphTableItemDelegate(_ui->table));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  _ui->table->horizontalHeader()->setSectionsMovable(true);
+#else
   _ui->table->horizontalHeader()->setMovable(true);
+#endif
   connect(_ui->table, SIGNAL(customContextMenuRequested (const QPoint &)),
           SLOT(showCustomContextMenu(const QPoint&)));
   connect(_ui->filterEdit,SIGNAL(returnPressed()),this,SLOT(filterChanged()));

@@ -20,8 +20,8 @@
 #ifndef PROPERTIESEDITOR_H
 #define PROPERTIESEDITOR_H
 
-#include <QtGui/QWidget>
-#include <QtCore/QModelIndex>
+#include <QWidget>
+#include <QModelIndex>
 
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/PropertyInterface.h>

@@ -14,7 +14,7 @@ SET(LIB_SRCS
     GlyphScaleConfigDialog.cpp
 )
 
-QT4_WRAP_UI(LIB_UI_HEADERS
+QTX_WRAP_UI(LIB_UI_HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.ui
 	HistoStatsConfigWidget.ui
 	HistoOptionsWidget.ui
@@ -22,7 +22,7 @@ QT4_WRAP_UI(LIB_UI_HEADERS
 	GlyphScaleConfigDialog.ui
 )
 
-QT4_WRAP_CPP(LIB_MOC_SRCS
+QTX_WRAP_CPP(LIB_MOC_SRCS
       HistogramView.h
       HistogramStatistics.h
       HistoOptionsWidget.h
@@ -32,7 +32,7 @@ QT4_WRAP_CPP(LIB_MOC_SRCS
       ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
 )
 
-QT4_ADD_RESOURCES(LIB_RCC_SRCS
+QTX_ADD_RESOURCES(LIB_RCC_SRCS
 HistogramResource.qrc
 )
 

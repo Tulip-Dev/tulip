@@ -19,8 +19,8 @@
 #include "ExportWizard.h"
 #include "ui_ExportWizard.h"
 
-#include <QtGui/QAbstractButton>
-#include <QtGui/QFileDialog>
+#include <QAbstractButton>
+#include <QFileDialog>
 
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/ParameterListModel.h>
@@ -47,7 +47,11 @@ ExportWizard::ExportWizard(Graph *g, QWidget *parent): QWizard(parent), _ui(new 
 
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
   connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  _ui->parametersList->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+#else
   _ui->parametersList->verticalHeader()->setResizeMode(QHeaderView::Fixed);
+#endif
   connect(_ui->exportModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton), SLOT(click()));
 
   _ui->parametersFrame->hide();

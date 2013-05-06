@@ -17,9 +17,9 @@
  *
  */
 
-#include <QtGui/QColorDialog>
-#include <QtGui/QPainter>
-#include <QtGui/QLinearGradient>
+#include <QColorDialog>
+#include <QPainter>
+#include <QLinearGradient>
 
 #include "ScatterPlot2DOptionsWidget.h"
 

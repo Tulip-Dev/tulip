@@ -26,10 +26,10 @@
 #include <tulip/GlRect.h>
 #include <tulip/GlTextureManager.h>
 
-#include <QtGui/QToolTip>
-#include <QtGui/QHelpEvent>
-#include <QtGui/QApplication>
-#include <QtGui/QMenu>
+#include <QToolTip>
+#include <QHelpEvent>
+#include <QApplication>
+#include <QMenu>
 
 #include <algorithm>
 #include <cmath>

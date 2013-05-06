@@ -17,13 +17,17 @@
  *
  */
 
-#include "SOMPropertiesWidget.h"
 
-#include <QtGui/QIntValidator>
-#include <QtGui/QDoubleValidator>
+#include "SOMPropertiesWidget.h"
+#include "SOMView.h"
+
+#include <QIntValidator>
+#include <QDoubleValidator>
+
 #include <tulip/GraphPropertiesSelectionWidget.h>
 #include <tulip/ColorScaleConfigDialog.h>
-#include "SOMView.h"
+
+
 using namespace std;
 using namespace tlp;
 

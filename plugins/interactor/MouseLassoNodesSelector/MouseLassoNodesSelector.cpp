@@ -17,9 +17,12 @@
  *
  */
 
-#include <algorithm>
+#include "MouseLassoNodesSelector.h"
+#include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/ViewNames.h"
 
-#include <QtGui/QMouseEvent>
+#include <QMouseEvent>
+
 #include <tulip/MouseInteractors.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/GlComplexPolygon.h>
@@ -27,9 +30,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlNode.h>
 
-#include "MouseLassoNodesSelector.h"
-#include "../../utils/StandardInteractorPriority.h"
-#include "../../utils/ViewNames.h"
+#include <algorithm>
 
 using namespace std;
 using namespace tlp;

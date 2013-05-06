@@ -19,14 +19,14 @@
 
 #include "tulip/QuickAccessBar.h"
 
-#include <QtGui/QFontDatabase>
-#include <QtGui/QComboBox>
-#include <QtCore/QDebug>
-#include <QtGui/QListView>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QApplication>
-#include <QtGui/QGraphicsView>
+#include <QFontDatabase>
+#include <QComboBox>
+#include <QDebug>
+#include <QListView>
+#include <QMainWindow>
+#include <QMouseEvent>
+#include <QApplication>
+#include <QGraphicsView>
 
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/GraphModel.h>

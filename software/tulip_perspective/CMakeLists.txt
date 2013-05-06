@@ -3,13 +3,17 @@ SET(SRCS
   src/TulipPerspectiveMainWindow.cpp
 )
 
-QT4_WRAP_CPP(MOC_SRCS
+QTX_WRAP_CPP(MOC_SRCS
   include/TulipPerspectiveMainWindow.h
 )
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../crash_handling)
 
-INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} include/)
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} include/)
+
+IF(USE_QT5)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+ENDIF(USE_QT5)
 
 ADD_EXECUTABLE(tulip_perspective ${SRCS} ${MOC_SRCS})
 

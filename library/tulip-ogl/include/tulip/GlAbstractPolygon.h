@@ -26,7 +26,6 @@
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/tulipconf.h>
-
 #include <tulip/GlSimpleEntity.h>
 #include <tulip/GlTools.h>
 

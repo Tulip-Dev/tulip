@@ -22,7 +22,8 @@
 #ifndef TULIPFONTDIALOG_H
 #define TULIPFONTDIALOG_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
+
 #include <tulip/tulipconf.h>
 #include <tulip/TulipFont.h>
 

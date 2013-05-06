@@ -34,14 +34,14 @@
 #include <tulip/ExportModule.h>
 #include <tulip/PluginLister.h>
 
-#include <QtGui/QMessageBox>
-#include <QtGui/QFileDialog>
-#include <QtCore/QTextStream>
-#include <QtCore/QRegExp>
-#include <QtGui/QInputDialog>
-#include <QtGui/QMessageBox>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QTextStream>
+#include <QRegExp>
+#include <QInputDialog>
+#include <QMessageBox>
 
-#include <QtGui/QLabel>
+#include <QLabel>
 
 #include <sstream>
 

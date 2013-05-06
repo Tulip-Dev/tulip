@@ -21,7 +21,8 @@
 #ifndef SIZEEDITOR_H
 #define SIZEEDITOR_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
+
 #include <tulip/Size.h>
 #include <tulip/tulipconf.h>
 

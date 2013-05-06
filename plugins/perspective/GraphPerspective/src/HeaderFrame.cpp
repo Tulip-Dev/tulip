@@ -18,7 +18,7 @@
  */
 #include "HeaderFrame.h"
 
-#include <QtGui/QSplitter>
+#include <QSplitter>
 
 #include "ui_HeaderFrame.h"
 

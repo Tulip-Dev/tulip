@@ -20,7 +20,7 @@
 #ifndef MATRIXVIEWCONFIGURATIONWIDGET_H
 #define MATRIXVIEWCONFIGURATIONWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace tlp {
 class Graph;

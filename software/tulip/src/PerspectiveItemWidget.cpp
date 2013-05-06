@@ -20,7 +20,7 @@
 
 #include "ui_PerspectiveItem.h"
 
-#include <QtGui/QMouseEvent>
+#include <QMouseEvent>
 
 #include <tulip/PluginLister.h>
 #include "TulipMainWindow.h"

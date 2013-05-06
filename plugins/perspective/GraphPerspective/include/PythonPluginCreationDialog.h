@@ -20,7 +20,7 @@
 #ifndef PLUGINCREATIONDIALOG_H_
 #define PLUGINCREATIONDIALOG_H_
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 namespace Ui {
 class PythonPluginCreationDialog;

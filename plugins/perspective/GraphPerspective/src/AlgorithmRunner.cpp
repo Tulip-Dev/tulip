@@ -21,9 +21,9 @@
 #include "AlgorithmRunnerItem.h"
 #include "ExpandableGroupBox.h"
 
-#include <QtGui/QDropEvent>
-#include <QtGui/QPainter>
-#include <QtGui/QToolButton>
+#include <QDropEvent>
+#include <QPainter>
+#include <QToolButton>
 
 #include <tulip/TulipMimes.h>
 #include <tulip/TulipSettings.h>

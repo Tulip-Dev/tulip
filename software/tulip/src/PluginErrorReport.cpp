@@ -19,8 +19,8 @@
 
 #include "PluginErrorReport.h"
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QDebug>
+#include <QFileInfo>
+#include <QDebug>
 
 #include "ui_PluginErrorReport.h"
 

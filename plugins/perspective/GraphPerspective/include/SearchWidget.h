@@ -20,7 +20,7 @@
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace Ui {
 class SearchWidget;

@@ -113,7 +113,7 @@ QUrl WebDavManager::initUrl(const QString& dest) {
 
 QNetworkRequest WebDavManager::initRequest(const QString& destination, QIODevice* data, QVariant mimetype) {
   QNetworkRequest request(initUrl(destination));
-  request.setRawHeader(QByteArray("Authorization"), _credentials.toAscii());
+  request.setRawHeader(QByteArray("Authorization"), _credentials.toLatin1());
   request.setRawHeader(QByteArray("Host"), _host.toUtf8());
 
   if(data != NULL) {

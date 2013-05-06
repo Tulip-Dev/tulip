@@ -22,14 +22,14 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
-#include <QtGui/QSpinBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QLabel>
-#include <QtGui/QCloseEvent>
-#include <QtGui/QComboBox>
-#include <QtGui/QCheckBox>
+#include <QSpinBox>
+#include <QPushButton>
+#include <QLabel>
+#include <QCloseEvent>
+#include <QComboBox>
+#include <QCheckBox>
 
 #include <tulip/ItemsListWidget.h>
 

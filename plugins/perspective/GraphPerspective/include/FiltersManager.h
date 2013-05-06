@@ -19,7 +19,7 @@
 #ifndef FILTERSMANAGER_H
 #define FILTERSMANAGER_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "FiltersManagerItem.h"
 
 namespace Ui {

@@ -23,7 +23,7 @@
 #include "HistogramViewNavigator.h"
 #include "HistogramView.h"
 
-#include <QtGui/QMouseEvent>
+#include <QMouseEvent>
 
 using namespace std;
 

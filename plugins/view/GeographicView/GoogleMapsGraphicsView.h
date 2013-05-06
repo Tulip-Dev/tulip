@@ -27,9 +27,9 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainWidgetGraphicsItem.h>
 
-#include <QtGui/QGraphicsView>
-#include <QtOpenGL/QGLWidget>
-#include <QtGui/QComboBox>
+#include <QGraphicsView>
+#include <QGLWidget>
+#include <QComboBox>
 
 namespace tlp {
 

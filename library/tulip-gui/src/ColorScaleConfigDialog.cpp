@@ -17,13 +17,13 @@
  *
  */
 
-#include <QtGui/QFileDialog>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QPainter>
-#include <QtCore/QSettings>
-#include <QtGui/QMessageBox>
-#include <QtGui/QInputDialog>
+#include <QFileDialog>
+#include <QHeaderView>
+#include <QLinearGradient>
+#include <QPainter>
+#include <QSettings>
+#include <QMessageBox>
+#include <QInputDialog>
 
 #include <algorithm>
 #include <vector>

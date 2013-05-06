@@ -19,7 +19,7 @@
 
 #include "DoubleStringsListRelationDialog.h"
 
-#include <QtGui/QScrollBar>
+#include <QScrollBar>
 
 using namespace std;
 

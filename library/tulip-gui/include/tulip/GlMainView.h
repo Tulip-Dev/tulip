@@ -21,8 +21,9 @@
 #define Tulip_GLMAINVIEW_H
 
 #include <tulip/ViewWidget.h>
-#include <QtGui/QAction>
-#include <QtGui/QMenu>
+
+#include <QAction>
+#include <QMenu>
 
 class QGraphicsProxyWidget;
 

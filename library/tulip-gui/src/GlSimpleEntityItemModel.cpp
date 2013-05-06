@@ -19,8 +19,8 @@
 
 #include "tulip/GlSimpleEntityItemModel.h"
 
-#include <QtCore/QStringList>
-#include <QtGui/QFont>
+#include <QStringList>
+#include <QFont>
 
 namespace tlp {
 

@@ -21,11 +21,9 @@
 #ifndef _Tulip_SNAPSHOTDIALOG_H
 #define _Tulip_SNAPSHOTDIALOG_H
 
+#include <QDialog>
+
 #include <tulip/tulipconf.h>
-
-#include <QtGui/QDialog>
-
-
 
 namespace Ui {
 class SnapshotDialogData;

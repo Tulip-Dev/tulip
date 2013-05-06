@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude})
 
 ADD_EXECUTABLE(graph_display graph_display.cpp)
 TARGET_LINK_LIBRARIES(graph_display ${TulipLibs} ${QT_LIBRARIES})

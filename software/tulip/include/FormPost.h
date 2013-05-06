@@ -19,8 +19,8 @@
 #ifndef FORMPOST_H
 #define FORMPOST_H
 
-#include <QtCore/QObject>
-#include <QtCore/QStringList>
+#include <QObject>
+#include <QStringList>
 
 class QNetworkReply;
 

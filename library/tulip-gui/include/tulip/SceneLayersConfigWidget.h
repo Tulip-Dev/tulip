@@ -22,7 +22,8 @@
 #ifndef SCENELAYERSCONFIGWIDGET_H
 #define SCENELAYERSCONFIGWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
+
 #include <tulip/tulipconf.h>
 
 namespace Ui {

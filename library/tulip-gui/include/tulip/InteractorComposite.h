@@ -21,7 +21,8 @@
 #define INTERACTORCOMPOSITE_H
 
 #include <tulip/Interactor.h>
-#include <QtCore/QList>
+
+#include <QList>
 
 namespace tlp {
 

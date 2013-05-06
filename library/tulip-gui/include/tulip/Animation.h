@@ -21,7 +21,7 @@
 #ifndef ANIMATION_H_
 #define ANIMATION_H_
 
-#include <QtCore/QPropertyAnimation>
+#include <QPropertyAnimation>
 #include <tulip/tulipconf.h>
 
 namespace tlp {

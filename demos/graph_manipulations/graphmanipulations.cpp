@@ -6,7 +6,8 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/DoubleProperty.h>
-#include <QtCore/QCoreApplication>
+
+#include <QCoreApplication>
 
 using namespace std;
 using namespace tlp;

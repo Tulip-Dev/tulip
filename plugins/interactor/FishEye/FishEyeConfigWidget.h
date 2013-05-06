@@ -20,7 +20,7 @@
 #ifndef FISHEYECONFIGWIDGET_H_
 #define FISHEYECONFIGWIDGET_H_
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace Ui {
 class FishEyeConfigWidget;

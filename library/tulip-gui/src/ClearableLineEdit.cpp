@@ -18,8 +18,9 @@
  */
 
 #include "tulip/ClearableLineEdit.h"
-#include <QtGui/QPaintEvent>
-#include <QtGui/QPainter>
+
+#include <QPaintEvent>
+#include <QPainter>
 
 QPixmap* ClearableLineEdit::CLEAR_PIXMAP = NULL;
 

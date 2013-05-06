@@ -20,8 +20,8 @@
 #ifndef PYTHONSCRIPTVIEW_H_
 #define PYTHONSCRIPTVIEW_H_
 
-#include <QtCore/QObject>
-#include <QtCore/QMap>
+#include <QObject>
+#include <QMap>
 #include <tulip/ViewWidget.h>
 
 class QTabWidget;

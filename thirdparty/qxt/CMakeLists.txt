@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${QT_INCLUDE_DIR} src)
+INCLUDE_DIRECTORIES(src)
 
 ADD_DEFINITIONS("-DBUILD_QXT_GUI -UQXT_STATIC")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -10,7 +10,7 @@ SET(SRCS
   src/qxtglobal.cpp
 )
 
-QT4_WRAP_CPP(MOC_SRCS
+QTX_WRAP_CPP(MOC_SRCS
 src/qxtspanslider.h
 src/qxtspanslider_p.h
 src/qxtflowview_p.h

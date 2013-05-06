@@ -19,14 +19,14 @@
 
 #include "TulipWelcomePage.h"
 
-#include <QtGui/QMessageBox>
-#include <QtCore/QFileInfo>
-#include <QtGui/QDesktopServices>
-#include <QtGui/QApplication>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
-#include <QtXml/QXmlSimpleReader>
+#include <QMessageBox>
+#include <QFileInfo>
+#include <QDesktopServices>
+#include <QApplication>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QXmlSimpleReader>
 
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginManager.h>

@@ -20,7 +20,7 @@
 
 #include "GraphPerspective.h"
 #include <tulip/GraphHierarchiesModel.h>
-#include <QtGui/QToolButton>
+#include <QToolButton>
 #include <tulip/BooleanProperty.h>
 
 #include "ui_FiltersManager.h"

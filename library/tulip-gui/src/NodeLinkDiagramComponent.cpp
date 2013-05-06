@@ -20,9 +20,9 @@
 
 #include "ui_GridOptionsWidget.h"
 
-#include <QtGui/QGraphicsView>
-#include <QtGui/QActionGroup>
-#include <QtGui/QDialog>
+#include <QGraphicsView>
+#include <QActionGroup>
+#include <QDialog>
 
 #include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGrid.h>

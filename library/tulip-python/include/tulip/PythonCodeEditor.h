@@ -41,10 +41,10 @@
 
 #include <tulip/AutoCompletionDataBase.h>
 
-#include <QtCore/QDateTime>
-#include <QtGui/QListWidget>
-#include <QtGui/QPlainTextEdit>
-#include <QtGui/QDialog>
+#include <QDateTime>
+#include <QListWidget>
+#include <QPlainTextEdit>
+#include <QDialog>
 
 namespace Ui {
 class FindReplaceDialogData;

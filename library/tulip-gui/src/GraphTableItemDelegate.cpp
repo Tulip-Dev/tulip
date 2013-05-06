@@ -18,9 +18,11 @@
  */
 #include <tulip/GraphTableItemDelegate.h>
 
+#include <QDebug>
+
 #include <tulip/GraphModel.h>
 #include <tulip/DoubleProperty.h>
-#include <QtCore/QDebug>
+
 
 using namespace tlp;
 using namespace std;

@@ -20,7 +20,7 @@
 #ifndef ADDRESSSELECTIONDIALOG_H_
 #define ADDRESSSELECTIONDIALOG_H_
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 #include "ui_AddressSelectionDialog.h"
 

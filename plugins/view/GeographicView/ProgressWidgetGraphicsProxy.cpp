@@ -17,7 +17,7 @@
  *
  */
 
-#include <QtGui/QPainter>
+#include <QPainter>
 
 #include "ProgressWidgetGraphicsProxy.h"
 

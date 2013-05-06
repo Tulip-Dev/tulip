@@ -29,13 +29,13 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlComplexPolygon.h>
 
-#include <QtGui/QMenu>
-#include <QtWebKit/QWebFrame>
-#include <QtCore/QThread>
-#include <QtGui/QComboBox>
-#include <QtXml/QDomDocument>
-#include <QtXml/QXmlDefaultHandler>
-#include <QtCore/QTimeLine>
+#include <QMenu>
+#include <QWebFrame>
+#include <QThread>
+#include <QComboBox>
+#include <QDomDocument>
+#include <QXmlDefaultHandler>
+#include <QTimeLine>
 
 #include <iostream>
 

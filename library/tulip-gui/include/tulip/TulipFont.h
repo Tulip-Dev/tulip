@@ -22,10 +22,11 @@
 #ifndef TULIPFONT_H
 #define TULIPFONT_H
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QMap>
-#include <QtCore/QList>
+#include <QObject>
+#include <QString>
+#include <QMap>
+#include <QList>
+
 #include <tulip/tulipconf.h>
 
 namespace tlp {

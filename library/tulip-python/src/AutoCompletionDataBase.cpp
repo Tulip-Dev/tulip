@@ -21,9 +21,9 @@
 #include "tulip/AutoCompletionDataBase.h"
 #include "tulip/APIDataBase.h"
 
-#include <QtCore/QTextStream>
-#include <QtCore/QRegExp>
-#include <QtCore/QStringList>
+#include <QTextStream>
+#include <QRegExp>
+#include <QStringList>
 
 #include <tulip/StringCollection.h>
 #include <tulip/PluginLister.h>

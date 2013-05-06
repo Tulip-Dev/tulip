@@ -21,8 +21,8 @@
 #ifndef CSVIMPORTWIZARD_H
 #define CSVIMPORTWIZARD_H
 
-#include <QtGui/QWizard>
-#include <QtGui/QWizardPage>
+#include <QWizard>
+#include <QWizardPage>
 
 #include <tulip/Graph.h>
 #include <tulip/CSVGraphImport.h>

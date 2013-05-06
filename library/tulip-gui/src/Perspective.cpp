@@ -18,13 +18,13 @@
  */
 #include "tulip/Perspective.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QMainWindow>
-#include <tulip/SimplePluginProgressWidget.h>
+#include <QApplication>
+#include <QMainWindow>
+#include <QProcess>
+#include <QTcpSocket>
+#include <QHostAddress>
 
-#include <QtCore/QProcess>
-#include <QtNetwork/QTcpSocket>
-#include <QtNetwork/QHostAddress>
+#include <tulip/SimplePluginProgressWidget.h>
 
 using namespace tlp;
 

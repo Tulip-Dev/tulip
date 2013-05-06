@@ -19,10 +19,10 @@ ADD_LIBRARY(HierarchicalClustering-${TulipVersion} SHARED ${HierarchicalClusteri
 TARGET_LINK_LIBRARIES(HierarchicalClustering-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-QT4_WRAP_UI(ConvolutionClustering_UI_SRCS
+QTX_WRAP_UI(ConvolutionClustering_UI_SRCS
   ConvolutionClusteringSetup.ui)
 
-QT4_WRAP_CPP(ConvolutionClustering_MOC_SRCS
+QTX_WRAP_CPP(ConvolutionClustering_MOC_SRCS
   ConvolutionClusteringSetup.h)
 
 SET(ConvolutionClustering_SRCS
@@ -32,7 +32,7 @@ SET(ConvolutionClustering_SRCS
   ConvolutionClusteringSetup.h)
 
 ADD_LIBRARY(ConvolutionClustering-${TulipVersion} SHARED ${ConvolutionClustering_SRCS} ${ConvolutionClustering_UI_SRCS} ${ConvolutionClustering_MOC_SRCS})
-TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${LibTulipCoreName} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY})
+TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${LibTulipCoreName} ${QT_LIBRARIES})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(EqualValueClustering_SRCS

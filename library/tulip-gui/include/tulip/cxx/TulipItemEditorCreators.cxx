@@ -16,10 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <QtCore/QSet>
-#include <QtGui/QLineEdit>
-#include <QtGui/QTextEdit>
-#include <QtGui/QComboBox>
+#include <QSet>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QComboBox>
 
 #include <tulip/ForEach.h>
 #include <tulip/VectorEditionWidget.h>

@@ -27,7 +27,7 @@
 #include <vector>
 #include <climits>
 
-#include <QtCore/QString>
+#include <QString>
 
 class QTextCodec;
 

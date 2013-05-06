@@ -21,7 +21,8 @@
 #ifndef TULIPITEMDELEGATE_H
 #define TULIPITEMDELEGATE_H
 
-#include <QtGui/QStyledItemDelegate>
+#include <QStyledItemDelegate>
+
 #include "tulip/TulipItemEditorCreators.h"
 
 namespace tlp {

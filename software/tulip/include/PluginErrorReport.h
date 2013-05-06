@@ -20,7 +20,7 @@
 #ifndef PLUGINERRORREPORT_H
 #define PLUGINERRORREPORT_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace Ui {
 class PluginErrorReportData;

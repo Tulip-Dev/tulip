@@ -22,7 +22,7 @@
 #ifndef GLSIMPLEENTITYITEMMODEL_H
 #define GLSIMPLEENTITYITEMMODEL_H
 
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
 
 #include <tulip/GlSimpleEntity.h>
 

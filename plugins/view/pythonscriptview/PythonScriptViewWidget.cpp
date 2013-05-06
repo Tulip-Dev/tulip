@@ -20,11 +20,11 @@
 #include <tulip/PythonInterpreter.h>
 #include <tulip/PythonCodeEditor.h>
 
-#include <QtCore/QFile>
-#include <QtGui/QToolBar>
-#include <QtGui/QIcon>
-#include <QtGui/QTextBlock>
-#include <QtWebKit/QWebView>
+#include <QFile>
+#include <QToolBar>
+#include <QIcon>
+#include <QTextBlock>
+#include <QWebView>
 
 
 

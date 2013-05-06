@@ -1,7 +1,7 @@
-#include <QtCore/QPropertyAnimation>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QLabel>
-#include <QtGui/QGraphicsProxyWidget>
+#include <QPropertyAnimation>
+#include <QGraphicsView>
+#include <QLabel>
+#include <QGraphicsProxyWidget>
 
 #include <tulip/MouseInteractors.h>
 #include <tulip/Interactor.h>

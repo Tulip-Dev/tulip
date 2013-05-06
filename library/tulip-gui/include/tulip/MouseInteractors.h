@@ -22,10 +22,9 @@
 #ifndef MOUSEOBJECT_H
 #define MOUSEOBJECT_H
 
+#include <QCursor>
+
 #include <tulip/tulipconf.h>
-
-#include <QtGui/QCursor>
-
 #include <tulip/InteractorComposite.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/Camera.h>

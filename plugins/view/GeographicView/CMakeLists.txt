@@ -12,7 +12,7 @@ SET(LIB_SRCS
     GoogleMapsShowElementInfo.cpp
 )
 
-QT4_WRAP_UI(LIB_UI_HEADERS
+QTX_WRAP_UI(LIB_UI_HEADERS
     GeolocalisationConfigWidget.ui
     GoogleMapsViewConfigWidget.ui
     ProgressWidget.ui
@@ -20,16 +20,15 @@ QT4_WRAP_UI(LIB_UI_HEADERS
     ElementInformationsWidget.ui
 )
 
-QT4_WRAP_CPP(LIB_MOC_SRCS
+QTX_WRAP_CPP(LIB_MOC_SRCS
     GoogleMapsView.h
     ProgressWidgetGraphicsProxy.h
     GoogleMapsViewConfigWidget.h
     GeolocalisationConfigWidget.h
     GoogleMaps.h
-    GoogleMapsShowElementInfo.h
 )
 
-QT4_ADD_RESOURCES(LIB_RCC_SRCS
+QTX_ADD_RESOURCES(LIB_RCC_SRCS
     GoogleMapViewResource.qrc
 )
 

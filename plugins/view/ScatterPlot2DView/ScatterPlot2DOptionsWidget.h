@@ -20,7 +20,7 @@
 #ifndef SCATTERPLOT2DOPTIONSWIDGET_H_
 #define SCATTERPLOT2DOPTIONSWIDGET_H_
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <tulip/Color.h>
 #include <tulip/Size.h>

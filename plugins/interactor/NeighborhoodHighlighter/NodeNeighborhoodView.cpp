@@ -17,13 +17,14 @@
  *
  */
 
-#include <algorithm>
+#include "NodeNeighborhoodView.h"
+
 #include <tulip/ForEach.h>
 #include <tulip/Iterator.h>
 #include <tulip/BooleanProperty.h>
-
-#include "NodeNeighborhoodView.h"
 #include <tulip/DoubleProperty.h>
+
+#include <algorithm>
 
 using namespace std;
 

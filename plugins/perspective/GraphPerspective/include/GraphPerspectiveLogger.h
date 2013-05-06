@@ -20,9 +20,9 @@
 #ifndef GRAPHPERSPECTIVELOGGER_H
 #define GRAPHPERSPECTIVELOGGER_H
 
-#include <QtGui/QPixmap>
-#include <QtCore/QDebug>
-#include <QtGui/QFrame>
+#include <QPixmap>
+#include <QDebug>
+#include <QFrame>
 
 namespace Ui {
 class GraphPerspectiveLogger;
@@ -42,7 +42,11 @@ public:
   ~GraphPerspectiveLogger();
   QPixmap icon();
   unsigned int count() const;
-  void log(QtMsgType,const char*);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  void log(QtMsgType, const QMessageLogContext &, const QString &);
+#else
+  void log(QtMsgType, const char*);
+#endif
 
 public slots:
   void clear();

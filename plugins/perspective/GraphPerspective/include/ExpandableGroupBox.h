@@ -19,8 +19,8 @@
 #ifndef EXPANDABLEGROUPBOX_H
 #define EXPANDABLEGROUPBOX_H
 
-#include <QtGui/QGroupBox>
-#include <QtCore/QMap>
+#include <QGroupBox>
+#include <QMap>
 
 class ExpandableGroupBox : public QGroupBox {
   Q_OBJECT

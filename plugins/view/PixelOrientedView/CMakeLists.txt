@@ -24,18 +24,18 @@ SET(LIB_SRCS
     POLIB/ZOrderLayout.cpp
 )
 
-QT4_WRAP_UI(LIB_UI_HEADERS
+QTX_WRAP_UI(LIB_UI_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.ui
     PixelOrientedOptionsWidget.ui
 )
 
-QT4_WRAP_CPP(LIB_MOC_SRCS
+QTX_WRAP_CPP(LIB_MOC_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
     PixelOrientedView.h
     PixelOrientedOptionsWidget.h
 )
 
-QT4_ADD_RESOURCES(RCC_SRCS PixelOrientedView.qrc)
+QTX_ADD_RESOURCES(RCC_SRCS PixelOrientedView.qrc)
 
 ADD_LIBRARY(PixelOrientedView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${RCC_SRCS})
 TARGET_LINK_LIBRARIES(PixelOrientedView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY})

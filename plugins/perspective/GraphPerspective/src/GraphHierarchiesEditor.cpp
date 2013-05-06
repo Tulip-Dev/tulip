@@ -18,14 +18,14 @@
  */
 #include "GraphHierarchiesEditor.h"
 
-#include <QtCore/QDebug>
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QMenu>
-#include <QtGui/QGraphicsEffect>
-#include <QtGui/QPainter>
-#include <QtGui/QTextDocument>
-#include <QtGui/QToolButton>
-#include <QtGui/QSortFilterProxyModel>
+#include <QDebug>
+#include <QContextMenuEvent>
+#include <QMenu>
+#include <QGraphicsEffect>
+#include <QPainter>
+#include <QTextDocument>
+#include <QToolButton>
+#include <QSortFilterProxyModel>
 
 #include <tulip/Perspective.h>
 #include <tulip/BooleanProperty.h>

@@ -13,18 +13,18 @@ SET(LIB_SRCS
     highlighters/ZoomAndPanHighlighter.cpp
 )
 
-QT4_WRAP_UI(LIB_UI_HEADERS
+QTX_WRAP_UI(LIB_UI_HEADERS
     designer/EnclosingCircleConfiguration.ui
     designer/PathFinderConfiguration.ui
 )
 
-QT4_WRAP_CPP(LIB_MOC_SRCS
+QTX_WRAP_CPP(LIB_MOC_SRCS
       PathFinderConfigurationWidget.h
       PathFinder.h
       highlighters/EnclosingCircleHighlighter.h
 )
 
-QT4_ADD_RESOURCES(LIB_RCC_SRCS
+QTX_ADD_RESOURCES(LIB_RCC_SRCS
 	designer/resources.qrc
 )
 

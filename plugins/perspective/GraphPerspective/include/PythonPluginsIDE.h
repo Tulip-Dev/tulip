@@ -20,10 +20,10 @@
 #ifndef PYTHONPLUGINSIDE_H
 #define PYTHONPLUGINSIDE_H
 
-#include <QtGui/QWidget>
-#include <QtCore/QDateTime>
-#include <QtCore/QMap>
-#include <QtCore/QUrl>
+#include <QWidget>
+#include <QDateTime>
+#include <QMap>
+#include <QUrl>
 
 class QTabWidget;
 

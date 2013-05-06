@@ -25,6 +25,7 @@
 #include <list>
 #include <string>
 #include <set>
+
 #include <tulip/GraphDecorator.h>
 #include <tulip/Color.h>
 #include <tulip/ColorProperty.h>

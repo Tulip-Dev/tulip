@@ -19,8 +19,8 @@
 #ifndef GRAPHHIERARCHIESEDITOR_H
 #define GRAPHHIERARCHIESEDITOR_H
 
-#include <QtGui/QWidget>
-#include <QtCore/QModelIndex>
+#include <QWidget>
+#include <QModelIndex>
 
 class QAbstractButton;
 

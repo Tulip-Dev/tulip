@@ -17,15 +17,15 @@
  *
  */
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-#include <QtCore/QThread>
-#include <QtGui/QApplication>
-#include <QtCore/QTimeLine>
+#include "NeighborhoodHighlighterInteractor.h"
+#include "../../utils/ViewNames.h"
+
+#include <QCursor>
+#include <QEvent>
+#include <QThread>
+#include <QApplication>
+#include <QTimeLine>
+#include <QMouseEvent>
 
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/MouseInteractors.h>
@@ -45,9 +45,6 @@
 
 #include <algorithm>
 #include <sstream>
-
-#include "NeighborhoodHighlighterInteractor.h"
-#include "../../utils/ViewNames.h"
 
 using namespace std;
 

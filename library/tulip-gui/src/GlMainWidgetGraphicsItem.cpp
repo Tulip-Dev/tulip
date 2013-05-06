@@ -16,14 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include "tulip/GlMainWidgetGraphicsItem.h"
 
-#include <QtOpenGL/QGLFramebufferObject>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QApplication>
-#include <QtGui/QGraphicsProxyWidget>
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QGraphicsScene>
+#include <QGLFramebufferObject>
+#include <QGraphicsSceneMouseEvent>
+#include <QApplication>
+#include <QGraphicsProxyWidget>
+#include <QContextMenuEvent>
+#include <QGraphicsScene>
 
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlQuad.h>

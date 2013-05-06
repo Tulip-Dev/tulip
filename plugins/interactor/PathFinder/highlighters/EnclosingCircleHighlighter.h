@@ -22,7 +22,7 @@
 
 #include "PathHighlighter.h"
 
-#include <QtGui/qwidget.h>
+#include <QWidget>
 
 #include "ui_EnclosingCircleConfiguration.h"
 

@@ -18,9 +18,10 @@
  */
 #include "tulip/ColorButton.h"
 
-#include <QtGui/QColorDialog>
-#include <QtGui/QMainWindow>
-#include <QtGui/QStylePainter>
+#include <QColorDialog>
+#include <QMainWindow>
+#include <QStylePainter>
+
 #include <tulip/TlpQtTools.h>
 #include <tulip/Perspective.h>
 

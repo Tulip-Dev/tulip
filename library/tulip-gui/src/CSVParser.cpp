@@ -16,14 +16,15 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#include <QTextCodec>
+
 #include <tulip/CSVParser.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/PluginProgress.h>
 
 #include <fstream>
 #include <cassert>
-
-#include <QtCore/QTextCodec>
 
 using namespace std;
 using namespace tlp;

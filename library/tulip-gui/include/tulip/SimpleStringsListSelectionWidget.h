@@ -22,7 +22,7 @@
 #ifndef SIMPLESTRINGSLISTSELECTIONWIDGET_H_
 #define SIMPLESTRINGSLISTSELECTIONWIDGET_H_
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include "StringsListSelectionWidgetInterface.h"
 #include "ui_SimpleStringsListSelectionWidget.h"

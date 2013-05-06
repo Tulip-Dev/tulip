@@ -17,6 +17,10 @@
  *
  */
 #include "tulip/GlMainView.h"
+
+#include <QGraphicsProxyWidget>
+#include <QGraphicsView>
+
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneConfigWidget.h>
 #include <tulip/SceneLayersConfigWidget.h>
@@ -24,12 +28,9 @@
 #include <tulip/QuickAccessBar.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/SnapshotDialog.h>
-#include <QtGui/QGraphicsProxyWidget>
-#include <QtGui/QGraphicsView>
-#include "tulip/GlMainWidgetGraphicsItem.h"
+#include <tulip/GlMainWidgetGraphicsItem.h>
 
 using namespace tlp;
-
 
 GlMainView::GlMainView(): _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true), _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL) {
 }

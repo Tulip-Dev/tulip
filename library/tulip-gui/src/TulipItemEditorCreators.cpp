@@ -18,13 +18,17 @@
  */
 #include "tulip/TulipItemEditorCreators.h"
 
-#include <QtCore/QDebug>
-#include <QtGui/QCheckBox>
-#include <QtGui/QLabel>
-#include <QtGui/QStylePainter>
-#include <QtGui/QApplication>
-#include <QtGui/QLinearGradient>
-#include <QtGui/QPaintEvent>
+#include <QDebug>
+#include <QCheckBox>
+#include <QLabel>
+#include <QStylePainter>
+#include <QApplication>
+#include <QLinearGradient>
+#include <QPaintEvent>
+#include <QColorDialog>
+#include <QMainWindow>
+#include <QFileDialog>
+
 #include <tulip/TlpQtTools.h>
 #include <tulip/ColorButton.h>
 #include <tulip/ColorScaleButton.h>
@@ -37,11 +41,9 @@
 #include <tulip/TulipFontDialog.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
-#include <QtGui/QColorDialog>
+
 #include <tulip/GlLabel.h>
 #include <tulip/Perspective.h>
-#include <QtGui/QMainWindow>
-#include <QtGui/QFileDialog>
 
 using namespace tlp;
 

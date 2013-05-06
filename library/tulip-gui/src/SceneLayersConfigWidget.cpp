@@ -18,11 +18,12 @@
  */
 
 #include "tulip/SceneLayersConfigWidget.h"
+#include "ui_SceneLayersConfigWidget.h"
 
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneLayersModel.h>
-#include "ui_SceneLayersConfigWidget.h"
+
 
 using namespace tlp;
 

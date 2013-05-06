@@ -24,10 +24,10 @@
 
 #include <tulip/Graph.h>
 #include <tulip/Observable.h>
-#include <QtGui/QDialog>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QRadioButton>
-#include <QtGui/QPushButton>
+#include <QDialog>
+#include <QButtonGroup>
+#include <QRadioButton>
+#include <QPushButton>
 
 #include "GradientManager.h"
 #include "ColorScalePreview.h"

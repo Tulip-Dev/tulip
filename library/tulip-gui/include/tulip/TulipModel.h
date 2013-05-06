@@ -21,7 +21,8 @@
 #ifndef TULIPMODEL_H
 #define TULIPMODEL_H
 
-#include <QtCore/QAbstractItemModel>
+#include <QAbstractItemModel>
+
 #include <tulip/tulipconf.h>
 #include <tulip/TulipMetaTypes.h>
 

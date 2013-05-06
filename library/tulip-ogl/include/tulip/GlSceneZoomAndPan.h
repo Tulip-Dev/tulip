@@ -26,7 +26,7 @@
 namespace tlp {
 
 class GlScene;
-class BoundingBox;
+struct BoundingBox;
 class Camera;
 
 /**

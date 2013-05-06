@@ -16,11 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qevent.h>
+
+#include <QMouseEvent>
 
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
@@ -30,7 +27,6 @@
 #include <tulip/GlTools.h>
 #include <tulip/GlLine.h>
 #include <tulip/GlGraphComposite.h>
-
 #include <tulip/MouseEdgeBuilder.h>
 
 using namespace std;

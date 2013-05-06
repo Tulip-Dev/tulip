@@ -20,8 +20,8 @@
 #ifndef GOOGLEMAPS_H
 #define GOOGLEMAPS_H
 
-#include <QtWebKit/QWebView>
-#include <QtWebKit/QWebFrame>
+#include <QWebView>
+#include <QWebFrame>
 
 #include <tulip/Coord.h>
 #include <tulip/Graph.h>

@@ -20,11 +20,11 @@
 #ifndef CONSOLE_OUTPUT_HANDLER_H
 #define CONSOLE_OUTPUT_HANDLER_H
 
-#include <QtGui/QPlainTextEdit>
-#include <QtGui/QTextBrowser>
-#include <QtGui/QTextBlock>
-#include <QtGui/QApplication>
-#include <QtCore/QTime>
+#include <QPlainTextEdit>
+#include <QTextBrowser>
+#include <QTextBlock>
+#include <QApplication>
+#include <QTime>
 
 class ConsoleOutputHandler : public QObject {
 

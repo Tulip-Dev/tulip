@@ -30,8 +30,8 @@ using namespace std;
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlMainWidget.h>
 
-#include <QtGui/qwidget.h>
-#include <QtGui/qcolordialog.h>
+#include <QWidget>
+#include <QColorDialog>
 
 #include "../PathFinderTools.h"
 

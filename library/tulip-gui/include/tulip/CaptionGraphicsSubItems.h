@@ -22,14 +22,13 @@
 #define CAPTIONGRAPHICSSUBITEMS_H
 
 
-#include <QtGui/QGraphicsItemGroup>
-#include <QtGui/QComboBox>
-#include <QtOpenGL/QGLFramebufferObject>
+#include <QGraphicsItemGroup>
+#include <QComboBox>
+#include <QGLFramebufferObject>
+#include <QGraphicsSceneMouseEvent>
+
 #include <tulip/View.h>
 #include <tulip/Color.h>
-
-
-#include <QtGui/QGraphicsSceneMouseEvent>
 
 namespace tlp {
 

@@ -20,7 +20,7 @@
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlMainWidget.h>
 
-#include <QtGui/QMouseEvent>
+#include <QMouseEvent>
 
 #include "ScatterPlot2DView.h"
 #include "ScatterPlot2DViewNavigator.h"

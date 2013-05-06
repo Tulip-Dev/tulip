@@ -24,7 +24,7 @@
 
 #include <tulip/ColorScale.h>
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 namespace Ui {
 class ColorScaleDialog;

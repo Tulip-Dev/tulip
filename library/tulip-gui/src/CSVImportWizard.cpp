@@ -18,8 +18,8 @@
  */
 #include "ui_CSVImportWizard.h"
 
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QLabel>
+#include <QVBoxLayout>
+#include <QLabel>
 
 #include <tulip/CSVParserConfigurationWidget.h>
 #include <tulip/CSVImportWizard.h>

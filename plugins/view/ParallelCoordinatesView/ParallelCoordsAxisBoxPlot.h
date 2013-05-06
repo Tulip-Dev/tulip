@@ -20,22 +20,8 @@
 #ifndef PARALLELCOORDSAXISBOXPLOT_H_
 #define PARALLELCOORDSAXISBOXPLOT_H_
 
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <QCursor>
+#include <QMouseEvent>
 
 #include <string>
 #include <map>

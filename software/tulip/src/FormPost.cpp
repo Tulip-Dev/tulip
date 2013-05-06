@@ -18,12 +18,12 @@
  */
 #include "FormPost.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QDateTime>
-#include <QtCore/QVariant>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
+#include <QFile>
+#include <QDateTime>
+#include <QVariant>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 FormPost::FormPost():
   QObject() {
@@ -63,7 +63,7 @@ QByteArray FormPost::strToEnc(QString s) {
     return s.toUtf8();
   }
   else {
-    return s.toAscii();
+    return s.toLatin1();
   }
 }
 
@@ -112,7 +112,7 @@ QNetworkReply * FormPost::postData(QString url) {
   QString endBoundary=crlf+"--"+boundary+"--"+crlf;
   QString contentType="multipart/form-data; boundary="+boundary;
   boundary="--"+boundary+crlf;
-  QByteArray bond=boundary.toAscii();
+  QByteArray bond=boundary.toLatin1();
   QByteArray send;
   bool first=true;
 
@@ -121,26 +121,26 @@ QNetworkReply * FormPost::postData(QString url) {
 
     if (first) {
       boundary=crlf+boundary;
-      bond=boundary.toAscii();
+      bond=boundary.toLatin1();
       first=false;
     }
 
-    send.append(QString("Content-Disposition: form-data; name=\""+_fieldNames.at(i)+"\""+crlf).toAscii());
+    send.append(QString("Content-Disposition: form-data; name=\""+_fieldNames.at(i)+"\""+crlf).toLatin1());
 
-    if (_encoding=="utf-8") send.append(QString("Content-Transfer-Encoding: 8bit"+crlf).toAscii());
+    if (_encoding=="utf-8") send.append(QString("Content-Transfer-Encoding: 8bit"+crlf).toLatin1());
 
-    send.append(crlf.toAscii());
+    send.append(crlf.toLatin1());
     send.append(strToEnc(_fieldValues.at(i)));
   }
 
   for (int i=0; i<files.size(); i++) {
     send.append(bond);
-    send.append(QString("Content-Disposition: form-data; name=\""+_fileFieldNames.at(i)+"\"; filename=\""+_fileNames.at(i)+"\""+crlf).toAscii());
-    send.append(QString("Content-Type: "+_fileMimes.at(i)+crlf+crlf).toAscii());
+    send.append(QString("Content-Disposition: form-data; name=\""+_fileFieldNames.at(i)+"\"; filename=\""+_fileNames.at(i)+"\""+crlf).toLatin1());
+    send.append(QString("Content-Type: "+_fileMimes.at(i)+crlf+crlf).toLatin1());
     send.append(files.at(i));
   }
 
-  send.append(endBoundary.toAscii());
+  send.append(endBoundary.toLatin1());
 
   _fieldNames.clear();
   _fieldValues.clear();
@@ -152,13 +152,13 @@ QNetworkReply * FormPost::postData(QString url) {
   QNetworkAccessManager * http=new QNetworkAccessManager(this);
   connect(http,SIGNAL(finished(QNetworkReply *)),this,SLOT(readData(QNetworkReply *)));
   QNetworkRequest request;
-  request.setRawHeader("Host", host.toAscii());
+  request.setRawHeader("Host", host.toLatin1());
 
-  if (_userAgent!="") request.setRawHeader("User-Agent", _userAgent.toAscii());
+  if (_userAgent!="") request.setRawHeader("User-Agent", _userAgent.toLatin1());
 
-  if (_referer!="") request.setRawHeader("Referer", _referer.toAscii());
+  if (_referer!="") request.setRawHeader("Referer", _referer.toLatin1());
 
-  request.setHeader(QNetworkRequest::ContentTypeHeader, contentType.toAscii());
+  request.setHeader(QNetworkRequest::ContentTypeHeader, contentType.toLatin1());
   request.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(send.size()).toString());
   request.setUrl(QUrl(url));
   QNetworkReply * reply=http->post(request,send);

@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GraphNeedsSavingObserver.h>
 
+#include <tulip/GraphNeedsSavingObserver.h>
 #include <tulip/Graph.h>
 
 #include <deque>

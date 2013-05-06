@@ -22,14 +22,16 @@
 #ifndef TULIPSETTINGS_H
 #define TULIPSETTINGS_H
 
-#include <QtCore/QSettings>
-#include <QtCore/QStringList>
+#include <QSettings>
+#include <QStringList>
+#include <QNetworkProxy>
+
 #include <tulip/tulipconf.h>
 #include <tulip/Graph.h>
 #include <tulip/Color.h>
 #include <tulip/Size.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <QtNetwork/QNetworkProxy>
+
 
 /**
   * @brief This class provides convenience functions to access the Tulip settings file (using QSettings)

@@ -23,10 +23,10 @@
 #include <tulip/ImportModule.h>
 #include <tulip/TulipPluginHeaders.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QUrl>
-#include <QtCore/QString>
-#include <QtGui/QWidget>
+#include <QObject>
+#include <QUrl>
+#include <QString>
+#include <QWidget>
 
 namespace Ui {
 class FacebookConnectWidget;

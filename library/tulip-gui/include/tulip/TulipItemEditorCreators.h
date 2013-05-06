@@ -21,10 +21,10 @@
 #ifndef TULIPITEMEDITORCREATORS_H
 #define TULIPITEMEDITORCREATORS_H
 
-#include <QtCore/QObject>
-#include <QtGui/QItemEditorCreatorBase>
-#include <QtGui/QStyleOptionViewItem>
-#include <QtGui/QPainter>
+#include <QObject>
+#include <QItemEditorCreatorBase>
+#include <QStyleOptionViewItem>
+#include <QPainter>
 
 #include <tulip/tulipconf.h>
 #include <tulip/PropertyTypes.h>

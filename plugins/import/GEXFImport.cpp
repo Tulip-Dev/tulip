@@ -25,8 +25,8 @@
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/ForEach.h>
 
-#include <QtXml/QXmlStreamReader>
-#include <QtCore/QFile>
+#include <QXmlStreamReader>
+#include <QFile>
 
 
 using namespace tlp;

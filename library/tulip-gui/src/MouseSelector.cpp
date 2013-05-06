@@ -16,11 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QEvent>
+
 #include <QMouseEvent>
 
 #include <tulip/Graph.h>

@@ -18,13 +18,13 @@ SET(LIB_SRCS
     ZoomUtils.cpp
 )
 
-QT4_WRAP_UI(LIB_UI_HEADERS
+QTX_WRAP_UI(LIB_UI_HEADERS
     SOMPropertiesWidget.ui
     ComputeSOMWidget.ui
     SOMWidget.ui
 )
 
-QT4_WRAP_CPP(LIB_MOC_SRCS
+QTX_WRAP_CPP(LIB_MOC_SRCS
     ColorScalePreview.h
     SOMPropertiesWidget.h
     SOMWidget.h
@@ -32,7 +32,7 @@ QT4_WRAP_CPP(LIB_MOC_SRCS
     SOMView.h
 )
 
-QT4_ADD_RESOURCES(LIB_RCC_SRCS
+QTX_ADD_RESOURCES(LIB_RCC_SRCS
     SOMViewResource.qrc
 )
 

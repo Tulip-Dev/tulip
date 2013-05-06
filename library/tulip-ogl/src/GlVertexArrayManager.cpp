@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include <GL/glew.h>
 
 #include <tulip/OpenGlConfigManager.h>

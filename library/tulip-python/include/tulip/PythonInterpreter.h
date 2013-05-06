@@ -47,11 +47,11 @@ typedef _object PyObject;
 #include <tulip/PythonCppTypesConverter.h>
 #include <tulip/Graph.h>
 
-#include <QtGui/QDialog>
-#include <QtGui/QPlainTextEdit>
-#include <QtCore/QDir>
-#include <QtCore/QVector>
-#include <QtCore/QSet>
+#include <QDialog>
+#include <QPlainTextEdit>
+#include <QDir>
+#include <QVector>
+#include <QSet>
 
 namespace tlp {
 

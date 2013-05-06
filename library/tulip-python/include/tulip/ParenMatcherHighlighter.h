@@ -39,8 +39,8 @@
 #ifndef PARENMATCHERHIGHLIGHTER_H_
 #define PARENMATCHERHIGHLIGHTER_H_
 
-#include <QtGui/QSyntaxHighlighter>
-#include <QtCore/QVector>
+#include <QSyntaxHighlighter>
+#include <QVector>
 
 class QTextDocument;
 

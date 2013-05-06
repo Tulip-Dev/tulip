@@ -20,8 +20,8 @@
 #ifndef PYTHONSCRIPTVIEWWIDGET_H_
 #define PYTHONSCRIPTVIEWWIDGET_H_
 
-#include <QtGui/QWidget>
-#include <QtCore/QUrl>
+#include <QWidget>
+#include <QUrl>
 
 namespace Ui {
 class PythonScriptViewWidget;

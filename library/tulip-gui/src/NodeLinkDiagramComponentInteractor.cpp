@@ -20,7 +20,7 @@
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 
-#include <QtGui/QLabel>
+#include <QLabel>
 
 using namespace tlp;
 

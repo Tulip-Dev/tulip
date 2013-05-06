@@ -1,7 +1,7 @@
 #include "%ProjectName:l%.%CppHeaderSuffix%"
 
 @if "%BaseView%" == "ViewWidget"
-#include <QtGui/QWidget>
+#include <QWidget>
 @endif
 
 using namespace tlp;

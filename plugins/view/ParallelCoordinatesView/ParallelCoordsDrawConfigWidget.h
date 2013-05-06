@@ -20,7 +20,7 @@
 #ifndef PARALLELCOORDSDRAWCONFIGWIDGET_H_
 #define PARALLELCOORDSDRAWCONFIGWIDGET_H_
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <tulip/Size.h>
 #include <tulip/Color.h>

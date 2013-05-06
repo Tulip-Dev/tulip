@@ -18,7 +18,7 @@
  */
 #include "tulip/QGlBufferManager.h"
 
-#include "tulip/GlMainWidget.h"
+#include <tulip/GlMainWidget.h>
 
 #include <iostream>
 

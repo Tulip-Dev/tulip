@@ -17,17 +17,17 @@
  *
  */
 
+#include <QMimeData>
+#include <QDrag>
+#include <QMouseEvent>
+#include <QApplication>
+
 #include <tulip/DragHandle.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/WorkspacePanel.h>
 #include <tulip/View.h>
 
 #include <cassert>
-
-#include <QtCore/QMimeData>
-#include <QtGui/QDrag>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QApplication>
 
 using namespace tlp;
 

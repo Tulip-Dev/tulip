@@ -20,8 +20,8 @@
 #include <tulip/Glyph.h>
 #include <tulip/Iterator.h>
 
-#include <QtGui/QComboBox>
-#include <QtGui/QPushButton>
+#include <QComboBox>
+#include <QPushButton>
 
 #include "GlyphScaleConfigDialog.h"
 

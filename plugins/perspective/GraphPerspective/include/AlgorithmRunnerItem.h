@@ -20,7 +20,7 @@
 #ifndef ALGORITHMRUNNERITEM_H
 #define ALGORITHMRUNNERITEM_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <tulip/DataSet.h>
 

@@ -19,12 +19,12 @@
 
 #include "tulip/ScrollPopupButton.h"
 
-#include <QtGui/QKeyEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QSlider>
-#include <QtGui/QCursor>
-#include <QtCore/QDebug>
+#include <QKeyEvent>
+#include <QMouseEvent>
+#include <QVBoxLayout>
+#include <QSlider>
+#include <QCursor>
+#include <QDebug>
 
 ScrollPopupButton::ScrollPopupButton(QWidget *parent): QPushButton(parent) {
   _slider = new QSlider();

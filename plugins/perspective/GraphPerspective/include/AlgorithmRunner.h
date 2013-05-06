@@ -19,7 +19,7 @@
 #ifndef ALGORITHMRUNNER_H
 #define ALGORITHMRUNNER_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <tulip/DataSet.h>
 #include <tulip/PluginModel.h>
 

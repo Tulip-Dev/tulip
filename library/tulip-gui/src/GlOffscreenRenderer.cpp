@@ -17,22 +17,19 @@
  *
  */
 
-#include <sstream>
-
 #if defined(_MSC_VER)
 #include <Windows.h>
 #endif
 
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-
+#include <GL/glew.h> 
+ 
 #include <tulip/GlOffscreenRenderer.h>
+ 
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlGraphComposite.h>
+
+#include <sstream>
 
 using namespace std;
 
@@ -249,18 +246,10 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   glBindTexture(GL_TEXTURE_2D, textureId);
 
   if (generateMipMaps) {
-#if defined(_MSC_VER)
-    gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_BGRA_EXT, GL_UNSIGNED_BYTE, buff);
-#else
     gluBuild2DMipmaps(GL_TEXTURE_2D, 4, getViewportWidth(), getViewportHeight(), GL_BGRA, GL_UNSIGNED_BYTE, buff);
-#endif
   }
   else {
-#if defined(_MSC_VER)
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA_EXT, GL_UNSIGNED_BYTE, buff);
-#else
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, buff);
-#endif
   }
 
   return textureId;

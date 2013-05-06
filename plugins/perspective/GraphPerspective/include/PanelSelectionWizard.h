@@ -19,8 +19,8 @@
 #ifndef PANELSELECTIONWIZARD_H
 #define PANELSELECTIONWIZARD_H
 
-#include <QtCore/QModelIndex>
-#include <QtGui/QWizard>
+#include <QModelIndex>
+#include <QWizard>
 
 namespace tlp {
 class Graph;

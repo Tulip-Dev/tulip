@@ -16,11 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include "tulip/ViewWidget.h"
 
-#include <QtGui/QApplication>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsProxyWidget>
+#include <QApplication>
+#include <QGraphicsView>
+#include <QGraphicsProxyWidget>
+
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainWidgetGraphicsItem.h>
 #include <tulip/Interactor.h>

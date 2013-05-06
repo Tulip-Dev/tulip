@@ -17,8 +17,8 @@
  *
  */
 #include <iostream>
-#include <QtGui/qapplication.h>
-#include <QtCore/qtimer.h>
+#include <qapplication.h>
+#include <qtimer.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/DownloadManager.h>
 #include "WebImport.h"

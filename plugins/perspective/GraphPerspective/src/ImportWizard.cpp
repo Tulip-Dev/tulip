@@ -19,7 +19,7 @@
 #include "ImportWizard.h"
 #include "ui_ImportWizard.h"
 
-#include <QtGui/QAbstractButton>
+#include <QAbstractButton>
 
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/ParameterListModel.h>
@@ -44,7 +44,11 @@ ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::Import
 
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
   connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  _ui->parametersList->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+#else
   _ui->parametersList->verticalHeader()->setResizeMode(QHeaderView::Fixed);
+#endif
   connect(_ui->importModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton), SLOT(click()));
   // display OK instead of Finish
   setButtonText(QWizard::FinishButton, "OK");

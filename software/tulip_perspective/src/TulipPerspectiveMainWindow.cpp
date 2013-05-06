@@ -18,9 +18,9 @@
  */
 #include "TulipPerspectiveMainWindow.h"
 
-#include <QtGui/QCloseEvent>
-#include <QtGui/QShortcut>
-#include <QtGui/QAction>
+#include <QCloseEvent>
+#include <QShortcut>
+#include <QAction>
 #include <tulip/Perspective.h>
 
 TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QWidget *parent): QMainWindow(parent) {

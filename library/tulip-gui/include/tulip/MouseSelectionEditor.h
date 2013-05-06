@@ -21,7 +21,6 @@
 #ifndef MOUSEMOVESELECTION_H
 #define MOUSEMOVESELECTION_H
 
-//#include <tulip/GlRect.h>
 #include <tulip/GlCircle.h>
 #include <tulip/GlRect.h>
 #include <tulip/GlComposite.h>

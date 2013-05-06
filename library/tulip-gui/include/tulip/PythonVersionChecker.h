@@ -21,8 +21,9 @@
 #ifndef PYTHONVERSIONCHECKER_H
 #define PYTHONVERSIONCHECKER_H
 
+#include <QString>
+
 #include <tulip/tulipconf.h>
-#include <QtCore/QString>
 
 namespace tlp {
 class TLP_QT_SCOPE PythonVersionChecker {

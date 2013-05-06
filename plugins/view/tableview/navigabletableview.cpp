@@ -18,14 +18,18 @@
  */
 #include "navigabletableview.h"
 
-#include <QtGui/QKeyEvent>
-#include <QtGui/QHeaderView>
+#include <QKeyEvent>
+#include <QHeaderView>
 
 #include <iostream>
 
 NavigableTableView::NavigableTableView(QWidget *parent) :
   QTableView(parent) , _sendSignalOnResize(true) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+#else
   horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+#endif
 }
 
 void NavigableTableView::keyPressEvent(QKeyEvent *event) {

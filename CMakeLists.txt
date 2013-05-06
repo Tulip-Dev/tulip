@@ -72,8 +72,8 @@ SET(TulipLibs ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTul
 ## ========================================================
 ## Configure file for uninstall target
 ## ========================================================
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
-add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake VERBATIM)
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
+ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake VERBATIM)
 
 ## ========================================================
 ## Additional macros
@@ -106,42 +106,6 @@ ENDFUNCTION()
 ## Compiler-specific options
 ## ========================================================
 SET_COMPILER_OPTIONS()
-IF(MSVC)
-
-  IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") # Visual studio 2008 needs boost
-    FIND_PACKAGE(BOOST REQUIRED)
-    INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}/boost/tr1)
-  ENDIF()
-
-  # Tells VS to use multiple threads to compile
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-  # Makes VS define M_PI
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES")
-  # Prevents VS to define min and max macros (name clash with std::min and std::max)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX")
-
-  SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
-  SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMTD")
-  
-  SET(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-  
-  IF (I64)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
-	SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}  /STACK:10000000 /MACHINE:X64")
-	SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}  /STACK:10000000 /MACHINE:X64")
-	SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}  /STACK:10000000 /MACHINE:X64")
-  ELSE(I64)
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
-	SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /MACHINE:X86")
-	SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /MACHINE:X86")
-	SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /MACHINE:X86")
-  ENDIF(I64)
-  
-ENDIF()
-# Use debug mode with GLIBC
-IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
-  SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DGLIBCXX")
-ENDIF()
 
 IF(BUILD_TESTS)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
@@ -156,14 +120,7 @@ ENDIF()
 ## ========================================================
 
 # Qt
-FIND_PACKAGE(Qt4 4.7.0 REQUIRED)
-SET(QT_USE_QTOPENGL true)
-SET(QT_USE_QTXML true)
-SET(QT_USE_QTNETWORK true)
-SET(QT_USE_QTWEBKIT true)
-SET(QT_USE_QTTEST false)
-SET(QT_USE_QTDBUS false)
-INCLUDE(${QT_USE_FILE})
+FIND_PACKAGE(QtX)
 
 # Freetype
 FIND_PACKAGE(Freetype REQUIRED)

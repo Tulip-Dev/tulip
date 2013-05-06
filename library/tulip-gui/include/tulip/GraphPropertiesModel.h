@@ -27,9 +27,10 @@
 #include <tulip/Graph.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/TlpQtTools.h>
-#include <QtGui/QFont>
-#include <QtGui/QIcon>
-#include <QtCore/QSet>
+
+#include <QFont>
+#include <QIcon>
+#include <QSet>
 
 namespace tlp {
 
