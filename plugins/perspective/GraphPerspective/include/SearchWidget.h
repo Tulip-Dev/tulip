@@ -28,6 +28,7 @@ class SearchWidget;
 
 class QComboBox;
 class SearchOperator;
+
 namespace tlp {
 class GraphHierarchiesModel;
 class Graph;

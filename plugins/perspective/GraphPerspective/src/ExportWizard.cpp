@@ -167,7 +167,7 @@ void ExportWizard::pathChanged(QString s) {
   PluginModel<tlp::ExportModule>* model = static_cast<PluginModel<tlp::ExportModule>*>(_ui->exportModules->model());
   QModelIndexList results = model->match(_ui->exportModules->rootIndex(), Qt::DisplayRole, selectedExport, 1, Qt::MatchExactly | Qt::MatchRecursive);
 
-  if (results.size()==0)
+  if (results.empty())
     return;
 
   _ui->exportModules->setCurrentIndex(results[0]);

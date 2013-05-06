@@ -21,22 +21,25 @@
 #ifndef _Tulip_MOUSESHOWELEMENTINFOS_H
 #define _Tulip_MOUSESHOWELEMENTINFOS_H
 
-#include <QMouseEvent>
-#include <QWidget>
-#include <QTableView>
-#include <QGraphicsProxyWidget>
-
-#include <tulip/ViewWidget.h>
-#include <tulip/GlScene.h>
 #include <tulip/InteractorComposite.h>
+#include <tulip/Graph.h>
 
 namespace Ui {
 class ElementInformationsWidget;
 }
 
+class QWidget;
+class QGraphicsProxyWidget;
+class QTableView;
+class QAbstractItemModel;
+class QObject;
+class SelectedEntity;
+
 namespace tlp {
 
 class View;
+class ViewWidget;
+
 /**
  * We define a specific interactor to show element graph infos in eltProperties
  */

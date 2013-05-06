@@ -22,16 +22,16 @@
 #define MOUSEMOVESELECTION_H
 
 #include <tulip/GlCircle.h>
-#include <tulip/GlRect.h>
-#include <tulip/GlComposite.h>
-#include <tulip/Observable.h>
 #include <tulip/GLInteractor.h>
 #include <tulip/GlComplexPolygon.h>
-#include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/SizeProperty.h>
+#include <tulip/GlRect.h>
 
 namespace tlp {
+
+class LayoutProperty;
+class BooleanProperty;
+class DoubleProperty;
+class SizeProperty;
 
 /// This interactor allows to move/rotate/stretch the current selection layout
 class TLP_QT_SCOPE MouseSelectionEditor:public GLInteractorComponent {
@@ -68,8 +68,6 @@ private:
   Coord editPosition;
   Coord editLayoutCenter;
 
-  //    int x,y;
-  //    double centerX, centerY;
   Coord ffdCenter;
 
   GlLayer *layer;

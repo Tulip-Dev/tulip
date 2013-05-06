@@ -22,12 +22,10 @@
 #define GL_HCVXHULL_H
 
 #include <string>
-#include <vector>
 #include <map>
 
 #include <tulip/DataSet.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
 #include <tulip/GlComposite.h>
 
 namespace tlp {
@@ -35,7 +33,6 @@ namespace tlp {
 class GlConvexGraphHull;
 
 struct node;
-class GlComposite;
 class Color;
 class LayoutProperty;
 class DoubleProperty;
@@ -57,7 +54,7 @@ public:
 
   void setGraph(tlp::Graph* graph);
   DataSet getData();
-  void setData(DataSet dataSet);
+  void setData(const DataSet &dataSet);
 
   void createComposite();
 

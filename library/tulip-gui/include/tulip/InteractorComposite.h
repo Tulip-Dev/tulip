@@ -22,7 +22,9 @@
 
 #include <tulip/Interactor.h>
 
-#include <QList>
+#include <QObject>
+
+class QIcon;
 
 namespace tlp {
 

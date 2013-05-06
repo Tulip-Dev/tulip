@@ -21,15 +21,17 @@
 #ifndef SIMPLEPLUGINPROGRESSWIDGET_H
 #define SIMPLEPLUGINPROGRESSWIDGET_H
 
-#include <QDialog>
-#include <QWidget>
-#include <QTime>
-
 #include <tulip/PluginProgress.h>
+
+#include <QTime>
+#include <QWidget>
+#include <QDialog>
 
 namespace Ui {
 class SimplePluginProgressWidgetData;
 }
+
+class QCloseEvent;
 
 namespace tlp {
 

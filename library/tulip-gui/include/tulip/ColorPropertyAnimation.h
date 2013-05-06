@@ -22,7 +22,7 @@
 #define COLORPROPERTYANIMATION_H_
 
 #include <tulip/ColorProperty.h>
-#include "tulip/VectorPropertyAnimation.h"
+#include <tulip/VectorPropertyAnimation.h>
 
 namespace tlp {
 

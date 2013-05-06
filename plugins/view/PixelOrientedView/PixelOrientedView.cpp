@@ -42,6 +42,8 @@
 #include "PixelOrientedInteractors.h"
 #include "PixelOrientedView.h"
 
+#include <QtGui/QMenu>
+
 using namespace std;
 using namespace pocore;
 using namespace tlp;

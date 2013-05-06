@@ -23,6 +23,9 @@
 
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipItemDelegate.h>
+#include <tulip/TulipMetaTypes.h>
+
+using namespace tlp;
 
 PreferencesDialog::PreferencesDialog(QWidget *parent): QDialog(parent), _ui(new Ui::PreferencesDialog) {
   _ui->setupUi(this);

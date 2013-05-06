@@ -24,6 +24,7 @@
 
 #include <QPushButton>
 
+
 #include <tulip/tulipconf.h>
 
 class QSlider;

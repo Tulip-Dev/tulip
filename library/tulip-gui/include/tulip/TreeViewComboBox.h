@@ -27,6 +27,8 @@
 
 #include <tulip/tulipconf.h>
 
+class QTreeView;
+
 class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
 
   Q_OBJECT

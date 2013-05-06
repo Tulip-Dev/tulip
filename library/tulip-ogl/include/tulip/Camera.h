@@ -21,12 +21,10 @@
 #define TLPCAMERA_H
 
 #include <tulip/Coord.h>
-#include <tulip/Vector.h>
 #include <tulip/Matrix.h>
 #include <tulip/BoundingBox.h>
 
 #include <tulip/Observable.h>
-#include <tulip/GlXMLTools.h>
 
 namespace tlp {
 

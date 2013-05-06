@@ -20,14 +20,12 @@
 #ifndef _PERSPECTIVE_H
 #define _PERSPECTIVE_H
 
-#include <QObject>
-#include <QVariant>
-#include <QSet>
-
-#include <tulip/PluginLister.h>
-#include <tulip/TulipProject.h>
 #include <tulip/PluginContext.h>
 #include <tulip/Plugin.h>
+
+#include <QString>
+#include <QVariantMap>
+#include <QSet>
 
 class QMainWindow;
 class QTcpSocket;
@@ -35,8 +33,9 @@ class QTcpSocket;
 namespace tlp {
 
 class PluginProgress;
+class TulipProject;
 
-static const std::string PERSPECTIVE_CATEGORY = QObject::trUtf8("Perspective").toStdString();
+static const std::string PERSPECTIVE_CATEGORY = "Perspective";
 
 /**
  * @ingroup Plugins

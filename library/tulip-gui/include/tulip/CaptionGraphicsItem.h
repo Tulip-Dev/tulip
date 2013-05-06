@@ -21,21 +21,20 @@
 #ifndef CAPTIONGRAPHICSITEM_H
 #define CAPTIONGRAPHICSITEM_H
 
-
-#include <QGraphicsItemGroup>
-#include <QPushButton>
-#include <QGraphicsSceneMouseEvent>
-#include <QGLFramebufferObject>
-
 #include <tulip/View.h>
 #include <tulip/Color.h>
-#include "tulip/CaptionGraphicsSubItems.h"
+#include <tulip/CaptionGraphicsSubItems.h>
 
-
+class QGradient;
+class QGraphicsProxyWidget;
+class QGraphicsSimpleTextItem;
+class QPushButton;
 
 namespace tlp {
 
 class GlMainView;
+class View;
+class CaptionGraphicsBackgroundItem;
 
 class CaptionGraphicsItem : public QObject {
 
@@ -70,7 +69,6 @@ protected slots :
   void filterChangedSlot(float begin, float end);
   void selectPropertyButtonClicked();
   void propertySelectedSlot();
-//  void selectedPropertyChangedSlot(const QString &propertyName);
 
 private :
   QString wrappedPropName(const QString& originalName) const;
@@ -83,7 +81,6 @@ private :
 
   QGraphicsProxyWidget *_confPropertySelectionItem;
   QGraphicsSimpleTextItem *_nodesEdgesTextItem;
-//  QComboBox *_confPropertySelectionWidget;
   QPushButton* _confPropertySelectionWidget;
 };
 

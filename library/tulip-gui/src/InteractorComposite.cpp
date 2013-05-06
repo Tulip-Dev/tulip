@@ -19,6 +19,8 @@
 
 #include "tulip/InteractorComposite.h"
 
+#include <QtGui/QAction>
+
 using namespace tlp;
 
 void InteractorComponent::setView(tlp::View *view) {
@@ -40,8 +42,7 @@ InteractorComposite::InteractorComposite(const QIcon &icon, const QString &text)
 }
 
 InteractorComposite::~InteractorComposite() {
-  foreach(InteractorComponent* i, _components)
-  delete i;
+    qDeleteAll(_components);
 }
 
 QCursor InteractorComposite::cursor() const {

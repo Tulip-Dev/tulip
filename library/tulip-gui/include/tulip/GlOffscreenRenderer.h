@@ -18,15 +18,31 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GLOFFSCREENRENDERER_H_
 #define GLOFFSCREENRENDERER_H_
 
+#include <tulip/tulipconf.h>
+#include <tulip/Coord.h>
 #include <tulip/GlScene.h>
 
 #include <QGLFramebufferObject>
 
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+
 namespace tlp {
+
+class GlSimpleEntity;
+class GlGraphComposite;
 
 /**
  * @brief Render a scene in an image or in a texture.
@@ -64,7 +80,7 @@ public :
   void setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight);
   unsigned int getViewportWidth();
   unsigned int getViewportHeight();
-  bool frameBufferOk() const {
+  inline bool frameBufferOk() const {
     return glFrameBuf->isValid();
   }
 

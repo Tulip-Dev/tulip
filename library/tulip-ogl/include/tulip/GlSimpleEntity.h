@@ -194,7 +194,7 @@ public:
   virtual void translate(const Coord &) {}
 
   GlComposite* getParent() const {
-    if (parents.size()==0)
+    if (parents.empty())
       return NULL;
 
     return parents[0];

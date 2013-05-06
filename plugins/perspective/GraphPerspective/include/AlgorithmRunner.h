@@ -20,18 +20,22 @@
 #define ALGORITHMRUNNER_H
 
 #include <QWidget>
-#include <tulip/DataSet.h>
-#include <tulip/PluginModel.h>
 
-class QToolButton;
+#include <tulip/PluginModel.h>
+#include <tulip/Algorithm.h>
+
+#include "AlgorithmRunnerItem.h"
+
 namespace Ui {
 class AlgorithmRunner;
 class AlgorithmRunnerItem;
 }
+
+class QToolButton;
+
 namespace tlp {
 class Graph;
 }
-class AlgorithmRunnerItem;
 
 class AlgorithmRunner: public QWidget {
   Q_OBJECT

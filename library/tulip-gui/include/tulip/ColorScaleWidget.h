@@ -23,13 +23,12 @@
 #define COLORSCALEWIDGET_H_
 
 #include <QWidget>
-#include <QPainter>
 
 #include <tulip/tulipconf.h>
 
 namespace tlp {
 class ColorScale;
-}
+
 /**
  *  @brief Widget used to display and edit color scale.
  */
@@ -41,8 +40,8 @@ public:
   /**
    * @brief Set the color scale to display.
    */
-  void setColorScale(tlp::ColorScale *colorScale);
-  tlp::ColorScale* getColorScale()const {
+  void setColorScale(ColorScale *colorScale);
+  inline tlp::ColorScale* getColorScale()const {
     return colorScale;
   }
 
@@ -55,9 +54,9 @@ protected:
 private:
 
   void paintColorScale(QPainter& painter,const QRect& rect);
-  tlp::ColorScale *colorScale;
+  ColorScale *colorScale;
   Qt::Orientation orientation;
 };
-
+}
 #endif /* COLORSCALEWIDGET_H_ */
 ///@endcond

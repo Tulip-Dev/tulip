@@ -95,7 +95,7 @@ double StrengthClustering::computeMQValue(const vector<set<node> > & partition, 
     pair<unsigned int, unsigned int> pp = itMap->first;
     unsigned int val = itMap->second;
 
-    if ( (partition[pp.first].size()!=0) && (partition[pp.second].size()!=0))
+    if ( !partition[pp.first].empty() && !partition[pp.second].empty())
       negative += double(val) / double(partition[pp.first].size() * partition[pp.second].size());
   }
 

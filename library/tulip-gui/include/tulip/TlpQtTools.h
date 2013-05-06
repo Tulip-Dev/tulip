@@ -25,11 +25,11 @@
 #include <QGLFramebufferObject>
 
 #include <tulip/Color.h>
-#include <tulip/Graph.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/DataSet.h>
+#include <tulip/tulipconf.h>
+#include <tulip/PropertyInterface.h>
 
 class QWidget;
+class QString;
 
 namespace tlp {
 

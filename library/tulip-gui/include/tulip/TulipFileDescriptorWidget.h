@@ -23,6 +23,7 @@
 
 #include <QWidget>
 
+#include <tulip/tulipconf.h>
 #include <tulip/TulipMetaTypes.h>
 
 class TLP_QT_SCOPE TulipFileDescriptorWidget: public QWidget {

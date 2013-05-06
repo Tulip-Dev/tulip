@@ -18,7 +18,6 @@
  */
 
 #include "GoogleMapsGraphicsView.h"
-
 #include "GoogleMapsView.h"
 
 #include <tulip/GlCPULODCalculator.h>
@@ -27,6 +26,7 @@
 #include <tulip/GlLine.h>
 #include <tulip/GlSceneZoomAndPan.h>
 #include <tulip/GlyphManager.h>
+#include <tulip/GlTextureManager.h>
 
 #include <QTextStream>
 #include <QTimeLine>
@@ -78,7 +78,7 @@ GlComposite *readPolyFile(QString fileName) {
     line.toUInt(&ok);
 
     if(ok) {
-      if(currentVector.size()!=0)
+      if(!currentVector.empty())
         datas.push_back(currentVector);
 
       currentVector=vector<Coord>();
@@ -114,10 +114,10 @@ GlComposite *readPolyFile(QString fileName) {
 
       if(polygonName!="") {
 
-        if(currentVector.size()!=0)
+        if(!currentVector.empty())
           datas.push_back(currentVector);
 
-        if(datas.size()!=0) {
+        if(!datas.empty()) {
 
           clearPolygons[polygonName]=datas;
           composite->addGlEntity(new GlComplexPolygon(datas,Color(0,0,0,50),Color(0,0,0,255)),polygonName);
@@ -147,7 +147,7 @@ GlComposite *readPolyFile(QString fileName) {
   }
 
   if(polygonName!="") {
-    if(currentVector.size()!=0)
+    if(!currentVector.empty())
       datas.push_back(currentVector);
 
     clearPolygons[polygonName]=datas;
@@ -175,7 +175,7 @@ GlComposite *readCsvFile(QString fileName) {
     QStringList strList=line.split("\t");
 
     if(strList.size()!=3) {
-      if(currentVector.size()!=0)
+      if(!currentVector.empty())
         datas.push_back(currentVector);
 
       currentVector=vector<Coord>();
@@ -183,7 +183,7 @@ GlComposite *readCsvFile(QString fileName) {
     }
 
     if(strList[0].toInt()!=lastIndex) {
-      if(currentVector.size()!=0)
+      if(!currentVector.empty())
         datas.push_back(currentVector);
 
       lastIndex=strList[0].toInt();
@@ -200,7 +200,7 @@ GlComposite *readCsvFile(QString fileName) {
     currentVector.push_back(Coord((strList[2].toDouble())*360./M_PI,mercatorLatitude*360./M_PI,0));
   }
 
-  if(datas.size()==0)
+  if(datas.empty())
     return NULL;
 
   composite->addGlEntity(new GlComplexPolygon(datas,Color(0,0,0,50),Color(0,0,0,255)),"polygon");
@@ -232,7 +232,7 @@ void simplifyPolyFile(QString fileName,float definition) {
     line.toUInt(&ok);
 
     if(ok) {
-      if(currentVector.size()!=0)
+      if(!currentVector.empty())
         datas.push_back(currentVector);
 
       currentVector=vector<Coord>();
@@ -268,10 +268,10 @@ void simplifyPolyFile(QString fileName,float definition) {
 
       if(polygonName!="") {
 
-        if(currentVector.size()!=0)
+        if(!currentVector.empty())
           datas.push_back(currentVector);
 
-        if(datas.size()!=0) {
+        if(!datas.empty()) {
 
           clearPolygons[polygonName]=datas;
           datas.clear();
@@ -294,7 +294,7 @@ void simplifyPolyFile(QString fileName,float definition) {
   }
 
   if(polygonName!="") {
-    if(currentVector.size()!=0)
+    if(!currentVector.empty())
       datas.push_back(currentVector);
 
     clearPolygons[polygonName]=datas;

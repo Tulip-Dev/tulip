@@ -16,7 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/Perspective.h"
+#include <tulip/Perspective.h>
+#include <tulip/TulipProject.h>
 
 #include <QApplication>
 #include <QMainWindow>

@@ -76,7 +76,7 @@ double StrengthMetric::e(const TLP_HASH_SET<tlp::node> &U) {
 }
 //=============================================================
 double StrengthMetric::s(TLP_HASH_SET<tlp::node> &U, TLP_HASH_SET<tlp::node> &V) {
-  if ((U.size()==0) || (V.size()==0)) return 0;
+  if ((U.empty()) || (V.empty())) return 0;
 
   return (e(U,V) / double(U.size()*V.size()));
 }
@@ -104,7 +104,7 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee ) {
 
   delete itN;
 
-  if (Nu.size()==0) return 0;
+  if (Nu.empty()) return 0;
 
   //Compute Nv
   itN=graph->getInOutNodes(v);
@@ -117,7 +117,7 @@ double StrengthMetric::getEdgeValue(const tlp::edge ee ) {
 
   delete itN;
 
-  if (Nv.size()==0) return 0;
+  if (Nv.empty()) return 0;
 
   //Compute Wuv, choose the minimum set to minimize operation
   TLP_HASH_SET<node> *A, *B;

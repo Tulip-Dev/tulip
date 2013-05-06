@@ -22,9 +22,11 @@
 
 #include <QWidget>
 #include <QTableView>
+
 #include <tulip/Graph.h>
 #include <tulip/WithParameter.h>
 #include <tulip/ParameterListModel.h>
+#include <tulip/PluginLister.h>
 
 namespace tlp {
 class BooleanProperty;

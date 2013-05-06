@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef ITEMSDIALOGLIST_H
 #define ITEMSDIALOGLIST_H
 
@@ -27,13 +26,6 @@
 #include <tulip/tulipconf.h>
 
 #include <QListWidget>
-#include <QMouseEvent>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QMouseEvent>
-#include <QObject>
-#include <QHash>
-
 
 namespace tlp {
 

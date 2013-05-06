@@ -20,18 +20,19 @@
 #ifndef _INTERACTOR_H
 #define _INTERACTOR_H
 
+#include <tulip/Plugin.h>
+
 #include <QObject>
-#include <QAction>
+#include <QCursor>
+#include <QMap>
 
-#include <tulip/TulipRelease.h>
+#include <string>
 
-#include <tulip/Plugin.h>
-#include <tulip/PluginLister.h>
-#include <tulip/Plugin.h>
+class QAction;
 
 namespace tlp {
 
-static const std::string INTERACTOR_CATEGORY = QObject::trUtf8("Interactor").toStdString();
+static const std::string INTERACTOR_CATEGORY = "Interactor";
 
 class View;
 
@@ -49,7 +50,7 @@ class View;
   Methods listed above are only called once. Once the interactor is initialized, it may be installed/removed several times on different QObjects. It will then repond to user inputs via the eventFilter method
   @see QObject::eventFilter()
   */
-class TLP_QT_SCOPE Interactor: public QObject, public tlp::Plugin {
+class TLP_QT_SCOPE Interactor: public QObject, public Plugin {
   Q_OBJECT
   Q_PROPERTY(unsigned int priority READ priority)
   Q_PROPERTY(QAction* action READ action)

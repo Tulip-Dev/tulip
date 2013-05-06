@@ -21,6 +21,7 @@
 #include <tulip/NodeLinkDiagramComponent.h>
 
 #include <QLabel>
+#include <QtGui/QIcon>
 
 using namespace tlp;
 

@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-
 #ifndef VIEW_H
 #define VIEW_H
 
@@ -27,7 +26,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
-#include <tulip/PluginLister.h>
+#include <tulip/Plugin.h>
 
 class QGraphicsView;
 class QGraphicsItem;
@@ -35,9 +34,10 @@ class QWidget;
 class QPixmap;
 class QMenu;
 class QPoint;
+class QPointF;
 
 namespace tlp {
-static const std::string VIEW_CATEGORY = QObject::trUtf8("Panel").toStdString();
+static const std::string VIEW_CATEGORY = "Panel";
 
 class Interactor;
 

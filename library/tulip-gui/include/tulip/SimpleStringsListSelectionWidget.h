@@ -25,17 +25,25 @@
 #include <QWidget>
 
 #include "StringsListSelectionWidgetInterface.h"
-#include "ui_SimpleStringsListSelectionWidget.h"
+
+namespace Ui {
+class SimpleStringsListSelectionData;
+}
+
+class QListWidgetItem;
 
 namespace tlp {
 
-class TLP_QT_SCOPE SimpleStringsListSelectionWidget : public QWidget, public StringsListSelectionWidgetInterface, public Ui::SimpleStringsListSelectionData {
+class TLP_QT_SCOPE SimpleStringsListSelectionWidget : public QWidget, public StringsListSelectionWidgetInterface {
 
   Q_OBJECT
+
+    Ui::SimpleStringsListSelectionData* _ui;
 
 public :
 
   SimpleStringsListSelectionWidget(QWidget *parent = NULL, const unsigned int maxSelectedStringsListSize = 0);
+  ~SimpleStringsListSelectionWidget();
 
   void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
 

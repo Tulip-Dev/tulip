@@ -25,7 +25,6 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/GlBox.h>
 #include <tulip/GlComplexeEntity.h>
 
 namespace tlp {
@@ -34,6 +33,7 @@ struct OcclusionTest;
 class TextRenderer;
 class GlSceneVisitor;
 class GlLabel;
+class GlBox;
 
 /**
  * Class to represent a node of a graph

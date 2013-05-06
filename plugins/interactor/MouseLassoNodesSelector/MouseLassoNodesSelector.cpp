@@ -29,6 +29,7 @@
 #include <tulip/GlMainView.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlNode.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 #include <algorithm>
 

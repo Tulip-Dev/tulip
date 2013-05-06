@@ -24,7 +24,6 @@
 #include <QAbstractItemModel>
 
 #include <tulip/tulipconf.h>
-#include <tulip/TulipMetaTypes.h>
 
 namespace tlp {
 

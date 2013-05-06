@@ -25,6 +25,8 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/TulipRelease.h>
 
+#include <QtCore/QFileInfo>
+
 using namespace tlp;
 using namespace std;
 

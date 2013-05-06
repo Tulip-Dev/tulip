@@ -20,16 +20,20 @@
 #include "SearchWidget.h"
 #include "ui_SearchWidget.h"
 
-#include <QStandardItemModel>
-#include <QDropEvent>
-
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/GraphTableItemDelegate.h>
 #include <tulip/GraphModel.h>
-
+#include <tulip/DoubleProperty.h>
 #include <tulip/TulipMimes.h>
+#include <tulip/StringProperty.h>
+#include <tulip/TulipMetaTypes.h>
+#include <tulip/TlpQtTools.h>
+
+#include <QDebug>
+#include <QStandardItemModel>
+#include <QDragEnterEvent>
 
 using namespace tlp;
 using namespace std;
@@ -264,7 +268,7 @@ void SearchWidget::search() {
       DataTypeSerializer* serializer = DataSet::typenameToSerializer(tulipData->getTypeName());
 
       if(serializer == NULL) {
-        qCritical() << "no type serializer found for " << tulipData->getTypeName() << ", please report this as a bug";
+        qCritical() << QString::fromUtf8("no type serializer found for ") << tlp::tlpStringToQString(tulipData->getTypeName()) << ", please report this as a bug";
       }
 
       stringstream temp;

@@ -24,18 +24,24 @@
 
 #include <QWidget>
 
-#include "ui_DoubleStringsListSelectionWidget.h"
 #include "StringsListSelectionWidgetInterface.h"
+
+namespace Ui {
+class DoubleStringsListSelectionData;
+}
 
 namespace tlp {
 
-class TLP_QT_SCOPE DoubleStringsListSelectionWidget : public QWidget, public StringsListSelectionWidgetInterface, public Ui::DoubleStringsListSelectionData {
+class TLP_QT_SCOPE DoubleStringsListSelectionWidget : public QWidget, public StringsListSelectionWidgetInterface {
 
   Q_OBJECT
+
+  Ui::DoubleStringsListSelectionData *_ui;
 
 public :
 
   DoubleStringsListSelectionWidget(QWidget *parent = NULL, const unsigned int maxSelectedStringsListSize = 0);
+  ~DoubleStringsListSelectionWidget();
 
   void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);
 

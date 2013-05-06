@@ -21,7 +21,9 @@
 #include <QPainter>
 #include <QPaintEvent>
 
+
 #include <tulip/TlpQtTools.h>
+#include <tulip/ColorScaleConfigDialog.h>
 
 using namespace tlp;
 

@@ -18,12 +18,12 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GRAPHMODEL_H
 #define GRAPHMODEL_H
 
 #include <QVector>
 #include <QSortFilterProxyModel>
+
 
 #include <tulip/Observable.h>
 #include <tulip/TulipModel.h>
@@ -31,9 +31,11 @@
 namespace tlp {
 class Graph;
 class PropertyInterface;
+class BooleanProperty;
 
 class TLP_QT_SCOPE GraphModel : public tlp::TulipModel, public Observable {
   tlp::Graph* _graph;
+
 public:
   static QVariant nodeValue(unsigned int, tlp::PropertyInterface*);
   static QVariant nodeDefaultValue(tlp::PropertyInterface*);
@@ -72,14 +74,14 @@ public:
 protected:
   QVector<unsigned int> _elements;
   QVector<QPair<unsigned int,bool> > _elementsToModify;
-  QVector<tlp::PropertyInterface*> _properties;
+  QVector<PropertyInterface*> _properties;
 
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const = 0;
 };
 
-class TLP_QT_SCOPE GraphSortFilterProxyModel: public QSortFilterProxyModel, public tlp::Observable {
+class TLP_QT_SCOPE GraphSortFilterProxyModel: public QSortFilterProxyModel, public Observable {
   QVector<PropertyInterface*> _properties;
-  tlp::BooleanProperty* _filterProperty;
+  BooleanProperty* _filterProperty;
 
 public:
   GraphSortFilterProxyModel(QObject* parent = NULL);

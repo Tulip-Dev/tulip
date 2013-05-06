@@ -245,7 +245,7 @@ void GlComposite::translate(const Coord &mouvement) {
 }
 //============================================================
 void GlComposite::notifyModified(GlSimpleEntity *entity) {
-  if(layerParents.size()!=0)
+  if(!layerParents.empty())
     layerParents[0]->getScene()->notifyModifyEntity(entity);
 }
 //============================================================

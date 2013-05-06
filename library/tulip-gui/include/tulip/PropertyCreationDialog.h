@@ -22,7 +22,8 @@
 #ifndef PROPERTYCREATIONDIALOG_H
 #define PROPERTYCREATIONDIALOG_H
 
-#include <QDialog>
+#include <QtGui/QDialog>
+
 
 #include <tulip/tulipconf.h>
 

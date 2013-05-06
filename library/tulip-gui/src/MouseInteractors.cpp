@@ -17,16 +17,11 @@
  *
  */
 
-#include "tulip/MouseInteractors.h"
-
-#include <QtDebug>
-#include <QCursor>
-#include <QMouseEvent>
+#include <QEvent>
+#include <QWheelEvent>
 #include <QPinchGesture>
-#include <QGraphicsView>
+#include <QPanGesture>
 
-#include <tulip/Graph.h>
-#include <tulip/ColorProperty.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/View.h>
@@ -36,6 +31,8 @@
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
+#include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/MouseInteractors.h>
 
 #include <iostream>
 

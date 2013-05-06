@@ -20,12 +20,11 @@
 
 #ifndef MOUSEADDEDGE_H
 #define MOUSEADDEDGE_H
+
 #include <vector>
 #include <tulip/Coord.h>
 #include <tulip/GLInteractor.h>
-#include <tulip/ObservableGraph.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableProperty.h>
 
 namespace tlp {
 class Graph;

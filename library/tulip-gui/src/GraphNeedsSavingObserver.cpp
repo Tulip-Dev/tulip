@@ -18,6 +18,7 @@
  */
 
 #include <tulip/GraphNeedsSavingObserver.h>
+#include <tulip/PropertyInterface.h>
 #include <tulip/Graph.h>
 
 #include <deque>

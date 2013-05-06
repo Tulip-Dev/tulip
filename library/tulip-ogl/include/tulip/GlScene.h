@@ -22,12 +22,12 @@
 
 #include <tulip/tulipconf.h>
 
-#include <tulip/Graph.h>
+//#include <tulip/Graph.h>
 #include <tulip/GlLODCalculator.h>
-#include <tulip/GlSceneObserver.h>
+//#include <tulip/GlSceneObserver.h>
 #include <tulip/GlLayer.h>
-#include <tulip/GlDisplayListManager.h>
-#include <tulip/GlTextureManager.h>
+//#include <tulip/GlDisplayListManager.h>
+//#include <tulip/GlTextureManager.h>
 
 namespace tlp {
 

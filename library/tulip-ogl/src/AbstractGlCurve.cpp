@@ -24,6 +24,7 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/Curves.h>
 #include <tulip/TlpTools.h>
+#include <tulip/GlShaderProgram.h>
 
 using namespace std;
 

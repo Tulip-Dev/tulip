@@ -42,6 +42,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/SnapshotDialog.h>
 #include <tulip/TulipItemDelegate.h>
+#include <tulip/CaptionGraphicsSubItems.h>
 
 class TopPopupComboBox: public QComboBox {
   QListView* _view;
@@ -271,7 +272,7 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
 }
 
 void QuickAccessBar::setAllColorValues(unsigned int eltType,
-                                       ColorProperty* prop, Color color) {
+                                       ColorProperty* prop, const Color &color) {
   BooleanProperty* selected = inputData()->getElementSelected();
   bool hasSelected = false;
 

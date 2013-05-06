@@ -211,7 +211,7 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
       validEdge[preference->getNodeValue(tgt)] = e ;
     }
 
-    if (validEdge.size()>0) {
+    if (!validEdge.empty()) {
       ok = true;
       e = validEdge.rbegin()->second;
       n = graph->opposite(e, n);//validEdge.begin()->first;

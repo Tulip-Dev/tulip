@@ -64,7 +64,7 @@ void GlOverviewGraphicsItem::setLayerVisible(const string &name, bool visible) {
 
 void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
-  if(baseScene.getLayersList().size()==0)
+  if(baseScene.getLayersList().empty())
     return;
 
   // Initialize the context avoid segfault when trying to render graph without any initialised gl context.

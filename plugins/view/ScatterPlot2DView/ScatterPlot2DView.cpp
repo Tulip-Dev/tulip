@@ -26,6 +26,7 @@
 #include <tulip/GlProgressBar.h>
 
 #include <QTime>
+#include <QtGui/QMenu>
 
 #include "ScatterPlot2DView.h"
 #include "ScatterPlot2DOptionsWidget.h"

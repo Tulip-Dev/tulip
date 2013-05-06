@@ -16,11 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlMainView.h"
+#include <tulip/GlMainView.h>
 
 #include <QGraphicsProxyWidget>
 #include <QGraphicsView>
 
+#include <tulip/GlMainWidgetGraphicsItem.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneConfigWidget.h>
 #include <tulip/SceneLayersConfigWidget.h>
@@ -28,7 +29,7 @@
 #include <tulip/QuickAccessBar.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/SnapshotDialog.h>
-#include <tulip/GlMainWidgetGraphicsItem.h>
+
 
 using namespace tlp;
 

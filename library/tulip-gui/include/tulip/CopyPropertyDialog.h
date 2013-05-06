@@ -21,15 +21,9 @@
 #ifndef COPYPROPERTYDIALOG_H
 #define COPYPROPERTYDIALOG_H
 
-#include <string>
-#include <vector>
-
 #include <tulip/tulipconf.h>
-#include <tulip/Iterator.h>
 
-#include <QString>
 #include <QDialog>
-#include <QWidget>
 
 namespace Ui {
 class CopyPropertyDialogData;

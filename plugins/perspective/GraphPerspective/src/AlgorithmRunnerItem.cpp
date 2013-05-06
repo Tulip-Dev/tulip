@@ -17,20 +17,29 @@
  *
  */
 
-#include "AlgorithmRunnerItem.h"
-
-#include "ui_AlgorithmRunnerItem.h"
-
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QDrag>
+#include <QtCore/QDateTime>
 
 #include "GraphPerspective.h"
+#include "AlgorithmRunnerItem.h"
+#include "ui_AlgorithmRunnerItem.h"
+
 #include <tulip/GraphTest.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/ParameterListModel.h>
 #include <tulip/TulipSettings.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/StringProperty.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/GraphProperty.h>
+#include <tulip/SizeProperty.h>
+#include <tulip/IntegerProperty.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/TulipMetaTypes.h>
 
 using namespace tlp;
 

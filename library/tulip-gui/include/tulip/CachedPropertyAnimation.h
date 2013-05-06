@@ -21,11 +21,13 @@
 #ifndef CACHEDPROPERTYANIMATION_H_
 #define CACHEDPROPERTYANIMATION_H_
 
-#include "tulip/PropertyAnimation.h"
+#include <tulip/PropertyAnimation.h>
+
 #include <map>
-#include <tulip/BooleanProperty.h>
 
 namespace tlp {
+
+class BooleanProperty;
 
 template<typename PropType, typename NodeType, typename EdgeType>
 class CachedPropertyAnimation: public PropertyAnimation<PropType, NodeType, EdgeType> {

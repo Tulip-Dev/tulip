@@ -19,6 +19,7 @@
 #include "tulip/CaptionGraphicsSubItems.h"
 
 #include <QGraphicsProxyWidget>
+#include <QtGui/QGraphicsSceneMouseEvent>
 
 #include <tulip/DoubleProperty.h>
 #include <tulip/ColorProperty.h>
@@ -412,7 +413,7 @@ float computeToto(float y,float x1, float x2, float y1, float y2) {
 }
 
 void MovablePathItem::updatePath() {
-  if(_metricToSizeFilteredList.size()==0)
+  if(_metricToSizeFilteredList.empty())
     return ;
 
   vector<QPainterPath> paths;
@@ -490,7 +491,7 @@ void MovablePathItem::updatePath() {
       paths[i1].lineTo(QPoint(30-pathsPoints[i1][i2].x(),pathsPoints[i1][i2].y()));
     }
 
-    if(pathsPoints[i1].size()!=0) {
+    if(!pathsPoints[i1].empty()) {
       paths[i1].lineTo(QPoint(30-pathsPoints[i1][0].x(),pathsPoints[i1][0].y()));
       paths[i1].lineTo(pathsPoints[i1][0]);
     }
@@ -522,6 +523,12 @@ bool MovablePathItem::sceneEvent ( QEvent * event ) {
   }
 
   return false;
+}
+
+SelectionTextItem::SelectionTextItem() {
+  QFont f=font();
+  f.setBold(true);
+  setFont(f);
 }
 
 }

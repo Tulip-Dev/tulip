@@ -21,6 +21,7 @@
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/MouseSelector.h>
 #include <tulip/MouseSelectionEditor.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 #include "../utils/StandardInteractorPriority.h"
 #include "../utils/ViewNames.h"

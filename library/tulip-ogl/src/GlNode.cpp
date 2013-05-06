@@ -38,6 +38,7 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlLabel.h>
+#include <tulip/GlBox.h>
 
 //====================================================
 tlp::GlLabel* tlp::GlNode::label=NULL;

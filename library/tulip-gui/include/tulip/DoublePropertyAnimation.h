@@ -22,7 +22,7 @@
 #ifndef DOUBLEPROPERTYANIMATION_H
 #define DOUBLEPROPERTYANIMATION_H
 
-#include "tulip/CachedPropertyAnimation.h"
+#include <tulip/CachedPropertyAnimation.h>
 #include <tulip/DoubleProperty.h>
 
 namespace tlp {

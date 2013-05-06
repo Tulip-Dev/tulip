@@ -20,6 +20,7 @@
 #include <typeinfo>
 
 #include <QGraphicsView>
+#include <QtGui/QAction>
 
 #include "MatrixView.h"
 #include "PropertyValuesDispatcher.h"

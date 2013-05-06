@@ -31,6 +31,7 @@
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 using namespace std;
 using namespace tlp;

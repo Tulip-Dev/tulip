@@ -16,16 +16,19 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/CaptionGraphicsItem.h"
-
 #include <QGraphicsProxyWidget>
 #include <QGraphicsView>
 #include <QApplication>
 #include <QMenu>
+#include <QtGui/QComboBox>
+#include <QtGui/QPushButton>
 
 #include <tulip/DoubleProperty.h>
 #include <tulip/ColorProperty.h>
-#include "tulip/CaptionItem.h"
+#include <tulip/CaptionItem.h>
+#include <tulip/CaptionGraphicsItem.h>
+#include <tulip/CaptionGraphicsSubItems.h>
+#include <tulip/View.h>
 
 using namespace std;
 
