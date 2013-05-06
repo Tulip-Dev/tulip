@@ -24,10 +24,12 @@
 #include <QStyle>
 #include <QVBoxLayout>
 
+#include <iostream>
+
 using namespace tlp;
 
 SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::WindowFlags f)
-  :QWidget(parent,f), _ui(new Ui::SimplePluginProgressWidgetData), _state(tlp::TLP_CONTINUE) {
+  :QWidget(parent,f), _ui(new Ui::SimplePluginProgressWidgetData), _lastUpdate(QTime::currentTime()), _state(tlp::TLP_CONTINUE) {
   _ui->setupUi(this);
   _ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
   _ui->stopButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_MediaStop));
@@ -40,8 +42,8 @@ SimplePluginProgressWidget::~SimplePluginProgressWidget() {
 }
 
 void SimplePluginProgressWidget::checkLastUpdate() {
-  if (_lastUpdate.msecsTo(QTime::currentTime()) > 1000) {
-    QApplication::processEvents(QEventLoop::AllEvents,1000);
+  if (_lastUpdate.msecsTo(QTime::currentTime()) > 50) {
+    QApplication::processEvents();
     _lastUpdate = QTime::currentTime();
   }
 }
