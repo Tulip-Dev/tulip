@@ -18,7 +18,7 @@
  */
 #include "tulip/CaptionGraphicsSubItems.h"
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 #include <tulip/DoubleProperty.h>
 #include <tulip/ColorProperty.h>

@@ -19,10 +19,11 @@
 
 #include "tulip/GraphModel.h"
 
+#include <QIcon>
+
 #include <tulip/BooleanProperty.h>
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>
-#include <QtGui/QIcon>
 #include <tulip/TulipMetaTypes.h>
 
 using namespace tlp;
@@ -403,7 +404,7 @@ void NodesGraphModel::setGraph(Graph* g) {
   node n;
   forEach(n,graph()->getNodes())
   _elements[i++] = n.id;
-  reset();
+  //reset();
 }
 
 QString NodesGraphModel::stringValue(unsigned int id, PropertyInterface* pi) const {
@@ -442,7 +443,7 @@ void EdgesGraphModel::setGraph(Graph* g) {
   edge e;
   forEach(e,graph()->getEdges())
   _elements[i++] = e.id;
-  reset();
+  //reset();
 }
 
 QVariant EdgesGraphModel::value(unsigned int id, PropertyInterface* prop) const {

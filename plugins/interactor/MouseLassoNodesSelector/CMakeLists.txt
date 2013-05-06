@@ -4,7 +4,7 @@ SET(LIB_SRCS
     MouseLassoNodesSelector.cpp
 )
 
-QT4_ADD_RESOURCES(LIB_RCC_SRCS
+QTX_ADD_RESOURCES(LIB_RCC_SRCS
     MouseLassoNodesSelectorResource.qrc
 )
 

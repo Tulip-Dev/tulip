@@ -22,8 +22,10 @@
 #ifndef TULIPFONTWIDGET_H
 #define TULIPFONTWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
+
 #include <tulip/TulipFont.h>
+
 namespace Ui {
 class TulipFontWidget;
 }

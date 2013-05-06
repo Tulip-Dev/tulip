@@ -21,10 +21,10 @@
 #ifndef PROCESSINGANIMATIONITEM_H
 #define PROCESSINGANIMATIONITEM_H
 
-#include <QtGui/QGraphicsPixmapItem>
-#include <QtCore/QTimer>
-#include <QtCore/QObject>
-#include <QtGui/QBrush>
+#include <QGraphicsPixmapItem>
+#include <QTimer>
+#include <QObject>
+#include <QBrush>
 
 class ProcessingAnimationItem : public QObject, public QGraphicsPixmapItem {
   Q_OBJECT
@@ -35,7 +35,7 @@ class ProcessingAnimationItem : public QObject, public QGraphicsPixmapItem {
   QBrush _brush;
 
 public:
-  explicit ProcessingAnimationItem(const QPixmap& pixmap, const QSize& size, QGraphicsItem* parent=NULL, QGraphicsScene* scene=NULL);
+  explicit ProcessingAnimationItem(const QPixmap& pixmap, const QSize& size, QGraphicsItem* parent=NULL);
   virtual ~ProcessingAnimationItem();
 
   QBrush brush() const {

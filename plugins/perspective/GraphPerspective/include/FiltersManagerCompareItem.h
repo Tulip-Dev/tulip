@@ -23,7 +23,7 @@
 #include "AbstractFiltersManagerItem.h"
 
 #include <string>
-#include <QtCore/QVector>
+#include <QVector>
 
 class QComboBox;
 

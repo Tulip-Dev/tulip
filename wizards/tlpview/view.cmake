@@ -17,7 +17,7 @@ SET(PLUGIN_SRCS
 # Add source files here
 )
 
-QT4_WRAP_CPP(PLUGIN_MOC_SRCS
+QTX_WRAP_CPP(PLUGIN_MOC_SRCS
 %ProjectName:l%.%CppHeaderSuffix%
 # Add headers with Q_OBJECT here
 )

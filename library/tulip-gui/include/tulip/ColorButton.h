@@ -21,7 +21,8 @@
 #ifndef COLORBUTTON_H
 #define COLORBUTTON_H
 
-#include <QtGui/QPushButton>
+#include <QPushButton>
+
 #include <tulip/tulipconf.h>
 #include <tulip/Color.h>
 #include <tulip/TulipMetaTypes.h>

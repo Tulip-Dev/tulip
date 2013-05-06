@@ -20,11 +20,6 @@
 #ifndef SCATTERPLOTCORELCOEFFSELECTOR_H_
 #define SCATTERPLOTCORELCOEFFSELECTOR_H_
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-
 #include <tulip/GlSimpleEntity.h>
 #include <tulip/GlCircle.h>
 #include <tulip/GLInteractor.h>

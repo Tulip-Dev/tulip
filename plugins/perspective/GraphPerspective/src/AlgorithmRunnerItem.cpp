@@ -21,8 +21,9 @@
 
 #include "ui_AlgorithmRunnerItem.h"
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QMessageBox>
+#include <QMouseEvent>
+#include <QMessageBox>
+#include <QDrag>
 
 #include "GraphPerspective.h"
 #include <tulip/GraphTest.h>

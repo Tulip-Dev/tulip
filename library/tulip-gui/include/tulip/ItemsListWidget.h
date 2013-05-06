@@ -26,13 +26,13 @@
 
 #include <tulip/tulipconf.h>
 
-#include <QtGui/QListWidget>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDropEvent>
-#include <QtGui/QMouseEvent>
-#include <QtCore/QObject>
-#include <QtCore/QHash>
+#include <QListWidget>
+#include <QMouseEvent>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMouseEvent>
+#include <QObject>
+#include <QHash>
 
 
 namespace tlp {

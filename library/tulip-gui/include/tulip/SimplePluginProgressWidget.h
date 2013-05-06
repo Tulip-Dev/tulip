@@ -21,9 +21,9 @@
 #ifndef SIMPLEPLUGINPROGRESSWIDGET_H
 #define SIMPLEPLUGINPROGRESSWIDGET_H
 
-#include <QtGui/QDialog>
-#include <QtGui/QWidget>
-#include <QtCore/QTime>
+#include <QDialog>
+#include <QWidget>
+#include <QTime>
 
 #include <tulip/PluginProgress.h>
 

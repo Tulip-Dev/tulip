@@ -21,8 +21,8 @@
 
 #include <tulip/TlpTools.h>
 
-#include <QtGui/QPainter>
-#include <QtNetwork/QNetworkReply>
+#include <QPainter>
+#include <QNetworkReply>
 
 using namespace tlp;
 

@@ -18,14 +18,14 @@
  */
 #include "tulip/QuaZIPFacade.h"
 
-#include <QtCore/QDir>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 
 #include <tulip/SimplePluginProgress.h>
 
-#include "quazip.h"
-#include "quazipfile.h"
+#include <quazip.h>
+#include <quazipfile.h>
 
 QuaZIPFacade::QuaZIPFacade() {
 }

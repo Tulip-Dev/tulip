@@ -39,10 +39,10 @@
 #ifndef APIDATABASE_H_
 #define APIDATABASE_H_
 
-#include <QtCore/QSet>
-#include <QtCore/QVector>
-#include <QtCore/QHash>
-#include <QtCore/QString>
+#include <QSet>
+#include <QVector>
+#include <QHash>
+#include <QString>
 
 #include <tulip/tulipconf.h>
 

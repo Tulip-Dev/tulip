@@ -20,10 +20,10 @@
 #ifndef TULIPMAINWINDOW_H
 #define TULIPMAINWINDOW_H
 
-#include <QtGui/QMainWindow>
-#include <QtGui/QDialog>
-#include <QtGui/QSystemTrayIcon>
-#include <QtCore/QVariant>
+#include <QMainWindow>
+#include <QDialog>
+#include <QSystemTrayIcon>
+#include <QVariant>
 
 namespace Ui {
 class TulipMainWindowData;

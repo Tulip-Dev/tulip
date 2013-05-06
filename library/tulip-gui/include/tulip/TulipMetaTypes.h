@@ -21,9 +21,9 @@
 #ifndef TULIPMETATYPES_H
 #define TULIPMETATYPES_H
 
-#include <QtCore/QFileInfo>
-#include <QtCore/QVariant>
-#include <QtCore/QStringList>
+#include <QFileInfo>
+#include <QVariant>
+#include <QStringList>
 
 #include <tulip/DataSet.h>
 #include <tulip/Graph.h>

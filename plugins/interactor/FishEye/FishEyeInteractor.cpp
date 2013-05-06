@@ -17,12 +17,13 @@
  *
  */
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-
 #include <GL/glew.h>
+
+#include "FishEyeInteractor.h"
+#include "FishEyeConfigWidget.h"
+#include "../../utils/ViewNames.h"
+
+#include <QMouseEvent>
 
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/MouseInteractors.h>
@@ -30,13 +31,6 @@
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlMainWidget.h>
-
-#include <QtCore/QEvent>
-#include <QtGui/QMouseEvent>
-
-#include "FishEyeInteractor.h"
-#include "FishEyeConfigWidget.h"
-#include "../../utils/ViewNames.h"
 
 using namespace std;
 using namespace tlp;

@@ -20,11 +20,6 @@
 #ifndef SCATTERPLOTPREVIEWGENERATOR_H_
 #define SCATTERPLOTPREVIEWGENERATOR_H_
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-
 #include <tulip/GLInteractor.h>
 #include <tulip/Coord.h>
 

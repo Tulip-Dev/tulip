@@ -21,9 +21,9 @@
 #ifndef PLUGINMANAGER_H
 #define PLUGINMANAGER_H
 
-#include <tulip/tulipconf.h>
+#include <QStringList>
 
-#include <QtCore/QStringList>
+#include <tulip/tulipconf.h>
 
 class QNetworkReply;
 

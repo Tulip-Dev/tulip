@@ -19,16 +19,18 @@
 
 #include "ThresholdInteractor.h"
 #include "SOMView.h"
+
 #include <tulip/GlLabel.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/ForEach.h>
 #include <tulip/QGlPixelBufferManager.h>
 #include <tulip/GlTextureManager.h>
 
-#include <QtGui/QToolTip>
-#include <QtGui/QMouseEvent>
-#include <QtOpenGL/QGLPixelBuffer>
-#include <QtGui/QPicture>
+#include <QToolTip>
+#include <QMouseEvent>
+#include <QGLPixelBuffer>
+#include <QPicture>
+
 using namespace tlp;
 using namespace std;
 

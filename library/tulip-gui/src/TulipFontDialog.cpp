@@ -18,11 +18,11 @@
  */
 
 #include "tulip/TulipFontDialog.h"
-
-#include <QtGui/QFontDatabase>
-#include <QtGui/QPushButton>
-#include <QtCore/QDebug>
 #include "ui_TulipFontDialog.h"
+
+#include <QFontDatabase>
+#include <QPushButton>
+#include <QDebug>
 
 using namespace tlp;
 

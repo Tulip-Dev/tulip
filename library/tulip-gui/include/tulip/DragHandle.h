@@ -22,7 +22,7 @@
 #ifndef _DRAGHANDLE_H
 #define _DRAGHANDLE_H
 
-#include <QtGui/QLabel>
+#include <QLabel>
 
 namespace tlp {
 

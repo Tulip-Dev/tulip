@@ -19,8 +19,8 @@
 #ifndef GRAPHPERSPECTIVE_H
 #define GRAPHPERSPECTIVE_H
 
-#include <QtCore/QModelIndex>
-#include <QtCore/QPoint>
+#include <QModelIndex>
+#include <QPoint>
 #include <tulip/Perspective.h>
 #include <tulip/Observable.h>
 
@@ -74,6 +74,12 @@ public:
 
   void treatEvent(const tlp::Event &);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  void log(QtMsgType, const QMessageLogContext &, const QString &);
+#else
+  void log(QtMsgType,const char*);
+#endif
+
 public slots:
   void showFullScreen(bool);
   void importGraph();
@@ -85,7 +91,6 @@ public slots:
   void open(QString fileName = QString::null);
   virtual void openProjectFile(const QString &path);
 
-  void log(QtMsgType,const char*);
   void showLogger();
 
   virtual void redrawPanels(bool center=false);

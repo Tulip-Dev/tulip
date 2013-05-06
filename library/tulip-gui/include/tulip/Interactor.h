@@ -20,8 +20,8 @@
 #ifndef _INTERACTOR_H
 #define _INTERACTOR_H
 
-#include <QtCore/QObject>
-#include <QtGui/QAction>
+#include <QObject>
+#include <QAction>
 
 #include <tulip/TulipRelease.h>
 

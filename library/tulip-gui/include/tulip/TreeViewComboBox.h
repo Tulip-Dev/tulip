@@ -22,10 +22,10 @@
 #ifndef TREEVIEWCOMBOBOX_H
 #define TREEVIEWCOMBOBOX_H
 
-#include <tulip/tulipconf.h>
+#include <QComboBox>
+#include <QTreeView>
 
-#include <QtGui/QComboBox>
-#include <QtGui/QTreeView>
+#include <tulip/tulipconf.h>
 
 class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
 

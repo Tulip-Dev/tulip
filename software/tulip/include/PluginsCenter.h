@@ -21,9 +21,10 @@
 #define PLUGINSCENTER_
 
 #include <tulip/TulipRelease.h>
-#include <QtGui/QWidget>
-#include <QtCore/QMap>
-#include <QtNetwork/QNetworkReply>
+
+#include <QWidget>
+#include <QMap>
+#include <QNetworkReply>
 
 namespace Ui {
 class PluginsCenterData;

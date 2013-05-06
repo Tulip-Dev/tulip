@@ -19,6 +19,7 @@
 
 #include <tulip/TulipFontWidget.h>
 #include "ui_TulipFontWidget.h"
+
 #include <tulip/TulipFontDialog.h>
 
 using namespace tlp;

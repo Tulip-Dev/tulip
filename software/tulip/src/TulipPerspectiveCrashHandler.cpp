@@ -20,10 +20,10 @@
 
 #include "ui_TulipPerspectiveCrashHandler.h"
 
-#include <QtGui/QMessageBox>
-#include <QtGui/QFileDialog>
-#include <QtNetwork/QNetworkReply>
-#include <QtCore/QFile>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QNetworkReply>
+#include <QFile>
 #include "FormPost.h"
 #include <tulip/TulipProject.h>
 

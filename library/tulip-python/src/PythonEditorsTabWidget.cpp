@@ -17,7 +17,7 @@
  *
  */
 
-#include <QtCore/QFileInfo>
+#include <QFileInfo>
 
 #include "tulip/PythonEditorsTabWidget.h"
 #include "tulip/PythonCodeEditor.h"

@@ -17,16 +17,12 @@
  *
  */
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-
-#include <QtOpenGL/QGLPixelBuffer>
-#include <QtOpenGL/QGLFramebufferObject>
-#include <QtOpenGL/QGLFormat>
-
 #include <tulip/GlMainWidget.h>
+ 
+#include <QGLPixelBuffer>
+#include <QGLFramebufferObject>
+#include <QGLFormat>
+
 #include <tulip/TulipSettings.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>

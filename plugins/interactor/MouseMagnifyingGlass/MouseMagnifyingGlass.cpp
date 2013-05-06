@@ -19,14 +19,11 @@
 
 #include <GL/glew.h>
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
+#include "MouseMagnifyingGlass.h"
+#include "../../utils/ViewNames.h"
 
-#include <QtCore/QEvent>
-#include <QtGui/QMouseEvent>
-#include <QtOpenGL/QGLFramebufferObject>
+#include <QMouseEvent>
+#include <QGLFramebufferObject>
 
 #include <tulip/GlRect.h>
 #include <tulip/GlMainView.h>
@@ -35,9 +32,6 @@
 #include <tulip/GlTools.h>
 
 #include <sstream>
-
-#include "MouseMagnifyingGlass.h"
-#include "../../utils/ViewNames.h"
 
 using namespace std;
 using namespace tlp;

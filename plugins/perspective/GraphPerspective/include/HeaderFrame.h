@@ -19,7 +19,7 @@
 #ifndef HEADERFRAME_H
 #define HEADERFRAME_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace Ui {
 class HeaderFrameData;

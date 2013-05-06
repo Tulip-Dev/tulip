@@ -22,8 +22,9 @@
 #ifndef GRAPHMODEL_H
 #define GRAPHMODEL_H
 
-#include <QtCore/QVector>
-#include <QtGui/QSortFilterProxyModel>
+#include <QVector>
+#include <QSortFilterProxyModel>
+
 #include <tulip/Observable.h>
 #include <tulip/TulipModel.h>
 

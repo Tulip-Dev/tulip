@@ -20,7 +20,7 @@
 #ifndef OUTPUTPANELBUTTON_H
 #define OUTPUTPANELBUTTON_H
 
-#include <QtGui/QPushButton>
+#include <QPushButton>
 
 class OutputPanelButton : public QPushButton {
   Q_OBJECT

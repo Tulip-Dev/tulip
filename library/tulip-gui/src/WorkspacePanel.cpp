@@ -16,21 +16,22 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/WorkspacePanel.h"
-#include <tulip/TlpQtTools.h>
 
-#include <QtCore/QPropertyAnimation>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QCloseEvent>
-#include <QtGui/QPushButton>
-#include <QtGui/QApplication>
-#include <QtGui/QGraphicsProxyWidget>
-#include <QtGui/QGraphicsRectItem>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QTabWidget>
-#include <QtGui/QGraphicsSceneContextMenuEvent>
-#include <QtGui/QScrollBar>
-#include <QtGui/QHBoxLayout>
+#include "tulip/WorkspacePanel.h"
+#include "ui_WorkspacePanel.h"
+
+#include <QPropertyAnimation>
+#include <QGraphicsView>
+#include <QCloseEvent>
+#include <QPushButton>
+#include <QApplication>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsRectItem>
+#include <QGraphicsSceneMouseEvent>
+#include <QTabWidget>
+#include <QGraphicsSceneContextMenuEvent>
+#include <QScrollBar>
+#include <QHBoxLayout>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/ProcessingAnimationItem.h>
@@ -40,7 +41,8 @@
 #include <tulip/Graph.h>
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/TulipMimes.h>
-#include "ui_WorkspacePanel.h"
+#include <tulip/TlpQtTools.h>
+
 
 using namespace tlp;
 

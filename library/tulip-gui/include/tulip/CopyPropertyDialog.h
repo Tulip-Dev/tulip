@@ -27,16 +27,9 @@
 #include <tulip/tulipconf.h>
 #include <tulip/Iterator.h>
 
-#include <QtCore/QString>
-#include <QtGui/QDialog>
-#include <QtGui/QWidget>
-
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-
-
+#include <QString>
+#include <QDialog>
+#include <QWidget>
 
 namespace Ui {
 class CopyPropertyDialogData;

@@ -16,10 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#include <QNetworkReply>
+#include <QEventLoop>
+#include <QTimer>
+
 #include <string>
-#include <QtNetwork/QNetworkReply>
-#include <QtCore/qeventloop.h>
-#include <QtCore/qtimer.h>
 
 class HttpContext :public QObject {
   Q_OBJECT

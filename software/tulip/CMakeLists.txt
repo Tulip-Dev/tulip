@@ -17,7 +17,7 @@ SET(SRCS
   src/PerspectiveSelectionDialog.cpp
 )
 
-QT4_WRAP_UI(UI_HEADERS
+QTX_WRAP_UI(UI_HEADERS
   designer/AboutTulipPage.ui
   designer/PerspectiveItem.ui
   designer/PluginErrorReport.ui
@@ -29,7 +29,7 @@ QT4_WRAP_UI(UI_HEADERS
   designer/PerspectiveSelectionDialog.ui
 )
 
-QT4_WRAP_CPP(MOC_SRCS
+QTX_WRAP_CPP(MOC_SRCS
   include/PerspectiveItemWidget.h
   include/PluginErrorReport.h
   include/PluginsCenter.h
@@ -42,11 +42,15 @@ QT4_WRAP_CPP(MOC_SRCS
   include/PerspectiveSelectionDialog.h
 )
 
-QT4_ADD_RESOURCES(RCC_SRCS resources/TulipAgent.qrc)
+QTX_ADD_RESOURCES(RCC_SRCS resources/TulipAgent.qrc)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../crash_handling)
 
-INCLUDE_DIRECTORIES(include ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR} ${QxtInclude})
+INCLUDE_DIRECTORIES(include ${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QxtInclude})
+
+IF(USE_QT5)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+ENDIF(USE_QT5)
 
 ADD_EXECUTABLE(tulip ${SRCS} ${UI_HEADERS} ${MOC_SRCS} ${RCC_SRCS})
 

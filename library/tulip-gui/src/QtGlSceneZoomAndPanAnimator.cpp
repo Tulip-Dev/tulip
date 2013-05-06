@@ -17,8 +17,8 @@
  *
  */
 
-#include <QtGui/QApplication>
-#include <QtCore/QTimeLine>
+#include <QApplication>
+#include <QTimeLine>
 
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlMainWidget.h>

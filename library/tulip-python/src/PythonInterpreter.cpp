@@ -23,11 +23,11 @@
 
 #include <sstream>
 
-#include <QtGui/QMessageBox>
-#include <QtGui/QApplication>
-#include <QtCore/QLibrary>
-#include <QtCore/QTime>
-#include <QtCore/QTextStream>
+#include <QMessageBox>
+#include <QApplication>
+#include <QLibrary>
+#include <QTime>
+#include <QTextStream>
 
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>
@@ -327,6 +327,7 @@ PythonInterpreter::~PythonInterpreter() {
   if (!_wasInit && interpreterInit()) {
     consoleOuputString = "";
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
     // This is a hack to prevent segfaults when the PyQt4 module has been imported
     // during the Python session. Seems there is some garbage collection issue
     // on Qt objects wrapped by SIP. After looking at the SIP source code, the
@@ -340,6 +341,7 @@ PythonInterpreter::~PythonInterpreter() {
 
     if (sipQtSupport)
       *sipQtSupport = NULL;
+#endif
 
     runString("sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__;\n");
 #ifndef WIN32

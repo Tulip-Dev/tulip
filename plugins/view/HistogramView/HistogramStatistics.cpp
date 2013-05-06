@@ -17,11 +17,6 @@
 *
 */
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/ForEach.h>
 #include <tulip/GlLines.h>
@@ -29,7 +24,7 @@
 
 #include <algorithm>
 
-#include <QtCore/QEvent>
+#include <QEvent>
 
 #include "HistoStatsConfigWidget.h"
 #include "HistogramView.h"

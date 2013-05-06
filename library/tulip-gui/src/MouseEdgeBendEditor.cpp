@@ -16,12 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#include <QMouseEvent>
+
 #include <tulip/GlMainWidget.h>
 #include <tulip/MouseEdgeBendEditor.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlyphManager.h>
-
-#include <QtGui/qevent.h>
 
 using namespace tlp;
 using namespace std;

@@ -20,7 +20,7 @@
 #ifndef TULIPWELCOMEPAGE_H
 #define TULIPWELCOMEPAGE_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class QVBoxLayout;
 

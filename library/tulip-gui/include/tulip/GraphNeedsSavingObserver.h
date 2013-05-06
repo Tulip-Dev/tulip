@@ -22,7 +22,7 @@
 
 #include <tulip/Observable.h>
 
-#include <QtCore/QObject>
+#include <QObject>
 
 namespace tlp {
 

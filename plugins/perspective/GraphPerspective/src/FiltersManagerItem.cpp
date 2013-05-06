@@ -21,7 +21,8 @@
 
 #include "ui_FiltersManagerItem.h"
 
-#include <QtGui/QMenu>
+#include <QMenu>
+
 #include "GraphPerspective.h"
 #include <tulip/GraphHierarchiesModel.h>
 

@@ -23,7 +23,9 @@
 #define PROPERTYCREATIONDIALOG_H
 
 #include <QDialog>
+
 #include <tulip/tulipconf.h>
+
 namespace Ui {
 class PropertyCreationDialog;
 }

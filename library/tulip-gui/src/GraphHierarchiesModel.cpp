@@ -18,11 +18,10 @@
  */
 #include "tulip/GraphHierarchiesModel.h"
 
-#include <QtGui/QFont>
-#include <QtCore/QSize>
-#include <QtCore/QDebug>
-#include <QtCore/QMimeData>
-#include <fstream>
+#include <QFont>
+#include <QSize>
+#include <QDebug>
+#include <QMimeData>
 
 #include <tulip/TlpTools.h>
 #include <tulip/TulipMetaTypes.h>
@@ -37,6 +36,8 @@
 #include <tulip/DrawingTools.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GraphNeedsSavingObserver.h>
+
+#include <fstream>
 
 using namespace std;
 using namespace tlp;

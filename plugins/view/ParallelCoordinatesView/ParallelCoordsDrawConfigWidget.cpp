@@ -17,8 +17,8 @@
  *
  */
 
-#include <QtGui/QFileDialog>
-#include <QtGui/QColorDialog>
+#include <QFileDialog>
+#include <QColorDialog>
 
 #include <tulip/TlpTools.h>
 

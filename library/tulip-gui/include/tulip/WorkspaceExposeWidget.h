@@ -22,10 +22,11 @@
 #ifndef WORKSPACEEXPOSEWIDGET_H
 #define WORKSPACEEXPOSEWIDGET_H
 
-#include <QtGui/QGraphicsObject>
-#include <QtGui/QGraphicsView>
-#include <QtCore/QMap>
-#include <QtGui/QPixmap>
+#include <QGraphicsObject>
+#include <QGraphicsView>
+#include <QMap>
+#include <QPixmap>
+
 #include <tulip/tulipconf.h>
 
 class QAbstractAnimation;

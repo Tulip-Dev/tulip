@@ -22,18 +22,13 @@
 #define Tulip_GLVERTEXARRAYMANAGER_H
 
 #if defined(_MSC_VER)
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
-# if defined(__WIN32__)
-# include <GL/glext.h>
-# endif
 #endif
 
 #include <tulip/Coord.h>

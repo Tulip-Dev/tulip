@@ -186,7 +186,7 @@ IF((TULIP_OGL_LIBRARY AND NOT TULIP_CORE_LIBRARY) OR (TULIP_GUI_LIBRARY AND NOT 
   MESSAGE("TulipOGL: ${TULIP_OGL_LIBRARY} (depends on TulipCore)")
   MESSAGE("TulipGUI: ${TULIP_GUI_LIBRARY} (depends on TulipOGL)")
   MESSAGE("TulipOGDF: ${TULIP_OGDF_LIBRARY} (depends on TulipCore)")
- MESSAGE("TulipPython: ${TULIP_PYTHON_LIBRARY} (depends on TulipCore)")
+  MESSAGE("TulipPython: ${TULIP_PYTHON_LIBRARY} (depends on TulipCore)")
   MESSAGE(FATAL_ERROR "Please check that dependencies for detected libraries are met.")
 ENDIF()
 

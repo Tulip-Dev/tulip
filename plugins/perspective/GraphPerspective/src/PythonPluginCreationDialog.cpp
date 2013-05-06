@@ -18,9 +18,10 @@
  */
 
 #include <tulip/PythonInterpreter.h>
-#include <QtCore/QDate>
-#include <QtGui/QFileDialog>
-#include <QtGui/QMessageBox>
+
+#include <QDate>
+#include <QFileDialog>
+#include <QMessageBox>
 
 #include "PythonPluginCreationDialog.h"
 #include "ui_PythonPluginCreationDialog.h"

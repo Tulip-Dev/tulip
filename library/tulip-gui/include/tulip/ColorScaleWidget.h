@@ -22,8 +22,8 @@
 #ifndef COLORSCALEWIDGET_H_
 #define COLORSCALEWIDGET_H_
 
-#include <QtGui/QWidget>
-#include <QtGui/QPainter>
+#include <QWidget>
+#include <QPainter>
 
 #include <tulip/tulipconf.h>
 

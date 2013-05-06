@@ -20,7 +20,7 @@
 #ifndef RSSPARSER_H
 #define RSSPARSER_H
 
-#include <QtXml/QXmlDefaultHandler>
+#include <QXmlDefaultHandler>
 
 /**
   @brief a Basic XML/RSS parser meant to parse RSS flux coming from the Tulip website.

@@ -19,19 +19,18 @@
 
 #include <tulip/PluginManager.h>
 
+#include <QDir>
+#include <QApplication>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginLister.h>
 #include <tulip/SystemDefinition.h>
-
 #include <tulip/YajlFacade.h>
 #include <tulip/QuaZIPFacade.h>
 #include <tulip/TlpQtTools.h>
-
-#include <QtCore/QDir>
-#include <QtGui/QApplication>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
 
 using namespace tlp;
 

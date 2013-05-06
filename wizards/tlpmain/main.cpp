@@ -1,6 +1,6 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/PluginLoaderTxt.h>
-#include <QtGui/QApplication>
+#include <QApplication>
 
 using namespace tlp;
 

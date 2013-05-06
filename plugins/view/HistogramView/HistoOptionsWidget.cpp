@@ -19,7 +19,7 @@
 
 #include <iostream>
 
-#include <QtGui/QColorDialog>
+#include <QColorDialog>
 
 #include "HistoOptionsWidget.h"
 

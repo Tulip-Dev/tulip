@@ -1,10 +1,8 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
-SET(QT_USE_QTWEBKIT true)
-
 # Force to use SIP headers located in thirdparty and not those installed in the system
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${QT_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(pythonscriptview_LIB_SRCS
     PythonScriptView.h
@@ -26,19 +24,15 @@ SET(pythonscriptview_RCC
     PythonScriptViewResource.qrc
 )
 
-QT4_WRAP_UI(pythonscriptview_UI_SRCS ${pythonscriptview_UI})
-QT4_WRAP_CPP(pythonscriptview_MOC_SRCS ${pythonscriptview_MOC})
-QT4_ADD_RESOURCES(pythonscriptview_RCC_SRCS ${pythonscriptview_RCC})
+QTX_WRAP_UI(pythonscriptview_UI_SRCS ${pythonscriptview_UI})
+QTX_WRAP_CPP(pythonscriptview_MOC_SRCS ${pythonscriptview_MOC})
+QTX_ADD_RESOURCES(pythonscriptview_RCC_SRCS ${pythonscriptview_RCC})
 
 ADD_LIBRARY(pythonscriptview-${TulipVersion} SHARED ${pythonscriptview_LIB_SRCS} ${pythonscriptview_MOC_SRCS} ${pythonscriptview_UI_SRCS} ${pythonscriptview_RCC_SRCS})
 
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipCoreName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${LibTulipPythonName})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_LIBRARIES})
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY})
-IF(LINUX)
-TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_QTWEBKIT_LIBRARY_RELEASE})
-ENDIF(LINUX)
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
 

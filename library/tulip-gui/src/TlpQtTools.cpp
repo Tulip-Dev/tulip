@@ -16,17 +16,24 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#include <tulip/TlpQtTools.h> 
+ 
 #include <ostream>
 #include <ios>
-#include <tulip/TlpQtTools.h>
 
-#include <QtCore/QDebug>
-#include <QtOpenGL/QGLPixelBuffer>
-#include <QtGui/QColorDialog>
-#include <QtGui/QMessageBox>
-#include <QtGui/QDesktopServices>
-#include <QtCore/QDir>
-#include <QtGui/QApplication>
+#include <QDebug>
+#include <QGLPixelBuffer>
+#include <QColorDialog>
+#include <QMessageBox>
+
+#include <QDir>
+#include <QApplication>
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+#include <QDesktopServices>
+#else
+#include <QStandardPaths>
+#endif
 
 #include <tulip/DataSet.h>
 #include <tulip/TulipSettings.h>
@@ -47,6 +54,7 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/TulipMetaTypes.h>
+
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -133,11 +141,19 @@ QString getPluginPackageName(const QString& pluginName) {
 }
 
 QString getPluginStagingDirectory() {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  return QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/staging/plugins";
+#else
   return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/staging/plugins";
+#endif
 }
 
 QString getPluginLocalInstallationDir() {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  return QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/plugins";
+#else
   return QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins";
+#endif
 }
 
 QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFramebufferObject::Attachment attachment) {
@@ -151,7 +167,11 @@ QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFrame
 }
 
 QString localPluginsPath() {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+    return QString(QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/plugins/");
+#else
   return QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/");
+#endif
 }
 
 void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {

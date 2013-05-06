@@ -19,12 +19,12 @@
 
 #include <tulip/PythonInterpreter.h>
 
-#include <QtCore/QFile>
-#include <QtCore/QTextStream>
-#include <QtGui/QMessageBox>
-#include <QtGui/QFileDialog>
-#include <QtGui/QTextBlock>
-#include <QtWebKit/QWebView>
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QTextBlock>
+#include <QWebView>
 
 #include <tulip/PythonCodeEditor.h>
 #include <tulip/PluginLister.h>

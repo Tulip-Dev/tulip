@@ -19,9 +19,10 @@
 
 #include "tulip/SceneConfigWidget.h"
 
-#include <QtCore/QDebug>
-#include <QtGui/QMainWindow>
-#include <QtGui/QApplication>
+#include <QDebug>
+#include <QMainWindow>
+#include <QApplication>
+
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/Perspective.h>

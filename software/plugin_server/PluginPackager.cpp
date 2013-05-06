@@ -17,20 +17,20 @@
  *
  */
 
-#include <QtCore/QString>
-#include <QtCore/QFile>
-#include <QtCore/QDir>
-#include <QtXml/QDomDocument>
-#include <QtCore/QLibrary>
-#include <QtCore/QDebug>
-#include <QtGui/QApplication>
+#include <QString>
+#include <QFile>
+#include <QDir>
+#include <QDomDocument>
+#include <QLibrary>
+#include <QDebug>
+#include <QApplication>
 
 #include <tulip/SystemDefinition.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/QuaZIPFacade.h>
-#include <QtCore/QDateTime>
+#include <QDateTime>
 
 #include <tulip/Interactor.h>
 #include <tulip/GlyphManager.h>

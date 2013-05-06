@@ -20,7 +20,7 @@
 #ifndef PIXELORIENTEDOPTIONSWIDGET_H_
 #define PIXELORIENTEDOPTIONSWIDGET_H_
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <tulip/Color.h>
 

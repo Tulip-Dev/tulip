@@ -22,8 +22,10 @@
 #ifndef CLEARABLELINEEDIT_H
 #define CLEARABLELINEEDIT_H
 
+#include <QLineEdit>
+
 #include <tulip/tulipconf.h>
-#include <QtGui/QLineEdit>
+
 
 class TLP_QT_SCOPE ClearableLineEdit : public QLineEdit {
   static QPixmap* CLEAR_PIXMAP;

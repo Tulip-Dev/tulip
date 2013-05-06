@@ -19,10 +19,11 @@
 #include "tulip/PropertyCreationDialog.h"
 #include "ui_PropertyCreationDialog.h"
 
+#include <QMessageBox>
+#include <QPushButton>
+
 #include <tulip/Graph.h>
 #include <tulip/TlpQtTools.h>
-#include <QtGui/QMessageBox>
-#include <QtGui/QPushButton>
 
 using namespace tlp;
 

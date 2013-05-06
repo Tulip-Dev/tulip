@@ -28,10 +28,10 @@
 #include "highlighters/EnclosingCircleHighlighter.h"
 #include "highlighters/ZoomAndPanHighlighter.h"
 
-#include <QtGui/QListWidget>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QMessageBox>
+#include <QListWidget>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QMessageBox>
 
 using namespace tlp;
 using namespace std;

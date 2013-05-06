@@ -17,7 +17,6 @@
  *
  */
 
-#include <typeinfo>
 #include <tulip/BooleanProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -44,6 +43,7 @@
 #include <sstream>
 #include <climits>
 #include <algorithm>
+#include <typeinfo>
 
 const int CIRCLE_GLYPH_ID = 14;
 

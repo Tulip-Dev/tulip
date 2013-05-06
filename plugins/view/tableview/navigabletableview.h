@@ -19,7 +19,7 @@
 #ifndef NAVIGABLETABLEVIEW_H
 #define NAVIGABLETABLEVIEW_H
 
-#include <QtGui/QTableView>
+#include <QTableView>
 
 class QKeyEvent;
 

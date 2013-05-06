@@ -20,7 +20,8 @@
 #ifndef Tulip_GLMAINWIDGET_H
 #define Tulip_GLMAINWIDGET_H
 
-#include <QtOpenGL/QGLWidget>
+
+#include <QGLWidget>
 
 #include <tulip/tulipconf.h>
 #include <tulip/GlScene.h>

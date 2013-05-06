@@ -18,10 +18,11 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#include <QtCore/QObject>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtCore/QUrl>
-#include <QtCore/QMap>
+#include <QObject>
+#include <QNetworkAccessManager>
+#include <QUrl>
+#include <QMap>
+
 #include <tulip/tulipconf.h>
 
 class QNetworkReply;

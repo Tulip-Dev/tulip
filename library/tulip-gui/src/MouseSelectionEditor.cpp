@@ -16,8 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cmath>
-#include <climits>
+
+#include <tulip/MouseSelectionEditor.h>
+
+#include <QMouseEvent>
 
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
@@ -28,11 +30,10 @@
 #include <tulip/DrawingTools.h>
 #include <tulip/ForEach.h>
 #include <tulip/GlGraphComposite.h>
-
-#include <tulip/MouseSelectionEditor.h>
 #include <tulip/TlpQtTools.h>
 
-#include <QtGui/qevent.h>
+#include <cmath>
+#include <climits>
 
 #define EPSILON 1.0
 #define EPSILON_SCREEN 50

@@ -6,18 +6,18 @@ PropertiesEditor.cpp
 navigabletableview.cpp
 )
 
-QT4_WRAP_UI(UI_SRCS
+QTX_WRAP_UI(UI_SRCS
 TableView.ui
 PropertiesEditor.ui
 )
 
-QT4_WRAP_CPP(MOC_SRCS
+QTX_WRAP_CPP(MOC_SRCS
 TableView.h
 PropertiesEditor.h
 navigabletableview.h
 )
 
-QT4_ADD_RESOURCES(RCC_SRCS TableView.qrc)
+QTX_ADD_RESOURCES(RCC_SRCS TableView.qrc)
 
 ADD_LIBRARY(TableView-${TulipVersion} SHARED ${LIB_SRCS} ${MOC_SRCS} ${UI_SRCS} ${RCC_SRCS})
 

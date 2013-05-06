@@ -21,12 +21,13 @@
 #ifndef Tulip_QGLBUFFERMANAGER_H
 #define Tulip_QGLBUFFERMANAGER_H
 
+
+#include <QGLPixelBuffer>
+#include <QGLFramebufferObject>
+
 #include <map>
 
 #include <tulip/tulipconf.h>
-
-#include <QtOpenGL/QGLPixelBuffer>
-#include <QtOpenGL/QGLFramebufferObject>
 
 namespace tlp {
 

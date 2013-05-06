@@ -20,7 +20,8 @@
 #ifndef HISTOOPTIONSWIDGET_H_
 #define HISTOOPTIONSWIDGET_H_
 
-#include <QtGui/QWidget>
+#include <QWidget>
+
 #include <tulip/Color.h>
 
 #include "ui_HistoOptionsWidget.h"

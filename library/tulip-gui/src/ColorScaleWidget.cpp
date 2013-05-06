@@ -29,11 +29,16 @@
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  */
+
 #include "tulip/ColorScaleWidget.h"
+
+#include <QPaintEvent>
+
 #include <tulip/ColorScale.h>
-#include <QtGui/QPaintEvent>
+
 using namespace tlp;
 using namespace std;
+
 ColorScaleWidget::ColorScaleWidget(QWidget* parent) :
   QWidget(parent), colorScale(NULL), orientation(Qt::Horizontal) {
 }

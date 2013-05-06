@@ -18,8 +18,9 @@
  */
 #include "tulip/ColorScaleButton.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
+#include <QPainter>
+#include <QPaintEvent>
+
 #include <tulip/TlpQtTools.h>
 
 using namespace tlp;

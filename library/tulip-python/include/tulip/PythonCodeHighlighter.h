@@ -39,10 +39,10 @@
 #ifndef PYTHONCODEHIGHLIGHTER_H_
 #define PYTHONCODEHIGHLIGHTER_H_
 
-#include <QtGui/QSyntaxHighlighter>
+#include <QSyntaxHighlighter>
 
-#include <QtCore/QHash>
-#include <QtGui/QTextCharFormat>
+#include <QHash>
+#include <QTextCharFormat>
 
 class QTextDocument;
 

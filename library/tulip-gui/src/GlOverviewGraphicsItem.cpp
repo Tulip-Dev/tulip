@@ -16,16 +16,18 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/GlOverviewGraphicsItem.h"
-#include "tulip/GlOffscreenRenderer.h"
-#include "tulip/GlMainWidget.h"
-#include "tulip/GlMainView.h"
-#include "tulip/GlGraphComposite.h"
-#include "tulip/TlpQtTools.h"
-#include <QtGui/QMenu>
-#include <QtGui/QMessageBox>
 
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include "tulip/GlOverviewGraphicsItem.h"
+
+#include <QMenu>
+#include <QMessageBox>
+#include <QGraphicsSceneMouseEvent>
+
+#include <tulip/GlOffscreenRenderer.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlMainView.h>
+#include <tulip/GlGraphComposite.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace std;
 

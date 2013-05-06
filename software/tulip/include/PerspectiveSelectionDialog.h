@@ -20,8 +20,8 @@
 #ifndef PERSPECTIVESELECTIONDIALOG_H
 #define PERSPECTIVESELECTIONDIALOG_H
 
-#include <QtGui/QDialog>
-#include <QtCore/QModelIndex>
+#include <QDialog>
+#include <QModelIndex>
 
 namespace Ui {
 class PerspectiveSelectionDialog;

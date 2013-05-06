@@ -25,7 +25,7 @@
 #include <tulip/TulipModel.h>
 #include <tulip/Observable.h>
 
-#include <QtCore/QList>
+#include <QList>
 
 namespace tlp {
 class Graph;

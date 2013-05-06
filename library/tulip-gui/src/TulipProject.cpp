@@ -19,17 +19,17 @@
 
 #include "tulip/TulipProject.h"
 
-#include <tulip/SimplePluginProgress.h>
+#include <QDebug>
+#include <QMetaProperty>
+#include <QDir>
+#include <QCoreApplication>
+#include <QTextStream>
+#include <QDomDocument>
 
-#include <QtCore/QDebug>
-#include <QtCore/QMetaProperty>
-#include <QtCore/QDir>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QTextStream>
-#include <QtXml/QDomDocument>
+#include <tulip/SimplePluginProgress.h>
+#include <tulip/QuaZIPFacade.h>
 
 #include <cstdlib>
-#include <tulip/QuaZIPFacade.h>
 
 #define DATA_DIR_NAME "data"
 #define INFOS_FILE_NAME "project.xml"

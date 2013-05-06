@@ -18,18 +18,19 @@
  */
 #include "tulip/TulipItemDelegate.h"
 
-#include <QtCore/QDebug>
+#include <QDebug>
+#include <QEvent>
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
+#include <QMainWindow>
+#include <QLabel>
+
 #include <tulip/TulipModel.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/GraphModel.h>
 #include <tulip/Perspective.h>
-#include <QtCore/QEvent>
-#include <QtGui/QDialog>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QMainWindow>
-#include <QtGui/QLabel>
 
 using namespace tlp;
 

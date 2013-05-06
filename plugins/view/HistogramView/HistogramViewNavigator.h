@@ -20,11 +20,6 @@
 #ifndef HISTOGRAMVIEWNAVIGATOR_H_
 #define HISTOGRAMVIEWNAVIGATOR_H_
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-
 #include <tulip/GLInteractor.h>
 
 namespace tlp {

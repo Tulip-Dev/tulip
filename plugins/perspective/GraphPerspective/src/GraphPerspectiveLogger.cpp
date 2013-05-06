@@ -59,11 +59,22 @@ unsigned int GraphPerspectiveLogger::count() const {
   return _logCount;
 }
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, const QString &msg) {
+    if (type == QtFatalMsg) {
+      std::cerr << msg.toStdString() << std::endl;
+      abort();
+    }
+
+    if (type > _logSeverity)
+      _logSeverity = type;
+
+    _logCount++;
+    _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), msg));
+}
+#else
 void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
   if (type == QtFatalMsg) {
-#ifndef NDEBUG
-    QString qMsg(msg);
-#endif
     std::cerr<<msg<<std::endl;
     abort();
   }
@@ -74,6 +85,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
   _logCount++;
   _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)),msg));
 }
+#endif
 
 QPixmap GraphPerspectiveLogger::icon() {
   return QPixmap(iconForType(_logSeverity));

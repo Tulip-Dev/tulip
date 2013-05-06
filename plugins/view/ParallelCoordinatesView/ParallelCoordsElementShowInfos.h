@@ -20,16 +20,8 @@
 #ifndef PARALLELCOORDSELEMENTSHOWINFOS_H_
 #define PARALLELCOORDSELEMENTSHOWINFOS_H_
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <QCursor>
+#include <QMouseEvent>
 
 #include <tulip/MouseShowElementInfos.h>
 #include <tulip/GlScene.h>

@@ -21,9 +21,9 @@
 #ifndef CSVIMPORTCONFIGURATIONWIDGET_H
 #define CSVIMPORTCONFIGURATIONWIDGET_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QValidator>
-#include <QtGui/QTableWidget>
+#include <QWidget>
+#include <QValidator>
+#include <QTableWidget>
 
 #include <tulip/CSVGraphImport.h>
 #include <tulip/CSVContentHandler.h>

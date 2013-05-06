@@ -26,7 +26,7 @@
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/TulipMimes.h>
 
-#include <QtCore/QPropertyAnimation>
+#include <QPropertyAnimation>
 
 static const QString setCurrentGraphFunction =
   "graph = None\n"

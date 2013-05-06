@@ -18,14 +18,15 @@
  */
 #include "tulip/ParameterListModel.h"
 
+#include <QFont>
+#include <QColor>
+#include <QDebug>
+
 #include <tulip/ForEach.h>
-#include <algorithm>
-#include <QtGui/QFont>
-#include <QtGui/QColor>
 #include <tulip/Color.h>
 #include <tulip/TlpQtTools.h>
 
-#include <QtCore/QDebug>
+#include <algorithm>
 
 namespace tlp {
 

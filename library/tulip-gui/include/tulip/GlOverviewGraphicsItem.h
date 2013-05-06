@@ -22,8 +22,10 @@
 #define GLOVERVIEWGRAPHICSITEM_H
 
 
-#include <QtGui/QGraphicsPixmapItem>
-#include <QtOpenGL/QGLFramebufferObject>
+#include <QGraphicsPixmapItem>
+
+#include <QGLFramebufferObject>
+
 #include <tulip/GlScene.h>
 
 namespace tlp {

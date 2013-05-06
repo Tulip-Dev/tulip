@@ -26,8 +26,8 @@
 #include "highlighters/PathHighlighter.h"
 #include "PathFinder.h"
 
-#include <QtGui/QMouseEvent>
-#include <QtGui/QMessageBox>
+#include <QMouseEvent>
+#include <QMessageBox>
 
 using namespace std;
 using namespace tlp;

@@ -23,13 +23,14 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include <list>
-#include <QtGui/QCheckBox>
-#include <QtGui/QDialog>
-#include <QtGui/QRadioButton>
-#include <QtGui/QSpinBox>
-#include <QtGui/QGroupBox>
-#include <QtGui/QLineEdit>
-#include <QtGui/qevent.h>
+
+#include <QCheckBox>
+#include <QDialog>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QGroupBox>
+#include <QLineEdit>
+#include <QEvent>
 
 #include <tulip/DataSet.h>
 #include <tulip/Size.h>

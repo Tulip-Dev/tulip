@@ -22,7 +22,8 @@
 #ifndef COORDEDITOR_H
 #define COORDEDITOR_H
 
-#include <QtGui/QDialog>
+#include <QDialog>
+
 #include <tulip/Coord.h>
 #include <tulip/tulipconf.h>
 

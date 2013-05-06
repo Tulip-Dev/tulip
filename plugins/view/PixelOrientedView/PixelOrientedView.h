@@ -22,7 +22,7 @@
 
 #include <tulip/GlMainView.h>
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include "POLIB/potypes.h"
 #include "POLIB/SpiralLayout.h"

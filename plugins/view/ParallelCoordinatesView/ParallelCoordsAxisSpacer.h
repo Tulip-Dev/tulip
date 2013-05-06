@@ -20,12 +20,8 @@
 #ifndef PARALLELCOORDSAXISSPACER_H_
 #define PARALLELCOORDSAXISSPACER_H_
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
+#include <QCursor>
+#include <QMouseEvent>
 
 #include <tulip/GLInteractor.h>
 #include "ParallelCoordinatesView.h"

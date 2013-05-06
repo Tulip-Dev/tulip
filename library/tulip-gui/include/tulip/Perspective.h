@@ -20,13 +20,14 @@
 #ifndef _PERSPECTIVE_H
 #define _PERSPECTIVE_H
 
+#include <QObject>
+#include <QVariant>
+#include <QSet>
+
 #include <tulip/PluginLister.h>
 #include <tulip/TulipProject.h>
 #include <tulip/PluginContext.h>
 #include <tulip/Plugin.h>
-#include <QtCore/QObject>
-#include <QtCore/QVariant>
-#include <QtCore/QSet>
 
 class QMainWindow;
 class QTcpSocket;

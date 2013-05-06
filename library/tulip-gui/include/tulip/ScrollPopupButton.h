@@ -22,8 +22,10 @@
 #ifndef SCROLLPOPUPBUTTON_H
 #define SCROLLPOPUPBUTTON_H
 
-#include <QtGui/QPushButton>
+#include <QPushButton>
+
 #include <tulip/tulipconf.h>
+
 class QSlider;
 
 class TLP_QT_SCOPE ScrollPopupButton : public QPushButton {

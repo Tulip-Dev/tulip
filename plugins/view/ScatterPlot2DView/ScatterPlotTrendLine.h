@@ -20,11 +20,6 @@
 #ifndef SCATTERPLOTTRENDLINE_H_
 #define SCATTERPLOTTRENDLINE_H_
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-
 #include <tulip/GLInteractor.h>
 
 namespace tlp {

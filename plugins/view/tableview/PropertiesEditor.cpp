@@ -16,7 +16,17 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include "PropertiesEditor.h"
+#include "ui_PropertiesEditor.h"
+
+#include <QSortFilterProxyModel>
+#include <QMenu>
+#include <QDialogButtonBox>
+#include <QDialog>
+#include <QCursor>
+#include <QMainWindow>
+#include <QMessageBox>
 
 #include <tulip/Perspective.h>
 #include <tulip/GraphModel.h>
@@ -24,15 +34,6 @@
 #include <tulip/CopyPropertyDialog.h>
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/TulipItemDelegate.h>
-#include <QtGui/QSortFilterProxyModel>
-#include <QtGui/QMenu>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QDialog>
-#include <QtGui/QCursor>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMessageBox>
-
-#include "ui_PropertiesEditor.h"
 
 Q_DECLARE_METATYPE(Qt::CheckState)
 

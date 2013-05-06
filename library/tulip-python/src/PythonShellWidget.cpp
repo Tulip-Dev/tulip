@@ -19,8 +19,8 @@
 
 #include "tulip/PythonInterpreter.h"
 
-#include <QtCore/QRegExp>
-#include <QtGui/QKeyEvent>
+#include <QRegExp>
+#include <QKeyEvent>
 
 #include <tulip/TlpTools.h>
 #include <tulip/Observable.h>

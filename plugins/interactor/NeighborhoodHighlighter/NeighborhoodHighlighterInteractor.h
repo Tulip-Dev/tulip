@@ -20,16 +20,16 @@
 #ifndef NEIGHBOURHOODHIGHLIGHTERINTERACTOR_H_
 #define NEIGHBOURHOODHIGHLIGHTERINTERACTOR_H_
 
+#include "NeighborhoodHighlighterConfigWidget.h"
+#include "NodeNeighborhoodView.h"
+#include "../../utils/StandardInteractorPriority.h"
+
+#include <QObject>
+
 #include <tulip/GLInteractor.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlScene.h>
-
-#include <QtCore/QObject>
-
-#include "NeighborhoodHighlighterConfigWidget.h"
-#include "NodeNeighborhoodView.h"
-#include "../../utils/StandardInteractorPriority.h"
 
 namespace tlp {
 

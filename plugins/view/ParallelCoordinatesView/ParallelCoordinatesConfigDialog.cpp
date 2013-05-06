@@ -20,16 +20,16 @@
 #include "ParallelCoordinatesConfigDialog.h"
 #include "ParallelTools.h"
 
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QGroupBox>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QFileDialog>
-#include <QtGui/QPalette>
-#include <QtGui/QColor>
-#include <QtGui/QColorDialog>
-#include <QtGui/QTabWidget>
+#include <QHBoxLayout>
+#include <QGroupBox>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QFileDialog>
+#include <QPalette>
+#include <QColor>
+#include <QColorDialog>
+#include <QTabWidget>
 
 #include <tulip/TlpTools.h>
 

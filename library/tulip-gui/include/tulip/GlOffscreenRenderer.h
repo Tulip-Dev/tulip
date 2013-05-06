@@ -23,7 +23,8 @@
 #define GLOFFSCREENRENDERER_H_
 
 #include <tulip/GlScene.h>
-#include <QtOpenGL/QGLFramebufferObject>
+
+#include <QGLFramebufferObject>
 
 namespace tlp {
 

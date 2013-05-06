@@ -20,8 +20,8 @@
 #ifndef ABSTRACTFILTERSMANAGERITEM_H
 #define ABSTRACTFILTERSMANAGERITEM_H
 
-#include <QtGui/QWidget>
-#include <QtGui/QTableView>
+#include <QWidget>
+#include <QTableView>
 #include <tulip/Graph.h>
 #include <tulip/WithParameter.h>
 #include <tulip/ParameterListModel.h>

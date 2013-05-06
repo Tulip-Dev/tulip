@@ -20,7 +20,7 @@
 #ifndef PYTHONTABWIDGET_H
 #define PYTHONTABWIDGET_H
 
-#include <QtGui/QTabWidget>
+#include <QTabWidget>
 
 #include <tulip/tulipconf.h>
 

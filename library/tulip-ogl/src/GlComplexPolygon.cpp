@@ -30,8 +30,8 @@
 #include <tulip/ParametricCurves.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlShaderProgram.h>
-#include <QtCore/QStringList>
-#include <QtCore/QVariantList>
+#include <QStringList>
+#include <QVariantList>
 
 // FIXME The line below is duplicated of tulip-gui/TulipMetaTypes.h
 Q_DECLARE_METATYPE(tlp::Color)

@@ -24,7 +24,7 @@ quazip/(un)zip.h files for details, basically it's zlib license.
 #ifndef QUAZIP_GLOBAL_H
 #define QUAZIP_GLOBAL_H
 
-#include <QtCore/qglobal.h>
+#include <qglobal.h>
 
 /**
   This is automatically defined when building a static library, but when

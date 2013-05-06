@@ -16,15 +16,16 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/TlpQtTools.h>
-
-#include <QtCore/QTextCodec>
-#include <QtGui/QFileDialog>
-#include <QtGui/QKeyEvent>
 
 #include "tulip/CSVParserConfigurationWidget.h"
 #include "ui_CSVParserConfigurationWidget.h"
-#include "tulip/CSVParser.h"
+
+#include <QTextCodec>
+#include <QFileDialog>
+#include <QKeyEvent>
+
+#include <tulip/CSVParser.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 using namespace std;
@@ -181,7 +182,7 @@ string CSVParserConfigurationWidget::getEncoding()const {
   return QStringToTlpString(ui->encodingComboBox->currentText());
 }
 char CSVParserConfigurationWidget::getTextSeparator() const {
-  return ui->textDelimiterComboBox->currentText().at(0).toAscii();
+  return ui->textDelimiterComboBox->currentText().at(0).toLatin1();
 }
 
 bool CSVParserConfigurationWidget::getMergeSeparator() const {

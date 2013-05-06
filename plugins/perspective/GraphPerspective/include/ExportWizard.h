@@ -19,8 +19,8 @@
 #ifndef EXPORTWIZARD_H
 #define EXPORTWIZARD_H
 
-#include <QtGui/QWizard>
-#include <QtCore/QModelIndex>
+#include <QWizard>
+#include <QModelIndex>
 #include <tulip/WithParameter.h>
 
 namespace Ui {

@@ -29,7 +29,7 @@
 #include <tulip/ObservableGraph.h>
 #include <tulip/GlMainWidget.h>
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <vector>
 

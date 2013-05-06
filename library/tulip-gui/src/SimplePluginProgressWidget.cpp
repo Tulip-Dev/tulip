@@ -16,12 +16,13 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <QtGui/QCloseEvent>
-#include <QtGui/QStyle>
-#include <QtGui/QVBoxLayout>
 
-#include "ui_SimplePluginProgressWidget.h"
 #include <tulip/SimplePluginProgressWidget.h>
+#include "ui_SimplePluginProgressWidget.h"
+
+#include <QCloseEvent>
+#include <QStyle>
+#include <QVBoxLayout>
 
 using namespace tlp;
 

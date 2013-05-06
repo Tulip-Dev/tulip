@@ -21,8 +21,9 @@
 #ifndef TULIPFILEDESCRIPTORWIDGET_H
 #define TULIPFILEDESCRIPTORWIDGET_H
 
+#include <QWidget>
+
 #include <tulip/TulipMetaTypes.h>
-#include <QtGui/QWidget>
 
 class TLP_QT_SCOPE TulipFileDescriptorWidget: public QWidget {
   Q_OBJECT

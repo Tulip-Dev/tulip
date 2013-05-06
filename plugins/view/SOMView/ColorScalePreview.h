@@ -20,7 +20,7 @@
 #ifndef COLORSCALEPREVIEW_H_
 #define COLORSCALEPREVIEW_H_
 
-#include <QtGui/QLabel>
+#include <QLabel>
 #include <tulip/ColorScale.h>
 
 /**

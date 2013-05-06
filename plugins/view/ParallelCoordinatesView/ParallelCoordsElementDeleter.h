@@ -20,16 +20,8 @@
 #ifndef PARALLELCOORDSELEMENTDELETER_H_
 #define PARALLELCOORDSELEMENTDELETER_H_
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <QCursor>
+#include <QMouseEvent>
 
 #include <tulip/GLInteractor.h>
 

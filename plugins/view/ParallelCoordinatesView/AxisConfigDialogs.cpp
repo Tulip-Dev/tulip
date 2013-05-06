@@ -22,11 +22,11 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
 
-#include <QtGui/QGridLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QGroupBox>
-#include <QtCore/QString>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGroupBox>
+#include <QString>
 
 using namespace std;
 

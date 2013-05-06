@@ -16,8 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include "tulip/ItemsListWidget.h"
-#include <QtGui/qapplication.h>
+
+#include <QApplication>
+#include <QMimeData>
+#include <QDrag>
 
 namespace tlp {
 

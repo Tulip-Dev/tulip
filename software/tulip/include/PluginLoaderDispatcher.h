@@ -20,7 +20,7 @@
 #define PLUGINLOADERDISPATCHER_H
 
 #include <tulip/PluginLoader.h>
-#include <QtCore/QSet>
+#include <QSet>
 
 class PluginLoaderDispatcher: public tlp::PluginLoader {
 public:

@@ -21,8 +21,8 @@
 
 using namespace tlp;
 
-#include <QtGui/QStandardItem>
-#include <QtGui/QComboBox>
+#include <QStandardItem>
+#include <QComboBox>
 
 QStandardItem* itemAt(QComboBox* combo, int i) {
   QStandardItemModel* model = qobject_cast<QStandardItemModel*>(combo->model());

@@ -18,7 +18,7 @@
  */
 #include "tulip/TulipModel.h"
 
-#include <QtGui/QFont>
+#include <QFont>
 
 using namespace tlp;
 

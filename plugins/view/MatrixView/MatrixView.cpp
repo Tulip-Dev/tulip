@@ -19,7 +19,7 @@
 
 #include <typeinfo>
 
-#include <QtGui/QGraphicsView>
+#include <QGraphicsView>
 
 #include "MatrixView.h"
 #include "PropertyValuesDispatcher.h"

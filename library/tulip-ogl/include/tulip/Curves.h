@@ -21,13 +21,11 @@
 #ifndef CURVES_H
 #define CURVES_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 #include <tulip/GlTools.h>
 #include <vector>
-
-
-
 
 namespace tlp {
 template<typename T, unsigned int N>

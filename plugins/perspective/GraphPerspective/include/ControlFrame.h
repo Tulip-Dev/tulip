@@ -19,7 +19,7 @@
 #ifndef CONTROLFRAME_H
 #define CONTROLFRAME_H
 
-#include <QtGui/QFrame>
+#include <QFrame>
 
 namespace Ui {
 class ControlFrame;

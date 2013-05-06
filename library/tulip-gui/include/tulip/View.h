@@ -20,14 +20,14 @@
 #ifndef VIEW_H
 #define VIEW_H
 
+#include <QObject>
+#include <QSet>
+#include <QSize>
+#include <QPointF>
+
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
 #include <tulip/PluginLister.h>
-
-#include <QtCore/QObject>
-#include <QtCore/QSet>
-#include <QtCore/QSize>
-#include <QtCore/QPointF>
 
 class QGraphicsView;
 class QGraphicsItem;

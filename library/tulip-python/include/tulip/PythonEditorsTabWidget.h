@@ -20,8 +20,8 @@
 #ifndef PYTHONEDITORSTABWIDGET_H
 #define PYTHONEDITORSTABWIDGET_H
 
-#include <QtCore/QMap>
-#include <QtGui/QTabWidget>
+#include <QMap>
+#include <QTabWidget>
 
 #include <tulip/tulipconf.h>
 

@@ -18,18 +18,18 @@
  */
 
 #include "tulip/SnapshotDialog.h"
+#include "ui_SnapshotDialog.h"
+
+#include <QLabel>
+#include <QEvent>
+#include <QMessageBox>
+#include <QImageWriter>
+#include <QFileDialog>
+#include <QGraphicsPixmapItem>
+#include <QClipboard>
+#include <QGraphicsScene>
 
 #include <tulip/View.h>
-
-#include <QtGui/QLabel>
-#include <QtCore/QEvent>
-#include <QtGui/QMessageBox>
-#include <QtGui/QImageWriter>
-#include <QtGui/QFileDialog>
-#include <QtGui/QGraphicsPixmapItem>
-#include <QtGui/QClipboard>
-#include <QtGui/QGraphicsScene>
-#include "ui_SnapshotDialog.h"
 
 using namespace std;
 

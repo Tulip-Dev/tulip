@@ -19,7 +19,7 @@
 #ifndef TULIPPERSPECTIVEPROCESSMAINWINDOW_H
 #define TULIPPERSPECTIVEPROCESSMAINWINDOW_H
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 namespace tlp {
 class Perspective;

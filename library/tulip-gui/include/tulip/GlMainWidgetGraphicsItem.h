@@ -29,7 +29,8 @@
  (at your option) any later version.
  */
 
-#include <QtGui/QGraphicsObject>
+#include <QGraphicsObject>
+
 #include <tulip/tulipconf.h>
 
 namespace tlp {

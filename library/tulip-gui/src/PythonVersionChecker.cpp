@@ -20,8 +20,8 @@
 #include <tulip/PythonVersionChecker.h>
 #include <tulip/TlpQtTools.h>
 
-#include <QtCore/QProcess>
-#include <QtCore/QSettings>
+#include <QProcess>
+#include <QSettings>
 
 #include <iostream>
 

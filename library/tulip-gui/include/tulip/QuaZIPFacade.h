@@ -21,7 +21,7 @@
 #ifndef QUAZIPFACADE_H
 #define QUAZIPFACADE_H
 
-#include <QtCore/QString>
+#include <QString>
 
 #include <tulip/tulipconf.h>
 

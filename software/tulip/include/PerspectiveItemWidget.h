@@ -19,7 +19,7 @@
 #ifndef PERSPECTIVEITEMWIDGET_H
 #define PERSPECTIVEITEMWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace tlp {
 class PluginInformations;

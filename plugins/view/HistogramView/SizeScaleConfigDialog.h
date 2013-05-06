@@ -20,7 +20,7 @@
 #ifndef SIZESCALECONFIGDIALOG_H_
 #define SIZESCALECONFIGDIALOG_H_
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 #include "ui_SizeScaleConfigDialog.h"
 

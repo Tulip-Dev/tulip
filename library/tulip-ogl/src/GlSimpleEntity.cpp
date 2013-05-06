@@ -18,8 +18,8 @@
  */
 #include <tulip/GlSimpleEntity.h>
 
-#include <QtCore/QStringList>
-#include <QtCore/QVariantList>
+#include <QStringList>
+#include <QVariantList>
 
 #include <tulip/GlComposite.h>
 

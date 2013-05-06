@@ -22,7 +22,7 @@
 #ifndef QUICKACCESSBAR_H
 #define QUICKACCESSBAR_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include <tulip/CaptionItem.h>
 #include <tulip/tulipconf.h>

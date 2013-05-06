@@ -20,7 +20,7 @@
 #ifndef PROGRESSWIDGETGRAPHICSPROXY_H_
 #define PROGRESSWIDGETGRAPHICSPROXY_H_
 
-#include <QtGui/QGraphicsProxyWidget>
+#include <QGraphicsProxyWidget>
 
 #include "ui_ProgressWidget.h"
 

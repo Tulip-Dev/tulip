@@ -26,11 +26,11 @@
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
 
-#include <QtGui/QGraphicsScene>
-#include <QtGui/QResizeEvent>
-#include <QtGui/QGraphicsItem>
-#include <QtGui/QDialog>
-#include <QtCore/QThread>
+#include <QGraphicsScene>
+#include <QResizeEvent>
+#include <QGraphicsItem>
+#include <QDialog>
+#include <QThread>
 
 #include <map>
 

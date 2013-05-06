@@ -20,17 +20,17 @@
 #ifndef TULIPPROJECT_H
 #define TULIPPROJECT_H
 
-#include <fstream>
-
-#include <QtCore/QDir>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QDate>
-#include <QtCore/QObject>
-#include <QtCore/QIODevice>
+#include <QDir>
+#include <QString>
+#include <QStringList>
+#include <QDate>
+#include <QObject>
+#include <QIODevice>
 
 #include <tulip/tulipconf.h>
 #include <tulip/PluginProgress.h>
+
+#include <fstream>
 
 namespace tlp {
 

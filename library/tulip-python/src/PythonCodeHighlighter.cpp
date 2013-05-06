@@ -21,7 +21,7 @@
 #include "tulip/PythonCodeHighlighter.h"
 #include "tulip/APIDataBase.h"
 
-#include <QtGui/QTextDocument>
+#include <QTextDocument>
 
 using namespace tlp;
 

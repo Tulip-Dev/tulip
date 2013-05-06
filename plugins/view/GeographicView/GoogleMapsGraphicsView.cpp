@@ -28,9 +28,9 @@
 #include <tulip/GlSceneZoomAndPan.h>
 #include <tulip/GlyphManager.h>
 
-#include <QtCore/QTextStream>
-#include <QtCore/QTimeLine>
-#include <QtGui/QMessageBox>
+#include <QTextStream>
+#include <QTimeLine>
+#include <QMessageBox>
 
 using namespace std;
 

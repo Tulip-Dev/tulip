@@ -16,23 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include <tulip/GlMetaNodeRenderer.h>
-
-#if defined(_MSC_VER)
-#include <Windows.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-# if defined(__WIN32__)
-# include <GL/glext.h>
-# endif
-#endif
-
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlCPULODCalculator.h>

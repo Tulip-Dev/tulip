@@ -24,7 +24,6 @@
 #include <vector>
 
 #include <tulip/BoundingBox.h>
-
 #include <tulip/GlEntity.h>
 
 namespace tlp {

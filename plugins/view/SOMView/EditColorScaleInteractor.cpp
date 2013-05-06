@@ -18,7 +18,7 @@
  */
 
 #include "EditColorScaleInteractor.h"
-#include <QtGui/QMouseEvent>
+#include <QMouseEvent>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlEntity.h>
 #include <tulip/GlColorScale.h>

@@ -19,10 +19,10 @@
 
 #include "TulipSplashScreen.h"
 
-#include <QtGui/QPainter>
-#include <QtGui/QApplication>
-#include <QtCore/QPropertyAnimation>
-#include <QtCore/QDir>
+#include <QPainter>
+#include <QApplication>
+#include <QPropertyAnimation>
+#include <QDir>
 
 #include <tulip/TlpTools.h>
 #include <tulip/Plugin.h>

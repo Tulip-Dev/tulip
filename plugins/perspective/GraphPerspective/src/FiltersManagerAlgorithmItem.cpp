@@ -20,8 +20,8 @@
 #include "FiltersManagerAlgorithmItem.h"
 #include "ui_FiltersManagerAlgorithmItem.h"
 
-#include <QtGui/QStandardItem>
-#include <QtGui/QComboBox>
+#include <QStandardItem>
+#include <QComboBox>
 
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>

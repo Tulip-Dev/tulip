@@ -19,8 +19,8 @@
 
 #include "GoogleMaps.h"
 
-#include <QtCore/QTimer>
-#include <QtGui/QApplication>
+#include <QTimer>
+#include <QApplication>
 
 using namespace std;
 

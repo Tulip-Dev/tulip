@@ -20,8 +20,9 @@
 #include "FiltersManagerCompareItem.h"
 #include "ui_FiltersManagerCompareItem.h"
 
-#include <QtGui/QStandardItem>
-#include <QtGui/QComboBox>
+#include <QStandardItem>
+#include <QComboBox>
+
 #include <tulip/Graph.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/DoubleProperty.h>

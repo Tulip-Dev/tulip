@@ -20,16 +20,8 @@
 #ifndef HISTOGRAMCOLORMAPPING_H_
 #define HISTOGRAMCOLORMAPPING_H_
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include <QCursor>
+#include <QEvent>
 
 #include <tulip/tulipconf.h>
 #include <tulip/GWInteractor.h>
@@ -40,9 +32,6 @@
 #include <tulip/GlPolyQuad.h>
 
 #include <map>
-
-//#include "HistogramView.h"
-
 
 namespace tlp {
 

@@ -21,7 +21,7 @@
 #define PATHFINDERCONFIGURATIONWIDGET_H_
 
 #include "ui_PathFinderConfiguration.h"
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class PathFinderConfigurationWidget: public QWidget, public Ui::PathFinderConfigurationData {
   Q_OBJECT

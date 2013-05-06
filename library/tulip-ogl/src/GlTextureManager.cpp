@@ -19,9 +19,10 @@
 
 #include <GL/glew.h>
 
+#include <QImage>
+#include <QGLWidget>
+
 #include <tulip/GlTextureManager.h>
-#include <QtGui/QImage>
-#include <QtOpenGL/QGLWidget>
 
 //====================================================
 tlp::GlTextureManager* tlp::GlTextureManager::inst=0;

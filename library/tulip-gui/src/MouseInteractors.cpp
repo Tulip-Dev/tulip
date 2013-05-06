@@ -16,30 +16,28 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
-#include <QtDebug>
 
-#ifdef  _WIN32
-// compilation pb workaround
-#include <windows.h>
-#endif
-#include <QtGui/qcursor.h>
-#include <QtGui/qevent.h>
-#include <QtGui/QPinchGesture>
-#include <QtGui/QGraphicsView>
-
-#include "tulip/Graph.h"
-#include "tulip/ColorProperty.h"
 #include "tulip/MouseInteractors.h"
+
+#include <QtDebug>
+#include <QCursor>
+#include <QMouseEvent>
+#include <QPinchGesture>
+#include <QGraphicsView>
+
+#include <tulip/Graph.h>
+#include <tulip/ColorProperty.h>
 #include <tulip/GlNode.h>
-#include "tulip/GlMainWidget.h"
-#include "tulip/View.h"
+#include <tulip/GlMainWidget.h>
+#include <tulip/View.h>
 #include <tulip/Observable.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
+
+#include <iostream>
 
 using namespace tlp;
 using namespace std;

@@ -18,9 +18,8 @@
  */
 #include "ExpandableGroupBox.h"
 
-#include <QtGui/QVBoxLayout>
-
-#include <QtCore/QDebug>
+#include <QVBoxLayout>
+#include <QDebug>
 
 ExpandableGroupBox::ExpandableGroupBox(QWidget *parent, const QString &title): QGroupBox(title,parent), _expanded(true), _widget(0) {
   setCheckable(true);

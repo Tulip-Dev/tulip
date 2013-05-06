@@ -19,11 +19,11 @@
 
 #include "GoogleMapsShowElementInfo.h"
 
-#include <QtCore/QPropertyAnimation>
-#include <QtGui/QLayout>
 
 #include "ui_ElementInformationsWidget.h"
 #include "GoogleMapsViewInteractors.h"
+#include "../../utils/StandardInteractorPriority.h"
+#include "../../utils/ViewNames.h"
 
 #include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
@@ -32,8 +32,8 @@
 #include <tulip/GlSimpleEntityItemModel.h>
 #include <tulip/GlComplexPolygon.h>
 
-#include "../../utils/StandardInteractorPriority.h"
-#include "../../utils/ViewNames.h"
+#include <QPropertyAnimation>
+#include <QLayout>
 
 using namespace std;
 using namespace tlp;

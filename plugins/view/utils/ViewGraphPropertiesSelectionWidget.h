@@ -25,7 +25,7 @@
 #include <vector>
 #include <string>
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 #include "ui_ViewGraphPropertiesSelectionWidget.h"
 

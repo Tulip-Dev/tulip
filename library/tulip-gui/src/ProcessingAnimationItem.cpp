@@ -17,11 +17,12 @@
  *
  */
 #include "tulip/ProcessingAnimationItem.h"
-#include <QtGui/QPainter>
-#include <QtGui/QStyleOptionGraphicsItem>
 
-ProcessingAnimationItem::ProcessingAnimationItem(const QPixmap &pixmap, const QSize &size, QGraphicsItem *parent, QGraphicsScene *scene)
-  : QGraphicsPixmapItem(parent,scene), _currentFrame(0), _brush(Qt::transparent) {
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
+
+ProcessingAnimationItem::ProcessingAnimationItem(const QPixmap &pixmap, const QSize &size, QGraphicsItem *parent)
+  : QGraphicsPixmapItem(parent), _currentFrame(0), _brush(Qt::transparent) {
   for (int y=0; y<pixmap.height(); y+=size.height()) {
     for (int x=0; x<pixmap.width(); x+=size.width()) {
       _pixmaps.push_back(pixmap.copy(x,y,size.width(),size.height()));

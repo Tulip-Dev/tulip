@@ -2,11 +2,11 @@ FIND_PACKAGE(TULIP REQUIRED)
 FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 
-QT4_ADD_RESOURCES(LIB_RCC_SRCS
+QTX_ADD_RESOURCES(LIB_RCC_SRCS
     interactor_plugin_resource.qrc
 )
 
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${QT_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude})
 
 ADD_LIBRARY(interactor_plugin-${TULIP_VERSION} SHARED interactor_plugin.cpp ${LIB_RCC_SRCS})
 TARGET_LINK_LIBRARIES(interactor_plugin-${TULIP_VERSION} ${TULIP_LIBRARIES} ${QT_LIBRARIES})

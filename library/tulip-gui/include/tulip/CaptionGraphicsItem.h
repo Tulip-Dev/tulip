@@ -22,11 +22,11 @@
 #define CAPTIONGRAPHICSITEM_H
 
 
-#include <QtGui/QGraphicsItemGroup>
-//#include <QtGui/QComboBox>
-#include <QtGui/QPushButton>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtOpenGL/QGLFramebufferObject>
+#include <QGraphicsItemGroup>
+#include <QPushButton>
+#include <QGraphicsSceneMouseEvent>
+#include <QGLFramebufferObject>
+
 #include <tulip/View.h>
 #include <tulip/Color.h>
 #include "tulip/CaptionGraphicsSubItems.h"

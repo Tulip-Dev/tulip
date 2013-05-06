@@ -20,7 +20,7 @@
 #ifndef GLYPHSCALECONFIGDIALOG_H_
 #define GLYPHSCALECONFIGDIALOG_H_
 
-#include <QtCore/QStringList>
+#include <QStringList>
 
 #include "ui_GlyphScaleConfigDialog.h"
 

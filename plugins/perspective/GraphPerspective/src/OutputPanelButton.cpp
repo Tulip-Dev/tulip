@@ -18,8 +18,9 @@
  */
 
 #include "OutputPanelButton.h"
-#include <QtGui/QPainter>
-#include <QtGui/QApplication>
+
+#include <QPainter>
+#include <QApplication>
 
 OutputPanelButton::OutputPanelButton(QWidget *parent): QPushButton(parent), _number(0) {}
 

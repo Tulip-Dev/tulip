@@ -33,8 +33,6 @@
 #include <algorithm>
 
 #include "HistogramColorMapping.h"
-//#include "ColorScaleConfigDialog.h"
-
 
 using namespace std;
 

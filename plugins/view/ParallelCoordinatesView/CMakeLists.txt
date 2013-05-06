@@ -24,13 +24,13 @@ SET(LIB_SRCS
       ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.cpp
 )
 
-QT4_WRAP_UI(LIB_UI_HEADERS
+QTX_WRAP_UI(LIB_UI_HEADERS
     ParallelCoordinatesConfigDialog.ui
     ParallelCoordsDrawConfigWidget.ui
     ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.ui
 )
 
-QT4_WRAP_CPP(LIB_MOC_SRCS
+QTX_WRAP_CPP(LIB_MOC_SRCS
       ParallelCoordinatesView.h
       ParallelCoordinatesConfigDialog.h
       AxisConfigDialogs.h
@@ -38,7 +38,7 @@ QT4_WRAP_CPP(LIB_MOC_SRCS
       ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
 )
 
-QT4_ADD_RESOURCES(LIB_RCC_SRCS
+QTX_ADD_RESOURCES(LIB_RCC_SRCS
 ParallelResource.qrc
 )
 

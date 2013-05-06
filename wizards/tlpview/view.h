@@ -4,7 +4,7 @@
 #include <tulip/%BaseView%.h>
 
 @if "%BaseView%" == "View"
-#include <QtGui/QGraphicsView>
+#include <QGraphicsView>
 @endif
 
 class %ProjectName:c%: public tlp::%BaseView% {

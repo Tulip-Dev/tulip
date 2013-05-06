@@ -40,14 +40,14 @@
 #include <tulip/GlLODCalculator.h>
 #include <tulip/GlLabel.h>
 
-#include <QtGui/QMenu>
-#include <QtGui/QPalette>
-#include <QtGui/QToolTip>
-#include <QtGui/QMessageBox>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QFileDialog>
-#include <QtGui/QImageWriter>
-#include <QtGui/QVBoxLayout>
+#include <QMenu>
+#include <QPalette>
+#include <QToolTip>
+#include <QMessageBox>
+#include <QMouseEvent>
+#include <QFileDialog>
+#include <QImageWriter>
+#include <QVBoxLayout>
 
 using namespace std;
 namespace tlp {

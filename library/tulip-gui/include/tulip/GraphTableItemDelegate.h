@@ -21,7 +21,9 @@
 
 #ifndef TULIPTABLEWIDGETITEMDELEGATE_H_
 #define TULIPTABLEWIDGETITEMDELEGATE_H_
-#include <QtGui/QStyledItemDelegate>
+
+#include <QStyledItemDelegate>
+
 #include <tulip/tulipconf.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipItemDelegate.h>

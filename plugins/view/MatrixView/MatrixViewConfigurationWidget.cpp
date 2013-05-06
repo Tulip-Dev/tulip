@@ -25,7 +25,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/TlpQtTools.h>
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 
 using namespace tlp;
 using namespace std;

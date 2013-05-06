@@ -20,16 +20,14 @@
 #ifndef _TLPQTTOOLS_H
 #define _TLPQTTOOLS_H
 
+#include <QColor>
+#include <QDebug>
+#include <QGLFramebufferObject>
+
 #include <tulip/Color.h>
 #include <tulip/Graph.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/DataSet.h>
-
-#include <QtGui/QColor>
-
-#include <QtCore/QDebug>
-
-#include <QtOpenGL/QGLFramebufferObject>
 
 class QWidget;
 

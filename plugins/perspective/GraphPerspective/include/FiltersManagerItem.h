@@ -21,7 +21,7 @@
 #define FILTERSMANAGERITEM_H
 
 
-#include <QtGui/QFrame>
+#include <QFrame>
 #include <tulip/WithParameter.h>
 
 namespace Ui {

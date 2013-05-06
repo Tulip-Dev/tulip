@@ -21,7 +21,7 @@
 #ifndef CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 #define CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 
-#include <QtGui/QComboBox>
+#include <QComboBox>
 
 #include <tulip/tulipconf.h>
 

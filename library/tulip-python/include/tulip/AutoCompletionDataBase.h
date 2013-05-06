@@ -39,9 +39,9 @@
 #ifndef AUTOCOMPLETIONDATABASE_H_
 #define AUTOCOMPLETIONDATABASE_H_
 
-#include <QtCore/QString>
-#include <QtCore/QSet>
-#include <QtCore/QHash>
+#include <QString>
+#include <QSet>
+#include <QHash>
 
 #include <tulip/Graph.h>
 #include <tulip/APIDataBase.h>

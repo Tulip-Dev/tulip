@@ -39,7 +39,7 @@
 #ifndef PYTHONSHELLWIDGET_H_
 #define PYTHONSHELLWIDGET_H_
 
-#include <QtCore/QVector>
+#include <QVector>
 
 #include <tulip/PythonCodeEditor.h>
 

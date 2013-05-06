@@ -25,7 +25,7 @@
 #include <tulip/Graph.h>
 #include <tulip/tulipconf.h>
 
-#include <QtGui/QMessageBox>
+#include <QMessageBox>
 
 namespace tlp {
 class PropertyInterface;

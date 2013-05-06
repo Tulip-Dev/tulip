@@ -16,18 +16,22 @@
  * See the GNU General Public License for more details.
  *
  */
+
 #include "tulip/CSVGraphMappingConfigurationWidget.h"
 #include "ui_CSVGraphMappingConfigurationWidget.h"
-#include "tulip/CSVGraphImport.h"
-#include "tulip/PropertyCreationDialog.h"
+
+#include <QComboBox>
+#include <QFormLayout>
+#include <QLabel>
+#include <QPushButton>
+#include <QLineEdit>
+
+#include <tulip/CSVGraphImport.h>
+#include <tulip/PropertyCreationDialog.h>
 #include <tulip/Graph.h>
 #include <tulip/ForEach.h>
 #include <tulip/TlpQtTools.h>
-#include <QtGui/QComboBox>
-#include <QtGui/QFormLayout>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QLineEdit>
+
 using namespace tlp;
 using namespace std;
 

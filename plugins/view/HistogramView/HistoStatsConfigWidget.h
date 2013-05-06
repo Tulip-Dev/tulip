@@ -20,7 +20,7 @@
 #ifndef HISTOSTATSCONFIGWIDGET_H_
 #define HISTOSTATSCONFIGWIDGET_H_
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace Ui {
 class HistoStatsConfigWidget;

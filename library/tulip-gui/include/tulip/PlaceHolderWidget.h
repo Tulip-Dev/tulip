@@ -21,7 +21,7 @@
 #ifndef PLACEHOLDERWIDGET_H
 #define PLACEHOLDERWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 class PlaceHolderWidget: public QWidget {
   Q_OBJECT

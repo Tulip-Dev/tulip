@@ -17,7 +17,7 @@
  *
  */
 
-#include <QtGui/QColorDialog>
+#include <QColorDialog>
 
 #include "PixelOrientedOptionsWidget.h"
 

@@ -20,7 +20,7 @@
 #ifndef QTGLSCENEZOOMANDPANANIMATOR_H_
 #define QTGLSCENEZOOMANDPANANIMATOR_H_
 
-#include <QtCore/QObject>
+#include <QObject>
 
 #include <tulip/GlSceneZoomAndPan.h>
 

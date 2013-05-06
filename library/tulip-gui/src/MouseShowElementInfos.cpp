@@ -20,12 +20,12 @@
 
 #include "ui_ElementInformationsWidget.h"
 
-#include <QtCore/QPropertyAnimation>
-#include <QtGui/QGraphicsView>
-#include <QtGui/QHeaderView>
+#include <QPropertyAnimation>
+#include <QGraphicsView>
+#include <QHeaderView>
+
 #include <tulip/GraphElementModel.h>
 #include <tulip/TulipItemDelegate.h>
-
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
 

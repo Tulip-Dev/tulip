@@ -16,12 +16,16 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <QtCore/QString>
-#include <QtCore/QDir>
-#include <QtGui/QApplication>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMessageBox>
-#include <QtGui/QDesktopServices>
+#include <QString>
+#include <QDir>
+#include <QApplication>
+#include <QMainWindow>
+#include <QMessageBox>
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#include <QStandardPaths>
+#else
+#include <QDesktopServices>
+#endif
 
 #include <CrashHandling.h>
 
@@ -186,8 +190,11 @@ int main(int argc,char **argv) {
   QRegExp extraParametersRegexp("^\\-\\-([^=]*)=(.*)");
 
   QStringList args = QApplication::arguments();
-
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  QString dumpPath = QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0)).filePath("tulip_perspective-0.log");
+#else
   QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-0.log");
+#endif
   setDumpPath(dumpPath.toStdString());
 
   for(int i=1; i < args.size(); ++i) {
@@ -210,7 +217,11 @@ int main(int argc,char **argv) {
     }
     else if (idRegexp.exactMatch(a)) {
       context->id = idRegexp.cap(1).toUInt();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+      QString dumpPath = QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0)).filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
+#else
       QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-" + idRegexp.cap(1) + ".log");
+#endif
       setDumpPath(dumpPath.toStdString());
     }
     else if(extraParametersRegexp.exactMatch(a)) {
