@@ -25,6 +25,7 @@
 
 #include <tulip/TulipModel.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/PluginLister.h>
 
 #include <string>
 

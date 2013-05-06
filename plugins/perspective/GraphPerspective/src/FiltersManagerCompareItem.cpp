@@ -29,6 +29,8 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/TulipItemDelegate.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/TulipMetaTypes.h>
 
 using namespace tlp;
 using namespace std;

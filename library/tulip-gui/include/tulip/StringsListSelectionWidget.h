@@ -24,7 +24,9 @@
 
 #include <vector>
 
-#include "StringsListSelectionWidgetInterface.h"
+#include <tulip/StringsListSelectionWidgetInterface.h>
+
+#include <QtGui/QWidget>
 
 namespace tlp {
 

@@ -56,7 +56,7 @@ QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height) {
     //   - We try to allocate smaller buffer
 
     // Code to search the bigest buffer and delete it
-    while(!glPixelBuffer->isValid() && bufferToWidthHeight.size()>0) {
+    while(!glPixelBuffer->isValid() && !bufferToWidthHeight.empty()) {
       int widthToRemove=0;
       int heightToRemove=0;
       QGLPixelBuffer *bufferToRemove = NULL;
@@ -102,7 +102,7 @@ QGLFramebufferObject *QGlBufferManager::getFramebufferObject(int width, int heig
   QGLFramebufferObject *glFramebufferObject=new QGLFramebufferObject(width,height/*,QGLFramebufferObject::NoAttachment, GL_TEXTURE_2D, GL_RGBA32F_ARB*/);
 
   if(!glFramebufferObject->isValid()) {
-    while(!glFramebufferObject->isValid() && framebufferToWidthHeight.size()>0) {
+    while(!glFramebufferObject->isValid() && !framebufferToWidthHeight.empty()) {
       int widthToRemove=0;
       int heightToRemove=0;
       QGLFramebufferObject *bufferToRemove = NULL;

@@ -24,8 +24,6 @@
 
 #include <QGraphicsObject>
 #include <QGraphicsView>
-#include <QMap>
-#include <QPixmap>
 
 #include <tulip/tulipconf.h>
 
@@ -41,16 +39,16 @@ class PreviewItem: public QGraphicsObject {
   static QRect _closePixmapRect;
 
   QPixmap _pixmap;
-  tlp::WorkspacePanel* _panel;
+  WorkspacePanel* _panel;
   bool _hovered;
   bool _closeButtonHovered;
 
   int textHeight() const;
 public:
-  explicit PreviewItem(const QPixmap& pixmap, tlp::WorkspacePanel* panel, QGraphicsItem* parent = NULL);
+  explicit PreviewItem(const QPixmap& pixmap, WorkspacePanel* panel, QGraphicsItem* parent = NULL);
   QRectF boundingRect() const;
   void paint(QPainter*, const QStyleOptionGraphicsItem*, QWidget*);
-  tlp::WorkspacePanel* panel() const;
+  WorkspacePanel* panel() const;
   bool shouldClose(const QPointF&);
 protected:
   void hoverEnterEvent(QGraphicsSceneHoverEvent*);

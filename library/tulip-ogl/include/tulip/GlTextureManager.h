@@ -21,15 +21,25 @@
 #ifndef Tulip_GLTEXTUREMANAGER_H
 #define Tulip_GLTEXTUREMANAGER_H
 
-#include <map>
-
 #include <tulip/tulipconf.h>
 
-#include <cassert>
-#include <tulip/OpenGlConfigManager.h>
-#include <string>
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+# if defined(__WIN32__)
+# include <GL/glext.h>
+# endif
+#endif
+
 #include <set>
-#include <iostream>
+#include <map>
 
 namespace tlp {
 

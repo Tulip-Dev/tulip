@@ -25,6 +25,7 @@
 
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/TulipMimes.h>
+#include <tulip/TulipMetaTypes.h>
 
 #include <QPropertyAnimation>
 

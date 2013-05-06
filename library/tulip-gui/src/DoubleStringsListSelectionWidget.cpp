@@ -17,70 +17,72 @@
  *
  */
 
-#include "tulip/DoubleStringsListSelectionWidget.h"
+#include <tulip/DoubleStringsListSelectionWidget.h>
+#include <tulip/TlpQtTools.h>
+
+#include "ui_DoubleStringsListSelectionWidget.h"
 
 using namespace std;
 
 namespace tlp {
 
-DoubleStringsListSelectionWidget::DoubleStringsListSelectionWidget(QWidget *parent, const unsigned int maxSelectedStringsListSize) : QWidget(parent) {
-  setupUi(this);
-  outputList->setMaxListSize(maxSelectedStringsListSize);
+DoubleStringsListSelectionWidget::DoubleStringsListSelectionWidget(QWidget *parent, const unsigned int maxSelectedStringsListSize) : QWidget(parent), _ui(new Ui::DoubleStringsListSelectionData()) {
+  _ui->setupUi(this);
 
-  if (maxSelectedStringsListSize != 0) {
-    selectButton->setEnabled(false);
-  }
-  else {
-    selectButton->setEnabled(true);
-  }
+  _ui->outputList->setMaxListSize(maxSelectedStringsListSize);
+  _ui->selectButton->setEnabled(maxSelectedStringsListSize == 0);
 
   qtWidgetsConnection();
 }
 
+DoubleStringsListSelectionWidget::~DoubleStringsListSelectionWidget() {
+    delete _ui;
+}
+
 void DoubleStringsListSelectionWidget::setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) {
   for (unsigned int i = 0; i < unselectedStringsList.size(); ++i) {
-    inputList->addItemList(QString::fromUtf8(unselectedStringsList[i].c_str()));
+    _ui->inputList->addItemList(QString::fromUtf8(unselectedStringsList[i].c_str()));
   }
 }
 
 void DoubleStringsListSelectionWidget::setSelectedStringsList(const std::vector<std::string> &selectedStringsList) {
   for (unsigned int i = 0; i < selectedStringsList.size(); ++i) {
-    outputList->addItemList(QString::fromUtf8(selectedStringsList[i].c_str()));
+    _ui->outputList->addItemList(QString::fromUtf8(selectedStringsList[i].c_str()));
   }
 }
 
 void DoubleStringsListSelectionWidget::clearUnselectedStringsList() {
-  inputList->clear();
+  _ui->inputList->clear();
 }
 
 void DoubleStringsListSelectionWidget::clearSelectedStringsList() {
-  outputList->clear();
+  _ui->outputList->clear();
 }
 
 void DoubleStringsListSelectionWidget::setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel) {
-  inputListLabel->setText(QString::fromUtf8(unselectedStringsListLabel.c_str()));
+  _ui->inputListLabel->setText(QString::fromUtf8(unselectedStringsListLabel.c_str()));
 }
 
 void DoubleStringsListSelectionWidget::setSelectedStringsListLabel(const std::string &selectedStringsListLabel) {
-  outputListLabel->setText(QString::fromUtf8(selectedStringsListLabel.c_str()));
+  _ui->outputListLabel->setText(QString::fromUtf8(selectedStringsListLabel.c_str()));
 }
 
 void DoubleStringsListSelectionWidget::setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize) {
-  outputList->setMaxListSize(maxSelectedStringsListSize);
+  _ui->outputList->setMaxListSize(maxSelectedStringsListSize);
 
   if (maxSelectedStringsListSize != 0) {
-    selectButton->setEnabled(false);
+    _ui->selectButton->setEnabled(false);
   }
   else {
-    selectButton->setEnabled(true);
+    _ui->selectButton->setEnabled(true);
   }
 }
 
 vector<string> DoubleStringsListSelectionWidget::getSelectedStringsList() const {
   vector<string> outputStringList;
 
-  for (int i = 0; i < outputList->count(); ++i) {
-    outputStringList.push_back(string(outputList->item(i)->text().toUtf8().data()));
+  for (int i = 0; i < _ui->outputList->count(); ++i) {
+      outputStringList.push_back(tlp::QStringToTlpString(_ui->outputList->item(i)->text()));
   }
 
   return outputStringList;
@@ -89,17 +91,17 @@ vector<string> DoubleStringsListSelectionWidget::getSelectedStringsList() const 
 vector<string> DoubleStringsListSelectionWidget::getUnselectedStringsList() const {
   vector<string> inputStringList;
 
-  for (int i = 0; i < inputList->count(); ++i) {
-    inputStringList.push_back(string(inputList->item(i)->text().toUtf8().data()));
+  for (int i = 0; i < _ui->inputList->count(); ++i) {
+    inputStringList.push_back(tlp::QStringToTlpString(_ui->inputList->item(i)->text()));
   }
 
   return inputStringList;
 }
 
 void DoubleStringsListSelectionWidget::selectAllStrings() {
-  if (outputList->getMaxListSize() == 0) {
-    for (int i = 0 ; i < inputList->count() ; ++i) {
-      outputList->addItem(new QListWidgetItem(*(inputList->item(i))));
+  if (_ui->outputList->getMaxListSize() == 0) {
+    for (int i = 0 ; i < _ui->inputList->count() ; ++i) {
+      _ui->outputList->addItem(new QListWidgetItem(*(_ui->inputList->item(i))));
     }
 
     clearUnselectedStringsList();
@@ -107,65 +109,65 @@ void DoubleStringsListSelectionWidget::selectAllStrings() {
 }
 
 void DoubleStringsListSelectionWidget::unselectAllStrings() {
-  for (int i = 0 ; i < outputList->count() ; ++i) {
-    inputList->addItem(new QListWidgetItem(*(outputList->item(i))));
+  for (int i = 0 ; i < _ui->outputList->count() ; ++i) {
+    _ui->inputList->addItem(new QListWidgetItem(*(_ui->outputList->item(i))));
   }
 
   clearSelectedStringsList();
 }
 
 void DoubleStringsListSelectionWidget::qtWidgetsConnection() {
-  connect(addButton, SIGNAL(clicked()),this, SLOT(pressButtonAdd()));
-  connect(removeButton, SIGNAL(clicked()),this, SLOT(pressButtonRem()));
-  connect(upButton, SIGNAL(clicked()),this, SLOT(pressButtonUp()));
-  connect(downButton, SIGNAL(clicked()),this, SLOT(pressButtonDown()));
-  connect(selectButton, SIGNAL(clicked()), this, SLOT(pressButtonSelectAll()));
-  connect(unselectButton, SIGNAL(clicked()), this, SLOT(pressButtonUnselectAll()));
+  connect(_ui->addButton, SIGNAL(clicked()),this, SLOT(pressButtonAdd()));
+  connect(_ui->removeButton, SIGNAL(clicked()),this, SLOT(pressButtonRem()));
+  connect(_ui->upButton, SIGNAL(clicked()),this, SLOT(pressButtonUp()));
+  connect(_ui->downButton, SIGNAL(clicked()),this, SLOT(pressButtonDown()));
+  connect(_ui->selectButton, SIGNAL(clicked()), this, SLOT(pressButtonSelectAll()));
+  connect(_ui->unselectButton, SIGNAL(clicked()), this, SLOT(pressButtonUnselectAll()));
 }
 
 void DoubleStringsListSelectionWidget::pressButtonAdd() {
-  if (inputList->currentItem() != NULL) {
-    if (outputList->addItemList(inputList->currentItem()->text())) {
-      inputList->deleteItemList(inputList->currentItem());
+  if (_ui->inputList->currentItem() != NULL) {
+    if (_ui->outputList->addItemList(_ui->inputList->currentItem()->text())) {
+      _ui->inputList->deleteItemList(_ui->inputList->currentItem());
     }
   }
 }
 
 void DoubleStringsListSelectionWidget::pressButtonRem() {
-  if (outputList->currentItem() != NULL) {
-    inputList->addItemList(outputList->currentItem()->text());
-    outputList->deleteItemList(outputList->currentItem());
+  if (_ui->outputList->currentItem() != NULL) {
+    _ui->inputList->addItemList(_ui->outputList->currentItem()->text());
+    _ui->outputList->deleteItemList(_ui->outputList->currentItem());
   }
 }
 
 void DoubleStringsListSelectionWidget::pressButtonUp() {
-  if (outputList->count() > 0) {
-    int row = outputList->currentRow();
+  if (_ui->outputList->count() > 0) {
+    int row = _ui->outputList->currentRow();
 
     if (row > 0) {
-      QString s = outputList->currentItem()->text();
-      QString s2 = outputList->item(row - 1)->text();
-      outputList->deleteItemList(outputList->item(row - 1));
-      outputList->deleteItemList(outputList->item(row - 1));
-      outputList->insertItem(row - 1, s2);
-      outputList->insertItem(row - 1, s);
-      outputList->setCurrentRow(row - 1);
+      QString s = _ui->outputList->currentItem()->text();
+      QString s2 = _ui->outputList->item(row - 1)->text();
+      _ui->outputList->deleteItemList(_ui->outputList->item(row - 1));
+      _ui->outputList->deleteItemList(_ui->outputList->item(row - 1));
+      _ui->outputList->insertItem(row - 1, s2);
+      _ui->outputList->insertItem(row - 1, s);
+      _ui->outputList->setCurrentRow(row - 1);
     }
   }
 }
 
 void DoubleStringsListSelectionWidget::pressButtonDown() {
-  if (outputList->count() > 0) {
-    int row = outputList->currentRow();
+  if (_ui->outputList->count() > 0) {
+    int row = _ui->outputList->currentRow();
 
-    if (row < (outputList->count() - 1)) {
-      QString s = outputList->currentItem()->text();
-      QString s2 = outputList->item(row + 1)->text();
-      outputList->deleteItemList(outputList->item(row));
-      outputList->deleteItemList(outputList->item(row));
-      outputList->insertItem(row, s);
-      outputList->insertItem(row, s2);
-      outputList->setCurrentRow(row + 1);
+    if (row < (_ui->outputList->count() - 1)) {
+      QString s = _ui->outputList->currentItem()->text();
+      QString s2 = _ui->outputList->item(row + 1)->text();
+      _ui->outputList->deleteItemList(_ui->outputList->item(row));
+      _ui->outputList->deleteItemList(_ui->outputList->item(row));
+      _ui->outputList->insertItem(row, s);
+      _ui->outputList->insertItem(row, s2);
+      _ui->outputList->setCurrentRow(row + 1);
     }
   }
 }

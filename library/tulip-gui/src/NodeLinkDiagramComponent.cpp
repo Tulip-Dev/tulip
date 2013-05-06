@@ -23,6 +23,7 @@
 #include <QGraphicsView>
 #include <QActionGroup>
 #include <QDialog>
+#include <QtGui/QMenu>
 
 #include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGrid.h>

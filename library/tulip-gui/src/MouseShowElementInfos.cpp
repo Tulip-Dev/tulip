@@ -16,18 +16,20 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/MouseShowElementInfos.h"
-
 #include "ui_ElementInformationsWidget.h"
 
 #include <QPropertyAnimation>
 #include <QGraphicsView>
 #include <QHeaderView>
+#include <QMouseEvent>
+#include <QGraphicsProxyWidget>
 
 #include <tulip/GraphElementModel.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlScene.h>
+#include <tulip/MouseShowElementInfos.h>
 
 using namespace std;
 using namespace tlp;

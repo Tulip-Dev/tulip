@@ -48,7 +48,7 @@ void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const d
 void GlLines::glDrawCurve(const Coord &startPoint, const vector<Coord> &bends, const Coord &endPoint, const double width,
                           const unsigned int stippleType, const Color &startColor, const Color &endColor,
                           const bool arrow, const double arrowWidth, const double arrowHeight) {
-  if (bends.size()==0) {
+  if (bends.empty()) {
     glDrawLine(startPoint,endPoint,width,stippleType,startColor,endColor,arrow,arrowWidth,arrowHeight);
     return;
   }
@@ -94,7 +94,7 @@ void GlLines::glDrawBezierCurve(const Coord &startPoint,const vector<Coord> &ben
                                 unsigned int steps,const double width,const unsigned int stippleType,
                                 const Color &startColor,const Color &endColor,
                                 const bool arrow, const double arrowWidth, const double arrowHeight) {
-  if (bends.size()==0) {
+  if (bends.empty()) {
     glDrawLine(startPoint,endPoint,width,stippleType,startColor,endColor,arrow,arrowWidth,arrowHeight);
     return;
   }
@@ -137,7 +137,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
                                 unsigned int steps,const double width,const unsigned int stippleType,
                                 const Color &startColor,const Color &endColor,const bool arrow,const double arrowWidth,
                                 const double arrowHeight) {
-  if (bends.size()==0) {
+  if (bends.empty()) {
     glDrawLine(startPoint,endPoint,width,stippleType,startColor,endColor,arrow,arrowWidth,arrowHeight);
     return;
   }
@@ -285,7 +285,7 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &be
                                  unsigned int steps,const double width,const unsigned int stippleType,
                                  const Color &startColor,const Color &endColor,const bool arrow,const double arrowWidth,
                                  const double arrowHeight) {
-  if (bends.size()==0) {
+  if (bends.empty()) {
     glDrawLine(startPoint,endPoint,width,stippleType,startColor,endColor,arrow,arrowWidth,arrowHeight);
     return;
   }

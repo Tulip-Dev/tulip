@@ -25,13 +25,13 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/GlScene.h>
+#include <tulip/Graph.h>
 
 class QGLFramebufferObject;
 
 namespace tlp {
 
 class View;
-
 class GlCompositeHierarchyManager;
 
 /** @ingroup OpenGL
@@ -52,7 +52,7 @@ class GlCompositeHierarchyManager;
  * @see GlSimpleEntity
  *
  *
- * If you only want to visualise a graph, you can call the setGraph function
+ * If you only want to visualize a graph, you can call the setGraph function
  *
  *
  * After scene construction you can perform some operation on GlMainWidget :

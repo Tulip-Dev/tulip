@@ -20,6 +20,7 @@
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QComboBox>
+#include <QPainter>
 
 #include <tulip/ForEach.h>
 #include <tulip/VectorEditionWidget.h>

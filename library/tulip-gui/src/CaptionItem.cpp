@@ -21,6 +21,10 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/SizeProperty.h>
+#include <tulip/CaptionGraphicsItem.h>
+#include <tulip/View.h>
+
+#include <QtGui/QLinearGradient>
 
 using namespace std;
 
@@ -250,7 +254,7 @@ void CaptionItem::generateSizeCaption(CaptionType captionType) {
     }
   }
 
-  if(metricToSizeFiltered.size()==0) {
+  if(metricToSizeFiltered.empty()) {
     metricToSizeFiltered.push_back(pair<double,float>(minProp,0));
     metricToSizeFiltered.push_back(pair<double,float>(maxProp,0));
   }

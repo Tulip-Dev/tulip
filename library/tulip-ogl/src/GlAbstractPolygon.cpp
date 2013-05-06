@@ -212,7 +212,7 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
     // Expand vector
     if(filled) {
       normalArray.resize(size,normal);
-      assert(fillColors.size()!=0);
+      assert(!fillColors.empty());
 
       if(fillColors.size()!=1)
         fillColors.resize(size,fillColors.back());

@@ -17,13 +17,14 @@
  *
  */
 
-#include "tulip/SceneLayersModel.h"
+#include <tulip/SceneLayersModel.h>
 
 #include <QFont>
 #include <QVector>
 
 #include <tulip/GlScene.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlSceneObserver.h>
 
 using namespace tlp;
 

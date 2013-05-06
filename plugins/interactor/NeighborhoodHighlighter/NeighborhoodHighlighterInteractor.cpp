@@ -17,9 +17,6 @@
  *
  */
 
-#include "NeighborhoodHighlighterInteractor.h"
-#include "../../utils/ViewNames.h"
-
 #include <QCursor>
 #include <QEvent>
 #include <QThread>
@@ -42,6 +39,11 @@
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
+#include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GlLayer.h>
+
+#include "NeighborhoodHighlighterInteractor.h"
+#include "../../utils/ViewNames.h"
 
 #include <algorithm>
 #include <sstream>
@@ -49,9 +51,6 @@
 using namespace std;
 
 namespace tlp {
-
-const Color redColor(255,0,0);
-const Color greenColor(0,255,0);
 
 class GraphCompositeDrawVisitor : public GlSceneVisitor {
 
@@ -418,7 +417,7 @@ node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, 
   vector<SelectedEntity> selectedElements;
   glWidget->getScene()->selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, NULL, selectedElements);
 
-  if(selectedElements.size()!=0) {
+  if(!selectedElements.empty()) {
     n=node(selectedElements[0].getComplexEntityId());
   }
 
@@ -426,12 +425,13 @@ node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, 
 }
 
 bool NeighborhoodHighlighter::selectInAugmentedDisplayGraph(const int x, const int y, SelectedEntity &selectedEntity) {
-  GlGraphComposite *graphComposite = (GlGraphComposite *) glWidget->getScene()->getLayer("Main")->findGlEntity("graph");
-  glWidget->getScene()->getLayer("Main")->deleteGlEntity("graph");
-  glWidget->getScene()->getLayer("Main")->addGlEntity(glNeighborhoodGraph, "graph");
+  GlLayer *l = glWidget->getScene()->getLayer("Main");
+  GlGraphComposite *graphComposite = (GlGraphComposite *) l->findGlEntity("graph");
+  l->deleteGlEntity("graph");
+  l->addGlEntity(glNeighborhoodGraph, "graph");
   bool ret = glWidget->pickNodesEdges(x, y, selectedEntity);
-  glWidget->getScene()->getLayer("Main")->deleteGlEntity("graph");
-  glWidget->getScene()->getLayer("Main")->addGlEntity(graphComposite, "graph");
+  l->deleteGlEntity("graph");
+  l->addGlEntity(graphComposite, "graph");
   return ret;
 }
 

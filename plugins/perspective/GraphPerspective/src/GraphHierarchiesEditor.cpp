@@ -156,7 +156,7 @@ void GraphHierarchiesEditor::addInducedSubGraph() {
 }
 
 void GraphHierarchiesEditor::delGraph() {
-  if (_contextGraph == NULL && _ui->hierarchiesTree->selectionModel()->selectedRows(0).size()>0) {
+    if (_contextGraph == NULL && !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
     _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
   }
 
@@ -180,7 +180,7 @@ void GraphHierarchiesEditor::delGraph() {
 }
 
 void GraphHierarchiesEditor::delAllGraph() {
-  if (_contextGraph == NULL && _ui->hierarchiesTree->selectionModel()->selectedRows(0).size()>0) {
+    if (_contextGraph == NULL && !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
     _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
   }
 
@@ -209,7 +209,7 @@ void GraphHierarchiesEditor::createPanel() {
   if (sender() == _ui->addPanelButton) {
     QModelIndexList selectedGraphs = _ui->hierarchiesTree->selectionModel()->selectedRows();
 
-    if (selectedGraphs.size()>0)
+    if (!selectedGraphs.empty())
       g = _ui->hierarchiesTree->model()->data(selectedGraphs[0],tlp::TulipModel::GraphRole).value<tlp::Graph*>();
   }
 

@@ -16,17 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/ParameterListModel.h"
-
-#include <QFont>
-#include <QColor>
-#include <QDebug>
-
+#include <tulip/ParameterListModel.h>
 #include <tulip/ForEach.h>
-#include <tulip/Color.h>
-#include <tulip/TlpQtTools.h>
+#include <tulip/TulipMetaTypes.h>
 
-#include <algorithm>
+#include <QColor>
+#include <QModelIndex>
 
 namespace tlp {
 

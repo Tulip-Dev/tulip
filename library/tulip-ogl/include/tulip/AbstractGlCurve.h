@@ -21,12 +21,29 @@
 #ifndef ABSTRACTGLCURVE_H
 #define ABSTRACTGLCURVE_H
 
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+# if defined(__WIN32__)
+# include <GL/glext.h>
+# endif
+#endif
+
 #include <tulip/GlSimpleEntity.h>
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
-#include <tulip/GlShaderProgram.h>
 
 namespace tlp {
+
+class GlShaderProgram;
+class GlShader;
 
 class TLP_GL_SCOPE AbstractGlCurve : public GlSimpleEntity {
 
@@ -94,9 +111,9 @@ public :
 
 protected:
 
-  virtual void setCurveVertexShaderRenderingSpecificParameters() {};
+  virtual void setCurveVertexShaderRenderingSpecificParameters() {}
 
-  virtual void cleanupAfterCurveVertexShaderRendering() {};
+  virtual void cleanupAfterCurveVertexShaderRendering() {}
 
   virtual Coord computeCurvePointOnCPU(const std::vector<Coord> &controlPoints, float t) = 0;
 

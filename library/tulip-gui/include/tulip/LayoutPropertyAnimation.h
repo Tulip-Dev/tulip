@@ -22,7 +22,8 @@
 #define LAYOUTPROPERTYANIMATION_H_
 
 #include <tulip/Coord.h>
-#include "tulip/CachedPropertyAnimation.h"
+#include <tulip/CachedPropertyAnimation.h>
+
 #include <vector>
 
 namespace tlp {

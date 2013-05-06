@@ -17,9 +17,12 @@
  *
  */
 
-#include "tulip/SimpleStringsListSelectionWidget.h"
-#include "tulip/DoubleStringsListSelectionWidget.h"
-#include "tulip/StringsListSelectionWidget.h"
+#include <tulip/SimpleStringsListSelectionWidget.h>
+#include <tulip/DoubleStringsListSelectionWidget.h>
+#include <tulip/StringsListSelectionWidget.h>
+
+#include <QtGui/QLayout>
+#include <QtGui/QVBoxLayout>
 
 using namespace std;
 

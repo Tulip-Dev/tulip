@@ -18,14 +18,12 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#include <QObject>
 #include <QNetworkAccessManager>
 #include <QUrl>
 #include <QMap>
 
 #include <tulip/tulipconf.h>
 
-class QNetworkReply;
 class QNetworkReply;
 
 class TLP_QT_SCOPE DownloadManager: public QNetworkAccessManager {

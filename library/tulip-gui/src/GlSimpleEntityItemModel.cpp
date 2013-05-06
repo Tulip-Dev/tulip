@@ -17,7 +17,8 @@
  *
  */
 
-#include "tulip/GlSimpleEntityItemModel.h"
+#include <tulip/GlSimpleEntityItemModel.h>
+#include <tulip/GlSimpleEntity.h>
 
 #include <QStringList>
 #include <QFont>

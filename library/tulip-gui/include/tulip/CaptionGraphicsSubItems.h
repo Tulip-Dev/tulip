@@ -21,14 +21,10 @@
 #ifndef CAPTIONGRAPHICSSUBITEMS_H
 #define CAPTIONGRAPHICSSUBITEMS_H
 
+#include <QGraphicsPixmapItem>
+#include <QObject>
 
-#include <QGraphicsItemGroup>
-#include <QComboBox>
-#include <QGLFramebufferObject>
-#include <QGraphicsSceneMouseEvent>
-
-#include <tulip/View.h>
-#include <tulip/Color.h>
+class QGradient;
 
 namespace tlp {
 
@@ -77,11 +73,7 @@ class SelectionTextItem : public QGraphicsTextItem {
 
 public :
 
-  SelectionTextItem() {
-    QFont f=font();
-    f.setBold(true);
-    setFont(f);
-  }
+  SelectionTextItem();
 
 protected :
 

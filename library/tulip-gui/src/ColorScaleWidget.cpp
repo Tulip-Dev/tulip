@@ -16,25 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
-
-/*
- * ColorScaleWidget.cpp
- *
- *  Created on: 2 avr. 2010
- *      Author: Jonathan Dubois
- *       Email: jonathan.dubois@labri.fr
- *
- *  This program is free software; you can redistribute it and/or modify  *
- *  it under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- */
-
-#include "tulip/ColorScaleWidget.h"
+#include <tulip/ColorScaleWidget.h>
+#include <tulip/ColorScale.h>
 
 #include <QPaintEvent>
-
-#include <tulip/ColorScale.h>
+#include <QPainter>
 
 using namespace tlp;
 using namespace std;

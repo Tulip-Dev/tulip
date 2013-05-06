@@ -21,14 +21,11 @@
 #ifndef WORKSPACE_H
 #define WORKSPACE_H
 
-#include <QMap>
-#include <QPair>
 #include <QWidget>
-#include <QAbstractItemModel>
+#include <QMap>
+#include <QVector>
 
 #include <tulip/tulipconf.h>
-#include <tulip/DataSet.h>
-#include <tulip/WorkspaceExposeWidget.h>
 
 class PlaceHolderWidget;
 
@@ -38,6 +35,8 @@ class Workspace;
 
 class QPushButton;
 class QLabel;
+class QMimeData;
+
 namespace tlp {
 class PluginProgress;
 class View;
@@ -58,9 +57,9 @@ class TLP_QT_SCOPE Workspace: public QWidget {
 
   QMap<QWidget*,QVector<PlaceHolderWidget*> > _modeToSlots;
   QMap<QWidget*,QWidget*> _modeSwitches;
-  tlp::GraphHierarchiesModel* _model;
+  GraphHierarchiesModel* _model;
 
-  QString panelTitle(tlp::WorkspacePanel*) const;
+  QString panelTitle(WorkspacePanel*) const;
 
   QLabel* _pageCountLabel;
   bool _autoCenterViews;

@@ -369,19 +369,19 @@ bool Solver::constraintGraphIsCyclic(const unsigned n, Variable* const vs[]) {
     }
   }
 
-  while(localGraph.size()>0) {
+  while(!localGraph.empty()) {
     node *u=NULL;
     vector<node*>::iterator i=localGraph.begin();
 
     for(; i!=localGraph.end(); ++i) {
       u=*i;
 
-      if(u->in.size()==0) {
+      if(u->in.empty()) {
         break;
       }
     }
 
-    if(i==localGraph.end() && localGraph.size()>0) {
+    if(i==localGraph.end() && !localGraph.empty()) {
       //cycle found!
       return true;
     }
@@ -439,19 +439,19 @@ bool Solver::blockGraphIsCyclic() {
     }
   }
 
-  while(localGraph.size()>0) {
+  while(!localGraph.empty()) {
     node *u=NULL;
     vector<node*>::iterator i=localGraph.begin();
 
     for(; i!=localGraph.end(); ++i) {
       u=*i;
 
-      if(u->in.size()==0) {
+      if(u->in.empty()) {
         break;
       }
     }
 
-    if(i==localGraph.end() && localGraph.size()>0) {
+    if(i==localGraph.end() && !localGraph.empty()) {
       //cycle found!
       return true;
     }

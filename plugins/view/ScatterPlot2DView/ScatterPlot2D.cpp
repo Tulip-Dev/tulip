@@ -28,6 +28,7 @@
 #include <tulip/GlProgressBar.h>
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlTextureManager.h>
 
 #include "ScatterPlot2D.h"
 

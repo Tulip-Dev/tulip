@@ -1859,7 +1859,7 @@ yyreduce:
     (yyval.attr) = dotyy->nodeAttr;
 
     if( (yyval.created) ) {
-      if( !((yyval.attr).mask & DOT_ATTR::LABEL) || (yyval.attr).label.size()==0 )
+      if( !((yyval.attr).mask & DOT_ATTR::LABEL) || (yyval.attr).label.empty() )
         (yyval.attr).setValue( "label", (yyval.s) );
 
       dotyy->SetupNode( (yyval.nodeA), (yyval.attr) );

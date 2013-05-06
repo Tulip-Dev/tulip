@@ -21,16 +21,19 @@
 #ifndef GLOVERVIEWGRAPHICSITEM_H
 #define GLOVERVIEWGRAPHICSITEM_H
 
+#include <tulip/tulipconf.h>
+#include <tulip/Camera.h>
 
 #include <QGraphicsPixmapItem>
 
-#include <QGLFramebufferObject>
+#include <set>
 
-#include <tulip/GlScene.h>
+class QGLFramebufferObject;
 
 namespace tlp {
 
 class GlMainView;
+class GlScene;
 
 class TLP_QT_SCOPE GlOverviewGraphicsItem : public QObject, public QGraphicsRectItem {
 
@@ -42,10 +45,10 @@ public:
   ~GlOverviewGraphicsItem();
 
   void setSize(unsigned int width, unsigned int height);
-  unsigned int getWidth() {
+  inline unsigned int getWidth() {
     return width;
   }
-  unsigned int getHeight() {
+  inline unsigned int getHeight() {
     return height;
   }
 

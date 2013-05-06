@@ -22,6 +22,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/View.h>
 #include <tulip/StringsListSelectionWidget.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 #include "PathFinderComponent.h"
 #include "PathFinderConfigurationWidget.h"

@@ -21,10 +21,10 @@
 #ifndef PARAMETERLISTMODEL_H
 #define PARAMETERLISTMODEL_H
 
-#include "tulip/TulipModel.h"
+#include <tulip/TulipModel.h>
 #include <tulip/WithParameter.h>
 #include <tulip/DataSet.h>
-#include <tulip/TulipMetaTypes.h>
+
 
 #include <QVector>
 

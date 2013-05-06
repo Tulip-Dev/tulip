@@ -20,6 +20,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/MouseBoxZoomer.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 #include "../utils/StandardInteractorPriority.h"
 #include "../utils/ViewNames.h"

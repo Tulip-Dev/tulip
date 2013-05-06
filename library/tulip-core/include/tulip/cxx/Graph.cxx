@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/PluginProgress.h>
+#include <tulip/PropertyInterface.h>
 
 //================================================================================
 template<typename ATTRIBUTETYPE>

@@ -23,9 +23,12 @@
 
 #include <QPushButton>
 
-#include <tulip/ColorScaleConfigDialog.h>
+
+#include <tulip/ColorScale.h>
 
 namespace tlp {
+
+class ColorScaleConfigDialog;
 
 class TLP_QT_SCOPE ColorScaleButton: public QPushButton {
   Q_OBJECT

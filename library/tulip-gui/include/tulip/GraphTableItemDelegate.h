@@ -18,15 +18,13 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef TULIPTABLEWIDGETITEMDELEGATE_H_
 #define TULIPTABLEWIDGETITEMDELEGATE_H_
 
-#include <QStyledItemDelegate>
-
 #include <tulip/tulipconf.h>
-#include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipItemDelegate.h>
+
+class QStyleOptionViewItem;
 
 /**
 * @brief QItemDelegate to display and edit data from a GraphTableModel in the Qt model/view architecture.

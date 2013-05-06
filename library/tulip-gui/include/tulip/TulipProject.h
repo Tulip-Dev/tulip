@@ -28,11 +28,12 @@
 #include <QIODevice>
 
 #include <tulip/tulipconf.h>
-#include <tulip/PluginProgress.h>
 
 #include <fstream>
 
 namespace tlp {
+
+class PluginProgress;
 
 /**
   @ingroup Plugins

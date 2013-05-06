@@ -22,14 +22,16 @@
 #include "MouseMagnifyingGlass.h"
 #include "../../utils/ViewNames.h"
 
-#include <QMouseEvent>
-#include <QGLFramebufferObject>
-
 #include <tulip/GlRect.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/GlTools.h>
+#include <tulip/NodeLinkDiagramComponent.h>
+
+#include <QGLFramebufferObject>
+#include <QEvent>
+#include <QMouseEvent>
 
 #include <sstream>
 

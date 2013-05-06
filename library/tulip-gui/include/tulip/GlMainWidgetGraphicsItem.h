@@ -31,14 +31,12 @@
 
 #include <QGraphicsObject>
 
+
 #include <tulip/tulipconf.h>
 
 namespace tlp {
 class GlMainWidget;
-}
 
-
-namespace tlp {
 class TLP_QT_SCOPE GlMainWidgetGraphicsItem : public QGraphicsObject {
   Q_OBJECT
 public:

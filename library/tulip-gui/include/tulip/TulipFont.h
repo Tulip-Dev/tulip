@@ -23,9 +23,7 @@
 #define TULIPFONT_H
 
 #include <QObject>
-#include <QString>
 #include <QMap>
-#include <QList>
 
 #include <tulip/tulipconf.h>
 
@@ -59,7 +57,7 @@ public:
   explicit TulipFont(const QString fontName, QObject *parent = NULL);
   TulipFont(const TulipFont&);
 
-  TulipFont& operator =(const TulipFont&);
+  TulipFont& operator=(const TulipFont&);
   bool isBold() const;
   bool isItalic() const;
   QString fontName() const;

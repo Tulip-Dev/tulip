@@ -21,13 +21,8 @@
 #ifndef TULIPMETATYPES_H
 #define TULIPMETATYPES_H
 
-#include <QFileInfo>
-#include <QVariant>
-#include <QStringList>
-
 #include <tulip/DataSet.h>
 #include <tulip/Graph.h>
-#include <tulip/DataSet.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
@@ -43,9 +38,6 @@
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlLabel.h>
 #include <tulip/TulipFont.h>
-#include <tulip/PropertyTypes.h>
-
-#include <vector>
 
 // Helper class for filesystem types handling
 struct TulipFileDescriptor {

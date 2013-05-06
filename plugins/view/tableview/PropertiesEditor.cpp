@@ -34,6 +34,9 @@
 #include <tulip/CopyPropertyDialog.h>
 #include <tulip/PropertyCreationDialog.h>
 #include <tulip/TulipItemDelegate.h>
+#include <tulip/StringProperty.h>
+#include <tulip/BooleanProperty.h>
+#include <tulip/TulipMetaTypes.h>
 
 Q_DECLARE_METATYPE(Qt::CheckState)
 

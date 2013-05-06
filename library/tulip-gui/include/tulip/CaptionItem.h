@@ -23,13 +23,20 @@
 
 #include <QObject>
 
-#include <tulip/View.h>
-#include <tulip/CaptionGraphicsItem.h>
-#include <tulip/DoubleProperty.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/SizeProperty.h>
+#include <tulip/Color.h>
+#include <tulip/Observable.h>
+
+class QGradient;
 
 namespace tlp {
+
+class View;
+class CaptionGraphicsBackgroundItem;
+class CaptionGraphicsItem;
+class Graph;
+class ColorProperty;
+class DoubleProperty;
+class SizeProperty;
 
 class CaptionItem : public QObject, public Observable {
 

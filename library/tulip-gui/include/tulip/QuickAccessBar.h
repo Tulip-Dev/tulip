@@ -26,7 +26,6 @@
 
 #include <tulip/CaptionItem.h>
 #include <tulip/tulipconf.h>
-#include <tulip/Color.h>
 
 class QGraphicsItem;
 
@@ -41,27 +40,29 @@ class GlGraphInputData;
 class GlScene;
 class TulipItemDelegate;
 class ColorProperty;
+class Color;
+class PropertyInterface;
 
 class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   Q_OBJECT
 
   Ui::QuickAccessBar* _ui;
   QGraphicsItem *_quickAccessBarItem;
-  tlp::GlMainView* _mainView;
-  tlp::TulipItemDelegate* delegate;
+  GlMainView* _mainView;
+  TulipItemDelegate* delegate;
   bool _resetting;
-  tlp::GlGraphInputData* inputData() const;
-  tlp::GlGraphRenderingParameters* renderingParameters() const;
-  tlp::GlScene* scene() const;
+  GlGraphInputData* inputData() const;
+  GlGraphRenderingParameters* renderingParameters() const;
+  GlScene* scene() const;
   double _oldFontScale;
   double _oldNodeScale;
   bool _captionsInitialized;
   CaptionItem *_captions[4];
   void updateFontButtonStyle();
   void showHideCaption(CaptionItem::CaptionType captionType);
-  void setAllValues(unsigned int eltType, tlp::PropertyInterface* prop);
-  void setAllColorValues(unsigned int eltType, tlp::ColorProperty* prop,
-                         tlp::Color color);
+  void setAllValues(unsigned int eltType, PropertyInterface* prop);
+  void setAllColorValues(unsigned int eltType, ColorProperty* prop,
+                         const Color &color);
 
 public:
   explicit QuickAccessBar(QGraphicsItem *quickAccessBarItem,QWidget *parent = 0);

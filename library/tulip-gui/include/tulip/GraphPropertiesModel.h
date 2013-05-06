@@ -25,8 +25,6 @@
 #include <tulip/TulipModel.h>
 #include <tulip/Observable.h>
 #include <tulip/Graph.h>
-#include <tulip/PropertyInterface.h>
-#include <tulip/TlpQtTools.h>
 
 #include <QFont>
 #include <QIcon>
@@ -48,11 +46,7 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
 public:
   explicit GraphPropertiesModel(tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
   explicit GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
-  virtual ~GraphPropertiesModel() {
-#ifndef NDEBUG
-    qDebug() << "Deleting GraphPropertiesModel<" << typeid(PROPTYPE).name() << "*>";
-#endif
-  }
+  virtual ~GraphPropertiesModel() {}
 
   tlp::Graph* graph() const {
     return _graph;

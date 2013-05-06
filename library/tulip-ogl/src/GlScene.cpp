@@ -36,6 +36,7 @@
 #include <tulip/GlSVGFeedBackBuilder.h>
 #include <tulip/GlEPSFeedBackBuilder.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlSceneObserver.h>
 
 using namespace std;
 
@@ -822,7 +823,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
     delete selectLODCalculator;
 
   glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
-  return (selectedEntities.size()!=0);
+  return (!selectedEntities.empty());
 }
 //====================================================
 void GlScene::outputSVG(unsigned int size,const string& filename) {

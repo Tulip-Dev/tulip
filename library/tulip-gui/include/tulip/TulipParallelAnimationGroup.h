@@ -23,7 +23,7 @@
 
 #include <QParallelAnimationGroup>
 
-#include "tulip/tulipconf.h"
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 

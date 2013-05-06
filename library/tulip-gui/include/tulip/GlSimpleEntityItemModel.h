@@ -24,9 +24,11 @@
 
 #include <QAbstractItemModel>
 
-#include <tulip/GlSimpleEntity.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
+
+class GlSimpleEntity;
 
 class TLP_QT_SCOPE GlSimpleEntityItemModel : public QAbstractItemModel {
   Q_OBJECT

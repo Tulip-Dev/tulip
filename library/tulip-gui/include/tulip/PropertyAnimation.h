@@ -21,7 +21,7 @@
 #ifndef PROPERTYANIMATION_H_
 #define PROPERTYANIMATION_H_
 
-#include "tulip/Animation.h"
+#include <tulip/Animation.h>
 #include <tulip/BooleanProperty.h>
 
 
@@ -31,7 +31,7 @@ template<typename PropType, typename NodeType, typename EdgeType>
 class PropertyAnimation: public Animation {
 public:
   PropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out,
-                    tlp::BooleanProperty *selection = 0, int frameCount = 1, bool computeNodes = true, bool computeEdges = true, QObject* parent=NULL);
+                    tlp::BooleanProperty *selection = NULL, int frameCount = 1, bool computeNodes = true, bool computeEdges = true, QObject* parent=NULL);
 
   virtual ~PropertyAnimation();
   virtual void frameChanged(int f);

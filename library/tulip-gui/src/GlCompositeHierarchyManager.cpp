@@ -210,7 +210,7 @@ DataSet GlCompositeHierarchyManager::getData() {
   return set;
 }
 
-void GlCompositeHierarchyManager::setData(DataSet dataSet) {
+void GlCompositeHierarchyManager::setData(const DataSet &dataSet) {
   for(std::map<tlp::Graph*, std::pair<tlp::GlComposite*, tlp::GlConvexGraphHull*> >::const_iterator it = _graphsComposites.begin(); it != _graphsComposites.end(); ++it) {
     stringstream graph;
     graph << it->first->getId();

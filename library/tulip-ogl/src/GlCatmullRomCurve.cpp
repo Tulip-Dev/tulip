@@ -24,6 +24,7 @@
 #include <tulip/GlCatmullRomCurve.h>
 #include <tulip/GlBezierCurve.h>
 #include <tulip/ParametricCurves.h>
+#include <tulip/GlShaderProgram.h>
 
 using namespace std;
 

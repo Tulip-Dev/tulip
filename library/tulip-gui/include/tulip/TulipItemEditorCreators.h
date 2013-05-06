@@ -21,14 +21,16 @@
 #ifndef TULIPITEMEDITORCREATORS_H
 #define TULIPITEMEDITORCREATORS_H
 
-#include <QObject>
-#include <QItemEditorCreatorBase>
-#include <QStyleOptionViewItem>
-#include <QPainter>
-
 #include <tulip/tulipconf.h>
 #include <tulip/PropertyTypes.h>
-#include <tulip/TulipMetaTypes.h>
+
+#include <QVariant>
+#include <QSize>
+
+class QWidget;
+class QPainter;
+class QStyleOptionViewItem;
+class QModelIndex;
 
 namespace tlp {
 
@@ -54,8 +56,7 @@ template<typename T>
 class TLP_QT_SCOPE StringDisplayEditorCreator: public TulipItemEditorCreator {
 public:
   inline QString displayText(const QVariant& v) const {
-    QString text = QString::fromUtf8(T::toString(v.value<typename T::RealType>()).c_str());
-    return text;
+    return QString::fromUtf8(T::toString(v.value<typename T::RealType>()).c_str());
   }
 };
 

@@ -26,6 +26,9 @@
 #include <QMenu>
 
 class QGraphicsProxyWidget;
+class QMenu;
+class QAction;
+class QRectF;
 
 namespace tlp {
 class GlOverviewGraphicsItem;

@@ -18,7 +18,6 @@
  */
 
 #include "TableView.h"
-
 #include "ui_TableView.h"
 #include "PropertiesEditor.h"
 
@@ -26,11 +25,14 @@
 #include <tulip/GraphModel.h>
 #include <tulip/GraphTableItemDelegate.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/StringProperty.h>
+#include <tulip/TulipMetaTypes.h>
+
+#include <QResizeEvent>
+#include <QGraphicsView>
+#include <QMenu>
 #include <QGraphicsItem>
 #include <QGraphicsProxyWidget>
-#include <QGraphicsView>
-#include <QApplication>
-#include <QMenu>
 
 using namespace tlp;
 

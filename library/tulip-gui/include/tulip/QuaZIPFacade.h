@@ -21,13 +21,13 @@
 #ifndef QUAZIPFACADE_H
 #define QUAZIPFACADE_H
 
-#include <QString>
-
 #include <tulip/tulipconf.h>
 
 namespace tlp {
 class PluginProgress;
 }
+
+class QString;
 
 /**
   @brief This class is a facade to the QuaZIP libraries features.

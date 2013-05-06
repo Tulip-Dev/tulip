@@ -18,18 +18,15 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef MOUSEOBJECT_H
 #define MOUSEOBJECT_H
 
-#include <QCursor>
-
-#include <tulip/tulipconf.h>
 #include <tulip/InteractorComposite.h>
-#include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/Camera.h>
 
 namespace tlp {
+
+class NodeLinkDiagramComponent;
 
 /** An interactor class allowing to zoom and pan using the mouse wheel.
  */
