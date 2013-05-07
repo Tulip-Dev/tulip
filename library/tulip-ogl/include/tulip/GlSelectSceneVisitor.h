@@ -21,13 +21,7 @@
 #ifndef Tulip_GLSELECTSCENEVISITOR_H
 #define Tulip_GLSELECTSCENEVISITOR_H
 
-#include <vector>
-#include <utility>
-
 #include <tulip/GlSceneVisitor.h>
-#include <tulip/GlNode.h>
-#include <tulip/GlEdge.h>
-#include <tulip/GlLODCalculator.h>
 
 namespace tlp {
 
@@ -36,6 +30,9 @@ enum SelectionFlag {
   SelectNodes=2,
   SelectEdges=4
 };
+
+class GlGraphInputData;
+class GlLODCalculator;
 
 /**
  * This visitor is use when we want to select an entity in scene
@@ -47,8 +44,7 @@ public:
   /**
    * Constructor with SelectionFlac (SelectSimpleEntity, SelectNodes and SelectEdges), GlGraphInputData and GlLODCalculator
    */
-  GlSelectSceneVisitor(SelectionFlag flag,GlGraphInputData* inputData,GlLODCalculator *calculator)
-    :selectionFlag(flag),inputData(inputData),calculator(calculator) {}
+  GlSelectSceneVisitor(SelectionFlag flag,GlGraphInputData* inputData,GlLODCalculator *calculator);
 
   /**
    * Visit a simple entity

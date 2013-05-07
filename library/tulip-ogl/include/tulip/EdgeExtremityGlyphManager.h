@@ -23,6 +23,7 @@
 #define EDGEEXTREMITYGLYPHMANAGER_H_
 
 #include <string>
+
 #include <tulip/tulipconf.h>
 #include <tulip/MutableContainer.h>
 

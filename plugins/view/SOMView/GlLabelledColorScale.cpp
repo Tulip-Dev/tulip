@@ -18,19 +18,24 @@
  */
 
 #include "GlLabelledColorScale.h"
+
 #include <tulip/GlRect.h>
+#include <tulip/GlPolyQuad.h>
+
+#include <sstream>
+
 using namespace std;
 using namespace tlp;
 
-GlLabelledColorScale::GlLabelledColorScale(tlp::Coord position, tlp::Size size,
-    tlp::ColorScale* colorScale, double minValue, double maxValue, bool colorScaleAtTop) :
+GlLabelledColorScale::GlLabelledColorScale(Coord position, Size size,
+    ColorScale* colorScale, double minValue, double maxValue, bool colorScaleAtTop) :
   GlComposite(), position(position), size(size), minValue(minValue), maxValue(maxValue),
   colorScaleAtTop(colorScaleAtTop) {
 
   buildComposite(colorScale);
 }
 
-void GlLabelledColorScale::buildComposite(tlp::ColorScale* colorScale) {
+void GlLabelledColorScale::buildComposite(ColorScale* colorScale) {
   float labelHeightSize = size.getH() * 0.5;
   float scaleLength = size.getW();
   float scaleThickness = (1 - 0.5) * size.getH();

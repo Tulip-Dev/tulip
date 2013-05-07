@@ -22,11 +22,9 @@
 #ifndef Tulip_GLSCENEOBSERVER_H
 #define Tulip_GLSCENEOBSERVER_H
 
-#include <set>
 #include <string>
 
 #include <tulip/tulipconf.h>
-
 #include <tulip/Observable.h>
 
 namespace tlp {

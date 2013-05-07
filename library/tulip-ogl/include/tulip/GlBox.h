@@ -20,12 +20,19 @@
 #ifndef Tulip_GLBOX_H
 #define Tulip_GLBOX_H
 
-#include <tulip/Coord.h>
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
 #include <tulip/Color.h>
 #include <tulip/Size.h>
-
 #include <tulip/GlSimpleEntity.h>
-#include <tulip/GlTextureManager.h>
 
 namespace tlp {
 /**

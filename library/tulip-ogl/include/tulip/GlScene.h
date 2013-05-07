@@ -21,15 +21,17 @@
 #define Tulip_GLSCENE_H
 
 #include <tulip/tulipconf.h>
-
-//#include <tulip/Graph.h>
 #include <tulip/GlLODCalculator.h>
-//#include <tulip/GlSceneObserver.h>
 #include <tulip/GlLayer.h>
-//#include <tulip/GlDisplayListManager.h>
-//#include <tulip/GlTextureManager.h>
+#include <tulip/Color.h>
+#include <tulip/Observable.h>
 
 namespace tlp {
+
+class GlSimpleEntity;
+class Graph;
+class GlLODCalculator;
+class GlGraphComposite;
 
 /**
  * @ingroup OpenGL
@@ -395,7 +397,7 @@ public:
    */
   void clearLayersList() {
     for(std::vector<std::pair<std::string,GlLayer*> >::iterator it=layersList.begin(); it!=layersList.end(); ++it)
-      delete (*it).second;
+      delete it->second;
 
     layersList.clear();
   }

@@ -24,12 +24,9 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <vector>
-
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/tulipconf.h>
-
 #include <tulip/GlSimpleEntity.h>
 
 namespace tlp {

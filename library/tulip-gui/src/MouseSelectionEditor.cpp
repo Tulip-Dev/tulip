@@ -17,10 +17,10 @@
  *
  */
 
-#include <tulip/MouseSelectionEditor.h>
-
 #include <QMouseEvent>
 
+#include <tulip/MouseSelectionEditor.h>
+#include <tulip/Camera.h>
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/BooleanProperty.h>

@@ -23,11 +23,13 @@
 #ifndef DOXYGEN_NOTFOR_USER
 
 #include <set>
+#include <string>
 
-#include <tulip/PluginLoader.h>
 #include <tulip/tulipconf.h>
 
 namespace tlp {
+
+class PluginLoader;
 
 /**
  * @ingroup Plugins

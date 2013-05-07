@@ -23,7 +23,7 @@
 
 #include <tulip/GlGraphRenderer.h>
 
-#include <vector>
+#include <map>
 
 namespace tlp {
 

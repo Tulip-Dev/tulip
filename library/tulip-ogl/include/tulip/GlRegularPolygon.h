@@ -21,6 +21,7 @@
 #define GLREGULARPOLYGON_H
 
 #include <tulip/GlPolygon.h>
+#include <tulip/Size.h>
 
 namespace tlp {
 

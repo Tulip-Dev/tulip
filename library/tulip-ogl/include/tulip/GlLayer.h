@@ -21,11 +21,6 @@
 #define Tulip_GLLAYER_H
 
 #include <tulip/tulipconf.h>
-
-#include <tulip/Matrix.h>
-
-#include <tulip/GlEntity.h>
-#include <tulip/Camera.h>
 #include <tulip/GlComposite.h>
 
 namespace tlp {
@@ -236,10 +231,7 @@ protected :
   /**
    * Set the scene where the layer is
    */
-  void setScene(GlScene *scene) {
-    this->scene=scene;
-    camera->setScene(scene);
-  }
+  void setScene(GlScene *scene);
 
 private:
 

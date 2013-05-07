@@ -25,7 +25,6 @@
 #include <tulip/tulipconf.h>
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
-#include <tulip/Size.h>
 #include <tulip/GlSimpleEntity.h>
 
 #include <vector>

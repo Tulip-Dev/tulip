@@ -35,6 +35,7 @@
 
 #include <set>
 #include <map>
+#include <string>
 
 namespace tlp {
 

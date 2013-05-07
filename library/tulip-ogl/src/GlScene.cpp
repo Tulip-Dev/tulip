@@ -17,15 +17,15 @@
  *
  */
 #include <GL/glew.h>
+
 #include <algorithm>
-#include <iostream>
 #include <cstdlib>
 #include <climits>
 #include <cstdio>
 
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
-
+#include <tulip/GlXMLTools.h>
 #include <tulip/GlLODSceneVisitor.h>
 #include <tulip/GlCPULODCalculator.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>

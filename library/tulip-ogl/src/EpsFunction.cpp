@@ -26,7 +26,7 @@
 using namespace tlp;
 
 //====================================================
-void tlp::Line(float x1,float y1,float z1,float x2, float y2 ,  float z2, Color C1, Color C2) {
+void tlp::Line(float x1, float y1, float z1, float x2, float y2 ,  float z2, Color &C1, Color &C2) {
   glBegin(GL_LINES);
   setColor(C1);
   glVertex3f(x1, y1, z1);

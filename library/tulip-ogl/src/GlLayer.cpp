@@ -17,11 +17,12 @@
  *
  */
 #include <tulip/GlLayer.h>
-
+#include <tulip/GlXMLTools.h>
 #include <tulip/Camera.h>
 #include <tulip/GlSceneVisitor.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlGraphComposite.h>
+
 
 using namespace std;
 
@@ -42,6 +43,11 @@ GlLayer::~GlLayer() {
     delete camera;
 
   composite.removeLayerParent(this);
+}
+
+void GlLayer::setScene(GlScene *scene) {
+  this->scene=scene;
+  camera->setScene(scene);
 }
 
 void GlLayer::setCamera(Camera* camera) {

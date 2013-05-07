@@ -23,13 +23,24 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 //====================================================
 
-#include <stdio.h>
-#include <tulip/Color.h>
-#include <tulip/OpenGlConfigManager.h>
+#include <cstdio>
+
+
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 namespace tlp {
 
-void Line(float x1,float y1,float z1,float x2, float y2 ,  float z2, Color C1, Color C2);
+class Color;
+
+void Line(float x1,float y1,float z1,float x2, float y2 ,  float z2, Color& C1, Color& C2);
 void Rect(float x, float y , float z, float w , float h);
 GLfloat *spewPrimitiveEPS(FILE * file, GLfloat * loc);
 void spewUnsortedFeedback(FILE * file, GLint size, GLfloat * buffer);

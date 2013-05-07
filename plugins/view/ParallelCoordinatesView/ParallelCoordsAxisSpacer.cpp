@@ -18,6 +18,7 @@
  */
 
 #include <tulip/GlLine.h>
+#include <tulip/Camera.h>
 
 #include "ParallelCoordsAxisSpacer.h"
 #include "ParallelTools.h"

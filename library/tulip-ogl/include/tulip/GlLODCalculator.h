@@ -22,11 +22,9 @@
 #define Tulip_GLLODCALCULATOR_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/tulipconf.h>
-
-#include <tulip/Matrix.h>
-#include <tulip/Vector.h>
 #include <tulip/BoundingBox.h>
+
+#include <vector>
 
 namespace tlp {
 

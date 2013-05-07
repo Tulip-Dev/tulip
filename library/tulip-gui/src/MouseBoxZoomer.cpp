@@ -17,8 +17,6 @@
  *
  */
 
-#include "tulip/MouseBoxZoomer.h"
-
 #include <QMouseEvent>
 
 #include <tulip/Graph.h>
@@ -28,8 +26,20 @@
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/Camera.h>
+#include <tulip/MouseBoxZoomer.h>
 
-#include <iostream>
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
 
 using namespace std;
 using namespace tlp;

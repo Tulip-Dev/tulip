@@ -30,6 +30,7 @@
 #include <tulip/GlPentagon.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Graph.h>
+#include <tulip/GlGraphInputData.h>
 
 using namespace std;
 using namespace tlp;

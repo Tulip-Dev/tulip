@@ -28,6 +28,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/GlTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include <QGLFramebufferObject>
 #include <QEvent>

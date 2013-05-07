@@ -19,9 +19,10 @@
 #include <GL/glew.h>
 
 #include <tulip/GlBox.h>
-
-#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlXMLTools.h>
 #include <tulip/GlTools.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 

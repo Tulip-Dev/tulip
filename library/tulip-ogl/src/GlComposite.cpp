@@ -21,6 +21,7 @@
 #include <tulip/GlLayer.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlXMLTools.h>
 
 using namespace std;
 

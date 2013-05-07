@@ -17,7 +17,7 @@
  *
  */
 #include <tulip/GlEdge.h>
-
+#include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -45,6 +45,9 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlLabel.h>
 #include <tulip/ParametricCurves.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/OpenGlConfigManager.h>
+
 
 tlp::GlLabel* tlp::GlEdge::label=0;
 bool tlp::GlEdge::haveToComputeEdgeWidthBaseLod=true;

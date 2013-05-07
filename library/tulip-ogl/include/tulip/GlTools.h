@@ -21,14 +21,26 @@
 #ifndef GLTOOLS_H
 #define GLTOOLS_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
-#include <tulip/OpenGlConfigManager.h>
+#include <tulip/tulipconf.h>
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
 #include <tulip/Matrix.h>
-#include <tulip/BoundingBox.h>
+
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 namespace tlp {
+
+class BoundingBox;
+
 typedef Matrix<float, 4> MatrixGL;
 TLP_GL_SCOPE void glTest(const std::string &message = std::string("(no description)"));
 TLP_GL_SCOPE void setColor(const Color &c);

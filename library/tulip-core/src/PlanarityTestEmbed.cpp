@@ -655,7 +655,6 @@ void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW,
  * Sorts all back-edges with representant repr by depth first search traversal in
  * (T_repr - P), denoted as T_v^*.
 */
-//#include <tulip/GraphImpl.h>
 int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
     node,
     node repr,

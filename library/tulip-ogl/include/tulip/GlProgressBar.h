@@ -24,6 +24,8 @@
 
 #include <tulip/GlComposite.h>
 #include <tulip/SimplePluginProgress.h>
+#include <tulip/Color.h>
+#include <tulip/Coord.h>
 
 const std::string SLIDER_TEXTURE_NAME = "cylinderTexture.png";
 

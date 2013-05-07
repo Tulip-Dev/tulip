@@ -21,14 +21,19 @@
 #ifndef FACEITERATOR2_H
 #define FACEITERATOR2_H
 
-#include <list>
-#include <tulip/PlanarConMap.h>
+#include <vector>
 
+#include <tulip/Iterator.h>
+#include <tulip/Face.h>
+#include <tulip/Node.h>
+#include <tulip/Edge.h>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 //============================================================
 /// Face iterator for PlanarConMap
 namespace tlp {
+
+class PlanarConMap;
 
 class FaceIterator : public Iterator<Face> {
 public:

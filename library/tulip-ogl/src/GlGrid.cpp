@@ -18,7 +18,7 @@
  */
 #include <tulip/GlGrid.h>
 #include <tulip/OpenGlConfigManager.h>
-
+#include <tulip/GlXMLTools.h>
 #include <tulip/GlTools.h>
 
 using namespace std;
@@ -31,7 +31,7 @@ GlGrid::GlGrid(const Coord& frontTopLeft, const Coord& backBottomRight,
   backBottomRight(backBottomRight),
   color(color),
   cell(cell) {
-  for(unsigned int i=0; i < 3; i++)
+  for(unsigned int i=0; i < 3; ++i)
     this->displayDim[i] = displayDim[i];
 
   boundingBox.expand(frontTopLeft);
@@ -45,7 +45,6 @@ void GlGrid::draw(float,Camera *) {
 
   glDisable(GL_COLOR_MATERIAL);
   setMaterial(color);
-  //glColor4ubv(((const GLubyte *)&color));
 
   OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
@@ -115,7 +114,7 @@ void GlGrid::draw(float,Camera *) {
 }
 //============================================================
 void GlGrid::getDisplayDim(bool displayDim[3]) const {
-  for(int i=0; i < 3; i++)
+  for(int i=0; i < 3; ++i)
     displayDim[i] = this->displayDim[i];
 }
 //============================================================

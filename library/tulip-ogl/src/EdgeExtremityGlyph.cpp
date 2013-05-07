@@ -17,11 +17,12 @@
  *
  */
 #include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/Glyph.h>
 #include <tulip/Vector.h>
 
 using namespace tlp;
 
-EdgeExtremityGlyph::EdgeExtremityGlyph(const tlp::PluginContext* context) : edgeExtGlGraphInputData(NULL) {
+EdgeExtremityGlyph::EdgeExtremityGlyph(const PluginContext* context) : edgeExtGlGraphInputData(NULL) {
   if(context != NULL) {
     const GlyphContext* glyphContext = dynamic_cast<const GlyphContext*>(context);
     assert(glyphContext != NULL);

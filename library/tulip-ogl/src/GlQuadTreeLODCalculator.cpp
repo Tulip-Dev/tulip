@@ -24,14 +24,14 @@
 
 #include <tulip/Matrix.h>
 #include <tulip/QuadTree.h>
-
+#include <tulip/GlGraphInputData.h>
 #include <tulip/Camera.h>
 #include <tulip/GlEntity.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
-#include <iostream>
+#include <tulip/GlSceneObserver.h>
 
 using namespace std;
 

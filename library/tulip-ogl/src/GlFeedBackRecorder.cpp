@@ -17,8 +17,9 @@
  *
  */
 #include <tulip/GlFeedBackRecorder.h>
+#include <tulip/GlFeedBackBuilder.h>
 
-#include <stdio.h>
+#include <cstdlib>
 
 using namespace std;
 
@@ -39,6 +40,8 @@ static int compare(const void *a, const void *b) {
     return 0;
   }
 }
+
+GlFeedBackRecorder::GlFeedBackRecorder(GlFeedBackBuilder *builder,unsigned int pointSize):feedBackBuilder(builder), pointSize(pointSize) {}
 
 void GlFeedBackRecorder::record(bool doSort,GLint size, GLfloat *feedBackBuffer,const Vector<int,4>& viewport) {
   feedBackBuilder->begin(viewport);
@@ -95,7 +98,8 @@ void GlFeedBackRecorder::sortAndRecord(GLint size, GLfloat *feedBackBuffer) {
 
     default:
       /* XXX Left as an excersie to the reader. */
-      printf("Incomplete implementation.  Unexpected token (%d).\n",token);
+      //printf("Incomplete implementation.  Unexpected token (%d).\n",token);
+        assert(false);
     }
   }
 
@@ -229,8 +233,9 @@ GLfloat* GlFeedBackRecorder::recordPrimitive(GLfloat *loc) {
 
   default:
     /* XXX Left as an excersie to the reader. */
-    printf("Incomplete implementation.  Unexpected token (%d).\n", token);
+    //printf("Incomplete implementation.  Unexpected token (%d).\n", token);
     //exit(1);
+      assert(false);
   }
 
   return loc;

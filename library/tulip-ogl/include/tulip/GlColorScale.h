@@ -23,10 +23,13 @@
 #define GLCOLORSCALE_H_
 
 #include <tulip/Observable.h>
-#include <tulip/GlPolyQuad.h>
-#include <tulip/ColorScale.h>
+#include <tulip/GlSimpleEntity.h>
+#include <tulip/Color.h>
 
 namespace tlp {
+
+class ColorScale;
+class GlPolyQuad;
 
 class TLP_GL_SCOPE GlColorScale : public GlSimpleEntity, public Observable {
 

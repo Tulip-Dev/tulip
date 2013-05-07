@@ -20,7 +20,7 @@
 #include <tulip/GlLine.h>
 #include <tulip/GlTools.h>
 #include <tulip/OpenGlConfigManager.h>
-
+#include <tulip/GlXMLTools.h>
 
 using namespace std;
 

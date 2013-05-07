@@ -26,6 +26,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainWidgetGraphicsItem.h>
+#include <tulip/Camera.h>
 
 #include <QGraphicsView>
 #include <QGLWidget>
@@ -46,7 +47,7 @@ public :
   void createLayoutWithAddresses(std::string addressPropertyName, bool createLatAndLngProps);
   void createLayoutWithLatLngs(std::string latitudePropertyName, std::string longitudePropertyName);
 
-  GlGraphComposite *getGlGraphComposite() const; //{return glGraph;}
+  GlGraphComposite *getGlGraphComposite() const;
 
   std::pair<double, double> getLatLngForNode(node n) {
     return nodeLatLng[n];

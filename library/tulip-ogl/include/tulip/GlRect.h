@@ -22,8 +22,10 @@
 #define GL_RECT_H
 
 #include <tulip/GlPolygon.h>
+#include <tulip/Size.h>
 
 namespace tlp {
+
 /**
  * @ingroup OpenGL
  * \brief This is a general class for the rendering of 2D rectangles.

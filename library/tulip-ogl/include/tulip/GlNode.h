@@ -27,6 +27,8 @@
 #include <tulip/Coord.h>
 #include <tulip/GlComplexeEntity.h>
 
+#include <vector>
+
 namespace tlp {
 
 struct OcclusionTest;

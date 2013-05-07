@@ -25,9 +25,17 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
-#include <tulip/tulipconf.h>
 #include <tulip/GlSimpleEntity.h>
-#include <tulip/GlTools.h>
+
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 namespace tlp {
 

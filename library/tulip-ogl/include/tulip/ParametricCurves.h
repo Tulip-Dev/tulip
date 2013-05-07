@@ -23,6 +23,7 @@
 
 #include <vector>
 
+#include <tulip/tulipconf.h>
 #include <tulip/Coord.h>
 
 namespace tlp {
@@ -37,7 +38,7 @@ TLP_GL_SCOPE void buildPascalTriangle(unsigned int n, std::vector<std::vector<do
 
 /**
  * Compute the position of a point 'p' at t (0 <= t <= 1)
- * along BÃÂ©zier curve defined by a set of control points
+ * along Bezier curve defined by a set of control points
  *
  * \param controlPoints a vector of control points
  * \param t curve parameter value (0 <= t <= 1)

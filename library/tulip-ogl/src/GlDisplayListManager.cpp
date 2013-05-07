@@ -18,6 +18,8 @@
  */
 #include <tulip/GlDisplayListManager.h>
 
+#include <cassert>
+
 //====================================================
 tlp::GlDisplayListManager* tlp::GlDisplayListManager::inst=0;
 
@@ -56,8 +58,8 @@ bool GlDisplayListManager::callDisplayList(const std::string& name) {
     assert(false);
   }
 
-  assert(glIsList((*it).second));
-  glCallList((*it).second);
+  assert(glIsList(it->second));
+  glCallList(it->second);
   return true;
 }
 }

@@ -26,10 +26,9 @@
 #include <sstream>
 #include <vector>
 #include <map>
+#include <cassert>
 
 #include <tulip/tulipconf.h>
-#include <tulip/Color.h>
-#include <tulip/Coord.h>
 
 namespace tlp {
 

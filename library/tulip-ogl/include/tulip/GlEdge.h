@@ -22,18 +22,18 @@
 #define Tulip_GLEDGE_H
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
-#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/PropertyTypes.h>
-
+#include <tulip/Size.h>
 #include <tulip/GlComplexeEntity.h>
-#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/Matrix.h>
 
 namespace tlp {
 
 struct OcclusionTest;
 class TextRenderer;
 class GlLabel;
+class EdgeExtremityGlyph;
 
 /**
  * Class to represent an edge of a graph

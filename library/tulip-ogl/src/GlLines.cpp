@@ -16,17 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
 #include <cmath>
+
 #include <tulip/GlLines.h>
 #include <tulip/GlTools.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 using namespace tlp;
-
-/*static float (*buildColorArray(const Color &startColor, const Color &endColor, unsigned int steps, const bool gleColor=false))[3];
-static double *buildRadiusArray(const double startRadius, const double endRadius, unsigned int steps, const bool gleArray=false);
-static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &target);*/
 
 //=============================================================
 void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const double width, const unsigned int stippleType,
@@ -449,64 +446,3 @@ GLfloat *GlLines::buildCurvePoints(const Coord &p0,const Coord &p1,const Coord &
 
   return bendsCoordinates;
 }
-//=============================================================
-/*static float (*buildColorArray(const Color &startColor, const Color &endColor, unsigned int steps, const bool gleColor))[3] {
-  float (*colorArray)[3] =  new float[steps+1+(gleColor ? 2 : 0)][3];
-  float (*tmp)[3] = (gleColor ? &(colorArray[1]) : colorArray);
-
-  float Rs=startColor.getRGL(), Gs=startColor.getGGL(), Bs=startColor.getBGL();
-  float R = (endColor.getRGL()-Rs) / (float)steps;
-  float G = (endColor.getGGL()-Gs) / (float)steps;
-  float B = (endColor.getBGL()-Bs) / (float)steps;
-
-  tmp[0][0]=Rs; tmp[0][1]=Gs; tmp[0][2]=Bs;
-  for (unsigned int i=1; i < (steps+1); ++i) {
-    tmp[i][0] = tmp[i-1][0]+R;
-    tmp[i][1] = tmp[i-1][1]+G;
-    tmp[i][2] = tmp[i-1][2]+B;
-  }
-
-  if (gleColor) {
-    for (unsigned int i=0; i<3; ++i) {
-      colorArray[0][i] = colorArray[1][i];
-      colorArray[steps+2][i] = colorArray[steps+1][i];
-    }
-  }
-  return colorArray;
-  }*/
-//=============================================================
-/*static double *buildRadiusArray(const double startRadius, const double endRadius, unsigned int steps, const bool gleArray) {
-  double *radius = new double[steps+1+(gleArray ? 2 : 0)];
-  double *tmp = (gleArray ? &(radius[1]) : radius);
-  double d = (endRadius - startRadius) / (double)steps;
-
-  tmp[0] = startRadius;
-  for (unsigned int i=1; i < (steps+1); ++i)
-    tmp[i] = tmp[i-1] + d;
-
-  if (gleArray) {
-    radius[0] = radius[1];
-    radius[steps+2] = radius[steps+1];
-  }
-  return radius;
-  }*/
-//=============================================================
-/*static Coord gleComputeAngle(Coord point, const Coord &finalPoint, const Coord &target) {
-  //point is point b, finalPoint is point a, target is b
-  Coord ab = point - finalPoint;
-  Coord ac = target - finalPoint;
-  float scal = ab.dotProduct(ac);
-  if (scal < 0) {  //this means ABC > 90deg, so we reverse ab and change point to its new location
-    ab *= -1;
-    point = ab + finalPoint;
-    scal = ab.dotProduct(ac);
-  }
-  //b' is b projected on ac
-  Coord tmp = ac / ac.norm();  // tmp is vector ab' = (ab.ac)/ norm(ac) * ac->
-  tmp *= (scal / ac.norm());
-  Coord angle = tmp + ((tmp + finalPoint) - point); //angle ab''= ab'+b'b'' = ab'+bb'= tmp + ((tmp+finalPoint=b') - (b=point))
-  angle += finalPoint; //finally apply ab'' to a=finalPoint;
-
-  return angle;
-  }*/
-//=============================================================

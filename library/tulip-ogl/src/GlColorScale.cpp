@@ -20,6 +20,8 @@
 #include <map>
 
 #include <tulip/GlColorScale.h>
+#include <tulip/ColorScale.h>
+#include <tulip/GlPolyQuad.h>
 
 using namespace std;
 
@@ -34,9 +36,7 @@ GlColorScale::GlColorScale(ColorScale *colorScale, const Coord &baseCoord, const
 }
 
 GlColorScale::~GlColorScale() {
-  if (colorScalePolyQuad != NULL) {
     delete colorScalePolyQuad;
-  }
 }
 
 void GlColorScale::setColorScale(ColorScale * scale) {

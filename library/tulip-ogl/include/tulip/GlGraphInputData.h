@@ -22,9 +22,6 @@
 #define Tulip_GLGRAPHINPUTDATA_H
 
 #include <tulip/tulipconf.h>
-
-#include <tulip/MutableContainer.h>
-
 #include <tulip/Observable.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/DoubleProperty.h>

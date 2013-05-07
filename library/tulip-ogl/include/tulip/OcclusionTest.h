@@ -21,7 +21,9 @@
 #ifndef Tulip_OCCLUSIONTEST_H
 #define Tulip_OCCLUSIONTEST_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
+
 #include <vector>
+
 #include <tulip/Rectangle.h>
 
 namespace tlp {
@@ -40,7 +42,7 @@ struct TLP_GL_SCOPE OcclusionTest {
   /**
   * Remove all 2D AABB previously added.
   */
-  void reset() {
+  void clear() {
     data.clear();
   }
   /**
@@ -66,9 +68,8 @@ struct TLP_GL_SCOPE OcclusionTest {
   */
   bool testRectangle(const RectangleInt2D &rec) {
     bool intersect=false;
-    std::vector<RectangleInt2D>::const_iterator it;
 
-    for (it=data.begin(); it!=data.end(); ++it) {
+    for (std::vector<RectangleInt2D>::const_iterator it=data.begin(); it!=data.end(); ++it) {
       if (rec.intersect(*it)) {
         intersect=true;
         break;

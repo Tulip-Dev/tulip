@@ -21,14 +21,24 @@
 #ifndef Tulip_GLFEEDBACKRECORDER_H
 #define Tulip_GLFEEDBACKRECORDER_H
 
-#include <tulip/tulipconf.h>
-#include <cstdlib>
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
 
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+
+#include <tulip/tulipconf.h>
 #include <tulip/Vector.h>
 
-#include <tulip/GlFeedBackBuilder.h>
-
 namespace tlp {
+
+class GlFeedBackBuilder;
 
 /** \brief Class use to build an object with an OpenGL feedback buffer
  *
@@ -42,9 +52,7 @@ public:
   /**
    * Constructor : the recorder use GlFeedBackBuilder : builder
    */
-  GlFeedBackRecorder(GlFeedBackBuilder *builder,unsigned int pointSize=7):
-    feedBackBuilder(builder),
-    pointSize(pointSize) {}
+  GlFeedBackRecorder(GlFeedBackBuilder *builder,unsigned int pointSize=7);
   /**
    * Record a new feedback buffer
    * \param doSort : sort the feedback buffer

@@ -17,6 +17,9 @@
  *
  */
 #include <tulip/FaceIterator.h>
+#include <tulip/PlanarConMap.h>
+
+#include <cassert>
 
 using namespace std;
 using namespace tlp;

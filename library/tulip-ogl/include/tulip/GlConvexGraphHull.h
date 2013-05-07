@@ -22,9 +22,8 @@
 #ifndef GLCONVEXGRAPHHULL_H_
 #define GLCONVEXGRAPHHULL_H_
 
-#include <tulip/ObservableGraph.h>
 #include <tulip/Color.h>
-#include <tulip/ObservableProperty.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 

@@ -20,13 +20,12 @@
 #ifndef COMPOSITE_H
 #define COMPOSITE_H
 
-#include <tulip/tulipconf.h>
-
 #include <map>
 #include <list>
 #include <string>
 
 #include <tulip/GlSimpleEntity.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 

@@ -24,12 +24,15 @@
 #include <GL/glew.h>
 #include <GL/glu.h>
 #endif
+
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/ParametricCurves.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlShaderProgram.h>
+#include <tulip/GlXMLTools.h>
+
 #include <QStringList>
 #include <QVariantList>
 

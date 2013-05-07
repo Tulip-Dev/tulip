@@ -17,12 +17,10 @@
  *
  */
 #include <tulip/GlGraphLowDetailsRenderer.h>
-
-#include <iostream>
-
 #include <tulip/ForEach.h>
 #include <tulip/GraphProperty.h>
-
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlLODSceneVisitor.h>

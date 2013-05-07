@@ -23,6 +23,7 @@
 #include <tulip/GlCircle.h>
 #include <tulip/GlQuad.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/Camera.h>
 
 #include "ParallelTools.h"
 #include "ParallelCoordinatesView.h"

@@ -24,12 +24,8 @@
 #include <map>
 #include <vector>
 
-#include <tulip/BoundingBox.h>
-#include <tulip/GlGraphInputData.h>
-#include <tulip/Matrix.h>
-#include <tulip/Vector.h>
-#include <tulip/GlSceneObserver.h>
 #include <tulip/GlCPULODCalculator.h>
+#include <tulip/Observable.h>
 #include <tulip/GlGraphRenderingParameters.h>
 
 namespace tlp {
@@ -37,6 +33,9 @@ namespace tlp {
 class Camera;
 template <class TYPE> class QuadTreeNode;
 class GlScene;
+class PropertyInterface;
+class Graph;
+class GlLayer;
 
 /**
  * Class use to compute bounding boxs of a vector of GlEntity

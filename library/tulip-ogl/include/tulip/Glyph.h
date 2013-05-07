@@ -23,18 +23,11 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-
 #include <tulip/Plugin.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
-#include <tulip/Color.h>
 #include <tulip/BoundingBox.h>
-#include <tulip/TlpTools.h>
-#include <tulip/PluginLister.h>
-
-#include <tulip/GlGraphInputData.h>
-#include <tulip/Plugin.h>
-
+#include <tulip/PluginContext.h>
 
 namespace tlp {
 
@@ -42,6 +35,7 @@ static const std::string GLYPH_CATEGORY = "Node shape";
 
 class Graph;
 struct node;
+class GlGraphInputData;
 
 class GlyphContext : public PluginContext {
 public:

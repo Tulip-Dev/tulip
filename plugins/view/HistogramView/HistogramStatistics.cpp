@@ -21,6 +21,7 @@
 #include <tulip/ForEach.h>
 #include <tulip/GlLines.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/Camera.h>
 
 #include <algorithm>
 

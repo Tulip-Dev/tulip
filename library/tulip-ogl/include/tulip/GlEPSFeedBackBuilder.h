@@ -22,11 +22,11 @@
 #define Tulip_GLEPSFEEDBACKBUILDER_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/tulipconf.h>
-
 #include <sstream>
 
 #include <tulip/GlTLPFeedBackBuilder.h>
+#include <tulip/tulipconf.h>
+#include <tulip/Color.h>
 
 namespace tlp {
 

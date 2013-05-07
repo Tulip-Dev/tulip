@@ -18,11 +18,22 @@
  */
 #include <tulip/GlSphere.h>
 
-#include <tulip/Color.h>
-
+#include <tulip/GlXMLTools.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
 #include <tulip/OpenGlConfigManager.h>
+
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
 
 using namespace std;
 

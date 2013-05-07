@@ -26,6 +26,7 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/Graph.h>
 #include <tulip/GlBox.h>
+#include <tulip/GlGraphInputData.h>
 
 using namespace std;
 using namespace tlp;

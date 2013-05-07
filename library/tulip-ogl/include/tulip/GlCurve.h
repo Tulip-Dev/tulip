@@ -22,9 +22,6 @@
 #ifndef Tulip_GLCURVE_H
 #define Tulip_GLCURVE_H
 
-#include <tulip/Color.h>
-#include <tulip/Coord.h>
-
 #include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
