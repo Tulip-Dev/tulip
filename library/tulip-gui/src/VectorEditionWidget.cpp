@@ -18,8 +18,8 @@
  */
 
 #include <tulip/VectorEditionWidget.h>
-
 #include <tulip/TulipItemDelegate.h>
+#include <tulip/TulipMetaTypes.h>
 
 #include "ui_VectorEditionWidget.h"
 

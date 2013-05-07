@@ -30,6 +30,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlScene.h>
 #include <tulip/MouseShowElementInfos.h>
+#include <tulip/TulipMetaTypes.h>
 
 using namespace std;
 using namespace tlp;
