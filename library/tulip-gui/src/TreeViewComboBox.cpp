@@ -24,7 +24,7 @@
 #include <QPainter>
 #include <QStyleOptionViewItem>
 #include <QMouseEvent>
-#include <QtGui/QTreeView>
+#include <QTreeView>
 
 class TreeViewDelegate: public QStyledItemDelegate {
 public:

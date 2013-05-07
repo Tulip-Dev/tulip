@@ -26,7 +26,7 @@
 
 #include <tulip/StringsListSelectionWidgetInterface.h>
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 namespace tlp {
 

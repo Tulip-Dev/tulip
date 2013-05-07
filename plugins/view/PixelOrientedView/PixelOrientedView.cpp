@@ -42,7 +42,7 @@
 #include "PixelOrientedInteractors.h"
 #include "PixelOrientedView.h"
 
-#include <QtGui/QMenu>
+#include <QMenu>
 
 using namespace std;
 using namespace pocore;

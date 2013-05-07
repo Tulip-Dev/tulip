@@ -20,6 +20,8 @@
 
 #include <QMouseEvent>
 #include <QApplication>
+#include <QMimeData>
+#include <QDrag>
 
 namespace tlp {
 
