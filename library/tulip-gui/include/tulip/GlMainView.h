@@ -20,13 +20,11 @@
 #ifndef Tulip_GLMAINVIEW_H
 #define Tulip_GLMAINVIEW_H
 
-#include <tulip/ViewWidget.h>
-
-#include <QAction>
 #include <QMenu>
 
+#include <tulip/ViewWidget.h>
+
 class QGraphicsProxyWidget;
-class QMenu;
 class QAction;
 class QRectF;
 

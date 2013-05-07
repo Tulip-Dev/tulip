@@ -18,6 +18,9 @@
  */
 #include "tulip/QGlBufferManager.h"
 
+#include <QGLPixelBuffer>
+#include <QGLFramebufferObject>
+
 #include <tulip/GlMainWidget.h>
 
 #include <iostream>
@@ -38,6 +41,22 @@ QGlBufferManager::QGlBufferManager() {
   QGLPixelBuffer *glPixelBuffer=new QGLPixelBuffer(2,2,format,GlMainWidget::getFirstQGLWidget());
   pixelBufferWork=glPixelBuffer->isValid();
   delete glPixelBuffer;
+}
+
+void QGlBufferManager::clearBuffers() {
+  if(!inst)
+    return;
+
+  for(std::map<std::pair<int,int>,QGLPixelBuffer*>::iterator it=inst->widthHeightToBuffer.begin(); it!=inst->widthHeightToBuffer.end(); ++it)
+    delete (*it).second;
+
+  for(std::map<std::pair<int,int>,QGLFramebufferObject*>::iterator it=inst->widthHeightToFramebuffer.begin(); it!=inst->widthHeightToFramebuffer.end(); ++it)
+    delete (*it).second;
+
+  inst->widthHeightToBuffer.clear();
+  inst->bufferToWidthHeight.clear();
+  inst->widthHeightToFramebuffer.clear();
+  inst->framebufferToWidthHeight.clear();
 }
 
 QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height) {

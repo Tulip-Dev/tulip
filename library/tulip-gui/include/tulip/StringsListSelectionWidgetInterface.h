@@ -22,8 +22,6 @@
 #ifndef STRINGLISTSELECTIONWIDGETINTERFACE_H_
 #define STRINGLISTSELECTIONWIDGETINTERFACE_H_
 
-#include <QWidget>
-
 #include <tulip/tulipconf.h>
 
 #include <vector>

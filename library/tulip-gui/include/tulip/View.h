@@ -33,8 +33,6 @@ class QGraphicsItem;
 class QWidget;
 class QPixmap;
 class QMenu;
-class QPoint;
-class QPointF;
 
 namespace tlp {
 static const std::string VIEW_CATEGORY = "Panel";

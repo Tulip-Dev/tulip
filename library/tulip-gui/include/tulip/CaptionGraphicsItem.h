@@ -21,9 +21,10 @@
 #ifndef CAPTIONGRAPHICSITEM_H
 #define CAPTIONGRAPHICSITEM_H
 
-#include <tulip/View.h>
-#include <tulip/Color.h>
-#include <tulip/CaptionGraphicsSubItems.h>
+#include <QObject>
+
+#include <vector>
+#include <string>
 
 class QGradient;
 class QGraphicsProxyWidget;

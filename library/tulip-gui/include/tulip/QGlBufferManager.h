@@ -21,13 +21,12 @@
 #ifndef Tulip_QGLBUFFERMANAGER_H
 #define Tulip_QGLBUFFERMANAGER_H
 
-
-#include <QGLPixelBuffer>
-#include <QGLFramebufferObject>
-
 #include <map>
 
 #include <tulip/tulipconf.h>
+
+class QGLPixelBuffer;
+class QGLFramebufferObject;
 
 namespace tlp {
 
@@ -48,21 +47,7 @@ public:
     return *inst;
   }
 
-  static void clearBuffers() {
-    if(!inst)
-      return;
-
-    for(std::map<std::pair<int,int>,QGLPixelBuffer*>::iterator it=inst->widthHeightToBuffer.begin(); it!=inst->widthHeightToBuffer.end(); ++it)
-      delete (*it).second;
-
-    for(std::map<std::pair<int,int>,QGLFramebufferObject*>::iterator it=inst->widthHeightToFramebuffer.begin(); it!=inst->widthHeightToFramebuffer.end(); ++it)
-      delete (*it).second;
-
-    inst->widthHeightToBuffer.clear();
-    inst->bufferToWidthHeight.clear();
-    inst->widthHeightToFramebuffer.clear();
-    inst->framebufferToWidthHeight.clear();
-  }
+  static void clearBuffers();
 
   /**
    * Return if QGlPixelBuffer can be used

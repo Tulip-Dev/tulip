@@ -23,6 +23,7 @@
 #include <QLineEdit>
 
 #include <tulip/CSVParser.h>
+#include <tulip/CSVGraphImport.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/ColorProperty.h>

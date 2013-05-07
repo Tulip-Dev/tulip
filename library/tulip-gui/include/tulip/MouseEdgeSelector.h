@@ -23,9 +23,6 @@
 
 #include <tulip/InteractorComposite.h>
 
-class QMouseEvent;
-class QKeyEvent;
-
 namespace tlp {
 
 class Graph;

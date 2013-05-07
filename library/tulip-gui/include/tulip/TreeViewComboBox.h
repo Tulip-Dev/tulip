@@ -23,7 +23,6 @@
 #define TREEVIEWCOMBOBOX_H
 
 #include <QComboBox>
-#include <QTreeView>
 
 #include <tulip/tulipconf.h>
 

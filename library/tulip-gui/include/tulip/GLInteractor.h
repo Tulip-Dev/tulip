@@ -21,6 +21,8 @@
 
 #include <tulip/InteractorComposite.h>
 
+#include <QIcon>
+
 namespace tlp {
 
 class GlMainWidget;
