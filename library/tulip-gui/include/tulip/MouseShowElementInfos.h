@@ -33,12 +33,12 @@ class QGraphicsProxyWidget;
 class QTableView;
 class QAbstractItemModel;
 class QObject;
-class SelectedEntity;
 
 namespace tlp {
 
 class View;
 class ViewWidget;
+class SelectedEntity;
 
 /**
  * We define a specific interactor to show element graph infos in eltProperties
