@@ -25,19 +25,17 @@
 #include <tulip/Coord.h>
 #include <tulip/GlScene.h>
 
-#include <QGLFramebufferObject>
-
 #if defined(_MSC_VER)
 #include <Windows.h>
 #endif
 
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
 #endif
+
+class QGLFramebufferObject;
 
 namespace tlp {
 
@@ -80,9 +78,7 @@ public :
   void setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight);
   unsigned int getViewportWidth();
   unsigned int getViewportHeight();
-  inline bool frameBufferOk() const {
-    return glFrameBuf->isValid();
-  }
+  bool frameBufferOk() const;
 
   GlScene *getScene() {
     return &scene;

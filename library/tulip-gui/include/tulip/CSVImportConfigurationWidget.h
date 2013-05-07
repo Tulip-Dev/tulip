@@ -25,7 +25,6 @@
 #include <QValidator>
 #include <QTableWidget>
 
-#include <tulip/CSVGraphImport.h>
 #include <tulip/CSVContentHandler.h>
 #include <tulip/tulipconf.h>
 
@@ -40,6 +39,8 @@ class CSVImportConifgurationWidget;
 
 namespace tlp {
 class CSVParser;
+class CSVImportParameters;
+class CSVColumn;
 
 /**
  * @brief Configuration widget for a property.

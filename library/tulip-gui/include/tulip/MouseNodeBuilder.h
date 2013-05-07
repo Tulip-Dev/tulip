@@ -21,9 +21,9 @@
 #ifndef MOUSEADDNODE_H
 #define MOUSEADDNODE_H
 
-#include <QEvent>
-
 #include <tulip/InteractorComposite.h>
+
+#include <QEvent>
 
 namespace tlp {
 

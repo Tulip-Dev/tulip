@@ -23,8 +23,9 @@
 
 #include <GL/glew.h> 
  
-#include <tulip/GlOffscreenRenderer.h>
- 
+#include <QGLFramebufferObject>
+
+#include <tulip/GlOffscreenRenderer.h> 
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlGraphComposite.h>
@@ -209,6 +210,10 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   glPopMatrix();
 
   glPopAttrib();
+}
+
+bool GlOffscreenRenderer::frameBufferOk() const {
+  return glFrameBuf->isValid();
 }
 
 static QImage convertImage(const QImage &image) {

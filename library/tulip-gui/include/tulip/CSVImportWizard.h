@@ -24,20 +24,21 @@
 #include <QWizard>
 #include <QWizardPage>
 
-#include <tulip/Graph.h>
-#include <tulip/CSVGraphImport.h>
+#include <tulip/tulipconf.h>
 
 namespace Ui {
 class CSVImportWizard;
 }
 namespace tlp {
 
+class Graph;
 class CSVParser;
 class CSVParserConfigurationWidget;
 class CSVTableWidget;
 class CSVImportConfigurationWidget;
 class CSVToGraphDataMapping;
 class CSVGraphMappingConfigurationWidget;
+class CSVImportParameters;
 
 /**
   * @brief QWIzardPage encapsulating a CSVParserConfigurationWidget and a preview.

@@ -21,6 +21,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
+#include <tulip/CSVGraphImport.h>
 #include <tulip/CSVParserConfigurationWidget.h>
 #include <tulip/CSVImportWizard.h>
 #include <tulip/CSVImportConfigurationWidget.h>

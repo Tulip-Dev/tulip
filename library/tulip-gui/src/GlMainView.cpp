@@ -20,6 +20,8 @@
 
 #include <QGraphicsProxyWidget>
 #include <QGraphicsView>
+#include <QAction>
+#include <QMenu>
 
 #include <tulip/GlMainWidgetGraphicsItem.h>
 #include <tulip/GlMainWidget.h>
