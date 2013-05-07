@@ -38,7 +38,7 @@ namespace tlp {
 
 class View;
 class ViewWidget;
-class SelectedEntity;
+struct SelectedEntity;
 
 /**
  * We define a specific interactor to show element graph infos in eltProperties
