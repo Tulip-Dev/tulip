@@ -19,7 +19,7 @@
 #include "tulip/CaptionGraphicsSubItems.h"
 
 #include <QGraphicsProxyWidget>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QGraphicsSceneMouseEvent>
 
 #include <tulip/DoubleProperty.h>
 #include <tulip/ColorProperty.h>

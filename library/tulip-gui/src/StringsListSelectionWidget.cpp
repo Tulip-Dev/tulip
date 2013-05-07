@@ -21,8 +21,8 @@
 #include <tulip/DoubleStringsListSelectionWidget.h>
 #include <tulip/StringsListSelectionWidget.h>
 
-#include <QtGui/QLayout>
-#include <QtGui/QVBoxLayout>
+#include <QLayout>
+#include <QVBoxLayout>
 
 using namespace std;
 

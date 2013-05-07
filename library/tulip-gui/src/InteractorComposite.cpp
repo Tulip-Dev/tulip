@@ -19,7 +19,7 @@
 
 #include "tulip/InteractorComposite.h"
 
-#include <QtGui/QAction>
+#include <QAction>
 
 using namespace tlp;
 

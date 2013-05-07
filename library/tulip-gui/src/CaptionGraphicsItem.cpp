@@ -20,8 +20,8 @@
 #include <QGraphicsView>
 #include <QApplication>
 #include <QMenu>
-#include <QtGui/QComboBox>
-#include <QtGui/QPushButton>
+#include <QComboBox>
+#include <QPushButton>
 
 #include <tulip/DoubleProperty.h>
 #include <tulip/ColorProperty.h>
