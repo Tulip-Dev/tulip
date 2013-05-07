@@ -23,7 +23,8 @@
 
 #include <QStyledItemDelegate>
 
-#include "tulip/TulipItemEditorCreators.h"
+#include <tulip/TulipItemEditorCreators.h>
+#include <tulip/TulipMetaTypes.h>
 
 namespace tlp {
 

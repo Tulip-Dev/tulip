@@ -37,6 +37,7 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/Interactor.h>
+#include <tulip/TulipMetaTypes.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlCompositeHierarchyManager.h>
 
