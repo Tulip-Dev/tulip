@@ -22,7 +22,6 @@
 
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
-#include <tulip/PropertyAlgorithm.h>
 
 namespace tlp {
 

@@ -23,13 +23,16 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <string>
-#include <cassert>
+//#include <string>
 
 #include <tulip/tulipconf.h>
 #include <tulip/Glyph.h>
+#include <tulip/MutableContainer.h>
 
 namespace tlp {
+
+class GlGraphInputData;
+class Graph;
 
 /** \ brief Singleton class use to store Glyphs plugins
  * This class is a singleton use to sore Glyphs plugins

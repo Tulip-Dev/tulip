@@ -25,6 +25,7 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlShaderProgram.h>
+#include <tulip/GlTools.h>
 
 using namespace std;
 using namespace tlp;

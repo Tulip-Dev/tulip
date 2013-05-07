@@ -26,6 +26,8 @@
 #include <tulip/TlpTools.h>
 #include <tulip/GlShaderProgram.h>
 
+#include <sstream>
+
 using namespace std;
 
 static bool checkVboSupport() {

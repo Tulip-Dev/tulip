@@ -22,16 +22,14 @@
 #define GL_CONVEX_HULL_H
 
 #include <vector>
-#include <tulip/BoundingBox.h>
-#include <tulip/Graph.h>
-#include <tulip/Color.h>
-#include <tulip/Coord.h>
 
+#include <tulip/Color.h>
 #include <tulip/GlComposite.h>
 
 namespace tlp {
 
 struct ConvexHullItem;
+class Graph;
 
 /** \brief Class used to represent ConvexHull
  *

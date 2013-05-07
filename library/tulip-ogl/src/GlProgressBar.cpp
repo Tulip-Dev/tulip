@@ -17,13 +17,13 @@
  *
  */
 #include <tulip/GlProgressBar.h>
-
 #include <tulip/GlPolygon.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlQuad.h>
 #include <tulip/TlpTools.h>
 
 #include <vector>
+#include <sstream>
 
 using namespace std;
 

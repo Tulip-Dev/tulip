@@ -21,6 +21,7 @@
 
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/Camera.h>
 
 using namespace tlp;
 using namespace std;

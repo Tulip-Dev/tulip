@@ -17,10 +17,8 @@
  *
  */
 #include <tulip/GlGraphRenderer.h>
-
 #include <tulip/ForEach.h>
 #include <tulip/GraphProperty.h>
-
 #include <tulip/GlTools.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlLODSceneVisitor.h>
@@ -30,10 +28,15 @@
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 using namespace std;
 
 namespace tlp {
+
+GlGraphRenderer::GlGraphRenderer(const GlGraphInputData *inputData):inputData(inputData),graphModified(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
+}
 
 void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntities) {
   Graph *graph=inputData->getGraph();

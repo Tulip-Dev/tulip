@@ -18,7 +18,7 @@
  */
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
-
+#include <tulip/GlXMLTools.h>
 #include <tulip/GlPolyQuad.h>
 #include <tulip/Vector.h>
 #include <tulip/OpenGlConfigManager.h>

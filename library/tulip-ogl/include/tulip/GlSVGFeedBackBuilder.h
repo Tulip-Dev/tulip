@@ -26,6 +26,7 @@
 #include <sstream>
 
 #include <tulip/GlTLPFeedBackBuilder.h>
+#include <tulip/Color.h>
 
 namespace tlp {
 

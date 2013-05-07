@@ -21,19 +21,15 @@
 #define Tulip_GLGRAPHCOMPOSITE_H
 
 #include <tulip/GlComposite.h>
-
-#include <vector>
-
 #include <tulip/Observable.h>
-
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlScene.h>
-#include <tulip/GlGraphRenderer.h>
 
 namespace tlp {
 
 class Graph;
+class GlGraphRenderer;
 
 /**
  * @ingroup OpenGL

@@ -21,8 +21,6 @@
 #ifndef Tulip_GLCOMPLEXEENTITY_H
 #define Tulip_GLCOMPLEXEENTITY_H
 
-#include <vector>
-
 #include <tulip/BoundingBox.h>
 #include <tulip/GlEntity.h>
 

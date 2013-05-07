@@ -23,6 +23,7 @@
 #include <tulip/MouseEdgeBendEditor.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlyphManager.h>
+#include <tulip/Camera.h>
 
 using namespace tlp;
 using namespace std;
@@ -47,9 +48,7 @@ void MouseEdgeBendEditor::clear() {
   if (glMainWidget != NULL) {
     glMainWidget->getScene()->removeLayer(layer,false);
 
-    if(layer)
-      delete layer;
-
+    delete layer;
     layer=NULL;
     circleString=NULL;
 

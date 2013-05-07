@@ -20,12 +20,10 @@
 #ifndef Tulip_GLLABEL_H
 #define Tulip_GLLABEL_H
 
-#include <string>
-
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 #include <tulip/Size.h>
-
+#include <tulip/Camera.h>
 #include <tulip/GlSimpleEntity.h>
 
 class FTGLPolygonFont;
@@ -33,7 +31,6 @@ class FTOutlineFont;
 
 namespace tlp {
 
-class Camera;
 struct OcclusionTest;
 
 enum LabelPosition {ON_CENTER = 0, ON_TOP = 1, ON_BOTTOM = 2, ON_LEFT = 3, ON_RIGHT = 4};

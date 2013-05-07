@@ -21,12 +21,9 @@
 #ifndef Tulip_GLCPULODCALCULATOR_H
 #define Tulip_GLCPULODCALCULATOR_H
 
-#include <map>
-#include <vector>
-
-#include <tulip/BoundingBox.h>
 #include <tulip/Coord.h>
 #include <tulip/GlLODCalculator.h>
+#include <tulip/Matrix.h>
 
 namespace tlp {
 class GlSimpleEntity;

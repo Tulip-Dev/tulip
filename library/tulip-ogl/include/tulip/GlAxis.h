@@ -22,6 +22,7 @@
 #define GLAXIS_H_
 
 #include <tulip/GlComposite.h>
+#include <tulip/Color.h>
 
 const float DEFAULT_GRAD_WIDTH = 6.;
 

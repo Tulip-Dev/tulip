@@ -17,12 +17,9 @@
  *
  */
 #include <tulip/GlGraphComposite.h>
-
-#include <iostream>
-
 #include <tulip/ForEach.h>
 #include <tulip/GraphProperty.h>
-
+#include <tulip/GlXMLTools.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlLODSceneVisitor.h>

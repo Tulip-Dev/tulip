@@ -22,12 +22,26 @@
 #define CURVES_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
-#include <tulip/GlTools.h>
+#include <tulip/tulipconf.h>
+
 #include <vector>
 
 namespace tlp {
+
 template<typename T, unsigned int N>
 class Matrix;
 //====================================================================

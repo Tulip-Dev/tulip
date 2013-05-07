@@ -22,6 +22,9 @@
 #include <tulip/GlPolygon.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/GlGraphInputData.h>
+#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlTools.h>
 
 using namespace tlp;
 using namespace std;

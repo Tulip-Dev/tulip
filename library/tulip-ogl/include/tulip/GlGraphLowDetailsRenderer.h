@@ -45,6 +45,10 @@ namespace tlp {
 
 class Graph;
 class GlScene;
+class LayoutProperty;
+class ColorProperty;
+class SizeProperty;
+class BooleanProperty;
 
 /** \brief Class to display graph with very simple and very fast renderer
  *

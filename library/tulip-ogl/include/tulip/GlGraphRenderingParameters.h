@@ -20,12 +20,14 @@
 #ifndef Tulip_GLGRAPHRENDERINGPARAMETERS_H
 #define Tulip_GLGRAPHRENDERINGPARAMETERS_H
 
-#include <string>
 #include <tulip/Color.h>
 #include <tulip/DataSet.h>
-#include <tulip/DoubleProperty.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
+
+class DoubleProperty;
+class BooleanProperty;
 
 /**
  * @ingroup OpenGL

@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/GlCircle.h>
+#include <tulip/GlXMLTools.h>
 
 using namespace std;
 

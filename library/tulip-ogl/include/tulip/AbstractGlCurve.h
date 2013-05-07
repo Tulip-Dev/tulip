@@ -37,7 +37,6 @@
 #endif
 
 #include <tulip/GlSimpleEntity.h>
-#include <tulip/Coord.h>
 #include <tulip/Color.h>
 
 namespace tlp {

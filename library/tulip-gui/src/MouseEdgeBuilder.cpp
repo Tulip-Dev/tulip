@@ -28,6 +28,7 @@
 #include <tulip/GlLine.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/MouseEdgeBuilder.h>
+#include <tulip/Camera.h>
 
 using namespace std;
 using namespace tlp;

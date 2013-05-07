@@ -34,6 +34,8 @@ Glyph::Glyph(const tlp::PluginContext* context) : glGraphInputData(NULL) {
 //=============================================
 Glyph::~Glyph() {
 }
+
+
 //=============================================
 Coord Glyph::getAnchor(const Coord &nodeCenter, const Coord &from, const Size &scale, const double zRotation) const {
   Coord anchor = from - nodeCenter;

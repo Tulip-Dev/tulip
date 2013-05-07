@@ -22,13 +22,20 @@
 #ifndef GL_SHADER_PROGRAM
 #define GL_SHADER_PROGRAM
 
-#include <tulip/OpenGlConfigManager.h>
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 
 #include <string>
-#include <map>
+#include <vector>
 
 #include <tulip/tulipconf.h>
-#include <tulip/Vector.h>
 #include <tulip/Matrix.h>
 #include <tulip/Color.h>
 

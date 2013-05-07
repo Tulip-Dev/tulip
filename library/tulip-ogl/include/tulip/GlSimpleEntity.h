@@ -23,9 +23,8 @@
 #include <vector>
 
 #include <tulip/GlEntity.h>
+#include <tulip/Coord.h>
 #include <tulip/GlSceneVisitor.h>
-#include <tulip/Camera.h>
-#include <tulip/GlXMLTools.h>
 #include <tulip/BoundingBox.h>
 
 #include <QStringList>
@@ -34,6 +33,7 @@
 namespace tlp {
 
 class GlComposite;
+class Camera;
 
 /**
  * @ingroup OpenGL

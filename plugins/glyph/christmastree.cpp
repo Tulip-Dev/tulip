@@ -29,7 +29,7 @@
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/OpenGlConfigManager.h>
-
+#include <tulip/GlGraphInputData.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
 

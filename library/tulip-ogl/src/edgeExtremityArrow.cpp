@@ -20,6 +20,7 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlTriangle.h>
+#include <tulip/Glyph.h>
 
 using namespace tlp;
 using namespace std;

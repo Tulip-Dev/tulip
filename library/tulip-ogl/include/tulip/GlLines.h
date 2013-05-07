@@ -23,11 +23,20 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #include <vector>
 
-#include <tulip/OpenGlConfigManager.h>
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
 
-#include <tulip/Size.h>
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
+
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 

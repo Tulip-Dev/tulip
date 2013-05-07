@@ -22,12 +22,6 @@
 #define Tulip_GLLODSCENEVISITOR_H
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-
-#include <vector>
-#include <map>
-
-#include <tulip/BoundingBox.h>
-
 #include <tulip/GlSceneVisitor.h>
 
 namespace tlp {

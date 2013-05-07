@@ -23,8 +23,11 @@
 
 #include <QSettings>
 #include <QNetworkProxy>
+#include <QString>
 
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/Size.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
 

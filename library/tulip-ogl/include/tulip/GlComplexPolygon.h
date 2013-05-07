@@ -16,15 +16,19 @@
  * See the GNU General Public License for more details.
  *
  */
-
-
 #ifndef GLCOMPLEXPOLYGON_H
 #define GLCOMPLEXPOLYGON_H
 
-#include <tulip/OpenGlConfigManager.h>
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
 
-#ifdef WIN32
-#include <windows.h>
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
 #endif
 
 #ifndef CALLBACK

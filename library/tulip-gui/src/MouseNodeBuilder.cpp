@@ -27,7 +27,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainView.h>
-
+#include <tulip/Camera.h>
 
 using namespace tlp;
 using namespace std;

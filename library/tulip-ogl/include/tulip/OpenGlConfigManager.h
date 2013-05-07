@@ -21,23 +21,10 @@
 #ifndef Tulip_OPENGLCONFIGMANAGER_H
 #define Tulip_OPENGLCONFIGMANAGER_H
 
-#include <cassert>
-#include <iostream>
-#include <map>
-
-#if defined(_MSC_VER)
-#include <Windows.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
-
 #include <tulip/tulipconf.h>
+
+#include <map>
+#include <string>
 
 #define BUFFER_OFFSET(bytes) ((GLubyte*) NULL + (bytes))
 

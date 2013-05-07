@@ -17,6 +17,8 @@
  *
  */
 #include <tulip/Gl2DRect.h>
+#include <tulip/Camera.h>
+#include <tulip/GlXMLTools.h>
 
 #include <limits>
 

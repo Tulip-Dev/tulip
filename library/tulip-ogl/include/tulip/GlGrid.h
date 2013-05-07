@@ -21,8 +21,6 @@
 #ifndef _Tulip_GLGRID_H_
 #define _Tulip_GLGRID_H_
 
-#include <vector>
-
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 #include <tulip/Size.h>

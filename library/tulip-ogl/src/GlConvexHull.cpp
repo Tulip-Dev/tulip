@@ -24,6 +24,7 @@
 #include <tulip/GlTools.h>
 #include <tulip/GlConvexHull.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlXMLTools.h>
 
 using namespace std;
 
@@ -52,11 +53,11 @@ GlConvexHull::GlConvexHull(const vector<Coord> &points,
     convexHull(_points, convexHullIdxs);
     // build new points
     vector<Coord> points;
-    vector<unsigned int>::const_iterator it = convexHullIdxs.begin();
 
-    for (; it != convexHullIdxs.end(); ++it) {
-      points.push_back(_points[*it]);
-      boundingBox.expand(_points[*it]);
+    for (vector<unsigned int>::const_iterator it = convexHullIdxs.begin(); it != convexHullIdxs.end(); ++it) {
+        unsigned i=*it;
+        points.push_back(_points[i]);
+        boundingBox.expand(_points[i]);
     }
 
     _points = points;

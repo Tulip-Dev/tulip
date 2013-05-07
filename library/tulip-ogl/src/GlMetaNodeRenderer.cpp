@@ -24,6 +24,7 @@
 #include <tulip/GlNode.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/Glyph.h>
+#include <tulip/Camera.h>
 
 #if defined(_MSC_VER)
 #include <Windows.h>

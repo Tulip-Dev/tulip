@@ -20,14 +20,14 @@
 #ifndef Tulip_GLGRAPHRENDERER_H
 #define Tulip_GLGRAPHRENDERER_H
 
-#include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/GlGraphInputData.h>
 #include <tulip/GlScene.h>
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 
 class Graph;
-
+class GlGraphInputData;
+class Camera;
 
 /**
  * @ingroup OpenGL
@@ -45,8 +45,7 @@ public:
    * \param inputData : GlGraphInputData used by renderer to display the graph (in input data you have pointers on properties used to render nodes/edges
    * \param parameters : GlGraphRenderingParameters used by renderer to display the graph
    */
-  GlGraphRenderer(const GlGraphInputData *inputData):inputData(inputData),graphModified(true),selectionDrawActivate(false),selectionIdMap(NULL),selectionCurrentId(NULL) {
-  }
+  GlGraphRenderer(const GlGraphInputData *inputData);
 
   /**
    * @brief Destructor

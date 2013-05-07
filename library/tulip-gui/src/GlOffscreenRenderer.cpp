@@ -22,10 +22,11 @@
 #endif
 
 #include <GL/glew.h> 
- 
+
 #include <QGLFramebufferObject>
 
-#include <tulip/GlOffscreenRenderer.h> 
+#include <tulip/Camera.h>
+#include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlGraphComposite.h>

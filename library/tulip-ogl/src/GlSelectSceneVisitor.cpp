@@ -21,10 +21,14 @@
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlLayer.h>
+#include <tulip/GlLODCalculator.h>
 
 using namespace std;
 
 namespace tlp {
+
+GlSelectSceneVisitor::GlSelectSceneVisitor(SelectionFlag flag,GlGraphInputData* inputData,GlLODCalculator *calculator)
+  :selectionFlag(flag),inputData(inputData),calculator(calculator) {}
 
 void GlSelectSceneVisitor::visit(GlSimpleEntity *entity) {
   if(selectionFlag==SelectSimpleEntities)

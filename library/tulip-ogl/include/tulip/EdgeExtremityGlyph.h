@@ -22,17 +22,15 @@
 #ifndef EDGEEXTREMITYGLYPH_H_
 #define EDGEEXTREMITYGLYPH_H_
 
-#include <tulip/Node.h>
-#include <tulip/Edge.h>
-#include <tulip/Color.h>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Matrix.h>
 #include <tulip/Plugin.h>
-#include <tulip/PluginLister.h>
-#include <tulip/Glyph.h>
 
 namespace tlp {
+
+class Color;
+
 static const std::string EEGLYPH_CATEGORY = "Edge extremity";
 
 typedef Matrix<float, 4> MatrixGL;

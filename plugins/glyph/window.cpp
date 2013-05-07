@@ -26,6 +26,8 @@
 #include <tulip/GlQuad.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/ColorProperty.h>
+#include <tulip/GlGraphInputData.h>
 
 using namespace tlp;
 using namespace std;

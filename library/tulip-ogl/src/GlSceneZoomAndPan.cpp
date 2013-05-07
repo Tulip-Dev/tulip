@@ -19,6 +19,7 @@
 
 #include <tulip/GlSceneZoomAndPan.h>
 #include <tulip/GlScene.h>
+#include <tulip/Camera.h>
 
 #include <algorithm>
 

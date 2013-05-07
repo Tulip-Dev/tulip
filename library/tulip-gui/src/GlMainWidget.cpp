@@ -37,6 +37,7 @@
 #include <tulip/GlCompositeHierarchyManager.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/View.h>
+#include <tulip/Camera.h>
 
 using namespace std;
 
@@ -52,7 +53,7 @@ static void setRasterPosition(unsigned int x, unsigned int y) {
   glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
   glBitmap(0,0,0,0,-val[0] + x, -val[1] + y, tmp);
   glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
-  tlp::glTest(__PRETTY_FUNCTION__);
+  glTest(__PRETTY_FUNCTION__);
 }
 //==================================================
 static QGLFormat GlInit() {

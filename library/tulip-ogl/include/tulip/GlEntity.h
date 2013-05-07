@@ -21,8 +21,6 @@
 #ifndef Tulip_GLENTITY_H
 #define Tulip_GLENTITY_H
 
-#include <utility>
-
 #include <tulip/tulipconf.h>
 
 namespace tlp {

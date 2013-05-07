@@ -19,6 +19,7 @@
 
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/Camera.h>
 
 #include "HistogramViewNavigator.h"
 #include "HistogramView.h"

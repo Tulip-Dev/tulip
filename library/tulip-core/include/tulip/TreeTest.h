@@ -24,13 +24,11 @@
 
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
-#include <tulip/MutableContainer.h>
-#include <tulip/PluginProgress.h>
 
 namespace tlp {
 
 class Graph;
-
+class PluginProgress;
 /**
  * @ingroup Checks
  * @brief Performs test to check whether a graph is a simple or rooted tree.
