@@ -17,18 +17,7 @@
  *
  */
 
-#if defined(_MSC_VER)
-#include <Windows.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
 #include <GL/glew.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
 
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/GlTools.h>

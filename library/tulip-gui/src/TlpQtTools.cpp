@@ -23,9 +23,7 @@
 #include <ios>
 
 #include <QDebug>
-#include <QGLPixelBuffer>
 #include <QColorDialog>
-#include <QMessageBox>
 
 #include <QDir>
 #include <QApplication>
