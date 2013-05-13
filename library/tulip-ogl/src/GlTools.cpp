@@ -17,6 +17,10 @@
  *
  */
 
+#ifndef NDEBUG
+#include <glu.h>
+#endif
+
 #include <tulip/Rectangle.h>
 #include <tulip/GlTools.h>
 #include <tulip/Matrix.h>
