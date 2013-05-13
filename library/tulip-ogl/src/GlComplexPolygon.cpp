@@ -17,11 +17,16 @@
  *
  */
 
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #else
 #include <GL/glew.h>
+#include <GL/gl.h>
 #include <GL/glu.h>
 #endif
 
@@ -32,12 +37,10 @@
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlXMLTools.h>
+#include <tulip/TulipMetaTypes.h>
 
 #include <QStringList>
 #include <QVariantList>
-
-// FIXME The line below is duplicated of tulip-gui/TulipMetaTypes.h
-Q_DECLARE_METATYPE(tlp::Color)
 
 #ifdef __APPLE_CC__
 #if __APPLE_CC__ < 5400 && ( !defined(__GNUC__) || __GNUC_MINOR__ <= 2)
