@@ -19,8 +19,8 @@
 #ifndef GLCOMPLEXPOLYGON_H
 #define GLCOMPLEXPOLYGON_H
 
-#if defined(_MSC_VER)
-#include <Windows.h>
+#ifdef WIN32
+#include <windows.h>
 #endif
 
 #if defined(__APPLE__)
