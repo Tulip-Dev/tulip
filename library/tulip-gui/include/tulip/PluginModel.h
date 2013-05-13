@@ -22,6 +22,7 @@
 #define PLUGINMODEL_H
 
 #include <QIcon>
+#include <QFont>
 
 #include <tulip/TulipModel.h>
 #include <tulip/TlpQtTools.h>

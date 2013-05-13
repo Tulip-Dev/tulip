@@ -469,7 +469,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
       n.id=it->id;
 
-      if (filteringProperty->getNodeValue(n)) {
+      if (filteringProperty&&filteringProperty->getNodeValue(n)) {
           continue;
       }
 

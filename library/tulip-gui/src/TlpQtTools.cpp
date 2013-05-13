@@ -156,16 +156,6 @@ QString getPluginLocalInstallationDir() {
 #endif
 }
 
-QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFramebufferObject::Attachment attachment) {
-  QGLFramebufferObject *fbo=new QGLFramebufferObject(width,height,attachment);
-
-  if(!fbo->isValid()) {
-    QMessageBox::critical(NULL,"OpenGL Error","Tulip cannot find enough video card memory to run.");
-  }
-
-  return fbo;
-}
-
 QString localPluginsPath() {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     return QString(QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/plugins/");

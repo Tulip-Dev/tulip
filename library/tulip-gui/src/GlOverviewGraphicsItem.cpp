@@ -22,12 +22,12 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QGraphicsSceneMouseEvent>
+#include <QGLFramebufferObject>
 
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlGraphComposite.h>
-#include <tulip/TlpQtTools.h>
 
 using namespace std;
 
@@ -45,10 +45,8 @@ void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height) {
   this->width=width;
   this->height=height;
 
-  if(glFrameBuffer) {
     delete glFrameBuffer;
     glFrameBuffer=NULL;
-  }
 
   draw(true);
 }
@@ -60,6 +58,16 @@ void GlOverviewGraphicsItem::setLayerVisible(const string &name, bool visible) {
   else {
     _hiddenLayers.erase(name);
   }
+}
+
+static QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFramebufferObject::Attachment attachment) {
+  QGLFramebufferObject *fbo=new QGLFramebufferObject(width,height,attachment);
+
+  if(!fbo->isValid()) {
+      QMessageBox::critical(NULL,"OpenGL Error","Tulip cannot find enough available memory (GPU) to run.");
+  }
+
+  return fbo;
 }
 
 void GlOverviewGraphicsItem::draw(bool generatePixmap) {
@@ -141,14 +149,14 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     _oldCameras.clear();
 
     for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
-      _oldCameras.push_back((*it).second->getCamera());
+      _oldCameras.push_back(it->second->getCamera());
     }
   }
   else {
     unsigned int i=0;
 
     for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
-      (*it).second->getCamera().loadCameraParametersWith(_oldCameras[i]);
+      it->second->getCamera().loadCameraParametersWith(_oldCameras[i]);
       ++i;
     }
   }
@@ -191,13 +199,13 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     const vector<pair<string, GlLayer*> > &layersList=baseScene.getLayersList();
 
     for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-      layersVisibility.push_back((*it).second->isVisible());
+      layersVisibility.push_back(it->second->isVisible());
 
-      if((*it).second->isAWorkingLayer())
-        (*it).second->setVisible(false);
+      if(it->second->isAWorkingLayer())
+        it->second->setVisible(false);
 
-      if(_hiddenLayers.count((*it).first)!=0)
-        (*it).second->setVisible(false);
+      if(_hiddenLayers.count(it->first)!=0)
+        it->second->setVisible(false);
     }
 
     // Draw the scene
@@ -209,21 +217,21 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
     for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
       if((*itTmp)==true)
-        (*it).second->setVisible(true);
+        it->second->setVisible(true);
 
       ++itTmp;
     }
-
-    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(edgesLabels);
-    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(nodesLabels);
-    baseScene.getGlGraphComposite()->getRenderingParametersPointer()->setViewMetaLabel(metaNodesLabels);
+    GlGraphRenderingParameters *param = baseScene.getGlGraphComposite()->getRenderingParametersPointer();
+    param->setViewEdgeLabel(edgesLabels);
+    param->setViewNodeLabel(nodesLabels);
+    param->setViewMetaLabel(metaNodesLabels);
   }
 
   // invert applied camera transformations
   unsigned int i=0;
 
   for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
-    (*it).second->getCamera()=cameras[i];
+    it->second->getCamera()=cameras[i];
     ++i;
   }
 
@@ -313,7 +321,7 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
   const vector<pair<string, GlLayer*> >& layerList=baseScene.getLayersList();
 
   for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
-    cameras.push_back((*it).second->getCamera());
+    cameras.push_back(it->second->getCamera());
   }
 
   baseScene.centerScene();
@@ -321,7 +329,7 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
   vector<Coord> centerPos;
 
   for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
-    centerPos.push_back((*it).second->getCamera().screenTo3DWorld(position));
+    centerPos.push_back(it->second->getCamera().screenTo3DWorld(position));
   }
 
   glMatrixMode(GL_MODELVIEW);

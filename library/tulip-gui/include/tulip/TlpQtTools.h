@@ -22,7 +22,6 @@
 
 #include <QColor>
 #include <QDebug>
-#include <QGLFramebufferObject>
 
 #include <tulip/Color.h>
 #include <tulip/tulipconf.h>
@@ -99,8 +98,6 @@ TLP_QT_SCOPE QString getPluginPackageName(const QString& pluginName);
 TLP_QT_SCOPE QString getPluginStagingDirectory();
 
 TLP_QT_SCOPE QString getPluginLocalInstallationDir();
-
-TLP_QT_SCOPE QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFramebufferObject::Attachment attachment);
 
 TLP_QT_SCOPE QString localPluginsPath();
 
