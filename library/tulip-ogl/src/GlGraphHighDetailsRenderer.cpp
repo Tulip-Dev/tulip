@@ -433,6 +433,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
   BooleanProperty *selectionProperty=inputData->getElementSelected();
   bool viewOutScreenLabel=inputData->parameters->isViewOutScreenLabel();
   DoubleProperty *metric=inputData->parameters->getElementOrderingProperty();
+  BooleanProperty *filteringProperty = inputData->parameters->getDisplayFilteringProperty();
 
   vector<pair<node,float> > nodesMetricOrdered;
   vector<pair<edge,float> > edgesMetricOrdered;
@@ -467,6 +468,10 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
         lod=-lod;
 
       n.id=it->id;
+
+      if (filteringProperty->getNodeValue(n)) {
+          continue;
+      }
 
       if(selectionProperty->getNodeValue(n)==drawSelected) {
         if(!metric) {
@@ -509,6 +514,10 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
         continue;
 
       e.id=it->id;
+
+      if (filteringProperty->getEdgeValue(e)) {
+          continue;
+      }
 
       if(selectionProperty->getEdgeValue(e) == drawSelected) {
         if(!metric) {
