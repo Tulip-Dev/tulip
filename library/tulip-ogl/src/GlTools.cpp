@@ -18,7 +18,7 @@
  */
 
 #ifndef NDEBUG
-#include <glu.h>
+#include <GL/glu.h>
 #endif
 
 #include <tulip/Rectangle.h>
