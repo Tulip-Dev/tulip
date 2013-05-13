@@ -1,5 +1,13 @@
 SET(USE_QT5_IF_INSTALLED OFF CACHE BOOL "Use Qt5 to build the project if it is installed.")
 
+SET(Qt5Widgets_FOUND false)
+SET(Qt5OpenGL_FOUND false)
+SET(Qt5Xml_FOUND false)
+SET(Qt5XmlPatterns_FOUND false)
+SET(Qt5Network_FOUND false)
+SET(Qt5WebKit_FOUND false)
+SET(Qt5WebKitWidgets_FOUND false)
+
 # If asked, use Qt5
 IF(USE_QT5_IF_INSTALLED)
 
