@@ -61,7 +61,6 @@ bool GlAbstractPolygon::getFillMode() {
 //=====================================================
 void GlAbstractPolygon::setFillMode(const bool filled) {
   this->filled = filled;
-  clearGenerated();
 }
 //=====================================================
 bool GlAbstractPolygon::getOutlineMode() {
@@ -70,7 +69,6 @@ bool GlAbstractPolygon::getOutlineMode() {
 //=====================================================
 void GlAbstractPolygon::setOutlineMode(const bool outlined) {
   this->outlined = outlined;
-  clearGenerated();
 }
 //=====================================================
 bool GlAbstractPolygon::getLightingMode() {
