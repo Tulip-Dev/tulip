@@ -70,7 +70,7 @@ void OpenGlConfigManager::checkDrivers() {
     ati=true;
 
   if(!nvidia && !ati) {
-    QMessageBox::warning(NULL,QObject::trUtf8("Graphics card warning"), QObject::trUtf8("Your graphics card is not powerful enough or is not configured with the proper drivers. For optimal performances, make sure to install the properietary drivers corresponding to your graphics card model."));
+    QMessageBox::warning(NULL,QObject::trUtf8("Graphics card warning"), QObject::trUtf8("Your graphics card is not powerful enough or is not configured with the proper drivers. For optimal performances, make sure to install the proprietary drivers corresponding to your graphics card model."));
   }
 }
 
