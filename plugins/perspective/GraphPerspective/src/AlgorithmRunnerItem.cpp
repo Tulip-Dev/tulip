@@ -290,10 +290,11 @@ void AlgorithmRunnerItem::run(Graph *g) {
         && typeName != TN(StringVectorProperty)
         && typeName != TN(IntegerVectorProperty)
         && typeName != TN(SizeVectorProperty)
-        && typeName != TN(ColorVectorProperty))
+        && typeName != TN(ColorVectorProperty)) {
       if (desc.getDirection() != IN_PARAM)
 	outNonPropertyParams.push_back(desc.getName());
       continue;
+    }
 
     if (desc.getDirection() == IN_PARAM) {
       if (desc.isMandatory()) {
