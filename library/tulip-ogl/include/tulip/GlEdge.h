@@ -114,7 +114,6 @@ private :
 
   static GlLabel *label;
   static bool haveToComputeEdgeWidthBaseLod;
-  static bool orthoProjection;
   static float edgeWidthBaseLod;
 
   /**
