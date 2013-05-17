@@ -176,19 +176,19 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
     const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
     unsigned nbBends = bends.size();
 
+    bool vertexArrayRendering = false;
     if (data->getGlVertexArrayManager()->renderingIsBegin() &&
             !data->parameters->getFeedbackRender()) {
         if(lodSize>-1 && lodSize<1) {
-            if (!data->parameters->isViewArrow() || lodSize <= 0.1) {
+            if (lodSize <= 0.1) {
+                vertexArrayRendering = true;
                 data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
                 return;
             }
         }
-        else if (!data->parameters->isEdge3D()
-                 && !data->parameters->isViewArrow()
-                 && edgeTexture == "") {
+        else if (!data->parameters->isEdge3D() && edgeTexture == "") {
+            vertexArrayRendering = true;
             data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
-            return;
         }
     }
 
@@ -232,59 +232,53 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
     getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
 
     if (nbBends == 0 && (source == target)) { //a loop without bends
-        //draw a nice loop;
-        //TODO !!
+        //TODO : draw a nice loop!!
         return;
     }
 
     if (bends.size() == 0 && (srcCoord - tgtCoord).norm() < 1E-4)
         return; //two nodes very closed
 
-    Matrix<float, 4> transformMatrix;
-    camera->getTransformMatrix(transformMatrix);
-
     // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
     Coord srcAnchor, tgtAnchor, beginLineAnchor, endLineAnchor;
 
     getEdgeAnchor(data,source,target,bends,srcCoord,tgtCoord,srcSize,tgtSize,srcAnchor,tgtAnchor);
 
-    float selectionOutlineSize= 0.f;
-
-    if (selected) {
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-
-        Coord p1=camera->screenTo3DWorld(Coord(0,0,0));
-        Coord p2=camera->screenTo3DWorld(Coord(2,0,0));
-        selectionOutlineSize = (p2-p1).norm();
-        edgeSize[0] += selectionOutlineSize;
-        edgeSize[1] += selectionOutlineSize;
-
-        glMatrixMode(GL_PROJECTION);
-        glPopMatrix();
-        glMatrixMode(GL_MODELVIEW);
-        glPopMatrix();
-    }
-
-    double lineWidth=data->getElementBorderWidth()->getEdgeValue(e);
-
     if (data->parameters->isViewArrow()) {
         EdgeExtremityGlyph *startEdgeGlyph = data->extremityGlyphs.get(data->getElementSrcAnchorShape()->getEdgeValue(e));
         EdgeExtremityGlyph *endEdgeGlyph = data->extremityGlyphs.get(data->getElementTgtAnchorShape()->getEdgeValue(e));
 
+        float selectionOutlineSize= 0.f;
+
+        if (selected) {
+            glMatrixMode(GL_PROJECTION);
+            glPushMatrix();
+            glMatrixMode(GL_MODELVIEW);
+            glPushMatrix();
+
+            Coord p1=camera->screenTo3DWorld(Coord(0,0,0));
+            Coord p2=camera->screenTo3DWorld(Coord(2,0,0));
+            selectionOutlineSize = (p2-p1).norm();
+            edgeSize[0] += selectionOutlineSize;
+            edgeSize[1] += selectionOutlineSize;
+
+            glMatrixMode(GL_PROJECTION);
+            glPopMatrix();
+            glMatrixMode(GL_MODELVIEW);
+            glPopMatrix();
+        }
+
         if (startEdgeGlyph != NULL) {
-            displayArrow(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,selectionOutlineSize,startEdgeGlyph, endEdgeGlyph ? endEdgeGlyph->id() : UINT_MAX,
-                    bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
+            displayArrowAndAdjustAnchor(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,selectionOutlineSize, endEdgeGlyph ? endEdgeGlyph->id() : UINT_MAX,
+                    bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor, startEdgeGlyph, camera);
         }
         else {
             beginLineAnchor = srcAnchor;
         }
 
         if (endEdgeGlyph != NULL) {
-            displayArrow(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,selectionOutlineSize,endEdgeGlyph,startEdgeGlyph ? startEdgeGlyph->id() : UINT_MAX,
-                    bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
+            displayArrowAndAdjustAnchor(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,selectionOutlineSize,startEdgeGlyph ? startEdgeGlyph->id() : UINT_MAX,
+                    bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor, endEdgeGlyph, camera);
         }
         else {
             endLineAnchor = tgtAnchor;
@@ -294,6 +288,11 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
         beginLineAnchor = srcAnchor;
         endLineAnchor = tgtAnchor;
     }
+
+    if (vertexArrayRendering)
+        return;
+
+    double lineWidth=data->getElementBorderWidth()->getEdgeValue(e);
 
     //Reset in case of drawing extremity glyph that can alterate value
     GlTextureManager::getInst().setAnimationFrame(data->getElementAnimationFrame()->getEdgeValue(e));
@@ -583,6 +582,7 @@ void GlEdge::getVertices(const GlGraphInputData *data,
     const node target = eEnds.second;
     const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
     const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
+    bool selected = data->getElementSelected()->getEdgeValue(e);
 
     const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
     unsigned nbBends = bends.size();
@@ -597,13 +597,47 @@ void GlEdge::getVertices(const GlGraphInputData *data,
     const Size &srcSize = data->getElementSize()->getNodeValue(source);
     const Size &tgtSize = data->getElementSize()->getNodeValue(target);
 
+    float maxSrcSize, maxTgtSize;
+
+    if(srcSize[0]>=srcSize[1])
+        maxSrcSize=srcSize[0];
+    else
+        maxSrcSize=srcSize[1];
+
+    if(tgtSize[0]>=tgtSize[1])
+        maxTgtSize=tgtSize[0];
+    else
+        maxTgtSize=tgtSize[1];
+
     Coord srcAnchor, tgtAnchor;
     getEdgeAnchor(data,source,target,bends,srcCoord,tgtCoord,srcSize,tgtSize,srcAnchor,tgtAnchor);
 
     vector<Coord> vertices;
     Coord srcCoordTmp=srcCoord;
     Coord tgtCoordTmp=tgtCoord;
-    computeCleanVertices(bends, srcAnchor, tgtAnchor, srcCoordTmp, tgtCoordTmp, vertices);
+
+    EdgeExtremityGlyph *startEdgeGlyph = data->extremityGlyphs.get(data->getElementSrcAnchorShape()->getEdgeValue(e));
+    EdgeExtremityGlyph *endEdgeGlyph = data->extremityGlyphs.get(data->getElementTgtAnchorShape()->getEdgeValue(e));
+
+
+    Coord beginLineAnchor;
+    if (data->parameters->isViewArrow() && startEdgeGlyph != NULL) {
+        displayArrowAndAdjustAnchor(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),Color(),maxSrcSize,selected,0, endEdgeGlyph ? endEdgeGlyph->id() : UINT_MAX,
+                bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
+    }
+    else {
+        beginLineAnchor = srcAnchor;
+    }
+
+    Coord endLineAnchor;
+    if (data->parameters->isViewArrow() && endEdgeGlyph != NULL) {
+        displayArrowAndAdjustAnchor(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),Color(),maxTgtSize,selected,0,startEdgeGlyph ? startEdgeGlyph->id() : UINT_MAX,
+                bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
+    } else {
+        endLineAnchor = tgtAnchor;
+    }
+
+    computeCleanVertices(bends, beginLineAnchor, endLineAnchor, srcCoordTmp, tgtCoordTmp, vertices);
 
     if(vertices.empty())
         return ;
@@ -764,30 +798,31 @@ float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
         camera->getModelviewMatrix(modelviewMatrix);
         if (edgeSize[0] != edgeSize[1]) {
             return std::max(std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,camera->getViewport())),
-                            std::abs(projectSize(edgeCoord, Size(edgeSize[1], edgeSize[1], edgeSize[1]), projectionMatrix, modelviewMatrix,camera->getViewport())));
+                    std::abs(projectSize(edgeCoord, Size(edgeSize[1], edgeSize[1], edgeSize[1]), projectionMatrix, modelviewMatrix,camera->getViewport())));
         } else {
             return std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,camera->getViewport()));
         }
     }
 }
 
-void GlEdge::displayArrow(const GlGraphInputData *data,
-                          const edge &e,
-                          const node &source,
-                          const Size& sizeRatio,
-                          float edgeSize,
-                          const Color &color,
-                          float maxSize,
-                          bool selected,
-                          float selectionOutlineSize,
-                          EdgeExtremityGlyph* extremityGlyph,
-                          int tgtEdgeGlyph,
-                          size_t numberOfBends,
-                          const Coord &anchor,
-                          const Coord &tgtCoord,
-                          const Coord &srcAnchor,
-                          const Coord &tgtAnchor,
-                          Coord &lineAnchor) {
+void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data,
+                                         const edge &e,
+                                         const node &source,
+                                         const Size& sizeRatio,
+                                         float edgeSize,
+                                         const Color &color,
+                                         float maxSize,
+                                         bool selected,
+                                         float selectionOutlineSize,
+                                         int tgtEdgeGlyph,
+                                         size_t numberOfBends,
+                                         const Coord &anchor,
+                                         const Coord &tgtCoord,
+                                         const Coord &srcAnchor,
+                                         const Coord &tgtAnchor,
+                                         Coord &lineAnchor,
+                                         EdgeExtremityGlyph* extremityGlyph,
+                                         Camera *camera) {
 
     //Correct begin tmp Anchor
     Coord beginTmpAnchor = anchor;
@@ -832,22 +867,33 @@ void GlEdge::displayArrow(const GlGraphInputData *data,
 
     size[0] = std::min(maxGlyphSize, size[0]);
 
-    assert(extremityGlyph);
+    if (extremityGlyph) {
 
-    MatrixGL srcTransformationMatrix;
-    MatrixGL srcScalingMatrix;
+        MatrixGL projectionMatrix;
+        MatrixGL modelviewMatrix;
+        camera->getProjectionMatrix(projectionMatrix);
+        camera->getModelviewMatrix(modelviewMatrix);
 
-    extremityGlyph->get2DTransformationMatrix(beginTmpAnchor, srcAnchor, size,
-                                              srcTransformationMatrix, srcScalingMatrix);
+        float lod = projectSize(srcAnchor, size, projectionMatrix, modelviewMatrix,camera->getViewport());
+
+        // edge extremity glyph is in the viewport
+        if (lod > 0) {
+            MatrixGL srcTransformationMatrix;
+            MatrixGL srcScalingMatrix;
+
+            extremityGlyph->get2DTransformationMatrix(beginTmpAnchor, srcAnchor, size,
+                                                      srcTransformationMatrix, srcScalingMatrix);
 
 
-    glPushMatrix();
-    glMultMatrixf((GLfloat *) &srcTransformationMatrix);
-    glMultMatrixf((GLfloat *) &srcScalingMatrix);
-    glDisable(GL_CULL_FACE);
-    extremityGlyph->draw(e, source, color,(data->parameters->isEdgeColorInterpolate() ? color : data->getElementBorderColor()->getEdgeValue(e)), 100.);
-    glEnable(GL_CULL_FACE);
-    glPopMatrix();
+            glPushMatrix();
+            glMultMatrixf((GLfloat *) &srcTransformationMatrix);
+            glMultMatrixf((GLfloat *) &srcScalingMatrix);
+            glDisable(GL_CULL_FACE);
+            extremityGlyph->draw(e, source, color,(data->parameters->isEdgeColorInterpolate() ? color : data->getElementBorderColor()->getEdgeValue(e)), 100.);
+            glEnable(GL_CULL_FACE);
+            glPopMatrix();
+        }
+    }
 
     //Compute new Anchor
 
