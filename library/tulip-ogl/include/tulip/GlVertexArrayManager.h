@@ -174,6 +174,10 @@ protected:
   ColorProperty* colorProperty;
   ColorProperty* borderColorProperty;
   DoubleProperty* borderWidthProperty;
+  IntegerProperty *srcAnchorShapeProperty;
+  IntegerProperty *tgtAnchorShapeProperty;
+  SizeProperty *srcAnchorSizeProperty;
+  SizeProperty *tgtAnchorSizeProperty;
   bool graphObserverActivated;
   bool layoutObserverActivated;
   bool colorObserverActivated;
@@ -191,6 +195,7 @@ protected:
   bool edgesModified;
   bool colorInterpolate;
   bool sizeInterpolate;
+  bool viewArrow;
 
 
   std::vector<Coord> linesCoordsArray;

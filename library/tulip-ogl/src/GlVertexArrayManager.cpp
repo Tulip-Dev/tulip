@@ -48,6 +48,10 @@ GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *i):inputData(i),gra
     colorProperty(inputData->getElementColor()),
     borderColorProperty(inputData->getElementBorderColor()),
     borderWidthProperty(inputData->getElementBorderWidth()),
+    srcAnchorShapeProperty(inputData->getElementSrcAnchorShape()),
+    tgtAnchorShapeProperty(inputData->getElementTgtAnchorShape()),
+    srcAnchorSizeProperty(inputData->getElementSrcAnchorSize()),
+    tgtAnchorSizeProperty(inputData->getElementTgtAnchorSize()),
     graphObserverActivated(false),
     layoutObserverActivated(false),
     colorObserverActivated(false),
@@ -61,7 +65,9 @@ GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *i):inputData(i),gra
     vectorIndexSizeInit(false),
     edgesModified(false),
     colorInterpolate(inputData->parameters->isEdgeColorInterpolate()),
-    sizeInterpolate(inputData->parameters->isEdgeSizeInterpolate()) {
+    sizeInterpolate(inputData->parameters->isEdgeSizeInterpolate()),
+    viewArrow(inputData->parameters->isViewArrow())
+{
 }
 
 GlVertexArrayManager::~GlVertexArrayManager() {
@@ -80,6 +86,13 @@ void GlVertexArrayManager::setInputData(GlGraphInputData *inputData) {
     colorProperty = inputData->getElementColor();
     borderColorProperty = inputData->getElementBorderColor();
     borderWidthProperty = inputData->getElementBorderWidth();
+    srcAnchorShapeProperty = inputData->getElementSrcAnchorShape();
+    tgtAnchorShapeProperty = inputData->getElementTgtAnchorShape();
+    srcAnchorSizeProperty = inputData->getElementSrcAnchorSize();
+    tgtAnchorSizeProperty = inputData->getElementTgtAnchorSize();
+    colorInterpolate = inputData->parameters->isEdgeColorInterpolate();
+    sizeInterpolate = inputData->parameters->isEdgeSizeInterpolate();
+    viewArrow = inputData->parameters->isViewArrow();
     graph=inputData->getGraph();
     initObservers();
 }
@@ -99,6 +112,12 @@ bool GlVertexArrayManager::haveToCompute() {
 
     if(inputData->parameters->isEdgeSizeInterpolate()!=sizeInterpolate) {
         sizeInterpolate=inputData->parameters->isEdgeSizeInterpolate();
+        clearLayoutData();
+        recompute = true;
+    }
+
+    if (inputData->parameters->isViewArrow() != viewArrow) {
+        viewArrow = inputData->parameters->isViewArrow();
         clearLayoutData();
         recompute = true;
     }
@@ -177,6 +196,46 @@ bool GlVertexArrayManager::haveToCompute() {
         borderWidthProperty = inputData->getElementBorderWidth();
         borderWidthProperty->addListener(this);
         clearColorData();
+        recompute = true;
+    }
+
+    if(srcAnchorShapeProperty != inputData->getElementSrcAnchorShape()){
+        if(srcAnchorShapeProperty && layoutObserverActivated)
+            srcAnchorShapeProperty->removeListener(this);
+
+        srcAnchorShapeProperty = inputData->getElementSrcAnchorShape();
+        srcAnchorShapeProperty->addListener(this);
+        clearLayoutData();
+        recompute = true;
+    }
+
+    if(tgtAnchorShapeProperty != inputData->getElementTgtAnchorShape()){
+        if(tgtAnchorShapeProperty && layoutObserverActivated)
+            tgtAnchorShapeProperty->removeListener(this);
+
+        tgtAnchorShapeProperty = inputData->getElementTgtAnchorShape();
+        tgtAnchorShapeProperty->addListener(this);
+        clearLayoutData();
+        recompute = true;
+    }
+
+    if(srcAnchorSizeProperty != inputData->getElementSrcAnchorSize()){
+        if(srcAnchorSizeProperty && layoutObserverActivated)
+            srcAnchorSizeProperty->removeListener(this);
+
+        srcAnchorSizeProperty = inputData->getElementSrcAnchorSize();
+        srcAnchorSizeProperty->addListener(this);
+        clearLayoutData();
+        recompute = true;
+    }
+
+    if(tgtAnchorSizeProperty != inputData->getElementTgtAnchorSize()){
+        if(tgtAnchorSizeProperty && layoutObserverActivated)
+            tgtAnchorSizeProperty->removeListener(this);
+
+        tgtAnchorSizeProperty = inputData->getElementTgtAnchorSize();
+        tgtAnchorSizeProperty->addListener(this);
+        clearLayoutData();
         recompute = true;
     }
 
@@ -706,7 +765,8 @@ void GlVertexArrayManager::activatePointNodeDisplay(GlNode *node,bool onePixel,b
 }
 
 void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
-    if(layoutProperty==property || sizeProperty==property || shapeProperty==property|| rotationProperty==property) {
+    if(layoutProperty==property || sizeProperty==property || shapeProperty==property|| rotationProperty==property ||
+       srcAnchorShapeProperty==property || tgtAnchorShapeProperty==property || srcAnchorSizeProperty==property || tgtAnchorSizeProperty==property) {
         setHaveToComputeLayout(true);
         clearLayoutData();
         layoutProperty->removeListener(this);
@@ -787,6 +847,10 @@ void GlVertexArrayManager::initObservers() {
         sizeProperty->addListener(this);
         shapeProperty->addListener(this);
         rotationProperty->addListener(this);
+        srcAnchorShapeProperty->addListener(this);
+        tgtAnchorShapeProperty->addListener(this);
+        srcAnchorSizeProperty->addListener(this);
+        tgtAnchorSizeProperty->addListener(this);
         layoutObserverActivated=true;
     }
 
@@ -817,6 +881,18 @@ void GlVertexArrayManager::clearObservers(PropertyInterface *deletedProperty) {
 
         if(deletedProperty!=rotationProperty)
             rotationProperty->removeListener(this);
+
+        if(deletedProperty!=srcAnchorShapeProperty)
+            srcAnchorShapeProperty->removeListener(this);
+
+        if(deletedProperty!=tgtAnchorShapeProperty)
+            tgtAnchorShapeProperty->removeListener(this);
+
+        if(deletedProperty!=srcAnchorSizeProperty)
+            srcAnchorSizeProperty->removeListener(this);
+
+        if(deletedProperty!=tgtAnchorSizeProperty)
+            tgtAnchorSizeProperty->removeListener(this);
 
         layoutObserverActivated=false;
     }
@@ -879,6 +955,22 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
                 borderWidthProperty = NULL;
                 clearColorData();
             }
+            else if(property==srcAnchorShapeProperty) {
+                srcAnchorShapeProperty = NULL;
+                clearLayoutData();
+            }
+            else if(property==tgtAnchorShapeProperty) {
+                tgtAnchorShapeProperty = NULL;
+                clearLayoutData();
+            }
+            else if(property==srcAnchorSizeProperty) {
+                srcAnchorSizeProperty = NULL;
+                clearLayoutData();
+            }
+            else if(property==tgtAnchorSizeProperty) {
+                tgtAnchorSizeProperty = NULL;
+                clearLayoutData();
+            }
             break;
         }
 
@@ -909,7 +1001,8 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
         case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
         case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
 
-            if (layoutProperty==property || shapeProperty==property) {
+            if (layoutProperty==property || shapeProperty==property || srcAnchorShapeProperty==property || tgtAnchorShapeProperty==property ||
+                srcAnchorSizeProperty==property || tgtAnchorSizeProperty==property) {
                 edgesModified = true;
             }
 
