@@ -187,6 +187,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   BooleanProperty *filteringProperty = inputData->parameters->getDisplayFilteringProperty();
   bool displayNodes = inputData->parameters->isDisplayNodes();
   bool displayMetaNodes = inputData->parameters->isDisplayMetaNodes();
+  bool displayMetaNodesLabel = inputData->parameters->isViewMetaLabel();
   bool displayEdges = inputData->parameters->isDisplayEdges();
 
   GlNode glNode(0);
@@ -204,6 +205,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
     //draw nodes and metanodes
     for(vector<ComplexEntityLODUnit>::iterator it =layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
+
       if(it->lod<=0)
         continue;
 
@@ -212,7 +214,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
           continue;
       }
 
-      if((!graph->isMetaNode(node(it->id)) && displayNodes) || (graph->isMetaNode(node(it->id)) && displayMetaNodes)) {
+      if(displayNodes || ((displayMetaNodes || displayMetaNodesLabel) && graph->isMetaNode(node(it->id)))) {
         if(selectionDrawActivate) {
           if((selectionType & RenderingNodes)==0)
             continue;
@@ -317,7 +319,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
 
       if(it->isNode) {
-        if((!graph->isMetaNode(node(entity->id)) && displayNodes) || (graph->isMetaNode(node(entity->id)) && displayMetaNodes)) {
+        if(displayNodes || ((displayMetaNodes || displayMetaNodesLabel) && graph->isMetaNode(node(entity->id)))) {
           if(selectionDrawActivate) {
             if((selectionType & RenderingNodes)==0)
               continue;
@@ -452,10 +454,9 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
   delete nonDefaultLabelEdges;
 
   bool viewNodeLabel=inputData->parameters->isViewNodeLabel();
-  bool viewMetaLabel=inputData->parameters->isViewMetaLabel();
 
   // Draw Labels for Nodes
-  if((viewNodeLabel || viewMetaLabel) && !nodeLabelEmpty) {
+  if(viewNodeLabel && !nodeLabelEmpty) {
     node n;
 
     for(vector<ComplexEntityLODUnit>::iterator it=layerLODUnit.nodesLODVector.begin(); it!=layerLODUnit.nodesLODVector.end(); ++it) {

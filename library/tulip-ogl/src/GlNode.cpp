@@ -103,22 +103,9 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
   node n=node(id);
 
   if (data->getElementSelected()->getNodeValue(n)) {
-
-    if(data->getGraph()->isMetaNode(n)) {
-      glStencilFunc(GL_LEQUAL,data->parameters->getSelectedMetaNodesStencil(),0xFFFF);
-    }
-    else {
-      glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil(),0xFFFF);
-    }
-  }
-  else {
-
-    if(data->getGraph()->isMetaNode(n)) {
-      glStencilFunc(GL_LEQUAL,data->parameters->getMetaNodesStencil(),0xFFFF);
-    }
-    else {
-      glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
-    }
+    glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil(),0xFFFF);
+  } else {
+    glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
   }
 
   ColorProperty *colP=data->getElementColor();
@@ -196,6 +183,9 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
   }
 
+  if (!data->parameters->isDisplayNodes())
+      return;
+
   //draw a glyph or make recursive call for meta nodes
   glPushMatrix();
   glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
@@ -268,14 +258,9 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lo
   if (tmp.length() < 1)
     return;
 
-  if(!data->getGraph()->isMetaNode(n)) {
-    if(selected) label->setStencil(data->parameters->getSelectedNodesStencil());
-    else label->setStencil(data->parameters->getNodesLabelStencil());
-  }
-  else {
-    if(selected) label->setStencil(data->parameters->getSelectedMetaNodesStencil());
-    else label->setStencil(data->parameters->getMetaNodesLabelStencil());
-  }
+
+  if(selected) label->setStencil(data->parameters->getSelectedNodesStencil());
+  else label->setStencil(data->parameters->getNodesLabelStencil());
 
   int fontSize=data->getElementFontSize()->getNodeValue(n);
 
@@ -288,7 +273,6 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lo
   const Coord &nodeCoord = data->getElementLayout()->getNodeValue(n);
   const Size  &nodeSize  = data->getElementSize()->getNodeValue(n);
   int labelPos = data->getElementLabelPosition()->getNodeValue(n);
-
 
   BoundingBox includeBB;
   data->glyphs.get(data->getElementShape()->getNodeValue(n))->getTextBoundingBox(includeBB,n);

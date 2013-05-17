@@ -208,7 +208,7 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
       visible = parameters->isDisplayEdges();
     }
     else if (id == META_NODES_ID) {
-      display = trUtf8("Meta nodes");
+      display = trUtf8("Meta nodes content");
       stencil = parameters->getMetaNodesStencil();
       visible = parameters->isDisplayMetaNodes();
     }
@@ -218,7 +218,7 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
       visible = parameters->isDisplayMetaNodes();
     }
     else if (id == META_NODES_LABELS_ID) {
-      display = trUtf8("Meta nodes labels");
+      display = trUtf8("Meta nodes content labels");
       stencil = parameters->getMetaNodesLabelStencil();
       visible = parameters->isViewMetaLabel();
     }
