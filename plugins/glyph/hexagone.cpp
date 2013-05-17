@@ -120,6 +120,6 @@ public:
                  lod);
   }
 };
-
+PLUGIN(EEHexagone)
 
 
