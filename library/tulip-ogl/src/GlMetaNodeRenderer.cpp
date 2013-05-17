@@ -78,9 +78,21 @@ void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
   }
 
   scene->getGlGraphComposite()->setRenderingParameters(*(_inputData->renderingParameters()));
-  bool viewMetaLabels = _inputData->renderingParameters()->isViewMetaLabel();//Checks if user wants to see metanode labels
+  bool viewMeta = _inputData->renderingParameters()->isDisplayMetaNodes();//Checks if user wants to see metanode content
+  bool viewMetaLabels = _inputData->renderingParameters()->isViewMetaLabel();//Checks if user wants to see metanode content labels
+  int metaStencil = _inputData->renderingParameters()->getMetaNodesStencil();
+  int metaSelectedStencil = _inputData->renderingParameters()->getSelectedMetaNodesStencil();
+  int metaLabelStencil = _inputData->renderingParameters()->getMetaNodesLabelStencil();
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setDisplayNodes(viewMeta);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setDisplayEdges(viewMeta);
   scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewEdgeLabel(viewMetaLabels);
   scene->getGlGraphComposite()->getRenderingParametersPointer()->setViewNodeLabel(viewMetaLabels);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setNodesStencil(metaStencil);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setEdgesStencil(metaStencil);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setSelectedNodesStencil(metaSelectedStencil);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setSelectedEdgesStencil(metaSelectedStencil);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setNodesLabelStencil(metaLabelStencil);
+  scene->getGlGraphComposite()->getRenderingParametersPointer()->setEdgesLabelStencil(metaLabelStencil);
 
   GlNode glNode(n.id);
 

@@ -136,7 +136,10 @@ bool GlQuadTreeLODCalculator::needEntities() {
 
     if(oldParameters.isDisplayEdges()!=newParameters->isDisplayEdges() ||
         oldParameters.isDisplayMetaNodes()!=newParameters->isDisplayMetaNodes() ||
-        oldParameters.isDisplayNodes()!=newParameters->isDisplayNodes()) {
+        oldParameters.isDisplayNodes()!=newParameters->isDisplayNodes() ||
+        oldParameters.isViewNodeLabel() != newParameters->isViewNodeLabel() ||
+        oldParameters.isViewEdgeLabel() != newParameters->isViewEdgeLabel() ||
+        oldParameters.isViewMetaLabel() != newParameters->isViewMetaLabel()) {
       oldParameters=*inputData->parameters;
       haveToCompute = true;
       return true;
