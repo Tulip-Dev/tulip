@@ -114,3 +114,4 @@ public:
                lod);
   }
 };
+PLUGIN(EECircle)
