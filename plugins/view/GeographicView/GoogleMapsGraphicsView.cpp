@@ -31,6 +31,7 @@
 #include <QTextStream>
 #include <QTimeLine>
 #include <QMessageBox>
+#include <QFile>
 
 using namespace std;
 
