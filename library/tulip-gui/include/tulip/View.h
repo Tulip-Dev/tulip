@@ -21,8 +21,8 @@
 
 #include <QObject>
 #include <QSet>
+#include <QList>
 #include <QSize>
-#include <QPointF>
 
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
@@ -33,6 +33,8 @@ class QGraphicsItem;
 class QWidget;
 class QPixmap;
 class QMenu;
+class QPointF;
+class QPoint;
 
 namespace tlp {
 static const std::string VIEW_CATEGORY = "Panel";

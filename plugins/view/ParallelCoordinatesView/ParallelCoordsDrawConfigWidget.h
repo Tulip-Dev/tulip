@@ -25,17 +25,20 @@
 #include <tulip/Size.h>
 #include <tulip/Color.h>
 
-#include "ui_ParallelCoordsDrawConfigWidget.h"
+namespace Ui {
+class ParallelCoordsDrawConfigWidgetData;
+}
 
 namespace tlp {
 
-class ParallelCoordsDrawConfigWidget : public QWidget, public Ui::ParallelCoordsDrawConfigWidgetData {
+class ParallelCoordsDrawConfigWidget : public QWidget {
 
   Q_OBJECT
 
 public :
 
   ParallelCoordsDrawConfigWidget(QWidget *parent = 0);
+  ~ParallelCoordsDrawConfigWidget();
 
   unsigned int getAxisHeight() const;
   void setAxisHeight(const unsigned int axisHeight);
@@ -87,6 +90,7 @@ private :
   Color oldBackgroundColor;
   unsigned int oldUnhighlightedEltsColorsAlphaValue;
   std::string oldLinesTextureFilename;
+  Ui::ParallelCoordsDrawConfigWidgetData* _ui;
 
 
 };

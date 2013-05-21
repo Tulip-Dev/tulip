@@ -25,9 +25,7 @@
 #include <vector>
 #include <map>
 
-#include "../utils/ViewGraphPropertiesSelectionWidget.h"
 #include "../../utils/ViewNames.h"
-#include "HistoOptionsWidget.h"
 #include "Histogram.h"
 
 #if defined(_MSC_VER)
@@ -36,10 +34,8 @@
 
 #if defined(__APPLE__)
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
 #endif
 
 class QMenu;
@@ -51,6 +47,8 @@ class GlLayer;
 class GlComposite;
 class Interactor;
 class GlRect;
+class ViewGraphPropertiesSelectionWidget;
+class HistoOptionsWidget;
 
 /*@{*/
 /** \file

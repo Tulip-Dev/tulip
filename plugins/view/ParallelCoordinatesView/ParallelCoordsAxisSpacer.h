@@ -20,9 +20,6 @@
 #ifndef PARALLELCOORDSAXISSPACER_H_
 #define PARALLELCOORDSAXISSPACER_H_
 
-#include <QCursor>
-#include <QMouseEvent>
-
 #include <tulip/GLInteractor.h>
 #include "ParallelCoordinatesView.h"
 

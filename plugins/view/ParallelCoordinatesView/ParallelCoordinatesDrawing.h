@@ -22,12 +22,8 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <tulip/Graph.h>
 #include <tulip/GlComposite.h>
-#include <tulip/GlScene.h>
 #include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
-#include <tulip/GlMainWidget.h>
 
 #include <QWidget>
 
@@ -37,6 +33,8 @@
 #include "ParallelCoordinatesGraphProxy.h"
 
 namespace tlp {
+
+class GlMainWidget;
 
 class ParallelCoordinatesDrawing : public GlComposite, public Observable {
 

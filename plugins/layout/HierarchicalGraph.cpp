@@ -18,9 +18,12 @@
  */
 #include <string>
 #include <cassert>
-#include <math.h>
+#include <cmath>
 #include <stack>
+
 #include <tulip/SortIterator.h>
+#include <tulip/StringCollection.h>
+
 #include "HierarchicalGraph.h"
 #include "DatasetTools.h"
 

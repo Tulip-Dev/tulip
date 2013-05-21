@@ -20,14 +20,22 @@
 #ifndef SOMWIDGET_H_
 #define SOMWIDGET_H_
 
-#include "ui_SOMWidget.h"
+#include <QWidget>
 
-class SOMWidget:public QWidget, public Ui::SOMWidget {
+namespace Ui {
+class SOMWidget;
+}
+
+namespace tlp {
+class SOMWidget:public QWidget {
   Q_OBJECT
+
+   Ui::SOMWidget* _ui;
+
 public:
   SOMWidget(QWidget *parent = NULL);
-  virtual ~SOMWidget();
+  ~SOMWidget();
 };
-
+}
 
 #endif /* SOMWIDGET_H_ */

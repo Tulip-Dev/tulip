@@ -20,24 +20,27 @@
 #ifndef HISTODATACONFIGWIDGET_H_
 #define HISTODATACONFIGWIDGET_H_
 
-#include <tulip/Graph.h>
-
 #include <vector>
 #include <string>
 
 #include <QWidget>
 
-#include "ui_ViewGraphPropertiesSelectionWidget.h"
+#include <tulip/Graph.h>
+
+namespace Ui {
+class ViewGraphPropertiesSelectionWidgetData;
+}
 
 namespace tlp {
 
-class ViewGraphPropertiesSelectionWidget : public QWidget, public Ui::ViewGraphPropertiesSelectionWidgetData, public Observable {
+class ViewGraphPropertiesSelectionWidget : public QWidget, public Observable {
 
   Q_OBJECT
 
 public :
 
   ViewGraphPropertiesSelectionWidget(QWidget *parent = 0);
+  ~ViewGraphPropertiesSelectionWidget();
 
   void setWidgetParameters(Graph *graph, std::vector<std::string> graphPropertiesTypesFilter);
   std::vector<std::string> getSelectedGraphProperties();
@@ -47,7 +50,7 @@ public :
 
   ElementType getDataLocation() const;
   void setDataLocation(const ElementType location);
-
+  void enableEdgesButton(const bool enable);
   void treatEvent(const Event&);
 
   bool configurationChanged();
@@ -62,6 +65,7 @@ public slots:
 
 private :
 
+  Ui::ViewGraphPropertiesSelectionWidgetData *_ui;
   Graph *graph;
   std::vector<std::string> graphPropertiesTypesFilter;
   std::vector<std::string> lastSelectedProperties;

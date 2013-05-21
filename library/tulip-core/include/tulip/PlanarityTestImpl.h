@@ -26,10 +26,12 @@
 
 #include <list>
 #include <vector>
-#include <tulip/ObservableGraph.h>
+
 #include <tulip/Edge.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/BmdList.h>
+#include <tulip/tulipconf.h>
+#include <tulip/Node.h>
 
 namespace tlp {
 class Graph;

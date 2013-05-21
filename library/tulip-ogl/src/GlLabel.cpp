@@ -36,6 +36,7 @@
 #include <tulip/OcclusionTest.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlXMLTools.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 

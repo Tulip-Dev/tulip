@@ -31,6 +31,8 @@ extern "C" {
 #include <fstream>
 #include <sstream>
 
+YajlParseFacade::YajlParseFacade(tlp::PluginProgress* progress) : _progress(progress), _parsingSucceeded(true) {}
+
 static int parse_null(void *ctx) {
   YajlParseFacade* facade = (YajlParseFacade*) ctx;
   facade->parseNull();

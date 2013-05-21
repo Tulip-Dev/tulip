@@ -22,32 +22,31 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <list>
-
-#include <QCheckBox>
 #include <QDialog>
-#include <QRadioButton>
-#include <QSpinBox>
-#include <QGroupBox>
-#include <QLineEdit>
-#include <QEvent>
 
-#include <tulip/DataSet.h>
 #include <tulip/Size.h>
+#include <tulip/Color.h>
+#include <tulip/Graph.h>
 
+namespace Ui {
+class ConfigDialog;
+}
 
-#include "ParallelCoordinatesGraphProxy.h"
-#include "ui_ParallelCoordinatesConfigDialog.h"
+class QWidget;
+class QShowEvent;
 
 namespace tlp {
 
-class ParallelCoordinatesConfigDialog : public QDialog, public Ui::Dialog {
+class ParallelCoordinatesGraphProxy;
+
+class ParallelCoordinatesConfigDialog : public QDialog {
 
   Q_OBJECT
 
 public :
 
   ParallelCoordinatesConfigDialog(ParallelCoordinatesGraphProxy *data, QWidget *parent = 0);
+  ~ParallelCoordinatesConfigDialog();
 
   std::vector<std::string> getSelectedProperties() const;
 
@@ -109,6 +108,7 @@ private :
   bool linesTextureBak;
   bool userTextureBak;
   std::string userTextureFileBak;
+  Ui::ConfigDialog* _ui;
 
 };
 

@@ -22,7 +22,6 @@
 #define QUADTREE_H
 
 #include <map>
-#include <iostream>
 
 #include <tulip/Rectangle.h>
 #include <tulip/Coord.h>

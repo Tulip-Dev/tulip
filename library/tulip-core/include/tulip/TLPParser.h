@@ -20,7 +20,6 @@
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
-#include <iostream>
 #include <sstream>
 #include <string>
 #include <list>

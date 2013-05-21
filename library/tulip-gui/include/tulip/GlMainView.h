@@ -20,8 +20,6 @@
 #ifndef Tulip_GLMAINVIEW_H
 #define Tulip_GLMAINVIEW_H
 
-#include <QMenu>
-
 #include <tulip/ViewWidget.h>
 
 class QGraphicsProxyWidget;

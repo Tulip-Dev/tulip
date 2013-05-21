@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/TulipPluginHeaders.h>
+#include <tulip/StringCollection.h>
 
 using namespace std;
 using namespace tlp;

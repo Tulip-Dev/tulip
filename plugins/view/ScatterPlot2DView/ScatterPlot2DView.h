@@ -34,8 +34,6 @@
 #include <GL/gl.h>
 #endif
 
-#include "../utils/ViewGraphPropertiesSelectionWidget.h"
-
 #include "../../utils/ViewNames.h"
 
 namespace tlp {
@@ -69,6 +67,7 @@ class GlComposite;
 class SizeProperty;
 class GlGraphComposite;
 class ScatterPlot2DOptionsWidget;
+class ViewGraphPropertiesSelectionWidget;
 
 class ScatterPlot2DView : public GlMainView {
 

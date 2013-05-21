@@ -26,7 +26,6 @@
 #include "QuantitativeParallelAxis.h"
 #include "ParallelCoordsDrawConfigWidget.h"
 
-#include "../utils/ViewGraphPropertiesSelectionWidget.h"
 #include "../../utils/ViewNames.h"
 
 #include <tulip/GlMainView.h>
@@ -36,6 +35,10 @@
 class QMenu;
 
 namespace tlp {
+
+struct SelectedEntity;
+class GlGraphComposite;
+class ViewGraphPropertiesSelectionWidget;
 
 /*@{*/
 /** \file

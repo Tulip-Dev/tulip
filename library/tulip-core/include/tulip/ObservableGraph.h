@@ -20,17 +20,15 @@
 
 #ifndef GRAPHOBSERVABLE_H
 #define GRAPHOBSERVABLE_H
-#include <list>
-#include <map>
-#include <algorithm>
 
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
-#include "tulip/Observable.h"
+#include <tulip/tulipconf.h>
 
 namespace tlp {
 
 class Graph;
+class Event;
 
 //=========================================================
 

@@ -21,9 +21,9 @@
 #ifndef DELAUNAY_H
 #define DELAUNAY_H
 #include <vector>
+#include <set>
+
 #include <tulip/Coord.h>
-#include <tulip/Node.h>
-#include <tulip/Graph.h>
 
 namespace tlp {
 

@@ -19,6 +19,8 @@
 
 #include <tulip/Ordering.h>
 #include <tulip/BiconnectedTest.h>
+#include <tulip/PlanarConMap.h>
+
 #include <cassert>
 #include <cstdlib>
 

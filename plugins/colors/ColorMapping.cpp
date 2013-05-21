@@ -22,15 +22,17 @@
 #include <tulip/Color.h>
 #include <tulip/Vector.h>
 #include <tulip/ColorScale.h>
-#include "DoubleStringsListRelationDialog.h"
-
+#include <tulip/StringCollection.h>
 #include <tulip/GlComposite.h>
 #include <tulip/GlRect.h>
 #include <tulip/GlLabel.h>
 
+#include "DoubleStringsListRelationDialog.h"
+
 using namespace std;
 using namespace tlp;
 
+namespace {
 void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v ) {
   float theMin, theMax, delta;
   theMin = std::min(std::min(r, g), b); //MIN( MIN( r, g) , b );
@@ -115,7 +117,6 @@ void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
   }
 }
 
-namespace {
 const char * paramHelp[] = {
   // property
   HTML_HELP_OPEN() \

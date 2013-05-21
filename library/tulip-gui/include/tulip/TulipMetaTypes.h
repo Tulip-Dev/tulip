@@ -38,6 +38,7 @@
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlLabel.h>
 #include <tulip/TulipFont.h>
+#include <tulip/StringCollection.h>
 
 // Helper class for filesystem types handling
 struct TulipFileDescriptor {

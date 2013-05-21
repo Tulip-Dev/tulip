@@ -20,18 +20,26 @@
 #ifndef GLYPHSCALECONFIGDIALOG_H_
 #define GLYPHSCALECONFIGDIALOG_H_
 
+#include <QDialog>
 #include <QStringList>
 
-#include "ui_GlyphScaleConfigDialog.h"
+namespace Ui {
+class GlyphScaleConfigDialogData;
+}
 
+class QShowEvent;
+class QWidget;
 
-class GlyphScaleConfigDialog : public QDialog, public Ui::GlyphScaleConfigDialogData {
+namespace tlp {
+
+class GlyphScaleConfigDialog : public QDialog  {
 
   Q_OBJECT
 
 public :
 
   GlyphScaleConfigDialog(QWidget *parent = 0);
+  ~GlyphScaleConfigDialog();
 
   std::vector<int> getSelectedGlyphsId() const;
 
@@ -44,6 +52,7 @@ private slots :
 private :
 
   QStringList glyphsNameList;
+  Ui::GlyphScaleConfigDialogData* _ui;
 };
-
+}
 #endif /* GLYPHSCALECONFIGDIALOG_H_ */

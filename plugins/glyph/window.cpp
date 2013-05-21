@@ -28,6 +28,7 @@
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 using namespace std;

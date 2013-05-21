@@ -35,7 +35,6 @@
 #include "POLIB/LinearMappingColor.h"
 #include "POLIB/TulipGraphDimension.h"
 
-#include "../utils/ViewGraphPropertiesSelectionWidget.h"
 #include "../../utils/ViewNames.h"
 
 #include "PixelOrientedOverview.h"
@@ -43,6 +42,8 @@
 
 
 namespace tlp {
+
+class ViewGraphPropertiesSelectionWidget;
 
 /*@{*/
 /** \file

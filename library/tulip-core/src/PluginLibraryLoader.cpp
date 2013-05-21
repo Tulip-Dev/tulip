@@ -20,6 +20,8 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/tulipconf.h>
 #include <tulip/PluginLister.h>
+#include <tulip/TlpTools.h>
+
 #include <cstring>
 #include <sstream>
 #include <set>

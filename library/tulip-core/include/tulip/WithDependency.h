@@ -24,7 +24,6 @@
 #include <string>
 #include <typeinfo>
 #include <tulip/tulipconf.h>
-#include <tulip/TlpTools.h>
 
 namespace tlp {
 
@@ -51,14 +50,12 @@ struct Dependency {
   /**
    * @brief Constructs a new dependency.
    *
-   * @param fName The typename of the dependency (e.g. DoubleAlgorithm)
    * @param pName The name of the plug-in, as registered in the Tulip plug-in system.
    * @param pRelease The required version of the plug-in.
    */
   Dependency(std::string pName,
-             std::string pRelease) {
-    pluginName = pName;
-    pluginRelease = pRelease;
+             std::string pRelease):pluginName(pName),pluginRelease(pRelease) {
+
   }
 };
 

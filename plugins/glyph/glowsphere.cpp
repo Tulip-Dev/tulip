@@ -17,7 +17,7 @@
  *
  */
 #include <tulip/OpenGlConfigManager.h>
-
+#include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>

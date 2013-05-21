@@ -17,6 +17,7 @@
  *
  */
 #include "DatasetTools.h"
+#include <tulip/StringCollection.h>
 
 #define ORTHOGONAL "orthogonal"
 #define ORIENTATION "up to down;down to up;right to left;left to right;"

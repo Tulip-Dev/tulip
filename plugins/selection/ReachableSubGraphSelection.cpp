@@ -19,6 +19,8 @@
 
 #include "ReachableSubGraphSelection.h"
 
+#include <tulip/StringCollection.h>
+
 using namespace tlp;
 
 PLUGIN(ReachableSubGraphSelection)

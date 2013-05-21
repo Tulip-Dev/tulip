@@ -24,6 +24,8 @@
 
 #include "PixelOrientedViewNavigator.h"
 
+#include <QEvent>
+#include <QMouseEvent>
 
 using namespace std;
 
@@ -93,7 +95,7 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   return false;
 }
 
-PixelOrientedOverview *PixelOrientedViewNavigator::getOverviewUnderPointer(Coord sceneCoords) {
+PixelOrientedOverview *PixelOrientedViewNavigator::getOverviewUnderPointer(Coord &sceneCoords) {
   PixelOrientedOverview *ret = NULL;
   vector<PixelOrientedOverview *> overviews = pixelView->getOverviews();
   vector<PixelOrientedOverview *>::iterator it;

@@ -20,19 +20,26 @@
 #ifndef SCATTERPLOTCORRELCOEFFSELECTOROPTIONSWIDGET_H_
 #define SCATTERPLOTCORRELCOEFFSELECTOROPTIONSWIDGET_H_
 
+#include <QWidget>
+
 #include <tulip/Color.h>
 
-#include "ui_ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
+class QPushButton;
+
+namespace Ui {
+class ScatterPlotCorrelCoeffSelectorOptionsWidgetData;
+}
 
 namespace tlp {
 
-class ScatterPlotCorrelCoeffSelectorOptionsWidget : public QWidget, public Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData {
+class ScatterPlotCorrelCoeffSelectorOptionsWidget : public QWidget {
 
   Q_OBJECT
 
 public :
 
   ScatterPlotCorrelCoeffSelectorOptionsWidget(QWidget *parent = 0);
+  ~ScatterPlotCorrelCoeffSelectorOptionsWidget();
 
   Color getMinusOneColor() const;
   Color getZeroColor() const;
@@ -54,6 +61,7 @@ private :
   void changeButtonBackgroundColor(QPushButton *button);
   void updateColorScale();
   Color getButtonColor(QPushButton *button) const;
+  Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData* _ui;
 
 };
 

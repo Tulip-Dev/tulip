@@ -24,6 +24,7 @@
 #include <tulip/ForEach.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/TlpTools.h>
 
 #include "Histogram.h"
 
@@ -48,7 +49,7 @@ std::string getStringFromNumber(T number, unsigned int precision = 5) {
 namespace tlp {
 
 static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
-  GlGraphRenderingParameters param = glGraph->getRenderingParameters ();
+  GlGraphRenderingParameters param = glGraph->getRenderingParameters();
   param.setAntialiasing (true);
   param.setViewNodeLabel (true);
   param.setFontsType (2);
@@ -68,13 +69,9 @@ int Histogram::overviewCpt(0);
 Histogram::Histogram(Graph *graph, const std::string propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size,
                      const Color &backgroundColor, const Color &textColor) :
   graph(graph), propertyName(propertyName), blCorner(blCorner), size(size), nbHistogramBins(100), xAxis(NULL), yAxis(NULL),
-  xAxisLogScale(false), yAxisLogScale(false), nbXGraduations(15), yAxisIncrementStep(0), uniformQuantification(false),
-  cumulativeFreqHisto(false), lastCumulHisto(false), backgroundColor(backgroundColor), textColor(textColor), integerScale(false),
+  xAxisLogScale(false), yAxisLogScale(false), nbXGraduations(15), yAxisIncrementStep(0), histogramLayout(new LayoutProperty(graph)), histogramSize(new SizeProperty(graph)), histoBinsComposite(new GlComposite()), uniformQuantification(false),
+  cumulativeFreqHisto(false), lastCumulHisto(false), edgeAsNodeGraph(newGraph()), backgroundColor(backgroundColor), textColor(textColor), integerScale(false),
   dataLocation(dataLocation), displayEdges(false), layoutUpdateNeeded(true),sizesUpdateNeeded(true), textureUpdateNeeded(true) {
-  histogramLayout = new LayoutProperty(graph);
-  histogramSize = new SizeProperty(graph);
-  histoBinsComposite = new GlComposite();
-  edgeAsNodeGraph = newGraph();
 
   edge e;
   forEach(e, graph->getEdges()) {

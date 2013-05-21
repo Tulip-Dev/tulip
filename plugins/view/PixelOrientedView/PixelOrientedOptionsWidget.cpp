@@ -20,18 +20,24 @@
 #include <QColorDialog>
 
 #include "PixelOrientedOptionsWidget.h"
+#include "ui_PixelOrientedOptionsWidget.h"
 
 using namespace std;
+using namespace tlp;
 
-PixelOrientedOptionsWidget::PixelOrientedOptionsWidget(QWidget *parent) : QWidget(parent),oldValuesInitialized(false) {
-  setupUi(this);
+PixelOrientedOptionsWidget::PixelOrientedOptionsWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::PixelOrientedOptionsWidgetData), oldValuesInitialized(false) {
+  _ui->setupUi(this);
   setBackgroundColor(Color(255,255,255));
-  connect(backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
-  connect(applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
+  connect(_ui->backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
+  connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
+}
+
+PixelOrientedOptionsWidget::~PixelOrientedOptionsWidget() {
+    delete _ui;
 }
 
 Color PixelOrientedOptionsWidget::getBackgroundColor() const {
-  QString buttonStyleSheet = backColorButton->styleSheet();
+  QString buttonStyleSheet = _ui->backColorButton->styleSheet();
   QString backgroundColorCodeHex = buttonStyleSheet.mid(buttonStyleSheet.indexOf("#") + 1, 6);
   bool ok;
   return Color(backgroundColorCodeHex.mid(0, 2).toInt(&ok, 16),
@@ -62,11 +68,11 @@ void PixelOrientedOptionsWidget::setBackgroundColor(const Color &color) {
     str.insert(0,"0");
 
   colorStr.append(str);
-  backColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
+  _ui->backColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
 }
 
 void PixelOrientedOptionsWidget::pressBackgroundColorButton() {
-  QColor newColor = QColorDialog::getColor(backColorButton->palette().color(QPalette::Button));
+  QColor newColor = QColorDialog::getColor(_ui->backColorButton->palette().color(QPalette::Button));
 
   if (newColor.isValid()) {
     setBackgroundColor(Color(newColor.red(), newColor.green(), newColor.blue()));
@@ -75,14 +81,14 @@ void PixelOrientedOptionsWidget::pressBackgroundColorButton() {
 
 
 string PixelOrientedOptionsWidget::getLayoutType() const {
-  return layoutTypeCB->currentText().toStdString();
+  return _ui->layoutTypeCB->currentText().toStdString();
 }
 
 void PixelOrientedOptionsWidget::setLayoutType(const string layoutType) {
-  int idx = layoutTypeCB->findText(QString(layoutType.c_str()));
+  int idx = _ui->layoutTypeCB->findText(QString(layoutType.c_str()));
 
   if (idx != -1) {
-    layoutTypeCB->setCurrentIndex(idx);
+    _ui->layoutTypeCB->setCurrentIndex(idx);
   }
 }
 

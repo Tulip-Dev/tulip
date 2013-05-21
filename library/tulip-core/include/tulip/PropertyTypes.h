@@ -23,17 +23,18 @@
 
 #include <set>
 #include <vector>
-#include <string>
-#include <list>
-#include <iostream>
+//#include <string>
+//#include <list>
+//#include <iostream>
 #include <sstream>
-#include <float.h>
+//#include <float.h>
 #include <tulip/StoredType.h>
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
 #include <tulip/Color.h>
-#include <tulip/StringCollection.h>
+//#include <tulip/StringCollection.h>
 #include <tulip/Edge.h>
+#include <tulip/Node.h>
 #include <tulip/AbstractProperty.h>
 #include <tulip/TypeInterface.h>
 #include <tulip/SerializableType.h>

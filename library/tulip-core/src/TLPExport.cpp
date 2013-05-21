@@ -19,13 +19,14 @@
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <time.h>
+#include <ctime>
 
 #include <tulip/ExportModule.h>
 #include <tulip/Graph.h>
-
+#include <tulip/TlpTools.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/StringCollection.h>
+#include <tulip/TulipRelease.h>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 

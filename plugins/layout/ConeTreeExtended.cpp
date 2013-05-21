@@ -17,7 +17,9 @@
  *
  */
 #include <cmath>
+
 #include <tulip/Circle.h>
+#include <tulip/StringCollection.h>
 
 #include "ConeTreeExtended.h"
 #include "DatasetTools.h"

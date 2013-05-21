@@ -27,13 +27,11 @@
 #include <set>
 #include <vector>
 
-#include <tulip/tuliphash.h>
+//#include <tulip/tuliphash.h>
 #include <tulip/Node.h>
-#include <tulip/Edge.h>
+//#include <tulip/Edge.h>
 #include <tulip/Graph.h>
-#include <tulip/Observable.h>
-#include <tulip/ObservableGraph.h>
-#include <tulip/ObservableProperty.h>
+//#include <tulip/Observable.h>
 #include <tulip/MutableContainer.h>
 
 namespace std {

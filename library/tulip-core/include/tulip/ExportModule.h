@@ -24,7 +24,7 @@
 
 #include <iostream>
 #include <tulip/Plugin.h>
-
+#include <tulip/Algorithm.h>
 
 namespace tlp {
 

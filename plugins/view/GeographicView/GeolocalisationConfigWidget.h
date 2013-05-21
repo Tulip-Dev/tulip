@@ -20,19 +20,25 @@
 #ifndef GEOLOCALISATIONCONFIGWIDGET_H_
 #define GEOLOCALISATIONCONFIGWIDGET_H_
 
-#include <tulip/Graph.h>
+#include <QWidget>
 
-#include "ui_GeolocalisationConfigWidget.h"
+namespace Ui {
+class GeolocalisationConfigWidgetData;
+}
 
-using namespace tlp;
+namespace tlp {
 
-class GeolocalisationConfigWidget : public QWidget, public Ui::GeolocalisationConfigWidgetData {
+class Graph;
+
+class GeolocalisationConfigWidget : public QWidget  {
 
   Q_OBJECT
+   Ui::GeolocalisationConfigWidgetData* _ui;
 
 public :
 
   GeolocalisationConfigWidget(QWidget *parent = 0);
+  ~GeolocalisationConfigWidget();
 
   void setGraph(Graph *graph);
 
@@ -52,8 +58,11 @@ public slots :
 
   void enableDisableComboBoxes();
 
+signals:
+  void computeGeoLayout();
+
 
 };
-
+}
 
 #endif /* GOOGLEMAPSVIEWCONFIGWIDGET_H_ */

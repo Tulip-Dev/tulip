@@ -38,6 +38,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/PropertyInterface.h>
 
+#include "../utils/ViewGraphPropertiesSelectionWidget.h"
 
 using namespace std;
 

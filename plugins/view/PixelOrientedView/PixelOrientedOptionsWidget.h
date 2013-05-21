@@ -24,17 +24,21 @@
 
 #include <tulip/Color.h>
 
-#include "ui_PixelOrientedOptionsWidget.h"
+namespace Ui {
+class PixelOrientedOptionsWidgetData;
+}
 
-using namespace tlp;
+namespace tlp {
 
-class PixelOrientedOptionsWidget : public QWidget, public Ui::PixelOrientedOptionsWidgetData {
+class PixelOrientedOptionsWidget : public QWidget {
 
   Q_OBJECT
 
+    Ui::PixelOrientedOptionsWidgetData* _ui;
 public :
 
   PixelOrientedOptionsWidget(QWidget *parent = 0);
+  ~PixelOrientedOptionsWidget();
 
   Color getBackgroundColor() const;
   void setBackgroundColor(const Color &color);
@@ -65,5 +69,5 @@ private :
   std::string oldLayoutType;
 
 };
-
+}
 #endif /* PIXELORIENTEDOPTIONSWIDGET_H_ */

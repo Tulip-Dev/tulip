@@ -18,14 +18,15 @@
  */
 
 #include <algorithm>
-#include <tulip/TulipPluginHeaders.h>
 
+#include <tulip/TulipPluginHeaders.h>
 #include <tulip/MapIterator.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/Ordering.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Bfs.h>
 #include <tulip/GraphTools.h>
+#include <tulip/StringCollection.h>
 
 #include "MixedModel.h"
 #include "DatasetTools.h"

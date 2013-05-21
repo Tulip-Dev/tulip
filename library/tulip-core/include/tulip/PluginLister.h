@@ -22,6 +22,7 @@
 
 #include <list>
 #include <string>
+#include <map>
 
 #include <tulip/Plugin.h>
 #include <tulip/PluginLoader.h>

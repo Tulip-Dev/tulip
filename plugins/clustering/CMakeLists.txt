@@ -44,7 +44,6 @@ TARGET_LINK_LIBRARIES(EqualValueClustering-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(QuotientClustering_SRCS
-    QuotientClustering.h
     QuotientClustering.cpp
 )
 

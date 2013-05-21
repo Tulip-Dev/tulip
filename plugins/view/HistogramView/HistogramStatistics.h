@@ -24,6 +24,8 @@
 #include <tulip/Coord.h>
 #include <map>
 
+#include <QString>
+
 namespace tlp {
 
 class HistoStatsConfigWidget;

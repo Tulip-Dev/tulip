@@ -22,9 +22,6 @@
 
 #include <tulip/GLInteractor.h>
 
-#include <QCursor>
-#include <QMouseEvent>
-
 #include "PixelOrientedOverview.h"
 #include "PixelOrientedView.h"
 
@@ -42,7 +39,7 @@ public :
 
 private :
 
-  PixelOrientedOverview *getOverviewUnderPointer(Coord sceneCoord);
+  PixelOrientedOverview *getOverviewUnderPointer(Coord &sceneCoord);
 
   PixelOrientedView *pixelView;
   PixelOrientedOverview *selectedOverview;
