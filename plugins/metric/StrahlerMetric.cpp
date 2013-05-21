@@ -19,7 +19,10 @@
 
 #include <cmath>
 #include <cstdio>
+
 #include <tulip/StringProperty.h>
+#include <tulip/StringCollection.h>
+
 #include "StrahlerMetric.h"
 
 PLUGIN(StrahlerMetric)

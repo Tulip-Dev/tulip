@@ -23,6 +23,7 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/ForEach.h>
 #include <tulip/tulipconf.h>
+#include <tulip/StringCollection.h>
 
 using namespace std;
 using namespace tlp;

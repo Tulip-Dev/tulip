@@ -18,15 +18,25 @@
  */
 
 #include <algorithm>
+
 #include "ViewGraphPropertiesSelectionWidget.h"
+#include "ui_ViewGraphPropertiesSelectionWidget.h"
 
 using namespace std;
 
 namespace tlp {
 
-ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent) : QWidget(parent),graph(NULL) {
-  setupUi(this);
-  connect(applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
+ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::ViewGraphPropertiesSelectionWidgetData),graph(NULL) {
+  _ui->setupUi(this);
+  connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
+}
+
+ViewGraphPropertiesSelectionWidget::~ViewGraphPropertiesSelectionWidget() {
+    delete _ui;
+}
+
+void ViewGraphPropertiesSelectionWidget::enableEdgesButton(const bool enable) {
+    _ui->edgesButton->setEnabled(enable);
 }
 
 void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vector<string> graphPropertiesTypesFilter) {
@@ -48,10 +58,10 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
 
   vector<string> lastSelectedProperties = getSelectedGraphProperties();
 
-  graphPropertiesSelectionWidget->clearLists();
-  graphPropertiesSelectionWidget->setWidgetParameters(graph, graphPropertiesTypesFilter);
+  _ui->graphPropertiesSelectionWidget->clearLists();
+  _ui->graphPropertiesSelectionWidget->setWidgetParameters(graph, graphPropertiesTypesFilter);
 
-  if (lastSelectedProperties.size() > 0 && graph) {
+  if (!lastSelectedProperties.empty() && graph) {
     Iterator<string> *properties= graph->getProperties();
     vector<string> stringList;
     vector<string>::iterator it;
@@ -63,7 +73,7 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
       }
     }
 
-    graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
+    _ui->graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
 
     stringList.clear();
 
@@ -76,7 +86,7 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
     }
 
     delete properties;
-    graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
+    _ui->graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
   }
   else {
     this->lastSelectedProperties.clear();
@@ -84,14 +94,13 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
 }
 
 vector<string> ViewGraphPropertiesSelectionWidget::getSelectedGraphProperties() {
-  return graphPropertiesSelectionWidget->getSelectedProperties();
+  return _ui->graphPropertiesSelectionWidget->getSelectedProperties();
 }
 
 void ViewGraphPropertiesSelectionWidget::setWidgetEnabled(const bool enabled) {
-  groupBox->setEnabled(enabled);
-  groupBox2->setEnabled(enabled);
-  applyButton->setEnabled(enabled);
-
+  _ui->groupBox->setEnabled(enabled);
+  _ui->groupBox2->setEnabled(enabled);
+  _ui-> applyButton->setEnabled(enabled);
 }
 
 void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> selectedProperties) {
@@ -102,7 +111,7 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> se
   vector<string> stringList;
   vector<string> finalStringList;
   string propertyName;
-  graphPropertiesSelectionWidget->clearLists();
+  _ui->graphPropertiesSelectionWidget->clearLists();
 
   while (properties->hasNext()) {
     propertyName = properties->next();
@@ -122,12 +131,12 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> se
   }
 
   delete properties;
-  graphPropertiesSelectionWidget->setInputPropertiesList(finalStringList);
-  graphPropertiesSelectionWidget->setOutputPropertiesList(selectedProperties);
+  _ui->graphPropertiesSelectionWidget->setInputPropertiesList(finalStringList);
+  _ui->graphPropertiesSelectionWidget->setOutputPropertiesList(selectedProperties);
 }
 
 ElementType ViewGraphPropertiesSelectionWidget::getDataLocation() const {
-  if (nodesButton->isChecked()) {
+  if (_ui->nodesButton->isChecked()) {
     return NODE;
   }
   else {
@@ -137,12 +146,12 @@ ElementType ViewGraphPropertiesSelectionWidget::getDataLocation() const {
 
 void ViewGraphPropertiesSelectionWidget::setDataLocation(const ElementType location) {
   if (location == NODE) {
-    edgesButton->setChecked(false);
-    nodesButton->setChecked(true);
+    _ui->edgesButton->setChecked(false);
+   _ui-> nodesButton->setChecked(true);
   }
   else {
-    edgesButton->setChecked(true);
-    nodesButton->setChecked(false);
+    _ui->edgesButton->setChecked(true);
+    _ui->nodesButton->setChecked(false);
   }
 }
 

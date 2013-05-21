@@ -25,8 +25,6 @@
 
 #include <map>
 #include <string>
-#include <tulip/Node.h>
-#include <tulip/Edge.h>
 
 namespace tlp {
 

@@ -13,8 +13,11 @@
  */
 
 #include <algorithm>
+
 #include <tulip/SizeProperty.h>
 #include <tulip/ForEach.h>
+#include <tulip/StringCollection.h>
+
 #include "FastOverlapRemoval.h"
 #include "generate-constraints.h"
 #include "remove_rectangle_overlap.h"

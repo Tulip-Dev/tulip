@@ -42,6 +42,8 @@
 #include "PixelOrientedInteractors.h"
 #include "PixelOrientedView.h"
 
+#include "../utils/ViewGraphPropertiesSelectionWidget.h"
+
 #include <QMenu>
 
 using namespace std;
@@ -154,7 +156,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   if(!isConstruct) {
     isConstruct=true;
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
-    propertiesSelectionWidget->edgesButton->setEnabled(false);
+    propertiesSelectionWidget->enableEdgesButton(false);
     connect(propertiesSelectionWidget, SIGNAL(applySettingsSignal()), this, SLOT(applySettings()));
     pixelOrientedMediator = new PixelOrientedMediator(spiralLayout, NULL);
     optionsWidget = new PixelOrientedOptionsWidget();

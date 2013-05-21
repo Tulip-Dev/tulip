@@ -19,10 +19,14 @@
 
 #include <tulip/GlLine.h>
 #include <tulip/Camera.h>
+#include <tulip/GlMainWidget.h>
 
 #include "ParallelCoordsAxisSpacer.h"
 #include "ParallelTools.h"
 #include "ParallelTools.h"
+
+#include <QCursor>
+#include <QMouseEvent>
 
 using namespace std;
 
@@ -32,7 +36,7 @@ ParallelCoordsAxisSpacer::ParallelCoordsAxisSpacer() : selectedAxis(NULL), dragS
 
 bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 
-  GlMainWidget *glWidget = dynamic_cast<GlMainWidget*>(widget);
+  GlMainWidget *glWidget = qobject_cast<GlMainWidget*>(widget);
 
   if (e->type() == QEvent::MouseMove) {
     QMouseEvent *me = (QMouseEvent *) e;

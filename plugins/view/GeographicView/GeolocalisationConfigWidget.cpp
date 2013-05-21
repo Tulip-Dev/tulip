@@ -17,12 +17,14 @@
  *
  */
 
-#include <algorithm>
-#include <tulip/AbstractProperty.h>
-
 #include "GeolocalisationConfigWidget.h"
+#include "ui_GeolocalisationConfigWidget.h"
+
+#include <tulip/ImportModule.h>
+#include <tulip/Graph.h>
 
 using namespace std;
+using namespace tlp;
 
 const string viewPropertiesName[] = {"viewBorderColor", "viewBorderWidth", "viewColor", "viewLabel",
                                      "viewLabelColor", "viewLabelPosition", "viewLayout", "viewMetaGraph",
@@ -51,65 +53,70 @@ vector<string> getGraphPropertiesListAccordingToType(Graph *graph, string typeNa
   return ret;
 }
 
-GeolocalisationConfigWidget::GeolocalisationConfigWidget(QWidget *parent) : QWidget(parent) {
-  setupUi(this);
-  connect(addressLocRB, SIGNAL(toggled(bool)), this, SLOT(enableDisableComboBoxes()));
-  connect(latLngRB, SIGNAL(toggled(bool)), this, SLOT(enableDisableComboBoxes()));
+GeolocalisationConfigWidget::GeolocalisationConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::GeolocalisationConfigWidgetData) {
+  _ui->setupUi(this);
+  connect(_ui->addressLocRB, SIGNAL(toggled(bool)), this, SLOT(enableDisableComboBoxes()));
+  connect(_ui->latLngRB, SIGNAL(toggled(bool)), this, SLOT(enableDisableComboBoxes()));
+  connect(_ui->genLayoutButton, SIGNAL(clicked()), this, SIGNAL(computeGeoLayout()));
+}
+
+GeolocalisationConfigWidget::~GeolocalisationConfigWidget() {
+    delete _ui;
 }
 
 void GeolocalisationConfigWidget::setGraph(Graph *graph) {
-  addressPropCB->clear();
+  _ui->addressPropCB->clear();
   vector<string> stringProperties = getGraphPropertiesListAccordingToType(graph, "string");
 
   for (unsigned int i = 0 ; i < stringProperties.size() ; ++i) {
-    addressPropCB->addItem(QString::fromUtf8(stringProperties[i].c_str()));
+    _ui->addressPropCB->addItem(QString::fromUtf8(stringProperties[i].c_str()));
   }
 
-  latPropCB->clear();
-  lngPropCB->clear();
+  _ui->latPropCB->clear();
+  _ui->lngPropCB->clear();
   vector<string> doubleProperties = getGraphPropertiesListAccordingToType(graph, "double");
 
   for (unsigned int i = 0 ; i < doubleProperties.size() ; ++i) {
-    latPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
-    lngPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
+    _ui->latPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
+    _ui->lngPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
   }
 }
 
 void GeolocalisationConfigWidget::setLatLngGeoLocMethod() {
-  latLngRB->setChecked(true);
-  latPropCB->setCurrentIndex(latPropCB->findText("latitude"));
-  lngPropCB->setCurrentIndex(lngPropCB->findText("longitude"));
+  _ui->latLngRB->setChecked(true);
+  _ui->latPropCB->setCurrentIndex(_ui->latPropCB->findText("latitude"));
+  _ui->lngPropCB->setCurrentIndex(_ui->lngPropCB->findText("longitude"));
 }
 
 bool GeolocalisationConfigWidget::geolocateByAddress() const {
-  return addressLocRB->isChecked();
+  return _ui->addressLocRB->isChecked();
 }
 
 string GeolocalisationConfigWidget::getAddressGraphPropertyName() const {
-  return string(addressPropCB->currentText().toUtf8().data());
+  return string(_ui->addressPropCB->currentText().toUtf8().data());
 }
 
 string GeolocalisationConfigWidget::getLatitudeGraphPropertyName() const {
-  return string(latPropCB->currentText().toUtf8().data());
+  return string(_ui->latPropCB->currentText().toUtf8().data());
 }
 
 string GeolocalisationConfigWidget::getLongitudeGraphPropertyName() const {
-  return string(lngPropCB->currentText().toUtf8().data());
+  return string(_ui->lngPropCB->currentText().toUtf8().data());
 }
 
 bool GeolocalisationConfigWidget::createLatAndLngProperties() const {
-  return createLatLngPropsCB->isChecked();
+  return _ui->createLatLngPropsCB->isChecked();
 }
 
 void GeolocalisationConfigWidget::enableDisableComboBoxes() {
-  if (addressLocRB->isChecked()) {
-    addressPropCB->setEnabled(true);
-    latPropCB->setEnabled(false);
-    lngPropCB->setEnabled(false);
+  if (_ui->addressLocRB->isChecked()) {
+    _ui->addressPropCB->setEnabled(true);
+    _ui->latPropCB->setEnabled(false);
+    _ui->lngPropCB->setEnabled(false);
   }
   else {
-    addressPropCB->setEnabled(false);
-    latPropCB->setEnabled(true);
-    lngPropCB->setEnabled(true);
+    _ui->addressPropCB->setEnabled(false);
+    _ui->latPropCB->setEnabled(true);
+    _ui->lngPropCB->setEnabled(true);
   }
 }

@@ -19,19 +19,11 @@
 
 #include "ParallelCoordinatesConfigDialog.h"
 #include "ParallelTools.h"
+#include "ui_ParallelCoordinatesConfigDialog.h"
+#include "ParallelCoordinatesGraphProxy.h"
 
-#include <QHBoxLayout>
-#include <QGroupBox>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QPushButton>
 #include <QFileDialog>
-#include <QPalette>
-#include <QColor>
 #include <QColorDialog>
-#include <QTabWidget>
-
-#include <tulip/TlpTools.h>
 
 #include <algorithm>
 
@@ -39,13 +31,13 @@ using namespace std;
 
 namespace tlp {
 
-ParallelCoordinatesConfigDialog::ParallelCoordinatesConfigDialog(ParallelCoordinatesGraphProxy *data, QWidget *parent) : QDialog(parent), graphProxy(data) {
-  setupUi(this);
+ParallelCoordinatesConfigDialog::ParallelCoordinatesConfigDialog(ParallelCoordinatesGraphProxy *data, QWidget *parent) : QDialog(parent), graphProxy(data),_ui(new Ui::ConfigDialog) {
+  _ui->setupUi(this);
 
   propertyTypesFilter.push_back("double");
   propertyTypesFilter.push_back("int");
   propertyTypesFilter.push_back("string");
-  graphPropertiesSelectionWidget->setWidgetParameters(graphProxy, propertyTypesFilter);
+  _ui->graphPropertiesSelectionWidget->setWidgetParameters(graphProxy, propertyTypesFilter);
 
   // if number of data to plot is consequent, don't draw points on axis
   // by default to speed up rendering
@@ -53,11 +45,15 @@ ParallelCoordinatesConfigDialog::ParallelCoordinatesConfigDialog(ParallelCoordin
     setDrawPointOnAxis(false);
   }
 
-  connect(browseButton,SIGNAL(clicked()),this,SLOT(pressButtonBrowse()));
-  connect(userTexture, SIGNAL(toggled(bool)), this, SLOT(userTextureRbToggled(bool)));
-  connect(minAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(minAxisPointSizeValueChanged(int)));
-  connect(maxAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(maxAxisPointSizeValueChanged(int)));
-  connect(bgColorButton,SIGNAL(clicked()),this,SLOT(pressColorButton()));
+  connect(_ui->browseButton,SIGNAL(clicked()),this,SLOT(pressButtonBrowse()));
+  connect(_ui->userTexture, SIGNAL(toggled(bool)), this, SLOT(userTextureRbToggled(bool)));
+  connect(_ui->minAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(minAxisPointSizeValueChanged(int)));
+  connect(_ui->maxAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(maxAxisPointSizeValueChanged(int)));
+  connect(_ui->bgColorButton,SIGNAL(clicked()),this,SLOT(pressColorButton()));
+}
+
+ParallelCoordinatesConfigDialog::~ParallelCoordinatesConfigDialog(){
+    delete _ui;
 }
 
 void ParallelCoordinatesConfigDialog::updateSelectedProperties() {
@@ -66,13 +62,13 @@ void ParallelCoordinatesConfigDialog::updateSelectedProperties() {
   vector<string> stringList;
   vector<string>::iterator it;
   string propertyName;
-  graphPropertiesSelectionWidget->clearLists();
+  _ui->graphPropertiesSelectionWidget->clearLists();
 
   for (it = selectedProperties.begin() ; it != selectedProperties.end() ; ++it) {
     stringList.push_back(*it);
   }
 
-  graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
+ _ui-> graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
 
   stringList.clear();
 
@@ -86,7 +82,7 @@ void ParallelCoordinatesConfigDialog::updateSelectedProperties() {
 
   delete properties;
 
-  graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
+  _ui->graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
 
 }
 
@@ -96,11 +92,11 @@ vector<string> ParallelCoordinatesConfigDialog::getSelectedProperties()  const {
 
 void ParallelCoordinatesConfigDialog::setGraphProxy(ParallelCoordinatesGraphProxy *graphProx) {
   graphProxy = graphProx;
-  graphPropertiesSelectionWidget->setWidgetParameters(graphProxy, propertyTypesFilter);
+  _ui->graphPropertiesSelectionWidget->setWidgetParameters(graphProxy, propertyTypesFilter);
 }
 
 void ParallelCoordinatesConfigDialog::accept() {
-  selectedProperties = graphPropertiesSelectionWidget->getSelectedProperties();
+  selectedProperties = _ui->graphPropertiesSelectionWidget->getSelectedProperties();
   graphProxy->setSelectedProperties(selectedProperties);
   graphProxy->setDataLocation(getDataLocation());
   QDialog::accept();
@@ -113,11 +109,11 @@ void ParallelCoordinatesConfigDialog::reject() {
 
 void ParallelCoordinatesConfigDialog::pressButtonBrowse() {
   QString fileName(QFileDialog::getOpenFileName(this, tr("Open Texture File"), "./", tr("Image Files (*.png *.jpg *.bmp)")));
-  userTextureFile->setText(fileName);
+  _ui->userTextureFile->setText(fileName);
 }
 
 ElementType ParallelCoordinatesConfigDialog::getDataLocation() const {
-  if (nodesButton->isChecked()) {
+  if (_ui->nodesButton->isChecked()) {
     return NODE;
   }
   else {
@@ -127,34 +123,34 @@ ElementType ParallelCoordinatesConfigDialog::getDataLocation() const {
 
 void ParallelCoordinatesConfigDialog::setDataLocation(ElementType location) {
   if (location == NODE) {
-    edgesButton->setChecked(false);
-    nodesButton->setChecked(true);
+    _ui->edgesButton->setChecked(false);
+    _ui->nodesButton->setChecked(true);
   }
   else {
-    edgesButton->setChecked(true);
-    nodesButton->setChecked(false);
+    _ui->edgesButton->setChecked(true);
+    _ui->nodesButton->setChecked(false);
   }
 }
 
 unsigned int ParallelCoordinatesConfigDialog::getAxisHeight() const {
-  return axisHeight->value();
+  return _ui->axisHeight->value();
 }
 
 void ParallelCoordinatesConfigDialog::setAxisHeight(const unsigned int aHeight) {
-  axisHeight->setValue(aHeight);
+  _ui->axisHeight->setValue(aHeight);
 }
 
 bool ParallelCoordinatesConfigDialog::drawPointOnAxis() const {
-  return gBoxAxisPoints->isChecked();
+  return _ui->gBoxAxisPoints->isChecked();
 }
 
 string ParallelCoordinatesConfigDialog::getLinesTextureFilename() const {
-  if (gBoxLineTexture->isChecked()) {
-    if (defaultTexture->isChecked()) {
+  if (_ui->gBoxLineTexture->isChecked()) {
+    if (_ui->defaultTexture->isChecked()) {
       return string(TulipBitmapDir + DEFAULT_TEXTURE_FILE);
     }
     else {
-      return userTextureFile->text().toStdString();
+      return _ui->userTextureFile->text().toStdString();
     }
   }
   else {
@@ -164,105 +160,105 @@ string ParallelCoordinatesConfigDialog::getLinesTextureFilename() const {
 
 void ParallelCoordinatesConfigDialog::setLinesTextureFilename(const std::string &linesTextureFileName) {
   if (linesTextureFileName != "") {
-    gBoxLineTexture->setChecked(true);
+    _ui->gBoxLineTexture->setChecked(true);
 
     if (linesTextureFileName == string(TulipBitmapDir + DEFAULT_TEXTURE_FILE)) {
-      defaultTexture->setChecked(true);
+      _ui->defaultTexture->setChecked(true);
     }
     else {
-      userTexture->setChecked(true);
-      userTextureFile->setText(QString::fromUtf8(linesTextureFileName.c_str()));
+     _ui-> userTexture->setChecked(true);
+      _ui->userTextureFile->setText(QString::fromUtf8(linesTextureFileName.c_str()));
     }
   }
   else {
-    gBoxLineTexture->setChecked(false);
+    _ui->gBoxLineTexture->setChecked(false);
   }
 }
 
 void ParallelCoordinatesConfigDialog::showEvent (QShowEvent * event) {
   updateSelectedProperties();
   backupConfiguration();
-  tabWidget->setCurrentIndex(0);
+  _ui->tabWidget->setCurrentIndex(0);
   QWidget::showEvent(event);
 }
 
 Size ParallelCoordinatesConfigDialog::getAxisPointMinSize() const {
-  float pointSize = minAxisPointSize->text().toFloat();
+  float pointSize = _ui->minAxisPointSize->text().toFloat();
   return Size(pointSize, pointSize, pointSize);
 }
 
 Size ParallelCoordinatesConfigDialog::getAxisPointMaxSize() const {
-  float pointSize = maxAxisPointSize->text().toFloat();
+  float pointSize = _ui->maxAxisPointSize->text().toFloat();
   return Size(pointSize, pointSize, pointSize);
 }
 
 void ParallelCoordinatesConfigDialog::setAxisPointMinSize(const unsigned int axisPointMinSize) {
-  minAxisPointSize->setValue(axisPointMinSize);
+  _ui->minAxisPointSize->setValue(axisPointMinSize);
 }
 
 void ParallelCoordinatesConfigDialog::setAxisPointMaxSize(const unsigned int axisPointMaxSize) {
-  maxAxisPointSize->setValue(axisPointMaxSize);
+  _ui->maxAxisPointSize->setValue(axisPointMaxSize);
 }
 
 void ParallelCoordinatesConfigDialog::userTextureRbToggled(bool checked) {
   if (checked) {
-    userTextureFile->setEnabled(true);
-    browseButton->setEnabled(true);
+    _ui->userTextureFile->setEnabled(true);
+    _ui->browseButton->setEnabled(true);
   }
   else {
-    userTextureFile->setEnabled(false);
-    browseButton->setEnabled(false);
+    _ui->userTextureFile->setEnabled(false);
+    _ui->browseButton->setEnabled(false);
   }
 }
 
 void ParallelCoordinatesConfigDialog::minAxisPointSizeValueChanged(int newValue) {
-  if (maxAxisPointSize->value() < newValue) {
-    maxAxisPointSize->setValue(newValue + 1);
+  if (_ui->maxAxisPointSize->value() < newValue) {
+    _ui->maxAxisPointSize->setValue(newValue + 1);
   }
 }
 
 void ParallelCoordinatesConfigDialog::maxAxisPointSizeValueChanged(int newValue) {
-  if (minAxisPointSize->value() > newValue) {
-    minAxisPointSize->setValue(newValue - 1);
+  if (_ui->minAxisPointSize->value() > newValue) {
+    _ui->minAxisPointSize->setValue(newValue - 1);
   }
 }
 
 void ParallelCoordinatesConfigDialog::setLinesColorAlphaValue(unsigned int value) {
-  viewColorAlphaValue->setValue(value);
+  _ui->viewColorAlphaValue->setValue(value);
 }
 
 unsigned int ParallelCoordinatesConfigDialog::getLinesColorAlphaValue() const {
-  if (viewColorAlphaRb->isChecked()) {
+  if (_ui->viewColorAlphaRb->isChecked()) {
     return 300;
   }
   else {
-    return (unsigned int) viewColorAlphaValue->value();
+    return (unsigned int) _ui->viewColorAlphaValue->value();
   }
 }
 
 Color ParallelCoordinatesConfigDialog::getBackgroundColor() const {
-  QColor bgColor(bgColorButton->palette().color(QPalette::Button));
+  QColor bgColor(_ui->bgColorButton->palette().color(QPalette::Button));
   return Color(bgColor.red(), bgColor.green(), bgColor.blue());
 }
 
 void ParallelCoordinatesConfigDialog::setBackgroundColor(const Color &color) {
   QPalette palette;
   palette.setColor(QPalette::Button, QColor(color.getR(), color.getG(), color.getB(), color.getA()));
-  bgColorButton->setPalette(palette);
+  _ui->bgColorButton->setPalette(palette);
 }
 
 void ParallelCoordinatesConfigDialog::pressColorButton() {
-  QColor newColor(QColorDialog::getColor(bgColorButton->palette().color(QPalette::Button), this));
+  QColor newColor(QColorDialog::getColor(_ui->bgColorButton->palette().color(QPalette::Button), this));
 
   if (newColor.isValid()) {
     QPalette palette;
     palette.setColor(QPalette::Button, newColor);
-    bgColorButton->setPalette(palette);
+   _ui-> bgColorButton->setPalette(palette);
   }
 }
 
 void ParallelCoordinatesConfigDialog::backupConfiguration() {
-  if (nodesButton->isChecked()) {
+  if (_ui->nodesButton->isChecked()) {
     dataLocationBak = NODE;
   }
   else {
@@ -270,55 +266,55 @@ void ParallelCoordinatesConfigDialog::backupConfiguration() {
   }
 
   bgColorBak = getBackgroundColor();
-  axisHeightBak = axisHeight->value();
-  drawPointOnAxisBak = gBoxAxisPoints->isChecked();
-  minAxisPointSizeBak = minAxisPointSize->value();
-  maxAxisPointSizeBak = maxAxisPointSize->value();
-  linesColorAlphaValueBak = viewColorAlphaValue->value();
-  linesTextureBak = gBoxLineTexture->isChecked();
-  userTextureBak = userTexture->isChecked();
-  userTextureFileBak = userTextureFile->text().toStdString();
-  unhighlightedEltsColorsAlphaValueBak = nonHighlightedEltsAlphaValue->value();
+  axisHeightBak = _ui->axisHeight->value();
+  drawPointOnAxisBak = _ui->gBoxAxisPoints->isChecked();
+  minAxisPointSizeBak = _ui->minAxisPointSize->value();
+  maxAxisPointSizeBak = _ui->maxAxisPointSize->value();
+  linesColorAlphaValueBak = _ui->viewColorAlphaValue->value();
+  linesTextureBak = _ui->gBoxLineTexture->isChecked();
+  userTextureBak = _ui->userTexture->isChecked();
+  userTextureFileBak = _ui->userTextureFile->text().toStdString();
+  unhighlightedEltsColorsAlphaValueBak = _ui->nonHighlightedEltsAlphaValue->value();
 }
 
 void ParallelCoordinatesConfigDialog::restoreBackupConfiguration() {
-  nodesButton->setChecked(dataLocationBak == NODE);
-  edgesButton->setChecked(dataLocationBak == EDGE);
+ _ui->nodesButton->setChecked(dataLocationBak == NODE);
+  _ui->edgesButton->setChecked(dataLocationBak == EDGE);
 
   QPalette palette;
   palette.setColor(QPalette::Button, QColor(bgColorBak.getR(), bgColorBak.getG(), bgColorBak.getB()));
-  bgColorButton->setPalette(palette);
+  _ui->bgColorButton->setPalette(palette);
 
-  axisHeight->setValue(axisHeightBak);
-  gBoxAxisPoints->setChecked(drawPointOnAxisBak);
-  minAxisPointSize->setValue(minAxisPointSizeBak);
-  maxAxisPointSize->setValue(maxAxisPointSizeBak);
-  viewColorAlphaValue->setValue(linesColorAlphaValueBak);
-  gBoxLineTexture->setChecked(linesTextureBak);
-  defaultTexture->setChecked(!userTextureBak);
-  userTexture->setChecked(userTextureBak);
-  userTextureFile->setText(QString::fromUtf8(userTextureFileBak.c_str()));
-  nonHighlightedEltsAlphaValue->setValue(unhighlightedEltsColorsAlphaValueBak);
+  _ui->axisHeight->setValue(axisHeightBak);
+  _ui->gBoxAxisPoints->setChecked(drawPointOnAxisBak);
+  _ui->minAxisPointSize->setValue(minAxisPointSizeBak);
+  _ui->maxAxisPointSize->setValue(maxAxisPointSizeBak);
+  _ui->viewColorAlphaValue->setValue(linesColorAlphaValueBak);
+  _ui->gBoxLineTexture->setChecked(linesTextureBak);
+  _ui->defaultTexture->setChecked(!userTextureBak);
+  _ui->userTexture->setChecked(userTextureBak);
+  _ui->userTextureFile->setText(QString::fromUtf8(userTextureFileBak.c_str()));
+  _ui->nonHighlightedEltsAlphaValue->setValue(unhighlightedEltsColorsAlphaValueBak);
 }
 
 unsigned int ParallelCoordinatesConfigDialog::getSpaceBetweenAxis() const {
-  return spaceBetweenAxis->value();
+  return _ui->spaceBetweenAxis->value();
 }
 
 void ParallelCoordinatesConfigDialog::setSpaceBetweenAxis(const unsigned int spaceBetweenAxis) {
-  this->spaceBetweenAxis->setValue(spaceBetweenAxis);
+  _ui->spaceBetweenAxis->setValue(spaceBetweenAxis);
 }
 
 void ParallelCoordinatesConfigDialog::setDrawPointOnAxis(const bool drawPointOnAxis) {
-  gBoxAxisPoints->setChecked(drawPointOnAxis);
+  _ui->gBoxAxisPoints->setChecked(drawPointOnAxis);
 }
 
 unsigned int ParallelCoordinatesConfigDialog::getUnhighlightedEltsColorsAlphaValue() const {
-  return (unsigned int) nonHighlightedEltsAlphaValue->value();
+  return (unsigned int) _ui->nonHighlightedEltsAlphaValue->value();
 }
 
 void ParallelCoordinatesConfigDialog::setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue) {
-  nonHighlightedEltsAlphaValue->setValue(alphaValue);
+  _ui->nonHighlightedEltsAlphaValue->setValue(alphaValue);
 }
 
 }

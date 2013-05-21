@@ -22,15 +22,23 @@
 
 #include <QDialog>
 
-#include "ui_SizeScaleConfigDialog.h"
+namespace Ui {
+class SizeScaleConfigDialogData;
+}
 
-class SizeScaleConfigDialog : public QDialog, public Ui::SizeScaleConfigDialogData {
+class QWidget;
+
+namespace tlp {
+class SizeScaleConfigDialog : public QDialog {
 
   Q_OBJECT
 
+     Ui::SizeScaleConfigDialogData* _ui;
+
 public :
 
-  SizeScaleConfigDialog(QWidget *parent = 0);
+  SizeScaleConfigDialog(QWidget *d = 0);
+  ~SizeScaleConfigDialog();
 
   bool doMappingOnViewSize() const;
 
@@ -48,5 +56,5 @@ private slots :
   void viewSizeRadioButtonToggled(bool checked);
 
 };
-
+}
 #endif /* SIZESCALECONFIGDIALOG_H_ */

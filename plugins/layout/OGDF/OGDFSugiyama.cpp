@@ -31,6 +31,7 @@
 #include <ogdf/layered/OptimalHierarchyLayout.h>
 #include <ogdf/layered/FastSimpleHierarchyLayout.h>
 
+#include <tulip/StringCollection.h>
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 

@@ -25,17 +25,22 @@
 #include <tulip/Color.h>
 #include <tulip/Size.h>
 
-#include "ui_ScatterPlot2DOptionsWidget.h"
+namespace Ui {
+class ScatterPlot2DOptionsWidgetData;
+}
+
+class QPushButton;
 
 namespace tlp {
 
-class ScatterPlot2DOptionsWidget : public QWidget, public Ui::ScatterPlot2DOptionsWidgetData {
+class ScatterPlot2DOptionsWidget : public QWidget {
 
   Q_OBJECT
 
 public :
 
   ScatterPlot2DOptionsWidget(QWidget *parent = 0);
+  ~ScatterPlot2DOptionsWidget();
 
   bool uniformBackground() const;
   Color getUniformBackgroundColor() const;
@@ -87,6 +92,7 @@ private :
   Size oldMinSizeMapping;
   Size oldMaxSizeMapping;
   bool oldDisplayGraphEdges;
+  Ui::ScatterPlot2DOptionsWidgetData* _ui;
 
 };
 

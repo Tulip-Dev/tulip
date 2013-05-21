@@ -18,29 +18,37 @@
  */
 
 #include "AddressSelectionDialog.h"
+#include "ui_AddressSelectionDialog.h"
 
-AddressSelectionDialog::AddressSelectionDialog(QWidget *parent) : QDialog(parent) {
-  setupUi(this);
-  connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
+namespace tlp {
+
+AddressSelectionDialog::AddressSelectionDialog(QWidget *parent) : QDialog(parent),_ui(new Ui::AddressSelectionDialogData) {
+  _ui->setupUi(this);
+  connect(_ui->okButton, SIGNAL(clicked()), this, SLOT(accept()));
+}
+
+AddressSelectionDialog::~AddressSelectionDialog() {
+    delete _ui;
 }
 
 void AddressSelectionDialog::setBaseAddress(const QString &address) {
-  addressLabel->setText(address);
+  _ui->addressLabel->setText(address);
 }
 
 void AddressSelectionDialog::addResultToList(const QString &result) {
-  resultsList->addItem(result);
+  _ui->resultsList->addItem(result);
 }
 
 void AddressSelectionDialog::clearList() {
-  resultsList->clear();
-  rememberChoiceCB->setChecked(false);
+  _ui->resultsList->clear();
+  _ui->rememberChoiceCB->setChecked(false);
 }
 
 bool AddressSelectionDialog::rememberAddressChoice() const {
-  return rememberChoiceCB->isChecked();
+  return _ui->rememberChoiceCB->isChecked();
 }
 
 int AddressSelectionDialog::getPickedResultIdx() {
-  return resultsList->currentRow();
+  return _ui->resultsList->currentRow();
+}
 }

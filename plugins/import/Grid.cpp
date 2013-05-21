@@ -17,7 +17,9 @@
  *
  */
 #include <tulip/TulipPluginHeaders.h>
-#include <math.h>
+#include <tulip/StringCollection.h>
+
+#include <cmath>
 
 using namespace std;
 using namespace tlp;

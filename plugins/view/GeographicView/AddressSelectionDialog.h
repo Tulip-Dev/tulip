@@ -22,13 +22,22 @@
 
 #include <QDialog>
 
-#include "ui_AddressSelectionDialog.h"
+class QWidget;
+class QString;
 
-class AddressSelectionDialog : public QDialog, public Ui::AddressSelectionDialogData {
+namespace Ui{
+class AddressSelectionDialogData;
+}
+
+namespace tlp {
+class AddressSelectionDialog : public QDialog {
+
+    Ui::AddressSelectionDialogData* _ui;
 
 public :
 
   AddressSelectionDialog(QWidget *parent = 0);
+  ~AddressSelectionDialog();
 
   void setBaseAddress(const QString &address);
 
@@ -41,5 +50,5 @@ public :
   bool rememberAddressChoice() const;
 
 };
-
+}
 #endif /* ADDRESSSELECTIONDIALOG_H_ */

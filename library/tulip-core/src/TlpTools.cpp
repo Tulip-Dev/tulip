@@ -44,6 +44,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLoader.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/TulipRelease.h>
 
 using namespace std;
 using namespace tlp;

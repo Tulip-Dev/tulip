@@ -17,6 +17,8 @@
  *
  */
 #include <tulip/GraphTools.h>
+#include <tulip/StringCollection.h>
+
 #include "TreeReingoldAndTilfordExtended.h"
 #include "DatasetTools.h"
 

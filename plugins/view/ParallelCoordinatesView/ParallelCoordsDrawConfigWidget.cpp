@@ -24,46 +24,51 @@
 
 #include "ParallelTools.h"
 #include "ParallelCoordsDrawConfigWidget.h"
+#include "ui_ParallelCoordsDrawConfigWidget.h"
 
 using namespace std;
 
 namespace tlp {
 
-ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent) : QWidget(parent),oldValuesInitialized(false) {
-  setupUi(this);
+ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent) : QWidget(parent),oldValuesInitialized(false),_ui(new Ui::ParallelCoordsDrawConfigWidgetData) {
+  _ui->setupUi(this);
   setBackgroundColor(Color(255,255,255));
-  connect(browseButton,SIGNAL(clicked()),this,SLOT(pressButtonBrowse()));
-  connect(userTexture, SIGNAL(toggled(bool)), this, SLOT(userTextureRbToggled(bool)));
-  connect(minAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(minAxisPointSizeValueChanged(int)));
-  connect(maxAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(maxAxisPointSizeValueChanged(int)));
-  connect(bgColorButton,SIGNAL(clicked()),this,SLOT(pressColorButton()));
-  connect(applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
+  connect(_ui->browseButton,SIGNAL(clicked()),this,SLOT(pressButtonBrowse()));
+  connect(_ui->userTexture, SIGNAL(toggled(bool)), this, SLOT(userTextureRbToggled(bool)));
+  connect(_ui->minAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(minAxisPointSizeValueChanged(int)));
+  connect(_ui->maxAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(maxAxisPointSizeValueChanged(int)));
+  connect(_ui->bgColorButton,SIGNAL(clicked()),this,SLOT(pressColorButton()));
+  connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
+}
+
+ParallelCoordsDrawConfigWidget::~ParallelCoordsDrawConfigWidget(){
+    delete _ui;
 }
 
 void ParallelCoordsDrawConfigWidget::pressButtonBrowse() {
   QString fileName(QFileDialog::getOpenFileName(this, tr("Open Texture File"), "./", tr("Image Files (*.png *.jpg *.bmp)")));
-  userTextureFile->setText(fileName);
+  _ui->userTextureFile->setText(fileName);
 }
 
 unsigned int ParallelCoordsDrawConfigWidget::getAxisHeight() const {
-  return axisHeight->value();
+  return _ui->axisHeight->value();
 }
 
 void ParallelCoordsDrawConfigWidget::setAxisHeight(const unsigned int aHeight) {
-  axisHeight->setValue(aHeight);
+  _ui->axisHeight->setValue(aHeight);
 }
 
 bool ParallelCoordsDrawConfigWidget::drawPointOnAxis() const {
-  return gBoxAxisPoints->isChecked();
+  return _ui->gBoxAxisPoints->isChecked();
 }
 
 string ParallelCoordsDrawConfigWidget::getLinesTextureFilename() const {
-  if (gBoxLineTexture->isChecked()) {
-    if (defaultTexture->isChecked()) {
+  if (_ui->gBoxLineTexture->isChecked()) {
+    if (_ui->defaultTexture->isChecked()) {
       return DEFAULT_TEXTURE_FILE;
     }
     else {
-      return userTextureFile->text().toStdString();
+      return _ui->userTextureFile->text().toStdString();
     }
   }
   else {
@@ -73,89 +78,89 @@ string ParallelCoordsDrawConfigWidget::getLinesTextureFilename() const {
 
 void ParallelCoordsDrawConfigWidget::setLinesTextureFilename(const std::string &linesTextureFileName) {
   if (linesTextureFileName != "") {
-    gBoxLineTexture->setChecked(true);
+    _ui->gBoxLineTexture->setChecked(true);
 
     if (linesTextureFileName == string(TulipBitmapDir + DEFAULT_TEXTURE_FILE)) {
-      defaultTexture->setChecked(true);
+      _ui->defaultTexture->setChecked(true);
     }
     else {
-      userTexture->setChecked(true);
-      userTextureFile->setText(QString::fromUtf8(linesTextureFileName.c_str()));
+      _ui->userTexture->setChecked(true);
+      _ui->userTextureFile->setText(QString::fromUtf8(linesTextureFileName.c_str()));
     }
   }
   else {
-    gBoxLineTexture->setChecked(false);
+    _ui->gBoxLineTexture->setChecked(false);
   }
 }
 
 Size ParallelCoordsDrawConfigWidget::getAxisPointMinSize() const {
-  float pointSize = minAxisPointSize->text().toFloat();
+  float pointSize = _ui->minAxisPointSize->text().toFloat();
   return Size(pointSize, pointSize, pointSize);
 }
 
 Size ParallelCoordsDrawConfigWidget::getAxisPointMaxSize() const {
-  float pointSize = maxAxisPointSize->text().toFloat();
+  float pointSize = _ui->maxAxisPointSize->text().toFloat();
   return Size(pointSize, pointSize, pointSize);
 }
 
 void ParallelCoordsDrawConfigWidget::setAxisPointMinSize(const unsigned int axisPointMinSize) {
-  minAxisPointSize->setValue(axisPointMinSize);
+  _ui->minAxisPointSize->setValue(axisPointMinSize);
 }
 
 void ParallelCoordsDrawConfigWidget::setAxisPointMaxSize(const unsigned int axisPointMaxSize) {
-  maxAxisPointSize->setValue(axisPointMaxSize);
+  _ui->maxAxisPointSize->setValue(axisPointMaxSize);
 }
 
 bool ParallelCoordsDrawConfigWidget::displayNodesLabels() const {
-  return displayLabelsCB->isChecked();
+  return _ui->displayLabelsCB->isChecked();
 }
 
 void ParallelCoordsDrawConfigWidget::userTextureRbToggled(bool checked) {
   if (checked) {
-    userTextureFile->setEnabled(true);
-    browseButton->setEnabled(true);
+    _ui->userTextureFile->setEnabled(true);
+    _ui->browseButton->setEnabled(true);
   }
   else {
-    userTextureFile->setEnabled(false);
-    browseButton->setEnabled(false);
+    _ui->userTextureFile->setEnabled(false);
+    _ui->browseButton->setEnabled(false);
   }
 }
 
 void ParallelCoordsDrawConfigWidget::minAxisPointSizeValueChanged(int newValue) {
-  if (maxAxisPointSize->value() < newValue) {
-    maxAxisPointSize->setValue(newValue + 1);
+  if (_ui->maxAxisPointSize->value() < newValue) {
+    _ui->maxAxisPointSize->setValue(newValue + 1);
   }
 }
 
 void ParallelCoordsDrawConfigWidget::maxAxisPointSizeValueChanged(int newValue) {
-  if (minAxisPointSize->value() > newValue) {
-    minAxisPointSize->setValue(newValue - 1);
+  if (_ui->minAxisPointSize->value() > newValue) {
+    _ui->minAxisPointSize->setValue(newValue - 1);
   }
 }
 
 void ParallelCoordsDrawConfigWidget::setLinesColorAlphaValue(unsigned int value) {
   if (value > 255) {
-    viewColorAlphaRb->setChecked(true);
-    userAlphaRb->setChecked(false);
+    _ui->viewColorAlphaRb->setChecked(true);
+    _ui->userAlphaRb->setChecked(false);
   }
   else {
-    viewColorAlphaRb->setChecked(false);
-    userAlphaRb->setChecked(true);
-    viewColorAlphaValue->setValue(value);
+    _ui->viewColorAlphaRb->setChecked(false);
+    _ui->userAlphaRb->setChecked(true);
+    _ui->viewColorAlphaValue->setValue(value);
   }
 }
 
 unsigned int ParallelCoordsDrawConfigWidget::getLinesColorAlphaValue() const {
-  if (viewColorAlphaRb->isChecked()) {
+  if (_ui->viewColorAlphaRb->isChecked()) {
     return 300;
   }
   else {
-    return (unsigned int) viewColorAlphaValue->value();
+    return (unsigned int) _ui->viewColorAlphaValue->value();
   }
 }
 
 Color ParallelCoordsDrawConfigWidget::getBackgroundColor() const {
-  QString buttonStyleSheet(bgColorButton->styleSheet());
+  QString buttonStyleSheet(_ui->bgColorButton->styleSheet());
   QString backgroundColorCodeHex(buttonStyleSheet.mid(buttonStyleSheet.indexOf("#") + 1, 6));
   bool ok;
   return Color(backgroundColorCodeHex.mid(0, 2).toInt(&ok, 16),
@@ -188,11 +193,11 @@ void ParallelCoordsDrawConfigWidget::setBackgroundColor(const Color &color) {
 
   colorStr.append(str);
 
-  bgColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
+  _ui->bgColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
 }
 
 void ParallelCoordsDrawConfigWidget::pressColorButton() {
-  QColor newColor(QColorDialog::getColor(bgColorButton->palette().color(QPalette::Button), this));
+  QColor newColor(QColorDialog::getColor(_ui->bgColorButton->palette().color(QPalette::Button), this));
 
   if (newColor.isValid()) {
     setBackgroundColor(Color(newColor.red(), newColor.green(), newColor.blue()));
@@ -200,15 +205,15 @@ void ParallelCoordsDrawConfigWidget::pressColorButton() {
 }
 
 void ParallelCoordsDrawConfigWidget::setDrawPointOnAxis(const bool drawPointOnAxis) {
-  gBoxAxisPoints->setChecked(drawPointOnAxis);
+  _ui->gBoxAxisPoints->setChecked(drawPointOnAxis);
 }
 
 unsigned int ParallelCoordsDrawConfigWidget::getUnhighlightedEltsColorsAlphaValue() const {
-  return (unsigned int) nonHighlightedEltsAlphaValue->value();
+  return (unsigned int) _ui->nonHighlightedEltsAlphaValue->value();
 }
 
 void ParallelCoordsDrawConfigWidget::setUnhighlightedEltsColorsAlphaValue(const unsigned int alphaValue) {
-  nonHighlightedEltsAlphaValue->setValue(alphaValue);
+  _ui->nonHighlightedEltsAlphaValue->setValue(alphaValue);
 }
 
 bool ParallelCoordsDrawConfigWidget::configurationChanged() {

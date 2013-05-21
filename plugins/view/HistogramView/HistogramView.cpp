@@ -37,6 +37,8 @@
 
 #include "HistogramView.h"
 #include "HistogramInteractors.h"
+#include "../utils/ViewGraphPropertiesSelectionWidget.h"
+#include "HistoOptionsWidget.h"
 
 using namespace std;
 

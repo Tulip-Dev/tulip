@@ -33,6 +33,8 @@
 #include "ScatterPlot2D.h"
 #include "ScatterPlot2DInteractors.h"
 
+#include "../utils/ViewGraphPropertiesSelectionWidget.h"
+
 using namespace std;
 
 const unsigned int OVERVIEWS_SIZE = 512;
@@ -132,7 +134,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   if(!initialized) {
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
     connect(propertiesSelectionWidget, SIGNAL(applySettingsSignal()), this, SLOT(draw()));
-    propertiesSelectionWidget->edgesButton->setEnabled(false);
+    propertiesSelectionWidget->enableEdgesButton(false);
     optionsWidget = new ScatterPlot2DOptionsWidget();
     connect(optionsWidget, SIGNAL(applySettingsSignal()), this, SLOT(draw()));
     optionsMenu = new QMenu(tr("Options"));

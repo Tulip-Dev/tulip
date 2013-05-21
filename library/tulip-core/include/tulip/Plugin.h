@@ -19,12 +19,13 @@
 
 #ifndef TULIP_PLUGIN_H
 #define TULIP_PLUGIN_H
+
 #include <string>
-#include <tulip/tulipconf.h>
+
 #include <tulip/WithParameter.h>
 #include <tulip/WithDependency.h>
-#include <tulip/TulipRelease.h>
 #include <tulip/PluginContext.h>
+#include <tulip/TulipRelease.h>
 
 namespace tlp {
 

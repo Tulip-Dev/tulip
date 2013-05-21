@@ -18,13 +18,89 @@
  */
 
 #include "GoogleMapsViewConfigWidget.h"
-
+#include "ui_GoogleMapsViewConfigWidget.h"
 #include "GoogleMapsView.h"
 
-using namespace std;
+#include <QFileDialog>
+#include <QMessageBox>
 
-GoogleMapsViewConfigWidget::GoogleMapsViewConfigWidget(QWidget *parent) : QWidget(parent),_oldPolyFileType(None),_oldFileLoaded("") {
-  setupUi(this);
+using namespace std;
+using namespace tlp;
+
+GoogleMapsViewConfigWidget::GoogleMapsViewConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::GoogleMapsViewConfigWidgetData), _oldPolyFileType(None),_oldFileLoaded("") {
+  _ui->setupUi(this);
+}
+
+GoogleMapsViewConfigWidget::~GoogleMapsViewConfigWidget() {
+    delete _ui;
+}
+
+void GoogleMapsViewConfigWidget::openCsvFileBrowser() {
+  _ui->csvFile->setText(QFileDialog::getOpenFileName(NULL,tr("Open csv file"), "./", tr("cvs file (*.*)")));
+}
+
+void GoogleMapsViewConfigWidget::openPolyFileBrowser() {
+  _ui->polyFile->setText(QFileDialog::getOpenFileName(NULL,tr("Open .poly file"), "./", tr("Poly file (*.poly)")));
+}
+
+void GoogleMapsViewConfigWidget::openCsvHelp() {
+    QMessageBox::about(NULL,"Map csv file format","If you want to import a csv file into this view, your file must be in the format :\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id : id of the polygon");
+  }
+
+void GoogleMapsViewConfigWidget::openPolyHelp() {
+    QMessageBox::about(NULL,"Map poly files",".poly files format are an open street map format.\nYou can donwload .poly file on :\nhttp://downloads.cloudmade.com/");
+  }
+
+bool GoogleMapsViewConfigWidget::useSharedLayoutProperty() const {
+  return _ui->layoutCheckBox->isChecked();
+}
+
+bool GoogleMapsViewConfigWidget::useSharedSizeProperty() const {
+  return _ui->sizeCheckBox->isChecked();
+}
+
+GoogleMapsViewConfigWidget::PolyFileType GoogleMapsViewConfigWidget::polyFileType() const {
+  _ui->mapToPolygon->setEnabled(false);
+
+  if(_ui->useDefaultShape->isChecked())
+    return Default;
+
+  if(_ui->useCsvFile->isChecked())
+    return CsvFile;
+
+  if(_ui->usePolyFile->isChecked()) {
+    _ui->mapToPolygon->setEnabled(true);
+    return PolyFile;
+  }
+
+  return Default;
+}
+
+void GoogleMapsViewConfigWidget::setPolyFileType(PolyFileType &fileType) {
+  _ui->mapToPolygon->setEnabled(false);
+
+  if(fileType==Default)
+    _ui->useDefaultShape->setChecked(true);
+
+  if(fileType==CsvFile)
+    _ui->useCsvFile->setChecked(true);
+
+  if(fileType==PolyFile) {
+    _ui->usePolyFile->setChecked(true);
+    _ui->mapToPolygon->setEnabled(true);
+  }
+}
+
+QString GoogleMapsViewConfigWidget::getCsvFile() const {
+  return _ui->csvFile->text();
+}
+
+QString GoogleMapsViewConfigWidget::getPolyFile() const {
+  return _ui->polyFile->text();
+}
+
+bool GoogleMapsViewConfigWidget::useSharedShapeProperty() const {
+  return _ui->layoutCheckBox->isChecked();
 }
 
 bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
@@ -38,12 +114,12 @@ bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
     }
 
     case CsvFile: {
-      _oldFileLoaded=csvFile->text().toStdString();
+      _oldFileLoaded=_ui->csvFile->text().toStdString();
       break;
     }
 
     case PolyFile: {
-      _oldFileLoaded=polyFile->text().toStdString();
+      _oldFileLoaded=_ui->polyFile->text().toStdString();
       break;
     }
 
@@ -56,8 +132,8 @@ bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
   else {
     switch(_oldPolyFileType) {
     case CsvFile: {
-      if(_oldFileLoaded!=csvFile->text().toStdString()) {
-        _oldFileLoaded=csvFile->text().toStdString();
+      if(_oldFileLoaded!=_ui->csvFile->text().toStdString()) {
+        _oldFileLoaded=_ui->csvFile->text().toStdString();
         return true;
       }
 
@@ -65,8 +141,8 @@ bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
     }
 
     case PolyFile: {
-      if(_oldFileLoaded!=polyFile->text().toStdString()) {
-        _oldFileLoaded=polyFile->text().toStdString();
+      if(_oldFileLoaded!=_ui->polyFile->text().toStdString()) {
+        _oldFileLoaded=_ui->polyFile->text().toStdString();
         return true;
       }
 
@@ -92,32 +168,32 @@ void GoogleMapsViewConfigWidget::setState(const DataSet &dataSet) {
   if(dataSet.exist("csvFileName")) {
     string fileName;
     dataSet.get("csvFileName",fileName);
-    csvFile->setText(QString::fromUtf8(fileName.c_str()));
+    _ui->csvFile->setText(QString::fromUtf8(fileName.c_str()));
   }
 
   if(dataSet.exist("polyFileName")) {
     string fileName;
     dataSet.get("polyFileName",fileName);
-    polyFile->setText(QString::fromUtf8(fileName.c_str()));
+    _ui->polyFile->setText(QString::fromUtf8(fileName.c_str()));
   }
 
   bool useShared = false;
 
   if (dataSet.get("useSharedLayout",useShared))
-    layoutCheckBox->setChecked(useShared);
+    _ui->layoutCheckBox->setChecked(useShared);
 
   if (dataSet.get("useSharedSize",useShared))
-    sizeCheckBox->setChecked(useShared);
+    _ui->sizeCheckBox->setChecked(useShared);
 
   if (dataSet.get("useSharedShape",useShared))
-    shapeCheckBox->setChecked(useShared);
+    _ui->shapeCheckBox->setChecked(useShared);
 }
 
 DataSet GoogleMapsViewConfigWidget::state() const {
   DataSet data;
   data.set("polyFileType",(int)polyFileType());
-  data.set("csvFileName",csvFile->text().toStdString());
-  data.set("polyFileName",polyFile->text().toStdString());
+  data.set("csvFileName",_ui->csvFile->text().toStdString());
+  data.set("polyFileName",_ui->polyFile->text().toStdString());
   data.set("useSharedLayout",useSharedLayoutProperty());
   data.set("useSharedSize",useSharedSizeProperty());
   data.set("useSharedShape",useSharedShapeProperty());

@@ -40,6 +40,7 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlCompositeHierarchyManager.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 using namespace std;

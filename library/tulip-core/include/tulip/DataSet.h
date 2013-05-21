@@ -22,12 +22,11 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
-#include <iostream>
+#include <tulip/StlIterator.h>
+
 #include <string>
-#include <cassert>
 #include <typeinfo>
 #include <list>
-#include <tulip/StlIterator.h>
 
 namespace tlp {
 

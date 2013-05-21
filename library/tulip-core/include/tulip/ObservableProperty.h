@@ -24,11 +24,11 @@
 #include <tulip/tulipconf.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
-#include <tulip/Observable.h>
 
 namespace tlp {
 
 class PropertyInterface;
+class Event;
 //=========================================================
 
 /**

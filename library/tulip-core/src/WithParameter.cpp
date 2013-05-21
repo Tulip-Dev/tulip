@@ -29,6 +29,7 @@
 #include <tulip/StlIterator.h>
 #include <tulip/ColorScale.h>
 #include <tulip/ForEach.h>
+#include <tulip/StringCollection.h>
 
 using namespace tlp;
 using namespace std;

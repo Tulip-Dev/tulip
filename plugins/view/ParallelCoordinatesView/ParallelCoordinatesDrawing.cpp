@@ -34,6 +34,7 @@
 #include <tulip/GlScene.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlMainWidget.h>
 
 #include "ParallelCoordinatesDrawing.h"
 #include "NominalParallelAxis.h"

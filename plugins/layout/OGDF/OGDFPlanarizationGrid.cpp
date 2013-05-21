@@ -24,6 +24,8 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
+#include <tulip/StringCollection.h>
+
 namespace {
 
 const char * paramHelp[] = {

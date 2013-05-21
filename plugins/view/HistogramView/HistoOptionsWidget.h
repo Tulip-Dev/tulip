@@ -24,17 +24,20 @@
 
 #include <tulip/Color.h>
 
-#include "ui_HistoOptionsWidget.h"
+namespace Ui {
+class HistoOptionsWidgetData;
+}
 
 namespace tlp {
 
-class HistoOptionsWidget : public QWidget, public Ui::HistoOptionsWidgetData {
+class HistoOptionsWidget : public QWidget {
 
   Q_OBJECT
 
 public :
 
   HistoOptionsWidget(QWidget *parent = 0);
+  ~HistoOptionsWidget();
 
   void setWidgetEnabled(const bool enabled);
 
@@ -98,6 +101,7 @@ private :
   bool oldYAxisLogScale;
   Color oldBackgroundColor;
   bool oldShowGraphEdges;
+  Ui::HistoOptionsWidgetData* _ui;
 
 };
 

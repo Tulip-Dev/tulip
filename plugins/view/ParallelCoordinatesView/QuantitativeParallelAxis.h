@@ -23,22 +23,14 @@
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
 #include "ParallelAxis.h"
-#include "ParallelTools.h"
-#include "ParallelCoordinatesGraphProxy.h"
 
-#include <tulip/Color.h>
 #include <tulip/GlQuantitativeAxis.h>
-
-#include <vector>
-#include <algorithm>
-#include <string>
-
-#include <tulip/Iterator.h>
 
 const unsigned int DEFAULT_NB_AXIS_GRAD = 20;
 
 namespace tlp {
 
+class ParallelCoordinatesGraphProxy;
 
 enum BoxPlotValue {BOTTOM_OUTLIER = 0, FIRST_QUARTILE = 1, MEDIAN = 2, THIRD_QUARTILE = 3,
                    TOP_OUTLIER = 4, NO_VALUE = 5
@@ -85,10 +77,10 @@ public :
     axisMaxValue = max;
   }
 
-  double getAxisMinValue() const {
+  inline double getAxisMinValue() const {
     return glQuantitativeAxis->getAxisMinValue();
   }
-  double getAxisMaxValue() const {
+  inline double getAxisMaxValue() const {
     return glQuantitativeAxis->getAxisMaxValue();
   }
 

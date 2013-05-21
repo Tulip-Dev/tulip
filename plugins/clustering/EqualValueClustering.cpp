@@ -19,6 +19,8 @@
 
 #include "EqualValueClustering.h"
 
+#include <tulip/StringCollection.h>
+
 //================================================================================
 using namespace std;
 using namespace tlp;

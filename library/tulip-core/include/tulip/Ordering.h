@@ -18,21 +18,23 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef ORDERING_H
 #define ORDERING_H
 #include <tulip/Face.h>
-#include <tulip/PlanarConMap.h>
+//#include <tulip/PlanarConMap.h>
 #include <tulip/Node.h>
-#include <vector>
-#include <map>
-#include <stdio.h>
+#include <tulip/Edge.h>
+//#include <vector>
+//#include <map>
+
 #include <tulip/MutableContainer.h>
 
 #ifndef DOXYGEN_NOTFOR_USER
 
 namespace tlp {
 class PluginProgress;
+class PlanarConMap;
+
 class TLP_SCOPE Ordering {
 public :
 

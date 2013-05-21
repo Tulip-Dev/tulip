@@ -51,19 +51,19 @@ std::string tlp::getMajor(const std::string &release) {
   return release.substr(0, pos);
 }
 
-std::string Plugin::major() const {
+string Plugin::major() const {
   return tlp::getMajor(release());
 }
 
-std::string Plugin::minor() const {
+string Plugin::minor() const {
   return tlp::getMinor(release());
 }
 
-std::string Plugin::tulipMajor() const {
+string Plugin::tulipMajor() const {
   return tlp::getMajor(tulipRelease());
 }
 
-std::string Plugin::tulipMinor() const  {
+string Plugin::tulipMinor() const  {
   return tlp::getMinor(tulipRelease());
 }
 

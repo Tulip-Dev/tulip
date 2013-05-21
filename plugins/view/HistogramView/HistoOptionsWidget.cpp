@@ -17,95 +17,98 @@
  *
  */
 
-#include <iostream>
-
 #include <QColorDialog>
 
 #include "HistoOptionsWidget.h"
+#include "ui_HistoOptionsWidget.h"
 
 using namespace std;
 
 namespace tlp {
 
-HistoOptionsWidget::HistoOptionsWidget(QWidget *parent) : QWidget(parent),oldValueInitialized(false) {
-  setupUi(this);
+HistoOptionsWidget::HistoOptionsWidget(QWidget *parent) : QWidget(parent),oldValueInitialized(false),_ui(new Ui::HistoOptionsWidgetData) {
+  _ui->setupUi(this);
   setBackgroundColor(Color(255,255,255));
-  connect(backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
-  connect(applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
+  connect(_ui->backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
+  connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
+}
+
+HistoOptionsWidget::~HistoOptionsWidget(){
+    delete _ui;
 }
 
 void HistoOptionsWidget::setWidgetEnabled(const bool enabled) {
-  frame->setEnabled(enabled);
+  _ui->frame->setEnabled(enabled);
 }
 
 void HistoOptionsWidget::setNbOfHistogramBins(const unsigned int nbOfHistogramBins) {
-  nbHistoBins->setValue(nbOfHistogramBins);
+  _ui->nbHistoBins->setValue(nbOfHistogramBins);
 }
 
 unsigned int HistoOptionsWidget::getNbOfHistogramBins() {
-  return nbHistoBins->value();
+  return _ui->nbHistoBins->value();
 }
 
 void HistoOptionsWidget::setNbXGraduations(const unsigned int nbXGrads) {
-  nbXGraduations->setValue(nbXGrads);
+  _ui->nbXGraduations->setValue(nbXGrads);
 }
 
 unsigned int HistoOptionsWidget::getNbXGraduations() {
-  return nbXGraduations->value();
+  return _ui->nbXGraduations->value();
 }
 
 void HistoOptionsWidget::setYAxisIncrementStep(const unsigned int yAxisIncrementStep) {
-  YAxisIncrementStep->setValue(yAxisIncrementStep);
+  _ui->YAxisIncrementStep->setValue(yAxisIncrementStep);
 }
 
 unsigned int HistoOptionsWidget::getYAxisIncrementStep() {
-  return YAxisIncrementStep->value();
+  return _ui->YAxisIncrementStep->value();
 }
 
 void HistoOptionsWidget::setCumulativeFrequenciesHistogram(const bool cumulHisto) {
-  cumulFreqHisto->setChecked(cumulHisto);
+  _ui->cumulFreqHisto->setChecked(cumulHisto);
 }
 
 bool HistoOptionsWidget::cumulativeFrequenciesHisto() {
-  return cumulFreqHisto->isChecked();
+  return _ui->cumulFreqHisto->isChecked();
 }
 
 void HistoOptionsWidget::setUniformQuantification(const bool uniformQuantification) {
-  uniformQuantificationCB->setChecked(uniformQuantification);
+  _ui->uniformQuantificationCB->setChecked(uniformQuantification);
 }
 
 bool HistoOptionsWidget::uniformQuantification() {
-  return uniformQuantificationCB->isChecked();
+  return _ui->uniformQuantificationCB->isChecked();
 }
 
 void HistoOptionsWidget::enableOrDisableNbXGraduationsSP(int uniQuantState) {
   bool uniQuantActivated = (uniQuantState == Qt::Checked);
-  nbXGraduations->setEnabled(!uniQuantActivated);
-  xAxisLogscale->setEnabled(!uniQuantActivated);
+  _ui->nbXGraduations->setEnabled(!uniQuantActivated);
+  _ui->xAxisLogscale->setEnabled(!uniQuantActivated);
 }
 
 void HistoOptionsWidget::setXAxisLogScale(const bool xAxisLogScale) {
-  xAxisLogscale->setChecked(xAxisLogScale);
+  _ui->xAxisLogscale->setChecked(xAxisLogScale);
 }
 
 bool HistoOptionsWidget::xAxisLogScaleSet() const {
-  return xAxisLogscale->isChecked();
+  return _ui->xAxisLogscale->isChecked();
 }
 
 void HistoOptionsWidget::setYAxisLogScale(const bool yAxisLogScale) {
-  yAxisLogscale->setChecked(yAxisLogScale);
+  _ui->yAxisLogscale->setChecked(yAxisLogScale);
 }
 
 bool HistoOptionsWidget::yAxisLogScaleSet() const {
-  return yAxisLogscale->isChecked();
+  return _ui->yAxisLogscale->isChecked();
 }
 
 void HistoOptionsWidget::setBinWidth(const double width) {
-  binWidth->setText(QString::number(width));
+  _ui->binWidth->setText(QString::number(width));
 }
 
 Color HistoOptionsWidget::getBackgroundColor() const {
-  QString buttonStyleSheet(backColorButton->styleSheet());
+  QString buttonStyleSheet(_ui->backColorButton->styleSheet());
   QString backgroundColorCodeHex(buttonStyleSheet.mid(buttonStyleSheet.indexOf("#") + 1, 6));
   bool ok;
   return Color(backgroundColorCodeHex.mid(0, 2).toInt(&ok, 16),
@@ -137,11 +140,11 @@ void HistoOptionsWidget::setBackgroundColor(const Color &color) {
     str.insert(0,"0");
 
   colorStr.append(str);
-  backColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
+  _ui->backColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
 }
 
 void HistoOptionsWidget::pressBackgroundColorButton() {
-  QColor newColor(QColorDialog::getColor(backColorButton->palette().color(QPalette::Button)));
+  QColor newColor(QColorDialog::getColor(_ui->backColorButton->palette().color(QPalette::Button)));
 
   if (newColor.isValid()) {
     setBackgroundColor(Color(newColor.red(), newColor.green(), newColor.blue()));
@@ -149,15 +152,15 @@ void HistoOptionsWidget::pressBackgroundColorButton() {
 }
 
 bool HistoOptionsWidget::showGraphEdges() const {
-  return showEdgesCB->isChecked();
+  return _ui->showEdgesCB->isChecked();
 }
 
 void HistoOptionsWidget::enableShowGraphEdgesCB(const bool enable) {
-  showEdgesCB->setEnabled(enable);
+  _ui->showEdgesCB->setEnabled(enable);
 }
 
 void HistoOptionsWidget::setShowGraphEdges(const bool showGraphEdges) {
-  showEdgesCB->setChecked(showGraphEdges);
+  _ui->showEdgesCB->setChecked(showGraphEdges);
 }
 
 bool HistoOptionsWidget::configurationChanged() {

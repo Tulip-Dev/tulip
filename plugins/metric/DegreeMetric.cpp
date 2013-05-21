@@ -18,6 +18,8 @@
  */
 #include "DegreeMetric.h"
 
+#include <tulip/StringCollection.h>
+
 using namespace tlp;
 
 PLUGIN(DegreeMetric)

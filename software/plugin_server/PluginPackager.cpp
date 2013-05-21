@@ -24,20 +24,20 @@
 #include <QLibrary>
 #include <QDebug>
 #include <QApplication>
+#include <QDateTime>
 
 #include <tulip/SystemDefinition.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/QuaZIPFacade.h>
-#include <QDateTime>
-
+#include <tulip/TlpQtTools.h>
+#include <tulip/TlpTools.h>
 #include <tulip/Interactor.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 
 #include <fcntl.h>
-#include <tulip/TlpQtTools.h>
 
 using namespace std;
 using namespace tlp;

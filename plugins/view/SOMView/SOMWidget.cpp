@@ -18,14 +18,17 @@
  */
 
 #include "SOMWidget.h"
+#include "ui_SOMWidget.h"
 
-SOMWidget::SOMWidget(QWidget *parent):QWidget(parent) {
-  setupUi(this);
+using namespace tlp;
+
+SOMWidget::SOMWidget(QWidget *parent):QWidget(parent),_ui(new Ui::SOMWidget) {
+  _ui->setupUi(this);
 
 }
 
 SOMWidget::~SOMWidget() {
-  // TODO Auto-generated destructor stub
+  delete _ui;
 }
 
 

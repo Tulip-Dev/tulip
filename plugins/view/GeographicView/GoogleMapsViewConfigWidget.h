@@ -20,19 +20,20 @@
 #ifndef GOOGLEMAPSVIEWCONFIGWIDGET_H_
 #define GOOGLEMAPSVIEWCONFIGWIDGET_H_
 
-#include <tulip/Graph.h>
+#include <QWidget>
+
 #include <tulip/DataSet.h>
 
-#include <QFileDialog>
-#include <QMessageBox>
+namespace Ui {
+class GoogleMapsViewConfigWidgetData;
+}
 
-#include "ui_GoogleMapsViewConfigWidget.h"
-
-using namespace tlp;
-
-class GoogleMapsViewConfigWidget : public QWidget, public Ui::GoogleMapsViewConfigWidgetData {
+namespace tlp {
+class GoogleMapsViewConfigWidget : public QWidget {
 
   Q_OBJECT
+
+    Ui::GoogleMapsViewConfigWidgetData* _ui;
 
 public :
 
@@ -44,58 +45,16 @@ public :
   };
 
   GoogleMapsViewConfigWidget(QWidget *parent = 0);
+  ~GoogleMapsViewConfigWidget();
 
-  bool useSharedLayoutProperty() const {
-    return layoutCheckBox->isChecked();
-  }
+  bool useSharedLayoutProperty() const;
+  bool useSharedSizeProperty() const;
+  bool useSharedShapeProperty() const;
 
-  bool useSharedSizeProperty() const {
-    return sizeCheckBox->isChecked();
-  }
-
-  bool useSharedShapeProperty() const {
-    return layoutCheckBox->isChecked();
-  }
-
-  PolyFileType polyFileType() const {
-    mapToPolygon->setEnabled(false);
-
-    if(useDefaultShape->isChecked())
-      return Default;
-
-    if(useCsvFile->isChecked())
-      return CsvFile;
-
-    if(usePolyFile->isChecked()) {
-      mapToPolygon->setEnabled(true);
-      return PolyFile;
-    }
-
-    return Default;
-  }
-
-  void setPolyFileType(PolyFileType &fileType) {
-    mapToPolygon->setEnabled(false);
-
-    if(fileType==Default)
-      useDefaultShape->setChecked(true);
-
-    if(fileType==CsvFile)
-      useCsvFile->setChecked(true);
-
-    if(fileType==PolyFile) {
-      usePolyFile->setChecked(true);
-      mapToPolygon->setEnabled(true);
-    }
-  }
-
-  QString getCsvFile() {
-    return csvFile->text();
-  }
-
-  QString getPolyFile() {
-    return polyFile->text();
-  }
+  PolyFileType polyFileType() const;
+  void setPolyFileType(PolyFileType &fileType);
+  QString getCsvFile() const;
+  QString getPolyFile() const;
 
   bool polyOptionsChanged();
 
@@ -108,22 +67,10 @@ signals :
   void mapToPolygonSignal();
 
 public slots:
-
-  void openCsvFileBrowser() {
-    csvFile->setText(QFileDialog::getOpenFileName(NULL,tr("Open csv file"), "./", tr("cvs file (*.*)")));
-  }
-
-  void openPolyFileBrowser() {
-    polyFile->setText(QFileDialog::getOpenFileName(NULL,tr("Open .poly file"), "./", tr("Poly file (*.poly)")));
-  }
-
-  void openCsvHelp() {
-    QMessageBox::about(NULL,"Map csv file format","If you want to import a csv file into this view, your file must be in the format :\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id : id of the polygon");
-  }
-
-  void openPolyHelp() {
-    QMessageBox::about(NULL,"Map poly files",".poly files format are an open street map format.\nYou can donwload .poly file on :\nhttp://downloads.cloudmade.com/");
-  }
+  void openCsvFileBrowser();
+  void openPolyFileBrowser();
+  void openCsvHelp();
+  void openPolyHelp();
 
   void mapToPolygonSlot() {
     emit mapToPolygonSignal();
@@ -135,6 +82,6 @@ protected :
   std::string _oldFileLoaded;
 
 };
-
+}
 
 #endif /* GOOGLEMAPSVIEWCONFIGWIDGET_H_ */

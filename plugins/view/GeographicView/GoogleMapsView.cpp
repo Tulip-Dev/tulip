@@ -42,6 +42,7 @@
 #include "GoogleMapsView.h"
 
 using namespace std;
+using namespace tlp;
 
 GoogleMapsView::GoogleMapsView(PluginContext *) : googleMapsViewConfigWidget(NULL),geolocalisationConfigWidget(NULL),sceneConfigurationWidget(NULL),
   sceneLayersConfigurationWidget(NULL),useSharedLayoutProperty(true),useSharedSizeProperty(true),useSharedShapeProperty(true) {
@@ -62,7 +63,7 @@ void GoogleMapsView::setupUi() {
   connect(googleMapsViewConfigWidget,SIGNAL(mapToPolygonSignal()),this,SLOT(mapToPolygon()));
 
   geolocalisationConfigWidget = new GeolocalisationConfigWidget();
-  connect(geolocalisationConfigWidget->genLayoutButton, SIGNAL(clicked()), this, SLOT(computeGeoLayout()));
+  connect(geolocalisationConfigWidget, SIGNAL(computeGeoLayout()), this, SLOT(computeGeoLayout()));
 
   sceneConfigurationWidget=new SceneConfigWidget();
 
