@@ -247,9 +247,11 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lo
   bool selected=data->getElementSelected()->getNodeValue(n);
   // Color of the label : selected or not
   const Color& fontColor = selected ? data->parameters->getSelectionColor() :data->getElementLabelColor()->getNodeValue(n);
+  const Color& fontBorderColor = selected ? data->parameters->getSelectionColor() : data->getElementLabelBorderColor()->getNodeValue(n);
+  float fontBorderWidth = data->getElementLabelBorderWidth()->getNodeValue(n);
 
   // If we have transparent label : return
-  if(fontColor.getA()==0)
+  if(fontColor.getA()==0 && (fontBorderColor.getA()==0 || fontBorderWidth==0))
     return;
 
   // Node text
@@ -280,7 +282,8 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lo
   Vec3f sizeBB = includeBB[1]-includeBB[0];
 
   label->setFontNameSizeAndColor(data->getElementFont()->getNodeValue(n),fontSize,fontColor);
-  label->setOutlineColor(Color(0,0,0,fontColor[3]));
+  label->setOutlineColor(fontBorderColor);
+  label->setOutlineSize(fontBorderWidth);
   label->setText(tmp);
   label->setTranslationAfterRotation(centerBB*nodeSize);
   label->setSize(Size(nodeSize[0]*sizeBB[0],nodeSize[1]*sizeBB[1],0));
@@ -290,7 +293,7 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lo
   label->setScaleToSize(data->parameters->isLabelScaled());
   label->setUseLODOptimisation(true,this->getBoundingBox(data));
   label->setLabelsDensity(data->parameters->getLabelsDensity());
-  label->setUseMinMaxSize(true);
+  label->setUseMinMaxSize(!data->parameters->isLabelFixedFontSize());
   label->setMinSize(data->parameters->getMinSizeOfLabel());
   label->setMaxSize(data->parameters->getMaxSizeOfLabel());
   label->setOcclusionTester(test);

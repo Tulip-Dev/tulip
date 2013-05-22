@@ -77,6 +77,8 @@ void GlGraphInputData::reloadGraphProperties() {
   if (_propertiesNameMap.empty()) {
     _propertiesNameMap["viewColor"]=VIEW_COLOR;
     _propertiesNameMap["viewLabelColor"]=VIEW_LABELCOLOR;
+    _propertiesNameMap["viewLabelBorderColor"]=VIEW_LABELBORDERCOLOR;
+    _propertiesNameMap["viewLabelBorderWidth"]=VIEW_LABELBORDERWIDTH;
     _propertiesNameMap["viewSize"]=VIEW_SIZE;
     _propertiesNameMap["viewLabel"]=VIEW_LABEL;
     _propertiesNameMap["viewLabelPosition"]=VIEW_LABELPOSITION;
@@ -102,6 +104,10 @@ void GlGraphInputData::reloadGraphProperties() {
     _properties.insert(_propertiesMap[VIEW_COLOR]);
     _propertiesMap[VIEW_LABELCOLOR]=graph->getProperty<ColorProperty>("viewLabelColor");
     _properties.insert(_propertiesMap[VIEW_LABELCOLOR]);
+    _propertiesMap[VIEW_LABELBORDERCOLOR]=graph->getProperty<ColorProperty>("viewLabelBorderColor");
+    _properties.insert(_propertiesMap[VIEW_LABELBORDERCOLOR]);
+    _propertiesMap[VIEW_LABELBORDERWIDTH]=graph->getProperty<DoubleProperty>("viewLabelBorderWidth");
+    _properties.insert(_propertiesMap[VIEW_LABELBORDERWIDTH]);
     _propertiesMap[VIEW_SIZE]=graph->getProperty<SizeProperty>("viewSize");
     _properties.insert(_propertiesMap[VIEW_SIZE]);
     _propertiesMap[VIEW_LABEL]=graph->getProperty<StringProperty>("viewLabel");

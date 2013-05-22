@@ -53,7 +53,9 @@ public:
    */
   enum PropertyName {
     VIEW_COLOR=0, /**< color of nodes/edges */
-    VIEW_LABELCOLOR, /**< color of lables */
+    VIEW_LABELCOLOR, /**< color of labels */
+    VIEW_LABELBORDERCOLOR, /**< border color of labels */
+    VIEW_LABELBORDERWIDTH, /**< border width of labels */
     VIEW_SIZE, /**< size of nodes/edges */
     VIEW_LABELPOSITION, /**< position of labels */
     VIEW_SHAPE, /**< shape of nodes/edges */
@@ -197,6 +199,30 @@ public:
    */
   void setElementLabelColor(ColorProperty *property) {
     setProperty(VIEW_LABELCOLOR,property);
+  }
+  /**
+   * Return a pointer on the property used to elementLabelBorderColor
+   */
+  ColorProperty *getElementLabelBorderColor() const {
+    return getProperty<ColorProperty>(VIEW_LABELBORDERCOLOR);
+  }
+  /**
+   * Set the pointer on the property used to elementLabelBorderColor
+   */
+  void setElementLabelBorderColor(ColorProperty *property) {
+    setProperty(VIEW_LABELBORDERCOLOR,property);
+  }
+  /**
+   * Return a pointer on the property used to elementLabelBorderWidth
+   */
+  DoubleProperty *getElementLabelBorderWidth() const {
+    return getProperty<DoubleProperty>(VIEW_LABELBORDERWIDTH);
+  }
+  /**
+   * Set the pointer on the property used to elementLabelBorderColor
+   */
+  void setElementLabelBorderColor(DoubleProperty *property) {
+    setProperty(VIEW_LABELBORDERWIDTH,property);
   }
   /**
    * Return a pointer on the property used to elementSize
