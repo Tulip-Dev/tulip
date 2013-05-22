@@ -72,6 +72,8 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c),
 void GraphPerspective::reserveDefaultProperties() {
   registerReservedProperty("viewColor");
   registerReservedProperty("viewLabelColor");
+  registerReservedProperty("viewLabelBorderColor");
+  registerReservedProperty("viewLabelBorderWidth");
   registerReservedProperty("viewSize");
   registerReservedProperty("viewLabel");
   registerReservedProperty("viewLabelPosition");
