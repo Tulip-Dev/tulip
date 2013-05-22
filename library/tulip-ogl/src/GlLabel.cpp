@@ -315,9 +315,8 @@ void GlLabel::draw(float, Camera *camera) {
   }
   else {
     scaleToApply=0.05f;
-    float tmpScreenH=screenH*0.05f;
-
     if(useMinMaxSize) {
+      float tmpScreenH=screenH*0.05f;
       if(tmpScreenH<minSize) {
         scaleToApply*=minSize/tmpScreenH;
       }
@@ -415,12 +414,10 @@ void GlLabel::draw(float, Camera *camera) {
     labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]-occlusionSize[0],baseCoord[1]-occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
     labelBoundingBox.expand(projectPoint(Coord(baseCoord[0]-occlusionSize[0],baseCoord[1]+occlusionSize[1],baseCoord[2]),transformMatrix,camera->getViewport()));
 
-    if(occlusionTester->testRectangle(RectangleInt2D(labelBoundingBox[0][0],labelBoundingBox[0][1],labelBoundingBox[1][0],labelBoundingBox[1][1]))) {
+    if(!occlusionTester->addRectangle(RectangleInt2D(labelBoundingBox[0][0],labelBoundingBox[0][1],labelBoundingBox[1][0],labelBoundingBox[1][1]))) {
       glPopAttrib();
       return;
     }
-
-    occlusionTester->addRectangle(RectangleInt2D(labelBoundingBox[0][0],labelBoundingBox[0][1],labelBoundingBox[1][0],labelBoundingBox[1][1]));
   }
 
   glPushMatrix();
@@ -437,11 +434,13 @@ void GlLabel::draw(float, Camera *camera) {
   if(zRot!=0.)
     glRotatef(zRot,0.,0.,1.);
 
+  glTranslatef(translationAfterRotation[0],translationAfterRotation[1],translationAfterRotation[2]);
+
   if(!billboarded) {
     //Alignement translation
     switch(alignment) {
     case ON_CENTER:
-      glTranslatef(translationAfterRotation[0],translationAfterRotation[1],translationAfterRotation[2]);
+
       break;
 
     case ON_LEFT:
@@ -545,7 +544,7 @@ void GlLabel::draw(float, Camera *camera) {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   //The label is too small to be readed, draw a line
-  if(screenH < 4 && useLOD) {
+  if(screenH < 2 && useLOD) {
     float wAlign=0;
     float hAlign=0;
 
@@ -571,7 +570,10 @@ void GlLabel::draw(float, Camera *camera) {
     }
 
     glLineWidth(screenH);
-    setMaterial(Color(color[0],color[1],color[2],color[3]));
+    if (outlineColor.getA()==0 || outlineSize == 0)
+        setMaterial(Color(color[0],color[1],color[2],color[3]));
+    else
+        setMaterial(Color(outlineColor[0],outlineColor[1],outlineColor[2],outlineColor[3]));
     OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
     glBegin(GL_LINES);
     glVertex3f(-w/2.+wAlign,hAlign,0);
@@ -644,18 +646,26 @@ void GlLabel::draw(float, Camera *camera) {
 
       setMaterial(color);
 
-
-      font->Render((*it).c_str(),-1,shift);
+      if (screenH > 6 || outlineColor.getA()==0 || outlineSize==0) {
+        OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+        font->Render((*it).c_str(),-1,shift);
+        OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+      }
 
       if(textureName!="")
         GlTextureManager::getInst().desactivateTexture();
 
-      if(screenH > 25 && useLOD) {
-        glLineWidth(outlineSize);
+      if (outlineSize > 0) {
+        if (screenH > 25) {
+          glLineWidth(outlineSize);
+        }
         setMaterial(outlineColor);
+
+        OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+        borderFont->Render((*it).c_str(),-1,shift);
+        OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
       }
 
-      borderFont->Render((*it).c_str(),-1,shift);
       yShift-=fontSize+5;
       ++itW;
     }

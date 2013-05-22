@@ -463,6 +463,9 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       if(it->lod<0 && !viewOutScreenLabel)
         continue;
 
+      if (it->lod < 10 && inputData->renderingParameters()->isLabelScaled())
+        continue;
+
       float lod=it->lod;
 
       if(viewOutScreenLabel && lod<0)
@@ -470,7 +473,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
 
       n.id=it->id;
 
-      if (filteringProperty&&filteringProperty->getNodeValue(n)) {
+      if (filteringProperty && filteringProperty->getNodeValue(n)) {
           continue;
       }
 
@@ -514,9 +517,12 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       if(it->lod<0 && !viewOutScreenLabel)
         continue;
 
+      if (it->lod < 5)
+        continue;
+
       e.id=it->id;
 
-      if (filteringProperty->getEdgeValue(e)) {
+      if (filteringProperty && filteringProperty->getEdgeValue(e)) {
           continue;
       }
 

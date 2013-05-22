@@ -51,7 +51,7 @@ public:
   /**
    * @brief Set parameters with a DataSet structure
    */
-  void    setParameters(const DataSet &);
+  void setParameters(const DataSet &);
 
   /**
    * @brief activate or deactivate anlialiasing
@@ -407,6 +407,16 @@ public:
   void setLabelScaled(bool state);
 
   /**
+   * @brief return if labels are rendered with a fixed font size (dynamic size otherwise)
+   */
+  bool isLabelFixedFontSize() const;
+
+  /**
+   * Set if labels must be rendered with a fixed font size (dynamic size otherwise)
+   */
+  void setLabelFixedFontSize(bool state);
+
+  /**
    * @brief Return labels -density
    *
    * This density must be in interval -100 100
@@ -427,22 +437,22 @@ public:
   void setLabelsDensity(int density);
 
   /**
-   * @brief return min size of label : this min size is only used if labels aren't be scaled
+   * @brief return min size of label : this min size is only used if labels are not scaled and are not rendered with a fixed font size
    */
   int getMinSizeOfLabel() const;
 
   /**
-   * @brief Set min size of label : this min size is only used if labels aren't be scaled
+   * @brief Set min size of label : this min size is only used if labels are not scaled and are not rendered with a fixed font size
    */
   void setMinSizeOfLabel(int size);
 
   /**
-   * @brief return max size of label : this max size is only used if labels aren't be scaled
+   * @brief return max size of label : this max size is only used if labels are not scaled and are not rendered with a fixed font size
    */
   int getMaxSizeOfLabel() const;
 
   /**
-   * @brief Set max size of label : this max size is only used if labels aren't be scaled
+   * @brief Set max size of label : this max size is only used if labels are not scaled and are not rendered with a fixed font size
    */
   void setMaxSizeOfLabel(int size);
 
@@ -502,6 +512,7 @@ private:
   int _metaNodesLabelStencil;
   int _edgesLabelStencil;
   bool _labelScaled;
+  bool _labelFixedFontSize;
   int _labelMinSize;
   int _labelMaxSize;
   int _labelsDensity;

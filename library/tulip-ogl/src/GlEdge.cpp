@@ -450,15 +450,18 @@ void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data, float 
 
     bool select = data->getElementSelected()->getEdgeValue(e);
 
-    Color fontColor;
+    Color fontColor, outlineColor;
 
-    if (data->getElementSelected()->getEdgeValue(e))
-        fontColor= data->parameters->getSelectionColor();
-    else {
+    if (data->getElementSelected()->getEdgeValue(e)) {
+        fontColor = outlineColor = data->parameters->getSelectionColor();
+    } else {
         fontColor = data->getElementLabelColor()->getEdgeValue(e);
+        outlineColor = data->getElementLabelBorderColor()->getEdgeValue(e);
     }
 
-    if(fontColor.getA()==0)
+    float outlineWidth = data->getElementLabelBorderWidth()->getEdgeValue(e);
+
+    if(fontColor.getA()==0 && (outlineColor.getA()==0 || outlineWidth==0))
         return;
 
     int fontSize=data->getElementFontSize()->getEdgeValue(e);
@@ -473,7 +476,8 @@ void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data, float 
 
     label->setFontNameSizeAndColor(data->getElementFont()->getEdgeValue(e),fontSize,fontColor);
     label->setText(tmp);
-    label->setOutlineColor(Color(0,0,0,fontColor[3]));
+    label->setOutlineColor(outlineColor);
+    label->setOutlineSize(outlineWidth);
 
     const std::pair<node, node>& eEnds = data->graph->ends(e);
     const node source = eEnds.first;
@@ -496,10 +500,7 @@ void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data, float 
 
     getEdgeSize(data,e,srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
 
-    if(edgeSize[0]>edgeSize[1])
-        label->setTranslationAfterRotation(Coord(0,edgeSize[0]*2,0));
-    else
-        label->setTranslationAfterRotation(Coord(0,edgeSize[1]*2,0));
+    label->setTranslationAfterRotation(Coord());
 
     const Coord & srcCoord = data->getElementLayout()->getNodeValue(source);
     const Coord & tgtCoord = data->getElementLayout()->getNodeValue(target);
@@ -550,22 +551,29 @@ void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data, float 
     }
 
     BoundingBox bb=getBoundingBox(data);
+    int labelPos = data->getElementLabelPosition()->getEdgeValue(e);
 
-    label->setSize(Size(0.001f,0.001f,0.0f));
+    label->setSize(Size());
     label->rotate(0,0,angle);
-    label->setAlignment(ON_TOP);
+    label->setAlignment(labelPos);
     label->setScaleToSize(false);
     label->setLabelsDensity(data->parameters->getLabelsDensity());
 
     if(!(data->parameters->getLabelsDensity()==100)) //labels overlap
-        label->setOcclusionTester(test);
+      label->setOcclusionTester(test);
     else
-        label->setOcclusionTester(NULL);
+      label->setOcclusionTester(NULL);
 
     label->setPosition(position);
+    if (edgeSize[0] > edgeSize[1]) {
+      label->setTranslationAfterRotation(Coord(0, -edgeSize[0]/2));
+    }
+    else {
+      label->setTranslationAfterRotation(Coord(0, -edgeSize[1]/2));
+    }
 
     label->setUseLODOptimisation(true,bb);
-    label->setUseMinMaxSize(true);
+    label->setUseMinMaxSize(!data->parameters->isLabelFixedFontSize());
     label->setMinSize(data->parameters->getMinSizeOfLabel());
     label->setMaxSize(data->parameters->getMaxSizeOfLabel());
     label->setBillboarded(data->parameters->getLabelsAreBillboarded());

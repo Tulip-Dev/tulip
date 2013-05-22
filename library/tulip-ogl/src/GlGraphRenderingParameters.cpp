@@ -49,6 +49,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _metaNodesLabelStencil(0xFFFF),
   _edgesLabelStencil(0xFFFF),
   _labelScaled(false),
+  _labelFixedFontSize(false),
   _labelMinSize(10),
   _labelMaxSize(30),
   _labelsDensity(0),
@@ -433,6 +434,13 @@ bool GlGraphRenderingParameters::isLabelScaled() const {
 }
 void GlGraphRenderingParameters::setLabelScaled(bool state) {
   _labelScaled=state;
+}
+//====================================================
+bool GlGraphRenderingParameters::isLabelFixedFontSize() const {
+  return _labelFixedFontSize;
+}
+void GlGraphRenderingParameters::setLabelFixedFontSize(bool state) {
+  _labelFixedFontSize=state;
 }
 //====================================================
 int GlGraphRenderingParameters::getLabelsDensity() const {

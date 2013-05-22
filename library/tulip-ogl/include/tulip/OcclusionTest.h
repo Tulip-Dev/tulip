@@ -56,10 +56,10 @@ struct TLP_GL_SCOPE OcclusionTest {
   bool addRectangle(const RectangleInt2D &rec) {
     if (!testRectangle(rec)) {
       data.push_back(rec);
-      return false;
+      return true;
     }
 
-    return true;
+    return false;
   }
   /**
   * @brief test wehter or nor the AABB intersect with a AABB already inserted.
