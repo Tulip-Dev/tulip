@@ -143,7 +143,7 @@ static ViewBorderWidthCalculator vWidthCalc;
 void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
                     borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
-                    labelColor = "viewLabelColor", labelPosition = "viewLabelPosition", label="viewLabel", rotation = "viewRotation", labelRotation = "viewLabelRotation",
+                    labelColor = "viewLabelColor", labelBorderColor = "viewLabelBorderColor", labelBorderWidth = "viewLabelBorderWidth", labelPosition = "viewLabelPosition", label="viewLabel", rotation = "viewRotation", labelRotation = "viewLabelRotation",
                     srcAnchorSize = "viewSrcAnchorSize", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
 
   if (!g->existProperty(shapes)) {
@@ -187,7 +187,7 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   }
 
   if (!g->existProperty(tgtShape)) {
-    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
+      g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(EdgeExtremityGlyphManager::getInst().glyphId("2D - Arrow"));
   }
 
   if (!g->existProperty(srcShape)) {
@@ -197,6 +197,16 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   if (!g->existProperty(labelColor)) {
     g->getProperty<ColorProperty>(labelColor)->setAllNodeValue(TulipSettings::instance().defaultLabelColor());
     g->getProperty<ColorProperty>(labelColor)->setAllEdgeValue(TulipSettings::instance().defaultLabelColor());
+  }
+
+  if (!g->existProperty(labelBorderColor)) {
+    g->getProperty<ColorProperty>(labelBorderColor)->setAllNodeValue(TulipSettings::instance().defaultLabelColor());
+    g->getProperty<ColorProperty>(labelBorderColor)->setAllEdgeValue(TulipSettings::instance().defaultLabelColor());
+  }
+
+  if (!g->existProperty(labelBorderWidth)) {
+    g->getProperty<DoubleProperty>(labelBorderWidth)->setAllNodeValue(1);
+    g->getProperty<DoubleProperty>(labelBorderWidth)->setAllEdgeValue(1);
   }
 
   if (!g->existProperty(labelPosition)) {
