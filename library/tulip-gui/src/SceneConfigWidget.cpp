@@ -45,6 +45,10 @@ using namespace tlp;
 SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(NULL), _resetting(false) {
   _ui->setupUi(this);
 
+  connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this, SLOT(dynamicFontRBToggled(bool)));
+  connect(_ui->labelSizesSpanSlider, SIGNAL(lowerValueChanged(int)), this, SLOT(updateSliderRangeLabels()));
+  connect(_ui->labelSizesSpanSlider, SIGNAL(upperValueChanged(int)), this, SLOT(updateSliderRangeLabels()));
+
   if (Perspective::instance()->mainWindow() != NULL) {
     _ui->selectionColorButton->setDialogParent(Perspective::instance()->mainWindow());
     _ui->backgroundColorButton->setDialogParent(Perspective::instance()->mainWindow());
@@ -101,6 +105,8 @@ void SceneConfigWidget::resetChanges() {
     _ui->labelsOrderingCombo->setCurrentIndex(model->rowOf(renderingParameters->getElementOrderingProperty()));
 
   _ui->labelsFitCheck->setChecked(renderingParameters->isLabelScaled());
+  _ui->fixedFontSizeRB->setChecked(renderingParameters->isLabelFixedFontSize());
+  _ui->dynamicFontSizeRB->setChecked(!renderingParameters->isLabelFixedFontSize());
   _ui->labelsDensitySlider->setValue(renderingParameters->getLabelsDensity());
   _ui->labelSizesSpanSlider->setLowerValue(renderingParameters->getMinSizeOfLabel());
   _ui->labelSizesSpanSlider->setUpperValue(renderingParameters->getMaxSizeOfLabel());
@@ -127,21 +133,23 @@ void SceneConfigWidget::resetChanges() {
 
 bool SceneConfigWidget::eventFilter(QObject* obj, QEvent* ev) {
   if (ev->type() == QEvent::MouseButtonPress) {
-    if (obj == _ui->labelsDisabledLabel)
+    if (obj == _ui->labelsDisabledLabel) {
       _ui->labelsDensitySlider->setValue(-100);
-    else if (obj == _ui->labelsNoOverlapLabel)
+      applySettings();
+    }
+    else if (obj == _ui->labelsNoOverlapLabel) {
       _ui->labelsDensitySlider->setValue(0);
-    else if (obj == _ui->labelsShowAllLabel)
+      applySettings();
+    }
+    else if (obj == _ui->labelsShowAllLabel) {
       _ui->labelsDensitySlider->setValue(100);
+      applySettings();
+    }
 
     return true;
   }
 
   return false;
-}
-
-void SceneConfigWidget::settingsChanged() {
-  _ui->applyButton->setEnabled(!_resetting);
 }
 
 void SceneConfigWidget::applySettings() {
@@ -159,6 +167,7 @@ void SceneConfigWidget::applySettings() {
   }
 
   renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());
+  renderingParameters->setLabelFixedFontSize(_ui->fixedFontSizeRB->isChecked());
   renderingParameters->setLabelsDensity(_ui->labelsDensitySlider->value());
   renderingParameters->setMinSizeOfLabel(_ui->labelSizesSpanSlider->lowerValue());
   renderingParameters->setMaxSizeOfLabel(_ui->labelSizesSpanSlider->upperValue());
@@ -176,6 +185,14 @@ void SceneConfigWidget::applySettings() {
   // PROJECTION
   _glMainWidget->getScene()->setViewOrtho(_ui->orthoRadioButton->isChecked());
   _glMainWidget->draw();
-  _ui->applyButton->setEnabled(false);
   emit settingsApplied();
+}
+
+void SceneConfigWidget::dynamicFontRBToggled(bool state) {
+    _ui->sizeLimitsGB->setEnabled(state);
+}
+
+void SceneConfigWidget::updateSliderRangeLabels() {
+    _ui->labelsMinSizeLabel->setText(QString::number(_ui->labelSizesSpanSlider->lowerValue()));
+    _ui->labelsMaxSizeLabel->setText(QString::number(_ui->labelSizesSpanSlider->upperValue()));
 }

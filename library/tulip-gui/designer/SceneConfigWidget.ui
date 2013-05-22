@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>380</width>
-    <height>409</height>
+    <width>378</width>
+    <height>714</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -110,39 +110,6 @@ padding-top: 5px;
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="applyButton">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="toolTip">
-         <string>Apply changes</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">font-weight: bold;
-		 font-size: 10px;</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/gui/icons/24/view-refresh.png</normaloff>:/tulip/gui/icons/24/view-refresh.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>24</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="flat">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -167,9 +134,9 @@ padding-top: 5px;
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>347</width>
-        <height>702</height>
+        <y>-54</y>
+        <width>343</width>
+        <height>707</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -261,13 +228,6 @@ background-color: rgb(160, 160, 160);</string>
            </layout>
           </item>
           <item>
-           <widget class="QCheckBox" name="labelsFitCheck">
-            <property name="text">
-             <string>Fit labels size to nodes size</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QFrame" name="verticalFrame">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -280,28 +240,12 @@ background-color: rgb(160, 160, 160);</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <item>
-              <widget class="QLabel" name="labelsDensityLabel">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
+              <widget class="QGroupBox" name="groupBox_2">
+               <property name="title">
                 <string>Density</string>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QFrame" name="horizontalFrame">
-               <property name="styleSheet">
-                <string notr="true">QLabel {
-font-weight: bold;
-font-size: 10px;
-}</string>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_3">
-                <item>
+               <layout class="QGridLayout" name="gridLayout">
+                <item row="0" column="0">
                  <widget class="QLabel" name="labelsDisabledLabel">
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
@@ -311,7 +255,7 @@ font-size: 10px;
                   </property>
                  </widget>
                 </item>
-                <item>
+                <item row="0" column="1">
                  <widget class="QLabel" name="labelsNoOverlapLabel">
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
@@ -324,7 +268,7 @@ font-size: 10px;
                   </property>
                  </widget>
                 </item>
-                <item>
+                <item row="0" column="2">
                  <widget class="QLabel" name="labelsShowAllLabel">
                   <property name="cursor">
                    <cursorShape>PointingHandCursor</cursorShape>
@@ -337,32 +281,36 @@ font-size: 10px;
                   </property>
                  </widget>
                 </item>
+                <item row="1" column="0" colspan="3">
+                 <widget class="QSlider" name="labelsDensitySlider">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimum">
+                   <number>-100</number>
+                  </property>
+                  <property name="maximum">
+                   <number>100</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="tickPosition">
+                   <enum>QSlider::TicksAbove</enum>
+                  </property>
+                  <property name="tickInterval">
+                   <number>100</number>
+                  </property>
+                 </widget>
+                </item>
                </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QSlider" name="labelsDensitySlider">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimum">
-                <number>-100</number>
-               </property>
-               <property name="maximum">
-                <number>100</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::TicksAbove</enum>
-               </property>
-               <property name="tickInterval">
-                <number>100</number>
-               </property>
+               <zorder>labelsDensitySlider</zorder>
+               <zorder>labelsDisabledLabel</zorder>
+               <zorder>labelsShowAllLabel</zorder>
+               <zorder>labelsNoOverlapLabel</zorder>
               </widget>
              </item>
             </layout>
@@ -381,78 +329,101 @@ font-size: 10px;
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>
-              <widget class="QLabel" name="labelSizesLabel">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
+              <widget class="QCheckBox" name="labelsFitCheck">
                <property name="text">
-                <string>Size limits</string>
+                <string>Fit labels size to nodes size</string>
                </property>
               </widget>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout">
-               <item>
-                <widget class="QLabel" name="labelsMinSizeLabel">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>25</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>100</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QxtSpanSlider" name="labelSizesSpanSlider">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>200</number>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="labelsMaxSizeLabel">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="minimumSize">
-                  <size>
-                   <width>25</width>
-                   <height>0</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>100</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="fixedFontSizeRB">
+               <property name="text">
+                <string>Use fixed font size</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="dynamicFontSizeRB">
+               <property name="text">
+                <string>Use dynamic font size</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="sizeLimitsGB">
+               <property name="title">
+                <string>Size limits</string>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <widget class="QLabel" name="labelsMinSizeLabel">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>25</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>    0</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QxtSpanSlider" name="labelSizesSpanSlider">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimum">
+                   <number>0</number>
+                  </property>
+                  <property name="maximum">
+                   <number>200</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labelsMaxSizeLabel">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>25</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>200</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
              </item>
             </layout>
            </widget>
@@ -734,7 +705,7 @@ background-color: rgb(160, 160, 160);</string>
    <sender>edges3DCheck</sender>
    <signal>stateChanged(int)</signal>
    <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
+   <slot>applySettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>241</x>
@@ -750,7 +721,7 @@ background-color: rgb(160, 160, 160);</string>
    <sender>edgesArrowCheck</sender>
    <signal>stateChanged(int)</signal>
    <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
+   <slot>applySettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>241</x>
@@ -766,7 +737,7 @@ background-color: rgb(160, 160, 160);</string>
    <sender>edgesColorInterpolationCheck</sender>
    <signal>stateChanged(int)</signal>
    <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
+   <slot>applySettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>241</x>
@@ -782,7 +753,7 @@ background-color: rgb(160, 160, 160);</string>
    <sender>edgesSizeInterpolationCheck</sender>
    <signal>stateChanged(int)</signal>
    <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
+   <slot>applySettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>241</x>
@@ -791,22 +762,6 @@ background-color: rgb(160, 160, 160);</string>
     <hint type="destinationlabel">
      <x>212</x>
      <y>279</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>applyButton</sender>
-   <signal>clicked()</signal>
-   <receiver>SceneConfigWidget</receiver>
-   <slot>applySettings()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>362</x>
-     <y>28</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>209</x>
-     <y>269</y>
     </hint>
    </hints>
   </connection>
@@ -846,7 +801,7 @@ background-color: rgb(160, 160, 160);</string>
    <sender>labelsFitCheck</sender>
    <signal>stateChanged(int)</signal>
    <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
+   <slot>applySettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>171</x>
@@ -862,7 +817,7 @@ background-color: rgb(160, 160, 160);</string>
    <sender>labelsOrderingCombo</sender>
    <signal>currentIndexChanged(int)</signal>
    <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
+   <slot>applySettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>158</x>
@@ -876,9 +831,9 @@ background-color: rgb(160, 160, 160);</string>
   </connection>
   <connection>
    <sender>labelsDensitySlider</sender>
-   <signal>valueChanged(int)</signal>
+   <signal>sliderReleased()</signal>
    <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
+   <slot>applySettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>171</x>
@@ -892,25 +847,9 @@ background-color: rgb(160, 160, 160);</string>
   </connection>
   <connection>
    <sender>labelSizesSpanSlider</sender>
-   <signal>lowerValueChanged(int)</signal>
+   <signal>sliderReleased()</signal>
    <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>171</x>
-     <y>270</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>189</x>
-     <y>204</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>labelSizesSpanSlider</sender>
-   <signal>upperValueChanged(int)</signal>
-   <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
+   <slot>applySettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>171</x>
@@ -926,7 +865,7 @@ background-color: rgb(160, 160, 160);</string>
    <sender>orthoRadioButton</sender>
    <signal>clicked()</signal>
    <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
+   <slot>applySettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>173</x>
@@ -942,7 +881,7 @@ background-color: rgb(160, 160, 160);</string>
    <sender>centralRadioButton</sender>
    <signal>clicked()</signal>
    <receiver>SceneConfigWidget</receiver>
-   <slot>settingsChanged()</slot>
+   <slot>applySettings()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>173</x>
@@ -951,6 +890,22 @@ background-color: rgb(160, 160, 160);</string>
     <hint type="destinationlabel">
      <x>189</x>
      <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fixedFontSizeRB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SceneConfigWidget</receiver>
+   <slot>applySettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>171</x>
+     <y>274</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>188</x>
+     <y>356</y>
     </hint>
    </hints>
   </connection>
