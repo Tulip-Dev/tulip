@@ -32,7 +32,6 @@ extern TLP_SCOPE std::string TulipUserHandBookIndex;
 extern TLP_SCOPE std::string TulipBitmapDir;
 extern TLP_SCOPE std::string TulipShareDir;
 
-#ifndef EMSCRIPTEN
 /**
  * @ingroup Plugins
  *
@@ -47,6 +46,7 @@ extern TLP_SCOPE std::string TulipShareDir;
  */
 extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
 
+#ifndef EMSCRIPTEN
 /**
  * @ingroup Plugins
  *
