@@ -185,6 +185,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   }
 
   BooleanProperty *filteringProperty = inputData->parameters->getDisplayFilteringProperty();
+  DoubleProperty *metric=inputData->parameters->getElementOrderingProperty();
   bool displayNodes = inputData->parameters->isDisplayNodes();
   bool displayMetaNodes = inputData->parameters->isDisplayMetaNodes();
   bool displayMetaNodesLabel = inputData->parameters->isViewMetaLabel();
@@ -203,6 +204,9 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   if(!inputData->parameters->isElementZOrdered()) {
 
+    vector<pair<node,float> > nodesMetricOrdered;
+    vector<pair<edge,float> > edgesMetricOrdered;
+
     //draw nodes and metanodes
     for(vector<ComplexEntityLODUnit>::iterator it =layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
 
@@ -215,17 +219,20 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
       }
 
       if(displayNodes || ((displayMetaNodes || displayMetaNodesLabel) && graph->isMetaNode(node(it->id)))) {
-        if(selectionDrawActivate) {
-          if((selectionType & RenderingNodes)==0)
-            continue;
+        if (!metric)  {
+          if(selectionDrawActivate) {
+            if((selectionType & RenderingNodes)==0)
+              continue;
 
-          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->id,SelectedEntity::NODE_SELECTED);
-          glLoadName(*selectionCurrentId);
-          (*selectionCurrentId)++;
+            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->id,SelectedEntity::NODE_SELECTED);
+            glLoadName(*selectionCurrentId);
+            (*selectionCurrentId)++;
+          }
+          glNode.id=it->id;
+          glNode.draw(it->lod,inputData,camera);
+        } else {
+          nodesMetricOrdered.push_back(make_pair(node(it->id), it->lod));
         }
-
-        glNode.id=it->id;
-        glNode.draw(it->lod,inputData,camera);
 
         if(renderOnlyOneNode)
           break;
@@ -233,7 +240,26 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
       else {
         continue;
       }
+    }
 
+    if(metric) {
+      // Draw nodes with metric ordering
+      GreatThanNode ltn;
+      ltn.metric=metric;
+      sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
+
+      for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin(); it!=nodesMetricOrdered.end(); ++it) {
+        if(selectionDrawActivate) {
+          if((selectionType & RenderingNodes)==0)
+            continue;
+
+          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->first.id,SelectedEntity::NODE_SELECTED);
+          glLoadName(*selectionCurrentId);
+          (*selectionCurrentId)++;
+        }
+        glNode.id=it->first.id;
+        glNode.draw(it->second,inputData,camera);
+      }
     }
 
     if(!renderOnlyOneNode) {
@@ -250,20 +276,43 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
         if(!displayEdges)
           continue;
 
-        if(selectionDrawActivate) {
-          if((selectionType & RenderingEdges)==0)
-            continue;
+        if (!metric) {
+          if(selectionDrawActivate) {
+            if((selectionType & RenderingEdges)==0)
+              continue;
 
-          (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->id,SelectedEntity::EDGE_SELECTED);
-          glLoadName(*selectionCurrentId);
-          (*selectionCurrentId)++;
+            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->id,SelectedEntity::EDGE_SELECTED);
+            glLoadName(*selectionCurrentId);
+            (*selectionCurrentId)++;
+          }
+
+          glEdge.id=it->id;
+          glEdge.draw(it->lod,inputData,camera);
+        } else {
+          edgesMetricOrdered.push_back(make_pair(edge(it->id), it->lod));
         }
+      }
 
-        glEdge.id=it->id;
-        glEdge.draw(it->lod,inputData,camera);
+      if (metric) {
+        // Draw edges with metric ordering
+        GreatThanEdge lte;
+        lte.metric=metric;
+        sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
+
+        for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin(); it!=edgesMetricOrdered.end(); ++it) {
+          if(selectionDrawActivate) {
+            if((selectionType & RenderingEdges)==0)
+              continue;
+
+            (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->first.id,SelectedEntity::EDGE_SELECTED);
+            glLoadName(*selectionCurrentId);
+            (*selectionCurrentId)++;
+          }
+          glEdge.id=it->first.id;
+          glEdge.draw(it->second,inputData,camera);
+        }
       }
     }
-
   }
   else {
 
