@@ -52,9 +52,9 @@ public slots:
   void setGlMainWidget(tlp::GlMainWidget*);
   void resetChanges();
   void applySettings();
+  void dynamicFontRBToggled(bool);
+  void updateSliderRangeLabels();
 
-protected slots:
-  void settingsChanged();
 
 protected:
   bool eventFilter(QObject *, QEvent *);
