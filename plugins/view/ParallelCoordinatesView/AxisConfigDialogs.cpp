@@ -166,7 +166,7 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
   vector<string>::reverse_iterator it;
 
   for (it = labelsOrder.rbegin() ; it != labelsOrder.rend() ; ++it) {
-    axisLabelsOrder->addItem(QString((*it).c_str()));
+    axisLabelsOrder->addItem(QString::fromUtf8((*it).c_str()));
   }
 
   setLayout(dialogLayout);
@@ -181,7 +181,7 @@ void NominalAxisConfigDialog::closeEvent (QCloseEvent *) {
   vector<string> labelsOrder;
 
   for (int i = 0; i < axisLabelsOrder->count(); ++i) {
-    labelsOrder.push_back(axisLabelsOrder->item(i)->text().toStdString());
+    labelsOrder.push_back(axisLabelsOrder->item(i)->text().toUtf8().data());
   }
 
   reverse(labelsOrder.begin(), labelsOrder.end());
@@ -231,14 +231,14 @@ void NominalAxisConfigDialog::pressButtonLexOrder() {
     vector<string>::iterator it;
 
     for (it = labelsOrder.begin() ; it != labelsOrder.end() ; ++it) {
-      axisLabelsOrder->addItem(QString((*it).c_str()));
+      axisLabelsOrder->addItem(QString::fromUtf8((*it).c_str()));
     }
   }
   else {
     vector<string>::reverse_iterator it;
 
     for (it = labelsOrder.rbegin() ; it != labelsOrder.rend() ; ++it) {
-      axisLabelsOrder->addItem(QString((*it).c_str()));
+      axisLabelsOrder->addItem(QString::fromUtf8((*it).c_str()));
     }
   }
 

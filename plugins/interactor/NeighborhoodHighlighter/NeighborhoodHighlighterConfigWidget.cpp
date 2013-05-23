@@ -52,7 +52,7 @@ int NeighborhoodHighlighterConfigWidget::numberOfNodesToBring() const {
 }
 
 std::string NeighborhoodHighlighterConfigWidget::propertyToUse() const {
-  return propertyName->currentText().toStdString();
+  return std::string(propertyName->currentText().toUtf8().data());
 }
 
 void NeighborhoodHighlighterConfigWidget::setNumberOfNodes(int nodesNb) {
@@ -60,6 +60,6 @@ void NeighborhoodHighlighterConfigWidget::setNumberOfNodes(int nodesNb) {
 }
 
 void NeighborhoodHighlighterConfigWidget::setPropertyToUse(std::string propertyName) {
-  this->propertyName->addItem(QString::fromStdString(propertyName));
-  this->propertyName->setCurrentIndex(this->propertyName->findText(QString::fromStdString(propertyName)));
+  this->propertyName->addItem(QString::fromUtf8(propertyName.c_str()));
+  this->propertyName->setCurrentIndex(this->propertyName->findText(QString::fromUtf8(propertyName.c_str())));
 }

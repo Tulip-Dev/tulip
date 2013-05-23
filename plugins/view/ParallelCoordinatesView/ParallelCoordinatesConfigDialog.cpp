@@ -150,7 +150,7 @@ string ParallelCoordinatesConfigDialog::getLinesTextureFilename() const {
       return string(TulipBitmapDir + DEFAULT_TEXTURE_FILE);
     }
     else {
-      return _ui->userTextureFile->text().toStdString();
+      return _ui->userTextureFile->text().toUtf8().data();
     }
   }
   else {
@@ -273,7 +273,7 @@ void ParallelCoordinatesConfigDialog::backupConfiguration() {
   linesColorAlphaValueBak = _ui->viewColorAlphaValue->value();
   linesTextureBak = _ui->gBoxLineTexture->isChecked();
   userTextureBak = _ui->userTexture->isChecked();
-  userTextureFileBak = _ui->userTextureFile->text().toStdString();
+  userTextureFileBak = _ui->userTextureFile->text().toUtf8().data();
   unhighlightedEltsColorsAlphaValueBak = _ui->nonHighlightedEltsAlphaValue->value();
 }
 

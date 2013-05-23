@@ -129,11 +129,11 @@ QWidget *PathFinder::configurationWidget() const {
 }
 
 void PathFinder::setWeightMetric(const QString &metric) {
-  weightMetric = metric.toStdString();
+  weightMetric = metric.toUtf8().data();
 }
 
 void PathFinder::setEdgeOrientation(const QString &metric) {
-  string cmp(metric.toStdString());
+  string cmp(metric.toUtf8().data());
 
   for (map<PathAlgorithm::EdgeOrientation, string>::iterator it = edgeOrientationLabels.begin(); it != edgeOrientationLabels.end(); ++it) {
     if (it->second.compare(cmp) == 0)

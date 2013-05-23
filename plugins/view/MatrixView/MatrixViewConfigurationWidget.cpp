@@ -84,7 +84,7 @@ void MatrixViewConfigurationWidget::orderingMetricComboIndexChanged(int i) {
   string name("");
 
   if (i > 0)
-    name = _ui->orderingMetricCombo->itemText(i).toStdString();
+    name = QStringToTlpString(_ui->orderingMetricCombo->itemText(i));
 
   emit metricSelected(name);
 }
