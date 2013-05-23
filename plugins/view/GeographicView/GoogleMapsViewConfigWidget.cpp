@@ -114,12 +114,12 @@ bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
     }
 
     case CsvFile: {
-      _oldFileLoaded=_ui->csvFile->text().toStdString();
+      _oldFileLoaded=_ui->csvFile->text().toUtf8().data();
       break;
     }
 
     case PolyFile: {
-      _oldFileLoaded=_ui->polyFile->text().toStdString();
+      _oldFileLoaded=_ui->polyFile->text().toUtf8().data();
       break;
     }
 
@@ -132,8 +132,8 @@ bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
   else {
     switch(_oldPolyFileType) {
     case CsvFile: {
-      if(_oldFileLoaded!=_ui->csvFile->text().toStdString()) {
-        _oldFileLoaded=_ui->csvFile->text().toStdString();
+      if(_oldFileLoaded!=_ui->csvFile->text().toUtf8().data()) {
+        _oldFileLoaded=_ui->csvFile->text().toUtf8().data();
         return true;
       }
 
@@ -141,8 +141,8 @@ bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
     }
 
     case PolyFile: {
-      if(_oldFileLoaded!=_ui->polyFile->text().toStdString()) {
-        _oldFileLoaded=_ui->polyFile->text().toStdString();
+      if(_oldFileLoaded!=_ui->polyFile->text().toUtf8().data()) {
+        _oldFileLoaded=_ui->polyFile->text().toUtf8().data();
         return true;
       }
 
@@ -192,8 +192,8 @@ void GoogleMapsViewConfigWidget::setState(const DataSet &dataSet) {
 DataSet GoogleMapsViewConfigWidget::state() const {
   DataSet data;
   data.set("polyFileType",(int)polyFileType());
-  data.set("csvFileName",_ui->csvFile->text().toStdString());
-  data.set("polyFileName",_ui->polyFile->text().toStdString());
+  data.set("csvFileName",std::string(_ui->csvFile->text().toUtf8().data()));
+  data.set("polyFileName",std::string(_ui->polyFile->text().toUtf8().data()));
   data.set("useSharedLayout",useSharedLayoutProperty());
   data.set("useSharedSize",useSharedSizeProperty());
   data.set("useSharedShape",useSharedShapeProperty());

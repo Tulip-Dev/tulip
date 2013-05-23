@@ -235,7 +235,7 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
     vector<string> properties;
 
     for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
-      properties.push_back((*it).toStdString());
+      properties.push_back((*it).toUtf8().data());
     }
 
     dimensionConfigurationWidget->propertiesConfigurationWidget->setOutputPropertiesList(properties);

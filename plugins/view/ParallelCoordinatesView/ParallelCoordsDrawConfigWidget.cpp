@@ -68,7 +68,7 @@ string ParallelCoordsDrawConfigWidget::getLinesTextureFilename() const {
       return DEFAULT_TEXTURE_FILE;
     }
     else {
-      return _ui->userTextureFile->text().toStdString();
+      return _ui->userTextureFile->text().toUtf8().data();
     }
   }
   else {
