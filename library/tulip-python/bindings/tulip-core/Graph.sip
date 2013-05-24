@@ -3379,43 +3379,6 @@ which can contain an error message.
 	}
 %End
 
-//===========================================================================================
-
-    void addGraphObserver(tlp::GraphObserverPython *) const;
-%Docstring
-tlp.Graph.addGraphObserver(graphObserver)
-
-.. versionadded:: 3.8
-
-Registers a new graph observer object
-that will receive notifications when the graph is modified.
-
-:param graphObserver: the new graph observer to register
-:type graphObserver: :class:`tlp.GraphObserver`
-%End
-
-%MethodCode
-    sipCpp->addListener(a0);
-%End
-
-//===========================================================================================
-
-    void removeGraphObserver(tlp::GraphObserverPython *) const;
-%Docstring
-tlp.Graph.removeGraphObserver(graphObserver)
-
-.. versionadded:: 3.8
-
-Removes a registered graph observer object.
-
-:param graphObserver: the graph observer to remove
-:type graphObserver: :class:`tlp.GraphObserver`
-%End
-
-%MethodCode
-    sipCpp->removeListener(a0);
-%End
-
  //===========================================================================================
     void push(bool unpopAllowed = true, std::vector<tlp::PropertyInterface*>* propertiesToPreserveOnPop= NULL);
 %Docstring

@@ -44,9 +44,7 @@ INSTALL(FILES
   tulip/minmaxproperty.h
   tulip/MutableContainer.h
   tulip/Node.h
-  tulip/ObservableGraph.h
   tulip/Observable.h
-  tulip/ObservableProperty.h
   tulip/Ordering.h
   tulip/OuterPlanarTest.h
   tulip/PlanarConMap.h

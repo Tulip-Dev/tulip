@@ -216,7 +216,6 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
 %Include ImportModule.sip
 %Include ExportModule.sip
 
-%Include ObservableProperty.sip
 %Include PropertyInterface.sip
 
 %Include BooleanProperty.sip
@@ -232,7 +231,6 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
 %Include WithParameter.sip
 %Include WithDependency.sip
 %Include PluginProgress.sip
-%Include ObservableGraph.sip
 %Include Graph.sip
 %Include GraphMeasure.sip
 %Include GraphTools.sip

@@ -452,28 +452,6 @@ Meta-nodes management
 
 .. automethod:: tulip::tlp.Graph.openMetaNode
 
-Graph observation
-^^^^^^^^^^^^^^^^^
-
-.. automethod:: tulip::tlp.Graph.addGraphObserver
-
-.. automethod:: tulip::tlp.Graph.removeGraphObserver
-
-Tulip observation system
-------------------------
-
-tlp.GraphObserver
-^^^^^^^^^^^^^^^^^
-
-.. autoclass:: tulip::tlp.GraphObserver
-        :members:
-
-tlp.PropertyObserver
-^^^^^^^^^^^^^^^^^^^^
-
-.. autoclass:: tulip::tlp.PropertyObserver
-        :members:
-
 Tulip datatypes
 ---------------
 

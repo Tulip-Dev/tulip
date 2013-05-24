@@ -26,7 +26,6 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/ConnectedTest.h>
-#include <tulip/ObservableProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -968,7 +967,7 @@ void PushPopTest::testAddDelProps() {
 
 // this class will capture
 // everything that will happen to our properties
-class PropertyObserverForTest :public PropertyObserver, public Observable {
+class PropertyObserverForTest :public Observable {
 public:
   std::set<PropertyInterface*> properties;
 

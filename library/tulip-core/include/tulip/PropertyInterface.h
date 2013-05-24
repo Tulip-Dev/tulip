@@ -33,7 +33,6 @@ struct DataMem;
 class Graph;
 template<class itType >
 struct Iterator;
-class PropertyObserver;
 
 //=============================================================
 /**
@@ -350,22 +349,6 @@ public:
    */
   virtual void setMetaValueCalculator(MetaValueCalculator* calculator) {
     metaValueCalculator = calculator;
-  }
-
-  /**
-   * @brief Adds a Listener to this property.
-   * @deprecated Use addListener instead.
-   */
-  void _DEPRECATED addPropertyObserver(Observable *pObs) {
-    addListener(pObs);
-  }
-
-  /**
-   * @brief Removes a Listener from this property.
-   * @deprecated Use removeListener instead.
-   */
-  void _DEPRECATED removePropertyObserver(Observable *pObs) {
-    removeListener(pObs);
   }
 
   /**

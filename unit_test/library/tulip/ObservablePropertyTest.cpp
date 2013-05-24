@@ -27,7 +27,6 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
-#include <tulip/ObservableProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -79,7 +78,7 @@ static ObserverPTest* observer;
 
 // this class will capture
 // everything that will happen to our properties
-class PropertyObserverTest :public PropertyObserver, public Observable {
+class PropertyObserverTest :public Observable {
 public:
   std::set<PropertyInterface*> properties;
   node lastNode;
@@ -127,7 +126,54 @@ public:
     properties.insert(prop);
   }
   virtual void treatEvent(const Event& evt) {
-    PropertyObserver::treatEvent(evt);
+    const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&evt);
+
+    if (propEvt) {
+      PropertyInterface* prop = propEvt->getProperty();
+
+      switch(propEvt->getType()) {
+      case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
+	beforeSetNodeValue(prop, propEvt->getNode());
+	return;
+
+      case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
+	beforeSetEdgeValue(prop, propEvt->getEdge());
+	return;
+
+      case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
+	beforeSetAllNodeValue(prop);
+	return;
+
+      case PropertyEvent::TLP_BEFORE_SET_ALL_EDGE_VALUE:
+	beforeSetAllEdgeValue(prop);
+	return;
+
+      /*case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
+	afterSetNodeValue(prop, propEvt->getNode());
+	return;
+
+      case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
+	afterSetAllNodeValue(prop);
+	return;
+
+      case PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE:
+	afterSetAllEdgeValue(prop);
+	return;
+
+      case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
+	afterSetEdgeValue(prop, propEvt->getEdge());
+	return;*/
+
+      default:
+	return;
+      }
+    }
+    else {
+      PropertyInterface* prop = dynamic_cast<PropertyInterface *>(evt.sender());
+
+      if (prop && evt.type() == Event::TLP_DELETE)
+	destroy(prop);
+    }
   }
 };
 

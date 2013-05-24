@@ -22,7 +22,6 @@
 
 #include "GoogleMaps.h"
 
-#include <tulip/ObservableProperty.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainWidgetGraphicsItem.h>

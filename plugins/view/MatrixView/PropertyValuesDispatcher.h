@@ -21,8 +21,7 @@
 #define PROPERTYVALUESDISPATCHER_H
 
 #include <tulip/Observable.h>
-#include <tulip/ObservableProperty.h>
-#include <tulip/ObservableGraph.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
 class IntegerVectorProperty;
@@ -33,16 +32,16 @@ class IntegerProperty;
 #include <set>
 #include <string>
 
-class PropertyValuesDispatcher: public tlp::PropertyObserver, public tlp::GraphObserver, public tlp::Observable {
+class PropertyValuesDispatcher: public tlp::Observable {
 public:
   PropertyValuesDispatcher(tlp::Graph *source, tlp::Graph *target,
                            const std::set<std::string> &sourceToTargetProperties, const std::set<std::string> &targetToSourceProperties,
                            tlp::IntegerVectorProperty *_graphEntitiesToDisplayedNodes, tlp::BooleanProperty *_displayedNodesAreNodes, tlp::IntegerProperty *displayedNodesToGraphEntities);
-  virtual void afterSetNodeValue(tlp::PropertyInterface*, const tlp::node);
-  virtual void afterSetEdgeValue(tlp::PropertyInterface*, const tlp::edge);
-  virtual void afterSetAllNodeValue(tlp::PropertyInterface*);
-  virtual void afterSetAllEdgeValue(tlp::PropertyInterface*);
-  virtual void addLocalProperty(tlp::Graph*, const std::string&);
+  void afterSetNodeValue(tlp::PropertyInterface*, const tlp::node);
+  void afterSetEdgeValue(tlp::PropertyInterface*, const tlp::edge);
+  void afterSetAllNodeValue(tlp::PropertyInterface*);
+  void afterSetAllEdgeValue(tlp::PropertyInterface*);
+  void addLocalProperty(tlp::Graph*, const std::string&);
   virtual void treatEvent(const tlp::Event&);
 
 private:
