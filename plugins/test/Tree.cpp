@@ -19,6 +19,7 @@
 
 #include <tulip/TreeTest.h>
 #include <tulip/GraphTest.h>
+#include <tulip/GraphTools.h>
 #include <tulip/BooleanProperty.h>
 
 class DirectedTreeTest : public tlp::GraphTest {
@@ -52,16 +53,32 @@ public:
   PLUGININFORMATIONS("Make Directed Tree", "Tulip team", "18/04/2012", "Makes a graph a directed tree.", "1.0", "Topology Update")
   MakeDirectedTree(const tlp::PluginContext* context) : tlp::Algorithm(context) {
   }
+ 
+  tlp::node root;
+
+  virtual bool check(std::string& errorMsg) {
+    if (!tlp::TreeTest::isFreeTree(graph)) {
+      errorMsg = "The graph is not topologically a tree";
+      return false;
+    }
+
+    tlp::node n;
+    forEach(n, graph->getProperty<tlp::BooleanProperty>("viewSelection")->getNodesEqualTo(true)) {
+      if (root.isValid()) {
+	tlp::error() << "Only one root node must be selected." << std::endl;
+	return false;
+      }
+
+      root = n;
+    }
+
+    if (!root.isValid())
+      root = graphCenterHeuristic(graph);
+
+    return true;
+  }
 
   virtual bool run() {
-
-    tlp::BooleanProperty* selection = graph->getProperty<tlp::BooleanProperty>("viewSelection");
-    tlp::Iterator<tlp::node>* it = selection->getNodesEqualTo(true);
-    tlp::node root = it->next();
-
-    if(it->hasNext())
-      return false;
-
     tlp::TreeTest::makeRootedTree(graph, root);
     return true;
   }
