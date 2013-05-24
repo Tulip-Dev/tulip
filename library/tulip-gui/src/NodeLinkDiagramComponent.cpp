@@ -182,6 +182,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph,DataSet dataSet) {
     foregroundLayer->set2DMode();
     std::string dir=TulipBitmapDir;
     Gl2DRect *labri=new Gl2DRect(35.,5.,50.,50.,dir + "logolabri.jpg",false,false);
+    labri->setStencil(1);
     labri->setVisible(false);
     foregroundLayer->addGlEntity(labri,"labrilogo");
 

@@ -31,6 +31,7 @@
 #include <tulip/QuickAccessBar.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/SnapshotDialog.h>
+#include <tulip/Gl2DRect.h>
 
 
 using namespace tlp;
@@ -164,8 +165,8 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
     _quickAccessBarItem->setWidget(_quickAccessBar);
     addToScene(_quickAccessBarItem);
     _quickAccessBarItem->setZValue(10);
-    sceneRectChanged(QRectF(QPoint(0, 0), graphicsView()->size()));
   }
+  sceneRectChanged(QRectF(QPoint(0, 0), graphicsView()->size()));
 }
 
 bool GlMainView::quickAccessBarVisible() const {
@@ -181,6 +182,15 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
   if (_overviewItem != NULL)
     // put overview in the bottom right corner
     _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+
+  GlLayer *fgLayer = getGlMainWidget()->getScene()->getLayer("Foreground");
+  if (fgLayer) {
+      Gl2DRect *labriLogo = dynamic_cast<Gl2DRect*>(fgLayer->findGlEntity("labrilogo"));
+      if (labriLogo) {
+          labriLogo->setCoordinates((_quickAccessBar != NULL) ? 35. : 0., 5., 50., 50.);
+          draw();
+      }
+  }
 }
 
 QPixmap GlMainView::snapshot(const QSize &outputSize) const {
