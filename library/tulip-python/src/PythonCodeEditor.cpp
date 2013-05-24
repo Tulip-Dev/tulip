@@ -117,7 +117,18 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
   else if (e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return) {
     e->accept();
     close();
+    insertSelectedItem();
+  }
+  else {
+    QCoreApplication::sendEvent(parent(), e);
+  }
+}
 
+void AutoCompletionList::mouseDoubleClickEvent(QMouseEvent * event) {
+  insertSelectedItem();
+}
+
+void AutoCompletionList::insertSelectedItem() {
     if (currentItem()) {
       PythonCodeEditor *editor = static_cast<PythonCodeEditor *>(parent());
       QTextCursor cursor = editor->textCursor();
@@ -129,7 +140,6 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
 #else
         int start = cursor.position() - cursor.block().position();
 #endif
-
 
         int end = 0;
         bool endOk = false;
@@ -194,10 +204,6 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
         }
       }
     }
-  }
-  else {
-    QCoreApplication::sendEvent(parent(), e);
-  }
 }
 
 void AutoCompletionList::showEvent (QShowEvent * event) {
@@ -1190,7 +1196,7 @@ void PythonCodeEditor::showAutoCompletionList(bool dotContext) {
   updateAutoCompletionList(dotContext);
 
   if (_autoCompletionList->count() == 0)
-    _autoCompletionList->hide();
+    _autoCompletionList->hide();  
 }
 
 void PythonCodeEditor::updateAutoCompletionListPosition() {
@@ -1249,13 +1255,12 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
   foreach(QString s, stringList) {
     _autoCompletionList->addItem(s);
   }
-  _autoCompletionList->sortItems();
-
 
   if (_autoCompletionList->count() == 0)
     _autoCompletionList->hide();
   else
     _autoCompletionList->setCurrentRow(0);
+
 }
 
 QString PythonCodeEditor::getEditedFunctionName() const {
