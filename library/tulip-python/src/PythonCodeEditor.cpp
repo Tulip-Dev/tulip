@@ -31,6 +31,7 @@
 #include <QScrollBar>
 #include <QMessageBox>
 #include <QMimeData>
+#include <QDesktopWidget>
 
 #include "ui_FindReplaceDialog.h"
 
@@ -1221,7 +1222,10 @@ void PythonCodeEditor::updateAutoCompletionListPosition() {
     }
   }
 
-  _autoCompletionList->move(mapToGlobal(QPoint(pos, bottom)));
+  if (mapToGlobal(QPoint(0, bottom+_autoCompletionList->height())).y() > QApplication::desktop()->screenGeometry().height())
+    _autoCompletionList->move(mapToGlobal(QPoint(pos, top-_autoCompletionList->height())));
+  else
+    _autoCompletionList->move(mapToGlobal(QPoint(pos, bottom)));
 }
 
 void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
@@ -1236,6 +1240,10 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
   _autoCompletionList->clear();
 
   QString textBeforeCursorTrimmed = textBeforeCursor.trimmed();
+
+  // string litteral edition : don't show autocompletion list
+  if (textBeforeCursorTrimmed.count("\"")%2==1 || textBeforeCursorTrimmed.count("\'")%2==1)
+    return;
 
   QSet<QString> stringList = _autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName(), dotContext);
   foreach(QString s, stringList) {
@@ -1260,8 +1268,6 @@ QString PythonCodeEditor::getEditedFunctionName() const {
   QTextBlock block = textCursor().block();
   QString currentLine = block.text();
   QString textBeforeCursor = textCursor().block().text().mid(0, textCursor().position() - textCursor().block().position());
-
-
 
   if (textBeforeCursor.startsWith("\t") || textBeforeCursor.startsWith(" ")) {
     while (1) {
