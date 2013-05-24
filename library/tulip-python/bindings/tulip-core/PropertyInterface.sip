@@ -322,43 +322,6 @@ Returns :const:`True` if the given string representation has been successfully c
 	}
 %End
 	
-//===========================================================================================	
-
-    void addPropertyObserver(tlp::PropertyObserverPython *pObs);
-%Docstring
-tlp.PropertyInterface.addPropertyObserver(propertyObserver)
-
-.. versionadded:: 3.8
-
-Registers a new property observer object
-that will receive notifications when the property is modified.
-
-:param propertyObserver: the new property observer to register
-:type propertyObserver: :class:`tlp.PropertyObserver`
-%End
-
-%MethodCode
-    sipCpp->addListener(a0);
-%End
-
-//===========================================================================================
-
-    void removePropertyObserver(tlp::PropertyObserverPython *pObs);
-%Docstring
-tlp.PropertyInterface.removePropertyObserver(propertyObserver)
-
-.. versionadded:: 3.8
-
-Removes a registered property observer object.
-
-:param propertyObserver: the property observer to remove
-:type propertyObserver: :class:`tlp.PropertyObserver`
-%End
-
-%MethodCode
-    sipCpp->removeListener(a0);
-%End
-
 //===========================================================================================
 
     std::string __getitem__(const tlp::node node) ;

@@ -23,7 +23,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
-#include <tulip/ObservableGraph.h>
 
 using namespace std;
 using namespace tlp;
@@ -156,7 +155,7 @@ public:
   vector<Graph*> addLocalPropertyCalledGraphs;
 };
 
-class GraphObserverTest :public GraphObserver, public Observable {
+class GraphObserverTest :public Observable {
 public:
 
   vector<Graph*> graphs;
@@ -257,6 +256,42 @@ public:
       Graph* graph = gEvt->getGraph();
 
       switch (gEvt->getType()) {
+      case GraphEvent::TLP_ADD_NODE:
+	addNode(graph, gEvt->getNode());
+	break;
+
+      case GraphEvent::TLP_DEL_NODE:
+	delNode(graph, gEvt->getNode());
+	break;
+
+      case GraphEvent::TLP_ADD_EDGE:
+	addEdge(graph, gEvt->getEdge());
+	break;
+
+      case GraphEvent::TLP_DEL_EDGE:
+	delEdge(graph, gEvt->getEdge());
+	break;
+
+      case GraphEvent::TLP_REVERSE_EDGE:
+	reverseEdge(graph, gEvt->getEdge());
+	break;
+
+      case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
+	addSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
+	break;
+
+      case GraphEvent::TLP_AFTER_DEL_SUBGRAPH:
+	delSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
+	break;
+
+      case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
+	addLocalProperty(graph, gEvt->getPropertyName());
+	break;
+
+      case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:
+	delLocalProperty(graph, gEvt->getPropertyName());
+	break;
+
       case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
         addInheritedProperty(graph, gEvt->getPropertyName());
         return;
@@ -265,16 +300,74 @@ public:
         afterDelInheritedProperty(graph, gEvt->getPropertyName());
         return;
 
+      /*case GraphEvent::TLP_BEFORE_SET_ENDS:
+	beforeSetEnds(graph, gEvt->getEdge());
+	break;
+
+      case GraphEvent::TLP_AFTER_SET_ENDS:
+	afterSetEnds(graph, gEvt->getEdge());
+	break;
+
+      case GraphEvent::TLP_ADD_NODES: {
+	const std::vector<node>& nodes = gEvt->getNodes();
+
+	for (unsigned int i = 0; i < nodes.size(); ++i)
+	  addNode(graph, nodes[i]);
+
+	break;
+      }
+
+      case GraphEvent::TLP_ADD_EDGES: {
+	const std::vector<edge>& edges = gEvt->getEdges();
+
+	for (unsigned int i = 0; i < edges.size(); ++i)
+	  addEdge(graph, edges[i]);
+
+	break;
+      }
+
+      case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
+	beforeSetAttribute(graph, gEvt->getAttributeName());
+	break;
+
+      case GraphEvent::TLP_AFTER_SET_ATTRIBUTE:
+	afterSetAttribute(graph, gEvt->getAttributeName());
+	break;
+
+      case GraphEvent::TLP_REMOVE_ATTRIBUTE:
+	removeAttribute(graph, gEvt->getAttributeName());
+
+      case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
+      case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
+      case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
+      case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
+      case GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH:
+      case GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH:
+      case GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH:
+      case GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH:
+      case GraphEvent::TLP_BEFORE_ADD_SUBGRAPH:
+      case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
+      case GraphEvent::TLP_BEFORE_ADD_LOCAL_PROPERTY:
+      case GraphEvent::TLP_BEFORE_ADD_INHERITED_PROPERTY:
+      break;*/
+
       default:
         break;
       }
     }
+    else {
+    Graph* graph =
+      // From my point of view the use of dynamic_cast should be correct
+      // but it fails, so I use reinterpret_cast (pm)
+      reinterpret_cast<Graph *>(evt.sender());
 
-    GraphObserver::treatEvent(evt);
+    if (graph && evt.type() == Event::TLP_DELETE)
+      destroy(graph);
+    }
   }
 };
 
-class DelInheritedPropertyObserverTest :public GraphObserver, public Observable {
+class DelInheritedPropertyObserverTest :public Observable {
 public:
   DelInheritedPropertyObserverTest():inheritedPropertyExist(false),initialized(false) {
 

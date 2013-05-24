@@ -34,7 +34,6 @@ using namespace std;
 PropertyValuesDispatcher::PropertyValuesDispatcher(tlp::Graph *source, tlp::Graph *target,
     const std::set<std::string> &sourceToTargetProperties, const std::set<std::string> &targetToSourceProperties,
     tlp::IntegerVectorProperty *graphEntitiesToDisplayedNodes, tlp::BooleanProperty *displayedNodesAreNodes, tlp::IntegerProperty *displayedNodesToGraphEntities):
-  PropertyObserver(), GraphObserver(),
   _source(source), _target(target),
   _graphEntitiesToDisplayedNodes(graphEntitiesToDisplayedNodes), _displayedNodesAreNodes(displayedNodesAreNodes),
   _displayedNodesToGraphEntities(displayedNodesToGraphEntities), _sourceToTargetProperties(sourceToTargetProperties),
@@ -148,8 +147,36 @@ void PropertyValuesDispatcher::addLocalProperty(tlp::Graph *g, const std::string
 }
 
 void PropertyValuesDispatcher::treatEvent(const tlp::Event& evt) {
-  if (typeid(evt) == typeid(GraphEvent))
-    GraphObserver::treatEvent(evt);
-  else
-    PropertyObserver::treatEvent(evt);
+  if (typeid(evt) == typeid(GraphEvent)) {
+    const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+    Graph* graph = gEvt->getGraph();
+
+    if (gEvt->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY)
+      addLocalProperty(graph, gEvt->getPropertyName());
+  }
+  else {
+    const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&evt);
+    assert(propEvt);
+    PropertyInterface* prop = propEvt->getProperty();
+
+    switch(propEvt->getType()) {
+      case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
+	afterSetNodeValue(prop, propEvt->getNode());
+	return;
+
+      case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
+	afterSetAllNodeValue(prop);
+	return;
+
+      case PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE:
+	afterSetAllEdgeValue(prop);
+	return;
+
+      case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
+	afterSetEdgeValue(prop, propEvt->getEdge());
+	return;
+    default:
+      return;
+    }
+  }
 }
