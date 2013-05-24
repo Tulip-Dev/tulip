@@ -70,9 +70,11 @@ public :
 
 protected :
 
+  void insertSelectedItem();
   void keyPressEvent(QKeyEvent *e);
   void showEvent(QShowEvent * event);
   void hideEvent(QHideEvent * event);
+  void mouseDoubleClickEvent(QMouseEvent * event);
   bool eventFilter(QObject *obj, QEvent * event);
 
 };
