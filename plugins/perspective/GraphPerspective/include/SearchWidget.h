@@ -68,6 +68,7 @@ protected slots:
   void updateOperators(tlp::PropertyInterface* a, const QString& b);
   void setNumericOperatorsEnabled(bool e);
   void updateEditorWidget();
+  void selectionModeChanged(int index);
 
 protected:
   void dragEnterEvent(QDragEnterEvent *);

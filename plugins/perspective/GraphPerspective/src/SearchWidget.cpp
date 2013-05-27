@@ -159,6 +159,7 @@ SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::Search
   _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(NULL,false,_ui->searchTermACombo));
   _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Custom value"),NULL,false,_ui->searchTermBCombo));
   connect(_ui->graphCombo,SIGNAL(currentItemChanged()),this,SLOT(graphIndexChanged()));
+  connect(_ui->selectionModeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(selectionModeChanged(int)));
 }
 
 SearchWidget::~SearchWidget() {
@@ -236,6 +237,10 @@ void SearchWidget::setGraph(Graph *g) {
     searchForIndex(_ui->searchTermBCombo,oldTermBName);
   else
     searchForIndex(_ui->searchTermBCombo,trUtf8("Custom value"));
+}
+
+void SearchWidget::selectionModeChanged(int index) {
+    _ui->resultsStorageCombo->setEnabled((index==3)?false:true);
 }
 
 void SearchWidget::search() {
@@ -329,8 +334,9 @@ void SearchWidget::search() {
       }
     }
   }
-
-  delete result;
+  else if (_ui->selectionModeCombo->currentIndex() == 3) { // no modification
+      output = result;
+  }
 
   if (deleteTermB)
     delete b;
@@ -342,7 +348,7 @@ void SearchWidget::search() {
   forEach(e, output->getEdgesEqualTo(true)) {
       resultsCountEdges++;
   }
-
+  delete result;
   _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) and " +QString::number(resultsCountEdges) +" edge(s) found");
 
   Observable::unholdObservers();

@@ -54,8 +54,8 @@ background-color: white;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>967</width>
-        <height>242</height>
+        <width>968</width>
+        <height>233</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -390,6 +390,9 @@ color: black;
                 <height>16777215</height>
                </size>
               </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Choose &amp;quot;Do not modify selection&amp;quot; to only count the number of nodes/edges found.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
               <property name="sizeAdjustPolicy">
                <enum>QComboBox::AdjustToContents</enum>
               </property>
@@ -406,6 +409,11 @@ color: black;
               <item>
                <property name="text">
                 <string>Remove from current selection</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string extracomment="ffsfdfdf">Do not modify selection</string>
                </property>
               </item>
              </widget>
