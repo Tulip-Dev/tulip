@@ -125,7 +125,7 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
   }
 }
 
-void AutoCompletionList::mouseDoubleClickEvent(QMouseEvent * event) {
+void AutoCompletionList::mouseDoubleClickEvent(QMouseEvent *) {
   insertSelectedItem();
 }
 
@@ -1252,10 +1252,13 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
   if (textBeforeCursorTrimmed.count("\"")%2==1 || textBeforeCursorTrimmed.count("\'")%2==1)
     return;
 
+
   QSet<QString> stringList = _autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName(), dotContext);
+
   foreach(QString s, stringList) {
     _autoCompletionList->addItem(s);
   }
+  _autoCompletionList->sortItems();
 
   if (_autoCompletionList->count() == 0)
     _autoCompletionList->hide();
