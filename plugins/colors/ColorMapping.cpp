@@ -118,30 +118,24 @@ void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
 }
 
 const char * paramHelp[] = {
-  // property
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "NumericProperty" ) \
-  HTML_HELP_BODY() \
-  "This metric is used to get the values affected to graph items." \
-  "Used with the linear or uniform color models." \
-  HTML_HELP_CLOSE(),
-  // property
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "PropertyInterface*" ) \
-  HTML_HELP_BODY() \
-  "This metric is used to get the valuesaffected to graph items." \
-  "Used with the enumerated color model." \
-  HTML_HELP_CLOSE(),
+  // type
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF("values", "linear <BR> uniform <BR> enumerated") \
   HTML_HELP_DEF( "default", "linear" )   \
   HTML_HELP_BODY() \
-  "If linear, the first property above is used. The minimum value is mapped to one end of the color scale," \
+  "If linear, the input property must be a Double or Integer property. The minimum value is mapped to one end of the color scale," \
   "the maximum value is mapped to the other end, and a linear interpolation is used between both.<BR>"          \
   "If uniform, this is the same except for the interpolation: the value are sorted, numbered, and a linear interpolation is used on those numbers" \
   "(in other words, only the order is taken into account, not the actual values).<BR>" \
-  "Finally, if enumerated, the second property above is used. Each possible value is mapped to a distinct color in no specific order." \
+  "Finally, if enumerated, the input property can be of any type. Each possible value is mapped to a distinct color in no specific order." \
+  // property
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "PropertyInterface*" ) \
+  HTML_HELP_BODY() \
+  "This property is used to get the values affected to graph items." \
+  HTML_HELP_CLOSE(),
+  // target
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
@@ -150,7 +144,7 @@ const char * paramHelp[] = {
   HTML_HELP_BODY() \
   "Whether colors are computed for nodes or for edges."  \
   HTML_HELP_CLOSE(),
-  // color1
+  // color
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "ColorScale" ) \
   HTML_HELP_BODY() \
@@ -183,13 +177,12 @@ private:
 
 
 public:
-  PLUGININFORMATIONS("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","1.0", "Color")
+  PLUGININFORMATIONS("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","2.0", "Color")
   ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
-    addInParameter<NumericProperty*>("linear/uniform\nproperty",paramHelp[0],"viewMetric");
-    addInParameter<PropertyInterface*>("enumerated\nproperty",paramHelp[1],"viewMetric");
-    addInParameter<StringCollection>(ELT_TYPE, paramHelp[2], ELT_TYPES);
-    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[3], TARGET_TYPES);
-    addInParameter<ColorScale>("colorScale",paramHelp[4],"((75, 75, 255, 200), (156, 161, 255, 200), (255, 255, 127, 200), (255, 170, 0, 200), (229, 40, 0, 200))");
+    addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
+    addInParameter<PropertyInterface*>("input property",paramHelp[1],"viewMetric");
+    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES);
+    addInParameter<ColorScale>("colorScale",paramHelp[3],"((75, 75, 255, 200), (156, 161, 255, 200), (255, 255, 127, 200), (255, 170, 0, 200), (229, 40, 0, 200))");
   }
 
   //=========================================================
@@ -206,16 +199,19 @@ public:
     eltTypes.setCurrent(LINEAR_ELT);
     targetType.setCurrent(NODES_TARGET);
     NumericProperty* metricS = NULL;
+    PropertyInterface* metric = NULL;
 
     if ( dataSet!=NULL ) {
-      dataSet->get("linear/uniform\nproperty", metricS);
+      dataSet->get("input property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("colorScale", colorScale);
     }
 
-    if (metricS == NULL)
+    if (metric == NULL)
       metricS = graph->getProperty<DoubleProperty>("viewMetric");
+    else
+      metricS = dynamic_cast<NumericProperty*>(metric);
 
     if (eltTypes.getCurrent()!=ENUMERATED_ELT) {
       if (eltTypes.getCurrent()==LINEAR_ELT) {
@@ -319,7 +315,7 @@ public:
     PropertyInterface *metric = NULL;
 
     if (dataSet!=NULL) {
-      dataSet->get("enumerated\nproperty", metric);
+      dataSet->get("input property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("colorScale", colorScale);
@@ -376,8 +372,13 @@ public:
       }
 
       dialog.getResult(enumeratedMappingResultVector);
+    } else {
+      // check if input property is a NumericProperty
+      if (! dynamic_cast<NumericProperty*>(metric)) {
+	errorMsg += "For a linear or uniform color mapping,\nthe input property must be a Double or Integer property";
+	return false;
+      }
     }
-
     return true;
   }
 };
