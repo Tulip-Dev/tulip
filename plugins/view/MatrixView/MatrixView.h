@@ -79,6 +79,8 @@ public:
   virtual void delNode(tlp::Graph *,const tlp::node );
   virtual void delEdge(tlp::Graph *,const tlp::edge );
 
+  void fillContextMenu(QMenu *menu,const QPointF &point);
+
 private slots:
   void setBackgroundColor(QColor);
   void setOrderingMetric(std::string);
