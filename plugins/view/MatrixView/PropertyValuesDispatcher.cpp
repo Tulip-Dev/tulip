@@ -156,10 +156,10 @@ void PropertyValuesDispatcher::treatEvent(const tlp::Event& evt) {
   }
   else {
     const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&evt);
-    assert(propEvt);
-    PropertyInterface* prop = propEvt->getProperty();
+    if (propEvt) {
+      PropertyInterface* prop = propEvt->getProperty();
 
-    switch(propEvt->getType()) {
+      switch(propEvt->getType()) {
       case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
 	afterSetNodeValue(prop, propEvt->getNode());
 	return;
@@ -175,8 +175,9 @@ void PropertyValuesDispatcher::treatEvent(const tlp::Event& evt) {
       case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
 	afterSetEdgeValue(prop, propEvt->getEdge());
 	return;
-    default:
-      return;
+      default:
+	return;
+      }
     }
   }
 }
