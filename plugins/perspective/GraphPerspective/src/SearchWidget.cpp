@@ -302,33 +302,29 @@ void SearchWidget::search() {
   edge e;
 
   if (_ui->selectionModeCombo->currentIndex() == 0) // replace current selection
-    *output = *result;
+      output->copy(result);
   else if (_ui->selectionModeCombo->currentIndex() == 1) { // add to current selection
     if (onNodes) {
-      forEach(n,g->getNodes()) {
-        if (result->getNodeValue(n))
+      forEach(n,result->getNodesEqualTo(true)) {
           output->setNodeValue(n,true);
       }
     }
 
     if (onEdges) {
-      forEach(e,g->getEdges()) {
-        if (result->getEdgeValue(e))
+      forEach(e,result->getEdgesEqualTo(true)) {
           output->setEdgeValue(e,true);
       }
     }
   }
   else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
     if (onNodes) {
-      forEach(n,g->getNodes()) {
-        if (result->getNodeValue(n))
+      forEach(n,result->getNodesEqualTo(true)) {
           output->setNodeValue(n,false);
       }
     }
 
     if (onEdges) {
-      forEach(e,g->getEdges()) {
-        if (result->getEdgeValue(e))
+      forEach(e,result->getEdgesEqualTo(true)) {
           output->setEdgeValue(e,false);
       }
     }
@@ -339,17 +335,15 @@ void SearchWidget::search() {
   if (deleteTermB)
     delete b;
 
-  unsigned int resultsCount = 0;
-  forEach(n, g->getNodes()) {
-    if (output->getNodeValue(n))
-      resultsCount++;
+  unsigned int resultsCountNodes = 0, resultsCountEdges=0;
+  forEach(n, output->getNodesEqualTo(true)) {
+      resultsCountNodes++;
   }
-  forEach(e, g->getEdges()) {
-    if (output->getEdgeValue(e))
-      resultsCount++;
+  forEach(e, output->getEdgesEqualTo(true)) {
+      resultsCountEdges++;
   }
 
-  _ui->resultsCountLabel->setText(QString::number(resultsCount) + trUtf8(" results found"));
+  _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) and " +QString::number(resultsCountEdges) +" edge(s) found");
 
   Observable::unholdObservers();
 }
