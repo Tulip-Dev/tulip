@@ -67,7 +67,7 @@ public:
 // viewBorderWidth
 class ViewBorderWidthCalculator :public DoubleMinMaxProperty::MetaValueCalculator {
 public:
-  virtual void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType>* width, node mN,
+  virtual void computeMetaValue(AbstractProperty<DoubleType, DoubleType, NumericProperty>* width, node mN,
                                 Graph*, Graph*) {
     // meta node border width is 1
     width->setNodeValue(mN, 1);
