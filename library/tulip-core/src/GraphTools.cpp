@@ -25,7 +25,7 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/StableIterator.h>
 #include <tulip/IntegerProperty.h>
-#include <tulip/DoubleProperty.h>
+#include <tulip/NumericProperty.h>
 #include <tulip/ForEach.h>
 #include <tulip/ConnectedTest.h>
 #include <tulip/Ordering.h>
@@ -388,15 +388,15 @@ void selectSpanningTree(Graph* graph, BooleanProperty *selection,
 
 //======================================================================
 struct ltEdge {
-  DoubleProperty *m;
-  ltEdge(DoubleProperty *metric) : m(metric) {}
+  NumericProperty *m;
+  ltEdge(NumericProperty *metric) : m(metric) {}
   bool operator()(const edge &e1, const edge &e2) const {
-    return (m->getEdgeValue(e1) < m->getEdgeValue(e2));
+    return (m->getEdgeDoubleValue(e1) < m->getEdgeDoubleValue(e2));
   }
 };
 
 void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
-                               DoubleProperty *edgeWeight,
+                               NumericProperty *edgeWeight,
                                PluginProgress *pluginProgress) {
   assert(ConnectedTest::isConnected(graph));
 
@@ -555,6 +555,71 @@ vector<node> dfs(const Graph *graph, node root) {
   }
 
   return ret;
+}
+
+//==================================================
+void buildNodesUniformQuantification(const Graph* graph,
+				     const NumericProperty* prop,
+				     unsigned int k,
+				     std::map<double, int>& nodeMapping) {
+  //build the histogram of node values
+  map<double,int> histogram;
+  Iterator<node> *itN=graph->getNodes();
+
+  while (itN->hasNext()) {
+    node itn=itN->next();
+    double nodeValue=prop->getNodeDoubleValue(itn);
+
+    if (histogram.find(nodeValue)==histogram.end())
+      histogram[nodeValue]=1;
+    else
+      histogram[nodeValue]+=1;
+  } delete itN;
+
+  //Build the color map
+  map<double,int>::iterator it;
+  double sum=0;
+  double cK=double(graph->numberOfNodes())/double(k);
+  int k2=0;
+
+  for (it=histogram.begin(); it!=histogram.end(); ++it) {
+    sum+=(*it).second;
+    nodeMapping[(*it).first]=k2;
+
+    while (sum>cK*double(k2+1)) ++k2;
+  }
+}
+//==================================================
+void buildEdgesUniformQuantification(const Graph* graph,
+				     const NumericProperty* prop,
+				     unsigned int k,
+				     std::map<double, int>& edgeMapping) {
+  //build the histogram of edges values
+  map<double,int> histogram;
+  Iterator<edge> *itE=graph->getEdges();
+
+  while (itE->hasNext()) {
+    edge ite=itE->next();
+    double value=prop->getEdgeDoubleValue(ite);
+
+    if (histogram.find(value)==histogram.end())
+      histogram[value]=1;
+    else
+      histogram[value]+=1;
+  } delete itE;
+  //===============================================================
+  //Build the color map
+  map<double,int>::iterator it;
+  double sum=0;
+  double cK=double(graph->numberOfEdges())/double(k);
+  int k2=0;
+
+  for (it=histogram.begin(); it!=histogram.end(); ++it) {
+    sum+=(*it).second;
+    edgeMapping[(*it).first]=k2;
+
+    while (sum>cK*double(k2+1)) ++k2;
+  }
 }
 
 }

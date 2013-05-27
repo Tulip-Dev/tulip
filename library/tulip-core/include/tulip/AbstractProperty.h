@@ -50,8 +50,8 @@ class GraphView;
  *
  * The actual data is stored in this class, and it manages the default values.
  */
-template <class Tnode, class Tedge>
-class TLP_SCOPE AbstractProperty : public PropertyInterface {
+ template <class Tnode, class Tedge, class Tprop=PropertyInterface>
+class TLP_SCOPE AbstractProperty : public Tprop {
   friend class Graph;
   friend class GraphView;
 
@@ -153,11 +153,11 @@ public:
    * @param prop The property nto copy the values from.
    * @return This property with the values copied.
    */
-  virtual AbstractProperty<Tnode,Tedge>& operator =(AbstractProperty<Tnode,Tedge> &prop) {
+  virtual AbstractProperty<Tnode,Tedge,Tprop>& operator =(AbstractProperty<Tnode,Tedge,Tprop> &prop) {
     if (this!= &prop) {
-      if (graph == NULL) graph = prop.graph;
+      if (Tprop::graph == NULL) Tprop::graph = prop.Tprop::graph;
 
-      if (graph == prop.graph) {
+      if (Tprop::graph == prop.Tprop::graph) {
         setAllNodeValue(prop.getNodeDefaultValue());
         setAllEdgeValue(prop.getEdgeDefaultValue());
         Iterator<node> *itN = prop.getNonDefaultValuatedNodes();
@@ -179,22 +179,22 @@ public:
       }
       else {
         //==============================================================*
-        Iterator<node>* itN = graph->getNodes();
+        Iterator<node>* itN = Tprop::graph->getNodes();
 
         while (itN->hasNext()) {
           node itn=itN->next();
 
-          if (prop.graph->isElement(itn))
+          if (prop.Tprop::graph->isElement(itn))
             setNodeValue(itn, prop.getNodeValue(itn));
         }
 
         delete itN;
-        Iterator<edge>*itE = graph->getEdges();
+        Iterator<edge>*itE = Tprop::graph->getEdges();
 
         while (itE->hasNext()) {
           edge ite=itE->next();
 
-          if (prop.graph->isElement(ite))
+          if (prop.Tprop::graph->isElement(ite))
             setEdgeValue(ite, prop.getEdgeValue(ite));
         }
 
@@ -267,8 +267,8 @@ public:
     if (property == NULL)
       return false;
 
-    tlp::AbstractProperty<Tnode,Tedge>* tp =
-      dynamic_cast<tlp::AbstractProperty<Tnode,Tedge>*>(property);
+    tlp::AbstractProperty<Tnode,Tedge,Tprop>* tp =
+      dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,Tprop>*>(property);
     assert(tp);
     bool notDefault;
     typename StoredType<typename Tnode::RealType>::ReturnedValue value =
@@ -285,8 +285,8 @@ public:
     if (property == NULL)
       return false;
 
-    tlp::AbstractProperty<Tnode,Tedge>* tp =
-      dynamic_cast<tlp::AbstractProperty<Tnode,Tedge>*>(property);
+    tlp::AbstractProperty<Tnode,Tedge,Tprop>* tp =
+      dynamic_cast<tlp::AbstractProperty<Tnode,Tedge,Tprop>*>(property);
     assert(tp);
     bool notDefault;
     typename StoredType<typename Tedge::RealType>::ReturnedValue value =
@@ -299,8 +299,8 @@ public:
     return true;
   }
   virtual void copy(PropertyInterface* property) {
-    tlp::AbstractProperty<Tnode,Tedge>* prop =
-      dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge>*>(property);
+    tlp::AbstractProperty<Tnode,Tedge,Tprop>* prop =
+      dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge,Tprop>*>(property);
     assert(prop != NULL);
     *this = *prop;
   }
@@ -352,23 +352,23 @@ public:
   // mN is the meta node, sg is the corresponding subgraph
   // and mg is the graph owning mN
   virtual void computeMetaValue(node n, Graph* sg, Graph* mg) {
-    if (metaValueCalculator)
-      ((typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *)
-       metaValueCalculator)->computeMetaValue(this, n, sg, mg);
+    if (Tprop::metaValueCalculator)
+      ((typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *)
+       Tprop::metaValueCalculator)->computeMetaValue(this, n, sg, mg);
   }
   // mE is the meta edge, itE is an iterator on the underlying edges
   // mg is the graph owning mE
   virtual void computeMetaValue(edge e, tlp::Iterator<edge>* itE, Graph* mg) {
-    if (metaValueCalculator)
-      ((typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *)metaValueCalculator)->computeMetaValue(this, e, itE, mg);
+    if (Tprop::metaValueCalculator)
+      ((typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *) Tprop::metaValueCalculator)->computeMetaValue(this, e, itE, mg);
   }
   virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *mvCalc) {
-    if (mvCalc && !dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *>(mvCalc)) {
-      tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... invalid conversion of " << typeid(mvCalc).name() << "into " << typeid(typename tlp::AbstractProperty<Tnode,Tedge>::MetaValueCalculator *).name() << std::endl;
+    if (mvCalc && !dynamic_cast<typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *>(mvCalc)) {
+      tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... invalid conversion of " << typeid(mvCalc).name() << "into " << typeid(typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *).name() << std::endl;
       abort();
     }
 
-    metaValueCalculator = mvCalc;
+    Tprop::metaValueCalculator = mvCalc;
   }
 
   int compare(const node n1, const node n2) const;
@@ -383,14 +383,14 @@ public:
     // computes the value of the meta node mN of the graph mg
     // for the property prop, according to the values associated
     // to the underlying nodes i.e the nodes of the subgraph sg.
-    virtual void computeMetaValue(AbstractProperty<Tnode, Tedge>*,
+    virtual void computeMetaValue(AbstractProperty<Tnode,Tedge,Tprop>*,
                                   node,
                                   Graph*, Graph*) {}
     // computes the value of the meta node mE of the graph mg
     // for the property prop, according to the values associated
     // to the underlying edges given by the iterator itE.
     // The method do not have to delete the iterator
-    virtual void computeMetaValue(AbstractProperty<Tnode, Tedge>*,
+    virtual void computeMetaValue(AbstractProperty<Tnode,Tedge,Tprop>*,
                                   edge, tlp::Iterator<edge>*,
                                   Graph*) {}
   };
@@ -398,7 +398,7 @@ public:
 protected:
   //=================================================================================
   ///Enable to clone part of sub_class
-  virtual void clone_handler(AbstractProperty<Tnode,Tedge> &) {}
+  virtual void clone_handler(AbstractProperty<Tnode,Tedge,Tprop> &) {}
 
   MutableContainer<typename Tnode::RealType> nodeProperties;
   MutableContainer<typename Tedge::RealType> edgeProperties;
@@ -406,8 +406,8 @@ protected:
   typename Tedge::RealType edgeDefaultValue;
 };
 
-template <typename vectType,typename eltType >
-class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectType> {
+ template <typename vectType,typename eltType,typename propType=PropertyInterface>
+   class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectType, propType> {
 public:
   AbstractVectorProperty(Graph *, std::string name = "");
 

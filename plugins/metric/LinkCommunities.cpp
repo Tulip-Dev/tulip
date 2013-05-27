@@ -104,7 +104,7 @@ private:
   tlp::EdgeProperty<double> similarity;
 
 
-  tlp::DoubleProperty* metric;
+  tlp::NumericProperty* metric;
 };
 /*@}*/
 
@@ -115,7 +115,7 @@ namespace {
 const char * paramHelp[] = {
   // metric
   HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "DoubleProperty" )       \
+  HTML_HELP_DEF( "type", "NumericProperty" )       \
   HTML_HELP_DEF( "value", "An existing edge metric" )                 \
   HTML_HELP_BODY()              \
   "An existing edge metric property"\
@@ -139,7 +139,7 @@ const char * paramHelp[] = {
 }
 //==============================================================================================================
 LinkCommunities::LinkCommunities(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
-  addInParameter<DoubleProperty>("metric", paramHelp[0],"",false);
+  addInParameter<NumericProperty>("metric", paramHelp[0],"",false);
   addInParameter<bool>("Group isthmus", paramHelp[1],"true",true);
   addInParameter<unsigned int>("Number of steps",paramHelp[2],"200",true);
 }
@@ -320,40 +320,43 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee) {
   double a11=0.0,a22=0.0;
   edge e;
   forEach(e,graph->getInEdges(n1)) {
+    double val = metric->getEdgeDoubleValue(e);
     node n=graph->opposite(e,n1);
     edge me = graph->existEdge(n2,n,true);
 
     if(me.isValid())
-      a1a2+=metric->getEdgeValue(e)*metric->getEdgeValue(me);
+      a1a2+=val*metric->getEdgeDoubleValue(me);
 
     me = graph->existEdge(n,n2,true);
 
     if(me.isValid())
-      a1a2+=metric->getEdgeValue(e)*metric->getEdgeValue(me);
+      a1a2+=val*metric->getEdgeDoubleValue(me);
 
-    a1+=metric->getEdgeValue(e);
-    a11+=metric->getEdgeValue(e)*metric->getEdgeValue(e);
+    a1+=val;
+    a11+=val*val;
   }
 
   forEach(e,graph->getOutEdges(n1)) {
+    double val = metric->getEdgeDoubleValue(e);
     node n=graph->opposite(e,n1);
     edge me = graph->existEdge(n2,n,true);
 
     if(me.isValid())
-      a1a2+=metric->getEdgeValue(e)*metric->getEdgeValue(me);
+      a1a2+=val*metric->getEdgeDoubleValue(me);
 
     me = graph->existEdge(n,n2,true);
 
     if(me.isValid())
-      a1a2+=metric->getEdgeValue(e)*metric->getEdgeValue(me);
+      a1a2+=val*metric->getEdgeDoubleValue(me);
 
-    a1+=metric->getEdgeValue(e);
-    a11+=metric->getEdgeValue(e)*metric->getEdgeValue(e);
+    a1+=val;
+    a11+=val*val;
   }
 
   forEach(e,graph->getInOutEdges(n2)) {
-    a2+=metric->getEdgeValue(e);
-    a22+=metric->getEdgeValue(e)*metric->getEdgeValue(e);
+    double val = metric->getEdgeDoubleValue(e);
+    a2+=val;
+    a22+=val*val;
   }
   a1/=graph->deg(n1);
   a11+=a1*a1;
@@ -363,7 +366,7 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee) {
   e = graph->existEdge(n1,n2,false);
 
   if(e.isValid())
-    a1a2+=metric->getEdgeValue(e)*(a1+a2);
+    a1a2+=metric->getEdgeDoubleValue(e)*(a1+a2);
 
   double m=a11+a22-a1a2;
 

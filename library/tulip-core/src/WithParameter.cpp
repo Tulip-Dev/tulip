@@ -133,13 +133,31 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
     CHECK_PROPERTY(tlp::SizeVectorProperty);
     CHECK_PROPERTY(tlp::ColorVectorProperty);
 
-    if (type.compare(typeid(PropertyInterface*).name()) == 0) {
-      if (!g || defaultValue.empty() || !g->existProperty(defaultValue))
-        dataSet.set(name, (PropertyInterface*) NULL);
-      else
-        dataSet.set(name, g->getProperty(defaultValue));
-
+    if (type.compare(typeid(NumericProperty*).name()) == 0) {
+      if (!g || defaultValue.empty())
+        dataSet.set(name, (NumericProperty*) NULL);
+      else {
+	PropertyInterface* prop = g->getProperty(defaultValue);
+	if (!dynamic_cast<NumericProperty*>(prop)) {
+	  tlp::error() << "NumericProperty '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << std::endl;
+	  prop = NULL;
+	}
+        dataSet.set(name, (NumericProperty *) prop);
+      }
       continue;
+    }
+
+    if (type.compare(typeid(PropertyInterface*).name()) == 0) {
+      if (!g || defaultValue.empty())
+        dataSet.set(name, (PropertyInterface*) NULL);
+      else {
+	if (!g->existProperty(defaultValue)) {
+	  tlp::error() << "Property '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << std::endl;
+	  dataSet.set(name, (PropertyInterface*) NULL);
+	}
+	else
+	  dataSet.set(name, g->getProperty(defaultValue));
+      }
     }
   }
 }

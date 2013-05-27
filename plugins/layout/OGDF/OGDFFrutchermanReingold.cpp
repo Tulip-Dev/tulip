@@ -39,7 +39,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
                              "set the use of node weights given in metric.  "
                              HTML_HELP_CLOSE(),
                              HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "DoubleProperty" )
+                             HTML_HELP_DEF( "type", "NumericProperty" )
                              HTML_HELP_BODY()
                              "metric containing nodes weights.  "
                              HTML_HELP_CLOSE(),
@@ -147,7 +147,7 @@ OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext* conte
   addInParameter<int>("iterations", paramHelp[0], "1000");
   addInParameter<bool>("noise", paramHelp[1], "true");
   addInParameter<bool>("use node weights", paramHelp[2], "false");
-  addInParameter<DoubleProperty>("node weights", paramHelp[3], "viewMetric");
+  addInParameter<NumericProperty*>("node weights", paramHelp[3], "viewMetric");
   addInParameter<StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST);
   addInParameter<double>("ideal edge length", paramHelp[5], "10.0");
   addInParameter<double>("minDistCC", paramHelp[6], "20.0");
@@ -166,7 +166,7 @@ void OGDFFrutchermanReingold::beforeCall() {
     double dval = 0;
     bool bval = false;
     StringCollection sc;
-    DoubleProperty *metric = NULL;
+    NumericProperty *metric = NULL;
 
     if (dataSet->get("iterations", ival))
       sefr->iterations(ival);
@@ -193,7 +193,7 @@ void OGDFFrutchermanReingold::beforeCall() {
       sefr->nodeWeights(bval);
 
       if (bval && dataSet->get("node weights", metric)) {
-        tlpToOGDF->copyTlpDoublePropertyToOGDFNodeWeight(metric);
+        tlpToOGDF->copyTlpNumericPropertyToOGDFNodeWeight(metric);
       }
     }
 

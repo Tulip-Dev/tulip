@@ -133,12 +133,22 @@ void LouvainClustering::createQuotient() {
     //Sum of weights on adjacents edges and test for self-loops
     double deg=0.0;
     edge e;
-    forEach(e,graph->getInOutEdges(n)) {
-      if(graph->opposite(e,n)==n)
-        internalWeight->setNodeValue(t,metric->getEdgeValue(e));
-      else
-        deg+=metric->getEdgeValue(e);
+    if (metric) {
+      forEach(e,graph->getInOutEdges(n)) {
+	if(graph->opposite(e,n)==n)
+	  internalWeight->setNodeValue(t, metric->getEdgeDoubleValue(e));
+	else
+	  deg+=metric->getEdgeDoubleValue(e);
+      }
+    } else {
+      forEach(e,graph->getInOutEdges(n)) {
+	if(graph->opposite(e,n)==n)
+	  internalWeight->setNodeValue(t, 1.0);
+	else
+	  deg+=1.0;
+      }
     }
+      
     externalWeight->setNodeValue(t,deg);
     //Update comToInfo for modularity computing
     comToInfo.insert(make_pair(t,make_pair(internalWeight->getNodeValue(t),2.0*internalWeight->getNodeValue(t)+deg)));
@@ -147,13 +157,23 @@ void LouvainClustering::createQuotient() {
   //Copy Edges and the sum of edge weights
   m=0.0;
   edge e;
-  forEach(e,graph->getEdges()) {
-    const std::pair<node, node>& eEnds = graph->ends(e);
-    edge ne = quotient->addEdge(nodeMapping.get(eEnds.first.id),
-                                nodeMapping.get(eEnds.second.id));
-    externalWeight->setEdgeValue(ne,metric->getEdgeValue(e));
-    m+=metric->getEdgeValue(e);
-  }
+  if (metric) {
+    forEach(e,graph->getEdges()) {
+      const std::pair<node, node>& eEnds = graph->ends(e);
+      edge ne = quotient->addEdge(nodeMapping.get(eEnds.first.id),
+				  nodeMapping.get(eEnds.second.id));
+      externalWeight->setEdgeValue(ne,metric->getEdgeDoubleValue(e));
+      m+=metric->getEdgeDoubleValue(e);
+    }
+  } else {
+    forEach(e,graph->getEdges()) {
+      const std::pair<node, node>& eEnds = graph->ends(e);
+      edge ne = quotient->addEdge(nodeMapping.get(eEnds.first.id),
+				  nodeMapping.get(eEnds.second.id));
+      externalWeight->setEdgeValue(ne, 1.0);
+      m+=1.0;
+    }
+  }    
 }
 //========================================================================================
 void LouvainClustering::trackClustering() {
@@ -314,7 +334,7 @@ namespace {
 const char * paramHelp[] = {
   // metric
   HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "DoubleProperty" )       \
+  HTML_HELP_DEF( "type", "NumericProperty" )       \
   HTML_HELP_DEF( "value", "An existing edge metric" )                 \
   HTML_HELP_BODY()              \
   "An existing edge metric property"\
@@ -323,7 +343,7 @@ const char * paramHelp[] = {
 }
 //========================================================================================
 LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleAlgorithm(context), quotient(NULL), metric(NULL), noparam(false) {
-  addInParameter<DoubleProperty>("metric",paramHelp[0], "",false);
+  addInParameter<NumericProperty*>("metric",paramHelp[0], "",false);
 }
 //========================================================================================
 LouvainClustering::~LouvainClustering() {
@@ -332,22 +352,11 @@ LouvainClustering::~LouvainClustering() {
     delete internalWeight;
     delete externalWeight;
   }
-
-  if(noparam)
-    delete metric;
-
 }
 //========================================================================================
 bool LouvainClustering::run() {
   if(dataSet!=NULL)
     dataSet->get("metric",metric);
-
-  //If no metric given set all edge weights to 1
-  if(metric==NULL) {
-    noparam=true;
-    metric = new DoubleProperty(graph);
-    metric->setAllEdgeValue(1.0);
-  }
 
   //Init RNG seed
   srand ((time(NULL)));

@@ -99,6 +99,7 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::IntegerVectorProperty*);
   CHECK_QVARIANT(tlp::SizeVectorProperty*);
   CHECK_QVARIANT(tlp::ColorVectorProperty*);
+  CHECK_QVARIANT(tlp::NumericProperty*);
   CHECK_QVARIANT(tlp::PropertyInterface*);
 
   CHECK_QVARIANT(ColorScale);
@@ -172,6 +173,7 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   CHECK_DATATYPE(tlp::IntegerVectorProperty*);
   CHECK_DATATYPE(tlp::SizeVectorProperty*);
   CHECK_DATATYPE(tlp::ColorProperty*);
+  CHECK_DATATYPE(tlp::NumericProperty*);
   CHECK_DATATYPE(tlp::PropertyInterface*);
 
   CHECK_DATATYPE(tlp::ColorScale)

@@ -342,7 +342,7 @@ const char * paramHelp[] = {
 
 //================================================================================
 StrengthClustering::StrengthClustering(PluginContext* context):DoubleAlgorithm(context) {
-  addInParameter<DoubleProperty>("metric", paramHelp[0], "", false);
+  addInParameter<NumericProperty*>("metric", paramHelp[0], "", false);
 //  addInParameter<bool>("layout subgraphs", paramHelp[1], "true");
 //  addInParameter<bool>("layout quotient graph", paramHelp[2], "true");
 //  addDependency("Quotient Clustering", "1.3");
@@ -361,7 +361,7 @@ bool StrengthClustering::run() {
   if (!graph->applyPropertyAlgorithm("Strength", values, errMsg, pluginProgress))
     return false;
 
-  DoubleProperty *metric = NULL;
+  NumericProperty *metric = NULL;
 
 //  subgraphsLayout = true;
 //  quotientLayout = true;
@@ -372,14 +372,12 @@ bool StrengthClustering::run() {
   }
 
   if (metric) {
-    DoubleProperty mult(graph);
+    NumericProperty* mult = metric->copyProperty(graph);
 
     if (pluginProgress)
       pluginProgress->setComment("Computing Strength metric X specified metric on edges ...");
 
-    mult = *metric;
-
-    mult.uniformQuantification(100);
+    mult->uniformQuantification(100);
     edge e;
     unsigned int steps = 0, maxSteps = graph->numberOfEdges();
 
@@ -387,7 +385,7 @@ bool StrengthClustering::run() {
       maxSteps = 10;
 
     forEach (e, graph->getEdges()) {
-      values->setEdgeValue(e, values->getEdgeValue(e)*(mult.getEdgeValue(e) + 1));
+      values->setEdgeValue(e, values->getEdgeValue(e)*(mult->getEdgeDoubleValue(e) + 1));
 
       if (pluginProgress && ((++steps % (maxSteps / 10) == 0))) {
         pluginProgress->progress(++steps, maxSteps);
@@ -396,6 +394,7 @@ bool StrengthClustering::run() {
           return pluginProgress->state()!= TLP_CANCEL;
       }
     }
+    delete mult;
   }
 
   bool stopped = false;

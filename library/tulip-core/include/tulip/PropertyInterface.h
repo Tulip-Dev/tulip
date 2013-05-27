@@ -108,7 +108,6 @@ public:
    * @param name The name of the new property.
    * @return The newly created property.
    */
-
   virtual PropertyInterface* clonePrototype(Graph *graph, const std::string& name) =0;
 
   /**

@@ -34,7 +34,7 @@ const char * paramHelp[] = {
   "Type of degree to compute (in/out/inout)."  \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "DoubleProperty" )       \
+  HTML_HELP_DEF( "type", "NumericProperty" )       \
   HTML_HELP_DEF( "value", "An existing metric corresponding to weights.")   \
   HTML_HELP_DEF( "default", "none" )          \
   HTML_HELP_BODY()              \
@@ -62,14 +62,14 @@ const char * paramHelp[] = {
 //==============================================================================
 DegreeMetric::DegreeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
   addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
-  addInParameter<DoubleProperty>("metric", paramHelp[1], "", false);
+  addInParameter<NumericProperty*>("metric", paramHelp[1], "", false);
   addInParameter<bool>("norm", paramHelp[2], "false", false);
 }
 //==================================================================
 bool DegreeMetric::run() {
   StringCollection degreeTypes(DEGREE_TYPES);
   degreeTypes.setCurrent(0);
-  DoubleProperty* weights = NULL;
+  NumericProperty* weights = NULL;
   bool norm = false;
 
   if (dataSet!=NULL) {
@@ -112,7 +112,7 @@ bool DegreeMetric::run() {
       double sum = 0;
       edge e;
       forEach(e, graph->getEdges())
-      sum += fabs(weights->getEdgeValue(e));
+      sum += fabs(weights->getEdgeDoubleValue(e));
       normalization = (sum / double(graph->numberOfEdges())) * double(graph->numberOfNodes() - 1);
 
       if (fabs(normalization) < 1E-9) normalization = 1.0;
@@ -124,7 +124,7 @@ bool DegreeMetric::run() {
         edge e;
         double nWeight = 0.0;
         forEach(e, graph->getInOutEdges(n)) {
-          nWeight += weights->getEdgeValue(e);
+          nWeight += weights->getEdgeDoubleValue(e);
         }
         result->setNodeValue(n, nWeight / normalization);
       }
@@ -135,7 +135,7 @@ bool DegreeMetric::run() {
         edge e;
         double nWeight = 0.0;
         forEach(e, graph->getInEdges(n)) {
-          nWeight += weights->getEdgeValue(e);
+          nWeight += weights->getEdgeDoubleValue(e);
         }
         result->setNodeValue(n, nWeight / normalization);
       }
@@ -146,7 +146,7 @@ bool DegreeMetric::run() {
         edge e;
         double nWeight = 0.0;
         forEach(e, graph->getOutEdges(n)) {
-          nWeight += weights->getEdgeValue(e);
+          nWeight += weights->getEdgeDoubleValue(e);
         }
         result->setNodeValue(n, nWeight / normalization);
       }

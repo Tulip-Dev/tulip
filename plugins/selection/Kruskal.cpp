@@ -26,7 +26,7 @@ using namespace tlp;
 namespace {
 const char * paramHelp[] = {
   HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_DEF( "type", "NumericProperty" ) \
   HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
   HTML_HELP_BODY() \
   "Metric containing the edges weights." \
@@ -35,7 +35,7 @@ const char * paramHelp[] = {
 }
 //======================================================
 Kruskal::Kruskal(const tlp::PluginContext* context):BooleanAlgorithm(context) {
-  addInParameter<DoubleProperty> ("edge weight", paramHelp[0], "viewMetric");
+  addInParameter<NumericProperty*> ("edge weight", paramHelp[0], "viewMetric");
 }
 //======================================================
 Kruskal::~Kruskal() {
@@ -56,7 +56,7 @@ bool Kruskal::check(std::string &erreurMsg) {
 /// Compute the Minimum Spanning Tree
 bool Kruskal::run() {
   /* Initialisation */
-  DoubleProperty *edgeWeight = NULL;
+  NumericProperty *edgeWeight = NULL;
 
   if ( dataSet!=NULL) {
     dataSet->get("edge weight", edgeWeight);

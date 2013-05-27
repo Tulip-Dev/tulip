@@ -22,11 +22,9 @@
 
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
+#include <tulip/AbstractProperty.h>
 
 namespace tlp {
-
-template<class Tnode, class Tedge>
-class AbstractProperty;
 
 /**
  * @brief Abstracts the computation of minimal and maximal values on node and edge values of properties.
@@ -34,8 +32,8 @@ class AbstractProperty;
  * The value is lazily computed on first request.
  * The value is cached, and the cache is invalidated whenever it cannot be simply updated.
  **/
-template<typename nodeType, typename edgeType>
-class MinMaxProperty : public tlp::AbstractProperty<nodeType, edgeType> {
+ template<typename nodeType, typename edgeType, typename propType=PropertyInterface>
+   class MinMaxProperty : public tlp::AbstractProperty<nodeType, edgeType, propType> {
 public:
   /**
    * @brief Constructs a MinMaxProperty.

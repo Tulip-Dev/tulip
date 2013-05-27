@@ -29,6 +29,7 @@
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
 #include <tulip/StringProperty.h>
+#include <tulip/NumericProperty.h>
 #include <tulip/ForEach.h>
 
 #include <exception>
@@ -62,8 +63,8 @@ public:
 
   tlp::Coord getNodeCoordFromOGDFGraphAttr(unsigned int nodeIndex);
 
-  void copyTlpDoublePropertyToOGDFEdgeLength(tlp::DoubleProperty *);
-  void copyTlpDoublePropertyToOGDFNodeWeight(tlp::DoubleProperty *);
+  void copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *);
+  void copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *);
   void copyTlpNodeSizeToOGDF(tlp::SizeProperty *);
 
   vector<tlp::Coord> getEdgeCoordFromOGDFGraphAttr(unsigned int edgeIndex);

@@ -112,6 +112,8 @@ Q_DECLARE_METATYPE(std::vector<bool>)
 
 Q_DECLARE_METATYPE(std::set<tlp::edge>)
 
+Q_DECLARE_METATYPE(tlp::NumericProperty*)
+
 Q_DECLARE_METATYPE(tlp::PropertyInterface*)
 
 Q_DECLARE_METATYPE(tlp::ColorScale)

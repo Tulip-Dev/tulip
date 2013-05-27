@@ -19,6 +19,7 @@
 #include <climits>
 #include <tulip/IntegerProperty.h>
 #include <tulip/PropertyAlgorithm.h>
+#include <tulip/GraphTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -33,7 +34,7 @@ IntegerProperty::IntegerProperty (Graph *sg, std::string n):IntegerMinMaxPropert
   sg->addListener(this);
 }
 //====================================================================
-void IntegerProperty::clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType> &proxyC) {
+void IntegerProperty::clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> &proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     IntegerProperty *proxy=(IntegerProperty *)&proxyC;
     nodeValueUptodate = proxy->nodeValueUptodate;
@@ -100,4 +101,31 @@ PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::s
   p->setAllEdgeValue( getEdgeDefaultValue() );
   return p;
 }
+
+//===============================================================
+void IntegerProperty::nodesUniformQuantification(unsigned int k) {
+  std::map<double,int> nodeMapping;
+  buildNodesUniformQuantification(graph, this, k, nodeMapping);
+
+  Iterator<node> *itN=graph->getNodes();
+
+  while(itN->hasNext()) {
+    node itn=itN->next();
+    setNodeValue(itn, nodeMapping[getNodeValue(itn)]);
+  } delete itN;
+}
+
+//===============================================================
+void IntegerProperty::edgesUniformQuantification(unsigned int k) {
+  std::map<double,int> edgeMapping;
+  buildEdgesUniformQuantification(graph, this, k, edgeMapping);
+
+  Iterator<edge> *itE=graph->getEdges();
+
+  while(itE->hasNext()) {
+    edge ite=itE->next();
+    setEdgeValue(ite, edgeMapping[getEdgeValue(ite)]);
+  } delete itE;
+}
+
 
