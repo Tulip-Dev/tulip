@@ -48,7 +48,7 @@ PythonPanel::~PythonPanel() {
   delete _ui;
 }
 
-QAbstractScrollArea *PythonPanel::consoleWidget() {
+QPlainTextEdit *PythonPanel::consoleWidget() {
   return _ui->consoleWidget;
 }
 

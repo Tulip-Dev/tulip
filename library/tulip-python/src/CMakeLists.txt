@@ -6,7 +6,7 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(${LibTulipPythonName}_LIB_SRCS
-    ConsoleOutputModule.cpp
+    ConsoleUtilsModule.cpp
     PythonCodeEditor.cpp
     PythonCodeHighlighter.cpp
     ParenMatcherHighlighter.cpp
@@ -16,7 +16,7 @@ SET(${LibTulipPythonName}_LIB_SRCS
     APIDataBase.cpp
     AutoCompletionDataBase.cpp
     PythonTabWidget.cpp
-    ConsoleOutputHandler.h
+    ConsoleHandlers.h
     PythonEditorsTabWidget.cpp
     PythonCppTypesConverter.cpp
 )
@@ -26,7 +26,7 @@ SET(${LibTulipPythonName}_UI
 )
 
 SET(${LibTulipPythonName}_MOC
-    ConsoleOutputHandler.h
+    ConsoleHandlers.h
     ../include/tulip/PythonShellWidget.h
     ../include/tulip/PythonCodeEditor.h
     ../include/tulip/PythonEditorsTabWidget.h

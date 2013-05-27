@@ -32,7 +32,7 @@ class GraphHierarchiesModel;
 }
 
 class QPropertyAnimation;
-class QAbstractScrollArea;
+class QPlainTextEdit;
 class OutputPanelButton;
 
 class PythonPanel : public QWidget {
@@ -51,7 +51,7 @@ public :
 
   void setPanelButton(OutputPanelButton *button);
 
-  QAbstractScrollArea *consoleWidget();
+  QPlainTextEdit *consoleWidget();
 
 protected:
 
