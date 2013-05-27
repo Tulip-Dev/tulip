@@ -111,6 +111,24 @@ static bool processQtEvents = false;
 
 QTime timer;
 
+class SleepSimulator {
+     QMutex localMutex;
+     QWaitCondition sleepSimulator;
+public:
+    SleepSimulator() {
+      localMutex.lock();
+    }
+    ~SleepSimulator() {
+      localMutex.unlock();
+    }
+
+    void sleep(unsigned long sleepMS) {
+      sleepSimulator.wait(&localMutex, sleepMS);
+    }
+};
+
+static SleepSimulator ss;
+
 void tlp::decrefPyObject(PyObject *obj) {
   Py_XDECREF(obj);
 }
@@ -127,12 +145,9 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
     }
 
     while (scriptPaused) {
-      if (timer.elapsed() >= 50) {
-        if (processQtEvents && QApplication::hasPendingEvents())
-          QApplication::processEvents();
-
-        timer.start();
-      }
+      if (processQtEvents && QApplication::hasPendingEvents())
+        QApplication::processEvents();
+      ss.sleep(30);
     }
 
   }
@@ -1049,26 +1064,9 @@ void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) 
   }
 }
 
-class SleepSimulator {
-     QMutex localMutex;
-     QWaitCondition sleepSimulator;
-public:
-    SleepSimulator() {
-      localMutex.lock();
-    }
-    ~SleepSimulator() {
-      localMutex.unlock();
-    }
-
-    void sleep(unsigned long sleepMS) {
-      sleepSimulator.wait(&localMutex, sleepMS);
-    }
-};
-
 QString PythonInterpreter::readLineFromConsole() {
     if (consoleOuputEmitter && consoleOuputEmitter->consoleWidget()) {
         ConsoleInputHandler cih;
-        SleepSimulator ss;
         cih.setConsoleWidget(consoleOuputEmitter->consoleWidget());
         cih.startReadLine();
         while (!cih.lineRead()) {
