@@ -47,11 +47,13 @@ typedef _object PyObject;
 #include <tulip/PythonCppTypesConverter.h>
 #include <tulip/Graph.h>
 
-#include <QDialog>
-#include <QPlainTextEdit>
-#include <QDir>
 #include <QVector>
 #include <QSet>
+#include <QString>
+
+class QAbstractScrollArea;
+class QPlainTextEdit;
+class QTextBrowser;
 
 namespace tlp {
 
@@ -63,7 +65,8 @@ class TLP_PYTHON_SCOPE PythonInterpreter {
   void holdGIL();
   void releaseGIL();
 
-
+  void setDefaultConsoleWidget(QAbstractScrollArea *consoleWidget);
+  void setConsoleWidget(QAbstractScrollArea *consoleWidget);
 
   static PythonInterpreter _instance;
 
@@ -175,9 +178,11 @@ public :
 
   QString getVariableType(const QString &varName);
 
-  void setDefaultConsoleWidget(QAbstractScrollArea *consoleWidget);
+  void setDefaultConsoleWidget(QPlainTextEdit *consoleWidget);
+  void setDefaultConsoleWidget(QTextBrowser *consoleWidget);
 
-  void setConsoleWidget(QAbstractScrollArea *consoleWidget);
+  void setConsoleWidget(QPlainTextEdit *consoleWidget);
+  void setConsoleWidget(QTextBrowser *consoleWidget);
 
   void resetConsoleWidget();
 
@@ -196,6 +201,8 @@ public :
   bool outputEnabled() const;
 
   void sendOutputToConsole(const QString &output, bool stdErr);
+
+  QString readLineFromConsole();
 
 protected:
 

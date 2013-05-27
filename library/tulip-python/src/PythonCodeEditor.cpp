@@ -32,6 +32,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QDesktopWidget>
+#include <QFileInfo>
 
 #include "ui_FindReplaceDialog.h"
 

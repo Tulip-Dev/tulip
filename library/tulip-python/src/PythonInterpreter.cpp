@@ -19,7 +19,7 @@
 
 #include "PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
-#include "ConsoleOutputHandler.h"
+#include "ConsoleHandlers.h"
 
 #include <sstream>
 
@@ -28,6 +28,9 @@
 #include <QLibrary>
 #include <QTime>
 #include <QTextStream>
+#include <QMutex>
+#include <QWaitCondition>
+#include <QDir>
 
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>
@@ -49,7 +52,7 @@ extern QString consoleErrorOuputString;
 extern QString mainScriptFileName;
 extern bool outputActivated;
 
-extern void initscriptengine();
+extern void initconsoleutils();
 extern void inittuliputils();
 
 #ifndef WIN32
@@ -102,8 +105,6 @@ static QString convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
   return ret;
 }
 #endif
-
-
 
 static bool scriptPaused = false;
 static bool processQtEvents = false;
@@ -263,13 +264,25 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 #endif
 
     if (!dlopen(libPythonName.toStdString().c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
+
+      // for Python 3.2
       libPythonName = QString("libpython") + _pythonVersion + QString("mu");
 #ifdef __APPLE__
       libPythonName += QString(".dylib");
 #else
       libPythonName += QString(".so.1.0");
 #endif
-      dlopen(libPythonName.toStdString().c_str(), RTLD_LAZY | RTLD_GLOBAL);
+
+      if (!dlopen(libPythonName.toStdString().c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
+        // for Python 3.3
+        libPythonName = QString("libpython") + _pythonVersion + QString("m");
+#ifdef __APPLE__
+        libPythonName += QString(".dylib");
+#else
+        libPythonName += QString(".so.1.0");
+#endif
+        dlopen(libPythonName.toStdString().c_str(), RTLD_LAZY | RTLD_GLOBAL);
+      }
     }
 
 #endif
@@ -291,16 +304,24 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       addModuleSearchPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "/python", true);
 #endif
 
-      initscriptengine();
+      initconsoleutils();
       inittuliputils();
 
-      runString("import sys; import scriptengine ; import tuliputils ; sys.stdout = scriptengine.ConsoleOutput(False); sys.stderr = scriptengine.ConsoleOutput(True);\n");
+      runString("import sys;"
+                "import consoleutils;"
+                "import tuliputils;"
+                "sys.stdout = consoleutils.ConsoleOutput(False);"
+                "sys.stderr = consoleutils.ConsoleOutput(True);"
+                "sys.stdin = consoleutils.ConsoleInput()\n");
 
       // Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
       // and if the site module is not present on the host system
       // Disable output while trying to import the module to not confuse the user
       outputActivated = false;
       runString("import site");
+#if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3
+      runString("site.main()");
+#endif
       runString("import sip");
       runString("from tulip import *");
       outputActivated = true;
@@ -316,6 +337,24 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
     }
 
     PyEval_SetTrace(tracefunc, NULL);
+
+    // remove exit and quit functions
+#if PY_MAJOR_VERSION >= 3
+    PyObject *builtinModule = PyImport_ImportModule("builtins");
+#else
+    PyObject *builtinModule = PyImport_ImportModule("__builtin__");
+#endif
+    if (PyObject_HasAttrString(builtinModule, "exit"))
+      PyObject_DelAttrString(builtinModule, "exit");
+    if (PyObject_HasAttrString(builtinModule, "quit"))
+      PyObject_DelAttrString(builtinModule, "quit");
+    Py_DECREF(builtinModule);
+
+    PyObject *sysModule = PyImport_ImportModule("sys");
+    if (PyObject_HasAttrString(sysModule, "exit"))
+      PyObject_DelAttrString(sysModule, "exit");
+    Py_DECREF(sysModule);
+
   }
 
   releaseGIL();
@@ -343,7 +382,7 @@ PythonInterpreter::~PythonInterpreter() {
       *sipQtSupport = NULL;
 #endif
 
-    runString("sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__;\n");
+    runString("sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; sys.stdin = sys.__stdin__\n");
 #ifndef WIN32
     PyEval_ReleaseLock();
     PyEval_RestoreThread(mainThreadState);
@@ -694,10 +733,12 @@ int stopScript(void *) {
 }
 
 void PythonInterpreter::stopCurrentScript() {
-  holdGIL();
-  Py_AddPendingCall(&stopScript, NULL);
-  releaseGIL();
-  scriptPaused = false;
+  if (_runningScript) {
+    holdGIL();
+    Py_AddPendingCall(&stopScript, NULL);
+    releaseGIL();
+    scriptPaused = false;
+  }
 }
 
 void PythonInterpreter::deleteModule(const QString &moduleName) {
@@ -718,6 +759,22 @@ bool PythonInterpreter::reloadModule(const QString &moduleName) {
   oss << "import " << moduleName << endl;
   oss << "reload(" << moduleName << ")" << endl;
   return runString(pythonCode);
+}
+
+void PythonInterpreter::setDefaultConsoleWidget(QPlainTextEdit *console) {
+  setDefaultConsoleWidget(static_cast<QAbstractScrollArea *>(console));
+}
+
+void PythonInterpreter::setConsoleWidget(QPlainTextEdit *console) {
+  setConsoleWidget(static_cast<QAbstractScrollArea *>(console));
+}
+
+void PythonInterpreter::setDefaultConsoleWidget(QTextBrowser *console) {
+  setDefaultConsoleWidget(static_cast<QAbstractScrollArea *>(console));
+}
+
+void PythonInterpreter::setConsoleWidget(QTextBrowser *console) {
+  setConsoleWidget(static_cast<QAbstractScrollArea *>(console));
 }
 
 void PythonInterpreter::setDefaultConsoleWidget(QAbstractScrollArea *console) {
@@ -990,4 +1047,35 @@ void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) 
       std::cout << output.toStdString();
     }
   }
+}
+
+class SleepSimulator {
+     QMutex localMutex;
+     QWaitCondition sleepSimulator;
+public:
+    SleepSimulator() {
+      localMutex.lock();
+    }
+    ~SleepSimulator() {
+      localMutex.unlock();
+    }
+
+    void sleep(unsigned long sleepMS) {
+      sleepSimulator.wait(&localMutex, sleepMS);
+    }
+};
+
+QString PythonInterpreter::readLineFromConsole() {
+    if (consoleOuputEmitter && consoleOuputEmitter->consoleWidget()) {
+        ConsoleInputHandler cih;
+        SleepSimulator ss;
+        cih.setConsoleWidget(consoleOuputEmitter->consoleWidget());
+        cih.startReadLine();
+        while (!cih.lineRead()) {
+            QApplication::processEvents();
+            ss.sleep(30);
+        }
+        return cih.line();
+    }
+    return "";
 }
