@@ -4,35 +4,67 @@ import tempfile
 import sys
 if sys.version_info[0] == 3:
   from urllib.request import urlopen
+  import queue as Queue
 else:
   from urllib2 import urlopen
+  import Queue
 import os
 import threading
 
-def downloadAvatar(url, fileName):
-  if sys.version_info[0] < 3:
-    fileNameEnc = fileName.decode(sys.getdefaultencoding()).encode(sys.getfilesystemencoding())
-  else:
-    fileNameEnc = fileName.encode(sys.getfilesystemencoding()) 	
-  if not os.path.isfile(fileNameEnc):
+maxThreadsDl = 8
+nbThreadsDl = 0
+threadJobs = Queue.Queue()
+threadsPool = []
+runThread = False
+
+def downloadAvatar():
+  global runThread
+  while runThread:
+    job = None
+    try:
+      job = threadJobs.get(block = 0)
+    except Queue.Empty:
+      pass
+
+    if not job:
+      continue
+
+    url = job[0]
+    fileName = job[1]
+    if sys.version_info[0] < 3:
+      fileNameEnc = fileName.decode(sys.getdefaultencoding()).encode(sys.getfilesystemencoding())
+    else:
+      fileNameEnc = fileName.encode(sys.getfilesystemencoding())
+
     avatarFile = urlopen(url)
     output = open(fileNameEnc,'wb')
     output.write(avatarFile.read())
     output.close()
-
-threadsPool = []
+    threadJobs.task_done()
 
 def launchAvatarDlThread(url, directory, name):
     global threadsPool
+    global threadJobs
+    global nbThreadsDl
+    global maxThreadsDl
+    global runThread
+    runThread = True
     ext = url[len(url)-4:]
     fileName = directory+"/"+name+ext
-    t = threading.Thread(target=downloadAvatar, args = (url, fileName))
-    threadsPool.append(t)
-    t.start()
+    threadJobs.put((url, fileName))
+    if (nbThreadsDl < maxThreadsDl):
+      nbThreadsDl = nbThreadsDl + 1
+      t = threading.Thread(target=downloadAvatar)
+      threadsPool.append(t)
+      t.start()
     return fileName
 
 def waitAvatarDlThreads():
     global threadsPool
+    global threadJobs
+    global runThread
+    threadJobs.join()
+    runThread = False
     for t in threadsPool:
         t.join()
     threadsPool = []
@@ -128,6 +160,9 @@ def importFacebookGraph(graph, accessToken, pluginProgress, avatarsDlPath):
   
   dataSet = tlp.getDefaultPluginParameters("FM^3 (OGDF)", graph)
   graph.applyLayoutAlgorithm("FM^3 (OGDF)", viewLayout, dataSet)
+
+  if pluginProgress:
+    pluginProgress.setComment("Finishing to download avatars")
 
   waitAvatarDlThreads()
   
