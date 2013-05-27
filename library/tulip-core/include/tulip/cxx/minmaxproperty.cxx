@@ -19,16 +19,16 @@
 #include <tulip/Graph.h>
 #include <tulip/Coord.h>
 
-template<typename nodeType, typename edgeType>
-tlp::MinMaxProperty<nodeType, edgeType>::MinMaxProperty(tlp::Graph* graph, std::string name, typename nodeType::RealType NodeMin,
+template<typename nodeType, typename edgeType, typename propType>
+tlp::MinMaxProperty<nodeType, edgeType, propType>::MinMaxProperty(tlp::Graph* graph, std::string name, typename nodeType::RealType NodeMin,
     typename nodeType::RealType NodeMax, typename edgeType::RealType EdgeMin, typename edgeType::RealType EdgeMax)
-  : AbstractProperty<nodeType, edgeType>(graph, name), nodeValueUptodate(false), edgeValueUptodate(false), _nodeMin(NodeMin), _nodeMax(NodeMax), _edgeMin(EdgeMin), _edgeMax(EdgeMax) {
+  : AbstractProperty<nodeType, edgeType, propType>(graph, name), nodeValueUptodate(false), edgeValueUptodate(false), _nodeMin(NodeMin), _nodeMax(NodeMax), _edgeMin(EdgeMin), _edgeMax(EdgeMax) {
 }
 
-template<typename nodeType, typename edgeType>
-typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType>::getNodeMin(tlp::Graph* graph) {
+template<typename nodeType, typename edgeType, typename propType>
+typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getNodeMin(tlp::Graph* graph) {
   if(!graph) {
-    graph = this->graph;
+    graph = this->propType::graph;
   }
 
   unsigned int graphID = graph->getId();
@@ -40,10 +40,10 @@ typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType>::getNodeMin(
   return minNode[graphID];
 }
 
-template<typename nodeType, typename edgeType>
-typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType>::getNodeMax(tlp::Graph* graph) {
+template<typename nodeType, typename edgeType, typename propType>
+typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getNodeMax(tlp::Graph* graph) {
   if(!graph) {
-    graph = this->graph;
+    graph = this->propType::graph;
   }
 
   unsigned int graphID = graph->getId();
@@ -55,10 +55,10 @@ typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType>::getNodeMax(
   return maxNode[graphID];
 }
 
-template<typename nodeType, typename edgeType>
-typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType>::getEdgeMin(tlp::Graph* graph) {
+template<typename nodeType, typename edgeType, typename propType>
+typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getEdgeMin(tlp::Graph* graph) {
   if(!graph) {
-    graph = this->graph;
+    graph = this->propType::graph;
   }
 
   unsigned int graphID = graph->getId();
@@ -70,10 +70,10 @@ typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType>::getEdgeMin(
   return minEdge[graphID];
 }
 
-template<typename nodeType, typename edgeType>
-typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType>::getEdgeMax(tlp::Graph* graph) {
+template<typename nodeType, typename edgeType, typename propType>
+typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getEdgeMax(tlp::Graph* graph) {
   if(!graph) {
-    graph = this->graph;
+    graph = this->propType::graph;
   }
 
   unsigned int graphID = graph->getId();
@@ -85,10 +85,10 @@ typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType>::getEdgeMax(
   return maxEdge[graphID];
 }
 
-template<typename nodeType, typename edgeType>
-void tlp::MinMaxProperty<nodeType, edgeType>::computeMinMaxNode(Graph* graph) {
+template<typename nodeType, typename edgeType, typename propType>
+void tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxNode(Graph* graph) {
   if(!graph) {
-    graph = this->graph;
+    graph = this->propType::graph;
   }
 
   typename nodeType::RealType maxN2 = _nodeMin, minN2 = _nodeMax;
@@ -121,8 +121,8 @@ void tlp::MinMaxProperty<nodeType, edgeType>::computeMinMaxNode(Graph* graph) {
   maxNode[sgi] = maxN2;
 }
 
-template<typename nodeType, typename edgeType>
-void tlp::MinMaxProperty<nodeType, edgeType>::computeMinMaxEdge(Graph* graph) {
+template<typename nodeType, typename edgeType, typename propType>
+void tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxEdge(Graph* graph) {
   typename edgeType::RealType maxE2 = _edgeMin, minE2 = _edgeMax;
 
   Iterator<edge>* edgeIterator = graph->getEdges();
@@ -151,8 +151,8 @@ void tlp::MinMaxProperty<nodeType, edgeType>::computeMinMaxEdge(Graph* graph) {
   maxEdge[sgi]=maxE2;
 }
 
-template<typename nodeType, typename edgeType>
-void tlp::MinMaxProperty<nodeType, edgeType>::updateNodeValue(tlp::node n, typename nodeType::RealType newValue) {
+template<typename nodeType, typename edgeType, typename propType>
+void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateNodeValue(tlp::node n, typename nodeType::RealType newValue) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = nodeValueUptodate.begin();
 
   if (it != nodeValueUptodate.end()) {
@@ -179,8 +179,8 @@ void tlp::MinMaxProperty<nodeType, edgeType>::updateNodeValue(tlp::node n, typen
   }
 }
 
-template<typename nodeType, typename edgeType>
-void tlp::MinMaxProperty<nodeType, edgeType>::updateEdgeValue(tlp::edge e, typename edgeType::RealType newValue) {
+template<typename nodeType, typename edgeType, typename propType>
+void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateEdgeValue(tlp::edge e, typename edgeType::RealType newValue) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = edgeValueUptodate.begin();
 
   if (it != edgeValueUptodate.end()) {
@@ -207,8 +207,8 @@ void tlp::MinMaxProperty<nodeType, edgeType>::updateEdgeValue(tlp::edge e, typen
   }
 }
 
-template<typename nodeType, typename edgeType>
-void tlp::MinMaxProperty<nodeType, edgeType>::updateAllNodesValues(typename nodeType::RealType newValue) {
+template<typename nodeType, typename edgeType, typename propType>
+void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateAllNodesValues(typename nodeType::RealType newValue) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = nodeValueUptodate.begin();
 
   if (it != nodeValueUptodate.end()) {
@@ -221,8 +221,8 @@ void tlp::MinMaxProperty<nodeType, edgeType>::updateAllNodesValues(typename node
   }
 }
 
-template<typename nodeType, typename edgeType>
-void tlp::MinMaxProperty<nodeType, edgeType>::updateAllEdgesValues(typename edgeType::RealType newValue) {
+template<typename nodeType, typename edgeType, typename propType>
+void tlp::MinMaxProperty<nodeType, edgeType, propType>::updateAllEdgesValues(typename edgeType::RealType newValue) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = edgeValueUptodate.begin();
 
   if (it != edgeValueUptodate.end()) {
@@ -235,8 +235,8 @@ void tlp::MinMaxProperty<nodeType, edgeType>::updateAllEdgesValues(typename edge
   }
 }
 
-template<typename nodeType, typename edgeType>
-void tlp::MinMaxProperty<nodeType, edgeType>::treatEvent(const tlp::Event& ev) {
+template<typename nodeType, typename edgeType, typename propType>
+void tlp::MinMaxProperty<nodeType, edgeType, propType>::treatEvent(const tlp::Event& ev) {
   const GraphEvent* graphEvent = dynamic_cast<const tlp::GraphEvent*>(&ev);
 
   if (graphEvent) {

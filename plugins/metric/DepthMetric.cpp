@@ -26,7 +26,7 @@ using namespace tlp;
 
 static const char * paramHelp[] = {
   HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_DEF( "type", "NumericProperty" ) \
   HTML_HELP_DEF( "default", "None" ) \
   HTML_HELP_BODY() \
   "This parameter defines the metric used for edges weight." \
@@ -34,7 +34,7 @@ static const char * paramHelp[] = {
 };
 
 DepthMetric::DepthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), edgeWeight(NULL) {
-  addInParameter<DoubleProperty> ("edge weight", paramHelp[0], "", false);
+  addInParameter<NumericProperty*> ("edge weight", paramHelp[0], "", false);
 }
 
 // structure below is used to implement dfs loop
@@ -67,7 +67,7 @@ double DepthMetric::getNodeValue(tlp::node current) {
   while(!dfsLevels.empty()) {
     while(outEdges->hasNext()) {
       edge e = outEdges->next();
-      double edgeValue = edgeWeight ? edgeWeight->getEdgeValue(e) : 1.0;
+      double edgeValue = edgeWeight ? edgeWeight->getEdgeDoubleValue(e) : 1.0;
       node neighbour = graph->target(e);
       value = result->getNodeValue(neighbour);
 

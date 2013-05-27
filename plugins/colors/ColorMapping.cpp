@@ -120,17 +120,17 @@ void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
 const char * paramHelp[] = {
   // property
   HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_DEF( "type", "NumericProperty" ) \
   HTML_HELP_BODY() \
-  "This metric is used to affect scalar values to graph items." \
-  "The meaning of theses values depends of the choosen color model." \
+  "This metric is used to get the values affected to graph items." \
+  "Used with the linear or uniform color models." \
   HTML_HELP_CLOSE(),
   // property
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "PropertyInterface*" ) \
   HTML_HELP_BODY() \
-  "This metric is used to affect scalar values to graph items." \
-  "The meaning of theses values depends of the choosen color model." \
+  "This metric is used to get the valuesaffected to graph items." \
+  "Used with the enumerated color model." \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
@@ -173,7 +173,7 @@ const char * paramHelp[] = {
 
 class ColorMapping: public ColorAlgorithm {
 private:
-  DoubleProperty *entryMetric;
+  NumericProperty *entryMetric;
   StringCollection eltTypes;
   StringCollection targetType;
   ColorScale colorScale;
@@ -185,7 +185,7 @@ private:
 public:
   PLUGININFORMATIONS("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","1.0", "Color")
   ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
-    addInParameter<DoubleProperty>("linear/uniform\nproperty",paramHelp[0],"viewMetric");
+    addInParameter<NumericProperty*>("linear/uniform\nproperty",paramHelp[0],"viewMetric");
     addInParameter<PropertyInterface*>("enumerated\nproperty",paramHelp[1],"viewMetric");
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[2], ELT_TYPES);
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[3], TARGET_TYPES);
@@ -205,13 +205,10 @@ public:
     //    qWarning() << __PRETTY_FUNCTION__ << endl;
     eltTypes.setCurrent(LINEAR_ELT);
     targetType.setCurrent(NODES_TARGET);
-    DoubleProperty* metricS = NULL;
-
-    PropertyInterface *metric = NULL;
+    NumericProperty* metricS = NULL;
 
     if ( dataSet!=NULL ) {
       dataSet->get("linear/uniform\nproperty", metricS);
-      dataSet->get("enumerated\nproperty", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("colorScale", colorScale);
@@ -220,17 +217,13 @@ public:
     if (metricS == NULL)
       metricS = graph->getProperty<DoubleProperty>("viewMetric");
 
-    if (metric == NULL)
-      metric = graph->getProperty<DoubleProperty>("viewMetric");
-
     if (eltTypes.getCurrent()!=ENUMERATED_ELT) {
       if (eltTypes.getCurrent()==LINEAR_ELT) {
         entryMetric = metricS;
       }
       else {
-        DoubleProperty *tmp= new DoubleProperty(graph);
-        *tmp = *metricS;
-        tmp->uniformQuantification(300);
+        NumericProperty *tmp= metricS->copyProperty(graph);
+	tmp->uniformQuantification(300);
         entryMetric = tmp;
       }
 
@@ -239,13 +232,13 @@ public:
         unsigned int maxIter = graph->numberOfNodes();
         unsigned int iter = 0;
         double minN,maxN;
-        minN=entryMetric->getNodeMin(graph);
-        maxN=entryMetric->getNodeMax(graph);
+        minN=entryMetric->getNodeDoubleMin(graph);
+        maxN=entryMetric->getNodeDoubleMax(graph);
         Iterator<node> *itN=graph->getNodes();
 
         while(itN->hasNext()) {
           node itn=itN->next();
-          double dd=entryMetric->getNodeValue(itn)-minN;
+          double dd=entryMetric->getNodeDoubleValue(itn)-minN;
           result->setNodeValue(itn, getColor(dd,maxN-minN));
 
           if ((iter % 100 == 0) &&
@@ -267,13 +260,13 @@ public:
         unsigned int maxIter = graph->numberOfEdges();
         unsigned int iter = 0;
         double minE,maxE;
-        minE = entryMetric->getEdgeMin(graph);
-        maxE = entryMetric->getEdgeMax(graph);
+        minE = entryMetric->getEdgeDoubleMin(graph);
+        maxE = entryMetric->getEdgeDoubleMax(graph);
         Iterator<edge> *itE=graph->getEdges();
 
         while(itE->hasNext()) {
           edge ite=itE->next();
-          double dd=entryMetric->getEdgeValue(ite)-minE;
+          double dd=entryMetric->getEdgeDoubleValue(ite)-minE;
           result->setEdgeValue(ite, getColor(dd,maxE-minE));
 
           if ((iter % 100 == 0) &&

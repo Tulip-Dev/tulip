@@ -19,80 +19,80 @@
 #include <iostream>
 #include <cstdlib>
 
-template <class Tnode, class Tedge>
-tlp::AbstractProperty<Tnode,Tedge>::AbstractProperty(tlp::Graph *sg, std::string n) {
-  graph = sg;
-  name = n;
+template <class Tnode, class Tedge, class Tprop>
+tlp::AbstractProperty<Tnode,Tedge,Tprop>::AbstractProperty(tlp::Graph *sg, std::string n) {
+  Tprop::graph = sg;
+  Tprop::name = n;
   nodeDefaultValue = Tnode::defaultValue();
   edgeDefaultValue = Tedge::defaultValue();
   nodeProperties.setAll(Tnode::defaultValue());
   edgeProperties.setAll(Tedge::defaultValue());
-  metaValueCalculator = NULL;
+  Tprop::metaValueCalculator = NULL;
 }
 //=============================================================
-template <class Tnode, class Tedge>
-typename Tnode::RealType tlp::AbstractProperty<Tnode,Tedge>::getNodeDefaultValue() const {
+template <class Tnode, class Tedge, class Tprop>
+typename Tnode::RealType tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNodeDefaultValue() const {
   return nodeDefaultValue;
 }
 //=============================================================
-template <class Tnode, class Tedge>
-typename Tedge::RealType tlp::AbstractProperty<Tnode,Tedge>::getEdgeDefaultValue() const {
+template <class Tnode, class Tedge, class Tprop>
+typename Tedge::RealType tlp::AbstractProperty<Tnode,Tedge,Tprop>::getEdgeDefaultValue() const {
   return edgeDefaultValue;
 }
 //=============================================================
-template <class Tnode, class Tedge>
-typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge>::getNodeValue(const tlp::node n ) const {
+template <class Tnode, class Tedge, class Tprop>
+typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNodeValue(const tlp::node n ) const {
   assert(n.isValid());
   return nodeProperties.get(n.id);
 }
 //=============================================================
-template <class Tnode, class Tedge>
-typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge>::getEdgeValue(const tlp::edge e) const {
+template <class Tnode, class Tedge, class Tprop>
+typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge,Tprop>::getEdgeValue(const tlp::edge e) const {
   assert(e.isValid());
   return edgeProperties.get(e.id);
 }
 //=============================================================
-template <class Tnode, class Tedge>
-void tlp::AbstractProperty<Tnode,Tedge>::setNodeValue(const tlp::node n,const typename Tnode::RealType &v) {
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setNodeValue(const tlp::node n,const typename Tnode::RealType &v) {
   assert(n.isValid());
-  notifyBeforeSetNodeValue(n);
+  Tprop::notifyBeforeSetNodeValue(n);
   nodeProperties.set(n.id,v);
-  notifyAfterSetNodeValue(n);
+  Tprop::notifyAfterSetNodeValue(n);
 }
 //=============================================================
-template <class Tnode, class Tedge>
-void tlp::AbstractProperty<Tnode,Tedge>::setEdgeValue(const tlp::edge e,const typename Tedge::RealType &v) {
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setEdgeValue(const tlp::edge e,const typename Tedge::RealType &v) {
   assert(e.isValid());
-  notifyBeforeSetEdgeValue(e);
+  Tprop::notifyBeforeSetEdgeValue(e);
   edgeProperties.set(e.id,v);
-  notifyAfterSetEdgeValue(e);
+  Tprop::notifyAfterSetEdgeValue(e);
 }
 //=============================================================
-template <class Tnode, class Tedge>
-void tlp::AbstractProperty<Tnode,Tedge>::setAllNodeValue(const typename Tnode::RealType &v) {
-  notifyBeforeSetAllNodeValue();
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllNodeValue(const typename Tnode::RealType &v) {
+  Tprop::notifyBeforeSetAllNodeValue();
   nodeDefaultValue = v;
   nodeProperties.setAll(v);
-  notifyAfterSetAllNodeValue();
+  Tprop::notifyAfterSetAllNodeValue();
 }
 //============================================================
-template <class Tnode, class Tedge>
-void tlp::AbstractProperty<Tnode,Tedge>::setAllEdgeValue(const typename Tedge::RealType &v) {
-  notifyBeforeSetAllEdgeValue();
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllEdgeValue(const typename Tedge::RealType &v) {
+  Tprop::notifyBeforeSetAllEdgeValue();
   edgeDefaultValue = v;
   edgeProperties.setAll(v);
-  notifyAfterSetAllEdgeValue();
+  Tprop::notifyAfterSetAllEdgeValue();
 }
 
-template <class Tnode, class Tedge>
-int tlp::AbstractProperty<Tnode,Tedge>::compare(const node n1,const node n2)const {
+template <class Tnode, class Tedge, class Tprop>
+int tlp::AbstractProperty<Tnode,Tedge,Tprop>::compare(const node n1,const node n2)const {
   const typename Tnode::RealType& n1Value = getNodeValue(n1);
   const typename Tnode::RealType& n2Value = getNodeValue(n2);
   return (n1Value < n2Value) ? -1 : ((n1Value == n2Value) ? 0 : 1);
 }
 //============================================================
-template <class Tnode, class Tedge>
-int tlp::AbstractProperty<Tnode,Tedge>::compare(const edge e1,const edge e2)const {
+template <class Tnode, class Tedge, class Tprop>
+int tlp::AbstractProperty<Tnode,Tedge,Tprop>::compare(const edge e1,const edge e2)const {
   const typename Tedge::RealType& e1Value = getEdgeValue(e1);
   const typename Tedge::RealType& e2Value = getEdgeValue(e2);
   return (e1Value < e2Value) ? -1 : ((e1Value == e2Value) ? 0 : 1);
@@ -140,45 +140,45 @@ private:
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
 //============================================================
-template <class Tnode, class Tedge>
-tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge>::getNonDefaultValuatedNodes(const Graph* g) const {
+template <class Tnode, class Tedge, class Tprop>
+tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNonDefaultValuatedNodes(const Graph* g) const {
   tlp::Iterator<tlp::node> *it =
     new tlp::UINTIterator<tlp::node>(nodeProperties.findAll(nodeDefaultValue, false));
 
-  if (name.empty())
+  if (Tprop::name.empty())
     // we always need to check that nodes belong to graph
     // for non registered properties, because deleted nodes are not erased
     // from them
-    return new GraphEltIterator<tlp::node>(g != NULL ? g : graph, it);
+    return new GraphEltIterator<tlp::node>(g != NULL ? g : Tprop::graph, it);
 
-  return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::node>(g, it);
+  return ((g == NULL) || (g == Tprop::graph)) ? it : new GraphEltIterator<tlp::node>(g, it);
 }
 //============================================================
-template <class Tnode, class Tedge>
-tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge>::getNonDefaultValuatedEdges(const Graph* g) const {
+template <class Tnode, class Tedge, class Tprop>
+tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNonDefaultValuatedEdges(const Graph* g) const {
   tlp::Iterator<tlp::edge>* it =
     new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
 
-  if (name.empty())
+  if (Tprop::name.empty())
     // we always need to check that edges belong to graph
     // for non registered properties, because deleted edges are not erased
     // from them
-    return new GraphEltIterator<tlp::edge>(g != NULL ? g : graph, it);
+    return new GraphEltIterator<tlp::edge>(g != NULL ? g : Tprop::graph, it);
 
-  return ((g == NULL) || (g == graph)) ? it : new GraphEltIterator<tlp::edge>(g, it);
+  return ((g == NULL) || (g == Tprop::graph)) ? it : new GraphEltIterator<tlp::edge>(g, it);
 }
 //============================================================
-template <typename vectType, typename eltType>
-tlp::AbstractVectorProperty<vectType, eltType>::AbstractVectorProperty(tlp::Graph* g, std::string name) :AbstractProperty<vectType, vectType>(g, name) {}
+template <typename vectType, typename eltType, typename propType>
+tlp::AbstractVectorProperty<vectType, eltType, propType>::AbstractVectorProperty(tlp::Graph* g, std::string name) :AbstractProperty<vectType, vectType>(g, name) {}
 //============================================================
-template <typename vectType, typename eltType>
-void tlp::AbstractVectorProperty<vectType, eltType>::setNodeEltValue(const node n, unsigned int i, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v) {
+template <typename vectType, typename eltType, typename propType>
+void tlp::AbstractVectorProperty<vectType, eltType, propType>::setNodeEltValue(const node n, unsigned int i, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v) {
   assert(n.isValid());
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
   assert(vect.size() > i);
-  this->notifyBeforeSetNodeValue(n);
+  this->propType::notifyBeforeSetNodeValue(n);
 
   if (isNotDefault)
     vect[i] = v;
@@ -188,12 +188,12 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setNodeEltValue(const node 
     AbstractProperty<vectType, vectType>::nodeProperties.set(n.id, tmp);
   }
 
-  this->notifyAfterSetNodeValue(n);
+  this->propType::notifyAfterSetNodeValue(n);
 }
 //============================================================
-template <typename vectType, typename eltType>
+template <typename vectType, typename eltType, typename propType>
 typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue
-tlp::AbstractVectorProperty<vectType, eltType>::getNodeEltValue(const node n, unsigned int i) const {
+tlp::AbstractVectorProperty<vectType, eltType, propType>::getNodeEltValue(const node n, unsigned int i) const {
   assert(n.isValid());
   const typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n);
@@ -201,13 +201,13 @@ tlp::AbstractVectorProperty<vectType, eltType>::getNodeEltValue(const node n, un
   return vect[i];
 }
 //============================================================
-template <typename vectType, typename eltType>
-void tlp::AbstractVectorProperty<vectType, eltType>::pushBackNodeEltValue(const node n, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v) {
+template <typename vectType, typename eltType, typename propType>
+void tlp::AbstractVectorProperty<vectType, eltType, propType>::pushBackNodeEltValue(const node n, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v) {
   assert(n.isValid());
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
-  this->notifyBeforeSetNodeValue(n);
+  this->propType::notifyBeforeSetNodeValue(n);
 
   if (isNotDefault)
     vect.push_back(v);
@@ -217,41 +217,41 @@ void tlp::AbstractVectorProperty<vectType, eltType>::pushBackNodeEltValue(const 
     AbstractProperty<vectType, vectType>::nodeProperties.set(n, tmp);
   }
 
-  this->notifyAfterSetNodeValue(n);
+  this->propType::notifyAfterSetNodeValue(n);
 }
 //============================================================
-template <typename vectType, typename eltType>
-void tlp::AbstractVectorProperty<vectType, eltType>::popBackNodeEltValue(const node n) {
+template <typename vectType, typename eltType, typename propType>
+void tlp::AbstractVectorProperty<vectType, eltType, propType>::popBackNodeEltValue(const node n) {
   assert(n.isValid());
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
-  this->notifyBeforeSetNodeValue(n);
+  this->propType::notifyBeforeSetNodeValue(n);
   assert(isNotDefault);
   vect.pop_back();
-  this->notifyAfterSetNodeValue(n);
+  this->propType::notifyAfterSetNodeValue(n);
 }
 //============================================================
-template <typename vectType, typename eltType>
-void tlp::AbstractVectorProperty<vectType, eltType>::resizeNodeValue(const node n, size_t size, typename eltType::RealType elt) {
+template <typename vectType, typename eltType, typename propType>
+void tlp::AbstractVectorProperty<vectType, eltType, propType>::resizeNodeValue(const node n, size_t size, typename eltType::RealType elt) {
   assert(n.isValid());
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::nodeProperties.get(n, isNotDefault);
   assert(isNotDefault);
-  this->notifyBeforeSetNodeValue(n);
+  this->propType::notifyBeforeSetNodeValue(n);
   vect.resize(size, elt);
-  this->notifyAfterSetNodeValue(n);
+  this->propType::notifyAfterSetNodeValue(n);
 }
 //============================================================
-template <typename vectType, typename eltType>
-void tlp::AbstractVectorProperty<vectType, eltType>::setEdgeEltValue(const edge e, unsigned int i, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v) {
+template <typename vectType, typename eltType, typename propType>
+void tlp::AbstractVectorProperty<vectType, eltType, propType>::setEdgeEltValue(const edge e, unsigned int i, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v) {
   assert(e.isValid());
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
   assert(vect.size() > i);
-  this->notifyBeforeSetEdgeValue(e);
+  this->propType::notifyBeforeSetEdgeValue(e);
 
   if (isNotDefault)
     vect[i] = v;
@@ -261,25 +261,25 @@ void tlp::AbstractVectorProperty<vectType, eltType>::setEdgeEltValue(const edge 
     AbstractProperty<vectType, vectType>::edgeProperties.set(e, tmp);
   }
 
-  this->notifyAfterSetEdgeValue(e);
+  this->propType::notifyAfterSetEdgeValue(e);
 }
 //============================================================
-template <typename vectType, typename eltType>
+template <typename vectType, typename eltType, typename propType>
 typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue
-tlp::AbstractVectorProperty<vectType, eltType>::getEdgeEltValue(const edge e, unsigned int i) const {
+tlp::AbstractVectorProperty<vectType, eltType, propType>::getEdgeEltValue(const edge e, unsigned int i) const {
   assert(e.isValid());
   const typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e);
   assert(vect.size() > i);
   return vect[i];
 }//============================================================
-template <typename vectType, typename eltType>
-void tlp::AbstractVectorProperty<vectType, eltType>::pushBackEdgeEltValue(const edge e, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v) {
+template <typename vectType, typename eltType, typename propType>
+void tlp::AbstractVectorProperty<vectType, eltType, propType>::pushBackEdgeEltValue(const edge e, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v) {
   assert(e.isValid());
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
-  this->notifyBeforeSetEdgeValue(e);
+  this->propType::notifyBeforeSetEdgeValue(e);
 
   if (isNotDefault)
     vect.push_back(v);
@@ -289,29 +289,29 @@ void tlp::AbstractVectorProperty<vectType, eltType>::pushBackEdgeEltValue(const 
     AbstractProperty<vectType, vectType>::edgeProperties.set(e, tmp);
   }
 
-  this->notifyAfterSetEdgeValue(e);
+  this->propType::notifyAfterSetEdgeValue(e);
 }
 //============================================================
-template <typename vectType, typename eltType>
-void tlp::AbstractVectorProperty<vectType, eltType>::popBackEdgeEltValue(const edge e) {
+template <typename vectType, typename eltType, typename propType>
+void tlp::AbstractVectorProperty<vectType, eltType, propType>::popBackEdgeEltValue(const edge e) {
   assert(e.isValid());
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
-  this->notifyBeforeSetEdgeValue(e);
+  this->propType::notifyBeforeSetEdgeValue(e);
   assert(isNotDefault);
   vect.pop_back();
-  this->notifyAfterSetEdgeValue(e);
+  this->propType::notifyAfterSetEdgeValue(e);
 }
 //============================================================
-template <typename vectType, typename eltType>
-void tlp::AbstractVectorProperty<vectType, eltType>::resizeEdgeValue(const edge e, size_t size, typename eltType::RealType elt) {
+template <typename vectType, typename eltType, typename propType>
+void tlp::AbstractVectorProperty<vectType, eltType, propType>::resizeEdgeValue(const edge e, size_t size, typename eltType::RealType elt) {
   assert(e.isValid());
   bool isNotDefault;
   typename vectType::RealType& vect =
     AbstractProperty<vectType, vectType>::edgeProperties.get(e, isNotDefault);
   assert(isNotDefault);
-  this->notifyBeforeSetEdgeValue(e);
+  this->propType::notifyBeforeSetEdgeValue(e);
   vect.resize(size, elt);
-  this->notifyAfterSetEdgeValue(e);
+  this->propType::notifyAfterSetEdgeValue(e);
 }

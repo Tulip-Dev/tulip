@@ -28,7 +28,7 @@ namespace {
 const char * paramHelp[] = {
   // property
   HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_DEF( "type", "NumericProperty" ) \
   HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
   HTML_HELP_BODY() \
   "Metric to map to size." \
@@ -67,7 +67,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
   "Type of mapping." \
-  "<ul><li>true: linear mapping (min value of property is mapped to min size, max to max size, and a linear interpolation is used inbetween.)</li>" \
+  "<ul><li>true: linear mapping (min value of property is mapped to min size, max to max size, and a linear interpolation is used in between.)</li>" \
   "<li>false: uniform quantification (the values of property are sorted, and the same size increment is used between consecutive values).</li></ul>"                          \
   HTML_HELP_CLOSE(),
   // Mapping type
@@ -107,7 +107,7 @@ class MetricSizeMapping:public SizeAlgorithm {
 public:
   PLUGININFORMATIONS("Metric Mapping","Auber","08/08/2003","","2.0", "Size")
   MetricSizeMapping(const PluginContext* context):SizeAlgorithm(context) {
-    addInParameter<DoubleProperty>("property", paramHelp[0], "viewMetric");
+    addInParameter<NumericProperty*>("property", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
     addInParameter<bool>("width", paramHelp[2],"true");
     addInParameter<bool>("height", paramHelp[2],"true");
@@ -156,9 +156,9 @@ public:
     }
 
     if (nodeoredge)
-      range = entryMetric->getNodeMax(graph) - entryMetric->getNodeMin(graph);
+      range = entryMetric->getNodeDoubleMax(graph) - entryMetric->getNodeDoubleMin(graph);
     else
-      range = entryMetric->getEdgeMax(graph) - entryMetric->getEdgeMin(graph);
+      range = entryMetric->getEdgeDoubleMax(graph) - entryMetric->getEdgeDoubleMin(graph);
 
     if (!range) {
       errorMsg = rangeMetricErrorMsg;
@@ -178,11 +178,10 @@ public:
   }
 
   bool run() {
-    DoubleProperty *tmp = NULL;
+    NumericProperty *tmp = NULL;
 
     if (!mappingType) {
-      tmp = new DoubleProperty(graph);
-      *tmp = *entryMetric;
+      tmp = entryMetric->copyProperty(graph);
       tmp->uniformQuantification(300);
       entryMetric = tmp;
     }
@@ -193,7 +192,7 @@ public:
     pluginProgress->showPreview(false);
 
     if(nodeoredge) {
-      shift = entryMetric->getNodeMin(graph);
+      shift = entryMetric->getNodeDoubleMin(graph);
 
       // compute size of nodes
       Iterator<node> *itN=graph->getNodes();
@@ -204,10 +203,10 @@ public:
 
         if (proportional == AREA_PROPORTIONAL) {
           const double power = 1.0 / (float(xaxis) + float(yaxis) + float(zaxis));
-          sizos = min + pow((entryMetric->getNodeValue(itn)-shift)*(max-min)/range, power);
+          sizos = min + pow((entryMetric->getNodeDoubleValue(itn)-shift)*(max-min)/range, power);
         }
         else {
-          sizos = min + (entryMetric->getNodeValue(itn)-shift)*(max-min)/range;
+          sizos = min + (entryMetric->getNodeDoubleValue(itn)-shift)*(max-min)/range;
         }
 
         Size size=entrySize->getNodeValue(itn);
@@ -249,14 +248,14 @@ public:
       }
     }
     else {
-      shift = entryMetric->getEdgeMin(graph);
+      shift = entryMetric->getEdgeDoubleMin(graph);
       // compute size of edges
       Iterator<edge> *itE=graph->getEdges();
 
       while(itE->hasNext()) {
         edge ite=itE->next();
         double sizos =
-          min+(entryMetric->getEdgeValue(ite)-shift)*(max-min)/range;
+          min+(entryMetric->getEdgeDoubleValue(ite)-shift)*(max-min)/range;
         Size size = entrySize->getEdgeValue(ite);
         size[0] = static_cast<float>(sizos);
         size[1] = static_cast<float>(sizos);
@@ -297,7 +296,7 @@ public:
   }
 
 private:
-  DoubleProperty *entryMetric;
+  NumericProperty *entryMetric;
   SizeProperty *entrySize;
   bool xaxis,yaxis,zaxis,mappingType;
   double min,max;

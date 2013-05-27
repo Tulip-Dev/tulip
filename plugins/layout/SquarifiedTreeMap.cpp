@@ -39,7 +39,7 @@ namespace {
 const char * paramHelp[] = {
   // metric :
   HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Metric" ) \
+  HTML_HELP_DEF( "type", "NumericProperty" ) \
   HTML_HELP_DEF( "values", "An existing metric property" ) \
   HTML_HELP_DEF( "default", "viewMetric if it exists" ) \
   HTML_HELP_BODY() \
@@ -82,7 +82,7 @@ const char * paramHelp[] = {
 //====================================================================
 SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PluginContext* context) :LayoutAlgorithm(context) {
   aspectRatio = DEFAULT_RATIO;
-  addInParameter<DoubleProperty>("metric", paramHelp[0], "viewMetric", false);
+  addInParameter<NumericProperty*>("metric", paramHelp[0], "viewMetric", false);
   addInParameter<double>("Aspect Ratio", paramHelp[1], "1.");
   addInParameter<bool>("Treemap Type", paramHelp[2], "false");
   addOutParameter<SizeProperty>("Node Size", paramHelp[3],
@@ -110,7 +110,7 @@ bool SquarifiedTreeMap::check(std::string& errorMsg) {
   if (!metric && graph->existProperty("viewMetric")) {
     metric = graph->getProperty<DoubleProperty>("viewMetric");
 
-    if (metric->getNodeMin() < 0.) {
+    if (metric->getNodeDoubleMin() < 0.) {
       errorMsg = "Graph's nodes must have a positive metric.";
       return false;
     }
@@ -379,7 +379,7 @@ void SquarifiedTreeMap::squarify(const std::vector<tlp::node> &toTreat, const tl
 void SquarifiedTreeMap::computeNodesSize(const tlp::node n) {
 
   if (graph->outdeg(n) == 0) { //the node is a leaf of the tree
-    double leafValue = metric ? metric->getNodeValue(n) : 1.;
+    double leafValue = metric ? metric->getNodeDoubleValue(n) : 1.;
 
     nodesSize.set(n.id , (leafValue > 0) ? leafValue : 1.);
     return;

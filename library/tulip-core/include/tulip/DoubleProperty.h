@@ -25,32 +25,29 @@
 #include <tulip/AbstractProperty.h>
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/minmaxproperty.h>
+#include <tulip/NumericProperty.h>
 
 namespace tlp {
 
 class PropertyContext;
 
-typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType> DoubleMinMaxProperty;
+typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> DoubleMinMaxProperty;
 
 /**
  * @ingroup Graph
  * @brief A graph property that maps a double value to graph elements.
  */
-class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
+ class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
 public :
   DoubleProperty (Graph *, std::string n="");
-  void uniformQuantification(unsigned int);
-  void nodesUniformQuantification(unsigned int);
-  void edgesUniformQuantification(unsigned int);
 
-  virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType> &);
+  virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> &);
 
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
   std::string getTypename() const {
     return propertyTypename;
   }
-
 
   virtual void setNodeValue(const node n, const double &v);
   virtual void setEdgeValue(const edge e, const double &v);
@@ -65,6 +62,37 @@ public :
   virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator* calc);
   void setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC,
                               PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
+
+  // NumericProperty interface
+  virtual double getNodeDoubleValue(const node n ) const {
+    return getNodeValue(n);
+  }
+  virtual double getNodeDoubleMin(Graph* g = NULL) {
+    return getNodeMin(g);
+  }
+  virtual double getNodeDoubleMax(Graph* g = NULL) {
+    return getNodeMax(g);
+  }
+  virtual double getEdgeDoubleValue(const edge e) const {
+    return getEdgeValue(e);
+  }
+  virtual double getEdgeDoubleMin(Graph* g = NULL) {
+    return getEdgeMin(g);
+  }
+  virtual double getEdgeDoubleMax(Graph* g = NULL) {
+    return getEdgeMax(g);
+  }
+
+  void nodesUniformQuantification(unsigned int);
+
+  void edgesUniformQuantification(unsigned int);
+
+  NumericProperty* copyProperty(Graph *g) {
+    DoubleProperty* newProp = new DoubleProperty(g);
+    newProp->copy(this);
+
+    return newProp;
+  }
 
 private:
   // override Observable::treatEvent

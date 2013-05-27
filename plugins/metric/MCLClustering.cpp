@@ -89,7 +89,7 @@ public:
   map< pair<unsigned int, unsigned int>, edge > existEdge;
   MutableContainer<node> nodeMapping;
   MutableContainer<edge> edgeMapping;
-  DoubleProperty *weights;
+  NumericProperty *weights;
   double _r;
   unsigned int _k;
 };
@@ -238,7 +238,7 @@ const char * paramHelp[] = {
   "Determines the random walk length at each step" \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_DEF( "type", "NumericProperty" ) \
   HTML_HELP_BODY() \
   "Edge weights to use" \
   HTML_HELP_CLOSE(),
@@ -251,7 +251,7 @@ const char * paramHelp[] = {
 //=================================================
 MCLClustering::MCLClustering(const tlp::PluginContext *context):DoubleAlgorithm(context) {
   addInParameter<double>("inflate", paramHelp[0], "2.", false);
-  addInParameter<DoubleProperty>("weights", paramHelp[1], "", false);
+  addInParameter<NumericProperty*>("weights", paramHelp[1], "", false);
   addInParameter<unsigned int>("pruning", paramHelp[2], "5", false);
 }
 //===================================================================================
@@ -273,8 +273,8 @@ void MCLClustering::init() {
     existEdge[pair<unsigned int, unsigned int>(src.id, tgt.id)] = tmp;
     edgeMapping.set(e.id, tmp);
 
-    if (weights != 0) {
-      inW[tmp] = weights->getEdgeValue(e);
+    if (weights != NULL) {
+      inW[tmp] = weights->getEdgeDoubleValue(e);
     }
     else {
       inW[tmp] = 1.0;
@@ -372,7 +372,7 @@ bool MCLClustering::run() {
   g.alloc(outW);
   g.alloc(tlpNodes);
 
-  weights = 0;
+  weights = NULL;
   _r = 2.;
   _k = 5;
 

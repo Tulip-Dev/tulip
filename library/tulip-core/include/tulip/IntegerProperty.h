@@ -27,19 +27,20 @@
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/Observable.h>
 #include <tulip/minmaxproperty.h>
+#include <tulip/NumericProperty.h>
 
 namespace tlp {
 
 class Graph;
 class PropertyContext;
 
-typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType> IntegerMinMaxProperty;
+ typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> IntegerMinMaxProperty;
 
 /**
  * @ingroup Graph
  * @brief A graph property that maps an integer value to graph elements.
  */
-class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
+ class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 
 public :
   IntegerProperty(Graph *, std::string n = "");
@@ -57,8 +58,39 @@ public :
   int compare(const node n1, const node n2) const;
   int compare(const edge e1, const edge e2) const;
 
+  // NumericProperty interface
+  virtual double getNodeDoubleValue(const node n ) const {
+    return (double) getNodeValue(n);
+  }
+  virtual double getNodeDoubleMin(Graph* g = NULL) {
+    return (double) getNodeMin(g);
+  }
+  virtual double getNodeDoubleMax(Graph* g = NULL) {
+    return (double) getNodeMax(g);
+  }
+  virtual double getEdgeDoubleValue(const edge e) const {
+    return (double) getEdgeValue(e);
+  }
+  virtual double getEdgeDoubleMin(Graph* g = NULL) {
+    return (double) getEdgeMin(g);
+  }
+  virtual double getEdgeDoubleMax(Graph* g = NULL) {
+    return (double) getEdgeMax(g);
+  }
+
+  void nodesUniformQuantification(unsigned int);
+
+  void edgesUniformQuantification(unsigned int);
+
+  NumericProperty* copyProperty(Graph *g) {
+    IntegerProperty* newProp = new IntegerProperty(g);
+    newProp->copy(this);
+
+    return newProp;
+  }
+
 protected:
-  virtual void clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType> &);
+  virtual void clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> &);
 
 private:
   // override Observable::treatEvent

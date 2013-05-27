@@ -28,7 +28,7 @@ using namespace std;
 namespace {
 
 const char * paramHelp[] = {HTML_HELP_OPEN()
-                            HTML_HELP_DEF( "type", "DoubleProperty" )
+                            HTML_HELP_DEF( "type", "NumericProperty" )
                             HTML_HELP_BODY()
                             "A double property containing unit edge length to use."
                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
@@ -299,8 +299,8 @@ PLUGIN(OGDFFm3)
 
 OGDFFm3::OGDFFm3(const tlp::PluginContext* context) :
   OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
-  addInParameter<DoubleProperty> ("Edge Length Property", paramHelp[0],
-                                  "viewMetric", false);
+  addInParameter<NumericProperty*> ("Edge Length Property", paramHelp[0],
+				    "viewMetric", false);
   addInParameter<SizeProperty> ("Node Size", paramHelp[1], "viewSize", false);
   addInParameter<double> ("Unit edge length", paramHelp[2], "10.0", false);
   addInParameter<bool> ("New initial placement", paramHelp[3], "true");
@@ -539,13 +539,14 @@ void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
 
   ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout*> (ogdfLayoutAlgo);
 
-  DoubleProperty *length = NULL;
+  NumericProperty *length = NULL;
 
   if (dataSet->get("Edge Length Property", length) && length) {
     EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
     tlp::edge e;
     forEach(e, graph->getEdges()) {
-      edgeLength[tlpToOGDF->getOGDFGraphEdge(e.id)] = length->getEdgeValue(e);
+      edgeLength[tlpToOGDF->getOGDFGraphEdge(e.id)] =
+	length->getEdgeDoubleValue(e);
     }
     fmmm->call(gAttributes, edgeLength);
   }

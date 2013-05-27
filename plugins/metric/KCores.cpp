@@ -71,11 +71,11 @@ public:
   ~KCores();
   bool run();
 private:
-  bool peel(tlp::Graph* subgraph, tlp::DoubleProperty* metric,
+  bool peel(tlp::Graph* subgraph, tlp::NumericProperty* metric,
             tlp::DoubleProperty&);
-  bool peelIn(tlp::Graph* subgraph, tlp::DoubleProperty* metric,
+  bool peelIn(tlp::Graph* subgraph, tlp::NumericProperty* metric,
               tlp::DoubleProperty&);
-  bool peelOut(tlp::Graph* subgraph, tlp::DoubleProperty* metric,
+  bool peelOut(tlp::Graph* subgraph, tlp::NumericProperty* metric,
                tlp::DoubleProperty&);
 };
 
@@ -91,7 +91,7 @@ const char * paramHelp[] = {
   HTML_HELP_CLOSE(),
   // metric
   HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "DoubleProperty" )       \
+  HTML_HELP_DEF( "type", "NumericProperty" )       \
   HTML_HELP_DEF( "value", "An existing edge metric" )   \
   HTML_HELP_BODY()              \
   "An existing edge metric property"\
@@ -106,13 +106,13 @@ const char * paramHelp[] = {
 //========================================================================================
 KCores::KCores(const PluginContext *context):DoubleAlgorithm(context) {
   addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
-  addInParameter<DoubleProperty>("metric",paramHelp[1],"",false);
+  addInParameter<NumericProperty*>("metric",paramHelp[1],"",false);
   addDependency("Degree","1.0");
 }
 //========================================================================================
 KCores::~KCores() {}
 //========================================================================================
-bool KCores::peel(Graph* subgraph, DoubleProperty* metric,
+bool KCores::peel(Graph* subgraph, NumericProperty* metric,
                   DoubleProperty& wdeg) {
   double k= wdeg.getNodeMin();
   bool modify = true;
@@ -127,7 +127,7 @@ bool KCores::peel(Graph* subgraph, DoubleProperty* metric,
         edge ee;
         forEach(ee,subgraph->getInOutEdges(n)) {
           node m = subgraph->opposite(ee,n);
-          wdeg.setNodeValue(m, wdeg.getNodeValue(m)-(metric ? metric->getEdgeValue(ee) : 1.0));
+          wdeg.setNodeValue(m, wdeg.getNodeValue(m)-(metric ? metric->getEdgeDoubleValue(ee) : 1.0));
         }
         subgraph->delNode(n);
         modify = true;
@@ -139,7 +139,7 @@ bool KCores::peel(Graph* subgraph, DoubleProperty* metric,
   return onePeel;
 }
 //========================================================================================
-bool KCores::peelIn(Graph* subgraph, DoubleProperty* metric,
+bool KCores::peelIn(Graph* subgraph, NumericProperty* metric,
                     DoubleProperty& wdeg) {
   double k= wdeg.getNodeMin();
   bool modify = true;
@@ -154,7 +154,7 @@ bool KCores::peelIn(Graph* subgraph, DoubleProperty* metric,
         edge ee;
         forEach(ee,subgraph->getOutEdges(n)) {
           node m = subgraph->opposite(ee,n);
-          wdeg.setNodeValue(m, wdeg.getNodeValue(m)- (metric ? metric->getEdgeValue(ee) : 1.0));
+          wdeg.setNodeValue(m, wdeg.getNodeValue(m)- (metric ? metric->getEdgeDoubleValue(ee) : 1.0));
         }
         subgraph->delNode(n);
         modify = true;
@@ -166,7 +166,7 @@ bool KCores::peelIn(Graph* subgraph, DoubleProperty* metric,
   return onePeel;
 }
 //========================================================================================
-bool KCores::peelOut(Graph* subgraph, DoubleProperty* metric,
+bool KCores::peelOut(Graph* subgraph, NumericProperty* metric,
                      DoubleProperty& wdeg) {
   double k= wdeg.getNodeMin();
   bool modify = true;
@@ -181,7 +181,7 @@ bool KCores::peelOut(Graph* subgraph, DoubleProperty* metric,
         edge ee;
         forEach(ee,subgraph->getInEdges(n)) {
           node m = subgraph->opposite(ee,n);
-          wdeg.setNodeValue(m, wdeg.getNodeValue(m)- (metric ? metric->getEdgeValue(ee) : 1.0));
+          wdeg.setNodeValue(m, wdeg.getNodeValue(m)- (metric ? metric->getEdgeDoubleValue(ee) : 1.0));
         }
         subgraph->delNode(n);
         modify = true;
@@ -194,7 +194,7 @@ bool KCores::peelOut(Graph* subgraph, DoubleProperty* metric,
 }
 //========================================================================================
 bool KCores::run() {
-  DoubleProperty* metric = NULL;
+  NumericProperty* metric = NULL;
   StringCollection degreeTypes(DEGREE_TYPES);
   degreeTypes.setCurrent(0);
 

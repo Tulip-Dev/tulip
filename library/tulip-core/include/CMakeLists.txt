@@ -44,6 +44,7 @@ INSTALL(FILES
   tulip/minmaxproperty.h
   tulip/MutableContainer.h
   tulip/Node.h
+  tulip/NumericProperty.h
   tulip/Observable.h
   tulip/Ordering.h
   tulip/OuterPlanarTest.h

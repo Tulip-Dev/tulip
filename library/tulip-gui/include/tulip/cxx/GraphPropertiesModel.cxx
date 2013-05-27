@@ -118,7 +118,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
   if (_graph == NULL || (index.internalPointer() == NULL && index.row() != 0))
     return QVariant();
 
-  PROPTYPE* pi = (PROPTYPE*)(index.internalPointer());
+  PropertyInterface* pi = (PropertyInterface*)(index.internalPointer());
 
   if (role == Qt::DisplayRole || role == Qt::ToolTipRole) {
     if (!_placeholder.isNull() && index.row() == 0)
@@ -150,7 +150,7 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
     return QVariant::fromValue<PropertyInterface*>(pi);
   }
   else if (_checkable && role == Qt::CheckStateRole && index.column() == 0) {
-    return (_checkedProperties.contains(pi) ? Qt::Checked : Qt::Unchecked);
+    return (_checkedProperties.contains((PROPTYPE*) pi) ? Qt::Checked : Qt::Unchecked);
   }
 
   return QVariant();

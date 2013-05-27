@@ -191,6 +191,47 @@ QString PropertyInterfaceEditorCreator::displayText(const QVariant& v) const {
 }
 
 /*
+  NumericPropertyEditorCreator
+*/
+QWidget* NumericPropertyEditorCreator::createWidget(QWidget* parent) const {
+  return new QComboBox(parent);
+}
+
+void NumericPropertyEditorCreator::setEditorData(QWidget* w, const QVariant& val, bool isMandatory, tlp::Graph* g) {
+  if (g == NULL) {
+    w->setEnabled(false);
+    return;
+  }
+
+  NumericProperty* prop = val.value<NumericProperty*>();
+  QComboBox* combo = static_cast<QComboBox*>(w);
+  GraphPropertiesModel<NumericProperty>* model = NULL;
+
+  if (isMandatory)
+    model = new GraphPropertiesModel<NumericProperty>(g,false,combo);
+  else
+    model = new GraphPropertiesModel<NumericProperty>(QObject::trUtf8("Select a property"),g,false,combo);
+
+  combo->setModel(model);
+  combo->setCurrentIndex(model->rowOf(prop));
+}
+
+QVariant NumericPropertyEditorCreator::editorData(QWidget* w,tlp::Graph*) {
+  QComboBox* combo = static_cast<QComboBox*>(w);
+  GraphPropertiesModel<NumericProperty>* model = static_cast<GraphPropertiesModel<NumericProperty> *>(combo->model());
+  return model->data(model->index(combo->currentIndex(),0),TulipModel::PropertyRole);
+}
+
+QString NumericPropertyEditorCreator::displayText(const QVariant& v) const {
+  PropertyInterface *prop = v.value<PropertyInterface*>();
+
+  if (prop==NULL)
+    return "";
+
+  return prop->getName().c_str();
+}
+
+/*
   ColorScaleEditorCreator
 */
 QWidget* ColorScaleEditorCreator::createWidget(QWidget* parent) const {

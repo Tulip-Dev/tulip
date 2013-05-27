@@ -38,7 +38,7 @@ public:
   bool check(std::string &);
 private:
   double getNodeValue(const tlp::node n);
-  tlp::DoubleProperty* edgeWeight;
+  tlp::NumericProperty* edgeWeight;
 };
 
 #endif

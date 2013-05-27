@@ -34,7 +34,7 @@ namespace tlp {
 class BooleanProperty;
 class DoubleProperty;
 class IntegerProperty;
-
+class NumericProperty;
 
 /**
  *  This ordering was first introduced by C. Gutwenger and P. Mutzel in \n
@@ -94,7 +94,7 @@ TLP_SCOPE void selectSpanningTree(Graph* graph, BooleanProperty *selection,
  * for the other elements
  */
 TLP_SCOPE void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selectionProperty,
-    DoubleProperty *weight = NULL,
+    NumericProperty *weight = NULL,
     PluginProgress *pluginProgress = NULL);
 
 
@@ -117,6 +117,18 @@ TLP_SCOPE std::vector<node> bfs(const Graph *graph, node root = node());
  * @return A vector containing the nodes of the graph in the order they have been visited by the DFS.
  */
 TLP_SCOPE std::vector<node> dfs(const Graph *graph, node root = node());
+
+/*
+ * builds a uniform quantification with the NumericProperty associated values
+ * of the nodes of a graph
+ */
+TLP_SCOPE void buildNodesUniformQuantification(const Graph* graph, const NumericProperty* prop, unsigned int k, std::map<double, int>& mapping);
+
+/*
+ * builds a uniform quantification with the NumericProperty associated values
+ * of the edges of a graph
+ */
+TLP_SCOPE void buildEdgesUniformQuantification(const Graph* graph, const NumericProperty* prop, unsigned int k, std::map<double, int>& mapping);
 
 }
 #endif

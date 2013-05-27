@@ -118,6 +118,14 @@ public:
   virtual QString displayText(const QVariant &) const;
 };
 
+class TLP_QT_SCOPE NumericPropertyEditorCreator: public tlp::TulipItemEditorCreator {
+public:
+  QWidget* createWidget(QWidget*) const;
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+  virtual QString displayText(const QVariant &) const;
+};
+
 class TLP_QT_SCOPE ColorScaleEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;

@@ -277,6 +277,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
     // forget non property out param
     if (typeName != TN(PropertyInterface*)
+	&& typeName != TN(NumericProperty*)
         && typeName != TN(BooleanProperty)
         && typeName != TN(DoubleProperty)
         && typeName != TN(LayoutProperty)

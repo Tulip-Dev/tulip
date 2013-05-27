@@ -22,7 +22,7 @@
 #include <tulip/LayoutProperty.h>
 #include <ogdf/basic/geometry.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/DoubleProperty.h>
+#include <tulip/NumericProperty.h>
 
 #include <vector>
 
@@ -126,10 +126,10 @@ vector<tlp::Coord> TulipToOGDF::getEdgeCoordFromOGDFGraphAttr(unsigned int edgeI
   return v;
 }
 
-void TulipToOGDF::copyTlpDoublePropertyToOGDFEdgeLength(tlp::DoubleProperty *metric) {
+void TulipToOGDF::copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *metric) {
   tlp::edge eTlp;
   forEach(eTlp, tulipGraph->getEdges()) {
-    ogdfAttributes.doubleWeight(ogdfEdges.get(eTlp.id)) = metric->getEdgeValue(eTlp);
+    ogdfAttributes.doubleWeight(ogdfEdges.get(eTlp.id)) = metric->getEdgeDoubleValue(eTlp);
   }
 }
 
@@ -151,9 +151,9 @@ void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
   }
 }
 
-void TulipToOGDF::copyTlpDoublePropertyToOGDFNodeWeight(tlp::DoubleProperty *metric) {
+void TulipToOGDF::copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *metric) {
   tlp::node nTlp;
   forEach(nTlp, tulipGraph->getNodes()) {
-    ogdfAttributes.weight(ogdfNodes.get(nTlp.id)) = static_cast<int>(metric->getNodeValue(nTlp));
+    ogdfAttributes.weight(ogdfNodes.get(nTlp.id)) = static_cast<int>(metric->getNodeDoubleValue(nTlp));
   }
 }

@@ -34,7 +34,7 @@ static const char * paramHelp[] = {
   HTML_HELP_CLOSE(),
   // edge length
   HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "DoubleProperty" ) \
+  HTML_HELP_DEF( "type", "NumericProperty" ) \
   HTML_HELP_BODY() \
   "This metric is used to compute the length of edges." \
   HTML_HELP_CLOSE(),
@@ -91,7 +91,7 @@ GEMLayout::GEMLayout(const tlp::PluginContext* context) : LayoutAlgorithm(contex
   a_gravity(AGRAVITYDEF), i_oscillation(IOSCILLATIONDEF), a_oscillation(AOSCILLATIONDEF), i_rotation(IROTATIONDEF), a_rotation(AROTATIONDEF), i_shake(ISHAKEDEF),
   a_shake(ASHAKEDEF), _dim(2), _nbNodes(0), _useLength(false), metric(NULL), max_iter(0) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
-  addInParameter<DoubleProperty>("edge length", paramHelp[1], "", false);
+  addInParameter<NumericProperty*>("edge length", paramHelp[1], "", false);
   addInParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
   addInParameter<unsigned int>("max iterations", paramHelp[3], "0");
   addDependency("Connected Component Packing", "1.0");
@@ -151,7 +151,7 @@ Coord GEMLayout::computeForces(unsigned int v,
   double  maxEdgeLength;
 
   if (_useLength)
-    maxEdgeLength = std::max(2.0f, (float)metric->getEdgeMin());
+    maxEdgeLength = std::max(2.0f, (float)metric->getEdgeDoubleMin());
   else
     maxEdgeLength = EDGELENGTH;
 
@@ -183,7 +183,7 @@ Coord GEMLayout::computeForces(unsigned int v,
       float edgeLength;
 
       if (_useLength)
-        edgeLength = static_cast<float>(metric->getEdgeValue(e));
+        edgeLength = static_cast<float>(metric->getEdgeDoubleValue(e));
       else
         edgeLength = EDGELENGTH;
 
