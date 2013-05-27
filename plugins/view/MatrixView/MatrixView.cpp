@@ -50,7 +50,7 @@ MatrixView::~MatrixView() {
 }
 
 void MatrixView::setState(const DataSet &ds) {
-
+  
   clearRedrawTriggers();
 
   setOverviewVisible(true);
@@ -112,6 +112,10 @@ DataSet MatrixView::state() const {
 
 QList<QWidget *> MatrixView::configurationWidgets() const {
   return QList<QWidget *>() << _configurationWidget ;
+}
+
+void MatrixView::fillContextMenu(QMenu *menu, const QPointF &point) {
+  GlMainView::fillContextMenu(menu,point);
 }
 
 void MatrixView::draw() {
