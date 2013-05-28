@@ -113,6 +113,8 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
     vector<node> selectedNodes;
     GlNode glNode(0);
 
+    bool needPush = true;
+
     for (unsigned int i = 0 ; i < tmpNodes.size() ; ++i) {
       glNode.id = tmpNodes[i].getComplexEntityId();
       BoundingBox nodeBB(glNode.getBoundingBox(glWidget->getScene()->getGlGraphComposite()->getInputData()));
@@ -160,6 +162,10 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
       quad.push_back(quad[0]);
 
       if (isPolygonAincludesInB(quad, polygonScr)) {
+	if (needPush) {
+	  viewSelection->getGraph()->push();
+	  needPush = false;
+	}
         viewSelection->setNodeValue(node(tmpNodes[i].getComplexEntityId()), true);
         selectedNodes.push_back(node(tmpNodes[i].getComplexEntityId()));
       }
