@@ -349,7 +349,12 @@ void SearchWidget::search() {
       resultsCountEdges++;
   }
   delete result;
-  _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) and " +QString::number(resultsCountEdges) +" edge(s) found");
+  if(onNodes&&!onEdges)
+      _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) found");
+  else if(!onNodes&&onEdges)
+      _ui->resultsCountLabel->setText(QString::number(resultsCountEdges) +" edge(s) found");
+  else
+      _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) and " +QString::number(resultsCountEdges) +" edge(s) found");
 
   Observable::unholdObservers();
 }
