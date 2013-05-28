@@ -67,7 +67,7 @@ public:
             ||(viewName==ViewName::HistogramViewName)
             // at this time the selection is not properly managed
 	    // in the MatrixView so we disable it
-	    //||(viewName==ViewName::MatrixViewName)
+	    ||(viewName==ViewName::MatrixViewName)
             ||(viewName==ViewName::PixelOrientedViewName)
             ||(viewName==ViewName::ScatterPlot2DViewName)
            );

@@ -21,6 +21,7 @@
 
 #include <QGraphicsView>
 #include <QAction>
+#include <QMenu>
 
 #include "MatrixView.h"
 #include "PropertyValuesDispatcher.h"
@@ -41,7 +42,7 @@ using namespace std;
 
 MatrixView::MatrixView(const PluginContext *):
   NodeLinkDiagramComponent(),
-  _matrixGraph(NULL), _graphEntitiesToDisplayedNodes(NULL), _displayedNodesToGraphEntities(NULL), _displayedNodesAreNodes(NULL), _dispatcher(NULL),
+  _matrixGraph(NULL), _graphEntitiesToDisplayedNodes(NULL), _displayedNodesToGraphEntities(NULL), _displayedEdgesToGraphEdges(NULL), _displayedNodesAreNodes(NULL), _dispatcher(NULL),
   _configurationWidget(NULL), _mustUpdateSizes(false), _mustUpdateLayout(false), _orderingMetricName("") {
 }
 
@@ -116,6 +117,36 @@ QList<QWidget *> MatrixView::configurationWidgets() const {
 
 void MatrixView::fillContextMenu(QMenu *menu, const QPointF &point) {
   GlMainView::fillContextMenu(menu,point);
+  //Check if a node/edge is under the mouse pointer
+  bool result;
+  SelectedEntity entity;
+  int x = point.x(), y = point.y();
+#ifndef _WIN32 // For some obscure reason, point coordinates should not be shifted when under Win32
+  QRect rect = getGlMainWidget()->frameGeometry();
+  x -= rect.x();
+  y -= rect.y();
+#endif
+  result = getGlMainWidget()->pickNodesEdges(x, y, entity);
+
+  if (result) {
+    menu->addSeparator();
+    isNode = entity.getEntityType() == SelectedEntity::NODE_SELECTED;
+    itemId = entity.getComplexEntityId();
+    if (isNode) {
+      if (!_displayedNodesAreNodes->getNodeValue(node(itemId)))
+	isNode = false;
+      itemId = _displayedNodesToGraphEntities->getNodeValue(node(itemId));
+    } else
+      itemId = _displayedEdgesToGraphEdges->getEdgeValue(edge(itemId));
+    menu->addAction((isNode ? trUtf8("Node #") : trUtf8("Edge #"))
+		    + QString::number(itemId))->setEnabled(false);
+
+    menu->addSeparator();
+
+    menu->addAction(tr("Toggle selection"),this,SLOT(addRemoveItemToSelection()));
+    menu->addAction(tr("Select"),this,SLOT(selectItem()));
+    menu->addAction(tr("Delete"),this,SLOT(deleteItem()));
+  }
 }
 
 void MatrixView::draw() {
@@ -146,6 +177,8 @@ void MatrixView::deleteDisplayedGraph() {
   _graphEntitiesToDisplayedNodes=NULL;
   delete _displayedNodesToGraphEntities;
   _displayedNodesToGraphEntities=NULL;
+  delete _displayedEdgesToGraphEdges;
+  _displayedEdgesToGraphEdges=NULL;
   delete _displayedNodesAreNodes;
   _displayedNodesAreNodes=NULL;
   delete _dispatcher;
@@ -167,6 +200,7 @@ void MatrixView::initDisplayedGraph() {
   _graphEntitiesToDisplayedNodes = new IntegerVectorProperty(graph());
   _displayedNodesAreNodes = new BooleanProperty(_matrixGraph);
   _displayedNodesToGraphEntities = new IntegerProperty(_matrixGraph);
+  _displayedEdgesToGraphEdges = new IntegerProperty(_matrixGraph);
   createScene(_matrixGraph,DataSet());
 
   Observable::holdObservers();
@@ -193,7 +227,7 @@ void MatrixView::initDisplayedGraph() {
   _sourceToTargetProperties.insert(inputData->getElementTexture()->getName());
   set<string> targetToSourceProperties;
   targetToSourceProperties.insert(inputData->getElementSelected()->getName());
-  _dispatcher = new PropertyValuesDispatcher(graph(), _matrixGraph, _sourceToTargetProperties, targetToSourceProperties, _graphEntitiesToDisplayedNodes, _displayedNodesAreNodes, _displayedNodesToGraphEntities);
+  _dispatcher = new PropertyValuesDispatcher(graph(), _matrixGraph, _sourceToTargetProperties, targetToSourceProperties, _graphEntitiesToDisplayedNodes, _displayedNodesAreNodes, _displayedNodesToGraphEntities, _displayedEdgesToGraphEdges, _edgesMap);
 
   GlGraphRenderingParameters *renderingParameters = getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
   renderingParameters->setLabelScaled(true);
@@ -283,6 +317,7 @@ void MatrixView::addEdge(tlp::Graph *g, const tlp::edge e) {
   node dispTgt = node(_graphEntitiesToDisplayedNodes->getNodeValue(eEnds.second)[0]);
   edge dispEdge = _matrixGraph->addEdge(dispSrc,dispTgt);
   _edgesMap[e] = dispEdge;
+  _displayedEdgesToGraphEdges->setEdgeValue(dispEdge, e.id);
 
   ColorProperty* originalColors = graph()->getProperty<ColorProperty>("viewColor");
   ColorProperty* colors = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementColor();
