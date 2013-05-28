@@ -73,32 +73,32 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData* data) {
     const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
     const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
 
+    const Size &srcSize = data->getElementSize()->getNodeValue(source);
+    const Size &tgtSize = data->getElementSize()->getNodeValue(target);
+    double srcRot = data->getElementRotation()->getNodeValue(source);
+    double tgtRot = data->getElementRotation()->getNodeValue(target);
+
     const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
 
+    // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
+    Coord srcAnchor, tgtAnchor, tmpAnchor;
+
+    int srcGlyphId = data->getElementShape()->getNodeValue(source);
+    Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);
+    tmpAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
+    srcAnchor = sourceGlyph->getAnchor(srcCoord, tmpAnchor, srcSize, srcRot);
+
+    int tgtGlyphId = 1; //cube outlined
+
+    if (!data->getGraph()->isMetaNode(target))
+        tgtGlyphId = data->getElementShape()->getNodeValue(target);
+
+    Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
+    //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
+    tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
+    tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
+
     if (!bends.empty()) {
-
-        const Size &srcSize = data->getElementSize()->getNodeValue(source);
-        const Size &tgtSize = data->getElementSize()->getNodeValue(target);
-        double srcRot = data->getElementRotation()->getNodeValue(source);
-        double tgtRot = data->getElementRotation()->getNodeValue(target);
-
-        // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
-        Coord srcAnchor, tgtAnchor, tmpAnchor;
-
-        int srcGlyphId = data->getElementShape()->getNodeValue(source);
-        Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);
-        tmpAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
-        srcAnchor = sourceGlyph->getAnchor(srcCoord, tmpAnchor, srcSize, srcRot);
-
-        int tgtGlyphId = 1; //cube outlined
-
-        if (!data->getGraph()->isMetaNode(target))
-            tgtGlyphId = data->getElementShape()->getNodeValue(target);
-
-        Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
-        //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
-        tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
-        tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
 
         vector<Coord> tmp;
         tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcAnchor,tgtAnchor, tmp);
@@ -107,8 +107,8 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData* data) {
             bb.expand(*it);
     }
 
-    bb.expand(srcCoord);
-    bb.expand(tgtCoord);
+    bb.expand(srcAnchor);
+    bb.expand(tgtAnchor);
 
     return bb;
 }

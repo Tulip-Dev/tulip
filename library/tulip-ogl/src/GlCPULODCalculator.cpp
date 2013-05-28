@@ -31,7 +31,7 @@ using namespace std;
 
 namespace tlp {
 
-GlCPULODCalculator::GlCPULODCalculator():computeEdgesLOD(false) {
+GlCPULODCalculator::GlCPULODCalculator():computeEdgesLOD(true) {
 
 }
 

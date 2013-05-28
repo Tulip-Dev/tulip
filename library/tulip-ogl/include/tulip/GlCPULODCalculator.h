@@ -92,7 +92,7 @@ public:
 
   /**
    * Set if the edge LOD must be calculated
-   * \Warning at default the edge LOD is not calculated and return 10.
+   * \Warning If not calcultated, the default edge LOD is 10.
    */
   void setComputeEdgesLOD(bool state) {
     computeEdgesLOD=state;
