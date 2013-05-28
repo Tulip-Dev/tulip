@@ -20,6 +20,7 @@
 #ifndef PROPERTYVALUESDISPATCHER_H
 #define PROPERTYVALUESDISPATCHER_H
 
+#include <QHash>
 #include <tulip/Observable.h>
 #include <tulip/Graph.h>
 
@@ -36,7 +37,9 @@ class PropertyValuesDispatcher: public tlp::Observable {
 public:
   PropertyValuesDispatcher(tlp::Graph *source, tlp::Graph *target,
                            const std::set<std::string> &sourceToTargetProperties, const std::set<std::string> &targetToSourceProperties,
-                           tlp::IntegerVectorProperty *_graphEntitiesToDisplayedNodes, tlp::BooleanProperty *_displayedNodesAreNodes, tlp::IntegerProperty *displayedNodesToGraphEntities);
+                           tlp::IntegerVectorProperty *_graphEntitiesToDisplayedNodes, tlp::BooleanProperty *_displayedNodesAreNodes,
+			   tlp::IntegerProperty *displayedNodesToGraphEntities, tlp::IntegerProperty *displayedEdgesToGraphEdges,
+			   QHash<tlp::edge,tlp::edge>& edgesMap);
   void afterSetNodeValue(tlp::PropertyInterface*, const tlp::node);
   void afterSetEdgeValue(tlp::PropertyInterface*, const tlp::edge);
   void afterSetAllNodeValue(tlp::PropertyInterface*);
@@ -50,6 +53,8 @@ private:
   tlp::IntegerVectorProperty *_graphEntitiesToDisplayedNodes;
   tlp::BooleanProperty *_displayedNodesAreNodes;
   tlp::IntegerProperty *_displayedNodesToGraphEntities;
+  tlp::IntegerProperty *_displayedEdgesToGraphEdges;
+  QHash<tlp::edge,tlp::edge>& _edgesMap;
   std::set<std::string> _sourceToTargetProperties;
   std::set<std::string> _targetToSourceProperties;
   bool _modifying;

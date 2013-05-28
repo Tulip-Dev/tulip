@@ -97,6 +97,7 @@ private:
   // Correspondance maps
   tlp::IntegerVectorProperty *_graphEntitiesToDisplayedNodes;
   tlp::IntegerProperty *_displayedNodesToGraphEntities;
+  tlp::IntegerProperty *_displayedEdgesToGraphEdges;
   tlp::BooleanProperty *_displayedNodesAreNodes;
   PropertyValuesDispatcher *_dispatcher;
   QHash<tlp::edge,tlp::edge> _edgesMap;

@@ -38,9 +38,6 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
   GlCompositeHierarchyManager* manager;
   bool _hasHulls;
 
-  bool isNode;
-  unsigned int itemId;
-
   void registerTriggers();
   void updateGrid();
 public:
@@ -73,6 +70,9 @@ protected slots:
   void fillContextMenu(QMenu *menu,const QPointF &point);
 
 protected:
+  bool isNode;
+  unsigned int itemId;
+
   void graphChanged(tlp::Graph *);
 
   void createScene(Graph *graph,DataSet dataSet);
