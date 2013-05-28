@@ -419,8 +419,14 @@ void SearchWidget::updateEditorWidget() {
   else
     defaultValue = GraphModel::edgeDefaultValue(prop);
 
-  _ui->tableWidget->item(0, 0)->setData(Qt::EditRole, defaultValue);
+  // workaround for sf bug #716
+  // I suspect that because 0 == false (when updating termA from viewMetric
+  // from viewSelection) the table item was not properly refreshed.
+  // So force the refresh of the table item with defaultValue
+  // in first displaying a 'blank' value
+  _ui->tableWidget->item(0, 0)->setData(Qt::DisplayRole, QVariant(QString()));
   _ui->tableWidget->item(0, 0)->setData(Qt::DisplayRole, defaultValue);
+  _ui->tableWidget->item(0, 0)->setData(Qt::EditRole, defaultValue);
 }
 
 void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
