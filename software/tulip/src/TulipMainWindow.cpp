@@ -88,7 +88,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   systemTrayMenu->addAction(trUtf8("Show"),this,SLOT(showProjectsCenter()));
   systemTrayMenu->addAction(trUtf8("Hide"),this,SLOT(close()));
   systemTrayMenu->addSeparator();
-  systemTrayMenu->addAction(trUtf8("Welcome"),this,SLOT(showProjectsCenter()));
+  systemTrayMenu->addAction(trUtf8("Projects"),this,SLOT(showProjectsCenter()));
   systemTrayMenu->addAction(trUtf8("Plugins center"),this,SLOT(showPluginsCenter()));
   systemTrayMenu->addAction(trUtf8("About us"),this,SLOT(showAboutCenter()));
   systemTrayMenu->addSeparator();
