@@ -129,9 +129,10 @@ const char * paramHelp[] = {
   "If uniform, this is the same except for the interpolation: the value are sorted, numbered, and a linear interpolation is used on those numbers" \
   "(in other words, only the order is taken into account, not the actual values).<BR>" \
   "Finally, if enumerated, the input property can be of any type. Each possible value is mapped to a distinct color in no specific order." \
+  HTML_HELP_CLOSE(),
   // property
   HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "PropertyInterface*" ) \
+  HTML_HELP_DEF( "type", "PropertyInterface" ) \
   HTML_HELP_BODY() \
   "This property is used to get the values affected to graph items." \
   HTML_HELP_CLOSE(),
