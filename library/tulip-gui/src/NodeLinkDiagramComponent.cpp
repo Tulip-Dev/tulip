@@ -394,7 +394,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
 
   QAction *actionTooltips=menu->addAction("Tooltips");
   actionTooltips->setCheckable(true);
-  actionTooltips->setChecked(false);
+  actionTooltips->setChecked(_tooltips);
   connect(actionTooltips,SIGNAL(triggered(bool)),this,SLOT(displayToolTips(bool)));
 
   QAction* zOrdering = menu->addAction(trUtf8("Use Z ordering"));
