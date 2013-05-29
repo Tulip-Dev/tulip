@@ -27,7 +27,8 @@ GLYPH(HalfCylinder halfcylinder.cpp)
 GLYPH(ChristmasTree christmastree.cpp)
 GLYPH(Diamond diamond.cpp)
 GLYPH(Cross cross.cpp)
-GLYPH(GlowSphere.cpp glowsphere.cpp)
+GLYPH(GlowSphere glowsphere.cpp)
+GLYPH(Star star.cpp)
 
 ## radialGradientTexture.png is used in glowsphere.cpp
 INSTALL(FILES

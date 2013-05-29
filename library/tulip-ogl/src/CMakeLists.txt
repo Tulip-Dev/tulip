@@ -61,6 +61,7 @@ SET(tulip-ogl_LIB_SRCS
   GlShaderProgram.cpp
   GlSimpleEntity.cpp
   GlSphere.cpp
+  GlStar.cpp
   GlSVGFeedBackBuilder.cpp
   GlTextureManager.cpp
   GlTLPFeedBackBuilder.cpp

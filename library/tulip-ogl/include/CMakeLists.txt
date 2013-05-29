@@ -62,6 +62,7 @@ INSTALL(FILES
   tulip/GlShaderProgram.h
   tulip/GlSimpleEntity.h
   tulip/GlSphere.h
+  tulip/GlStar.h
   tulip/GlTextureManager.h
   tulip/GlTLPFeedBackBuilder.h
   tulip/GlTools.h
