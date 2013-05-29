@@ -40,6 +40,9 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
 
   void registerTriggers();
   void updateGrid();
+
+  bool _tooltips;
+
 public:
   static const std::string viewName;
   PLUGININFORMATIONS(NodeLinkDiagramComponent::viewName, "Tulip Team", "16/04/2008",
@@ -68,6 +71,7 @@ protected slots:
   void setZOrdering(bool);
   void showGridControl();
   void fillContextMenu(QMenu *menu,const QPointF &point);
+  void displayToolTips(bool display);
 
 protected:
   bool isNode;
@@ -80,7 +84,8 @@ protected:
   void loadGraphOnScene(Graph *graph);
   void useHulls(bool hasHulls);
   bool hasHulls() const;
-
+  void setupWidget();
+  bool eventFilter(QObject *,QEvent *e);
 };
 }
 

@@ -24,6 +24,10 @@
 #include <QActionGroup>
 #include <QDialog>
 #include <QMenu>
+#include <QHelpEvent>
+#include <QToolTip>
+#include <QString>
+#include <QEvent>
 
 #include <tulip/GlMetaNodeRenderer.h>
 #include <tulip/GlGrid.h>
@@ -41,13 +45,14 @@
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlCompositeHierarchyManager.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 using namespace std;
 
 const string NodeLinkDiagramComponent::viewName("Node Link Diagram view");
 
-NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL),_hasHulls(false) {
+NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL),_hasHulls(false),_tooltips(false) {
 }
 
 void NodeLinkDiagramComponent::updateGrid() {
@@ -103,6 +108,54 @@ void NodeLinkDiagramComponent::draw() {
   updateGrid();
   GlMainView::draw();
 }
+
+void NodeLinkDiagramComponent::setupWidget() {
+    GlMainView::setupWidget();
+    graphicsView()->installEventFilter(this);//Handle tooltip events
+}
+
+ bool NodeLinkDiagramComponent::eventFilter(QObject *,QEvent *event) {
+     if(_tooltips==true && event->type()==QEvent::ToolTip) {
+         SelectedEntity type;
+         QHelpEvent *he = static_cast<QHelpEvent *>(event);
+         GlMainWidget *gl = getGlMainWidget();
+         QRect rect=gl->frameGeometry();
+         if (gl->pickNodesEdges(he->x()-rect.x(), he->y()-rect.y(), type)) {
+           // try to show the viewLabel if any
+           StringProperty *labels = graph()->getProperty<StringProperty>("viewLabel");
+           std::string label;
+           QString ttip;
+           node tmpNode=type.getNode();
+           if(tmpNode.isValid()) {
+             label = labels->getNodeValue(tmpNode);
+             if (!label.empty())
+               ttip = tlpStringToQString(label) + " (";
+
+             ttip += QString("node: ")+ QString::number(tmpNode.id);
+
+             if (!label.empty())
+                 ttip += ")";
+
+             QToolTip::showText(he->globalPos(), ttip, gl);
+             return true;
+           }
+           else {
+               edge tmpEdge=type.getEdge();
+               if(tmpEdge.isValid()) {
+                   label = labels->getEdgeValue(tmpEdge);
+                   if (!label.empty())
+                       ttip = tlpStringToQString(label) + "(";
+                   ttip += QString("edge: ")+QString::number(tmpEdge.id);
+                   if (!label.empty())
+                       ttip += ")";
+                   QToolTip::showText(he->globalPos(), ttip, gl);
+                   return true;
+               }
+           }
+         }
+     }
+         return false;
+ }
 
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   ParameterDescriptionList gridParameters;
@@ -332,8 +385,17 @@ void NodeLinkDiagramComponent::requestChangeGraph(Graph *graph) {
   draw();
 }
 
+void NodeLinkDiagramComponent::displayToolTips(bool display) {
+    _tooltips = display;
+}
+
 void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point) {
   GlMainView::fillContextMenu(menu,point);
+
+  QAction *actionTooltips=menu->addAction("Tooltips");
+  actionTooltips->setCheckable(true);
+  actionTooltips->setChecked(false);
+  connect(actionTooltips,SIGNAL(triggered(bool)),this,SLOT(displayToolTips(bool)));
 
   QAction* zOrdering = menu->addAction(trUtf8("Use Z ordering"));
   zOrdering->setCheckable(true);
