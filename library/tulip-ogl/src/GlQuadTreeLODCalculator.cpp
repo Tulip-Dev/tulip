@@ -485,17 +485,7 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
     }
   }
 
-
-
-  // If edge labels are rendered we have to compute the edges LOD because label rendering use LOD
-  computeEdgesLOD=false;
-
-  if(inputData)
-    setComputeEdgesLOD(inputData->parameters->isViewEdgeLabel());
-
-
   GlCPULODCalculator::computeFor3DCamera(layerLODUnit,eye,transformMatrix,globalViewport,currentViewport);
-
 }
 
 void GlQuadTreeLODCalculator::removeObservers() {
