@@ -227,6 +227,10 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
   }
 
+  draw();
+
+  drawOverview(true);
+
   string detailScatterPlotX = "";
   string detailScatterPlotY = "";
   dataSet.get("detailed scatterplot x dim", detailScatterPlotX);
@@ -240,10 +244,6 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
     switchFromMatrixToDetailView(scatterPlotsMap[make_pair(detailScatterPlotX, detailScatterPlotY)]);
   }
-
-  draw();
-
-  drawOverview(true);
 
   registerTriggers();
 
