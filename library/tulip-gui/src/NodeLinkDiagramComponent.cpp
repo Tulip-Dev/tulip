@@ -131,7 +131,7 @@ void NodeLinkDiagramComponent::setupWidget() {
              if (!label.empty())
                ttip = tlpStringToQString(label) + " (";
 
-             ttip += QString("node: ")+ QString::number(tmpNode.id);
+             ttip += QString("node #")+ QString::number(tmpNode.id);
 
              if (!label.empty())
                  ttip += ")";
@@ -145,7 +145,7 @@ void NodeLinkDiagramComponent::setupWidget() {
                    label = labels->getEdgeValue(tmpEdge);
                    if (!label.empty())
                        ttip = tlpStringToQString(label) + "(";
-                   ttip += QString("edge: ")+QString::number(tmpEdge.id);
+                   ttip += QString("edge #")+QString::number(tmpEdge.id);
                    if (!label.empty())
                        ttip += ")";
                    QToolTip::showText(he->globalPos(), ttip, gl);
