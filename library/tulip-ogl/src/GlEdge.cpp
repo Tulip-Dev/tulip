@@ -179,12 +179,10 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
     bool vertexArrayRendering = false;
     if (data->getGlVertexArrayManager()->renderingIsBegin() &&
             !data->parameters->getFeedbackRender()) {
-        if(lodSize>-1 && lodSize<1) {
-            if (lodSize <= 0.1) {
-                vertexArrayRendering = true;
-                data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
-                return;
-            }
+        if(lodSize>-5 && lodSize<5) {
+            vertexArrayRendering = true;
+            data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
+            return;
         }
         else if (!data->parameters->isEdge3D() && edgeTexture == "") {
             vertexArrayRendering = true;
