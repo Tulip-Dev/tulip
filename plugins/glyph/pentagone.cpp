@@ -54,31 +54,31 @@ void drawPentagon(const Color &fillColor,const Color &borderColor,float borderWi
 
 /// A 2D glyph
 /**
- * This glyph draws a textured pentagone using the "viewTexture"
- * node property value. If this property has no value, the pentagone
+ * This glyph draws a textured pentagon using the "viewTexture"
+ * node property value. If this property has no value, the pentagon
  * is then colored using the "viewColor" node property value.
  */
-class Pentagone: public Glyph {
+class Pentagon: public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Pentagone", "David Auber", "09/07/2002", "Textured Pentagone", "1.0", 12)
-  Pentagone(const tlp::PluginContext *context = NULL);
-  virtual ~Pentagone();
+  GLYPHINFORMATIONS("2D - Pentagon", "David Auber", "09/07/2002", "Textured Pentagon", "1.0", 12)
+  Pentagon(const tlp::PluginContext *context = NULL);
+  virtual ~Pentagon();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);
 };
-PLUGIN(Pentagone)
-Pentagone::Pentagone(const tlp::PluginContext* context) :
+PLUGIN(Pentagon)
+Pentagon::Pentagon(const tlp::PluginContext* context) :
   Glyph(context) {
   if(!pentagon)
     pentagon=new GlPentagon(Coord(0,0,0),Size(.5,.5,0));
 }
-Pentagone::~Pentagone() {
+Pentagon::~Pentagon() {
 }
-void Pentagone::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
+void Pentagon::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
   boundingBox[0] = Coord(-0.3f, -0.35f, 0);
   boundingBox[1] = Coord(0.3f, 0.35f, 0);
 }
-void Pentagone::draw(node n, float lod) {
+void Pentagon::draw(node n, float lod) {
   pentagon->setLightingMode(true);
   string textureName=glGraphInputData->getElementTexture()->getNodeValue(n);
 
@@ -94,7 +94,7 @@ void Pentagone::draw(node n, float lod) {
 
 class EEPentagon: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("2D - Pentagone extremity", "David Auber", "09/07/2002", "Textured Pentagone for edge extremities", "1.0", 12)
+  GLYPHINFORMATIONS("2D - Pentagon extremity", "David Auber", "09/07/2002", "Textured Pentagon for edge extremities", "1.0", 12)
 
   EEPentagon(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if(!pentagon)
