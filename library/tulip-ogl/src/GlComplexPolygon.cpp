@@ -320,8 +320,10 @@ GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,Colo
   outlineSize(1),
   textureName(textureName),
   textureZoom(1.) {
-  createPolygon(coords,polygonEdgesType);
-  runTesselation();
+  if (!coords.empty()) {
+    createPolygon(coords,polygonEdgesType);
+    runTesselation();
+  }
 }
 //=====================================================
 GlComplexPolygon::GlComplexPolygon(const vector<vector<Coord> >&coords,Color fcolor,int polygonEdgesType,const string &textureName):
