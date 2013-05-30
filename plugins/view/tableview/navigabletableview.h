@@ -39,6 +39,7 @@ protected:
 
   void  scrollContentsBy (int dx, int dy);
   int sizeHintForRow(int row) const;
+  int sizeHintForColumn(int col) const;
   void resizeEvent(QResizeEvent * event);
 
 signals:
