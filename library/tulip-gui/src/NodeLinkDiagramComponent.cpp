@@ -119,6 +119,7 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *obj,QEvent *event) {
     SelectedEntity type;
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
     GlMainWidget *gl = getGlMainWidget();
+
     if (gl->pickNodesEdges(he->x(), he->y(), type)) {
       // try to show the viewLabel if any
       StringProperty *labels = graph()->getProperty<StringProperty>("viewLabel");
@@ -164,7 +165,8 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *obj,QEvent *event) {
       event->ignore();
     }
   }
-    // standard event processing
+
+  // standard event processing
   return GlMainView::eventFilter(obj, event);
 }
 
