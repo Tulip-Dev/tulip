@@ -36,7 +36,7 @@ DoubleStringsListSelectionWidget::DoubleStringsListSelectionWidget(QWidget *pare
 }
 
 DoubleStringsListSelectionWidget::~DoubleStringsListSelectionWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void DoubleStringsListSelectionWidget::setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) {
@@ -82,7 +82,7 @@ vector<string> DoubleStringsListSelectionWidget::getSelectedStringsList() const 
   vector<string> outputStringList;
 
   for (int i = 0; i < _ui->outputList->count(); ++i) {
-      outputStringList.push_back(tlp::QStringToTlpString(_ui->outputList->item(i)->text()));
+    outputStringList.push_back(tlp::QStringToTlpString(_ui->outputList->item(i)->text()));
   }
 
   return outputStringList;

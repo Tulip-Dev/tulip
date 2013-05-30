@@ -33,7 +33,7 @@ class Graph;
 class GeolocalisationConfigWidget : public QWidget  {
 
   Q_OBJECT
-   Ui::GeolocalisationConfigWidgetData* _ui;
+  Ui::GeolocalisationConfigWidgetData* _ui;
 
 public :
 

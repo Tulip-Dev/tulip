@@ -39,74 +39,74 @@ using namespace std;
 using namespace tlp;
 
 void drawRing() {
-    GLUquadricObj *quadratic;
-    quadratic = gluNewQuadric();
-    gluQuadricNormals(quadratic, GLU_SMOOTH);
-    gluQuadricTexture(quadratic, GL_TRUE);
-    gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-    gluDisk(quadratic, 0.2f, 0.5f, 30, 1);
-    gluQuadricOrientation(quadratic, GLU_INSIDE);
-    gluDisk(quadratic, 0.2f, 0.5f, 30, 1);
-    gluDeleteQuadric(quadratic);
+  GLUquadricObj *quadratic;
+  quadratic = gluNewQuadric();
+  gluQuadricNormals(quadratic, GLU_SMOOTH);
+  gluQuadricTexture(quadratic, GL_TRUE);
+  gluQuadricOrientation(quadratic, GLU_OUTSIDE);
+  gluDisk(quadratic, 0.2f, 0.5f, 30, 1);
+  gluQuadricOrientation(quadratic, GLU_INSIDE);
+  gluDisk(quadratic, 0.2f, 0.5f, 30, 1);
+  gluDeleteQuadric(quadratic);
 }
 void drawRingBorder() {
-    glBegin(GL_LINE_LOOP);
-    double alpha = M_PI / 2.;
-    double delta = 2. * M_PI / 30.0;
+  glBegin(GL_LINE_LOOP);
+  double alpha = M_PI / 2.;
+  double delta = 2. * M_PI / 30.0;
 
-    for (unsigned int i = 0; i < 30; ++i) {
-        glVertex3f(0.5 * cos(alpha), 0.5 * sin(alpha), 0.0);
-        alpha += delta;
-    }
+  for (unsigned int i = 0; i < 30; ++i) {
+    glVertex3f(0.5 * cos(alpha), 0.5 * sin(alpha), 0.0);
+    alpha += delta;
+  }
 
-    glEnd();
-    glBegin(GL_LINE_LOOP);
-    alpha = M_PI / 2.;
+  glEnd();
+  glBegin(GL_LINE_LOOP);
+  alpha = M_PI / 2.;
 
-    for (unsigned int i = 0; i < 30; ++i) {
-        glVertex3f(0.2 * cos(alpha), 0.2 * sin(alpha), 0.0);
-        alpha += delta;
-    }
+  for (unsigned int i = 0; i < 30; ++i) {
+    glVertex3f(0.2 * cos(alpha), 0.2 * sin(alpha), 0.0);
+    alpha += delta;
+  }
 
-    glEnd();
+  glEnd();
 }
 void drawGlyph(const Color& glyohColor, const string& texture,
                const string& texturePath, double borderWidth,
                const Color& borderColor, float lod) {
 
-    if (GlDisplayListManager::getInst().beginNewDisplayList("Ring_ring")) {
-        drawRing();
-        GlDisplayListManager::getInst().endNewDisplayList();
-    }
+  if (GlDisplayListManager::getInst().beginNewDisplayList("Ring_ring")) {
+    drawRing();
+    GlDisplayListManager::getInst().endNewDisplayList();
+  }
 
-    if (GlDisplayListManager::getInst().beginNewDisplayList("Ring_ringborder")) {
-        drawRingBorder();
-        GlDisplayListManager::getInst().endNewDisplayList();
-    }
+  if (GlDisplayListManager::getInst().beginNewDisplayList("Ring_ringborder")) {
+    drawRingBorder();
+    GlDisplayListManager::getInst().endNewDisplayList();
+  }
 
-    setMaterial(glyohColor);
+  setMaterial(glyohColor);
 
-    if (texture != "") {
-        GlTextureManager::getInst().activateTexture(texturePath + texture);
-    }
+  if (texture != "") {
+    GlTextureManager::getInst().activateTexture(texturePath + texture);
+  }
 
-    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-    GlDisplayListManager::getInst().callDisplayList("Ring_ring");
-    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+  GlDisplayListManager::getInst().callDisplayList("Ring_ring");
+  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
-    GlTextureManager::getInst().desactivateTexture();
+  GlTextureManager::getInst().desactivateTexture();
 
-    if (lod > 20 && borderWidth > 0) {
+  if (lod > 20 && borderWidth > 0) {
 
-        glLineWidth(borderWidth);
+    glLineWidth(borderWidth);
 
-        glDisable(GL_LIGHTING);
-        setColor(borderColor);
-        OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-        GlDisplayListManager::getInst().callDisplayList("Ring_ringborder");
-        OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
-        glEnable(GL_LIGHTING);
-    }
+    glDisable(GL_LIGHTING);
+    setColor(borderColor);
+    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+    GlDisplayListManager::getInst().callDisplayList("Ring_ringborder");
+    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+    glEnable(GL_LIGHTING);
+  }
 }
 
 /** \addtogroup glyph */
@@ -120,50 +120,50 @@ void drawGlyph(const Color& glyohColor, const string& texture,
  */
 class Ring: public Glyph {
 public:
-    GLYPHINFORMATIONS("2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
-    Ring(const tlp::PluginContext *context = NULL);
-    virtual ~Ring();
-    virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
-    virtual string getName() {
-        return string("Ring");
-    }
-    virtual void draw(node n, float lod);
+  GLYPHINFORMATIONS("2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
+  Ring(const tlp::PluginContext *context = NULL);
+  virtual ~Ring();
+  virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
+  virtual string getName() {
+    return string("Ring");
+  }
+  virtual void draw(node n, float lod);
 };
 PLUGIN(Ring)
 Ring::Ring(const tlp::PluginContext* context) :
-    Glyph(context) {
+  Glyph(context) {
 }
 Ring::~Ring() {
 }
 void Ring::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-    boundingBox[0] = Coord(-0.35f, -0.35f, 0);
-    boundingBox[1] = Coord(0.35f, 0.35f, 0);
+  boundingBox[0] = Coord(-0.35f, -0.35f, 0);
+  boundingBox[1] = Coord(0.35f, 0.35f, 0);
 }
 void Ring::draw(node n, float lod) {
-    drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
-              glGraphInputData->getElementTexture()->getNodeValue(n),
-              glGraphInputData->parameters->getTexturePath(),
-              glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-              glGraphInputData->getElementBorderColor()->getNodeValue(n), lod);
+  drawGlyph(glGraphInputData->getElementColor()->getNodeValue(n),
+            glGraphInputData->getElementTexture()->getNodeValue(n),
+            glGraphInputData->parameters->getTexturePath(),
+            glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+            glGraphInputData->getElementBorderColor()->getNodeValue(n), lod);
 
 }
 
 
 class EERing: public EdgeExtremityGlyph {
 public:
-    GLYPHINFORMATIONS("2D - Ring extremity", "David Auber", "09/07/2002", "Textured Ring for edge extremities", "1.0", 15)
+  GLYPHINFORMATIONS("2D - Ring extremity", "David Auber", "09/07/2002", "Textured Ring for edge extremities", "1.0", 15)
 
-    EERing(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
-    }
+  EERing(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
+  }
 
-    void draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
-        glDisable(GL_LIGHTING);
-        drawGlyph(glyphColor,
-                  edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
-                  edgeExtGlGraphInputData->parameters->getTexturePath(),
-                  edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-                  borderColor, lod);
-    }
+  void draw(edge e, node, const Color& glyphColor, const Color &borderColor, float lod) {
+    glDisable(GL_LIGHTING);
+    drawGlyph(glyphColor,
+              edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e),
+              edgeExtGlGraphInputData->parameters->getTexturePath(),
+              edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+              borderColor, lod);
+  }
 };
 PLUGIN(EERing)
 

@@ -38,13 +38,16 @@ using namespace tlp;
 static GlStar *star = NULL;
 void drawStar(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
   star->setFillColor(fillColor);
+
   if (borderWidth > 0) {
     star->setOutlineMode(true);
     star->setOutlineColor(borderColor);
     star->setOutlineSize(borderWidth);
-  } else {
+  }
+  else {
     star->setOutlineMode(false);
   }
+
   star->setTextureName(textureName);
   star->draw(lod,NULL);
 }
@@ -85,10 +88,10 @@ void Star::draw(node n, float lod) {
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawStar(glGraphInputData->getElementColor()->getNodeValue(n),
-	   glGraphInputData->getElementBorderColor()->getNodeValue(n),
-	   glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-	   textureName,
-	   lod);
+           glGraphInputData->getElementBorderColor()->getNodeValue(n),
+           glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+           textureName,
+           lod);
 }
 
 class EEStar: public EdgeExtremityGlyph {
@@ -108,10 +111,10 @@ public:
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawStar(glyphColor,
-	     borderColor,
-	     edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-	     textureName,
-	     lod);
+             borderColor,
+             edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+             textureName,
+             lod);
   }
 };
 PLUGIN(EEStar)

@@ -33,8 +33,8 @@ HistoOptionsWidget::HistoOptionsWidget(QWidget *parent) : QWidget(parent),oldVal
   connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
 }
 
-HistoOptionsWidget::~HistoOptionsWidget(){
-    delete _ui;
+HistoOptionsWidget::~HistoOptionsWidget() {
+  delete _ui;
 }
 
 void HistoOptionsWidget::setWidgetEnabled(const bool enabled) {

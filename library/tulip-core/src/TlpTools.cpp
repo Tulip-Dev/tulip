@@ -253,15 +253,17 @@ void tlp::initTulipLib(const char* appDirPath) {
 #if defined(__GNUC__)
 #include <cxxabi.h>
 std::string tlp::demangleClassName(const char* className,
-				   bool hideTlp) {
+                                   bool hideTlp) {
   static char demangleBuffer[256];
   int status;
   size_t length = 256;
   abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
                       &length, &status);
+
   // skip tlp::
   if (hideTlp && strstr(demangleBuffer, "tlp::") == demangleBuffer)
     return std::string(demangleBuffer + 5);
+
   return std::string(demangleBuffer);
 }
 #elif defined(_MSC_VER)
@@ -269,12 +271,15 @@ std::string tlp::demangleClassName(const char* className,
 // but a human readable type name in the form "class tlp::T"
 // so just remove the first 11 characters to return T
 std::string tlp::demangleClassName(const char* className,
-				   bool hideTlp) {
+                                   bool hideTlp) {
   char* clName = const_cast<char*>(className);
+
   if (strstr(className, "class ") == className)
     clName += 6;
+
   if (hideTlp && strstr(clName, "tlp::") == clName)
     return std::string(clName + 5);
+
   return std::string(clName);
 }
 #else

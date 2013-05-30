@@ -51,7 +51,7 @@ MatrixView::~MatrixView() {
 }
 
 void MatrixView::setState(const DataSet &ds) {
-  
+
   clearRedrawTriggers();
 
   setOverviewVisible(true);
@@ -132,14 +132,18 @@ void MatrixView::fillContextMenu(QMenu *menu, const QPointF &point) {
     menu->addSeparator();
     isNode = entity.getEntityType() == SelectedEntity::NODE_SELECTED;
     itemId = entity.getComplexEntityId();
+
     if (isNode) {
       if (!_displayedNodesAreNodes->getNodeValue(node(itemId)))
-	isNode = false;
+        isNode = false;
+
       itemId = _displayedNodesToGraphEntities->getNodeValue(node(itemId));
-    } else
+    }
+    else
       itemId = _displayedEdgesToGraphEdges->getEdgeValue(edge(itemId));
+
     menu->addAction((isNode ? trUtf8("Node #") : trUtf8("Edge #"))
-		    + QString::number(itemId))->setEnabled(false);
+                    + QString::number(itemId))->setEnabled(false);
 
     menu->addSeparator();
 

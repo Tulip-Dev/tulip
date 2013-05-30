@@ -25,13 +25,13 @@ using namespace std;
 namespace tlp {
 
 GlStar::GlStar(const Coord &position,
-	       const Size &size,
-	       unsigned int numberOfStarPoints,
-	       const Color &fillColor,
-	       const Color &outlineColor,
-	       bool outlined,
-	       const string &textureName,
-	       float outlineSize):
+               const Size &size,
+               unsigned int numberOfStarPoints,
+               const Color &fillColor,
+               const Color &outlineColor,
+               bool outlined,
+               const string &textureName,
+               float outlineSize):
   GlComplexPolygon(vector<Coord>(), fillColor, outlineColor, 0, textureName),
   position(position),
   size(size),

@@ -20,7 +20,7 @@
 #include "SizeScaleConfigDialog.h"
 #include "ui_SizeScaleConfigDialog.h"
 
-namespace tlp{
+namespace tlp {
 
 SizeScaleConfigDialog::SizeScaleConfigDialog(QWidget *d):QDialog(d),_ui(new Ui::SizeScaleConfigDialogData) {
   _ui->setupUi(this);
@@ -29,8 +29,8 @@ SizeScaleConfigDialog::SizeScaleConfigDialog(QWidget *d):QDialog(d),_ui(new Ui::
   connect(_ui->viewSizeRB, SIGNAL(toggled(bool)), this, SLOT(viewSizeRadioButtonToggled(bool)));
 }
 
-SizeScaleConfigDialog::~SizeScaleConfigDialog(){
-    delete _ui;
+SizeScaleConfigDialog::~SizeScaleConfigDialog() {
+  delete _ui;
 }
 
 float SizeScaleConfigDialog::getMinSize() const {

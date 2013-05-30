@@ -85,10 +85,11 @@ bool sendAgentMessage(int port, const QString& message) {
 
 void checkTulipRunning(const QString& perspName, const QString& fileToOpen) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-    QFile lockFile(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0)).filePath("tulip.lck"));
+  QFile lockFile(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0)).filePath("tulip.lck"));
 #else
   QFile lockFile(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip.lck"));
 #endif
+
   if (lockFile.exists() && lockFile.open(QIODevice::ReadOnly)) {
     QString agentPort = lockFile.readAll();
     bool ok;

@@ -676,7 +676,7 @@ void ParallelCoordinatesDrawing::treatEvent(const tlp::Event& evt) {
       delNode(graph, gEvt->getNode());
       break;
 
-     case GraphEvent::TLP_DEL_EDGE:
+    case GraphEvent::TLP_DEL_EDGE:
       delEdge(graph, gEvt->getEdge());
       break;
 

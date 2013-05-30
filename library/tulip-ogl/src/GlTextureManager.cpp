@@ -157,6 +157,7 @@ bool GlTextureManager::loadTexture(const string& filename) {
     return true;
 
   QImage image(QString::fromUtf8(filename.c_str()));
+
   if (image.isNull()) {
     tlp::error() << "Error when loading texture from file " << filename.c_str() << std::endl;
     return false;

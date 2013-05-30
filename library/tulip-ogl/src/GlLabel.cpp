@@ -315,8 +315,10 @@ void GlLabel::draw(float, Camera *camera) {
   }
   else {
     scaleToApply=0.05f;
+
     if(useMinMaxSize) {
       float tmpScreenH=screenH*0.05f;
+
       if(tmpScreenH<minSize) {
         scaleToApply*=minSize/tmpScreenH;
       }
@@ -570,10 +572,12 @@ void GlLabel::draw(float, Camera *camera) {
     }
 
     glLineWidth(screenH);
+
     if (outlineColor.getA()==0 || outlineSize == 0)
-        setMaterial(Color(color[0],color[1],color[2],color[3]));
+      setMaterial(Color(color[0],color[1],color[2],color[3]));
     else
-        setMaterial(Color(outlineColor[0],outlineColor[1],outlineColor[2],outlineColor[3]));
+      setMaterial(Color(outlineColor[0],outlineColor[1],outlineColor[2],outlineColor[3]));
+
     OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
     glBegin(GL_LINES);
     glVertex3f(-w/2.+wAlign,hAlign,0);
@@ -659,6 +663,7 @@ void GlLabel::draw(float, Camera *camera) {
         if (screenH > 25) {
           glLineWidth(outlineSize);
         }
+
         setMaterial(outlineColor);
 
         OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();

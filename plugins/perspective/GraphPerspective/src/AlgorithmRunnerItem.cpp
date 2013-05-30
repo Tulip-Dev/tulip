@@ -277,7 +277,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
     // forget non property out param
     if (typeName != TN(PropertyInterface*)
-	&& typeName != TN(NumericProperty*)
+        && typeName != TN(NumericProperty*)
         && typeName != TN(BooleanProperty)
         && typeName != TN(DoubleProperty)
         && typeName != TN(LayoutProperty)
@@ -293,27 +293,30 @@ void AlgorithmRunnerItem::run(Graph *g) {
         && typeName != TN(SizeVectorProperty)
         && typeName != TN(ColorVectorProperty)) {
       if (desc.getDirection() != IN_PARAM)
-	outNonPropertyParams.push_back(desc.getName());
+        outNonPropertyParams.push_back(desc.getName());
+
       continue;
     }
 
     if (desc.getDirection() == IN_PARAM) {
       if (desc.isMandatory()) {
-	// if it is a mandatory input property
-	// check it is not null
-	PropertyInterface* prop = NULL;
-	dataSet.get(desc.getName(), prop);
-	if (prop == NULL) {
-	  g->pop();
-	  Observable::holdObservers();
-	  QString message("Mandatory property parameter '");
-	  message += desc.getName().c_str();
-	  message += "'<br/> cannot be null";
-	  qCritical() << message;
-	  QMessageBox::critical(parentWidget(), name(), message);
-	  return;
-	}
+        // if it is a mandatory input property
+        // check it is not null
+        PropertyInterface* prop = NULL;
+        dataSet.get(desc.getName(), prop);
+
+        if (prop == NULL) {
+          g->pop();
+          Observable::holdObservers();
+          QString message("Mandatory property parameter '");
+          message += desc.getName().c_str();
+          message += "'<br/> cannot be null";
+          qCritical() << message;
+          QMessageBox::critical(parentWidget(), name(), message);
+          return;
+        }
       }
+
       continue;
     }
 
@@ -423,6 +426,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
       tlp::DataType *dataType = dataSet.getData(outNonPropertyParams[i]);
       originalDataSet.setData(outNonPropertyParams[i], dataType);
     }
+
     ParameterListModel* model = static_cast<ParameterListModel*>(_ui->parameters->model());
     model->setParametersValues(originalDataSet);
   }
@@ -482,6 +486,7 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
       dataSet.get<LayoutProperty*>("result",prop);
       prop->perfectAspectRatio();
     }
+
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
   }
   else if (pluginLister->pluginExists<Algorithm>(stdName) &&

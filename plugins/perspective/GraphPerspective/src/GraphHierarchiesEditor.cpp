@@ -156,7 +156,7 @@ void GraphHierarchiesEditor::addInducedSubGraph() {
 }
 
 void GraphHierarchiesEditor::delGraph() {
-    if (_contextGraph == NULL && !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
+  if (_contextGraph == NULL && !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
     _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
   }
 
@@ -180,7 +180,7 @@ void GraphHierarchiesEditor::delGraph() {
 }
 
 void GraphHierarchiesEditor::delAllGraph() {
-    if (_contextGraph == NULL && !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
+  if (_contextGraph == NULL && !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
     _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
   }
 

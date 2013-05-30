@@ -30,9 +30,9 @@ namespace tlp {
 
 class HistoStatsConfigWidget : public QWidget  {
 
-    Q_OBJECT
+  Q_OBJECT
 
-    Ui::HistoStatsConfigWidget *_ui;
+  Ui::HistoStatsConfigWidget *_ui;
 
 public :
 

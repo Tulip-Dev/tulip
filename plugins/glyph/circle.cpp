@@ -39,13 +39,16 @@ static GlCircle *circle = NULL;
 
 void drawCircle(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
   circle->setFillColor(fillColor);
+
   if (borderWidth > 0) {
     circle->setOutlineMode(true);
     circle->setOutlineColor(borderColor);
     circle->setOutlineSize(borderWidth);
-  } else {
+  }
+  else {
     circle->setOutlineMode(false);
   }
+
   circle->setTextureName(textureName);
   circle->draw(lod,NULL);
 }

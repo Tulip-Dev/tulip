@@ -43,13 +43,16 @@ void drawGlyph(const Color& glyphColor, const string& texture,
                const Color& borderColor, float lod) {
   rect->setFillColor(glyphColor);
   rect->setTextureName(texturePath+texture);
+
   if (borderWidth > 0) {
     rect->setOutlineMode(true);
     rect->setOutlineColor(borderColor);
     rect->setOutlineSize(borderWidth);
-  } else {
+  }
+  else {
     rect->setOutlineMode(false);
   }
+
   rect->draw(lod,NULL);
 
 }

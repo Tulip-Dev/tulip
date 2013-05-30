@@ -43,13 +43,16 @@ void drawDiamond(const Color &fillColor,
                  float lod) {
 
   diamond->setFillColor(fillColor);
+
   if (borderWidth > 0) {
     diamond->setOutlineMode(true);
     diamond->setOutlineColor(borderColor);
     diamond->setOutlineSize(borderWidth);
-  } else {
+  }
+  else {
     diamond->setOutlineMode(false);
   }
+
   diamond->setTextureName(textureName);
   diamond->draw(lod,NULL);
 }

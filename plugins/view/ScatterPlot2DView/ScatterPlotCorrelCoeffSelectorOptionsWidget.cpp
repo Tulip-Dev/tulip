@@ -40,7 +40,7 @@ ScatterPlotCorrelCoeffSelectorOptionsWidget::ScatterPlotCorrelCoeffSelectorOptio
 }
 
 ScatterPlotCorrelCoeffSelectorOptionsWidget::~ScatterPlotCorrelCoeffSelectorOptionsWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 Color ScatterPlotCorrelCoeffSelectorOptionsWidget::getButtonColor(QPushButton *button) const {

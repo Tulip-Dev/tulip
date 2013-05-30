@@ -140,19 +140,19 @@ class QuotientClustering:public tlp::Algorithm {
 public:
   PLUGININFORMATIONS("Quotient Clustering","David Auber","13/06/2001","OK","1.3", "Clustering")
 //================================================================================
-QuotientClustering(PluginContext* context):Algorithm(context) {
-  addDependency("Circular", "1.1");
-  addDependency("GEM (Frick)", "1.2");
-  addDependency("Auto Sizing", "1.0");
-  addInParameter<bool>("oriented", paramHelp[0], "true");
-  addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
-  addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS);
-  addInParameter<StringProperty>("meta-node label", paramHelp[4], "", false);
-  addInParameter<bool>("use name of subgraph", paramHelp[5], "false");
-  addInParameter<bool>("recursive", paramHelp[1], "false");
-  addInParameter<bool>("layout quotient graph(s)", paramHelp[7], "false");
-  addInParameter<bool>("edge cardinality", paramHelp[6], "false");
-}
+  QuotientClustering(PluginContext* context):Algorithm(context) {
+    addDependency("Circular", "1.1");
+    addDependency("GEM (Frick)", "1.2");
+    addDependency("Auto Sizing", "1.0");
+    addInParameter<bool>("oriented", paramHelp[0], "true");
+    addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
+    addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS);
+    addInParameter<StringProperty>("meta-node label", paramHelp[4], "", false);
+    addInParameter<bool>("use name of subgraph", paramHelp[5], "false");
+    addInParameter<bool>("recursive", paramHelp[1], "false");
+    addInParameter<bool>("layout quotient graph(s)", paramHelp[7], "false");
+    addInParameter<bool>("edge cardinality", paramHelp[6], "false");
+  }
 
   //===============================================================================
   bool run() {
@@ -229,7 +229,7 @@ QuotientClustering(PluginContext* context):Algorithm(context) {
 
       //do nothing for viewBorderWidth
       if(pName == "viewBorderWidth")
-          continue;
+        continue;
 
       if (dynamic_cast<DoubleProperty *>(prop)) {
         prevCalcs[(unsigned long) prop] = prop->getMetaValueCalculator();
@@ -428,6 +428,6 @@ QuotientClustering(PluginContext* context):Algorithm(context) {
 
     return true;
   }
-  };
+};
 
 PLUGIN(QuotientClustering)

@@ -33,7 +33,7 @@ using namespace std;
 
 PropertyValuesDispatcher::PropertyValuesDispatcher(tlp::Graph *source, tlp::Graph *target,
     const std::set<std::string> &sourceToTargetProperties, const std::set<std::string> &targetToSourceProperties,
-						   tlp::IntegerVectorProperty *graphEntitiesToDisplayedNodes, tlp::BooleanProperty *displayedNodesAreNodes, tlp::IntegerProperty *displayedNodesToGraphEntities, tlp::IntegerProperty *displayedEdgesToGraphEdges, QHash<tlp::edge,tlp::edge>&  edgesMap):
+    tlp::IntegerVectorProperty *graphEntitiesToDisplayedNodes, tlp::BooleanProperty *displayedNodesAreNodes, tlp::IntegerProperty *displayedNodesToGraphEntities, tlp::IntegerProperty *displayedEdgesToGraphEdges, QHash<tlp::edge,tlp::edge>&  edgesMap):
   _source(source), _target(target),
   _graphEntitiesToDisplayedNodes(graphEntitiesToDisplayedNodes), _displayedNodesAreNodes(displayedNodesAreNodes),
   _displayedNodesToGraphEntities(displayedNodesToGraphEntities),
@@ -87,9 +87,10 @@ void PropertyValuesDispatcher::afterSetNodeValue(tlp::PropertyInterface *sourceP
       vector<int> vect = _graphEntitiesToDisplayedNodes->getEdgeValue(edge(id));
 
       for(vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)  {
-	node n1(*it);
-	if (n1 != n)
-	  sourceProp->setNodeStringValue(n1, sourceProp->getNodeStringValue(n));
+        node n1(*it);
+
+        if (n1 != n)
+          sourceProp->setNodeStringValue(n1, sourceProp->getNodeStringValue(n));
       }
     }
   }
@@ -109,8 +110,10 @@ void PropertyValuesDispatcher::afterSetEdgeValue(tlp::PropertyInterface *sourceP
 
     for(vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)
       targetProp->setNodeStringValue(node(*it), sourceProp->getEdgeStringValue(e));
+
     targetProp->setEdgeStringValue(_edgesMap[e], sourceProp->getEdgeStringValue(e));
-  } else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
+  }
+  else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
     unsigned int id = _displayedEdgesToGraphEdges->getEdgeValue(e);
 
@@ -184,27 +187,29 @@ void PropertyValuesDispatcher::treatEvent(const tlp::Event& evt) {
   }
   else {
     const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&evt);
+
     if (propEvt) {
       PropertyInterface* prop = propEvt->getProperty();
 
       switch(propEvt->getType()) {
       case PropertyEvent::TLP_AFTER_SET_NODE_VALUE:
-	afterSetNodeValue(prop, propEvt->getNode());
-	return;
+        afterSetNodeValue(prop, propEvt->getNode());
+        return;
 
       case PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE:
-	afterSetAllNodeValue(prop);
-	return;
+        afterSetAllNodeValue(prop);
+        return;
 
       case PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE:
-	afterSetAllEdgeValue(prop);
-	return;
+        afterSetAllEdgeValue(prop);
+        return;
 
       case PropertyEvent::TLP_AFTER_SET_EDGE_VALUE:
-	afterSetEdgeValue(prop, propEvt->getEdge());
-	return;
+        afterSetEdgeValue(prop, propEvt->getEdge());
+        return;
+
       default:
-	return;
+        return;
       }
     }
   }

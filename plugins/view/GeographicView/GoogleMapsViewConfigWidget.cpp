@@ -32,7 +32,7 @@ GoogleMapsViewConfigWidget::GoogleMapsViewConfigWidget(QWidget *parent) : QWidge
 }
 
 GoogleMapsViewConfigWidget::~GoogleMapsViewConfigWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void GoogleMapsViewConfigWidget::openCsvFileBrowser() {
@@ -44,12 +44,12 @@ void GoogleMapsViewConfigWidget::openPolyFileBrowser() {
 }
 
 void GoogleMapsViewConfigWidget::openCsvHelp() {
-    QMessageBox::about(NULL,"Map csv file format","If you want to import a csv file into this view, your file must be in the format :\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id : id of the polygon");
-  }
+  QMessageBox::about(NULL,"Map csv file format","If you want to import a csv file into this view, your file must be in the format :\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id : id of the polygon");
+}
 
 void GoogleMapsViewConfigWidget::openPolyHelp() {
-    QMessageBox::about(NULL,"Map poly files",".poly files format are an open street map format.\nYou can donwload .poly file on :\nhttp://downloads.cloudmade.com/");
-  }
+  QMessageBox::about(NULL,"Map poly files",".poly files format are an open street map format.\nYou can donwload .poly file on :\nhttp://downloads.cloudmade.com/");
+}
 
 bool GoogleMapsViewConfigWidget::useSharedLayoutProperty() const {
   return _ui->layoutCheckBox->isChecked();

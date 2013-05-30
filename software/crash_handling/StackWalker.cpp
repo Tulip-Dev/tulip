@@ -467,12 +467,12 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   STACKFRAME        stack;
   ULONG               frame;
   IMAGEHLP_SYMBOL   *symbol = reinterpret_cast<IMAGEHLP_SYMBOL*>(malloc(sizeof(IMAGEHLP_SYMBOL)+2048*sizeof(TCHAR)));
-#ifdef I64  
+#ifdef I64
   DWORD64             displacement = 0;
 #else
   DWORD             displacement = 0;
-#endif  
-  DWORD				  displacement2 = 0;
+#endif
+  DWORD         displacement2 = 0;
   TCHAR name[1024];
 
   memset( &stack, 0, sizeof( STACKFRAME ) );

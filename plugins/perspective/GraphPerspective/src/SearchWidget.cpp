@@ -240,7 +240,7 @@ void SearchWidget::setGraph(Graph *g) {
 }
 
 void SearchWidget::selectionModeChanged(int index) {
-    _ui->resultsStorageCombo->setEnabled((index==3)?false:true);
+  _ui->resultsStorageCombo->setEnabled((index==3)?false:true);
 }
 
 void SearchWidget::search() {
@@ -307,35 +307,35 @@ void SearchWidget::search() {
   edge e;
 
   if (_ui->selectionModeCombo->currentIndex() == 0) // replace current selection
-      output->copy(result);
+    output->copy(result);
   else if (_ui->selectionModeCombo->currentIndex() == 1) { // add to current selection
     if (onNodes) {
       forEach(n,result->getNodesEqualTo(true)) {
-          output->setNodeValue(n,true);
+        output->setNodeValue(n,true);
       }
     }
 
     if (onEdges) {
       forEach(e,result->getEdgesEqualTo(true)) {
-          output->setEdgeValue(e,true);
+        output->setEdgeValue(e,true);
       }
     }
   }
   else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
     if (onNodes) {
       forEach(n,result->getNodesEqualTo(true)) {
-          output->setNodeValue(n,false);
+        output->setNodeValue(n,false);
       }
     }
 
     if (onEdges) {
       forEach(e,result->getEdgesEqualTo(true)) {
-          output->setEdgeValue(e,false);
+        output->setEdgeValue(e,false);
       }
     }
   }
   else if (_ui->selectionModeCombo->currentIndex() == 3) { // no modification
-      output = result;
+    output = result;
   }
 
   if (deleteTermB)
@@ -343,18 +343,19 @@ void SearchWidget::search() {
 
   unsigned int resultsCountNodes = 0, resultsCountEdges=0;
   forEach(n, output->getNodesEqualTo(true)) {
-      resultsCountNodes++;
+    resultsCountNodes++;
   }
   forEach(e, output->getEdgesEqualTo(true)) {
-      resultsCountEdges++;
+    resultsCountEdges++;
   }
   delete result;
+
   if(onNodes&&!onEdges)
-      _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) found");
+    _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) found");
   else if(!onNodes&&onEdges)
-      _ui->resultsCountLabel->setText(QString::number(resultsCountEdges) +" edge(s) found");
+    _ui->resultsCountLabel->setText(QString::number(resultsCountEdges) +" edge(s) found");
   else
-      _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) and " +QString::number(resultsCountEdges) +" edge(s) found");
+    _ui->resultsCountLabel->setText(QString::number(resultsCountNodes) + " node(s) and " +QString::number(resultsCountEdges) +" edge(s) found");
 
   Observable::unholdObservers();
 }

@@ -137,13 +137,16 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
       if (!g || defaultValue.empty())
         dataSet.set(name, (NumericProperty*) NULL);
       else {
-	PropertyInterface* prop = g->getProperty(defaultValue);
-	if (!dynamic_cast<NumericProperty*>(prop)) {
-	  tlp::error() << "NumericProperty '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << std::endl;
-	  prop = NULL;
-	}
+        PropertyInterface* prop = g->getProperty(defaultValue);
+
+        if (!dynamic_cast<NumericProperty*>(prop)) {
+          tlp::error() << "NumericProperty '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << std::endl;
+          prop = NULL;
+        }
+
         dataSet.set(name, (NumericProperty *) prop);
       }
+
       continue;
     }
 
@@ -151,12 +154,12 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
       if (!g || defaultValue.empty())
         dataSet.set(name, (PropertyInterface*) NULL);
       else {
-	if (!g->existProperty(defaultValue)) {
-	  tlp::error() << "Property '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << std::endl;
-	  dataSet.set(name, (PropertyInterface*) NULL);
-	}
-	else
-	  dataSet.set(name, g->getProperty(defaultValue));
+        if (!g->existProperty(defaultValue)) {
+          tlp::error() << "Property '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << std::endl;
+          dataSet.set(name, (PropertyInterface*) NULL);
+        }
+        else
+          dataSet.set(name, g->getProperty(defaultValue));
       }
     }
   }

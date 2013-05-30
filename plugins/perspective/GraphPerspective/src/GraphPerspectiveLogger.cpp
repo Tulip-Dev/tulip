@@ -61,16 +61,16 @@ unsigned int GraphPerspectiveLogger::count() const {
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, const QString &msg) {
-    if (type == QtFatalMsg) {
-      std::cerr << msg.toStdString() << std::endl;
-      abort();
-    }
+  if (type == QtFatalMsg) {
+    std::cerr << msg.toStdString() << std::endl;
+    abort();
+  }
 
-    if (type > _logSeverity)
-      _logSeverity = type;
+  if (type > _logSeverity)
+    _logSeverity = type;
 
-    _logCount++;
-    _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), msg));
+  _logCount++;
+  _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), msg));
 }
 #else
 void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {

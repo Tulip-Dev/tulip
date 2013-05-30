@@ -228,9 +228,11 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
             glLoadName(*selectionCurrentId);
             (*selectionCurrentId)++;
           }
+
           glNode.id=it->id;
           glNode.draw(it->lod,inputData,camera);
-        } else {
+        }
+        else {
           nodesMetricOrdered.push_back(make_pair(node(it->id), it->lod));
         }
 
@@ -257,6 +259,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
           glLoadName(*selectionCurrentId);
           (*selectionCurrentId)++;
         }
+
         glNode.id=it->first.id;
         glNode.draw(it->second,inputData,camera);
       }
@@ -288,7 +291,8 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
           glEdge.id=it->id;
           glEdge.draw(it->lod,inputData,camera);
-        } else {
+        }
+        else {
           edgesMetricOrdered.push_back(make_pair(edge(it->id), it->lod));
         }
       }
@@ -308,6 +312,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
             glLoadName(*selectionCurrentId);
             (*selectionCurrentId)++;
           }
+
           glEdge.id=it->first.id;
           glEdge.draw(it->second,inputData,camera);
         }
@@ -523,7 +528,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       n.id=it->id;
 
       if (filteringProperty && filteringProperty->getNodeValue(n)) {
-          continue;
+        continue;
       }
 
       if(selectionProperty->getNodeValue(n)==drawSelected) {
@@ -572,7 +577,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
       e.id=it->id;
 
       if (filteringProperty && filteringProperty->getEdgeValue(e)) {
-          continue;
+        continue;
       }
 
       if(selectionProperty->getEdgeValue(e) == drawSelected) {

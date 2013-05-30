@@ -53,7 +53,7 @@ public:
   PLUGININFORMATIONS("Make Directed Tree", "Tulip team", "18/04/2012", "Makes a graph a directed tree.", "1.0", "Topology Update")
   MakeDirectedTree(const tlp::PluginContext* context) : tlp::Algorithm(context) {
   }
- 
+
   tlp::node root;
 
   virtual bool check(std::string& errorMsg) {
@@ -65,8 +65,8 @@ public:
     tlp::node n;
     forEach(n, graph->getProperty<tlp::BooleanProperty>("viewSelection")->getNodesEqualTo(true)) {
       if (root.isValid()) {
-	tlp::error() << "Only one root node must be selected." << std::endl;
-	return false;
+        tlp::error() << "Only one root node must be selected." << std::endl;
+        return false;
       }
 
       root = n;

@@ -189,10 +189,10 @@ void SceneConfigWidget::applySettings() {
 }
 
 void SceneConfigWidget::dynamicFontRBToggled(bool state) {
-    _ui->sizeLimitsGB->setEnabled(state);
+  _ui->sizeLimitsGB->setEnabled(state);
 }
 
 void SceneConfigWidget::updateSliderRangeLabels() {
-    _ui->labelsMinSizeLabel->setText(QString::number(_ui->labelSizesSpanSlider->lowerValue()));
-    _ui->labelsMaxSizeLabel->setText(QString::number(_ui->labelSizesSpanSlider->upperValue()));
+  _ui->labelsMinSizeLabel->setText(QString::number(_ui->labelSizesSpanSlider->lowerValue()));
+  _ui->labelsMaxSizeLabel->setText(QString::number(_ui->labelSizesSpanSlider->upperValue()));
 }

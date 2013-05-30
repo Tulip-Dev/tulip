@@ -34,7 +34,7 @@ class PixelOrientedOptionsWidget : public QWidget {
 
   Q_OBJECT
 
-    Ui::PixelOrientedOptionsWidgetData* _ui;
+  Ui::PixelOrientedOptionsWidgetData* _ui;
 public :
 
   PixelOrientedOptionsWidget(QWidget *parent = 0);

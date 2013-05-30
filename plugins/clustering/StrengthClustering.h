@@ -48,9 +48,9 @@ public:
   bool check(std::string &);
 private:
   void computeNodePartition(double threshold,
-			    std::vector< std::set<tlp::node> >&);
+                            std::vector< std::set<tlp::node> >&);
   double computeMQValue(const std::vector< std::set<tlp::node> >& partition,
-			tlp::Graph *);
+                        tlp::Graph *);
   double findBestThreshold(int numberOfSteps, bool& stopped);
 //  tlp::Graph* buildSubGraphs(const std::vector< std::set<tlp::node > > &);
 //  bool recursiveCall(tlp::Graph *);

@@ -41,8 +41,8 @@ ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent) 
   connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
 }
 
-ParallelCoordsDrawConfigWidget::~ParallelCoordsDrawConfigWidget(){
-    delete _ui;
+ParallelCoordsDrawConfigWidget::~ParallelCoordsDrawConfigWidget() {
+  delete _ui;
 }
 
 void ParallelCoordsDrawConfigWidget::pressButtonBrowse() {

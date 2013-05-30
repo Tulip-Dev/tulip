@@ -37,7 +37,7 @@ typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> D
  * @ingroup Graph
  * @brief A graph property that maps a double value to graph elements.
  */
- class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
+class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
 public :
   DoubleProperty (Graph *, std::string n="");
 

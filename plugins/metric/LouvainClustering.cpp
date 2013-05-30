@@ -133,22 +133,24 @@ void LouvainClustering::createQuotient() {
     //Sum of weights on adjacents edges and test for self-loops
     double deg=0.0;
     edge e;
+
     if (metric) {
       forEach(e,graph->getInOutEdges(n)) {
-	if(graph->opposite(e,n)==n)
-	  internalWeight->setNodeValue(t, metric->getEdgeDoubleValue(e));
-	else
-	  deg+=metric->getEdgeDoubleValue(e);
-      }
-    } else {
-      forEach(e,graph->getInOutEdges(n)) {
-	if(graph->opposite(e,n)==n)
-	  internalWeight->setNodeValue(t, 1.0);
-	else
-	  deg+=1.0;
+        if(graph->opposite(e,n)==n)
+          internalWeight->setNodeValue(t, metric->getEdgeDoubleValue(e));
+        else
+          deg+=metric->getEdgeDoubleValue(e);
       }
     }
-      
+    else {
+      forEach(e,graph->getInOutEdges(n)) {
+        if(graph->opposite(e,n)==n)
+          internalWeight->setNodeValue(t, 1.0);
+        else
+          deg+=1.0;
+      }
+    }
+
     externalWeight->setNodeValue(t,deg);
     //Update comToInfo for modularity computing
     comToInfo.insert(make_pair(t,make_pair(internalWeight->getNodeValue(t),2.0*internalWeight->getNodeValue(t)+deg)));
@@ -157,23 +159,25 @@ void LouvainClustering::createQuotient() {
   //Copy Edges and the sum of edge weights
   m=0.0;
   edge e;
+
   if (metric) {
     forEach(e,graph->getEdges()) {
       const std::pair<node, node>& eEnds = graph->ends(e);
       edge ne = quotient->addEdge(nodeMapping.get(eEnds.first.id),
-				  nodeMapping.get(eEnds.second.id));
+                                  nodeMapping.get(eEnds.second.id));
       externalWeight->setEdgeValue(ne,metric->getEdgeDoubleValue(e));
       m+=metric->getEdgeDoubleValue(e);
     }
-  } else {
+  }
+  else {
     forEach(e,graph->getEdges()) {
       const std::pair<node, node>& eEnds = graph->ends(e);
       edge ne = quotient->addEdge(nodeMapping.get(eEnds.first.id),
-				  nodeMapping.get(eEnds.second.id));
+                                  nodeMapping.get(eEnds.second.id));
       externalWeight->setEdgeValue(ne, 1.0);
       m+=1.0;
     }
-  }    
+  }
 }
 //========================================================================================
 void LouvainClustering::trackClustering() {

@@ -129,14 +129,14 @@ void GraphPerspective::addRecentDocument(const QString& path) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
-    std::cerr << msg.toStdString() << std::endl;
-    static_cast<GraphPerspective*>(Perspective::instance())->log(type, context, msg);
+  std::cerr << msg.toStdString() << std::endl;
+  static_cast<GraphPerspective*>(Perspective::instance())->log(type, context, msg);
 }
 
 void GraphPerspective::log(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
-    _logger->log(type, context, msg);
-    _ui->loggerIcon->setPixmap(_logger->icon());
-    _ui->loggerMessage->setText(QString::number(_logger->count()));
+  _logger->log(type, context, msg);
+  _ui->loggerIcon->setPixmap(_logger->icon());
+  _ui->loggerMessage->setText(QString::number(_logger->count()));
 }
 
 #else
@@ -160,6 +160,7 @@ GraphPerspective::~GraphPerspective() {
 #else
   qInstallMsgHandler(0);
 #endif
+
   if(_ui!=NULL)
     delete _ui;
 }

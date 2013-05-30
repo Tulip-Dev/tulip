@@ -33,7 +33,7 @@ PixelOrientedOptionsWidget::PixelOrientedOptionsWidget(QWidget *parent) : QWidge
 }
 
 PixelOrientedOptionsWidget::~PixelOrientedOptionsWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 Color PixelOrientedOptionsWidget::getBackgroundColor() const {

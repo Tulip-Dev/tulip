@@ -90,7 +90,8 @@ void Billboard::draw(node n,float lod) {
     rect->setOutlineMode(true);
     rect->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
     rect->setOutlineSize(borderWidth);
-  } else {
+  }
+  else {
     rect->setOutlineMode(false);
   }
 

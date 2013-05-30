@@ -166,6 +166,7 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
     addToScene(_quickAccessBarItem);
     _quickAccessBarItem->setZValue(10);
   }
+
   sceneRectChanged(QRectF(QPoint(0, 0), graphicsView()->size()));
 }
 
@@ -184,12 +185,14 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
 
   GlLayer *fgLayer = getGlMainWidget()->getScene()->getLayer("Foreground");
+
   if (fgLayer) {
-      Gl2DRect *labriLogo = dynamic_cast<Gl2DRect*>(fgLayer->findGlEntity("labrilogo"));
-      if (labriLogo) {
-          labriLogo->setCoordinates((_quickAccessBar != NULL) ? 35. : 0., 5., 50., 50.);
-          draw();
-      }
+    Gl2DRect *labriLogo = dynamic_cast<Gl2DRect*>(fgLayer->findGlEntity("labrilogo"));
+
+    if (labriLogo) {
+      labriLogo->setCoordinates((_quickAccessBar != NULL) ? 35. : 0., 5., 50., 50.);
+      draw();
+    }
   }
 }
 

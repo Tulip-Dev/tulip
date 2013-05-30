@@ -50,7 +50,7 @@ class GraphView;
  *
  * The actual data is stored in this class, and it manages the default values.
  */
- template <class Tnode, class Tedge, class Tprop=PropertyInterface>
+template <class Tnode, class Tedge, class Tprop=PropertyInterface>
 class TLP_SCOPE AbstractProperty : public Tprop {
   friend class Graph;
   friend class GraphView;
@@ -406,8 +406,8 @@ protected:
   typename Tedge::RealType edgeDefaultValue;
 };
 
- template <typename vectType,typename eltType,typename propType=PropertyInterface>
-   class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectType, propType> {
+template <typename vectType,typename eltType,typename propType=PropertyInterface>
+class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectType, propType> {
 public:
   AbstractVectorProperty(Graph *, std::string name = "");
 

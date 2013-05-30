@@ -33,7 +33,7 @@ class SizeScaleConfigDialog : public QDialog {
 
   Q_OBJECT
 
-     Ui::SizeScaleConfigDialogData* _ui;
+  Ui::SizeScaleConfigDialogData* _ui;
 
 public :
 

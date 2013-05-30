@@ -66,7 +66,7 @@ private:
 
     PluginDescription(): factory(NULL), infos(NULL) {}
     ~PluginDescription() {
-        delete infos;
+      delete infos;
     }
   };
 

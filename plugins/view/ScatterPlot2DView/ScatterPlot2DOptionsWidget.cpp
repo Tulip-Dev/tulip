@@ -43,7 +43,7 @@ ScatterPlot2DOptionsWidget::ScatterPlot2DOptionsWidget(QWidget *parent) : QWidge
 }
 
 ScatterPlot2DOptionsWidget::~ScatterPlot2DOptionsWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 Color ScatterPlot2DOptionsWidget::getButtonColor(QPushButton *button) const {
@@ -123,7 +123,7 @@ Size ScatterPlot2DOptionsWidget::getMaxSizeMapping() const {
 }
 
 void ScatterPlot2DOptionsWidget::setMinSizeMapping(const float minSize) {
- _ui-> minSizeSpinBox->setValue((int)minSize);
+  _ui-> minSizeSpinBox->setValue((int)minSize);
 }
 
 void ScatterPlot2DOptionsWidget::setMaxSizeMapping(const float maxSize) {

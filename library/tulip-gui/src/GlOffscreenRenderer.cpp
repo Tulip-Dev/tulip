@@ -21,7 +21,7 @@
 #include <Windows.h>
 #endif
 
-#include <GL/glew.h> 
+#include <GL/glew.h>
 
 #include <QGLFramebufferObject>
 
