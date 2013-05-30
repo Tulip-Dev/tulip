@@ -119,9 +119,7 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *,QEvent *event) {
     SelectedEntity type;
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
     GlMainWidget *gl = getGlMainWidget();
-    QRect rect=gl->frameGeometry();
-
-    if (gl->pickNodesEdges(he->x()-rect.x(), he->y()-rect.y(), type)) {
+    if (gl->pickNodesEdges(he->x(), he->y(), type)) {
       // try to show the viewLabel if any
       StringProperty *labels = graph()->getProperty<StringProperty>("viewLabel");
       std::string label;
@@ -161,7 +159,7 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *,QEvent *event) {
         }
       }
     }
-    else {
+    else { //be sure to hide the tooltip if the mouse cursor is not under a node or an edge
       QToolTip::hideText();
       event->ignore();
     }
@@ -419,13 +417,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
   //Check if a node/edge is under the mouse pointer
   bool result;
   SelectedEntity entity;
-  int x = point.x(), y = point.y();
-#ifndef _WIN32 // For some obscure reason, point coordinates should not be shifted when under Win32
-  QRect rect = getGlMainWidget()->frameGeometry();
-  x -= rect.x();
-  y -= rect.y();
-#endif
-  result = getGlMainWidget()->pickNodesEdges(x, y, entity);
+  result = getGlMainWidget()->pickNodesEdges(point.x(), point.y(), entity);
 
   if (result) {
     menu->addSeparator();
