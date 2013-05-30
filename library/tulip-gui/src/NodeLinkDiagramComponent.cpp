@@ -114,7 +114,7 @@ void NodeLinkDiagramComponent::setupWidget() {
   graphicsView()->installEventFilter(this);//Handle tooltip events
 }
 
-bool NodeLinkDiagramComponent::eventFilter(QObject *,QEvent *event) {
+bool NodeLinkDiagramComponent::eventFilter(QObject *obj,QEvent *event) {
   if(_tooltips==true && event->type()==QEvent::ToolTip) {
     SelectedEntity type;
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
@@ -164,8 +164,8 @@ bool NodeLinkDiagramComponent::eventFilter(QObject *,QEvent *event) {
       event->ignore();
     }
   }
-
-  return false;
+    // standard event processing
+  return GlMainView::eventFilter(obj, event);
 }
 
 void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
