@@ -153,6 +153,10 @@ void NodeLinkDiagramComponent::setupWidget() {
                }
            }
          }
+         else {
+             QToolTip::hideText();
+             event->ignore();
+         }
      }
          return false;
  }
