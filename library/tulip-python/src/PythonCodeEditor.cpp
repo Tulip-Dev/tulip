@@ -1249,7 +1249,7 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
   QString textBeforeCursorTrimmed = textBeforeCursor.trimmed();
 
   // string litteral edition : don't show autocompletion list
-  if (textBeforeCursorTrimmed.count("\"")%2==1 || textBeforeCursorTrimmed.count("\'")%2==1)
+  if (dotContext && (textBeforeCursorTrimmed.count("\"")%2==1 || textBeforeCursorTrimmed.count("\'")%2==1))
     return;
 
 
