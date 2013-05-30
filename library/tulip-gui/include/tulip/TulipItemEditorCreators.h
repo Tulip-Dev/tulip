@@ -43,9 +43,7 @@ public:
     return "";
   }
 
-  virtual QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const {
-    return QSize();
-  }
+  virtual QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 
   virtual void setEditorData(QWidget*,const QVariant&,bool isMandatory,tlp::Graph* g=NULL)=0;
   virtual QVariant editorData(QWidget*,tlp::Graph* g=NULL)=0;
@@ -168,6 +166,7 @@ public:
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual QString displayText(const QVariant &) const;
   virtual bool paint(QPainter*, const QStyleOptionViewItem&, const QVariant&) const;
+  QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 
 class TLP_QT_SCOPE EdgeShapeEditorCreator: public tlp::TulipItemEditorCreator {
