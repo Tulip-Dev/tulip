@@ -47,6 +47,39 @@
 
 using namespace tlp;
 
+class CustomComboBox : public QComboBox {
+
+public:
+
+    CustomComboBox(QWidget *parent=NULL) : QComboBox(parent), _popupWidth(0) {}
+
+    void addItem(const QPixmap & icon, const QString & text, const QVariant & userData = QVariant(), const int extraWidth=20) {
+      QFontMetrics fm = fontMetrics();
+      _popupWidth = qMax(_popupWidth, icon.width() + fm.boundingRect(text).width() + extraWidth);
+      QComboBox::addItem(icon, text, userData);
+    }
+
+    void addItem(const QString & text, const QVariant & userData = QVariant(), const int extraWidth=20) {
+      QFontMetrics fm = fontMetrics();
+      _popupWidth = qMax(_popupWidth, fm.boundingRect(text).width() + extraWidth);
+      QComboBox::addItem(text, userData);
+    }
+
+    void showPopup() {
+      QComboBox::showPopup();
+      QWidget *popup = findChild<QFrame*>();
+
+      if (_popupWidth > popup->width()) {
+        popup->resize(_popupWidth, popup->height());
+      }
+    }
+
+private:
+
+    int _popupWidth;
+
+};
+
 /*
  * Base class
  */
@@ -58,6 +91,14 @@ bool TulipItemEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem
   }
 
   return false;
+}
+
+QSize TulipItemEditorCreator::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
+  QVariant data = index.model()->data(index);
+  QString line = displayText(data);
+  QFontMetrics fontMetrics(option.font);
+  QRect textBB = fontMetrics.boundingRect(line);
+  return QSize(textBB.width()+15, textBB.height()+5);
 }
 
 // this class is defined to properly catch the return status
@@ -402,7 +443,7 @@ QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &opt
 }
 
 QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
-  QComboBox* combobox = new QComboBox(parent);
+  CustomComboBox* combobox = new CustomComboBox(parent);
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
 
   for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
@@ -455,7 +496,7 @@ bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem
 
 ///EdgeExtremityShapeEditorCreator
 QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const {
-  QComboBox* combobox = new QComboBox(parent);
+  CustomComboBox* combobox = new CustomComboBox(parent);
   combobox->addItem(QString("NONE"),EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
 
@@ -498,6 +539,13 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter* painter, const QStyleOptio
   QStyle *style = QApplication::style();
   style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, NULL);
   return true;
+}
+
+QSize EdgeExtremityShapeEditorCreator::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
+  QVariant data = index.model()->data(index);
+  static QPixmap pixmap = EdgeExtremityGlyphRenderer::getInst().render(data.value<EdgeExtremityShape>().edgeExtremityShapeId);
+  QFontMetrics fontMetrics(option.font);
+  return QSize(pixmap.width()+fontMetrics.boundingRect(displayText(data)).width()+40, pixmap.height());
 }
 
 ///EdgeShapeEditorCreator
