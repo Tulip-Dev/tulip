@@ -62,30 +62,24 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
   _ui->graphPropertiesSelectionWidget->setWidgetParameters(graph, graphPropertiesTypesFilter);
 
   if (!lastSelectedProperties.empty() && graph) {
-    Iterator<string> *properties= graph->getProperties();
     vector<string> stringList;
-    vector<string>::iterator it;
-    string propertyName;
 
-    for (it = lastSelectedProperties.begin() ; it != lastSelectedProperties.end() ; ++it) {
-      if (graph->existProperty(*it)) {
-        stringList.push_back(*it);
+
+    for (vector<string>::const_iterator it = lastSelectedProperties.begin() ; it != lastSelectedProperties.end() ; ++it) {
+        string prop(*it);
+        if (graph->existProperty(prop)) {
+        stringList.push_back(prop);
       }
     }
-
     _ui->graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
 
     stringList.clear();
-
-    while (properties->hasNext()) {
-      propertyName = properties->next();
-
+    string propertyName;
+    forEach(propertyName, graph->getProperties()) {
       if (graph->existProperty(propertyName) && std::find(lastSelectedProperties.begin(), lastSelectedProperties.end(), propertyName) == lastSelectedProperties.end()) {
         stringList.push_back(propertyName);
       }
     }
-
-    delete properties;
     _ui->graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
   }
   else {

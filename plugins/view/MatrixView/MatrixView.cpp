@@ -118,17 +118,9 @@ QList<QWidget *> MatrixView::configurationWidgets() const {
 void MatrixView::fillContextMenu(QMenu *menu, const QPointF &point) {
   GlMainView::fillContextMenu(menu,point);
   //Check if a node/edge is under the mouse pointer
-  bool result;
   SelectedEntity entity;
-  int x = point.x(), y = point.y();
-#ifndef _WIN32 // For some obscure reason, point coordinates should not be shifted when under Win32
-  QRect rect = getGlMainWidget()->frameGeometry();
-  x -= rect.x();
-  y -= rect.y();
-#endif
-  result = getGlMainWidget()->pickNodesEdges(x, y, entity);
 
-  if (result) {
+  if (getGlMainWidget()->pickNodesEdges(point.x(), point.y(), entity)) {
     menu->addSeparator();
     isNode = entity.getEntityType() == SelectedEntity::NODE_SELECTED;
     itemId = entity.getComplexEntityId();
