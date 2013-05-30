@@ -66,11 +66,13 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
 
 
     for (vector<string>::const_iterator it = lastSelectedProperties.begin() ; it != lastSelectedProperties.end() ; ++it) {
-        string prop(*it);
-        if (graph->existProperty(prop)) {
+      string prop(*it);
+
+      if (graph->existProperty(prop)) {
         stringList.push_back(prop);
       }
     }
+
     _ui->graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
 
     stringList.clear();

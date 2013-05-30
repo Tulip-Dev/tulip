@@ -51,32 +51,32 @@ class CustomComboBox : public QComboBox {
 
 public:
 
-    CustomComboBox(QWidget *parent=NULL) : QComboBox(parent), _popupWidth(0) {}
+  CustomComboBox(QWidget *parent=NULL) : QComboBox(parent), _popupWidth(0) {}
 
-    void addItem(const QPixmap & icon, const QString & text, const QVariant & userData = QVariant(), const int extraWidth=20) {
-      QFontMetrics fm = fontMetrics();
-      _popupWidth = qMax(_popupWidth, icon.width() + fm.boundingRect(text).width() + extraWidth);
-      QComboBox::addItem(icon, text, userData);
+  void addItem(const QPixmap & icon, const QString & text, const QVariant & userData = QVariant(), const int extraWidth=20) {
+    QFontMetrics fm = fontMetrics();
+    _popupWidth = qMax(_popupWidth, icon.width() + fm.boundingRect(text).width() + extraWidth);
+    QComboBox::addItem(icon, text, userData);
+  }
+
+  void addItem(const QString & text, const QVariant & userData = QVariant(), const int extraWidth=20) {
+    QFontMetrics fm = fontMetrics();
+    _popupWidth = qMax(_popupWidth, fm.boundingRect(text).width() + extraWidth);
+    QComboBox::addItem(text, userData);
+  }
+
+  void showPopup() {
+    QComboBox::showPopup();
+    QWidget *popup = findChild<QFrame*>();
+
+    if (_popupWidth > popup->width()) {
+      popup->resize(_popupWidth, popup->height());
     }
-
-    void addItem(const QString & text, const QVariant & userData = QVariant(), const int extraWidth=20) {
-      QFontMetrics fm = fontMetrics();
-      _popupWidth = qMax(_popupWidth, fm.boundingRect(text).width() + extraWidth);
-      QComboBox::addItem(text, userData);
-    }
-
-    void showPopup() {
-      QComboBox::showPopup();
-      QWidget *popup = findChild<QFrame*>();
-
-      if (_popupWidth > popup->width()) {
-        popup->resize(_popupWidth, popup->height());
-      }
-    }
+  }
 
 private:
 
-    int _popupWidth;
+  int _popupWidth;
 
 };
 
