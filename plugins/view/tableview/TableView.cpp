@@ -619,21 +619,30 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
 }
 
 void TableView::resizeTableRows() {
+
   if (!_ui->table->model())
     return;
 
   int top = qMax(0, _ui->table->verticalHeader()->visualIndexAt(0));
   int bottom = _ui->table->verticalHeader()->visualIndexAt(_ui->table->viewport()->height());
 
-  if (bottom == -1 || (bottom+10) >= _ui->table->model()->rowCount())
-    bottom = _ui->table->model()->rowCount() - 1;
-  else
-    bottom += 10;
+  if (bottom != -1) {
+    if ((bottom+10) >= _ui->table->model()->rowCount())
+      bottom = _ui->table->model()->rowCount() - 1;
+    else
+      bottom += 10;
+  }
+
+  int left = qMax(0, _ui->table->horizontalHeader()->visualIndexAt(0));
+  int right = _ui->table->horizontalHeader()->visualIndexAt(_ui->table->viewport()->width());
+
 
   for (int i = top ; i <= bottom ; ++i)
     _ui->table->resizeRowToContents(i);
 
-  _ui->table->resizeColumnsToContents();
+  for (int i = left ; i <= right ; ++i)
+    _ui->table->resizeColumnToContents(i);
+
 }
 
 

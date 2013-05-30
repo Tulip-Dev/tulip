@@ -49,8 +49,8 @@ int NavigableTableView::sizeHintForRow(int row) const {
     return -1;
 
   ensurePolished();
-  int left = 0;
-  int right = model()->columnCount();
+  int left = qMax(0, horizontalHeader()->visualIndexAt(0));
+  int right = horizontalHeader()->visualIndexAt(viewport()->width());
   int hint = 0;
 
   for (int column = left; column < right; ++column) {
@@ -60,6 +60,31 @@ int NavigableTableView::sizeHintForRow(int row) const {
 
     QModelIndex index = model()->index(row, column);
     hint = qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).height());
+  }
+
+  return hint;
+}
+
+int NavigableTableView::sizeHintForColumn(int col) const {
+  if (!model())
+    return -1;
+
+  ensurePolished();
+  int top = qMax(0, verticalHeader()->visualIndexAt(0));
+  int bottom = verticalHeader()->visualIndexAt(viewport()->height());
+
+  int hint = 0;
+
+  if (bottom != -1) {
+    if ((bottom+10) >= model()->rowCount())
+      bottom = model()->rowCount() - 1;
+    else
+      bottom += 10;
+  }
+
+  for (int row = top; row <= bottom; ++row) {
+    QModelIndex index = model()->index(row, col);
+    hint = qMax(hint, itemDelegate(index)->sizeHint(viewOptions(), index).width());
   }
 
   return hint;
