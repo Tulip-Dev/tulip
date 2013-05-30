@@ -52,8 +52,8 @@ ParallelCoordinatesConfigDialog::ParallelCoordinatesConfigDialog(ParallelCoordin
   connect(_ui->bgColorButton,SIGNAL(clicked()),this,SLOT(pressColorButton()));
 }
 
-ParallelCoordinatesConfigDialog::~ParallelCoordinatesConfigDialog(){
-    delete _ui;
+ParallelCoordinatesConfigDialog::~ParallelCoordinatesConfigDialog() {
+  delete _ui;
 }
 
 void ParallelCoordinatesConfigDialog::updateSelectedProperties() {
@@ -68,7 +68,7 @@ void ParallelCoordinatesConfigDialog::updateSelectedProperties() {
     stringList.push_back(*it);
   }
 
- _ui-> graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
+  _ui-> graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
 
   stringList.clear();
 
@@ -166,7 +166,7 @@ void ParallelCoordinatesConfigDialog::setLinesTextureFilename(const std::string 
       _ui->defaultTexture->setChecked(true);
     }
     else {
-     _ui-> userTexture->setChecked(true);
+      _ui-> userTexture->setChecked(true);
       _ui->userTextureFile->setText(QString::fromUtf8(linesTextureFileName.c_str()));
     }
   }
@@ -253,7 +253,7 @@ void ParallelCoordinatesConfigDialog::pressColorButton() {
   if (newColor.isValid()) {
     QPalette palette;
     palette.setColor(QPalette::Button, newColor);
-   _ui-> bgColorButton->setPalette(palette);
+    _ui-> bgColorButton->setPalette(palette);
   }
 }
 
@@ -278,7 +278,7 @@ void ParallelCoordinatesConfigDialog::backupConfiguration() {
 }
 
 void ParallelCoordinatesConfigDialog::restoreBackupConfiguration() {
- _ui->nodesButton->setChecked(dataLocationBak == NODE);
+  _ui->nodesButton->setChecked(dataLocationBak == NODE);
   _ui->edgesButton->setChecked(dataLocationBak == EDGE);
 
   QPalette palette;

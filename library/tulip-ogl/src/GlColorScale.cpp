@@ -36,7 +36,7 @@ GlColorScale::GlColorScale(ColorScale *colorScale, const Coord &baseCoord, const
 }
 
 GlColorScale::~GlColorScale() {
-    delete colorScalePolyQuad;
+  delete colorScalePolyQuad;
 }
 
 void GlColorScale::setColorScale(ColorScale * scale) {

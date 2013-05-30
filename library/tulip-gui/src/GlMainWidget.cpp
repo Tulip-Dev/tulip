@@ -18,7 +18,7 @@
  */
 
 #include <tulip/GlMainWidget.h>
- 
+
 #include <QGLPixelBuffer>
 #include <QGLFramebufferObject>
 #include <QGLFormat>
@@ -384,9 +384,11 @@ void GlMainWidget::pickNodesEdges(const int x, const int y,
                                   std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
                                   GlLayer* layer, bool pickNodes, bool pickEdges) {
   makeCurrent();
+
   if (pickNodes) {
     scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedNodes);
   }
+
   if (pickEdges) {
     scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedEdges);
   }

@@ -112,19 +112,19 @@ static bool processQtEvents = false;
 QTime timer;
 
 class SleepSimulator {
-     QMutex localMutex;
-     QWaitCondition sleepSimulator;
+  QMutex localMutex;
+  QWaitCondition sleepSimulator;
 public:
-    SleepSimulator() {
-      localMutex.lock();
-    }
-    ~SleepSimulator() {
-      localMutex.unlock();
-    }
+  SleepSimulator() {
+    localMutex.lock();
+  }
+  ~SleepSimulator() {
+    localMutex.unlock();
+  }
 
-    void sleep(unsigned long sleepMS) {
-      sleepSimulator.wait(&localMutex, sleepMS);
-    }
+  void sleep(unsigned long sleepMS) {
+    sleepSimulator.wait(&localMutex, sleepMS);
+  }
 };
 
 static SleepSimulator ss;
@@ -147,6 +147,7 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
     while (scriptPaused) {
       if (processQtEvents && QApplication::hasPendingEvents())
         QApplication::processEvents();
+
       ss.sleep(30);
     }
 
@@ -359,15 +360,20 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 #else
     PyObject *builtinModule = PyImport_ImportModule("__builtin__");
 #endif
+
     if (PyObject_HasAttrString(builtinModule, "exit"))
       PyObject_DelAttrString(builtinModule, "exit");
+
     if (PyObject_HasAttrString(builtinModule, "quit"))
       PyObject_DelAttrString(builtinModule, "quit");
+
     Py_DECREF(builtinModule);
 
     PyObject *sysModule = PyImport_ImportModule("sys");
+
     if (PyObject_HasAttrString(sysModule, "exit"))
       PyObject_DelAttrString(sysModule, "exit");
+
     Py_DECREF(sysModule);
 
   }
@@ -395,6 +401,7 @@ PythonInterpreter::~PythonInterpreter() {
 
     if (sipQtSupport)
       *sipQtSupport = NULL;
+
 #endif
 
     runString("sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; sys.stdin = sys.__stdin__\n");
@@ -1065,15 +1072,18 @@ void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) 
 }
 
 QString PythonInterpreter::readLineFromConsole() {
-    if (consoleOuputEmitter && consoleOuputEmitter->consoleWidget()) {
-        ConsoleInputHandler cih;
-        cih.setConsoleWidget(consoleOuputEmitter->consoleWidget());
-        cih.startReadLine();
-        while (!cih.lineRead()) {
-            QApplication::processEvents();
-            ss.sleep(30);
-        }
-        return cih.line();
+  if (consoleOuputEmitter && consoleOuputEmitter->consoleWidget()) {
+    ConsoleInputHandler cih;
+    cih.setConsoleWidget(consoleOuputEmitter->consoleWidget());
+    cih.startReadLine();
+
+    while (!cih.lineRead()) {
+      QApplication::processEvents();
+      ss.sleep(30);
     }
-    return "";
+
+    return cih.line();
+  }
+
+  return "";
 }

@@ -49,8 +49,8 @@ GlyphScaleConfigDialog::GlyphScaleConfigDialog(QWidget *parent) : QDialog(parent
   connect(_ui->nbGlyphsSpinBox, SIGNAL(valueChanged(int)), this, SLOT(nbGlyphsSpinBoxValueChanged(int)));
 }
 
-GlyphScaleConfigDialog::~GlyphScaleConfigDialog(){
-    delete _ui;
+GlyphScaleConfigDialog::~GlyphScaleConfigDialog() {
+  delete _ui;
 }
 
 vector<int> GlyphScaleConfigDialog::getSelectedGlyphsId() const {

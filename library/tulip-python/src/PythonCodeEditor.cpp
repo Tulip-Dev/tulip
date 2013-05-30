@@ -130,81 +130,81 @@ void AutoCompletionList::mouseDoubleClickEvent(QMouseEvent *) {
 }
 
 void AutoCompletionList::insertSelectedItem() {
-    if (currentItem()) {
-      PythonCodeEditor *editor = static_cast<PythonCodeEditor *>(parent());
-      QTextCursor cursor = editor->textCursor();
-      QString text = cursor.block().text();
+  if (currentItem()) {
+    PythonCodeEditor *editor = static_cast<PythonCodeEditor *>(parent());
+    QTextCursor cursor = editor->textCursor();
+    QString text = cursor.block().text();
 
-      if (text != "") {
+    if (text != "") {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
-        int start = cursor.positionInBlock();
+      int start = cursor.positionInBlock();
 #else
-        int start = cursor.position() - cursor.block().position();
+      int start = cursor.position() - cursor.block().position();
 #endif
 
-        int end = 0;
-        bool endOk = false;
+      int end = 0;
+      bool endOk = false;
 
-        for (int i = start ; i > 0 ; --i) {
-          int j = 0;
+      for (int i = start ; i > 0 ; --i) {
+        int j = 0;
 
-          while (sepChar[j]) {
-            if (text[i-1] == sepChar[j] || text[i-1] == '.') {
-              end = i;
-              endOk = true;
-              break;
-            }
-
-            ++j;
-          }
-
-          if (endOk)
-            break;
-        }
-
-        cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, start - end);
-        cursor.removeSelectedText();
-      }
-
-      QString textToInsert = currentItem()->text();
-      int pos = textToInsert.indexOf("\" (");
-
-      if (pos != -1) {
-        textToInsert = textToInsert.mid(0, pos+1);
-      }
-
-      cursor.insertText(textToInsert);
-
-      QString type = _codeEditor->_autoCompletionDb->getLastFoundType();
-
-      if (type != "") {
-        QVector<QString> types;
-        types.push_back(type);
-        QVector<QString> baseTypes = PythonInterpreter::getInstance()->getBaseTypesForType(type);
-
-        for (int i = 0 ; i < baseTypes.size() ; ++i) {
-          types.push_back(baseTypes[i]);
-        }
-
-        for (int i = 0 ; i < types.size() ; ++i) {
-          QString funcName = types[i] + "." + textToInsert;
-
-          if (APIDataBase::getInstance()->functionExists(funcName)) {
-            QVector<QVector<QString> > params = APIDataBase::getInstance()->getParamTypesForMethodOrFunction(funcName);
-
-            if (params.count() > 1 || params[0].count() > 0) {
-              if (text.indexOf("class ") == -1)
-                qApp->sendEvent(_codeEditor, new QKeyEvent(QEvent::KeyPress, Qt::Key_ParenLeft, Qt::NoModifier, "("));
-            }
-            else {
-              cursor.insertText("()");
-            }
-
+        while (sepChar[j]) {
+          if (text[i-1] == sepChar[j] || text[i-1] == '.') {
+            end = i;
+            endOk = true;
             break;
           }
+
+          ++j;
+        }
+
+        if (endOk)
+          break;
+      }
+
+      cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, start - end);
+      cursor.removeSelectedText();
+    }
+
+    QString textToInsert = currentItem()->text();
+    int pos = textToInsert.indexOf("\" (");
+
+    if (pos != -1) {
+      textToInsert = textToInsert.mid(0, pos+1);
+    }
+
+    cursor.insertText(textToInsert);
+
+    QString type = _codeEditor->_autoCompletionDb->getLastFoundType();
+
+    if (type != "") {
+      QVector<QString> types;
+      types.push_back(type);
+      QVector<QString> baseTypes = PythonInterpreter::getInstance()->getBaseTypesForType(type);
+
+      for (int i = 0 ; i < baseTypes.size() ; ++i) {
+        types.push_back(baseTypes[i]);
+      }
+
+      for (int i = 0 ; i < types.size() ; ++i) {
+        QString funcName = types[i] + "." + textToInsert;
+
+        if (APIDataBase::getInstance()->functionExists(funcName)) {
+          QVector<QVector<QString> > params = APIDataBase::getInstance()->getParamTypesForMethodOrFunction(funcName);
+
+          if (params.count() > 1 || params[0].count() > 0) {
+            if (text.indexOf("class ") == -1)
+              qApp->sendEvent(_codeEditor, new QKeyEvent(QEvent::KeyPress, Qt::Key_ParenLeft, Qt::NoModifier, "("));
+          }
+          else {
+            cursor.insertText("()");
+          }
+
+          break;
         }
       }
     }
+  }
 }
 
 void AutoCompletionList::showEvent (QShowEvent * event) {
@@ -1197,7 +1197,7 @@ void PythonCodeEditor::showAutoCompletionList(bool dotContext) {
   updateAutoCompletionList(dotContext);
 
   if (_autoCompletionList->count() == 0)
-    _autoCompletionList->hide();  
+    _autoCompletionList->hide();
 }
 
 void PythonCodeEditor::updateAutoCompletionListPosition() {

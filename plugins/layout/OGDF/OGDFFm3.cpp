@@ -300,7 +300,7 @@ PLUGIN(OGDFFm3)
 OGDFFm3::OGDFFm3(const tlp::PluginContext* context) :
   OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
   addInParameter<NumericProperty*> ("Edge Length Property", paramHelp[0],
-				    "viewMetric", false);
+                                    "viewMetric", false);
   addInParameter<SizeProperty> ("Node Size", paramHelp[1], "viewSize", false);
   addInParameter<double> ("Unit edge length", paramHelp[2], "10.0", false);
   addInParameter<bool> ("New initial placement", paramHelp[3], "true");
@@ -546,7 +546,7 @@ void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
     tlp::edge e;
     forEach(e, graph->getEdges()) {
       edgeLength[tlpToOGDF->getOGDFGraphEdge(e.id)] =
-	length->getEdgeDoubleValue(e);
+        length->getEdgeDoubleValue(e);
     }
     fmmm->call(gAttributes, edgeLength);
   }

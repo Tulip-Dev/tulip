@@ -182,9 +182,9 @@ private:
 };
 
 static Coord computeCircleArcMidPoint(const Coord &start, const Coord &end, const Coord &center) {
-    float radius = start.dist(center);
-    float c=atan2(start[1]+end[1], start[0]+end[0]);
-    return Coord(center.x() + radius*cos(c), center.y() + radius*sin(c));
+  float radius = start.dist(center);
+  float c=atan2(start[1]+end[1], start[0]+end[0]);
+  return Coord(center.x() + radius*cos(c), center.y() + radius*sin(c));
 }
 
 GlPolygon* RoundedBox::roundedSquare=NULL;
@@ -192,8 +192,8 @@ Coord RoundedBox::minIncludeBBSquare;
 Coord RoundedBox::maxIncludeBBSquare;
 
 RoundedBox::RoundedBox(const tlp::PluginContext* context) : Glyph(context) {
-    minIncludeBBSquare = computeCircleArcMidPoint(Coord(-0.25, -0.5), Coord(-0.5, -0.25), Coord(-0.25, -0.25));
-    maxIncludeBBSquare = -minIncludeBBSquare;
+  minIncludeBBSquare = computeCircleArcMidPoint(Coord(-0.25, -0.5), Coord(-0.5, -0.25), Coord(-0.25, -0.25));
+  maxIncludeBBSquare = -minIncludeBBSquare;
 }
 
 void RoundedBox::initRoundedSquare() {
@@ -202,10 +202,12 @@ void RoundedBox::initRoundedSquare() {
 
 void RoundedBox::getIncludeBoundingBox(BoundingBox &boundingBox,node n) {
   const Size &size = glGraphInputData->getElementSize()->getNodeValue(n);
+
   if (size[0] == size[1]) {
     boundingBox[0] = minIncludeBBSquare;
     boundingBox[1] = maxIncludeBBSquare;
-  } else {
+  }
+  else {
     float radius = min(size[0] / 4, size[1] / 4);
     radius = min(radius/size[0], radius/size[1]);
     boundingBox[0] = computeCircleArcMidPoint(Coord(-0.5+radius, -0.5), Coord(-0.5, -0.5+radius), Coord(-0.5+radius, -0.5+radius));
@@ -354,6 +356,7 @@ void RoundedBox::draw(node n, float lod) {
     setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
 
     bool textureOK = false;
+
     if (texture != "") {
       textureOK = GlTextureManager::getInst().activateTexture(texture);
     }

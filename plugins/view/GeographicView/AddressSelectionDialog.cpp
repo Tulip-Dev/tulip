@@ -28,7 +28,7 @@ AddressSelectionDialog::AddressSelectionDialog(QWidget *parent) : QDialog(parent
 }
 
 AddressSelectionDialog::~AddressSelectionDialog() {
-    delete _ui;
+  delete _ui;
 }
 
 void AddressSelectionDialog::setBaseAddress(const QString &address) {

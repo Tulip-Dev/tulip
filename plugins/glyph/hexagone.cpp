@@ -40,13 +40,16 @@ static GlHexagon *hexagon = NULL;
 void drawHexagon(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
 
   hexagon->setFillColor(fillColor);
+
   if (borderWidth > 0) {
     hexagon->setOutlineMode(true);
     hexagon->setOutlineColor(borderColor);
     hexagon->setOutlineSize(borderWidth);
-  } else {
+  }
+  else {
     hexagon->setOutlineMode(false);
   }
+
   hexagon->setTextureName(textureName);
   hexagon->draw(lod,NULL);
 }
@@ -87,10 +90,10 @@ void Hexagon::draw(node n, float lod) {
     textureName=glGraphInputData->parameters->getTexturePath()+textureName;
 
   drawHexagon(glGraphInputData->getElementColor()->getNodeValue(n),
-               glGraphInputData->getElementBorderColor()->getNodeValue(n),
-               glGraphInputData->getElementBorderWidth()->getNodeValue(n),
-               textureName,
-               lod);
+              glGraphInputData->getElementBorderColor()->getNodeValue(n),
+              glGraphInputData->getElementBorderWidth()->getNodeValue(n),
+              textureName,
+              lod);
 }
 
 class EEHexagon: public EdgeExtremityGlyph {
@@ -114,10 +117,10 @@ public:
       textureName=edgeExtGlGraphInputData->parameters->getTexturePath()+textureName;
 
     drawHexagon(glyphColor,
-		borderColor,
-		edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
-		textureName,
-		lod);
+                borderColor,
+                edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e),
+                textureName,
+                lod);
   }
 };
 PLUGIN(EEHexagon)

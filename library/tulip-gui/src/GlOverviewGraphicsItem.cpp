@@ -45,8 +45,8 @@ void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height) {
   this->width=width;
   this->height=height;
 
-    delete glFrameBuffer;
-    glFrameBuffer=NULL;
+  delete glFrameBuffer;
+  glFrameBuffer=NULL;
 
   draw(true);
 }
@@ -64,7 +64,7 @@ static QGLFramebufferObject *createQGLFramebufferObject(int width, int height, Q
   QGLFramebufferObject *fbo=new QGLFramebufferObject(width,height,attachment);
 
   if(!fbo->isValid()) {
-      QMessageBox::critical(NULL,"OpenGL Error","Tulip cannot find enough available memory (GPU) to run.");
+    QMessageBox::critical(NULL,"OpenGL Error","Tulip cannot find enough available memory (GPU) to run.");
   }
 
   return fbo;
@@ -221,6 +221,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
       ++itTmp;
     }
+
     GlGraphRenderingParameters *param = baseScene.getGlGraphComposite()->getRenderingParametersPointer();
     param->setViewEdgeLabel(edgesLabels);
     param->setViewNodeLabel(nodesLabels);

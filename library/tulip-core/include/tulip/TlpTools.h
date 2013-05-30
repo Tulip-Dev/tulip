@@ -55,8 +55,8 @@ extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
  * @param hideTlp a flag to indicate if the 'tlp::' prefix
  * @return string The demangled name of a Tulip C++ class.
  */
- TLP_SCOPE std::string demangleClassName(const char *className,
-					 bool hideTlp = false);
+TLP_SCOPE std::string demangleClassName(const char *className,
+                                        bool hideTlp = false);
 
 /**
  * @ingroup Plugins
@@ -66,9 +66,9 @@ extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
  * @return string The demangled name of a Tulip C++ class
  * without the tlp:: prefix
  */
- inline std::string demangleTlpClassName(const char *className) {
-   return demangleClassName(className, true);
- }
+inline std::string demangleTlpClassName(const char *className) {
+  return demangleClassName(className, true);
+}
 #endif // EMSCRIPTEN
 
 /**

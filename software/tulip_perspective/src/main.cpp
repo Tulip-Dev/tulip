@@ -236,7 +236,7 @@ int main(int argc,char **argv) {
   QString error;
 
   if(!projectFilePath.isEmpty() && !QFileInfo(projectFilePath).exists()) {
-      usage("File "+projectFilePath+" not found");
+    usage("File "+projectFilePath+" not found");
   }
 
   if (!projectFilePath.isEmpty() && projectFilePath.endsWith(".tlpx")) {
@@ -255,12 +255,13 @@ int main(int argc,char **argv) {
   }
   else if (perspectiveName.isEmpty()) {
     perspectiveName = project->perspective();
+
     if(perspectiveName.isEmpty())
-        error = "No perspective given on the command line or in the project file";
+      error = "No perspective given on the command line or in the project file";
   }
 
   if (perspectiveName.isEmpty()) {
-      usage("Could not determine the perspective to launch: \n"+ error);
+    usage("Could not determine the perspective to launch: \n"+ error);
   }
 
   context->project = project;
@@ -275,7 +276,7 @@ int main(int argc,char **argv) {
   Perspective *perspective = PluginLister::instance()->getPluginObject<Perspective>(perspectiveName.toStdString(), context);
 
   if (perspective==NULL) {
-      usage("Cannot open perspective: " + perspectiveName + "\nWrong plugin type or plugin not found.");
+    usage("Cannot open perspective: " + perspectiveName + "\nWrong plugin type or plugin not found.");
   }
 
   Perspective::setInstance(perspective);

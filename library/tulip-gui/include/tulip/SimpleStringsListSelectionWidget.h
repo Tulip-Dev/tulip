@@ -38,7 +38,7 @@ class TLP_QT_SCOPE SimpleStringsListSelectionWidget : public QWidget, public Str
 
   Q_OBJECT
 
-    Ui::SimpleStringsListSelectionData* _ui;
+  Ui::SimpleStringsListSelectionData* _ui;
 
 public :
 

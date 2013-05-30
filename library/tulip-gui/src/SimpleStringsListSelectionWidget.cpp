@@ -29,9 +29,9 @@ using namespace std;
 namespace tlp {
 
 SimpleStringsListSelectionWidget::SimpleStringsListSelectionWidget(QWidget *parent, const unsigned int maxSelectedStringsListSize) :
-    QWidget(parent), _ui(new Ui::SimpleStringsListSelectionData()), maxSelectedStringsListSize(maxSelectedStringsListSize) {
+  QWidget(parent), _ui(new Ui::SimpleStringsListSelectionData()), maxSelectedStringsListSize(maxSelectedStringsListSize) {
 
-    _ui->setupUi(this);
+  _ui->setupUi(this);
 
   if (maxSelectedStringsListSize != 0) {
     _ui->selectButton->setEnabled(false);
@@ -44,7 +44,7 @@ SimpleStringsListSelectionWidget::SimpleStringsListSelectionWidget(QWidget *pare
 }
 
 SimpleStringsListSelectionWidget::~SimpleStringsListSelectionWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void SimpleStringsListSelectionWidget::qtWidgetsConnection() {

@@ -110,8 +110,10 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
     if (role == Qt::DisplayRole) {
       // remove prefix if any
       size_t pos = infos.getName().find("::");
+
       if (pos != std::string::npos)
-	return infos.getName().c_str() + pos + 2;
+        return infos.getName().c_str() + pos + 2;
+
       return infos.getName().c_str();
     }
     else if (role == Qt::BackgroundRole) {

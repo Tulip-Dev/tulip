@@ -99,7 +99,7 @@ void GlFeedBackRecorder::sortAndRecord(GLint size, GLfloat *feedBackBuffer) {
     default:
       /* XXX Left as an excersie to the reader. */
       //printf("Incomplete implementation.  Unexpected token (%d).\n",token);
-        assert(false);
+      assert(false);
     }
   }
 
@@ -235,7 +235,7 @@ GLfloat* GlFeedBackRecorder::recordPrimitive(GLfloat *loc) {
     /* XXX Left as an excersie to the reader. */
     //printf("Incomplete implementation.  Unexpected token (%d).\n", token);
     //exit(1);
-      assert(false);
+    assert(false);
   }
 
   return loc;

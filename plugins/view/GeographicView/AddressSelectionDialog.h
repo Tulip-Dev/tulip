@@ -25,14 +25,14 @@
 class QWidget;
 class QString;
 
-namespace Ui{
+namespace Ui {
 class AddressSelectionDialogData;
 }
 
 namespace tlp {
 class AddressSelectionDialog : public QDialog {
 
-    Ui::AddressSelectionDialogData* _ui;
+  Ui::AddressSelectionDialogData* _ui;
 
 public :
 

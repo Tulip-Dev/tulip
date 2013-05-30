@@ -236,7 +236,9 @@ void DoubleProperty::nodesUniformQuantification(unsigned int k) {
   while(itN->hasNext()) {
     node itn=itN->next();
     setNodeValue(itn, (double) nodeMapping[getNodeValue(itn)]);
-  } delete itN;
+  }
+
+  delete itN;
 }
 //===============================================================
 void DoubleProperty::edgesUniformQuantification(unsigned int k) {
@@ -248,7 +250,9 @@ void DoubleProperty::edgesUniformQuantification(unsigned int k) {
   while(itE->hasNext()) {
     edge ite=itE->next();
     setEdgeValue(ite, (double) edgeMapping[getEdgeValue(ite)]);
-  } delete itE;
+  }
+
+  delete itE;
 }
 //====================================================================
 void DoubleProperty::clone_handler(AbstractProperty< DoubleType, DoubleType, tlp::NumericProperty>& proxyC) {

@@ -76,7 +76,8 @@ void Triangle::draw(node n,float lod) {
   if (texFile != "") {
     string texturePath=glGraphInputData->parameters->getTexturePath();
     triangle->setTextureName(texturePath+texFile);
-  } else {
+  }
+  else {
     triangle->setTextureName("");
   }
 
@@ -86,7 +87,8 @@ void Triangle::draw(node n,float lod) {
     triangle->setOutlineMode(true);
     triangle->setOutlineColor(glGraphInputData->getElementBorderColor()->getNodeValue(n));
     triangle->setOutlineSize(lineWidth);
-  } else {
+  }
+  else {
     triangle->setOutlineMode(false);
   }
 

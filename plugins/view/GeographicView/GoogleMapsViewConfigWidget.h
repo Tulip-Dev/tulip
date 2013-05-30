@@ -33,7 +33,7 @@ class GoogleMapsViewConfigWidget : public QWidget {
 
   Q_OBJECT
 
-    Ui::GoogleMapsViewConfigWidgetData* _ui;
+  Ui::GoogleMapsViewConfigWidgetData* _ui;
 
 public :
 

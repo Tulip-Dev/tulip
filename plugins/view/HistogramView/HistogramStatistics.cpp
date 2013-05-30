@@ -107,9 +107,9 @@ inline double square(double x) {
   return x*x;
 }
 
-  /*inline double cube(double x) {
-  return x*x*x;
-  }*/
+/*inline double cube(double x) {
+return x*x*x;
+}*/
 }
 static void drawComposite(tlp::GlComposite *composite, float lod, tlp::Camera *camera) {
   map<string, tlp::GlSimpleEntity*> glEntities = composite->getGlEntities();
@@ -504,7 +504,7 @@ void HistogramStatistics::computeInteractor() {
       double upperBound = histoStatsConfigWidget->getSelectionUpperBound();
       map<unsigned int, double>::iterator pos = find_if(graphPropertyValueSet.begin(), graphPropertyValueSet.end(),
           compose_fn(logical_and<bool>(), map_value_greater_equal<unsigned int, double>(lowerBound),
-                   map_value_less_equal<unsigned int, double>(upperBound)));
+                     map_value_less_equal<unsigned int, double>(upperBound)));
 
       while (pos != graphPropertyValueSet.end()) {
         if (histoView->getDataLocation() == EDGE) {
@@ -516,7 +516,7 @@ void HistogramStatistics::computeInteractor() {
 
         pos = find_if(++pos, graphPropertyValueSet.end(),
                       compose_fn(logical_and<bool>(), map_value_greater_equal<unsigned int, double>(lowerBound),
-                               map_value_less_equal<unsigned int, double>(upperBound)));
+                                 map_value_less_equal<unsigned int, double>(upperBound)));
       }
 
       Observable::unholdObservers();

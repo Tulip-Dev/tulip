@@ -45,7 +45,7 @@ struct SelectedEntity;
  */
 class TLP_QT_SCOPE MouseShowElementInfos : public InteractorComponent {
 
-    Ui::ElementInformationsWidget* _ui;
+  Ui::ElementInformationsWidget* _ui;
 public:
   MouseShowElementInfos();
   ~MouseShowElementInfos();

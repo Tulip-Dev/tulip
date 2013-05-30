@@ -55,9 +55,9 @@ GlConvexHull::GlConvexHull(const vector<Coord> &points,
     vector<Coord> points;
 
     for (vector<unsigned int>::const_iterator it = convexHullIdxs.begin(); it != convexHullIdxs.end(); ++it) {
-        unsigned i=*it;
-        points.push_back(_points[i]);
-        boundingBox.expand(_points[i]);
+      unsigned i=*it;
+      points.push_back(_points[i]);
+      boundingBox.expand(_points[i]);
     }
 
     _points = points;

@@ -17,8 +17,8 @@
  *
  */
 
-#include <tulip/TlpQtTools.h> 
- 
+#include <tulip/TlpQtTools.h>
+
 #include <ostream>
 #include <ios>
 
@@ -113,7 +113,7 @@ namespace tlp {
 
 bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QColor &result) {
 
- QColor newColor = QColorDialog::getColor(color, parent, title, QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
+  QColor newColor = QColorDialog::getColor(color, parent, title, QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
 
   if(newColor.isValid()) {
     result=newColor;
@@ -156,7 +156,7 @@ QString getPluginLocalInstallationDir() {
 
 QString localPluginsPath() {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-    return QString(QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/plugins/");
+  return QString(QStandardPaths::standardLocations(QStandardPaths::DataLocation).at(0) + "/plugins/");
 #else
   return QString(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/plugins/");
 #endif

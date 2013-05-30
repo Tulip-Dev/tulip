@@ -112,7 +112,9 @@ void IntegerProperty::nodesUniformQuantification(unsigned int k) {
   while(itN->hasNext()) {
     node itn=itN->next();
     setNodeValue(itn, nodeMapping[getNodeValue(itn)]);
-  } delete itN;
+  }
+
+  delete itN;
 }
 
 //===============================================================
@@ -125,7 +127,9 @@ void IntegerProperty::edgesUniformQuantification(unsigned int k) {
   while(itE->hasNext()) {
     edge ite=itE->next();
     setEdgeValue(ite, edgeMapping[getEdgeValue(ite)]);
-  } delete itE;
+  }
+
+  delete itE;
 }
 
 

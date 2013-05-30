@@ -32,8 +32,8 @@ namespace tlp {
  * The value is lazily computed on first request.
  * The value is cached, and the cache is invalidated whenever it cannot be simply updated.
  **/
- template<typename nodeType, typename edgeType, typename propType=PropertyInterface>
-   class MinMaxProperty : public tlp::AbstractProperty<nodeType, edgeType, propType> {
+template<typename nodeType, typename edgeType, typename propType=PropertyInterface>
+class MinMaxProperty : public tlp::AbstractProperty<nodeType, edgeType, propType> {
 public:
   /**
    * @brief Constructs a MinMaxProperty.

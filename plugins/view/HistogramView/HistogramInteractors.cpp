@@ -132,9 +132,9 @@ QWidget *HistogramInteractorStatistics::configurationWidget() const {
 }
 
 void HistogramInteractorStatistics::install(QObject *target) {
-    if(target!=NULL) {
-        histoStatistics->computeInteractor();
-    }
+  if(target!=NULL) {
+    histoStatistics->computeInteractor();
+  }
 }
 
 }

@@ -34,30 +34,30 @@ inline double xt3(double t, double R) {
   double t4 = t*t;
   double t9 = t4*t4;
   return 4.0*R*t2*t4+4.0*R*t1*t4*t+4.0*R*t9;
+}
+
+/*inline double tx3(double x, double R) {
+double t = 0.5;
+double mint = 0.;
+double maxt = 1.;
+double val = xt3(t,R);
+
+while (fabs(val-x)>1E-4) {
+  if (val > x) {
+    maxt = t;
+    t = (t + mint) / 2.0;
+  }
+  else if (val < x) {
+    mint = t;
+    t = (maxt + t) / 2.0;
+
   }
 
-  /*inline double tx3(double x, double R) {
-  double t = 0.5;
-  double mint = 0.;
-  double maxt = 1.;
-  double val = xt3(t,R);
+  val = xt3(t,R);
+}
 
-  while (fabs(val-x)>1E-4) {
-    if (val > x) {
-      maxt = t;
-      t = (t + mint) / 2.0;
-    }
-    else if (val < x) {
-      mint = t;
-      t = (maxt + t) / 2.0;
-
-    }
-
-    val = xt3(t,R);
-  }
-
-  return t;
-  }*/
+return t;
+}*/
 //====================================================================
 /*static double yt3(double t, double R) {
   //y = R*4*(1-t)^3*t + R*4*(1-t)*t^3 + 4*R*t^4

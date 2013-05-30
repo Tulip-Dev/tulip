@@ -104,7 +104,8 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
   if (data->getElementSelected()->getNodeValue(n)) {
     glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil(),0xFFFF);
-  } else {
+  }
+  else {
     glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
   }
 
@@ -164,8 +165,9 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
         size=2;
 
       Color pointColor = data->getElementColor()->getNodeValue(n);
+
       if (data->getElementBorderWidth()->getNodeValue(n) > 0) {
-          pointColor = data->getElementBorderColor()->getNodeValue(n);
+        pointColor = data->getElementBorderColor()->getNodeValue(n);
       }
 
       OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
@@ -184,7 +186,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
   }
 
   if (!data->parameters->isDisplayNodes())
-      return;
+    return;
 
   //draw a glyph or make recursive call for meta nodes
   glPushMatrix();
@@ -313,9 +315,11 @@ void GlNode::getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &po
   const Color& fillColor = inputData->getElementColor()->getNodeValue(n);
   const Color& borderColor = inputData->getElementBorderColor()->getNodeValue(n);
   pointsCoordsArray.push_back(nodeCoord);
+
   if (inputData->getElementBorderWidth()->getNodeValue(n) > 0) {
     pointsColorsArray.push_back(borderColor);
-  } else {
+  }
+  else {
     pointsColorsArray.push_back(fillColor);
   }
 }
@@ -324,9 +328,11 @@ void GlNode::getColor(GlGraphInputData *inputData,std::vector<Color> &pointsColo
   node n=node(id);
   const Color& fillColor = inputData->getElementColor()->getNodeValue(n);
   const Color& borderColor = inputData->getElementBorderColor()->getNodeValue(n);
+
   if (inputData->getElementBorderWidth()->getNodeValue(n) > 0) {
     pointsColorsArray.push_back(borderColor);
-  } else {
+  }
+  else {
     pointsColorsArray.push_back(fillColor);
   }
 }

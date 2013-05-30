@@ -559,9 +559,9 @@ vector<node> dfs(const Graph *graph, node root) {
 
 //==================================================
 void buildNodesUniformQuantification(const Graph* graph,
-				     const NumericProperty* prop,
-				     unsigned int k,
-				     std::map<double, int>& nodeMapping) {
+                                     const NumericProperty* prop,
+                                     unsigned int k,
+                                     std::map<double, int>& nodeMapping) {
   //build the histogram of node values
   map<double,int> histogram;
   Iterator<node> *itN=graph->getNodes();
@@ -574,7 +574,9 @@ void buildNodesUniformQuantification(const Graph* graph,
       histogram[nodeValue]=1;
     else
       histogram[nodeValue]+=1;
-  } delete itN;
+  }
+
+  delete itN;
 
   //Build the color map
   map<double,int>::iterator it;
@@ -591,9 +593,9 @@ void buildNodesUniformQuantification(const Graph* graph,
 }
 //==================================================
 void buildEdgesUniformQuantification(const Graph* graph,
-				     const NumericProperty* prop,
-				     unsigned int k,
-				     std::map<double, int>& edgeMapping) {
+                                     const NumericProperty* prop,
+                                     unsigned int k,
+                                     std::map<double, int>& edgeMapping) {
   //build the histogram of edges values
   map<double,int> histogram;
   Iterator<edge> *itE=graph->getEdges();
@@ -606,7 +608,9 @@ void buildEdgesUniformQuantification(const Graph* graph,
       histogram[value]=1;
     else
       histogram[value]+=1;
-  } delete itE;
+  }
+
+  delete itE;
   //===============================================================
   //Build the color map
   map<double,int>::iterator it;

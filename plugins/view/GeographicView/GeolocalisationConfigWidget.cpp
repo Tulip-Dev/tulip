@@ -61,7 +61,7 @@ GeolocalisationConfigWidget::GeolocalisationConfigWidget(QWidget *parent) : QWid
 }
 
 GeolocalisationConfigWidget::~GeolocalisationConfigWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void GeolocalisationConfigWidget::setGraph(Graph *graph) {

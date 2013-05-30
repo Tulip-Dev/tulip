@@ -42,7 +42,7 @@ InteractorComposite::InteractorComposite(const QIcon &icon, const QString &text)
 }
 
 InteractorComposite::~InteractorComposite() {
-    qDeleteAll(_components);
+  qDeleteAll(_components);
 }
 
 QCursor InteractorComposite::cursor() const {

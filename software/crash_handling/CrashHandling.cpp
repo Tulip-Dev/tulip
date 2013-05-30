@@ -173,17 +173,17 @@ exception_filter(LPEXCEPTION_POINTERS info) {
   else {
     std::cerr << "Writing dump stack to " << TULIP_DUMP_FILE << std::endl;
   }
-  
+
   os << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-            << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-            << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-            << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+     << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
+     << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
+     << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
   os << TLP_STACK_BEGIN_HEADER << std::endl;
   sw.printCallStack(os, 50);
   os << std::endl << TLP_STACK_END_HEADER << std::endl;
   os << std::flush;
   os.close();
-  
+
   return 1;
 }
 

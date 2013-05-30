@@ -39,13 +39,16 @@ static GlPentagon *pentagon = NULL;
 void drawPentagon(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
 
   pentagon->setFillColor(fillColor);
+
   if (borderWidth > 0) {
     pentagon->setOutlineMode(true);
     pentagon->setOutlineColor(borderColor);
     pentagon->setOutlineSize(borderWidth);
-  } else {
+  }
+  else {
     pentagon->setOutlineMode(false);
   }
+
   pentagon->setTextureName(textureName);
   pentagon->draw(lod,NULL);
 }

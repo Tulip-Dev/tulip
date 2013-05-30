@@ -34,13 +34,13 @@ namespace tlp {
 class Graph;
 class PropertyContext;
 
- typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> IntegerMinMaxProperty;
+typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> IntegerMinMaxProperty;
 
 /**
  * @ingroup Graph
  * @brief A graph property that maps an integer value to graph elements.
  */
- class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
+class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 
 public :
   IntegerProperty(Graph *, std::string n = "");

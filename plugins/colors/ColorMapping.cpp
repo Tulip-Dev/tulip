@@ -220,7 +220,7 @@ public:
       }
       else {
         NumericProperty *tmp= metricS->copyProperty(graph);
-	tmp->uniformQuantification(300);
+        tmp->uniformQuantification(300);
         entryMetric = tmp;
       }
 
@@ -373,13 +373,15 @@ public:
       }
 
       dialog.getResult(enumeratedMappingResultVector);
-    } else {
+    }
+    else {
       // check if input property is a NumericProperty
       if (! dynamic_cast<NumericProperty*>(metric)) {
-	errorMsg += "For a linear or uniform color mapping,\nthe input property must be a Double or Integer property";
-	return false;
+        errorMsg += "For a linear or uniform color mapping,\nthe input property must be a Double or Integer property";
+        return false;
       }
     }
+
     return true;
   }
 };

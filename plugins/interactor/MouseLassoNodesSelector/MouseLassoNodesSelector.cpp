@@ -162,10 +162,11 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
       quad.push_back(quad[0]);
 
       if (isPolygonAincludesInB(quad, polygonScr)) {
-	if (needPush) {
-	  viewSelection->getGraph()->push();
-	  needPush = false;
-	}
+        if (needPush) {
+          viewSelection->getGraph()->push();
+          needPush = false;
+        }
+
         viewSelection->setNodeValue(node(tmpNodes[i].getComplexEntityId()), true);
         selectedNodes.push_back(node(tmpNodes[i].getComplexEntityId()));
       }

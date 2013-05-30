@@ -38,13 +38,13 @@ class TLP_GL_SCOPE AdditionalGlSceneAnimation {
 
 public :
 
-    virtual ~AdditionalGlSceneAnimation(){}
+  virtual ~AdditionalGlSceneAnimation() {}
 
   /**
    * Method to set the total number of animation steps. No need to call it because the GlSceneZoomAndPan class do that task.
    *
    */
- inline void setNbAnimationSteps(int nbAnimationSteps) {
+  inline void setNbAnimationSteps(int nbAnimationSteps) {
     this->nbAnimationSteps = nbAnimationSteps;
   }
 
@@ -72,7 +72,7 @@ class TLP_GL_SCOPE GlSceneZoomAndPan  {
 
 public :
 
-    virtual ~GlSceneZoomAndPan(){}
+  virtual ~GlSceneZoomAndPan() {}
 
   /**
    * GlSceneZoomAndPan constructor

@@ -358,17 +358,17 @@ void Workspace::updatePanels() {
 }
 
 void Workspace::nextPage() {
-    if(_ui->nextPageButton->isEnabled()) {
-        _currentPanelIndex++;
-        updatePanels();
-    }
+  if(_ui->nextPageButton->isEnabled()) {
+    _currentPanelIndex++;
+    updatePanels();
+  }
 }
 
 void Workspace::previousPage() {
-    if(_ui->previousPageButton->isEnabled()) {
-        _currentPanelIndex--;
-        updatePanels();
-    }
+  if(_ui->previousPageButton->isEnabled()) {
+    _currentPanelIndex--;
+    updatePanels();
+  }
 }
 
 void Workspace::setExposeModeSwitch(QPushButton* b) {

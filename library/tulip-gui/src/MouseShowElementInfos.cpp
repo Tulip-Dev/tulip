@@ -44,7 +44,7 @@ MouseShowElementInfos::MouseShowElementInfos():_ui(new Ui::ElementInformationsWi
 }
 
 MouseShowElementInfos::~MouseShowElementInfos() {
-    delete _ui;
+  delete _ui;
 }
 
 void MouseShowElementInfos::clear() {

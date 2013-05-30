@@ -32,11 +32,11 @@ ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *
 }
 
 ViewGraphPropertiesSelectionWidget::~ViewGraphPropertiesSelectionWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void ViewGraphPropertiesSelectionWidget::enableEdgesButton(const bool enable) {
-    _ui->edgesButton->setEnabled(enable);
+  _ui->edgesButton->setEnabled(enable);
 }
 
 void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vector<string> graphPropertiesTypesFilter) {
@@ -147,7 +147,7 @@ ElementType ViewGraphPropertiesSelectionWidget::getDataLocation() const {
 void ViewGraphPropertiesSelectionWidget::setDataLocation(const ElementType location) {
   if (location == NODE) {
     _ui->edgesButton->setChecked(false);
-   _ui-> nodesButton->setChecked(true);
+    _ui-> nodesButton->setChecked(true);
   }
   else {
     _ui->edgesButton->setChecked(true);

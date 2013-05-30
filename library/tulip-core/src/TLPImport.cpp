@@ -730,6 +730,7 @@ struct TLPFileInfoBuilder: public TLPFalse {
 
   bool addString(const std::string &str) {
     std::string theStr(str);
+
     if (name == AUTHOR)
       graphBuilder->dataSet->set(AUTHOR, theStr);
     else if (name == COMMENTS)

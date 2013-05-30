@@ -151,124 +151,145 @@ private :
 
 class ConsoleInputHandler : public QObject {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public:
 
-    ConsoleInputHandler() : _consoleWidget(NULL), _lineRead(false) {}
+  ConsoleInputHandler() : _consoleWidget(NULL), _lineRead(false) {}
 
-    void setConsoleWidget(QAbstractScrollArea *consoleWidget) {
-        _consoleWidget = consoleWidget;
+  void setConsoleWidget(QAbstractScrollArea *consoleWidget) {
+    _consoleWidget = consoleWidget;
+  }
+
+  QAbstractScrollArea *consoleWidget() const {
+    return _consoleWidget;
+  }
+
+  void startReadLine() {
+    if (_consoleWidget) {
+      _consoleWidget->installEventFilter(this);
+      qApp->installEventFilter(this);
+      _consoleWidget->setFocus();
+    }
+    else {
+      _lineRead = true;
+      return;
     }
 
-    QAbstractScrollArea *consoleWidget() const {
-        return _consoleWidget;
+    _lineRead = false;
+    QTextBrowser *textBrowser = dynamic_cast<QTextBrowser*>(_consoleWidget);
+    QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit*>(_consoleWidget);
+    QColor lineColor = QColor(Qt::green).lighter(160);
+
+    if (textBrowser) {
+      _readPos = textBrowser->textCursor();
+      _wasReadOnly = textBrowser->isReadOnly();
+      textBrowser->setReadOnly(false);
+      textBrowser->verticalScrollBar()->setValue(textBrowser->verticalScrollBar()->maximum());
+    }
+    else if (textEdit) {
+      _readPos = textEdit->textCursor();
+      _wasReadOnly = textEdit->isReadOnly();
+      textEdit->setReadOnly(false);
     }
 
-    void startReadLine() {
-        if (_consoleWidget) {
-            _consoleWidget->installEventFilter(this);
-            qApp->installEventFilter(this);
-            _consoleWidget->setFocus();
-        } else {
-            _lineRead = true;
-            return;
-        }
-        _lineRead = false;
-        QTextBrowser *textBrowser = dynamic_cast<QTextBrowser*>(_consoleWidget);
-        QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit*>(_consoleWidget);
-        QColor lineColor = QColor(Qt::green).lighter(160);
+    _startReadCol = _readPos.columnNumber();
+    QTextBlockFormat format = _blockFormat = _readPos.blockFormat();
+    format.setBackground(lineColor);
+    format.setProperty(QTextFormat::FullWidthSelection, true);
+    _readPos.setBlockFormat(format);
+  }
+
+  bool lineRead() const {
+    return _lineRead;
+  }
+
+  QString line() const {
+    return _line;
+  }
+
+  bool eventFilter(QObject *, QEvent *event) {
+    QTextBrowser *textBrowser = dynamic_cast<QTextBrowser*>(_consoleWidget);
+    QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit*>(_consoleWidget);
+    QTextCursor curCursor;
+
+    if (textBrowser) {
+      curCursor = textBrowser->textCursor();
+    }
+    else {
+      curCursor = textEdit->textCursor();
+    }
+
+    if (event->type() == QEvent::KeyPress) {
+      QKeyEvent *kev = static_cast<QKeyEvent *>(event);
+      int key = kev->key();
+
+      if ((key ==  Qt::Key_Enter || key ==  Qt::Key_Return) && kev->modifiers() == Qt::NoModifier) {
+        _lineRead = true;
+        _line = _readPos.block().text().mid(_startReadCol);
+        _line.append("\n");
+        _readPos.insertText("\n");
+        _readPos.setBlockFormat(_blockFormat);
 
         if (textBrowser) {
-            _readPos = textBrowser->textCursor();
-            _wasReadOnly = textBrowser->isReadOnly();
-            textBrowser->setReadOnly(false);
-            textBrowser->verticalScrollBar()->setValue(textBrowser->verticalScrollBar()->maximum());
-        } else if (textEdit) {
-            _readPos = textEdit->textCursor();
-            _wasReadOnly = textEdit->isReadOnly();
-            textEdit->setReadOnly(false);
+          textBrowser->setReadOnly(_wasReadOnly);
         }
-        _startReadCol = _readPos.columnNumber();
-        QTextBlockFormat format = _blockFormat = _readPos.blockFormat();
-        format.setBackground(lineColor);
-        format.setProperty(QTextFormat::FullWidthSelection, true);
-        _readPos.setBlockFormat(format);
+        else {
+          textEdit->setReadOnly(_wasReadOnly);
+        }
+
+        _consoleWidget->removeEventFilter(this);
+        qApp->removeEventFilter(this);
+        return true;
+      }
+      else if (key ==  Qt::Key_Up || key ==  Qt::Key_Down) {
+        return true;
+      }
+      else if (key == Qt::Key_Left) {
+        if (curCursor.columnNumber() > _startReadCol) {
+          if (textEdit) {
+            textEdit->moveCursor(QTextCursor::Left);
+          }
+          else {
+            textBrowser->moveCursor(QTextCursor::Left);
+          }
+        }
+
+        return true;
+      }
+      else if (key == Qt::Key_Right) {
+        if (textEdit) {
+          textEdit->moveCursor(QTextCursor::Right);
+        }
+        else {
+          textBrowser->moveCursor(QTextCursor::Right);
+        }
+      }
+      else if (key == Qt::Key_Backspace) {
+        if (curCursor.columnNumber() > _startReadCol) {
+          curCursor.deletePreviousChar();
+        }
+
+        return true;
+      }
+    }
+    else if (event->type() == QEvent::MouseButtonDblClick || event->type() == QEvent::MouseButtonPress ||
+             event->type() == QEvent::MouseButtonRelease) {
+      return true;
     }
 
-    bool lineRead() const {
-        return _lineRead;
-    }
-
-    QString line() const {
-        return _line;
-    }
-
-    bool eventFilter(QObject *, QEvent *event) {
-        QTextBrowser *textBrowser = dynamic_cast<QTextBrowser*>(_consoleWidget);
-        QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit*>(_consoleWidget);
-        QTextCursor curCursor;
-        if (textBrowser) {
-            curCursor = textBrowser->textCursor();
-        } else {
-            curCursor = textEdit->textCursor();
-        }
-        if (event->type() == QEvent::KeyPress) {
-            QKeyEvent *kev = static_cast<QKeyEvent *>(event);
-            int key = kev->key();
-            if ((key ==  Qt::Key_Enter || key ==  Qt::Key_Return) && kev->modifiers() == Qt::NoModifier) {
-                _lineRead = true;
-                _line = _readPos.block().text().mid(_startReadCol);
-                _line.append("\n");
-                _readPos.insertText("\n");
-                _readPos.setBlockFormat(_blockFormat);
-                if (textBrowser) {
-                    textBrowser->setReadOnly(_wasReadOnly);
-                } else {
-                    textEdit->setReadOnly(_wasReadOnly);
-                }
-                _consoleWidget->removeEventFilter(this);
-                qApp->removeEventFilter(this);
-                return true;
-            } else if (key ==  Qt::Key_Up || key ==  Qt::Key_Down) {
-                return true;
-            } else if (key == Qt::Key_Left) {
-                if (curCursor.columnNumber() > _startReadCol) {
-                    if (textEdit) {
-                        textEdit->moveCursor(QTextCursor::Left);
-                    } else {
-                        textBrowser->moveCursor(QTextCursor::Left);
-                    }
-                }
-                return true;
-            } else if (key == Qt::Key_Right) {
-                if (textEdit) {
-                    textEdit->moveCursor(QTextCursor::Right);
-                } else {
-                    textBrowser->moveCursor(QTextCursor::Right);
-                }
-            } else if (key == Qt::Key_Backspace) {
-                if (curCursor.columnNumber() > _startReadCol) {
-                    curCursor.deletePreviousChar();
-                }
-                return true;
-            }
-        } else if (event->type() == QEvent::MouseButtonDblClick || event->type() == QEvent::MouseButtonPress ||
-                   event->type() == QEvent::MouseButtonRelease) {
-            return true;
-        }
-        return false;
-    }
+    return false;
+  }
 
 private:
 
-    QTextCursor _readPos;
-    int _startReadCol;
-    QAbstractScrollArea *_consoleWidget;
-    bool _lineRead;
-    QString _line;
-    bool _wasReadOnly;
-    QTextBlockFormat _blockFormat;
+  QTextCursor _readPos;
+  int _startReadCol;
+  QAbstractScrollArea *_consoleWidget;
+  bool _lineRead;
+  QString _line;
+  bool _wasReadOnly;
+  QTextBlockFormat _blockFormat;
 
 };
 

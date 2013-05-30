@@ -187,7 +187,7 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   }
 
   if (!g->existProperty(tgtShape)) {
-      g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(EdgeExtremityGlyphManager::getInst().glyphId("2D - Arrow"));
+    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(EdgeExtremityGlyphManager::getInst().glyphId("2D - Arrow"));
   }
 
   if (!g->existProperty(srcShape)) {
