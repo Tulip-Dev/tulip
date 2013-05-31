@@ -1261,8 +1261,9 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
   QSet<QString> ret;
 
   QString cleanContext = context;
+
   if (cleanContext.startsWith(">>> ") || cleanContext.startsWith("... ")) {
-      cleanContext.replace(0, 4, "");
+    cleanContext.replace(0, 4, "");
   }
 
   ret = getTulipAlgorithmListIfContext(cleanContext);
@@ -1357,6 +1358,7 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
     if (type != "") {
       _lastFoundType = type;
       ret = getAllDictForType(type, prefix);
+
       if (type != "tlp" && ((_varToType.find(editedFunction) != _varToType.end() && _varToType[editedFunction].find(expr) != _varToType[editedFunction].end()) ||
                             (!_apiDb->typeExists(expr) && _apiDb->getFullTypeName(expr) == ""))) {
         foreach(QString entry, ret) {

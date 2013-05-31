@@ -600,8 +600,10 @@ void GraphPerspective::open(QString fileName) {
 
       modules[*listIt] = *it;
     }
+
     if (!currentFilter.empty())
       filters += *it + "(" + currentFilter + ");;";
+
     delete m;
   }
 

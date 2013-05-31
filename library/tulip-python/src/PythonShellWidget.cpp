@@ -308,7 +308,8 @@ void PythonShellWidget::updateAutoCompletionList(bool) {
 
   if (_autoCompletionList->count() == 0) {
     PythonCodeEditor::updateAutoCompletionList();
-  } else {
+  }
+  else {
     _autoCompletionList->sortItems();
   }
 

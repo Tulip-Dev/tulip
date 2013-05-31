@@ -186,6 +186,7 @@ void PropertiesEditor::setPropsVisibility(int state) {
     // no filter
     static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
   }
+
   for(int i=0; i<_sourceModel->rowCount(); ++i)
     _sourceModel->setData(_sourceModel->index(i,0), state,
                           Qt::CheckStateRole);
@@ -207,16 +208,18 @@ void PropertiesEditor::setPropsNotVisibleExcept() {
 void PropertiesEditor::showVisualProperties(bool f) {
   // reset property name filter
   _ui->lineEdit->setText(QString());
+
   if (f) {
     static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
+
     // ensure all visual properties are shown
     for(int i=0; i<_sourceModel->rowCount(); ++i) {
       if (_sourceModel->index(i,0).data().toString().indexOf("view") == 0)
-	setPropertyChecked(i, true);
+        setPropertyChecked(i, true);
     }
   }
-    else
-      static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp("^(?!view).*");
+  else
+    static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp("^(?!view).*");
 }
 
 // properties inserted when filtering
