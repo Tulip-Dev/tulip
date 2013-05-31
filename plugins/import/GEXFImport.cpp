@@ -52,6 +52,23 @@ using namespace std;
  *
  */
 
+static const char * paramHelp[] = {
+  // filename
+  HTML_HELP_OPEN()            \
+  HTML_HELP_DEF( "type", "pathname" )       \
+  HTML_HELP_BODY()                  \
+  "This parameter defines the file pathname to import."       \
+  HTML_HELP_CLOSE(),
+  // curved edges
+  HTML_HELP_OPEN()            \
+  HTML_HELP_DEF( "type", "bool" )       \
+  HTML_HELP_DEF( "values", "true, false" ) \
+  HTML_HELP_DEF( "default", "false" ) \
+  HTML_HELP_BODY()                  \
+  "Indicates if Bezier curves will be used to draw the edges."       \
+  HTML_HELP_CLOSE(),
+};
+
 class GEXFImport : public ImportModule {
 
 public :
@@ -61,8 +78,8 @@ public :
     viewLayout(NULL), viewSize(NULL), viewColor(NULL), viewLabel(NULL),
     viewShape(NULL) {
     // add a file parameter for the plugin
-    addInParameter<string>("file::filename","","");
-    addInParameter<bool>("Curved edges","", "false");
+    addInParameter<string>("file::filename", paramHelp[0],"");
+    addInParameter<bool>("Curved edges",paramHelp[1], "false");
   }
 
   ~GEXFImport() {}
@@ -189,7 +206,7 @@ public :
       // create a Tulip property and store mapping between attribute id and property
       if (xmlReader.isStartElement() && xmlReader.name() == "attribute") {
         string attributeId = xmlReader.attributes().value("id").toString().toStdString();
-        string attributeName = xmlReader.attributes().value("title").toString().toStdString();
+        string attributeName = xmlReader.attributes().value("title").toString().toUtf8().data();
         string attributeType = xmlReader.attributes().value("type").toString().toStdString();
 
         if (attributeType == "string") {
@@ -278,7 +295,7 @@ public :
     // parse node label
     if (xmlReader.attributes().hasAttribute("label")) {
       string nodeLabel =
-        xmlReader.attributes().value("label").toString().toStdString();
+        xmlReader.attributes().value("label").toString().toUtf8().data();
       viewLabel->setNodeValue(n, nodeLabel);
     }
 
@@ -330,7 +347,7 @@ public :
           attributeId = xmlReader.attributes().value("for").toString().toStdString();
         }
 
-        string attributeStrValue = xmlReader.attributes().value("value").toString().toStdString();
+        string attributeStrValue = xmlReader.attributes().value("value").toString().toUtf8().data();
 
         if (nodePropertiesMap.find(attributeId) != nodePropertiesMap.end()) {
           nodePropertiesMap[attributeId]->setNodeStringValue(n, attributeStrValue);
@@ -390,7 +407,7 @@ public :
       edge e = graph->addEdge(nodesMap[srcId], nodesMap[tgtId]);
 
       if (xmlReader.attributes().hasAttribute("label")) {
-        string edgeLabel = xmlReader.attributes().value("label").toString().toStdString();
+        string edgeLabel = xmlReader.attributes().value("label").toString().toUtf8().data();
         viewLabel->setEdgeValue(e, edgeLabel);
       }
 
@@ -408,7 +425,7 @@ public :
             attributeId = xmlReader.attributes().value("for").toString().toStdString();
           }
 
-          string attributeStrValue = xmlReader.attributes().value("value").toString().toStdString();
+          string attributeStrValue = xmlReader.attributes().value("value").toString().toUtf8().data();
 
           if (edgePropertiesMap.find(attributeId) != edgePropertiesMap.end()) {
             edgePropertiesMap[attributeId]->setEdgeStringValue(e, attributeStrValue);
