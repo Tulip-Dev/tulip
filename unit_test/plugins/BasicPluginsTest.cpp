@@ -235,6 +235,34 @@ void BasicPluginsTest::testImportUCINET() {
   }
 }
 //==========================================================
+void BasicPluginsTest::testImportGEXF() {
+  // test all data/*.net files
+  const char* gexf_files[] = {
+    "data/basic.gexf",
+    "data/data.gexf",
+    "data/hierarchy1.gexf",
+    "data/hierarchy2.gexf",
+    "data/hierarchy3.gexf",
+    "data/hierarchy4.gexf",
+    "data/phylogeny.gexf",
+    "data/viz.gexf",
+    "data/WebAtlas_EuroSiS.gexf",
+    NULL
+  };
+  const char** files = &gexf_files[0];
+
+  while(files[0]) {
+    DataSet ds;
+    ds.set("file::filename", string(files[0]));
+    std::cout << "importing GEXF file: " << files[0] << "...";
+    Graph* g = importGraph("GEXF", ds, NULL, graph);
+    CPPUNIT_ASSERT(g == graph);
+    std::cout << " OK" << std::endl;
+    g->clear();
+    files += 1;
+  }
+}
+//==========================================================
 void BasicPluginsTest::testMetricColorMapping() {
   initializeGraph("Planar Graph");
   DoubleProperty metric(graph);
