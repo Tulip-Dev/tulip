@@ -578,34 +578,30 @@ void GraphPerspective::saveAs(const QString& path) {
 }
 
 void GraphPerspective::open(QString fileName) {
-  QString filters;
   QMap<std::string, std::string> modules;
   std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
 
-  filters.append("Tulip project (*.tlpx);;");
-
-  QString filterAny("Any supported format (");
+  std::string filters("Tulip project (*.tlpx);;");
+  std::string filterAny("Any supported format (");
 
   for(std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
     ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
     std::list<std::string> fileExtension(m->fileExtensions());
+
+    std::string currentFilter;
 
     for(std::list<std::string>::const_iterator listIt = fileExtension.begin(); listIt != fileExtension.end(); ++listIt) {
 
       if(listIt->empty())
         continue;
 
-      QString currentFilter = it->c_str() + QString("(.") + listIt->c_str() + QString(")") + QString("(*.") + listIt->c_str() + QString(")");
-      filterAny += QString("*.") + listIt->c_str() + " ";
-      filters += currentFilter;
-
-      if(it != imports.end()) {
-        filters += ";;";
-      }
+      filterAny += "*." + *listIt + " ";
+      currentFilter += "*." + *listIt + " ";
 
       modules[*listIt] = *it;
     }
-
+    if (!currentFilter.empty())
+      filters += *it + "(" + currentFilter + ");;";
     delete m;
   }
 
@@ -614,7 +610,7 @@ void GraphPerspective::open(QString fileName) {
   filters.insert(0, filterAny);
 
   if (fileName.isNull()) // If open() was called without a parameter, open the file dialog
-    fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open Graph"), _lastOpenLocation, filters);
+    fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open graph"), _lastOpenLocation, filters.c_str());
 
   if(!fileName.isEmpty()) {
     QFileInfo fileInfo(fileName);
