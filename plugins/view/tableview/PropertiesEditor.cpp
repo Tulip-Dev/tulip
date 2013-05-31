@@ -94,7 +94,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   menu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
   menu.addAction(pname)->setEnabled(false);
   menu.addSeparator();
-  connect(menu.addAction(trUtf8("Set other properties not visible")),SIGNAL(triggered()),this,SLOT(setPropsNotVisibleExcept()));
+  connect(menu.addAction(trUtf8("Hide all other properties")),SIGNAL(triggered()),this,SLOT(setPropsNotVisibleExcept()));
   menu.addSeparator();
   bool enabled = (pname != "viewLabel");
   QMenu* subMenu = menu.addMenu(trUtf8("To labels of"));
@@ -180,6 +180,12 @@ void PropertiesEditor::setPropsVisibility(int state) {
   _ui->propsVisibilityCheck->setTristate(false);
   disconnect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(emitResizeTableRows()));
 
+  if (state == Qt::Checked) {
+    // reset property name filter
+    _ui->lineEdit->setText(QString());
+    // no filter
+    static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
+  }
   for(int i=0; i<_sourceModel->rowCount(); ++i)
     _sourceModel->setData(_sourceModel->index(i,0), state,
                           Qt::CheckStateRole);
@@ -199,10 +205,18 @@ void PropertiesEditor::setPropsNotVisibleExcept() {
 }
 
 void PropertiesEditor::showVisualProperties(bool f) {
-  if (f)
+  // reset property name filter
+  _ui->lineEdit->setText(QString());
+  if (f) {
     static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
-  else
-    static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp("^(?!view).*");
+    // ensure all visual properties are shown
+    for(int i=0; i<_sourceModel->rowCount(); ++i) {
+      if (_sourceModel->index(i,0).data().toString().indexOf("view") == 0)
+	setPropertyChecked(i, true);
+    }
+  }
+    else
+      static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp("^(?!view).*");
 }
 
 // properties inserted when filtering

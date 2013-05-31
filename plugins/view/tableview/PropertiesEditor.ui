@@ -149,10 +149,10 @@ color: #595959;</string>
       <item>
        <widget class="QCheckBox" name="propsVisibilityCheck">
         <property name="toolTip">
-         <string>Set visibility of all properties</string>
+         <string>Show/Hide all 'Elements' table properties</string>
         </property>
         <property name="text">
-         <string>All properties</string>
+         <string>Show all 'Elements' table properties</string>
         </property>
         <property name="checked">
          <bool>false</bool>
@@ -168,10 +168,10 @@ color: #595959;</string>
          </sizepolicy>
         </property>
         <property name="toolTip">
-         <string>Set visibility of visual rendering properties</string>
+         <string>Show/Hide visual rendering properties</string>
         </property>
         <property name="text">
-         <string>Visual properties (view*)</string>
+         <string>Show visual properties (view*)</string>
         </property>
         <property name="checked">
          <bool>true</bool>
