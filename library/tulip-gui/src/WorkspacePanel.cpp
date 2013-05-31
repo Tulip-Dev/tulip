@@ -439,7 +439,6 @@ void WorkspacePanel::setOverlayMode(bool m) {
 
 void WorkspacePanel::dragEnterEvent(QDragEnterEvent * evt) {
   handleDragEnterEvent(evt,evt->mimeData());
-  setOverlayMode(true);
 }
 
 void WorkspacePanel::dropEvent(QDropEvent *evt) {
