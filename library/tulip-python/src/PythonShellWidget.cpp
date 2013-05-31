@@ -255,7 +255,7 @@ void PythonShellWidget::updateAutoCompletionList(bool) {
   if (!_autoCompletionList->isVisible())
     return;
 
-  PythonCodeEditor::updateAutoCompletionList();
+  _autoCompletionList->clear();
 
   QString lineNotTrimmed = textCursor().block().text().mid(_currentPs.length());
   QString line = rtrim(textCursor().block().text()).mid(_currentPs.length());
@@ -306,7 +306,11 @@ void PythonShellWidget::updateAutoCompletionList(bool) {
     }
   }
 
-  _autoCompletionList->sortItems();
+  if (_autoCompletionList->count() == 0) {
+    PythonCodeEditor::updateAutoCompletionList();
+  } else {
+    _autoCompletionList->sortItems();
+  }
 
   if (_autoCompletionList->count() == 0)
     _autoCompletionList->hide();
