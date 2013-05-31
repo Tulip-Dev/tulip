@@ -39,6 +39,7 @@ class BasicPluginsTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testImportGrid);
   CPPUNIT_TEST(testImportGridApproximation);
   CPPUNIT_TEST(testImportDot);
+  CPPUNIT_TEST(testImportGEXF);
   CPPUNIT_TEST(testImportGml);
   CPPUNIT_TEST(testExportGml);
   CPPUNIT_TEST(testImportFileSystem);
@@ -79,6 +80,7 @@ public:
   void testImportGrid();
   void testImportGridApproximation();
   void testImportDot();
+  void testImportGEXF();
   void testImportGml();
   void testExportGml();
   void testImportFileSystem();
