@@ -340,12 +340,11 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
     QString line = origLine.trimmed();
 
     if (interactiveSession) {
-      if (!(line.startsWith(">>>") || line.startsWith("..."))) {
+      if (!(line.startsWith(">>> ") || line.startsWith("... "))) {
         continue;
       }
       else {
-        line = line.replace(">>>", "");
-        line = line.replace("...", "");
+        line = line.replace(0, 4, "");
       }
     }
 
@@ -898,8 +897,12 @@ QSet<QString> AutoCompletionDataBase::getPluginParametersListIfContext(const QSt
     QString strCollecExpr = "].setCurrent(";
     int pos2 = context.indexOf(strCollecExpr, pos+1);
 
+
+
     if (pos != -1 && pos2 == -1) {
       QString prefix = context.mid(pos+1);
+
+
 
       if (_pluginParametersDataSet[editedFunction].find(varName) != _pluginParametersDataSet[editedFunction].end()) {
         foreach(QString param, _pluginParametersDataSet[editedFunction][varName]) {
@@ -1258,6 +1261,9 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
   QSet<QString> ret;
 
   QString cleanContext = context;
+  if (cleanContext.startsWith(">>> ") || cleanContext.startsWith("... ")) {
+      cleanContext.replace(0, 4, "");
+  }
 
   ret = getTulipAlgorithmListIfContext(cleanContext);
 
@@ -1351,7 +1357,6 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
     if (type != "") {
       _lastFoundType = type;
       ret = getAllDictForType(type, prefix);
-
       if (type != "tlp" && ((_varToType.find(editedFunction) != _varToType.end() && _varToType[editedFunction].find(expr) != _varToType[editedFunction].end()) ||
                             (!_apiDb->typeExists(expr) && _apiDb->getFullTypeName(expr) == ""))) {
         foreach(QString entry, ret) {
