@@ -8,6 +8,9 @@ Getting started
 Using the bindings from the Tulip Software GUI
 -----------------------------------------------
 
+Tulip Python IDE
+^^^^^^^^^^^^^^^^^
+
 A lightweight Python IDE can be accessed through the graphical interface of Tulip.
 Three components are available :
 
@@ -58,6 +61,93 @@ Three components are available :
 
    Figure 3: Screenshot of the "Python Plugin Editor" in the Tulip GUI.
 
+Using the autocompletion to code faster
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Each Python code editor widget provides an autocompletion feature in order to ease
+the developpment of scripts. To activate it, just hit **Ctrl + Space** and the autocompletion
+list will popup. Its content will depend on the context before the current position of the text cursor.
+
+Python objects autocompletion
+""""""""""""""""""""""""""""""
+
+The autocompletion list feature is really usefull to get the content of the dictionnary
+of Python objects. The list is filled by fetching the content of a database according to the context.
+That database contains the API of all standard Python modules but also the tulip ones.
+That database is also updated dynamically by performing a static analysis on the source code (in particular,
+that analysis tries to associate a typename to each variable in the source code).
+The autocompletion will also popup immediatly when hitting a dot character. If the variable before the dot
+has an associated typename in the database, only the content of its dictionnary will be inserted in the list.
+:ref:`Figure 4<fig4>` shows an
+example of the content of the autocompletion list when requesting it on the "graph" variable (of type :class:`tlp.Graph`)
+
+.. _fig4:
+.. figure:: autocompletion_global.png
+   :align: center
+
+   Figure 4: Using the autocompletion list to get the dictionnary content of a Python object.
+
+Tulip special autocompletion features
+""""""""""""""""""""""""""""""""""""""
+
+The autocompletion list is also there to ease the developpment of Tulip Python scripts. Some special
+features have been including to ease the use of the Tulip Python API:
+
+    * **Autocompletion for algorithms** Tulip is bundled with a lot of algorithms (plugins) that can be called through Python.
+      To call an algorithm (plugin), one of the following method has to be used : :meth:`tlp.Graph.applyAlgorithm`, :meth:`tlp.Graph.applyBooleanAlgorithm`,
+      :meth:`tlp.Graph.applyColorAlgorithm`, :meth:`tlp.Graph.applyDoubleAlgorithm`, :meth:`tlp.Graph.applyIntegerAlgorithm`, :meth:`tlp.Graph.applyLayoutAlgorithm`,
+      :meth:`tlp.Graph.applySizeAlgorithm`, :meth:`tlp.Graph.applyStringAlgorithm`, :func:`tlp.importGraph`, :func:`tlp.exportGraph`.
+      The first parameter of those method is a string contaning the name of the algorithm (plugin)
+      to call. When requesting the autocompletion list with the following context : *graph.apply\*Algorithm(*, it will be filled with the names of the corresponding
+      algorithms (plugins). :ref:`Figure 5<fig5>` shows an example of the content of the autocompletion list when requesting it with the following context : *graph.applyLayoutAlgorithm(*.
+
+.. _fig5:
+.. figure:: autocompletion_algos.png
+   :align: center
+
+   Figure 5: Using the autocompletion list to get the algorithm names.
+
+    * **Autocompletion for algorithm parameters** Parameters can be transmitted to Tulip algorithms through a :class:`tlp.DataSet` object. The parameters are
+      identified by their names. The autocompletion list can be used to get the names of these parameters. For that feature to work, the following context
+      must be present in the source code::
+
+        # Replace by the name of the algorithm you want to call, note that the autocompletion
+        # also works for the following context : tlp.getDefaultPluginParameters(
+        dataSet = tlp.getDefaultPluginParameters("algorithm name")
+        # Hit Ctrl-Space after the bracket to see the magic
+        dataSet[
+
+      :ref:`Figure 6<fig6>` shows an example of the autocompletion list content when requesting the parameters of the layout algorithm : "FM^3 (OGDF)".
+
+.. _fig6:
+.. figure:: autocompletion_algosparams.png
+   :align: center
+
+   Figure 6: Using the autocompletion list to get the algorithm parameters names.
+
+    * **Autocompletion for graph properties** Tulip stores the data associated to graph elements in objects called properties. To get a reference
+      on those type of objects, you can either use specific methods (for instance : :meth:`tlp.Graph.getLayoutProperty`, :meth:`tlp.Graph.getSizeProperty`)
+      that take the name of the property to retrieve as parameter or the following syntax : *graph["property name"]*. When requesting the autocompletion list
+      for the following context : *graph.get*Property(* or *graph[*, the list will be filled with the names of the corresponding and existing properties.
+      :ref:`Figure 7<fig7>` show an example of the content of the autocompletion list for the following context : *graph[*.
+
+.. _fig7:
+.. figure:: autocompletion_properties.png
+   :align: center
+
+   Figure 7: Using the autocompletion list to get the graph properties names.
+
+    * **Autocompletion list for sub-graphs** Tulip allows to manipulate a large hierarchy of sub-graphs. References to those sub-graphs can be retrieved
+      with their names through the use of the dedicated method :meth:`tlp.Graph.getSubGraph`. When requesting the autocompletion list for the
+      following context : *graph.getSubGraph(*, the list will be filled with all the names of the graphs present in the hierarchy. :ref:`Figure 8<fig8>` shows
+      an example of that use case.
+
+.. _fig8:
+.. figure:: autocompletion_subgraphs.png
+   :align: center
+
+   Figure 8: Using the autocompletion list to get the sub-graphs names.
+
 .. _usingBindingsInShell:
 
 Using the bindings from the Python Interpreter
@@ -65,7 +155,6 @@ Using the bindings from the Python Interpreter
 
 Setting up the environment
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 The Tulip Python bindings can also be used through the classical Python Interpreter. But some setup has to be done
 before importing the :mod:`tulip` module. 
 
