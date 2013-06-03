@@ -224,10 +224,10 @@ bool tokenize(const string& str, vector<string>& tokens,
 class ImportUCINET : public ImportModule {
 
 public :
-  PLUGININFORMATIONS("UCINET","Patrick Mary","12/09/2011","Imports a new graph from a file (.net) in UCINET DL input format.","1.0","File")
+  PLUGININFORMATIONS("UCINET","Patrick Mary","12/09/2011","Imports a new graph from a text file (.txt) in UCINET DL input format.","1.0","File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
-    l.push_back("net");
+    l.push_back("txt");
     return l;
   }
   ImportUCINET(const tlp::PluginContext* context):ImportModule(context),
