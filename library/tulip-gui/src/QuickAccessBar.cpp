@@ -330,6 +330,10 @@ void QuickAccessBar::setAllValues(unsigned int eltType,
                                         prop, _mainView->graph(),
                                         delegate, _mainView->getGlMainWidget());
 
+  // Check if edition has been cancelled
+  if (!val.isValid())
+    return;
+
   BooleanProperty* selected = inputData()->getElementSelected();
   bool hasSelected = false;
 
