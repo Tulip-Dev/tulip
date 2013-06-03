@@ -596,6 +596,7 @@ void GraphPerspective::open(QString fileName) {
 
   filterAny += " *.tlpx);;";
 
+  filters += "All files (*)";
   filters.insert(0, filterAny);
 
   if (fileName.isNull()) // If open() was called without a parameter, open the file dialog
