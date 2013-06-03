@@ -34,8 +34,7 @@
 
 #include "../PathAlgorithm.h"
 
-//using namespace tlp;
-//using namespace std;
+namespace tlp {
 
 class Dikjstra: public PathAlgorithm {
 public:
@@ -92,5 +91,5 @@ private:
 public:
   tlp::MutableContainer<double> nodeDistance;
 };
-
+}
 #endif // DIKJSTRA_H

@@ -24,9 +24,9 @@
 #include <tulip/DrawingTools.h>
 #include <tulip/BooleanProperty.h>
 
-using namespace tlp;
 using namespace std;
 
+namespace tlp {
 // Computes the enclosing circle of the elements contained in a boolean property.
 Circlef getEnclosingCircle(GlGraphInputData *inputData, BooleanProperty *selection) {
   BoundingBox bbox(computeBoundingBox(inputData->getGraph(), inputData->getElementLayout(), inputData->getElementSize(), inputData->getElementRotation(), selection));
@@ -57,4 +57,5 @@ bool getEdgeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData, edge e
 
   circle = getEnclosingCircle(inputData, selection);
   return true;
+}
 }

@@ -22,25 +22,47 @@
 
 #include "PathHighlighter.h"
 
+#include <tulip/Color.h>
+
 #include <QWidget>
+#include <QObject>
 
-#include "ui_EnclosingCircleConfiguration.h"
+namespace Ui {
+class EnclosingCircleConfigurationData;
+}
 
-class EnclosingCircleConfigurationWidget: public QWidget, public Ui::EnclosingCircleConfigurationData {
+namespace tlp {
+
+class EnclosingCircleConfigurationWidget: public QWidget {
+
+    Q_OBJECT
+
+    Ui::EnclosingCircleConfigurationData* _ui;
 public:
-  EnclosingCircleConfigurationWidget(QWidget *parent=0): QWidget(parent) {
-    setupUi(this);
-  }
+  EnclosingCircleConfigurationWidget(QWidget *parent=0);
+  ~EnclosingCircleConfigurationWidget();
+
+  void circleColorBtnDisabled(const bool disabled);
+  void inverseColorRadioCheck(const bool checked);
+  void solidColorRadioCheck(const bool checked);
+  void alphaSliderSetValue(const int val);
+
+signals:
+  void solidColorRadioChecked(bool);
+  void inverseColorRadioChecked(bool);
+  void colorButtonClicked();
+  void alphaChanged(int);
 };
 
 class EnclosingCircleHighlighter: public QObject, public PathHighlighter {
   Q_OBJECT
+
 public:
-  inline EnclosingCircleHighlighter(): PathHighlighter("Enclosing circle"), circleColor(200,200,200), outlineColor(0,0,0), alpha(128), inversedColor(false) {}
-  void highlight(const PathFinder *parent, tlp::GlMainWidget *glMainWidget, tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt);
-  void draw(tlp::GlMainWidget *glMainWidget);
-  PathHighlighter *clone();
-  bool isConfigurable();
+  EnclosingCircleHighlighter();
+  ~EnclosingCircleHighlighter();
+  void highlight(const PathFinder *parent, GlMainWidget *glMainWidget, BooleanProperty *selection, tlp::node src, tlp::node tgt);
+  void draw(GlMainWidget *glMainWidget);
+  bool isConfigurable() const;
   QWidget *getConfigurationWidget();
 
 public slots:
@@ -50,12 +72,11 @@ public slots:
   void alphaChanged(int);
 
 private:
-  tlp::Color circleColor;
-  tlp::Color outlineColor;
+  Color circleColor, outlineColor;
   int alpha;
   bool inversedColor;
 
   EnclosingCircleConfigurationWidget *configurationWidget;
 };
-
+}
 #endif /* ENCLOSINGCIRCLEHIGHLIGHTER_H_ */

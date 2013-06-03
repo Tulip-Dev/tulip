@@ -20,6 +20,8 @@
 #ifndef PATHFINDERCOMPONENT_H_
 #define PATHFINDERCOMPONENT_H_
 
+#include <QSet>
+
 #include <tulip/GLInteractor.h>
 #include <tulip/Node.h>
 
@@ -28,7 +30,7 @@ class Graph;
 class GlMainView;
 class BooleanProperty;
 class DoubleProperty;
-}
+
 class PathHighlighter;
 class PathFinder;
 
@@ -36,9 +38,10 @@ class PathFinder;
  * @brief The main component of the PathFinder interactor. Runs the path finding algorithm when two nodes have been selected and
  * triggers the highlighters if a path has been found.
  */
-struct PathFinderComponent: public tlp::GLInteractorComponent {
+class PathFinderComponent: public GLInteractorComponent {
+public:
   PathFinderComponent(PathFinder *parent);
-  virtual ~PathFinderComponent();
+  ~PathFinderComponent();
   bool eventFilter(QObject *, QEvent *);
   void timerEvent(QTimerEvent *);
 
@@ -51,7 +54,7 @@ struct PathFinderComponent: public tlp::GLInteractorComponent {
   /**
    * @return A list of all the installed highlighters.
    */
-  std::set<PathHighlighter *> getHighlighters();
+  QSet<PathHighlighter *> getHighlighters();
 
   void clear();
 
@@ -65,14 +68,14 @@ private:
   int lastY;
   tlp::GlMainWidget *glMW;
 
-  std::set<PathHighlighter *> highlighters;
+  QSet<PathHighlighter *> highlighters;
   void runHighlighters(tlp::GlMainWidget *glMainWidget,tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt);
   void clearHighlighters(tlp::GlMainWidget *glMainWidget);
 
-  void selectPath(tlp::GlMainWidget *glMainWidget,tlp::Graph *graph);
+  void selectPath(GlMainWidget *glMainWidget,tlp::Graph *graph);
   PathHighlighter *findHighlighter(const std::string &name);
 };
 
-
+}
 
 #endif /* PATHFINDERCOMPONENT_H_ */

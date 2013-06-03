@@ -236,10 +236,11 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   dataSet.get("detailed scatterplot x dim", detailScatterPlotX);
   dataSet.get("detailed scatterplot y dim", detailScatterPlotY);
 
-  if (detailScatterPlotX != "" && detailScatterPlotY != "") {
-    if (!scatterPlotsGenMap[make_pair(detailScatterPlotX, detailScatterPlotY)]) {
-      scatterPlotsMap[make_pair(detailScatterPlotX, detailScatterPlotY)]->generateOverview();
-      scatterPlotsGenMap[make_pair(detailScatterPlotX, detailScatterPlotY)] = true;
+  if (!detailScatterPlotX.empty() && !detailScatterPlotY.empty()) {
+      pair<string, string> x_y = make_pair(detailScatterPlotX, detailScatterPlotY);
+      if (!scatterPlotsGenMap[x_y]) {
+          scatterPlotsMap[x_y]->generateOverview();
+          scatterPlotsGenMap[x_y] = true;
     }
 
     switchFromMatrixToDetailView(scatterPlotsMap[make_pair(detailScatterPlotX, detailScatterPlotY)]);
@@ -745,8 +746,6 @@ void ScatterPlot2DView::generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWi
 }
 
 void ScatterPlot2DView::switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot) {
-
-
 
   sceneRadiusBak = getGlMainWidget()->getScene()->getGraphCamera().getSceneRadius();
   zoomFactorBak = getGlMainWidget()->getScene()->getGraphCamera().getZoomFactor();

@@ -12,6 +12,7 @@ NeighborhoodHighlighterConfigWidget.ui
 
 QTX_WRAP_CPP(LIB_MOC_SRCS
 NeighborhoodHighlighterInteractor.h
+NeighborhoodHighlighterConfigWidget.h
 )
 
 QTX_ADD_RESOURCES(LIB_RCC_SRCS
