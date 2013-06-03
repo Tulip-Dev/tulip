@@ -46,7 +46,7 @@ PathFinder::PathFinder(const tlp::PluginContext *) :
   GLInteractorComposite(QIcon(":/pathfinder.png"), "Select the shortest path between two nodes"), weightMetric(NO_METRIC), selectAllPaths(false), edgeOrientation(DEFAULT_ORIENTATION),
   pathsTypes(DEFAULT_PATHS_TYPE), toleranceActivated(DEFAULT_TOLERANCE_ACTIVATION), tolerance(DEFAULT_TOLERANCE), _configurationWidget(NULL), highlightersListWidget(NULL), configureHighlighterBtn(NULL) {
 
-    edgeOrientationLabels[PathAlgorithm::Oriented] = "Consider edges as oriented";
+  edgeOrientationLabels[PathAlgorithm::Oriented] = "Consider edges as oriented";
   edgeOrientationLabels[PathAlgorithm::NonOriented] = "Consider edges as non-oriented";
   edgeOrientationLabels[PathAlgorithm::Reversed] = "Consider edges as reversed";
   pathsTypesLabels[PathAlgorithm::AllPaths] = "Select all the paths";
@@ -55,7 +55,7 @@ PathFinder::PathFinder(const tlp::PluginContext *) :
 }
 
 PathFinder::~PathFinder() {
-    delete _configurationWidget;
+  delete _configurationWidget;
 }
 
 bool PathFinder::isCompatible(const std::string &viewName) const {
@@ -103,7 +103,7 @@ void PathFinder::construct() {
   QSet<PathHighlighter *> highlighters(getPathFinderComponent()->getHighlighters());
 
   foreach(PathHighlighter *h, highlighters)
-    inactiveList.push_back(h->getName());
+  inactiveList.push_back(h->getName());
 
   highlightersListWidget->setSelectedStringsList(activeList);
   highlightersListWidget->setUnselectedStringsList(inactiveList);

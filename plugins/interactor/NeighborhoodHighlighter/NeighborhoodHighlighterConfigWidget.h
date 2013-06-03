@@ -32,9 +32,9 @@ namespace tlp {
 
 class NeighborhoodHighlighterConfigWidget : public QWidget {
 
-    Q_OBJECT
+  Q_OBJECT
 
-    Ui::NeighborhoodHighlighterConfigWidgetData* _ui;
+  Ui::NeighborhoodHighlighterConfigWidgetData* _ui;
 
 public :
 

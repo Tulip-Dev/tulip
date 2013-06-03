@@ -35,9 +35,9 @@ namespace tlp {
 
 class EnclosingCircleConfigurationWidget: public QWidget {
 
-    Q_OBJECT
+  Q_OBJECT
 
-    Ui::EnclosingCircleConfigurationData* _ui;
+  Ui::EnclosingCircleConfigurationData* _ui;
 public:
   EnclosingCircleConfigurationWidget(QWidget *parent=0);
   ~EnclosingCircleConfigurationWidget();

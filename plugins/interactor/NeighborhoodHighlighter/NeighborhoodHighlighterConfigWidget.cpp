@@ -30,7 +30,7 @@ NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(QWidget
 }
 
 NeighborhoodHighlighterConfigWidget::~NeighborhoodHighlighterConfigWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 NodeNeighborhoodView::NeighborNodesType NeighborhoodHighlighterConfigWidget::getNeighborsType() const {
@@ -75,5 +75,5 @@ void NeighborhoodHighlighterConfigWidget::setPropertyToUse(std::string &property
 }
 
 bool NeighborhoodHighlighterConfigWidget::isdisplayEdgesCBChecked() const {
-    return _ui->displayEdgesCB->isChecked();
+  return _ui->displayEdgesCB->isChecked();
 }

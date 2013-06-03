@@ -98,8 +98,8 @@ void Workspace::setModel(tlp::GraphHierarchiesModel* model) {
 }
 
 void Workspace::closeAll() {
-    qDeleteAll(_panels);
-    _panels.clear();
+  qDeleteAll(_panels);
+  _panels.clear();
 }
 
 QList<tlp::View*> Workspace::panels() const {
@@ -166,13 +166,13 @@ int Workspace::addPanel(tlp::View* view) {
 }
 
 void Workspace::delView(tlp::View* view) {
-    foreach(WorkspacePanel* it, _panels) {
-        if (it->view() == view) {
-            _panels.removeOne(it);
-            delete it;
-            return;
-        }
+  foreach(WorkspacePanel* it, _panels) {
+    if (it->view() == view) {
+      _panels.removeOne(it);
+      delete it;
+      return;
     }
+  }
 }
 
 void Workspace::panelDestroyed(QObject* obj) {

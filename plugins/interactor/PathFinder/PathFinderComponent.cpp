@@ -37,7 +37,7 @@ PathFinderComponent::PathFinderComponent(PathFinder *parent) : parent(parent), g
 }
 
 PathFinderComponent::~PathFinderComponent() {
-    qDeleteAll(highlighters);
+  qDeleteAll(highlighters);
 }
 
 bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
@@ -198,9 +198,9 @@ void PathFinderComponent::clearHighlighters(GlMainWidget *glMainWidget) {
 }
 
 PathHighlighter *PathFinderComponent::findHighlighter(const string &name) {
-    foreach(PathHighlighter *p, highlighters) {
-        if (p->getName() == name)
-            return p;
+  foreach(PathHighlighter *p, highlighters) {
+    if (p->getName() == name)
+      return p;
   }
   return NULL;
 }

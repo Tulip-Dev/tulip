@@ -161,7 +161,7 @@ GraphPerspective::~GraphPerspective() {
   qInstallMsgHandler(0);
 #endif
 
-    delete _ui;
+  delete _ui;
 }
 
 void GraphPerspective::logCleared() {
