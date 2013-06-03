@@ -74,7 +74,7 @@ class TLP_QT_SCOPE Perspective : public QObject, public tlp::Plugin {
   QSet<QString> _reservedProperties;
   QTcpSocket* _agentSocket;
   unsigned int _perspectiveId;
-
+  bool _maximised;
   void sendAgentMessage(const QString&);
   void notifyProjectLocation(const QString& path);
 
@@ -212,6 +212,12 @@ protected slots:
    * @brief Send a message to the Tulip agent to make him display the Plugins Center page.
    */
   void showPluginsCenter();
+
+  /**
+   * @brief Call this slot to swith to full screen or windowed mode
+   * @param f is true, switch to full screen mode. If false, switch to windowed mode
+   */
+  void showFullScreen(bool f);
 
   /**
    * @brief Send a message to the Tulip agent to make him display the Projects page.

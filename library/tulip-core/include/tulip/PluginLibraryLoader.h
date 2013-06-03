@@ -29,7 +29,7 @@
 
 namespace tlp {
 
-class PluginLoader;
+struct PluginLoader;
 
 /**
  * @ingroup Plugins

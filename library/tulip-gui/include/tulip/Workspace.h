@@ -95,7 +95,7 @@ public slots:
   void expose(bool);
   void showExposeMode();
   void hideExposeMode();
-
+  void closeAll();
   void setActivePanel(tlp::View*);
   void setModel(tlp::GraphHierarchiesModel*);
 

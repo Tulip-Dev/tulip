@@ -39,7 +39,7 @@
 
 namespace tlp {
 
-class BoundingBox;
+struct BoundingBox;
 
 typedef Matrix<float, 4> MatrixGL;
 TLP_GL_SCOPE void glTest(const std::string &message = std::string("(no description)"));
