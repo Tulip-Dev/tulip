@@ -237,10 +237,11 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   dataSet.get("detailed scatterplot y dim", detailScatterPlotY);
 
   if (!detailScatterPlotX.empty() && !detailScatterPlotY.empty()) {
-      pair<string, string> x_y = make_pair(detailScatterPlotX, detailScatterPlotY);
-      if (!scatterPlotsGenMap[x_y]) {
-          scatterPlotsMap[x_y]->generateOverview();
-          scatterPlotsGenMap[x_y] = true;
+    pair<string, string> x_y = make_pair(detailScatterPlotX, detailScatterPlotY);
+
+    if (!scatterPlotsGenMap[x_y]) {
+      scatterPlotsMap[x_y]->generateOverview();
+      scatterPlotsGenMap[x_y] = true;
     }
 
     switchFromMatrixToDetailView(scatterPlotsMap[make_pair(detailScatterPlotX, detailScatterPlotY)]);

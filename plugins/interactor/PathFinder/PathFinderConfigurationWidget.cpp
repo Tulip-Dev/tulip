@@ -34,61 +34,61 @@ PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent): Q
 }
 
 PathFinderConfigurationWidget::~PathFinderConfigurationWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void PathFinderConfigurationWidget::addweightComboItem(const QString &s) {
-    _ui->weightCombo->addItem(s);
+  _ui->weightCombo->addItem(s);
 }
 
 void PathFinderConfigurationWidget::addedgeOrientationComboItem(const QString &s) {
-    _ui->edgeOrientationCombo->addItem(s);
+  _ui->edgeOrientationCombo->addItem(s);
 }
 
 void PathFinderConfigurationWidget::addpathsTypeComboItem(const QString &s) {
-    _ui->pathsTypeCombo->addItem(s);
+  _ui->pathsTypeCombo->addItem(s);
 }
 
 void PathFinderConfigurationWidget::setCurrentweightComboIndex(const int i) {
-    _ui->weightCombo->setCurrentIndex(i);
+  _ui->weightCombo->setCurrentIndex(i);
 }
 
 int PathFinderConfigurationWidget::weightComboFindText(const QString &text) const {
-    return _ui->weightCombo->findText(text);
+  return _ui->weightCombo->findText(text);
 }
 
 void PathFinderConfigurationWidget::setCurrentedgeOrientationComboIndex(const int i) {
-    _ui->edgeOrientationCombo->setCurrentIndex(i);
+  _ui->edgeOrientationCombo->setCurrentIndex(i);
 }
 
 int PathFinderConfigurationWidget::edgeOrientationComboFindText(const QString &text) const {
-    return _ui->edgeOrientationCombo->findText(text);
+  return _ui->edgeOrientationCombo->findText(text);
 }
 
 void PathFinderConfigurationWidget::toleranceChecked(const bool checked) {
-    _ui->toleranceCheck->setChecked(checked);
+  _ui->toleranceCheck->setChecked(checked);
 }
 
 void PathFinderConfigurationWidget::setToleranceSpinValue(const int val) {
-    _ui->toleranceSpin->setValue(val);
+  _ui->toleranceSpin->setValue(val);
 }
 
 void PathFinderConfigurationWidget::highlightersLabelDisabled(const bool disable) {
-    _ui->highlightersLabel->setDisabled(disable);
+  _ui->highlightersLabel->setDisabled(disable);
 }
 
 void PathFinderConfigurationWidget::addbottomWidget(QWidget *w) {
-    _ui->bottomArea->addWidget(w, 0, Qt::AlignLeft);
+  _ui->bottomArea->addWidget(w, 0, Qt::AlignLeft);
 }
 
 void PathFinderConfigurationWidget::toleranceCheckDisabled(const bool disabled) {
-    _ui->toleranceCheck->setDisabled(disabled);
+  _ui->toleranceCheck->setDisabled(disabled);
 }
 
 void PathFinderConfigurationWidget::toleranceSpinDisabled(const bool disabled) {
-_ui->toleranceSpin->setDisabled(disabled);
+  _ui->toleranceSpin->setDisabled(disabled);
 }
 
 void PathFinderConfigurationWidget::toleranceLabelDisabled(const bool disabled) {
-_ui->toleranceLabel->setDisabled(disabled);
+  _ui->toleranceLabel->setDisabled(disabled);
 }

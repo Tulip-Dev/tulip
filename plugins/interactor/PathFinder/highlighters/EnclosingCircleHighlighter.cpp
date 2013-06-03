@@ -44,23 +44,23 @@ EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(QWidget *
 }
 
 EnclosingCircleConfigurationWidget::~EnclosingCircleConfigurationWidget() {
-    delete _ui;
+  delete _ui;
 }
 
 void EnclosingCircleConfigurationWidget::circleColorBtnDisabled(const bool disabled) {
-    _ui->circleColorBtn->setDisabled(disabled);
+  _ui->circleColorBtn->setDisabled(disabled);
 }
 
 void EnclosingCircleConfigurationWidget::inverseColorRadioCheck(const bool checked) {
-    _ui->inverseColorRadio->setChecked(checked);
+  _ui->inverseColorRadio->setChecked(checked);
 }
 
 void EnclosingCircleConfigurationWidget::alphaSliderSetValue(const int val) {
-    _ui->alphaSlider->setValue(val);
+  _ui->alphaSlider->setValue(val);
 }
 
 void EnclosingCircleConfigurationWidget::solidColorRadioCheck(const bool checked) {
-    _ui->solidColorRadio->setChecked(checked);
+  _ui->solidColorRadio->setChecked(checked);
 }
 
 Color getInverseColor(const Color &c) {
@@ -121,7 +121,7 @@ bool EnclosingCircleHighlighter::isConfigurable() const {
 }
 
 EnclosingCircleHighlighter::~EnclosingCircleHighlighter() {
-    delete configurationWidget;
+  delete configurationWidget;
 }
 
 QWidget *EnclosingCircleHighlighter::getConfigurationWidget() {

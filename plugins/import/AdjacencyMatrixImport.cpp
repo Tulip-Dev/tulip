@@ -107,8 +107,8 @@ public:
     string name2;
 
     if (!(dataSet->get("file::filename", name2) ||
-	  // ensure compatibility with old version
-	  dataSet->get("file::name", name2)))
+          // ensure compatibility with old version
+          dataSet->get("file::name", name2)))
       return false;
 
     struct stat infoEntry;
