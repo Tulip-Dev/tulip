@@ -161,7 +161,6 @@ GraphPerspective::~GraphPerspective() {
   qInstallMsgHandler(0);
 #endif
 
-  if(_ui!=NULL)
     delete _ui;
 }
 
@@ -298,6 +297,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->workspace,SIGNAL(importGraphRequest()),this,SLOT(importGraph()));
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
   connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(setWorkspaceMode()));
+  connect(_ui->action_Close_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
 
   // Agent actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));
@@ -382,19 +382,6 @@ void GraphPerspective::refreshDockExpandControls() {
 
   if (expandedHeaders.size() == 1)
     expandedHeaders[0]->expandControl()->setEnabled(false);
-}
-
-void GraphPerspective::showFullScreen(bool f) {
-  if (f) {
-    _maximised = _mainWindow->isMaximized();
-    _mainWindow->showFullScreen();
-  }
-  else {
-    _mainWindow->showNormal();
-
-    if (_maximised)
-      _mainWindow->showMaximized();
-  }
 }
 
 void GraphPerspective::exportGraph(Graph* g) {

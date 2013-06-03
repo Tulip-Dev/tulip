@@ -45,7 +45,6 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
   Q_OBJECT
   Ui::GraphPerspectiveMainWindowData *_ui;
   tlp::GraphHierarchiesModel *_graphs;
-  bool _maximised;
 
   void reserveDefaultProperties();
   QString _lastOpenLocation;
@@ -81,7 +80,6 @@ public:
 #endif
 
 public slots:
-  void showFullScreen(bool);
   void importGraph();
   void exportGraph(tlp::Graph*g = NULL);
   void saveGraphToFile(tlp::Graph*g = NULL);

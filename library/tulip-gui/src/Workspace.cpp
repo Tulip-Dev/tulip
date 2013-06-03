@@ -97,6 +97,11 @@ void Workspace::setModel(tlp::GraphHierarchiesModel* model) {
   }
 }
 
+void Workspace::closeAll() {
+    qDeleteAll(_panels);
+    _panels.clear();
+}
+
 QList<tlp::View*> Workspace::panels() const {
   QList<tlp::View*> result;
   foreach(WorkspacePanel* panel, _panels) {
@@ -160,16 +165,14 @@ int Workspace::addPanel(tlp::View* view) {
   return _panels.size()-1;
 }
 
-
 void Workspace::delView(tlp::View* view) {
-  WorkspacePanel* panel = NULL;
-  foreach(WorkspacePanel* it, _panels) {
-    if (it->view() == view) {
-      panel = it;
-      break;
+    foreach(WorkspacePanel* it, _panels) {
+        if (it->view() == view) {
+            _panels.removeOne(it);
+            delete it;
+            return;
+        }
     }
-  }
-  delete panel;
 }
 
 void Workspace::panelDestroyed(QObject* obj) {
