@@ -86,7 +86,7 @@ class AdjacencyMatrixImport:public ImportModule {
 public:
   PLUGININFORMATIONS("Adjacency Matrix", "Auber David", "05/09/2008","Imports a graph from a file coding an adjacency matrix.","1.2","File")
   AdjacencyMatrixImport(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<string>("file::name",paramHelp[0],"");
+    addInParameter<string>("file::filename",paramHelp[0],"");
   }
   ~AdjacencyMatrixImport() {}
   vector<node> nodes;
@@ -106,7 +106,9 @@ public:
   bool importGraph() {
     string name2;
 
-    if (!dataSet->get("file::name", name2))
+    if (!(dataSet->get("file::filename", name2) ||
+	  // ensure compatibility with old version
+	  dataSet->get("file::name", name2)))
       return false;
 
     struct stat infoEntry;
