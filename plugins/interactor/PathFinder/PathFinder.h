@@ -23,7 +23,7 @@
 #include <tulip/GLInteractor.h>
 
 #include "../../utils/StandardInteractorPriority.h"
-#include "PathFinding/Dikjstra/Dikjstra.h"
+#include "PathFinding/PathAlgorithm.h"
 
 #define NO_METRIC "None"
 #define DEFAULT_ORIENTATION PathAlgorithm::NonOriented
@@ -31,14 +31,15 @@
 #define DEFAULT_TOLERANCE 100
 #define DEFAULT_TOLERANCE_ACTIVATION false
 
-struct PathFinderComponent;
+class QPushButton;
+
+namespace tlp {
+class PathFinderComponent;
 class PathHighlighter;
 class PathFinderConfigurationWidget;
-namespace tlp {
+
 class StringsListSelectionWidget;
 class BooleanProperty;
-}
-class QPushButton;
 
 /*@{*/
 /** \file
@@ -66,14 +67,14 @@ public:
    * @return The name of the property used to get the weight values over the edges.
    */
   inline std::string getWeightMetricName() const {
-    return this->weightMetric;
+    return weightMetric;
   }
 
   /**
    * @return true if the user chose not to select only one path
    */
   inline bool isSelectAllPaths() const {
-    return this->selectAllPaths;
+    return selectAllPaths;
   }
 
   /**
@@ -81,7 +82,7 @@ public:
    * @see PathAlgorithm::EdgeOrientation
    */
   inline PathAlgorithm::EdgeOrientation getEdgeOrientation() const {
-    return this->edgeOrientation;
+    return edgeOrientation;
   }
 
   /**
@@ -89,7 +90,7 @@ public:
    * @see PathAlgorithm::PathType
    */
   inline PathAlgorithm::PathType getPathsType() const {
-    return this->pathsTypes;
+    return pathsTypes;
   }
 
   /**
@@ -143,4 +144,5 @@ private:
   QPushButton *configureHighlighterBtn;
 };
 
+}
 #endif /* PATHFINDER_H_ */

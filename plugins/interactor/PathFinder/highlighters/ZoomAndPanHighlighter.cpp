@@ -19,9 +19,6 @@
 
 #include "ZoomAndPanHighlighter.h"
 
-using namespace std;
-using namespace tlp;
-
 #include <tulip/Graph.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlGraphInputData.h>
@@ -32,6 +29,9 @@ using namespace tlp;
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
+
+using namespace std;
+using namespace tlp;
 
 void ZoomAndPanHighlighter::highlight(const PathFinder*, GlMainWidget *glMainWidget, BooleanProperty *selection, node, node) {
   GlGraphInputData *inputData(getInputData(glMainWidget));
@@ -46,11 +46,7 @@ void ZoomAndPanHighlighter::highlight(const PathFinder*, GlMainWidget *glMainWid
 void ZoomAndPanHighlighter::draw(GlMainWidget*) {
 }
 
-PathHighlighter *ZoomAndPanHighlighter::clone() {
-  return new ZoomAndPanHighlighter;
-}
-
-bool ZoomAndPanHighlighter::isConfigurable() {
+bool ZoomAndPanHighlighter::isConfigurable() const {
   return false;
 }
 

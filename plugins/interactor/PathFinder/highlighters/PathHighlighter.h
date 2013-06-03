@@ -21,10 +21,11 @@
 #define PATHHIGHLIGHTER_H_
 
 #include <string>
-#include <tulip/Node.h>
-#include "PathFinding/Dikjstra/Dikjstra.h"
+#include <map>
 
-#include <QObject>
+#include <tulip/Node.h>
+
+class QWidget;
 
 namespace tlp {
 class GlMainView;
@@ -35,9 +36,8 @@ class GlMainWidget;
 class GlLayer;
 class GlScene;
 class GlSimpleEntity;
-}
+
 class PathFinder;
-class QWidget;
 
 
 class PathHighlighter {
@@ -45,14 +45,13 @@ public:
   PathHighlighter(const std::string &name);
   virtual ~PathHighlighter();
 
-  inline std::string getName() {
+  inline std::string getName() const {
     return this->name;
   }
-  virtual void highlight(const PathFinder *parent, tlp::GlMainWidget *glMainWidget, tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt)=0;
+  virtual void highlight(const PathFinder *parent, GlMainWidget *glMainWidget, BooleanProperty *selection, node src, node tgt)=0;
   virtual void draw(tlp::GlMainWidget *glMainWidget) = 0;
-  virtual PathHighlighter *clone() = 0;
   void clear();
-  virtual bool isConfigurable()=0;
+  virtual bool isConfigurable() const=0;
   virtual QWidget *getConfigurationWidget()=0;
 
 protected:
@@ -66,5 +65,5 @@ private:
   std::map<std::string, bool> entities;
   int entityId;
 };
-
+}
 #endif /* PATHHIGHLIGHTER_H_ */

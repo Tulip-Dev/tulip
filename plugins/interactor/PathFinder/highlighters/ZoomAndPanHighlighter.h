@@ -22,14 +22,17 @@
 
 #include "PathHighlighter.h"
 
+#include <QObject>
+
+namespace tlp {
+
 class ZoomAndPanHighlighter: public PathHighlighter, public QObject {
 public:
   inline ZoomAndPanHighlighter(): PathHighlighter("Zoom and pan") {}
   void highlight(const PathFinder *parent, tlp::GlMainWidget *glMainWidget, tlp::BooleanProperty *selection, tlp::node src, tlp::node tgt);
   void draw(tlp::GlMainWidget *glMainWidget);
-  PathHighlighter *clone();
-  bool isConfigurable();
+  bool isConfigurable() const;
   QWidget *getConfigurationWidget();
 };
-
+}
 #endif /* ZOOMANDPANHIGHLIGHTER_H_ */

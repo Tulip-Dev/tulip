@@ -213,7 +213,7 @@ NeighborhoodHighlighter::NeighborhoodHighlighter(const NeighborhoodHighlighter &
   neighborhoodGraphOriginalLayout(NULL), neighborhoodGraphColors(NULL), neighborhoodGraphBackupColors(NULL),
   centralNodeLocked(false), circleLayoutSet(false), neighborhoodDist(1), circleAlphaValue(maxCircleAlphaValue) {
   configWidget = neighborhoodHighlighter.configWidget;
-  connect(configWidget->applyButton, SIGNAL(clicked()), this, SLOT(updateNeighborhoodGraph()));
+  connect(configWidget, SIGNAL(updateNeighborhoodGraph()), this, SLOT(updateNeighborhoodGraph()));
 }
 
 NeighborhoodHighlighter::~NeighborhoodHighlighter() {
@@ -705,7 +705,7 @@ bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
     GlGraphRenderingParameters renderingParameters = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     renderingParameters.setNodesStencil(1);
     renderingParameters.setNodesLabelStencil(1);
-    renderingParameters.setDisplayEdges(configWidget->displayEdgesCB->isChecked());
+    renderingParameters.setDisplayEdges(configWidget->isdisplayEdgesCBChecked());
     glNeighborhoodGraph->setRenderingParameters(renderingParameters);
     glNeighborhoodGraph->draw(10,glNeighborhoodCamera);
 

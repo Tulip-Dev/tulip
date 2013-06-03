@@ -21,13 +21,25 @@
 #define NEIGHBOURHOODHIGHLIGHTERCONFIGWIDGET_H_
 
 #include "NodeNeighborhoodView.h"
-#include "ui_NeighborhoodHighlighterConfigWidget.h"
 
-class NeighborhoodHighlighterConfigWidget : public QWidget, public Ui::NeighborhoodHighlighterConfigWidgetData {
+#include <QWidget>
+
+namespace Ui {
+class NeighborhoodHighlighterConfigWidgetData;
+}
+
+namespace tlp {
+
+class NeighborhoodHighlighterConfigWidget : public QWidget {
+
+    Q_OBJECT
+
+    Ui::NeighborhoodHighlighterConfigWidgetData* _ui;
 
 public :
 
   NeighborhoodHighlighterConfigWidget(QWidget *parent = 0);
+  ~NeighborhoodHighlighterConfigWidget();
 
   NodeNeighborhoodView::NeighborNodesType getNeighborsType() const;
   bool computeReachableSubGraph() const;
@@ -35,8 +47,12 @@ public :
   bool bringAndGoAnimation1() const;
   std::string propertyToUse() const;
   int numberOfNodesToBring() const;
-  void setPropertyToUse(std::string propertyName);
+  void setPropertyToUse(std::string &propertyName);
   void setNumberOfNodes(int nodesNb);
-};
+  bool isdisplayEdgesCBChecked() const;
 
+signals:
+  void updateNeighborhoodGraph();
+};
+}
 #endif /* NEIGHBOURHOODHIGHLIGHTERCONFIGWIDGET_H_ */

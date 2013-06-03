@@ -20,14 +20,47 @@
 #ifndef PATHFINDERCONFIGURATIONWIDGET_H_
 #define PATHFINDERCONFIGURATIONWIDGET_H_
 
-#include "ui_PathFinderConfiguration.h"
 #include <QWidget>
 
-class PathFinderConfigurationWidget: public QWidget, public Ui::PathFinderConfigurationData {
+#include <string>
+
+namespace Ui {
+class PathFinderConfigurationData;
+}
+
+class QString;
+
+namespace tlp {
+class PathFinderConfigurationWidget: public QWidget {
   Q_OBJECT
+
+  Ui::PathFinderConfigurationData* _ui;
 public:
   PathFinderConfigurationWidget(QWidget *parent=0);
-  virtual ~PathFinderConfigurationWidget();
-};
+  ~PathFinderConfigurationWidget();
 
+  void addweightComboItem(const QString &s);
+  void setCurrentweightComboIndex(const int i);
+  int weightComboFindText(const QString &text) const;
+  void addedgeOrientationComboItem(const QString &s);
+  void setCurrentedgeOrientationComboIndex(const int i);
+  int edgeOrientationComboFindText(const QString &text) const;
+  void addpathsTypeComboItem(const QString &s);
+  void toleranceChecked(const bool checked);
+  void setToleranceSpinValue(const int val);
+  void highlightersLabelDisabled(const bool disable);
+  void addbottomWidget(QWidget *w);
+  void toleranceCheckDisabled(const bool disabled);
+  void toleranceSpinDisabled(const bool disabled);
+  void toleranceLabelDisabled(const bool disabled);
+
+signals:
+  void setWeightMetric(const QString &);
+  void setEdgeOrientation(const QString &);
+  void setPathsType(const QString &);
+  void activateTolerance(bool);
+  void setTolerance(int);
+
+};
+}
 #endif /* PATHFINDERCONFIGURATIONWIDGET_H_ */

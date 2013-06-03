@@ -33,7 +33,7 @@ namespace tlp {
 class BooleanProperty;
 class DoubleProperty;
 class Graph;
-}
+
 
 /**
  * @brief An implementation of the DFS algorithm to find all the existing paths between two nodes.
@@ -72,5 +72,5 @@ private:
   EdgeOrientation edgesOrientation;
   double maxDist;
 };
-
+}
 #endif /* DFS_H_ */

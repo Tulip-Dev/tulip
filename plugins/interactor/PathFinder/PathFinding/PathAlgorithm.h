@@ -27,7 +27,7 @@ namespace tlp {
 class BooleanProperty;
 class DoubleProperty;
 class Graph;
-}
+
 
 /**
  * @brief An facade for any path finding algorithm.
@@ -63,5 +63,5 @@ public:
    */
   static bool computePath(tlp::Graph *graph, PathType pathType, EdgeOrientation edgesOrientation, tlp::node src, tlp::node tgt, tlp::BooleanProperty *result, tlp::DoubleProperty *weights=0, double tolerance=DBL_MAX);
 };
-
+}
 #endif /* PATHALGORITHM_H_ */

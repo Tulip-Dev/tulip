@@ -37,8 +37,7 @@ PathFinderComponent::PathFinderComponent(PathFinder *parent) : parent(parent), g
 }
 
 PathFinderComponent::~PathFinderComponent() {
-  for (set<PathHighlighter *>::iterator it = highlighters.begin(); it != highlighters.end(); ++it)
-    delete (*it);
+    qDeleteAll(highlighters);
 }
 
 bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
@@ -199,19 +198,18 @@ void PathFinderComponent::clearHighlighters(GlMainWidget *glMainWidget) {
 }
 
 PathHighlighter *PathFinderComponent::findHighlighter(const string &name) {
-  for (set<PathHighlighter *>::iterator it = highlighters.begin(); it != highlighters.end(); ++it) {
-    if ((*it)->getName().compare(name) == 0)
-      return *it;
+    foreach(PathHighlighter *p, highlighters) {
+        if (p->getName() == name)
+            return p;
   }
-
-  return 0;
+  return NULL;
 }
 
 void PathFinderComponent::addHighlighter(PathHighlighter *highlighter) {
   highlighters.insert(highlighter);
 }
 
-set<PathHighlighter *> PathFinderComponent::getHighlighters() {
+QSet<PathHighlighter *> PathFinderComponent::getHighlighters() {
   return highlighters;
 }
 

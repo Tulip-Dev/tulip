@@ -17,11 +17,6 @@
  *
  */
 
-#include "EnclosingCircleHighlighter.h"
-
-using namespace tlp;
-using namespace std;
-
 #include <tulip/GlScene.h>
 #include <tulip/Circle.h>
 #include <tulip/ForEach.h>
@@ -33,13 +28,51 @@ using namespace std;
 #include <QWidget>
 #include <QColorDialog>
 
+#include "EnclosingCircleHighlighter.h"
 #include "../PathFinderTools.h"
+#include "ui_EnclosingCircleConfiguration.h"
+
+using namespace tlp;
+using namespace std;
+
+EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(QWidget *parent): QWidget(parent),_ui(new Ui::EnclosingCircleConfigurationData) {
+  _ui->setupUi(this);
+  connect(_ui->solidColorRadio, SIGNAL(clicked(bool)), this, SIGNAL(solidColorRadioChecked(bool)));
+  connect(_ui->inverseColorRadio, SIGNAL(clicked(bool)), this, SIGNAL(inverseColorRadioChecked(bool)));
+  connect(_ui->circleColorBtn, SIGNAL(clicked(bool)), this, SIGNAL(colorButtonClicked()));
+  connect(_ui->alphaSlider, SIGNAL(valueChanged(int)), this, SIGNAL(alphaChanged(int)));
+}
+
+EnclosingCircleConfigurationWidget::~EnclosingCircleConfigurationWidget() {
+    delete _ui;
+}
+
+void EnclosingCircleConfigurationWidget::circleColorBtnDisabled(const bool disabled) {
+    _ui->circleColorBtn->setDisabled(disabled);
+}
+
+void EnclosingCircleConfigurationWidget::inverseColorRadioCheck(const bool checked) {
+    _ui->inverseColorRadio->setChecked(checked);
+}
+
+void EnclosingCircleConfigurationWidget::alphaSliderSetValue(const int val) {
+    _ui->alphaSlider->setValue(val);
+}
+
+void EnclosingCircleConfigurationWidget::solidColorRadioCheck(const bool checked) {
+    _ui->solidColorRadio->setChecked(checked);
+}
 
 Color getInverseColor(const Color &c) {
   return Color(255 - c.getR(), 255 - c.getG(), 255 - c.getB(), c.getA());
 }
 
 //******************************************************
+EnclosingCircleHighlighter::EnclosingCircleHighlighter():PathHighlighter("Enclosing circle"), circleColor(200,200,200), outlineColor(0,0,0), alpha(128), inversedColor(false),configurationWidget(NULL) {
+
+}
+
+
 void EnclosingCircleHighlighter::highlight(const PathFinder*, GlMainWidget *glMainWidget, BooleanProperty *selection, node, node) {
   GlGraphInputData *inputData(getInputData(glMainWidget));
   GlScene *scene = glMainWidget->getScene();
@@ -83,39 +116,39 @@ void EnclosingCircleHighlighter::highlight(const PathFinder*, GlMainWidget *glMa
 void EnclosingCircleHighlighter::draw(GlMainWidget*) {
 }
 
-PathHighlighter *EnclosingCircleHighlighter::clone() {
-  return new EnclosingCircleHighlighter;
+bool EnclosingCircleHighlighter::isConfigurable() const {
+  return true;
 }
 
-bool EnclosingCircleHighlighter::isConfigurable() {
-  return true;
+EnclosingCircleHighlighter::~EnclosingCircleHighlighter() {
+    delete configurationWidget;
 }
 
 QWidget *EnclosingCircleHighlighter::getConfigurationWidget() {
   configurationWidget = new EnclosingCircleConfigurationWidget;
 
   if (inversedColor) {
-    configurationWidget->inverseColorRadio->setChecked(true);
-    configurationWidget->circleColorBtn->setDisabled(true);
+    configurationWidget->inverseColorRadioCheck(true);
+    configurationWidget->circleColorBtnDisabled(true);
   }
   else
-    configurationWidget->solidColorRadio->setChecked(true);
+    configurationWidget->solidColorRadioCheck(true);
 
-  configurationWidget->alphaSlider->setValue(alpha);
-  connect(configurationWidget->solidColorRadio, SIGNAL(clicked(bool)), this, SLOT(solidColorRadioChecked(bool)));
-  connect(configurationWidget->inverseColorRadio, SIGNAL(clicked(bool)), this, SLOT(inverseColorRadioChecked(bool)));
-  connect(configurationWidget->circleColorBtn, SIGNAL(clicked(bool)), this, SLOT(colorButtonClicked()));
-  connect(configurationWidget->alphaSlider, SIGNAL(valueChanged(int)), this, SLOT(alphaChanged(int)));
+  configurationWidget->alphaSliderSetValue(alpha);
+  connect(configurationWidget, SIGNAL(solidColorRadioChecked(bool)), this, SLOT(solidColorRadioChecked(bool)));
+  connect(configurationWidget, SIGNAL(inverseColorRadioChecked(bool)), this, SLOT(inverseColorRadioChecked(bool)));
+  connect(configurationWidget, SIGNAL(colorButtonClicked(bool)), this, SLOT(colorButtonClicked()));
+  connect(configurationWidget, SIGNAL(alphaChanged(int)), this, SLOT(alphaChanged(int)));
   return configurationWidget;
 }
 
 void EnclosingCircleHighlighter::solidColorRadioChecked(bool) {
-  configurationWidget->circleColorBtn->setDisabled(false);
+  configurationWidget->circleColorBtnDisabled(false);
   inversedColor=false;
 }
 
 void EnclosingCircleHighlighter::inverseColorRadioChecked(bool) {
-  configurationWidget->circleColorBtn->setDisabled(true);
+  configurationWidget->circleColorBtnDisabled(true);
   inversedColor=true;
 }
 

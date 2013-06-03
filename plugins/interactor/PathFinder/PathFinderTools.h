@@ -28,7 +28,7 @@ namespace tlp {
 class GlGraphInputData;
 class SizeProperty;
 class LayoutProperty;
-}
+
 
 /**
  * Computes the enclosing circle of a graph's node using the layout,size etc properties specified in the input data.
@@ -37,7 +37,7 @@ class LayoutProperty;
  * @param n the node.
  * @return true if the circle has been successfully computed.
  */
-bool getNodeEnclosingCircle(tlp::Circlef &circle, tlp::GlGraphInputData *inputData, tlp::node n);
+bool getNodeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData, node n);
 
 /**
  * Computes the enclosing circle of a graph's edge bends using the layout,size etc properties specified in the input data.
@@ -46,6 +46,6 @@ bool getNodeEnclosingCircle(tlp::Circlef &circle, tlp::GlGraphInputData *inputDa
  * @param n the node.
  * @return true if the circle has been successfully computed.
  */
-bool getEdgeEnclosingCircle(tlp::Circlef &circle, tlp::GlGraphInputData *inputData, tlp::edge n);
-
+bool getEdgeEnclosingCircle(Circlef &circle, GlGraphInputData *inputData, edge n);
+}
 #endif /* PATHFINDERTOOLS_H_ */
