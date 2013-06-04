@@ -355,11 +355,15 @@ void TableView::filterChanged() {
   sortModel->setFilterFixedString(filter);
 }
 
-void TableView::setAllValues(PropertyInterface* prop, bool selectedOnly) {
+bool TableView::setAllValues(PropertyInterface* prop, bool selectedOnly) {
   QVariant val =
     TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE,
                                         prop, graph(),
                                         static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()), (QWidget *) this->centralItem()->parentWidget());
+
+  // Check if edition has been cancelled
+  if (!val.isValid())
+    return false;
 
   if (selectedOnly) {
     BooleanProperty* selection = graph()->getProperty<BooleanProperty>("viewSelection");
@@ -383,6 +387,7 @@ void TableView::setAllValues(PropertyInterface* prop, bool selectedOnly) {
     else
       GraphModel::setAllEdgeValue(prop,val);
   }
+  return true;
 }
 
 void TableView::mapToGraphSelection() {
@@ -453,7 +458,7 @@ void TableView::selectHighlightedRows() {
   }
 }
 
-void TableView::setAllHighlightedRows(PropertyInterface* prop) {
+bool TableView::setAllHighlightedRows(PropertyInterface* prop) {
   Graph* g = graph();
   QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
@@ -461,6 +466,10 @@ void TableView::setAllHighlightedRows(PropertyInterface* prop) {
     TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE,
                                         prop, g,
                                         static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()));
+
+  // Check if edition has been cancelled
+  if (!val.isValid())
+    return false;
 
   for (QList<QModelIndex>::const_iterator itIdx = rows.begin();
        itIdx != rows.end(); ++itIdx) {
@@ -471,6 +480,7 @@ void TableView::setAllHighlightedRows(PropertyInterface* prop) {
       GraphModel::setEdgeValue(itIdx->data(TulipModel::ElementIdRole).toUInt(),
                                prop, val);
   }
+  return true;
 }
 
 void TableView::setLabelsOfHighlightedRows(PropertyInterface *prop) {
@@ -581,13 +591,17 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
   }
 
   if (action == setAll) {
-    setAllValues(graph()->getProperty(propName), false);
+    if (!setAllValues(graph()->getProperty(propName), false))
+      // cancelled so undo
+      graph()->pop();
     return;
   }
 
   if (action == selectedSetAll) {
     // set values for all rows elts
-    setAllValues(graph()->getProperty(propName), true);
+    if (!setAllValues(graph()->getProperty(propName), true))
+      // cancelled so undo
+      graph()->pop();
     return;
   }
 
