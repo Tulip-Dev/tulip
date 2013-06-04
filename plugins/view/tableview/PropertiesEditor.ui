@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
+    <width>401</width>
     <height>458</height>
    </rect>
   </property>
@@ -111,6 +111,9 @@ image: url(:/tulip/gui/icons/eye_disabled.png);
    <item>
     <widget class="QFrame" name="frame">
      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="spacing">
+       <number>4</number>
+      </property>
       <property name="leftMargin">
        <number>5</number>
       </property>
@@ -147,17 +150,51 @@ color: #595959;</string>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="propsVisibilityCheck">
-        <property name="toolTip">
-         <string>Show/Hide all 'Elements' table properties</string>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>0</number>
         </property>
-        <property name="text">
-         <string>Show all 'Elements' table properties</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
+        <item>
+         <widget class="QCheckBox" name="propsVisibilityCheck">
+          <property name="toolTip">
+           <string>Show/Hide all 'Elements' table properties</string>
+          </property>
+          <property name="text">
+           <string>Show all  properties</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="newButton">
+          <property name="toolTip">
+           <string>Add a new local property to the current graph</string>
+          </property>
+          <property name="text">
+           <string>Add property</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+            <normaloff>:/tulip/gui/icons/64/list-add.png</normaloff>:/tulip/gui/icons/64/list-add.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <widget class="QCheckBox" name="userPropertiesCheck">
@@ -294,7 +331,9 @@ border-bottom: 1px solid #C9C9C9;</string>
    <header location="global">tulip/ClearableLineEdit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>tableView</sender>
@@ -313,22 +352,6 @@ border-bottom: 1px solid #C9C9C9;</string>
    </hints>
   </connection>
   <connection>
-   <sender>userPropertiesCheck</sender>
-   <signal>clicked(bool)</signal>
-   <receiver>PropertiesEditor</receiver>
-   <slot>showVisualProperties(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>204</x>
-     <y>69</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>199</x>
-     <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>propsVisibilityCheck</sender>
    <signal>stateChanged(int)</signal>
    <receiver>PropertiesEditor</receiver>
@@ -341,6 +364,22 @@ border-bottom: 1px solid #C9C9C9;</string>
     <hint type="destinationlabel">
      <x>-40</x>
      <y>108</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>userPropertiesCheck</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>PropertiesEditor</receiver>
+   <slot>showVisualProperties(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>204</x>
+     <y>69</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>220</y>
     </hint>
    </hints>
   </connection>
