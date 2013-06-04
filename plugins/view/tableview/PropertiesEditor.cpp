@@ -249,6 +249,11 @@ void PropertiesEditor::displayedPropertiesRemoved(const QModelIndex &parent,
 
 void PropertiesEditor::setAllNodes() {
   QVariant val = TulipItemDelegate::showEditorDialog(NODE,_contextProperty,_graph,static_cast<TulipItemDelegate*>(_delegate));
+
+  // Check if edition has been cancelled
+  if (!val.isValid())
+    return;
+
   Observable::holdObservers();
   _graph->push();
   GraphModel::setAllNodeValue(_contextProperty,val);
@@ -257,6 +262,11 @@ void PropertiesEditor::setAllNodes() {
 
 void PropertiesEditor::setAllEdges() {
   QVariant val = TulipItemDelegate::showEditorDialog(EDGE,_contextProperty,_graph,static_cast<TulipItemDelegate*>(_delegate));
+
+  // Check if edition has been cancelled
+  if (!val.isValid())
+    return;
+
   Observable::holdObservers();
   _graph->push();
   GraphModel::setAllEdgeValue(_contextProperty,val);

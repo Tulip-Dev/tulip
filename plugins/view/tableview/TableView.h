@@ -69,13 +69,13 @@ protected:
   void graphDeleted(tlp::Graph *);
   bool eventFilter(QObject* obj, QEvent* event);
   void setLabels(tlp::PropertyInterface* prop, bool selectionOnly);
-  void setAllValues(tlp::PropertyInterface*, bool useFilter);
+  bool setAllValues(tlp::PropertyInterface*, bool useFilter);
 
 protected slots:
   void delHighlightedRows();
   void toggleHighlightedRows();
   void selectHighlightedRows();
-  void setAllHighlightedRows(tlp::PropertyInterface*);
+  bool setAllHighlightedRows(tlp::PropertyInterface*);
   void setLabelsOfHighlightedRows(tlp::PropertyInterface*);
   void setMatchProperty();
   void mapToGraphSelection();
