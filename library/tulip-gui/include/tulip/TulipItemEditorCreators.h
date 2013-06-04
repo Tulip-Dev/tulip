@@ -34,6 +34,8 @@ class QModelIndex;
 
 namespace tlp {
 
+class PropertyInterface;
+
 class TLP_QT_SCOPE TulipItemEditorCreator {
 public:
   virtual ~TulipItemEditorCreator() {}
@@ -47,7 +49,7 @@ public:
 
   virtual void setEditorData(QWidget*,const QVariant&,bool isMandatory,tlp::Graph* g=NULL)=0;
   virtual QVariant editorData(QWidget*,tlp::Graph* g=NULL)=0;
-
+  virtual void setPropertyToEdit(tlp::PropertyInterface*) {}
 };
 
 template<typename T>
@@ -93,10 +95,13 @@ public:
 };
 
 class TLP_QT_SCOPE CoordEditorCreator: public StringDisplayEditorCreator<tlp::PointType> {
+  bool editSize;
 public:
+  CoordEditorCreator():editSize(false) {}
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
+  virtual void setPropertyToEdit(tlp::PropertyInterface* prop);
 };
 
 template<typename PROP>

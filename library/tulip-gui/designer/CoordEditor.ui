@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Edit size/coord</string>
+   <string>Edit coord</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources/TulipGUIResource.qrc">

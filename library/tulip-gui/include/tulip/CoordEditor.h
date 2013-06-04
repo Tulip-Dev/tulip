@@ -41,7 +41,7 @@ class TLP_QT_SCOPE CoordEditor : public QDialog {
 
   Ui::CoordEditor *ui;
 public:
-  explicit CoordEditor(QWidget *parent = 0);
+  explicit CoordEditor(QWidget *parent = 0, bool editSize = false);
   ~CoordEditor();
 
   tlp::Coord coord() const;

@@ -105,6 +105,8 @@ QWidget* TulipItemDelegate::createEditor(QWidget* parent, const QStyleOptionView
     return QStyledItemDelegate::createEditor(parent, option, index);
   }
 
+  PropertyInterface* pi = index.data(TulipModel::PropertyRole).value<PropertyInterface*>();
+  c->setPropertyToEdit(pi);
   QWidget* w = c->createWidget(parent);
   return w;
 }
@@ -254,6 +256,7 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,
   if (dialogParent == NULL)
     dialogParent = Perspective::instance()->mainWindow();
 
+  creator->setPropertyToEdit(pi);
   QWidget* w = creator->createWidget(dialogParent);
   creator->setEditorData(w,defaultValue,g);
 
