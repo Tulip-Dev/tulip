@@ -44,6 +44,7 @@ using namespace tlp;
 
 PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _graph(NULL), _delegate(new tlp::TulipItemDelegate), _sourceModel(NULL) {
   _ui->setupUi(this);
+  connect(_ui->newButton,SIGNAL(clicked()),this,SLOT(newProperty()));
 }
 
 PropertiesEditor::~PropertiesEditor() {
