@@ -29,12 +29,14 @@ CoordEditor::CoordEditor(QWidget *parent, bool editSize) :
   QDialog(parent),
   ui(new Ui::CoordEditor) {
   ui->setupUi(this);
+
   if (editSize) {
     setWindowTitle("Edit size");
     ui->xLabel->setText("W");
     ui->yLabel->setText("H");
     ui->zLabel->setText("D");
   }
+
   QDoubleValidator *validator = new QDoubleValidator(this);
   validator->setRange(-FLT_MAX,FLT_MAX,1000);
   ui->xLineEdit->setValidator(validator);

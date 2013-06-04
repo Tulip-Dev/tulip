@@ -387,6 +387,7 @@ bool TableView::setAllValues(PropertyInterface* prop, bool selectedOnly) {
     else
       GraphModel::setAllEdgeValue(prop,val);
   }
+
   return true;
 }
 
@@ -480,6 +481,7 @@ bool TableView::setAllHighlightedRows(PropertyInterface* prop) {
       GraphModel::setEdgeValue(itIdx->data(TulipModel::ElementIdRole).toUInt(),
                                prop, val);
   }
+
   return true;
 }
 
@@ -594,6 +596,7 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
     if (!setAllValues(graph()->getProperty(propName), false))
       // cancelled so undo
       graph()->pop();
+
     return;
   }
 
@@ -602,6 +605,7 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
     if (!setAllValues(graph()->getProperty(propName), true))
       // cancelled so undo
       graph()->pop();
+
     return;
   }
 
