@@ -29,6 +29,9 @@
 /**
  * @brief Object used to store ColorScale for different properties.
  */
+
+namespace tlp {
+
 class GradientManager {
 public:
   GradientManager();
@@ -47,5 +50,5 @@ protected:
   int endColorRange;
   int minSVal;
 };
-
+}
 #endif /* GRADIENTMANAGER_H_ */

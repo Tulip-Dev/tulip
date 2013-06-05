@@ -26,6 +26,7 @@
 #include "SOMMap.h"
 #include "ZoomUtils.h"
 #include "SOMViewInteractor.h"
+#include "SOMPropertiesWidget.h"
 
 #include <cmath>
 
@@ -39,6 +40,9 @@
 #include <tulip/ImportModule.h>
 #include <tulip/GlLODCalculator.h>
 #include <tulip/GlLabel.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/GlGraphComposite.h>
 
 #include <QMenu>
 #include <QPalette>
@@ -50,9 +54,10 @@
 #include <QVBoxLayout>
 
 using namespace std;
-namespace tlp {
+using namespace tlp;
+
 PLUGIN(SOMView)
-}
+
 
 SOMView::SOMView(PluginContext *) :
   graphComposite(NULL), graphLayoutProperty(NULL), graphSizeProperty(NULL), mask(NULL), somMask(NULL), mapCompositeElements(NULL), som(NULL), properties(NULL), somMapIsBuild(false),isConstruct(false) {
@@ -66,10 +71,8 @@ SOMView::~SOMView() {
   destruct = true;
 
   if (somMapIsBuild) {
-    if (mask) {
       delete mask;
       mask = NULL;
-    }
 
     //Clear the color properties
     for (map<string, ColorProperty*>::iterator it = propertyToColorProperty.begin(); it != propertyToColorProperty.end(); ++it) {
@@ -83,12 +86,12 @@ SOMView::~SOMView() {
     som = NULL;
   }
 
-  if (graphLayoutProperty) {
-    delete graphLayoutProperty;
-  }
+  delete graphLayoutProperty;
+  delete properties;
+}
 
-  if (properties)
-    delete properties;
+ColorScale *SOMView::getColorScale() {
+  return properties->getDefaultColorScale();
 }
 
 void SOMView::construct(QWidget *) {
@@ -101,7 +104,6 @@ void SOMView::construct(QWidget *) {
 
   //Properties initialiaztion
   properties = new SOMPropertiesWidget(this, NULL);
-  initPropertiesDialog();
 
   previewWidget = new GlMainWidget(NULL, NULL);
   previewWidget->installEventFilter(this);
@@ -193,19 +195,6 @@ void SOMView::initMenu() {
   connect(selectNodesInMaskAction, SIGNAL(triggered()), this, SLOT(selectAllNodesInMask()));
 }
 
-void SOMView::initPropertiesDialog() {
-
-  properties->nodeConnectivityComboBox->addItem(QString("4"));
-  properties->nodeConnectivityComboBox->addItem(QString("6"));
-  properties->nodeConnectivityComboBox->addItem(QString("8"));
-  properties->nodeConnectivityComboBox->setCurrentIndex(0);
-
-  properties->diffusionRateComputationMethodComboBox->addItem(QString("Distance Max"));
-  properties->diffusionRateComputationMethodComboBox->addItem(QString("Gaussian"));
-  properties->diffusionRateComputationMethodComboBox->setCurrentIndex(0);
-
-}
-
 void SOMView::setState(const DataSet &dataSet) {
 
   if(!isConstruct)
@@ -228,8 +217,8 @@ void SOMView::setState(const DataSet &dataSet) {
   //update drawing dialog
   vector<string> propertyFilterType;
   propertyFilterType.push_back("double");
-  properties->dimensionConfigurationWidget->propertiesConfigurationWidget->clearLists();
-  properties->dimensionConfigurationWidget->propertiesConfigurationWidget->setWidgetParameters(graph(), propertyFilterType);
+  properties->clearpropertiesConfigurationWidget();
+  properties->addfilter(graph(), propertyFilterType);
 
   if (dataSet.exist("propertiesWidget")) {
     DataSet propertiesDataSet;
@@ -247,7 +236,7 @@ void SOMView::setState(const DataSet &dataSet) {
   computeSOMMap();
 
   //Display the empty label if no properties are selected.
-  if (properties->dimensionConfigurationWidget->propertiesConfigurationWidget->getSelectedProperties().size() == 0)
+  if (properties->getSelectedProperties().empty())
     addEmptyViewLabel();
 
   registerTriggers();
@@ -345,7 +334,7 @@ bool SOMView::createPicture(const std::string &pictureName, int width, int heigh
 
 void SOMView::drawPreviews() {
 
-  vector<string> propertiesName = properties->dimensionConfigurationWidget->propertiesConfigurationWidget->getSelectedProperties();
+    vector<string> propertiesName(properties->getSelectedProperties());
   int thumbWidth = 50;
   int thumbHeight = 50;
   int spacing = 5;
@@ -499,7 +488,7 @@ void SOMView::draw() {
   removeEmptyViewLabel();
   previewWidget->getScene()->getLayer("Main");
 
-  if (properties->dimensionConfigurationWidget->propertiesConfigurationWidget->getSelectedProperties().size() == 0)
+  if (properties->getSelectedProperties().empty())
     addEmptyViewLabel();
 
   getGlMainWidget()->draw(true);
@@ -511,11 +500,11 @@ void SOMView::refresh() {
 
 void SOMView::buildSOMMap() {
   somMapIsBuild = true;
-  int width = properties->gridWidthSpinBox->value();
-  int height = properties->gridHeightSpinBox->value();
+  int width = properties->getGridWidth();
+  int height = properties->getGridHeight();
 
   SOMMap::SOMMapConnectivity connectivity = SOMMap::four;
-  QString conn = properties->nodeConnectivityComboBox->currentText();
+  QString conn = properties->getConnectivityLabel();
 
   if (conn == "4")
     connectivity = SOMMap::four;
@@ -529,7 +518,7 @@ void SOMView::buildSOMMap() {
   }
 
   //Only true or false
-  bool oppositeConnected = properties->opposedConnectedCheckBox->checkState() == Qt::Checked ? true : false;
+  bool oppositeConnected = properties->getOppositeConnected();
 
   som = new SOMMap(width, height, connectivity, oppositeConnected);
 
@@ -610,8 +599,7 @@ void SOMView::computeSOMMap() {
 
   clearMask();
 
-  vector<string> propertiesSelected = properties->dimensionConfigurationWidget->propertiesConfigurationWidget->getSelectedProperties();
-
+  vector<string> propertiesSelected = properties->getSelectedProperties();
   //set<string> oldSelection = selection;
   string oldSelection = selection;
   clearSelection();
@@ -628,9 +616,7 @@ void SOMView::computeSOMMap() {
     return;
   }
 
-  //tlp::QtProgress *progressBar = new tlp::QtProgress(mainWidget, "Computing SOM MAP", this);
-  algorithm.run(som, inputSample, properties->dimensionConfigurationWidget->iterationNumberSpinBox->value(), NULL);
-  //delete progressBar;
+  algorithm.run(som, inputSample, properties->getIterationNumber(), NULL);
 
   //Update somMap representation
   drawPreviews();
@@ -1039,25 +1025,7 @@ void SOMView::selectAllNodesInMask() {
 }
 
 QList<QWidget *> SOMView::configurationWidgets() const {
-
-  QList<QWidget *> widgets;
-
-  properties->dimensionConfigurationWidget->setWindowTitle("Dimensions");
-  widgets.append(properties->dimensionConfigurationWidget);
-
-  properties->learningRatePropertiesGroupBox->setWindowTitle("Learning");
-  widgets.append(properties->learningRatePropertiesGroupBox);
-
-  properties->diffusionRatePropertiesGroupBox->setWindowTitle("Diffusion");
-  widgets.append(properties->diffusionRatePropertiesGroupBox);
-
-  properties->representationGroupBox->setWindowTitle("Representation");
-  widgets.append(properties->representationGroupBox);
-
-  properties->animationGroupBox->setWindowTitle("Animation");
-  widgets.append(properties->animationGroupBox);
-
-  return widgets;
+  return properties->configurationWidgets();
 }
 
 void SOMView::gridStructurePropertiesUpdated() {
@@ -1076,8 +1044,8 @@ void SOMView::gridStructurePropertiesUpdated() {
 }
 
 bool SOMView::checkGridValidity() const {
-  return !(properties->gridHeightSpinBox->value() % 2 != 0 && properties->nodeConnectivityComboBox->currentIndex() == 1
-           && properties->opposedConnectedCheckBox->checkState() == Qt::Checked);
+  return !(properties->getGridHeight() % 2 != 0 && properties->getConnectivityIndex() == 1
+          && properties->getOppositeConnected());
 }
 void SOMView::learningAlgorithmPropertiesUpdated() {
   computeSOMMap();
@@ -1118,7 +1086,7 @@ void SOMView::internalSwitchToDetailledMode(SOMPreviewComposite* preview, bool a
   if (animation) {
     GlBoundingBoxSceneVisitor bbsv(previewWidget->getScene()->getGlGraphComposite()->getInputData());
     preview->acceptVisitor(&bbsv);
-    zoomOnScreenRegion(previewWidget, bbsv.getBoundingBox(), true, properties->getAnimationDuration());
+    tlp::zoomOnScreenRegion(previewWidget, bbsv.getBoundingBox(), true, properties->getAnimationDuration());
   }
 
   copyToGlMainWidget(mapWidget);
@@ -1138,10 +1106,10 @@ void SOMView::internalSwitchToPreviewMode(bool animation) {
     it->second->acceptVisitor(&bbsv);
 
   if (animation) {
-    zoomOnScreenRegion(previewWidget, bbsv.getBoundingBox(), true, properties->getAnimationDuration());
+    tlp::zoomOnScreenRegion(previewWidget, bbsv.getBoundingBox(), true, properties->getAnimationDuration());
   }
   else {
-    zoomOnScreenRegionWithoutAnimation(previewWidget, bbsv.getBoundingBox());
+    tlp::zoomOnScreenRegionWithoutAnimation(previewWidget, bbsv.getBoundingBox());
   }
 
   //Clear selection

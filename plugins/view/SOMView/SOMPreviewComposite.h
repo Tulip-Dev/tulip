@@ -29,7 +29,9 @@
 /**
  * @brief GlComposite used to print SOM preview. Use a SOMMapElement to print the SOM and add other information like property name or color scale and min and max value.
  */
-class SOMPreviewComposite: public tlp::GlComposite {
+namespace tlp {
+
+class SOMPreviewComposite: public GlComposite {
 public:
   /**
     *@brief Constructor for the SOMPreviewComposite.
@@ -60,12 +62,12 @@ public:
    * Change the colors of the som representation with those in the given property;
    * @param newColor The new colors.
    */
-  void updateColors(tlp::ColorProperty *newColor);
+  void updateColors(ColorProperty *newColor);
 
   /**
    * @brief Test is the entity is an internal element of the SOM.
    */
-  bool isElement(tlp::GlEntity* entity);
+  bool isElement(GlEntity* entity);
 
 
 protected:
@@ -82,5 +84,5 @@ protected:
   tlp::Coord currentPosition;
 
 };
-
+}
 #endif /* SOMPREVIEWCOMPOSITE_H_ */

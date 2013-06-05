@@ -18,9 +18,12 @@
  */
 
 #include "ColorScalePreview.h"
+
 #include <tulip/ColorScaleConfigDialog.h>
 
-ColorScalePreview::ColorScalePreview(tlp::ColorScale* colorScale) :
+using namespace tlp;
+
+ColorScalePreview::ColorScalePreview(ColorScale* colorScale) :
   currentColorScale(colorScale) {
   setAutoFillBackground(true);
   fillLabel();
@@ -50,7 +53,7 @@ void ColorScalePreview::fillLabel() {
   }
 }
 
-void ColorScalePreview::setColorScale(tlp::ColorScale* colorScale) {
+void ColorScalePreview::setColorScale(ColorScale* colorScale) {
   currentColorScale = colorScale;
   fillLabel();
 }

@@ -19,12 +19,20 @@
 
 #include "ThresholdInteractor.h"
 #include "SOMView.h"
+#include "GlLabelledColorScale.h"
+#include <SOMMap.h>
 
 #include <tulip/GlLabel.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/ForEach.h>
 #include <tulip/QGlPixelBufferManager.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/ColorScale.h>
+#include <tulip/GlQuad.h>
+#include <tulip/GlRect.h>
+#include <tulip/GlLayer.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/BooleanProperty.h>
 
 #include <QToolTip>
 #include <QMouseEvent>
@@ -53,6 +61,11 @@ ColorScaleSlider::ColorScaleSlider(SliderWay way, Size size, GlLabelledColorScal
   buildComposite(textureName);
   linkedScale->getGlColorScale()->getColorScale()->addObserver(this);
 
+}
+
+double ColorScaleSlider::getValue() {
+  return linkedScale->getMinValue() + currentShift
+         * (linkedScale->getMaxValue() - linkedScale->getMinValue());
 }
 
 ColorScaleSlider::~ColorScaleSlider() {
@@ -138,7 +151,7 @@ void ColorScaleSlider::computeBoundingBox() {
   boundingBox = visitor.getBoundingBox();
 }
 
-void ColorScaleSlider::setColor(tlp::Color c) {
+void ColorScaleSlider::setColor(Color c) {
   arrow->setFillColor(c);
 }
 

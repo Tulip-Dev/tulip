@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>348</width>
+    <width>359</width>
     <height>530</height>
    </rect>
   </property>
@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="ComputeSOMWidget" name="dimensionConfigurationWidget" native="true"/>
+    <widget class="tlp::ComputeSOMWidget" name="dimensionConfigurationWidget" native="true"/>
    </item>
    <item>
     <widget class="QGroupBox" name="GridRepresentationGrouBox">
@@ -93,7 +93,23 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="nodeConnectivityComboBox"/>
+         <widget class="QComboBox" name="nodeConnectivityComboBox">
+          <item>
+           <property name="text">
+            <string>4</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>6</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>8</string>
+           </property>
+          </item>
+         </widget>
         </item>
        </layout>
       </item>
@@ -206,7 +222,18 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="diffusionRateComputationMethodComboBox"/>
+         <widget class="QComboBox" name="diffusionRateComputationMethodComboBox">
+          <item>
+           <property name="text">
+            <string>Distance Max</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Gaussian</string>
+           </property>
+          </item>
+         </widget>
         </item>
        </layout>
       </item>
@@ -433,7 +460,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ComputeSOMWidget</class>
+   <class>tlp::ComputeSOMWidget</class>
    <extends>QWidget</extends>
    <header>ComputeSOMWidget.h</header>
    <container>1</container>

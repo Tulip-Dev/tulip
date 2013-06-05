@@ -23,9 +23,9 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/Camera.h>
 
-using namespace tlp;
 using namespace std;
 
+namespace tlp {
 void zoomOnScreenRegion(GlMainWidget *glWidget, const BoundingBox &boundingBox, const bool optimalPath,
                         const double velocity, const double p) {
   QtGlSceneZoomAndPanAnimator animator(glWidget, boundingBox,1000,"Main", optimalPath, velocity, p);
@@ -70,4 +70,5 @@ void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget, const BoundingBo
   if (withZoom) {
     camera.setZoomFactor(zoomEnd);
   }
+}
 }

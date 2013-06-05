@@ -25,7 +25,7 @@
 #include <tulip/GlColorScale.h>
 namespace tlp {
 class GlLayer;
-}
+
 class GlLabelledColorScale: public tlp::GlComposite {
 public:
   GlLabelledColorScale(tlp::Coord position, tlp::Size size, tlp::ColorScale* colorScale,
@@ -74,5 +74,5 @@ protected:
   double maxValue;
   bool colorScaleAtTop;
 };
-
+}
 #endif /* GLLABELLEDCOLORSCALE_H_ */

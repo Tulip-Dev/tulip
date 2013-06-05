@@ -21,15 +21,20 @@
 #define EDITCOLORSCALEINTERACTOR_H_
 
 #include <tulip/GLInteractor.h>
-#include <tulip/GlColorScale.h>
-#include <tulip/DoubleProperty.h>
-#include "SOMView.h"
-#include "GlLabelledColorScale.h"
+//#include <tulip/GlColorScale.h>
+//#include <tulip/DoubleProperty.h>
+
+//#include "SOMView.h"
+
 namespace tlp {
 class GlLayer;
-}
+class View;
+class GlMainWidget;
+class GlLabelledColorScale;
+class DoubleProperty;
+class SOMView;
 
-class EditColorScaleInteractor: public tlp::GLInteractorComponent {
+class EditColorScaleInteractor: public GLInteractorComponent {
 public:
 
   EditColorScaleInteractor();
@@ -37,12 +42,12 @@ public:
   bool eventFilter(QObject *, QEvent *);
   void viewChanged(View *view);
   bool compute(GlMainWidget *);
-  bool draw(tlp::GlMainWidget *glMainWidget);
+  bool draw(GlMainWidget *glMainWidget);
 
 protected:
-  virtual void propertyChanged(SOMView* somView,const std::string& propertyName, tlp::DoubleProperty *newProperty);
+  virtual void propertyChanged(SOMView* somView,const std::string& propertyName, DoubleProperty *newProperty);
   virtual void screenSizeChanged(SOMView* somView);
-  tlp::DoubleProperty *currentProperty;
+  DoubleProperty *currentProperty;
   GlLabelledColorScale *colorScale;
   float widthPercent;
   float heightPercent;
@@ -50,7 +55,7 @@ protected:
   int glMainWidgetWidth;
   int glMainWidgetHeight;
 
-  tlp::GlLayer *selectionLayer;
+  GlLayer *selectionLayer;
 };
-
+}
 #endif /* EDITCOLORSCALEINTERACTOR_H_ */

@@ -20,77 +20,67 @@
 #ifndef SOMPROPERTIESWIDGET_H_
 #define SOMPROPERTIESWIDGET_H_
 
-#include "ui_SOMPropertiesWidget.h"
-
-#include <tulip/Graph.h>
 #include <tulip/Observable.h>
-#include <QDialog>
-#include <QButtonGroup>
-#include <QRadioButton>
-#include <QPushButton>
+#include <tulip/DataSet.h>
+
+#include <QWidget>
+#include <QList>
 
 #include "GradientManager.h"
-#include "ColorScalePreview.h"
-class SOMView;
 
-class SOMPropertiesWidget: public QWidget, public Ui::SOMPropertiesWidget, public tlp::Observable {
+namespace Ui {
+class SOMPropertiesWidget;
+}
+
+class QButtonGroup;
+class QRadioButton;
+class QPushButton;
+class QAbstractButton;
+
+namespace tlp {
+
+class SOMView;
+class ColorScale;
+class Graph;
+class ColorScalePreview;
+
+class SOMPropertiesWidget: public QWidget, public tlp::Observable {
   Q_OBJECT
+
+  Ui::SOMPropertiesWidget* _ui;
+
 public:
 
   enum SizeMappingType {
     NoSizeMapping, RealNodeSizeMapping, DistanceMapping
   };
   SOMPropertiesWidget(SOMView* view, QWidget *parent = NULL);
-  virtual ~SOMPropertiesWidget();
+  ~SOMPropertiesWidget();
 
-  unsigned int getGridWidth() const {
-    return gridWidthSpinBox->value();
-  }
-  unsigned int getGridHeight() const {
-    return gridHeightSpinBox->value();
-  }
+  unsigned int getGridWidth() const;
+  unsigned int getGridHeight() const;
+  QString getConnectivityLabel() const;
+  bool getOppositeConnected() const;
+  double getLearningRateValue() const;
+  QString getDiffusionRateMethodLabel() const;
+  unsigned int getMaxDistanceValue() const;
+  double getDiffusionRateValue() const;
+  bool getAutoMapping() const;
+  bool getLinkColor() const;
 
-  QString getConnectivityLabel() const {
-    return nodeConnectivityComboBox->currentText();
-  }
-
-  bool getOppositeConnected() const {
-    return opposedConnectedCheckBox->checkState() == Qt::Checked ? true : false;
-  }
-
-  double getLearningRateValue() const {
-    return baseLearningRateSpinBox->value();
-  }
-
-  QString getDiffusionRateMethodLabel() const {
-    return diffusionRateComputationMethodComboBox->currentText();
-  }
-
-  unsigned int getMaxDistanceValue() const {
-    return maxDistanceSpinBox->value();
-  }
-
-  double getDiffusionRateValue() const {
-    return baseDiffusionRateSpinBox->value();
-  }
-
-  bool getAutoMapping() const {
-    return autoMappingCheckBox->isChecked();
-  }
-
-  bool getLinkColor() const {
-    return colorLinkCheckBox->checkState() == Qt::Checked ? true : false;
-  }
-
-  tlp::ColorScale* getDefaultColorScale() const {
+  ColorScale* getDefaultColorScale() const {
     return defaultScale;
   }
 
-  tlp::ColorScale* getPropertyColorScale(const std::string& propertyName);
-
-  void graphChanged(tlp::Graph *graph);
-
+  ColorScale* getPropertyColorScale(const std::string& propertyName);
+  void clearpropertiesConfigurationWidget();
+  void addfilter(Graph *g, std::vector<std::string> &propertyFilterType);
+  void graphChanged(Graph *graph);
+  std::vector<std::string> getSelectedProperties() const;
+  unsigned getIterationNumber() const;
+  unsigned getConnectivityIndex() const;
   SizeMappingType getSizeMapping() const;
+  QList<QWidget *> configurationWidgets() const;
 
   void update(std::set<tlp::Observable *>::iterator begin, std::set<tlp::Observable *>::iterator end);
 
@@ -98,28 +88,24 @@ public:
   /**
    * @brief Return true if using namiation during switching to preview.
    */
-  bool useAnimation() const {
-    return animationCheckBox->isChecked();
-  }
+  bool useAnimation() const;
   /**
    * @brief Return the duration of the animation in second.
    */
-  unsigned int getAnimationDuration() const {
-    return animationStepsSpinBox->value();
-  }
+  unsigned int getAnimationDuration() const;
 
   /**
    * @brief Store the configuration widget data properties.
    * Function called during getData function to store the state of the configuration widget.
    * @return The dataset containing the configuration state.
    */
-  tlp::DataSet getData() const;
+  DataSet getData() const;
 
   /**
    * @brief Restore saved properties from data set.
    * @param data The previously saved dataset.
    */
-  void setData(const tlp::DataSet& data);
+  void setData(const DataSet& data);
 
   QButtonGroup* colorScalingButtonGroup;
   QRadioButton* singleColorScale;
@@ -135,7 +121,7 @@ public:
 
 protected:
   GradientManager gradientManager;
-  tlp::ColorScale *defaultScale;
+  ColorScale *defaultScale;
   SOMView *view;
 
 protected slots:
@@ -143,5 +129,5 @@ protected slots:
   void scalingMethodChange(QAbstractButton *);
   void animationCheckBoxClicked();
 };
-
+}
 #endif /* SOMPROPERTIESWIDGET_H_ */
