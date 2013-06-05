@@ -94,7 +94,7 @@ void SOMMap::initMap() {
     break;
 
   case six:
-    nodeShape->setAllNodeValue(GlyphManager::getInst().glyphId("2D - Hexagone"));
+    nodeShape->setAllNodeValue(GlyphManager::getInst().glyphId("2D - Hexagon"));
     break;
   }
 

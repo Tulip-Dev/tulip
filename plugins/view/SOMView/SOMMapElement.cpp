@@ -18,6 +18,8 @@
  */
 
 #include "SOMMapElement.h"
+#include <SOMMap.h>
+
 #include <tulip/GlRect.h>
 #include <tulip/GlCircle.h>
 #include <tulip/ColorProperty.h>

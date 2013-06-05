@@ -19,23 +19,46 @@
 
 #ifndef THRESHOLDINTERACTOR_H_
 #define THRESHOLDINTERACTOR_H_
-#include <tulip/GLInteractor.h>
+
+#if defined(_MSC_VER)
+#include <Windows.h>
+#endif
+
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
+
+//#include <tulip/GLInteractor.h>
 #include "EditColorScaleInteractor.h"
+
 #include <tulip/GlComposite.h>
-#include <tulip/GlQuad.h>
-#include <tulip/GlPolygon.h>
-#include <tulip/GlLabel.h>
-#include <tulip/GlRect.h>
-#include <tulip/DoubleProperty.h>
-#include "SOMView.h"
+#include <tulip/Observable.h>
+#include <tulip/Size.h>
+#include <tulip/Color.h>
+#include <tulip/Coord.h>
+//#include <tulip/GlQuad.h>
+//#include <tulip/GlPolygon.h>
+//#include <tulip/GlLabel.h>
+//#include <tulip/GlRect.h>
+//#include <tulip/DoubleProperty.h>
+//#include "SOMView.h"
 
 #include <QMutex>
+
+namespace tlp {
+
+class GlLabelledColorScale;
+class GlPolygon;
+class GlQuad;
+class GlLabel;
 
 class Slider {
 public:
   virtual ~Slider() {
   }
-  ;
+
   virtual float getLeftBound() = 0;
   virtual float getRightBound() = 0;
   virtual void beginShift() = 0;
@@ -43,22 +66,19 @@ public:
   virtual void endShift() = 0;
 };
 
-class ColorScaleSlider: public Slider,
-  public tlp::GlComposite,
-  public tlp::Observable {
+class ColorScaleSlider: public Slider, public GlComposite, public Observable {
 public:
   enum SliderWay {
     ToLeft, ToRight
   };
-  ColorScaleSlider(SliderWay way, tlp::Size size,
-                   GlLabelledColorScale *colorScale,const std::string& textureName);
+  ColorScaleSlider(SliderWay way, Size size, GlLabelledColorScale *colorScale,const std::string& textureName);
   ~ColorScaleSlider();
   void draw(float lod, tlp::Camera *camera);
-  void setColor(tlp::Color c);
-  tlp::Coord getBasePosition() {
+  void setColor(Color c);
+  Coord getBasePosition() {
     return position;
   }
-  tlp::Size getSize() {
+  Size getSize() {
     return size;
   }
   SliderWay getWay() {
@@ -73,10 +93,7 @@ public:
   void beginShift();
   void shift(float shift);
   void endShift();
-  double getValue() {
-    return linkedScale->getMinValue() + currentShift
-           * (linkedScale->getMaxValue() - linkedScale->getMinValue());
-  }
+  double getValue();
   float getCurrentShift() const {
     return currentShift;
   }
@@ -90,11 +107,11 @@ protected:
   void updatePosition();
   void computeBoundingBox();
   SliderWay way;
-  tlp::Coord position;
-  tlp::Size size;
-  tlp::GlPolygon *arrow;
-  tlp::GlQuad *rect;
-  tlp::GlLabel *label;
+  Coord position;
+  Size size;
+  GlPolygon *arrow;
+  GlQuad *rect;
+  GlLabel *label;
   ColorScaleSlider* linkedSlider;
   GlLabelledColorScale *linkedScale;
 
@@ -132,7 +149,7 @@ public:
 protected:
   void screenSizeChanged(SOMView* somView);
   void propertyChanged(SOMView* somView,const std::string& propertyName, tlp::DoubleProperty *newProperty);
-  void performSelection(SOMView *somView, tlp::Iterator<node> *it);
+  void performSelection(SOMView *somView, Iterator<node> *it);
   void buildSliders(SOMView* somView);
   void clearSliders();
   void generateSliderTexture(tlp::GlMainWidget* widget);
@@ -149,5 +166,5 @@ protected:
   std::string textureName;
   GLuint textureId;
 };
-
+}
 #endif /* THRESHOLDINTERACTOR_H_ */

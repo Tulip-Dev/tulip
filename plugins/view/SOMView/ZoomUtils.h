@@ -20,12 +20,13 @@
 #ifndef ZOOMUTILS_H_
 #define ZOOMUTILS_H_
 
-#include <tulip/BoundingBox.h>
+#include <cmath>
 
 namespace tlp {
 class GlMainWidget;
-}
-void zoomOnScreenRegion(tlp::GlMainWidget *glWidget, const tlp::BoundingBox &boundingBox, const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6));
-void zoomOnScreenRegionWithoutAnimation(tlp::GlMainWidget *glWidget, const tlp::BoundingBox &boundingBox);
+struct BoundingBox;
 
+void zoomOnScreenRegion(GlMainWidget *glWidget, const BoundingBox &boundingBox, const bool optimalPath = true, const double velocity = 1.1, const double p = std::sqrt(1.6));
+void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget, const BoundingBox &boundingBox);
+}
 #endif /* ZOOMUTILS_H_ */

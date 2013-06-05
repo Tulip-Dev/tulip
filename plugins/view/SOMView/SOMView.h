@@ -21,27 +21,26 @@
 #define SOMVIEW_H_
 
 #include <tulip/GlMainView.h>
-#include <tulip/GlMainWidget.h>
-#include <tulip/ColorScale.h>
 #include <tulip/MouseInteractors.h>
-#include <tulip/GlGraphComposite.h>
-#include <tulip/LayoutProperty.h>
-
-#include "SOMWidget.h"
-#include "SOMPropertiesWidget.h"
-#include "ComputeSOMWidget.h"
-#include "SOMMapElement.h"
-#include "GradientManager.h"
-#include "GlLabelledColorScale.h"
 
 #include <SOMAlgorithm.h>
 #include <InputSample.h>
 
 #include "../../utils/ViewNames.h"
 
-using namespace tlp;
+namespace tlp {
 class SOMPreviewComposite;
 class SOMMap;
+class DoubleProperty;
+class ColorProperty;
+class ColorScale;
+class BooleanProperty;
+class GlGraphComposite;
+class LayoutProperty;
+class SizeProperty;
+class SOMMapElement;
+class SOMPropertiesWidget;
+
 /*@{*/
 /** \file
  *  \brief  Tulip self organizing map view
@@ -93,13 +92,13 @@ public:
    * Return all the previews.
    * @return a vector with all the previews.
    */
-  vector<SOMPreviewComposite*> getPreviews();
+  std::vector<SOMPreviewComposite*> getPreviews();
 
   /**
      * Return the name of the selected property
    * @return
    */
-  string getSelectedProperty() {
+  std::string getSelectedProperty() {
     return selection;
   }
 
@@ -107,13 +106,13 @@ public:
    * Get the DoubleProperty pointer on the the current selected property. Return NULL if no properties are selected.
    * @return
    */
-  tlp::DoubleProperty* getSelectedPropertyValues();
+  DoubleProperty* getSelectedPropertyValues();
 
   /**
    * Return the ColorProperty pointer for the selected property. Return NULL if no properties are selected.
    * @return
    */
-  tlp::ColorProperty* getSelectedBaseSOMColors();
+  ColorProperty* getSelectedBaseSOMColors();
   /**
     * Returns the current SOMMap.
     **/
@@ -132,9 +131,7 @@ public:
    * Get the color scale of the main SOM.
    * @return
    */
-  tlp::ColorScale *getColorScale() {
-    return properties->getDefaultColorScale();
-  }
+  ColorScale *getColorScale();
 
   /**
    * Change the color of the main SOM using those in the given property.
@@ -180,12 +177,12 @@ public slots :
    * Add the property with the given name to the selection.
    * @param propertyName the name of the property.
    */
-  void addPropertyToSelection(const string& propertyName);
+  void addPropertyToSelection(const std::string& propertyName);
   /**
    * Remove the property with the given name from the selection.
    * @param propertyName the name of the property.
    */
-  void removePropertyFromSelection(const string& propertyName);
+  void removePropertyFromSelection(const std::string& propertyName);
   /**
    * Clear all the preview selection.
    */
@@ -348,8 +345,8 @@ private:
 
   bool mappingIsVisible;
 
-  tlp::MousePanNZoomNavigator navigator;
-  tlp::MouseNKeysNavigator knav;
+  MousePanNZoomNavigator navigator;
+  MouseNKeysNavigator knav;
 
   //QAction
   QAction *hideMappingAction;
@@ -390,11 +387,6 @@ private slots:
   void hideMapping();
 
   /**
-   * Init the properties dialog.
-   */
-  void initPropertiesDialog();
-
-  /**
    * Set it's SOM bmu node color for each node of the input sample.
    */
   void updateNodeColorMapping(tlp::ColorProperty* cp = NULL);
@@ -420,5 +412,5 @@ private slots:
   void toggleInteractors(const bool activate);
 
 };
-
+}
 #endif /* SOMVIEW_H_ */

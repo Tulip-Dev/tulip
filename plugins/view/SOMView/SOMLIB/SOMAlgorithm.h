@@ -28,9 +28,8 @@
 #include "DiffusionRateFunctionSimple.h"
 #include "TimeDecreasingFunctionSimple.h"
 
-using namespace std;
-using namespace tlp;
 
+namespace tlp {
 class SOMMap;
 class InputSample;
 
@@ -148,5 +147,5 @@ protected:
   DiffusionRateFunction* diffusionRateFunction;
 
 };
-
+}
 #endif /* SOMALGORITHM_H_ */

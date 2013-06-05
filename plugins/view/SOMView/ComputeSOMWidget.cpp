@@ -18,11 +18,39 @@
  */
 
 #include "ComputeSOMWidget.h"
+#include "ui_ComputeSOMWidget.h"
 
-ComputeSOMWidget::ComputeSOMWidget(QWidget* parent) :
-  QWidget(parent) {
-  setupUi(this);
+using namespace tlp;
+using namespace std;
+
+ComputeSOMWidget::ComputeSOMWidget(QWidget* parent):QWidget(parent),_ui(new Ui::SOMComputeWidget) {
+    _ui->setupUi(this);
 }
 
 ComputeSOMWidget::~ComputeSOMWidget() {
+    delete _ui;
+}
+
+unsigned ComputeSOMWidget::number() const {
+    return _ui->iterationNumberSpinBox->value();
+}
+
+void ComputeSOMWidget::setNumber(unsigned uintValue) {
+    return _ui->iterationNumberSpinBox->setValue(uintValue);
+}
+
+void ComputeSOMWidget::clearLists() {
+    _ui->propertiesConfigurationWidget->clearLists();
+}
+
+vector<string> ComputeSOMWidget::getSelectedProperties() {
+    return _ui->propertiesConfigurationWidget->getSelectedProperties();
+}
+
+void ComputeSOMWidget::setWidgetParameters(Graph *g, vector<string> &propertyFilterType) {
+    _ui->propertiesConfigurationWidget->setWidgetParameters(g, propertyFilterType);
+}
+
+void ComputeSOMWidget::setOutputPropertiesList(std::vector<std::string> &properties) {
+    _ui->propertiesConfigurationWidget->setOutputPropertiesList(properties);
 }

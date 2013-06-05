@@ -22,6 +22,8 @@
 
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 
+namespace tlp {
+
 class SOMViewInteractor: public tlp::NodeLinkDiagramComponentInteractor {
 public:
   SOMViewInteractor(const QString &iconPath, const QString &text);
@@ -76,5 +78,5 @@ public:
   virtual void construct();
 
 };
-
+}
 #endif /* SOMVIEWINTERACTOR_H_ */

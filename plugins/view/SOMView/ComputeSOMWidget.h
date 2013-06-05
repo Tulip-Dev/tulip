@@ -20,15 +20,34 @@
 #ifndef COMPUTESOMWIDGET_H_
 #define COMPUTESOMWIDGET_H_
 
-#include "ui_ComputeSOMWidget.h"
+#include <QWidget>
+
+#include <vector>
+#include <string>
+
+namespace Ui {
+ class SOMComputeWidget;
+}
+
+namespace tlp {
+
+class Graph;
 /**
  * @brief Class configuring properties selected and number of iteration for computing SOM.
  */
-class ComputeSOMWidget: public QWidget, public Ui::SOMComputeWidget {
+class ComputeSOMWidget: public QWidget {
   Q_OBJECT
+  Ui::SOMComputeWidget* _ui;
+
 public:
   ComputeSOMWidget(QWidget* parent = NULL);
-  virtual ~ComputeSOMWidget();
+  ~ComputeSOMWidget();
+  unsigned number() const;
+  void setNumber(unsigned uintValue);
+  void clearLists();
+  std::vector<std::string> getSelectedProperties();
+  void setWidgetParameters(tlp::Graph *g, std::vector<std::string> &propertyFilterType);
+  void setOutputPropertiesList(std::vector<std::string> &properties);
 };
-
+}
 #endif /* COMPUTESOMWIDGET_H_ */

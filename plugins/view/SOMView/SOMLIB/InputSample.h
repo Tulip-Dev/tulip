@@ -31,6 +31,7 @@
   * Handle all the the samples data used to train the SOM. Take a graph and a vector of DoubleProperties to use it as sample data.
   * This object can handle standard or normalized values.
   **/
+namespace tlp {
 class InputSample: public tlp::Observable {
 public:
   InputSample(tlp::Graph *graph = NULL);
@@ -144,5 +145,5 @@ protected:
   bool usingNormalizedValues;
 
 };
-
+}
 #endif /* INPUTSAMPLE_H_ */

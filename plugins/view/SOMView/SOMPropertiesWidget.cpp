@@ -20,9 +20,13 @@
 
 #include "SOMPropertiesWidget.h"
 #include "SOMView.h"
+#include "ui_SOMPropertiesWidget.h"
+#include "ColorScalePreview.h"
 
 #include <QIntValidator>
 #include <QDoubleValidator>
+#include <QRadioButton>
+#include <QPushButton>
 
 #include <tulip/GraphPropertiesSelectionWidget.h>
 #include <tulip/ColorScaleConfigDialog.h>
@@ -32,11 +36,11 @@ using namespace std;
 using namespace tlp;
 
 SOMPropertiesWidget::SOMPropertiesWidget(SOMView* view, QWidget *parent) :
-  QWidget(parent), view(view) {
-  setupUi(this);
+    QWidget(parent), _ui(new Ui::SOMPropertiesWidget), view(view) {
+  _ui->setupUi(this);
   setAutoFillBackground(true);
 
-  defaultScale = new tlp::ColorScale();
+  defaultScale = new ColorScale();
 
   vector<Color> colors;
   colors.push_back(Color(0, 0, 255));
@@ -46,7 +50,7 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView* view, QWidget *parent) :
 
   defaultScale->addObserver(this);
 
-  QVBoxLayout *sizeMappingLayout = new QVBoxLayout(nodeSizeMappingGroupBox);
+  QVBoxLayout *sizeMappingLayout = new QVBoxLayout(_ui->nodeSizeMappingGroupBox);
   sizeMappingLayout->setMargin(0);
   sizeMappingLayout->setSpacing(0);
   sizeMappingButtonGroup = new QButtonGroup();
@@ -61,11 +65,94 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView* view, QWidget *parent) :
   //Display multiple properties at same time
   multiplePropertiesRepresentation = false;
 
+  _ui->dimensionConfigurationWidget->setWindowTitle("Dimensions");
+  _ui->learningRatePropertiesGroupBox->setWindowTitle("Learning");
+  _ui->diffusionRatePropertiesGroupBox->setWindowTitle("Diffusion");
+  _ui->representationGroupBox->setWindowTitle("Representation");
+  _ui->animationGroupBox->setWindowTitle("Animation");
+
+}
+
+QList<QWidget *> SOMPropertiesWidget::configurationWidgets() const {
+
+  QList<QWidget *> widgets;
+
+  widgets << _ui->dimensionConfigurationWidget << _ui->learningRatePropertiesGroupBox;
+  widgets << _ui->diffusionRatePropertiesGroupBox << _ui->representationGroupBox << _ui->animationGroupBox;
+
+  return widgets;
+}
+
+unsigned int SOMPropertiesWidget::getGridWidth() const {
+  return _ui->gridWidthSpinBox->value();
+}
+unsigned int SOMPropertiesWidget::getGridHeight() const {
+  return _ui->gridHeightSpinBox->value();
+}
+
+QString SOMPropertiesWidget::getConnectivityLabel() const {
+  return _ui->nodeConnectivityComboBox->currentText();
+}
+
+unsigned SOMPropertiesWidget::getConnectivityIndex() const {
+  return _ui->nodeConnectivityComboBox->currentIndex();
+}
+
+bool SOMPropertiesWidget::getOppositeConnected() const {
+  return _ui->opposedConnectedCheckBox->checkState() == Qt::Checked ? true : false;
+}
+
+double SOMPropertiesWidget::getLearningRateValue() const {
+  return _ui->baseLearningRateSpinBox->value();
+}
+
+QString SOMPropertiesWidget::getDiffusionRateMethodLabel() const {
+  return _ui->diffusionRateComputationMethodComboBox->currentText();
+}
+
+unsigned int SOMPropertiesWidget::getMaxDistanceValue() const {
+  return _ui->maxDistanceSpinBox->value();
+}
+
+double SOMPropertiesWidget::getDiffusionRateValue() const {
+  return _ui->baseDiffusionRateSpinBox->value();
+}
+
+bool SOMPropertiesWidget::getAutoMapping() const {
+  return _ui->autoMappingCheckBox->isChecked();
+}
+
+bool SOMPropertiesWidget::getLinkColor() const {
+  return _ui->colorLinkCheckBox->checkState() == Qt::Checked ? true : false;
+}
+
+bool SOMPropertiesWidget::useAnimation() const {
+  return _ui->animationCheckBox->isChecked();
+}
+
+unsigned int SOMPropertiesWidget::getAnimationDuration() const {
+  return _ui->animationStepsSpinBox->value();
+}
+
+unsigned SOMPropertiesWidget::getIterationNumber() const {
+    return _ui->dimensionConfigurationWidget->number();
+}
+
+void SOMPropertiesWidget::clearpropertiesConfigurationWidget() {
+    _ui->dimensionConfigurationWidget->clearLists();
+}
+
+void SOMPropertiesWidget::addfilter(Graph *g, vector<string> &propertyFilterType) {
+    _ui->dimensionConfigurationWidget->setWidgetParameters(g, propertyFilterType);
+}
+
+vector<string> SOMPropertiesWidget::getSelectedProperties() const {
+    return _ui->dimensionConfigurationWidget->getSelectedProperties();
 }
 
 SOMPropertiesWidget::~SOMPropertiesWidget() {
-  defaultScale->removeObserver(this);
   delete defaultScale;
+  delete _ui;
 }
 
 void SOMPropertiesWidget::diffusionMethodChange() {
@@ -112,7 +199,7 @@ void SOMPropertiesWidget::observableDestroyed(tlp::Observable*) {
 }
 
 void SOMPropertiesWidget::animationCheckBoxClicked() {
-  animationStepsSpinBox->setEnabled(animationCheckBox->isChecked());
+  _ui->animationStepsSpinBox->setEnabled(_ui->animationCheckBox->isChecked());
 }
 
 DataSet SOMPropertiesWidget::getData() const {
@@ -122,12 +209,12 @@ DataSet SOMPropertiesWidget::getData() const {
   data.set("gridWidth", getGridWidth());
   data.set("gridHeight", getGridHeight());
   data.set("oppositeConnected", getOppositeConnected());
-  data.set("connectivity", nodeConnectivityComboBox->currentIndex());
+  data.set("connectivity", _ui->nodeConnectivityComboBox->currentIndex());
   //Learning rate properties.
   data.set("learningRate", getLearningRateValue());
 
   //Diffusion rate properties.
-  data.set("diffusionMethod", diffusionRateComputationMethodComboBox->currentIndex());
+  data.set("diffusionMethod", _ui->diffusionRateComputationMethodComboBox->currentIndex());
   data.set("maxDistance", getMaxDistanceValue());
   data.set("diffusionRate", getDiffusionRateValue());
 
@@ -143,21 +230,21 @@ DataSet SOMPropertiesWidget::getData() const {
   data.set("animationDuration", getAnimationDuration());
 
   //Save current properties.
-  vector<string> properties = dimensionConfigurationWidget->propertiesConfigurationWidget->getSelectedProperties();
+  vector<string> properties = _ui->dimensionConfigurationWidget->getSelectedProperties();
 
   if (!properties.empty()) {
     //Use QStringList class to store a list in a string
     QStringList stringlist;
 
     for (vector<string>::iterator it = properties.begin(); it != properties.end(); ++it) {
-      stringlist.push_back(QString::fromUtf8((*it).c_str()));
+      stringlist.push_back(QString::fromUtf8(it->c_str()));
     }
 
-    data.set("properties", std::string(stringlist.join(";").toUtf8().data()));
+    data.set("properties", string(stringlist.join(";").toUtf8().data()));
   }
 
   //Save iteration number
-  data.set("iterationNumber", dimensionConfigurationWidget->iterationNumberSpinBox->value());
+  data.set("iterationNumber", _ui->dimensionConfigurationWidget->number());
 
   //Save color scale
   DataSet colorScaleDataSet;
@@ -183,32 +270,32 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
   int intValue = 0;
   //Restore grid state.
   data.get("gridWidth", uintValue);
-  gridWidthSpinBox->setValue(uintValue);
+  _ui->gridWidthSpinBox->setValue(uintValue);
   data.get("gridHeight", uintValue);
-  gridHeightSpinBox->setValue(uintValue);
+  _ui->gridHeightSpinBox->setValue(uintValue);
   data.get("connectivity", intValue);
-  nodeConnectivityComboBox->setCurrentIndex(intValue);
+  _ui->nodeConnectivityComboBox->setCurrentIndex(intValue);
   data.get("oppositeConnected", boolValue);
-  opposedConnectedCheckBox->setChecked(boolValue);
+  _ui->opposedConnectedCheckBox->setChecked(boolValue);
 
   //Learning rate properties.
   data.get("learningRate", doubleValue);
-  baseLearningRateSpinBox->setValue(doubleValue);
+  _ui->baseLearningRateSpinBox->setValue(doubleValue);
 
   //Diffusion rate properties.
   data.get("diffusionMethod", intValue);
-  diffusionRateComputationMethodComboBox->setCurrentIndex(intValue);
+  _ui->diffusionRateComputationMethodComboBox->setCurrentIndex(intValue);
 
   data.get("maxDistance", uintValue);
-  maxDistanceSpinBox->setValue(uintValue);
+  _ui->maxDistanceSpinBox->setValue(uintValue);
   data.get("diffusionRate", doubleValue);
-  baseDiffusionRateSpinBox->setValue(doubleValue);
+  _ui->baseDiffusionRateSpinBox->setValue(doubleValue);
 
   //Representaion properties
   data.get("performMapping", boolValue);
-  autoMappingCheckBox->setChecked(boolValue);
+  _ui->autoMappingCheckBox->setChecked(boolValue);
   data.get("linkColors", boolValue);
-  colorLinkCheckBox->setChecked(boolValue);
+  _ui->colorLinkCheckBox->setChecked(boolValue);
 
   //SizeMapping
   data.get("useSizeMapping", boolValue);
@@ -222,9 +309,9 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
 
   //Animation
   data.get("withAnimation", boolValue);
-  animationCheckBox->setChecked(boolValue);
+  _ui->animationCheckBox->setChecked(boolValue);
   data.get("animationDuration", uintValue);
-  animationStepsSpinBox->setValue(uintValue);
+  _ui->animationStepsSpinBox->setValue(uintValue);
 
   //If there is saved properties reload them.
   if (data.exist("properties")) {
@@ -234,17 +321,17 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
     QStringList list = QString::fromUtf8(propertiesString.c_str()).split(";", QString::SkipEmptyParts);
     vector<string> properties;
 
-    for (QStringList::iterator it = list.begin(); it != list.end(); ++it) {
-      properties.push_back((*it).toUtf8().data());
+    foreach(const QString &s, list) {
+      properties.push_back(s.toUtf8().data());
     }
 
-    dimensionConfigurationWidget->propertiesConfigurationWidget->setOutputPropertiesList(properties);
+    _ui->dimensionConfigurationWidget->setOutputPropertiesList(properties);
   }
 
   data.get("iterationNumber", uintValue);
-  dimensionConfigurationWidget->iterationNumberSpinBox->setValue(uintValue);
+  _ui->dimensionConfigurationWidget->setNumber(uintValue);
 
-  //Reload color scale scale
+  //Reload color scale
 
   DataSet colorScaleDataSet;
   data.get("defaultScale", colorScaleDataSet);
@@ -257,7 +344,7 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
   for (QStringList::iterator it = colorStringList.begin(); it != colorStringList.end(); ++it) {
     Color c;
 
-    if (ColorType::fromString(c, (*it).toStdString())) {
+    if (ColorType::fromString(c, it->toStdString())) {
       colors.push_back(c);
     }
   }

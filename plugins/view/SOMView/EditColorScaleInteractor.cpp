@@ -18,16 +18,24 @@
  */
 
 #include "EditColorScaleInteractor.h"
+#include "GlLabelledColorScale.h"
+
 #include <QMouseEvent>
+
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlEntity.h>
 #include <tulip/GlColorScale.h>
 #include <tulip/ColorScaleConfigDialog.h>
 #include <tulip/Camera.h>
 #include <tulip/GlLayer.h>
+#include <tulip/DoubleProperty.h>
+
 #include "SOMView.h"
+#include <SOMMap.h>
 
 using namespace tlp;
+using namespace std;
+
 EditColorScaleInteractor::EditColorScaleInteractor() :
   currentProperty(NULL), colorScale(NULL), widthPercent(.80), heightPercent(.1), heightPosition(.1),glMainWidgetWidth(0),glMainWidgetHeight(0),selectionLayer(new GlLayer("SelectionLayer")) {
 }
@@ -46,13 +54,12 @@ bool EditColorScaleInteractor::eventFilter(QObject *obj, QEvent *event) {
 
   if (event->type() == QEvent::MouseButtonDblClick) {
     QMouseEvent *me = (QMouseEvent*) event;
-    tlp::GlMainWidget *glMainWidget = dynamic_cast<tlp::GlMainWidget*> (obj);
+    GlMainWidget *glMainWidget = dynamic_cast<tlp::GlMainWidget*> (obj);
 
     if (!glMainWidget)
       return false;
 
     glMainWidget->getScene()->getGraphCamera().initGl();
-//    GlLayer layer("sel");
     selectionLayer->set2DMode();
     glMainWidget->getScene()->addExistingLayer(selectionLayer);
     selectionLayer->getCamera().initGl();

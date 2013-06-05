@@ -17,9 +17,9 @@
  *
  */
 
-#include <time.h>
-#include "SOMAlgorithm.h"
+#include <ctime>
 
+#include "SOMAlgorithm.h"
 #include "SOMMap.h"
 #include "InputSample.h"
 
@@ -29,9 +29,10 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/ForEach.h>
 
-SOMAlgorithm::SOMAlgorithm(/*Graph* inputSamples,*/
-  /*const vector<string>&propertiesToListen,*/
-  TimeDecreasingFunction* learningRateFunction, DiffusionRateFunction* diffusionRateFunction) :
+using namespace tlp;
+using namespace std;
+
+SOMAlgorithm::SOMAlgorithm(TimeDecreasingFunction* learningRateFunction, DiffusionRateFunction* diffusionRateFunction) :
 
   learningRateFunction(learningRateFunction), diffusionRateFunction(diffusionRateFunction) {
 

@@ -21,18 +21,24 @@
 #define SOMMAPELEMENT_H_
 
 #include <tulip/GlComposite.h>
-#include <tulip/ColorProperty.h>
-#include <tulip/ForEach.h>
-#include <SOMMap.h>
+#include <tulip/Size.h>
+#include <tulip/Coord.h>
+#include <tulip/Node.h>
+
 /**
  * @brief GlComposite used to visualize a SOM.
  * GlComposite used to visualize a SOM. This object take a SOM and the the ColorProperty defining the color of each node of the map and print them.
  * If the SOM is hexagonal kind print hexagonal glyph else print sqaure.
  */
+namespace tlp {
+
+class SOMMap;
+class ColorProperty;
+
 class SOMMapElement: public tlp::GlComposite {
 public:
-  SOMMapElement(tlp::Coord position, tlp::Size size, SOMMap *map,
-                tlp::ColorProperty *colorProperty);
+  SOMMapElement(Coord position, Size size, SOMMap *map,
+                ColorProperty *colorProperty);
   virtual ~SOMMapElement();
 
   tlp::Coord getTopLeftPositionForElement(unsigned int x, unsigned int y);
@@ -43,31 +49,32 @@ public:
    * @param map the new SOM
    * @param cp the new color property
    */
-  void setData(SOMMap* map, tlp::ColorProperty* cp);
+  void setData(SOMMap* map, ColorProperty* cp);
 
 
   /**
    * Change the colors of the som representation with those in the given property;
    * @param newColor The new colors.
    */
-  void updateColors(tlp::ColorProperty *newColor);
+  void updateColors(ColorProperty *newColor);
 
 protected:
 
   void computeNodeAreaSize();
 
   float computeMaximizedRadiusForHexagone(unsigned int width,
-                                          unsigned int height, tlp::Size& size);
+                                          unsigned int height, Size& size);
 
-  void buildMainComposite(tlp::Coord topLeft, tlp::Size elementSize,
+  void buildMainComposite(Coord topLeft, Size elementSize,
                           SOMMap* map);
 
   SOMMap* som;
 
-  std::map<tlp::node, tlp::GlSimpleEntity*> nodesMap;
+  std::map<node, GlSimpleEntity*> nodesMap;
 
-  tlp::Coord position;
-  tlp::Size size;
-  tlp::Size nodeAreaSize;
+  Coord position;
+  Size size;
+  Size nodeAreaSize;
 };
+}
 #endif /* SOMMAPELEMENT_H_ */

@@ -65,7 +65,7 @@ public:
 
   PLUGININFORMATIONS("Welsh & Powell","David Auber","03/01/2005","Nodes coloring measure,<br/>values assigned to adjacent nodes are always different.","1.0", "Graph")
 
-  WelshPowell(const tlp::PluginContext *context):DoubleAlgorithm(context) {};
+  WelshPowell(const tlp::PluginContext *context):DoubleAlgorithm(context) {}
 
   bool hasNeightboColoredWith(const node n ,const int color, const MutableContainer<int> &colors) {
     node u;
