@@ -26,7 +26,7 @@
 #include <string>
 
 namespace Ui {
- class SOMComputeWidget;
+class SOMComputeWidget;
 }
 
 namespace tlp {

@@ -156,4 +156,4 @@ void PreferencesDialog::cellChanged(int row, int column) {
     model->setData(model->index(3, column == 1 ? 2 : 1), model->data(model->index(3,column)));
   }
 }
-    
+

@@ -36,7 +36,7 @@ using namespace std;
 using namespace tlp;
 
 SOMPropertiesWidget::SOMPropertiesWidget(SOMView* view, QWidget *parent) :
-    QWidget(parent), _ui(new Ui::SOMPropertiesWidget), view(view) {
+  QWidget(parent), _ui(new Ui::SOMPropertiesWidget), view(view) {
   _ui->setupUi(this);
   setAutoFillBackground(true);
 
@@ -135,19 +135,19 @@ unsigned int SOMPropertiesWidget::getAnimationDuration() const {
 }
 
 unsigned SOMPropertiesWidget::getIterationNumber() const {
-    return _ui->dimensionConfigurationWidget->number();
+  return _ui->dimensionConfigurationWidget->number();
 }
 
 void SOMPropertiesWidget::clearpropertiesConfigurationWidget() {
-    _ui->dimensionConfigurationWidget->clearLists();
+  _ui->dimensionConfigurationWidget->clearLists();
 }
 
 void SOMPropertiesWidget::addfilter(Graph *g, vector<string> &propertyFilterType) {
-    _ui->dimensionConfigurationWidget->setWidgetParameters(g, propertyFilterType);
+  _ui->dimensionConfigurationWidget->setWidgetParameters(g, propertyFilterType);
 }
 
 vector<string> SOMPropertiesWidget::getSelectedProperties() const {
-    return _ui->dimensionConfigurationWidget->getSelectedProperties();
+  return _ui->dimensionConfigurationWidget->getSelectedProperties();
 }
 
 SOMPropertiesWidget::~SOMPropertiesWidget() {
