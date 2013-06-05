@@ -98,9 +98,9 @@ void Workspace::setModel(tlp::GraphHierarchiesModel* model) {
 }
 
 void Workspace::closeAll() {
-    foreach(WorkspacePanel* p, _panels) {
-      delete p; //beware: the destroyed signal is connected to panelDestroyed
-    }
+  foreach(WorkspacePanel* p, _panels) {
+    delete p; //beware: the destroyed signal is connected to panelDestroyed
+  }
 }
 
 QList<tlp::View*> Workspace::panels() const {

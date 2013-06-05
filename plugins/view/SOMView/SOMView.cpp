@@ -71,8 +71,8 @@ SOMView::~SOMView() {
   destruct = true;
 
   if (somMapIsBuild) {
-      delete mask;
-      mask = NULL;
+    delete mask;
+    mask = NULL;
 
     //Clear the color properties
     for (map<string, ColorProperty*>::iterator it = propertyToColorProperty.begin(); it != propertyToColorProperty.end(); ++it) {
@@ -334,7 +334,7 @@ bool SOMView::createPicture(const std::string &pictureName, int width, int heigh
 
 void SOMView::drawPreviews() {
 
-    vector<string> propertiesName(properties->getSelectedProperties());
+  vector<string> propertiesName(properties->getSelectedProperties());
   int thumbWidth = 50;
   int thumbHeight = 50;
   int spacing = 5;
@@ -1045,7 +1045,7 @@ void SOMView::gridStructurePropertiesUpdated() {
 
 bool SOMView::checkGridValidity() const {
   return !(properties->getGridHeight() % 2 != 0 && properties->getConnectivityIndex() == 1
-          && properties->getOppositeConnected());
+           && properties->getOppositeConnected());
 }
 void SOMView::learningAlgorithmPropertiesUpdated() {
   computeSOMMap();

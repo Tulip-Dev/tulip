@@ -161,7 +161,8 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   if (!selectionDrawActivate) {
     lodCalculator->compute(fakeScene->getViewport(), fakeScene->getViewport());
-  } else {
+  }
+  else {
     lodCalculator->compute(fakeScene->getViewport(), selectionViewport);
   }
 
