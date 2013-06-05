@@ -39,6 +39,7 @@ signals:
 public slots:
   void writeSettings();
   void readSettings();
+  void cellChanged(int row, int column);
 
 };
 

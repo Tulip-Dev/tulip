@@ -30,6 +30,7 @@ using namespace tlp;
 PreferencesDialog::PreferencesDialog(QWidget *parent): QDialog(parent), _ui(new Ui::PreferencesDialog) {
   _ui->setupUi(this);
   _ui->graphDefaultsTable->setItemDelegate(new tlp::TulipItemDelegate(_ui->graphDefaultsTable));
+  connect(_ui->graphDefaultsTable, SIGNAL(cellChanged(int, int)), this, SLOT(cellChanged(int, int)));
 }
 
 PreferencesDialog::~PreferencesDialog() {
@@ -139,9 +140,20 @@ void PreferencesDialog::readSettings() {
   model->setData(model->index(2,2),QVariant::fromValue<tlp::EdgeShape>((tlp::EdgeShape)(TulipSettings::instance().defaultShape(tlp::EDGE))));
   model->setData(model->index(3,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor()));
   model->setData(model->index(3,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor()));
+  // edges selection color is not editable
+  //_ui->graphDefaultsTable->item(3,2)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
   _ui->aspectRatioCheck->setChecked(TulipSettings::instance().isAutomaticRatio());
   _ui->viewOrthoCheck->setChecked(TulipSettings::instance().isViewOrtho());
   _ui->colorMappingCheck->setChecked(TulipSettings::instance().isAutomaticMapMetric());
   _ui->runningTimeComputedCheck->setChecked(TulipSettings::instance().isRunningTimeComputed());
 }
+
+void PreferencesDialog::cellChanged(int row, int column) {
+  if (row == 3) {
+    // force selection color to be the same for nodes & edges
+    QAbstractItemModel* model = _ui->graphDefaultsTable->model();
+    model->setData(model->index(3, column == 1 ? 2 : 1), model->data(model->index(3,column)));
+  }
+}
+    
