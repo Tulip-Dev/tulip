@@ -484,7 +484,7 @@ border: 0px;
           </item>
           <item row="3" column="0">
            <property name="text">
-            <string>Selection color</string>
+            <string>Selection color (nodes = edges)</string>
            </property>
            <property name="font">
             <font>
