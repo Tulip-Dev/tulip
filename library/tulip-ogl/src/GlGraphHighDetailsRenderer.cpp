@@ -159,7 +159,12 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     visitGraph(&visitor);
   }
 
-  lodCalculator->compute(fakeScene->getViewport(), fakeScene->getViewport());
+  if (!selectionDrawActivate) {
+    lodCalculator->compute(fakeScene->getViewport(), fakeScene->getViewport());
+  } else {
+    lodCalculator->compute(fakeScene->getViewport(), selectionViewport);
+  }
+
   LayersLODVector &layersLODVector = lodCalculator->getResult();
 
   GlEdge::clearEdgeWidthLodSystem();
@@ -448,7 +453,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   selectionDrawActivate=false;
 }
 //===================================================================
-void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntitiesFlag type, int, int, int, int, vector<SelectedEntity> &selectedEntities) {
+void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntitiesFlag type, int x, int y, int w, int h, vector<SelectedEntity> &selectedEntities) {
   map<unsigned int, SelectedEntity> idToEntity;
   unsigned int id=1;
 
@@ -462,7 +467,7 @@ void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntities
   glInitNames();
   glPushName(0);
 
-  initSelectionRendering(type,idToEntity,id);
+  initSelectionRendering(type, x, y, w, h, idToEntity,id);
 
   draw(20,camera);
 
@@ -477,11 +482,15 @@ void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntities
   delete[] selectBuf;
 }
 //===================================================================
-void GlGraphHighDetailsRenderer::initSelectionRendering(RenderingEntitiesFlag type,map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId) {
+void GlGraphHighDetailsRenderer::initSelectionRendering(RenderingEntitiesFlag type, int x, int y, int w, int h, map<unsigned int, SelectedEntity> &idMap,unsigned int &currentId) {
   selectionType=type;
   selectionIdMap=&idMap;
   selectionCurrentId=&currentId;
   selectionDrawActivate=true;
+  selectionViewport[0] = x;
+  selectionViewport[1] = y;
+  selectionViewport[2] = w;
+  selectionViewport[3] = h;
 }
 //===================================================================
 void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,OcclusionTest *occlusionTest,LayerLODUnit &layerLODUnit) {
