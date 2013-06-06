@@ -464,42 +464,47 @@ void GraphPerspective::saveGraphToFile(Graph *g) {
   }
 }
 
+void GraphPerspective::importGraph(const std::string& module,
+				   DataSet& data) {
+  Graph* g;
+  if (!module.empty()) {
+    PluginProgress* prg = progress(NoProgressOption);
+    prg->setTitle(module);
+    g = tlp::importGraph(module,data,prg);
+
+    if (g == NULL) {
+      QMessageBox::critical(_mainWindow,trUtf8("Import error"),
+			    QString("<i>") + module.c_str() + trUtf8("</i> failed to import data.<br/><br/><b>") + prg->getError().c_str() + "</b>");
+      delete prg;
+      return;
+    }
+
+    delete prg;
+    std::string name;
+
+    if (!g->getAttribute<std::string>("name", name)) {
+      QString n = QString(module.c_str()) + " - " +
+	QString::fromUtf8(data.toString().c_str());
+      n.replace(QRegExp("[\\w]*::"),""); // remove words before "::"
+      g->setAttribute<std::string>("name", std::string(n.toUtf8().data()));
+    }
+  }
+  else {
+    g = tlp::newGraph();
+  }
+
+  _graphs->addGraph(g);
+  applyRandomLayout(g);
+  showStartPanels(g);
+}
+
 void GraphPerspective::importGraph() {
   ImportWizard wizard(_mainWindow);
 
   if (wizard.exec() == QDialog::Accepted) {
-    Graph* g = NULL;
-
-    if (!wizard.algorithm().isNull()) {
-      DataSet data = wizard.parameters();
-      PluginProgress* prg = progress(NoProgressOption);
-      std::string importPluginName = wizard.algorithm().toStdString();
-      prg->setTitle(importPluginName);
-      g = tlp::importGraph(importPluginName,data,prg);
-
-      if (g == NULL) {
-        QMessageBox::critical(_mainWindow,trUtf8("Import error"),"<i>" + wizard.algorithm() + trUtf8("</i> failed to import data.<br/><br/><b>") + prg->getError().c_str() + "</b>");
-        delete prg;
-        return;
-      }
-
-      delete prg;
-      std::string name;
-
-      if (!g->getAttribute<std::string>("name",name)) {
-        QString n = wizard.algorithm() + " - " + wizard.parameters().toString().c_str();
-        n.replace(QRegExp("[\\w]*::"),""); // remove words before "::"
-        g->setAttribute<std::string>("name",n.toStdString());
-      }
-    }
-    else {
-      g = tlp::newGraph();
-    }
-
-    _graphs->addGraph(g);
-
-    applyRandomLayout(g);
-    showStartPanels(g);
+    DataSet data = wizard.parameters();
+    std::string importPluginName = wizard.algorithm().toStdString();
+    importGraph(importPluginName, data);
   }
 }
 
@@ -616,12 +621,8 @@ void GraphPerspective::open(QString fileName) {
         DataSet params;
         params.set("file::filename", std::string(fileName.toUtf8().data()));
         addRecentDocument(fileName);
-        PluginProgress* prg = progress(NoProgressOption);
-        Graph* g = tlp::importGraph(modules[extension], params, prg);
-        delete prg;
+	importGraph(modules[extension], params);
         QDir::setCurrent(QFileInfo(fileName.toUtf8().data()).absolutePath());
-        _graphs->addGraph(g);
-        showStartPanels(g);
         break;
       }
     }

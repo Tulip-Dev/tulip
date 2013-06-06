@@ -136,6 +136,7 @@ protected slots:
 
 protected:
   bool eventFilter(QObject *, QEvent *);
+  void importGraph(const std::string& module, tlp::DataSet& data);
 };
 
 #endif // GRAPHPERSPECTIVE_H
