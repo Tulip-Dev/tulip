@@ -55,8 +55,17 @@ if [ -f test_gui.tlp ]; then
     rm test_gui.tlp
 fi
 
+if [ -f data/test_gui.tlp ]; then
+    rm data/test_gui.tlp
+fi
+
 # run the test
 sh tulip_replay.sh $TEST_NAME.xns $TLP_INPUT_FILE
+
+# move data/test_gui.tlp if it exist
+if [ -f data/test_gui.tlp ]; then
+    mv data/test_gui.tlp .
+fi
 
 # test_gui.tlp must exist
 if [ ! -f test_gui.tlp ]; then

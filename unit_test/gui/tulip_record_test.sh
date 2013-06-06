@@ -31,6 +31,10 @@ if [ -f test_gui.tlp ]; then
     rm test_gui.tlp
 fi
 
+if [ -f data/test_gui.tlp ]; then
+    rm data/test_gui.tlp
+fi
+
 # record the test
 sh tulip_record.sh $TEST_NAME.xns $TLP_INPUT_FILE
 
@@ -44,6 +48,11 @@ fi
 if [ ! -f $TEST_NAME.xns ]; then
     echo "Recording of $TEST_NAME failed: $TEST_NAME.xns does not exist"
     exit 1
+fi
+
+# move data/test_gui.tlp if it exist
+if [ -f data/test_gui.tlp ]; then
+    mv data/test_gui.tlp .
 fi
 
 # test_gui.tlp must exist
