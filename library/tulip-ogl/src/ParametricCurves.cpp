@@ -220,6 +220,7 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
 #if defined(_OPENMP) && !defined(_MSC_VER)
     #pragma omp parallel for
 #endif
+
     for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
       float curStep = i * h;
       curvePoints[i] = computeBezierPoint(controlPoints, curStep);
