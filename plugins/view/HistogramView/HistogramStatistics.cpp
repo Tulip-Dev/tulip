@@ -35,6 +35,8 @@
 #define compose_fn stdext::compose2
 #else
 
+#include <functional>
+
 // Visual Studio lacks compose2, use implementation from boost
 
 /* class for the compose_f_gx_hx adapter
