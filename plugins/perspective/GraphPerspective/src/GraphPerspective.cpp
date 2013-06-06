@@ -465,8 +465,9 @@ void GraphPerspective::saveGraphToFile(Graph *g) {
 }
 
 void GraphPerspective::importGraph(const std::string& module,
-				   DataSet& data) {
+                                   DataSet& data) {
   Graph* g;
+
   if (!module.empty()) {
     PluginProgress* prg = progress(NoProgressOption);
     prg->setTitle(module);
@@ -474,7 +475,7 @@ void GraphPerspective::importGraph(const std::string& module,
 
     if (g == NULL) {
       QMessageBox::critical(_mainWindow,trUtf8("Import error"),
-			    QString("<i>") + module.c_str() + trUtf8("</i> failed to import data.<br/><br/><b>") + prg->getError().c_str() + "</b>");
+                            QString("<i>") + module.c_str() + trUtf8("</i> failed to import data.<br/><br/><b>") + prg->getError().c_str() + "</b>");
       delete prg;
       return;
     }
@@ -484,7 +485,7 @@ void GraphPerspective::importGraph(const std::string& module,
 
     if (!g->getAttribute<std::string>("name", name)) {
       QString n = QString(module.c_str()) + " - " +
-	QString::fromUtf8(data.toString().c_str());
+                  QString::fromUtf8(data.toString().c_str());
       n.replace(QRegExp("[\\w]*::"),""); // remove words before "::"
       g->setAttribute<std::string>("name", std::string(n.toUtf8().data()));
     }
@@ -621,7 +622,7 @@ void GraphPerspective::open(QString fileName) {
         DataSet params;
         params.set("file::filename", std::string(fileName.toUtf8().data()));
         addRecentDocument(fileName);
-	importGraph(modules[extension], params);
+        importGraph(modules[extension], params);
         QDir::setCurrent(QFileInfo(fileName.toUtf8().data()).absolutePath());
         break;
       }
