@@ -187,7 +187,7 @@ Coord computeBezierPoint(const vector<Coord> &controlPoints, const float t) {
     controlPoint[0] = controlPoints[i][0];
     controlPoint[1] = controlPoints[i][1];
     controlPoint[2] = controlPoints[i][2];
-    bezierPoint += controlPoint * curCoeff * tCoeffs[static_cast<double>(t)][i] * sCoeffs[t][nbControlPoints - 1 - i];
+    bezierPoint += controlPoint * curCoeff * tCoeffs[static_cast<double>(t)][i] * sCoeffs[static_cast<double>(t)][nbControlPoints - 1 - i];
     double c = static_cast<double>(i+1);
     curCoeff *= (r -c)/c;
   }
@@ -215,10 +215,11 @@ void computeBezierPoints(const vector<Coord> &controlPoints, vector<Coord> &curv
   default:
     curvePoints.resize(nbCurvePoints);
     float h = 1.0 / static_cast<float>(nbCurvePoints - 1);
-#ifdef _OPENMP
+// With Visual Studio, the parallelization of the curve points computation
+// leads to incorrect results (why? I don't know ...)
+#if defined(_OPENMP) && !defined(_MSC_VER)
     #pragma omp parallel for
 #endif
-
     for (int i = 0 ; i < static_cast<int>(nbCurvePoints) ; ++i) {
       float curStep = i * h;
       curvePoints[i] = computeBezierPoint(controlPoints, curStep);
