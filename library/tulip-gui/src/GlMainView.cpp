@@ -117,6 +117,8 @@ GlMainWidget* GlMainView::getGlMainWidget() const {
 
 void GlMainView::centerView(bool graphChanged) {
   getGlMainWidget()->centerScene(graphChanged);
+  if(isOverviewVisible)
+      drawOverview(graphChanged);
 }
 
 void GlMainView::glMainViewDrawn(bool graphChanged) {
