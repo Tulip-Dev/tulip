@@ -117,7 +117,7 @@ public:
   }
 
   virtual void parseString(const std::string& value) {
-    _currentMap[_currentKey] = value.c_str();
+    _currentMap[_currentKey] = QString::fromUtf8(value.c_str());
   }
 
   virtual void parseMapKey(const std::string& value) {
