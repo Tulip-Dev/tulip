@@ -131,6 +131,7 @@ int main(int argc, char **argv) {
     name += TULIP_RELEASE;
   else
     name += TULIP_MM_RELEASE;
+
   // the applicationName below is used to identify the location
   // of downloaded plugins, so it must be the same as in
   // tulip_perspective/main.cpp
