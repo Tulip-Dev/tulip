@@ -190,7 +190,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
 
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   initQTypeSerializers();
-  tlp::TulipPluginsPath = (tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toUtf8().data() +
+  tlp::TulipPluginsPath = std::string((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toUtf8().data()) +
                           tlp::PATH_DELIMITER +
                           tlp::TulipPluginsPath +
                           tlp::PATH_DELIMITER +
