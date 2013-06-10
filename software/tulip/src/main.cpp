@@ -30,6 +30,7 @@
 #endif
 #include <QTcpSocket>
 
+#include <tulip/TulipRelease.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/TlpTools.h>
@@ -123,7 +124,17 @@ int main(int argc, char **argv) {
 
 
   QApplication tulip_agent(argc, argv);
-  tulip_agent.setApplicationName("tulip");
+  QString name("Tulip ");
+
+  // show patch number only if needed
+  if (TULIP_INT_RELEASE % 10)
+    name += TULIP_RELEASE;
+  else
+    name += TULIP_MM_RELEASE;
+  // the applicationName below is used to identify the location
+  // of downloaded plugins, so it must be the same as in
+  // tulip_perspective/main.cpp
+  tulip_agent.setApplicationName(name);
 
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
