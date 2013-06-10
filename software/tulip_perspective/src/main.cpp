@@ -138,6 +138,9 @@ int main(int argc,char **argv) {
     title += TULIP_MM_RELEASE;
 
   QApplication tulip_perspective(argc, argv);
+  // the applicationName below is used to identify the location
+  // of downloaded plugins, so it must be the same as in
+  // tulip/main.cpp
   tulip_perspective.setApplicationName(title);
 
 #if defined(__APPLE__)
