@@ -111,23 +111,23 @@ void AlgorithmRunnerItem::setGraph(Graph* g) {
       DataType* t = it.second;
 
       if (ISPROP(tlp::BooleanProperty*) ||
-	  ISPROP(tlp::BooleanVectorProperty*) ||
-	  ISPROP(tlp::DoubleProperty*) ||
-	  ISPROP(tlp::DoubleVectorProperty*) ||
-	  ISPROP(tlp::LayoutProperty*) ||
-	  ISPROP(tlp::CoordVectorProperty*) ||
-	  ISPROP(tlp::StringProperty*) ||
-	  ISPROP(tlp::StringVectorProperty*) ||
-	  ISPROP(tlp::IntegerProperty*) ||
-	  ISPROP(tlp::IntegerVectorProperty*) ||
-	  ISPROP(tlp::SizeProperty*) ||
-	  ISPROP(tlp::SizeVectorProperty*) ||
-	  ISPROP(tlp::ColorProperty*) ||
-	  ISPROP(tlp::ColorVectorProperty*) ||
-	  ISPROP(tlp::NumericProperty*) ||
-	  ISPROP(tlp::PropertyInterface*) ||
-	  ISPROP(tlp::GraphProperty*)) {
-	dataSet.remove(it.first);
+          ISPROP(tlp::BooleanVectorProperty*) ||
+          ISPROP(tlp::DoubleProperty*) ||
+          ISPROP(tlp::DoubleVectorProperty*) ||
+          ISPROP(tlp::LayoutProperty*) ||
+          ISPROP(tlp::CoordVectorProperty*) ||
+          ISPROP(tlp::StringProperty*) ||
+          ISPROP(tlp::StringVectorProperty*) ||
+          ISPROP(tlp::IntegerProperty*) ||
+          ISPROP(tlp::IntegerVectorProperty*) ||
+          ISPROP(tlp::SizeProperty*) ||
+          ISPROP(tlp::SizeVectorProperty*) ||
+          ISPROP(tlp::ColorProperty*) ||
+          ISPROP(tlp::ColorVectorProperty*) ||
+          ISPROP(tlp::NumericProperty*) ||
+          ISPROP(tlp::PropertyInterface*) ||
+          ISPROP(tlp::GraphProperty*)) {
+        dataSet.remove(it.first);
       }
     }
     _initData = dataSet;
