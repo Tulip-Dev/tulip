@@ -121,8 +121,10 @@ Qt::ItemFlags GraphElementModel::flags(const QModelIndex &index) const {
 #ifdef NDEBUG
   return TulipModel::flags(index) | Qt::ItemIsEditable;
 #else
+
   if (((PropertyInterface*)(index.internalPointer()))->getName() == "viewMetaGraph")
     return TulipModel::flags(index);
+
   return TulipModel::flags(index) | Qt::ItemIsEditable;
 #endif
 }
