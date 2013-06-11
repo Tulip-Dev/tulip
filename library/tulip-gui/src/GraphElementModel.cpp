@@ -117,6 +117,16 @@ QVariant GraphElementModel::data(const QModelIndex &index, int role) const {
   return QVariant();
 }
 
+Qt::ItemFlags GraphElementModel::flags(const QModelIndex &index) const {
+#ifdef NDEBUG
+  return TulipModel::flags(index) | Qt::ItemIsEditable;
+#else
+  if (((PropertyInterface*)(index.internalPointer()))->getName() == "viewMetaGraph")
+    return TulipModel::flags(index);
+  return TulipModel::flags(index) | Qt::ItemIsEditable;
+#endif
+}
+
 bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if(role==Qt::EditRole) {
     PropertyInterface* prop=NULL;

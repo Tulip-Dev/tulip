@@ -88,7 +88,14 @@ QModelIndex GraphModel::parent(const QModelIndex &/*child*/) const {
 }
 
 Qt::ItemFlags GraphModel::flags(const QModelIndex &index) const {
-  return QAbstractItemModel::flags(index) | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
+  Qt::ItemFlags iflags = QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
+#ifdef NDEBUG
+  return iflags | Qt::ItemIsEditable;
+#else
+  if (((PropertyInterface*)(index.internalPointer()))->getName() == "viewMetaGraph")
+    return iflags;
+  return iflags | Qt::ItemIsEditable;
+#endif
 }
 
 QVariant GraphModel::headerData(int section, Qt::Orientation orientation, int role) const {
