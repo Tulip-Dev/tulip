@@ -4,7 +4,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = Tulip
-PROJECT_NUMBER         = 4.2.0
+PROJECT_NUMBER         = 4.3.0
 PROJECT_BRIEF          = "Better Visualization Through Research"
 PROJECT_LOGO           = software/bitmaps/welcomelogo.bmp
 OUTPUT_DIRECTORY       = doc
