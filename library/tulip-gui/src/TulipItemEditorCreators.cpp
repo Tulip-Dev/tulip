@@ -268,7 +268,7 @@ QVariant NumericPropertyEditorCreator::editorData(QWidget* w,tlp::Graph*) {
 }
 
 QString NumericPropertyEditorCreator::displayText(const QVariant& v) const {
-  PropertyInterface *prop = v.value<PropertyInterface*>();
+  NumericProperty *prop = v.value<NumericProperty*>();
 
   if (prop==NULL)
     return "";
@@ -659,6 +659,32 @@ QString GraphEditorCreator::displayText(const QVariant& var) const {
   std::string name;
   g->getAttribute<std::string>("name",name);
   return name.c_str();
+}
+
+//EdgeSetEditorCreator
+QWidget* EdgeSetEditorCreator::createWidget(QWidget *parent) const {
+  return new QLabel(parent);
+}
+
+void EdgeSetEditorCreator::setEditorData(QWidget* w, const QVariant& var, bool, tlp::Graph*) {
+  std::set<tlp::edge> eset = var.value<std::set<tlp::edge> >();
+
+  std::stringstream ss;
+  tlp::EdgeSetType::write(ss, eset);
+  static_cast<QLabel*>(w)->setText(ss.str().c_str());
+}
+
+QVariant EdgeSetEditorCreator::editorData(QWidget*,tlp::Graph*) {
+  return QVariant();
+}
+
+QString EdgeSetEditorCreator::displayText(const QVariant& var) const {
+  std::set<tlp::edge> eset = var.value<std::set<tlp::edge> >();
+
+  std::stringstream ss;
+  tlp::EdgeSetType::write(ss, eset);
+
+  return ss.str().c_str();
 }
 
 //QStringEditorCreator

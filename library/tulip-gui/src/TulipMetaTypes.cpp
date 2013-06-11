@@ -73,6 +73,7 @@ bool QStringType::fromString(QString& s, const std::string& str) {
 
 tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::GraphType::RealType);
+  CHECK_QVARIANT(tlp::EdgeSetType::RealType);
   CHECK_QVARIANT(tlp::DoubleType::RealType);
   CHECK_QVARIANT(tlp::FloatType::RealType);
   CHECK_QVARIANT(tlp::IntegerType::RealType);
@@ -147,6 +148,7 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   // ******
 
   CHECK_DATATYPE(tlp::GraphType::RealType);
+  CHECK_DATATYPE(tlp::EdgeSetType::RealType);
   CHECK_DATATYPE(tlp::DoubleType::RealType);
   CHECK_DATATYPE(tlp::FloatType::RealType);
   CHECK_DATATYPE(tlp::IntegerType::RealType);
