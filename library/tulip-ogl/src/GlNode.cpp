@@ -151,18 +151,10 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
   if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
     if (lod < 1) lod = 1;
-
-    int size= sqrt(lod);
-
     if(data->getGlVertexArrayManager()->renderingIsBegin()) {
-      if(size<2)
-        data->getGlVertexArrayManager()->activatePointNodeDisplay(this,true,selected);
-      else
-        data->getGlVertexArrayManager()->activatePointNodeDisplay(this,false,selected);
+      data->getGlVertexArrayManager()->activatePointNodeDisplay(this, selected);
     }
     else {
-      if(size>2)
-        size=2;
 
       Color pointColor = data->getElementColor()->getNodeValue(n);
 
@@ -173,7 +165,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
       OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
       glDisable(GL_LIGHTING);
       setColor(selected ? colorSelect2 : pointColor);
-      glPointSize(size);
+      glPointSize(4);
       glBegin(GL_POINTS);
       glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.);
       glEnd();
