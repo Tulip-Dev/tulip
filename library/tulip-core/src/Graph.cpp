@@ -1135,6 +1135,20 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   Observable::unholdObservers();
   return metaNode;
 }
+
+// map all nodes or embedded nodes (nodes of meta node subgraph)
+// of a subgraph to metaNode
+static void mapSubGraphNodes(Graph* sg, node metaNode,
+			     MutableContainer<node>& mappingM,
+			     GraphProperty* metaInfo) {
+  node n;
+  forEach(n, sg->getNodes()) {
+    mappingM.set(n.id, metaNode);
+    Graph* ssg = metaInfo->getNodeValue(n);
+    if (ssg)
+      mapSubGraphNodes(ssg, metaNode, mappingM, metaInfo);
+  }
+}
 //====================================================================================
 void Graph::openMetaNode(node metaNode, bool updateProperties) {
   if (getRoot() == this) {
@@ -1151,6 +1165,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 
   Observable::holdObservers();
   MutableContainer<node> mappingM;
+  mappingM.setAll(node());
   //add node from meta to graph
   {
     node n;
@@ -1158,6 +1173,11 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     stableForEach(n, metaGraph->getNodes()) {
       addNode(n);
       mappingM.set(n.id, n);
+      Graph *sg = metaInfo->getNodeValue(n);
+      if (sg)
+	// map all nodes or embedded nodes
+	// of this subgraph to n
+	mapSubGraphNodes(sg, n, mappingM, metaInfo);
     }
     StableIterator<edge> ite(metaGraph->getEdges());
     addEdges(&ite);
@@ -1223,11 +1243,25 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
             graphColors->setEdgeValue(e, metaColor);
           }
           else {
-            newMetaEdges[eEnds.first][mappingM.get(eEnds.second.id)].insert(e);
+	    node tgt = mappingM.get(eEnds.second.id);
+	    // tgt may not be valid because at this time
+	    // when deleting a node from a subgraph pointed
+	    // by a metanode we are not able to correctly
+	    // update the meta edges embedding the inout edges
+	    // of this node
+	    if (tgt.isValid())
+	      newMetaEdges[eEnds.first][tgt].insert(e);
           }
         }
         else {
-          newMetaEdges[mappingM.get(eEnds.first.id)][eEnds.second].insert(e);
+	  node src = mappingM.get(eEnds.first.id);
+	  // src may not be valid because at this time
+	  // when deleting a node from a subgraph pointed
+	  // by a metanode we are not able to correctly
+	  // update the meta edges embedding the inout edges
+	  // of this node
+	  if (src.isValid())
+	    newMetaEdges[src][eEnds.second].insert(e);
         }
       }
 
