@@ -43,9 +43,7 @@ public:
   virtual QString headerText(unsigned int id) const = 0;
   virtual QVariant value(unsigned int id,PropertyInterface *prop) const = 0;
 
-  Qt::ItemFlags flags(const QModelIndex &index) const {
-    return TulipModel::flags(index) | Qt::ItemIsEditable;
-  }
+  Qt::ItemFlags flags(const QModelIndex &index) const;
 
 protected :
 
