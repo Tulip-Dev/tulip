@@ -22,7 +22,7 @@
 #define Tulip_GLVERTEXARRAYMANAGER_H
 
 #if defined(_MSC_VER)
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 #if defined(__APPLE__)
@@ -39,6 +39,7 @@
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
 #include <tulip/Observable.h>
+#include <tulip/tuliphash.h>
 
 #include <vector>
 
@@ -151,7 +152,7 @@ public:
   /**
    * This function is call when you want to activate point rendering of a specific node
    */
-  void activatePointNodeDisplay(GlNode *node, bool onePixel, bool selected);
+  void activatePointNodeDisplay(GlNode *node, bool selected);
 
 protected:
 
@@ -203,44 +204,57 @@ protected:
   std::vector<GLint> linesIndexArray;
   std::vector<GLsizei> linesIndexCountArray;
 
-  std::vector<GLint> linesRenderingStartIndexArray;
-  std::vector<GLsizei> linesRenderingCountArray;
-  std::vector<GLint> linesSelectedRenderingStartIndexArray;
-  std::vector<GLsizei> linesSelectedRenderingCountArray;
+  std::vector<GLuint> linesRenderingIndicesArray;
+  std::vector<GLuint> linesSelectedRenderingIndicesArray;
 
   std::vector<Coord> quadsCoordsArray;
   std::vector<Color> quadsColorsArray;
   std::vector<Color> quadsOutlineColorsArray;
-  std::vector<GLint> quadsIndexArray;
+  std::vector<GLuint> quadsIndexArray;
   std::vector<GLsizei> quadsIndexCountArray;
   std::vector<std::vector<GLuint> > quadsBottomOutlineIndexArray;
   std::vector<std::vector<GLuint> > quadsTopOutlineIndexArray;
 
-  std::vector<GLint> quadsRenderingStartIndexArray;
-  std::vector<GLsizei> quadsRenderingCountArray;
-  std::vector<GLint> quadsSelectedRenderingStartIndexArray;
-  std::vector<GLsizei> quadsSelectedRenderingCountArray;
-  std::map<float, std::vector<const GLuint* > > quadsOutlineRenderingIndexArray;
-  std::map<float, std::vector<GLsizei> > quadsOutlineRenderingCountArray;
-  std::map<float, std::vector<const GLuint* > > quadsOutlineSelectedRenderingIndexArray;
-  std::map<float, std::vector<GLsizei> > quadsOutlineSelectedRenderingCountArray;
+  std::vector<GLuint> quadsRenderingIndicesArray;
+  std::vector<GLuint> quadsSelectedRenderingIndicesArray;
+
+  std::map<float, std::vector<GLuint> > quadsOutlineRenderingIndicesArray;
+  std::map<float, std::vector<GLuint> > quadsSelectedOutlineRenderingIndicesArray;
 
   std::vector<Coord> pointsCoordsArray;
   std::vector<Color> pointsColorsArray;
 
-  std::vector<GLuint> points1PNodesRenderingIndexArray;
-  std::vector<GLuint> points1PNodesSelectedRenderingIndexArray;
-  std::vector<GLuint> points2PNodesRenderingIndexArray;
-  std::vector<GLuint> points2PNodesSelectedRenderingIndexArray;
-  std::vector<GLuint> points1PEdgesRenderingIndexArray;
-  std::vector<GLuint> points1PEdgesSelectedRenderingIndexArray;
+  std::vector<GLuint> pointsNodesRenderingIndexArray;
+  std::vector<GLuint> pointsNodesSelectedRenderingIndexArray;
+  std::vector<GLuint> pointsEdgesRenderingIndexArray;
+  std::vector<GLuint> pointsEdgesSelectedRenderingIndexArray;
 
-  std::vector<std::pair<unsigned int,unsigned int> > edgeToLineIndexVector;
-  std::vector<std::pair<unsigned int,unsigned int> > edgeToQuadIndexVector;
-  std::vector<unsigned int> edgeToBottomOulineIndexVector;
-  std::vector<unsigned int> edgeToTopOutlineIndexVector;
-  std::vector<unsigned int> edgeToPointIndexVector;
-  std::vector<unsigned int> nodeToPointIndexVector;
+  TLP_HASH_MAP<unsigned int, std::pair<unsigned int,unsigned int> > edgeToLineIndexVector;
+  TLP_HASH_MAP<unsigned int, std::pair<unsigned int,unsigned int> > edgeToQuadIndexVector;
+  TLP_HASH_MAP<unsigned int, unsigned int> edgeToBottomOulineIndexVector;
+  TLP_HASH_MAP<unsigned int, unsigned int> edgeToTopOutlineIndexVector;
+  TLP_HASH_MAP<unsigned int, unsigned int> edgeToPointIndexVector;
+  TLP_HASH_MAP<unsigned int, unsigned int> nodeToPointIndexVector;
+
+  GLuint pointsVerticesVBO;
+  GLuint pointsColorsVBO;
+  GLuint linesVerticesVBO;
+  GLuint linesColorsVBO;
+  GLuint quadsVerticesVBO;
+  GLuint quadsColorsVBO;
+  GLuint quadsOutlineColorsVBO;
+
+  bool pointsVerticesUploaded;
+  bool pointsColorsUploaded;
+  bool linesVerticesUploaded;
+  bool linesColorsUploaded;
+  bool quadsVerticesUploaded;
+  bool quadsColorsUploaded;
+  bool quadsOutlineColorsUploaded;
+
+  bool verticesUploadNeeded;
+  bool colorsUploadNeeded;
+
 };
 
 }
