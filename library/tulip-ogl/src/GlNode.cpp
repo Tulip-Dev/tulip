@@ -151,6 +151,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
   if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
     if (lod < 1) lod = 1;
+
     if(data->getGlVertexArrayManager()->renderingIsBegin()) {
       data->getGlVertexArrayManager()->activatePointNodeDisplay(this, selected);
     }
