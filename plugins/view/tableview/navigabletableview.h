@@ -31,24 +31,15 @@ public:
   explicit NavigableTableView(QWidget *parent = 0);
   void keyPressEvent(QKeyEvent *event);
 
-  void setSendSignalOnResize(bool sendSignalOnResize) {
-    _sendSignalOnResize = sendSignalOnResize;
-  }
-
 protected:
 
-  void  scrollContentsBy (int dx, int dy);
   int sizeHintForRow(int row) const;
   int sizeHintForColumn(int col) const;
-  void resizeEvent(QResizeEvent * event);
-
-signals:
-
-  void resizeTableRows();
+  void paintEvent(QPaintEvent * event);
 
 private:
 
-  bool _sendSignalOnResize;
+  void resizeTableRows();
 
 };
 

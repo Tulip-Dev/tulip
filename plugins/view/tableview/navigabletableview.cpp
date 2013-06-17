@@ -24,7 +24,7 @@
 #include <iostream>
 
 NavigableTableView::NavigableTableView(QWidget *parent) :
-  QTableView(parent) , _sendSignalOnResize(true) {
+  QTableView(parent) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 #else
@@ -90,15 +90,34 @@ int NavigableTableView::sizeHintForColumn(int col) const {
   return hint;
 }
 
-void NavigableTableView::scrollContentsBy (int dx, int dy) {
-  QTableView::scrollContentsBy(dx, dy);
-  emit resizeTableRows();
+void NavigableTableView::paintEvent(QPaintEvent * event) {
+    resizeTableRows();
+    QTableView::paintEvent(event);
 }
 
-void NavigableTableView::resizeEvent(QResizeEvent * event) {
-  QTableView::resizeEvent(event);
+void NavigableTableView::resizeTableRows() {
 
-  if (_sendSignalOnResize) {
-    emit resizeTableRows();
+  if (!model())
+    return;
+
+  int top = qMax(0, verticalHeader()->visualIndexAt(0));
+  int bottom = verticalHeader()->visualIndexAt(viewport()->height());
+
+  if (bottom != -1) {
+    if ((bottom+10) >= model()->rowCount())
+      bottom = model()->rowCount() - 1;
+    else
+      bottom += 10;
   }
+
+  int left = qMax(0, horizontalHeader()->visualIndexAt(0));
+  int right = horizontalHeader()->visualIndexAt(viewport()->width());
+
+
+  for (int i = top ; i <= bottom ; ++i)
+    resizeRowToContents(i);
+
+  for (int i = left ; i <= right ; ++i)
+    resizeColumnToContents(i);
+
 }
