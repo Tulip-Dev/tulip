@@ -93,8 +93,6 @@ extern void printErrorMessage(const std::string &errMsg);
 
 extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
 
-extern const sipTypeDef *getSipType(const char *sipTypename);
-
 extern void replaceAll(std::string &s, const std::string& replaceWhat, const std::string& replaceWithWhat);
 
 extern bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty *selection);
@@ -149,14 +147,6 @@ void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
         sipTransferTo(pyObj, pyObj);
         sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyObj);
         sipCommonDtor(wrapper);
-    }
-}
-
-const sipTypeDef *getSipType(const char *sipTypename) {
-    if (sipResolveTypedef(sipTypename)) {
-         return sipFindType(sipResolveTypedef(sipTypename));
-    } else {
-         return sipFindType(sipTypename);
     }
 }
 
