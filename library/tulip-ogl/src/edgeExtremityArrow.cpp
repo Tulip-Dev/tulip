@@ -55,9 +55,6 @@ void GlArrow2DEdgeExtremity::draw(edge e, node, const Color& glyphColor, const C
 
   double width = edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e);
 
-  if (width < 1e-6)
-    width=1e-6;
-
   triangle->setFillColor(glyphColor);
   triangle->setOutlineSize(width);
   triangle->setOutlineColor(borderColor);
