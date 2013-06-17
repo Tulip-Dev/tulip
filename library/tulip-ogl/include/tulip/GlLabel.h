@@ -451,6 +451,7 @@ private :
 
   Camera oldCamera;
   float oldLod;
+  Vec4i oldViewport;
 
   std::vector<std::string> textVector;
   std::vector<float> textWidthVector;
