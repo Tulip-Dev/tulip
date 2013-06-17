@@ -259,7 +259,8 @@ void GlLabel::draw(float, Camera *camera) {
   else {
     computeLOD=camera->getEyes()!=oldCamera.getEyes() ||
                camera->getCenter()!=oldCamera.getCenter() ||
-               camera->getZoomFactor()!=oldCamera.getZoomFactor();
+               camera->getZoomFactor()!=oldCamera.getZoomFactor() ||
+               camera->getViewport() != oldViewport;
   }
 
   float lod=oldLod;
@@ -270,6 +271,7 @@ void GlLabel::draw(float, Camera *camera) {
     lod=(camera->worldTo2DScreen(test)-camera->worldTo2DScreen(Coord(0,0,0))).norm();
     oldLod=lod;
     oldCamera=*camera;
+    oldViewport = camera->getViewport();
   }
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
