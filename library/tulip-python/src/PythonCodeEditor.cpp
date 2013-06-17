@@ -121,7 +121,7 @@ void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
     insertSelectedItem();
   }
   else {
-    QCoreApplication::sendEvent(parent(), e);
+    QCoreApplication::sendEvent(_codeEditor, e);
   }
 }
 
@@ -516,6 +516,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), _h
 PythonCodeEditor::~PythonCodeEditor() {
   delete _autoCompletionDb;
   removeEventFilter(_autoCompletionList);
+  delete _autoCompletionList;
 }
 
 QString PythonCodeEditor::getCleanCode() const {
@@ -1251,7 +1252,6 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
   // string litteral edition : don't show autocompletion list
   if (dotContext && (textBeforeCursorTrimmed.count("\"")%2==1 || textBeforeCursorTrimmed.count("\'")%2==1))
     return;
-
 
   QSet<QString> stringList = _autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName(), dotContext);
 
