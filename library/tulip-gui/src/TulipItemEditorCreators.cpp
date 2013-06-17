@@ -400,6 +400,31 @@ QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor());
 }
 
+class QImageIconPool {
+
+public:
+
+    const QIcon &getIconForImageFile(const QString &file) {
+        if (iconPool.contains(file)) {
+            return iconPool[file];
+        } else{
+            QImage imageFile(file);
+            if (!imageFile.isNull()) {
+                iconPool[file] = QPixmap::fromImage(imageFile.scaled(32,32));
+                return iconPool[file];
+            }
+        }
+        return nullIcon;
+    }
+
+private:
+
+    QMap<QString, QIcon> iconPool;
+    QIcon nullIcon;
+};
+
+static QImageIconPool imageIconPool;
+
 bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
   TulipItemEditorCreator::paint(painter,option,v);
   QRect rect = option.rect;
@@ -408,7 +433,12 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOpti
   QIcon icon;
   QString text;
 
-  if (fileInfo.isFile()) {
+  const QIcon &imageIcon = imageIconPool.getIconForImageFile(fileInfo.absoluteFilePath());
+
+  if (!imageIcon.isNull()) {
+    icon = imageIcon;
+    text = fileInfo.fileName();
+  } else if (fileInfo.isFile()) {
     icon = QApplication::style()->standardIcon(QStyle::SP_FileIcon);
     text = fileInfo.fileName();
   }
@@ -441,9 +471,18 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOpti
 QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
   TulipFileDescriptor fileDesc = data.value<TulipFileDescriptor>();
-  int pixmapWidth = option.rect.height()-4;
+  QFileInfo fileInfo(fileDesc.absolutePath);
+  QString text;
+  if (fileInfo.isDir()) {
+    QDir d1 = fileInfo.dir();
+    d1.cdUp();
+    text = fileInfo.absoluteFilePath().remove(0,d1.absolutePath().length()-1);
+  } else {
+    text = fileInfo.fileName();
+  }
+  const int pixmapWidth = 32;
   QFontMetrics fontMetrics(option.font);
-  return QSize(pixmapWidth+fontMetrics.boundingRect(fileDesc.absolutePath).width(), option.rect.height());
+  return QSize(pixmapWidth+fontMetrics.boundingRect(text).width(), pixmapWidth);
 }
 
 QWidget* NodeShapeEditorCreator::createWidget(QWidget*parent) const {
