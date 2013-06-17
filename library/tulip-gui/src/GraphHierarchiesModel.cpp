@@ -144,7 +144,7 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
                     borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
                     labelColor = "viewLabelColor", labelBorderColor = "viewLabelBorderColor", labelBorderWidth = "viewLabelBorderWidth", labelPosition = "viewLabelPosition", label="viewLabel", rotation = "viewRotation", labelRotation = "viewLabelRotation",
-                    srcAnchorSize = "viewSrcAnchorSize", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
+                    srcAnchorSize = "viewSrcAnchorSize", selection = "viewSelection", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
 
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
@@ -242,6 +242,11 @@ void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
   if (!g->existProperty(label)) {
     g->getProperty<StringProperty>(label)->setAllNodeValue("");
     g->getProperty<StringProperty>(label)->setAllEdgeValue("");
+  }
+
+  if (!g->existProperty(selection)) {
+    g->getProperty<BooleanProperty>(selection)->setAllNodeValue(false);
+    g->getProperty<BooleanProperty>(selection)->setAllEdgeValue(false);
   }
 
 }
