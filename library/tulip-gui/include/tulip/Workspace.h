@@ -98,6 +98,7 @@ public slots:
   void closeAll();
   void setActivePanel(tlp::View*);
   void setModel(tlp::GraphHierarchiesModel*);
+  tlp::GraphHierarchiesModel* graphModel() const;
 
   void writeProject(tlp::TulipProject*,QMap<tlp::Graph*,QString>, tlp::PluginProgress*);
   void readProject(tlp::TulipProject*,QMap<QString,tlp::Graph*>,tlp::PluginProgress*);
@@ -128,6 +129,7 @@ protected slots:
   void updateStartupMode();
 
 protected:
+
   virtual void dragEnterEvent(QDragEnterEvent* event);
   virtual void dropEvent(QDropEvent* event);
 
