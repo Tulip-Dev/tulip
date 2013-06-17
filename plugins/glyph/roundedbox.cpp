@@ -270,7 +270,10 @@ GlPolygon *RoundedBox::createRoundedRect(const Size &size) {
   fillColors.push_back(Color(255,255,255));
   outlineColors.push_back(Color(0,0,0));
 
-  return new GlPolygon(boxPoints, fillColors, outlineColors, true, true);
+  GlPolygon *ret = new GlPolygon(boxPoints, fillColors, outlineColors, true, true);
+  ret->setInvertYTexture(false);
+
+  return ret;
 }
 
 const float squareVerticesData[56] = {
@@ -315,14 +318,13 @@ void RoundedBox::draw(node n, float lod) {
     roundedBoxOutlineShader->printInfoLog();
   }
 
-
   const Size &size = glGraphInputData->getElementSize()->getNodeValue(n);
 
   float outlineWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
 
   const string &texture = glGraphInputData->getElementTexture()->getNodeValue(n);
 
-  if (roundedBoxShader == NULL || !roundedBoxShader->isLinked() || !roundedBoxOutlineShader->isLinked() || (GlShaderProgram::getCurrentActiveShader() && GlShaderProgram::getCurrentActiveShader()->getName() == "fisheye")) {
+  if (roundedBoxShader == NULL || !roundedBoxShader->isLinked() || !roundedBoxOutlineShader->isLinked() || GlShaderProgram::getCurrentActiveShader()) {
     if (roundedSquare == NULL)
       initRoundedSquare();
 
