@@ -118,19 +118,21 @@ void QuickAccessBar::setGlMainView(GlMainView* v) {
 
 void QuickAccessBar::reset() {
   _resetting = true;
+  if (tlp::Perspective::instance()) {
+      _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+      _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+      _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+      _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+      _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+      _ui->labelColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+  }
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
-  _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-  _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-  _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-  _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-  _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
   _ui->colorInterpolationToggle->setIcon((renderingParameters()->isEdgeColorInterpolate() ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
   _ui->sizeInterpolationToggle->setChecked(renderingParameters()->isEdgeSizeInterpolate());
   _ui->sizeInterpolationToggle->setIcon((renderingParameters()->isEdgeSizeInterpolate() ? QIcon(":/tulip/gui/icons/20/size_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/size_interpolation_disabled.png")));
   _ui->showEdgesToggle->setChecked(renderingParameters()->isDisplayEdges());
   _ui->showEdgesToggle->setIcon((renderingParameters()->isDisplayEdges() ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
-  _ui->labelColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
   _ui->showLabelsToggle->setIcon((renderingParameters()->isViewNodeLabel() ? QIcon(":/tulip/gui/icons/20/labels_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
   _ui->labelsScaledToggle->setChecked(renderingParameters()->isLabelScaled());
