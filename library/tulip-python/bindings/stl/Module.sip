@@ -24,8 +24,6 @@
 
 extern void printErrorMessage(const std::string &errMsg);
 
-extern const sipTypeDef *getSipType(const char *sipTypename);
-
 #if PY_MAJOR_VERSION >= 3
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
 #endif
@@ -41,14 +39,6 @@ void printErrorMessage(const std::string &errMsg) {
     PyRun_SimpleString(pythonCode.c_str());
 }
 
-const sipTypeDef *getSipType(const char *sipTypename) {
-    if (sipResolveTypedef(sipTypename)) {
-         return sipFindType(sipResolveTypedef(sipTypename));
-    } else {
-         return sipFindType(sipTypename);
-    }
-}
-
 #if PY_MAJOR_VERSION >= 3
 std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
     PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
@@ -59,6 +49,9 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
 #endif
 %End
 
+%ExportedHeaderCode
+#define getSipType(sipTypename) (sipResolveTypedef(sipTypename) ? sipFindType(sipResolveTypedef(sipTypename)) : sipFindType(sipTypename))
+%End
 
 %Include list.sip
 %Include pair.sip
