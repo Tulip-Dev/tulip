@@ -68,7 +68,6 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
           this,SLOT(displayedPropertiesInserted(const QModelIndex&, int, int)));
   _ui->tableView->setModel(model);
   connect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(checkStateChanged(QModelIndex,Qt::CheckState)));
-  connect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(emitResizeTableRows()));
   _ui->tableView->resizeColumnsToContents();
   _ui->tableView->sortByColumn(0,Qt::AscendingOrder);
 }
@@ -179,7 +178,6 @@ void PropertiesEditor::setPropsVisibility(int state) {
     return;
 
   _ui->propsVisibilityCheck->setTristate(false);
-  disconnect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(emitResizeTableRows()));
 
   if (state == Qt::Checked) {
     // reset property name filter
@@ -191,9 +189,6 @@ void PropertiesEditor::setPropsVisibility(int state) {
   for(int i=0; i<_sourceModel->rowCount(); ++i)
     _sourceModel->setData(_sourceModel->index(i,0), state,
                           Qt::CheckStateRole);
-
-  connect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(emitResizeTableRows()));
-  emitResizeTableRows();
 }
 
 void PropertiesEditor::setPropsNotVisibleExcept() {
@@ -203,7 +198,6 @@ void PropertiesEditor::setPropsNotVisibleExcept() {
 
   _ui->propsVisibilityCheck->setTristate(true);
   _ui->propsVisibilityCheck->setCheckState(Qt::PartiallyChecked);
-  emitResizeTableRows();
 }
 
 void PropertiesEditor::showVisualProperties(bool f) {
@@ -352,15 +346,9 @@ QSet<PropertyInterface *> PropertiesEditor::visibleProperties() const {
 }
 
 void PropertiesEditor::setPropertyChecked(int index, bool state) {
-  disconnect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(emitResizeTableRows()));
   _sourceModel->setData(_sourceModel->index(index,0),state ? Qt::Checked : Qt::Unchecked,Qt::CheckStateRole);
-  connect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(emitResizeTableRows()));
 }
 
 PropertyInterface *PropertiesEditor::contextProperty() const {
   return _contextProperty;
-}
-
-void PropertiesEditor::emitResizeTableRows() {
-  emit resizeTableRows();
 }

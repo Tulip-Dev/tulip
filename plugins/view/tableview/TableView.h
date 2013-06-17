@@ -62,7 +62,6 @@ public slots:
   void filterChanged();
   tlp::BooleanProperty* getFilteringProperty() const;
   bool hasEffectiveFiltering();
-  void resizeTableRows();
 
 protected:
   void graphChanged(tlp::Graph *);

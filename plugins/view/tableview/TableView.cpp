@@ -123,8 +123,6 @@ void TableView::setupWidget() {
   setCentralWidget(centralWidget);
   connect(propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
   connect(propertiesEditor,SIGNAL(mapToGraphSelection()),this,SLOT(mapToGraphSelection()));
-  connect(propertiesEditor,SIGNAL(resizeTableRows()), this, SLOT(resizeTableRows()));
-  connect(_ui->table,SIGNAL(resizeTableRows()), this, SLOT(resizeTableRows()));
 
   _ui->table->setItemDelegate(new GraphTableItemDelegate(_ui->table));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -158,8 +156,6 @@ void TableView::graphChanged(tlp::Graph* g) {
     visibleProperties.insert(QString::fromUtf8(pi->getName().c_str()));
   }
 
-  _ui->table->setSendSignalOnResize(false);
-
   GraphPropertiesModel<BooleanProperty>* model = new GraphPropertiesModel<BooleanProperty>(trUtf8("no selection"),g,false,_ui->filteringPropertyCombo);
   _ui->filteringPropertyCombo->setModel(model);
   _ui->filteringPropertyCombo->setCurrentIndex(0);
@@ -183,8 +179,6 @@ void TableView::graphChanged(tlp::Graph* g) {
   }
 
   isNewGraph = false;
-
-  _ui->table->setSendSignalOnResize(true);
 }
 
 void TableView::graphDeleted(Graph*) {
@@ -226,10 +220,6 @@ void TableView::readSettings() {
 
     if (!visibleProperties.contains(pi))
       _ui->table->setColumnHidden(i, true);
-  }
-
-  if (!isNewGraph) {
-    resizeTableRows();
   }
 
 }
@@ -635,33 +625,5 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
     return;
   }
 }
-
-void TableView::resizeTableRows() {
-
-  if (!_ui->table->model())
-    return;
-
-  int top = qMax(0, _ui->table->verticalHeader()->visualIndexAt(0));
-  int bottom = _ui->table->verticalHeader()->visualIndexAt(_ui->table->viewport()->height());
-
-  if (bottom != -1) {
-    if ((bottom+10) >= _ui->table->model()->rowCount())
-      bottom = _ui->table->model()->rowCount() - 1;
-    else
-      bottom += 10;
-  }
-
-  int left = qMax(0, _ui->table->horizontalHeader()->visualIndexAt(0));
-  int right = _ui->table->horizontalHeader()->visualIndexAt(_ui->table->viewport()->width());
-
-
-  for (int i = top ; i <= bottom ; ++i)
-    _ui->table->resizeRowToContents(i);
-
-  for (int i = left ; i <= right ; ++i)
-    _ui->table->resizeColumnToContents(i);
-
-}
-
 
 PLUGIN(TableView)
