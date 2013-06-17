@@ -62,6 +62,18 @@ void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
 }
 
 void initializeGraphViewProperties(tlp::Graph *graph) {
+    if (!graph->existProperty("viewLayout")) {
+        graph->getProperty<tlp::LayoutProperty>("viewLayout")->setAllNodeValue(tlp::Coord(0,0,0));
+        graph->getProperty<tlp::LayoutProperty>("viewLayout")->setAllEdgeValue(std::vector<tlp::Coord>());
+    }
+    if (!graph->existProperty("viewMetric")) {
+        graph->getProperty<tlp::DoubleProperty>("viewMetric")->setAllNodeValue(0.0);
+        graph->getProperty<tlp::DoubleProperty>("viewMetric")->setAllEdgeValue(0.0);
+    }
+    if (!graph->existProperty("viewSelection")) {
+        graph->getProperty<tlp::BooleanProperty>("viewSelection")->setAllNodeValue(false);
+        graph->getProperty<tlp::BooleanProperty>("viewSelection")->setAllEdgeValue(false);
+    }
     if (!graph->existProperty("viewSize")) {
         graph->getProperty<tlp::SizeProperty>("viewSize")->setAllNodeValue(tlp::Size(1,1,1));
         graph->getProperty<tlp::SizeProperty>("viewSize")->setAllEdgeValue(tlp::Size(0.125,0.125,0.5));
@@ -69,6 +81,26 @@ void initializeGraphViewProperties(tlp::Graph *graph) {
     if (!graph->existProperty("viewColor")) {
         graph->getProperty<tlp::ColorProperty>("viewColor")->setAllNodeValue(tlp::Color(255,0,0));
         graph->getProperty<tlp::ColorProperty>("viewColor")->setAllEdgeValue(tlp::Color(0,0,0));
+    }
+    if (!graph->existProperty("viewBorderColor")) {
+        graph->getProperty<tlp::ColorProperty>("viewBorderColor")->setAllNodeValue(tlp::Color(255,0,0));
+        graph->getProperty<tlp::ColorProperty>("viewBorderColor")->setAllEdgeValue(tlp::Color(0,0,0));
+    }
+    if (!graph->existProperty("viewLabelColor")) {
+        graph->getProperty<tlp::ColorProperty>("viewLabelColor")->setAllNodeValue(tlp::Color(0,0,0));
+        graph->getProperty<tlp::ColorProperty>("viewLabelColor")->setAllEdgeValue(tlp::Color(0,0,0));
+    }
+    if (!graph->existProperty("viewLabelBorderColor")) {
+        graph->getProperty<tlp::ColorProperty>("viewLabelBorderColor")->setAllNodeValue(tlp::Color(0,0,0));
+        graph->getProperty<tlp::ColorProperty>("viewLabelBorderColor")->setAllEdgeValue(tlp::Color(0,0,0));
+    }
+    if (!graph->existProperty("viewBorderWidth")) {
+        graph->getProperty<tlp::DoubleProperty>("viewBorderWidth")->setAllNodeValue(0.0);
+        graph->getProperty<tlp::DoubleProperty>("viewBorderWidth")->setAllEdgeValue(0.0);
+    }
+    if (!graph->existProperty("viewLabelBorderWidth")) {
+        graph->getProperty<tlp::DoubleProperty>("viewLabelBorderWidth")->setAllNodeValue(1.0);
+        graph->getProperty<tlp::DoubleProperty>("viewLabelBorderWidth")->setAllEdgeValue(1.0);
     }
     if (!graph->existProperty("viewShape")) {
         graph->getProperty<tlp::IntegerProperty>("viewShape")->setAllNodeValue(4);
@@ -97,6 +129,10 @@ void initializeGraphViewProperties(tlp::Graph *graph) {
     }
     if (!graph->existProperty("viewTgtAnchorSize")) {
         graph->getProperty<tlp::SizeProperty>("viewTgtAnchorSize")->setAllEdgeValue(tlp::Size(0.25,0.25,0.25));
+    }
+    if (!graph->existProperty("viewTexture")) {
+        graph->getProperty<tlp::StringProperty>("viewTexture")->setAllNodeValue("");
+        graph->getProperty<tlp::StringProperty>("viewTexture")->setAllEdgeValue("");
     }
 }
 %End
