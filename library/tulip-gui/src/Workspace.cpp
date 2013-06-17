@@ -97,6 +97,10 @@ void Workspace::setModel(tlp::GraphHierarchiesModel* model) {
   }
 }
 
+tlp::GraphHierarchiesModel* Workspace::graphModel() const {
+  return _model;
+}
+
 void Workspace::closeAll() {
   foreach(WorkspacePanel* p, _panels) {
     delete p; //beware: the destroyed signal is connected to panelDestroyed
