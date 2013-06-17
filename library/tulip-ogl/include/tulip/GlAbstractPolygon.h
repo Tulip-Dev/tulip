@@ -169,6 +169,11 @@ public:
   void setHideOutlineLod(float lod);
 
   /**
+   * Sets if the y texture coordinates have to be inversed
+   */
+  void setInvertYTexture(bool invertYTexture);
+
+  /**
    * Draw the polygon
    */
   virtual void draw(float lod,Camera *camera);
