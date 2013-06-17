@@ -404,23 +404,26 @@ class QImageIconPool {
 
 public:
 
-    const QIcon &getIconForImageFile(const QString &file) {
-        if (iconPool.contains(file)) {
-            return iconPool[file];
-        } else{
-            QImage imageFile(file);
-            if (!imageFile.isNull()) {
-                iconPool[file] = QPixmap::fromImage(imageFile.scaled(32,32));
-                return iconPool[file];
-            }
-        }
-        return nullIcon;
+  const QIcon &getIconForImageFile(const QString &file) {
+    if (iconPool.contains(file)) {
+      return iconPool[file];
     }
+    else {
+      QImage imageFile(file);
+
+      if (!imageFile.isNull()) {
+        iconPool[file] = QPixmap::fromImage(imageFile.scaled(32,32));
+        return iconPool[file];
+      }
+    }
+
+    return nullIcon;
+  }
 
 private:
 
-    QMap<QString, QIcon> iconPool;
-    QIcon nullIcon;
+  QMap<QString, QIcon> iconPool;
+  QIcon nullIcon;
 };
 
 static QImageIconPool imageIconPool;
@@ -438,7 +441,8 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOpti
   if (!imageIcon.isNull()) {
     icon = imageIcon;
     text = fileInfo.fileName();
-  } else if (fileInfo.isFile()) {
+  }
+  else if (fileInfo.isFile()) {
     icon = QApplication::style()->standardIcon(QStyle::SP_FileIcon);
     text = fileInfo.fileName();
   }
@@ -473,13 +477,16 @@ QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &opt
   TulipFileDescriptor fileDesc = data.value<TulipFileDescriptor>();
   QFileInfo fileInfo(fileDesc.absolutePath);
   QString text;
+
   if (fileInfo.isDir()) {
     QDir d1 = fileInfo.dir();
     d1.cdUp();
     text = fileInfo.absoluteFilePath().remove(0,d1.absolutePath().length()-1);
-  } else {
+  }
+  else {
     text = fileInfo.fileName();
   }
+
   const int pixmapWidth = 32;
   QFontMetrics fontMetrics(option.font);
   return QSize(pixmapWidth+fontMetrics.boundingRect(text).width(), pixmapWidth);

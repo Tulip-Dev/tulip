@@ -404,6 +404,7 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   if (PyInt_CheckExact(pyObj) || PyLong_Check(pyObj)) {
     long val = getCppObjectFromPyObject<long>(pyObj);
+
     if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
       valSetter.setValue(static_cast<int>(val));
     }
@@ -433,6 +434,7 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   if (PyLong_Check(pyObj)) {
     long val = getCppObjectFromPyObject<long>(pyObj);
+
     if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
       valSetter.setValue(static_cast<int>(val));
     }

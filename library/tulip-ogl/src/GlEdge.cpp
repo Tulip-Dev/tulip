@@ -894,25 +894,26 @@ void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data,
     // edge extremity glyph is in the viewport
     if (lod > 0) {
 
-        Color borderColor = data->parameters->isEdgeColorInterpolate() ? color : data->getElementBorderColor()->getEdgeValue(e);
+      Color borderColor = data->parameters->isEdgeColorInterpolate() ? color : data->getElementBorderColor()->getEdgeValue(e);
 
-        if (data->getGlGlyphRenderer()->renderingHasStarted()) {
-            data->getGlGlyphRenderer()->addEdgeExtremityGlyphRendering(extremityGlyph, e, source, color, borderColor, 100., beginTmpAnchor, srcAnchor, size, selected);
-        }  else {
-            MatrixGL srcTransformationMatrix;
-            MatrixGL srcScalingMatrix;
+      if (data->getGlGlyphRenderer()->renderingHasStarted()) {
+        data->getGlGlyphRenderer()->addEdgeExtremityGlyphRendering(extremityGlyph, e, source, color, borderColor, 100., beginTmpAnchor, srcAnchor, size, selected);
+      }
+      else {
+        MatrixGL srcTransformationMatrix;
+        MatrixGL srcScalingMatrix;
 
-            extremityGlyph->get2DTransformationMatrix(beginTmpAnchor, srcAnchor, size,
-                srcTransformationMatrix, srcScalingMatrix);
+        extremityGlyph->get2DTransformationMatrix(beginTmpAnchor, srcAnchor, size,
+            srcTransformationMatrix, srcScalingMatrix);
 
-            glPushMatrix();
-            glMultMatrixf((GLfloat *) &srcTransformationMatrix);
-            glMultMatrixf((GLfloat *) &srcScalingMatrix);
-            glDisable(GL_CULL_FACE);
-            extremityGlyph->draw(e, source, color, borderColor, 100.);
-            glEnable(GL_CULL_FACE);
-            glPopMatrix();
-        }
+        glPushMatrix();
+        glMultMatrixf((GLfloat *) &srcTransformationMatrix);
+        glMultMatrixf((GLfloat *) &srcScalingMatrix);
+        glDisable(GL_CULL_FACE);
+        extremityGlyph->draw(e, source, color, borderColor, 100.);
+        glEnable(GL_CULL_FACE);
+        glPopMatrix();
+      }
     }
   }
 
