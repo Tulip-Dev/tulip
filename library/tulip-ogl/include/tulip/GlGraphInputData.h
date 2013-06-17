@@ -40,6 +40,7 @@ class EdgeExtremityGlyph;
 class GlVertexArrayManager;
 class GlMetaNodeRenderer;
 class GlGraphRenderingParameters;
+class GlGlyphRenderer;
 
 /**
  * Class use to store inputData of the graph
@@ -117,6 +118,10 @@ public:
    */
   GlVertexArrayManager *getGlVertexArrayManager() const {
     return _glVertexArrayManager;
+  }
+
+  GlGlyphRenderer *getGlGlyphRenderer() const {
+    return _glGlyphRenderer;
   }
 
   /**
@@ -475,6 +480,7 @@ protected:
   bool _deleteMetaNodeRendererAtDestructor;
   GlMetaNodeRenderer *_metaNodeRenderer;
   GlVertexArrayManager *_glVertexArrayManager;
+  GlGlyphRenderer *_glGlyphRenderer;
 
 
 };

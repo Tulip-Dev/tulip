@@ -33,6 +33,7 @@
 #include <tulip/Camera.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlGlyphRenderer.h>
 
 using namespace std;
 
@@ -177,6 +178,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     if(!selectionDrawActivate) {
       //inputData->getGlVertexArrayManager()->activate(true);
       inputData->getGlVertexArrayManager()->beginRendering();
+      inputData->getGlGlyphRenderer()->startRendering();
     }
     else {
       inputData->getGlVertexArrayManager()->activate(false);
@@ -417,8 +419,10 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   }
 
   if(!selectionDrawActivate) {
-    if(vertexArrayManagerActivated)
+    if(vertexArrayManagerActivated) {
       inputData->getGlVertexArrayManager()->endRendering();
+      inputData->getGlGlyphRenderer()->endRendering();
+    }
   }
   else {
     selectionDrawActivate=false;

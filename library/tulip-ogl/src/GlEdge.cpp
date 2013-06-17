@@ -48,6 +48,7 @@
 #include <tulip/GlGraphInputData.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
+#include <tulip/GlGlyphRenderer.h>
 
 
 tlp::GlLabel* tlp::GlEdge::label=0;
@@ -892,20 +893,26 @@ void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data,
 
     // edge extremity glyph is in the viewport
     if (lod > 0) {
-      MatrixGL srcTransformationMatrix;
-      MatrixGL srcScalingMatrix;
 
-      extremityGlyph->get2DTransformationMatrix(beginTmpAnchor, srcAnchor, size,
-          srcTransformationMatrix, srcScalingMatrix);
+        Color borderColor = data->parameters->isEdgeColorInterpolate() ? color : data->getElementBorderColor()->getEdgeValue(e);
 
+        if (data->getGlGlyphRenderer()->renderingHasStarted()) {
+            data->getGlGlyphRenderer()->addEdgeExtremityGlyphRendering(extremityGlyph, e, source, color, borderColor, 100., beginTmpAnchor, srcAnchor, size, selected);
+        }  else {
+            MatrixGL srcTransformationMatrix;
+            MatrixGL srcScalingMatrix;
 
-      glPushMatrix();
-      glMultMatrixf((GLfloat *) &srcTransformationMatrix);
-      glMultMatrixf((GLfloat *) &srcScalingMatrix);
-      glDisable(GL_CULL_FACE);
-      extremityGlyph->draw(e, source, color,(data->parameters->isEdgeColorInterpolate() ? color : data->getElementBorderColor()->getEdgeValue(e)), 100.);
-      glEnable(GL_CULL_FACE);
-      glPopMatrix();
+            extremityGlyph->get2DTransformationMatrix(beginTmpAnchor, srcAnchor, size,
+                srcTransformationMatrix, srcScalingMatrix);
+
+            glPushMatrix();
+            glMultMatrixf((GLfloat *) &srcTransformationMatrix);
+            glMultMatrixf((GLfloat *) &srcScalingMatrix);
+            glDisable(GL_CULL_FACE);
+            extremityGlyph->draw(e, source, color, borderColor, 100.);
+            glEnable(GL_CULL_FACE);
+            glPopMatrix();
+        }
     }
   }
 

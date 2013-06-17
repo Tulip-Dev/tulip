@@ -39,6 +39,7 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlLabel.h>
 #include <tulip/GlBox.h>
+#include <tulip/GlGlyphRenderer.h>
 
 //====================================================
 tlp::GlLabel* tlp::GlNode::label=NULL;
@@ -118,7 +119,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
   const Coord &nodeCoord = data->getElementLayout()->getNodeValue(n);
 
-  const Size &nodeSize = data->getElementSize()->getNodeValue(n);
+  Size nodeSize = data->getElementSize()->getNodeValue(n);
 
   const Color& fillColor = colP->getNodeValue(n);
 
@@ -181,29 +182,38 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
   if (!data->parameters->isDisplayNodes())
     return;
 
-  //draw a glyph or make recursive call for meta nodes
-  glPushMatrix();
-  glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
-  glRotatef(data->getElementRotation()->getNodeValue(n), 0., 0., 1.);
+  float rot = data->getElementRotation()->getNodeValue(n);
 
   // If node size in z is equal to 0 we have to scale with FLT_EPSILON to preserve normal
   // (because if we do a scale of (x,y,0) and if we have a normal like (0,0,1) the new normal after scale will be (0,0,0) and we will have light problem)
   if(nodeSize[2]==0)
-    glScalef(nodeSize[0], nodeSize[1],FLT_EPSILON);
-  else
+    nodeSize[2] = FLT_EPSILON;
+
+  if (data->getGlGlyphRenderer()->renderingHasStarted()) {
+    data->getGlGlyphRenderer()->addNodeGlyphRendering(data->glyphs.get(data->getElementShape()->getNodeValue(n)),
+                                                      n, lod, nodeCoord, nodeSize, rot, selected);
+  } else {
+
+    //draw a glyph or make recursive call for meta nodes
+    glPushMatrix();
+    glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
+    glRotatef(rot, 0., 0., 1.);
+
     glScalef(nodeSize[0], nodeSize[1],nodeSize[2]);
 
-  if (selected) {
-    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-    selectionBox->setStencil(data->parameters->getSelectedNodesStencil()-1);
-    selectionBox->setOutlineColor(colorSelect2);
-    selectionBox->draw(10,NULL);
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+    if (selected) {
+      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+      selectionBox->setStencil(data->parameters->getSelectedNodesStencil()-1);
+      selectionBox->setOutlineColor(colorSelect2);
+      selectionBox->draw(10,NULL);
+      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+    }
+
+    data->glyphs.get(data->getElementShape()->getNodeValue(n))->draw(n,lod);
+
+    glPopMatrix();
+
   }
-
-  data->glyphs.get(data->getElementShape()->getNodeValue(n))->draw(n,lod);
-
-  glPopMatrix();
 
   if (selected) {
     glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);

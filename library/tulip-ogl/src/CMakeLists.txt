@@ -27,6 +27,7 @@ SET(tulip-ogl_LIB_SRCS
   GlEdge.cpp
   GlEPSFeedBackBuilder.cpp
   GlFeedBackRecorder.cpp
+  GlGlyphRenderer.cpp
   GlGraphComposite.cpp
   GlGraphRenderer.cpp
   GlGraphHighDetailsRenderer.cpp
