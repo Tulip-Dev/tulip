@@ -101,6 +101,11 @@ public:
   void getEdgeSize(const GlGraphInputData *data,edge e,const Size &srcSize, const Size &tgtSize,const float maxSrcSize,const float maxTgtSize,Size &edgeSize);
 
   /**
+   * Compute edge anchor
+   */
+  void getEdgeAnchor(const GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
+
+  /**
    * This function must be called before each graph rendering
    * This function clears previously compute edgeWidthLod
    */
@@ -143,11 +148,6 @@ private :
    * This lod is used to know if the edge is render in polygon mode or line mode
    */
   float getEdgeWidthLod(const Coord &edgeCoord,const Size &edgeSize,Camera *camera);
-
-  /**
-   * Compute edge anchor
-   */
-  void getEdgeAnchor(const GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
 
   /**
    * Thgis function is used to render edge arrows
