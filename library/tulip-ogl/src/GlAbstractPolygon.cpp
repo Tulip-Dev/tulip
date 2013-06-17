@@ -143,6 +143,10 @@ void GlAbstractPolygon::setHideOutlineLod(float lod) {
   hideOutlineLod=lod;
 }
 //=====================================================
+void GlAbstractPolygon::setInvertYTexture(bool invertYTexture) {
+  this->invertYTexture = invertYTexture;
+}
+//=====================================================
 void GlAbstractPolygon::draw(float lod,Camera *) {
 
   bool canUseVBO=OpenGlConfigManager::getInst().hasVertexBufferObject();
