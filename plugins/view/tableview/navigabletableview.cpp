@@ -91,8 +91,8 @@ int NavigableTableView::sizeHintForColumn(int col) const {
 }
 
 void NavigableTableView::paintEvent(QPaintEvent * event) {
-    resizeTableRows();
-    QTableView::paintEvent(event);
+  resizeTableRows();
+  QTableView::paintEvent(event);
 }
 
 void NavigableTableView::resizeTableRows() {

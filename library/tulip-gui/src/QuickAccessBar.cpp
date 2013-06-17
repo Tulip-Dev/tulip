@@ -118,14 +118,16 @@ void QuickAccessBar::setGlMainView(GlMainView* v) {
 
 void QuickAccessBar::reset() {
   _resetting = true;
+
   if (tlp::Perspective::instance()) {
-      _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-      _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-      _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-      _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-      _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-      _ui->labelColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+    _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+    _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+    _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+    _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+    _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
+    _ui->labelColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
   }
+
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
   _ui->colorInterpolationToggle->setIcon((renderingParameters()->isEdgeColorInterpolate() ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));

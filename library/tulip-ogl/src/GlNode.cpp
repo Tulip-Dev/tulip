@@ -191,8 +191,9 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
   if (data->getGlGlyphRenderer()->renderingHasStarted()) {
     data->getGlGlyphRenderer()->addNodeGlyphRendering(data->glyphs.get(data->getElementShape()->getNodeValue(n)),
-                                                      n, lod, nodeCoord, nodeSize, rot, selected);
-  } else {
+        n, lod, nodeCoord, nodeSize, rot, selected);
+  }
+  else {
 
     //draw a glyph or make recursive call for meta nodes
     glPushMatrix();
