@@ -653,6 +653,9 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
   node src = ends.first;
   node tgt = ends.second;
 
+  const Coord &srcCoord = layoutProperty->getNodeValue(src);
+  const Coord &tgtCoord = layoutProperty->getNodeValue(tgt);
+
   const Size &srcSize = sizeProperty->getNodeValue(src);
   const Size &tgtSize = sizeProperty->getNodeValue(tgt);
 
@@ -756,6 +759,13 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
       edgeToLineIndexVector[gledge->id]=make_pair(-1,linesIndexCountArray.size()-1);
       edgeToQuadIndexVector[gledge->id] = make_pair(-1,quadsIndexCountArray.size()-1);
     }
+
+    const vector<Coord> &bends = layoutProperty->getEdgeValue(e);
+    Coord srcAnchor, tgtAnchor;
+    gledge->getEdgeAnchor(inputData,src,tgt,bends,srcCoord,tgtCoord,srcSize,tgtSize,srcAnchor,tgtAnchor);
+    linesCoordsArray[lastIndex] = srcAnchor;
+    linesCoordsArray[lastIndex+numberOfVertices-1] = tgtAnchor;
+
   }
   else {
     size_t lastIndex=linesColorsArray.size();
