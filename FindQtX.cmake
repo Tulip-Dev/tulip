@@ -32,6 +32,7 @@ IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
         GET_TARGET_PROPERTY(QtCore_location Qt5::Core LOCATION)
         GET_FILENAME_COMPONENT(QT_BINARY_DIR ${QtCore_location} PATH)
         SET(QT_BINARY_DIR ${QT_BINARY_DIR}/../bin)
+        SET(QT_PLUGINS_DIR ${QT_BINARY_DIR}/../plugins)
     ENDIF(WIN32)
 
     INCLUDE_DIRECTORIES(${Qt5Widgets_INCLUDE_DIRS})
