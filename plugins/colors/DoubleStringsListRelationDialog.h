@@ -24,28 +24,28 @@
 
 #include <tulip/Color.h>
 
-#include "ui_DoubleStringsListRelationDialog.h"
+namespace Ui {
+ class DoubleStringsListRelationDialogData;
+}
 
 namespace tlp {
 
-class DoubleStringsListRelationDialog : public QDialog, public Ui::DoubleStringsListRelationDialogData {
+class DoubleStringsListRelationDialog : public QDialog {
 
   Q_OBJECT
+
+  Ui::DoubleStringsListRelationDialogData* _ui;
 
 public :
 
   DoubleStringsListRelationDialog(const std::vector<std::string> &firstValues,const std::vector<Color> &secondValues,QWidget *parent = 0);
+  ~DoubleStringsListRelationDialog();
   void getResult(std::vector<std::pair<std::string,Color> > &result);
 
-
 private slots:
-
   void upButtonClicked();
   void downButtonClicked();
   void scrollBarValueChanged(int value);
-
-private :
-
 };
 
 }

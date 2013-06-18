@@ -18,21 +18,31 @@
  */
 #ifndef CONVOLUTIONCLUSTERINGSETUP_H
 #define CONVOLUTIONCLUSTERINGSETUP_H
-#include "ui_ConvolutionClusteringSetup.h"
-#include "ConvolutionClustering.h"
 
-class ConvolutionClusteringSetup
-    : public QDialog, public Ui::ConvolutionClusteringSetupData {
+#include <QDialog>
+
+namespace Ui {
+ class ConvolutionClusteringSetupData;
+}
+
+class QWidget;
+
+namespace tlp {
+
+class ConvolutionClustering;
+
+class ConvolutionClusteringSetup : public QDialog {
   Q_OBJECT
 
+  Ui::ConvolutionClusteringSetupData* _ui;
 public:
   ConvolutionClusteringSetup(ConvolutionClustering *convolPlugin,QWidget* parent = NULL);
   ~ConvolutionClusteringSetup();
 
-  ConvolutionClustering *getPlugin() {
+  inline ConvolutionClustering *getPlugin() const {
     return convolPlugin;
   }
-  bool getLogarithmicScale() {
+  inline bool getLogarithmicScale() const {
     return useLogarithmicScale;
   }
   void abort() {
@@ -47,5 +57,5 @@ private:
   ConvolutionClustering *convolPlugin;
   bool useLogarithmicScale;
 };
-
+}
 #endif // CONVOLUTIONCLUSTERINGSETUP_H

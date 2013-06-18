@@ -60,7 +60,7 @@ GlNode::GlNode(unsigned int id):id(id) {
 }
 
 BoundingBox GlNode::getBoundingBox(const GlGraphInputData* data) {
-  node n=node(id);
+  node n(id);
   int nodeRot = data->getElementRotation()->getNodeValue(n);
   const Size& nodeSize = data->getElementSize()->getNodeValue(n);
   const Coord& nodeCoord = data->getElementLayout()->getNodeValue(n);

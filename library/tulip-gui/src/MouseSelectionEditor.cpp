@@ -168,9 +168,10 @@ void MouseSelectionEditor::getOperation(GlEntity *select) {
 }
 //========================================================================================
 bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
-  if (e->type() == QEvent::MouseButtonPress) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+    if (e->type() == QEvent::MouseButtonPress) {
+
     initProxies(glMainWidget);
     computeFFD(glMainWidget);
 
@@ -184,8 +185,6 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     editPosition[1] = qMouseEv->y();
     editPosition[2] = 0;
     editLayoutCenter = _layoutCenter;
-
-    //  qWarning() << "edit pos:" << editPosition << endl;
 
     vector <SelectedEntity> select;
 
@@ -215,6 +214,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
         // which should intercept the event
         operation = NONE;
         glMainWidget->setCursor(QCursor(Qt::CrossCursor));
+
         return false;
       }
 
@@ -308,7 +308,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       break;
 
     default:
-      return false;
+     return false;
     }
 
     glMainWidget->redraw();
@@ -316,9 +316,8 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonRelease &&
-      ((QMouseEvent *) e)->button() == Qt::LeftButton &&
+      qMouseEv->button() == Qt::LeftButton &&
       operation != NONE) {
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
     stopEdition();
 
     //restore colors
@@ -370,11 +369,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     }
   }
 
-  if  (e->type() == QEvent::MouseMove &&
-       ((QMouseEvent *) e)->buttons() & Qt::LeftButton &&
-       operation != NONE) {
-    QMouseEvent * qMouseEv = (QMouseEvent *) e;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+  if  (e->type() == QEvent::MouseMove && qMouseEv->buttons() & Qt::LeftButton && operation != NONE) {
     int newX = qMouseEv->x();
     int newY = qMouseEv->y();
 

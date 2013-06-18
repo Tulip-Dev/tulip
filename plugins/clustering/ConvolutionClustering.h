@@ -35,11 +35,13 @@
 * 2004.
 *
 */
+
+namespace tlp {
+
 class ConvolutionClustering:public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATIONS("Convolution","David Auber","14/08/2001","Alpha","2.0","Clustering")
   ConvolutionClustering(tlp::PluginContext* context);
-  ~ConvolutionClustering();
   bool run();
   std::vector<double> *getHistogram();
   void setParameters(int histosize,int threshold,int width);
@@ -47,13 +49,15 @@ public:
   void autoSetParameter();
   std::list<int> getLocalMinimum();
 private:
-//  void buildSubGraphs(const std::vector<int>& ranges);
   void getClusters(const std::vector<int>& ranges);
   std::vector<double> smoothHistogram;
   std::map<int,int> histogramOfValues;
   int histosize,threshold,width;
   tlp::DoubleProperty *metric;
 };
+
+}
+
 
 #endif
 
