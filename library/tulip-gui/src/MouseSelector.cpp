@@ -46,12 +46,13 @@ MouseSelector::MouseSelector(Qt::MouseButton button,
                              Qt::KeyboardModifier modifier,
                              SelectionMode mode):
   mButton(button), kModifier(modifier), x(0),y(0),w(0),h(0),
-  started(false),graph(0),_mode(mode) {
+  started(false),graph(NULL),_mode(mode) {
 }
 //==================================================================
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
   GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+  Graph *g = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
   if (e->type() == QEvent::MouseButtonPress) {
 
@@ -64,11 +65,11 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         w = 0;
         h = 0;
         started = true;
-        graph=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+        graph=g;
         mousePressModifier=qMouseEv->modifiers();
       }
       else {
-        if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
+        if (g!=graph) {
           graph = NULL;
           started = false;
           return false;
@@ -90,7 +91,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         (kModifier == Qt::NoModifier ||
          qMouseEv->modifiers() & kModifier))) {
 
-    if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
+    if (g!=graph) {
       graph=NULL;
       started=false;
     }
@@ -122,7 +123,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
   if  (e->type() == QEvent::MouseButtonRelease) {
 
-    if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
+    if (g!=graph) {
       graph=NULL;
       started=false;
       return false;

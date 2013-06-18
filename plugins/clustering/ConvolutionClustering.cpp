@@ -17,22 +17,18 @@
  *
  */
 
-
 #include "ConvolutionClustering.h"
 #include "ConvolutionClusteringSetup.h"
 
-#include "tulip/ForEach.h"
+#include <tulip/ForEach.h>
 
 using namespace std;
-using namespace tlp;
 
+namespace tlp {
 PLUGIN(ConvolutionClustering)
 
-//================================================================================
 ConvolutionClustering::ConvolutionClustering(PluginContext* context):DoubleAlgorithm(context) {}
-//================================================================================
-ConvolutionClustering::~ConvolutionClustering() {}
-//================================================================================
+
 //convolution function, build a triangular function center in 0 with a width width and a
 double g(int k,double width,double amplitude) {
   double slope=amplitude/width;
@@ -291,4 +287,5 @@ bool ConvolutionClustering::run() {
 //  buildSubGraphs(ranges);
   getClusters(ranges);
   return true;
+}
 }

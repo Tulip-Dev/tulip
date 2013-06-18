@@ -17,17 +17,20 @@
  *
  */
 #include "ConvolutionClusteringSetup.h"
+#include "ui_ConvolutionClusteringSetup.h"
+#include "ConvolutionClustering.h"
+
 #include <QPainter>
 
 using namespace std;
-using namespace tlp;
+
+namespace tlp {
 
 class HistogramWidget : public QWidget {
 
 public:
   HistogramWidget(ConvolutionClusteringSetup *dialog, QWidget *parent)
     : QWidget(parent), setupDialog(dialog) {
-    // setFrameShape(Q3Frame::StyledPanel); setFrameShadow(Q3Frame::Raised);
   }
 
   void paintEvent(QPaintEvent *) {
@@ -109,39 +112,26 @@ private:
   ConvolutionClusteringSetup *setupDialog;
 };
 
-
-/*
- *  Constructs a ConvolutionClusteringSetup which is a child of 'parent', with the
- *  name 'name' and widget flags set to 'f'
- *
- *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
- */
 ConvolutionClusteringSetup::ConvolutionClusteringSetup( ConvolutionClustering *convolPlugin, QWidget* parent)
-  : QDialog( parent),
-    convolPlugin(convolPlugin),
-    useLogarithmicScale(false) {
-  setupUi(this);
-  histogramWidget = new HistogramWidget(this, Frame3);
-  QGridLayout *flayout = new QGridLayout(Frame3);
+    : QDialog( parent), _ui(new Ui::ConvolutionClusteringSetupData), convolPlugin(convolPlugin), useLogarithmicScale(false) {
+  _ui->setupUi(this);
+  histogramWidget = new HistogramWidget(this, _ui->Frame3);
+  QGridLayout *flayout = new QGridLayout(_ui->Frame3);
   flayout->setMargin(1);
   flayout->addWidget(histogramWidget, 0, 0);
 
   int a,b,c;
   convolPlugin->getParameters(a,b,c);
-  widthSlider->setMinimum(1);
-  widthSlider->setMaximum(a);
-  widthSlider->setValue(c);
-  discretizationSlider->setMinimum(1);
-  discretizationSlider->setMaximum(2*a);
-  discretizationSlider->setValue(a);
+  _ui->widthSlider->setMinimum(1);
+  _ui->widthSlider->setMaximum(a);
+  _ui->widthSlider->setValue(c);
+  _ui->discretizationSlider->setMinimum(1);
+  _ui->discretizationSlider->setMaximum(2*a);
+  _ui->discretizationSlider->setValue(a);
 }
 
-/*
- *  Destroys the object and frees any allocated resources
- */
 ConvolutionClusteringSetup::~ConvolutionClusteringSetup() {
-  // no need to delete child widgets, Qt does it all for us
+  delete _ui;
 }
 
 /*
@@ -153,13 +143,12 @@ void ConvolutionClusteringSetup::setlog(bool b) {
 }
 
 void ConvolutionClusteringSetup::update() {
-  // GC 4.2: >? is no longer supported
-  //widthSlider->setMaxValue(discretizationSlider->value() / 2 >? 1);
-  widthSlider->setMaximum(std::max(discretizationSlider->value() / 2, 1));
-  convolPlugin->setParameters(discretizationSlider->value(),0,widthSlider->value());
+  _ui->widthSlider->setMaximum(std::max(_ui->discretizationSlider->value() / 2, 1));
+  convolPlugin->setParameters(_ui->discretizationSlider->value(),0,_ui->widthSlider->value());
 
   if (histogramWidget)
     histogramWidget->update();
 
-  QWidget::update();
+  QDialog::update();
+}
 }
