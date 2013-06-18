@@ -18,7 +18,10 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
 ## ========================================================
 STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" I64)
 IF(I64)
+  SET(PROCESSOR_ARCHITECTURE "64")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DI64")
+ELSE(I64)
+  SET(PROCESSOR_ARCHITECTURE "32")
 ENDIF(I64)
 
 ## ========================================================
@@ -196,6 +199,7 @@ IF(PYTHONINTERP_FOUND)
   EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version ERROR_VARIABLE PYTHON_VERSION_RAW)
   STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
   STRING(REGEX MATCH "[0-9]\\.[0-9]" PYTHON_VERSION "${PYTHON_VERSION_RAW}")
+  STRING(REGEX MATCH "[0-9]\\.[0-9]\\.[0-9]" PYTHON_VERSION_WITH_PATCH "${PYTHON_VERSION_RAW}")
 
   # Find the Python library with the same version as the interpreter
   # Starting Python 3.2, the library is suffixed by mu, also handle that case
@@ -302,6 +306,7 @@ ADD_SUBDIRECTORY(tlpscripten)
 IF(BUILD_TESTS)
   ADD_SUBDIRECTORY(unit_test)
 ENDIF()
+ADD_SUBDIRECTORY(bundlers)
 
 ## ========================================================
 ## tulip-config script
@@ -344,3 +349,24 @@ INSTALL(PROGRAMS "${MSVC11_REDIST_DIR}/${CMAKE_MSVC_ARCH}/Microsoft.VC110.OPENMP
 ENDIF(MSVC11)
 ENDIF(OPENMP_FOUND)
 ENDIF(MSVC)
+
+IF(WIN32)
+EXECUTE_PROCESS(COMMAND makensis RESULT_VARIABLE NSIS_RESULT OUTPUT_QUIET)
+STRING(COMPARE EQUAL "${NSIS_RESULT}" "1" NSIS_OK)
+IF(NSIS_OK)
+        STRING(REPLACE "/" "\\" BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+        STRING(REPLACE "/" "\\" TLP_DIR "${CMAKE_INSTALL_PREFIX}")
+        STRING(REPLACE "/" "\\" QTX_PLUGINS_DIR "${QT_PLUGINS_DIR}")
+
+        ADD_CUSTOM_TARGET(bundle
+                          COMMAND cmake -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
+                          COMMAND cmake -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/win_bundle.bat ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/win_bundle.bat
+                          COMMAND cmake -E copy ${CMAKE_CURRENT_SOURCE_DIR}/COPYING ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/COPYING
+                          COMMAND cmd /C win_bundle.bat ${TLP_DIR} ${BINARY_DIR} ${QTX_PLUGINS_DIR}
+                          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win)
+
+ELSE(NSIS_OK)
+        MESSAGE("Nullsoft Scriptable Install System does not seem present on your system (or the \"makensis.exe\" command is not in your PATH environment variable)")
+        MESSAGE("Tulip installer can not be generated without Nullsoft NSIS.")
+ENDIF(NSIS_OK)
+ENDIF(WIN32)
