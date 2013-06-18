@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/NodeLinkDiagramComponent.h"
-
 #include "ui_GridOptionsWidget.h"
 
 #include <QGraphicsView>
@@ -46,13 +44,18 @@
 #include <tulip/GlCompositeHierarchyManager.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/NodeLinkDiagramComponent.h>
 
 using namespace tlp;
 using namespace std;
 
 const string NodeLinkDiagramComponent::viewName("Node Link Diagram view");
 
-NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL),_hasHulls(false),_tooltips(false) {
+NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL),_hasHulls(false),_tooltips(false),grid_ui(NULL) {
+}
+
+NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
+    delete grid_ui;
 }
 
 void NodeLinkDiagramComponent::updateGrid() {
@@ -181,12 +184,12 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   gridParameters.add<bool>("Z grid","","true",false);
   ParameterListModel* model = new ParameterListModel(gridParameters,NULL,this);
 
-  Ui::GridOptionsWidget* ui = new Ui::GridOptionsWidget; //ui never deleted => memory leak!
+  grid_ui = new Ui::GridOptionsWidget;
   _gridOptions = new QDialog(graphicsView());
-  ui->setupUi(_gridOptions);
-  ui->tableView->setModel(model);
-  ui->tableView->setItemDelegate(new TulipItemDelegate);
-  connect(ui->tableView, SIGNAL(destroyed()), ui->tableView->itemDelegate(), SLOT(deleteLater()));
+  grid_ui->setupUi(_gridOptions);
+  grid_ui->tableView->setModel(model);
+  grid_ui->tableView->setItemDelegate(new TulipItemDelegate);
+  connect(grid_ui->tableView, SIGNAL(destroyed()), grid_ui->tableView->itemDelegate(), SLOT(deleteLater()));
 
   bool overviewVisible=true;
 

@@ -24,6 +24,10 @@
 #include <tulip/GlMainView.h>
 #include <tulip/Camera.h>
 
+namespace Ui {
+class GridOptionsWidget;
+}
+
 class QDialog;
 
 namespace tlp {
@@ -33,7 +37,7 @@ class GlCompositeHierarchyManager;
 class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
   Q_OBJECT
 
-  tlp::GlGrid* _grid;
+  GlGrid* _grid;
   QDialog* _gridOptions;
   GlCompositeHierarchyManager* manager;
   bool _hasHulls;
@@ -43,6 +47,8 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
 
   bool _tooltips;
 
+  Ui::GridOptionsWidget* grid_ui;
+
 public:
   static const std::string viewName;
   PLUGININFORMATIONS(NodeLinkDiagramComponent::viewName, "Tulip Team", "16/04/2008",
@@ -51,6 +57,7 @@ public:
                      "1.0", "relational")
 
   NodeLinkDiagramComponent(const tlp::PluginContext* context = NULL);
+  virtual ~NodeLinkDiagramComponent();
   std::string icon() const {
     return ":/tulip/gui/icons/32/node_link_diagram_view.png";
   }
