@@ -59,10 +59,15 @@ GlLabel::~GlLabel() {
 void GlLabel::init() {
   fontName=TulipBitmapDir + "font.ttf";
   font=new FTPolygonFont(fontName.c_str());
-  borderFont=new FTGLOutlineFont(fontName.c_str());
-  fontSize=20;
-  font->FaceSize(fontSize);
-  borderFont->FaceSize(fontSize);
+  if(font->Error()==0) { //no error
+    borderFont=new FTGLOutlineFont(fontName.c_str());
+    fontSize=20;
+    font->FaceSize(fontSize);
+    borderFont->FaceSize(fontSize);
+  }
+  else {
+      tlp::warning() << "Error when loading font file (" << fontName << ") for rendering labels" << endl;
+  }
   outlineColor=Color(0,0,0,255);
   outlineSize=1.;
   renderingMode=0;
