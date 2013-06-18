@@ -22,7 +22,7 @@
 #include <QDialog>
 
 namespace Ui {
- class ConvolutionClusteringSetupData;
+class ConvolutionClusteringSetupData;
 }
 
 class QWidget;

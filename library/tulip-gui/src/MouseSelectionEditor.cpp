@@ -168,9 +168,10 @@ void MouseSelectionEditor::getOperation(GlEntity *select) {
 }
 //========================================================================================
 bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
-    QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
-    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
-    if (e->type() == QEvent::MouseButtonPress) {
+  QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
+  GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
+
+  if (e->type() == QEvent::MouseButtonPress) {
 
     initProxies(glMainWidget);
     computeFFD(glMainWidget);
@@ -308,7 +309,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
       break;
 
     default:
-     return false;
+      return false;
     }
 
     glMainWidget->redraw();

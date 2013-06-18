@@ -55,7 +55,7 @@ NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _
 }
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
-    delete grid_ui;
+  delete grid_ui;
 }
 
 void NodeLinkDiagramComponent::updateGrid() {
