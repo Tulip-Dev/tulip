@@ -969,11 +969,14 @@ void GraphPerspective::CSVImport() {
 
 void GraphPerspective::showStartPanels(Graph *g) {
   View* firstPanel = NULL;
+  View* secondPanel = NULL;
   foreach(QString panelName, QStringList() << "Spreadsheet view" << "Node Link Diagram view") {
     View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
 
     if (firstPanel == NULL)
       firstPanel = view;
+    else
+      secondPanel = view;
 
     view->setupUi();
     view->setGraph(g);
@@ -982,6 +985,7 @@ void GraphPerspective::showStartPanels(Graph *g) {
   }
   _ui->workspace->setActivePanel(firstPanel);
   _ui->workspace->switchToSplitMode();
+  secondPanel->centerView(false);
 }
 
 void GraphPerspective::applyRandomLayout(Graph* g) {
