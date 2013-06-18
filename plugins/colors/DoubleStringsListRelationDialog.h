@@ -25,7 +25,7 @@
 #include <tulip/Color.h>
 
 namespace Ui {
- class DoubleStringsListRelationDialogData;
+class DoubleStringsListRelationDialogData;
 }
 
 namespace tlp {

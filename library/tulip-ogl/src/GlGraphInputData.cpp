@@ -62,7 +62,7 @@ void GlGraphInputData::setMetaNodeRenderer(GlMetaNodeRenderer *renderer,bool del
 }
 
 GlGraphInputData::~GlGraphInputData() {
-    delete _glVertexArrayManager;
+  delete _glVertexArrayManager;
 
   GlyphManager::getInst().clearGlyphList(&this->graph, this, glyphs);
   EdgeExtremityGlyphManager::getInst().clearGlyphList(&this->graph, this,

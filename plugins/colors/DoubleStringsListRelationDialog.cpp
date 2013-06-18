@@ -50,7 +50,7 @@ DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const std::vect
 }
 
 DoubleStringsListRelationDialog::~DoubleStringsListRelationDialog() {
-    delete _ui;
+  delete _ui;
 }
 
 void DoubleStringsListRelationDialog::getResult(std::vector<std::pair<std::string,Color> > &result) {
