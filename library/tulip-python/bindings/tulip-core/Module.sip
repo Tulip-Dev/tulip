@@ -208,6 +208,7 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
 
 %Include PropertyInterface.sip
 
+
 %Include BooleanProperty.sip
 %Include DoubleProperty.sip
 %Include ColorProperty.sip
@@ -240,6 +241,7 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
 %Include DrawingTools.sip
 %Include Observable.sip
 %Include GraphEvent.sip
+%Include PropertyEvent.sip
 %Include Constants.sip
 %Include Delaunay.sip
 %Include ConvexHull.sip
