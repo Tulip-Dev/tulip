@@ -25,7 +25,7 @@
 
 namespace tlp {
 
-class PropertyInterface /Abstract/ {
+class PropertyInterface : tlp::Observable /Abstract/ {
 %TypeHeaderCode
 #include <tulip/PropertyInterface.h>
 %End
