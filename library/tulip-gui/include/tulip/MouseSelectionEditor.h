@@ -49,24 +49,13 @@ private:
   enum EditOperation { NONE=0, ROTATE_Z, ROTATE_XY, STRETCH_X, STRETCH_Y, STRETCH_XY, TRANSLATE, ALIGN_TOP, ALIGN_BOTTOM, ALIGN_LEFT, ALIGN_RIGHT, ALIGN_VERTICALLY, ALIGN_HORIZONTALLY};
   enum OperationTarget { COORD = 0, SIZE, COORD_AND_SIZE};
 
-  Graph *_graph;
   GlMainWidget *glMainWidget;
-  LayoutProperty *_layout;
-  BooleanProperty *_selection;
   DoubleProperty *_rotation;
-  SizeProperty *_sizes;
 
   void initProxies(GlMainWidget *glMainWidget);
   void initEdition();
   void undoEdition();
   void stopEdition();
-
-  EditOperation operation;
-  OperationTarget mode;
-
-  Coord editCenter;
-  Coord editPosition;
-  Coord editLayoutCenter;
 
   Coord ffdCenter;
 
@@ -80,10 +69,24 @@ private:
 
   bool computeFFD(GlMainWidget*);
   void getOperation(GlEntity *select);
-  void mMouseTranslate(double, double, GlMainWidget*);
-  void mMouseRotate(double, double, GlMainWidget*);
-  void mMouseStretchAxis(double, double, GlMainWidget*);
-  void mAlign(EditOperation operation,GlMainWidget*);
+
+protected:
+
+  EditOperation operation;
+  OperationTarget mode;
+
+  Coord editCenter;
+  Coord editPosition;
+  Graph *_graph;
+  LayoutProperty *_layout;
+  BooleanProperty *_selection;
+  SizeProperty *_sizes;
+  Coord editLayoutCenter;
+
+  virtual void mMouseTranslate(double, double, GlMainWidget*);
+  virtual void mMouseRotate(double, double, GlMainWidget*);
+  virtual void mMouseStretchAxis(double, double, GlMainWidget*);
+  virtual void mAlign(EditOperation operation,GlMainWidget*);
 
 
 };
