@@ -74,7 +74,7 @@ void GlGlyphRenderer::startRendering() {
     _glyphShader->printInfoLog();
   }
 
-  if (_glyphShader && _glyphShader->isLinked()) {
+  if (_glyphShader && _glyphShader->isLinked() && !GlShaderProgram::getCurrentActiveShader()) {
     _renderingStarted = true;
   }
 }
