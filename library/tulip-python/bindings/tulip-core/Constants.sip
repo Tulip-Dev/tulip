@@ -44,7 +44,8 @@ namespace tlp {
             Sphere=2 ,
             Square=4,
             Triangle=11,
-            Window=17
+            Window=17,
+            Star=19
         };
     };
 
@@ -80,7 +81,8 @@ namespace tlp {
             Ring=15,
             Sphere=2 ,
             Square=4,
-            Triangle=11
+            Triangle=11,
+            Star=19
         };
     };
 
@@ -125,7 +127,8 @@ namespace tlp {
             Sphere=2 ,
             Square=4,
             Triangle=11,
-            Window=17
+            Window=17,
+            Star=19
         };
     };
 
@@ -161,7 +164,8 @@ namespace tlp {
             Ring=15,
             Sphere=2 ,
             Square=4,
-            Triangle=11
+            Triangle=11,
+            Star=19
         };
     };
 
