@@ -21,8 +21,6 @@
 
 #include <tulip/OpenGlConfigManager.h>
 
-#include <QMessageBox>
-
 #include <iostream>
 #include <cstdlib>
 
@@ -43,7 +41,8 @@ OpenGlConfigManager& OpenGlConfigManager::getInst() {
 
 OpenGlConfigManager::OpenGlConfigManager():
   glewIsInit(false),
-  driversAreChecked(false), antialiased(true) {
+  driversAreChecked(false), antialiased(true),
+  graphicsCardWarningDisplayer(NULL) {
 }
 
 void OpenGlConfigManager::initGlew() {
@@ -70,7 +69,11 @@ void OpenGlConfigManager::checkDrivers() {
     ati=true;
 
   if(!nvidia && !ati) {
-    QMessageBox::warning(NULL,QObject::trUtf8("Graphics card warning"), QObject::trUtf8("Your graphics card is not powerful enough or is not configured with the proper drivers. For optimal performances, make sure to install the proprietary drivers corresponding to your graphics card model."));
+    std::string message("Your graphics card is not powerful enough,\nor it is not configured with the proper drivers.\nFor optimal performances, make sure to install\nthe proprietary drivers corresponding to your\ngraphics card model.");
+    if (graphicsCardWarningDisplayer)
+      graphicsCardWarningDisplayer->displayWarning(message);
+
+    tlp::warning() << message.c_str() << std::endl;
   }
 }
 
@@ -130,6 +133,10 @@ void OpenGlConfigManager::desactivatePolygonAntiAliasing() {
   }
 }
 
+void OpenGlConfigManager::setGraphicsCardWarningDisplayer(OpenGlConfigManager::GraphicsCardWarningDisplayer* displayer) {
+    delete getInst().graphicsCardWarningDisplayer;
+    getInst().graphicsCardWarningDisplayer = displayer;
+}
 }
 
 

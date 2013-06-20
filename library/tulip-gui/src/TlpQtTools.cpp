@@ -24,6 +24,8 @@
 
 #include <QDebug>
 #include <QColorDialog>
+#include <QAbstractButton>
+#include <QMessageBox>
 
 #include <QDir>
 #include <QApplication>
@@ -51,6 +53,7 @@
 #include <tulip/PluginManager.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
+#include <tulip/OpenGlConfigManager.h>
 #include <tulip/TulipMetaTypes.h>
 
 
@@ -162,6 +165,18 @@ QString localPluginsPath() {
 #endif
 }
 
+// define a simple class for the display graphics card warning
+class QtGraphicsCardWarningDisplayer: public OpenGlConfigManager::GraphicsCardWarningDisplayer {
+  void displayWarning(std::string& warning) {
+    if (TulipSettings::instance().warnUserAboutGraphicsCard()) {
+      QMessageBox msgBox(QMessageBox::Warning, QObject::trUtf8("Graphics card warning"), QObject::trUtf8(warning.c_str()), QMessageBox::Ok | QMessageBox::Discard, NULL);
+      msgBox.button(QMessageBox::Discard)->setText("Don't display this warning later");
+      msgBox.exec();
+      TulipSettings::instance().setWarnUserAboutGraphicsCard(msgBox.clickedButton() == msgBox.button(QMessageBox::Ok));
+    }
+  }
+};
+
 void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   QLocale::setDefault(QLocale(QLocale::English));
   TulipSettings::instance().applyProxySettings();
@@ -190,6 +205,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
 
   tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   initQTypeSerializers();
+  OpenGlConfigManager::setGraphicsCardWarningDisplayer(new QtGraphicsCardWarningDisplayer());
   tlp::TulipPluginsPath = std::string((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toUtf8().data()) +
                           tlp::PATH_DELIMITER +
                           tlp::TulipPluginsPath +
