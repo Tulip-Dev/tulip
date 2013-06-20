@@ -67,6 +67,8 @@ public:
   static const QString ResultPropertyStoredEntry;
   static const QString RunningTimeComputedEntry;
 
+  static const QString WarnUserAboutGraphicsCardEntry;
+
   static TulipSettings &instance();
 
   static QString elementKey(const QString& configEntry, tlp::ElementType elem);
@@ -176,6 +178,9 @@ public:
 
   bool isRunningTimeComputed() const;
   void setRunningTimeComputed(bool);
+
+  bool warnUserAboutGraphicsCard() const;
+  void setWarnUserAboutGraphicsCard(bool);
 
 private:
   TulipSettings();

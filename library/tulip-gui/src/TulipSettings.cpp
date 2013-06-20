@@ -59,6 +59,8 @@ const QString TulipSettings::ResultPropertyStoredEntry = "graph/auto/result";
 
 const QString TulipSettings::RunningTimeComputedEntry = "graph/auto/time";
 
+const QString TulipSettings::WarnUserAboutGraphicsCardEntry = "app/warn_about_graphics_card";
+
 TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 }
 
@@ -348,3 +350,12 @@ bool TulipSettings::isRunningTimeComputed() const {
 void TulipSettings::setRunningTimeComputed(bool f) {
   setValue(RunningTimeComputedEntry,f);
 }
+
+bool TulipSettings::warnUserAboutGraphicsCard() const {
+  return value(WarnUserAboutGraphicsCardEntry,true).toBool();
+}
+
+void TulipSettings::setWarnUserAboutGraphicsCard(bool f) {
+  setValue(WarnUserAboutGraphicsCardEntry, f);
+}
+

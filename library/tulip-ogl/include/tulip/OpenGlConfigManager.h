@@ -101,6 +101,17 @@ public:
 
   void initGlew();
 
+  class GraphicsCardWarningDisplayer {
+
+  public:
+    /**
+     * display a warning about the graphics card drivers
+     */
+    virtual void displayWarning(std::string& message) = 0;
+  };
+
+  static void setGraphicsCardWarningDisplayer(GraphicsCardWarningDisplayer *);
+
 private:
 
 
@@ -115,6 +126,7 @@ private:
   bool glewIsInit;
   bool driversAreChecked;
   bool antialiased;
+  GraphicsCardWarningDisplayer* graphicsCardWarningDisplayer;
 
   std::map<std::string, bool> checkedExtensions;
 
