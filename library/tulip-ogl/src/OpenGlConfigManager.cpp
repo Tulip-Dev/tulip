@@ -70,6 +70,7 @@ void OpenGlConfigManager::checkDrivers() {
 
   if(!nvidia && !ati) {
     std::string message("Your graphics card is not powerful enough,\nor it is not configured with the proper drivers.\nFor optimal performances, make sure to install\nthe proprietary drivers corresponding to your\ngraphics card model.");
+
     if (graphicsCardWarningDisplayer)
       graphicsCardWarningDisplayer->displayWarning(message);
 
@@ -134,8 +135,8 @@ void OpenGlConfigManager::desactivatePolygonAntiAliasing() {
 }
 
 void OpenGlConfigManager::setGraphicsCardWarningDisplayer(OpenGlConfigManager::GraphicsCardWarningDisplayer* displayer) {
-    delete getInst().graphicsCardWarningDisplayer;
-    getInst().graphicsCardWarningDisplayer = displayer;
+  delete getInst().graphicsCardWarningDisplayer;
+  getInst().graphicsCardWarningDisplayer = displayer;
 }
 }
 
