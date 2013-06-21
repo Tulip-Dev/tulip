@@ -72,9 +72,10 @@ void CoordEditor::coordUpdated() {
 // to ensure it is shown in the center of its parent
 void CoordEditor::showEvent(QShowEvent* ev) {
   QDialog::showEvent(ev);
+
   if (parentWidget())
     move(parentWidget()->window()->frameGeometry().topLeft() +
-	 parentWidget()->window()->rect().center() -
-	 rect().center());
+         parentWidget()->window()->rect().center() -
+         rect().center());
 }
 
