@@ -46,6 +46,9 @@ public:
 
   tlp::Coord coord() const;
 
+  // redefinition to ensure it is shown in the center of its parent
+  void showEvent(QShowEvent* ev);
+
 public slots:
   void setCoord(const tlp::Coord& s);
 

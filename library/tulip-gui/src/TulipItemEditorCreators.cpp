@@ -178,8 +178,8 @@ QString BooleanEditorCreator::displayText(const QVariant& v) const {
 /*
   CoordEditorCreator
 */
-QWidget* CoordEditorCreator::createWidget(QWidget* parent) const {
-  return new CoordEditor(parent, editSize);
+QWidget* CoordEditorCreator::createWidget(QWidget* /*parent*/) const {
+  return new CoordEditor(Perspective::instance()->mainWindow(), editSize);
 }
 
 void CoordEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
