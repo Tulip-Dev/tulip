@@ -28,6 +28,7 @@
  *
  * TLP_BEGIN_HASH_NAMESPACE is defined to open the namespace in which the hash classes are defined, to define new hashes (e.g. for Edge).
  * TLP_END_HASH_NAMESPACE is definde to close the namespace (only used when using std::tr1)
+ * TLP_HASH_NAMESPACE allows to use a specific hasher class when declaring a hash set or a hash map.
  */
 
 //VS2010 and later can use C++0x's unordered_map; vs2008 uses boost's tr1 implementation
@@ -42,6 +43,7 @@
 #  include <unordered_set>
 #  define TLP_HASH_MAP std::unordered_map
 #  define TLP_HASH_SET std::unordered_set
+#  define TLP_HASH_NAMESPACE std
 #  define TLP_BEGIN_HASH_NAMESPACE namespace std
 #  define TLP_END_HASH_NAMESPACE
 //clang, and GCC versions prior to the 4.x series do not have tr1; using ext
@@ -56,6 +58,7 @@
 #  endif
 #  define TLP_HASH_MAP stdext::hash_map
 #  define TLP_HASH_SET stdext::hash_set
+#  define TLP_HASH_NAMESPACE stdext
 #  define TLP_BEGIN_HASH_NAMESPACE namespace stdext
 #  define TLP_END_HASH_NAMESPACE
 
@@ -91,6 +94,7 @@ struct hash<float> {
 #  include <tr1/unordered_set>
 #  define TLP_HASH_MAP std::tr1::unordered_map
 #  define TLP_HASH_SET std::tr1::unordered_set
+#  define TLP_HASH_NAMESPACE std::tr1
 #  define TLP_BEGIN_HASH_NAMESPACE namespace std { namespace tr1
 #  define TLP_END_HASH_NAMESPACE }
 #endif
