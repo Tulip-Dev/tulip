@@ -175,10 +175,8 @@ node GraphView::addNode() {
 }
 //----------------------------------------------------------------
 void GraphView::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
-  if (!addedNodes.empty()) {
-    getSuperGraph()->addNodes(nb, addedNodes);
-    restoreNodes(addedNodes);
-  }
+  getSuperGraph()->addNodes(nb, addedNodes);
+  restoreNodes(addedNodes);
 }
 //----------------------------------------------------------------
 node GraphView::restoreNode(node n) {
