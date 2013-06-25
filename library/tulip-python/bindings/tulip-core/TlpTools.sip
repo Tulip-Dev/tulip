@@ -63,8 +63,12 @@ tlp.initTulipLib()
 Looks for the Tulip plugins directory and fills the Tulip path variables : tlp.TulipLibDir, tlp.TulipPluginsPath, tlp.TulipBitmapDir.
 The plug-ins directory can be defined in different ways, given by order of prevalence:
 
-   * the TLP_DIR environment variable, if it has a value
-   * a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on unix
+    * the TLP_DIR environment variable, if it has a value
+    * the appDirPath parameter, if it is not NULL
+    * at that point, the Tulip paths will be retrieved from the path of the loaded Tulip shared library
+      (you must dispose of a standard Tulip installation for that feature to work,
+      meaning the relative path for the Tulip plugins folder to the Tulip libraries one must be ../lib/tulip/).
+    * a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on Unix.
    
 %End
 
