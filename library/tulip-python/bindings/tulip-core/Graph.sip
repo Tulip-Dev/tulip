@@ -3662,7 +3662,7 @@ Sets the name of the graph.
 	
 //===========================================================================================
 
-void setAttribute(const std::string &name, SIP_PYOBJECT val);
+    void setAttribute(const std::string &name, SIP_PYOBJECT val);
 %Docstring
 tlp.Graph.setAttribute(name, val)
 
@@ -3689,7 +3689,7 @@ Sets an attribute of the graph.
 
 //===========================================================================================
 
-SIP_PYOBJECT getAttribute(const std::string& name);
+    SIP_PYOBJECT getAttribute(const std::string& name);
 %Docstring
 tlp.Graph.getAttribute(name)
 
@@ -3698,11 +3698,12 @@ Returns a reference on an attribute of the graph or :const:`None` if it does not
 :param name: the name of the attribute to return.
 :type name: string
 :rtype: object
+:throws: an exception is the attribute does not exist
 %End
 
 %MethodCode
     sipRes = NULL;
-    if (sipCpp->getAttributes().exist(*a0)) {
+    if (sipCpp->attributeExist(*a0)) {
         tlp::DataType* dataType = sipCpp->getAttribute(*a0);
         sipRes = getPyObjectFromDataType(dataType);
         delete dataType;
@@ -3715,6 +3716,61 @@ Returns a reference on an attribute of the graph or :const:`None` if it does not
         PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
     }
 %End  
+
+//===========================================================================================
+
+    void removeAttribute(const std::string& name);
+%Docstring
+tlp.Graph.removeAttribute(name)
+
+.. versionadded:: 4.4
+
+Removes an attribute of the graph.
+
+:param name: the name of the attribute to return.
+:type name: string
+:rtype: object
+:throws: an exception is the attribute does not exist
+%End
+
+%MethodCode
+    if (sipCpp->attributeExist(*a0)) {
+        sipCpp->removeAttribute(*a0);
+    } else {
+        std::ostringstream oss;
+        oss << "Graph attribute named \"" << *a0 << "\" does not exist.";
+        sipIsErr = -1;
+        PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
+    }
+%End
+
+//===========================================================================================
+
+    bool attributeExist(const std::string &name);
+%Docstring
+tlp.Graph.attributeExist(name)
+
+.. versionadded:: 4.4
+
+Checks if an attribute with a specific name exists in the graph.
+
+:param name: the name of the attribute to test existence.
+:type name: string
+:rtype: boolean
+%End
+
+//===========================================================================================
+
+    const tlp::DataSet & getAttributes() const;
+%Docstring
+tlp.Graph.getAttributes()
+
+.. versionadded:: 4.4
+
+Returns all the attributes of the graph.
+
+:rtype: :class:`tlp.DataSet`
+%End
 
 //===========================================================================================
 
