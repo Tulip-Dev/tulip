@@ -1,20 +1,15 @@
 #include <tulip/Graph.h>
-#include <tulip/Interactor.h>
 #include <tulip/TlpTools.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/PluginLoaderTxt.h>
+#include <tulip/PluginLibraryLoader.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/StringProperty.h>
 #include <tulip/DoubleProperty.h>
 
-#include <QCoreApplication>
-
 using namespace std;
 using namespace tlp;
 
-int main(int argc,char ** argv ) {
-  //instanciate the QApplication
-  QCoreApplication app(argc, argv);
+int main(int ,char **  ) {
 
   /*
    * Let's create the following graph
@@ -26,8 +21,12 @@ int main(int argc,char ** argv ) {
    *    D - E
    */
 
-  //initialize Tulip (load plugins, etc)
-  tlp::initTulipSoftware();
+    /*
+     Initialize the library and load all plugins
+     */
+    tlp::initTulipLib();
+    PluginLoaderTxt loadertxt;
+    PluginLibraryLoader::loadPlugins(&loadertxt);
 
   //create a new graph
   Graph* myGraph = tlp::newGraph();
