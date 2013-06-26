@@ -1,29 +1,45 @@
-#include <tulip/TlpQtTools.h>
+#include <tulip/PluginLoaderTxt.h>
+#include <tulip/PluginLibraryLoader.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/MouseInteractors.h>
+#include <tulip/TlpTools.h>
 
 #include <QApplication>
+#include <QString>
+
+#include <iostream>
 
 using namespace tlp;
+using namespace std;
 
 int main(int argc, char** argv) {
   /*
-   A QApplication must always be declared at the beginning of the main function in order for Tulip to work.
+   A QApplication must always be declared at the beginning of the main function if you intend to use the tulip-gui library
    This must be done before calling tlp::initTulipSoftware()
    */
   QApplication app(argc,argv);
 
   /*
-   Initialize the library, load plugins and set application runtime pathes accordingly to the host operating system
-   This method should always be called if you intend to use plugins in your application.
+   Initialize the library and load all plugins
    */
-  tlp::initTulipSoftware(NULL);
+  tlp::initTulipLib();
+  PluginLoaderTxt loadertxt;
+  PluginLibraryLoader::loadPlugins(&loadertxt);
 
   /*
    Load the file passed as first argument into a graph.
    This method will select the default Tulip algorithm plugin (TLP)
    */
-  Graph* g = tlp::loadGraph(argv[1]);
+  if(QApplication::arguments().size()!=2) {
+      cout << "Usage: " <<  QApplication::arguments()[0].toStdString() <<" tlp_file (.tlp, .tlp.gz)" << endl;
+      exit(EXIT_FAILURE);
+  }
+  QString filename = QApplication::arguments()[1];
+  if(!((filename.endsWith(".tlp"))||(filename.endsWith(".tlp.gz")))) {
+      cout << "File " << filename.toStdString() << " not compatible. Use a tlp file or a tlp.gz file" << endl;
+      exit(EXIT_FAILURE);
+  }
+  Graph* g = tlp::loadGraph(filename.toStdString());
 
   // Creates the main widget that will display our graph
   GlMainWidget* mainWidget = new GlMainWidget(NULL);
