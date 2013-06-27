@@ -34,9 +34,8 @@ using namespace std;
 namespace tlp {
 
 GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):
-    QGraphicsRectItem(0,0,128,128),view(view),baseScene(scene),width(128),height(128), mouseClicked(false),
-    _frameColor(Color::Gray), _frameWidth(2)
-{
+  QGraphicsRectItem(0,0,128,128),view(view),baseScene(scene),width(128),height(128), mouseClicked(false),
+  _frameColor(Color::Gray), _frameWidth(2) {
 }
 
 GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
@@ -64,7 +63,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     return;
 
   if (_frameWidth%2==1) {
-      ++_frameWidth;
+    ++_frameWidth;
   }
 
   // Initialize the context avoid segfault when trying to render graph without any initialised gl context.
@@ -90,6 +89,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     //Init lines and polygons item
     for(unsigned int i=0; i<8; ++i) {
       line[i].setParentItem(&overview);
+
       if (i < 4) {
         poly[i].setParentItem(&overview);
         poly[i].setBrush(QBrush(QColor(0,0,0,64)));
@@ -104,14 +104,17 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   for(unsigned int i=0; i<8; ++i) {
     if (bgV < 128) {
-        line[i].setPen(QColor(255, 255, 255));
-    } else {
+      line[i].setPen(QColor(255, 255, 255));
+    }
+    else {
       line[i].setPen(QColor(0, 0, 0));
     }
+
     if (i < 4) {
       if (bgV < 128) {
         poly[i].setBrush(QBrush(QColor(255,255,255,64)));
-      } else {
+      }
+      else {
         poly[i].setBrush(QBrush(QColor(0,0,0,64)));
       }
     }

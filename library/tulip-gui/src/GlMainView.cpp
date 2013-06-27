@@ -58,8 +58,8 @@ void GlMainView::refresh() {
 }
 
 void GlMainView::setOverviewPosition(const OverviewPosition &position) {
-    _overviewPosition = position;
-    drawOverview();
+  _overviewPosition = position;
+  drawOverview();
 }
 
 void GlMainView::drawOverview(bool generatePixmap) {
@@ -191,14 +191,15 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
   if (_overviewItem != NULL) {
     // put overview in the bottom right corner
     if (_overviewPosition == OVERVIEW_BOTTOM_RIGHT)
-        _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+      _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
     else if (_overviewPosition == OVERVIEW_BOTTOM_LEFT)
-        _overviewItem->setPos(0, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+      _overviewItem->setPos(0, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
     else if (_overviewPosition == OVERVIEW_TOP_LEFT)
-        _overviewItem->setPos(0, 0);
+      _overviewItem->setPos(0, 0);
     else if (_overviewPosition == OVERVIEW_TOP_RIGHT)
-        _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, 0);
+      _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, 0);
   }
+
   GlLayer *fgLayer = getGlMainWidget()->getScene()->getLayer("Foreground");
 
   if (fgLayer) {

@@ -125,44 +125,44 @@ void GlOffscreenRenderer::clearScene() {
 
 void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
-  #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
-    antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
-  #endif
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
+  antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
+#endif
 
-    if (glFrameBuf != NULL && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
-      delete glFrameBuf;
-      glFrameBuf = NULL;
-      delete glFrameBuf2;
-      glFrameBuf2 = NULL;
-    }
-
-
-    if (glFrameBuf == NULL) {
-  #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
-      QGLFramebufferObjectFormat fboFmt;
-      fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-
-      if (antialiasedFbo)
-        fboFmt.setSamples(8);
-
-      glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
-    }
+  if (glFrameBuf != NULL && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
+    delete glFrameBuf;
+    glFrameBuf = NULL;
+    delete glFrameBuf2;
+    glFrameBuf2 = NULL;
+  }
 
 
-    if (antialiasedFbo && glFrameBuf2 == NULL) {
-      glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
-    }
+  if (glFrameBuf == NULL) {
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
+    QGLFramebufferObjectFormat fboFmt;
+    fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+
+    if (antialiasedFbo)
+      fboFmt.setSamples(8);
+
+    glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
+  }
 
 
-  #else
-      glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
-    }
-  #endif
+  if (antialiasedFbo && glFrameBuf2 == NULL) {
+    glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
+  }
+
+
+#else
+    glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
+  }
+#endif
 }
 
 void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antialiased) {
 
-    //If no OpenGL context, activate the default one in order to avoid segfault when trying to render an OpenGL scene
+  //If no OpenGL context, activate the default one in order to avoid segfault when trying to render an OpenGL scene
   if (!QGLContext::currentContext()) {
     QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
     firstWidget->makeCurrent();
@@ -221,46 +221,46 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 }
 
 void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antialiased) {
-    //If no OpenGL context, activate the default one in order to avoid segfault when trying to render an OpenGL scene
-    if (!QGLContext::currentContext()) {
-      QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
-      firstWidget->makeCurrent();
-    }
+  //If no OpenGL context, activate the default one in order to avoid segfault when trying to render an OpenGL scene
+  if (!QGLContext::currentContext()) {
+    QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
+    firstWidget->makeCurrent();
+  }
 
-    initFrameBuffers(antialiased);
+  initFrameBuffers(antialiased);
 
-    Vector<int,4> backupViewport=scene->getViewport();
+  Vector<int,4> backupViewport=scene->getViewport();
 
-    scene->setViewport(0,0,vPWidth, vPHeight);
+  scene->setViewport(0,0,vPWidth, vPHeight);
 
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
+  glPushAttrib(GL_ALL_ATTRIB_BITS);
 
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
 
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
 
-    glFrameBuf->bind();
-    scene->draw();
-    glFrameBuf->release();
+  glFrameBuf->bind();
+  scene->draw();
+  glFrameBuf->release();
 
-  #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
 
-    if (antialiasedFbo)
-      QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
+  if (antialiasedFbo)
+    QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
 
-  #endif
+#endif
 
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glPopMatrix();
 
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
+  glMatrixMode(GL_PROJECTION);
+  glPopMatrix();
 
-    glPopAttrib();
+  glPopAttrib();
 
-    scene->setViewport(backupViewport);
+  scene->setViewport(backupViewport);
 }
 
 bool GlOffscreenRenderer::frameBufferOk() const {
