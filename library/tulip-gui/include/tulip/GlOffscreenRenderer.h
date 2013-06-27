@@ -115,6 +115,8 @@ public :
    **/
   void renderScene(const bool centerScene = true, const bool antialiased = false);
 
+  void renderExternalScene(GlScene *scene, const bool antialiased = false);
+
   /**
    * @brief Generate a QImage from the scene. You need to call the renderScene function before this function.
    **/
@@ -127,6 +129,8 @@ public :
 private :
 
   GlOffscreenRenderer();
+
+  void initFrameBuffers(const bool antialiased);
 
   static GlOffscreenRenderer *instance;
 
