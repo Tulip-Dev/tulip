@@ -22,20 +22,21 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QGraphicsSceneMouseEvent>
-#include <QGLFramebufferObject>
 
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/GlOffscreenRenderer.h>
 
 using namespace std;
 
 namespace tlp {
 
-map<pair<int,int>,QGLFramebufferObject*> GlOverviewGraphicsItem::framebufferObjects=map<pair<int,int>,QGLFramebufferObject*>();
-
-GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):QGraphicsRectItem(0,0,128,128),view(view),baseScene(scene),width(128),height(128),glFrameBuffer(NULL),mouseClicked(false) {
+GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):
+    QGraphicsRectItem(0,0,128,128),view(view),baseScene(scene),width(128),height(128), mouseClicked(false),
+    _frameColor(Color::Gray), _frameWidth(2)
+{
 }
 
 GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
@@ -44,10 +45,6 @@ GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
 void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height) {
   this->width=width;
   this->height=height;
-
-  delete glFrameBuffer;
-  glFrameBuffer=NULL;
-
   draw(true);
 }
 
@@ -60,48 +57,63 @@ void GlOverviewGraphicsItem::setLayerVisible(const string &name, bool visible) {
   }
 }
 
-static QGLFramebufferObject *createQGLFramebufferObject(int width, int height, QGLFramebufferObject::Attachment attachment) {
-  QGLFramebufferObject *fbo=new QGLFramebufferObject(width,height,attachment);
-
-  if(!fbo->isValid()) {
-    QMessageBox::critical(NULL,"OpenGL Error","Tulip cannot find enough available memory (GPU) to run.");
-  }
-
-  return fbo;
-}
-
 void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   if(baseScene.getLayersList().empty())
     return;
 
+  if (_frameWidth%2==1) {
+      ++_frameWidth;
+  }
+
   // Initialize the context avoid segfault when trying to render graph without any initialised gl context.
   QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
   firstWidget->makeCurrent();
 
-  if(glFrameBuffer==NULL) {
-    // Allocate frame buffer object
-    if(framebufferObjects.count(pair<int,int>(width,height))!=0) {
-      glFrameBuffer=framebufferObjects[pair<int,int>(width,height)];
-    }
-    else {
-      glFrameBuffer=createQGLFramebufferObject(width, height, QGLFramebufferObject::CombinedDepthStencil);
-      framebufferObjects[pair<int,int>(width,height)]=glFrameBuffer;
-    }
+  if(!overviewBorder.parentItem()) {
 
     //This flag is needed to don't display overview rectangle outside overview
     setFlag(QGraphicsItem::ItemClipsChildrenToShape);
+    overview.setFlag(QGraphicsItem::ItemClipsChildrenToShape);
     overview.setShapeMode(QGraphicsPixmapItem::BoundingRectShape);
     setBrush(QBrush(QColor(255,255,255,255)));
-    overview.setParentItem(this);
+
+
+    QPainterPath path;
+    path.addRect(_frameWidth/2, _frameWidth/2, width-_frameWidth, height-_frameWidth);
+    overviewBorder.setPath(path);
+    overviewBorder.setParentItem(this);
+
+    overview.setParentItem(&overviewBorder);
 
     //Init lines and polygons item
-    for(unsigned int i=0; i<4; ++i) {
+    for(unsigned int i=0; i<8; ++i) {
       line[i].setParentItem(&overview);
-      poly[i].setParentItem(&overview);
-      poly[i].setBrush(QBrush(QColor(0,0,0,64)));
+      if (i < 4) {
+        poly[i].setParentItem(&overview);
+        poly[i].setBrush(QBrush(QColor(0,0,0,64)));
+        poly[i].setPen(Qt::NoPen);
+      }
     }
 
+  }
+
+  Color backgroundColor = baseScene.getBackgroundColor();
+  int bgV = backgroundColor.getV();
+
+  for(unsigned int i=0; i<8; ++i) {
+    if (bgV < 128) {
+        line[i].setPen(QColor(255, 255, 255));
+    } else {
+      line[i].setPen(QColor(0, 0, 0));
+    }
+    if (i < 4) {
+      if (bgV < 128) {
+        poly[i].setBrush(QBrush(QColor(255,255,255,64)));
+      } else {
+        poly[i].setBrush(QBrush(QColor(0,0,0,64)));
+      }
+    }
   }
 
   // Backup initial viewport
@@ -135,13 +147,6 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   // Change viewport of the scene to the overview viewport
   baseScene.setViewport(0,0,width, height);
-
-  // Backup OpenGL matrix
-  glPushAttrib(GL_ALL_ATTRIB_BITS);
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
 
   if(generatePixmap || _oldCameras.size()!=layerList.size()) {
     // Center the scene
@@ -209,9 +214,8 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     }
 
     // Draw the scene
-    glFrameBuffer->bind();
-    baseScene.draw();
-    glFrameBuffer->release();
+    GlOffscreenRenderer::getInstance()->setViewPortSize(width-2*_frameWidth, height-2*_frameWidth);
+    GlOffscreenRenderer::getInstance()->renderExternalScene(&baseScene, true);
 
     vector<bool>::iterator itTmp=layersVisibility.begin();
 
@@ -236,32 +240,30 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     ++i;
   }
 
-  // invert applied OpenGl transformations
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-  glPopAttrib();
-
   // invert applied viewport
   baseScene.setViewport(backupViewport);
 
   if(generatePixmap) {
     // Load scene pixmap to the item
     QPixmap pixmap;
-    QImage img(glFrameBuffer->toImage());
-    img = QImage(img.bits(),img.width(),img.height(),QImage::Format_ARGB32);
+    QImage img = GlOffscreenRenderer::getInstance()->getImage();
     pixmap.convertFromImage(img);
+    overview.setPos(_frameWidth, _frameWidth);
     overview.setPixmap(pixmap);
   }
 
   // set lines and polygons coordinates
-  line[0].setLine(width,0,p0[0],height-p0[1]);
+  line[0].setLine(width-2*_frameWidth,0,p0[0],height-p0[1]);
   line[1].setLine(0,0,p1[0],height-p1[1]);
-  line[2].setLine(0,height,p2[0],height-p2[1]);
-  line[3].setLine(width,height,p3[0],height-p3[1]);
+  line[2].setLine(0,height-2*_frameWidth,p2[0],height-p2[1]);
+  line[3].setLine(width-2*_frameWidth,height-2*_frameWidth,p3[0],height-p3[1]);
+  line[4].setLine(p0[0],height-p0[1], p1[0],height-p1[1]);
+  line[5].setLine(p1[0],height-p1[1], p2[0],height-p2[1]);
+  line[6].setLine(p2[0],height-p2[1], p3[0],height-p3[1]);
+  line[7].setLine(p3[0],height-p3[1], p0[0],height-p0[1]);
+
   QVector<QPointF> tmpVect;
-  tmpVect.push_back(QPointF(width,0));
+  tmpVect.push_back(QPointF(width-2*_frameWidth,0));
   tmpVect.push_back(QPointF(p0[0],height-p0[1]));
   tmpVect.push_back(QPointF(p1[0],height-p1[1]));
   tmpVect.push_back(QPointF(0,0));
@@ -270,20 +272,27 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   tmpVect.push_back(QPointF(0,0));
   tmpVect.push_back(QPointF(p1[0],height-p1[1]));
   tmpVect.push_back(QPointF(p2[0],height-p2[1]));
-  tmpVect.push_back(QPointF(0,height));
+  tmpVect.push_back(QPointF(0,height-2*_frameWidth));
   poly[1].setPolygon(QPolygonF(tmpVect));
   tmpVect.clear();
-  tmpVect.push_back(QPointF(0,height));
+  tmpVect.push_back(QPointF(0,height-2*_frameWidth));
   tmpVect.push_back(QPointF(p2[0],height-p2[1]));
   tmpVect.push_back(QPointF(p3[0],height-p3[1]));
-  tmpVect.push_back(QPointF(width,height));
+  tmpVect.push_back(QPointF(width-2*_frameWidth,height-2*_frameWidth));
   poly[2].setPolygon(QPolygonF(tmpVect));
   tmpVect.clear();
-  tmpVect.push_back(QPointF(width,height));
+  tmpVect.push_back(QPointF(width-2*_frameWidth,height-2*_frameWidth));
   tmpVect.push_back(QPointF(p3[0],height-p3[1]));
   tmpVect.push_back(QPointF(p0[0],height-p0[1]));
-  tmpVect.push_back(QPointF(width,0));
+  tmpVect.push_back(QPointF(width-2*_frameWidth,0));
   poly[3].setPolygon(QPolygonF(tmpVect));
+
+  QPen pen(QColor(_frameColor[0], _frameColor[1], _frameColor[2], _frameColor[3]));
+  pen.setWidth(_frameWidth);
+  pen.setJoinStyle(Qt::MiterJoin);
+
+  overviewBorder.setPen(pen);
+
 }
 
 void GlOverviewGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {
@@ -306,17 +315,11 @@ void GlOverviewGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent* event) {
 
 void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
 
-  Coord position(width-pos.x(),pos.y(),0);
+  Coord position(width+_frameWidth-pos.x(),pos.y()-_frameWidth,0);
 
   Vector<int,4> backupViewport=baseScene.getViewport();
 
   baseScene.setViewport(0,0,width, height);
-
-  glPushAttrib(GL_ALL_ATTRIB_BITS);
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
 
   vector<Camera> cameras;
   const vector<pair<string, GlLayer*> >& layerList=baseScene.getLayersList();
@@ -332,12 +335,6 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
   for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
     centerPos.push_back(it->second->getCamera().screenTo3DWorld(position));
   }
-
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-  glPopAttrib();
 
   unsigned int i=0;
 

@@ -23,12 +23,12 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/Camera.h>
+#include <tulip/Color.h>
 
 #include <QGraphicsPixmapItem>
+#include <QGraphicsPathItem>
 
 #include <set>
-
-class QGLFramebufferObject;
 
 namespace tlp {
 
@@ -52,6 +52,14 @@ public:
     return height;
   }
 
+  void setFrameColor(const Color &color) {
+      _frameColor = color;
+  }
+
+  void setFrameWidth(int width) {
+      _frameWidth = width;
+  }
+
   void setLayerVisible(const std::string &name,bool visible);
 
 public slots :
@@ -65,23 +73,23 @@ private :
   void mouseMoveEvent(QGraphicsSceneMouseEvent* event);
   void setScenePosition(QPointF pos);
 
-
   GlMainView *view;
   GlScene &baseScene;
   unsigned int width, height;
-  QGLFramebufferObject *glFrameBuffer;
 
   QGraphicsPixmapItem overview;
-  QGraphicsLineItem line[4];
+  QGraphicsPathItem overviewBorder;
+  QGraphicsLineItem line[8];
   QGraphicsPolygonItem poly[4];
 
   bool mouseClicked;
 
   std::set<std::string> _hiddenLayers;
 
-  static std::map<std::pair<int,int>,QGLFramebufferObject*> framebufferObjects;
-
   std::vector<Camera> _oldCameras;
+
+  Color _frameColor;
+  int _frameWidth;
 
 };
 
