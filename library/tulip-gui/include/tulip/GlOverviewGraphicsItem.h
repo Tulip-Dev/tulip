@@ -53,11 +53,11 @@ public:
   }
 
   void setFrameColor(const Color &color) {
-      _frameColor = color;
+    _frameColor = color;
   }
 
   void setFrameWidth(int width) {
-      _frameWidth = width;
+    _frameWidth = width;
   }
 
   void setLayerVisible(const std::string &name,bool visible);
