@@ -59,6 +59,7 @@ class QuickAccessBar;
  * @see tlp::ViewWidget
  */
 class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
+
   Q_OBJECT
 
   tlp::GlMainWidget* _glMainWidget;
@@ -76,12 +77,16 @@ protected :
   tlp::SceneLayersConfigWidget* _sceneLayersConfigurationWidget;
 
 public:
+
+  enum OverviewPosition {OVERVIEW_TOP_LEFT, OVERVIEW_TOP_RIGHT, OVERVIEW_BOTTOM_LEFT, OVERVIEW_BOTTOM_RIGHT};
+
   GlMainView();
   virtual ~GlMainView();
   tlp::GlMainWidget* getGlMainWidget() const;
   virtual QList<QWidget*> configurationWidgets() const;
   bool overviewVisible() const;
   QPixmap snapshot(const QSize &outputSize=QSize()) const;
+  void setOverviewPosition(const OverviewPosition &position);
 
 public slots:
   /**
@@ -144,6 +149,8 @@ protected:
   bool eventFilter(QObject* obj, QEvent* event);
 
   tlp::GlOverviewGraphicsItem* overviewItem() const;
+
+  OverviewPosition _overviewPosition;
 };
 }
 

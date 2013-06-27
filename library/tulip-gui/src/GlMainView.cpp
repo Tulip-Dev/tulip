@@ -36,7 +36,7 @@
 
 using namespace tlp;
 
-GlMainView::GlMainView(): _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true), _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL) {
+GlMainView::GlMainView(): _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true), _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL), _overviewPosition(OVERVIEW_BOTTOM_RIGHT) {
 }
 
 GlMainView::~GlMainView() {
@@ -55,6 +55,11 @@ void GlMainView::redraw() {
 
 void GlMainView::refresh() {
   _glMainWidget->draw(false);
+}
+
+void GlMainView::setOverviewPosition(const OverviewPosition &position) {
+    _overviewPosition = position;
+    drawOverview();
 }
 
 void GlMainView::drawOverview(bool generatePixmap) {
@@ -183,10 +188,17 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     _quickAccessBarItem->resize(rect.width(),_quickAccessBarItem->size().height());
   }
 
-  if (_overviewItem != NULL)
+  if (_overviewItem != NULL) {
     // put overview in the bottom right corner
-    _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
-
+    if (_overviewPosition == OVERVIEW_BOTTOM_RIGHT)
+        _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+    else if (_overviewPosition == OVERVIEW_BOTTOM_LEFT)
+        _overviewItem->setPos(0, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+    else if (_overviewPosition == OVERVIEW_TOP_LEFT)
+        _overviewItem->setPos(0, 0);
+    else if (_overviewPosition == OVERVIEW_TOP_RIGHT)
+        _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, 0);
+  }
   GlLayer *fgLayer = getGlMainWidget()->getScene()->getLayer("Foreground");
 
   if (fgLayer) {
