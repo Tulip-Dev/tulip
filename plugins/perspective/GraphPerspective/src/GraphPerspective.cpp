@@ -312,8 +312,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->mainSplitter->setStretchFactor(1,1);
   _ui->mainSplitter->setCollapsible(1, false);
 
-  _mainWindow->show();
-
   // Open project with model
   QMap<QString,tlp::Graph*> rootIds;
 
@@ -361,8 +359,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   PythonInterpreter::getInstance()->setOutputEnabled(true);
 
   showTrayMessage("GraphPerspective started");
-
-  delete progress;
 }
 
 tlp::GraphHierarchiesModel* GraphPerspective::model() const {
