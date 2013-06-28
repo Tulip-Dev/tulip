@@ -300,7 +300,13 @@ int main(int argc,char **argv) {
 
   perspective->start(progress);
 
-  mainWindow->setWindowTitle(title);
+  if (mainWindow->windowTitle() == "") {
+    mainWindow->setWindowTitle(title);
+  }
+
+  delete progress;
+
+  mainWindow->show();
 
   // the delay of geometry update until perspective execution
   // seems to ensure that the four parameters (x,y,w,h)
