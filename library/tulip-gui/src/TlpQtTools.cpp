@@ -203,7 +203,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
     }
   }
 
-  tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
+  tlp::initTulipLib();
   initQTypeSerializers();
   OpenGlConfigManager::setGraphicsCardWarningDisplayer(new QtGraphicsCardWarningDisplayer());
   tlp::TulipPluginsPath = std::string((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toUtf8().data()) +
