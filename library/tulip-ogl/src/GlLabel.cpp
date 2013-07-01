@@ -95,7 +95,7 @@ void GlLabel::setText(const string& text) {
   this->text=text;
 
   if (font->Error())
-      return;
+    return;
 
   if(font->FaceSize()!=(unsigned int)fontSize) {
     font->FaceSize(fontSize);
@@ -674,7 +674,8 @@ void GlLabel::draw(float, Camera *camera) {
       if (outlineSize > 0) {
         if (screenH > 25) {
           glLineWidth(outlineSize);
-        } else {
+        }
+        else {
           glLineWidth(1);
         }
 
