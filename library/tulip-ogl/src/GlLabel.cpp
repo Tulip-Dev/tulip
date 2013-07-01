@@ -94,6 +94,9 @@ void GlLabel::init() {
 void GlLabel::setText(const string& text) {
   this->text=text;
 
+  if (font->Error())
+      return;
+
   if(font->FaceSize()!=(unsigned int)fontSize) {
     font->FaceSize(fontSize);
     borderFont->FaceSize(fontSize);
@@ -255,7 +258,7 @@ float GlLabel::getHeightAfterScale() {
 //============================================================
 void GlLabel::draw(float, Camera *camera) {
 
-  if(fontSize<=0)
+  if(fontSize<=0 || font->Error())
     return;
 
   bool computeLOD=false;
@@ -671,6 +674,8 @@ void GlLabel::draw(float, Camera *camera) {
       if (outlineSize > 0) {
         if (screenH > 25) {
           glLineWidth(outlineSize);
+        } else {
+          glLineWidth(1);
         }
 
         setMaterial(outlineColor);
