@@ -227,9 +227,33 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
 
 void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool toggle) {
   if (_currentInteractorConfigurationItem != NULL) {
-    static_cast<QScrollArea*>(_currentInteractorConfigurationItem->widget())->takeWidget();
-    delete _currentInteractorConfigurationItem;
-    _currentInteractorConfigurationItem = NULL;
+    if (!toggle)
+      _currentInteractorConfigurationItem->hide();
+    else {
+      QWidget* interactorWidget = _view->currentInteractor()->configurationWidget();
+      if (!interactorWidget)
+	return;
+      QScrollArea* area = static_cast<QScrollArea*>(_currentInteractorConfigurationItem->widget());
+      // avoid deletion of previous contents
+      area->takeWidget();
+
+      // set new contents
+      if (interactorWidget->objectName() != "contents")
+	interactorWidget->setObjectName("contents");
+      area->setWidget(interactorWidget);
+
+      // resize as much as possible
+      QSize size(interactorWidget->sizeHint());
+      QSize psize(_view->graphicsView()->size());
+      if (size.width() > psize.width() - 30)
+	size.setWidth(psize.width() - 30);
+      if (size.height() > psize.height() - 30)
+	size.setHeight(psize.height() - 30);
+      area->resize(size);
+      
+      _currentInteractorConfigurationItem->show();
+    }
+    return;
   }
 
   if (!toggle || _view->currentInteractor() == NULL || _view->currentInteractor()->configurationWidget() == NULL)
