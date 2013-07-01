@@ -2,7 +2,7 @@
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/MouseInteractors.h>
-#include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QApplication>
 #include <QString>
@@ -22,9 +22,7 @@ int main(int argc, char** argv) {
   /*
    Initialize the library and load all plugins
    */
-  tlp::initTulipLib();
-  PluginLoaderTxt loadertxt;
-  PluginLibraryLoader::loadPlugins(&loadertxt);
+  tlp::initTulipSoftware();
 
   /*
    Load the file passed as first argument into a graph.
