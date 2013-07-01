@@ -321,7 +321,7 @@ node GraphAbstract::getInNode(const node n,unsigned int i)const {
   Iterator<node>*itN=getInNodes(n);
   node result;
 
-  for(unsigned int j=i+1; j>1; --j) {
+  while(i--) {
     result=itN->next();
   }
 
@@ -334,7 +334,7 @@ node GraphAbstract::getOutNode(const node n,unsigned int i)const {
   Iterator<node>*itN=getOutNodes(n);
   node result;
 
-  for(unsigned int j=i+1; j>1; --j) {
+  while(i--) {
     result=itN->next();
   }
 

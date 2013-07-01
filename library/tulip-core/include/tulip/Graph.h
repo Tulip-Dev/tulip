@@ -693,7 +693,7 @@ public:
    * node in = graph->addNode();
    * node N = graph->addNode();
    * graph->addEdge(in, N);
-   * //in == graph->getInNode(N, 0);
+   * //in == graph->getInNode(N, 1);
    * @endcode
    *
    * If you have 5 input nodes on a node N, then
@@ -726,7 +726,7 @@ public:
    * node N = graph->addNode();
    * node out = graph->addNode();
    * graph->addEdge(N, out);
-   * //out == graph->getOutNode(N, 0);
+   * //out == graph->getOutNode(N, 1);
    * @endcode
    *
    * If you have 5 output nodes on a node N, then
