@@ -128,7 +128,12 @@ extern "C" {
 }
 
 // throw an exception if an expected directory does not exist
-static void checkDirectory(const std::string& dir) {
+static void checkDirectory(std::string dir) {
+  // remove ending / separator if any
+  // bug detected on Windows
+  if (dir[dir.length() - 1] == '/')
+    dir.erase(dir.length() - 1);
+
   struct stat infoEntry;
 
   if (stat(dir.c_str(),&infoEntry) != 0) {
