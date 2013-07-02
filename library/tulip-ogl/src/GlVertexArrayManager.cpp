@@ -957,7 +957,7 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
     layoutObserverActivated=false;
   }
 
-  if(edgesModified || colorProperty==property || borderColorProperty==property || borderWidthProperty==property) {
+  if(edgesModified || layoutProperty==property || colorProperty==property || borderColorProperty==property || borderWidthProperty==property) {
     setHaveToComputeColor(true);
     clearColorData();
     colorProperty->removeListener(this);
