@@ -116,6 +116,7 @@ void View::setGraph(tlp::Graph *g) {
 
 void View::treatEvent(const Event& ev) {
   const GraphEvent *gEv = dynamic_cast<const GraphEvent*>(&ev);
+
   if (ev.type() == Event::TLP_DELETE && ev.sender() == _graph) {
 #ifndef NDEBUG
     Graph* old = _graph;
@@ -133,11 +134,13 @@ void View::treatEvent(const Event& ev) {
     }
 
 #endif // NDEBUG
-  } else if (gEv && gEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY) {
-      QString propName = gEv->getPropertyName().c_str();
-      if (propName.startsWith("view")) {
-          addRedrawTrigger(_graph->getProperty(propName.toStdString()));
-      }
+  }
+  else if (gEv && gEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY) {
+    QString propName = gEv->getPropertyName().c_str();
+
+    if (propName.startsWith("view")) {
+      addRedrawTrigger(_graph->getProperty(propName.toStdString()));
+    }
   }
 }
 

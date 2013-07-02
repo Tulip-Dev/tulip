@@ -295,7 +295,8 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   if (importSucessfull) {
     setViewPropertiesDefaults(newGraph);
     return newGraph;
-  } else
+  }
+  else
     return NULL;
 }
 //=========================================================

@@ -76,13 +76,13 @@ TulipSettings &TulipSettings::instance() {
 }
 
 void TulipSettings::synchronizeViewSettings() {
-    TulipViewSettings::instance().setDefaultColor(NODE, defaultColor(NODE));
-    TulipViewSettings::instance().setDefaultColor(EDGE, defaultColor(EDGE));
-    TulipViewSettings::instance().setDefaultSize(NODE, defaultSize(NODE));
-    TulipViewSettings::instance().setDefaultSize(EDGE, defaultSize(EDGE));
-    TulipViewSettings::instance().setDefaultShape(NODE, defaultShape(NODE));
-    TulipViewSettings::instance().setDefaultShape(EDGE, defaultShape(EDGE));
-    TulipViewSettings::instance().setDefaultLabelColor(defaultLabelColor());
+  TulipViewSettings::instance().setDefaultColor(NODE, defaultColor(NODE));
+  TulipViewSettings::instance().setDefaultColor(EDGE, defaultColor(EDGE));
+  TulipViewSettings::instance().setDefaultSize(NODE, defaultSize(NODE));
+  TulipViewSettings::instance().setDefaultSize(EDGE, defaultSize(EDGE));
+  TulipViewSettings::instance().setDefaultShape(NODE, defaultShape(NODE));
+  TulipViewSettings::instance().setDefaultShape(EDGE, defaultShape(EDGE));
+  TulipViewSettings::instance().setDefaultLabelColor(defaultLabelColor());
 }
 
 QStringList TulipSettings::recentDocuments() const {
@@ -375,15 +375,19 @@ void TulipSettings::setWarnUserAboutGraphicsCard(bool f) {
 }
 
 void TulipSettings::treatEvent(const Event &message) {
-    const ViewSettingsEvent *sev = dynamic_cast<const ViewSettingsEvent *>(&message);
-    if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_COLOR_MODIFIED) {
-        setDefaultColor(sev->getElementType(), sev->getColor());
-    } else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_SIZE_MODIFIED) {
-        setDefaultSize(sev->getElementType(), sev->getSize());
-    } else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_SHAPE_MODIFIED) {
-        setDefaultShape(sev->getElementType(), sev->getShape());
-    } else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_LABEL_COLOR_MODIFIED) {
-        setDefaultLabelColor(sev->getColor());
-    }
+  const ViewSettingsEvent *sev = dynamic_cast<const ViewSettingsEvent *>(&message);
+
+  if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_COLOR_MODIFIED) {
+    setDefaultColor(sev->getElementType(), sev->getColor());
+  }
+  else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_SIZE_MODIFIED) {
+    setDefaultSize(sev->getElementType(), sev->getSize());
+  }
+  else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_SHAPE_MODIFIED) {
+    setDefaultShape(sev->getElementType(), sev->getShape());
+  }
+  else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_LABEL_COLOR_MODIFIED) {
+    setDefaultLabelColor(sev->getColor());
+  }
 }
 
