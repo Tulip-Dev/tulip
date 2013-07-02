@@ -20,10 +20,10 @@
 #include <tulip/ConnectedTest.h>
 #include <tulip/GraphTest.h>
 
-class ConnetedTest : public tlp::GraphTest {
+class ConnectedTest : public tlp::GraphTest {
 public:
   PLUGININFORMATIONS("Connected", "Tulip team", "18/04/2012", "Tests whether a graph is connected or not.", "1.0", "Topological Test")
-  ConnetedTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
+  ConnectedTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
   virtual bool test() {
@@ -31,7 +31,7 @@ public:
   }
 
 };
-PLUGIN(ConnetedTest)
+PLUGIN(ConnectedTest)
 
 class MakeConnected : public tlp::Algorithm {
 public:
