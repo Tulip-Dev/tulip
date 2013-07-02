@@ -149,38 +149,38 @@ To attach to an object for receiving events, call its :meth:`tlp.Observable.addO
 
 %ConvertToSubClassCode
         if (dynamic_cast<tlp::Graph *>(sipCpp)) {
-            sipType = sipType_tlp_Graph;
+            sipType = sipFindType("tlp::Graph");
         } else if (dynamic_cast<tlp::BooleanProperty *>(sipCpp)) {
-            sipType = sipType_tlp_BooleanProperty;
+            sipType = sipFindType("tlp::BooleanProperty");
         } else if (dynamic_cast<tlp::ColorProperty *>(sipCpp)) {
-            sipType = sipType_tlp_ColorProperty;
+            sipType = sipFindType("tlp::ColorProperty");
         } else if (dynamic_cast<tlp::DoubleProperty *>(sipCpp)) {
-            sipType = sipType_tlp_DoubleProperty;
+            sipType = sipFindType("tlp::DoubleProperty");
         } else if (dynamic_cast<tlp::GraphProperty *>(sipCpp)) {
-            sipType = sipType_tlp_GraphProperty;
+            sipType = sipFindType("tlp::GraphProperty");
         } else if (dynamic_cast<tlp::IntegerProperty *>(sipCpp)) {
-            sipType = sipType_tlp_IntegerProperty;
+            sipType = sipFindType("tlp::IntegerProperty");
         } else if (dynamic_cast<tlp::LayoutProperty *>(sipCpp)) {
-            sipType = sipType_tlp_LayoutProperty;
+            sipType = sipFindType("tlp::LayoutProperty");
         } else if (dynamic_cast<tlp::SizeProperty *>(sipCpp)) {
-            sipType = sipType_tlp_SizeProperty;
+            sipType = sipFindType("tlp::SizeProperty");
         } else if (dynamic_cast<tlp::StringProperty *>(sipCpp)) {
-            sipType = sipType_tlp_StringProperty;
+            sipType = sipFindType("tlp::StringProperty");
 
         } else if (dynamic_cast<tlp::BooleanVectorProperty *>(sipCpp)) {
-            sipType = sipType_tlp_BooleanVectorProperty;
+            sipType = sipFindType("tlp::BooleanVectorProperty");
         } else if (dynamic_cast<tlp::ColorVectorProperty *>(sipCpp)) {
-            sipType = sipType_tlp_ColorVectorProperty;
+            sipType = sipFindType("tlp::ColorVectorProperty");
         } else if (dynamic_cast<tlp::DoubleVectorProperty *>(sipCpp)) {
-            sipType = sipType_tlp_DoubleVectorProperty;
+            sipType = sipFindType("tlp::DoubleVectorProperty");
         } else if (dynamic_cast<tlp::IntegerVectorProperty *>(sipCpp)) {
-            sipType = sipType_tlp_IntegerVectorProperty;
+            sipType = sipFindType("tlp::IntegerVectorProperty");
         } else if (dynamic_cast<tlp::CoordVectorProperty *>(sipCpp)) {
-            sipType = sipType_tlp_CoordVectorProperty;
+            sipType = sipFindType("tlp::CoordVectorProperty");
         } else if (dynamic_cast<tlp::SizeVectorProperty *>(sipCpp)) {
-            sipType = sipType_tlp_SizeVectorProperty;
+            sipType = sipFindType("tlp::SizeVectorProperty");
         } else if (dynamic_cast<tlp::StringVectorProperty *>(sipCpp)) {
-            sipType = sipType_tlp_StringVectorProperty;
+            sipType = sipFindType("tlp::StringVectorProperty");
         } else {
             sipType = NULL;
         }
