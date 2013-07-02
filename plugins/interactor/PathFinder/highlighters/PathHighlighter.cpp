@@ -81,8 +81,23 @@ void PathHighlighter::addGlEntity(GlScene *scene, GlSimpleEntity *entity, bool d
     realName = ss.str();
   }
 
+  if (backupScene)
+    backupScene->removeListener(this);
+
   backupScene = scene;
+  backupScene->addListener(this);
+
   GlLayer *layer = getWorkingLayer(backupScene);
   entities[realName] = deleteOnExit;
   layer->addGlEntity(entity, realName);
+}
+
+void PathHighlighter::treatEvent(const Event &ev) {
+  if (ev.type()==Event::TLP_DELETE) {
+    if (ev.sender() == backupScene) {
+      // reset backupScene to avoid segfault
+      // on destructor invocation
+      backupScene = NULL;
+    }
+  }
 }
