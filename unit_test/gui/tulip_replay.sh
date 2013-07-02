@@ -35,7 +35,7 @@ sh  ./launch_tulip.sh $TULIP $TLP_INPUT_FILE  > /dev/null 2>&1 &
 sleep 5
 # replay events
 echo "Replaying events from $CNEE_INPUT_FILE"
-$CNEE -rep --file $CNEE_INPUT_FILE -fp > /dev/null 2>&1
+$CNEE -rep --file $CNEE_INPUT_FILE -fp -e /tmp/$CNEE_INPUT_FILE.log > /dev/null 2>&1
 xset r
 echo "Replay finished"
 
