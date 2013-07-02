@@ -82,6 +82,7 @@ INSTALL(FILES
   tulip/TulipException.h
   tulip/tuliphash.h
   tulip/TulipPluginHeaders.h
+  tulip/TulipViewSettings.h
   tulip/uniqueiterator.h
   tulip/VectorCast.h
   tulip/vectorgraph.h

@@ -19,6 +19,8 @@
 #include <cmath>
 #include <algorithm>
 #include <tulip/TreeTest.h>
+#include <tulip/TulipViewSettings.h>
+
 #include "SquarifiedTreeMap.h"
 #include "TreeTools.h"
 
@@ -32,8 +34,6 @@ const double SEPARATION_Z  = 10;
 const double DEFAULT_RATIO = 1.4;
 const int DEFAULT_WIDTH   = 1024;
 const int DEFAULT_HEIGHT  = 1024;
-
-const int TEXTUREDGLYPHID = 17;
 
 namespace {
 const char * paramHelp[] = {
@@ -149,7 +149,7 @@ bool SquarifiedTreeMap::run() {
     node n;
     forEach(n, graph->getNodes()) {
       if (graph->outdeg(n) != 0)
-        glyphResult->setNodeValue(n, TEXTUREDGLYPHID);
+        glyphResult->setNodeValue(n, NodeShape::Window);
     }
   }
 

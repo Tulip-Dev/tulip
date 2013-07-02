@@ -74,7 +74,7 @@ void GlLabel::init() {
   outlineSize=1.;
   renderingMode=0;
   translationAfterRotation=Coord(0,0,0);
-  alignment=ON_CENTER;
+  alignment=LabelPosition::Center;
   scaleToSize=true;
   useMinMaxSize=false;
   minSize=10;
@@ -359,22 +359,22 @@ void GlLabel::draw(float, Camera *camera) {
     }
 
     switch(alignment) {
-    case ON_CENTER:
+    case LabelPosition::Center:
       break;
 
-    case ON_LEFT:
+    case LabelPosition::Left:
       baseCoord[0]-=sizeForOutAlign[0]/2+wModified*scaleToApply/2.;
       break;
 
-    case ON_RIGHT:
+    case LabelPosition::Right:
       baseCoord[0]+=sizeForOutAlign[0]/2+wModified*scaleToApply/2.;
       break;
 
-    case ON_TOP:
+    case LabelPosition::Top:
       baseCoord[1]+=sizeForOutAlign[1]/2+hModified*scaleToApply/2.;
       break;
 
-    case ON_BOTTOM:
+    case LabelPosition::Bottom:
       baseCoord[1]-=sizeForOutAlign[1]/2+hModified*scaleToApply/2.;
       break;
 
@@ -453,23 +453,23 @@ void GlLabel::draw(float, Camera *camera) {
   if(!billboarded) {
     //Alignement translation
     switch(alignment) {
-    case ON_CENTER:
+    case LabelPosition::Center:
 
       break;
 
-    case ON_LEFT:
+    case LabelPosition::Left:
       glTranslatef(-sizeForOutAlign[0]/2,0,0);
       break;
 
-    case ON_RIGHT:
+    case LabelPosition::Right:
       glTranslatef(sizeForOutAlign[0]/2,0,0);
       break;
 
-    case ON_TOP:
+    case LabelPosition::Top:
       glTranslatef(0,sizeForOutAlign[1]/2,0);
       break;
 
-    case ON_BOTTOM:
+    case LabelPosition::Bottom:
       glTranslatef(0,-sizeForOutAlign[1]/2,0);
       break;
 
@@ -512,19 +512,19 @@ void GlLabel::draw(float, Camera *camera) {
 
     switch(alignment) {
 
-    case ON_LEFT:
+    case LabelPosition::Left:
       billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(-billboardedBB.width()/2.,0,0),invTransformMatrix,camera->getViewport())-baseCenter;
       break;
 
-    case ON_RIGHT:
+    case LabelPosition::Right:
       billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(billboardedBB.width()/2.,0,0),invTransformMatrix,camera->getViewport())-baseCenter;
       break;
 
-    case ON_TOP:
+    case LabelPosition::Top:
       billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(0,billboardedBB.height()/2.,0),invTransformMatrix,camera->getViewport())-baseCenter;
       break;
 
-    case ON_BOTTOM:
+    case LabelPosition::Bottom:
       billboardedTranlation=unprojectPoint(((Coord)billboardedBB.center())+Coord(0,-billboardedBB.height()/2.,0),invTransformMatrix,camera->getViewport())-baseCenter;
       break;
 
@@ -563,19 +563,19 @@ void GlLabel::draw(float, Camera *camera) {
     float hAlign=0;
 
     switch (alignment) {
-    case ON_TOP:
+    case LabelPosition::Top:
       hAlign=h/2.;
       break;
 
-    case ON_BOTTOM:
+    case LabelPosition::Bottom:
       hAlign=-(h/2.);
       break;
 
-    case ON_LEFT:
+    case LabelPosition::Left:
       wAlign = -(w/2.);
       break;
 
-    case ON_RIGHT:
+    case LabelPosition::Right:
       wAlign = w/2.;
       break;
 
@@ -607,11 +607,11 @@ void GlLabel::draw(float, Camera *camera) {
     float xAlignFactor=.5;
 
     switch (alignment) {
-    case ON_LEFT:
+    case LabelPosition::Left:
       xAlignFactor = 1.;
       break;
 
-    case ON_RIGHT:
+    case LabelPosition::Right:
       xAlignFactor = .0;
       break;
 
@@ -624,19 +624,19 @@ void GlLabel::draw(float, Camera *camera) {
     float yShiftFactor=0.;
 
     switch (alignment) {
-    case ON_LEFT:
+    case LabelPosition::Left:
       xShiftFactor = -0.5;
       break;
 
-    case ON_RIGHT:
+    case LabelPosition::Right:
       xShiftFactor = 0.5;
       break;
 
-    case ON_TOP:
+    case LabelPosition::Top:
       yShiftFactor = 0.5;
       break;
 
-    case ON_BOTTOM:
+    case LabelPosition::Bottom:
       yShiftFactor = -0.5;
       break;
 

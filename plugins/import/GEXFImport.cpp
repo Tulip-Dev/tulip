@@ -24,6 +24,7 @@
 #include <tulip/ImportModule.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/ForEach.h>
+#include <tulip/TulipViewSettings.h>
 
 #include <QXmlStreamReader>
 #include <QFile>
@@ -167,7 +168,7 @@ public :
     }
 
     // nodes shape will be circle
-    viewShape->setAllNodeValue(14);
+    viewShape->setAllNodeValue(NodeShape::Circle);
 
     // add subgraph nodes, edges and meta nodes if needed
     Graph*quotientGraph = addSubGraphsNodes();
@@ -180,7 +181,7 @@ public :
     // Set edges to be rendered as Cubic Bézier curves and
     // compute curve control points for each edge
     if (curvedEdges && nodesHaveCoordinates) {
-      viewShape->setAllEdgeValue(4);
+      viewShape->setAllEdgeValue(EdgeShape::BezierCurve);
       curveGraphEdges();
     }
 

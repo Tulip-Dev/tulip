@@ -35,6 +35,7 @@
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/TulipViewSettings.h>
 
 #include "ParallelCoordinatesDrawing.h"
 #include "NominalParallelAxis.h"
@@ -45,8 +46,6 @@
 #include <climits>
 #include <algorithm>
 #include <typeinfo>
-
-const int CIRCLE_GLYPH_ID = 14;
 
 using namespace std;
 
@@ -324,7 +323,7 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
           axisPointsGraphShape->setNodeValue(n, graphProxy->getPropertyValueForData<IntegerProperty, IntegerType>("viewShape", dataId));
         }
         else {
-          axisPointsGraphShape->setNodeValue(n, CIRCLE_GLYPH_ID);
+          axisPointsGraphShape->setNodeValue(n, NodeShape::Circle);
         }
 
         axisPointsGraphLabels->setNodeValue(n, graphProxy->getPropertyValueForData<StringProperty, StringType>("viewLabel", dataId));

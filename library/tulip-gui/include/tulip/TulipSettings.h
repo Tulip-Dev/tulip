@@ -36,7 +36,7 @@ namespace tlp {
   * TulipSettings is a wrapper for QSettings providing quick access to common keys provided in the tulip configuration file.
   * This object does not mask any method from the QSettings class, which mean that the user can still access custom keys by invoking the QSettings::value method.
   */
-class TLP_QT_SCOPE TulipSettings: public QSettings, GlDefaultSelectionColorManager {
+class TLP_QT_SCOPE TulipSettings: public QSettings, GlDefaultSelectionColorManager, Observable {
   Q_OBJECT
   Q_ENUMS(DisplayProperty)
 
@@ -72,6 +72,8 @@ public:
   static TulipSettings &instance();
 
   static QString elementKey(const QString& configEntry, tlp::ElementType elem);
+
+  void synchronizeViewSettings();
 
   /**
     @brief Retrieves the list of documents recently opened with tulip.
@@ -181,6 +183,8 @@ public:
 
   bool warnUserAboutGraphicsCard() const;
   void setWarnUserAboutGraphicsCard(bool);
+
+  void treatEvent(const Event &message);
 
 private:
   TulipSettings();

@@ -24,6 +24,7 @@
 #include <tulip/ForEach.h>
 #include <tulip/tulipconf.h>
 #include <tulip/StringCollection.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -90,11 +91,11 @@ void SOMMap::initMap() {
   switch (connectivity) {
   case four:
   case eight:
-    nodeShape->setAllNodeValue(GlyphManager::getInst().glyphId("2D - Square"));
+    nodeShape->setAllNodeValue(NodeShape::Square);
     break;
 
   case six:
-    nodeShape->setAllNodeValue(GlyphManager::getInst().glyphId("2D - Hexagon"));
+    nodeShape->setAllNodeValue(NodeShape::Hexagon);
     break;
   }
 

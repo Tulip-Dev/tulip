@@ -110,16 +110,6 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(QStringType::RealType);
   CHECK_QVARIANT(QStringListType::RealType);
 
-  if (v.userType() == qMetaTypeId<NodeShape>()) {
-    NodeShape desc = v.value<NodeShape>();
-    return new TypedData<unsigned int>(new unsigned int(desc.nodeShapeId));
-  }
-
-  if (v.userType() == qMetaTypeId<EdgeExtremityShape>()) {
-    EdgeExtremityShape desc = v.value<EdgeExtremityShape>();
-    return new TypedData<unsigned int>(new unsigned int(desc.edgeExtremityShapeId));
-  }
-
   if (v.userType() == qMetaTypeId<TulipFileDescriptor>()) {
     TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
     return new TypedData<std::string>(new std::string(QStringToTlpString(desc.absolutePath)));

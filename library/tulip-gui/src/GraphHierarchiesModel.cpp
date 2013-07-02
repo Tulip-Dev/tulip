@@ -140,117 +140,6 @@ static ViewLayoutCalculator vLayoutCalc;
 static ViewSizeCalculator vSizeCalc;
 static ViewBorderWidthCalculator vWidthCalc;
 
-void GraphHierarchiesModel::setApplicationDefaults(tlp::Graph *g) {
-  const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontSizes = "viewFontSize",
-                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
-                    labelColor = "viewLabelColor", labelBorderColor = "viewLabelBorderColor", labelBorderWidth = "viewLabelBorderWidth", labelPosition = "viewLabelPosition", label="viewLabel", rotation = "viewRotation", labelRotation = "viewLabelRotation",
-                    srcAnchorSize = "viewSrcAnchorSize", selection = "viewSelection", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
-
-  if (!g->existProperty(shapes)) {
-    g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipSettings::instance().defaultShape(tlp::NODE));
-    g->getProperty<IntegerProperty>(shapes)->setAllEdgeValue(TulipSettings::instance().defaultShape(tlp::EDGE));
-  }
-
-  if (!g->existProperty(colors)) {
-    g->getProperty<ColorProperty>(colors)->setAllNodeValue(TulipSettings::instance().defaultColor(tlp::NODE));
-    g->getProperty<ColorProperty>(colors)->setAllEdgeValue(TulipSettings::instance().defaultColor(tlp::EDGE));
-  }
-
-  if (!g->existProperty(sizes)) {
-    g->getProperty<SizeProperty>(sizes)->setAllNodeValue(TulipSettings::instance().defaultSize(tlp::NODE));
-    g->getProperty<SizeProperty>(sizes)->setAllEdgeValue(TulipSettings::instance().defaultSize(tlp::EDGE));
-  }
-
-  if (!g->existProperty(metrics)) {
-    g->getProperty<DoubleProperty>(metrics)->setAllNodeValue(0);
-    g->getProperty<DoubleProperty>(metrics)->setAllEdgeValue(0);
-  }
-
-  if (!g->existProperty(fonts)) {
-    g->getProperty<StringProperty>(fonts)->setAllNodeValue(tlp::TulipBitmapDir + "font.ttf");
-    g->getProperty<StringProperty>(fonts)->setAllEdgeValue(tlp::TulipBitmapDir + "font.ttf");
-  }
-
-  if (!g->existProperty(fontSizes)) {
-    g->getProperty<IntegerProperty>(fontSizes)->setAllNodeValue(18);
-    g->getProperty<IntegerProperty>(fontSizes)->setAllEdgeValue(18);
-  }
-
-  if (!g->existProperty(borderWidth)) {
-    g->getProperty<DoubleProperty>(borderWidth)->setAllNodeValue(0);
-    g->getProperty<DoubleProperty>(borderWidth)->setAllEdgeValue(1);
-  }
-
-  if (!g->existProperty(borderColor)) {
-    g->getProperty<ColorProperty>(borderColor)->setAllNodeValue(TulipSettings::instance().defaultColor(tlp::NODE));
-    g->getProperty<ColorProperty>(borderColor)->setAllEdgeValue(TulipSettings::instance().defaultColor(tlp::EDGE));
-  }
-
-  if (!g->existProperty(tgtShape)) {
-    g->getProperty<IntegerProperty>(tgtShape)->setAllEdgeValue(EdgeExtremityGlyphManager::getInst().glyphId("2D - Arrow"));
-  }
-
-  if (!g->existProperty(srcShape)) {
-    g->getProperty<IntegerProperty>(srcShape)->setAllEdgeValue(EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
-  }
-
-  if (!g->existProperty(labelColor)) {
-    g->getProperty<ColorProperty>(labelColor)->setAllNodeValue(TulipSettings::instance().defaultLabelColor());
-    g->getProperty<ColorProperty>(labelColor)->setAllEdgeValue(TulipSettings::instance().defaultLabelColor());
-  }
-
-  if (!g->existProperty(labelBorderColor)) {
-    g->getProperty<ColorProperty>(labelBorderColor)->setAllNodeValue(TulipSettings::instance().defaultLabelColor());
-    g->getProperty<ColorProperty>(labelBorderColor)->setAllEdgeValue(TulipSettings::instance().defaultLabelColor());
-  }
-
-  if (!g->existProperty(labelBorderWidth)) {
-    g->getProperty<DoubleProperty>(labelBorderWidth)->setAllNodeValue(1);
-    g->getProperty<DoubleProperty>(labelBorderWidth)->setAllEdgeValue(1);
-  }
-
-  if (!g->existProperty(labelPosition)) {
-    g->getProperty<IntegerProperty>(labelPosition)->setAllNodeValue(ON_CENTER);
-    g->getProperty<IntegerProperty>(labelPosition)->setAllEdgeValue(ON_CENTER);
-  }
-
-  if (!g->existProperty(rotation)) {
-    g->getProperty<DoubleProperty>(rotation)->setAllNodeValue(0);
-    g->getProperty<DoubleProperty>(rotation)->setAllEdgeValue(0);
-  }
-
-  if (!g->existProperty(labelRotation)) {
-    g->getProperty<DoubleProperty>(labelRotation)->setAllNodeValue(0);
-    g->getProperty<DoubleProperty>(labelRotation)->setAllEdgeValue(0);
-  }
-
-  if (!g->existProperty(srcAnchorSize)) {
-    g->getProperty<SizeProperty>(srcAnchorSize)->setAllNodeValue(Size(1,1,0));
-    g->getProperty<SizeProperty>(srcAnchorSize)->setAllEdgeValue(Size(1,1,0));
-  }
-
-  if (!g->existProperty(tgtAnchorSize)) {
-    g->getProperty<SizeProperty>(tgtAnchorSize)->setAllNodeValue(Size(1,1,0));
-    g->getProperty<SizeProperty>(tgtAnchorSize)->setAllEdgeValue(Size(1,1,0));
-  }
-
-  if (!g->existProperty(texture)) {
-    g->getProperty<StringProperty>(texture)->setAllNodeValue("");
-    g->getProperty<StringProperty>(texture)->setAllEdgeValue("");
-  }
-
-  if (!g->existProperty(label)) {
-    g->getProperty<StringProperty>(label)->setAllNodeValue("");
-    g->getProperty<StringProperty>(label)->setAllEdgeValue("");
-  }
-
-  if (!g->existProperty(selection)) {
-    g->getProperty<BooleanProperty>(selection)->setAllNodeValue(false);
-    g->getProperty<BooleanProperty>(selection)->setAllEdgeValue(false);
-  }
-
-}
-
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent), _currentGraph(NULL) {}
 
 GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy): TulipModel(copy.QObject::parent()), tlp::Observable() {
@@ -589,7 +478,6 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
       return;
   }
   _graphs.push_back(g);
-  setApplicationDefaults(g);
   g->getProperty<ColorProperty>("viewColor")->setMetaValueCalculator(&vColorCalc);
   g->getProperty<StringProperty>("viewLabel")->setMetaValueCalculator(&vLabelCalc);
   g->getProperty<LayoutProperty>("viewLayout")->setMetaValueCalculator(&vLayoutCalc);

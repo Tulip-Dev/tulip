@@ -25,6 +25,7 @@
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TulipViewSettings.h>
 
 #include "Histogram.h"
 
@@ -85,7 +86,7 @@ Histogram::Histogram(Graph *graph, const std::string propertyName, const Element
         graph->getProperty<StringProperty>("viewLabel")->getEdgeValue(e));
   }
   edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection")->addListener(this);
-  edgeAsNodeGraph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(14);
+  edgeAsNodeGraph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(NodeShape::Circle);
 
   if (dataLocation == NODE) {
     graphComposite = new GlGraphComposite(graph);

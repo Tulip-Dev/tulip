@@ -73,8 +73,8 @@ void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setDefaultColor(tlp::EDGE,model->data(model->index(0,2)).value<tlp::Color>());
   TulipSettings::instance().setDefaultSize(tlp::NODE,model->data(model->index(1,1)).value<tlp::Size>());
   TulipSettings::instance().setDefaultSize(tlp::EDGE,model->data(model->index(1,2)).value<tlp::Size>());
-  TulipSettings::instance().setDefaultShape(tlp::NODE,model->data(model->index(2,1)).value<NodeShape>().nodeShapeId);
-  TulipSettings::instance().setDefaultShape(tlp::EDGE,(int)(model->data(model->index(2,2)).value<tlp::EdgeShape>()));
+  TulipSettings::instance().setDefaultShape(tlp::NODE,model->data(model->index(2,1)).value<NodeShape::NodeShapes>());
+  TulipSettings::instance().setDefaultShape(tlp::EDGE,(int)(model->data(model->index(2,2)).value<EdgeShape::EdgeShapes>()));
   TulipSettings::instance().setDefaultSelectionColor(model->data(model->index(3,1)).value<tlp::Color>());
   TulipSettings::instance().setDefaultSelectionColor(model->data(model->index(3,2)).value<tlp::Color>());
 
@@ -136,8 +136,8 @@ void PreferencesDialog::readSettings() {
   model->setData(model->index(0,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultColor(tlp::EDGE)));
   model->setData(model->index(1,1),QVariant::fromValue<tlp::Size>(TulipSettings::instance().defaultSize(tlp::NODE)));
   model->setData(model->index(1,2),QVariant::fromValue<tlp::Size>(TulipSettings::instance().defaultSize(tlp::EDGE)));
-  model->setData(model->index(2,1),QVariant::fromValue<NodeShape>(NodeShape(TulipSettings::instance().defaultShape(tlp::NODE))));
-  model->setData(model->index(2,2),QVariant::fromValue<tlp::EdgeShape>((tlp::EdgeShape)(TulipSettings::instance().defaultShape(tlp::EDGE))));
+  model->setData(model->index(2,1),QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(TulipSettings::instance().defaultShape(tlp::NODE))));
+  model->setData(model->index(2,2),QVariant::fromValue<EdgeShape::EdgeShapes>(static_cast<EdgeShape::EdgeShapes>(TulipSettings::instance().defaultShape(tlp::EDGE))));
   model->setData(model->index(3,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor()));
   model->setData(model->index(3,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor()));
   // edges selection color is not editable

@@ -25,6 +25,7 @@
 #include <tulip/Size.h>
 #include <tulip/Camera.h>
 #include <tulip/GlSimpleEntity.h>
+#include <tulip/TulipViewSettings.h>
 
 class FTGLPolygonFont;
 class FTOutlineFont;
@@ -33,10 +34,8 @@ namespace tlp {
 
 struct OcclusionTest;
 
-enum LabelPosition {ON_CENTER = 0, ON_TOP = 1, ON_BOTTOM = 2, ON_LEFT = 3, ON_RIGHT = 4};
-
-#define MIN_LABEL_POSITION ON_CENTER
-#define MAX_LABEL_POSITION ON_RIGHT
+#define MIN_LABEL_POSITION LabelPosition::Center
+#define MAX_LABEL_POSITION LabelPosition::Right
 
 /**
  * @ingroup OpenGL
@@ -118,7 +117,7 @@ public :
   ///@endcond
 
   /**
-   * @brief Set the alignment of the label : ON_CENTER, ON_TOP, ON_BOTTOM, ON_LEFT, ON_RIGHT
+   * @brief Set the alignment of the label : LabelPosition::Center, LabelPosition::Top, LabelPosition::Bottom, LabelPosition::Left, LabelPosition::Right
    * This function is usefull when you have an entity : you spesify the size of the position of this entity and you tell that you want a label outside this entity
    * @see LabelPosition
    * @see setSizeOfOutAlign
