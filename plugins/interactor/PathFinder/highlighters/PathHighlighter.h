@@ -24,6 +24,7 @@
 #include <map>
 
 #include <tulip/Node.h>
+#include <tulip/Observable.h>
 
 class QWidget;
 
@@ -40,7 +41,7 @@ class GlSimpleEntity;
 class PathFinder;
 
 
-class PathHighlighter {
+class PathHighlighter : public Observable {
 public:
   PathHighlighter(const std::string &name);
   virtual ~PathHighlighter();
@@ -58,6 +59,7 @@ protected:
   tlp::GlLayer *getWorkingLayer(tlp::GlScene *scene);
   tlp::GlGraphInputData *getInputData(tlp::GlMainWidget *glMainWidget);
   void addGlEntity(tlp::GlScene *scene, tlp::GlSimpleEntity *entity, bool deleteOnExit=true, const std::string &name="");
+  void treatEvent(const Event &ev);
 
 private:
   std::string name;
