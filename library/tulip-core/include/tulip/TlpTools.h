@@ -41,7 +41,8 @@ extern TLP_SCOPE std::string TulipShareDir;
  * 1. the TLP_DIR environment variable, if it has a value
  * 2. the appDirPath parameter, if it is not NULL
  * 3. at that point, the Tulip paths will be retrieved from the path of the loaded Tulip shared library
- *  (you must dispose of a standard Tulip installation for that feature to work).
+ *  (you must dispose of a standard Tulip installation for that feature to work,
+ *   meaning the relative path for the Tulip plugins folder to the Tulip libraries one must be ../lib/tulip/).).
  * 4. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on Unix.
  */
 extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
