@@ -242,7 +242,7 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
 %Include Observable.sip
 %Include GraphEvent.sip
 %Include PropertyEvent.sip
-%Include Constants.sip
+%Include TulipViewSettings.sip
 %Include Delaunay.sip
 %Include ConvexHull.sip
 

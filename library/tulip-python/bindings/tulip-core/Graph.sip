@@ -45,7 +45,6 @@ typedef std::pair<tlp::node, tlp::node> pairNodeNode;
 
 extern void releaseGraphWrapper(tlp::Graph *graph);
 extern void releaseGraphHierarchyWrappers(tlp::Graph *graph);
-extern void initializeGraphViewProperties(tlp::Graph *graph);
 %End
 
 %ModuleCode
@@ -59,81 +58,6 @@ void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
         releaseGraphHierarchyWrappers(sg);
     }
     releaseGraphWrapper(graph);
-}
-
-void initializeGraphViewProperties(tlp::Graph *graph) {
-    if (!graph->existProperty("viewLayout")) {
-        graph->getProperty<tlp::LayoutProperty>("viewLayout")->setAllNodeValue(tlp::Coord(0,0,0));
-        graph->getProperty<tlp::LayoutProperty>("viewLayout")->setAllEdgeValue(std::vector<tlp::Coord>());
-    }
-    if (!graph->existProperty("viewMetric")) {
-        graph->getProperty<tlp::DoubleProperty>("viewMetric")->setAllNodeValue(0.0);
-        graph->getProperty<tlp::DoubleProperty>("viewMetric")->setAllEdgeValue(0.0);
-    }
-    if (!graph->existProperty("viewSelection")) {
-        graph->getProperty<tlp::BooleanProperty>("viewSelection")->setAllNodeValue(false);
-        graph->getProperty<tlp::BooleanProperty>("viewSelection")->setAllEdgeValue(false);
-    }
-    if (!graph->existProperty("viewSize")) {
-        graph->getProperty<tlp::SizeProperty>("viewSize")->setAllNodeValue(tlp::Size(1,1,1));
-        graph->getProperty<tlp::SizeProperty>("viewSize")->setAllEdgeValue(tlp::Size(0.125,0.125,0.5));
-    }
-    if (!graph->existProperty("viewColor")) {
-        graph->getProperty<tlp::ColorProperty>("viewColor")->setAllNodeValue(tlp::Color(255,0,0));
-        graph->getProperty<tlp::ColorProperty>("viewColor")->setAllEdgeValue(tlp::Color(0,0,0));
-    }
-    if (!graph->existProperty("viewBorderColor")) {
-        graph->getProperty<tlp::ColorProperty>("viewBorderColor")->setAllNodeValue(tlp::Color(255,0,0));
-        graph->getProperty<tlp::ColorProperty>("viewBorderColor")->setAllEdgeValue(tlp::Color(0,0,0));
-    }
-    if (!graph->existProperty("viewLabelColor")) {
-        graph->getProperty<tlp::ColorProperty>("viewLabelColor")->setAllNodeValue(tlp::Color(0,0,0));
-        graph->getProperty<tlp::ColorProperty>("viewLabelColor")->setAllEdgeValue(tlp::Color(0,0,0));
-    }
-    if (!graph->existProperty("viewLabelBorderColor")) {
-        graph->getProperty<tlp::ColorProperty>("viewLabelBorderColor")->setAllNodeValue(tlp::Color(0,0,0));
-        graph->getProperty<tlp::ColorProperty>("viewLabelBorderColor")->setAllEdgeValue(tlp::Color(0,0,0));
-    }
-    if (!graph->existProperty("viewBorderWidth")) {
-        graph->getProperty<tlp::DoubleProperty>("viewBorderWidth")->setAllNodeValue(0.0);
-        graph->getProperty<tlp::DoubleProperty>("viewBorderWidth")->setAllEdgeValue(0.0);
-    }
-    if (!graph->existProperty("viewLabelBorderWidth")) {
-        graph->getProperty<tlp::DoubleProperty>("viewLabelBorderWidth")->setAllNodeValue(1.0);
-        graph->getProperty<tlp::DoubleProperty>("viewLabelBorderWidth")->setAllEdgeValue(1.0);
-    }
-    if (!graph->existProperty("viewShape")) {
-        graph->getProperty<tlp::IntegerProperty>("viewShape")->setAllNodeValue(4);
-        graph->getProperty<tlp::IntegerProperty>("viewShape")->setAllEdgeValue(0);
-    }
-    if (!graph->existProperty("viewLabel")) {
-        graph->getProperty<tlp::StringProperty>("viewLabel")->setAllNodeValue("");
-        graph->getProperty<tlp::StringProperty>("viewLabel")->setAllEdgeValue("");
-    }
-    if (!graph->existProperty("viewFont")) {
-        graph->getProperty<tlp::StringProperty>("viewFont")->setAllNodeValue(tlp::TulipBitmapDir + "font.ttf");
-        graph->getProperty<tlp::StringProperty>("viewFont")->setAllEdgeValue(tlp::TulipBitmapDir + "font.ttf");
-    }
-    if (!graph->existProperty("viewFontSize")) {
-        graph->getProperty<tlp::IntegerProperty>("viewFontSize")->setAllNodeValue(18);
-        graph->getProperty<tlp::IntegerProperty>("viewFontSize")->setAllEdgeValue(18);
-    }
-    if (!graph->existProperty("viewSrcAnchorShape")) {
-        graph->getProperty<tlp::IntegerProperty>("viewSrcAnchorShape")->setAllEdgeValue(UINT_MAX);
-    }
-    if (!graph->existProperty("viewSrcAnchorSize")) {
-        graph->getProperty<tlp::SizeProperty>("viewSrcAnchorSize")->setAllEdgeValue(tlp::Size(0.25,0.25,0.25));
-    }
-    if (!graph->existProperty("viewTgtAnchorShape")) {
-        graph->getProperty<tlp::IntegerProperty>("viewTgtAnchorShape")->setAllEdgeValue(50);
-    }
-    if (!graph->existProperty("viewTgtAnchorSize")) {
-        graph->getProperty<tlp::SizeProperty>("viewTgtAnchorSize")->setAllEdgeValue(tlp::Size(0.25,0.25,0.25));
-    }
-    if (!graph->existProperty("viewTexture")) {
-        graph->getProperty<tlp::StringProperty>("viewTexture")->setAllNodeValue("");
-        graph->getProperty<tlp::StringProperty>("viewTexture")->setAllEdgeValue("");
-    }
 }
 %End
 
@@ -2572,7 +2496,7 @@ Removes and deletes the property associated to name in the graph properties pool
 %MethodCode
     if (sipCpp->existLocalProperty(*a0)) {
         tlp::PropertyInterface *prop = sipCpp->getProperty(*a0);
-        releaseSIPWrapper(prop, sipType_tlp_PropertyInterface);
+        releaseSIPWrapper(prop, sipFindType("tlp::PropertyInterface"));
         sipCpp->delLocalProperty(*a0);
     } else {
         sipIsErr = -1;
@@ -3812,12 +3736,6 @@ Creates and returns a new empty graph.
 :rtype: :class:`tlp.Graph`
 %End
 
-%MethodCode
-    sipRes = tlp::newGraph();
-    initializeGraphViewProperties(sipRes);
-%End
-
-
 //===========================================================================================
 
 tlp::Graph *loadGraph(const std::string &filename) /TransferBack/;
@@ -3830,11 +3748,6 @@ Returns a new graph or :const:`None` if the import fails.
 :param filename: the path to the tlp file
 :type filename: string
 :rtype: :class:`tlp.Graph`
-%End
-
-%MethodCode
-    sipRes = tlp::loadGraph(*a0);
-    initializeGraphViewProperties(sipRes);
 %End
 
 //===========================================================================================
@@ -3877,7 +3790,6 @@ Returns a new graph or None if the import fails.
 %MethodCode
 	if (pluginExists<tlp::ImportModule>(*a0)) {
 		sipRes = tlp::importGraph(*a0, *a1, 0);
-        initializeGraphViewProperties(sipRes);
 	} else {
         sipIsErr = -1;
 		std::string msg = "No Tulip import plugin named  ";
@@ -3917,7 +3829,6 @@ Returns a new graph or None if the import fails.
 %MethodCode
     if (pluginExists<tlp::ImportModule>(*a0)) {
         sipRes = tlp::importGraph(*a0, *a1, 0, a2);
-        initializeGraphViewProperties(sipRes);
     } else {
         sipIsErr = -1;
         std::string msg = "No Tulip import plugin named  ";

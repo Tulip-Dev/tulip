@@ -5,14 +5,12 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/AcyclicTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/AbstractProperty.sip.in
     ${CMAKE_CURRENT_SOURCE_DIR}/Algorithm.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Array.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/BiconnectedTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/BooleanPropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/BoundingBox.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ColorScale.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Color.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ConnectedTest.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Constants.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ConvexHull.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Coord.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Delaunay.sip
@@ -51,6 +49,7 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/TlpTools.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/TreeTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/TriconnectedTest.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/TulipViewSettings.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Vector.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/WithDependency.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/WithParameter.sip
