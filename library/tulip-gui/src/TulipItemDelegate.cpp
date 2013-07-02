@@ -66,9 +66,9 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<tlp::ColorScale>(new ColorScaleEditorCreator);
   registerCreator<tlp::StringCollection>(new StringCollectionEditorCreator);
   registerCreator<TulipFileDescriptor>(new TulipFileDescriptorEditorCreator);
-  registerCreator<NodeShape>(new NodeShapeEditorCreator);
-  registerCreator<EdgeShape>(new EdgeShapeEditorCreator);
-  registerCreator<EdgeExtremityShape>(new EdgeExtremityShapeEditorCreator);
+  registerCreator<NodeShape::NodeShapes>(new NodeShapeEditorCreator);
+  registerCreator<EdgeShape::EdgeShapes>(new EdgeShapeEditorCreator);
+  registerCreator<EdgeExtremityShape::EdgeExtremityShapes>(new EdgeExtremityShapeEditorCreator);
   registerCreator<std::vector<bool> >(new VectorEditorCreator<bool>);
   registerCreator<std::vector<Color> >(new VectorEditorCreator<Color>);
   registerCreator<std::vector<Coord> >(new VectorEditorCreator<Coord>);
@@ -77,7 +77,7 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<std::vector<Size> >(new VectorEditorCreator<Size>);
   registerCreator<std::vector<std::string> >(new VectorEditorCreator<std::string>);
   registerCreator<TulipFont>(new TulipFontEditorCreator);
-  registerCreator<LabelPosition>(new TulipLabelPositionEditorCreator);
+  registerCreator<LabelPosition::LabelPositions>(new TulipLabelPositionEditorCreator);
   registerCreator<Graph*>(new GraphEditorCreator);
   registerCreator<std::set<tlp::edge> >(new EdgeSetEditorCreator);
 }

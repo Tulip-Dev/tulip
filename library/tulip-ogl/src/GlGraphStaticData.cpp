@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/GlGraphStaticData.h>
+#include <tulip/TulipViewSettings.h>
 
 #include <iostream>
 
@@ -25,21 +26,21 @@ using namespace std;
 namespace tlp {
 
 const int GlGraphStaticData::edgeShapesCount = 4;
-int GlGraphStaticData::edgeShapeIds[edgeShapesCount] = {BEZIERSHAPE, POLYLINESHAPE, SPLINESHAPE, CUBICBSPLINE};
+int GlGraphStaticData::edgeShapeIds[edgeShapesCount] = {EdgeShape::Polyline, EdgeShape::BezierCurve, EdgeShape::CatmullRomCurve, EdgeShape::CubicBSplineCurve};
 string GlGraphStaticData::labelPositionNames[] = { string("Center"), string("Top"), string("Bottom"),string("Left"), string("Right") };
 
 string GlGraphStaticData::edgeShapeName(int id) {
   switch(id) {
-  case POLYLINESHAPE:
+  case EdgeShape::Polyline:
     return string("Polyline");
 
-  case BEZIERSHAPE:
+  case EdgeShape::BezierCurve:
     return string("Bezier Curve");
 
-  case SPLINESHAPE:
+  case EdgeShape::CatmullRomCurve:
     return string("Catmull-Rom Spline");
 
-  case CUBICBSPLINE:
+  case EdgeShape::CubicBSplineCurve:
     return string("Cubic B-Spline");
 
   default:
@@ -50,17 +51,17 @@ string GlGraphStaticData::edgeShapeName(int id) {
 }
 
 int GlGraphStaticData::edgeShapeId(string name) {
-  if (name == edgeShapeName(POLYLINESHAPE))
-    return POLYLINESHAPE;
+  if (name == edgeShapeName(EdgeShape::Polyline))
+    return EdgeShape::Polyline;
 
-  if (name == edgeShapeName(BEZIERSHAPE))
-    return BEZIERSHAPE;
+  if (name == edgeShapeName(EdgeShape::BezierCurve))
+    return EdgeShape::BezierCurve;
 
-  if (name == edgeShapeName(SPLINESHAPE))
-    return SPLINESHAPE;
+  if (name == edgeShapeName(EdgeShape::CatmullRomCurve))
+    return EdgeShape::CatmullRomCurve;
 
-  if (name == edgeShapeName(CUBICBSPLINE))
-    return CUBICBSPLINE;
+  if (name == edgeShapeName(EdgeShape::CubicBSplineCurve))
+    return EdgeShape::CubicBSplineCurve;
 
   tlp::warning() << __PRETTY_FUNCTION__ << endl;
   tlp::warning() << "Invalid edge shape name" << endl;

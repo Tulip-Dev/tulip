@@ -46,7 +46,6 @@ class TLP_QT_SCOPE GraphHierarchiesModel : public tlp::TulipModel, public tlp::O
 
 public:
   bool needsSaving();
-  static void setApplicationDefaults(tlp::Graph*);
 
   explicit GraphHierarchiesModel(QObject *parent=0);
   GraphHierarchiesModel(const GraphHierarchiesModel &);

@@ -38,6 +38,7 @@
 #include <tulip/ForEach.h>
 #include <tulip/ParametricCurves.h>
 #include <tulip/GlGraphStaticData.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -326,7 +327,7 @@ void PolyominoPacking::fillEdge(edge e, Vec2i p, std::vector<Vec2i> &cells, int 
     return;
   }
 
-  if (viewShape->getEdgeValue(e) == BEZIERSHAPE) {
+  if (viewShape->getEdgeValue(e) == EdgeShape::BezierCurve) {
     vector<Coord> controlPoints;
     controlPoints.push_back(srcCoord);
     controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
@@ -336,7 +337,7 @@ void PolyominoPacking::fillEdge(edge e, Vec2i p, std::vector<Vec2i> &cells, int 
     bends.erase(bends.begin());
     bends.pop_back();
   }
-  else if (viewShape->getEdgeValue(e) == CUBICBSPLINE) {
+  else if (viewShape->getEdgeValue(e) == EdgeShape::CubicBSplineCurve) {
     vector<Coord> controlPoints;
     controlPoints.push_back(srcCoord);
     controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
@@ -346,7 +347,7 @@ void PolyominoPacking::fillEdge(edge e, Vec2i p, std::vector<Vec2i> &cells, int 
     bends.erase(bends.begin());
     bends.pop_back();
   }
-  else if (viewShape->getEdgeValue(e) == SPLINESHAPE) {
+  else if (viewShape->getEdgeValue(e) == EdgeShape::CatmullRomCurve) {
     vector<Coord> controlPoints;
     controlPoints.push_back(srcCoord);
     controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());

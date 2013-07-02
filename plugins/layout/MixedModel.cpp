@@ -27,6 +27,7 @@
 #include <tulip/Bfs.h>
 #include <tulip/GraphTools.h>
 #include <tulip/StringCollection.h>
+#include <tulip/TulipViewSettings.h>
 
 #include "MixedModel.h"
 #include "DatasetTools.h"
@@ -123,7 +124,7 @@ bool MixedModel::run() {
     }
   }
 
-  glyphResult->setAllEdgeValue(0);
+  glyphResult->setAllEdgeValue(EdgeShape::Polyline);
 
   // give some empirical feedback of what we are doing 1 %
   pluginProgress->progress(1, 1000);
@@ -506,7 +507,7 @@ void MixedModel::placeNodesEdges() {
       vector<Coord> bends;
       bends.push_back(c_n);
       result->setEdgeValue(e, bends);
-      graph->getProperty<IntegerProperty>("viewShape")->setEdgeValue(e,4);
+      graph->getProperty<IntegerProperty>("viewShape")->setEdgeValue(e, EdgeShape::BezierCurve);
       graph->getProperty<ColorProperty>("viewColor")->setEdgeValue(e,Color(218,218,218));
     }
   }

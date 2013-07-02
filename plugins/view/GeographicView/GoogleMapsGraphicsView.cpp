@@ -27,6 +27,7 @@
 #include <tulip/GlSceneZoomAndPan.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/TulipViewSettings.h>
 
 #include <QTextStream>
 #include <QTimeLine>
@@ -1062,8 +1063,8 @@ void GoogleMapsGraphicsView::switchViewType() {
     geoLayoutBackup = new LayoutProperty(graph);
     *geoLayoutBackup=*geoLayout;
 
-    geoViewShape->setAllNodeValue(GlyphManager::getInst().glyphId("3D - Sphere"));
-    geoViewShape->setAllEdgeValue(16);
+    geoViewShape->setAllNodeValue(NodeShape::Sphere);
+    geoViewShape->setAllEdgeValue(EdgeShape::CubicBSplineCurve);
 
     forEach(n, graph->getNodes()) {
       const Size &nodeSize = viewSize->getNodeValue(n);

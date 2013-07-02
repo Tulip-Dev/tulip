@@ -36,6 +36,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/ParametricCurves.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace tlp;
 using namespace std;
@@ -282,7 +283,7 @@ void MatrixView::addNode(tlp::Graph *, const tlp::node n) {
     }
     _displayedNodesToGraphEntities->setNodeValue(dispNode, n.id);
     _displayedNodesAreNodes->setNodeValue(dispNode, true);
-    getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLabelPosition()->setNodeValue(dispNode, (i == 1 ? ON_LEFT : ON_TOP));
+    getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLabelPosition()->setNodeValue(dispNode, (i == 1 ? LabelPosition::Center : LabelPosition::Top));
 
     for (set<string>::iterator it = _sourceToTargetProperties.begin(); it != _sourceToTargetProperties.end(); ++it)
       _matrixGraph->getProperty(*it)->setNodeStringValue(dispNode, graph()->getProperty(*it)->getNodeStringValue(n));

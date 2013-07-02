@@ -49,6 +49,7 @@
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlGlyphRenderer.h>
+#include <tulip/TulipViewSettings.h>
 
 
 tlp::GlLabel* tlp::GlEdge::label=0;
@@ -319,7 +320,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
   glDepthFunc(GL_LEQUAL);
 
   if(bends.empty())
-    shape=POLYLINESHAPE;
+    shape=EdgeShape::Polyline;
 
   Coord srcDir(srcNodePos);
   Coord tgtDir(tgtNodePos);
@@ -339,7 +340,7 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
   }
 
   switch (shape) {
-  case POLYLINESHAPE:
+  case EdgeShape::Polyline:
 
     if (lod > 1000 || lod < -1000) {
       tlp::polyQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,colorInterpolate,borderColor,textureName, outlineWidth);
@@ -350,29 +351,29 @@ void GlEdge::drawEdge(const Coord &srcNodePos, const Coord &tgtNodePos, const Co
 
     break;
 
-  case L3D_BIT + POLYLINESHAPE: {
+  case L3D_BIT + EdgeShape::Polyline: {
     glDisable(GL_LIGHTING);
     simpleQuad(tmp, startColor, endColor, size[0] * .5f, size[1] * .5f, srcDir, tgtDir,lookDir,colorInterpolate,borderColor,textureName);
     glEnable(GL_LIGHTING);
     break;
   }
 
-  case BEZIERSHAPE :
-  case SPLINESHAPE :
-  case CUBICBSPLINE :
-  case BEZIERSHAPE + L3D_BIT:
-  case SPLINESHAPE + L3D_BIT:
-  case CUBICBSPLINE + L3D_BIT: {
+  case EdgeShape::BezierCurve :
+  case EdgeShape::CatmullRomCurve :
+  case EdgeShape::CubicBSplineCurve :
+  case EdgeShape::BezierCurve + L3D_BIT:
+  case EdgeShape::CatmullRomCurve + L3D_BIT:
+  case EdgeShape::CubicBSplineCurve + L3D_BIT: {
     static GlBezierCurve bezier;
     static GlCatmullRomCurve catmull;
     static GlOpenUniformCubicBSpline bspline;
     AbstractGlCurve *curve = NULL;
     unsigned int nbCurvePoints = 200;
 
-    if (shape == BEZIERSHAPE || shape == BEZIERSHAPE + L3D_BIT) {
+    if (shape == EdgeShape::BezierCurve || shape == EdgeShape::BezierCurve + L3D_BIT) {
       curve = &bezier;
     }
-    else if (shape == SPLINESHAPE || shape == SPLINESHAPE + L3D_BIT) {
+    else if (shape == EdgeShape::CatmullRomCurve || shape == EdgeShape::CatmullRomCurve + L3D_BIT) {
       curve = &catmull;
     }
     else {
@@ -655,19 +656,19 @@ void GlEdge::getVertices(const GlGraphInputData *data,
   if(vertices.empty())
     return ;
 
-  if ((vertices.size() > 2 && data->getElementShape()->getEdgeValue(e) == BEZIERSHAPE) ||
-      (vertices.size() == 3 && data->getElementShape()->getEdgeValue(e) == CUBICBSPLINE)) {
+  if ((vertices.size() > 2 && data->getElementShape()->getEdgeValue(e) == EdgeShape::BezierCurve) ||
+      (vertices.size() == 3 && data->getElementShape()->getEdgeValue(e) == EdgeShape::CubicBSplineCurve)) {
     vector<Coord> curvePoints;
     computeBezierPoints(vertices, curvePoints, 200);
     vertices = curvePoints;
   }
-  else if (vertices.size() > 2 && data->getElementShape()->getEdgeValue(e) == SPLINESHAPE) {
+  else if (vertices.size() > 2 && data->getElementShape()->getEdgeValue(e) == EdgeShape::CatmullRomCurve) {
     vector<Coord> curvePoints;
     computeCatmullRomPoints(vertices, curvePoints, false, 200);
     vertices = curvePoints;
   }
 
-  if (vertices.size() > 2 && data->getElementShape()->getEdgeValue(e) == CUBICBSPLINE) {
+  if (vertices.size() > 2 && data->getElementShape()->getEdgeValue(e) == EdgeShape::CubicBSplineCurve) {
     vector<Coord> curvePoints;
     computeOpenUniformBsplinePoints(vertices, curvePoints, 3, 200);
     vertices = curvePoints;

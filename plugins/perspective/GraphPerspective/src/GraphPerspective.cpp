@@ -254,6 +254,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   redirectWarningOutputToQWarning();
   redirectErrorOutputToQCritical();
 
+  TulipSettings::instance().synchronizeViewSettings();
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   qInstallMessageHandler(graphPerspectiveLogger);
 #else

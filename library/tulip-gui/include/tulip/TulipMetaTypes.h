@@ -39,6 +39,7 @@
 #include <tulip/GlLabel.h>
 #include <tulip/TulipFont.h>
 #include <tulip/StringCollection.h>
+#include <tulip/TulipViewSettings.h>
 
 // Helper class for filesystem types handling
 struct TulipFileDescriptor {
@@ -53,23 +54,6 @@ struct TulipFileDescriptor {
   QString absolutePath;
   FileType type;
   QString fileFilterPattern;
-};
-
-
-struct NodeShape {
-  unsigned int nodeShapeId;
-  NodeShape(unsigned int nodeShapeId=0):nodeShapeId(nodeShapeId) {}
-  operator unsigned int() const {
-    return nodeShapeId;
-  }
-};
-
-struct EdgeExtremityShape {
-  unsigned int edgeExtremityShapeId;
-  EdgeExtremityShape(unsigned int edgeExtremityShapeId=0):edgeExtremityShapeId(edgeExtremityShapeId) {}
-  operator unsigned int() const {
-    return edgeExtremityShapeId;
-  }
 };
 
 //Declare tulip type compatible with QVariant
@@ -122,11 +106,11 @@ Q_DECLARE_METATYPE(tlp::StringCollection)
 
 Q_DECLARE_METATYPE(TulipFileDescriptor)
 
-Q_DECLARE_METATYPE(NodeShape)
-Q_DECLARE_METATYPE(tlp::EdgeShape)
-Q_DECLARE_METATYPE(EdgeExtremityShape)
+Q_DECLARE_METATYPE(tlp::NodeShape::NodeShapes)
+Q_DECLARE_METATYPE(tlp::EdgeShape::EdgeShapes)
+Q_DECLARE_METATYPE(tlp::EdgeExtremityShape::EdgeExtremityShapes)
 
-Q_DECLARE_METATYPE(tlp::LabelPosition)
+Q_DECLARE_METATYPE(tlp::LabelPosition::LabelPositions)
 Q_DECLARE_METATYPE(tlp::TulipFont)
 
 Q_DECLARE_METATYPE(QStringList)

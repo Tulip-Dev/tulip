@@ -24,6 +24,7 @@
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/TulipRelease.h>
+#include <tulip/TulipViewSettings.h>
 
 #include <QtCore/QFileInfo>
 
@@ -67,10 +68,21 @@ TulipSettings::TulipSettings(): QSettings("TulipSoftware","Tulip") {
 TulipSettings &TulipSettings::instance() {
   if (!_instance) {
     _instance = new TulipSettings;
+    TulipViewSettings::instance().addListener(_instance);
     GlDefaultSelectionColorManager::setManager(_instance);
   }
 
   return *_instance;
+}
+
+void TulipSettings::synchronizeViewSettings() {
+    TulipViewSettings::instance().setDefaultColor(NODE, defaultColor(NODE));
+    TulipViewSettings::instance().setDefaultColor(EDGE, defaultColor(EDGE));
+    TulipViewSettings::instance().setDefaultSize(NODE, defaultSize(NODE));
+    TulipViewSettings::instance().setDefaultSize(EDGE, defaultSize(EDGE));
+    TulipViewSettings::instance().setDefaultShape(NODE, defaultShape(NODE));
+    TulipViewSettings::instance().setDefaultShape(EDGE, defaultShape(EDGE));
+    TulipViewSettings::instance().setDefaultLabelColor(defaultLabelColor());
 }
 
 QStringList TulipSettings::recentDocuments() const {
@@ -163,6 +175,7 @@ tlp::Color TulipSettings::defaultColor(tlp::ElementType elem) {
 void TulipSettings::setDefaultColor(tlp::ElementType elem, const tlp::Color& color) {
   QString value = tlp::ColorType::toString(color).c_str();
   setValue(elementKey(DefaultColorConfigEntry,elem),value);
+  TulipViewSettings::instance().setDefaultColor(elem, color);
 }
 
 Color TulipSettings::defaultLabelColor() {
@@ -175,6 +188,7 @@ Color TulipSettings::defaultLabelColor() {
 void TulipSettings::setDefaultLabelColor(const Color &color) {
   QString value = tlp::ColorType::toString(color).c_str();
   setValue(DefaultLabelColorConfigEntry,value);
+  TulipViewSettings::instance().setDefaultLabelColor(color);
 }
 
 tlp::Size TulipSettings::defaultSize(tlp::ElementType elem) {
@@ -187,15 +201,16 @@ tlp::Size TulipSettings::defaultSize(tlp::ElementType elem) {
 void TulipSettings::setDefaultSize(tlp::ElementType elem, const tlp::Size& size) {
   QString value = tlp::SizeType::toString(size).c_str();
   setValue(elementKey(DefaultSizeConfigEntry,elem),value);
+  TulipViewSettings::instance().setDefaultSize(elem, size);
 }
 
 int TulipSettings::defaultShape(tlp::ElementType elem) {
-  const int CIRCLE_GLYPH_ID = tlp::GlyphManager::getInst().glyphId("2D - Circle");
-  return value(elementKey(DefaultShapeConfigEntry,elem),(elem == tlp::NODE ? CIRCLE_GLYPH_ID : SPLINESHAPE)).toInt();
+  return value(elementKey(DefaultShapeConfigEntry,elem),(elem == tlp::NODE ? int(NodeShape::Circle) : int(EdgeShape::Polyline))).toInt();
 }
 
 void TulipSettings::setDefaultShape(tlp::ElementType elem, int shape) {
   setValue(elementKey(DefaultShapeConfigEntry,elem),shape);
+  TulipViewSettings::instance().setDefaultShape(elem, shape);
 }
 
 tlp::Color TulipSettings::defaultSelectionColor() {
@@ -357,5 +372,18 @@ bool TulipSettings::warnUserAboutGraphicsCard() const {
 
 void TulipSettings::setWarnUserAboutGraphicsCard(bool f) {
   setValue(WarnUserAboutGraphicsCardEntry, f);
+}
+
+void TulipSettings::treatEvent(const Event &message) {
+    const ViewSettingsEvent *sev = dynamic_cast<const ViewSettingsEvent *>(&message);
+    if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_COLOR_MODIFIED) {
+        setDefaultColor(sev->getElementType(), sev->getColor());
+    } else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_SIZE_MODIFIED) {
+        setDefaultSize(sev->getElementType(), sev->getSize());
+    } else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_SHAPE_MODIFIED) {
+        setDefaultShape(sev->getElementType(), sev->getShape());
+    } else if (sev && sev->getType() == ViewSettingsEvent::TLP_DEFAULT_LABEL_COLOR_MODIFIED) {
+        setDefaultLabelColor(sev->getColor());
+    }
 }
 
