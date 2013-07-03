@@ -149,7 +149,6 @@ StackWalkerGCC::~StackWalkerGCC() {
   for ( ; it != bfdMap.end() ; ++it) {
     delete it->second;
   }
-
 #endif
 }
 
@@ -161,7 +160,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   int size = backtrace(array, MAX_BACKTRACE_SIZE);
   char ** messages = backtrace_symbols(array, size);
 
-  if (messages == NULL)
+  if (messages == NULL || size < 2)
     return;
 
   std::ostringstream oss;
@@ -186,7 +185,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
   while (i < size) {
     std::string msg(messages[i]);
-
+    
     if (msg.find("_sigtramp") != std::string::npos) {
       ++i;
       break;
@@ -194,6 +193,8 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
     ++i;
   }
+
+  if (i == size) i = 1;
 
   std::string msg(messages[i]);
 
@@ -213,7 +214,6 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
     if (static_cast<unsigned int>(i) > maxDepth)
       return;
-
 
     for (char *p = messages[i]; *p; ++p) {
       if (*p == '(') {
@@ -274,7 +274,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #ifdef __APPLE__
 
-      if (file_exist("/usr/bin/atos")) {
+      if (file_exist("/usr/bin/atos") && file_exist(dsoName)) {
         int64_t exOffset = getOffsetInExecutable(array[i]);
         std::ostringstream oss;
         oss << "atos -o " << dsoName;
