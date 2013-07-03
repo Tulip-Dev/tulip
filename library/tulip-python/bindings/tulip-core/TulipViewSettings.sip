@@ -80,11 +80,11 @@ public:
     enum EdgeExtremityShapes {
         None=-1,
         Arrow=50,
-        ChristmasTree=28,
         Circle=14,
         Cone=3,
         Cross=8,
         Cube=0,
+        CubeOutlinedTransparent=9,
         Cylinder=6,
         Diamond=5,
         GlowSphere=16,
@@ -93,7 +93,6 @@ public:
         Ring=15,
         Sphere=2 ,
         Square=4,
-        Triangle=11,
         Star=19
     };
 };

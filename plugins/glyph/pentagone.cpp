@@ -31,6 +31,7 @@
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Graph.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -63,7 +64,7 @@ void drawPentagon(const Color &fillColor,const Color &borderColor,float borderWi
  */
 class Pentagon: public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Pentagon", "David Auber", "09/07/2002", "Textured Pentagon", "1.0", 12)
+  GLYPHINFORMATIONS("2D - Pentagon", "David Auber", "09/07/2002", "Textured Pentagon", "1.0", NodeShape::Pentagon)
   Pentagon(const tlp::PluginContext *context = NULL);
   virtual ~Pentagon();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
@@ -97,7 +98,7 @@ void Pentagon::draw(node n, float lod) {
 
 class EEPentagon: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("2D - Pentagon extremity", "David Auber", "09/07/2002", "Textured Pentagon for edge extremities", "1.0", 12)
+  GLYPHINFORMATIONS("2D - Pentagon extremity", "David Auber", "09/07/2002", "Textured Pentagon for edge extremities", "1.0", EdgeExtremityShape::Pentagon)
 
   EEPentagon(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if(!pentagon)

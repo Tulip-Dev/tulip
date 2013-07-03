@@ -31,6 +31,7 @@
 #include <tulip/GlStar.h>
 #include <tulip/Graph.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -62,7 +63,7 @@ void drawStar(const Color &fillColor,const Color &borderColor,float borderWidth,
  */
 class Star: public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Star", "David Auber", "09/07/2002", "Textured Star", "1.0", 19)
+  GLYPHINFORMATIONS("2D - Star", "David Auber", "09/07/2002", "Textured Star", "1.0", NodeShape::Star)
   Star(const tlp::PluginContext *context = NULL);
   virtual ~Star();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
@@ -96,7 +97,7 @@ void Star::draw(node n, float lod) {
 
 class EEStar: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("2D - Star extremity", "David Auber", "09/07/2002", "Textured Star for edge extremities", "1.0", 19)
+  GLYPHINFORMATIONS("2D - Star extremity", "David Auber", "09/07/2002", "Textured Star for edge extremities", "1.0", EdgeExtremityShape::Star)
 
   EEStar(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if(!star)

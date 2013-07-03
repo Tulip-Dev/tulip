@@ -32,6 +32,7 @@
 #include <tulip/GlGraphInputData.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -122,7 +123,7 @@ void drawTree() {
  */
 class ChristmasTree: public Glyph {
 public:
-  GLYPHINFORMATIONS("3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , 28)
+  GLYPHINFORMATIONS("3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , NodeShape::ChristmasTree)
   ChristmasTree(const tlp::PluginContext* context = NULL);
   virtual void draw(node n, float lod);
 };
@@ -142,27 +143,6 @@ void ChristmasTree::draw(node n, float) {
   GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
   OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 }
-
-
-class EEChristmasTree: public EdgeExtremityGlyph {
-public:
-  GLYPHINFORMATIONS("3D - ChristmasTree extremity", "Morgan Mathiaut", "16/12/2008", "Christmas tree for edge extremities", "1.0" , 28)
-
-  EEChristmasTree(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
-  }
-
-  void draw(edge, node, const Color& glyphColor,const Color&, float) {
-    glEnable(GL_LIGHTING);
-    drawTree();
-    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-    GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
-    setMaterial(glyphColor);
-    GlDisplayListManager::getInst().callDisplayList("ChristmasTree_sphere");
-    setMaterial(Color(255, 255, 255, 50));
-    GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
-    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-  }
-};
 
 
 

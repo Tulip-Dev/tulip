@@ -32,6 +32,7 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -204,7 +205,7 @@ void drawGlyph(const Color& glyphColor, const string& texture,
  */
 class Sphere: public Glyph {
 public:
-  GLYPHINFORMATIONS("3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", 2)
+  GLYPHINFORMATIONS("3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", NodeShape::Sphere)
   Sphere(const tlp::PluginContext *context = NULL);
   virtual ~Sphere();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
@@ -233,7 +234,7 @@ void Sphere::draw(node n, float lod) {
 }
 
 class EESphere: public EdgeExtremityGlyph {
-  GLYPHINFORMATIONS("3D - Sphere extremity", "Bertrand Mathieu", "09/07/2002", "Textured sphere for edge extremities", "1.0", 2)
+  GLYPHINFORMATIONS("3D - Sphere extremity", "Bertrand Mathieu", "09/07/2002", "Textured sphere for edge extremities", "1.0", EdgeExtremityShape::Sphere)
 public:
   EESphere(const tlp::PluginContext *context): EdgeExtremityGlyph(context) {
 

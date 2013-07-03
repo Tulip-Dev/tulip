@@ -34,6 +34,7 @@
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -120,7 +121,7 @@ void drawGlyph(const Color& glyohColor, const string& texture,
  */
 class Ring: public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", 15)
+  GLYPHINFORMATIONS("2D - Ring", "David Auber", "09/07/2002", "Textured Ring", "1.0", NodeShape::Ring)
   Ring(const tlp::PluginContext *context = NULL);
   virtual ~Ring();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
@@ -151,7 +152,7 @@ void Ring::draw(node n, float lod) {
 
 class EERing: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("2D - Ring extremity", "David Auber", "09/07/2002", "Textured Ring for edge extremities", "1.0", 15)
+  GLYPHINFORMATIONS("2D - Ring extremity", "David Auber", "09/07/2002", "Textured Ring for edge extremities", "1.0", EdgeExtremityShape::Ring)
 
   EERing(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
   }

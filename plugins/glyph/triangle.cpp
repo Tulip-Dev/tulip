@@ -31,13 +31,14 @@
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
 
 class Triangle : public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", 11)
+  GLYPHINFORMATIONS("2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", NodeShape::Triangle)
   Triangle(const tlp::PluginContext *context =NULL);
   virtual ~Triangle();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);

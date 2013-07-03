@@ -20,6 +20,7 @@
 #include <tulip/GlBox.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 
@@ -33,7 +34,7 @@ namespace tlp {
  */
 class CubeOutLined : public Glyph {
 public:
-  GLYPHINFORMATIONS("3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", 1)
+  GLYPHINFORMATIONS("3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", NodeShape::CubeOutlined)
   CubeOutLined(tlp::PluginContext* context);
   virtual ~CubeOutLined();
   virtual void draw(node n,float lod);
