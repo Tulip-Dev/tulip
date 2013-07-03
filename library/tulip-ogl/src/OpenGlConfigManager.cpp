@@ -35,7 +35,6 @@ OpenGlConfigManager& OpenGlConfigManager::getInst() {
   if(!inst)
     inst=new OpenGlConfigManager();
 
-  inst->initGlew();
   return *inst;
 }
 
