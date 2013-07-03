@@ -882,19 +882,12 @@ void ObservableGraphTest::testAddDelProperties() {
 }
 //==========================================================
 void ObservableGraphTest::testObserverWhenRemoveObservable() {
-  CPPUNIT_ASSERT_EQUAL(1u, graph->countListeners());
+  unsigned int listeners = graph->countListeners();
   GraphObserverTest *graphObserverTmp=new GraphObserverTest();
   graph->addListener(graphObserverTmp);
-  CPPUNIT_ASSERT_EQUAL(2u, graph->countListeners());
+  CPPUNIT_ASSERT_EQUAL(listeners + 1, graph->countListeners());
   delete graphObserverTmp;
-  CPPUNIT_ASSERT_EQUAL(1u, graph->countListeners());
-
-  /*CPPUNIT_ASSERT(graph->countObservers() == 1);
-  ObserverGTest *observerTmp=new ObserverGTest();
-  graph->addObserver(observerTmp);
-  CPPUNIT_ASSERT(graph->countObservers() == 2);
-  delete observerTmp;
-  CPPUNIT_ASSERT(graph->countObservers() == 1);*/
+  CPPUNIT_ASSERT_EQUAL(listeners, graph->countListeners());
 }
 
 void ObservableGraphTest::testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend() {
