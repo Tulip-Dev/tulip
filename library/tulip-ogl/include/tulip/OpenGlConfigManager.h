@@ -104,6 +104,9 @@ public:
   class GraphicsCardWarningDisplayer {
 
   public:
+
+    virtual ~GraphicsCardWarningDisplayer() {}
+
     /**
      * display a warning about the graphics card drivers
      */
