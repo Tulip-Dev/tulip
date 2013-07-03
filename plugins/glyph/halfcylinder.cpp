@@ -28,6 +28,7 @@
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -45,7 +46,7 @@ using namespace tlp;
 //=================================================================================================
 class HalfCylinder : public Glyph {
 public:
-  GLYPHINFORMATIONS("3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder", "1.0", 10)
+  GLYPHINFORMATIONS("3D - Half Cylinder", "Auber David", "31/07/2002", "Textured HalfCylinder", "1.0", NodeShape::HalfCylinder)
   HalfCylinder(const tlp::PluginContext *context = NULL);
   virtual ~HalfCylinder();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);

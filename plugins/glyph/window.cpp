@@ -29,6 +29,7 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace tlp;
 using namespace std;
@@ -38,7 +39,7 @@ const string gradient(TulipBitmapDir + "titlebarGradient.png");
 
 class Window : public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", 17)
+  GLYPHINFORMATIONS("2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", NodeShape::Window)
   Window(const tlp::PluginContext *context);
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void getTextBoundingBox(BoundingBox &boundingBox,node);
