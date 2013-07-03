@@ -223,7 +223,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
   struct dirent **namelist;
   int n = scandir((const char *) pluginPath.c_str(),
                   &namelist,
-#if !(defined(__APPLE__) || defined(__FreeBSD__))
+#if !(defined(__APPLE__) || defined(__FreeBSD__)) || (defined(__APPLE__) && __MAC_OS_X_VERSION_MIN_REQUIRED >= 1080)
                   (int (*) (const dirent *))
 #endif
                   __tulip_select_libs,
