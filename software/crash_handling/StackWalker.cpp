@@ -149,6 +149,7 @@ StackWalkerGCC::~StackWalkerGCC() {
   for ( ; it != bfdMap.end() ; ++it) {
     delete it->second;
   }
+
 #endif
 }
 
@@ -185,7 +186,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
   while (i < size) {
     std::string msg(messages[i]);
-    
+
     if (msg.find("_sigtramp") != std::string::npos) {
       ++i;
       break;
