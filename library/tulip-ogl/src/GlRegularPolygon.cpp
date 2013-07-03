@@ -80,7 +80,7 @@ void GlRegularPolygon::computePolygon() {
   for (unsigned int i=0; i < numberOfSides; ++i) {
     float deltaX = cos(i * delta + startAngle);
     float deltaY = sin(i * delta + startAngle);
-    points.push_back(Coord(deltaX,deltaY,0));
+    points.push_back(Coord(deltaX,deltaY,position[2]));
     box.expand(points.back());
   }
 
