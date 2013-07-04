@@ -1,7 +1,7 @@
 #!/bin/sh
 
 function usage {
-	echo "Usage : $0 <Tulip Install Dir> <Bundle Destination Dir>"
+        echo "Usage : $0 <Tulip Install Dir> <Bundle Destination Dir> <Tulip Version>"
 }
 
 if [ $# -ne 2 ]
@@ -12,6 +12,7 @@ fi
 
 TULIP_DIR=$1
 DEST_DIR=$2
+TULIP_VERSION=$3
 SRC_DIR=$(pwd)
 
 if [ ! -d $TULIP_DIR ]
@@ -21,7 +22,7 @@ then
 fi
 
 echo 'Wiping previous bundles into '$DEST_DIR
-rm -rf $DEST_DIR 2>/dev/null
+rm -rf $DEST_DIR/application 2>/dev/null
 mkdir -p $DEST_DIR/application
 cd $DEST_DIR/application
 mkdir .background
@@ -63,8 +64,8 @@ cp /usr/lib/libQtCLucene.4.dylib .
 # when Python 2.7 is not installed on the user sytem (Snow Leopard and Leopard)
 if [ ! -e /usr/lib/libpython2.7.dylib -a -d /Library/Frameworks/Python.framework/Versions/2.7 ]
 then
-	echo "Copying /Library/Frameworks/Python".framework to $(pwd)
-	# Copy the whole Python framework
+    echo "Copying /Library/Frameworks/Python".framework to $(pwd)
+    # Copy the whole Python framework
     cp "/Library/Frameworks/Python.framework/Versions/2.7/lib/libpython2.7.dylib" .
     cp "/Library/Frameworks/Python.framework/Versions/2.7/Python" .
     cp -r "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7" ../lib/ 
@@ -73,11 +74,15 @@ fi
 
 echo 'Copying libraries'
 for lib in libGLEW libfreetype libz libstdc++; do
-  for search_path in /usr/lib /opt/local/lib /usr/X11/lib; do
+  for search_path in /usr/lib /opt/local/lib ; do
     [ "$(ls $search_path/$lib*.dylib 2> /dev/null)" != "" ] && cp $search_path/$lib*.dylib .
   done
 done
 
 echo 'Generating DMG'
 cd $DEST_DIR
-sh $SRC_DIR/make_dmg.sh "Tulip" "4" $DEST_DIR/application
+sh $SRC_DIR/make_dmg.sh "Tulip" "${TULIP_VERSION}" $DEST_DIR/application
+
+rm -rf $DEST_DIR/application 2>/dev/null
+
+echo "Tulip-${TULIP_VERSION}.dmg has been correctly generated in ${DEST_DIR}"
