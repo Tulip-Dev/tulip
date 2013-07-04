@@ -23,6 +23,7 @@ fi
 
 echo 'Wiping previous bundles into '$DEST_DIR
 rm -rf $DEST_DIR/application 2>/dev/null
+rm -f $DEST_DIR/Tulip-${TULIP_VERSION}.dmg 2>/dev/null
 mkdir -p $DEST_DIR/application
 cd $DEST_DIR/application
 mkdir .background
