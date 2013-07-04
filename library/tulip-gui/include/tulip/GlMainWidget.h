@@ -82,7 +82,7 @@ public:
    * @param parent Qt Widget parent system
    * @param view if you want to link this GlMainWidget to a view : use this parameter
    */
-  GlMainWidget(QWidget *parent,View *view=NULL);
+  GlMainWidget(QWidget *parent=NULL, View *view=NULL);
   ~GlMainWidget();
 
   /**

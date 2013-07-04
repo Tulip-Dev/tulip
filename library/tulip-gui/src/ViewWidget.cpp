@@ -124,7 +124,7 @@ void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
 
   if (glMainWidget) {
     _graphicsView->setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
-    _graphicsView->setViewport(new QGLWidget(GlInit(), 0, GlMainWidget::getFirstQGLWidget()));
+    _graphicsView->setViewport(new GlMainWidget());
     _graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     GlMainWidgetGraphicsItem* glMainWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _graphicsView->width(), _graphicsView->height());
@@ -193,6 +193,8 @@ QPixmap ViewWidget::snapshot(const QSize &outputSize) const {
 
   QPixmap result(_centralWidget->size());
   _centralWidget->render(&result);
+
+
 
   if (outputSize.isValid()) {
     return result.scaled(outputSize);
