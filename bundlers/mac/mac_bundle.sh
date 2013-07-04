@@ -4,7 +4,7 @@ function usage {
         echo "Usage : $0 <Tulip Install Dir> <Bundle Destination Dir> <Tulip Version>"
 }
 
-if [ $# -ne 2 ]
+if [ $# -ne 3 ]
 then
 	usage $0
 	exit 1
