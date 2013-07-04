@@ -374,3 +374,11 @@ ELSE(NSIS_OK)
         MESSAGE("Tulip installer can not be generated without Nullsoft NSIS.")
 ENDIF(NSIS_OK)
 ENDIF(WIN32)
+
+IF(APPLE)
+        ADD_CUSTOM_TARGET(bundle
+                          COMMAND cmake -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
+                          COMMAND sh mac_bundle.sh ${CMAKE_INSTALL_PREFIX} ${CMAKE_CURRENT_BINARY_DIR} ${TulipVersion}
+                          WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac)
+
+ENDIF(APPLE)
