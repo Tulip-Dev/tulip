@@ -25,7 +25,7 @@ const char * nodeCountDescription =
 
 CliqueImport::CliqueImport(tlp::PluginContext* context):ImportModule(context) {
   //how many nodes we want in our clique
-  addInParameter<uint>("nodeCount", nodeCountDescription, "5");
+  addInParameter<unsigned int>("nodeCount", nodeCountDescription, "5");
 
   //depend on the circular layout, as it is the most obvious choice to draw a clique
   addDependency("Circular", "1.1");
@@ -36,11 +36,11 @@ CliqueImport::~CliqueImport() {
 
 bool CliqueImport::importGraph() {
   //retrieve the number of nodes we need to create
-  uint nodeCount = 5;
+  unsigned int nodeCount = 5;
   dataSet->get("nodeCount", nodeCount);
 
   //create the nodes
-  for(uint i = 0; i < nodeCount; ++i) {
+  for(unsigned int i = 0; i < nodeCount; ++i) {
     graph->addNode();
   }
 
