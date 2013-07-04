@@ -108,6 +108,8 @@ ENDFUNCTION()
 ## ========================================================
 ## Compiler-specific options
 ## ========================================================
+STRING(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG)
+
 SET_COMPILER_OPTIONS()
 
 IF(BUILD_TESTS)
@@ -141,6 +143,7 @@ FIND_PACKAGE(OpenGL REQUIRED)
 FIND_PACKAGE(GLEW REQUIRED)
 
 # OpenMP
+IF(NOT CLANG)
 FIND_PACKAGE(Threads)
 OPTION(ENABLE_OPENMP "Do you want to enable OpenMP?" ON)
 IF(ENABLE_OPENMP)
@@ -190,6 +193,7 @@ IF(ENABLE_OPENMP)
         ENDIF(CMAKE_DEBUG_MODE AND NOT CHECK_MEMORY)
     ENDIF(OPENMP_FOUND)
 ENDIF(ENABLE_OPENMP)
+ENDIF(NOT CLANG)
 
 # Python
 # After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
