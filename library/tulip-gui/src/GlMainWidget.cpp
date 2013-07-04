@@ -38,6 +38,7 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/View.h>
 #include <tulip/Camera.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 
@@ -146,6 +147,7 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
 #warning Qt fix must be tested with this version of Qt, see GlMainWidget.cpp l.106
 #endif
 #endif
+  OpenGlConfigManager::getInst().initGlew();
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
