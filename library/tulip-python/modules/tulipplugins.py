@@ -93,7 +93,7 @@ def exportGraph(plugin, os):
     return ret
 
 def createPlugin(context, pluginModule, pluginClassName, pluginName, author, date, info, release, group):
-    globals()[pluginModule] = __import__(pluginModule, globals(), locals(), [], -1)
+    globals()[pluginModule] = __import__(pluginModule, globals(), locals(), [], 0)
 
     plugin = eval(pluginModule + "." + pluginClassName + "(context)", globals(), locals())
     if hasattr(plugin, "run"):
