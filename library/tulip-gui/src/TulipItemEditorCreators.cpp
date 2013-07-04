@@ -16,9 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/TulipItemEditorCreators.h"
-
-#include <QDebug>
 #include <QCheckBox>
 #include <QLabel>
 #include <QStylePainter>
@@ -35,15 +32,14 @@
 #include <tulip/TulipFileDescriptorWidget.h>
 #include <tulip/CoordEditor.h>
 #include <tulip/GlyphRenderer.h>
-#include <tulip/GlGraphStaticData.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/TulipFontDialog.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
-
 #include <tulip/GlLabel.h>
 #include <tulip/Perspective.h>
+#include <tulip/TulipItemEditorCreators.h>
 
 using namespace tlp;
 
@@ -547,7 +543,7 @@ bool NodeShapeEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem
 ///EdgeExtremityShapeEditorCreator
 QWidget* EdgeExtremityShapeEditorCreator::createWidget(QWidget* parent) const {
   CustomComboBox* combobox = new CustomComboBox(parent);
-  combobox->addItem(QString("NONE"),EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
+  combobox->addItem(QString("NONE"),EdgeExtremityShape::None);
   std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
 
   for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
