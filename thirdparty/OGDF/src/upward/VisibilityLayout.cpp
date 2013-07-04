@@ -157,6 +157,9 @@ void VisibilityLayout::layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig)
 		DPoint pTgt(GA.x(e->target()), GA.y(e->target()));
 		poly.normalize(pSrc, pTgt);		
 	}//forall_edges
+	// reset faceToNode before deletion of UPR
+	// to prevent possible memory corruption in call to ~VisibilityLayout
+	faceToNode.init();
 }
 
 
