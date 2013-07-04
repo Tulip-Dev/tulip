@@ -21,6 +21,7 @@
 #include <tulip/tuliphash.h>
 #include <tulip/ForEach.h>
 #include <tulip/Glyph.h>
+#include <tulip/TulipViewSettings.h>
 
 tlp::EdgeExtremityGlyphManager* tlp::EdgeExtremityGlyphManager::eeinst = NULL;
 
@@ -30,13 +31,11 @@ namespace tlp {
 static TLP_HASH_MAP<int, std::string> eeglyphIdToName;
 static TLP_HASH_MAP<std::string, int> nameToEeGlyphId;
 
-const int EdgeExtremityGlyphManager::NoEdgeExtremetiesId = UINT_MAX;
-
 EdgeExtremityGlyphManager::EdgeExtremityGlyphManager() {
 }
 //====================================================
 string EdgeExtremityGlyphManager::glyphName(int id) {
-  if (id == NoEdgeExtremetiesId) {
+  if (id == EdgeExtremityShape::None) {
     return string("NONE");
   }
 
@@ -52,7 +51,7 @@ string EdgeExtremityGlyphManager::glyphName(int id) {
 //====================================================
 int EdgeExtremityGlyphManager::glyphId(string name) {
   if (name.compare("NONE") == 0) {
-    return NoEdgeExtremetiesId;
+    return EdgeExtremityShape::None;
   }
 
   if (nameToEeGlyphId.find(name) != nameToEeGlyphId.end()) {

@@ -95,6 +95,7 @@ INSTALL(FILES
   tulip/GlSimpleEntityItemModel.h
   tulip/PythonVersionChecker.h
   tulip/QuaZIPFacade.h
+  tulip/CoordEditor.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

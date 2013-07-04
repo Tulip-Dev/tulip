@@ -71,9 +71,6 @@ public:
    */
   void clearGlyphList(Graph **graph, GlGraphInputData* glGraphInputData,
                       MutableContainer<EdgeExtremityGlyph *>& glyphs);
-
-  static const int NoEdgeExtremetiesId;
-
 private:
 
   EdgeExtremityGlyphManager();

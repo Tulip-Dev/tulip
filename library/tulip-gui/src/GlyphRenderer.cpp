@@ -20,8 +20,9 @@
 #include <tulip/GlyphRenderer.h>
 #include <tulip/Graph.h>
 #include <tulip/GlOffscreenRenderer.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/TulipViewSettings.h>
+
 using namespace tlp;
 using namespace std;
 
@@ -68,7 +69,7 @@ QPixmap GlyphRenderer::render(unsigned int pluginId) {
 EdgeExtremityGlyphRenderer* EdgeExtremityGlyphRenderer::_instance = NULL;
 EdgeExtremityGlyphRenderer::EdgeExtremityGlyphRenderer():_graph(newGraph()) {
   //No edge extremity pixmap
-  _previews[EdgeExtremityGlyphManager::NoEdgeExtremetiesId] = QPixmap();
+  _previews[EdgeExtremityShape::None] = QPixmap();
 
   //Init graph.
   GlGraphRenderingParameters parameters;
@@ -88,7 +89,7 @@ EdgeExtremityGlyphRenderer::EdgeExtremityGlyphRenderer():_graph(newGraph()) {
   bends.push_back(Coord(0.01f,0,0));
   inputData.getElementLayout()->setAllEdgeValue(bends);
 
-  inputData.getElementSrcAnchorShape()->setAllEdgeValue(EdgeExtremityGlyphManager::NoEdgeExtremetiesId);
+  inputData.getElementSrcAnchorShape()->setAllEdgeValue(EdgeExtremityShape::None);
   inputData.getElementTgtAnchorSize()->setAllEdgeValue(Size(2,2,1));
 }
 
