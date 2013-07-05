@@ -278,9 +278,15 @@ Informations about the graph stucture
 
 .. automethod:: tulip::tlp.Graph.setName
 
+.. automethod:: tulip::tlp.Graph.getAttributes
+
 .. automethod:: tulip::tlp.Graph.getAttribute
 
 .. automethod:: tulip::tlp.Graph.setAttribute
+
+.. automethod:: tulip::tlp.Graph.removeAttribute
+
+.. automethod:: tulip::tlp.Graph.attributeExist
 
 .. automethod:: tulip::tlp.Graph.numberOfNodes
 
@@ -545,6 +551,33 @@ tlp.PluginProgress
 	:members:
 
 
+Tulip observation mechanism
+----------------------------
+
+tlp.Event
+^^^^^^^^^
+
+.. autoclass:: tulip::tlp.Event
+        :members:
+
+tlp.GraphEvent
+^^^^^^^^^^^^^^
+
+.. autoclass:: tulip::tlp.GraphEvent
+        :members:
+
+tlp.PropertyEvent
+^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: tulip::tlp.PropertyEvent
+        :members:
+
+tlp.Observable
+^^^^^^^^^^^^^^
+
+.. autoclass:: tulip::tlp.Observable
+        :members:
+
 Graph properties classes
 ----------------------------
 
@@ -692,6 +725,11 @@ tlp.WithParameter
 .. autoclass:: tulip::tlp.WithParameter
 	:members:
 
+tlp.Plugin
+^^^^^^^^^^
+
+.. autoclass:: tulip::tlp.Plugin
+        :members:
 
 tlp.Algorithm
 ^^^^^^^^^^^^^
@@ -713,26 +751,11 @@ tlp.ColorAlgorithm
 .. autoclass:: tulip::tlp.ColorAlgorithm
 	:members:
 
-
-.. 
-	Don't know why but setting a docstring in DoubleAlgorithm.sip
-	makes SIP failed to generate a valid compilable source code (bug ?).
-	So don't use autodoc for this class. 
-
 tlp.DoubleAlgorithm
 ^^^^^^^^^^^^^^^^^^^
 	
-.. class:: tlp.DoubleAlgorithm
-
-	Bases: :class:`tlp.Algorithm`
-
-	This class is the base interface for metric plugins.
-
-	.. rubric:: class attributes
-
-	.. py:attribute:: doubleResult
-
-		The result of the algorithm must be stored in this :class:`tlp.DoubleProperty`.
+.. autoclass:: tulip::tlp.DoubleAlgorithm
+        :members:
 
 tlp.IntegerAlgorithm
 ^^^^^^^^^^^^^^^^^^^^

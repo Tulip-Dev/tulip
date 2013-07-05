@@ -76,7 +76,7 @@ The sample code below illustrate how to set / get data on graph elements through
     loop.setEdgeValue(e, graph.source(e) == graph.target(e))
     # the syntax below can also be used
     # loop[e] = (graph.source(e) == graph.target(e))
-  
+
   # reading the properties
   for n in graph.getNodes():
     d = degree.getNodeValue(n)
@@ -90,3 +90,4 @@ The sample code below illustrate how to set / get data on graph elements through
     # isLoop = loop[e]
     if isLoop:
       print e, " is a loop"
+
