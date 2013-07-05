@@ -33,7 +33,7 @@ sleep 10
 . ./stop_tulip.sh
  
 # run tests loop
-TESTS=`ls run_*${TYPE}_test.sh`
+TESTS=`ls run_${TYPE}*_test.sh`
 NB_TESTS=`echo $TESTS | wc -w`
 TEST_ID=0
 for TEST in $TESTS
