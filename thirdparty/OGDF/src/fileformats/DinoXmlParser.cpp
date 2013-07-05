@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of XML parser (class DinoXmlParser)
  * (used for parsing and reading XML files)
- * 
+ *
  * \author Dino Ahr
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -58,25 +59,29 @@ namespace ogdf {
 		else return true;
 	}
 
-	bool XmlTagObject::findSonXmlTagObjectByName(const String sonsName,
-										          XmlTagObject *&son) const {
+	bool XmlTagObject::findSonXmlTagObjectByName(
+		const String sonsName,
+		XmlTagObject *&son) const
+	{
 		XmlTagObject *currentSon = this->m_pFirstSon;
 		while(currentSon && currentSon->m_pTagName->key() != sonsName)
 		{
 			currentSon = currentSon->m_pBrother;
 		}
-		
+
 		if(currentSon) {
 			son = currentSon;
-			return true;	
+			return true;
 		}
-		
+
 		son = 0;
-		return false;								
+		return false;
 	}
 
-	bool XmlTagObject::findSonXmlTagObjectByName(const String sonsName,
-								                  List<XmlTagObject*> &sons) const {
+	bool XmlTagObject::findSonXmlTagObjectByName(
+		const String sonsName,
+		List<XmlTagObject*> &sons) const
+	{
 		bool found;
 		XmlTagObject *currentSon = this->m_pFirstSon;
 		while(currentSon)
@@ -87,7 +92,7 @@ namespace ogdf {
 			}
 			currentSon = currentSon->m_pBrother;
 		}
-		
+
 		return found;
 	}
 
@@ -95,7 +100,7 @@ namespace ogdf {
 		const XmlTagObject *currentSon = this->m_pFirstSon;
 		while(currentSon)
 		{
-			
+
 			//Proof if name of currentSon is inequal to all in sonsName
 			ListConstIterator<String> it;
 			bool found = false;
@@ -105,15 +110,17 @@ namespace ogdf {
 			if(!found) return true;
 			currentSon = currentSon->m_pBrother;
 		}
-		
-		return false;	
+
+		return false;
 	}
 
-	bool XmlTagObject::findXmlAttributeObjectByName(const String attName,
-								    	             XmlAttributeObject*& attribute) const {
+	bool XmlTagObject::findXmlAttributeObjectByName(
+		const String attName,
+		XmlAttributeObject*& attribute) const
+	{
 		XmlAttributeObject *currentAttribute = this->m_pFirstAttribute;
-		while ((currentAttribute != 0) && 
-			   (currentAttribute->m_pAttributeName->key() != attName))
+		while ((currentAttribute != 0) &&
+			(currentAttribute->m_pAttributeName->key() != attName))
 		{
 			currentAttribute = currentAttribute->m_pNextAttribute;
 		}
@@ -126,12 +133,12 @@ namespace ogdf {
 
 		// Not found
 		attribute = 0;
-		return false;							    	   	
+		return false;
 	}
-			
+
 	bool XmlTagObject::isAttributeLess() const {
 		if(this->m_pFirstAttribute) return false;
-		else return true;	
+		else return true;
 	}
 
 
@@ -149,7 +156,7 @@ namespace ogdf {
 	{
 		// Create scanner
 		m_pScanner = new DinoXmlScanner(fileName);
-		
+
 	} // DinoXmlParser::DinoXmlParser
 
 	//
@@ -180,10 +187,8 @@ namespace ogdf {
 		m_pRootTag = parse();
 
 		// recursion depth not correct
-		if (m_recursionDepth != 0){
-			DinoTools::reportError("DinoXmlParser::createParseTree",
-								   __LINE__,
-								   "Recursion depth not equal to zero after parsing!");
+		if (m_recursionDepth != 0) {
+			DinoTools::reportError("DinoXmlParser::createParseTree", __LINE__, "Recursion depth not equal to zero after parsing!");
 		}
 
 	} // createParseTree
@@ -216,7 +221,7 @@ namespace ogdf {
 
 
 	//
-	// p a r s e 
+	// p a r s e
 	//
 	// Take a look at the state machine of parse() to understand
 	// what is going on here.
@@ -228,7 +233,7 @@ namespace ogdf {
 		// Increment recursion depth
 		++m_recursionDepth;
 
-		// currentTagObject is the tag object we want to create 
+		// currentTagObject is the tag object we want to create
 		// in this invocation of parse()
 		XmlTagObject *currentTagObject = 0;
 
@@ -250,7 +255,7 @@ namespace ogdf {
 
 			// Read "?", i.e. we have the XML header line <? ... ?>
 			if (token == questionMark){
-				
+
 				// Skip until we reach the matching question mark
 				if (!m_pScanner->skipUntil('?')){
 					DinoTools::reportError("DinoXmlParser::parse",
@@ -281,11 +286,11 @@ namespace ogdf {
 					(m_pScanner->getNextToken() != minus))
 				{
 					if (!m_pScanner->skipUntilMatchingClosingBracket()){
-					
+
 						DinoTools::reportError("DinoXmlParser::parse",
-											   __LINE__,
-											   "Could not find closing comment bracket!",
-											   getInputFileLineCounter());
+							__LINE__,
+							"Could not find closing comment bracket!",
+							getInputFileLineCounter());
 					}
 
 					continue;
@@ -298,9 +303,9 @@ namespace ogdf {
 					// Skip until we find a - (and skip over it)
 					if (!m_pScanner->skipUntil('-', true)){
 						DinoTools::reportError("DinoXmlParser::parse",
-											   __LINE__,
-											   "Closing --> of comment not found!",
-											   getInputFileLineCounter());
+							__LINE__,
+							"Closing --> of comment not found!",
+							getInputFileLineCounter());
 					}
 
 					// The next characters must be -> (note that one minus is already consumed)
@@ -321,10 +326,10 @@ namespace ogdf {
 			if (token == identifier){
 
 				// Get hash element of token string
-				HashedString *tagName = 
+				HashedString *tagName =
 					hashString(m_pScanner->getCurrentTokenString());
 
-				// Create new tag object 
+				// Create new tag object
 				currentTagObject = new XmlTagObject(tagName);
 				if (currentTagObject == 0){
 					OGDF_THROW(InsufficientMemoryException);
@@ -333,7 +338,7 @@ namespace ogdf {
 				m_tagObserver.push(tagName->key());
 				// set depth of current tag object
 				currentTagObject->setDepth(m_recursionDepth);
-				
+
 				// set line of the tag object in the parsed xml document
 				currentTagObject->setLine(getInputFileLineCounter());
 
@@ -342,11 +347,11 @@ namespace ogdf {
 
 				// Again we found an identifier, so it must be an attribute
 				if (token == identifier){
-				
+
 					// Read list of attributes
 					do {
 						// Save the attribute name
-						HashedString *attributeName = 
+						HashedString *attributeName =
 							hashString(m_pScanner->getCurrentTokenString());
 
 						// Consume "=", otherwise failure
@@ -361,7 +366,7 @@ namespace ogdf {
 
 						// Read value
 						token = m_pScanner->getNextToken();
-						if ((token != quotedValue) && 
+						if ((token != quotedValue) &&
 							(token != identifier) &&
 							(token != attributeValue))
 						{
@@ -372,9 +377,8 @@ namespace ogdf {
 						}
 
 						// Create a new XmlAttributeObject
-						XmlAttributeObject *currentAttributeObject = 
-							new XmlAttributeObject(attributeName, 
-												   hashString(m_pScanner->getCurrentTokenString()));
+						XmlAttributeObject *currentAttributeObject =
+							new XmlAttributeObject(attributeName, hashString(m_pScanner->getCurrentTokenString()));
 						if (currentAttributeObject == 0){
 							OGDF_THROW(InsufficientMemoryException);
 						}
@@ -388,7 +392,7 @@ namespace ogdf {
 					}
 					while (token == identifier);
 
-				} // Found an identifier of an attribute 
+				} // Found an identifier of an attribute
 
 				// Read "/", i.e. the tag is ended immeadiately, e.g.
 				// <A ... /> without a closing tag </A>
@@ -411,7 +415,7 @@ namespace ogdf {
 
 				} // end of Read "/"
 
-				// Read ">", i.e. the tag is closed and we 
+				// Read ">", i.e. the tag is closed and we
 				// expect some content
 				if (token == closingBracket){
 
@@ -424,15 +428,15 @@ namespace ogdf {
 						// currentTagObject
 						m_pScanner->readStringUntil('<');
 						currentTagObject->m_pTagValue = hashString(m_pScanner->getCurrentTokenString());
-						
-						// We expect a closing tag now, i.e. </id> 
+
+						// We expect a closing tag now, i.e. </id>
 						token = m_pScanner->getNextToken();
 						if (token != openingBracket)
 						{
 							DinoTools::reportError("DinoXmlParser::parse",
-												   __LINE__,
-												   "Opening Bracket expected!",
-												   getInputFileLineCounter());
+								__LINE__,
+								"Opening Bracket expected!",
+								getInputFileLineCounter());
 						}
 
 						token = m_pScanner->getNextToken();
@@ -444,7 +448,7 @@ namespace ogdf {
 										getInputFileLineCounter());
 						}
 
-						token = m_pScanner->getNextToken(); 
+						token = m_pScanner->getNextToken();
 						if (token != identifier)
 						{
 							DinoTools::reportError("DinoXmlParser::parse",
@@ -452,7 +456,7 @@ namespace ogdf {
 										"Identifier expected!",
 										getInputFileLineCounter());
 						}
-						
+
 						// next token is the closing tag
 						String nextTag(m_pScanner->getCurrentTokenString());
 						// pop corresponding tag from stack
@@ -464,7 +468,7 @@ namespace ogdf {
 							DinoTools::reportError("DinoXmlParser::parse",
 										__LINE__,
 										"wrong closing tag!",
-										getInputFileLineCounter());		
+										getInputFileLineCounter());
 						}
 
 						token = m_pScanner->getNextToken();
@@ -481,15 +485,15 @@ namespace ogdf {
 						return currentTagObject;
 
 					} // end of read something different from "<"
-					
-					// Found "<", so a (series of) new tag begins and we have to perform 
+
+					// Found "<", so a (series of) new tag begins and we have to perform
 					// recursive invocation of parse()
 					//
 					// There are two exceptions:
 					// - a slash follows afer <, i.e. we have a closing tag
 					// - an exclamation mark follows after <, i.e. we have a comment
 					while (m_pScanner->testNextToken() == openingBracket){
-						
+
 						// Leave the while loop if a closing tag occurs
 						if (m_pScanner->testNextNextToken() == slash){
 							break;
@@ -505,9 +509,9 @@ namespace ogdf {
 								(m_pScanner->getNextToken() != minus))
 							{
 								DinoTools::reportError("DinoXmlParser::parse",
-													   __LINE__,
-													   "Comment must start with <!--",
-													   getInputFileLineCounter());
+									__LINE__,
+									"Comment must start with <!--",
+									getInputFileLineCounter());
 							}
 
 							// Find end of comment
@@ -517,9 +521,9 @@ namespace ogdf {
 								// Skip until we find a - (and skip over it)
 								if (!m_pScanner->skipUntil('-', true)){
 									DinoTools::reportError("DinoXmlParser::parse",
-														   __LINE__,
-														   "Closing --> of comment not found!",
-														   getInputFileLineCounter());
+										__LINE__,
+										"Closing --> of comment not found!",
+										getInputFileLineCounter());
 								}
 
 								// The next characters must be -> (note that one minus is already consumed)
@@ -543,7 +547,7 @@ namespace ogdf {
 					} // while
 
 					// Now we have found all tags.
-					// We expect a closing tag now, i.e. </id> 
+					// We expect a closing tag now, i.e. </id>
 					token = m_pScanner->getNextToken();
 					if (token != openingBracket)
 					{
@@ -570,7 +574,7 @@ namespace ogdf {
 									"Identifier expected!",
 									getInputFileLineCounter());
 					}
- 					
+
  					// next token is the closing tag
 					String nextTag(m_pScanner->getCurrentTokenString());
 					// pop corresponding tag from stack
@@ -582,9 +586,9 @@ namespace ogdf {
 						DinoTools::reportError("DinoXmlParser::parse",
 									__LINE__,
 									"wrong closing tag!",
-									getInputFileLineCounter());		
+									getInputFileLineCounter());
 					}
-					
+
 					token = m_pScanner->getNextToken();
 					if (token != closingBracket)
 					{
@@ -595,7 +599,7 @@ namespace ogdf {
 					}
 
 					--m_recursionDepth;
-					
+
 					// check if Document contains code after the last closing bracket
 					if (m_recursionDepth == 0){
 						token = m_pScanner->getNextToken();
@@ -603,17 +607,17 @@ namespace ogdf {
 							DinoTools::reportError("DinoXmlParser::parse",
 									__LINE__,
 									"Document contains code after the last closing bracket!",
-									getInputFileLineCounter());	
+									getInputFileLineCounter());
 						}
 					}
-					
+
 					return currentTagObject;
 
 				} // end of Read ">"
 
 				OGDF_ASSERT(false)
 				//continue;
-				
+
 			} // end of found identifier
 
 			OGDF_ASSERT(false)
@@ -625,11 +629,13 @@ namespace ogdf {
 	//
 	// a p p e n d A t t r i b u t e O b j e c t
 	//
-	void DinoXmlParser::appendAttributeObject(XmlTagObject *tagObject,
-											  XmlAttributeObject *attributeObject){
+	void DinoXmlParser::appendAttributeObject(
+		XmlTagObject *tagObject,
+		XmlAttributeObject *attributeObject)
+	{
 
 		// No attribute exists yet
-		if (tagObject->m_pFirstAttribute == 0){
+		if (tagObject->m_pFirstAttribute == 0) {
 			tagObject->m_pFirstAttribute = attributeObject;
 		}
 		// At least one attribute exists
@@ -652,11 +658,12 @@ namespace ogdf {
 	//
 	// a p p e n d S o n T a g O b j e c t
 	//
-	void DinoXmlParser::appendSonTagObject(XmlTagObject *currentTagObject, 
-										   XmlTagObject *sonTagObject){
-
+	void DinoXmlParser::appendSonTagObject(
+		XmlTagObject *currentTagObject,
+		XmlTagObject *sonTagObject)
+	{
 		// No Son exists yet
-		if (currentTagObject->m_pFirstSon == 0){
+		if (currentTagObject->m_pFirstSon == 0) {
 			currentTagObject->m_pFirstSon = sonTagObject;
 		}
 		// At least one son exists
@@ -685,7 +692,7 @@ namespace ogdf {
 		// otherwise nothing is done
 		HashedString *key = m_hashTable.insertByNeed(str,-1);
 
-		// String str was not contained in the table 
+		// String str was not contained in the table
 		// --> assign a new info index to the new string
 		if(key->info() == -1){
 			key->info() = m_hashTableInfoIndex++;
@@ -698,9 +705,10 @@ namespace ogdf {
 	//
 	// t r a v e r s e P a t h
 	//
-	bool DinoXmlParser::traversePath(const XmlTagObject &startTag, 
-									 const Array<int> &infoIndexPath,
-			    					 const XmlTagObject *&targetTag) const
+	bool DinoXmlParser::traversePath(
+		const XmlTagObject &startTag,
+		const Array<int> &infoIndexPath,
+		const XmlTagObject *&targetTag) const
 	{
 		// Traverse array
 		const XmlTagObject *currentTag = &startTag;
@@ -726,14 +734,14 @@ namespace ogdf {
 	//
 	// f i n d S o n X m l T a g O b j e c t
 	//
-	bool DinoXmlParser::findSonXmlTagObject(const XmlTagObject &father, 
+	bool DinoXmlParser::findSonXmlTagObject(const XmlTagObject &father,
 			 								int sonInfoIndex,
 											const XmlTagObject *&son) const
 	{
 		// Traverse sons
 		const XmlTagObject *currentSon = father.m_pFirstSon;
-		while ((currentSon != 0) && 
-			   (currentSon->m_pTagName->info() != sonInfoIndex))
+		while ((currentSon != 0) &&
+			(currentSon->m_pTagName->info() != sonInfoIndex))
 		{
 			currentSon = currentSon->m_pBrother;
 		}
@@ -753,14 +761,14 @@ namespace ogdf {
 	//
 	// f i n d B r o t h e r X m l T a g O b j e c t
 	//
-	bool DinoXmlParser::findBrotherXmlTagObject(const XmlTagObject &currentTag, 
+	bool DinoXmlParser::findBrotherXmlTagObject(const XmlTagObject &currentTag,
 												int brotherInfoIndex,
 												const XmlTagObject *&brother) const
 	{
 
 		const XmlTagObject *currentBrother = currentTag.m_pBrother;
-		while ((currentBrother != 0) && 
-			   (currentBrother->m_pTagName->info() != brotherInfoIndex))
+		while ((currentBrother != 0) &&
+			(currentBrother->m_pTagName->info() != brotherInfoIndex))
 		{
 			currentBrother = currentBrother->m_pBrother;
 		}
@@ -780,13 +788,14 @@ namespace ogdf {
 	//
 	// f i n d X m l A t t r i b u t e O b j e c t
 	//
-	bool DinoXmlParser::findXmlAttributeObject(const XmlTagObject &currentTag, 
-											   int attributeInfoIndex,
-											   const XmlAttributeObject *&attribute) const
+	bool DinoXmlParser::findXmlAttributeObject(
+		const XmlTagObject &currentTag,
+		int attributeInfoIndex,
+		const XmlAttributeObject *&attribute) const
 	{
 		const XmlAttributeObject *currentAttribute = currentTag.m_pFirstAttribute;
-		while ((currentAttribute != 0) && 
-			   (currentAttribute->m_pAttributeName->info() != attributeInfoIndex))
+		while ((currentAttribute != 0) &&
+			(currentAttribute->m_pAttributeName->info() != attributeInfoIndex))
 		{
 			currentAttribute = currentAttribute->m_pNextAttribute;
 		}
@@ -813,7 +822,7 @@ namespace ogdf {
 
 		// Get iterator
 		HashConstIterator<String, int> it;
-		
+
 		// Traverse table
 		for( it = m_hashTable.begin(); it.valid(); ++it){
 			os << "\"" << it.key() << "\" has index " << it.info() << endl;
@@ -824,9 +833,10 @@ namespace ogdf {
 	//
 	// p r i n t X m l T a g O b j e c t T r e e
 	//
-	void DinoXmlParser::printXmlTagObjectTree(ostream &outs, 
-											  const XmlTagObject &rootObject, 
-											  int indent) const
+	void DinoXmlParser::printXmlTagObjectTree(
+		ostream &outs,
+		const XmlTagObject &rootObject,
+		int indent) const
 	{
 		printSpaces(outs, indent);
 
@@ -837,9 +847,9 @@ namespace ogdf {
 		XmlAttributeObject *currentAttribute = rootObject.m_pFirstAttribute;
 		while (currentAttribute != 0){
 
-			outs << " " 
-				 << currentAttribute->m_pAttributeName->key() 
-				 << " = \"" 
+			outs << " "
+				 << currentAttribute->m_pAttributeName->key()
+				 << " = \""
 				 << currentAttribute->m_pAttributeValue->key()
 				 << "\"";
 
@@ -865,14 +875,14 @@ namespace ogdf {
 
 		// Content
 		if (rootObject.m_pTagValue != 0){
-			
+
 			printSpaces(outs, indent + 2);
 
 			outs << rootObject.m_pTagValue->key() << endl;
 
 		}
 
-		// Closing tag 
+		// Closing tag
 		printSpaces(outs, indent);
 		outs << "</" << rootObject.m_pTagName->key() << ">" << endl;
 
@@ -889,7 +899,7 @@ namespace ogdf {
 
 	} // printSpaces
 
-	
+
 	//
 	// o u t p u t O p e r a t o r  for DinoXmlParser
 	//

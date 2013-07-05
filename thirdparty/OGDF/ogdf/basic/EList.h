@@ -1,9 +1,9 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2579 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-11 15:28:17 +0200 (Mi, 11. Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -66,7 +66,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -152,6 +153,7 @@ public:
 		return (pStack->*first == 0);
 	}
 };
+
 
 //! Implementation of an embedded list iterator used by \a EList
 template<typename E, E* E::*prev, E* E::*next>
@@ -422,7 +424,7 @@ public:
 
 			// link the pList->last element to other->first
 			pList->*last = pListOther->*other_first;
-		};
+		}
 
 		// add the size of the other pList
 		pList->*numElem += pListOther->*other_numElem;
@@ -450,7 +452,7 @@ public:
 		for(iterator it = begin(pList);it.valid();it++)
 		{
 			func(*it);
-		};
+		}
 	}
 
 	template<typename A1>
@@ -459,41 +461,41 @@ public:
 		for(iterator it = begin(pList);it.valid();it++)
 		{
 			((*it)->*func)(a1);
-		};
+		}
 	}
 
 	//! Constructor.
-	inline EList(L* pList) : m_pList(pList) {};
+	inline EList(L* pList) : m_pList(pList) { }
 
-	inline void init() { init(m_pList); };
+	inline void init() { init(m_pList); }
 
-	inline int size() const { return size(m_pList); };
-	inline bool empty() const { return empty(m_pList); };
+	inline int size() const { return size(m_pList); }
+	inline bool empty() const { return empty(m_pList); }
 
-	inline E* front() const { return front(m_pList); };
-	inline E* back() const { return back(m_pList); };
+	inline E* front() const { return front(m_pList); }
+	inline E* back() const { return back(m_pList); }
 
-	inline iterator pushBack(E* elem) { return pushBack(m_pList, elem); };
-	inline iterator pushFront(E* elem) { return pushFront(m_pList, elem); };
+	inline iterator pushBack(E* elem) { return pushBack(m_pList, elem); }
+	inline iterator pushFront(E* elem) { return pushFront(m_pList, elem); }
 
-	inline iterator insertBefore(E* elem, E* pNext) { return insertBefore(m_pList, elem, pNext); } ;
-	inline iterator insertBefore(E* elem, const iterator& it) { return insertBefore(m_pList, elem, it); } ;
+	inline iterator insertBefore(E* elem, E* pNext) { return insertBefore(m_pList, elem, pNext); }
+	inline iterator insertBefore(E* elem, const iterator& it) { return insertBefore(m_pList, elem, it); }
 
 	inline iterator insertAfter(E* elem, E* pPrev) { return insertAfter(m_pList, elem, pPrev); } ;
 	inline iterator insertAfter(E* elem, const iterator& it) { return insertAfter(m_pList, elem, it); } ;
 
-	inline void popFront() { popFront(m_pList); };
-	inline void popBack() { popBack(m_pList); };
+	inline void popFront() { popFront(m_pList); }
+	inline void popBack() { popBack(m_pList); }
 
-	void operator<<(E* elem) { pushBack(elem); };
+	void operator<<(E* elem) { pushBack(elem); }
 
-	inline iterator remove(E* elem) { return remove(m_pList, elem); };
-	inline iterator remove(const iterator& it)	{ return remove(m_pList, (E*)(*it)); };
+	inline iterator remove(E* elem) { return remove(m_pList, elem); }
+	inline iterator remove(const iterator& it)	{ return remove(m_pList, (E*)(*it)); }
 
-	inline iterator begin() const { return begin(m_pList); };
-	inline iterator end() const	{ return end(m_pList); };
-	inline iterator rbegin() const { return rbegin(m_pList); };
-	inline iterator rend() const { return rend(m_pList); };
+	inline iterator begin() const { return begin(m_pList); }
+	inline iterator end() const	{ return end(m_pList); }
+	inline iterator rbegin() const { return rbegin(m_pList); }
+	inline iterator rend() const { return rend(m_pList); }
 
 private:
 	L* m_pList;

@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of memory manager for allocating small
  *        pieces of memory
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -48,21 +49,10 @@
 #ifndef OGDF_MEMORY_H
 #define OGDF_MEMORY_H
 
-#if defined(OGDF_SYSTEM_WINDOWS) || defined(__CYGWIN__)
-#define WIN32_EXTRA_LEAN
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0500
-#endif
-#include <windows.h>
-#endif
 
 #include <stdlib.h>
 #include <new>
 
-struct MemElem { MemElem *m_next; };
-typedef MemElem *MemElemPtr;
 
 //---------------------------------------------------------------------
 // configuration of memory-manager (can also be set by compiler flag)
@@ -94,21 +84,24 @@ namespace ogdf {
 
 #define OGDF_MM(Alloc) \
 public: \
-void *operator new(size_t nBytes) { \
+static void *operator new(size_t nBytes) { \
 	if(OGDF_LIKELY(Alloc::checkSize(nBytes))) \
 		return Alloc::allocate(nBytes); \
 	else \
 	return MallocMemoryAllocator::allocate(nBytes); \
 } \
-void *operator new(size_t, void *p) { return p; } \
-void operator delete(void *p, size_t nBytes) { \
+\
+static void operator delete(void *p, size_t nBytes) { \
 	if(OGDF_LIKELY(p != 0)) { \
 		if(OGDF_LIKELY(Alloc::checkSize(nBytes))) \
 			Alloc::deallocate(nBytes, p); \
 		else \
 			MallocMemoryAllocator::deallocate(nBytes, p); \
 	} \
-}
+} \
+static void *operator new(size_t, void *p) { return p; } \
+static void operator delete(void *, void *) { }
+
 
 #define OGDF_NEW new
 

@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2616 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-16 15:34:43 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class UniformGrid
- * 
+ *
  * \author Rene Weiskircher
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -47,7 +48,7 @@ namespace ogdf {
 	const double UniformGrid::m_edgeMultiplier = 1.0;
 
 //	int UniformGrid::constructorcounter = 0;
-	
+
 	void UniformGrid::ModifiedBresenham(
 		const IPoint &p1,
 		const IPoint &p2,
@@ -64,7 +65,7 @@ namespace ogdf {
 		//------------------------------------------------------------------------
 		int dX = abs(Bx-Ax);	// store the change in X and Y of the line endpoints
 		int dY = abs(By-Ay);
-		
+
 		//------------------------------------------------------------------------
 		// DETERMINE "DIRECTIONS" TO INCREMENT X AND Y (REGARDLESS OF DECISION)
 		//------------------------------------------------------------------------
@@ -73,21 +74,21 @@ namespace ogdf {
 		if (Ay > By) { Yincr=-1; Yoffset = -1;} else { Yincr=1; Yoffset = 0;}	// which direction in Y?
 		// the offsets are necessary because we always want the cell left and below
 		// the point were bresenham wants to draw it
-		
+
 		//------------------------------------------------------------------------
 		// DETERMINE INDEPENDENT VARIABLE (ONE THAT ALWAYS INCREMENTS BY 1 (OR -1) )
 		// AND INITIATE APPROPRIATE LINE DRAWING ROUTINE (BASED ON FIRST OCTANT
 		// ALWAYS). THE X AND Y'S MAY BE FLIPPED IF Y IS THE INDEPENDENT VARIABLE.
 		//------------------------------------------------------------------------
 		if (dX >= dY)	// if X is the independent variable
-		{           
+		{
 			int dPr 	= dY<<1;  // amount to increment decision if right is chosen (always)
 			int dPru 	= dPr - (dX<<1);   // amount to increment decision if up is chosen
 			int P 		= dPr - dX;  // decision variable start value
 			int secondY = Ay+Yincr; //Y-coordinate of secondary point
-			int testval = P; //if P is equal to testval, the the next point is drawn exactly
-							// on the segment. If P is smaller than testval, it is below the
-			                //segment
+			int testval = P;	//if P is equal to testval, the the next point is drawn exactly
+								// on the segment. If P is smaller than testval, it is below the
+								//segment
 
 
 			for (; dX>=0; dX--)  // process each point in the line one at a time (just use dX)
@@ -95,7 +96,7 @@ namespace ogdf {
 				crossedCells.pushBack(IPoint(Ax+Xoffset,Ay+Yoffset));//add the primary cell
 				crossedCells.pushBack(IPoint(Ax+Xoffset,secondY+Yoffset));//add the secondary cell
 				if (P > 0)          // is the pixel going right AND up?
-				{ 
+				{
 					Ax+=Xincr;	       // increment independent variable
 					Ay+=Yincr;         // increment dependent variable
 					P+=dPru;           // increment decision (for up)
@@ -108,7 +109,7 @@ namespace ogdf {
 				if(P - testval < 0) //primary cell above the line
 					secondY = Ay-Yincr;
 				else secondY = Ay+Yincr;//primary cell below the line
-			}		
+			}
 		}
 		else              // if Y is the independent variable
 		{
@@ -118,13 +119,13 @@ namespace ogdf {
 			int testval = P; // substracting this from P tells us if the cell is drawn left or
 							// right from the actual segment
 			int secondX = Ax+Xincr; //X-Coordinate of secondary cell
-			
+
 			for (; dY>=0; dY--)            // process each point in the line one at a time (just use dY)
 			{
 				crossedCells.pushBack(IPoint(Ax+Xoffset,Ay+Yoffset));// add the primary cell
 				crossedCells.pushBack(IPoint(secondX+Xoffset,Ay+Yoffset));// add the secondary cell
 				if (P > 0)               // is the pixel going up AND right?
-				{ 
+				{
 					Ax+=Xincr;         // increment dependent variable
 					Ay+=Yincr;         // increment independent variable
 					P+=dPru;           // increment decision (for up)
@@ -137,9 +138,9 @@ namespace ogdf {
 				if(P - testval < 0) //primary cell left of the line
 					secondX = Ax-Xincr;
 				else secondX = Ax+Xincr;//primary cell right of the line
-			}		
-		}		
-		
+			}
+		}
+
 	}
 
 	void UniformGrid::DoubleModifiedBresenham(
@@ -153,7 +154,7 @@ namespace ogdf {
 		//------------------------------------------------------------------------
 		double dX = fabs(p2.m_x-p1.m_x);	// store the change in X and Y of the line endpoints
 		double dY = fabs(p1.m_y-p2.m_y);
-		
+
 
 		//------------------------------------------------------------------------
 		// DETERMINE INDEPENDENT VARIABLE (ONE THAT ALWAYS INCREMENTS BY 1 (OR -1) )
@@ -182,8 +183,8 @@ namespace ogdf {
 			//Since computeGridPoint rounds down, this gives us the point p1 and
 			//below each of the points. This is the address of the cell that contains
 			//the point
-			int Yincr = 1;
-			if(left.m_y > right.m_y) Yincr = -1;
+			//int Yincr = 1;
+			//if(left.m_y > right.m_y) Yincr = -1;
 			double slope = (right.m_y-left.m_y)/(right.m_x-left.m_x);
 			double c = left.m_y-slope*left.m_x;
 			OGDF_ASSERT(fabs(slope*right.m_x+c - right.m_y) < m_epsilon);
@@ -216,8 +217,8 @@ namespace ogdf {
 			}
 			IPoint start(computeGridPoint(bottom));
 			IPoint end(computeGridPoint(top));
-			int Xincr = 1;
-			if(bottom.m_x > top.m_x) Xincr = -1;
+			//int Xincr = 1;
+			//if(bottom.m_x > top.m_x) Xincr = -1;
 			double slope = (top.m_x-bottom.m_x)/(top.m_y-bottom.m_y);
 			double c = bottom.m_x-slope*bottom.m_y;
 			OGDF_ASSERT(fabs(slope*top.m_y+c - top.m_x) < m_epsilon);
@@ -237,7 +238,7 @@ namespace ogdf {
 				OldXPos = newX;
 			}
 		}
-		
+
 	}
 //constructor for computing the grid and the crossings from scratch for the
 //layout given by AG
@@ -302,12 +303,17 @@ UniformGrid::UniformGrid(
 
 //constructor for computing an updated grid for a given grid where one
 //vertex is moved to a new position
-UniformGrid::UniformGrid(const UniformGrid &ug, const node v,
-						 const DPoint& newPos) : m_layout(ug.m_layout),
-						 m_graph(ug.m_graph), m_grid(ug.m_grid),
-						 m_crossings(ug.m_crossings), m_cells(ug.m_cells),
-						 m_CellSize(ug.m_CellSize), 
-						 m_crossNum(ug.m_crossNum) 
+UniformGrid::UniformGrid(
+	const UniformGrid &ug,
+	const node v,
+	const DPoint& newPos) :
+	m_layout(ug.m_layout),
+	m_graph(ug.m_graph),
+	m_grid(ug.m_grid),
+	m_crossings(ug.m_crossings),
+	m_cells(ug.m_cells),
+	m_CellSize(ug.m_CellSize),
+	m_crossNum(ug.m_crossNum)
 {
 	//constructorcounter++;
 #ifdef OGDF_DEBUG
@@ -360,8 +366,11 @@ UniformGrid::UniformGrid(const UniformGrid &ug, const node v,
 }
 
 
-void UniformGrid::computeGridGeometry(const node moved, const DPoint& newPos,
-									  IntersectionRectangle& ir) const {
+void UniformGrid::computeGridGeometry(
+	const node moved,
+	const DPoint& newPos,
+	IntersectionRectangle& ir) const
+{
 	//first we compute the resolution and size of the grid
 	double MinX = DBL_MAX, MinY = DBL_MAX, MaxX =DBL_MIN, MaxY = DBL_MIN;
 	//find lower left and upper right vertex
@@ -384,8 +393,12 @@ void UniformGrid::computeGridGeometry(const node moved, const DPoint& newPos,
 	ir = IntersectionRectangle(MinX,MinY,MaxX,MaxY);
 }
 
-void UniformGrid::computeCrossings(const List<edge>& toInsert,const node moved,
-								   const DPoint& newPos) {
+
+void UniformGrid::computeCrossings(
+	const List<edge>& toInsert,
+	const node moved,
+	const DPoint& newPos)
+{
 	//now we compute all the remaining data of the class in one loop
 	//going through all edges and storing them in the grid.
 	ListConstIterator<edge> it;
@@ -433,9 +446,14 @@ void UniformGrid::computeCrossings(const List<edge>& toInsert,const node moved,
 #endif
 }
 
+
 //returns true if both edges are not adjacent and cross inside the given cell
-bool UniformGrid::crossingTest(const edge e1, const edge e2, const node moved,
-							   const DPoint& newPos, const IPoint& cell)
+bool UniformGrid::crossingTest(
+	const edge e1,
+	const edge e2,
+	const node moved,
+	const DPoint& newPos,
+	const IPoint& cell)
 {
 	bool crosses = false;
 	node s1 = e1->source(), t1 = e1->target();
@@ -480,7 +498,9 @@ void UniformGrid::markCells(SList<IPoint> &result, Array2D<bool> &cells) const {
 		}
 }
 
-void UniformGrid::checkBresenham(DPoint p1, DPoint p2) const {
+
+void UniformGrid::checkBresenham(DPoint p1, DPoint p2) const
+{
 	int crossed = 0;
 	DPoint bottomleft(min(p1.m_x,p2.m_x),min(p1.m_y,p2.m_y));
 	DPoint topright(max(max(p1.m_x,p2.m_x),bottomleft.m_x+1.0),
@@ -491,11 +511,11 @@ void UniformGrid::checkBresenham(DPoint p1, DPoint p2) const {
 	SList<IPoint> result;
 	DoubleModifiedBresenham(p1,p2,result);
 	cout << "\nList computed by Bresenham:\n";
-	
+
 	for(SListIterator<IPoint> it = result.begin(); it.valid(); ++it) {
 		cout << computeRealPoint(*it) << " ";
 	}
-	
+
 	markCells(result,cells);
 	cout << "\nCrossed cells:\n";
 	if(p1.m_x == p2.m_x) { //vertical segment
@@ -547,7 +567,7 @@ void UniformGrid::checkBresenham(DPoint p1, DPoint p2) const {
 					}
 				}
 			}
-			
+
 		}
 	}
 	if(crossed < max(fabs(p1.m_x-p2.m_x)/m_CellSize,fabs(p1.m_y-p2.m_y)/m_CellSize)) {
@@ -555,10 +575,12 @@ void UniformGrid::checkBresenham(DPoint p1, DPoint p2) const {
 		exit(1);
 	}
 	cout << "\n";
-	
+
 }
 
-void UniformGrid::checkBresenham(IPoint p1, IPoint p2) const {
+
+void UniformGrid::checkBresenham(IPoint p1, IPoint p2) const
+{
 	int crossed = 0;
 	int left = min(p1.m_x,p2.m_x)-1;
 	int right = max(max(p1.m_x,p2.m_x),left+1);
@@ -607,7 +629,7 @@ void UniformGrid::checkBresenham(IPoint p1, IPoint p2) const {
 					}
 				}
 			}
-			
+
 		}
 	}
 	if(crossed < max(abs(p1.m_x-p2.m_x),abs(p1.m_y-p2.m_y))) {
@@ -615,12 +637,16 @@ void UniformGrid::checkBresenham(IPoint p1, IPoint p2) const {
 		exit(1);
 	}
 	cout << "\n";
-	
+
 }
+
+
 //the upper and left boundary does not belong to a cell
-bool UniformGrid::crossesCell(IPoint A,
-							  IPoint B,
-							  const IPoint &CellAdr) const{
+bool UniformGrid::crossesCell(
+	IPoint A,
+	IPoint B,
+	const IPoint &CellAdr) const
+{
 	bool crosses = false;
 	if(A.m_x == B.m_x) {//line segment is vertical
 		if(A.m_x >= CellAdr.m_x && A.m_x < CellAdr.m_x+1) {
@@ -639,15 +665,19 @@ bool UniformGrid::crossesCell(IPoint A,
 	}
 	return crosses;
 }
+
+
 //the upper and left boundary does not belong to a cell
-bool UniformGrid::crossesCell(DPoint A,
-							  DPoint B,
-							  const IPoint &CellAdr) const{
+bool UniformGrid::crossesCell(
+	DPoint A,
+	DPoint B,
+	const IPoint &CellAdr) const
+{
 	bool crosses = false;
 	double xLowCell = CellAdr.m_x * m_CellSize;
 	double xHighCell = xLowCell + m_CellSize;
 	double yLowCell = CellAdr.m_y * m_CellSize;
-	double yHighCell = yLowCell + m_CellSize; 
+	double yHighCell = yLowCell + m_CellSize;
 	if(A.m_x == B.m_x) {//line segment is vertical
 		if(A.m_x >= xLowCell && A.m_x < xHighCell) {
 			if(intervalIntersect(A.m_y,B.m_y,yLowCell,yHighCell))
@@ -668,17 +698,22 @@ bool UniformGrid::crossesCell(DPoint A,
 	return crosses;
 }
 
-bool UniformGrid::intervalIntersect(double a1,
-									double a2,
-									double cell1,
-									double cell2) const {
+
+bool UniformGrid::intervalIntersect(
+	double a1,
+	double a2,
+	double cell1,
+	double cell2) const
+{
 	double epsilon = 0.000001;
 	bool intersect = true;
 	if(min(a1,a2)+epsilon >= max(cell1,cell2) || min(cell1,cell2)+epsilon >= max(a1,a2)) intersect = false;
 	return intersect;
 }
 
-ostream &operator<<(ostream &out, const UniformGrid &ug) {
+
+ostream &operator<<(ostream &out, const UniformGrid &ug)
+{
 	out << "\nGrid Size: " << ug.m_CellSize;
 	out << "\nEpsilon: " << ug.m_epsilon;
 	out << "\nEdge Multiplier: " << ug.m_edgeMultiplier;
@@ -698,4 +733,4 @@ ostream &operator<<(ostream &out, const UniformGrid &ug) {
 
 
 #endif
-}//namespace 
+}//namespace

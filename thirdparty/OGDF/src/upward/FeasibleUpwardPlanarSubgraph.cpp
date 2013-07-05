@@ -1,43 +1,45 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2559 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-06 15:04:28 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief Implements class UpwardPlanarSubgraphSimple which computes
  * an upward planar subgraph of a single-source acyclic digraph
- * 
+ *
  * \author Hoi-Ming Wong
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2008
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
 
 #include <ogdf/upward/FeasibleUpwardPlanarSubgraph.h>
 #include <ogdf/upward/UpwardPlanarModule.h>
@@ -47,71 +49,73 @@
 namespace ogdf {
 
 
-Module::ReturnType FeasibleUpwardPlanarSubgraph::call(Graph &G, 
-											  GraphCopy &FUPS, 
-											  adjEntry &extFaceHandle,										
-											  List<edge> &delEdges, 
-											  bool multisources,
-											  int runs) 
+Module::ReturnType FeasibleUpwardPlanarSubgraph::call(
+	Graph &G,
+	GraphCopy &FUPS,
+	adjEntry &extFaceHandle,
+	List<edge> &delEdges,
+	bool multisources,
+	int runs)
 {
-	
+
 #ifdef OGDF_DEBUG
-	UpwardPlanarModule upMod;	
-	OGDF_ASSERT(!upMod.upwardPlanarityTest(G));	
-#endif	
-	
+	UpwardPlanarModule upMod;
+	OGDF_ASSERT(!upMod.upwardPlanarityTest(G));
+#endif
+
 	delEdges.clear();
 
 	//current fups, its embedding and the removed edges
 	GraphCopy FUPS_cur;
 	List<edge> delEdges_cur;
-	
-	call(G, FUPS, extFaceHandle, delEdges, multisources);	
+
+	call(G, FUPS, extFaceHandle, delEdges, multisources);
 
 	for (int i = 1; i < runs; ++i) {
 		adjEntry extFaceHandle_cur;
-		call(G, FUPS_cur, extFaceHandle_cur, delEdges_cur, multisources);			
-		
+		call(G, FUPS_cur, extFaceHandle_cur, delEdges_cur, multisources);
+
 		// use new result??
-		if (delEdges_cur.size() < delEdges.size()) {						
+		if (delEdges_cur.size() < delEdges.size()) {
 			FUPS = FUPS_cur;
 			extFaceHandle = FUPS.copy(FUPS_cur.original(extFaceHandle_cur->theEdge()))->adjSource();
-			delEdges = delEdges_cur;			
-		}		
+			delEdges = delEdges_cur;
+		}
 	}
 	return Module::retFeasible;
 }
 
 
-Module::ReturnType FeasibleUpwardPlanarSubgraph::call(const Graph &G,
-													  GraphCopy &FUPS,
-													  adjEntry &extFaceHandle,													   
-													  List<edge> &delEdges, 
-													  bool multisources) 
-{		
-	FUPS = GraphCopy(G);	
+Module::ReturnType FeasibleUpwardPlanarSubgraph::call(
+	const Graph &G,
+	GraphCopy &FUPS,
+	adjEntry &extFaceHandle,
+	List<edge> &delEdges,
+	bool multisources)
+{
+	FUPS = GraphCopy(G);
 	delEdges.clear();
 	node s_orig;
-	hasSingleSource(G, s_orig);		
+	hasSingleSource(G, s_orig);
 	List<edge> nonTreeEdges_orig;
-	getSpanTree(FUPS, nonTreeEdges_orig, true, multisources);	
-	CombinatorialEmbedding Gamma(FUPS);	
+	getSpanTree(FUPS, nonTreeEdges_orig, true, multisources);
+	CombinatorialEmbedding Gamma(FUPS);
 	nonTreeEdges_orig.permute(); // random order
-	
-	//insert nonTreeEdges 
-	UpwardPlanarModule upMod;	
+
+	//insert nonTreeEdges
+	UpwardPlanarModule upMod;
 	while (!nonTreeEdges_orig.empty()) {
 		// make identical copy GC of Fups
 		//and insert e_orig in GC
 		GraphCopy GC = FUPS;
 		edge e_orig = nonTreeEdges_orig.popFrontRet();
 		//node a = GC.copy(e_orig->source());
-		//node b = GC.copy(e_orig->target());		
+		//node b = GC.copy(e_orig->target());
 		GC.newEdge(e_orig);
-		
-		if (upMod.upwardPlanarEmbed(GC)) { //upward embedded the fups and check feasibility			
+
+		if (upMod.upwardPlanarEmbed(GC)) { //upward embedded the fups and check feasibility
 			CombinatorialEmbedding Beta(GC);
-			
+
 			//choose a arbitrary feasibel ext. face
 			FaceSinkGraph fsg(Beta, GC.copy(s_orig));
 			SList<face> ext_faces;
@@ -120,13 +124,13 @@ Module::ReturnType FeasibleUpwardPlanarSubgraph::call(const Graph &G,
 			Beta.setExternalFace(ext_faces.front());
 
 			GraphCopy M = GC; // use a identical copy of GC to constrcut the merge graph of GC
-			adjEntry extFaceHandle_cur = getAdjEntry(Beta, GC.copy(s_orig), Beta.externalFace());			
+			adjEntry extFaceHandle_cur = getAdjEntry(Beta, GC.copy(s_orig), Beta.externalFace());
 			adjEntry adj_orig = GC.original(extFaceHandle_cur->theEdge())->adjSource();
-		
-			if (constructMergeGraph(M, adj_orig, nonTreeEdges_orig)) {				
+
+			if (constructMergeGraph(M, adj_orig, nonTreeEdges_orig)) {
 				FUPS = GC;
 				extFaceHandle = FUPS.copy(GC.original(extFaceHandle_cur->theEdge()))->adjSource();
-				continue; 
+				continue;
 			}
 			else {
 				//Beta is not feasible
@@ -134,23 +138,23 @@ Module::ReturnType FeasibleUpwardPlanarSubgraph::call(const Graph &G,
 			}
 		}
 		else {
-			// not ok, GC is not feasible 
+			// not ok, GC is not feasible
 			delEdges.pushBack(e_orig);
-		}													
+		}
 	}
-	
+
 	return Module::retFeasible;
 }
 
 
-void FeasibleUpwardPlanarSubgraph::getSpanTree(GraphCopy &GC, List<edge> &delEdges, bool random, bool multisource) 
+void FeasibleUpwardPlanarSubgraph::getSpanTree(GraphCopy &GC, List<edge> &delEdges, bool random, bool multisource)
 {
 	delEdges.clear();
 	if (GC.numberOfNodes() == 1)
 		return; // nothing to do
-	node s;	
-	hasSingleSource(GC, s);	
-	NodeArray<bool> visited(GC, false);		
+	node s;
+	hasSingleSource(GC, s);
+	NodeArray<bool> visited(GC, false);
 	EdgeArray<bool> isTreeEdge(GC,false);
 	List<node> toDo;
 
@@ -163,7 +167,7 @@ void FeasibleUpwardPlanarSubgraph::getSpanTree(GraphCopy &GC, List<edge> &delEdg
 			isTreeEdge[adj->theEdge()] = true;
 			visited[adj->theEdge()->target()];
 			toDo.pushBack(adj->theEdge()->target());
-		}		
+		}
 	}
 	else
 		toDo.pushBack(s);
@@ -172,15 +176,15 @@ void FeasibleUpwardPlanarSubgraph::getSpanTree(GraphCopy &GC, List<edge> &delEdg
 	//traversing with dfs
 	forall_listiterators(node, it, toDo) {
 		node start = *it;
-		adjEntry adj; 
+		adjEntry adj;
 		forall_adj(adj, start) {
 			node v = adj->theEdge()->target();
 			if (!visited[v])
 				dfs_visit(GC, adj->theEdge(), visited, isTreeEdge, random);
 		}
-	}	
-	
-	// delete all non tree edgesEdges to obtain a span tree 
+	}
+
+	// delete all non tree edgesEdges to obtain a span tree
 	List<edge> l;
 	edge e;
 	forall_edges(e, GC) {
@@ -191,16 +195,17 @@ void FeasibleUpwardPlanarSubgraph::getSpanTree(GraphCopy &GC, List<edge> &delEdg
 		e = l.popFrontRet();
 		delEdges.pushBack(GC.original(e));
 		GC.delCopy(e);
-	}	
+	}
 }
 
 
 
-void FeasibleUpwardPlanarSubgraph::dfs_visit(const Graph &G, 
-											 edge e, 
-											 NodeArray<bool> &visited, 
-											 EdgeArray<bool> &treeEdges, 
-											 bool random) 
+void FeasibleUpwardPlanarSubgraph::dfs_visit(
+	const Graph &G,
+	edge e,
+	NodeArray<bool> &visited,
+	EdgeArray<bool> &treeEdges,
+	bool random)
 {
 	treeEdges[e] = true;
 	List<edge> elist;
@@ -219,27 +224,28 @@ void FeasibleUpwardPlanarSubgraph::dfs_visit(const Graph &G,
 }
 
 
-bool FeasibleUpwardPlanarSubgraph::constructMergeGraph(GraphCopy &M, 
-													   adjEntry adj_orig,
-													   const List<edge> &orig_edges) 
-{	
+bool FeasibleUpwardPlanarSubgraph::constructMergeGraph(
+	GraphCopy &M,
+	adjEntry adj_orig,
+	const List<edge> &orig_edges)
+{
 	CombinatorialEmbedding Beta(M);
-	
-	//set ext. face of Beta	
-	adjEntry ext_adj = M.copy(adj_orig->theEdge())->adjSource(); 
+
+	//set ext. face of Beta
+	adjEntry ext_adj = M.copy(adj_orig->theEdge())->adjSource();
 	Beta.setExternalFace(Beta.rightFace(ext_adj));
-		
+
 	FaceSinkGraph fsg(Beta, M.copy(adj_orig->theNode()));
 	SList<node> aug_nodes;
-	SList<edge> aug_edges;	
+	SList<edge> aug_edges;
 	SList<face> fList;
-	fsg.possibleExternalFaces(fList); // use this method to call the methode checkForest()  
+	fsg.possibleExternalFaces(fList); // use this method to call the methode checkForest()
 	node v_ext = fsg.faceNodeOf(Beta.externalFace());
-	
+
 	OGDF_ASSERT(v_ext != 0);
 
 	fsg.stAugmentation(v_ext, M, aug_nodes, aug_edges);
-	
+
 	//add the deleted edges
 	forall_listiterators(edge, it, orig_edges) {
 		node a = M.copy((*it)->source());

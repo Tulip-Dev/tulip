@@ -1,44 +1,45 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2559 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-06 15:04:28 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Linear time layout algorithm for free trees (RadialTreeLayout).
- * 
+ *
  * Based on chapter 3.1.1 Radial Drawings of Graph Drawing by
  * Di Battista, Eades, Tamassia, Tollis
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -69,7 +70,7 @@ RadialTreeLayout::RadialTreeLayout(const RadialTreeLayout &tl)
 { }
 
 
-RadialTreeLayout::~RadialTreeLayout() 
+RadialTreeLayout::~RadialTreeLayout()
 { }
 
 
@@ -83,7 +84,7 @@ RadialTreeLayout &RadialTreeLayout::operator=(const RadialTreeLayout &tl)
 }
 
 
-void RadialTreeLayout::call(GraphAttributes &AG) 
+void RadialTreeLayout::call(GraphAttributes &AG)
 {
 	const Graph &tree = AG.constGraph();
 	if(tree.numberOfNodes() == 0) return;
@@ -92,7 +93,7 @@ void RadialTreeLayout::call(GraphAttributes &AG)
 		OGDF_THROW_PARAM(PreconditionViolatedException, pvcForest);
 
 	OGDF_ASSERT(m_levelDistance > 0);
-	 
+
 	// determine root of tree (m_root)
 	FindRoot(tree);
 
@@ -281,7 +282,7 @@ void RadialTreeLayout::ComputeAngles(const Graph &G)
 			for(it = m_nodes[i].begin(); it.valid(); ++it)
 			{
 				node w = *it;
-				
+
 				m_grouping[w].computeAdd(D[w],W[w]);
 
 				double deltaL = 0.0;
@@ -481,7 +482,7 @@ void RadialTreeLayout::Grouping::computeAdd(double &D, double &W)
 		W += g.m_sumW;
 
 		ListIterator<Group> itL;
-		
+
 		itL = it.pred();
 		if(itL.valid() == false) {
 			g.m_leftAdd = 0.0;

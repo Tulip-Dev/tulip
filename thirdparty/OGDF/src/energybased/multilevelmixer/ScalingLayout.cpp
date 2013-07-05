@@ -1,9 +1,9 @@
 /*
- * $Revision: 2302 $
+ * $Revision: 2565 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -45,10 +46,14 @@
 
 namespace ogdf {
 
-ScalingLayout::ScalingLayout()
-: m_extraScalingSteps(0), m_maxScaling(2.0), m_minScaling(1.0), 
-m_scalingType(st_relativeToDrawing), m_mmm(0), 
-m_layoutRepeats(1), m_desEdgeLength(1.0)
+ScalingLayout::ScalingLayout() :
+	m_minScaling(1.0),
+	m_maxScaling(2.0),
+	m_mmm(NULL),
+	m_desEdgeLength(1.0),
+	m_extraScalingSteps(0),
+	m_layoutRepeats(1),
+	m_scalingType(st_relativeToDrawing)
 {
 }
 
@@ -66,14 +71,14 @@ void ScalingLayout::call(MultilevelGraph &MLG)
 	Graph &G = MLG.getGraph();
 	double avgDesiredEdgeLength = 0.0;
 	edge e;
-	
+
 	if (m_scalingType == st_relativeToAvgLength) {
 		forall_edges(e, G) {
 			avgDesiredEdgeLength += MLG.weight(e);
 		}
 		avgDesiredEdgeLength /= G.numberOfNodes();
 	}
-	
+
 	double finalScaling = m_maxScaling;
 	if ( (m_scalingType == st_absolute) && (m_mmm != 0))
 	{
@@ -114,7 +119,7 @@ void ScalingLayout::call(MultilevelGraph &MLG)
 				avgEdgeLength += sqrt( x*x + y*y );
 			}
 			avgEdgeLength /= G.numberOfNodes();
-	
+
 			if(avgEdgeLength <= 0.0) {
 				MLG.moveToZero();
 			} else {
@@ -124,7 +129,7 @@ void ScalingLayout::call(MultilevelGraph &MLG)
 						avgStartEdgeLength = avgEdgeLength;
 					}
 					scaling = scalingFactor * avgStartEdgeLength / avgEdgeLength;
-				} else { 
+				} else {
 						if (m_scalingType == st_relativeToDesiredLength)
 						{
 							scaling = scalingFactor * m_desEdgeLength / avgEdgeLength;
@@ -134,9 +139,9 @@ void ScalingLayout::call(MultilevelGraph &MLG)
 					cout << "Scaling: F/s "<<scalingFactor<<" "<<scaling<<"\n";
 	#endif
 				}
-				
+
 				MLG.moveToZero();
-	
+
 				// scale to scaling
 				node v;
 				forall_nodes(v, G) {
@@ -176,7 +181,7 @@ void ScalingLayout::setSecondaryLayout(LayoutModule * layout)
 void ScalingLayout::setMMM(ModularMultilevelMixer* mmm)
 {
 	m_mmm = mmm;
-} 
+}
 
 
 void ScalingLayout::setScalingType(ScalingType type)

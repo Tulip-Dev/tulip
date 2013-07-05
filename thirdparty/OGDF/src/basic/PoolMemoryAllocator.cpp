@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2549 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-04 23:09:19 +0200 (Mi, 04. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of memory manager for more efficiently
  *        allocating small pieces of memory
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -95,11 +96,13 @@ void PoolMemoryAllocator::init()
 	initThread();
 }
 
+
 void PoolMemoryAllocator::initThread() {
 #if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
-	pthread_setspecific(s_tpKey,calloc(eTableSize,sizeof(MemElemPtr)));
+		pthread_setspecific(s_tpKey,calloc(eTableSize,sizeof(MemElemPtr)));
 #endif
 }
+
 
 void PoolMemoryAllocator::cleanup()
 {
@@ -124,6 +127,49 @@ PoolMemoryAllocator::MemElemPtr* PoolMemoryAllocator::getFreeBytesPtr(size_t nBy
 #else
   return s_tp+nBytes;
 #endif
+}
+
+
+bool PoolMemoryAllocator::checkSize(size_t nBytes) {
+	return nBytes < eTableSize;
+}
+
+
+void *PoolMemoryAllocator::allocate(size_t nBytes) {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+	MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
+#else
+	MemElemPtr *pFreeBytes = s_tp+nBytes;
+#endif
+	if (OGDF_LIKELY(*pFreeBytes != 0)) {
+		MemElemPtr p = *pFreeBytes;
+		*pFreeBytes = p->m_next;
+		return p;
+	} else {
+		return fillPool(*pFreeBytes,__uint16(nBytes));
+	}
+}
+
+
+void PoolMemoryAllocator::deallocate(size_t nBytes, void *p) {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+	MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
+#else
+	MemElemPtr *pFreeBytes = s_tp+nBytes;
+#endif
+	MemElemPtr(p)->m_next = *pFreeBytes;
+	*pFreeBytes = MemElemPtr(p);
+}
+
+
+void PoolMemoryAllocator::deallocateList(size_t nBytes, void *pHead, void *pTail) {
+#if !defined(OGDF_MEMORY_POOL_NTS) && defined(OGDF_NO_COMPILER_TLS)
+	MemElemPtr *pFreeBytes = ((MemElemPtr*)pthread_getspecific(s_tpKey))+nBytes;
+#else
+	MemElemPtr *pFreeBytes = s_tp+nBytes;
+#endif
+	MemElemPtr(pTail)->m_next = *pFreeBytes;
+	*pFreeBytes = MemElemPtr(pHead);
 }
 
 

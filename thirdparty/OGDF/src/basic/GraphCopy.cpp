@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of GraphCopySimple and GraphCopy classes
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -217,8 +218,10 @@ void GraphCopy::initByNodes(const List<node> &nodes, EdgeArray<edge> &eCopy)
 
 }
 
-void GraphCopy::initByActiveNodes(const List<node> &nodes, const NodeArray<bool> &activeNodes,
-								  EdgeArray<edge> &eCopy)
+void GraphCopy::initByActiveNodes(
+	const List<node> &nodes,
+	const NodeArray<bool> &activeNodes,
+	EdgeArray<edge> &eCopy)
 {
 	Graph::constructInitByActiveNodes(nodes, activeNodes, m_vCopy, eCopy);
 
@@ -279,12 +282,12 @@ void GraphCopy::setOriginalEmbedding()
 					//incoming and outgoing edges, check the direction
 					//to find the correct copy adjEntry
 					bool outEdge = (adjOr == (adjOr->theEdge()->adjSource()));
-		
+
 					OGDF_ASSERT(chain(adjOr->theEdge()).size() == 1);
 					edge cEdge = chain(adjOr->theEdge()).front();
 					adjEntry cAdj = (outEdge ? cEdge->adjSource() : cEdge->adjTarget());
 					newAdjOrder.pushBack(cAdj);
-				}	
+				}
 			}//foralladj
 			sort(copy(v), newAdjOrder);
 		}
@@ -367,7 +370,7 @@ edge GraphCopy::newEdge(node v, adjEntry adjEnd, edge eOrig, CombinatorialEmbedd
 	edge e;
 	if (original(v) == eOrig->source())
 		e = E.splitFace(v, adjEnd);
-	else 
+	else
 		e = E.splitFace(adjEnd, v);
 	m_eIterator[e] = m_eCopy[eOrig].pushBack(e);
 	m_eOrig[e] = eOrig;
@@ -382,7 +385,7 @@ void GraphCopy::setEdge(edge eOrig, edge eCopy){
 	OGDF_ASSERT(eCopy->target() == m_vCopy[eOrig->target()]);
 	OGDF_ASSERT(eCopy->source() == m_vCopy[eOrig->source()]);
 	OGDF_ASSERT(m_eCopy[eOrig].empty());
-	
+
 	m_eCopy[m_eOrig[eCopy] = eOrig].pushBack(eCopy);
 }
 
@@ -479,10 +482,11 @@ void GraphCopy::insertEdgePath(node srcOrig, node tgtOrig, const SList<adjEntry>
 //the parameter topDown describes he following:
 // if the crossingEdge is running horizontally from left to right,
 // is the crossedEdge direction top->down?
-edge GraphCopy::insertCrossing(edge& crossingEdge,
-							   edge crossedEdge,
-							   bool topDown)
-							   //const SList<edge> &crossedCopies)
+edge GraphCopy::insertCrossing(
+	edge& crossingEdge,
+	edge crossedEdge,
+	bool topDown)
+	//const SList<edge> &crossedCopies)
 {
 	//we first split the crossed edge
 	edge e = split(crossedEdge);
@@ -491,12 +495,12 @@ edge GraphCopy::insertCrossing(edge& crossingEdge,
 
 	//now we delete the crossing copy edge and replace it
 	//by two edges adjacent to the crossing vertex
-	//we have to consider the copy ordering of the 
+	//we have to consider the copy ordering of the
 	//original edge
 	//we have to keep the correct order of the adjacency entries
-	//because even without a combinatorial embedding, the 
+	//because even without a combinatorial embedding, the
 	//ordering of the edges may already be fixed
-    //Problem: wie erkennt man die Reihenfolge am split? 
+	//Problem: wie erkennt man die Reihenfolge am split?
 	//Man muss die Richtung der gekreuzten Kante kennen
 	//=>Parameter, und hier adjSource und adjTarget trennen
 	edge eNew1, eNew2;
@@ -504,7 +508,7 @@ edge GraphCopy::insertCrossing(edge& crossingEdge,
 	{
 		//case 1: crossingEdge runs top-down
 		eNew1 = newEdge(adSource, e->adjSource());
-		eNew2 = newEdge(e->adjSource()->cyclicPred(), 
+		eNew2 = newEdge(e->adjSource()->cyclicPred(),
 			crossingEdge->adjTarget()->cyclicPred());
 	}
 	else
@@ -529,10 +533,10 @@ edge GraphCopy::insertCrossing(edge& crossingEdge,
 void GraphCopy::delCopy(edge e)
 {
 	edge eOrig = m_eOrig[e];
-	
+
 	delEdge(e);
 	if (eOrig == 0)	return;
-	
+
 	OGDF_ASSERT(m_eCopy[eOrig].size() == 1);
 	m_eCopy[eOrig].clear();
 }
@@ -547,7 +551,7 @@ void GraphCopy::delCopy(node v)
 	forall_adj(adj,v)
 	{
 		edge eo = m_eOrig[adj->theEdge()];
-		if (eo != 0) 
+		if (eo != 0)
 			m_eCopy[eo].clear();
 	}
 

@@ -1,43 +1,44 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of cluster planarity tests and cluster
- * planar embedding for c-connected clustered graphs. Based on 
+ * planar embedding for c-connected clustered graphs. Based on
  * the algorithm by Cohen, Feng and Eades which uses PQ-trees.
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -45,19 +46,18 @@
 #include <ogdf/cluster/CconnectClusterPlanar.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/basic/extended_graph_alg.h>
-#include <ogdf/planarity/PlanarModule.h>
 
 namespace ogdf {
 
 // Constructor
-CconnectClusterPlanar::CconnectClusterPlanar() 
+CconnectClusterPlanar::CconnectClusterPlanar()
 {
 	ogdf::strcpy(errorCode,124,"\0");
 	m_errorCode = none;
 }
 
 // Destructor
-CconnectClusterPlanar::~CconnectClusterPlanar() 
+CconnectClusterPlanar::~CconnectClusterPlanar()
 {
 }
 
@@ -86,7 +86,7 @@ bool CconnectClusterPlanar::call(ClusterGraph &C)
 	m_isParallel.init();
 	m_clusterPQTree.init();
 
-	return cPlanar;	
+	return cPlanar;
 }
 
 
@@ -110,14 +110,14 @@ bool CconnectClusterPlanar::call(const ClusterGraph &C)
 
 	return cPlanar;
 }
-	
+
 
 
 //
 //	CallTree:
 //
 //  call(ClusterGraph &C)
-//		
+//
 //		preProcess(ClusterGraph &C,Graph &G)
 //
 //			planarityTest(ClusterGraph &C,cluster &act,Graph &G)
@@ -140,15 +140,14 @@ bool CconnectClusterPlanar::preProcess(ClusterGraph &C,Graph &G)
 {
 	if (!isCConnected(C))
 	{
-		ogdf::sprintf(errorCode,124,"Graph is not C-connected \n"); 
+		ogdf::sprintf(errorCode,124,"Graph is not C-connected \n");
 		m_errorCode = nonCConnected;
 		return false;
 	}
 
-	PlanarModule Pm;
-	if (!Pm.planarityTest(C))
+	if (!isPlanar(C))
 	{
-		ogdf::sprintf(errorCode,124,"Graph is not planar\n"); 
+		ogdf::sprintf(errorCode,124,"Graph is not planar\n");
 		m_errorCode = nonPlanar;
 		return false;
 	}
@@ -168,10 +167,11 @@ bool CconnectClusterPlanar::preProcess(ClusterGraph &C,Graph &G)
 
 
 // Recursive call for testing c-planarity of the clustered graph
-// that is induced by cluster act 
-bool CconnectClusterPlanar::planarityTest(ClusterGraph &C,
-										  cluster &act,
-										  Graph &G)
+// that is induced by cluster act
+bool CconnectClusterPlanar::planarityTest(
+	ClusterGraph &C,
+	cluster &act,
+	Graph &G)
 {
 	// Test children first
 	ListConstIterator<cluster> it;
@@ -196,7 +196,7 @@ bool CconnectClusterPlanar::planarityTest(ClusterGraph &C,
 	inducedSubGraph(G,subGraphNodes.begin(),subGraph,table);
 
 
-	// Introduce super sink and add edges corresponding 
+	// Introduce super sink and add edges corresponding
 	// to outgoing edges of the cluster
 
 	node superSink = subGraph.newNode();
@@ -223,7 +223,7 @@ bool CconnectClusterPlanar::planarityTest(ClusterGraph &C,
 				outgoingTable[cor] = e->target();
 			}
 
-			// else edge connects two nodes of the cluster	
+			// else edge connects two nodes of the cluster
 		}
 	}
 	if (superSink->degree() == 0) // root cluster is not connected to outside clusters
@@ -236,7 +236,7 @@ bool CconnectClusterPlanar::planarityTest(ClusterGraph &C,
 	bool cPlanar = preparation(subGraph,act,superSink);
 
 
-	if (cPlanar && act != C.rootCluster()) 
+	if (cPlanar && act != C.rootCluster())
 	{
 		// Remove induced subgraph and the cluster act.
 		// Replace it by a wheel graph
@@ -279,11 +279,11 @@ void CconnectClusterPlanar::constructWheelGraph(ClusterGraph &C,
 												PlanarPQTree* T,
 												EdgeArray<node> &outgoingTable)
 {
-		
-	const PQNode<edge,indInfo*,bool>* root = T->root();
-	const PQNode<edge,indInfo*,bool>*  checkNode = 0;
 
-	Queue<const PQNode<edge,indInfo*,bool>*> treeNodes;
+	const PQNode<edge,IndInfo*,bool>* root = T->root();
+	const PQNode<edge,IndInfo*,bool>*  checkNode = 0;
+
+	Queue<const PQNode<edge,IndInfo*,bool>*> treeNodes;
 	treeNodes.append(root);
 
 	node correspond = G.newNode(); // Corresponds to the root node.
@@ -305,17 +305,17 @@ void CconnectClusterPlanar::constructWheelGraph(ClusterGraph &C,
 		checkNode = treeNodes.pop();
 		correspond = graphNodes.pop();
 
-		PQNode<edge,indInfo*,bool>*  firstSon  = 0;
-		PQNode<edge,indInfo*,bool>*  nextSon   = 0;
-		PQNode<edge,indInfo*,bool>*  oldSib    = 0;
-		PQNode<edge,indInfo*,bool>*  holdSib   = 0;
+		PQNode<edge,IndInfo*,bool>*  firstSon  = 0;
+		PQNode<edge,IndInfo*,bool>*  nextSon   = 0;
+		PQNode<edge,IndInfo*,bool>*  oldSib    = 0;
+		PQNode<edge,IndInfo*,bool>*  holdSib   = 0;
 
 
 		if (checkNode->type() == PQNodeRoot::PNode)
 		{
 			// correspond is a cut node
 
-			OGDF_ASSERT(checkNode->referenceChild()) 
+			OGDF_ASSERT(checkNode->referenceChild())
 			firstSon = checkNode->referenceChild();
 
 			if (firstSon->type() != PQNodeRoot::leaf)
@@ -329,8 +329,8 @@ void CconnectClusterPlanar::constructWheelGraph(ClusterGraph &C,
 			else
 			{
 				// insert Edge to the outside
-				PQLeaf<edge,indInfo*,bool>* leaf = 
-					(PQLeaf<edge,indInfo*,bool>*) firstSon;
+				PQLeaf<edge,IndInfo*,bool>* leaf =
+					(PQLeaf<edge,IndInfo*,bool>*) firstSon;
 				edge f = leaf->getKey()->m_userStructKey;
 				//node x = outgoingTable[f];
 				G.newEdge(correspond,outgoingTable[f]);
@@ -353,9 +353,9 @@ void CconnectClusterPlanar::constructWheelGraph(ClusterGraph &C,
 				}
 				else
 				{
-					// insert Edge to the outside		
-					PQLeaf<edge,indInfo*,bool>* leaf = 
-						(PQLeaf<edge,indInfo*,bool>*) nextSon;
+					// insert Edge to the outside
+					PQLeaf<edge,IndInfo*,bool>* leaf =
+						(PQLeaf<edge,IndInfo*,bool>*) nextSon;
 					edge f = leaf->getKey()->m_userStructKey;
 					//node x = outgoingTable[f];
 					G.newEdge(correspond,outgoingTable[f]);
@@ -370,12 +370,12 @@ void CconnectClusterPlanar::constructWheelGraph(ClusterGraph &C,
  		else if (checkNode->type() == PQNodeRoot::QNode)
 		{
 			// correspond is the anchor of a hub
-			OGDF_ASSERT(checkNode->getEndmost(LEFT))
-			firstSon = checkNode->getEndmost(LEFT);
+			OGDF_ASSERT(checkNode->getEndmost(PQNodeRoot::LEFT))
+			firstSon = checkNode->getEndmost(PQNodeRoot::LEFT);
 
 			hub = G.newNode();
 			C.reassignNode(hub,parent);
-			G.newEdge(hub,correspond); // link anchor and hub 
+			G.newEdge(hub,correspond); // link anchor and hub
 			next = G.newNode();   // for first son
 			C.reassignNode(next,parent);
 			G.newEdge(hub,next);
@@ -384,16 +384,16 @@ void CconnectClusterPlanar::constructWheelGraph(ClusterGraph &C,
 			if (firstSon->type() != PQNodeRoot::leaf)
 			{
 				treeNodes.append(firstSon);
-				newNode = G.newNode();  
+				newNode = G.newNode();
 				C.reassignNode(newNode,parent);
 				graphNodes.append(newNode);
 				G.newEdge(next,newNode);
 			}
 			else
 			{
-				// insert Edge to the outside		
-				PQLeaf<edge,indInfo*,bool>* leaf = 
-					(PQLeaf<edge,indInfo*,bool>*) firstSon;
+				// insert Edge to the outside
+				PQLeaf<edge,IndInfo*,bool>* leaf =
+					(PQLeaf<edge,IndInfo*,bool>*) firstSon;
 				edge f = leaf->getKey()->m_userStructKey;
 				//node x = outgoingTable[f];
 				G.newEdge(next,outgoingTable[f]);
@@ -421,9 +421,9 @@ void CconnectClusterPlanar::constructWheelGraph(ClusterGraph &C,
 				}
 				else
 				{
-					// insert Edge to the outside		
-					PQLeaf<edge,indInfo*,bool>* leaf = 
-						(PQLeaf<edge,indInfo*,bool>*) nextSon;
+					// insert Edge to the outside
+					PQLeaf<edge,IndInfo*,bool>* leaf =
+						(PQLeaf<edge,IndInfo*,bool>*) nextSon;
 					edge f = leaf->getKey()->m_userStructKey;
 					G.newEdge(next,outgoingTable[f]);
 					delete leaf->getKey();
@@ -455,7 +455,7 @@ bool CconnectClusterPlanar::preparation(Graph  &G,
 
 	node v;
 	edge e;
-	int  bcIdSuperSink = -1; // ID of biconnected component that contains superSink 
+	int  bcIdSuperSink = -1; // ID of biconnected component that contains superSink
 							 // Initialization with -1 necessary for assertion
 	bool cPlanar = true;
 
@@ -475,7 +475,7 @@ bool CconnectClusterPlanar::preparation(Graph  &G,
 	forall_edges(e,G)
 	{
 		blockEdges[componentID[e]].pushFront(e);
-	} 
+	}
 
 	// Determine nodes per biconnected component.
 	Array<SList<node> > blockNodes(0,bcCount-1);
@@ -514,10 +514,10 @@ bool CconnectClusterPlanar::preparation(Graph  &G,
 		}
 
 	}
-	
+
 
 	// Perform planarity test for every biconnected component
-		
+
 	if (bcCount == 1)
 	{
 		// Compute st-numbering
@@ -540,14 +540,14 @@ bool CconnectClusterPlanar::preparation(Graph  &G,
 	{
 		for (int i = 0; i < bcCount; i++)
 		{
-			#ifdef OGDF_DEBUG 
+			#ifdef OGDF_DEBUG
 			if(int(ogdf::debugLevel)>=int(dlHeavyChecks)){
 				cout<<endl<<endl<<"-----------------------------------";
 				cout<<endl<<endl<<"Component "<<i<<endl;}
 			#endif
 
 			Graph C;
-		
+
 			SListIterator<node> itn;
 			for (itn = blockNodes[i].begin(); itn.valid(); ++ itn)
 			{
@@ -555,7 +555,7 @@ bool CconnectClusterPlanar::preparation(Graph  &G,
 				node w = C.newNode();
 				tableNodes[v] = w;
 
-				#ifdef OGDF_DEBUG 
+				#ifdef OGDF_DEBUG
 				if(int(ogdf::debugLevel)>=int(dlHeavyChecks)){
 					cout <<"Original: " << v << " New: " << w<< endl;}
 				#endif
@@ -575,7 +575,7 @@ bool CconnectClusterPlanar::preparation(Graph  &G,
 			EdgeArray<edge> backTableEdges(C,0);
 			for (it = blockEdges[i].begin(); it.valid(); ++it)
 				backTableEdges[tableEdges[*it]] = *it;
-		
+
 			// Compute st-numbering
 			NodeArray<int> numbering(C,0);
 			int n;
@@ -601,23 +601,24 @@ bool CconnectClusterPlanar::preparation(Graph  &G,
 
 	}
 
-	return cPlanar; 
+	return cPlanar;
 }
 
 
 // Performs a planarity test on a biconnected component
 // of G. numbering contains an st-numbering of the component.
-bool CconnectClusterPlanar::doTest(Graph &G,
-								   NodeArray<int> &numbering,
-								   cluster &cl,
-								   node superSink,
-								   EdgeArray<edge> &edgeTable)
+bool CconnectClusterPlanar::doTest(
+	Graph &G,
+	NodeArray<int> &numbering,
+	cluster &cl,
+	node superSink,
+	EdgeArray<edge> &edgeTable)
 {
 	node v;
 	bool cPlanar = true;
 
-	NodeArray<SListPure<PlanarLeafKey<indInfo*>* > > inLeaves(G);
-	NodeArray<SListPure<PlanarLeafKey<indInfo*>* > > outLeaves(G);
+	NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > > inLeaves(G);
+	NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > > outLeaves(G);
 	Array<node> table(G.numberOfNodes()+1);
 
 	forall_nodes(v,G)
@@ -625,10 +626,10 @@ bool CconnectClusterPlanar::doTest(Graph &G,
 		edge e;
 		forall_adj_edges(e,v)
 		{
-			if (numbering[e->opposite(v)] > numbering[v]) 
+			if (numbering[e->opposite(v)] > numbering[v])
 				//sideeffect: loops are ignored
 			{
-				PlanarLeafKey<indInfo*>* L = OGDF_NEW PlanarLeafKey<indInfo*>(e);
+				PlanarLeafKey<IndInfo*>* L = OGDF_NEW PlanarLeafKey<IndInfo*>(e);
 				inLeaves[v].pushFront(L);
 			}
 		}
@@ -637,10 +638,10 @@ bool CconnectClusterPlanar::doTest(Graph &G,
 
 	forall_nodes(v,G)
 	{
-		SListIterator<PlanarLeafKey<indInfo*>* > it;
+		SListIterator<PlanarLeafKey<IndInfo*>* > it;
 		for (it = inLeaves[v].begin(); it.valid(); ++it)
 		{
-			PlanarLeafKey<indInfo*>* L = *it;
+			PlanarLeafKey<IndInfo*>* L = *it;
 			outLeaves[L->userStructKey()->opposite(v)].pushFront(L);
 		}
 	}
@@ -666,17 +667,17 @@ bool CconnectClusterPlanar::doTest(Graph &G,
 	{
 		// Keep the PQTree to construct a wheelgraph
 		// Replace the edge stored in the keys of T
-		// by the original edges. 
+		// by the original edges.
 		// Necessary, since the edges currently in T
 		// correspond to a graph that mirrors a biconnected
 		// component and thus is deallocated
-			
-		SListIterator<PlanarLeafKey<indInfo*>* >  it;
+
+		SListIterator<PlanarLeafKey<IndInfo*>* >  it;
 		int n = G.numberOfNodes();
 
 		for (it = outLeaves[table[n]].begin(); it.valid(); ++it)
 		{
-			PQLeafKey<edge,indInfo*,bool>* key = (PQLeafKey<edge,indInfo*,bool>*) *it;
+			PQLeafKey<edge,IndInfo*,bool>* key = (PQLeafKey<edge,IndInfo*,bool>*) *it;
 			key->m_userStructKey = edgeTable[key->m_userStructKey];
 		}
 
@@ -693,8 +694,8 @@ bool CconnectClusterPlanar::doTest(Graph &G,
 		{
 			while (!outLeaves[v].empty())
 			{
-				PlanarLeafKey<indInfo*>* L = outLeaves[v].popFrontRet();
-				delete L;	
+				PlanarLeafKey<IndInfo*>* L = outLeaves[v].popFrontRet();
+				delete L;
 			}
 		}
 	}

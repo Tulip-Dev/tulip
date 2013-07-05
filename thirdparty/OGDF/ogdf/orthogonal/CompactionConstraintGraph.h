@@ -1,44 +1,45 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2566 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 23:10:08 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declares CompactionConstraintGraph.
- * 
+ *
  * I.e. a representation of constraint graphs (dependency graphs)
  * used in compaction algorithms.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -62,12 +63,12 @@ namespace ogdf {
 
 	// types of edges in the constraint graph
 	enum ConstraintEdgeType {
-		cetBasicArc, 
-		cetVertexSizeArc, 
+		cetBasicArc,
+		cetVertexSizeArc,
 		cetVisibilityArc,
 		cetFixToZeroArc, //can be compacted to zero length, can be fixed
-        cetReducibleArc, //can be compacted to zero length
-        cetMedianArc //inserted to replace some reducible in fixzerolength
+		cetReducibleArc, //can be compacted to zero length
+		cetMedianArc //inserted to replace some reducible in fixzerolength
 	};
 
 //---------------------------------------------------------
@@ -131,7 +132,7 @@ protected:
 	void removeRedundantVisibArcs(SListPure<Tuple2<node,node> > &visibArcs);
 
 	const OrthoRep *m_pOR;
-    const PlanRep *m_pPR;
+	const PlanRep *m_pPR;
 	OrthoDir m_arcDir;
 	OrthoDir m_oppArcDir;
 
@@ -144,9 +145,9 @@ protected:
 	EdgeArray<int>    m_cost;    // cost of an edge
 	EdgeArray<ConstraintEdgeType> m_type;
 
-    //test fuer vorkomp. der Generalisierungen
+	//test fuer vorkomp. der Generalisierungen
 	EdgeArray<bool> m_verticalGen; //generalization that runs vertical relative to hierarchy
-    EdgeArray<bool> m_verticalArc; //arc corresponding to such an edge
+	EdgeArray<bool> m_verticalArc; //arc corresponding to such an edge
 	EdgeArray<int> m_border; //only used for cage precompaction in flowcompaction computecoords
 
 	//basic arcs that have to be short for alignment (node to gen expander)
@@ -154,7 +155,7 @@ protected:
 
 	NodeArray<edge> m_pathToEdge; //save the (single!) edge (segment) for a pathNode
 	NodeArray<edge> m_originalEdge; //save edge for the basic arcs
-	
+
 	// embeds constraint graph such that all sources and sinks lie in a common
 	// face
 	void embed();
@@ -205,20 +206,24 @@ public:
 		int costGen = 1,
 		int costAssoc = 1,
 		bool align = false) :
-			CompactionConstraintGraphBase(OR, PG, arcDir, costGen, costAssoc, align),
-			m_length((Graph&)*this, sep), m_extraNode((Graph&)*this, false), 
-			m_extraOfs((Graph&)*this, 0), m_extraRep((Graph&)*this, 0)
+			CompactionConstraintGraphBase(OR, PG, arcDir, costGen, costAssoc, align)
 	{
 		OGDF_ASSERT(&(const Graph &)PG == &(const Graph &)OR);
+
+		m_length   .init((Graph&)*this, sep);
+		m_extraNode.init((Graph&)*this, false);
+		m_extraOfs .init((Graph&)*this, 0);
+		m_extraRep .init((Graph&)*this, 0);
+
 		m_sep       = sep;
-        
-        m_centerPriority = true; //should centering of single edges have prio. to gen. length
-        m_genToMedian = true;  //should outgoing merger gen. be drawn to merger median
+
+		m_centerPriority = true; //should centering of single edges have prio. to gen. length
+		m_genToMedian = true;  //should outgoing merger gen. be drawn to merger median
 		initializeCosts();
-		
+
 	}//constructor
 
-    // output for debugging only
+	// output for debugging only
 	void writeGML(const char *fileName) const ;
 	void writeGML(ostream &os) const;
 
@@ -227,12 +232,12 @@ public:
 	const Graph &getGraph() const { return (Graph&)*this; }
 	Graph &getGraph() { return (Graph&)*this; }
 
-	
+
 	const OrthoRep &getOrthoRep() const {
 		return *m_pOR;
 	}
 
-	
+
 	// returns list of nodes contained in segment v
 	// Precodn.: v is in the constraint graph
 	const SListPure<node> &nodesIn(node v) const {
@@ -263,21 +268,23 @@ public:
 		return m_type[e];
 	}
 
-    //returns node status
-    bool extraNode(node v) const {
-        return m_extraNode[v];
-    }
-    //returns extraNode position, change to save mem, only need some entries
-    ATYPE extraOfs(node v) const {
-        return m_extraOfs[v];
-    }
-    //returns extraNode existing anchor representant
-    node extraRep(node v) const {
-        return m_extraRep[v];
-    }
+	//returns node status
+	bool extraNode(node v) const {
+		return m_extraNode[v];
+	}
+
+	//returns extraNode position, change to save mem, only need some entries
+	ATYPE extraOfs(node v) const {
+		return m_extraOfs[v];
+	}
+
+	//returns extraNode existing anchor representant
+	node extraRep(node v) const {
+		return m_extraRep[v];
+	}
 
 	//get / set centerPriority (center single edges?)
-    bool centerPriority() {return m_centerPriority;}
+	bool centerPriority() {return m_centerPriority;}
 	void centerPriority(bool b) { m_centerPriority = b;}
 
 	// computes the total costs for coordintes given by pos, i.e.,
@@ -289,7 +296,8 @@ public:
 	// placement of generalizations if vertices are represented by variable
 	// cages; also corrects length of arcs belonging to cages which are
 	// adjacent to a corner; takes routing channels into account.
-	void insertVertexSizeArcs(const PlanRep &PG,
+	void insertVertexSizeArcs(
+		const PlanRep &PG,
 		const NodeArray<ATYPE> &sizeOrig,
 		const RoutingChannel<ATYPE> &rc);
 
@@ -305,13 +313,13 @@ public:
 
 	// inserts arcs connecting segments which can see each other in a drawing
 	// of the associated planarized representation PG which is given by
-	// posDir and posOppDir. 
+	// posDir and posOppDir.
 	void insertVisibilityArcs(
 		const PlanRep &PG,  // associated planarized representation
-		const NodeArray<ATYPE> &posDir,  // position of segment containing
-		                                 // vertex in PG
-		const NodeArray<ATYPE> &posOppDir);  // position of orthogonal segment
-	                                         // containing vertex in PG
+		const NodeArray<ATYPE> &posDir, // position of segment containing
+										// vertex in PG
+		const NodeArray<ATYPE> &posOppDir); // position of orthogonal segment
+											// containing vertex in PG
 
 	void insertVisibilityArcs(
 		const PlanRep &PG,
@@ -322,7 +330,7 @@ public:
 
 	//set min sep for multi edge original
 	void setMinimumSeparation(const PlanRep &PG,
-		const NodeArray<int> coord, 
+		const NodeArray<int> coord,
 		const MinimumEdgeDistances<ATYPE> &minDist);
 
 
@@ -340,7 +348,7 @@ public:
 	bool isFeasible(const NodeArray<ATYPE> &pos);
 
 	//returns the separation value
-	ATYPE separation() const {return m_sep;} 
+	ATYPE separation() const {return m_sep;}
 
 	//return PG result for flowcompaction
 	bool areMulti(edge e1, edge e2) const;
@@ -419,25 +427,25 @@ private:
 
 	EdgeArray<ATYPE> m_length;  // length of an edge
 
-    NodeArray<bool> m_extraNode; //node does not represent drawing node
-    //as we dont have positions, we save a drawing representant and an offset 
-    NodeArray<ATYPE> m_extraOfs; //offset of extra node to its rep, should change this
-    NodeArray<node> m_extraRep; //existing representant of extranodes position anchor
+	NodeArray<bool> m_extraNode; //node does not represent drawing node
+	//as we dont have positions, we save a drawing representant and an offset
+	NodeArray<ATYPE> m_extraOfs; //offset of extra node to its rep, should change this
+	NodeArray<node> m_extraRep; //existing representant of extranodes position anchor
 
 	//**********************
 	//COST SETTINGS SECTION
 
 	// we make vertex size arcs more expensive than basic arcs in order
-    // to get small cages
-    // should be replaced by option/value dependent on e.g. degree
-    int m_vertexArcCost;  //get small cages
-    int m_bungeeCost;     //middle position distance penalty
+	// to get small cages
+	// should be replaced by option/value dependent on e.g. degree
+	int m_vertexArcCost;  //get small cages
+	int m_bungeeCost;     //middle position distance penalty
 	int m_MedianArcCost;  //draw merger gen at median of incoming generalizations
 	int m_doubleBendCost; //try to minimize double bends
-    bool m_genToMedian;   //draw outgoing generalization from merger above ingoing gen.
+	bool m_genToMedian;   //draw outgoing generalization from merger above ingoing gen.
 	//this does not work if generalization costs are set very small by the user
 	//because there must be a minimum cost for centering
-    bool m_centerPriority;  //should centering be more expensive than generalizations
+	bool m_centerPriority;  //should centering be more expensive than generalizations
 
 	//factor of costs relative to generalization
 	static const int c_vertexArcFactor;
@@ -447,17 +455,20 @@ private:
 
 
 protected:
-    //node v has no representation in drawing, only internal representation
-    void setExtra(node v, node rep, ATYPE ofs) 
-        {m_extraNode[v] = true; m_extraRep[v] = rep; m_extraOfs[v] = ofs;}
+	//node v has no representation in drawing, only internal representation
+	void setExtra(node v, node rep, ATYPE ofs) {
+		m_extraNode[v] = true;
+		m_extraRep[v] = rep;
+		m_extraOfs[v] = ofs;
+	}
 
-	void initializeCosts() 
+	void initializeCosts()
 	{
-        // we make vertex size arcs more expensive than basic arcs in order
-    	// to get small cages; not necessary if cage size fixed in improvement
-		// cost should be dependend on degree 
+		// we make vertex size arcs more expensive than basic arcs in order
+		// to get small cages; not necessary if cage size fixed in improvement
+		// cost should be dependend on degree
 		// Z.B. DURCH OPTION ODER WERT; DER VON DER ZAHL ADJAZENTER KANTEN ABHAENGIG IST
-        // should be derived by number of edges times something	 
+		// should be derived by number of edges times something
 		int costGen = m_edgeCost[Graph::generalization];
 
 		m_vertexArcCost = c_vertexArcFactor*costGen; //spaeter aus Kompaktierungsmodul uebergeben
@@ -465,14 +476,14 @@ protected:
 			m_bungeeCost = c_bungeeFactor*costGen+1;//-1;//for distance to middle position,
 		else
 			m_bungeeCost = c_bungeeFactor*4+1;//-1;//for distance to middle position,
-                                   //addition value should be < gen cost!!!
+		//addition value should be < gen cost!!!
 		m_MedianArcCost = c_MedianFactor*m_vertexArcCost;
 		m_doubleBendCost = c_doubleBendFactor*m_vertexArcCost;
 	}//initializeCosts
 };
 
 //********************************
-//initialization of static members 
+//initialization of static members
 template<class ATYPE>
 const int CompactionConstraintGraph<ATYPE>::c_vertexArcFactor = 20;
 template<class ATYPE>
@@ -481,7 +492,7 @@ template<class ATYPE>
 const int CompactionConstraintGraph<ATYPE>::c_doubleBendFactor = 20; //double bends cost mxxx*vertexArcCost
 //factor *VertexArcCost, costs for pulling generalization to median position at merger
 template<class ATYPE>
-const int CompactionConstraintGraph<ATYPE>::c_MedianFactor = 10*c_doubleBendFactor; 
+const int CompactionConstraintGraph<ATYPE>::c_MedianFactor = 10*c_doubleBendFactor;
 
 
 //************************************
@@ -503,7 +514,7 @@ void CompactionConstraintGraph<ATYPE>::resetGenMergerLengths(
 	adjEntry adjFirst)
 {
 	adjEntry adj = adjFirst;
-    int faceSize = 0;
+	int faceSize = 0;
 
 	do {
 		if ((m_pOR->direction(adj) == m_arcDir ||
@@ -515,56 +526,56 @@ void CompactionConstraintGraph<ATYPE>::resetGenMergerLengths(
 		}
 
 		adj = adj->faceCycleSucc();
-        faceSize++;
+		faceSize++;
 	} while(adj != adjFirst);
 
 //****************************************
 //generalization position section
 //pull upper generalization to median of merger cage's incoming lower generalizations
 
-    if (m_genToMedian)
-    {
-        if ((m_pOR->direction(adjFirst) == m_arcDir) ||
+	if (m_genToMedian)
+	{
+		if ((m_pOR->direction(adjFirst) == m_arcDir) ||
 			(m_pOR->direction(adjFirst) == m_oppArcDir) )
-        {
-            int numIncoming = faceSize - 3;   
-            int median = (numIncoming / 2) + 1;
-            
-            //if (numIncoming == 2) ... just the middle position
-            node upper = m_pathNode[adjFirst->theNode()];
-            if (PG.typeOf(adjFirst->theNode()) != Graph::generalizationMerger) 
-              OGDF_THROW(AlgorithmFailureException);
-            node vMin;
-            if (m_pOR->direction(adjFirst) == m_arcDir)
-              vMin = adjFirst->faceCyclePred()->theNode();
-            else vMin = adjFirst->faceCycleSucc()->theNode();
-            adj = adjFirst->faceCycleSucc(); //target right or left boundary, depending on drawing direction
-            for (int i = 0; i < median; i++) 
-                adj = adj->faceCycleSucc();
-            node lower = m_pathNode[adj->theNode()];
-            node vCenter = newNode();
-            setExtra(vCenter, vMin, 0);
-            //it seems we dont need the helper, as only source-adjEntries lying on
-            //the outer face are considered later, but keep it in mind
-            /*
-            edge helper = newEdge(m_pathNode[vMin], vCenter);
-            m_length[helper] = 0;
-            m_cost[helper] = 0;
-            m_type[helper] = cetReducibleArc;
-            */
- 
-            edge e1 = newEdge(vCenter,upper);
-	        m_length[e1] = 0;
-	        m_cost[e1]   = m_MedianArcCost; 
-	        m_type[e1]   = cetMedianArc;
+		{
+			int numIncoming = faceSize - 3;
+			int median = (numIncoming / 2) + 1;
 
-	        edge e2 = newEdge(vCenter,lower);
-	        m_length[e2] = 0;
-	        m_cost[e2]   = m_MedianArcCost;
-	        m_type[e2]   = cetMedianArc;
-        }//if compaction dir
-    }//if gentomedian option set
-//*******************************************
+			//if (numIncoming == 2) ... just the middle position
+			node upper = m_pathNode[adjFirst->theNode()];
+			if (PG.typeOf(adjFirst->theNode()) != Graph::generalizationMerger)
+				OGDF_THROW(AlgorithmFailureException);
+			node vMin;
+			if (m_pOR->direction(adjFirst) == m_arcDir)
+				vMin = adjFirst->faceCyclePred()->theNode();
+			else vMin = adjFirst->faceCycleSucc()->theNode();
+			adj = adjFirst->faceCycleSucc(); //target right or left boundary, depending on drawing direction
+			for (int i = 0; i < median; i++)
+				adj = adj->faceCycleSucc();
+			node lower = m_pathNode[adj->theNode()];
+			node vCenter = newNode();
+			setExtra(vCenter, vMin, 0);
+			//it seems we dont need the helper, as only source-adjEntries lying on
+			//the outer face are considered later, but keep it in mind
+			/*
+			edge helper = newEdge(m_pathNode[vMin], vCenter);
+			m_length[helper] = 0;
+			m_cost[helper] = 0;
+			m_type[helper] = cetReducibleArc;
+			*/
+
+			edge e1 = newEdge(vCenter,upper);
+			m_length[e1] = 0;
+			m_cost[e1]   = m_MedianArcCost;
+			m_type[e1]   = cetMedianArc;
+
+			edge e2 = newEdge(vCenter,lower);
+			m_length[e2] = 0;
+			m_cost[e2]   = m_MedianArcCost;
+			m_type[e2]   = cetMedianArc;
+		}//if compaction dir
+	}//if gentomedian option set
+	//*******************************************
 }
 
 
@@ -590,7 +601,7 @@ void CompactionConstraintGraph<ATYPE>::setBoundaryCosts(
 		if (m_pathNode[adj->twin()->cyclicSucc()->theNode()] &&
 			(m_pOR->direction(adj->faceCycleSucc()) == m_arcDir)
 			)
-			m_originalEdge[m_pathNode[adj->twin()->cyclicSucc()->theNode()]] = 
+			m_originalEdge[m_pathNode[adj->twin()->cyclicSucc()->theNode()]] =
 				m_pPR->original(adj->twin()->cyclicSucc()->theEdge());
 
 	}
@@ -599,7 +610,7 @@ void CompactionConstraintGraph<ATYPE>::setBoundaryCosts(
 		m_cost[m_edgeToBasicArc[adj]] = 0;
 
 		if (m_pathNode[adj->twin()->cyclicSucc()->theNode()])
-			m_originalEdge[m_pathNode[adj->twin()->cyclicSucc()->theNode()]] = 
+			m_originalEdge[m_pathNode[adj->twin()->cyclicSucc()->theNode()]] =
 				m_pPR->original(adj->twin()->cyclicSucc()->theEdge());
 	}
 }
@@ -615,7 +626,7 @@ void CompactionConstraintGraph<ATYPE>::insertVertexSizeArcs(
 	const NodeArray<ATYPE> &sizeOrig,
 	const RoutingChannel<ATYPE> &rc)
 {
- 
+
 	// segments in constraint graph are sides sMin and sMax; other two side
 	// are sides in which adjacency entries run in direction m_arcDir and
 	// m_oppArcDir
@@ -643,7 +654,7 @@ void CompactionConstraintGraph<ATYPE>::insertVertexSizeArcs(
 			// determine routing channels rcMin and rcMax
 			ATYPE rcMin = overhang + rc(v,dirMin);
 			ATYPE rcMax = overhang + rc(v,dirMax);
-		
+
 			adjEntry cornerDir    = vi.m_corner[m_arcDir];
 			adjEntry cornerOppDir = vi.m_corner[m_oppArcDir];
 			adjEntry cornerMin    = vi.m_corner[dirMin];
@@ -740,14 +751,14 @@ void CompactionConstraintGraph<ATYPE>::setBasicArcsZeroLength(
 		node w = e->target();
 		if ( ((PG.typeOf(v) == Graph::dummy) && (PG.typeOf(w) == Graph::dummy) &&
 			(v->degree() == 2) && w->degree() == 2) &&
-            (m_pOR->angle(e->adjSource()) == m_pOR->angle(e->adjTarget()) ) && //no uturns
-            (PG.typeOf(e) != Graph::generalization)
-           )
+			(m_pOR->angle(e->adjSource()) == m_pOR->angle(e->adjTarget()) ) && //no uturns
+			(PG.typeOf(e) != Graph::generalization)
+			)
 		{
 			m_length[arc] = 0;
-            m_type[arc] = cetFixToZeroArc;
-            //we make fixtozero arcs as expensive as possible
-            m_cost[arc] = m_doubleBendCost;
+			m_type[arc] = cetFixToZeroArc;
+			//we make fixtozero arcs as expensive as possible
+			m_cost[arc] = m_doubleBendCost;
 		}
 	}
 }
@@ -829,105 +840,105 @@ void CompactionConstraintGraph<ATYPE>::insertVertexSizeArcs(
 			// any attached generalizations ?
 			if (sDir.m_adjGen == 0 && sOppDir.m_adjGen == 0)
 			{
-                //check for single edge case => special treatment
-                //generic case could handle all numbers
-                
-                if ((sDir.totalAttached() == 1) || (sOppDir.totalAttached() == 1))
-                    {
-                        //first, insert a new center node and connect it
-                        ATYPE lenMin = size/2;
-				        ATYPE lenMax = size - lenMin;
-                        node vCenter = newNode();
-                        setExtra(vCenter, cornerDir->theNode(), lenMin);
- 
-                        edge e1 = newEdge(vMin,vCenter);
-				        m_length[e1] = lenMin;
-                        //if (lenMin < minDist.epsilon(v,m_arcDir,0)) exit(1);
-				        m_cost[e1]   = m_vertexArcCost;
-				        m_type[e1]   = cetVertexSizeArc;
-				        edge e2 = newEdge(vCenter,vMax);
-				        m_length[e2] = lenMax;
-				        m_cost[e2]   = m_vertexArcCost;
-				        m_type[e2]   = cetVertexSizeArc;
+				//check for single edge case => special treatment
+				//generic case could handle all numbers
 
-                        if (sDir.totalAttached() == 1)
-                            {
-                     
-                        //then, insert a moveable node connecting center
-                        //and outgoing segment
-                        node vBungee = newNode();
-                        //+1 should fix the fixzerolength problem
-                        setExtra(vBungee, cornerDir->theNode(), minDist.epsilon(v,m_arcDir,0) );
+				if ((sDir.totalAttached() == 1) || (sOppDir.totalAttached() == 1))
+				{
+					//first, insert a new center node and connect it
+					ATYPE lenMin = size/2;
+					ATYPE lenMax = size - lenMin;
+					node vCenter = newNode();
+					setExtra(vCenter, cornerDir->theNode(), lenMin);
 
-                        edge eToBungee = newEdge(vMin, vBungee);
-                        m_type[eToBungee] = cetMedianArc; //cetBasicArc; //is this ok !!!!!!!!!!!!!!
-                        m_cost[eToBungee] = 0; //what about this !!!!!!!!!!!!!!!!!!!
-                        m_length[eToBungee] = minDist.epsilon(v,m_arcDir,0);
+					edge e1 = newEdge(vMin,vCenter);
+					m_length[e1] = lenMin;
+					//if (lenMin < minDist.epsilon(v,m_arcDir,0)) exit(1);
+					m_cost[e1]   = m_vertexArcCost;
+					m_type[e1]   = cetVertexSizeArc;
+					edge e2 = newEdge(vCenter,vMax);
+					m_length[e2] = lenMax;
+					m_cost[e2]   = m_vertexArcCost;
+					m_type[e2]   = cetVertexSizeArc;
 
-                        edge eBungeeCenter = newEdge(vBungee, vCenter);
-                        //bungee, center and outgoing segment may build column if in the middle
-                        m_type[eBungeeCenter] = cetMedianArc; 
-                        m_cost[eBungeeCenter] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
-                        m_length[eBungeeCenter] = 0;
+					if (sDir.totalAttached() == 1)
+					{
 
-                            //attention: pathnode construct works only if degree 1
-                        edge eBungeeOut =  newEdge(vBungee, m_pathNode[cornerDir->twinNode()]);
-                        if (m_pathNode[cornerDir->twinNode()] == vMin) exit(1);
-                        //bungee, center and outgoing segment may build column if in the middle
-                        m_type[eBungeeOut] = cetMedianArc; 
-                        m_cost[eBungeeOut] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
-                        m_length[eBungeeOut] = 0;
-/*
-                        //connect outgoing segment and "right" segment, maybe obsolete
-                        edge eFromOut = newEdge(m_pathNode[cornerDir->twinNode()], vMax);
-                        m_type[eFromOut] = cetBasicArc; //!!!!!!!!!!!!!!!!!!!!!!!
-                        m_cost[eFromOut] = 0; //!!!!!!!!!!!!!!!!!!!
-                        m_length[eFromOut] = minDist.epsilon(v,m_arcDir,1);
-  */                      
-                            }//if sDir case
-                       if ( (sOppDir.totalAttached() == 1) && !(m_pathNode[cornerOppDir->twinNode()] == vMin) )
-                            {
-                     
-                        //then, insert a moveable node connecting center
-                        //and outgoing segment
-                        node vBungee = newNode();
-                        //+1 for not fixzerolength
-                        setExtra(vBungee, cornerDir->theNode(), minDist.epsilon(v,m_oppArcDir,0) );
+						//then, insert a moveable node connecting center
+						//and outgoing segment
+						node vBungee = newNode();
+						//+1 should fix the fixzerolength problem
+						setExtra(vBungee, cornerDir->theNode(), minDist.epsilon(v,m_arcDir,0) );
 
-                        edge eToBungee = newEdge(vMin, vBungee);
-                        m_type[eToBungee] = cetMedianArc;//cetBasicArc; //is this ok !!!!!!!!!!!!!!
-                        m_cost[eToBungee] = 0; //what about this !!!!!!!!!!!!!!!!!!!
-                        m_length[eToBungee] = minDist.epsilon(v,m_oppArcDir,0);
+						edge eToBungee = newEdge(vMin, vBungee);
+						m_type[eToBungee] = cetMedianArc; //cetBasicArc; //is this ok !!!!!!!!!!!!!!
+						m_cost[eToBungee] = 0; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eToBungee] = minDist.epsilon(v,m_arcDir,0);
 
-                        edge eBungeeCenter = newEdge(vBungee, vCenter);
-                        //bungee, center and outgoing segment may build column if in the middle
-                        m_type[eBungeeCenter] = cetMedianArc; 
-                        m_cost[eBungeeCenter] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
-                        m_length[eBungeeCenter] = 0;
+						edge eBungeeCenter = newEdge(vBungee, vCenter);
+						//bungee, center and outgoing segment may build column if in the middle
+						m_type[eBungeeCenter] = cetMedianArc;
+						m_cost[eBungeeCenter] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eBungeeCenter] = 0;
 
-                            //attention: pathnode construct works only if degree 1, sometimes not at all
-                        edge eBungeeOut =  newEdge(vBungee, m_pathNode[cornerOppDir->twinNode()]);
-                        //bungee, center and outgoing segment may build column if in the middle
-                        m_type[eBungeeOut] = cetMedianArc; 
-                        m_cost[eBungeeOut] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
-                        m_length[eBungeeOut] = 0;
-/*
-                        //connect outgoing segment and "right" segment, maybe obsolete
-                        edge eFromOut = newEdge(m_pathNode[cornerOppDir->twinNode()], vMax);
-                        m_type[eFromOut] = cetBasicArc; //!!!!!!!!!!!!!!!!!!!!!!!
-                        m_cost[eFromOut] = 0; //!!!!!!!!!!!!!!!!!!!
-                        m_length[eFromOut] = minDist.epsilon(v,m_oppArcDir,0);
-                        */
-                            }//if sOppDir case
-                }//if special case
-                else
-                    {
-				      // no, only one arc for vertex size + routing channels
-				      edge e = newEdge(vMin,vMax);
-				      m_length[e] = size;
-				      m_cost[e]   = 2*m_vertexArcCost;
-				      m_type[e]   = cetVertexSizeArc;
-                    }//else special case
+						//attention: pathnode construct works only if degree 1
+						edge eBungeeOut =  newEdge(vBungee, m_pathNode[cornerDir->twinNode()]);
+						if (m_pathNode[cornerDir->twinNode()] == vMin) exit(1);
+						//bungee, center and outgoing segment may build column if in the middle
+						m_type[eBungeeOut] = cetMedianArc;
+						m_cost[eBungeeOut] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eBungeeOut] = 0;
+						/*
+						//connect outgoing segment and "right" segment, maybe obsolete
+						edge eFromOut = newEdge(m_pathNode[cornerDir->twinNode()], vMax);
+						m_type[eFromOut] = cetBasicArc; //!!!!!!!!!!!!!!!!!!!!!!!
+						m_cost[eFromOut] = 0; //!!!!!!!!!!!!!!!!!!!
+						m_length[eFromOut] = minDist.epsilon(v,m_arcDir,1);
+						*/
+					}//if sDir case
+					if ( (sOppDir.totalAttached() == 1) && !(m_pathNode[cornerOppDir->twinNode()] == vMin) )
+					{
+
+						//then, insert a moveable node connecting center
+						//and outgoing segment
+						node vBungee = newNode();
+						//+1 for not fixzerolength
+						setExtra(vBungee, cornerDir->theNode(), minDist.epsilon(v,m_oppArcDir,0) );
+
+						edge eToBungee = newEdge(vMin, vBungee);
+						m_type[eToBungee] = cetMedianArc;//cetBasicArc; //is this ok !!!!!!!!!!!!!!
+						m_cost[eToBungee] = 0; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eToBungee] = minDist.epsilon(v,m_oppArcDir,0);
+
+						edge eBungeeCenter = newEdge(vBungee, vCenter);
+						//bungee, center and outgoing segment may build column if in the middle
+						m_type[eBungeeCenter] = cetMedianArc;
+						m_cost[eBungeeCenter] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eBungeeCenter] = 0;
+
+						//attention: pathnode construct works only if degree 1, sometimes not at all
+						edge eBungeeOut =  newEdge(vBungee, m_pathNode[cornerOppDir->twinNode()]);
+						//bungee, center and outgoing segment may build column if in the middle
+						m_type[eBungeeOut] = cetMedianArc;
+						m_cost[eBungeeOut] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eBungeeOut] = 0;
+						/*
+						//connect outgoing segment and "right" segment, maybe obsolete
+						edge eFromOut = newEdge(m_pathNode[cornerOppDir->twinNode()], vMax);
+						m_type[eFromOut] = cetBasicArc; //!!!!!!!!!!!!!!!!!!!!!!!
+						m_cost[eFromOut] = 0; //!!!!!!!!!!!!!!!!!!!
+						m_length[eFromOut] = minDist.epsilon(v,m_oppArcDir,0);
+						*/
+					}//if sOppDir case
+				}//if special case
+				else
+				{
+					// no, only one arc for vertex size + routing channels
+					edge e = newEdge(vMin,vMax);
+					m_length[e] = size;
+					m_cost[e]   = 2*m_vertexArcCost;
+					m_type[e]   = cetVertexSizeArc;
+				}//else special case
 
 
 			} else {
@@ -948,48 +959,48 @@ void CompactionConstraintGraph<ATYPE>::insertVertexSizeArcs(
 					m_cost  [e2] = m_vertexArcCost;
 					m_type  [e2] = cetVertexSizeArc;
 				}
-                else 
-                {
-                  if (sDir.totalAttached() == 1)
-                  {
-                      node vCenter = newNode();//m_pathNode[sOppDir.m_adjGen->theNode()];  //newNode();
-                      setExtra(vCenter, cornerDir->theNode(), lenMin);
- 
-                      edge e1 = newEdge(vMin,vCenter);
-		              m_length[e1] = lenMin;
-	       	          m_cost[e1]   = m_vertexArcCost;
-				      m_type[e1]   = cetVertexSizeArc;
-				      edge e2 = newEdge(vCenter,vMax);
-				      m_length[e2] = lenMax;
-		              m_cost[e2]   = m_vertexArcCost;
-				      m_type[e2]   = cetVertexSizeArc;
+				else
+				{
+					if (sDir.totalAttached() == 1)
+					{
+						node vCenter = newNode();//m_pathNode[sOppDir.m_adjGen->theNode()];  //newNode();
+						setExtra(vCenter, cornerDir->theNode(), lenMin);
 
-                      //then, insert a moveable node connecting center
-                      //and outgoing segment
-                      node vBungee = newNode();
-                      //+1 for not fixzerolength
-                      setExtra(vBungee, cornerDir->theNode(), minDist.epsilon(v,m_arcDir,0) );
+						edge e1 = newEdge(vMin,vCenter);
+						m_length[e1] = lenMin;
+						m_cost[e1]   = m_vertexArcCost;
+						m_type[e1]   = cetVertexSizeArc;
+						edge e2 = newEdge(vCenter,vMax);
+						m_length[e2] = lenMax;
+						m_cost[e2]   = m_vertexArcCost;
+						m_type[e2]   = cetVertexSizeArc;
 
-                      edge eToBungee = newEdge(vMin, vBungee);
-                      m_type[eToBungee] = cetMedianArc;//cetBasicArc; //is this ok !!!!!!!!!!!!!!
-                      m_cost[eToBungee] = 0; //what about this !!!!!!!!!!!!!!!!!!!
-                      m_length[eToBungee] = minDist.epsilon(v,m_arcDir,0);
+						//then, insert a moveable node connecting center
+						//and outgoing segment
+						node vBungee = newNode();
+						//+1 for not fixzerolength
+						setExtra(vBungee, cornerDir->theNode(), minDist.epsilon(v,m_arcDir,0) );
 
-                      edge eBungeeCenter = newEdge(vBungee, vCenter);
-                      //bungee, center and outgoing segment may build column if in the middle
-                      m_type[eBungeeCenter] = cetMedianArc; 
-                      m_cost[eBungeeCenter] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
-                      m_length[eBungeeCenter] = 0;
+						edge eToBungee = newEdge(vMin, vBungee);
+						m_type[eToBungee] = cetMedianArc;//cetBasicArc; //is this ok !!!!!!!!!!!!!!
+						m_cost[eToBungee] = 0; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eToBungee] = minDist.epsilon(v,m_arcDir,0);
 
-                      //attention: pathnode construct works only if degree 1
-                      edge eBungeeOut =  newEdge(vBungee, m_pathNode[cornerDir->twinNode()]);
-                      //bungee, center and outgoing segment may build column if in the middle
-                      m_type[eBungeeOut] = cetMedianArc; 
-                      m_cost[eBungeeOut] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
-                      m_length[eBungeeOut] = 0;
+						edge eBungeeCenter = newEdge(vBungee, vCenter);
+						//bungee, center and outgoing segment may build column if in the middle
+						m_type[eBungeeCenter] = cetMedianArc;
+						m_cost[eBungeeCenter] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eBungeeCenter] = 0;
 
-                            }//if sDir case
-                }//else, only oppdir
+						//attention: pathnode construct works only if degree 1
+						edge eBungeeOut =  newEdge(vBungee, m_pathNode[cornerDir->twinNode()]);
+						//bungee, center and outgoing segment may build column if in the middle
+						m_type[eBungeeOut] = cetMedianArc;
+						m_cost[eBungeeOut] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eBungeeOut] = 0;
+
+					}//if sDir case
+				}//else, only oppdir
 				if (sOppDir.m_adjGen != 0) {
 					node vCenter = m_pathNode[sOppDir.m_adjGen->theNode()];
 					edge e1 = newEdge(vMin,vCenter);
@@ -1001,48 +1012,48 @@ void CompactionConstraintGraph<ATYPE>::insertVertexSizeArcs(
 					m_cost  [e2] = m_vertexArcCost;
 					m_type  [e2] = cetVertexSizeArc;
 				}
-                else
-                {
-                  //special case single edge to middle position
-                  if ( (sOppDir.totalAttached() == 1) && !(m_pathNode[cornerOppDir->twinNode()] == vMin) )
-                  {
-                        node vCenter = newNode();//m_pathNode[sDir.m_adjGen->theNode()];//newNode();
-                        setExtra(vCenter, cornerDir->theNode(), lenMin);
- 
-                        edge e1 = newEdge(vMin,vCenter);
-				        m_length[e1] = lenMin;
-				        m_cost[e1]   = m_vertexArcCost;
-				        m_type[e1]   = cetVertexSizeArc;
-				        edge e2 = newEdge(vCenter,vMax);
-				        m_length[e2] = lenMax;
-				        m_cost[e2]   = m_vertexArcCost;
-				        m_type[e2]   = cetVertexSizeArc;
-                        //then, insert a moveable node connecting center
-                        //and outgoing segment
-                        node vBungee = newNode();
-                        //+1 for not fixzerolength
-                        setExtra(vBungee, cornerDir->theNode(), minDist.epsilon(v,m_oppArcDir,0) );
+				else
+				{
+					//special case single edge to middle position
+					if ( (sOppDir.totalAttached() == 1) && !(m_pathNode[cornerOppDir->twinNode()] == vMin) )
+					{
+						node vCenter = newNode();//m_pathNode[sDir.m_adjGen->theNode()];//newNode();
+						setExtra(vCenter, cornerDir->theNode(), lenMin);
 
-                        edge eToBungee = newEdge(vMin, vBungee);
-                        m_type[eToBungee] = cetMedianArc;//cetBasicArc; //is this ok !!!!!!!!!!!!!!
-                        m_cost[eToBungee] = 0; //what about this !!!!!!!!!!!!!!!!!!!
-                        m_length[eToBungee] = minDist.epsilon(v,m_oppArcDir,0);
+						edge e1 = newEdge(vMin,vCenter);
+						m_length[e1] = lenMin;
+						m_cost[e1]   = m_vertexArcCost;
+						m_type[e1]   = cetVertexSizeArc;
+						edge e2 = newEdge(vCenter,vMax);
+						m_length[e2] = lenMax;
+						m_cost[e2]   = m_vertexArcCost;
+						m_type[e2]   = cetVertexSizeArc;
+						//then, insert a moveable node connecting center
+						//and outgoing segment
+						node vBungee = newNode();
+						//+1 for not fixzerolength
+						setExtra(vBungee, cornerDir->theNode(), minDist.epsilon(v,m_oppArcDir,0) );
 
-                        edge eBungeeCenter = newEdge(vBungee, vCenter);
-                        //bungee, center and outgoing segment may build column if in the middle
-                        m_type[eBungeeCenter] = cetMedianArc; 
-                        m_cost[eBungeeCenter] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
-                        m_length[eBungeeCenter] = 0;
+						edge eToBungee = newEdge(vMin, vBungee);
+						m_type[eToBungee] = cetMedianArc;//cetBasicArc; //is this ok !!!!!!!!!!!!!!
+						m_cost[eToBungee] = 0; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eToBungee] = minDist.epsilon(v,m_oppArcDir,0);
 
-                            //attention: pathnode construct works only if degree 1
-                        edge eBungeeOut =  newEdge(vBungee, m_pathNode[cornerOppDir->twinNode()]);
-                        //bungee, center and outgoing segment may build column if in the middle
-                        m_type[eBungeeOut] = cetMedianArc; 
-                        m_cost[eBungeeOut] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
-                        m_length[eBungeeOut] = 0;
+						edge eBungeeCenter = newEdge(vBungee, vCenter);
+						//bungee, center and outgoing segment may build column if in the middle
+						m_type[eBungeeCenter] = cetMedianArc;
+						m_cost[eBungeeCenter] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eBungeeCenter] = 0;
 
-                  }//if sOppDir case
-                }//else only dir gen
+						//attention: pathnode construct works only if degree 1
+						edge eBungeeOut =  newEdge(vBungee, m_pathNode[cornerOppDir->twinNode()]);
+						//bungee, center and outgoing segment may build column if in the middle
+						m_type[eBungeeOut] = cetMedianArc;
+						m_cost[eBungeeOut] = m_bungeeCost; //what about this !!!!!!!!!!!!!!!!!!!
+						m_length[eBungeeOut] = 0;
+
+					}//if sOppDir case
+				}//else only dir gen
 
 			}
 
@@ -1051,9 +1062,8 @@ void CompactionConstraintGraph<ATYPE>::insertVertexSizeArcs(
 
 		} // high/lowDegreeExpander
 	}
-//if (m_arcDir == odEast) writeGML("eastvertexsizeinserted.gml");
-//else writeGML("northvertexsizeinserted.gml");
-
+	//if (m_arcDir == odEast) writeGML("eastvertexsizeinserted.gml");
+	//else writeGML("northvertexsizeinserted.gml");
 }
 
 
@@ -1066,8 +1076,8 @@ ATYPE CompactionConstraintGraph<ATYPE>::computeTotalCosts(
 	ATYPE c = 0;
 
 	edge e;
-	forall_edges(e,*this) 
-	{ 
+	forall_edges(e,*this)
+	{
 		c += cost(e) * (pos[e->target()] - pos[e->source()]);
 	}
 
@@ -1082,7 +1092,7 @@ ATYPE CompactionConstraintGraph<ATYPE>::computeTotalCosts(
 template<class ATYPE>
 bool CompactionConstraintGraph<ATYPE>::checkSweepLine(const List<Interval> &sweepLine)
 {
-	if (sweepLine.empty()) 
+	if (sweepLine.empty())
 		return true;
 
 	ListConstIterator<Interval> it = sweepLine.begin();
@@ -1131,9 +1141,9 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 
 // inserts arcs connecting segments which can see each other in a drawing
 // of the associated planarized representation PG which is given by
-// posDir and posOppDir. 
+// posDir and posOppDir.
 
-//ersetze mindist.delta durch min(m_sep, mindist.delta) fuer skalierung 
+//ersetze mindist.delta durch min(m_sep, mindist.delta) fuer skalierung
 template<class ATYPE>
 void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 	const PlanRep &PG,
@@ -1166,8 +1176,8 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 	node v;
 	forall_nodes(v,*this) {
 
-        //special case nodes
-        if (m_path[v].empty()) continue;
+		//special case nodes
+		if (m_path[v].empty()) continue;
 
 		SListConstIterator<node> it = m_path[v].begin();
 
@@ -1195,13 +1205,13 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 				if (adj) {
 					for(adjEntry adj2 = adj->faceCycleSucc();
 						m_pOR->direction(adj2) == m_pOR->direction(adj);
-						adj2 = adj2->twin()->faceCycleSucc()) ;
+					adj2 = adj2->twin()->faceCycleSucc()) ;
 					if(posDir[adj->theNode()] == posDir[adj2->twinNode()])
 					subtractSep = false;
 				}
 			}
 			//if (subtractSep)*/
-				low[v] -= m_sep;
+			low[v] -= m_sep;
 		}
 	}
 
@@ -1218,10 +1228,10 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 
 		int i = 0;
 		adjEntry adj;
-	
+
 		for (adj = (isCaseA) ? vi.m_corner[dirMin]->faceCycleSucc()->faceCycleSucc() : vi.m_corner[dirMin]->faceCycleSucc();
 			m_pOR->direction((isCaseA) ? adj : adj->faceCycleSucc()) == dirMin; //m_pOR->direction(adj) == dirMin;
-			adj = adj->faceCycleSucc()) 
+			adj = adj->faceCycleSucc())
 		{
 			adjEntry adjCross = adj->cyclicPred();
 			adjEntry adjTwin = adjCross->twin();
@@ -1301,7 +1311,7 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 						low[sNext] = lowReal[sNext];  //?
 						s = sNext;
 					}//while
-				}//if 
+				}//if
 
 				adjTwin = adjCross->twin(); // update of twin for while
 				//check if we have to stop
@@ -1352,7 +1362,7 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 				continue;
 			}
 
-			
+
 			//we save the current direction and stop if we run in opposite
 			OrthoDir runDir = m_pOR->direction(adjCross);
 			// if -> while
@@ -1375,9 +1385,9 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 					// is approproate). The same situation can appear several times in a
 					// row.
 					//collect chains of segments compacted to zero length
-					for( ; ; ) /*lowReal[s] == high[s]*/ 
+					for( ; ; ) /*lowReal[s] == high[s]*/
 					{
-						do 
+						do
 						{
 							adjCross = adjCross->faceCycleSucc();
 						} while(m_pOR->direction(adjCross) == segDir ||
@@ -1400,7 +1410,7 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 
 				//check if we have to stop
 				if (runDir != m_pOR->direction(adjCross)) break;
-			}//while dummy 
+			}//while dummy
 		}
 	}
 
@@ -1422,8 +1432,8 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 	ListIterator<node> itV;
 	for(itV = sortedPathNodes.begin(); itV.valid(); ++itV)
 	{
-     //special case nodes
-        if (m_path[*itV].empty()) continue;
+		//special case nodes
+		if (m_path[*itV].empty()) continue;
 		OGDF_ASSERT_IF(dlExtendedChecking,checkSweepLine(sweepLine));
 
 		node v = *itV;
@@ -1444,9 +1454,9 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 		}
 
 		ListIterator<Interval> itUp = it, itSucc;
-		// we store if itUp will be deleted in order not to 
+		// we store if itUp will be deleted in order not to
 		// access the deleted iterator later
-		bool isItUpDel = ( ((*itUp).m_low >= low[v]) && ((*itUp).m_high <= high[v]) ); 
+		bool isItUpDel = ( ((*itUp).m_low >= low[v]) && ((*itUp).m_high <= high[v]) );
 
 		for(; it.valid() && (*it).m_low >= low[v]; it = itSucc) {
 			itSucc = it.succ();
@@ -1528,29 +1538,29 @@ void CompactionConstraintGraph<ATYPE>::insertVisibilityArcs(
 
 
 	for(itT = visibArcs.begin(); itT.valid(); ++itT) {
-        //***********************************CHECK if
+		//***********************************CHECK if
 		node v = (*itT).x1(), w = (*itT).x2();
-        if (!(m_extraNode[v] || m_extraNode[w]))
-            {
-            //******************************CHECK if
-      node boundRepresentant1 = m_path[v].front();
-      node boundRepresentant2 = m_path[w].front();
-      node en1 = m_pPR->expandedNode(boundRepresentant1);
-      node en2 = m_pPR->expandedNode(boundRepresentant2);
-      //do not insert visibility in cages
-      if (!( ( en1 && en2 ) && ( en1 == en2) ))
-          {
-		    edge e = newEdge(v,w);
+		if (!(m_extraNode[v] || m_extraNode[w]))
+		{
+			//******************************CHECK if
+			node boundRepresentant1 = m_path[v].front();
+			node boundRepresentant2 = m_path[w].front();
+			node en1 = m_pPR->expandedNode(boundRepresentant1);
+			node en2 = m_pPR->expandedNode(boundRepresentant2);
+			//do not insert visibility in cages
+			if (!( ( en1 && en2 ) && ( en1 == en2) ))
+			{
+				edge e = newEdge(v,w);
 
-			//hier vielleicht multiedges abfangen: length auf max(min(sep, dists), minDist.sep)
+				//hier vielleicht multiedges abfangen: length auf max(min(sep, dists), minDist.sep)
 
-		    m_length[e] = max(m_sep, minDist.separation()); //m_sep;
-		    m_cost  [e] = 0;
-		    m_type  [e] = cetVisibilityArc;
-        
-            //writeGML("visibilityinserted.gml");
-          }//special if 2
-            }//special if 1
+				m_length[e] = max(m_sep, minDist.separation()); //m_sep;
+				m_cost  [e] = 0;
+				m_type  [e] = cetVisibilityArc;
+
+				//writeGML("visibilityinserted.gml");
+			}//special if 2
+		}//special if 1
 	}
 
 	OGDF_ASSERT_IF(dlExtendedChecking,checkSweepLine(sweepLine));
@@ -1583,9 +1593,9 @@ bool CompactionConstraintGraph<ATYPE>::isFeasible(
 				break;
 			case cetVisibilityArc: cout << "visibility arc" << endl;
 				break;
-            case cetMedianArc: cout << "median arc" << endl;
+			case cetMedianArc: cout << "median arc" << endl;
 				break;
-            case cetReducibleArc: cout << "reducible arc" <<endl;
+			case cetReducibleArc: cout << "reducible arc" <<endl;
 				break;
 			case cetFixToZeroArc: cout << "fixtozero arc" <<endl;
 
@@ -1617,89 +1627,86 @@ void CompactionConstraintGraph<ATYPE>::writeGML(ostream &os) const
 	os.precision(10);
 
 	os << "Creator \"ogdf::CompactionConstraintGraphBase::writeGML\"\n";
-	os << "directed 1\n";
-
 	os << "graph [\n";
+	os << "  directed 1\n";
 
 	node v;
 	forall_nodes(v,G) {
-		os << "node [\n";
+		os << "  node [\n";
+		os << "    id " << (id[v] = nextId++) << "\n";
 
-		os << "id " << (id[v] = nextId++) << "\n";
+		if (m_extraNode[v]) {
+			os << "    label \"" << "0" << "\"\n";
+		} else {
+			os << "    label \"" << m_pPR->expandedNode(m_path[v].front()) << "\"\n";
+		}
 
-        if (m_extraNode[v])
-            {
-                os << "label \"" << "0" << "\"\n";
-            }
-        else 
-            {   
-                os << "label \"" << m_pPR->expandedNode(m_path[v].front()) << "\"\n";
-            }
+		os << "    graphics [\n";
+		os << "      x 0.0\n";
+		os << "      y 0.0\n";
+		os << "      w 30.0\n";
+		os << "      h 30.0\n";
+		if (m_extraNode[v])
+			os << "      fill \"#00FFFF\"\n";
+		else
+			os << "      fill \"#FFFF00\"\n";
+		os << "    ]\n"; // graphics
 
-		os << "graphics [\n";
-		os << "x 0.0\n";
-		os << "y 0.0\n";
-		os << "w 30.0\n";
-		os << "h 30.0\n";
-        if (m_extraNode[v])
-                os << "fill \"#00FFFF\"\n";
-        else 
-                os << "fill \"#FFFF00\"\n";
-		os << "]\n"; // graphics
-
-		os << "]\n"; // node
+		os << "  ]\n"; // node
 	}
-
 
 	edge e;
 	forall_edges(e,G) {
-		os << "edge [\n";
-
-		os << "source " << id[e->source()] << "\n";
-		os << "target " << id[e->target()] << "\n";
+		os << "  edge [\n";
+		os << "    source " << id[e->source()] << "\n";
+		os << "    target " << id[e->target()] << "\n";
 
 		// nice idea to use the edge length as edge labels, but Graphwin-
 		// garbage is not able to show the graph (thinks it has to set
 		// the y-coordinates of all nodes to NAN)
-		/*os << "label \"";
-		writeLength(os,e);
-		os << "\"\n";*/
+#if 0
+		os << "    label \"";
+		writeLength(os, e);
+		os << "\"\n";
+#endif
 
-		os << "graphics [\n";
+		os << "    graphics [\n";
 
-		os << "type \"line\"\n";
-		os << "arrow \"last\"\n";
+		os << "      type \"line\"\n";
+		os << "      arrow \"last\"\n";
 		switch(m_type[e])
 		{
 		case cetBasicArc: // red
-			os << "fill \"#FF0000\"\n";
+			os << "      fill \"#FF0000\"\n";
 			break;
 		case cetVertexSizeArc: // blue
-			os << "fill \"#0000FF\"\n";
+			os << "      fill \"#0000FF\"\n";
 			break;
 		case cetVisibilityArc: // green
-			os << "fill \"#00FF00\"\n";
+			os << "      fill \"#00FF00\"\n";
 			break;
-        case cetReducibleArc: // red
-			os << "fill \"#FF0000\"\n";
+		case cetReducibleArc: // red
+			os << "      fill \"#FF0000\"\n";
 			break;
 		case cetFixToZeroArc: // violett
-			os << "fill \"#AF00FF\"\n";
+			os << "      fill \"#AF00FF\"\n";
 			break;
-        case cetMedianArc: // rose
-			os << "fill \"#FF00FF\"\n";
+		case cetMedianArc: // rose
+			os << "      fill \"#FF00FF\"\n";
 			break;
 		}
 
-		os << "]\n"; // graphics
+		os << "    ]\n"; // graphics
 
-		/*os << "LabelGraphics [\n";
-		os << "type \"text\"\n";
-		os << "fill \"#000000\"\n";
-		os << "anchor \"w\"\n";
-		os << "]\n";*/
+#if 0
+		os << "    LabelGraphics [\n";
+		os << "      type \"text\"\n";
+		os << "      fill \"#000000\"\n";
+		os << "      anchor \"w\"\n";
+		os << "    ]\n";
+#endif
 
-		os << "]\n"; // edge
+		os << "  ]\n"; // edge
 	}
 
 	os << "]\n"; // graph

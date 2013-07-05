@@ -1,9 +1,9 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2555 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-06 12:12:10 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,10 +14,12 @@
  *
  * \author Karsten Klein
  *
- *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2010
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
  * This program is free software; you can redistribute it and/or
@@ -78,13 +80,12 @@ class BaseConstraint : public ABA_CONSTRAINT {
 
 public:
 	BaseConstraint(ABA_MASTER *master, const ABA_SUB *sub, ABA_CSENSE::SENSE sense, double rhs, bool dynamic, bool local, bool liftable) :
-		ABA_CONSTRAINT(master, sub, sense, rhs, dynamic, local, liftable) {}
+		ABA_CONSTRAINT(master, sub, sense, rhs, dynamic, local, liftable) { }
 
-	virtual ~BaseConstraint() {};
+	virtual ~BaseConstraint() { }
 
 	virtual int coeff(const nodePair& n) = 0;
 };
 }//end namespace ogdf
 
 #endif
-

@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of some graph generators
- * 
+ *
  * \author Carsten Gutwenger, Markus Chimani
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -46,7 +47,7 @@
 #include <ogdf/basic/EdgeArray.h>
 #include <ogdf/basic/NodeArray.h>
 #include <ogdf/basic/FaceArray.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/Array2D.h>
 
 
@@ -82,20 +83,20 @@ void randomGraph(Graph &G, int n, int m)
 bool randomSimpleGraph(Graph &G, int n, int m)
 {
 	G.clear();
-	
+
 	if(n < 1)
-		return false;	
-	
+		return false;
+
 	int max = n * (n-1) / 2;
 	if(m > max || m < n)
 		return false;
-	
+
 	Array<node> v(n);
 
 	int i;
 	for(i = 0; i < n; i++)
 		v[i] = G.newNode();
-	
+
 	bool remove;
 	if(m > max /2) {
 		m = max - m;
@@ -107,7 +108,7 @@ bool randomSimpleGraph(Graph &G, int n, int m)
 	Array<bool> used(max);
 	for(i = max; i-->0;)
 		used[i] = remove;
-		
+
 	int a,b;
 	while(m > 0) {
 		a = randomNumber(0,n-1);
@@ -117,7 +118,7 @@ bool randomSimpleGraph(Graph &G, int n, int m)
 			int c = a;
 			a = b;
 			b = c;
-		}		
+		}
 		if(used[i = __IDX(a,b,n,max)] == remove) {
 			used[i] = !remove;
 			m--;
@@ -128,7 +129,7 @@ bool randomSimpleGraph(Graph &G, int n, int m)
 		for(b = a+1; b < n; b++)
 			if(used[__IDX(a,b,n,max)])
 				G.newEdge(v[a],v[b]);
-	
+
 	return true;
 }
 
@@ -329,8 +330,7 @@ void planarTriconnectedGraph(Graph &G, int n, double p1, double p2)
 	// start with K_4
 	completeGraph(G,4);
 
-	PlanarModule pm;
-	pm.planarEmbed(G);
+	planarEmbedPlanarGraph(G);
 
 	// nodes[0],...,nodes[i-1] is array of all nodes
 	Array<node> nodes(n);
@@ -394,8 +394,7 @@ void planarTriconnectedGraph(Graph &G, int n, int m)
 	// start with K_4
 	completeGraph(G,4);
 
-	PlanarModule pm;
-	pm.planarEmbed(G);
+	planarEmbedPlanarGraph(G);
 
 	// nodes[0],...,nodes[i-1] is array of all nodes
 	Array<node> nodes(n);
@@ -508,8 +507,6 @@ void planarConnectedGraph(Graph &G, int n, int m)
 		face f = *fi;
 		bigFaces.del(fi);
 
-		int fd = f->size();
-
 		List<adjEntry> fnodes;
 		adjEntry adj;
 		forall_face_adj(adj, f) {
@@ -534,7 +531,7 @@ void planarConnectedGraph(Graph &G, int n, int m)
 					if(e->opposite(n1) == n2) {
 						okay = false;
 						break;
-					};
+					}
 				}
 				if(okay) break;
 			}
@@ -560,7 +557,7 @@ void planarBiconnectedGraph(Graph &G, int n, int m, bool multiEdges)
 	int ke = n-3, kf = m-n;
 
 	G.clear();
-	
+
 	Array<edge> edges(m);
 	Array<face> bigFaces(m);
 	//random_source S;
@@ -652,23 +649,23 @@ void planarBiconnectedGraph(Graph &G, int n, int m, bool multiEdges)
 	}
 }
 
-void planarCNBGraph(Graph &G, int n, int m,	int b)	
+void planarCNBGraph(Graph &G, int n, int m,	int b)
 {
 	G.clear();
 	if (b <= 0) b = 1;
 	if (n <= 0) n = 1;
 	if ((m <= 0) || (m > 3*n-6)) m = 3*n-6;
-	
+
 	node cutv;
 	G.newNode();
-	
+
 	for (int nB=1; nB<=b; nB++){
 		cutv = G.chooseNode();
 		// set number of nodes for the current created block
 		int actN = randomNumber(1, n);
-		
+
 		node v1 = G.newNode();
-		
+
 		if (actN <= 1){
 			G.newEdge(v1, cutv);
 		}
@@ -676,7 +673,7 @@ void planarCNBGraph(Graph &G, int n, int m,	int b)
 			if (actN == 2){
 				node v2 = G.newNode();
 				G.newEdge(v1, v2);
-				
+
 				int rnd = randomNumber(1, 2);
 				edge newE;
 				int rnd2 = randomNumber(1, 2);
@@ -699,13 +696,13 @@ void planarCNBGraph(Graph &G, int n, int m,	int b)
 					actM = randomNumber(1, m);
 				if (actM < actN)
 					actM = actN;
-				
+
 				int ke = actN-3, kf = actM-actN;
-				
+
 				Array<node> nodes(actN);
 				Array<edge> edges(actM);
 				Array<face> bigFaces(actM);
-					
+
 				// we start with a triangle
 				node v2 = G.newNode(), v3 = G.newNode();
 				nodes[0] = v1;
@@ -714,27 +711,27 @@ void planarCNBGraph(Graph &G, int n, int m,	int b)
 				edges[0] = G.newEdge(v1,v2);
 				edges[1] = G.newEdge(v2,v3);
 				edges[2] = G.newEdge(v3,v1);
-				
+
 				int actInsertedNodes = 3;
-				
+
 				CombinatorialEmbedding E(G);
 				FaceArray<int> posBigFaces(E);
 				int nBigFaces = 0, nEdges = 3;
-				
+
 				while(ke+kf > 0) {
 					int p = randomNumber(1,ke+kf);
-			
+
 					if (nBigFaces == 0 || p <= ke) {
 						int eNr = randomNumber(0,nEdges-1);
 						edge e  = edges[eNr];
 						face f  = E.rightFace(e->adjSource());
 						face fr = E.rightFace(e->adjTarget());
-						
+
 						node u = e->source();
 						node v = e->target();
-						
+
 						edges[nEdges++] = E.split(e);
-						
+
 						if (e->source() != v && e->source() != u)
 							nodes[actInsertedNodes++] = e->source();
 						else
@@ -748,29 +745,29 @@ void planarCNBGraph(Graph &G, int n, int m,	int b)
 							posBigFaces[fr] = nBigFaces;
 							bigFaces[nBigFaces++] = fr;
 						}
-			
+
 						ke--;
 					}
-					else {						
+					else {
 						int pos = randomNumber(0,nBigFaces-1);
 						face f = bigFaces[pos];
 						int df = f->size();
 						int i = randomNumber(0,df-1), j = randomNumber(2,df-2);
-			
+
 						adjEntry adj1;
 						for (adj1 = f->firstAdj(); i > 0; adj1 = adj1->faceCycleSucc())
 							i--;
-			
+
 						adjEntry adj2;
 						for (adj2 = adj1; j > 0; adj2 = adj2->faceCycleSucc())
 							j--;
-			
+
 						edge e = E.splitFace(adj1,adj2);
 						edges[nEdges++] = e;
-						
+
 						face f1 = E.rightFace(e->adjSource());
 						face f2 = E.rightFace(e->adjTarget());
-			
+
 						bigFaces[pos] = f1;
 						posBigFaces[f1] = pos;
 						if (f2->size() >= 4) {
@@ -780,17 +777,17 @@ void planarCNBGraph(Graph &G, int n, int m,	int b)
 						if (f1->size() == 3) {
 							bigFaces[pos] = bigFaces[--nBigFaces];
 						}
-						
+
 						kf--;
 					}
 				}
-						
+
 				// delete multi edges
 				SListPure<edge> allEdges;
 				EdgeArray<int> minIndex(G), maxIndex(G);
-		
+
 				parallelFreeSortUndirected(G,allEdges,minIndex,maxIndex);
-		
+
 				SListConstIterator<edge> it = allEdges.begin();
 				edge ePrev = *it, e;
 				for(it = ++it; it.valid(); ++it, ePrev = e) {
@@ -803,9 +800,9 @@ void planarCNBGraph(Graph &G, int n, int m,	int b)
 							e->adjSource()->faceCycleSucc()->twin(), ogdf::before);
 					}
 				}
-				
+
 				node cutv2 = nodes[randomNumber(0,actN-1)];
-				
+
 				int rnd = randomNumber(1,2);
 				edge newE = G.newEdge(cutv2, cutv);
 				if (rnd == 1){
@@ -813,7 +810,7 @@ void planarCNBGraph(Graph &G, int n, int m,	int b)
 				}
 			}
 	}
-};
+}
 
 
 void constructCConnectedCluster(node v,ClusterGraph &C);
@@ -837,11 +834,11 @@ void randomClusterGraph(ClusterGraph &C,Graph &G,int cNum)
 	}
 
 	for (int i = 0; i < cNum; i++)
-	{	
+	{
 		int rand = randomNumber(0,n-1);
 
 		node start = numNode[rand];
-	
+
 		constructCluster(start,C);
 	}
 
@@ -866,11 +863,11 @@ void randomClusterPlanarGraph(ClusterGraph &C,Graph &G,int cNum)
 	}
 
 	for (int i = 0; i < cNum; i++)
-	{	
+	{
 		int rand = randomNumber(0,n-1);
 
 		node start = numNode[rand];
-	
+
 		constructCConnectedCluster(start,C);
 	}
 
@@ -894,7 +891,7 @@ void randomClusterPlanarGraph(ClusterGraph &C,Graph &G,int cNum)
 		cluster cl = (*C.rootCluster()->cBegin());
 		C.delCluster(cl);
 	}
-		
+
 
 	OGDF_ASSERT(C.consistencyCheck());
 
@@ -910,11 +907,11 @@ void constructCConnectedCluster(node v,ClusterGraph &C)
 	if (newCluster.size() > 1)
 	{
 		cluster cl = C.newCluster(C.clusterOf(v));
-//		cout << " Cluster " << cl->index() << endl; 		
+//		cout << " Cluster " << cl->index() << endl;
 		while (!newCluster.empty())
 		{
 			node w = newCluster.popFrontRet();
-//			cout << " Node in cluster " << w << endl; 
+//			cout << " Node in cluster " << w << endl;
 			C.reassignNode(w,cl);
 		}
 	}
@@ -949,7 +946,7 @@ void constructCluster(node v,ClusterGraph &C)
 		node w = newCluster.popFrontRet();
 		C.reassignNode(w,cl);
 	}
-	
+
 }//constructcluster
 
 //insert nodes in v's cluster to new cluster with a certain probability
@@ -958,19 +955,19 @@ void bfs(node v,SList<node> &newCluster,NodeArray<bool> &visited,ClusterGraph &C
 
 	edge e;
 	SListPure<node> bfsL;
-	forall_adj_edges (e,v) 
+	forall_adj_edges (e,v)
 	{
 		node w = e->opposite(v);
 		int probability = randomNumber(0,99);
 		if (probability < 70 && !visited[w])
 		{
 			visited[w] = true;
-			if (C.clusterOf(v) == C.clusterOf(w)) 
+			if (C.clusterOf(v) == C.clusterOf(w))
 			{
 				newCluster.pushBack(w);
 				bfsL.pushBack(w);
 			}
-		}					
+		}
 		else
 			visited[w] = true;
 	}
@@ -1113,14 +1110,14 @@ void suspension(Graph &G, int n)
 		node n0 = G.newNode();
 		forall_listiterators(node, it, nds)
 			G.newEdge(n0,*it);
-	}	
+	}
 }
 
 void cubeGraph(Graph &G, int n)
 {
 	OGDF_ASSERT( n>=0 && n < 8*(int)sizeof(int)-1 ); // one sign bit, one less to be safe
 	G.clear();
-	
+
 	int c = 1 << n;
 	Array<node> lu(c);
 	for(int i=0; i<c; ++i) {
@@ -1130,7 +1127,7 @@ void cubeGraph(Graph &G, int n)
 			if(q&i) G.newEdge(lu[i^q],lu[i]);
 			q <<= 1;
 		}
-	}	
+	}
 }
 
 void gridGraph(Graph &G, int n, int m, bool loopN, bool loopM) {
@@ -1182,7 +1179,7 @@ void petersenGraph(Graph &G, int n, int m) {
 }
 
 void randomDiGraph(Graph &G, int n, double p) {
-	
+
 	OGDF_ASSERT(n>=0 && p<=1 && p>=0);
 
 	for(int i=0; i<n; i++)

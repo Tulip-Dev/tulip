@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of the class DinoUmlDiagramGraph
- * 
+ *
  * \author Dino Ahr
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -74,9 +75,10 @@ namespace ogdf {
 	//
 	// a d d N o d e W i t h G e o m e t r y
 	//
-	void DinoUmlDiagramGraph::addNodeWithGeometry(NodeElement* node, 
-												  double x, double y, 
-												  double w, double h)
+	void DinoUmlDiagramGraph::addNodeWithGeometry(
+		NodeElement* node,
+		double x, double y,
+		double w, double h)
 	{
 		// Append node to the end of the list
 		m_containedNodes.pushBack(node);
@@ -86,7 +88,7 @@ namespace ogdf {
 		m_y.pushBack(y);
 		m_w.pushBack(w);
 		m_h.pushBack(h);
-	
+
 	}
 
 	//
@@ -137,8 +139,8 @@ namespace ogdf {
 	ostream &operator<<(ostream &os, const DinoUmlDiagramGraph &diagramGraph)
 	{
 		// Header with diagram name and type
-		os << "\n--- " << diagramGraph.getDiagramTypeString() 
-		   << " \"" << diagramGraph.m_diagramName << "\" ---\n" << endl;
+		os << "\n--- " << diagramGraph.getDiagramTypeString()
+			<< " \"" << diagramGraph.m_diagramName << "\" ---\n" << endl;
 
 		// Nodes
 
@@ -152,13 +154,13 @@ namespace ogdf {
 		// Traverse lists
 		while (nodeIt.valid()){
 
-			os << "Node " << diagramGraph.m_modelGraph.getNodeLabel(*nodeIt) 
-			   << " with geometry ("
-			   << *xIt << ", "
-			   << *yIt << ", "
-			   << *wIt << ", "
-			   << *hIt << ")." << endl;
-		
+			os << "Node " << diagramGraph.m_modelGraph.getNodeLabel(*nodeIt)
+				<< " with geometry ("
+				<< *xIt << ", "
+				<< *yIt << ", "
+				<< *wIt << ", "
+				<< *hIt << ")." << endl;
+
 			++nodeIt;
 			++xIt;
 			++yIt;
@@ -175,11 +177,11 @@ namespace ogdf {
 			 edgeIt.valid();
 			 ++edgeIt)
 		{
-			os << "Edge between " 
-			   << diagramGraph.m_modelGraph.getNodeLabel((*edgeIt)->source()) 
-			   << " and "
-			   << diagramGraph.m_modelGraph.getNodeLabel((*edgeIt)->target())
-			   << endl;
+			os << "Edge between "
+				<< diagramGraph.m_modelGraph.getNodeLabel((*edgeIt)->source())
+				<< " and "
+				<< diagramGraph.m_modelGraph.getNodeLabel((*edgeIt)->target())
+				<< endl;
 		}
 
 		return os;

@@ -1,48 +1,49 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2583 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of a base class for planar representations
  *        of graphs and cluster graphs.
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
 
 //PlanRep should not know about generalizations and association,
-//but we already set types in Attributedgraph, therefore set them 
+//but we already set types in Attributedgraph, therefore set them
 //in PlanRep, too
 
 #ifdef _MSC_VER
@@ -174,7 +175,7 @@ public:
 	//@{
 
 	/**
-	 * Returns the adjacency entry of the first edge of the inserted boundary 
+	 * Returns the adjacency entry of the first edge of the inserted boundary
 	 * at a center node (original) of a clique, 0 if no boundary exists
 	 */
 	adjEntry boundaryAdj(node v) const {
@@ -182,7 +183,7 @@ public:
 	}
 
 	/**
-	 * Returns a reference to the adjacency entry of the first edge of the inserted boundary 
+	 * Returns a reference to the adjacency entry of the first edge of the inserted boundary
 	 * at a center node (original) of a clique, 0 if no boundary exists
 	 */
 	adjEntry& boundaryAdj(node v){
@@ -216,7 +217,7 @@ public:
 	 * \brief Returns a reference to the type of node \a v.
 	 * @param v is a node in the planarized representation.
 	 */
-   Graph::NodeType& typeOf(node v) {
+	Graph::NodeType& typeOf(node v) {
 		return m_vType[v];
 	}
 
@@ -263,7 +264,7 @@ public:
 
 	//@}
 	/**
-	 * @name Edge types 
+	 * @name Edge types
 	 */
 	//@{
 
@@ -279,7 +280,7 @@ public:
 	 * \brief Returns a reference to the type of edge \a e.
 	 * @param e is an edge in the planarized representation.
 	 */
-    EdgeType& typeOf(edge e) {
+	EdgeType& typeOf(edge e) {
 		return m_eType[e];
 	}
 
@@ -296,7 +297,7 @@ public:
 	 * \brief Returns the new type field of \a e.
 	 * @param e is an edge in the planarized representation.
 	 */
-	edgeType edgeTypeOf(edge e) 
+	edgeType edgeTypeOf(edge e)
 	{
 		return m_edgeTypes[e];
 	}
@@ -315,7 +316,7 @@ public:
 	 * @param e is an edge in the planarized representation.
 	 * @param et is the type assigned to \a e.
 	 */
-	void setEdgeTypeOf(edge e, edgeType et) 
+	void setEdgeTypeOf(edge e, edgeType et)
 	{
 		m_edgeTypes[e] = et;
 	}
@@ -334,7 +335,7 @@ public:
 		switch (et)
 		{
 			case Graph::association: m_edgeTypes[e] = etcPrimAssociation;break;
-			case Graph::generalization: m_edgeTypes[e] = etcPrimGeneralization; 
+			case Graph::generalization: m_edgeTypes[e] = etcPrimGeneralization;
 				break;
 			case Graph::dependency: m_edgeTypes[e] = etcPrimDependency; break;
 			default: break;
@@ -343,7 +344,7 @@ public:
 
 	//-------------------------------------------------------------------------
 	//new edge types
-    //to set or check edge types use the pattern function in the private section
+	//to set or check edge types use the pattern function in the private section
 
 	//-------------------
 	//primary level types
@@ -377,7 +378,7 @@ public:
 	}
 
 	//! Classifies edge \a e as association (primary type).
-    void setAssociation(edge e) {
+	void setAssociation(edge e) {
 		setPrimaryType(e, etcPrimAssociation);
 
 		//preliminary set old array too
@@ -438,7 +439,7 @@ public:
 	}
 
 	//! Returns true if edge \a e is classified as brother.
-    bool isBrother(edge e) {
+	bool isBrother(edge e) {
 		return ( (((m_edgeTypes[e] & etpFourth) & brotherPattern())>> etoFourth) == etcBrother);
 	}
 
@@ -456,21 +457,25 @@ public:
 
 	//set primary edge type of edge e to primary edge type in et
 	//deletes old primary value
-	void setPrimaryType(edge e, edgeType et) {m_edgeTypes[e] &= 0xfffffff0; 
-	                                          m_edgeTypes[e] |= (etpPrimary & et); } 
+	void setPrimaryType(edge e, edgeType et) {
+		m_edgeTypes[e] &= 0xfffffff0;
+		m_edgeTypes[e] |= (etpPrimary & et);
+	}
 
-	void setSecondaryType(edge e, edgeType et) {m_edgeTypes[e] &= 0xffffff0f; 
-	                                            m_edgeTypes[e] |= (etpSecondary & ( et << etoSecondary)); }
+	void setSecondaryType(edge e, edgeType et) {
+		m_edgeTypes[e] &= 0xffffff0f;
+		m_edgeTypes[e] |= (etpSecondary & ( et << etoSecondary));
+	}
 
 	//sets primary type to bitwise AND of et's primary value and old value
-	edgeType edgeTypePrimaryAND(edge e, edgeType et) {m_edgeTypes[e] &= (etpAll & et); return m_edgeTypes[e];}    
+	edgeType edgeTypePrimaryAND(edge e, edgeType et) {m_edgeTypes[e] &= (etpAll & et); return m_edgeTypes[e];}
 
 	//sets primary type to bitwise OR of et's primary value and old value
 	edgeType edgeTypePrimaryOR(edge e, edgeType et) {m_edgeTypes[e] |= et; return m_edgeTypes[e];}
 
-    //set user defined type locally
-    void setUserType(edge e, edgeType et)
-	{   
+	//set user defined type locally
+	void setUserType(edge e, edgeType et)
+	{
 		OGDF_ASSERT( et < 147);
 		m_edgeTypes[e] |= (et << etoUser);
 	}
@@ -485,27 +490,27 @@ public:
 	//
 	// old edge types
 
-    //this is pure nonsense, cause we have uml-edgetype and m_etype, and should be able to 
-    //use them with different types, but as long as they arent used correctly (switch instead of xor),
-    //use this function to return if e is expansionedge
-    //if it is implemented correctly later, delete the array and return m_etype == Graph::expand
-    //(the whole function then is obsolete, cause you can check it directly, but for convenience...)
-    //should use genexpand, nodeexpand, dissect instead of bool
-    void setExpansionEdge(edge e, int expType) {
-        m_expansionEdge[e] = expType;
-        }
+	//this is pure nonsense, cause we have uml-edgetype and m_etype, and should be able to
+	//use them with different types, but as long as they arent used correctly (switch instead of xor),
+	//use this function to return if e is expansionedge
+	//if it is implemented correctly later, delete the array and return m_etype == Graph::expand
+	//(the whole function then is obsolete, cause you can check it directly, but for convenience...)
+	//should use genexpand, nodeexpand, dissect instead of bool
+	void setExpansionEdge(edge e, int expType) {
+		m_expansionEdge[e] = expType;
+	}
 
-    bool isExpansionEdge(edge e) const {
-        return (m_expansionEdge[e] > 0);
-    }
+	bool isExpansionEdge(edge e) const {
+		return (m_expansionEdge[e] > 0);
+	}
 
-    int expansionType(edge e) const { return m_expansionEdge[e]; }
+	int expansionType(edge e) const { return m_expansionEdge[e]; }
 
-    //precondition normalized
-    bool isDegreeExpansionEdge(edge e) const {
-        //return (m_eType[e] == Graph::expand);
-        return ( m_expansionEdge[e]  == 2);
-    }
+	//precondition normalized
+	bool isDegreeExpansionEdge(edge e) const {
+		//return (m_eType[e] == Graph::expand);
+		return ( m_expansionEdge[e]  == 2);
+	}
 
 
 	//@}
@@ -563,7 +568,7 @@ public:
 	void removeCrossing(node v); //removes the crossing at node v
 
 	//model a boundary around a star subgraph centered at center
-    //and keep external face information (outside the clique
+	//and keep external face information (outside the clique
 	void insertBoundary(node center, adjEntry& adjExternal);
 
 
@@ -578,9 +583,9 @@ public:
 
 
 	//returns node which was expanded using v
-    node expandedNode(node v) const { return m_expandedNode[v]; }
+	node expandedNode(node v) const { return m_expandedNode[v]; }
 
-    void setExpandedNode(node v, node w) { m_expandedNode[v] = w; }
+	void setExpandedNode(node v, node w) { m_expandedNode[v] = w; }
 
 
 	//@}
@@ -648,14 +653,25 @@ public:
 		GraphCopy::removeEdgePathEmbedded(E,eOrig,newFaces);
 	}
 
-	//inserts crossings between two copy edges (used in TopologyModule)
-	//replaces crossingedge by first crossingedge part and returns second.
-	//the parameter topDown describes he following:
-	// if the crossingEdge is running horizontally from left to right,
-	// is the crossedEdge direction top->down?
-	edge insertCrossing(edge& crossingEdge,
-						const edge crossedEdge,
-						bool topDown);
+	//! Inserts crossings between two copy edges.
+	/**
+	 * This method is used in TopologyModule.
+	 *
+	 * Let \a crossingEdge = (\a a, \a b) and \a crossedEdge = (\a v, \a w).
+	 * Then \a crossedEdge is split creating two edges \a crossedEdge = (\a v, \a u)
+	 * and (\a u, \a w), \a crossingEdge is removed and replaced by two new edges
+	 * \a e1  = (\a a, \a u) and \a e1 = (\a u, \a b).
+	 * Finally it sets \a crossingEdge to \a e2 and returns (\a u, \a w).
+	 *
+	 * @param crossingEdge is the edge that gets split.
+	 * @param crossedEdge is the edge that is replaced by two new edges.
+	 * @param topDown is used as follows: If set to true, \a crossingEdge will cross
+	 *        \a crossedEdge from right to left, otherwise from left to right.
+	*/
+	edge insertCrossing(
+		edge &crossingEdge,
+		edge crossedEdge,
+		bool topDown);
 
 	//@}
 	/**
@@ -688,7 +704,7 @@ protected:
 	int m_numCC;     //!< The number of components in the original graph.
 
 	Array<List<node> >  m_nodesInCC; //!< The list of original nodes in each component.
-	
+
 	const GraphAttributes* m_pGraphAttributes; //!< Pointer to graph attributes of original graph.
 
 	//------------
@@ -706,8 +722,8 @@ protected:
 	edgeType brotherPattern()        {return etcBrother   << etoFourth;}
 	edgeType halfBrotherPattern()    {return etcHalfBrother   << etoFourth;}
 	edgeType cliquePattern()         {return etcSecClique << etoSecondary;} //boundary
-	
-    
+
+
 	void removeUnnecessaryCrossing(
 		adjEntry adjA1,
 		adjEntry adjA2,
@@ -720,7 +736,7 @@ protected:
 
 	NodeArray<nodeType> m_nodeTypes; //!< Node types for extended semantic information.
 
-    NodeArray<node>     m_expandedNode; //!< For all expansion nodes, save expanded node.
+	NodeArray<node>     m_expandedNode; //!< For all expansion nodes, save expanded node.
 	NodeArray<adjEntry> m_expandAdj;
 
 	//clique handling: We save an adjEntry of the first edge of an inserted
@@ -728,10 +744,10 @@ protected:
 	NodeArray<adjEntry> m_boundaryAdj;
 
 	//zusammenlegbare Typen
-    EdgeArray<int>      m_expansionEdge; //1 genmerge, 2 degree (2 highdegree, 3 lowdegree)
+	EdgeArray<int>      m_expansionEdge; //1 genmerge, 2 degree (2 highdegree, 3 lowdegree)
 	EdgeArray<EdgeType> m_eType;
-	
-	//m_edgeTypes stores semantic edge type information on several levels: 
+
+	//m_edgeTypes stores semantic edge type information on several levels:
 	//primary type: generalization, association,...
 	//secondary type: merger,...
 	//tertiary type: vertical in hierarchy, inner, outer, ...

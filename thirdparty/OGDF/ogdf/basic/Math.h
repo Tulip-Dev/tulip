@@ -1,44 +1,45 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Mathematical Helpers
- * 
+ *
  * \author Markus Chimani
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
- 
+
 #ifndef OGDF_MATH_H
 #define OGDF_MATH_H
 
@@ -48,51 +49,61 @@
 namespace ogdf {
 
 
-#define DOUBLE_EPS 0.000001
+//#define DOUBLE_EPS 0.000001
 
 
 class OGDF_EXPORT Math {
+
 public:
+	//! The constant \f$\pi\f$.
 	static const double pi;
+
+	//! The constant \f$\frac{\pi}{2}\f$.
 	static const double pi_2;
+
+	//! The constant \f$\frac{\pi}{4}\f$.
 	static const double pi_4;
+
+	//! The constant \f$2\pi\f$.
 	static const double two_pi;
+
+	//! Euler's number.
 	static const double e;
 
-	inline static int binomial(int n, int k) {
-		if(k>n/2) k = n-k;
-		if(k == 0) return 1;
-		int r = n;
-		for(int i = 2; i<=k; ++i)
-			r = (r * (n+1-i))/i;
-		return r;
+	//! The constant log(2.0).
+	static const double log_of_2;
+
+	//! The constant log(4.0).
+	static const double log_of_4;
+
+	//! Returns the logarithm of \a x to the base 2.
+	static double log2(double x) {
+		OGDF_ASSERT(x >= 0)
+		return log(x) / log_of_2;
 	}
 
-	inline static double binomial(double n, double k) {
-		if(k>n/2) k = n-k;
-		if(k == 0) return 1.0;
-		double r = n;
-		for(int i = 2; i<=k; ++i)
-			r = (r * (n+1-i))/i;
-		return r;
+	//! Returns the logarithm of \a x to the base 4.
+	static double log4(double x) {
+		OGDF_ASSERT(x >= 0)
+		return log(x) / log_of_4;
 	}
 
-	static int factorial(int n) {
-		int r = 1;
-		for(; n>1; --n) r *= n;
-		return r;
-	}
+	//! Returns \f$n \choose k\f$.
+	static int binomial(int n, int k);
 
-	static double factorial(double n) {
-		double r = 1;
-		for(; n>1; --n) r *= n;
-		return r;
-	}
+	//! Returns \f$n \choose k\f$.
+	static double binomial_d(int n, int k);
 
-	inline bool equald(double a, double b) {
-		double d = a-b;
-		return d < DOUBLE_EPS && d > -DOUBLE_EPS;
-	}
+	//! Returns \a n!.
+	static int factorial(int n);
+
+	//! Returns \a n!.
+	static double factorial_d(int n);
+
+	//static bool equald(double a, double b) {
+	//	double d = a-b;
+	//	return d < DOUBLE_EPS && d > -DOUBLE_EPS;
+	//}
 
 	/*!
 	 * \brief A fast method to obtain the rounded down binary logarithm of an 32-bit integer
@@ -101,7 +112,7 @@ public:
 	 * @param v The number of which the binary logarithm is to be determined
 	 * @return The rounded down logarithm base 2 if v is positive, -1 otherwise
 	 */
-	inline static int floorLog2(int v) {
+	static int floorLog2(int v) {
 		if (v <= 0) {
 			return -1;
 		} else {

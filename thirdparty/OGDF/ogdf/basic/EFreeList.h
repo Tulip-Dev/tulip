@@ -1,9 +1,9 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2579 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-11 15:28:17 +0200 (Mi, 11. Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -15,7 +15,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -45,8 +46,8 @@
 #pragma once
 #endif
 
-#ifndef OGDF_EFREELIST_H
-#define OGDF_EFREELIST_H
+#ifndef OGDF_EFREE_LIST_H
+#define OGDF_EFREE_LIST_H
 
 #include <ogdf/basic/EList.h>
 
@@ -55,13 +56,17 @@ namespace ogdf {
 template<typename E, E* E::*next> class EFreeList;
 template<typename E, E* E::*next, int E::*index> class EFreeListIndexPool;
 
+template<typename E, E* E::*next> class EFreeListTypes;
+
+
 //! Simple implementation of a FreeList which buffers the memory allocation of an embedded list item.
 template<typename E, E* E::*next>
 class EFreeList
 {
+	friend class EFreeListTypes<E,next>;
 public:
 	//! Constructs a new freelist
-	inline EFreeList()  { FreeStack::init(this); }
+	inline EFreeList()  { EFreeListTypes<E,next>::FreeStack::init(this); }
 
 	//! Destructor. Releases the mem used by the remaining elements on the stack.
 	~EFreeList() { this->freeFreeList(); }
@@ -69,31 +74,40 @@ public:
 	//! Returns a new instance of E by either using an instance from the stack or creating a new one.
 	inline E* alloc()
 	{
-		if (!FreeStack::empty(this))
-			return FreeStack::popRet(this);
+		if (!EFreeListTypes<E,next>::FreeStack::empty(this))
+			return EFreeListTypes<E,next>::FreeStack::popRet(this);
 		else
 			return new E();
 	}
 
 	//! Returns true if the stack is empty.
-	inline bool empty() const { return FreeStack::empty(this); }
+	inline bool empty() const { return EFreeListTypes<E,next>::FreeStack::empty(this); }
 
 	//! Frees an item buy putting it onto the stack of free instances
-	inline void free(E* ptr) { FreeStack::push(this, ptr); }
+	inline void free(E* ptr) { EFreeListTypes<E,next>::FreeStack::push(this, ptr); }
 
 protected:
 	//! deletes all instances in the list
 	inline void freeFreeList()
 	{
-		while (!FreeStack::empty(this)) { delete FreeStack::popRet(this); };
+		while (!EFreeListTypes<E,next>::FreeStack::empty(this)) { delete EFreeListTypes<E,next>::FreeStack::popRet(this); }
 	}
 
 	//! Top of the stack
 	E* m_pTop;
 
 	//! Typedef for the embedded stack
+	//typedef EStack<EFreeList<E, next>, E, &EFreeList<E, next>::m_pTop, next> FreeStack;
+};
+
+//! Type declarations for EFreeList.
+template<typename E, E* E::*next>
+class EFreeListTypes
+{
+public:
 	typedef EStack<EFreeList<E, next>, E, &EFreeList<E, next>::m_pTop, next> FreeStack;
 };
+
 
 //! More complex implementation of a FreeList, which is able to generate indeices for the elements.
 template<typename E, E* E::*next, int E::*index>
@@ -107,7 +121,7 @@ public:
 	inline void free(E* ptr) { m_freeList.free(ptr); }
 
 	//! The value indicates that all indices in 0..numUsedIndices-1 might be in use.
-	inline int numUsedIndices() const { return m_nextFreeIndex; };
+	inline int numUsedIndices() const { return m_nextFreeIndex; }
 
 	//! Allocates a new Element by either using the free list or allocating a new one with a brand new index.
 	inline E* alloc()
@@ -120,7 +134,7 @@ public:
 		} else
 		{
 			return m_freeList.alloc();
-		};
+		}
 	}
 
 protected:
@@ -133,4 +147,4 @@ protected:
 
 } // end of namespace ogdf
 
-#endif /* ELISTPOOL_H_ */
+#endif

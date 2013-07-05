@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2573 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-10 18:48:33 +0200 (Di, 10. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
- * \brief implementation of class ClusterPlanarizationLayout 
+ * \brief implementation of class ClusterPlanarizationLayout
  * applies planarization approach for drawing Cluster diagrams
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -63,22 +64,22 @@ ClusterPlanarizationLayout::ClusterPlanarizationLayout()
 }
 
 
-//the call function that lets ClusterPlanarizationLayout compute a layout 
+//the call function that lets ClusterPlanarizationLayout compute a layout
 //for the input
 void ClusterPlanarizationLayout::call(
-	Graph& G, 
-	ClusterGraphAttributes& acGraph, 
+	Graph& G,
+	ClusterGraphAttributes& acGraph,
 	ClusterGraph& cGraph,
 	bool simpleCConnect) //default true
 {
 	EdgeArray<double> edgeWeight;
-	call(G, acGraph, cGraph, edgeWeight, simpleCConnect);	
+	call(G, acGraph, cGraph, edgeWeight, simpleCConnect);
 }
-//the call function that lets ClusterPlanarizationLayout compute a layout 
+//the call function that lets ClusterPlanarizationLayout compute a layout
 //for the input using \a weight for the computation of the cluster planar subgraph
 void ClusterPlanarizationLayout::call(
-	Graph& G, 
-	ClusterGraphAttributes& acGraph, 
+	Graph& G,
+	ClusterGraphAttributes& acGraph,
 	ClusterGraph& cGraph,
 	EdgeArray<double>& edgeWeight,
 	bool simpleCConnect) //default true
@@ -86,7 +87,7 @@ void ClusterPlanarizationLayout::call(
 	m_nCrossings = 0;
 	bool subGraph = false; // c-planar subgraph computed?
 
-	//check some simple cases 
+	//check some simple cases
 	if (G.numberOfNodes() == 0) return;
 
 //-------------------------------------------------------------
@@ -141,25 +142,25 @@ void ClusterPlanarizationLayout::call(
 
 
 	//-----------------------------------------------
-	//check if instance is clusterplanar and embed it 
+	//check if instance is clusterplanar and embed it
 	CconnectClusterPlanarEmbed CCPE; //cccp
 
 	bool cplanar = CCPE.embed(cGraph, G);
 
 	List<edge> connectEdges;
 
-	//if the graph is not c-planar, we have to check the reason and to 
+	//if the graph is not c-planar, we have to check the reason and to
 	//correct the problem by planarising or inserting connection edges
-	if (!cplanar) 
+	if (!cplanar)
 	{
 		bool connect = false;
-		
+
 		if ( (CCPE.errCode() == CconnectClusterPlanarEmbed::nonConnected) ||
 				(CCPE.errCode() == CconnectClusterPlanarEmbed::nonCConnected) )
 		{
 			//we insert edges to make the input c-connected
 			makeCConnected(cGraph, G, connectEdges, simpleCConnect);
-			
+
 			//save edgearray info for inserted edges
 			ListConstIterator<edge> itE = connectEdges.begin();
 			while (itE.valid())
@@ -168,9 +169,9 @@ void ClusterPlanarizationLayout::call(
 				orEdge[*itE]     = (*itE);
 				itE++;
 			}//while
-			
+
 			connect = true;
-			
+
 			CCPE.embed(cGraph, G);
 
 			if ( (CCPE.errCode() == CconnectClusterPlanarEmbed::nonConnected) ||
@@ -185,7 +186,7 @@ void ClusterPlanarizationLayout::call(
 		{
 			subGraph = true;
 			EdgeArray<bool> inSubGraph(G, false);
-			
+
 			CPlanarSubClusteredGraph cps;
 			if (edgeWeight.valid())
 				cps.call(cGraph, inSubGraph, leftEdges, edgeWeight);
@@ -203,13 +204,13 @@ void ClusterPlanarizationLayout::call(
 			//the subgraph (use a new copy)
 
 			//construct copy
-			
+
 			//ClusterGraph CGW(cGraph, GW, resultCluster, resultNode, resultEdge);
 
 			workGraph = &GW;
 			workCG = new ClusterGraph(cGraph, GW, resultCluster, resultNode, resultEdge);
 				//&CGW;
-			
+
 			//----------------------
 			//reinit original arrays
 			orNode.init(GW,0);
@@ -220,7 +221,7 @@ void ClusterPlanarizationLayout::call(
 			//set array entries to the appropriate values
 			forall_nodes(workv, G)
 			{
-				orNode[resultNode[workv]] = workv; 
+				orNode[resultNode[workv]] = workv;
 			}
 			forall_edges(worke, G)
 			{
@@ -228,13 +229,13 @@ void ClusterPlanarizationLayout::call(
 			}
 			forall_clusters(workc, cGraph)
 			{
-				orCluster[resultCluster[workc]] = workc; 
+				orCluster[resultCluster[workc]] = workc;
 				originalClId[resultCluster[workc]] = workc->index();
 			}
 
 			//----------------------------------------------------
 			//create new ACG and copy values (width, height, type)
-			
+
 			workACG = new ClusterGraphAttributes(*workCG, workACG->attributes());
 			forall_nodes(workv, GW)
 			{
@@ -260,16 +261,16 @@ void ClusterPlanarizationLayout::call(
 				NodePair np;
 				np.m_src = e->source();
 				np.m_tgt = e->target();
-				
+
 				leftWNodes.pushBack(np);
-				
+
 				GW.delEdge(e);
-				
+
 				itE++;
 			}//while
 
-			CconnectClusterPlanarEmbed CCP; 
-			
+			CconnectClusterPlanarEmbed CCP;
+
 #ifdef OGDF_DEBUG
 			bool subPlanar =
 #endif
@@ -277,7 +278,7 @@ void ClusterPlanarizationLayout::call(
 			//bool subPlanar = CCP.embed(*workCG, *workGraph);
 			OGDF_ASSERT(subPlanar);
 		}//if not planar
-		else 
+		else
 		{
 			if (!connect)
 			OGDF_THROW_PARAM(PreconditionViolatedException, pvcClusterPlanar);
@@ -286,14 +287,14 @@ void ClusterPlanarizationLayout::call(
 	}//if
 
 	//if multiple CCs are handled, the connectedges (their copies resp.)
-	//can be deleted here 
+	//can be deleted here
 
 	//now CCPE should give us the external face
-	
+
 	ClusterPlanRep CP(*workACG, *workCG);
 
-    OGDF_ASSERT(CP.representsCombEmbedding())
-	
+	OGDF_ASSERT(CP.representsCombEmbedding());
+
 	const int numCC = CP.numberOfCCs(); //equal to one
 	//preliminary
 	OGDF_ASSERT(numCC == 1);
@@ -303,7 +304,7 @@ void ClusterPlanarizationLayout::call(
 
 	for (int ikl = 0; ikl < numCC; ikl++)
 	{
-	
+
 			CP.initCC(ikl);
 			CP.setOriginalEmbedding();
 
@@ -324,7 +325,7 @@ void ClusterPlanarizationLayout::call(
 
 			OGDF_ASSERT(leftWNodes.size()==newEdges.size())
 			OGDF_ASSERT(leftEdges.size()==newEdges.size())
-			
+
 			ListConstIterator<edge> itE = newEdges.begin();
 			ListConstIterator<edge> itEor = leftEdges.begin();
 			while (itE.valid())
@@ -342,10 +343,10 @@ void ClusterPlanarizationLayout::call(
 			// copy layout into acGraph
 			// Later, we move nodes and edges in each connected component, such
 			// that no two overlap.
-		    const List<node> &origInCC = CP.nodesInCC(ikl);
-		    ListConstIterator<node> itV;
+			const List<node> &origInCC = CP.nodesInCC(ikl);
+			ListConstIterator<node> itV;
 
-			for(itV = origInCC.begin(); itV.valid(); ++itV) 
+			for(itV = origInCC.begin(); itV.valid(); ++itV)
 			{
 				node vG = *itV;
 
@@ -353,7 +354,7 @@ void ClusterPlanarizationLayout::call(
 				acGraph.y(orNode[vG]) = drawing.y(CP.copy(vG));
 
 				adjEntry adj;
-				forall_adj(adj,vG) 
+				forall_adj(adj,vG)
 				{
 					if ((adj->index() & 1) == 0) continue;
 					edge eG = adj->theEdge();
@@ -388,7 +389,7 @@ void ClusterPlanarizationLayout::call(
 
 	}//for connected components
 
-    //postProcess(acGraph);
+	//postProcess(acGraph);
 	//
 	// arrange layouts of connected components
 	//
@@ -409,7 +410,7 @@ void ClusterPlanarizationLayout::call(
 		const double dy = offset[i].m_y;
 
 		HashArray<int, bool> shifted(false);
-		
+
 		// iterate over all nodes in ith CC
 		ListConstIterator<node> it;
 		for(it = nodes.begin(); it.valid(); ++it)
@@ -420,7 +421,7 @@ void ClusterPlanarizationLayout::call(
 			acGraph.y(orNode[v]) += dy;
 
 			// update cluster positions accordingly
-            int clNumber = cGraph.clusterOf(orNode[v])->index();
+			int clNumber = cGraph.clusterOf(orNode[v])->index();
 
 			if ((clNumber > 0) && !shifted[clNumber])
 			{
@@ -454,7 +455,7 @@ void ClusterPlanarizationLayout::call(
 				G.delEdge(connectEdges.popFrontRet());
 			}
 
-	if (subGraph) 
+	if (subGraph)
 	{
 		originalClId.init();
 		orCluster.init();
@@ -470,9 +471,9 @@ void ClusterPlanarizationLayout::call(
 
 
 void ClusterPlanarizationLayout::computeClusterPositions(
-	ClusterPlanRep& CP, 
+	ClusterPlanRep& CP,
 	Layout drawing,
-	HashArray<int, ClusterPosition>& CA) 
+	HashArray<int, ClusterPosition>& CA)
 {
 	edge e;
 	forall_edges(e, CP)
@@ -491,7 +492,7 @@ void ClusterPlanarizationLayout::computeClusterPositions(
 			if (CA.isDefined(CP.ClusterID(e)))
 			{
 				cpos = CA[CP.ClusterID(e)];
-	
+
 				double preValmaxx = cpos.m_maxx;
 				double preValmaxy = cpos.m_maxy;
 

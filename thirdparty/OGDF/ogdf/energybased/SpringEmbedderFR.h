@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of Spring-Embedder (Fruchterman,Reingold)
  *        algorithm.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -60,7 +61,7 @@ namespace ogdf {
 	class OGDF_EXPORT GraphCopy;
 
 
-//! The spring-embedder layout algorithm by Fruchterman and Reingold. 
+//! The spring-embedder layout algorithm by Fruchterman and Reingold.
 /**
  * The implementation used in SpringEmbedderFR is based on
  * the following publication:
@@ -121,12 +122,12 @@ public:
 
 
 	//! Returns the current setting of iterations.
-    int iterations() const {
+	int iterations() const {
 		return m_iterations;
 	}
 
 	//! Sets the number of iterations to \a i.
-    void iterations(int i) {
+	void iterations(int i) {
 		if (i>0)
 			m_iterations = i;
 	}
@@ -140,26 +141,26 @@ public:
 	}
 
 	//! Returns the current setting of nodes.
-    bool noise() const {
+	bool noise() const {
 		return m_noise;
 	}
 
 	//! Sets the parameter noise to \a on.
-    void noise(bool on) {
+	void noise(bool on) {
 		m_noise = on;
 	}
-    
+
 	//! Returns the minimum distance between connected components.
-    double minDistCC() const { return m_minDistCC; }
+	double minDistCC() const { return m_minDistCC; }
 
 	//! Sets the minimum distance between connected components to \a x.
-    void minDistCC(double x) { m_minDistCC = x; }
+	void minDistCC(double x) { m_minDistCC = x; }
 
 	//! Returns the page ratio.
-    double pageRatio() { return m_pageRatio; }
+	double pageRatio() { return m_pageRatio; }
 
 	//! Sets the page ration to \a x.
-    void pageRatio(double x) { m_pageRatio = x; }
+	void pageRatio(double x) { m_pageRatio = x; }
 
 	//! Returns the current scaling method.
 	Scaling scaling() const {
@@ -190,38 +191,38 @@ public:
 	}
 
 private:
-    bool initialize(GraphCopy &G, GraphCopyAttributes &AG);
+	bool initialize(GraphCopy &G, GraphCopyAttributes &AG);
 
-    void mainStep(GraphCopy &G, GraphCopyAttributes &AG);
-    void cleanup() {
+	void mainStep(GraphCopy &G, GraphCopyAttributes &AG);
+	void cleanup() {
 		delete m_A;
 		m_A = 0;
 	}
-    
-    NodeArray<ListIterator<node> > m_lit; 
 
-    int m_cF;
-    
-    double m_width;
-    double m_height; 
+	NodeArray<ListIterator<node> > m_lit;
 
-    double m_txNull;
-    double m_tyNull;
-    double m_tx;
-    double m_ty;
+	int m_cF;
 
-    double m_k;
-    double m_k2;
-    double m_kk;
-    int m_ki;
-    
-    int m_xA;
-    int m_yA;
+	double m_width;
+	double m_height;
 
-    Array2D<List<node> > *m_A;
+	double m_txNull;
+	double m_tyNull;
+	double m_tx;
+	double m_ty;
+
+	double m_k;
+	double m_k2;
+	double m_kk;
+	int m_ki;
+
+	int m_xA;
+	int m_yA;
+
+	Array2D<List<node> > *m_A;
 
 
-    double mylog2(int x) {
+	double mylog2(int x) {
 		double l = 0.0;
 		while(x > 0) {
 			l++;
@@ -230,20 +231,20 @@ private:
 		return l/2;
 	}
 
-    int    m_iterations;  //!< The number of iterations.
+	int    m_iterations;  //!< The number of iterations.
 	double m_fineness;    //!< The fineness of the grid.
 	double m_edgeLength;
 
-    double m_xleft;       //!< Bounding box (minimal x-coordinate).
-    double m_xright;      //!< Bounding box (maximal x-coordinate).
-    double m_ysmall;      //!< Bounding box (minimal y-coordinate).
-    double m_ybig;        //!< Bounding box (maximal y-coordinate).
+	double m_xleft;       //!< Bounding box (minimal x-coordinate).
+	double m_xright;      //!< Bounding box (maximal x-coordinate).
+	double m_ysmall;      //!< Bounding box (minimal y-coordinate).
+	double m_ybig;        //!< Bounding box (maximal y-coordinate).
 
-    bool m_noise;         //!< Perform random perturbations?
+	bool m_noise;         //!< Perform random perturbations?
 
 	Scaling m_scaling;    //!< The scaling method.
 	double m_scaleFactor; //!< The factor used if scaling type is scScaleFunction.
-	
+
 	double m_bbXmin; //!< User bounding box (minimal x-coordinate).
 	double m_bbYmin; //!< User bounding box (maximal x-coordinate).
 	double m_bbXmax; //!< User bounding box (minimal y-coordinate).

@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
- * \brief Implementation of Sugiyama algorithm (extension with 
+ * \brief Implementation of Sugiyama algorithm (extension with
  * clusters)
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -137,7 +138,7 @@ class AdjacencyComparer
 		} else
 			return +1;
 	}
-	
+
 	OGDF_AUGMENT_STATICCOMPARER(LHTreeNode::Adjacency)
 };
 
@@ -234,7 +235,7 @@ void ENGLayer::removeAuxNodes() {
 void ENGLayer::simplifyAdjacencies(List<LHTreeNode::Adjacency> &adjs)
 {
 	AdjacencyComparer cmp;
-	
+
 	if(!adjs.empty()) {
 		adjs.quicksort(cmp);
 
@@ -285,8 +286,9 @@ ClusterGraphCopy::ClusterGraphCopy()
 }
 
 ClusterGraphCopy::ClusterGraphCopy(const ExtendedNestingGraph &H, const ClusterGraph &CG)
-: ClusterGraph(H), m_pCG(&CG), m_pH(&H), m_copy(CG,0), m_original(*this,0)
+: ClusterGraph(H), m_pCG(&CG), m_pH(&H), m_copy(CG,0)
 {
+	m_original.init(*this,0);
 	m_copy    [CG.rootCluster()] = rootCluster();
 	m_original[rootCluster()]    = CG.rootCluster();
 
@@ -341,15 +343,16 @@ void ClusterGraphCopy::setParent(node v, cluster c)
 
 ExtendedNestingGraph::ExtendedNestingGraph(const ClusterGraph &CG) :
 	m_copy(CG),
-	m_origNode(*this, 0),
 	m_topNode(CG),
 	m_bottomNode(CG),
-	m_type(*this, ntDummy),
 	m_copyEdge(CG),
-	m_origEdge(*this, 0),
 	m_mark(CG, 0)
 {
 	const Graph &G = CG;
+
+	m_origNode.init(*this, 0);
+	m_type    .init(*this, ntDummy);
+	m_origEdge.init(*this, 0);
 
 	// Create nodes
 	node v;
@@ -414,7 +417,7 @@ ExtendedNestingGraph::ExtendedNestingGraph(const ClusterGraph &CG) :
 	forall_edges(e, G) {
 		node u = e->source();
 		node v = e->target();
-		
+
 		// e was reversed?
 		if(m_copyEdge[e].front()->source() != m_copy[e->source()])
 			swap(u,v);
@@ -596,15 +599,6 @@ void ExtendedNestingGraph::createDummyNodes()
 
 		cluster cTop = lca(u,v);
 
-		cluster cV, cU;
-		if(m_secondPathTo == v) {
-			cV = m_secondPath;
-			cU = m_mark[cTop];
-		} else {
-			cU = m_secondPath;
-			cV = m_mark[cTop];
-		}
-
 		// create split nodes
 		for(int i = m_rank[uH]+1; i < m_rank[vH]; ++i) {
 			eH = split(eH);
@@ -738,7 +732,7 @@ void ExtendedNestingGraph::createVirtualClusters()
 				if(cu != c) {
 					if(nextCluster.size() > 1)
 						m_CGC.createCluster(nextCluster, c);
-					
+
 					nextCluster.clear();
 					c = cu;
 				}
@@ -806,7 +800,7 @@ void ExtendedNestingGraph::createVirtualClusters(
 			for(itV = c->nBegin(); itV.valid(); ++itV)
 				nodes[component[vCopy[*itV]]].pushBack(*itV);
 
-			for(itC = c->cBegin(); itC.valid(); ++itC) 
+			for(itC = c->cBegin(); itC.valid(); ++itC)
 				clusters[component[cCopy[*itC]]].pushBack(*itC);
 
 			for(int i = 0; i < k; ++i) {
@@ -1017,7 +1011,7 @@ void ExtendedNestingGraph::buildLayers()
 					LHTreeNode *aNode = treeNode[e->target()];
 					cluster ca = aNode->parent()->originalCluster();
 					LHTreeNode *aParent = aNode->parent()->parent();
-					
+
 					for(; aParent != 0; aParent = aParent->parent()) {
 						ListConstIterator<Tuple3<edge,LHTreeNode*,LHTreeNode*> > itE;
 						for(itE = edges[aParent->originalCluster()].begin();
@@ -1038,7 +1032,7 @@ void ExtendedNestingGraph::buildLayers()
 					aNode = treeNode[e->source()];
 					ca = aNode->parent()->originalCluster();
 					aParent = aNode->parent()->parent();
-					
+
 					for(; aParent != 0; aParent = aParent->parent()) {
 						ListConstIterator<Tuple3<edge,LHTreeNode*,LHTreeNode*> > itE;
 						for(itE = edges[aParent->originalCluster()].begin();
@@ -1149,7 +1143,7 @@ struct RCEdge
 class LocationRelationshipComparer
 {
 public:
-	static int compare(const RCEdge &x, const RCEdge &y) 
+	static int compare(const RCEdge &x, const RCEdge &y)
 	{
 		return RCCrossings::compare(x.weight(), y.weight());
 	}
@@ -1233,7 +1227,7 @@ RCCrossings ExtendedNestingGraph::reduceCrossings(LHTreeNode *cNode, bool dirTop
 		itCC.valid(); ++itCC)
 	{
 		/*cout << "crossing: C" << m_CGC.clusterOf((*itCC).m_edgeCluster->source()) <<
-			" e=" << (*itCC).m_edgeCluster << "  with edge " << (*itCC).m_edge << 
+			" e=" << (*itCC).m_edgeCluster << "  with edge " << (*itCC).m_edge <<
 			" cluster: C" << m_CGC.clusterOf((*itCC).m_edge->source()) <<
 			", C" << m_CGC.clusterOf((*itCC).m_edge->target()) << "\n";*/
 
@@ -1386,11 +1380,11 @@ void ExtendedNestingGraph::removeTopBottomEdges()
 				cluster cvOrigParent = cvOrig->parent();
 
 				if((cvOrig == cuOrigParent && rank(u) == rank(bottom(cuOrig))) ||
-				   (cuOrig == cvOrigParent && rank(v) == rank(top   (cvOrig))) ||
-				   (cuOrigParent == cvOrigParent &&
-						rank(u) == rank(bottom(cuOrig)) &&
-						rank(v) == rank(top   (cvOrig))
-				   ))
+					(cuOrig == cvOrigParent && rank(v) == rank(top   (cvOrig))) ||
+					(cuOrigParent == cvOrigParent &&
+					rank(u) == rank(bottom(cuOrig)) &&
+					rank(v) == rank(top   (cvOrig))
+					))
 				{
 					vert = true;
 				}
@@ -1410,7 +1404,7 @@ void ExtendedNestingGraph::removeTopBottomEdges()
 
 		while(!S.empty()) {
 			LHTreeNode *cNode = S.pop();
-			
+
 			cNode->setPos();
 			ListConstIterator<LHTreeNode::ClusterCrossing> itCC;
 			for(itCC = cNode->m_upperClusterCrossing.begin(); itCC.valid(); ++itCC) {
@@ -1468,7 +1462,7 @@ cluster ExtendedNestingGraph::lca(node u, node v) const
 				m_secondPath = pred1;
 				m_secondPathTo = u;
 				return c1;
-			
+
 			} else {
 				m_mark[c1] = pred1;
 				pred1 = c1;
@@ -1481,7 +1475,7 @@ cluster ExtendedNestingGraph::lca(node u, node v) const
 				m_secondPath = pred2;
 				m_secondPathTo = v;
 				return c2;
-			
+
 			} else {
 				m_mark[c2] = pred2;
 				pred2 = c2;
@@ -1518,7 +1512,7 @@ LHTreeNode *ExtendedNestingGraph::lca(
 				*uChild = uPred;
 				*vChild = m_markTree[cuNode->originalCluster()];
 				return cuNode;
-			
+
 			} else {
 				m_markTree[cuNode->originalCluster()] = uPred;
 				uPred = cuNode;
@@ -1531,7 +1525,7 @@ LHTreeNode *ExtendedNestingGraph::lca(
 				*uChild = m_markTree[cvNode->originalCluster()];
 				*vChild = vPred;
 				return cvNode;
-			
+
 			} else {
 				m_markTree[cvNode->originalCluster()] = vPred;
 				vPred = cvNode;
@@ -1679,7 +1673,7 @@ edge ExtendedNestingGraph::addEdge(node u, node v, bool addAlways)
 
 	} else if(addAlways)
 		return newEdge(v,u);
-	
+
 	return 0;
 }
 

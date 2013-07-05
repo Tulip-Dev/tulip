@@ -1,45 +1,46 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of ClusterPQContainer.
- * 
+ *
  * Stores information for a biconnected component
  * of a cluster for embedding the cluster in the
  * top down traversal
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -69,26 +70,26 @@ class ClusterPQContainer {
 	// incoming edge of v: an edge e = (v,w) with number(v) < number(w)
 
 
-	// Stores for every node v the keys corresponding to the incoming edges of v 
-	NodeArray<SListPure<PlanarLeafKey<indInfo*>* > >* m_inLeaves;
+	// Stores for every node v the keys corresponding to the incoming edges of v
+	NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > >* m_inLeaves;
 
-	// Stores for every node v the keys corresponding to the outgoing edges of v 
-	NodeArray<SListPure<PlanarLeafKey<indInfo*>* > >* m_outLeaves;
-	
-	// Stores for every node v the sequence of incoming edges of v according 
+	// Stores for every node v the keys corresponding to the outgoing edges of v
+	NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > >* m_outLeaves;
+
+	// Stores for every node v the sequence of incoming edges of v according
 	// to the embedding
 	NodeArray<SListPure<edge> >* m_frontier;
-	
+
 	// Stores for every node v the nodes corresponding to the
 	// opposed sink indicators found in the frontier of v.
 	NodeArray<SListPure<node> >* m_opposed;
-	
+
 	// Stores for every node v the nodes corresponding to the
 	// non opposed sink indicators found in the frontier of v.
 	NodeArray<SListPure<node> >* m_nonOpposed;
-	
-	// Table to acces for every edge its corresponding key in the PQTree	
-	EdgeArray<PlanarLeafKey<indInfo*>*>* m_edge2Key;
+
+	// Table to acces for every edge its corresponding key in the PQTree
+	EdgeArray<PlanarLeafKey<IndInfo*>*>* m_edge2Key;
 
 	// Stores for every node its st-number
 	NodeArray<int> *m_numbering;
@@ -101,11 +102,11 @@ class ClusterPQContainer {
 	// the subgraph that contains the biconnected component
 	// NOT THE COPY OF THE BICONNECTED COMPONENT THAT WAS CONSTRUCTED
 	// DURING PLANARITY TESTING. THIS HAS BEEN DELETED.
-	Graph					*m_subGraph; 
+	Graph					*m_subGraph;
 	// corresponding PQTree
 	EmbedPQTree				*m_T;
 	// The leaf correpsonding to the edge (s,t).
-	PlanarLeafKey<indInfo*>	*m_stEdgeLeaf;
+	PlanarLeafKey<IndInfo*>	*m_stEdgeLeaf;
 
 public:
 
@@ -113,17 +114,17 @@ public:
 		m_inLeaves(0),m_outLeaves(0),m_frontier(0),
 		m_opposed(0),m_nonOpposed(0),m_edge2Key(0),
 		m_numbering(0),m_tableNumber2Node(0),
-		m_superSink(0),m_subGraph(0),m_T(0), m_stEdgeLeaf(0) {};
-	
-	~ClusterPQContainer() {};
+		m_superSink(0),m_subGraph(0),m_T(0), m_stEdgeLeaf(0) { }
+
+	~ClusterPQContainer() { }
 
 	void init(Graph *subGraph){
 		m_subGraph = subGraph;
-		m_inLeaves 
-			= OGDF_NEW NodeArray<SListPure<PlanarLeafKey<indInfo*>* > >(*subGraph);
+		m_inLeaves
+			= OGDF_NEW NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > >(*subGraph);
 
-		m_outLeaves 
-			= OGDF_NEW NodeArray<SListPure<PlanarLeafKey<indInfo*>* > >(*subGraph);
+		m_outLeaves
+			= OGDF_NEW NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > >(*subGraph);
 
 		m_frontier
 			= OGDF_NEW NodeArray<SListPure<edge> >(*subGraph);
@@ -132,15 +133,15 @@ public:
 			= OGDF_NEW NodeArray<SListPure<node> >(*subGraph);
 
 		m_nonOpposed
-			= OGDF_NEW NodeArray<SListPure<node> >(*subGraph);	
+			= OGDF_NEW NodeArray<SListPure<node> >(*subGraph);
 
 		m_edge2Key
-			= OGDF_NEW EdgeArray<PlanarLeafKey<indInfo*>*>(*subGraph);	
+			= OGDF_NEW EdgeArray<PlanarLeafKey<IndInfo*>*>(*subGraph);
 
 		m_numbering
 			= OGDF_NEW NodeArray<int >(*subGraph);
 
-		m_tableNumber2Node 
+		m_tableNumber2Node
 			= OGDF_NEW Array<node>(subGraph->numberOfNodes()+1);
 	}
 
@@ -152,11 +153,11 @@ public:
 		{
 			node v;
 			forall_nodes(v,*m_subGraph)
-			{	
+			{
 				while (!(*m_outLeaves)[v].empty())
 				{
-					PlanarLeafKey<indInfo*>* L = (*m_outLeaves)[v].popFrontRet();
-					delete L;	
+					PlanarLeafKey<IndInfo*>* L = (*m_outLeaves)[v].popFrontRet();
+					delete L;
 				}
 			}
 			delete m_outLeaves;

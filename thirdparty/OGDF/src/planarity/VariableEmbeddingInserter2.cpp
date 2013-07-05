@@ -1,48 +1,49 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class VariableEmbeddingInserter2
- * 
+ *
  * \author Carsten Gutwenger<br>Jan Papenfu&szlig;
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
 
 #include <ogdf/planarity/VariableEmbeddingInserter2.h>
 #include <ogdf/decomposition/DynamicSPQRForest.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 
 
 namespace ogdf {
@@ -160,8 +161,7 @@ class ExpandedGraph2
 
 	Graph           m_dual;  // augmented dual graph of exp
 	EdgeArray<adjEntry> m_primalEdge;
-	EdgeArray<bool>     m_primalIsGen; // true iff corresponding primal edge
-	                                   // is a generalization
+	EdgeArray<bool>     m_primalIsGen; // true iff corresponding primal edge is a generalization
 
 	node            m_vS, m_vT; // augmented nodes in dual representing s and t
 
@@ -223,8 +223,7 @@ void ExpandedGraph2::expand(node v, node vPred, node vSucc)
 
 	expandSkeleton(v, eInS, eOutS);
 
-	PlanarModule pm;
-	pm.planarEmbed(m_exp);
+	planarEmbed(m_exp);
 	m_E.init(m_exp);
 }
 
@@ -714,8 +713,7 @@ Module::ReturnType VariableEmbeddingInserter2::doCall(
 				rrEdges.pushBack(*it);
 			break;
 
-		case rrNone:
-		case rrIncremental:
+		default:
 			break;
 		}
 
@@ -777,11 +775,10 @@ Module::ReturnType VariableEmbeddingInserter2::doCall(
 		} while (improved);
 	}
 
-	PlanarModule pm;
 #ifdef OGDF_DEBUG
 	bool isPlanar =
 #endif
-		pm.planarEmbed(PG);
+		planarEmbed(PG);
 
 	OGDF_ASSERT(isPlanar);
 
@@ -853,7 +850,7 @@ void VariableEmbeddingInserter2::insert (edge eOrig, SList<adjEntry>& eip)
 				for (ListConstIterator<adjEntry> kt=L.begin(); kt.valid(); ++kt) {
 					edge e = (*kt)->theEdge();
 					eip.pushBack(e->adjSource()==*kt ? dSPQRF.original(e)->adjSource()
-					                                 : dSPQRF.original(e)->adjTarget());
+						: dSPQRF.original(e)->adjTarget());
 				}
 			}
 			if (jt.valid()) repS = dSPQRF.cutVertex(*it,*jt);

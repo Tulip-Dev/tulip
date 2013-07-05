@@ -1,9 +1,9 @@
 /*
- * $Revision: 2302 $
+ * $Revision: 2565 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -76,23 +77,23 @@ void ComponentSplitterLayout::call(GraphAttributes &GA)
 
 		//std::vector< std::vector<node> > componentArray;
 		//componentArray.resize(numComponents);
-	    //Array<GraphAttributes *> components(numComponents);
+		//Array<GraphAttributes *> components(numComponents);
 		//
-		
-		// intialize the array of lists of nodes contained in a CC 
+
+		// intialize the array of lists of nodes contained in a CC
 		nodesInCC.init(m_numberOfComponents);
 
-		 node v;
-		 forall_nodes(v,G)
+		node v;
+		forall_nodes(v,G)
 			nodesInCC[componentNumber[v]].pushBack(v);
 
 		 // Create copies of the connected components and corresponding
 		 // GraphAttributes
 		 GraphCopy GC;
 		 GC.createEmpty(G);
-	 
-	     EdgeArray<edge> auxCopy(G);
-	 
+
+		 EdgeArray<edge> auxCopy(G);
+
 		 for (int i = 0; i < m_numberOfComponents; i++)
 		 {
 			 GC.initByNodes(nodesInCC[i],auxCopy);
@@ -106,18 +107,18 @@ void ComponentSplitterLayout::call(GraphAttributes &GA)
 				cGA.y(v) = GA.y(GC.original(v));
 			 }
 			 m_secondaryLayout.get().call(cGA);
-			 
+
 			 //copy layout information back into GA
 			 forall_nodes(v, GC)
 			 {
 				 node w = GC.original(v);
 				 if (w != 0)
-				  GA.x(w) = cGA.x(v);
-				  GA.y(w) = cGA.y(v);
+					 GA.x(w) = cGA.x(v);
+				 GA.y(w) = cGA.y(v);
 			 }
 		 }
-		 
-		 
+
+
 	// rotate component drawings and call the packer
 	reassembleDrawings(GA);
 	// free
@@ -178,7 +179,7 @@ double atan2ex(double y, double x)
 	return angle;
 }
 
-//TODO: Regard some kind of aspect ration (input) 
+//TODO: Regard some kind of aspect ration (input)
 //(then also the rotation of a single component makes sense)
 void ComponentSplitterLayout::reassembleDrawings(GraphAttributes& GA)
 {
@@ -197,7 +198,7 @@ void ComponentSplitterLayout::reassembleDrawings(GraphAttributes& GA)
 		//to have to change all interfaces, we do it anyway
 		std::vector<DPoint> points;
 
-		//collect node positions and at the same time center average 
+		//collect node positions and at the same time center average
 		// at origin
 		//node v;
 		ListConstIterator<node> it = nodesInCC[j].begin();
@@ -342,7 +343,7 @@ void ComponentSplitterLayout::reassembleDrawings(GraphAttributes& GA)
 			double angle = rotation[index];
 			// apply rotation and offset to all nodes
 			node v;
-			
+
 			ListConstIterator<node> it = nodesInCC[j].begin();
 			while (it.valid())
 			{
@@ -363,7 +364,7 @@ void ComponentSplitterLayout::reassembleDrawings(GraphAttributes& GA)
 
 				GA.x(v) = x;
 				GA.y(v) = y;
-				
+
 				it++;
 
 			}// while nodes in component

@@ -1,43 +1,44 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
- * \brief  Implementation of the Planar Module. 
- * 
+ * \brief  Implementation of the Booth-Lueker planarity test.
+ *
  * Implements planarity test and planar embedding algorithm.
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -50,13 +51,13 @@
 #include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/internal/planarity/PlanarPQTree.h>
 #include <ogdf/internal/planarity/PlanarLeafKey.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/planarity/BoothLueker.h>
 #include <ogdf/internal/planarity/EmbedPQTree.h>
 
 
 namespace ogdf{
 
-bool PlanarModule::planarityTest(Graph &G)
+bool BoothLueker::isPlanarDestructive(Graph &G)
 {
 	bool ret = preparation(G,false);
 	m_parallelEdges.init();
@@ -65,9 +66,9 @@ bool PlanarModule::planarityTest(Graph &G)
 	return ret;
 }
 
-bool PlanarModule::planarityTest(const Graph &G)
+bool BoothLueker::isPlanar(const Graph &G)
 {
-	Graph Gp(G); 
+	Graph Gp(G);
 	bool ret = preparation(Gp,false);
 	m_parallelEdges.init();
 	m_isParallel.init();
@@ -79,7 +80,7 @@ bool PlanarModule::planarityTest(const Graph &G)
 // Parallel edges:  do not need to be ignored, they can be handled
 // by the planarity test.
 // Selfloops: need to be ignored.
-bool PlanarModule::preparation(Graph &G, bool embed)
+bool BoothLueker::preparation(Graph &G, bool embed)
 {
 	if (G.numberOfEdges() < 9 && !embed)
 		return true;
@@ -119,7 +120,7 @@ bool PlanarModule::preparation(Graph &G, bool embed)
 	forall_edges(e,G)
 	{
 		blockEdges[componentID[e]].pushFront(e);
-	} 
+	}
 
 	// Determine nodes per biconnected component.
 	Array<SList<node> > blockNodes(0,bcCount-1);
@@ -147,7 +148,7 @@ bool PlanarModule::preparation(Graph &G, bool embed)
 	}
 
 	// Perform Planarity Test for every biconnected component
-		
+
 	if (bcCount == 1)
 	{
 		if (G.numberOfEdges() >= 2)
@@ -176,7 +177,7 @@ bool PlanarModule::preparation(Graph &G, bool embed)
 		for (i = 0; i < bcCount; i++)
 		{
 			Graph C;
-		
+
 			SListIterator<node> itn;
 			for (itn = blockNodes[i].begin(); itn.valid(); ++ itn)
 			{
@@ -203,7 +204,7 @@ bool PlanarModule::preparation(Graph &G, bool embed)
 			EdgeArray<edge> backTableEdges(C,0);
 			for (it = blockEdges[i].begin(); it.valid(); ++it)
 				backTableEdges[tableEdges[*it]] = *it;
-		
+
 			if (C.numberOfEdges() >= 2)
 			{
 				// Compute st-numbering
@@ -232,7 +233,7 @@ bool PlanarModule::preparation(Graph &G, bool embed)
 					forall_adj(a,v)
 					{
 						edge e = backTableEdges[a->theEdge()];
-						adjEntry adj = (e->adjSource()->theNode() == w)? 
+						adjEntry adj = (e->adjSource()->theNode() == w)?
 										e->adjSource() : e->adjTarget();
 						entireEmbedding[w].pushBack(adj);
 					}
@@ -257,18 +258,18 @@ bool PlanarModule::preparation(Graph &G, bool embed)
 	OGDF_ASSERT_IF(dlConsistencyChecks,
 		planar == false || embed == false || G.representsCombEmbedding())
 
-	return planar; 
+	return planar;
 }
 
 
 // Performs a planarity test on a biconnected component
 // of G. numbering contains an st-numbering of the component.
-bool PlanarModule::doTest(Graph &G,NodeArray<int> &numbering)
+bool BoothLueker::doTest(Graph &G,NodeArray<int> &numbering)
 {
 	bool planar = true;
 
-	NodeArray<SListPure<PlanarLeafKey<indInfo*>* > > inLeaves(G);
-	NodeArray<SListPure<PlanarLeafKey<indInfo*>* > > outLeaves(G);
+	NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > > inLeaves(G);
+	NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > > outLeaves(G);
 	Array<node> table(G.numberOfNodes()+1);
 
 	node v;
@@ -277,10 +278,10 @@ bool PlanarModule::doTest(Graph &G,NodeArray<int> &numbering)
 		edge e;
 		forall_adj_edges(e,v)
 		{
-			if (numbering[e->opposite(v)] > numbering[v]) 
+			if (numbering[e->opposite(v)] > numbering[v])
 				//sideeffect: loops are ignored
 			{
-				PlanarLeafKey<indInfo*>* L = OGDF_NEW PlanarLeafKey<indInfo*>(e);
+				PlanarLeafKey<IndInfo*>* L = OGDF_NEW PlanarLeafKey<IndInfo*>(e);
 				inLeaves[v].pushFront(L);
 			}
 		}
@@ -289,10 +290,10 @@ bool PlanarModule::doTest(Graph &G,NodeArray<int> &numbering)
 
 	forall_nodes(v,G)
 	{
-		SListIterator<PlanarLeafKey<indInfo*>* > it;
+		SListIterator<PlanarLeafKey<IndInfo*>* > it;
 		for (it = inLeaves[v].begin(); it.valid(); ++it)
 		{
-			PlanarLeafKey<indInfo*>* L = *it;
+			PlanarLeafKey<IndInfo*>* L = *it;
 			outLeaves[L->userStructKey()->opposite(v)].pushFront(L);
 		}
 	}
@@ -323,8 +324,8 @@ bool PlanarModule::doTest(Graph &G,NodeArray<int> &numbering)
 	{
 		while (!inLeaves[v].empty())
 		{
-			PlanarLeafKey<indInfo*>* L = inLeaves[v].popFrontRet();
-			delete L;	
+			PlanarLeafKey<IndInfo*>* L = inLeaves[v].popFrontRet();
+			delete L;
 		}
 	}
 
@@ -333,20 +334,20 @@ bool PlanarModule::doTest(Graph &G,NodeArray<int> &numbering)
 
 
 // Performs a planarity test on a biconnected component
-// of G and embedds it planar. 
+// of G and embedds it planar.
 // numbering contains an st-numbering of the component.
-bool PlanarModule::doEmbed(
+bool BoothLueker::doEmbed(
 	Graph &G,
-	NodeArray<int>  &numbering,			
+	NodeArray<int>  &numbering,
 	EdgeArray<edge> &backTableEdges,
 	EdgeArray<edge> &forwardTableEdges)
 {
-	
-	NodeArray<SListPure<PlanarLeafKey<indInfo*>* > > inLeaves(G);
-	NodeArray<SListPure<PlanarLeafKey<indInfo*>* > > outLeaves(G);
+
+	NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > > inLeaves(G);
+	NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > > outLeaves(G);
 	NodeArray<SListPure<edge> > frontier(G);
 	NodeArray<SListPure<node> > opposed(G);
-	NodeArray<SListPure<node> > nonOpposed(G);	
+	NodeArray<SListPure<node> > nonOpposed(G);
 	Array<node> table(G.numberOfNodes()+1);
 	Array<bool> toReverse(1,G.numberOfNodes()+1,false);
 
@@ -359,7 +360,7 @@ bool PlanarModule::doEmbed(
 		{
 			if (numbering[e->opposite(v)] > numbering[v])
 			{
-				PlanarLeafKey<indInfo*>* L = OGDF_NEW PlanarLeafKey<indInfo*>(e);
+				PlanarLeafKey<IndInfo*>* L = OGDF_NEW PlanarLeafKey<IndInfo*>(e);
 				inLeaves[v].pushFront(L);
 			}
 		}
@@ -368,10 +369,10 @@ bool PlanarModule::doEmbed(
 
 	forall_nodes(v,G)
 	{
-		SListIterator<PlanarLeafKey<indInfo*>* > it;
+		SListIterator<PlanarLeafKey<IndInfo*>* > it;
 		for (it = inLeaves[v].begin(); it.valid(); ++it)
 		{
-			PlanarLeafKey<indInfo*>* L = *it;
+			PlanarLeafKey<IndInfo*>* L = *it;
 			outLeaves[L->userStructKey()->opposite(v)].pushFront(L);
 		}
 	}
@@ -384,8 +385,7 @@ bool PlanarModule::doEmbed(
 	{
 		if (T.Reduction(outLeaves[table[i]]))
 		{
-			T.ReplaceRoot(inLeaves[table[i]],frontier[table[i]],
-						  opposed[table[i]],nonOpposed[table[i]],table[i]);
+			T.ReplaceRoot(inLeaves[table[i]], frontier[table[i]], opposed[table[i]], nonOpposed[table[i]], table[i]);
 			T.emptyAllPertinentNodes();
 		}
 		else
@@ -395,8 +395,8 @@ bool PlanarModule::doEmbed(
 			{
 				while (!inLeaves[v].empty())
 				{
-					PlanarLeafKey<indInfo*>* L = inLeaves[v].popFrontRet();
-					delete L;	
+					PlanarLeafKey<IndInfo*>* L = inLeaves[v].popFrontRet();
+					delete L;
 				}
 			}
 			return false;
@@ -464,7 +464,7 @@ bool PlanarModule::doEmbed(
 					// of a bundle of parallel edges
 
 					ListIterator<edge> it;
-					// If v is source of e, insert the parallel edges 
+					// If v is source of e, insert the parallel edges
 					// in the order stored in the list.
 					if (e->adjSource()->theNode() == v)
 					{
@@ -473,21 +473,21 @@ bool PlanarModule::doEmbed(
 						for (it = m_parallelEdges[trans].begin(); it.valid(); it++)
 						{
 							edge parallel = forwardTableEdges[*it];
-							adjEntry adj = parallel->adjSource()->theNode() == v? 
-										   parallel->adjSource() : parallel->adjTarget();
+							adjEntry adj = parallel->adjSource()->theNode() == v ?
+								parallel->adjSource() : parallel->adjTarget();
 							newEntireEmbedding[v].pushBack(adj);
 						}
 					}
 					else
-					// v is target of e, insert the parallel edges 
+					// v is target of e, insert the parallel edges
 					// in the opposite order stored in the list.
 					// This keeps the embedding.
 					{
 						for (it = m_parallelEdges[trans].rbegin(); it.valid(); it--)
 						{
 							edge parallel = forwardTableEdges[*it];
-							adjEntry adj = parallel->adjSource()->theNode() == v? 
-										   parallel->adjSource() : parallel->adjTarget();
+							adjEntry adj = parallel->adjSource()->theNode() == v ?
+								parallel->adjSource() : parallel->adjTarget();
 							newEntireEmbedding[v].pushBack(adj);
 						}
 						adjEntry adj = e->adjTarget();
@@ -497,7 +497,7 @@ bool PlanarModule::doEmbed(
 				else if (!m_isParallel[trans])
 					// normal non-multi-edge
 				{
-					adjEntry adj = e->adjSource()->theNode() == v? 
+					adjEntry adj = e->adjSource()->theNode() == v?
 									e->adjSource() : e->adjTarget();
 					newEntireEmbedding[v].pushBack(adj);
 				}
@@ -520,8 +520,8 @@ bool PlanarModule::doEmbed(
 	{
 		while (!inLeaves[v].empty())
 		{
-			PlanarLeafKey<indInfo*>* L = inLeaves[v].popFrontRet();
-			delete L;	
+			PlanarLeafKey<IndInfo*>* L = inLeaves[v].popFrontRet();
+			delete L;
 		}
 	}
 
@@ -530,7 +530,7 @@ bool PlanarModule::doEmbed(
 
 // Used by doEmbed. Computes an entire embedding from an
 // upward embedding.
-void PlanarModule::entireEmbed(
+void BoothLueker::entireEmbed(
 	Graph &G,
 	NodeArray<SListPure<adjEntry> > &entireEmbedding,
 	NodeArray<SListIterator<adjEntry> > &adjMarker,
@@ -543,7 +543,7 @@ void PlanarModule::entireEmbed(
 	{
 		adjEntry a = *it;
 		edge e = a->theEdge();
-		adjEntry adj = (e->adjSource()->theNode() == v)? 
+		adjEntry adj = (e->adjSource()->theNode() == v)?
 						e->adjTarget() : e->adjSource();
 		node w = adj->theNode();
 		entireEmbedding[w].pushFront(adj);
@@ -554,7 +554,7 @@ void PlanarModule::entireEmbed(
 
 
 
-void PlanarModule::prepareParallelEdges(Graph &G)
+void BoothLueker::prepareParallelEdges(Graph &G)
 {
 	edge e;
 

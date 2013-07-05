@@ -1,44 +1,45 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2583 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief declaration of class MMVariableEmbeddingInserter
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
- 
+
 #ifdef _MSC_VER
 #pragma once
 #endif
@@ -161,8 +162,8 @@ private:
 	 * @param nsParent is the parent node split.
 	 */
 	void collectAnchorNodes(
-		node v, 
-		NodeSet &nodes, 
+		node v,
+		NodeSet &nodes,
 		const PlanRepExpansion::NodeSplit *nsParent) const;
 
 	/**
@@ -197,7 +198,9 @@ private:
 	 *
 	 * The possible start and end nodes of the insertion path have to be stored in
 	 * \a m_pSources and \a m_pTargets.
-	 * @param eip is assigned the insertion path (the crossed edges).
+	 * @param eip    is assigned the insertion path (the crossed edges).
+	 * @param vStart is assigned the start point of the insertion path.
+	 * @param vEnd   is assigned the end point of the insertion path.
 	 */
 	void insert(List<Crossing> &eip, AnchorNodeInfo &vStart, AnchorNodeInfo &vEnd);
 
@@ -218,33 +221,35 @@ private:
 		edge &eTgt);
 
 	node preparePath(
-		node vAnchor, 
-		adjEntry adjPath, 
+		node vAnchor,
+		adjEntry adjPath,
 		bool bOrigEdge,
 		node vOrig);
 
 	void findPseudos(
 		node vDummy,
-		adjEntry adjSrc, 
-		AnchorNodeInfo &infoSrc, 
+		adjEntry adjSrc,
+		AnchorNodeInfo &infoSrc,
 		SListPure<node> &pseudos);
 
 	void insertWithCommonDummy(
-		edge eOrig, 
-		node vDummy, 
-		node &src, 
+		edge eOrig,
+		node vDummy,
+		node &src,
 		node &tgt);
 
 	/**
 	 * \brief Implements vertex case of recursive path search in BC-tree.
 	 *
-	 * @param v is the node in the graph currently visited during BC-tree traversal.
+	 * @param v      is the node in the graph currently visited during BC-tree traversal.
 	 * @param parent is the parent block in DFS-traversal.
 	 * @param eip is (step-by-step) assigned the insertion path (crossed edges).
+	 * @param vStart is assigned the start point of \a eip.
+	 * @param vEnd   is assigned the end point of \a eip.
 	 */
 	bool dfsVertex(node v,
 		int parent,
-		List<Crossing> &eip, 
+		List<Crossing> &eip,
 		AnchorNodeInfo &vStart,
 		AnchorNodeInfo &vEnd);
 
@@ -255,6 +260,8 @@ private:
 	 * @param parent is the parent node in DFS-traversal.
 	 * @param repS is assigned the representative (nodein the graph) of a source node.
 	 * @param eip is (step-by-step) assigned the insertion path (crossed edges).
+	 * @param vStart is assigned the start point of \a eip.
+	 * @param vEnd   is assigned the end point of \a eip.
 	 */
 	bool dfsBlock(int i,
 		node parent,
@@ -268,10 +275,10 @@ private:
 	/**
 	 * \brief Computes optimal insertion path in block \a BC.
 	 *
-	 * @param BC is the block.
-	 * @param s is a node in \a BC representing a source node.
-	 * @param t is a node in \a BC representing a target node.
-	 * @param L is assigned the insertion path (the crossed edges).
+	 * @param BC      is the block.
+	 * @param L       is assigned the insertion path (the crossed edges).
+	 * @param srcInfo is assigned the start point of the insertion path.
+	 * @param tgtInfo is assigned the end point of the insertion path.
 	 */
 	void blockInsert(
 		Block &BC,

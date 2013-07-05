@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2554 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-06 11:39:38 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements class PlanarStraightLayout
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -43,11 +44,11 @@
 #include <ogdf/planarlayout/PlanarStraightLayout.h>
 #include <ogdf/basic/GraphCopy.h>
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/planarity/PlanarModule.h>
 #include <ogdf/augmentation/PlanarAugmentation.h>
 #include <ogdf/augmentation/PlanarAugmentationFix.h>
 #include <ogdf/module/ShellingOrderModule.h>
 #include <ogdf/planarlayout/BiconnectedShellingOrder.h>
+#include <ogdf/planarity/SimpleEmbedder.h>
 
 namespace ogdf {
 
@@ -59,6 +60,7 @@ PlanarStraightLayout::PlanarStraightLayout()
 
 	m_augmenter.set(new PlanarAugmentation);
 	m_computeOrder.set(new BiconnectedShellingOrder);
+	m_embedder.set(new SimpleEmbedder);
 }
 
 
@@ -120,10 +122,7 @@ void PlanarStraightLayout::doCall(
 		m_augmenter.get().call(GC);
 
 		// embed augmented graph
-		PlanarModule pm;
-		bool isPlanar = pm.planarEmbed(GC);
-		if(isPlanar == false)
-			OGDF_THROW_PARAM(PreconditionViolatedException, pvcPlanar);
+		m_embedder.get().call(GC,adjExternal);
 	}
 
 	// compute shelling order with shelling order module
@@ -179,7 +178,7 @@ void PlanarStraightLayout::computeCoordinates(const Graph &G,
 		if (i > 1)
 			prev[V1[i]] = V1[i-1];
 	}
-    prev[v1] = next[v2] = 0;
+	prev[v1] = next[v2] = 0;
 
 	// process shelling order from bottom to top
 	const int n = lmc.length();

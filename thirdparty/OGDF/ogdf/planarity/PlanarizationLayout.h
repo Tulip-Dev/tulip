@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2583 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class PlanarizationLayout.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -74,11 +75,11 @@ namespace ogdf {
  *     diagram; call with UMLGraph); a simplified version is provided by
  *     simpleCall.
  *   - Calling the algorithm for simultaneous drawing.
- * 
+ *
  * If the planarization layout algorithm shall be used for simultaneous drawing,
  * you need to define the different subgraphs by setting the <i>subgraphs</i>
  * option.
- * 
+ *
  * The implementation used in PlanarizationLayout is based on the following
  * publication:
  *
@@ -122,7 +123,7 @@ namespace ogdf {
  *     <td><i>inserter</i><td>EdgeInsertionModule<td>FixedEmbeddingInserter
  *     <td>The module used for edge insertion which is applied in the second
  *     step of the planarization method. The edges not contained in the planar
- *     subgraph are re-inserted one-by-one, each with as few crossings as possible. 
+ *     subgraph are re-inserted one-by-one, each with as few crossings as possible.
  *   </tr><tr>
  *     <td><i>embedder</i><td>EmbedderModule<td>SimpleEmbedder
  *     <td>The graph embedding algorithm applied after the crossing minimization
@@ -134,7 +135,6 @@ namespace ogdf {
  *   </tr><tr>
  *     <td><i>packer</i><td>CCLayoutPackModule<td>TileToRowsCCPacker
  *     <td>The packer module used for arranging connected components.
- *   </tr><tr>
  *   </tr>
  * </table>
  */
@@ -173,17 +173,17 @@ public:
 		//this simple call method does not care about any special treatments
 		//of subgraphs, layout informations etc., therefore we save the
 		//option status and set them back later on
-		//cliques are only handled for UMLGraphs, so it is save to 
+		//cliques are only handled for UMLGraphs, so it is save to
 		//only set this value here and not in the GraphAtrtibutes interface method.
 		bool l_saveCliqueHandling = m_processCliques;
 		m_processCliques = false;
 
 		//---------------------------------------------------
 		// preprocessing: insert a merger for generalizations
-		
+
 		preProcess(umlGraph);
 		umlGraph.insertGenMergers();
-		
+
 		doSimpleCall(&umlGraph);
 
 		umlGraph.undoGenMergers();
@@ -229,7 +229,7 @@ public:
 
 	/**
 	 * \brief Returns the current setting of option pageRatio.
-	 * 
+	 *
 	 * This option specifies the desired ration width / height of the computed
 	 * layout. It is currently only used for packing connected components.
 	 */
@@ -280,11 +280,11 @@ public:
 	{m_planarLayouter.get().setOptions(ops);}
 
 	//draw hierarchy nodes corresponding to their level
-	void alignSons(bool b) 
+	void alignSons(bool b)
 	{
 		int opts = m_planarLayouter.get().getOptions();
 
-		if (b) m_planarLayouter.get().setOptions(opts | umlOpAlign); 
+		if (b) m_planarLayouter.get().setOptions(opts | umlOpAlign);
 		else  m_planarLayouter.get().setOptions(opts & ~umlOpAlign);
 	}
 
@@ -333,7 +333,7 @@ public:
 	 * The planar layout algorithm is used to compute a planar layout
 	 * of the planarized representation resulting from the crossing
 	 * minimization step. Planarized representation means that edge crossings
-	 * are replaced by dummy nodes of degree four, so the actual layout 
+	 * are replaced by dummy nodes of degree four, so the actual layout
 	 * algorithm obtains a planar graph as input. By default, the planar
 	 * layout algorithm produces an orthogonal drawing.
 	 */
@@ -375,14 +375,14 @@ protected:
 	void getFixationDistance(node startNode, HashArray<int, int> &distance,
 		const NodeArray<bool> &fixedNodes);
 	//reembeds already planarized PG in case of errors
-	void reembed(PlanRepUML &PG, int ccNumber, bool l_align = false, 
+	void reembed(PlanRepUML &PG, int ccNumber, bool l_align = false,
 		bool l_gensExist = false);
 
 	virtual void preProcess(UMLGraph &UG);
 	virtual void postProcess(UMLGraph& UG); //redo changes at original
 
 	//collect and store nodes around center in correct order
-	void fillAdjNodes(List<node>& adjNodes, PlanRepUML& PG, node centerNode, 
+	void fillAdjNodes(List<node>& adjNodes, PlanRepUML& PG, node centerNode,
 		NodeArray<bool>& isClique, Layout& drawing);
 
 	void arrangeCCs(PlanRep &PG, GraphAttributes &GA, Array<DPoint> &boundingBox);
@@ -438,7 +438,7 @@ public:
 		else
 			return 0;
 	}
-	
+
 	OGDF_AUGMENT_COMPARER(node)
 };
 

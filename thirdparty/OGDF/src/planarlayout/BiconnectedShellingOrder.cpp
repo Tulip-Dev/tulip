@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements class BiconnectedShellingOrder which computes
  * a shelling order for a biconnected planar graph.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -46,7 +47,7 @@
 #include <ogdf/basic/FaceArray.h>
 #include <ogdf/basic/SList.h>
 
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/simple_graph_alg.h>
 
 
@@ -109,18 +110,18 @@ struct PairFaceItem
 // defines (as shortcuts)
 // initialization of a variable
 #define INIT_VAR(x,var,val) \
-   var[x] = (val);          \
-   setUpdate(x);
+	var[x] = (val);          \
+	setUpdate(x);
 
 // decrement of a variable
 #define DEC_VAR(x,var)     \
-   --var[x];               \
-   setUpdate(x);
+	--var[x];               \
+	setUpdate(x);
 
 // increment of a variable
 #define INC_VAR(x,var)     \
-   ++var[x];               \
-   setUpdate(x);
+	++var[x];               \
+	setUpdate(x);
 
 
 //---------------------------------------------------------
@@ -174,7 +175,7 @@ public:
 	}
 
 	// returns true <=> v is a possible next node, i.e.
-	//   cutf(v) <= 1, cutf(v) = virte(v), numsf(v) = 0 and deg(v) >= 3 
+	//   cutf(v) <= 1, cutf(v) = virte(v), numsf(v) = 0 and deg(v) >= 3
 	bool isPossNode(node v) {  // precond.: v on C_k'
 		return (m_onBase[v] == false && m_cutf[v] <= 1 &&
 			m_cutf[v] == virte(v) && m_numsf[v] == 0 && m_deg[v] >= 3);
@@ -257,7 +258,7 @@ private:
 		adjEntry &adjRight);
 
 	adjEntry findMaxBaseChain(ConstCombinatorialEmbedding &E,
-		face f, 
+		face f,
 		int &length);
 
 	const Graph                 *m_pGraph;     // the graph
@@ -311,7 +312,7 @@ private:
 	ListPure<face> m_possFaces; // faces with outv(f) >= 3 und outv(f) = oute(f)+1
 	ListPure<node> m_possNodes; // nodes with cutf(v) <= 1, cutf(v) = virte(v), numsf(v) = 0 and deg(v) >= 3
 	ListPure<node> m_possVirt;  // node v denotes virtual edge e = (v,next[v]), that satisfies
-			    			// (deg(v) = 2 and v != vLeft) or (deg(next(v)) = 2 and next(v) != vRight)
+								// (deg(v) = 2 and v != vLeft) or (deg(next(v)) = 2 and next(v) != vRight)
 
 	ListPure <node> m_updateNodes; // list of nodes to be updated
 	SListPure<face> m_updateFaces; // list of faces to be updated
@@ -327,10 +328,10 @@ void ComputeBicOrder::print()
 	cout << "contour:\n";
 	node v;
 	for(v = m_vLeft; v != 0; v = m_next[v])
-		cout << " " << v << "[" << m_prev[v] << "," << m_prevPred[v] << 
+		cout << " " << v << "[" << m_prev[v] << "," << m_prevPred[v] <<
 			" : " << m_next[v] << "," << m_nextSucc[v] <<
 			"; " << m_virtEdge[v] << "]\n";
-	
+
 	cout << "node infos:\n";
 	forall_nodes(v,*m_pGraph)
 		cout << v << ": deg = " << m_deg[v] << ", cutf = " << m_cutf[v] <<
@@ -596,7 +597,7 @@ void ComputeBicOrder::initVInFStruct(const ConstCombinatorialEmbedding &E)
 	{
 		if (!smallV.empty()) {
 			v = smallV.popFrontRet();
-			
+
 			ListIterator<PairFaceItem> it;
 			for(it = m_facesOf[v].begin(); it.valid(); ++it) {
 				PairFaceItem f_it = *it;
@@ -951,7 +952,7 @@ void ComputeBicOrder::removeNextNode(ShellingOrderSet &V)
 	SListConstIterator<face> itF;
 	for(itF = L.begin(); itF.valid(); ++itF)
 		--m_outv[*itF];
-	
+
 	SListPure<node> L_v;
 	getAdjNodes(m_nextV, L_v);
 
@@ -1223,7 +1224,7 @@ struct QType
 
 
 adjEntry ComputeBicOrder::findMaxBaseChain(ConstCombinatorialEmbedding &E,
-	face f, 
+	face f,
 	int &length)
 {
 	const Graph &G = (const Graph &) E;

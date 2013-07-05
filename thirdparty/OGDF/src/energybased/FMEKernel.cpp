@@ -1,39 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of FME kernel.
- * 
+ *
  * \author Martin Gronemann
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2009
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -46,12 +49,13 @@ namespace ogdf {
 
 #ifdef OGDF_FME_KERNEL_USE_SSE_DIRECT
 
-inline void eval_direct_aligned_SSE(float* ptr_x1, float* ptr_y1, float* ptr_s1, float* ptr_fx1, float* ptr_fy1, size_t n1,
-								    float* ptr_x2, float* ptr_y2, float* ptr_s2, float* ptr_fx2, float* ptr_fy2, size_t n2)
+inline void eval_direct_aligned_SSE(
+	float* ptr_x1, float* ptr_y1, float* ptr_s1, float* ptr_fx1, float* ptr_fy1, size_t n1,
+	float* ptr_x2, float* ptr_y2, float* ptr_s2, float* ptr_fx2, float* ptr_fy2, size_t n2)
 {
 	for (__uint32 i=0; i < n1; i+=4)
 	{
-		// register for i 
+		// register for i
 		__m128 x      = _mm_load_ps( ptr_x1 + i );
 		__m128 y      = _mm_load_ps( ptr_y1 + i );
 		__m128 s	  = _mm_load_ps( ptr_s1 + i );
@@ -71,7 +75,7 @@ inline void eval_direct_aligned_SSE(float* ptr_x1, float* ptr_y1, float* ptr_s1,
 			s_shuffled		= _mm_load_ps( ptr_s2 +j );
 			fx_sum_shuffled	= _mm_load_ps( ptr_fx2+j );
 			fy_sum_shuffled	= _mm_load_ps( ptr_fy2+j );
-	
+
 			for (int k=0;k<4;k++)
 			{
 				__m128 dx = _mm_sub_ps(x, x_shuffled);
@@ -94,15 +98,15 @@ inline void eval_direct_aligned_SSE(float* ptr_x1, float* ptr_y1, float* ptr_s1,
 				s_shuffled		= _mm_shuffle_ps(s_shuffled,  s_shuffled,  _MM_SHUFFLE(0,3,2,1));
 				fx_sum_shuffled = _mm_shuffle_ps(fx_sum_shuffled, fx_sum_shuffled, _MM_SHUFFLE(0,3,2,1));
 				fy_sum_shuffled = _mm_shuffle_ps(fy_sum_shuffled, fy_sum_shuffled, _MM_SHUFFLE(0,3,2,1));
-			};
+			}
 			// note: after shuffling 4 times we are back to original order
 			_mm_store_ps(ptr_fx2 + j, fx_sum_shuffled);
 			_mm_store_ps(ptr_fy2 + j, fy_sum_shuffled);
-		};
+		}
 		_mm_store_ps( ptr_fx1 + i, fx_sum );
 		_mm_store_ps( ptr_fy1 + i, fy_sum );
-	};
-};
+	}
+}
 
 //! kernel function to evaluate forces between 4 points with coords x, y (16 byte aligned) directly. result is stored in fx, fy
 inline void eval_direct_aligned_SSE(float* ptr_x, float* ptr_y, float* ptr_s, float* ptr_fx, float* ptr_fy)
@@ -157,8 +161,8 @@ inline void eval_direct_aligned_SSE(float* ptr_x, float* ptr_y, float* ptr_s, fl
 	fx_A = _mm_sub_ps(fx_A, fx_AB_shuffled);
 	fy_A = _mm_sub_ps(fy_A, fy_AB_shuffled);
 
-	fx_A = _mm_add_ps(fx_A, fx_AC);  
-	fy_A = _mm_add_ps(fy_A, fy_AC);  
+	fx_A = _mm_add_ps(fx_A, fx_AC);
+	fy_A = _mm_add_ps(fy_A, fy_AC);
 
 	_mm_store_ps(ptr_fx, fx_A);
 	_mm_store_ps(ptr_fy, fy_A);
@@ -181,12 +185,12 @@ inline void eval_direct_aligned_SSE(float* ptr_x, float* ptr_y, float* ptr_s, fl
 	__m128 dy	= _mm_sub_ps( y, y_shuffled );								// dy = y_A - y_B
 	__m128 s_sum = _mm_add_ps(s, s_shuffled);
 	__m128 f  = _MM_COMPUTE_FORCE(dx,dy,s_sum);
-//	__m128 dsq	= _mm_add_ps( _mm_mul_ps( dx, dx ), 
+//	__m128 dsq	= _mm_add_ps( _mm_mul_ps( dx, dx ),
 //							  _mm_mul_ps( dy, dy ) );						// dsq = (dx*dx + dy*dy)
 //	__m128 f	= _mm_div_ps( _mm_add_ps( s, s_shuffled ), dsq );			// f = (s_A+s_B)/d^2
-	__m128 fx	= _mm_mul_ps( dx, f ); 	// ( fx(a,b), fx(b,c), fx(c,d), fx(d,a) )	
-	__m128 fy	= _mm_mul_ps( dy, f );	// ( fy(a,b), fy(b,c), fy(c,d), fy(d,a) )									
-	
+	__m128 fx	= _mm_mul_ps( dx, f ); 	// ( fx(a,b), fx(b,c), fx(c,d), fx(d,a) )
+	__m128 fy	= _mm_mul_ps( dy, f );	// ( fy(a,b), fy(b,c), fy(c,d), fy(d,a) )
+
 	fx_sum = _mm_add_ps( fx_sum, _mm_sub_ps( fx, _mm_shuffle_ps( fx, fx, _MM_SHUFFLE(2,1,0,3) ) ) ); // ( fx(a,b), fx(b,c), fx(c,d), fx(d,a) ) - ( fx(d,a), fx(a,b), fx(b,c), fx(c,d) )
 	fy_sum = _mm_add_ps( fy_sum, _mm_sub_ps( fy, _mm_shuffle_ps( fy, fy, _MM_SHUFFLE(2,1,0,3) ) ) ); // ( fy(a,b), fy(b,c), fy(c,d), fy(d,a) ) - ( fy(d,a), fy(a,b), fy(b,c), fy(c,d) )
 
@@ -198,14 +202,14 @@ inline void eval_direct_aligned_SSE(float* ptr_x, float* ptr_y, float* ptr_s, fl
 	// A x B = ( f(a,c), f(b,d), f(c,a), f(d,b) )
 	dx = _mm_sub_ps( x, x_shuffled );										// dx = x_A - x_B
 	dy = _mm_sub_ps( y, y_shuffled );										// dy = y_A - y_B
-//	dsq = _mm_add_ps( _mm_mul_ps( dx, dx ), 
+//	dsq = _mm_add_ps( _mm_mul_ps( dx, dx ),
 //					  _mm_mul_ps( dy, dy ) );								// dsq = (dx*dx + dy*dy)
 //	f = _mm_div_ps( _mm_add_ps( s, s_shuffled ), dsq );						// f = (s_A+s_B)/d^2
 	s_sum = _mm_add_ps(s, s_shuffled);
 	f  = _MM_COMPUTE_FORCE(dx,dy,s_sum);
 	fx = _mm_mul_ps( dx, f );												// fx(a,c), fx(b,d), fx(c,a), fx(d,b)
 	fy = _mm_mul_ps( dy, f );												// fy(a,c), fy(b,d), fy(c,a), fy(d,b)
-	
+
 	fx_sum = _mm_add_ps(fx_sum, fx);  // ( fx(a,c), fx(b,d), fx(c,a), fx(d,b) )
 	fy_sum = _mm_add_ps(fy_sum, fy);  // ( fy(a,c), fy(b,d), fy(c,a), fy(d,b) )
 
@@ -216,13 +220,13 @@ inline void eval_direct_aligned_SSE(float* ptr_x, float* ptr_y, float* ptr_s, fl
 	// f(d) = f(d,a) - f(c,d) + f(d,b) = f(d,a) + f(d,c) + f(d,b)
 	_mm_store_ps( ptr_fx, fx_sum );
 	_mm_store_ps( ptr_fy, fy_sum );
-};
+}
 
 inline void eval_direct_aligned_SSE(float* ptr_x, float* ptr_y, float* ptr_s, float* ptr_fx, float* ptr_fy, size_t n)
 {
 	for (__uint32 i=0; i < n; i+=4)
 	{
-		// register for i 
+		// register for i
 		__m128 x      = _mm_load_ps( ptr_x + i );
 		__m128 y      = _mm_load_ps( ptr_y + i );
 		__m128 s	  = _mm_load_ps( ptr_s + i );
@@ -239,14 +243,14 @@ inline void eval_direct_aligned_SSE(float* ptr_x, float* ptr_y, float* ptr_s, fl
 		// begin copy paste from above
 		__m128 dx	= _mm_sub_ps( x, x_shuffled );								// dx = x_A - x_B
 		__m128 dy	= _mm_sub_ps( y, y_shuffled );								// dy = y_A - y_B
-//		__m128 dsq	= _mm_add_ps( _mm_mul_ps( dx, dx ), 
+//		__m128 dsq	= _mm_add_ps( _mm_mul_ps( dx, dx ),
 //								  _mm_mul_ps( dy, dy ) );						// dsq = (dx*dx + dy*dy)
 //		__m128 f	= _mm_div_ps( _mm_add_ps( s, s_shuffled ), dsq );			// f = (s_A+s_B)/d^2
 		__m128 s_sum = _mm_add_ps(s, s_shuffled);
 		__m128 f    = _MM_COMPUTE_FORCE(dx,dy,s_sum);
-		__m128 fx	= _mm_mul_ps( dx, f ); 	// ( fx(a,b), fx(b,c), fx(c,d), fx(d,a) )	
-		__m128 fy	= _mm_mul_ps( dy, f );	// ( fy(a,b), fy(b,c), fy(c,d), fy(d,a) )									
-		
+		__m128 fx	= _mm_mul_ps( dx, f ); 	// ( fx(a,b), fx(b,c), fx(c,d), fx(d,a) )
+		__m128 fy	= _mm_mul_ps( dy, f );	// ( fy(a,b), fy(b,c), fy(c,d), fy(d,a) )
+
 		fx_sum = _mm_add_ps( fx_sum, _mm_sub_ps( fx, _mm_shuffle_ps( fx, fx, _MM_SHUFFLE(2,1,0,3) ) ) ); // ( fx(a,b), fx(b,c), fx(c,d), fx(d,a) ) - ( fx(d,a), fx(a,b), fx(b,c), fx(c,d) )
 		fy_sum = _mm_add_ps( fy_sum, _mm_sub_ps( fy, _mm_shuffle_ps( fy, fy, _MM_SHUFFLE(2,1,0,3) ) ) ); // ( fy(a,b), fy(b,c), fy(c,d), fy(d,a) ) - ( fy(d,a), fy(a,b), fy(b,c), fy(c,d) )
 
@@ -256,16 +260,16 @@ inline void eval_direct_aligned_SSE(float* ptr_x, float* ptr_y, float* ptr_s, fl
 
 		dx = _mm_sub_ps( x, x_shuffled );										// dx = x_A - x_B
 		dy = _mm_sub_ps( y, y_shuffled );										// dy = y_A - y_B
-//		dsq = _mm_add_ps( _mm_mul_ps( dx, dx ), 
+//		dsq = _mm_add_ps( _mm_mul_ps( dx, dx ),
 //						  _mm_mul_ps( dy, dy ) );								// dsq = (dx*dx + dy*dy)
 //		f = _mm_div_ps( _mm_add_ps( s, s_shuffled ), dsq );						// f = (s_A+s_B)/d^2
 		s_sum = _mm_add_ps(s, s_shuffled);
 		f  = _MM_COMPUTE_FORCE(dx,dy,s_sum);
 		fx = _mm_mul_ps( dx, f );												// fx(a,c), fx(b,d), fx(c,a), fx(d,b)
 		fy = _mm_mul_ps( dy, f );												// fy(a,c), fy(b,d), fy(c,a), fy(d,b)
-		
+
 		fx_sum = _mm_add_ps(fx_sum, fx);										// ( fx(a,c), fx(b,d), fx(c,a), fx(d,b) )
-		fy_sum = _mm_add_ps(fy_sum, fy); 
+		fy_sum = _mm_add_ps(fy_sum, fy);
 
 		// end copy paste from above
 		for (__uint32 j=i+4; j < n; j+=4)
@@ -275,7 +279,7 @@ inline void eval_direct_aligned_SSE(float* ptr_x, float* ptr_y, float* ptr_s, fl
 			s_shuffled		= _mm_load_ps( ptr_s +j );
 			fx_sum_shuffled	= _mm_load_ps( ptr_fx+j );
 			fy_sum_shuffled	= _mm_load_ps( ptr_fy+j );
-	
+
 			for (int k=0;k<4;k++)
 			{
 				dx = _mm_sub_ps(x, x_shuffled);
@@ -298,15 +302,15 @@ inline void eval_direct_aligned_SSE(float* ptr_x, float* ptr_y, float* ptr_s, fl
 				s_shuffled		= _mm_shuffle_ps(s_shuffled,  s_shuffled,  _MM_SHUFFLE(0,3,2,1));
 				fx_sum_shuffled = _mm_shuffle_ps(fx_sum_shuffled, fx_sum_shuffled, _MM_SHUFFLE(0,3,2,1));
 				fy_sum_shuffled = _mm_shuffle_ps(fy_sum_shuffled, fy_sum_shuffled, _MM_SHUFFLE(0,3,2,1));
-			};
+			}
 			// note: after shuffling 4 times we are back to original order
 			_mm_store_ps(ptr_fx + j, fx_sum_shuffled);
 			_mm_store_ps(ptr_fy + j, fy_sum_shuffled);
-		};
+		}
 		_mm_store_ps( ptr_fx + i, fx_sum );
 		_mm_store_ps( ptr_fy + i, fy_sum );
-	};
-};
+	}
+}
 
 void eval_direct_fast(float* x, float* y, float* s, float* fx, float* fy, size_t n)
 {
@@ -327,7 +331,7 @@ void eval_direct_fast(float* x, float* y, float* s, float* fx, float* fy, size_t
 		eval_direct(x+numA, y+numA, s+numA, fx+numA, fy+numA, numB,
 					x, y, s, fx, fy, numA);
 		// eval AxC
-		eval_direct(x, y, s, fx, fy, numA, 
+		eval_direct(x, y, s, fx, fy, numA,
 					x+numAB, y+numAB, s+numAB, fx+numAB, fy+numAB, numC);
 		// eval BxB
 		//eval_direct(x+numA, y+numA, s+numA, fx+numA, fy+numA, numB);
@@ -341,8 +345,8 @@ void eval_direct_fast(float* x, float* y, float* s, float* fx, float* fy, size_t
 	} else
 	{
 		eval_direct(x, y, s, fx, fy, n);
-	};
-};
+	}
+}
 //! kernel function to evaluate forces between two sets of points with coords x1, y1 (x2, y2) directly. result is stored in fx1, fy1 (fx2, fy2
 void eval_direct_fast(float* x1, float* y1, float* s1, float* fx1, float* fy1, size_t n1,
 					 float* x2, float* y2, float* s2, float* fx2, float* fy2, size_t n2)
@@ -358,7 +362,7 @@ void eval_direct_fast(float* x1, float* y1, float* s1, float* fx1, float* fy1, s
 		const size_t numA1 = fence11 - ptr1;
 		const size_t numA2 = fence21 - ptr2;
 		const size_t numB1 = fence12 - fence11;
-		const size_t numB2 = fence22 - fence21;	
+		const size_t numB2 = fence22 - fence21;
 		const size_t numC1 = (ptr1+n1) - fence12;
 		const size_t numC2 = (ptr2+n2) - fence22;
 		const size_t numAB1 = fence12 - ptr1;
@@ -386,8 +390,8 @@ void eval_direct_fast(float* x1, float* y1, float* s1, float* fx1, float* fy1, s
 	} else
 	{
 		eval_direct(x1, y1, s1, fx1, fy1, n1, x2, y2, s2, fx2, fy2, n2);
-	};
-};
+	}
+}
 #endif
 
 
@@ -396,14 +400,14 @@ inline __w64 int align_16_begin(T* ptr)
 {
 	return align_16_next_ptr(ptr) - ptr;
 	//return ((T*)((((int)ptr) + 15) &~ 0x0F)) - ptr;
-};
+}
 
 template<typename T, typename N>
 inline __w64 int align_16_end(T* ptr, const N n)
 {
 	return (n) - ( (ptr+n) - align_16_prev_ptr( ptr+n ) );
 	//return ((T*)(((int)(ptr + n)) &~ 0x0F)) - ptr;
-};*/
+}*/
 
 //
 //  ______________________
@@ -436,7 +440,7 @@ inline __w64 int align_16_end(T* ptr, const N n)
 		eval_direct(x+numA, y+numA, s+numA, fx+numA, fy+numA, numB,
 					x, y, s, fx, fy, numA);
 		// eval AxC
-		eval_direct(x, y, s, fx, fy, numA, 
+		eval_direct(x, y, s, fx, fy, numA,
 					x+numAB, y+numAB, s+numAB, fx+numAB, fy+numAB, numC);
 		// eval BxB
 		//eval_direct(x+numA, y+numA, s+numA, fx+numA, fy+numA, numB);
@@ -462,9 +466,9 @@ inline __w64 int align_16_end(T* ptr, const N n)
 				fy[i] += dy*f;
 				fx[j] -= dx*f;
 				fy[j] -= dy*f;
-			};
-		};
-	};*/
+			}
+		}
+	}*/
 
 /*	//const void* start16 = (void*)(((int)x + 15) &~ 0x0F);
 	//const void* end16 = (void*)(((int)(y + n)) &~ 0x0F);
@@ -487,8 +491,8 @@ inline __w64 int align_16_end(T* ptr, const N n)
 			fx[i] += dx*f;
 			fy[i] += dy*f;
 			fx[j] -= dx*f;
-			fy[j] -= dy*f;		
-		};
+			fy[j] -= dy*f;
+		}
 		// i beginning (not 16 byte aligned)
 		// j 16 byte aligned blocks
 		for ( ; j < (i+1+align_16_end(inner_ptr, n-i)); j += 4)
@@ -502,15 +506,15 @@ inline __w64 int align_16_end(T* ptr, const N n)
 			Vec4f fxv(dx*f);
 			Vec4f fyv(dy*f);
 			Vec4f fx_j(fx+j);
-			Vec4f fy_j(fy+j);		
+			Vec4f fy_j(fy+j);
 			fx[i] += fxv.hsum();
 			fy[i] += fyv.hsum();
 			fx_j -= fxv;
 			fy_j -= fyv;
-			
+
 			fx_j.store(fx+j);
 			fy_j.store(fy+j);
-		};
+		}
 		// i beginning (not 16 byte aligned)
 		// j end (not 16 byte aligned)
 		for ( ; j < (n); j++)
@@ -524,8 +528,8 @@ inline __w64 int align_16_end(T* ptr, const N n)
 			fy[i] += dy*f;
 			fx[j] -= dx*f;
 			fy[j] -= dy*f;
-		};	
-	};
+		}
+	}
 	// i 16 byte aligned blocks
 	for ( ; i < (align_16_end(x, n)); i += 4)
 	{
@@ -553,8 +557,8 @@ inline __w64 int align_16_end(T* ptr, const N n)
 			fx_i += fxv;
 			fy_i += fyv;
 			fx[j] -= fxv.hsum();
-			fy[j] -= fyv.hsum();	
-		};
+			fy[j] -= fyv.hsum();
+		}
 		// i 16 byte aligned blocks
 		// j 16 byte aligned blocks
 		for ( ; j < i+1+align_16_end(inner_ptr, n-i); j += 4)
@@ -576,15 +580,15 @@ inline __w64 int align_16_end(T* ptr, const N n)
 
 			Vec4f fxv(dx*f);
 			Vec4f fyv(dy*f);
-				
+
 			fx_i += fxv;
 			fy_i += fyv;
 			fx_j -= fxv;
 			fy_j -= fyv;
-			
+
 			fx_j.store(fx+j);
 			fy_j.store(fy+j);
-		};
+		}
 		// i 16 byte aligned blocks
 		// j end (not 16 byte aligned)
 		for ( ; j < (n); j++)
@@ -599,11 +603,11 @@ inline __w64 int align_16_end(T* ptr, const N n)
 			fx_i += fxv;
 			fy_i += fyv;
 			fx[j] -= fxv.hsum();
-			fy[j] -= fyv.hsum();	
-		};
+			fy[j] -= fyv.hsum();
+		}
 		fx_i.store(fx+i);
 		fy_i.store(fy+i);
-	};
+	}
 	// i end (not 16 byte aligned)
 	for ( ; i < (n); i++)
 	{
@@ -624,9 +628,9 @@ inline __w64 int align_16_end(T* ptr, const N n)
 			fx[i] += dx*f;
 			fy[i] += dy*f;
 			fx[j] -= dx*f;
-			fy[j] -= dy*f;		
-		};
-		
+			fy[j] -= dy*f;
+		}
+
 		//std::cout << "after first loop" << std::endl;
 		// i beginning (not 16 byte aligned)
 		// j 16 byte aligned blocks
@@ -641,15 +645,15 @@ inline __w64 int align_16_end(T* ptr, const N n)
 			Vec4f fxv(dx*f);
 			Vec4f fyv(dy*f);
 			Vec4f fx_j(fx+j);
-			Vec4f fy_j(fy+j);		
+			Vec4f fy_j(fy+j);
 			fx[i] += fxv.hsum();
 			fy[i] += fyv.hsum();
 			fx_j -= fxv;
 			fy_j -= fyv;
-			
+
 			fx_j.store(fx+j);
 			fy_j.store(fy+j);
-		};
+		}
 		// i beginning (not 16 byte aligned)
 		// j end (not 16 byte aligned)
 		for ( ; j < (n); j++)
@@ -663,8 +667,8 @@ inline __w64 int align_16_end(T* ptr, const N n)
 			fy[i] += dy*f;
 			fx[j] -= dx*f;
 			fy[j] -= dy*f;
-		};	
-	};
+		}
+	}
 	} else
 	{
 		for (__uint32 i=0; i < n; i++)
@@ -679,14 +683,14 @@ inline __w64 int align_16_end(T* ptr, const N n)
 				fy[i] += dy*f;
 				fx[j] -= dx*f;
 				fy[j] -= dy*f;
-			};
-		};
-	};*/
-//};
+			}
+		}
+	}*/
+//}
 
 
 
-void fast_multipole_l2p(double* localCoeffiecients, __uint32 numCoeffiecients, double centerX, double centerY, 
+void fast_multipole_l2p(double* localCoeffiecients, __uint32 numCoeffiecients, double centerX, double centerY,
 				float x, float y, float q, float& fx, float&fy)
 {
 	double* source_coeff = localCoeffiecients; //+ source*(m_numCoeff << 1);
@@ -698,8 +702,8 @@ void fast_multipole_l2p(double* localCoeffiecients, __uint32 numCoeffiecients, d
 	{
 		ak.load(source_coeff+(k<<1));
 		res += ak*delta_k*(double)k;
-		delta_k *= delta;		
-	};
+		delta_k *= delta;
+	}
 	res = res.conj();
 	double resTemp[2];
 	res.store_unaligned(resTemp);
@@ -710,7 +714,7 @@ void fast_multipole_l2p(double* localCoeffiecients, __uint32 numCoeffiecients, d
 	fx -= (float)resTemp[0]*q;
 	fy -= (float)resTemp[1]*q;
 #endif
-};
+}
 
 
 void fast_multipole_p2m(double* mulitCoeffiecients, __uint32 numCoeffiecients, double centerX, double centerY,
@@ -731,7 +735,7 @@ void fast_multipole_p2m(double* mulitCoeffiecients, __uint32 numCoeffiecients, d
 		ak -= delta_k*(q/(double)k);
 		ak.store(receiv_coeff+(k<<1));
 		delta_k *= delta;
-	};
-};
+	}
+}
 
 }

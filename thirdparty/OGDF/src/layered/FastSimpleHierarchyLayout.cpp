@@ -1,21 +1,22 @@
 /*
- * $Revision: 2303 $
+ * $Revision: 2552 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 09:41:00 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief Implementation of the FastSimpleHierarchyLayout
  * (third phase of sugiyama)
  *
- * \author Till Schaefer
+ * \author Till Sch&auml;fer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -53,19 +54,19 @@
 
 namespace ogdf {
 
-FastSimpleHierarchyLayout::FastSimpleHierarchyLayout(int minXSep, int ySep) 
-	: m_minXSep(minXSep), m_ySep(ySep) 
+FastSimpleHierarchyLayout::FastSimpleHierarchyLayout(int minXSep, int ySep)
+	: m_minXSep(minXSep), m_ySep(ySep)
 {
 	m_balanced = true;
 }
-	
-FastSimpleHierarchyLayout::FastSimpleHierarchyLayout(bool downward, bool leftToRight, int minXSep, int ySep) 
-	: m_downward(downward), m_leftToRight(leftToRight), m_minXSep(minXSep), m_ySep(ySep)
+
+FastSimpleHierarchyLayout::FastSimpleHierarchyLayout(bool downward, bool leftToRight, int minXSep, int ySep)
+	: m_minXSep(minXSep), m_ySep(ySep), m_downward(downward), m_leftToRight(leftToRight)
 {
 	m_balanced = false;
 }
 
-FastSimpleHierarchyLayout::FastSimpleHierarchyLayout(const FastSimpleHierarchyLayout &fshl) 
+FastSimpleHierarchyLayout::FastSimpleHierarchyLayout(const FastSimpleHierarchyLayout &fshl)
 {
 	m_minXSep = fshl.m_minXSep;
 	m_ySep = fshl.m_ySep;
@@ -78,7 +79,7 @@ FastSimpleHierarchyLayout::FastSimpleHierarchyLayout(const FastSimpleHierarchyLa
 FastSimpleHierarchyLayout::~FastSimpleHierarchyLayout() { }
 
 
-FastSimpleHierarchyLayout &FastSimpleHierarchyLayout::operator=(const FastSimpleHierarchyLayout &fshl) 
+FastSimpleHierarchyLayout &FastSimpleHierarchyLayout::operator=(const FastSimpleHierarchyLayout &fshl)
 {
 	m_minXSep = fshl.m_minXSep;
 	m_ySep = fshl.m_ySep;
@@ -90,13 +91,13 @@ FastSimpleHierarchyLayout &FastSimpleHierarchyLayout::operator=(const FastSimple
 }
 
 
-void FastSimpleHierarchyLayout::doCall(const Hierarchy& H, GraphCopyAttributes &AGC) 
+void FastSimpleHierarchyLayout::doCall(const Hierarchy& H, GraphCopyAttributes &AGC)
 {
 	const GraphCopy& GC = H;
 	node v;
 	NodeArray<node> align(GC);
 	NodeArray<node> root(GC);
-	
+
 	if (m_balanced) {
 		// the x positions; x=-1 <=> x is undefined
 		NodeArray<int> x[4];
@@ -104,7 +105,7 @@ void FastSimpleHierarchyLayout::doCall(const Hierarchy& H, GraphCopyAttributes &
 		int min[4];
 		int max[4];
 		int minWidthLayout = 0;
-		
+
 		// initializing
 		for (int i = 0; i < 4; i++) {
 			min[i] = std::numeric_limits<int>::max();
@@ -119,13 +120,13 @@ void FastSimpleHierarchyLayout::doCall(const Hierarchy& H, GraphCopyAttributes &
 				horizontalCompactation(align, H, root, x[2 * downward + leftToRight], leftToRight == 0, downward == 0);
 			}
 		}
-		
-		/* 
+
+		/*
 		* - calc min/max x coordinate for each layout
 		* - calc x-width for each layout
 		* - find the layout with the minimal width
 		*/
-		for (int i = 0; i < 4; i++) { 
+		for (int i = 0; i < 4; i++) {
 			forall_nodes(v, GC) {
 				if (min[i] > x[i][v]) {
 					min[i] = x[i][v];
@@ -139,14 +140,14 @@ void FastSimpleHierarchyLayout::doCall(const Hierarchy& H, GraphCopyAttributes &
 				minWidthLayout = i;
 			}
 		}
-		
+
 		/*
 		* shift the layout so that they align with the minimum width layout
 		* - leftToRight: align minimum coordinate
 		* - rightToLeft: align maximum coordinate
 		*/
 		int shift[4];
-		for (int i = 0; i < 4; i++) { 
+		for (int i = 0; i < 4; i++) {
 			if (i % 1 == 0) {
 				// for leftToRight layouts
 				shift[i] = min[minWidthLayout] - min[i];
@@ -155,14 +156,14 @@ void FastSimpleHierarchyLayout::doCall(const Hierarchy& H, GraphCopyAttributes &
 				shift[i] = max[minWidthLayout] - max[i];
 			}
 		}
-		
-		/* 
+
+		/*
 		* shift the layouts and use the
 		* median average coordinate for each node
 		*/
 		Array<int> sorting(4);
 		forall_nodes(v, GC) {
-			for (int i = 0; i < 4; i++) { 
+			for (int i = 0; i < 4; i++) {
 				sorting[i] = x[i][v] + shift[i];
 			}
 			sorting.quicksort();
@@ -181,7 +182,7 @@ void FastSimpleHierarchyLayout::doCall(const Hierarchy& H, GraphCopyAttributes &
 	}
 }
 
-NodeArray<NodeArray<bool> > FastSimpleHierarchyLayout::markType1Conflicts(const Hierarchy &H, const bool downward) 
+NodeArray<NodeArray<bool> > FastSimpleHierarchyLayout::markType1Conflicts(const Hierarchy &H, const bool downward)
 {
 	const GraphCopy& GC = H;
 	NodeArray<NodeArray<bool> > type1Conflicts(GC);
@@ -258,7 +259,7 @@ NodeArray<NodeArray<bool> > FastSimpleHierarchyLayout::markType1Conflicts(const 
 
 void FastSimpleHierarchyLayout::verticalAlignment(const Hierarchy &H, NodeArray<node> &root,
 		NodeArray<node> &align, const NodeArray<NodeArray<bool> > &type1Conflicts,
-		bool downward, const bool leftToRight) 
+		bool downward, const bool leftToRight)
 {
 	const GraphCopy& GC = H;
 	node v, u;
@@ -277,30 +278,30 @@ void FastSimpleHierarchyLayout::verticalAlignment(const Hierarchy &H, NodeArray<
 	}
 
 	// for all Level
-	for (int i = downward ? 0 : H.high(); 
+	for (int i = downward ? 0 : H.high();
 		 (downward && i <= H.high()) || (!downward && i >= 0); i = downward ? i + 1 : i - 1) {
 		Level currentLevel = H[i];
 		r = leftToRight ? -1 : std::numeric_limits<int>::max();
 
 		// for all nodes on Level i (with direction leftToRight)
-		for (int j = leftToRight ? 0 : currentLevel.high(); 
+		for (int j = leftToRight ? 0 : currentLevel.high();
 			 (leftToRight && j <= currentLevel.high()) || (!leftToRight && j >= 0); leftToRight ? j++ : j--) {
 			v = currentLevel[j];
 			// the fist median
 			median = (int)floor((H.adjNodes(v, relupward).size() + 1) / 2.0);
-			
+
 			medianCount = (H.adjNodes(v, relupward).size() % 2 == 1) ? 1 : 2;
 			if (H.adjNodes(v, relupward).size() == 0) {
 				medianCount = 0;
 			}
-			
+
 			// for all median neighbours in direction of H
 			for (int count = 0; count < medianCount; count++) {
 				u = H.adjNodes(v, relupward)[median + count - 1];
 
 				if (align[v] == v) {
 					// if segment (u,v) not marked by type1 conflicts AND ...
-					if ((type1Conflicts[v])[u] == false && 
+					if ((type1Conflicts[v])[u] == false &&
 						((leftToRight && r < H.pos(u)) || (!leftToRight && r > H.pos(u)))) {
 						align[u] = v;
 						root[v] = root[u];
@@ -311,7 +312,7 @@ void FastSimpleHierarchyLayout::verticalAlignment(const Hierarchy &H, NodeArray<
 			}
 		}
 	}
-	
+
 #ifdef DEBUG_OUTPUT
 	forall_nodes(v, GC) {
 		cout << "node: " << GC.original(v) << "/" << v << ", root: " << GC.original(root[v]) << "/" << root[v] << ", alignment: " << GC.original(align[v]) << "/" << align[v] << endl;
@@ -320,17 +321,17 @@ void FastSimpleHierarchyLayout::verticalAlignment(const Hierarchy &H, NodeArray<
 }
 
 void FastSimpleHierarchyLayout::horizontalCompactation(const NodeArray<node> &align,
-		const Hierarchy &H, const NodeArray<node> root, NodeArray<int> &x, const bool leftToRight, bool downward) 
+		const Hierarchy &H, const NodeArray<node> root, NodeArray<int> &x, const bool leftToRight, bool downward)
 {
 #ifdef DEBUG_OUTPUT
 	cout << "-------- Horizontal Compactation --------" << endl;
 #endif
-	
+
 	const GraphCopy& GC = H;
 	node v;
 	NodeArray<node> sink(GC);
 	NodeArray<int> shift(GC, std::numeric_limits<int>::max());
-	
+
 	x.init(GC, -1);
 
 	forall_nodes(v, GC) {
@@ -338,11 +339,11 @@ void FastSimpleHierarchyLayout::horizontalCompactation(const NodeArray<node> &al
 	}
 
 	// calculate class relative coordinates for all roots
-	for (int i = downward ? 0 : H.high(); 
+	for (int i = downward ? 0 : H.high();
 		(downward && i <= H.high()) || (!downward && i >= 0); i = downward ? i + 1 : i - 1) {
 		Level currentLevel = H[i];
-	
-		for (int j = leftToRight ? 0 : currentLevel.high(); 
+
+		for (int j = leftToRight ? 0 : currentLevel.high();
 			(leftToRight && j <= currentLevel.high()) || (!leftToRight && j >= 0); leftToRight ? j++ : j--) {
 			v = currentLevel[j];
 			if (root[v] == v) {
@@ -366,7 +367,7 @@ void FastSimpleHierarchyLayout::horizontalCompactation(const NodeArray<node> &al
 #endif
 		x[v] = x[root[v]];
 	}
-	
+
 	// apply shift for each class
 	forall_nodes(v, GC) {
 		if (shift[sink[root[v]]] < std::numeric_limits<int>::max()) {
@@ -377,7 +378,7 @@ void FastSimpleHierarchyLayout::horizontalCompactation(const NodeArray<node> &al
 
 void FastSimpleHierarchyLayout::placeBlock(node v, NodeArray<node> &sink,
 		NodeArray<int> &shift, NodeArray<int> &x, const NodeArray<node> &align,
-		const Hierarchy &H, const NodeArray<node> &root, const bool leftToRight) 
+		const Hierarchy &H, const NodeArray<node> &root, const bool leftToRight)
 {
 	node w;
 	node u;
@@ -385,7 +386,7 @@ void FastSimpleHierarchyLayout::placeBlock(node v, NodeArray<node> &sink,
 #ifdef DEBUG_OUTPUT
 	const GraphCopy& GC = H;
 #endif
-	
+
 	if (x[v] == -1) {
 		x[v] = 0;
 		w = v;
@@ -404,8 +405,6 @@ void FastSimpleHierarchyLayout::placeBlock(node v, NodeArray<node> &sink,
 #ifdef DEBUG_OUTPUT
 					cout << "old shift " << GC.original(sink[u]) << ": " << shift[sink[u]] << "<>" << x[v] - x[u] - m_minXSep << endl;
 #endif
-					int xv = x[v];
-					int xu = x[u];
 					if (leftToRight) {
 						shift[sink[u]] = min<int>(shift[sink[u]], x[v] - x[u] - m_minXSep);
 					} else {
@@ -423,14 +422,14 @@ void FastSimpleHierarchyLayout::placeBlock(node v, NodeArray<node> &sink,
 					}
 				}
 #ifdef DEBUG_OUTPUT
-				cout << "placing w: " << GC.original(w) << "; predecessor: " << GC.original(pred(w, H, leftToRight)) << 
-					"; root(w)=v: " << GC.original(v) << "; root(pred(u)): " << GC.original(u) << 
+				cout << "placing w: " << GC.original(w) << "; predecessor: " << GC.original(pred(w, H, leftToRight)) <<
+					"; root(w)=v: " << GC.original(v) << "; root(pred(u)): " << GC.original(u) <<
 					"; sink(v): " << GC.original(sink[v]) << "; sink(u): " << GC.original(sink[u]) << endl;
 				cout << "x(v): " << x[v] << endl;
 			} else {
 				cout << "not placing w: " << GC.original(w) << " because at beginning of layer" << endl;
 #endif
-			} 
+			}
 			w = align[w];
 		} while (w != v);
 #ifdef DEBUG_OUTPUT
@@ -439,8 +438,7 @@ void FastSimpleHierarchyLayout::placeBlock(node v, NodeArray<node> &sink,
 	}
 }
 
-const node FastSimpleHierarchyLayout::virtualTwinNode(const Hierarchy &H, const node v, 
-													  const Hierarchy::TraversingDir dir) 
+node FastSimpleHierarchyLayout::virtualTwinNode(const Hierarchy &H, const node v, const Hierarchy::TraversingDir dir) const
 {
 	if (!H.isLongEdgeDummy(v) || H.adjNodes(v, dir).size() == 0) {
 		return NULL;
@@ -454,7 +452,7 @@ const node FastSimpleHierarchyLayout::virtualTwinNode(const Hierarchy &H, const 
 	return *H.adjNodes(v, dir).begin();
 }
 
-node FastSimpleHierarchyLayout::pred(const node v, const Hierarchy &H, const bool leftToRight) 
+node FastSimpleHierarchyLayout::pred(const node v, const Hierarchy &H, const bool leftToRight)
 {
 	int pos = H.pos(v);
 	int rank = H.rank(v);

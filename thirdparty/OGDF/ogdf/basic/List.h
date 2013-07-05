@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2632 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-17 21:04:24 +0200 (Di, 17. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief Declaration of doubly linked lists and iterators
- * 
+ *
  * \author Carsten Gutwenger and Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -192,7 +193,7 @@ template<class E> class ListConstIterator {
 public:
 	//! Constructs an iterator pointing to no element.
 	ListConstIterator() : m_pX(0) { }
-	
+
 	//! Constructs an iterator pointing to \a pX.
 	ListConstIterator(const ListElement<E> *pX) : m_pX(pX) { }
 
@@ -264,8 +265,10 @@ public:
 /**
  * Elements of the list are instances of type ListElement<E>.
  * Use ListConstIterator<E> or ListIterator<E> in order to iterate over the list.
- * 
+ *
  * In contrast to List<E>, instances of \a ListPure<E> do not store the length of the list.
+ *
+ * @tparam E is the data type stored in list elements.
  */
 
 template<class E> class ListPure {
@@ -429,7 +432,7 @@ public:
 	 * The running time of this method is linear in \a pos.
 	 */
 	ListConstIterator<E> get(int pos) const {
-	  ListElement<E> *pX;
+		ListElement<E> *pX;
 		for(pX = m_head; pX != 0; pX = pX->m_next)
 			if (pos-- == 0) break;
 		return pX;
@@ -440,16 +443,15 @@ public:
 	 * The running time of this method is linear in \a pos.
 	 */
 	ListIterator<E> get(int pos) {
-	  ListElement<E> *pX;
+		ListElement<E> *pX;
 		for(pX = m_head; pX != 0; pX = pX->m_next)
 			if (pos-- == 0) break;
 		return pX;
 	}
 
-	//! Returns the position (starting with 0) of \a it in the list.
+	//! Returns the position (starting with 0) of iterator \a it in the list.
 	/**
-	 * Positions are numbered 0,1,...
-	 * \pre \a it is an iterator pointing to an element in this list.
+	 * \pre \a it is a valid iterator pointing to an element in this list!
 	 */
 	int pos(ListConstIterator<E> it) const {
 		OGDF_ASSERT(it.valid())
@@ -459,22 +461,39 @@ public:
 		return p;
 	}
 
-	// returns random valid iterator. Note that this takes linear time (doubled).
+	//! Returns an iterator to a random element in the list (or an invalid iterator if the list is empty)
+	/**
+	 * This method takes linear time.
+	 */
 	ListConstIterator<E> chooseIterator() const {
-		return get(randomNumber(0,size()-1));
+		return empty() ? ListConstIterator<E>() : get(randomNumber(0,size()-1));
 	}
 
-	// returns random valid iterator. Note that this takes linear time (doubled).
+	//! Returns an iterator to a random element in the list (or an invalid iterator if the list is empty)
+	/**
+	 * This method takes linear time.
+	 */
 	ListIterator<E> chooseIterator() {
-		return get(randomNumber(0,size()-1));
+		return empty() ? ListIterator<E>() : get(randomNumber(0,size()-1));
 	}
 
-	// returns random element. Note that this takes linear time.
+	//! Returns a random element from the list.
+	/**
+	 * \pre The list is not empty!
+	 *
+	 * This method takes linear time.
+	 */
 	const E chooseElement() const {
+		OGDF_ASSERT(m_head != 0)
 		return *chooseIterator();
 	}
 
-	// returns random element. Note that this takes linear time.
+	//! Returns a random element from the list.
+	/**
+	 * \pre The list is not empty!
+	 *
+	 * This method takes linear time.
+	 */
 	E chooseElement() {
 		return *chooseIterator();
 	}
@@ -594,7 +613,7 @@ public:
 	 * \pre The list is not empty!
 	 */
 	E popFrontRet() {
-		E el = front(); 
+		E el = front();
 		popFront();
 		return el;
 	}
@@ -617,7 +636,7 @@ public:
 	 * \pre The list is not empty!
 	 */
 	E popBackRet() {
-		E el = back(); 
+		E el = back();
 		popBack();
 		return el;
 	}
@@ -687,7 +706,7 @@ public:
 		pX->m_next = m_head;
 		m_head = m_head->m_prev = pX;
 	}//move
-	
+
 	//! Moves \a it to the end of the list.
 	/**
 	 * \pre \a it points to an element in this list.
@@ -717,9 +736,9 @@ public:
 		OGDF_ASSERT(it.valid() && itBefore.valid())
 		// move it
 		ListElement<E> *pX = it, *pPrev = pX->m_prev, *pNext = pX->m_next;
-		//the same of already in place 
+		//the same of already in place
 		ListElement<E> *pY = itBefore;
-		if(pX == pY || pPrev == pY) return;		
+		if(pX == pY || pPrev == pY) return;
 
 		// update old position
 		if (pPrev) pPrev->m_next = pNext;
@@ -878,22 +897,22 @@ public:
 	void exchange(ListPure<E>& L2) {
 		ListElement<E>* t;
 		t = this->m_head;
-		this->m_head = L2.m_head; 
-		L2.m_head = t; 
+		this->m_head = L2.m_head;
+		L2.m_head = t;
 		t = this->m_tail;
-		this->m_tail = L2.m_tail; 
-		L2.m_tail = t; 
+		this->m_tail = L2.m_tail;
+		L2.m_tail = t;
 	}
 
 	//! Splits the list at element \a it into lists \a L1 and \a L2.
 	/**
 	 * If \a it is not a null pointer and \a L = x1,...,x{k-1}, \a it,x_{k+1},xn, then
-     * \a L1 = x1,...,x{k-1} and \a L2 = \a it,x{k+1},...,xn if \a dir = \c before. 
+	 * \a L1 = x1,...,x{k-1} and \a L2 = \a it,x{k+1},...,xn if \a dir = \c before.
 	 * If \a it is a null pointer, then \a L1 is made empty and \a L2 = \a L. Finally
-     * \a L is made empty if it is not identical to \a L1 or \a L2.
-     * 
-     * \pre \a it points to an element in this list.
-     */
+	 * \a L is made empty if it is not identical to \a L1 or \a L2.
+	 *
+	 * \pre \a it points to an element in this list.
+	 */
 
 	void split(ListIterator<E> it,ListPure<E> &L1,ListPure<E> &L2,Direction dir = before) {
 		if (&L1 != this) L1.clear();
@@ -917,7 +936,7 @@ public:
 			L2.m_head = m_head;
 			L2.m_tail = m_tail;
 		}
-		
+
 		if (this != &L1 && this != &L2) {
 			m_head = m_tail = 0;
 		}
@@ -931,7 +950,7 @@ public:
 		ListElement<E> *pX = it;
 		if (pX != m_tail) {
 			(L2.m_head = pX->m_next)->m_prev = 0;
-			pX->m_next = 0; 
+			pX->m_next = 0;
 			L2.m_tail = m_tail;
 			m_tail = pX;
 		}
@@ -1011,7 +1030,7 @@ public:
 	void permute() {
 		permute(size());
 	}
-	
+
 	//! Scans the list for the specified element and returns its position in the list, or -1 if not found.
 	int search (const E& e) const {
 		int x = 0;
@@ -1019,7 +1038,7 @@ public:
 			if(*i == e) return x;
 		return -1;
 	}
-	
+
 	//! Scans the list for the specified element (using the user-defined comparer) and returns its position in the list, or -1 if not found.
 	template<class COMPARER>
 	int search (const E& e, const COMPARER &comp) const {
@@ -1045,9 +1064,9 @@ protected:
 //! Iteration over all iterators \a it of a list \a L, where L is of Type \c List<\a type>.
 /**
  * Automagically creates a \c ListConstIterator<\a type> named \a it, and runs through the List \a L.
- * 
+ *
  * <h3>Example</h3>
- * 
+ *
  * The following code runs through the list \a L, and prints each item
  *   \code
  *   List<double> L;
@@ -1056,9 +1075,9 @@ protected:
  *     cout << *it << endl;
  *   }
  *   \endcode
- * 
+ *
  *   Note that this code is equivalent to the following tedious long version
- * 
+ *
  *   \code
  *   List<double> L;
  *   ...
@@ -1068,7 +1087,7 @@ protected:
  *   \endcode
  */
 #define forall_listiterators(type, it, L) \
-   for(ListConstIterator< type > it = (L).begin(); it.valid(); ++it)
+	for(ListConstIterator< type > it = (L).begin(); it.valid(); ++it)
 
 //! Iteration over all iterators \a it of a list \a L, where L is of Type \c List<\a type>, in reverse order.
 /**
@@ -1076,7 +1095,7 @@ protected:
  * See \c #forall_listiterators for an example.
  */
 #define forall_rev_listiterators(type, it, L) \
-   for(ListConstIterator< type > it = (L).rbegin(); it.valid(); --it)
+	for(ListConstIterator< type > it = (L).rbegin(); it.valid(); --it)
 
 //! Iteration over all non-const iterators \a it of a list \a L, where L is of Type \c List<\a type>.
 /**
@@ -1084,7 +1103,7 @@ protected:
  * See \c #forall_listiterators for an example.
  */
 #define forall_nonconst_listiterators(type, it, L) \
-   for(ListIterator< type > it = (L).begin(); it.valid(); ++it)
+	for(ListIterator< type > it = (L).begin(); it.valid(); ++it)
 
 //! Iteration over all non-const iterators \a it of a list \a L, where L is of Type \c List<\a type>, in reverse order.
 /**
@@ -1092,15 +1111,15 @@ protected:
  * See \c #forall_listiterators for an example.
  */
 #define forall_rev_nonconst_listiterators(type, it, L) \
-   for(ListIterator< type > it = (L).rbegin(); it.valid(); --it)
- 
+	for(ListIterator< type > it = (L).rbegin(); it.valid(); --it)
+
 //! Iteration over all iterators \a it of a list \a L, where L is of Type \c SList<\a type>.
 /**
  * Automagically creates a \c SListConstIterator<\a type> named \a it, and runs through the SList \a L.
  * See \c #forall_listiterators for an example.
  */
 #define forall_slistiterators(type, it, L) \
-   for(SListConstIterator< type > it = (L).begin(); it.valid(); ++it)
+	for(SListConstIterator< type > it = (L).begin(); it.valid(); ++it)
 
 //! Iteration over all non-const iterators \a it of a list \a L, where L is of Type \c SList<\a type>.
 /**
@@ -1108,7 +1127,7 @@ protected:
  * See \c #forall_listiterators for an example.
  */
 #define forall_nonconst_slistiterators(type, it, L) \
-   for(SListIterator< type > it = (L).begin(); it.valid(); ++it)
+	for(SListIterator< type > it = (L).begin(); it.valid(); ++it)
 
 
 
@@ -1117,11 +1136,13 @@ protected:
 /**
  * Elements of the list are instances of type ListElement<E>.
  * Use ListConstIterator<E> or ListIterator<E> in order to iterate over the list.
- * 
+ *
  * In contrast to ListPure<E>, instances of \a List<E> store the length of the list.
- * 
+ *
  * See the \c #forall_listiterators macros for the recommended way how to easily iterate through a
- * list. (Since this feature is rather new, you won't find many exampled in the code base yet.)
+ * list.
+ *
+ * @tparam E is the data type stored in list elements.
  */
 template<class E>
 class List : private ListPure<E> {
@@ -1211,28 +1232,50 @@ public:
 		return ListPure<E>::get(pos);
 	}
 
-	// returns the position (starting with 0) of it in the list
+	//! Returns the position (starting with 0) of iterator \a it in the list.
+	/**
+	 * \pre \a it is a valid iterator pointing to an element in this list!
+	 */
 	int pos(ListConstIterator<E> it) const {
+		OGDF_ASSERT(it.valid())
 		return ListPure<E>::pos(it);
 	}
 
-	// returns random valid iterator. Note that this takes linear time.
+	//! Returns an iterator to a random element in the list (or an invalid iterator if the list is empty)
+	/**
+	 * This method takes linear time.
+	 */
 	ListConstIterator<E> chooseIterator() const {
-		return get(randomNumber(0,m_count-1));
+		return (m_count > 0) ? get(randomNumber(0,m_count-1)) : ListConstIterator<E>();
 	}
 
-	// returns random valid iterator. Note that this takes linear time.
+	//! Returns an iterator to a random element in the list (or an invalid iterator if the list is empty)
+	/**
+	 * This method takes linear time.
+	 */
 	ListIterator<E> chooseIterator() {
-		return get(randomNumber(0,m_count-1));
+		return (m_count > 0) ? get(randomNumber(0,m_count-1)) : ListIterator<E>();
 	}
 
-	// returns random element. Note that this takes linear time.
+	//! Returns a random element from the list.
+	/**
+	 * \pre The list is not empty!
+	 *
+	 * This method takes linear time.
+	 */
 	const E chooseElement() const {
+		OGDF_ASSERT(!empty());
 		return *chooseIterator();
 	}
 
-	// returns random element. Note that this takes linear time.
+	//! Returns a random element from the list.
+	/**
+	 * \pre The list is not empty!
+	 *
+	 * This method takes linear time.
+	 */
 	E chooseElement() {
+		OGDF_ASSERT(!empty());
 		return *chooseIterator();
 	}
 
@@ -1301,7 +1344,7 @@ public:
 
 	// removes first element and returns it
 	E popFrontRet() {
-		E el = front(); 
+		E el = front();
 		popFront();
 		return el;
 	}
@@ -1314,7 +1357,7 @@ public:
 
 	// removes last element and returns it
 	E popBackRet() {
-		E el = back(); 
+		E el = back();
 		popBack();
 		return el;
 	}
@@ -1400,14 +1443,14 @@ public:
 		m_count += L2.m_count;
 		L2.m_count = 0;
 	}
-	
+
 	//! Prepends \a L2 to this list and makes \a L2 empty.
 	void concFront(List<E> &L2) {
 		ListPure<E>::concFront(L2);
 		m_count += L2.m_count;
 		L2.m_count = 0;
 	}
-	
+
 	//! Exchanges too complete lists in O(1).
 	/**
 	 * The list's content is moved to L2 and vice versa.
@@ -1415,19 +1458,19 @@ public:
 	void exchange(List<E>& L2) {
 		ListPure<E>::exchange(L2);
 		int t = this->m_count;
-		this->m_count = L2.m_count; 
-		L2.m_count = t; 
+		this->m_count = L2.m_count;
+		L2.m_count = t;
 	}
-	
+
 	//! Splits the list at element \a it into lists \a L1 and \a L2.
 	/**
 	 * If \a it is not a null pointer and \a L = x1,...,x{k-1}, \a it,x_{k+1},xn, then
-     * \a L1 = x1,...,x{k-1} and \a L2 = \a it,x{k+1},...,xn if \a dir = \c before. 
+	 * \a L1 = x1,...,x{k-1} and \a L2 = \a it,x{k+1},...,xn if \a dir = \c before.
 	 * If \a it is a null pointer, then \a L1 is made empty and \a L2 = \a L. Finally
-     * \a L is made empty if it is not identical to \a L1 or \a L2.
-     * 
-     * \pre \a it points to an element in this list.
-     */
+	 * \a L is made empty if it is not identical to \a L1 or \a L2.
+	 *
+	 * \pre \a it points to an element in this list.
+	 */
 	void split(ListIterator<E> it,List<E> &L1,List<E> &L2,Direction dir = before) {
 		ListPure<E>::split(it,L1,L2,dir);
 		int countL = m_count, countL1 = 0;
@@ -1483,7 +1526,7 @@ public:
 		return ListPure<E>::search(e, comp);
 	}
 
- 
+
 	OGDF_NEW_DELETE
 }; // class List
 
@@ -1516,7 +1559,7 @@ void ListPure<E>::bucketSort(int l, int h, BucketFunc<E> &f)
 			pY = tail[i];
 		}
 	}
-	
+
 	m_tail = pY;
 	pY->m_next = 0;
 }

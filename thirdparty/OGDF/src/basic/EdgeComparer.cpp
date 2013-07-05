@@ -1,44 +1,45 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of EdgeComparer.
- * 
- * Compare edges on base of node layout position, 
+ *
+ * Compare edges on base of node layout position,
  * clockwise ordering
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -59,14 +60,14 @@ int EdgeComparer::compare(const adjEntry &e1, const adjEntry &e2) const
 	//are the adjentries sourceentries (edges outgoing) ?
 	bool sAdj1 = (e1 == e1->theEdge()->adjSource());
 	bool sAdj2 = (e2 == e2->theEdge()->adjSource());
-	//generic nodes/edges 
+	//generic nodes/edges
 	node s1 = (m_PR ? m_PR->original(e1->theNode()) : e1->theNode());
 	node s2 = (m_PR ? m_PR->original(e2->theNode()) : e2->theNode());
 	edge ed1 = (m_PR ? m_PR->original(e1->theEdge()) : e1->theEdge());
 	edge ed2 = (m_PR ? m_PR->original(e2->theEdge()) : e2->theEdge());
 	node t1 = (m_PR ?  m_PR->original(e1->twinNode()) : e1->twinNode());
 	node t2 = (m_PR ?  m_PR->original(e2->twinNode()) : e2->twinNode());
-	
+
 	//a: adjentry node(s)
 	//b: twin nodes
 
@@ -86,12 +87,12 @@ int EdgeComparer::compare(const adjEntry &e1, const adjEntry &e2) const
 	y1a = m_AG->y(s1);
 	y2a = m_AG->y(s2);
 
-	
+
 	//meet check not yet implemented, assume same start point
 	OGDF_ASSERT(!((!DIsEqual(x1a,x2a)) && (!(DIsEqual(y1a,y2a)))) || (s1 != s2))
-	
+
 	//check if we have bends without representation node
-	//use them as second end point 
+	//use them as second end point
 	const DPolyline &bends1 = m_AG->bends(ed1);
 	const DPolyline &bends2 = m_AG->bends(ed2);
 
@@ -106,11 +107,11 @@ int EdgeComparer::compare(const adjEntry &e1, const adjEntry &e2) const
 		if (sAdj1)
 			it1 = bends1.begin();
 		else it1 = bends1.rbegin();
-	
+
 		x1b = (*it1).m_x;
 		y1b = (*it1).m_y;
 	}
-	else 
+	else
 	{
 		x1b = m_AG->x(t1);
 		y1b = m_AG->y(t1);
@@ -124,7 +125,7 @@ int EdgeComparer::compare(const adjEntry &e1, const adjEntry &e2) const
 		x2b = (*it2).m_x;
 		y2b = (*it2).m_y;
 	}
-	else 
+	else
 	{
 		x2b = m_AG->x(t2);
 		y2b = m_AG->y(t2);
@@ -154,11 +155,11 @@ int EdgeComparer::compare(const adjEntry &e1, const adjEntry &e2) const
 				x1b = (*it1).m_x;
 				y1b = (*it1).m_y;
 			}
-			else 
+			else
 			{
 				x1b = m_AG->x(t1);
 				y1b = m_AG->y(t1);
-				end1 = true; 
+				end1 = true;
 			}
 			if (it2.valid())
 			{
@@ -175,7 +176,7 @@ int EdgeComparer::compare(const adjEntry &e1, const adjEntry &e2) const
 		}//while same endpoints
 	}
 
-	//now we have all the points necessary to sort 
+	//now we have all the points necessary to sort
 	//double dx1, dx2, dy1, dy2;
 	//dx1 = x1b - x1a;
 	//dx2 = x2b - x2a;
@@ -185,7 +186,7 @@ int EdgeComparer::compare(const adjEntry &e1, const adjEntry &e2) const
 	//debug
 	/*
 	ofstream f("c:\\Temp\\Karsten\\ASorting.txt", ios::app);
-	
+
 	f << "\nEntries at node: " << s1->index() <<"\n";
 	f << "Compare " << s1->index() <<"->"<<t1->index() << " " <<m_AG->type(ed1)<<" , \n"
 		<< s2->index() <<"->"<<t2->index() << " " <<m_AG->type(ed1)<< "\n";
@@ -209,7 +210,7 @@ int EdgeComparer::compare(const adjEntry &e1, const adjEntry &e2) const
 		const DPolyline &bends3 = m_AG->bends(ed3);
 		DPoint dp;
 		//as we use different comparison points for edges
-		//at different compares, we have to assure that 
+		//at different compares, we have to assure that
 		//we always have the same position of a edge's comparison
 		//point compared to our reference vector
 		//
@@ -228,14 +229,14 @@ int EdgeComparer::compare(const adjEntry &e1, const adjEntry &e2) const
 		{
 			if (bends3.size()>1)
 			{
-				ListConstIterator<DPoint> itb; 
+				ListConstIterator<DPoint> itb;
 				if (s1->firstAdj()==ed3->adjSource())
 				{
 					itb = bends3.begin();
 					itb++;
 					dp = (*itb);
 				}
-				else 
+				else
 				{
 					itb = bends3.rbegin();
 					itb--;
@@ -250,7 +251,7 @@ int EdgeComparer::compare(const adjEntry &e1, const adjEntry &e2) const
 			}
 		}
 		//--
-		else 
+		else
 			dp = DPoint(m_AG->x(uvw)-2, m_AG->y(uvw)+1);
 		double w1 = angle(DPoint(x1a, y1a), dp, DPoint(x1b, y1b));
 		double w2 = angle(DPoint(x1a, y1a), dp, DPoint(x2b, y2b));
@@ -307,9 +308,10 @@ bool EdgeComparer::before(const DPoint u, const DPoint v, const DPoint w) const
 //defined by the point coordinates
 //respects the flipping of y axis!!
 //TODO: shift into geometric
-int EdgeComparer::orientation(const DPoint u, 
-							  const DPoint v, 
-							  const DPoint w) const
+int EdgeComparer::orientation(
+	const DPoint u,
+	const DPoint v,
+	const DPoint w) const
 {
 	double plus1 = v.m_x*w.m_y;
 	double plus2 = w.m_x*u.m_y;
@@ -318,28 +320,27 @@ int EdgeComparer::orientation(const DPoint u,
 	double minus2 = w.m_x*v.m_y;
 	double minus3 = u.m_x*w.m_y;
 
-    double E = plus1 + plus2 + plus3 - minus1 - minus2 - minus3;
+	double E = plus1 + plus2 + plus3 - minus1 - minus2 - minus3;
 
-    
-    if ( E > 0 ) return 1;
-    if ( E < 0 ) return -1;
-    return 0;
+	if ( E > 0 ) return 1;
+	if ( E < 0 ) return -1;
+	return 0;
 
 }//orientation
 
 
 //counterclockwise with respect to their angle to the x-axis
-int EdgeComparer::compareVectors(const double& x1, 
-									const double& y1, 
-									const double& x2, 
+int EdgeComparer::compareVectors(const double& x1,
+									const double& y1,
+									const double& x2,
 									const double& y2) const
-{ 
+{
 	if (x1 == x2 && y1 == y2) return 0;
 	if (x1 == 0 && y1 == 0) return -1;
 	if (x2 == 0 && y2 == 0) return +1;
 	// vectors are distinct and non-zero
 
-	int sy1 = signOf(y1);  int sy2 = signOf(y2); 
+	int sy1 = signOf(y1);  int sy2 = signOf(y2);
 
 	int upper1 = ( sy1 != 0 ? sy1 : signOf(x1) );
 	int upper2 = ( sy2 != 0 ? sy2 : signOf(x2) );
@@ -349,29 +350,30 @@ int EdgeComparer::compareVectors(const double& x1,
 	return upper2 - upper1;
 }//comparevectors
 
+
 //computes angle between vectors
 double EdgeComparer::angle(DPoint p, DPoint q, DPoint r) const
 {
 	double dx1 = q.m_x - p.m_x, dy1 = q.m_y - p.m_y;
 	double dx2 = r.m_x - p.m_x, dy2 = r.m_y - p.m_y;
-  
+
 	//two vertices on the same place!
 	if ((dx1 == 0 && dy1 == 0) || (dx2 == 0 && dy2 == 0))
 		return 0.0;
-  
-    double norm = (dx1*dx1+dy1*dy1)*(dx2*dx2+dy2*dy2);
-  
-    double cosphi = (dx1*dx2+dy1*dy2) / sqrt(norm);
-    
+
+	double norm = (dx1*dx1+dy1*dy1)*(dx2*dx2+dy2*dy2);
+
+	double cosphi = (dx1*dx2+dy1*dy2) / sqrt(norm);
+
 	if (cosphi >= 1.0 ) return 0; if (cosphi <= -1.0 ) return Math::pi;
-  
-    double phi = acos(cosphi);
-    
-    if (dx1*dy2 < dy1*dx2) phi = -phi;
-    
+
+	double phi = acos(cosphi);
+
+	if (dx1*dy2 < dy1*dx2) phi = -phi;
+
 	if (phi < 0) phi += 2*Math::pi;
-    
-    return phi; 
+
+	return phi;
 }//angle
 
 

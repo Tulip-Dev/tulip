@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2615 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-16 14:23:36 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of extended graph algorithms
- * 
- * \author Sebastian Leipert, Karsten Klein
- * 
+ *
+ * \author Sebastian Leipert, Karsten Klein, Markus Chimani
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -49,6 +50,7 @@
 
 #include <ogdf/cluster/ClusterGraph.h>
 #include <ogdf/basic/BinaryHeap2.h>
+#include <ogdf/planarity/BoyerMyrvold.h>
 #include <limits>
 
 namespace ogdf {
@@ -58,7 +60,14 @@ namespace ogdf {
 // Methods for induced subgraphs
 //---------------------------------------------------------
 
-//! Computes the induced subgraph of nodes.
+//! Computes the subgraph induced by a list of nodes.
+/**
+ * @tparam NODELISTITERATOR is the type of iterators for the input list of nodes.
+ * @param G        is the input graph.
+ * @param start    is a list iterator pointing to the first element in a list of nodes, for which
+ *                 an induced subgraph shall be computed.
+ * @param subGraph is assigned the computed subgraph.
+ */
 template<class LISTITERATOR>
 void inducedSubGraph(const Graph &G, LISTITERATOR start, Graph &subGraph)
 {
@@ -66,12 +75,21 @@ void inducedSubGraph(const Graph &G, LISTITERATOR start, Graph &subGraph)
 	inducedSubGraph(G,start,subGraph,nodeTableOrig2New);
 }
 
-//! Computes the induced subgraph of nodes.
+//! Computes the subgraph induced by a list of nodes (plus a mapping from original nodes to new copies).
+/**
+ * @tparam NODELISTITERATOR is the type of iterators for the input list of nodes.
+ * @param G        is the input graph.
+ * @param start    is a list iterator pointing to the first element in a list of nodes, for which
+ *                 an induced subgraph shall be computed.
+ * @param subGraph is assigned the computed subgraph.
+ * @param nodeTableOrig2New is assigned a mapping from the nodes in \a G to the nodes in \a subGraph.
+ */
 template<class LISTITERATOR>
-void inducedSubGraph(const Graph &G,
-					 LISTITERATOR start,
-					 Graph &subGraph,
-					 NodeArray<node> &nodeTableOrig2New)
+void inducedSubGraph(
+	const Graph &G,
+	LISTITERATOR start,
+	Graph &subGraph,
+	NodeArray<node> &nodeTableOrig2New)
 {
 	subGraph.clear();
 	nodeTableOrig2New.init(G,0);
@@ -97,15 +115,25 @@ void inducedSubGraph(const Graph &G,
 		}
 	}
 }
-					 
 
-//! Computes the induced subgraph of nodes.
+
+//! Computes the subgraph induced by a list of nodes (plus mappings from original nodes and edges to new copies).
+/**
+ * @tparam NODELISTITERATOR is the type of iterators for the input list of nodes.
+ * @param G        is the input graph.
+ * @param start    is a list iterator pointing to the first element in a list of nodes, for which
+ *                 an induced subgraph shall be computed.
+ * @param subGraph is assigned the computed subgraph.
+ * @param nodeTableOrig2New is assigned a mapping from the nodes in \a G to the nodes in \a subGraph.
+ * @param edgeTableOrig2New is assigned a mapping from the edges in \a G to the egdes in \a subGraph.
+ */
 template<class LISTITERATOR>
-void inducedSubGraph(const Graph &G,
-					 LISTITERATOR start,
-					 Graph &subGraph,
-					 NodeArray<node> &nodeTableOrig2New,
-					 EdgeArray<edge> &edgeTableOrig2New)
+void inducedSubGraph(
+	const Graph &G,
+	LISTITERATOR start,
+	Graph &subGraph,
+	NodeArray<node> &nodeTableOrig2New,
+	EdgeArray<edge> &edgeTableOrig2New)
 {
 	subGraph.clear();
 	nodeTableOrig2New.init(G,0);
@@ -124,11 +152,11 @@ void inducedSubGraph(const Graph &G,
 		forall_adj(adj,w)
 		{
 			edge e = adj->theEdge();
-			if (nodeTableOrig2New[e->source()] && 
-				nodeTableOrig2New[e->target()] && 
+			if (nodeTableOrig2New[e->source()] &&
+				nodeTableOrig2New[e->target()] &&
 				!mark[e])
 			{
-				edgeTableOrig2New[e] = 
+				edgeTableOrig2New[e] =
 					subGraph.newEdge(
 						nodeTableOrig2New[e->source()],
 						nodeTableOrig2New[e->target()]);
@@ -139,8 +167,17 @@ void inducedSubGraph(const Graph &G,
 }
 
 
-template<class NODELISTITERATOR,class EDGELIST>
-void inducedSubgraph(Graph &G,NODELISTITERATOR &it,EDGELIST &E)
+//! Computes the edges in a node-induced subgraph.
+/**
+ * @tparam NODELISTITERATOR is the type of iterators for the input list of nodes.
+ * @tparam EDGELIST         is the type of the returned edge list.
+ * @param  G  is the input graph.
+ * @param  it is a list iterator pointing to the first element in a list of nodes, whose
+ *            induced subgraph is considered.
+ * @param  E  is assigned the list of edges in the node-induced subgraph.
+ */
+template<class NODELISTITERATOR, class EDGELIST>
+void inducedSubgraph(Graph &G, NODELISTITERATOR &it, EDGELIST &E)
 {
 	NODELISTITERATOR itBegin = it;
 	NodeArray<bool>  mark(G,false);
@@ -167,15 +204,20 @@ void inducedSubgraph(Graph &G,NODELISTITERATOR &it,EDGELIST &E)
 //---------------------------------------------------------
 
 
-// true <=> C is C-connected
+//! Returns true iff cluster graph \a C is c-connected.
 OGDF_EXPORT bool isCConnected(const ClusterGraph &C);
 
-//connect clusters to achieve c-connectivity (probably loosing planarity)
-//GG is underlying graph of C, returns inserted edges in addededges
-//simple: only connect underlying cluster subgraph without crossing check
+//! Makes a cluster graph c-connected by adding edges.
+/**
+ * @param C is the input cluster graph.
+ * @param G is the graph associated with the cluster graph \a C; the function adds new edges to this graph.
+ * @param addedEdges is assigned the list of newly created edges.
+ * @param simple selects the method used: If set to true, a simple variant that does not guarantee to preserve
+ *        planarity is used.
+ */
 OGDF_EXPORT void makeCConnected(
 	ClusterGraph& C,
-	Graph& GG,
+	Graph& G,
 	List<edge>& addedEdges,
 	bool simple = true);
 
@@ -187,48 +229,79 @@ OGDF_EXPORT void makeCConnected(
 //---------------------------------------------------------
 
 
-// Computes an st-Numbering.
-// Precondition: G must be biconnected and simple.
-// Exception: the Graph is allowed to have isolated nodes.
-// The st-numbers are stored in NodeArray. Return value is 
-// the number t. It is 0, if the computation was unsuccessful.
-// The nodes s and t may be specified. In this case 
-// s and t have to be adjacent.
-// If s and t are set 0 and parameter randomized is set to true,
-// the st edge is chosen to be a random edge in G.
+//! Computes an st-Numbering of \a G.
+/**
+ * \pre \a G must be biconnected and simple, with the exception that
+ * the graph is allowed to have isolated nodes. If both \a s and \a t
+ * are set to nodes (both are not 0), they must be adjacent.
+ *
+ * @param G is the input graph.
+ * @param numbering is assigned the st-number for each node.
+ * @param s is the source node for the st-numbering.
+ * @param t is the target node for the st-numbering.
+ * @param randomized is only used when both \a s and \a t are not set (both are 0);
+ *        in this case a random edge (s,t) is chosen; otherwise the first node s with degree
+ *        > 0 is chosen and its first neighbor is used as t.
+ * @return the number assigned to \a t, or 0 if no st-numbering could be computed.
+ */
 OGDF_EXPORT int stNumber(const Graph &G,
 	NodeArray<int> &numbering,
 	node s = 0,
 	node t = 0,
 	bool randomized = false);
 
-// Tests, whether a numbering is an st-numbering
-// Precondition: G must be biconnected and simple.
-// Exception: the Graph is allowed to have isolated nodes.
+//! Tests, whether a numbering of the nodes is an st-numbering.
+/**
+ * \pre \a G must be biconnected and simple, with the exception that
+ * the graph is allowed to have isolated nodes.
+ */
 OGDF_EXPORT bool testSTnumber(const Graph &G, NodeArray<int> &st_no,int max);
 
 
 //---------------------------------------------------------
 // Methods for minimum spanning tree computation
 //---------------------------------------------------------
+
 //! Computes a minimum spanning tree using Prim's algorithm
-/** Computes a minimum spanning tree MST of graph \a G with respect
- *  to edge weights in \a weight using Prim's algorithm.
- *  If an edge is in MST, the corresponding value in \a isInTree
- *  is set to true, otherwise to false.
- *  Returns the sum of the edge weights in the computed tree.
- * */ 
+/**
+ * @tparam T        is the numeric type for edge weights.
+ * @param  G        is the input graph.
+ * @param  weight   is an edge array with the edge weights.
+ * @param  isInTree is assigned the result, i.e. \a isInTree[\a e] is true iff edge \a e is in the computed MST.
+ * @return the sum of the edge weights in the computed tree.
+ **/
 template<typename T>
-T computeMinST(const Graph &G, const EdgeArray<T> &weight, EdgeArray<bool> &isInTree){
+T computeMinST(const Graph &G, const EdgeArray<T> &weight, EdgeArray<bool> &isInTree) {
 	NodeArray<edge> pred(G, 0);
 	return computeMinST(G.firstNode(), G, weight, pred, isInTree);
 }
 
+
+//! Computes a minimum spanning tree (MST) using Prim's algorithm
+/**
+ * @tparam T        is the numeric type for edge weights.
+ * @param  G        is the input graph.
+ * @param  weight   is an edge array with the edge weights.
+ * @param  isInTree is assigned the result, i.e. \a isInTree[\a e] is true iff edge \a e is in the computed MST.
+ * @param  pred     is assigned for each node the edge from its parent in the MST.
+ * @return the sum of the edge weights in the computed tree.
+ **/
 template<typename T>
-T computeMinST(const Graph &G, const EdgeArray<T> &weight, NodeArray<edge> &pred, EdgeArray<bool> &isInTree){
+T computeMinST(const Graph &G, const EdgeArray<T> &weight, NodeArray<edge> &pred, EdgeArray<bool> &isInTree) {
 	return computeMinST(G.firstNode(), G, weight, pred, isInTree);
 }
 
+
+//! Computes a minimum spanning tree (MST) using Prim's algorithm
+/**
+ * @tparam T        is the numeric type for edge weights.
+ * @param  s        is the start node for Prim's algorithm and will be the root of the MST.
+ * @param  G        is the input graph.
+ * @param  weight   is an edge array with the edge weights.
+ * @param  isInTree is assigned the result, i.e. \a isInTree[\a e] is true iff edge \a e is in the computed MST.
+ * @param  pred     is assigned for each node the edge from its parent in the MST.
+ * @return the sum of the edge weights in the computed tree.
+ **/
 template<typename T>
 T computeMinST(node s, const Graph &G, const EdgeArray<T> &weight, NodeArray<edge> &pred, EdgeArray<bool> &isInTree)
 {
@@ -300,6 +373,47 @@ T computeMinST(node s, const Graph &G, const EdgeArray<T> &weight, NodeArray<edg
 	delete[] pqpos;
 	return treeWeight;
 }//computeMinST
+
+
+//! Returns true, if G is planar, false otherwise.
+/**
+ * This is a shortcut for BoyerMyrvold::isPlanar().
+ *
+ * @param G is the input graph.
+ * @return true if \a G is planar, false otherwise.
+ */
+inline bool isPlanar(const Graph &G) {
+	return BoyerMyrvold().isPlanar(G);
+}
+
+
+//! Returns true, if G is planar, false otherwise. If true is returned, G will be planarly embedded.
+/**
+ * This is a shortcut for BoyerMyrvold::planarEmbed
+ *
+ * @param G is the input graph.
+ * @return true if \a G is planar, false otherwise.
+ */
+inline bool planarEmbed(Graph &G) {
+	return BoyerMyrvold().planarEmbed(G);
+}
+
+
+//! Constructs a planar embedding of G. It assumes that \a G is planar!
+/**
+ * This routine is slightly faster than planarEmbed(), but requires \a G to be planar.
+ * If \a G is not planar, the graph will be destroyed while trying to embed it!
+ *
+ * This is a shortcut for BoyerMyrvold::planarEmbedPlanarGraph().
+ *
+ * @param G is the input graph.
+ * @return true if the embedding was successful; false, if the given graph was non-planar (in this case
+ *         the graph will be left in an at least partially deleted state).
+ *
+ */
+inline bool planarEmbedPlanarGraph(Graph &G) {
+	return BoyerMyrvold().planarEmbedPlanarGraph(G);
+}
 
 } // end namespace ogdf
 

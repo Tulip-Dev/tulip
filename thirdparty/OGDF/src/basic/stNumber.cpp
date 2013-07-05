@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of st-numbering algorithm
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -48,30 +49,32 @@
 namespace ogdf {
 
 // Needed by the function stNumber
-void stSearch(const Graph	  &C,
-			  node			  sink, 
-			  int			  &count, 
-			  NodeArray<int>  &low, 
-			  NodeArray<int>  &dfn,
-			  NodeArray<edge> &dfsInEdge,
-			  NodeArray<edge> &followLowPath);
+void stSearch(
+	const Graph	  &C,
+	node			  sink,
+	int			  &count,
+	NodeArray<int>  &low,
+	NodeArray<int>  &dfn,
+	NodeArray<edge> &dfsInEdge,
+	NodeArray<edge> &followLowPath);
 
 // Needed by the function stNumber
-bool stPath(StackPure<node>	&path,
-			node		 	v,
-			adjEntry		&adj,
-			NodeArray<bool> &markedNode,
-			EdgeArray<bool> &markedEdge,
-			NodeArray<int>	&dfn,
-			NodeArray<edge> &dfsInEdge,
-			NodeArray<edge> &followLowPath);
+bool stPath(
+	StackPure<node>	&path,
+	node		 	v,
+	adjEntry		&adj,
+	NodeArray<bool> &markedNode,
+	EdgeArray<bool> &markedEdge,
+	NodeArray<int>	&dfn,
+	NodeArray<edge> &dfsInEdge,
+	NodeArray<edge> &followLowPath);
 
 // Computes an st-Numbering.
 // Precondition: G must be biconnected and simple.
 // Exception: the Graph is allowed to have isolated nodes.
-// The st-numbers are stored in NodeArray. Return value is 
+// The st-numbers are stored in NodeArray. Return value is
 // the number t. It is 0, if the computation was unsuccessful.
-// The nodes s and t may be specified. In this case 
+// The nodes s and t may be specified. In this case
 // s and t have to be adjacent.
 // If s and t are set 0 and parameter randomized is set to true,
 // the st edge is chosen to be a random edge in G.
@@ -99,7 +102,7 @@ int stNumber(const Graph &G,
 	NodeArray<edge> dfsInEdge(G,0);
 
 	// Stores a path of vertices that have not been visited.
-	StackPure<node> path; 
+	StackPure<node> path;
 
 	//Stores for every node the outgoing, first edge on the
 	// path that defines the low number of the node.
@@ -142,7 +145,7 @@ int stNumber(const Graph &G,
 
 		} else {
 			forall_nodes(s,G)
-			{	
+			{
 				if (s->degree() > 0)
 				{
 					st = s->firstAdj()->theEdge();
@@ -154,8 +157,9 @@ int stNumber(const Graph &G,
 	}
 	if (!s || !t)
 		return 0;
-								// Compute the DFN and LOW numbers
-                                // of the block.
+
+	// Compute the DFN and LOW numbers
+	// of the block.
 	dfn[t] = count++;
 	low[t] = dfn[t];
 	stSearch(G,s,count,low,dfn,dfsInEdge,followLowPath);
@@ -166,8 +170,8 @@ int stNumber(const Graph &G,
 	markedNode[t] = true;
 	markedEdge[st] = true;
 
-	StackPure<node> nodeStack; // nodeStack stores the vertices during the 
-                               // computation of the st-numbering.
+	StackPure<node> nodeStack;	// nodeStack stores the vertices during the
+								// computation of the st-numbering.
 	nodeStack.push(t);
 	nodeStack.push(s);
 	count = 1;
@@ -195,13 +199,14 @@ int stNumber(const Graph &G,
 
 // Computes the DFN and LOW numbers of a biconnected component
 // Uses DFS strategy
-void stSearch(const Graph		&G,
-			  node				v, 
-			  int				&count, 
-			  NodeArray<int>	&low, 
-			  NodeArray<int>	&dfn,			  
-			  NodeArray<edge>	&dfsInEdge,
-			  NodeArray<edge>	&followLowPath)
+void stSearch(
+	const Graph		&G,
+	node				v,
+	int				&count,
+	NodeArray<int>	&low,
+	NodeArray<int>	&dfn,
+	NodeArray<edge>	&dfsInEdge,
+	NodeArray<edge>	&followLowPath)
 {
 	dfn[v] = count;
 	count++;
@@ -282,28 +287,28 @@ bool stPath(StackPure<node>	&path,
 			}
 			return true;
 		}
-		
+
 	}while (adj != 0);
 
 	return false;
 }
-          
+
 
 bool testSTnumber(const Graph &G, NodeArray<int> &st_no,int max)
 {
 	bool   foundLow = false;
 	bool   foundHigh = false;
 	bool   it_is = true;
-    node   v; 
+	node   v;
 
 	forall_nodes(v,G)
-	{  
+	{
 		if (v->degree() == 0)
 			continue;
 
 		foundHigh = foundLow = 0;
 		if (st_no[v] == 1)
-		{	
+		{
 			adjEntry adj;
 			forall_adj(adj,v)
 			{
@@ -311,9 +316,9 @@ bool testSTnumber(const Graph &G, NodeArray<int> &st_no,int max)
 					foundLow = foundHigh = 1;
 			}
 		}
-        
-        else if (st_no[v] == max)
-		{	
+
+		else if (st_no[v] == max)
+		{
 			adjEntry adj;
 			forall_adj(adj,v)
 			{
@@ -323,7 +328,7 @@ bool testSTnumber(const Graph &G, NodeArray<int> &st_no,int max)
 		}
 
 		else
-        {  
+		{
 			adjEntry adj;
 			forall_adj(adj,v)
 			{
@@ -333,8 +338,8 @@ bool testSTnumber(const Graph &G, NodeArray<int> &st_no,int max)
 					foundHigh = 1;
 			}
 		}
-        if (!foundLow || !foundHigh)
-            it_is = 0;
+		if (!foundLow || !foundHigh)
+			it_is = 0;
 	}
 	return it_is;
 }

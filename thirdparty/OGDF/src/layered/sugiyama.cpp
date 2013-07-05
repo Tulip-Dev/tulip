@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of Sugiyama algorithm (classes Hierarchy,
  * Level, SugiyamaLayout)
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -89,7 +90,7 @@ void GraphCopyAttributes::transform()
 
 		DPolyline &dpl = m_pAG->bends(eG);
 		dpl.clear();
-		
+
 		ListConstIterator<edge> itE = m_pGC->chain(eG).begin();
 		node v      = (*itE)->source();
 		node vAfter = (*itE)->target();
@@ -102,7 +103,7 @@ void GraphCopyAttributes::transform()
 
 			// filter real bend points
 			if((m_x[v] != m_x[vBefore] || m_x[v] != m_x[vAfter]) &&
-			   (m_y[v] != m_y[vBefore] || m_y[v] != m_y[vAfter]))
+				(m_y[v] != m_y[vBefore] || m_y[v] != m_y[vAfter]))
 				dpl.pushBack(DPoint(m_x[v],m_y[v]));
 		}
 
@@ -141,7 +142,7 @@ void ClusterGraphCopyAttributes::transform()
 
 		DPolyline &dpl = m_pACG->bends(eG);
 		dpl.clear();
-		
+
 		ListConstIterator<edge> itE = m_pH->chain(eG).begin();
 		node v      = (*itE)->source();
 		node vAfter = (*itE)->target();
@@ -154,7 +155,7 @@ void ClusterGraphCopyAttributes::transform()
 
 			// filter real bend points
 			if((m_x[v] != m_x[vBefore] || m_x[v] != m_x[vAfter]) &&
-			   (m_y[v] != m_y[vBefore] || m_y[v] != m_y[vAfter]))
+				(m_y[v] != m_y[vBefore] || m_y[v] != m_y[vAfter]))
 				dpl.pushBack(DPoint(m_x[v],m_y[v]));
 		}
 
@@ -215,23 +216,27 @@ void Level::getIsolatedNodes(SListPure<Tuple2<node,int> > &isolated)
 
 void Level::setIsolatedNodes(SListPure<Tuple2<node,int> > &isolated)
 {
-	SListPure<node> sortedNodes;
+	const int sizeL = size();
+	Array<node> sortedNodes(sizeL);
+	isolated.pushBack(Tuple2<node,int>(0,sizeL));
 	SListConstIterator<Tuple2<node,int> > itIsolated = isolated.begin();
 
-	int i;
-	for(i = 0; true; ++itIsolated) {
-		int nextPos = (itIsolated.valid()) ? (*itIsolated).x2() : (high()+1);
-		for(; i < nextPos; ++i) {
-			if (adjNodes(m_nodes[i]).high() >= 0)
-				sortedNodes.pushBack(m_nodes[i]);
+	int nextPos = (*itIsolated).x2();
+	for( int iNodes = 0, iSortedNodes = 0; nextPos <= sizeL; ) {
+		if( iSortedNodes == nextPos ) {
+			if( iSortedNodes == sizeL )
+				break;
+			sortedNodes[iSortedNodes++] = (*itIsolated).x1();
+			nextPos = (*(++itIsolated)).x2();
+		} else {
+			node v = m_nodes[iNodes++];
+			if( adjNodes(v).size() > 0 )
+				sortedNodes[iSortedNodes++] = v;
 		}
-		if (i > high()) break;
-		sortedNodes.pushBack((*itIsolated).x1());
 	}
 
-	SListConstIterator<node> itSorted = sortedNodes.begin();
-	for(i = 0; itSorted.valid(); ++itSorted)
-		m_nodes[i++] = *itSorted;
+	for( int i = 0; i < sizeL; ++i)
+		m_nodes[i] = sortedNodes[i];
 }
 
 
@@ -308,7 +313,7 @@ void Hierarchy::doInit(const NodeArray<int> &rank)
 		if (rankSrc > rankTgt) {
 			m_GC.reverseEdge(e); std::swap(rankSrc,rankTgt);
 		}
-		
+
 		if (rankSrc == rankTgt) {
 			e = m_GC.split(e);
 			m_GC.reverseEdge(e);
@@ -329,7 +334,7 @@ void Hierarchy::doInit(const NodeArray<int> &rank)
 	for(i = 0; i <= m_pLevel.high(); ++i)
 		delete m_pLevel[i];
 	m_pLevel.init(0,maxRank);
-	
+
 	for(i = 0; i <= maxRank; ++i)
 		m_pLevel[i] = new Level(this,i,length[i]);
 
@@ -404,7 +409,7 @@ void Hierarchy::buildAdjNodes(int i)
 		node v = level[j];
 		edge e;
 		forall_adj_edges(e,v) {
-			if (e->source() == v) {			
+			if (e->source() == v) {
 				(m_lowerAdjNodes[e->target()])[m_nSet[e->target()]++] = v;
 			} else {
 				(m_upperAdjNodes[e->source()])[m_nSet[e->source()]++] = v;
@@ -493,10 +498,8 @@ int Hierarchy::calculateCrossings()
 
 
 // calculation of edge crossings between level i and i+1
-// implementation by Michael Juenger (juenger@oreas.de), Decembre 2000
-//   adapted by Carsten Gutwenger (gutwenger@oreas.de)
-// implements a (yet unpublished) algorithm by Barth
-// refer to Graph Drawing script by Michael Juenger
+// implementation by Michael Juenger, Decembre 2000, adapted by Carsten Gutwenger
+// implements the algorithm by Barth, Juenger, Mutzel
 
 int Hierarchy::calculateCrossings(int i)
 {
@@ -505,7 +508,7 @@ int Hierarchy::calculateCrossings(int i)
 
 	int nc = 0; // number of crossings
 
-	int fa = 1; 
+	int fa = 1;
 	while (fa < nUpper)
 		fa *= 2;
 
@@ -539,7 +542,7 @@ int Hierarchy::calculateCrossings(int i)
 
 
 //-----------------------------------------------
-// The following code 
+// The following code
 //   calculateCrossingsPlaneSweep() and
 //   calculateCrossingsPlaneSweep(int i)
 // is the old implementation of the crossing calculation using a
@@ -979,7 +982,7 @@ void SugiyamaLayout::doCall(GraphAttributes &AG, bool umlCall, NodeArray<int> &r
 
 			const double dx = offset[i].m_x - offset1[i].m_x;
 			const double dy = offset[i].m_y - offset1[i].m_y;
-			
+
 			// iterate over all nodes in ith CC
 			ListConstIterator<node> it;
 			for(it = nodes.begin(); it.valid(); ++it)
@@ -1003,8 +1006,8 @@ void SugiyamaLayout::doCall(GraphAttributes &AG, bool umlCall, NodeArray<int> &r
 					}
 				}
 			}
-		}		
-		
+		}
+
 	} else {
 		int minRank = INT_MAX;
 		node v;
@@ -1026,7 +1029,7 @@ void SugiyamaLayout::doCall(GraphAttributes &AG, bool umlCall, NodeArray<int> &r
 			if(vOrig == 0)
 				vOrig = GC.original(v->firstAdj()->theEdge())->source();
 
-			m_compGC[v] = component[vOrig];	
+			m_compGC[v] = component[vOrig];
 		}
 
 		reduceCrossings(H);
@@ -1067,16 +1070,16 @@ void SugiyamaLayout::doCall(GraphAttributes &AG, bool umlCall, NodeArray<int> &r
 			}
 		}
 
-		m_numLevels = H.size();		
+		m_numLevels = H.size();
 		m_maxLevelSize = 0;
 		for(int i = 0; i <= H.high(); i++) {
 			Level &l = H[i];
 			if (l.size() > m_maxLevelSize)
-				m_maxLevelSize = l.size();			
+				m_maxLevelSize = l.size();
 		}
 
 	}
-	
+
 }
 
 
@@ -1139,7 +1142,7 @@ int SugiyamaLayout::traverseTopDown(Hierarchy& H)
 		if(!useSubgraphs()) {
 			TwoLayerCrossMin &minimizer = m_crossMin.get();
 			minimizer(H[i]);
-	    } else {
+		} else {
 			TwoLayerCrossMinSimDraw &minimizer = m_crossMinSimDraw.get();
 			minimizer.call(H[i],m_subgraphs);
 		}
@@ -1163,15 +1166,15 @@ int SugiyamaLayout::traverseBottomUp(Hierarchy& H)
 
 	for (int i = H.high()-1; i >= 0; i--) {
 		if(!useSubgraphs())
-	    {
+		{
 			TwoLayerCrossMin &minimizer = m_crossMin.get();
 			minimizer(H[i]);
-	    }
+		}
 		else
-	    {
+		{
 			TwoLayerCrossMinSimDraw &minimizer = m_crossMinSimDraw.get();
 			minimizer.call(H[i],m_subgraphs);
-	    }
+		}
 	}
 
 	if (m_transpose)
@@ -1264,9 +1267,9 @@ void SugiyamaLayout::reduceCrossings(Hierarchy &H)
 		H.permute();
 
 		if(!useSubgraphs())
-		  nCrossingsOld = H.calculateCrossings();
+			nCrossingsOld = H.calculateCrossings();
 		else
-		  nCrossingsOld = H.calculateCrossings();
+			nCrossingsOld = H.calculateCrossings();
 		if (nCrossingsOld < m_nCrossings) {
 			H.storePos(bestPos);
 

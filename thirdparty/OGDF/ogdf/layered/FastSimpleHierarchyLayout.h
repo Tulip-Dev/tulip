@@ -1,21 +1,22 @@
 /*
- * $Revision: 2303 $
+ * $Revision: 2583 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 09:41:00 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief declaration of the FastSimpleHierarchyLayout
  * (third phase of sugiyama)
  *
- * \author Till Schaefer
+ * \author Till Sch&auml;fer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -55,26 +56,26 @@
 namespace ogdf {
 
 /**
- * \brief Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf
+ * \brief Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris K&ouml;pf
  *
  * This class implements a hierarchy layout algorithm, i.e., it layouts
  * hierarchies with a given order of nodes on each layer. It is used as a third
  * phase of the Sugiyama algorithm.
  *
- * The Algorithm runs in three phases.<br> 
+ * The Algorithm runs in three phases.<br>
  * - Alignment (4x)<br>
  * - Horizontal Compactation (4x)<br>
  * - Balancing
- * 
- * The <i>Alignment</i> and <i>Horzontal Compactation</i> phase are calculated downward, upward, 
- * leftToRight and rightToLeft. The four resulting layouts are combined in a balancing step. 
- * 
- * <b>Warning:</b> The implementation is known to not always produce a correct layout. 
+ *
+ * The <i>Alignment</i> and <i>Horzontal Compactation</i> phase are calculated downward, upward,
+ * leftToRight and rightToLeft. The four resulting layouts are combined in a balancing step.
+ *
+ * <b>Warning:</b> The implementation is known to not always produce a correct layout.
  * Therefore this Algorithm is for testing purpose only.
- * 
+ *
  * The implementation is based on:
  *
- * Ulrik Brandes, Boris Köpf: <i>Fast and Simple Horizontal Coordinate Assignment</i>.
+ * Ulrik Brandes, Boris K&ouml;pf: <i>Fast and Simple Horizontal Coordinate Assignment</i>.
  * LNCS 2002, Volume 2265/2002, pp. 33-36
  *
  * <h3>Optional Parameters</h3>
@@ -91,7 +92,7 @@ namespace ogdf {
  *   </tr>
  * </table>
  */
-class OGDF_EXPORT FastSimpleHierarchyLayout : public HierarchyLayoutModule 
+class OGDF_EXPORT FastSimpleHierarchyLayout : public HierarchyLayoutModule
 {
 private:
 	int m_minXSep;
@@ -99,23 +100,25 @@ private:
 	bool m_balanced;
 	bool m_downward;
 	bool m_leftToRight;
-	
+
 protected:
 	void doCall(const Hierarchy& H, GraphCopyAttributes &AGC);
 
 public:
 	/**
 	 * Constructor for balanced layout. This is usually the best choice!
-	 * 
+	 *
 	 * @param minXSep Mimimum separation between each node in x-direction.
 	 * @param ySep Distance between adjacent layers in y-direction.
 	 */
 	FastSimpleHierarchyLayout(int minXSep = 150, int ySep = 75);
-	
+
 	/**
-	 * Constructor for specific unbalanced layout. 
+	 * Constructor for specific unbalanced layout.
 	 * This is for scientific purpose and debugging. If you are not sure then use the other Constructor
-	 * 
+	 *
+	 * @param downward The level direction
+	 * @param leftToRight The node direction on each level
 	 * @param ySep Distance between adjacent layers in y-direction.
 	 * @param minXSep Mimimum separation between nodes in x-direction.
 	 */
@@ -138,7 +141,7 @@ private:
 	 * A type1 conflict is a crossing of a inner segment with a non-inner segment.
 	 *
 	 * This is for preferring straight inner segments.
-	 * 
+	 *
 	 * @param H The Hierarchy
 	 * @param downward The level direction
 	 * @return (type1Conflicts[v])[u]=true means (u,v) is marked, u is the upper node
@@ -146,9 +149,9 @@ private:
 	NodeArray<NodeArray<bool> > markType1Conflicts(const Hierarchy& H, bool downward);
 
 	/**
-	 * Align each node to a node on the next higher level. The result is a blockgraph where each 
-	 * node is in a block whith a nother node when they have the same root. 
-	 * 
+	 * Align each node to a node on the next higher level. The result is a blockgraph where each
+	 * node is in a block whith a nother node when they have the same root.
+	 *
 	 * @param H The Hierarchy
 	 * @param root The root for each node (calculated by this method)
 	 * @param align The alignment to the next level node (align(v)=u <=> u is aligned to v) (calculated by this method)
@@ -156,26 +159,35 @@ private:
 	 * @param downward The level direction
 	 * @param leftToRight The node direction on each level
 	 */
-	void verticalAlignment(const Hierarchy &H, NodeArray<node> &root, NodeArray<node> &align,
-						   const NodeArray<NodeArray<bool> > &type1Conflicts, const bool downward, 
-						   const bool leftToRight);
+	void verticalAlignment(
+		const Hierarchy &H,
+		NodeArray<node> &root,
+		NodeArray<node> &align,
+		const NodeArray<NodeArray<bool> > &type1Conflicts,
+		const bool downward,
+		const bool leftToRight);
 
 	/**
 	 * Calculate the coordinates for each node
-	 * 
+	 *
 	 * @param align The alignment to the next level node (align(v)=u <=> u is aligned to v)
 	 * @param H The Hierarchy
 	 * @param root The root for each node
 	 * @param x The x-coordinates for each node (calculated by this method)
 	 * @param leftToRight The node direction on each level
+	 * @param downward The level direction
 	 */
-	void horizontalCompactation(const NodeArray<node> &align, const Hierarchy &H, 
-								const NodeArray<node> root, NodeArray<int> &x,
-							    const bool leftToRight, bool downward);
+	void horizontalCompactation(
+		const NodeArray<node> &align,
+		const Hierarchy &H,
+		const NodeArray<node> root,
+		NodeArray<int> &x,
+		const bool leftToRight,
+		bool downward);
 
 	/**
 	 * Calculate the coordinate for root nodes (placing)
-	 * 
+	 *
 	 * @param v The root node to place
 	 * @param sink The Sink for each node. A sink identifies each block class (calculated by this method)
 	 * @param shift The shift for each class (calculated by this method)
@@ -191,15 +203,15 @@ private:
 
 	/**
 	 * The twin of an inner Segment
-	 * 
-	 * @return Parent node which is connected by an inner segment. 
+	 *
+	 * @return Parent node which is connected by an inner segment.
 	 * NULL if there is no parent segment or if the segment is not an inner segment.
 	 */
-	const node virtualTwinNode(const Hierarchy &H, const node v, const Hierarchy::TraversingDir dir);
-	
+	node virtualTwinNode(const Hierarchy &H, const node v, const Hierarchy::TraversingDir dir) const;
+
 	/**
 	 * Predecessor of v on the same level,
-	 * 
+	 *
 	 * @param v The node for which the predecessor should be calculated.
 	 * @param H The Hierarchy
 	 * @param leftToRight If true the left predecessor is choosen. Otherwise the right predecessor.

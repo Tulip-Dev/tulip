@@ -1,6 +1,2 @@
-@cd ..
-@del /F /Q doc\html
+@del /F /Q .\html
 @doxygen.exe ogdf-doxygen.cfg
-copy doc\images\ftv2*.png doc\html\
-copy doc\indexp.php doc\html
-@cd doc

@@ -1,20 +1,21 @@
 /*
- * $Revision: 2303 $
+ * $Revision: 2599 $
  *
  * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-05-08 09:41:00 +0200 (Tue, 08 May 2012) $
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief Definition of the Fraysseix, Pach, Pollack Algorithm (FPPLayout)
  *
- * \author Till Schaefer
+ * \author Till Sch&auml;fer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -40,7 +41,7 @@
  ***************************************************************/
 
 #include <ogdf/planarlayout/FPPLayout.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/GraphCopy.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/basic/exceptions.h>
@@ -51,9 +52,13 @@ namespace ogdf {
 FPPLayout::FPPLayout() : PlanarGridLayoutModule() {
 }
 
-void FPPLayout::doCall(const Graph &G, adjEntry adjExternal,
-					   GridLayout &gridLayout, IPoint &boundingBox,
-					   bool fixEmbedding) {
+void FPPLayout::doCall(
+	const Graph &G,
+	adjEntry adjExternal,
+	GridLayout &gridLayout,
+	IPoint &boundingBox,
+	bool fixEmbedding)
+{
 	// check for double edges & self loops
 	OGDF_ASSERT(isSimple(G));
 
@@ -86,8 +91,7 @@ void FPPLayout::doCall(const Graph &G, adjEntry adjExternal,
 
 	// embed
 	if (!fixEmbedding) {
-		PlanarModule pm;
-		if (pm.planarEmbed(GC) == false) {
+		if (planarEmbed(GC) == false) {
 			OGDF_THROW_PARAM(PreconditionViolatedException, pvcPlanar);
 		}
 	}
@@ -116,8 +120,15 @@ void FPPLayout::doCall(const Graph &G, adjEntry adjExternal,
 }
 
 
-void FPPLayout::computeOrder(const GraphCopy &G, NodeArray<int> &num, NodeArray<adjEntry> &e_wp,
-							  NodeArray<adjEntry> &e_wq, adjEntry e_12, adjEntry e_2n, adjEntry e_n1) {
+void FPPLayout::computeOrder(
+	const GraphCopy &G,
+	NodeArray<int> &num,
+	NodeArray<adjEntry> &e_wp,
+	NodeArray<adjEntry> &e_wq,
+	adjEntry e_12,
+	adjEntry e_2n,
+	adjEntry e_n1)
+{
 	NodeArray<int> num_diag(G, 0);							// number of chords
 	// link[v] = Iterator in possible, that points to v (if diag[v] = 0 and outer[v] = TRUE)
 	NodeArray<ListIterator<node> > link(G, 0);

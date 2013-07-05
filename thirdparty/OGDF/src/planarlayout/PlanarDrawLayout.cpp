@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements class PlanarDrawLayout
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -43,12 +44,12 @@
 #include <ogdf/planarlayout/PlanarDrawLayout.h>
 #include <ogdf/basic/GraphCopy.h>
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/planarity/PlanarModule.h>
 #include <ogdf/augmentation/PlanarAugmentation.h>
 #include <ogdf/augmentation/PlanarAugmentationFix.h>
 #include <ogdf/module/ShellingOrderModule.h>
 #include <ogdf/basic/BoundedStack.h>
 #include <ogdf/planarlayout/BiconnectedShellingOrder.h>
+#include <ogdf/planarity/SimpleEmbedder.h>
 
 namespace ogdf {
 
@@ -61,6 +62,7 @@ PlanarDrawLayout::PlanarDrawLayout()
 
 	m_augmenter.set(new PlanarAugmentation);
 	m_computeOrder.set(new BiconnectedShellingOrder);
+	m_embedder.set(new SimpleEmbedder);
 }
 
 
@@ -113,10 +115,7 @@ void PlanarDrawLayout::doCall(
 		m_augmenter.get().call(GC);
 
 		// embed augmented graph
-		PlanarModule pm;
-		bool isPlanar = pm.planarEmbed(GC);
-		if(isPlanar == false)
-			OGDF_THROW_PARAM(PreconditionViolatedException, pvcPlanar);
+		m_embedder.get().call(GC,adjExternal);
 	}
 
 	// compute shelling order
@@ -148,15 +147,6 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 	NodeArray<int> &x,
 	NodeArray<int> &y)
 {
-	/*cout << "Graph:\n";
-	List<edge> edges;
-	G.allEdges(edges);
-	cout << edges << endl;
-	cout << "order:\n";
-	for(int ih = 1; ih <= order.length(); ++ih) {
-		cout << ih << ": " << order[ih] << endl;
-	}*/
-
 	// let c_1,...,c_q be the the current contour, then
 	// next[c_i] = c_i+1, prev[c_i] = c_i-1
 	NodeArray<node>	next(G), prev(G);
@@ -197,14 +187,14 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 		if (i > 1)
 			prev[V1[i]] = V1[i-1];
 	}
-    prev[v1] = next[v2] = 0;
+	prev[v1] = next[v2] = 0;
 
 	// process shelling order from bottom to top
 	for (int k = 2; k <= order.length(); k++)
 	{
 		// Referenz auf aktuelle Menge Vk (als Abk?rzung)
 		const ShellingOrderSet &Vk = order[k]; // Vk = { z_1,...,z_l }
-		int l = Vk.len();   
+		int l = Vk.len();
 
 		node z1 = Vk[1];
 		node cl = Vk.left();  // left vertex
@@ -235,7 +225,7 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 			if (isOuter)
 			{
 				yMax = max(y[cl]+1-eps,
-						   y[cr] + ((x[cr] == 1 && eps == 1) ? 1 : 0));
+					y[cr] + ((x[cr] == 1 && eps == 1) ? 1 : 0));
 				for (v = next[cl]; v != cr; v = next[v]) {
 					if (x[v] < x[cr]) {
 						int y1 = (y[cr]-y[v])*(eps-x[cr])/(x[cr]-x[v])+y[cr];
@@ -263,7 +253,7 @@ void PlanarDrawLayout::computeCoordinates(const Graph &G,
 						yMax = y[v];
 				}
 				int offset = max (yMax-x[cr]+l+eps-y[cr],
-							  (y[prev[cr]] > y[cr]) ? 1 : 0);
+					(y[prev[cr]] > y[cr]) ? 1 : 0);
 				y_z  = y[cr] + x[cr] + offset - l + 1 - eps;
 				x_cr = y_z - y[cr];
 			}

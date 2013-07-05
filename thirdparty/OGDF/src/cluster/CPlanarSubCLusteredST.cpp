@@ -1,45 +1,46 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
- * \brief Implementation of class CPlanarSubClusteredST. 
- * Computes a (c-connected) spanning tree of a c-connected graph. 
- * 
+ * \brief Implementation of class CPlanarSubClusteredST.
+ * Computes a (c-connected) spanning tree of a c-connected graph.
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
- 
+
  #include <ogdf/internal/cluster/CPlanarSubClusteredST.h>
 
 #include <ogdf/basic/simple_graph_alg.h>
@@ -69,12 +70,12 @@ void CPlanarSubClusteredST::call(const ClusterGraph &CG, EdgeArray<bool>& inST)
 	inST.fill(false);
 
 	//representationsgraphs for every cluster, on clustergraph
-	ClusterArray<Graph*> l_clusterRepGraph(CG, 0); 
+	ClusterArray<Graph*> l_clusterRepGraph(CG, 0);
 	computeRepresentationGraphs(CG, l_clusterRepGraph);
 
 	//now we compute the spanning trees on the representation graphs
 	//we should save the selection info on the original edge
-	//are statically on the repgraphedges (we only have edge -> repedge 
+	//are statically on the repgraphedges (we only have edge -> repedge
 	//information) but
 	ClusterArray< EdgeArray<bool> > l_inTree(CG);
 
@@ -96,10 +97,10 @@ void CPlanarSubClusteredST::call(const ClusterGraph &CG, EdgeArray<bool>& inST)
 	NodeArray<bool> visited(CG.getGraph(), false);
 
 	dfsBuildOriginalST(CG.getGraph().firstNode(),
-					   l_inTree, 
+					   l_inTree,
 					   inST,
 					   visited);
-					   
+
 	//unregister the edgearrays to avoid destructor failure after
 	//representation graph deletion
 	forall_clusters(c, CG)
@@ -110,23 +111,23 @@ void CPlanarSubClusteredST::call(const ClusterGraph &CG, EdgeArray<bool>& inST)
 	deleteRepresentationGraphs(CG, l_clusterRepGraph);
 }//call
 
-void CPlanarSubClusteredST::call(const ClusterGraph& CG, 
+void CPlanarSubClusteredST::call(const ClusterGraph& CG,
 		EdgeArray<bool>& inST,
 		EdgeArray<double>& weight)
 {
 	initialize(CG);
-	
+
 	//representationsgraphs for every cluster, on clustergraph
-	ClusterArray<Graph*> l_clusterRepGraph(CG, 0); 
+	ClusterArray<Graph*> l_clusterRepGraph(CG, 0);
 	computeRepresentationGraphs(CG, l_clusterRepGraph);
 
 	//Now we compute the spanning trees on the representation graphs
-	//are statically on the repgraphedges (we only have edge -> repedge 
+	//are statically on the repgraphedges (we only have edge -> repedge
 	//information)
 	ClusterArray< EdgeArray<bool> > l_inTree(CG);
 	//Weight of the representation edges
 	ClusterArray< EdgeArray<double> > l_repWeight(CG);
-	//Copy the weight 
+	//Copy the weight
 	cluster c;
 	edge e;
 	forall_clusters(c, CG)
@@ -137,12 +138,12 @@ void CPlanarSubClusteredST::call(const ClusterGraph& CG,
 	{
 		l_repWeight[m_allocCluster[e]][m_repEdge[e]] = weight[e];
 	}
-	
+
 	forall_clusters(c, CG)
 	{
 		l_inTree[c].init(*l_clusterRepGraph[c], false);
 		//compute STs
-		computeMinST(*l_clusterRepGraph[c], l_repWeight[c], 
+		computeMinST(*l_clusterRepGraph[c], l_repWeight[c],
 			l_inTree[c]);
 	}//forallclusters
 
@@ -164,7 +165,7 @@ void CPlanarSubClusteredST::call(const ClusterGraph& CG,
 	}
 	OGDF_ASSERT(isConnected(cg));
 	OGDF_ASSERT(cg.numberOfEdges() == cg.numberOfNodes()-1)
-	
+
 #endif
 	//unregister the edgearrays to avoid destructor failure after
 	//representation graph deletion
@@ -173,7 +174,7 @@ void CPlanarSubClusteredST::call(const ClusterGraph& CG,
 		l_inTree[c].init();
 		l_repWeight[c].init();
 	}
-	
+
 	deleteRepresentationGraphs(CG, l_clusterRepGraph);
 }//call
 
@@ -198,7 +199,7 @@ void CPlanarSubClusteredST::dfsBuildOriginalST(node v,
 		//otherwise running time m*m*c
 		//cluster c1, c2;
 		cluster allocCluster = m_allocCluster[e];
-	
+
 		OGDF_ASSERT(allocCluster != 0);
 
 		if (! treeEdges[allocCluster][m_repEdge[e]]) continue;

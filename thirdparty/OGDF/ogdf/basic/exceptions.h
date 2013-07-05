@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Definition of exception classes
- * 
+ *
  * \author Carsten Gutwenger, Markus Chimani
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -147,7 +148,7 @@ namespace ogdf {
 
 
 	//! Base class of all ogdf exceptions.
-	class OGDF_EXPORT Exception { 
+	class OGDF_EXPORT Exception {
 
 	private:
 
@@ -160,17 +161,17 @@ namespace ogdf {
 		 * @param file is the name of the source file where exception was thrown.
 		 * @param line is the line number in the source file where the exception was thrown.
 		 */
-		Exception(const char *file = NULL, int line = -1) : 
-		  m_file(file),
-		  m_line(line)
-		{}
+		Exception(const char *file = NULL, int line = -1) :
+			m_file(file),
+			m_line(line)
+			{ }
 
 		//! Returns the name of the source file where exception was thrown.
 		/**
 		 * Returns a null pointer if the name of the source file is unknown.
 		 */
 		const char *file() { return m_file; }
-		
+
 		//! Returns the line number where the exception was thrown.
 		/**
 		 * Returns -1 if the line number is unknown.
@@ -213,7 +214,7 @@ namespace ogdf {
 
 
 	//! %Exception thrown when preconditions are violated.
-	class OGDF_EXPORT PreconditionViolatedException : public Exception 
+	class OGDF_EXPORT PreconditionViolatedException : public Exception
 	{
 	public:
 		//! Constructs a precondition violated exception.
@@ -281,7 +282,7 @@ namespace ogdf {
 			Exception(file, line),
 			m_exceptionCode(code)
 			{}
-				
+
 		//! Constructs a library not supported exception.
 			LibraryNotSupportedException(
 				const char *file = NULL,

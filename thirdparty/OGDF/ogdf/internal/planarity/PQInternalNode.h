@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration and implementation of the class PQInternalNode.
  *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -56,10 +57,10 @@ namespace ogdf {
 
 
 /**
- * The class template PQInternalNode is used to present 
+ * The class template PQInternalNode is used to present
  * P-nodes and Q-nodes in the PQ-Tree. This implementation does not
- * provide different classes for both, P- and Q-nodes, although this might 
- * seem necessary in the first place. The reason why this is not done, is 
+ * provide different classes for both, P- and Q-nodes, although this might
+ * seem necessary in the first place. The reason why this is not done, is
  * supported by the fact that the maintainance of both nodes in the tree
  * is similar and using the same class for P- and Q-nodes
  * makes the application of the templates by
@@ -79,7 +80,7 @@ namespace ogdf {
  * Besides, the constructors accept additional information of type
  * PQNodeKey and PQInternalKey.
  * This information is not necessary when allocating an element of type
- * PQInternalNode and results in the four constructors that handle all cases. 
+ * PQInternalNode and results in the four constructors that handle all cases.
  *
  * Using a constructor with the \a infoPtr storing the adress of
  * an element of type PQNodeKey automatically sets
@@ -100,15 +101,15 @@ public:
 
 	PQInternalNode(
 		int count,
-		int typ,
-		int stat,
-        PQInternalKey<T,X,Y>* internalPtr,
-        PQNodeKey<T,X,Y>* infoPtr)
+		PQNodeRoot::PQNodeType typ,
+		PQNodeRoot::PQNodeStatus stat,
+		PQInternalKey<T,X,Y>* internalPtr,
+		PQNodeKey<T,X,Y>* infoPtr)
 		: PQNode<T,X,Y>(count,infoPtr)
 	{
 		m_type = typ;
 		m_status = stat;
-		m_mark = UNMARKED;
+		m_mark = PQNodeRoot::UNMARKED;
 
 		m_pointerToInternal = internalPtr;
 		internalPtr->setNodePointer(this);
@@ -116,42 +117,42 @@ public:
 
 	PQInternalNode(
 		int count,
-		int typ,
-		int stat,
-        PQInternalKey<T,X,Y>* internalPtr)
+		PQNodeRoot::PQNodeType typ,
+		PQNodeRoot::PQNodeStatus stat,
+		PQInternalKey<T,X,Y>* internalPtr)
 		: PQNode<T,X,Y>(count)
 	{
 		m_type   = typ;
 		m_status = stat;
-		m_mark   = UNMARKED;
+		m_mark   = PQNodeRoot::UNMARKED;
 		m_pointerToInternal = internalPtr;
 		internalPtr->setNodePointer(this);
 	}
 
 	PQInternalNode(
 		int count,
-		int typ,
-		int stat,
+		PQNodeRoot::PQNodeType typ,
+		PQNodeRoot::PQNodeStatus stat,
 		PQNodeKey<T,X,Y>* infoPtr)
 		: PQNode<T,X,Y>(count,infoPtr)
 	{
 		m_type   = typ;
 		m_status = stat;
-		m_mark   = UNMARKED;
+		m_mark   = PQNodeRoot::UNMARKED;
 		m_pointerToInternal = 0;
 	}
 
 	PQInternalNode(
 		int count,
 		PQNodeRoot::PQNodeType typ,
-		int stat)
+		PQNodeRoot::PQNodeStatus stat)
 		: PQNode<T,X,Y>(count)
 	{
 		m_type = typ;
 		m_status = stat;
-		m_mark = UNMARKED;
+		m_mark = PQNodeRoot::UNMARKED;
 		m_pointerToInternal = 0;
-   
+
 	}
 
 	/**
@@ -165,7 +166,7 @@ public:
 	 * with an appropriate destructor, or make use of the function
 	 * CleanNode() of the class template PQTree.
 	*/
-    ~PQInternalNode() {}
+	~PQInternalNode() { }
 
 
 	//! Returns 0. An element of type PQInternalNode does not have a PQLeafKey.
@@ -177,8 +178,8 @@ public:
 	 * specified pointer variable in a derived class
 	 * of PQNode to the adress stored in \a pointerToKey that is
 	 * of type PQLeafKey. The class template PQInternalNode does not store
-	 * informations of type PQLeafKey.  
-     *
+	 * informations of type PQLeafKey.
+	 *
 	 * setKey() ignores the informations as long as
 	 * \a pointerToKey = 0. The return value then is 1.
 	 * In case that \a pointerToKey != 0, the return value is 0.
@@ -189,7 +190,7 @@ public:
 	}
 
 	//! Returns a pointer to the PQInternalKey information.
-    virtual PQInternalKey<T,X,Y>* getInternal() const { return m_pointerToInternal; }
+	virtual PQInternalKey<T,X,Y>* getInternal() const { return m_pointerToInternal; }
 
 	/**
 	 * setInternal() sets the pointer variable \a m_pointerToInternal to the
@@ -202,7 +203,7 @@ public:
 	 * The return value is always 1 unless \a pointerInternal was
 	 * equal to 0.
 	 */
-    virtual bool setInternal(PQInternalKey<T,X,Y>* pointerToInternal)
+	virtual bool setInternal(PQInternalKey<T,X,Y>* pointerToInternal)
 	{
 		m_pointerToInternal = pointerToInternal;
 		if (pointerToInternal != 0)
@@ -221,10 +222,10 @@ public:
 	 * P- or Q-node is either marked \b BLOCKED, \b UNBLOCKED or
 	 * \b QUEUED (see PQNode).
 	 */
-	virtual int mark() const { return m_mark; }        
-	
+	virtual PQNodeRoot::PQNodeMark mark() const { return m_mark; }
+
 	//! Sets the variable \ m_mark.
-	virtual void mark(int m) { m_mark = m; }
+	virtual void mark(PQNodeRoot::PQNodeMark m) { m_mark = m; }
 
 	//! Returns the variable \a m_status in the derived class PQInternalNode.
 	/**
@@ -236,29 +237,29 @@ public:
 	 * possibilities, (e.g. in computing planar subgraphs) this
 	 * function may be overloaded by the client.
 	 */
-	virtual int status() const { return m_status; }
-    
+	virtual PQNodeRoot::PQNodeStatus status() const { return m_status; }
+
 	//! Sets the variable \a m_status in the derived class PQInternalNode.
-	virtual void status(int s) { m_status = s; }
+	virtual void status(PQNodeRoot::PQNodeStatus s) { m_status = s; }
 
 	//! Returns the variable \a m_type in the derived class PQInternalNode.
 	/**
 	 * The type of a PQInternalNode is either \b PNode or \b QNode (see
 	 * PQNodeRoot).
 	 */
-	virtual PQNodeRoot::PQNodeType type() const { return m_type; }      
-    
+	virtual PQNodeRoot::PQNodeType type() const { return m_type; }
+
 	//! Sets the variable \a m_type in the derived class PQInternalNode.
 	virtual void type(PQNodeRoot::PQNodeType t) { m_type = t; }
 
 private:
 
 	/**
-	 * \a m_mark is a variable, storing if a PQInternalNode is 
+	 * \a m_mark is a variable, storing if a PQInternalNode is
 	 * \b QUEUEUD, \b BLOCKED or \b UNBLOCKED (see PQNode)
 	 * during the first phase of the procedure Bubble().
 	 */
-	int m_mark;  
+	PQNodeRoot::PQNodeMark m_mark;
 
 
 	/**
@@ -270,19 +271,19 @@ private:
 	 * client in order to present different information classes, needed in
 	 * the different applications of PQ-trees.
 	 */
-    PQInternalKey<T,X,Y>* m_pointerToInternal;
+	PQInternalKey<T,X,Y>* m_pointerToInternal;
 
 	/**
 	 * \a m_status is a variable storing the status of a PQInternalNode.
 	 * A P- or Q-node can be either \b FULL, \b PARTIAL or \b EMPTY
 	 * (see PQNode).
 	 */
-	int m_status;
+	PQNodeRoot::PQNodeStatus m_status;
 
-    /**
+	/**
 	 * \a m_status is a variable storing the status of a PQInternalNode.
 	 * A P- or Q-node can be either \b FULL, \b PARTIAL or \b EMPTY
-	 * (see PQNode).	
+	 * (see PQNode).
 	 */
 	PQNodeRoot::PQNodeType m_type;
 };
@@ -290,5 +291,3 @@ private:
 }
 
 #endif
-
-

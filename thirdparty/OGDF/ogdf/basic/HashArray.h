@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2615 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-16 14:23:36 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration and implementation of HashArray class.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -54,23 +55,21 @@
 namespace ogdf {
 
 
+//! Indexed arrays using hashing for element access.
 /**
- * \brief Indexed arrays using hashing for element access.
+ * @tparam I is the index type.
+ * @tparam E is the element type.
+ * @tparam H is the hash function type. Optional; its default uses the class DefHashFunc.
  *
  * A hashing array can be used like a usual array but has a general
- * index type. The class uses three template parameters:
- *   - \a I is the index type.
- *   - \a E is the element type.
- *   - \a H is the hash function type.
- * The hash function type argument is optional; its default uses the class
- * DefHashFunc.
+ * index type.
  *
  * The hashing array is only defined for a subset <I>I<SUB>def</SUB></I> of the
  * index set (set of all elements of the index type). At construction, this set
  * is empty. Whenever an index is assigned an element, this index is added
  * to <I>I<SUB>def</SUB></I>. There are also method for testing if an index
  * is defined (is in <I>I<SUB>def</SUB></I>).
- * 
+ *
  * <H3>Example</H3>
  * The following code snippet demonstrates how to use a hashing array. First,
  * the example inserts elements into a hashing array simulating a tiny
@@ -131,7 +130,7 @@ public:
 
 	//! Returns the number of defined indices (= number of elements in hash table).
 	int size() const { return Hashing<I,E,H>::size(); }
-	
+
 	//! Returns if any indices are defined (= if the hash table is empty)
 	int empty() const { return Hashing<I,E,H>::empty(); }
 

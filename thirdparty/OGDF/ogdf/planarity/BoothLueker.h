@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
- * \brief Declaration of PlanarModule which implements a planarity
+ * \brief Declaration of BoothLueker which implements a planarity
  *        test and planar embedding algorithm.
- * 
- * \author Sebastian Leipert
- * 
+ *
+ * \author Sebastian Leipert, Markus Chimani
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -45,13 +46,13 @@
 #pragma once
 #endif
 
-#ifndef OGDF_PLANAR_MODULE_H
-#define OGDF_PLANAR_MODULE_H
+#ifndef OGDF_BOOTH_LUEKER_H
+#define OGDF_BOOTH_LUEKER_H
 
 //=========================================================
 // Main functions:
 //
-// planarityTest(Graph &G)  Tests a graph for planarity.
+// isPlanar(Graph &G)  Tests a graph for planarity.
 //
 // planarEmbed(Graph &G)  Tests a graph for planarity and returns
 //                        a planar embedding if G is planar.
@@ -61,37 +62,56 @@
 #include <ogdf/basic/EdgeArray.h>
 #include <ogdf/basic/NodeArray.h>
 #include <ogdf/basic/SList.h>
+#include <ogdf/module/PlanarityModule.h>
 
 namespace ogdf {
 
-
-class OGDF_EXPORT PlanarModule{
+//! Booth-Lueker planarity test.
+/** This class implements the linear-time planarity test proposed by Booth and Luecker, based on PQ-trees.\n
+ * This class is deprecated! You will usually want to use the more modern/faster/versatile linear-time planarity test
+ * by Boyer and Myrvold instead, implemented in the class BoyerMyrvold.
+ * Generally, it is suggested to use the direct function calls isPlanar and planarEmbed in extended_graph_alg.h (which in turn use BoyerMyrvold).
+ */
+class OGDF_EXPORT BoothLueker : public PlanarityModule {
 
 public:
 
-	PlanarModule() {};
-	~PlanarModule() {};
+	BoothLueker() { }
+	~BoothLueker() { }
 
-	// Returns true, if G is planar, false otherwise.
-	bool planarityTest(Graph &G);
-	bool planarityTest(const Graph &G);
+	//! Returns true, if G is planar, false otherwise.
+	bool isPlanarDestructive(Graph &G);
+	//! Returns true, if G is planar, false otherwise.
+	bool isPlanar(const Graph &G);
 
-	// Returns true, if G is planar, false otherwise.
-	// If true, G contains a planar embedding.
+	//! Returns true, if G is planar, false otherwise. If true, G contains a planar embedding.
 	bool planarEmbed(Graph &G){return preparation(G,true);}
+	//! Returns true, if G is planar, false otherwise. If true, G contains a planar embedding.
+	/**
+	 * For BoothLueker, this procedure is exactly the same as planarEmbed. (See PlanarityModule or
+	 * BoyerMyrvold for the rationale of this function's existence.
+	 */
+	bool planarEmbedPlanarGraph(Graph &G){return preparation(G,true);}
 
 private:
 
-	// Prepares the planarity test and the planar embedding
+	//! Prepares the planarity test and the planar embedding
 	bool preparation(Graph &G,bool embed);
 
-	// Performs a planarity test on a biconnected component
-	// of G. numbering contains an st-numbering of the component.
+	//! Performs a planarity test on a biconnected component of \a G.
+	/**
+	 * Performs a planarity test on a biconnected component of \a G.
+	 *
+	 * \a numbering contains an st-numbering of the component.
+	 */
 	bool doTest(Graph &G,NodeArray<int> &numbering);
 
-	// Performs a planarity test on a biconnected component
-	// of G and embedds it planar. 
-	// numbering contains an st-numbering of the component.
+	//! Performs a planarity test on a biconnected component of \a G and embedds it planar.
+	/**
+	 * Performs a planarity test on a biconnected component of \a G and embedds it planar.
+	 *
+	 * \a numbering contains an st-numbering of the component.
+	 */
 	bool doEmbed(Graph &G,
 				 NodeArray<int>  &numbering,
 				 EdgeArray<edge> &backTableEdges,

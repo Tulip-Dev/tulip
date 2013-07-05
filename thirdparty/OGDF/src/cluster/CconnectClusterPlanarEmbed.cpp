@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of Cluster Planarity tests and Cluster
  * Planar embedding for C-connected Cluster Graphs
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -50,21 +51,20 @@
 #include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/AdjEntryArray.h>
 
-#include <ogdf/planarity/PlanarModule.h>
 #include <ogdf/internal/planarity/EmbedPQTree.h>
 
 
 namespace ogdf {
 
 // Constructor
-CconnectClusterPlanarEmbed::CconnectClusterPlanarEmbed() 
+CconnectClusterPlanarEmbed::CconnectClusterPlanarEmbed()
 {
 	ogdf::strcpy(errorCode,124,"\0");
 	m_errorCode = none;
 }
 
 // Destructor
-CconnectClusterPlanarEmbed::~CconnectClusterPlanarEmbed() 
+CconnectClusterPlanarEmbed::~CconnectClusterPlanarEmbed()
 {
 }
 
@@ -152,11 +152,11 @@ bool CconnectClusterPlanarEmbed::embed(ClusterGraph &C,Graph &G)
 
 		recursiveEmbed(Ccopy,Gcopy);
 		OGDF_ASSERT(Ccopy.consistencyCheck());
-		
+
 		copyEmbedding(Ccopy,Gcopy,C,G);
 
 		C.adjAvailable(true);
-	
+
 	}
 	else
 		nonPlanarCleanup(Ccopy,Gcopy);
@@ -194,7 +194,7 @@ bool CconnectClusterPlanarEmbed::embed(ClusterGraph &C,Graph &G)
 
 	return cPlanar;
 }
-	
+
 
 
 // Tests if a ClusterGraph is c-planar and embedds it.
@@ -206,7 +206,7 @@ bool CconnectClusterPlanarEmbed::embed(ClusterGraph &C,Graph &G, char (&code)[12
 	ogdf::strcpy(code,124,errorCode);
 	return cPlanar;
 }
-	
+
 
 
 
@@ -215,7 +215,7 @@ bool CconnectClusterPlanarEmbed::embed(ClusterGraph &C,Graph &G, char (&code)[12
 //	CallTree:
 //
 //  call(ClusterGraph &C)
-//		
+//
 //		preProcess(ClusterGraph &C,Graph &G)
 //
 //			planarityTest(ClusterGraph &C,cluster &act,Graph &G)
@@ -237,23 +237,24 @@ bool CconnectClusterPlanarEmbed::embed(ClusterGraph &C,Graph &G, char (&code)[12
 
 // Copies the embedding of Ccopy to C
 
-void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
-											   Graph &Gcopy,
-											   ClusterGraph &C,
-											   Graph &G)
+void CconnectClusterPlanarEmbed::copyEmbedding(
+	ClusterGraph &Ccopy,
+	Graph &Gcopy,
+	ClusterGraph &C,
+	Graph &G)
 {
 
 	node vCopy;
 	node v;
 	cluster c;
-    OGDF_ASSERT(Gcopy.representsCombEmbedding())
+	OGDF_ASSERT(Gcopy.representsCombEmbedding())
 
 	OGDF_ASSERT(Ccopy.representsCombEmbedding())
 
 	AdjEntryArray<adjEntry> adjTableCopy2Orig(Gcopy);
-	AdjEntryArray<adjEntry> adjTableOrig2Copy(G);		
+	AdjEntryArray<adjEntry> adjTableOrig2Copy(G);
 	AdjEntryArray<bool>     visited(G,false);				 // For parallel edges
-	EdgeArray<edge>         edgeTableCopy2Orig(Gcopy,0);     // Translation table for parallel edges 
+	EdgeArray<edge>         edgeTableCopy2Orig(Gcopy,0);     // Translation table for parallel edges
 	EdgeArray<bool>         parallelEdge(Gcopy,false);		 // Marks parallel edges in copy Graph
 	AdjEntryArray<adjEntry>	parallelEntryPoint(G,0);		 // For storing information on parallel
 															 // edges for cluster adjlistst.
@@ -287,13 +288,13 @@ void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
 			forall_adj(wAdj,wOrig)
 			{
 
-				if (edgeTableCopy2Orig[vAdj->theEdge()] != 0 && 
+				if (edgeTableCopy2Orig[vAdj->theEdge()] != 0 &&
 					m_isParallel[edgeTableCopy2Orig[vAdj->theEdge()]])
 					// Break if parallel edge (not a reference edge) that has already been assigned.
 					break;
-				if (wAdj->twinNode() == wN  
-					&& !visited[wAdj] && !m_isParallel[wAdj->theEdge()]) 
-//					&& !m_isParallel[wAdj->theEdge()]) 
+				if (wAdj->twinNode() == wN
+					&& !visited[wAdj] && !m_isParallel[wAdj->theEdge()])
+//					&& !m_isParallel[wAdj->theEdge()])
 					// Either a non parallel edge or the reference edge of a set of
 					// parallel edges.
 				{
@@ -307,18 +308,18 @@ void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
 						cout << "Orig " << wAdj << " " << wAdj->index() << "\t twin " << wAdj->twin()->index() << endl;
 						cout << "Copy " << vAdj << " " << vAdj->index() << "\t twin " << vAdj->twin()->index() << endl << endl;}
 					//qDebug ("Visited: %d->%d %d", wAdj->theNode()->index(),
-					//	wAdj->twinNode()->index(), 
+					//	wAdj->twinNode()->index(),
 					//	wAdj->index());
 					#endif
-					entireEmbedding[wOrig].pushBack(wAdj);	// if no parallel edges exist, 
+					entireEmbedding[wOrig].pushBack(wAdj);	// if no parallel edges exist,
 															// this will be our embedding.
 //					entireEmbedding[wN].pushFront(wAdj->twin());
 					visited[wAdj] = true; // for multi-edges
 //					visited[wAdj->twin()] = true; // for multi-edges
 					break;
 				}
-				else if (wAdj->twinNode() == wN  && !visited[wAdj]) 
-					// A parallel edge that is not the reference edge. 
+				else if (wAdj->twinNode() == wN  && !visited[wAdj])
+					// A parallel edge that is not the reference edge.
 					// We need to set the translation table
 				{
 					adjTableCopy2Orig[vAdj] = wAdj;
@@ -355,23 +356,23 @@ void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
 					// of a bundle of parallel edges
 
 					ListIterator<edge> it;
-					// If v is source of e, insert the parallel edges 
+					// If v is source of e, insert the parallel edges
 					// in the order stored in the list.
 					if (e->adjSource()->theNode() == v)
 					{
 						adjEntry adj = e->adjSource();
-					
+
 						newEntireEmbedding[v].pushBack(adj);
 						newEntireEmbeddingCopy[m_nodeTableOrig2Copy[v]].pushBack(adjTableOrig2Copy[adj]);
-					
+
 						parallelEntryPoint[e->adjSource()] = adj;
 						parallelToBeIgnored[adjTableOrig2Copy[adj]] = true;
 
 						for (it = m_parallelEdges[e].begin(); it.valid(); it++)
 						{
 							edge parallel = (*it);
-							adjEntry adj = parallel->adjSource()->theNode() == v? 
-										   parallel->adjSource() : parallel->adjTarget();
+							adjEntry adj = parallel->adjSource()->theNode() == v ?
+								parallel->adjSource() : parallel->adjTarget();
 							parallelToBeIgnored[adjTableOrig2Copy[adj]] = true;
 							#ifdef OGDF_DEBUG
 							if (int(ogdf::debugLevel) >= int(dlHeavyChecks)){
@@ -382,7 +383,7 @@ void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
 						}
 					}
 					else
-					// v is target of e, insert the parallel edges 
+					// v is target of e, insert the parallel edges
 					// in the opposite order stored in the list.
 					// This keeps the embedding.
 					{
@@ -390,10 +391,10 @@ void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
 						for (it = m_parallelEdges[e].rbegin(); it.valid(); it--)
 						{
 							edge parallel = (*it);
-							adjEntry adj = parallel->adjSource()->theNode() == v? 
-										   parallel->adjSource() : parallel->adjTarget();
+							adjEntry adj = parallel->adjSource()->theNode() == v ?
+								parallel->adjSource() : parallel->adjTarget();
 							parallelToBeIgnored[adjTableOrig2Copy[adj]] = true;
-							
+
 							newEntireEmbedding[v].pushBack(adj);
 							newEntireEmbeddingCopy[m_nodeTableOrig2Copy[v]].pushBack(adjTableOrig2Copy[adj]);
 							if (first)
@@ -404,7 +405,7 @@ void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
 							}
 						}
 						adjEntry adj = e->adjTarget();
-						
+
 						newEntireEmbedding[v].pushBack(adj);
 						newEntireEmbeddingCopy[m_nodeTableOrig2Copy[v]];//.pushBack(adjTableOrig2Copy[adj]);
 						newEntireEmbeddingCopy[m_nodeTableOrig2Copy[v]].pushBack(adjTableOrig2Copy[adj]);
@@ -414,9 +415,9 @@ void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
 				else if (!m_isParallel[e])
 					// normal non-multi-edge
 				{
-					adjEntry adj = e->adjSource()->theNode() == v? 
+					adjEntry adj = e->adjSource()->theNode() == v?
 									e->adjSource() : e->adjTarget();
-					
+
 					newEntireEmbedding[v].pushBack(adj);
 					newEntireEmbeddingCopy[m_nodeTableOrig2Copy[v]];//pushBack(adjTableOrig2Copy[adj]);
 					adjTableOrig2Copy[adj];
@@ -441,7 +442,7 @@ void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
 
 	adjEntry adj;
 
-    OGDF_ASSERT(G.representsCombEmbedding())
+	OGDF_ASSERT(G.representsCombEmbedding())
 
 	forall_clusters(c,Ccopy)
 	{
@@ -458,18 +459,18 @@ void CconnectClusterPlanarEmbed::copyEmbedding(ClusterGraph &Ccopy,
 			if (!m_parallelEdges[edgeTableCopy2Orig[e]].empty())
 			{
 				adjEntry padj = parallelEntryPoint[adjTableCopy2Orig[adj]];
-				
+
 				bool lastMultiEdgeFound = false;
 				node target = padj->twinNode();
 
-				while (!lastMultiEdgeFound) // Scan the parallel edges of e 
-											// in the original graph along the embedded 
+				while (!lastMultiEdgeFound) // Scan the parallel edges of e
+											// in the original graph along the embedded
 											// adjacency list of its target
 				{
 					if (padj->twinNode() == target) // is a multi edge
 					{
 						embedding.pushBack(padj);
-						padj = padj->succ();						
+						padj = padj->succ();
 						if (!padj) break; //only multi edges
 					}
 					else		// Not a multi Edge
@@ -543,7 +544,7 @@ void CconnectClusterPlanarEmbed::nonPlanarCleanup(ClusterGraph &Ccopy,Graph &Gco
 
 // This function is called by recursiveEmbed only. It fixes
 // the adjacency lists of the hubs in Gcopy after a cluster has been
-// reembedded. 
+// reembedded.
 
 void CconnectClusterPlanarEmbed::hubControl(Graph &G,NodeArray<bool> &hubs)
 {
@@ -610,7 +611,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 {
 
 	node v;
-	// Remove root cluster from stack. 
+	// Remove root cluster from stack.
 	// Induced subgraph of root cluster corresponds to Gcopy
 	cluster root = m_callStack.pop();
 
@@ -625,10 +626,10 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 		cluster							act				= m_callStack.pop();
 		if (m_unsatisfiedCluster[act] == true)
 			continue;
-		
+
 		// subgraph is the graph that replaces the wheelGraph of act in Gcopy
 		Graph							*subGraph		= m_clusterSubgraph[act];
-		// embedding contains the (partial) embedding of all biconnected components 
+		// embedding contains the (partial) embedding of all biconnected components
 		// that do not have outgoing edges of the cluster act.
 		NodeArray<SListPure<adjEntry> >	*embedding		= m_clusterEmbedding[act];
 		// For every node of subGraph hubs is true if the node is a hub in subGraph
@@ -643,7 +644,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 		//
 		// 1. In m_wheelGraphNodes we have for every node of Gcopy that
 		//    is a wheel graph node its corresponding cluster.
-		//    Must UPDATE this information after we have replaced the current 
+		//    Must UPDATE this information after we have replaced the current
 		//    wheel graph by subGraph.
 
 		// Make sure that:
@@ -655,17 +656,17 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 
 
 		//----------------------------------------//
-		// Translation tables between the subgraph and 
+		// Translation tables between the subgraph and
 		// its corresponding subgraph in Gcopy
 		AdjEntryArray<adjEntry> tableAdjEntrySubGraph2Gcopy(*subGraph);
 		NodeArray<node> nodeTableGcopy2SubGraph(Gcopy,0);
 		NodeArray<node> nodeTableSubGraph2Gcopy(*subGraph,0);
-		
-		
+
+
 		//----------------------------------------//
 		// Identify all wheelgraph nodes in Gcopy that correspond to act.
 		// These nodes have to be removed and replaced by subGraph.
-		
+
 		SList<node> replaceNodes;
 		forall_nodes(v,Gcopy)
 			if (m_wheelGraphNodes[v] == act)
@@ -685,7 +686,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 
 		//----------------------------------------//
 		// Insert for every node of subGraph
-		// a new node in Gcopy. 
+		// a new node in Gcopy.
 		forall_nodes(v,*subGraph)
 		{
 			if (v != m_clusterSuperSink[act])
@@ -704,8 +705,8 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 			}
 		}
 
-		
-		//----------------------------------------//		
+
+		//----------------------------------------//
 		// Insert the edges between the new nodes
 		EdgeArray<bool> visited((*subGraph),false);
 		forall_nodes(v,*subGraph)
@@ -715,7 +716,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 
 			if (v != m_clusterSuperSink[act])
 			{
-				forall_adj_edges (e,v) 
+				forall_adj_edges (e,v)
 				{
 					node w = e->opposite(v);
 
@@ -723,9 +724,9 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 					{
 						node newW = nodeTableSubGraph2Gcopy[w];
 						edge eNew = Gcopy.newEdge(newV,newW);
-						if ((e->adjSource()->theNode() == v && 
+						if ((e->adjSource()->theNode() == v &&
 							 eNew->adjSource()->theNode() == nodeTableSubGraph2Gcopy[v]) ||
-							(e->adjTarget()->theNode() == v && 
+							(e->adjTarget()->theNode() == v &&
 							 eNew->adjTarget()->theNode() == nodeTableSubGraph2Gcopy[v]))
 						{
 							tableAdjEntrySubGraph2Gcopy[e->adjSource()] = eNew->adjSource();
@@ -742,15 +743,15 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 						m_outgoingEdgesAnker[eNew] = (*outgoingAnker)[e];
 						visited[e] = true;
 					}
-				}				
-			}  
+				}
+			}
 		}//forallnodes
 		//edge borderEdge = m_clusterPQContainer[act].m_stEdgeLeaf->userStructKey();
 
 
-		
-		//----------------------------------------//		
-		
+
+		//----------------------------------------//
+
 		edge startEdge = 0; // first outgoing edge of cluster
 							// start embedding here
 		SListIterator<node> its;
@@ -763,7 +764,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 
 			// Traverse all edges adajcent to v to locate an outgoing edge.
 			edge e;
-			forall_adj_edges(e,v) 
+			forall_adj_edges(e,v)
 			{
 				node w = e->opposite(v);
 				if (act != m_wheelGraphNodes[w])
@@ -784,7 +785,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 		List<edge> outgoingEdges;
 		outgoingEdges.pushBack(startEdge);
 
-		adjEntry adj =  startEdge->adjSource()->theNode() == v ? 
+		adjEntry adj =  startEdge->adjSource()->theNode() == v ?
 						startEdge->adjSource() : startEdge->adjTarget();
 		edge currentEdge = 0;
 		while (currentEdge != startEdge)
@@ -804,15 +805,15 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 
 		}
 
-		//----------------------------------------//		
-		// Insert the edges between the new nodes and 
+		//----------------------------------------//
+		// Insert the edges between the new nodes and
 		// the existing nodes of Gcopy.
 
-		PlanarLeafKey<indInfo*>* leftKey = 0;
-		PlanarLeafKey<indInfo*>* rightKey = 0;
+		PlanarLeafKey<IndInfo*>* leftKey = 0;
+		PlanarLeafKey<IndInfo*>* rightKey = 0;
 		edge firstEdge = 0;
 		node t = m_clusterPQContainer[act].m_superSink;
-		SListPure<PlanarLeafKey<indInfo*>*> allOutgoing;
+		SListPure<PlanarLeafKey<IndInfo*>*> allOutgoing;
 
 		#ifdef OGDF_DEBUG
 		EdgeArray<edge> debugTableOutgoingSubGraph2Gcopy(*subGraph,0);
@@ -828,7 +829,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 			// Assert that stack for anker nodes is not empty
 			OGDF_ASSERT(!m_outgoingEdgesAnker[e]->empty())
 
-			node nonWheelNode; // The node of Gcopy that does not 
+			node nonWheelNode; // The node of Gcopy that does not
 								// correspond to cluster act
 			if (act != m_wheelGraphNodes[e->source()])
 				nonWheelNode = e->source();
@@ -849,7 +850,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 			allOutgoing.pushBack(rightKey);
 			if (leftKey)
 			{
-				SListPure<PlanarLeafKey<indInfo*>*> pair;
+				SListPure<PlanarLeafKey<IndInfo*>*> pair;
 				pair.pushBack(leftKey);
 				pair.pushBack(rightKey);
 #ifdef OGDF_DEBUG
@@ -858,10 +859,10 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 					T->Reduction(pair);
 				// Assert that the Reduction did not fail
 				OGDF_ASSERT(planar)
-				T->PQTree<edge,indInfo*,bool>::emptyAllPertinentNodes();
+				T->PQTree<edge,IndInfo*,bool>::emptyAllPertinentNodes();
 			}
 			else
-				firstEdge = subGraphEdge; 
+				firstEdge = subGraphEdge;
 
 			leftKey = rightKey;
 
@@ -906,7 +907,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 		}
 
 
-		//----------------------------------------//		
+		//----------------------------------------//
 		// Compute an embedding of the subgraph
 
 		// Mark all leaves as relevant
@@ -916,16 +917,16 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 			T->Reduction(allOutgoing);
 		// Assert that the Reduction did not fail
 		OGDF_ASSERT(planar)
-	
-		// Stores for every node v the keys corresponding to the incoming edges of v 
-		NodeArray<SListPure<PlanarLeafKey<indInfo*>* > >* inLeaves
+
+		// Stores for every node v the keys corresponding to the incoming edges of v
+		NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > >* inLeaves
 			= m_clusterPQContainer[act].m_inLeaves;
 
-		// Stores for every node v the keys corresponding to the outgoing edges of v 
-		/*NodeArray<SListPure<PlanarLeafKey<indInfo*>* > >* outLeaves
+		// Stores for every node v the keys corresponding to the outgoing edges of v
+		/*NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > >* outLeaves
 			= m_clusterPQContainer[act].m_outLeaves;*/
 
-		// Stores for every node v the sequence of incoming edges of v according 
+		// Stores for every node v the sequence of incoming edges of v according
 		// to the embedding
 		NodeArray<SListPure<edge> >* frontier
 			= m_clusterPQContainer[act].m_frontier;
@@ -947,15 +948,12 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 		Array<node>* tableNumber2Node = m_clusterPQContainer[act].m_tableNumber2Node;
 
 		Array<bool> toReverse(1,(*numbering)[t],false);
-			
-	    // Get necessary embedding information
-		T->ReplaceRoot((*inLeaves)[t],
-					   (*frontier)[t],
-					   (*opposed)[t],
-					   (*nonOpposed)[t],t);
+
+		// Get necessary embedding information
+		T->ReplaceRoot((*inLeaves)[t], (*frontier)[t], (*opposed)[t], (*nonOpposed)[t],t);
 
 
-		//---------------------------------------------------------//	
+		//---------------------------------------------------------//
 		// Compute a regular embedding of the biconnected component.
 
 		// Reverse adjacency lists if necessary
@@ -999,7 +997,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 				for(it=(*frontier)[v].begin();it.valid();it++)cout<<*it<<" ";
 				cout << endl;}}
 		#endif
-		
+
 		// Compute the upward embedding
 
 		NodeArray<SListPure<adjEntry> > biCompEmbedding(*subGraph);
@@ -1014,7 +1012,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 			}
 		}
 
-		//---------------------------------------------//	
+		//---------------------------------------------//
 		// Compute the entire embedding of the subGraph
 
 		NodeArray<bool> mark(*subGraph,false);
@@ -1028,7 +1026,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 		entireEmbed(*subGraph,biCompEmbedding,adjMarker,mark,v);
 
 
-		//--------------------------------------------------//	
+		//--------------------------------------------------//
 		// Sort the adjacency list of the new nodes in Gcopy
 		// using the entire embedding of subGraph
 
@@ -1045,7 +1043,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 		}
 
 
-		// Copy Embedding of the biconnected componts 
+		// Copy Embedding of the biconnected componts
 		// with outging edges. Don't add the outgoing edges
 
 		for (i = 1; i < (*numbering)[t]; i++)
@@ -1059,16 +1057,15 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 				embeddingGcopy[nodeTableSubGraph2Gcopy[v]].pushBack(
 					tableAdjEntrySubGraph2Gcopy[adj]);
 			}
-		}		
+		}
 
 
 		forall_nodes(v,*subGraph)
 			if (v != t)
-				Gcopy.sort(nodeTableSubGraph2Gcopy[v],
-						   embeddingGcopy[nodeTableSubGraph2Gcopy[v]]);
+				Gcopy.sort(nodeTableSubGraph2Gcopy[v], embeddingGcopy[nodeTableSubGraph2Gcopy[v]]);
 
 
-		//----------------------------------------//	
+		//----------------------------------------//
 		// Sort the adjacency list of the new cluster nodes in Gcopy
 		// using the adjacency list of t
 
@@ -1076,7 +1073,7 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 		while (!biCompEmbedding[t].empty())
 		{
 			adjEntry adj = biCompEmbedding[t].popFrontRet();
-			(*embedding)[t].pushBack(adj); 
+			(*embedding)[t].pushBack(adj);
 			// Choose the twin of adj, since adj is associated with t
 			// which is the outside of the cluster.
 			embeddingClusterList.pushFront(tableAdjEntrySubGraph2Gcopy[adj->twin()]);
@@ -1086,8 +1083,8 @@ void CconnectClusterPlanarEmbed::recursiveEmbed(ClusterGraph &Ccopy,Graph &Gcopy
 
 
 
-	
-		//----------------------------------------//	
+
+		//----------------------------------------//
 		// Delete the wheelGraph nodes from Gcopy
 		while (!replaceNodes.empty())
 		{
@@ -1143,15 +1140,14 @@ bool CconnectClusterPlanarEmbed::preProcess(ClusterGraph &Ccopy,Graph &Gcopy)
 	m_errorCode = none;
 	if (!isCConnected(Ccopy))
 	{
-		ogdf::sprintf(errorCode,124,"Graph is not Ccopy-connected \n"); 
+		ogdf::sprintf(errorCode,124,"Graph is not Ccopy-connected \n");
 		m_errorCode = nonCConnected;
 		return false;
 	}
 
-	PlanarModule Pm;
-	if (!Pm.planarityTest(Ccopy))
+	if (!isPlanar(Ccopy))
 	{
-		ogdf::sprintf(errorCode,124,"Graph is not planar\n"); 
+		ogdf::sprintf(errorCode,124,"Graph is not planar\n");
 		m_errorCode = nonPlanar;
 		return false;
 	}
@@ -1178,13 +1174,14 @@ bool CconnectClusterPlanarEmbed::preProcess(ClusterGraph &Ccopy,Graph &Gcopy)
 
 // Recursive call for testing Planarity of a Cluster
 
-bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
-											   cluster &act,
-											   Graph &Gcopy)
+bool CconnectClusterPlanarEmbed::planarityTest(
+	ClusterGraph &Ccopy,
+	cluster &act,
+	Graph &Gcopy)
 {
 	cluster origOfAct = m_clusterTableCopy2Orig[act];
 
-	
+
 	// Test children first
 	ListConstIterator<cluster> it;
 	for (it = act->cBegin(); it.valid();)
@@ -1214,8 +1211,7 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
 	Graph			*subGraph =  OGDF_NEW Graph();
 	NodeArray<node> nodeTableOrig2New;
 	EdgeArray<edge> edgeTableOrig2New;
-	inducedSubGraph(Gcopy,subGraphNodes.begin(),(*subGraph),
-						  nodeTableOrig2New,edgeTableOrig2New);
+	inducedSubGraph(Gcopy, subGraphNodes.begin(), (*subGraph), nodeTableOrig2New, edgeTableOrig2New);
 	NodeArray<node> nodeTableNew2Orig((*subGraph),0);
 
 	// Necessary only for root cluster.
@@ -1231,14 +1227,14 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
 		for (its = act->nBegin(); its.valid(); its++)
 		{
 			node w = (*its);
-			(*m_clusterNodeTableNew2Orig[origOfAct])[nodeTableOrig2New[w]] 
+			(*m_clusterNodeTableNew2Orig[origOfAct])[nodeTableOrig2New[w]]
 				= m_nodeTableCopy2Orig[w];
 		}
 		edge e;
 		forall_edges(e,Gcopy)
 		{
 			if (edgeTableOrig2New[e] && m_outgoingEdgesAnker[e])
-				(*m_clusterOutgoingEdgesAnker[origOfAct])[edgeTableOrig2New[e]] 
+				(*m_clusterOutgoingEdgesAnker[origOfAct])[edgeTableOrig2New[e]]
 					= m_outgoingEdgesAnker[e];
 		}
 	}
@@ -1257,7 +1253,7 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
 		edge e;
 		forall_edges(e,Gcopy)
 		{
-			edgeTableNew2Orig[edgeTableOrig2New[e]] = e; 
+			edgeTableNew2Orig[edgeTableOrig2New[e]] = e;
 			if (m_outgoingEdgesAnker[e])
 				(*m_clusterOutgoingEdgesAnker[origOfAct])[e]
 					= m_outgoingEdgesAnker[e];
@@ -1266,7 +1262,7 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
 
 
 
-	// Introduce super sink and add edges corresponding 
+	// Introduce super sink and add edges corresponding
 	// to outgoing edges of the cluster
 
 	node superSink = subGraph->newNode();
@@ -1280,13 +1276,13 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
 		{
 			edge e = adj->theEdge();
 			edge cor = 0;
-			if (nodeTableOrig2New[e->source()] == 0) 
+			if (nodeTableOrig2New[e->source()] == 0)
 				// edge is connected to a node outside the cluster
 			{
 				cor = subGraph->newEdge(nodeTableOrig2New[e->target()],superSink);
 				outgoingTable[cor] = e->source();
 				if (m_outgoingEdgesAnker[e])
-					(*m_clusterOutgoingEdgesAnker[origOfAct])[cor] 
+					(*m_clusterOutgoingEdgesAnker[origOfAct])[cor]
 						= m_outgoingEdgesAnker[e];
 			}
 			else if (nodeTableOrig2New[e->target()] == 0) // dito
@@ -1294,10 +1290,10 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
 				cor = subGraph->newEdge(nodeTableOrig2New[e->source()],superSink);
 				outgoingTable[cor] = e->target();
 				if (m_outgoingEdgesAnker[e])
-					(*m_clusterOutgoingEdgesAnker[origOfAct])[cor] 
+					(*m_clusterOutgoingEdgesAnker[origOfAct])[cor]
 						= m_outgoingEdgesAnker[e];			}
 
-			// else edge connects two nodes of the cluster	
+			// else edge connects two nodes of the cluster
 		}
 	}
 	if (superSink->degree() == 0) // root cluster is not connected to outside clusters
@@ -1320,7 +1316,7 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
 	bool cPlanar = preparation((*subGraph),origOfAct,superSink);
 
 
-	if (cPlanar && act != Ccopy.rootCluster()) 
+	if (cPlanar && act != Ccopy.rootCluster())
 	{
 		// Remove induced subgraph and the cluster act.
 		// Replace it by a wheel graph
@@ -1331,7 +1327,7 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
 				(*m_clusterSubgraphHubs[origOfAct])[nodeTableOrig2New[w]]
 					= true;
 			if (m_wheelGraphNodes[w])
-				(*m_clusterSubgraphWheelGraph[origOfAct])[nodeTableOrig2New[w]]	
+				(*m_clusterSubgraphWheelGraph[origOfAct])[nodeTableOrig2New[w]]
 					= m_wheelGraphNodes[w];
 
 //			Ccopy.unassignNode(w);
@@ -1350,9 +1346,9 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
 		Ccopy.delCluster(act);
 	}
 
-	else if (cPlanar && act == Ccopy.rootCluster()) 
+	else if (cPlanar && act == Ccopy.rootCluster())
 	{
-	
+
 		node w ;
 		forall_nodes(w,Gcopy)
 		{
@@ -1375,17 +1371,17 @@ bool CconnectClusterPlanarEmbed::planarityTest(ClusterGraph &Ccopy,
 			forall_adj(a,w)
 			{
 				edge e = edgeTableNew2Orig[a->theEdge()];
-				adjEntry adj = (e->adjSource()->theNode() == originalOfw)? 
+				adjEntry adj = (e->adjSource()->theNode() == originalOfw)?
 								e->adjSource() : e->adjTarget();
 				adjList.pushBack(adj);
 			}
-			
+
 			Gcopy.sort(originalOfw,adjList);
 		}
 
-		// Test if embedding was determined correctly. 
+		// Test if embedding was determined correctly.
 		OGDF_ASSERT(subGraph->representsCombEmbedding())
-		
+
 		edgeTableNew2Orig.init();
 		outgoingTable.init();
 		nodeTableNew2Orig.init();
@@ -1434,7 +1430,7 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 
 	node v;
 	edge e;
-	int  bcIdSuperSink = -1; // ID of biconnected component that contains superSink 
+	int  bcIdSuperSink = -1; // ID of biconnected component that contains superSink
 							 // Initialization with -1 necessary for assertion
 	bool cPlanar = true;
 
@@ -1452,7 +1448,7 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 	//		Partial Embedding of the biconnected components not having
 	//		outgoing edges.
 
-	NodeArray<SListPure<adjEntry> > 
+	NodeArray<SListPure<adjEntry> >
 		*entireEmbedding = OGDF_NEW NodeArray<SListPure<adjEntry> >(subGraph);
 	m_clusterEmbedding[origCluster] = entireEmbedding;
 
@@ -1464,7 +1460,7 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 	forall_edges(e,subGraph)
 	{
 		blockEdges[componentID[e]].pushFront(e);
-	} 
+	}
 
 	// Determine nodes per biconnected component.
 	Array<SList<node> > blockNodes(0,bcCount-1);
@@ -1503,11 +1499,11 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 		}
 
 	}
-	
-	
+
+
 
 	// Perform Planarity Test for every biconnected component
-		
+
 	if (bcCount == 1)
 	{
 		// Compute st-numbering
@@ -1531,18 +1527,22 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 		if (bcIdSuperSink == 0)
 			m_clusterPQContainer[origCluster].init(&subGraph);
 
-		cPlanar = doEmbed(&subGraph,numbering,origCluster,superSink,
-						  subGraph,
-						  tableEdgesBiComp2SubGraph,
-						  tableEdgesBiComp2SubGraph,
-						  tableNodesBiComp2SubGraph);
+		cPlanar = doEmbed(
+			&subGraph,
+			numbering,
+			origCluster,
+			superSink,
+			subGraph,
+			tableEdgesBiComp2SubGraph,
+			tableEdgesBiComp2SubGraph,
+			tableNodesBiComp2SubGraph);
 
 		// Do not save the embedding of the subgraph. It is not complete.
 		if (bcIdSuperSink == -1)
 		{
 			// The root cluster is embedded.
-			// Gather the embeddding of the biconnected graph, if it belongs to 
-			// the root cluster. 
+			// Gather the embeddding of the biconnected graph, if it belongs to
+			// the root cluster.
 			// The embedding of the subgraph is saved, as it is the root cluster graph.
 			forall_nodes(v,subGraph)
 			{
@@ -1558,7 +1558,7 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 		for (int i = 0; i < bcCount; i++)
 		{
 			Graph *biCompOfSubGraph = OGDF_NEW Graph();
-		
+
 			SListIterator<node> itn;
 			for (itn = blockNodes[i].begin(); itn.valid(); ++ itn)
 			{
@@ -1575,15 +1575,15 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 			for (it = blockEdges[i].begin(); it.valid(); ++it)
 			{
 				e = *it;
-				edge f = biCompOfSubGraph->newEdge(tableNodesSubGraph2BiComp[e->source()],
-												  tableNodesSubGraph2BiComp[e->target()]);
+				edge f = biCompOfSubGraph->newEdge(
+					tableNodesSubGraph2BiComp[e->source()], tableNodesSubGraph2BiComp[e->target()]);
 				tableEdgesSubGraph2BiComp[e] = f;
 			}
 
 			EdgeArray<edge> tableEdgesBiComp2SubGraph(*biCompOfSubGraph,0);
 			for (it = blockEdges[i].begin(); it.valid(); ++it)
 				tableEdgesBiComp2SubGraph[tableEdgesSubGraph2BiComp[*it]] = *it;
-		
+
 			NodeArray<int> numbering(*biCompOfSubGraph,0);
 			int n;
 			if (bcIdSuperSink == i)
@@ -1594,25 +1594,32 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 				// Initialize the container class for storing all information
 				m_clusterPQContainer[origCluster].init(&subGraph);
 
-				cPlanar = doEmbed(biCompOfSubGraph,numbering,origCluster,
-								  tableNodesSubGraph2BiComp[superSink],
-								  subGraph,
-								  tableEdgesBiComp2SubGraph,
-								  tableEdgesSubGraph2BiComp,
-								  tableNodesBiComp2SubGraph);			
+				cPlanar = doEmbed(
+					biCompOfSubGraph,
+					numbering,
+					origCluster,
+					tableNodesSubGraph2BiComp[superSink],
+					subGraph,
+					tableEdgesBiComp2SubGraph,
+					tableEdgesSubGraph2BiComp,
+					tableNodesBiComp2SubGraph);
 			}
 			else
 			{
 				n = stNumber(*biCompOfSubGraph,numbering);
-				OGDF_ASSERT_IF(dlConsistencyChecks,testSTnumber(*biCompOfSubGraph,numbering,n))
-				cPlanar = doEmbed(biCompOfSubGraph,numbering,origCluster,0,
-								  subGraph,
-								  tableEdgesBiComp2SubGraph,
-								  tableEdgesSubGraph2BiComp,
-								  tableNodesBiComp2SubGraph);
+				OGDF_ASSERT_IF(dlConsistencyChecks,testSTnumber(*biCompOfSubGraph,numbering,n));
+				cPlanar = doEmbed(
+					biCompOfSubGraph,
+					numbering,
+					origCluster,
+					0,
+					subGraph,
+					tableEdgesBiComp2SubGraph,
+					tableEdgesSubGraph2BiComp,
+					tableNodesBiComp2SubGraph);
 			}
 
-			if (!cPlanar) 
+			if (!cPlanar)
 			{
 				numbering.init();
 				tableEdgesBiComp2SubGraph.init();
@@ -1624,8 +1631,8 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 			if (bcIdSuperSink == -1)
 			{
 				// The root cluster is embedded.
-				// Gather the embedding of the biconnected graph, if it belongs to 
-				// the root cluster. 
+				// Gather the embedding of the biconnected graph, if it belongs to
+				// the root cluster.
 				// The embedding of the subgraph is saved, as it is the root cluster graph.
 				forall_nodes(v,*biCompOfSubGraph)
 				{
@@ -1634,7 +1641,7 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 					forall_adj(a,v)
 					{
 						edge e = tableEdgesBiComp2SubGraph[a->theEdge()];
-						adjEntry adj = (e->adjSource()->theNode() == w)? 
+						adjEntry adj = (e->adjSource()->theNode() == w)?
 										e->adjSource() : e->adjTarget();
 						(*entireEmbedding)[w].pushBack(adj);
 					}
@@ -1652,7 +1659,7 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 					forall_adj(a,v)
 					{
 						edge e = tableEdgesBiComp2SubGraph[a->theEdge()];
-						adjEntry adj = (e->adjSource()->theNode() == w)? 
+						adjEntry adj = (e->adjSource()->theNode() == w)?
 										e->adjSource() : e->adjTarget();
 						(*entireEmbedding)[w].pushBack(adj);
 					}
@@ -1668,11 +1675,11 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 		}//for bccount
 
 		// m_clusterEmbedding[origCluster] now contains the (partial) embedding
-		// of all biconnected components that do not have outgoing edges 
+		// of all biconnected components that do not have outgoing edges
 		// of the cluster origCluster.
 	}
 
-	return cPlanar; 
+	return cPlanar;
 
 }// 						preparation
 
@@ -1685,10 +1692,10 @@ bool CconnectClusterPlanarEmbed::preparation(Graph &subGraph,
 
 
 // Performs a planarity test on a biconnected component
-// of subGraph and embedds it planar. 
+// of subGraph and embedds it planar.
 // numbering contains an st-numbering of the component.
 bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
-									NodeArray<int>  &numbering,			
+									NodeArray<int>  &numbering,
 									cluster &origCluster,
 									node superSink,
 									Graph &subGraph,
@@ -1698,18 +1705,18 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 {
 	node v;
 	bool cPlanar = true;
-	
+
 	// Definition
 	// incoming edge of v: an edge e = (v,w) with number(v) < number(w)
 
 
-	// Stores for every node v the keys corresponding to the incoming edges of v 
-	NodeArray<SListPure<PlanarLeafKey<indInfo*>* > > inLeaves(*biconComp);
+	// Stores for every node v the keys corresponding to the incoming edges of v
+	NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > > inLeaves(*biconComp);
 
-	// Stores for every node v the keys corresponding to the outgoing edges of v 
-	NodeArray<SListPure<PlanarLeafKey<indInfo*>* > > outLeaves(*biconComp);
+	// Stores for every node v the keys corresponding to the outgoing edges of v
+	NodeArray<SListPure<PlanarLeafKey<IndInfo*>* > > outLeaves(*biconComp);
 
-	// Stores for every node v the sequence of incoming edges of v according 
+	// Stores for every node v the sequence of incoming edges of v according
 	// to the embedding
 	NodeArray<SListPure<edge> > frontier(*biconComp);
 
@@ -1719,14 +1726,14 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 
 	// Stores for every node v the nodes corresponding to the
 	// non opposed sink indicators found in the frontier of v.
-	NodeArray<SListPure<node> > nonOpposed(*biconComp);	
+	NodeArray<SListPure<node> > nonOpposed(*biconComp);
 
 	// Stores for every st-Number the corresponding node
 	Array<node> tableNumber2Node(biconComp->numberOfNodes()+1);
-	
+
 	Array<bool> toReverse(1,biconComp->numberOfNodes()+1,false);
 
-	PlanarLeafKey<indInfo*>* stEdgeLeaf;
+	PlanarLeafKey<IndInfo*>* stEdgeLeaf;
 
 	forall_nodes(v,*biconComp)
 	{
@@ -1736,8 +1743,8 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 		{
 			if (numbering[e->opposite(v)] > numbering[v])
 			{
-				PlanarLeafKey<indInfo*>* L = OGDF_NEW PlanarLeafKey<indInfo*>(e);
-				inLeaves[v].pushFront(L);				
+				PlanarLeafKey<IndInfo*>* L = OGDF_NEW PlanarLeafKey<IndInfo*>(e);
+				inLeaves[v].pushFront(L);
 				if (numbering[v] == 1 && numbering[e->opposite(v)])
 					stEdgeLeaf = L;
 			}
@@ -1747,10 +1754,10 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 
 	forall_nodes(v,*biconComp)
 	{
-		SListIterator<PlanarLeafKey<indInfo*>* > it;
+		SListIterator<PlanarLeafKey<IndInfo*>* > it;
 		for (it = inLeaves[v].begin(); it.valid(); ++it)
 		{
-			PlanarLeafKey<indInfo*>* L = *it;
+			PlanarLeafKey<IndInfo*>* L = *it;
 			outLeaves[L->userStructKey()->opposite(v)].pushFront(L);
 		}
 	}
@@ -1763,11 +1770,12 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 	{
 		if (T->Reduction(outLeaves[tableNumber2Node[i]]))
 		{
-			T->ReplaceRoot(inLeaves[tableNumber2Node[i]],
-						   frontier[tableNumber2Node[i]],
-							opposed[tableNumber2Node[i]],
-							nonOpposed[tableNumber2Node[i]],
-							tableNumber2Node[i]);
+			T->ReplaceRoot(
+				inLeaves[tableNumber2Node[i]],
+				frontier[tableNumber2Node[i]],
+				opposed[tableNumber2Node[i]],
+				nonOpposed[tableNumber2Node[i]],
+				tableNumber2Node[i]);
 			T->emptyAllPertinentNodes();
 		}
 		else
@@ -1784,19 +1792,19 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 
 		// Keep the PQTree to construct a Wheelgraph
 		// Replace the edge stored in the keys of T
-		// by the original edges. 
+		// by the original edges.
 		// Necessary, since the edges currently in T
-		// correspond to a graph that mirrors a biconnected 
+		// correspond to a graph that mirrors a biconnected
 		// component and thus is deallocated
-			
-		// For embedding the graph, we need to keep the 
+
+		// For embedding the graph, we need to keep the
 		// PQTree as well.
 
-		SListIterator<PlanarLeafKey<indInfo*>* >  it;
+		SListIterator<PlanarLeafKey<IndInfo*>* >  it;
 		//int n = biconComp->numberOfNodes();
 
 		// Replace the edge stored in the keys of T
-		// by the original edges. 
+		// by the original edges.
 
 
 		//--------------------------------------//
@@ -1804,13 +1812,13 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 		// Translate the information back from biconComp to subGraph.
 
 
-		m_clusterPQContainer[origCluster].m_superSink 
+		m_clusterPQContainer[origCluster].m_superSink
 			= tableNodesBiComp2SubGraph[superSink];
 
 		forall_nodes(v,*biconComp)
 		{
 			// Replace the edge stored in the every key used for constructing T
-			// by the original edges. 
+			// by the original edges.
 			// This implicity replaces the keys at the leaves and at inLeaves.
 
 
@@ -1820,7 +1828,7 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 			OGDF_ASSERT((*m_clusterPQContainer[origCluster].m_outLeaves)[orig].empty())
 			for (it = outLeaves[v].begin(); it.valid(); ++it)
 			{
-				PlanarLeafKey<indInfo*>* key = *it;
+				PlanarLeafKey<IndInfo*>* key = *it;
 				key->m_userStructKey = tableEdgesBiComp2SubGraph[key->m_userStructKey];
 				(*m_clusterPQContainer[origCluster].m_edge2Key)[key->m_userStructKey] = key;
 				(*m_clusterPQContainer[origCluster].m_outLeaves)[orig].pushBack(key);
@@ -1830,7 +1838,7 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 			OGDF_ASSERT((*m_clusterPQContainer[origCluster].m_inLeaves)[orig].empty())
 			for (it = inLeaves[v].begin(); it.valid(); ++it)
 			{
-				PlanarLeafKey<indInfo*>* key = *it;
+				PlanarLeafKey<IndInfo*>* key = *it;
 				(*m_clusterPQContainer[origCluster].m_inLeaves)[orig].pushBack(key);
 			}
 
@@ -1845,7 +1853,7 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 			{
 				node w = tableNodesBiComp2SubGraph[(*itn)];
 				(*m_clusterPQContainer[origCluster].m_nonOpposed)[orig].pushBack(w);
-			}		
+			}
 			for (itn = opposed[v].begin(); itn.valid(); itn++)
 			{
 				node w = tableNodesBiComp2SubGraph[(*itn)];
@@ -1856,27 +1864,27 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 			(*m_clusterPQContainer[origCluster].m_tableNumber2Node)[numbering[v]] = orig;
 
 
-			// Replace the edges stored in frontier 
+			// Replace the edges stored in frontier
 			// by the original edges of subgraph.
-			
+
 			OGDF_ASSERT((*m_clusterPQContainer[origCluster].m_frontier)[orig].empty())
 			SListIterator<edge> ite;
 			for (ite = frontier[v].begin(); ite.valid(); ite++)
 			{
 				edge e = tableEdgesBiComp2SubGraph[(*ite)];
 				(*m_clusterPQContainer[origCluster].m_frontier)[orig].pushBack(e);
-			}		
-			
-			
+			}
+
+
 		}
 		m_clusterPQContainer[origCluster].m_T = T;
 		m_clusterPQContainer[origCluster].m_stEdgeLeaf = stEdgeLeaf;
-		SListPure<PQBasicKey<edge,indInfo*,bool>*> leafKeys;
+		SListPure<PQBasicKey<edge,IndInfo*,bool>*> leafKeys;
 		T->getFront(T->root(),leafKeys);
-		SListIterator<PQBasicKey<edge,indInfo*,bool>* >  itk;
+		SListIterator<PQBasicKey<edge,IndInfo*,bool>* >  itk;
 		for (itk = leafKeys.begin(); itk.valid(); itk++)
 		{
-			if ((*itk)->nodePointer()->status() == INDICATOR)
+			if ((*itk)->nodePointer()->status() == PQNodeRoot::INDICATOR)
 			{
 				node ofInd = (*itk)->nodePointer()->getNodeInfo()->userStructInfo()->getAssociatedNode();
 				(*itk)->nodePointer()->getNodeInfo()->userStructInfo()->resetAssociatedNode(tableNodesBiComp2SubGraph[ofInd]);
@@ -1891,25 +1899,29 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 		int i = biconComp->numberOfNodes();
 		if (T->Reduction(outLeaves[tableNumber2Node[i]]))
 		{
-			T->ReplaceRoot(inLeaves[tableNumber2Node[i]],frontier[tableNumber2Node[i]],
-			  opposed[tableNumber2Node[i]],nonOpposed[tableNumber2Node[i]],tableNumber2Node[i]);
+			T->ReplaceRoot(
+				inLeaves[tableNumber2Node[i]],
+				frontier[tableNumber2Node[i]],
+				opposed[tableNumber2Node[i]],
+				nonOpposed[tableNumber2Node[i]],
+				tableNumber2Node[i]);
 		}
 		delete T;
 	}
 
 	// Cleanup
-	if (!origCluster || !superSink || !cPlanar) 
+	if (!origCluster || !superSink || !cPlanar)
 									// Do not cleanup information of component
 									// with outgoing edges.
 	{
 		forall_nodes(v,*biconComp)
-		{	
+		{
 			if (v != superSink || !cPlanar)
 			{
 				while (!outLeaves[v].empty())
 				{
-					PlanarLeafKey<indInfo*>* L = outLeaves[v].popFrontRet();
-					delete L;	
+					PlanarLeafKey<IndInfo*>* L = outLeaves[v].popFrontRet();
+					delete L;
 				}
 			}
 		}
@@ -1975,7 +1987,7 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 		forall_nodes(v,*biconComp)
 			biconComp->sort(v,entireEmbedding[v]);
 
-		// Test if embedding was determined correctly. 
+		// Test if embedding was determined correctly.
 		OGDF_ASSERT(biconComp->representsCombEmbedding())
 
 	}
@@ -1996,11 +2008,12 @@ bool CconnectClusterPlanarEmbed::doEmbed(Graph *biconComp,
 
 // Used by doEmbed. Computes an entire embedding from an
 // upward embedding.
-void CconnectClusterPlanarEmbed::entireEmbed(Graph &biconComp,
-							   NodeArray<SListPure<adjEntry> > &entireEmbedding,
-							   NodeArray<SListIterator<adjEntry> > &adjMarker,
-							   NodeArray<bool> &mark,
-							   node v)
+void CconnectClusterPlanarEmbed::entireEmbed(
+	Graph &biconComp,
+	NodeArray<SListPure<adjEntry> > &entireEmbedding,
+	NodeArray<SListIterator<adjEntry> > &adjMarker,
+	NodeArray<bool> &mark,
+	node v)
 {
 	mark[v] = true;
 	SListIterator<adjEntry> it;
@@ -2008,7 +2021,7 @@ void CconnectClusterPlanarEmbed::entireEmbed(Graph &biconComp,
 	{
 		adjEntry a = *it;
 		edge e = a->theEdge();
-		adjEntry adj = (e->adjSource()->theNode() == v)? 
+		adjEntry adj = (e->adjSource()->theNode() == v)?
 						e->adjTarget() : e->adjSource();
 		node w = adj->theNode();
 		entireEmbedding[w].pushFront(adj);
@@ -2068,12 +2081,12 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 												EdgeArray<node> &outgoingTable,
 												node superSink)
 {
-		
-	OGDF_ASSERT(Ccopy.consistencyCheck());
-	PQNode<edge,indInfo*,bool>* root = T->root();
-	PQNode<edge,indInfo*,bool>*  checkNode = 0;
 
-	Queue<PQNode<edge,indInfo*,bool>*> treeNodes;
+	OGDF_ASSERT(Ccopy.consistencyCheck());
+	PQNode<edge,IndInfo*,bool>* root = T->root();
+	PQNode<edge,IndInfo*,bool>*  checkNode = 0;
+
+	Queue<PQNode<edge,IndInfo*,bool>*> treeNodes;
 	treeNodes.append(root);
 
 	node correspond = Gcopy.newNode(); // Corresponds to the root node.
@@ -2098,24 +2111,24 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 		checkNode = treeNodes.pop();
 		correspond = graphNodes.pop();
 
-		PQNode<edge,indInfo*,bool>*  firstSon  = 0;
-		PQNode<edge,indInfo*,bool>*  nextSon   = 0;
-		PQNode<edge,indInfo*,bool>*  oldSib    = 0;
-		PQNode<edge,indInfo*,bool>*  holdSib   = 0;
+		PQNode<edge,IndInfo*,bool>*  firstSon  = 0;
+		PQNode<edge,IndInfo*,bool>*  nextSon   = 0;
+		PQNode<edge,IndInfo*,bool>*  oldSib    = 0;
+		PQNode<edge,IndInfo*,bool>*  holdSib   = 0;
 
 
 		if (checkNode->type() == PQNodeRoot::PNode)
 		{
 			// correspond is a cut node
 
-			OGDF_ASSERT(checkNode->referenceChild()) 
+			OGDF_ASSERT(checkNode->referenceChild())
 			firstSon = checkNode->referenceChild();
 
 			if (firstSon->type() != PQNodeRoot::leaf)
 			{
 				treeNodes.append(firstSon);
 				newNode = Gcopy.newNode();
-				m_nodeTableCopy2Orig[newNode] = 0; 
+				m_nodeTableCopy2Orig[newNode] = 0;
 				m_wheelGraphNodes[newNode] = origOfAct;
 				Ccopy.reassignNode(newNode,parent);
 				graphNodes.append(newNode);
@@ -2124,8 +2137,8 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 			else
 			{
 				// insert Edge to the outside
-				PQLeaf<edge,indInfo*,bool>* leaf = 
-					(PQLeaf<edge,indInfo*,bool>*) firstSon;
+				PQLeaf<edge,IndInfo*,bool>* leaf =
+					(PQLeaf<edge,IndInfo*,bool>*) firstSon;
 				edge f = leaf->getKey()->m_userStructKey;
 				//node x = outgoingTable[f];
 				edge newEdge = Gcopy.newEdge(correspond,outgoingTable[f]);
@@ -2133,10 +2146,10 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 
 				if ((*m_clusterOutgoingEdgesAnker[origOfAct])[f])
 				{
-					m_outgoingEdgesAnker[newEdge] 
+					m_outgoingEdgesAnker[newEdge]
 						= (*m_clusterOutgoingEdgesAnker[origOfAct])[f];
 				}
-				else 
+				else
 					m_outgoingEdgesAnker[newEdge] = OGDF_NEW Stack<edge>;
 				m_outgoingEdgesAnker[newEdge]->push(f);
 			}
@@ -2151,7 +2164,7 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 					treeNodes.append(nextSon);
 					newNode = Gcopy.newNode();  // new node corresponding to anchor
 												// or cutnode
-					m_nodeTableCopy2Orig[newNode] = 0; 
+					m_nodeTableCopy2Orig[newNode] = 0;
 					m_wheelGraphNodes[newNode] = origOfAct;
 					Ccopy.reassignNode(newNode,parent);
 					graphNodes.append(newNode);
@@ -2159,19 +2172,19 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 				}
 				else
 				{
-					// insert Edge to the outside		
-					PQLeaf<edge,indInfo*,bool>* leaf = 
-						(PQLeaf<edge,indInfo*,bool>*) nextSon;
+					// insert Edge to the outside
+					PQLeaf<edge,IndInfo*,bool>* leaf =
+						(PQLeaf<edge,IndInfo*,bool>*) nextSon;
 					edge f = leaf->getKey()->m_userStructKey;
 					//node x = outgoingTable[f];
 					edge newEdge = Gcopy.newEdge(correspond,outgoingTable[f]);
 
 					if ((*m_clusterOutgoingEdgesAnker[origOfAct])[f])
 					{
-						m_outgoingEdgesAnker[newEdge] 
+						m_outgoingEdgesAnker[newEdge]
 							= (*m_clusterOutgoingEdgesAnker[origOfAct])[f];
 					}
-					else 
+					else
 						m_outgoingEdgesAnker[newEdge] = OGDF_NEW Stack<edge>;
 					m_outgoingEdgesAnker[newEdge]->push(f);
 				}
@@ -2189,14 +2202,14 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 			firstSon = T->scanLeftEndmost(checkNode);
 
 			hub = Gcopy.newNode();
-			m_nodeTableCopy2Orig[hub] = 0; 
+			m_nodeTableCopy2Orig[hub] = 0;
 			m_currentHubs[hub] = true;
 			m_wheelGraphNodes[hub] = origOfAct;
 			Ccopy.reassignNode(hub,parent);
 
-			Gcopy.newEdge(hub,correspond); // link achor and hub 
+			Gcopy.newEdge(hub,correspond); // link achor and hub
 			next = Gcopy.newNode();   // for first son
-			m_nodeTableCopy2Orig[next] = 0; 
+			m_nodeTableCopy2Orig[next] = 0;
 			m_wheelGraphNodes[next] = origOfAct;
 			Ccopy.reassignNode(next,parent);
 			Gcopy.newEdge(hub,next);
@@ -2205,8 +2218,8 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 			if (firstSon->type() != PQNodeRoot::leaf)
 			{
 				treeNodes.append(firstSon);
-				newNode = Gcopy.newNode();  
-				m_nodeTableCopy2Orig[newNode] = 0; 
+				newNode = Gcopy.newNode();
+				m_nodeTableCopy2Orig[newNode] = 0;
 				m_wheelGraphNodes[newNode] = origOfAct;
 				Ccopy.reassignNode(newNode,parent);
 				graphNodes.append(newNode);
@@ -2214,19 +2227,19 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 			}
 			else
 			{
-				// insert Edge to the outside		
-				PQLeaf<edge,indInfo*,bool>* leaf = 
-					(PQLeaf<edge,indInfo*,bool>*) firstSon;
+				// insert Edge to the outside
+				PQLeaf<edge,IndInfo*,bool>* leaf =
+					(PQLeaf<edge,IndInfo*,bool>*) firstSon;
 				edge f = leaf->getKey()->m_userStructKey;
 				//node x = outgoingTable[f];
 				edge newEdge = Gcopy.newEdge(next,outgoingTable[f]);
 
 				if ((*m_clusterOutgoingEdgesAnker[origOfAct])[f])
 				{
-					m_outgoingEdgesAnker[newEdge] 
+					m_outgoingEdgesAnker[newEdge]
 						= (*m_clusterOutgoingEdgesAnker[origOfAct])[f];
 				}
-				else 
+				else
 					m_outgoingEdgesAnker[newEdge] = OGDF_NEW Stack<edge>;
 				m_outgoingEdgesAnker[newEdge]->push(f);
 			}
@@ -2237,7 +2250,7 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 			while (nextSon)
 			{
 				next = Gcopy.newNode();
-				m_nodeTableCopy2Orig[next] = 0; 
+				m_nodeTableCopy2Orig[next] = 0;
 				m_wheelGraphNodes[next] = origOfAct;
 				Ccopy.reassignNode(next,parent);
 				Gcopy.newEdge(hub,next);
@@ -2247,7 +2260,7 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 					treeNodes.append(nextSon);
 					newNode = Gcopy.newNode();  // new node corresponding to anchor
 												// or cutnode
-					m_nodeTableCopy2Orig[newNode] = 0; 
+					m_nodeTableCopy2Orig[newNode] = 0;
 					m_wheelGraphNodes[newNode] = origOfAct;
 					Ccopy.reassignNode(newNode,parent);
 					graphNodes.append(newNode);
@@ -2256,19 +2269,19 @@ void CconnectClusterPlanarEmbed::constructWheelGraph(ClusterGraph &Ccopy,
 				}
 				else
 				{
-					// insert Edge to the outside		
-					PQLeaf<edge,indInfo*,bool>* leaf = 
-						(PQLeaf<edge,indInfo*,bool>*) nextSon;
+					// insert Edge to the outside
+					PQLeaf<edge,IndInfo*,bool>* leaf =
+						(PQLeaf<edge,IndInfo*,bool>*) nextSon;
 					edge f = leaf->getKey()->m_userStructKey;
 					//node x = outgoingTable[f];
 					edge newEdge = Gcopy.newEdge(next,outgoingTable[f]);
 
 					if ((*m_clusterOutgoingEdgesAnker[origOfAct])[f])
 					{
-						m_outgoingEdgesAnker[newEdge] 
+						m_outgoingEdgesAnker[newEdge]
 							= (*m_clusterOutgoingEdgesAnker[origOfAct])[f];
 					}
-					else 
+					else
 						m_outgoingEdgesAnker[newEdge] = OGDF_NEW Stack<edge>;
 					m_outgoingEdgesAnker[newEdge]->push(f);
 				}

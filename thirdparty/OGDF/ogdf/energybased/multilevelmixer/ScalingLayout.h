@@ -1,9 +1,9 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2523 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -67,15 +68,15 @@ public:
 	 */
 	enum ScalingType {
 		//! Scales by a factor relative to the drawing.
-		st_relativeToDrawing,      
-		/*! 
+		st_relativeToDrawing,
+		/*!
 		 * Scales by a factor relative to the avg edge weights
 		 * to be used in combination with the fixed edge length
 		 * setting in ModularMultilevelMixer.
 		 */
-		st_relativeToAvgLength, 
+		st_relativeToAvgLength,
 		//! Scales by a factor relative to the desired Edgelength m_desEdgeLength.
-		st_relativeToDesiredLength, 
+		st_relativeToDesiredLength,
 		//! Absolute factor, can be used to scale relative to level size change.
 		st_absolute
 	};
@@ -88,7 +89,7 @@ public:
 	 * @param GA is the input graph and will also be assigned the layout information.
 	 */
 	void call(GraphAttributes &GA);
-	
+
 	/**
 	 * \brief Computes a layout of graph \a MLG.
 	 *
@@ -103,35 +104,35 @@ public:
 	 * @param max sets the maximum
 	 */
 	void setScaling(double min, double max);
-	
+
 	/*!
 	 * \brief Sets how often the scaling should be repeated.
 	 *
 	 * @param steps is the number of repeats
 	 */
 	void setExtraScalingSteps(unsigned int steps);
-	
+
 	/*!
 	 * \brief Sets a LayoutModule that should be applied after scaling.
 	 *
 	 * @param layout is the secondary LayoutModule
 	 */
 	void setSecondaryLayout(LayoutModule* layout);
-	
+
 	/*!
 	 * \brief Is used to compute the scaling relatively to the level size change when ScalingType st_absolute is used.
 	 *
 	 * @param mmm is the ModularMultilevelMixer
 	 */
 	void setMMM(ModularMultilevelMixer* mmm);
-	
+
 	/*!
 	 * \brief Sets a ScalingType wich sets the relative scale for the Graph
 	 *
 	 * @param type is the ScalingType
 	 */
 	void setScalingType(ScalingType type);
-	
+
 	/*!
 	 * \brief Sets how often the LayoutModule should be applied.
 	 *
@@ -148,8 +149,8 @@ private:
 	ModuleOption<LayoutModule> m_secondaryLayoutModule;
 
 	double m_minScaling;
-	double m_maxScaling; 
-	ModularMultilevelMixer* m_mmm;//!< Used to derive level size ratio if st_absolute 
+	double m_maxScaling;
+	ModularMultilevelMixer* m_mmm;//!< Used to derive level size ratio if st_absolute
 	double m_desEdgeLength;
 
 	// 0 = scale to maxScaling only

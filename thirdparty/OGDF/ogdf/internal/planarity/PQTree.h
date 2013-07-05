@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2583 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration and implementation of the class PQTree.
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -61,7 +62,7 @@
 #include <ogdf/internal/planarity/PQLeafKey.h>
 #include <ogdf/internal/planarity/PQInternalKey.h>
 #include <ogdf/internal/planarity/PQNodeKey.h>
- 
+
 
 namespace ogdf {
 
@@ -86,7 +87,7 @@ public:
 
 	bool addNewLeavesToTree(
 		PQInternalNode<T,X,Y>        *father,
-        SListPure<PQLeafKey<T,X,Y>*> &leafKeys);
+		SListPure<PQLeafKey<T,X,Y>*> &leafKeys);
 
 	void emptyNode(PQNode<T,X,Y>* nodePtr);
 
@@ -96,7 +97,7 @@ public:
 
 	virtual void CleanNode(PQNode<T,X,Y>* /* nodePtr */) { }
 
-    virtual void Cleanup();
+	virtual void Cleanup();
 
 	/**
 	 * If the user wishes to use different flags in a derived class of PQTree
@@ -104,15 +105,15 @@ public:
 	 * clientDefinedEmptyNode() in order to make a valid cleanup of the nodes.
 	 * It will be called per default by the function emptyAllPertinentNodes().
 	 */
-    virtual void clientDefinedEmptyNode(PQNode<T,X,Y>* nodePtr) {
+	virtual void clientDefinedEmptyNode(PQNode<T,X,Y>* nodePtr) {
 		emptyNode(nodePtr);
 	}
 
-    virtual void emptyAllPertinentNodes();
+	virtual void emptyAllPertinentNodes();
 
-    virtual int  Initialize(SListPure<PQLeafKey<T,X,Y>*> &leafKeys);
+	virtual int  Initialize(SListPure<PQLeafKey<T,X,Y>*> &leafKeys);
 
-    virtual bool Reduction(SListPure<PQLeafKey<T,X,Y>*> &leafKeys);
+	virtual bool Reduction(SListPure<PQLeafKey<T,X,Y>*> &leafKeys);
 
 	/**
 	 * The function root() returns a pointer of the root node of the PQTree.
@@ -129,23 +130,23 @@ protected:
 
 
 	//! is a pointer to the root of the $PQ$-tree.
-	PQNode<T,X,Y>* m_root;                     
+	PQNode<T,X,Y>* m_root;
 
-    //! is a pointer to the root of the pertinent subtree.
+	//! is a pointer to the root of the pertinent subtree.
 	PQNode<T,X,Y>* m_pertinentRoot;
 
 	//! is a pointer to the virtual root of the pertinent subtree, in case that the pertinent root cannot be detected.
-    PQNode<T,X,Y>* m_pseudoRoot;   
+	PQNode<T,X,Y>* m_pseudoRoot;
 
-	//! Stores the total number of nodes that have been allocated. 
+	//! Stores the total number of nodes that have been allocated.
 	/**
 	 * Gives every node that has been used once in the
-	 * PQ-tree a unique identification number. 
+	 * PQ-tree a unique identification number.
 	*/
-    int m_identificationNumber;      
+	int m_identificationNumber;
 
 	//! Stores the number of leaves.
-    int m_numberOfLeaves;
+	int m_numberOfLeaves;
 
 	/**
 	 * Stores all nodes that have been marked \b FULL or
@@ -155,47 +156,48 @@ protected:
 	 * nodes that have been removed during a reduction. When detected in
 	 * the stack, their memory is freed.
 	 */
-    List<PQNode<T,X,Y>*> *m_pertinentNodes; 
-   
+	List<PQNode<T,X,Y>*> *m_pertinentNodes;
+
 
 	virtual bool Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys);
 
 	virtual bool Reduce(SListPure<PQLeafKey<T,X,Y>*> &leafKeys);
 
-	virtual bool templateL1(PQNode<T,X,Y> *nodePtr,
-                               bool isRoot);
+	virtual bool templateL1(PQNode<T,X,Y> *nodePtr, bool isRoot);
 
-	virtual bool templateP1(PQNode<T,X,Y> *nodePtr,
-                               bool isRoot);
+	virtual bool templateP1(PQNode<T,X,Y> *nodePtr, bool isRoot);
 
 	virtual bool templateP2(PQNode<T,X,Y> **nodePtr);
 
 	virtual bool templateP3(PQNode<T,X,Y> *nodePtr);
 
 	virtual bool templateP4(PQNode<T,X,Y> **nodePtr);
-      
+
 	virtual bool templateP5(PQNode<T,X,Y> *nodePtr);
 
 	virtual bool templateP6(PQNode<T,X,Y> **nodePtr);
 
-	virtual bool templateQ1(PQNode<T,X,Y> *nodePtr, bool isRoot); 
-      
+	virtual bool templateQ1(PQNode<T,X,Y> *nodePtr, bool isRoot);
+
 	virtual bool templateQ2(PQNode<T,X,Y> *nodePtr, bool isRoot);
 
 	virtual bool templateQ3(PQNode<T,X,Y> *nodePtr);
-      
 
-   
-	virtual bool addNodeToNewParent(PQNode<T,X,Y>* parent,
-                                        PQNode<T,X,Y>* child);
 
-	virtual bool addNodeToNewParent(PQNode<T,X,Y>* parent,
-                                        PQNode<T,X,Y>* child,
-                                        PQNode<T,X,Y>* leftBrother,
-                                        PQNode<T,X,Y>* rightBrother);
 
-	virtual bool checkIfOnlyChild(PQNode<T,X,Y> *child,
-					                  PQNode<T,X,Y> *parent);
+	virtual bool addNodeToNewParent(
+		PQNode<T,X,Y>* parent,
+		PQNode<T,X,Y>* child);
+
+	virtual bool addNodeToNewParent(
+		PQNode<T,X,Y>* parent,
+		PQNode<T,X,Y>* child,
+		PQNode<T,X,Y>* leftBrother,
+		PQNode<T,X,Y>* rightBrother);
+
+	virtual bool checkIfOnlyChild(
+		PQNode<T,X,Y> *child,
+		PQNode<T,X,Y> *parent);
 
 	/**
 	 * The function destroyNode() marks a node as TO_BE_DELETED. This
@@ -203,76 +205,79 @@ protected:
 	 * to remove the node and free its memory.
 	 */
 	virtual void destroyNode(PQNode<T,X,Y> *nodePtr) {
-		nodePtr->status(TO_BE_DELETED);
+		nodePtr->status(PQNodeRoot::TO_BE_DELETED);
 	}
 
-	virtual void exchangeNodes(PQNode<T,X,Y> *oldNode,
-                                 PQNode<T,X,Y> *newNode);
+	virtual void exchangeNodes(
+		PQNode<T,X,Y> *oldNode,
+		PQNode<T,X,Y> *newNode);
 
-	virtual void linkChildrenOfQnode(PQNode<T,X,Y> *installed,
-                                       PQNode<T,X,Y> *newChild);
+	virtual void linkChildrenOfQnode(
+		PQNode<T,X,Y> *installed,
+		PQNode<T,X,Y> *newChild);
 
 	virtual void removeChildFromSiblings(PQNode<T,X,Y>* nodePtr);
 
-	virtual int  removeNodeFromTree(PQNode<T,X,Y>* parent,
-	   								  PQNode<T,X,Y>* child);
+	virtual int  removeNodeFromTree(
+		PQNode<T,X,Y>* parent,
+		PQNode<T,X,Y>* child);
 
-   
-    List<PQNode<T,X,Y>*>* fullChildren(PQNode<T,X,Y>* nodePtr) {
+
+	List<PQNode<T,X,Y>*>* fullChildren(PQNode<T,X,Y>* nodePtr) {
 		return nodePtr->fullChildren;
 	}
 
 
-    List<PQNode<T,X,Y>*>*  partialChildren(PQNode<T,X,Y>* nodePtr) {
+	List<PQNode<T,X,Y>*>*  partialChildren(PQNode<T,X,Y>* nodePtr) {
 		return nodePtr->partialChildren;
 	}
 
-    virtual PQNode<T,X,Y>* clientLeftEndmost(PQNode<T,X,Y>* nodePtr) const {
+	virtual PQNode<T,X,Y>* clientLeftEndmost(PQNode<T,X,Y>* nodePtr) const {
 		return nodePtr->m_leftEndmost;
 	}
 
-    virtual PQNode<T,X,Y>* clientRightEndmost(PQNode<T,X,Y>* nodePtr) const {
+	virtual PQNode<T,X,Y>* clientRightEndmost(PQNode<T,X,Y>* nodePtr) const {
 		return nodePtr->m_rightEndmost;
 	}
 
-    virtual PQNode<T,X,Y>* clientNextSib(PQNode<T,X,Y>* nodePtr,
-                                         PQNode<T,X,Y>* other) const {
-		return nodePtr->getNextSib(other);
+	virtual PQNode<T,X,Y>* clientNextSib(PQNode<T,X,Y>* nodePtr,
+		PQNode<T,X,Y>* other) const {
+			return nodePtr->getNextSib(other);
 	}
 
-    virtual PQNode<T,X,Y>* clientSibLeft(PQNode<T,X,Y>* nodePtr) const {
+	virtual PQNode<T,X,Y>* clientSibLeft(PQNode<T,X,Y>* nodePtr) const {
 		return nodePtr->m_sibLeft;
 	}
 
-    virtual PQNode<T,X,Y>* clientSibRight(PQNode<T,X,Y>* nodePtr) const {
+	virtual PQNode<T,X,Y>* clientSibRight(PQNode<T,X,Y>* nodePtr) const {
 		return nodePtr->m_sibRight;
 	}
 
-    virtual int clientPrintNodeCategorie(PQNode<T,X,Y>* nodePtr);
+	virtual int clientPrintNodeCategorie(PQNode<T,X,Y>* nodePtr);
 
-    virtual const char* clientPrintStatus(PQNode<T,X,Y>* nodePtr);
+	virtual const char* clientPrintStatus(PQNode<T,X,Y>* nodePtr);
 
-    virtual const char* clientPrintType(PQNode<T,X,Y>* nodePtr);
+	virtual const char* clientPrintType(PQNode<T,X,Y>* nodePtr);
 
 private:
-      
+
 	bool checkChain(
 		PQNode<T,X,Y> *nodePtr,
-        PQNode<T,X,Y> *firstFull,
-        PQNode<T,X,Y> **seqStart,
-        PQNode<T,X,Y> **seqEnd);
+		PQNode<T,X,Y> *firstFull,
+		PQNode<T,X,Y> **seqStart,
+		PQNode<T,X,Y> **seqEnd);
 
 	void copyFullChildrenToPartial(
 		PQNode<T,X,Y> *nodePtr,
-        PQNode<T,X,Y> *partialChild);
+		PQNode<T,X,Y> *partialChild);
 
 	PQNode<T,X,Y>* createNodeAndCopyFullChildren(List<PQNode<T,X,Y>*> *fullNodes);
 
 	void printNode(
 		char *filename,
-        int number,
-        PQNode<T,X,Y>* father,
-        PQNode<T,X,Y>* son);  
+		int number,
+		PQNode<T,X,Y>* father,
+		PQNode<T,X,Y>* son);
 
 	void removeBlock(PQNode<T,X,Y> *nodePtr, bool isRoot);
 
@@ -282,8 +287,8 @@ private:
 
 
 /************************************************************************
-                      addNewLeavesToTree
-************************************************************************/ 
+						addNewLeavesToTree
+************************************************************************/
 
 /**
  * The function addNewLeavesToTree() adds a set of elements to the already
@@ -304,18 +309,18 @@ private:
 template<class T,class X,class Y>
 bool PQTree<T,X,Y>::addNewLeavesToTree(
 	PQInternalNode<T,X,Y> *father,
-    SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
+	SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 {
 	if (!leafKeys.empty())
 	{
-		OGDF_ASSERT(!father->m_childCount) 
+		OGDF_ASSERT(!father->m_childCount)
 		// Father has children. Brothers expected
 
 		/// Enter the first element as PQLeaf to the [[parent]].
 		SListIterator<PQLeafKey<T,X,Y>*> it = leafKeys.begin();
 		PQLeafKey<T,X,Y>* newKey = *it; //leafKeys[0];
 
-		PQNode<T,X,Y>* aktualSon = OGDF_NEW PQLeaf<T,X,Y>(m_identificationNumber++,EMPTY,newKey);
+		PQNode<T,X,Y>* aktualSon = OGDF_NEW PQLeaf<T,X,Y>(m_identificationNumber++,PQNodeRoot::EMPTY,newKey);
 		PQNode<T,X,Y>* firstSon = aktualSon;
 		firstSon->m_parent = father;
 		firstSon->m_parentType = father->type();
@@ -327,7 +332,7 @@ bool PQTree<T,X,Y>::addNewLeavesToTree(
 		{
 			newKey = *it; //leafKeys[i];
 			aktualSon = OGDF_NEW PQLeaf<T,X,Y>(m_identificationNumber++,
-										 EMPTY,newKey);
+										 PQNodeRoot::EMPTY,newKey);
 			aktualSon->m_parent = father;
 			aktualSon->m_parentType = father->type();
 			father->m_childCount++;
@@ -336,7 +341,7 @@ bool PQTree<T,X,Y>::addNewLeavesToTree(
 			oldSon = aktualSon;
 		}
 		if (father->type() == PQNodeRoot::PNode)
-		/// Set the reference pointers if [[parent]] is a $P$-node.			
+		/// Set the reference pointers if [[parent]] is a $P$-node.
 		{
 			firstSon->m_sibLeft = oldSon;
 			oldSon->m_sibRight = firstSon;
@@ -349,21 +354,21 @@ bool PQTree<T,X,Y>::addNewLeavesToTree(
 			father->m_leftEndmost = firstSon;
 			father->m_rightEndmost = oldSon;
 		}
-		return true; 
+		return true;
 	}
-	 
+
 	return false;
 }
 
 
 
 /************************************************************************
-                      addNodeToNewParent
-************************************************************************/ 
+						addNodeToNewParent
+************************************************************************/
 
 /**
- * The function addNodeToNewParent() adds a node \a child as a child 
- * to another node specified in \a parent. 
+ * The function addNodeToNewParent() adds a node \a child as a child
+ * to another node specified in \a parent.
  * The \a parent of the new node has to be an existing P- or Q-node and
  * is \b not allowed to have children.
  * In the case, that \a parent has children, addNewNodeToParent()
@@ -380,14 +385,14 @@ bool PQTree<T,X,Y>::addNewLeavesToTree(
 template<class T,class X,class Y>
 bool PQTree<T,X,Y>::addNodeToNewParent(
 	PQNode<T,X,Y>* parent,
-    PQNode<T,X,Y>* child)
+	PQNode<T,X,Y>* child)
 {
 	OGDF_ASSERT(parent->type() == PQNodeRoot::PNode && parent->type() == PQNodeRoot::QNode)
 		//parent type not valid.
 
 	if (child != 0)
 	{
-		OGDF_ASSERT(parent->m_childCount == 0)   
+		OGDF_ASSERT(parent->m_childCount == 0)
 			//when adding new nodes: Brothers expected.
 		child->m_parent = parent;
 		child->m_parentType = parent->type();
@@ -395,8 +400,8 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 
 		/*
 		Set the reference pointers in case that [[parent]] is a $P$-node.
-		If [[parent]] is a $Q$-node, this chunk sets the endmost children 
-		of [[parent]]. Since [[child]] is the only child of [[parent]] 
+		If [[parent]] is a $Q$-node, this chunk sets the endmost children
+		of [[parent]]. Since [[child]] is the only child of [[parent]]
 		both endmost pointers are set to [[child]].
 		*/
 		if (parent->type() == PQNodeRoot::PNode)
@@ -411,7 +416,7 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 			parent->m_leftEndmost = child;
 			parent->m_rightEndmost = child;
 		}
-        
+
 		return true;
 	}
 
@@ -420,12 +425,12 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 
 
 /************************************************************************
-                      addNodeToNewParent
-************************************************************************/ 
+						addNodeToNewParent
+************************************************************************/
 
 /**
  * The function addNodeToNewParent() adds a node \a child to the children
- * of another node specified in \a parent. 
+ * of another node specified in \a parent.
  * The \a parent of the new node has to be an existing P- or Q-node and
  * is allowed to have children. In case that \a parent has children,
  * the siblings of the new introduced child <b> must be specified</b>.
@@ -464,7 +469,7 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 	PQNode<T,X,Y>* leftBrother,
 	PQNode<T,X,Y>* rightBrother)
 {
-   
+
 	if (parent != 0)
 	{
 		OGDF_ASSERT(parent->type() == PQNodeRoot::PNode || parent->type() == PQNodeRoot::QNode)
@@ -481,9 +486,9 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 			{
 				/*
 				The parent is a $P$-node with children.
-				Either [[leftBrother]] or [[rightBrother]] stores 
-				a pointer to an existing child of [[parent]] and [[parent]] 
-				is a $P$-node. In case that two brothers are stored, an 
+				Either [[leftBrother]] or [[rightBrother]] stores
+				a pointer to an existing child of [[parent]] and [[parent]]
+				is a $P$-node. In case that two brothers are stored, an
 				arbitrary one is choosen to be the next sibling of [[child]].
 				This brother is stored in [[brother]]. The pointer [[sister]]
 				denotes a pointer to an arbitrary sibling of [[brother]].
@@ -496,18 +501,18 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 				sister->m_sibLeft = child;
 				return true;
 			}
-      
+
 			else if (leftBrother == 0)
 			{
 				/*
 				The parent is a $Q$-node with children.
-				The [[leftBrother]] is a [[0]]-pointer while the 
+				The [[leftBrother]] is a [[0]]-pointer while the
 				[[rightBrother]] denotes an existing child of [[parent]].
-				The node [[rightBrother]] {\bf must be} one of the two endmost 
-				children of [[parent]]. If this is not the case, the chunk 
-				detects this, halts the procedure [[addNewLeavesToTree]] 
+				The node [[rightBrother]] {\bf must be} one of the two endmost
+				children of [[parent]]. If this is not the case, the chunk
+				detects this, halts the procedure [[addNewLeavesToTree]]
 				printing an error message and returning [[0]].
-				If [[rightBrother]] is endmost child of [[parent]], then 
+				If [[rightBrother]] is endmost child of [[parent]], then
 				this chunk adds [[child]] at the one end where
 				[[rightBrother]] hides. The node [[child]] is then made the
 				new endmost child of [[parent]] on the corresponding side.
@@ -516,7 +521,7 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 				{
 					parent->m_leftEndmost = child;
 					child->m_sibRight = rightBrother;
-					rightBrother->putSibling(child,LEFT);
+					rightBrother->putSibling(child,PQNodeRoot::LEFT);
 					return true;
 				}
 
@@ -524,30 +529,30 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 				OGDF_ASSERT(rightBrother == parent->m_rightEndmost);
 				parent->m_rightEndmost = child;
 				child->m_sibLeft = rightBrother;
-				rightBrother->putSibling(child,LEFT);
+				rightBrother->putSibling(child,PQNodeRoot::LEFT);
 				return true;
 			}
 
 			else if (rightBrother == 0)
 			{
 				/*
-				The parent is a $Q$-node with children. 
-				The [[rightBrother]] is a [[0]]-pointer while the 
-				[[leftBrother]] denotes an existing child of [[parent]]. The 
-				node [[leftBrother]] {\bf must be} one of the two endmost 
-				children of [[parent]]. If this is not the case, the chunk 
-				detects this, halts the procedure [[addNodeToNewParent]] 
+				The parent is a $Q$-node with children.
+				The [[rightBrother]] is a [[0]]-pointer while the
+				[[leftBrother]] denotes an existing child of [[parent]]. The
+				node [[leftBrother]] {\bf must be} one of the two endmost
+				children of [[parent]]. If this is not the case, the chunk
+				detects this, halts the procedure [[addNodeToNewParent]]
 				printing an error message and returning [[0]].
-				If [[leftBrother]] is endmost child of [[parent]], then this 
-				chunk adds [[child]] at the one end where [[leftBrother]] 
-				hides. The node [[child]] is then made new endmost child of 
+				If [[leftBrother]] is endmost child of [[parent]], then this
+				chunk adds [[child]] at the one end where [[leftBrother]]
+				hides. The node [[child]] is then made new endmost child of
 				[[parent]] on the corresponding side.
 				*/
 				if (leftBrother == parent->m_rightEndmost)
 				{
 					parent->m_rightEndmost = child;
 					child->m_sibLeft = leftBrother;
-					leftBrother->putSibling(child,RIGHT);
+					leftBrother->putSibling(child,PQNodeRoot::RIGHT);
 					return true;
 				}
 
@@ -555,26 +560,26 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 				OGDF_ASSERT(leftBrother == parent->m_leftEndmost);
 				parent->m_leftEndmost = child;
 				child->m_sibRight = leftBrother;
-				leftBrother->putSibling(child,RIGHT);
+				leftBrother->putSibling(child,PQNodeRoot::RIGHT);
 				return true;
 			}
 
 			else
 			{
 				/*
-				The parent is a $Q$-node with children. 
-				Both the [[rightBrother]] and the [[leftBrother]] denote 
-				existing children of [[parent]]. In this case, [[leftBrother]] 
-				and [[rightBrother]] must be immideate siblings. If this is 
+				The parent is a $Q$-node with children.
+				Both the [[rightBrother]] and the [[leftBrother]] denote
+				existing children of [[parent]]. In this case, [[leftBrother]]
+				and [[rightBrother]] must be immideate siblings. If this is
 				not the case, this will be detected during the function call
-				[[changeSiblings]] of the class [[PQNode.h]] (see 
-				\ref{PQNode.changeSiblings}) in the first two lines of this 
-				chunk. If the chunk recognizes the failure of 
-				[[changeSiblings]] it halts the procedure 
-				[[addNewLeavesToTree]], printing an error message and 
+				[[changeSiblings]] of the class [[PQNode.h]] (see
+				\ref{PQNode.changeSiblings}) in the first two lines of this
+				chunk. If the chunk recognizes the failure of
+				[[changeSiblings]] it halts the procedure
+				[[addNewLeavesToTree]], printing an error message and
 				returning [[0]].
-				If the two brothers are immediate siblings, this chunk 
-				adds [[child]] between the two brothers as interior child of 
+				If the two brothers are immediate siblings, this chunk
+				adds [[child]] between the two brothers as interior child of
 				the $Q$-node [[parent]].
 				*/
 #ifdef OGDF_DEBUG
@@ -584,13 +589,13 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 
 				// brothers are not siblings?
 				OGDF_ASSERT(ok);
-				
+
 				if (leftBrother->m_sibRight == child)
 				{
 					child->m_sibLeft = leftBrother;
 					child->m_sibRight = rightBrother;
 				}
-				else 
+				else
 				{
 					child->m_sibLeft = rightBrother;
 					child->m_sibRight = leftBrother;
@@ -604,19 +609,19 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 	else if (leftBrother != 0 && rightBrother != 0)
 	{
 		/*
-		The parent is a $Q$-node with children. 
-		Both the [[rightBrother]] and the [[leftBrother]] denote 
-		existing children of [[parent]]. In this case, [[leftBrother]] 
-		and [[rightBrother]] must be immideate siblings. If this is 
+		The parent is a $Q$-node with children.
+		Both the [[rightBrother]] and the [[leftBrother]] denote
+		existing children of [[parent]]. In this case, [[leftBrother]]
+		and [[rightBrother]] must be immideate siblings. If this is
 		not the case, this will be detected during the function call
-		[[changeSiblings]] of the class [[PQNode.h]] (see 
-		\ref{PQNode.changeSiblings}) in the first two lines of this 
-		chunk. If the chunk recognizes the failure of 
-		[[changeSiblings]] it halts the procedure 
-		[[addNewLeavesToTree]], printing an error message and 
+		[[changeSiblings]] of the class [[PQNode.h]] (see
+		\ref{PQNode.changeSiblings}) in the first two lines of this
+		chunk. If the chunk recognizes the failure of
+		[[changeSiblings]] it halts the procedure
+		[[addNewLeavesToTree]], printing an error message and
 		returning [[0]].
-		If the two brothers are immediate siblings, this chunk 
-		adds [[child]] between the two brothers as interior child of 
+		If the two brothers are immediate siblings, this chunk
+		adds [[child]] between the two brothers as interior child of
 		the $Q$-node [[parent]].
 		*/
 #ifdef OGDF_DEBUG
@@ -632,22 +637,22 @@ bool PQTree<T,X,Y>::addNodeToNewParent(
 			child->m_sibLeft = leftBrother;
 			child->m_sibRight = rightBrother;
 		}
-		else 
+		else
 		{
 			child->m_sibLeft = rightBrother;
 			child->m_sibRight = leftBrother;
 		}
 		return true;
-	}       
-	
+	}
+
 	return true;
 }
 
 
 
 /************************************************************************
-                           Bubble
-************************************************************************/ 
+								Bubble
+************************************************************************/
 
 /**
  * The function Bubble() realizes a function described in [Booth].
@@ -692,14 +697,14 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 	Enter the [[Full]] leaves into the queue [[processNodes]].
 	In a first step the pertinent leaves have to be identified in the tree
 	and entered on to the queue [[processNodes]]. The identification of
-	the leaves can be done with the help of a pointer stored in every 
-	[[PQLeafKey]] (see \ref{PQLeafKey}) in constant time for every element.	
+	the leaves can be done with the help of a pointer stored in every
+	[[PQLeafKey]] (see \ref{PQLeafKey}) in constant time for every element.
 	*/
 	SListIterator<PQLeafKey<T,X,Y>*> it;
-	for (it  = leafKeys.begin(); it.valid(); ++it) 
+	for (it  = leafKeys.begin(); it.valid(); ++it)
 	{
 		PQNode<T,X,Y>* checkLeaf = (*it)->nodePointer(); //leafKeys[i]->nodePointer();
-		checkLeaf->mark(QUEUED);
+		checkLeaf->mark(PQNodeRoot::QUEUED);
 		processNodes.append(checkLeaf);
 		m_pertinentNodes->pushFront(checkLeaf);
 	}
@@ -714,18 +719,18 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 	while ((processNodes.size() + blockCount + offTheTop) > 1)
 	{
 		if (processNodes.size() == 0)
-			/* 
+			/*
 			No consecutive sequence possible.
 			The queue [[processNodes]] does not contain any nodes for
 			processing and the sum of [[blockCount]] and [[offTheTop]] is
-			greater than 1. If the queue is empty, the root of the pertinent 
-			subtree was already processed. Nevertheless, there are blocked 
-			nodes since [[offTheTop]] is either be [[0]] or [[1]], hence 
-			[[blockCount]] must be at least [[1]]. Such blocked nodes cannot 
-			form a consecutive sequence with all nodes in the set 
-			[[leafKeys]]. Observe that this chunk finishes the function 
-			[[Bubble]]. Hence every memory allocated by the function [[Bubble]] 
-			has to be deleted here as well.        
+			greater than 1. If the queue is empty, the root of the pertinent
+			subtree was already processed. Nevertheless, there are blocked
+			nodes since [[offTheTop]] is either be [[0]] or [[1]], hence
+			[[blockCount]] must be at least [[1]]. Such blocked nodes cannot
+			form a consecutive sequence with all nodes in the set
+			[[leafKeys]]. Observe that this chunk finishes the function
+			[[Bubble]]. Hence every memory allocated by the function [[Bubble]]
+			has to be deleted here as well.
 			*/
 			return false;
 		/*
@@ -735,76 +740,77 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 		*/
 		PQNode<T,X,Y>* checkNode = processNodes.pop();
 		blockedNodes.push(checkNode);
-		checkNode->mark(BLOCKED);
+		checkNode->mark(PQNodeRoot::BLOCKED);
 		blockedSiblings = 0;
 
 		/*
 		Check if node is adjacent to an unblocked node.
-		After getting the node [[checkNode]] from the queue, its siblings are 
-		checked, whether they are unblocked. If they are, then they have a 
-		valid pointer to their parent and the parent pointer of [[checkNode]] 
+		After getting the node [[checkNode]] from the queue, its siblings are
+		checked, whether they are unblocked. If they are, then they have a
+		valid pointer to their parent and the parent pointer of [[checkNode]]
 		is updated.
 		*/
 		if ((checkNode->m_parentType != PQNodeRoot::PNode) && (checkNode != m_root))
-                                            // checkNode is son of a QNode.
-                                            // Check if it is blocked.
+			// checkNode is son of a QNode.
+			// Check if it is blocked.
 		{
 			if (clientSibLeft(checkNode) == 0)
-                                            // checkNode is endmost child of
-                                            // a QNode. It has a valid pointer
-                                            // to its parent.
+				// checkNode is endmost child of
+				// a QNode. It has a valid pointer
+				// to its parent.
 			{
-				checkNode->mark(UNBLOCKED);
-				if (clientSibRight(checkNode) && 
-					clientSibRight(checkNode)->mark() == BLOCKED)
+				checkNode->mark(PQNodeRoot::UNBLOCKED);
+				if (clientSibRight(checkNode) &&
+					clientSibRight(checkNode)->mark() == PQNodeRoot::BLOCKED)
 					blockedSiblings++;
 			}
 
 			else if (clientSibRight(checkNode) == 0)
-                                            // checkNode is endmost child of
-                                            // a QNode. It has a valid pointer
-                                            // to its parent.
+				// checkNode is endmost child of
+				// a QNode. It has a valid pointer
+				// to its parent.
 			{
-				checkNode->mark(UNBLOCKED);
-				if (clientSibLeft(checkNode) && 
-					clientSibLeft(checkNode)->mark() == BLOCKED)
+				checkNode->mark(PQNodeRoot::UNBLOCKED);
+				if (clientSibLeft(checkNode) &&
+					clientSibLeft(checkNode)->mark() == PQNodeRoot::BLOCKED)
 					blockedSiblings++;
 			}
-             
+
 
 			else
-                                            // checkNode is not endmost child of
-                                            // a QNode. It has not a valid 
-											// pointer to its parent.
+				// checkNode is not endmost child of
+				// a QNode. It has not a valid
+				// pointer to its parent.
 			{
-				if (clientSibLeft(checkNode)->mark() == UNBLOCKED)
-                                            // checkNode is adjacent to an
-                                            // unblocked node. Take its parent.
+				if (clientSibLeft(checkNode)->mark() == PQNodeRoot::UNBLOCKED)
+					// checkNode is adjacent to an
+					// unblocked node. Take its parent.
 				{
-					checkNode->mark(UNBLOCKED);
+					checkNode->mark(PQNodeRoot::UNBLOCKED);
 					checkNode->m_parent = clientSibLeft(checkNode)->m_parent;
 				}
-				else if (clientSibLeft(checkNode)->mark() == BLOCKED)
+				else if (clientSibLeft(checkNode)->mark() == PQNodeRoot::BLOCKED)
 					blockedSiblings++;
 
-				if (clientSibRight(checkNode)->mark() == UNBLOCKED)
-                                            // checkNode is adjacent to an 
-                                            // unblocked node. Take its parent.
+				if (clientSibRight(checkNode)->mark() == PQNodeRoot::UNBLOCKED)
+					// checkNode is adjacent to an
+					// unblocked node. Take its parent.
 				{
-					checkNode->mark(UNBLOCKED);
+					checkNode->mark(PQNodeRoot::UNBLOCKED);
 					checkNode->m_parent = clientSibRight(checkNode)->m_parent;
 				}
-				else if (clientSibRight(checkNode)->mark() == BLOCKED)
+				else if (clientSibRight(checkNode)->mark() == PQNodeRoot::BLOCKED)
 					blockedSiblings++;
 			}
 		}
-         
-		else                                // checkNode is son of a PNode
-                                            // and children of P_NODEs
-                                            // cannot be blocked.
-			checkNode->mark(UNBLOCKED);
 
-		if (checkNode->mark() == UNBLOCKED)
+		else
+			// checkNode is son of a PNode
+			// and children of P_NODEs
+			// cannot be blocked.
+			checkNode->mark(PQNodeRoot::UNBLOCKED);
+
+		if (checkNode->mark() == PQNodeRoot::UNBLOCKED)
 		{
 			PQNode<T,X,Y>* parent = checkNode->m_parent;
 
@@ -813,18 +819,18 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 			This chunk belongs to the procedure [[bubble]].
 			The node [[checkNode]] is [[UNBLOCKED]].
 			If the parent of [[checkNode]] is a $Q$-Node, then we check the
-			siblings [[checkSib]] of [[checkNode]] whether they are 
-			[[BLOCKED]]. If they are blocked,  they have to be marked 
-			[[UNBLOCKED]] since they are adjacent to the [[UNBLOCKED]] node 
-			[[checkNode]]. We then have to proceed with the siblings of 
+			siblings [[checkSib]] of [[checkNode]] whether they are
+			[[BLOCKED]]. If they are blocked,  they have to be marked
+			[[UNBLOCKED]] since they are adjacent to the [[UNBLOCKED]] node
+			[[checkNode]]. We then have to proceed with the siblings of
 			[[checkSib]] in order to find [[BLOCKED]] nodes
 			adjacent to [[checkSib]]. This is repeated until no [[BLOCKED]]
 			nodes are found any more.
 
 			Observe that while running through the children of the $Q$-Node
-			(referred by the pointer [[parent]]), their parent pointers, 
-			as well as the [[pertChildCount]] of [[parent]] are updated. 
-			Furthermore we reduce simultaneously the count [[numBlocked]].	
+			(referred by the pointer [[parent]]), their parent pointers,
+			as well as the [[pertChildCount]] of [[parent]] are updated.
+			Furthermore we reduce simultaneously the count [[numBlocked]].
 			*/
 			if (blockedSiblings > 0)
 			{
@@ -832,9 +838,9 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 				{
 					checkSib = clientSibLeft(checkNode);
 					PQNode<T,X,Y>* oldSib = checkNode;
-					while (checkSib->mark() == BLOCKED)
+					while (checkSib->mark() == PQNodeRoot::BLOCKED)
 					{
-						checkSib->mark(UNBLOCKED);
+						checkSib->mark(PQNodeRoot::UNBLOCKED);
 						checkSib->m_parent = parent;
 						numBlocked--;
 						parent->m_pertChildCount++;
@@ -849,9 +855,9 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 				{
 					checkSib = clientSibRight(checkNode);
 					PQNode<T,X,Y>* oldSib = checkNode;
-					while (checkSib->mark() == BLOCKED)
+					while (checkSib->mark() == PQNodeRoot::BLOCKED)
 					{
-						checkSib->mark(UNBLOCKED);
+						checkSib->mark(PQNodeRoot::UNBLOCKED);
 						checkSib->m_parent = parent;
 						numBlocked--;
 						parent->m_pertChildCount++;
@@ -870,27 +876,27 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 			the parent has to be processed. If [[checkNode]] is the root
 			of the tree we do nothing except setting the flag [[offTheTop]].
 			If it is not the root and [[parent]] has not been placed onto the
-			queue [[processNodes]], the [[parent]] is placed on to 
+			queue [[processNodes]], the [[parent]] is placed on to
 			[[processNodes]].
 
-			Observe that the number [[blockCount]] is updated. Since 
-			[[checkNode]] was [[UNBLOCKED]] all perinent nodes adjacent 
-			to that node became [[UNBLOCKED]] as well. Therefore the number 
-			of blocks is reduced by the number of [[BLOCKED]] siblings of 
+			Observe that the number [[blockCount]] is updated. Since
+			[[checkNode]] was [[UNBLOCKED]] all perinent nodes adjacent
+			to that node became [[UNBLOCKED]] as well. Therefore the number
+			of blocks is reduced by the number of [[BLOCKED]] siblings of
 			[[checkNode]].
 			*/
 			if (parent == 0)
-	                                       // checkNode is root of the tree.
+				// checkNode is root of the tree.
 				offTheTop = 1;
 			else
-	                                       // checkNode is not the root.
+				// checkNode is not the root.
 			{
 				parent->m_pertChildCount++;
-				if (parent->mark() == UNMARKED)
+				if (parent->mark() == PQNodeRoot::UNMARKED)
 				{
 					processNodes.append(parent);
 					m_pertinentNodes->pushFront(parent);
-					parent->mark(QUEUED);
+					parent->mark(PQNodeRoot::QUEUED);
 				}
 			}
 
@@ -903,10 +909,10 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 		{
 			/*
 			Process blocked [[checkNode]]
-			Since [[checkNode]] is [[BLOCKED]], we cannot continue 
-			processing at this point in the Tree. We have to wait until 
-			this node becomes unblocked. So only the variables 
-			[[blockCount]] and [[numBlocked]] are updated. 
+			Since [[checkNode]] is [[BLOCKED]], we cannot continue
+			processing at this point in the Tree. We have to wait until
+			this node becomes unblocked. So only the variables
+			[[blockCount]] and [[numBlocked]] are updated.
 			*/
 			blockCount += 1 - blockedSiblings;
 			numBlocked++;
@@ -918,30 +924,30 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 	{
 		/*
 		If [[blockCount]] $= 1$ enter [[m_pseudoRoot]] to the tree
-		In case that the root of the pertinent subtree is a $Q$-node 
-		with empty children on both sides and the pertinent children 
-		in the middle, it is possible that the $PQ$-tree is reducible. 
-		But since the sequence of pertinent children of the $Q$-node is 
-		blocked, the procedure is not able to find the parent of its 
+		In case that the root of the pertinent subtree is a $Q$-node
+		with empty children on both sides and the pertinent children
+		in the middle, it is possible that the $PQ$-tree is reducible.
+		But since the sequence of pertinent children of the $Q$-node is
+		blocked, the procedure is not able to find the parent of its
 		pertinent children. This is due to the fact that the interior
 		children of a $Q$-node do not have a valid parent pointer.
 
-		So the root of the pertinent subtree is not known, hence cannot be 
+		So the root of the pertinent subtree is not known, hence cannot be
 		entered into the processing queue used in the function call [[Reduce]]
-		(see \ref{Reduce}). To solve this problem a special node only designed 
-		for this cases is used: [[m_pseudoRoot]]. It simulates the root of the 
-		pertinent subtree. This works out well, since for this node the only 
-		possible template maching is [[templateQ3]] (see \ref{templateQ3}), 
-		where no pointers to the endmost children of a $Q$-node are used. 
+		(see \ref{Reduce}). To solve this problem a special node only designed
+		for this cases is used: [[m_pseudoRoot]]. It simulates the root of the
+		pertinent subtree. This works out well, since for this node the only
+		possible template maching is [[templateQ3]] (see \ref{templateQ3}),
+		where no pointers to the endmost children of a $Q$-node are used.
 		*/
 		while (!blockedNodes.empty())
 		{
 			PQNode<T,X,Y>* checkNode = blockedNodes.pop();
-			if (checkNode->mark() == BLOCKED)
+			if (checkNode->mark() == PQNodeRoot::BLOCKED)
 			{
-				checkNode->mark(UNBLOCKED);
+				checkNode->mark(PQNodeRoot::UNBLOCKED);
 				checkNode->m_parent = m_pseudoRoot;
-				m_pseudoRoot->m_pertChildCount++;              
+				m_pseudoRoot->m_pertChildCount++;
 				OGDF_ASSERT(!checkNode->endmostChild())
 					//Blocked node as endmost child of a QNode.
 			}
@@ -953,8 +959,8 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 
 
 /************************************************************************
-                          checkChain
-************************************************************************/ 
+							checkChain
+************************************************************************/
 
 /**
  * The function checkChain() is used by the function templateQ2()
@@ -996,7 +1002,7 @@ bool PQTree<T,X,Y>::Bubble(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
  *     right side of \a firstFull. Not needed when checkChain() was
  *     called by templateQ2().
  *   - \a rightOld is the node that has been examined right before
- *     \a checkNode on the right side of \afirstFull.
+ *     \a checkNode on the right side of \a firstFull.
  *     Not needed when checkChain() was called by templateQ2().
 */
 
@@ -1004,7 +1010,7 @@ template<class T,class X,class Y>
 bool PQTree<T,X,Y>::checkChain(
 	PQNode<T,X,Y> *nodePtr,
 	PQNode<T,X,Y> *firstFull,
-	PQNode<T,X,Y> **seqStart, 
+	PQNode<T,X,Y> **seqStart,
 	PQNode<T,X,Y> **seqEnd)
 {
 	bool notFull = false;
@@ -1012,27 +1018,27 @@ bool PQTree<T,X,Y>::checkChain(
 	fullCount--;                    // firstFull does have a FULL label.
 
 	/*
-	Start at the [[firstFull]] child sweeping through the full children on 
-	the left side of [[firstfull]]. It stops as soon as a nonfull child is 
+	Start at the [[firstFull]] child sweeping through the full children on
+	the left side of [[firstfull]]. It stops as soon as a nonfull child is
 	detected. The last found full child is stored in [[seqEnd]].
 	*/
 	PQNode<T,X,Y> *leftNext = clientSibLeft(firstFull);
 	(*seqEnd) = firstFull;
 	if (leftNext != 0)
 	{
-		if (leftNext->status() == FULL) {
+		if (leftNext->status() == PQNodeRoot::FULL) {
 			fullCount--;
 
 			PQNode<T,X,Y> *leftOld = firstFull;
 			PQNode<T,X,Y> *checkNode = leftNext;
-    
+
 			while (fullCount > 0 && !notFull)
-                                       // There are still full children to be
-                                       // counted, and no empty child has been
-                                       // encountered on this side.
+				// There are still full children to be
+				// counted, and no empty child has been
+				// encountered on this side.
 			{
 				leftNext = clientNextSib(checkNode,leftOld);
-				if (leftNext != 0 && leftNext->status() == FULL)
+				if (leftNext != 0 && leftNext->status() == PQNodeRoot::FULL)
 					fullCount--;
 				else
 					notFull = true;
@@ -1040,12 +1046,12 @@ bool PQTree<T,X,Y>::checkChain(
 				checkNode = leftNext;
 			}
 
-			if (checkNode != 0 && checkNode->status() == FULL)
+			if (checkNode != 0 && checkNode->status() == PQNodeRoot::FULL)
 				(*seqEnd)  = checkNode;
 
 			else {
 				//searching consecutive sequence in Q2 or Q3.
-				OGDF_ASSERT(leftOld != 0 && leftOld->status() == FULL);
+				OGDF_ASSERT(leftOld != 0 && leftOld->status() == PQNodeRoot::FULL);
 				(*seqEnd) = leftOld;
 			}
 
@@ -1055,8 +1061,8 @@ bool PQTree<T,X,Y>::checkChain(
 	}
 
 	/*
-	Start at the [[firstFull]] child sweeping through the full children on 
-	the right side of [[firstfull]]. It stops as soon as a nonfull child is 
+	Start at the [[firstFull]] child sweeping through the full children on
+	the right side of [[firstfull]]. It stops as soon as a nonfull child is
 	detected.
 	*/
 	notFull = false;
@@ -1064,32 +1070,32 @@ bool PQTree<T,X,Y>::checkChain(
 	(*seqStart) = firstFull;
 	if(rightNext != 0)
 	{
-		if (rightNext->status() == FULL) {
+		if (rightNext->status() == PQNodeRoot::FULL) {
 			fullCount--;
 
 			PQNode<T,X,Y> *rightOld = firstFull;
 			PQNode<T,X,Y> *checkNode = rightNext;
 
 			while (fullCount > 0 && !notFull)
-                                       // There are still full children to be
-                                       // counted, and no empty child has been
-                                       // encountered on this side.
+				// There are still full children to be
+				// counted, and no empty child has been
+				// encountered on this side.
 			{
 				rightNext = clientNextSib(checkNode,rightOld);
-				if (rightNext != 0 && rightNext->status() == FULL)
+				if (rightNext != 0 && rightNext->status() == PQNodeRoot::FULL)
 					fullCount--;
 				else
 					notFull = true;
 				rightOld = checkNode;
 				checkNode = rightNext;
 			}
-			if (checkNode != 0 && checkNode->status() == FULL)
+			if (checkNode != 0 && checkNode->status() == PQNodeRoot::FULL)
 				(*seqStart) = checkNode;
 
 			else {
-				OGDF_ASSERT(rightOld != 0 && rightOld->status() == FULL);
+				OGDF_ASSERT(rightOld != 0 && rightOld->status() == PQNodeRoot::FULL);
 				(*seqStart) = rightOld;
-                     //searching consecutive seqeuence in Q2 or Q3.
+				//searching consecutive seqeuence in Q2 or Q3.
 			}
 
 		} else {
@@ -1105,10 +1111,10 @@ bool PQTree<T,X,Y>::checkChain(
 		(*seqEnd) = (*seqStart);
 		(*seqStart) = checkNode;
 	}
-      
+
 	if (fullCount == 0)
-                                    // All full children occupy a consecutive
-                                    // sequence.
+		// All full children occupy a consecutive
+		// sequence.
 		return true;
 	else
 		return false;
@@ -1116,8 +1122,8 @@ bool PQTree<T,X,Y>::checkChain(
 
 
 /************************************************************************
-                          checkIfOnlyChild
-************************************************************************/ 
+							checkIfOnlyChild
+************************************************************************/
 
 /**
  * The function checkIfOnlyChild() checks if \a child is the only
@@ -1162,13 +1168,13 @@ bool PQTree<T,X,Y>::checkIfOnlyChild(
 
 
 /************************************************************************
-                         Cleanup
-************************************************************************/ 
+								Cleanup
+************************************************************************/
 
 /**
  * The function Cleanup() removes the entire PQ-tree, stored in the
  * class template PQTree. The function Cleanup() is called by the
- * destructor of the class template PQTree. 
+ * destructor of the class template PQTree.
  * It scans all nodes of the tree and frees the
  * memory used by the tree. Cleanup() includes the removal of the memory
  * allocated by the following datastructures:
@@ -1185,7 +1191,7 @@ bool PQTree<T,X,Y>::checkIfOnlyChild(
  * (besides the \a m_root, this will always be the node \a checkNode)
  * the pointers of all its children are stored in a queue \a helpqueue and
  * then the processed node is deleted.
- * 
+ *
  * The use of a queue \a helpqueue is a must, since the nodes do not
  * have pointers to all of their children, as the children mostly do
  * not have a pointer to their parent.
@@ -1203,20 +1209,20 @@ void PQTree<T,X,Y>::Cleanup()
 	PQNode<T,X,Y>*  nextSon   = 0;
 	PQNode<T,X,Y>*  lastSon   = 0;
 	PQNode<T,X,Y>*  oldSib    = 0;
-  
+
 	Queue<PQNode<T,X,Y>*> helpqueue;
 
 	if (m_root != 0)
 	{
 		emptyAllPertinentNodes();
-		
+
 		/*
 		Process the [[m_root]] of the [[PQTree]]. Before deleting [[m_root]],
 		pointers to all its children are stored in the queue [[helpqueue]].
 		*/
 		if (m_root->type() == PQNodeRoot::PNode)
 		{
-			if (m_root->m_referenceChild != 0) 
+			if (m_root->m_referenceChild != 0)
 			{
 				PQNode<T,X,Y>* firstSon = m_root->m_referenceChild;
 				helpqueue.append(firstSon);
@@ -1231,10 +1237,10 @@ void PQTree<T,X,Y>::Cleanup()
 			}
 		}
 		else if (m_root->type() == PQNodeRoot::QNode)
-		{  
+		{
 			PQNode<T,X,Y>* firstSon = m_root->m_leftEndmost;
 			helpqueue.append(firstSon);
-            
+
 			lastSon = m_root->m_rightEndmost;
 			helpqueue.append(lastSon);
 
@@ -1263,8 +1269,8 @@ void PQTree<T,X,Y>::Cleanup()
 			pointers to all its children are stored in the queue [[helpqueue]].
 			*/
 			if (checkNode->type() == PQNodeRoot::PNode)
-			{  
-				if (checkNode->m_referenceChild != 0) 
+			{
+				if (checkNode->m_referenceChild != 0)
 				{
 					PQNode<T,X,Y>* firstSon = checkNode->m_referenceChild;
 					helpqueue.append(firstSon);
@@ -1320,8 +1326,8 @@ void PQTree<T,X,Y>::Cleanup()
 
 
 /************************************************************************
-                        clientPrintNodeCategorie
-************************************************************************/ 
+						clientPrintNodeCategorie
+************************************************************************/
 
 /**
  * If the user wishes to use different flags in a derived class of PQTree
@@ -1334,7 +1340,7 @@ void PQTree<T,X,Y>::Cleanup()
  */
 
 template<class T,class X,class Y>
-int PQTree<T,X,Y>::clientPrintNodeCategorie(PQNode<T,X,Y>* nodePtr) 
+int PQTree<T,X,Y>::clientPrintNodeCategorie(PQNode<T,X,Y>* nodePtr)
 {
 	return (nodePtr != 0) ? 1 : 0;
 		// 1 is the standard node categrie in the Tree Interface.
@@ -1342,8 +1348,8 @@ int PQTree<T,X,Y>::clientPrintNodeCategorie(PQNode<T,X,Y>* nodePtr)
 
 
 /************************************************************************
-                        clientPrintStatus
-************************************************************************/ 
+						clientPrintStatus
+************************************************************************/
 
 /**
  * If the user wishes to use different status in a derived class of PQTree
@@ -1356,15 +1362,15 @@ int PQTree<T,X,Y>::clientPrintNodeCategorie(PQNode<T,X,Y>* nodePtr)
  */
 
 template<class T,class X,class Y>
-const char* PQTree<T,X,Y>::clientPrintStatus(PQNode<T,X,Y>* nodePtr) 
+const char* PQTree<T,X,Y>::clientPrintStatus(PQNode<T,X,Y>* nodePtr)
 {
-	return (nodePtr != 0) ? "ERROR" : "ERROR: clientPrintStatus: NO NODE ACCESSED";            
+	return (nodePtr != 0) ? "ERROR" : "ERROR: clientPrintStatus: NO NODE ACCESSED";
 }
 
 
 /************************************************************************
-                        clientPrintType
-************************************************************************/ 
+						clientPrintType
+************************************************************************/
 
 /**
  * If the user wishes to use different types in a derived class of PQTree
@@ -1377,15 +1383,15 @@ const char* PQTree<T,X,Y>::clientPrintStatus(PQNode<T,X,Y>* nodePtr)
  */
 
 template<class T,class X,class Y>
-const char*  PQTree<T,X,Y>::clientPrintType(PQNode<T,X,Y>* nodePtr) 
+const char*  PQTree<T,X,Y>::clientPrintType(PQNode<T,X,Y>* nodePtr)
 {
 	return (nodePtr != 0) ? "ERROR" : "ERROR: clientPrintType: NO NODE ACCESSED";
 }
 
 
 /************************************************************************
-                         Constructor
-************************************************************************/ 
+							Constructor
+************************************************************************/
 
 
 template<class T,class X,class Y> PQTree<T,X,Y>::PQTree()
@@ -1403,12 +1409,12 @@ template<class T,class X,class Y> PQTree<T,X,Y>::PQTree()
 
 
 /************************************************************************
-                     copyFullChildrenToPartial
-************************************************************************/ 
+					copyFullChildrenToPartial
+************************************************************************/
 
 /**
- * The function copyFullChildrenToPartial() 
- * copies all full children of \a nodePtr to a new P-node 
+ * The function copyFullChildrenToPartial()
+ * copies all full children of \a nodePtr to a new P-node
  * The node \a nodePtr has to be a P-node. The new P-node
  * is added to \a partialChild as an endmost child of \a partialChild.
  * The node \a partialChild has to be a Q-node and the new P-node is added
@@ -1422,39 +1428,40 @@ template<class T,class X,class Y> PQTree<T,X,Y>::PQTree()
  */
 
 template<class T,class X,class Y>
-void PQTree<T,X,Y>::copyFullChildrenToPartial(PQNode<T,X,Y> *nodePtr,
-											  PQNode<T,X,Y> *partialChild)
+void PQTree<T,X,Y>::copyFullChildrenToPartial(
+	PQNode<T,X,Y> *nodePtr,
+	PQNode<T,X,Y> *partialChild)
 {
 	if (nodePtr->fullChildren->size() > 0)
-                                        // There are some full children to
-                                        // be copied.
+		// There are some full children to
+		// be copied.
 	{
 		nodePtr->m_childCount = nodePtr->m_childCount -
-		                        nodePtr->fullChildren->size();
+			nodePtr->fullChildren->size();
 
 		PQNode<T,X,Y> *newNode = createNodeAndCopyFullChildren(nodePtr->fullChildren);
 
-                                         // Introduce newNode as endmost
-                                         // child of the partial Q-node.
+		// Introduce newNode as endmost
+		// child of the partial Q-node.
 		partialChild->m_childCount++;
 		partialChild->fullChildren->pushFront(newNode);
 
-		if (clientLeftEndmost(partialChild)->status() == FULL)
+		if (clientLeftEndmost(partialChild)->status() == PQNodeRoot::FULL)
 		{
 			PQNode<T,X,Y> *checkNode = partialChild->m_leftEndmost;
 			partialChild->m_leftEndmost = newNode;
 			linkChildrenOfQnode(checkNode,newNode);
-         
+
 		}
 		else {
 			// ERROR: Endmostchild not found?
-			OGDF_ASSERT(clientRightEndmost(partialChild)->status() == FULL);
-		
+			OGDF_ASSERT(clientRightEndmost(partialChild)->status() == PQNodeRoot::FULL);
+
 			PQNode<T,X,Y> *checkNode = partialChild->m_rightEndmost;
-			partialChild->m_rightEndmost = newNode;	
+			partialChild->m_rightEndmost = newNode;
 			linkChildrenOfQnode(checkNode,newNode);
 		}
-			
+
 		newNode->m_parent = partialChild;
 		newNode->m_parentType = PQNodeRoot::QNode;
 	}
@@ -1462,8 +1469,8 @@ void PQTree<T,X,Y>::copyFullChildrenToPartial(PQNode<T,X,Y> *nodePtr,
 
 
 /************************************************************************
-                     createNodeAndCopyFullChildren
-************************************************************************/ 
+					createNodeAndCopyFullChildren
+************************************************************************/
 
 /**
  * The function createNodeAndCopyFullChildren() copies the full children of a
@@ -1471,7 +1478,7 @@ void PQTree<T,X,Y>::copyFullChildrenToPartial(PQNode<T,X,Y> *nodePtr,
  * This new P-node
  * is created by the function and stored in \a newNode if there is more than one full child.
  * If there is just one full child, it is not necessary to construct a new
- * P-node and the full child is stored in \a newNode. 
+ * P-node and the full child is stored in \a newNode.
  * The \a newNode is the return value of the procedure.
  *
  * The function createNodeAndCopyFullChildren() is used by
@@ -1505,26 +1512,26 @@ PQNode<T,X,Y>* PQTree<T,X,Y>::createNodeAndCopyFullChildren(
 		newNode = fullNodes->popFrontRet();
 		removeChildFromSiblings(newNode);
 	}
-   
+
 	else
 	{
 		/*
 		This chunk belongs to the function [[createNodeAndCopyFullChildren]].
 		There is more than one full child, so a new $P$-node is created.
 		This chunk first allocates the memory for the new $P$-node that will
-		be stored in [[newNode]]. Then it pops the nodes out of the stack 
+		be stored in [[newNode]]. Then it pops the nodes out of the stack
 		[[fullNodes]] and introduces them as sons of [[newNode]].
 		Popping the nodes out of the stack implies at the same time
 		that they are removed from the [[fullChildren]] stack of the
 		$P$-node of their parent.
 		*/
-		newNode = OGDF_NEW PQInternalNode<T,X,Y>(m_identificationNumber++,PQNodeRoot::PNode,FULL);
+		newNode = OGDF_NEW PQInternalNode<T,X,Y>(m_identificationNumber++,PQNodeRoot::PNode,PQNodeRoot::FULL);
 		m_pertinentNodes->pushFront(newNode);
 		newNode->m_pertChildCount = fullNodes->size();
 		newNode->m_childCount = fullNodes->size();
 
 		/*
-		The first node is copied separately, since we need the pointer to it 
+		The first node is copied separately, since we need the pointer to it
 		for setting the pointers to the siblings of the next full nodes.
 		*/
 		PQNode<T,X,Y> *firstSon = fullNodes->popFrontRet();
@@ -1539,7 +1546,7 @@ PQNode<T,X,Y>* PQTree<T,X,Y>::createNodeAndCopyFullChildren(
 		All remaining nodes that are stored in the stack [[fullNodes]] are
 		introduced as children of the new $P$-node [[newNode]]. Observe
 		that the children of a $P$-node must form a doubly linked list.
-		Hence the last node and the [[firstSon]] must be linked via their 
+		Hence the last node and the [[firstSon]] must be linked via their
 		siblings pointers.
 		*/
 		while (!fullNodes->empty())
@@ -1558,14 +1565,14 @@ PQNode<T,X,Y>* PQTree<T,X,Y>::createNodeAndCopyFullChildren(
 		newNode->m_referenceChild = firstSon;
 		firstSon->m_referenceParent = newNode;
 	}
-   
+
 	return newNode;
 }
 
 
 /************************************************************************
-                 emptyAllPertinetNodes
-************************************************************************/ 
+					emptyAllPertinetNodes
+************************************************************************/
 
 /**
  * The function emptyAllPertinentNodes() has to be called after a reduction
@@ -1586,39 +1593,39 @@ void PQTree<T,X,Y>::emptyAllPertinentNodes()
 		nodePtr = m_pertinentNodes->popFrontRet();
 		switch (nodePtr->status())
 		{
-			case TO_BE_DELETED:
+			case PQNodeRoot::TO_BE_DELETED:
 				if (nodePtr == m_root)
 					m_root = 0;
-                CleanNode(nodePtr);
-                //if (nodePtr)
+				CleanNode(nodePtr);
+				//if (nodePtr)
 				delete nodePtr;
-                break;
+				break;
 
-			case FULL:
+			case PQNodeRoot::FULL:
 				emptyNode(nodePtr);
-                break;
+				break;
 
-			case PARTIAL:
+			case PQNodeRoot::PARTIAL:
 				emptyNode(nodePtr);
-                break;
+				break;
 
 			default:
 				clientDefinedEmptyNode(nodePtr);
-                break;
+				break;
 		}
 	}
 	m_pseudoRoot->m_pertChildCount = 0;
 	m_pseudoRoot->m_pertLeafCount = 0;
 	m_pseudoRoot->fullChildren->clear();
 	m_pseudoRoot->partialChildren->clear();
-	m_pseudoRoot->status(EMPTY);
-	m_pseudoRoot->mark(UNMARKED);
+	m_pseudoRoot->status(PQNodeRoot::EMPTY);
+	m_pseudoRoot->mark(PQNodeRoot::UNMARKED);
 }
 
 
 /************************************************************************
-                        emptyNode
-************************************************************************/ 
+							emptyNode
+************************************************************************/
 
 /**
  * The funtion emptyNode() cleans up all stacks, flags and pointers of a
@@ -1628,18 +1635,18 @@ void PQTree<T,X,Y>::emptyAllPertinentNodes()
 template<class T,class X,class Y>
 void PQTree<T,X,Y>::emptyNode(PQNode<T,X,Y> *nodePtr)
 {
-	nodePtr->status(EMPTY);
+	nodePtr->status(PQNodeRoot::EMPTY);
 	nodePtr->m_pertChildCount = 0;
 	nodePtr->m_pertLeafCount = 0;
 	nodePtr->fullChildren->clear();
 	nodePtr->partialChildren->clear();
-	nodePtr->mark(UNMARKED);
+	nodePtr->mark(PQNodeRoot::UNMARKED);
 }
 
 
 /************************************************************************
-                     exchangeNodes
-************************************************************************/ 
+						exchangeNodes
+************************************************************************/
 
 /**
  * The function exchangeNodes() replaces the \a oldNode by the \a newNode
@@ -1659,7 +1666,7 @@ void PQTree<T,X,Y>::emptyNode(PQNode<T,X,Y> *nodePtr)
 template<class T,class X,class Y>
 void PQTree<T,X,Y>::exchangeNodes(
 	PQNode<T,X,Y> *oldNode,
-    PQNode<T,X,Y> *newNode)
+	PQNode<T,X,Y> *newNode)
 {
 	if (oldNode->m_referenceParent != 0)
 	{
@@ -1677,9 +1684,9 @@ void PQTree<T,X,Y>::exchangeNodes(
 	else if (oldNode->endmostChild())
 	{
 		/*
-		The [[oldNode]] is endmost child of a Q-node. So its parent 
-		contains an extra pointer to [[oldNode]]. Link the parent of 
-		[[oldNode]] to [[newNode]] via this pointer and make [[newNode]] 
+		The [[oldNode]] is endmost child of a Q-node. So its parent
+		contains an extra pointer to [[oldNode]]. Link the parent of
+		[[oldNode]] to [[newNode]] via this pointer and make [[newNode]]
 		endmost child of its new parent.
 		*/
 		if (oldNode->m_parent->m_leftEndmost == oldNode)
@@ -1698,7 +1705,7 @@ void PQTree<T,X,Y>::exchangeNodes(
 		pointers of [[newNode]] are set to [[newNode]].
 		\item [[oldNode]] is the [[m_root]] of the $PQ$-tree. Since
 		by our definition of the $PQ$-tree the sibling pointers of the
-		[[m_root]] point to the root itself, (i.e. to make sure that 
+		[[m_root]] point to the root itself, (i.e. to make sure that
 		checking for the endmost child property is also valid for the root)
 		the sibling pointers of [[newNode]] are set to [[newNode]] as well.
 		\end{enumerate}
@@ -1716,11 +1723,11 @@ void PQTree<T,X,Y>::exchangeNodes(
 			newNode->m_sibRight = newNode;
 		}
 	}
-	else 
+	else
 	{
 		OGDF_ASSERT(!(oldNode->m_sibLeft == oldNode))
 		//sibling pointers of old node are not compatible
-	    OGDF_ASSERT(!(oldNode->m_sibRight == oldNode))
+		OGDF_ASSERT(!(oldNode->m_sibRight == oldNode))
 		//sibling pointers of old node are not compatible.
 	}
 	/*
@@ -1754,15 +1761,15 @@ void PQTree<T,X,Y>::exchangeNodes(
 		newNode->m_sibRight = oldNode->m_sibRight;
 		oldNode->m_sibRight = 0;
 	}
-      
+
 	newNode->m_parentType = oldNode->m_parentType;
 	newNode->m_parent = oldNode->m_parent;
 }
 
 
 /************************************************************************
-                        front
-************************************************************************/ 
+							front
+************************************************************************/
 
 /**
  * The function front()
@@ -1770,8 +1777,8 @@ void PQTree<T,X,Y>::exchangeNodes(
  * \a nodePtr. A specified node \a nodePtr of the PQ-tree is
  * handed to the function and front() detects the leaves in the front
  * of this node returning the elements represented by the leaves. These
- * elements are 
- * stored in an array of keys named \a leafKeys. 
+ * elements are
+ * stored in an array of keys named \a leafKeys.
  * The return value is the numbers of leaves that have been detected.
  * Observe that front() uses \a leafKeys[0] to store the
  * first key.
@@ -1781,16 +1788,16 @@ template<class T,class X,class Y>
 void PQTree<T,X,Y>::front(
 	PQNode<T,X,Y>* nodePtr,
 	SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
-{   
+{
 	Queue<PQNode<T,X,Y>*> helpqueue;
 	helpqueue.append(nodePtr);
-  
+
 	while (!helpqueue.empty())
 	{
 		PQNode<T,X,Y>* checkNode = helpqueue.pop();
 
 		if (checkNode->type() == PQNodeRoot::leaf)
-			leafKeys.pushBack(checkNode->getKey());      
+			leafKeys.pushBack(checkNode->getKey());
 		else
 		{
 			PQNode<T,X,Y>*  firstSon  = 0;
@@ -1799,15 +1806,15 @@ void PQTree<T,X,Y>::front(
 			PQNode<T,X,Y>*  holdSib   = 0;
 
 			if (checkNode->type() == PQNodeRoot::PNode)
-			{  
-				OGDF_ASSERT(checkNode->m_referenceChild) 
+			{
+				OGDF_ASSERT(checkNode->m_referenceChild)
 				firstSon = checkNode->m_referenceChild;
 			}
  			else if (checkNode->type() == PQNodeRoot::QNode)
 			{
 				OGDF_ASSERT(checkNode->m_leftEndmost)
 				firstSon = checkNode->m_leftEndmost;
-			}				
+			}
 			helpqueue.append(firstSon);
 			nextSon = firstSon->getNextSib(oldSib);
 			oldSib = firstSon;
@@ -1824,8 +1831,8 @@ void PQTree<T,X,Y>::front(
 
 
 /************************************************************************
-                         Initialize
-************************************************************************/ 
+							Initialize
+************************************************************************/
 
 /**
  * The function Initialize() initializes the PQ-tree with a set of elements.
@@ -1836,7 +1843,7 @@ void PQTree<T,X,Y>::front(
  * as root (stored in \a m_root) and all leaves gathered underneath the P-node,
  * symbolizing all kinds of permutations. If \a numberOfElements = 1,
  * the universal PQ-tree consists of a single PQLeaf, being the root of
- * the tree. 
+ * the tree.
  *
  * Observe that the first element has to be stored in
  * \a leafKeys[0] and the last one in
@@ -1845,38 +1852,38 @@ void PQTree<T,X,Y>::front(
  * the PQ-tree was successful.
  */
 
-template<class T,class X,class Y> 
+template<class T,class X,class Y>
 int PQTree<T,X,Y>::Initialize(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 {
 	m_pertinentNodes = OGDF_NEW List<PQNode<T,X,Y>*>;
 
 	if (!leafKeys.empty())
 	{
-		PQInternalNode<T,X,Y> *newNode2 = OGDF_NEW PQInternalNode<T,X,Y>(-1,PQNodeRoot::QNode,PARTIAL);
+		PQInternalNode<T,X,Y> *newNode2 = OGDF_NEW PQInternalNode<T,X,Y>(-1,PQNodeRoot::QNode,PQNodeRoot::PARTIAL);
 		m_pseudoRoot = newNode2;
 
 		if (leafKeys.begin() != leafKeys.end()) // at least two elements
 		{
-			PQInternalNode<T,X,Y> *newNode = OGDF_NEW PQInternalNode<T,X,Y>(m_identificationNumber++,PQNodeRoot::PNode,EMPTY);
+			PQInternalNode<T,X,Y> *newNode = OGDF_NEW PQInternalNode<T,X,Y>(m_identificationNumber++,PQNodeRoot::PNode,PQNodeRoot::EMPTY);
 			m_root = newNode;
 			m_root->m_sibLeft = m_root;
 			m_root->m_sibRight = m_root;
 			return addNewLeavesToTree(newNode,leafKeys);
 		}
-		PQLeaf<T,X,Y> *newLeaf = OGDF_NEW PQLeaf<T,X,Y>(m_identificationNumber++,EMPTY,*leafKeys.begin());
+		PQLeaf<T,X,Y> *newLeaf = OGDF_NEW PQLeaf<T,X,Y>(m_identificationNumber++,PQNodeRoot::EMPTY,*leafKeys.begin());
 		m_root = newLeaf;
 		m_root->m_sibLeft = m_root;
 		m_root->m_sibRight = m_root;
 		return 1;
-	}    
+	}
 
 	return 0;
 }
 
 
 /************************************************************************
-                       linkChildrenOfQnode
-************************************************************************/ 
+						linkChildrenOfQnode
+************************************************************************/
 
 /**
  * The function linkChildrenOfQnode() links the two endmost children
@@ -1889,8 +1896,8 @@ int PQTree<T,X,Y>::Initialize(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 
 template<class T,class X,class Y>
 void PQTree<T,X,Y>::linkChildrenOfQnode(
-	PQNode<T,X,Y> *installed, 
-    PQNode<T,X,Y> *newChild)
+	PQNode<T,X,Y> *installed,
+	PQNode<T,X,Y> *newChild)
 {
 	if ((installed != 0) && (newChild != 0))
 	{
@@ -1918,12 +1925,12 @@ void PQTree<T,X,Y>::linkChildrenOfQnode(
 
 
 /************************************************************************
-                 writeGML
-************************************************************************/ 
+								writeGML
+************************************************************************/
 
 /**
  * The function writeGML() prints the PQ-tree in the GML
- * fileformat. The filename is ended by a ".gml" and can be read 
+ * fileformat. The filename is ended by a ".gml" and can be read
  * eg. by the <em>AGD</em>.
  */
 
@@ -1947,79 +1954,78 @@ void PQTree<T,X,Y>::writeGML(ostream &os)
 	os.precision(10);
 
 	os << "Creator \"ogdf::PQTree::writeGML\"\n";
-	os << "directed 1\n";
-
 	os << "graph [\n";
+	os << "  directed 1\n";
 
 	PQNode<T,X,Y>*  checkNode = m_root;
 	PQNode<T,X,Y>*  firstSon  = 0;
 	PQNode<T,X,Y>*  nextSon   = 0;
 	PQNode<T,X,Y>*  lastSon   = 0;
 	PQNode<T,X,Y>*  oldSib    = 0;
-	PQNode<T,X,Y>*  holdSib   = 0;	
+	PQNode<T,X,Y>*  holdSib   = 0;
 
 	if (checkNode->type() != PQNodeRoot::leaf)
 		secondTrace.pushBack(checkNode);
 
 	while (checkNode)
 	{
-		os << "node [\n";
+		os << "  node [\n";
 
-		os << "id " << (id[checkNode->m_identificationNumber] = nextId++) << "\n";
+		os << "    id " << (id[checkNode->m_identificationNumber] = nextId++) << "\n";
 
-		os << "label \"" << checkNode->m_identificationNumber;
+		os << "    label \"" << checkNode->m_identificationNumber;
 		if (checkNode->getKey() != 0)
-			os << checkNode->getKey()->print();
+			checkNode->getKey()->print(os);
 		os << "\"\n";
 
-		os << "graphics [\n";
-		if (m_root->status() == FULL)
+		os << "    graphics [\n";
+		if (m_root->status() == PQNodeRoot::FULL)
 		{
 			if (checkNode->type() == PQNodeRoot::PNode)
-				os << "fill \"#FF0000\"\n";
+				os << "      fill \"#FF0000\"\n";
 			else if (checkNode->type() == PQNodeRoot::QNode)
-				os << "fill \"#0000A0\"\n";
+				os << "      fill \"#0000A0\"\n";
 			else if (checkNode->type() == PQNodeRoot::leaf)
 				os << "fill \"#FFFFE6\"\n";
 		}
-		else if (m_root->status() == EMPTY)
+		else if (m_root->status() == PQNodeRoot::EMPTY)
 		{
 			if (checkNode->type() == PQNodeRoot::PNode)
-				os << "fill \"#FF0000\"\n";
+				os << "      fill \"#FF0000\"\n";
 			else if (checkNode->type() == PQNodeRoot::QNode)
-				os << "fill \"#0000A0\"\n";
+				os << "      fill \"#0000A0\"\n";
 			else if (checkNode->type() == PQNodeRoot::leaf)
-				os << "fill \"#00FF00\"\n";
+				os << "      fill \"#00FF00\"\n";
 		}
-		else if (m_root->status() == PARTIAL)
+		else if (m_root->status() == PQNodeRoot::PARTIAL)
 		{
 			if (checkNode->type() == PQNodeRoot::PNode)
-				os << "fill \"#FF0000\"\n";
+				os << "      fill \"#FF0000\"\n";
 			else if (checkNode->type() == PQNodeRoot::QNode)
-				os << "fill \"#0000A0\"\n";
+				os << "      fill \"#0000A0\"\n";
 			else if (checkNode->type() == PQNodeRoot::leaf)
-				os << "fill \"#FFFFE6\"\n";
+				os << "      fill \"#FFFFE6\"\n";
 		}
-		else if (m_root->status() == PERTINENT)
+		else if (m_root->status() == PQNodeRoot::PERTINENT)
 		{
 			if (checkNode->type() == PQNodeRoot::PNode)
-				os << "fill \"#FF0000\"\n";
+				os << "      fill \"#FF0000\"\n";
 			else if (checkNode->type() == PQNodeRoot::QNode)
-				os << "fill \"#0000A0\"\n";
+				os << "      fill \"#0000A0\"\n";
 			else if (checkNode->type() == PQNodeRoot::leaf)
-				os << "fill \"#FFFFE6\"\n";
+				os << "      fill \"#FFFFE6\"\n";
 		}
 
-		os << "]\n"; // graphics
-		os << "]\n"; // node
+		os << "    ]\n"; // graphics
+		os << "  ]\n"; // node
 
 		if (checkNode->type() == PQNodeRoot::PNode)
-		{  
-			if (checkNode->m_referenceChild != 0) 
+		{
+			if (checkNode->m_referenceChild != 0)
 			{
 				firstSon = checkNode->m_referenceChild;
 				helpQueue.pushBack(firstSon);
-	
+
 				if (firstSon->m_sibRight != 0)
 				nextSon = firstSon->m_sibRight;
 				while (nextSon != firstSon)
@@ -2036,7 +2042,7 @@ void PQTree<T,X,Y>::writeGML(ostream &os)
 
 			firstSon = checkNode->m_leftEndmost;
 			helpQueue.pushBack(firstSon);
-      
+
 			lastSon = checkNode->m_rightEndmost;
 			if ( firstSon != lastSon)
 			{
@@ -2069,23 +2075,23 @@ void PQTree<T,X,Y>::writeGML(ostream &os)
 	{
 		checkNode = *it;
 		if (checkNode->type() == PQNodeRoot::PNode)
-		{  
-			if (checkNode->m_referenceChild != 0) 
+		{
+			if (checkNode->m_referenceChild != 0)
 			{
 				firstSon = checkNode->m_referenceChild;
-				os << "edge [\n";
-				os << "source " << id[checkNode->m_identificationNumber] << "\n";
-				os << "target " << id[firstSon->m_identificationNumber] << "\n";
-				os << "]\n"; // edge
-	
+				os << "  edge [\n";
+				os << "    source " << id[checkNode->m_identificationNumber] << "\n";
+				os << "    target " << id[firstSon->m_identificationNumber] << "\n";
+				os << "  ]\n"; // edge
+
 				if (firstSon->m_sibRight != 0)
 				nextSon = firstSon->m_sibRight;
 				while (nextSon != firstSon)
 				{
-					os << "edge [\n";
-					os << "source " << id[checkNode->m_identificationNumber] << "\n";
-					os << "target " << id[nextSon->m_identificationNumber] << "\n";
-					os << "]\n"; // edge
+					os << "  edge [\n";
+					os << "    source " << id[checkNode->m_identificationNumber] << "\n";
+					os << "    target " << id[nextSon->m_identificationNumber] << "\n";
+					os << "  ]\n"; // edge
 					nextSon = nextSon->m_sibRight;
 				}
 			}
@@ -2095,20 +2101,20 @@ void PQTree<T,X,Y>::writeGML(ostream &os)
 			oldSib = 0;
 			holdSib = 0;
 
-			firstSon = checkNode->m_leftEndmost;      
+			firstSon = checkNode->m_leftEndmost;
 			lastSon = checkNode->m_rightEndmost;
 
-			os << "edge [\n";
-			os << "source " << id[checkNode->m_identificationNumber] << "\n";
-			os << "target " << id[lastSon->m_identificationNumber] << "\n";
-			os << "]\n"; // edge
+			os << "  edge [\n";
+			os << "    source " << id[checkNode->m_identificationNumber] << "\n";
+			os << "    target " << id[lastSon->m_identificationNumber] << "\n";
+			os << "  ]\n"; // edge
 			if ( firstSon != lastSon)
 			{
 				nextSon = lastSon->getNextSib(oldSib);
-				os << "edge [\n";
-				os << "source " << id[checkNode->m_identificationNumber] << "\n";
-				os << "target " << id[nextSon->m_identificationNumber] << "\n";
-				os << "]\n"; // edge
+				os << "  edge [\n";
+				os << "    source " << id[checkNode->m_identificationNumber] << "\n";
+				os << "    target " << id[nextSon->m_identificationNumber] << "\n";
+				os << "  ]\n"; // edge
 
 				oldSib = lastSon;
 				while (nextSon != firstSon)
@@ -2116,11 +2122,10 @@ void PQTree<T,X,Y>::writeGML(ostream &os)
 					holdSib = nextSon->getNextSib(oldSib);
 					oldSib = nextSon;
 					nextSon = holdSib;
-					os << "edge [\n";
-					os << "source " << id[checkNode->m_identificationNumber] << "\n";
-					os << "target " << id[nextSon->m_identificationNumber] << "\n";
-					os << "]\n"; // edge
-
+					os << "  edge [\n";
+					os << "    source " << id[checkNode->m_identificationNumber] << "\n";
+					os << "    target " << id[nextSon->m_identificationNumber] << "\n";
+					os << "  ]\n"; // edge
 				}
 			}
 		}
@@ -2131,8 +2136,8 @@ void PQTree<T,X,Y>::writeGML(ostream &os)
 
 
 /************************************************************************
-                            Reduce
-************************************************************************/ 
+								Reduce
+************************************************************************/
 
 /**
  * The function Reduce() does the reduction of the pertinent leaves
@@ -2186,14 +2191,14 @@ bool PQTree<T,X,Y>::Reduce(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 	/*
 	In a first step the pertinent leaves have to be identified in the tree
 	and are entered on to the queue [[processNodes]]. The identification of
-	the leaves can be done with the help of a pointer stored in every 
-	[[PQLeafKey]] in constant time for every element.   
+	the leaves can be done with the help of a pointer stored in every
+	[[PQLeafKey]] in constant time for every element.
 	*/
 	SListIterator<PQLeafKey<T,X,Y>*> it;
 	for (it = leafKeys.begin(); it.valid(); ++it)
 	{
 		PQNode<T,X,Y>* checkLeaf = (*it)->nodePointer();
-		checkLeaf->status(FULL);
+		checkLeaf->status(PQNodeRoot::FULL);
 		checkLeaf->m_pertLeafCount = 1;
 		processNodes.append(checkLeaf);
 		pertLeafCount++;
@@ -2205,22 +2210,22 @@ bool PQTree<T,X,Y>::Reduce(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 		checkNode = processNodes.pop();
 
 		if (checkNode->m_pertLeafCount < pertLeafCount)
-		{ 
+		{
 			/*
-			Application of the template matchings to a pointer [[checkNode]] 
-			storing the adress of a node that is {\bf not the root} of the 
-			pertinent subtree. Before applying the template matchings to 
-			[[checkNode]], some values of the parent of [[checkNode]] are 
-			updated. The number of the parents pertinent children stored in 
-			[[pertChildCount]] is count down by one. In case that 
-			[[checkNode->m_parent->m_pertChildCount == 0]], we know that all 
-			pertinent children of the parent have been processed. Since the 
-			parent then is allowed to be processed as well, 
+			Application of the template matchings to a pointer [[checkNode]]
+			storing the adress of a node that is {\bf not the root} of the
+			pertinent subtree. Before applying the template matchings to
+			[[checkNode]], some values of the parent of [[checkNode]] are
+			updated. The number of the parents pertinent children stored in
+			[[pertChildCount]] is count down by one. In case that
+			[[checkNode->m_parent->m_pertChildCount == 0]], we know that all
+			pertinent children of the parent have been processed. Since the
+			parent then is allowed to be processed as well,
 			[[checkNode->m_parent]] is stored in the queue [[processNodes]].
 			*/
-			checkNode->m_parent->m_pertLeafCount = 
-										checkNode->m_parent->m_pertLeafCount
-	                                    + checkNode->m_pertLeafCount;
+			checkNode->m_parent->m_pertLeafCount =
+				checkNode->m_parent->m_pertLeafCount
+				+ checkNode->m_pertLeafCount;
 
 			checkNode->m_parent->m_pertChildCount--;
 			if (!checkNode->m_parent->m_pertChildCount)
@@ -2236,13 +2241,13 @@ bool PQTree<T,X,Y>::Reduce(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 		else
 		{
 			/*
-			application of the template matchings to a pointer [[checkNode]] 
-			that stores the adress of a node that {\bf is the root} of the 
-			pertinent subtree. In a case that a template matching was 
-			successfully applied, the pointer [[checkNode]] stores after the 
-			application the adress of the root of pertinent subtree. This 
-			includes nodes that have been newly introduced as root of the 
-			perinent subtree during the application. If no template matching 
+			application of the template matchings to a pointer [[checkNode]]
+			that stores the adress of a node that {\bf is the root} of the
+			pertinent subtree. In a case that a template matching was
+			successfully applied, the pointer [[checkNode]] stores after the
+			application the adress of the root of pertinent subtree. This
+			includes nodes that have been newly introduced as root of the
+			perinent subtree during the application. If no template matching
 			was successfully applied [[checkNode]] is a [[0]] pointer.
 			*/
 			if (!templateL1(checkNode,1))
@@ -2264,8 +2269,8 @@ bool PQTree<T,X,Y>::Reduce(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 
 
 /************************************************************************
-                         Reduction
-************************************************************************/ 
+								Reduction
+************************************************************************/
 
 /**
  * The function Reduction() tests whether permissible permutations of the
@@ -2274,15 +2279,15 @@ bool PQTree<T,X,Y>::Reduce(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
  * such a permutation, the PQ-tree is reduced and Reduction()
  * returns 1.
  *
- * The function Reduction() gets a list \aleafKeys
- * of pointers to elements of type PQLeafKey, 
- * representing all elements of S. 
+ * The function Reduction() gets a list \a leafKeys
+ * of pointers to elements of type PQLeafKey,
+ * representing all elements of S.
  *
  * Reduction() calls the procedure Bubble() and if Bubble() was
  * successful, Reduction() calls the function Reduce().
  */
 
-template<class T,class X,class Y> 
+template<class T,class X,class Y>
 bool PQTree<T,X,Y>::Reduction(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 {
 	bool success = Bubble(leafKeys);
@@ -2296,15 +2301,15 @@ bool PQTree<T,X,Y>::Reduction(SListPure<PQLeafKey<T,X,Y>*> &leafKeys)
 
 
 /************************************************************************
-                          removeBlock
-************************************************************************/ 
+							removeBlock
+************************************************************************/
 
 /**
  * This chunk contains the procedure removeBlock. It is used by the functions
  * templateQ2() and templateQ3(). The node \a nodePtr is expected to be a
  * Q-node with no, one or at most two partial children, such that
  * the partial and full children of \a nodePtr form a legal consecutive
- * sequence, hence can be reduced. 
+ * sequence, hence can be reduced.
  *
  * The function removeBlock() does the
  * following: Of every partial node that is found in the sequence of children of
@@ -2324,14 +2329,14 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 	For every
 	partial child we keep a set of pointers. Since there are at most
 	two partial children, we initialize two sets. Every set contains
-	besides a pointer to the partial child four pointers to its endmost 
-	children, sorted according to their full or empty labels and pointers 
+	besides a pointer to the partial child four pointers to its endmost
+	children, sorted according to their full or empty labels and pointers
 	to the immediate siblings of the partial child, also sorted according
 	to their full or empty labels.
 	*/
 	///Pointer to the first partial child
 	PQNode<T,X,Y> *partial_1 = 0;
-	
+
 	/*
 	Pointer to the full endmost child (more
 	precisely: to the endmost child appearing on the full side) of
@@ -2339,7 +2344,7 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 	may store the adress of an ignored node.
 	*/
 	PQNode<T,X,Y> *endfull_1 = 0;
-	
+
 	/*
 	Pointer to the empty endmost child  (more
 	precisely: to the endmost child appearing on the empty side) of
@@ -2347,24 +2352,24 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 	may store the adress of an ignored node.
 	*/
 	PQNode<T,X,Y> *endempty_1 = 0;
-	
+
 	/*
-	Pointer to the first {\it non ignored} node 
+	Pointer to the first {\it non ignored} node
 	with full status. [[realfull_1]] is identical to [[endfull_1]] if no
-	ignored nodes appear at the full end of the first partial child. 	
+	ignored nodes appear at the full end of the first partial child.
 	*/
 	PQNode<T,X,Y> *realfull_1 = 0;
-	
+
 	/*
-	Pointer to the first {\it non ignored} node 
+	Pointer to the first {\it non ignored} node
 	with empty status. [[realempty_1]] is identical to [[endempty_1]] if no
-	ignored nodes appear at the empty end of the first partial child.  
+	ignored nodes appear at the empty end of the first partial child.
 	*/
 	PQNode<T,X,Y> *realempty_1 = 0;
 
 	// Pointer to the second partial child.
 	PQNode<T,X,Y> *partial_2 = 0;
-	
+
 	/*
 	Pointer to the full endmost child (more
 	precisely: to the endmost child appearing on the full side) of
@@ -2380,48 +2385,41 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 	may store the adress of an ignored node.
 	*/
 	PQNode<T,X,Y> *endempty_2 = 0;
-	
+
 	/*
-	Pointer to the first {\it non ignored} node 
-	with full status. [[realfull_2]] is identical to [[endfull_2]] if no
-	ignored nodes appear at the full end of the first partial child. 
-	*/
-	PQNode<T,X,Y> *realfull_2 = 0;
-	
-	/*
-	Pointer to the first {\it non ignored} node 
+	Pointer to the first {\it non ignored} node
 	with empty status. [[realempty_2]] is identical to [[endempty_2]] if no
-	ignored nodes appear at the empty end of the first partial child.  
+	ignored nodes appear at the empty end of the first partial child.
 	*/
 	PQNode<T,X,Y> *realempty_2 = 0;
-      
+
 	/*
 	Pointer to a full sibling of
-	[[partial_1]], if it exists. In case that ignored nodes are used 
+	[[partial_1]], if it exists. In case that ignored nodes are used
 	this [[sibfull_1]] stores the direct sibling of [[partial_1]]
 	on the side where the full siblings are. Hence [[sibfull_1]] may
 	store an ignored node.
 	*/
-	PQNode<T,X,Y> *sibfull_1 = 0; 
-	
+	PQNode<T,X,Y> *sibfull_1 = 0;
+
 	/*
 	Pointer to a partial sibling of
-	[[partial_1]], if it exists. In case that ignored nodes are used 
+	[[partial_1]], if it exists. In case that ignored nodes are used
 	this [[sibpartial_1]] stores the direct sibling of [[partial_1]]
 	on the side where a partial sibling is. Hence [[sibpartial_1]] may
 	store an ignored node.
 	*/
 	PQNode<T,X,Y> *sibpartial_1 = 0;
-	
+
 	/*
 	Pointer to an empty sibling of
-	[[parial_1]], if it exists. In case that ignored nodes are used 
+	[[parial_1]], if it exists. In case that ignored nodes are used
 	this [[sibempty_1]] stores the direct sibling of [[partial_1]]
 	on the side where the empty siblings are. Hence [[sibempty_1]] may
 	store an ignored node.
 	*/
-	PQNode<T,X,Y> *sibempty_1 = 0;  
-	
+	PQNode<T,X,Y> *sibempty_1 = 0;
+
 	/*
 	Pointer only used in case that [[partial_1]] has
 	no non-ignored siblings on one side. [[partial_1]] then is endmost child
@@ -2430,38 +2428,38 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 	[[nonstatussib_1]] then stores the adress of the endmost ignored child.
 	Observe that it is not valid for a $Q$-node to have only one
 	non-ignored child and several ignored children. Hence this situation
-	is only allowed to appear {\bf once} on one side of [[partial_1]]. 
-	Every other situation results in an error message.	
+	is only allowed to appear {\bf once} on one side of [[partial_1]].
+	Every other situation results in an error message.
 	*/
 	PQNode<T,X,Y> *nonstatussib_1 = 0;
 
 	/*
 	Pointer to a full sibling of
-	[[partial_2]], if it exists. In case that ignored nodes are used 
+	[[partial_2]], if it exists. In case that ignored nodes are used
 	this [[sibfull_2]] stores the direct sibling of [[partial_2]]
 	on the side where the full siblings are. Hence [[sibfull_2]] may
 	store an ignored node.
 	*/
-	PQNode<T,X,Y> *sibfull_2 = 0;   
-	
+	PQNode<T,X,Y> *sibfull_2 = 0;
+
 	/*
 	Pointer to a partial sibling of
-	[[partial_2]], if it exists. In case that ignored nodes are used 
+	[[partial_2]], if it exists. In case that ignored nodes are used
 	this [[sibpartial_2]] stores the direct sibling of [[partial_2]]
 	on the side where a partial sibling is. Hence [[sibpartial_2]] may
 	store an ignored node.
 	*/
 	PQNode<T,X,Y> *sibpartial_2 = 0;
-	
+
 	/*
 	Pointer to an empty sibling of
-	[[parial_2]], if it exists. In case that ignored nodes are used 
+	[[parial_2]], if it exists. In case that ignored nodes are used
 	this [[sibempty_2]] stores the direct sibling of [[partial_2]]
 	on the side where the empty siblings are. Hence [[sibempty_2]] may
 	store an ignored node.
 	*/
-	PQNode<T,X,Y> *sibempty_2 = 0;  
-	
+	PQNode<T,X,Y> *sibempty_2 = 0;
+
 	/*
 	Pointer	only used in case that [[partial_2]] has
 	no non-ignored siblings on one side. [[partial_2]] then is endmost child
@@ -2470,14 +2468,14 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 	[[nonstatussib_2]] then stores the adress of the endmost ignored child.
 	Observe that it is not valid for a $Q$-node to have only one
 	non-ignored child and several ignored children. Hence this situation
-	is only allowed to appear {\bf once} on one side of [[partial_2]]. 
+	is only allowed to appear {\bf once} on one side of [[partial_2]].
 	Every other situation results in an error message.
 	*/
 	PQNode<T,X,Y> *nonstatussib_2 = 0;
 
 	PQNode<T,X,Y> *helpptr        = 0;
 
-	PQNode<T,X,Y> *checkVarLeft   = 0; 
+	PQNode<T,X,Y> *checkVarLeft   = 0;
 
 	PQNode<T,X,Y> *checkVarRight  = 0;
 
@@ -2486,70 +2484,70 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 	child of [[nodePtr]]. Per default, [[endmostcheck]] is [[0]].
 	*/
 	int endmostcheck = 0;
-   
-   
-	nodePtr->status(PARTIAL);
+
+
+	nodePtr->status(PQNodeRoot::PARTIAL);
 	if (!isRoot)
 		nodePtr->m_parent->partialChildren->pushFront(nodePtr);
-      
+
 	if (!nodePtr->partialChildren->empty())
  												// Get a partial child.
 	{
 		partial_1 = nodePtr->partialChildren->popFrontRet();
 
-												// Get the full and empty 
-												// endmost children of the 
+												// Get the full and empty
+												// endmost children of the
 												// partial child [[partial_1]].
 		checkVarLeft = clientLeftEndmost(partial_1);
 		checkVarRight = clientRightEndmost(partial_1);
-		if (checkVarLeft->status() == FULL)
+		if (checkVarLeft->status() == PQNodeRoot::FULL)
 		{
 			endfull_1  = partial_1->m_leftEndmost;
 			realfull_1 = checkVarLeft;
 		}
 		else {
 			// partial child with no full endmost child detected?
-			OGDF_ASSERT(checkVarRight->status() == FULL);
-		
+			OGDF_ASSERT(checkVarRight->status() == PQNodeRoot::FULL);
+
 			endfull_1  = partial_1->m_rightEndmost;
 			realfull_1 = checkVarRight;
 		}
 
-		if (checkVarLeft->status() == EMPTY)
+		if (checkVarLeft->status() == PQNodeRoot::EMPTY)
 		{
 			endempty_1  = partial_1->m_leftEndmost;
 			realempty_1 = checkVarLeft;
 		}
 		else {
 			// partial child with no empty endmost child detected?
-			OGDF_ASSERT(checkVarRight->status() == EMPTY);
-		
+			OGDF_ASSERT(checkVarRight->status() == PQNodeRoot::EMPTY);
+
 			endempty_1  = partial_1->m_rightEndmost;
 			realempty_1 = checkVarRight;
 		}
 
-												// Get the immediate 
-												// siblings of the partial 
+												// Get the immediate
+												// siblings of the partial
 												// child [[partial_1]].
 		if (clientSibLeft(partial_1) != 0)
 		{
-			if (clientSibLeft(partial_1)->status() == FULL)
+			if (clientSibLeft(partial_1)->status() == PQNodeRoot::FULL)
 				sibfull_1 = partial_1->m_sibLeft;
-			else if (clientSibLeft(partial_1)->status() == EMPTY)
+			else if (clientSibLeft(partial_1)->status() == PQNodeRoot::EMPTY)
 				sibempty_1 = partial_1->m_sibLeft;
-			else if (clientSibLeft(partial_1)->status() == PARTIAL)
+			else if (clientSibLeft(partial_1)->status() == PQNodeRoot::PARTIAL)
 				sibpartial_1 = partial_1->m_sibLeft;
 		}
-		else 
+		else
 			nonstatussib_1 = partial_1->m_sibLeft;
 
 		if (clientSibRight(partial_1) != 0)
 		{
-			if (clientSibRight(partial_1)->status() == FULL)
+			if (clientSibRight(partial_1)->status() == PQNodeRoot::FULL)
 				sibfull_1 = partial_1->m_sibRight;
-			else if (clientSibRight(partial_1)->status() == EMPTY)
+			else if (clientSibRight(partial_1)->status() == PQNodeRoot::EMPTY)
 				sibempty_1 = partial_1->m_sibRight;
-			else if (clientSibRight(partial_1)->status() == PARTIAL)
+			else if (clientSibRight(partial_1)->status() == PQNodeRoot::PARTIAL)
 				sibpartial_1 = partial_1->m_sibRight;
 		}
 		else {
@@ -2564,60 +2562,58 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 											// There is a second partial child.
 	{
 		partial_2 = nodePtr->partialChildren->popFrontRet();
-											// Get the full and empty endmost 
-											// children of the partial 
+											// Get the full and empty endmost
+											// children of the partial
 											// child [[partial_2]].
-		
+
 		checkVarLeft = clientLeftEndmost(partial_2);
 		checkVarRight = clientRightEndmost(partial_2);
-		if (checkVarLeft->status() == FULL)
+		if (checkVarLeft->status() == PQNodeRoot::FULL)
 		{
 			endfull_2 = partial_2->m_leftEndmost;
-			realfull_2 = checkVarLeft;
 		}
 		else {
 			// partial child with no full endmost child detected?
-			OGDF_ASSERT(checkVarRight->status() == FULL);
-		
+			OGDF_ASSERT(checkVarRight->status() == PQNodeRoot::FULL);
+
 			endfull_2 = partial_2->m_rightEndmost;
-			realfull_2 = checkVarRight;
 		}
 
-		if (checkVarLeft->status() == EMPTY)
+		if (checkVarLeft->status() == PQNodeRoot::EMPTY)
 		{
 			endempty_2 = partial_2->m_leftEndmost;
 			realempty_2 = checkVarLeft;
 		}
 		else {
 			// partial child with no empty endmost child detected?
-			OGDF_ASSERT(checkVarRight->status() == EMPTY);
-		
+			OGDF_ASSERT(checkVarRight->status() == PQNodeRoot::EMPTY);
+
 			endempty_2 = partial_2->m_rightEndmost;
 			realempty_2 = checkVarRight;
 		}
-												// Get the immediate siblings 
-												// of the partial child 
+												// Get the immediate siblings
+												// of the partial child
 												// [[partial_2]].
 		if (clientSibLeft(partial_2) != 0)
 		{
-			if (clientSibLeft(partial_2)->status() == FULL)
+			if (clientSibLeft(partial_2)->status() == PQNodeRoot::FULL)
 				sibfull_2 = partial_2->m_sibLeft;
-			else if (clientSibLeft(partial_2)->status() == EMPTY)
+			else if (clientSibLeft(partial_2)->status() == PQNodeRoot::EMPTY)
 				sibempty_2 = partial_2->m_sibLeft;
-			else if (clientSibLeft(partial_2)->status() == PARTIAL)
+			else if (clientSibLeft(partial_2)->status() == PQNodeRoot::PARTIAL)
 				sibpartial_2 = partial_2->m_sibLeft;
 		}
-		else 
+		else
 			nonstatussib_2 = partial_2->m_sibLeft;
 
 
 		if (clientSibRight(partial_2) != 0)
 		{
-			if (clientSibRight(partial_2)->status() == FULL)
+			if (clientSibRight(partial_2)->status() == PQNodeRoot::FULL)
 				sibfull_2 = partial_2->m_sibRight;
-			else if (clientSibRight(partial_2)->status() == EMPTY)
+			else if (clientSibRight(partial_2)->status() == PQNodeRoot::EMPTY)
 				sibempty_2 = partial_2->m_sibRight;
-			else if (clientSibRight(partial_2)->status() == PARTIAL)
+			else if (clientSibRight(partial_2)->status() == PQNodeRoot::PARTIAL)
 				sibpartial_2 = partial_2->m_sibRight;
 		}
 		else {
@@ -2628,13 +2624,13 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 
 
 	if (partial_1 != 0 && partial_2 != 0)
-	
+
 	/*
 	Connect the endmost
 	children of the partial children [[partial_1]] and [[partial_2]] correctly
 	with their new siblings. In doing this, all children of the partial
 	children become children of [[nodePtr]]. The reader should observe that
-	the parent pointers of the interior children of [[partial_1]] and 
+	the parent pointers of the interior children of [[partial_1]] and
 	[[partial_2]] are not updated in order to hit the linear time complexity.
 
 	When including the children of the partial children to the children
@@ -2644,12 +2640,12 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 	*/
 	{
 		if (sibfull_1 != 0 && sibfull_2 != 0)
-                                          // There are full children  between
-                                          // the 2 partial nodes.
-                                          // Connect the full children
-                                          // between the 2 partial children
-                                          // with the full endmost children
-                                          // of the 2 partial nodes.
+			// There are full children  between
+			// the 2 partial nodes.
+			// Connect the full children
+			// between the 2 partial children
+			// with the full endmost children
+			// of the 2 partial nodes.
 		{
 			sibfull_1->changeSiblings(partial_1,endfull_1);
 			endfull_1->putSibling(sibfull_1);
@@ -2658,19 +2654,19 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 		}
 
 		else if (sibpartial_1 != 0 && sibpartial_2 != 0)
-                                          // There are no full children between
-                                          // the 2 partial nodes. Connect the
-                                          // full endmost children of the
-                                          // partial nodes as siblings.
+			// There are no full children between
+			// the 2 partial nodes. Connect the
+			// full endmost children of the
+			// partial nodes as siblings.
 		{
 			if (partial_1 == sibpartial_2 && partial_2 == sibpartial_1)
-                                          // Regular Case.
+				// Regular Case.
 			{
 				endfull_1->putSibling(endfull_2);
 				endfull_2->putSibling(endfull_1);
 			}
-                                          // Only ignored children between 
-                                          // partial_1 and partial_2. 
+				// Only ignored children between
+				// partial_1 and partial_2.
 			else
 			{
 				endfull_1->putSibling(sibpartial_1);
@@ -2678,27 +2674,27 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 				endfull_2->putSibling(sibpartial_2);
 				sibpartial_2->changeSiblings(partial_2,endfull_2);
 			}
-         
+
 		}
-                                            // Include the children of the 
-                                            // partial children with their
-                                            // full nodes inbetween into
-                                            // the sequence of the children of
-                                            // Q-node nodePtr.
+			// Include the children of the
+			// partial children with their
+			// full nodes inbetween into
+			// the sequence of the children of
+			// Q-node nodePtr.
 		if (sibempty_1 == 0)
-                                            // partial_1 is endmost child of
-                                            // nodePtr. Make the empty endmost
-                                            // child of partial_1 be the new 
-											// endmost child of nodePtr.
+			// partial_1 is endmost child of
+			// nodePtr. Make the empty endmost
+			// child of partial_1 be the new
+			// endmost child of nodePtr.
 		{
 			if (nonstatussib_1 == 0)
-                                            // Regular case.
+				// Regular case.
 			{
 				nodePtr->changeEndmost(partial_1,endempty_1);
 			}
 			else
-                                          // Only ignored children between 
-                                          // partial_1 and one end of nodePtr. 
+				// Only ignored children between
+				// partial_1 and one end of nodePtr.
 			{
 				nonstatussib_1->changeSiblings(partial_1,endempty_1);
 				endempty_1->putSibling(nonstatussib_1);
@@ -2706,9 +2702,9 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 			endempty_1->m_parent = nodePtr;
 			realempty_1->m_parent = nodePtr;
 		}
-                                     
+
 		else
-                                            // partial_1 is not endmost child.
+			// partial_1 is not endmost child.
 		{
 			sibempty_1->changeSiblings(partial_1,endempty_1);
 			endempty_1->putSibling(sibempty_1);
@@ -2716,20 +2712,20 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 
 
 		if (sibempty_2 == 0)
-                                            // partial_2 is endmost child of
-                                            // nodePtr. Make the empty endmost
-                                            // child of partial_2 be the new 
-                                            // endmost child of nodePtr.
+			// partial_2 is endmost child of
+			// nodePtr. Make the empty endmost
+			// child of partial_2 be the new
+			// endmost child of nodePtr.
 		{
 			if (nonstatussib_2 == 0)
-                                            // Regular case.
+				// Regular case.
 			{
 				nodePtr->changeEndmost(partial_2,endempty_2);
 			}
 			else
-                                            // Only ignored children between 
-                                            // partial_1 and one end of 
-											// nodePtr. 
+				// Only ignored children between
+				// partial_1 and one end of
+				// nodePtr.
 			{
 				nonstatussib_2->changeSiblings(partial_2,endempty_2);
 				endempty_2->putSibling(nonstatussib_2);
@@ -2737,24 +2733,24 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 			endempty_2->m_parent = nodePtr;
 			realempty_2->m_parent = nodePtr;
 		}
-                                     
+
 		else
-                                            // partial_2 is not endmost child.
+			// partial_2 is not endmost child.
 		{
 			sibempty_2->changeSiblings(partial_2,endempty_2);
 			endempty_2->putSibling(sibempty_2);
 		}
 
-                                            // Copy the full children of 
-                                            // partial_1 and partial_2 to 
-											// nodePtr.
+			// Copy the full children of
+			// partial_1 and partial_2 to
+			// nodePtr.
 		while (!partial_2->fullChildren->empty())
 		{
 			helpptr = partial_2->fullChildren->popFrontRet();
 			nodePtr->fullChildren->pushFront(helpptr);
 		}
 		nodePtr->m_childCount = nodePtr->m_childCount +partial_2->m_childCount - 1;
-                                    
+
 		destroyNode(partial_2);
 
 		while (!partial_1->fullChildren->empty())
@@ -2767,7 +2763,7 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 		destroyNode(partial_1);
 	}
 
-	
+
 	else if (partial_1 != 0)
 
 	/*
@@ -2775,39 +2771,39 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 	children of the partial child [[partial_1]] correctly
 	with their new siblings. In doing this, all children of the partial
 	child become children of [[nodePtr]]. The reader should observe that
-	the parent pointers of the interior children of [[partial_1]] 
+	the parent pointers of the interior children of [[partial_1]]
 	are not updated in order to hit the linear time complexity.
 
 	When including the children of [[partial_1]] to the children
 	of [[nodePtr]], it is taken care that all full children
 	form a consecutive sequence afterwards. If necessary the pointers to the
-	endmost children of [[nodePtr]] are updated.	
+	endmost children of [[nodePtr]] are updated.
 	*/
-	
+
 	{
 		if ((clientLeftEndmost(nodePtr) == partial_1) ||
 			(clientRightEndmost(nodePtr) == partial_1))
-                                            // partial_1 is endmost child.
+				// partial_1 is endmost child.
 			endmostcheck = 1;
-               
+
 		if (sibfull_1 != 0)
-                                            // There are full children on one
-                                            // side of the partial node.
-                                            // Connect the full children with
-                                            // the full endmost child of 
-											// partial_1.
+			// There are full children on one
+			// side of the partial node.
+			// Connect the full children with
+			// the full endmost child of
+			// partial_1.
 		{
 			sibfull_1->changeSiblings(partial_1,endfull_1);
 			endfull_1->putSibling(sibfull_1);
 		}
 
 		else if (!endmostcheck)
-                                            // There are not any full children
-                                            // and partial_1 is not endmost.
-                                            // So get the 2nd empty sibling
-                                            // of partial_1 and connect it
-                                            // to the full endmost child
-                                            // of partial_1.
+			// There are not any full children
+			// and partial_1 is not endmost.
+			// So get the 2nd empty sibling
+			// of partial_1 and connect it
+			// to the full endmost child
+			// of partial_1.
 		{
 			if (partial_1->m_sibLeft != sibempty_1)
 				sibempty_2 = partial_1->m_sibLeft;
@@ -2819,22 +2815,22 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 		}
 
 		else
-                                            // partial_1 is endmost child
-                                            // and there are no full children.
-                                            // Make the full endmost child of 
-                                            // partial_1 be the endmostchild
-                                            // of nodePtr.
+			// partial_1 is endmost child
+			// and there are no full children.
+			// Make the full endmost child of
+			// partial_1 be the endmostchild
+			// of nodePtr.
 		{
 
 			if (nonstatussib_1 == 0)
-                                            // Regular case.
+				// Regular case.
 			{
 				nodePtr->changeEndmost(partial_1,endfull_1);
 			}
 			else
-                                            // Only ignored children between 
-                                            // partial_1 and one end of 
-											// nodePtr. 
+				// Only ignored children between
+				// partial_1 and one end of
+				// nodePtr.
 			{
 				nonstatussib_1->changeSiblings(partial_1,endfull_1);
 				endfull_1->putSibling(nonstatussib_1);
@@ -2845,21 +2841,21 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 		}
 
 		if (sibempty_1 == 0)
-                                            // There are no empty children.
-                                            // partial_1 is endmost child of
-                                            // nodePtr. Make the empty endmost
-                                            // child of partial_1 be the new 
-                                            // endmost child of nodePtr.
+			// There are no empty children.
+			// partial_1 is endmost child of
+			// nodePtr. Make the empty endmost
+			// child of partial_1 be the new
+			// endmost child of nodePtr.
 		{
 			if (nonstatussib_1 == 0)
-                                            // Regular case.
+				// Regular case.
 			{
 				nodePtr->changeEndmost(partial_1,endempty_1);
 			}
 			else
-                                            // Only ignored children between 
-                                            // partial_1 and one end of 
-											// nodePtr. 
+				// Only ignored children between
+				// partial_1 and one end of
+				// nodePtr.
 			{
 				nonstatussib_1->changeSiblings(partial_1,endempty_1);
 				endempty_1->putSibling(nonstatussib_1);
@@ -2867,11 +2863,11 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 			endempty_1->m_parent = nodePtr;
 			realempty_1->m_parent = nodePtr;
 		}
-                                     
+
 		else
-                                            // There are empty children. So 
-                                            // connect the empty endmost child
-                                            // of partial_1 with sibempty_1.
+			// There are empty children. So
+			// connect the empty endmost child
+			// of partial_1 with sibempty_1.
 		{
 			sibempty_1->changeSiblings(partial_1,endempty_1);
 			endempty_1->putSibling(sibempty_1);
@@ -2887,13 +2883,13 @@ void PQTree<T,X,Y>::removeBlock(PQNode<T,X,Y> *nodePtr,bool isRoot)
 		destroyNode(partial_1);
 
 	}
-	// else nodePtr does not have partial children. Then nothing is to do. 
+	// else nodePtr does not have partial children. Then nothing is to do.
 }
 
 
 /************************************************************************
-                     removeChildFromSiblings
-************************************************************************/ 
+						removeChildFromSiblings
+************************************************************************/
 
 /**
  * The function removeChildFromSiblings() removes the node \a nodePtr from
@@ -2922,7 +2918,7 @@ void PQTree<T,X,Y>::removeChildFromSiblings(PQNode<T,X,Y>* nodePtr)
 		nodePtr->m_referenceParent = 0;
 	}
 	else if (nodePtr->endmostChild())
-	{  
+	{
 		/*
 		Check if [[nodePtr]] is the endmost child of a $Q$-node.
 		If so, the next sibling of [[nodePtr]] will be the the new endmost
@@ -2969,14 +2965,14 @@ void PQTree<T,X,Y>::removeChildFromSiblings(PQNode<T,X,Y>* nodePtr)
 
 
 /************************************************************************
-                 removeNodeFromTree
-************************************************************************/ 
+						removeNodeFromTree
+************************************************************************/
 
 /**
  * The function removeNodeFromTree() has to be handled with great care by
  * the user. This function is not used in any of the functions of
  * the class template PQTree and can only be accessed by inheritance.
- * 
+ *
  * Its objective is to remove a node \a child from the PQ-tree. To do so,
  * the \a parent of the node \a child has to be known by the user.
  * To indicate this, the parent has to be handed over by her.
@@ -2989,7 +2985,7 @@ void PQTree<T,X,Y>::removeChildFromSiblings(PQNode<T,X,Y>* nodePtr)
  * this function to search the parent would cost in worst case
  * linear runtime for one call of the function removeNodeFromTree().
  * Its up to the user to do better.
- * 
+ *
  * Calling removeNodeFromTree() with a 0-pointer for \a parent,
  * will always terminate this function with an ERROR-message and returning
  * -1 as value.
@@ -3028,7 +3024,7 @@ int PQTree<T,X,Y>::removeNodeFromTree(PQNode<T,X,Y>* parent,PQNode<T,X,Y>* child
 	{
 		removeChildFromSiblings(child);
 		parent->m_childCount--;
-		if ((child->status() == FULL) || (child->status() == PARTIAL))
+		if ((child->status() == PQNodeRoot::FULL) || (child->status() == PQNodeRoot::PARTIAL))
 			parent->m_pertChildCount--;
 		return parent->m_childCount;
 	}
@@ -3036,12 +3032,12 @@ int PQTree<T,X,Y>::removeNodeFromTree(PQNode<T,X,Y>* parent,PQNode<T,X,Y>* child
 	{
 		//parent is invalid 0-pointer.
 		return -1;
-	}   
+	}
 }
 
 
 /************************************************************************
-                       sortExceptions
+							sortExceptions
 ************************************************************************/
 
 /**
@@ -3070,8 +3066,8 @@ void PQTree<T,X,Y>::sortExceptions(int Exceptions[],int arraySize)
 
 
 /************************************************************************
-                          templateL1
-************************************************************************/ 
+						templateL1
+************************************************************************/
 
 /**
  * The function templateL1() implements the template matching for
@@ -3098,20 +3094,20 @@ void PQTree<T,X,Y>::sortExceptions(int Exceptions[],int arraySize)
 template<class T,class X,class Y>
 bool PQTree<T,X,Y>::templateL1(PQNode<T,X,Y> *nodePtr, bool isRoot)
 {
-	if ((nodePtr->type() == PQNodeRoot::leaf) && (nodePtr->status() == FULL))
+	if ((nodePtr->type() == PQNodeRoot::leaf) && (nodePtr->status() == PQNodeRoot::FULL))
 	{
 		if (!isRoot)
 			nodePtr->m_parent->fullChildren->pushFront(nodePtr);
 		return true;
 	}
-	
+
 	return false;
 }
 
 
 /************************************************************************
-                          templateP1
-************************************************************************/ 
+							templateP1
+************************************************************************/
 
 /**
  * The function templateP1() implements the template matching for
@@ -3132,19 +3128,18 @@ bool PQTree<T,X,Y>::templateL1(PQNode<T,X,Y> *nodePtr, bool isRoot)
  * If the P-node is not the root of the pertinent subtree,
  * the \a fullChildren stack of the parent of \a nodePtr is updated.
  * If the P-node is the root of the pertinent subtree, nothing has to
- * be done. 
+ * be done.
  */
 
 template<class T,class X,class Y>
-bool PQTree<T,X,Y>::templateP1(PQNode<T,X,Y> *nodePtr,
-							   bool isRoot)
+bool PQTree<T,X,Y>::templateP1(PQNode<T,X,Y> *nodePtr, bool isRoot)
 {
 	if (nodePtr->type() != PQNodeRoot::PNode ||
 		nodePtr->fullChildren->size() != nodePtr->m_childCount)
 		return false;
 	else
 	{
-		nodePtr->status(FULL);
+		nodePtr->status(PQNodeRoot::FULL);
 		if (!isRoot)
 			nodePtr->m_parent->fullChildren->pushFront(nodePtr);
 
@@ -3154,8 +3149,8 @@ bool PQTree<T,X,Y>::templateP1(PQNode<T,X,Y> *nodePtr,
 
 
 /************************************************************************
-                          templateP2
-************************************************************************/ 
+							templateP2
+************************************************************************/
 
 /**
  * The function templateP2() implements the template matching for a
@@ -3187,22 +3182,22 @@ bool PQTree<T,X,Y>::templateP2(PQNode<T,X,Y> **nodePtr)
 
 	(*nodePtr)->m_childCount =
 		(*nodePtr)->m_childCount - (*nodePtr)->fullChildren->size() + 1;
-                                   // Gather all full children of nodePtr
-                                   // as children of the new P-node.
-                                   // Delete them from nodePtr.
+			// Gather all full children of nodePtr
+			// as children of the new P-node.
+			// Delete them from nodePtr.
 
 	PQNode<T,X,Y> *newNode = createNodeAndCopyFullChildren((*nodePtr)->fullChildren);
-                                   // Correct parent-pointer and
-                                   // sibling-pointers of the new P-node.
-                                   
+		// Correct parent-pointer and
+		// sibling-pointers of the new P-node.
+
 	newNode->m_parent = (*nodePtr);
 	newNode->m_sibRight = (*nodePtr)->m_referenceChild->m_sibRight;
 	newNode->m_sibLeft = newNode->m_sibRight->m_sibLeft;
 	newNode->m_sibLeft->m_sibRight = newNode;
 	newNode->m_sibRight->m_sibLeft = newNode;
 	newNode->m_parentType = PQNodeRoot::PNode;
-                                   // The new P-node now is the root of
-                                   // the pertinent subtree.
+		// The new P-node now is the root of
+		// the pertinent subtree.
 	(*nodePtr) = newNode;
 
 	return true;
@@ -3210,8 +3205,8 @@ bool PQTree<T,X,Y>::templateP2(PQNode<T,X,Y> **nodePtr)
 
 
 /************************************************************************
-                          templateP3
-************************************************************************/ 
+							templateP3
+************************************************************************/
 
 /*
  * The function templateP3() implements the template matching for a
@@ -3256,9 +3251,9 @@ bool PQTree<T,X,Y>::templateP3(PQNode<T,X,Y> *nodePtr)
 	Create a new partial $Q$-node stored in [[newQnode]].
 	It replaces [[nodePtr]] by the Q-node [[newQnode]] in the $PQ$-tree
 	and makes [[nodePtr]] endmost child of [[newQnode]].
-	This is done by updating parent-pointers and sibling-pointers. 
+	This is done by updating parent-pointers and sibling-pointers.
 	*/
-	PQInternalNode<T,X,Y> *newNode = OGDF_NEW PQInternalNode<T,X,Y>(m_identificationNumber++,PQNodeRoot::QNode,PARTIAL);
+	PQInternalNode<T,X,Y> *newNode = OGDF_NEW PQInternalNode<T,X,Y>(m_identificationNumber++,PQNodeRoot::QNode,PQNodeRoot::PARTIAL);
 	PQNode<T,X,Y>         *newQnode = newNode;
 	m_pertinentNodes->pushFront(newQnode);
 
@@ -3268,7 +3263,7 @@ bool PQTree<T,X,Y>::templateP3(PQNode<T,X,Y> *nodePtr)
 
 	newQnode->m_leftEndmost = (nodePtr);
 	newQnode->m_childCount = 1;
-  
+
 	/*
 	Create a new full $P$-node stored in [[newPnode]].
 	It copies the full children of [[nodePtr]] to [[newPnode]].
@@ -3278,37 +3273,37 @@ bool PQTree<T,X,Y>::templateP3(PQNode<T,X,Y> *nodePtr)
 	if (nodePtr->fullChildren->size() > 0)
 	{
 		nodePtr->m_childCount = nodePtr->m_childCount -
-                                nodePtr->fullChildren->size();
-                                
+			nodePtr->fullChildren->size();
+
 		PQNode<T,X,Y> *newPnode = createNodeAndCopyFullChildren(nodePtr->fullChildren);
 		newPnode->m_parentType = PQNodeRoot::QNode;
 
-                                       // Update newQnode.
+		// Update newQnode.
 		newQnode->m_childCount++;
 		newQnode->fullChildren->pushFront(newPnode);
-                                       // Update sibling pointers.
+		// Update sibling pointers.
 		nodePtr->m_sibRight = newPnode;
 		newPnode->m_sibLeft = nodePtr;
 		newQnode->m_rightEndmost = newPnode;
 		newPnode->m_parent = newQnode;
 	}
 
-                                  // Check if nodePtr contains
-                                  // only one son. If so, nodePtr
-                                  // will be deleted from the tree.
+	// Check if nodePtr contains
+	// only one son. If so, nodePtr
+	// will be deleted from the tree.
 	PQNode<T,X,Y> *emptyNode = nodePtr->m_referenceChild;
 	checkIfOnlyChild(emptyNode,nodePtr);
-                                  // Update partialchildren stack of
-                                  // the parent of the new Q-node.
-	newQnode->m_parent->partialChildren->pushFront(newQnode);      
+	// Update partialchildren stack of
+	// the parent of the new Q-node.
+	newQnode->m_parent->partialChildren->pushFront(newQnode);
 
 	return true;
 }
 
 
 /************************************************************************
-                          templateP4
-************************************************************************/ 
+							templateP4
+************************************************************************/
 
 /**
  * The function templateP4() implements the template matching for a
@@ -3342,16 +3337,16 @@ bool PQTree<T,X,Y>::templateP4(PQNode<T,X,Y> **nodePtr)
 	if ((*nodePtr)->type() != PQNodeRoot::PNode   ||
 		(*nodePtr)->partialChildren->size() != 1)
 		return false;
-      
+
 	PQNode<T,X,Y> *partialChild = (*nodePtr)->partialChildren->popFrontRet();
 	copyFullChildrenToPartial(*nodePtr,partialChild);
-                                  // If nodePtr does not have any
-                                  // empty children, then it has to
-                                  // be deleted and the partial node
-                                  // is occupying its place in the tree.
+		// If nodePtr does not have any
+		// empty children, then it has to
+		// be deleted and the partial node
+		// is occupying its place in the tree.
 	checkIfOnlyChild(partialChild,*nodePtr);
-                                  // The partial child now is
-                                  // root of the pertinent subtree.
+		// The partial child now is
+		// root of the pertinent subtree.
 	*nodePtr = partialChild;
 
 	return true;
@@ -3359,8 +3354,8 @@ bool PQTree<T,X,Y>::templateP4(PQNode<T,X,Y> **nodePtr)
 
 
 /************************************************************************
-                          templateP5
-************************************************************************/ 
+							templateP5
+************************************************************************/
 
 /**
  * The function templateP5() implements the template matching for a
@@ -3403,18 +3398,18 @@ bool PQTree<T,X,Y>::templateP5(PQNode<T,X,Y> *nodePtr)
 	if ((nodePtr->type() != PQNodeRoot::PNode) ||
 		(nodePtr->partialChildren->size() != 1))
 		return false;
-      
+
 	/*
 	Remove [[partialChild]] from the children of [[nodePtr]]. The node
-	[[partialChild]] then occupies the position of [[nodePtr]] in the 
-	$PQ$-tree which is done in the function call [[exchangeNodes]] 
-	(\ref{exchangeNodes}). The chunk then removes all full children from 
+	[[partialChild]] then occupies the position of [[nodePtr]] in the
+	$PQ$-tree which is done in the function call [[exchangeNodes]]
+	(\ref{exchangeNodes}). The chunk then removes all full children from
 	[[nodePtr]] and adds them as children of a new $P$-node as endmost
 	child of [[partialChild]]. This is done in the function call
 	[[copyFullChildrenToPartial]] (\ref{copyFullChildrenToPartial}).
 	When this chunk has finished, [[nodePtr]] has only empty children.
 	*/
-	int emptyChildCount = nodePtr->m_childCount - 
+	int emptyChildCount = nodePtr->m_childCount -
 						nodePtr->fullChildren->size() - 1;
 	PQNode<T,X,Y> *partialChild = nodePtr->partialChildren->popFrontRet();
 	nodePtr->m_parent->partialChildren->pushFront(partialChild);
@@ -3425,10 +3420,10 @@ bool PQTree<T,X,Y>::templateP5(PQNode<T,X,Y> *nodePtr)
 	if (emptyChildCount > 0)
 	{
 		/*
-		Check if [[nodePtr]] has just one empty child. If so, the child 
+		Check if [[nodePtr]] has just one empty child. If so, the child
 		is stored in [[emptyNode]] in order to be added to the empty
-		side of the partial $Q$-node [[partialChild]]. If [[nodePtr]] 
-		has more than one empty child, [[nodePtr]] is stored in 
+		side of the partial $Q$-node [[partialChild]]. If [[nodePtr]]
+		has more than one empty child, [[nodePtr]] is stored in
 		[[emptyNode]] in order to be added to the empty
 		side of the partial $Q$-node [[partialChild]].
 		*/
@@ -3449,15 +3444,15 @@ bool PQTree<T,X,Y>::templateP5(PQNode<T,X,Y> *nodePtr)
 		that is added to the empty side of [[partialChild]].
 		*/
 		PQNode<T,X,Y> *checkNode;
-		if (clientLeftEndmost(partialChild)->status() == EMPTY)
+		if (clientLeftEndmost(partialChild)->status() == PQNodeRoot::EMPTY)
 		{
 			checkNode = partialChild->m_leftEndmost;
 			partialChild->m_leftEndmost = emptyNode;
 		}
 		else {
 			// Endmostchild not found?
-			OGDF_ASSERT(clientRightEndmost(partialChild)->status() == EMPTY);
-		
+			OGDF_ASSERT(clientRightEndmost(partialChild)->status() == PQNodeRoot::EMPTY);
+
 			checkNode = partialChild->m_rightEndmost;
 			partialChild->m_rightEndmost = emptyNode;
 		}
@@ -3467,8 +3462,8 @@ bool PQTree<T,X,Y>::templateP5(PQNode<T,X,Y> *nodePtr)
 		emptyNode->m_parentType = PQNodeRoot::QNode;
 		partialChild->m_childCount++;
 	}
-                                   // If nodePtr did not have any empty
-                                   // children it has to be deleted.
+		// If nodePtr did not have any empty
+		// children it has to be deleted.
 	if (emptyChildCount <= 1)
 		destroyNode(nodePtr);
 
@@ -3477,8 +3472,8 @@ bool PQTree<T,X,Y>::templateP5(PQNode<T,X,Y> *nodePtr)
 
 
 /************************************************************************
-                          templateP6
-************************************************************************/ 
+							templateP6
+************************************************************************/
 
 /**
  * The function templateP6() implements the template matching for a
@@ -3529,17 +3524,17 @@ bool PQTree<T,X,Y>::templateP6(PQNode<T,X,Y> **nodePtr)
 	//PQNode<T,X,Y>  *fullEnd_1       = 0;
 	//PQNode<T,X,Y>  *fullEnd_2       = 0;
 	//PQNode<T,X,Y>  *emptyEnd_2      = 0;
-	//PQNode<T,X,Y>  *realEmptyEnd_2  = 0;   
+	//PQNode<T,X,Y>  *realEmptyEnd_2  = 0;
 
 	if ((*nodePtr)->type() != PQNodeRoot::PNode   ||
 		(*nodePtr)->partialChildren->size() != 2)
 		return false;
-      
+
 	/*
-	Get the partial children of [[nodePtr]] and removes the second 
-	partial child stored in [[partial_2]] from the children of 
-	[[nodePtr]]. If there are any full children of [[nodePtr]], the 
-	chunk removes them from the children of [[nodePtr]] and copies them 
+	Get the partial children of [[nodePtr]] and removes the second
+	partial child stored in [[partial_2]] from the children of
+	[[nodePtr]]. If there are any full children of [[nodePtr]], the
+	chunk removes them from the children of [[nodePtr]] and copies them
 	as children to a new $P$-node. This new $P$-node is then made
 	endmost child of [[partial_1]].
 	*/
@@ -3553,36 +3548,36 @@ bool PQTree<T,X,Y>::templateP6(PQNode<T,X,Y> **nodePtr)
 	/*
 	Check the endmost children of the two partial children of [[nodePtr]]
 	and stores them at approriate places, remembering what kind of type
-	the endmost children are. 		
+	the endmost children are.
 	*/
 	PQNode<T,X,Y> *fullEnd_1;
-	if (clientLeftEndmost(partial_1)->status() == FULL)
+	if (clientLeftEndmost(partial_1)->status() == PQNodeRoot::FULL)
 		fullEnd_1 = partial_1->m_leftEndmost;
 	else {
 		// partial child with no FULL endmost child detected?
-		OGDF_ASSERT(clientRightEndmost(partial_1)->status() == FULL);
+		OGDF_ASSERT(clientRightEndmost(partial_1)->status() == PQNodeRoot::FULL);
 		fullEnd_1 = partial_1->m_rightEndmost;
 	}
 
 	PQNode<T,X,Y> *fullEnd_2      = 0;
 	PQNode<T,X,Y> *emptyEnd_2     = 0;
-	PQNode<T,X,Y> *realEmptyEnd_2 = 0;   
-	if (clientLeftEndmost(partial_2)->status() == FULL)
+	PQNode<T,X,Y> *realEmptyEnd_2 = 0;
+	if (clientLeftEndmost(partial_2)->status() == PQNodeRoot::FULL)
 		fullEnd_2 = partial_2->m_leftEndmost;
 	else {
 		// partial child with no FULL or EMPTY endmost child detected?
-		OGDF_ASSERT(clientLeftEndmost(partial_2)->status() == EMPTY);
-	
+		OGDF_ASSERT(clientLeftEndmost(partial_2)->status() == PQNodeRoot::EMPTY);
+
 		emptyEnd_2 = partial_2->m_leftEndmost;
 		realEmptyEnd_2 = clientLeftEndmost(partial_2);
 	}
 
-	if (clientRightEndmost(partial_2)->status() == FULL)
+	if (clientRightEndmost(partial_2)->status() == PQNodeRoot::FULL)
 		fullEnd_2 = partial_2->m_rightEndmost;
 	else {
 		// partial child with no FULL or EMPTY endmost child detected?
-		OGDF_ASSERT(clientRightEndmost(partial_2)->status() == EMPTY);
-	
+		OGDF_ASSERT(clientRightEndmost(partial_2)->status() == PQNodeRoot::EMPTY);
+
 		emptyEnd_2 = partial_2->m_rightEndmost;
 		realEmptyEnd_2 = clientRightEndmost(partial_2);
 	}
@@ -3613,18 +3608,18 @@ bool PQTree<T,X,Y>::templateP6(PQNode<T,X,Y> **nodePtr)
 	realEmptyEnd_2->m_parentType = PQNodeRoot::QNode;
 
 	partial_1->m_childCount = partial_1->m_childCount +
-                            partial_2->m_childCount;
+		partial_2->m_childCount;
 	destroyNode(partial_2);
 
 
 
-                                  // If nodePtr does not have any
-                                  // empty children, then it has to
-                                  // be deleted and the partial node
-                                  // is occupying its place in the tree.
+		// If nodePtr does not have any
+		// empty children, then it has to
+		// be deleted and the partial node
+		// is occupying its place in the tree.
 	checkIfOnlyChild(partial_1,*nodePtr);
-                                // partial_1 is now root of the
-                                // pertinent subtree.
+		// partial_1 is now root of the
+		// pertinent subtree.
 	*nodePtr = partial_1;
 
 	return true;
@@ -3632,8 +3627,8 @@ bool PQTree<T,X,Y>::templateP6(PQNode<T,X,Y> **nodePtr)
 
 
 /************************************************************************
-                          templateQ1
-************************************************************************/ 
+							templateQ1
+************************************************************************/
 
 /**
  * The function templateQ1() implements the template matching for
@@ -3667,14 +3662,14 @@ bool PQTree<T,X,Y>::templateQ1(PQNode<T,X,Y> *nodePtr, bool isRoot)
 {
 	if (nodePtr->type() == PQNodeRoot::QNode &&
 		nodePtr != m_pseudoRoot &&
-		clientLeftEndmost(nodePtr)->status() == FULL &&
-		clientRightEndmost(nodePtr)->status() == FULL)
+		clientLeftEndmost(nodePtr)->status() == PQNodeRoot::FULL &&
+		clientRightEndmost(nodePtr)->status() == PQNodeRoot::FULL)
 	{
 		PQNode<T,X,Y>* seqStart = 0;
 		PQNode<T,X,Y>* seqEnd = 0;
 		if (checkChain(nodePtr,clientLeftEndmost(nodePtr),&seqStart,&seqEnd))
 		{
-			nodePtr->status(FULL);
+			nodePtr->status(PQNodeRoot::FULL);
 			if (!isRoot)
 				nodePtr->m_parent->fullChildren->pushFront(nodePtr);
 			return true;
@@ -3686,13 +3681,13 @@ bool PQTree<T,X,Y>::templateQ1(PQNode<T,X,Y> *nodePtr, bool isRoot)
 
 
 /************************************************************************
-                          templateQ2
-************************************************************************/ 
+							templateQ2
+************************************************************************/
 
 /**
  * The function templateQ2() implements the template matching for
  * Q-nodes  with a pertinent
- * sequence of children on one side of the Q-node. 
+ * sequence of children on one side of the Q-node.
  * The function requires as input any pointer to a node stored in
  * \a nodePtr. If the node stored in \a nodePtr is a Q-node with
  * a pertinent
@@ -3761,19 +3756,19 @@ bool PQTree<T,X,Y>::templateQ2(PQNode<T,X,Y> *nodePtr,bool isRoot)
 		if (nodePtr->m_leftEndmost != 0)
 		{
 			fullNode = clientLeftEndmost(nodePtr);
-			if (fullNode->status() != FULL) 
+			if (fullNode->status() != PQNodeRoot::FULL)
 				fullNode = 0;
 		}
 		if (nodePtr->m_rightEndmost != 0  && fullNode == 0)
 		{
 			fullNode = clientRightEndmost(nodePtr);
-			if (fullNode->status() != FULL)
+			if (fullNode->status() != PQNodeRoot::FULL)
 				fullNode = 0;
 		}
 
 		/*
-		In case that a full endmost child of [[nodePtr]] exists, this 
-		child has been stored in [[fullNode]] and the chunk checks by 
+		In case that a full endmost child of [[nodePtr]] exists, this
+		child has been stored in [[fullNode]] and the chunk checks by
 		calling the function [[checkChain]] (\ref{checkChain}), if all
 		full children of [[nodePtr]] form a consecutive sequence.
 		In case that the full children
@@ -3781,8 +3776,8 @@ bool PQTree<T,X,Y>::templateQ2(PQNode<T,X,Y> *nodePtr,bool isRoot)
 		return value of [[checkChain]] is [[1]]. If a partial child
 		stored in [[partialChild]] exists, the chunk checks if
 		[[partialChild]] is adjacent to the sequence of full children.
-		If the latter case is [[1]], the flag [[sequenceCons]] is 
-		set to [[1]] and the function [[templateQ2]] is allowed to 
+		If the latter case is [[1]], the flag [[sequenceCons]] is
+		set to [[1]] and the function [[templateQ2]] is allowed to
 		reduce the pertient children of [[nodePtr]].
 		*/
 		PQNode<T,X,Y> *sequenceBegin = 0;
@@ -3805,10 +3800,10 @@ bool PQTree<T,X,Y>::templateQ2(PQNode<T,X,Y> *nodePtr,bool isRoot)
 		if (!nodePtr->partialChildren->empty())
 		{
 			/*
-			If the $Q$-node [[nodePtr]] has no full children but one 
-			partial child this chunk checks, if the partial child is 
-			endmost child of the [[nodePtr]]. If this is not the case, 
-			[[nodePtr]] cannot be reduced by the template matching 
+			If the $Q$-node [[nodePtr]] has no full children but one
+			partial child this chunk checks, if the partial child is
+			endmost child of the [[nodePtr]]. If this is not the case,
+			[[nodePtr]] cannot be reduced by the template matching
 			{\bf Q2}.
 			*/
 			//nodePtr->partialChildren->startAtBottom();
@@ -3816,7 +3811,7 @@ bool PQTree<T,X,Y>::templateQ2(PQNode<T,X,Y> *nodePtr,bool isRoot)
 			PQNode<T,X,Y> *partialChild = nodePtr->partialChildren->front();
 			if ((clientLeftEndmost(nodePtr) == partialChild) ||
 				(clientRightEndmost(nodePtr) == partialChild))
-				sequenceCons = true; 
+				sequenceCons = true;
 		}
 	}
 
@@ -3828,8 +3823,8 @@ bool PQTree<T,X,Y>::templateQ2(PQNode<T,X,Y> *nodePtr,bool isRoot)
 
 
 /************************************************************************
-                          templateQ3
-************************************************************************/ 
+							templateQ3
+************************************************************************/
 
 /*
  * The function templateQ3() implements the template matching for
@@ -3837,7 +3832,7 @@ bool PQTree<T,X,Y>::templateQ2(PQNode<T,X,Y> *nodePtr,bool isRoot)
  * of full and/or partial children in the middle. The Q-node must be the
  * root of the pertinent subtree.
  * The function requires as input any pointer to a node stored in
- * \a nodePtr. If the node stored in \a nodePtr is a Q-node 
+ * \a nodePtr. If the node stored in \a nodePtr is a Q-node
  * with empty and/or partial children at both ends and a sequence
  * full or partial children in the middle,
  * templateQ3() considers itself responsible for the node and will
@@ -3890,14 +3885,14 @@ bool PQTree<T,X,Y>::templateQ2(PQNode<T,X,Y> *nodePtr,bool isRoot)
  */
 
 template<class T,class X,class Y>
-bool PQTree<T,X,Y>::templateQ3(PQNode<T,X,Y> *nodePtr)                      
+bool PQTree<T,X,Y>::templateQ3(PQNode<T,X,Y> *nodePtr)
 {
 	if (nodePtr->type() != PQNodeRoot::QNode || nodePtr->partialChildren->size() >= 3)
-		return false;	
-      
-	bool conssequence = false; 
+		return false;
+
+	bool conssequence = false;
 	bool found        = false;
-   
+
 	/*
 	Check ifthe
 	pertinent children of [[nodePtr]] form a consecutive sequence. We
@@ -3914,20 +3909,20 @@ bool PQTree<T,X,Y>::templateQ3(PQNode<T,X,Y> *nodePtr)
 	If the test was successful, the pertinent children form a
 	consecutive sequence.
 	*/
-	
+
 	if (!nodePtr->fullChildren->empty())
 	{
 		/*
 		A consecutive
 		sequence of full children has been detected, containing all full
-		children of [[nodePtr]]. The chunk checks if each partial child 
-		of [[nodePtr]] is adjacent to a full child. Observe that the 
-		function [[templateQ3]] only reaches this chunk when [[nodePtr]] 
+		children of [[nodePtr]]. The chunk checks if each partial child
+		of [[nodePtr]] is adjacent to a full child. Observe that the
+		function [[templateQ3]] only reaches this chunk when [[nodePtr]]
 		has less than three partial children.
 		*/
 		PQNode<T,X,Y> *fullChild = nodePtr->fullChildren->front();
 		PQNode<T,X,Y> *fullStart = 0;
-		PQNode<T,X,Y> *fullEnd   = 0;  
+		PQNode<T,X,Y> *fullEnd   = 0;
 		conssequence = checkChain(nodePtr,fullChild,&fullStart,&fullEnd);
 		if (conssequence)
 		{

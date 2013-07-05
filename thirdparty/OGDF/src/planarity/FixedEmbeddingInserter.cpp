@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2559 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-06 15:04:28 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief implementation of FixedEmbeddingInserter class
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -94,14 +95,14 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 	const EdgeArray<bool> *forbiddenEdgeOrig,
 	const EdgeArray<unsigned int> *edgeSubGraph)
 {
-  
+
 	double T;
 	usedTime(T);
-	
+
 	ReturnType retValue = retFeasible;
 	m_runsPostprocessing = 0;
 
-	if(!m_keepEmbedding) PG.embed(); 
+	if(!m_keepEmbedding) PG.embed();
 	OGDF_ASSERT(PG.representsCombEmbedding() == true);
 
 	if (origEdges.size() == 0)
@@ -173,7 +174,7 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 		}
 
 		insertEdge(PG,E,eOrig,crossed,forbidCrossingGens,forbiddenEdgeOrig);
-		
+
 		if(removeReinsert() == rrIncremental || removeReinsert() == rrIncInserted) {
 			currentOrigEdges.pushBack(eOrig);
 
@@ -181,21 +182,21 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 			do {
 				++m_runsPostprocessing;
 				improved = false;
-				
+
 				SListConstIterator<edge> itRR;
 				for(itRR = currentOrigEdges.begin(); itRR.valid(); ++itRR)
 				{
 					edge eOrigRR = *itRR;
-		
+
 					int pathLength;
 					if(costOrig != 0)
 						pathLength = costCrossed(eOrigRR,PG,*costOrig,edgeSubGraph);
 					else
 						pathLength = PG.chain(eOrigRR).size() - 1;
 					if (pathLength == 0) continue; // cannot improve
-		
+
 					removeEdge(PG,E,eOrigRR,forbidCrossingGens,forbiddenEdgeOrig);
-		
+
 					// try to find a better insertion path
 					SList<adjEntry> crossed;
 					if(costOrig != 0) {
@@ -212,13 +213,13 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 							forbidCrossingGens ? ((const PlanRepUML&)PG).typeOrig(eOrigRR) : Graph::association,
 							crossed);
 					}
-					
+
 					// re-insert edge (insertion path cannot be longer)
 					insertEdge(PG,E,eOrigRR,crossed,forbidCrossingGens,forbiddenEdgeOrig);
-		
+
 					int newPathLength = (costOrig != 0) ? costCrossed(eOrigRR,PG,*costOrig,edgeSubGraph) : (PG.chain(eOrigRR).size() - 1);
 					OGDF_ASSERT(newPathLength <= pathLength);
-					
+
 					if(newPathLength < pathLength)
 						improved = true;
 				}
@@ -230,14 +231,14 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 	if(removeReinsert() != rrIncremental && removeReinsert() != rrIncInserted) {
 		// postprocessing (remove-reinsert heuristc)
 		SListPure<edge> rrEdges;
-	
+
 		switch(removeReinsert())
 		{
 		case rrAll:
 		case rrMostCrossed: {
 				const List<node> &origInCC = PG.nodesInCC();
 				ListConstIterator<node> itV;
-	
+
 				for(itV = origInCC.begin(); itV.valid(); ++itV) {
 					node vG = *itV;
 					adjEntry adj;
@@ -249,7 +250,7 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 				}
 			}
 			break;
-	
+
 		case rrInserted:
 			for(ListConstIterator<edge> it = origEdges.begin(); it.valid(); ++it)
 				rrEdges.pushBack(*it);
@@ -260,11 +261,11 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 		case rrIncInserted:
 			break;
 		}
-	
+
 		// marks the end of the interval of rrEdges over which we iterate
 		// initially set to invalid iterator which means all edges
 		SListConstIterator<edge> itStop;
-	
+
 		bool improved;
 		do {
 			// abort postprocessing if time limit reached
@@ -272,24 +273,24 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 				retValue = retTimeoutFeasible;
 				break;
 			}
-				
+
 			++m_runsPostprocessing;
 			improved = false;
-	
+
 			if(removeReinsert() == rrMostCrossed)
 			{
 				FEICrossingsBucket bucket(&PG);
 				rrEdges.bucketSort(bucket);
-	
+
 				const int num = int(0.01 * percentMostCrossed() * G.numberOfEdges());
 				itStop = rrEdges.get(num);
 			}
-	
+
 			SListConstIterator<edge> it;
 			for(it = rrEdges.begin(); it != itStop; ++it)
 			{
 				edge eOrig = *it;
-							
+
 				// remove only if crossings on edge;
 				// in especially: forbidden edges are never handled by postprocessing
 				//   since there are no crossings on such edges
@@ -299,9 +300,9 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 				else
 					pathLength = PG.chain(eOrig).size() - 1;
 				if (pathLength == 0) continue; // cannot improve
-	
+
 				removeEdge(PG,E,eOrig,forbidCrossingGens,forbiddenEdgeOrig);
-	
+
 				// try to find a better insertion path
 				SList<adjEntry> crossed;
 				if(costOrig != 0) {
@@ -318,13 +319,13 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 						forbidCrossingGens ? ((const PlanRepUML&)PG).typeOrig(eOrig) : Graph::association,
 						crossed);
 				}
-	
+
 				// re-insert edge (insertion path cannot be longer)
 				insertEdge(PG,E,eOrig,crossed,forbidCrossingGens,forbiddenEdgeOrig);
-	
+
 				int newPathLength = (costOrig != 0) ? costCrossed(eOrig,PG,*costOrig,edgeSubGraph) : (PG.chain(eOrig).size() - 1);
 				OGDF_ASSERT(newPathLength <= pathLength);
-				
+
 				if(newPathLength < pathLength)
 					improved = true;
 			}
@@ -350,11 +351,11 @@ Module::ReturnType FixedEmbeddingInserter::doCall(
 edge FixedEmbeddingInserter::crossedEdge(adjEntry adj) const
 {
 	edge e = adj->theEdge();
-	
+
 	adj = adj->cyclicSucc();
 	while(adj->theEdge() == e)
 		adj = adj->cyclicSucc();
-		
+
 	return adj->theEdge();
 }
 
@@ -365,9 +366,9 @@ int FixedEmbeddingInserter::costCrossed(edge eOrig,
 	const EdgeArray<unsigned int> *subgraphs) const
 {
 	int c = 0;
-	
+
 	const List<edge> &L = PG.chain(eOrig);
-	
+
 	ListConstIterator<edge> it = L.begin();
 	for(++it; it.valid(); ++it) {
 		edge e = PG.original(crossedEdge((*it)->adjSource()));
@@ -381,7 +382,7 @@ int FixedEmbeddingInserter::costCrossed(edge eOrig,
 			c += costOrig[e];
 		}
 	}
-	
+
 	return c;
 }
 
@@ -575,7 +576,7 @@ inline int getCost(const PlanRep &PG, const EdgeArray<int> &cost, edge e, const 
 		}
 		edgeCost *= cost[eOrig];
 		edgeCost *= 10000;
-		if(edgeCost == 0) 
+		if(edgeCost == 0)
 			edgeCost = 1;
 	}
 	return edgeCost;
@@ -640,7 +641,7 @@ void FixedEmbeddingInserter::findShortestPath(
 
 	// actual search (using extended bfs on directed dual)
 	int currentDist = 0;
-	
+
 	for( ; ; )
 	{
 		// next candidate edge

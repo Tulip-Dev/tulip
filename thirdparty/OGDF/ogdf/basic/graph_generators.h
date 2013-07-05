@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2583 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of graph generators.
- * 
+ *
  * \author Carsten Gutwenger, Markus Chimani
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -105,7 +106,7 @@ OGDF_EXPORT void planarCNBGraph(Graph &G, int n, int m,	int b);
 //! Creates a random triconnected (and simple) graph.
 /**
  * The graph generator proceeds as follows. It starts with a \f$K_4\f$ and performs
- * then \a n-4 split node operations on randomly selected nodes of the graph 
+ * then \a n-4 split node operations on randomly selected nodes of the graph
  * constructed so far. Each such operation splits a node \a v into two nodes
  * \a x and \a y and distributes \a v's neighbors to the two nodes such that each
  * node gets at least two neighbors. Additionally, the edge (\a x,\a y) is inserted.
@@ -245,13 +246,15 @@ OGDF_EXPORT void randomClusterGraph(ClusterGraph &C,Graph &G,int cNum);
 /**
  * This function is called with a graph \a G and the root of a second graph, resembling a tree,
  * that gives the cluster structure. Then, the vertices of G are randomly assigned to the clusters,
- * where we can guarantee that any leaf-cluster has (on average) \a moreInLeaves -times more vertices
+ * where we can guarantee that any leaf-cluster has (on average) <i>moreInLeaves</i>-times more vertices
  * than a non-leaf cluster. (E.g. if \a moreInLeaves = 5, any leaf will contain roughly 5 times more vertices than
  * an inner cluster)
  * @param C is a cluster graph for \a G, to be assigned the solution.
  * @param G is the input graph.
- * @param root is a node in some other graph (say \a T). \a T is a tree that we will consider rooted at \a root. \a T is the
- * pattern for the cluster hierarchy.
+ * @param root is a node in some other graph (say \a T). \a T is a tree that we will consider rooted at \a root.
+ *        \a T is the pattern for the cluster hierarchy.
+ * @param moreInLeaves is a factor such that leaf-clusters have on average <i>moreInLeaves</i>-times more
+ *        vertices than inner clusters
  * \pre \a G contains at least twice as many nodes as \a T has leaves.
  */
 OGDF_EXPORT void randomClusterGraph(ClusterGraph& C, const Graph& G, const node root, int moreInLeaves);
@@ -293,13 +296,13 @@ OGDF_EXPORT void cubeGraph(Graph &G, int n);
  */
 OGDF_EXPORT void suspension(Graph &G, int s);
 
-//! Creates a (toroidal) grid graph on \it n x \it m nodes.
+//! Creates a (toroidal) grid graph on \a n x \a m nodes.
 /**
  * @param G is assigned the generated graph.
  * @param n is the number of nodes on first axis.
  * @param m is the number of nodes on second axis.
  * @param loopN if the grid is cyclic on first axis
- * @param loopN if the grid is cyclic on second axis
+ * @param loopM if the grid is cyclic on second axis
  */
 OGDF_EXPORT void gridGraph(Graph &G, int n, int m, bool loopN, bool loopM);
 
@@ -312,10 +315,10 @@ OGDF_EXPORT void gridGraph(Graph &G, int n, int m, bool loopN, bool loopM);
 OGDF_EXPORT void petersenGraph(Graph &G, int n, int m);
 
 //! Creates a random (simple) directed graph.
-/** 
+/**
  * @param G is assigned the generated graph.
  * @param n is the number of nodes in the generated graph.
- * @param p is the probability that an edge is created (for each node pair)  
+ * @param p is the probability that an edge is created (for each node pair)
  */
 OGDF_EXPORT void randomDiGraph(Graph &G, int n, double p);
 

@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2552 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
- * \brief Implementation of class IntersectionRectangle (checks 
+ * \brief Implementation of class IntersectionRectangle (checks
  * overlap of rectangles).
- * 
+ *
  * \author Rene Weiskircher
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -46,9 +47,10 @@
 #include <ogdf/basic/geometry.h>
 
 namespace ogdf {
+
 	// this constructor gets the center point, width and height and sets the corners, the
 	// center and the area
-	IntersectionRectangle::IntersectionRectangle(const DPoint &c, double width, double height) 
+	IntersectionRectangle::IntersectionRectangle(const DPoint &c, double width, double height)
 	{
 		m_center = c;
 		double halfwidth = 0.5*width;
@@ -59,9 +61,11 @@ namespace ogdf {
 		m_p2.m_y = m_center.m_y + halfheight;
 		m_area = width * height;
 	}
+
+
 	// two rectangles intersect if one of the center points is contained in the other rectangle
 	// or if one of the corners of the second rectangle is contained in the first
-	bool IntersectionRectangle::intersects(const IntersectionRectangle &ir) const 
+	bool IntersectionRectangle::intersects(const IntersectionRectangle &ir) const
 	{
 		bool intersect = false;
 		if(inside(ir.m_center) || ir.inside(m_center)) intersect = true;
@@ -72,15 +76,21 @@ namespace ogdf {
 		}
 		return intersect;
 	}
+
+
 	// This makes the lower left point the first point of the rectangle, computes
 	// the coordinates of the center point and the area.
 	void IntersectionRectangle::init() {
-        if (width() < 0)  swap(m_p2.m_x, m_p1.m_x);
-        if (height() < 0) swap(m_p2.m_y, m_p1.m_y);
+		if (width() < 0)
+			swap(m_p2.m_x, m_p1.m_x);
+		if (height() < 0)
+			swap(m_p2.m_y, m_p1.m_y);
 		m_area = (m_p2.m_x-m_p1.m_x)*(m_p2.m_y-m_p1.m_y);
 		m_center.m_x = m_p1.m_x + 0.5*(m_p2.m_x-m_p1.m_x);
 		m_center.m_y = m_p1.m_y + 0.5*(m_p2.m_y-m_p1.m_y);
-    }
+	}
+
+
 	// this returns the rectangle defined by the intersection of this and ir. If the intersection
 	// is empty, an empty rectangle is returned.
 	IntersectionRectangle IntersectionRectangle::intersection(
@@ -112,8 +122,9 @@ namespace ogdf {
 		return IntersectionRectangle(DPoint(leftInter,bottomInter),DPoint(rightInter,topInter));
 	}
 
+
 	// computes distance to other rectangle
-	double IntersectionRectangle::distance(const IntersectionRectangle &ir) const 
+	double IntersectionRectangle::distance(const IntersectionRectangle &ir) const
 	{
 		double dist = 0.0;
 		if(!intersects(ir)) {
@@ -124,8 +135,10 @@ namespace ogdf {
 		}
 		return dist;
 	}
+
+
 	// computes distance between two parallel lines
-	double IntersectionRectangle::parallelDist(const DLine& d1, const DLine& d2) const 
+	double IntersectionRectangle::parallelDist(const DLine& d1, const DLine& d2) const
 	{
 		OGDF_ASSERT((d1.isHorizontal() && d2.isHorizontal()) ||
 			(d1.isVertical() && d2.isVertical()));
@@ -152,12 +165,13 @@ namespace ogdf {
 			dist = min(dist,pointDist(d1.end(),d2.start()));
 			dist = min(dist,pointDist(d1.end(),d2.end()));
 		}
-		else 
+		else
 			dist = paraDist; // segments overlap
 		return dist;
 	}
 
-	ostream& operator<<(ostream& out,const IntersectionRectangle &ir) 
+
+	ostream& operator<<(ostream& out,const IntersectionRectangle &ir)
 	{
 		out << "\nCenter: " << ir.m_center;
 		out << "\nLower left corner: " << ir.m_p1;
@@ -168,7 +182,8 @@ namespace ogdf {
 		return out;
 	}
 
-	void IntersectionRectangle::move(const DPoint& newCenter) 
+
+	void IntersectionRectangle::move(const DPoint& newCenter)
 	{
 		double dX = newCenter.m_x - m_center.m_x;
 		double dY = newCenter.m_y - m_center.m_y;
@@ -178,5 +193,6 @@ namespace ogdf {
 		m_p2.m_x += dX;
 		m_p2.m_y += dY;
 	}
+
 } // end namespace ogdf
 

@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2547 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-04 22:05:45 +0200 (Mi, 04. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class PlanarStraightLayout which represents
  *        a planar straight-line drawing algorithm.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -54,11 +55,12 @@
 #include <ogdf/basic/ModuleOption.h>
 #include <ogdf/module/AugmentationModule.h>
 #include <ogdf/module/ShellingOrderModule.h>
+#include <ogdf/module/EmbedderModule.h>
 
 
 namespace ogdf {
 
-	class OGDF_EXPORT ShellingOrder;
+	class ShellingOrder;
 
 /**
  * \brief Implementation of the Planar-Straight layout algorithm.
@@ -114,6 +116,9 @@ namespace ogdf {
  *     <td>Augments the graph by adding edges to obtain a planar graph with
  *     a certain connectivity (e.g., biconnected or triconnected).
  *   </tr><tr>
+ *     <td><i>embedder</i><td>EmbedderModule<td>SimpleEmbedder
+ *     <td>Planar embedding algorithm applied after planar augmentation.
+ *   </tr><tr>
  *     <td><i>shellingOrder</i><td>ShellingOrderModule<td>BiconnectedShellingOrder
  *     <td>The algorithm to compute a shelling order. The connectivity assured
  *     by the planar augmentation module has to be sufficient for the shelling
@@ -141,7 +146,7 @@ public:
 
 	/**
 	 * \brief Returns the current setting of option sizeOptimization.
-	 * 
+	 *
 	 * If this option is set to true, the algorithm tries to reduce the
 	 * size of the resulting grid layout.
 	 */
@@ -152,7 +157,7 @@ public:
 
 	/**
 	 * \brief Returns the current setting of option baseRatio.
-	 * 
+	 *
 	 * This option specifies the maximal number of nodes placed on the base line.
 	 * The algorithm tries to place as many nodes as possible on the base
 	 * line, but takes at most max(2, \a baseRatio * size of external face) many.
@@ -177,10 +182,15 @@ public:
 	void setAugmenter(AugmentationModule *pAugmenter) {
 		m_augmenter.set(pAugmenter);
 	}
-	
+
 	//! Sets the shelling order module.
 	void setShellingOrder(ShellingOrderModule *pOrder){
 		m_computeOrder.set(pOrder);
+	}
+
+	//! Sets the module option for the graph embedding algorithm.
+	void setEmbedder(EmbedderModule *pEmbedder) {
+		m_embedder.set(pEmbedder);
 	}
 
 	//! @}
@@ -189,7 +199,8 @@ private:
 	bool   m_sizeOptimization; //!< The option for size optimization.
 	double m_baseRatio; //!< The option for specifying the base ratio.
 
-	ModuleOption<AugmentationModule> m_augmenter;		//!< The augmentation module.
+	ModuleOption<EmbedderModule>      m_embedder;       //!< The planar embedder module.
+	ModuleOption<AugmentationModule>  m_augmenter;		//!< The augmentation module.
 	ModuleOption<ShellingOrderModule> m_computeOrder;	//!< The shelling order module.
 
 	void doCall(

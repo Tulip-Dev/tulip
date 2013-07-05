@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2559 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-06 15:04:28 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements class FaceSinkGraph
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -52,11 +53,11 @@ FaceSinkGraph::FaceSinkGraph(
 	node s) :                             // single source
 	m_pE            (&E),
 	m_source        (s),
-	m_T             (0),
-	m_originalNode  (*this,0),
-	m_originalFace  (*this,0),
-	m_containsSource(*this,false)
+	m_T             (0)
 {
+	m_originalNode  .init(*this, 0);
+	m_originalFace  .init(*this, 0);
+	m_containsSource.init(*this, false);
 	doInit();
 }
 
@@ -157,7 +158,7 @@ void FaceSinkGraph::doInit()
 
 			// v is a sink-switch iff both adjacent edges (there are only two
 			// in f since G is biconnected) are directed towards v
-			if(adj->theEdge()->target() == v && 
+			if(adj->theEdge()->target() == v &&
 				adjPred->theEdge()->target() == v)
 			{
 				if (sinkSwitch[v] == 0) {
@@ -422,26 +423,26 @@ node FaceSinkGraph::dfsStAugmentation(
 
 void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 	OGDF_ASSERT(m_pE->externalFace() != 0);
-	
+
 	List<adjEntry> dummyList;
 	faceSwitches.init(*m_pE, dummyList);
-	
+
 	NodeArray<bool> visited(m_pE->getGraph(), false);
 	List<face> toDo;
 	FaceArray<bool> faceDone(*m_pE, false);
-	
+
 	//debug
 	//m_pE->getGraph().writeGML("c:/temp/debug.gml");
 
-	//compute sink-switches for the ext. face	
+	//compute sink-switches for the ext. face
 	adjEntry adj;
-	forall_face_adj(adj, m_pE->externalFace()) {		
+	forall_face_adj(adj, m_pE->externalFace()) {
 		node u = adj->theNode();
 		if (u->outdeg() == 0 && !visited[u])
-			faceSwitches[m_pE->externalFace()].pushBack(adj);		
+			faceSwitches[m_pE->externalFace()].pushBack(adj);
 
 		if (u->indeg() > 1 && !visited[u]) {
-			List<edge> outEdges;			
+			List<edge> outEdges;
 			m_pE->getGraph().outEdges(u, outEdges);
 			if (outEdges.empty()) {
 				adjEntry run;
@@ -463,16 +464,16 @@ void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 				}
 			}
 		}
-		visited[u] = true;	
-	}	
+		visited[u] = true;
+	}
 
 	faceDone[m_pE->externalFace()] = true;
 
 	while (!toDo.empty()) {
 		face f = toDo.popFrontRet();
 		if (faceDone[f])
-			continue;	
-		
+			continue;
+
 		forall_face_adj(adj, f) {
 			node u = adj->theNode();
 			if (visited[u] && adj->theEdge()->target() == adj->faceCyclePred()->theEdge()->target()
@@ -482,11 +483,11 @@ void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 			else {
 				if (u->outdeg() == 0)
 					faceSwitches[f].pushBack(adj); // the non top sink switch of f
-			}			
-			
-			
+			}
+
+
 			if (u->indeg() > 1) {
-				List<edge> outEdges;			
+				List<edge> outEdges;
 				m_pE->getGraph().outEdges(u, outEdges);
 				if (outEdges.empty()) {
 					adjEntry run;
@@ -495,7 +496,7 @@ void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 							toDo.pushBack(m_pE->rightFace(run));
 					}
 				}
-				else {					
+				else {
 					edge e = outEdges.front();
 					adjEntry run = e->adjSource();
 					run = run->cyclicSucc();
@@ -504,7 +505,7 @@ void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 						if (next->theEdge()->target() == u && run->theEdge()->target() == u)
 							toDo.pushBack(m_pE->rightFace(run));
 						run = run->cyclicSucc();
-					}				
+					}
 				}
 			}
 			visited[u] = true;
@@ -512,10 +513,10 @@ void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 		faceDone[f] = true;
 
 		OGDF_ASSERT(!faceSwitches[f].empty());
-	}	
-	
-	
-	
+	}
+
+
+
 	/*
 	//-------------------------------------debug
 	cout << endl;
@@ -531,14 +532,14 @@ void FaceSinkGraph::sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches) {
 	}
 	// --------------------------------end debug
 
-	*/	
+	*/
 }
 
 
 
-adjEntry FaceSinkGraph::getAdjEntry(node v, face f) {		
+adjEntry FaceSinkGraph::getAdjEntry(node v, face f) {
  	adjEntry adj = 0;
- 	forall_adj(adj, v) {			
+ 	forall_adj(adj, v) {
 		if (m_pE->rightFace(adj) == f)
 			break;
 	}
@@ -547,6 +548,6 @@ adjEntry FaceSinkGraph::getAdjEntry(node v, face f) {
 
 	return adj;
  }
-	
+
 } // end namespace ogdf
 

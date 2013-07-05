@@ -1,13 +1,13 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2564 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
 
 /** \file
- * \brief Declaration of interface for energy-based layout algorithms 
+ * \brief Declaration of interface for energy-based layout algorithms
  * (class ForceLayoutModule)
  *
  * \author Karsten Klein
@@ -15,7 +15,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -61,15 +62,19 @@ namespace ogdf {
  * \brief Interface of general layout algorithms.
  *
  */
-class OGDF_EXPORT ForceLayoutModule : public LayoutModule {
-    // holds index of the current level in multilevel hierarchy
-    int m_currentLevel; 
+class OGDF_EXPORT ForceLayoutModule : public LayoutModule
+{
+	// holds index of the current level in multilevel hierarchy
+	int m_currentLevel;
+
 public:
 	//! Initializes a force layout module.
 	ForceLayoutModule() { }
 
 	virtual ~ForceLayoutModule() { }
-virtual void call(GraphAttributes &GA) = 0;
+
+	virtual void call(GraphAttributes &GA) = 0;
+
 	/**
 	 * \brief Computes a layout of graph \a MLG.
 	 *
@@ -93,7 +98,7 @@ virtual void call(GraphAttributes &GA) = 0;
 	 * @param MLG is the input graph and will also be assigned the layout information.
 	 */
 	virtual void call(MultilevelGraph &MLG) {
-                m_currentLevel = MLG.getLevel();
+		m_currentLevel = MLG.getLevel();
 		GraphAttributes GA(MLG.getGraph());
 		MLG.exportAttributesSimple(GA);
 		call(GA);

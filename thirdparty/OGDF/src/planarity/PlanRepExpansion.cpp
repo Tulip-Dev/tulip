@@ -1,48 +1,49 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class PlanRepExpansion.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
 
 #include <ogdf/planarity/PlanRepExpansion.h>
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/CombinatorialEmbedding.h>
 #include <ogdf/basic/FaceSet.h>
 #include <ogdf/basic/NodeSet.h>
@@ -168,9 +169,7 @@ void PlanRepExpansion::delCopy(edge e)
 
 bool PlanRepExpansion::embed()
 {
-	PlanarModule embedder;
-
-	return embedder.planarEmbed(*this);
+	return planarEmbed(*this);
 }
 
 
@@ -559,8 +558,8 @@ void PlanRepExpansion::unsplit(edge eIn, edge eOut)
 
 
 edge PlanRepExpansion::unsplitExpandNode(
-	node u, 
-	edge eContract, 
+	node u,
+	edge eContract,
 	edge eExpand,
 	CombinatorialEmbedding &E)
 {
@@ -572,7 +571,7 @@ edge PlanRepExpansion::unsplitExpandNode(
 	List<edge> &pathExp = (nsExp != 0) ? nsExp->m_path : m_eCopy[eOrigExp];
 
 	if((eExpand->target() == u && eContract->source() != u) ||
-	   (eExpand->source() == u && eContract->target() != u))
+		(eExpand->source() == u && eContract->target() != u))
 	{
 		// reverse path of eContract
 		ListConstIterator<edge> it;
@@ -618,8 +617,8 @@ edge PlanRepExpansion::unsplitExpandNode(
 
 
 edge PlanRepExpansion::unsplitExpandNode(
-	node u, 
-	edge eContract, 
+	node u,
+	edge eContract,
 	edge eExpand)
 {
 	NodeSplit *ns = m_eNodeSplit[eContract];
@@ -630,7 +629,7 @@ edge PlanRepExpansion::unsplitExpandNode(
 	List<edge> &pathExp = (nsExp != 0) ? nsExp->m_path : m_eCopy[eOrigExp];
 
 	if((eExpand->target() == u && eContract->source() != u) ||
-	   (eExpand->source() == u && eContract->target() != u))
+		(eExpand->source() == u && eContract->target() != u))
 	{
 		// reverse path of eContract
 		ListConstIterator<edge> it;
@@ -1010,7 +1009,7 @@ PlanRepExpansion::nodeSplit PlanRepExpansion::convertDummy(
 		m_eNodeSplit[*itE] = ns_1;
 		m_eOrig     [*itE] = 0;
 	}
-	
+
 	return ns_1;
 }
 

@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class BCTree
- * 
+ *
  * \author Jan Papenfu&szlig;
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -56,7 +57,7 @@ namespace ogdf {
 
 /**
  * \brief Static BC-trees.
- * 
+ *
  * This class provides static BC-trees.\n
  * The data structure consists of three parts:
  * - The original graph itself (\e G) is represented by an ordinary ogdf::Graph
@@ -101,14 +102,14 @@ protected:
 	Graph& m_G;
 /**
  * \brief The BC-tree.
- * 
+ *
  * Each vertex is representing a biconnected component (B-component) or a
  * cut-vertex (C-component) of the original graph.
  */
 	Graph m_B;
 /**
  * \brief The biconnected components graph.
- * 
+ *
  * This graph contains copies of the the biconnected components (B-components)
  * and the cut-vertices (C-components) of the original graph. The copies of the
  * B- and C-components of the original graph are not interconnected, i.e. the
@@ -131,13 +132,13 @@ protected:
 
 /** @} @{
  * \brief Array of marks for the vertices of the original graph.
- * 
+ *
  * They are needed during the generation of the BC-tree by DFS method.
  */
 	NodeArray<bool> m_gNode_isMarked;
 /**
  * \brief An injective mapping vertices(\e G) -> vertices(\e H).
- * 
+ *
  * For each vertex \e vG of the original graph:
  * - If \e vG is not a cut-vertex, then m_gNode_hNode[\e vG] is the very vertex
  *   of the biconnected components graph corresponding to \e vG.
@@ -148,7 +149,7 @@ protected:
 	NodeArray<node> m_gNode_hNode;
 /**
  * \brief A bijective mapping edges(\e G) -> edges(\e H).
- * 
+ *
  * For each edge \e eG of the original graph, m_gEdge_hEdge[\e eG] is the very
  * edge of the biconnected components graph corresponding to \e eG.
  */
@@ -160,7 +161,7 @@ protected:
 	NodeArray<BNodeType> m_bNode_type;
 /**
  * \brief Array of marks for the BC-tree-vertices.
- * 
+ *
  * They are needed for searching for the nearest common ancestor of two
  * vertices of the BC-tree.
  */
@@ -169,7 +170,7 @@ protected:
  * \brief Array that contains for each BC-tree-vertex the representant of its
  * parent within the subgraph in the biconnected components graph belonging to
  * the biconnected component represented by the respective BC-tree-vertex.
- * 
+ *
  * For each vertex \e vB of the BC-tree:
  * - If \e vB is representing a B-component and \e vB is the root of the
  *   BC-tree, then m_bNode_hRefNode[\e vB] is \e NULL.
@@ -189,7 +190,7 @@ protected:
  * itself within the subgraph in the biconnected components graph belonging to
  * the biconnected component represented by the parent of the respective
  * BC-tree-vertex.
- * 
+ *
  * - If \e vB is the root of the BC-tree, then m_bNode_hParNode[\e vB] is
  *   \e NULL.
  * - If \e vB is representing a B-component and \e vB is not the root of the
@@ -208,7 +209,7 @@ protected:
  * \brief Array that contains for each BC-tree-vertex a linear list of the
  * edges of the biconnected components graph belonging to the biconnected
  * component represented by the respective BC-tree-vertex.
- * 
+ *
  * For each vertex \e vB of the BC-tree:
  * - If \e vB is representing a B-component, then m_bNode_hEdges[\e vB] is a
  *   linear list of the edges of the biconnected components graph corresponding
@@ -221,7 +222,7 @@ protected:
  * \brief Array that contains for each BC-tree-vertex the number of vertices
  * belonging to the biconnected component represented by the respective
  * BC-tree-vertex.
- * 
+ *
  * For each vertex \e vB of the BC-tree:
  * - If \e vB is representing a B-component, then m_bNode_numNodes[\e vB] is
  *   the number of vertices belonging to the B-component, cut-vertices
@@ -232,7 +233,7 @@ protected:
 
 /** @} @{
  * \brief A surjective mapping vertices(\e H) -> vertices(\e B).
- * 
+ *
  * For each vertex \e vH of the biconnected components graph,
  * m_hNode_bNode[\e vH] is the very BC-tree-vertex representing the B- or
  * C-component with respect to the copy of the very block or representation
@@ -241,7 +242,7 @@ protected:
 	mutable NodeArray<node> m_hNode_bNode;
 /**
  * \brief A surjective mapping edges(\e H) -> vertices(\e B).
- * 
+ *
  * For each edge \e eH of the biconnected components graph,
  * m_hEdge_bNode[\e eH] is the very BC-tree-vertex representing the unambiguous
  * B-component, which \e eH is belonging to.
@@ -249,7 +250,7 @@ protected:
 	mutable EdgeArray<node> m_hEdge_bNode;
 /**
  * \brief A surjective mapping vertices(\e H) -> vertices(\e G).
- * 
+ *
  * For each vertex \e vH of the biconnected components graph,
  * m_hNode_gNode[\e vH] is the vertex of the original graph which \e vH is
  * corresponding to.
@@ -257,7 +258,7 @@ protected:
 	NodeArray<node> m_hNode_gNode;
 /**
  * \brief A bijective mapping edges(\e H) -> edges(\e G).
- * 
+ *
  * For each edge \e eH of the biconnected components graph,
  * m_hEdge_gEdge[\e eH] is the edge of the original graph which \e eH is
  * corresponding to.
@@ -266,42 +267,42 @@ protected:
 
 /** @} @{
  * \brief Temporary variable.
- * 
+ *
  * It is needed for the generation of the BC-tree by DFS method. It has to be a
  * member of class BCTree due to recursive calls to biComp().
  */
 	int m_count;
 /**
  * \brief Temporary array.
- * 
+ *
  * It is needed for the generation of the BC-tree by DFS method. It has to be a
  * member of class BCTree due to recursive calls to biComp().
 */
 	NodeArray<int> m_number;
 /**
  * \brief Temporary array.
- * 
+ *
  * It is needed for the generation of the BC-tree by DFS method. It has to be a
  * member of class BCTree due to recursive calls to biComp().
  */
 	NodeArray<int> m_lowpt;
 /**
  * \brief Temporary stack.
- * 
+ *
  * It is needed for the generation of the BC-tree by DFS method. It has to be a
  * member of class BCTree due to recursive calls to biComp().
  */
 	BoundedStack<adjEntry> m_eStack;
 /**
  * \brief Temporary array.
- * 
+ *
  * It is needed for the generation of the BC-tree by DFS method. It has to be a
  * member of class BCTree due to recursive calls to biComp().
  */
 	NodeArray<node> m_gtoh;
 /**
  * \brief Temporary list.
- * 
+ *
  * It is needed for the generation of the BC-tree by DFS method. It has to be a
  * member of class BCTree due to recursive calls to biComp().
  */
@@ -309,27 +310,27 @@ protected:
 
 /** @}
  * \brief Initialization.
- * 
+ *
  * initializes all data structures and generates the BC-tree and the
  * biconnected components graph by call to biComp().
  * \param vG is the vertex of the original graph which the DFS algorithm starts
  * with.
  */
 	void init (node vG);
-	
+
 /** @}
  * \brief Initialization for not connected graphs
- * 
+ *
  * initializes all data structures and generates a forest of BC-trees and the
  * biconnected components graph by call to biComp().
  * \param vG is the vertex of the original graph which the DFS algorithm starts
  * first with.
- */	
+ */
 	void initNotConnected (node vG);
 /**
  * \brief generates the BC-tree and the biconnected components graph
  * recursively.
- * 
+ *
  * The DFS algorithm is based on J. Hopcroft and R. E. Tarjan: Algorithm 447:
  * Efficient algorithms for graph manipulation. <em>Comm. ACM</em>, 16:372-378
  * (1973).
@@ -357,32 +358,32 @@ public:
 
 /** @}
  * \brief A constructor.
- * 
- * This constructor does only call init() or initNotConnected(). 
+ *
+ * This constructor does only call init() or initNotConnected().
  * BCTree(\a G) is equivalent to BCTree(<em>G</em>,<em>G</em>.firstNode()).
  * \param G is the original graph.
  * \param callInitConnected decides which init is called, default call is init()
  */
-	BCTree (Graph& G, bool callInitConnected = false) : m_G(G), m_eStack(G.numberOfEdges()) { 
-		if (!callInitConnected) 
-			init(G.firstNode()); 
+	BCTree (Graph& G, bool callInitConnected = false) : m_G(G), m_eStack(G.numberOfEdges()) {
+		if (!callInitConnected)
+			init(G.firstNode());
 		else initNotConnected(G.firstNode());
 	}
-	
+
 /**
  * \brief A constructor.
- * 
+ *
  * This constructor does only call init() or initNotConnected().
  * \param G is the original graph.
  * \param vG is the vertex of the original graph which the DFS algorithm starts
  * \param callInitConnected decides which init is called, default call is init()
  */
-	BCTree (Graph& G, node vG, bool callInitConnected = false) : m_G(G), m_eStack(G.numberOfEdges()) { 
-		if (!callInitConnected) 
-			init(vG); 
+	BCTree (Graph& G, node vG, bool callInitConnected = false) : m_G(G), m_eStack(G.numberOfEdges()) {
+		if (!callInitConnected)
+			init(vG);
 		else initNotConnected(vG);
 	}
-	
+
 /**
  * \brief Virtual destructor.
  */
@@ -525,7 +526,7 @@ public:
  * are therefore belonging to C-components, too.
  */
 	node bComponent (node uG, node vG) const;
-	
+
 /**
  * \brief calculates a path in the BC-tree.
  * \param sG is a vertex of the original graph.
@@ -536,7 +537,7 @@ public:
  * destructed by the caller!</b>
  */
 	SList<node>& findPath (node sG, node tG) const;
-	
+
 /**
  * \brief calculates a path in the BC-tree.
  * \param sB is a vertex of the BC-tree.
@@ -545,7 +546,7 @@ public:
  * linear list of vertices.
  * \post <b>The SList<node> instance is created by this function and has to be
  * destructed by the caller!</b>
- */	
+ */
 	SList<node>* findPathBCTree (node sB, node tB) const;
 
 /**
@@ -565,7 +566,7 @@ public:
 /**
  * \brief returns the copy of a cut-vertex in the biconnected components graph
  * which belongs to a certain B-component and leads to another B-component.
- * 
+ *
  * If two BC-tree-vertices are neighbours, then the biconnected components
  * represented by them have exactly one cut-vertex in common. But there are
  * several copies of this cut-vertex in the biconnected components graph,

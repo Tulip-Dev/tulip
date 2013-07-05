@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2555 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-06 12:12:10 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class CombinatorialEmbedding
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -312,7 +313,7 @@ edge CombinatorialEmbedding::splitFace(node v, adjEntry adjTgt)
 		face f2 = createFaceElement(adjSrc);
 
 		adjEntry adj = adjSrc;
-		do 
+		do
 		{
 			m_rightFace[adj] = f2;
 			f2->m_size++;
@@ -320,7 +321,7 @@ edge CombinatorialEmbedding::splitFace(node v, adjEntry adjTgt)
 		} while (adj != adjSrc);
 		subSize = f2->m_size;
 	}//if not zero degree
-	else 
+	else
 	{
 		m_rightFace[e->adjTarget()] = f1;
 	}
@@ -363,7 +364,7 @@ edge CombinatorialEmbedding::splitFace(adjEntry adjSrc, node v)
 		face f2 = createFaceElement(adjTgt);
 
 		adjEntry adj = adjTgt;
-		do 
+		do
 		{
 			m_rightFace[adj] = f2;
 			f2->m_size++;
@@ -371,7 +372,7 @@ edge CombinatorialEmbedding::splitFace(adjEntry adjSrc, node v)
 		} while (adj != adjTgt);
 		subSize = f2->m_size;
 	}//if not zero degree
-	else 
+	else
 	{
 		m_rightFace[e->adjSource()] = f1;
 	}
@@ -398,7 +399,7 @@ void CombinatorialEmbedding::updateMerger(edge e, face fRight, face fLeft)
 	{
 		fRight->m_adjFirst = e->adjSource();
 		fLeft->m_adjFirst  = e->adjTarget();
-	}//if 
+	}//if
 }//updateMerger
 
 //--
@@ -598,7 +599,7 @@ bool ConstCombinatorialEmbedding::consistencyCheck()
 			sz++;
 			if (visited[adj2] == true)
 				return false;
-			
+
 			visited[adj2] = true;
 
 			if (m_rightFace[adj2] != f)
@@ -627,5 +628,3 @@ bool ConstCombinatorialEmbedding::consistencyCheck()
 }
 
 } // end namespace ogdf
-
-

@@ -1,43 +1,44 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of CombinatorialEmbedding and face.
- * 
+ *
  * Enriches graph by the notion of faces
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -126,7 +127,7 @@ template<class T>class FaceArray;
  *
  * Maintains a combinatorial embedding of an embedded graph, i.e., the set of
  * faces. A combinatorial embedding is defined by the (cyclic) order of the
- * adjacency entries around a vertex; more precisely, the adjacency list 
+ * adjacency entries around a vertex; more precisely, the adjacency list
  * gives the cyclic order of the adjacency entries in clockwise order.
  * Each adjacency entry \a adj is contained in exactly one face, the face
  * to the right of \a adj. The list of adjacency entries defining a face is given
@@ -251,7 +252,7 @@ public:
 
 	//! Computes the list of faces.
 	void computeFaces();
-	
+
 
 	/** @} @{
 	 * \brief Checks the consistency of the data structure.
@@ -332,7 +333,7 @@ public:
 	 * \brief Returns the associated graph.
 	 */
 	const Graph &getGraph() const { return *m_cpGraph; }
-	
+
 	Graph &getGraph() { return *m_pGraph; }
 
 	operator const Graph &() const { return *m_cpGraph; }

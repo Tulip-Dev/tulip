@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declares ClusterOrthoLayout which represents an orthogonal
  * planar drawing algorithm for c-planar c-connected Clustergraphs.
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -71,21 +72,22 @@ public:
 	//! Initializes an instance of class ClusterOrthoLayout
 	ClusterOrthoLayout();
 
-  
-	/** \brief Calls planar UML layout algorithm. 
-	 * 
-	 * Input is a planarized representation \a PG of a connected component 
-	 * of the graph, output is a layout of the (modified) planarized 
+
+	/** \brief Calls planar UML layout algorithm.
+	 *
+	 * Input is a planarized representation \a PG of a connected component
+	 * of the graph, output is a layout of the (modified) planarized
 	 * representation in \a drawing.
 	 */
 	void call(ClusterPlanRep &PG, adjEntry adjExternal, Layout &drawing);
 	//! Call method for non c-planar graphs
-	void call(ClusterPlanRep &PG, 
-			  adjEntry adjExternal, 
-			  Layout &drawing,
-			  List<NodePair>& npEdges,
-			  List<edge>& newEdges,
-			  Graph& originalGraph);
+	void call(
+		ClusterPlanRep &PG,
+		adjEntry adjExternal,
+		Layout &drawing,
+		List<NodePair>& npEdges,
+		List<edge>& newEdges,
+		Graph& originalGraph);
 
 	//void call(PlanRepUML & /* PG */, adjEntry /* adjExternal */, Layout & /* drawing */) {}
 
@@ -101,7 +103,7 @@ public:
 		m_separation = sep;
 	}
 
-	//! Returns cOverhang, where cOverhang * separation defines the minimum 
+	//! Returns cOverhang, where cOverhang * separation defines the minimum
 	//distance between the glue point of an edge and a corner of the vertex boundary
 	double cOverhang() const {
 		return m_cOverhang;
@@ -149,8 +151,8 @@ public:
 		m_costGen = c;
 	}
 
-    //! Sets the option profile, thereby fixing a set of drawing options.
-    void optionProfile(int i) {m_optionProfile = i;} 
+	//! Sets the option profile, thereby fixing a set of drawing options.
+	void optionProfile(int i) {m_optionProfile = i;}
 
 	//! Sets alignment option.
 	void align(bool b) {m_align = b;}
@@ -158,19 +160,19 @@ public:
 	//! Sets scaling option for compaction step.
 	void scaling(bool b) {m_useScalingCompaction = b;}
 
-	//! Sets generic options by setting field bits. 
+	//! Sets generic options by setting field bits.
 	//Necessary to allow setting over base class pointer
 	//bit 0 = alignment
 	//bit 1 = scaling
 	//bit 2 = progressive/traditional
 	//=> 0 is standard
-	virtual void setOptions(int optionField) 
+	virtual void setOptions(int optionField)
 	{
 		if (optionField & 1) m_align = true;
 		else m_align = false;
 		if (optionField & 2) m_useScalingCompaction = true;
 		else m_useScalingCompaction = false;
-		if (optionField & 4) m_orthoStyle = 1; 
+		if (optionField & 4) m_orthoStyle = 1;
 		else m_orthoStyle = 0; //traditional
 	}
 
@@ -186,15 +188,15 @@ private:
 	double m_cOverhang; //!< Factor for minimum distance between vertex corner an adjacent edges.
 	double m_margin;	//!< Distance between bounding box and drawing boundary.
 	OrthoDir m_preferedDir; //!< Preferred direction of generalizations (obsolete).
-    int m_optionProfile;
+	int m_optionProfile;
 	int m_costAssoc;    //!< Compaction cost of association type edges.
 	int m_costGen;      //!< Compaction cost of generalizations type edges.
-    //align merger sons on same level
-    bool m_align;       //!< Horizontal alignment option.
+	//align merger sons on same level
+	bool m_align;       //!< Horizontal alignment option.
 	//settings for scaling compaction
 	bool m_useScalingCompaction; //!< Switches scaling improvement during compaction.
-	int m_scalingSteps; //!< Number of scaling steps during compaction.      
-    int m_orthoStyle;   //!< Type of style (traditional/progressive) used for shape step.
+	int m_scalingSteps; //!< Number of scaling steps during compaction.
+	int m_orthoStyle;   //!< Type of style (traditional/progressive) used for shape step.
 };
 
 

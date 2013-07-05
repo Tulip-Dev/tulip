@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declares class DavidsonHarel which implements the
  * Davidson-Harel approach for drawing graphs.
- * 
+ *
  * \author Rene Weiskircher
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -62,12 +63,12 @@ public:
 	//! Creates an instance of Davidsen-Harel base class.
 	DavidsonHarel();
 
-	~DavidsonHarel() {};
+	~DavidsonHarel() { }
 
 	//! Sets the start temperature to \a startTemp.
 	void setStartTemperature(int startTemp);
 
-    //! Sets the number of iterations for each temperature step to \a steps.
+	//! Sets the number of iterations for each temperature step to \a steps.
 	void setNumberOfIterations(int steps);
 
 	//! Adds an energy function \a F with a certain weight.
@@ -85,8 +86,6 @@ public:
 private:
 	//! The default starting temperature.
 	const static int m_defaultTemp;
-	//! the constant PI
-	const static double m_PI;       
 	//! The default starting radius.
 	const static double m_defaultRadius;
 	//! Per default, the number of iterations per temperature are set as a constant multiple of the number of vertices.
@@ -108,7 +107,7 @@ private:
 	List<node> m_nonIsolatedNodes; //!< The list of nodes with degree greater 0.
 
 	//! Resets the parameters for subsequent runs.
-	void initParameters(); 
+	void initParameters();
 
 	//! Randomly computes a node and a new position for that node.
 	node computeCandidateLayout(const GraphAttributes &, DPoint &) const;
@@ -131,7 +130,7 @@ private:
 	//! Fake assignment operator (dummy to avoid copying)
 	DavidsonHarel& operator=(const DavidsonHarel &dh);
 	//! Fake copy constructor (dummy to avoid copying)
-	DavidsonHarel(const DavidsonHarel &) {};
+	DavidsonHarel(const DavidsonHarel &) { }
 };
 
 } //end namespace

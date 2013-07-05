@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2576 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: klein $
+ *   $Date: 2012-07-11 07:50:24 +0200 (Mi, 11. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class GridLayout.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -73,7 +74,7 @@ public:
 	// destruction
 	virtual ~GridLayout() { }
 
-	
+
 	//! Returns a reference to the array storing the x-coordinates of nodes.
 	const NodeArray<int> &x() const { return m_x; }
 	//! Returns a reference to the array storing the x-coordinates of nodes.
@@ -142,7 +143,7 @@ public:
 
 	/**
 	 * \brief Computes the bounding box of the grid layout.
-	 * 
+	 *
 	 * The returned bounding box is (0,0,0,0) if the associated graph is empty
 	 * or no graph is associated with the grid layout.
 	 * @param xmin is assigned the minimum x-coordinate in the grid layout.
@@ -165,7 +166,7 @@ public:
 	int numberOfBends() const;
 
 	/**
-	 * \brief Transforms the grid layout to a layout write grid layout to a layout.
+	 * \brief Transforms the grid layout to a layout.
 	 *
 	 * This implementation only copies the grid coordinates to \a drawing; the
 	 * derived class GridLayoutMapped performs the actual transformation of coordinates.

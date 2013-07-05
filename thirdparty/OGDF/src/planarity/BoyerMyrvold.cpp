@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief implementation of the wrapper class of the Boyer-Myrvold planarity test
- * 
+ *
  * \author Jens Schmidt
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -50,14 +51,14 @@ namespace ogdf {
 // returns true, if g is planar, false otherwise. this is the
 // routine, which avoids the overhead of copying the input graph.
 // it is therefore not suitable, if your graph must not be changed.
-bool BoyerMyrvold::planarDestructive(Graph& g)
+bool BoyerMyrvold::isPlanarDestructive(Graph& g)
 {
 	clear();
 	nOfStructures = 0;
-	
+
 	// less than 9 edges are always planar
 	if (g.numberOfEdges() < 9) return true;
-	
+
 	SListPure<KuratowskiStructure> dummy;
 	pBMP = new BoyerMyrvoldPlanar(g,false,BoyerMyrvoldPlanar::doNotEmbed,false,
 									dummy,false,true);
@@ -67,14 +68,14 @@ bool BoyerMyrvold::planarDestructive(Graph& g)
 
 // returns true, if g is planar, false otherwise.
 // use this slower routine, if your graph must not be changed.
-bool BoyerMyrvold::planar(const Graph& g)
+bool BoyerMyrvold::isPlanar(const Graph& g)
 {
 	clear();
 	nOfStructures = 0;
-	
+
 	// less than 9 edges are always planar
 	if (g.numberOfEdges() < 9) return true;
-	
+
 	Graph h(g);
 	SListPure<KuratowskiStructure> dummy;
 	pBMP = new BoyerMyrvoldPlanar(h,false,BoyerMyrvoldPlanar::doNotEmbed,false,
@@ -101,7 +102,7 @@ void BoyerMyrvold::transform(
 		if (++count[e->source()] == 3) kn[k++] = e->source();
 		if (++count[e->target()] == 3) kn[k++] = e->target();
 	}
-	
+
 	// transform edgelist of KuratowskiSubdivision to KuratowskiWrapper
 	OGDF_ASSERT(k==5 || k==6);
 	node n;
@@ -164,7 +165,7 @@ void BoyerMyrvold::transform(
 			i++;
 		}
 	}
-	
+
 	// destruct linear counting structure
 	for (itE = source.edgeList.begin(); itE.valid(); ++itE) {
 		const edge& e(*itE);
@@ -187,20 +188,20 @@ void BoyerMyrvold::transform(
 	EdgeArray<int> countEdge(g,0);
 	SListConstIterator<KuratowskiWrapper> it;
 	node lastEmbeddedVertex = NULL;
-	
+
 	// transform each KuratowskiWrapper into KuratowskiSubdivision
 	for (it = sourceList.begin(); it.valid(); ++it) {
 		if (!onlyDifferent || (*it).V != lastEmbeddedVertex) {
 			lastEmbeddedVertex = (*it).V;
 			KuratowskiSubdivision s;
 			transform(*it,s,count,countEdge);
-			
+
 			targetList.pushBack(s);
 		}
 	}
 }
 
-// returns true, if g is planar, false otherwise. in addition, 
+// returns true, if g is planar, false otherwise. in addition,
 // g contains a planar embedding, if planar. if not planar,
 // kuratowski subdivisions are added to output.
 // use this function, if g may be changed.
@@ -217,16 +218,16 @@ bool BoyerMyrvold::planarEmbedDestructive(
 	bool avoidE2Minors)
 {
 	OGDF_ASSERT(embeddingGrade != BoyerMyrvoldPlanar::doNotEmbed);
-	
+
 	clear();
 	SListPure<KuratowskiStructure> dummy;
 	pBMP = new BoyerMyrvoldPlanar(g,bundles,embeddingGrade,limitStructures,dummy,
 									randomDFSTree,avoidE2Minors);
 	bool planar = pBMP->start();
 	OGDF_ASSERT(!planar || g.genus()==0);
-	
+
 	nOfStructures = dummy.size();
-	
+
 	// Kuratowski extraction
 	if (embeddingGrade > BoyerMyrvoldPlanar::doFindZero ||
 				embeddingGrade == BoyerMyrvoldPlanar::doFindUnlimited) {
@@ -241,7 +242,7 @@ bool BoyerMyrvold::planarEmbedDestructive(
 	return planar;
 }
 
-// returns true, if g is planar, false otherwise. in addition, 
+// returns true, if g is planar, false otherwise. in addition,
 // h contains a planar embedding, if planar. if not planar, list
 // contains a kuratowski subdivision.
 // use this slower function, if g must not be changed.
@@ -258,7 +259,7 @@ bool BoyerMyrvold::planarEmbed(
 	bool avoidE2Minors)
 {
 	OGDF_ASSERT(embeddingGrade != BoyerMyrvoldPlanar::doNotEmbed);
-	
+
 	clear();
 	GraphCopySimple h(g);
 	SListPure<KuratowskiStructure> dummy;
@@ -266,9 +267,9 @@ bool BoyerMyrvold::planarEmbed(
 									randomDFSTree,avoidE2Minors);
 	bool planar = pBMP->start();
 	OGDF_ASSERT(!planar || h.genus()==0);
-	
+
 	nOfStructures = dummy.size();
-	
+
 	// Kuratowski extraction
 	if (embeddingGrade > BoyerMyrvoldPlanar::doFindZero ||
 				embeddingGrade == BoyerMyrvoldPlanar::doFindUnlimited) {
@@ -279,7 +280,7 @@ bool BoyerMyrvold::planarEmbed(
 			extract.extract(dummy,output);
 		}
 		OGDF_ASSERT(planar || !output.empty());
-		
+
 		// convert kuratowski edges in original graph edges
 		if (!output.empty()) {
 			SListIterator<KuratowskiWrapper> it;
@@ -290,12 +291,12 @@ bool BoyerMyrvold::planarEmbed(
 			}
 		}
 	}
-	
+
 	// copy adjacency lists, if planar
 	if (planar) {
 		node v;
 		adjEntry adj;
-    	SListPure<adjEntry> entries;
+		SListPure<adjEntry> entries;
 		forall_nodes(v,g) {
 			entries.clear();
 			forall_adj(adj,h.copy(v)) {
@@ -314,11 +315,11 @@ bool BoyerMyrvold::planarEmbed(
 			g.sort(v,entries);
 		}
 	}
-	
+
 	return planar;
 }
 
-// returns true, if graph copy h is planar, false otherwise. in addition, 
+// returns true, if graph copy h is planar, false otherwise. in addition,
 // h contains a planar embedding, if planar. if not planar, list
 // contains a kuratowski subdivision.
 // use this slower function, if g must not be changed.
@@ -336,7 +337,7 @@ bool BoyerMyrvold::planarEmbed(
 	bool avoidE2Minors)
 {
 	OGDF_ASSERT(embeddingGrade != BoyerMyrvoldPlanar::doNotEmbed);
-	
+
 	clear();
 	//OGDF_ASSERT(&h.original() == &g);
 	SListPure<KuratowskiStructure> dummy;
@@ -344,9 +345,9 @@ bool BoyerMyrvold::planarEmbed(
 									randomDFSTree,avoidE2Minors);
 	bool planar = pBMP->start();
 	OGDF_ASSERT(!planar || h.genus()==0);
-	
+
 	nOfStructures = dummy.size();
-	
+
 	// Kuratowski extraction
 	if (embeddingGrade > BoyerMyrvoldPlanar::doFindZero ||
 				embeddingGrade == BoyerMyrvoldPlanar::doFindUnlimited) {
@@ -357,7 +358,7 @@ bool BoyerMyrvold::planarEmbed(
 			extract.extract(dummy,output);
 		}
 		OGDF_ASSERT(planar || !output.empty());
-		
+
 		// convert kuratowski edges in original graph edges
 		if (!output.empty()) {
 			SListIterator<KuratowskiWrapper> it;
@@ -368,7 +369,7 @@ bool BoyerMyrvold::planarEmbed(
 			}
 		}
 	}
-	
+
 	return planar;
 }
 

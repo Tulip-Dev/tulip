@@ -1,44 +1,45 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Contains the class DinoUmlToGraphConverter...
- * 
- * ...which performs all necessary steps to obtain a model graph 
+ *
+ * ...which performs all necessary steps to obtain a model graph
  * and a set of diagram graphs from the input file.
- * 
+ *
  * \author Dino Ahr
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -71,7 +72,7 @@ namespace ogdf {
 	 *    uml model as well as a set of diagram graphs which are part of the
 	 *    uml model.
 	 *
-	 *  The graphs can be accessed via the functions getModelGraph() and 
+	 *  The graphs can be accessed via the functions getModelGraph() and
 	 *  getDiagramGraphs().
 	 *
 	 *  In debug mode warnings and the content of the model graph and the diagram
@@ -99,8 +100,8 @@ namespace ogdf {
 		SList<UMLGraph*> m_diagramGraphsInUMLGraphFormat;
 
 		/** Predefined info indices for known tag and attribute names. */
-		enum PredefinedInfoIndex { 
-			xmi = 0, 
+		enum PredefinedInfoIndex {
+			xmi = 0,
 			xmiContent,
 			xmiId,
 			umlModel,
@@ -127,28 +128,28 @@ namespace ogdf {
 			diagramType,
 			classDiagram,
 			moduleDiagram,
-			
-			nextPredefinedInfoIndex 
+
+			nextPredefinedInfoIndex
 		};
 
-		/** Maps string info to node. 
+		/** Maps string info to node.
 		 *  We need this hash table for fast access to nodes corresponding
-		 *  to UML elements. For each UML Element in XMI format we have an 
+		 *  to UML elements. For each UML Element in XMI format we have an
 		 *  unique identifier via the xmi.id attribute. The xmi.id attribute
 		 *  is saved as string in the hash table of the parser, hence we can
 		 *  use the info index of it. While scanning for relations between nodes
 		 *  we encounter the xmi.id attribute values of the involved elements referenced
 		 *  as type attribute in the relation. Now we can use the hash table to
-		 *  access the corresponding node. 
+		 *  access the corresponding node.
 		 */
 		Hashing<int,NodeElement*> m_idToNode;
 
 		/** Maps string info to edge.
-		 *  The functionality is the same as for #m_idToNode. 
+		 *  The functionality is the same as for #m_idToNode.
 		 */
 		Hashing<int,EdgeElement*> m_idToEdge;
 
-		/** The log file. 
+		/** The log file.
 		 *  The log file is named \e umlToGraphConversionLog.txt and contains
 		 *  warnings and errors ocurred during the conversion process. Furthermore
 		 *  it contains the content of the model graph #m_modelGraph and of the
@@ -158,7 +159,7 @@ namespace ogdf {
 
 	public:
 
-		/** Constructor. 
+		/** Constructor.
 		 *  The constructor performs the following:
 		 *  - A parser object of class DinoXmlParser is created and
 		 *    the parse process is started via DinoXmlParser::createParseTree().
@@ -173,7 +174,7 @@ namespace ogdf {
 		 */
 		DinoUmlToGraphConverter(const char *fileName);
 
-		/** Destructor. 
+		/** Destructor.
 		 *  The destructor destroys:
 		 *  - the diagram graphs contained in #m_diagramGraphs,
 		 *  - the model graph contained in #m_modelGraph,
@@ -181,14 +182,14 @@ namespace ogdf {
 		 */
 		~DinoUmlToGraphConverter();
 
-		/** Access to model graph. 
+		/** Access to model graph.
 		 *  @return A const reference to the model graph.
 		 */
-		const DinoUmlModelGraph &getModelGraph() const { 
-			return *m_modelGraph; 
+		const DinoUmlModelGraph &getModelGraph() const {
+			return *m_modelGraph;
 		}
 
-		/** Access to diagram graphs. 
+		/** Access to diagram graphs.
 		 *  @return A const reference to the list of diagram graphs.
 		 */
 		const SList<DinoUmlDiagramGraph*> & getDiagramGraphs () const {
@@ -221,7 +222,7 @@ namespace ogdf {
 		void initializePredefinedInfoIndices();
 
 		/** Converts the relevant information contained in the parse tree
-		 *  into the data structure of DinoUmlModelGraph. Error messages are 
+		 *  into the data structure of DinoUmlModelGraph. Error messages are
 		 *  reported in #m_logFile.
 		 *  @param modelGraph The model graph into which the nodes and edges
 		 *  corresponding to uml elements and uml relations should be inserted.
@@ -229,11 +230,11 @@ namespace ogdf {
 		 */
 		bool createModelGraph(DinoUmlModelGraph &modelGraph);
 
-		/** Traverses the package structure and identifies classifiers inside 
-		 *  the parse tree (starting at \a currentRootTag) and inserts a new node 
+		/** Traverses the package structure and identifies classifiers inside
+		 *  the parse tree (starting at \a currentRootTag) and inserts a new node
 		 *  for each classifier. This function will call itself recursively while
 		 *  traversing nested packages.
-		 *  
+		 *
 		 *  Valid classifiers are currently: \c class and \c interface.
 		 *  @param currentRootTag The tag where to start the search for classifiers.
 		 *  @param currentPackageName This string should contain the name of the package
@@ -241,32 +242,34 @@ namespace ogdf {
 		 *  @param modelGraph The model graph into which nodes are inserted.
 		 *  @return False if something went wrong, true otherwise.
 		 */
-		bool traversePackagesAndInsertClassifierNodes(const XmlTagObject &currentRootTag, 
-													  String currentPackageName,
-													  DinoUmlModelGraph &modelGraph);
+		bool traversePackagesAndInsertClassifierNodes(
+			const XmlTagObject &currentRootTag,
+			String currentPackageName,
+			DinoUmlModelGraph &modelGraph);
 
 		/** Tries to find all classifiers of type \a desiredClassifier inside the parse
 		 *  tree (starting at \a currentRootTag). Inserts a new node into \a modelGraph
 		 *  for each classifier found.
-		 *  @param currentRootTag The tag where to start the search for the desired 
+		 *  @param currentRootTag The tag where to start the search for the desired
 		 *  classifier.
 		 *  @param currentPackageName This string should contain the name of the package
 		 *  path corresponding to \a currentRootTag.
-		 *  @param desiredClassifier The info index of the desired class 
+		 *  @param desiredClassifier The info index of the desired class
 		 *  (see enum #PredefinedInfoIndex).
 		 *  @param modelGraph The model graph into which nodes are inserted.
 		 *  @return False if something went wrong, true otherwise.
 		 */
-		bool insertSpecificClassifierNodes(const XmlTagObject &currentRootTag,
-										   String currentPackageName,
-										   int desiredClassifier,
-										   DinoUmlModelGraph &modelGraph);
+		bool insertSpecificClassifierNodes(
+			const XmlTagObject &currentRootTag,
+			String currentPackageName,
+			int desiredClassifier,
+			DinoUmlModelGraph &modelGraph);
 
-		/** Traverses the package structure and identifies associations inside 
-		 *  the parse tree and inserts a new edge between the corresponding 
+		/** Traverses the package structure and identifies associations inside
+		 *  the parse tree and inserts a new edge between the corresponding
 		 *  nodes of the involved classifiers.
-		 * 
-		 *  Note that it is not possible to include this function into 
+		 *
+		 *  Note that it is not possible to include this function into
 		 *  traversePackagesAndInsertClassifierNodes(). The reason is that it
 		 *  is possible that edges are specified prior to that one or both nodes
 		 *  have been created.
@@ -274,14 +277,15 @@ namespace ogdf {
 		 *  @param modelGraph The model graph into which edges are inserted.
 		 *  @return False if something went wrong, true otherwise.
 		 */
-		bool traversePackagesAndInsertAssociationEdges(const XmlTagObject &currentRootTag, 
-													   DinoUmlModelGraph &modelGraph);
-	
-		/** Traverses the package structure and identifies generalization inside 
-		 *  the parse tree and inserts a new edge between the corresponding 
+		bool traversePackagesAndInsertAssociationEdges(
+			const XmlTagObject &currentRootTag,
+			DinoUmlModelGraph &modelGraph);
+
+		/** Traverses the package structure and identifies generalization inside
+		 *  the parse tree and inserts a new edge between the corresponding
 		 *  nodes of the involved classifiers.
 		 *
-		 *  It does not make sense to put this function and 
+		 *  It does not make sense to put this function and
 		 *  traversePackagesAndInsertAssociationEdges() together since the generalization
 		 *  tags are inside the class tags, so first the classes have to be identified
 		 *  again in contrast to traversePackagesAndInsertAssociationEdges().
@@ -289,21 +293,23 @@ namespace ogdf {
 		 *  @param modelGraph The model graph into which edges are inserted.
 		 *  @return False if something went wrong, true otherwise.
 		 */
-		bool traversePackagesAndInsertGeneralizationEdges(const XmlTagObject &currentRootTag, 
-													      DinoUmlModelGraph &modelGraph);
-		
+		bool traversePackagesAndInsertGeneralizationEdges(
+			const XmlTagObject &currentRootTag,
+			DinoUmlModelGraph &modelGraph);
 
-		/** Identifies dependency tags inside the parse tree and inserts a 
+
+		/** Identifies dependency tags inside the parse tree and inserts a
 		 *  new edge between the corresponding nodes of the involved elements.
 		 *  @param currentRootTag The tag where to start the search for dependencies.
 		 *  @param modelGraph The model graph into which edges are inserted.
 		 *  @return False if something went wrong, true otherwise.
 		 */
-		bool insertDependencyEdges(const XmlTagObject &currentRootTag, 
-							       DinoUmlModelGraph &modelGraph);
+		bool insertDependencyEdges(
+			const XmlTagObject &currentRootTag,
+			DinoUmlModelGraph &modelGraph);
 
 		/** For each diagram converts the relevant information contained in the parse tree
-		 *  into the data structure of DinoUmlDiagramGraph. Error messages are 
+		 *  into the data structure of DinoUmlDiagramGraph. Error messages are
 		 *  reported in #m_logFile.
 		 *  @return Returns true if conversion was succesful, false otherwise.
 		 *  \todo Currently only class diagrams are handled. Must be extended to handle
@@ -319,7 +325,7 @@ namespace ogdf {
 		 */
 		bool createDiagramGraphsInUMLGraphFormat(SList<UMLGraph*> &diagramGraphsInUMLGraphFormat);
 
-		
+
 	}; // class DinoUmlToGraphConverter
 
 

@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class UMLGraph.
- * 
+ *
  * \author Carsten Gutwenger and Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -93,14 +94,14 @@ public:
 	//and deleting all edges between nodes in clique
 	//returns center node
 	void replaceByStar(List< List<node> > &cliques);
-	
+
 	//undo clique replacements
 	void undoStars();
 	//boolean switches restore of all hidden edges in single clique call
 	void undoStar(node center, bool restoreAllEdges);
 
 	//returns the size of a circular drawing for a clique around center v
-	DRect cliqueRect(node v) 
+	DRect cliqueRect(node v)
 	{
 		return m_cliqueCircleSize[v];
 	}
@@ -108,9 +109,9 @@ public:
 	{
 		return m_cliqueCirclePos[v];
 	}
-	
+
 	//compute circle positions for all nodes around center
-	//using the ordering given in this UMLGraph, calls 
+	//using the ordering given in this UMLGraph, calls
 	//ccP(List...)
 	//rectMin is a temporary solution until compaction with constraints allows stretching
 	//of rect to clique size, it gives the min(w,h) of the given fixed size rect around the clique
@@ -120,12 +121,12 @@ public:
 	//rectangle (left, right,...) to avoid clique crossings of outgoing edges
 	void computeCliquePosition(List<node> &adjNodes, node center, double rectMin = -1.0);
 
-    //allow change, but should not be declared const
-    Graph& pureGraph() const {return *m_pG;}
+	//allow change, but should not be declared const
+	Graph& pureGraph() const {return *m_pG;}
 
 	//set status value
 	//void setAlign(edge e, bool b) {m_alignEdge[e] = b;}
-    //set status of edges to be specially embedded (if alignment)
+	//set status of edges to be specially embedded (if alignment)
 	void setUpwards(adjEntry a, bool b) {m_upwardEdge[a] = b;}
 	bool upwards(adjEntry a) const {return m_upwardEdge[a];}
 
@@ -135,7 +136,7 @@ public:
 	// writes attributed graph in GML format to output stream os
 	void writeGML(ostream &os);
 
-	//adjust the parent field for all nodes after insertion of 
+	//adjust the parent field for all nodes after insertion of
 	//mergers. If insertion is done per node via doinsert, adjust
 	//has to be called afterwards. Otherwise, insertgenmergers calls it.
 	void adjustHierarchyParents();
@@ -165,12 +166,11 @@ public:
 	//modelling of association classes
 	class AssociationClass {
 	public:
-		AssociationClass(edge e, double width = 1.0, double height = 1.0, 
+		AssociationClass(edge e, double width = 1.0, double height = 1.0,
 			double x = 0.0, double y = 0.0)
 			: m_width(width), m_height(height), m_x(x), m_y(y), m_edge(e), m_node(0)
-		{
-		
-		}
+		{ }
+
 		double m_width;
 		double m_height;
 		double m_x;
@@ -220,12 +220,12 @@ public:
 	node modelAssociationClass(AssociationClass* ac)
 	{
 		node dummy = m_pG->split(ac->m_edge)->source();
-		
+
 		m_height[dummy] = 1; //just a dummy size
 		m_width[dummy]  = 1;
 		OGDF_ASSERT(ac->m_node)
 		m_pG->newEdge(ac->m_node, dummy);
-		
+
 		return dummy;
 	}
 
@@ -288,20 +288,20 @@ private:
 
 	SListPure<edge> m_mergeEdges;
 	SListPure<node> m_centerNodes; //center nodes introduced at clique replacement
-	EdgeArray<bool> m_replacementEdge; //used to mark clique replacement edges
-	                                   //may be we can join this with edge type
-	NodeArray<DRect> m_cliqueCircleSize; //save the bounding box size of the 
-	                                     //circular drawing of the clique at center
-	NodeArray<DPoint> m_cliqueCirclePos; //save the position of the node in the
-	                                     //circular drawing of the clique 
-    //---------------------------------------------------
+	EdgeArray<bool> m_replacementEdge;	//used to mark clique replacement edges
+										//may be we can join this with edge type
+	NodeArray<DRect> m_cliqueCircleSize;	//save the bounding box size of the
+											//circular drawing of the clique at center
+	NodeArray<DPoint> m_cliqueCirclePos;	//save the position of the node in the
+											//circular drawing of the clique
+	//---------------------------------------------------
 	//structures for association classes
 	//may be replaced later by generic structures for different types
 	SListPure<AssociationClass*> m_assClassList; //saves all accociation classes
 	EdgeArray<AssociationClass*> m_assClass;     //association class for list
 	EdgeArray<node> m_associationClassModel;     //modelled classes are stored
 
-	
+
 	//***************************************************
 	//the following arrays are only set and updated in insertgenmergers
 	//used to classify edges for embedding with alignment

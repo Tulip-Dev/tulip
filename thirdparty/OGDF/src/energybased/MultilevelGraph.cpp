@@ -1,9 +1,9 @@
 /*
- * $Revision: 2302 $
+ * $Revision: 2552 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -75,7 +76,7 @@ MultilevelGraph::MultilevelGraph()
 	m_G = new Graph();
 	if(m_G == 0) {
 		OGDF_THROW(InsufficientMemoryException);
-	} 
+	}
 
 	//replaces layout info stuff below
 	initInternal();
@@ -95,8 +96,8 @@ MultilevelGraph::MultilevelGraph(GraphAttributes &GA)
 	m_G = new Graph();
 	if(m_G == 0) {
 		OGDF_THROW(InsufficientMemoryException);
-	} 
-	
+	}
+
 	//replaces layout info stuff below
 	initInternal();
 
@@ -153,7 +154,7 @@ MultilevelGraph::MultilevelGraph(istream &is)
 	m_G = new Graph();
 	if(m_G == 0) {
 		OGDF_THROW(InsufficientMemoryException);
-	} 
+	}
 	m_nodeAssociations.init(*m_G);
 	m_edgeAssociations.init(*m_G);
 	m_radius.init(*m_G);
@@ -175,7 +176,7 @@ MultilevelGraph::MultilevelGraph(const String &filename)
 	m_G = new Graph();
 	if(m_G == 0) {
 		OGDF_THROW(InsufficientMemoryException);
-	} 
+	}
 	m_nodeAssociations.init(*m_G);
 	m_edgeAssociations.init(*m_G);
 	m_radius.init(*m_G);
@@ -362,7 +363,7 @@ void MultilevelGraph::importAttributes(const GraphAttributes &GA)
 	}
 
 	forall_nodes(v, *m_G) {
-		
+
 		double w = GA.width(tempNodeAssociations[m_nodeAssociations[v]]);
 		double h = GA.height(tempNodeAssociations[m_nodeAssociations[v]]);
 		if(w > 0 || h > 0) {
@@ -773,7 +774,7 @@ void MultilevelGraph::updateMergeWeights()
 	forall_nodes(v, *m_G) {
 		m_reverseNodeMergeWeight[v->index()] = 1;
 	}
-	
+
 }
 
 

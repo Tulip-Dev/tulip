@@ -1,42 +1,45 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2524 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-03 09:54:22 +0200 (Tue, 03 Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief declaration of class FixedEmbeddingInserter
- * 
+ *
  * \author Hoi-Ming Wong
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2008
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
- 
+
 #ifdef _MSC_VER
 #pragma once
 #endif
@@ -64,18 +67,18 @@ public:
 	//! Creates an instance of fixed-embedding edge inserter.
 	FixedEmbeddingUpwardEdgeInserter() {}
 
-	~FixedEmbeddingUpwardEdgeInserter() { }	
-	
+	~FixedEmbeddingUpwardEdgeInserter() { }
+
 
 private:
 
-	bool isUpwardPlanar(Graph &G) 
+	bool isUpwardPlanar(Graph &G)
 	{
 		UpwardPlanarModule upMod;
-		return upMod.upwardPlanarityTest(G);	
+		return upMod.upwardPlanarityTest(G);
 	}
 
-	/**	
+	/**
 	 * @param UPR is the input upward planarized representation of a FUPS and will also receive the result.
 	 * @param origEdges is the list of original edges (edges in the original graph
 	 *        of \a UPR) that have to be inserted.
@@ -85,14 +88,14 @@ private:
 	 *        forbidden to be crossed.
 	 */
 	virtual ReturnType doCall(UpwardPlanRep &UPR,
-		const List<edge> &origEdges,		
+		const List<edge> &origEdges,
 		const EdgeArray<int>  *costOrig = 0,
 		const EdgeArray<bool> *forbiddenEdgeOrig = 0
-		); 
+		);
 
 
 	ReturnType insertAll(UpwardPlanRep &UPR,
-						List<edge> &toInsert,		
+						List<edge> &toInsert,
 						EdgeArray<int>  &cost);
 
 
@@ -102,12 +105,12 @@ private:
 	//! compute a list of dynamic locked edges
 	void dynamicLock(UpwardPlanRep &UPR, EdgeArray<bool> &locked, face f, adjEntry e_cur);
 
-	void nextFeasibleEdges(UpwardPlanRep &UPR, List<adjEntry> &nextEdges, face f, adjEntry e_cur, EdgeArray<bool> &locked, bool heuristic); 
-	
+	void nextFeasibleEdges(UpwardPlanRep &UPR, List<adjEntry> &nextEdges, face f, adjEntry e_cur, EdgeArray<bool> &locked, bool heuristic);
+
 	//! compute the minimal feasible insertion path
 	void minFIP(UpwardPlanRep &UPR,
 				List<edge> &origEdges,
-				EdgeArray<int> &cost, 
+				EdgeArray<int> &cost,
 				edge e_orig,
 				SList<adjEntry> &path) { getPath(UPR, origEdges, cost, e_orig, path, false); }
 
@@ -116,15 +119,15 @@ private:
 	//! compute a constraint feasible insertion path usig heuristic.
 	void constraintFIP(UpwardPlanRep &UPR,
 				List<edge> &origEdges,
-				EdgeArray<int> &cost, 
+				EdgeArray<int> &cost,
 				edge e_orig,
 				SList<adjEntry> &path) { getPath(UPR, origEdges, cost, e_orig, path, true); }
 
 	//! compute an insertion path
 	void getPath(UpwardPlanRep &UPR,
 				List<edge> &origEdges,
-				EdgeArray<int> &cost, 
-				edge e_orig, 
+				EdgeArray<int> &cost,
+				edge e_orig,
 				SList<adjEntry> &path,
 				bool heuristic);
 
@@ -135,7 +138,7 @@ private:
 
 	//! mark the edges which dominate node v
 	void markDown(const Graph &G, node v, EdgeArray<bool> &markedEdges);
-	
+
 	//! compute the feasible edges of the face f with respect to e
 	void feasibleEdges(UpwardPlanRep &UPR,
 						face f, // current face
@@ -148,7 +151,7 @@ private:
 	bool isConstraintFeasible(UpwardPlanRep &UPR,
 							const List<edge> &orig_edges,
 							edge e_orig,
-							adjEntry adjCurrent, 
+							adjEntry adjCurrent,
 							adjEntry adjNext, // the next adjEntry of the current insertion path
 							EdgeArray<adjEntry> &predAdj //Array to reconstruction the insertion path
 							);
@@ -156,10 +159,10 @@ private:
 
 	//! return true if current insertion path is contraint feasible
 	bool isConstraintFeasible(UpwardPlanRep &UPR,
-							List<edge> &origEdges,	
+							List<edge> &origEdges,
 							edge e_orig,
-							SList<adjEntry> &path);	
-	
+							SList<adjEntry> &path);
+
 
 };
 

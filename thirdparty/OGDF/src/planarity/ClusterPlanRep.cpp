@@ -1,48 +1,49 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief implementation of ClusterPlanRep class
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
 #include <ogdf/cluster/ClusterPlanRep.h>
 #include <ogdf/orthogonal/OrthoRep.h>
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/Layout.h>
 #include <ogdf/basic/GridLayoutMapped.h>
 #include <ogdf/basic/tuples.h>
@@ -55,16 +56,18 @@ enum edgeDir {undef, in, out};
 namespace ogdf {
 
 ClusterPlanRep::ClusterPlanRep(
-	const ClusterGraphAttributes &acGraph, 
+	const ClusterGraphAttributes &acGraph,
 	const ClusterGraph &clusterGraph)
 	:
-	PlanRep(acGraph), 
-	m_pClusterGraph(&clusterGraph), 
-	m_edgeClusterID(*this, -1),
-	m_nodeClusterID(*this, -1)
+	PlanRep(acGraph),
+	m_pClusterGraph(&clusterGraph)
 {
 	OGDF_ASSERT(&clusterGraph.getGraph() == &acGraph.constGraph())
- //   const Graph &CG = clusterGraph;
+
+	m_edgeClusterID.init(*this, -1);
+	m_nodeClusterID.init(*this, -1);
+
+	//const Graph &CG = clusterGraph;
 	//const Graph &G  = acGraph.constGraph();
 
 	//if (&acGraph != 0)
@@ -85,7 +88,7 @@ void ClusterPlanRep::initCC(int i)
 {
 	PlanRep::initCC(i);
 
-	//this means that for every reinitialization IDs are set 
+	//this means that for every reinitialization IDs are set
 	//again, but this should not lead to problems
 	//it cant be done in the constructor because the copies
 	//in CCs are not yet initialized then
@@ -129,7 +132,7 @@ void ClusterPlanRep::insertEdgePathEmbedded(
 	{
 		node dummy = (*it)->target();
 		if (dummy == copy(eOrig->target())) continue;
-		
+
 		OGDF_ASSERT(dummy->degree() == 4)
 
 		//get the entries on the crossed edge
@@ -159,7 +162,7 @@ void ClusterPlanRep::insertEdgePathEmbedded(
 		cluster c1, c2;
 		if (orV1 && orV2)
 		{
-			OGDF_ASSERT(m_pClusterGraph->clusterOf(orV1) == 
+			OGDF_ASSERT(m_pClusterGraph->clusterOf(orV1) ==
 						 m_pClusterGraph->clusterOf(orV2));
 			OGDF_ASSERT(m_nodeClusterID[v1] != -1)
 			m_nodeClusterID[dummy] = m_nodeClusterID[v1];
@@ -174,8 +177,8 @@ void ClusterPlanRep::insertEdgePathEmbedded(
 			cluster dC  = clusterOfDummy(vD);
 
 			OGDF_ASSERT( (orC == dC) ||		//original and crossing
-						  (orC == dC->parent()) || //original and boundary
-						  (orC->parent() == dC) )
+				(orC == dC->parent()) || //original and boundary
+				(orC->parent() == dC) )
 
 			if (orC == dC) m_nodeClusterID[dummy] = orC->index();
 			else if (orC == dC->parent()) m_nodeClusterID[dummy] = orC->index();
@@ -186,15 +189,19 @@ void ClusterPlanRep::insertEdgePathEmbedded(
 		c1 = clusterOfDummy(v1);
 		c2 = clusterOfDummy(v2);
 		OGDF_ASSERT( (c1 == c2) ||		//min.one crossing
-						  (c1 == c2->parent()) || //min. one boundary
-						  (c1->parent() == c2) ||
-						  (c1->parent() == c2->parent())
-					)
+			(c1 == c2->parent()) || //min. one boundary
+			(c1->parent() == c2) ||
+			(c1->parent() == c2->parent())
+		)
 
-		if (c1 == c2) m_nodeClusterID[dummy] = c1->index();
-			else if (c1 == c2->parent()) m_nodeClusterID[dummy] = c1->index();
-				 else if (c2 == c1->parent()) m_nodeClusterID[dummy] = c2->index();
-					  else m_nodeClusterID[dummy] = c1->parent()->index();
+		if (c1 == c2)
+			m_nodeClusterID[dummy] = c1->index();
+		else if (c1 == c2->parent())
+			m_nodeClusterID[dummy] = c1->index();
+		else if (c2 == c1->parent())
+			m_nodeClusterID[dummy] = c2->index();
+		else
+			m_nodeClusterID[dummy] = c1->parent()->index();
 		continue;
 
 
@@ -208,20 +215,20 @@ void ClusterPlanRep::ModelBoundaries()
 	//clusters hold their adjacent adjEntries and edges in lists, but after
 	//insertion of boundaries these lists are outdated due to edge splittings
 
-	//is the clusteradjacent edge outgoing? 
+	//is the clusteradjacent edge outgoing?
 	//2 means undef (only at inner leaf cluster)
 	AdjEntryArray<int> outEdge(*m_pClusterGraph, 2); //0 in 1 out
-	//what edge is currently adjacent to cluster (after possible split) 
+	//what edge is currently adjacent to cluster (after possible split)
 	//with original adjEntry in clusteradjlist
-    AdjEntryArray<edge> currentEdge(*m_pClusterGraph, 0);
-	
+	AdjEntryArray<edge> currentEdge(*m_pClusterGraph, 0);
+
 	List<adjEntry> rootEdges; //edges that can be used to set the outer face
 
 	convertClusterGraph(m_pClusterGraph->rootCluster(), currentEdge, outEdge);
 }
 
 //recursively insert cluster boundaries for all clusters in cluster tree
-void ClusterPlanRep::convertClusterGraph(cluster act, 
+void ClusterPlanRep::convertClusterGraph(cluster act,
 										 AdjEntryArray<edge>& currentEdge,
 										 AdjEntryArray<int>& outEdge)
 {
@@ -241,7 +248,7 @@ void ClusterPlanRep::convertClusterGraph(cluster act,
 	{
 		ListConstIterator<cluster> succ = it.succ();
 		convertClusterGraph((*it), currentEdge, outEdge);
-		
+
 		it = succ;
 	}
 	//do not convert root cluster
@@ -257,37 +264,37 @@ void ClusterPlanRep::convertClusterGraph(cluster act,
 }//convertclustergraph
 
 //inserts Boundary for a single cluster, needs the cluster and updates a
-//hashtable linking splitted original edges (used in clusteradjlist) to the 
+//hashtable linking splitted original edges (used in clusteradjlist) to the
 //current (new) edge, if cluster is leafcluster, we check and set the edge
 //direction and the adjacent edge corresponding to the adjEntries in the clusters
 //adjEntry List
-void ClusterPlanRep::insertBoundary(cluster C, 
+void ClusterPlanRep::insertBoundary(cluster C,
 									AdjEntryArray<edge>& currentEdge,
 									AdjEntryArray<int>& outEdge,
 									bool clusterIsLeaf)
 {
 	//we insert edges to represent the cluster boundary
-	//by splitting the outgoing edges and connecting the 
+	//by splitting the outgoing edges and connecting the
 	//split nodes
 
 	OGDF_ASSERT(this->representsCombEmbedding())
 
 	//retrieve the outgoing edges
 
-    //TODO: nichtverbundene Cluster abfangen
+	//TODO: nichtverbundene Cluster abfangen
 
 	SList<adjEntry> outAdj;
 	//outgoing adjEntries in clockwise order
 	m_pClusterGraph->adjEntries(C, outAdj);
 
-	//now split the edges and save adjEntries 
+	//now split the edges and save adjEntries
 	//we maintain two lists of adjentries
 	List<adjEntry> targetEntries, sourceEntries;
 	//we need to find out if edge is outgoing
 	bool isOut = false;
 	SListIterator<adjEntry> it = outAdj.begin();
 	//if no outAdj exist, we have a connected component
-	//and dont need a boundary, change this when unconnected 
+	//and dont need a boundary, change this when unconnected
 	//graphs are allowed
 	if (!it.valid()) return;
 
@@ -310,7 +317,7 @@ void ClusterPlanRep::insertBoundary(cluster C,
 		if (outEdge[(*it)] == 2)
 			outEdge[(*it)] = ( ((*it) == (*it)->theEdge()->adjSource()) ? 1 : 0);
 
-		if (currentEdge[(*it)] == 0) 
+		if (currentEdge[(*it)] == 0)
 		{
 			//may already be splitted from head
 			currentEdge[(*it)] = copy((*it)->theEdge());
@@ -348,20 +355,20 @@ void ClusterPlanRep::insertBoundary(cluster C,
 		}//else outgoing
 
 		//always set some rootAdj for external face
-	    if ( (C->parent() == m_pClusterGraph->rootCluster()) && !(it.succ().valid()))
+		if ( (C->parent() == m_pClusterGraph->rootCluster()) && !(it.succ().valid()))
 		{
 			//save the adjentry corresponding to new splitresult edge
 			m_rootAdj = currentEdge[(*it)]->adjSource();
-	 	    OGDF_ASSERT(m_rootAdj != 0);
+			OGDF_ASSERT(m_rootAdj != 0);
 		}//if
 
-        //go on with next edge
+		//go on with next edge
 		it++;
-		
+
 	}//while outedges
 
 
-    //we need pairs of adjEntries
+	//we need pairs of adjEntries
 	OGDF_ASSERT(targetEntries.size() == sourceEntries.size());
 	//now flip first target entry to front
 	//should be nonempty
@@ -379,8 +386,8 @@ void ClusterPlanRep::insertBoundary(cluster C,
 
 		OGDF_ASSERT(this->representsCombEmbedding())
 	}
-	
-    OGDF_ASSERT(this->representsCombEmbedding())
+
+	OGDF_ASSERT(this->representsCombEmbedding())
 
 }//insertBoundary
 
@@ -425,9 +432,11 @@ void ClusterPlanRep::writeGML(const char *fileName, const Layout &drawing)
 	ofstream os(fileName);
 	writeGML(os,drawing);
 }
+
+
 void ClusterPlanRep::writeGML(const char *fileName)
 {
-    Layout drawing(*this);
+	Layout drawing(*this);
 	ofstream os(fileName);
 	writeGML(os,drawing);
 }
@@ -444,111 +453,116 @@ void ClusterPlanRep::writeGML(ostream &os, const Layout &drawing)
 	os.precision(10);
 
 	os << "Creator \"ogdf::GraphAttributes::writeGML\"\n";
-	os << "directed 1\n";
-
 	os << "graph [\n";
+	os << "  directed 1\n";
 
 	node v;
 	forall_nodes(v,G) {
 
 		node ori = original(v);
 
-		os << "node [\n";
+		os << "  node [\n";
 
-		os << "id " << (id[v] = nextId++) << "\n";
+		os << "    id " << (id[v] = nextId++) << "\n";
 
-		os << "graphics [\n";
-		os << "x " << drawing.x(v) << "\n";
-		os << "y " << drawing.y(v) << "\n";
-		os << "w " << 10.0 << "\n";
-		os << "h " << 10.0 << "\n";
-		os << "type \"rectangle\"\n";
-		os << "width 1.0\n";
+		os << "    graphics [\n";
+		os << "      x " << drawing.x(v) << "\n";
+		os << "      y " << drawing.y(v) << "\n";
+		os << "      w " << 10.0 << "\n";
+		os << "      h " << 10.0 << "\n";
+		os << "      type \"rectangle\"\n";
+		os << "      width 1.0\n";
 		if (typeOf(v) == Graph::generalizationMerger) {
-			os << "type \"oval\"\n";
-			os << "fill \"#0000A0\"\n";
+			os << "      type \"oval\"\n";
+			os << "      fill \"#0000A0\"\n";
 		}
 		else if (typeOf(v) == Graph::generalizationExpander) {
-			os << "type \"oval\"\n";
-			os << "fill \"#00FF00\"\n";
+			os << "      type \"oval\"\n";
+			os << "      fill \"#00FF00\"\n";
 		}
 		else if (typeOf(v) == Graph::highDegreeExpander ||
 			typeOf(v) == Graph::lowDegreeExpander)
-			os << "fill \"#FFFF00\"\n";
+			os << "      fill \"#FFFF00\"\n";
 		else if (typeOf(v) == Graph::dummy)
-			os << "type \"oval\"\n";
+			os << "      type \"oval\"\n";
 
-		else 
+		else
 		if (m_pClusterGraph->clusterOf(ori)->index() != 0) //cluster
 		{
 			//only < 16
-			os << "fill \"#" << std::hex << std::setw(6) << std::setfill('0')
-			  <<m_pClusterGraph->clusterOf(ori)->index()*256*256+
-									 m_pClusterGraph->clusterOf(ori)->index()*256+
-									 m_pClusterGraph->clusterOf(ori)->index()*4 << std::dec << "\"\n";
+			os << "      fill \"#" << std::hex << std::setw(6) << std::setfill('0')
+				<< m_pClusterGraph->clusterOf(ori)->index()*256*256+
+					m_pClusterGraph->clusterOf(ori)->index()*256+
+					m_pClusterGraph->clusterOf(ori)->index()*4 << std::dec << "\"\n";
 		}
 		else
 		{
 		if (v->degree() > 4)
-			os << "fill \"#FFFF00\"\n";
+			os << "      fill \"#FFFF00\"\n";
 
 		else
-			os << "fill \"#000000\"\n";
+			os << "      fill \"#000000\"\n";
 		}
 
-		os << "]\n"; // graphics
+		os << "    ]\n"; // graphics
 
-		os << "]\n"; // node
+		os << "  ]\n"; // node
 	}
 
 
 	edge e;
 	forall_edges(e,G) {
-		os << "edge [\n";
+		os << "  edge [\n";
 
-		os << "source " << id[e->source()] << "\n";
-		os << "target " << id[e->target()] << "\n";
+		os << "    source " << id[e->source()] << "\n";
+		os << "    target " << id[e->target()] << "\n";
 
-		os << "generalization " << typeOf(e) << "\n";
+		os << "    generalization " << typeOf(e) << "\n";
 
-		os << "graphics [\n";
+		os << "    graphics [\n";
 
-		os << "type \"line\"\n";
+		os << "      type \"line\"\n";
 
 		if (typeOf(e) == Graph::generalization)
 		{
-				os << "arrow \"last\"\n";
-	
-				os << "fill \"#FF0000\"\n";
-            os << "width 3.0\n";
+			os << "      arrow \"last\"\n";
+
+			os << "      fill \"#FF0000\"\n";
+			os << "      width 3.0\n";
 		}
-		else 
-        {
-			
-                if (typeOf(e->source()) == Graph::generalizationExpander ||
+		else
+		{
+
+			if (typeOf(e->source()) == Graph::generalizationExpander ||
 				typeOf(e->source()) == Graph::generalizationMerger ||
 				typeOf(e->target()) == Graph::generalizationExpander ||
 				typeOf(e->target()) == Graph::generalizationMerger)
 			{
-				os << "arrow \"none\"\n";
-				if (isBrother(e)) os << "fill \"#F0F000\"\n"; //gelb
-			    else if (isHalfBrother(e)) os << "fill \"#FF00AF\"\n";
-				else 
-					if (isClusterBoundary(e)) os << "fill \"#FF0000\"\n";
-					else
-						os << "fill \"#FF0000\"\n";
+				os << "      arrow \"none\"\n";
+				if (isBrother(e))
+					os << "      fill \"#F0F000\"\n"; //gelb
+				else if (isHalfBrother(e))
+					os << "      fill \"#FF00AF\"\n";
+				else if (isClusterBoundary(e))
+					os << "      fill \"#FF0000\"\n";
+				else
+					os << "      fill \"#FF0000\"\n";
 			}
 			else
-				os << "arrow \"none\"\n";
-	        if (isBrother(e)) os << "fill \"#F0F000\"\n"; //gelb
-			else if (isHalfBrother(e)) os << "fill \"#FF00AF\"\n";
-			else if (isClusterBoundary(e)) os << "fill \"#FF0000\"\n";
-			else os << "fill \"#00000F\"\n";
-            os << "width 1.0\n";
-                }//else generalization
-		os << "]\n"; // graphics
+				os << "      arrow \"none\"\n";
+			if (isBrother(e))
+				os << "      fill \"#F0F000\"\n"; //gelb
+			else if (isHalfBrother(e))
+				os << "      fill \"#FF00AF\"\n";
+			else if (isClusterBoundary(e))
+				os << "      fill \"#FF0000\"\n";
+			else
+				os << "      fill \"#00000F\"\n";
+			os << "      width 1.0\n";
+		}//else generalization
+		os << "    ]\n"; // graphics
 
-		os << "]\n"; // edge
+		os << "  ]\n"; // edge
 	}
 
 	os << "]\n"; // graph

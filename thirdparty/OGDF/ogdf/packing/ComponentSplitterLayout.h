@@ -1,9 +1,9 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2523 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -71,7 +72,7 @@ private:
 	int m_minDistCC;
 	int m_rotatingSteps;
 	int m_border;
-	
+
 	//! Combines drawings of connected components to
 	//! a single drawing by rotating components and packing
 	//! the result (optimizes area of axis-parallel rectangle).

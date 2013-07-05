@@ -1,9 +1,9 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2523 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -54,8 +55,8 @@ namespace ogdf {
 /** \brief An example Layout using the Modular Mutlievel Mixer
  *
  * This example is tuned to reduce twists in the final drawing. Use this layout
- * or a variation of it if many twists occur. LocalBiconnectedMerger and 
- * BarycenterPlacer are used as merging and placement strategies. The 
+ * or a variation of it if many twists occur. LocalBiconnectedMerger and
+ * BarycenterPlacer are used as merging and placement strategies. The
  * FastMultipoleEmbedder is for force calculation.
  *
  * For an easy variation of the Modular Multilevel Mixer copy the code in call.

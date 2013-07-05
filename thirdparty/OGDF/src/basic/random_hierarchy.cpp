@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements graph generator for hierarchical graphs.
- * 
+ *
  * \author Carsten Gutwenger, Christoph Buchheim
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -48,18 +49,19 @@ namespace ogdf {
 
 class BEdge {
 public:
-  int head, tail, id, pos;
-  BEdge *next;
-  BEdge(int t,int h,int c) : head(h), tail(t), id(c), pos(-1), next(0) {};
-  OGDF_NEW_DELETE
+	int head, tail, id, pos;
+	BEdge *next;
+	BEdge(int t,int h,int c) : head(h), tail(t), id(c), pos(-1), next(0) { }
+	OGDF_NEW_DELETE
 };
 
 typedef BEdge *bEdge;
 
 
 int cmpId(const bEdge &a, const bEdge &b) {
-  return (a->id < b->id ? -1 : (a->id > b->id ? 1 : 0));
+	return (a->id < b->id ? -1 : (a->id > b->id ? 1 : 0));
 }
+
 
 class CmpTail {
 public:
@@ -96,7 +98,7 @@ void randomHierarchy(Graph &G,
 
 	/** Place nodes **/
 
-	for(int i = 0; i < numberOfNodes; i++) 
+	for(int i = 0; i < numberOfNodes; i++)
 		G.newNode();
 
 	int numberOfLayers=0, totNumber=0, realCount=0;
@@ -108,7 +110,7 @@ void randomHierarchy(Graph &G,
 		vrt[totNumber++] = 0;
 		realCount++;
 		r = double(randomNumber(0,1000)) / 1000.0;
-		if(totNumber == 1 && singleSource || realCount == numberOfNodes || r*r*numberOfNodes < 1)
+		if((totNumber == 1 && singleSource) || realCount == numberOfNodes || r*r*numberOfNodes < 1)
 		{
 			if(longEdges && numberOfLayers)
 				vrt[totNumber++] = 1;
@@ -186,7 +188,7 @@ void randomHierarchy(Graph &G,
 	delete[] leftN;
 	delete[] rightN;
 
-	if(planar) 
+	if(planar)
 		for(act = 0; act < totNumber; act++) {
 			CmpTail cmpTail;
 			edgeIn[act].quicksort(cmpTail);

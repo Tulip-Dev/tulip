@@ -1,42 +1,44 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2524 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-03 09:54:22 +0200 (Tue, 03 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of dominance layout algorithm.
- * 
+ *
  * \author Hoi-Ming Wong
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2009
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
 
 //***
 // Dominance Drawing Method. see "Graph Drawing" by Di Battista et al.
@@ -52,11 +54,12 @@
 #define OGDF_DOMINANCE_LAYOUT_H
 
 
-#include <ogdf/module/LayoutModule.h>
+#include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/ModuleOption.h>
+#include <ogdf/basic/Math.h>
+#include <ogdf/module/LayoutModule.h>
 #include <ogdf/module/UpwardPlanarizerModule.h>
 #include <ogdf/upward/UpwardPlanRep.h>
-#include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/upward/SubgraphUpwardPlanarizer.h>
 
 namespace ogdf {
@@ -68,17 +71,17 @@ public:
 
 	DominanceLayout() {
 		m_grid_dist = 1;
-		// set default module		
-		m_upPlanarizer.set(new SubgraphUpwardPlanarizer());	
-	
-		m_angle = 45.0/180.0*3.1415926535; 
+		// set default module
+		m_upPlanarizer.set(new SubgraphUpwardPlanarizer());
 
-	}	
+		m_angle = 45.0 / 180.0 * Math::pi;
+
+	}
 
 	virtual void call(GraphAttributes &GA);
 
 	void layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig);
-	
+
 	void setUpwardPlanarizer(UpwardPlanarizerModule *upPlanarizer) {
 		m_upPlanarizer.set(upPlanarizer);
 	}
@@ -89,7 +92,7 @@ public:
 
 private:
 
-	double m_angle; //rotate angle to obtain an upward drawing; default is 45°
+	double m_angle; //rotate angle to obtain an upward drawing; default is 45
 
 	NodeArray<edge> firstout;
 	NodeArray<edge> lastout;
@@ -111,12 +114,12 @@ private:
 	NodeArray<int> xCoord;
 	NodeArray<int> yCoord;
 
-	
+
 	//min grid distance
 	int m_grid_dist;
 
 	ModuleOption<UpwardPlanarizerModule> m_upPlanarizer; // upward planarizer
-		
+
 	void labelX(const UpwardPlanRep &UPR, node v, int &count);
 
 	void labelY(const UpwardPlanRep &UPR, node v, int &count);

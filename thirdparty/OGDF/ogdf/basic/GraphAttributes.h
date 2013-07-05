@@ -1,45 +1,46 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2585 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: klein $
+ *   $Date: 2012-07-12 03:46:50 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief Declaration of class GraphAttributes which extends a Graph
  *        by additional attributes.
- * 
+ *
  * \author Carsten Gutwenger
  *         Karsten Klein
  *         Joachim Kupke
  *         Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -205,7 +206,7 @@ public:
 
 	//! Specifies scaling of images.
 	enum ImageStyle {
-		FreeScale = 0, FixScale = 1,
+		FreeScale = 0, FixScale = 1
 	};
 	//! Specifies image alignment.
 	enum ImageAlignment {
@@ -282,7 +283,7 @@ protected:
 	//! Static helper method for mapping brush patterns styles to ogml.
 	static const char * brushPatternToOGML(const GraphAttributes::BrushPattern & brushPattern);
 
-	static void generateIndent(char ** indent, const int & indentSize);
+	//static void generateIndent(char ** indent, const int & indentSize);
 
 	//! Static helper method for exchanging X(HT)ML-tag specific chars.
 	String formatLabel(const String & labelText);
@@ -414,13 +415,11 @@ public:
 	bool directed() {
 		return m_directed;
 	}
-	;
 
 	//! Sets if the graph is directed to \a directed.
 	void directed(bool directed) {
 		m_directed = directed;
 	}
-	;
 
 	//! Returns the template name of node \a v.
 	const String &templateNode(node v) const {
@@ -746,7 +745,7 @@ public:
 	/**
 	 * We hide the internal representation of semantic node types from
 	 * the user to be able to change this later (semantic node type member array).
-	 * We are not allowed to set association classes manually, only by calling 
+	 * We are not allowed to set association classes manually, only by calling
 	 * createAssociationClass().
 	 */
 	bool isAssociationClass(node v) const {
@@ -827,10 +826,10 @@ public:
 	//! Reads the graph and attributes from the XML input stream \a is.
 	bool readXML(Graph &G, istream &is);
 
-	//! Reads the graph from the XML input stream \a is.
+	//! Writes the graph to the XML file \a fileName.
 	void writeXML(const String &fileName, const char* delimiter = "", const char* offset = "") const;
 
-	//! Reads the graph from the XML input stream \a is.
+	//! Writes the graph to XML output stream \a os.
 	virtual void writeXML(ostream &os, const char* delimiter = "", const char* offset = "") const;
 
 	//! Reads a graph in Rudy format from file \a fileName.

@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2552 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
- * \brief Implementation of Spring-Embedder algorithm 
- * 
+ * \brief Implementation of Spring-Embedder algorithm
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -162,7 +163,7 @@ void SpringEmbedderFR::call(GraphAttributes &AG)
 
 		const double dx = offset[i].m_x;
 		const double dy = offset[i].m_y;
-		
+
 		// iterate over all nodes in ith CC
 		ListConstIterator<node> it;
 		for(it = nodes.begin(); it.valid(); ++it)
@@ -182,7 +183,7 @@ bool SpringEmbedderFR::initialize(GraphCopy &G, GraphCopyAttributes &AG)
 {
 	if(G.numberOfNodes() <= 1)
 		return false;  // nothing to do
-  
+
 	m_A = 0;
 
 	// compute a suitable area (xleft,ysmall), (xright,ybig)
@@ -296,12 +297,12 @@ void SpringEmbedderFR::mainStep(GraphCopy &G, GraphCopyAttributes &AG)
 	node u,v;
 	edge e;
 
-	NodeArray<double> xdisp(G,0); 
-	NodeArray<double> ydisp(G,0); 
+	NodeArray<double> xdisp(G,0);
+	NodeArray<double> ydisp(G,0);
 
 	// repulsive forces
-	forall_nodes(v,G) 
-	{ 
+	forall_nodes(v,G)
+	{
 		double xv = AG.x(v);
 		double yv = AG.y(v);
 
@@ -314,7 +315,7 @@ void SpringEmbedderFR::mainStep(GraphCopy &G, GraphCopyAttributes &AG)
 			{
 				ListIterator<node> it;
 				for(it = (*m_A)(i+m,j+n).begin(); it.valid(); ++it)
-				{ 
+				{
 					u = *it;
 
 					if(u == v) continue;
@@ -342,9 +343,9 @@ void SpringEmbedderFR::mainStep(GraphCopy &G, GraphCopyAttributes &AG)
 		double f = (u->degree()+v->degree())/6.0;
 
 		dist /= f;
-		
+
 		double fac = dist / m_k;
-		
+
 		xdisp[v] -= xdist*fac;
 		ydisp[v] -= ydist*fac;
 		xdisp[u] += xdist*fac;
@@ -354,7 +355,7 @@ void SpringEmbedderFR::mainStep(GraphCopy &G, GraphCopyAttributes &AG)
 	// noise
 	if(m_noise)
 	{
-		forall_nodes(v,G) 
+		forall_nodes(v,G)
 		{
 			xdisp[v] *= (double(randomNumber(750,1250))/1000.0);
 			ydisp[v] *= (double(randomNumber(750,1250))/1000.0);
@@ -365,7 +366,7 @@ void SpringEmbedderFR::mainStep(GraphCopy &G, GraphCopyAttributes &AG)
 	// preventions
 
 	forall_nodes(v,G)
-	{ 
+	{
 		double xv = AG.x(v);
 		double yv = AG.y(v);
 
@@ -402,14 +403,14 @@ void SpringEmbedderFR::mainStep(GraphCopy &G, GraphCopyAttributes &AG)
 			j = j0;
 
 		if( (i != i0) || (j != j0) )
-		{ 
+		{
 			OGDF_ASSERT(m_lit[v].valid());
 
 			(*m_A)(i0,j0).moveToFront(m_lit[v], (*m_A)(i,j));
 		}
 	}
 
-	m_tx = m_txNull / mylog2(m_cF); 
+	m_tx = m_txNull / mylog2(m_cF);
 	m_ty = m_tyNull / mylog2(m_cF);
 
 	m_cF++;

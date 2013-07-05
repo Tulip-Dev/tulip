@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of Hierarchy class.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -62,7 +63,7 @@ namespace ogdf {
  */
 class OGDF_EXPORT Hierarchy {
 public:
-	friend class Level;		
+	friend class Level;
 
 	friend class LayerBasedUPRLayout;
 	friend class HierarchyLayoutModule;
@@ -91,12 +92,12 @@ private:
 		result.clear();
 		positions.clear();
 		bool allDummies = true;
-		
+
 		if (r > high() || r < 0)
 			return false;
 
 		Level &lvl = *m_pLevel[r];
-		
+
 		for(int i = 0; i <= lvl.high(); i++) {
 			node v = lvl[i];
 			if (markedNodes[v]) {
@@ -105,7 +106,7 @@ private:
 				if (!isLongEdgeDummy(v))
 					allDummies = false;
 			}
-		}		
+		}
 		positions.quicksort();
 		return allDummies;
 	}
@@ -155,7 +156,7 @@ public:
 		return (m_direction == downward) ? m_lowerAdjNodes[v] :
 		m_upperAdjNodes[v];
 	}
-	
+
 	//! Returns the adjacent nodes of \a v.
 	const Array<node> &adjNodes(node v, TraversingDir dir) const {
 		return (dir == downward) ? m_lowerAdjNodes[v] :
@@ -165,7 +166,7 @@ public:
 	//! Returns the adjacent level of level \a i (according to direction()).
 	const Level &adjLevel(int i) const {
 		return (m_direction == downward) ? *m_pLevel[i-1] : *m_pLevel[i+1];
-	
+
 	}
 
 	bool isLongEdgeDummy(node v) const {
@@ -178,7 +179,7 @@ public:
 	//! Returns the <i>i</i>-th level.
 	Level &operator[](int i) { return *m_pLevel[i]; }
 
-	
+
 	//! Computes the number of crossings between level \a i and \a i+1.
 	int calculateCrossings(int i);
 	//! Computes the total number of crossings.
@@ -194,7 +195,7 @@ public:
 	//! Computes the total number of crossings (for simultaneous drawing).
 	int calculateCrossingsSimDraw(const EdgeArray<unsigned int> *edgeSubGraph);
 
-	
+
 	//! Stores the position of nodes in \a oldPos.
 	void storePos (NodeArray<int> &oldPos);
 	//! Restores the position of nodes from \a newPos.
@@ -218,7 +219,7 @@ public:
 private:
 	void doInit(const NodeArray<int> &rank);
 
-	int transposePart(const Array<node> &adjV, const Array<node> &adjW);	
+	int transposePart(const Array<node> &adjV, const Array<node> &adjW);
 
 	OGDF_MALLOC_NEW_DELETE
 };

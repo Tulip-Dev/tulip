@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of XML parser (class XmlParser)
  * (used for parsing and reading XML files)
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -84,7 +85,7 @@ void XmlParser::createObjectTree(istream &is, bool doCheck)
 	// See als the  workaround for Get2Chip in function getLine()
 
 	m_rLineBuffer = new char[BUFFERLENGTH]; // get2Chip special:
-		                                    // XML Standard: char[256];
+											// XML Standard: char[256];
 	*m_rLineBuffer = '\n';
 	m_lineBuffer = m_rLineBuffer+1;
 
@@ -94,7 +95,7 @@ void XmlParser::createObjectTree(istream &is, bool doCheck)
 
 	// create object tree
 	m_objectTree = parseList(xmlEOF,xmlListEnd,"");
-	
+
 	delete[] m_rLineBuffer;
 }
 
@@ -119,7 +120,7 @@ void XmlParser::initPredefinedKeys()
 	m_hashTable.fastInsert("H",         hPredefKey);
 	m_hashTable.fastInsert("WIDTH",     widthPredefKey);
 	m_hashTable.fastInsert("HEIGHT",    heightPredefKey);
-	
+
 	m_hashTable.fastInsert("NODETYPE",  nodetypePredefKey);
 	m_hashTable.fastInsert("EDGETYPE",  edgetypePredefKey);
 	m_hashTable.fastInsert("TYPE",      typePredefKey);
@@ -137,8 +138,8 @@ void XmlParser::initPredefinedKeys()
 }
 
 
-XmlObject *XmlParser::parseList(XmlObjectType closingKey, 
-								XmlObjectType /* errorKey */, 
+XmlObject *XmlParser::parseList(XmlObjectType closingKey,
+								XmlObjectType /* errorKey */,
 								const char *objectBodyName)
 {
 	XmlObject *firstSon = 0;
@@ -146,7 +147,7 @@ XmlObject *XmlParser::parseList(XmlObjectType closingKey,
 
 	for( ; ; ) {
 		XmlObjectType symbol = getNextSymbol();
-		
+
 		if (symbol == closingKey || symbol == xmlError)
 			return firstSon;
 
@@ -165,8 +166,8 @@ XmlObject *XmlParser::parseList(XmlObjectType closingKey,
 			char* newObjectBodyName = new char[len];
 			m_objectBody.pushBack(newObjectBodyName);
 			ogdf::strcpy(newObjectBodyName,len,m_keyName);
-			
-			// Recursive call for building the tree.			
+
+			// Recursive call for building the tree.
 			object->m_pFirstSon = parseList(xmlListEnd,xmlEOF,newObjectBodyName);
 		}
 
@@ -180,7 +181,7 @@ XmlObject *XmlParser::parseList(XmlObjectType closingKey,
 			char *pChar = new char[len];
 			ogdf::strcpy(pChar,len,m_stringSymbol);
 
-			object = OGDF_NEW XmlObject(hashString(objectBodyName),pChar); 
+			object = OGDF_NEW XmlObject(hashString(objectBodyName),pChar);
 		}
 		else
 		{ // must be a symbol
@@ -196,22 +197,22 @@ XmlObject *XmlParser::parseList(XmlObjectType closingKey,
 			case xmlIntValue:
 				object = OGDF_NEW XmlObject(key,m_intSymbol);
 				break;
-			
+
 			case xmlDoubleValue:
 				object = OGDF_NEW XmlObject(key,m_doubleSymbol);
 				break;
-			
+
 			case xmlStringValue: {
 				size_t len = strlen(m_stringSymbol)+1;
 				char *pChar = new char[len];
 				ogdf::strcpy(pChar,len,m_stringSymbol);
 				object = OGDF_NEW XmlObject(key,pChar); }
 				break;
-			
+
 			case xmlListBegin:
 				setError("unexpected begin of list");
 				break;
-			
+
 			case xmlListEnd:
 				setError("unexpected end of list");
 				return firstSon;
@@ -223,7 +224,7 @@ XmlObject *XmlParser::parseList(XmlObjectType closingKey,
 			case xmlEOF:
 				setError("missing value");
 				return firstSon;
-		
+
 			case xmlError:
 				return firstSon;
 			}
@@ -231,7 +232,7 @@ XmlObject *XmlParser::parseList(XmlObjectType closingKey,
 
 		*pPrev = object;
 		pPrev = &object->m_pBrother;
-		
+
 	}
 	return firstSon;
 }
@@ -267,21 +268,21 @@ XmlParser::~XmlParser()
 bool XmlParser::getLine()
 {
 	do {
-//              Standard XML needs only this	    
+//              Standard XML needs only this
 //    	        if (m_is->eof()) return false;
 //		m_is->getline(m_lineBuffer,255);
 
-// Workaround for Get2Chip. XML-Information may exceed 254 signs per line. 
-// Moreover, XML signs may be longer than 254 signs. Cut information at '>'. 
+// Workaround for Get2Chip. XML-Information may exceed 254 signs per line.
+// Moreover, XML signs may be longer than 254 signs. Cut information at '>'.
 // Workaround starts here.
-		char c; 
-		int count = 0; 
+		char c;
+		int count = 0;
 		while ( ((c = m_is->get() ) != '>') && (count <= (BUFFERLENGTH - 2))){
-		    if (m_is->eof()) return false;
-		    m_lineBuffer[count++] = c;
+			if (m_is->eof()) return false;
+			m_lineBuffer[count++] = c;
 		}
 		if ( (c == '>') && (count <= (BUFFERLENGTH - 2)))
-		    m_lineBuffer[count++] = c;
+			m_lineBuffer[count++] = c;
 		m_lineBuffer[count] = '\0';
 // Workaround stops here.
 
@@ -293,7 +294,7 @@ bool XmlParser::getLine()
 }
 
 /*****************************************************************************
-                         getNextSymbol
+								getNextSymbol
 ******************************************************************************/
 
 
@@ -317,7 +318,7 @@ XmlObjectType XmlParser::getNextSymbol()
 		if (!getLine()) return xmlEOF;
 	}
 
-	
+
 	// identify start of current symbol
 	char *pStart = m_pCurrent;
 
@@ -326,7 +327,7 @@ XmlObjectType XmlParser::getNextSymbol()
 	if (*pStart == '=')
 	{	// attribute value
 		// string or int or double expected
-		
+
 		// again: eat whitespace
 		pStart++;m_pCurrent++;
 		for(; *m_pCurrent && isspace(*m_pCurrent); ++m_pCurrent) ;
@@ -339,23 +340,23 @@ XmlObjectType XmlParser::getNextSymbol()
 
 		bool quotation = (*pStart == '\"' ? 1 : 0);
 		if (quotation)
-		{ 
+		{
 			pStart++;
 			m_pCurrent++;
 		}
 		if (*pStart == '-' || isdigit(*pStart)) // Check if int or double
-		{ 
+		{
 			digit = true;
 			char *pCheck = m_pCurrent;
 			pCheck++;
 			while(isdigit(*pCheck))  ++pCheck;	// int or double
-			if (*pCheck == '.') 
+			if (*pCheck == '.')
 				pCheck++;						// only double
 			else if (quotation && *pCheck != '\"')
 				digit = false;                  // must be string
 			else if (!quotation && !isspace(*pCheck) && *pCheck != '>')
 				digit = false;                  // must be string
-			if (digit) 
+			if (digit)
 			{
 				while(isdigit(*pCheck))  ++pCheck;
 				if (quotation && *pCheck != '\"')
@@ -367,25 +368,21 @@ XmlObjectType XmlParser::getNextSymbol()
 
 //		if (!isdigit(*pStart) &&  (*pStart != '-')) { // string
 		if (!digit) // string
-		{   
+		{
 			m_stringSymbol = m_pCurrent;
 			if (quotation){
-				for(; *m_pCurrent != 0 && 
-					  *m_pCurrent != '\"'; ++m_pCurrent)
-					if (*m_pCurrent == '\\') 
-					    ++m_pCurrent; // No quotation mark found yet. Drop the line.
+				for(; *m_pCurrent != 0 && *m_pCurrent != '\"'; ++m_pCurrent)
+					if (*m_pCurrent == '\\')
+						++m_pCurrent; // No quotation mark found yet. Drop the line.
 			}
-			else { 
-				for(; *m_pCurrent != 0 && 
-					  !isspace(*m_pCurrent) && 
-					  *m_pCurrent != '>'; ++m_pCurrent)
+			else {
+				for(; *m_pCurrent != 0 && !isspace(*m_pCurrent) && *m_pCurrent != '>'; ++m_pCurrent)
 					if (*m_pCurrent == '\\') ++m_pCurrent;
 			}
 			if (quotation && *m_pCurrent == 0) {
 				m_longString = (pStart);
 				while(getLine()) {
-					for(m_pCurrent = m_lineBuffer; 
-					    *m_pCurrent != 0 && *m_pCurrent != '\"'; ++m_pCurrent)
+					for(m_pCurrent = m_lineBuffer; *m_pCurrent != 0 && *m_pCurrent != '\"'; ++m_pCurrent)
 						if (*m_pCurrent == '\\') ++m_pCurrent;
 					if (*m_pCurrent == 0)
 						m_longString += m_lineBuffer;
@@ -398,7 +395,7 @@ XmlObjectType XmlParser::getNextSymbol()
 				}
 				m_stringSymbol = m_longString.cstr();
 
-			} 
+			}
 			else {
 				m_cStore = *(m_pStore = m_pCurrent);
 				if (quotation)
@@ -409,25 +406,23 @@ XmlObjectType XmlParser::getNextSymbol()
 
 			return xmlStringValue;
 		}
-//		else if (*pStart == '-' || isdigit(*pStart)) 
+//		else if (*pStart == '-' || isdigit(*pStart))
 		else  // int or double
-		{ 
+		{
 			m_pCurrent++;
 			while(isdigit(*m_pCurrent)) ++m_pCurrent;
 
 			if (*m_pCurrent == '.')  // double
-			{ 
+			{
 				// check to be done
 
 				sscanf(pStart,"%lf",&m_doubleSymbol);
 				m_pCurrent++;
 				while (isdigit(*m_pCurrent)) ++m_pCurrent;
 				if (quotation){
-					for(; *m_pCurrent != 0 && 
-						  *m_pCurrent != '\"' && 
-						  isdigit(*m_pCurrent); ++m_pCurrent);
+					for(; *m_pCurrent != 0 && *m_pCurrent != '\"' && isdigit(*m_pCurrent); ++m_pCurrent) ;
 
-					if (*m_pCurrent == '\"') 
+					if (*m_pCurrent == '\"')
 						m_pCurrent++;
 					else
 					{
@@ -437,17 +432,17 @@ XmlObjectType XmlParser::getNextSymbol()
 				}
 				return xmlDoubleValue;
 
-			} 
+			}
 
 			else // int
-			{ 
+			{
 				if (isalpha(*m_pCurrent)) {
 					setError("malformed number");
 					return xmlError;
 				}
 				if (quotation){
 					for(; *m_pCurrent != 0 && *m_pCurrent != '\"'; ++m_pCurrent);
-					if (*m_pCurrent == '\"') 
+					if (*m_pCurrent == '\"')
 						m_pCurrent++;
 					else{
 						setError("malformed number");
@@ -457,7 +452,7 @@ XmlObjectType XmlParser::getNextSymbol()
 				sscanf(pStart,"%d",&m_intSymbol);
 				return xmlIntValue;
 			}
-			
+
 		}
 	}
 
@@ -477,14 +472,14 @@ XmlObjectType XmlParser::getNextSymbol()
 	}
 	else if (*pStart == '/') {
 		m_pCurrent++;
-		for (; *m_pCurrent && *m_pCurrent == '>'; ++m_pCurrent);	
+		for (; *m_pCurrent && *m_pCurrent == '>'; ++m_pCurrent);
 		m_cStore = *(m_pStore = m_pCurrent);
 		return xmlListEnd;
 
-	} 
+	}
 
 	else	// Invalid clause: if(isalpha(*pStart)). May contain numbers
-	{ 
+	{
 		// Tag name, Attribute Name (both are said to be keys)
 		// or body name (element)
 
@@ -499,7 +494,7 @@ XmlObjectType XmlParser::getNextSymbol()
 		}
 		if (m_eoTag)  // its the body of an element
 		{
-			// Do not ignore whitespace, quotation marks etc. 
+			// Do not ignore whitespace, quotation marks etc.
 			// They belong to the element.
 			// Only search for the '<' of the next tag.
 			// The element is considered as string.
@@ -510,12 +505,11 @@ XmlObjectType XmlParser::getNextSymbol()
 			}
 			// again: identify start of current symbol
 			//char *pStart = m_pCurrent;
-			
+
 
 			m_stringSymbol = m_pCurrent;
-			
-			while(*m_pCurrent != 0 && 
-				  *m_pCurrent != '<' ) 
+
+			while(*m_pCurrent != 0 && *m_pCurrent != '<' )
 				++m_pCurrent;
 			m_cStore = *(m_pStore = m_pCurrent);
 			*m_pCurrent = 0;
@@ -524,12 +518,13 @@ XmlObjectType XmlParser::getNextSymbol()
 		}
 		else  // it is a key
 		{
-			while(*m_pCurrent != 0 && 
-				  *m_pCurrent != '=' && 
-				  *m_pCurrent != '>' && 
-				  *m_pCurrent != '/' && 
-				  *m_pCurrent != '<' && 
-				  !isspace(*m_pCurrent)) 
+			while(*m_pCurrent != 0 &&
+				*m_pCurrent != '=' &&
+				*m_pCurrent != '>' &&
+				*m_pCurrent != '/' &&
+				*m_pCurrent != '<' &&
+				!isspace(*m_pCurrent)
+			)
 				++m_pCurrent;
 			m_cStore = *(m_pStore = m_pCurrent);
 			*m_pCurrent = 0;
@@ -543,8 +538,8 @@ XmlObjectType XmlParser::getNextSymbol()
 			m_keySymbol = hashString(pStart);
 			return xmlKey;
 		}
-	} 
-	
+	}
+
 	//
 	//setError("unknown symbol");
 
@@ -563,11 +558,11 @@ XmlKey XmlParser::hashString(const String &str)
 }
 
 /*****************************************************************************
-                             getNodeIdRange
+								getNodeIdRange
 ******************************************************************************/
 
 
-XmlObject *XmlParser::getNodeIdRange(int &minId,int &maxId, 
+XmlObject *XmlParser::getNodeIdRange(int &minId,int &maxId,
 										 int &nodetypeCount,
 										 XmlObject *graphObject)
 
@@ -580,14 +575,14 @@ XmlObject *XmlParser::getNodeIdRange(int &minId,int &maxId,
 
 	for(; scanObject; scanObject = scanObject->m_pBrother)
 		if (id(scanObject) == graphPredefKey) break;
-	
+
 	if (!scanObject || id(scanObject) != graphPredefKey)
 	{
 		scanObject = graphObject;
 		for(; scanObject; scanObject = scanObject->m_pBrother)
 		{
 			graphObject = getNodeIdRange(minId,maxId,nodetypeCount,scanObject->m_pFirstSon);
-			if (graphObject && id(graphObject) == graphPredefKey) 
+			if (graphObject && id(graphObject) == graphPredefKey)
 				return graphObject;
 		}
 	}
@@ -596,14 +591,14 @@ XmlObject *XmlParser::getNodeIdRange(int &minId,int &maxId,
 
 	XmlObject *son = scanObject->m_pFirstSon;
 	for(; son; son = son->m_pBrother) {
-		if (id(son) == nodePredefKey && son->m_valueType == xmlListBegin) 
+		if (id(son) == nodePredefKey && son->m_valueType == xmlListBegin)
 			maxId++;
-		else if (id(son) == nodetypePredefKey && son->m_valueType == xmlListBegin) 
+		else if (id(son) == nodetypePredefKey && son->m_valueType == xmlListBegin)
 			nodetypeCount++;
 	}
 
 	if (maxId >= 0)
-		minId = 0; 
+		minId = 0;
 
 	return scanObject;
 }
@@ -612,19 +607,19 @@ XmlObject *XmlParser::getNodeIdRange(int &minId,int &maxId,
 
 
 /*****************************************************************************
-                             makeIdMap
+									makeIdMap
 ******************************************************************************/
 
 
-bool XmlParser::makeIdMap(int maxId,
-						  Array<char*> & idMap,
-						  int nodetypeCount,
-						  Array<char*> & typeName,
-						  Array<double> & typeWidth,
-						  Array<double> & typeHeight,
-						  XmlObject *graphObject)
+bool XmlParser::makeIdMap(
+	int maxId,
+	Array<char*> & idMap,
+	int nodetypeCount,
+	Array<char*> & typeName,
+	Array<double> & typeWidth,
+	Array<double> & typeHeight,
+	XmlObject *graphObject)
 {
-
 	int idCount = 0;
 	int typeCount = 0;
 	for(; graphObject; graphObject = graphObject->m_pBrother)
@@ -637,7 +632,7 @@ bool XmlParser::makeIdMap(int maxId,
 		if (id(son) == nodePredefKey && son->m_valueType == xmlListBegin) {
 			XmlObject *nodeSon = son->m_pFirstSon;
 			for(; nodeSon; nodeSon = nodeSon->m_pBrother)
-				if (id(nodeSon) == namePredefKey && nodeSon->m_valueType == xmlStringValue){ 
+				if (id(nodeSon) == namePredefKey && nodeSon->m_valueType == xmlStringValue){
 					if (idCount >= maxId+1)
 						return 0;
 					size_t len = strlen(nodeSon->m_stringValue)+1;
@@ -649,7 +644,7 @@ bool XmlParser::makeIdMap(int maxId,
 			XmlObject *nodeSon = son->m_pFirstSon;
 			if (typeCount <= nodetypeCount){
 				for(; nodeSon; nodeSon = nodeSon->m_pBrother) {
-					if (id(nodeSon) == namePredefKey && nodeSon->m_valueType == xmlStringValue){ 
+					if (id(nodeSon) == namePredefKey && nodeSon->m_valueType == xmlStringValue){
 						size_t len = strlen(nodeSon->m_stringValue)+1;
 						typeName[typeCount] = new char[len];
 						ogdf::strcpy(typeName[typeCount],len,nodeSon->m_stringValue);
@@ -664,7 +659,7 @@ bool XmlParser::makeIdMap(int maxId,
 						if (nodeSon->m_valueType == xmlIntValue)
 							typeHeight[typeCount] = (int) nodeSon->m_intValue;
 						else if	(nodeSon->m_valueType == xmlDoubleValue)
-							typeHeight[typeCount] = nodeSon->m_doubleValue;				
+							typeHeight[typeCount] = nodeSon->m_doubleValue;
 					}
 				}
 				typeCount++;
@@ -680,7 +675,7 @@ bool XmlParser::makeIdMap(int maxId,
 
 
 /*****************************************************************************
-                             read
+										read
 ******************************************************************************/
 
 
@@ -721,7 +716,7 @@ bool XmlParser::read(Graph &G)
 			int vId = idCount++;
 
 			// create new node if necessary and assign attributes
-			if (mapToNode[vId] == 0) 
+			if (mapToNode[vId] == 0)
 				mapToNode[vId] = G.newNode();
 			break;
 		}
@@ -780,7 +775,7 @@ bool XmlParser::read(Graph &G)
 
 
 /*****************************************************************************
-                             read
+									read
 ******************************************************************************/
 
 
@@ -818,7 +813,7 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 	for(; son; son = son->m_pBrother) {
 
 		switch(id(son)) {
-		case nodePredefKey: 
+		case nodePredefKey:
 		{
 			if (son->m_valueType != xmlListBegin) break;
 
@@ -829,22 +824,22 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 			// read all relevant attributes
 
 			XmlObject *graphicsObject = son->m_pFirstSon;
-			for(; graphicsObject; graphicsObject = graphicsObject->m_pBrother) 
+			for(; graphicsObject; graphicsObject = graphicsObject->m_pBrother)
 			{
-				switch(id(graphicsObject)) 
+				switch(id(graphicsObject))
 				{
 					case namePredefKey:
 						if (graphicsObject->m_valueType == xmlStringValue)
 							label = graphicsObject->m_stringValue;
 						break;
 					case xPredefKey:
-						if(graphicsObject->m_valueType == xmlDoubleValue) 
+						if(graphicsObject->m_valueType == xmlDoubleValue)
 							x = graphicsObject->m_doubleValue;
 						else if (graphicsObject->m_valueType == xmlIntValue)
 							x = (int) graphicsObject->m_intValue;
 						break;
 					case yPredefKey:
-						if(graphicsObject->m_valueType == xmlDoubleValue) 
+						if(graphicsObject->m_valueType == xmlDoubleValue)
 							y = graphicsObject->m_doubleValue;
 						else if (graphicsObject->m_valueType == xmlIntValue)
 							y = (int) graphicsObject->m_intValue;
@@ -852,16 +847,16 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 					case wPredefKey:
 						if (!typeDefined)
 						{
-							if(graphicsObject->m_valueType == xmlDoubleValue) 
+							if(graphicsObject->m_valueType == xmlDoubleValue)
 								w = graphicsObject->m_doubleValue;
 							else if (graphicsObject->m_valueType == xmlIntValue)
 								w = (int) graphicsObject->m_intValue;
 						}
-						break;			
+						break;
 					case hPredefKey:
 						if (!typeDefined)
 						{
-							if(graphicsObject->m_valueType == xmlDoubleValue) 
+							if(graphicsObject->m_valueType == xmlDoubleValue)
 								h = graphicsObject->m_doubleValue;
 							else if (graphicsObject->m_valueType == xmlIntValue)
 								h = (int) graphicsObject->m_intValue;
@@ -870,7 +865,7 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 					case widthPredefKey:
 						if (!typeDefined)
 						{
-							if(graphicsObject->m_valueType == xmlDoubleValue) 
+							if(graphicsObject->m_valueType == xmlDoubleValue)
 								w = graphicsObject->m_doubleValue;
 							else if (graphicsObject->m_valueType == xmlIntValue)
 								w = (int) graphicsObject->m_intValue;
@@ -879,18 +874,18 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 					case heightPredefKey:
 						if (!typeDefined)
 						{
-							if(graphicsObject->m_valueType == xmlDoubleValue) 
+							if(graphicsObject->m_valueType == xmlDoubleValue)
 								h = graphicsObject->m_doubleValue;
 							else if (graphicsObject->m_valueType == xmlIntValue)
 								h = (int) graphicsObject->m_intValue;
 						}
 						break;
 					case typePredefKey:
-						if(graphicsObject->m_valueType == xmlStringValue) 
+						if(graphicsObject->m_valueType == xmlStringValue)
 						{
 							int i = 0;
 							for (;i <= nodetypeCount && strcmp(typeName[i],graphicsObject->m_stringValue);i++);
-							if (i <= nodetypeCount) 
+							if (i <= nodetypeCount)
 							{
 								w = typeWidth[i];
 								h = typeHeight[i];
@@ -900,24 +895,24 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 						break;
 
 
-					case positionPredefKey: 
+					case positionPredefKey:
 					{
 						if (graphicsObject->m_valueType != xmlListBegin) break;
 
 
 						XmlObject *graphicsObjectElement = graphicsObject->m_pFirstSon;
-						for(; graphicsObjectElement; graphicsObjectElement = graphicsObjectElement->m_pBrother) 
+						for(; graphicsObjectElement; graphicsObjectElement = graphicsObjectElement->m_pBrother)
 						{
-							switch(id(graphicsObjectElement)) 
+							switch(id(graphicsObjectElement))
 							{
 								case xPredefKey:
-									if(graphicsObjectElement->m_valueType == xmlDoubleValue) 
+									if(graphicsObjectElement->m_valueType == xmlDoubleValue)
 										x = graphicsObjectElement->m_doubleValue;
 									else if (graphicsObjectElement->m_valueType == xmlIntValue)
 										x = (int) graphicsObjectElement->m_intValue;
 									break;
 								case yPredefKey:
-									if(graphicsObjectElement->m_valueType == xmlDoubleValue) 
+									if(graphicsObjectElement->m_valueType == xmlDoubleValue)
 										y = graphicsObjectElement->m_doubleValue;
 									else if (graphicsObjectElement->m_valueType == xmlIntValue)
 										y = (int) graphicsObjectElement->m_intValue;
@@ -925,30 +920,30 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 							}// switch(id(graphicsObjectElement))
 						}// for(; graphicsObjectElement; graphicsObjectElement = graphicsObjectElement->m_pBrother)
 						break;
-					}// case positionPredefKey: 
-					case sizePredefKey: 
+					}// case positionPredefKey:
+					case sizePredefKey:
 					{
 						if (graphicsObject->m_valueType != xmlListBegin) break;
 
 
 						XmlObject *graphicsObjectElement = graphicsObject->m_pFirstSon;
-						for(; graphicsObjectElement; graphicsObjectElement = graphicsObjectElement->m_pBrother) 
+						for(; graphicsObjectElement; graphicsObjectElement = graphicsObjectElement->m_pBrother)
 						{
-							switch(id(graphicsObjectElement)) 
+							switch(id(graphicsObjectElement))
 							{
 								case wPredefKey:
 									if (!typeDefined)
 									{
-										if(graphicsObjectElement->m_valueType == xmlDoubleValue) 
+										if(graphicsObjectElement->m_valueType == xmlDoubleValue)
 											w = graphicsObjectElement->m_doubleValue;
 										else if (graphicsObjectElement->m_valueType == xmlIntValue)
 											w = (int) graphicsObjectElement->m_intValue;
 									}
-									break;			
+									break;
 								case hPredefKey:
 									if (!typeDefined)
 									{
-										if(graphicsObjectElement->m_valueType == xmlDoubleValue) 
+										if(graphicsObjectElement->m_valueType == xmlDoubleValue)
 											h = graphicsObjectElement->m_doubleValue;
 										else if (graphicsObjectElement->m_valueType == xmlIntValue)
 											h = (int) graphicsObjectElement->m_intValue;
@@ -957,7 +952,7 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 								case widthPredefKey:
 									if (!typeDefined)
 									{
-										if(graphicsObjectElement->m_valueType == xmlDoubleValue) 
+										if(graphicsObjectElement->m_valueType == xmlDoubleValue)
 											w = graphicsObjectElement->m_doubleValue;
 										else if (graphicsObjectElement->m_valueType == xmlIntValue)
 											w = (int) graphicsObjectElement->m_intValue;
@@ -966,7 +961,7 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 								case heightPredefKey:
 									if (!typeDefined)
 									{
-										if(graphicsObjectElement->m_valueType == xmlDoubleValue) 
+										if(graphicsObjectElement->m_valueType == xmlDoubleValue)
 											h = graphicsObjectElement->m_doubleValue;
 										else if (graphicsObjectElement->m_valueType == xmlIntValue)
 											h = (int) graphicsObjectElement->m_intValue;
@@ -976,7 +971,7 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 						}// for(; graphicsObjectElement; graphicsObjectElement = graphicsObjectElement->m_pBrother)
 
 						break;
-					}// case sizePredefKey: 
+					}// case sizePredefKey:
 
 
 
@@ -1011,10 +1006,10 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 			bool backward = false;
 			// read all relevant attributes
 			XmlObject *graphicsObject = son->m_pFirstSon;
-			for(; graphicsObject; graphicsObject = graphicsObject->m_pBrother) 
+			for(; graphicsObject; graphicsObject = graphicsObject->m_pBrother)
 			{
 				int i = 0;
-				switch(id(graphicsObject)) 
+				switch(id(graphicsObject))
 				{
 					case namePredefKey:
 						if (graphicsObject->m_valueType == xmlStringValue)
@@ -1037,34 +1032,34 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 						if (graphicsObject->m_valueType != xmlStringValue) break;
 							if (!strcmp("BACKWARD",graphicsObject->m_stringValue))
 								backward = true;
-					case pathPredefKey: 
+					case pathPredefKey:
 					{
 						if (graphicsObject->m_valueType != xmlListBegin) break;
 						DPoint dp;
 
 						XmlObject *graphicsObjectElement = graphicsObject->m_pFirstSon;
-						for(; graphicsObjectElement; graphicsObjectElement = graphicsObjectElement->m_pBrother) 
+						for(; graphicsObjectElement; graphicsObjectElement = graphicsObjectElement->m_pBrother)
 						{
-							switch(id(graphicsObjectElement)) 
+							switch(id(graphicsObjectElement))
 							{
-								case positionPredefKey: 
+								case positionPredefKey:
 								{
 									if (graphicsObjectElement->m_valueType != xmlListBegin) break;
 									DPoint dp;
 
 									XmlObject *element = graphicsObjectElement->m_pFirstSon;
-									for(; element; element = element->m_pBrother) 
+									for(; element; element = element->m_pBrother)
 									{
-										switch(id(element)) 
+										switch(id(element))
 										{
 											case xPredefKey:
-												if(element->m_valueType == xmlDoubleValue) 
+												if(element->m_valueType == xmlDoubleValue)
 													dp.m_x = element->m_doubleValue;
 												else if (element->m_valueType == xmlIntValue)
 													dp.m_x = (int) element->m_intValue;
 												break;
 											case yPredefKey:
-												if(element->m_valueType == xmlDoubleValue) 
+												if(element->m_valueType == xmlDoubleValue)
 													dp.m_y = element->m_doubleValue;
 												else if (element->m_valueType == xmlIntValue)
 													dp.m_y = (int) element->m_intValue;
@@ -1073,11 +1068,11 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 									}// for(; element; element = element->m_pBrother)
 									bends.pushBack(dp);
 									break;
-								}// case positionPredefKey: 
+								}// case positionPredefKey:
 							}//switch(id(graphicsObjectElement))
-						}//for(; graphicsObjectElement; graphicsObjectElement = graphicsObjectElement->m_pBrother) 
+						}//for(; graphicsObjectElement; graphicsObjectElement = graphicsObjectElement->m_pBrother)
 						break;
-					}// case positionPredefKey: 
+					}// case positionPredefKey:
 /*
 					case graphicsPredefKey:
 						if (graphicsObject->m_valueType != xmlListBegin) break;
@@ -1090,18 +1085,18 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 						}
 */
 				}// switch(id(graphicsObject))
-			}// for(; graphicsObject; graphicsObject = graphicsObject->m_pBrother) 
+			}// for(; graphicsObject; graphicsObject = graphicsObject->m_pBrother)
 
 			// check if everything required is defined correctly
-			if (sourceId == notDefined || targetId == notDefined) 
+			if (sourceId == notDefined || targetId == notDefined)
 			{
 				setError("source or target id not defined");
 				closeLabels(idMap,typeName);
 				return false;
 
-			} 
+			}
 			else if (sourceId < minId || maxId < sourceId ||
-				targetId < minId || maxId < targetId) 
+				targetId < minId || maxId < targetId)
 			{
 				setError("source or target id out of range");
 				closeLabels(idMap,typeName);
@@ -1133,15 +1128,13 @@ bool XmlParser::read(Graph &G, GraphAttributes &AG)
 void XmlParser::closeLabels(Array<char*> idMap,	Array<char*>  typeName)
 {
 	int i;
-    for (i = idMap.low(); i <= idMap.high();i++)
+	for (i = idMap.low(); i <= idMap.high();i++)
 		if (idMap[i])
-			delete[] idMap[i];		    
-    for (i = typeName.low(); i <= typeName.high();i++)
+			delete[] idMap[i];
+	for (i = typeName.low(); i <= typeName.high();i++)
 		if (typeName[i])
-			delete[] typeName[i];		    
+			delete[] typeName[i];
 }
-
-
 
 
 void XmlParser::readLineAttribute(XmlObject *object, DPolyline &dpl)

@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class Planarity
- * 
+ *
  * \author Rene Weiskircher
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -48,7 +49,8 @@ namespace ogdf {
 		delete m_edgeNums;
 		delete m_crossingMatrix;
 	}
-	
+
+
 	// intializes number of edges and allocates memory for  crossingMatrix
 	Planarity::Planarity(GraphAttributes &AG):
 	EnergyFunction("Planarity",AG)
@@ -65,6 +67,7 @@ namespace ogdf {
 		e_num --;
 		m_crossingMatrix = new Array2D<bool> (1,e_num,1,e_num);
 	}
+
 
 	// computes energy of layout, stores it and sets the crossingMatrix
 	void Planarity::computeEnergy()
@@ -88,6 +91,7 @@ namespace ogdf {
 		m_energy = energySum;
 	}
 
+
 	// tests if two edges cross
 	bool Planarity::intersect(const edge e1, const edge e2) const
 	{
@@ -98,21 +102,25 @@ namespace ogdf {
 
 		bool cross = false;
 		if(v1s != v2s && v1s != v2t && v1t != v2s && v1t != v2t)
-			cross = lowLevelIntersect(currentPos(v1s),currentPos(v1t),
-									  currentPos(v2s),currentPos(v2t));
+			cross = lowLevelIntersect(currentPos(v1s),currentPos(v1t), currentPos(v2s),currentPos(v2t));
 		return cross;
 	}
 
+
 	// tests if two lines given by four points cross
-	bool Planarity::lowLevelIntersect(const DPoint &e1s, const DPoint &e1t,
-						   const DPoint &e2s, const DPoint &e2t) const
+	bool Planarity::lowLevelIntersect(
+		const DPoint &e1s,
+		const DPoint &e1t,
+		const DPoint &e2s,
+		const DPoint &e2t) const
 	{
 		DPoint s1(e1s),t1(e1t),s2(e2s),t2(e2t);
 		DLine l1(s1,t1), l2(s2,t2);
 		DPoint dummy;
 		return l1.intersection(l2,dummy);
 	}
-	
+
+
 	// computes the energy if the node returned by testNode() is moved
 	// to position testPos().
 	void Planarity::compCandEnergy()
@@ -154,6 +162,7 @@ namespace ogdf {
 		}
 	}
 
+
 	// this functions sets the crossingMatrix according to candidateCrossings
 	void Planarity::internalCandidateTaken() {
 		ListIterator<ChangedCrossing> it;
@@ -162,6 +171,7 @@ namespace ogdf {
 			(*m_crossingMatrix)(cc.edgeNum1,cc.edgeNum2) = cc.cross;
 		}
 	}
+
 
 #ifdef OGDF_DEBUG
 void Planarity::printInternalData() const {
@@ -181,7 +191,7 @@ void Planarity::printInternalData() const {
 			cout << " (" << cc.edgeNum1 << "," << cc.edgeNum2 << ")" << cc.cross;
 		}
 	}
-
 }
 #endif
+
 }

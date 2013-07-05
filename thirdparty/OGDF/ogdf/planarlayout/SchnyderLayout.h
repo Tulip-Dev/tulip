@@ -1,21 +1,22 @@
 /*
- * $Revision: 2303 $
+ * $Revision: 2566 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 09:41:00 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-07 23:10:08 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief Declaration of the Schnyder Layout Algorithm (SchnyderLayout)
  *        algorithm.
  *
- * \author Till Schaefer
+ * \author Till Sch&auml;fer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -68,7 +69,7 @@ namespace ogdf {
  * In the third step, the actual coordinates are computed.
  */
 class OGDF_EXPORT SchnyderLayout : public PlanarGridLayoutModule {
-	
+
 public:
 	SchnyderLayout();
 
@@ -79,17 +80,32 @@ protected:
 private:
 	void contract(Graph& G, node a, node b, node c, List<node>& L);
 
-	void realizer(GraphCopy& G, const List<node>& L, node a, node b, node c,
-				  EdgeArray<int>& rValues, GraphCopy& T);
+	void realizer(
+		GraphCopy& G,
+		const List<node>& L,
+		node a,
+		node b,
+		node c,
+		EdgeArray<int>& rValues,
+		GraphCopy& T);
 
-	void subtreeSizes(EdgeArray<int>& rValues, int i, node r, 
-					  NodeArray<int>& size);
+	void subtreeSizes(
+		EdgeArray<int>& rValues,
+		int i,
+		node r,
+		NodeArray<int>& size);
 
-	void prefixSum(EdgeArray<int>& rValues, int i, node r, 
-				   const NodeArray<int>& val, NodeArray<int>& sum);
+	void prefixSum(
+		EdgeArray<int>& rValues,
+		int i,
+		node r,
+		const NodeArray<int>& val,
+		NodeArray<int>& sum);
 
-	void schnyderEmbedding(GraphCopy& GC, GridLayout &gridLayout, 
-						   adjEntry adjExternal);
+	void schnyderEmbedding(
+		GraphCopy& GC,
+		GridLayout &gridLayout,
+		adjEntry adjExternal);
 };
 
 

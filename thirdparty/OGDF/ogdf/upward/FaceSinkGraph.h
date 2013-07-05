@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class FaceSinkGraph
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -98,7 +99,7 @@ public:
 	}
 
 
-	
+
 
 	//! returns the list of faces f in E such that there exists an upward-planar
 	//! drawing realizing E with f as external face
@@ -131,7 +132,7 @@ public:
 		SList<node> &augmentedNodes,  // list of augmented nodes
 		SList<edge> &augmentedEdges); // list of augmented edges
 
-	//! augments G to an st-planar graph 
+	//! augments G to an st-planar graph
 	/** (introduces only one new node as super sink into G)
 	 */
 	void stAugmentation(
@@ -144,8 +145,8 @@ public:
 	// the ext. face muss be set
 	void sinkSwitches(FaceArray< List<adjEntry> > &faceSwitches);
 
-	
-	
+
+
 private:
 	//! constructs face-sink graph
 	void doInit();
@@ -158,7 +159,7 @@ private:
 		// number of internal vertices of G in current tree
 		int &nInternalVertices);
 
-	//! builds list of possible external faces 
+	//! builds list of possible external faces
 	/** all faces in tree T containing
 	 * the single source s) by a dfs traversal of T
 	 */
@@ -182,7 +183,7 @@ private:
 		Graph &G,                     // original graph (not const)
 		SList<edge> &augmentedEdges); // list of augmented edges
 
-	
+
 	//! associated embedding of graph G
 	const ConstCombinatorialEmbedding *m_pE;
 	node m_source; //!< the single source
@@ -196,7 +197,7 @@ private:
 	//! traverse the face sink tree and compute the sink witches of each internal faces
 	void dfsFST(node v, //current node
 		node parent, //parent of v
-		FaceArray< List<adjEntry> > &faceSwitches, 
+		FaceArray< List<adjEntry> > &faceSwitches,
 		NodeArray<bool> &visited);
 		*/
 
@@ -206,11 +207,11 @@ private:
 	//! a node in tree T is returned as representative
 	node checkForest();
 
-	
+
 	//! return a adjEntry of node v which right face is f. Be Carefully! The adjEntry is not always unique.
 	adjEntry getAdjEntry(node v, face f);
 
-	
+
 }; // class FaceSinkGraph
 
 
