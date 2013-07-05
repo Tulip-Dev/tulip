@@ -17,12 +17,6 @@
  *
  */
 
-// +-------------------------------------------------------------------------+
-// | Tulip Python Bindings                                                   |
-// | inspired from bindings by the Booggie project development team          |
-// | (http://booggie.org/)                                                   |
-// +-------------------------------------------------------------------------+
-
 namespace tlp {
 
 class PropertyAlgorithm : tlp::Algorithm {
@@ -41,6 +35,19 @@ class BooleanAlgorithm : tlp::PropertyAlgorithm {
 %TypeHeaderCode
 #include <tulip/PropertyAlgorithm.h>
 %End
+
+%Docstring
+Bases: :class:`tlp.Algorithm`
+
+This class is the base interface for selection plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: result
+
+    The result of the algorithm must be stored in this :class:`tlp.BooleanProperty`.
+%End
+
 public:
     tlp::BooleanProperty *result;
     virtual std::string category() const;
@@ -53,6 +60,19 @@ class ColorAlgorithm : tlp::PropertyAlgorithm {
 %TypeHeaderCode
 #include <tulip/PropertyAlgorithm.h>
 %End
+
+%Docstring
+Bases: :class:`tlp.Algorithm`
+
+This class is the base interface for color plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: result
+
+    The result of the algorithm must be stored in this :class:`tlp.ColorProperty`.
+%End
+
 public:
     tlp::ColorProperty *result;
     virtual std::string category() const;
@@ -64,6 +84,19 @@ class DoubleAlgorithm : tlp::PropertyAlgorithm {
 %TypeHeaderCode
 #include <tulip/PropertyAlgorithm.h>
 %End
+
+%Docstring
+Bases: :class:`tlp.Algorithm`
+
+This class is the base interface for metric plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: result
+
+    The result of the algorithm must be stored in this :class:`tlp.DoubleProperty`.
+%End
+
 public:
     tlp::DoubleProperty *result;
     virtual std::string category() const;
@@ -75,6 +108,19 @@ class IntegerAlgorithm : tlp::PropertyAlgorithm {
 %TypeHeaderCode
 #include <tulip/PropertyAlgorithm.h>
 %End
+
+%Docstring
+Bases: :class:`tlp.IntegerAlgorithm`
+
+This class is the base interface for integer plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: result
+
+    The result of the algorithm must be stored in this :class:`tlp.IntegerProperty`.
+%End
+
 public:
     tlp::IntegerProperty *result;
     virtual std::string category() const;
@@ -86,6 +132,19 @@ class LayoutAlgorithm : tlp::PropertyAlgorithm {
 %TypeHeaderCode
 #include <tulip/PropertyAlgorithm.h>
 %End
+
+%Docstring
+Bases: :class:`tlp.Algorithm`
+
+This class is the base interface for layout plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: result
+
+    The result of the algorithm must be stored in this :class:`tlp.LayoutProperty`.
+%End
+
 public:
     tlp::LayoutProperty *result;
     virtual std::string category() const;
@@ -97,6 +156,19 @@ class SizeAlgorithm : tlp::PropertyAlgorithm {
 %TypeHeaderCode
 #include <tulip/PropertyAlgorithm.h>
 %End
+
+%Docstring
+Bases: :class:`tlp.Algorithm`
+
+This class is the base interface for size plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: result
+
+The result of the algorithm must be stored in this :class:`tlp.SizeProperty`.
+%End
+
 public:
     tlp::SizeProperty *result;
     virtual std::string category() const;
@@ -108,6 +180,19 @@ class StringAlgorithm : tlp::PropertyAlgorithm {
 %TypeHeaderCode
 #include <tulip/PropertyAlgorithm.h>
 %End
+
+%Docstring
+Bases: :class:`tlp.Algorithm`
+
+This class is the base interface for string plugins.
+
+.. rubric:: class attributes
+
+.. py:attribute:: result
+
+    The result of the algorithm must be stored in this :class:`tlp.StringProperty`.
+%End
+
 public:
     tlp::StringProperty *result;
     virtual std::string category() const;

@@ -22,6 +22,8 @@ when rendering the graph. Below is an exhaustive list of these attributes :
     * edge extremities shapes
     * edge extremities sizes
 
+.. _graph-layout:
+
 Graph layout
 ------------
 
@@ -41,6 +43,8 @@ The sample code below shows how to set a random layout from Python::
         y = random.random() * size
         viewLayout[n] = tlp.Coord(x, y, 0)
 
+.. _nodes-rotations:
+
 Rotations of the nodes
 -----------------------
 
@@ -54,6 +58,8 @@ The sample code below rotates of 90 degrees the nodes whose degree is greater th
     for n in graph.getNodes():
         if graph.deg(n) > 10:
             viewRotation[n] = 90
+
+.. _graph-selection:
 
 Selection
 ----------
@@ -76,11 +82,13 @@ The sample code below select nodes whose degree is greater than 3 and the edges 
         if viewSelection[graph.source(e)] and viewSelection[graph.target(e)]:
             viewSelection[e] = True
 
+.. _graph-colors:
+
 Colors of graph elements and labels
 ------------------------------------
 
 The colors of nodes and edges can be modified through the **"viewColor"** and **"viewBorderColor"** graph properties (of type :class:`tlp.ColorProperty`).
-The colors of nodes and edges labels can be modified through the **"viewLabelColor"** graph property.
+The colors of nodes and edges labels can be modified through the **"viewLabelColor"** and **"viewLabelBorderColor"** graph property.
 The colors must be given in RGBA format through an instance of the :class:`tlp.Color` class.
 
 The sample code below colors nodes whose degree is greater than 3 in blue and the others in green::
@@ -95,6 +103,90 @@ The sample code below colors nodes whose degree is greater than 3 in blue and th
             viewColor[n] = blue
         else:
             viewColor[n] = green
+
+Some predefined colors constants are also available in the :class:`tlp.Color`. Below is the exhaustive list of these constants:
+
+    * :const:`tlp.Color.Amaranth`
+    * :const:`tlp.Color.Amber`
+    * :const:`tlp.Color.Apricot`
+    * :const:`tlp.Color.Aquamarine`
+    * :const:`tlp.Color.Azure`
+    * :const:`tlp.Color.BabyBlue`
+    * :const:`tlp.Color.Beige`
+    * :const:`tlp.Color.Black`
+    * :const:`tlp.Color.Blue`
+    * :const:`tlp.Color.BlueGreen`
+    * :const:`tlp.Color.BlueViolet`
+    * :const:`tlp.Color.Blush`
+    * :const:`tlp.Color.Bronze`
+    * :const:`tlp.Color.Brown`
+    * :const:`tlp.Color.Burgundy`
+    * :const:`tlp.Color.Byzantium`
+    * :const:`tlp.Color.Carmine`
+    * :const:`tlp.Color.Cerise`
+    * :const:`tlp.Color.Cerulean`
+    * :const:`tlp.Color.Champagne`
+    * :const:`tlp.Color.ChartreuseGreen`
+    * :const:`tlp.Color.Chocolate`
+    * :const:`tlp.Color.Coffee`
+    * :const:`tlp.Color.Copper`
+    * :const:`tlp.Color.Coral`
+    * :const:`tlp.Color.Crimson`
+    * :const:`tlp.Color.Cyan`
+    * :const:`tlp.Color.DesertSand`
+    * :const:`tlp.Color.ElectricBlue`
+    * :const:`tlp.Color.Erin`
+    * :const:`tlp.Color.Gold`
+    * :const:`tlp.Color.Gray`
+    * :const:`tlp.Color.Green`
+    * :const:`tlp.Color.Harlequin`
+    * :const:`tlp.Color.Indigo`
+    * :const:`tlp.Color.Ivory`
+    * :const:`tlp.Color.Jade`
+    * :const:`tlp.Color.JungleGreen`
+    * :const:`tlp.Color.Lavender`
+    * :const:`tlp.Color.Lemon`
+    * :const:`tlp.Color.Lilac`
+    * :const:`tlp.Color.Lime`
+    * :const:`tlp.Color.Magenta`
+    * :const:`tlp.Color.MagentaRose`
+    * :const:`tlp.Color.Maroon`
+    * :const:`tlp.Color.Mauve`
+    * :const:`tlp.Color.NavyBlue`
+    * :const:`tlp.Color.Olive`
+    * :const:`tlp.Color.Orange`
+    * :const:`tlp.Color.OrangeRed`
+    * :const:`tlp.Color.Orchid`
+    * :const:`tlp.Color.Peach`
+    * :const:`tlp.Color.Pear`
+    * :const:`tlp.Color.Periwinkle`
+    * :const:`tlp.Color.PersianBlue`
+    * :const:`tlp.Color.Pink`
+    * :const:`tlp.Color.Plum`
+    * :const:`tlp.Color.PrussianBlue`
+    * :const:`tlp.Color.Puce`
+    * :const:`tlp.Color.Purple`
+    * :const:`tlp.Color.Raspberry`
+    * :const:`tlp.Color.Red`
+    * :const:`tlp.Color.RedViolet`
+    * :const:`tlp.Color.Rose`
+    * :const:`tlp.Color.Salmon`
+    * :const:`tlp.Color.Sapphire`
+    * :const:`tlp.Color.Scarlet`
+    * :const:`tlp.Color.Silver`
+    * :const:`tlp.Color.SlateGray`
+    * :const:`tlp.Color.SpringBud`
+    * :const:`tlp.Color.SpringGreen`
+    * :const:`tlp.Color.Tan`
+    * :const:`tlp.Color.Taupe`
+    * :const:`tlp.Color.Teal`
+    * :const:`tlp.Color.Turquoise`
+    * :const:`tlp.Color.Violet`
+    * :const:`tlp.Color.Viridian`
+    * :const:`tlp.Color.White`
+    * :const:`tlp.Color.Yellow`
+
+.. _graph-sizes:
 
 Sizes of graph elements
 ------------------------
@@ -111,6 +203,8 @@ The sample code below set nodes sizes proportional to their degree::
 
     for n in graph.getNodes():
         viewSize[n] = baseSize * (graph.deg(n) + 1)
+
+.. _graph-shapes:
 
 Shapes of graph elements
 -------------------------
@@ -138,6 +232,7 @@ Below is the exhaustive list of the constants for nodes shapes:
     * :const:`tlp.NodeShape.RoundedBox`
     * :const:`tlp.NodeShape.Sphere`
     * :const:`tlp.NodeShape.Square`
+    * :const:`tlp.NodeShape.Star`
     * :const:`tlp.NodeShape.Triangle`
     * :const:`tlp.NodeShape.Window`
 
@@ -153,11 +248,11 @@ Constants are also available for code readability, here is the exhaustive list :
 
     * :const:`tlp.EdgeExtremityShape.None`
     * :const:`tlp.EdgeExtremityShape.Arrow`
-    * :const:`tlp.EdgeExtremityShape.ChristmasTree`
     * :const:`tlp.EdgeExtremityShape.Circle`
     * :const:`tlp.EdgeExtremityShape.Cone`
     * :const:`tlp.EdgeExtremityShape.Cross`
     * :const:`tlp.EdgeExtremityShape.Cube`
+    * :const:`tlp.EdgeExtremityShape.CubeOutlinedTransparent`
     * :const:`tlp.EdgeExtremityShape.Cylinder`
     * :const:`tlp.EdgeExtremityShape.Diamond`
     * :const:`tlp.EdgeExtremityShape.GlowSphere`
@@ -167,7 +262,7 @@ Constants are also available for code readability, here is the exhaustive list :
     * :const:`tlp.EdgeExtremityShape.Ring`
     * :const:`tlp.EdgeExtremityShape.Sphere`
     * :const:`tlp.EdgeExtremityShape.Square`
-    * :const:`tlp.EdgeExtremityShape.Triangle`
+    * :const:`tlp.EdgeExtremityShape.Star`
 
 The sample code below set the shape of the selected nodes to a circle::
 
@@ -177,6 +272,8 @@ The sample code below set the shape of the selected nodes to a circle::
     for n in graph.getNodes():
         if viewSelection[n]:
             viewShape[n] = tlp.NodeShape.Circle
+
+.. _graph-labels:
 
 Labels of graph elements
 ------------------------
@@ -202,11 +299,16 @@ Constants are defined for code readability, below is the exhaustive list:
     * :const:`tlp.LabelPosition.Left`
     * :const:`tlp.LabelPosition.Right`
 
-Border width of graph elements
--------------------------------
+.. _borders-widths:
+
+Border width of graph elements and labels
+------------------------------------------
 
 The border width of graph elements can be modified through the **"viewBorderWidth"** graph property (of type :class:`tlp.DoubleProperty`).
+The border width of graph elements labels can be modified through the **"viewLabelBorderWidth"** graph property (of type :class:`tlp.DoubleProperty`).
 The width is defined by a floating point value.
+
+.. _graph-textures:
 
 Applying a texture to nodes or edges
 -------------------------------------

@@ -17,6 +17,8 @@ This manual aims to quickly introduce the following features:
    graphdatastorage
    graphvisualattributes
    graphalgorithms
+   graphobservation
+   creatingvisualizations
 
  
 

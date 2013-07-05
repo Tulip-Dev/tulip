@@ -28,26 +28,86 @@ class Plugin : tlp::WithParameter, tlp::WithDependency {
 %TypeHeaderCode
 #include <tulip/Plugin.h>
 %End
+
+%Docstring
+Bases: :class:`tlp.WithParameter`
+
+This is the base class for all Tulip plugins.
+%End
+
 public:
         virtual ~Plugin();
 
-        virtual std::string icon() const;
-
         virtual std::string category() const=0;
+%Docstring
+tlp.Plugin.category()
+
+Returns the category of the plugin.
+
+:rtype: string
+%End
 
         virtual std::string name() const=0;
+%Docstring
+tlp.Plugin.name()
+
+Returns the name of the plugin.
+
+:rtype: string
+%End
 
         virtual std::string group() const=0;
+%Docstring
+tlp.Plugin.group()
 
+Returns the group of the plugin.
+
+:rtype: string
+%End
         virtual std::string author() const=0;
+%Docstring
+tlp.Plugin.author()
+
+Returns the author of the plugin.
+
+:rtype: string
+%End
 
         virtual std::string date() const=0;
+%Docstring
+tlp.Plugin.category()
+
+Returns the creation date of the plugin.
+
+:rtype: string
+%End
 
         virtual std::string info() const=0;
+%Docstring
+tlp.Plugin.category()
+
+Returns some informations about the plugin.
+
+:rtype: string
+%End
 
         virtual std::string release() const=0;
+%Docstring
+tlp.Plugin.category()
+
+Returns the release number of the plugin.
+
+:rtype: string
+%End
 
         virtual std::string tulipRelease() const=0;
+%Docstring
+tlp.Plugin.category()
+
+Returns the Tulip release number.
+
+:rtype: string
+%End
 
         virtual std::string major() const;
 
@@ -60,6 +120,7 @@ public:
         virtual int id() const;
 
         virtual std::string programmingLanguage() const;
+
 
 };
 

@@ -29,8 +29,10 @@ Contents
    gettingstarted
    manual
    pythonplugins 
-   apireference
-   tulippluginsreference       
+   tulipreference
+   tulipoglreference
+   tulipguireference
+   tulippluginsreference
 
 Indices and tables
 ==================
