@@ -27,6 +27,7 @@
 
 #include <tulip/PythonInterpreter.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
@@ -63,7 +64,6 @@ APIDataBase::APIDataBase() {
   addApiEntry("dict.viewitems()");
   addApiEntry("dict.viewkeys()");
   addApiEntry("dict.viewvalues()");
-
 }
 
 void APIDataBase::loadApiFile(const QString &apiFilePath) {
@@ -90,8 +90,15 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
   QString apiEntry(apiEnt);
   int pos = apiEntry.indexOf('.');
 
-  if (apiEntry.contains(QRegExp("^tulip.*\\..+"))) {
+  if (apiEntry.contains(QRegExp("^tulipogl.*\\..+"))) {
+    apiEntry = apiEntry.mid(pos+1);
+  }
 
+  if (apiEntry.contains(QRegExp("^tulipgui.*\\..+"))) {
+    apiEntry = apiEntry.mid(pos+1);
+  }
+
+  if (apiEntry.contains(QRegExp("^tulip.*\\..+"))) {
     apiEntry = apiEntry.mid(pos+1);
   }
 

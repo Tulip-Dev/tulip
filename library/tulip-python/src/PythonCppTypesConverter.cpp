@@ -17,7 +17,7 @@
  *
  */
 
-#include "PythonIncludes.h"
+#include "tulip/PythonIncludes.h"
 #include "tulip/PythonCppTypesConverter.h"
 
 static std::map<std::string, std::string> getTypenamesMap() {
@@ -90,7 +90,6 @@ static std::map<std::string, std::string> getTypenamesMap() {
 static std::map<std::string, std::string> cppTypenameToSipTypename = getTypenamesMap();
 
 void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTypename, const bool transferTo) {
-  initSipAPI();
   PyObject *pyObject = sipWrapper;
   const sipTypeDef* kTypeDef = sipFindType(cppTypename.c_str());
 
@@ -127,7 +126,6 @@ void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTyp
 }
 
 PyObject *convertCppTypeToSipWrapper(void *cppObj, const std::string &cppTypename, bool fromNew) {
-  initSipAPI();
   const sipTypeDef* kTypeDef = sipFindType(cppTypename.c_str());
 
   if (kTypeDef) {
@@ -473,8 +471,6 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
     return true;
   }
-
-  initSipAPI();
 
   if (sipCanConvertToType(pyObj, sipFindType("std::vector<long>"), SIP_NOT_NONE)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<int>).name())) {

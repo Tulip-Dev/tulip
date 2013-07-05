@@ -17,7 +17,7 @@
  *
  */
 
-#include "PythonIncludes.h"
+#include "tulip/PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 #include "ConsoleHandlers.h"
 
@@ -340,9 +340,9 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 #endif
       runString("import sip");
       runString("from tulip import *");
+      runString("from tulipogl import *");
+      runString("from tulipgui import *");
       outputActivated = true;
-
-      sipAPI = getSipAPI();
 
 #ifndef _MSC_VER
       loadTulipPythonPluginsFromDefaultDirs();
@@ -696,7 +696,7 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
 
   if (PyCallable_Check(pFunc)) {
 
-    if(sipAPI == NULL) {
+    if (sipAPI() == NULL) {
       QMessageBox::critical(NULL, QObject::trUtf8("failed to initalize Python"), QObject::trUtf8("SIP could not be initialized (sipApi is null)"));
       return false;
     }
