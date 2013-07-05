@@ -226,7 +226,7 @@ public:
   /**
    * Set the pointer on the property used to elementLabelBorderColor
    */
-  void setElementLabelBorderColor(DoubleProperty *property) {
+  void setElementLabelBorderWidth(DoubleProperty *property) {
     setProperty(VIEW_LABELBORDERWIDTH,property);
   }
   /**
