@@ -134,6 +134,8 @@ DataTypeSerializerContainer DataSet::serializerContainer;
 // registering of a data type serializer
 void DataSet::registerDataTypeSerializer(const std::string& typeName,
     DataTypeSerializer* dts) {
+
+#ifndef NDEBUG
   TLP_HASH_MAP<std::string, DataTypeSerializer*>::iterator it =
     serializerContainer.tnTodts.find(typeName);
 
@@ -144,6 +146,7 @@ void DataSet::registerDataTypeSerializer(const std::string& typeName,
 
   if (it != serializerContainer.otnTodts.end())
     tlp::warning() << "Warning: a data type serializer is already registered for read type " << dts->outputTypeName << std::endl;
+#endif
 
   serializerContainer.tnTodts[typeName] = serializerContainer.otnTodts[dts->outputTypeName] = dts;
 }
