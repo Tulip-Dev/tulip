@@ -7,13 +7,15 @@ IF(NOT MSVC)
 UNSET(HAVE_BFD CACHE)
 IF(LINUX OR MINGW)
 INCLUDE(CheckIncludeFile)
-# workaround for latest versions of MinGW binutils
+# workaround for latest versions of GNU binutils
 SET(CMAKE_REQUIRED_DEFINITIONS "-DPACKAGE -DPACKAGE_VERSION")
 CHECK_INCLUDE_FILE(bfd.h HAVE_BFD)
 
 IF(HAVE_BFD)
 SET(LIB_SRCS ${LIB_SRCS} BfdWrapper.cpp)
 ADD_DEFINITIONS(-DHAVE_BFD)
+# workaround for latest versions of GNU binutils
+ADD_DEFINITIONS(-DPACKAGE -DPACKAGE_VERSION)
 ELSE()
 MESSAGE("Install GNU binutils development package to get a detailed stack trace when Tulip crashes.")	
 ENDIF()
