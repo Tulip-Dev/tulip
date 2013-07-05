@@ -23,9 +23,6 @@
 #ifdef __MINGW32__
 #include <windows.h>
 #include <stdint.h>
-// workaround for latest versions of MinGW binutils
-#define PACKAGE
-#define PACKAGE_VERSION
 #endif
 
 #include <cstdlib>
