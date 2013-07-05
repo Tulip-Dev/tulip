@@ -299,6 +299,8 @@ signals:
     */
   void graphSet(tlp::Graph*);
 
+  void interactorsChanged();
+
 protected slots:
   /**
     @brief Callback method after setInteractors() was called.

@@ -159,6 +159,7 @@ void WorkspacePanel::setView(tlp::View* view) {
   connect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
   connect(_view,SIGNAL(graphSet(tlp::Graph*)),this,SLOT(viewGraphSet(tlp::Graph*)));
   connect(_view,SIGNAL(drawNeeded()),this,SIGNAL(drawNeeded()));
+  connect(_view,SIGNAL(interactorsChanged()), this, SLOT(refreshInteractorsToolbar()));
 
   if (_view->configurationWidgets().empty())
     return;
@@ -303,9 +304,24 @@ void WorkspacePanel::hideConfigurationTab() {
   setConfigurationTabExpanded(false);
 }
 
+void clearLayout(QLayout* layout, bool deleteWidgets = true) {
+    while (QLayoutItem* item = layout->takeAt(0)) {
+        if (deleteWidgets) {
+            if (QWidget* widget = item->widget())
+                delete widget;
+        }
+        else if (QLayout* childLayout = item->layout())
+            clearLayout(childLayout, deleteWidgets);
+        delete item;
+    }
+}
+
 void WorkspacePanel::refreshInteractorsToolbar() {
   _actionTriggers.clear();
   QList<Interactor*> compatibleInteractors = _view->interactors();
+  if (_ui->interactorsFrame->layout()) {
+    clearLayout(_ui->interactorsFrame->layout());
+  }
   delete _ui->interactorsFrame->layout();
   bool interactorsUiShown = compatibleInteractors.size() > 0;
   _ui->currentInteractorButton->setVisible(interactorsUiShown);
