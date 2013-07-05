@@ -17,7 +17,7 @@
  *
  */
 
-#include "PythonIncludes.h"
+#include "tulip/PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 
 #include <tulip/PluginLister.h>
@@ -57,10 +57,6 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
     scriptName.replace(".py", "");
 
     if (PythonInterpreter::getInstance()->runString(QString("import ") + scriptName)) {
-
-      if (!sipAPI) {
-        sipAPI = getSipAPI();
-      }
 
       // Getting proper sipWrapperType
       const sipTypeDef* kpTypeDef = sipFindType("tlp::Graph");

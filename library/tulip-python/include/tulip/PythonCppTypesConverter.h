@@ -122,6 +122,15 @@ public:
 };
 
 template <>
+class PyObjectToCppObjectConvertor<PyObject *> {
+public:
+  bool convert(PyObject *pyObject, PyObject *&cppObject) {
+    cppObject = pyObject;
+    return true;
+  }
+};
+
+template <>
 class PyObjectToCppObjectConvertor<bool> {
 public:
   bool convert(PyObject *pyObject, bool &cppObject) {
@@ -231,6 +240,15 @@ public:
     return false;
   }
 
+};
+
+template <>
+class CppObjectToPyObjectConvertor<PyObject*> {
+public:
+  bool convert(const PyObject* &cppObject, PyObject *&pyObject) {
+    pyObject = const_cast<PyObject*>(cppObject);
+    return true;
+  }
 };
 
 template <>
