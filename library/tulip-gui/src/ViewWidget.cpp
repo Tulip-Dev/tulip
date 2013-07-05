@@ -60,22 +60,6 @@ struct MyGraphicsView: public QGraphicsView {
   }
 };
 
-static QGLFormat GlInit() {
-  QGLFormat tmpFormat;
-  tmpFormat.setDirectRendering(true);
-  tmpFormat.setDoubleBuffer(true);
-  tmpFormat.setAccum(false);
-  tmpFormat.setStencil(true);
-  tmpFormat.setOverlay(false);
-  tmpFormat.setDepth(true);
-  tmpFormat.setRgba(true);
-  tmpFormat.setAlpha(true);
-  tmpFormat.setOverlay(false);
-  tmpFormat.setStereo(false);
-  tmpFormat.setSampleBuffers(true);
-  return tmpFormat;
-}
-
 ViewWidget::ViewWidget()
   : View(), _graphicsView(NULL), _centralWidget(NULL), _centralWidgetItem(NULL) {
 }
