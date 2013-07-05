@@ -1,67 +1,67 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief  Iimplementation of class DavidsonHarel
- * 
+ *
  * This class realizes the Davidson Harel Algorithm for
  * automtatic graph drawing. It minimizes the energy
  * of the drawing using simulated annealing. This file
  * contains the main simulated annealing algorithm and
  * the fnction for computing the next candidate layout
  * that should be considered.
- * 
- * \author 
- * 
+ *
+ * \author
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
 #include <ogdf/energybased/DavidsonHarel.h>
-#include <ogdf/basic/basic.h>
-#include <math.h>
+#include <ogdf/basic/Math.h>
 #include <time.h>
 
-//TODO: in addition to the layout size, node sizes should be used in 
+//TODO: in addition to the layout size, node sizes should be used in
 //the initial radius computation in case of "all central" layouts with
 //huge nodes
 //the combinations for parameters should be checked: its only useful
 //to have a slow shrinking if you have enough time to shrink down to
 //small radius
 
-namespace ogdf{
+namespace ogdf {
+
 	const int DavidsonHarel::m_defaultTemp = 1000;
-	const double DavidsonHarel::m_PI = 3.14159;
-	const double DavidsonHarel::m_defaultRadius = 100.0; 
+	const double DavidsonHarel::m_defaultRadius = 100.0;
 	const int DavidsonHarel::m_iterationMultiplier = 25;  //best//30;ori
 	const double DavidsonHarel::m_coolingFactor = 0.80;  //0.75;ori
 	const double DavidsonHarel::m_shrinkFactor = 0.8;
@@ -77,11 +77,12 @@ namespace ogdf{
 		srand((unsigned)time(NULL));
 	}
 
+
 	//allow resetting in between subsequent calls
 	void DavidsonHarel::initParameters()
 	{
 		m_diskRadius = m_defaultRadius;
-        m_energy = 0.0;
+		m_energy = 0.0;
 		//m_numberOfIterations = 0; //is set in member function
 		m_shrinkingFactor = m_shrinkFactor;
 
@@ -131,26 +132,26 @@ namespace ogdf{
 
 	//newVal is the energy value of a candidate layout. It is accepted if it is lower
 	//than the previous energy of the layout or if m_fineTune is not tpFine and
-	//the difference to the old energy divided by the temperature is smaller than a 
+	//the difference to the old energy divided by the temperature is smaller than a
 	//random number between zero and one
 	bool DavidsonHarel::testEnergyValue(double newVal)
 	{
 		bool accepted = true;
 		if(newVal > m_energy) {
 			accepted = false;
-			
+
 			double testval = exp((m_energy-newVal)/ m_temperature);
 			double compareVal = randNum(); // number between 0 and 1
-			
+
 			if(compareVal < testval)
 				accepted = true;
-				
+
 		}
 		return accepted;
 	}
 
 	//divides number returned by rand by RAND_MAX to get number between zero and one
-	inline double DavidsonHarel::randNum() const 
+	inline double DavidsonHarel::randNum() const
 	{
 		double val = rand();
 		val /= RAND_MAX;
@@ -167,7 +168,7 @@ namespace ogdf{
 		node v = *(m_nonIsolatedNodes.get(randomPos));
 		double oldx = AG.x(v);
 		double oldy = AG.y(v);
-		double randomAngle = randNum()*2.0*m_PI;
+		double randomAngle = randNum() * 2.0 * Math::pi;
 		newPos.m_y = oldy+sin(randomAngle)*m_diskRadius;
 		newPos.m_x = oldx+cos(randomAngle)*m_diskRadius;
 #ifdef OGDF_DEBUG
@@ -199,23 +200,23 @@ namespace ogdf{
 		double h = maxY-minY+1.0;
 
 		double ratio = h/w;
-		
+
 		double W = sqrt(G.numberOfNodes() / ratio);
-	
+
 		m_diskRadius = W / 5.0;//allow to move by a significant part of current layout size
 		m_diskRadius=max(m_diskRadius,max(maxX-minX,maxY-minY)/5.0);
-		
+
 		//TODO: also use node sizes
 		/*
 		double lengthSum(0.0);
-	    node v;
-	    forall_nodes(v,m_G) {
-		    const IntersectionRectangle &i = shape(v);
-		    lengthSum += i.width();
-		    lengthSum += i.width();
-	    }
-	    lengthSum /= (2*m_G.numberOfNodes());
-	    // lengthSum is now the average of all lengths and widths
+		node v;
+		forall_nodes(v,m_G) {
+			const IntersectionRectangle &i = shape(v);
+			lengthSum += i.width();
+			lengthSum += i.width();
+			}
+			lengthSum /= (2*m_G.numberOfNodes());
+			// lengthSum is now the average of all lengths and widths
 		*/
 		//change the initial radius depending on the settings
 		//this is legacy crap
@@ -308,7 +309,6 @@ namespace ogdf{
 	{
 		initParameters();
 
-		
 		m_shrinkingFactor = m_shrinkFactor;
 
 		OGDF_ASSERT(!m_energyFunctions.empty());
@@ -321,7 +321,7 @@ namespace ogdf{
 			itSucc = it.succ();
 			if((*it)->degree() == 0) m_nonIsolatedNodes.del(it);
 		}
-		if(G.numberOfEdges() > 0) { //else only isolated nodes 
+		if(G.numberOfEdges() > 0) { //else only isolated nodes
 			computeFirstRadius(AG);
 			computeInitialEnergy();
 			if(m_numberOfIterations == 0)

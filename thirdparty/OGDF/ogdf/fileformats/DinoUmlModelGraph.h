@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Contains the class DinoUmlModelGraph which represents the
  * complete UML Model in a graph like data structure.
- * 
+ *
  * \author Dino Ahr
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -69,15 +70,15 @@ namespace ogdf {
 		/** The label of the contained nodes. */
 		NodeArray<String> m_nodeLabel;
 
-		/** The types of the contained edges. 
-		 *  Types are association or generalization. 
+		/** The types of the contained edges.
+		 *  Types are association or generalization.
 		 */
-		EdgeArray<Graph::EdgeType> m_eType; 
-		
-		/** The types of the contained nodes. 
-		 *  Types are vertex, dummy, generalizationMerger 
+		EdgeArray<Graph::EdgeType> m_eType;
+
+		/** The types of the contained nodes.
+		 *  Types are vertex, dummy, generalizationMerger
 		 */
-		NodeArray<Graph::NodeType> m_vType; 
+		NodeArray<Graph::NodeType> m_vType;
 
 	public:
 
@@ -98,13 +99,13 @@ namespace ogdf {
 
 		/** Returns a const reference to the type of the given edge. */
 		const Graph::EdgeType &type(edge e) const { return m_eType[e]; }
-	
+
 		/** Returns a reference to the type of the given edge. */
 		Graph::EdgeType &type(edge e) { return m_eType[e]; }
 
 		/** Returns a const reference to the type of the given node. */
 		const Graph::NodeType &type(node v) const { return m_vType[v]; }
-	
+
 		/** Returns a reference to the type of the given node. */
 		Graph::NodeType &type(node v) { return m_vType[v]; }
 

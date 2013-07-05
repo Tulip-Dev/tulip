@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2552 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class BCTree
- * 
+ *
  * \author Jan Papenfu&szlig;
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -71,7 +72,7 @@ void BCTree::init (node vG)
 	m_number.init(m_G,0);
 	m_lowpt.init(m_G);
 	m_gtoh.init(m_G);
-	
+
 	biComp(0,vG);
 
 	m_number.init();
@@ -112,12 +113,12 @@ void BCTree::initNotConnected (node vG)
 	m_number.init(m_G,0);
 	m_lowpt.init(m_G);
 	m_gtoh.init(m_G);
-	
-	biComp(0,vG);	
+
+	biComp(0,vG);
 	// cout << m_count << endl << flush;
-	
-	node v;	
-	
+
+	node v;
+
 	// call biComp for all nodes that are not in the
 	//  first connected component
 	forall_nodes(v, m_G)
@@ -135,17 +136,13 @@ void BCTree::initNotConnected (node vG)
 		node vB = parent(uB);
 		if (vB) m_B.newEdge(uB,vB);
 	}
-}	
+}
 
 
 void BCTree::biComp (adjEntry adjuG, node vG)
 {
 	m_lowpt[vG] = m_number[vG] = ++m_count;
-	
-	node uG = 0;
-	if (adjuG != 0)
-		uG = adjuG->theNode();
-	
+
 	adjEntry adj;
 	forall_adj (adj,vG) {
 		//edge eG = adj->theEdge();
@@ -286,7 +283,7 @@ SList<node>* BCTree::findPathBCTree (node sB, node tB) const
 	node nB = findNCA(sB,tB);
 	for (pB->pushBack(sB); sB!=nB; pB->pushBack(sB)) sB = parent(sB);
 	for (SListIterator<node> iB=pB->rbegin(); tB!=nB; tB=parent(tB)) pB->insertAfter(tB,iB);
-	return pB;		
+	return pB;
 }
 
 

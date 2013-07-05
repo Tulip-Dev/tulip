@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief implementation of MMFixedEmbeddingInserter class
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -178,7 +179,7 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 	//	cout << *itE << " ";
 	//cout << endl;
 
-	PG.embed(); 
+	PG.embed();
 	OGDF_ASSERT(PG.representsCombEmbedding() == true);
 
 	if (origEdges.size() == 0)
@@ -264,30 +265,30 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 			bool improved;
 			do {
 				improved = false;
-				
+
 				SListConstIterator<edge> itRR;
 				for(itRR = currentOrigEdges.begin(); itRR.valid(); ++itRR)
 				{
 					edge eOrigRR = *itRR;
-		
+
 					int pathLength = PG.chain(eOrigRR).size() - 1;
 					if (pathLength == 0) continue; // cannot improve
-		
+
 					node oldSrc, oldTgt;
 					removeEdge(PG,E,eOrigRR,0,oldSrc,oldTgt);
-		
+
 					// try to find a better insertion path
 					List<Tuple2<adjEntry,adjEntry> > crossed;
 					findShortestPath(PG, E,
 						PG.expansion(eOrigRR->source()), PG.expansion(eOrigRR->target()),
 						crossed, forbiddenEdgeOrig);
-					
+
 					// re-insert edge (insertion path cannot be longer)
 					insertEdge(PG,E,eOrigRR,eOrigRR->source(),eOrigRR->target(),0,crossed);
-		
+
 					int newPathLength = PG.chain(eOrigRR).size() - 1;
 					OGDF_ASSERT(newPathLength <= pathLength);
-					
+
 					if(newPathLength < pathLength)
 						improved = true;
 				}
@@ -305,14 +306,14 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 	if(removeReinsert() != rrIncremental) {
 		// postprocessing (remove-reinsert heuristc)
 		SListPure<edge> rrEdges;
-	
+
 		switch(removeReinsert())
 		{
 		case rrAll:
 		case rrMostCrossed: {
 				const List<node> &origInCC = PG.nodesInCC();
 				ListConstIterator<node> itV;
-	
+
 				for(itV = origInCC.begin(); itV.valid(); ++itV) {
 					node vG = *itV;
 					adjEntry adj;
@@ -324,7 +325,7 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 				}
 			}
 			break;
-	
+
 		case rrInserted:
 			for(ListConstIterator<edge> it = origEdges.begin(); it.valid(); ++it)
 				rrEdges.pushBack(*it);
@@ -334,37 +335,37 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 		case rrIncremental:
 			break;
 		}
-	
+
 		// marks the end of the interval of rrEdges over which we iterate
 		// initially set to invalid iterator which means all edges
 		SListConstIterator<edge> itStop;
-	
+
 		bool improved;
 		do {
 			improved = false;
-	
+
 			if(removeReinsert() == rrMostCrossed)
 			{
 				FEICrossingsBucket bucket(&PG);
 				rrEdges.bucketSort(bucket);
-	
+
 				const int num = int(0.01 * percentMostCrossed() * G.numberOfEdges());
 				itStop = rrEdges.get(num);
 			}
-	
+
 			SListConstIterator<edge> it;
 			for(it = rrEdges.begin(); it != itStop; ++it)
 			{
 				edge eOrig = *it;
-							
+
 				int pathLength;
 				pathLength = PG.chain(eOrig).size() - 1;
 				if (pathLength == 0) continue; // cannot improve
-	
+
 				node oldSrc = 0, oldTgt = 0;
 				removeEdge(PG,E,eOrig,0,oldSrc,oldTgt);
 				//draw(PG, forbiddenEdgeOrig);
-	
+
 				// try to find a better insertion path
 				anchorNodes(eOrig->source(), sources, PG);
 				anchorNodes(eOrig->target(), targets, PG);
@@ -372,10 +373,10 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 				List<Tuple2<adjEntry,adjEntry> > crossed;
 				findShortestPath(PG, E, sources.nodes(), targets.nodes(), crossed, forbiddenEdgeOrig);
 				sources.clear(); targets.clear();
-	
+
 				// re-insert edge (insertion path cannot be longer)
 				insertEdge(PG,E,eOrig,eOrig->source(),eOrig->target(),0,crossed);
-	
+
 				if(PG.splittable(oldSrc))
 					contractSplitIfReq(PG,E,oldSrc);
 				if(PG.splittable(oldTgt))
@@ -384,7 +385,7 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 				int newPathLength = PG.chain(eOrig).size() - 1;
 				int saved = pathLength - newPathLength;
 				OGDF_ASSERT(saved >= 0);
-				
+
 				if(saved > 0)
 					improved = true;
 			}
@@ -421,7 +422,7 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 					{
 						// re-insert edge (insertion path cannot be longer)
 						insertEdge(PG,E,0,vOrig,vOrig,ns,crossed);
-			
+
 						if(PG.splittable(oldSrc))
 							contractSplitIfReq(PG,E,oldSrc,ns);
 						if(PG.splittable(oldTgt))
@@ -430,7 +431,7 @@ Module::ReturnType MMFixedEmbeddingInserter::doCall(
 						int newPathLength = ns->m_path.size() - 1;
 						int saved = pathLength - newPathLength;
 						OGDF_ASSERT(saved >= 0);
-						
+
 						if(saved > 0)
 							improved = true;
 
@@ -535,8 +536,8 @@ void MMFixedEmbeddingInserter::constructDual(
 	m_vS = m_dual.newNode();
 	m_vT = m_dual.newNode();
 
-	m_maxCost = 2; // we just have 0/1 edge costs at the moment; maximum has
-	               // to be adjusted when we have more general costs
+	m_maxCost = 2;	// we just have 0/1 edge costs at the moment; maximum has
+					// to be adjusted when we have more general costs
 }
 
 
@@ -614,7 +615,7 @@ void MMFixedEmbeddingInserter::findShortestPath(
 
 	// actual search (using extended bfs on directed dual)
 	int currentDist = 0;
-	
+
 	for( ; ; )
 	{
 		// next candidate edge
@@ -753,7 +754,7 @@ void MMFixedEmbeddingInserter::preprocessInsertionPath(
 	adjEntry &adjStart = (*crossed.begin ()).x1();
 	adjEntry &adjEnd   = (*crossed.rbegin()).x1();
 
-	// Achtung: Hier werden keine potentiellen Mehrfachkanten berücksichtigt!!!
+	// Warning: Potential multi-edges are not considered here!!!
 
 	if(PG.original(adjStart->theNode()) == 0) {
 		prepareAnchorNode(PG, E, adjStart, srcOrig);
@@ -1154,7 +1155,7 @@ void MMFixedEmbeddingInserter::contractSplit(
 
 
 void MMFixedEmbeddingInserter::contractSplitIfReq(
-	PlanRepExpansion &PG, 
+	PlanRepExpansion &PG,
 	CombinatorialEmbedding &E,
 	node u,
 	const PlanRepExpansion::nodeSplit nsCurrent)
@@ -1173,7 +1174,7 @@ void MMFixedEmbeddingInserter::contractSplitIfReq(
 		if(eDES) m_dual.delEdge(eDES);
 		edge eDET = m_dualEdge[eExpand  ->adjTarget()];
 		if(eDET) m_dual.delEdge(eDET);
-		
+
 		edge e = PG.unsplitExpandNode(u,eContract,eExpand,E);
 
 		if(e->isSelfLoop()) {
@@ -1208,8 +1209,8 @@ void MMFixedEmbeddingInserter::contractSplitIfReq(
 
 
 void MMFixedEmbeddingInserter::collectAnchorNodes(
-	node v, 
-	NodeSet &nodes, 
+	node v,
+	NodeSet &nodes,
 	const PlanRepExpansion::NodeSplit *nsParent,
 	const PlanRepExpansion &PG) const
 {
@@ -1312,7 +1313,7 @@ bool MMFixedEmbeddingInserter::checkSplitDeg(
 
 
 bool MMFixedEmbeddingInserter::checkDualGraph(
-	PlanRepExpansion &PG, 
+	PlanRepExpansion &PG,
 	const CombinatorialEmbedding &E) const
 {
 	NodeArray<face> af(m_dual,0);

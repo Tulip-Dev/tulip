@@ -1,44 +1,45 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2583 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief declaration of class MMFixedEmbeddingInserter
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
- 
+
 #ifdef _MSC_VER
 #pragma once
 #endif
@@ -138,6 +139,8 @@ private:
 	 *        entry assigned to the left (right) node after the split. Additionally,
 	 *        the first and last element in the list specify, where the path
 	 *        leaves the source and enters the target node.
+	 * @param forbiddenEdgeOrig points to an edge array indicating if an original edge is
+	 *        forbidden to be crossed.
 	 */
 	void findShortestPath(
 		const PlanRepExpansion &PG,
@@ -241,6 +244,7 @@ private:
 	 * @param PG is the planarized expansion.
 	 * @param E is the corresponding embeddding.
 	 * @param u is a node in the planarized expansion.
+	 * @param nsCurrent is a node split which may not be contracted.
 	 */
 	void contractSplitIfReq(
 		PlanRepExpansion &PG,
@@ -268,8 +272,8 @@ private:
 	 * @param PG is the planarized expansion.
 	 */
 	void collectAnchorNodes(
-		node v, 
-		NodeSet &nodes, 
+		node v,
+		NodeSet &nodes,
 		const PlanRepExpansion::NodeSplit *nsParent,
 		const PlanRepExpansion &PG) const;
 
@@ -317,8 +321,8 @@ private:
 		PlanRepExpansion &PG);
 
 	bool origOfDualForbidden(
-		edge e, 
-		const PlanRepExpansion &PG, 
+		edge e,
+		const PlanRepExpansion &PG,
 		const EdgeArray<bool> *forbiddenEdgeOrig) const
 	{
 		if(forbiddenEdgeOrig == 0)
@@ -334,7 +338,7 @@ private:
 
 		adjEntry adj = m_primalAdj[e];
 		if(adj == 0) return false;
-		
+
 		edge eOrig = PG.originalEdge(adj->theEdge());
 		if(eOrig != 0) {
 			//if((*forbiddenEdgeOrig)[eOrig] == true)

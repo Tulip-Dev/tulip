@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief implementation of PlanRepUML class
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -62,7 +63,7 @@ PlanRepInc::PlanRepInc(const UMLGraph &UG, const NodeArray<bool> &fixed)
 : PlanRepUML(UG)
 {
 	initMembers(UG);
-	
+
 	const Graph &G = UG;
 	//we start the node activation status with the fixed input values
 	node v;
@@ -84,7 +85,7 @@ void PlanRepInc::initMembers(const UMLGraph &UG)
 }
 
 
-//activate a cc with at least one node, even if all nodes are 
+//activate a cc with at least one node, even if all nodes are
 //excluded
 node PlanRepInc::initMinActiveCC(int i)
 {
@@ -113,7 +114,7 @@ node PlanRepInc::initActiveCCGen(int i, bool minNode)
 
 	ListConstIterator<node> itV;
 
-	for(itV = origInCC.begin(); itV.valid(); ++itV) 
+	for(itV = origInCC.begin(); itV.valid(); ++itV)
 	{
 		if (m_activeNodes[(*itV)])
 			activeOrigCCNodes.pushBack((*itV));
@@ -124,7 +125,7 @@ node PlanRepInc::initActiveCCGen(int i, bool minNode)
 			m_vCopy[vG] = 0;
 
 			adjEntry adj;
-			forall_adj(adj,vG) 
+			forall_adj(adj,vG)
 			{
 				if ((adj->index() & 1) == 0) continue;
 				edge eG = adj->theEdge();
@@ -151,7 +152,7 @@ node PlanRepInc::initActiveCCGen(int i, bool minNode)
 	}//minNode
 
 	m_currentCC = i;
-	
+
 	//double feature: liste und nodearray, besser
 	GraphCopy::initByActiveNodes(activeOrigCCNodes, m_activeNodes, m_eAuxCopy);
 
@@ -187,13 +188,13 @@ node PlanRepInc::initActiveCCGen(int i, bool minNode)
 void PlanRepInc::activateNode(node v)
 {
 	if (m_activeNodes[v]) return;
-	
+
 	m_activeNodes[v] = true;
 
 }//activateNode
 
 //Connect parts of partial active current CC.
-//Note that this only makes sense when the CC parts are 
+//Note that this only makes sense when the CC parts are
 //already correctly embedded. Crossings are already replaced
 //by nodes
 bool PlanRepInc::makeTreeConnected(adjEntry /* adjExternal */)
@@ -205,18 +206,18 @@ bool PlanRepInc::makeTreeConnected(adjEntry /* adjExternal */)
 
 	//if there is only one CC, we don't need to connect
 	if (isConnected(*this)) return false;
-	//We have to insert edges connnecting nodes lying on 
+	//We have to insert edges connnecting nodes lying on
 	//the "external" face of the active parts
-	
+
 	//First, we activate the CC's parts one by one and compute
 	//the 'external' face from the layout information
-	//If the PlanRepInc is not embedded corresponding to 
+	//If the PlanRepInc is not embedded corresponding to
 	//this layout, we may introduce edges that are non-planar
 	//in the drawing, leading to problems when we compute paths
 	//in the dual graph
 
 	List<node> isolatedNodes;
-	const int numPartialCC = connectedIsolatedComponents(*this, 
+	const int numPartialCC = connectedIsolatedComponents(*this,
 		isolatedNodes, m_component);
 
 	//CombinatorialEmbedding can cope with unconnected graphs
@@ -232,8 +233,8 @@ bool PlanRepInc::makeTreeConnected(adjEntry /* adjExternal */)
 		if (tm.faceSum(*this, *m_pGraphAttributes, f) < 0)
 			extAdjs.pushBack(f->firstAdj());
 
-#ifdef OGDF_DEBUG	
-		cout << "FaceSum in Face " << f->index() << " Groesse " << f->size() 
+#ifdef OGDF_DEBUG
+		cout << "FaceSum in Face " << f->index() << " Groesse " << f->size()
 			<< " ist: " << tm.faceSum(*this, *m_pGraphAttributes, f) <<"\n" << flush;
 #endif
 	}//forallfaces
@@ -243,7 +244,7 @@ bool PlanRepInc::makeTreeConnected(adjEntry /* adjExternal */)
 	OGDF_ASSERT(extAdjs.size() + isolatedNodes.size() == numPartialCC)
 	//OGDF_ASSERT(extAdjs.size() > 1) //eigentlich: = #partial CCs
 	//OGDF_ASSERT(extAdjs.size() == numPartialCC)
-	
+
 	const int n1 = numPartialCC-1;
 	m_eTreeArray.init(0, n1, 0, n1, 0);
 	m_treeInit = true;
@@ -258,7 +259,7 @@ bool PlanRepInc::makeTreeConnected(adjEntry /* adjExternal */)
 	while(it.valid())
 	{
 		//for the case: one external face, multiple isolated nodes
-	    lastAdj = (*it);
+		lastAdj = (*it);
 		adjEntry adj = (*it);
 		ListIterator<adjEntry> it2 = it.succ();
 		if (it2.valid())
@@ -270,7 +271,7 @@ bool PlanRepInc::makeTreeConnected(adjEntry /* adjExternal */)
 			//save the connection edge by CC number index
 			//this is used when deleting obsolete edges later
 			//after edge reinsertion
-			m_eTreeArray(componentNumber(adj->theNode()), componentNumber(adj2->theNode())) = 
+			m_eTreeArray(componentNumber(adj->theNode()), componentNumber(adj2->theNode())) =
 				m_eTreeArray(m_component[adj2->theNode()], m_component[adj->theNode()])
 				= eTree;
 		}//if CCs left to connect
@@ -288,12 +289,12 @@ bool PlanRepInc::makeTreeConnected(adjEntry /* adjExternal */)
 			//save the connection edge by CC number index
 			//this is used when deleting obsolete edges later
 			//after edge reinsertion
-			m_eTreeArray(componentNumber(lastAdj->theNode()), componentNumber(uvw)) = 
+			m_eTreeArray(componentNumber(lastAdj->theNode()), componentNumber(uvw)) =
 				m_eTreeArray(m_component[uvw], m_component[lastAdj->theNode()])
 				= eTree;
 			lastAdj = eTree->adjSource();
 		}
-		else //connect the first two isolated nodes / only iso nodes exist 
+		else //connect the first two isolated nodes / only iso nodes exist
 		{
 			//MUST BE #isonodes>1, else we returned already because CC connected
 			OGDF_ASSERT(!isolatedNodes.empty())
@@ -304,14 +305,14 @@ bool PlanRepInc::makeTreeConnected(adjEntry /* adjExternal */)
 			//save the connection edge by CC number index
 			//this is used when deleting obsolete edges later
 			//after edge reinsertion
-			m_eTreeArray(componentNumber(secv), componentNumber(uvw)) = 
+			m_eTreeArray(componentNumber(secv), componentNumber(uvw)) =
 				m_eTreeArray(m_component[uvw], m_component[secv])
 				= eTree;
 			lastAdj = eTree->adjSource();
-			
+
 		}
 	}//while isolated nodes
-	
+
 	OGDF_ASSERT(isConnected(*this));
 
 
@@ -333,7 +334,7 @@ void PlanRepInc::deleteTreeConnection(int i, int j)
 	OGDF_ASSERT(m_treeEdge[e]);
 	//we have to take care of treeConnection edges that
 	//are already crossed
-	while ((e->target()->degree() == 4) && 
+	while ((e->target()->degree() == 4) &&
 		m_treeEdge[e->adjTarget()->cyclicSucc()->cyclicSucc()->theEdge()])
 	{
 		nexte = e->adjTarget()->cyclicSucc()->cyclicSucc()->theEdge();
@@ -360,7 +361,7 @@ void PlanRepInc::deleteTreeConnection(int i, int j, CombinatorialEmbedding &E)
 	OGDF_ASSERT(m_treeEdge[e]);
 	//we have to take care of treeConnection edges that
 	//are already crossed
-	while ((e->target()->degree() == 4) && 
+	while ((e->target()->degree() == 4) &&
 		m_treeEdge[e->adjTarget()->cyclicSucc()->cyclicSucc()->theEdge()])
 	{
 		nexte = e->adjTarget()->cyclicSucc()->cyclicSucc()->theEdge();
@@ -391,7 +392,7 @@ void PlanRepInc::getExtAdjs(List<adjEntry> & /* extAdjs */)
 	//derive the unconnected parts by a run through the current
 	//copy
 	//compute connected component of current CC
-	
+
 	NodeArray<int> component(*this);
 	int numPartialCC = connectedComponents(*this, component);
 	EdgeArray<edge> copyEdge;//copy edges in partial CC copy
@@ -432,8 +433,8 @@ void PlanRepInc::getExtAdjs(List<adjEntry> & /* extAdjs */)
 		//
 		//}//forallnodes
 	}//for
-	
-	
+
+
 }//getextadj
 
 
@@ -445,16 +446,16 @@ adjEntry PlanRepInc::getExtAdj(GraphCopy & /* GC */, CombinatorialEmbedding & /*
 }//getextadj
 
 //-------------------------------------
-//structure updates of underlying graph 
+//structure updates of underlying graph
 //signaled by graph structure
-void PlanRepInc::nodeDeleted(node /* v */) 
+void PlanRepInc::nodeDeleted(node /* v */)
 {
 
 }
 void PlanRepInc::nodeAdded(node /* v */)   {}
 void PlanRepInc::edgeDeleted(edge /* e */) {}
 void PlanRepInc::edgeAdded(edge /* e */)   {}
-void PlanRepInc::reInit()            {} 
+void PlanRepInc::reInit()            {}
 void PlanRepInc::cleared()           {}
 
 
@@ -464,7 +465,7 @@ void PlanRepInc::cleared()           {}
 int PlanRepInc::genusLayout(Layout &drawing) const
 {
 	Graph testGraph;
-	GraphAttributes AG(testGraph, GraphAttributes::nodeGraphics | 
+	GraphAttributes AG(testGraph, GraphAttributes::nodeGraphics |
 		GraphAttributes::edgeGraphics |
 		GraphAttributes::nodeColor |
 		GraphAttributes::nodeStyle |
@@ -491,16 +492,16 @@ int PlanRepInc::genusLayout(Layout &drawing) const
 
 	int colBase = 3;
 	int colBase2 = 250;
-	forall_nodes(v,*this) 
+	forall_nodes(v,*this)
 	{
 		char prints[10];
-		
+
 		ogdf::sprintf(prints,10,"#%.2X%.2X%.2X\0",colBase,colBase2,colBase);
 		colBase = (colBase*3) % 233;
 		colBase2 = (colBase*2) % 233;
 		String col(prints);
 
-		if (tcopy[v] == 0) 
+		if (tcopy[v] == 0)
 		{
 			node u = testGraph.newNode();
 			tcopy[v] = u;
@@ -515,10 +516,10 @@ int PlanRepInc::genusLayout(Layout &drawing) const
 		forall_adj(adj1,v) {
 			bool handled = visited[adj1];
 			adjEntry adj = adj1;
-			
+
 			do {
 				node z = adj->theNode();
-				if (tcopy[z] == 0) 
+				if (tcopy[z] == 0)
 				{
 					node u1 = testGraph.newNode();
 					tcopy[z] = u1;
@@ -538,7 +539,7 @@ int PlanRepInc::genusLayout(Layout &drawing) const
 						eOrig[e] = adj->theEdge();
 						if (eCol[adj->theEdge()].length() > 0)
 							AG.colorEdge(e) = eCol[adj->theEdge()];
-						else 
+						else
 						{
 							eCol[adj->theEdge()] = col;
 							AG.colorEdge(e) = col;
@@ -546,11 +547,11 @@ int PlanRepInc::genusLayout(Layout &drawing) const
 						finished[adj->theEdge()] = true;
 					}
 					/*
-					else 
+					else
 					{
 						eCol[adj->theEdge()] = col;
 					}*/
-					
+
 				}
 				visited[adj] = true;
 				adj = adj->faceCycleSucc();
@@ -575,9 +576,9 @@ int PlanRepInc::genusLayout(Layout &drawing) const
 	return genus;
 }
 //#endif
+
 //zu debugzwecken
-void PlanRepInc::writeGML(const char *fileName, GraphAttributes &AG,
-						  bool colorEmbed)
+void PlanRepInc::writeGML(const char *fileName, GraphAttributes &AG, bool colorEmbed)
 {
 	OGDF_ASSERT(m_pGraphAttributes == &(AG));
 
@@ -598,53 +599,52 @@ void PlanRepInc::writeGML(ostream &os, const GraphAttributes &AG)
 	os.precision(10);
 
 	os << "Creator \"ogdf::PlanRepInc::writeGML\"\n";
-	os << "directed 1\n";
-
 	os << "graph [\n";
+	os << "  directed 1\n";
 
 	node v;
 	forall_nodes(v,G) {
 		if (!original(v)) continue;
-		os << "node [\n";
+		os << "  node [\n";
 
-		os << "id " << (id[v] = nextId++) << "\n";
+		os << "    id " << (id[v] = nextId++) << "\n";
 
-		os << "graphics [\n";
-		os << "x " << AG.x(original(v)) << "\n";
-		os << "y " << AG.y(original(v)) << "\n";
-		os << "w " << 10.0 << "\n";
-		os << "h " << 10.0 << "\n";
-		os << "type \"rectangle\"\n";
-		os << "width 1.0\n";
+		os << "    graphics [\n";
+		os << "      x " << AG.x(original(v)) << "\n";
+		os << "      y " << AG.y(original(v)) << "\n";
+		os << "      w " << 10.0 << "\n";
+		os << "      h " << 10.0 << "\n";
+		os << "      type \"rectangle\"\n";
+		os << "      width 1.0\n";
 		if (typeOf(v) == Graph::generalizationMerger) {
-			os << "type \"oval\"\n";
-			os << "fill \"#0000A0\"\n";
+			os << "      type \"oval\"\n";
+			os << "      fill \"#0000A0\"\n";
 		}
 		else if (typeOf(v) == Graph::generalizationExpander) {
-			os << "type \"oval\"\n";
-			os << "fill \"#00FF00\"\n";
+			os << "      type \"oval\"\n";
+			os << "      fill \"#00FF00\"\n";
 		}
 		else if (typeOf(v) == Graph::highDegreeExpander ||
 			typeOf(v) == Graph::lowDegreeExpander)
-			os << "fill \"#FFFF00\"\n";
+			os << "      fill \"#FFFF00\"\n";
 		else if (typeOf(v) == Graph::dummy)
 			{
 				if (isCrossingType(v))
 				{
-					os << "fill \"#FF0000\"\n";
+					os << "      fill \"#FF0000\"\n";
 				}
-				else os << "fill \"#FFFFFF\"\n";
-				os << "type \"oval\"\n";
+				else
+					os << "      fill \"#FFFFFF\"\n";
+				os << "      type \"oval\"\n";
 			}
 
 		else if (v->degree() > 4)
-			os << "fill \"#FFFF00\"\n";
+			os << "      fill \"#FFFF00\"\n";
 
 		else
-			os << "fill \"#000000\"\n";
+			os << "    fill \"#000000\"\n";
 
-
-		os << "]\n"; // graphics
+		os << "  ]\n"; // graphics
 
 		os << "]\n"; // node
 	}
@@ -652,106 +652,111 @@ void PlanRepInc::writeGML(ostream &os, const GraphAttributes &AG)
 	edge e;
 	forall_edges(e,G) {
 		if (!(original(e->source()) && original(e->target()))) continue;
-		os << "edge [\n";
+		os << "  edge [\n";
 
-		os << "source " << id[e->source()] << "\n";
-		os << "target " << id[e->target()] << "\n";
+		os << "    source " << id[e->source()] << "\n";
+		os << "    target " << id[e->target()] << "\n";
 
-		os << "generalization " << typeOf(e) << "\n";
+		os << "    generalization " << typeOf(e) << "\n";
 
-		os << "graphics [\n";
+		os << "    graphics [\n";
 
-		os << "type \"line\"\n";
+		os << "      type \"line\"\n";
 
 		if (typeOf(e) == Graph::generalization)
 		{
-			os << "arrow \"last\"\n";
+			os << "      arrow \"last\"\n";
 			if (m_alignUpward[e->adjSource()])
-				os << "fill \"#0000FF\"\n";
+				os << "      fill \"#0000FF\"\n";
 			else
-				os << "fill \"#FF0000\"\n";
-            os << "width 3.0\n";
+				os << "      fill \"#FF0000\"\n";
+			os << "      width 3.0\n";
 		}
-		else 
-        {
+		else
+		{
 			if (typeOf(e->source()) == Graph::generalizationExpander ||
 				typeOf(e->source()) == Graph::generalizationMerger ||
 				typeOf(e->target()) == Graph::generalizationExpander ||
 				typeOf(e->target()) == Graph::generalizationMerger)
 			{
-				os << "arrow \"none\"\n";
-				if (isBrother(e)) os << "fill \"#F0F000\"\n"; //gelb
-			    else if (isHalfBrother(e)) os << "fill \"#FF00AF\"\n";
-				else os << "fill \"#FF0000\"\n";
+				os << "      arrow \"none\"\n";
+				if (isBrother(e))
+					os << "      fill \"#F0F000\"\n"; //gelb
+				else if (isHalfBrother(e))
+					os << "      fill \"#FF00AF\"\n";
+				else
+					os << "      fill \"#FF0000\"\n";
 			}
 			else
-				os << "arrow \"none\"\n";
-	        if (isBrother(e)) os << "fill \"#F0F000\"\n"; //gelb
-			else if (isHalfBrother(e)) os << "fill \"#FF00AF\"\n";
-			else os << "fill \"#00000F\"\n";
-            os << "width 1.0\n";
-        }//else generalization
-			
+				os << "      arrow \"none\"\n";
+			if (isBrother(e))
+				os << "      fill \"#F0F000\"\n"; //gelb
+			else if (isHalfBrother(e))
+				os << "      fill \"#FF00AF\"\n";
+			else
+				os << "      fill \"#00000F\"\n";
+			os << "      width 1.0\n";
+		}//else generalization
+
 		if (original(e) != 0)
 		{
 			const DPolyline &dpl = AG.bends(original(e));
 			if (!dpl.empty()) {
-				os << "Line [\n";
-				os << "point [ x " << AG.x(original(e->source())) << " y " <<
+				os << "      Line [\n";
+				os << "        point [ x " << AG.x(original(e->source())) << " y " <<
 					AG.y(original(e->source())) << " ]\n";
 
 				ListConstIterator<DPoint> it;
 				for(it = dpl.begin(); it.valid(); ++it)
-					os << "point [ x " << (*it).m_x << " y " << (*it).m_y << " ]\n";
+					os << "        point [ x " << (*it).m_x << " y " << (*it).m_y << " ]\n";
 
-				os << "point [ x " << AG.x(original(e->target())) << " y " <<
+				os << "        point [ x " << AG.x(original(e->target())) << " y " <<
 					AG.y(original(e->target())) << " ]\n";
 
-				os << "]\n"; // Line
+				os << "      ]\n"; // Line
 			}//bends
 		}//original
 
-		os << "]\n"; // graphics
+		os << "    ]\n"; // graphics
 
-		os << "]\n"; // edge
+		os << "  ]\n"; // edge
 	}
 
 	os << "]\n"; // graph
 }
 //#endif
 
-double angle(DPoint p, DPoint q, DPoint r) 
+double angle(DPoint p, DPoint q, DPoint r)
 {
 	double dx1 = q.m_x - p.m_x, dy1 = q.m_y - p.m_y;
 	double dx2 = r.m_x - p.m_x, dy2 = r.m_y - p.m_y;
-  
+
 	//two vertices on the same place!
 	if ((dx1 == 0 && dy1 == 0) || (dx2 == 0 && dy2 == 0))
 		return 0.0;
-  
-    double norm = (dx1*dx1+dy1*dy1)*(dx2*dx2+dy2*dy2);
-  
-    double cosphi = (dx1*dx2+dy1*dy2) / sqrt(norm);
-    
+
+	double norm = (dx1*dx1+dy1*dy1)*(dx2*dx2+dy2*dy2);
+
+	double cosphi = (dx1*dx2+dy1*dy2) / sqrt(norm);
+
 	if (cosphi >= 1.0 ) return 0; if (cosphi <= -1.0 ) return Math::pi;
-  
-    double phi = acos(cosphi);
-    
-    if (dx1*dy2 < dy1*dx2) phi = -phi;
-    
+
+	double phi = acos(cosphi);
+
+	if (dx1*dy2 < dy1*dx2) phi = -phi;
+
 	if (phi < 0) phi += 2*Math::pi;
-    
-    return phi; 
+
+	return phi;
 }//angle
 
-double fAngle(DPoint p, DPoint q, DPoint r) 
+double fAngle(DPoint p, DPoint q, DPoint r)
 {
 	return angle(p, q, r)*360.0/(2*Math::pi);
 }
 
 
-void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
-						  bool colorEmbed)
+void PlanRepInc::writeGML(ostream &os, const Layout &drawing, bool colorEmbed)
 {
 	const Graph &G = *this;
 
@@ -762,70 +767,70 @@ void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
 	os.precision(10);
 
 	os << "Creator \"ogdf::GraphAttributes::writeGML\"\n";
-	os << "directed 1\n";
 
 	os << "graph [\n";
+	os << "  directed 1\n";
 
 	node v;
 	forall_nodes(v,G) {
-		os << "node [\n";
+		os << "  node [\n";
 
-		os << "id " << (id[v] = nextId++) << "\n";
+		os << "    id " << (id[v] = nextId++) << "\n";
 
-		os << "graphics [\n";
-		os << "x " << drawing.x(v) << "\n";
-		os << "y " << drawing.y(v) << "\n";
-		os << "w " << 10.0 << "\n";
-		os << "h " << 10.0 << "\n";
-		os << "type \"rectangle\"\n";
-		os << "width 1.0\n";
+		os << "    graphics [\n";
+		os << "      x " << drawing.x(v) << "\n";
+		os << "      y " << drawing.y(v) << "\n";
+		os << "      w " << 10.0 << "\n";
+		os << "      h " << 10.0 << "\n";
+		os << "      type \"rectangle\"\n";
+		os << "      width 1.0\n";
 		if (typeOf(v) == Graph::generalizationMerger) {
-			os << "type \"oval\"\n";
-			os << "fill \"#0000A0\"\n";
+			os << "      type \"oval\"\n";
+			os << "      fill \"#0000A0\"\n";
 		}
 		else if (typeOf(v) == Graph::generalizationExpander) {
-			os << "type \"oval\"\n";
-			os << "fill \"#00FF00\"\n";
+			os << "      type \"oval\"\n";
+			os << "      fill \"#00FF00\"\n";
 		}
 		else if (typeOf(v) == Graph::highDegreeExpander ||
 			typeOf(v) == Graph::lowDegreeExpander)
-			os << "fill \"#FFFF00\"\n";
+			os << "      fill \"#FFFF00\"\n";
 		else if (typeOf(v) == Graph::dummy)
 			{
 				if (isCrossingType(v))
 				{
-					os << "fill \"#FF0000\"\n";
+					os << "      fill \"#FF0000\"\n";
 				}
-				else os << "fill \"#FFFFFF\"\n";
-				os << "type \"oval\"\n";
+				else os << "      fill \"#FFFFFF\"\n";
+				os << "      type \"oval\"\n";
 			}
 
 		else if (v->degree() > 4)
-			os << "fill \"#FFFF00\"\n";
+			os << "      fill \"#FFFF00\"\n";
 
 		else
-			os << "fill \"#000000\"\n";
+			os << "      fill \"#000000\"\n";
 
 
-		os << "]\n"; // graphics
+		os << "    ]\n"; // graphics
 
-		os << "]\n"; // node
+		os << "  ]\n"; // node
 	}
 
 
 	NodeArray<bool> proc(*this, false);
 	edge e;
-	forall_edges(e,G) 
+	forall_edges(e,G)
 	{
-		os << "edge [\n";
+		os << "  edge [\n";
 
-		os << "source " << id[e->source()] << "\n";
-		os << "target " << id[e->target()] << "\n";
+		os << "    source " << id[e->source()] << "\n";
+		os << "    target " << id[e->target()] << "\n";
 
-		os << "generalization " << typeOf(e) << "\n";
-		os << "graphics [\n";
+		os << "    generalization " << typeOf(e) << "\n";
+		os << "    graphics [\n";
 
-		os << "type \"line\"\n";
+		os << "      type \"line\"\n";
 
 		int embedNum = 0;
 		int sNum = 0;
@@ -839,7 +844,7 @@ void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
 			//----------------
 			if (proc[e->target()] && !proc[e->source()]) w = e->target();
 			else if (proc[e->source()] && !proc[e->target()]) w = e->source();
-			else 
+			else
 			//----------------
 				w = (e->source()->degree() > e->target()->degree() ? e->source() : e->target());
 
@@ -871,60 +876,65 @@ void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
 
 			if (typeOf(e) == Graph::generalization)
 			{
-				os << "arrow \"last\"\n";
-				
+				os << "      arrow \"last\"\n";
+
 				if (m_alignUpward[e->adjSource()])
-					os << "fill \"#0000FF\"\n";
+					os << "      fill \"#0000FF\"\n";
 				else
 				{
 					switch (embedNum)
 					{
-						case 1: os << "fill \"#F00000\"\n";break;
-						case 2: os << "fill \"#D00000\"\n";break;
-						case 3: os << "fill \"#B00000\"\n";break;
-						case 4: os << "fill \"#900000\"\n";break;
-                        case 5: os << "fill \"#800000\"\n";break;
-						case 6: os << "fill \"#600000\"\n";break;
-						case 7: os << "fill \"#400000\"\n";break;
-						default: os << "fill \"#FF0000\"\n";
+						case 1: os << "      fill \"#F00000\"\n";break;
+						case 2: os << "      fill \"#D00000\"\n";break;
+						case 3: os << "      fill \"#B00000\"\n";break;
+						case 4: os << "      fill \"#900000\"\n";break;
+						case 5: os << "fill \"#800000\"\n";break;
+						case 6: os << "      fill \"#600000\"\n";break;
+						case 7: os << "      fill \"#400000\"\n";break;
+						default: os << "      fill \"#FF0000\"\n";
 					}
 				}
-                os << "width 3.0\n";
+				os << "      width 3.0\n";
 			}
-			else 
-            {
-                if (typeOf(e->source()) == Graph::generalizationExpander ||
+			else
+			{
+				if (typeOf(e->source()) == Graph::generalizationExpander ||
 					typeOf(e->source()) == Graph::generalizationMerger ||
 					typeOf(e->target()) == Graph::generalizationExpander ||
 					typeOf(e->target()) == Graph::generalizationMerger)
 				{
-					os << "arrow \"none\"\n";
-					if (isBrother(e)) os << "fill \"#F0F000\"\n"; //gelb
-				    else if (isHalfBrother(e)) os << "fill \"#FF00AF\"\n";
-					else os << "fill \"#FF0000\"\n";
+					os << "      arrow \"none\"\n";
+					if (isBrother(e))
+						os << "      fill \"#F0F000\"\n"; //gelb
+					else if (isHalfBrother(e))
+						os << "      fill \"#FF00AF\"\n";
+					else
+						os << "      fill \"#FF0000\"\n";
 				}
 				else
-					os << "arrow \"none\"\n";
-		        if (isBrother(e)) os << "fill \"#F0F000\"\n"; //gelb
-				else 
-					if (isHalfBrother(e)) os << "fill \"#FF00AF\"\n";
-					else
-						switch (embedNum)
-						{
-							case 1: os << "fill \"#000030\"\n";break;
-							case 2: os << "fill \"#000060\"\n";break;
-							case 3: os << "fill \"#200090\"\n";break;
-							case 4: os << "fill \"#3000B0\"\n";break;
-							case 5: os << "fill \"#4000E0\"\n";break;
-							case 6: os << "fill \"#5000F0\"\n";break;
-							case 7: os << "fill \"#8000FF\"\n";break;
-							default: os << "fill \"#000000\"\n";;
-						}
-						
-                os << "width 1.0\n";
+					os << "      arrow \"none\"\n";
+				if (isBrother(e))
+					os << "      fill \"#F0F000\"\n"; //gelb
+				else if (isHalfBrother(e))
+					os << "      fill \"#FF00AF\"\n";
+				else {
+					switch (embedNum)
+					{
+						case 1: os << "      fill \"#000030\"\n";break;
+						case 2: os << "      fill \"#000060\"\n";break;
+						case 3: os << "      fill \"#200090\"\n";break;
+						case 4: os << "      fill \"#3000B0\"\n";break;
+						case 5: os << "      fill \"#4000E0\"\n";break;
+						case 6: os << "      fill \"#5000F0\"\n";break;
+						case 7: os << "      fill \"#8000FF\"\n";break;
+						default: os << "      fill \"#000000\"\n";;
+					}
+				}
+
+				os << "      width 1.0\n";
 			}//else generalization
 
-			//insert a bend at each end corresponding to the 
+			//insert a bend at each end corresponding to the
 			//adjacency order
 			if (colorEmbed)
 			{
@@ -932,11 +942,11 @@ void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
 				node vs = e->source();
 				node vt = e->target();
 				double sx, sy, tx, ty;
-				
-				const double xs = drawing.x(vs), 
-					   ys = drawing.y(vs); //aufpunkt 
-				const double xt = drawing.x(vt), 
-					   yt = drawing.y(vt); //aufpunkt 
+
+				const double xs = drawing.x(vs),
+					ys = drawing.y(vs); //aufpunkt
+				const double xt = drawing.x(vt),
+					yt = drawing.y(vt); //aufpunkt
 
 				//double dx = drawing.x(vt) - drawing.x(vs);
 				//double dy = drawing.y(vt) - drawing.y(vs);
@@ -950,22 +960,22 @@ void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
 				double rdys = drawing.y(rws) - ys;
 				double rdxt = drawing.x(rwt) - xt;
 				double rdyt = drawing.y(rwt) - yt;
-				
+
 				double rslength = sqrt(rdxs*rdxs + rdys*rdys);
 				double rtlength = sqrt(rdxt*rdxt + rdyt*rdyt);
 
 				double refSx = drawing.x(vs) + (rad/rslength)*rdxs;
-				double refSy = drawing.y(vs) + (rad/rslength)*rdys;  
+				double refSy = drawing.y(vs) + (rad/rslength)*rdys;
 				double refTx = drawing.x(vt) + (rad/rtlength)*rdxt;
 				double refTy = drawing.y(vt) + (rad/rtlength)*rdyt;
 
 				double refSx2 = drawing.x(vs) + rdxs/rslength;
-				double refSy2 = drawing.y(vs) + rdys/rslength;  
+				double refSy2 = drawing.y(vs) + rdys/rslength;
 				double refTx2 = drawing.x(vt) + rdxt/rslength;
 				double refTy2 = drawing.y(vt) + rdyt/rslength;
-				
+
 				//do not change reference edge
-				if (sNum <0)//== 0) 
+				if (sNum <0)//== 0)
 				{
 					sx = refSx;
 					sy = refSy;
@@ -975,14 +985,14 @@ void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
 					OGDF_ASSERT(sNum < vs->degree())
 					double angleS = sNum*360.0/vs->degree();
 
-					double refAngleS = fAngle(DPoint(xs, ys), 
+					double refAngleS = fAngle(DPoint(xs, ys),
 						DPoint(refSx2, refSy2),
 						DPoint(xs+1.0, ys)
 						);
 					double testAngleS = refAngleS-angleS;
 
 					//---
-					double dTS = testAngleS*2*Math::pi/360.0;					
+					double dTS = testAngleS*2*Math::pi/360.0;
 					//--
 					sx = xs + rad*cos(dTS);//testAngleS);
 					sy = ys + rad*sin(dTS);//testAngleS);
@@ -997,7 +1007,7 @@ void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
 					OGDF_ASSERT(tNum < vt->degree())
 					double angleT = tNum*360/vt->degree();
 
-					double refAngleT = fAngle(DPoint(xt, yt), 
+					double refAngleT = fAngle(DPoint(xt, yt),
 						DPoint(refTx2, refTy2),
 						DPoint(xt+1.0, yt)
 						);
@@ -1006,25 +1016,24 @@ void PlanRepInc::writeGML(ostream &os, const Layout &drawing,
 					//--
 					double dTT = testAngleT*2*Math::pi/360.0;
 					//--
-					
+
 					tx = xt + rad*cos(dTT);//testAngleT);
 					ty = yt + rad*sin(dTT);//testAngleT);
 
 				}
 
-				
-				os << "Line [\n";
-				os << "point [ x " << xs << " y " << ys << " ]\n";
-				os << "point [ x " << sx << " y " << sy << " ]\n";
-				os << "point [ x " << tx << " y " << ty << " ]\n";
-				os << "point [ x " << xt << " y " << yt << " ]\n";
-				
-				os << "]\n"; // Line
-				
-			}//if colorembed
-			os << "]\n"; // graphics
+				os << "      Line [\n";
+				os << "        point [ x " << xs << " y " << ys << " ]\n";
+				os << "        point [ x " << sx << " y " << sy << " ]\n";
+				os << "        point [ x " << tx << " y " << ty << " ]\n";
+				os << "        point [ x " << xt << " y " << yt << " ]\n";
 
-		os << "]\n"; // edge
+				os << "      ]\n"; // Line
+
+			}//if colorembed
+			os << "    ]\n"; // graphics
+
+		os << "  ]\n"; // edge
 	}
 
 	os << "]\n"; // graph

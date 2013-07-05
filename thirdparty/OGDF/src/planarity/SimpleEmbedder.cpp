@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief A simple embedder algorithm.
- * 
+ *
  * \author Thorsten Kerkhof
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -43,14 +44,13 @@
 
 namespace ogdf {
 
-	void SimpleEmbedder::call(PlanRep& PG, adjEntry& adjExternal)
+	void SimpleEmbedder::call(Graph& G, adjEntry& adjExternal)
 	{
-		PlanarModule pm;
-		OGDF_ASSERT(pm.planarityTest(PG));
+		OGDF_ASSERT(isPlanar(G));
 
 		//----------------------------------------------------------
 		//
-		// determine embedding of PG
+		// determine embedding of G
 		//
 
 		// We currently compute any embedding and choose the maximal face
@@ -61,20 +61,22 @@ namespace ogdf {
 		// of edges (alternatively, we could compute a new embedding and
 		// finally "remove" such unnecessary crossings).
 		adjExternal = 0;
-		if(!PG.representsCombEmbedding())
-			pm.planarEmbed(PG);
+		if(!G.representsCombEmbedding())
+			planarEmbed(G);
 
-		if (PG.numberOfEdges() > 0) 
+		if (G.numberOfEdges() > 0)
 		{
-			CombinatorialEmbedding E(PG);
+			CombinatorialEmbedding E(G);
 			//face fExternal = E.maximalFace();
-			face fExternal = findBestExternalFace(PG, E);
+			face fExternal = findBestExternalFace(G, E);
 			adjExternal = fExternal->firstAdj();
 		}
 	}
 
-	face SimpleEmbedder::findBestExternalFace(const PlanRep& PG,
-	                                          const CombinatorialEmbedding& E)
+
+	face SimpleEmbedder::findBestExternalFace(
+		const PlanRep& PG,
+		const CombinatorialEmbedding& E)
 	{
 		FaceArray<int> weight(E);
 

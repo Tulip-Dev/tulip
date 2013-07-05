@@ -1,54 +1,55 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief The algorithm computes a planar embedding with minimum
  *   depth if the embedding for all blocks of the graph is given.
  *   For details see the paper "Minimum Depth Graph Drawing" by
  *   M. Pizzonia and R. Tamassia.
- * 
+ *
  * \author Thorsten Kerkhof
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
 #include <ogdf/planarity/EmbedderMinDepthPiTa.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/internal/planarity/ConnectedSubgraph.h>
 
 namespace ogdf {
 
-void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
+void EmbedderMinDepthPiTa::call(Graph& G, adjEntry& adjExternal)
 {
 	adjExternal = 0;
 	pAdjExternal = &adjExternal;
@@ -56,74 +57,58 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 	edge e;
 
 	//simple base cases:
-	if (PG.empty())
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		return;//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	if (PG.numberOfNodes() == 1)
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		return;//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	if (PG.numberOfEdges() == 1)
+	if (G.numberOfNodes() <= 1)
+		return;
+
+	if (G.numberOfEdges() == 1)
 	{
-		edge e = PG.chooseEdge();
-		node n1 = e->source();
-		node n2 = e->target();
-		NodeArray< List<adjEntry> > newOrder(PG);
-		newOrder[n1].pushBack(e->adjSource());
-		newOrder[n2].pushBack(e->adjTarget());
-		PG.sort(n1, newOrder[n1]);
-		PG.sort(n2, newOrder[n2]);
+		edge e = G.firstEdge();
 		adjExternal = e->adjSource();
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		return;//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+		return;
 	}
 
-#ifdef USE_EXTENDED_DEPTH_DEFINITION
-	dummyNodes.clear();
-	pBCTree = new BCTree(PG);
-	if (pBCTree->bcTree().numberOfNodes() != 1)
-	{
-		node bT;
-		forall_nodes(bT, pBCTree->bcTree())
+	if(useExtendedDepthDefinition()) {
+		dummyNodes.clear();
+		pBCTree = new BCTree(G);
+		if (pBCTree->bcTree().numberOfNodes() != 1)
 		{
-			if (pBCTree->typeOfBNode(bT) != BCTree::BComp)
-				continue;
-
-			node cT = bT->firstAdj()->twinNode();
-			node cH = pBCTree->cutVertex(cT, bT);
-			Graph SG;
-			NodeArray<node> nSG_to_nG;
-			ConnectedSubgraph<int>::call(pBCTree->auxiliaryGraph(), SG, cH, nSG_to_nG);
-			if (SG.numberOfEdges() == 1)
+			node bT;
+			forall_nodes(bT, pBCTree->bcTree())
 			{
-				node dummyNodePG = PG.newNode();
-				dummyNodes.pushBack(dummyNodePG);
-				node SGnode1 = SG.chooseEdge()->source();
-				node PGnode1 = pBCTree->original(nSG_to_nG[SGnode1]);
-				node SGnode2 = SG.chooseEdge()->target();
-				node PGnode2 = pBCTree->original(nSG_to_nG[SGnode2]);
-				PG.newEdge(PGnode1, dummyNodePG);
-				PG.newEdge(PGnode2, dummyNodePG);
+				if (pBCTree->typeOfBNode(bT) != BCTree::BComp)
+					continue;
+
+				node cT = bT->firstAdj()->twinNode();
+				node cH = pBCTree->cutVertex(cT, bT);
+				Graph SG;
+				NodeArray<node> nSG_to_nG;
+				ConnectedSubgraph<int>::call(pBCTree->auxiliaryGraph(), SG, cH, nSG_to_nG);
+				if (SG.numberOfEdges() == 1)
+				{
+					node dummyNodePG = G.newNode();
+					dummyNodes.pushBack(dummyNodePG);
+					node SGnode1 = SG.chooseEdge()->source();
+					node PGnode1 = pBCTree->original(nSG_to_nG[SGnode1]);
+					node SGnode2 = SG.chooseEdge()->target();
+					node PGnode2 = pBCTree->original(nSG_to_nG[SGnode2]);
+					G.newEdge(PGnode1, dummyNodePG);
+					G.newEdge(PGnode2, dummyNodePG);
+				}
 			}
 		}
+		delete pBCTree;
 	}
-	delete pBCTree;
-
-#endif
 
 	//HINT: Edges are directed from child to parent in BC-trees
-	pBCTree = new BCTree(PG);
+	pBCTree = new BCTree(G);
 
 	//base case of biconnected graph:
 	if (pBCTree->bcTree().numberOfNodes() == 1)
 	{
-		PlanarModule PM;
-		PM.planarEmbed(PG);
-		CombinatorialEmbedding CE(PG);
+		planarEmbed(G);
+		CombinatorialEmbedding CE(G);
 		adjExternal = CE.chooseFace()->firstAdj();
-		deleteDummyNodes(PG, adjExternal);
+		deleteDummyNodes(G, adjExternal);
 
 		delete pBCTree;
 		return;
@@ -133,7 +118,7 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 	//***************************************************************************/
 	//First step: embed all blocks
 	//***************************************************************************/
-	newOrder.init(PG);
+	newOrder.init(G);
 	nodeLength.init(pBCTree->bcTree());
 	oneEdgeBlockNodes.clear();
 
@@ -171,11 +156,9 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 	forall_edges(e, pBCTree->bcTree())
 	{
 		if (e->source() == vT)
-			bcTreePG.newEdge(npBCTree_to_nBCTree[e->target()],
-			                 npBCTree_to_nBCTree[vT]);
+			bcTreePG.newEdge(npBCTree_to_nBCTree[e->target()], npBCTree_to_nBCTree[vT]);
 		else
-			bcTreePG.newEdge(npBCTree_to_nBCTree[e->source()],
-			                 npBCTree_to_nBCTree[e->target()]);
+			bcTreePG.newEdge(npBCTree_to_nBCTree[e->source()], npBCTree_to_nBCTree[e->target()]);
 	}
 
 	G_nT.init(pBCTree->bcTree());
@@ -187,11 +170,11 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 
 	tmpAdjExtFace = 0;
 	embedCutVertex(npBCTree_to_nBCTree[vT], true);
-	forall_nodes(n, PG)
-		PG.sort(n, newOrder[n]);
+	forall_nodes(n, G)
+		G.sort(n, newOrder[n]);
 
 	//adjExternal = tmpAdjExtFace;
-	//deleteDummyNodes(PG, adjExternal);
+	//deleteDummyNodes(G, adjExternal);
 	//return;
 
 	//***************************************************************************/
@@ -199,17 +182,17 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 	//if needed, modify it into a minimum diameter embedding.
 	//***************************************************************************/
 	//a) Compute dual graph:
-	NodeArray< List<adjEntry> > adjacencyList(PG);
-	forall_nodes(n, PG)
+	NodeArray< List<adjEntry> > adjacencyList(G);
+	forall_nodes(n, G)
 	{
 		adjEntry ae;
 		forall_adj(ae, n)
 			adjacencyList[n].pushBack(ae);
 	}
 
-	NodeArray< List<adjEntry> > adjEntryTreated(PG);
+	NodeArray< List<adjEntry> > adjEntryTreated(G);
 	faces.clear();
-	forall_nodes(n, PG)
+	forall_nodes(n, G)
 	{
 		adjEntry adj;
 		forall_adj(adj, n)
@@ -238,7 +221,7 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 	Graph DG;
 	fPG_to_nDG.clear();
 	nDG_to_fPG.init(DG);
-	
+
 	for (ListIterator< List<adjEntry> > it = faces.begin(); it.valid(); it++)
 	{
 		node nn = DG.newNode();
@@ -279,7 +262,7 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 				adjFaces[*(fPG_to_nDG.get(f1_id))].pushBack(*(fPG_to_nDG.get(f2_id)));
 				DG.newEdge(*(fPG_to_nDG.get(f1_id)), *(fPG_to_nDG.get(f2_id)));
 			}
-			
+
 			if (*it2 == tmpAdjExtFace)
 				extFaceID = f1_id;
 		}
@@ -311,10 +294,10 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 			edge ePG = pBCTree->original(eBlockEmbedding_to_eH[bT][eB]);
 			adjExternal = ePG->adjSource();
 		}
-			
+
 		delete pBCTree;
 		delete pm_blockCutfaceTree;
-		deleteDummyNodes(PG, adjExternal);
+		deleteDummyNodes(G, adjExternal);
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		return;//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -340,7 +323,7 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 		adjExternal = (*((*(faces.get(cfid))).begin()));
 		delete pBCTree;
 		delete pm_blockCutfaceTree;
-		deleteDummyNodes(PG, adjExternal);
+		deleteDummyNodes(G, adjExternal);
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		return;//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -357,7 +340,7 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 	}
 	forall_edges(e, m_blockCutfaceTree.bcTree())
 		blockCutfaceTree.newEdge(nm_blockCutfaceTree_to_nBlockCutfaceTree[e->source()],
-		                         nm_blockCutfaceTree_to_nBlockCutfaceTree[e->target()]);
+			nm_blockCutfaceTree_to_nBlockCutfaceTree[e->target()]);
 
 	//Root tree at external face. If external face is not a cutface in the
 	//block-cutface tree, choose an arbitrary cutface as root, because
@@ -397,8 +380,7 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 			node nbDG = e_root_to_nbDG->source();
 			List<node> tmpBlocksNodes;
 			List<node> tmpChildBlocks;
-			node bPG = computeBlockMapping(nbDG, rootOfBlockCutfaceTree,
-			                               tmpBlocksNodes, tmpChildBlocks);
+			node bPG = computeBlockMapping(nbDG, rootOfBlockCutfaceTree, tmpBlocksNodes, tmpChildBlocks);
 			bDG_to_bPG[nbDG] = bPG;
 			bPG_to_bDG[bPG] = nbDG;
 		}
@@ -426,7 +408,7 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 			{
 				if (e_knot_to_w->target() != knotTdiam)
 					continue;
-				
+
 				node child = nTdiam_to_nBlockCutfaceTree[e_knot_to_w->source()];
 				node childBCFTree = nBlockCutfaceTree_to_nm_blockCutfaceTree[child];
 				edge e_childBCFTree_to_b;
@@ -478,15 +460,14 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 				adjEntry ae;
 				forall_face_adj(ae, f)
 				{
-					node orgNode = pBCTree->original(nBlockEmbedding_to_nH[bDG_to_bPG[m_knot]]
-																																[ae->theNode()]);
+					node orgNode = pBCTree->original(nBlockEmbedding_to_nH[bDG_to_bPG[m_knot]] [ae->theNode()]);
 					if (childrenOfKnot.search(orgNode) != -1)
 						numOfEntriesFromList++;
 				}
 				if (numOfEntriesFromList == childrenOfKnot.size())
 				{
 					//i) remove embedding of blocks
-					NodeArray< NodeArray< List<adjEntry> > > adjList(pBCTree->bcTree(), PG);
+					NodeArray< NodeArray< List<adjEntry> > > adjList(pBCTree->bcTree(), G);
 					for (ListIterator<node> it = childrenOfKnot.begin(); it.valid(); it++)
 					{
 						node nG = *it;
@@ -516,13 +497,11 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 						node nG = *it;
 						node bT = *(childrenOfKnot_bT.get(childrenOfKnot.search(*it)));
 						//find adjEntry of nG in f
-						adjEntry adjAfter;
 						adjEntry ae;
 						forall_face_adj(ae, f)
 						{
 							if (pBCTree->original(nBlockEmbedding_to_nH[bT][ae->theNode()]) == nG)
 							{
-								adjAfter = ae;
 								break;
 							}
 						}
@@ -535,9 +514,9 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 					break;
 				}
 			}
-			
-			forall_nodes(n, PG)
-				PG.sort(n, newOrder[n]);
+
+			forall_nodes(n, G)
+				G.sort(n, newOrder[n]);
 		}
 	}
 
@@ -572,8 +551,9 @@ void EmbedderMinDepthPiTa::call(PlanRep& PG, adjEntry& adjExternal)
 
 	delete pBCTree;
 	delete pm_blockCutfaceTree;
-	deleteDummyNodes(PG, adjExternal);
+	deleteDummyNodes(G, adjExternal);
 }
+
 
 int EmbedderMinDepthPiTa::eccentricityBottomUp(const node& nT)
 {
@@ -583,7 +563,7 @@ int EmbedderMinDepthPiTa::eccentricityBottomUp(const node& nT)
 	{
 		if (e_nT_to_mT->target() != nT)
 			continue;
-		
+
 		node mT = e_nT_to_mT->source();
 		int mT_eccentricity = eccentricityBottomUp(mT) + 1;
 		if (mT_eccentricity > thisEccentricity[0])
@@ -600,6 +580,7 @@ int EmbedderMinDepthPiTa::eccentricityBottomUp(const node& nT)
 	return thisEccentricity[0];
 }
 
+
 void EmbedderMinDepthPiTa::eccentricityTopDown(const node& nT)
 {
 	int thisEccentricity = eccentricity[nT];
@@ -609,16 +590,14 @@ void EmbedderMinDepthPiTa::eccentricityTopDown(const node& nT)
 	{
 		if (e_nT_to_mT->source() != nT)
 			continue;
-		
+
 		node mT = e_nT_to_mT->target();
-		if (   eccentricity[mT] == thisEccentricity + 1
-		    && eccentricity_alt[mT] + 1 >= thisEccentricity)
+		if (eccentricity[mT] == thisEccentricity + 1 && eccentricity_alt[mT] + 1 >= thisEccentricity)
 		{
 			thisEccentricity_alt = thisEccentricity;
 			thisEccentricity = eccentricity_alt[mT] + 1;
 		}
-		else if (   eccentricity[mT] != thisEccentricity + 1
-		         && eccentricity[mT] + 1 > thisEccentricity)
+		else if (eccentricity[mT] != thisEccentricity + 1 && eccentricity[mT] + 1 > thisEccentricity)
 		{
 			thisEccentricity_alt = thisEccentricity;
 			thisEccentricity = eccentricity[mT] + 1;
@@ -634,17 +613,19 @@ void EmbedderMinDepthPiTa::eccentricityTopDown(const node& nT)
 		{
 			if (e_nT_to_mT->target() != nT)
 				continue;
-			
+
 			node mT = e_nT_to_mT->source();
 			eccentricityTopDown(mT);
 		}
 	}
 }
 
-node EmbedderMinDepthPiTa::computeBlockMapping(const node& bDG,
-                                               const node& parent,
-                                               List<node>& blocksNodes,
-                                               List<node>& childBlocks)
+
+node EmbedderMinDepthPiTa::computeBlockMapping(
+	const node& bDG,
+	const node& parent,
+	List<node>& blocksNodes,
+	List<node>& childBlocks)
 {
 	List<node> childNodes;
 	edge e_bDG_to_cDG;
@@ -672,7 +653,7 @@ node EmbedderMinDepthPiTa::computeBlockMapping(const node& bDG,
 			bPG_to_bDG[bDG2_map] = bDG2;
 			childNodes.conc(thisBlocksNodes);
 		}
-		
+
 		List<node> m_childNodes = childNodes;
 		for (ListIterator<node> it = m_childNodes.begin(); it.valid(); it++)
 		{
@@ -704,15 +685,14 @@ node EmbedderMinDepthPiTa::computeBlockMapping(const node& bDG,
 				edge e_cT_bT;
 				forall_adj_edges(e_cT_bT, cT)
 				{
-					node bT = (e_cT_bT->source() == cT) ? e_cT_bT->target()
-					                                    : e_cT_bT->source();
+					node bT = (e_cT_bT->source() == cT) ? e_cT_bT->target() : e_cT_bT->source();
 					if (childBlocks.search(bT) != -1)
 						numOfBlocksInList++;
 				}
 				if (numOfBlocksInList == cT->degree())
 					delete_node = true;
 			}
-			
+
 			if (delete_node)
 				childNodes.del(childNodes.get(childNodes.search(n)));
 		}
@@ -724,8 +704,8 @@ node EmbedderMinDepthPiTa::computeBlockMapping(const node& bDG,
 	Graph SG;
 	NodeArray<node> nSG_to_nH;
 	ConnectedSubgraph<int>::call(pm_blockCutfaceTree->auxiliaryGraph(),
-	                             SG, parentH, nSG_to_nH);
-	
+		SG, parentH, nSG_to_nH);
+
 	List<node> blockNodesDG;
 	node nSG;
 	forall_nodes(nSG, SG)
@@ -738,9 +718,9 @@ node EmbedderMinDepthPiTa::computeBlockMapping(const node& bDG,
 		for (ListIterator<adjEntry> it = beginIt; it.valid(); it++)
 		{
 			node nPG = (*it)->theNode();
-			if (   childNodes.search(nPG) == -1
-			    && blockNodesDG.search(nPG) == -1
-			    && oneEdgeBlockNodes.search(nPG) == -1)
+			if (childNodes.search(nPG) == -1
+				&& blockNodesDG.search(nPG) == -1
+				&& oneEdgeBlockNodes.search(nPG) == -1)
 			{
 				blockNodesDG.pushBack(nPG);
 			}
@@ -776,6 +756,7 @@ node EmbedderMinDepthPiTa::computeBlockMapping(const node& bDG,
 	return 0;
 }
 
+
 void EmbedderMinDepthPiTa::invertPath(Graph& G, const node& n, const edge& e)
 {
 	edge e2;
@@ -788,6 +769,7 @@ void EmbedderMinDepthPiTa::invertPath(Graph& G, const node& n, const edge& e)
 		}
 	}
 }
+
 
 void EmbedderMinDepthPiTa::computeTdiam(const node& n)
 {
@@ -812,7 +794,7 @@ void EmbedderMinDepthPiTa::computeTdiam(const node& n)
 				numEdgesWithMaxLength++;
 		}
 	}
-	
+
 	forall_adj_edges(e_n_to_m, n)
 	{
 		if (e_n_to_m->target() != n)
@@ -831,7 +813,7 @@ void EmbedderMinDepthPiTa::computeTdiam(const node& n)
 			knotTdiam = nTdiam;
 			Tdiam_initialized = true;
 		}
-		
+
 		if (Tdiam_was_initialized || numEdgesWithMaxLength > 1)
 		{
 			node mTdiam = Tdiam.newNode();
@@ -845,6 +827,7 @@ void EmbedderMinDepthPiTa::computeTdiam(const node& n)
 		computeTdiam(m);
 	}
 }
+
 
 int EmbedderMinDepthPiTa::computeBlockCutfaceTreeEdgeLengths(const node& n)
 {
@@ -866,6 +849,7 @@ int EmbedderMinDepthPiTa::computeBlockCutfaceTreeEdgeLengths(const node& n)
 	return maxChildrenEdgeLength + 1;
 }
 
+
 void EmbedderMinDepthPiTa::embedBlocks(const node& bT, const node& cH)
 {
 	//recursion:
@@ -874,7 +858,7 @@ void EmbedderMinDepthPiTa::embedBlocks(const node& bT, const node& cH)
 	{
 		if (e->source() == bT)
 			continue;
-		
+
 		node cT = e->source();
 		edge e2;
 		forall_adj_edges(e2, cT)
@@ -891,24 +875,26 @@ void EmbedderMinDepthPiTa::embedBlocks(const node& bT, const node& cH)
 	if (m_cH == 0)
 		m_cH = pBCTree->cutVertex(bT->firstAdj()->twinNode(), bT);
 	ConnectedSubgraph<int>::call(pBCTree->auxiliaryGraph(), blockG[bT], m_cH,
-	                             nBlockEmbedding_to_nH[bT], eBlockEmbedding_to_eH[bT],
-	                             nH_to_nBlockEmbedding[bT], eH_to_eBlockEmbedding[bT]);
-	PlanarModule PM;
-	PM.planarEmbed(blockG[bT]);
+		nBlockEmbedding_to_nH[bT], eBlockEmbedding_to_eH[bT],
+		nH_to_nBlockEmbedding[bT], eH_to_eBlockEmbedding[bT]);
+	planarEmbed(blockG[bT]);
 	nodeLength[bT].init(blockG[bT], 0);
-#ifndef USE_EXTENDED_DEPTH_DEFINITION
-	if (blockG[bT].numberOfEdges() == 1)
+
+	if(!useExtendedDepthDefinition())
 	{
-		node n;
-		forall_nodes(n, blockG[bT])
+		if (blockG[bT].numberOfEdges() == 1)
 		{
-			node nOrg = pBCTree->original(nBlockEmbedding_to_nH[bT][n]);
-			if (nOrg->degree() == 1)
-				oneEdgeBlockNodes.pushBack(nOrg);
+			node n;
+			forall_nodes(n, blockG[bT])
+			{
+				node nOrg = pBCTree->original(nBlockEmbedding_to_nH[bT][n]);
+				if (nOrg->degree() == 1)
+					oneEdgeBlockNodes.pushBack(nOrg);
+			}
 		}
 	}
-#endif
 }
+
 
 void EmbedderMinDepthPiTa::embedCutVertex(const node& vT, bool root /*= false*/)
 {
@@ -917,7 +903,7 @@ void EmbedderMinDepthPiTa::embedCutVertex(const node& vT, bool root /*= false*/)
 	nPG_to_nG_nT[vTp].init(pBCTree->originalGraph());
 	eG_nT_to_ePG[vTp].init(G_nT[vTp]);
 	ePG_to_eG_nT[vTp].init(pBCTree->originalGraph());
-	
+
 	node vG_nT = G_nT[vTp].newNode();
 	node adj_bT = vT->firstAdj()->twinNode();
 	node vH = pBCTree->cutVertex(vTp, nBCTree_to_npBCTree[adj_bT]);
@@ -995,10 +981,10 @@ void EmbedderMinDepthPiTa::embedCutVertex(const node& vT, bool root /*= false*/)
 					}
 				} //for (adjEntry aeNode = nB->firstAdj(); aeNode; aeNode = aeNode->succ())
 			} //forall_nodes(nB, blockG[bTp])
-			
+
 			forall_nodes(nB, G_nT[bTp])
 				G_nT[bTp].sort(nB, newOrder_G_bTp[nB]);
-		} 
+		}
 		else //if not leaf
 		{
 			//Let \Gamma(B) = embed(B)
@@ -1031,6 +1017,13 @@ void EmbedderMinDepthPiTa::embedCutVertex(const node& vT, bool root /*= false*/)
 		//set adjacency entry of external face for Gamma(vT), if not already assigned:
 		if (Gamma_adjExt_nT[vTp] == 0)
 		{
+			// TESTCODE
+			// BUG (actually occurs below): graph of v is wrong
+			//node v = Gamma_adjExt_nT[bTp]->theNode(); // graphOf: ???
+			//NodeArray<node> &na = nG_nT_to_nPG[bTp];  // graphOf: G_nT[bTp]
+			//node xxx = na[v];  // BUG
+			// END TESTCODE
+
 			node nodeG = nG_nT_to_nPG[bTp][Gamma_adjExt_nT[bTp]->theNode()];
 			node nodeG_vT = nPG_to_nG_nT[vTp][nodeG];
 			node twinG = nG_nT_to_nPG[bTp][Gamma_adjExt_nT[bTp]->twinNode()];
@@ -1048,7 +1041,7 @@ void EmbedderMinDepthPiTa::embedCutVertex(const node& vT, bool root /*= false*/)
 
 		if (root)
 		{
-			//set adjacency entry of external face for PG, if not already assigned:
+			//set adjacency entry of external face for G, if not already assigned:
 			if (tmpAdjExtFace == 0)
 			{
 				node nodeG = nG_nT_to_nPG[bTp][Gamma_adjExt_nT[bTp]->theNode()];
@@ -1138,7 +1131,7 @@ void EmbedderMinDepthPiTa::embedCutVertex(const node& vT, bool root /*= false*/)
 			} //forall_nodes(nB, G_nT[bTp])
 		} //forall_adj_edges(e_vT_bT, vT)
 	}
-	
+
 	//apply new order:
 	node n_G_vT;
 	forall_nodes(n_G_vT, G_nT[vTp])
@@ -1168,6 +1161,7 @@ void EmbedderMinDepthPiTa::embedCutVertex(const node& vT, bool root /*= false*/)
 	}
 }
 
+
 void EmbedderMinDepthPiTa::embedBlockVertex(const node& bT, const node& parent_cT)
 {
 	node bTp = nBCTree_to_npBCTree[bT];
@@ -1194,7 +1188,7 @@ void EmbedderMinDepthPiTa::embedBlockVertex(const node& bT, const node& parent_c
 		face lf = CE.leftFace(ae_parent_cB);
 		if (candidateCutfaces.search(lf) == -1)
 			candidateCutfaces.pushBack(lf);
-		
+
 		face rf = CE.rightFace(ae_parent_cB);
 		if (candidateCutfaces.search(rf) == -1)
 			candidateCutfaces.pushBack(rf);
@@ -1205,12 +1199,10 @@ void EmbedderMinDepthPiTa::embedBlockVertex(const node& bT, const node& parent_c
 	//and f_B = face with max delta(f) and maximum number of cutvertices with deepest embedding.
 	face f_B = *(candidateCutfaces.begin());
 	int max_delta_f = 0;
-	int max_numOfCVWithDeepestEmbedding = 0;
 	for (ListIterator<face> it_f = candidateCutfaces.begin(); it_f.valid(); it_f++)
 	{
 		face f = *it_f;
 		int maxDepth = 0;
-		int numOfCVWithDeepestEmbedding = 0;
 		adjEntry ae_f = f->firstAdj();
 		do
 		{
@@ -1223,32 +1215,28 @@ void EmbedderMinDepthPiTa::embedBlockVertex(const node& bT, const node& parent_c
 				node nT = npBCTree_to_nBCTree[nTp];
 				if (nT != parent_cT)
 				{
-					int depth_nT = depthCutvetex(nT);
+					int depth_nT = depthCutvertex(nT);
 					if (depth_nT > maxDepth)
 					{
 						maxDepth = depth_nT;
-						numOfCVWithDeepestEmbedding = 1;
 					}
-					else if (depth_nT == maxDepth)
-						numOfCVWithDeepestEmbedding++;
 				}
 			}
 
 			ae_f = ae_f->faceCycleSucc();
 		} while(ae_f != f->firstAdj());
-		
+
 		if (maxDepth > max_delta_f)
 		{
 			f_B = f;
 			max_delta_f = maxDepth;
-			max_numOfCVWithDeepestEmbedding = numOfCVWithDeepestEmbedding;
 		}
 	}
-	
+
 	//embed all cutvertices incident to f_B into f_B and all other cutvertices
 	//into an arbitrary cutface:
 	Gamma_adjExt_nT[bTp] = f_B->firstAdj();
-	
+
 	//G_nT[bT] = blockG[bT]:
 	nG_nT_to_nPG[bTp].init(G_nT[bTp]);
 	nPG_to_nG_nT[bTp].init(pBCTree->originalGraph());
@@ -1339,7 +1327,7 @@ void EmbedderMinDepthPiTa::embedBlockVertex(const node& bT, const node& parent_c
 					}
 					aeFace = aeFace->faceCycleSucc();
 				} while(aeFace != Gamma_adjExt_nT[cTp]);
-				
+
 				//embed all edges of Gamma(cT):
 				node n_G_cT;
 				forall_nodes(n_G_cT, G_nT[cTp])
@@ -1358,7 +1346,7 @@ void EmbedderMinDepthPiTa::embedBlockVertex(const node& bT, const node& parent_c
 						ae = n_G_cT->firstAdj();
 						pAfter = OGDF_NEW ListIterator<adjEntry>();
 					}
-					
+
 					bool after_ae = true;
 					for (adjEntry aeNode = ae;
 							 after_ae || aeNode != ae;
@@ -1373,23 +1361,21 @@ void EmbedderMinDepthPiTa::embedBlockVertex(const node& bT, const node& parent_c
 							if (!pAfter->valid())
 								*pAfter = newOrder_bT[n_G_bT2].pushBack(e_G_bT->adjSource());
 							else
-								*pAfter = newOrder_bT[n_G_bT2].insertAfter(e_G_bT->adjSource(),
-								                                           *pAfter);
+								*pAfter = newOrder_bT[n_G_bT2].insertAfter(e_G_bT->adjSource(), *pAfter);
 						}
 						else
 						{
 							if (!pAfter->valid())
 								*pAfter = newOrder_bT[n_G_bT2].pushBack(e_G_bT->adjTarget());
 							else
-								*pAfter = newOrder_bT[n_G_bT2].insertAfter(e_G_bT->adjTarget(),
-								                                           *pAfter);
+								*pAfter = newOrder_bT[n_G_bT2].insertAfter(e_G_bT->adjTarget(), *pAfter);
 						}
 					} //for (adjEntry aeNode = ae; aeNode; aeNode = aeNode->succ())
 
 					if (nG2 != nG)
 						delete pAfter;
 				} //forall_nodes(n_G_cT, G_nT[cT])
-				
+
 				//find adjacency entry of n_blockG_bT which lies on face f_B:
 				aeFace = f_B->firstAdj();
 				do
@@ -1410,9 +1396,9 @@ void EmbedderMinDepthPiTa::embedBlockVertex(const node& bT, const node& parent_c
 		//embed all edges of block bT:
 		bool after_ae = true;
 		for (adjEntry aeNode = ae;
-		     after_ae || aeNode != ae;
-				 after_ae = (!after_ae || !aeNode->succ()) ? false : true,
-		       aeNode = aeNode->succ() ? aeNode->succ() : n_blockG_bT->firstAdj())
+			after_ae || aeNode != ae;
+			after_ae = (!after_ae || !aeNode->succ()) ? false : true,
+			aeNode = aeNode->succ() ? aeNode->succ() : n_blockG_bT->firstAdj())
 		{
 			edge eG = pBCTree->original(eBlockEmbedding_to_eH[bTp][aeNode->theEdge()]);
 			edge e_G_bT = ePG_to_eG_nT[bTp][eG];
@@ -1439,6 +1425,7 @@ void EmbedderMinDepthPiTa::embedBlockVertex(const node& bT, const node& parent_c
 	forall_nodes(n_G_bT, G_nT[bTp])
 		G_nT[bTp].sort(n_G_bT, newOrder_bT[n_G_bT]);
 }
+
 
 int EmbedderMinDepthPiTa::depthBlock(const node& bT/*, const node& parent_cT*/)
 {
@@ -1479,7 +1466,7 @@ int EmbedderMinDepthPiTa::depthBlock(const node& bT/*, const node& parent_cT*/)
 			ae = ae->faceCycleSucc();
 		} while (ae != Gamma_adjExt_nT[bTp]);
 
-		int depth_Gamma_cT = depthCutvetex(cT);
+		int depth_Gamma_cT = depthCutvertex(cT);
 		if (v_incident_to_fB)
 		{
 			if (depth_Gamma_cT > maxDepth_dP)
@@ -1498,11 +1485,12 @@ int EmbedderMinDepthPiTa::depthBlock(const node& bT/*, const node& parent_cT*/)
 	return 2 + dNP;
 }
 
-int EmbedderMinDepthPiTa::depthCutvetex(const node& cT)
+
+int EmbedderMinDepthPiTa::depthCutvertex(const node& cT)
 {
 	//return max_{B \in children(v)} depth(Gamma(B))
 	int maxDepth = 0;
-	
+
 	edge e_cT_bT;
 	forall_adj_edges(e_cT_bT, cT)
 	{
@@ -1518,9 +1506,12 @@ int EmbedderMinDepthPiTa::depthCutvetex(const node& cT)
 	return maxDepth;
 }
 
-void EmbedderMinDepthPiTa::deleteDummyNodes(PlanRep& PG, adjEntry& adjExternal)
+
+void EmbedderMinDepthPiTa::deleteDummyNodes(Graph& G, adjEntry& adjExternal)
 {
-#ifdef USE_EXTENDED_DEPTH_DEFINITION
+	if(!useExtendedDepthDefinition())
+		return;
+
 	node adjExtNode = adjExternal->theNode();
 	node adjExtTwinNode = adjExternal->twinNode();
 	if (dummyNodes.search(adjExtNode) != -1)
@@ -1529,7 +1520,7 @@ void EmbedderMinDepthPiTa::deleteDummyNodes(PlanRep& PG, adjEntry& adjExternal)
 		if (!succ)
 			succ = adjExtNode->firstAdj();
 		node succTwinNode = succ->twinNode();
-		
+
 		//find edge between adjExtTwinNode and succTwinNode:
 		adjEntry ae;
 		forall_adj(ae, adjExtTwinNode)
@@ -1547,7 +1538,7 @@ void EmbedderMinDepthPiTa::deleteDummyNodes(PlanRep& PG, adjEntry& adjExternal)
 		if (!succ)
 			succ = adjExtTwinNode->firstAdj();
 		node succTwinNode = succ->twinNode();
-		
+
 		//find edge between adjExtNode and succTwinNode:
 		adjEntry ae;
 		forall_adj(ae, adjExtNode)
@@ -1561,8 +1552,7 @@ void EmbedderMinDepthPiTa::deleteDummyNodes(PlanRep& PG, adjEntry& adjExternal)
 	}
 
 	for (ListIterator<node> it = dummyNodes.begin(); it.valid(); it++)
-		PG.delNode(*it);
-#endif
+		G.delNode(*it);
 }
 
 } // end namespace ogdf

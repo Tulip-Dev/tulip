@@ -1,42 +1,46 @@
 /*
- * $Revision: 2010 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2010-08-27 12:25:58 +0200 (Fri, 27 Aug 2010) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declares class TricComp which realizes the Hopcroft/Tarjan
  * algorithm for finding the triconnected components of a biconnected
  * multi-graph.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * Version 2 as published by the Free Software Foundation.
- * 
+ * Version 2 or 3 as published by the Free Software Foundation;
+ * see the file LICENSE.txt included in the packaging of this file
+ * for details.
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
 
 #ifdef _MSC_VER
 #pragma once
@@ -127,7 +131,7 @@ private:
 		m_TSTACK_a[++m_top] = -1;
 	}
 
-	// returns true iff end-of-stack marker is not on top of TSTACK 
+	// returns true iff end-of-stack marker is not on top of TSTACK
 	bool TSTACK_notEOS() {
 		return (m_TSTACK_a[m_top] != -1);
 	}
@@ -184,7 +188,7 @@ private:
 	}
 
 	NodeArray<int>   m_NUMBER; // (first) dfs-number of v
-	NodeArray<int>   m_LOWPT1; 
+	NodeArray<int>   m_LOWPT1;
 	NodeArray<int>   m_LOWPT2;
 	NodeArray<int>   m_ND;     // number of descendants in palm tree
 	NodeArray<int>   m_DEGREE; // degree of v
@@ -195,12 +199,9 @@ private:
 	NodeArray<int>  m_NEWNUM;  // (second) dfs-number of v
 	EdgeArray<bool> m_START;   // edge starts a path
 	NodeArray<edge> m_TREE_ARC; // tree arc entering v
-	NodeArray<List<int> > m_HIGHPT; // list of fronds entering v in the order
-	                                // they are visited
-	EdgeArray<ListIterator<edge> > m_IN_ADJ; // pointer to element in adjacency
-	                                         // list containing e
-	EdgeArray<ListIterator<int> >  m_IN_HIGH; // pointer to element in HIGHPT
-	                                          // list containing e
+	NodeArray<List<int> > m_HIGHPT;	// list of fronds entering v in the order they are visited
+	EdgeArray<ListIterator<edge> > m_IN_ADJ;	// pointer to element in adjacency list containing e
+	EdgeArray<ListIterator<int> >  m_IN_HIGH;	// pointer to element in HIGHPT list containing e
 	BoundedStack<edge> m_ESTACK; // stack of currently active edges
 
 	node m_start;     // start node of dfs traversal

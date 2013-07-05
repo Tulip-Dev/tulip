@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2583 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of graph copy classes.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -56,7 +57,7 @@
 
 namespace ogdf {
 
-class OGDF_EXPORT FaceSetPure;
+class FaceSetPure;
 
 
 //---------------------------------------------------------
@@ -76,8 +77,8 @@ class OGDF_EXPORT FaceSetPure;
  * that both edges resulting from the split are mapped to the same
  * original edge; this feature is provided by GraphCopy.
  */
-class OGDF_EXPORT GraphCopySimple : public Graph {
-
+class OGDF_EXPORT GraphCopySimple : public Graph
+{
 	const Graph *m_pGraph;   //!< The original graph.
 	NodeArray<node> m_vOrig; //!< The corresponding node in the original graph.
 	NodeArray<node> m_vCopy; //!< The corresponding node in the graph copy.
@@ -93,7 +94,7 @@ public:
 	//! Copy constructor.
 	GraphCopySimple(const GraphCopySimple &GC);
 
-	virtual ~GraphCopySimple() {};
+	virtual ~GraphCopySimple() { }
 
 	//! Returns a reference to the original graph.
 	const Graph &original() const { return *m_pGraph; }
@@ -101,7 +102,7 @@ public:
 	/**
 	 * \brief Returns the node in the original graph corresponding to \a v.
 	 * @param v is a node in the graph copy.
-     * \return the corresponding node in the original graph, or 0 if no
+	 * \return the corresponding node in the original graph, or 0 if no
 	 *         such node exists.
 	 */
 	node original(node v) const { return m_vOrig[v]; }
@@ -109,7 +110,7 @@ public:
 	/**
 	 * \brief Returns the edge in the original graph corresponding to \a e.
 	 * @param e is an edge in the graph copy.
-     * \return the corresponding edge in the original graph, or 0 if no
+	 * \return the corresponding edge in the original graph, or 0 if no
 	 *         such edge exists.
 	 */
 	edge original(edge e) const { return m_eOrig[e]; }
@@ -117,14 +118,14 @@ public:
 	/**
 	 * \brief Returns the node in the graph copy corresponding to \a v.
 	 * @param v is a node in the original graph.
-     * \return the corresponding node in the graph copy.
+	 * \return the corresponding node in the graph copy.
 	 */
 	node copy(node v) const { return m_vCopy[v]; }
 
 	/**
 	 * \brief Returns the edge in the graph copy corresponding to \a e.
 	 * @param e is an edge in the original graph.
-     * \return the corresponding edge in the graph copy.
+	 * \return the corresponding edge in the graph copy.
 	 */
 	edge copy(edge e) const { return m_eCopy[e]; }
 
@@ -252,7 +253,7 @@ public:
 	 */
 	GraphCopy(const GraphCopy &GC);
 
-	virtual ~GraphCopy() {};
+	virtual ~GraphCopy() { }
 
 
 	/**
@@ -266,7 +267,7 @@ public:
 	/**
 	 * \brief Returns the node in the original graph corresponding to \a v.
 	 * @param v is a node in the graph copy.
-     * \return the corresponding node in the original graph, or 0 if no
+	 * \return the corresponding node in the original graph, or 0 if no
 	 *         such node exists.
 	 */
 	node original(node v) const { return m_vOrig[v]; }
@@ -274,7 +275,7 @@ public:
 	/**
 	 * \brief Returns the edge in the original graph corresponding to \a e.
 	 * @param e is an edge in the graph copy.
-     * \return the corresponding edge in the original graph, or 0 if no
+	 * \return the corresponding edge in the original graph, or 0 if no
 	 *         such edge exists.
 	 */
 	edge original(edge e) const { return m_eOrig[e]; }
@@ -282,7 +283,7 @@ public:
 	/**
 	 * \brief Returns the node in the graph copy corresponding to \a v.
 	 * @param v is a node in the original graph.
-     * \return the corresponding node in the graph copy.
+	 * \return the corresponding node in the graph copy.
 	 */
 	node copy(node v) const { return m_vCopy[v]; }
 
@@ -297,7 +298,7 @@ public:
 	/**
 	 * \brief Returns the first edge in the list of edges coresponding to edge \a e.
 	 * @param e is an edge in the original graph.
-     * \return the first edge in the corresponding list of edges in
+	 * \return the first edge in the corresponding list of edges in
 	 * the graph copy.
 	 */
 	edge copy(edge e) const { return m_eCopy[e].front(); }
@@ -316,13 +317,13 @@ public:
 
 	/**
 	 * \brief Returns true iff edge \a e has been reversed.
-     * @param e is an edge in the original graph.
+	 * @param e is an edge in the original graph.
 	 */
 	bool isReversed (edge e) const {
 		return e->source() != original(copy(e)->source());
 	}
 
-	
+
 	/**
 	 * @name Creation and deletion of nodes and edges
 	 */
@@ -374,8 +375,8 @@ public:
 	 * The two edges \a eIn and \a eOut are merged to a single edge \a eIn.
 	 * \pre The vertex \a u that was created by the previous split operation has
 	 *      exactly one incoming edge \a eIn and one outgoing edge \a eOut.
-	 * @param eIn is an edge (*,\a u) in the graph copy. 
-	 * @param eOut is an edge (\a u,*) in the graph copy. 
+	 * @param eIn is an edge (*,\a u) in the graph copy.
+	 * @param eOut is an edge (\a u,*) in the graph copy.
 	 */
 	void unsplit(edge eIn, edge eOut);
 
@@ -386,6 +387,7 @@ public:
 	/**
 	 * Let \a v be the node whose adjacency list contains \a adjSrc. Then,
 	 * the created edge is (\a v,\a w).
+	 * @param eOrig is the original edge.
 	 * @param adjSrc is the adjacency entry after which the new edge is inserted
 	 *        in the adjacency list of \a v.
 	 * @param w is the source node of the new edge; the edge is added at the end
@@ -398,6 +400,7 @@ public:
 	/**
 	 * Let \a w be the node whose adjacency list contains \a adjTgt. Then,
 	 * the created edge is (\a v,\a w).
+	 * @param eOrig is the original edge.
 	 * @param v is the source node of the new edge; the edge is added at the end
 	 *        of the adjacency list of \a v.
 	 * @param adjTgt is the adjacency entry after which the new edge is inserted
@@ -417,7 +420,7 @@ public:
 	 * @param eCopy is the edge copy
 	 */
 	void setEdge(edge eOrig, edge eCopy);
-	
+
 	//! Re-inserts edge \a eOrig by "crossing" the edges in \a crossedEdges.
 	/**
 	 * Let \a v and \a w be the copies of the source and target nodes of \a eOrig.
@@ -432,7 +435,7 @@ public:
 
 	//for FixedEmbeddingUpwardEdgeInserter only
 	void insertEdgePath(node srcOrig, node tgtOrig, const SList<adjEntry> &crossedEdges);
-	
+
 
 	//! Removes the complete edge path for edge \a eOrig.
 	/**
@@ -440,15 +443,25 @@ public:
 	 */
 	void removeEdgePath(edge eOrig);
 
-	//! Inserts crossings between already existing edges (used in TopologyModule).
+	//! Inserts crossings between two copy edges.
 	/**
-	 * Replaces \a crossingEdge by first \a crossingEdge part and returns second.
-	 * @param topDown describes the following: if the \a crossingEdge is running
-	 *        horizontally from left to right, is the \a crossedEdge direction top->down?
-	 */
-	edge insertCrossing(edge& crossingEdge,
-						edge crossedEdge,
-						bool topDown);
+	 * This method is used in TopologyModule.
+	 *
+	 * Let \a crossingEdge = (\a a, \a b) and \a crossedEdge = (\a v, \a w).
+	 * Then \a crossedEdge is split creating two edges \a crossedEdge = (\a v, \a u)
+	 * and (\a u, \a w), \a crossingEdge is removed and replaced by two new edges
+	 * \a e1  = (\a a, \a u) and \a e1 = (\a u, \a b).
+	 * Finally it sets \a crossingEdge to \a e2 and returns (\a u, \a w).
+	 *
+	 * @param crossingEdge is the edge that gets split.
+	 * @param crossedEdge is the edge that is replaced by two new edges.
+	 * @param topDown is used as follows: If set to true, \a crossingEdge will cross
+	 *        \a crossedEdge from right to left, otherwise from left to right.
+	*/
+	edge insertCrossing(
+		edge& crossingEdge,
+		edge crossedEdge,
+		bool topDown);
 
 
 	/**
@@ -504,7 +517,7 @@ public:
 		edge eOrig,
 		CombinatorialEmbedding &E,
 		const SList<adjEntry> &crossedEdges);
-	
+
 	/**
 	 * Removes the complete edge path for edge \a eOrig while preserving the embedding.
 	 * @param E is an embedding of the graph copy.
@@ -520,7 +533,7 @@ public:
 
 	//@}
 	/**
-	 * @name Miscellaneous 
+	 * @name Miscellaneous
 	 */
 	//@{
 
@@ -594,7 +607,7 @@ public:
 	 *        otherwise.
 	 * @param eCopy is assigned the copy of each original edge.
 	 */
-	void initByActiveNodes(const List<node> &nodes, 
+	void initByActiveNodes(const List<node> &nodes,
 		const NodeArray<bool> &activeNodes, EdgeArray<edge> &eCopy);
 
 	//@}

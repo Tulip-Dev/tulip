@@ -1,47 +1,23 @@
-/** \file
- * \brief Declares class ProcrustesSubLayout
- * 
- * \author Martin Gronemann
- * 
- * \par License:
- * This file is part of the Open Graph Drawing Framework (OGDF).
+/*
+ * $Revision: 2554 $
  *
- * Copyright (C). All rights reserved.
- * See README.txt in the root directory of the OGDF installation for details.
- * 
- * \par
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation;
- * see the file LICENSE.txt included in the packaging of this file
- * for details.
- * 
- * \par
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * \par
- * You should have received a copy of the GNU General Public 
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- * 
- * \see  http://www.gnu.org/copyleft/gpl.html
+ * last checkin:
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-06 11:39:38 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief Implements class ProcrustesSubLayout
- * 
+ *
  * \author Martin Gronemann
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,19 +34,19 @@
  * you follow the requirements of the GNU General Public License
  * in regard to all of the software in the executable aside from these
  * third-party libraries.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -84,7 +60,7 @@ ProcrustesSubLayout::ProcrustesSubLayout(LayoutModule* pSubLayout) : m_pSubLayou
 	// nothing
 }
 
-void ProcrustesSubLayout::copyFromGraphAttributes(const GraphAttributes& graphAttributes, ProcrustesPointSet& pointSet)	
+void ProcrustesSubLayout::copyFromGraphAttributes(const GraphAttributes& graphAttributes, ProcrustesPointSet& pointSet)
 {
 	const Graph& graph = graphAttributes.constGraph();
 	int i = 0;
@@ -114,9 +90,9 @@ void ProcrustesSubLayout::rotate(GraphAttributes& graphAttributes, double angle)
 		double y = sin(angle)*graphAttributes.x(v) + cos(angle)*graphAttributes.y(v);
 		graphAttributes.x(v) = x;
 		graphAttributes.y(v) = y;
-	}	
+	}
 }
-	
+
 void ProcrustesSubLayout::scale(GraphAttributes& graphAttributes, double scale)
 {
 	const Graph& graph = graphAttributes.constGraph();
@@ -124,47 +100,47 @@ void ProcrustesSubLayout::scale(GraphAttributes& graphAttributes, double scale)
 	{
 		graphAttributes.x(v) *= scale;
 		graphAttributes.y(v) *= scale;
-	}	
+	}
 }
-	
+
 void ProcrustesSubLayout::flipY(GraphAttributes& graphAttributes)
 {
 	const Graph& graph = graphAttributes.constGraph();
 	for (node v = graph.firstNode(); v; v = v->succ())
 	{
 		graphAttributes.y(v) = -graphAttributes.y(v);
-	}	
+	}
 }
-							 
+
 //! Computes a circular layout for graph attributes \a GA.
 void ProcrustesSubLayout::call(GraphAttributes& graphAttributes)
 {
 	// any layout?
 	if (!m_pSubLayout)
 		return;
-	
+
 	const Graph& graph = graphAttributes.constGraph();
-	
+
 	// the nodes as points from the initial layout before
 	ProcrustesPointSet initialPointSet(graph.numberOfNodes());
 	copyFromGraphAttributes(graphAttributes, initialPointSet);
 	initialPointSet.normalize();
-	
+
 	// call the layout algorithm
 	m_pSubLayout->call(graphAttributes);
-	
+
 	// two new pointsets, one which holds the new layout
 	ProcrustesPointSet newPointSet(graph.numberOfNodes());
 	copyFromGraphAttributes(graphAttributes, newPointSet);
-	newPointSet.normalize();	
+	newPointSet.normalize();
 	newPointSet.rotateTo(initialPointSet);
-	
+
 	// and one which holds the new layout with flipped y coords
 	ProcrustesPointSet newFlippedPointSet(graph.numberOfNodes());
 	copyFromGraphAttributes(graphAttributes, newFlippedPointSet);
 	newFlippedPointSet.normalize(true);
 	newFlippedPointSet.rotateTo(initialPointSet);
-	
+
 	// which layout is better
 	bool useFlippedLayout = initialPointSet.compare(newFlippedPointSet) < initialPointSet.compare(newPointSet);
 	double scaleFactor = initialPointSet.scale();
@@ -180,12 +156,12 @@ void ProcrustesSubLayout::call(GraphAttributes& graphAttributes)
 		if (!m_scaleToInitialLayout)
 			scaleFactor = newFlippedPointSet.scale();
 	}
-	
+
 	// everything is uniform and rotated. now get back to the initial layout
 	scale(graphAttributes, scaleFactor);
 	translate(graphAttributes, initialPointSet.originX(), initialPointSet.originY());
 }
-	
+
 void ProcrustesSubLayout::reverseTransform(GraphAttributes& graphAttributes, const ProcrustesPointSet& pointSet)
 {
 	translate(graphAttributes, -pointSet.originX(), -pointSet.originY());
@@ -194,11 +170,11 @@ void ProcrustesSubLayout::reverseTransform(GraphAttributes& graphAttributes, con
 	scale(graphAttributes, 1.0/pointSet.scale());
 	rotate(graphAttributes, pointSet.angle());
 }
-	
-ProcrustesPointSet::ProcrustesPointSet(int numPoints) : 
-	m_numPoints(numPoints), 
-	m_originX(0.0), 
-	m_originY(0.0), 
+
+ProcrustesPointSet::ProcrustesPointSet(int numPoints) :
+	m_numPoints(numPoints),
+	m_originX(0.0),
+	m_originY(0.0),
 	m_scale(1.0),
 	m_angle(0.0),
 	m_flipped(false)
@@ -206,19 +182,19 @@ ProcrustesPointSet::ProcrustesPointSet(int numPoints) :
 	m_x = new double[m_numPoints];
 	m_y = new double[m_numPoints];
 }
-	
+
 ProcrustesPointSet::~ProcrustesPointSet()
 {
 	delete[] m_x;
 	delete[] m_y;
 }
-		
+
 void ProcrustesPointSet::normalize(bool flip)
 {
 	// upppppps
 	if (!m_numPoints)
 		return;
-	
+
 	// calculate the avg center
 	m_originX = 0.0;
 	m_originY = 0.0;
@@ -230,7 +206,7 @@ void ProcrustesPointSet::normalize(bool flip)
 	// average
 	m_originX /= (double)m_numPoints;
 	m_originY /= (double)m_numPoints;
-	
+
 	// center points and calculate root mean square distance (RMDS)
 	if (m_numPoints > 1)
 	{
@@ -256,8 +232,8 @@ void ProcrustesPointSet::normalize(bool flip)
 		// scaling
 		m_x[i] *= scaleInv;
 		m_y[i] *= scaleInv;
-	}	
-	
+	}
+
 	m_flipped = flip;
 	if (m_flipped)
 	{
@@ -267,7 +243,7 @@ void ProcrustesPointSet::normalize(bool flip)
 		}
 	}
 }
-	
+
 void ProcrustesPointSet::rotateTo(const ProcrustesPointSet& other)
 {
 	// calculate angle between the two normalized point sets
@@ -277,12 +253,12 @@ void ProcrustesPointSet::rotateTo(const ProcrustesPointSet& other)
 	{
 		a += m_x[i]*other.m_y[i] - m_y[i]*other.m_x[i];
 		b += m_x[i]*other.m_x[i] + m_y[i]*other.m_y[i];
-	}	
-	
-	// note: atan and me never have been friends really. 
+	}
+
+	// note: atan and me never have been friends really.
 	// i hope i'm not missing anything here!
 	m_angle	= atan2(a, b);
-	
+
 	// now rotate the points
 	for (int i = 0; i < m_numPoints; ++i)
 	{
@@ -290,9 +266,9 @@ void ProcrustesPointSet::rotateTo(const ProcrustesPointSet& other)
 		double y = sin(m_angle)*m_x[i] + cos(m_angle)*m_y[i];
 		m_x[i] = x;
 		m_y[i] = y;
-	}	
+	}
 }
-	
+
 double ProcrustesPointSet::compare(const ProcrustesPointSet& other) const
 {
 	double result = 0.0;
@@ -302,10 +278,10 @@ double ProcrustesPointSet::compare(const ProcrustesPointSet& other) const
 		double dx = other.m_x[i] - m_x[i];
 		double dy = other.m_y[i] - m_y[i];
 		result += dx*dx + dy*dy;
-	}	
+	}
 	// somehow similiar to rmds, see wikipedia for further details
 	result = sqrt(result);
 	return result;
 }
-	
+
 } // end of namespace ogdf

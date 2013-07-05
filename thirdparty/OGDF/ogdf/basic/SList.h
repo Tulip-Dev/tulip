@@ -1,43 +1,44 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2615 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-16 14:23:36 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration and implementation of singly linked lists
  * (SListPure<E> and SList<E>) and iterators (SListConstIterator<E>
  * and SListIterator<E>).
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -80,7 +81,7 @@ class SListElement {
 	//! Constructs an SListElement.
 	SListElement(const E &x, SListElement<E> *next) :
 		m_next(next), m_x(x) { }
-	
+
 	OGDF_NEW_DELETE
 }; // class SListElement
 
@@ -174,10 +175,10 @@ template<class E> class SListConstIterator {
 public:
 	//! Constructs an iterator pointing to no element.
 	SListConstIterator() : m_pX(0) { }
-	
+
 	//! Constructs an iterator pointing to \a pX.
 	SListConstIterator(const SListElement<E> *pX) : m_pX(pX) { }
-	
+
 	//! Constructs an iterator that is a copy of \a it.
 	SListConstIterator(const SListIterator<E> &it) : m_pX((const SListElement<E> *)it) { }
 	//! Constructs an iterator that is a copy of \a it.
@@ -230,8 +231,10 @@ public:
 /**
  * Elements of the list are instances of type SListElement<E>.
  * Use SListConstIterator<E> or SListIterator<E> in order to iterate over the list.
- * 
+ *
  * In contrast to SList<E>, instances of \a SListPure<E> do not store the length of the list.
+ *
+ * @tparam E is the data type stored in list elements.
  */
 
 template<class E> class SListPure {
@@ -241,7 +244,7 @@ template<class E> class SListPure {
 public:
 	//! Constructs an empty singly linked list.
 	SListPure() : m_head(0), m_tail(0) { }
-	
+
 	//! Constructs a singly linked list that is a copy of \a L.
 	SListPure(const SListPure<E> &L) : m_head(0), m_tail(0) {
 		copy(L);
@@ -341,7 +344,7 @@ public:
 		return p;
 	}
 
-	
+
 	//! Returns a reference to the first element.
 	/**
 	 * \pre The list is not empty!
@@ -447,7 +450,7 @@ public:
 	 * \pre The list is not empty!
 	 */
 	E popFrontRet() {
-		E el = front(); 
+		E el = front();
 		popFront();
 		return el;
 	}
@@ -616,6 +619,8 @@ protected:
  * Use SListConstIterator<E> or SListIterator<E> in order to iterate over the list.
  * In contrast to SListPure<E>, instances of \a SList<E> store the length of the list
  * and thus allow constant time access to the length.
+ *
+ * @tparam E is the data type stored in list elements.
  */
 
 template<class E>
@@ -626,7 +631,7 @@ class SList : private SListPure<E> {
 public:
 	//! Constructs an empty singly linked list.
 	SList() : m_count(0) { }
-	
+
 	//! Constructs a singly linked list that is a copy of \a L.
 	SList(const SList<E> &L) : SListPure<E>(L), m_count(L.m_count) { }
 
@@ -706,7 +711,7 @@ public:
 		return SListPure<E>::pos(it);;
 	}
 
-	
+
 	//! Returns a reference to the first element.
 	/**
 	 * \pre The list is not empty!
@@ -789,7 +794,7 @@ public:
 	 * \pre The list is not empty!
 	 */
 	E popFrontRet() {
-		E el = front(); 
+		E el = front();
 		popFront();
 		return el;
 	}
@@ -905,7 +910,7 @@ void SListPure<E>::bucketSort(BucketFunc<E> &f)
 
 	int l, h;
 	l = h = f.getBucket(m_head->m_x);
-	
+
 	SListElement<E> *pX;
 	for(pX = m_head->m_next; pX; pX = pX->m_next)
 	{
@@ -917,7 +922,7 @@ void SListPure<E>::bucketSort(BucketFunc<E> &f)
 	bucketSort(l,h,f);
 }
 
-	
+
 // sorts list L using bucket sort
 template<class E>
 void SListPure<E>::bucketSort(int l, int h, BucketFunc<E> &f)
@@ -926,7 +931,7 @@ void SListPure<E>::bucketSort(int l, int h, BucketFunc<E> &f)
 	if (m_head == m_tail) return;
 
 	Array<SListElement<E> *> head(l,h,0), tail(l,h);
-	
+
 	SListElement<E> *pX;
 	for (pX = m_head; pX; pX = pX->m_next) {
 		int i = f.getBucket(pX->m_x);
@@ -947,7 +952,7 @@ void SListPure<E>::bucketSort(int l, int h, BucketFunc<E> &f)
 			pY = tail[i];
 		}
 	}
-	
+
 	m_tail = pY;
 	pY->m_next = 0;
 }

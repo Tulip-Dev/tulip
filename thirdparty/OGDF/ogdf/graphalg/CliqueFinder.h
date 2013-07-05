@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2584 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 02:38:07 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declares CliqueFinder class.
  * CliqueFinder searches for complete (dense) subgraphs.
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -58,17 +59,17 @@ namespace ogdf{
 
 //! Finds cliques and dense subgraphs.
 /**
- * The class CliqueFinder can be called on a graph 
+ * The class CliqueFinder can be called on a graph
  * to retrieve (disjoint) cliques or dense subgraphs
  * respectively. Uses SPQR trees to find 3-connected
  * components.
- * 
+ *
  * In the following, clique always stands for a subgraph
  * with properties that can be defined by the user to change
  * the standard definition of a complete subgraph, e.g. a
  * minimum size/degree etc.
  * We search for cliques in graph G by first dividing G into
- * its triconnnected components and then using a greedy 
+ * its triconnnected components and then using a greedy
  * heuristics within each component
  */
 class OGDF_EXPORT CliqueFinder {
@@ -77,15 +78,15 @@ public:
 	//constructor
 	CliqueFinder(const Graph &G);
 	~CliqueFinder();
-	
+
 	//Calls
-	//We first make G biconnected, this keeps the triconnected 
+	//We first make G biconnected, this keeps the triconnected
 	//components. then the triconnected components are computed
 	//within these components, we search for cliques
-	
+
 	//!Searches for cliques and returns the clique index number for each node
 	/**
-	 * Each clique will be assigned a different number, each node gets the 
+	 * Each clique will be assigned a different number, each node gets the
 	 * number of the clique it is contained in, -1 if not a clique member
 	 */
 	void call(NodeArray<int> &cliqueNumber);
@@ -100,9 +101,9 @@ public:
 	void setMinSize(int i) { m_minDegree = max(2, i-1);}
 	enum postProcess {ppNone, ppSimple};
 
-	//! set the abstract measure of density needed for subgraphs to be detected
+	//! Sets the abstract measure of density needed for subgraphs to be detected.
 	/**
-	 * does not have effect for graphs with #n<4
+	 * Does not have an effect for graphs with less than 4 nodes.
 	 */
 	void setDensity(int density)
 	{
@@ -159,10 +160,10 @@ private:
 	bool m_callByList; //stores information on type of call for result setting
 	List< List<node> > *m_pList; //stores pointer on list given as call parameter
 
-	int m_density; //an abstract value from 0..100 definin how dense the
-	               //subgraphs need to be, is not directly related to any
-				   //measure (degree, ...) but translated into a constraint
-			       //based on the heuristical search of the subgraphs
+	int m_density;	//an abstract value from 0..100 definin how dense the
+					//subgraphs need to be, is not directly related to any
+					//measure (degree, ...) but translated into a constraint
+					//based on the heuristical search of the subgraphs
 };//CliqueFinder
 
 }//end namespace ogdf

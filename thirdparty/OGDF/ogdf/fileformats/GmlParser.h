@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of classes GmlObject and GmlParser.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -136,8 +137,8 @@ public:
 		yPredefKey, wPredefKey, hPredefKey, typePredefKey, widthPredefKey,
 		sourcePredefKey, targetPredefKey, arrowPredefKey, LinePredefKey,
 		pointPredefKey, generalizationPredefKey, subGraphPredefKey, fillPredefKey, clusterPredefKey,
-		rootClusterPredefKey, vertexPredefKey, colorPredefKey, 
-		heightPredefKey, stipplePredefKey, patternPredefKey, 
+		rootClusterPredefKey, vertexPredefKey, colorPredefKey,
+		heightPredefKey, stipplePredefKey, patternPredefKey,
 		linePredefKey, lineWidthPredefKey, templatePredefKey,
 		edgeWeightPredefKey, NEXTPREDEFKEY };
 
@@ -165,30 +166,41 @@ public:
 	//bool read(Graph &G, ClusterGraph & CG);
 	//read only cluster part of object tree and create cluster graph structure
 	bool readCluster(Graph &G, ClusterGraph& CG);
-	//the same with attributes 
-	bool readAttributedCluster(Graph &G, ClusterGraph& CG,
-									   ClusterGraphAttributes& ACG);
+	//the same with attributes
+	bool readAttributedCluster(
+		Graph &G,
+		ClusterGraph& CG,
+		ClusterGraphAttributes& ACG);
 
 protected:
 
 	//read all cluster tree information
-	bool clusterRead(GmlObject* rootCluster, 
-					 ClusterGraph& CG);
+	bool clusterRead(
+		GmlObject* rootCluster,
+		ClusterGraph& CG);
+
 	//with attributes
-	bool attributedClusterRead(GmlObject* rootCluster, 
-							ClusterGraph& CG, 
-							ClusterGraphAttributes& ACG);
+	bool attributedClusterRead(
+		GmlObject* rootCluster,
+		ClusterGraph& CG,
+		ClusterGraphAttributes& ACG);
+
 	//recursively read cluster subtree information
-	bool recursiveClusterRead(GmlObject* clusterObject,
-	 					 ClusterGraph& CG,
-						 cluster c);
-	bool recursiveAttributedClusterRead(GmlObject* clusterObject,
-								ClusterGraph& CG,
-								ClusterGraphAttributes& ACG,
-								cluster c);
-	bool readClusterAttributes(GmlObject* cGraphics,
-									  cluster c,
-									  ClusterGraphAttributes& ACG);
+	bool recursiveClusterRead(
+		GmlObject* clusterObject,
+	 	ClusterGraph& CG,
+		cluster c);
+
+	bool recursiveAttributedClusterRead(
+		GmlObject* clusterObject,
+		ClusterGraph& CG,
+		ClusterGraphAttributes& ACG,
+		cluster c);
+
+	bool readClusterAttributes(
+		GmlObject* cGraphics,
+		cluster c,
+		ClusterGraphAttributes& ACG);
 
 private:
 	void doInit(istream &is, bool doCheck);

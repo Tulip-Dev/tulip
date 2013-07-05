@@ -1,11 +1,11 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class GEMLayout.
  *
@@ -13,32 +13,33 @@
  * based on Frick et al.'s algorithm.
  *
  * \author Christoph Buchheim
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -63,9 +64,9 @@ namespace ogdf {
 // GEMLayout
 //
 // Fast force-directed layout algorithm. See
-// - A. Frick, A. Ludwig, H. Mehldau: "A Fast Adaptive 
+// - A. Frick, A. Ludwig, H. Mehldau: "A Fast Adaptive
 //	 Layout Algorithm for Undirected Graphs"
-//	
+//
 //---------------------------------------------------------
 
 //! The energy-based GEM layout algorithm.
@@ -73,7 +74,7 @@ namespace ogdf {
  * The implementation used in GEMLayout is based on the following publication:
  *
  * Arne Frick, Andreas Ludwig, Heiko Mehldau: <i>A Fast Adaptive %Layout
- * Algorithm for Undirected Graphs</i>. Proc. %Graph Drawing 1994, 
+ * Algorithm for Undirected Graphs</i>. Proc. %Graph Drawing 1994,
  * LNCS 894, pp. 388-403, 1995.
  *
  * <H3>Optional parameters</H3>
@@ -189,16 +190,16 @@ public:
 	double minimalTemperature() const { return m_minimalTemperature; }
 
 	//! Sets the minimal temperature to \a x.
-	void minimalTemperature(double x) { 
-		m_minimalTemperature = (x < 0) ? 0 : x; 
+	void minimalTemperature(double x) {
+		m_minimalTemperature = (x < 0) ? 0 : x;
 	}
 
 	//! Returns the initial temperature.
 	double initialTemperature() const { return m_initialTemperature; }
 
 	//! Sets the initial temperature to \a x; must be >= minimalTemperature.
-	void initialTemperature(double x) { 
-		m_initialTemperature = (x < m_minimalTemperature) ? m_minimalTemperature : x; 
+	void initialTemperature(double x) {
+		m_initialTemperature = (x < m_minimalTemperature) ? m_minimalTemperature : x;
 	}
 
 	//! Returns the gravitational constant.
@@ -206,8 +207,8 @@ public:
 
 	//! Sets the gravitational constant to \a x; must be >= 0.
 	//! Attention! Only (very) small values give acceptable results.
-	void gravitationalConstant(double x) { 
-		m_gravitationalConstant = (x < 0) ? 0 : x; 
+	void gravitationalConstant(double x) {
+		m_gravitationalConstant = (x < 0) ? 0 : x;
 	}
 
 	//! Returns the desired edge length.
@@ -215,7 +216,7 @@ public:
 
 	//! Sets the desired edge length to \a x; must be >= 0.
 	void desiredLength(double x) {
-		m_desiredLength = (x < 0) ? 0 : x; 
+		m_desiredLength = (x < 0) ? 0 : x;
 	}
 
 	//! Returns the maximal disturbance.
@@ -223,65 +224,65 @@ public:
 
 	//! Sets the maximal disturbance to \a x; must be >= 0.
 	void maximalDisturbance(double x) {
-		m_maximalDisturbance = (x < 0) ? 0 : x; 
+		m_maximalDisturbance = (x < 0) ? 0 : x;
 	}
 
 	//! Returns the opening angle for rotations.
 	double rotationAngle() const { return m_rotationAngle; }
 
 	//! Sets the opening angle for rotations to \a x (0 <= \a x <= pi / 2).
-	void rotationAngle(double x) { 
+	void rotationAngle(double x) {
 		if(x < 0) x = 0;
 		if(x > Math::pi / 2.0) x = Math::pi / 2.0;
-		m_rotationAngle = x; 
+		m_rotationAngle = x;
 	}
 
 	//! Returns the opening angle for oscillations.
 	double oscillationAngle() const { return m_oscillationAngle; }
 
 	//! Sets the opening angle for oscillations to \a x (0 <= \a x <= pi / 2).
-	void oscillationAngle(double x) { 
+	void oscillationAngle(double x) {
 		if(x < 0) x = 0;
 		if(x > Math::pi / 2.0) x = Math::pi / 2.0;
-		m_oscillationAngle = x; 
+		m_oscillationAngle = x;
 	}
 
 	//! Returns the rotation sensitivity.
 	double rotationSensitivity() const { return m_rotationSensitivity; }
 
 	//! Sets the rotation sensitivity to \a x (0 <= \a x <= 1).
-	void rotationSensitivity(double x) { 
+	void rotationSensitivity(double x) {
 		if(x < 0) x = 0;
 		if(x > 1) x = 1;
-		m_rotationSensitivity = x; 
+		m_rotationSensitivity = x;
 	}
 
 	//! Returns the oscillation sensitivity.
 	double oscillationSensitivity() const { return m_oscillationSensitivity; }
 
 	//! Sets the oscillation sensitivity to \a x (0 <= \a x <= 1).
-	void oscillationSensitivity(double x) { 
+	void oscillationSensitivity(double x) {
 		if(x < 0) x = 0;
 		if(x > 1) x = 1;
-		m_oscillationSensitivity = x; 
+		m_oscillationSensitivity = x;
 	}
 
 	//! Returns the used formula for attraction (1 = Fruchterman / Reingold, 2 = GEM).
 	int attractionFormula() const { return m_attractionFormula; }
 
 	//! sets the formula for attraction to \a n (1 = Fruchterman / Reingold, 2 = GEM).
-	void attractionFormula(int n) { 
+	void attractionFormula(int n) {
 		if(n == 1 || n == 2) m_attractionFormula = n;
 	}
 
 	//! Returns the minimal distance between connected components.
-    double minDistCC() const { return m_minDistCC; }
+	double minDistCC() const { return m_minDistCC; }
 
 	//! Sets the minimal distance between connected components to \a x.
-    void minDistCC(double x) { m_minDistCC = x; }
+	void minDistCC(double x) { m_minDistCC = x; }
 
 	//! Returns the page ratio used for the layout of connected components.
-    double pageRatio() const { return m_pageRatio; }
+	double pageRatio() const { return m_pageRatio; }
 
 	//! Sets the page ratio used for the layout of connected components to \a x.
 	void pageRatio(double x) { m_pageRatio = x; }

@@ -1,9 +1,9 @@
 /*
- * $Revision: 2302 $
+ * $Revision: 2549 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-04 23:09:19 +0200 (Mi, 04. Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -85,7 +86,7 @@ void PreprocessorLayout::call(MultilevelGraph &MLG)
 
 		m_secondaryLayout.get().call(MLG.getGraphAttributes());
 		MLG.updateReverseIndizes();
-		
+
 		for(std::vector<EdgeData>::iterator i = m_deletedEdges.begin(); i != m_deletedEdges.end(); i++ ) {
 			int index = (*i).edgeIndex;
 			edge temp = G->newEdge(MLG.getNode((*i).sourceIndex), MLG.getNode((*i).targetIndex), index);

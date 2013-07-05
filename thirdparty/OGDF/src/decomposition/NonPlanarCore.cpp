@@ -1,48 +1,49 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements the class NonPlanarCore.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
 
 #include <ogdf/planarity/NonPlanarCore.h>
 #include <ogdf/decomposition/StaticSPQRTree.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/Queue.h>
 #include <ogdf/basic/CombinatorialEmbedding.h>
 #include <ogdf/basic/FaceArray.h>
@@ -85,7 +86,7 @@ NonPlanarCore::NonPlanarCore(const Graph &G) : m_pOriginal(&G), m_orig(m_graph),
 			if(map[tgt] == 0) {
 				m_orig[map[tgt] = m_graph.newNode()] = S.original(e->target());
 			}
-			
+
 			if(S.isVirtual(e)) {
 				node w = S.twinTreeNode(e);
 				if(mark[w] == false) {
@@ -102,7 +103,7 @@ NonPlanarCore::NonPlanarCore(const Graph &G) : m_pOriginal(&G), m_orig(m_graph),
 			}
 		}
 	}
-	
+
 	edge e;
 	forall_edges(e, m_graph) {
 		m_cost[e] = m_mincut[e].size();
@@ -114,7 +115,6 @@ NonPlanarCore::NonPlanarCore(const Graph &G) : m_pOriginal(&G), m_orig(m_graph),
 // non-planar core.
 void NonPlanarCore::markCore(const SPQRTree &T, NodeArray<bool> &mark)
 {
-	PlanarModule pm;
 	const Graph &tree = T.tree();
 
 	// We mark every tree node that belongs to the core
@@ -136,7 +136,7 @@ void NonPlanarCore::markCore(const SPQRTree &T, NodeArray<bool> &mark)
 
 		// if v has a planar skeleton
 		if(T.typeOf(v) != SPQRTree::RNode ||
-			pm.planarityTest(T.skeleton(v).getGraph()) == true)
+			isPlanar(T.skeleton(v).getGraph()) == true)
 		{
 			mark[v] = false; // unmark this leaf
 
@@ -219,11 +219,10 @@ void NonPlanarCore::traversingPath(Skeleton &Sv, edge eS, List<edge> &path, Node
 	edge e_st = H.newEdge(mapV[Sv.original(eS->source())],mapV[Sv.original(eS->target())]);
 
 	// Compute planar embedding of H
-	PlanarModule pm;
 #ifdef OGDF_DEBUG
 	bool ok =
 #endif
-		pm.planarEmbed(H);
+		planarEmbed(H);
 	OGDF_ASSERT(ok)
 	CombinatorialEmbedding E(H);
 

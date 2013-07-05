@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of CPlanarSubClusteredST class.
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -59,13 +60,13 @@ class CPlanarSubClusteredST
 
 public:
 
-	CPlanarSubClusteredST() {};
+	CPlanarSubClusteredST() { }
 
 	//! sets values in inST according to membership in c-planar STGraph
 	virtual void call(const ClusterGraph& CG, EdgeArray<bool>& inST);
 	//! sets values in inST according to membership in c-planar STGraph,
 	//! computes minimum spanning tree according to weight in \a weight
-	virtual void call(const ClusterGraph& CG, 
+	virtual void call(const ClusterGraph& CG,
 		EdgeArray<bool>& inST,
 		EdgeArray<double>& weight);
 
@@ -78,29 +79,29 @@ private:
 	EdgeArray<bool>& inST,                         //original edges
 	NodeArray<bool> &visited);
 	//builds spanning tree on graph of node v in treeEdges
-	void dfsBuildSpanningTree(node v, 
+	void dfsBuildSpanningTree(node v,
 				 			  EdgeArray<bool> &treeEdges,
 							  NodeArray<bool> &visited);
 
 	//! constructs for every cluster a graph representing its
 	//! main structure (children & their connections)
-	//! only insert nodes here 
+	//! only insert nodes here
 	void constructRepresentationGraphNodes(const ClusterGraph& CG,
-										   Graph& g, 
+										   Graph& g,
 									       cluster c
 										   )
 	{
-		
+
 		//insert nodes for all child clusters
 		ListConstIterator<cluster> it;
-		for (it = c->cBegin(); it.valid(); it++) 
+		for (it = c->cBegin(); it.valid(); it++)
 		{
 			node v = g.newNode();
 			m_cRepNode[*it] = v;
 		}//for
 		//insert nodes for all node entries in c
 		ListConstIterator<node> itn;
-		for (itn = c->nBegin(); itn.valid(); itn++) 
+		for (itn = c->nBegin(); itn.valid(); itn++)
 		{
 			node v = g.newNode();
 			m_vRepNode[*itn] = v;
@@ -119,20 +120,20 @@ private:
 			node u = e->source();
 			node v = e->target();
 			cluster uAncestor, vAncestor;
-			cluster allocCluster = 
+			cluster allocCluster =
 				CG.commonClusterLastAncestors(u,v, uAncestor, vAncestor);
 			m_allocCluster[e] = allocCluster;
 			//now derive the real ancestors (maybe the nodes themselves from
 			//the supplied clusters
 
-			//Case1: both nodes in same cluster => connect the nodes in the 
+			//Case1: both nodes in same cluster => connect the nodes in the
 			//cluster representation graph
 			if (uAncestor == vAncestor)
 			{
 				m_repEdge[e] = RepGraph[uAncestor]->newEdge(
 								m_vRepNode[u], m_vRepNode[v]);
 			}//if
-			else 
+			else
 			{
 				OGDF_ASSERT(!((uAncestor == CG.rootCluster())&&
 					(vAncestor == CG.rootCluster())))
@@ -153,9 +154,9 @@ private:
 					OGDF_ASSERT(allocCluster != 0)
 					//now create edge in lowest common cluster
 					node v1, v2;
-					v1 = ( (uAncestor == 0) ? m_vRepNode[u] : 
+					v1 = ( (uAncestor == 0) ? m_vRepNode[u] :
 								m_cRepNode[uAncestor]);
-					v2 = ( (vAncestor == 0) ? m_vRepNode[v] : 
+					v2 = ( (vAncestor == 0) ? m_vRepNode[v] :
 								m_cRepNode[vAncestor]);
 					m_repEdge[e] = RepGraph[allocCluster]->newEdge(v1, v2);
 				}
@@ -166,7 +167,7 @@ private:
 	}//constructRepresentationGraphEdges
 
 	//! Computes representation graphs used for spanning tree computation
-	void computeRepresentationGraphs(const ClusterGraph& CG, 
+	void computeRepresentationGraphs(const ClusterGraph& CG,
 									 ClusterArray<Graph*>& RepGraph)
 	{
 		cluster c;
@@ -178,7 +179,7 @@ private:
 		constructRepresentationGraphEdges(CG, RepGraph);
 	}//computeRepresentationGraphs
 
-	void deleteRepresentationGraphs(const ClusterGraph& CG, 
+	void deleteRepresentationGraphs(const ClusterGraph& CG,
 									 ClusterArray<Graph*>& RepGraph)
 	{
 		cluster c;
@@ -187,12 +188,12 @@ private:
 			if (RepGraph[c])
 				delete RepGraph[c];
 		}//forallclusters
-	
+
 	}//deleteRepresentationGraphs
 
 	//! Initializes some internally used members on CG
 	void initialize(const ClusterGraph& CG);
-	
+
     //****************************************************
 	//data fields
 

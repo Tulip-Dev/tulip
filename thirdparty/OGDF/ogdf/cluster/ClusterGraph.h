@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Derived class of GraphObserver providing additional functionality
  * to handle clustered graphs.
- * 
+ *
  * \author Sebastian Leipert, Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -76,17 +77,17 @@ class OGDF_EXPORT ClusterElement : private GraphElement {
 	ClusterElement			*m_pNext;     //!< The postorder successor of this cluster.
 	ListIterator<ClusterElement*> m_it;   //!< The position of this cluster within children list of its parent.
 
-	List<adjEntry>			m_adjEntries; //!< The adjacency list.
-										  // Don't use a GraphList ! 
-	                                      // This messes with the adjacency 
-										  // list of the underlying graph
+	List<adjEntry>			m_adjEntries;	//!< The adjacency list.
+											// Don't use a GraphList !
+											// This messes with the adjacency
+											// list of the underlying graph
 
 	#ifdef OGDF_DEBUG
 	// we store the graph containing this cluster for debugging purposes
 	const ClusterGraph *m_pClusterGraph;
 	#endif
 
-	
+
 	void init(List<node> &nodes) {
 		while (!nodes.empty())
 			m_entries.pushBack(nodes.popFrontRet());
@@ -99,7 +100,7 @@ class OGDF_EXPORT ClusterElement : private GraphElement {
 	List<node> &getNodes(){
 		return m_entries;
 	}
-	
+
 	//! Traverses the inclusion tree and adds nodes to \a clusterNodes.
 	/**
 	 * Invoked by public function getClusterNodes(List<node> &clusterNodes).
@@ -113,11 +114,11 @@ public:
 	//! Creates a new cluster element.
 	#ifdef OGDF_DEBUG
 	ClusterElement(const ClusterGraph *pClusterGraph,int id):
-		m_id(id),m_depth(0),m_parent(0),m_pPrev(0),m_pNext(0),m_it(0),		
-		m_pClusterGraph(pClusterGraph) {};
+		m_id(id),m_depth(0),m_parent(0),m_pPrev(0),m_pNext(0),m_it(0),
+		m_pClusterGraph(pClusterGraph) { }
 	#else
 	ClusterElement(int id):
-		m_id(id), m_depth(0),m_parent(0),m_pPrev(0),m_pNext(0),m_it(0) {};
+		m_id(id), m_depth(0),m_parent(0),m_pPrev(0),m_pNext(0),m_it(0) { }
 	#endif
 
 
@@ -125,7 +126,7 @@ public:
 	const ClusterGraph *graphOf() const { return m_pClusterGraph; }
 	#endif
 
-	
+
 	//! Returns the (unique) index of the cluster.
 	int index() const { return m_id; }
 	//! Returns the depth of the cluster in the cluster tree.
@@ -174,7 +175,7 @@ public:
 	 * Recursively traverses the cluster tree starting at this cluster.
 	 */
 	void getClusterNodes(List<node> &clusterNodes);
-	//! Sets the entry for each node v to true if v is a member of 
+	//! Sets the entry for each node v to true if v is a member of
 	//! the subgraph induced by the ClusterElement.
 	//! All other entries remain unchanged!
 	//! Returns the number of entries set to true.
@@ -246,7 +247,7 @@ for((c)=(C).firstPostOrderCluster(); (c); (c)=(c)->pSucc())
 
 
 //! Representation of clustered graphs.
-/** 
+/**
  * This class is derived from GraphObserver and handles hierarchical
  * clustering of the nodes in a graph, providing additional functionality.
  */
@@ -259,7 +260,7 @@ class OGDF_EXPORT ClusterGraph : public GraphObserver
 	int		m_nClusters;			  //!< The number of clusters.
 	int		m_clusterIdCount;		  //!< The index assigned to the next created cluster.
 	int		m_clusterArrayTableSize;  //!< The current table size of cluster arrays.
-	
+
 	mutable cluster m_postOrderStart; //!< The first cluster in postorder.
 	cluster	m_rootCluster;			  //!< The root cluster.
 
@@ -268,8 +269,8 @@ class OGDF_EXPORT ClusterGraph : public GraphObserver
 
 	NodeArray<cluster> m_nodeMap; //!< Stores the cluster of each node.
 	//! Stories for every node its position within the children list of its cluster.
-	NodeArray<ListIterator<node> >  m_itMap;   
-	
+	NodeArray<ListIterator<node> >  m_itMap;
+
 	mutable ListPure<ClusterArrayBase*> m_regClusterArrays; //!< The registered cluster arrays.
 	mutable ListPure<ClusterGraphObserver*> m_regObservers; //!< The registered graph observers.
 
@@ -331,7 +332,7 @@ public:
 
 	//! Clears all cluster data and then reinitializes the instance with underlying graph \a G.
 	void init(const Graph &G);
-	
+
 	//! Conversion to const Graph reference.
 	operator const Graph &() const { return *m_pGraph; }
 
@@ -370,10 +371,10 @@ public:
 	void delCluster(cluster c);
 
 	//! Returns the root cluster.
-	cluster rootCluster() const {return m_rootCluster;};
+	cluster rootCluster() const { return m_rootCluster; }
 
 	//! Returns the cluster to which a node belongs.
-	inline cluster clusterOf(node v) const{ 
+	inline cluster clusterOf(node v) const{
 		OGDF_ASSERT(v->graphOf() == m_pGraph)
 		return m_nodeMap[v];
 	}
@@ -381,21 +382,21 @@ public:
 	//! Returns number of clusters.
 	int numberOfClusters() const { return m_nClusters; }
 	//! Returns upper bound for cluster indices.
-	int clusterIdCount() const { return m_clusterIdCount;} 
+	int clusterIdCount() const { return m_clusterIdCount;}
 
 	//! Returns table size of cluster arrays associated with this graph.
 	int clusterArrayTableSize() const { return m_clusterArrayTableSize; }
 
 	//! Moves cluster \a c to a new parent \a newParent.
 	void moveCluster(cluster c, cluster newParent);
-	
+
 
 	//! Reassigns node \a v to cluster \ c.
 	void reassignNode(node v, cluster c);
 
 	//! Clear cluster info structure, reinitializes with underlying graph \a G.
 	//inserted mainly for use in gmlparser.
-	void reInit(Graph& G) 
+	void reInit(Graph& G)
 	{
 		reinitGraph(G);
 	}
@@ -404,7 +405,7 @@ public:
 	//tree queries / depth issues
 
 	//! Turns automatic update of node depth values on or off.
-	void setUpdateDepth(bool b) const 
+	void setUpdateDepth(bool b) const
 	{
 		m_updateDepth = b;
 		//make sure that depth cant be used anymore
@@ -437,7 +438,7 @@ public:
 	//! Returns depth of cluster c in cluster tree, starting with root depth 1.
 	//should be called instead of direct c->depth call to assure
 	//valid depth
-	int& clusterDepth(cluster c) const 
+	int& clusterDepth(cluster c) const
 	{
 		// updateDepth must be set to true if depth info shall be used
 		OGDF_ASSERT(m_updateDepth);
@@ -460,7 +461,7 @@ public:
 
 	//! Returns the lowest common cluster lca and the highest ancestors on the path to lca.
 	cluster commonClusterLastAncestors(
-		node v, 
+		node v,
 		node w,
 		cluster& c1,
 		cluster& c2) const;
@@ -473,8 +474,8 @@ public:
 
 	//! Returns lca of \a v and \a w, stores corresponding path in \a eL and ancestors in \a c1, \a c2.
 	cluster commonClusterAncestorsPath(
-		node v, 
-  		node w,
+		node v,
+		node w,
 		cluster& c1,
 		cluster& c2,
 		List<cluster>& eL) const;
@@ -487,10 +488,10 @@ public:
 
 	//! Registers a ClusterGraphObserver.
 	ListIterator<ClusterGraphObserver*> registerObserver(ClusterGraphObserver *pObserver) const;
-	
+
 	//! Unregisters a ClusterGraphObserver.
 	void unregisterObserver(ListIterator<ClusterGraphObserver*> it) const;
-	
+
 	//! Returns the list of clusters that are empty or only contain empty clusters.
 	/**
 	 * The list is constructed in an order that allows deletion and reinsertion.
@@ -508,7 +509,7 @@ public:
 		return (c->nCount() == 1) && (c->cCount() == 0);
 	}
 
-	//! Returns true if cluster \a c has only one child and no nodes. 
+	//! Returns true if cluster \a c has only one child and no nodes.
 	inline bool emptyOnClusterDelete(cluster c) //virtual?
 	{
 		//if (!c) return false; //Allows easy use in loops
@@ -520,9 +521,9 @@ public:
 	//! Returns the last cluster in the list of all cluster.
 	cluster lastCluster () const { return m_clusters.rbegin(); }
 	//! Returns the first cluster in the list of post ordered clusters.
-	cluster firstPostOrderCluster() const { 
+	cluster firstPostOrderCluster() const {
 		if (!m_postOrderStart) postOrder();
-		return m_postOrderStart; 
+		return m_postOrderStart;
 	}
 
 	//! Returns the list of all clusters in \a clusters.
@@ -636,17 +637,17 @@ public:
 	// (for debugging purposes only)
 	bool representsCombEmbedding();
 
-	//! Sets the availability status of the adjacency entries. 
-	void adjAvailable(bool val){ m_adjAvailable = val;};
+	//! Sets the availability status of the adjacency entries.
+	void adjAvailable(bool val){ m_adjAvailable = val; }
 
 protected:
 	//! Creates new cluster containing nodes in parameter list
 	//! with index \a clusterid.
-	cluster doCreateCluster(SList<node>& nodes, 
+	cluster doCreateCluster(SList<node>& nodes,
 		const cluster parent, int clusterId = -1);
-	//! Creates new cluster containing nodes in parameter list and 
+	//! Creates new cluster containing nodes in parameter list and
 	//! stores resulting empty clusters in list, cluster has index \a clusterid.
-	cluster doCreateCluster(SList<node>& nodes, 
+	cluster doCreateCluster(SList<node>& nodes,
 		SList<cluster>& emptyCluster,
 		const cluster parent, int clusterId = -1);
 
@@ -667,7 +668,7 @@ protected:
 	void updatePostOrder(cluster c, cluster oldParent, cluster newParent);
 
 	//! Computes new predecessor for SUBTREE at moved cluster c.
-	//0 if c==root 
+	//0 if c==root
 	cluster postOrderPredecessor(cluster c) const;
 	//! Leftmost cluster in subtree rooted at c, gets predecessor of subtree.
 	cluster leftMostCluster(cluster c) const;
@@ -675,17 +676,17 @@ protected:
 	//---------------------------------------
 	//functions inherited from GraphObserver:
 	//define how to cope with graph changes
-	
+
 	//! Implementation of inherited method: Updates data if node deleted.
-	virtual void nodeDeleted(node v) 
-	{ 
+	virtual void nodeDeleted(node v)
+	{
 		bool cRemove = false;
 		cluster c = clusterOf(v);
 		if (!c) return;
 		//never allow totally empty cluster
 		//if ((emptyOnNodeDelete(c)) &&
 		//	(c != rootCluster()) ) cRemove = true;
-		unassignNode(v); 
+		unassignNode(v);
 		if (cRemove && !m_allowEmptyClusters) //parent exists
 		{
 			cluster nonEmpty = c->parent();
@@ -701,23 +702,23 @@ protected:
 		}
 	}
 	//! Implementation of inherited method: Updates data if node added.
-	virtual void nodeAdded(node v)   
+	virtual void nodeAdded(node v)
 	{
 		assignNode(v, rootCluster());
-	};
+	}
 	//! Implementation of inherited method: Updates data if edge deleted.
-	virtual void edgeDeleted(edge /* e */) {};
+	virtual void edgeDeleted(edge /* e */) { }
 	//! Implementation of inherited method: Updates data if edge added.
-	virtual void edgeAdded(edge /* e */)   {};
+	virtual void edgeAdded(edge /* e */)   { }
 	//! Currently does nothing.
-	virtual void reInit()            {};
+	virtual void reInit()            { }
 	//! Clears cluster data without deleting root when underlying graphs' clear method is called.
-	virtual void cleared()			 
+	virtual void cleared()
 	{
 		//we don't want a complete clear, as the graph still exists
 		//and can be updated from input stream
 		semiClear();
-	};//Graph cleared
+	}//Graph cleared
 
 private:
 	//! Assigns node \a v to cluster \a c (\a v not yet assigned!).
@@ -734,8 +735,8 @@ private:
 		{
 			cluster C2 = m_nodeMap[v];
 			C2->m_entries.del(m_itMap[v]);
-			m_nodeMap[v] = 0; 
-			m_itMap[v] = 0;   
+			m_nodeMap[v] = 0;
+			m_itMap[v] = 0;
 		}
 	}
 
@@ -746,18 +747,23 @@ private:
 	//! Perform a deep copy on C, C's underlying
 	//! graph is copied into G.
 	void deepCopy(const ClusterGraph &C,Graph &G);
+
 	//! Perform a deep copy on C, C's underlying
 	//! graph is copied into G. Stores associated nodes in \a originalNodeTable.
-	void deepCopy(const ClusterGraph &C,Graph &G,	
-				  ClusterArray<cluster> &originalClusterTable,
-				  NodeArray<node> &originalNodeTable);
+
+	void deepCopy(
+		const ClusterGraph &C,Graph &G,
+		ClusterArray<cluster> &originalClusterTable,
+		NodeArray<node> &originalNodeTable);
+
 	//! Perform a deep copy on C, C's underlying
 	//! graph is copied into G.  Stores associated nodes in \a originalNodeTable
 	//! and edges in \a edgeCopy.
-	void deepCopy(const ClusterGraph &C,Graph &G,	
-				  ClusterArray<cluster> &originalClusterTable,
-				  NodeArray<node> &originalNodeTable,
-				  EdgeArray<edge> &edgeCopy);
+	void deepCopy(
+		const ClusterGraph &C,Graph &G,
+		ClusterArray<cluster> &originalClusterTable,
+		NodeArray<node> &originalNodeTable,
+		EdgeArray<edge> &edgeCopy);
 
 
 	void clearClusterTree(cluster c,List<node> &attached);
@@ -783,22 +789,24 @@ private:
 
 
 	//! Recursively write the cluster structure in GML.
-	void writeCluster(ostream &os,
-					  NodeArray<int> &nId,
-					  ClusterArray<int> & cId,
-					  int &nextId,
-					  cluster c,
-					  String ttt);
+	void writeCluster(
+		ostream &os,
+		NodeArray<int> &nId,
+		ClusterArray<int> & cId,
+		int &nextId,
+		cluster c,
+		String ttt);
 
 	//! Recursively write the cluster structure in GraphWin GML.
-	void writeGraphWinCluster(ostream &os,
-					  NodeArray<int> &nId,
-					  NodeArray<String> &nStr,
-					  ClusterArray<int> &cId,
-					  ClusterArray<String> &cStr,
-					  int &nextId,
-					  cluster c,
-					  String ttt);
+	void writeGraphWinCluster(
+		ostream &os,
+		NodeArray<int> &nId,
+		NodeArray<String> &nStr,
+		ClusterArray<int> &cId,
+		ClusterArray<String> &cStr,
+		int &nextId,
+		cluster c,
+		String ttt);
 
 };
 

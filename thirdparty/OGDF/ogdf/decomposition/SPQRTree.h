@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class SPQRTree
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -63,12 +64,12 @@ namespace ogdf {
 
 /**
  * \brief Linear-time implementation of static SPQR-trees.
- * 
+ *
  * The class SPQRTree maintains the arrangement of the triconnected
  * components of a biconnected multi-graph \a G [Hopcroft, Tarjan 1973]
  * as a so-called SPQR tree \a T [Di Battista, Tamassia, 1996]. We
  * call \a G the original graph of \a T.
- * 
+ *
  * Each node of the tree has an associated type (represented by
  * SPQRTree::NodeType), which is either SNode, PNode, or
  * RNode, and a skeleton (represented by the class Skeleton).
@@ -76,7 +77,7 @@ namespace ogdf {
  * correspondence to the triconnected components of \a G, i.e.,
  * S-nodes correspond to polygons, P-nodes to bonds, and
  * R-nodes to triconnected graphs.
- * 
+ *
  * In our representation of SPQR-trees, Q-nodes are omitted. Instead,
  * the skeleton S of a node \a v in \a T contains two types of edges:
  * real edges, which correspond to edges in \a G, and virtual edges, which
@@ -84,7 +85,7 @@ namespace ogdf {
  * There is a special edge \a er in G at which \a T is rooted, i.e., the
  * root node of \a T is the node whose skeleton contains the real edge
  * corresponding to \a er.
- * 
+ *
  * The reference edge of the skeleton of the root node is \a er, the
  * reference edge of the skeleton \a S of a non-root node \a v is the virtual
  * edge in \a S that corresponds to the tree edge (parent(\a v),\a v).

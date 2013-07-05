@@ -1,45 +1,46 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of the FastPlanarSubgraph.
- * 
+ *
  * Class is derived from base class PlanarSubgraphModule
- * and implements the interface for the Planarization algorithm 
+ * and implements the interface for the Planarization algorithm
  * based on PQ-trees.
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -70,7 +71,7 @@ Module::ReturnType FastPlanarSubgraph::doCall(
 	if (G.numberOfEdges() < 9)
 		return retOptimal;
 
-	
+
 	node v;
 	NodeArray<node> tableNodes(G,0);
 	EdgeArray<edge> tableEdges(G,0);
@@ -89,7 +90,7 @@ Module::ReturnType FastPlanarSubgraph::doCall(
 	{
 		if (!e->isSelfLoop())
 			blockEdges[componentID[e]].pushFront(e);
-	} 
+	}
 
 	// Determine nodes per biconnected component.
 	Array<SList<node> > blockNodes(0,bcCount-1);
@@ -115,10 +116,10 @@ Module::ReturnType FastPlanarSubgraph::doCall(
 		for (itn = blockNodes[i].begin(); itn.valid(); ++itn)
 			mark[*itn] = false;
 	}
-	
+
 
 	// Perform Planarization for every biconnected component
-		
+
 	if (bcCount == 1) {
 		if (G.numberOfEdges() > 4)
 			computeDelEdges(G,pCost,0,delEdges);
@@ -127,7 +128,7 @@ Module::ReturnType FastPlanarSubgraph::doCall(
 		for (i = 0; i < bcCount; i++)
 		{
 			Graph C;
-		
+
 			SListIterator<node> itn;
 			for (itn = blockNodes[i].begin(); itn.valid(); ++ itn)
 			{
@@ -150,16 +151,16 @@ Module::ReturnType FastPlanarSubgraph::doCall(
 			// that represents the biconnectedcomponent of the original graph.
 			EdgeArray<edge> backTableEdges(C,0);
 			for (it = blockEdges[i].begin(); it.valid(); ++it)
-				backTableEdges[tableEdges[*it]] = *it; 
+				backTableEdges[tableEdges[*it]] = *it;
 
 			// gets the deletec Edges of the biconnected component
-			List<edge> delEdgesOfBC;	
-										
+			List<edge> delEdgesOfBC;
+
 
 			if (C.numberOfEdges() > 4)
 				computeDelEdges(C,pCost,&backTableEdges,delEdgesOfBC);
 
-			// get the original edges that are deleted and 
+			// get the original edges that are deleted and
 			// put them on the list delEdges.
 			while (!delEdgesOfBC.empty())
 				delEdges.pushBack(backTableEdges[delEdgesOfBC.popFrontRet()]);
@@ -182,12 +183,12 @@ void FastPlanarSubgraph::computeDelEdges(
 		// Compute st-numbering
 		NodeArray<int> numbering(G,0);
 		stNumber(G,numbering);
-		
+
 		planarize(G,numbering,delEdges);
 
 	} else {
 		int bestSolution = INT_MAX;
-		
+
 		for(int i = 1; i <= m_nRuns && bestSolution > 1; ++i)
 		{
 			List<edge> currentDelEdges;
@@ -195,19 +196,19 @@ void FastPlanarSubgraph::computeDelEdges(
 			// Compute (randomized) st-numbering
 			NodeArray<int> numbering(G,0);
 			stNumber(G,numbering,0,0,true);
-			
+
 			planarize(G,numbering,currentDelEdges);
 
 			if(pCost == 0)
 			{
 				int currentSolution = currentDelEdges.size();
-				
+
 				if(currentSolution < bestSolution) {
 					bestSolution = currentSolution;
 					delEdges.clear();
 					delEdges.conc(currentDelEdges);
 				}
-	
+
 			} else {
 				int currentSolution = 0;
 				ListConstIterator<edge> it;
@@ -216,12 +217,12 @@ void FastPlanarSubgraph::computeDelEdges(
 						currentSolution += (*pCost)[(*backTableEdges)[*it]];
 					else
 						currentSolution += (*pCost)[*it];
-				
+
 				if(currentSolution < bestSolution) {
 					bestSolution = currentSolution;
 					delEdges.clear();
 					delEdges.conc(currentDelEdges);
-					
+
 				}
 			}
 		}
@@ -285,7 +286,7 @@ void FastPlanarSubgraph::planarize(
 
 	SListIterator<PQLeafKey<edge,whaInfo*,bool>* > it;
 	for (it = totalEliminatedKeys.begin(); it.valid(); ++it)
-	{ 
+	{
 		edge e = (*it)->userStructKey();
 		delEdges.pushBack(e);
 	}
@@ -296,13 +297,12 @@ void FastPlanarSubgraph::planarize(
 		while (!inLeaves[v].empty())
 		{
 			PlanarLeafKey<whaInfo*>* L = inLeaves[v].popFrontRet();
-			delete L;	
+			delete L;
 		}
 	}
 
-	T.Cleanup(); // Explicit call for destructor necessary. This allows to 
-			     // call virtual funtion CleanNode for freeing node information
-				 // class.
+	T.Cleanup();	// Explicit call for destructor necessary. This allows to call virtual
+					// funtion CleanNode for freeing node information class.
 }
 
 

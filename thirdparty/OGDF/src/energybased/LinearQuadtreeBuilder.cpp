@@ -1,39 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2552 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class LinearQuadtreeBuilder.
- * 
+ *
  * \author Martin Gronemann
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2009
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -52,7 +55,8 @@ void LinearQuadtreeBuilder::prepareNodeAndLeaf(LinearQuadtree::PointID leafPos, 
 
 	lastInner = leafPos + n;
 	lastLeaf = leafPos;
-};
+}
+
 
 void LinearQuadtreeBuilder::prepareTree(LinearQuadtree::PointID begin,  LinearQuadtree::PointID end)
 {
@@ -68,26 +72,29 @@ void LinearQuadtreeBuilder::prepareTree(LinearQuadtree::PointID begin,  LinearQu
 		{
 			tree.setPointLeaf(i, leafPos);
 			i++;
-		};
+		}
 		prepareNodeAndLeaf(leafPos, i);
-	};
-};
+	}
+}
+
 
 void LinearQuadtreeBuilder::prepareTree()
 {
 	prepareTree(0, n);
-};
+}
+
 
 void LinearQuadtreeBuilder::mergeWithNext(LinearQuadtree::NodeID curr)
 {
 	LinearQuadtree::NodeID next = tree.nextNode(curr);
 	for (__uint32 i = 1; i < tree.numberOfChilds(next); i++)
 	{
-		tree.setChild(curr, tree.numberOfChilds(curr), tree.child(next, i)); 
+		tree.setChild(curr, tree.numberOfChilds(curr), tree.child(next, i));
 		tree.setNumberOfChilds(curr, tree.numberOfChilds(curr)+1);
-	};
+	}
 	tree.setNextNode(curr, tree.nextNode(next));
-};
+}
+
 
 LinearQuadtree::NodeID LinearQuadtreeBuilder::buildHierarchy(LinearQuadtree::NodeID curr, __uint32 maxLevel)
 {
@@ -96,32 +103,34 @@ LinearQuadtree::NodeID LinearQuadtreeBuilder::buildHierarchy(LinearQuadtree::Nod
 		LinearQuadtree::NodeID curr_next = tree.nextNode(curr);
 		if (tree.level(curr) == tree.level(curr_next))
 		{
-			mergeWithNext(curr);			
-		} 
+			mergeWithNext(curr);
+		}
 		else
 		if (tree.level(curr) < tree.level(curr_next))
 		{
 			tree.setChild(curr_next, 0, curr);
 			//pushBackChain(curr);
 			curr = curr_next;
-		} 
+		}
 		else // if tree.level(curr) > tree.level(curr_next)
 		{
 			LinearQuadtree::NodeID right_node = buildHierarchy(curr_next, tree.level(curr));
 			tree.setChild(curr, tree.numberOfChilds(curr)-1, right_node);
 			tree.setNextNode(curr, tree.nextNode(right_node));
-		};
-	};
+		}
+	}
 	//pushBackChain(curr);
 	return curr;
-};
+}
+
 
 void LinearQuadtreeBuilder::buildHierarchy()
 {
 	tree.clear();
 	restoreChainLastNode = 0;
 	tree.m_root = buildHierarchy(n, 128);
-};
+}
+
 
 void LinearQuadtreeBuilder::build()
 {
@@ -133,9 +142,6 @@ void LinearQuadtreeBuilder::build()
 	tree.m_numInnerNodes = numInnerNodes;
 	tree.m_firstLeaf = firstLeaf;
 	tree.m_numLeaves = numLeaves;
-};
+}
 
 } // end of namespace
-
-
-

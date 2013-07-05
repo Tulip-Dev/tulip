@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of Sugiyama algorithm.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -61,7 +62,7 @@
 
 namespace ogdf {
 
-	class OGDF_EXPORT ExtendedNestingGraph;
+	class ExtendedNestingGraph;
 
 /**
  * \brief Sugiyama's layout algorithm.
@@ -75,11 +76,11 @@ namespace ogdf {
  *   - Calling the algorithm for mixed-upward graphs (e.g., UML class
  *     diagrams), where only some edges are directed and shall point
  *     in the same direction.
- * 
+ *
  * If the Sugiyama algorithm shall be used for simultaneous drawing,
  * you need to define the different subgraphs by setting the <i>subgraphs</i>
  * option.
- * 
+ *
  * The implementation used in SugiyamaLayout is based on the following
  * publications:
  *
@@ -87,8 +88,8 @@ namespace ogdf {
  * Kiem-Phong Vo: <i>A technique for drawing directed graphs</i>.
  * IEEE Trans. Software Eng. 19(3), pp. 214-230, 1993.
  *
- * Georg Sander: <i>%Layout of compound directed graphs</i>. 
- * Technical Report, Universität des Saarlandes, 1996.
+ * Georg Sander: <i>%Layout of compound directed graphs</i>.
+ * Technical Report, Universit&auml;t des Saarlandes, 1996.
  *
  * <H3>Optional parameters</H3>
  * The following options affect the crossing minimization step
@@ -209,7 +210,7 @@ protected:
 
 	bool m_alignBaseClasses; //!< Option for aligning base classes.
 	bool m_alignSiblings;    //!< Option for aligning siblings in inheritance trees.
-	
+
 	EdgeArray<unsigned int> *m_subgraphs; //!< Defines the subgraphs for simultaneous drawing.
 
 public:
@@ -313,10 +314,10 @@ public:
 	 * This options defines the minimum distance between connected
 	 * components of the graph.
 	 */
-    double minDistCC() const { return m_minDistCC; }
+	double minDistCC() const { return m_minDistCC; }
 
 	//! Sets the option minDistCC to \a x.
-    void minDistCC(double x) { m_minDistCC = x; }
+	void minDistCC(double x) { m_minDistCC = x; }
 
 	/**
 	 * \brief Returns the current setting of option pageRation.
@@ -325,10 +326,10 @@ public:
 	 * is used by the packing algorithms used for laying out
 	 * connected components.
 	 */
-    double pageRatio() const { return m_pageRatio; }
+	double pageRatio() const { return m_pageRatio; }
 
 	//! Sets the option pageRatio to \a x.
-    void pageRatio(double x) { m_pageRatio = x; }
+	void pageRatio(double x) { m_pageRatio = x; }
 
 	/**
 	 * \brief Returns the current setting of option alignBaseClasses.
@@ -395,7 +396,7 @@ public:
 	/**
 	 * \brief Sets the module option for the computation of the final layout.
 	 *
-	 * This module receives as input the computed layer assignment and 
+	 * This module receives as input the computed layer assignment and
 	 * and order of nodes on each layer, and computes the final coordinates
 	 * of nodes and bend points.
 	 */
@@ -406,7 +407,7 @@ public:
 	/**
 	 * \brief Sets the module option for the computation of the final layout for clustered graphs.
 	 *
-	 * This module receives as input the computed layer assignment and 
+	 * This module receives as input the computed layer assignment and
 	 * and order of nodes on each layer, and computes the final coordinates
 	 * of nodes and bend points.
 	 */

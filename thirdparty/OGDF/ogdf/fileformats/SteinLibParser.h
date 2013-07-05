@@ -6,7 +6,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -60,8 +61,8 @@ public:
 	 * @param isTerminal Incidence vector for the terminal nodes in the graph
 	 * @return True, if the parsing was successful, false otherwise
 	 */
-	bool readSteinLibInstance(const char *fileName, EdgeWeightedGraph<T> *wG, List<node> *terminals,
-			NodeArray<bool> *isTerminal) const {
+	bool readSteinLibInstance(const char *fileName, EdgeWeightedGraph<T> &wG, List<node> &terminals,
+			NodeArray<bool> &isTerminal) const {
 
 		std::ifstream is(fileName);
 		if (!is && !is.good()) {
@@ -73,12 +74,11 @@ public:
 		int nextSection = 1;
 		char value[1024];
 		char key[1024];
-		bool directed = false;
 		int scannedElements;
-		int n, m, t; // number of nodes, edges and terminals
+		int n;
 		int v1, v2, v3;
 		Array<node> indexToNode;
-		node root; // root terminal (directed case)
+		//node root; // root terminal (directed case)
 
 		std::string name, date, creator, remark;
 
@@ -99,17 +99,17 @@ public:
 			switch (section) {
 			case 0:
 				if (!strcasecmp(buffer, "SECTION Comment")
-				 && nextSection == 1) {
-					section = 1;
+					&& nextSection == 1) {
+						section = 1;
 				} else if (!strcasecmp(buffer, "SECTION Graph")
-				           && nextSection == 2) {
-					section = 2;
+					&& nextSection == 2) {
+						section = 2;
 				} else if (!strcasecmp(buffer, "SECTION Terminals")
-				           && nextSection == 3) {
-					section = 3;
+					&& nextSection == 3) {
+						section = 3;
 				} else if (!strcasecmp(buffer, "SECTION Coordinates")
-				           && nextSection == 4) {
-					section = 4;
+					&& nextSection == 4) {
+						section = 4;
 				} else if (!strcasecmp(buffer, "EOF") && nextSection >= 4) {
 					return true;
 				}
@@ -147,24 +147,28 @@ public:
 						n = v1;
 						indexToNode = Array<node>(1, n, 0);
 						for (int i = 1; i <= n; i++) {
-							indexToNode[i] = wG->newNode();
-							(*isTerminal)[indexToNode[i]] = false;
+							indexToNode[i] = wG.newNode();
+							isTerminal[indexToNode[i]] = false;
 						}
-					} else if (!strcasecmp(key, "Edges")) {
+					}
+#if 0
+					else if (!strcasecmp(key, "Edges")) {
 						m = v1;
-						directed = false;
+						wG.directed(false);
 					} else if (!strcasecmp(key, "Arcs")) {
 						m = v1;
-						directed = true;
+						wG.directed(true);
 					}
+#endif
 					break;
 				case 4: // specific edge or arc
 					switch (buffer[0]) {
 					case 'E':
-						wG->newEdge(indexToNode[v1], indexToNode[v2], v3);
-						break;
 					case 'A':
-						wG->newEdge(indexToNode[v1], indexToNode[v2], v3);
+						if (v1 > n || v2 > n) {
+							return false;
+						}
+						wG.newEdge(indexToNode[v1], indexToNode[v2], v3);
 						break;
 					default:
 						return false;
@@ -177,19 +181,27 @@ public:
 				break;
 			case 3: // terminals section
 				sscanf(buffer, "%s %d", key, &v1);
+#if 0
 				if (!strcasecmp(key, "Terminals")) {
-					t = v1;
+					t = v1; // set number of terminals
 				} else if (!strcasecmp(key, "Root")) {
+					if (v1 > n) {
+						return false;
+					}
 					root = indexToNode[v1];
-				} else if (!strcasecmp(key, "T")) {
-					terminals->pushBack(indexToNode[v1]);
-					(*isTerminal)[indexToNode[v1]] = true;
+				} else
+#endif
+				if (!strcasecmp(key, "T")) {
+					if (v1 > n) {
+						return false;
+					}
+					terminals.pushBack(indexToNode[v1]);
+					isTerminal[indexToNode[v1]] = true;
 				} else if (!strcasecmp(key, "END")) {
 					nextSection = 4;
 					section = 0;
-				} else {
-					return false;
 				}
+				// no else: ignore unused keys
 				break;
 			case 4: // coordinates section (omitted)
 				sscanf(buffer, "%s", key);

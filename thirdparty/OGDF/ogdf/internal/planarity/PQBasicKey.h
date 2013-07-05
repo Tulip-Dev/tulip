@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration and implementation of the class PQBasicKey.
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -64,7 +65,7 @@ namespace ogdf {
  * The implementation of the PQ-tree provides the storage of three
  * different types of information.
  *   - General information that is stored at P- and Q-nodes and
- *     leaves likewise (see also PQNodeKey). 
+ *     leaves likewise (see also PQNodeKey).
  *   - Information that is only supported for internal nodes (see
  *     also internalKey).
  *   - The keys of the leaves (see also leafKey).
@@ -93,7 +94,7 @@ namespace ogdf {
  * responsibillity for these classes by the client,
  * nodes with certain informations can
  * be accessed by the client in constant time. This makes
- * the adaption of algorithms fast and easy. 
+ * the adaption of algorithms fast and easy.
  *
  * Only the derived concrete class template leafKey
  * is treated in a different way by the class template PQTree.
@@ -133,20 +134,12 @@ template<class T,class X, class Y> class PQNode;
 
 template<class T,class X,class Y>
 class PQBasicKey: public PQBasicKeyRoot {
-   
-public:
-   
-	// Constructor
-	PQBasicKey()
-	{
-		m_nodePointer = 0;
-		m_printString = 0;
-	}
 
-	// Destructor
-	virtual ~PQBasicKey() {
-		delete[] m_printString;
-	}
+public:
+
+	// Constructor
+	PQBasicKey() : m_nodePointer(0) { }
+
 
 	/**
 	 * The function nodePointer()
@@ -158,7 +151,7 @@ public:
 	 * Nevertheless, the private member \a m_nodePointer that stores
 	 * the pointer to this member <b>is not set</b> within the PQ-tree,
 	 * unless it is a derived class template of type leafKey.
-     *
+	 *
 	 * Setting the \a m_nodePointer has to be done explicitly by
 	 * the client with the help of the
 	 * function setNodePointer().
@@ -177,7 +170,7 @@ public:
 	 * of the function print() is an empty string.
 	 */
 
-	virtual const char* print() { return "\0"; }
+	virtual ostream &print(ostream &os) { return os; }
 
 	/**
 	 * The function setNodePointer() sets the private member
@@ -186,28 +179,24 @@ public:
 	 * Using this function enables the client to identify
 	 * certain informations with a node in the PQ-tree.
 	 */
-    void setNodePointer(PQNode<T,X,Y>* node) { m_nodePointer = node; }
+	void setNodePointer(PQNode<T,X,Y>* node) { m_nodePointer = node; }
 
 	//! Returns the key of a leaf.
-    virtual T userStructKey()  = 0;
+	virtual T userStructKey()  = 0;
 
 	//! Returns the information of any node.
-    virtual X userStructInfo()  = 0;
+	virtual X userStructInfo()  = 0;
 
 	//! Returns the information of any internal node.
-    virtual Y userStructInternal()  = 0;
+	virtual Y userStructInternal()  = 0;
 
-protected:
-
-	//! A pointer to a string that can be used within the function print()
-    char* m_printString;
 
 private:
 
 	/** Stores the adress of a node. This node has to
 	 * be specified by the client via the function \a setNodePointer.
 	 */
-    PQNode<T,X,Y>* m_nodePointer;
+	PQNode<T,X,Y>* m_nodePointer;
 
 };
 

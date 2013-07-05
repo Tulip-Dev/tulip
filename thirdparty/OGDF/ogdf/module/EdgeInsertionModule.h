@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2615 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-16 14:23:36 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of interface for edge insertion algorithms
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -206,7 +207,7 @@ public:
 	 */
 	ReturnType callForbidCrossingGens(PlanRepUML &PG,
 		const EdgeArray<int> &costOrig,
-		const List<edge> &origEdges) 
+		const List<edge> &origEdges)
 	{
 		return doCall(PG, origEdges, true, &costOrig, 0, 0);
 	}
@@ -215,7 +216,7 @@ public:
 	virtual int runsPostprocessing() const {
 		return 0;
 	}
-	
+
 
 #ifdef OGDF_DEBUG
 	bool checkCrossingGens(const PlanRepUML &PG);
@@ -233,6 +234,8 @@ protected:
 	 *        \a PG without an original edge have zero costs.
 	 * @param forbiddenEdgeOrig points to an edge array indicating if an original edge is
 	 *        forbidden to be crossed.
+	 * @param edgeSubGraph is used for simultaneous embedding and specifies for each edge
+	 *        to which subgraphs it belongs.
 	 */
 	virtual ReturnType doCall(PlanRep &PG,
 		const List<edge> &origEdges,

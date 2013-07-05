@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of a line buffer serving the class DinoXmlScanner
- * 
+ *
  * \author Dino Ahr
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -63,9 +64,10 @@ namespace ogdf {
 	//
 	// C o n s t r u c t o r
 	//
-	DinoLineBufferPosition::DinoLineBufferPosition(int lineNumber, 
-												   int lineUpdateCount, 
-							                       int linePosition)
+	DinoLineBufferPosition::DinoLineBufferPosition(
+		int lineNumber,
+		int lineUpdateCount,
+		int linePosition)
 	{
 		set(lineNumber, lineUpdateCount, linePosition);
 	}
@@ -156,9 +158,7 @@ namespace ogdf {
 		// Open file
 		m_pIs = new ifstream(fileName, ios::in);
 		if (!(*m_pIs)) {
-			DinoTools::reportError("DinoLineBuffer::DinoLineBuffer",
-									__LINE__,
-						           "Error opening file!");
+			DinoTools::reportError("DinoLineBuffer::DinoLineBuffer", __LINE__, "Error opening file!");
 		}
 
 		// Create and initialize lineUpdateCountArray
@@ -168,9 +168,9 @@ namespace ogdf {
 			m_lineUpdateCountArray[i] = 0;
 		}
 
-		// Create and initialize line buffer 
+		// Create and initialize line buffer
 		m_pLinBuf = new char[(DinoLineBuffer::c_maxNoOfLines * DinoLineBuffer::c_maxLineLength)];
-		if (m_pLinBuf == 0) 
+		if (m_pLinBuf == 0)
 			OGDF_THROW(InsufficientMemoryException);
 		for (i = 0; i < DinoLineBuffer::c_maxNoOfLines * DinoLineBuffer::c_maxLineLength; i++){
 			m_pLinBuf[i] = '0';
@@ -178,7 +178,7 @@ namespace ogdf {
 
 		// Read first line
 		if (!m_pIs->eof()){
-			
+
 			// Read first line
 			m_pIs->getline(m_pLinBuf, DinoLineBuffer::c_maxLineLength);
 
@@ -254,13 +254,14 @@ namespace ogdf {
 				++m_inputFileLineCounter;
 
 				// Set current position
-				m_currentPosition.set(m_numberOfMostRecentlyReadLine, 
-									  m_lineUpdateCountArray[m_numberOfMostRecentlyReadLine],
-									  0);
+				m_currentPosition.set(
+					m_numberOfMostRecentlyReadLine,
+					m_lineUpdateCountArray[m_numberOfMostRecentlyReadLine],
+					0);
 
-				// End of file is reached 
+				// End of file is reached
 				if (m_pIs->eof()){
-			
+
 					// Set eof marker
 					setCurrentCharacter(EOF);
 
@@ -268,15 +269,14 @@ namespace ogdf {
 				// Read next line and put it to the new position
 				else{
 
-					m_pIs->getline(getCurrentCharacterPointer(),
-								   DinoLineBuffer::c_maxLineLength);
+					m_pIs->getline(getCurrentCharacterPointer(), DinoLineBuffer::c_maxLineLength);
 				}
 
 			} // Current line is equal to most recently read line
 
 			// Current line is NOT equal to most recently read line, i.e.
 			// it is not necessary to read a new line from the file but to
-			// set the currentPosition to the next line which is already in 
+			// set the currentPosition to the next line which is already in
 			// the line buffer.
 			else{
 
@@ -290,7 +290,7 @@ namespace ogdf {
 					newLine = m_currentPosition.getLineNumber() + 1;
 				}
 
-				// Set current position 
+				// Set current position
 				m_currentPosition.set(newLine, m_lineUpdateCountArray[newLine], 0);
 
 			} // Current line is NOT equal to most recently read line
@@ -321,14 +321,14 @@ namespace ogdf {
 	//
 	// s k i p W h i t e s p a c e
 	//
-	void DinoLineBuffer::skipWhitespace(){
+	void DinoLineBuffer::skipWhitespace()
+	{
 
-		if (getCurrentCharacter() == EOF){
+		if (getCurrentCharacter() == EOF) {
 			return;
 		}
 
-		while ((isspace(getCurrentCharacter())) &&
-			   (!(getCurrentCharacter() == EOF)))
+		while ((isspace(getCurrentCharacter())) && (!(getCurrentCharacter() == EOF)))
 		{
 			moveToNextCharacter();
 		}
@@ -338,9 +338,11 @@ namespace ogdf {
 	//
 	// e x t r a c t S t r i n g
 	//
-	bool DinoLineBuffer::extractString(const DinoLineBufferPosition &startPosition,
-									   const DinoLineBufferPosition &endPosition,
-									   char *targetString){
+	bool DinoLineBuffer::extractString(
+		const DinoLineBufferPosition &startPosition,
+		const DinoLineBufferPosition &endPosition,
+		char *targetString)
+	{
 
 		// StartPosition invalid, probably because the line of the startPosition
 		// has already been overwritten, i.e. the string is too long
@@ -352,8 +354,8 @@ namespace ogdf {
 
 		// EndPosition must be valid
 		OGDF_ASSERT(isValidPosition(endPosition))
-		
-		// Remember original currentPosition 
+
+		// Remember original currentPosition
 		DinoLineBufferPosition originalCurrentPosition = getCurrentPosition();
 
 		// Begin at startPosition
@@ -404,12 +406,12 @@ namespace ogdf {
 	bool DinoLineBuffer::isValidPosition(const DinoLineBufferPosition &position) const
 	{
 
-		// We can assume that the position is valid according to 
+		// We can assume that the position is valid according to
 		// array ranges since these things are checked in constructor and set of
 		// class DinoLineBufferPosition
 
 		// The line of the given position has already been overwritten
-		if (position.getLineUpdateCount() != 
+		if (position.getLineUpdateCount() !=
 			m_lineUpdateCountArray[position.getLineNumber()])
 		{
 			return false;

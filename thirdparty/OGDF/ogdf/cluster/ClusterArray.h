@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2584 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 02:38:07 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration and implementation of ClusterArray class.
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -114,8 +115,8 @@ public:
 	//! Constructs an empty cluster array associated with no graph.
 	ClusterArray() : Array<T>(), ClusterArrayBase() { }
 	//! Constructs a cluster array associated with \a C.
-	ClusterArray(const ClusterGraph &C) : 
-		Array<T>(C.clusterArrayTableSize()), 
+	ClusterArray(const ClusterGraph &C) :
+		Array<T>(C.clusterArrayTableSize()),
 		ClusterArrayBase(&C) { }
 	//! Constructs a cluster array associated with \a C.
 	/**
@@ -123,13 +124,14 @@ public:
 	 * @param x is the default value for all array elements.
 	 */
 	ClusterArray(const ClusterGraph &C, const T &x) :
-		Array<T>(0,C.clusterArrayTableSize()-1,x), 
+		Array<T>(0,C.clusterArrayTableSize()-1,x),
 		ClusterArrayBase(&C), m_x(x) { }
 	//! Constructs a cluster array associated with \a C and a given
 	//! size (for static use).
 	/**
 	 * @param C is the associated cluster graph.
 	 * @param x is the default value for all array elements.
+	 * @param size is the size of the array.
 	 */
 	ClusterArray(const ClusterGraph &C, const T &x, int size) :
 		Array<T>(0,size-1,x),
@@ -139,13 +141,13 @@ public:
 	/**
 	 * Associates the array with the same cluster graph as \a A and copies all elements.
 	 */
-	ClusterArray(const ClusterArray<T> &A) : 
-		Array<T>(A), 
+	ClusterArray(const ClusterArray<T> &A) :
+		Array<T>(A),
 		ClusterArrayBase(A.m_pClusterGraph), m_x(A.m_x) { }
 
 	//! Returns true iff the array is associated with a graph.
 	bool valid() const { return (Array<T>::low() <= Array<T>::high()); }
-	
+
 	//! Returns a pointer to the associated cluster graph.
 	const ClusterGraph *graphOf() const {
 		return m_pClusterGraph;

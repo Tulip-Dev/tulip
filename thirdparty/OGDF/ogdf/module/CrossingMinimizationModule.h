@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of CrossingMinimization Module, an interface for crossing minimization algorithms
- * 
+ *
  * \author Markus Chimani
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -45,7 +46,7 @@
 
 
 #include <ogdf/planarity/PlanRep.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/Module.h>
 #include <ogdf/basic/Logger.h>
 #include <ogdf/basic/Timeouter.h>
@@ -88,7 +89,7 @@ public:
 			int cc,
 			int&  crossingNumber,
 			const EdgeArray<int>  * cost = 0,
-			const EdgeArray<bool> * forbid = 0, 
+			const EdgeArray<bool> * forbid = 0,
 			const EdgeArray<unsigned int> * subgraphs = 0)
 	{
 		m_useCost = (cost != 0);
@@ -112,7 +113,7 @@ public:
 			int cc,
 			int&  crossingNumber,
 			const EdgeArray<int>  * cost = 0,
-			const EdgeArray<bool> * forbid = 0, 
+			const EdgeArray<bool> * forbid = 0,
 			const EdgeArray<unsigned int> * const subgraphs = 0) {
 		return call(PG, cc, crossingNumber, cost, forbid, subgraphs);
 	};
@@ -145,12 +146,12 @@ protected:
 	virtual ReturnType doCall(PlanRep &PG,
 		int cc,
 		const EdgeArray<int>  &cost,
-		const EdgeArray<bool> &forbid, 
-		const EdgeArray<unsigned int> &subgraphs, 
+		const EdgeArray<bool> &forbid,
+		const EdgeArray<unsigned int> &subgraphs,
 		int& crossingNumber) = 0;
-		
+
 	OGDF_MALLOC_NEW_DELETE
-	
+
 private:
 	bool m_useCost; //!< True iff edge costs are given.
 	bool m_useForbid; //!< True iff forbidden edges are given.

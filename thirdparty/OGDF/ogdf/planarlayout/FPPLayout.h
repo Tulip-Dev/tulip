@@ -1,21 +1,22 @@
 /*
- * $Revision: 2303 $
+ * $Revision: 2566 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 09:41:00 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-07 23:10:08 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief Declaration of the Fraysseix, Pach, Pollack Algorithm (FPPLayout)
  *        algorithm.
  *
- * \author Till Schaefer
+ * \author Till Sch&auml;fer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -51,18 +52,18 @@
 #include <ogdf/basic/Graph_d.h>
 #include <ogdf/module/GridLayoutModule.h>
 
-namespace ogdf 
+namespace ogdf
 {
 
 /**
- * The class FPPLayout represents the layout algorithm by 
- * de Fraysseix, Pach, Pollack [DPP90]. This algorithm draws a planar graph G 
- * straight-line without crossings. G must not contain self-loops or multiple 
+ * The class FPPLayout represents the layout algorithm by
+ * de Fraysseix, Pach, Pollack [DPP90]. This algorithm draws a planar graph G
+ * straight-line without crossings. G must not contain self-loops or multiple
  * edges. The grid layout size is (2<i>n</i>-4) * (<i>n</i>-2) for a graph with
  * n nodes (<i>n</i> ≥ 3).
- * The algorithm runs in three phases. In the ﬁrst phase, the graph is 
- * augmented by adding new artiﬁcial edges to get a triangulated plane graph. 
- * Then, a so-called shelling order (also called canonical ordering) 
+ * The algorithm runs in three phases. In the ﬁrst phase, the graph is
+ * augmented by adding new artiﬁcial edges to get a triangulated plane graph.
+ * Then, a so-called shelling order (also called canonical ordering)
  * for triangulated planar graphs is computed. In the third phase the vertices
  * are placed incrementally according to the shelling order.
  */
@@ -71,16 +72,29 @@ public:
 	FPPLayout();
 
 private:
-	void doCall ( const Graph &G, adjEntry adjExternal, GridLayout &gridLayout,
-				  IPoint &boundingBox, bool fixEmbedding );
+	void doCall(
+		const Graph &G,
+		adjEntry adjExternal,
+		GridLayout &gridLayout,
+		IPoint &boundingBox,
+		bool fixEmbedding );
 
-	void computeOrder ( const GraphCopy &G, NodeArray<int> &num, 
-						 NodeArray<adjEntry> &e_wp, NodeArray<adjEntry> &e_wq, 
-						 adjEntry e_12, adjEntry e_2n, adjEntry e_n1 );
+	void computeOrder(
+		const GraphCopy &G,
+		NodeArray<int> &num,
+		NodeArray<adjEntry> &e_wp,
+		NodeArray<adjEntry> &e_wq,
+		adjEntry e_12,
+		adjEntry e_2n,
+		adjEntry e_n1 );
 
-	void computeCoordinates ( const GraphCopy &G, IPoint &boundingBox, 
-							   GridLayout &gridLayout, NodeArray<int> &num,
-							   NodeArray<adjEntry> &e_wp, NodeArray<adjEntry> &e_wq );
+	void computeCoordinates(
+		const GraphCopy &G,
+		IPoint &boundingBox,
+		GridLayout &gridLayout,
+		NodeArray<int> &num,
+		NodeArray<adjEntry> &e_wp,
+		NodeArray<adjEntry> &e_wq );
 };
 
 

@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class DynamicSPQRForest
- * 
+ *
  * \author Jan Papenfu&szlig;
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -54,7 +55,7 @@ namespace ogdf {
 
 /**
  * \brief Dynamic SPQR-forest.
- * 
+ *
  * This class is an extension of DynamicBCTree.\n
  * It provides a set of SPQR-trees for each B-component of a BC-tree.
  * These SPQR-trees are dynamic, i.e. there are member functions for
@@ -91,7 +92,7 @@ protected:
 
 /** @{
  * \brief The root vertices of the SPQR-trees.
- * 
+ *
  * For each vertex of the BC-tree representing a B-component, this
  * array contains the root vertex of the respective SPQR-tree, or
  * \e NULL, if the SPQR-tree does not exist.
@@ -99,7 +100,7 @@ protected:
 	mutable NodeArray<node> m_bNode_SPQR;
 /**
  * \brief The numbers of S-components.
- * 
+ *
  * For each vertex of the BC-tree representing a B-component,
  * this array contains the number of S-components of the respective
  * SPQR-tree. If the SPQR-tree does not exist, then the array member
@@ -108,7 +109,7 @@ protected:
 	mutable NodeArray<int> m_bNode_numS;
 /**
  * \brief The numbers of P-components.
- * 
+ *
  * For each vertex of the BC-tree representing a B-component,
  * this array contains the number of P-components of the respective
  * SPQR-tree. If the SPQR-tree does not exist, then the array member
@@ -117,7 +118,7 @@ protected:
 	mutable NodeArray<int> m_bNode_numP;
 /**
  * \brief The numbers of R-components.
- * 
+ *
  * For each vertex of the BC-tree representing a B-component,
  * this array contains the number of R-components of the respective
  * SPQR-tree. If the SPQR-tree does not exist, then the array member
@@ -176,7 +177,7 @@ protected:
 /**
  * \brief creates the SPQR-tree for a given B-component of the
  * BC-tree.
- * 
+ *
  * An SPQR-tree belonging to a B-component of the BC-tree is only
  * created on demand, i.e. this member function is only called by
  * findSPQRTree() and - under certain circumstances - by
@@ -273,7 +274,7 @@ public:
 
 /** @} @{
  * \brief A constructor.
- * 
+ *
  * This constructor does only create the dynamic BC-tree rooted at the first
  * edge of \a G. The data structure is prepared for dealing with SPQR-trees,
  * but they will only be created on demand. Cf. member functions findPathSPQR()
@@ -285,7 +286,7 @@ public:
 /** @} @{
  * \brief finds the proper representative of the SPQR-tree-vertex which
  * a given real or virtual edge is belonging to.
- * 
+ *
  * This member function has to be used carefully (see <b>Precondition</b>)!
  * \param eH is an edge of \e m_H.
  * \pre The respective SPQR-tree belonging to the B-component represented by
@@ -363,7 +364,7 @@ public:
 /** @} @{
  * \brief updates the whole data structure after a new edge has been
  * inserted into the original graph.
- * 
+ *
  * This member function generally updates both BC- and SPQR-trees. If
  * any SPQR-tree of the B-components of the insertion path through
  * the BC-tree exists, the SPQR-tree data structure of the resulting
@@ -378,7 +379,7 @@ public:
  * \brief updates the whole data structure after a new vertex has been
  * inserted into the original graph by splitting an edge into \a eG
  * and \a fG.
- * 
+ *
  * This member function updates the BC-tree at first. If the SPQR-tree
  * of the B-component which the split edge is belonging to does exist,
  * then it is updated, too. If it does not exist, it is not created.

@@ -1,20 +1,21 @@
 /*
- * $Revision: 2303 $
+ * $Revision: 2599 $
  *
  * last checkin:
- *   $Author: gutwenger $
- *   $Date: 2012-05-08 09:41:00 +0200 (Tue, 08 May 2012) $
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief Definition of the Schnyder Layout Algorithm (SchnyderLayout)
  *
- * \author Till Schaefer
+ * \author Till Sch&auml;fer
  *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -40,7 +41,7 @@
  ***************************************************************/
 
 #include <ogdf/planarlayout/SchnyderLayout.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/basic/GraphCopy.h>
 #include <ogdf/basic/List.h>
@@ -50,9 +51,14 @@ namespace ogdf {
 SchnyderLayout::SchnyderLayout() : PlanarGridLayoutModule() {
 }
 
-void SchnyderLayout::doCall(const Graph &G, adjEntry adjExternal,
-							GridLayout &gridLayout, IPoint &boundingBox,
-							bool fixEmbedding) {
+
+void SchnyderLayout::doCall(
+	const Graph &G,
+	adjEntry adjExternal,
+	GridLayout &gridLayout,
+	IPoint &boundingBox,
+	bool fixEmbedding)
+{
 	// check for double edges & self loops
 	OGDF_ASSERT(isSimple(G));
 
@@ -85,8 +91,7 @@ void SchnyderLayout::doCall(const Graph &G, adjEntry adjExternal,
 
 	// embed
 	if (!fixEmbedding) {
-		PlanarModule pm;
-		if (pm.planarEmbed(GC) == false) {
+		if (planarEmbed(GC) == false) {
 			OGDF_THROW_PARAM(PreconditionViolatedException, pvcPlanar);
 		}
 	}
@@ -96,8 +101,12 @@ void SchnyderLayout::doCall(const Graph &G, adjEntry adjExternal,
 	schnyderEmbedding(GC, gridLayout, adjExternal);
 }
 
-void SchnyderLayout::schnyderEmbedding(GraphCopy& GC, GridLayout &gridLayout,
-									   adjEntry adjExternal) {
+
+void SchnyderLayout::schnyderEmbedding(
+	GraphCopy& GC,
+	GridLayout &gridLayout,
+	adjEntry adjExternal)
+{
 	NodeArray<int> &xcoord = gridLayout.x();
 	NodeArray<int> &ycoord = gridLayout.y();
 
@@ -164,22 +173,22 @@ void SchnyderLayout::schnyderEmbedding(GraphCopy& GC, GridLayout &gridLayout,
 	// special treatment for a
 	v1[a_in_T] = t1[a_in_T];
 
-	/* 
-	 * v1[v] now is the sum of the 
-	 * "count of nodes in t1" minus the "subtree size for node x" 
+	/*
+	 * v1[v] now is the sum of the
+	 * "count of nodes in t1" minus the "subtree size for node x"
 	 * for every node x on a path from b to v in t2
 	 */
 
 	prefixSum(rValues, 3, c_in_T, t1, val);
 	// special treatment for a
 	val[a_in_T] = t1[a_in_T];
-	
-	/* 
-	 * val[v] now is the sum of the 
-	 * "count of nodes in t1" minus the "subtree size for node x" 
+
+	/*
+	 * val[v] now is the sum of the
+	 * "count of nodes in t1" minus the "subtree size for node x"
 	 * for every node x on a path from c to v in t3
 	 */
-	
+
 	// r1[v]=v1[v]+val[v]-t1[v] is the number of nodes in region 1 from v
 	forall_nodes(v, T) {
 		// calc v1'
@@ -206,11 +215,13 @@ void SchnyderLayout::schnyderEmbedding(GraphCopy& GC, GridLayout &gridLayout,
 	}
 }
 
+
 /*
  * Constructs List L
  * L is the ordering for uncontracting the nodes in realizer
  */
-void SchnyderLayout::contract(Graph& G, node a, node b, node c, List<node>& L) {
+void SchnyderLayout::contract(Graph& G, node a, node b, node c, List<node>& L)
+{
 	adjEntry adj1, adj2;
 	List<node> candidates;
 	NodeArray<bool> marked(G, false);			// considered nodes
@@ -259,13 +270,21 @@ void SchnyderLayout::contract(Graph& G, node a, node b, node c, List<node>& L) {
 	}
 }
 
+
 /*
  * Construct the realiszer and the Tree T
  * rValues = realizer value
  * T = Tree
  */
-void SchnyderLayout::realizer(GraphCopy& G, const List<node>& L, node a, node b, node c,
-							  EdgeArray<int>& rValues, GraphCopy& T) {
+void SchnyderLayout::realizer(
+	GraphCopy& G,
+	const List<node>& L,
+	node a,
+	node b,
+	node c,
+	EdgeArray<int>& rValues,
+	GraphCopy& T)
+{
 	int  i = 0;
 	edge e;
 	NodeArray<int> ord(G, 0);
@@ -339,11 +358,16 @@ void SchnyderLayout::realizer(GraphCopy& G, const List<node>& L, node a, node b,
 	rValues[e] = 3;
 }
 
+
 /*
  * computes the sizes of all subtrees of a tree with root r
  */
-void SchnyderLayout::subtreeSizes(EdgeArray<int>& rValues, int i, node r,
-								  NodeArray<int>& size) {
+void SchnyderLayout::subtreeSizes(
+	EdgeArray<int>& rValues,
+	int i,
+	node r,
+	NodeArray<int>& size)
+{
 	int  sum = 0;
 	adjEntry adj;
 	forall_adj(adj, r) {
@@ -360,8 +384,13 @@ void SchnyderLayout::subtreeSizes(EdgeArray<int>& rValues, int i, node r,
  * computes for every node u in the subtree of T(i) with root r
  * the sum of all val[v] where v is a node on the path from r to u
  */
-void SchnyderLayout::prefixSum(EdgeArray<int>& rValues, int i, node r,
-							   const NodeArray<int>& val, NodeArray<int>& sum) {
+void SchnyderLayout::prefixSum(
+	EdgeArray<int>& rValues,
+	int i,
+	node r,
+	const NodeArray<int>& val,
+	NodeArray<int>& sum)
+{
 	List<node> Q;
 
 	Q.pushBack(r);

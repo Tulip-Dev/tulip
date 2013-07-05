@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of the optimal third phase of the
  * sugiyama algorithm for cluster graphs
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -249,17 +250,14 @@ void OptimalHierarchyClusterLayout::computeXCoordinates(
 	int nSegments     = 0; // number of vertical segments
 	int nRealVertices = 0; // number of real vertices
 	int nEdges        = 0; // number of edges not in vertical segments
-	int nBalanced     = 0; // number of real vertices with deg > 1 for which
-	                       // balancing constraints may be applied
+	int nBalanced     = 0; // number of real vertices with deg > 1 for which balancing constraints may be applied
 
-	m_vIndex.init(H,-1); // for real node: index of x[v]
-	                             // for dummy: index of corresponding segment
+	m_vIndex.init(H,-1); // for real node: index of x[v] for dummy: index of corresponding segment
 	NodeArray<int> bIndex(H,-1); // (relative) index of b[v]
-	EdgeArray<int> eIndex(H,-1); // for edge not in vertical segment:
-	                             //   its index
-	Array<int> count(H.numberOfEdges());  // counts the number of dummy vertices
-	                             // in corresponding segment that are not at
-	                             // position 0
+	EdgeArray<int> eIndex(H,-1); // for edge not in vertical segment: its index
+	Array<int> count(H.numberOfEdges());	// counts the number of dummy vertices
+											// in corresponding segment that are not at
+											// position 0
 
 	int nSpacingConstraints = 0;
 	for(i = 0; i < k; ++i)
@@ -284,8 +282,7 @@ void OptimalHierarchyClusterLayout::computeXCoordinates(
 
 				// ignore dummy nodes and nodes representing cluster
 				// (top or bottom) border
-				if(H.type(v) == ExtendedNestingGraph::ntClusterBottom ||
-				   H.type(v) == ExtendedNestingGraph::ntClusterTop)
+				if(H.type(v) == ExtendedNestingGraph::ntClusterBottom || H.type(v) == ExtendedNestingGraph::ntClusterTop)
 					continue;
 
 				++nSpacingConstraints;
@@ -325,7 +322,7 @@ void OptimalHierarchyClusterLayout::computeXCoordinates(
 						} while(m_isVirtual[w] && H.verticalSegment(e));
 
 						++nSegments;
-						
+
 						// edge following vertical segment
 						eIndex[e] = nEdges++;
 
@@ -348,7 +345,7 @@ void OptimalHierarchyClusterLayout::computeXCoordinates(
 	// assignment of variables to matrix columns
 	//   d_e                  0, ...,                     nEdges-1
 	//   x_v       vertexOffset, ..., vertexOffset      + nRealVertices-1
-    //   x_s      segmentOffset, ..., segmentOffset     + nSegments-1
+	//   x_s      segmentOffset, ..., segmentOffset     + nSegments-1
 	//   b_v     balancedOffset, ..., balancedOffset    + nBalanced-1
 	//   l_c   clusterLefOffset, ..., clusterLeftOffset + nClusters-1
 	//   r_c clusterRightOffset, ..., clusterRightOffset+ nClusters-1
@@ -461,7 +458,7 @@ void OptimalHierarchyClusterLayout::computeXCoordinates(
 	Array<double> matrixValue(nNonZeroes);
 	Array<char>   equationSense(nRows);
 	Array<double> rightHandSide(nRows);
-	
+
 	int currentRow = 0;
 	Array<int> currentCol(nCols);
 	for(i = 0; i < nCols; ++i)
@@ -714,8 +711,7 @@ void OptimalHierarchyClusterLayout::computeXCoordinates(
 	forall_nodes(v,H)
 	{
 		ExtendedNestingGraph::NodeType t = H.type(v);
-		if(t == ExtendedNestingGraph::ntNode ||
-		   t == ExtendedNestingGraph::ntDummy)
+		if(t == ExtendedNestingGraph::ntNode || t == ExtendedNestingGraph::ntDummy)
 		{
 			if(m_isVirtual[v])
 				AGC.x(v) = x[m_segmentOffset + m_vIndex[v]];
@@ -837,8 +833,7 @@ void OptimalHierarchyClusterLayout::computeYCoordinates(
 	node v;
 	forall_nodes(v,H) {
 		ExtendedNestingGraph::NodeType t = H.type(v);
-		if(t == ExtendedNestingGraph::ntNode ||
-		   t == ExtendedNestingGraph::ntDummy)
+		if(t == ExtendedNestingGraph::ntNode || t == ExtendedNestingGraph::ntDummy)
 		{
 			AGC.y(v) = y[H.rank(v)];
 		}

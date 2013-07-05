@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief implements class VariableEmbeddingInserter
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -43,7 +44,7 @@
 #include <ogdf/planarity/VariableEmbeddingInserter.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/decomposition/StaticPlanarSPQRTree.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/CombinatorialEmbedding.h>
 
 
@@ -96,7 +97,7 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 {
 	double T;
 	usedTime(T);
-	
+
 	ReturnType retValue = retFeasible;
 	m_runsPostprocessing = 0;
 
@@ -117,7 +118,7 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 		forall_edges(e,PG)
 			currentOrigEdges.pushBack(PG.original(e));
 	}
-	
+
 	// insertion of edges
 	ListConstIterator<edge> it;
 	for(it = origEdges.begin(); it.valid(); ++it)
@@ -130,7 +131,7 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 		insert(PG.copy(eOrig->source()),PG.copy(eOrig->target()),eip);
 
 		PG.insertEdgePath(eOrig,eip);
-		
+
 		if(removeReinsert() == rrIncremental || removeReinsert() == rrIncInserted) {
 			currentOrigEdges.pushBack(eOrig);
 
@@ -138,31 +139,31 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 			do {
 				++m_runsPostprocessing;
 				improved = false;
-				
+
 				SListConstIterator<edge> itRR;
 				for(itRR = currentOrigEdges.begin(); itRR.valid(); ++itRR)
 				{
 					edge eOrigRR = *itRR;
-		
+
 					int pathLength;
 					if(costOrig != 0)
 						pathLength = costCrossed(eOrigRR);
 					else
 						pathLength = PG.chain(eOrigRR).size() - 1;
 					if (pathLength == 0) continue; // cannot improve
-		
+
 					PG.removeEdgePath(eOrigRR);
-		
+
 					m_typeOfCurrentEdge = m_forbidCrossingGens ? ((PlanRepUML&)PG).typeOrig(eOrigRR) : Graph::association;
-		
+
 					SList<adjEntry> eip;
 					m_st = eOrigRR;
 					insert(PG.copy(eOrigRR->source()),PG.copy(eOrigRR->target()),eip);
 					PG.insertEdgePath(eOrigRR,eip);
-		
+
 					int newPathLength = (costOrig != 0) ? costCrossed(eOrigRR) : (PG.chain(eOrigRR).size() - 1);
 					OGDF_ASSERT(newPathLength <= pathLength);
-					
+
 					if(newPathLength < pathLength)
 						improved = true;
 				}
@@ -175,14 +176,14 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 		// postprocessing (remove-reinsert heuristc)
 		const Graph &G = PG.original();
 		SListPure<edge> rrEdges;
-	
+
 		switch(removeReinsert())
 		{
 		case rrAll:
 		case rrMostCrossed: {
 				const List<node> &origInCC = PG.nodesInCC();
 				ListConstIterator<node> itV;
-	
+
 				for(itV = origInCC.begin(); itV.valid(); ++itV) {
 					node vG = *itV;
 					adjEntry adj;
@@ -194,7 +195,7 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 				}
 			}
 			break;
-	
+
 		case rrInserted:
 			for(ListConstIterator<edge> it = origEdges.begin(); it.valid(); ++it)
 				rrEdges.pushBack(*it);
@@ -205,13 +206,13 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 		case rrIncInserted:
 			break;
 		}
-	
-	
-	
+
+
+
 		// marks the end of the interval of rrEdges over which we iterate
 		// initially set to invalid iterator which means all edges
 		SListConstIterator<edge> itStop;
-	
+
 		bool improved;
 		do {
 			// abort postprocessing if time limit reached
@@ -219,55 +220,54 @@ Module::ReturnType VariableEmbeddingInserter::doCall(
 				retValue = retTimeoutFeasible;
 				break;
 			}
-				
+
 			++m_runsPostprocessing;
 			improved = false;
-	
+
 			if(removeReinsert() == rrMostCrossed)
 			{
 				VEICrossingsBucket bucket(&PG);
 				rrEdges.bucketSort(bucket);
-	
+
 				const int num = int(0.01 * percentMostCrossed() * G.numberOfEdges());
 				itStop = rrEdges.get(num);
 			}
-	
+
 			SListConstIterator<edge> it;
 			for(it = rrEdges.begin(); it != itStop; ++it)
 			{
 				edge eOrig = *it;
-	
+
 				int pathLength;
 				if(costOrig != 0)
 					pathLength = costCrossed(eOrig);
 				else
 					pathLength = PG.chain(eOrig).size() - 1;
 				if (pathLength == 0) continue; // cannot improve
-	
+
 				PG.removeEdgePath(eOrig);
-	
+
 				m_typeOfCurrentEdge = m_forbidCrossingGens ? ((PlanRepUML&)PG).typeOrig(eOrig) : Graph::association;
-	
+
 				SList<adjEntry> eip;
 				m_st = eOrig;
 				insert(PG.copy(eOrig->source()),PG.copy(eOrig->target()),eip);
 				PG.insertEdgePath(eOrig,eip);
-	
+
 				// we cannot find a shortest path that is longer than before!
 				int newPathLength = (costOrig != 0) ? costCrossed(eOrig) : (PG.chain(eOrig).size() - 1);
 				OGDF_ASSERT(newPathLength <= pathLength);
-				
+
 				if(newPathLength < pathLength)
 					improved = true;
 			}
 		} while (improved);
 	}
 
-	PlanarModule pm;
 #ifdef OGDF_DEBUG
 	bool isPlanar =
 #endif
-		pm.planarEmbed(PG);
+		planarEmbed(PG);
 
 	OGDF_ASSERT(isPlanar);
 
@@ -311,14 +311,14 @@ Module::ReturnType VariableEmbeddingInserter::doCallPostprocessing(
 	// postprocessing (remove-reinsert heuristc)
 	const Graph &G = PG.original();
 	SListPure<edge> rrEdges;
-	
+
 	switch(removeReinsert())
 	{
 	case rrAll:
 	case rrMostCrossed: {
 			const List<node> &origInCC = PG.nodesInCC();
 			ListConstIterator<node> itV;
-	
+
 			for(itV = origInCC.begin(); itV.valid(); ++itV) {
 				node vG = *itV;
 				adjEntry adj;
@@ -330,7 +330,7 @@ Module::ReturnType VariableEmbeddingInserter::doCallPostprocessing(
 			}
 		}
 		break;
-	
+
 	case rrInserted:
 		for(ListConstIterator<edge> it = origEdges.begin(); it.valid(); ++it)
 			rrEdges.pushBack(*it);
@@ -341,13 +341,13 @@ Module::ReturnType VariableEmbeddingInserter::doCallPostprocessing(
 	case rrIncInserted:
 		break;
 	}
-	
-	
-	
+
+
+
 	// marks the end of the interval of rrEdges over which we iterate
 	// initially set to invalid iterator which means all edges
 	SListConstIterator<edge> itStop;
-	
+
 	bool improved;
 	do {
 		// abort postprocessing if time limit reached
@@ -355,54 +355,53 @@ Module::ReturnType VariableEmbeddingInserter::doCallPostprocessing(
 			retValue = retTimeoutFeasible;
 			break;
 		}
-				
+
 		++m_runsPostprocessing;
 		improved = false;
-	
+
 		if(removeReinsert() == rrMostCrossed)
 		{
 			VEICrossingsBucket bucket(&PG);
 			rrEdges.bucketSort(bucket);
-	
+
 			const int num = int(0.01 * percentMostCrossed() * G.numberOfEdges());
 			itStop = rrEdges.get(num);
 		}
-	
+
 		SListConstIterator<edge> it;
 		for(it = rrEdges.begin(); it != itStop; ++it)
 		{
 			edge eOrig = *it;
-	
+
 			int pathLength;
 			if(costOrig != 0)
 				pathLength = costCrossed(eOrig);
 			else
 				pathLength = PG.chain(eOrig).size() - 1;
 			if (pathLength == 0) continue; // cannot improve
-	
+
 			PG.removeEdgePath(eOrig);
-	
+
 			m_typeOfCurrentEdge = m_forbidCrossingGens ? ((PlanRepUML&)PG).typeOrig(eOrig) : Graph::association;
-	
+
 			SList<adjEntry> eip;
 			m_st = eOrig;
 			insert(PG.copy(eOrig->source()),PG.copy(eOrig->target()),eip);
 			PG.insertEdgePath(eOrig,eip);
-	
+
 			// we cannot find a shortest path that is longer than before!
 			int newPathLength = (costOrig != 0) ? costCrossed(eOrig) : (PG.chain(eOrig).size() - 1);
 			OGDF_ASSERT(newPathLength <= pathLength);
-				
+
 			if(newPathLength < pathLength)
 				improved = true;
 		}
 	} while (improved);
 
-	PlanarModule pm;
 #ifdef OGDF_DEBUG
 	bool isPlanar =
 #endif
-		pm.planarEmbed(PG);
+		planarEmbed(PG);
 
 	OGDF_ASSERT(isPlanar);
 
@@ -417,11 +416,11 @@ Module::ReturnType VariableEmbeddingInserter::doCallPostprocessing(
 edge VariableEmbeddingInserter::crossedEdge(adjEntry adj) const
 {
 	edge e = adj->theEdge();
-	
+
 	adj = adj->cyclicSucc();
 	while(adj->theEdge() == e)
 		adj = adj->cyclicSucc();
-		
+
 	return adj->theEdge();
 }
 
@@ -429,9 +428,9 @@ edge VariableEmbeddingInserter::crossedEdge(adjEntry adj) const
 int VariableEmbeddingInserter::costCrossed(edge eOrig) const
 {
 	int c = 0;
-	
+
 	const List<edge> &L = m_pPG->chain(eOrig);
-	
+
 	ListConstIterator<edge> it = L.begin();
 	if(m_edgeSubgraph != 0) {
 		for(++it; it.valid(); ++it) {
@@ -450,7 +449,7 @@ int VariableEmbeddingInserter::costCrossed(edge eOrig) const
 			c += (*m_costOrig)[m_pPG->original(crossedEdge((*it)->adjSource()))];
 		}
 	}
-	
+
 	return c;
 }
 
@@ -535,7 +534,12 @@ class BiconnectedComponent : public Graph
 {
 public:
 	// constructor
-	BiconnectedComponent() : Graph(), m_BCtoG(*this), m_cost(*this,1), m_typeOf(*this, Graph::association) { }
+	BiconnectedComponent()
+	{
+		m_BCtoG .init(*this);
+		m_cost  .init(*this,1);
+		m_typeOf.init(*this, Graph::association);
+	}
 
 	void cost(edge e, int c) {
 		m_cost[e] = c;
@@ -595,7 +599,7 @@ bool VariableEmbeddingInserter::dfsVertex(node v, int parent)
 					m_GtoBC[e->target()] = BC.newNode();
 					nodesG.pushBack(e->target());
 				}
-				
+
 				edge eBC = BC.newEdge(m_GtoBC[e->source()],m_GtoBC[e->target()]);
 				BC.m_BCtoG[eBC->adjSource()] = e->adjSource();
 				BC.m_BCtoG[eBC->adjTarget()] = e->adjTarget();
@@ -614,7 +618,7 @@ bool VariableEmbeddingInserter::dfsVertex(node v, int parent)
 							cost = 1;
 						BC.cost(eBC, cost);
 					} else
-				    	BC.cost(eBC, (eOrig == 0) ? 0 : (*m_costOrig)[eOrig]);
+						BC.cost(eBC, (eOrig == 0) ? 0 : (*m_costOrig)[eOrig]);
 				}
 			}
 
@@ -626,7 +630,7 @@ bool VariableEmbeddingInserter::dfsVertex(node v, int parent)
 
 				// transform crossed edges to edges in G
 				ListConstIterator<adjEntry> it;
-				for(it = L.rbegin(); it.valid(); --it) { 
+				for(it = L.rbegin(); it.valid(); --it) {
 					m_pEip->pushFront(BC.m_BCtoG[*it]);
 				}
 			}
@@ -691,10 +695,9 @@ class ExpandedGraph
 
 	Graph           m_dual;  // augmented dual graph of exp
 	EdgeArray<adjEntry> m_primalEdge;
-	EdgeArray<bool>     m_primalIsGen; // true iff corresponding primal edge
-									   // is a generalization
+	EdgeArray<bool>     m_primalIsGen; // true iff corresponding primal edge is a generalization
 
-	node            m_vS, m_vT; // augmented nodes in dual representing s and t
+	node m_vS, m_vT; // augmented nodes in dual representing s and t
 
 public:
 	ExpandedGraph(const BiconnectedComponent &BC, const StaticSPQRTree &T);
@@ -707,7 +710,7 @@ public:
 	void findShortestPath(Graph::EdgeType eType, List<adjEntry> &L);
 	void findWeightedShortestPath(Graph::EdgeType eType,
 		List<adjEntry> &L);
-	
+
 	int costDual(edge eDual) const {
 		adjEntry adjExp = m_primalEdge[eDual];
 		return (adjExp == 0) ? 0 : m_BC.cost(m_expToG[adjExp]->theEdge());
@@ -758,8 +761,7 @@ void ExpandedGraph::expand(node v, edge eIn, edge eOut)
 
 	expandSkeleton(v, eIn, eOut);
 
-	PlanarModule pm;
-	pm.planarEmbed(m_exp);
+	planarEmbed(m_exp);
 	m_E.init(m_exp);
 }
 
@@ -841,7 +843,7 @@ void ExpandedGraph::constructDual(node s, node t,
 	face f;
 	forall_faces(f,m_E) {
 		faceNode[f] = m_dual.newNode();
-    }
+	}
 
 	// construct dual edges (for primal edges in exp)
 	node v;
@@ -875,7 +877,7 @@ void ExpandedGraph::constructDual(node s, node t,
 		adjEntry adj;
 		forall_adj(adj,m_GtoExp[s])
 			m_dual.newEdge(m_vS,faceNode[m_E.rightFace(adj)]);
-	} 
+	}
 	else
 	{
 		m_dual.newEdge(m_vS,faceNode[m_E.rightFace(m_eS->adjSource())]);
@@ -907,7 +909,7 @@ void ExpandedGraph::constructDualForbidCrossingGens(node s, node t)
 	face f;
 	forall_faces(f,m_E) {
 		faceNode[f] = m_dual.newNode();
-    }
+	}
 
 	edge eDual;
 	// construct dual edges (for primal edges in exp)
@@ -945,7 +947,7 @@ void ExpandedGraph::constructDualForbidCrossingGens(node s, node t)
 			eDual = m_dual.newEdge(m_vS,faceNode[m_E.rightFace(adj)]);
 			OGDF_ASSERT(m_primalEdge[eDual] == 0 || m_expToG[m_primalEdge[eDual]] != 0);
 		}
-	} 
+	}
 	else
 	{
 		eDual = m_dual.newEdge(m_vS,faceNode[m_E.rightFace(m_eS->adjSource())]);

@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2615 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-16 14:23:36 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration and implementation of Array class and
  * Array algorithms
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -54,17 +55,12 @@
 
 namespace ogdf {
 
-//! Threshold used by \a quicksort() such that insertion sort is
-//! called for instances smaller than \a maxSizeInsertionSort.
-const size_t maxSizeInsertionSort = 40;
-
-
 //! Iteration over all indices \a i of an array \a A.
 /**
  * Note that the index variable \a i has to be defined prior to this macro
  * (just as for \c #forall_edges, etc.).
  * <h3>Example</h3>
- * 
+ *
  *   \code
  *   Array<double> A;
  *   ...
@@ -73,9 +69,9 @@ const size_t maxSizeInsertionSort = 40;
  *     cout << A[i] << endl;
  *   }
  *   \endcode
- * 
+ *
  *   Note that this code is equivalent to the following tedious long version
- * 
+ *
  *   \code
  *   Array<double> A;
  *   ...
@@ -86,7 +82,7 @@ const size_t maxSizeInsertionSort = 40;
  *   \endcode
  */
 #define forall_arrayindices(i, A) \
-   for(i = (A).low(); i<=(A).high(); ++i)
+	for(i = (A).low(); i<=(A).high(); ++i)
 
 //! Iteration over all indices \a i of an array \a A, in reverse order.
 /**
@@ -95,20 +91,25 @@ const size_t maxSizeInsertionSort = 40;
  * See \c #forall_arrayindices for an example
  */
 #define forall_rev_arrayindices(i, A) \
-   for(i = (A).high(); i>=(A).low(); --i)
+	for(i = (A).high(); i>=(A).low(); --i)
 
 
 
 //! The parameterized class \a Array<E,INDEX> implements dynamic arrays of type \a E.
 /**
- * The template parameter \a E denotes the element type and the parameter
- * \a INDEX denotes the index type. The index type must be chosen such that
- * it can express the whole index range of the array instance, as well as
- * its size. The default index type is \c int, other possible types are
- * \c short and <code>long long<code> (on 64-bit systems).
+ * @tparam E     denotes the element type.
+ * @tparam INDEX denotes the index type. The index type must be chosen such that it can
+ *               express the whole index range of the array instance, as well as its size.
+ *               The default index type is \c int, other possible types are \c short and
+ *               <code>long long</code> (on 64-bit systems).
  */
 template<class E, class INDEX = int> class Array {
 public:
+	//! Threshold used by \a quicksort() such that insertion sort is
+	//! called for instances smaller than \a maxSizeInsertionSort.
+	enum { maxSizeInsertionSort = 40 };
+
+
 	//! Creates an array with empty index set.
 	Array() { construct(0,-1); }
 
@@ -191,8 +192,12 @@ public:
 	}
 
 	//! Reinitializes the array to an array with empty index set.
-	void init() { init(0,-1); }
-	
+	void init() {
+		//init(0,-1);
+		deconstruct();
+		construct(0,-1);
+	}
+
 	//! Reinitializes the array to an array with index set [0..\a s-1].
 	/**
 	 * Notice that the elements contained in the array get discarded!
@@ -262,7 +267,7 @@ public:
 	void permute() {
 		permute(low(), high());
 	}
-	
+
 	//! Performs a binary search for element \a x.
 	/**
 	 * \pre The array must be sorted!
@@ -334,7 +339,6 @@ public:
 
 	//! Sorts array using Quicksort and a user-defined comparer \a comp.
 	/**
-	 * @param A is the array to be sorted.
 	 * @param comp is a user-defined comparer; \a C must be a class providing a \a less(x,y) method.
 	 */
 	template<class COMPARER>
@@ -352,7 +356,7 @@ public:
 	template<class COMPARER>
 	void quicksort(INDEX l, INDEX r, const COMPARER &comp) {
 		OGDF_ASSERT(low() <= l && l <= high())
-		OGDF_ASSERT(low() <= r && r <= high())		
+		OGDF_ASSERT(low() <= r && r <= high())
 		if(l < r)
 			quicksortInt(m_vpStart+l,m_vpStart+r,comp);
 	}
@@ -389,7 +393,7 @@ private:
 		// use insertion sort for small instances
 		if (s < maxSizeInsertionSort) {
 			for (E *pI = pL+1; pI <= pR; pI++) {
-				E v = *pI; 
+				E v = *pI;
 				E *pJ = pI;
 				while (--pJ >= pL && comp.less(v,*pJ)) {
 					*(pJ+1) = *pJ;
@@ -473,7 +477,7 @@ void Array<E,INDEX>::construct(INDEX a, INDEX b)
 {
 	m_low = a; m_high = b;
 	INDEX s = b-a+1;
-	
+
 	if (s < 1) {
 		m_pStart = m_vpStart = m_pStop = 0;
 

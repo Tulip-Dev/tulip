@@ -1,75 +1,75 @@
  /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class MaximumPlanarSubgraph
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
- 
+
  #ifdef USE_ABACUS
- 
+
  #include <ogdf/planarity/MaximumPlanarSubgraph.h>
  #include <ogdf/cluster/MaximumCPlanarSubgraph.h>
- #include <ogdf/planarity/PlanarModule.h>
+ #include <ogdf/basic/extended_graph_alg.h>
  #include <ogdf/basic/simple_graph_alg.h>
- 
- namespace ogdf {
- 
- Module::ReturnType MaximumPlanarSubgraph::doCall(const Graph &G,
-            const List<edge> &preferedEdges,
-            List<edge> &delEdges,
-            const EdgeArray<int>  *pCost,
-            bool preferredImplyPlanar)
-{
 
+ namespace ogdf {
+
+Module::ReturnType MaximumPlanarSubgraph::doCall(
+	const Graph &G,
+	const List<edge> &preferedEdges,
+	List<edge> &delEdges,
+	const EdgeArray<int>  *pCost,
+	bool preferredImplyPlanar)
+{
 	if (G.numberOfEdges() < 9)
 		return retOptimal;
 
 	//if the graph is planar, we don't have to do anything
-    PlanarModule pm;
-    if (pm.planarityTest(G))
-    	return retOptimal;
+	if (isPlanar(G))
+		return retOptimal;
 
 	//---------
-    //Exact ILP
-    MaximumCPlanarSubgraph mc;
-    List<nodePair> addEdges;
-        
-	delEdges.clear();    
-	
+	//Exact ILP
+	MaximumCPlanarSubgraph mc;
+	List<nodePair> addEdges;
+
+	delEdges.clear();
+
 	node v;
 	NodeArray<node> tableNodes(G,0);
 	EdgeArray<edge> tableEdges(G,0);
@@ -87,7 +87,7 @@
 	{
 		if (!e->isSelfLoop())
 			blockEdges[componentID[e]].pushFront(e);
-	} 
+	}
 
 	// Determine nodes per biconnected component.
 	Array<SList<node> > blockNodes(0,bcCount-1);
@@ -113,23 +113,23 @@
 		for (itn = blockNodes[i].begin(); itn.valid(); ++itn)
 			mark[*itn] = false;
 	}
-	
+
 
 	// Perform computation for every biconnected component
 	ReturnType mr;
-	
+
 	if (bcCount == 1) {
 		ClusterGraph CG(G);
 		mr = mc.call(CG, delEdges, addEdges);
-		
+
 		return mr;
-	} 
-	else 
+	}
+	else
 	{
 		for (i = 0; i < bcCount; i++)
 		{
 			Graph C;
-		
+
 			SListIterator<node> itn;
 			for (itn = blockNodes[i].begin(); itn.valid(); ++ itn)
 			{
@@ -153,17 +153,17 @@
 			// of the original graph.
 			EdgeArray<edge> backTableEdges(C,0);
 			for (it = blockEdges[i].begin(); it.valid(); ++it)
-				backTableEdges[tableEdges[*it]] = *it; 
+				backTableEdges[tableEdges[*it]] = *it;
 
 			// The deleted edges of the biconnected component
-			List<edge> delEdgesOfBC;				
+			List<edge> delEdgesOfBC;
 
 			ClusterGraph CG(C);
 			mr = mc.call(CG, delEdgesOfBC, addEdges);
 			// Abort if no optimal solution found, i.e., feasible is also not allowed
 			if (mr != retOptimal)
 				return mr;
-		
+
 			// Get the original edges that are deleted and
 			// put them on the list delEdges.
 			while (!delEdgesOfBC.empty())
@@ -175,5 +175,5 @@
 }//docall for graph
 
 } //end namespace ogdf
- 
+
 #endif //USE_ABACUS

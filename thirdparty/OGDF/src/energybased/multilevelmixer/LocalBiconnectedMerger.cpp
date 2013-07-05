@@ -1,9 +1,9 @@
 /*
- * $Revision: 2302 $
+ * $Revision: 2552 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -186,7 +187,7 @@ bool LocalBiconnectedMerger::canMerge( Graph &G, node parent, node mergePartner,
 			}
 		}
 	}
-	
+
 	// free some space
 	m_realNodeMarks.clear();
 	return false;
@@ -246,7 +247,7 @@ bool LocalBiconnectedMerger::buildOneLevel(MultilevelGraph &MLG)
 	Graph &G = MLG.getGraph();
 	int level = MLG.getLevel() + 1;
 //	std::cout << "Level: " << level << std::endl;
-	
+
 	m_substituteNodes.init(G, 0);
 	initCuts(G);
 

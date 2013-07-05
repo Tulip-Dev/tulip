@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2559 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-06 15:04:28 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of visibility layout algorithm.
- * 
+ *
  * \author Hoi-Ming Wong and Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -48,21 +49,23 @@
 namespace ogdf {
 
 
-void VisibilityLayout::call(GraphAttributes &GA) {
+void VisibilityLayout::call(GraphAttributes &GA)
+{
 	if (GA.constGraph().numberOfNodes() <= 1)
-		return;	
+		return;
 
 	//call upward planarizer
 	UpwardPlanRep UPR;
-	UPR.createEmpty(GA.constGraph());		
-	m_upPlanarizer.get().call(UPR);	
+	UPR.createEmpty(GA.constGraph());
+	m_upPlanarizer.get().call(UPR);
 	layout(GA, UPR);
 }
 
 
-void VisibilityLayout::layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig) {
+void VisibilityLayout::layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig)
+{
 	UpwardPlanRep UPR = UPROrig;
-	
+
 	//clear some data
 	edge e;
 	forall_edges(e, GA.constGraph()) {
@@ -70,7 +73,7 @@ void VisibilityLayout::layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig)
 	}
 
 	int minGridDist = 1;
-	node v;	
+	node v;
 	forall_nodes(v, GA.constGraph()) {
 		if (minGridDist < max(GA.height(v), GA.width(v)))
 			minGridDist = (int) max(GA.height(v), GA.width(v));
@@ -87,20 +90,20 @@ void VisibilityLayout::layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig)
 
 	OGDF_ASSERT(adjSrc != 0);
 
-	edge e_st = UPR.newEdge(adjSrc, UPR.getSuperSink()); // on the right	
+	edge e_st = UPR.newEdge(adjSrc, UPR.getSuperSink()); // on the right
 	gamma.computeFaces();
 	gamma.setExternalFace(gamma.rightFace(e_st->adjSource()));
-	
-	constructVisibilityRepresentation(UPR); 
-	
+
+	constructVisibilityRepresentation(UPR);
+
 	// the preliminary postion
 	NodeArray<int> xPos(UPR);
-	NodeArray<int> yPos(UPR);	
-	
+	NodeArray<int> yPos(UPR);
+
 	// node Position
 	forall_nodes(v, UPR) {
 		NodeSegment vVis = nodeToVis[v];
-		int x = (int) (vVis.x_l + vVis.x_r)/2 ; // median positioning			
+		int x = (int) (vVis.x_l + vVis.x_r)/2 ; // median positioning
 		xPos[v] = x;
 		yPos[v] = vVis.y;
 
@@ -110,10 +113,10 @@ void VisibilityLayout::layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig)
 			GA.x(vOrig) = x * minGridDist;
 			GA.y(vOrig)	= vVis.y * minGridDist;
 		}
-	}	
-	
+	}
+
 	//compute bendpoints
-	forall_edges(e, GA.constGraph()) {		
+	forall_edges(e, GA.constGraph()) {
 		List<edge> chain = UPR.chain(e);
 		forall_listiterators(edge, it, chain) {
 			edge eUPR = *it;
@@ -125,7 +128,7 @@ void VisibilityLayout::layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig)
 					GA.bends(e).pushBack(p1);
 					if (yPos[eUPR->source()]+1 != yPos[eUPR->target()]-1)
 						GA.bends(e).pushBack(p2);
-				}				
+				}
 			}
 			else {
 				//short edge
@@ -135,14 +138,14 @@ void VisibilityLayout::layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig)
 						DPoint p(xPos[tgtUPR]*minGridDist, yPos[tgtUPR]*minGridDist);
 						GA.bends(e).pushBack(p);
 					}
-				}  
+				}
 				//long edge
 				else {
 					DPoint p1(eVis.x*minGridDist, (yPos[eUPR->source()]+1)*minGridDist);
 					DPoint p2(eVis.x*minGridDist, (yPos[eUPR->target()]-1)*minGridDist);
 					GA.bends(e).pushBack(p1);
 					if (yPos[eUPR->source()]+1 != yPos[eUPR->target()]-1)
-						GA.bends(e).pushBack(p2);				
+						GA.bends(e).pushBack(p2);
 					if (UPR.original(eUPR->target()) == 0) {
 						node tgtUPR = eUPR->target();
 						DPoint p(xPos[tgtUPR]*minGridDist, yPos[tgtUPR]*minGridDist);
@@ -155,7 +158,7 @@ void VisibilityLayout::layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig)
 		DPolyline &poly = GA.bends(e);
 		DPoint pSrc(GA.x(e->source()), GA.y(e->source()));
 		DPoint pTgt(GA.x(e->target()), GA.y(e->target()));
-		poly.normalize(pSrc, pTgt);		
+		poly.normalize(pSrc, pTgt);
 	}//forall_edges
 	// reset faceToNode before deletion of UPR
 	// to prevent possible memory corruption in call to ~VisibilityLayout
@@ -163,11 +166,10 @@ void VisibilityLayout::layout(GraphAttributes &GA, const UpwardPlanRep &UPROrig)
 }
 
 
-
-
-void VisibilityLayout::constructDualGraph(UpwardPlanRep &UPR) {
+void VisibilityLayout::constructDualGraph(UpwardPlanRep &UPR)
+{
 	CombinatorialEmbedding &gamma = UPR.getEmbedding();
-	
+
 	faceToNode.init(gamma, 0);
 	leftFace_node.init(UPR, 0);
 	rightFace_node.init(UPR, 0);
@@ -178,12 +180,12 @@ void VisibilityLayout::constructDualGraph(UpwardPlanRep &UPR) {
 	face f;
 	forall_faces(f, gamma) {
 		faceToNode[f] = D.newNode();
-		
+
 		if (f == gamma.externalFace())
 			s_D = faceToNode[f] ;
 
 		//compute face switches
-		node s, t; 
+		node s, t;
 		adjEntry adj;
 		forall_face_adj(adj, f) {
 			adjEntry adjNext = adj->faceCycleSucc();
@@ -200,7 +202,7 @@ void VisibilityLayout::constructDualGraph(UpwardPlanRep &UPR) {
 			if (gamma.rightFace(adj) != gamma.externalFace())
 				adj = adj->cyclicSucc();
 		}
-		else 
+		else
 			adj = UPR.getAdjEntry(gamma, t, f);
 
 		adjEntry adjBegin = adj;
@@ -215,21 +217,21 @@ void VisibilityLayout::constructDualGraph(UpwardPlanRep &UPR) {
 				if (v != s)
 					rightFace_node[v] = f;
 				rightFace_edge[adj->theEdge()] = f;
-			}			
+			}
 			if (adj->theEdge()->source() == s)
 				passSource = true;
 			adj = adj->faceCycleSucc();
-		} while(adj != adjBegin);		
+		} while(adj != adjBegin);
 	}
-	t_D = D.newNode(); // the second (right) node associated with the external face		
-	
+	t_D = D.newNode(); // the second (right) node associated with the external face
+
 	//construct dual edges
 	edge e;
 	forall_edges(e, UPR) {
 		face f_r = rightFace_edge[e];
-		face f_l = leftFace_edge[e];		
+		face f_l = leftFace_edge[e];
 		node u = faceToNode[f_l];
-		node v = faceToNode[f_r];					
+		node v = faceToNode[f_r];
 		if (f_r == gamma.externalFace() || f_r == f_l)
 			D.newEdge(u, t_D);
 		else
@@ -240,7 +242,8 @@ void VisibilityLayout::constructDualGraph(UpwardPlanRep &UPR) {
 }
 
 
-void VisibilityLayout::constructVisibilityRepresentation(UpwardPlanRep &UPR) {
+void VisibilityLayout::constructVisibilityRepresentation(UpwardPlanRep &UPR)
+{
 	constructDualGraph(UPR);
 	//makeSimple(D);
 	//if (t_D->degree() <= 1)
@@ -255,17 +258,17 @@ void VisibilityLayout::constructVisibilityRepresentation(UpwardPlanRep &UPR) {
 	//compute top. numbering
 	NodeArray<int> topNumberUPR(UPR);
 	NodeArray<int> topNumberD(D);
-	
+
 	topologicalNumbering(UPR, topNumberUPR);
 	topologicalNumbering(D, topNumberD);
 
 	nodeToVis.init(UPR);
 	edgeToVis.init(UPR);
-	
+
 	node v;
 	forall_nodes(v, UPR) {
 		NodeSegment vVis;
-		
+
 		//cout << "node : " << v << " stNum: " << topNumberUPR[v] << endl;
 
 		if (v == UPR.getSuperSource() || v == UPR.getSuperSink()) {

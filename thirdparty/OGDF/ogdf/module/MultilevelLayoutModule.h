@@ -1,9 +1,9 @@
 /*
- * $Revision: 2303 $
+ * $Revision: 2523 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 09:41:00 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -15,7 +15,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par

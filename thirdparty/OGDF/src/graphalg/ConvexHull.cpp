@@ -1,9 +1,9 @@
 /*
- * $Revision: 2302 $
+ * $Revision: 2523 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -121,8 +122,8 @@ void ConvexHull::leftHull(std::vector<DPoint> points, DPoint &start, DPoint &end
 	// delete points faster by switching with last in vector!
 	DPoint q1;
 	DPoint q2;
-	int indexQ1;
-	int indexQ2;
+	unsigned int indexQ1;
+	unsigned int indexQ2;
 	for( ; ; ) {
 		if (points.size() == 1) {
 			hullPoly.pushBack(points.front());
@@ -201,10 +202,10 @@ void ConvexHull::leftHull(std::vector<DPoint> points, DPoint &start, DPoint &end
 		}
 	}
 
-	int indexQ = 0;
+	unsigned int indexQ = 0;
 	DPoint q(points[qCandidates[0]]);
 	for (unsigned int i = 0; i < qCandidates.size(); i++) {
-		if ( indexQ != i && sameDirection(points[qCandidates[i]], q, q1, q2) ) {
+		if (indexQ != i && sameDirection(points[qCandidates[i]], q, q1, q2) ) {
 			q = points[qCandidates[i]];
 			indexQ = i;
 		}

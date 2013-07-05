@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of UMLGraph class
- * 
+ *
  * \author Carsten Gutwenger, Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -49,16 +50,17 @@ namespace ogdf {
 
 
 
-UMLGraph::UMLGraph(Graph &G,
+UMLGraph::UMLGraph(
+	Graph &G,
 	long initAttributes) :
-	GraphAttributes(G, initAttributes | edgeType | nodeType |
-		nodeGraphics | edgeGraphics), m_pG(&G), m_cliqueCenterSize(10)
-{ 
-  m_upwardEdge.init(*this, false);
-  m_hierarchyParent.init(*this,0);
-  m_assClass.init(*this, 0);
-  m_associationClassModel.init(*this, 0);
+	GraphAttributes(G, initAttributes | edgeType | nodeType | nodeGraphics | edgeGraphics), m_pG(&G), m_cliqueCenterSize(10)
+{
+	m_upwardEdge.init(*this, false);
+	m_hierarchyParent.init(*this,0);
+	m_assClass.init(*this, 0);
+	m_associationClassModel.init(*this, 0);
 }
+
 
 UMLGraph::~UMLGraph()
 {
@@ -69,12 +71,14 @@ UMLGraph::~UMLGraph()
 		it++;
 	}//while
 }//destructor
+
+
 void UMLGraph::insertGenMergers()
 {
 	if (m_pG->empty()) return;
 
 	node v = m_pG->firstNode(), vLast = m_pG->lastNode(); //new nodes are pushed behind
-	                                           //otherwise, mergers would be considered
+	//otherwise, mergers would be considered
 
 	for( ; ; )
 	{
@@ -98,6 +102,7 @@ void UMLGraph::insertGenMergers()
 	adjustHierarchyParents();
 }
 
+
 void UMLGraph::adjustHierarchyParents()
 {
 	node v;
@@ -105,16 +110,17 @@ void UMLGraph::adjustHierarchyParents()
 	{
 		if (!m_hierarchyParent[v]) continue;
 		adjEntry ae;
-	    forall_adj(ae,v)
+		forall_adj(ae,v)
 		{
 			if (ae->theNode() != v)
 				continue;
 			if (m_hierarchyParent[v] == m_hierarchyParent[ae->twinNode()]) //(half)brothers
 				m_upwardEdge[ae] = true; //the same should be for twin
-		
+
 		}//foralladjedges
 	}
 }//adjustHierarchyParents
+
 
 //inserts a merger node for generalizations hanging at v
 node UMLGraph::doInsertMergers(node v, SList<edge> &inGens)
@@ -150,8 +156,8 @@ node UMLGraph::doInsertMergers(node v, SList<edge> &inGens)
 			m_upwardEdge[(*it)->adjSource()] = true;//set status at source node
 		}
 	}//if ingen >= 2
-	else 
-		if (inGens.size() == 1) 
+	else
+		if (inGens.size() == 1)
 		{   //they are not needed yet
 			//m_hierarchyParent[inGens.front()->source()] = v;
 			//m_upwardEdge[inGens.front()->adjSource()] = true;//set status at source node
@@ -203,7 +209,7 @@ void UMLGraph::sortEdgesFromLayout()
 	NodeArray<SListPure<adjEntry> > adjList(*m_pG);
 
 	EdgeComparer* ec = new EdgeComparer(*this);
-	
+
 	node v;
 	adjEntry ae;
 	forall_nodes(v, *m_pG)
@@ -215,7 +221,7 @@ void UMLGraph::sortEdgesFromLayout()
 		//sort the entries
 		adjList[v].quicksort(*ec);
 		m_pG->sort(v, adjList[v]);
-	
+
 	}//forall nodes
 
 	delete ec;
@@ -235,7 +241,7 @@ void UMLGraph::replaceByStar(List< List<node> > &cliques)
 	m_replacementEdge.init(*m_pG, false);
 
 	if (cliques.empty()) return;
-	//we save membership of nodes in each list	
+	//we save membership of nodes in each list
 	NodeArray<int> cliqueNum(*m_pG, -1);
 	ListIterator< List<node> > it = cliques.begin();
 
@@ -282,13 +288,13 @@ DRect UMLGraph::circularBound(node center)
 
 	//TODO: we need to assure that the circular drawing
 	//parameters fit the drawing parameters of the whole graph
-	//umlgraph clique parameter members? 
+	//umlgraph clique parameter members?
 
 	OGDF_ASSERT(center->degree() > 0)
 	node lastNode = 0;
 	node firstNode = 0;
 	node v;
-	
+
 	adjEntry ae = center->firstAdj();
 	do {
 		node w = ae->twinNode();
@@ -305,7 +311,7 @@ DRect UMLGraph::circularBound(node center)
 	G.newEdge(lastNode, firstNode);
 
 	cl.call(AG);
-	
+
 	forall_nodes(v, G)
 	{
 		m_cliqueCirclePos[umlOriginal[v]] = DPoint(AG.x(v), AG.y(v));
@@ -318,7 +324,7 @@ DRect UMLGraph::circularBound(node center)
 
 //computes relative positions of all nodes around center on a circle
 //keeping the topological ordering of the nodes, letting the opposite
-//node (to center) of the edge at firstAdj having the position at  
+//node (to center) of the edge at firstAdj having the position at
 //three o'clock (TODO: unter umstaenden hier aus gegebenen coords in
 //this den Punkt auswaehlen. Aber: Was, wenn keine coords=>optional?
 void UMLGraph::computeCliquePosition(node center, double rectMin)
@@ -334,7 +340,7 @@ void UMLGraph::computeCliquePosition(node center, double rectMin)
 }//computeCliquePosition
 
 //computes relative positions of all nodes in List cList on a minimum size
-//circle (needed to compute positions with different ordering than given in *this). 
+//circle (needed to compute positions with different ordering than given in *this).
 //Precondition: nodes in adjNodes are adjacent to center
 //first node in adjNodes is positioned to the right
 void UMLGraph::computeCliquePosition(List<node> &adjNodes, node center, double rectMin)//, const adjEntry &startAdj)
@@ -344,9 +350,9 @@ void UMLGraph::computeCliquePosition(List<node> &adjNodes, node center, double r
 	OGDF_ASSERT(center->degree() == adjNodes.size())
 
 	node v;
-	double radius = 0.0, outerRadius = 0.0;
+	double radius = 0.0;
 	//TODO: member, parameter
-	//const 
+	//const
 		double minDist = 1.0;
 	//TODO: necessary?
 	double minCCDist = 20.0;
@@ -370,7 +376,7 @@ void UMLGraph::computeCliquePosition(List<node> &adjNodes, node center, double r
 			double d = sqrt(
 				width(q)*width(q) + height(q)*height(q));
 			pureSumDiameters += d;
-			
+
 			if (d > maxSize) maxSize = d;
 
 			itNode++;
@@ -380,7 +386,7 @@ void UMLGraph::computeCliquePosition(List<node> &adjNodes, node center, double r
 		while (totalSum/Math::pi < rectBound*0.75)
 		{
 			minDist = minDist + 1.0;
-			totalSum += (center->degree()-1.0); 
+			totalSum += (center->degree()-1.0);
 		}//while
 		if (minDist > 1.1) minDist -= 1.0;
 		//do not use larger value than cliquecentersize (used with separation)
@@ -398,7 +404,7 @@ void UMLGraph::computeCliquePosition(List<node> &adjNodes, node center, double r
 	List<double> angles; //node at startAdj gets 0.0
 	double lastDiameter = 0.0; //temporary storage of space needed for previous node
 	bool first = true;
-	
+
 	while (itNode.valid())
 	{
 		v  =(*itNode);
@@ -406,7 +412,7 @@ void UMLGraph::computeCliquePosition(List<node> &adjNodes, node center, double r
 			width(v)*width(v) + height(v)*height(v));
 
 		sumDiameters += d;
-		
+
 		if (d/2.0 > maxR) maxR = d/2.0;
 
 		//save current position relative to startadj
@@ -421,7 +427,7 @@ void UMLGraph::computeCliquePosition(List<node> &adjNodes, node center, double r
 			angles.pushBack(lastDiameter+d/2.0+minDist+angles.back());
 		}
 		lastDiameter = d/2.0; //its only half diameter...
-		
+
 		itNode++;
 	}//while
 
@@ -429,16 +435,13 @@ void UMLGraph::computeCliquePosition(List<node> &adjNodes, node center, double r
 
 	if(n == 1) {
 			radius      = 0;
-			outerRadius = maxR;
 
 		} else if (n == 2) {
 			radius      = 0.5*minDist + sumDiameters / 4;
-			outerRadius = 0.5*minDist + sumDiameters / 2;
 
 		} else {
 			double perimeter = (n*minDist + sumDiameters);
 			radius      = perimeter / (2*Math::pi);
-			outerRadius = radius + maxR;
 
 			ListIterator<double> it = angles.begin();
 			itNode = adjNodes.begin();
@@ -478,7 +481,7 @@ void UMLGraph::computeCliquePosition(List<node> &adjNodes, node center, double r
 		minY -= minCCDist;
 		//normalize
 		//cout<<"\n";
-		
+
 		itNode = adjNodes.begin();
 		while (itNode.valid())
 		{
@@ -499,7 +502,7 @@ node UMLGraph::replaceByStar(List<node> &clique, NodeArray<int> &cliqueNum)
 {
 	if (clique.empty()) return 0;
 	//insert an additional center node
-	
+
 	node center = m_pG->newNode();
 	width(center) = m_cliqueCenterSize;
 	height(center) = m_cliqueCenterSize;
@@ -516,10 +519,10 @@ node UMLGraph::replaceByStar(List<node> &clique, NodeArray<int> &cliqueNum)
 	while (it.valid())
 	{
 		node v = (*it);
-		
+
 		adjEntry ad;
 		int numIt = cliqueNum[v];
-		
+
 		forall_adj(ad, v)
 		{
 			if (cliqueNum[ad->twinNode()] == numIt)
@@ -540,7 +543,7 @@ node UMLGraph::replaceByStar(List<node> &clique, NodeArray<int> &cliqueNum)
 		it++;
 	}//while
 
-	//now delete all edges 
+	//now delete all edges
 	ListIterator<edge>	itEdge = delEdges.begin();
 	while (itEdge.valid())
 	{
@@ -548,7 +551,7 @@ node UMLGraph::replaceByStar(List<node> &clique, NodeArray<int> &cliqueNum)
 		m_pG->hideEdge((*itEdge));
 		itEdge++;
 	}//while
-	
+
 	return center;
 }//replaceByStar
 
@@ -572,8 +575,8 @@ void UMLGraph::undoStars()
 void UMLGraph::undoStar(node center, bool restoreAllEdges)
 {
 	OGDF_ASSERT(center)
-	
-	//TODO: we should only restore the hidden clique edges, maybe there were 
+
+	//TODO: we should only restore the hidden clique edges, maybe there were
 	//already hidden edges and we call this for all cliques, but it is global
 	if (restoreAllEdges) m_pG->restoreAllEdges();
 
@@ -602,113 +605,109 @@ void UMLGraph::writeGML(ostream &os)
 	os.precision(10);
 
 	os << "Creator \"ogdf::GraphAttributes::writeGML\"\n";
-	os << "directed 1\n";
-
 	os << "graph [\n";
+	os << "  directed 1\n";
 
 	node v;
 	forall_nodes(v,G) {
-		os << "node [\n";
+		os << "  node [\n";
 
-		os << "id " << (id[v] = nextId++) << "\n";
+		os << "    id " << (id[v] = nextId++) << "\n";
 
 		if (attributes() & nodeLabel)
-			os << "label \"" << labelNode(v) << "\"\n";
+			os << "    label \"" << labelNode(v) << "\"\n";
 
-		//if (attributes() & nodeGraphics) 
-            {
-			os << "graphics [\n";
-			os << "x " << x(v) << "\n";
-			os << "y " << y(v) << "\n";
-			os << "w " << width(v) << "\n";
-			os << "h " << height(v) << "\n";
-			os << "type \"rectangle\"\n";
-			os << "width 1.0\n";
-			
+		//if (attributes() & nodeGraphics)
+		{
+			os << "    graphics [\n";
+			os << "      x " << x(v) << "\n";
+			os << "      y " << y(v) << "\n";
+			os << "      w " << width(v) << "\n";
+			os << "      h " << height(v) << "\n";
+			os << "      type \"rectangle\"\n";
+			os << "      width 1.0\n";
+
 			if (type(v) == Graph::generalizationMerger)
-				os << "fill \"#0000A0\"\n";
+				os << "      fill \"#0000A0\"\n";
 			else if (type(v) == Graph::generalizationExpander)
-				os << "fill \"#00FF00\"\n";
-			else 
+				os << "      fill \"#00FF00\"\n";
+			else
 			{
 				if (attributes() & nodeColor)
 				{
-					os << "fill \"" << m_nodeColor[v] << "\"\n";
-					os << "line \"" << m_nodeLine[v] << "\"\n";
+					os << "      fill \"" << m_nodeColor[v] << "\"\n";
+					os << "      line \"" << m_nodeLine[v] << "\"\n";
 				}//color
 				else
-				if (v->degree() > 4)
-					os << "fill \"#FFFF00\"\n";
+					if (v->degree() > 4)
+						os << "      fill \"#FFFF00\"\n";
 			}
-			os << "]\n"; // graphics
+			os << "    ]\n"; // graphics
 		}
 
-		os << "]\n"; // node
+		os << "  ]\n"; // node
 	}
 
 	edge e;
 	forall_edges(e,G) {
-		os << "edge [\n";
+		os << "  edge [\n";
 
-		os << "source " << id[e->source()] << "\n";
-		os << "target " << id[e->target()] << "\n";
+		os << "    source " << id[e->source()] << "\n";
+		os << "    target " << id[e->target()] << "\n";
 
 		if (attributes() & edgeType)
-			os << "generalization " << type(e) << "\n";
+			os << "    generalization " << type(e) << "\n";
 
 		if (attributes() & edgeGraphics) {
-			os << "graphics [\n";
-
-			os << "type \"line\"\n";
-
+			os << "    graphics [\n";
+			os << "      type \"line\"\n";
 			if (attributes() & GraphAttributes::edgeType) {
 				if (type(e) == Graph::generalization)
 				{
-					os << "arrow \"last\"\n";
+					os << "      arrow \"last\"\n";
 					if (m_upwardEdge[e->adjSource()])
-                      os << "fill \"#FF00FF\"\n";
-					else os << "fill \"#FF0000\"\n";
-                    os << "width 2.0\n";
+						os << "      fill \"#FF00FF\"\n";
+					else os << "      fill \"#FF0000\"\n";
+					os << "      width 2.0\n";
 				}
 				else
-                    {
-                	if (attributes() & edgeColor)
+				{
+					if (attributes() & edgeColor)
 					{
 						// color edges, if specific color in attribut is set
-						os << "fill \"" << m_edgeColor[e] << "\"\n";
+						os << "      fill \"" << m_edgeColor[e] << "\"\n";
 					}
 					else
-					if (m_upwardEdge[e->adjSource()])
-                      os << "fill \"#2Fff2F\"\n";
-					  os << "arrow \"none\"\n";
-                      os << "width 1.0\n";
-                    }
-				//os << "generalization " << type(e) << "\n";
+						if (m_upwardEdge[e->adjSource()])
+							os << "      fill \"#2Fff2F\"\n";
+					os << "      arrow \"none\"\n";
+					os << "      width 1.0\n";
+				}
+				//os << "      generalization " << type(e) << "\n";
 
 			} else {
-				os << "arrow \"last\"\n";
+				os << "      arrow \"last\"\n";
 			}
 
 			const DPolyline &dpl = bends(e);
 			if (!dpl.empty()) {
-				os << "Line [\n";
-				os << "point [ x " << x(e->source()) << " y " <<
+				os << "      Line [\n";
+				os << "        point [ x " << x(e->source()) << " y " <<
 					y(e->source()) << " ]\n";
 
 				ListConstIterator<DPoint> it;
 				for(it = dpl.begin(); it.valid(); ++it)
-					os << "point [ x " << (*it).m_x << " y " << (*it).m_y << " ]\n";
+					os << "        point [ x " << (*it).m_x << " y " << (*it).m_y << " ]\n";
 
-				os << "point [ x " << x(e->target()) << " y " <<
-					y(e->target()) << " ]\n";
+				os << "        point [ x " << x(e->target()) << " y " << y(e->target()) << " ]\n";
 
-				os << "]\n"; // Line
+				os << "      ]\n"; // Line
 			}
 
-			os << "]\n"; // graphics
+			os << "    ]\n"; // graphics
 		}
 
-		os << "]\n"; // edge
+		os << "  ]\n"; // edge
 	}
 
 	os << "]\n"; // graph

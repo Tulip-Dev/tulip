@@ -1,43 +1,44 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2566 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 23:10:08 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements constructive and improvement heurisitcs for
  * comapction applying computation of min-cost flow in the
  * dual of the constraint graph
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -84,13 +85,13 @@ void writeGridDrawing(const char *name, PlanRep &PG, GridLayoutMapped &drawing)
 
 // constructor
 FlowCompaction::FlowCompaction(int maxImprovementSteps,
-	int costGen, 
+	int costGen,
 	int costAssoc)
 {
 	m_maxImprovementSteps = maxImprovementSteps;
 	m_costGen   = costGen;
 	m_costAssoc = costAssoc;
-    m_cageExpense = true;
+	m_cageExpense = true;
 	m_numGenSteps = 3; //number of improvement steps for generalizations only + 1
 	m_scalingSteps = 0;
 	m_align = false;
@@ -203,7 +204,7 @@ void FlowCompaction::improvementHeuristics(
 
 		Dy.insertVertexSizeArcs(PG, drawing.height(), rc);
 		Dy.insertVisibilityArcs(PG, drawing.y(), drawing.x());
-		
+
 
 		NodeArray<int> yDy(Dy.getGraph(), 0);
 
@@ -224,7 +225,7 @@ void FlowCompaction::improvementHeuristics(
 
 		if ((steps > 0) && (steps<m_numGenSteps)) //first compact cages
 			computeCoords(Dy, yDy, true, false, true, true);
-		else 
+		else
 			computeCoords(Dy, yDy, true, false, true, false);
 
 		// final y-coordinates of vertices
@@ -239,8 +240,7 @@ void FlowCompaction::improvementHeuristics(
 
 		costs = Dx.computeTotalCosts(xDx) + Dy.computeTotalCosts(yDy);
 
-	} while (steps < maxSteps && (steps < m_numGenSteps || 
-		     costs < lastCosts));//(steps == 1 || costs < lastCosts));
+	} while (steps < maxSteps && (steps < m_numGenSteps || costs < lastCosts));//(steps == 1 || costs < lastCosts));
 
 }
 
@@ -248,7 +248,7 @@ void FlowCompaction::improvementHeuristics(
 void FlowCompaction::improvementHeuristics(
 	PlanRep &PG,
 	OrthoRep &OR,
-	//const 
+	//const
 	MinimumEdgeDistances<int> &minDist,
 	GridLayoutMapped &drawing,
 	int originalSeparation //test for compaction improvement
@@ -293,10 +293,10 @@ void FlowCompaction::improvementHeuristics(
 			else xDx[w] = drawing.x(Dx.extraRep(w)) + Dx.extraOfs(w);
 		}
 
-        if ((steps > 0) && (steps<m_numGenSteps)) //first compact cages
+		if ((steps > 0) && (steps<m_numGenSteps)) //first compact cages
 			computeCoords(Dx, xDx, true, true, true, true);
-		else 
-		    computeCoords(Dx, xDx, true, true, true, false);
+		else
+			computeCoords(Dx, xDx, true, true, true, false);
 
 		//computeCoords(Dx, xDx, true, true, true);
 
@@ -328,12 +328,12 @@ void FlowCompaction::improvementHeuristics(
 		// set position of segments in order to fix arcs of length 0 in
 		// computeCoords()
 		forall_nodes(w,Dy.getGraph())
-        {
-            if (!Dy.extraNode(w))
-			    yDy[w] = drawing.y(Dy.nodesIn(w).front());
-            else
+		{
+			if (!Dy.extraNode(w))
+				yDy[w] = drawing.y(Dy.nodesIn(w).front());
+			else
 				yDy[w] = drawing.y(Dy.extraRep(w)) + Dy.extraOfs(w);
-        }
+		}
 
 #ifdef foutputMD
 		fileName.sprintf("Dy_%d.gml",steps);
@@ -352,7 +352,7 @@ void FlowCompaction::improvementHeuristics(
 		//computeCoords(Dy, yDy, true, true, true);
 		if ((steps > 0) && (steps < m_numGenSteps)) //first compact cages
 			computeCoords(Dy, yDy, true, true, true, true);
-		else 
+		else
 			computeCoords(Dy, yDy, true, true, true, false);
 
 		// final y-coordinates of vertices
@@ -370,8 +370,7 @@ void FlowCompaction::improvementHeuristics(
 
 		costs = Dx.computeTotalCosts(xDx) + Dy.computeTotalCosts(yDy);
 
-		if (steps <= m_scalingSteps) minDist.separation(max(originalSeparation, 
-			                                                minDist.separation() / 2));
+		if (steps <= m_scalingSteps) minDist.separation(max(originalSeparation, minDist.separation() / 2));
 
 	} while (steps < maxSteps && (steps < max(m_scalingSteps + 1, m_numGenSteps) || costs < lastCosts));
 }
@@ -391,12 +390,12 @@ void FlowCompaction::computeCoords(
 {
 	Graph &Gd = D.getGraph();
 
-    //D.writeGML("computecoords.gml");
+	//D.writeGML("computecoords.gml");
 
 	//
 	// embed constraint graph such that all sources and sinks lie
 	// in a common face
- 
+
 	D.embed();
 	CombinatorialEmbedding E(Gd);
 
@@ -405,7 +404,7 @@ void FlowCompaction::computeCoords(
 	Graph dual;
 	FaceArray<node> dualNode(E);
 	m_dualEdge.init(Gd);
-	
+
 	// insert a node in the dual graph for each face in E
 	face f;
 	forall_faces(f,E) {
@@ -425,7 +424,7 @@ void FlowCompaction::computeCoords(
 
 
 	MinCostFlowReinelt mcf;
-		
+
 	const int infinity = mcf.infinity();
 
 	NodeArray<int> supply(dual,0);
@@ -452,18 +451,18 @@ void FlowCompaction::computeCoords(
 
 		//fix length of alignment edges after some rounds
 		//(preliminary use onlyGen setting here)
-		
+
 		if (m_align && improvementHeuristics)
 		{
 			if (D.alignmentArc(e) && !onlyGen) //use onlyGen instead of extra bool to test
 				upperBound[eDual] = currentLength;
-		
+
 		}//if align
-		
+
 
 		//fix cage boundary edge segments to values smaller than sep
 		if ( improvementHeuristics && D.fixOnBorder(e) && (currentLength < D.separation()) )
-		{			
+		{
 			if (currentLength < lowerBound[eDual]) lowerBound[eDual] = currentLength;
 			//lowerBound[eDual] = test fuer skalierung
 
@@ -471,28 +470,28 @@ void FlowCompaction::computeCoords(
 		}
 
 		//reducible arcs are currently out of play
-		//maybe they will be inserted later on for some special purpose, 
+		//maybe they will be inserted later on for some special purpose,
 		//therefore we keep the code
 		OGDF_ASSERT(D.typeOf(e) != cetReducibleArc)
-   //     if (D.typeOf(e) == cetReducibleArc)
-   //         {
-			//OGDF_ASSERT(false);
-   //           lowerBound[eDual] = min(0, currentLength);
-   //           upperBound[eDual] = infinity;
-   //         }
+		//     if (D.typeOf(e) == cetReducibleArc)
+		//         {
+		//OGDF_ASSERT(false);
+		//           lowerBound[eDual] = min(0, currentLength);
+		//           upperBound[eDual] = infinity;
+		//         }
 		//should we reset median arcs here?
-     
+
 		if (onlyGen)
 		{
 			//vertexsize sind aber nur innen, border muss noch geaendert werden
 			//also expansion!=generalization
-			if (!(D.verticalArc(e) || (D.typeOf(e) == cetVertexSizeArc) 
+			if (!(D.verticalArc(e) || (D.typeOf(e) == cetVertexSizeArc)
 				|| D.onBorder(e)) ) {
 				lowerBound[eDual] = currentLength;
 				upperBound[eDual] = infinity;
 			}
 		}
-		
+
 	}//forall Gd edges
 
 	if (fixVertexSize) {
@@ -515,7 +514,7 @@ void FlowCompaction::computeCoords(
 
 	} else {
 #ifdef OGDF_DEBUG
-		bool feasible = 
+		bool feasible =
 #endif
 			mcf.call(dual,lowerBound,upperBound,cost,supply,m_flow);
 
@@ -576,80 +575,79 @@ void writeCcgGML(const CompactionConstraintGraph<int> &D,
 	os.precision(10);
 
 	os << "Creator \"ogdf::writeCcgGML\"\n";
-	os << "directed 1\n";
-
 	os << "graph [\n";
+	os << "  directed 1\n";
 
 	node v;
 	forall_nodes(v,G) {
-		os << "node [\n";
+		os << "  node [\n";
 
-		os << "id " << (id[v] = nextId++) << "\n";
-		os << "label \"" << v << "\"\n";
+		os << "    id " << (id[v] = nextId++) << "\n";
+		os << "    label \"" << v << "\"\n";
 
-		os << "graphics [\n";
-		os << "x " << AG.x(v) << "\n";
-		os << "y " << AG.y(v) << "\n";
-		os << "w " << AG.width(v) << "\n";
-		os << "h " << AG.height(v) << "\n";
-		os << "]\n"; // graphics
+		os << "    graphics [\n";
+		os << "      x " << AG.x(v) << "\n";
+		os << "      y " << AG.y(v) << "\n";
+		os << "      w " << AG.width(v) << "\n";
+		os << "      h " << AG.height(v) << "\n";
+		os << "    ]\n"; // graphics
 
-		os << "]\n"; // node
+		os << "  ]\n"; // node
 	}
 
 
 	edge e;
 	forall_edges(e,G) {
-		os << "edge [\n";
+		os << "  edge [\n";
 
-		os << "source " << id[e->source()] << "\n";
-		os << "target " << id[e->target()] << "\n";
+		os << "    source " << id[e->source()] << "\n";
+		os << "    target " << id[e->target()] << "\n";
 
-		os << "graphics [\n";
+		os << "    graphics [\n";
 
-		os << "type \"line\"\n";
-		os << "arrow \"last\"\n";
+		os << "      type \"line\"\n";
+		os << "      arrow \"last\"\n";
 
 		switch(D.typeOf(e))
 		{
 		case cetBasicArc: // red
-			os << "fill \"#FF0000\"\n";
+			os << "      fill \"#FF0000\"\n";
 			break;
 		case cetVertexSizeArc: // blue
-			os << "fill \"#0000FF\"\n";
+			os << "      fill \"#0000FF\"\n";
 			break;
 		case cetVisibilityArc: // green
-			os << "fill \"#00FF00\"\n";
+			os << "      fill \"#00FF00\"\n";
 			break;
-        case cetReducibleArc: // pink
-			os << "fill \"#FF00FF\"\n";
+		case cetReducibleArc: // pink
+			os << "      fill \"#FF00FF\"\n";
 			break;
 		case cetFixToZeroArc: // violet
-			os << "fill \"#AF00FF\"\n";
+			os << "      fill \"#AF00FF\"\n";
 			break;
-        case cetMedianArc: // black
-			os << "fill \"#0F000F\"\n";
+		case cetMedianArc: // black
+			os << "      fill \"#0F000F\"\n";
 			break;
 		}
 
 		const DPolyline &dpl = AG.bends(e);
 		if (!dpl.empty()) {
-			os << "Line [\n";
-			os << "point [ x " << AG.x(e->source()) << " y " <<
+			os << "      Line [\n";
+			os << "        point [ x " << AG.x(e->source()) << " y " <<
 				AG.y(e->source()) << " ]\n";
 
 			ListConstIterator<DPoint> it;
 			for(it = dpl.begin(); it.valid(); ++it)
-				os << "point [ x " << (*it).m_x << " y " << (*it).m_y << " ]\n";
+				os << "        point [ x " << (*it).m_x << " y " << (*it).m_y << " ]\n";
 
-			os << "point [ x " << AG.x(e->target()) << " y " <<
+			os << "        point [ x " << AG.x(e->target()) << " y " <<
 				AG.y(e->target()) << " ]\n";
 
-			os << "]\n"; // Line
+			os << "      ]\n"; // Line
 		}
 
-		os << "]\n"; // graphics
-		os << "]\n"; // edge
+		os << "    ]\n"; // graphics
+		os << "  ]\n"; // edge
 	}
 
 	os << "]\n"; // graph
@@ -670,20 +668,20 @@ void printCCGx(const char *filename,
 
 	forall_nodes(v,Gd)
 	{
-        if (D.extraNode(v))
-        {
+		if (D.extraNode(v))
+		{
 			AG.height(v) = 1.0;
 			AG.width (v) = 1.0;
 
 			AG.x(v) = drawing.x(D.extraRep(v)) + D.extraOfs(v);
 
 			continue;
-        }
+		}
 
 		const SListPure<node> &L = D.nodesIn(v);
-        if (L.empty())
+		if (L.empty())
 			continue;//should not happen, extraNode
-		
+
 		node v1 = L.front();
 		int minY = y[v1];
 		int maxY = y[v1];
@@ -725,20 +723,20 @@ void printCCGy(const char *filename,
 
 	forall_nodes(v,Gd)
 	{
-        if (D.extraNode(v))
-        {
+		if (D.extraNode(v))
+		{
 			AG.height(v) = 1.0;
 			AG.width (v) = 1.0;
 
 			//AG.x(v) = drawing.x(D.extraRep(v)) + D.extraOfs(v);
 
 			continue;
-        }
+		}
 
 		const SListPure<node> &L = D.nodesIn(v);
-        if (L.empty())
+		if (L.empty())
 			continue;//should not happen, extraNode
-		
+
 		node v1 = L.front();
 		int minX = x[v1];
 		int maxX = x[v1];

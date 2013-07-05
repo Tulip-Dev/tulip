@@ -1,9 +1,9 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2523 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -73,8 +74,8 @@ protected:
 	int m_numLevels; //!< stores number of levels for statistics purposes
 
 public:
-	virtual ~MultilevelBuilder() {};
-	MultilevelBuilder():m_adjustEdgeLengths(0),m_numLevels(1) {};
+	virtual ~MultilevelBuilder() { }
+	MultilevelBuilder():m_adjustEdgeLengths(0),m_numLevels(1) { }
 
 	virtual void buildAllLevels(MultilevelGraph &MLG)
 	{
@@ -86,8 +87,9 @@ public:
 			m_numLevels++;
 		}
 		MLG.updateReverseIndizes();
-	};
-	void setEdgeLengthAdjustment(int factor) {m_adjustEdgeLengths = factor;};
+	}
+
+	void setEdgeLengthAdjustment(int factor) { m_adjustEdgeLengths = factor; }
 	int getNumLevels() {return m_numLevels;}
 
 };

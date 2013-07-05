@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration and implementation of the class PQInternalKey.
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -59,7 +60,7 @@ template<class T,class X,class Y> class PQNode;
 
 /**
  * The class template PQInternalKey is a derived class of class template
- * PQBasicKey. PQInternalKey is a concrete class. 
+ * PQBasicKey. PQInternalKey is a concrete class.
  * It is constructed to store any kind of information of internal nodes of the
  * PQ-tree. It may only be used for internal nodes as P- and
  * Q-nodes. This information is not allowed to leaves.
@@ -71,7 +72,7 @@ template<class T,class X,class Y> class PQNode;
  * maintainance of this pointer is left to the user. By keeping the
  * responsibillity by the user, nodes with certain informations can
  * be identified and  accessed by him in constant time. This makes
- * the adaption of algorithms fast and easy. 
+ * the adaption of algorithms fast and easy.
  */
 
 template<class T,class X,class Y>
@@ -85,22 +86,22 @@ public:
 	 * to manipulate the information that was stored by his algorithm at a
 	 * node.
 	 */
-    Y m_userStructInternal;
+	Y m_userStructInternal;
 
 	//Constructor
-    PQInternalKey(Y element) { m_userStructInternal = element; }
+	PQInternalKey(Y element) { m_userStructInternal = element; }
 
 	//Destructor
-    virtual ~PQInternalKey() {}
+	virtual ~PQInternalKey() {}
 
 	//! Overloaded pure virtual function returning 0.
-    virtual T userStructKey() { return 0; }
+	virtual T userStructKey() { return 0; }
 
 	//! Overloaded pure virtual function returning 0.
-    virtual X userStructInfo() { return 0; }
+	virtual X userStructInfo() { return 0; }
 
 	//! Overloaded pure virtual function returning \a m_userStructInternal.
-    virtual Y userStructInternal() { return  m_userStructInternal; }
+	virtual Y userStructInternal() { return  m_userStructInternal; }
 };
 
 }

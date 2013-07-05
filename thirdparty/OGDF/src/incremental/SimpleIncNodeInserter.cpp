@@ -1,47 +1,48 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of simple incremental node inserter
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
 
 //-------------------------------------
-//zwei Moeglichkeiten in PlanRep Elemente inkrementell zu 
+//zwei Moeglichkeiten in PlanRep Elemente inkrementell zu
 //bearbeiten: Elemente verstecken mit hide/activate
 //oder Elemente, die nicht aktiv sind, loeschen
 
@@ -80,7 +81,7 @@ void SimpleIncNodeInserter::insertCopyNode(node v, Graph::NodeType vTyp)
 	if (v->degree() == 0) return;
 	//insert all adjacent edges to already inserted nodes
 	adjEntry adjOrig = v->firstAdj();
-	do 
+	do
 	{
 		node wOrig = adjOrig->twinNode();
 		node wCopy = m_planRep->copy(wOrig);
@@ -92,7 +93,7 @@ void SimpleIncNodeInserter::insertCopyNode(node v, Graph::NodeType vTyp)
 			//newCopy can cope with zero value for adjEntry
 			if (v == e->source())
 				eCopy = m_planRep->newCopy(vCopy, wCopy->firstAdj(), e);
-			else 
+			else
 				eCopy = m_planRep->newCopy(wCopy, vCopy->firstAdj(), e);
 
 			//TODO: update component number in planrepinc
@@ -107,8 +108,10 @@ void SimpleIncNodeInserter::insertCopyNode(node v, Graph::NodeType vTyp)
 //if necessary
 //has currently running time of m*n because faces in the embedding
 //are recomputed, speed up by updating them manually
-void SimpleIncNodeInserter::insertCopyNode(node v, CombinatorialEmbedding &E,
-										   Graph::NodeType vTyp)
+void SimpleIncNodeInserter::insertCopyNode(
+	node v,
+	CombinatorialEmbedding &E,
+	Graph::NodeType vTyp)
 {
 	m_nodeOf.init(E, 0);
 	m_insertFaceNode.init(*m_planRep, false);
@@ -151,7 +154,7 @@ void SimpleIncNodeInserter::insertCopyNode(node v, CombinatorialEmbedding &E,
 			count++;
 		}
 		OGDF_ASSERT(count < eNum)
-	}	
+	}
 	insertFaceEdges(v, vCopy, f, E, adExternal);
 	//now the edges left are:
 	//edges to nodes with not yet existing copies
@@ -169,7 +172,7 @@ void SimpleIncNodeInserter::insertCopyNode(node v, CombinatorialEmbedding &E,
 	//face f
 	//if (v->degree() != vCopy->degree())
 	insertCrossingEdges(v, vCopy, E, adExternal);
-	
+
 	//TODO: remove reinsert for cross edges? Not necessary
 
 }//insertcopynode
@@ -196,14 +199,14 @@ face SimpleIncNodeInserter::getInsertionFace(node v, CombinatorialEmbedding &E)
 
 	FaceArray<int> numAdj(E, 0);
 
-	//we iterate over all adjacent edges and over all 
+	//we iterate over all adjacent edges and over all
 	//touching faces on the opposite nodes
 	//in case of a tie, return the larger face
 	edge e;
 	forall_adj_edges(e, v)
 	{
 		node wCopy = m_planRep->copy(e->opposite(v));
-		if (wCopy == 0) continue; //not yet inserted 
+		if (wCopy == 0) continue; //not yet inserted
 
 		m_vAdjNodes[wCopy] = true;
 		if (m_incidentEdges[wCopy] == 0)
@@ -220,7 +223,7 @@ face SimpleIncNodeInserter::getInsertionFace(node v, CombinatorialEmbedding &E)
 				bestFace = f;
 			if ( (numAdj[f] == numAdj[bestFace]) &&
 				((f->size() > bestFace->size()) || (f == E.externalFace())))
-			   	bestFace = f;
+				bestFace = f;
 		}//foralladj
 	}//foralledges
 
@@ -247,7 +250,7 @@ void SimpleIncNodeInserter::insertFaceEdges(node v, node vCopy, face f,
 		edge e;
 		node sv = m_planRep->firstNode();
 		node svOriginal = m_planRep->original(sv);
-		
+
 		//m_vAdjNodes is not set for this case!
 		//we first insert one single edge, compute faces and then insert the
 		//remaining multiple edges
@@ -267,7 +270,7 @@ void SimpleIncNodeInserter::insertFaceEdges(node v, node vCopy, face f,
 
 					if (m_planRep->componentNumber(vCopy) == -1)
 						m_planRep->componentNumber(vCopy) = m_planRep->componentNumber(sv);
-					
+
 					E.computeFaces();
 					firstEdge = false;
 					behindAdj = sv->firstAdj();
@@ -330,7 +333,7 @@ void SimpleIncNodeInserter::insertFaceEdges(node v, node vCopy, face f,
 				m_planRep->newCopy(vCopy, adFace, (*it), E);
 
 				//-----------------------
-				//component number update 
+				//component number update
 				//set new number or delete treeConnnection edge
 				if (m_planRep->componentNumber(vCopy) == -1)
 					m_planRep->componentNumber(vCopy) = m_planRep->componentNumber(u);
@@ -346,34 +349,34 @@ void SimpleIncNodeInserter::insertFaceEdges(node v, node vCopy, face f,
 								if (tEdge->adjSource() == adExternal)
 									adExternal = tEdge->adjSource()->twin()->cyclicPred();
 								else adExternal = tEdge->adjTarget()->cyclicSucc()->twin();
-								
+
 							}//if adexternal edge deleted
 						}//if connectivity edge
 						m_planRep->deleteTreeConnection(m_planRep->componentNumber(vCopy),
 						m_planRep->componentNumber(u), E);
 					}
 				//-----------------------
-				
+
 				it++;
 			}//while edges incident to u
-		
+
 		}//if u incident to edges at v
-			
+
 		itAd++;
 	}
 	//} while (adFace != f->firstAdj());
 
 	//edge e;
 	//bool *completed = new bool[v->degree()];
-	
-	
+
+
 }//insertfaceedges
 
 
 //insert edge copies at vCopy for edges at v that cannot be
 //inserted without crossings in the current embedding
 void SimpleIncNodeInserter::insertCrossingEdges(node v, node vCopy,
-												CombinatorialEmbedding &E, 
+												CombinatorialEmbedding &E,
 												adjEntry &adExternal)
 {
 	OGDF_ASSERT(m_planRep->copy(v) == vCopy)
@@ -381,15 +384,17 @@ void SimpleIncNodeInserter::insertCrossingEdges(node v, node vCopy,
 	//if (v->degree() == vCopy->degree()) return;
 	bool processed = true;
 	edge e;
-	{forall_adj_edges(e, v)
 	{
-	  if (m_planRep->chain(e).size() == 0)
-	    {
-	      processed = false;
-	      break;
-	    }
-	}}//foralledges
-	
+		forall_adj_edges(e, v)
+		{
+			if (m_planRep->chain(e).size() == 0)
+			{
+				processed = false;
+				break;
+			}
+		}
+	}//foralledges
+
 	if (processed) return;
 
 	constructDual(*m_planRep, E, m_forbidCrossings);
@@ -413,13 +418,13 @@ void SimpleIncNodeInserter::insertCrossingEdges(node v, node vCopy,
 
 		SList<adjEntry> crossedEdges;
 		//we already inserted a copy for edge e
-		if (m_planRep->chain(e).size() != 0) 
+		if (m_planRep->chain(e).size() != 0)
 			continue;
 		findShortestPath(E, vs, vt, m_planRep->typeOrig(e), crossedEdges);
 
 		insertEdge(E, e, crossedEdges, m_forbidCrossings);
 		//-----------------------
-		//component number update 
+		//component number update
 		//set new number or delete treeConnnection edge
 		if (m_planRep->componentNumber(vCopy) == -1)
 			m_planRep->componentNumber(vCopy) = m_planRep->componentNumber(wCopy);
@@ -435,20 +440,20 @@ void SimpleIncNodeInserter::insertCrossingEdges(node v, node vCopy,
 								if (tEdge->adjSource() == adExternal)
 									adExternal = tEdge->adjSource()->twin()->cyclicPred();
 								else adExternal = tEdge->adjTarget()->cyclicSucc()->twin();
-								
+
 							}//if adexternal edge deleted
 						}//if connectivity edge
 						m_planRep->deleteTreeConnection(m_planRep->componentNumber(vCopy),
-							m_planRep->componentNumber(wCopy), E);	
+							m_planRep->componentNumber(wCopy), E);
 					}
-				
+
 		//-----------------------
 	}//foralladjedges
 
 }//insertCrossingEdges
 
 void SimpleIncNodeInserter::constructDual(const Graph &G,
-	const CombinatorialEmbedding &E, 
+	const CombinatorialEmbedding &E,
 	//node vCopy,
 	bool forbidCrossings)
 {
@@ -509,7 +514,7 @@ void SimpleIncNodeInserter::findShortestPath(
 
 	// augment dual by edges from s to all adjacent faces of s ...
 	adjEntry adj;
-	forall_adj(adj,s) 
+	forall_adj(adj,s)
 	{
 		// starting edges of bfs-search are all edges leaving s
 		edge eDual = m_dual.newEdge(m_vS, m_nodeOf[E.rightFace(adj)]);

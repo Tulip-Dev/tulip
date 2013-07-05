@@ -1,39 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2552 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class GalaxyMultilevelBuilder.
- * 
+ *
  * \author Martin Gronemann
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2009
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -53,7 +56,7 @@ void GalaxyMultilevelBuilder::computeSystemMass()
 		m_nodeState[v].sysMass = (*m_pNodeInfo)[v].mass;
 		m_nodeState[v].label = 0;
 		m_nodeState[v].lastVisitor = v;
-	};
+	}
 
 	forall_nodes(v, *m_pGraph)
 	{
@@ -61,19 +64,21 @@ void GalaxyMultilevelBuilder::computeSystemMass()
 		forall_adj(adj, v)
 		{
 			m_nodeState[v].sysMass += (*m_pNodeInfo)[adj->twinNode()].mass;
-		};
+		}
 
 		if (v->degree()==1)
 			m_nodeState[v].sysMass *= m_pGraph->numberOfNodes() ;
-	};
-};
+	}
+}
+
 
 void swap(ogdf::GalaxyMultilevelBuilder::NodeOrderInfo& a, ogdf::GalaxyMultilevelBuilder::NodeOrderInfo& b)
 {
 	ogdf::GalaxyMultilevelBuilder::NodeOrderInfo t = a;
 	a = b;
 	b = t;
-};
+}
+
 
 void GalaxyMultilevelBuilder::sortNodesBySystemMass()
 {
@@ -85,11 +90,12 @@ void GalaxyMultilevelBuilder::sortNodesBySystemMass()
 		v = m_pRandomSet->chooseNode();
 		m_pRandomSet->removeNode(v);
 		m_nodeMassOrder[i].theNode = v;
-	};
-	
+	}
+
 	delete m_pRandomSet;
 	std::sort(m_nodeMassOrder, m_nodeMassOrder+(m_pGraph->numberOfNodes()), NodeMassComparer( m_nodeState ));
-};
+}
+
 
 void GalaxyMultilevelBuilder::labelSystem(node u, node v, int d, float df)
 {
@@ -103,21 +109,22 @@ void GalaxyMultilevelBuilder::labelSystem(node u, node v, int d, float df)
 			if (m_nodeState[w].label < d)
 			{
 				float currDistFromSun = (*m_pEdgeInfo)[adj->theEdge()].length + df /*+ (*m_pNodeInfo)[w].radius*/;
-				// check if we relabeling by a new sun 
+				// check if we relabeling by a new sun
 				if (m_nodeState[w].lastVisitor != u)
 				{
 					// maybe this node has never been labeled
 					m_nodeState[w].lastVisitor = u;
 					m_nodeState[w].edgeLengthFromSun = currDistFromSun;
-				};				
+				}
 				// finally relabel it
 				m_nodeState[w].edgeLengthFromSun = min(m_nodeState[w].edgeLengthFromSun, currDistFromSun);
 				m_nodeState[w].label = d;
 				labelSystem(u, w, d-1, currDistFromSun /*+(*m_pNodeInfo)[w].radius*/);
-			};
-		};
-	};
-};
+			}
+		}
+	}
+}
+
 
 void GalaxyMultilevelBuilder::labelSystem()
 {
@@ -128,7 +135,7 @@ void GalaxyMultilevelBuilder::labelSystem()
 		m_nodeState[v].sysMass = 0;
 		m_nodeState[v].label = 0;
 		m_nodeState[v].lastVisitor = v;
-	};
+	}
 
 	for (int i=0; i < m_pGraph->numberOfNodes(); i++)
 	{
@@ -139,9 +146,10 @@ void GalaxyMultilevelBuilder::labelSystem()
 			m_nodeState[v].label = (m_dist+1);
 			m_nodeState[v].edgeLengthFromSun = 0.0;//(*m_pNodeInfo)[v].radius;
 			labelSystem(v, v, m_dist, m_nodeState[v].edgeLengthFromSun);
-		};
-	};
-}; 
+		}
+	}
+}
+
 
 GalaxyMultilevel* GalaxyMultilevelBuilder::build(GalaxyMultilevel* pMultiLevel)
 {
@@ -157,17 +165,18 @@ GalaxyMultilevel* GalaxyMultilevelBuilder::build(GalaxyMultilevel* pMultiLevel)
 	this->labelSystem();
 	GalaxyMultilevel* pMultiLevelResult = new GalaxyMultilevel(pMultiLevel);
 	this->createResult(pMultiLevelResult);;
-	
+
 	FREE_16(m_nodeMassOrder);
 
 	return pMultiLevelResult;
-};
+}
+
 
 void GalaxyMultilevelBuilder::createResult(GalaxyMultilevel* pMultiLevelResult)
 {
 	pMultiLevelResult->m_pGraph = new Graph();
 	m_pGraphResult = pMultiLevelResult->m_pGraph;
-	
+
 	NodeArray<node> toResultNode(*m_pGraph, 0);
 	// create all sun nodes
 	for(List<node>::iterator it = m_sunNodeList.begin(); it.valid(); it++)
@@ -175,7 +184,7 @@ void GalaxyMultilevelBuilder::createResult(GalaxyMultilevel* pMultiLevelResult)
 		node v = *it;
 		node vResult = m_pGraphResult->newNode();
 		toResultNode[v] = vResult;
-	};
+	}
 
 	pMultiLevelResult->m_pNodeInfo = new NodeArray<GalaxyMultilevel::LevelNodeInfo>(*m_pGraphResult);
 	m_pNodeInfoResult = pMultiLevelResult->m_pNodeInfo;
@@ -186,7 +195,7 @@ void GalaxyMultilevelBuilder::createResult(GalaxyMultilevel* pMultiLevelResult)
 	{
 		(*m_pNodeInfoResult)[u].radius = 0.0f;
 		(*m_pNodeInfoResult)[u].mass = 0.0f;
-	};
+	}
 	forall_nodes(u, *m_pGraph)
 	{
 		node uSun = m_nodeState[u].lastVisitor;
@@ -194,7 +203,7 @@ void GalaxyMultilevelBuilder::createResult(GalaxyMultilevel* pMultiLevelResult)
 		(*m_pNodeInfo)[u].parent = uSunResult;
 		(*m_pNodeInfoResult)[uSunResult].mass +=((*m_pNodeInfo)[u].mass);
 		(*m_pNodeInfoResult)[uSunResult].radius = max( (*m_pNodeInfoResult)[uSunResult].radius, m_nodeState[u].edgeLengthFromSun);//m_nodeState[u].edgeLengthFromSun;//m_nodeState[u].edgeLengthFromSun;// max( (*m_pNodeInfoResult)[uSunResult].radius, m_nodeState[u].edgeLengthFromSun);
-	};
+	}
 
 	pMultiLevelResult->m_pEdgeInfo = new EdgeArray<GalaxyMultilevel::LevelEdgeInfo>(*m_pGraphResult);
 	m_pEdgeInfoResult = pMultiLevelResult->m_pEdgeInfo;
@@ -207,13 +216,13 @@ void GalaxyMultilevelBuilder::createResult(GalaxyMultilevel* pMultiLevelResult)
 		node vSun = m_nodeState[v].lastVisitor;
 		node wSun = m_nodeState[w].lastVisitor;
 		if (vSun != wSun)
-		{			
+		{
 			node vSunResult = toResultNode[vSun];
 			node wSunResult = toResultNode[wSun];
 			edge eResult = m_pGraphResult->newEdge(vSunResult, wSunResult);
 			(*m_pEdgeInfoResult)[eResult].length = m_nodeState[v].edgeLengthFromSun + (*m_pEdgeInfo)[e].length + m_nodeState[w].edgeLengthFromSun;
-		};
-	};
+		}
+	}
 
 	// make fast parallel free
 	NodeArray<node> lastVisit(*m_pGraphResult, 0);
@@ -232,9 +241,9 @@ void GalaxyMultilevelBuilder::createResult(GalaxyMultilevel* pMultiLevelResult)
 				else
 					lastVisit[w] = v;
 			} while (adj !=v->firstAdj());
-		};
-	};
-}	
+		}
+	}
+}
 
 } // end of namespace
 

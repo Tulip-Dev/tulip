@@ -1,9 +1,9 @@
 /*
- * $Revision: 2302 $
+ * $Revision: 2565 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -49,7 +50,7 @@
 #include <ogdf/energybased/SpringEmbedderFR.h>
 #include <time.h>
 
-#ifdef OGDF_DEBUG
+#ifdef OGDF_MMM_LEVEL_OUTPUTS
 #include <sstream>
 #include <string>
 #endif
@@ -61,7 +62,7 @@ ModularMultilevelMixer::ModularMultilevelMixer()
 {
 	// options
 	m_times              = 1;
-	m_fixedEdgeLength    = -1.0f; 
+	m_fixedEdgeLength    = -1.0f;
 	m_fixedNodeSize      = -1.0f;
 	m_coarseningRatio    = 1.0;
 	m_levelBound         = false;
@@ -86,7 +87,7 @@ void ModularMultilevelMixer::call(MultilevelGraph &MLG)
 {
 	const Graph &G = MLG.getGraph();
 
-	m_errorCode = ercNone; 
+	m_errorCode = ercNone;
 	clock_t time = clock();
 	if ((m_multilevelBuilder.valid() == false || m_initialPlacement.valid() == false) && m_oneLevelLayoutModule.valid() == false) {
 		OGDF_THROW(AlgorithmFailureException);
@@ -112,16 +113,16 @@ void ModularMultilevelMixer::call(MultilevelGraph &MLG)
 		m_multilevelBuilder.get().buildAllLevels(MLG);
 
 		//Part for experiments: Stop if number of levels too high
-#ifdef OGDF_DEBUG
+#ifdef OGDF_MMM_LEVEL_OUTPUTS
 		int nlevels = m_multilevelBuilder.get().getNumLevels();
-#endif 
+#endif
 		if (m_levelBound)
 		{
 			if ( m_multilevelBuilder.get().getNumLevels() > lbound)
 			{
 				m_errorCode = ercLevelBound;
 				return;
-			} 
+			}
 		}
 		node v;
 		if (m_randomize)
@@ -132,7 +133,7 @@ void ModularMultilevelMixer::call(MultilevelGraph &MLG)
 			}
 		}
 
-		while(MLG.getLevel() > 0) 
+		while(MLG.getLevel() > 0)
 		{
 			if (m_oneLevelLayoutModule.valid()) {
 				for(int i = 1; i <= m_times; i++) {
@@ -143,7 +144,7 @@ void ModularMultilevelMixer::call(MultilevelGraph &MLG)
 #ifdef OGDF_MMM_LEVEL_OUTPUTS
 			//Debugging output
 			std::stringstream ss;
-		        ss << nlevels--;
+			ss << nlevels--;
 			std::string s;
 			ss >> s;
 			s = "LevelLayout"+s;
@@ -159,19 +160,19 @@ void ModularMultilevelMixer::call(MultilevelGraph &MLG)
 			m_coarseningRatio = float(G.numberOfNodes()) / nNodes;
 
 #ifdef OGDF_MMM_LEVEL_OUTPUTS
-			//debug only 
+			//debug only
 			s = s+"_placed.gml";
 			MLG.writeGML(String(s.c_str()));
 #endif
 		} //while level
 	}
-	
+
 	//Final level
 
 	if(m_finalLayoutModule.valid() ||  m_oneLevelLayoutModule.valid())
 	{
 		LayoutModule &lastLayoutModule = (m_finalLayoutModule.valid() != 0 ? m_finalLayoutModule.get() : m_oneLevelLayoutModule.get());
-	
+
 		for(int i = 1; i <= m_times; i++) {
 			lastLayoutModule.call(MLG.getGraphAttributes());
 		}

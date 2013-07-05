@@ -1,42 +1,43 @@
 /*
- * $Revision: 2321 $
- * 
+ * $Revision: 2626 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-09 14:40:24 +0200 (Wed, 09 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-17 12:10:52 +0200 (Di, 17. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of basic functionality (incl. file and
  * directory handling)
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -60,7 +61,7 @@
 #endif
 #endif
 
-#ifdef __BORLANDC__	
+#ifdef __BORLANDC__
 #define _chdir chdir
 #endif
 
@@ -79,28 +80,47 @@ double OGDF_clk_tck = sysconf(_SC_CLK_TCK); //is long. but definig it here avoid
 
 #ifdef OGDF_DLL
 extern "C" {
-    BOOL APIENTRY DllMain(HANDLE hModule,
-        DWORD  ul_reason_for_call, LPVOID lpReserved)
+#ifdef OGDF_SYSTEM_WINDOWS
+
+#ifdef __MINGW32__
+extern "C"
+#endif
+BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
     {
-        switch (ul_reason_for_call)
+	switch (ul_reason_for_call)
         {
-            case DLL_PROCESS_ATTACH:
-                ogdf::PoolMemoryAllocator::init();
-                ogdf::System::init();
-                break;
+	case DLL_PROCESS_ATTACH:
+		ogdf::PoolMemoryAllocator::init();
+		ogdf::System::init();
+		break;
 
-            case DLL_THREAD_ATTACH:
-            case DLL_THREAD_DETACH:
-                break;
+	case DLL_THREAD_ATTACH:
+	case DLL_THREAD_DETACH:
+		break;
 
-            case DLL_PROCESS_DETACH:
-                ogdf::PoolMemoryAllocator::cleanup();
-                break;
-        }
-        return TRUE;
+	case DLL_PROCESS_DETACH:
+		ogdf::PoolMemoryAllocator::cleanup();
+		break;
+	}
+	return TRUE;
     }
 }
 #else
+void __attribute__ ((constructor)) my_load(void)
+{
+	ogdf::PoolMemoryAllocator::init();
+	ogdf::System::init();
+}
+
+void __attribute__ ((destructor)) my_unload(void)
+{
+	ogdf::PoolMemoryAllocator::cleanup();
+}
+
+#endif
+
+#else
+
 namespace ogdf {
 
 //static int variables are automatically initialized with 0
@@ -143,7 +163,7 @@ double usedTime(double& T)
 #ifdef OGDF_SYSTEM_UNIX
 	struct tms now;
 	times (&now);
-	T = now.tms_utime/OGDF_clk_tck;	
+	T = now.tms_utime/OGDF_clk_tck;
 #endif
 	return  T-t;
 }
@@ -215,19 +235,19 @@ void getEntriesAppend(const char *dirName,
 bool isDirectory(const char *fname)
 {
 	struct stat stat_buf;
-	
-  	if (stat(fname,&stat_buf) != 0)
-  		return false;
-  	return (stat_buf.st_mode & S_IFMT) == S_IFDIR;
+
+	if (stat(fname,&stat_buf) != 0)
+		return false;
+	return (stat_buf.st_mode & S_IFMT) == S_IFDIR;
 }
 
 bool isFile(const char *fname)
 {
 	struct stat stat_buf;
-	
-  	if (stat(fname,&stat_buf) != 0)
-  		return false;
-  	return (stat_buf.st_mode & S_IFMT) == S_IFREG;
+
+	if (stat(fname,&stat_buf) != 0)
+		return false;
+	return (stat_buf.st_mode & S_IFMT) == S_IFREG;
 }
 
 bool changeDir(const char *dirName)
@@ -244,29 +264,29 @@ void getEntriesAppend(const char *dirName,
 
  	DIR* dir_p = opendir(dirName);
 
- 	dirent* dir_e;
- 	while ( (dir_e = readdir(dir_p)) != NULL )
- 	{
- 		const char *fname = dir_e->d_name;
-   		if (pattern != 0 && fnmatch(pattern,fname,0)) continue;
-   		
-   		String fullName;
-   		fullName.sprintf("%s/%s", dirName, fname);
-   		
-   		bool isDir = isDirectory(fullName.cstr());
- 			if(isDir && (
-				strcmp(fname,".") == 0 ||
-				strcmp(fname,"..") == 0)
+	dirent* dir_e;
+	while ( (dir_e = readdir(dir_p)) != NULL )
+	{
+		const char *fname = dir_e->d_name;
+		if (pattern != 0 && fnmatch(pattern,fname,0)) continue;
+
+		String fullName;
+		fullName.sprintf("%s/%s", dirName, fname);
+
+		bool isDir = isDirectory(fullName.cstr());
+		if(isDir && (
+			strcmp(fname,".") == 0 ||
+			strcmp(fname,"..") == 0)
 			)
-				continue;
-   		
+			continue;
+
 		if (t == ftEntry || (t == ftFile && !isDir) ||
 			(t == ftDirectory && isDir))
 		{
 			entries.pushBack(fname);
 		}
 	}
-  
+
  	closedir(dir_p);
 }
 #endif

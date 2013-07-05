@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of the class DinoUmlToGraphConverter
- * 
+ *
  * \author Dino Ahr
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -63,14 +64,14 @@ namespace ogdf {
 		// Create the uml model graph
 		m_modelGraph = new DinoUmlModelGraph();
 		if (!createModelGraph(*m_modelGraph)){
-			
+
 			// Error
 			return;
 		}
 
 		// Create the uml diagram graphs
 		if (!createDiagramGraphs()){
-			
+
 			// Error
 			return;
 		}
@@ -97,14 +98,14 @@ namespace ogdf {
 		}
 		m_diagramGraphsInUMLGraphFormat.clear();
 
-		
+
 		// Delete diagram graphs
 		SListConstIterator<DinoUmlDiagramGraph*> dgIt;
 		for (dgIt = m_diagramGraphs.begin(); dgIt.valid(); ++dgIt){
 			delete *dgIt;
 		}
 		m_diagramGraphs.clear();
-		
+
 		// Destroy model graph
 		delete m_modelGraph;
 
@@ -112,8 +113,8 @@ namespace ogdf {
 		delete m_xmlParser;
 	}
 
-	// 
-	// i n i t i a l i z e P r e d e f i n e d I n f o I n d i c e s 
+	//
+	// i n i t i a l i z e P r e d e f i n e d I n f o I n d i c e s
 	//
 	void DinoUmlToGraphConverter::initializePredefinedInfoIndices()
 	{
@@ -158,11 +159,11 @@ namespace ogdf {
 
 		// Get iterator
 		HashConstIterator<int, NodeElement*> it;
-		
+
 		// Traverse table
 		for( it = m_idToNode.begin(); it.valid(); ++it){
-			os << "\"" << it.key() << "\" has index " 
-			   << m_modelGraph->getNodeLabel(it.info()) << endl;
+			os << "\"" << it.key() << "\" has index "
+				<< m_modelGraph->getNodeLabel(it.info()) << endl;
 		}
 
 	} // printIdToNodeMappingTable
@@ -172,7 +173,7 @@ namespace ogdf {
 	//
 	void DinoUmlToGraphConverter::printDiagramsInUMLGraphFormat(ofstream &os)
 	{
-		// Traverse diagrams 
+		// Traverse diagrams
 		SListConstIterator<UMLGraph*> diagramIt;
 		for (diagramIt = m_diagramGraphsInUMLGraphFormat.begin(); diagramIt.valid(); ++diagramIt)
 		{
@@ -183,14 +184,14 @@ namespace ogdf {
 			// Nodes
 			os << "Classes:" << endl;
 			NodeElement *v;
-			forall_nodes(v,G) 
+			forall_nodes(v,G)
 			{
 				os << "\t" << AG.labelNode(v);
 
-				os << " with geometry (" 
-					 << AG.x(v) << ", " 
-					 << AG.y(v) << ", " 
-					 << AG.width(v) << ", " 
+				os << " with geometry ("
+					 << AG.x(v) << ", "
+					 << AG.y(v) << ", "
+					 << AG.width(v) << ", "
 					 << AG.height(v) << ")";
 
 				os << endl;
@@ -199,22 +200,22 @@ namespace ogdf {
 			// Edges
 			EdgeElement *e;
 			os << "Relations:" << endl;
-			forall_edges(e,G) 
+			forall_edges(e,G)
 			{
 				os << "\t";
-				
+
 				if (AG.type(e) == Graph::association)
 					os << "Association between ";
 				if (AG.type(e) == Graph::generalization)
 					os << "Generalization between ";
 
-				os << AG.labelNode(e->source()) << " and " 
+				os << AG.labelNode(e->source()) << " and "
 					 << AG.labelNode(e->target()) << endl;
 			}
 
 			os << "---------------------------------------------------------------\n\n" << endl;
 
-		} // Traverse diagrams 
+		} // Traverse diagrams
 
 	} // printDiagramsInUMLGraphFormat
 
@@ -223,7 +224,7 @@ namespace ogdf {
 	// c r e a t e M o d e l G r a p h
 	//
 	bool DinoUmlToGraphConverter::createModelGraph(DinoUmlModelGraph &modelGraph){
-		
+
 		// Message
 		//cout << "Creating model graph..." << endl;
 
@@ -248,9 +249,10 @@ namespace ogdf {
 		}
 
 		// Traverse packages and insert classifier nodes
-		if (!traversePackagesAndInsertClassifierNodes(*fatherTag, 
-													  rootPackageName, 
-													  modelGraph))
+		if (!traversePackagesAndInsertClassifierNodes(
+			*fatherTag,
+			rootPackageName,
+			modelGraph))
 		{
 			return false;
 		}
@@ -262,15 +264,13 @@ namespace ogdf {
 
 
 		// Traverse packages and insert association edges
-		if (!traversePackagesAndInsertAssociationEdges(*fatherTag, 
-													   modelGraph))
+		if (!traversePackagesAndInsertAssociationEdges(*fatherTag, modelGraph))
 		{
 			return false;
 		}
-		
+
 		// Traverse packages and insert generalization edges
-		if (!traversePackagesAndInsertGeneralizationEdges(*fatherTag, 
-														  modelGraph))
+		if (!traversePackagesAndInsertGeneralizationEdges(*fatherTag, modelGraph))
 		{
 			return false;
 		}
@@ -289,16 +289,17 @@ namespace ogdf {
 	//
 	// t r a v e r s e P a c k a g e s A n d I n s e r t C l a s s i f i e r N o d e s
 	//
-	bool DinoUmlToGraphConverter::traversePackagesAndInsertClassifierNodes(const XmlTagObject &currentRootTag, 
-																		   String currentPackageName,
-																		   DinoUmlModelGraph &modelGraph)
+	bool DinoUmlToGraphConverter::traversePackagesAndInsertClassifierNodes(
+		const XmlTagObject &currentRootTag,
+		String currentPackageName,
+		DinoUmlModelGraph &modelGraph)
 	{
-		// We proceed in a DFS manner. As long as we are inside a package 
-		// and there is a subpackage inside, we dive into that subpackage 
+		// We proceed in a DFS manner. As long as we are inside a package
+		// and there is a subpackage inside, we dive into that subpackage
 		// by calling this function recursively (with a new rootTag). Along
 		// this we also construct the appropriate package name.
 		//
-		// If we arrive at a level where either all subpackages have been 
+		// If we arrive at a level where either all subpackages have been
 		// already traversed or no subpackage is inside we proceed to find
 		// the classifiers contained at the current level.
 		//
@@ -342,16 +343,14 @@ namespace ogdf {
 		} // while
 
 		// Identify contained classes (<UML:Class>)
-		if (!insertSpecificClassifierNodes(currentRootTag, currentPackageName, 
-										   umlClass, modelGraph))
+		if (!insertSpecificClassifierNodes(currentRootTag, currentPackageName, umlClass, modelGraph))
 		{
 			// Something went wrong
 			return false;
 		}
 
 		// Identify contained interfaces (<UML:Interface>)
-		if (!insertSpecificClassifierNodes(currentRootTag, currentPackageName, 
-										   umlInterface, modelGraph))
+		if (!insertSpecificClassifierNodes(currentRootTag, currentPackageName, umlInterface, modelGraph))
 		{
 			// Something went wrong
 			return false;
@@ -365,7 +364,7 @@ namespace ogdf {
 	//
 	// i n s e r t S p e c i f i c C l a s s i f i e r N o d e s
 	//
-	bool DinoUmlToGraphConverter::insertSpecificClassifierNodes(const XmlTagObject &currentRootTag, 
+	bool DinoUmlToGraphConverter::insertSpecificClassifierNodes(const XmlTagObject &currentRootTag,
 																String currentPackageName,
 																int desiredClassifier,
 																DinoUmlModelGraph &modelGraph)
@@ -411,13 +410,13 @@ namespace ogdf {
 
 			// Check if node already exists
 			if (m_idToNode.lookup(nodeId) != 0){
-				
+
 				// Error: Node already exists
 				return false;
 			}
 
 			// Create a node for the graph
-			NodeElement *node = modelGraph.newNode();		
+			NodeElement *node = modelGraph.newNode();
 			modelGraph.labelNode(node) = nodeNameString;
 			modelGraph.type(node) = Graph::vertex;
 
@@ -437,10 +436,10 @@ namespace ogdf {
 	//
 	// t r a v e r s e P a c k a g e s A n d I n s e r t A s s o c i a t i o n E d g e s
 	//
-	bool DinoUmlToGraphConverter::traversePackagesAndInsertAssociationEdges(const XmlTagObject &currentRootTag, 
+	bool DinoUmlToGraphConverter::traversePackagesAndInsertAssociationEdges(const XmlTagObject &currentRootTag,
 																			DinoUmlModelGraph &modelGraph)
 	{
-		// The traversion of the packages is identical with this of 
+		// The traversion of the packages is identical with this of
 		// traversePackagesAndInsertClassifierNodes
 
 		// Identify contained packages (<UML:Package>)
@@ -451,7 +450,7 @@ namespace ogdf {
 			// Find son umlNamespaceOwnedElement
 			// if nonexistent then continue
 			const XmlTagObject *newRootTag;
-			
+
 			if (m_xmlParser->findSonXmlTagObject(*packageSon, umlNamespaceOwnedElement, newRootTag))
 			{
 				// Call this function recursively
@@ -480,9 +479,9 @@ namespace ogdf {
 			// Go to <UML:Association.connection>
 			const XmlTagObject *connection;
 			m_xmlParser->findSonXmlTagObject(*associationSon, umlAssociationConnection, connection);
-			
+
 			// We assume binary associations
-			
+
 			// Investigate association ends
 			const XmlTagObject *end1 = 0;
 			m_xmlParser->findSonXmlTagObject(*connection, umlAssociationEnd, end1);
@@ -500,7 +499,7 @@ namespace ogdf {
 			}
 
 			// Use the infoIndex of value of attribute type to find
-			// the corresponding nodes 
+			// the corresponding nodes
 			const XmlAttributeObject *typeAttr1;
 			m_xmlParser->findXmlAttributeObject(*end1, type, typeAttr1);
 			const XmlAttributeObject *typeAttr2;
@@ -540,8 +539,9 @@ namespace ogdf {
 	//
 	// t r a v e r s e P a c k a g e s A n d I n s e r t G e n e r a l i z a t i o n E d g e s
 	//
-	bool DinoUmlToGraphConverter::traversePackagesAndInsertGeneralizationEdges(const XmlTagObject &currentRootTag, 
-																			   DinoUmlModelGraph &modelGraph)
+	bool DinoUmlToGraphConverter::traversePackagesAndInsertGeneralizationEdges(
+		const XmlTagObject &currentRootTag,
+		DinoUmlModelGraph &modelGraph)
 	{
 		// TODO: The generalization tags can also occur inside interface classifiers (in Java)
 		//       Currently we only consider classes.
@@ -553,7 +553,7 @@ namespace ogdf {
 
 			// Find son umlNamespaceOwnedElement
 			// if nonexistent then continue
-			const XmlTagObject *newRootTag; 
+			const XmlTagObject *newRootTag;
 			m_xmlParser->findSonXmlTagObject(*packageSon, umlNamespaceOwnedElement, newRootTag);
 			if (newRootTag != 0){
 
@@ -618,7 +618,7 @@ namespace ogdf {
 					NodeElement *childNode  = childNodeHE->info();
 					NodeElement *parentNode = parentNodeHE->info();
 
-					EdgeElement *edge = modelGraph.newEdge(childNode, parentNode);		
+					EdgeElement *edge = modelGraph.newEdge(childNode, parentNode);
 					modelGraph.type(edge) = Graph::generalization;
 
 					// Insert edge id and edge element into hashing table
@@ -642,7 +642,7 @@ namespace ogdf {
 	//
 	// i n s e r t D e p e n d e n c y E d g e s
 	//
-	bool DinoUmlToGraphConverter::insertDependencyEdges(const XmlTagObject &currentRootTag, 
+	bool DinoUmlToGraphConverter::insertDependencyEdges(const XmlTagObject &currentRootTag,
 														DinoUmlModelGraph &modelGraph)
 	{
 		// Find first dependency tag (<UML:Dependency>)
@@ -665,7 +665,7 @@ namespace ogdf {
 
 			// Something wrong
 			if (!clientAttr || !supplierAttr){
-	
+
 				// Warning: Current dependency tag does not contain both attributes client and supplier.
 
 				// Next dependency
@@ -687,7 +687,7 @@ namespace ogdf {
 				NodeElement *clientNode   = clientNodeHE->info();
 				NodeElement *supplierNode = supplierNodeHE->info();
 
-				EdgeElement *edge = modelGraph.newEdge(clientNode, supplierNode);		
+				EdgeElement *edge = modelGraph.newEdge(clientNode, supplierNode);
 				modelGraph.type(edge) = Graph::dependency;
 
 				// Insert edge id and edge element into hashing table
@@ -750,10 +750,10 @@ namespace ogdf {
 			// Find out type of the diagram
 			const XmlAttributeObject *diagramTypeAttr = 0;
 			m_xmlParser->findXmlAttributeObject(*currentDiagramTag, diagramType, diagramTypeAttr);
-			
+
 			// No diagramTypeAttribute found --> we continue with the next diagram
 			if (diagramTypeAttr == 0){
-				
+
 				// Next diagram
 				m_xmlParser->findBrotherXmlTagObject(*currentDiagramTag, umlDiagram, currentDiagramTag);
 				continue;
@@ -785,12 +785,12 @@ namespace ogdf {
 			}
 
 			// Create a new diagram graph and add it to the list of diagram graphs
-			DinoUmlDiagramGraph *diagramGraph = 
+			DinoUmlDiagramGraph *diagramGraph =
 				new DinoUmlDiagramGraph(*m_modelGraph,
 										diagramType,
 										diagramName);
 			m_diagramGraphs.pushBack(diagramGraph);
-	
+
 
 			// First pass the <UML:Diagram.element> tag
 			const XmlTagObject *rootDiagramElementTag = 0;
@@ -798,12 +798,12 @@ namespace ogdf {
 
 			// No such tag found --> we continue with the next diagram
 			if (rootDiagramElementTag == 0){
-				
+
 				// Next diagram
 				m_xmlParser->findBrotherXmlTagObject(*currentDiagramTag, umlDiagram, currentDiagramTag);
 				continue;
 			}
-			
+
 			// Now investigate the diagram elements
 			const XmlTagObject *currentDiagramElementTag = 0;
 			m_xmlParser->findSonXmlTagObject(*rootDiagramElementTag, umlDiagramElement, currentDiagramElementTag);
@@ -816,13 +816,13 @@ namespace ogdf {
 				// a node or edge with this reference exists
 				const XmlAttributeObject *subjectAttr = 0;
 				m_xmlParser->findXmlAttributeObject(*currentDiagramElementTag, subject, subjectAttr);
-		
+
 				// Not found --> continue with the next diagram element
 				if (subjectAttr == 0){
 
 					// Next diagram element
 					m_xmlParser->findBrotherXmlTagObject(*currentDiagramElementTag, umlDiagramElement, currentDiagramElementTag);
-					
+
 					continue;
 				}
 
@@ -841,7 +841,7 @@ namespace ogdf {
 					// Extract geometric information
 					const XmlAttributeObject *geometryAttr = 0;
 					m_xmlParser->findXmlAttributeObject(*currentDiagramElementTag, geometry, geometryAttr);
-					
+
 					// Not found
 					if (geometryAttr == 0){
 						break;
@@ -850,13 +850,14 @@ namespace ogdf {
 					// Get double values of geometry
 					Array<double> geometryArray(4);
 					DinoTools::stringToDoubleArray(geometryAttr->m_pAttributeValue->key(), geometryArray);
-					
+
 					// Add node to diagram graph
-					diagramGraph->addNodeWithGeometry(geometricNode,
-													  geometryArray[0],
-													  geometryArray[1],
-													  geometryArray[2],
-													  geometryArray[3]);
+					diagramGraph->addNodeWithGeometry(
+						geometricNode,
+						geometryArray[0],
+						geometryArray[1],
+						geometryArray[2],
+						geometryArray[3]);
 
 				} // Node exists
 				// Node does not exist
@@ -879,15 +880,15 @@ namespace ogdf {
 				} // else
 
 				// Next diagram element
-				m_xmlParser->findBrotherXmlTagObject(*currentDiagramElementTag, 
-													 umlDiagramElement, 
+				m_xmlParser->findBrotherXmlTagObject(*currentDiagramElementTag,
+													 umlDiagramElement,
 													 currentDiagramElementTag);
 
 			} // while (currentDiagramElementTag != 0)
 
 			// Next diagram
 			m_xmlParser->findBrotherXmlTagObject(*currentDiagramTag, umlDiagram, currentDiagramTag);
-					
+
 
 		} // while (currentDiagramTag != 0)
 
@@ -900,11 +901,11 @@ namespace ogdf {
 	//
 	bool DinoUmlToGraphConverter::createDiagramGraphsInUMLGraphFormat(SList<UMLGraph*> &diagramGraphsInUMLGraphFormat)
 	{
-		// We want to create an instance of UMLGraph for each instance of DinoUmlDiagramGraph 
+		// We want to create an instance of UMLGraph for each instance of DinoUmlDiagramGraph
 		// contained in the given list. Implicitly we have to create also an instance of class Graph
 		// for each UMLGraph.
-		// We maintain a hash list for mapping the nodes and edges of the model graph to the 
-		// new nodes and edges of the graph created for the diagram. 
+		// We maintain a hash list for mapping the nodes and edges of the model graph to the
+		// new nodes and edges of the graph created for the diagram.
 		// We use as key the unique index of the node resp. edge.
 
 		// Message
@@ -912,8 +913,8 @@ namespace ogdf {
 
 		// Traverse list of diagram graphs
 		SListConstIterator<DinoUmlDiagramGraph*> diagramGraphIterator;
-		for (diagramGraphIterator = m_diagramGraphs.begin(); 
-			 diagramGraphIterator.valid(); 
+		for (diagramGraphIterator = m_diagramGraphs.begin();
+			 diagramGraphIterator.valid();
 			 ++diagramGraphIterator)
 		{
 
@@ -933,8 +934,8 @@ namespace ogdf {
 			{
 				// Create a new "pendant" node for the existing	node
 				NodeElement *newNode = graph->newNode();
-				
-				// Insert mapping from index of the existing node to the pendant node 
+
+				// Insert mapping from index of the existing node to the pendant node
 				// into hashtable
 				indexToNewNode.fastInsert((*nodeIt)->index(), newNode);
 
@@ -950,9 +951,9 @@ namespace ogdf {
 				NodeElement *target = (*edgeIt)->target();
 
 				// Find pendant nodes
-				HashElement<int, NodeElement*> *sourceHashElement = 
+				HashElement<int, NodeElement*> *sourceHashElement =
 					indexToNewNode.lookup(source->index());
-				HashElement<int, NodeElement*> *targetHashElement = 
+				HashElement<int, NodeElement*> *targetHashElement =
 					indexToNewNode.lookup(target->index());
 				NodeElement *pendantSource = sourceHashElement->info();
 				NodeElement *pendantTarget = targetHashElement->info();
@@ -985,7 +986,7 @@ namespace ogdf {
 			while (nodeIt.valid())
 			{
 				// Get pendant node
-				HashElement<int, NodeElement*> *nodeHashElement = 
+				HashElement<int, NodeElement*> *nodeHashElement =
 					indexToNewNode.lookup((*nodeIt)->index());
 				NodeElement *pendantNode = nodeHashElement->info();
 
@@ -1012,7 +1013,7 @@ namespace ogdf {
 			for (edgeIt = diagramEdges.begin(); edgeIt.valid(); ++edgeIt)
 			{
 				// Find pendant edge
-				HashElement<int, EdgeElement*> *edgeHashElement = 
+				HashElement<int, EdgeElement*> *edgeHashElement =
 					indexToNewEdge.lookup((*edgeIt)->index());
 				EdgeElement *pendantEdge = edgeHashElement->info();
 
@@ -1023,7 +1024,7 @@ namespace ogdf {
 
 			// Add new umlGraph to list
 			diagramGraphsInUMLGraphFormat.pushBack(umlGraph);
-			 
+
 		} // Traverse list of diagram graphs
 
 		return true;

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Make VCXProj
 #
 # May 2010

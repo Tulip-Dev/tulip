@@ -1,9 +1,9 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2523 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -68,7 +69,7 @@ struct NodeMerge
 
 	std::vector<int> m_changedNodes; // there may be placement strategies that use more than one reference-node.
 	std::map<int, double> m_radius; // for changed nodes and the merged node
-	
+
 	int m_level;
 
 
@@ -77,7 +78,7 @@ struct NodeMerge
 };
 
 
-class MultilevelGraph
+class OGDF_EXPORT MultilevelGraph
 {
 private:
 	bool m_createdGraph; //used in destructor, TODO: check if it is needed
@@ -94,7 +95,7 @@ private:
 	EdgeArray<int> m_edgeAssociations;
 
 	std::vector<node> m_reverseNodeIndex;
-	std::vector<int> m_reverseNodeMergeWeight;//<! Keeps number of vertices represented by vertex with given index  
+	std::vector<int> m_reverseNodeMergeWeight;//<! Keeps number of vertices represented by vertex with given index
 	std::vector<edge> m_reverseEdgeIndex;
 
 	MultilevelGraph * removeOneCC(std::vector<node> &componentSubArray);
@@ -142,7 +143,7 @@ public:
 	int getLevel();
 	Graph & getGraph() { return *m_G; }
 	//! Returns attributes of current level graph as GraphAttributes
-	GraphAttributes & getGraphAttributes() const {return *m_GA;}; 
+	GraphAttributes & getGraphAttributes() const { return *m_GA; }
 	void exportAttributes(GraphAttributes &GA) const;
 	void exportAttributesSimple(GraphAttributes &GA) const;
 	void importAttributes(const GraphAttributes &GA);

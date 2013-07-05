@@ -1,43 +1,45 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2552 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of Spring-Embedder (Fruchterman,Reingold)
  *        algorithm with exact force computations.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2009
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
 
 #include <ogdf/energybased/SpringEmbedderFRExact.h>
 #include <ogdf/packing/TileToRowsCCPacker.h>
@@ -48,7 +50,7 @@
 #include <omp.h>
 #endif
 
-#ifdef OGDF_SSE3_EXTENSIONS 
+#ifdef OGDF_SSE3_EXTENSIONS
 #include <ogdf/internal/basic/intrinsics.h>
 #endif
 
@@ -116,7 +118,7 @@ void SpringEmbedderFRExact::ArrayGraph::initCC(int i)
 
 		m_x[j] = m_ga->x(v);
 		m_y[j] = m_ga->y(v);
-		
+
 		if (m_useNodeWeight)
 			m_nodeWeight[j] = (m_ga->attributes() & GraphAttributes::nodeWeight) ? m_ga->weight(v) : 1.0;
 		else
@@ -163,7 +165,7 @@ SpringEmbedderFRExact::SpringEmbedderFRExact()
 	m_pageRatio       = 1.0;
 	m_useNodeWeight = false;
 	m_checkConvergence = true;
-	m_convTolerance = 0.01; //fraction of ideal edge length below which convergence is achieved  
+	m_convTolerance = 0.01; //fraction of ideal edge length below which convergence is achieved
 }
 
 
@@ -240,7 +242,7 @@ void SpringEmbedderFRExact::call(GraphAttributes &AG)
 
 		const double dx = offset[i].m_x;
 		const double dy = offset[i].m_y;
-		
+
 		// iterate over all nodes in ith CC
 		SListConstIterator<node> it;
 		for(it = nodes.begin(); it.valid(); ++it)
@@ -305,7 +307,7 @@ void SpringEmbedderFRExact::cool(double &tx, double &ty, int &cF)
 			break;
 
 		case cfLogarithmic:
-			tx = m_txNull / mylog2(cF); 
+			tx = m_txNull / mylog2(cF);
 			ty = m_tyNull / mylog2(cF);
 			cF++;
 			break;
@@ -332,7 +334,7 @@ void SpringEmbedderFRExact::mainStep(ArrayGraph &C)
 
 	bool converged = (m_iterations == 0);
 	int itCount = 1;
-	
+
 	// Loop until either maximum number of iterations reached or
 	// movement falls under convergence threshold
 	while (!converged)
@@ -340,7 +342,7 @@ void SpringEmbedderFRExact::mainStep(ArrayGraph &C)
 		if (m_checkConvergence) converged = true;
 		// repulsive forces
 
-		#pragma omp parallel for 
+		#pragma omp parallel for
 		for(int v = 0; v < n; ++v)
 		{
 			disp_x[v] = disp_y[v] = 0;

@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2566 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 23:10:08 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements planar orthogonal drawing algorithm for
 //   cluster graphs.
- * 
+ *
  * \author Carsten Gutwenger, Sebastian Leipert, Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -64,14 +65,14 @@ ClusterOrthoLayout::ClusterOrthoLayout()
 	m_margin     = 40.0;
 	//preferred hierarchy direction is odNorth, but we use odSouth since gml's are flipped!
 	m_preferedDir = odSouth;
-    m_optionProfile = 0;
+	m_optionProfile = 0;
 	//edge costs
 	m_costAssoc   = 1;
 	m_costGen     = 4;
 	//align hierarchy nodes on same level
-    m_align = false;
+	m_align = false;
 	//scale layout while improving it during compaction
-	m_useScalingCompaction = false; 
+	m_useScalingCompaction = false;
 	m_scalingSteps = 6;
 
 	m_orthoStyle = 0; //traditional 0, progressive 1
@@ -125,10 +126,10 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 	// insert cluster boundaries
 	PG.ModelBoundaries();
 	OGDF_ASSERT(PG.representsCombEmbedding())
-	
+
 
 	//--------------------------
-	// insert non-planar edges 
+	// insert non-planar edges
 	CombinatorialEmbedding* CE = new CombinatorialEmbedding(PG);
 	if (!npEdges.empty())
 	{
@@ -141,7 +142,7 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 	adjEntry extAdj = 0;
 	int maximum = 0;
 	edge e, eSucc;
-	
+
 	for(e = PG.firstEdge(); e; e = eSucc)
 	{
 		eSucc = e->succ();
@@ -165,7 +166,7 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 	}//for
 
 	delete CE;
-	
+
 	//returns adjEntry in rootcluster
 	adjExternal = extAdj;
 	OGDF_ASSERT(adjExternal != 0);
@@ -182,9 +183,9 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 		m_separation = scaleFactor*m_separation; //reduce this step by step in compaction
 	}//if scaling
 
-    //***********************************
+	//***********************************
 	// PHASE 1: determine orthogonal shape
-    
+
 	//-------------------------------------------------------
 	// expand high-degree vertices and generalization mergers
 	PG.expand();
@@ -196,23 +197,23 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 	// orthogonal shape representation
 	OrthoRep OR;
 
-    ClusterOrthoShaper COF;
-	
+	ClusterOrthoShaper COF;
+
 	//set some options
 	COF.align(false); //cannot be used yet with clusters
 	COF.traditional(m_orthoStyle > 0 ? false : true); //prefer 90/270 degree angles over 180/180
 	//bend cost depends on cluster depths avoiding unnecessary "inner" bends
-	COF.bendCostTopDown(1); 
+	COF.bendCostTopDown(ClusterOrthoShaper::topDownCost);
 
 	// New Call
-	//COF.call(PG,E,OR,2); 
+	//COF.call(PG,E,OR,2);
 	// Original call without bend bounds(still valid)
 	COF.call(PG, E, OR);
 
 	String msg;
 	OGDF_ASSERT(OR.check(msg))
 
-    //******************************************************************
+	//******************************************************************
 	// PHASE 2: construction of a feasible drawing of the expanded graph
 
 	//---------------------------
@@ -247,7 +248,7 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 
 	RoutingChannel<int> rcGrid(PG,gridDrawing.toGrid(m_separation),m_cOverhang);
 	rcGrid.computeRoutingChannels(OR, m_align);
-	
+
 	node v;
 	const OrthoRep::VertexInfoUML *pInfoExp;
 	forall_nodes(v,PG) {
@@ -256,9 +257,9 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 		if (pInfoExp) break;
 	}
 
-    FlowCompaction fca(0,m_costGen,m_costAssoc);
-    fca.constructiveHeuristics(PG,OR,rcGrid,gridDrawing);
-	
+	FlowCompaction fca(0,m_costGen,m_costAssoc);
+	fca.constructiveHeuristics(PG,OR,rcGrid,gridDrawing);
+
 	OR.undissect(m_align);
 
 	if (!m_align)  {OGDF_ASSERT(OR.check(msg))}
@@ -272,7 +273,7 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 
 	fc.improvementHeuristics(PG,OR,rcGrid,gridDrawing);
 
-    if (m_align) OR.undissect(false);
+	if (m_align) OR.undissect(false);
 
 	//**************************
 	// PHASE 3: routing of edges
@@ -282,7 +283,7 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 	EdgeRouter router;
 	MinimumEdgeDistances<int> minDistGrid(PG, gridDrawing.toGrid(m_separation));
 	//router.setOrSep(int(gridDrawing.toGrid(l_orsep))); //scaling test
-    router.call(PG,OR,gridDrawing,E,rcGrid,minDistGrid, gridDrawing.width(), 
+	router.call(PG,OR,gridDrawing,E,rcGrid,minDistGrid, gridDrawing.width(),
 		gridDrawing.height(), m_align);
 
 	OGDF_ASSERT(OR.check(msg) == true);
@@ -293,13 +294,12 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 	// PHASE 4: apply improvement compaction heuristics again
 
 	// call flow compaction on grid
-	fc.improvementHeuristics(PG,OR,minDistGrid,gridDrawing,
-		                     int(gridDrawing.toGrid(l_orsep)));
+	fc.improvementHeuristics(PG, OR, minDistGrid, gridDrawing, int(gridDrawing.toGrid(l_orsep)));
 
 	// re-map result
 	gridDrawing.remap(drawing);
 
-    //postProcess(PG);
+	//postProcess(PG);
 
 	//--------------------------
 	// collapse all expanded vertices by introducing a new node in the center
@@ -318,7 +318,7 @@ void ClusterOrthoLayout::call(ClusterPlanRep &PG,
 // compute bounding box and move final drawing such that it is 0 aligned
 // respecting margins
 void ClusterOrthoLayout::computeBoundingBox(
-	const ClusterPlanRep &PG, 
+	const ClusterPlanRep &PG,
 	Layout &drawing)
 {
 	double minX, maxX, minY, maxY;

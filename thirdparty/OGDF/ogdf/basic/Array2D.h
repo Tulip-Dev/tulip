@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2615 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-16 14:23:36 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration and implementation of class Array2D which
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -56,6 +57,9 @@ namespace ogdf {
 
 
 //! The parameterized class \a Array2D<E> implements dynamic two-dimensional arrays.
+/**
+ * @tparam E denotes the element type.
+ */
 template<class E> class Array2D
 {
 public:
@@ -105,9 +109,9 @@ public:
 	//! Returns the length of the index interval (number of entries) in dimension 2.
 	int size2() const { return m_lenDim2; }
 
-	//! Returns the determinant of the matrix 
+	//! Returns the determinant of the matrix
 	/*! \note use only for square matrices and floating point values */
-	float det();
+	float det() const;
 
 	//! Returns a reference to the element with index (\a i,\a j).
 	const E &operator()(int i, int j) const {
@@ -185,7 +189,7 @@ void Array2D<E>::construct(int a, int b, int c, int d)
 
 	int lenDim1 = b-a+1;
 	m_lenDim2   = d-c+1;
-	
+
 	if (lenDim1 < 1 || m_lenDim2 < 1) {
 		m_pStart = m_vpStart = m_pStop = 0;
 
@@ -260,56 +264,57 @@ void Array2D<E>::copy(const Array2D<E> &array2)
 
 
 template<class E>
-float Array2D<E>::det()
+float Array2D<E>::det() const
 {
-  int a = m_a;
-  int b = m_b;
-  int c = m_c;
-  int d = m_d;
-  int m = m_b - m_a + 1;
-  int n = m_lenDim2;
+	int a = m_a;
+	int b = m_b;
+	int c = m_c;
+	int d = m_d;
+	int m = m_b - m_a + 1;
+	int n = m_lenDim2;
 
-  int i, j;
-  int rem_i, rem_j, column;
+	int i, j;
+	int rem_i, rem_j, column;
 
-  float determinant = 0.0;
+	float determinant = 0.0;
 
-  OGDF_ASSERT(m == n);
+	OGDF_ASSERT(m == n);
 
-  switch(n) {
-  case 0:
-    break;
-  case 1:
-    determinant = (float)((*this)(a, c));
-    break;
-  case 2:
-    determinant = (float)((*this)(a, c) * (*this)(b, d) - (*this)(a, d) * (*this)(b, c));
-    break;
+	switch(n) {
+	case 0:
+		break;
+	case 1:
+		determinant = (float)((*this)(a, c));
+		break;
+	case 2:
+		determinant = (float)((*this)(a, c) * (*this)(b, d) - (*this)(a, d) * (*this)(b, c));
+		break;
 
-  // Expanding along the first row (Laplace's Formula)
-  default:
-    Array2D<E> remMatrix(0, n-2, 0, n-2);             // the remaining matrix
-    for(column = c; column <= d; column++) {
-      rem_i = 0;
-      rem_j = 0;
-      for(i = a; i <= b; i++) {
-	for(j = c; j <= d; j++) {
-	  if(i != a && j != column) {
-	    remMatrix(rem_i, rem_j) = (*this)(i, j);
-	    if(rem_j < n-2) {
-	      rem_j++;
-	    }
-	    else {
-	      rem_i++;
-	      rem_j = 0;
-	    }
-	  }
+		// Expanding along the first row (Laplace's Formula)
+	default:
+		Array2D<E> remMatrix(0, n-2, 0, n-2);             // the remaining matrix
+		for(column = c; column <= d; column++) {
+			rem_i = 0;
+			rem_j = 0;
+			for(i = a; i <= b; i++) {
+				for(j = c; j <= d; j++) {
+					if(i != a && j != column) {
+						remMatrix(rem_i, rem_j) = (*this)(i, j);
+						if(rem_j < n-2) {
+							rem_j++;
+						}
+						else {
+							rem_i++;
+							rem_j = 0;
+						}
+					}
+				}
+			}
+			determinant += pow(-1.0,(a+column)) * (*this)(a,column) * remMatrix.det();
+		}
 	}
-      }
-      determinant += pow(-1.0,(a+column)) * (*this)(a,column) * remMatrix.det();
-    }
-  }  
-  return determinant;
+
+	return determinant;
 }
 
 

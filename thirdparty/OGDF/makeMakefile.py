@@ -1,16 +1,19 @@
+#!/usr/bin/env python
 # Make Makefile
 #
 # Jul 28, 2005
 # Markus Chimani, markus.chimani@cs.uni-dortmund.de
 #########################################################
 
-import os, sys, fnmatch, ConfigParser
+import os, sys, fnmatch, ConfigParser, posixpath
 
 class versionclass: 
 	def call(self):
 		return '$(' + self.var + ')'
 	def library(self):
 		return self.call() + '/' + libName
+	def sharedlibrary(self):
+		return self.call() + '/' + sharedlibName
 	def objects(self):
 		return '$(' +self.var + '_OBJS)'
 	def path(self):
@@ -52,14 +55,21 @@ if not config.has_section('COIN'):
 if not config.has_section('ABACUS'):
 	bailout('Section "ABACUS" is missing')
 
+sharedLib = loadConfig('GENERAL', 'sharedLib').startswith('t')
 libName = loadConfig('GENERAL', 'libName')
+sharedlibName = loadConfig('GENERAL', 'sharedlibName')
 compilerCommand = loadConfig('GENERAL', 'compilerCommand')
 compilerParams = loadConfig('GENERAL', 'compilerParams')
 libCommand = loadConfig('GENERAL', 'libCommand')
+sharedlibCommand = loadConfig('GENERAL', 'sharedlibCommand')
 rmCommand = loadConfig('GENERAL', 'rmCommand')
 mkdirCommand = loadConfig('GENERAL', 'mkdirCommand')
 includeLegacyCode = loadConfig('GENERAL', 'includeLegacyCode').startswith('t')
 useOwnLpSolver = loadConfig('GENERAL', 'useOwnLpSolver').startswith('t')
+
+ranlibCommand = loadConfig('GENERAL', 'ranlibCommand', True)
+if ranlibCommand == None:
+	ranlibCommand = ''
 
 gccMessageLength = loadConfig('GENERAL', 'gccMessageLength', True)
 if gccMessageLength == None:
@@ -67,10 +77,19 @@ if gccMessageLength == None:
 else:
 	gccMessageLength = '-fmessage-length=' + gccMessageLength
 
-compiler = ' '.join( [ compilerCommand, gccMessageLength, compilerParams, ' ' ] )
+compiler = ' '.join( [ compilerCommand, gccMessageLength, compilerParams ] )
 
+libs = ''
+
+if sharedLib:
+	compiler = ' '.join( [compiler, '-DOGDF_DLL -DOGDF_INSTALL' ] )
+	if sys.platform == 'win32' or sys.platform == 'cygwin':
+		libs = ' '.join( [libs, '-lpsapi'] )
+	else:
+		compiler = ' '.join( [compiler, '-fPIC'] )
+	
 if useOwnLpSolver:
-	compiler = ' '.join( [compiler, '-DOGDF_OWN_LPSOLVER', ' '] )
+	compiler = ' '.join( [compiler, '-DOGDF_OWN_LPSOLVER' ] )
 
 useCoin = loadConfig('COIN', 'useCoin').startswith('t')
 if useCoin:
@@ -136,7 +155,7 @@ def Walk( curdir ):
 		if name.startswith('.') or name.startswith('_') or (name=='legacy' and not includeLegacyCode):
 			continue
 
-		fullname = os.path.normpath(os.path.join(curdir, name))
+		fullname = posixpath.normpath(posixpath.join(curdir, name))
 		
 		if os.path.isdir(fullname) and not os.path.islink(fullname):
 			objs = objs + Walk( fullname )
@@ -160,7 +179,7 @@ def Walk( curdir ):
 						# ensure folder					
 						makefile.write('\t' + mkdirCommand + ' ' + v.call() + '/' + fullname[:-len(name)-1] + '\n')
 						# what to do: call the compiler
-						makefile.write('\t' + compiler + v.params + ' -o ' + v.call() + '/' + objfullname + ' -c ' + fullname + '\n\n')
+						makefile.write('\t' + compiler + ' ' + v.params + ' -o ' + v.call() + '/' + objfullname + ' -c ' + fullname + '\n\n')
 					
 					# pattern found: don't try other suffix
 					break			
@@ -187,9 +206,20 @@ for v in versions:
 # generate alls and cleans etc...
 
 for v in versions:
-	makefile.write(v.var + ': ' + v.library() + '\n\n')
-	makefile.write(v.library() + ': ' + v.objects() + '\n')
-	makefile.write('\t' + libCommand + ' -r ' + v.library() + ' '  + v.objects() + ' $(LIBS)\n\n')
+	
+	if sharedLib:
+		makefile.write(v.var + ': ' + v.sharedlibrary() + '\n\n')
+		makefile.write(v.sharedlibrary() + ': ' + v.objects() + '\n')
+		makefile.write('\t' + sharedlibCommand  + ' -shared -o ' + v.sharedlibrary() + ' ' + v.objects() + ' ' + libs + ' $(LIBS)\n')
+
+	else:
+		makefile.write(v.var + ': ' + v.library() + '\n\n')
+		makefile.write(v.library() + ': ' + v.objects() + '\n')
+		makefile.write('\t' + libCommand + ' -r ' + v.library() + ' '  + v.objects() + ' $(LIBS)\n')
+		if ranlibCommand != '':
+			makefile.write('\t' + ranlibCommand + ' ' + v.library() + '\n')
+	
+	makefile.write('\n')
 	makefile.write('clean' + v.var + ':\n')
 #	makefile.write('\t' + rmCommand + ' ' + v.objects() + ' ' + v.library() + '\n\n')
 	makefile.write('\t' + rmCommand + ' ' + v.path() + '\n\n')

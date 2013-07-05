@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declares class DavidsonHarelLayout, which is a front-end
  * for the fDavidsonHarel class.
- * 
+ *
  * \author Rene Weiskircher
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -57,7 +58,7 @@
 namespace ogdf {
 
 
-//! The Davidson-Harel layout algorithm. 
+//! The Davidson-Harel layout algorithm.
 /**
  * The implementation used in DavidsonHarelLayout is based on
  * the following publication:
@@ -83,7 +84,7 @@ public:
 	void call(GraphAttributes &GA);
 
 	//! Fixes the cost values to special configurations.
-    void fixSettings(SettingsParameter sp);
+	void fixSettings(SettingsParameter sp);
 
 	//! More convenient way of setting the speed of the algorithm.
 	/**
@@ -98,7 +99,7 @@ public:
 	 * DH is purely modular and independent with its cost functions.
 	 */
 	void setPreferredEdgeLengthMultiplier(double multi) {m_multiplier = multi;}
-	
+
 	//! Sets the preferred edge length to \a elen
 	void setPreferredEdgeLength(double elen) {m_prefEdgeLength = elen;}
 
@@ -137,10 +138,10 @@ public:
 
 	//! Returns the number of iterations per temperature step.
 	int getNumberOfIterations() const {return m_numberOfIterations;}
-	
-	//! Switch between using iteration number as fixed number or factor 
+
+	//! Switch between using iteration number as fixed number or factor
 	//! (*number of nodes of graph)
-	void setIterationNumberAsFactor(bool b) {m_itAsFactor = b;} 
+	void setIterationNumberAsFactor(bool b) {m_itAsFactor = b;}
 
 private:
 	double m_repulsionWeight;   //!< The weight for repulsion energy.

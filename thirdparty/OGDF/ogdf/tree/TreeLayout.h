@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2583 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of linear time layout algorithm for trees
  *        (TreeLayout) based on Walker's algorithm.
- * 
+ *
  * \author Christoph Buchheim
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -59,7 +60,7 @@ namespace ogdf {
  * The class TreeLayout represents the improved version of the tree layout
  * algorithm by Walker presented in:
  *
- * Christoph Buchheim, Michael Jünger, Sebastian Leipert: <i>Drawing
+ * Christoph Buchheim, Michael J&uuml;nger, Sebastian Leipert: <i>Drawing
  * rooted trees in linear time</i>. Software: Practice and Experience 36(6),
  * pp. 651-665, 2006.
  *
@@ -118,7 +119,7 @@ public:
 private:
 	double m_siblingDistance;        //!< The minimal distance between siblings.
 	double m_subtreeDistance;        //!< The minimal distance between subtrees.
-    double m_levelDistance;          //!< The minimal distance between levels.
+	double m_levelDistance;          //!< The minimal distance between levels.
 	double m_treeDistance;           //!< The minimal distance between trees.
 
 	bool m_orthogonalLayout;         //!< Option for orthogonal style (yes/no).
@@ -181,7 +182,7 @@ public:
 	 * @param GA is the input graph and will also be assigned the layout information.
 	 * @param G is the graph associated with \a GA.
 	 */
-	void callSortByPositions(GraphAttributes &AG, Graph &G);
+	void callSortByPositions(GraphAttributes &GA, Graph &G);
 
 
 	/** @}
@@ -272,21 +273,18 @@ private:
 
 	// space out the small subtrees on the left hand side of subtree
 	// defaultAncestor is used for all nodes with obsolete m_ancestor
-	void apportion(node subtree,
-		           node &defaultAncestor,
-				   const GraphAttributes &AG,
-				   bool upDown);
+	void apportion(
+		node subtree,
+		node &defaultAncestor,
+		const GraphAttributes &AG,
+		bool upDown);
 
 	// recursive top down traversal of the tree for computing final
 	// x-coordinates
-	void secondWalkX(node subtree,
-		            double modifierSum,
-					GraphAttributes &AG);
-	void secondWalkY(node subtree,
-		            double modifierSum,
-					GraphAttributes &AG);
+	void secondWalkX(node subtree, double modifierSum, GraphAttributes &AG);
+	void secondWalkY(node subtree, double modifierSum, GraphAttributes &AG);
 
-	// compute y-coordinates and edge shapes 
+	// compute y-coordinates and edge shapes
 	void computeYCoordinatesAndEdgeShapes(node root,GraphAttributes &AG);
 	void computeXCoordinatesAndEdgeShapes(node root,GraphAttributes &AG);
 

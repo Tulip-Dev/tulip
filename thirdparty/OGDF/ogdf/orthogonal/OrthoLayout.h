@@ -1,43 +1,44 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class OrthoLayout which represents an
  *        orthogonal planar drawing algorithm for mixed-upward
  *        embedded graphs.
- * 
+ *
  * \author Carsten Gutwenger and Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -57,7 +58,7 @@
 
 namespace ogdf {
 
-    enum OptionProfile {standard, minBendsperEdge, fullService}; //just to think about it...
+	enum OptionProfile { standard, minBendsperEdge, fullService }; //just to think about it...
 
 	enum OrthoDir;
 
@@ -139,8 +140,8 @@ public:
 		m_costGen = c;
 	}
 
-    //! Set the option profile, thereby fixing a set of drawing options
-    void optionProfile(int i) {m_optionProfile = i;} 
+	//! Set the option profile, thereby fixing a set of drawing options
+	void optionProfile(int i) {m_optionProfile = i;}
 
 	//! Set alignment option
 	void align(bool b) {m_align = b;}
@@ -153,23 +154,23 @@ public:
 
 	//in planarlayout
 	//enum LayoutOptions {umloptAlignment = 1, optScaling = 2, optProgressive = 4}
-	//set generic options by setting field bits, 
+	//set generic options by setting field bits,
 	//necessary to allow setting over base class pointer
 	//bit 0 = alignment
 	//bit 1 = scaling
 	//bit 2 = progressive/traditional
 	//=> 0 is standard
-	virtual void setOptions(int optionField) 
+	virtual void setOptions(int optionField)
 	{
 		if (optionField & umlOpAlign) m_align = true;
 		else m_align = false;
 		if (optionField & umlOpScale) m_useScalingCompaction = true;
 		else m_useScalingCompaction = false;
-		if (optionField & umlOpProg) m_orthoStyle = 1; 
+		if (optionField & umlOpProg) m_orthoStyle = 1;
 		else m_orthoStyle = 0; //traditional
 	}//setOptions
 
-	virtual int getOptions() 
+	virtual int getOptions()
 	{
 		int result = 0;
 		if (m_align) result = umlOpAlign;
@@ -194,17 +195,17 @@ private:
 	double m_cOverhang;
 	double m_margin;
 	OrthoDir m_preferedDir;
-    int m_optionProfile;
+	int m_optionProfile;
 	int m_costAssoc;
 	int m_costGen;
-    //align merger sons on same level
-    bool m_align;
+	//align merger sons on same level
+	bool m_align;
 	//settings for scaling compaction
 	bool m_useScalingCompaction;
 	int m_scalingSteps;
 	//mainly used for OrthoShaper traditional/progressive
-    int m_orthoStyle;
-    int m_bendBound; //!< bounds number of bends per edge in ortho shaper
+	int m_orthoStyle;
+	int m_bendBound; //!< bounds number of bends per edge in ortho shaper
 };
 
 

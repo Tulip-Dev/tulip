@@ -1,41 +1,42 @@
 /*
- * $Revision: 2320 $
- * 
+ * $Revision: 2618 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-09 14:37:44 +0200 (Wed, 09 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-16 15:59:09 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Basic declarations, included by all source files.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -50,7 +51,7 @@
 
 /**
  * \mainpage The Open Graph Drawing Framework
- * 
+ *
  * \section sec_intro Introduction
  * The Open Graph Drawing Framework (OGDF) is a C++ library containing
  * implementations of various graph drawing algorithms. The library is self
@@ -68,8 +69,55 @@
  * - [University of Sydney](http://sydney.edu.au/engineering/it/), Australia
  * - [oreas GmbH](http://www.oreas.com/), Cologne, Germany
  */
- 
- 
+
+
+//---------------------------------------------------------
+// detection of the system
+//---------------------------------------------------------
+
+#if defined(unix) || defined(__unix__) || defined(__unix) || defined(_AIX) || defined(__APPLE__)
+#define OGDF_SYSTEM_UNIX
+#endif
+
+#if defined(__WIN32__) || defined(_WIN32) || defined(__NT__)
+#define OGDF_SYSTEM_WINDOWS
+#endif
+
+// Note: Apple OS X machines will be both OGDF_SYSTEM_UNIX and OGDF_SYSTEM_OSX
+#if defined(__APPLE__)
+#define OGDF_SYSTEM_OSX
+#endif
+
+
+#if defined(USE_COIN) || defined(OGDF_OWN_LPSOLVER)
+#define OGDF_LP_SOLVER
+#endif
+
+#if defined(USE_COIN) && !defined(COIN_OSI_CPX) && !defined(COIN_OSI_SYM) && !defined(COIN_OSI_CLP)
+#error "Compiler-flag USE_COIN requires an additional COIN_OSI_xxx-flag to choose the LP solver backend."
+#endif
+
+
+// define minimal MS runtime version for mingw32
+#if defined(__MINGW32__) && !defined(__MINGW64__)
+#ifndef __MSVCRT_VERSION__
+#define __MSVCRT_VERSION__ 0x0700
+#endif
+#endif
+
+// include windows.h on Windows systems
+#if defined(OGDF_SYSTEM_WINDOWS) || defined(__CYGWIN__)
+#define WIN32_EXTRA_LEAN
+#define WIN32_LEAN_AND_MEAN
+#undef NOMINMAX
+#define NOMINMAX
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0500
+#endif
+#include <windows.h>
+#endif
+
+
 //---------------------------------------------------------
 // assertions
 //---------------------------------------------------------
@@ -78,7 +126,7 @@
 #include <assert.h>
 #define OGDF_ASSERT(expr) assert(expr);
 #define OGDF_ASSERT_IF(minLevel,expr) \
-	if (int(ogdf::debugLevel) >= int(minLevel)) assert(expr); else ;
+	if (int(ogdf::debugLevel) >= int(minLevel)) { assert(expr); } else { }
 #define OGDF_SET_DEBUG_LEVEL(level) ogdf::debugLevel = level;
 
 #else
@@ -150,48 +198,24 @@
 
 
 //---------------------------------------------------------
-// detection of the system
-//---------------------------------------------------------
-
-#if defined(unix) || defined(__unix__) || defined(__unix) || defined(_AIX) || defined(__APPLE__)
-#define OGDF_SYSTEM_UNIX
-#endif
-
-#if defined(__WIN32__) || defined(_WIN32) || defined(__NT__)
-#define OGDF_SYSTEM_WINDOWS
-#endif
-
-// Note: Apple OS X machines will be both OGDF_SYSTEM_UNIX and OGDF_SYSTEM_OSX
-#if defined(__APPLE__)
-#define OGDF_SYSTEM_OSX
-#endif
-
-
-#if defined(USE_COIN) || defined(OGDF_OWN_LPSOLVER)
-#define OGDF_LP_SOLVER
-#endif
-
-#if defined(USE_COIN) && !defined(COIN_OSI_CPX) && !defined(COIN_OSI_SYM) && !defined(COIN_OSI_CLP)
-#error "Compiler-flag USE_COIN requires an additional COIN_OSI_xxx-flag to choose the LP solver backend."
-#endif
-
-
-//---------------------------------------------------------
 // macros for compiling OGDF as DLL
 //---------------------------------------------------------
 
+#ifdef OGDF_SYSTEM_WINDOWS
 #ifdef OGDF_DLL
 
 #ifdef OGDF_INSTALL
 #define OGDF_EXPORT __declspec(dllexport)
-
 #else
 #define OGDF_EXPORT __declspec(dllimport)
 #endif
 
 #else
 #define OGDF_EXPORT
+#endif
 
+#else
+#define OGDF_EXPORT
 #endif
 
 
@@ -199,7 +223,7 @@
 // define data types with known size
 //---------------------------------------------------------
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER)
 
 typedef unsigned __int8  __uint8;
 typedef unsigned __int16 __uint16;
@@ -207,8 +231,12 @@ typedef unsigned __int32 __uint32;
 typedef unsigned __int64 __uint64;
 
 #else
-
 #if !defined(__MINGW32__)
+#undef __int8
+#undef __int16
+#undef __int32
+#undef __int64
+
 typedef signed char        __int8;
 typedef short              __int16;
 typedef int                __int32;
@@ -228,6 +256,7 @@ typedef unsigned long long __uint64;
 
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 
 using std::ios;
 using std::istream;
@@ -240,13 +269,14 @@ using std::cerr;
 using std::endl;
 using std::flush;
 using std::swap;
+using std::min;
+using std::max;
 
 #include <stdio.h>
 #include <stdarg.h>
 #include <time.h>
 #include <string.h>
 #include <math.h>
-
 
 #ifdef OGDF_SYSTEM_UNIX
 #include <stdint.h>
@@ -260,7 +290,7 @@ using std::swap;
 #include <ogdf/basic/exceptions.h>
 #include <ogdf/basic/memory.h>
 #include <ogdf/basic/comparer.h>
-	
+
 
 
 //---------------------------------------------------------
@@ -270,10 +300,6 @@ using std::swap;
 #ifdef _MSC_VER
 
 // disable useless warnings
-#pragma warning(disable:4250)
-#pragma warning(disable:4290)
-#pragma warning(disable:4291)
-#pragma warning(disable:4355)
 
 // missing dll-interface
 #pragma warning(disable:4251)
@@ -315,20 +341,6 @@ static Initialization s_ogdfInitializer;
 
 	enum Direction { before, after };
 
-#ifndef OGDF_NOMINMAX
-#ifndef min
-	//! Returns minimum of x and y.
-	template<class T>
-	inline T min(const T& x, const T& y) { return (x<y) ? x : y; }
-#endif
-
-#ifndef max
-	//! Returns maximum of x and y.
-	template<class T>
-	inline T max(const T& x, const T& y) { return (x>y) ? x : y; }
-#endif
-#endif
-
 	//! Returns random integer between low and high (including).
 	inline int randomNumber(int low, int high) {
 #if RAND_MAX == 32767
@@ -354,7 +366,7 @@ static Initialization s_ogdfInitializer;
 	inline double randomDoubleNormal(double m, double sd)
 	{
 		double x1, x2, y1, w, rndVal;
-	
+
 		do {
 			rndVal = randomDouble(0,1);
 			x1 = 2.0 * rndVal - 1.0;
@@ -378,7 +390,7 @@ static Initialization s_ogdfInitializer;
 	//! \a doDestruction() returns false if a data type does not require to
 	//! call its destructor (e.g. build-in data types).
 	template<class E>inline bool doDestruction(const E *) { return true; }
-	
+
 	// specializations
 	template<>inline bool doDestruction(const char *) { return false; }
 	template<>inline bool doDestruction<int>(const int *) { return false; }
@@ -404,10 +416,10 @@ static Initialization s_ogdfInitializer;
 
 	//! Changes current directory to \a dirName; returns true if successful.
 	OGDF_EXPORT bool changeDir(const char *dirName);
-	
+
 	//! Returns in \a files the list of files in directory \a dirName.
 	/** The optional argument \a pattern can be used to filter files.
-	 * 
+	 *
 	 *  \pre \a dirName is a directory
 	 */
 	OGDF_EXPORT void getFiles(const char *dirName,
@@ -416,7 +428,7 @@ static Initialization s_ogdfInitializer;
 
 	//! Appends to \a files the list of files in directory \a dirName.
 	/** The optional argument \a pattern can be used to filter files.
-	 * 
+	 *
 	 *  \pre \a dirName is a directory
 	 */
 	OGDF_EXPORT void getFilesAppend(const char *dirName,
@@ -426,7 +438,7 @@ static Initialization s_ogdfInitializer;
 
 	//! Returns in \a subdirs the list of directories contained in directory \a dirName.
 	/** The optional argument \a pattern can be used to filter files.
-	 * 
+	 *
 	 *  \pre \a dirName is a directory
 	 */
 	OGDF_EXPORT void getSubdirs(const char *dirName,
@@ -435,7 +447,7 @@ static Initialization s_ogdfInitializer;
 
 	//! Appends to \a subdirs the list of directories contained in directory \a dirName.
 	/** The optional argument \a pattern can be used to filter files.
-	 * 
+	 *
 	 *  \pre \a dirName is a directory
 	 */
 	OGDF_EXPORT void getSubdirsAppend(const char *dirName,
@@ -446,7 +458,7 @@ static Initialization s_ogdfInitializer;
 	//! Returns in \a entries the list of all entries contained in directory \a dirName.
 	/** Entries may be files or directories. The optional argument \a pattern
 	 *  can be used to filter files.
-	 * 
+	 *
 	 *  \pre \a dirName is a directory
 	 */
 	OGDF_EXPORT void getEntries(const char *dirName,
@@ -456,7 +468,7 @@ static Initialization s_ogdfInitializer;
 	//! Appends to \a entries the list of all entries contained in directory \a dirName.
 	/** Entries may be files or directories. The optional argument \a pattern
 	 *  can be used to filter files.
-	 * 
+	 *
 	 *  \pre \a dirName is a directory
 	 */
 	OGDF_EXPORT void getEntriesAppend(const char *dirName,
@@ -466,7 +478,7 @@ static Initialization s_ogdfInitializer;
 
 	//! Returns in \a entries the list of all entries of type \a t contained in directory \a dirName.
 	/** The optional argument \a pattern can be used to filter files.
-	 * 
+	 *
 	 *  \pre \a dirName is a directory
 	 */
 	OGDF_EXPORT void getEntries(const char *dirName,
@@ -476,7 +488,7 @@ static Initialization s_ogdfInitializer;
 
 	//! Appends to \a entries the list of all entries of type \a t contained in directory \a dirName.
 	/** The optional argument \a pattern can be used to filter files.
-	 * 
+	 *
 	 *  \pre \a dirName is a directory
 	 */
 	OGDF_EXPORT void getEntriesAppend(const char *dirName,
@@ -484,17 +496,13 @@ static Initialization s_ogdfInitializer;
 		List<String> &entries,
 		const char *pattern = "*");
 
-    //---------------------------------------------------------
+	//---------------------------------------------------------
 	// handling markup formatting
 	//---------------------------------------------------------
-	
-	const char NEWLINE('\n');					// newline character
-	const char INDENTCHAR(' ');				// indent character
-	const int INDENTSIZE(2); 					// indent size
 
 #ifdef OGDF_DEBUG
 	/** We maintain a debug level in debug versions indicating how many
-	 *  internal checks (usually assertions) are done. 
+	 *  internal checks (usually assertions) are done.
 	 *  Usage: Set the variable ogdf::debugLevel using the macro
 	 *   OGDF_SET_DEBUG_LEVEL(level) to the desired level
 	 *   in the calling code (e.g. main()). The debugLevel can be set

@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Make VCProj
 #
 # March 2006

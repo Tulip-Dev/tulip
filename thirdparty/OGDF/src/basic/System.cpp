@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2633 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-18 09:09:28 +0200 (Mi, 18. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of System class.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -66,7 +67,7 @@
 #ifdef _MSC_VER
 #include <intrin.h>
 
-#elif defined(OGDF_SYSTEM_UNIX) || defined(__MINGW32__)
+#elif defined(OGDF_SYSTEM_UNIX) || (defined(__MINGW32__) && !defined(__MINGW64__))
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/time.h>
@@ -89,10 +90,10 @@ static void __cpuid(int CPUInfo[4], int infoType)
 	a = b = c = d = 0;
 #endif
 
-  CPUInfo[0] = a;
-  CPUInfo[1] = b;
-  CPUInfo[2] = c;
-  CPUInfo[3] = d;
+	CPUInfo[0] = a;
+	CPUInfo[1] = b;
+	CPUInfo[2] = c;
+	CPUInfo[3] = d;
 }
 #endif
 
@@ -117,16 +118,19 @@ void System::init()
 	s_cacheSize   = 0;
 	s_cacheLine   = 0;
 
-    int CPUInfo[4] = {-1};
+	// currently not working for shared libs on Linux
+#if !defined(OGDF_DLL) || !defined(OGDF_SYSTEM_UNIX)
+
+	int CPUInfo[4] = {-1};
 	__cpuid(CPUInfo, 0);
 
 	unsigned int nIds = CPUInfo[0];
-    if(nIds >= 1)
-    {
-        __cpuid(CPUInfo, 1);
+	if(nIds >= 1)
+	{
+		__cpuid(CPUInfo, 1);
 
-        int featureInfoECX = CPUInfo[2];
-        int featureInfoEDX = CPUInfo[3];
+		int featureInfoECX = CPUInfo[2];
+		int featureInfoEDX = CPUInfo[3];
 
 		if(featureInfoEDX & (1 << 23)) s_cpuFeatures |= cpufmMMX;
 		if(featureInfoEDX & (1 << 25)) s_cpuFeatures |= cpufmSSE;
@@ -139,22 +143,22 @@ void System::init()
 		if(featureInfoECX & (1 <<  6)) s_cpuFeatures |= cpufmSMX;
 		if(featureInfoECX & (1 <<  7)) s_cpuFeatures |= cpufmEST;
 		if(featureInfoECX & (1 <<  3)) s_cpuFeatures |= cpufmMONITOR;
-    }
+	}
 
-    __cpuid(CPUInfo, 0x80000000);
-    unsigned int nExIds = CPUInfo[0];
+	__cpuid(CPUInfo, 0x80000000);
+	unsigned int nExIds = CPUInfo[0];
 
 	if(nExIds >= 0x80000006) {
-        __cpuid(CPUInfo, 0x80000006);
-        s_cacheLine = CPUInfo[2] & 0xff;
-        s_cacheSize = (CPUInfo[2] >> 16) & 0xffff;
+		__cpuid(CPUInfo, 0x80000006);
+		s_cacheLine = CPUInfo[2] & 0xff;
+		s_cacheSize = (CPUInfo[2] >> 16) & 0xffff;
 	}
 
 #if defined(OGDF_SYSTEM_WINDOWS) || defined(__CYGWIN__)
 	QueryPerformanceFrequency(&s_HPCounterFrequency);
 
 	SYSTEM_INFO siSysInfo;
-	GetSystemInfo(&siSysInfo); 
+	GetSystemInfo(&siSysInfo);
 	s_pageSize = siSysInfo.dwPageSize;
 	s_numberOfProcessors = siSysInfo.dwNumberOfProcessors;
 
@@ -163,14 +167,14 @@ void System::init()
 	size_t  size = sizeof( value );
 		if (sysctlbyname("hw.pagesize", &value, &size, NULL, 0) !=-1)
 		s_pageSize = (int)value;
-	else 
+	else
 		s_pageSize = 0;
-		
+
 	if (sysctlbyname("hw.ncpu", &value, &size, NULL, 0) !=-1)
 		s_numberOfProcessors = (int)value;
-	else 
+	else
 		s_numberOfProcessors = 1;
-	
+
 #elif defined(OGDF_SYSTEM_UNIX)
 	s_pageSize = sysconf(_SC_PAGESIZE);
 	s_numberOfProcessors = (int)sysconf(_SC_NPROCESSORS_CONF);
@@ -178,6 +182,8 @@ void System::init()
 #else
 	s_pageSize = 0; // just a placeholder!!!
 	s_numberOfProcessors = 1; // just a placeholder!!!
+#endif
+
 #endif
 }
 
@@ -222,7 +228,7 @@ long long System::physicalMemory()
 	return stat.dwTotalPhys;
 #endif
 }
-	
+
 long long System::availablePhysicalMemory()
 {
 #if !defined(__CYGWIN__) || (_WIN32_WINNT >= 0x0500)
@@ -264,7 +270,7 @@ long long System::physicalMemory()
 	size_t  size = sizeof( value );
 	if (sysctlbyname("hw.memsize", &value, &size, NULL, 0) !=-1)
 		return value;
-	else 
+	else
 		return 0;
 }
 
@@ -274,7 +280,7 @@ long long System::availablePhysicalMemory()
 	long long result;
 	size_t  size = sizeof( pageSize );
 	sysctlbyname("hw.pagesize", &pageSize, &size, NULL, 0);
-	
+
 	vm_statistics_data_t vm_stat;
 	int count = ((mach_msg_type_number_t) (sizeof(vm_statistics_data_t)/sizeof(integer_t)));
 	host_statistics(mach_host_self(), HOST_VM_INFO, (integer_t*)&vm_stat, (mach_msg_type_number_t*)&count);
@@ -289,22 +295,22 @@ size_t System::memoryUsedByProcess()
 	static char filename[32];
 	sprintf(filename, 32, "/proc/%d/statm", pid);
 
-    int fd = open(filename, O_RDONLY, 0);
-    if(fd==-1) OGDF_THROW(Exception);
+	int fd = open(filename, O_RDONLY, 0);
+	if(fd==-1) OGDF_THROW(Exception);
 
 	static char sbuf[256];
-    sbuf[read(fd, sbuf, sizeof(sbuf) - 1)] = 0;
-    close(fd);
+	sbuf[read(fd, sbuf, sizeof(sbuf) - 1)] = 0;
+	close(fd);
 
 	long size, resident, share, trs, lrs, drs, dt;
-    sscanf(sbuf, "%ld %ld %ld %ld %ld %ld %ld",
-	   &size,      // total program size (in pages)
-	   &resident,  // number of resident set (non-swapped) pages (4k)
-	   &share,     // number of pages of shared (mmap'd) memory
-	   &trs,       // text resident set size
-	   &lrs,       // shared-lib resident set size
-	   &drs,       // data resident set size
-	   &dt);       // dirty pages
+	sscanf(sbuf, "%ld %ld %ld %ld %ld %ld %ld",
+		&size,      // total program size (in pages)
+		&resident,  // number of resident set (non-swapped) pages (4k)
+		&share,     // number of pages of shared (mmap'd) memory
+		&trs,       // text resident set size
+		&lrs,       // shared-lib resident set size
+		&drs,       // data resident set size
+		&dt);       // dirty pages
 
 	return resident*4*1024;*/
 	return 0;
@@ -328,22 +334,22 @@ size_t System::memoryUsedByProcess()
 	static char filename[32];
 	sprintf(filename, 32, "/proc/%d/statm", pid);
 
-    int fd = open(filename, O_RDONLY, 0);
-    if(fd==-1) OGDF_THROW(Exception);
+	int fd = open(filename, O_RDONLY, 0);
+	if(fd==-1) OGDF_THROW(Exception);
 
 	static char sbuf[256];
-    sbuf[read(fd, sbuf, sizeof(sbuf) - 1)] = 0;
-    close(fd);
+	sbuf[read(fd, sbuf, sizeof(sbuf) - 1)] = 0;
+	close(fd);
 
 	long size, resident, share, trs, lrs, drs, dt;
-    sscanf(sbuf, "%ld %ld %ld %ld %ld %ld %ld",
-	   &size,      // total program size (in pages)
-	   &resident,  // number of resident set (non-swapped) pages (4k)
-	   &share,     // number of pages of shared (mmap'd) memory
-	   &trs,       // text resident set size
-	   &lrs,       // shared-lib resident set size
-	   &drs,       // data resident set size
-	   &dt);       // dirty pages
+	sscanf(sbuf, "%ld %ld %ld %ld %ld %ld %ld",
+		&size,      // total program size (in pages)
+		&resident,  // number of resident set (non-swapped) pages (4k)
+		&share,     // number of pages of shared (mmap'd) memory
+		&trs,       // text resident set size
+		&lrs,       // shared-lib resident set size
+		&drs,       // data resident set size
+		&dt);       // dirty pages
 
 	return resident*4*1024;
 }
@@ -355,32 +361,32 @@ size_t System::memoryUsedByProcess()
 
 size_t System::memoryAllocatedByMalloc()
 {
-    _HEAPINFO hinfo;
-    int heapstatus;
-    hinfo._pentry = NULL;
+	_HEAPINFO hinfo;
+	int heapstatus;
+	hinfo._pentry = NULL;
 
 	size_t allocMem = 0;
 	while((heapstatus = _heapwalk(&hinfo)) == _HEAPOK)
-    {
+	{
 		if(hinfo._useflag == _USEDENTRY)
 			allocMem += hinfo._size;
-    }
+	}
 
 	return allocMem;
 }
 
 size_t System::memoryInFreelistOfMalloc()
 {
-    _HEAPINFO hinfo;
-    int heapstatus;
-    hinfo._pentry = NULL;
+	_HEAPINFO hinfo;
+	int heapstatus;
+	hinfo._pentry = NULL;
 
 	size_t allocMem = 0;
 	while((heapstatus = _heapwalk(&hinfo)) == _HEAPOK)
-    {
+	{
 		if(hinfo._useflag == _FREEENTRY)
 			allocMem += hinfo._size;
-    }
+	}
 
 	return allocMem;
 }

@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declarations for Comparer objects.
- * 
+ *
  * \author Markus Chimani, Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -65,8 +66,8 @@ namespace ogdf {
  * Standard comparers are used by some sorting and searching methods.
  * The implementation of the generic class only provides dummies that
  * always throw a NoStdComparerException.
- * 
- * The compare operations are static, hence the StdComparer cannot 
+ *
+ * The compare operations are static, hence the StdComparer cannot
  * only be used as a comparer object, but also as a static comparer
  * when required.
  *
@@ -98,9 +99,9 @@ public:
 		static bool equal  (const type &x, const type &y) { return x == y; } \
 	};
 
-OGDF_STD_COMPARER(int);
-OGDF_STD_COMPARER(float);
-OGDF_STD_COMPARER(double);
+OGDF_STD_COMPARER(int)
+OGDF_STD_COMPARER(float)
+OGDF_STD_COMPARER(double)
 
 //! Generates a specialization of the standard static comparer for booleans.
 template<> class StdComparer<bool> {
@@ -113,14 +114,14 @@ public:
 };
 
 
-//! A static comparer which compares the target of pointers ("content"), instead of the pointer's adresses. 
-/** 
- * For the comparison of the contents, you may give your own static comparer 
+//! A static comparer which compares the target of pointers ("content"), instead of the pointer's adresses.
+/**
+ * For the comparison of the contents, you may give your own static comparer
  */
-template<class CONTENTTYPE, class STATICCONTENTCOMPARER = StdComparer<CONTENTTYPE> > 
+template<class CONTENTTYPE, class STATICCONTENTCOMPARER = StdComparer<CONTENTTYPE> >
 class TargetComparer {
 	typedef CONTENTTYPE* CONTENTPOINTER;
-public:	
+public:
 	static bool less   (const CONTENTPOINTER &x, const CONTENTPOINTER &y) { return STATICCONTENTCOMPARER::less   (*x,*y); }
 	static bool leq    (const CONTENTPOINTER &x, const CONTENTPOINTER &y) { return STATICCONTENTCOMPARER::leq    (*x,*y); }
 	static bool greater(const CONTENTPOINTER &x, const CONTENTPOINTER &y) { return STATICCONTENTCOMPARER::greater(*x,*y); }
@@ -129,16 +130,16 @@ public:
 };
 
 
-//! Add this macro to your class to turn it into a full comparer. 
+//! Add this macro to your class to turn it into a full comparer.
 /**
  * It is assumed that your class has a method "compare(const type &x, const type &y)", which
- * returns 0 if the two elements are equal, a negative value if \a x is smaller, and a positive 
- * value if \a x is greater. 
- * 
+ * returns 0 if the two elements are equal, a negative value if \a x is smaller, and a positive
+ * value if \a x is greater.
+ *
  * Note: If the compare function of your class requires no additional data other than the
  * two elements to compare, your should usually use the more general #OGDF_AUGMENT_STATICCOMPARER:
  * A static comparer is also always valid as a normal comparer.
- * 
+ *
  * Usage in Definition:
  * \code
  * class MyComparer {
@@ -152,7 +153,7 @@ public:
  *   OGDF_AUGMENT_COMPARER(MyStuff)
  * }
  * \endcode
- * 
+ *
  * Use the Comparer:
  * \code
  * MyStuff a=...;
@@ -175,17 +176,17 @@ public:
 	bool geq(const type &x, const type &y) const { return compare(x,y) >= 0; } \
 	bool equal(const type &x, const type &y) const { return compare(x,y) == 0; }
 
-//! Add this macro to your class to turn it into a full static comparer. 
+//! Add this macro to your class to turn it into a full static comparer.
 /**
  * It is assumed that your class has a *static* method "compare(const type &x, const type &y)", which
- * returns 0 if the two elements are equal, a negative value if \a x is smaller, and a positive 
+ * returns 0 if the two elements are equal, a negative value if \a x is smaller, and a positive
  * value if \a x is greater.
- * 
- * Note: You should use this macro instead of #OGDF_AUGMENT_COMPARER whenever your compare function 
- * requires no additional data stored in the object, other than the two elements to compare.
- * A static comparer is also always valid as a normal comparer. 
  *
-  * Usage in Definition:
+ * Note: You should use this macro instead of #OGDF_AUGMENT_COMPARER whenever your compare function
+ * requires no additional data stored in the object, other than the two elements to compare.
+ * A static comparer is also always valid as a normal comparer.
+ *
+ * Usage in Definition:
  * \code
  * class MyComparer {
  * public:
@@ -195,7 +196,7 @@ public:
  *    OGDF_AUGMENT_STATICCOMPARER(MyStuff)
  * }
  * \endcode
- * 
+ *
  * Use the Comparer:
  * \code
  * MyStuff a=...;
@@ -225,17 +226,17 @@ public:
  * The parameterized class \a VComparer<E> is an abstract base class for
  * encapsulating compare functions for type \a E. Implementations derive
  * from this class and implement at least the compare() method.
- * 
- * The methods of this class are all \a virtual, which comes with a 
+ *
+ * The methods of this class are all \a virtual, which comes with a
  * certain performance penalty. Its advantage is that if you require
- * multiple Comparers for the same class \a E, functions using 
- * compareres on \a E are not generated multiple times, which means 
- * smaller code. 
- * 
- * If size is not an issue, but speed is, use a Comparer with 
+ * multiple Comparers for the same class \a E, functions using
+ * compareres on \a E are not generated multiple times, which means
+ * smaller code.
+ *
+ * If size is not an issue, but speed is, use a Comparer with
  * non-virtual functions. You may want to use the convenience classes
  * StdComparer and TargetComparer, or the convenience macros
- * #OGDF_AUGMENT_COMPARER, #OGDF_AUGMENT_STATICCOMPARER, #OGDF_STD_COMPARER to 
+ * #OGDF_AUGMENT_COMPARER, #OGDF_AUGMENT_STATICCOMPARER, #OGDF_STD_COMPARER to
  * obtain non-virtual classes with few effort.
  */
 template<class E> class VComparer {

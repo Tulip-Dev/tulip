@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2583 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of planarization with grid layout.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -67,11 +68,11 @@ namespace ogdf {
  * of the planarization approach for drawing graphs. The class uses a
  * planar grid layout algorithm as a subroutine and allows to generate
  * a usual layout or a grid layout.
- * 
+ *
  * If the planarization layout algorithm shall be used for simultaneous drawing,
  * you need to define the different subgraphs by setting the <i>subgraphs</i>
  * option.
- * 
+ *
  * The implementation used in PlanarizationGridLayout is based on the following
  * publication:
  *
@@ -106,7 +107,7 @@ namespace ogdf {
  *     <td><i>inserter</i><td>EdgeInsertionModule<td>FixedEmbeddingInserter
  *     <td>The module used for edge insertion which is applied in the second
  *     step of the planarization method. The edges not contained in the planar
- *     subgraph are re-inserted one-by-one, each with as few crossings as possible. 
+ *     subgraph are re-inserted one-by-one, each with as few crossings as possible.
  *   </tr><tr>
  *     <td><i>planarLayouter</i><td>GridLayoutPlanRepModule<td>MixedModelLayout
  *     <td>The planar layout algorithm used to compute a planar layout
@@ -114,7 +115,6 @@ namespace ogdf {
  *   </tr><tr>
  *     <td><i>packer</i><td>CCLayoutPackModule<td>TileToRowsCCPacker
  *     <td>The packer module used for arranging connected components.
- *   </tr><tr>
  *   </tr>
  * </table>
  */
@@ -133,7 +133,7 @@ public:
 
 	/**
 	 * \brief Returns the current setting of option pageRatio.
-	 * 
+	 *
 	 * This option specifies the desired ration width / height of the computed
 	 * layout. It is currently only used for packing connected components.
 	 */
@@ -179,7 +179,7 @@ public:
 	 * The planar layout algorithm is used to compute a planar layout
 	 * of the planarized representation resulting from the crossing
 	 * minimization step. Planarized representation means that edge crossings
-	 * are replaced by dummy nodes of degree four, so the actual layout 
+	 * are replaced by dummy nodes of degree four, so the actual layout
 	 * algorithm obtains a planar graph as input. By default, the planar
 	 * layout algorithm produces an orthogonal drawing.
 	 */

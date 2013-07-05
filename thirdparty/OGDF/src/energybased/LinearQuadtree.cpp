@@ -1,39 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class LinearQuadtree.
- * 
+ *
  * \author Martin Gronemann
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2009
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -53,15 +56,17 @@ void LinearQuadtree::init(float min_x, float min_y, float max_x, float max_y)
 	m_scaleInv = (m_sideLengthGrid / m_sideLengthPoints);
 	m_cellSize = m_sideLengthPoints /((double)m_sideLengthGrid);
 	clear();
-};
+}
+
 
 void LinearQuadtree::clear()
 {
 	m_numWSP = 0;
 	m_numNotWSP = 0;
 	m_numDirectNodes = 0;
-	m_WSPD->clear();  
-};
+	m_WSPD->clear();
+}
+
 
 LinearQuadtree::LinearQuadtree(__uint32 n, float* origXPos, float* origYPos, float* origSize) : m_origXPos(origXPos), m_origYPos(origYPos), m_origSize(origSize)
 {
@@ -70,10 +75,12 @@ LinearQuadtree::LinearQuadtree(__uint32 n, float* origXPos, float* origYPos, flo
 	m_maxNumNodes = 2*n;
 }
 
+
 LinearQuadtree::~LinearQuadtree(void)
 {
 	deallocate();
 }
+
 
 void LinearQuadtree::allocate(__uint32 n)
 {
@@ -92,7 +99,8 @@ void LinearQuadtree::allocate(__uint32 n)
 	m_notWspd = (LQWSPair*)MALLOC_16(m_maxNumNodes*sizeof(LQWSPair)*27);
 	m_directNodes = (NodeID*)MALLOC_16(m_maxNumNodes*sizeof(NodeID));
 	m_WSPD = new WSPD(m_maxNumNodes);
-};
+}
+
 
 void LinearQuadtree::deallocate()
 {
@@ -107,18 +115,20 @@ void LinearQuadtree::deallocate()
 	FREE_16(m_notWspd);
 	FREE_16(m_directNodes);
 	delete m_WSPD;
-};
+}
+
 
 __uint64 LinearQuadtree::sizeInBytes() const
 {
-	return m_numPoints*sizeof(LQPoint) + 
-		   m_maxNumNodes*sizeof(LQNode) + 
-		   m_maxNumNodes*sizeof(LQWSPair)*27 +
-		   m_maxNumNodes*sizeof(NodeID) + 
-		   m_WSPD->sizeInBytes();
-};
+	return m_numPoints*sizeof(LQPoint) +
+		m_maxNumNodes*sizeof(LQNode) +
+		m_maxNumNodes*sizeof(LQWSPair)*27 +
+		m_maxNumNodes*sizeof(NodeID) +
+		m_WSPD->sizeInBytes();
+}
 
-//! iterates back in the sequence until the first point with another morton number occures, returns that point +1  
+
+//! iterates back in the sequence until the first point with another morton number occures, returns that point +1
 LinearQuadtree::PointID LinearQuadtree::findFirstPointInCell(LinearQuadtree::PointID somePointInCell) const
 {
 	if (somePointInCell==0) return 0;
@@ -127,29 +137,30 @@ LinearQuadtree::PointID LinearQuadtree::findFirstPointInCell(LinearQuadtree::Poi
 	{
 		if (result==0) return 0;
 		result--;
-	};
+	}
 	return result+1;
-};
+}
+
 
 void LinearQuadtree::addWSPD(NodeID s, NodeID t)
 {
 	m_numWSP++;
 	m_WSPD->addWSP(s, t);
-};
+}
+
 
 void LinearQuadtree::addDirectPair(NodeID s, NodeID t)
 {
 	m_notWspd[m_numNotWSP].a = s;
 	m_notWspd[m_numNotWSP].b = t;
 	m_numNotWSP++;
-};
+}
+
 
 void LinearQuadtree::addDirect(NodeID s)
 {
 	m_directNodes[m_numDirectNodes] = s;
 	m_numDirectNodes++;
-};
+}
 
 } // end of namespace ogdf
-
-

@@ -1,41 +1,42 @@
 /*
- * $Revision: 2303 $
- * 
+ * $Revision: 2552 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 09:41:00 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Definition of coffman graham ranking algorithm for Sugiyama
- * 
- * \author Till Schaefer
- * 
+ *
+ * \author Till Sch&auml;fer
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -59,7 +60,7 @@ void CoffmanGrahamRanking::call (const Graph& G, NodeArray<int>& rank)
 
 	m_subgraph.get().callAndReverse(gc);
 	removeTransitiveEdges(gc);
-	
+
 	List<Tuple2<node, int> > ready_nodes;
 	NodeArray<int> deg(gc);
 	NodeArray<int> pi(gc);
@@ -67,7 +68,7 @@ void CoffmanGrahamRanking::call (const Graph& G, NodeArray<int>& rank)
 
 	node v;
 	List<edge> edges;
-	
+
 	forall_nodes(v,gc) {
 		edges.clear();
 		gc.inEdges(v, edges);
@@ -114,7 +115,7 @@ void CoffmanGrahamRanking::call (const Graph& G, NodeArray<int>& rank)
 		for (i = 1; i <= m_w && !ready.empty(); i++) {
 			node u = ready.popFrontRet();
 			rank[gc.original(u)] = k;
-			
+
 			gc.inEdges<List<edge> >(u, edges);
 			for (ListIterator<edge> it = edges.begin(); it.valid() ; ++it){
 				if (--deg[(*it)->source()] == 0){
@@ -132,7 +133,7 @@ void CoffmanGrahamRanking::call (const Graph& G, NodeArray<int>& rank)
 	forall_nodes(v,G){
 		rank[v] = k - rank[v];
 	}
-	
+
 	m_s.init();
 }
 
@@ -186,7 +187,7 @@ void CoffmanGrahamRanking::insert (node v, List<node> &ready, const NodeArray<in
 			return;
 		}
 	}
-	
+
 	ready.pushFront(v);
 }
 
@@ -216,17 +217,17 @@ void CoffmanGrahamRanking::removeTransitiveEdges (Graph& G)
 {
 	node v, w;
 	List<edge> vout;
-	
+
 	mark.init(G,0);
 	visited = new StackPure<node>();
 
 	forall_nodes(v,G) {
 		G.outEdges<List<edge> >(v, vout);
 		/* alternative: iterate over all adjELements (only out Edges)
-		 * 
+		 *
 		 * forall_adj(adj,v) {
 		 * if ((adj->theEdge()->source()) == v) ...
-		 * 
+		 *
 		 * In this solution a List is generated, because we iterate three times
 		 * over this subset of adjElements
 		 */
@@ -234,17 +235,17 @@ void CoffmanGrahamRanking::removeTransitiveEdges (Graph& G)
 			w = (*it)-> target();
 			mark[w] = 2;
 		}
-		
+
 		// forall out edges
 		for (ListIterator<edge> it = vout.begin(); it.valid() ; ++it){
 			w = (*it)-> target();
-			
+
 			// if (w != 1)
 			if ((mark[w] & 1) == 0) {
 				dfs(w);
 			}
 		}
-		
+
 		// forall out edges
 		for (ListIterator<edge> it = vout.begin(); it.valid() ; ++it){
 			node u = (*it)->target();

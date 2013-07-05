@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of Graph class
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -322,7 +323,7 @@ void Graph::constructInitByNodes(
 
 
 //------------------
-//mainly a copy of the above code, remerge this again 
+//mainly a copy of the above code, remerge this again
 void Graph::constructInitByActiveNodes(
 	const List<node> &nodes,
 	const NodeArray<bool> &activeNodes,
@@ -359,14 +360,14 @@ void Graph::constructInitByActiveNodes(
 		int inCount = 0;
 		int outCount = 0;
 		adjEntry adjG;
-		forall_adj(adjG,vG) 
+		forall_adj(adjG,vG)
 		{
 			// coresponding adjacency entries differ by index modulo 2
 			// the following conditions makes sure that each edge is
 			// added only once to edges
 			if (activeNodes[adjG->m_edge->opposite(vG)])
 			{
-				if ((adjG->m_id & 1) == 0) 
+				if ((adjG->m_id & 1) == 0)
 				{
 					edges.pushBack(adjG->m_edge);
 				}//if one time
@@ -441,7 +442,7 @@ node Graph::newNode()
 
 	m_nodes.pushBack(v);
 	//  notify all registered observers
-	for(ListIterator<GraphObserver*> it = m_regStructures.begin(); 
+	for(ListIterator<GraphObserver*> it = m_regStructures.begin();
 			it.valid(); ++it) (*it)->nodeAdded(v);
 
 	return v;
@@ -474,7 +475,7 @@ node Graph::newNode(int index)
 
 	m_nodes.pushBack(v);
 	//  notify all registered observers
-	for(ListIterator<GraphObserver*> it = m_regStructures.begin(); 
+	for(ListIterator<GraphObserver*> it = m_regStructures.begin();
 			it.valid(); ++it) (*it)->nodeAdded(v);
 	return v;
 }
@@ -492,7 +493,7 @@ node Graph::pureNewNode()
 
 	m_nodes.pushBack(v);
 	//  notify all registered observers
-	for(ListIterator<GraphObserver*> it = m_regStructures.begin(); 
+	for(ListIterator<GraphObserver*> it = m_regStructures.begin();
 			it.valid(); ++it) (*it)->nodeAdded(v);
 	return v;
 }
@@ -602,7 +603,7 @@ edge Graph::newEdge(node v, node w)
 	adjTgt->m_twin = adjSrc;
 
 	edge e = createEdgeElement(v,w,adjSrc,adjTgt);
-	
+
 	return adjSrc->m_edge = adjTgt->m_edge = e;
 }
 
@@ -795,7 +796,7 @@ edge Graph::split(edge e)
 	adjTgt->m_id = e->m_adjTgt->m_id;
 
 	u->m_adjEdges.pushBack(adjTgt);
-	
+
 	adjEntry adjSrc = OGDF_NEW AdjElement(u);
 	adjSrc->m_twin = e->m_adjTgt;
 	u->m_adjEdges.pushBack(adjSrc);
@@ -866,7 +867,7 @@ void Graph::unsplit(edge eIn, edge eOut)
 	m_nodes.del(u);
 	--m_nNodes;
 	--m_nEdges;
-	
+
 }
 
 
@@ -891,11 +892,11 @@ void Graph::delNode(node v)
 void Graph::delEdge(edge e)
 {
 	OGDF_ASSERT(e != 0 && e->graphOf() == this)
-	
+
 	//  notify all registered observers
 	for(ListIterator<GraphObserver*> it = m_regStructures.begin();
 			it.valid(); ++it) (*it)->edgeDeleted(e);
-	
+
 	--m_nEdges;
 
 	node src = e->m_src, tgt = e->m_tgt;
@@ -1191,23 +1192,22 @@ void Graph::writeGML(ostream &os) const
 	int nextId = 0;
 
 	os << "Creator \"ogdf::Graph::writeGML\"\n";
-	os << "directed 1\n";
-
 	os << "graph [\n";
+	os << "  directed 1\n";
 
 	node v;
 	forall_nodes(v,*this) {
-		os << "node [\n";
-		os << "id " << (id[v] = nextId++) << "\n";
-		os << "]\n"; // node
+		os << "  node [\n";
+		os << "    id " << (id[v] = nextId++) << "\n";
+		os << "  ]\n"; // node
 	}
 
 	edge e;
 	forall_edges(e,*this) {
-		os << "edge [\n";
-		os << "source " << id[e->source()] << "\n";
-		os << "target " << id[e->target()] << "\n";
-		os << "]\n"; // edge
+		os << "  edge [\n";
+		os << "    source " << id[e->source()] << "\n";
+		os << "    target " << id[e->target()] << "\n";
+		os << "  ]\n"; // edge
 	}
 
 	os << "]\n"; // graph
@@ -1244,7 +1244,7 @@ bool Graph::readLEDAGraph(istream &is)
 	String formatType, nodeType, edgeType;
 
 	is >> formatType;
-	is >> nodeType; 
+	is >> nodeType;
 	is >> edgeType;
 
 	if (formatType != "LEDA.GRAPH")

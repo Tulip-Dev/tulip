@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2555 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-06 12:12:10 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class whaInfo.
- * 
+ *
  * \author Sebastian Leipert
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -69,24 +70,10 @@ enum whaType {
 };
 
 
-/*
-
-NOTICE:
-
-A compiler bug occurs, when declaring a template class friend of a 
-nontemplate class. This forces us to reject making MaxSequencePQTree
-a friend of whaInfo. 
-
-template<class T, class Y> class MaxSequencePQTree;
-class whaKey;
-*/
 
 class whaInfo
 {
-/*
-	friend class whaKey;
 	template<class T, class Y> friend class MaxSequencePQTree;
-*/
 
 public:
 
@@ -95,7 +82,7 @@ public:
 		m_a = 0;
 		m_h = 0;
 		m_w = 0;
-		m_deleteTyp       = B_TYPE;
+		m_deleteType       = B_TYPE;
 		m_pertLeafCount   = 0;
 		m_notVisitedCount = 0;
 		m_aChild          = 0;
@@ -112,35 +99,35 @@ public:
 		m_a = 0;
 		m_h = 0;
 		m_w = 0;
-		m_deleteTyp = B_TYPE;
+		m_deleteType = B_TYPE;
 		m_pertLeafCount = 0;
 		m_notVisitedCount = 0;
 	}
 
 
-//private:
+private:
 
-   
+
 	// number of pertinent leaves in the frontier of the node respectively the
-	// number of leaves that have to be deleted in the frontier of the node to 
+	// number of leaves that have to be deleted in the frontier of the node to
 	// make it an empty node.
 	int m_h;
 
 	// number of pertinent leaves in the frontier of the node that have to be
-	// deleted in order to create a node of type h, that is a node, where a 
-	// permutation of the leaves of the node exist such that the remaining 
+	// deleted in order to create a node of type h, that is a node, where a
+	// permutation of the leaves of the node exist such that the remaining
 	// pertinent leaves form a consecutive sequence on one end of the permutation.
 	int m_w;
 
 	// number of pertinent leaves in the frontier of the node that have to be
-	// deleted in order to create a node of type $a$, that is a node, where a 
-	// permutation of the leaves of the node exist such that the remaining 
+	// deleted in order to create a node of type $a$, that is a node, where a
+	// permutation of the leaves of the node exist such that the remaining
 	// pertinent leaves form a consecutive somewhere within the permutation.
 	int m_a;
 
-	// deleteType is type of the node being either 
-	// W_TYPE, B_TYPE, H_TYPE or A_TYPE. 
-	int m_deleteTyp;
+	// deleteType is type of the node being either
+	// W_TYPE, B_TYPE, H_TYPE or A_TYPE.
+	whaType m_deleteType;
 
 	//the number of pertinent leaves in the frontier of a node.
 	int m_pertLeafCount;
@@ -158,7 +145,7 @@ public:
 	PQNodeRoot *m_hChild1;
 
 	// a pointer to the child of node that has to be of type h if the
-	// node itself has been determined to be of type a and m_aChild does 
+	// node itself has been determined to be of type a and m_aChild does
 	// contain the empty pointer.
 	PQNodeRoot *m_hChild2;
 
@@ -170,28 +157,6 @@ public:
 	OGDF_NEW_DELETE
 };
 
-
-class whaKey : public PQNodeKey<edge,whaInfo*,bool>
-{
-public: 
-	
-	whaKey(whaInfo* i) : PQNodeKey<edge,whaInfo*,bool>(i) {}
-
-	virtual ~whaKey() {}
-
-	const char* print()
-	{
-		if (!m_printString) 
-			m_printString = new char[128]; 
-		ogdf::sprintf(m_printString,128,"w=%d, h=%d, a=%d",
-			m_userStructInfo->m_w,m_userStructInfo->m_h,
-			m_userStructInfo->m_a);
-		return m_printString;
-	}
-};
-
 }
 
 #endif
-
-

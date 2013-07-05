@@ -1,9 +1,9 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2615 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-16 14:23:36 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -47,28 +48,31 @@
 #ifndef OGDF_HYPER_GRAPH_H
 #define OGDF_HYPER_GRAPH_H
 
+#include <ogdf/basic/GraphAttributes.h>
 #include <ogdf/basic/EList.h>
 #include <ogdf/basic/EFreeList.h>
-#include <iostream>
 
 namespace ogdf {
 
-class HyperGraph
+class OGDF_EXPORT HyperGraph
 {
+	friend class HyperGraphTypes;
+
 public:
-	//! forward declaration to make AdjElement pointers available
+	// forward declaration to make AdjElement pointers available
 	class AdjElement;
 
-	//! Class for a node element
+	//! Representation of node elements.
 	class NodeElement
 	{
 		friend class HyperGraph;
+		friend class HyperGraphTypes;
 	public:
 		//! Returns the index of this node.
-		inline int index() const { return m_index; };
+		int index() const { return m_index; }
 
 		//! Returns the number of incident edges.
-		inline int degree() const { return m_numAdj; };
+		int degree() const { return m_numAdj; }
 
 	private:
 		NodeElement* m_pPrev;
@@ -79,16 +83,18 @@ public:
 		int m_index;
 	}; // class NodeElement
 
-	//! Class for a hyper edge.
+
+	//! Representation of hyper edges.
 	class EdgeElement
 	{
 		friend class HyperGraph;
+		friend class HyperGraphTypes;
 	public:
-		//! Returns the index of this element used when accessing arrays.
-		inline int index() const { return m_index; }
+		//! Returns the index of this edge.
+		int index() const { return m_index; }
 
 		//! Returns the number of incident nodes.
-		inline int cardinality() const { return m_numAdj; };
+		int cardinality() const { return m_numAdj; }
 
 	private:
 		EdgeElement* m_pPrev;
@@ -99,33 +105,33 @@ public:
 		int m_index;
 	}; // class EdgeElement
 
-	//! class for an adjacency element
+
+	//! Representation of adjacency elements.
 	class AdjElement
 	{
 		friend class HyperGraph;
+		friend class HyperGraphTypes;
 	public:
-		inline AdjElement() : m_pNode(0),
-							  m_pEdge(0) {};
+		AdjElement() : m_pNode(0), m_pEdge(0) { }
 
-		//! Returns the node this instance connects to an edge
-		inline NodeElement* theNode() { return m_pNode; };
+		//! Returns the node whose adjacency list contains this adjacency entry.
+		NodeElement* theNode() { return m_pNode; }
 
-		//! Returns the edge this instance connects to a node
-		inline EdgeElement* theEdge() { return m_pEdge; };
+		//! Returns the hyper edge associated with this adjacency entry.
+		EdgeElement* theEdge() { return m_pEdge; }
 
-		//! Returns the index of this element used when accessing arrays
-		inline int index() const { return m_index; }
+		//! Returns the index of this adjacency entry.
+		int index() const { return m_index; }
 	private:
 
-		inline AdjElement(NodeElement* pNode,
-						  EdgeElement* pEdge) :
-							m_pNode(pNode),
-							m_pEdge(pEdge),
-							m_pPrev_nodeAdj(0),
-							m_pNext_nodeAdj(0),
-							m_pPrev_edgeAdj(0),
-							m_pNext_edgeAdj(0)
-		{};
+		AdjElement(NodeElement* pNode, EdgeElement* pEdge) :
+			m_pNode(pNode),
+			m_pEdge(pEdge),
+			m_pPrev_nodeAdj(0),
+			m_pNext_nodeAdj(0),
+			m_pPrev_edgeAdj(0),
+			m_pNext_edgeAdj(0)
+		{ }
 
 		NodeElement* m_pNode;
 		EdgeElement* m_pEdge;
@@ -150,45 +156,6 @@ protected:
 	EdgeElement* m_pLastEdge;
 	int m_numEdges;
 
-public:
-	typedef EList<
-				HyperGraph, NodeElement,
-				&HyperGraph::m_numNodes,
-				&HyperGraph::m_pFirstNode,
-				&HyperGraph::m_pLastNode,
-				&NodeElement::m_pPrev,
-				&NodeElement::m_pNext
-			> NodeList;
-
-	//! typedef for the embedded list of edges
-	typedef EList<
-				HyperGraph, EdgeElement,
-				&HyperGraph::m_numEdges,
-				&HyperGraph::m_pFirstEdge,
-				&HyperGraph::m_pLastEdge,
-				&EdgeElement::m_pPrev,
-				&EdgeElement::m_pNext
-			> EdgeList;
-
-	//! typedef for the embedded list of AdjElement at a node
-	typedef EList<
-				NodeElement, AdjElement,
-				&NodeElement::m_numAdj,
-				&NodeElement::m_pFirstAdj,
-				&NodeElement::m_pLastAdj,
-				&AdjElement::m_pPrev_nodeAdj,
-				&AdjElement::m_pNext_nodeAdj
-			> NodeAdjList;
-
-	//! typedef for the embedded list of AdjElement at an edge
-	typedef EList<
-				EdgeElement, AdjElement,
-				&EdgeElement::m_numAdj,
-				&EdgeElement::m_pFirstAdj,
-				&EdgeElement::m_pLastAdj,
-				&AdjElement::m_pPrev_edgeAdj,
-				&AdjElement::m_pNext_edgeAdj
-			> EdgeAdjList;
 protected:
 	EFreeListIndexPool<
 		NodeElement,
@@ -208,6 +175,7 @@ protected:
 		&AdjElement::m_index
 	> m_adjAllocator;
 
+
 	template<typename E>
 	class GraphArrayBase
 	{
@@ -216,10 +184,10 @@ protected:
 		//! Interface method for resizing a graph array.
 		virtual void setSize(int numElements) = 0;
 
-		//! the embedded next and  prev pointer.
-		GraphArrayBase<E>* m_prev;
-		GraphArrayBase<E>* m_next;
+		GraphArrayBase<E>* m_prev; //!> the embedded prev pointer.
+		GraphArrayBase<E>* m_next; //!> the embedded next pointer.
 	};
+
 
 	template<typename T, typename E>
 	class GraphArray : protected Array<T>, GraphArrayBase<E>
@@ -227,7 +195,7 @@ protected:
 		friend class HyperGraph;
 	public:
 		// Creates an empty graph array not attached to a graph.
-		GraphArray() : m_pGraph(0), Array<T>() {};
+		GraphArray() : m_pGraph(0), Array<T>() { }
 
 		//! Creates a graph array attached to \a pGraph.
 		GraphArray(HyperGraph* pGraph) : m_pGraph(pGraph), m_initialValue(), Array<T>()
@@ -236,14 +204,17 @@ protected:
 				m_pGraph->registerArray(this);
 		}
 
-		//! Creates a graph array attached to \a pGraph where each entry
+		//! Creates a graph array attached to \a pGraph with default value \a initialValue.
 		GraphArray(HyperGraph* pGraph, const T& initialValue) : m_pGraph(pGraph), m_initialValue(initialValue), Array<T>()
 		{
 			if (m_pGraph)
 				m_pGraph->registerArray(this);
 		}
 
-		//! If the array is attached to a graph, the array will be detached before it is deallocated.
+		//! Destructor.
+		/**
+		 * If the array is attached to a graph, the array will be detached before it is deallocated.
+		 */
 		virtual ~GraphArray()
 		{
 			if (m_pGraph)
@@ -251,19 +222,19 @@ protected:
 		}
 
 		//! Returns a const reference to the entry for an indexed element.
-		inline const T& operator[](const E* e) const
+		const T& operator[](const E* e) const
 		{
 			return Array<T>::operator [](e->index());
 		}
 
 		//! Returns a reference to the entry for an indexed element.
-		inline T& operator[](const E* e)
+		T& operator[](const E* e)
 		{
 			return Array<T>::operator [](e->index());
 		}
 
 		//! Returns the graph the array is attached to.
-		inline HyperGraph* graph() const
+		HyperGraph* graph() const
 		{
 			return m_pGraph;
 		}
@@ -285,41 +256,32 @@ protected:
 
 	}; // end of class GraphArray
 
-	//! The \a ArrayController manages the GraphArrays of an Element.
+
+	template<typename ElementType> class ArrayControllerTypes;
+
+	//! Array controllers manage the graph arrays of an element.
 	template<typename ElementType>
 	class ArrayController
 	{
+		friend class ArrayControllerTypes<ElementType>;
 	public:
-		//! Creates a new ArrayController where the actual table size is zero
+		//! Creates a new array controller where the actual table size is zero.
 		ArrayController() : m_tableSize(0)
 		{
-			ArrayListType::init(this);
+			ArrayControllerTypes<ElementType>::ArrayListType::init(this);
 		}
 
-		//! Frees the ArrayController and unregisters all remaining arrays
-		~ArrayController()
-		{
-			// Unregister all arrays, but do not delete them.
-			while (!ArrayListType::empty(this))
-				unregisterArray(ArrayListType::front(this));
-		}
+		//! Frees the array controller and unregisters all remaining arrays.
+		~ArrayController();
 
-		//! Registers a new GraphArray and sets the size to \a m_tableSize.
-		inline void registerArray(GraphArrayBase<ElementType>* pArray)
-		{
-			ArrayListType::pushBack(this, pArray);
-			pArray->setSize(m_tableSize);
-		}
+		//! Registers a new graph array and sets the size to \a m_tableSize.
+		void registerArray(GraphArrayBase<ElementType>* pArray);
 
-		//! Unregisters an array by removing it from the list
-		inline void unregisterArray(GraphArrayBase<ElementType>* pArray)
-		{
-			ArrayListType::remove(this, pArray);
-			pArray->setSize(0);
-		}
+		//! Unregisters a graph array by removing it from the list.
+		void unregisterArray(GraphArrayBase<ElementType>* pArray);
 
-		//! function to calculate the new tableSize. returns min(2^k | 2^k >= minSize)
-		inline int newTableSize(int minSize)
+		//! function to calculate the new tableSize; returns min(2^k | 2^k >= minSize)
+		int newTableSize(int minSize)
 		{
 			int res = 1;
 			while (res < minSize)
@@ -328,23 +290,7 @@ protected:
 		}
 
 		//! called by the hyper graph when the amount of used entries has changed.
-		inline void numUsedIndicesChanged(int numUsedIndices)
-		{
-			// check if we have to grow
-			if (numUsedIndices > m_tableSize)
-			{
-				// we have to resize
-				// calculate new table size
-				m_tableSize = newTableSize(numUsedIndices);
-				// iterate over all arrays
-				for (typename ArrayListType::iterator it = ArrayListType::begin(this);
-					 it.valid(); it++)
-				{
-					// and resize them
-					(*it)->setSize(m_tableSize);
-				};
-			};
-		}
+		void numUsedIndicesChanged(int numUsedIndices);
 
 	protected:
 		//! First array in the chain of attached arrays
@@ -358,31 +304,38 @@ protected:
 
 		//! Current table size which corresponds to the length of all attached arrays.
 		int m_tableSize;
-
-		//! Typedef for the embedded list of arrays
-		typedef EList< ArrayController<ElementType>, GraphArrayBase<ElementType>,
-					   &ArrayController<ElementType>::m_numArrays,
-					   &ArrayController<ElementType>::m_first,
-					   &ArrayController<ElementType>::m_last,
-					   &GraphArrayBase<ElementType>::m_prev,
-					   &GraphArrayBase<ElementType>::m_next> ArrayListType;
 	};
+
+
+	template<typename ElementType>
+	class ArrayControllerTypes
+	{
+	public:
+		//! Type definition for the embedded list of arrays.
+		typedef EList< ArrayController<ElementType>, GraphArrayBase<ElementType>,
+			&ArrayController<ElementType>::m_numArrays,
+			&ArrayController<ElementType>::m_first,
+			&ArrayController<ElementType>::m_last,
+			&GraphArrayBase<ElementType>::m_prev,
+			&GraphArrayBase<ElementType>::m_next> ArrayListType;
+	};
+
 
 	ArrayController<NodeElement>  m_nodeArrayController; 	//!< controller for node arrays
 	ArrayController<EdgeElement>  m_edgeArrayController; 	//!< controller for edge arrays
-	ArrayController<AdjElement>  m_adjArrayController; 		//!< controller for adj arrays
+	ArrayController<AdjElement>   m_adjArrayController; 	//!< controller for adj arrays
 
 	void registerArray(GraphArrayBase<NodeElement>* pArray) { m_nodeArrayController.registerArray(pArray); }
-	void registerArray(GraphArrayBase<EdgeElement>* pArray) { m_edgeArrayController.registerArray(pArray); };
-	void registerArray(GraphArrayBase<AdjElement>* pArray) { m_adjArrayController.registerArray(pArray); };
+	void registerArray(GraphArrayBase<EdgeElement>* pArray) { m_edgeArrayController.registerArray(pArray); }
+	void registerArray(GraphArrayBase<AdjElement>* pArray) { m_adjArrayController.registerArray(pArray); }
 
 
 	void unregisterArray(GraphArrayBase<NodeElement>* pArray) { m_nodeArrayController.unregisterArray(pArray); }
-	void unregisterArray(GraphArrayBase<EdgeElement>* pArray) { m_edgeArrayController.unregisterArray(pArray); };
-	void unregisterArray(GraphArrayBase<AdjElement>* pArray) { m_adjArrayController.unregisterArray(pArray); };
+	void unregisterArray(GraphArrayBase<EdgeElement>* pArray) { m_edgeArrayController.unregisterArray(pArray); }
+	void unregisterArray(GraphArrayBase<AdjElement>* pArray) { m_adjArrayController.unregisterArray(pArray); }
 
 	//! Allocates a new NodeElement using the EFreeListIndexPool and lets the controller check if arrays have to be resized.
-	inline NodeElement* allocateNodeElement()
+	NodeElement* allocateNodeElement()
 	{
 		NodeElement* pResult = m_nodeAllocator.alloc();
 		m_nodeArrayController.numUsedIndicesChanged(m_nodeAllocator.numUsedIndices());
@@ -390,7 +343,7 @@ protected:
 	}
 
 	//! Allocates a new EdgeElement using the EFreeListIndexPool and lets the controller check if arrays have to be resized.
-	inline EdgeElement* allocateEdgeElement()
+	EdgeElement* allocateEdgeElement()
 	{
 		EdgeElement* pResult = m_edgeAllocator.alloc();
 		m_edgeArrayController.numUsedIndicesChanged(m_edgeAllocator.numUsedIndices());
@@ -398,7 +351,7 @@ protected:
 	}
 
 	//! Allocates a new AdjElement using the EFreeListIndexPool and lets the controller check if arrays have to be resized.
-	inline AdjElement* allocateAdjElement()
+	AdjElement* allocateAdjElement()
 	{
 		AdjElement* pResult = m_adjAllocator.alloc();
 		m_adjArrayController.numUsedIndicesChanged(m_adjAllocator.numUsedIndices());
@@ -406,26 +359,26 @@ protected:
 	}
 
 	//! Frees a used NodeElement
-	inline void freeNodeElement(NodeElement* pNode)
+	void freeNodeElement(NodeElement* pNode)
 	{
 		m_nodeAllocator.free(pNode);
 	}
 
 	//! Frees a used EdgeElement
-	inline void freeEdgeElement(EdgeElement* pEdge)
+	void freeEdgeElement(EdgeElement* pEdge)
 	{
 		m_edgeAllocator.free(pEdge);
 	}
 
 	//! Frees a used AdjElement
-	inline void freeAdjElement(AdjElement* pAdj)
+	void freeAdjElement(AdjElement* pAdj)
 	{
 		m_adjAllocator.free(pAdj);
 	}
 
 public:
 
-	//! NodeArray implementation.
+	//! Dynamic arrays indexed with nodes.
 	template<typename T>
 	class NodeArray : public GraphArray<T, NodeElement>
 	{
@@ -434,7 +387,7 @@ public:
 		NodeArray(HyperGraph* pGraph, const T& initValue) : GraphArray<T, NodeElement>(pGraph, initValue) {}
 	};
 
-	//! EdgeArray implementation.
+	//! Dynamic arrays indexed with hyper edges.
 	template<typename T>
 	class EdgeArray : public GraphArray<T, EdgeElement>
 	{
@@ -443,7 +396,7 @@ public:
 		EdgeArray(HyperGraph* pGraph, const T& initValue) : GraphArray<T, EdgeElement>(pGraph, initValue) {}
 	};
 
-	//! AdjArray implementation.
+	//! Dynamic arrays indexed with adjacency entries.
 	template<typename T>
 	class AdjArray : public GraphArray<T, AdjElement>
 	{
@@ -453,33 +406,17 @@ public:
 	};
 
 
-	//! Constructor for an empty hyper graph.
-	HyperGraph()
-	{
-		NodeList::init( this );
-		EdgeList::init( this );
-	}
+	//! Creates an empty hyper graph.
+	HyperGraph();
 
 	//! Creates a new node.
-	inline NodeElement* newNode()
-	{
-		NodeElement* pNode = allocateNodeElement();
-		NodeList::pushBack( this, pNode );
-		NodeAdjList::init( pNode );
-		return pNode;
-	}
+	NodeElement* newNode();
 
 	//! Creates a new edge which is not incident to any nodes.
-	inline EdgeElement* newEdge()
-	{
-		EdgeElement* pEdge = allocateEdgeElement();
-		EdgeList::pushBack( this, pEdge );
-		EdgeAdjList::init( pEdge );
-		return pEdge;
-	}
+	EdgeElement* newEdge();
 
 	//! Creates a new edge which is incident to the two nodes \a pNode1, \a pNode2.
-	inline EdgeElement* newEdge(NodeElement* pNode1, NodeElement* pNode2)
+	EdgeElement* newEdge(NodeElement* pNode1, NodeElement* pNode2)
 	{
 		EdgeElement* pEdge = newEdge();
 		newAdjElement( pNode1, pEdge );
@@ -489,40 +426,26 @@ public:
 
 	//! Creates a new \a AdjElement which makes \a pNode and \a pEdge incident.
 	/**
-	 * Note: This function does not check if \a pNode and \a pEdge are already incident.
-	 * The HyperGraph can deal with duplicate AdjElements. However, for reasons of clarity
-	 * it is not a good idea to make use of it.
+	 * \note This function does not check if \a pNode and \a pEdge are already incident.
+	 *       Hypergraphs can deal with duplicate AdjElements. However, for reasons of clarity
+	 *       it is not a good idea to make use of it.
 	 * @param pNode is the node.
 	 * @param pEdge is the hyper edge.
 	 */
-	AdjElement* newAdjElement(NodeElement* pNode, EdgeElement* pEdge)
-	{
-		AdjElement* pAdj = allocateAdjElement();
-		pAdj->m_pNode = pNode;
-		pAdj->m_pEdge = pEdge;
+	AdjElement* newAdjElement(NodeElement* pNode, EdgeElement* pEdge);
 
-		NodeAdjList::pushBack( pNode, pAdj );
-		EdgeAdjList::pushBack( pEdge, pAdj );
-		return pAdj;
-	}
+	//! Removes one endpoint \a pAdj from a hyper edge.
+	void delAdjElement(AdjElement* pAdj);
 
-	//! Deletes \a pAdj
-	void delAdjElement(AdjElement* pAdj)
-	{
-		EdgeAdjList::remove( pAdj->theEdge(), pAdj );
-		NodeAdjList::remove( pAdj->theNode(), pAdj );
-		freeAdjElement( pAdj );
-	}
-
-	//! Deletes \a pAdj
+	//! Removes the endpoint \a pNode from the hyper edge \a pEdge.
 	void delAdjElement(NodeElement* pNode, EdgeElement* pEdge)
 	{
 		AdjElement* pAdj = findAdjElement(pNode, pEdge);
 		if (pAdj) delAdjElement(pAdj);
 	}
 
-	//! Makes \a pNode and \a pEdge incident and the corresponding \a AdjElement is returned.
-	inline AdjElement* addNode(NodeElement* pNode, EdgeElement* pEdge, bool checkIfAlreadyExists = false)
+	//! Makes \a pNode and \a pEdge incident; returns the corresponding \a AdjElement.
+	AdjElement* addNode(NodeElement* pNode, EdgeElement* pEdge, bool checkIfAlreadyExists = false)
 	{
 		if (!checkIfAlreadyExists)
 			return newAdjElement( pNode, pEdge );
@@ -535,12 +458,12 @@ public:
 
 	//! If \a pNode and \a pEdge are incident, the corresponding AdjElement is removed.
 	/**
-	 * Note: The function requires time O(min(degree(pNode), cardinality(pEdge))).
+	 * \note The function requires time O(min(degree(pNode), cardinality(pEdge))).
 	 * @param pNode is the node.
 	 * @param pEdge is the hyper edge.
 	 * @param removeDuplicates is a flag, if it is set the function will remove any existing duplicates too.
 	*/
-	inline void removeNode(NodeElement* pNode, EdgeElement* pEdge, bool removeDuplicates = false)
+	void removeNode(NodeElement* pNode, EdgeElement* pEdge, bool removeDuplicates = false)
 	{
 		AdjElement* pAdj = findAdjElement(pNode, pEdge);
 		if (!removeDuplicates && pAdj)
@@ -552,95 +475,45 @@ public:
 			{
 				delAdjElement(pAdj);
 				pAdj = findAdjElement(pNode, pEdge);
-			};
+			}
 		}
 	}
 
 	//! Returns the \a AdjElement for pNode and pEdge.
 	/**
-	 *  In case \a pNode and \a pEdge are not incident the function returns 0.
-	 *  Note: The function requires time O(min(degree(pNode), cardinality(pEdge))).
+	 * In case \a pNode and \a pEdge are not incident the function returns 0.
+	 * \note The function requires time O(min(degree(pNode), cardinality(pEdge))).
 	 * @param pNode is the node.
 	 * @param pEdge is the hyper edge.
 	 */
-	inline AdjElement* findAdjElement(NodeElement* pNode, EdgeElement* pEdge) const
-	{
-		if (EdgeAdjList::size(pEdge) < NodeAdjList::size(pNode))
-		{
-			for (EdgeAdjList::iterator it = EdgeAdjList::begin(pEdge);
-					it.valid(); it++)
-			{
-				if ((*it)->theNode() == pNode) return (*it);
-			};
-		} else
-		{
-			for (NodeAdjList::iterator it = NodeAdjList::begin(pNode);
-					it.valid(); it++)
-			{
-				if ((*it)->theEdge() == pEdge) return (*it);
-			};
-		}
-		return 0;
-	}
+	AdjElement* findAdjElement(NodeElement* pNode, EdgeElement* pEdge) const;
 
-	//! Deletes an edge.
-	void delEdge(EdgeElement* pEdge)
-	{
-		for (EdgeAdjList::iterator it = EdgeAdjList::begin(pEdge); it.valid();)
-		{
-			AdjElement* pAdj = *it;
-			NodeAdjList::remove( pAdj->theNode(), pAdj );
-			it = EdgeAdjList::remove( pEdge, it );
-			freeAdjElement( pAdj );
-		};
-		EdgeList::remove( this, pEdge );
-		freeEdgeElement( pEdge );
-	}
+	//! Deletes hyper edge \a pEdge.
+	void delEdge(EdgeElement* pEdge);
 
-	//! Deletes a node.
-	void delNode(NodeElement* pNode)
-	{
-		for (NodeAdjList::iterator it = NodeAdjList::begin(pNode); it.valid();)
-		{
-			AdjElement* pAdj = *it;
-			EdgeAdjList::remove( pAdj->theEdge(), pAdj );
-			it = NodeAdjList::remove( pNode, it );
-			freeAdjElement( pAdj );
-		};
-		NodeList::remove( this, pNode );
-		freeNodeElement( pNode );
-	}
+	//! Deletes node \a pNode.
+	void delNode(NodeElement* pNode);
 
-	inline int numberOfNodes() const {  return NodeList::size(this);  };
-	inline int numberOfEdges() const {  return EdgeList::size(this);  };
+	int numberOfNodes() const;
+	int numberOfEdges() const;
 
 	//! Clears the graph.
-	void clear()
-	{
-		while (numberOfNodes())
-		{
-			delNode( NodeList::front(this) );
-		};
+	void clear();
 
-		while (numberOfEdges())
-		{
-			delEdge( EdgeList::front(this) );
-		};
-	};
-
-	void toCliqueGraph(Graph* pG,
-					   ogdf::NodeArray<NodeElement*>* pNodeMap = 0,
-					   ogdf::EdgeArray<EdgeElement*>* pEdgeMap = 0)
+	/* void toCliqueGraph(
+		Graph* pG,
+		NodeArray<HyperGraph::NodeElement*>* pNodeMap = 0,
+		EdgeArray<HyperGraph::EdgeElement*>* pEdgeMap = 0)
 	{
 		HyperGraph::NodeArray<ogdf::node> hgNode_to_gNode(this);
 		for (NodeList::iterator it = HyperGraph::NodeList::begin(this); it.valid(); it++)
 		{
-			NodeElement* hgNode = *it;
+			HyperGraph::NodeElement* hgNode = *it;
 			ogdf::node gNode  = pG->newNode();
 			hgNode_to_gNode[ hgNode ] = gNode;
 			if (pNodeMap)
 				(*pNodeMap)[gNode] = hgNode;
-		};
+		}
 
 		for (HyperGraph::EdgeList::iterator it = HyperGraph::EdgeList::begin(this); it.valid(); it++)
 		{
@@ -651,58 +524,268 @@ public:
 				{
 					NodeElement* hgNode = (*adj_it)->theNode();
 					NodeElement* hgNode2 = (*adj_it2)->theNode();
-					ogdf::node gNode  = hgNode_to_gNode[ hgNode ];
-					ogdf::node gNode2  = hgNode_to_gNode[ hgNode2 ];
+					node gNode  = hgNode_to_gNode[ hgNode ];
+					node gNode2  = hgNode_to_gNode[ hgNode2 ];
 
-					ogdf::edge gEdge = pG->newEdge(gNode, gNode2);
+					edge gEdge = pG->newEdge(gNode, gNode2);
 					if (pEdgeMap)
 						(*pEdgeMap)[gEdge] = hgEdge;
-				};
-			};
-		};
-	};
+				}
+			}
+		}
+	}
 
-	void toStarGraph(Graph* pG,
-					 ogdf::NodeArray<NodeElement*>* pNodeMap = 0,
-					 ogdf::EdgeArray<EdgeElement*>* pEdgeMap = 0)
+	void toStarGraph(
+		Graph* pG,
+		NodeArray<NodeElement*>* pNodeMap = 0,
+		EdgeArray<EdgeElement*>* pEdgeMap = 0)
 	{
 		HyperGraph::NodeArray<ogdf::node> hgNode_to_gNode(this);
 		for (NodeList::iterator it = HyperGraph::NodeList::begin(this); it.valid(); it++)
 		{
 			NodeElement* hgNode = *it;
-			ogdf::node gNode  = pG->newNode();
+			node gNode  = pG->newNode();
 			hgNode_to_gNode[ hgNode ] = gNode;
 			if (pNodeMap)
 				(*pNodeMap)[gNode] = hgNode;
-		};
+		}
 
 		for (HyperGraph::EdgeList::iterator it = HyperGraph::EdgeList::begin(this); it.valid(); it++)
 		{
 			EdgeElement* hgEdge = *it;
-			ogdf::node gNodeDummy  = pG->newNode();
+			node gNodeDummy  = pG->newNode();
 			if (pNodeMap)
 				(*pNodeMap)[gNodeDummy] = 0;
 
 			for (HyperGraph::EdgeAdjList::iterator adj_it = HyperGraph::EdgeAdjList::begin(hgEdge); adj_it.valid(); adj_it++)
 			{
 				NodeElement* hgNode = (*adj_it)->theNode();
-				ogdf::node gNode  = hgNode_to_gNode[ hgNode ];
-				ogdf::edge gEdge = pG->newEdge(gNodeDummy, gNode);
+				node gNode  = hgNode_to_gNode[ hgNode ];
+				edge gEdge = pG->newEdge(gNodeDummy, gNode);
 				if (pEdgeMap)
 					(*pEdgeMap)[gEdge] = hgEdge;
-			};
-		};
-	};
+			}
+		}
+	} */
 }; // end of class HyperGraph
+
+
+//! Type declarations for HyperGraph.
+class HyperGraphTypes
+{
+public:
+	//! Type definition for the embedded list of nodes.
+	typedef EList<
+				HyperGraph, HyperGraph::NodeElement,
+				&HyperGraph::m_numNodes,
+				&HyperGraph::m_pFirstNode,
+				&HyperGraph::m_pLastNode,
+				&HyperGraph::NodeElement::m_pPrev,
+				&HyperGraph::NodeElement::m_pNext
+			> NodeList;
+
+	//! Type definition for the embedded list of edges.
+	typedef EList<
+				HyperGraph, HyperGraph::EdgeElement,
+				&HyperGraph::m_numEdges,
+				&HyperGraph::m_pFirstEdge,
+				&HyperGraph::m_pLastEdge,
+				&HyperGraph::EdgeElement::m_pPrev,
+				&HyperGraph::EdgeElement::m_pNext
+			> EdgeList;
+
+	//! Type definition for the embedded list of AdjElement at a node.
+	typedef EList<
+				HyperGraph::NodeElement, HyperGraph::AdjElement,
+				&HyperGraph::NodeElement::m_numAdj,
+				&HyperGraph::NodeElement::m_pFirstAdj,
+				&HyperGraph::NodeElement::m_pLastAdj,
+				&HyperGraph::AdjElement::m_pPrev_nodeAdj,
+				&HyperGraph::AdjElement::m_pNext_nodeAdj
+			> NodeAdjList;
+
+	//! Type definition for the embedded list of AdjElement at an edge.
+	typedef EList<
+				HyperGraph::EdgeElement, HyperGraph::AdjElement,
+				&HyperGraph::EdgeElement::m_numAdj,
+				&HyperGraph::EdgeElement::m_pFirstAdj,
+				&HyperGraph::EdgeElement::m_pLastAdj,
+				&HyperGraph::AdjElement::m_pPrev_edgeAdj,
+				&HyperGraph::AdjElement::m_pNext_edgeAdj
+			> EdgeAdjList;
+};
+
+
+template<typename ElementType>
+HyperGraph::ArrayController<ElementType>::~ArrayController()
+{
+	// Unregisters all arrays, but does not delete them.
+	while (!ArrayControllerTypes<ElementType>::ArrayListType::empty(this))
+		unregisterArray(ArrayControllerTypes<ElementType>::ArrayListType::front(this));
+}
+
+
+// Registers a new graph array and sets the size to \a m_tableSize.
+template<typename ElementType>
+inline void HyperGraph::ArrayController<ElementType>::registerArray(GraphArrayBase<ElementType>* pArray)
+{
+	ArrayControllerTypes<ElementType>::ArrayListType::pushBack(this, pArray);
+	pArray->setSize(m_tableSize);
+}
+
+
+// Unregisters an array by removing it from the list.
+template<typename ElementType>
+inline void HyperGraph::ArrayController<ElementType>::unregisterArray(GraphArrayBase<ElementType>* pArray)
+{
+	ArrayControllerTypes<ElementType>::ArrayListType::remove(this, pArray);
+	pArray->setSize(0);
+}
+
+
+template<typename ElementType>
+inline void HyperGraph::ArrayController<ElementType>::numUsedIndicesChanged(int numUsedIndices)
+{
+	// check if we have to grow
+	if (numUsedIndices > m_tableSize)
+	{
+		// we have to resize
+		// calculate new table size
+		m_tableSize = newTableSize(numUsedIndices);
+		// iterate over all arrays
+		for (typename ArrayControllerTypes<ElementType>::ArrayListType::iterator it = ArrayControllerTypes<ElementType>::ArrayListType::begin(this);
+				it.valid(); it++)
+		{
+			// and resize them
+			(*it)->setSize(m_tableSize);
+		}
+	}
+}
+
+
+inline HyperGraph::HyperGraph()
+{
+	HyperGraphTypes::NodeList::init( this );
+	HyperGraphTypes::EdgeList::init( this );
+}
+
+
+inline HyperGraph::NodeElement* HyperGraph::newNode()
+{
+	NodeElement* pNode = allocateNodeElement();
+	HyperGraphTypes::NodeList::pushBack( this, pNode );
+	HyperGraphTypes::NodeAdjList::init( pNode );
+	return pNode;
+}
+
+
+inline HyperGraph::EdgeElement* HyperGraph::newEdge()
+{
+	EdgeElement* pEdge = allocateEdgeElement();
+	HyperGraphTypes::EdgeList::pushBack( this, pEdge );
+	HyperGraphTypes::EdgeAdjList::init( pEdge );
+	return pEdge;
+}
+
+
+inline HyperGraph::AdjElement* HyperGraph::newAdjElement(HyperGraph::NodeElement* pNode, HyperGraph::EdgeElement* pEdge)
+{
+	AdjElement* pAdj = allocateAdjElement();
+	pAdj->m_pNode = pNode;
+	pAdj->m_pEdge = pEdge;
+
+	HyperGraphTypes::NodeAdjList::pushBack( pNode, pAdj );
+	HyperGraphTypes::EdgeAdjList::pushBack( pEdge, pAdj );
+	return pAdj;
+}
+
+
+inline void HyperGraph::delAdjElement(HyperGraph::AdjElement* pAdj)
+{
+	HyperGraphTypes::EdgeAdjList::remove( pAdj->theEdge(), pAdj );
+	HyperGraphTypes::NodeAdjList::remove( pAdj->theNode(), pAdj );
+	freeAdjElement( pAdj );
+}
+
+
+inline HyperGraph::AdjElement* HyperGraph::findAdjElement(HyperGraph::NodeElement* pNode, HyperGraph::EdgeElement* pEdge) const
+{
+	if (HyperGraphTypes::EdgeAdjList::size(pEdge) < HyperGraphTypes::NodeAdjList::size(pNode))
+	{
+		for (HyperGraphTypes::EdgeAdjList::iterator it = HyperGraphTypes::EdgeAdjList::begin(pEdge);
+				it.valid(); it++)
+		{
+			if ((*it)->theNode() == pNode) return (*it);
+		}
+	} else
+	{
+		for (HyperGraphTypes::NodeAdjList::iterator it = HyperGraphTypes::NodeAdjList::begin(pNode);
+				it.valid(); it++)
+		{
+			if ((*it)->theEdge() == pEdge) return (*it);
+		}
+	}
+	return 0;
+}
+
+
+inline void HyperGraph::delEdge(HyperGraph::EdgeElement* pEdge)
+{
+	for (HyperGraphTypes::EdgeAdjList::iterator it = HyperGraphTypes::EdgeAdjList::begin(pEdge); it.valid();)
+	{
+		AdjElement* pAdj = *it;
+		HyperGraphTypes::NodeAdjList::remove( pAdj->theNode(), pAdj );
+		it = HyperGraphTypes::EdgeAdjList::remove( pEdge, it );
+		freeAdjElement( pAdj );
+	}
+	HyperGraphTypes::EdgeList::remove( this, pEdge );
+	freeEdgeElement( pEdge );
+}
+
+
+void HyperGraph::delNode(HyperGraph::NodeElement* pNode)
+{
+	for (HyperGraphTypes::NodeAdjList::iterator it = HyperGraphTypes::NodeAdjList::begin(pNode); it.valid();)
+	{
+		AdjElement* pAdj = *it;
+		HyperGraphTypes::EdgeAdjList::remove( pAdj->theEdge(), pAdj );
+		it = HyperGraphTypes::NodeAdjList::remove( pNode, it );
+		freeAdjElement( pAdj );
+	}
+	HyperGraphTypes::NodeList::remove( this, pNode );
+	freeNodeElement( pNode );
+}
+
+
+inline int HyperGraph::numberOfNodes() const { return HyperGraphTypes::NodeList::size(this); }
+
+inline int HyperGraph::numberOfEdges() const { return HyperGraphTypes::EdgeList::size(this); }
+
+
+inline void HyperGraph::clear()
+{
+	while (numberOfNodes())
+	{
+		delNode( HyperGraphTypes::NodeList::front(this) );
+	}
+
+	while (numberOfEdges())
+	{
+		delEdge( HyperGraphTypes::EdgeList::front(this) );
+	}
+}
+
+
 
 template<typename ListType, typename ArrayType>
 static void writeToStream(std::ostream& outStream, ArrayType& array)
 {
-	for (typename ListType::iterator it = ListType::begin(array.graph());it.valid(); it++)
+	for (typename ListType::iterator it = ListType::begin(array.graph()); it.valid(); it++)
 	{
 		outStream << array[*it] << std::endl;
-	};
-};
+	}
+}
+
 
 template<typename ListType, typename ArrayType>
 static void readFromStream(std::istream& inStream, ArrayType& array)
@@ -710,64 +793,68 @@ static void readFromStream(std::istream& inStream, ArrayType& array)
 	for (typename ListType::iterator it = ListType::begin(array.graph());it.valid(); it++)
 	{
 		inStream >> array[(*it)];
-	};
-};
+	}
+}
 
 template<typename T>
 static std::ostream& operator<<(std::ostream& outStream, HyperGraph::NodeArray<T>& array)
 {
-	writeToStream<HyperGraph::NodeList, HyperGraph::NodeArray<T> >(outStream, array);
+	writeToStream<HyperGraphTypes::NodeList, HyperGraph::NodeArray<T> >(outStream, array);
 	return outStream;
-};
+}
 
 template<typename T>
 static std::ostream& operator<<(std::ostream& outStream, HyperGraph::EdgeArray<T>& array)
 {
-	writeToStream<HyperGraph::EdgeList, HyperGraph::EdgeArray<T> >(outStream, array);
+	writeToStream<HyperGraphTypes::EdgeList, HyperGraph::EdgeArray<T> >(outStream, array);
 	return outStream;
-};
+}
 
 template<typename T>
 static std::ostream& operator<<(std::ostream& outStream, HyperGraph::AdjArray<T>& array)
 {
-	for (HyperGraph::EdgeList::iterator it = HyperGraph::EdgeList::begin(array.graph());it.valid(); it++)
+	for (HyperGraphTypes::EdgeList::iterator it = HyperGraphTypes::EdgeList::begin(array.graph());it.valid(); it++)
 	{
 		HyperGraph::edge e = *it;
-		for (HyperGraph::EdgeAdjList::iterator adj_it = HyperGraph::EdgeAdjList::begin(e); adj_it.valid(); adj_it++)
+		for (HyperGraphTypes::EdgeAdjList::iterator adj_it = HyperGraphTypes::EdgeAdjList::begin(e); adj_it.valid(); adj_it++)
 		{
 			outStream << array[(*adj_it)] << std::endl;
-		};
-	};
+		}
+	}
 	return outStream;
-};
+}
+
 
 template<typename T>
 static std::istream& operator>>(std::istream& inStream, HyperGraph::NodeArray<T>& array)
 {
-	readFromStream<HyperGraph::NodeList, HyperGraph::NodeArray<T> >(inStream, array);
+	readFromStream<HyperGraphTypes::NodeList, HyperGraph::NodeArray<T> >(inStream, array);
 	return inStream;
-};
+}
+
 
 template<typename T>
 static std::istream& operator>>(std::istream& inStream, HyperGraph::EdgeArray<T>& array)
 {
-	readFromStream<HyperGraph::EdgeList, HyperGraph::EdgeArray<T> >(inStream, array);
+	readFromStream<HyperGraphTypes::EdgeList, HyperGraph::EdgeArray<T> >(inStream, array);
 	return inStream;
-};
+}
+
 
 template<typename T>
-static std::ostream& operator>>(std::istream& inStream, HyperGraph::AdjArray<T>& array)
+static std::istream& operator>>(std::istream& inStream, HyperGraph::AdjArray<T>& array)
 {
-	for (HyperGraph::EdgeList::iterator it = HyperGraph::EdgeList::begin(array.graph());it.valid(); it++)
+	for (HyperGraphTypes::EdgeList::iterator it = HyperGraphTypes::EdgeList::begin(array.graph());it.valid(); it++)
 	{
 		HyperGraph::edge e = *it;
-		for (HyperGraph::EdgeAdjList::iterator adj_it = HyperGraph::EdgeAdjList::begin(e); adj_it.valid(); adj_it++)
+		for (HyperGraphTypes::EdgeAdjList::iterator adj_it = HyperGraphTypes::EdgeAdjList::begin(e); adj_it.valid(); adj_it++)
 		{
 			inStream >> array[(*adj_it)];
-		};
-	};
+		}
+	}
 	return inStream;
-};
+}
+
 
 static std::ostream& operator<<(std::ostream& outStream, HyperGraph& graph)
 {
@@ -777,28 +864,28 @@ static std::ostream& operator<<(std::ostream& outStream, HyperGraph& graph)
 	HyperGraph::NodeArray<int> packed_index(&graph);
 
 	int i=0;
-	for (HyperGraph::NodeList::iterator it = HyperGraph::NodeList::begin(&graph);it.valid(); it++)
+	for (HyperGraphTypes::NodeList::iterator it = HyperGraphTypes::NodeList::begin(&graph);it.valid(); it++)
 	{
 		packed_index[*it] = i++;
-	};
+	}
 
-	for (HyperGraph::EdgeList::iterator it = HyperGraph::EdgeList::begin(&graph);it.valid(); it++)
+	for (HyperGraphTypes::EdgeList::iterator it = HyperGraphTypes::EdgeList::begin(&graph);it.valid(); it++)
 	{
 		HyperGraph::edge e = *it;
 		outStream << e->cardinality() << std::endl;
-		for (HyperGraph::EdgeAdjList::iterator adj_it = HyperGraph::EdgeAdjList::begin(e); adj_it.valid(); adj_it++)
+		for (HyperGraphTypes::EdgeAdjList::iterator adj_it = HyperGraphTypes::EdgeAdjList::begin(e); adj_it.valid(); adj_it++)
 		{
 			outStream << packed_index[(*adj_it)->theNode()] << std::endl;
-		};
-	};
+		}
+	}
 	return outStream;
-};
+}
+
 
 static std::istream& operator>>(std::istream& inStream, HyperGraph& graph)
 {
 	int numNodes;
 	int numEdges;
-	int numAdjElements;
 	inStream >> numNodes;
 	inStream >> numEdges;
 
@@ -816,10 +903,10 @@ static std::istream& operator>>(std::istream& inStream, HyperGraph& graph)
 			int packedNodeIndex;
 			inStream >> packedNodeIndex;
 			graph.addNode(pNodes[packedNodeIndex], e);
-		};
-	};
+		}
+	}
 	return inStream;
-};
+}
 
 } // end of namespace ogdf
 

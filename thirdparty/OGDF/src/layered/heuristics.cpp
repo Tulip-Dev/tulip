@@ -1,42 +1,43 @@
 /*
- * $Revision: 2307 $
- * 
+ * $Revision: 2552 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 11:47:29 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-05 16:45:20 +0200 (Do, 05. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of heuristics for two-layer crossing
  * minimization (BarycenterHeuristic, MedianHeuristic)
- * 
- * \author Carsten Gutwenger, Till Schäfer
- * 
+ *
+ * \author Carsten Gutwenger, Till Sch&auml;fer
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -53,7 +54,7 @@ namespace ogdf {
 
 //---------------------------------------------------------
 // BarycenterHeuristic
-// implements the barycenter heuristic for 2-layer 
+// implements the barycenter heuristic for 2-layer
 // crossing minimization
 //---------------------------------------------------------
 
@@ -64,7 +65,7 @@ void BarycenterHeuristic::call (Level &L)
 	for (int i = 0; i <= L.high(); ++i) {
 		node v = L[i];
 		long sumpos = 0L;
-    
+
 		const Array<node> &adjNodes = L.adjNodes(v);
 		for(int j = 0; j <= adjNodes.high(); ++j)
 			sumpos += H.pos(adjNodes[j]);
@@ -72,14 +73,14 @@ void BarycenterHeuristic::call (Level &L)
 		m_weight[v] = (adjNodes.high() < 0) ? 0.0 :
 			double(sumpos) / double(adjNodes.size());
 	}
-	
+
 	L.sort(m_weight);
 }
 
 
 //---------------------------------------------------------
 // MedianHeuristic
-// implements the median heuristic for 2-layer 
+// implements the median heuristic for 2-layer
 // crossing minimization
 //---------------------------------------------------------
 
@@ -89,7 +90,7 @@ void MedianHeuristic::call (Level &L)
 
 	for (int i = 0; i <= L.high(); ++i) {
 		node v = L[i];
-    
+
 		const Array<node> &adjNodes = L.adjNodes(v);
 		const int high = adjNodes.high();
 
@@ -106,7 +107,7 @@ void MedianHeuristic::call (Level &L)
 
 //---------------------------------------------------------
 // GreedySwitchHeuristic
-// implements the greedy switch heuristic for 2-layer 
+// implements the greedy switch heuristic for 2-layer
 // crossing minimization
 //---------------------------------------------------------
 
@@ -143,7 +144,7 @@ void GreedySwitchHeuristic::call (Level &L)
 
 //---------------------------------------------------------
 // GreedyInsertHeuristic
-// implements the greedy insert heuristic for 2-layer 
+// implements the greedy insert heuristic for 2-layer
 // crossing minimization
 //---------------------------------------------------------
 
@@ -164,13 +165,13 @@ void GreedyInsertHeuristic::call(Level &L)
 	m_crossingMatrix->init(L);
 	int index, i;
 
-	// initialisation & priorisation 
+	// initialisation & priorisation
 	for (i = 0; i < L.size(); i++) {
 		double prio = 0;
 		for (index = 0; index < L.size(); index++)
 			prio += (*m_crossingMatrix)(i,index);
 
-		// stable quicksort: no need for unique prio 
+		// stable quicksort: no need for unique prio
 		m_weight[L[i]] = prio;
 	}
 
@@ -180,7 +181,7 @@ void GreedyInsertHeuristic::call(Level &L)
 
 //---------------------------------------------------------
 // SiftingHeuristic
-// implements the sifting heuristic for 2-layer 
+// implements the sifting heuristic for 2-layer
 // crossing minimization
 //---------------------------------------------------------
 
@@ -207,14 +208,14 @@ void SiftingHeuristic::call(Level &L)
 		for (i = 0; i < n; i++) {
 			vertices.pushBack(L[i]);
 		}
-		
+
 		if (m_strategy == random) {
 			vertices.permute();
 		}
 
 	} else { // m_strategy == desc_degree
 		int max_deg = 0;
-		
+
 		for (i = 0; i < n; i++) {
 			int deg = L.adjNodes(L[i]).size();
 			if (deg > max_deg) max_deg = deg;

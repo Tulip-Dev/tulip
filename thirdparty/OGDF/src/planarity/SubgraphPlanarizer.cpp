@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements class SubgraphPlanarizer.
- * 
+ *
  * \author Markus Chimani
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -51,11 +52,11 @@ SubgraphPlanarizer::SubgraphPlanarizer()
 	FastPlanarSubgraph* s= new FastPlanarSubgraph();
 	s->runs(100);
 	m_subgraph.set(s);
-	
+
 	VariableEmbeddingInserter* i = new VariableEmbeddingInserter();
 	i->removeReinsert(VariableEmbeddingInserter::rrAll);
 	m_inserter.set(i);
-	
+
 	m_permutations = 1;
 	m_setTimeout = true;
 }
@@ -68,7 +69,7 @@ Module::ReturnType SubgraphPlanarizer::doCall(PlanRep &PG,
 	int& crossingNumber)
 {
 	OGDF_ASSERT(m_permutations >= 1);
-  
+
 	OGDF_ASSERT(!(useSubgraphs()) || useCost()); // ersetze durch exception handling
 
 	double startTime;
@@ -95,16 +96,16 @@ Module::ReturnType SubgraphPlanarizer::doCall(PlanRep &PG,
 	for(int i = 1; i <= m_permutations; ++i)
 	{
 		const int nG = PG.numberOfNodes();
-		
+
 		for(ListConstIterator<edge> it = deletedEdges.begin(); it.valid(); ++it)
 			PG.delCopy(PG.copy(*it));
 
 		deletedEdges.permute();
-	
+
 		if(m_setTimeout)
 			m_inserter.get().timeLimit(
 				(m_timeLimit >= 0) ? max(0.0,m_timeLimit - usedTime(startTime)) : -1);
-		
+
 		ReturnType ret;
 		if(useForbid()) {
 			if(useCost()) {
@@ -115,7 +116,7 @@ Module::ReturnType SubgraphPlanarizer::doCall(PlanRep &PG,
 			} else
 				ret = m_inserter.get().call(PG, forbid, deletedEdges);
 		} else {
-			if(useCost()) {	
+			if(useCost()) {
 				if(useSubgraphs())
 					ret = m_inserter.get().call(PG, cost, deletedEdges, subgraphs);
 				else
@@ -126,7 +127,7 @@ Module::ReturnType SubgraphPlanarizer::doCall(PlanRep &PG,
 
 		if(isSolution(ret) == false)
 			continue; // no solution found, that's bad...
-	
+
 		if(!useCost())
 			crossingNumber = PG.numberOfNodes() - nG;
 		else {
@@ -148,18 +149,18 @@ Module::ReturnType SubgraphPlanarizer::doCall(PlanRep &PG,
 				}
 			}
 		}
-		
+
 		if(i == 1 || crossingNumber < cs.weightedCrossingNumber()) {
 			foundSolution = true;
 			cs.init(PG, crossingNumber);
 		}
-		
+
 		if(localLogMode() == LM_STATISTIC) {
 			if(m_permutations <= 200 ||
 				i <= 10 || (i <= 30 && (i % 2) == 0) || (i > 30 && i <= 100 && (i % 5) == 0) || ((i % 10) == 0))
 				sout() << "\t" << cs.weightedCrossingNumber();
 		}
-		
+
 		PG.initCC(cc);
 
 		if(m_timeLimit >= 0 && usedTime(startTime) >= m_timeLimit) {
@@ -168,13 +169,12 @@ Module::ReturnType SubgraphPlanarizer::doCall(PlanRep &PG,
 			break;
 		}
 	}
-	
+
 	cs.restore(PG,cc); // restore best solution in PG
 	crossingNumber = cs.weightedCrossingNumber();
-	
-	PlanarModule pm;
-	OGDF_ASSERT(pm.planarityTest(PG) == true);
-	
+
+	OGDF_ASSERT(isPlanar(PG) == true);
+
 	return retFeasible;
 }
 
@@ -183,7 +183,7 @@ void SubgraphPlanarizer::CrossingStructure::init(PlanRep &PG, int weightedCrossi
 {
 	m_weightedCrossingNumber = weightedCrossingNumber;
 	m_crossings.init(PG.original());
-	
+
 	m_numCrossings = 0;
 	NodeArray<int> index(PG,-1);
 	node v;
@@ -202,15 +202,15 @@ void SubgraphPlanarizer::CrossingStructure::init(PlanRep &PG, int weightedCrossi
 				m_crossings[e].pushBack(index[(*it)->source()]);
 			}
 		}
-	}	
+	}
 }
 
 void SubgraphPlanarizer::CrossingStructure::restore(PlanRep &PG, int cc)
 {
 	//PG.initCC(cc);
-	
+
 	Array<node> id2Node(0,m_numCrossings-1,0);
-	
+
 	SListPure<edge> edges;
 	PG.allEdges(edges);
 
@@ -218,7 +218,7 @@ void SubgraphPlanarizer::CrossingStructure::restore(PlanRep &PG, int cc)
 	{
 		edge ePG = *itE;
 		edge e = PG.original(ePG);
-		
+
 		SListConstIterator<int> it;
 		for(it = m_crossings[e].begin(); it.valid(); ++it)
 		{
@@ -226,7 +226,7 @@ void SubgraphPlanarizer::CrossingStructure::restore(PlanRep &PG, int cc)
 			edge ePGOld = ePG;
 			ePG = PG.split(ePG);
 			node y = ePG->source();
-			
+
 			if(x == 0) {
 				id2Node[*it] = y;
 			} else {

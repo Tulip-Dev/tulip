@@ -1,9 +1,9 @@
 /*
- * $Revision: 2299 $
+ * $Revision: 2523 $
  *
  * last checkin:
  *   $Author: gutwenger $
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
 
 /** \file
@@ -14,7 +14,8 @@
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
  *
  * \par
@@ -118,9 +119,9 @@ private:
 
 	//! If set to a value > 0, all node sizes will be set to this value.
 	double m_fixedNodeSize;
-	
-	double m_coarseningRatio; //!< Ratio between sizes of previous (p) and current (c) level graphs: c/p 
-	
+
+	double m_coarseningRatio; //!< Ratio between sizes of previous (p) and current (c) level graphs: c/p
+
 	bool m_levelBound; //!< Determines if computation is stopped when number of levels is too high.
 	bool m_randomize; //!< Determines if initial random layout is computed.
 
@@ -189,10 +190,10 @@ public:
 		MLG.importAttributesSimple(GA);
 	};*/
 	virtual void call(MultilevelGraph &MLG);
-	
+
 	//! Returns the error code of last call.
 	erc errorCode() { return m_errorCode; }
-	
+
 	//! Returns the ratio c/p between sizes of previous (p) and current (c) level graphs.
 	double coarseningRatio() { return m_coarseningRatio; }
 

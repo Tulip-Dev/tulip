@@ -1,45 +1,45 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class MinCostFlowReinelt.
- * 
+ *
  * \author Gerhard Reinelt, various adaptions by Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
-#include <stdlib.h>
 #include <ogdf/graphalg/MinCostFlowReinelt.h>
 
 
@@ -111,10 +111,8 @@ void MinCostFlowReinelt::beacircle(
 	arctype **pre,
 	bool *from_ub)
 {
-
-/* the first arc with negative reduced costs is taken, but the search is
-   started at the successor of the successor of eplus in the last iteration
-*/
+	//the first arc with negative reduced costs is taken, but the search is
+	//started at the successor of the successor of eplus in the last iteration
 
 	bool found = false;   /* true<=>entering arc found */
 
@@ -250,7 +248,7 @@ void MinCostFlowReinelt::beadouble(
 {
 
 	/* search as in procedure beacircle, but in each list the search started is
-	at the last movement 
+	at the last movement
 	*/
 	bool found = false;   /* true<=>entering arc found */
 
@@ -462,7 +460,7 @@ int MinCostFlowReinelt::mcf(
 	/* Number of nodes/arcs */
 	nn = mcfNrNodes;
 	OGDF_ASSERT(nn >= 2);
-	mm = mcfNrArcs; 
+	mm = mcfNrArcs;
 	OGDF_ASSERT(mm >= 2);
 
 	// number of artificial basis arcs
@@ -527,22 +525,22 @@ int MinCostFlowReinelt::mcf(
 		supply[toh-1] += low;
 		lb_cost += ep->cost * low;
 		e = ep;
-	} 
+	}
 
 	e->next_arc = NULL;
 	// feasible = true <=> feasible solution exists
-	bool feasible = true;  
+	bool feasible = true;
 
 
 	/************************/
 	/* 3: Starting solution */
 	/************************/
 
-	start_n1 = NULL; 
+	start_n1 = NULL;
 	start_n2 = NULL;
 	start_b = NULL;
 
-	start(supply); 
+	start(supply);
 
 	int step = 1;   /* initialize iteration counter */
 
@@ -572,7 +570,7 @@ int MinCostFlowReinelt::mcf(
 		if (eplus == NULL) {
 			finished = true;
 		} else {
-			
+
 			nodetype *iplus = eplus->tail; // -> tail of basis entering arc
 			nodetype *jplus = eplus->head; // -> head of basis entering arc
 
@@ -588,7 +586,7 @@ int MinCostFlowReinelt::mcf(
 			bool to_ub;   // to_ub = true <=> leaving arc goes to upperbound
 			bool xchange; // xchange = true <=> exchange iplus and jplus
 			while (p1 != p2) {
-				if (p1->nr_of_nodes<=p2->nr_of_nodes) { 
+				if (p1->nr_of_nodes<=p2->nr_of_nodes) {
 					np = p1;
 					if (from_ub==np->orientation) {
 						if (delta > np->arc_id->upper_bound - np->flow) {
@@ -597,7 +595,7 @@ int MinCostFlowReinelt::mcf(
 							xchange = false;
 							to_ub = true;
 						}
-					} 
+					}
 					else if (delta>np->flow) {
 						iminus = np;
 						delta = np->flow;
@@ -606,7 +604,7 @@ int MinCostFlowReinelt::mcf(
 					}
 					p1 = np->father;
 					continue;
-				}  
+				}
 				np = p2;
 				if (from_ub != np->orientation) {
 					if (delta > np->arc_id->upper_bound - np->flow) {
@@ -615,7 +613,7 @@ int MinCostFlowReinelt::mcf(
 						xchange = true;
 						to_ub = true;
 					}
-				} 
+				}
 				else if (delta > np->flow) {
 					iminus = np;
 					delta = np->flow;
@@ -623,28 +621,28 @@ int MinCostFlowReinelt::mcf(
 					to_ub = false;
 				}
 				p2 = np->father;
-			} 
+			}
 			// paths from iplus and jplus to root meet at w
-			nodetype *w = p1; 
+			nodetype *w = p1;
 			nodetype *iw;
 			nodetype *jminus;  // -> head of basis leaving arc
 
 			arctype *eminus; /// ->basis leaving arc
 			if (iminus == NULL) {
-				to_ub = !from_ub; 
+				to_ub = !from_ub;
 				eminus = eplus;
 				iminus = iplus;
 				jminus = jplus;
-			} 
+			}
 			else {
-				if (xchange) { 
+				if (xchange) {
 					iw = jplus;
 					jplus = iplus;
 					iplus = iw;
-				} 
+				}
 				jminus = iminus->father;
 				eminus = iminus->arc_id;
-			} 
+			}
 
 			// artif_to_lb = true <=> artif. arc goes to lower bound
 			bool artif_to_lb = false;
@@ -661,7 +659,7 @@ int MinCostFlowReinelt::mcf(
 						} else
 							artificials++;
 					}
-				} 
+				}
 				else {
 					if (iplus == root || jplus == root)
 						artificials++;
@@ -685,7 +683,7 @@ int MinCostFlowReinelt::mcf(
 				while (np!=w) {
 					if (np->orientation==s_orientation) {
 						np->flow -= delta;
-					} 
+					}
 					else {
 						np->flow += delta;
 					}
@@ -696,7 +694,7 @@ int MinCostFlowReinelt::mcf(
 				while (np!=w) {
 					if (np->orientation==s_orientation) {
 						np->flow += delta;
-					} 
+					}
 					else {
 						np->flow -= delta;
 					}
@@ -711,8 +709,7 @@ int MinCostFlowReinelt::mcf(
 				else
 					sigma = jplus->dual - iplus->dual - eplus->cost;
 
-				/* 4.3.2.2 : find new succ. of jminus if current succ.
-				             is iminus */
+				// 4.3.2.2 : find new succ. of jminus if current succ. is iminus
 
 				nodetype *newsuc = jminus->successor; // -> new successor
 				if (newsuc==iminus) {
@@ -731,11 +728,11 @@ int MinCostFlowReinelt::mcf(
 				bool eplus_ori = s_orientation;
 
 				int s_flow;
-				if (from_ub) { 
+				if (from_ub) {
 					s_flow = eplus->upper_bound - delta;
 					delta = -delta;
-				} 
-				else 
+				}
+				else
 					s_flow = delta;
 
 				arctype *s_arc_id = eminus;
@@ -753,10 +750,10 @@ int MinCostFlowReinelt::mcf(
 					int non = nd->nr_of_nodes - oldnumber;
 					while (i<non) {
 						lastnode = lastnode->successor;
-						lastnode->dual += sigma; 
+						lastnode->dual += sigma;
 						i++;
 					}
-					nd->dual += sigma; 
+					nd->dual += sigma;
 					pred->successor = lastnode->successor;
 
 					if (nd!=iminus) lastnode->successor = f;
@@ -772,7 +769,7 @@ int MinCostFlowReinelt::mcf(
 					int w_flow;
 					if (w_orientation==eplus_ori) {
 						w_flow = nd->flow + delta;
-					} 
+					}
 					else {
 						w_flow = nd->flow - delta;
 					}
@@ -786,17 +783,16 @@ int MinCostFlowReinelt::mcf(
 					s_arc_id = w_arc_id;
 					s_flow = w_flow;
 
-					oldnumber = nd->nr_of_nodes; 
-					nd = f; 
+					oldnumber = nd->nr_of_nodes;
+					nd = f;
 					f = f->father;
 
-				} 
+				}
 
 				jminus->successor = newsuc;
-				jplus->successor = iplus;  
+				jplus->successor = iplus;
 
-				/* 4.3.2.5: assign new nr_of_nodes in path from iminus to
-				            iplus */
+				// 4.3.2.5: assign new nr_of_nodes in path from iminus to iplus
 
 				oldnumber = iminus->nr_of_nodes;
 				np = iminus;
@@ -807,23 +803,21 @@ int MinCostFlowReinelt::mcf(
 
 				iplus->nr_of_nodes = oldnumber;
 
-				/* 4.3.2.6: update flows and nr_of_nodes in path from jminus
-				            to w */
+				// 4.3.2.6: update flows and nr_of_nodes in path from jminus to w
 
 				np = jminus;
 				while (np!=w) {
 					np->nr_of_nodes -= oldnumber;
 					if (np->orientation!=eplus_ori) {
 						np->flow += delta;
-					} 
+					}
 					else {
 						np->flow -= delta;
 					}
 					np = np->father;
 				}
 
-				/* 4.3.2.7 update flows and nr_of_nodes in path from jplus
-				           to w */
+				// 4.3.2.7 update flows and nr_of_nodes in path from jplus to w
 
 				np = jplus;
 				while (np!=w) {
@@ -845,27 +839,27 @@ int MinCostFlowReinelt::mcf(
 
 			if (eminus==eplus) {
 				if (!from_ub) {
-					if (pre==NULL) 
+					if (pre==NULL)
 						start_n1 = eminus->next_arc;
-					else 
+					else
 						pre->next_arc = eminus->next_arc;
 
-					eminus->next_arc = start_n2; 
-					start_n2 = eminus; 
-				} else { 
-					if (pre==NULL) 
+					eminus->next_arc = start_n2;
+					start_n2 = eminus;
+				} else {
+					if (pre==NULL)
 						start_n2 = eminus->next_arc;
-					else  
+					else
 						pre->next_arc = eminus->next_arc;
-					eminus->next_arc = start_n1;  
+					eminus->next_arc = start_n1;
 					start_n1 = eminus;
-				} 
+				}
 			} else {
-				int wcost = eminus->cost;  
-				int wub = eminus->upper_bound; 
-				int wnum = eminus->arcnum; 
-				nodetype *w_head = eminus->head;  
-				nodetype *w_tail = eminus->tail;  
+				int wcost = eminus->cost;
+				int wub = eminus->upper_bound;
+				int wnum = eminus->arcnum;
+				nodetype *w_head = eminus->head;
+				nodetype *w_tail = eminus->tail;
 				eminus->tail = eplus->tail;
 				eminus->head = eplus->head;
 				eminus->upper_bound = eplus->upper_bound;
@@ -885,12 +879,12 @@ int MinCostFlowReinelt::mcf(
 					else start_n1 = ep->next_arc;
 				}
 
-				if (to_ub) {  
-					ep->next_arc = start_n2; 
+				if (to_ub) {
+					ep->next_arc = start_n2;
 					start_n2 = ep;
-				} else { 
-					if (!artif_to_lb) { 
-						ep->next_arc = start_n1;  
+				} else {
+					if (!artif_to_lb) {
+						ep->next_arc = start_n1;
 						start_n1 = ep;
 					}
 				}
@@ -905,7 +899,7 @@ int MinCostFlowReinelt::mcf(
 			if (artificials==1) {
 				artificials = 0;
 				nodetype *nd = root->successor;
-				arctype *e1 = nd->arc_id; 
+				arctype *e1 = nd->arc_id;
 
 				if (nd->flow>0) {
 					feasible = false;
@@ -935,11 +929,11 @@ int MinCostFlowReinelt::mcf(
 					np->dual -= sigma;
 					np->successor = root;
 
-				}  
+				}
 
-			}  
+			}
 
-		} 
+		}
 
 	} while (!finished);
 
@@ -954,7 +948,7 @@ int MinCostFlowReinelt::mcf(
 			if (np->father==root && np->flow>0) {
 				feasible = false;
 				np = root;
-			} 
+			}
 			else
 				np = np->successor;
 		} while (np != root);
@@ -980,12 +974,12 @@ int MinCostFlowReinelt::mcf(
 			if (np->flow!=0)
 				zfw += np->flow * np->arc_id->cost;
 			np = np->successor;
-		} 
+		}
 		arctype *ep = start_n2;
 		while (ep!=NULL) {
 			zfw += ep->cost * ep->upper_bound;
 			ep = ep->next_arc;
-		} 
+		}
 		*mcfObj = zfw + lb_cost;
 
 		/* Dual variables */
@@ -1010,13 +1004,13 @@ int MinCostFlowReinelt::mcf(
 				mcfFlow[np->arc_id->arcnum] += np->flow;
 
 			np = np->successor;
-		}  
+		}
 
 		ep = start_n2;
 		while (ep!=NULL) {
 			mcfFlow[ep->arcnum] += ep->upper_bound;
 			ep = ep->next_arc;
-		} 
+		}
 
 		retValue = 0;
 

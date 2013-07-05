@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief implementation of the class ExtractKuratowskis
- * 
+ *
  * \author Jens Schmidt
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -62,7 +63,7 @@ void DynamicBacktrack::init(
 	this->end = end;
 	this->less = less;
 	this->flag = flag;
-	
+
 	// init stack
 	stack.clear();
 	adjEntry adj;
@@ -83,13 +84,13 @@ void DynamicBacktrack::init(
 			}
 		}
 	}
-	
+
 	// init array parent
 	if (!stack.empty()) {
 		m_parent.fill(NULL);
 		m_parent[start] = stack.top();
 	}
-};
+}
 
 // returns the next possible path from start to endnode, if exists.
 // endnode returns the last traversed node.
@@ -97,11 +98,11 @@ bool DynamicBacktrack::addNextPath(SListPure<edge>& list, node& endnode) {
 	adjEntry adj;
 	node v = NULL;
 	node temp;
-	
+
 	while (!stack.empty()) {
 		// backtrack
 		adj = stack.pop();
-		
+
 		// return from a child node: delete parent
 		if (adj==NULL) {
 			// go to parent and delete visited flag
@@ -110,13 +111,14 @@ bool DynamicBacktrack::addNextPath(SListPure<edge>& list, node& endnode) {
 			m_parent[temp] = NULL;
 			continue;
 		}
-		
+
 		// get and mark node
 		v = adj->twinNode();
 		m_parent[v] = adj;
-		
+
 		// path found
-		if (less && m_dfi[v]<m_dfi[end] || !less && v==end) {
+		if ((less && m_dfi[v]<m_dfi[end]) || (!less && v==end))
+		{
 			// extract path
 			endnode = v;
 			list.clear();
@@ -125,7 +127,7 @@ bool DynamicBacktrack::addNextPath(SListPure<edge>& list, node& endnode) {
 				adj = m_parent[adj->theNode()];
 				list.pushBack(adj->theEdge());
 			}
-			
+
 			// in a following call of this method we'll have to reconstruct the actual
 			// state, therefore delete the last NULLs and visited flags on stack
 			while (!stack.empty() && stack.top()==NULL) {
@@ -134,11 +136,11 @@ bool DynamicBacktrack::addNextPath(SListPure<edge>& list, node& endnode) {
 				v = m_parent[temp]->theNode();
 				m_parent[temp] = NULL;
 			}
-			
+
 			// return bool, if path found
 			return true;
 		}
-		
+
 		// push all possible child-nodes
 		forall_adj(adj,v) {
 			// if edge is signed and target node was not visited before
@@ -165,11 +167,11 @@ bool DynamicBacktrack::addNextPathExclude(
 	adjEntry adj;
 	node v = NULL;
 	node temp;
-	
+
 	while (!stack.empty()) {
 		// backtrack
 		adj = stack.pop();
-		
+
 		// return from a child node: delete parent
 		if (adj==NULL) {
 			// go to parent and delete visited flag
@@ -178,7 +180,7 @@ bool DynamicBacktrack::addNextPathExclude(
 			m_parent[temp] = NULL;
 			continue;
 		}
-		
+
 		// get and mark node
 		v = adj->twinNode();
 
@@ -189,9 +191,10 @@ bool DynamicBacktrack::addNextPathExclude(
 			continue;
 		}
 		m_parent[v] = adj;
-		
+
 		// path found
-		if (less && m_dfi[v] < m_dfi[end] || !less && v==end) {
+		if ((less && m_dfi[v] < m_dfi[end]) || (!less && v==end))
+		{
 			// extract path vice versa until the startnode or an exclude-node is found
 			endnode = v;
 			list.clear();
@@ -201,7 +204,7 @@ bool DynamicBacktrack::addNextPathExclude(
 				adj = m_parent[adj->theNode()];
 				list.pushBack(adj->theEdge());
 			}
-			
+
 			// in a following call of this method we'll have to reconstruct the actual
 			// state, therefore delete the last NULLs and visited flags on stack
 			while (!stack.empty() && stack.top()==NULL) {
@@ -210,11 +213,11 @@ bool DynamicBacktrack::addNextPathExclude(
 				v = m_parent[temp]->theNode();
 				m_parent[temp] = NULL;
 			}
-			
+
 			// return bool, if path found
 			return true;
 		}
-		
+
 		// push all possible child-nodes
 		forall_adj(adj,v) {
 			node x = adj->twinNode();
@@ -235,28 +238,28 @@ bool DynamicBacktrack::addNextPathExclude(
 }
 
 // class ExtractKuratowski
-ExtractKuratowskis::ExtractKuratowskis(BoyerMyrvoldPlanar& bm)
-	  : BMP(bm),
-	  	m_g(bm.m_g),
-	  	m_embeddingGrade(bm.m_embeddingGrade),
-	  	m_avoidE2Minors(bm.m_avoidE2Minors),
-	  	
-	  	m_wasHere(m_g,0),
-	  	
-		// initialize Members of BoyerMyrvoldPlanar
-		m_dfi(bm.m_dfi),
-		m_nodeFromDFI(bm.m_nodeFromDFI),
-		m_adjParent(bm.m_adjParent)
+ExtractKuratowskis::ExtractKuratowskis(BoyerMyrvoldPlanar& bm) :
+	BMP(bm),
+	m_g(bm.m_g),
+	m_embeddingGrade(bm.m_embeddingGrade),
+	m_avoidE2Minors(bm.m_avoidE2Minors),
+
+	m_wasHere(m_g,0),
+
+	// initialize Members of BoyerMyrvoldPlanar
+	m_dfi(bm.m_dfi),
+	m_nodeFromDFI(bm.m_nodeFromDFI),
+	m_adjParent(bm.m_adjParent)
 {
 	OGDF_ASSERT(m_embeddingGrade == BoyerMyrvoldPlanar::doFindUnlimited ||
 				m_embeddingGrade > 0);
 	// if only structures are limited, subdivisions must not be limited
 	if (bm.m_limitStructures) m_embeddingGrade = BoyerMyrvoldPlanar::doFindUnlimited;
 	m_nodeMarker = 0;
-	
+
 	// flip Graph and merge virtual with real nodes, if not already done
 	bm.flipBicomp(1,-1,m_wasHere,true,true);
-};
+}
 
 // returns the type of Kuratowski subdivision in list (none, K33 or K5)
 int ExtractKuratowskis::whichKuratowski(
@@ -265,7 +268,7 @@ int ExtractKuratowskis::whichKuratowski(
 					const SListPure<edge>& list) {
 	OGDF_ASSERT(!list.empty());
 	EdgeArray<int> edgenumber(m_g,0);
-	
+
 	// count edges
 	SListConstIterator<edge> it;
 	for (it = list.begin(); it.valid(); ++it) {
@@ -275,7 +278,7 @@ int ExtractKuratowskis::whichKuratowski(
 		}
 		edgenumber[e] = 1;
 	}
-	
+
 	return whichKuratowskiArray(m_g,/*m_dfi,*/edgenumber);
 }
 
@@ -292,14 +295,14 @@ int ExtractKuratowskis::whichKuratowskiArray(
 	int K33Partition[6] = {0,-1,-1,-1,-1,-1};
 	bool K33Links[6][6] = {{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},
 							{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0}};
-	
+
 	node K33Nodes[6];
 	node K5Nodes[5];
-	
+
 	#ifdef OGDF_DEBUG
 	forall_edges(e,m_g) OGDF_ASSERT(edgenumber[e] == 0 || edgenumber[e] == 1);
 	#endif
-	
+
 	// count incident nodes
 	SListConstIterator<edge> it;
 	int allEdges = 0;
@@ -313,7 +316,7 @@ int ExtractKuratowskis::whichKuratowskiArray(
 	if (allEdges < 9) {
 		return ExtractKuratowskis::none;
 	}
-	
+
 	int degree3nodes = 0;
 	int degree4nodes = 0;
 	forall_nodes(v,m_g) {
@@ -328,7 +331,7 @@ int ExtractKuratowskis::whichKuratowskiArray(
 			++degree4nodes;
 		}
 	}
-	
+
 	// check on K3,3
 	int paths = 0;
 	if (degree3nodes == 6) {
@@ -516,17 +519,17 @@ void ExtractKuratowskis::extractMinorA(
 	if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 				output.size() >= m_embeddingGrade)
 		return;
-	
+
 	KuratowskiWrapper A;
-	
+
 	// add all external face edges
 	addExternalFacePath(A.edgeList,k.externalFacePath);
-	
+
 	// add the path from v to u, this is only possible after computation of pathX and pathY
 	if (m_dfi[endnodeX] < m_dfi[endnodeY]) {
 		addDFSPath(A.edgeList,k.V,endnodeX);
 	} else addDFSPath(A.edgeList,k.V,endnodeY);
-	
+
 	// copy other paths to subdivision
 	SListConstIterator<edge> it;
 	for(it = pathX.begin(); it.valid(); ++it) A.edgeList.pushBack(*it);
@@ -557,17 +560,18 @@ void ExtractKuratowskis::extractMinorB(
 	if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 				output.size() >= m_embeddingGrade)
 		return;
-	
+
 	KuratowskiWrapper B;
-	
+
 	// find ExternE-struct suitable for wNode
 	SListIterator<ExternE> itExternW;
-	for (itExternW = info.externEStart; (*itExternW).theNode != info.w; ++itExternW);
+	for (itExternW = info.externEStart; (*itExternW).theNode != info.w; ++itExternW)
+		;
 	OGDF_ASSERT(itExternW.valid() && (*itExternW).theNode == info.w);
 	ExternE& externE(*itExternW);
 	OGDF_ASSERT(externE.theNode == pathW.front()->source() ||
 				externE.theNode == pathW.front()->target());
-	
+
 	// check, if a external path sharing the first pathW-edge exists
 	SListIterator<int> itStart;
 	SListIterator<node> itEnd = externE.endnodes.begin();
@@ -579,7 +583,7 @@ void ExtractKuratowskis::extractMinorB(
 			++itPath;
 			continue;
 		}
-		
+
 		// if path was preprocessed, copy path
 		node endnodeWExtern = *itEnd;
 		if (!(*itPath).empty()) {
@@ -590,18 +594,18 @@ void ExtractKuratowskis::extractMinorB(
 			adjEntry adj = adjToLowestNodeBelow(endnodeWExtern,*itStart);
 			B.edgeList.pushFront(adj->theEdge());
 			addDFSPathReverse(B.edgeList,adj->theNode(),info.w);
-			
+
 			// copy list
 			*itPath = B.edgeList;
 		}
-		
+
 		// truncate pathZ from edges already contained in pathW
 		OGDF_ASSERT(B.edgeList.front() == pathW.front());
 		truncateEdgelist(B.edgeList,pathW);
-		
+
 		// add external face edges
 		addExternalFacePath(B.edgeList,k.externalFacePath);
-		
+
 		// compute dfi-minimum and maximum of all three paths to node Ancestor u
 		// add the dfs-path from minimum to maximum
 		node min,max;
@@ -618,7 +622,7 @@ void ExtractKuratowskis::extractMinorB(
 			if (m_dfi[endnodeWExtern] > m_dfi[max]) max = endnodeWExtern;
 		}
 		addDFSPath(B.edgeList,max,min);
-		
+
 		// copy other paths to subdivision
 		SListConstIterator<edge> it;
 		for (it = pathX.begin(); it.valid(); ++it) B.edgeList.pushBack(*it);
@@ -632,7 +636,7 @@ void ExtractKuratowskis::extractMinorB(
 		B.V = k.V;
 		output.pushBack(B);
 		B.edgeList.clear();
-		
+
 //		break;
 	}
 }
@@ -654,10 +658,10 @@ void ExtractKuratowskis::extractMinorBBundles(
 {
 	KuratowskiWrapper B;
 	OGDF_ASSERT(flags[pathW.back()] & DynamicBacktrack::pertinentPath);
-	
+
 	// check, if pertinent pathW (w->u) traverses node z
 	if (!(flags[pathW.back()] & DynamicBacktrack::externalPath)) return;
-	
+
 	// mark single pathW in flags, so that pathW and the externalPath
 	// don't interfere later
 	SListConstIterator<edge> itE;
@@ -666,7 +670,7 @@ void ExtractKuratowskis::extractMinorBBundles(
 		nodeflags[(*itE)->source()] = nodemarker;
 		nodeflags[(*itE)->target()] = nodemarker;
 	}
-	
+
 	// traverse all possible external Paths out of z. forbid edges starting at W,
 	// that are different from the edge w->z
 	node endnodeWExtern;
@@ -679,10 +683,10 @@ void ExtractKuratowskis::extractMinorBBundles(
 		if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 					output.size() >= m_embeddingGrade)
 			break;
-		
+
 		// add external face edges
 		addExternalFacePath(B.edgeList,k.externalFacePath);
-		
+
 		// compute dfi-minimum and maximum of all three paths to node Ancestor u
 		// add the dfs-path from minimum to maximum
 		node min,max;
@@ -696,7 +700,7 @@ void ExtractKuratowskis::extractMinorBBundles(
 		if (m_dfi[endnodeWExtern] < m_dfi[min]) min = endnodeWExtern;
 			else if (m_dfi[endnodeWExtern] > m_dfi[max]) max = endnodeWExtern;
 		addDFSPath(B.edgeList,max,min);
-		
+
 		// copy other paths to subdivision
 		SListConstIterator<edge> it;
 		for (it = pathX.begin(); it.valid(); ++it) B.edgeList.pushBack(*it);
@@ -711,7 +715,7 @@ void ExtractKuratowskis::extractMinorBBundles(
 		output.pushBack(B);
 		B.edgeList.clear();
 	}
-	
+
 	// delete marked single pathW
 	for (itE = pathW.begin(); itE.valid(); ++itE) {
 		flags[*itE] &= ~DynamicBacktrack::singlePath;
@@ -734,30 +738,30 @@ void ExtractKuratowskis::extractMinorC(
 	if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 				output.size() >= m_embeddingGrade)
 		return;
-	
+
 	KuratowskiWrapper C;
 	SListPure<edge> tempC;
-	
+
 	// the case, that px is above stopX
 	OGDF_ASSERT(info.pxAboveStopX || info.pyAboveStopY);
 	SListConstIterator<adjEntry> itE;
-	
+
 	// add the path from v to u, this is only possible after computation
 	// of pathX and pathY
 	if (m_dfi[endnodeX] < m_dfi[endnodeY]) {
 		addDFSPath(tempC,k.V,endnodeX);
 	} else addDFSPath(tempC,k.V,endnodeY);
-	
+
 	// add highestFacePath of wNode
 	OGDF_ASSERT(info.highestXYPath->size() >= 2);
 	for (itE=info.highestXYPath->begin().succ(); itE.valid(); ++itE) {
 		tempC.pushBack((*itE)->theEdge());
 	}
-	
+
 	// the case, that px is above stopX
 	if (info.pxAboveStopX) {
 		C.edgeList = tempC;
-		
+
 		// add the external face path edges except the path from py/stopY to R
 		node end;
 		if (info.pyAboveStopY) {
@@ -767,7 +771,7 @@ void ExtractKuratowskis::extractMinorC(
 			C.edgeList.pushBack((*itE)->theEdge());
 			if ((*itE)->theNode() == end) break;
 		}
-		
+
 		// copy other paths to subdivision
 		SListConstIterator<edge> it;
 		for (it = pathX.begin(); it.valid(); ++it) C.edgeList.pushBack(*it);
@@ -782,16 +786,16 @@ void ExtractKuratowskis::extractMinorC(
 		output.pushBack(C);
 		C.edgeList.clear();
 	}
-	
+
 	// the case, that py is above stopY
 	if (info.pyAboveStopY) {
 		// check, if we have found enough subdivisions
 		if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 					output.size() >= m_embeddingGrade)
 			return;
-		
+
 		C.edgeList = tempC;
-		
+
 		// add the external face path edges except the path from px/stopX to R
 		node start;
 		if (info.pxAboveStopX) {
@@ -803,7 +807,7 @@ void ExtractKuratowskis::extractMinorC(
 				C.edgeList.pushBack((*itE)->theEdge());
 			} else if ((*itE)->theNode() == start) after = true;
 		}
-		
+
 		// copy other paths to subdivision
 		SListConstIterator<edge> it;
 		for (it = pathX.begin(); it.valid(); ++it) C.edgeList.pushBack(*it);
@@ -835,14 +839,14 @@ void ExtractKuratowskis::extractMinorD(
 	if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 				output.size() >= m_embeddingGrade)
 		return;
-	
+
 	KuratowskiWrapper D;
-	
+
 	// add the path from v to u, this is only possible after computation of pathX and pathY
 	if (m_dfi[endnodeX] < m_dfi[endnodeY]) {
 		addDFSPath(D.edgeList,k.V,endnodeX);
 	} else addDFSPath(D.edgeList,k.V,endnodeY);
-	
+
 	// add the external face path edges except the part from R to the nearest of
 	// the two nodes stopX and px resp. the part to stopY/py
 	node start;
@@ -863,19 +867,19 @@ void ExtractKuratowskis::extractMinorD(
 			between = true;
 		} else if (temp == end) between = false;
 	}
-	
+
 	// add highestFacePath of wNode
 	OGDF_ASSERT(info.highestXYPath->size() >= 2);
 	for (itE=info.highestXYPath->begin().succ(); itE.valid(); ++itE) {
 		D.edgeList.pushBack((*itE)->theEdge());
 	}
-	
+
 	// add path from first zNode to R
 	OGDF_ASSERT(!info.zPath->empty());
 	for (itE=info.zPath->begin().succ(); itE.valid(); ++itE) {
 		D.edgeList.pushBack((*itE)->theEdge());
 	}
-	
+
 	// copy other paths to subdivision
 	SListConstIterator<edge> it;
 	for (it = pathX.begin(); it.valid(); ++it) D.edgeList.pushBack(*it);
@@ -912,28 +916,28 @@ void ExtractKuratowskis::extractMinorE1(
 	if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 				output.size() >= m_embeddingGrade)
 		return;
-	
+
 	OGDF_ASSERT(before == -1 || before == 1);
 	KuratowskiWrapper E1;
 	SListConstIterator<edge> itE;
-	
+
 	// add highestFacePath of wNode
 	SListConstIterator<adjEntry> it;
 	for (it=info.highestXYPath->begin().succ(); it.valid(); ++it)
 		E1.edgeList.pushBack((*it)->theEdge());
-	
+
 	if (before == -1) {
 		// z is before w on external face path
-		
+
 		// add pathY
 		for (itE = pathY.begin(); itE.valid(); ++itE) E1.edgeList.pushBack(*itE);
-		
+
 		// add the path from v to u, this is only possible after computation of
 		// pathX and pathY
 		if (m_dfi[endnodeZ] < m_dfi[endnodeY]) {
 			addDFSPath(E1.edgeList,k.V,endnodeZ);
 		} else addDFSPath(E1.edgeList,k.V,endnodeY);
-		
+
 		// add the external face path edges except the part from stopY/py to R
 		node stop;
 		if (info.pyAboveStopY) {
@@ -945,20 +949,20 @@ void ExtractKuratowskis::extractMinorE1(
 		}
 	} else {
 		// z is after w on external face path
-		
+
 		// if minor A occurs, add the dfs-path from node RReal to V, that isn't anymore
 		// involved because of removing pathY
 		if (k.RReal != k.V) addDFSPath(E1.edgeList,k.RReal,k.V);
-		
+
 		// add pathX
 		for (itE = pathX.begin(); itE.valid(); ++itE) E1.edgeList.pushBack(*itE);
-		
+
 		// add the path from v to u, this is only possible after computation of
 		// pathX and pathY
 		if (m_dfi[endnodeZ] < m_dfi[endnodeX]) {
 			addDFSPath(E1.edgeList,k.V,endnodeZ);
 		} else addDFSPath(E1.edgeList,k.V,endnodeX);
-		
+
 		// add the external face path edges except the part from stopX/px to R
 		node start;
 		if (info.pxAboveStopX) {
@@ -971,7 +975,7 @@ void ExtractKuratowskis::extractMinorE1(
 			} else if ((*it)->theNode() == start) after = true;
 		}
 	}
-	
+
 	// add pathW and pathZ
 	for (itE = pathW.begin(); itE.valid(); ++itE) E1.edgeList.pushBack(*itE);
 	for (itE = pathZ.begin(); itE.valid(); ++itE) E1.edgeList.pushBack(*itE);
@@ -1005,24 +1009,24 @@ void ExtractKuratowskis::extractMinorE2(
 				)
 {
 	OGDF_ASSERT(!m_avoidE2Minors);
-	
+
 	// check, if we have found enough subdivisions
 	if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 				output.size() >= m_embeddingGrade)
 		return;
-	
+
 	KuratowskiWrapper E2;
-	
+
 	// add the path from v to u
 	if (m_dfi[endnodeX] < m_dfi[endnodeY]) {
 		addDFSPath(E2.edgeList,k.V,endnodeX);
 	} else addDFSPath(E2.edgeList,k.V,endnodeY);
-	
+
 	// add the external face path edges
 	SListConstIterator<adjEntry> it;
 	for (it=k.externalFacePath.begin(); it.valid(); ++it)
 		E2.edgeList.pushBack((*it)->theEdge());
-	
+
 	// add pathX, pathY and pathZ
 	SListConstIterator<edge> itE;
 	for (itE = pathX.begin(); itE.valid(); ++itE) E2.edgeList.pushBack(*itE);
@@ -1060,28 +1064,28 @@ void ExtractKuratowskis::extractMinorE3(
 	if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 				output.size() >= m_embeddingGrade)
 		return;
-	
+
 	KuratowskiWrapper E3;
 	OGDF_ASSERT(endnodeX != endnodeY);
-	
+
 	// add pathZ
 	SListConstIterator<edge> itE;
 	for (itE = pathZ.begin(); itE.valid(); ++itE) E3.edgeList.pushBack(*itE);
-	
+
 	// add highestFacePath px <-> py
 	SListConstIterator<adjEntry> it;
 	for (it=info.highestXYPath->begin().succ(); it.valid(); ++it)
 		E3.edgeList.pushBack((*it)->theEdge());
-	
+
 	// check, if endnodeX or endnodeY is descendant
 	if (m_dfi[endnodeX] < m_dfi[endnodeY]) {
 		OGDF_ASSERT(m_dfi[endnodeZ] < m_dfi[endnodeY]);
-		
+
 		// add the path from v to u
 		if (m_dfi[endnodeX] < m_dfi[endnodeZ]) {
 			addDFSPath(E3.edgeList,k.V,endnodeX);
 		} else addDFSPath(E3.edgeList,k.V,endnodeZ);
-		
+
 		// add the external face path edges except max(px,stopX)<->min(z,w) and v<->nearest(py,stopY)
 		node temp,start1,end1,start2;
 		if (info.pxAboveStopX) {
@@ -1103,12 +1107,12 @@ void ExtractKuratowskis::extractMinorE3(
 		}
 	} else {
 		OGDF_ASSERT(m_dfi[endnodeZ] < m_dfi[endnodeX]);
-		
+
 		// add the path from v to u
 		if (m_dfi[endnodeY] < m_dfi[endnodeZ]) {
 			addDFSPath(E3.edgeList,k.V,endnodeY);
 		} else addDFSPath(E3.edgeList,k.V,endnodeZ);
-		
+
 		// add the external face path edges except v<->min(px,stopX) and max(w,z)<->nearest(py,stopY)
 		node temp,end1,start2,end2;
 		if (info.pxAboveStopX) {
@@ -1129,7 +1133,7 @@ void ExtractKuratowskis::extractMinorE3(
 				else if (temp == end2) between = false;
 		}
 	}
-	
+
 	// add pathX, pathY and pathW
 	for (itE = pathX.begin(); itE.valid(); ++itE) E3.edgeList.pushBack(*itE);
 	for (itE = pathY.begin(); itE.valid(); ++itE) E3.edgeList.pushBack(*itE);
@@ -1166,21 +1170,21 @@ void ExtractKuratowskis::extractMinorE4(
 	if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 				output.size() >= m_embeddingGrade)
 		return;
-	
+
 	KuratowskiWrapper E4;
 	SListPure<edge> tempE4;
 	OGDF_ASSERT((px != k.stopX && !info.pxAboveStopX) ||
 				(py != k.stopY && !info.pyAboveStopY));
-	
+
 	// add pathZ
 	SListConstIterator<edge> itE;
 	for (itE = pathZ.begin(); itE.valid(); ++itE) tempE4.pushBack(*itE);
-	
+
 	// add highestFacePath px <-> py
 	SListConstIterator<adjEntry> it;
 	for (it = info.highestXYPath->begin().succ(); it.valid(); ++it)
 		tempE4.pushBack((*it)->theEdge());
-	
+
 	// compute dfi-minimum and maximum of all three paths to node Ancestor u
 	// add the dfs-path from minimum to maximum
 	node min,max;
@@ -1194,10 +1198,10 @@ void ExtractKuratowskis::extractMinorE4(
 	if (m_dfi[endnodeZ] < m_dfi[min]) min = endnodeZ;
 		else if (m_dfi[endnodeZ] > m_dfi[max]) max = endnodeZ;
 	addDFSPath(tempE4,max,min);
-	
+
 	if (px != k.stopX && !info.pxAboveStopX) {
 		E4.edgeList = tempE4;
-		
+
 		// add the external face path edges except max(w,z)<->min(py,stopY)
 		node temp,start,end;
 		if (before<=0) {
@@ -1213,7 +1217,7 @@ void ExtractKuratowskis::extractMinorE4(
 			if (temp == start) between = true;
 				else if (temp == end) between = false;
 		}
-		
+
 		// add pathX, pathY and pathW
 		for (itE = pathX.begin(); itE.valid(); ++itE) E4.edgeList.pushBack(*itE);
 		for (itE = pathY.begin(); itE.valid(); ++itE) E4.edgeList.pushBack(*itE);
@@ -1227,15 +1231,15 @@ void ExtractKuratowskis::extractMinorE4(
 		E4.V = k.V;
 		output.pushBack(E4);
 	}
-	
+
 	if (py != k.stopY && !info.pyAboveStopY) {
 		// check, if we have found enough subdivisions
 		if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 					output.size() >= m_embeddingGrade)
 			return;
-		
+
 		E4.edgeList = tempE4;
-		
+
 		// add the external face path edges except max(px,stopX)<->min(w,z)
 		node temp,start,end;
 		if (info.pxAboveStopX) {
@@ -1244,7 +1248,7 @@ void ExtractKuratowskis::extractMinorE4(
 		if (before <= 0) {
 			end = z;
 		} else end = info.w;
-		
+
 		bool between = false;
 		for (it=k.externalFacePath.begin(); it.valid(); ++it) {
 			temp = (*it)->theNode();
@@ -1252,7 +1256,7 @@ void ExtractKuratowskis::extractMinorE4(
 			if (temp == start) between = true;
 				else if (temp == end) between = false;
 		}
-		
+
 		// add pathX, pathY and pathW
 		for (itE = pathX.begin(); itE.valid(); ++itE) E4.edgeList.pushBack(*itE);
 		for (itE = pathY.begin(); itE.valid(); ++itE) E4.edgeList.pushBack(*itE);
@@ -1290,13 +1294,13 @@ void ExtractKuratowskis::extractMinorE5(
 	if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 				output.size() >= m_embeddingGrade)
 		return;
-	
+
 	KuratowskiWrapper E5;
 	//OGDF_ASSERT(px==k.stopX && py==k.stopY && z==info.w && k.V == k.RReal);
 	OGDF_ASSERT((endnodeX == endnodeY && m_dfi[endnodeZ] <= m_dfi[endnodeX]) ||
 				(endnodeX == endnodeZ && m_dfi[endnodeY] <= m_dfi[endnodeX]) ||
 				(endnodeY == endnodeZ && m_dfi[endnodeX] <= m_dfi[endnodeY]));
-	
+
 	// compute dfi-minimum of all three paths to node Ancestor u and
 	// add the dfs-path from minimum to V
 	node min;
@@ -1308,21 +1312,21 @@ void ExtractKuratowskis::extractMinorE5(
 		min = endnodeZ;
 	}
 	addDFSPath(E5.edgeList,k.V,min);
-	
+
 	// add pathZ
 	SListConstIterator<edge> itE;
 	for (itE = pathZ.begin(); itE.valid(); ++itE) E5.edgeList.pushBack(*itE);
-	
+
 	// add highestFacePath px <-> py
 	SListConstIterator<adjEntry> it;
 	for (it=info.highestXYPath->begin().succ(); it.valid(); ++it)
 		E5.edgeList.pushBack((*it)->theEdge());
-	
+
 	// add the external face path edges
 	for (it=k.externalFacePath.begin(); it.valid(); ++it) {
 		E5.edgeList.pushBack((*it)->theEdge());
 	}
-	
+
 	// add pathX, pathY and pathW
 	for (itE = pathX.begin(); itE.valid(); ++itE) E5.edgeList.pushBack(*itE);
 	for (itE = pathY.begin(); itE.valid(); ++itE) E5.edgeList.pushBack(*itE);
@@ -1353,13 +1357,13 @@ void ExtractKuratowskis::extractMinorE(
 {
 	// find external paths for each extern node z on the lower external face
 	OGDF_ASSERT(info.externEStart.valid() && info.externEEnd.valid());
-	
+
 	int before = -1; // -1= before, 0=equal, 1=after
 	SListConstIterator<edge> itW;
 	SListConstIterator<ExternE> it;
 	node px = info.highestXYPath->front()->theNode();
 	node py = info.highestXYPath->back()->theNode();
-	
+
 	adjEntry temp;
 	node z;
 	SListPure<edge> pathZ;
@@ -1367,24 +1371,24 @@ void ExtractKuratowskis::extractMinorE(
 	SListConstIterator<node> itZEndnode;
 	SListConstIterator<int> itZStartnode;
 	SListConstIterator<SListPure<edge> > itEPath;
-	
+
 	// consider only the nodes between px and py
 	for (it = info.externEStart; it.valid(); ++it) {
 		const ExternE& externE(*it);
 		z = externE.theNode;
-		
+
 		if (z == info.w) {
 			OGDF_ASSERT(z == pathW.front()->source() || z == pathW.front()->target());
 			// z = wNode
 			before = 0;
-			
+
 			itZStartnode = externE.startnodes.begin();
 			itEPath = externE.externalPaths.begin();
 			for (itZEndnode = externE.endnodes.begin(); itZEndnode.valid();
 											++itZEndnode,++itZStartnode,++itEPath) {
 				endnodeZ = *itZEndnode;
 				SListPure<edge>& externalPath(const_cast<SListPure<edge>& >(*itEPath));
-				
+
 				if (!externalPath.empty()) {
 					// get preprocessed path
 					pathZ = externalPath;
@@ -1393,11 +1397,11 @@ void ExtractKuratowskis::extractMinorE(
 					pathZ.clear();
 					pathZ.pushFront(temp->theEdge());
 					addDFSPathReverse(pathZ,temp->theNode(),z);
-					
+
 					// copy path
 					externalPath = pathZ;
 				}
-				
+
 				// minortype E2 on z=wNode
 				if (!m_avoidE2Minors && firstWPath && firstWOnHighestXY &&
 						m_dfi[endnodeZ] > m_dfi[endnodeX] &&
@@ -1405,10 +1409,10 @@ void ExtractKuratowskis::extractMinorE(
 						extractMinorE2(output,/*before,z,px,py,*/k,info,pathX,
 										endnodeX,pathY,endnodeY,/*pathW,*/pathZ/*,endnodeZ*/);
 				}
-				
+
 				// truncate pathZ from edges already contained in pathW
 				truncateEdgelist(pathZ,pathW);
-				
+
 				// minortype E3 on z=wNode
 				if (endnodeX != endnodeY &&
 						(m_dfi[endnodeX] > m_dfi[endnodeZ] || m_dfi[endnodeY] > m_dfi[endnodeZ])) {
@@ -1421,7 +1425,7 @@ void ExtractKuratowskis::extractMinorE(
 					extractMinorE4(output,before,z,px,py,k,info,pathX,
 									endnodeX,pathY,endnodeY,pathW,pathZ,endnodeZ);
 				}
-				
+
 				// minortype E5 (K5)
 				if (px == k.stopX && py == k.stopY && k.V == k.RReal &&
 						((endnodeX == endnodeY && m_dfi[endnodeZ] <= m_dfi[endnodeX]) ||
@@ -1439,19 +1443,19 @@ void ExtractKuratowskis::extractMinorE(
 			if (z == info.firstExternEAfterW) before = 1;
 			OGDF_ASSERT(before != 0);
 			OGDF_ASSERT(z != pathW.front()->source() && z != pathW.front()->target());
-			
+
 			itZStartnode = externE.startnodes.begin();
 			for (itZEndnode = externE.endnodes.begin(); itZEndnode.valid();
 													 ++itZEndnode,++itZStartnode) {
 				endnodeZ = *itZEndnode;
-				
+
 				temp = adjToLowestNodeBelow(endnodeZ,*itZStartnode);
 				pathZ.clear();
 				pathZ.pushFront(temp->theEdge());
 				addDFSPathReverse(pathZ,temp->theNode(),z);
-				
+
 				// split in minorE-subtypes
-				
+
 				// minortype E1
 				if ((before == -1 && firstXPath) || (before == 1 && firstYPath)) {
 					extractMinorE1(output,before,/*z,*/px,py,k,info,pathX,
@@ -1478,7 +1482,7 @@ void ExtractKuratowskis::extractMinorE(
 				}
 			}
 		}
-		
+
 		// check if last node was reached
 		if (it == info.externEEnd) break;
 	}
@@ -1514,7 +1518,7 @@ void ExtractKuratowskis::extractMinorEBundles(
 	node px = info.highestXYPath->front()->theNode();
 	node py = info.highestXYPath->back()->theNode();
 	DynamicBacktrack backtrackZ(m_g,m_dfi,flags);
-	
+
 	// mark all nodes of the single pathW in flags, so that pathW and
 	// the externalPath don't interfere later
 	for (itW = pathW.begin(); itW.valid(); ++itW) {
@@ -1522,16 +1526,16 @@ void ExtractKuratowskis::extractMinorEBundles(
 		nodeflags[(*itW)->source()] = nodemarker;
 		nodeflags[(*itW)->target()] = nodemarker;
 	}
-	
+
 	// consider only the nodes between px and py
 	for (it = info.externEStart; it.valid(); ++it) {
 		z = (*it).theNode;
-		
+
 		if (z == info.w) {
 			OGDF_ASSERT(z == pathW.back()->source() || z == pathW.back()->target());
 			// z = wNode
 			before = 0;
-			
+
 			// minortype E2 on z=wNode
 			// on the first pathW: consider all pathsZ
 			if (!m_avoidE2Minors && firstWPath && firstWOnHighestXY) {
@@ -1545,7 +1549,7 @@ void ExtractKuratowskis::extractMinorEBundles(
 					}
 				}
 			}
-			
+
 			backtrackZ.init(z,k.V,true,DynamicBacktrack::externalPath,
 							DynamicBacktrack::externalPath,NULL,NULL);
 			while (backtrackZ.addNextPathExclude(pathZ,endnodeZ,
@@ -1583,12 +1587,12 @@ void ExtractKuratowskis::extractMinorEBundles(
 			if (z == info.firstExternEAfterW) before = 1;
 			OGDF_ASSERT(before != 0);
 			OGDF_ASSERT(z != pathW.back()->source() && z != pathW.back()->target());
-			
+
 			backtrackZ.init(z,k.V,true,DynamicBacktrack::externalPath,
 							DynamicBacktrack::externalPath,NULL,NULL);
 			while (backtrackZ.addNextPath(pathZ,endnodeZ)) {
 				// split in minorE-subtypes
-				
+
 				// minortype E1
 				if ((before == -1 && firstXPath) || (before == 1 && firstYPath)) {
 					extractMinorE1(output,before,/*z,*/px,py,k,info,pathX,
@@ -1615,16 +1619,16 @@ void ExtractKuratowskis::extractMinorEBundles(
 				}
 			}
 		}
-		
+
 		// check if last node was reached
 		if (it == info.externEEnd) break;
-		
+
 		// check, if we have found enough subdivisions
 		if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 					output.size() >= m_embeddingGrade)
 			break;
 	}
-	
+
 	// delete marked single pathW
 	for (itW = pathW.begin(); itW.valid(); ++itW) {
 		flags[*itW] &= ~DynamicBacktrack::singlePath;
@@ -1640,20 +1644,20 @@ void ExtractKuratowskis::extract(
 	SListConstIterator<WInfo> itInfo;
 	SListConstIterator<edge> itS;
 	SListConstIterator<SListPure<edge> > itL;
-	
+
 	SListPure<edge> pathX,pathY;
 	node endnodeX,endnodeY;
 	adjEntry temp;
-	
+
 	SListConstIterator<node> itXEndnode;
 	SListConstIterator<node> itYEndnode;
 	SListConstIterator<int> itXStartnode;
 	SListConstIterator<int> itYStartnode;
-	
+
 	// consider all different kuratowski structures
 	for (itAll=allKuratowskis.begin(); itAll.valid(); ++itAll) {
 		const KuratowskiStructure& k(*itAll);
-		
+
 		// compute all possible external paths of stopX and stopY (pathX,pathY)
 		bool firstXPath = true;
 		itXStartnode = k.stopXStartnodes.begin();
@@ -1663,7 +1667,7 @@ void ExtractKuratowskis::extract(
 			temp = adjToLowestNodeBelow(endnodeX,*(itXStartnode++));
 			pathX.pushBack(temp->theEdge());
 			addDFSPath(pathX,temp->theNode(),k.stopX);
-			
+
 			bool firstYPath = true;
 			itYStartnode = k.stopYStartnodes.begin();
 			for (itYEndnode = k.stopYEndnodes.begin(); itYEndnode.valid(); ++itYEndnode) {
@@ -1672,51 +1676,51 @@ void ExtractKuratowskis::extract(
 				temp = adjToLowestNodeBelow(endnodeY,*(itYStartnode++));
 				pathY.pushBack(temp->theEdge());
 				addDFSPath(pathY,temp->theNode(),k.stopY);
-				
+
 				// if minor A occurs, other minortypes are possible with adding
 				// the dfs-path from node RReal to V
 				if (k.RReal != k.V) addDFSPath(pathY,k.RReal,k.V);
-				
+
 				// consider all possible wNodes
 				SListPure<adjEntry>* oldHighestXYPath = NULL;
 				for (itInfo = k.wNodes.begin(); itInfo.valid(); ++itInfo) {
 					const WInfo& info(*itInfo);
-					
+
 					// compute all possible internal paths of this wNode
 					bool firstWPath = true; // avoid multiple identical subdivisions in E2
 					for (itL = info.pertinentPaths.begin(); itL.valid(); ++itL) {
 						const SListPure<edge>& pathW(*itL);
 						OGDF_ASSERT(!pathX.empty() && !pathY.empty() && !pathW.empty());
-						
+
 						// extract minor A
 						if (info.minorType & WInfo::A)
 							extractMinorA(output,k,/*info,*/pathX,endnodeX,pathY,
 										endnodeY,pathW);
-						
+
 						// extract minor B
 						if (info.minorType & WInfo::B) {
 							++m_nodeMarker;
 							extractMinorB(output,/*m_wasHere,++m_nodeMarker,*/k,
 										info,pathX,endnodeX,pathY,endnodeY,pathW);
 						}
-						
+
 						// extract minor C
 						if (info.minorType & WInfo::C)
 							extractMinorC(output,k,info,pathX,endnodeX,pathY,
 										endnodeY,pathW);
-						
+
 						// extract minor D
 						if (info.minorType & WInfo::D)
 							extractMinorD(output,k,info,pathX,endnodeX,pathY,
 										endnodeY,pathW);
-						
+
 						// extract minor E including all subtypes
 						if (info.minorType & WInfo::E) {
 							extractMinorE(output,firstXPath,firstYPath,firstWPath,
 										oldHighestXYPath!=info.highestXYPath,k,info,
 										pathX,endnodeX,pathY,endnodeY,pathW);
 						}
-						
+
 						if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 									output.size() >= m_embeddingGrade)
 							return;
@@ -1742,25 +1746,25 @@ void ExtractKuratowskis::extractBundles(
 	SListConstIterator<KuratowskiStructure> itAll;
 	SListConstIterator<WInfo> itInfo;
 	SListConstIterator<edge> itS;
-	
+
 	SListPure<edge> pathX,pathY,pathW;
 	node endnodeX,endnodeY;
-	
+
 	EdgeArray<int> flags(m_g,0);
 	DynamicBacktrack backtrackX(m_g,m_dfi,flags);
 	DynamicBacktrack backtrackY(m_g,m_dfi,flags);
 	DynamicBacktrack backtrackW(m_g,m_dfi,flags);
-	
+
 	// consider all different kuratowski structures
 	for (itAll=allKuratowskis.begin(); itAll.valid(); ++itAll) {
 		const KuratowskiStructure& k(*itAll);
-		
+
 		// create pertinent and external flags
 		for (itS = k.pertinentSubgraph.begin(); itS.valid(); ++itS)
 			flags[*itS] |= DynamicBacktrack::pertinentPath;
 		for (itS = k.externalSubgraph.begin(); itS.valid(); ++itS)
 			flags[*itS] |= DynamicBacktrack::externalPath;
-		
+
 		// compute all possible external paths of stopX and stopY (pathX,pathY)
 		bool firstXPath = true;
 		backtrackX.init(k.stopX,k.V,true,DynamicBacktrack::externalPath,
@@ -1770,16 +1774,16 @@ void ExtractKuratowskis::extractBundles(
 			backtrackY.init(k.stopY,k.V,true,DynamicBacktrack::externalPath,
 							DynamicBacktrack::externalPath,NULL,NULL);
 			while (backtrackY.addNextPath(pathY,endnodeY)) {
-				
+
 				// if minor A occurs, other minortypes are possible with adding
 				// the dfs-path from node RReal to V
 				if (k.RReal != k.V) addDFSPath(pathY,k.RReal,k.V);
-				
+
 				// consider all possible wNodes
 				SListPure<adjEntry>* oldHighestXYPath = NULL;
 				for (itInfo = k.wNodes.begin(); itInfo.valid(); ++itInfo) {
 					const WInfo& info(*itInfo);
-					
+
 					// compute all possible internal paths of this wNode
 					bool firstWPath = true; // avoid multiple identical subdivisions in E2
 					backtrackW.init(info.w,k.V,false,DynamicBacktrack::pertinentPath,
@@ -1787,27 +1791,27 @@ void ExtractKuratowskis::extractBundles(
 					node dummy;
 					while (backtrackW.addNextPath(pathW,dummy)) {
 						OGDF_ASSERT(!pathX.empty() && !pathY.empty() && !pathW.empty());
-						
+
 						// extract minor A
 						if (info.minorType & WInfo::A)
 							extractMinorA(output,k,/*info,*/pathX,endnodeX,pathY,
 										endnodeY,pathW);
-						
+
 						// extract minor B
 						if (info.minorType & WInfo::B)
 							extractMinorBBundles(output,m_wasHere,++m_nodeMarker,k,flags,
 										info,pathX,endnodeX,pathY,endnodeY,pathW);
-						
+
 						// extract minor C
 						if (info.minorType & WInfo::C)
 							extractMinorC(output,k,info,pathX,endnodeX,pathY,
 										endnodeY,pathW);
-						
+
 						// extract minor D
 						if (info.minorType & WInfo::D)
 							extractMinorD(output,k,info,pathX,endnodeX,pathY,
 										endnodeY,pathW);
-						
+
 						// extract minor E including all subtypes
 						if (info.minorType & WInfo::E) {
 							extractMinorEBundles(output,firstXPath,firstYPath,firstWPath,
@@ -1815,7 +1819,7 @@ void ExtractKuratowskis::extractBundles(
 										m_wasHere,++m_nodeMarker,k,flags,info,
 										pathX,endnodeX,pathY,endnodeY,pathW);
 						}
-						
+
 						if (m_embeddingGrade > BoyerMyrvoldPlanar::doFindUnlimited &&
 									output.size() >= m_embeddingGrade)
 							return;
@@ -1830,7 +1834,7 @@ void ExtractKuratowskis::extractBundles(
 			firstXPath = false;
 			// break;
 		}
-		
+
 		// delete pertinent and external flags
 		for (itS = k.pertinentSubgraph.begin(); itS.valid(); ++itS)
 			flags[*itS] = 0;

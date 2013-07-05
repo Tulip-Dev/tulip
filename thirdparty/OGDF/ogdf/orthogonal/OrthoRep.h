@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of orthogonal representation of planar graphs.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -168,37 +169,37 @@ public:
 		return *this;
 	}
 
-    BendString &operator+=(const BendString &bs) {
-        char* temp = new char[m_len+bs.m_len+1];
+	BendString &operator+=(const BendString &bs) {
+		char* temp = new char[m_len+bs.m_len+1];
 
-        m_len = m_len + bs.m_len;
-        
-        if (m_len == 0) 
-        {
-		  *temp = 0;//temp = 0;
-        } 
-        else 
-        {
-		  char *p = temp;
-          if (m_pBend != 0)
-          {
-    		const char *str = m_pBend;
-		    while ((*p++ = *str++) != 0) ;
-          }
-          else {*p = '0'; p++;}
-          if (bs.m_len > 0)
-          {
-            p--;
-            const char *str1 = bs.m_pBend;
-            while ((*p++ = *str1++) != 0) ;
-          }
-        }
+		m_len = m_len + bs.m_len;
 
-        delete[] m_pBend;
-        m_pBend = temp;
+		if (m_len == 0)
+		{
+			*temp = 0;//temp = 0;
+		}
+		else
+		{
+			char *p = temp;
+			if (m_pBend != 0)
+			{
+				const char *str = m_pBend;
+				while ((*p++ = *str++) != 0) ;
+			}
+			else {*p = '0'; p++;}
+			if (bs.m_len > 0)
+			{
+				p--;
+				const char *str1 = bs.m_pBend;
+				while ((*p++ = *str1++) != 0) ;
+			}
+		}
 
-        return *this;
-    }
+		delete[] m_pBend;
+		m_pBend = temp;
+
+		return *this;
+	}
 
 	// output operator
 	// example output: "001101001" or ""
@@ -257,7 +258,7 @@ public:
 			return nGen + m_nAttached[0] + m_nAttached[1];
 		}
 
-		
+
 		// output operator for debugging
 		friend ostream &operator<<(ostream &os, const SideInfoUML &si)
 		{
@@ -379,8 +380,8 @@ public:
 	// a rectangle).
 	// Precond.: The orth. repr. is normalized and contains no 0-degree angles
 	void dissect();
-    // same as dissect, attempting to save artificial nodes and allow preprocessing
-    void dissect2(PlanRepUML* PG = 0);
+	// same as dissect, attempting to save artificial nodes and allow preprocessing
+	void dissect2(PlanRepUML* PG = 0);
 	// undoes a previous dissect() by removing dissection edges and unsplitting
 	// vertices
 	void undissect(bool align = false);
@@ -441,16 +442,16 @@ public:
 		return OrthoDir((d + 3) & 3);
 	}
 
-    friend ostream &operator<<(ostream &os, const OrthoRep &op) {
+	friend ostream &operator<<(ostream &os, const OrthoRep &op) {
 		edge e;
-        const Graph& E = op;
-        forall_edges(e, E)
-        {
-          os << e <<": src angle "<<op.angle(e->adjSource())<<" bend "<<op.bend(e->adjSource())
-              <<"\n"<<" tgt angle "<<op.angle(e->adjTarget())<<" bend "<<op.bend(e->adjTarget())
-              
-              <<"\n";
-        }
+		const Graph& E = op;
+		forall_edges(e, E)
+		{
+			os << e <<": src angle "<<op.angle(e->adjSource())<<" bend "<<op.bend(e->adjSource())
+				<<"\n"<<" tgt angle "<<op.angle(e->adjTarget())<<" bend "<<op.bend(e->adjTarget())
+
+				<<"\n";
+		}
 		return os;
 	}
 
@@ -476,8 +477,8 @@ private:
 
 	// The following members are used for undoing dissection
 	EdgeArray<bool> m_dissectionEdge; // = true iff dissection edge
-    //check if special gener. sons alignment edge
-    EdgeArray<bool> m_alignmentEdge; // = true iff alignment edge
+	//check if special gener. sons alignment edge
+	EdgeArray<bool> m_alignmentEdge; // = true iff alignment edge
 	// contains all nodes created by splitting non-dissection edges while
 	// dissect()
 	StackPure<node> m_splitNodes;
@@ -485,10 +486,10 @@ private:
 	adjEntry m_adjExternal;
 	// stores adjacency entry on preliminary external face in alignment case
 	adjEntry m_adjAlign;
-    //starts dissection phase for special pattern 1 replacement before standard dissection
-    bool m_preprocess;
-    //special pattern after pattern 1
-    bool m_pattern2;
+	//starts dissection phase for special pattern 1 replacement before standard dissection
+	bool m_preprocess;
+	//special pattern after pattern 1
+	bool m_pattern2;
 };
 
 

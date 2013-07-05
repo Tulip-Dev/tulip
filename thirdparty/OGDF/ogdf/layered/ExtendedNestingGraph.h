@@ -1,43 +1,44 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of ExtendedNestingGraph
- * 
+ *
  * Manages access on copy of an attributed graph.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -180,7 +181,7 @@ public:
 
 	// Construction
 	LHTreeNode(cluster c, LHTreeNode *up) {
-		m_parent      = 0; 
+		m_parent      = 0;
 		m_origCluster = c;
 		m_node        = 0;
 		m_type        = Compound;
@@ -192,7 +193,7 @@ public:
 	}
 
 	LHTreeNode(LHTreeNode *parent, node v, Type t = Node) {
-		m_parent      = parent; 
+		m_parent      = parent;
 		m_origCluster = 0;
 		m_node        = v;
 		m_type        = t;
@@ -210,7 +211,7 @@ public:
 
 	cluster originalCluster() const { return m_origCluster; }
 	node    getNode()         const { return m_node; }
-	
+
 	const LHTreeNode *up  () const { return m_up; }
 	const LHTreeNode *down() const { return m_down; }
 
@@ -264,7 +265,7 @@ class OGDF_EXPORT ENGLayer
 public:
 	ENGLayer() { m_root = 0; }
 	~ENGLayer();
-	
+
 	const LHTreeNode *root() const { return m_root; }
 	LHTreeNode *root() { return m_root; }
 
@@ -341,7 +342,7 @@ public:
 	NodeType type(node v) const { return m_type[v]; }
 	node    origNode   (node v) const { return m_origNode[v]; }
 	edge    origEdge   (edge e) const { return m_origEdge[e]; }
-	
+
 	cluster originalCluster(node v) const { return m_CGC.original(m_CGC.clusterOf(v)); }
 	cluster parent(node v) const { return m_CGC.clusterOf(v); }
 	cluster parent(cluster c) const { return c->parent(); }

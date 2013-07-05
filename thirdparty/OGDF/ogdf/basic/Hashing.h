@@ -1,44 +1,45 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2523 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-02 20:59:27 +0200 (Mon, 02 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of classes used for hashing.
  *
  * Declares HashingBase and HashElementBase, and declares and implements
  * classes Hashing, HashElement, HashConstIterator.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -196,7 +197,7 @@ template<class K, class I, class H> class HashArray;
  *
  * This class adds key and information members to HashElementBase. The two
  * template parameters are \a K for the type of keys and \a I for the type
- * of information. 
+ * of information.
  */
 template<class K, class I>
 class HashElement : public HashElementBase
@@ -346,7 +347,7 @@ public:
 
 	/**
 	 * \brief Inserts a new element with key \a key and information \a info into the hash table.
-	 * 
+	 *
 	 * The new element will only be inserted if no element with key \a key is
 	 * already contained; if such an element already exists the information of
 	 * this element remains unchanged.
@@ -362,7 +363,7 @@ public:
 
 	/**
 	 * \brief Inserts a new element with key \a key and information \a info into the hash table.
-	 * 
+	 *
 	 * This is a faster version of insert() that assumes that no element with key
 	 * \a key is already contained in the hash table.
 	 */

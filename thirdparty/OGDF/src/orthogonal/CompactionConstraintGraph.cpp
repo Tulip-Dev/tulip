@@ -1,43 +1,44 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of class CompactionConstraintGraphBase.
- * 
+ *
  * Represents base class for CompactionConstraintGraph<ATYPE>
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -45,7 +46,7 @@
 #include <ogdf/orthogonal/CompactionConstraintGraph.h>
 #include <ogdf/planarity/PlanRep.h>
 #include <ogdf/basic/simple_graph_alg.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 
 //#define foutput
 
@@ -59,23 +60,25 @@ CompactionConstraintGraphBase::CompactionConstraintGraphBase(
 	const PlanRep &PG,
 	OrthoDir arcDir,
 	int costGen,
-	int costAssoc, 
-	bool align) :
-		m_path(*this),
-		m_pathNode(OR),
-		m_edgeToBasicArc(OR,0),
-		m_cost(*this,costAssoc),
-		m_type(*this,cetBasicArc),
-        m_verticalGen(PG, false),
-        m_verticalArc(*this, false),
-		m_border(*this, false),
-		m_alignmentArc(*this, false),
-		m_pathToEdge(*this, 0),
-		m_originalEdge(*this, 0)
+	int costAssoc,
+	bool align
+) :
+	m_pathNode(OR),
+	m_edgeToBasicArc(OR,0)
 {
 	OGDF_ASSERT(&PG == &(const Graph &)OR);
 
-    m_pPR       = &PG;//only used in detecting cage visibility arcs
+	m_path        .init(*this);
+	m_cost        .init(*this,costAssoc);
+	m_type        .init(*this,cetBasicArc);
+	m_verticalGen .init(PG, false);
+	m_verticalArc .init(*this, false);
+	m_border      .init(*this, false);
+	m_alignmentArc.init(*this, false);
+	m_pathToEdge  .init(*this, 0);
+	m_originalEdge.init(*this, 0);
+
+	m_pPR       = &PG;//only used in detecting cage visibility arcs
 	m_pOR       = &OR;
 	m_align     = align;
 	m_arcDir    = arcDir;
@@ -86,11 +89,8 @@ CompactionConstraintGraphBase::CompactionConstraintGraphBase(
 	edge e;
 	forall_edges(e, PG)
 	{
-		if (
-			(PG.typeOf(e) == Graph::generalization) && //only generalizations
-			(!PG.isExpansionEdge(e))
-		   )
-		   m_verticalGen[e] = true;
+		if ((PG.typeOf(e) == Graph::generalization) && (!PG.isExpansionEdge(e)))
+			m_verticalGen[e] = true;
 	}//for
 
 	insertPathVertices(PG);
@@ -107,7 +107,7 @@ void CompactionConstraintGraphBase::insertPathVertices(const PlanRep &PG)
 	forall_nodes(v,PG)
 	{
 		const OrthoRep::VertexInfoUML *vi = m_pOR->cageInfo(v);
-        if (vi == 0 || PG.typeOf(v) == Graph::generalizationMerger) continue;
+		if (vi == 0 || PG.typeOf(v) == Graph::generalizationMerger) continue;
 
 		adjEntry adjGen = vi->m_side[m_arcDir   ].m_adjGen;
 		adjEntry adjOpp = vi->m_side[m_oppArcDir].m_adjGen;
@@ -138,7 +138,7 @@ void CompactionConstraintGraphBase::insertPathVertices(const PlanRep &PG)
 			//muss man hier originaledge als rueckgabe reintun???
 			if ((m_path[pathVertex].size() == 2) && m_pathToEdge[pathVertex])
 			{
-				
+
 			}//if original segment
 			else m_pathToEdge[pathVertex] = 0;
 		}
@@ -166,7 +166,7 @@ void CompactionConstraintGraphBase::dfsInsertPathVertex(
 		if (dirAdj != m_arcDir && dirAdj != m_oppArcDir) {
 			//for multiedges, only useful if only one edge considered on path
 			//maybe zero if no original edge exists
-			if (!m_pathToEdge[pathVertex]) 
+			if (!m_pathToEdge[pathVertex])
 			{
 				//only reset later for multi edge segments
 				m_pathToEdge[pathVertex] = m_pPR->original(adj->theEdge());
@@ -206,26 +206,26 @@ void CompactionConstraintGraphBase::insertBasicArcs(const PlanRep &PG)
 
 				m_cost[e] = m_edgeCost[PG.typeOf(adj->theEdge())];
 
-                //try to pull nodes up in hierarchies
+				//try to pull nodes up in hierarchies
 				if ( (PG.typeOf(adj->theEdge()) == Graph::generalization) &&
-					 (PG.typeOf(adj->theEdge()->target()) == Graph::generalizationExpander) &&
-					 !(PG.isExpansionEdge(adj->theEdge()))
+					(PG.typeOf(adj->theEdge()->target()) == Graph::generalizationExpander) &&
+					!(PG.isExpansionEdge(adj->theEdge()))
 					)
 				{
-					if (m_align) 
+					if (m_align)
 					{
 						//got to be higher than vertexarccost*doublebendfactor
 						m_cost[e] = 4000*m_cost[e]; //use parameter later corresponding
 						m_alignmentArc[e] = true;
 					}//if align
 					//to compconsgraph::doublebendfactor
-				    else m_cost[e] = 2*m_cost[e];
+					else m_cost[e] = 2*m_cost[e];
 				}
 
 				//set generalization type
 				if (verticalGen(adj->theEdge())) m_verticalArc[e] = true;
 				//set onborder
-				if (PG.isDegreeExpansionEdge(adj->theEdge())) 
+				if (PG.isDegreeExpansionEdge(adj->theEdge()))
 				{
 					edge borderE = adj->theEdge();
 					node v1 = borderE->source();
@@ -297,10 +297,9 @@ writeGML(String("c:\\temp\\CCgraph%d.gml"));//,randomNumber(0,20)));
 writeGML("c:\\temp\\CClastgraph.gml");
 #endif
 
-	PlanarModule pm;
-	bool isPlanar = pm.planarEmbed(*this);
+	bool isPlanar = planarEmbed(*this);
 	if (!isPlanar) OGDF_THROW(AlgorithmFailureException);
-	
+
 
 	delEdge(st);
 	if (sources.size() > 1)
@@ -425,58 +424,58 @@ void CompactionConstraintGraphBase::removeRedundantVisibArcs(
 			itPrev = it;
 	}//for visibArcs
 
-    //****************************CHECK for
-    //special treatment for cage visibility
-    //two cases: input node cage: just compare arbitrary node
-    //           merger cage: check first if there are mergers
-    itPrev = 0;
-    for(it = visibArcs.begin(); it.valid(); it = itNext)
+	//****************************CHECK for
+	//special treatment for cage visibility
+	//two cases: input node cage: just compare arbitrary node
+	//           merger cage: check first if there are mergers
+	itPrev = 0;
+	for(it = visibArcs.begin(); it.valid(); it = itNext)
 	{
-   
-      itNext = it.succ();
 
-      OGDF_ASSERT(!(m_path[(*it).x1()].empty()) && !(m_path[(*it).x1()].empty()));
+		itNext = it.succ();
 
-      node boundRepresentant1 = m_path[(*it).x1()].front();
-      node boundRepresentant2 = m_path[(*it).x2()].front();
-      node en1 = m_pPR->expandedNode(boundRepresentant1);
-      node en2 = m_pPR->expandedNode(boundRepresentant2);
-      //do not allow visibility constraints in fixed cages
-      //due to non-planarity with middle position constraints
-     
-      if ( ( en1 && en2 ) && ( en1 == en2) )
-          {
-            if (itPrev.valid()) visibArcs.delSucc(itPrev);
+		OGDF_ASSERT(!(m_path[(*it).x1()].empty()) && !(m_path[(*it).x1()].empty()));
+
+		node boundRepresentant1 = m_path[(*it).x1()].front();
+		node boundRepresentant2 = m_path[(*it).x2()].front();
+		node en1 = m_pPR->expandedNode(boundRepresentant1);
+		node en2 = m_pPR->expandedNode(boundRepresentant2);
+		//do not allow visibility constraints in fixed cages
+		//due to non-planarity with middle position constraints
+
+		if ( ( en1 && en2 ) && ( en1 == en2) )
+		{
+			if (itPrev.valid()) visibArcs.delSucc(itPrev);
 			else visibArcs.popFront();
-          }
-      else
-          {
-          //check if its a genmergerspanning vis arc, merge cases later
-          node firstn = 0, secondn = 0;
-          SListIterator< node > itn;
-          for (itn = m_path[(*it).x1()].begin(); itn.valid(); itn++)
-              {
-                node en = m_pPR->expandedNode(*itn);
-                if (!en) continue;
-                if (!(m_pPR->typeOf(*itn) == Graph::generalizationExpander)) continue;
-                else {firstn = en; break;}
-              }//for
-          for (itn = m_path[(*it).x2()].begin(); itn.valid(); itn++)
-              {
-                node en = m_pPR->expandedNode(*itn);
-                if (!en) continue;
-                if (!(m_pPR->typeOf(*itn) == Graph::generalizationExpander)) continue;
-                else {secondn = en; break;}
-              }//for
-          if ((firstn && secondn) && (firstn == secondn))
-              {
-                if (itPrev.valid()) visibArcs.delSucc(itPrev);
-			    else visibArcs.popFront();
-              }
-          else itPrev = it;
-          }
-    }//for visibArcs
-    
+		}
+		else
+		{
+			//check if its a genmergerspanning vis arc, merge cases later
+			node firstn = 0, secondn = 0;
+			SListIterator< node > itn;
+			for (itn = m_path[(*it).x1()].begin(); itn.valid(); itn++)
+			{
+				node en = m_pPR->expandedNode(*itn);
+				if (!en) continue;
+				if (!(m_pPR->typeOf(*itn) == Graph::generalizationExpander)) continue;
+				else {firstn = en; break;}
+			}//for
+			for (itn = m_path[(*it).x2()].begin(); itn.valid(); itn++)
+			{
+				node en = m_pPR->expandedNode(*itn);
+				if (!en) continue;
+				if (!(m_pPR->typeOf(*itn) == Graph::generalizationExpander)) continue;
+				else {secondn = en; break;}
+			}//for
+			if ((firstn && secondn) && (firstn == secondn))
+			{
+				if (itPrev.valid()) visibArcs.delSucc(itPrev);
+				else visibArcs.popFront();
+			}
+			else itPrev = it;
+		}
+	}//for visibArcs
+
 }
 
 
@@ -505,76 +504,79 @@ void CompactionConstraintGraphBase::writeGML(ostream &os) const
 	os.precision(10);
 
 	os << "Creator \"ogdf::CompactionConstraintGraphBase::writeGML\"\n";
-	os << "directed 1\n";
-
 	os << "graph [\n";
+	os << "  directed 1\n";
 
 	node v;
 	forall_nodes(v,G) {
-		os << "node [\n";
+		os << "  node [\n";
 
-		os << "id " << (id[v] = nextId++) << "\n";
+		os << "    id " << (id[v] = nextId++) << "\n";
 
-		os << "graphics [\n";
-		os << "x 0.0\n";
-		os << "y 0.0\n";
-		os << "w 30.0\n";
-		os << "h 30.0\n";
-		
-        os << "fill \"#FFFF00\"\n";
-		os << "]\n"; // graphics
+		os << "    graphics [\n";
+		os << "      x 0.0\n";
+		os << "      y 0.0\n";
+		os << "      w 30.0\n";
+		os << "      h 30.0\n";
 
-		os << "]\n"; // node
+		os << "      fill \"#FFFF00\"\n";
+		os << "    ]\n"; // graphics
+
+		os << "  ]\n"; // node
 	}
 
 
 	edge e;
 	forall_edges(e,G) {
-		os << "edge [\n";
+		os << "  edge [\n";
 
-		os << "source " << id[e->source()] << "\n";
-		os << "target " << id[e->target()] << "\n";
+		os << "    source " << id[e->source()] << "\n";
+		os << "    target " << id[e->target()] << "\n";
 
 		// nice idea to use the edge length as edge labels, but Graphwin-
 		// garbage is not able to show the graph (thinks it has to set
 		// the y-coordinates of all nodes to NAN)
-		/*os << "label \"";
+#if 0
+		os << "    label \"";
 		writeLength(os,e);
-		os << "\"\n";*/
+		os << "\"\n";
+#endif
 
-		os << "graphics [\n";
+		os << "    graphics [\n";
 
-		os << "type \"line\"\n";
-		os << "arrow \"last\"\n";
+		os << "      type \"line\"\n";
+		os << "      arrow \"last\"\n";
 		switch(m_type[e])
 		{
 		case cetBasicArc: // red
-			os << "fill \"#FF0000\"\n";
+			os << "      fill \"#FF0000\"\n";
 			break;
 		case cetVertexSizeArc: // blue
-			os << "fill \"#0000FF\"\n";
+			os << "      fill \"#0000FF\"\n";
 			break;
 		case cetVisibilityArc: // green
-			os << "fill \"#00FF00\"\n";
+			os << "      fill \"#00FF00\"\n";
 			break;
-        case cetReducibleArc: // rose
-			os << "fill \"#FF00FF\"\n";
+		case cetReducibleArc: // rose
+			os << "      fill \"#FF00FF\"\n";
 			break;
 		case cetFixToZeroArc: //violett
-			os << "fill \"#3F00FF\"\n";
+			os << "      fill \"#3F00FF\"\n";
 			break;
 		OGDF_NODEFAULT
 		}
 
-		os << "]\n"; // graphics
+		os << "    ]\n"; // graphics
 
-		/*os << "LabelGraphics [\n";
-		os << "type \"text\"\n";
-		os << "fill \"#000000\"\n";
-		os << "anchor \"w\"\n";
-		os << "]\n";*/
+#if 0
+		os << "    LabelGraphics [\n";
+		os << "      type \"text\"\n";
+		os << "      fill \"#000000\"\n";
+		os << "      anchor \"w\"\n";
+		os << "    ]\n";
+#endif
 
-		os << "]\n"; // edge
+		os << "  ]\n"; // edge
 	}
 
 	os << "]\n"; // graph
@@ -591,76 +593,82 @@ void CompactionConstraintGraphBase::writeGML(ostream &os, NodeArray<bool> one) c
 	os.precision(10);
 
 	os << "Creator \"ogdf::CompactionConstraintGraphBase::writeGML\"\n";
-	os << "directed 1\n";
-
 	os << "graph [\n";
+	os << "  directed 1\n";
 
 	node v;
 	forall_nodes(v,G) {
-		os << "node [\n";
+		os << "  node [\n";
 
-		os << "id " << (id[v] = nextId++) << "\n";
+		os << "    id " << (id[v] = nextId++) << "\n";
 
-		os << "graphics [\n";
-		os << "x 0.0\n";
-		os << "y 0.0\n";
-		os << "w 30.0\n";
-		os << "h 30.0\n";
-		if ((one[v])) os << "fill \"#FF0F0F\"\n";
-        else os << "fill \"#FFFF00\"\n";
-		os << "]\n"; // graphics
+		os << "    graphics [\n";
+		os << "      x 0.0\n";
+		os << "      y 0.0\n";
+		os << "      w 30.0\n";
+		os << "      h 30.0\n";
+		if ((one[v])) {
+			os << "      fill \"#FF0F0F\"\n";
+		} else {
+			os << "      fill \"#FFFF00\"\n";
+		}
+		os << "    ]\n"; // graphics
 
-		os << "]\n"; // node
+		os << "  ]\n"; // node
 	}
 
 
 	edge e;
 	forall_edges(e,G) {
-		os << "edge [\n";
+		os << "  edge [\n";
 
-		os << "source " << id[e->source()] << "\n";
-		os << "target " << id[e->target()] << "\n";
+		os << "    source " << id[e->source()] << "\n";
+		os << "    target " << id[e->target()] << "\n";
 
 		// nice idea to use the edge length as edge labels, but Graphwin-
 		// garbage is not able to show the graph (thinks it has to set
 		// the y-coordinates of all nodes to NAN)
-		/*os << "label \"";
+#if 0
+		os << "    label \"";
 		writeLength(os,e);
-		os << "\"\n";*/
+		os << "\"\n";
+#endif
 
-		os << "graphics [\n";
+		os << "    graphics [\n";
 
-		os << "type \"line\"\n";
-		os << "arrow \"last\"\n";
+		os << "      type \"line\"\n";
+		os << "      arrow \"last\"\n";
 		switch(m_type[e])
 		{
 		case cetBasicArc: // red
-			os << "fill \"#FF0000\"\n";
+			os << "      fill \"#FF0000\"\n";
 			break;
 		case cetVertexSizeArc: // blue
-			os << "fill \"#0000FF\"\n";
+			os << "      fill \"#0000FF\"\n";
 			break;
 		case cetVisibilityArc: // green
-			os << "fill \"#00FF00\"\n";
+			os <<       "fill \"#00FF00\"\n";
 			break;
-        case cetReducibleArc: // rose
-			os << "fill \"#FF00FF\"\n";
+		case cetReducibleArc: // rose
+			os << "      fill \"#FF00FF\"\n";
 			break;
 		case cetFixToZeroArc: //violett
-			os << "fill \"#3F00FF\"\n";
+			os << "      fill \"#3F00FF\"\n";
 			break;
 		OGDF_NODEFAULT
 		}
 
-		os << "]\n"; // graphics
+		os << "    ]\n"; // graphics
 
-		/*os << "LabelGraphics [\n";
-		os << "type \"text\"\n";
-		os << "fill \"#000000\"\n";
-		os << "anchor \"w\"\n";
-		os << "]\n";*/
+#if 0
+		os << "    LabelGraphics [\n";
+		os << "      type \"text\"\n";
+		os << "      fill \"#000000\"\n";
+		os << "      anchor \"w\"\n";
+		os << "    ]\n";
+#endif
 
-		os << "]\n"; // edge
+		os << "  ]\n"; // edge
 	}
 
 	os << "]\n"; // graph

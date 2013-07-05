@@ -1,48 +1,49 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements class UpwardPlanarModule...
- * 
- *  ...which represents the upward-planarity testing and embedding 
+ *
+ *  ...which represents the upward-planarity testing and embedding
  * algorithm for single-source digraphs.
  * Reference: "Optimal upward planarity testing of single-source
  *  digraphs" P. Bertolazzi, G. Di Battista, C. Mannino, and
  *  R. Tamassia, SIAM J.Comput., 27(1) Feb. 1998, pp. 132-169
- * 
- * 
+ *
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -51,7 +52,7 @@
 #include <ogdf/upward/FaceSinkGraph.h>
 #include <ogdf/upward/ExpansionGraph.h>
 #include <ogdf/decomposition/StaticPlanarSPQRTree.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/upward/UpwardPlanarizationLayout.h>
 
@@ -307,7 +308,7 @@ bool UpwardPlanarModule::ConstraintRooting::checkEdge(
 // upward and, if it is, returns the list of possible external faces
 // Remark: the external face which is set in E is ignored!
 bool UpwardPlanarModule::testEmbeddedBiconnected(
-	const Graph &G,                  // embedded input graph 
+	const Graph &G,                  // embedded input graph
 	const ConstCombinatorialEmbedding &E, // embedding of G
 	SList<face> &externalFaces)      // returns list of possible external faces
 {
@@ -322,18 +323,18 @@ bool UpwardPlanarModule::testEmbeddedBiconnected(
 	node s = getSingleSource(G);
 	OGDF_ASSERT(s != 0);
 
-	FaceSinkGraph F(E,s);	
+	FaceSinkGraph F(E,s);
 
 	// find possible external faces (the faces in T containing s)
-	externalFaces.clear();	
-	F.possibleExternalFaces(externalFaces);	
+	externalFaces.clear();
+	F.possibleExternalFaces(externalFaces);
 
 	return !externalFaces.empty();
 }
 
 
 bool UpwardPlanarModule::testAndAugmentEmbedded(
-	Graph &G,                  // embedded input graph 
+	Graph &G,                  // embedded input graph
 	SList<node> &augmentedNodes,
 	SList<edge> &augmentedEdges)
 {
@@ -347,7 +348,7 @@ bool UpwardPlanarModule::testAndAugmentEmbedded(
 	OGDF_ASSERT(s != 0);
 
 	ConstCombinatorialEmbedding E(G);
-	FaceSinkGraph F(E,s);	
+	FaceSinkGraph F(E,s);
 
 	// find possible external faces (the faces in T containing s)
 	SList<face> externalFaces;
@@ -355,7 +356,7 @@ bool UpwardPlanarModule::testAndAugmentEmbedded(
 
 	if (externalFaces.empty())
 		return false;
-	
+
 	else {
 		F.stAugmentation(F.faceNodeOf(externalFaces.front()),G,augmentedNodes,augmentedEdges);
 		return true;
@@ -365,7 +366,7 @@ bool UpwardPlanarModule::testAndAugmentEmbedded(
 
 
 bool UpwardPlanarModule::testAndAugmentEmbedded(
-	Graph &G,                  // embedded input graph 
+	Graph &G,                  // embedded input graph
 	node  &superSink,
 	SList<edge> &augmentedEdges)
 {
@@ -380,7 +381,7 @@ bool UpwardPlanarModule::testAndAugmentEmbedded(
 
 	ConstCombinatorialEmbedding E(G);
 	FaceSinkGraph F(E,s);
-	
+
 
 	// find possible external faces (the faces in T containing s)
 	SList<face> externalFaces;
@@ -388,7 +389,7 @@ bool UpwardPlanarModule::testAndAugmentEmbedded(
 
 	if (externalFaces.empty())
 		return false;
-	
+
 	else {
 		F.stAugmentation(F.faceNodeOf(externalFaces.front()),G,superSink,augmentedEdges);
 		return true;
@@ -403,11 +404,12 @@ node UpwardPlanarModule::getSingleSource(const Graph &G)
 	node singleSource = 0;
 	node v;
 	forall_nodes(v,G) {
-		if (v->indeg() == 0)
+		if (v->indeg() == 0) {
 			if (singleSource == 0)
 				singleSource = v;
 			else // we have more than one source!
 				return 0;
+		}
 	}
 
 	return singleSource;
@@ -571,8 +573,7 @@ bool UpwardPlanarModule::testBiconnectedComponent(
 		}
 
 		// test whether expansion graph is planar
-		PlanarModule pm;
-		if (pm.planarityTest(exp) == false)
+		if (isPlanar(exp) == false)
 			return false;
 
 		// construct SPQR-tree T of exp with embedded skeleton graphs
@@ -616,7 +617,7 @@ bool UpwardPlanarModule::testBiconnectedComponent(
 		// exists
 		edge eRoot = directSkeletons(T,skInfo);
 
-		
+
 		if (eRoot == 0)
 			return false;
 
@@ -634,7 +635,7 @@ bool UpwardPlanarModule::testBiconnectedComponent(
 			OGDF_ASSERT(exp.representsCombEmbedding());
 			CombinatorialEmbedding E(exp);
 
-			FaceSinkGraph F(E,s);			
+			FaceSinkGraph F(E,s);
 
 			// find possible external faces (the faces in T containing s)
 			//externalFaces.clear();
@@ -680,7 +681,7 @@ bool UpwardPlanarModule::testBiconnectedComponent(
 					adjacentEdges[vG].pushBack(
 						exp.original(adj->theEdge())->adjTarget());
 				}
-				
+
 				adj1 = e->adjTarget();
 				for(adj = adj1->cyclicSucc(); adj != adj1;
 					adj = adj->cyclicSucc())
@@ -810,7 +811,7 @@ bool UpwardPlanarModule::checkDegrees(
 void UpwardPlanarModule::computeDegreesInPertinent(
 	const SPQRTree &T,
 	node s,
-	NodeArray<SkeletonInfo> &skInfo, 
+	NodeArray<SkeletonInfo> &skInfo,
 	node vT)
 {
 	const Skeleton        &S = T.skeleton(vT);
@@ -860,7 +861,7 @@ void UpwardPlanarModule::computeDegreesInPertinent(
 
 	// compute in- and outdegree of poles of reference edge in pertinent graph
 	// of reference edge
-	
+
 	int indegSrc  = 0;
 	int outdegSrc = 0;
 	{forall_adj_edges(e,src) {
@@ -873,7 +874,7 @@ void UpwardPlanarModule::computeDegreesInPertinent(
 			outdegSrc += degInfo[e].m_outdegTgt;
 		}
 	}}
-	
+
 	int indegTgt  = 0;
 	int outdegTgt = 0;
 	{forall_adj_edges(e,tgt) {
@@ -898,7 +899,7 @@ void UpwardPlanarModule::computeDegreesInPertinent(
 
 	containsSource[eRef] = (contSource == false &&
 		s != S.original(src) && s != S.original(tgt));
-	
+
 	// set degres at twin edge of reference edge
 	node wT = S.twinTreeNode(eRef);
 	DegreeInfo &degInfoTwin = skInfo[wT].m_degInfo[S.twinEdge(eRef)];
@@ -911,7 +912,7 @@ void UpwardPlanarModule::computeDegreesInPertinent(
 }
 
 
-// by default, corresponding virtual edges should be oriented in the 
+// by default, corresponding virtual edges should be oriented in the
 // same directions, i.e., the original nodes of source/target are equal
 // this procedure serves to assert that this really holds!
 bool UpwardPlanarModule::virtualEdgesDirectedEqually(const SPQRTree &T)
@@ -977,7 +978,7 @@ edge UpwardPlanarModule::directSkeletons(
 			// K = pertinent subgraph of e
 			// K^0 = K - {u,v}
 
-			const DegreeInfo &degInfoTwin = 
+			const DegreeInfo &degInfoTwin =
 				skInfo[S.twinTreeNode(e)].m_degInfo[eTwin];
 
 			bool uTwinIsSource = (degInfoTwin.m_indegSrc == 0);
@@ -1128,7 +1129,7 @@ edge UpwardPlanarModule::directSkeletons(
 	// above
 	//rooting.outputConstraints(cout);
 	edge eRoot = rooting.findRooting();
-	
+
 	//cout << "\nroot edge: " << eRoot << endl;
 
 	return eRoot;
@@ -1151,7 +1152,7 @@ bool UpwardPlanarModule::initFaceSinkGraph(
 	node s = getSingleSource(M);
 	OGDF_ASSERT(s != 0);
 
-	F.init(E,s);	
+	F.init(E,s);
 
 	// find possible external faces (the faces in T containing s)
 	F.possibleExternalFaces(externalFaces);

@@ -1,47 +1,48 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of Mixed-Model basic functionality.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
 
 #include "MixedModelBase.h"
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/simple_graph_alg.h>
 
 
@@ -49,10 +50,10 @@ namespace ogdf {
 
 
 /********************************************************************
-						  hasLeft, hasRight
+						hasLeft, hasRight
 
-  Determine if the kth set in the ordered partition has a "real"
-  left or right vertex, respectively.
+	Determine if the kth set in the ordered partition has a "real"
+	left or right vertex, respectively.
 ********************************************************************/
 
 bool MixedModelBase::hasLeft (int k) const
@@ -75,10 +76,10 @@ bool MixedModelBase::hasRight(int k) const
 
 
 /********************************************************************
-						  computeOrder
+							computeOrder
 
-  Computes the ordered partition (incl. m_left[k], m_right[k]) and
-  constructs the in- and outpoint lists.
+	Computes the ordered partition (incl. m_left[k], m_right[k]) and
+	constructs the in- and outpoint lists.
 ********************************************************************/
 
 
@@ -94,7 +95,7 @@ void MixedModelBase::computeOrder(
 	// augment PG (temporary) to achieve required connectivity
 	List<edge> augmentedEdges;
 	augmenter.call(m_PG,augmentedEdges);
-	
+
 	// embed augmented graph (if required)
 	if(pEmbedder)
 		pEmbedder->call(m_PG,adjExternal);
@@ -183,7 +184,7 @@ void MixedModelBase::computeOrder(
 /********************************************************************
 						removeDeg1Nodes
 
-  Removes deg-1-nodes and store informations for restoring them.
+	Removes deg-1-nodes and store informations for restoring them.
 ********************************************************************/
 
 void MixedModelBase::removeDeg1Nodes()
@@ -206,10 +207,10 @@ void MixedModelBase::removeDeg1Nodes()
 
 
 /********************************************************************
-					  assignIopCoords
+						assignIopCoords
 
-  Computes the relative coordinates of the in- and outpoints,
-  incl. height(v), depth(v).
+	Computes the relative coordinates of the in- and outpoints,
+	incl. height(v), depth(v).
 ********************************************************************/
 
 void MixedModelBase::assignIopCoords()
@@ -222,10 +223,10 @@ void MixedModelBase::assignIopCoords()
 		{
 			node v = V[i];
 
-			bool onlyLeft = (m_iops.in(v) == 2 && 
+			bool onlyLeft = (m_iops.in(v) == 2 &&
 				i >= 2 && m_iops.inpoints(v).front().m_adj->twinNode() == V[i-1] &&
 					m_iops.marked(m_iops.inpoints(v).back().m_adj));
-			bool onlyRight = (m_iops.in(v) == 2 && 
+			bool onlyRight = (m_iops.in(v) == 2 &&
 				i < V.len() && m_iops.inpoints(v).back().m_adj->twinNode() == V[i+1] &&
 					m_iops.marked(m_iops.inpoints(v).front().m_adj));
 
@@ -318,7 +319,7 @@ void MixedModelBase::assignIopCoords()
 /********************************************************************
 							placeNodes
 
-  Implements the placement step. Computes x[v] and y[v].
+	Implements the placement step. Computes x[v] and y[v].
 ********************************************************************/
 
 void MixedModelBase::placeNodes()
@@ -340,10 +341,10 @@ void MixedModelBase::placeNodes()
 
 
 /********************************************************************
-						  computeXCoords
+							computeXCoords
 
-  Computes the absolute x-coordinates x[v] of all nodes in the
-  ordering, furthermore dyla[k] and dyra[k] (used by compute_y_coordinates)
+	Computes the absolute x-coordinates x[v] of all nodes in the
+	ordering, furthermore dyla[k] and dyra[k] (used by compute_y_coordinates)
 ********************************************************************/
 
 void MixedModelBase::computeXCoords()
@@ -386,7 +387,7 @@ void MixedModelBase::computeXCoords()
 	// initialization
 	const ShellingOrderSet &V1 = m_mmo[1];
 	int p = V1.len();
-	
+
 	x[V1[1]] = m_iops.outLeft(V1[1]);
 	for (i = 2; i <= p; i++) {
 		x[V1[i]] = m_iops.maxRight(V1[i-1]) + m_iops.maxLeft(V1[i]) + 1;
@@ -574,8 +575,8 @@ void MixedModelBase::computeXCoords()
 /********************************************************************
 							computeYCoords
 
-  Computes the absolute y-coordinates y[v] of all nodes in the
-  ordering.
+	Computes the absolute y-coordinates y[v] of all nodes in the
+	ordering.
 ********************************************************************/
 
 class SetYCoords
@@ -758,7 +759,7 @@ void MixedModelBase::computeYCoords()
 
 	const ShellingOrderSet &V1 = m_mmo[1];
 	int p = V1.len();
-	
+
 	for (i = 1; i <= p; ++i) {
 		if (i < p) next[V1[i]] = V1[i+1];
 		if (i > 1) prev[V1[i]] = V1[i-1];
@@ -881,8 +882,8 @@ void MixedModelBase::computeYCoords()
 /********************************************************************
 							setBends
 
-  Assigns polylines to edges of the original graph and computes the
-  x- and y-coordinates of deg-1-nodes not in the ordering.
+	Assigns polylines to edges of the original graph and computes the
+	x- and y-coordinates of deg-1-nodes not in the ordering.
 ********************************************************************/
 
 void MixedModelBase::setBends ()
@@ -932,8 +933,8 @@ void MixedModelBase::setBends ()
 /********************************************************************
 							postprocessing1
 
-  Tries to reduce the number of bends by changing the outpoints of
-  nodes with indeg and outdeg 2.
+	Tries to reduce the number of bends by changing the outpoints of
+	nodes with indeg and outdeg 2.
 ********************************************************************/
 
 void MixedModelBase::postprocessing1()
@@ -967,8 +968,8 @@ void MixedModelBase::postprocessing1()
 /********************************************************************
 							postprocessing2
 
-  Tries to reduce the number of bends by moving degree-2 nodes on
-  bend points.
+	Tries to reduce the number of bends by moving degree-2 nodes on
+	bend points.
 ********************************************************************/
 
 void MixedModelBase::firstPoint(int &x, int &y, adjEntry adj)
@@ -1049,7 +1050,7 @@ void MixedModelBase::postprocessing2()
 
 
 /********************************************************************
-						  debugging output
+						debugging output
 ********************************************************************/
 
 void MixedModelBase::printMMOrder(ostream &os)
@@ -1060,7 +1061,7 @@ void MixedModelBase::printMMOrder(ostream &os)
 	for (k = 1; k <= m_mmo.length(); ++k)
 	{
 		const ShellingOrderSet &V = m_mmo[k];
-		
+
 		os << k << ": { ";
 		for (i = 1; i <= V.len(); i++)
 			os << V[i] << " ";

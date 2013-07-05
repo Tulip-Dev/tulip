@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief implementation of the class FindKuratowskis
- * 
+ *
  * \author Jens Schmidt
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -107,7 +108,7 @@ void KuratowskiStructure::copy(const KuratowskiStructure& orig) {
 	RReal = orig.RReal;
 	stopX = orig.stopX;
 	stopY = orig.stopY;
-	
+
 	wNodes = orig.wNodes;
 	highestFacePath = orig.highestFacePath;
 	highestXYPaths = orig.highestXYPaths;
@@ -120,56 +121,58 @@ void KuratowskiStructure::copy(const KuratowskiStructure& orig) {
 	stopYStartnodes = orig.stopYStartnodes;
 	stopXEndnodes = orig.stopXEndnodes;
 	stopYEndnodes = orig.stopYEndnodes;
-	
+
 	// copy pointer
 	copyPointer(orig,wNodes);
 }
 
+
 // clears members
-void KuratowskiStructure::clear() {
+void KuratowskiStructure::clear()
+{
 	V=R=RReal=stopX=stopY=NULL;
 	V_DFI = 0;
-  	wNodes.clear();
-  	highestFacePath.clear();
-  	highestXYPaths.clear();
-  	externalFacePath.clear();
-  	externalSubgraph.clear();
-  	pertinentSubgraph.clear();
-  	zPaths.clear();
-  	externE.clear();
-  	stopXStartnodes.clear();
-  	stopYStartnodes.clear();
-  	stopXEndnodes.clear();
-  	stopYEndnodes.clear();
+	wNodes.clear();
+	highestFacePath.clear();
+	highestXYPaths.clear();
+	externalFacePath.clear();
+	externalSubgraph.clear();
+	pertinentSubgraph.clear();
+	zPaths.clear();
+	externE.clear();
+	stopXStartnodes.clear();
+	stopYStartnodes.clear();
+	stopXEndnodes.clear();
+	stopYEndnodes.clear();
 }
 
 // class FindKuratowski
-FindKuratowskis::FindKuratowskis(BoyerMyrvoldPlanar* bm)
-	  : pBM(bm),
-	  	m_g(bm->m_g),
-	  	m_embeddingGrade(bm->m_embeddingGrade),
-	  	
-	  	m_bundles(bm->m_bundles),
-	  	
-		// initialize Members of BoyerMyrvoldPlanar
-		m_realVertex(bm->m_realVertex),
-		m_dfi(bm->m_dfi),
-		m_nodeFromDFI(bm->m_nodeFromDFI),
-		m_link(bm->m_link),
-		m_adjParent(bm->m_adjParent),
-		m_leastAncestor(bm->m_leastAncestor),
-		m_edgeType(bm->m_edgeType),
-		m_lowPoint(bm->m_lowPoint),
-		m_highestSubtreeDFI(bm->m_highestSubtreeDFI),
-		m_separatedDFSChildList(bm->m_separatedDFSChildList),
-		m_pointsToRoot(bm->m_pointsToRoot),
-		m_visitedWithBackedge(bm->m_visitedWithBackedge),
-		m_backedgeFlags(bm->m_backedgeFlags),
-		m_pertinentRoots(bm->m_pertinentRoots)
+FindKuratowskis::FindKuratowskis(BoyerMyrvoldPlanar* bm) :
+	pBM(bm),
+	m_g(bm->m_g),
+	m_embeddingGrade(bm->m_embeddingGrade),
+
+	m_bundles(bm->m_bundles),
+
+	// initialize Members of BoyerMyrvoldPlanar
+	m_realVertex(bm->m_realVertex),
+	m_dfi(bm->m_dfi),
+	m_nodeFromDFI(bm->m_nodeFromDFI),
+	m_link(bm->m_link),
+	m_adjParent(bm->m_adjParent),
+	m_leastAncestor(bm->m_leastAncestor),
+	m_edgeType(bm->m_edgeType),
+	m_lowPoint(bm->m_lowPoint),
+	m_highestSubtreeDFI(bm->m_highestSubtreeDFI),
+	m_separatedDFSChildList(bm->m_separatedDFSChildList),
+	m_pointsToRoot(bm->m_pointsToRoot),
+	m_visitedWithBackedge(bm->m_visitedWithBackedge),
+	m_backedgeFlags(bm->m_backedgeFlags),
+	m_pertinentRoots(bm->m_pertinentRoots)
 {
 	OGDF_ASSERT(bm != NULL);
 	m_nodeMarker = 0;
-};
+}
 
 // finds root node of the bicomp containing the stopping node stopX
 node FindKuratowskis::findRoot(node stopX) {
@@ -188,7 +191,7 @@ void FindKuratowskis::extractHighestFacePath(
 	node x,target;
 	while (adj != end->twin()) {
 		x = adj->theNode();
-		
+
 		if (m_wasHere[x] >= marker) {
 			// node is already visited on facepath: pop until duplicate node found
 			OGDF_ASSERT(!highestFacePath.empty());
@@ -200,7 +203,7 @@ void FindKuratowskis::extractHighestFacePath(
 			// sign visited nodes with marker
 			m_wasHere[x] = marker;
 		}
-		
+
 		do {
 			adj = adj->cyclicSucc();
 			target = adj->twinNode();
@@ -233,7 +236,7 @@ void FindKuratowskis::extractExternalFacePath(
 		externalFacePath.pushBack(pBM->beforeShortCircuitEdge(x,dir));
 		x = pBM->successorWithoutShortCircuit(x,dir);
 	}
-	
+
 	dir = CCW;
 	x = pBM->successorWithoutShortCircuit(k.R,dir);
 	ListConstIterator<adjEntry> highIt = highestFacePath.begin();
@@ -259,13 +262,13 @@ void FindKuratowskis::extractExternalFacePath(
 			info.externEEnd = NULL;
 			info.firstExternEAfterW = NULL;
 		}
-		
+
 		// push in wNodes-list
 		if (pBM->pertinent(x)) {
 			info.w = x;
 			k.wNodes.pushBack(info);
 		}
-		
+
 		// compute next highestXYPath
 		if (m_wasHere[x] == marker &&
 					m_wasHere[pBM->constSuccessorWithoutShortCircuit(x,dir)] != marker) {
@@ -275,7 +278,7 @@ void FindKuratowskis::extractExternalFacePath(
 			XYPathList.pushBack(adj);
 			OGDF_ASSERT((*highIt.succ())->theNode() !=
 						pBM->constSuccessorWithoutShortCircuit(x,dir));
-			
+
 			// traverse highFacePath to next marker
 			do {
 				++highIt;
@@ -286,12 +289,12 @@ void FindKuratowskis::extractExternalFacePath(
 				if (m_wasHere[temp->theNode()]==highMarker+1 && zList.empty())
 					zList.pushBack(temp);
 			} while (m_wasHere[temp->theNode()] != marker);
-			
+
 			// save highestXY-Path
 			OGDF_ASSERT(!XYPathList.empty());
 			k.highestXYPaths.pushBack(XYPathList);
 			info.highestXYPath = &k.highestXYPaths.back();
-			
+
 			// compute path from zNode to V and save it
 			if (!zList.empty()) {
 				OGDF_ASSERT(zList.size()==1); // just one zNode for now
@@ -309,7 +312,7 @@ void FindKuratowskis::extractExternalFacePath(
 				info.zPath = &k.zPaths.back();
 			}
 		}
-		
+
 		// go on
 		adj = pBM->beforeShortCircuitEdge(x,dir);
 		x = pBM->successorWithoutShortCircuit(x,dir);
@@ -343,14 +346,14 @@ void FindKuratowskis::splitInMinorTypes(
 			} else {
 				if (pBM->externallyActive(x,k.V_DFI)) {
 					externEdummy.theNode = x;
-					
+
 					// check minor type B and save extern linkage
 					if (it.valid() && (*it).w==x &&
 							!m_pertinentRoots[x].empty() &&
 							m_lowPoint[m_nodeFromDFI[-m_dfi[m_pertinentRoots[x].back()]]]
 							< k.V_DFI) {
 						WInfo& info(*it);
-						
+
 						// checking minor type B
 						info.minorType |= WInfo::B;
 						// mark extern node for later extraction
@@ -365,16 +368,16 @@ void FindKuratowskis::splitInMinorTypes(
 						externEdummy.startnodes.clear();
 						k.externE.pushBack(externEdummy);
 					}
-					
+
 					// save for each wNode the first externally active successor
 					// on the external face
 					for (itList = infoList.begin(); itList.valid(); ++itList)
 						(*itList)->firstExternEAfterW = x;
 					infoList.clear();
-					
-					
+
+
 				}
-				
+
 				// get appropriate WInfo
 				if (it.valid() && (*it).w==x) {
 					infoList.pushBack(&(*it));
@@ -383,7 +386,7 @@ void FindKuratowskis::splitInMinorTypes(
 			}
 		}
 	}
-	
+
 	// divide wNodes in different minor types
 	// avoids multiple computation of the externE range
 	itExtern = externalFacePath.begin();
@@ -391,28 +394,28 @@ void FindKuratowskis::splitInMinorTypes(
 	WInfo* oldInfo = NULL;
 	for (it=k.wNodes.begin(); it.valid(); ++it) {
 		WInfo& info(*it);
-		
+
 		// checking minor type A
 		if (k.RReal!=k.V) info.minorType |= WInfo::A;
-		
+
 		// if a XYPath exists
 		if (info.highestXYPath!=NULL) {
 			if (m_wasHere[info.highestXYPath->front()->theNode()]==marker)
 				info.pxAboveStopX = true;
 			if (m_wasHere[info.highestXYPath->back()->theNode()]==marker)
 				info.pyAboveStopY = true;
-			
+
 			// checking minor type C
 			if (info.pxAboveStopX || info.pyAboveStopY)
 				info.minorType |= WInfo::C;
-			
+
 			// checking minor type D
 			if (info.zPath!=NULL) info.minorType |= WInfo::D;
-			
+
 			// checking minor type E
 			if (!k.externE.empty()) {
 				node t;
-				
+
 				// compute valid range of externE-nodes in linear time
 				if (oldInfo!=NULL && info.highestXYPath==oldInfo->highestXYPath) {
 					// found the same highestXYPath as before
@@ -456,7 +459,7 @@ void FindKuratowskis::splitInMinorTypes(
 				}
 			}
 		}
-		
+
 		/*
 		// use this to find special kuratowski-structures
 		if ((info.minorType & (WInfo::A|WInfo::B|WInfo::C|WInfo::D|WInfo::E)) ==
@@ -465,7 +468,7 @@ void FindKuratowskis::splitInMinorTypes(
 		}
 		*/
 	}
-	
+
 	// extract the externalSubgraph of all saved externally active nodes
 	// exclude the already extracted minor b-types
 	#ifdef OGDF_DEBUG
@@ -473,7 +476,7 @@ void FindKuratowskis::splitInMinorTypes(
 	#endif
 	for (itExternE=k.externE.begin(); itExternE.valid(); ++itExternE) {
 		if ((*itExternE).startnodes.empty()) continue;
-		
+
 		ExternE& externE(*itExternE);
 		externE.startnodes.clear();
 		if (m_bundles) {
@@ -501,19 +504,19 @@ void FindKuratowskis::extractExternalSubgraph(
 {
 	int lowpoint;
 	ListConstIterator<node> it;
-	
+
 	if (m_leastAncestor[stop] < root) {
 		externalStartnodes.pushBack(m_dfi[stop]);
 		externalEndnodes.pushBack(m_nodeFromDFI[m_leastAncestor[stop]]);
 	}
-	
+
 	// descent to external active child bicomps of stopnode
 	node temp;
 	for (it = m_separatedDFSChildList[stop].begin(); it.valid(); ++it) {
 		temp = *it;
 		lowpoint = m_lowPoint[temp];
 		if (lowpoint >= root) break;
-		
+
 		externalStartnodes.pushBack(m_dfi[temp]);
 		externalEndnodes.pushBack(m_nodeFromDFI[lowpoint]);
 	}
@@ -529,11 +532,11 @@ void FindKuratowskis::extractExternalSubgraphBundles(
 {
 	node v,temp;
 	adjEntry adj;
-	
+
 	#ifdef OGDF_DEBUG
 	forall_nodes(v,m_g) OGDF_ASSERT(m_wasHere[v]!=nodeMarker);
 	#endif
-	
+
 	StackPure<node> stack; // stack for dfs-traversal
 	ListConstIterator<node> it;
 	stack.push(stop);
@@ -542,12 +545,12 @@ void FindKuratowskis::extractExternalSubgraphBundles(
 		if (m_wasHere[v]==nodeMarker) continue;
 		// mark visited nodes
 		m_wasHere[v]=nodeMarker;
-		
+
 		// search for unvisited nodes and add them to stack
 		forall_adj(adj,v) {
 			temp = adj->twinNode();
 			if (m_edgeType[adj->theEdge()]==EDGE_BACK_DELETED) continue;
-			
+
 			// go along backedges to ancestor (ignore virtual nodes)
 			if (m_dfi[temp] < root && m_dfi[temp] > 0) {
 				OGDF_ASSERT(m_edgeType[adj->theEdge()]==EDGE_BACK);
@@ -561,7 +564,7 @@ void FindKuratowskis::extractExternalSubgraphBundles(
 				if (m_wasHere[temp] != nodeMarker) stack.push(temp);
 			}
 		}
-		
+
 		// descent to external active child bicomps
 		for (it = m_separatedDFSChildList[v].begin(); it.valid(); ++it) {
 			temp = *it;
@@ -584,18 +587,18 @@ void FindKuratowskis::extractPertinentSubgraph(
 	int targetDFI;
 	node target;
 	edge e;
-	
+
 	// create links from pertinent nodes to WInfo
 	for (it = W_All.begin(); it.valid(); ++it)
 		m_getWInfo[(*it).w] = &(*it);
-	
+
 	// add all pertinent paths to WInfo
 	forall_adj(adj,k.V) {
 		if (m_edgeType[adj->theEdge()]==EDGE_BACK_DELETED) continue;
 		targetDFI = m_dfi[adj->twinNode()];
 		if (targetDFI >= minDFI && targetDFI <= maxDFI) {
 			// target node is in subtree of a pertinent node
-			
+
 			// delete last edge and backedgeFlags
 			target = adj->twinNode();
 			e = adj->theEdge();
@@ -606,7 +609,7 @@ void FindKuratowskis::extractPertinentSubgraph(
 			// delete backedge-counter on virtual root node
 			--m_visitedWithBackedge[m_pointsToRoot[e]];
 			OGDF_ASSERT(m_visitedWithBackedge[m_pointsToRoot[e]] >= 0);
-			
+
 			// go up along the DFS-path
 			while (m_getWInfo[target] == NULL) {
 				path.pushFront(m_adjParent[target]->theEdge());
@@ -616,13 +619,13 @@ void FindKuratowskis::extractPertinentSubgraph(
 					m_pertinentRoots[target].clear();
 				}
 			}
-			
+
 			// save path
 			m_getWInfo[target]->pertinentPaths.pushBack(path);
 			path.clear();
 		}
 	}
-	
+
 	// delete links from pertinent nodes to WInfo
 	for (it = W_All.begin(); it.valid(); ++it)
 		m_getWInfo[(*it).w] = NULL;
@@ -639,11 +642,11 @@ void FindKuratowskis::extractPertinentSubgraphBundles(
 	node w,x;
 	adjEntry adj;
 	edge e;
-	
+
 	#ifdef OGDF_DEBUG
 	forall_nodes(w,m_g) OGDF_ASSERT(m_wasHere[w]!=nodeMarker);
 	#endif
-	
+
 	StackPure<node> stack; // stack for dfs-traversal
 	SListIterator<node> it;
 	SListConstIterator<WInfo> itt;
@@ -651,7 +654,7 @@ void FindKuratowskis::extractPertinentSubgraphBundles(
 	for (itt = W_All.begin(); itt.valid(); ++itt) {
 		node currentWNode = (*itt).w;
 		stack.push(currentWNode);
-		
+
 		// until stack is empty, do dfs-traversal in bicomps and descent to
 		// pertinent child bicomps
 		while (!stack.empty()) {
@@ -659,13 +662,13 @@ void FindKuratowskis::extractPertinentSubgraphBundles(
 			if (m_wasHere[w]==nodeMarker) continue;
 			// mark visited nodes
 			m_wasHere[w]=nodeMarker;
-			
+
 			// search for unvisited nodes and add them to stack
 			forall_adj(adj,w) {
 				e = adj->theEdge();
 				if (m_edgeType[e]==EDGE_BACK_DELETED) continue;
 				x = adj->twinNode();
-				
+
 				// go along pertinent backedges to V (ignore virtual nodes)
 				if (x==V && m_edgeType[e]!=EDGE_BACK_DELETED) {
 					OGDF_ASSERT(m_edgeType[e]==EDGE_BACK);
@@ -676,7 +679,7 @@ void FindKuratowskis::extractPertinentSubgraphBundles(
 					--m_visitedWithBackedge[m_pointsToRoot[e]];
 					OGDF_ASSERT(m_visitedWithBackedge[m_pointsToRoot[e]]>=0);
 					pertinentSubgraph.pushBack(e);
-					
+
 				} else if (w != currentWNode && m_dfi[x] >= m_dfi[w]) {
 					OGDF_ASSERT(m_edgeType[adj->theEdge()]==EDGE_DFS ||
 								m_edgeType[adj->theEdge()]==EDGE_BACK ||
@@ -686,7 +689,7 @@ void FindKuratowskis::extractPertinentSubgraphBundles(
 					if (m_wasHere[x] != nodeMarker) stack.push(x);
 				}
 			}
-			
+
 			// descent to pertinent child bicomps
 			for (it = m_pertinentRoots[w].begin(); it.valid(); ++it) {
 				stack.push(*it);
@@ -716,7 +719,7 @@ void FindKuratowskis::addKuratowskiStructure(
 	OGDF_ASSERT(m_embeddingGrade > BoyerMyrvoldPlanar::doNotFind);
 	// check, if we have found enough kuratowski structures
 	OGDF_ASSERT(m_embeddingGrade <= 0 || allKuratowskis.size() < m_embeddingGrade);
-	
+
 	// init NodeArrays in first invocation
 	if (!m_wasHere.valid()) {
 		if (!m_bundles) {
@@ -726,60 +729,60 @@ void FindKuratowskis::addKuratowskiStructure(
 		OGDF_ASSERT(m_wasHere.graphOf()==NULL);
 		m_wasHere.init(m_g,0);
 	}
-	
+
 	// delete old KuratowskiStruture and initialize new structure
-  	k.clear();
-  	k.V = currentNode;
-  	k.V_DFI = m_dfi[currentNode];
+	k.clear();
+	k.V = currentNode;
+	k.V_DFI = m_dfi[currentNode];
 	k.stopX = stopx;
 	k.stopY = stopy;
 	k.R = root;
 	k.RReal = m_realVertex[k.R];
-  	
+
 	// flip bicomp with root R with or without reversed flipping. changes the embedding
 	// process completely.
 	pBM->flipBicomp(-m_dfi[k.R],++m_nodeMarker,m_wasHere,false,true);
-//	pBM->flipBicomp(-m_dfi[k.R],++m_nodeMarker,m_wasHere,false,false);
-	
+	//	pBM->flipBicomp(-m_dfi[k.R],++m_nodeMarker,m_wasHere,false,false);
+
 	// extract highest facepath (contains all highest xy-paths)
 	extractHighestFacePath(k.highestFacePath,++m_nodeMarker);
 	++m_nodeMarker;
-	
+
 	// extract external facepath in direction CCW and split the highest facepath in
 	// highest xy-paths
 	++m_nodeMarker;
 	extractExternalFacePath(k.externalFacePath,k.highestFacePath,m_nodeMarker,
 															m_nodeMarker-2);
-	
+
 	// extract external subgraph from stopX and stopY to ancestors of R
 	if (m_bundles) {
 		extractExternalSubgraphBundles(k.stopX,k.V_DFI,k.externalSubgraph,++m_nodeMarker);
 	} else {
 		extractExternalSubgraph(k.stopX,k.V_DFI,k.stopXStartnodes,k.stopXEndnodes);
 	}
-	
+
 	if (m_bundles) {
 		extractExternalSubgraphBundles(k.stopY,k.V_DFI,k.externalSubgraph,++m_nodeMarker);
 	} else {
 		extractExternalSubgraph(k.stopY,k.V_DFI,k.stopYStartnodes,k.stopYEndnodes);
 	}
-	
+
 	// pass pertinent nodes in the lists of possible different minor-types
 	splitInMinorTypes(k.externalFacePath,++m_nodeMarker);
-	
+
 	// extract pertinent subgraphs from all w-nodes to k.V
 	if (m_bundles) {
 		extractPertinentSubgraphBundles(k.wNodes,k.V,k.pertinentSubgraph,++m_nodeMarker);
 	} else {
 		extractPertinentSubgraph(k.wNodes/*,k.V*/);
 	}
-	
+
 	// add Kuratowski to KuratowskisOnNode
 	allKuratowskis.pushBack(k);
-	
+
 	// reverse flipping
 //	pBM->flipBicomp(-m_dfi[k.R],++m_nodeMarker,m_wasHere,false,false);
-	
+
 	OGDF_ASSERT(m_bundles || k.pertinentSubgraph.empty());
 }
 

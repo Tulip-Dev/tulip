@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementation of the class DinoXmlScanner serving the
  *        class DinoXmlParser
- * 
+ *
  * \author Dino Ahr
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -60,7 +61,7 @@ namespace ogdf {
 
 		// Create current token string
 		m_pCurrentTokenString = new char[DinoLineBuffer::c_maxStringLength];
-		if (m_pCurrentTokenString == 0) 
+		if (m_pCurrentTokenString == 0)
 			OGDF_THROW(InsufficientMemoryException);
 		for (int i = 0; i < DinoLineBuffer::c_maxStringLength; i++){
 			m_pCurrentTokenString[i] = '0';
@@ -75,7 +76,7 @@ namespace ogdf {
 	{
 		// Destroy current token string
 		delete [] m_pCurrentTokenString;
-		
+
 		// Destroy line buffer
 		delete m_pLineBuffer;
 
@@ -106,7 +107,7 @@ namespace ogdf {
 		switch (currentCharacter){
 
 		// Opening Bracket
-		case '<': 
+		case '<':
 			{
 				m_pLineBuffer->moveToNextCharacter();
 				return openingBracket;
@@ -122,7 +123,7 @@ namespace ogdf {
 			break;
 
 		// Question Mark
-		case '?': 
+		case '?':
 			{
 				m_pLineBuffer->moveToNextCharacter();
 				return questionMark;
@@ -146,7 +147,7 @@ namespace ogdf {
 			break;
 
 		// Slash
-		case '/': 
+		case '/':
 			{
 				m_pLineBuffer->moveToNextCharacter();
 				return slash;
@@ -175,9 +176,9 @@ namespace ogdf {
 
 			// Read valid identifier characters
 			while ((isalnum(currentCharacter)) ||  // a..z|A..Z|0..9
-				   (currentCharacter == '.') ||
-				   (currentCharacter == ':') ||
-				   (currentCharacter == '_'))
+				(currentCharacter == '.') ||
+				(currentCharacter == ':') ||
+				(currentCharacter == '_'))
 			{
 				currentCharacter = m_pLineBuffer->moveToNextCharacter();
 			}
@@ -234,13 +235,13 @@ namespace ogdf {
 			// Read until until an invalid character occurs
 			currentCharacter = m_pLineBuffer->moveToNextCharacter();
 			while ((isalnum(currentCharacter)) ||
-				   (currentCharacter == '-') ||
-				   (currentCharacter == '.'))
+				(currentCharacter == '-') ||
+				(currentCharacter == '.'))
 			{
 				currentCharacter = m_pLineBuffer->moveToNextCharacter();
 			}
 
-			// Copy attributeValue to currentTokenString 
+			// Copy attributeValue to currentTokenString
 			m_pLineBuffer->extractString(startPosition,
 										 m_pLineBuffer->getCurrentPosition(),
 										 m_pCurrentTokenString);
@@ -303,7 +304,7 @@ namespace ogdf {
 	bool DinoXmlScanner::skipUntil(char searchCharacter, bool skipOverSearchCharacter){
 
 		while (m_pLineBuffer->getCurrentCharacter() != EOF){
-			
+
 			// Search character has been found!
 			if (m_pLineBuffer->getCurrentCharacter() == searchCharacter){
 
@@ -311,7 +312,7 @@ namespace ogdf {
 				if (skipOverSearchCharacter){
 					m_pLineBuffer->moveToNextCharacter();
 				}
-					
+
 				return true;
 
 			} // Search character has been found!
@@ -331,10 +332,10 @@ namespace ogdf {
 	bool DinoXmlScanner::skipUntilMatchingClosingBracket(){
 
 		// We assume that the opening bracket has already been read
-		int bracketParity = 1; 
+		int bracketParity = 1;
 
 		while ((m_pLineBuffer->getCurrentCharacter() != EOF) &&
-			   (bracketParity != 0))
+			(bracketParity != 0))
 		{
 			// Opening bracket has been found!
 			if (m_pLineBuffer->getCurrentCharacter() == '<'){
@@ -361,7 +362,7 @@ namespace ogdf {
 	} // skipUntilMatchingClosingBracket
 
 	//
-	// r e a d S t r i n g U n t i l 
+	// r e a d S t r i n g U n t i l
 	//
 	bool DinoXmlScanner::readStringUntil(char searchCharacter,
 										 bool includeSearchCharacter){
@@ -396,7 +397,7 @@ namespace ogdf {
 		XmlToken currentToken;
 
 		while (!terminate){
-			
+
 			cout << "Line " << getInputFileLineCounter() << ": ";
 			currentToken = getNextToken();
 

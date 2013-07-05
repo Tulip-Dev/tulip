@@ -1,41 +1,42 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2583 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 01:02:21 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of interface for grid layout algorithms.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -103,9 +104,19 @@ public:
 
 
 	//! Returns the current setting of the minimum distance between nodes.
+	/**
+	 * This minimum distance is used for mapping grid coordinates to double coordinates as stored
+	 * in GraphAttributes. This mapping occurs automatically when the grid layout algorithm is
+	 * called with LayoutModule's call method.
+	 */
 	double separation() const { return m_separation; }
 
 	//! Sets the minimum distance between nodes.
+	/**
+	 * This minimum distance is used for mapping grid coordinates to double coordinates as stored
+	 * in GraphAttributes. This mapping occurs automatically when the grid layout algorithm is
+	 * called with LayoutModule's call method.
+	 */
 	void separation(double sep) { m_separation = sep; }
 
 	const IPoint &gridBoundingBox() const { return m_gridBoundingBox; }
@@ -186,8 +197,8 @@ protected:
 	 *        upper right corner as well as the width and height of the grid layout.
 	 */
 	virtual void doCall(
-		const Graph &G, 
-		GridLayout &gridLayout, 
+		const Graph &G,
+		GridLayout &gridLayout,
 		IPoint &boundingBox)
 	{
 		doCall(G,0,gridLayout,boundingBox,false);
@@ -210,10 +221,10 @@ protected:
 	 *        has to be preserved (true), or if an embedding needs to be computed (false).
 	 */
 	virtual void doCall(
-		const Graph &G, 
+		const Graph &G,
 		adjEntry adjExternal,
-		GridLayout &gridLayout, 
-		IPoint &boundingBox, 
+		GridLayout &gridLayout,
+		IPoint &boundingBox,
 		bool fixEmbedding) = 0;
 };
 
@@ -295,11 +306,12 @@ protected:
 	 * @param adjExternal is an adjacency entry on the external face, or 0 if no external
 	 *        face is specified.
 	 * @param gridLayout is assigned the computed grid layout.
+	 * @param boundingBox is assigned the bounding box of the computed layout.
 	 * @param fixEmbedding determines if the input graph is embedded and that embedding
 	 *        has to be preserved (true), or if an embedding needs to be computed (false).
 	 */
 	virtual void doCall(
-		PlanRep &PG, 
+		PlanRep &PG,
 		adjEntry adjExternal,
 		GridLayout &gridLayout,
 		IPoint &boundingBox,
@@ -308,10 +320,10 @@ protected:
 private:
 	//! Implements PlanarGridLayoutModule::doCall().
 	void doCall(
-		const Graph &G, 
+		const Graph &G,
 		adjEntry adjExternal,
-		GridLayout &gridLayout, 
-		IPoint &boundingBox, 
+		GridLayout &gridLayout,
+		IPoint &boundingBox,
 		bool fixEmbedding);
 };
 

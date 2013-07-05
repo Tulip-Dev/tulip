@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2615 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-16 14:23:36 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration and implementation of class Tuple2, Tuple3
  *        and Tuple4.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -56,6 +57,10 @@
 namespace ogdf {
 
 //! Tuples of two elements (2-tuples).
+/**
+ * @tparam E1 is the data type for the first element.
+ * @tparam E2 is the data type for the second element.
+ */
 template<class E1, class E2> class Tuple2 {
 public:
 	E1 m_x1; //!< The first element.
@@ -107,6 +112,11 @@ ostream &operator<<(ostream &os, const Tuple2<E1,E2> &t2)
 
 
 //! Tuples of three elements (3-tuples).
+/**
+ * @tparam E1 is the data type for the first element.
+ * @tparam E2 is the data type for the second element.
+ * @tparam E3 is the data type for the third element.
+ */
 template<class E1, class E2, class E3> class Tuple3 {
 public:
 	E1 m_x1; //!< The first element.
@@ -164,7 +174,13 @@ ostream &operator<<(ostream &os, const Tuple3<E1,E2,E3> &t3)
 }
 
 
-//! Tuples of three elements (3-tuples).
+//! Tuples of four elements (4-tuples).
+/**
+ * @tparam E1 is the data type for the first element.
+ * @tparam E2 is the data type for the second element.
+ * @tparam E3 is the data type for the third element.
+ * @tparam E4 is the data type for the fourth element.
+ */
 template<class E1, class E2, class E3, class E4> class Tuple4 {
 public:
 	E1 m_x1; //!< The first element.

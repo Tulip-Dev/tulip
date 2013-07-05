@@ -1,48 +1,50 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Computes an embedding of a graph with maximum external face.
- * See paper "Graph Embedding with Minimum Depth and Maximum External
+ *
+ * See the paper "Graph Embedding with Minimum Depth and Maximum External
  * Face" by C. Gutwenger and P. Mutzel (2004) for details.
  * The algorithm for maximum external face is combined with the
  * algorithm for maximum external layers which defines how to embed
  * blocks into inner faces. See diploma thesis "Algorithmen zur
- * Bestimmung von guten Graph-Einbettungen für orthogonale
- * Zeichnungen" (in german) of Thorsten Kerkhof (2007) for details.
- * 
+ * Bestimmung von guten Graph-Einbettungen f&uuml;r orthogonale
+ * Zeichnungen" (in german) by Thorsten Kerkhof (2007) for details.
+ *
  * \author Thorsten Kerkhof
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -52,41 +54,31 @@
 
 namespace ogdf {
 
-void EmbedderMaxFaceLayers::call(PlanRep& PG, adjEntry& adjExternal)
+void EmbedderMaxFaceLayers::call(Graph& G, adjEntry& adjExternal)
 {
 	adjExternal = 0;
 	pAdjExternal = &adjExternal;
 
 	//simple base cases:
-	if (PG.empty())
+	if (G.numberOfNodes() <= 1)
 		return;
-	if (PG.numberOfNodes() == 1)
-		return;
-	if (PG.numberOfEdges() == 1)
+	if (G.numberOfEdges() == 1)
 	{
-		edge e = PG.chooseEdge();
-		node n1 = e->source();
-		node n2 = e->target();
-		newOrder.init(PG);
-		newOrder[n1].pushBack(e->adjSource());
-		newOrder[n2].pushBack(e->adjTarget());
-		PG.sort(n1, newOrder[n1]);
-		PG.sort(n2, newOrder[n2]);
+		edge e = G.firstEdge();
 		adjExternal = e->adjSource();
 		return;
 	}
 
 	//HINT: Edges are directed from child to parent in BC-trees
-	pBCTree = new BCTree(PG);
+	pBCTree = new BCTree(G);
 
 	//base case of biconnected graph:
 	if (pBCTree->bcTree().numberOfNodes() == 1)
 	{
-		NodeArray<int> m_nodeLength(PG, 0);
-		EdgeArray<int> m_edgeLength(PG, 1);
+		NodeArray<int> m_nodeLength(G, 0);
+		EdgeArray<int> m_edgeLength(G, 1);
 		adjEntry m_adjExternal;
-		EmbedderMaxFaceBiconnectedGraphsLayers<int>::embed(PG, m_adjExternal,
-		                                                    m_nodeLength, m_edgeLength);
+		EmbedderMaxFaceBiconnectedGraphsLayers<int>::embed(G, m_adjExternal, m_nodeLength, m_edgeLength);
 		adjExternal = m_adjExternal;
 
 		delete pBCTree;
@@ -117,7 +109,7 @@ void EmbedderMaxFaceLayers::call(PlanRep& PG, adjEntry& adjExternal)
 	eH_to_eBlockEmbedding.init(pBCTree->bcTree());
 	nodeLength.init(pBCTree->bcTree());
 	cstrLength.init(pBCTree->bcTree());
-	spqrTrees.init(pBCTree->bcTree());
+	spqrTrees.init(pBCTree->bcTree(),0);
 	computeBlockGraphs(rootBlockNode, 0);
 
 	//Bottom-Up-Traversal:
@@ -144,7 +136,7 @@ void EmbedderMaxFaceLayers::call(PlanRep& PG, adjEntry& adjExternal)
 		nodeLength[rootBlockNode][cB] = length_v_in_rootBlock;
 	}
 
-	node bT_opt = PG.chooseNode(); //= PG.chooseNode() only to get rid of warning
+	node bT_opt = G.chooseNode(); //= G.chooseNode() only to get rid of warning
 	int ell_opt = 0;
 	maximumFaceRec(rootBlockNode, bT_opt, ell_opt);
 
@@ -152,29 +144,20 @@ void EmbedderMaxFaceLayers::call(PlanRep& PG, adjEntry& adjExternal)
 	//****************************************************************************
 	//Second step: Embed G by expanding a maximum face in bT_opt
 	//****************************************************************************
-	newOrder.init(PG);
+	newOrder.init(G);
 	treeNodeTreated.init(pBCTree->bcTree(), false);
 	embedBlock(bT_opt);
 
 	node v;
-	forall_nodes(v, PG)
-		PG.sort(v, newOrder[v]);
+	forall_nodes(v, G)
+		G.sort(v, newOrder[v]);
 
 	forall_nodes(v, pBCTree->bcTree())
-	{
-		if (pBCTree->typeOfBNode(v) == BCTree::BComp)
-		{
-			if (   !blockG[v].empty()
-					&& blockG[v].numberOfNodes() != 1
-					&& blockG[v].numberOfEdges() != 1)
-			{
-				delete spqrTrees[v];
-			}
-		}
-	}
+		delete spqrTrees[v];
 
 	delete pBCTree;
 }
+
 
 void EmbedderMaxFaceLayers::computeBlockGraphs(const node& bT, const node& cH)
 {
@@ -184,7 +167,7 @@ void EmbedderMaxFaceLayers::computeBlockGraphs(const node& bT, const node& cH)
 	{
 		if (e->source() == bT)
 			continue;
-		
+
 		node cT = e->source();
 		edge e2;
 		forall_adj_edges(e2, cT)
@@ -206,12 +189,13 @@ void EmbedderMaxFaceLayers::computeBlockGraphs(const node& bT, const node& cH)
 	nodeLength[bT].init(blockG[bT], 0);
 	cstrLength[bT].init(blockG[bT], 0);
 	if (   !blockG[bT].empty()
-	    && blockG[bT].numberOfNodes() != 1
-	    && blockG[bT].numberOfEdges() != 1)
+		&& blockG[bT].numberOfNodes() != 1
+		&& blockG[bT].numberOfEdges() > 2)
 	{
 		spqrTrees[bT] = new StaticSPQRTree(blockG[bT]);
 	}
 }
+
 
 int EmbedderMaxFaceLayers::constraintMaxFace(const node& bT, const node& cH)
 {
@@ -252,6 +236,7 @@ int EmbedderMaxFaceLayers::constraintMaxFace(const node& bT, const node& cH)
 	return cstrLengthBc;
 }
 
+
 void EmbedderMaxFaceLayers::maximumFaceRec(const node& bT, node& bT_opt, int& ell_opt)
 {
 	//(B*, \ell*) := (B, size of a maximum face in B):
@@ -260,10 +245,10 @@ void EmbedderMaxFaceLayers::maximumFaceRec(const node& bT, node& bT_opt, int& el
 	NodeArray< EdgeArray<int> > edgeLengthSkel;
 	int m_ell_opt = EmbedderMaxFaceBiconnectedGraphsLayers<int>::computeSize(
 		blockG[bT],
-	    nodeLength[bT],
-	    edgeLength,
-	    *spqrTrees[bT],
-	    edgeLengthSkel);
+		nodeLength[bT],
+		edgeLength,
+		*spqrTrees[bT],
+		edgeLengthSkel);
 
 	edge e;
 	forall_adj_edges(e, bT)
@@ -274,14 +259,13 @@ void EmbedderMaxFaceLayers::maximumFaceRec(const node& bT, node& bT_opt, int& el
 		node cH = pBCTree->cutVertex(cT, bT);
 
 		EdgeArray<int> edgeLength(blockG[bT], 1);
-		cstrLength[bT][nH_to_nBlockEmbedding[bT][cH]]
-			= EmbedderMaxFaceBiconnectedGraphsLayers<int>::computeSize(
-				blockG[bT],
-			    nH_to_nBlockEmbedding[bT][cH],
-			    nodeLength[bT],
-			    edgeLength,
-			    *spqrTrees[bT],
-			    edgeLengthSkel);
+		cstrLength[bT][nH_to_nBlockEmbedding[bT][cH]] = EmbedderMaxFaceBiconnectedGraphsLayers<int>::computeSize(
+			blockG[bT],
+			nH_to_nBlockEmbedding[bT][cH],
+			nodeLength[bT],
+			edgeLength,
+			*spqrTrees[bT],
+			edgeLengthSkel);
 
 		//L := \sum_{(B', c) \in bcTree} cstrLength(B', c)
 		int L = 0;
@@ -298,7 +282,7 @@ void EmbedderMaxFaceLayers::maximumFaceRec(const node& bT, node& bT_opt, int& el
 				node bT2 = e2->target();
 				L += cstrLength[bT2][nH_to_nBlockEmbedding[bT2][pBCTree->cutVertex(cT, bT2)]];
 			}
-		} 
+		}
 
 		forall_adj_edges(e2, cT)
 		{
@@ -311,7 +295,7 @@ void EmbedderMaxFaceLayers::maximumFaceRec(const node& bT, node& bT_opt, int& el
 			node partnerV = pBCTree->cutVertex(cT, pT);
 			node pB = nH_to_nBlockEmbedding[pT][partnerV];
 			nodeLength[pT][pB] = L - cstrLength[pT][pB];
-			
+
 			//pBCTree->originalGraph().chooseNode() just to get rid of warning:
 			node thisbT_opt = pBCTree->originalGraph().chooseNode();
 			int thisell_opt = 0;
@@ -329,6 +313,7 @@ void EmbedderMaxFaceLayers::maximumFaceRec(const node& bT, node& bT_opt, int& el
 	ell_opt = m_ell_opt;
 }
 
+
 void EmbedderMaxFaceLayers::embedBlock(const node& bT)
 {
 	ListIterator<adjEntry> after;
@@ -336,15 +321,16 @@ void EmbedderMaxFaceLayers::embedBlock(const node& bT)
 	embedBlock(bT, cT, after);
 }
 
-void EmbedderMaxFaceLayers::embedBlock(const node& bT,
-                                        const node& cT,
-                                        ListIterator<adjEntry>& after)
+
+void EmbedderMaxFaceLayers::embedBlock(
+	const node& bT,
+	const node& cT,
+	ListIterator<adjEntry>& after)
 {
 	treeNodeTreated[bT] = true;
 	node cH = 0;
 	if (!(cT == 0))
 		cH = pBCTree->cutVertex(cT, bT);
-
 
 	//***************************************************************************
 	// 1. Compute embedding of block
@@ -356,8 +342,7 @@ void EmbedderMaxFaceLayers::embedBlock(const node& bT,
 			nodeLength[bT], edgeLength);
 	else
 		EmbedderMaxFaceBiconnectedGraphsLayers<int>::embed(blockG[bT], m_adjExternal,
-			nodeLength[bT], edgeLength,
-		    nH_to_nBlockEmbedding[bT][cH]);
+			nodeLength[bT], edgeLength, nH_to_nBlockEmbedding[bT][cH]);
 
 	//***************************************************************************
 	// 2. Copy block embedding into graph embedding and call recursively
@@ -420,7 +405,7 @@ void EmbedderMaxFaceLayers::embedBlock(const node& bT,
 				if (treeNodeTreated[parent_bT_of_cT2])
 					no_recursion = true;
 			}
-			
+
 			if (no_recursion)
 			{
 				//find adjacency entry of nSG which lies on external face f:
@@ -507,7 +492,7 @@ void EmbedderMaxFaceLayers::embedBlock(const node& bT,
 						} //forall_nodes(nBG, blockG[bT])
 
 						p_nDG_to_fPG->init(*p_DG);
-						
+
 						for (ListIterator< List<adjEntry> > it = p_faces->begin(); it.valid(); it++)
 						{
 							node nn = p_DG->newNode();
@@ -547,7 +532,7 @@ void EmbedderMaxFaceLayers::embedBlock(const node& bT,
 									adjFaces[*(p_fPG_to_nDG->get(f1_id))].pushBack(*(p_fPG_to_nDG->get(f2_id)));
 									p_DG->newEdge(*(p_fPG_to_nDG->get(f1_id)), *(p_fPG_to_nDG->get(f2_id)));
 								}
-								
+
 								if (*it2 == f->firstAdj())
 									extFaceID = f1_id;
 							} //for (ListIterator<adjEntry> it2 = (*it).begin(); it2.valid(); it2++)
@@ -588,7 +573,7 @@ void EmbedderMaxFaceLayers::embedBlock(const node& bT,
 								break;
 							}
 						}
-						
+
 						if (contains_nSG)
 						{
 							int thisDist = (*p_distances)[*p_fPG_to_nDG->get(fID)];
@@ -604,7 +589,7 @@ void EmbedderMaxFaceLayers::embedBlock(const node& bT,
 						}
 					} //for (int fID = 0; fID < faces.size(); fID++)
 				} //if (!aeExtExists)
-				
+
 				edge e_cT2_to_bT2;
 				forall_adj_edges(e_cT2_to_bT2, cT2)
 				{
@@ -622,9 +607,9 @@ void EmbedderMaxFaceLayers::embedBlock(const node& bT,
 		//embed all edges of block bT:
 		bool after_ae = true;
 		for (adjEntry aeNode = ae;
-		     after_ae || aeNode != ae;
-				 after_ae = (!after_ae || !aeNode->succ()) ? false : true,
-		       aeNode = aeNode->succ() ? aeNode->succ() : nSG->firstAdj())
+			after_ae || aeNode != ae;
+			after_ae = (!after_ae || !aeNode->succ()) ? false : true,
+			aeNode = aeNode->succ() ? aeNode->succ() : nSG->firstAdj())
 		{
 			edge eG = pBCTree->original(eBlockEmbedding_to_eH[bT][aeNode->theEdge()]);
 			if (nG == eG->source())

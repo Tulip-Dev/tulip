@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
 
 /** \file
  * \brief Implementation of Tutte's Algorithm
- * 
+ *
  * \author David Alberts \and Andrea Wagner
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -44,7 +45,7 @@
 #include <ogdf/basic/Math.h>
 #include <ogdf/energybased/CoinTutteLayout.h>
 #include <ogdf/basic/GraphCopyAttributes.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 
 namespace ogdf {
 
@@ -60,7 +61,7 @@ bool solveLP(
 
 	OsiSolverInterface *osi = CoinManager::createCorrectOsiSolverInterface();
 
-	// constructs a dummy optimization problem. 
+	// constructs a dummy optimization problem.
 	// The given system of equations is used as constraint.
 	osi->setObjSense(-1);                        // maximize...
 	Array<double> obj(0,cols-1,1);               // ...the sum of variables
@@ -68,8 +69,7 @@ bool solveLP(
 	Array<double> upperBound(0,cols-1,osi->getInfinity());
 
 	// loads the problem to Coin-Osi
-	osi->loadProblem(Matrix, &lowerBound[0], &upperBound[0], &obj[0],\
-		   &rightHandSide[0], &rightHandSide[0]);
+	osi->loadProblem(Matrix, &lowerBound[0], &upperBound[0], &obj[0], &rightHandSide[0], &rightHandSide[0]);
 
 	// solves the linear program
 	osi->initialSolve();
@@ -87,7 +87,7 @@ bool solveLP(
 		return false;
 	}
 }
-  
+
 TutteLayout::TutteLayout()
 {
 	m_bbox = DRect (0.0, 0.0, 250.0, 250.0);
@@ -106,10 +106,10 @@ void TutteLayout::setFixedNodes(
 {
 	// compute faces of a copy of G
 	GraphCopy GC(G);
-	PlanarModule pm;
 
 	// compute a planar embedding if \a G is planar
-	if(pm.planarityTest(G)) pm.planarEmbed(GC);
+	if(isPlanar(G)) planarEmbed(GC);
+	//FIXME this stuff above seems wrong!!
 
 	CombinatorialEmbedding E(GC);
 	E.computeFaces();
@@ -128,11 +128,11 @@ void TutteLayout::setFixedNodes(
 	List<node> maxNodes;
 	forall_face_adj(adj,maxFace) {
 		maxNodes.pushBack(adj->theNode());
-	} 
+	}
 
 	forall_nonconst_listiterators(node, it, maxNodes) {
 		node &w = *it;
-		if(addMe[w]) { 
+		if(addMe[w]) {
 			nodes.pushBack(w);
 			addMe[w] = false;
 		}
@@ -208,7 +208,7 @@ void TutteLayout::call(GraphAttributes &AG, const List<node> &givenNodes)
 
 	double r        = diam/2.8284271;
 	int    n        = G.numberOfNodes();
-	double nodeDiam = 2.0*sqrt((AG.width(v)) * (AG.width(v)) 
+	double nodeDiam = 2.0*sqrt((AG.width(v)) * (AG.width(v))
 			 + (AG.height(v)) * (AG.height(v)));
 
 	if(r<nodeDiam/(2*sin(2*Math::pi/n))) {
@@ -253,7 +253,7 @@ void TutteLayout::call(GraphAttributes &AG)
 
 	double r        = diam/2.8284271;
 	int n           = G.numberOfNodes();
-	double nodeDiam = 2.0*sqrt((AG.width(v)) * (AG.width(v)) 
+	double nodeDiam = 2.0*sqrt((AG.width(v)) * (AG.width(v))
 			 + (AG.height(v)) * (AG.height(v)));
 
 	if(r<nodeDiam/(2*sin(2*Math::pi/n))) {
@@ -272,7 +272,7 @@ void TutteLayout::call(GraphAttributes &AG)
 // contain the nodes with fixed positions.
 bool TutteLayout::doCall(
 	GraphAttributes &AG,
-	const List<node> &fixedNodes, 
+	const List<node> &fixedNodes,
 	List<DPoint> &fixedPositions)
 {
 	node v, w;
@@ -369,7 +369,7 @@ bool TutteLayout::doCall(
 
 	forall_nodes (v, GC) {
 		AGC.x(v) += center.m_x;
-		AGC.y(v) += center.m_y; 
+		AGC.y(v) += center.m_y;
 	}
 
 	forall_nodes(v,GC) {

@@ -1,43 +1,45 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2524 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-03 09:54:22 +0200 (Tue, 03 Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of Spring-Embedder (Fruchterman,Reingold)
  *        algorithm with exact force computations.
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2009
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
 
 #ifdef _MSC_VER
 #pragma once
@@ -54,8 +56,8 @@
 namespace ogdf {
 
 
-	class OGDF_EXPORT GraphCopyAttributes;
-	class OGDF_EXPORT GraphCopy;
+class OGDF_EXPORT GraphCopyAttributes;
+class OGDF_EXPORT GraphCopy;
 
 
 class OGDF_EXPORT SpringEmbedderFRExact : public ForceLayoutModule
@@ -75,30 +77,30 @@ public:
 
 
 	//! Returns the current setting of iterations.
-    int iterations() const {
+	int iterations() const {
 		return m_iterations;
 	}
 
 	//! Sets the number of iterations to \a i.
-    void iterations(int i) {
+	void iterations(int i) {
 		OGDF_ASSERT(i > 0)
-		m_iterations = i;
+			m_iterations = i;
 	}
 
 	//! Returns the current setting of nodes.
-    bool noise() const {
+	bool noise() const {
 		return m_noise;
 	}
 
 	//! Sets the parameter noise to \a on.
-    void noise(bool on) {
+	void noise(bool on) {
 		m_noise = on;
 	}
-	
-	//! Switches use of node weights given in GraphAttributtes 
-    void nodeWeights(bool on) {
-    	m_useNodeWeight = on;
-    }
+
+	//! Switches use of node weights given in GraphAttributtes
+	void nodeWeights(bool on) {
+		m_useNodeWeight = on;
+	}
 	//! Returns the current setting for the cooling function.
 	CoolingFunction coolingFunction() const {
 		return m_coolingFunction;
@@ -108,28 +110,28 @@ public:
 	void coolingFunction(CoolingFunction f) {
 		m_coolingFunction = f;
 	}
-    
+
 	//! Returns the ideal edge length.
-    double idealEdgeLength() const { return m_idealEdgeLength; }
+	double idealEdgeLength() const { return m_idealEdgeLength; }
 
 	//! Sets the ideal edge length to \a len.
-    void idealEdgeLength(double len) { m_idealEdgeLength = len; }
+	void idealEdgeLength(double len) { m_idealEdgeLength = len; }
 
 	//! Returns the minimum distance between connected components.
-    double minDistCC() const { return m_minDistCC; }
+	double minDistCC() const { return m_minDistCC; }
 
 	//! Sets the minimum distance between connected components to \a x.
-    void minDistCC(double x) { m_minDistCC = x; }
+	void minDistCC(double x) { m_minDistCC = x; }
 
 	//! Returns the page ratio.
-    double pageRatio() { return m_pageRatio; }
+	double pageRatio() { return m_pageRatio; }
 
 	//! Sets the page ration to \a x.
-    void pageRatio(double x) { m_pageRatio = x; }
-    
-    void checkConvergence(bool b) {m_checkConvergence = b;}
-    bool checkConvergence() {return m_checkConvergence;}
-void convTolerance(double tol) {m_convTolerance = tol;}
+	void pageRatio(double x) { m_pageRatio = x; }
+
+	void checkConvergence(bool b) {m_checkConvergence = b;}
+	bool checkConvergence() {return m_checkConvergence;}
+	void convTolerance(double tol) {m_convTolerance = tol;}
 
 private:
 	class ArrayGraph
@@ -162,11 +164,11 @@ private:
 		double *m_y;
 		double *m_nodeWeight;
 		//this should be part of a multilevel layout interface class later on
-		bool m_useNodeWeight; //should given nodeweights be used or all set to 1.0? 
+		bool m_useNodeWeight; //should given nodeweights be used or all set to 1.0?
 	};
 
 	double log2(double x) { return log(x) / log(2.0); }
-    double mylog2(int x) {
+	double mylog2(int x) {
 		double l = 0.0;
 		while(x > 0) {
 			l++;
@@ -190,8 +192,8 @@ private:
 	// cooling function
 	void cool(double &tx, double &ty, int &cF);
 
-    int    m_iterations; //!< The number of iterations.
-    bool   m_noise;      //!< Perform random perturbations?
+	int    m_iterations; //!< The number of iterations.
+	bool   m_noise;      //!< Perform random perturbations?
 	CoolingFunction m_coolingFunction; //!< The selected cooling function
 
 

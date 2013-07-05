@@ -1,41 +1,42 @@
 /*
- * $Revision: 2303 $
- * 
+ * $Revision: 2599 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 09:41:00 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: chimani $
+ *   $Date: 2012-07-15 22:39:24 +0200 (So, 15. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief implements class MultiEdgeApproxInserter
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -46,7 +47,7 @@
 #include <ogdf/basic/Queue.h>
 #include <ogdf/planarity/FixedEmbeddingInserter.h>
 #include <ogdf/planarity/VariableEmbeddingInserter.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 
 
 namespace ogdf {
@@ -140,8 +141,11 @@ public:
 
 
 	// constructor
-	Block() :  m_BCtoG(*this), m_cost(*this,1), m_spqr(0),
-		m_embB(0), m_dualB(0), m_faceNodeB(0), m_primalAdjB(0), m_vS(0), m_vT(0) { }
+	Block() :  m_spqr(0), m_embB(0), m_dualB(0), m_faceNodeB(0), m_primalAdjB(0), m_vS(0), m_vT(0)
+	{
+		m_BCtoG.init(*this);
+		m_cost .init(*this,1);
+	}
 
 	// destructoe
 	~Block() {
@@ -269,9 +273,10 @@ bool MultiEdgeApproxInserter::Block::embPrefAgree(node n, const EmbeddingPrefere
 			// check if adj entries in (embedded) P-Node are in the right order
 			return p_e.adj1()->cyclicSucc() == p_e.adj2();
 		}
-	}
 
-	return true;  // any other case "agrees"
+	default:
+		return true;  // any other case "agrees"
+	}
 }
 
 
@@ -352,7 +357,7 @@ void MultiEdgeApproxInserter::Block::constructDual(node n)
 	face f;
 	forall_faces(f,*emb) {
 		(*faceNode)[f] = dual->newNode();
-    }
+	}
 
 	// construct dual edges (for primal edges in M)
 	node v;
@@ -385,7 +390,7 @@ void MultiEdgeApproxInserter::Block::constructDualBlock()
 	face f;
 	forall_faces(f,*m_embB) {
 		(*m_faceNodeB)[f] = m_dualB->newNode();
-    }
+	}
 
 	// construct dual edges (for primal edges in block)
 	node v;
@@ -709,7 +714,7 @@ int MultiEdgeApproxInserter::Block::costsSubpath(node n, edge eIn, edge eOut, no
 
 	int currentDist = 0;
 	for( ; ; ) {
-		// next candidate 
+		// next candidate
 		while(nodesAtDist[currentDist % maxTC].empty())
 			++currentDist;
 
@@ -802,7 +807,7 @@ MultiEdgeApproxInserter::Block *MultiEdgeApproxInserter::constructBlock(int i)
 			m_GtoBC[e->target()] = b->newNode();
 			nodesG.pushBack(e->target());
 		}
-				
+
 		edge eBC = b->newEdge(m_GtoBC[e->source()],m_GtoBC[e->target()]);
 		b->m_BCtoG[eBC->adjSource()] = e->adjSource();
 		b->m_BCtoG[eBC->adjTarget()] = e->adjTarget();
@@ -820,7 +825,7 @@ MultiEdgeApproxInserter::Block *MultiEdgeApproxInserter::constructBlock(int i)
 		m_GtoBC[v] = 0;
 	}
 
-	PlanarModule().planarEmbed(*b);
+	planarEmbed(*b);
 
 	return b;
 }
@@ -867,7 +872,7 @@ bool MultiEdgeApproxInserter::dfsPathSPQR(node v, node v2, edge eParent, List<ed
 
 //---------------------------------------------------------
 // compute insertion path of edge edge k in SPQR-tree of block b
-// from node vOrig to node wOrig 
+// from node vOrig to node wOrig
 //---------------------------------------------------------
 
 int MultiEdgeApproxInserter::computePathSPQR(int b, node vOrig, node wOrig, int k)
@@ -1117,7 +1122,7 @@ void MultiEdgeApproxInserter::embedBlock(int b, int m)
 				else if(j > 1)
 					j_mu = j-2;
 			}
-			
+
 			if(j_mu >= 0)
 			{
 				node mu = p[j_mu].m_node;
@@ -1141,7 +1146,7 @@ void MultiEdgeApproxInserter::embedBlock(int b, int m)
 			// skip S-node (can only be one)
 			if(spqr.typeOf(p[j].m_node) == SPQRTree::SNode)
 				++j;
-			
+
 		} while(j < len);
 
 		// flip embedding preferences
@@ -1235,7 +1240,7 @@ const char *strType[] = { "S", "P", "R" };
 struct CutvertexPreference {
 	CutvertexPreference(node v1, int b1, node v2, int b2)
 		: m_v1(v1), m_v2(v2), m_b1(b1), m_b2(b2), m_len1(-1), m_len2(-1) { }
-		
+
 	node m_v1, m_v2;
 	int  m_b1, m_b2;
 	int m_len1, m_len2;
@@ -1531,7 +1536,7 @@ Module::ReturnType MultiEdgeApproxInserter::doCall(
 	OGDF_ASSERT(PG.representsCombEmbedding());
 
 	// arbitrary embedding for testing
-	//PlanarModule().planarEmbed(PG);
+	//planarEmbed(PG);
 
 	// generate further statistic information
 	if(m_statistics) {
@@ -1578,7 +1583,7 @@ Module::ReturnType MultiEdgeApproxInserter::doCall(
 	fei.keepEmbedding(true);
 	fei.removeReinsert(m_rrOptionFix);
 	fei.percentMostCrossed(m_percentMostCrossedFix);
-	
+
 	fei.call( PG, origEdges );
 
 	if(m_rrOptionVar != rrNone && m_rrOptionVar != rrIncremental) {
@@ -1635,7 +1640,7 @@ void MultiEdgeApproxInserter::constructDual(const PlanRep &PG)
 	face f;
 	forall_faces(f,m_E) {
 		m_faceNode[f] = m_dual.newNode();
-    }
+	}
 
 	// construct dual edges (for primal edges in block)
 	node v;

@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2554 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-06 11:39:38 +0200 (Fr, 06. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements class CircularLayout
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -344,8 +345,10 @@ private:
 CircleGraph::CircleGraph(
 	const ClusterStructure &C,
 	NodeArray<node> &toCircle,
-	int c) : m_fromCircle(*this)
+	int c)
 {
+	m_fromCircle.init(*this);
+
 	SListConstIterator<node> it;
 	for(it = C.m_nodesIn[c].begin(); it.valid(); ++it)
 	{
@@ -518,7 +521,7 @@ void CircleGraph::swapping(List<node> &nodes, int maxIterations)
 			}
 		} while(improvement && ++iterations <= maxIterations);
 	}
-		
+
 	for(it = nodes.begin(); it.valid(); ++it)
 		*it = m_fromCircle[*it];
 }
@@ -633,7 +636,7 @@ void CircularLayout::call(GraphAttributes &AG)
 
 		const double dx = offset[i].m_x;
 		const double dy = offset[i].m_y;
-		
+
 		// iterate over all nodes in ith CC
 		ListConstIterator<node> it;
 		for(it = nodes.begin(); it.valid(); ++it)
@@ -728,7 +731,7 @@ void outputRegions(List<SCRegion> &regions)
 	ListIterator<SCRegion> it;
 	for(it = regions.begin(); it.valid(); ++it)
 	{
-		cout << "[" << (*it).m_superClusters << ", " << 
+		cout << "[" << (*it).m_superClusters << ", " <<
 			fac*(*it).m_start << ", " << fac*(*it).m_length << "]" << endl;
 	}
 }
@@ -1149,7 +1152,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 #endif
 		}
 	} while(changed);
-				
+
 /*		ListIterator<ClusterRegion> itR1 = regions.begin(),itR2;
 		for(itR2 = itR1.succ(); true; itR2 = itR1.succ())
 		{
@@ -1164,7 +1167,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 				doMerge = (*itR2).m_start + 2*Math::pi < (*itR1).m_start + (*itR1).m_length;
 			} else
 				doMerge = (*itR2).m_start < (*itR1).m_start + (*itR1).m_length;
-		
+
 			if (doMerge)
 			{
 				(*itR1).m_clusters.conc((*itR2).m_clusters);
@@ -1265,16 +1268,16 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 				circleQueue.append(QueuedCirclePosition(
 					*it,minDist,posStart,posRegionEnd));
 				circleAngle[*it] = posRegionEnd - R1.m_scaleFactor*preferedAngle[*it]/2;
-				
+
 				posStart = posRegionEnd;
 
 			} else {
 				itR2 = itR1.succ();
 				circleAngle[*it] = posRegionEnd - R1.m_scaleFactor*preferedAngle[*it]/2;
-				
+
 				if(itR2.valid()) {
 					double gap = (*itR2).m_start - posRegionEnd;
-					posRegionEnd += gap * R1.m_scaleFactor*preferedAngle[*it] / 
+					posRegionEnd += gap * R1.m_scaleFactor*preferedAngle[*it] /
 						(R1.m_scaleFactor*preferedAngle[*it] + (*itR2).m_scaleFactor*preferedAngle[(*itR2).m_clusters.front()]);
 					circleQueue.append(QueuedCirclePosition(
 						*it,minDist,posStart,posRegionEnd));
@@ -1323,7 +1326,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 		int cluster = qcp.m_cluster;
 
 #ifdef OUTPUT
-		cout << "cluster = " << cluster << ", start = " << fac*qcp.m_sectorStart << 
+		cout << "cluster = " << cluster << ", start = " << fac*qcp.m_sectorStart <<
 			", end = " << fac*qcp.m_sectorEnd << endl;
 		cout << "  minDist = " << qcp.m_minDist <<
 			", angle = " << fac*circleAngle[cluster] << endl;
@@ -1471,7 +1474,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 						circleQueue.append(QueuedCirclePosition(
 							*it,minDist,posStart,posRegionEnd));
 						circleAngle[*it] = posRegionEnd - preferedAngle[*it]/2;
-						
+
 						posStart = posRegionEnd;
 
 					} else {
@@ -1479,7 +1482,7 @@ void CircularLayout::doCall(GraphCopyAttributes &AG, ClusterStructure &C)
 						circleAngle[*it] = posRegionEnd - preferedAngle[*it]/2;
 						if(itR2.valid()) {
 							double gap = (*itR2).m_start - posRegionEnd;
-							posRegionEnd += gap * preferedAngle[*it] / 
+							posRegionEnd += gap * preferedAngle[*it] /
 								(preferedAngle[*it] + preferedAngle[(*itR2).m_clusters.front()]);
 							circleQueue.append(QueuedCirclePosition(
 								*it,minDist,posStart,posRegionEnd));
@@ -1778,7 +1781,7 @@ void CircularLayout::assignClustersByBiconnectedComponents(ClusterStructure &C)
 		OGDF_ASSERT(current != 0);
 		centerBC = current;
 
-		// if center node current of BC-Tree is a cut-vertex, we choose the 
+		// if center node current of BC-Tree is a cut-vertex, we choose the
 		// maximal bic. comp. containing current as centerBC
 		if (componentOf[centerBC] == -1) {
 			int sizeCenter = 0;

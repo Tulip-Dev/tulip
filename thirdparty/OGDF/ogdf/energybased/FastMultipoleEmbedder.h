@@ -1,49 +1,51 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of Fast-Multipole-Embedder layout algorithm.
- * 
+ *
  * \author Martin Gronemann
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2009
- * 
+ *
+ * \par
+ * Copyright (C)<br>
+ * See README.txt in the root directory of the OGDF installation for details.
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
-
 
 #ifdef _MSC_VER
 #pragma once
 #endif
 
-#ifndef _FAST_MULTIPOLE_EMBEDDER_H_
-#define _FAST_MULTIPOLE_EMBEDDER_H_
+#ifndef OGDF_FAST_MULTIPOLE_EMBEDDER_H
+#define OGDF_FAST_MULTIPOLE_EMBEDDER_H
 
 #include <ogdf/basic/Graph.h>
 #include <ogdf/module/LayoutModule.h>
@@ -64,43 +66,47 @@ class OGDF_EXPORT FastMultipoleEmbedder : public LayoutModule
 public:
 	//! constructor
 	FastMultipoleEmbedder();
-	
+
 	//! destructor
 	~FastMultipoleEmbedder();
-	
+
 	//! Calls the algorithm for graph \a MLG.
 	//Does not do anything smart, can be safely removed
-    //void call(MultilevelGraph &MLG);
+	//void call(MultilevelGraph &MLG);
 
 	//! Calls the algorithm for graph \a G with the given edgelength and returns the layout information in \a nodeXPosition, nodeYPosition.
-    void call(const Graph& G, NodeArray<float>& nodeXPosition, NodeArray<float>& nodeYPosition, 
-			  const EdgeArray<float>& edgeLength, const NodeArray<float>& nodeSize);
+	void call(
+		const Graph& G,
+		NodeArray<float>& nodeXPosition,
+		NodeArray<float>& nodeYPosition,
+		const EdgeArray<float>& edgeLength,
+		const NodeArray<float>& nodeSize);
 
 	//! Calls the algorithm for graph \a GA with the given edgelength and returns the layout information in \a GA.
-    void call(GraphAttributes &GA, const EdgeArray<float>& edgeLength, const NodeArray<float>& nodeSize);
+	void call(GraphAttributes &GA, const EdgeArray<float>& edgeLength, const NodeArray<float>& nodeSize);
 
 	//! Calls the algorithm for graph \a GA and returns the layout information in \a GA.
 	void call(GraphAttributes &GA);
 
 	//! sets the maximum number of iterations
-	void setNumIterations(__uint32 numIterations) { m_numIterations = numIterations; };
+	void setNumIterations(__uint32 numIterations) { m_numIterations = numIterations; }
 
 	//! sets the number of coefficients for the expansions. default = 4
-	void setMultipolePrec(__uint32 precision) { m_precisionParameter = precision; };
-	
-	//! if true, layout algorithm will randomize the layout in the beginning 
-	void setRandomize(bool b) { m_randomize = b; };
+	void setMultipolePrec(__uint32 precision) { m_precisionParameter = precision; }
+
+	//! if true, layout algorithm will randomize the layout in the beginning
+	void setRandomize(bool b) { m_randomize = b; }
 
 	//!
-	void setDefaultEdgeLength(float edgeLength) { m_defaultEdgeLength = edgeLength; };
+	void setDefaultEdgeLength(float edgeLength) { m_defaultEdgeLength = edgeLength; }
 
 	//!
-	void setDefaultNodeSize(float nodeSize) { m_defaultNodeSize = nodeSize; };
+	void setDefaultNodeSize(float nodeSize) { m_defaultNodeSize = nodeSize; }
 
 	//!
-	void setNumberOfThreads(__uint32 numThreads) { m_maxNumberOfThreads = numThreads; };
+	void setNumberOfThreads(__uint32 numThreads) { m_maxNumberOfThreads = numThreads; }
 
-	//void setEnablePostProcessing(bool b) { m_doPostProcessing = b; };
+	//void setEnablePostProcessing(bool b) { m_doPostProcessing = b; }
 private:
 	void initOptions();
 
@@ -116,7 +122,7 @@ private:
 
 	//! frees the memory
 	void deallocate();
-	
+
 	__uint32 m_numIterations;
 
 	ArrayGraph* m_pGraph;
@@ -134,7 +140,7 @@ private:
 	float m_defaultNodeSize;
 
 	__uint32 m_numberOfThreads;
-	
+
 	__uint32 m_maxNumberOfThreads;
 };
 
@@ -148,7 +154,7 @@ public:
 	void call(GraphAttributes &GA);
 
 	//! sets the bound for the number of nodes for multilevel step
-	void multilevelUntilNumNodesAreLess(int nodesBound) { m_multiLevelNumNodesBound = nodesBound; };
+	void multilevelUntilNumNodesAreLess(int nodesBound) { m_multiLevelNumNodesBound = nodesBound; }
 
 	void maxNumThreads(int numThreads) { m_iMaxNumThreads = numThreads; }
 private:
@@ -172,11 +178,11 @@ private:
 
 	//! writes the current level to graph attributes. used for output
 	void writeCurrentToGraphAttributes(GraphAttributes& GA);
-	
+
 	//! refine
 	void nextLevel();
 
-	//! initialize datastructure by current level 
+	//! initialize datastructure by current level
 	void initCurrentLevel();
 
 	//! clean up the multilevel graphs
@@ -208,7 +214,7 @@ private:
 	NodeArray<float>* m_pLastNodeXPos;
 	NodeArray<float>* m_pLastNodeYPos;
 };
-	
+
 } // end of namespace ogdf
 
 #endif

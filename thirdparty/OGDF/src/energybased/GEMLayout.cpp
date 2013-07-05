@@ -1,43 +1,44 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implementations of class GEMLayout.
- * 
+ *
  * Fast force-directed layout algorithm (GEMLayout) based on Frick et al.'s algorithm
- * 
+ *
  * \author Christoph Buchheim
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -51,45 +52,45 @@
 
 namespace ogdf {
 
-GEMLayout::GEMLayout()
-    :m_numberOfRounds(30000),
+GEMLayout::GEMLayout() :
+	m_numberOfRounds(30000),
 	m_minimalTemperature(0.005),
 	m_initialTemperature(12.0),
 	m_gravitationalConstant(1.0/16.0), //original paper value
 	m_desiredLength(5.0),
 	m_maximalDisturbance(0),
 	m_rotationAngle(Math::pi/3.0),
-	m_oscillationAngle(Math::pi/2.0),
+	m_oscillationAngle(Math::pi_2),
 	m_rotationSensitivity(0.01),
 	m_oscillationSensitivity(0.3),
 	m_attractionFormula(1),
 	m_minDistCC(20),
 	m_pageRatio(1.0)
-
 { }
 
-GEMLayout::GEMLayout(const GEMLayout &fl)
-    :m_numberOfRounds(fl.m_numberOfRounds),
-	 m_minimalTemperature(fl.m_minimalTemperature),
-	 m_initialTemperature(fl.m_initialTemperature),
-	 m_gravitationalConstant(fl.m_gravitationalConstant),
-	 m_desiredLength(fl.m_desiredLength),
-	 m_maximalDisturbance(fl.m_maximalDisturbance),
-	 m_rotationAngle(fl.m_rotationAngle),
-	 m_oscillationAngle(fl.m_oscillationAngle),
-	 m_rotationSensitivity(fl.m_rotationSensitivity),
-	 m_oscillationSensitivity(fl.m_oscillationSensitivity),
-	 m_attractionFormula(fl.m_attractionFormula),
-	 m_minDistCC(fl.m_minDistCC),
-	 m_pageRatio(fl.m_pageRatio)
+GEMLayout::GEMLayout(const GEMLayout &fl) :
+	m_numberOfRounds(fl.m_numberOfRounds),
+	m_minimalTemperature(fl.m_minimalTemperature),
+	m_initialTemperature(fl.m_initialTemperature),
+	m_gravitationalConstant(fl.m_gravitationalConstant),
+	m_desiredLength(fl.m_desiredLength),
+	m_maximalDisturbance(fl.m_maximalDisturbance),
+	m_rotationAngle(fl.m_rotationAngle),
+	m_oscillationAngle(fl.m_oscillationAngle),
+	m_rotationSensitivity(fl.m_rotationSensitivity),
+	m_oscillationSensitivity(fl.m_oscillationSensitivity),
+	m_attractionFormula(fl.m_attractionFormula),
+	m_minDistCC(fl.m_minDistCC),
+	m_pageRatio(fl.m_pageRatio)
 { }
 
-GEMLayout::~GEMLayout() 
-{ }
+
+GEMLayout::~GEMLayout() { }
+
 
 GEMLayout &GEMLayout::operator=(const GEMLayout &fl)
 {
-    m_numberOfRounds = fl.m_numberOfRounds;
+	m_numberOfRounds = fl.m_numberOfRounds;
 	m_minimalTemperature = fl.m_minimalTemperature;
 	m_initialTemperature = fl.m_initialTemperature;
 	m_gravitationalConstant = fl.m_gravitationalConstant;
@@ -103,7 +104,8 @@ GEMLayout &GEMLayout::operator=(const GEMLayout &fl)
 	return *this;
 }
 
-void GEMLayout::call(GraphAttributes &AG) 
+
+void GEMLayout::call(GraphAttributes &AG)
 {
 	const Graph &G = AG.constGraph();
 	if(G.empty())
@@ -223,7 +225,7 @@ void GEMLayout::call(GraphAttributes &AG)
 
 		const double dx = offset[i].m_x;
 		const double dy = offset[i].m_y;
-		
+
 		// iterate over all nodes in ith CC
 		ListConstIterator<node> it;
 		for(it = nodes.begin(); it.valid(); ++it)
@@ -251,7 +253,7 @@ void GEMLayout::computeImpulse(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 	edge e;
 	double deltaX,deltaY,delta,deltaSqu;
 	double desiredLength,desiredSqu;
-	
+
 	// add double node radius to desired edge length
 	desiredLength = m_desiredLength + length(AG.getHeight(v),AG.getWidth(v));
 	desiredSqu = desiredLength * desiredLength;
@@ -259,16 +261,16 @@ void GEMLayout::computeImpulse(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 	// compute attraction to center of gravity
 	m_newImpulseX = (m_barycenterX / n - AG.x(v)) * m_gravitationalConstant;
 	m_newImpulseY = (m_barycenterY / n - AG.y(v)) * m_gravitationalConstant;
-	
+
 	// disturb randomly
 	int maxIntDisturbance = (int)(m_maximalDisturbance * 10000);
-	m_newImpulseX += 
+	m_newImpulseX +=
 		(double)(randomNumber(-maxIntDisturbance,maxIntDisturbance) / 10000);
-	m_newImpulseY += 
+	m_newImpulseY +=
 		(double)(randomNumber(-maxIntDisturbance,maxIntDisturbance) / 10000);
-	
+
 	// compute repulsive forces
-	forall_nodes(u,G) 
+	forall_nodes(u,G)
 		if(u != v ) {
 			deltaX = AG.x(v) - AG.x(u);
 			deltaY = AG.y(v) - AG.y(u);
@@ -287,12 +289,12 @@ void GEMLayout::computeImpulse(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 		deltaY = AG.y(v) - AG.y(u);
 		delta = length(deltaX,deltaY);
 		if(m_attractionFormula == 1) {
-			m_newImpulseX -= deltaX * delta / (desiredLength * weight(v));	
+			m_newImpulseX -= deltaX * delta / (desiredLength * weight(v));
 			m_newImpulseY -= deltaY * delta / (desiredLength * weight(v));
 		}
 		else {
 			deltaSqu = delta * delta;
-			m_newImpulseX -= deltaX * deltaSqu / (desiredSqu * weight(v));	
+			m_newImpulseX -= deltaX * deltaSqu / (desiredSqu * weight(v));
 			m_newImpulseY -= deltaY * deltaSqu / (desiredSqu * weight(v));
 		}
 	}
@@ -319,7 +321,7 @@ void GEMLayout::updateNode(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 		m_barycenterX += weight(v) * m_newImpulseX;
 		m_barycenterY += weight(v) * m_newImpulseY;
 
-		impulseLength = length(m_newImpulseX,m_newImpulseY) 
+		impulseLength = length(m_newImpulseX,m_newImpulseY)
 						* length(m_impulseX[v],m_impulseY[v]);
 		if(DIsGreater(impulseLength,0)) {
 
@@ -327,12 +329,12 @@ void GEMLayout::updateNode(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 
 			// compute sine and cosine of angle between old and new impulse
 			double sinBeta,cosBeta;
-			sinBeta = (m_newImpulseX * m_impulseX[v] 
-				       - m_newImpulseY * m_impulseY[v])
-					  / impulseLength;
-			cosBeta = (m_newImpulseX * m_impulseX[v] 
-				       + m_newImpulseY * m_impulseY[v])
-					  / impulseLength;
+			sinBeta = (m_newImpulseX * m_impulseX[v]
+				- m_newImpulseY * m_impulseY[v])
+					/ impulseLength;
+			cosBeta = (m_newImpulseX * m_impulseX[v]
+				+ m_newImpulseY * m_impulseY[v])
+					/ impulseLength;
 
 			// check for rotation
 			if(DIsGreater(sinBeta,m_sin))
@@ -340,7 +342,7 @@ void GEMLayout::updateNode(GraphCopy &G, GraphCopyAttributes &AG,node v) {
 
 			// check for oscillation
 			if(DIsGreater(length(cosBeta),m_cos))
-				m_localTemperature[v] *= 
+				m_localTemperature[v] *=
 					(1 + cosBeta * m_oscillationSensitivity);
 
 			// cool down according to skew gauge

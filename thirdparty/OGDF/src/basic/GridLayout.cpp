@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2549 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-04 23:09:19 +0200 (Mi, 04. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Implements classes GridLayout and GridLayoutMapped
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -181,9 +182,11 @@ IPolyline GridLayout::getCompactBends(edge e) const
 	IPolyline ipl = m_bends[e];
 
 	if (ipl.size() == 0) return ipl;
-	
+
+#if 0
 	IPoint ip_first = ipl.front();
 	IPoint ip_last  = ipl.back();
+#endif
 
 	IPoint ip_src(m_x[e->source()],m_y[e->source()]);
 	IPoint ip_tgt(m_x[e->target()],m_y[e->target()]);
@@ -196,10 +199,12 @@ IPolyline GridLayout::getCompactBends(edge e) const
 	ipl.popFront();
 	ipl.popBack();
 
-	//if (ip_first != ip_src && (ipl.empty() || ip_first != ipl.front()))
-	//	ipl.pushFront(ip_first);
-	//if (ip_last != ip_tgt && (ipl.empty() || ip_last != ipl.back()))
-	//	ipl.pushBack(ip_last);
+#if 0
+	if (ip_first != ip_src && (ipl.empty() || ip_first != ipl.front()))
+		ipl.pushFront(ip_first);
+	if (ip_last != ip_tgt && (ipl.empty() || ip_last != ipl.back()))
+		ipl.pushBack(ip_last);
+#endif
 
 	return ipl;
 }
@@ -363,7 +368,7 @@ int GridLayout::numberOfBends() const
 	return num;
 }
 
-	
+
 //---------------------------------------------------------
 // GridLayoutMapped
 //---------------------------------------------------------
@@ -378,7 +383,7 @@ GridLayoutMapped::GridLayoutMapped(
 {
 	// determine grid mapping factor
 	double minDelta = separation;
-	
+
 	node v;
 	forall_nodes(v,PG)
 	{
@@ -405,7 +410,7 @@ GridLayoutMapped::GridLayoutMapped(
 
 				else if ( !((si.m_nAttached[0] == 1) && (cOverhang == 0.0)) ) //hier cov= 0 abfangen
 					minDelta =  min(minDelta,
-						size / (si.m_nAttached[0] - 1 + 2*cOverhang)); 
+						size / (si.m_nAttached[0] - 1 + 2*cOverhang));
 				else
 					minDelta = min(minDelta, size/2);
 			}

@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2584 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-12 02:38:07 +0200 (Do, 12. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Declaration of class ClusterPlanarizationLayout
  * Planarization approach for cluster graphs
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -90,7 +91,6 @@ namespace ogdf {
  *   </tr><tr>
  *     <td><i>packer</i><td>CCLayoutPackModule<td>TileToRowsCCPacker
  *     <td>The packer module used for arranging connected components.
- *   </tr><tr>
  *   </tr>
  * </table>
  */
@@ -104,7 +104,7 @@ public:
 	virtual ~ClusterPlanarizationLayout() { }
 
 
-	 
+
 	//! Calls cluster planarization layout with cluster-graph attributes \a acGraph.
 	/**
 	 * @param G is the input graph.
@@ -112,10 +112,11 @@ public:
 	 * @param cGraph is the input cluster graph.
 	 * @param simpleCConnect If set to true, c-connectivity is achieved by adding arbitrary edges (fast).
 	 */
-	virtual void call(Graph& G, 
-					  ClusterGraphAttributes& acGraph, 
-					  ClusterGraph& cGraph,
-					  bool simpleCConnect = true);
+	virtual void call(
+		Graph& G,
+		ClusterGraphAttributes& acGraph,
+		ClusterGraph& cGraph,
+		bool simpleCConnect = true);
 	//! Calls cluster planarization layout with cluster-graph attributes \a acGraph.
 	/**
 	 * @param G is the input graph.
@@ -124,11 +125,12 @@ public:
 	 * @param edgeWeight allows to prefer lightweight edges for planar subgraph computation.
 	 * @param simpleCConnect If set to true, c-connectivity is achieved by adding arbitrary edges (fast).
 	 */
-	virtual void call(Graph& G, 
-					  ClusterGraphAttributes& acGraph, 
-					  ClusterGraph& cGraph,
-					  EdgeArray<double>& edgeWeight,
-					  bool simpleCConnect = true);
+	virtual void call(
+		Graph& G,
+		ClusterGraphAttributes& acGraph,
+		ClusterGraph& cGraph,
+		EdgeArray<double>& edgeWeight,
+		bool simpleCConnect = true);
 
 
 	//! Returns the current page ratio (= desired width / height of layout).
@@ -164,7 +166,7 @@ protected:
 	};
 
 	void computeClusterPositions(
-		ClusterPlanRep& CP, 
+		ClusterPlanRep& CP,
 		Layout drawing,
 		HashArray<int, ClusterPosition>& CA);
 

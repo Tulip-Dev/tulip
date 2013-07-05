@@ -1,42 +1,43 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2565 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 17:14:54 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief Linear time layout algorithm for trees (TreeLayout)
  * based on Walker's algorithm
- * 
+ *
  * \author Christoph Buchheim
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -80,7 +81,7 @@ TreeLayout::TreeLayout(const TreeLayout &tl)
 { }
 
 
-TreeLayout::~TreeLayout() 
+TreeLayout::~TreeLayout()
 { }
 
 
@@ -108,10 +109,10 @@ public:
 	int compare(const adjEntry &adjX, const adjEntry &adjY) const {
 		if ((*m_pAngle)[adjX] < (*m_pAngle)[adjY])
 			return -1;
-		else 
+		else
 			if ((*m_pAngle)[adjX] > (*m_pAngle)[adjY])
 				return 1;
-		else 
+		else
 			return 0;
 	}
 	OGDF_AUGMENT_COMPARER(adjEntry)
@@ -283,7 +284,7 @@ void TreeLayout::callSortByPositions(GraphAttributes &AG, Graph &tree)
 }
 
 
-void TreeLayout::call(GraphAttributes &AG) 
+void TreeLayout::call(GraphAttributes &AG)
 {
 	const Graph &tree = AG.constGraph();
 	if(tree.numberOfNodes() == 0) return;
@@ -322,7 +323,7 @@ void TreeLayout::call(GraphAttributes &AG)
 
 				shiftTreeX(AG,root,shift);
 			}
-			
+
 			findMaxX(AG,root,maxX);
 		}
 
@@ -364,7 +365,7 @@ void TreeLayout::call(GraphAttributes &AG)
 
 				shiftTreeY(AG,root,shift);
 			}
-			
+
 			findMaxY(AG,root,maxY);
 		}
 
@@ -403,7 +404,7 @@ void TreeLayout::undoReverseEdges(GraphAttributes &AG)
 		}
 
 		m_pGraph = 0;
-	}		
+	}
 }
 
 void TreeLayout::findMinX(GraphAttributes &AG, node root, double &minX)
@@ -533,8 +534,8 @@ void TreeLayout::findMaxY(GraphAttributes &AG, node root, double &maxY)
 }
 
 
-//node TreeLayout::initializeTreeStructure(const Graph &tree) 
-void TreeLayout::initializeTreeStructure(const Graph &tree, List<node> &roots) 
+//node TreeLayout::initializeTreeStructure(const Graph &tree)
+void TreeLayout::initializeTreeStructure(const Graph &tree, List<node> &roots)
 {
 	node v;
 
@@ -593,9 +594,9 @@ void TreeLayout::initializeTreeStructure(const Graph &tree, List<node> &roots)
 				m_leftSibling[v] = 0;
 			}
 			else {
-		
+
 				// search for first leaving edge
-				while(first->theEdge()->source() == v) 
+				while(first->theEdge()->source() == v)
 					first = first->cyclicSucc();
 				m_parent[v] = first->theEdge()->source();
 				stop = first;
@@ -610,7 +611,7 @@ void TreeLayout::initializeTreeStructure(const Graph &tree, List<node> &roots)
 			while(first->cyclicSucc() != stop) {
 				first = first->cyclicSucc();
 				m_number[first->theEdge()->target()] = ++childCounter;
-				m_leftSibling[first->theEdge()->target()] 
+				m_leftSibling[first->theEdge()->target()]
 					= previous->theEdge()->target();
 				previous = first;
 			}
@@ -620,7 +621,7 @@ void TreeLayout::initializeTreeStructure(const Graph &tree, List<node> &roots)
 }
 
 
-void TreeLayout::deleteTreeStructure() 
+void TreeLayout::deleteTreeStructure()
 {
 	m_number     .init();
 	m_parent     .init();
@@ -651,7 +652,7 @@ node TreeLayout::nextOnLeftContour(node v) const
 	OGDF_ASSERT(v->graphOf() == m_firstChild.graphOf());
 	OGDF_ASSERT(v->graphOf() == m_thread.graphOf());
 
-	// if v has children, the successor of v on the left contour 
+	// if v has children, the successor of v on the left contour
 	// is its leftmost child,
 	// otherwise, the successor is the thread of v (may be 0)
 	if(m_firstChild[v] != 0)
@@ -667,7 +668,7 @@ node TreeLayout::nextOnRightContour(node v) const
 	OGDF_ASSERT(v->graphOf() == m_lastChild.graphOf());
 	OGDF_ASSERT(v->graphOf() == m_thread.graphOf());
 
-	// if v has children, the successor of v on the right contour 
+	// if v has children, the successor of v on the right contour
 	// is its rightmost child,
 	// otherwise, the successor is the thread of v (may be 0)
 	if(m_lastChild[v] != 0)
@@ -677,7 +678,7 @@ node TreeLayout::nextOnRightContour(node v) const
 }
 
 
-void TreeLayout::firstWalk(node subtree,const GraphAttributes &AG,bool upDown) 
+void TreeLayout::firstWalk(node subtree,const GraphAttributes &AG,bool upDown)
 {
 	OGDF_ASSERT(subtree != 0);
 	OGDF_ASSERT(subtree->graphOf() == m_leftSibling.graphOf());
@@ -695,11 +696,11 @@ void TreeLayout::firstWalk(node subtree,const GraphAttributes &AG,bool upDown)
 		node leftSibling = m_leftSibling[subtree];
 		if(leftSibling != 0) {
 			if(upDown) {
-				m_preliminary[subtree] = m_preliminary[leftSibling] 
+				m_preliminary[subtree] = m_preliminary[leftSibling]
 					+ (AG.width(subtree) + AG.width(leftSibling)) / 2
 					+ m_siblingDistance;
 			} else {
-				m_preliminary[subtree] = m_preliminary[leftSibling] 
+				m_preliminary[subtree] = m_preliminary[leftSibling]
 					+ (AG.height(subtree) + AG.height(leftSibling)) / 2
 					+ m_siblingDistance;
 			}
@@ -737,8 +738,7 @@ void TreeLayout::firstWalk(node subtree,const GraphAttributes &AG,bool upDown)
 		}
 
 		// place the parent node
-		double midpoint = (m_preliminary[children.front()] 
-			               + m_preliminary[children.back()]) / 2;
+		double midpoint = (m_preliminary[children.front()] + m_preliminary[children.back()]) / 2;
 		node leftSibling = m_leftSibling[subtree];
 		if(leftSibling != 0) {
 			if(upDown) {
@@ -750,17 +750,18 @@ void TreeLayout::firstWalk(node subtree,const GraphAttributes &AG,bool upDown)
 					+ (AG.height(subtree) + AG.height(leftSibling)) / 2
 					+ m_siblingDistance;
 			}
-			m_modifier[subtree] = 
+			m_modifier[subtree] =
 				m_preliminary[subtree] - midpoint;
 		}
 		else m_preliminary[subtree] = midpoint;
 	}
 }
 
-void TreeLayout::apportion(node subtree,
-						   node &defaultAncestor,
-						   const GraphAttributes &AG,
-						   bool upDown) 
+void TreeLayout::apportion(
+	node subtree,
+	node &defaultAncestor,
+	const GraphAttributes &AG,
+	bool upDown)
 {
 	OGDF_ASSERT(subtree != 0);
 	OGDF_ASSERT(subtree->graphOf() == defaultAncestor->graphOf());
@@ -773,7 +774,7 @@ void TreeLayout::apportion(node subtree,
 	OGDF_ASSERT(subtree->graphOf() == m_thread.graphOf());
 
 	if(m_leftSibling[subtree] == 0) return;
-	
+
 	// check distance to the left of the subtree
 	// and traverse left/right inside/outside contour
 
@@ -803,10 +804,8 @@ void TreeLayout::apportion(node subtree,
 		// actualize ancestor for right contour
 		m_ancestor[rightContourOut] = subtree;
 
-		if(nextOnLeftContour(leftContourOut) != 0
-		   && nextOnRightContour(rightContourOut) != 0) 
+		if(nextOnLeftContour(leftContourOut) != 0 && nextOnRightContour(rightContourOut) != 0)
 		{
-
 			// continue traversal
 			leftContourOut  = nextOnLeftContour(leftContourOut);
 			leftContourIn   = nextOnRightContour(leftContourIn);
@@ -854,18 +853,15 @@ void TreeLayout::apportion(node subtree,
 	} while(!stop);
 
 	// adjust threads
-	if(nextOnRightContour(rightContourOut) == 0
-	   && nextOnRightContour(leftContourIn) != 0) 
+	if(nextOnRightContour(rightContourOut) == 0 && nextOnRightContour(leftContourIn) != 0)
 	{
-
-		// right subtree smaller than left subforest 
+		// right subtree smaller than left subforest
 		m_thread[rightContourOut] = nextOnRightContour(leftContourIn);
 		m_modifier[rightContourOut] += leftModSumIn - rightModSumOut;
 	}
-	if(nextOnLeftContour(leftContourOut) == 0
-	   && nextOnLeftContour(rightContourIn) != 0) 
-	{
 
+	if(nextOnLeftContour(leftContourOut) == 0 && nextOnLeftContour(rightContourIn) != 0)
+	{
 		// left subforest smaller than right subtree
 		m_thread[leftContourOut] = nextOnLeftContour(rightContourIn);
 		m_modifier[leftContourOut] += rightModSumIn - leftModSumOut;
@@ -876,13 +872,13 @@ void TreeLayout::apportion(node subtree,
 
 void TreeLayout::secondWalkX(node subtree,
 							double modifierSum,
-							GraphAttributes &AG) 
+							GraphAttributes &AG)
 {
 	OGDF_ASSERT(subtree != 0);
 	OGDF_ASSERT(subtree->graphOf() == m_preliminary.graphOf());
 	OGDF_ASSERT(subtree->graphOf() == m_modifier.graphOf());
 
-	// compute final x-coordinates for the subtree 
+	// compute final x-coordinates for the subtree
 	// by recursively aggregating modifiers
 	AG.x(subtree) = m_preliminary[subtree] + modifierSum;
 	modifierSum += m_modifier[subtree];
@@ -893,13 +889,13 @@ void TreeLayout::secondWalkX(node subtree,
 
 void TreeLayout::secondWalkY(node subtree,
 							double modifierSum,
-							GraphAttributes &AG) 
+							GraphAttributes &AG)
 {
 	OGDF_ASSERT(subtree != 0);
 	OGDF_ASSERT(subtree->graphOf() == m_preliminary.graphOf());
 	OGDF_ASSERT(subtree->graphOf() == m_modifier.graphOf());
 
-	// compute final y-coordinates for the subtree 
+	// compute final y-coordinates for the subtree
 	// by recursively aggregating modifiers
 	AG.y(subtree) = m_preliminary[subtree] + modifierSum;
 	modifierSum += m_modifier[subtree];
@@ -909,8 +905,7 @@ void TreeLayout::secondWalkY(node subtree,
 }
 
 
-void TreeLayout::computeYCoordinatesAndEdgeShapes(node root,
-												  GraphAttributes &AG) 
+void TreeLayout::computeYCoordinatesAndEdgeShapes(node root, GraphAttributes &AG)
 {
 	OGDF_ASSERT(root != 0);
 
@@ -943,27 +938,26 @@ void TreeLayout::computeYCoordinatesAndEdgeShapes(node root,
 				DPolyline &edgeBends = AG.bends(e);
 				edgeBends.clear();
 				if(m_orthogonalLayout) {
-					edgeCoordinate = 
+					edgeCoordinate =
 						yCoordinate + (oldHeight + m_levelDistance) / 2;
 					edgeBends.pushBack(DPoint(AG.x(v),edgeCoordinate));
 					edgeBends.pushBack(DPoint(AG.x(w),edgeCoordinate));
 				}
 
-				// compute the maximal node height on the new level 
+				// compute the maximal node height on the new level
 				if(AG.height(e->target()) > newHeight)
 					newHeight = AG.height(e->target());
 			}
 		}
 
-		// assign y-coordinate to the nodes of the new level 
+		// assign y-coordinate to the nodes of the new level
 		yCoordinate += (oldHeight + newHeight) / 2 + m_levelDistance;
 		for(it = newLevel.begin(); it.valid(); it = it.succ())
 			AG.y(*it) = yCoordinate;
 	}
 }
 
-void TreeLayout::computeXCoordinatesAndEdgeShapes(node root,
-												  GraphAttributes &AG) 
+void TreeLayout::computeXCoordinatesAndEdgeShapes(node root, GraphAttributes &AG)
 {
 	OGDF_ASSERT(root != 0);
 
@@ -996,19 +990,19 @@ void TreeLayout::computeXCoordinatesAndEdgeShapes(node root,
 				DPolyline &edgeBends = AG.bends(e);
 				edgeBends.clear();
 				if(m_orthogonalLayout) {
-					edgeCoordinate = 
+					edgeCoordinate =
 						xCoordinate + (oldWidth + m_levelDistance) / 2;
 					edgeBends.pushBack(DPoint(edgeCoordinate,AG.y(v)));
 					edgeBends.pushBack(DPoint(edgeCoordinate,AG.y(w)));
 				}
 
-				// compute the maximal node width on the new level 
+				// compute the maximal node width on the new level
 				if(AG.width(e->target()) > newWidth)
 					newWidth = AG.width(e->target());
 			}
 		}
 
-		// assign x-coordinate to the nodes of the new level 
+		// assign x-coordinate to the nodes of the new level
 		xCoordinate += (oldWidth + newWidth) / 2 + m_levelDistance;
 		for(it = newLevel.begin(); it.valid(); it = it.succ())
 			AG.x(*it) = xCoordinate;

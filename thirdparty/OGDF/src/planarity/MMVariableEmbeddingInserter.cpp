@@ -1,41 +1,42 @@
 /*
- * $Revision: 2302 $
- * 
+ * $Revision: 2616 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-08 08:35:55 +0200 (Tue, 08 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-16 15:34:43 +0200 (Mo, 16. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
  * \brief implementation of MMVariableEmbeddingInserter class
- * 
+ *
  * \author Carsten Gutwenger
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -44,7 +45,7 @@
 #include <ogdf/basic/NodeSet.h>
 #include <ogdf/basic/simple_graph_alg.h>
 #include <ogdf/decomposition/StaticPlanarSPQRTree.h>
-#include <ogdf/planarity/PlanarModule.h>
+#include <ogdf/basic/extended_graph_alg.h>
 #include <ogdf/basic/String.h>
 #include <ogdf/basic/GraphAttributes.h>
 
@@ -111,7 +112,7 @@ void MMVariableEmbeddingInserter::writeEip(const List<Crossing> &eip)
 			cout << "} {";
 			cout << cr.m_partitionRight;
 			cout << "}";
-		
+
 		} else
 			cout << cr.m_adj;
 		cout << endl;
@@ -135,7 +136,7 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 
 	m_pPG = &PG;
 	m_forbiddenEdgeOrig = forbiddenEdgeOrig;
-	
+
 	SListPure<edge> rrEdges;
 	if(removeReinsert() != rrNone) {
 		edge e;
@@ -146,11 +147,9 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 		for(itE = origEdges.begin(); itE.valid(); ++itE)
 			rrEdges.pushBack(*itE);
 	}
-	
+
 	m_pSources = new NodeSet(PG);
 	m_pTargets = new NodeSet(PG);
-
-	PlanarModule pm;
 
 #ifdef MMC_OUTPUT
 	outputPG(PG,0);
@@ -219,20 +218,20 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 			contractSplitIfReq(oldTgt);
 
 		//OGDF_ASSERT(PG.consistencyCheck());
-		//OGDF_ASSERT(pm.planarityTest(PG));
+		//OGDF_ASSERT(isPlanar(PG));
 	}
 
 	if(removeReinsert() != rrNone) {
 		// postprocessing (remove-reinsert heuristc)
 		//SListPure<edge> rrEdges;
-	
+
 		//switch(removeReinsert())
 		//{
 		//case rrAll:
 		//case rrMostCrossed: {
 		//		const List<node> &origInCC = PG.nodesInCC();
 		//		ListConstIterator<node> itV;
-	
+
 		//		for(itV = origInCC.begin(); itV.valid(); ++itV) {
 		//			node vG = *itV;
 		//			adjEntry adj;
@@ -244,7 +243,7 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 		//		}
 		//	}
 		//	break;
-	
+
 		//case rrInserted: {
 		//		ListConstIterator<edge> it;
 		//		for(it = origEdges.begin(); it.valid(); ++it)
@@ -252,24 +251,24 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 		//	}
 		//	break;
 		//}
-	
+
 		// marks the end of the interval of rrEdges over which we iterate
 		// initially set to invalid iterator which means all edges
 		//SListConstIterator<edge> itStop;
-	
+
 		bool improved;
 		do {
 			improved = false;
-	
+
 			//if(removeReinsert() == rrMostCrossed)
 			//{
 			//	VEICrossingsBucket bucket(&PG);
 			//	rrEdges.bucketSort(bucket);
-	
+
 			//	const int num = int(0.01 * percentMostCrossed() * G.numberOfEdges());
 			//	itStop = rrEdges.get(num);
 			//}
-	
+
 			SListConstIterator<edge> it;
 			for(it = rrEdges.begin(); it.valid(); ++it)
 			{
@@ -277,14 +276,14 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 				edge eOrig = *it;
 				node srcOrig = eOrig->source();
 				node tgtOrig = eOrig->target();
-							
+
 				int oldCrossings = PG.chain(eOrig).size() - 1;
 				if (oldCrossings == 0) continue; // cannot improve
-	
+
 				node oldSrc = 0, oldTgt = 0;
 				PG.removeEdgePath(eOrig,0,oldSrc,oldTgt);
 				//OGDF_ASSERT(PG.consistencyCheck());
-	
+
 				// try to find a better insertion path
 				anchorNodes(eOrig->source(), *m_pSources);
 				anchorNodes(eOrig->target(), *m_pTargets);
@@ -305,10 +304,10 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 
 				int newCrossings = eip.size();
 
-				OGDF_ASSERT(pm.planarityTest(PG));
+				OGDF_ASSERT(isPlanar(PG));
 				PG.insertEdgePath(eOrig, 0, src, tgt, eip, eExtraSrc, eExtraTgt);
 				OGDF_ASSERT(PG.consistencyCheck());
-				OGDF_ASSERT(pm.planarityTest(PG));
+				OGDF_ASSERT(isPlanar(PG));
 
 				m_pSources->clear();
 				m_pTargets->clear();
@@ -319,12 +318,12 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 					contractSplitIfReq(oldTgt);
 
 				OGDF_ASSERT(PG.consistencyCheck());
-				OGDF_ASSERT(pm.planarityTest(PG));
+				OGDF_ASSERT(isPlanar(PG));
 
 				//int newPathLength = PG.chain(eOrig).size() - 1;
 				int saved = oldCrossings - newCrossings;
 				OGDF_ASSERT(saved >= 0);
-				
+
 				if(saved > 0)
 					improved = true;
 			}
@@ -378,13 +377,13 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 							contractSplitIfReq(oldTgt);
 
 						OGDF_ASSERT(PG.consistencyCheck());
-						OGDF_ASSERT(pm.planarityTest(PG));
+						OGDF_ASSERT(isPlanar(PG));
 
 						//int newCrossings = ns->m_path.size() - 1;
 						int newCrossings = eip.size();
 						int saved = oldCrossings - newCrossings;
 						OGDF_ASSERT(saved >= 0);
-						
+
 						if(saved > 0)
 							improved = true;
 
@@ -401,7 +400,7 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 
 						convertDummy(vCommon,vOrig,ns);
 						OGDF_ASSERT(PG.consistencyCheck());
-						OGDF_ASSERT(pm.planarityTest(PG));
+						OGDF_ASSERT(isPlanar(PG));
 					}
 				}
 			}
@@ -424,8 +423,8 @@ Module::ReturnType MMVariableEmbeddingInserter::doCall(
 
 
 void MMVariableEmbeddingInserter::insert(
-	List<Crossing> &eip, 
-	AnchorNodeInfo &vStart, 
+	List<Crossing> &eip,
+	AnchorNodeInfo &vStart,
 	AnchorNodeInfo &vEnd)
 {
 	PlanRepExpansion &PG = *m_pPG;
@@ -517,7 +516,7 @@ node MMVariableEmbeddingInserter::prepareAnchorNode(
 		//		if(PG.original(vStraight)== vOrig)
 		//			break;
 		//	}
-		//	
+		//
 		//	PG.removeCrossingReuseDummy(adj, vStraight);
 
 		//	return u;
@@ -590,15 +589,15 @@ node MMVariableEmbeddingInserter::prepareAnchorNode(
 		return adj->twinNode();
 
 	} else {
-		edge eNew, e = adj->theEdge();
+		edge e = adj->theEdge();
 		if(nsStraight == 0) {
 			// We split a chain of an original edge
-			eNew = PG.enlargeSplit(vStraight, e);
+			PG.enlargeSplit(vStraight, e);
 			return e->target();
 
 		} else {
 			// We split a node split
-			eNew = PG.splitNodeSplit(e);
+			PG.splitNodeSplit(e);
 			return e->target();
 		}
 	}
@@ -627,8 +626,8 @@ void MMVariableEmbeddingInserter::preprocessInsertionPath(
 
 
 node MMVariableEmbeddingInserter::preparePath(
-	node vAnchor, 
-	adjEntry adjPath, 
+	node vAnchor,
+	adjEntry adjPath,
 	bool bOrigEdge,
 	node vOrig)
 {
@@ -654,8 +653,8 @@ node MMVariableEmbeddingInserter::preparePath(
 
 void MMVariableEmbeddingInserter::findPseudos(
 	node vDummy,
-	adjEntry adjSrc, 
-	AnchorNodeInfo &infoSrc, 
+	adjEntry adjSrc,
+	AnchorNodeInfo &infoSrc,
 	SListPure<node> &pseudos)
 {
 	PlanRepExpansion &PG = *m_pPG;
@@ -689,9 +688,9 @@ void MMVariableEmbeddingInserter::findPseudos(
 
 
 void MMVariableEmbeddingInserter::insertWithCommonDummy(
-	edge eOrig, 
-	node vDummy, 
-	node &src, 
+	edge eOrig,
+	node vDummy,
+	node &src,
 	node &tgt)
 {
 	PlanRepExpansion &PG = *m_pPG;
@@ -780,15 +779,14 @@ class MMVariableEmbeddingInserter::Block : public Graph
 {
 public:
 	// constructor
-	Block(PlanRepExpansion &PG) :
-		m_PG(PG),
-		m_adjBCtoG(*this,0),
-		m_forbidden(*this,false),
-		m_vBCtoG(*this,0),
-		m_isSource(*this,false),
-		m_isTarget(*this,false),
-		m_isSplittable(*this,false)
+	Block(PlanRepExpansion &PG) : m_PG(PG)
 	{
+		m_adjBCtoG    .init(*this,0);
+		m_forbidden   .init(*this,false);
+		m_vBCtoG      .init(*this,0);
+		m_isSource    .init(*this,false);
+		m_isTarget    .init(*this,false);
+		m_isSplittable.init(*this,false);
 		m_pT = 0;
 	}
 
@@ -937,7 +935,7 @@ public:
 	void constructDual(bool bPathToEdge, bool bPathToSrc, bool bPathToTgt);
 
 	void findShortestPath(bool &bPathToEdge, bool &bPathToSrc, bool &bPathToTgt, Paths &paths);
-	
+
 	// avoid automatic generation of assignment operator
 	ExpandedSkeleton &operator=(const ExpandedSkeleton &);
 
@@ -991,8 +989,7 @@ void MMVariableEmbeddingInserter::ExpandedSkeleton::expand(
 
 	expandSkeleton(v, eIn, eOut);
 
-	PlanarModule pm;
-	pm.planarEmbed(m_exp);
+	planarEmbed(m_exp);
 	m_E.init(m_exp);
 }
 
@@ -1337,9 +1334,9 @@ MMVariableEmbeddingInserter::PathType
 }
 
 void MMVariableEmbeddingInserter::ExpandedSkeleton::findShortestPath(
-	bool &bPathToEdge, 
-	bool &bPathToSrc, 
-	bool &bPathToTgt, 
+	bool &bPathToEdge,
+	bool &bPathToSrc,
+	bool &bPathToTgt,
 	Paths &paths)
 {
 	const int maxCost = 2;
@@ -1361,7 +1358,7 @@ void MMVariableEmbeddingInserter::ExpandedSkeleton::findShortestPath(
 
 	// actual search (using extended bfs on directed dual)
 	int currentDist = 0;
-	
+
 	for( ; ; )
 	{
 		// next candidate edge
@@ -1430,8 +1427,8 @@ void MMVariableEmbeddingInserter::ExpandedSkeleton::findShortestPath(
 
 
 bool MMVariableEmbeddingInserter::dfsVertex(
-	node v, 
-	int parent, 
+	node v,
+	int parent,
 	List<Crossing> &eip,
 	AnchorNodeInfo &vStart,
 	AnchorNodeInfo &vEnd)
@@ -1478,7 +1475,7 @@ bool MMVariableEmbeddingInserter::dfsVertex(
 						BC.m_isTarget[m_GtoBC[vTgt]] = true;
 					BC.m_isSplittable[m_GtoBC[vTgt]] = m_pPG->splittable(vTgt);
 				}
-				
+
 				edge eBC = BC.newEdge(m_GtoBC[vSrc],m_GtoBC[vTgt]);
 				BC.m_adjBCtoG[eBC->adjSource()] = e->adjSource();
 				BC.m_adjBCtoG[eBC->adjTarget()] = e->adjTarget();
@@ -1827,8 +1824,8 @@ void MMVariableEmbeddingInserter::convertDummy(
 
 
 void MMVariableEmbeddingInserter::collectAnchorNodes(
-	node v, 
-	NodeSet &nodes, 
+	node v,
+	NodeSet &nodes,
 	const PlanRepExpansion::NodeSplit *nsParent) const
 {
 	if(m_pPG->original(v) != 0)

@@ -1,42 +1,43 @@
 /*
- * $Revision: 2299 $
- * 
+ * $Revision: 2564 $
+ *
  * last checkin:
- *   $Author: gutwenger $ 
- *   $Date: 2012-05-07 15:57:08 +0200 (Mon, 07 May 2012) $ 
+ *   $Author: gutwenger $
+ *   $Date: 2012-07-07 00:03:48 +0200 (Sa, 07. Jul 2012) $
  ***************************************************************/
- 
+
 /** \file
- * \brief Implementation of binary heap class that allows the 
+ * \brief Implementation of binary heap class that allows the
  * decreaseKey operation.
- * 
+ *
  * \author Karsten Klein
- * 
+ *
  * \par License:
  * This file is part of the Open Graph Drawing Framework (OGDF).
  *
- * Copyright (C). All rights reserved.
+ * \par
+ * Copyright (C)<br>
  * See README.txt in the root directory of the OGDF installation for details.
- * 
+ *
  * \par
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * Version 2 or 3 as published by the Free Software Foundation;
  * see the file LICENSE.txt included in the packaging of this file
  * for details.
- * 
+ *
  * \par
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * \par
- * You should have received a copy of the GNU General Public 
+ * You should have received a copy of the GNU General Public
  * License along with this program; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
- * 
+ *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
@@ -44,8 +45,8 @@
 #pragma once
 #endif
 
-#ifndef OREAS_BINARY_HEAP2_H
-#define OREAS_BINARY_HEAP2_H
+#ifndef OGDF_BINARY_HEAP2_H
+#define OGDF_BINARY_HEAP2_H
 
 #include <ogdf/basic/HeapBase.h>
 
@@ -55,7 +56,7 @@ namespace ogdf {
  * \brief Min-heap priority queue realized by a data array.
  *
  * Heaps store objects that are weighted with costs;
- * the minimal cost object is accessible over 
+ * the minimal cost object is accessible over
  * member function minRet() and extracted by extractMin().
  *
  * The class uses two template parameters:
@@ -69,8 +70,8 @@ namespace ogdf {
  *
  * To allow direct access to the underlying array structure
  * in order to minimize decreaseKey() runningtime,
- * a pointer to an integer storage can be provided as input() 
- * parameter that will be kept updated with the index position 
+ * a pointer to an integer storage can be provided as input()
+ * parameter that will be kept updated with the index position
  * during heap operations.
  *
  * <H3>Running Time</H3>
@@ -96,9 +97,9 @@ namespace ogdf {
 
 
 //to allow directobject adress, a pointer to an integer storage
-//can be provided, where the array index is updated by the 
+//can be provided, where the array index is updated by the
 //heap class
-	
+
 
 template <class key, class HeapObject>
 class BinaryHeap2 : public HeapBase<key, HeapObject>
@@ -117,20 +118,20 @@ public:
 
 
 	//! Assignment operator.
-    const BinaryHeap2& operator=(const BinaryHeap2<key, HeapObject>& rhs);
+	const BinaryHeap2& operator=(const BinaryHeap2<key, HeapObject>& rhs);
 
 	//------------------------------------------------------------
-	//modification: 
+	//modification:
 
 	//! Inserts a new element \a obj with priority \a p and pointer for index update.
 	void insert(HeapObject& obj, key& p, int* keyUpdate = 0);
-	
+
 	//! Obtains heap property, only needed if the elements are not inserted by insert method.
 	virtual void makeHeap();
 	//delete
 	//it is not clear how a delete without explicit
 	//given heapentry pointer  should behave, e.g. if equal values
-	//for objects are allowed 
+	//for objects are allowed
 
 	//! Returns minimum priority element and removes it from the heap.
 	// arraySize is decreased if size < 1/3arraySize (amortized runtime O(1))
@@ -221,51 +222,51 @@ protected:
 	int higherArraySize(int arraySize) {return 2*arraySize;}
 	int lowerArrayBound(int arraySize) {return arraySize/2+1;}
 	int lowerArraySize(int arraySize) {return arraySize/2;}
-	
+
 	void init(int initSize);
 
 private:
 	//holding object and priority key
 	struct HeapEntry
 	{
-	  key m_priority;
-	  HeapObject m_object;
+		key m_priority;
+		HeapObject m_object;
 
-	  //we maintain positions during operations
-	  int m_pos; 
-	  int* m_foreignPos; //storage structure given by user
+		//we maintain positions during operations
+		int m_pos;
+		int* m_foreignPos; //storage structure given by user
 
-      //! Initializes HeapEntry object.
-	  HeapEntry() {m_priority = 0; 
-				   m_pos = 0;
-				   m_foreignPos = 0;
-	  }
+		//! Initializes HeapEntry object.
+		HeapEntry() {m_priority = 0;
+		m_pos = 0;
+		m_foreignPos = 0;
+		}
 
-	  //! Initializes HeapEntry object with priority.
-	  /**
-	   * @param k ist the priority.
-	   * @param ob is the corresponding HeapObject.
-	   */
-	  HeapEntry(key k, const HeapObject& ob) {m_priority = k; m_object = ob;
+		//! Initializes HeapEntry object with priority.
+		/**
+		* @param k ist the priority.
+		* @param ob is the corresponding HeapObject.
+		*/
+		HeapEntry(key k, const HeapObject& ob) {m_priority = k; m_object = ob;
 		m_foreignPos = 0;
 		//m_pos = ob.m_pos;
-	  }
+		}
 
-	  //! Initializes HaepEntry object with priority.
-	  /**
-	   * @param k ist the priority.
-	   * @param ob is the corresponding HeapObject.
-	   * @param pos is the position of the object within the array.
-	   * @param fp is a pointer to the index.
-	   */
-	  HeapEntry(key k, const HeapObject& ob, int pos, int* fp) 
-	  {
-		  m_priority = k; 
-		  m_object = ob;
-		  if (fp == 0) m_foreignPos = 0;
-		  else m_foreignPos = fp;
-		  m_pos = pos;
-	  }
+		//! Initializes HaepEntry object with priority.
+		/**
+		* @param k ist the priority.
+		* @param ob is the corresponding HeapObject.
+		* @param pos is the position of the object within the array.
+		* @param fp is a pointer to the index.
+		*/
+		HeapEntry(key k, const HeapObject& ob, int pos, int* fp)
+		{
+			m_priority = k;
+			m_object = ob;
+			if (fp == 0) m_foreignPos = 0;
+			else m_foreignPos = fp;
+			m_pos = pos;
+		}
 	};
 
 	HeapEntry* m_heapArray; //dynamically maintained array of heapentries
@@ -281,15 +282,10 @@ private:
 
 
 
-} //namespace oreas
-
 //**************************************************************
 //implementation
 //**************************************************************
 
-#include <ogdf/basic/basic.h>
-
-namespace ogdf {
 
 //**************************************************************
 //constructor and initialization
@@ -300,6 +296,7 @@ BinaryHeap2<key, HeapObject>::BinaryHeap2(int startSize)
 	init(startSize);
 }//constructor
 
+
 template <class key, class HeapObject>
 void BinaryHeap2<key, HeapObject>::init(int initSize)
 {
@@ -309,8 +306,9 @@ void BinaryHeap2<key, HeapObject>::init(int initSize)
 
 	m_startSize = initSize;
 
-    HeapBase<key,HeapObject>::m_size = 0;
+	HeapBase<key,HeapObject>::m_size = 0;
 }
+
 
 template <class key, class HeapObject>
 void BinaryHeap2<key, HeapObject>::clear()
@@ -318,6 +316,7 @@ void BinaryHeap2<key, HeapObject>::clear()
 	if (m_heapArray) delete[] m_heapArray;
 	init(m_startSize);
 }
+
 
 //**************************************************************
 //element shifting operations
@@ -329,30 +328,31 @@ void BinaryHeap2<key, HeapObject>::siftUp(int pos)
 {
 	OGDF_ASSERT( (pos > 0) && (pos <= HeapBase<key,HeapObject>::m_size) )
 
-	if (pos == 1) 
-	{
-		m_heapArray[1].m_pos = 1;
-		if (m_heapArray[1].m_foreignPos != 0) //address is defined
-			*(m_heapArray[1].m_foreignPos) = 1;
-		return;//nothing to do
-	}
+		if (pos == 1)
+		{
+			m_heapArray[1].m_pos = 1;
+			if (m_heapArray[1].m_foreignPos != 0) //address is defined
+				*(m_heapArray[1].m_foreignPos) = 1;
+			return;//nothing to do
+		}
 
-	HeapEntry tempEntry = m_heapArray[pos];
-	int run = pos;
-	while ( (parentIndex(run) >= 1) && 
-		    (m_heapArray[parentIndex(run)].m_priority > tempEntry.m_priority) )
-	{
-		m_heapArray[run] = m_heapArray[parentIndex(run)];
-        if (m_heapArray[run].m_foreignPos != 0) *(m_heapArray[run].m_foreignPos) = run;
-		run = parentIndex(run);
-	}//while
+		HeapEntry tempEntry = m_heapArray[pos];
+		int run = pos;
+		while ( (parentIndex(run) >= 1) &&
+			(m_heapArray[parentIndex(run)].m_priority > tempEntry.m_priority) )
+		{
+			m_heapArray[run] = m_heapArray[parentIndex(run)];
+			if (m_heapArray[run].m_foreignPos != 0) *(m_heapArray[run].m_foreignPos) = run;
+			run = parentIndex(run);
+		}//while
 
-	m_heapArray[run] = tempEntry;
-	m_heapArray[run].m_pos = run;
-	if (m_heapArray[run].m_foreignPos != 0) *(m_heapArray[run].m_foreignPos) = run;
+		m_heapArray[run] = tempEntry;
+		m_heapArray[run].m_pos = run;
+		if (m_heapArray[run].m_foreignPos != 0) *(m_heapArray[run].m_foreignPos) = run;
 
 
 }//siftup
+
 
 //restore heap property by finding correct position for object
 //at position pos on lower levels, updates array index values
@@ -361,16 +361,16 @@ void BinaryHeap2<key, HeapObject>::siftDown(int pos)
 {
 	OGDF_ASSERT( (pos > 0) && (pos <= HeapBase<key,HeapObject>::m_size) );
 
-	if (pos >= int(HeapBase<key,HeapObject>::m_size/2)+1) 
+	if (pos >= int(HeapBase<key,HeapObject>::m_size/2)+1)
 	{
 		m_heapArray[pos].m_pos = pos;
-	    if (m_heapArray[pos].m_foreignPos != 0) *(m_heapArray[pos].m_foreignPos) = pos;
+		if (m_heapArray[pos].m_foreignPos != 0) *(m_heapArray[pos].m_foreignPos) = pos;
 		return; //leafs cant move down
 	}//if leaf
 
 	key sPrio = getPriority(pos);
 	int sIndex = pos;
-	
+
 	if (hasLeft(pos) && (getPriority(leftChildIndex(pos)) < sPrio) )
 	{
 		sIndex = leftChildIndex(pos);
@@ -381,52 +381,52 @@ void BinaryHeap2<key, HeapObject>::siftDown(int pos)
 		sIndex = rightChildIndex(pos);
 		sPrio = getPriority(rightChildIndex(pos));
 	}//if right child smaller
-	  
+
 	if (sIndex != pos)
 	{
-		HeapEntry tempEntry = m_heapArray[pos]; 
+		HeapEntry tempEntry = m_heapArray[pos];
 		m_heapArray[pos] = m_heapArray[sIndex];
 		m_heapArray[sIndex] = tempEntry;
 
 		//update both index entries
 		m_heapArray[pos].m_pos = pos;
-	    if (m_heapArray[pos].m_foreignPos != 0) *(m_heapArray[pos].m_foreignPos) = pos;
+		if (m_heapArray[pos].m_foreignPos != 0) *(m_heapArray[pos].m_foreignPos) = pos;
 		m_heapArray[sIndex].m_pos = sIndex;
-	    if (m_heapArray[sIndex].m_foreignPos != 0) *(m_heapArray[sIndex].m_foreignPos) = sIndex;
+		if (m_heapArray[sIndex].m_foreignPos != 0) *(m_heapArray[sIndex].m_foreignPos) = sIndex;
 
-        siftDown(sIndex); //TODO: dont use recursion
+		siftDown(sIndex); //TODO: dont use recursion
 	}//if sift necessary
 	else  //update in case of new elements (non-insert)
 	{
 		m_heapArray[pos].m_pos = pos;
-	    if (m_heapArray[pos].m_foreignPos != 0) *(m_heapArray[pos].m_foreignPos) = pos;
+		if (m_heapArray[pos].m_foreignPos != 0) *(m_heapArray[pos].m_foreignPos) = pos;
 	}//else
-	
-
 }//siftdown
 
 
 template <class key, class HeapObject>
 void BinaryHeap2<key, HeapObject>::makeHeap()
 {
-  //only needed if insertion is not done over insert 
-  //(if we allow array parameter in constructor)
-  for (int i=HeapBase<key,HeapObject>::m_size/2; i > 0; i--)
-	  siftDown(i);
+	//only needed if insertion is not done over insert
+	//(if we allow array parameter in constructor)
+	for (int i=HeapBase<key,HeapObject>::m_size/2; i > 0; i--)
+		siftDown(i);
 }//makeheap
+
 
 template <class key, class HeapObject>
 void BinaryHeap2<key, HeapObject>::decreaseKey(int index, key priority)
 {
-  HeapEntry& he = m_heapArray[index];
+	HeapEntry& he = m_heapArray[index];
 
-  //check if error value
-  if (he.m_priority < priority) OGDF_THROW_PARAM(AlgorithmFailureException, afcIllegalParameter);
+	//check if error value
+	if (he.m_priority < priority) OGDF_THROW_PARAM(AlgorithmFailureException, afcIllegalParameter);
 
-  he.m_priority = priority;
-  siftUp(index);
+	he.m_priority = priority;
+	siftUp(index);
 
 }//decreaseKey
+
 
 //extract the minimum priority object and reallocate array if size < 1/3 arraysize
 template <class key, class HeapObject>
@@ -449,7 +449,7 @@ HeapObject BinaryHeap2<key, HeapObject>::extractMin()
 			for (int i = 1; i <= HeapBase<key,HeapObject>::m_size ; i++)
 				tempHeap[i] = m_heapArray[i];
 			delete[] m_heapArray;
-			m_heapArray = tempHeap; 
+			m_heapArray = tempHeap;
 			m_arraySize = lowerArraySize(m_arraySize);
 
 		}//if small enough
@@ -463,7 +463,7 @@ HeapObject BinaryHeap2<key, HeapObject>::extractMin()
 }//extractMin
 
 
-//place a copy of the given input element in the queue, doubles 
+//place a copy of the given input element in the queue, doubles
 //array size if necessary
 template <class key, class HeapObject>
 void BinaryHeap2<key, HeapObject>::insert(HeapObject& ho, key& priority, int* keyUpdate)
@@ -477,9 +477,9 @@ void BinaryHeap2<key, HeapObject>::insert(HeapObject& ho, key& priority, int* ke
 		for (int i = 1; i <= m_arraySize ; i++) //last one is not occupied yet
 			tempHeap[i] = m_heapArray[i];
 		delete[] m_heapArray;
-		m_heapArray = tempHeap; 
+		m_heapArray = tempHeap;
 		m_arraySize = higherArraySize(m_arraySize);
-	
+
 	}//if array full
 
 	//now insert object and reestablish heap property
@@ -497,24 +497,23 @@ const BinaryHeap2<key, HeapObject>& BinaryHeap2<key, HeapObject>::operator=(cons
 	if (this != &rhs)
 	{
 		if (m_heapArray && !(m_arraySize == rhs.m_arraySize))
-		{ 
+		{
 			delete[] m_heapArray;
 			m_heapArray = 0;
 		}//if
 
-        if (!m_heapArray)
+		if (!m_heapArray)
 			m_heapArray = new HeapEntry[arrayBound(rhs.m_arraySize)]; //start at 1
-		
+
 		OGDF_ASSERT(m_heapArray);
 
 		HeapBase<key,HeapObject>::m_size = rhs.m_size;
 
 		m_startSize = rhs.m_startSize;
-
 		m_arraySize = rhs.m_arraySize;
 
 		for (int i = 1; i <= HeapBase<key,HeapObject>::m_size ; i++)
-				m_heapArray[i] = rhs.m_heapArray[i];
+			m_heapArray[i] = rhs.m_heapArray[i];
 
 	}//if not self
 	return *this;
@@ -522,6 +521,6 @@ const BinaryHeap2<key, HeapObject>& BinaryHeap2<key, HeapObject>::operator=(cons
 
 
 
-}//namespace oreas
+}//namespace ogdf
 
 #endif
