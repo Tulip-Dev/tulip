@@ -70,6 +70,8 @@ SET(LibTulipPythonName "tulip-python-${TulipMMVersion}")
 SET(LibTulipOGDFName "tulip-ogdf-${TulipMMVersion}")
 SET(LibStlPythonBindingsName "stl-python-bindings")
 SET(LibTulipCorePythonBindingsName "tulip-core-python-bindings")
+SET(LibTulipOGLPythonBindingsName "tulip-opengl-python-bindings")
+SET(LibTulipGUIPythonBindingsName "tulip-gui-python-bindings")
 SET(TulipLibs ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipOGDFName})
 
 ## ========================================================
