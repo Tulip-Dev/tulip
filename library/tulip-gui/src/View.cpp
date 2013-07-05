@@ -157,6 +157,7 @@ QString View::configurationWidgetsStyleSheet() const {
 }
 
 void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
+    emit interactorsChanged();
 }
 
 void View::centerView(bool/* graphChanged */) {

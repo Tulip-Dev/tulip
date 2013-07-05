@@ -90,9 +90,10 @@ protected slots:
   void scrollInteractorsRight();
   void scrollInteractorsLeft();
   void resetInteractorsScrollButtonsVisibility();
+  void refreshInteractorsToolbar();
 
 protected:
-  void refreshInteractorsToolbar();
+
 
   void resizeEvent(QResizeEvent *);
 
