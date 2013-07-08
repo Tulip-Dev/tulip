@@ -187,7 +187,7 @@
 (edge 178 88 98)
 (edge 179 89 99)
 (property  0 color "viewBorderColor"
-(default "(255,95,95,255)" "(180,180,180,255)")
+(default "(0,0,0,255)" "(0,0,0,255)")
 )
 (property  0 double "viewBorderWidth"
 (default "0" "1")
@@ -196,7 +196,7 @@
 (default "(255,95,95,255)" "(180,180,180,255)")
 )
 (property  0 string "viewFont"
-(default "TulipBitmapDir/font.ttf" "TulipBitmapDir/font.ttf")
+(default "font.ttf" "font.ttf")
 )
 (property  0 int "viewFontSize"
 (default "18" "18")
@@ -205,7 +205,7 @@
 (default "" "")
 )
 (property  0 color "viewLabelBorderColor"
-(default "(54,54,54,255)" "(54,54,54,255)")
+(default "(0,0,0,255)" "(0,0,0,255)")
 )
 (property  0 double "viewLabelBorderWidth"
 (default "1" "1")
@@ -214,9 +214,6 @@
 (default "(54,54,54,255)" "(54,54,54,255)")
 )
 (property  0 int "viewLabelPosition"
-(default "0" "0")
-)
-(property  0 double "viewLabelRotation"
 (default "0" "0")
 )
 (property  0 layout "viewLayout"
