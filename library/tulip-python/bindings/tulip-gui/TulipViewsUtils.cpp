@@ -51,42 +51,49 @@ std::vector<std::string> TulipViewsManager::getTulipViews() {
 }
 
 tlp::Workspace *TulipViewsManager::tlpWorkspace() {
-    tlp::Perspective *perspective = tlp::Perspective::instance();
-    if (perspective) {
-        return perspective->mainWindow()->findChild<tlp::Workspace*>();
-    }
-    return NULL;
+  tlp::Perspective *perspective = tlp::Perspective::instance();
+
+  if (perspective) {
+    return perspective->mainWindow()->findChild<tlp::Workspace*>();
+  }
+
+  return NULL;
 }
 
 TulipViewsManager::TulipViewsManager() {
-    model = new GraphHierarchiesModel(this);
+  model = new GraphHierarchiesModel(this);
 
 }
 
 std::vector<tlp::View *> TulipViewsManager::getOpenedViews() {
-    tlp::Workspace *workspace = tlpWorkspace();
-    if (workspace) {
-        QList<tlp::View*> views = workspace->panels();
-        return std::vector<tlp::View *>(views.begin(), views.end());
-    } else {
-        return openedViews;
-    }
+  tlp::Workspace *workspace = tlpWorkspace();
+
+  if (workspace) {
+    QList<tlp::View*> views = workspace->panels();
+    return std::vector<tlp::View *>(views.begin(), views.end());
+  }
+  else {
+    return openedViews;
+  }
 }
 
 std::vector<tlp::View *> TulipViewsManager::getOpenedViewsWithName(const std::string &viewName) {
-    std::vector<tlp::View *> views = getOpenedViews();
-    std::vector<tlp::View*> ret;
-    for (size_t i = 0 ; i < views.size() ; ++i) {
-        if (views[i]->name() == viewName) {
-            ret.push_back(views[i]);
-        }
+  std::vector<tlp::View *> views = getOpenedViews();
+  std::vector<tlp::View*> ret;
+
+  for (size_t i = 0 ; i < views.size() ; ++i) {
+    if (views[i]->name() == viewName) {
+      ret.push_back(views[i]);
     }
-    return ret;
+  }
+
+  return ret;
 }
 
 tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *graph, const DataSet &dataSet, bool show) {
   tlp::Workspace *workspace = tlpWorkspace();
   tlp::View *view = NULL;
+
   if (workspace) {
     workspace->graphModel()->addGraph(graph);
     view = PluginLister::instance()->getPluginObject<View>(viewName,NULL);
@@ -94,7 +101,8 @@ tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *g
     view->setGraph(graph);
     view->setState(dataSet);
     workspace->addPanel(view);
-  } else {
+  }
+  else {
     model->addGraph(graph);
 
     view = PluginLister::instance()->getPluginObject<View>(viewName,NULL);
@@ -123,80 +131,93 @@ tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *g
 
 void TulipViewsManager::closeView(tlp::View *view) {
   tlp::Workspace *workspace = tlpWorkspace();
+
   if (workspace) {
     workspace->delView(view);
-  } else {
-      if (viewToWindow.find(view) != viewToWindow.end()) {
-        delete viewToWindow[view];
-        viewToWindow.erase(view);
-        viewToPanel.erase(view);
-      }
-      if (viewToPanel.find(view) != viewToPanel.end()) {
-        delete viewToPanel[view];
-        viewToPanel.erase(view);
-      }
+  }
+  else {
+    if (viewToWindow.find(view) != viewToWindow.end()) {
+      delete viewToWindow[view];
+      viewToWindow.erase(view);
+      viewToPanel.erase(view);
+    }
+
+    if (viewToPanel.find(view) != viewToPanel.end()) {
+      delete viewToPanel[view];
+      viewToPanel.erase(view);
+    }
   }
 }
 
 std::vector<tlp::View*> TulipViewsManager::getViewsOfGraph(tlp::Graph *graph) {
-    tlp::Workspace *workspace = tlpWorkspace();
-    std::vector<tlp::View*> ret;
-    if (workspace) {
-      QList<tlp::View*> views = workspace->panels();
-      for (int i = 0 ; i < views.count() ; ++i) {
-        if (views.at(i)->graph() == graph) {
-          ret.push_back(views.at(i));
-        }
-      }
-    } else {
-      for (size_t i = 0 ; i < openedViews.size() ; ++i) {
-        if (openedViews[i]->graph() == graph) {
-          ret.push_back(openedViews[i]);
-        }
+  tlp::Workspace *workspace = tlpWorkspace();
+  std::vector<tlp::View*> ret;
+
+  if (workspace) {
+    QList<tlp::View*> views = workspace->panels();
+
+    for (int i = 0 ; i < views.count() ; ++i) {
+      if (views.at(i)->graph() == graph) {
+        ret.push_back(views.at(i));
       }
     }
+  }
+  else {
+    for (size_t i = 0 ; i < openedViews.size() ; ++i) {
+      if (openedViews[i]->graph() == graph) {
+        ret.push_back(openedViews[i]);
+      }
+    }
+  }
 
   return ret;
 }
 
 void TulipViewsManager::closeAllViews() {
-    tlp::Workspace *workspace = tlpWorkspace();
-    if (workspace) {
-       workspace->closeAll();
-    } else {
-      std::vector<tlp::View*> openedViewsCp(openedViews);
-      for (size_t i = 0 ; i < openedViewsCp.size() ; ++i) {
-        closeView(openedViewsCp[i]);
-      }
+  tlp::Workspace *workspace = tlpWorkspace();
 
+  if (workspace) {
+    workspace->closeAll();
+  }
+  else {
+    std::vector<tlp::View*> openedViewsCp(openedViews);
+
+    for (size_t i = 0 ; i < openedViewsCp.size() ; ++i) {
+      closeView(openedViewsCp[i]);
     }
+
+  }
 
 }
 
 void TulipViewsManager::closeViewsRelatedToGraph(tlp::Graph* graph) {
-    tlp::Workspace *workspace = tlpWorkspace();
-    if (workspace) {
-        QList<tlp::View*> views = workspace->panels();
-        for (int i = 0 ; i < views.count() ; ++i) {
-          if (views.at(i)->graph() == graph) {
-              workspace->delView(views.at(i));
-          }
-        }
-    } else {
-      std::vector<tlp::View*> openedViewsCp(openedViews);
+  tlp::Workspace *workspace = tlpWorkspace();
 
-      for (size_t i = 0 ; i < openedViewsCp.size() ; ++i) {
-        if (openedViewsCp[i]->graph() == graph) {
-          closeView(openedViewsCp[i]);
-        }
+  if (workspace) {
+    QList<tlp::View*> views = workspace->panels();
+
+    for (int i = 0 ; i < views.count() ; ++i) {
+      if (views.at(i)->graph() == graph) {
+        workspace->delView(views.at(i));
       }
     }
+  }
+  else {
+    std::vector<tlp::View*> openedViewsCp(openedViews);
+
+    for (size_t i = 0 ; i < openedViewsCp.size() ; ++i) {
+      if (openedViewsCp[i]->graph() == graph) {
+        closeView(openedViewsCp[i]);
+      }
+    }
+  }
 }
 
 void TulipViewsManager::viewDestroyed(QObject *obj) {
   tlp::Workspace *workspace = tlpWorkspace();
   tlp::View *view = static_cast<tlp::View*>(obj);
   releaseSIPWrapper(view, sipFindType("tlp::View"));
+
   if (!workspace) {
     viewToWindow.erase(view);
     viewToPanel.erase(view);
@@ -206,23 +227,27 @@ void TulipViewsManager::viewDestroyed(QObject *obj) {
 
 void TulipViewsManager::setViewVisible(tlp::View *view, const bool visible) {
   tlp::Workspace *workspace = tlpWorkspace();
+
   if (!workspace) {
     if (visible) {
       viewToWindow[view] = new ViewMainWindow();
       viewToWindow[view]->setWindowTitle(("Tulip : " + view->name() + " : " + view->graph()->getName()).c_str());
       viewToWindow[view]->setCentralWidget(viewToPanel[view]);
       viewToWindow[view]->setVisible(true);
-    } else {
+    }
+    else {
       viewToPanel[view]->setParent(NULL);
+
       if (viewToWindow.find(view) != viewToWindow.end()) {
-          delete viewToWindow[view];
-          viewToWindow.erase(view);
+        delete viewToWindow[view];
+        viewToWindow.erase(view);
       }
     }
 
     if (visible) {
-        viewToWindow[view]->raise();
+      viewToWindow[view]->raise();
     }
+
     QApplication::processEvents();
   }
 }
@@ -231,6 +256,7 @@ bool TulipViewsManager::areViewsVisible()  {
   bool ret = false;
 
   tlp::Workspace *workspace = tlpWorkspace();
+
   if (!workspace) {
     for (size_t i = 0 ; i < openedViews.size() ; ++i) {
       ret = ret || (viewToWindow.find(openedViews[i]) != viewToWindow.end() && viewToWindow[openedViews[i]]->isVisible());
@@ -242,6 +268,7 @@ bool TulipViewsManager::areViewsVisible()  {
 
 void TulipViewsManager::resizeView(tlp::View *view, int width, int height) {
   tlp::Workspace *workspace = tlpWorkspace();
+
   if (!workspace) {
     viewToWindow[view]->resize(width, height);
     QApplication::processEvents();
@@ -250,6 +277,7 @@ void TulipViewsManager::resizeView(tlp::View *view, int width, int height) {
 
 void TulipViewsManager::setViewPos(tlp::View *view, int x, int y) {
   tlp::Workspace *workspace = tlpWorkspace();
+
   if (!workspace) {
     viewToWindow[view]->move(x, y);
     QApplication::processEvents();

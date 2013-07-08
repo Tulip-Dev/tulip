@@ -76,7 +76,7 @@ public :
   void setViewPos(tlp::View *view, int x, int y);
 
   tlp::GraphHierarchiesModel *graphModel() const {
-      return model;
+    return model;
   }
 
   tlp::Workspace *tlpWorkspace();
