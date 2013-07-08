@@ -123,6 +123,7 @@ inline const sipAPIDef * sipAPI() {
   if (!sipAPIPtr) {
     sipAPIPtr = getSipAPI();
   }
+
   return sipAPIPtr;
 }
 
