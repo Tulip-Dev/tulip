@@ -350,19 +350,28 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
   STACKFRAME frame;
   memset(&frame,0,sizeof(frame));
 
-  frame.AddrPC.Offset = context->Eip;
-  frame.AddrPC.Mode = AddrModeFlat;
+#ifndef I64
+  DWORD machine = IMAGE_FILE_MACHINE_I386;
+  frame.AddrPC.Offset    = context->Eip;
   frame.AddrStack.Offset = context->Esp;
-  frame.AddrStack.Mode = AddrModeFlat;
   frame.AddrFrame.Offset = context->Ebp;
-  frame.AddrFrame.Mode = AddrModeFlat;
+#else
+  DWORD machine = IMAGE_FILE_MACHINE_AMD64;
+  frame.AddrPC.Offset    = context->Rip;
+  frame.AddrStack.Offset = context->Rsp;
+  frame.AddrFrame.Offset = context->Rsp;
+#endif
+
+  frame.AddrPC.Mode      = AddrModeFlat;
+  frame.AddrStack.Mode   = AddrModeFlat;
+  frame.AddrFrame.Mode   = AddrModeFlat;
 
   char symbol_buffer[sizeof(IMAGEHLP_SYMBOL) + 255];
   char module_name_raw[MAX_PATH];
 
   int depth = maxDepth;
 
-  while(StackWalk(IMAGE_FILE_MACHINE_I386,
+  while(StackWalk(machine,
                   process,
                   thread,
                   &frame,
@@ -403,7 +412,11 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
     const char * func = NULL;
 
+#ifndef I64
     DWORD dummy = 0;
+#else
+    DWORD64 dummy = 0;
+#endif
 
     if (SymGetSymFromAddr(process, frame.AddrPC.Offset, &dummy, symbol)) {
       func = symbol->Name;
