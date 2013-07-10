@@ -31,9 +31,6 @@
 #else
 #include <GL/gl.h>
 #include <GL/glu.h>
-# if defined(__WIN32__)
-# include <GL/glext.h>
-# endif
 #endif
 
 #include <tulip/Coord.h>

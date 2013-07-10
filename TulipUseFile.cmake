@@ -2,8 +2,14 @@
 ## Toolchains options
 ## -----------------------------------------------------------------------------------------------
 MACRO(SET_COMPILER_OPTIONS)
+
+  STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
+
   IF(NOT MSVC) #visual studio does not recognize these options
      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wno-long-long")
+     IF(X64)
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
+     ENDIF(X64)
     IF(NOT APPLE)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
     ENDIF(NOT APPLE)
@@ -59,8 +65,6 @@ MACRO(SET_COMPILER_OPTIONS)
       SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMTD")
 
       SET(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} /SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-
-      STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
 
       IF(X64)
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
