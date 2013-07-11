@@ -138,7 +138,7 @@ void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
   }
 
   graph->removeListener(instance);
-  instance->resultsBuffer.erase((unsigned long)graph);
+  instance->resultsBuffer.erase(graph);
   instance->connect(graph, addedEdges);
   assert(BiconnectedTest::isBiconnected(graph));
 }
@@ -163,8 +163,8 @@ bool BiconnectedTest::compute(const tlp::Graph* graph) {
     return true;
   }
 
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    return resultsBuffer[(unsigned long)graph];
+  if (resultsBuffer.find(graph)!=resultsBuffer.end())
+    return resultsBuffer[graph];
 
   MutableContainer<bool> mark;
   mark.setAll(false);
@@ -184,7 +184,7 @@ bool BiconnectedTest::compute(const tlp::Graph* graph) {
     result=false;
   } //connected test
 
-  resultsBuffer[(unsigned long)graph]=result;
+  resultsBuffer[graph]=result;
   graph->addListener(this);
   return result;
 }
@@ -197,30 +197,30 @@ void BiconnectedTest::treatEvent(const Event& evt) {
 
     switch(gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
-      resultsBuffer[(unsigned long)graph]=false;
+      resultsBuffer[graph]=false;
       break;
 
     case GraphEvent::TLP_DEL_NODE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-        if (resultsBuffer[(unsigned long)graph]) return;
+      if (resultsBuffer.find(graph)!=resultsBuffer.end())
+        if (resultsBuffer[graph]) return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_DEL_EDGE:
 
-      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-        if (!resultsBuffer[(unsigned long)graph]) return;
+      if (resultsBuffer.find(graph)!=resultsBuffer.end())
+        if (!resultsBuffer[graph]) return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     default:
@@ -234,7 +234,7 @@ void BiconnectedTest::treatEvent(const Event& evt) {
     Graph* graph = reinterpret_cast<Graph *>(evt.sender());
 
     if (graph && evt.type() == Event::TLP_DELETE) {
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
     }
   }
 }

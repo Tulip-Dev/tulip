@@ -34,12 +34,12 @@ bool SimpleTest::isSimple(const tlp::Graph* graph) {
   if(instance == 0 )
     instance = new SimpleTest();
 
-  if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[(unsigned long)graph] = simpleTest(graph);
+  if (instance->resultsBuffer.find(graph) == instance->resultsBuffer.end()) {
+    instance->resultsBuffer[graph] = simpleTest(graph);
     graph->addListener(instance);
   }
 
-  return instance->resultsBuffer[(unsigned long)graph];
+  return instance->resultsBuffer[graph];
 }
 //**********************************************************************
 void SimpleTest::makeSimple(Graph* graph,vector<edge> &removed) {
@@ -123,7 +123,7 @@ bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdg
 }
 //=================================================================
 void SimpleTest::deleteResult(Graph *graph) {
-  resultsBuffer.erase((unsigned long)graph);
+  resultsBuffer.erase(graph);
   graph->removeListener(this);
 }
 //=================================================================
@@ -136,21 +136,21 @@ void SimpleTest::treatEvent(const Event& evt) {
     switch(gEvt->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer[(unsigned long)graph])
+      if (resultsBuffer[graph])
         deleteResult(graph);
 
       break;
 
     case GraphEvent::TLP_DEL_EDGE:
 
-      if (!resultsBuffer[(unsigned long)graph])
+      if (!resultsBuffer[graph])
         deleteResult(graph);
 
       break;
 
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     default:

@@ -87,33 +87,33 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph* graph) {
 //=================================================================
 bool PlanarityTest::compute(Graph* graph) {
 
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    return resultsBuffer[(unsigned long)graph];
+  if (resultsBuffer.find(graph)!=resultsBuffer.end())
+    return resultsBuffer[graph];
 
   unsigned int nbOfNodes = graph->numberOfNodes();
 
   if (nbOfNodes==0) {
-    resultsBuffer[(unsigned long)graph] = true;
+    resultsBuffer[graph] = true;
     return true;
   }
 
   // quick test
   if ((nbOfNodes >= 3) && (graph->numberOfEdges() > ((3 * nbOfNodes) - 6))) {
     graph->addListener(this);
-    return resultsBuffer[(unsigned long)graph] = false;
+    return resultsBuffer[graph] = false;
   }
 
   vector<edge> addedEdges;
   BiconnectedTest::makeBiconnected(graph, addedEdges);
   PlanarityTestImpl planarTest(graph);
-  resultsBuffer[(unsigned long)graph] = planarTest.isPlanar(true);
+  resultsBuffer[graph] = planarTest.isPlanar(true);
   vector<edge>::const_iterator it = addedEdges.begin();
 
   for (; it!=addedEdges.end(); ++it)
     graph->delEdge(*it, true);
 
   graph->addListener(this);
-  return resultsBuffer[(unsigned long)graph];
+  return resultsBuffer[graph];
 }
 //=================================================================
 void PlanarityTest::treatEvent(const Event& evt) {
@@ -125,29 +125,29 @@ void PlanarityTest::treatEvent(const Event& evt) {
     switch(gEvt->getType()) {
     case GraphEvent::TLP_DEL_NODE:
 
-      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-        if (resultsBuffer[(unsigned long)graph]) return;
+      if (resultsBuffer.find(graph)!=resultsBuffer.end())
+        if (resultsBuffer[graph]) return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-        if (!resultsBuffer[(unsigned long)graph]) return;
+      if (resultsBuffer.find(graph)!=resultsBuffer.end())
+        if (!resultsBuffer[graph]) return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_DEL_EDGE:
 
-      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-        if (resultsBuffer[(unsigned long)graph]) return;
+      if (resultsBuffer.find(graph)!=resultsBuffer.end())
+        if (resultsBuffer[graph]) return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     default:
@@ -160,6 +160,6 @@ void PlanarityTest::treatEvent(const Event& evt) {
     Graph* graph = reinterpret_cast<Graph *>(evt.sender());
 
     if (graph && evt.type() == Event::TLP_DELETE)
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
   }
 }

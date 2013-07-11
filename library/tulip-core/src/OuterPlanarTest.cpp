@@ -38,17 +38,17 @@ bool OuterPlanarTest::isOuterPlanar(tlp::Graph* graph) {
 //=================================================================
 bool OuterPlanarTest::compute(tlp::Graph* graph) {
 
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    return resultsBuffer[(unsigned long)graph];
+  if (resultsBuffer.find(graph)!=resultsBuffer.end())
+    return resultsBuffer[graph];
   else if(graph->numberOfNodes()==0) {
-    resultsBuffer[(unsigned long)graph] = true;
+    resultsBuffer[graph] = true;
     return true;
   }
 
   PlanarityTestImpl planarTest(graph);
 
   if (!planarTest.isPlanar(true))
-    return (resultsBuffer[(unsigned long)graph] = false);
+    return (resultsBuffer[graph] = false);
   else {
     node n = graph->addNode();
     node current;
@@ -56,10 +56,10 @@ bool OuterPlanarTest::compute(tlp::Graph* graph) {
       if(current != n)
         graph->addEdge(n,current);
     }
-    resultsBuffer[(unsigned long)graph] = planarTest.isPlanar(true);
+    resultsBuffer[graph] = planarTest.isPlanar(true);
     graph->delNode(n);
     graph->addListener(this);
-    return resultsBuffer[(unsigned long)graph];
+    return resultsBuffer[graph];
   }
 }
 //=================================================================
@@ -72,34 +72,34 @@ void OuterPlanarTest::treatEvent(const Event& evt) {
     switch(gEvt->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-        if (!resultsBuffer[(unsigned long)graph]) return;
+      if (resultsBuffer.find(graph)!=resultsBuffer.end())
+        if (!resultsBuffer[graph]) return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_DEL_EDGE:
 
-      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-        if (resultsBuffer[(unsigned long)graph]) return;
+      if (resultsBuffer.find(graph)!=resultsBuffer.end())
+        if (resultsBuffer[graph]) return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_DEL_NODE:
 
-      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-        if (resultsBuffer[(unsigned long)graph]) return;
+      if (resultsBuffer.find(graph)!=resultsBuffer.end())
+        if (resultsBuffer[graph]) return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     default:
@@ -113,6 +113,6 @@ void OuterPlanarTest::treatEvent(const Event& evt) {
     Graph* graph = reinterpret_cast<Graph *>(evt.sender());
 
     if (graph && evt.type() == Event::TLP_DELETE)
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
   }
 }
