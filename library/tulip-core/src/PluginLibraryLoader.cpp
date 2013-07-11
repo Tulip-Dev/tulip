@@ -196,7 +196,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
     while (success) {
       std::string currentPluginLibrary = pluginPath +"/"+ findData.cFileName;
       std::string lib(findData.cFileName);
-      unsigned long idx = lib.rfind('-');
+      size_t idx = lib.rfind('-');
 
       if (idx != std::string::npos) {
         std::string tulip_release(TULIP_MM_RELEASE);
