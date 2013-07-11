@@ -27,11 +27,11 @@ using namespace std;
 
 namespace tlp {
 //====================================================================
-void GlDisplayListManager::changeContext(unsigned long context) {
+void GlDisplayListManager::changeContext(uintptr_t context) {
   currentContext=context;
 }
 //====================================================================
-void GlDisplayListManager::removeContext(unsigned long context) {
+void GlDisplayListManager::removeContext(uintptr_t context) {
   displayListMap.erase(context);
 }
 //====================================================================

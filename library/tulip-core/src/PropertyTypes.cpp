@@ -20,6 +20,8 @@
 #include <tulip/PropertyTypes.h>
 #include <tulip/Graph.h>
 
+#include <stdint.h>
+
 using namespace std;
 using namespace tlp;
 
@@ -38,7 +40,7 @@ void GraphType::write(ostream &oss, const RealType &v) {
 }
 
 bool GraphType::read(istream& iss, RealType& v) {
-  unsigned long lv = 0;
+  uintptr_t lv = 0;
   bool ok = bool(iss >> lv);
 
   if (ok)

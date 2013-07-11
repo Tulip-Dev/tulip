@@ -37,6 +37,8 @@
 #include <map>
 #include <string>
 
+#include <stdint.h>
+
 namespace tlp {
 
 struct GlTexture {
@@ -52,7 +54,7 @@ struct GlTexture {
 class TLP_GL_SCOPE GlTextureManager {
 
   typedef std::map<std::string,GlTexture> TextureUnit;
-  typedef std::map<unsigned long,TextureUnit> ContextAndTextureMap;
+  typedef std::map<uintptr_t,TextureUnit> ContextAndTextureMap;
 
 public:
 
@@ -73,11 +75,11 @@ public:
   /**
    * Change the current OpenGl context (each OpenGl window have a different OpenGl context)
    */
-  void changeContext(unsigned long context);
+  void changeContext(uintptr_t context);
   /**
    * Remove all textures of an OpenGl context and remove this context
    */
-  void removeContext(unsigned long context);
+  void removeContext(uintptr_t context);
 
   /**
    * Return texture info (id, width and height) for the given name
@@ -152,7 +154,7 @@ private:
 
   static GlTextureManager* inst;
 
-  unsigned long currentContext;
+  uintptr_t currentContext;
 
   ContextAndTextureMap texturesMap;
   std::set<std::string> texturesWithError;

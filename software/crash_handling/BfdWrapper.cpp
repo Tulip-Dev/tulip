@@ -92,7 +92,11 @@ int file_exist (const std::string &filename) {
 static
 DWORD GetModuleBase(DWORD dwAddress) {
   MEMORY_BASIC_INFORMATION Buffer;
-  return VirtualQuery((LPCVOID) dwAddress, &Buffer, sizeof(Buffer)) ? (DWORD) Buffer.AllocationBase : 0;
+#ifndef I64
+  return VirtualQuery(reinterpret_cast<LPCVOID>(dwAddress), &Buffer, sizeof(Buffer)) ? reinterpret_cast<DWORD>(Buffer.AllocationBase) : 0;
+#else
+  return VirtualQuery(reinterpret_cast<LPCVOID>(dwAddress), &Buffer, sizeof(Buffer)) ? reinterpret_cast<DWORD64>(Buffer.AllocationBase) : 0;
+#endif
 }
 #else
 

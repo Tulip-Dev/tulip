@@ -36,6 +36,8 @@
 #include <map>
 #include <string>
 
+#include <stdint.h>
+
 #include <tulip/tulipconf.h>
 
 namespace tlp {
@@ -48,7 +50,7 @@ namespace tlp {
 class TLP_GL_SCOPE GlDisplayListManager {
 
   typedef std::map<std::string,GLuint> DisplayListMap;
-  typedef std::map<unsigned long, DisplayListMap> ContextAndDisplayListMap;
+  typedef std::map<uintptr_t, DisplayListMap> ContextAndDisplayListMap;
 
 public:
 
@@ -65,12 +67,12 @@ public:
   /**
    * Change OpenGl context because display list can't be shared in different context
    */
-  void changeContext(unsigned long context);
+  void changeContext(uintptr_t context);
 
   /**
    * remove context
    */
-  void removeContext(unsigned long context);
+  void removeContext(uintptr_t context);
 
   /**
    * Begin to record a new display list with name : name
@@ -93,7 +95,7 @@ private:
    */
   GlDisplayListManager() {}
 
-  unsigned long currentContext;
+  uintptr_t currentContext;
 
   static GlDisplayListManager* inst;
 

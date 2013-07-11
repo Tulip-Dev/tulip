@@ -27,6 +27,7 @@
 #include <QImage>
 #include <QGraphicsView>
 #include <iostream>
+#include <stdint.h>
 %End
 
 namespace tlp {
@@ -97,7 +98,7 @@ of Qt used to build Tulip and using the same version of SIP used to build the Tu
    sipRes = NULL;
    if (tlp::PythonInterpreter::getInstance()->runString(wrapViewQFrameFunc)) {
        PyObject *wrapper = NULL;
-       if (tlp::PythonInterpreter::getInstance()->callFunctionOneParamAndGetReturnValue(QString("__main__"), QString("wrapQFrame"), reinterpret_cast<unsigned long>(sipCpp->graphicsView()->parent()), wrapper)) {
+       if (tlp::PythonInterpreter::getInstance()->callFunctionOneParamAndGetReturnValue(QString("__main__"), QString("wrapQFrame"), reinterpret_cast<uintptr_t>(sipCpp->graphicsView()->parent()), wrapper)) {
            sipRes = wrapper;
            Py_INCREF(sipRes);
            sipTransferTo(sipRes, NULL);
@@ -132,7 +133,7 @@ of Qt used to build Tulip and using the same version of SIP used to build the Tu
     sipRes = NULL;
     if (tlp::PythonInterpreter::getInstance()->runString(wrapViewQGraphicsViewFunc)) {
         PyObject *wrapper = NULL;
-        if (tlp::PythonInterpreter::getInstance()->callFunctionOneParamAndGetReturnValue(QString("__main__"), QString("wrapQGraphicsView"), reinterpret_cast<unsigned long>(sipCpp->graphicsView()), wrapper)) {
+        if (tlp::PythonInterpreter::getInstance()->callFunctionOneParamAndGetReturnValue(QString("__main__"), QString("wrapQGraphicsView"), reinterpret_cast<uintptr_t>(sipCpp->graphicsView()), wrapper)) {
             sipRes = wrapper;
             Py_INCREF(sipRes);
             sipTransferTo(sipRes, NULL);

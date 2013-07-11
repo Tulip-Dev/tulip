@@ -36,6 +36,8 @@
 
 #include <sstream>
 
+#include <stdint.h>
+
 using namespace std;
 using namespace tlp;
 
@@ -307,6 +309,6 @@ void MouseMagnifyingGlassInteractorComponent::viewChanged(View *view) {
   }
 
   ostringstream oss;
-  oss << "magnifyingglass" << (unsigned long) glWidget;
+  oss << "magnifyingglass" << reinterpret_cast<uintptr_t>(glWidget);
   textureName = oss.str();
 }

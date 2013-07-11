@@ -222,7 +222,7 @@ public:
     DoubleProperty::PredefinedMetaValueCalculator edgeFn =
       (DoubleProperty::PredefinedMetaValueCalculator) edgeFunctions.getCurrent();
     QuotientLabelCalculator viewLabelCalc(metaLabel, useSubGraphName);
-    TLP_HASH_MAP<unsigned long, PropertyInterface::MetaValueCalculator *> prevCalcs;
+    TLP_HASH_MAP<PropertyInterface*, PropertyInterface::MetaValueCalculator *> prevCalcs;
     string pName;
     forEach(pName, quotientGraph->getProperties()) {
       PropertyInterface *prop = quotientGraph->getProperty(pName);
@@ -232,12 +232,12 @@ public:
         continue;
 
       if (dynamic_cast<DoubleProperty *>(prop)) {
-        prevCalcs[(unsigned long) prop] = prop->getMetaValueCalculator();
+        prevCalcs[prop] = prop->getMetaValueCalculator();
         ((DoubleProperty *)prop)->setMetaValueCalculator(nodeFn, edgeFn);
       }
 
       if (pName == "viewLabel") {
-        prevCalcs[(unsigned long) prop] = prop->getMetaValueCalculator();
+        prevCalcs[prop] = prop->getMetaValueCalculator();
         ((StringProperty*) prop)->setMetaValueCalculator(&viewLabelCalc);
       }
     }
@@ -248,11 +248,11 @@ public:
     delete itS;
 
     // restore previous calculators
-    TLP_HASH_MAP<unsigned long, PropertyInterface::MetaValueCalculator *>::iterator itC =
+    TLP_HASH_MAP<PropertyInterface*, PropertyInterface::MetaValueCalculator *>::iterator itC =
       prevCalcs.begin();
 
     while(itC != prevCalcs.end()) {
-      ((PropertyInterface*) (*itC).first)->setMetaValueCalculator((*itC).second);
+      ((*itC).first)->setMetaValueCalculator((*itC).second);
       ++itC;
     }
 

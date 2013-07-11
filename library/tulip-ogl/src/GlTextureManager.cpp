@@ -33,11 +33,11 @@ namespace tlp {
 GlTextureManager::GlTextureManager():animationFrame(0) {
 }
 //====================================================================
-void GlTextureManager::changeContext(unsigned long context) {
+void GlTextureManager::changeContext(uintptr_t context) {
   currentContext=context;
 }
 //====================================================================
-void GlTextureManager::removeContext(unsigned long context) {
+void GlTextureManager::removeContext(uintptr_t context) {
   texturesMap.erase(context);
 }
 //====================================================================

@@ -357,8 +357,8 @@ void GlMainWidget::resizeGL(int w, int h) {
 void GlMainWidget::makeCurrent() {
   if (isVisible()) {
     QGLWidget::makeCurrent();
-    GlDisplayListManager::getInst().changeContext((unsigned long)GlMainWidget::firstQGLWidget);
-    GlTextureManager::getInst().changeContext((unsigned long)GlMainWidget::firstQGLWidget);
+    GlDisplayListManager::getInst().changeContext(reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
+    GlTextureManager::getInst().changeContext(reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
     QRect rect=contentsRect();
     scene.setViewport(0,0,rect.width(),rect.height());
   }
