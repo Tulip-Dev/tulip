@@ -183,7 +183,7 @@ void TreeTest::makeRootedTree(Graph *graph, node root) {
   if (instance==NULL) instance=new TreeTest();
 
   graph->removeListener(instance);
-  instance->resultsBuffer.erase((unsigned long)graph);
+  instance->resultsBuffer.erase(graph);
 
   if (!graph->isElement (root)) {
     tlp::warning() << "makeRootedTree:  Passed root is not element of graph" << endl;
@@ -350,12 +350,12 @@ void TreeTest::cleanComputedTree(tlp::Graph *graph, tlp::Graph *tree) {
 
 //====================================================================
 bool TreeTest::compute(const Graph *graph) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end()) {
-    return resultsBuffer[(unsigned long)graph];
+  if (resultsBuffer.find(graph)!=resultsBuffer.end()) {
+    return resultsBuffer[graph];
   }
 
   if (graph->numberOfEdges()!=graph->numberOfNodes()-1) {
-    resultsBuffer[(unsigned long)graph]=false;
+    resultsBuffer[graph]=false;
     graph->addListener(this);
     return false;
   }
@@ -368,7 +368,7 @@ bool TreeTest::compute(const Graph *graph) {
 
     if (graph->indeg(tmp)>1) {
       delete it;
-      resultsBuffer[(unsigned long)graph]=false;
+      resultsBuffer[graph]=false;
       graph->addListener(this);
       return false;
     }
@@ -376,7 +376,7 @@ bool TreeTest::compute(const Graph *graph) {
     if (graph->indeg(tmp)==0) {
       if (rootNodeFound) {
         delete it;
-        resultsBuffer[(unsigned long)graph]=false;
+        resultsBuffer[graph]=false;
         graph->addListener(this);
         return false;
       }
@@ -388,12 +388,12 @@ bool TreeTest::compute(const Graph *graph) {
   delete it;
 
   if (AcyclicTest::isAcyclic(graph)) {
-    resultsBuffer[(unsigned long)graph]=true;
+    resultsBuffer[graph]=true;
     graph->addListener(this);
     return true;
   }
   else {
-    resultsBuffer[(unsigned long)graph]=false;
+    resultsBuffer[graph]=false;
     graph->addListener(this);
     return false;
   }
@@ -408,27 +408,27 @@ void TreeTest::treatEvent(const Event& evt) {
     switch(gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_DEL_NODE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_ADD_EDGE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_DEL_EDGE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     default:
@@ -441,6 +441,6 @@ void TreeTest::treatEvent(const Event& evt) {
     Graph* graph = reinterpret_cast<Graph *>(evt.sender());
 
     if (graph && evt.type() == Event::TLP_DELETE)
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
   }
 }

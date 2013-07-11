@@ -36,8 +36,8 @@ bool TriconnectedTest::isTriconnected(Graph* graph) {
 }
 //=================================================================
 bool TriconnectedTest::compute(Graph* graph) {
-  if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-    return resultsBuffer[(unsigned long)graph];
+  if (resultsBuffer.find(graph)!=resultsBuffer.end())
+    return resultsBuffer[graph];
 
   if (graph->numberOfNodes()==0) return false;
 
@@ -67,7 +67,7 @@ bool TriconnectedTest::compute(Graph* graph) {
 
   delete itN;
   graph->delSubGraph(tmp);
-  resultsBuffer[(unsigned long)graph] = result;
+  resultsBuffer[graph] = result;
   return result;
 }
 //=================================================================
@@ -80,25 +80,25 @@ void TriconnectedTest::treatEvent(const Event& evt) {
     switch(gEvt->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer.find((unsigned long)graph)!=resultsBuffer.end())
-        if (resultsBuffer[(unsigned long)graph]) return;
+      if (resultsBuffer.find(graph)!=resultsBuffer.end())
+        if (resultsBuffer[graph]) return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_DEL_EDGE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_DEL_NODE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_ADD_NODE:
-      resultsBuffer[(unsigned long)graph]=false;
+      resultsBuffer[graph]=false;
       break;
 
     default:
@@ -112,7 +112,7 @@ void TriconnectedTest::treatEvent(const Event& evt) {
     Graph* graph = reinterpret_cast<Graph *>(evt.sender());
 
     if (graph && evt.type() == Event::TLP_DELETE)
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
   }
 }
 

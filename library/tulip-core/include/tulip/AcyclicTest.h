@@ -22,9 +22,9 @@
 #include <vector>
 #include <tulip/Observable.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
-class Graph;
 class BooleanProperty;
 
 /**
@@ -96,7 +96,7 @@ private:
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
    **/
-  TLP_HASH_MAP<unsigned long, bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph*, bool> resultsBuffer;
 
   //override of Observable::treatEvent to remove the cached result for a graph if it is modified.
   virtual void treatEvent(const Event&);

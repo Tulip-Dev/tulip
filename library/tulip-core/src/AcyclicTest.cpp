@@ -33,12 +33,12 @@ bool AcyclicTest::isAcyclic(const Graph *graph) {
   if (instance == NULL)
     instance = new AcyclicTest();
 
-  if (instance->resultsBuffer.find((unsigned long)graph) == instance->resultsBuffer.end()) {
-    instance->resultsBuffer[(unsigned long)graph] = acyclicTest(graph);
+  if (instance->resultsBuffer.find(graph) == instance->resultsBuffer.end()) {
+    instance->resultsBuffer[graph] = acyclicTest(graph);
     graph->addListener(instance);
   }
 
-  return instance->resultsBuffer[(unsigned long)graph];
+  return instance->resultsBuffer[graph];
 }
 //**********************************************************************
 void AcyclicTest::makeAcyclic(Graph* graph,vector<edge> &reversed, vector<tlp::SelfLoops> &selfLoops) {
@@ -179,24 +179,24 @@ void AcyclicTest::treatEvent(const Event& evt) {
     switch(graphEvent->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer[(unsigned long)graph]==false)
+      if (resultsBuffer[graph]==false)
         return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_DEL_EDGE:
 
-      if (resultsBuffer[(unsigned long)graph]==true) return;
+      if (resultsBuffer[graph]==true) return;
 
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     case GraphEvent::TLP_REVERSE_EDGE:
       graph->removeListener(this);
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
       break;
 
     default:
@@ -210,6 +210,6 @@ void AcyclicTest::treatEvent(const Event& evt) {
     Graph* graph = reinterpret_cast<Graph *>(evt.sender());
 
     if (graph && evt.type() == Event::TLP_DELETE)
-      resultsBuffer.erase((unsigned long)graph);
+      resultsBuffer.erase(graph);
   }
 }

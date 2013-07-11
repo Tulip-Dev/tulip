@@ -24,10 +24,10 @@
 
 #include <tulip/tuliphash.h>
 #include <tulip/Observable.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
 
-class Graph;
 class PluginProgress;
 /**
  * @ingroup Checks
@@ -112,7 +112,7 @@ private:
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
    **/
-  TLP_HASH_MAP<unsigned long,bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph*,bool> resultsBuffer;
 };
 
 
