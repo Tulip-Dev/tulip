@@ -39,6 +39,8 @@
 #include <QGLPixelBuffer>
 #include <QPicture>
 
+#include <stdint.h>
+
 using namespace tlp;
 using namespace std;
 
@@ -574,7 +576,7 @@ void ThresholdInteractor::clearSliders() {
 }
 
 void ThresholdInteractor::generateSliderTexture(GlMainWidget* widget) {
-  unsigned long id = (unsigned long) this;
+  uintptr_t id = reinterpret_cast<uintptr_t>(this);
   ostringstream oss;
   oss << "ThresholdInteractorSliderTexture" << id;
   widget->makeCurrent();
