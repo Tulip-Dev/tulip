@@ -454,11 +454,11 @@ void GraphPerspective::saveGraphToFile(Graph *g) {
   QString fileName = QFileDialog::getSaveFileName(_mainWindow, tr("Export Graph"), QString(), filters);
 
   if(!fileName.isEmpty()) {
-    std::ofstream out(fileName.toStdString().c_str());
+    std::ofstream out(fileName.toUtf8().data());
     QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
     DataSet params;
-    params.set("file", fileName.toStdString());
-    tlp::exportGraph(_graphs->currentGraph(), out, modules[extension.toStdString()], params);
+    params.set("file", std::string(fileName.toUtf8().data()));
+    tlp::exportGraph(g, out, modules[extension.toStdString()], params);
   }
 }
 
