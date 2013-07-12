@@ -288,4 +288,14 @@ bool ConvolutionClustering::run() {
   getClusters(ranges);
   return true;
 }
+  
+
+  bool ConvolutionClustering::check(std::string& errorMsg) {
+    metric=graph->getProperty<DoubleProperty>("viewMetric");
+    if (metric->getNodeMax() == metric->getNodeMin()) {
+      errorMsg = "All metric values are the same";
+      return false;
+    }
+    return true;
+  }
 }
