@@ -1,0 +1,1 @@
+sh tulip_run_test.sh measure_cluster grid_approximation.tlp

@@ -1,0 +1,1 @@
+sh tulip_run_test.sh measure_strahler grid_approximation.tlp
