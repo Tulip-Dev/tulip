@@ -209,9 +209,24 @@ struct TLP_SCOPE ParameterDescriptionList {
    **/
   void buildDefaultDataSet(DataSet& ioDataSet, Graph* inG = NULL) const;
 
-  unsigned int size() const {
+  /**
+   * @brief Returns the number of parameters.
+   *
+   * @return The number of parameters
+   **/
+ inline unsigned int size() const {
     return parameters.size();
   }
+
+  /**
+   * @brief Test if the list is empty
+   *
+   * @return bool true if the parameter description list is empty, false otherwise.
+   **/
+ inline bool empty() const {
+    return parameters.empty();
+  }
+
 private:
   ParameterDescription* getParameter(const std::string& parameterName);
   std::vector<ParameterDescription> parameters;
