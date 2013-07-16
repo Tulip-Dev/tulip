@@ -194,7 +194,7 @@ QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph* g) {
 
 // Serialization
 static QString GRAPHS_PATH("/graphs/");
-static QString GRAPH_FILE("graph.json");
+//static QString GRAPH_FILE("graph.json");
 
 bool GraphHierarchiesModel::needsSaving() {
   bool saveNeeded = false;
@@ -209,12 +209,12 @@ QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *
   foreach(QString entry, project->entryList(GRAPHS_PATH,QDir::Dirs | QDir::NoDot | QDir::NoDotDot, QDir::Name)) {
     QString file = GRAPHS_PATH + entry + "/graph.tlp";
 
-    if (!project->exists(file)) {
-      file = GRAPHS_PATH + entry + "/graph.json";
+//    if (!project->exists(file)) {
+//      file = GRAPHS_PATH + entry + "/graph.json";
 
       if (!project->exists(file))
         continue;
-    }
+//    }
 
     QString absolutePath = project->toAbsolutePath(file);
     Graph* g = loadGraph(std::string(absolutePath.toUtf8().data()),progress);
@@ -240,7 +240,7 @@ QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject 
     tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlp").toStdString(),progress);
   }
   foreach(GraphNeedsSavingObserver* observer, _saveNeeded)
-  observer->saved();
+      observer->saved();
   return rootIds;
 }
 
