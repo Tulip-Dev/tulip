@@ -514,10 +514,12 @@ std::vector<edge> GraphView::getEdges(const node src, const node tgt,
 
   if (nodeAdaptativeFilter.get(src.id) && nodeAdaptativeFilter.get(tgt.id) &&
       ((GraphImpl *)getRoot())->getEdges(src, tgt, directed, edges)) {
-    for(std::vector<edge>::iterator ite = edges.begin();
-        ite != edges.end(); ++ite) {
-      if(!edgeAdaptativeFilter.get(ite->id))
-        ite = edges.erase(ite);
+    for(std::vector<edge>::iterator ite = edges.begin();ite != edges.end(); ++ite) {
+      if(!edgeAdaptativeFilter.get(ite->id)) {
+          ite = edges.erase(ite); //erase returns an iterator to the next element in the vector
+         //going back in the vector because the for loop will do a ++ite before testing the end of the vector
+          --ite;
+      }
     }
   }
 
