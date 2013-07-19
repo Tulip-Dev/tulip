@@ -212,8 +212,9 @@ QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *
 //    if (!project->exists(file)) {
 //      file = GRAPHS_PATH + entry + "/graph.json";
 
-      if (!project->exists(file))
-        continue;
+    if (!project->exists(file))
+      continue;
+
 //    }
 
     QString absolutePath = project->toAbsolutePath(file);
@@ -240,7 +241,7 @@ QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject 
     tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlp").toStdString(),progress);
   }
   foreach(GraphNeedsSavingObserver* observer, _saveNeeded)
-      observer->saved();
+  observer->saved();
   return rootIds;
 }
 
