@@ -361,6 +361,34 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="split33Page">
+      <layout class="QVBoxLayout" name="verticalLayout_16">
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="split33HorizontalSplitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="handleWidth">
+          <number>3</number>
+         </property>
+         <widget class="QSplitter" name="split33VerticalSplitter">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
+          </property>
+          <widget class="PlaceHolderWidget" name="split33Panel1" native="true"/>
+          <widget class="PlaceHolderWidget" name="split33Panel2" native="true"/>
+         </widget>
+         <widget class="PlaceHolderWidget" name="split33Panel3" native="true"/>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -618,6 +646,32 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="split33ModeButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/split3_3_screen.png</normaloff>:/tulip/gui/ui/split3_3_screen.png</iconset>
+        </property>
+        <property name="autoExclusive">
+         <bool>false</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="split3ModeButton">
         <property name="maximumSize">
          <size>
@@ -868,6 +922,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>split33ModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSplit33Mode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>989</x>
+     <y>622</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>542</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>delView(tlp::View*)</slot>
@@ -880,6 +950,7 @@ p, li { white-space: pre-wrap; }
   <slot>expose(bool)</slot>
   <slot>switchToSplit3Mode()</slot>
   <slot>switchToSplit32Mode()</slot>
+  <slot>switchToSplit33Mode()</slot>
   <slot>switchToSixMode()</slot>
  </slots>
 </ui>

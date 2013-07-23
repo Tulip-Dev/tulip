@@ -61,7 +61,7 @@
         <file>icons/20/set_label_color.png</file>
         <file>icons/20/set_node_color.png</file>
         <file>icons/20/set_edge_color.png</file>
-         <file>icons/20/set_node_border_color.png</file>
+        <file>icons/20/set_node_border_color.png</file>
         <file>icons/20/set_edge_border_color.png</file>
         <file>icons/20/set_node_shape.png</file>
         <file>icons/20/set_edge_shape.png</file>
@@ -100,5 +100,6 @@
         <file>icons/16/clipboard.png</file>
         <file>icons/64/document-import.png</file>
         <file>icons/arrow_two_head.png</file>
+        <file>ui/split3_3_screen.png</file>
     </qresource>
 </RCC>

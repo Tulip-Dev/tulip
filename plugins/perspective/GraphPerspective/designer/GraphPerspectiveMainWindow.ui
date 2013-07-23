@@ -17,7 +17,7 @@
    <string/>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
@@ -839,7 +839,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <string>Previous panel</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
                  </property>
                  <property name="shortcut">
@@ -868,7 +868,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <string>Next panel</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
                  </property>
                  <property name="shortcut">
@@ -907,7 +907,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <string>Switch to 1-panel mode</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
                  </property>
                 </widget>
@@ -930,7 +930,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <string>Switch to 2-panels mode</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/split_screen.png</normaloff>:/tulip/gui/ui/split_screen.png</iconset>
                  </property>
                 </widget>
@@ -953,7 +953,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <string>Switch to 2top-1bottom-panels mode</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/split3_screen.png</normaloff>:/tulip/gui/ui/split3_screen.png</iconset>
                  </property>
                 </widget>
@@ -976,8 +976,31 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <string>Switch to 1left-2right-panels mode</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/split3_2_screen.png</normaloff>:/tulip/gui/ui/split3_2_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="split33ModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 2left-1right-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+                   <normaloff>:/tulip/gui/ui/split3_3_screen.png</normaloff>:/tulip/gui/ui/split3_3_screen.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -999,7 +1022,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <string>Switch to 4-panels mode</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
                  </property>
                 </widget>
@@ -1022,7 +1045,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <string>Switch to 6-panels mode</string>
                  </property>
                  <property name="icon">
-                  <iconset>
+                  <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
                    <normaloff>:/tulip/gui/ui/six_screen.png</normaloff>:/tulip/gui/ui/six_screen.png</iconset>
                  </property>
                 </widget>
@@ -1047,7 +1070,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -1538,7 +1561,9 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>importButton</sender>
@@ -1777,6 +1802,22 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <hint type="destinationlabel">
      <x>575</x>
      <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>split33ModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSplit33Mode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1130</x>
+     <y>680</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>639</x>
+     <y>335</y>
     </hint>
    </hints>
   </connection>

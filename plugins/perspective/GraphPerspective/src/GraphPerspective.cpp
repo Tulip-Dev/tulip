@@ -236,6 +236,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->workspace->setSplit3ModeSwitch(_ui->split3ModeButton);
   _ui->split32ModeButton->setEnabled(false);
   _ui->workspace->setSplit32ModeSwitch(_ui->split32ModeButton);
+  _ui->split33ModeButton->setEnabled(false);
+  _ui->workspace->setSplit33ModeSwitch(_ui->split33ModeButton);
   _ui->gridModeButton->setEnabled(false);
   _ui->workspace->setGridModeSwitch(_ui->gridModeButton);
   _ui->sixModeButton->setEnabled(false);
@@ -908,6 +910,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->splitModeButton->setEnabled(enabled);
   _ui->split3ModeButton->setEnabled(enabled);
   _ui->split32ModeButton->setEnabled(enabled);
+  _ui->split33ModeButton->setEnabled(enabled);
   _ui->gridModeButton->setEnabled(enabled);
   _ui->sixModeButton->setEnabled(enabled);
 
