@@ -84,6 +84,8 @@ public slots:
   void setSplit3ModeSwitch(QWidget*);
   void switchToSplit32Mode();
   void setSplit32ModeSwitch(QWidget*);
+  void switchToSplit33Mode();
+  void setSplit33ModeSwitch(QWidget*);
   void switchToGridMode();
   void setGridModeSwitch(QWidget*);
   void switchToSixMode();
