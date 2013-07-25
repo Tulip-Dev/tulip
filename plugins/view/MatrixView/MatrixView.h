@@ -50,11 +50,11 @@ class MatrixView: public tlp::NodeLinkDiagramComponent {
 public:
 
   PLUGININFORMATIONS(ViewName::MatrixViewName, "Ludwig Fiolka", "07/01/2011",
-                     "In mathematics and computer science, an adjacency matrix is a means of representing which vertices of a graph are adjacent to which other vertices. Another matrix representation for a graph is the incidence matrix.\n"
-                     "Specifically, the adjacency matrix of a finite graph G on n vertices is the n x n matrix where the non-diagonal entry aij is the number of edges from vertex i to vertex j, and the diagonal entry aii, depending on the convention, is either once or twice the number of edges (loops) from vertex i to itself.\n"
-                     "Undirected graphs often use the former convention of counting loops twice, whereas directed graphs typically use the latter convention.\n"
-                     "There exists a unique adjacency matrix for each isomorphism class of graphs (up to permuting rows and columns), and it is not the adjacency matrix of any other isomorphism class of graphs. In the special case of a finite simple graph, the adjacency matrix is a (0,1)-matrix with zeros on its diagonal.\n"
-                     "If the graph is undirected, the adjacency matrix is symmetric.", "2.0","View")
+                     "<p>In mathematics and computer science, an adjacency matrix is a means of representing which vertices of a graph are adjacent to which other vertices. Another matrix representation for a graph is the incidence matrix.</p>"
+                     "<p>Specifically, the adjacency matrix of a finite graph G on n vertices is the n x n matrix where the non-diagonal entry aij is the number of edges from vertex i to vertex j, and the diagonal entry aii, depending on the convention, is either once or twice the number of edges (loops) from vertex i to itself."
+                     "Undirected graphs often use the former convention of counting loops twice, whereas directed graphs typically use the latter convention.</p>"
+                     "<p>There exists a unique adjacency matrix for each isomorphism class of graphs (up to permuting rows and columns), and it is not the adjacency matrix of any other isomorphism class of graphs. In the special case of a finite simple graph, the adjacency matrix is a (0,1)-matrix with zeros on its diagonal.</p>"
+                     "If the graph is undirected, the adjacency matrix is symmetric.</p>", "2.0","View")
 
   MatrixView(const tlp::PluginContext *);
   virtual ~MatrixView();

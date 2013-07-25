@@ -36,9 +36,6 @@ ReverseEdges::ReverseEdges(tlp::PluginContext* context): Algorithm(context) {
                                   "viewSelection", false);
 }
 
-ReverseEdges::~ReverseEdges() {
-}
-
 bool ReverseEdges::run() {
   BooleanProperty* selection = NULL;
 

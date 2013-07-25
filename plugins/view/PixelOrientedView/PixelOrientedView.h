@@ -77,10 +77,10 @@ class PixelOrientedView : public GlMainView {
 public :
 
   PLUGININFORMATIONS(ViewName::PixelOrientedViewName, "Antoine Lambert", "12/2008",
-                     "The Pixel Oriented view allows to visualize graph properties using pixel oriented visualization techniques.\n"
-                     "This type of visualization aims to use each pixel of the display to visualize one data value and therefore allow the visualization of the largest amount of data possible.\n"
-                     "Pixels are mapped so that neighbor pixels in the data are placed close to each other on the screen.\n"
-                     "The technique uses a linear order on data elements (graph nodes), inferred from a selected property, which can be seen as a map from the data space onto a line segment. The mapping onto a 2D portion of the plane then uses a \"space-filling curve\"", "1.0","View")
+                     "<p>The Pixel Oriented view allows to visualize graph properties using pixel oriented visualization techniques.</p>"
+                     "<p>This type of visualization aims to use each pixel of the display to visualize one data value and therefore allow the visualization of the largest amount of data possible."
+                     "Pixels are mapped so that neighbor pixels in the data are placed close to each other on the screen.</p>"
+                     "<p>The technique uses a linear order on data elements (graph nodes), inferred from a selected property, which can be seen as a map from the data space onto a line segment. The mapping onto a 2D portion of the plane then uses a \"space-filling curve\"</p>", "1.0","View")
 
   PixelOrientedView(const PluginContext *);
   ~PixelOrientedView();

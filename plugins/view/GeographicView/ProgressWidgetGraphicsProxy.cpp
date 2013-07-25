@@ -20,19 +20,26 @@
 #include <QPainter>
 
 #include "ProgressWidgetGraphicsProxy.h"
+#include "ui_ProgressWidget.h"
 
-ProgressWidget::ProgressWidget(QWidget *parent) : QWidget(parent), cancelClicked(true) {
-  setupUi(this);
-  connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancelButtonClicked()));
+using namespace tlp;
+
+ProgressWidget::ProgressWidget(QWidget *parent) : QWidget(parent), _ui(new Ui::ProgressWidgetData), cancelClicked(true) {
+  _ui->setupUi(this);
+  connect(_ui->cancelButton, SIGNAL(clicked()), this, SLOT(cancelButtonClicked()));
+}
+
+ProgressWidget::~ProgressWidget(){
+    delete _ui;
 }
 
 void ProgressWidget::setComment(const QString &comment) {
-  commentLabel->setText(comment);
+  _ui->commentLabel->setText(comment);
 }
 
 void ProgressWidget::setProgress(int value, int max) {
-  progressBar->setMaximum(max);
-  progressBar->setValue(value);
+  _ui->progressBar->setMaximum(max);
+  _ui->progressBar->setValue(value);
 }
 
 void ProgressWidget::showEvent(QShowEvent * event) {

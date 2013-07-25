@@ -77,9 +77,9 @@ class HistogramView : public GlMainView {
 public :
 
   PLUGININFORMATIONS(ViewName::HistogramViewName, "Antoine Lambert", "02/2009",
-                     "The Histogram view allows to create frequency histograms from graph properties (supported types are Metric and Integer).\n"
-                     "By selecting a set of graph properties, frequency histograms are computed and displayed for values associated to nodes (or edges).\n\n"
-                     "This view also allows to map visual properties (colors, sizes, glyphs, ..) of the graph elements with respect to a graph metric in a visual way. These operations can be done with the \"Metric mapping\" interactor. Many interactors are also bundled with the view to perform elements selection, statistical analysis, ...", "1.1", "View")
+                     "<p>The Histogram view allows to create frequency histograms from graph properties (supported types are Metric and Integer)."
+                     "By selecting a set of graph properties, frequency histograms are computed and displayed for values associated to nodes (or edges).</p>"
+                     "<p>This view also allows to map visual properties (colors, sizes, glyphs, ..) of the graph elements with respect to a graph metric in a visual way. These operations can be done with the \"Metric mapping\" interactor. Many interactors are also bundled with the view to perform elements selection, statistical analysis, ...</p>", "1.1", "View")
 
   HistogramView(const PluginContext *);
   ~HistogramView();

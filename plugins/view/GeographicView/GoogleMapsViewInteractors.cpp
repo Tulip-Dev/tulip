@@ -17,6 +17,8 @@
  *
  */
 
+#include <QApplication>
+
 #include "GoogleMapsViewInteractors.h"
 
 #include "../../utils/StandardInteractorPriority.h"

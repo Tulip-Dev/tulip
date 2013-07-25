@@ -33,6 +33,7 @@
 #include <QTimeLine>
 #include <QMessageBox>
 #include <QFile>
+#include <QApplication>
 
 using namespace std;
 
