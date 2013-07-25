@@ -246,16 +246,16 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
 
     PropertyInterface *interf=NULL;
 
-    //The property already exist need to check if existing is compatible with new one.
+    //The property already exists. Need to check if existing property is compatible with the new one.
     if (graph->existProperty(propertyName)) {
       PropertyInterface *existingProperty = graph->getProperty(propertyName);
 
       //If the properties are compatible query if we had to override existing.
       if (existingProperty->getTypename().compare(propertyType)==0) {
         if (overwritePropertiesButton != QMessageBox::YesToAll && overwritePropertiesButton != QMessageBox::NoToAll) {
-          overwritePropertiesButton = QMessageBox::question(parent, parent->tr("Property exist."),
+          overwritePropertiesButton = QMessageBox::question(parent, parent->tr("Property already exists."),
                                       parent->tr("A property with the name \"") + tlpStringToQString(propertyName) + parent->tr(
-                                        "\" already exist. Overwrite?"), QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No
+                                        "\" already exists. Overwrite?"), QMessageBox::Yes | QMessageBox::YesToAll | QMessageBox::No
                                       | QMessageBox::NoToAll, QMessageBox::Yes);
         }
 
@@ -268,8 +268,8 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
       }
       else {
         //If the properties are not compatible skip.
-        QMessageBox::critical(parent, parent->tr("Property exist."), parent->tr("A property with the name \"") + tlpStringToQString(
-                                propertyName) + parent->tr("\" already exist with a different type. This property will be ignored."));
+        QMessageBox::critical(parent, parent->tr("Property already existing."), parent->tr("A property with the name \"") + tlpStringToQString(
+                                propertyName) + parent->tr("\" already exists with a different type. This property will be ignored."));
         interf = NULL;
       }
     }

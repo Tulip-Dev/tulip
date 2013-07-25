@@ -19,7 +19,7 @@
 
 #include <tulip/CoordEditor.h>
 
-#include <ui_CoordEditor.h>
+#include "ui_CoordEditor.h"
 
 #include <cfloat>
 
