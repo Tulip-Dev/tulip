@@ -29,8 +29,8 @@ ProgressWidget::ProgressWidget(QWidget *parent) : QWidget(parent), _ui(new Ui::P
   connect(_ui->cancelButton, SIGNAL(clicked()), this, SLOT(cancelButtonClicked()));
 }
 
-ProgressWidget::~ProgressWidget(){
-    delete _ui;
+ProgressWidget::~ProgressWidget() {
+  delete _ui;
 }
 
 void ProgressWidget::setComment(const QString &comment) {
