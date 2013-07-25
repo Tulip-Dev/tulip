@@ -21,16 +21,28 @@
 #define PROGRESSWIDGETGRAPHICSPROXY_H_
 
 #include <QGraphicsProxyWidget>
+#include <QWidget>
+#include <QColor>
 
-#include "ui_ProgressWidget.h"
+class QPainter;
+class QStyleOptionGraphicsItem;
 
-class ProgressWidget : public QWidget, public Ui::ProgressWidgetData {
+namespace Ui {
+class ProgressWidgetData;
+}
+
+namespace tlp {
+
+class ProgressWidget : public QWidget {
 
   Q_OBJECT
+
+  Ui::ProgressWidgetData* _ui;
 
 public :
 
   ProgressWidget(QWidget *parent = 0);
+  ~ProgressWidget();
 
   void setComment(const QString &comment);
 
@@ -64,7 +76,7 @@ public :
 
   void setProgress(int value, int max);
 
-  void setFrameColor(const QColor &frameColor) {
+ inline void setFrameColor(const QColor &frameColor) {
     this->frameColor = frameColor;
   }
 
@@ -79,5 +91,5 @@ private :
   ProgressWidget *progressWidget;
   QColor frameColor;
 };
-
+}
 #endif /* PROGRESSWIDGETGRAPHICSPROXY_H_ */

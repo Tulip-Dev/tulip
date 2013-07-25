@@ -36,6 +36,7 @@
 #include <QDomDocument>
 #include <QXmlDefaultHandler>
 #include <QTimeLine>
+#include <QApplication>
 
 #include <iostream>
 
