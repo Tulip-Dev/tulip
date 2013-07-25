@@ -76,7 +76,7 @@ public :
 
   void setProgress(int value, int max);
 
- inline void setFrameColor(const QColor &frameColor) {
+  inline void setFrameColor(const QColor &frameColor) {
     this->frameColor = frameColor;
   }
 
