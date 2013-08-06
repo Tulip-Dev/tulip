@@ -324,7 +324,8 @@ bool GraphStorage::getEdges(node src, node tgt, bool directed,
     if (e != previous) {
       const std::pair<node, node>& eEnds = edges[e.id];
 
-      if (eEnds.second == tgt || (!directed && eEnds.first == tgt)) {
+      if ((eEnds.second == tgt && eEnds.first == src) ||
+	  (!directed && eEnds.first == tgt && eEnds.second == src)) {
         vEdges.push_back(e);
 
         if (onlyFirst)
