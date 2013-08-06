@@ -357,6 +357,9 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
     oldGraphComposite->getInputData()->deleteGlVertexArrayManagerInDestructor(false);
     delete graphComposite->getInputData()->getGlVertexArrayManager();
     graphComposite->getInputData()->setGlVertexArrayManager(oldGraphComposite->getInputData()->getGlVertexArrayManager());
+    // prevent deletion of GlVertexArrayManager
+    // when deleting oldGraphComposite
+    oldGraphComposite->getInputData()->setGlVertexArrayManager(NULL);
     graphComposite->getInputData()->getGlVertexArrayManager()->setInputData(graphComposite->getInputData());
   }
 
