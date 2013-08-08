@@ -552,6 +552,7 @@ void GlComplexPolygon::draw(float,Camera *) {
   for (set<GLenum>::iterator it = primitivesSet.begin() ; it != primitivesSet.end() ; ++it) {
     glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), &verticesMap[*it][0][0]);
     glTexCoordPointer(2, GL_FLOAT, 2*sizeof(GLfloat), &texCoordsMap[*it][0]);
+
     for (size_t i = 0 ; i < verticesCountMap[*it].size() ; ++i) {
       glDrawArrays(*it, startIndicesMap[*it][i], verticesCountMap[*it][i]);
     }
