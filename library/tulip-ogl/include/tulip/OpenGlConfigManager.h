@@ -44,11 +44,6 @@ public:
   static OpenGlConfigManager &getInst();
 
   /**
-   * Check if system has good graphics card drivers.
-   */
-  void checkDrivers();
-
-  /**
    * Returns the OpenGL version number supported by the host system.
    */
   double getOpenGLVersion();
@@ -99,25 +94,9 @@ public:
    */
   void desactivatePolygonAntiAliasing();
 
-  void initGlew();
-
-  class GraphicsCardWarningDisplayer {
-
-  public:
-
-    virtual ~GraphicsCardWarningDisplayer() {}
-
-    /**
-     * display a warning about the graphics card drivers
-     */
-    virtual void displayWarning(std::string& message) = 0;
-  };
-
-  static void setGraphicsCardWarningDisplayer(GraphicsCardWarningDisplayer *);
+  void initExtensions();
 
 private:
-
-
 
   /**
    * Private constructor for singleton
@@ -129,7 +108,6 @@ private:
   bool glewIsInit;
   bool driversAreChecked;
   bool antialiased;
-  GraphicsCardWarningDisplayer* graphicsCardWarningDisplayer;
 
   std::map<std::string, bool> checkedExtensions;
 

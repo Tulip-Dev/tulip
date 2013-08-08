@@ -40,40 +40,13 @@ OpenGlConfigManager& OpenGlConfigManager::getInst() {
 
 OpenGlConfigManager::OpenGlConfigManager():
   glewIsInit(false),
-  driversAreChecked(false), antialiased(true),
-  graphicsCardWarningDisplayer(NULL) {
+  driversAreChecked(false), antialiased(true) {
 }
 
-void OpenGlConfigManager::initGlew() {
+void OpenGlConfigManager::initExtensions() {
   if (!glewIsInit) {
     glewExperimental=true;
     glewIsInit = (glewInit() == GLEW_OK);
-  }
-}
-
-void OpenGlConfigManager::checkDrivers() {
-  if(driversAreChecked)
-    return;
-
-  driversAreChecked=true;
-
-  bool nvidia=false;
-  bool ati=false;
-  string vendor(getOpenGLVendor());
-
-  if(vendor.find("NVIDIA")!=string::npos)
-    nvidia=true;
-
-  if(vendor.find("ATI")!=string::npos)
-    ati=true;
-
-  if(!nvidia && !ati) {
-    std::string message("Your graphics card is not powerful enough,\nor it is not configured with the proper drivers.\nFor optimal performances, make sure to install\nthe proprietary drivers corresponding to your\ngraphics card model.");
-
-    if (graphicsCardWarningDisplayer)
-      graphicsCardWarningDisplayer->displayWarning(message);
-
-    tlp::warning() << message.c_str() << std::endl;
   }
 }
 
@@ -133,10 +106,6 @@ void OpenGlConfigManager::desactivatePolygonAntiAliasing() {
   }
 }
 
-void OpenGlConfigManager::setGraphicsCardWarningDisplayer(OpenGlConfigManager::GraphicsCardWarningDisplayer* displayer) {
-  delete getInst().graphicsCardWarningDisplayer;
-  getInst().graphicsCardWarningDisplayer = displayer;
-}
 }
 
 

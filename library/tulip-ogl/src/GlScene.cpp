@@ -105,8 +105,7 @@ GlScene::~GlScene() {
 }
 
 void GlScene::initGlParameters() {
-  OpenGlConfigManager::getInst().initGlew();
-  OpenGlConfigManager::getInst().checkDrivers();
+  OpenGlConfigManager::getInst().initExtensions();
 
   glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
 

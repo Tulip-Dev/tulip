@@ -147,7 +147,7 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
 #warning Qt fix must be tested with this version of Qt, see GlMainWidget.cpp l.106
 #endif
 #endif
-  OpenGlConfigManager::getInst().initGlew();
+  OpenGlConfigManager::getInst().initExtensions();
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
