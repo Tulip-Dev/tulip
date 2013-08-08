@@ -245,10 +245,6 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
   holdGIL();
 
   importModule("sys");
-#if PY_MAJOR_VERSION < 3
-  reloadModule("sys");
-  runString("sys.setdefaultencoding('utf-8')");
-#endif
 
 #if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString("__main__");
@@ -269,6 +265,11 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
   // checking if a QApplication is instanced before instancing any QWidget
   // allow to avoid segfaults when trying to instantiate the plugin outside the Tulip GUI (for instance, with tulip_check_pl)
   if (QApplication::instance()) {
+
+#if PY_MAJOR_VERSION < 3
+    reloadModule("sys");
+    runString("sys.setdefaultencoding('utf-8')");
+#endif
 
     // hack for linux in order to be able to load dynamic python modules installed on the system (like numpy, matplotlib and other cool stuffs)
 #ifndef WIN32
