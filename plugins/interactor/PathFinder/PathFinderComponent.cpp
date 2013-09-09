@@ -65,7 +65,8 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
     glw->setCursor(Qt::ArrowCursor);
   }
 
-  if (event->type() == QEvent::MouseButtonPress) {
+  if (event->type() == QEvent::MouseButtonPress &&
+      qMouseEv->button() == Qt::LeftButton) {
     // kill current timer if needed
     if (timerId) {
       killTimer(timerId);
