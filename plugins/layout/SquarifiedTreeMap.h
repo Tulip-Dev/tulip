@@ -71,7 +71,7 @@ public:
 
 private:
   tlp::SizeProperty*         sizeResult;
-  tlp::DoubleProperty*       metric;
+  tlp::NumericProperty*       metric;
   tlp::IntegerProperty*      glyphResult;
   tlp::MutableContainer<double>    nodesSize;
   bool shneidermanTreeMap;

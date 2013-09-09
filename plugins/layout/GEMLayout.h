@@ -163,7 +163,7 @@ private:
   unsigned int _dim; //2 or 3;
   unsigned int _nbNodes; //number of nodes in the graph
   bool _useLength; //if we manage edge length
-  tlp::DoubleProperty * metric; //metric for edge length
+  tlp::NumericProperty* metric; //metric for edge length
   unsigned int max_iter; // the max number of iterations
 
 };
