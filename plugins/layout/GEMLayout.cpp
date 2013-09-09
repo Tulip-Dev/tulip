@@ -321,7 +321,7 @@ void GEMLayout::arrange() {
   double  maxEdgeLength;
 
   if (_useLength)
-    maxEdgeLength = std::max(2.0f, (float)metric->getEdgeMin());
+    maxEdgeLength = std::max(2.0f, (float)metric->getEdgeDoubleMin());
   else
     maxEdgeLength = EDGELENGTH;
 

@@ -109,7 +109,7 @@ private:
   tlp::DoubleProperty *internalWeight;                 //Sum of Internal edges weights
   tlp::DoubleProperty *externalWeight;                 //Sum of External edges weights
 
-  tlp::DoubleProperty *metric;                        //Edge Weights
+  tlp::NumericProperty *metric;                        //Edge Weights
   bool noparam;
   double m;                                      //Sum of edge weights for the original graph
 };
