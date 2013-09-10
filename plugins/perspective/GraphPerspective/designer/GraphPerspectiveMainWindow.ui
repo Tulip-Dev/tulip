@@ -1095,8 +1095,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <addaction name="actionCreate_sub_graph"/>
     <addaction name="actionClone_sub_graph"/>
     <addaction name="separator"/>
-    <addaction name="actionImport_CSV"/>
-    <addaction name="separator"/>
     <addaction name="actionPreferences"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
@@ -1135,6 +1133,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <addaction name="actionSave_Project_as"/>
     <addaction name="separator"/>
     <addaction name="actionImport"/>
+    <addaction name="actionImport_CSV"/>
     <addaction name="actionNew_graph"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
