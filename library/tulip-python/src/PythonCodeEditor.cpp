@@ -522,7 +522,7 @@ PythonCodeEditor::~PythonCodeEditor() {
 QString PythonCodeEditor::getCleanCode() const {
   QString code = toPlainText().replace("\r\n", "\n");
 
-  if (code[code.size()-1] != '\n')
+  if (code.size() && code[code.size()-1] != '\n')
     code += "\n";
 
   return  code;
