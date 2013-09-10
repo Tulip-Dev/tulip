@@ -98,10 +98,31 @@ void SnapshotDialog::resizeEvent(QResizeEvent *) {
 }
 
 void SnapshotDialog::accept() {
-  QString fileName=browseClicked();
+  QList<QByteArray> formatList=QImageWriter::supportedImageFormats();
+  QString formatedFormatList;
+
+  for(QList<QByteArray>::iterator it=formatList.begin(); it!=formatList.end(); ++it) {
+    if (formatedFormatList.indexOf(QString(*it).toLower()) == -1)
+      formatedFormatList+=QString(*it).toLower()+" (*."+QString(*it).toLower()+");;";
+  }
+
+  // remove last ;;
+  formatedFormatList.resize(formatedFormatList.size() - 2);
+
+  QString selectedFilter("jpeg (*.jpeg)");
+  QString fileName=
+    QFileDialog::getSaveFileName(this,tr("Save image as..."),
+				 QDir::homePath(),
+				 tr(QString(formatedFormatList).toStdString().c_str()),
+				 &selectedFilter);
 
   if(fileName=="")
     return;
+
+  // force file extension
+  QString selectedExtension = QString('.') + selectedFilter.section(' ', 0, 0);
+  if (!fileName.endsWith(selectedExtension))
+    fileName += selectedExtension;
 
   this->setEnabled(false);
 
@@ -148,21 +169,6 @@ void SnapshotDialog::heightSpinBoxValueChanged(int value) {
   }
 
   inSizeSpinBoxValueChanged=false;
-}
-
-QString SnapshotDialog::browseClicked() {
-  QList<QByteArray> formatList=QImageWriter::supportedImageFormats();
-  QString formatedFormatList;
-
-  for(QList<QByteArray>::iterator it=formatList.begin(); it!=formatList.end(); ++it) {
-    if(QString(*it).toLower()=="jpeg")
-      formatedFormatList=QString(*it).toLower()+" (*."+QString(*it).toLower()+");;"+formatedFormatList;
-    else
-      formatedFormatList+=QString(*it).toLower()+" (*."+QString(*it).toLower()+");;";
-  }
-
-  QString newFileName=QFileDialog::getSaveFileName(this,tr("Save image as..."), QDir::homePath(), tr(QString(formatedFormatList).toStdString().c_str()));
-  return newFileName;
 }
 
 void SnapshotDialog::fileNameTextChanged(const QString &text) {
