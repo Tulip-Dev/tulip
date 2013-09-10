@@ -112,15 +112,16 @@ void SnapshotDialog::accept() {
   QString selectedFilter("jpeg (*.jpeg)");
   QString fileName=
     QFileDialog::getSaveFileName(this,tr("Save image as..."),
-				 QDir::homePath(),
-				 tr(QString(formatedFormatList).toStdString().c_str()),
-				 &selectedFilter);
+                                 QDir::homePath(),
+                                 tr(QString(formatedFormatList).toStdString().c_str()),
+                                 &selectedFilter);
 
   if(fileName=="")
     return;
 
   // force file extension
   QString selectedExtension = QString('.') + selectedFilter.section(' ', 0, 0);
+
   if (!fileName.endsWith(selectedExtension))
     fileName += selectedExtension;
 
