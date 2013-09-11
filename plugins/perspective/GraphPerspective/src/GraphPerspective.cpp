@@ -442,22 +442,37 @@ void GraphPerspective::saveGraphToFile(Graph *g) {
 
   for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
     ExportModule* m = PluginLister::instance()->getPluginObject<ExportModule>(*it, NULL);
-    QString currentFilter = it->c_str() + QString("(*.") + m->fileExtension().c_str() + QString(")");
+    QString currentFilter = it->c_str() + QString("(*.") + m->fileExtension().c_str() + QString(");;");
     filters += currentFilter;
-
-    if(it != exports.end()) {
-      filters += ";;";
-    }
 
     modules[m->fileExtension()] = *it;
     delete m;
   }
 
-  QString fileName = QFileDialog::getSaveFileName(_mainWindow, tr("Export Graph"), QString(), filters);
+  // remove last ;;
+  filters.resize(filters.size() - 2);
+
+  QString selectedFilter;
+  QString fileName =
+    QFileDialog::getSaveFileName(_mainWindow, tr("Export Graph"),
+				 QString(), filters, &selectedFilter
+				 // on MacOSX selectedFilter is ignored by the
+				 // native dialog
+#ifdef __APPLE__
+				 , QFileDialog::DontUseNativeDialog
+#endif
+				 );
+
+    QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
+
 
   if(!fileName.isEmpty()) {
+    // force file extension
+    QString extension = selectedFilter.mid(selectedFilter.lastIndexOf('.') + 1,  selectedFilter.lastIndexOf(')') - selectedFilter.lastIndexOf('.') - 1);
+    if (!fileName.endsWith(extension))
+      fileName += '.' + extension;
+
     std::ofstream out(fileName.toUtf8().data());
-    QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
     DataSet params;
     params.set("file", std::string(fileName.toUtf8().data()));
     tlp::exportGraph(g, out, modules[extension.toStdString()], params);
@@ -549,7 +564,7 @@ void GraphPerspective::save() {
 
 void GraphPerspective::saveAs(const QString& path) {
   if (path.isEmpty()) {
-    QString path = QFileDialog::getSaveFileName(_mainWindow,trUtf8("Save file"),QString(),"Tulip Project (*.tlpx)");
+    QString path = QFileDialog::getSaveFileName(_mainWindow,trUtf8("Save project"),QString(),"Tulip Project (*.tlpx)");
 
     if (!path.isEmpty()) {
       if (!path.endsWith(".tlpx"))
