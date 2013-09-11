@@ -114,7 +114,13 @@ void SnapshotDialog::accept() {
     QFileDialog::getSaveFileName(this,tr("Save image as..."),
                                  QDir::homePath(),
                                  tr(QString(formatedFormatList).toStdString().c_str()),
-                                 &selectedFilter);
+                                 &selectedFilter
+				 // on MacOSX selectedFilter is ignored by the
+				 // native dialog
+#ifdef __APPLE__
+				 , QFileDialog::DontUseNativeDialog
+#endif
+				 );
 
   if(fileName=="")
     return;
