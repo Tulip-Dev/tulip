@@ -103,7 +103,7 @@ void PythonPluginCreationDialog::validateForm() {
 }
 
 void PythonPluginCreationDialog::selectPluginSourceFile() {
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Set Plugin source filen"),"","Python script (*.py)");
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Set Plugin source file"),"","Python script (*.py)");
 
   if (fileName.isEmpty())
     return;
