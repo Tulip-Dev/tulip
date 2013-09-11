@@ -455,20 +455,21 @@ void GraphPerspective::saveGraphToFile(Graph *g) {
   QString selectedFilter;
   QString fileName =
     QFileDialog::getSaveFileName(_mainWindow, tr("Export Graph"),
-				 QString(), filters, &selectedFilter
-				 // on MacOSX selectedFilter is ignored by the
-				 // native dialog
+                                 QString(), filters, &selectedFilter
+                                 // on MacOSX selectedFilter is ignored by the
+                                 // native dialog
 #ifdef __APPLE__
-				 , QFileDialog::DontUseNativeDialog
+                                 , QFileDialog::DontUseNativeDialog
 #endif
-				 );
+                                );
 
-    QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
+  QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
 
 
   if(!fileName.isEmpty()) {
     // force file extension
     QString extension = selectedFilter.mid(selectedFilter.lastIndexOf('.') + 1,  selectedFilter.lastIndexOf(')') - selectedFilter.lastIndexOf('.') - 1);
+
     if (!fileName.endsWith(extension))
       fileName += '.' + extension;
 
