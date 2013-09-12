@@ -27,7 +27,7 @@
 
 namespace tlp {
 
-class TLP_SCOPE GraphDecorator : public Graph {  // non-orientÃ¯Â¿Â½, planaire
+class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
 public:
   GraphDecorator(Graph* s) {
     assert(s);

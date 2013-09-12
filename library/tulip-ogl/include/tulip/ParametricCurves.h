@@ -45,7 +45,7 @@ TLP_GL_SCOPE void buildPascalTriangle(unsigned int n, std::vector<std::vector<do
  */
 TLP_GL_SCOPE Coord computeBezierPoint(const std::vector<Coord> &controlPoints, const float t);
 
-/** Compute a set of points approximating a BÃÂ©zier curve
+/** Compute a set of points approximating a Bézier curve
  *
  *  \param controlPoints a vector of control points
  *  \param curvePoints an empty vector to store the computed points
@@ -64,7 +64,7 @@ TLP_GL_SCOPE void computeBezierPoints(const std::vector<Coord> &controlPoints, s
  *
  * \param controlPoints a vector of control points
  * \param t curve parameter value (0 <= t <= 1)
- * \param closedCurve if true, the curve will be closed, meaning a BÃÂ©zier segment will connect the last and first control point
+ * \param closedCurve if true, the curve will be closed, meaning a Bézier segment will connect the last and first control point
  * \param alpha curve parameterization parameter (0 <= alpha <= 1), alpha = 0 -> uniform parameterization, alpha = 0.5 -> centripetal parameterization, alpha = 1.0 -> chord-length parameterization
  */
 TLP_GL_SCOPE Coord computeCatmullRomPoint(const std::vector<Coord> &controlPoints, const float t, const bool closedCurve = false, const float alpha = 0.5);
@@ -73,7 +73,7 @@ TLP_GL_SCOPE Coord computeCatmullRomPoint(const std::vector<Coord> &controlPoint
  *
  *  \param controlPoints a vector of control points
  *  \param curvePoints an empty vector to store the computed points
- *  \param closedCurve if true, the curve will be closed, meaning a BÃÂ©zier segment will connect the last and first control point
+ *  \param closedCurve if true, the curve will be closed, meaning a Bézier segment will connect the last and first control point
  *  \param alpha curve parameterization parameter (0 <= alpha <= 1), alpha = 0 -> uniform parameterization, alpha = 0.5 -> centripetal parameterization, alpha = 1.0 -> chord-length parameterization
  *  \param nbCurvePoints number of points to generate
  */
@@ -82,7 +82,7 @@ TLP_GL_SCOPE void computeCatmullRomPoints(const std::vector<Coord> &controlPoint
 /**
   * Compute the position of a point 'p' at t (0 <= t <= 1)
   * along open uniform B-spline curve defined by a set of control points.
-  * An uniform B-spline is a piecewise collection of BÃÂ©zier curves of the same degree, connected end to end.
+  * An uniform B-spline is a piecewise collection of Bézier curves of the same degree, connected end to end.
   * The features of this type of spline are the following :
   *   -> the spline is C^2 continuous, meaning there is no discontinuities in curvature
   *     -> the spline has local control : its parameters only affect a small part of the entire spline
