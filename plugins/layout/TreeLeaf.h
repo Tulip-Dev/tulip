@@ -48,14 +48,15 @@ class OrientableSizeProxy;
 
 class TreeLeaf:public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATIONS("Tree Leaf","David Auber","01/12/1999","ok","1.0","Tree")
+  PLUGININFORMATIONS("Tree Leaf","David Auber","01/12/1999","A simple level-based tree layout","1.1","Tree")
   TreeLeaf(const tlp::PluginContext* context);
   ~TreeLeaf();
   bool run();
 
 private:
-  float spacing;
+  float minLayerSpacing;
   float nodeSpacing;
+  bool uniformLayerDistance;
   std::vector<float> levelHeights;
   float dfsPlacement(tlp::Graph* tree, tlp::node n, float x, float y, unsigned int depth,
                      OrientableLayout *oriLayout, OrientableSizeProxy *oriSize);
