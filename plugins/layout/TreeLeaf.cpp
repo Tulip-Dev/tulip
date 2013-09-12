@@ -65,6 +65,7 @@ float TreeLeaf::dfsPlacement(tlp::Graph* tree, tlp::node n, float x, float y, un
   Iterator<node> *itN=tree->getOutNodes(n);
 
   float layerSpacing = minLayerSpacing;
+
   if (uniformLayerDistance == false) {
     if (depth < levelHeights.size()-1) {
       layerSpacing += nodeSpacing;
@@ -117,6 +118,7 @@ bool TreeLeaf::run() {
     size = graph->getProperty<SizeProperty>("viewSize");
 
   uniformLayerDistance = true;
+
   if (dataSet != NULL)
     dataSet->get("uniform layer spacing", uniformLayerDistance);
 
