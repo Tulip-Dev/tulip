@@ -39,8 +39,8 @@ class NumericProperty;
 /**
  *  This ordering was first introduced by C. Gutwenger and P. Mutzel in \n
  *  "Grid embeddings of biconnected planar graphs", \n
- *  "Extended Abstract, Max-Planck-Institut fÃÂ¼r Informatik," \n
- *  "SaarbrÃÂ¼cken, Germany, 1997" \n
+ *  "Extended Abstract, Max-Planck-Institut für Informatik," \n
+ *  "Saarbrücken, Germany, 1997" \n
  *  Let n be the number of nodes, the original algorithm complexity is in O(n).\n
  *  But the implementation of the canonical ordering has not been made in O(n).\n
  */
