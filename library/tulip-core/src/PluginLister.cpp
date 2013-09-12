@@ -67,7 +67,7 @@ void PluginLister::checkLoadedPluginsDependencies(tlp::PluginLoader* loader) {
         std::string releaseDep = (*itD).pluginRelease;
 
         if (tlp::getMajor(release) != tlp::getMajor(releaseDep) ||
-            tlp::getMinor(release) != tlp::getMinor(releaseDep)) {
+            tlp::getMinor(release) < tlp::getMinor(releaseDep)) {
           if (loader) {
             loader->aborted(pluginName, " '" + pluginName + "' will be removed, it depends on release " +
                             releaseDep + " of" + " '" + pluginDepName + "' but " +
