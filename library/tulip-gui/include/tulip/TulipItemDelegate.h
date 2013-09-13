@@ -21,6 +21,7 @@
 #ifndef TULIPITEMDELEGATE_H
 #define TULIPITEMDELEGATE_H
 
+#include <climits>
 #include <QStyledItemDelegate>
 
 #include <tulip/TulipItemEditorCreators.h>
@@ -37,7 +38,7 @@ class TLP_QT_SCOPE TulipItemDelegate : public QStyledItemDelegate {
   QComboBox* _currentMonitoredCombo;
 
 public:
-  static QVariant showEditorDialog(tlp::ElementType,tlp::PropertyInterface*,tlp::Graph*,TulipItemDelegate*, QWidget* dialogParent = NULL);
+  static QVariant showEditorDialog(tlp::ElementType,tlp::PropertyInterface*,tlp::Graph*,TulipItemDelegate*, QWidget* dialogParent = NULL, unsigned int id = UINT_MAX);
 
   explicit TulipItemDelegate(QObject* parent=NULL);
   virtual ~TulipItemDelegate();
