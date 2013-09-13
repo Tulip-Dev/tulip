@@ -73,6 +73,10 @@ protected slots:
   void addRemoveItemToSelection();
   void selectItem();
   void deleteItem();
+  void editColor();
+  void editLabel();
+  void editShape();
+  void editSize();
   void goInsideItem();
   void ungroupItem();
   void setZOrdering(bool);
@@ -93,6 +97,7 @@ protected:
   bool hasHulls() const;
   void setupWidget();
   bool eventFilter(QObject *,QEvent *e);
+  void editValue(PropertyInterface* pi);
 };
 }
 

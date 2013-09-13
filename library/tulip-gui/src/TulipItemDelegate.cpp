@@ -241,25 +241,35 @@ void TulipItemDelegate::comboDataChanged() {
 
 
 QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,
-    tlp::PropertyInterface* pi,
-    tlp::Graph* g,
-    TulipItemDelegate* delegate,
-    QWidget* dialogParent) {
-  QVariant defaultValue;
+					     tlp::PropertyInterface* pi,
+					     tlp::Graph* g,
+					     TulipItemDelegate* delegate,
+					     QWidget* dialogParent,
+					     unsigned int id) {
+  QVariant value;
 
-  if (elType == tlp::NODE)
-    defaultValue = GraphModel::nodeDefaultValue(pi);
-  else
-    defaultValue = GraphModel::edgeDefaultValue(pi);
-
-  TulipItemEditorCreator* creator = delegate->creator(defaultValue.userType());
+  if (elType == tlp::NODE) {
+    node n(id);
+    if (n.isValid())
+      value = GraphModel::nodeValue(id, pi);
+    else
+      value = GraphModel::nodeDefaultValue(pi);
+  } else {
+    edge e(id);
+    if (e.isValid())
+      value = GraphModel::edgeValue(id, pi);
+    else
+      value = GraphModel::edgeDefaultValue(pi);
+  }
+  
+  TulipItemEditorCreator* creator = delegate->creator(value.userType());
 
   if (dialogParent == NULL)
     dialogParent = Perspective::instance()->mainWindow();
 
   creator->setPropertyToEdit(pi);
   QWidget* w = creator->createWidget(dialogParent);
-  creator->setEditorData(w,defaultValue,g);
+  creator->setEditorData(w,value,g);
 
   QDialog* dlg = dynamic_cast<QDialog*>(w);
 

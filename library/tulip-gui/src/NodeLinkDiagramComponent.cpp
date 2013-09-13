@@ -45,6 +45,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GraphModel.h>
 
 using namespace tlp;
 using namespace std;
@@ -441,6 +442,11 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     menu->addAction(tr("Select"),this,SLOT(selectItem()));
     menu->addAction(tr("Delete"),this,SLOT(deleteItem()));
 
+    QMenu* updateMenu = menu->addMenu("Edit");
+    updateMenu->addAction("Color", this, SLOT(editColor()));
+    updateMenu->addAction("Label", this, SLOT(editLabel()));
+    updateMenu->addAction("Shape", this, SLOT(editShape()));
+    updateMenu->addAction("Size", this, SLOT(editSize()));
 
     if (isNode) {
       Graph *metaGraph=graph()->getNodeMetaInfo(node(entity.getComplexEntityId()));
@@ -486,6 +492,41 @@ void NodeLinkDiagramComponent::deleteItem() {
     graph()->delNode(node(itemId));
   else
     graph()->delEdge(edge(itemId));
+}
+
+void NodeLinkDiagramComponent::editValue(PropertyInterface* pi) {
+  TulipItemDelegate tid(getGlMainWidget());
+  QVariant val =
+    TulipItemDelegate::showEditorDialog(isNode ? NODE : EDGE,
+					pi, graph(), &tid,
+					getGlMainWidget(), itemId);
+
+  // Check if edition has been cancelled
+  if (!val.isValid())
+    return;
+
+  graph()->push();
+
+  if (isNode)
+    GraphModel::setNodeValue(itemId, pi, val);
+  else
+    GraphModel::setEdgeValue(itemId, pi, val);
+}
+
+void NodeLinkDiagramComponent::editColor() {
+  editValue(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementColor());
+}
+
+void NodeLinkDiagramComponent::editLabel() {
+  editValue(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLabel());
+}
+
+void NodeLinkDiagramComponent::editShape() {
+  editValue(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementShape());
+}
+
+void NodeLinkDiagramComponent::editSize() {
+  editValue(getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementSize());
 }
 
 const Camera& NodeLinkDiagramComponent::goInsideItem(node meta) {
