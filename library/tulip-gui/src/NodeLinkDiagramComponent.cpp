@@ -498,8 +498,8 @@ void NodeLinkDiagramComponent::editValue(PropertyInterface* pi) {
   TulipItemDelegate tid(getGlMainWidget());
   QVariant val =
     TulipItemDelegate::showEditorDialog(isNode ? NODE : EDGE,
-					pi, graph(), &tid,
-					getGlMainWidget(), itemId);
+                                        pi, graph(), &tid,
+                                        getGlMainWidget(), itemId);
 
   // Check if edition has been cancelled
   if (!val.isValid())
