@@ -346,8 +346,8 @@ public:
   inline bool operator!=(const VECTOR &) const;
   inline bool operator==(const VECTOR &) const;
   inline VECTOR & fill(const TYPE obj);
-  inline TYPE norm () const;
-  inline TYPE length () const {
+  inline OTYPE norm () const;
+  inline OTYPE length () const {
     return norm();
   }
   inline VECTOR & normalize () {
@@ -369,7 +369,7 @@ public:
 
     return *this;
   }
-  inline TYPE dist (const VECTOR &) const;
+  inline OTYPE dist (const VECTOR &) const;
   inline TYPE dotProduct(const VECTOR &) const;
 };
 
@@ -379,7 +379,7 @@ inline TYPE dotProduct(const VECTOR &a, const VECTOR &b) {
 }
 
 TEMPLATEVECTOR
-inline TYPE dist(const VECTOR &a, const VECTOR &b) {
+inline OTYPE dist(const VECTOR &a, const VECTOR &b) {
   return a.dist(b);
 }
 
