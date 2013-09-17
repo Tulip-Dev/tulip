@@ -296,17 +296,17 @@ OTYPE  VECTORTLP::norm() const {
 
   case 2:
     return tlpsqrt<OTYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x())
-                                +
-                                tlpsqr<TYPE, OTYPE>(y())
-                               );
+                                 +
+                                 tlpsqr<TYPE, OTYPE>(y())
+                                );
 
   case 3:
     return tlpsqrt<OTYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x())
-                                +
-                                tlpsqr<TYPE, OTYPE>(y())
-                                +
-                                tlpsqr<TYPE, OTYPE>(z())
-                               );
+                                 +
+                                 tlpsqr<TYPE, OTYPE>(y())
+                                 +
+                                 tlpsqr<TYPE, OTYPE>(z())
+                                );
 
   default :
     OTYPE tmp = tlpsqr<OTYPE, OTYPE>((*this)[0]);
@@ -326,16 +326,16 @@ OTYPE  VECTORTLP::dist(const VECTOR &c) const {
 
   case 2:
     return tlpsqrt<OTYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()-c.x())
-                                +
-                                tlpsqr<TYPE, OTYPE>(y()-c.y()));
+                                 +
+                                 tlpsqr<TYPE, OTYPE>(y()-c.y()));
 
   case 3:
     return tlpsqrt<OTYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()-c.x())
-                                +
-                                tlpsqr<TYPE, OTYPE>(y()-c.y())
-                                +
-                                tlpsqr<TYPE, OTYPE>(z()-c.z())
-                               );
+                                 +
+                                 tlpsqr<TYPE, OTYPE>(y()-c.y())
+                                 +
+                                 tlpsqr<TYPE, OTYPE>(z()-c.z())
+                                );
 
   default :
     OTYPE tmp = tlpsqr<OTYPE, OTYPE>((*this)[0] - c[0]);
