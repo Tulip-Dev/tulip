@@ -115,9 +115,9 @@ bool GlQuadTreeLODCalculator::needEntities() {
       Camera camera      = (*it).first->getCamera();
       Camera oldCamera   = (*it).second;
       Coord unitCamera    = camera.getEyes() - camera.getCenter();
-      unitCamera          = unitCamera/unitCamera.norm();
+      unitCamera.normalize();
       Coord unitOldCamera = oldCamera.getEyes()-oldCamera.getCenter();
-      unitOldCamera  = unitOldCamera/unitOldCamera.norm();
+      unitOldCamera.normalize();
 
       if(unitCamera != unitOldCamera) {
         haveToCompute = true;

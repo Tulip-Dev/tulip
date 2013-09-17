@@ -289,19 +289,19 @@ VECTORTLP & VECTORTLP::fill(const TYPE scalaire) {
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE, typename OTYPE>
-TYPE  VECTORTLP::norm() const {
+OTYPE  VECTORTLP::norm() const {
   switch(SIZE) {
   case 1:
-    return VECTORTLP::array[0];
+    return static_cast<OTYPE>(fabs(VECTORTLP::array[0]));
 
   case 2:
-    return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x())
+    return tlpsqrt<OTYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x())
                                 +
                                 tlpsqr<TYPE, OTYPE>(y())
                                );
 
   case 3:
-    return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x())
+    return tlpsqrt<OTYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x())
                                 +
                                 tlpsqr<TYPE, OTYPE>(y())
                                 +
@@ -309,28 +309,28 @@ TYPE  VECTORTLP::norm() const {
                                );
 
   default :
-    OTYPE tmp = tlpsqr<TYPE, OTYPE>((*this)[0]);
+    OTYPE tmp = tlpsqr<OTYPE, OTYPE>((*this)[0]);
 
     for (unsigned int i=1; i<SIZE; ++i)
-      tmp += tlpsqr<TYPE, OTYPE>((*this)[i]);
+      tmp += tlpsqr<OTYPE, OTYPE>((*this)[i]);
 
-    return(tlpsqrt<TYPE, OTYPE>(tmp));
+    return(tlpsqrt<OTYPE, OTYPE>(tmp));
   }
 }
 //======================================================
 template <typename TYPE,unsigned int SIZE, typename OTYPE>
-TYPE  VECTORTLP::dist(const VECTOR &c) const {
+OTYPE  VECTORTLP::dist(const VECTOR &c) const {
   switch(SIZE) {
   case 1:
-    return static_cast<TYPE>(fabs(x()-c.x()));
+    return static_cast<OTYPE>(fabs(x()-c.x()));
 
   case 2:
-    return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()-c.x())
+    return tlpsqrt<OTYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()-c.x())
                                 +
                                 tlpsqr<TYPE, OTYPE>(y()-c.y()));
 
   case 3:
-    return tlpsqrt<TYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()-c.x())
+    return tlpsqrt<OTYPE, OTYPE>(tlpsqr<TYPE, OTYPE>(x()-c.x())
                                 +
                                 tlpsqr<TYPE, OTYPE>(y()-c.y())
                                 +
@@ -338,12 +338,12 @@ TYPE  VECTORTLP::dist(const VECTOR &c) const {
                                );
 
   default :
-    OTYPE tmp = tlpsqr<TYPE, OTYPE>((*this)[0] - c[0]);
+    OTYPE tmp = tlpsqr<OTYPE, OTYPE>((*this)[0] - c[0]);
 
     for (unsigned int i=1; i<SIZE; ++i)
-      tmp += tlpsqr<TYPE, OTYPE>((*this)[i]-c[i]);
+      tmp += tlpsqr<OTYPE, OTYPE>((*this)[i]-c[i]);
 
-    return(tlpsqrt<TYPE, OTYPE>(tmp));
+    return(tlpsqrt<OTYPE, OTYPE>(tmp));
   }
 }
 
