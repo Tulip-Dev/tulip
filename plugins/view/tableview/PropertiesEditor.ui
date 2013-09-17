@@ -197,7 +197,7 @@ color: #595959;</string>
        </layout>
       </item>
       <item>
-       <widget class="QCheckBox" name="userPropertiesCheck">
+       <widget class="QCheckBox" name="visualPropertiesCheck">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -368,7 +368,7 @@ border-bottom: 1px solid #C9C9C9;</string>
    </hints>
   </connection>
   <connection>
-   <sender>userPropertiesCheck</sender>
+   <sender>visualPropertiesCheck</sender>
    <signal>clicked(bool)</signal>
    <receiver>PropertiesEditor</receiver>
    <slot>showVisualProperties(bool)</slot>
