@@ -321,7 +321,7 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee) {
   edge e;
   forEach(e,graph->getInEdges(n1)) {
     double val = metric->getEdgeDoubleValue(e);
-    node n=graph->opposite(e,n1);
+    node n=graph->source(e);
     edge me = graph->existEdge(n2,n,true);
 
     if(me.isValid())
@@ -338,7 +338,7 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee) {
 
   forEach(e,graph->getOutEdges(n1)) {
     double val = metric->getEdgeDoubleValue(e);
-    node n=graph->opposite(e,n1);
+    node n=graph->target(e);
     edge me = graph->existEdge(n2,n,true);
 
     if(me.isValid())
