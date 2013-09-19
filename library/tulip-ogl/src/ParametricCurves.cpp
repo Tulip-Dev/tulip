@@ -239,7 +239,7 @@ static void computeCatmullRomGlobalParameter(const vector<Coord> &controlPoints,
   float totalDist = 0.f;
 
   for (size_t i = 1 ; i < controlPoints.size() ; ++i) {
-    float dist = pow(controlPoints[i-1].dist(controlPoints[i]), alpha);
+    float dist = pow((float) controlPoints[i-1].dist(controlPoints[i]), alpha);
     cumDist[i] = cumDist[i-1] + dist;
     totalDist += dist;
   }
