@@ -273,7 +273,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionFull_screen,SIGNAL(triggered(bool)),this,SLOT(showFullScreen(bool)));
   connect(_ui->actionImport,SIGNAL(triggered()),this,SLOT(importGraph()));
   connect(_ui->actionExport,SIGNAL(triggered()),this,SLOT(exportGraph()));
-  connect(_ui->actionSave_graph_to_file,SIGNAL(triggered()),this,SLOT(saveGraphToFile()));
+  connect(_ui->actionSave_graph_to_file,SIGNAL(triggered()),this,SLOT(saveGraphHierarchyInTlpFile()));
   connect(_ui->workspace,SIGNAL(panelFocused(tlp::View*)),this,SLOT(panelFocused(tlp::View*)));
   connect(_ui->actionSave_Project,SIGNAL(triggered()),this,SLOT(save()));
   connect(_ui->actionSave_Project_as,SIGNAL(triggered()),this,SLOT(saveAs()));
@@ -391,14 +391,15 @@ void GraphPerspective::exportGraph(Graph* g) {
   if (g == NULL)
     return;
 
-  ExportWizard wizard(g,_mainWindow);
+  static QString exportFile;
+  ExportWizard wizard(g, exportFile, _mainWindow);
   wizard.setWindowTitle(QString("Export of graph \"") + g->getName().c_str() + '"');
 
   if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() || wizard.outputFile().isEmpty())
     return;
 
   std::ostream *os;
-  std::string filename = wizard.outputFile().toUtf8().data();
+  std::string filename = (exportFile = wizard.outputFile()).toUtf8().data();
 
   if (filename.rfind(".gz") == (filename.length() - 3))
     os = tlp::getOgzstream(filename.c_str());
@@ -429,54 +430,50 @@ void GraphPerspective::exportGraph(Graph* g) {
   delete prg;
 }
 
-void GraphPerspective::saveGraphToFile(Graph *g) {
+void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
   if (g == NULL)
     g = _graphs->currentGraph();
 
   if (g == NULL)
     return;
 
-  QString filters;
-  QMap<std::string, std::string> modules;
-  std::list<std::string> exports = PluginLister::instance()->availablePlugins<ExportModule>();
+  static QString savedFile;
+  QString filter("TLP (*.tlp *.tlp.gz)");
+  std::string filename =
+    QFileDialog::getSaveFileName(_mainWindow, tr("Save graph hierarchy in tlp file"),
+                                 savedFile, filter).toUtf8().data();
 
-  for(std::list<std::string>::const_iterator it = exports.begin(); it != exports.end(); ++it) {
-    ExportModule* m = PluginLister::instance()->getPluginObject<ExportModule>(*it, NULL);
-    QString currentFilter = it->c_str() + QString("(*.") + m->fileExtension().c_str() + QString(");;");
-    filters += currentFilter;
+  if(!filename.empty()) {
+    std::ostream *os;
 
-    modules[m->fileExtension()] = *it;
-    delete m;
-  }
+    if (filename.rfind(".tlp.gz") == (filename.length() - 7))
+      os = tlp::getOgzstream(filename.c_str());
+    else {
+      if (filename.rfind(".tlp") == std::string::npos)
+	// force file extension
+	filename += ".tlp";
+      os = new std::ofstream(filename.c_str());
+    }
 
-  // remove last ;;
-  filters.resize(filters.size() - 2);
+    if (os->fail()) {
+      QMessageBox::critical(_mainWindow,trUtf8("File error"),trUtf8("Cannot open output file for writing: ") + QString::fromUtf8(filename.c_str()));
+      delete os;
+      return;
+    }
 
-  QString selectedFilter;
-  QString fileName =
-    QFileDialog::getSaveFileName(_mainWindow, tr("Export Graph"),
-                                 QString(), filters, &selectedFilter
-                                 // on MacOSX selectedFilter is ignored by the
-                                 // native dialog
-#ifdef __APPLE__
-                                 , QFileDialog::DontUseNativeDialog
-#endif
-                                );
+    // remember for the next call
+    savedFile = QString::fromUtf8(filename.c_str());
 
-  QString extension(fileName.right(fileName.length() - (fileName.lastIndexOf('.')+1)));
-
-
-  if(!fileName.isEmpty()) {
-    // force file extension
-    QString extension = selectedFilter.mid(selectedFilter.lastIndexOf('.') + 1,  selectedFilter.lastIndexOf(')') - selectedFilter.lastIndexOf('.') - 1);
-
-    if (!fileName.endsWith(extension))
-      fileName += '.' + extension;
-
-    std::ofstream out(fileName.toUtf8().data());
     DataSet params;
-    params.set("file", std::string(fileName.toUtf8().data()));
-    tlp::exportGraph(g, out, modules[extension.toStdString()], params);
+    params.set("file", filename);
+    bool result = tlp::exportGraph(g, *os, "TLP Export", params);
+
+    if (!result)
+      QMessageBox::critical(_mainWindow,trUtf8("Save error"),trUtf8("Failed to save graph hierarchy"));
+    else
+      addRecentDocument(savedFile);
+
+    delete os;
   }
 }
 

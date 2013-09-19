@@ -233,10 +233,10 @@
      <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
    </property>
    <property name="text">
-    <string>Save to file</string>
+    <string>Save</string>
    </property>
    <property name="toolTip">
-    <string>Writes the graph into the selected file</string>
+    <string>Writes the whole hierarchy (from the root graph) into a file using the tlp format</string>
    </property>
   </action>
   <action name="actionCreate_induced_sub_graph">
@@ -432,7 +432,7 @@
    <sender>actionSave_to_file</sender>
    <signal>triggered()</signal>
    <receiver>GraphHierarchiesEditorData</receiver>
-   <slot>saveGraphToFile()</slot>
+   <slot>saveGraphHierarchyInTlpFile()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
