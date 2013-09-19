@@ -450,8 +450,9 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
       os = tlp::getOgzstream(filename.c_str());
     else {
       if (filename.rfind(".tlp") == std::string::npos)
-	// force file extension
-	filename += ".tlp";
+        // force file extension
+        filename += ".tlp";
+
       os = new std::ofstream(filename.c_str());
     }
 
