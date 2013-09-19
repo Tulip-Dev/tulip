@@ -82,7 +82,7 @@ public:
 public slots:
   void importGraph();
   void exportGraph(tlp::Graph*g = NULL);
-  void saveGraphToFile(tlp::Graph*g = NULL);
+  void saveGraphHierarchyInTlpFile(tlp::Graph*g = NULL);
   void createPanel(tlp::Graph* g = NULL);
   void save();
   void saveAs(const QString& path=QString::null);

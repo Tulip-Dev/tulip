@@ -231,8 +231,8 @@ void GraphHierarchiesEditor::renameGraph() {
   _ui->hierarchiesTree->edit(_contextIndex);
 }
 
-void GraphHierarchiesEditor::saveGraphToFile() {
-  tlp::Perspective::typedInstance<GraphPerspective>()->saveGraphToFile(_contextGraph);
+void GraphHierarchiesEditor::saveGraphHierarchyInTlpFile() {
+  tlp::Perspective::typedInstance<GraphPerspective>()->saveGraphHierarchyInTlpFile(_contextGraph);
 }
 
 void GraphHierarchiesEditor::setSynchronized(bool f) {

@@ -34,7 +34,7 @@
 using namespace tlp;
 using namespace std;
 
-ExportWizard::ExportWizard(Graph *g, QWidget *parent): QWizard(parent), _ui(new Ui::ExportWizard), _graph(g) {
+ExportWizard::ExportWizard(Graph *g, const QString& exportFile, QWidget *parent): QWizard(parent), _ui(new Ui::ExportWizard), _graph(g) {
   _ui->setupUi(this);
   button(QWizard::FinishButton)->setEnabled(false);
 
@@ -56,6 +56,8 @@ ExportWizard::ExportWizard(Graph *g, QWidget *parent): QWizard(parent), _ui(new 
 
   _ui->parametersFrame->hide();
   updateFinishButton();
+
+  _ui->pathEdit->setText(exportFile);
 }
 
 ExportWizard::~ExportWizard() {
@@ -174,5 +176,7 @@ void ExportWizard::pathChanged(QString s) {
 }
 
 void ExportWizard::browseButtonClicked() {
-  _ui->pathEdit->setText(QFileDialog::getSaveFileName(this));
+  QString exportFile = QFileDialog::getSaveFileName(this, "Export file", _ui->pathEdit->text());
+  if (!exportFile.isEmpty())
+    _ui->pathEdit->setText(exportFile);
 }
