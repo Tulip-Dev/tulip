@@ -235,12 +235,12 @@ void GraphImpl::restoreEdges(const std::vector<edge>& edges,
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdge(const edge e) {
-  tlp::warning() << "{Warning ] : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << std::endl;
+  tlp::warning() << "Warning: "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << std::endl;
   tlp::warning() << "\t Trying to add edge " << e.id << " (" << source(e).id << "," << target(e).id << ")";
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdges(Iterator<edge>*) {
-  tlp::warning() << "Warning : "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << std::endl;
+  tlp::warning() << "Warning: "  << __PRETTY_FUNCTION__ << " ... Impossible operation on Root Graph" << std::endl;
 }
 //----------------------------------------------------------------
 void GraphImpl::reserveEdges(unsigned int nb) {
