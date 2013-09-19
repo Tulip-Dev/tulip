@@ -177,6 +177,7 @@ void ExportWizard::pathChanged(QString s) {
 
 void ExportWizard::browseButtonClicked() {
   QString exportFile = QFileDialog::getSaveFileName(this, "Export file", _ui->pathEdit->text());
+
   if (!exportFile.isEmpty())
     _ui->pathEdit->setText(exportFile);
 }
