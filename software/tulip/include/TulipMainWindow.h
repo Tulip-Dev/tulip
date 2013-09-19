@@ -29,7 +29,7 @@ namespace Ui {
 class TulipMainWindowData;
 }
 namespace tlp {
-class PluginInformations;
+struct PluginInformations;
 }
 class PluginsCenter;
 class QLabel;
