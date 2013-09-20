@@ -189,8 +189,23 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
   if(nodeSize[2]==0)
     nodeSize[2] = FLT_EPSILON;
 
-  if (data->getGlGlyphRenderer()->renderingHasStarted()) {
-    data->getGlGlyphRenderer()->addNodeGlyphRendering(data->glyphs.get(data->getElementShape()->getNodeValue(n)),
+  // Some glyphs can not benefit from the shader rendering optimization
+  // due to the use of quadrics or modelview matrix modification or lighting effect
+  static set<int> noShaderGlyphs;
+  if (noShaderGlyphs.empty()) {
+      noShaderGlyphs.insert(NodeShape::Billboard);
+      noShaderGlyphs.insert(NodeShape::ChristmasTree);
+      noShaderGlyphs.insert(NodeShape::Cone);
+      noShaderGlyphs.insert(NodeShape::Cylinder);
+      noShaderGlyphs.insert(NodeShape::GlowSphere);
+      noShaderGlyphs.insert(NodeShape::HalfCylinder);
+      noShaderGlyphs.insert(NodeShape::Sphere);
+  }
+
+  int glyph = data->getElementShape()->getNodeValue(n);
+
+  if (data->getGlGlyphRenderer()->renderingHasStarted() && noShaderGlyphs.find(glyph) == noShaderGlyphs.end()) {
+    data->getGlGlyphRenderer()->addNodeGlyphRendering(data->glyphs.get(glyph),
         n, lod, nodeCoord, nodeSize, rot, selected);
   }
   else {
