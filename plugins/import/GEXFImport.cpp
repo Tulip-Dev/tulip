@@ -320,9 +320,11 @@ public :
         unsigned int g = xmlReader.attributes().value("g").toString().toUInt();
         unsigned int b = xmlReader.attributes().value("b").toString().toUInt();
         float a = 1.0f;
+
         if (xmlReader.attributes().hasAttribute("a")) {
-            a = xmlReader.attributes().value("a").toString().toFloat();
+          a = xmlReader.attributes().value("a").toString().toFloat();
         }
+
         viewColor->setNodeValue(n, Color((unsigned char) r, (unsigned char) g,
                                          (unsigned char) b,
                                          (unsigned char) (a * 255)));

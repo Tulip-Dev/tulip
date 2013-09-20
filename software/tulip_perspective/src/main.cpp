@@ -232,14 +232,17 @@ int main(int argc,char **argv) {
 
   initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   QIcon icon = progress->windowIcon();
+
   if (! iconPath.isEmpty()) {
     QString iconFullPath = QString::fromUtf8(TulipBitmapDir.c_str()) + iconPath;
     QIcon tmp(iconFullPath);
+
     if (tmp.pixmap(QSize(16,16)).isNull() == false)
       icon = tmp;
     else
       usage("Could not load icon : " + iconFullPath);
   }
+
   progress->setWindowIcon(icon);
   progress->show();
 
@@ -291,6 +294,7 @@ int main(int argc,char **argv) {
     QMessageBox::warning(0,"Error", e.what());
     exit(1);
   }
+
   delete loader;
 
   // Initialize main window.
