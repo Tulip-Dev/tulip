@@ -36,13 +36,12 @@ extern TLP_SCOPE std::string TulipShareDir;
  * @ingroup Plugins
  *
  * @brief Initializes the Tulip library.
- * Looks for the Tulip plug-ins directory, and loads the plug-ins from it.
+ * Looks for the Tulip plug-ins directory.
  * The plug-ins directory can be defined in different ways, given by order of prevalence :
  * 1. the TLP_DIR environment variable, if it has a value
  * 2. the appDirPath parameter, if it is not NULL
  * 3. at that point, the Tulip paths will be retrieved from the path of the loaded Tulip shared library
- *  (you must dispose of a standard Tulip installation for that feature to work,
- *   meaning the relative path for the Tulip plugins folder to the Tulip libraries one must be ../lib/tulip/).).
+ *  (you must dispose of a standard Tulip installation for that feature to work).
  * 4. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on Unix.
  */
 extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
