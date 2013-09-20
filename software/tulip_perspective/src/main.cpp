@@ -110,6 +110,8 @@ void usage(const QString &error) {
        << "List of OPTIONS:" << endl
        << "  --perspective=<perspective_name> (-p perspective_name)\tStart the perspective specified by perspective_name." << endl
        << "  --geometry=<X,Y,width,height>\tSets the given rectangle as geometry for the main window." << endl
+       << "  --title=<title>\tDisplay a specific name in the loading dialog." << endl
+       << "  --icon=<relative path>\tChoose the icon in the loading dialog by providing a path relative to Tulip bitmap directory." << endl
        << "  --help (-h)\tDisplays this help message and ignores other options." << endl << endl
        << "Available perspectives:" << endl;
   list<string> perspectives = PluginLister::instance()->availablePlugins<Perspective>();
@@ -129,64 +131,37 @@ void usage(const QString &error) {
 int main(int argc,char **argv) {
   start_crash_handler();
 
-  QString title("Tulip ");
+  QString appName("Tulip ");
+  QString iconPath;
 
   // show patch number only if needed
   if (TULIP_INT_RELEASE % 10)
-    title += TULIP_RELEASE;
+    appName += TULIP_RELEASE;
   else
-    title += TULIP_MM_RELEASE;
+    appName += TULIP_MM_RELEASE;
 
   QApplication tulip_perspective(argc, argv);
   // the applicationName below is used to identify the location
   // of downloaded plugins, so it must be the same as in
   // tulip/main.cpp
-  tulip_perspective.setApplicationName(title);
+  tulip_perspective.setApplicationName(appName);
 
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
 #endif
 
-  // Create perspective's window
-  TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
-  mainWindow->setVisible(false);
-
-  // Progress bar dialog
-  SimplePluginProgressDialog *progress = new SimplePluginProgressDialog(mainWindow);
-  progress->setStopButtonVisible(false);
-  progress->setCancelButtonVisible(false);
-  progress->showPreview(false);
-  progress->setWindowTitle(title);
-  progress->resize(500,progress->height());
-  progress->show();
-
-  // Init tulip
-  progress->progress(0,100);
-  progress->setComment(QObject::trUtf8("Initializing tulip"));
-  PluginLoaderToProgress* loader = new PluginLoaderToProgress();
-  loader->_progress = progress;
-
-  try {
-    tlp::initTulipSoftware(loader);
-  }
-  catch(tlp::TulipException& e) {
-    QMessageBox::warning(0,"Error", e.what());
-    exit(1);
-  }
-
-  delete loader;
-
   // Check arguments
-  progress->progress(60,100);
-  progress->setComment(QObject::trUtf8("Checking arguments").toStdString());
   QString perspectiveName,projectFilePath;
   QVariantMap extraParams;
   QRect windowGeometry;
+  QString title = appName;
   PerspectiveContext* context = new PerspectiveContext();
 
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
   QRegExp pRegexp("^\\-p");
+  QRegExp titleRegexp("^\\-\\-title=(.*)");
+  QRegExp iconRegexp("^\\-\\-icon=(.*)");
   QRegExp portRegexp("^\\-\\-port=([0-9]*)");
   QRegExp idRegexp("^\\-\\-id=([0-9]*)");
   QRegExp geometryRegexp("^\\-\\-geometry=([0-9]*)\\,([0-9]*)\\,([0-9]*)\\,([0-9]*)");
@@ -212,6 +187,12 @@ int main(int argc,char **argv) {
     else if(pRegexp.exactMatch(a)) {
       perspectiveName = args[++i];
     }
+    else if (titleRegexp.exactMatch(a)) {
+      title = titleRegexp.cap(1);
+    }
+    else if (iconRegexp.exactMatch(a)) {
+      iconPath = iconRegexp.cap(1);
+    }
     else if (geometryRegexp.exactMatch(a)) {
       windowGeometry = QRect(geometryRegexp.cap(1).toInt(),geometryRegexp.cap(2).toInt(),geometryRegexp.cap(3).toInt(),geometryRegexp.cap(4).toInt());
     }
@@ -234,6 +215,33 @@ int main(int argc,char **argv) {
       projectFilePath = a;
     }
   }
+
+  // Create perspective's window
+  TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
+  mainWindow->setVisible(false);
+
+  // Progress bar dialog
+  SimplePluginProgressDialog *progress = new SimplePluginProgressDialog(mainWindow);
+  progress->setStopButtonVisible(false);
+  progress->setCancelButtonVisible(false);
+  progress->showPreview(false);
+  progress->resize(500,progress->height());
+  progress->setComment(QString("Initializing ") + title);
+  progress->setWindowTitle(title);
+  progress->progress(0,100);
+
+  initTulipLib(QApplication::applicationDirPath().toUtf8().data());
+  QIcon icon = progress->windowIcon();
+  if (! iconPath.isEmpty()) {
+    QString iconFullPath = QString::fromUtf8(TulipBitmapDir.c_str()) + iconPath;
+    QIcon tmp(iconFullPath);
+    if (tmp.pixmap(QSize(16,16)).isNull() == false)
+      icon = tmp;
+    else
+      usage("Could not load icon : " + iconFullPath);
+  }
+  progress->setWindowIcon(icon);
+  progress->show();
 
   TulipProject *project = NULL;
   QString error;
@@ -270,6 +278,21 @@ int main(int argc,char **argv) {
   context->project = project;
   context->parameters = extraParams;
   project->setPerspective(perspectiveName);
+
+
+  // Init tulip
+  PluginLoaderToProgress* loader = new PluginLoaderToProgress();
+  loader->_progress = progress;
+
+  try {
+    tlp::initTulipSoftware(loader);
+  }
+  catch(tlp::TulipException& e) {
+    QMessageBox::warning(0,"Error", e.what());
+    exit(1);
+  }
+  delete loader;
+
   // Initialize main window.
   progress->progress(100,100);
   progress->setComment("Setting up GUI (this can take some time)");
