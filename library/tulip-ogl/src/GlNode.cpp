@@ -192,14 +192,15 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
   // Some glyphs can not benefit from the shader rendering optimization
   // due to the use of quadrics or modelview matrix modification or lighting effect
   static set<int> noShaderGlyphs;
+
   if (noShaderGlyphs.empty()) {
-      noShaderGlyphs.insert(NodeShape::Billboard);
-      noShaderGlyphs.insert(NodeShape::ChristmasTree);
-      noShaderGlyphs.insert(NodeShape::Cone);
-      noShaderGlyphs.insert(NodeShape::Cylinder);
-      noShaderGlyphs.insert(NodeShape::GlowSphere);
-      noShaderGlyphs.insert(NodeShape::HalfCylinder);
-      noShaderGlyphs.insert(NodeShape::Sphere);
+    noShaderGlyphs.insert(NodeShape::Billboard);
+    noShaderGlyphs.insert(NodeShape::ChristmasTree);
+    noShaderGlyphs.insert(NodeShape::Cone);
+    noShaderGlyphs.insert(NodeShape::Cylinder);
+    noShaderGlyphs.insert(NodeShape::GlowSphere);
+    noShaderGlyphs.insert(NodeShape::HalfCylinder);
+    noShaderGlyphs.insert(NodeShape::Sphere);
   }
 
   int glyph = data->getElementShape()->getNodeValue(n);
