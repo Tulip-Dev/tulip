@@ -78,7 +78,7 @@
 (default "(255,95,95,255)" "(180,180,180,255)")
 )
 (property  0 string "viewFont"
-(default "font.ttf" "font.ttf")
+(default "TulipBitmapDir/font.ttf" "TulipBitmapDir/font.ttf")
 )
 (property  0 int "viewFontSize"
 (default "18" "18")
