@@ -1,40 +1,29 @@
 <RCC>
     <qresource prefix="/tulip/gui">
         <file>icons/i_addedge.png</file>
-        <file>icons/i_addnode.png</file>
         <file>icons/i_bends.png</file>
         <file>icons/i_del.png</file>
         <file>icons/i_locked.png</file>
         <file>icons/i_magic.png</file>
         <file>icons/i_move.png</file>
-        <file>icons/i_open.png</file>
-        <file>icons/i_print.png</file>
-        <file>icons/i_redo.png</file>
-        <file>icons/i_save.png</file>
         <file>icons/i_select.png</file>
-        <file>icons/i_undo.png</file>
         <file>icons/i_navigation.png</file>
         <file>icons/i_selection.png</file>
-        <file>icons/i_snapshot.png</file>
         <file>icons/i_unlocked.png</file>
         <file>icons/i_zoom.png</file>
         <file>icons/logo32x32.png</file>
         <file>ui/arrowdown.png</file>
         <file>ui/arrowup.png</file>
         <file>ui/btn_26.png</file>
-        <file>ui/editclear.png</file>
-        <file>ui/expose.png</file>
-        <file>ui/full_screen.png</file>
         <file>ui/btn_26_hover.png</file>
         <file>ui/btn_26_pressed.png</file>
+        <file>ui/full_screen.png</file>
         <file>ui/combobox_arrow.png</file>
         <file>ui/darkclosebutton.png</file>
-        <file>ui/darkminimizebutton.png</file>
         <file>ui/down_arrow-black.png</file>
         <file>ui/down_arrow-white.png</file>
         <file>ui/grid_screen.png</file>
         <file>ui/lightclosebutton.png</file>
-        <file>ui/lightminimizebutton.png</file>
         <file>ui/list_bullet_arrow.png</file>
         <file>ui/next.png</file>
         <file>ui/previous.png</file>
@@ -43,7 +32,6 @@
         <file>ui/split_screen.png</file>
         <file>icons/64/list-add.png</file>
         <file>icons/16/media-playback-start.png</file>
-        <file>icons/24/view-refresh.png</file>
         <file>icons/20/labels.png</file>
         <file>icons/20/labels_disabled.png</file>
         <file>icons/20/labels_enabled.png</file>
@@ -74,8 +62,6 @@
         <file>icons/16/list-del.png</file>
         <file>icons/16/go-down.png</file>
         <file>icons/16/go-up.png</file>
-        <file>icons/22/document-save.png</file>
-        <file>icons/22/folder.png</file>
         <file>icons/22/media-playback-start.png</file>
         <file>icons/16/preferences-other.png</file>
         <file>txt/view_configurationtab.css</file>
