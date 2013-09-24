@@ -147,12 +147,12 @@ static void checkDirectory(std::string dir) {
 
 //=========================================================
 void tlp::initTulipLib(const char* appDirPath) {
-  if (!TulipShareDir.empty()) // already initialized
-    return;
-
   // first we must ensure that the parsing of float or double
   // doest not depend on locale
   setlocale(LC_NUMERIC, "C");
+
+  if (!TulipShareDir.empty()) // already initialized
+    return;
 
   char *getEnvTlp;
   string::size_type pos;
