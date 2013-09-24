@@ -237,7 +237,20 @@ Observable::~Observable() {
     //tlp::debug() << "[Observable node] destructor:" << n.id  << "::" << this << endl;
     _oAlive[_n] = false;
 
-    if (_oNotifying == 0 && _oUnholding == 0 && _oHoldCounter == 0) {
+    bool noDelay = _oNotifying == 0 && _oUnholding == 0 && _oHoldCounter == 0;
+    if (noDelay == false) {
+      // _n cannot be deleted only if it is observed
+      // then its deletion is delayed until the observers are unhold
+      noDelay = true;
+      edge e;
+      forEach(e, _oGraph.getInEdges(_n)) {
+	if (_oType[e] & OBSERVER) {
+	  noDelay = false;
+	  break;
+	}
+      }
+    }
+    if (noDelay) {
       _oGraph.delNode(_n);
       //tlp::debug() << "[Observable node] deleted:" << n.id << "::" << this << endl;
     }
