@@ -37,6 +37,7 @@ std::string TulipPluginsPath;
 std::string TulipDocProfile;
 std::string TulipUserHandBookIndex;
 std::string TulipBitmapDir;
+std::string TulipShareDir;
 
 //=====================================================================
 
