@@ -60,12 +60,12 @@ const std::string& ParameterDescriptionList::getDefaultValue(const string& name)
 }
 
 void ParameterDescriptionList::setDefaultValue(const string& name,
-					       const string& val) {
+    const string& val) {
   getParameter(name)->setDefaultValue(val);
 }
 
 void ParameterDescriptionList::setDirection(const string& name,
-					    ParameterDirection direction) {
+    ParameterDirection direction) {
   getParameter(name)->setDirection(direction);
 }
 
