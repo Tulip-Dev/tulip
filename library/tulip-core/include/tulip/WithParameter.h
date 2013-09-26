@@ -205,7 +205,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @return void
    **/
   void setDirection(const std::string& parameterName,
-		    ParameterDirection direction);
+                    ParameterDirection direction);
 
   /**
    * @brief Retrieves whether a parameter is mandatory or optional.

@@ -240,15 +240,16 @@ QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) cons
     dts->writeData(sstr, &dt);
 
     std::string str = sstr.str();
+
     if (str.size() > 45)
-      str.replace(str.begin() + 41, str.end(), " ...)"); 
-    
+      str.replace(str.begin() + 41, str.end(), " ...)");
+
     return QString::fromUtf8(str.c_str());
   }
 
   if (v.size() == 1)
     return QString("1 element");
-  
+
   return QString::number(v.size()) + QObject::trUtf8(" elements");
 }
 
