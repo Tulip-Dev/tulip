@@ -104,7 +104,7 @@ public:
     return defaultValue;
   }
   /**
-   * @brief Sets the parameter's default value.
+   * @brief Set the parameter's default value.
    */
   void setDefaultValue(const std::string& defVal) {
     defaultValue = defVal;
@@ -120,6 +120,12 @@ public:
    */
   ParameterDirection getDirection() const {
     return direction;
+  }
+  /**
+   * @return Set the parameter's direction
+   */
+  void setDirection(ParameterDirection dir) {
+    direction = dir;
   }
 };
 
@@ -190,6 +196,16 @@ struct TLP_SCOPE ParameterDescriptionList {
    **/
   void setDefaultValue(const std::string& parameterName,
                        const std::string& value);
+
+  /**
+   * @brief Sets the direction of a parameter.
+   *
+   * @param parameterName The name of the parameter to set the value of.
+   * @param dir The new direction for this parameter.
+   * @return void
+   **/
+  void setDirection(const std::string& parameterName,
+		    ParameterDirection direction);
 
   /**
    * @brief Retrieves whether a parameter is mandatory or optional.

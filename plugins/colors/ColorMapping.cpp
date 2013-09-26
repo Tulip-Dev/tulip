@@ -178,12 +178,17 @@ private:
 
 
 public:
-  PLUGININFORMATIONS("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","2.0", "Color")
+  PLUGININFORMATIONS("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","2.1", "Color")
   ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
     addInParameter<PropertyInterface*>("input property",paramHelp[1],"viewMetric");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES);
     addInParameter<ColorScale>("colorScale",paramHelp[3],"((75, 75, 255, 200), (156, 161, 255, 200), (255, 255, 127, 200), (255, 170, 0, 200), (229, 40, 0, 200))");
+    // result needs to be an inout parameter
+    // in order to preserve the original values of non targetted elements
+    // i.e if "target" = "nodes", the values of edges must be preserved
+    // and if "target" = "edges", the values of nodes must be preserved
+    parameters.setDirection("result", INOUT_PARAM);
   }
 
   //=========================================================
