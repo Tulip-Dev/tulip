@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <sstream>
 #include <QSet>
 #include <QLineEdit>
 #include <QTextEdit>
@@ -23,6 +24,7 @@
 #include <QPainter>
 
 #include <tulip/ForEach.h>
+#include <tulip/DataSet.h>
 #include <tulip/VectorEditionWidget.h>
 #include <tulip/GraphPropertiesModel.h>
 
@@ -204,6 +206,22 @@ QVariant VectorEditorCreator<ElementType>::editorData(QWidget* editor,tlp::Graph
   return QVariant::fromValue<std::vector<ElementType> >(result);
 }
 
+// the template below is only used for displayText method implementation
+template<typename T>
+struct DisplayVectorDataType :public DataType {
+  DisplayVectorDataType(void *value) :DataType(value) {}
+  ~DisplayVectorDataType() {
+  }
+  DataType* clone() const {
+    return NULL;
+  }
+
+  std::string getTypeName() const {
+    return std::string(typeid(std::vector<T>).name());
+  }
+};
+
+
 template<typename ElementType>
 QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) const {
   std::vector<ElementType> v = data.value<std::vector<ElementType> >();
@@ -211,9 +229,26 @@ QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) cons
   if (v.empty())
     return QString();
 
+  // use a DataTypeSerializer if any
+  DataTypeSerializer* dts =
+    DataSet::typenameToSerializer(std::string(typeid(v).name()));
+
+  if (dts) {
+    DisplayVectorDataType<ElementType> dt(&v);
+
+    std::stringstream sstr;
+    dts->writeData(sstr, &dt);
+
+    std::string str = sstr.str();
+    if (str.size() > 45)
+      str.replace(str.begin() + 41, str.end(), " ...)"); 
+    
+    return QString::fromUtf8(str.c_str());
+  }
+
   if (v.size() == 1)
     return QString("1 element");
-
+  
   return QString::number(v.size()) + QObject::trUtf8(" elements");
 }
 
