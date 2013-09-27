@@ -44,6 +44,7 @@ class PropertiesEditor : public QWidget {
   tlp::Graph* _graph;
   tlp::TulipItemDelegate* _delegate;
   tlp::GraphPropertiesModel<tlp::PropertyInterface>* _sourceModel;
+  bool filteringProperties;
 
 public:
   explicit PropertiesEditor(QWidget *parent = NULL);
@@ -86,6 +87,7 @@ protected slots:
                                    int end);
   void displayedPropertiesRemoved(const QModelIndex &parent, int start,
                                   int end);
+  void setPropertiesFilter(QString filter);
 };
 
 #endif // PROPERTIESEDITOR_H

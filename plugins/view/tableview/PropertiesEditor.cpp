@@ -42,7 +42,7 @@ Q_DECLARE_METATYPE(Qt::CheckState)
 
 using namespace tlp;
 
-PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _graph(NULL), _delegate(new tlp::TulipItemDelegate), _sourceModel(NULL) {
+PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _graph(NULL), _delegate(new tlp::TulipItemDelegate), _sourceModel(NULL), filteringProperties(false) {
   _ui->setupUi(this);
   connect(_ui->newButton,SIGNAL(clicked()),this,SLOT(newProperty()));
 }
@@ -61,7 +61,7 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
   model->setFilterCaseSensitivity(Qt::CaseInsensitive);
   // the 3 signal-to-slot connections below ensure the propagation
   // of the displayed properties filtering
-  connect(_ui->lineEdit,SIGNAL(textChanged(QString)),model,SLOT(setFilterFixedString(QString)));
+  connect(_ui->lineEdit,SIGNAL(textChanged(QString)),this,SLOT(setPropertiesFilter(QString)));
   connect(model,SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
           this,SLOT(displayedPropertiesRemoved(const QModelIndex&, int, int)));
   connect(model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
@@ -71,6 +71,12 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
   _ui->tableView->resizeColumnsToContents();
   _ui->tableView->sortByColumn(0,Qt::AscendingOrder);
   _ui->visualPropertiesCheck->setChecked(true);
+}
+
+void PropertiesEditor::setPropertiesFilter(QString filter) {
+  filteringProperties = true;
+  static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString(filter);
+  filteringProperties = false;
 }
 
 void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
@@ -227,6 +233,8 @@ void PropertiesEditor::displayedPropertiesInserted(const QModelIndex &parent,
   for(; start <= end; ++start) {
     QModelIndex sIndex = model->mapToSource(model->index(start, 0, parent));
     PropertyInterface* pi = _sourceModel->data(sIndex, TulipModel::PropertyRole).value<PropertyInterface*>();
+    if (filteringProperties == false)
+      _sourceModel->setData(sIndex, Qt::Checked, Qt::CheckStateRole);
     emit propertyVisibilityChanged(pi, _sourceModel->data(sIndex, Qt::CheckStateRole).toInt() != Qt::Unchecked);
   }
 }
@@ -270,11 +278,17 @@ void PropertiesEditor::setAllEdges() {
 }
 
 void PropertiesEditor::copyProperty() {
-  CopyPropertyDialog::copyProperty(_graph,_contextProperty,true,Perspective::instance()->mainWindow());
+  _graph->push();
+  if (CopyPropertyDialog::copyProperty(_graph,_contextProperty,true,Perspective::instance()->mainWindow()) == NULL)
+    // copy has been cancelled
+    _graph->pop();
 }
 
 void PropertiesEditor::newProperty() {
-  PropertyCreationDialog::createNewProperty(_graph, Perspective::instance()->mainWindow());
+  _graph->push();
+  if (PropertyCreationDialog::createNewProperty(_graph, Perspective::instance()->mainWindow()) == NULL)
+    // creation has been cancelled
+    _graph->pop();
 }
 
 void PropertiesEditor::delProperty() {
