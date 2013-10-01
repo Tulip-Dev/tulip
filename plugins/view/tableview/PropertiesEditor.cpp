@@ -42,7 +42,7 @@ Q_DECLARE_METATYPE(Qt::CheckState)
 
 using namespace tlp;
 
-PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _graph(NULL), _delegate(new tlp::TulipItemDelegate), _sourceModel(NULL), filteringProperties(false) {
+PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(NULL), _graph(NULL), _delegate(new tlp::TulipItemDelegate), _sourceModel(NULL), filteringProperties(false) {
   _ui->setupUi(this);
   connect(_ui->newButton,SIGNAL(clicked()),this,SLOT(newProperty()));
 }
@@ -178,6 +178,8 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   }
 
   menu.exec(QCursor::pos());
+
+  _contextProperty = NULL;
 }
 
 void PropertiesEditor::setPropsVisibility(int state) {
@@ -286,7 +288,7 @@ void PropertiesEditor::copyProperty() {
 
 void PropertiesEditor::newProperty() {
   _graph->push();
-  if (PropertyCreationDialog::createNewProperty(_graph, Perspective::instance()->mainWindow()) == NULL)
+  if (PropertyCreationDialog::createNewProperty(_graph, Perspective::instance()->mainWindow(), _contextProperty ? _contextProperty->getTypename() : std::string()) == NULL)
     // creation has been cancelled
     _graph->pop();
 }

@@ -33,10 +33,16 @@ PropertyCreationDialog::PropertyCreationDialog(QWidget *parent) :
   initGui();
 }
 
-PropertyCreationDialog::PropertyCreationDialog(Graph* graph,QWidget *parent ):
+PropertyCreationDialog::PropertyCreationDialog(Graph* graph, QWidget *parent,
+					       std::string selectedType):
   QDialog(parent),
   ui(new Ui::PropertyCreationDialog),_graph(graph),_createdProperty(NULL) {
   initGui();
+  if (!selectedType.empty()) {
+    int selectedIndex = ui->propertyTypeComboBox->findText(propertyTypeToPropertyTypeLabel(selectedType));
+    if (selectedIndex != -1)
+      ui->propertyTypeComboBox->setCurrentIndex(selectedIndex);
+  }    
 }
 
 void PropertyCreationDialog::initGui() {
@@ -104,8 +110,8 @@ void PropertyCreationDialog::accept() {
   QDialog::accept();
 }
 
-PropertyInterface* PropertyCreationDialog::createNewProperty(tlp::Graph* graph,QWidget* parent) {
-  PropertyCreationDialog *dialog = new PropertyCreationDialog(graph,parent);
+PropertyInterface* PropertyCreationDialog::createNewProperty(tlp::Graph* graph,QWidget* parent, std::string selectedType) {
+  PropertyCreationDialog *dialog = new PropertyCreationDialog(graph,parent,selectedType);
   PropertyInterface* result = NULL;
 
   if(dialog->exec() == QDialog::Accepted) {
