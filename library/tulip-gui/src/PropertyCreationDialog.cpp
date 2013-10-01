@@ -34,15 +34,17 @@ PropertyCreationDialog::PropertyCreationDialog(QWidget *parent) :
 }
 
 PropertyCreationDialog::PropertyCreationDialog(Graph* graph, QWidget *parent,
-					       std::string selectedType):
+    std::string selectedType):
   QDialog(parent),
   ui(new Ui::PropertyCreationDialog),_graph(graph),_createdProperty(NULL) {
   initGui();
+
   if (!selectedType.empty()) {
     int selectedIndex = ui->propertyTypeComboBox->findText(propertyTypeToPropertyTypeLabel(selectedType));
+
     if (selectedIndex != -1)
       ui->propertyTypeComboBox->setCurrentIndex(selectedIndex);
-  }    
+  }
 }
 
 void PropertyCreationDialog::initGui() {
