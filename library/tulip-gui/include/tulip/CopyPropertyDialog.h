@@ -40,8 +40,7 @@ class PropertyInterface;
   * @code
   * Graph* g;
   * PropertyInterface* source = g->getLocalProperty<BooleanProperty>("viewSelection");
-  * QWidget* parent;
-  * PropertyInterface* clonedProperty = PropertyCreationDialog::createNewProperty(g,souce,parent);
+  * PropertyInterface* clonedProperty = CopyPropertyDialog::copyProperty(g, source);
   * @endcode
   *
   *
