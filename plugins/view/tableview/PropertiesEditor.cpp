@@ -235,8 +235,10 @@ void PropertiesEditor::displayedPropertiesInserted(const QModelIndex &parent,
   for(; start <= end; ++start) {
     QModelIndex sIndex = model->mapToSource(model->index(start, 0, parent));
     PropertyInterface* pi = _sourceModel->data(sIndex, TulipModel::PropertyRole).value<PropertyInterface*>();
+
     if (filteringProperties == false)
       _sourceModel->setData(sIndex, Qt::Checked, Qt::CheckStateRole);
+
     emit propertyVisibilityChanged(pi, _sourceModel->data(sIndex, Qt::CheckStateRole).toInt() != Qt::Unchecked);
   }
 }
@@ -281,6 +283,7 @@ void PropertiesEditor::setAllEdges() {
 
 void PropertiesEditor::copyProperty() {
   _graph->push();
+
   if (CopyPropertyDialog::copyProperty(_graph,_contextProperty,true,Perspective::instance()->mainWindow()) == NULL)
     // copy has been cancelled
     _graph->pop();
@@ -288,6 +291,7 @@ void PropertiesEditor::copyProperty() {
 
 void PropertiesEditor::newProperty() {
   _graph->push();
+
   if (PropertyCreationDialog::createNewProperty(_graph, Perspective::instance()->mainWindow(), _contextProperty ? _contextProperty->getTypename() : std::string()) == NULL)
     // creation has been cancelled
     _graph->pop();
