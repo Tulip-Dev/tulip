@@ -201,8 +201,8 @@ public:
   void ajustSceneToSize(int width, int height);
 
   /**
-   * @brief Zoom to given x,y screen coordinates
-   * @param step fator of zoom, must be >= 0
+   * @brief Zoom by step to given x,y screen coordinates
+   * @param step of zoom
    */
   void zoomXY(int step, const int x, const int y);
 
@@ -214,9 +214,15 @@ public:
 
   /**
    * @brief Zoom by step
-   * @param step fator of zoom, must be >= 0
+   * @param step of zoom
    */
   void zoom(int step);
+
+  /**
+   * @brief Zoom by factor
+   * @param factor of zoom
+   */
+  void zoomFactor(float factor);
 
   /**
    * @brief Translate camera by (x,y,z)
