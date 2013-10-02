@@ -25,6 +25,7 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Size.h>
 #include <tulip/GlSimpleEntity.h>
 
 #if defined(_MSC_VER)
@@ -182,6 +183,11 @@ public:
    * Translate entity
    */
   virtual void translate(const Coord& mouvement);
+
+  /**
+   * Scale entity
+   */
+  virtual void scale(const tlp::Size& factor);
 
   /**
    * Function to export data and type in outString (in XML format)
