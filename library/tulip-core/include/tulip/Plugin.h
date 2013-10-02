@@ -27,6 +27,18 @@
 #include <tulip/PluginContext.h>
 #include <tulip/TulipRelease.h>
 
+#ifdef __EMSCRIPTEN__
+
+#ifdef major
+#undef major
+#endif
+
+#ifdef minor
+#undef minor
+#endif
+
+#endif
+
 namespace tlp {
 
 /**
