@@ -42,6 +42,7 @@ class TableView : public tlp::ViewWidget {
   PropertiesEditor* propertiesEditor;
   tlp::GraphModel* _model;
   bool isNewGraph;
+  bool filteringColumns;
 
 public:
   PLUGININFORMATIONS("Spreadsheet view","Tulip Team","04/17/2012","Spreadsheet view for raw data","4.0","")
@@ -67,8 +68,8 @@ protected:
   void graphChanged(tlp::Graph *);
   void graphDeleted(tlp::Graph *);
   bool eventFilter(QObject* obj, QEvent* event);
-  void setLabels(tlp::PropertyInterface* prop, bool selectionOnly);
-  bool setAllValues(tlp::PropertyInterface*, bool useFilter);
+  void setLabels(tlp::PropertyInterface* prop, bool selectedOnly);
+  bool setAllValues(tlp::PropertyInterface*, bool nodes, bool selectedOnly);
 
 protected slots:
   void delHighlightedRows();
@@ -77,10 +78,13 @@ protected slots:
   bool setAllHighlightedRows(tlp::PropertyInterface*);
   void setLabelsOfHighlightedRows(tlp::PropertyInterface*);
   void setMatchProperty();
+  void setColumnsFilter(QString);
+  void setPropertiesFilter(QString);
   void mapToGraphSelection();
 
   void columnsInserted(const QModelIndex&,int,int);
   void showCustomContextMenu(const QPoint & pos);
+  void showHorizontalHeaderCustomContextMenu(const QPoint & pos);
   void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
 };
 

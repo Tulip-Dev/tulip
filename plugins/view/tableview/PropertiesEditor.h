@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QModelIndex>
+#include <QLineEdit>
 
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/PropertyInterface.h>
@@ -55,8 +56,10 @@ public:
 
 
   void setPropertyChecked(int index, bool state);
+  QLineEdit* getPropertiesFilterEdit();
   void toLabels(tlp::PropertyInterface* prop,
                 bool nodes, bool edges, bool selectedOnly = false);
+  bool setAllValues(tlp::PropertyInterface* prop, bool nodes, bool selectedOnly);
 
   tlp::PropertyInterface* contextProperty() const;
 signals:
@@ -81,8 +84,6 @@ protected slots:
   void setPropsVisibility(int);
   void setPropsNotVisibleExcept();
   void showVisualProperties(bool);
-  void setAllNodes();
-  void setAllEdges();
   void displayedPropertiesInserted(const QModelIndex &parent, int start,
                                    int end);
   void displayedPropertiesRemoved(const QModelIndex &parent, int start,

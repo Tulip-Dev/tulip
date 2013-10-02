@@ -27,10 +27,14 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/StringProperty.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/Perspective.h>
+#include <tulip/CopyPropertyDialog.h>
+#include <tulip/PropertyCreationDialog.h>
 
 #include <QResizeEvent>
 #include <QGraphicsView>
 #include <QMenu>
+#include <QMainWindow>
 #include <QGraphicsItem>
 #include <QGraphicsProxyWidget>
 
@@ -130,6 +134,11 @@ void TableView::setupWidget() {
 #else
   _ui->table->horizontalHeader()->setMovable(true);
 #endif
+  _ui->table->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(_ui->table->horizontalHeader(),
+	  SIGNAL(customContextMenuRequested (const QPoint &)),
+	  this,
+	  SLOT(showHorizontalHeaderCustomContextMenu(const QPoint&)));
   connect(_ui->table, SIGNAL(customContextMenuRequested (const QPoint &)),
           SLOT(showCustomContextMenu(const QPoint&)));
   connect(_ui->filterEdit,SIGNAL(returnPressed()),this,SLOT(filterChanged()));
@@ -142,6 +151,10 @@ void TableView::setupWidget() {
   // use a push button instead of a combobox (see matchPropertyCombo)
   // waiting for a fix for combobox in QGraphicsItem
   connect(_ui->matchPropertyButton, SIGNAL(pressed()), this, SLOT(setMatchProperty()));
+  // colmuns/properties filtering
+  filteringColumns = false;
+  connect(_ui->columnsFilterEdit,SIGNAL(textChanged(QString)),this,SLOT(setColumnsFilter(QString)));
+  connect(propertiesEditor->getPropertiesFilterEdit(),SIGNAL(textChanged(QString)),this,SLOT(setPropertiesFilter(QString)));
 }
 
 QList<QWidget*> TableView::configurationWidgets() const {
@@ -323,6 +336,22 @@ void TableView::setMatchProperty() {
   }
 }
 
+void TableView::setColumnsFilter(QString text) {
+  if (filteringColumns)
+    return;
+  filteringColumns = true;
+  propertiesEditor->getPropertiesFilterEdit()->setText(text);
+  filteringColumns = false;
+}
+
+void TableView::setPropertiesFilter(QString text) {
+  if (filteringColumns)
+    return;
+  filteringColumns = true;
+  _ui->columnsFilterEdit->setText(text);
+  filteringColumns = false;
+}
+
 void TableView::filterChanged() {
   QString filter = _ui->filterEdit->text();
   GraphSortFilterProxyModel* sortModel = static_cast<GraphSortFilterProxyModel*>(_ui->table->model());
@@ -345,9 +374,9 @@ void TableView::filterChanged() {
   sortModel->setFilterFixedString(filter);
 }
 
-bool TableView::setAllValues(PropertyInterface* prop, bool selectedOnly) {
+bool TableView::setAllValues(PropertyInterface* prop, bool nodes, bool selectedOnly) {
   QVariant val =
-    TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE,
+    TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE,
                                         prop, graph(),
                                         static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()), (QWidget *) this->centralItem()->parentWidget());
 
@@ -358,7 +387,7 @@ bool TableView::setAllValues(PropertyInterface* prop, bool selectedOnly) {
   if (selectedOnly) {
     BooleanProperty* selection = graph()->getProperty<BooleanProperty>("viewSelection");
 
-    if (NODES_DISPLAYED) {
+    if (nodes) {
       node n;
       forEach(n, selection->getNonDefaultValuatedNodes(graph())) {
         GraphModel::setNodeValue(n.id, prop, val);
@@ -372,7 +401,7 @@ bool TableView::setAllValues(PropertyInterface* prop, bool selectedOnly) {
     }
   }
   else {
-    if (NODES_DISPLAYED)
+    if (nodes)
       GraphModel::setAllNodeValue(prop,val);
     else
       GraphModel::setAllEdgeValue(prop,val);
@@ -506,6 +535,8 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
   if (propName.empty())
     return;
 
+  PropertyInterface* prop = graph()->getProperty(propName);
+
   QModelIndexList highlightedRows =
     _ui->table->selectionModel()->selectedRows();
 
@@ -518,26 +549,18 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
   QAction* action = contextMenu.addAction(QString::fromUtf8(propName.c_str()));
   action->setEnabled(false);
   contextMenu.addSeparator();
-  QAction* setAll;
-  QAction* selectedSetAll = NULL;
-  QAction* highlightedSetAll = NULL;
-  QAction* toLabels;
-  QAction* selectedToLabels = NULL;
-  QAction* highlightedToLabels = NULL;
 
   QMenu* subMenu = contextMenu.addMenu(trUtf8("Set values of "));
-  setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName);
+  QAction* setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName);
+  QAction* selectedSetAll = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName);
 
-  selectedSetAll = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName);
-
-  highlightedSetAll = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(eltId)));
+  QAction* highlightedSetAll = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
 
   subMenu = contextMenu.addMenu(trUtf8("To labels of "));
-  toLabels = subMenu->addAction(trUtf8("All") + ' ' + eltsName);
+  QAction* toLabels = subMenu->addAction(trUtf8("All") + ' ' + eltsName);
+  QAction* selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName);
 
-  selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName);
-
-  highlightedToLabels = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(eltId)));
+  QAction* highlightedToLabels = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
 
   contextMenu.addSeparator();
   action = contextMenu.addAction(highlightedRows.size() > 1 ?
@@ -582,8 +605,42 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
     return;
   }
 
+  /*if (action == nodesSetAll) {
+    if (!setAllValues(prop, true, false))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+  }
+
+  if (action == edgesSetAll) {
+    if (!setAllValues(prop, false, false))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+  }
+
+  if (action == nodesSelectedSetAll) {
+    // set values for all rows elts
+    if (!setAllValues(prop, true, true))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+  }
+
+  if (action == edgesSelectedSetAll) {
+    // set values for all rows elts
+    if (!setAllValues(prop, false, true))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+    }*/
+
   if (action == setAll) {
-    if (!setAllValues(graph()->getProperty(propName), false))
+    if (!setAllValues(prop, NODES_DISPLAYED, false))
       // cancelled so undo
       graph()->pop();
 
@@ -592,7 +649,7 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
 
   if (action == selectedSetAll) {
     // set values for all rows elts
-    if (!setAllValues(graph()->getProperty(propName), true))
+    if (!setAllValues(prop, NODES_DISPLAYED, true))
       // cancelled so undo
       graph()->pop();
 
@@ -601,27 +658,207 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
 
   if (action == highlightedSetAll) {
     // set values for elts corresponding to highlighted rows
-    setAllHighlightedRows(graph()->getProperty(propName));
+    setAllHighlightedRows(prop);
     return;
   }
 
   if (action == toLabels) {
     bool nodes = NODES_DISPLAYED;
-    propertiesEditor->toLabels(graph()->getProperty(propName), nodes, !nodes);
+    propertiesEditor->toLabels(prop, nodes, !nodes);
     return;
   }
 
   if (action == selectedToLabels) {
     // set values as labels
     bool nodes = NODES_DISPLAYED;
-    propertiesEditor->toLabels(graph()->getProperty(propName), nodes, !nodes,
+    propertiesEditor->toLabels(prop, nodes, !nodes,
                                true);
     return;
   }
 
   if (action == highlightedToLabels) {
     // set values as labels for elts corresponding to highlighted rows
-    setLabelsOfHighlightedRows(graph()->getProperty(propName));
+    setLabelsOfHighlightedRows(prop);
+    return;
+  }
+}
+
+void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
+  if (_ui->table->model()->columnCount() == 0)
+    return;
+
+  QModelIndex idx = _ui->table->indexAt(pos);
+
+  QString eltsName(NODES_DISPLAYED ? trUtf8("nodes") : trUtf8("edges"));
+  std::string propName = _model->headerData(idx.column(), Qt::Horizontal, Qt::DisplayRole).toString().toUtf8().data();
+
+  if (propName.empty())
+    return;
+
+  PropertyInterface* prop = graph()->getProperty(propName);
+
+  QModelIndexList highlightedRows =
+    _ui->table->selectionModel()->selectedRows();
+
+  QMenu contextMenu;
+  contextMenu.setProperty("mainMenu", true);
+  // the style sheet below allows to display disabled items
+  // as "title" items
+  contextMenu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+
+  QAction* action = contextMenu.addAction(QString::fromUtf8(propName.c_str()));
+  action->setEnabled(false);
+  contextMenu.addSeparator();
+
+  QAction* addProp = contextMenu.addAction("Add new");
+  QAction* copyProp = contextMenu.addAction("Copy");
+  QAction* deleteProp = NULL;
+  if (!Perspective::instance()->isReservedPropertyName(propName.c_str()) ||
+    // Enable deletion of reserved properties when on a subgraph and that properties are local
+      (graph() != graph()->getRoot() && graph()->existLocalProperty(propName)))
+    deleteProp = contextMenu.addAction("Delete");
+
+  contextMenu.addSeparator();
+
+  QMenu* subMenu = contextMenu.addMenu(trUtf8("Set values of "));
+  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes"));
+  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges"));
+  QAction* nodesSelectedSetAll = subMenu->addAction(trUtf8("Selected nodes"));
+  QAction* edgesSelectedSetAll = subMenu->addAction(trUtf8("Selected edges"));
+  QAction* highlightedSetAll = NULL;
+  if (highlightedRows.size() != 0)
+    highlightedSetAll = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
+
+  QAction* toLabels = NULL;
+  QAction* nodesToLabels = NULL;
+  QAction* edgesToLabels = NULL;
+  QAction* selectedToLabels = NULL;
+  QAction* nodesSelectedToLabels = NULL;
+  QAction* edgesSelectedToLabels = NULL;
+  QAction* highlightedToLabels = NULL;
+
+  if (propName != "viewLabel") {
+    subMenu = contextMenu.addMenu(trUtf8("To labels of "));
+    toLabels = subMenu->addAction("All");
+    nodesToLabels = subMenu->addAction("All nodes");
+    edgesToLabels = subMenu->addAction("All edges");
+    selectedToLabels = subMenu->addAction("All selected");
+    nodesSelectedToLabels = subMenu->addAction("Selected nodes");
+    edgesSelectedToLabels = subMenu->addAction("Selected edges");
+    if (highlightedRows.size() != 0)
+      highlightedToLabels = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
+  }
+
+  // display the menu with the mouse inside to allow
+  // keyboard navigation
+  action = contextMenu.exec(QCursor::pos() - QPoint(5,5));
+  if (!action)
+    return;
+
+  // hold/unhold observers
+  tlp::ObserverHolder oh;
+
+  // allow to undo
+  graph()->push();
+
+  if (action == copyProp) {
+    if (CopyPropertyDialog::copyProperty(graph(), prop, true,
+					 Perspective::instance()->mainWindow())
+	== NULL)
+      // cancelled so undo
+      graph()->pop();
+    return;
+  }
+
+  if (action == deleteProp) {
+    prop->getGraph()->delLocalProperty(propName);
+    return;
+  }
+
+  if (action == addProp) {
+    if (PropertyCreationDialog::createNewProperty(graph(), Perspective::instance()->mainWindow(), prop->getTypename())
+	== NULL)
+      // cancelled so undo
+      graph()->pop();
+    return;
+  }
+
+if (action == nodesSetAll) {
+    if (!setAllValues(prop, true, false))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+  }
+
+  if (action == edgesSetAll) {
+    if (!setAllValues(prop, false, false))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+  }
+
+  if (action == nodesSelectedSetAll) {
+    // set values for all rows elts
+    if (!setAllValues(prop, true, true))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+  }
+
+  if (action == edgesSelectedSetAll) {
+    // set values for all rows elts
+    if (!setAllValues(prop, false, true))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+    }
+
+  if (action == highlightedSetAll) {
+    // set values for elts corresponding to highlighted rows
+    setAllHighlightedRows(prop);
+    return;
+  }
+
+  if (action == toLabels) {
+    propertiesEditor->toLabels(prop, true, true);
+    return;
+  }
+
+  if (action == nodesToLabels) {
+    propertiesEditor->toLabels(prop, true, false);
+    return;
+  }
+
+  if (action == edgesToLabels) {
+    propertiesEditor->toLabels(prop, false, true);
+    return;
+  }
+
+  if (action == selectedToLabels) {
+    // set values as labels
+    propertiesEditor->toLabels(prop, true, true, true);
+    return;
+  }
+
+  if (action == nodesSelectedToLabels) {
+    // set values as labels
+    propertiesEditor->toLabels(prop, true, false, true);
+    return;
+  }
+
+  if (action == edgesSelectedToLabels) {
+    // set values as labels
+    propertiesEditor->toLabels(prop, false, true, true);
+    return;
+  }
+
+  if (action == highlightedToLabels) {
+    // set values as labels for elts corresponding to highlighted rows
+    setLabelsOfHighlightedRows(prop);
     return;
   }
 }
