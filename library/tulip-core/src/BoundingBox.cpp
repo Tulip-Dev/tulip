@@ -81,6 +81,12 @@ void BoundingBox::translate(const tlp::Vec3f& vec) {
   (*this)[1] += vec;
 }
 
+void BoundingBox::scale(const tlp::Vec3f& vec) {
+  if (isValid()) {
+    (*this)[0] *= vec;
+    (*this)[1] *= vec;
+  }
+}
 
 bool BoundingBox::isValid() const {
   return (*this)[0][0] <= (*this)[1][0] && (*this)[0][1] <= (*this)[1][1] && (*this)[0][2] <= (*this)[1][2];

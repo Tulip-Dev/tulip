@@ -127,6 +127,14 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   void translate(const tlp::Vec3f& vec);
 
   /**
+  * @brief Scales the bounding box, i.e. multiplying its components by a vector passed as parameter.
+  *
+  * @param factor The factor vector to scale this bounding box by.
+  * @return void
+  **/
+  void scale(const tlp::Vec3f& factor);
+
+  /**
   * @brief Checks whether the bounding box's lowest point is less than it's highest point.
   * "Less Than" means axis-by-axis comparison, i.e. x1 < x2 && y1 < y2 && z1 < z2.
   *

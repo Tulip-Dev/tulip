@@ -112,6 +112,18 @@ Translates the bounding box by the displacement given by the vector passed as pa
 :type displacement: :class:`tlp.Vec3f`
 %End
 
+      void scale(const tlp::Vec3f& factor);
+%Docstring
+tlp.BoundingBox.scale(factor)
+
+.. versionadded:: 4.4
+
+Scales the bounding box, i.e. multiplying its components by a factor vector.
+
+:param factor: The factor vector to scale this bounding box by.
+:type factor: :class:`tlp.Vec3f`
+%End
+
       bool isValid() const;
 %Docstring
 tlp.BoundingBox.isValid()
