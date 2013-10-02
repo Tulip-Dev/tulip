@@ -629,6 +629,14 @@ void GlScene::zoom(int step) {
   }
 }
 
+void GlScene::zoomFactor(float factor) {
+  for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
+    if(it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
+      it->second->getCamera().setZoomFactor(it->second->getCamera().getZoomFactor() * factor);
+    }
+  }
+}
+
 void GlScene::rotateScene(const int x, const int y, const int z) {
   for(vector<pair<string, GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end(); ++it) {
     if(it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
