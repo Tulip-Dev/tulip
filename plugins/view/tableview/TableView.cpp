@@ -136,9 +136,9 @@ void TableView::setupWidget() {
 #endif
   _ui->table->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(_ui->table->horizontalHeader(),
-	  SIGNAL(customContextMenuRequested (const QPoint &)),
-	  this,
-	  SLOT(showHorizontalHeaderCustomContextMenu(const QPoint&)));
+          SIGNAL(customContextMenuRequested (const QPoint &)),
+          this,
+          SLOT(showHorizontalHeaderCustomContextMenu(const QPoint&)));
   connect(_ui->table, SIGNAL(customContextMenuRequested (const QPoint &)),
           SLOT(showCustomContextMenu(const QPoint&)));
   connect(_ui->filterEdit,SIGNAL(returnPressed()),this,SLOT(filterChanged()));
@@ -339,6 +339,7 @@ void TableView::setMatchProperty() {
 void TableView::setColumnsFilter(QString text) {
   if (filteringColumns)
     return;
+
   filteringColumns = true;
   propertiesEditor->getPropertiesFilterEdit()->setText(text);
   filteringColumns = false;
@@ -347,6 +348,7 @@ void TableView::setColumnsFilter(QString text) {
 void TableView::setPropertiesFilter(QString text) {
   if (filteringColumns)
     return;
+
   filteringColumns = true;
   _ui->columnsFilterEdit->setText(text);
   filteringColumns = false;
@@ -713,8 +715,9 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   QAction* addProp = contextMenu.addAction("Add new");
   QAction* copyProp = contextMenu.addAction("Copy");
   QAction* deleteProp = NULL;
+
   if (!Perspective::instance()->isReservedPropertyName(propName.c_str()) ||
-    // Enable deletion of reserved properties when on a subgraph and that properties are local
+      // Enable deletion of reserved properties when on a subgraph and that properties are local
       (graph() != graph()->getRoot() && graph()->existLocalProperty(propName)))
     deleteProp = contextMenu.addAction("Delete");
 
@@ -726,6 +729,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   QAction* nodesSelectedSetAll = subMenu->addAction(trUtf8("Selected nodes"));
   QAction* edgesSelectedSetAll = subMenu->addAction(trUtf8("Selected edges"));
   QAction* highlightedSetAll = NULL;
+
   if (highlightedRows.size() != 0)
     highlightedSetAll = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
 
@@ -745,6 +749,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
     selectedToLabels = subMenu->addAction("All selected");
     nodesSelectedToLabels = subMenu->addAction("Selected nodes");
     edgesSelectedToLabels = subMenu->addAction("Selected edges");
+
     if (highlightedRows.size() != 0)
       highlightedToLabels = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
   }
@@ -752,6 +757,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   // display the menu with the mouse inside to allow
   // keyboard navigation
   action = contextMenu.exec(QCursor::pos() - QPoint(5,5));
+
   if (!action)
     return;
 
@@ -763,10 +769,11 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
 
   if (action == copyProp) {
     if (CopyPropertyDialog::copyProperty(graph(), prop, true,
-					 Perspective::instance()->mainWindow())
-	== NULL)
+                                         Perspective::instance()->mainWindow())
+        == NULL)
       // cancelled so undo
       graph()->pop();
+
     return;
   }
 
@@ -777,13 +784,14 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
 
   if (action == addProp) {
     if (PropertyCreationDialog::createNewProperty(graph(), Perspective::instance()->mainWindow(), prop->getTypename())
-	== NULL)
+        == NULL)
       // cancelled so undo
       graph()->pop();
+
     return;
   }
 
-if (action == nodesSetAll) {
+  if (action == nodesSetAll) {
     if (!setAllValues(prop, true, false))
       // cancelled so undo
       graph()->pop();
@@ -815,7 +823,7 @@ if (action == nodesSetAll) {
       graph()->pop();
 
     return;
-    }
+  }
 
   if (action == highlightedSetAll) {
     // set values for elts corresponding to highlighted rows
