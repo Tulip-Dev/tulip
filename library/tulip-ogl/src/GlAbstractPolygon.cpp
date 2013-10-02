@@ -469,6 +469,16 @@ void GlAbstractPolygon::translate(const Coord& vec) {
   clearGenerated();
 }
 //===========================================================
+void GlAbstractPolygon::scale(const Size& factor) {
+  boundingBox.scale(factor);
+
+  for(vector<Coord>::iterator it = points.begin(); it!=points.end(); ++it) {
+    (*it) *= factor;
+  }
+
+  clearGenerated();
+}
+//===========================================================
 void GlAbstractPolygon::getXML(string &outString) {
 
   GlXMLTools::createProperty(outString, "type", "GlPolygon","GlEntity");
