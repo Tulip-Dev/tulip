@@ -145,6 +145,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   QAction* selectedEdgesSetAll = subMenu->addAction(trUtf8("Selected edges"));
 
   enabled = (pname != "viewLabel");
+
   if (enabled) {
     subMenu = menu.addMenu(trUtf8("To labels of"));
     QAction* action = subMenu->addAction(trUtf8("All"));
@@ -165,10 +166,13 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
   if (action == nodesSetAll)
     setAllValues(_contextProperty, true, false);
+
   if (action == edgesSetAll)
     setAllValues(_contextProperty, false, false);
+
   if (action == selectedNodesSetAll)
     setAllValues(_contextProperty, true, true);
+
   if (action == selectedEdgesSetAll)
     setAllValues(_contextProperty, false, true);
 
@@ -249,12 +253,12 @@ void PropertiesEditor::displayedPropertiesRemoved(const QModelIndex &parent,
 }
 
 bool PropertiesEditor::setAllValues(PropertyInterface* prop, bool nodes,
-				    bool selectedOnly) {
+                                    bool selectedOnly) {
   QVariant val =
     TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE,
                                         prop, _graph,
                                         static_cast<TulipItemDelegate*>(_delegate),
-					(QWidget *) parentWidget());
+                                        (QWidget *) parentWidget());
 
   // Check if edition has been cancelled
   if (!val.isValid())
