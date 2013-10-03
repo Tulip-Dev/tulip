@@ -724,7 +724,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   }
 
   if (action == nodesSetAll) {
-  if (!propertiesEditor->setAllValues(prop, true, false))
+    if (!propertiesEditor->setAllValues(prop, true, false))
       // cancelled so undo
       graph()->pop();
 

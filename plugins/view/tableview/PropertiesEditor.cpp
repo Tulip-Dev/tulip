@@ -166,14 +166,19 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   bool result = false;
 
   _graph->push();
+
   if (action == nodesSetAll)
     result = setAllValues(_contextProperty, true, false);
+
   if (action == edgesSetAll)
     result = setAllValues(_contextProperty, false, false);
+
   if (action == selectedNodesSetAll)
     result = setAllValues(_contextProperty, true, true);
+
   if (action == selectedEdgesSetAll)
     result = setAllValues(_contextProperty, false, true);
+
   if (!result)
     // edition cancelled
     _graph->pop();
@@ -260,7 +265,7 @@ bool PropertiesEditor::setAllValues(PropertyInterface* prop, bool nodes,
     TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE,
                                         prop, _graph,
                                         static_cast<TulipItemDelegate*>(_delegate),
-					editorParent);
+                                        editorParent);
 
   // Check if edition has been cancelled
   if (!val.isValid())
