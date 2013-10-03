@@ -117,7 +117,6 @@ bool TableView::eventFilter(QObject* obj, QEvent* event) {
 }
 
 void TableView::setupWidget() {
-  propertiesEditor = new PropertiesEditor();
   // install this as event filter
   // for automatic resizing of the viewport
   graphicsView()->viewport()->parentWidget()->installEventFilter(this);
@@ -125,6 +124,9 @@ void TableView::setupWidget() {
   _ui->setupUi(centralWidget);
 
   setCentralWidget(centralWidget);
+
+  propertiesEditor = new PropertiesEditor((QWidget *) centralItem()->parentWidget());
+
   connect(propertiesEditor,SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface*,bool)),this,SLOT(setPropertyVisible(tlp::PropertyInterface*,bool)));
   connect(propertiesEditor,SIGNAL(mapToGraphSelection()),this,SLOT(mapToGraphSelection()));
 
@@ -376,42 +378,6 @@ void TableView::filterChanged() {
   sortModel->setFilterFixedString(filter);
 }
 
-bool TableView::setAllValues(PropertyInterface* prop, bool nodes, bool selectedOnly) {
-  QVariant val =
-    TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE,
-                                        prop, graph(),
-                                        static_cast<TulipItemDelegate*>(_ui->table->itemDelegate()), (QWidget *) this->centralItem()->parentWidget());
-
-  // Check if edition has been cancelled
-  if (!val.isValid())
-    return false;
-
-  if (selectedOnly) {
-    BooleanProperty* selection = graph()->getProperty<BooleanProperty>("viewSelection");
-
-    if (nodes) {
-      node n;
-      forEach(n, selection->getNonDefaultValuatedNodes(graph())) {
-        GraphModel::setNodeValue(n.id, prop, val);
-      }
-    }
-    else {
-      edge e;
-      forEach(e, selection->getNonDefaultValuatedEdges(graph())) {
-        GraphModel::setEdgeValue(e.id, prop, val);
-      }
-    }
-  }
-  else {
-    if (nodes)
-      GraphModel::setAllNodeValue(prop,val);
-    else
-      GraphModel::setAllEdgeValue(prop,val);
-  }
-
-  return true;
-}
-
 void TableView::mapToGraphSelection() {
   BooleanProperty* out = graph()->getProperty<BooleanProperty>("viewSelection");
 
@@ -607,42 +573,8 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
     return;
   }
 
-  /*if (action == nodesSetAll) {
-    if (!setAllValues(prop, true, false))
-      // cancelled so undo
-      graph()->pop();
-
-    return;
-  }
-
-  if (action == edgesSetAll) {
-    if (!setAllValues(prop, false, false))
-      // cancelled so undo
-      graph()->pop();
-
-    return;
-  }
-
-  if (action == nodesSelectedSetAll) {
-    // set values for all rows elts
-    if (!setAllValues(prop, true, true))
-      // cancelled so undo
-      graph()->pop();
-
-    return;
-  }
-
-  if (action == edgesSelectedSetAll) {
-    // set values for all rows elts
-    if (!setAllValues(prop, false, true))
-      // cancelled so undo
-      graph()->pop();
-
-    return;
-    }*/
-
   if (action == setAll) {
-    if (!setAllValues(prop, NODES_DISPLAYED, false))
+    if (!propertiesEditor->setAllValues(prop, NODES_DISPLAYED, false))
       // cancelled so undo
       graph()->pop();
 
@@ -651,7 +583,7 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
 
   if (action == selectedSetAll) {
     // set values for all rows elts
-    if (!setAllValues(prop, NODES_DISPLAYED, true))
+    if (!propertiesEditor->setAllValues(prop, NODES_DISPLAYED, true))
       // cancelled so undo
       graph()->pop();
 
@@ -792,7 +724,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   }
 
   if (action == nodesSetAll) {
-    if (!setAllValues(prop, true, false))
+  if (!propertiesEditor->setAllValues(prop, true, false))
       // cancelled so undo
       graph()->pop();
 
@@ -800,7 +732,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   }
 
   if (action == edgesSetAll) {
-    if (!setAllValues(prop, false, false))
+    if (!propertiesEditor->setAllValues(prop, false, false))
       // cancelled so undo
       graph()->pop();
 
@@ -809,7 +741,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
 
   if (action == nodesSelectedSetAll) {
     // set values for all rows elts
-    if (!setAllValues(prop, true, true))
+    if (!propertiesEditor->setAllValues(prop, true, true))
       // cancelled so undo
       graph()->pop();
 
@@ -818,7 +750,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
 
   if (action == edgesSelectedSetAll) {
     // set values for all rows elts
-    if (!setAllValues(prop, false, true))
+    if (!propertiesEditor->setAllValues(prop, false, true))
       // cancelled so undo
       graph()->pop();
 

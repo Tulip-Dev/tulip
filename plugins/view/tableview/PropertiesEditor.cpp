@@ -42,7 +42,7 @@ Q_DECLARE_METATYPE(Qt::CheckState)
 
 using namespace tlp;
 
-PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(NULL), _graph(NULL), _delegate(new tlp::TulipItemDelegate), _sourceModel(NULL), filteringProperties(false) {
+PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(NULL), _graph(NULL), _delegate(new tlp::TulipItemDelegate), _sourceModel(NULL), filteringProperties(false), editorParent(parent) {
   _ui->setupUi(this);
   connect(_ui->newButton,SIGNAL(clicked()),this,SLOT(newProperty()));
 }
@@ -163,18 +163,20 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   }
 
   QAction* action = menu.exec(QCursor::pos());
+  bool result = false;
 
+  _graph->push();
   if (action == nodesSetAll)
-    setAllValues(_contextProperty, true, false);
-
+    result = setAllValues(_contextProperty, true, false);
   if (action == edgesSetAll)
-    setAllValues(_contextProperty, false, false);
-
+    result = setAllValues(_contextProperty, false, false);
   if (action == selectedNodesSetAll)
-    setAllValues(_contextProperty, true, true);
-
+    result = setAllValues(_contextProperty, true, true);
   if (action == selectedEdgesSetAll)
-    setAllValues(_contextProperty, false, true);
+    result = setAllValues(_contextProperty, false, true);
+  if (!result)
+    // edition cancelled
+    _graph->pop();
 
   _contextProperty = NULL;
 }
@@ -258,13 +260,11 @@ bool PropertiesEditor::setAllValues(PropertyInterface* prop, bool nodes,
     TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE,
                                         prop, _graph,
                                         static_cast<TulipItemDelegate*>(_delegate),
-                                        (QWidget *) parentWidget());
+					editorParent);
 
   // Check if edition has been cancelled
   if (!val.isValid())
     return false;
-
-  _graph->push();
 
   if (selectedOnly) {
     BooleanProperty* selection =
