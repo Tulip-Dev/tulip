@@ -46,6 +46,7 @@ class PropertiesEditor : public QWidget {
   tlp::TulipItemDelegate* _delegate;
   tlp::GraphPropertiesModel<tlp::PropertyInterface>* _sourceModel;
   bool filteringProperties;
+  QWidget* editorParent;
 
 public:
   explicit PropertiesEditor(QWidget *parent = NULL);

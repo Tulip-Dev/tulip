@@ -68,8 +68,6 @@ protected:
   void graphChanged(tlp::Graph *);
   void graphDeleted(tlp::Graph *);
   bool eventFilter(QObject* obj, QEvent* event);
-  void setLabels(tlp::PropertyInterface* prop, bool selectedOnly);
-  bool setAllValues(tlp::PropertyInterface*, bool nodes, bool selectedOnly);
 
 protected slots:
   void delHighlightedRows();
