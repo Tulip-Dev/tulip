@@ -59,14 +59,6 @@ struct EdgeRecord {
   }
 };
 
-struct PropertyRecord {
-  PropertyInterface* prop;
-  std::string name;
-
-  PropertyRecord(PropertyInterface* p, std::string str)
-    :prop(p), name(str) {}
-};
-
 struct GraphEltsRecord {
   Graph* graph;
   MutableContainer<bool> elts;
@@ -77,13 +69,6 @@ struct GraphEltsRecord {
 } // end of namespace tlp
 
 namespace std {
-template<>
-struct less<tlp::PropertyRecord> {
-  size_t  operator()(const tlp::PropertyRecord& rp1, const tlp::PropertyRecord& rp2) const {
-    return rp1.name < rp2.name;
-  }
-};
-
 template<>
 struct less<tlp::GraphEltsRecord*> {
   size_t  operator()(const tlp::GraphEltsRecord* g1, const tlp::GraphEltsRecord* g2) const {
@@ -142,9 +127,9 @@ class GraphUpdatesRecorder :public Observable {
   std::list<std::pair<Graph*, Graph*> > deletedSubGraphs;
 
   // one set of added properties per graph
-  TLP_HASH_MAP<Graph*,  std::set<PropertyRecord> > addedProperties;
+  TLP_HASH_MAP<Graph*,  std::set<PropertyInterface*> > addedProperties;
   // one set of deleted properties per graph
-  TLP_HASH_MAP<Graph*,  std::set<PropertyRecord> > deletedProperties;
+  TLP_HASH_MAP<Graph*,  std::set<PropertyInterface*> > deletedProperties;
   // one set of old attribute values per graph
   TLP_HASH_MAP<Graph*, DataSet> oldAttributeValues;
   // one set of new attribute values per graph
