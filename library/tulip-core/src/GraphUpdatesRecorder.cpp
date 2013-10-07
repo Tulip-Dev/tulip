@@ -649,6 +649,7 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
   forEach(prop, g->getLocalObjectProperties()) {
     if (newProps && (newProps->find(prop) != newProps->end()))
       continue;
+
     prop->addListener(this);
   }
 
@@ -1383,6 +1384,7 @@ void GraphUpdatesRecorder::addLocalProperty(Graph* g, const string& name) {
     addedProperties.find(g);
 
   PropertyInterface* prop = g->getProperty(name);
+
   if (it == addedProperties.end()) {
     set<PropertyInterface*>  props;
     props.insert(prop);
