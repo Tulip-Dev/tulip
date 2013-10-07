@@ -185,22 +185,22 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
 // delete the objects collected as to be deleted
 void GraphUpdatesRecorder::deleteDeletedObjects() {
 
-  TLP_HASH_MAP<Graph*, set<PropertyRecord> >& propertiesToDelete =
+  TLP_HASH_MAP<Graph*, set<PropertyInterface*> >& propertiesToDelete =
     updatesReverted ? addedProperties : deletedProperties;
 
   std::list<std::pair<Graph*, Graph*> >& subGraphsToDelete =
     updatesReverted ? addedSubGraphs : deletedSubGraphs;
 
   // loop on properties
-  TLP_HASH_MAP<Graph*, set<PropertyRecord> >::const_iterator itdp =
+  TLP_HASH_MAP<Graph*, set<PropertyInterface*> >::const_iterator itdp =
     propertiesToDelete.begin();
 
   while(itdp != propertiesToDelete.end()) {
-    set<PropertyRecord>::const_iterator itp =  itdp->second.begin();
-    set<PropertyRecord>::const_iterator ite = itdp->second.end();
+    set<PropertyInterface*>::const_iterator itp =  itdp->second.begin();
+    set<PropertyInterface*>::const_iterator ite = itdp->second.end();
 
     while(itp != ite) {
-      delete (itp->prop);
+      delete (*itp);
       ++itp;
     }
 
@@ -640,20 +640,15 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
 
   // add self as a PropertyObserver for all previously
   // existing properties
-  TLP_HASH_MAP<Graph*, set<PropertyRecord> >::const_iterator itp =
+  TLP_HASH_MAP<Graph*, set<PropertyInterface*> >::const_iterator itp =
     addedProperties.find(g);
-  const set<PropertyRecord>* newProps =
+  const set<PropertyInterface*>* newProps =
     (itp == addedProperties.end()) ? NULL : &(itp->second);
 
   PropertyInterface* prop;
   forEach(prop, g->getLocalObjectProperties()) {
-    if (newProps) {
-      PropertyRecord p(prop,  prop->getName());
-
-      if (newProps->find(p) != newProps->end())
-        continue;
-    }
-
+    if (newProps && (newProps->find(prop) != newProps->end()))
+      continue;
     prop->addListener(this);
   }
 
@@ -704,18 +699,18 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
   Observable::holdObservers();
   // loop on propsToDel
-  TLP_HASH_MAP<Graph*,  set<PropertyRecord> >& propsToDel =
+  TLP_HASH_MAP<Graph*,  set<PropertyInterface*> >& propsToDel =
     undo ? addedProperties : deletedProperties;
-  TLP_HASH_MAP<Graph*,  set<PropertyRecord> >::const_iterator itpg =
+  TLP_HASH_MAP<Graph*,  set<PropertyInterface*> >::const_iterator itpg =
     propsToDel.begin();
 
   while(itpg != propsToDel.end()) {
     Graph* g = (Graph*) itpg->first;
-    set<PropertyRecord>::const_iterator itp = itpg->second.begin();
-    set<PropertyRecord>::const_iterator itpe = itpg->second.end();
+    set<PropertyInterface*>::const_iterator itp = itpg->second.begin();
+    set<PropertyInterface*>::const_iterator itpe = itpg->second.end();
 
     while(itp != itpe) {
-      g->delLocalProperty(itp->name);
+      g->delLocalProperty((*itp)->getName());
       ++itp;
     }
 
@@ -943,17 +938,18 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   }
 
   // loop on propsToAdd
-  TLP_HASH_MAP<Graph*,  set<PropertyRecord> >& propsToAdd =
+  TLP_HASH_MAP<Graph*,  set<PropertyInterface*> >& propsToAdd =
     undo ? deletedProperties : addedProperties;
   itpg = propsToAdd.begin();
 
   while(itpg != propsToAdd.end()) {
     Graph* g = (Graph*) itpg->first;
-    set<PropertyRecord>::const_iterator itp = itpg->second.begin();
-    set<PropertyRecord>::const_iterator itpe = itpg->second.end();
+    set<PropertyInterface*>::const_iterator itp = itpg->second.begin();
+    set<PropertyInterface*>::const_iterator itpe = itpg->second.end();
 
     while(itp != itpe) {
-      g->addLocalProperty(itp->name, itp->prop);
+      PropertyInterface* prop = (*itp);
+      g->addLocalProperty(prop->getName(), prop);
       ++itp;
     }
 
@@ -1056,15 +1052,14 @@ bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface* prop) {
       // prop is no longer observed
       prop->removeListener(this);
       // may be a newly added property
-      PropertyRecord p(prop, prop->getName());
       Graph* g = prop->getGraph();
-      TLP_HASH_MAP<Graph*, set<PropertyRecord> >::iterator it =
+      TLP_HASH_MAP<Graph*, set<PropertyInterface*> >::iterator it =
         addedProperties.find(g);
 
       if (it != addedProperties.end() &&
-          (it->second.find(p) != it->second.end()))
+          (it->second.find(prop) != it->second.end()))
         // the property is no longer recorded
-        it->second.erase(p);
+        it->second.erase(prop);
 
       return true;
     }
@@ -1075,17 +1070,16 @@ bool GraphUpdatesRecorder::dontObserveProperty(PropertyInterface* prop) {
 
 bool GraphUpdatesRecorder::isAddedOrDeletedProperty(Graph* g,
     PropertyInterface *prop) {
-  PropertyRecord p(prop,  prop->getName());
-  TLP_HASH_MAP<Graph*, set<PropertyRecord> >::const_iterator it =
+  TLP_HASH_MAP<Graph*, set<PropertyInterface*> >::const_iterator it =
     addedProperties.find(g);
 
   if (it != addedProperties.end() &&
-      (it->second.find(p) != it->second.end()))
+      (it->second.find(prop) != it->second.end()))
     return true;
 
   it = deletedProperties.find(g);
   return it != deletedProperties.end() &&
-         (it->second.find(p) != it->second.end());
+         (it->second.find(prop) != it->second.end());
 }
 
 
@@ -1385,28 +1379,28 @@ void GraphUpdatesRecorder::removeGraphData(Graph *g) {
 }
 
 void GraphUpdatesRecorder::addLocalProperty(Graph* g, const string& name) {
-  PropertyRecord p(g->getProperty(name),  name);
-  TLP_HASH_MAP<Graph*, set<PropertyRecord> >::const_iterator it =
+  TLP_HASH_MAP<Graph*, set<PropertyInterface*> >::const_iterator it =
     addedProperties.find(g);
 
+  PropertyInterface* prop = g->getProperty(name);
   if (it == addedProperties.end()) {
-    set<PropertyRecord>  props;
-    props.insert(p);
+    set<PropertyInterface*>  props;
+    props.insert(prop);
     addedProperties[g] = props;
   }
   else
-    addedProperties[g].insert(p);
+    addedProperties[g].insert(prop);
 }
 
 void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
-  PropertyRecord p(g->getProperty(name),  name);
-  TLP_HASH_MAP<Graph*, set<PropertyRecord> >::iterator it =
+  PropertyInterface* prop = g->getProperty(name);
+  TLP_HASH_MAP<Graph*, set<PropertyInterface*> >::iterator it =
     addedProperties.find(g);
 
   // remove p from addedProperties if it is a newly added one
-  if (it != addedProperties.end() && (it->second.find(p) != it->second.end())) {
+  if (it != addedProperties.end() && (it->second.find(prop) != it->second.end())) {
     // the property is no longer recorded
-    it->second.erase(p);
+    it->second.erase(prop);
     return;
   }
 
@@ -1414,15 +1408,15 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
   it = deletedProperties.find(g);
 
   if (it == deletedProperties.end()) {
-    set<PropertyRecord>  props;
-    props.insert(p);
+    set<PropertyInterface*>  props;
+    props.insert(prop);
     deletedProperties[g] = props;
   }
   else
-    deletedProperties[g].insert(p);
+    deletedProperties[g].insert(prop);
 
   // the property is no longer observed
-  p.prop->removeListener(this);
+  prop->removeListener(this);
 }
 
 void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
