@@ -965,6 +965,82 @@ void PushPopTest::testAddDelProps() {
   CPPUNIT_ASSERT_EQUAL(bProp, graph->getProperty<BooleanProperty>("boolean"));
 }
 
+void PushPopTest::testRenameProps() {
+  CPPUNIT_ASSERT(!graph->existProperty("boolean"));
+
+  BooleanProperty* bProp = graph->getProperty<BooleanProperty>("boolean");
+  CPPUNIT_ASSERT(graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+
+  graph->push();
+
+  DoubleProperty* dProp = graph->getProperty<DoubleProperty>("double");
+  CPPUNIT_ASSERT(graph->existProperty("double"));
+  node n = graph->addNode();
+  dProp->setNodeValue(n, 123456789.);
+
+  dProp->rename("dbl");
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+  CPPUNIT_ASSERT(graph->existProperty("dbl"));
+  
+  graph->pop();
+
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+  CPPUNIT_ASSERT(!graph->existProperty("dbl"));
+  CPPUNIT_ASSERT(!graph->isElement(n));
+
+  graph->unpop();
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+  CPPUNIT_ASSERT(graph->existProperty("dbl"));
+  CPPUNIT_ASSERT(dProp == graph->getProperty("dbl"));
+  CPPUNIT_ASSERT(graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(graph->isElement(n));
+  CPPUNIT_ASSERT_EQUAL(123456789., dProp->getNodeValue(n));
+
+  bProp->rename("bool");
+  CPPUNIT_ASSERT(!graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(graph->existProperty("bool"));
+  CPPUNIT_ASSERT(bProp == graph->getProperty("bool"));
+
+  graph->pop();
+  CPPUNIT_ASSERT(graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(!graph->existProperty("bool"));
+  CPPUNIT_ASSERT(bProp == graph->getProperty("boolean"));
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+  CPPUNIT_ASSERT(!graph->existProperty("dbl"));
+  CPPUNIT_ASSERT(!graph->isElement(n));
+
+  graph->unpop();
+  CPPUNIT_ASSERT(!graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(graph->existProperty("bool"));
+  CPPUNIT_ASSERT(bProp == graph->getProperty("bool"));
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+  CPPUNIT_ASSERT(graph->existProperty("dbl"));
+
+  graph->delLocalProperty("bool");
+  CPPUNIT_ASSERT(!graph->existProperty("bool"));
+  CPPUNIT_ASSERT(graph->existProperty("dbl"));
+  dProp->rename("bool");
+  CPPUNIT_ASSERT(!graph->existProperty("dbl"));
+  CPPUNIT_ASSERT(graph->existProperty("bool"));
+  CPPUNIT_ASSERT(dProp == graph->getProperty("bool"));
+
+  graph->pop();
+  CPPUNIT_ASSERT(graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(!graph->existProperty("bool"));
+  CPPUNIT_ASSERT(bProp == graph->getProperty("boolean"));
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+  CPPUNIT_ASSERT(!graph->existProperty("dbl"));
+  CPPUNIT_ASSERT(!graph->isElement(n));
+
+  graph->unpop();
+  CPPUNIT_ASSERT(!graph->existProperty("double"));
+  CPPUNIT_ASSERT(!graph->existProperty("dbl"));
+  CPPUNIT_ASSERT(!graph->existProperty("boolean"));
+  CPPUNIT_ASSERT(graph->existProperty("bool"));
+  CPPUNIT_ASSERT(dProp == graph->getProperty("bool"));  
+}
+
 // this class will capture
 // everything that will happen to our properties
 class PropertyObserverForTest :public Observable {

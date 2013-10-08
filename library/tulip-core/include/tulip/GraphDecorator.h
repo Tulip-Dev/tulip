@@ -164,6 +164,9 @@ protected:
   virtual void clearSubGraphs();
   virtual void restoreSubGraph(Graph*);
   virtual void setSubGraphToKeep(Graph*);
+  // internally used for property renaming
+  virtual bool renameLocalProperty(PropertyInterface* prop,
+				   const std::string& newName);
 };
 
 }

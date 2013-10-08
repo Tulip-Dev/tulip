@@ -210,6 +210,7 @@ class TLP_SCOPE Graph : public Observable {
   friend class GraphUpdatesRecorder;
   friend class GraphDecorator;
   friend class PropertyManager;
+  friend class PropertyInterface;
 
 public:
   Graph():id(0) {}
@@ -1417,6 +1418,11 @@ protected:
   virtual bool canDeleteProperty(Graph* g, PropertyInterface *prop) {
     return getRoot()->canDeleteProperty(g, prop);
   }
+
+  // local property renaming
+  // can failed if a property with the same name already exists
+  virtual bool renameLocalProperty(PropertyInterface* prop,
+				   const std::string& newName)=0;
 
   // internally used to deal with sub graph deletion
   virtual void removeSubGraph(Graph*)=0;

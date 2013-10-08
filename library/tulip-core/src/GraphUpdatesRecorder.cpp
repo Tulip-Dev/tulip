@@ -175,6 +175,10 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
         beforeSetEdgeValue(prop, propEvt->getEdge());
         break;
 
+      case PropertyEvent::TLP_RENAME:
+	propertyRenamed(prop);
+	break;
+
       default:
         break;
       }
@@ -957,6 +961,28 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
     ++itpg;
   }
 
+  // loop on renamedProperties
+  if (!renamedProperties.empty()) {
+    TLP_HASH_MAP<PropertyInterface*, std::string>::iterator itrp =
+      renamedProperties.begin();
+
+    std::vector<std::pair<PropertyInterface*, std::string> > renamings(renamedProperties.size());
+    for(unsigned int i = 0; itrp != renamedProperties.end(); ++itrp, ++i) {
+      PropertyInterface* prop = itrp->first;
+      std::string newName = prop->getName();
+      // switch names
+      prop->rename(itrp->second);
+      renamings[i] = std::make_pair(prop, newName);
+    }
+
+    // rebuild
+    renamedProperties.clear();
+    for(unsigned int i = 0; i < renamings.size(); ++i) {
+      const std::pair<PropertyInterface*, std::string>& renaming = renamings[i];
+      renamedProperties[renaming.first] = renaming.second;
+    }
+  }    
+
   // loop on nodeDefaultValues
   TLP_HASH_MAP<PropertyInterface*, DataMem*>& nodeDefaultValues =
     undo ? oldNodeDefaultValues : newNodeDefaultValues;
@@ -1403,6 +1429,12 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
   if (it != addedProperties.end() && (it->second.find(prop) != it->second.end())) {
     // the property is no longer recorded
     it->second.erase(prop);
+    // remove from renamed properties
+    // if needed
+    TLP_HASH_MAP<PropertyInterface*, std::string>::iterator itr =
+      renamedProperties.find(prop);
+    if (itr != renamedProperties.end())
+      renamedProperties.erase(itr);
     return;
   }
 
@@ -1419,6 +1451,20 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
 
   // the property is no longer observed
   prop->removeListener(this);
+}
+
+void GraphUpdatesRecorder::propertyRenamed(PropertyInterface* prop) {
+  TLP_HASH_MAP<Graph*, set<PropertyInterface*> >::iterator it =
+    addedProperties.find(prop->getGraph());
+
+  // remove p from addedProperties if it is a newly added one
+  if (it != addedProperties.end() &&
+      (it->second.find(prop) != it->second.end())) {
+    return;
+  } else {
+    if (renamedProperties.find(prop) == renamedProperties.end())
+      renamedProperties[prop] = prop->getName();
+  }
 }
 
 void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {

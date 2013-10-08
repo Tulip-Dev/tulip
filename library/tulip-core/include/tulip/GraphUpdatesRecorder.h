@@ -149,6 +149,8 @@ class GraphUpdatesRecorder :public Observable {
   TLP_HASH_MAP<PropertyInterface*, DataMem*> oldEdgeDefaultValues;
   // the new default edge value for each updated property
   TLP_HASH_MAP<PropertyInterface*, DataMem*> newEdgeDefaultValues;
+  // the old name for each renamed property
+  TLP_HASH_MAP<PropertyInterface*, std::string> renamedProperties;
 
   struct RecordedValues {
     PropertyInterface* values;
@@ -167,7 +169,7 @@ class GraphUpdatesRecorder :public Observable {
   TLP_HASH_MAP<PropertyInterface*, RecordedValues> newValues;
 
   // real deletion of deleted objects (properties, sub graphs)
-  // during the recording of updates thes objects are removed from graph
+  // during the recording of updates these objects are removed from graph
   // structures but not really 'deleted'
   void deleteDeletedObjects();
   // deletion of recorded values
@@ -221,7 +223,7 @@ public:
   GraphUpdatesRecorder(bool allowRestart = true);
   ~GraphUpdatesRecorder();
 
-  // GraphObserver interface
+  // old GraphObserver interface
   // graphAddedNodes
   void addNode(Graph* g, const node n);
 
@@ -255,7 +257,13 @@ public:
   // deletedProperties
   void delLocalProperty(Graph* g, const std::string& name);
 
-  // PropertyObserver Interface
+  // beforeSetAttribute
+  void beforeSetAttribute(Graph* g, const std::string& name);
+
+  // removeAttribute
+  void removeAttribute(Graph* g, const std::string& name);
+
+  // old PropertyObserver Interface
   // oldValues
   void beforeSetNodeValue(PropertyInterface* p, const node n);
 
@@ -268,11 +276,8 @@ public:
   // oldEdgeDefaultValues
   void beforeSetAllEdgeValue(PropertyInterface* p);
 
-  // beforeSetAttribute
-  void beforeSetAttribute(Graph* g, const std::string& name);
-
-  // removeAttribute
-  void removeAttribute(Graph* g, const std::string& name);
+  // renamedProperties
+  void propertyRenamed(PropertyInterface* p);
 
 protected:
   // override Observable::treatEvent

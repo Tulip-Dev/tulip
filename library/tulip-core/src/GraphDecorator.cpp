@@ -460,6 +460,12 @@ void GraphDecorator::addLocalProperty(const std::string &name, PropertyInterface
 }
 
 //============================================================
+bool GraphDecorator::renameLocalProperty(PropertyInterface* prop,
+					 const std::string& newName) {
+  return graph_component->renameLocalProperty(prop, newName);
+}
+
+//============================================================
 Iterator<std::string>* GraphDecorator::getLocalProperties() const {
   return graph_component->getLocalProperties();
 }

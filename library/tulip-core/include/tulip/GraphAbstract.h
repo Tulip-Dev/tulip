@@ -119,6 +119,9 @@ protected:
   PropertyManager *propertyContainer;
   const std::set<edge>& getReferencedEdges(const edge) const;
 
+  virtual bool renameLocalProperty(PropertyInterface *prop,
+				   const std::string& newName);
+
   // internally used to deal with sub graph deletion
   virtual void clearSubGraphs();
   virtual void removeSubGraph(Graph*);
