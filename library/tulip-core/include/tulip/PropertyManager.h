@@ -49,6 +49,7 @@ public:
   bool existLocalProperty(const std::string&) const;
   bool existInheritedProperty(const std::string&) const;
   void setLocalProperty(const std::string&, PropertyInterface *);
+  bool renameLocalProperty(PropertyInterface *, const std::string&);
   PropertyInterface* getProperty(const std::string&) const;
   PropertyInterface* getLocalProperty(const std::string&) const;
   PropertyInterface* getInheritedProperty(const std::string&) const;

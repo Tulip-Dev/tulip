@@ -146,6 +146,76 @@ void PropertyManager::setLocalProperty(const string &str,
   }
 }
 //==============================================================
+bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
+					  const string &newName) {
+  assert(prop && prop->getGraph() == graph);
+
+  if (existLocalProperty(newName))
+    return false;
+
+  std::string propName = prop->getName();
+  map<string,PropertyInterface *>::iterator it;
+  it = localProperties.find(propName);
+
+  if (it == localProperties.end())
+    return false;
+
+  assert(it->second == prop);
+
+  // loop in the ascendant hierarchy to get
+  // an inherited property
+  PropertyInterface* newProp = NULL;
+  Graph* g = graph;
+
+  while (g != g->getSuperGraph()) {
+    g = g->getSuperGraph();
+
+    if (g->existLocalProperty(propName)) {
+      newProp = g->getProperty(propName);
+      break;
+    }
+  }
+
+  //Warn subgraphs for deletion.
+  Graph* sg;
+  forEach(sg, graph->getSubGraphs()) {
+    (((GraphAbstract *) sg)->propertyContainer)->notifyBeforeDelInheritedProperty(propName);
+  }
+
+  //Remove property from map.
+  localProperties.erase(it);
+  //Set the inherited property in this graph and all it's subgraphs.
+  (((GraphAbstract *) graph)->propertyContainer)->setInheritedProperty(propName, newProp);
+
+  bool hasInheritedProperty=false;
+
+  // remove previously existing inherited property
+  hasInheritedProperty =
+    ((it = inheritedProperties.find(newName))!= inheritedProperties.end());
+
+  if (hasInheritedProperty) {
+    //Notify property destruction old state.
+    notifyBeforeDelInheritedProperty(newName);
+    //Erase old inherited property
+    inheritedProperties.erase(it);
+  }
+
+  // register property as local
+  localProperties[newName] = prop;
+
+  //If we had an inherited property notify it's destruction.
+  if(hasInheritedProperty) {
+    ((GraphAbstract *) graph)->notifyAfterDelInheritedProperty(newName);
+  }
+
+  // loop on subgraphs
+  forEach(sg, graph->getSubGraphs()) {
+    // to set p as inherited property
+    (((GraphAbstract *) sg)->propertyContainer)->setInheritedProperty(newName, prop);
+  }
+  return true;
+}
+//==============================================================
 void PropertyManager::setInheritedProperty(const string &str,
     PropertyInterface *p) {
   if (!existLocalProperty(str)) {

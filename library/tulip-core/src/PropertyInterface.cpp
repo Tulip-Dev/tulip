@@ -39,6 +39,15 @@ PropertyInterface::~PropertyInterface() {
   observableDeleted();
 }
 
+bool PropertyInterface::rename(const std::string& newName) {
+  if (!graph || graph->renameLocalProperty(this, newName)) {
+    notifyRename(newName);
+    name = newName;
+    return true;
+  }
+  return false;
+}      
+
 void PropertyInterface::notifyBeforeSetNodeValue(const node n) {
   if (hasOnlookers())
     sendEvent(PropertyEvent(*this, PropertyEvent::TLP_BEFORE_SET_NODE_VALUE,
@@ -90,6 +99,7 @@ void PropertyInterface::notifyAfterSetAllEdgeValue() {
                             PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE,
                             Event::TLP_MODIFICATION));
 }
+
 void PropertyInterface::notifyDestroy() {
   if (hasOnlookers())  {
     // the undo/redo mechanism has to simulate graph destruction
@@ -98,3 +108,9 @@ void PropertyInterface::notifyDestroy() {
     sendEvent(evt);
   }
 }
+
+void PropertyInterface::notifyRename(const std::string& newName) {
+  if (hasOnlookers())
+    sendEvent(PropertyEvent(*this, newName));
+}
+

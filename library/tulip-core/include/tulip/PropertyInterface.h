@@ -125,6 +125,13 @@ public:
   }
 
   /**
+   * @brief Rename a property
+   * @param the new name
+   * @return returns true if the renaming succeed.
+   * It may fails if a property with the given name already exists
+   */
+  bool rename(const std::string& newName);
+  /**
    * @cond DOXYGEN_HIDDEN
    * @brief Gets the graph on which this property has been defined.
    * This is an internal function and its behavior can change.
@@ -379,6 +386,7 @@ protected:
   void notifyBeforeSetAllEdgeValue();
   void notifyAfterSetAllEdgeValue();
   void notifyDestroy();
+  void notifyRename(const std::string& newName);
 };
 
 /**
@@ -396,7 +404,8 @@ public:
                           TLP_AFTER_SET_NODE_VALUE,
                           TLP_BEFORE_SET_ALL_NODE_VALUE,
                           TLP_AFTER_SET_ALL_NODE_VALUE,
-                          TLP_BEFORE_SET_ALL_EDGE_VALUE,
+ 			  TLP_RENAME,
+			  TLP_BEFORE_SET_ALL_EDGE_VALUE,
                           TLP_AFTER_SET_ALL_EDGE_VALUE,
                           TLP_BEFORE_SET_EDGE_VALUE,
                           TLP_AFTER_SET_EDGE_VALUE
@@ -404,20 +413,38 @@ public:
   PropertyEvent(const PropertyInterface& prop, PropertyEventType propEvtType,
                 Event::EventType evtType = Event::TLP_MODIFICATION,
                 unsigned int id = UINT_MAX)
-    : Event(prop, evtType), evtType(propEvtType), eltId(id) {}
+    : Event(prop, evtType), evtType(propEvtType) {
+    info.eltId = id;
+  }
+
+  PropertyEvent(const PropertyInterface& prop, const std::string& str)
+    : Event(prop, Event::TLP_MODIFICATION), evtType(TLP_RENAME) {
+    info.name = new std::string(str);
+  }
+
+  // destructor needed to cleanup name if any
+  ~PropertyEvent() {
+    if (evtType == TLP_RENAME)
+      delete info.name;
+  }
 
   PropertyInterface* getProperty() const {
     return reinterpret_cast<PropertyInterface *>(sender());
   }
 
   node getNode() const {
-    assert(evtType < TLP_BEFORE_SET_ALL_NODE_VALUE);
-    return node(eltId);
+    assert(evtType < TLP_RENAME);
+    return node(info.eltId);
   }
 
   edge getEdge() const {
-    assert(evtType > TLP_AFTER_SET_ALL_EDGE_VALUE);
-    return edge(eltId);
+    assert(evtType > TLP_RENAME);
+    return edge(info.eltId);
+  }
+
+  const std::string& getNewName() const {
+    assert(evtType == TLP_RENAME);
+    return *(info.name);
   }
 
   PropertyEventType getType() const {
@@ -426,7 +453,10 @@ public:
 
 protected:
   PropertyEventType evtType;
-  unsigned int eltId;
+  union {
+    unsigned int eltId;
+    std::string* name;
+  } info;
 };
 }
 
