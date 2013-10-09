@@ -40,13 +40,8 @@ PropertyInterface::~PropertyInterface() {
 }
 
 bool PropertyInterface::rename(const std::string& newName) {
-  if (!graph || graph->renameLocalProperty(this, newName)) {
-    notifyRename(newName);
-    name = newName;
-    return true;
-  }
-  return false;
-}      
+  return graph && graph->renameLocalProperty(this, newName);
+}   
 
 void PropertyInterface::notifyBeforeSetNodeValue(const node n) {
   if (hasOnlookers())
@@ -107,10 +102,5 @@ void PropertyInterface::notifyDestroy() {
     evt._type = Event::TLP_DELETE;
     sendEvent(evt);
   }
-}
-
-void PropertyInterface::notifyRename(const std::string& newName) {
-  if (hasOnlookers())
-    sendEvent(PropertyEvent(*this, newName));
 }
 

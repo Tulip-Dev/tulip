@@ -141,6 +141,10 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
       delLocalProperty(graph, gEvt->getPropertyName());
       break;
 
+    case GraphEvent::TLP_BEFORE_RENAME_LOCAL_PROPERTY:
+      propertyRenamed(gEvt->getProperty());
+      break;
+      
     case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
       beforeSetAttribute(graph, gEvt->getAttributeName());
       break;
@@ -174,10 +178,6 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
       case PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE:
         beforeSetEdgeValue(prop, propEvt->getEdge());
         break;
-
-      case PropertyEvent::TLP_RENAME:
-	propertyRenamed(prop);
-	break;
 
       default:
         break;
