@@ -1630,3 +1630,12 @@ Graph *Graph::getNthSubGraph(unsigned int n) const {
   delete it;
   return NULL;
 }
+
+const std::string& GraphEvent::getPropertyName() const {
+  assert(evtType > TLP_AFTER_DEL_SUBGRAPH && evtType < TLP_BEFORE_SET_ATTRIBUTE);
+  if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
+      evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
+    return info.renamedProp->first->getName();
+  return *(info.name);
+}
+

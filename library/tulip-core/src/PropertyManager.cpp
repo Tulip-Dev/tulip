@@ -162,6 +162,9 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
 
   assert(it->second == prop);
 
+  // before rename notification
+  ((GraphAbstract *) graph)->notifyBeforeRenameLocalProperty(prop, newName);
+
   // loop in the ascendant hierarchy to get
   // an inherited property
   PropertyInterface* newProp = NULL;
@@ -213,6 +216,13 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
     // to set p as inherited property
     (((GraphAbstract *) sg)->propertyContainer)->setInheritedProperty(newName, prop);
   }
+
+  // update property name
+  prop->name = newName;
+
+  // after renaming notification
+  ((GraphAbstract *) graph)->notifyAfterRenameLocalProperty(prop, propName);
+  
   return true;
 }
 //==============================================================

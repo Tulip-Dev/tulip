@@ -141,6 +141,11 @@ private:
   void notifyAddInheritedProperty(const std::string& prop);
   void notifyBeforeDelInheritedProperty(const std::string& prop);
   void notifyAfterDelInheritedProperty(const std::string& prop);
+  // notification of property renaming
+  void notifyBeforeRenameLocalProperty(PropertyInterface* prop,
+				       const std::string& newName);
+  void notifyAfterRenameLocalProperty(PropertyInterface* prop,
+				      const std::string& oldName);
 };
 
 }

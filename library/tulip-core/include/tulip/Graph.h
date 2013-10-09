@@ -1544,11 +1544,13 @@ public:
     TLP_ADD_INHERITED_PROPERTY = 20,
     TLP_BEFORE_DEL_INHERITED_PROPERTY = 21,
     TLP_AFTER_DEL_INHERITED_PROPERTY = 22,
-    TLP_BEFORE_SET_ATTRIBUTE = 23,
-    TLP_AFTER_SET_ATTRIBUTE = 24,
-    TLP_REMOVE_ATTRIBUTE = 25,
-    TLP_BEFORE_ADD_LOCAL_PROPERTY = 26,
-    TLP_BEFORE_ADD_INHERITED_PROPERTY = 27
+    TLP_BEFORE_RENAME_LOCAL_PROPERTY = 23,
+    TLP_AFTER_RENAME_LOCAL_PROPERTY = 24,
+    TLP_BEFORE_SET_ATTRIBUTE = 25,
+    TLP_AFTER_SET_ATTRIBUTE = 26,
+    TLP_REMOVE_ATTRIBUTE = 27,
+    TLP_BEFORE_ADD_LOCAL_PROPERTY = 28,
+    TLP_BEFORE_ADD_INHERITED_PROPERTY = 29
   };
 
   // constructor for node/edge events
@@ -1586,10 +1588,24 @@ public:
     info.name = new std::string(str);
   }
 
+  // constructor for rename property events
+  GraphEvent(const Graph& g, GraphEventType graphEvtType,
+	     PropertyInterface* prop,
+             const std::string& newName)
+    : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
+    info.renamedProp =
+      new std::pair<PropertyInterface*,std::string>(prop, newName);
+  }
+
   // destructor needed to cleanup name if any
   ~GraphEvent() {
-    if (evtType > TLP_AFTER_DEL_SUBGRAPH)
-      delete info.name;
+    if (evtType > TLP_AFTER_DEL_SUBGRAPH) {
+      if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
+	  evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
+	delete info.renamedProp;
+      else
+	delete info.name;
+    }
   }
 
   Graph* getGraph() const {
@@ -1626,9 +1642,22 @@ public:
     return *(info.name);
   }
 
-  const std::string& getPropertyName() const {
-    assert(evtType > TLP_AFTER_DEL_SUBGRAPH && evtType < TLP_BEFORE_SET_ATTRIBUTE);
-    return *(info.name);
+  const std::string& getPropertyName() const;
+
+  PropertyInterface* getProperty() const {
+    assert(evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
+	   evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY);
+    return info.renamedProp->first;
+  }
+
+  const std::string& getPropertyNewName() const {
+    assert(evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY);
+    return info.renamedProp->second;
+  }
+
+  const std::string& getPropertyOldName() const {
+    assert(evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY);
+    return info.renamedProp->second;
   }
 
   GraphEventType getType() const {
@@ -1643,6 +1672,7 @@ protected:
     std::string* name;
     const std::vector<node>* nodes;
     const std::vector<edge>* edges;
+    std::pair<PropertyInterface*, std::string>* renamedProp;
   } info;
 };
 
