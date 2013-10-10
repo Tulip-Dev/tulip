@@ -27,12 +27,14 @@
 #include <QCursor>
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QTimer>
 
 #include <tulip/Perspective.h>
 #include <tulip/GraphModel.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/CopyPropertyDialog.h>
 #include <tulip/PropertyCreationDialog.h>
+#include <tulip/RenamePropertyDialog.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
@@ -136,6 +138,10 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
     }
   }
 
+  QAction* rename = NULL;
+  if (!Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str()))
+    rename = menu.addAction("Rename");
+
   menu.addSeparator();
 
   QMenu* subMenu = menu.addMenu(trUtf8("Set values of"));
@@ -178,6 +184,9 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
   if (action == selectedEdgesSetAll)
     result = setAllValues(_contextProperty, false, true);
+
+  if (action == rename)
+    result = renameProperty(_contextProperty);
 
   if (!result)
     // edition cancelled
@@ -319,10 +328,15 @@ void PropertiesEditor::delProperty() {
   _contextProperty->getGraph()->delLocalProperty(_contextProperty->getName());
 }
 
+
 void PropertiesEditor::delProperties() {
   _graph->push();
   foreach(PropertyInterface* pi, _contextPropertyList)
   pi->getGraph()->delLocalProperty(pi->getName());
+}
+
+bool PropertiesEditor::renameProperty(PropertyInterface* prop) {
+  return RenamePropertyDialog::renameProperty(prop, editorParent);
 }
 
 void PropertiesEditor::toLabels() {

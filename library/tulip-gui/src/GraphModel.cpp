@@ -205,6 +205,28 @@ void GraphModel::treatEvent(const Event& ev) {
       beginRemoveColumns(QModelIndex(),col,col);
       _properties.remove(col);
       endRemoveColumns();
+    } else if (graphEv->getType() ==
+	       GraphEvent::TLP_BEFORE_RENAME_LOCAL_PROPERTY) {
+      PropertyInterface* prop = graphEv->getProperty();
+      // remove from old place
+      int col = _properties.indexOf(prop);
+      // insert according to new name
+      std::string propName = graphEv->getPropertyNewName();
+      int insertCol = 0;
+      for(insertCol = 0; insertCol < _properties.size(); ++insertCol) {
+	if ((prop != _properties[insertCol]) &&
+	    (propName < _properties[insertCol]->getName()))
+	  break;
+      }
+
+      if (insertCol == col + 1)
+	return;
+      beginMoveColumns(QModelIndex(), col, col, QModelIndex(), insertCol);
+      _properties.remove(col);
+      if (col < insertCol)
+	--insertCol;
+      _properties.insert(insertCol, prop);
+      endMoveColumns();
     }
   }
 }

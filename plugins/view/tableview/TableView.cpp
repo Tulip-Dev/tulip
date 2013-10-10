@@ -653,6 +653,11 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
       (graph() != graph()->getRoot() && graph()->existLocalProperty(propName)))
     deleteProp = contextMenu.addAction("Delete");
 
+  QAction* renameProp = NULL;
+
+  if (!Perspective::instance()->isReservedPropertyName(propName.c_str()))
+    renameProp = contextMenu.addAction("Rename");
+
   contextMenu.addSeparator();
 
   QMenu* subMenu = contextMenu.addMenu(trUtf8("Set values of "));
@@ -714,7 +719,15 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
     return;
   }
 
-  if (action == addProp) {
+  if (action == renameProp) {
+    if (!propertiesEditor->renameProperty(prop))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+  }
+
+   if (action == addProp) {
     if (PropertyCreationDialog::createNewProperty(graph(), Perspective::instance()->mainWindow(), prop->getTypename())
         == NULL)
       // cancelled so undo

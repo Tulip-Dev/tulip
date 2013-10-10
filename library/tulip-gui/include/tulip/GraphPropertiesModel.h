@@ -40,6 +40,7 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   QSet<PROPTYPE*> _checkedProperties;
   QVector<PROPTYPE*> _properties;
   bool _removingRows;
+  bool forcingRedraw;
 
   void rebuildCache();
 
@@ -128,6 +129,13 @@ public:
           endInsertRows();
         }
       }
+    }
+    else if (graphEvent->getType() == GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY) {
+      // force any needed sorting
+      emit layoutAboutToBeChanged();
+      changePersistentIndex(createIndex(0, 0),
+			    createIndex(_properties.size() - 1, 0));
+      emit layoutChanged();
     }
   }
 

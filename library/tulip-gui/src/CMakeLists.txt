@@ -37,6 +37,7 @@ SET(SRCS
   QGlBufferManager.cpp
   QtGlSceneZoomAndPanAnimator.cpp
   QuaZIPFacade.cpp
+  RenamePropertyDialog.cpp
   SimplePluginProgressWidget.cpp
   SimpleStringsListSelectionWidget.cpp
   StringsListSelectionWidget.cpp
@@ -107,6 +108,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/CSVParserConfigurationWidget.ui
   ../designer/DoubleStringsListSelectionWidget.ui
   ../designer/PropertyCreationDialog.ui
+  ../designer/RenamePropertyDialog.ui
   ../designer/SimplePluginProgressWidget.ui
   ../designer/SimpleStringsListSelectionWidget.ui
   ../designer/SizeEditor.ui
@@ -140,6 +142,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/Perspective.h
   ../include/tulip/PropertyCreationDialog.h
   ../include/tulip/QtGlSceneZoomAndPanAnimator.h
+  ../include/tulip/RenamePropertyDialog.h
   ../include/tulip/SimplePluginProgressWidget.h
   ../include/tulip/SimpleStringsListSelectionWidget.h
   ../include/tulip/TulipProject.h

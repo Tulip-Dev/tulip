@@ -66,7 +66,7 @@ GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool che
 }
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable), _removingRows(false) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(placeholder), _checkable(checkable), _removingRows(false), forcingRedraw(false) {
   if (_graph != NULL) {
     _graph->addListener(this);
     rebuildCache();
@@ -97,7 +97,7 @@ QModelIndex GraphPropertiesModel<PROPTYPE>::parent(const QModelIndex &) const {
 
 template<typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowCount(const QModelIndex &parent) const {
-  if (parent.isValid() || _graph == NULL)
+  if (parent.isValid() || _graph == NULL || forcingRedraw)
     return 0;
 
   int result = _properties.size();
