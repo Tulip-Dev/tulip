@@ -35,6 +35,7 @@ INSTALL(FILES
   tulip/QGlBufferManager.h
   tulip/QGlPixelBufferManager.h
   tulip/QtGlSceneZoomAndPanAnimator.h
+  tulip/RenamePropertyDialog.h
   tulip/SimplePluginProgressWidget.h
   tulip/SimpleStringsListSelectionWidget.h
   tulip/StringsListSelectionWidget.h

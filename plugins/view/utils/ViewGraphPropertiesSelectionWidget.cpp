@@ -158,7 +158,8 @@ void ViewGraphPropertiesSelectionWidget::treatEvent(const Event &evt) {
     switch(graphEvent->getType()) {
 
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
-    case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY: {
+    case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
+    case GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY: {
       setWidgetParameters(graph,graphPropertiesTypesFilter);
       break;
     }

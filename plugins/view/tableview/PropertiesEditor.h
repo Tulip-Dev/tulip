@@ -61,6 +61,7 @@ public:
   void toLabels(tlp::PropertyInterface* prop,
                 bool nodes, bool edges, bool selectedOnly = false);
   bool setAllValues(tlp::PropertyInterface* prop, bool nodes, bool selectedOnly);
+  bool renameProperty(tlp::PropertyInterface* prop);
 
   tlp::PropertyInterface* contextProperty() const;
 signals:
