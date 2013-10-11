@@ -139,6 +139,7 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   }
 
   QAction* rename = NULL;
+
   if (!Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str()))
     rename = menu.addAction("Rename");
 

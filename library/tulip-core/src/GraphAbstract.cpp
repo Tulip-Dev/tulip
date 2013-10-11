@@ -489,17 +489,17 @@ void GraphAbstract::notifyAfterDelInheritedProperty(const std::string& name) {
 }
 //=========================================================================
 void GraphAbstract::notifyBeforeRenameLocalProperty(PropertyInterface* prop,
-						    const std::string& newName) {
+    const std::string& newName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_RENAME_LOCAL_PROPERTY,
-			 prop, newName));
+                         prop, newName));
 }
 //=========================================================================
 void GraphAbstract::notifyAfterRenameLocalProperty(PropertyInterface* prop,
-						   const std::string& oldName) {
+    const std::string& oldName) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY,
-			 prop, oldName));
+                         prop, oldName));
 }
 //=========================================================================
 Iterator<std::string>* GraphAbstract::getLocalProperties() const {

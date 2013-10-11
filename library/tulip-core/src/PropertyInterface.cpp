@@ -41,7 +41,7 @@ PropertyInterface::~PropertyInterface() {
 
 bool PropertyInterface::rename(const std::string& newName) {
   return graph && graph->renameLocalProperty(this, newName);
-}   
+}
 
 void PropertyInterface::notifyBeforeSetNodeValue(const node n) {
   if (hasOnlookers())

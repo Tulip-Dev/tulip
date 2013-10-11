@@ -134,7 +134,7 @@ public:
       // force any needed sorting
       emit layoutAboutToBeChanged();
       changePersistentIndex(createIndex(0, 0),
-			    createIndex(_properties.size() - 1, 0));
+                            createIndex(_properties.size() - 1, 0));
       emit layoutChanged();
     }
   }

@@ -727,7 +727,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
     return;
   }
 
-   if (action == addProp) {
+  if (action == addProp) {
     if (PropertyCreationDialog::createNewProperty(graph(), Perspective::instance()->mainWindow(), prop->getTypename())
         == NULL)
       // cancelled so undo

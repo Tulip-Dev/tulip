@@ -1422,7 +1422,7 @@ protected:
   // local property renaming
   // can failed if a property with the same name already exists
   virtual bool renameLocalProperty(PropertyInterface* prop,
-				   const std::string& newName)=0;
+                                   const std::string& newName)=0;
 
   // internally used to deal with sub graph deletion
   virtual void removeSubGraph(Graph*)=0;
@@ -1590,7 +1590,7 @@ public:
 
   // constructor for rename property events
   GraphEvent(const Graph& g, GraphEventType graphEvtType,
-	     PropertyInterface* prop,
+             PropertyInterface* prop,
              const std::string& newName)
     : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
     info.renamedProp =
@@ -1601,10 +1601,10 @@ public:
   ~GraphEvent() {
     if (evtType > TLP_AFTER_DEL_SUBGRAPH) {
       if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
-	  evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
-	delete info.renamedProp;
+          evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
+        delete info.renamedProp;
       else
-	delete info.name;
+        delete info.name;
     }
   }
 
@@ -1646,7 +1646,7 @@ public:
 
   PropertyInterface* getProperty() const {
     assert(evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
-	   evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY);
+           evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY);
     return info.renamedProp->first;
   }
 

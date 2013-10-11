@@ -147,7 +147,7 @@ void PropertyManager::setLocalProperty(const string &str,
 }
 //==============================================================
 bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
-					  const string &newName) {
+    const string &newName) {
   assert(prop && prop->getGraph() == graph);
 
   if (existLocalProperty(newName))
@@ -222,7 +222,7 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
 
   // after renaming notification
   ((GraphAbstract *) graph)->notifyAfterRenameLocalProperty(prop, propName);
-  
+
   return true;
 }
 //==============================================================

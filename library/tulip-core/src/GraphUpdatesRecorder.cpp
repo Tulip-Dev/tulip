@@ -144,7 +144,7 @@ void GraphUpdatesRecorder::treatEvent(const Event& ev) {
     case GraphEvent::TLP_BEFORE_RENAME_LOCAL_PROPERTY:
       propertyRenamed(gEvt->getProperty());
       break;
-      
+
     case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
       beforeSetAttribute(graph, gEvt->getAttributeName());
       break;
@@ -967,6 +967,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
       renamedProperties.begin();
 
     std::vector<std::pair<PropertyInterface*, std::string> > renamings(renamedProperties.size());
+
     for(unsigned int i = 0; itrp != renamedProperties.end(); ++itrp, ++i) {
       PropertyInterface* prop = itrp->first;
       std::string newName = prop->getName();
@@ -977,11 +978,12 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
 
     // rebuild
     renamedProperties.clear();
+
     for(unsigned int i = 0; i < renamings.size(); ++i) {
       const std::pair<PropertyInterface*, std::string>& renaming = renamings[i];
       renamedProperties[renaming.first] = renaming.second;
     }
-  }    
+  }
 
   // loop on nodeDefaultValues
   TLP_HASH_MAP<PropertyInterface*, DataMem*>& nodeDefaultValues =
@@ -1433,8 +1435,10 @@ void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
     // if needed
     TLP_HASH_MAP<PropertyInterface*, std::string>::iterator itr =
       renamedProperties.find(prop);
+
     if (itr != renamedProperties.end())
       renamedProperties.erase(itr);
+
     return;
   }
 
@@ -1461,7 +1465,8 @@ void GraphUpdatesRecorder::propertyRenamed(PropertyInterface* prop) {
   if (it != addedProperties.end() &&
       (it->second.find(prop) != it->second.end())) {
     return;
-  } else {
+  }
+  else {
     if (renamedProperties.find(prop) == renamedProperties.end())
       renamedProperties[prop] = prop->getName();
   }
