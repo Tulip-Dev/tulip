@@ -61,8 +61,6 @@ static const char *TULIP_PLUGINS_PATH_VARIABLE="TLP_PLUGINS_PATH";
 
 string tlp::TulipLibDir;
 string tlp::TulipPluginsPath;
-string tlp::TulipDocProfile;
-string tlp::TulipUserHandBookIndex;
 string tlp::TulipBitmapDir;
 string tlp::TulipShareDir;
 #ifdef _WIN32
@@ -242,9 +240,6 @@ void tlp::initTulipLib(const char* appDirPath) {
   // check it exists
   if (tlpDirSet)
     checkDirectory(TulipShareDir);
-
-  TulipDocProfile=TulipShareDir+"tulip.qhc";
-  TulipUserHandBookIndex=TulipShareDir+"userHandbook/html/index.html";
 
   TulipBitmapDir=TulipShareDir+"bitmaps/";
 
