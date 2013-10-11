@@ -56,7 +56,7 @@ RenamePropertyDialog::~RenamePropertyDialog() {
 }
 
 bool RenamePropertyDialog::renameProperty(PropertyInterface* prop,
-					  QWidget* parent) {
+    QWidget* parent) {
   if (prop == NULL) {
     QMessageBox::critical(parent,tr("Error during the renaming"), "The property is NULL");
     return false;
@@ -81,6 +81,7 @@ bool RenamePropertyDialog::renameProperty(PropertyInterface* prop,
       valid = false;
       errorMsg = tr("A local property named '") + tlpStringToQString(propertyName) + "'\n already exists";
     }
+
     if (valid) {
       errorMsg = "Unable to rename the property";
       valid = prop->rename(propertyName);
@@ -91,5 +92,6 @@ bool RenamePropertyDialog::renameProperty(PropertyInterface* prop,
     else
       return true;
   }
+
   return false;
 }

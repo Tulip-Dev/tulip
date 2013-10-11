@@ -120,7 +120,7 @@ protected:
   const std::set<edge>& getReferencedEdges(const edge) const;
 
   virtual bool renameLocalProperty(PropertyInterface *prop,
-				   const std::string& newName);
+                                   const std::string& newName);
 
   // internally used to deal with sub graph deletion
   virtual void clearSubGraphs();
@@ -143,9 +143,9 @@ private:
   void notifyAfterDelInheritedProperty(const std::string& prop);
   // notification of property renaming
   void notifyBeforeRenameLocalProperty(PropertyInterface* prop,
-				       const std::string& newName);
+                                       const std::string& newName);
   void notifyAfterRenameLocalProperty(PropertyInterface* prop,
-				      const std::string& oldName);
+                                      const std::string& oldName);
 };
 
 }
