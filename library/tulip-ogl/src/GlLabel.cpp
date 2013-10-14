@@ -277,7 +277,6 @@ void GlLabel::draw(float, Camera *camera) {
 
   if(computeLOD) {
     Coord test=camera->screenTo3DWorld(Coord(1,1,1))-camera->screenTo3DWorld(Coord(0,0,0));
-    // do not know why test.normalize() doest no work
     test/=test.norm();
     lod=(camera->worldTo2DScreen(test)-camera->worldTo2DScreen(Coord(0,0,0))).norm();
     oldLod=lod;
