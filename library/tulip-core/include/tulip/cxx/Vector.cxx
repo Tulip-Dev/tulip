@@ -326,16 +326,16 @@ DTYPE  VECTORTLP::dist(const VECTOR &c) const {
 
   case 2:
     return tlpsqrt<DTYPE, OTYPE>(tlpsqr<DTYPE, OTYPE>(x()-c.x())
-				 +
-				 tlpsqr<DTYPE, OTYPE>(y()-c.y()));
+                                 +
+                                 tlpsqr<DTYPE, OTYPE>(y()-c.y()));
 
   case 3:
     return tlpsqrt<DTYPE, OTYPE>(tlpsqr<DTYPE, OTYPE>(x()-c.x())
-				 +
-				 tlpsqr<DTYPE, OTYPE>(y()-c.y())
-				 +
-				 tlpsqr<DTYPE, OTYPE>(z()-c.z())
-                               );
+                                 +
+                                 tlpsqr<DTYPE, OTYPE>(y()-c.y())
+                                 +
+                                 tlpsqr<DTYPE, OTYPE>(z()-c.z())
+                                );
 
   default :
     OTYPE tmp = tlpsqr<DTYPE, OTYPE>((*this)[0] - c[0]);

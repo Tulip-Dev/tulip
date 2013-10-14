@@ -200,7 +200,7 @@ void ScatterPlot2D::createAxis() {
   else {
     unsigned int step = static_cast<unsigned int>((xMax - xMin) / 20);
     xAxis->setAxisParameters(static_cast<int>(xMin), static_cast<int>(xMax),
-			     step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
+                             step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
   }
 
   xAxis->setAxisGraduationsMaxLabelWidth(300.0f);
@@ -215,7 +215,7 @@ void ScatterPlot2D::createAxis() {
   else {
     unsigned int step = static_cast<unsigned int>((yMax - yMin) / 20);
     yAxis->setAxisParameters(static_cast<int>(yMin) ,static_cast<int>(yMax),
-			     step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
+                             step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
   }
 
   yAxis->addCaption(GlAxis::LEFT, 100.0f, false, 300.0f, 155.0f);

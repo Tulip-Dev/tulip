@@ -64,7 +64,7 @@ inline double tlpsqrt<double, long double>(long double a) {
  * \author : David Auber auber@tulip-software.org
  * \version 0.0.1 24/01/2003
  */
- template <typename TYPE, unsigned int SIZE, typename OTYPE = double, typename DTYPE = TYPE>
+template <typename TYPE, unsigned int SIZE, typename OTYPE = double, typename DTYPE = TYPE>
 class Vector:public Array<TYPE,SIZE> {
 public:
   inline VECTOR() {
@@ -453,7 +453,7 @@ inline VECTOR operator-(const VECTOR&);
 /**
   * @brief typedef for 2D vector of unsigned int
   */
- typedef Vector<unsigned int, 2> Vec2ui;
+typedef Vector<unsigned int, 2> Vec2ui;
 /**
   * @brief typedef for 3D vector of unsigned int
   */
