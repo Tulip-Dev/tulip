@@ -178,28 +178,19 @@ void ScatterPlot2D::clean() {
 }
 
 void ScatterPlot2D::createAxis() {
+  assert(dynamic_cast<NumericProperty *>(graph->getProperty(xDim)));
+  assert(dynamic_cast<NumericProperty *>(graph->getProperty(yDim)));
+  NumericProperty* xProp = (NumericProperty *) graph->getProperty(xDim);
+  NumericProperty* yProp = (NumericProperty *) graph->getProperty(yDim);
   xType = graph->getProperty(xDim)->getTypename();
   yType = graph->getProperty(yDim)->getTypename();
 
   double xMin, xMax, yMin, yMax;
 
-  if (xType == "double") {
-    xMin = graph->getProperty<DoubleProperty>(xDim)->getNodeMin(graph);
-    xMax = graph->getProperty<DoubleProperty>(xDim)->getNodeMax(graph);
-  }
-  else {
-    xMin = static_cast<double>(graph->getProperty<IntegerProperty>(xDim)->getNodeMin(graph));
-    xMax = static_cast<double>(graph->getProperty<IntegerProperty>(xDim)->getNodeMax(graph));
-  }
-
-  if (yType == "double") {
-    yMin = graph->getProperty<DoubleProperty>(yDim)->getNodeMin(graph);
-    yMax = graph->getProperty<DoubleProperty>(yDim)->getNodeMax(graph);
-  }
-  else {
-    yMin = static_cast<double>(graph->getProperty<IntegerProperty>(yDim)->getNodeMin(graph));
-    yMax = static_cast<double>(graph->getProperty<IntegerProperty>(yDim)->getNodeMax(graph));
-  }
+  xMin = xProp->getNodeDoubleMin(graph);
+  xMax = xProp->getNodeDoubleMax(graph);
+  yMin = yProp->getNodeDoubleMin(graph);
+  yMax = yProp->getNodeDoubleMax(graph);
 
   xAxis = new GlQuantitativeAxis(xDim, Coord(0.0f, 0.0f, 0.0f), DEFAULT_AXIS_LENGTH, GlAxis::HORIZONTAL_AXIS, foregroundColor, true);
 
@@ -207,7 +198,9 @@ void ScatterPlot2D::createAxis() {
     xAxis->setAxisParameters(xMin ,xMax, DEFAULT_NB_GRADS, GlAxis::LEFT_OR_BELOW, true);
   }
   else {
-    xAxis->setAxisParameters(static_cast<int>(xMin), static_cast<int>(xMax), static_cast<unsigned int>((xMax - xMin) / 20), GlAxis::LEFT_OR_BELOW, true);
+    unsigned int step = static_cast<unsigned int>((xMax - xMin) / 20);
+    xAxis->setAxisParameters(static_cast<int>(xMin), static_cast<int>(xMax),
+			     step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
   }
 
   xAxis->setAxisGraduationsMaxLabelWidth(300.0f);
@@ -220,7 +213,9 @@ void ScatterPlot2D::createAxis() {
     yAxis->setAxisParameters(yMin ,yMax, DEFAULT_NB_GRADS, GlAxis::LEFT_OR_BELOW, true);
   }
   else {
-    yAxis->setAxisParameters(static_cast<int>(yMin) ,static_cast<int>(yMax), static_cast<unsigned int>((yMax - yMin) / 20), GlAxis::LEFT_OR_BELOW, true);
+    unsigned int step = static_cast<unsigned int>((yMax - yMin) / 20);
+    yAxis->setAxisParameters(static_cast<int>(yMin) ,static_cast<int>(yMax),
+			     step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
   }
 
   yAxis->addCaption(GlAxis::LEFT, 100.0f, false, 300.0f, 155.0f);
@@ -244,44 +239,20 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
   if(!drawStep)
     drawStep=1;
 
-  DoubleProperty *xDoubleProp = NULL, *yDoubleProp = NULL;
-  IntegerProperty *xIntProp = NULL, *yIntProp = NULL;
-
-  if (xType == "double") {
-    xDoubleProp = graph->getProperty<DoubleProperty>(xDim);
-  }
-  else {
-    xIntProp = graph->getProperty<IntegerProperty>(xDim);
-  }
-
-  if (yType == "double") {
-    yDoubleProp = graph->getProperty<DoubleProperty>(yDim);
-  }
-  else {
-    yIntProp = graph->getProperty<IntegerProperty>(yDim);
-  }
+  assert(dynamic_cast<NumericProperty *>(graph->getProperty(xDim)));
+  assert(dynamic_cast<NumericProperty *>(graph->getProperty(yDim)));
+  NumericProperty* xProp = (NumericProperty *) graph->getProperty(xDim);
+  NumericProperty* yProp = (NumericProperty *) graph->getProperty(yDim);
 
   forEach(n, graph->getNodes()) {
     Coord nodeCoord;
     double xValue, yValue;
 
-    if (xDoubleProp) {
-      xValue = xDoubleProp->getNodeValue(n);
-    }
-    else {
-      xValue = static_cast<double>(xIntProp->getNodeValue(n));
-    }
-
+    xValue = xProp->getNodeDoubleValue(n);
     sumxi += xValue;
     sumxi2 += (xValue * xValue);
 
-    if (yDoubleProp) {
-      yValue = yDoubleProp->getNodeValue(n);
-    }
-    else {
-      yValue = static_cast<double>(yIntProp->getNodeValue(n));
-    }
-
+    yValue = yProp->getNodeDoubleValue(n);
     sumyi += yValue;
     sumyi2 += (yValue * yValue);
     sumxiyi += (xValue * yValue);
