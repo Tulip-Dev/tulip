@@ -166,21 +166,21 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
 
     Coord v03 = p3-p0;
     Coord v34 = p4-p3;
-    v03.normalize();
-    v34.normalize();
+    v03=  v03/v03.norm();
+    v34 = v34/v34.norm();
     p1 = v03+p0;
     double scalaireTmp=v03.dotProduct(v34) / (v03.norm()*v34.norm());
 
     if ((scalaireTmp<0.99999) && (scalaireTmp>-0.9999999)) {
       Coord vP2=(((v03^v34)^(v34-v03)));
-      vP2.normalize();
+      vP2=vP2/vP2.norm();
       Coord vP1=(((v03^v34)^(v03-v34)));
-      vP1.normalize();
+      vP1=vP1/vP1.norm();
       p2=vP2+p3;
       p1next=vP1+p3;
     }
     else {
-      v34.normalize();;
+      v34=v34/v34.norm();
       p2=p3-v34;
       p1next=p3+v34;
     }
@@ -216,17 +216,17 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
     double scalaireTmp=v03.dotProduct(v34)/(v03.norm()*v34.norm());
 
     if ((scalaireTmp<0.99999) && (scalaireTmp>-0.9999999)) {
-      v03.normalize();
-      v34.normalize();
+      v03=v03/v03.norm();
+      v34=v34/v34.norm();
       Coord vP2=(((v03^v34)^(v34-v03)));
-      vP2.normalize();
+      vP2=vP2/vP2.norm();
       Coord vP1=(((v03^v34)^(v03-v34)));
-      vP1.normalize();
+      vP1=vP1/vP1.norm();
       p2=vP2+p3;
       p1next=vP1+p3;
     }
     else {
-      v34.normalize();
+      v34=v34/v34.norm();
       p2=p3-v34;
       p1next=p3+v34;
     }
@@ -255,7 +255,7 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
     p1=p1next;
     p3=endPoint;
     p2=p0-p3;
-    p2=p2.normalize()+p3;
+    p2=p2/p2.norm()+p3;
     GLfloat *bendsCoordinates=buildCurvePoints(p0,p1,p2,p3);
     glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, bendsCoordinates);
     glEnable(GL_MAP1_VERTEX_3);
@@ -304,18 +304,18 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &be
     double scalaireTmp=v03.dotProduct(v34)/(v03.norm()*v34.norm());
 
     if ((scalaireTmp<0.99999) && (scalaireTmp>-0.9999999)) {
-      v03.normalize();
-      v34.normalize();
+      v03=v03/v03.norm();
+      v34=v34/v34.norm();
       p1=v03+p0;
       Coord vP2=(((v03^v34)^(v34-v03)));
-      vP2.normalize();
+      vP2=vP2/vP2.norm();
       Coord vP1=(((v03^v34)^(v03-v34)));
-      vP1.normalize();
+      vP1=vP1/vP1.norm();
       p2=vP2+p3;
       p1next=vP1+p3;
     }
     else {
-      v34.normalize();
+      v34=v34/v34.norm();
       p2=p3-v34;
       p1next=p3+v34;
     }
@@ -337,17 +337,17 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &be
     double scalaireTmp=v03.dotProduct(v34)/(v03.norm()*v34.norm());
 
     if ((scalaireTmp<0.99999) && (scalaireTmp>-0.9999999)) {
-      v03.normalize();
-      v34.normalize();
+      v03=v03/v03.norm();
+      v34=v34/v34.norm();
       Coord vP2=(((v03^v34)^(v34-v03)));
-      vP2.normalize();
+      vP2=vP2/vP2.norm();
       Coord vP1=(((v03^v34)^(v03-v34)));
-      vP1.normalize();
+      vP1=vP1/vP1.norm();
       p2=vP2+p3;
       p1next=vP1+p3;
     }
     else {
-      v34.normalize();
+      v34=v34/v34.norm();
       p2=p3-v34;
       p1next=p3+v34;
     }
@@ -363,7 +363,7 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &be
     p1=p1next;
     p3=endPoint;
     p2=p0-p3;
-    p2=p2.normalize()+p3;
+    p2=p2/p2.norm()+p3;
     tmpVect[tmpVectIdx++]=p0;
     tmpVect[tmpVectIdx++]=p1;
     tmpVect[tmpVectIdx++]=p2;

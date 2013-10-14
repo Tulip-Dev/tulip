@@ -30,8 +30,8 @@
 #include <limits>
 #include <cstring>
 
-#define VECTOR Vector<TYPE,SIZE,OTYPE>
-#define TEMPLATEVECTOR template <typename TYPE, unsigned int SIZE, typename OTYPE>
+#define VECTOR Vector<TYPE,SIZE,OTYPE,DTYPE>
+#define TEMPLATEVECTOR template <typename TYPE, unsigned int SIZE, typename OTYPE, typename DTYPE>
 
 namespace tlp {
 
@@ -64,7 +64,7 @@ inline double tlpsqrt<double, long double>(long double a) {
  * \author : David Auber auber@tulip-software.org
  * \version 0.0.1 24/01/2003
  */
-template <typename TYPE, unsigned int SIZE, typename OTYPE = double>
+ template <typename TYPE, unsigned int SIZE, typename OTYPE = double, typename DTYPE = TYPE>
 class Vector:public Array<TYPE,SIZE> {
 public:
   inline VECTOR() {
@@ -346,8 +346,8 @@ public:
   inline bool operator!=(const VECTOR &) const;
   inline bool operator==(const VECTOR &) const;
   inline VECTOR & fill(const TYPE obj);
-  inline OTYPE norm () const;
-  inline OTYPE length () const {
+  inline TYPE norm () const;
+  inline TYPE length () const {
     return norm();
   }
   inline VECTOR & normalize () {
@@ -369,7 +369,7 @@ public:
 
     return *this;
   }
-  inline OTYPE dist (const VECTOR &) const;
+  inline DTYPE dist (const VECTOR &) const;
   inline TYPE dotProduct(const VECTOR &) const;
 };
 
@@ -379,7 +379,7 @@ inline TYPE dotProduct(const VECTOR &a, const VECTOR &b) {
 }
 
 TEMPLATEVECTOR
-inline OTYPE dist(const VECTOR &a, const VECTOR &b) {
+inline TYPE dist(const VECTOR &a, const VECTOR &b) {
   return a.dist(b);
 }
 
@@ -453,7 +453,7 @@ inline VECTOR operator-(const VECTOR&);
 /**
   * @brief typedef for 2D vector of unsigned int
   */
-typedef Vector<unsigned int, 2> Vec2ui;
+ typedef Vector<unsigned int, 2> Vec2ui;
 /**
   * @brief typedef for 3D vector of unsigned int
   */
