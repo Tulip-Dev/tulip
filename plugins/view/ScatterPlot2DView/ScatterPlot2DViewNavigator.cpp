@@ -88,7 +88,8 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
 ScatterPlot2D *ScatterPlot2DViewNavigator::getOverviewUnderPointer(const Coord &sceneCoords) {
   ScatterPlot2D *ret = NULL;
-  vector<ScatterPlot2D *> overviews = scatterPlot2dView->getScatterPlots();
+  vector<ScatterPlot2D *> overviews =
+    scatterPlot2dView->getSelectedScatterPlots();
   vector<ScatterPlot2D *>::iterator it;
 
   for (it = overviews.begin() ; it != overviews.end() ; ++it) {

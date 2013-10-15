@@ -99,7 +99,7 @@ public :
   QList<QWidget *> configurationWidgets() const;
   void computeNodeSizes();
   void buildScatterPlotsMatrix();
-  std::vector<ScatterPlot2D *> getScatterPlots() const;
+  std::vector<ScatterPlot2D *> getSelectedScatterPlots() const;
   ScatterPlot2D *getDetailedScatterPlot() const {
     return detailedScatterPlot;
   }
