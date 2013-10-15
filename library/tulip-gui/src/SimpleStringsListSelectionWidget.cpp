@@ -199,7 +199,7 @@ void SimpleStringsListSelectionWidget::pressButtonDown() {
   if (_ui->listWidget->count() > 0) {
     int row = _ui->listWidget->currentRow();
 
-    if (row < (_ui->listWidget->count() - 1)) {
+    if (row != -1 && row < (_ui->listWidget->count() - 1)) {
       QListWidgetItem *item1 = new QListWidgetItem(*(_ui->listWidget->currentItem()));
       QListWidgetItem *item2 = new QListWidgetItem(*(_ui->listWidget->item(row + 1)));
       delete _ui->listWidget->item(row);
