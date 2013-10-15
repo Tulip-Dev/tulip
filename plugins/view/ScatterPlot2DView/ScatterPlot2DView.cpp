@@ -825,24 +825,30 @@ std::vector<ScatterPlot2D *> ScatterPlot2DView::getSelectedScatterPlots() const 
     // in the selectedGraphProperties vector
     if (!it->second)
       continue;
+
     // properties on x and y axis
     const string& xProp = (it->first).first;
     const string& yProp = (it->first).second;
     // position in the selectedGraphProperties of the property on the x axis
     int xPos = -1;
     bool valid = false;
+
     for(unsigned int i = 0; i < selectedGraphProperties.size(); ++i) {
       const string& prop = selectedGraphProperties[i];
+
       if (prop == xProp) {
-	xPos = i;
-	continue;
+        xPos = i;
+        continue;
       }
+
       if (prop == yProp) {
-	if (xPos != -1)
-	  valid = true;
-	break;
+        if (xPos != -1)
+          valid = true;
+
+        break;
       }
     }
+
     if (valid)
       ret.push_back(it->second);
   }
