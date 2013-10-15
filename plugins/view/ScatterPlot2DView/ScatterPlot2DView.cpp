@@ -430,7 +430,7 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
           Coord overviewBlCorner(i * (OVERVIEWS_SIZE + OFFSET_BETWEEN_PREVIEWS), (selectedGraphProperties.size() - j - 1.0f) * (OVERVIEWS_SIZE + OFFSET_BETWEEN_PREVIEWS));
           map<pair<string, string>, ScatterPlot2D *>::iterator it = scatterPlotsMap.find(overviewsMapKey);
 
-          if (it != scatterPlotsMap.end()) {
+          if (it != scatterPlotsMap.end() && it->second) {
             scatterOverview = (it->second);
 
             if(!scatterOverview)
@@ -815,15 +815,36 @@ BoundingBox ScatterPlot2DView::getMatrixBoundingBox() {
   return glBBSV.getBoundingBox();
 }
 
-std::vector<ScatterPlot2D *> ScatterPlot2DView::getScatterPlots() const {
+std::vector<ScatterPlot2D *> ScatterPlot2DView::getSelectedScatterPlots() const {
   vector<ScatterPlot2D *> ret;
   map<pair<string, string>, ScatterPlot2D *>::const_iterator it;
 
   for (it = scatterPlotsMap.begin() ; it != scatterPlotsMap.end() ; ++it) {
-    if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), (it->first).first) != selectedGraphProperties.end() &&
-        std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), (it->first).second) != selectedGraphProperties.end()) {
-      ret.push_back(it->second);
+    // a scatter plot is selected if non null
+    // and if the property on the x axis is before the property on the y axis
+    // in the selectedGraphProperties vector
+    if (!it->second)
+      continue;
+    // properties on x and y axis
+    const string& xProp = (it->first).first;
+    const string& yProp = (it->first).second;
+    // position in the selectedGraphProperties of the property on the x axis
+    int xPos = -1;
+    bool valid = false;
+    for(unsigned int i = 0; i < selectedGraphProperties.size(); ++i) {
+      const string& prop = selectedGraphProperties[i];
+      if (prop == xProp) {
+	xPos = i;
+	continue;
+      }
+      if (prop == yProp) {
+	if (xPos != -1)
+	  valid = true;
+	break;
+      }
     }
+    if (valid)
+      ret.push_back(it->second);
   }
 
   return ret;
