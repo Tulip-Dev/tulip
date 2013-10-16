@@ -66,7 +66,6 @@ private slots :
   void userTextureRbToggled(bool checked);
   void minAxisPointSizeValueChanged(int newValue);
   void maxAxisPointSizeValueChanged(int newValue);
-  void pressColorButton();
 
 public slots :
 

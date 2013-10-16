@@ -34,11 +34,6 @@
        <height>0</height>
       </size>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
      <property name="title">
       <string>General draw parameters : </string>
      </property>
@@ -46,7 +41,16 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetNoConstraint</enum>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>3</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item row="2" column="0" colspan="3">
@@ -58,7 +62,16 @@
          <property name="sizeConstraint">
           <enum>QLayout::SetNoConstraint</enum>
          </property>
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>6</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item row="0" column="0">
@@ -68,11 +81,6 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-            </font>
            </property>
            <property name="text">
             <string>viewColor value</string>
@@ -89,11 +97,6 @@
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <pointsize>8</pointsize>
-            </font>
            </property>
            <property name="text">
             <string>user value                                                                                 </string>
@@ -127,11 +130,6 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-         </font>
-        </property>
         <property name="text">
          <string>Non highlighted elements colors alpha value :                                 </string>
         </property>
@@ -155,13 +153,8 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-         </font>
-        </property>
         <property name="text">
-         <string>Background Color :</string>
+         <string>Background color :</string>
         </property>
        </widget>
       </item>
@@ -172,11 +165,6 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-         </font>
         </property>
         <property name="text">
          <string>Axis height :  </string>
@@ -203,7 +191,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QPushButton" name="bgColorButton">
+       <widget class="tlp::ColorButton" name="bgColorButton">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -269,11 +257,6 @@
        <height>0</height>
       </size>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
      <property name="title">
       <string>Draw nodes on axis : </string>
      </property>
@@ -299,11 +282,6 @@
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox">
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
      <property name="title">
       <string>viewSize Mapping configuration</string>
      </property>
@@ -317,11 +295,6 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
           </property>
           <property name="text">
            <string>Minimum axis node size : </string>
@@ -364,11 +337,6 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
-          </property>
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
           </property>
           <property name="text">
            <string>Maximum axis node size : </string>
@@ -419,11 +387,6 @@
        <height>0</height>
       </size>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
      <property name="title">
       <string>Apply texture on lines :  </string>
      </property>
@@ -434,7 +397,16 @@
       <property name="sizeConstraint">
        <enum>QLayout::SetNoConstraint</enum>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>6</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item row="0" column="0" colspan="2">
@@ -444,11 +416,6 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-         </font>
         </property>
         <property name="text">
          <string>Use tulip default texture</string>
@@ -465,11 +432,6 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-         </font>
         </property>
         <property name="text">
          <string>Use texture from file :</string>
@@ -565,6 +527,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::ColorButton</class>
+   <extends>QPushButton</extends>
+   <header>tulip/ColorButton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
