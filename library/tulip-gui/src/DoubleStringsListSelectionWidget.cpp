@@ -160,7 +160,7 @@ void DoubleStringsListSelectionWidget::pressButtonDown() {
   if (_ui->outputList->count() > 0) {
     int row = _ui->outputList->currentRow();
 
-    if (row < (_ui->outputList->count() - 1)) {
+    if (row != -1 && row < (_ui->outputList->count() - 1)) {
       QString s = _ui->outputList->currentItem()->text();
       QString s2 = _ui->outputList->item(row + 1)->text();
       _ui->outputList->deleteItemList(_ui->outputList->item(row));
