@@ -39,9 +39,11 @@ ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent) 
   connect(_ui->userTexture, SIGNAL(toggled(bool)), this, SLOT(userTextureRbToggled(bool)));
   connect(_ui->minAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(minAxisPointSizeValueChanged(int)));
   connect(_ui->maxAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(maxAxisPointSizeValueChanged(int)));
+
   if (Perspective::instance() != NULL && Perspective::instance()->mainWindow() != NULL) {
     _ui->bgColorButton->setDialogParent(Perspective::instance()->mainWindow());
   }
+
   //connect(_ui->bgColorButton,SIGNAL(clicked()),this,SLOT(pressColorButton()));
   connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
 }
