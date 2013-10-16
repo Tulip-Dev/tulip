@@ -143,9 +143,9 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
 
   okButton = new QPushButton("OK");
   axisLabelsOrder = new ItemsListWidget(this);
-  QPushButton* up = new QPushButton(QIcon(":/up.png"),"");
+  QPushButton* up = new QPushButton(QIcon(":/tulip/gui/icons/16/go-up.png"),"");
   QPushButton* lexOrder = new QPushButton(QString("Lexicographic") + QChar(QChar::LineSeparator) +  QString("     order"));
-  QPushButton *down = new QPushButton(QIcon(":/down.png"),"");
+  QPushButton *down = new QPushButton(QIcon(":/tulip/gui/icons/16/go-down.png"),"");
 
 
   buttonsUpDownLayout->addWidget(up);
@@ -209,7 +209,7 @@ void NominalAxisConfigDialog::pressButtonDown() {
   if (axisLabelsOrder->count() > 0) {
     int row = axisLabelsOrder->currentRow();
 
-    if (row < (axisLabelsOrder->count() - 1)) {
+    if (row != -1 && row < (axisLabelsOrder->count() - 1)) {
       QString s = axisLabelsOrder->currentItem()->text();
       QString s2 = axisLabelsOrder->item(row + 1)->text();
       axisLabelsOrder->deleteItemList(axisLabelsOrder->item(row));
