@@ -19,8 +19,10 @@
 
 #include <QFileDialog>
 #include <QColorDialog>
+#include <QMainWindow>
 
 #include <tulip/TlpTools.h>
+#include <tulip/Perspective.h>
 
 #include "ParallelTools.h"
 #include "ParallelCoordsDrawConfigWidget.h"
@@ -37,7 +39,10 @@ ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent) 
   connect(_ui->userTexture, SIGNAL(toggled(bool)), this, SLOT(userTextureRbToggled(bool)));
   connect(_ui->minAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(minAxisPointSizeValueChanged(int)));
   connect(_ui->maxAxisPointSize, SIGNAL(valueChanged(int)), this, SLOT(maxAxisPointSizeValueChanged(int)));
-  connect(_ui->bgColorButton,SIGNAL(clicked()),this,SLOT(pressColorButton()));
+  if (Perspective::instance() != NULL && Perspective::instance()->mainWindow() != NULL) {
+    _ui->bgColorButton->setDialogParent(Perspective::instance()->mainWindow());
+  }
+  //connect(_ui->bgColorButton,SIGNAL(clicked()),this,SLOT(pressColorButton()));
   connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
 }
 
@@ -159,49 +164,12 @@ unsigned int ParallelCoordsDrawConfigWidget::getLinesColorAlphaValue() const {
   }
 }
 
-Color ParallelCoordsDrawConfigWidget::getBackgroundColor() const {
-  QString buttonStyleSheet(_ui->bgColorButton->styleSheet());
-  QString backgroundColorCodeHex(buttonStyleSheet.mid(buttonStyleSheet.indexOf("#") + 1, 6));
-  bool ok;
-  return Color(backgroundColorCodeHex.mid(0, 2).toInt(&ok, 16),
-               backgroundColorCodeHex.mid(2, 2).toInt(&ok, 16),
-               backgroundColorCodeHex.mid(4, 2).toInt(&ok, 16));
-}
-
 void ParallelCoordsDrawConfigWidget::setBackgroundColor(const Color &color) {
-  QString colorStr;
-  QString str;
-
-  str.setNum(color.getR(),16);
-
-  if(str.size()!=2)
-    str.insert(0,"0");
-
-  colorStr.append(str);
-
-  str.setNum(color.getG(),16);
-
-  if(str.size()!=2)
-    str.insert(0,"0");
-
-  colorStr.append(str);
-
-  str.setNum(color.getB(),16);
-
-  if(str.size()!=2)
-    str.insert(0,"0");
-
-  colorStr.append(str);
-
-  _ui->bgColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
+  _ui->bgColorButton->setTulipColor(color);
 }
 
-void ParallelCoordsDrawConfigWidget::pressColorButton() {
-  QColor newColor(QColorDialog::getColor(_ui->bgColorButton->palette().color(QPalette::Button), this));
-
-  if (newColor.isValid()) {
-    setBackgroundColor(Color(newColor.red(), newColor.green(), newColor.blue()));
-  }
+Color ParallelCoordsDrawConfigWidget::getBackgroundColor() const {
+  return _ui->bgColorButton->tulipColor();
 }
 
 void ParallelCoordsDrawConfigWidget::setDrawPointOnAxis(const bool drawPointOnAxis) {
