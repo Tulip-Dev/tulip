@@ -137,7 +137,6 @@ const char * paramHelp[] = {
   "This property is used to get the values affected to graph items." \
   HTML_HELP_CLOSE(),
   // target
-  HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
   HTML_HELP_DEF("values", "nodes <BR> edges") \
