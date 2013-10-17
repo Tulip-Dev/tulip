@@ -59,8 +59,11 @@ public :
   int compare(const edge e1, const edge e2) const;
 
   // NumericProperty interface
-  virtual double getNodeDoubleValue(const node n ) const {
+  virtual double getNodeDoubleValue(const node n) const {
     return (double) getNodeValue(n);
+  }
+  virtual double getNodeDoubleDefaultValue() const {
+    return (double) getNodeDefaultValue();
   }
   virtual double getNodeDoubleMin(Graph* g = NULL) {
     return (double) getNodeMin(g);
@@ -70,6 +73,9 @@ public :
   }
   virtual double getEdgeDoubleValue(const edge e) const {
     return (double) getEdgeValue(e);
+  }
+  virtual double getEdgeDoubleDefaultValue() const {
+    return (double) getEdgeDefaultValue();
   }
   virtual double getEdgeDoubleMin(Graph* g = NULL) {
     return (double) getEdgeMin(g);
