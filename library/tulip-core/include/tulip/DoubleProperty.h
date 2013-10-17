@@ -64,8 +64,11 @@ public :
                               PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
 
   // NumericProperty interface
-  virtual double getNodeDoubleValue(const node n ) const {
+  virtual double getNodeDoubleValue(const node n) const {
     return getNodeValue(n);
+  }
+  virtual double getNodeDoubleDefaultValue() const {
+    return getNodeDefaultValue();
   }
   virtual double getNodeDoubleMin(Graph* g = NULL) {
     return getNodeMin(g);
@@ -75,6 +78,9 @@ public :
   }
   virtual double getEdgeDoubleValue(const edge e) const {
     return getEdgeValue(e);
+  }
+  virtual double getEdgeDoubleDefaultValue() const {
+    return getEdgeDefaultValue();
   }
   virtual double getEdgeDoubleMin(Graph* g = NULL) {
     return getEdgeMin(g);

@@ -37,6 +37,12 @@ public:
   virtual double getNodeDoubleValue(const node n) const=0;
 
   /**
+   * @brief Gets the default node value of the property.
+   * @return The default value of nodes.
+   */
+  virtual double getNodeDoubleDefaultValue() const=0;
+
+  /**
    * @brief Gets the minimum value on the nodes.
    * @param graph The graph on which to compute.
    * @return The minimal value on this graph for this property.
@@ -55,6 +61,12 @@ public:
    * @param e The edge for which we want to get the value of the property.
    **/
   virtual double getEdgeDoubleValue(const edge e) const=0;
+
+  /**
+   * @brief Gets the default edge value of the property.
+   * @return The default value of edges.
+   */
+  virtual double getEdgeDoubleDefaultValue() const=0;
 
   /**
    * @brief Gets the minimum value on the edges.
