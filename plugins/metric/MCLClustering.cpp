@@ -230,7 +230,7 @@ bool MCLClustering::equal() {
   return true;
 }
 //=================================================
-const char * paramHelp[] = {
+static const char * paramHelp[] = {
   // number of clusters
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "unsigned int" ) \
