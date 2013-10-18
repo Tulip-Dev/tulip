@@ -81,13 +81,12 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "LayoutProperty" ) \
   HTML_HELP_BODY() \
   "The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm." \
-  HTML_HELP_CLOSE(),  
+  HTML_HELP_CLOSE(),
 };
 
 PLUGIN(LinLogAlgorithm)
 
-LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context) : LayoutAlgorithm(context) 
-{
+LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addInParameter<bool>("octtree", paramHelp[1], "true");
   addInParameter<NumericProperty*>("edge weight", paramHelp[2], "", false);
@@ -107,7 +106,7 @@ LinLogAlgorithm::~LinLogAlgorithm() {
 bool LinLogAlgorithm::run() {
   bool is3D = false;
   bool useOctTree = false;
-  
+
   unsigned int max_iter = 100;
   tlp::NumericProperty* edgeWeight = NULL;
   tlp::BooleanProperty* skipNodes = NULL;
@@ -115,7 +114,7 @@ bool LinLogAlgorithm::run() {
   float rExp = 0.0;
   float gFac = 0.9;
   LayoutProperty* layout = NULL;
-	
+
   if ( dataSet!=NULL ) {
     dataSet->get("3D layout", is3D);
     dataSet->get("octtree", useOctTree);
@@ -127,23 +126,25 @@ bool LinLogAlgorithm::run() {
     dataSet->get("skip nodes", skipNodes);
     dataSet->get("initial layout", layout);
   }
+
   linlog = new LinLogLayout(graph, pluginProgress);
 
   if (layout)
     *result = *layout;
   else {
     std::string err;
+
     if (graph->applyPropertyAlgorithm("Random layout", result, err) == false) {
       pluginProgress->setError(err);
       return false;
     }
-  }      
+  }
 
   //launches the lin log algorithm
   linlog->initAlgo(result, edgeWeight,
-		   aExp, rExp,	gFac,
-		   max_iter,
-		   is3D, useOctTree, skipNodes); 
-	
+                   aExp, rExp,  gFac,
+                   max_iter,
+                   is3D, useOctTree, skipNodes);
+
   return linlog->startAlgo();
 }
