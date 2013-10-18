@@ -22,29 +22,29 @@
 #include <tulip/TulipPluginHeaders.h>
 #include "OctTree.h"
 
-class LinLogLayout { 
-	
- public:
+class LinLogLayout {
+
+public:
   LinLogLayout (tlp::Graph* _graph, tlp::PluginProgress* pluginProgress);
   ~LinLogLayout ();
-  bool initAlgo (tlp::LayoutProperty* _layoutResult, 
-		 tlp::NumericProperty* _weight, 
-		 double _attrExponent, 
-		 double _repuExponent, 
-		 double _gravFactor,
-		 unsigned int _max_iter,
-		 bool _is3D,
-		 bool _useOctTree,
-		 tlp::BooleanProperty* _skipNodes);
-  
+  bool initAlgo (tlp::LayoutProperty* _layoutResult,
+                 tlp::NumericProperty* _weight,
+                 double _attrExponent,
+                 double _repuExponent,
+                 double _gravFactor,
+                 unsigned int _max_iter,
+                 bool _is3D,
+                 bool _useOctTree,
+                 tlp::BooleanProperty* _skipNodes);
+
   void setAttrExp (double);
   void setGravFact (double);
-  void setRepExp (double);	
+  void setRepExp (double);
   bool startAlgo ();
-	
- private: 
-	
-  tlp::NumericProperty* edgeWeight;	
+
+private:
+
+  tlp::NumericProperty* edgeWeight;
   tlp::LayoutProperty* layoutResult;
   tlp::DoubleProperty *linLogWeight;
   tlp::BooleanProperty* skipNodes;
@@ -56,7 +56,7 @@ class LinLogLayout {
   unsigned int _nbNodes; //number of nodes in the graph
   unsigned int max_iter; // the max number of iterations
   bool useOctTree;
-    
+
   /** Factor for repulsion energy. */
   double repuFactor;
   /** Exponent of the Euclidean distance in the repulsion energy. */
@@ -73,26 +73,26 @@ class LinLogLayout {
   double getGravitationEnergy (node u) ;
   double getAttractionEnergy (node u);
   double getRepulsionEnergy (node u);
-  double getEnergy (node u); 
+  double getEnergy (node u);
   double getDist (const Coord& pos1, const Coord& pos2) ;
   double getDistForComparison (const Coord& pos1, const Coord& pos2) ;
 
-	
+
   double addRepulsionDir (node u, double* dir);
   double addAttractionDir (node u, double* dir);
   double addGravitationDir (node u, double* dir);
   void getDirection (node u, double* dir);
-	
+
   bool minimizeEnergyNoTree (int nrIterations);
-	
-  void initEnergyFactors ();  
-  void computeBaryCenter (); 
+
+  void initEnergyFactors ();
+  void computeBaryCenter ();
 
   void setComputationalWeigths ();
-	
+
   void initWeights ();
   void initWeights2 (); //old initialization
-	
+
   OctTree* buildOctTree ();
   bool minimizeEnergy (int nrIterations);
   double addRepulsionDir (node u, double* dir, OctTree* tree);

@@ -37,17 +37,17 @@ class LinLogLayout;
 
 class LinLogAlgorithm : public tlp::LayoutAlgorithm {
 
- public :
+public :
 
   PLUGININFORMATIONS("LinLog", "B. Renoust","11/02/13","The LinLog layout algorithm</br>an energy model layout.","1.0","Force Directed");
 
   LinLogAlgorithm(const tlp::PluginContext *context);
-	
+
   ~LinLogAlgorithm ();
 
   bool run();
-   	
- private :
+
+private :
   tlp::LayoutProperty* layout;
   LinLogLayout* linlog;
 };
