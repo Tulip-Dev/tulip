@@ -1,6 +1,7 @@
 ADD_SUBDIRECTORY(OGDF)
 ADD_SUBDIRECTORY(FastOverlapRemoval)
 ADD_SUBDIRECTORY(Grip)
+ADD_SUBDIRECTORY(LinLog)
 
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude})
 
