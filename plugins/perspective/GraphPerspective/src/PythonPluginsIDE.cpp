@@ -219,7 +219,7 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
 
   _ui->pluginsInfosWidget->setText(infosMsg);
 
-  QString docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + "../doc/tulip-python/html/index.html";
+  QString docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html";
 
   QFile docRoot(docRootPath);
 
