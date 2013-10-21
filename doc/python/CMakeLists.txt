@@ -8,7 +8,7 @@ ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${S
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "doc;doctrees") 
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html 
-  DESTINATION ${TulipShareInstallDir}/../doc/tulip-python
+  DESTINATION ${TulipShareInstallDir}/doc/tulip-python
   COMPONENT tulip_python_doc)
 																 
 ELSE(SPHINX_FOUND)
