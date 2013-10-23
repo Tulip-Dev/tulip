@@ -89,22 +89,6 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   connect(_ui->modulesTabWidget, SIGNAL(fileSaved(int)), view, SLOT(checkErrors()));
   connect(_ui->modulesTabWidget, SIGNAL(filesReloaded()), _ui->mainScriptsTabWidget, SLOT(reloadCodeInEditorsIfNeeded()));
   connect(_ui->mainScriptsTabWidget, SIGNAL(filesReloaded()), _ui->modulesTabWidget, SLOT(reloadCodeInEditorsIfNeeded()));
-
-  QString docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html";
-
-  QFile docRoot(docRootPath);
-
-  if (docRoot.exists()) {
-    QWebView *webView = new QWebView();
-    webView->installEventFilter(&keyboardFocusEventFilter);
-#ifdef WIN32
-    webView->load(QUrl("file:///"+docRootPath));
-#else
-    webView->load(QUrl("file://"+docRootPath));
-#endif
-    _ui->tabWidget->addTab(webView, "Documentation");
-  }
-
 }
 
 PythonScriptViewWidget::~PythonScriptViewWidget() {

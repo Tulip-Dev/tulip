@@ -21,6 +21,7 @@
 #include <tulip/PythonInterpreter.h>
 
 #include "GraphPerspective.h"
+#include "DocumentationNavigator.h"
 
 #include <QMessageBox>
 #include <QFileDialog>
@@ -306,6 +307,12 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // Agent actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));
   connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SLOT(showAboutPage()));
+
+  if (DocumentationNavigator::hasDocumentation())
+    connect(_ui->actionShowDocumentation,SIGNAL(triggered()),this,SLOT(showDocumentation()));
+  else
+    _ui->actionShowDocumentation->setVisible(false);
+    
 
   tlp::PluginLister::instance()->addListener(this);
   PythonInterpreter::getInstance()->setDefaultConsoleWidget(_ui->pythonPanel->consoleWidget());
@@ -1127,6 +1134,10 @@ void GraphPerspective::setDevelopMode() {
   _ui->workspaceButton->setChecked(false);
   _ui->developButton->setChecked(true);
   _ui->centralWidget->setCurrentIndex(1);
+}
+
+void GraphPerspective::showDocumentation() {
+  DocumentationNavigator::showDocumentation();
 }
 
 PLUGIN(GraphPerspective)
