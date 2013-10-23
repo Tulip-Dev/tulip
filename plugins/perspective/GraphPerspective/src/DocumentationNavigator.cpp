@@ -113,7 +113,7 @@ DocumentationNavigator::DocumentationNavigator(): QDialog() {
 
 bool DocumentationNavigator::hasDocumentation() {
   return QFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) +
-	       "doc/tulip-python/html/index.html").exists();
+               "doc/tulip-python/html/index.html").exists();
 }
 
 void DocumentationNavigator::showDocumentation() {
@@ -144,4 +144,4 @@ void DocumentationNavigator::updateButtons(bool) {
   backButton->setEnabled(history->canGoBack());
   forwardButton->setEnabled(history->canGoForward());
 }
-  
+

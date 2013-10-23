@@ -312,7 +312,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     connect(_ui->actionShowDocumentation,SIGNAL(triggered()),this,SLOT(showDocumentation()));
   else
     _ui->actionShowDocumentation->setVisible(false);
-    
+
 
   tlp::PluginLister::instance()->addListener(this);
   PythonInterpreter::getInstance()->setDefaultConsoleWidget(_ui->pythonPanel->consoleWidget());
