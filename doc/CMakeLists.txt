@@ -1,7 +1,15 @@
 SET(BUILD_DOC ON CACHE BOOL "Do you want to build the documentation ? [ON|OFF]")
 #Only
 IF(BUILD_DOC)
-  ADD_SUBDIRECTORY(python)
+  IF(PYTHONINTERP_FOUND AND SIP_OK)
+    IF(SPHINX_FOUND)
+      ADD_SUBDIRECTORY(python)
+      ADD_SUBDIRECTORY(user)
+      ADD_SUBDIRECTORY(developer)
+    ELSE(SPHINX_FOUND)
+      MESSAGE("Sphinx not found: unable to generate the documentation.")
+    ENDIF(SPHINX_FOUND)
+  ENDIF(PYTHONINTERP_FOUND AND SIP_OK)
  
   IF(LINUX)
     FIND_PACKAGE(Doxygen)

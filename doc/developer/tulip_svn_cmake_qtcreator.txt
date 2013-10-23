@@ -1,0 +1,24 @@
+sourceforge : http://sourceforge.net/p/auber/code/
+
+svn checkout svn://svn.code.sf.net/p/auber/code/tulip tulip-src
+
+in a file tulip4.X, create the directories:
+
+tulip-src (from the svn)
+build-release
+build-debug
+install-release
+install-debug
+
+launch cmake-gui:
+
+source code = "/.../tulip4.X/tulip"
+build path = "/.../tulip4.X/build-release" or "/.../tulip4.X/build-debug" 
+
+CMAKE_BUILD_TYPE = "Release" or "Debug"
+CMAKE_INSTALL_PREFIX = "/.../tulip4.X/install-release" or "/.../tulip4.X/install-debug" 
+
+make [-jX, X being the number of cores/processors]
+make install
+
+The Windows users can enjoy a few graphic interfaces like `Tortoise SVN <http://tortoisesvn.net/>`_ for instance. They too will need to download the files from the SourceForge SVN.
