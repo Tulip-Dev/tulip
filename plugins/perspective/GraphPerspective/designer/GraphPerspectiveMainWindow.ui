@@ -1110,6 +1110,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionShowDocumentation"/>
     <addaction name="actionAbout_us"/>
     <addaction name="actionPlugins_Center"/>
    </widget>
@@ -1374,6 +1375,14 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="shortcut">
     <string>F11</string>
+   </property>
+  </action>
+  <action name="actionShowDocumentation">
+   <property name="text">
+    <string>Documentation</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+?</string>
    </property>
   </action>
   <action name="actionAbout_us">

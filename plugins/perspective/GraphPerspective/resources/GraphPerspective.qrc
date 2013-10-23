@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/tulip/graphperspective">
+        <file>icons/16/back.png</file>
         <file>icons/16/document-import.png</file>
         <file>icons/16/document-new.png</file>
         <file>icons/16/document-open.png</file>
@@ -7,6 +8,7 @@
         <file>icons/16/document-save.png</file>
         <file>icons/16/edit-redo.png</file>
         <file>icons/16/edit-undo.png</file>
+        <file>icons/16/forward.png</file>
         <file>icons/16/group.png</file>
         <file>icons/16/help-about.png</file>
         <file>icons/16/hierarchy_add.png</file>

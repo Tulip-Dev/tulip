@@ -43,20 +43,6 @@ static QString PYTHON_PLUGINS_PATH(PYTHON_PATH+"/plugins");
 static QString PYTHON_PLUGINS_FILES(PYTHON_PLUGINS_PATH + "/files");
 static QString PYTHON_MODULES_FILES(PYTHON_MODULES_PATH + "/files");
 
-class GragKeyboardFocusEventFilter : public QObject {
-public :
-  bool eventFilter(QObject *, QEvent *event) {
-    if (event->type() == QEvent::ShortcutOverride) {
-      event->accept();
-      return true;
-    }
-
-    return false;
-  }
-};
-
-static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
-
 static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QString &pluginType,
     const QString &pluginName, const QString &pluginAuthor,
     const QString &pluginDate, const QString &pluginInfos,
@@ -218,22 +204,6 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
   _ui->splitter->setCollapsible(0, false);
 
   _ui->pluginsInfosWidget->setText(infosMsg);
-
-  QString docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html";
-
-  QFile docRoot(docRootPath);
-
-  if (docRoot.exists()) {
-    QWebView *webView = new QWebView();
-    webView->installEventFilter(&keyboardFocusEventFilter);
-#ifdef WIN32
-    webView->load(QUrl("file:///"+docRootPath));
-#else
-    webView->load(QUrl("file://"+docRootPath));
-#endif
-    _ui->tabWidget->addTab(webView, "Documentation");
-  }
-
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 

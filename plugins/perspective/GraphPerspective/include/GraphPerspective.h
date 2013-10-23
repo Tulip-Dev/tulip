@@ -90,6 +90,7 @@ public slots:
   virtual void openProjectFile(const QString &path);
 
   void showLogger();
+  void showDocumentation();
 
   virtual void redrawPanels(bool center=false);
   void centerPanelsForGraph(tlp::Graph*, bool graphChanged, bool onlyGlMainView);
