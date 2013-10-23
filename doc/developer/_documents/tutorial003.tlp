@@ -1,0 +1,39 @@
+(tlp "2.3"
+(date "06-14-2013")
+(comments "")
+(nb_nodes 3)
+;(nodes <node_id> <node_id> ...)
+(nodes 0..2)
+(nb_edges 3)
+;(edge <edge_id> <source_id> <target_id>)
+(edge 0 1 2)
+(edge 1 0 1)
+(edge 2 2 0)
+(property  0 color "firstColors"
+(default "(0,0,0,0)" "(0,0,0,0)")
+)
+(property  0 int "firstInteger"
+(default "0" "0")
+)
+(property  0 layout "firstLayout"
+(default "(0,0,0)" "()")
+)
+(property  0 graph "firstMeta"
+(default "0" "()")
+)
+(property  0 double "firstMetric"
+(default "0" "0")
+)
+(property  0 bool "firstSelection"
+(default "false" "false")
+)
+(property  0 size "firstSizes"
+(default "(0,0,0)" "(0,0,0)")
+)
+(property  0 string "firstString"
+(default "first" "first")
+)
+(graph_attributes 0 
+(string "file" "tutorial003.tlp")
+)
+)
