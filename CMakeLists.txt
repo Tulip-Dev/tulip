@@ -75,6 +75,15 @@ SET(LibTulipGUIPythonBindingsName "tulip-gui-python-bindings")
 SET(TulipLibs ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipOGDFName})
 
 ## ========================================================
+## Current year (used in documentation config files)
+## ========================================================
+IF (WIN32)
+  EXECUTE_PROCESS(COMMAND "echo" "%DATE:~6,4%" OUTPUT_VARIABLE CurrentYear OUTPUT_STRIP_TRAILING_WHITESPACE)
+ELSEIF(UNIX)
+  EXECUTE_PROCESS(COMMAND "date" "+%Y" OUTPUT_VARIABLE CurrentYear OUTPUT_STRIP_TRAILING_WHITESPACE)
+ENDIF()
+
+## ========================================================
 ## Configure file for uninstall target
 ## ========================================================
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
