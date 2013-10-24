@@ -48,3 +48,7 @@ Returns the maximum value on the edges for that integer property.
 :type subgraph: :class:`tlp.Graph`
 :rtype: integer 
 %End
+
+private:
+
+  void treatEvent(const tlp::Event&);

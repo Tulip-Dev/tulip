@@ -95,3 +95,6 @@ An uniform quantification tries to separate the edges in n classes of equivalent
 .. warning:: All previous values on edges will be erased and replaced by the id of the class they belong to.
 %End
 
+private:
+
+  void treatEvent(const tlp::Event&);

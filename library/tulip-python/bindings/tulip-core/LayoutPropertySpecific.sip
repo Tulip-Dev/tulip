@@ -653,3 +653,7 @@ Only works in 2D, the third coordinate is not taken into account.
 //Returns the number of edges crossings in the layout.
 //%End
   	
+
+private:
+
+  void treatEvent(const tlp::Event&);
