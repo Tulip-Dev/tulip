@@ -76,9 +76,10 @@ int NavigableTableView::sizeHintForColumn(int col) const {
   int hint = 0;
 
   if (bottom == -1 || (bottom+10) >= model()->rowCount()) {
-     bottom = model()->rowCount() - 1;
-  } else {
-     bottom += 10;
+    bottom = model()->rowCount() - 1;
+  }
+  else {
+    bottom += 10;
   }
 
   for (int row = top; row <= bottom; ++row) {
