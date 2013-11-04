@@ -11,15 +11,23 @@ Before doing any of the tutorials please read the following warnings :
 	
 * you can find at the end of each tutorial, the integral source code that we used.
 	
-* If you want more details on a specific function or class please read the Tulip Graph library <ulink url="../../doxygen/tulip.html">documentation</ulink>. 
+* If you want more details on a specific function or class please read the `Tulip API documentation <http://tulip.labri.fr/Documentation/4_4/doxygen/>`_. 
 
 Tutorial compilation instructions
 =================================
 
-The present tutorials are only here to help you familiarize with the Tulip tool while using some of the classic graph manipulation operations. To compile the tutorial files, you will first need a C++ compiler (see the minimal compatible versions in the *INSTALL.* [linux, mac, win] file).
+The present tutorials are only here to help you familiarize with the Tulip tool while using some of the classic graph manipulation operations. To compile the tutorial files, you will first need a C++ compiler (see the minimal compatible versions in the *INSTALL.[linux, mac, win]* file).
 
-The second needed element is the *tulip-config* file. If you have followed the standard installation procedures, such file should exists in the directory */usr/local/bin*, along with *tulip* and *tulip_perspective*.
-If you have, however, followed the customized installation procedures, the files should be in the directory *[...]/Tulip-4.3/install-[debug,release]/bin/*. You can either add this folder address to the path or specify the whole address in the compilation command line.
+The second needed element is the *tulip-config* file. If you have followed the standard installation procedures, such file should exists in the directory ::
+
+  /usr/local/bin
+
+along with *tulip* and *tulip_perspective*.
+If you have, however, followed the customized installation procedures, the files should be in the directory ::
+
+  [...]/Tulip-4.3/install-[debug,release]/bin/*
+
+You can either add this folder address to the path or specify the whole address in the compilation command line.
 
 This command will be formed as ::
 

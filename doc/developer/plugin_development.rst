@@ -578,7 +578,7 @@ Following is a list of all protected members :
 Skeleton of an ExportModule derived class
 -----------------------------------------
 
-Example de code::
+Code example::
  
   #include <tulip/ExportModule.h>
   #include <string>
