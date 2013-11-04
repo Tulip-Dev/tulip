@@ -4,10 +4,12 @@
 Plugins Management (Mac OS and Windows only)
 ********************************************
 
-The plugin management center can be found in the welcome window, under the tab "Plugins center".
+The plugin management center can be found in the Tulip window, under the tab "Plugins center". 
 
 .. image:: _images/tulip-plugin_center.png
     :width: 600
+
+As you can see, we are here again speaking of the framework and no more of the perspective. The plugins are added directly into Tulip so they can become available in every perspective in the framework. Please, also note that due to library specification and software portability, the Plugin center is not available on Unix-like systems and therefore can only be used on the Apple Mac OS and Microsoft Windows operating systems.
 
 The plugins center panel is divided into three parts.
 

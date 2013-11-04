@@ -29,7 +29,7 @@ As an example to illustrate our explanations, we will use the following graph (r
 Subgraph
 ^^^^^^^^
 
-A subgraph is simply a subset of the graph elements: some nodes of the graph, and some edges between them (more information: `Wikipedia: Subgraphs <http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Subgraphs>`).
+A subgraph is simply a subset of the graph elements: some nodes of the graph, and some edges between them (more informations: `Wikipedia: Subgraphs <http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Subgraphs>`_).
 
 Specifically, the edge of a subgraph must already be present in the graph just above it in the hierarchical scale. A subgraph does not necessarily contains all the edges of the induced subgraph. For an edge to possibly be in the subgraph, both its endpoints must be in it.
 
