@@ -1,11 +1,10 @@
 .. _gui:
 
-****************************************************
-A Quick Presentation of the Graphical User Interface
-****************************************************
+*********************************************
+A Quick Presentation of the Tulip Perspective
+*********************************************
 
-We suggest to run Tulip and experiment with the concepts explained while reading this Manual. When starting the software, the welcome window will appear. You can open one of the perspectives of Tulip by clicking on the corresponding green arrow icon or double clicking on their description box. The "Open Project" button also allows you to directly open one of your Tulip file, graph or project.
-Here are the components of the main window:
+Here are the components of Tulip Perspective's main window:
 
 .. image:: _images/i_interface.png
     :width: 600
@@ -28,12 +27,15 @@ Here are the components of the main window:
 
 |l_blu| Workspace view
 
+From this point and even if it is partially incorrect, we will refer to the Tulip perspective by simply using the term Tulip. Differenciating one from the other should not be too complex as the perspective window proposes the visualization actions and the Tulip framework window only offers you to manage your plugins and to choose your project.
+
+
 .. _menu:
 
 Menus
 =====
 
-The Tulips's User Interface exploits the standard *File, Edit, Window, Help* menu options.
+The Tulip User Interface exploits the standard *File, Edit, Window, Help* menu options.
 
 .. image:: _images/mainmenu.png
 
@@ -41,7 +43,7 @@ The *File* submenu contains the operation for file management. One can find in i
 
 The *Edit* submenu gives access to the standard tools *Undo, Redo, Cut, Copy, Paste* and *Delete*. Several other options concerning the selection operations or the subgraph creation can also be found here.
 
-The two last submenus, *Window* and *Help*, give a few various options going from enabling the full screen mode to the opening of the help window.
+The two last submenus, *Window* and *Help*, give a few various options going from enabling the full screen mode to the opening of the help window or of the currnet documentation.
 
 
 .. _toolbar:
