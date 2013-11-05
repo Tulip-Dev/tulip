@@ -32,7 +32,7 @@ using namespace std;
 
 namespace tlp {
 
-  ParallelCoordsAxisSpacer::ParallelCoordsAxisSpacer() : parallelView(NULL), selectedAxis(NULL), x(0), y(0), dragStarted(false) {}
+ParallelCoordsAxisSpacer::ParallelCoordsAxisSpacer() : parallelView(NULL), selectedAxis(NULL), x(0), y(0), dragStarted(false) {}
 
 bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 

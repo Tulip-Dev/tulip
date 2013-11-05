@@ -31,7 +31,7 @@ using namespace std;
 
 namespace tlp {
 
-  PixelOrientedViewNavigator::PixelOrientedViewNavigator() : pixelView(NULL), selectedOverview(NULL) {}
+PixelOrientedViewNavigator::PixelOrientedViewNavigator() : pixelView(NULL), selectedOverview(NULL) {}
 
 PixelOrientedViewNavigator::~PixelOrientedViewNavigator() {}
 

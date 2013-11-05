@@ -277,7 +277,7 @@ void GlAxisBoxPlot::drawLabel(Coord position, string labelName, Camera *camera) 
   labelToDraw.draw(0, camera);
 }
 
-  ParallelCoordsAxisBoxPlot::ParallelCoordsAxisBoxPlot() : parallelView(NULL), currentGraph(NULL), selectedAxis(NULL), lastNbAxis(0) {}
+ParallelCoordsAxisBoxPlot::ParallelCoordsAxisBoxPlot() : parallelView(NULL), currentGraph(NULL), selectedAxis(NULL), lastNbAxis(0) {}
 
 ParallelCoordsAxisBoxPlot::~ParallelCoordsAxisBoxPlot() {
   deleteGlAxisPlot();
