@@ -48,7 +48,7 @@ namespace tlp {
 struct EntityWithDistance {
 
   EntityWithDistance(const double &dist,EntityLODUnit *entity)
-    :distance(dist),entity(entity),isComplexEntity(false) {
+    :distance(dist),entity(entity),isComplexEntity(false),isNode(true) {
   }
   EntityWithDistance(const double &dist,ComplexEntityLODUnit *entity,bool isNode)
     :distance(dist),entity(entity),isComplexEntity(true),isNode(isNode) {

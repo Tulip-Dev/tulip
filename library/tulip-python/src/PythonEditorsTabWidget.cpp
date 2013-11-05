@@ -107,9 +107,10 @@ void PythonEditorsTabWidget::clearErrorIndicators() {
 }
 
 bool PythonEditorsTabWidget::eventFilter(QObject *obj, QEvent *event) {
-  Qt::KeyboardModifiers modifier = Qt::ControlModifier;
 #ifdef __APPLE__
-  modifier = Qt::MetaModifier;
+  Qt::KeyboardModifiers modifier = Qt::MetaModifier;
+#else
+  Qt::KeyboardModifiers modifier = Qt::ControlModifier;
 #endif
 
   if (event->type() == QEvent::KeyPress) {

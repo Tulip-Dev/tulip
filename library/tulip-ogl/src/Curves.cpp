@@ -480,7 +480,7 @@ void polyQuad(const vector<Coord> &vertices,
               const string &textureName, const float outlineWidth) {
 
   vector<float> sizes;
-  getSizes(vertices, s1, s2,sizes);
+  getSizes(vertices, s1, s2, sizes);
 
   vector<Coord> quadVertices;
   vector<unsigned int> bottomOutlineIndices;
@@ -492,21 +492,17 @@ void polyQuad(const vector<Coord> &vertices,
   if (GlShaderProgram::getCurrentActiveShader() && GlShaderProgram::getCurrentActiveShader()->getName() == "fisheye") {
     const float nbSubDiv = 20.f;
     vector<Coord> newVertices;
-    vector<float> newSizes;
     newVertices.push_back(quadVertices[0]);
     newVertices.push_back(quadVertices[1]);
-    newSizes.push_back(sizes[0]);
 
     for (size_t i = 0 ; i < quadVertices.size()/2 - 1 ; ++i) {
       for (float j = 1 ; j < nbSubDiv ; ++j) {
         newVertices.push_back(quadVertices[2*i] + (j/(nbSubDiv-1)) * (quadVertices[2*(i+1)] - quadVertices[2*i]));
         newVertices.push_back(quadVertices[2*i+1] + (j/(nbSubDiv-1)) * (quadVertices[2*(i+1)+1] - quadVertices[2*i+1]));
-        newSizes.push_back(sizes[i] + (j/(nbSubDiv-1)) * (sizes[i+1] - sizes[i]));
       }
     }
 
     quadVertices = newVertices;
-    sizes = newSizes;
   }
 
   float length = 0;
