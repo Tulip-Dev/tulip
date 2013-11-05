@@ -155,7 +155,7 @@ class ConsoleInputHandler : public QObject {
 
 public:
 
-  ConsoleInputHandler() : _consoleWidget(NULL), _lineRead(false) {}
+  ConsoleInputHandler() : _startReadCol(-1), _consoleWidget(NULL), _lineRead(false), _wasReadOnly(false) {}
 
   void setConsoleWidget(QAbstractScrollArea *consoleWidget) {
     _consoleWidget = consoleWidget;

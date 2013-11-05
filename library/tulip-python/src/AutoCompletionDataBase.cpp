@@ -861,7 +861,7 @@ static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &pr
   QSet<QString> ret;
   tlp::Graph *sg=NULL;
   forEach(sg, root->getSubGraphs()) {
-    QString sgName = "\"" + QString(sg->getName().c_str()) + "\"";
+    QString sgName = "\"" + QString::fromUtf8(sg->getName().c_str()) + "\"";
 
     if (sgName.startsWith(prefix))
       ret.insert(sgName);
@@ -874,11 +874,10 @@ static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &pr
 
 static QSet<QString> getGraphPropertiesList(Graph *graph, const QString &prefix, const QString &type="") {
   QSet<QString> ret;
-  string prop;
   QVector<PropertyInterface*> properties = getAllGraphPropertiesFromRoot(graph);
   foreach(PropertyInterface* prop, properties) {
     if (type == "" || prop->getTypename() == type.toStdString()) {
-      QString qProp = "\"" + QString(prop->getName().c_str()) + "\"";
+      QString qProp = "\"" + QString::fromUtf8(prop->getName().c_str()) + "\"";
 
       if (qProp.startsWith(prefix)) {
         ret.insert(qProp);
