@@ -191,8 +191,8 @@ bool ViewGraphPropertiesSelectionWidget::configurationChanged() {
   }
 
   if(!sameSelectedProperties) {
-    return true;
     lastSelectedProperties=selectedProperties;
+    return true;
   }
 
   return false;
