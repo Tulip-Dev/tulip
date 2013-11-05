@@ -37,7 +37,7 @@ static Color axisHighlight(14,241,212,0);
 
 static Color axisToSwapHighlight(0,255,0,0);
 
-  ParallelCoordsAxisSwapper::ParallelCoordsAxisSwapper() : parallelView(NULL), selectedAxis(NULL), otherAxisToSwap(NULL), initialSelectedAxisRotAngle(0), dragStarted(false), x(0), y(0), axisHighlightRect(NULL), mouseMove(false), axisSwapStarted(false) {}
+ParallelCoordsAxisSwapper::ParallelCoordsAxisSwapper() : parallelView(NULL), selectedAxis(NULL), otherAxisToSwap(NULL), initialSelectedAxisRotAngle(0), dragStarted(false), x(0), y(0), axisHighlightRect(NULL), mouseMove(false), axisSwapStarted(false) {}
 
 ParallelCoordsAxisSwapper::~ParallelCoordsAxisSwapper() {}
 

@@ -433,7 +433,7 @@ GlColorScale::GlColorScale(const Coord &baseCoord, const float length,
 
 }
 
-  GlColorScale::GlColorScale(const GlColorScale &colorScale): orientation(Horizontal) {
+GlColorScale::GlColorScale(const GlColorScale &colorScale): orientation(Horizontal) {
   if (colorScale.scale)
     scale = new ColorScale(*colorScale.scale);
   else

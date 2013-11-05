@@ -44,7 +44,7 @@ static const char * paramHelp[] = {
 
 //======================================================
 Grip::Grip(const tlp::PluginContext *context) : LayoutAlgorithm(context),
- misf(NULL), edgeLength(0), level(0), currentGraph(NULL), _dim(0) {
+  misf(NULL), edgeLength(0), level(0), currentGraph(NULL), _dim(0) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addDependency("Connected Component", "1.0");
   addDependency("Equal Value", "1.1");

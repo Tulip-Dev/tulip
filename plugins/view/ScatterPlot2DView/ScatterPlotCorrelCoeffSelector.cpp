@@ -69,7 +69,7 @@ bool isPolygonAincludesInB(const vector<Coord> &A, const vector<Coord> &B) {
   return ret;
 }
 
-  GlEditableComplexPolygon::GlEditableComplexPolygon(std::vector<Coord> polygonPoints, const Color &color) : polygonPoints(polygonPoints), color(color), selected(false) {
+GlEditableComplexPolygon::GlEditableComplexPolygon(std::vector<Coord> polygonPoints, const Color &color) : polygonPoints(polygonPoints), color(color), selected(false) {
   basicCircle.resizePoints(30);
   basicCircle.setFillMode(true);
   basicCircle.setOutlineMode(true);

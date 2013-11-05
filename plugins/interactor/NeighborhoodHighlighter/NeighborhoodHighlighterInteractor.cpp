@@ -209,8 +209,8 @@ NeighborhoodHighlighter::NeighborhoodHighlighter() :
   neighborhoodGraphBackupColors(NULL), centralNodeLocked(false),
   circleLayoutSet(false), glWidget(NULL), neighborhoodDist(1),
   configWidget(NULL), circleAlphaValue(maxCircleAlphaValue),
-  startAlpha(0), endAlpha(255), nbAnimSteps(0){
-    }
+  startAlpha(0), endAlpha(255), nbAnimSteps(0) {
+}
 
 NeighborhoodHighlighter::NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter) : neighborhoodGraph(NULL), glNeighborhoodGraph(NULL), glNeighborhoodCamera(NULL), neighborhoodGraphLayout(NULL), neighborhoodGraphCircleLayout(NULL),
   neighborhoodGraphOriginalLayout(NULL), neighborhoodGraphColors(NULL), neighborhoodGraphBackupColors(NULL),
