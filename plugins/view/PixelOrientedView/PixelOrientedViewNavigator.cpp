@@ -31,12 +31,12 @@ using namespace std;
 
 namespace tlp {
 
-PixelOrientedViewNavigator::PixelOrientedViewNavigator() : selectedOverview(NULL) {}
+  PixelOrientedViewNavigator::PixelOrientedViewNavigator() : pixelView(NULL), selectedOverview(NULL) {}
 
 PixelOrientedViewNavigator::~PixelOrientedViewNavigator() {}
 
 void PixelOrientedViewNavigator::viewChanged(View *view) {
-  pixelView = (PixelOrientedView *) view;
+  pixelView = static_cast<PixelOrientedView *>(view);
 }
 
 bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {

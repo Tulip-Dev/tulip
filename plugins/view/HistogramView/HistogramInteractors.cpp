@@ -112,7 +112,7 @@ void HistogramInteractorMetricMapping::construct() {
   push_back(new MousePanNZoomNavigator);
 }
 
-HistogramInteractorStatistics::HistogramInteractorStatistics(const PluginContext *) : HistogramInteractor(":/i_histo_statistics.png", "Statistics"),histoStatsConfigWidget(NULL) {
+  HistogramInteractorStatistics::HistogramInteractorStatistics(const PluginContext *) : HistogramInteractor(":/i_histo_statistics.png", "Statistics"),histoStatsConfigWidget(NULL), histoStatistics(NULL) {
   setPriority(StandardInteractorPriority::ViewInteractor2);
 }
 

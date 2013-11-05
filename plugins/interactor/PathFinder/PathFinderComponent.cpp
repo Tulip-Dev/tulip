@@ -84,7 +84,7 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
     selectionProperty->setAllNodeValue(false);
     selectionProperty->setAllEdgeValue(false);
 
-    if (selNodes.size() == 0) {
+    if (selNodes.empty()) {
       src = node();
       tgt = node();
       glw->setCursor(Qt::ArrowCursor);

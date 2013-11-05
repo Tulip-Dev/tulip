@@ -346,7 +346,7 @@ const char * paramHelp[] = {
 };
 }
 //========================================================================================
-LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleAlgorithm(context), quotient(NULL), metric(NULL), noparam(false) {
+LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleAlgorithm(context), quotient(NULL), internalWeight(NULL), externalWeight(NULL), metric(NULL), noparam(false), m(0.0) {
   addInParameter<NumericProperty*>("metric",paramHelp[0], "",false);
 }
 //========================================================================================

@@ -736,7 +736,7 @@ void SOMView::clearSelection() {
 
 DoubleProperty* SOMView::getSelectedPropertyValues() {
   if (som && !selection.empty() && som->existProperty(selection)) {
-    return (DoubleProperty*) som->getProperty(selection);
+    return static_cast<DoubleProperty*>(som->getProperty(selection));
   }
   else
     return NULL;

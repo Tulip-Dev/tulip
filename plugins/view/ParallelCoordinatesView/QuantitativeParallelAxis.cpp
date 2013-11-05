@@ -44,10 +44,10 @@ void QuantitativeParallelAxis::setAxisLabels() {
   double propertyMin = getAssociatedPropertyMinValue();
   double propertyMax = getAssociatedPropertyMaxValue();
   bool realScale = false;
-  unsigned int n;
 
   if (propertyMin >= INT_MIN && propertyMax <= INT_MAX) {
     if (getAxisDataTypeName() == "double") {
+      unsigned int n;
       forEach(n, graphProxy->getDataIterator()) {
         double val = graphProxy->getPropertyValueForData<DoubleProperty, DoubleType>(getAxisName(), n);
         double intpart, fracpart;

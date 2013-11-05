@@ -1075,7 +1075,7 @@ public :
           break;
 
         // check for empty line
-        if (tokens.size() == 0)
+        if (tokens.empty())
           break;
 
         // check for line separation between matrices

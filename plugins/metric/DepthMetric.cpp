@@ -44,7 +44,7 @@ struct dfsDepthStruct {
   double maxDepth;
   double edgeValue;
 
-  dfsDepthStruct() {}
+  dfsDepthStruct(): outEdges(NULL), maxDepth(0.0), edgeValue(0.0) {}
   dfsDepthStruct(node n, Iterator<edge>* edges):
     current(n), outEdges(edges), maxDepth(0.0), edgeValue(0.0) {}
 };

@@ -214,7 +214,7 @@ bool ParallelCoordinatesGraphProxy::isDataHighlighted(const unsigned int dataId)
 }
 
 bool ParallelCoordinatesGraphProxy::highlightedEltsSet() const {
-  return highlightedElts.size() != 0;
+  return !highlightedElts.empty();
 }
 
 void ParallelCoordinatesGraphProxy::selectHighlightedElements() {

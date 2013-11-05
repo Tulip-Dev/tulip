@@ -48,7 +48,7 @@ QWidget *GoogleMapViewInteractorNavigation::configurationWidget() const {
   return NULL;
 }
 
-GoogleMapViewNavigator::GoogleMapViewNavigator():inRotation(false) {}
+GoogleMapViewNavigator::GoogleMapViewNavigator(): x(0), y(0), inRotation(false) {}
 
 GoogleMapViewNavigator::~GoogleMapViewNavigator() {}
 
@@ -110,7 +110,7 @@ bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     QWheelEvent *qWheelEv = dynamic_cast<QWheelEvent *>(e);
 
     if(qMouseEv || qWheelEv) {
-      GoogleMapsView* googleMapsView=(GoogleMapsView*)(view());
+      GoogleMapsView* googleMapsView=static_cast<GoogleMapsView*>(view());
       QApplication::sendEvent(googleMapsView->getGoogleMap(), e);
     }
 

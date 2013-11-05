@@ -165,8 +165,9 @@ void AxisSlider::translate(const Coord &move) {
 }
 
 ParallelCoordsAxisSliders::ParallelCoordsAxisSliders() :
-  currentGraph(NULL), selectedAxis(NULL), selectedSlider(NULL),
-  axisSliderDragStarted(false), slidersRangeDragStarted(false),
+  parallelView(NULL), currentGraph(NULL), selectedAxis(NULL), selectedSlider(NULL),
+  axisSliderDragStarted(false), pointerBetweenSliders(false),
+  slidersRangeDragStarted(false), slidersRangeLength(0), xClick(0), yClick(0),
   lastAxisHeight(0), lastNbAxis(0), highlightedEltsSetOperation(ParallelCoordinatesDrawing::NONE),
   selectionLayer(new GlLayer("sliders selection layer")) {}
 
@@ -193,14 +194,14 @@ bool ParallelCoordsAxisSliders::compute(GlMainWidget *) {
 void ParallelCoordsAxisSliders::initOrUpdateSliders() {
   vector<ParallelAxis *> allAxis = parallelView->getAllAxis();
 
-  if (axisSlidersMap.size() == 0) {
+  if (axisSlidersMap.empty()) {
     parallelView->updateAxisSlidersPosition();
     buildGlSliders(allAxis);
     parallelView->refresh();
     return;
   }
 
-  if ((lastAxisHeight != 0 && allAxis.size() > 0 && lastAxisHeight != allAxis[0]->getAxisHeight()) ||
+  if ((lastAxisHeight != 0 && !allAxis.empty() && lastAxisHeight != allAxis[0]->getAxisHeight()) ||
       (lastNbAxis != 0 && lastNbAxis != allAxis.size()) || (currentGraph != parallelView->getGraphProxy()->getGraph())) {
     deleteGlSliders();
 

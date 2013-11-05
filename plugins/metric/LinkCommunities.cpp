@@ -138,7 +138,7 @@ const char * paramHelp[] = {
 };
 }
 //==============================================================================================================
-LinkCommunities::LinkCommunities(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+LinkCommunities::LinkCommunities(const tlp::PluginContext *context) : DoubleAlgorithm(context), metric(NULL) {
   addInParameter<NumericProperty*>("metric", paramHelp[0],"",false);
   addInParameter<bool>("Group isthmus", paramHelp[1],"true",true);
   addInParameter<unsigned int>("Number of steps",paramHelp[2],"200",true);

@@ -70,10 +70,10 @@ const unsigned int nbPropertiesTypes = sizeof(propertiesTypes) / sizeof(string);
 const vector<string> propertiesTypesFilter(propertiesTypes, propertiesTypes + nbPropertiesTypes);
 
 ScatterPlot2DView::ScatterPlot2DView(const PluginContext *) :
-  propertiesSelectionWidget(NULL),optionsWidget(NULL),
+  propertiesSelectionWidget(NULL), optionsWidget(NULL),
   scatterPlotGraph(NULL), emptyGraph(NULL), mainLayer(NULL), glGraphComposite(NULL), scatterPlotSize(NULL),
-  matrixComposite(NULL), axisComposite(NULL), detailedScatterPlot(NULL), detailedScatterPlotPropertyName(make_pair("","")),
-  matrixView(true), matrixUpdateNeeded(false), newGraphSet(false), lastViewWindowWidth(0),
+  matrixComposite(NULL), axisComposite(NULL), labelsComposite(NULL), detailedScatterPlot(NULL), detailedScatterPlotPropertyName(make_pair("","")), center(false),
+  matrixView(true), sceneRadiusBak(0.0), zoomFactorBak(0.0), optionsMenu(NULL), centerViewAction(NULL), scatterPlotViewNavigator(NULL), matrixUpdateNeeded(false), newGraphSet(false), lastViewWindowWidth(0),
   lastViewWindowHeight(0), interactorsActivated(false),initialized(false) {}
 
 ScatterPlot2DView::~ScatterPlot2DView() {
@@ -630,7 +630,7 @@ void ScatterPlot2DView::destroyOverviewsIfNeeded() {
     selectedGraphProperties.erase(remove(selectedGraphProperties.begin(), selectedGraphProperties.end(), propertiesToRemove[i]), selectedGraphProperties.end());
   }
 
-  if (propertiesToRemove.size() > 0) {
+  if (!propertiesToRemove.empty()) {
     propertiesSelectionWidget->setSelectedProperties(selectedGraphProperties);
   }
 }
@@ -652,7 +652,7 @@ void ScatterPlot2DView::destroyOverviews() {
 
 void ScatterPlot2DView::generateScatterPlots() {
 
-  if (selectedGraphProperties.size() == 0) return;
+  if (selectedGraphProperties.empty()) return;
 
   GlLabel *coeffLabel = NULL;
 

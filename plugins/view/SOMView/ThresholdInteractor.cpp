@@ -314,7 +314,7 @@ void ThresholdInteractor::setView(View *view) {
   EditColorScaleInteractor::setView(view);
 
   if (currentProperty)
-    buildSliders((SOMView*) view);
+    buildSliders(static_cast<SOMView*>(view));
 
   view->refresh();
 }
@@ -383,7 +383,7 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
         }
       }
 
-      assert(finalSelectedEntities.size() != 0);
+      assert(!finalSelectedEntities.empty());
 
       if (!startDrag) {
         glMainWidget->setMouseTracking(true);

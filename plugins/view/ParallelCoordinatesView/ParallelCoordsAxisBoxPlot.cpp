@@ -277,7 +277,7 @@ void GlAxisBoxPlot::drawLabel(Coord position, string labelName, Camera *camera) 
   labelToDraw.draw(0, camera);
 }
 
-ParallelCoordsAxisBoxPlot::ParallelCoordsAxisBoxPlot() : currentGraph(NULL), selectedAxis(NULL), lastNbAxis(0) {}
+  ParallelCoordsAxisBoxPlot::ParallelCoordsAxisBoxPlot() : parallelView(NULL), currentGraph(NULL), selectedAxis(NULL), lastNbAxis(0) {}
 
 ParallelCoordsAxisBoxPlot::~ParallelCoordsAxisBoxPlot() {
   deleteGlAxisPlot();
@@ -301,7 +301,7 @@ bool ParallelCoordsAxisBoxPlot::compute(GlMainWidget *) {
 void ParallelCoordsAxisBoxPlot::initOrUpdateBoxPlots() {
   vector<ParallelAxis *> allAxis = parallelView->getAllAxis();
 
-  if (axisBoxPlotMap.size() == 0) {
+  if (axisBoxPlotMap.empty()) {
     buildGlAxisPlot(allAxis);
     lastNbAxis = allAxis.size();
     parallelView->refresh();
@@ -322,7 +322,7 @@ void ParallelCoordsAxisBoxPlot::initOrUpdateBoxPlots() {
 void ParallelCoordsAxisBoxPlot::buildGlAxisPlot(vector<ParallelAxis *> currentAxis) {
   for (unsigned int i = 0 ; i < currentAxis.size() ; ++i) {
     if (dynamic_cast<QuantitativeParallelAxis *>(currentAxis[i])) {
-      QuantitativeParallelAxis *quantitativeAxis = (QuantitativeParallelAxis *) currentAxis[i];
+      QuantitativeParallelAxis *quantitativeAxis = static_cast<QuantitativeParallelAxis *>(currentAxis[i]);
 
       if (quantitativeAxis->getMedianStringValue() != "KO")
         axisBoxPlotMap[quantitativeAxis] = new GlAxisBoxPlot(quantitativeAxis, lightBlue, darkBlue);
@@ -358,12 +358,12 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
     selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
 
     if (selectedAxis != NULL && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
-      if (axisBoxPlotMap.find((QuantitativeParallelAxis *)selectedAxis) != axisBoxPlotMap.end())
+      if (axisBoxPlotMap.find(static_cast<QuantitativeParallelAxis *>(selectedAxis)) != axisBoxPlotMap.end())
         if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
           rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
         }
 
-      axisBoxPlotMap[(QuantitativeParallelAxis *)selectedAxis]->setHighlightRangeIfAny(sceneCoords);
+      axisBoxPlotMap[static_cast<QuantitativeParallelAxis *>(selectedAxis)]->setHighlightRangeIfAny(sceneCoords);
     }
 
     parallelView->refresh();
@@ -378,8 +378,8 @@ bool ParallelCoordsAxisBoxPlot::eventFilter(QObject *widget, QEvent *e) {
     if (selectedAxis != NULL && dynamic_cast<QuantitativeParallelAxis *>(selectedAxis)) {
       Observable::holdObservers();
 
-      if (axisBoxPlotMap.find((QuantitativeParallelAxis *)selectedAxis) != axisBoxPlotMap.end())
-        parallelView->highlightDataInAxisBoxPlotRange((QuantitativeParallelAxis *) selectedAxis);
+      if (axisBoxPlotMap.find(static_cast<QuantitativeParallelAxis *>(selectedAxis)) != axisBoxPlotMap.end())
+        parallelView->highlightDataInAxisBoxPlotRange(static_cast<QuantitativeParallelAxis *>(selectedAxis));
 
       Observable::unholdObservers();
       selectedAxis = NULL;

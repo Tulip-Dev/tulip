@@ -68,9 +68,10 @@ unsigned int HistogramView::histoViewInstancesCount(0);
 
 HistogramView::HistogramView(const PluginContext *) :
   propertiesSelectionWidget(NULL), histoOptionsWidget(NULL), xAxisDetail(NULL), yAxisDetail(NULL), _histoGraph(NULL), emptyGraph(NULL),
-  emptyGlGraphComposite(NULL), histogramsComposite(NULL), labelsComposite(NULL), axisComposite(NULL), smallMultiplesView(true), detailedHistogram(NULL),
+  emptyGlGraphComposite(NULL), histogramsComposite(NULL), labelsComposite(NULL), axisComposite(NULL), smallMultiplesView(true), mainLayer(NULL), detailedHistogram(NULL),
+  sceneRadiusBak(0), zoomFactorBak(0),
   noDimsLabel(NULL), noDimsLabel2(NULL), emptyRect(NULL), emptyRect2(NULL), lastViewWindowWidth(0),
-  lastViewWindowHeight(0), interactorsActivated(false),isConstruct(false), lastNbHistograms(0), dataLocation(NODE),needUpdateHistogram(false)  {
+  lastViewWindowHeight(0), interactorsActivated(false), optionsMenu(NULL), centerViewAction(NULL), isConstruct(false), lastNbHistograms(0), dataLocation(NODE),needUpdateHistogram(false)  {
   ++histoViewInstancesCount;
 }
 
@@ -231,7 +232,7 @@ void HistogramView::setState(const DataSet &dataSet) {
 
   propertiesSelectionWidget->setSelectedProperties(selectedProperties);
 
-  if (selectedProperties.size() > 0) {
+  if (!selectedProperties.empty()) {
     buildHistograms();
 
     for (size_t j = 0 ; j < selectedProperties.size() ; ++j) {
@@ -445,8 +446,8 @@ void HistogramView::draw() {
     switchFromSmallMultiplesToDetailedView(detailedHistogram);
   }
 
-  if (selectedProperties.size() == 0) {
-    if (interactors().size() > 0) {
+  if (selectedProperties.empty()) {
+    if (!interactors().empty()) {
       setCurrentInteractor(interactors().front());
     }
 
@@ -461,7 +462,7 @@ void HistogramView::draw() {
     return;
   }
 
-  if (selectedProperties.size() > 0) {
+  if (!selectedProperties.empty()) {
     removeEmptyViewLabel();
   }
 
@@ -502,7 +503,7 @@ void HistogramView::buildHistograms() {
   selectedProperties = propertiesSelectionWidget->getSelectedGraphProperties();
   dataLocation = propertiesSelectionWidget->getDataLocation();
 
-  if (selectedProperties.size() == 0) {
+  if (selectedProperties.empty()) {
     return;
   }
 

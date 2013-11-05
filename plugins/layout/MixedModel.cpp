@@ -987,8 +987,8 @@ void MixedModel::computeCoords() {
     Coord c = nodeSize.get((V[0][i]).id);
     float x;
 
-    if(i == 0) x = (out_l < static_cast<double>(c.getX()/2.f) ? (c.getX()/2.f) : static_cast<float>(out_l)) ;
-    else  x = static_cast<float>(out_r_moins1) + (out_l < static_cast<double>(c.getX()/2.f) ? (c.getX()/2.f) : static_cast<float>(out_l))  + spacing;
+    if(i == 0) x = (out_l < static_cast<double>(c.getX()/2.f)) ? (c.getX()/2.f) : static_cast<float>(out_l) ;
+    else  x = static_cast<float>(out_r_moins1) + ((out_l < static_cast<double>(c.getX()/2.f)) ? (c.getX()/2.f) : static_cast<float>(out_l))  + spacing;
 
     NodeCoords[v] = Coord(x, 0, 0);  // y(vi) = 0
     out_r_moins1 = (out_r < (c.getX()/2.) ? (c.getX()/2.) : out_r);
@@ -1024,12 +1024,12 @@ void MixedModel::computeCoords() {
 
     node Z0 = V[k][0];
     co = nodeSize.get(Z0.id);
-    int max_y_taille = (int) (inr[Z0]<co.getY()/2. ? co.getY()/2. : inr[Z0]);
+    int max_y_taille = (int) ((inr[Z0]<co.getY()/2.) ? co.getY()/2. : inr[Z0]);
     int taille_tmp;
 
     for(unsigned int i = 0; i<p; ++i) {
       co = nodeSize.get((V[k][i]).id);
-      taille_tmp = (int) (inr[V[k][i]]<co.getY()/2. ? co.getY()/2. : inr[V[k][i]]);
+      taille_tmp = (int) ((inr[V[k][i]]<co.getY()/2.) ? co.getY()/2. : inr[V[k][i]]);
 
       if(taille_tmp > max_y_taille)
         max_y_taille = taille_tmp;
@@ -1066,7 +1066,7 @@ void MixedModel::computeCoords() {
       int out_l = outl[V[k][0]], out_r = outr[V[k][0]];
 
       float tmp = NodeCoords[(*it)].getX()+ dxt;
-      float ftmp = (out_l<(nodeSize.get(Z0.id)).getX()/2.f ? (nodeSize.get(Z0.id)).getX()/2.f : out_l) + dxl;
+      float ftmp = ((out_l<(nodeSize.get(Z0.id)).getX()/2.f) ? (nodeSize.get(Z0.id)).getX()/2.f : out_l) + dxl;
 
       if(tmp >= ftmp) NodeCoords[Z0].setX(tmp);
       else NodeCoords[Z0].setX(ftmp);
@@ -1079,7 +1079,7 @@ void MixedModel::computeCoords() {
       else delta = 0;
 
       tmp = NodeCoords[(*ir)].getX()+ delta - NodeCoords[Z0].getX();
-      ftmp = (out_r<(nodeSize.get(Z0.id)).getX()/2.f ? (nodeSize.get(Z0.id)).getX()/2.f : out_r) - dxr;
+      ftmp = ((out_r<(nodeSize.get(Z0.id)).getX()/2.f) ? (nodeSize.get(Z0.id)).getX()/2.f : out_r) - dxr;
 
       if(tmp >= ftmp) NodeCoords[(*ir)].setX(tmp);
       else NodeCoords[(*ir)].setX(ftmp);
@@ -1102,18 +1102,18 @@ void MixedModel::computeCoords() {
         Coord co2 = nodeSize.get((V[k][i]).id);
         double x;
 
-        if(i == 0) x = (out_l<co2.getX()/2. ? co2.getX()/2. : out_l) + dxl;
-        else x = out_r_moins1 + (out_l<co2.getX()/2. ? co2.getX()/2. : out_l)+1;
+        if(i == 0) x = ((out_l<co2.getX()/2.) ? co2.getX()/2. : out_l) + dxl;
+        else x = out_r_moins1 + ((out_l<co2.getX()/2.) ? co2.getX()/2. : out_l)+1;
 
         NodeCoords[V[k][i]].setX(static_cast<float>(x));
         somme += static_cast<float>(x);
 
-        out_r_moins1 = (int) (out_r<co2.getX()/2. ? co2.getX()/2. : out_r);
+        out_r_moins1 = (int) ((out_r<co2.getX()/2.) ? co2.getX()/2. : out_r);
       }
 
       //assign x(cr)
       co = nodeSize.get((V[k][p-1]).id);
-      float tmp = (out_r<co.getX()/2.f ? co.getX()/2.f : out_r) - dxr;
+      float tmp = ((out_r<co.getX()/2.f) ? co.getX()/2.f : out_r) - dxr;
 
       float xtmp = NodeCoords[cr].getX();
       double x;

@@ -16,7 +16,7 @@ namespace vpsc {
 Constraint::Constraint(Variable *left, Variable *right, double gap, bool equality)
   : left(left),
     right(right),
-    gap(gap),
+    gap(gap), lm(0),
     timeStamp(0),
     active(false),
     visited(false),

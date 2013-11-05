@@ -36,7 +36,7 @@ class Histogram : public GlComposite, public Observable {
 
 public :
 
-  Histogram(Graph *graph, const std::string propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size, const Color &backgroundColor, const Color &textColor);
+  Histogram(Graph *graph, const std::string& propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size, const Color &backgroundColor, const Color &textColor);
   ~Histogram();
 
   std::string getPropertyName() const {

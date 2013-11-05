@@ -44,7 +44,7 @@ public :
   void setBackgroundColor(const Color &color);
 
   std::string getLayoutType() const;
-  void setLayoutType(const std::string layoutType);
+  void setLayoutType(const std::string& layoutType);
 
   bool configurationChanged();
 

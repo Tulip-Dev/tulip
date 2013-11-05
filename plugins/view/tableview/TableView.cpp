@@ -40,7 +40,7 @@
 
 using namespace tlp;
 
-TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), _model(NULL), isNewGraph(false) {}
+TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(NULL), _model(NULL), isNewGraph(false), filteringColumns(false) {}
 
 TableView::~TableView() {
   delete _ui;

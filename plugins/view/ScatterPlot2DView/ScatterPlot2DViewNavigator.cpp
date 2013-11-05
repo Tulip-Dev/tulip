@@ -32,7 +32,7 @@ using namespace std;
 
 namespace tlp {
 
-ScatterPlot2DViewNavigator::ScatterPlot2DViewNavigator() : selectedScatterPlotOverview(NULL), glWidget(NULL) {}
+  ScatterPlot2DViewNavigator::ScatterPlot2DViewNavigator() : scatterPlot2dView(NULL), selectedScatterPlotOverview(NULL), glWidget(NULL) {}
 
 ScatterPlot2DViewNavigator::~ScatterPlot2DViewNavigator() {}
 
