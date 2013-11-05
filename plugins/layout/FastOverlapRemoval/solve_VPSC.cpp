@@ -29,7 +29,7 @@ namespace vpsc {
 static const double ZERO_UPPERBOUND=-0.0000001;
 
 IncSolver::IncSolver(const unsigned n, Variable* const vs[], const unsigned m, Constraint *cs[])
-  : Solver(n,vs,m,cs) {
+  : Solver(n,vs,m,cs), splitCnt(0) {
   inactive.assign(cs,cs+m);
 
   for(ConstraintList::iterator i=inactive.begin(); i!=inactive.end(); ++i) {

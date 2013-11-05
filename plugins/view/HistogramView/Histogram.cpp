@@ -67,7 +67,7 @@ static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
 
 int Histogram::overviewCpt(0);
 
-Histogram::Histogram(Graph *graph, const std::string propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size,
+Histogram::Histogram(Graph *graph, const std::string& propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size,
                      const Color &backgroundColor, const Color &textColor) :
   graph(graph), propertyName(propertyName), blCorner(blCorner), size(size), nbHistogramBins(100), xAxis(NULL), yAxis(NULL),
   xAxisLogScale(false), yAxisLogScale(false), nbXGraduations(15), yAxisIncrementStep(0), histogramLayout(new LayoutProperty(graph)), histogramSize(new SizeProperty(graph)), histoBinsComposite(new GlComposite()), uniformQuantification(false),

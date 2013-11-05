@@ -51,10 +51,10 @@ using namespace std;
 
 namespace tlp {
 
-ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graph, Graph *axisPointsGraph) :
-  firstAxisPos(Coord(0.0f, 0.0f, 0.0f)), height(DEFAULT_AXIS_HEIGHT), spaceBetweenAxis(height/2), linesColorAlphaValue(DEFAULT_LINES_COLOR_ALPHA_VALUE), drawPointsOnAxis(true),
-  graphProxy(graph), backgroundColor(Color(255,255,255)), createAxisFlag(true), axisPointsGraph(axisPointsGraph), layoutType(PARALLEL), resetAxisLayout(false) {
-
+  ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graph, Graph *axisPointsGraph) :
+    nbAxis(0), firstAxisPos(Coord(0.0f, 0.0f, 0.0f)), width(0), height(DEFAULT_AXIS_HEIGHT), spaceBetweenAxis(height/2), linesColorAlphaValue(DEFAULT_LINES_COLOR_ALPHA_VALUE), drawPointsOnAxis(true),
+    graphProxy(graph), backgroundColor(Color(255,255,255)), createAxisFlag(true), axisPointsGraph(axisPointsGraph), layoutType(PARALLEL), linesType(STRAIGHT),
+    linesThickness(THICK), resetAxisLayout(false) {
   axisPointsGraphLayout = axisPointsGraph->getProperty<LayoutProperty>("viewLayout");
   axisPointsGraphSize = axisPointsGraph->getProperty<SizeProperty>("viewSize");
   axisPointsGraphShape = axisPointsGraph->getProperty<IntegerProperty>("viewShape");
@@ -623,7 +623,7 @@ void ParallelCoordinatesDrawing::updateWithAxisSlidersRange(ParallelAxis *axis, 
     dataSubset = axis->getDataInSlidersRange();
   }
 
-  if (dataSubset.size() > 0) {
+  if (!dataSubset.empty()) {
     graphProxy->unsetHighlightedElts();
     set<unsigned int>::iterator it;
 

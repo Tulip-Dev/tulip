@@ -181,11 +181,11 @@ void MCLClustering::pruneK(node n, unsigned int k) {
 //==================================================
 void MCLClustering::pruneT(node n) {
   double maxV = 0.;
-  double sum = 0.;
+  //double sum = 0.;
   edge   e;
   forEach(e, g.getOutEdges(n)) {
     maxV = std::max(outW[e], maxV);
-    sum += outW[e];
+    //sum += outW[e];
   }
   stableForEach(e, g.getOutEdges(n)) {
     if (outW[e] < maxV / (2. * double(g.outdeg(n) + 1))) {
@@ -249,7 +249,7 @@ static const char * paramHelp[] = {
   HTML_HELP_CLOSE(),
 };
 //=================================================
-MCLClustering::MCLClustering(const tlp::PluginContext *context):DoubleAlgorithm(context) {
+MCLClustering::MCLClustering(const tlp::PluginContext *context):DoubleAlgorithm(context), weights(NULL), _r(2.0), _k(5) {
   addInParameter<double>("inflate", paramHelp[0], "2.", false);
   addInParameter<NumericProperty*>("weights", paramHelp[1], "", false);
   addInParameter<unsigned int>("pruning", paramHelp[2], "5", false);
@@ -447,9 +447,9 @@ bool MCLClustering::run() {
 
 
   //compute clusters
-  double piv = 0;
+  //double piv = 0;
   forEach(n, g.getNodes()) {
-    if(g.deg(n) > 1) piv += 1.;
+    //if(g.deg(n) > 1) piv += 1.;
 
     result->setNodeValue(tlpNodes[n], resultN[n]);
   }

@@ -73,8 +73,11 @@ namespace tlp {
 PLUGIN(PixelOrientedView)
 
 PixelOrientedView::PixelOrientedView(const PluginContext *) :
-  pixelOrientedGraph(NULL), overviewsComposite(NULL), lastNbNodes(0), hilbertLayout(NULL), squareLayout(NULL), spiralLayout(new SpiralLayout()),
-  zorderLayout(NULL), tulipNodeColorMapping(NULL), smallMultiplesView(true), detailViewLabel(NULL), detailOverview(NULL),
+pixelOrientedGraph(NULL), graphComposite(NULL), mainLayer(NULL),
+  overviewsComposite(NULL), optionsWidget(NULL), propertiesSelectionWidget(NULL),
+  pixelOrientedMediator(NULL), menuOptions(NULL), centerViewAction(NULL),
+  lastNbNodes(0), overviewWidth(0), overviewHeight(0), minWidth(0), refSize(0), hilbertLayout(NULL), squareLayout(NULL), spiralLayout(new SpiralLayout()),
+  zorderLayout(NULL), tulipNodeColorMapping(NULL), smallMultiplesView(true), sceneRadiusBak(0.0), zoomFactorBak(0.0), detailViewLabel(NULL), detailOverview(NULL),
   newGraphSet(false), smallMultiplesNeedUpdate(false), lastViewWindowWidth(0), lastViewWindowHeight(0), center(false), interactorsActivated(false),isConstruct(false)  {
 }
 

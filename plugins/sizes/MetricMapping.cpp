@@ -106,7 +106,9 @@ static const string AREA_PROPORTIONAL = "Area Proportional";
 class MetricSizeMapping:public SizeAlgorithm {
 public:
   PLUGININFORMATIONS("Metric Mapping","Auber","08/08/2003","","2.0", "Size")
-  MetricSizeMapping(const PluginContext* context):SizeAlgorithm(context) {
+  MetricSizeMapping(const PluginContext* context):SizeAlgorithm(context),
+    entryMetric(NULL), entrySize(NULL), xaxis(true), yaxis(true), zaxis(true),
+    mappingType(true), min(1), max(10), range(0), shift(0), nodeoredge(true) {
     addInParameter<NumericProperty*>("property", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
     addInParameter<bool>("width", paramHelp[2],"true");

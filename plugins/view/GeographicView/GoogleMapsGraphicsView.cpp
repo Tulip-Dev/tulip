@@ -381,9 +381,13 @@ double mercatorToLatitude(double mercator) {
 }
 
 
-GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, QGraphicsScene *graphicsScene, QWidget *parent) : QGraphicsView(graphicsScene, parent),
-  _googleMapsView(googleMapsView), graph(NULL),  googleMaps(NULL), globeCameraBackup(NULL,true),geoLayout(NULL), geoViewSize(NULL), geoLayoutBackup(NULL), mapTranslationBlocked(false),
-  geocodingActive(false), cancelGeocoding(false),firstGlobeSwitch(true) {
+GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, QGraphicsScene *graphicsScene, QWidget *parent) :
+  QGraphicsView(graphicsScene, parent),
+  _googleMapsView(googleMapsView), graph(NULL), googleMaps(NULL),
+  currentMapZoom(0),globeCameraBackup(NULL,true),geoLayout(NULL),
+  geoViewSize(NULL), geoViewShape(NULL), geoLayoutBackup(NULL),
+  mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
+  polygonEntity(NULL), planisphereEntity(NULL), firstGlobeSwitch(true) {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   glWidget = new QGLWidget(GlInit(), this, GlMainWidget::getFirstQGLWidget());
   setViewport(glWidget);
@@ -429,8 +433,6 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   viewTypeProxyWidget->setPos(20,20);
   scene()->addItem(viewTypeProxyWidget);
   connect(viewTypeComboBox,SIGNAL(currentIndexChanged(QString)),_googleMapsView,SLOT(viewTypeChanged(QString)));
-
-  polygonEntity=NULL;
 }
 
 
@@ -1127,7 +1129,7 @@ void GoogleMapsGraphicsView::switchViewType() {
       geoLayout->setEdgeValue(e, bends);
     }
 
-    if (edgeBendsLatLng.size() > 0) {
+    if (!edgeBendsLatLng.empty()) {
       edge e;
       forEach(e, graph->getEdges()) {
         vector<Coord> edgeBendsCoords;

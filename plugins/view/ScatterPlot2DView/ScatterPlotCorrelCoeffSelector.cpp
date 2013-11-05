@@ -69,7 +69,7 @@ bool isPolygonAincludesInB(const vector<Coord> &A, const vector<Coord> &B) {
   return ret;
 }
 
-GlEditableComplexPolygon::GlEditableComplexPolygon(std::vector<Coord> polygonPoints, const Color &color) : polygonPoints(polygonPoints), color(color) {
+  GlEditableComplexPolygon::GlEditableComplexPolygon(std::vector<Coord> polygonPoints, const Color &color) : polygonPoints(polygonPoints), color(color), selected(false) {
   basicCircle.resizePoints(30);
   basicCircle.setFillMode(true);
   basicCircle.setOutlineMode(true);
@@ -178,7 +178,7 @@ void GlEditableComplexPolygon::draw(float lod,Camera* camera) {
 }
 
 ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget) :
-  optionsWidget(optionsWidget), selectedPolygon(NULL), selectedPolygonPoint(NULL), dragStarted(false), x(0), y(0) {
+  optionsWidget(optionsWidget), scatterView(NULL), selectedPolygon(NULL), selectedPolygonPoint(NULL), dragStarted(false), x(0), y(0) {
   basicCircle.resizePoints(30);
   basicCircle.setFillMode(true);
   basicCircle.setOutlineMode(true);
@@ -220,7 +220,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
     Coord translationVectorScene = newPointerSceneCoords - currentPointerSceneCoords;
     currentPointerSceneCoords = newPointerSceneCoords;
 
-    if (polygonEdit.size() == 0) {
+    if (polygonEdit.empty()) {
       if (!dragStarted) {
         getPolygonAndPointUnderPointerIfAny(currentPointerSceneCoords, &camera);
 
@@ -299,7 +299,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
       }
     }
     else if (me->buttons() == Qt::RightButton) {
-      if (polygonEdit.size() > 0) {
+      if (!polygonEdit.empty()) {
         polygonEdit.clear();
         glWidget->redraw();
       }
@@ -417,7 +417,7 @@ bool ScatterPlotCorrelCoeffSelector::draw(GlMainWidget *glMainWidget) {
     foregroundColor = Color(0,0,0);
   }
 
-  if (polygonEdit.size() > 0) {
+  if (!polygonEdit.empty()) {
     for (size_t i = 0 ; i < polygonEdit.size() - 1 ; ++i) {
       camera.initGl();
       Coord lineStart(camera.worldTo2DScreen(polygonEdit[i]));
@@ -515,7 +515,7 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
   vector<node> selectedNodes;
   double correlationCoeff = 0;
 
-  if (tmpNodes.size() > 0) {
+  if (!tmpNodes.empty()) {
     GlNode glNode(0);
 
     for (size_t i = 0 ; i < tmpNodes.size() ; ++i) {
@@ -570,7 +570,7 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
     }
   }
 
-  if (selectedNodes.size() > 0) {
+  if (!selectedNodes.empty()) {
     string xDim(scatterView->getDetailedScatterPlot()->getXDim());
     string yDim(scatterView->getDetailedScatterPlot()->getYDim());
     string xType(graph->getProperty(xDim)->getTypename());

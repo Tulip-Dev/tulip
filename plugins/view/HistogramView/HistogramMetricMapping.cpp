@@ -574,12 +574,12 @@ void GlGlyphScale::translate(const Coord &move) {
   }
 }
 
-HistogramMetricMapping::HistogramMetricMapping() : curve(NULL),
-  curveDragStarted(false), selectedAnchor(NULL),
+HistogramMetricMapping::HistogramMetricMapping() :
+  histoView(NULL), curve(NULL), curveDragStarted(false), selectedAnchor(NULL),
   colorScale(new ColorScale()), glColorScale(NULL), glSizeScale(NULL), glGlyphScale(NULL),
-  colorScaleConfigDialog(NULL), sizeScaleConfigDialog(NULL), glyphScaleConfigDialog(NULL), lastXAxisLength(0),
-  mappinqPolyQuad(NULL), glyphMappingGraph(newGraph()), glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
-  mappingType(VIEWCOLOR_MAPPING), popupMenu(NULL) {
+  colorScaleConfigDialog(NULL), sizeScaleConfigDialog(NULL), glyphScaleConfigDialog(NULL), lastXAxisLength(0), histoXAxis(NULL),
+  mappinqPolyQuad(NULL), scaleAxisOffset(0), glyphMappingGraph(newGraph()), glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
+  mappingType(VIEWCOLOR_MAPPING), popupMenu(NULL), colorMappingMenu(NULL), viewColorMappingAction(NULL), viewBorderColorMappingAction(NULL), sizeMapping(NULL), glyphMapping(NULL) {
 }
 
 HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &histoMetricMapping)
@@ -677,7 +677,7 @@ void HistogramMetricMapping::viewChanged(View *view) {
     return;
   }
 
-  histoView = (HistogramView *) view;
+  histoView = static_cast<HistogramView *>(view);
   initInteractor();
   popupMenu = new QMenu();
   popupMenu->addAction("MappingType")->setEnabled(false);

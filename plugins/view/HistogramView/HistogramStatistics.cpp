@@ -241,6 +241,7 @@ public :
 
 HistogramStatistics::HistogramStatistics(HistoStatsConfigWidget *ConfigWidget)
   : histoView(NULL) , histoStatsConfigWidget(ConfigWidget),
+    propertyMean(0), propertyStandardDeviation(0),
     densityAxis(NULL), meanAxis(NULL), standardDeviationPosAxis(NULL),
     standardDeviationNegAxis(NULL), standardDeviation2PosAxis(NULL), standardDeviation2NegAxis(NULL),
     standardDeviation3PosAxis(NULL), standardDeviation3NegAxis(NULL) {
@@ -248,7 +249,7 @@ HistogramStatistics::HistogramStatistics(HistoStatsConfigWidget *ConfigWidget)
 }
 
 HistogramStatistics::HistogramStatistics(const HistogramStatistics &histoStats)
-  : histoView(histoStats.histoView), histoStatsConfigWidget(histoStats.histoStatsConfigWidget),
+  : histoView(histoStats.histoView), histoStatsConfigWidget(histoStats.histoStatsConfigWidget), propertyMean(0), propertyStandardDeviation(0),
     densityAxis(NULL), meanAxis(NULL), standardDeviationPosAxis(NULL),
     standardDeviationNegAxis(NULL), standardDeviation2PosAxis(NULL), standardDeviation2NegAxis(NULL),
     standardDeviation3PosAxis(NULL), standardDeviation3NegAxis(NULL) {
@@ -264,7 +265,7 @@ HistogramStatistics::~HistogramStatistics() {
 }
 
 void HistogramStatistics::viewChanged(View *view) {
-  histoView = (HistogramView *) view;
+  histoView = static_cast<HistogramView *>(view);
   connect(histoStatsConfigWidget, SIGNAL(computeAndDrawInteractor()), this, SLOT(computeAndDrawInteractor()));
   //computeAndDrawInteractor();
 }
@@ -540,7 +541,7 @@ bool HistogramStatistics::draw(GlMainWidget *glMainWidget) {
   glDisable(GL_LIGHTING);
   glDisable(GL_DEPTH_TEST);
 
-  if (densityEstimationCurvePoints.size() > 0) {
+  if (!densityEstimationCurvePoints.empty()) {
     Color curveColor(255,0,0);
     Coord startPoint(densityEstimationCurvePoints[0]);
     Coord endPoint(densityEstimationCurvePoints[densityEstimationCurvePoints.size() - 1]);

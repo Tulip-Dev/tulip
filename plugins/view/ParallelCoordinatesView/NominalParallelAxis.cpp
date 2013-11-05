@@ -51,7 +51,7 @@ NominalParallelAxis::setLabels() {
 
   delete dataIt;
 
-  if (labelsOrder.size() == 0 || (labelsOrder.size() > 0 && labelsOrder.size() != labels.size())) {
+  if (labelsOrder.empty() || (labelsOrder.size() != labels.size())) {
     labelsOrder = labels;
   }
 

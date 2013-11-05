@@ -108,7 +108,7 @@ void PathFinder::construct() {
   highlightersListWidget->setSelectedStringsList(activeList);
   highlightersListWidget->setUnselectedStringsList(inactiveList);
 
-  if (activeList.size() + inactiveList.size() == 0) {
+  if (activeList.empty() && inactiveList.empty()) {
     highlightersListWidget->setDisabled(true);
     _configurationWidget->highlightersLabelDisabled(true);
   }

@@ -192,7 +192,7 @@ double InputSample::unnormalize(double val, unsigned propNum) {
 }
 
 const DynamicVector<double>& InputSample::getWeight(tlp::node n) {
-  if (rootGraph && propertiesList.size() == 0) {
+  if (rootGraph && propertiesList.empty()) {
     std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " "
               << "Warning no properties specified" << std::endl;
     assert(false);

@@ -109,7 +109,7 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
   vector<SelectedEntity> tmpEdges;
   glWidget->pickNodesEdges(xStart, glWidget->height() - yEnd, (xEnd - xStart), (yEnd - yStart), tmpNodes, tmpEdges);
 
-  if (tmpNodes.size() > 0) {
+  if (!tmpNodes.empty()) {
     vector<node> selectedNodes;
     GlNode glNode(0);
 
@@ -221,7 +221,7 @@ bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEven
     else if (me->button() == Qt::RightButton) {
       dragStarted = false;
 
-      if (polygon.size() > 0) {
+      if (!polygon.empty()) {
         polygon.clear();
         drawInteractor = true;
         glWidget->redraw();
@@ -271,7 +271,7 @@ bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *glWidget) {
     return false;
   }
 
-  if (polygon.size() > 0) {
+  if (!polygon.empty()) {
 
     Camera camera2D(camera->getScene(), false);
 

@@ -84,7 +84,7 @@ string PixelOrientedOptionsWidget::getLayoutType() const {
   return _ui->layoutTypeCB->currentText().toStdString();
 }
 
-void PixelOrientedOptionsWidget::setLayoutType(const string layoutType) {
+void PixelOrientedOptionsWidget::setLayoutType(const string& layoutType) {
   int idx = _ui->layoutTypeCB->findText(QString(layoutType.c_str()));
 
   if (idx != -1) {

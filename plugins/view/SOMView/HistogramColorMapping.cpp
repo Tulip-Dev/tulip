@@ -353,7 +353,7 @@ ColorScale::~ColorScale() {
 
 }
 
-void ColorScale::setColorScale(const std::vector<Color> colors) {
+void ColorScale::setColorScale(const std::vector<Color>& colors) {
   colorMap.clear();
 
   if (!colors.empty()) {
@@ -388,7 +388,7 @@ void ColorScale::setColorScaleFromImage(const std::string &imageFile) {
 Color ColorScale::getColorAtLen(const float pos) const {
   assert(pos >= 0 && pos <= 1);
 
-  if (colorMap.size() == 0) {
+  if (colorMap.empty()) {
     return Color(255, 255, 255);
   }
   else {
@@ -433,7 +433,7 @@ GlColorScale::GlColorScale(const Coord &baseCoord, const float length,
 
 }
 
-GlColorScale::GlColorScale(const GlColorScale &colorScale) {
+  GlColorScale::GlColorScale(const GlColorScale &colorScale): orientation(Horizontal) {
   if (colorScale.scale)
     scale = new ColorScale(*colorScale.scale);
   else

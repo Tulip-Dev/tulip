@@ -77,7 +77,7 @@ public :
   PLUGININFORMATIONS("GEXF","Antoine LAMBERT","05/05/2010","Imports a new graph from a file in the GEXF input format.","1.0","File")
   GEXFImport(const PluginContext*  context):ImportModule(context),
     viewLayout(NULL), viewSize(NULL), viewColor(NULL), viewLabel(NULL),
-    viewShape(NULL) {
+    viewShape(NULL), nodesHaveCoordinates(false) {
     // add a file parameter for the plugin
     addInParameter<string>("file::filename", paramHelp[0],"");
     addInParameter<bool>("Curved edges",paramHelp[1], "false");

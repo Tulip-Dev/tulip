@@ -71,7 +71,7 @@ void Dikjstra::initDikjstra(const tlp::Graph * const graph,
     DikjstraElement &u = *(*it);
     dikjstraTable.erase(it);
 
-    if (focusTable.size() > 0) {
+    if (!focusTable.empty()) {
       set<DikjstraElement *, LessDikjstraElement>::reverse_iterator it = focusTable.rbegin();
       //set<DikjstraElement *>::iterator it2 = focusTable.begin();
       double maxDist = (*it)->dist;
@@ -220,10 +220,10 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
   }
 
   if (n != src) {
-    return false;
 #ifndef NDEBUG
     cout << "Path do not exist !" << endl;
 #endif /* NDEBUG */
+    return false;
   }
 
   return true;

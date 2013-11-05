@@ -617,9 +617,9 @@ struct WebImport:public ImportModule {
 
     while ( len != string::npos ) {
       len = lowercase.rfind(balise, len);
-      bool urlFound = true;
 
       if( len != string::npos ) {
+	bool urlFound = true;
         // find the next '=' then the first '"'
         size_t start = len + balise.length();
         len--;
