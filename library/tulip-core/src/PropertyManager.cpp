@@ -190,10 +190,8 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
   //Set the inherited property in this graph and all it's subgraphs.
   (((GraphAbstract *) graph)->propertyContainer)->setInheritedProperty(propName, newProp);
 
-  bool hasInheritedProperty=false;
-
   // remove previously existing inherited property
-  hasInheritedProperty =
+  bool hasInheritedProperty =
     ((it = inheritedProperties.find(newName))!= inheritedProperties.end());
 
   if (hasInheritedProperty) {

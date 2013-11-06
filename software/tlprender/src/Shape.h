@@ -65,7 +65,7 @@ public:
   bool isValid() const;
   void begin();
   void add(const int x, const int y, const GLfloat z);
-  inline void add(const Point p) {
+  inline void add(const Point& p) {
     vertices.push_back(p);
   }
 

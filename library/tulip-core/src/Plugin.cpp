@@ -22,9 +22,10 @@ using namespace tlp;
 using namespace std;
 
 std::string tlp::getMinor(const std::string &release) {
-  char sep = '.';
 #ifdef _MSC_VER
-  sep = '_';
+  char sep = '_';
+#else
+  char sep = '.';
 #endif
   size_t pos = release.find(sep);
 
@@ -43,9 +44,10 @@ std::string tlp::getMinor(const std::string &release) {
 }
 
 std::string tlp::getMajor(const std::string &release) {
-  char sep = '.';
 #ifdef _MSC_VER
-  sep = '_';
+  char sep = '_';
+#else
+  char sep = '.';
 #endif
   size_t pos = release.find(sep);
   return release.substr(0, pos);
