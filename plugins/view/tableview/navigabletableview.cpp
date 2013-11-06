@@ -51,7 +51,9 @@ int NavigableTableView::sizeHintForRow(int row) const {
   ensurePolished();
   int left = qMax(0, horizontalHeader()->visualIndexAt(0));
   int right = horizontalHeader()->visualIndexAt(viewport()->width());
+
   if (right < 0) right = model()->columnCount();
+
   int hint = 0;
 
   for (int column = left; column <= right; ++column) {
@@ -105,13 +107,15 @@ void NavigableTableView::resizeTableRows() {
   int bottom = verticalHeader()->visualIndexAt(viewport()->height());
 
   if (bottom == -1 || (bottom+10) >= model()->rowCount()) {
-     bottom = model()->rowCount() - 1;
-  } else {
-     bottom += 10;
+    bottom = model()->rowCount() - 1;
+  }
+  else {
+    bottom += 10;
   }
 
   int left = qMax(0, horizontalHeader()->visualIndexAt(0));
   int right = horizontalHeader()->visualIndexAt(viewport()->width());
+
   if (right < 0) right = model()->columnCount();
 
   for (int i = top ; i <= bottom ; ++i)
