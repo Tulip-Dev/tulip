@@ -543,9 +543,9 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
     if (!ge)
       return;
 
-    static bool removeOnAdd = false;
-
     if (_graphs.contains(ge->getGraph()->getRoot())) {
+      static bool removeOnAdd = false;
+
       if (ge->getType() == GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH) {
         const Graph* sg = ge->getSubGraph();
         Graph* parentGraph = sg->getSuperGraph();

@@ -110,7 +110,7 @@ std::ostream& tlp::operator<<(std::ostream &os,const tlp::Color &a) {
   const unsigned int SIZE =4;
   os << "(" ;
 
-  for ( unsigned int i=0 ; i<SIZE ; ++i ) {
+  for (unsigned int i=0 ; i<SIZE ; ++i) {
     if( i>0 )
       os << ",";
 
@@ -130,34 +130,33 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Color & outA) {
   int pos = is.tellg();
   is.clear();
 
-  if( !(is >> c) || c!='(' ) {
+  if(!bool(is >> c) || c!='(') {
     is.seekg(pos);
-    is.setstate( std::ios::failbit );
+    is.setstate(std::ios::failbit);
     return is;
   }
 
-  for( unsigned int i=0; i<SIZE; ++i ) {
-    if( i>0 && ( !(is >> c) || c!=',' ) ) {
+  for(unsigned int i=0; i<SIZE; ++i) {
+    if(i>0 && ( !bool(is >> c) || c!=',') ) {
       is.seekg(pos);
-      is.setstate( std::ios::failbit );
+      is.setstate(std::ios::failbit);
       return is;
     }
 
-    bool done = true;
     unsigned int vi = 0;
-    done = bool( is >> vi );
+    bool done = bool(is >> vi);
     outA.array[i] = vi;
 
-    if( !done ) {
+    if(!done) {
       is.seekg(pos);
-      is.setstate( std::ios::failbit );
+      is.setstate(std::ios::failbit);
       return is;
     }
   }
 
-  if( !(is >> c) || c!=')' ) {
+  if(!bool(is >> c) || c!=')') {
     is.seekg(pos);
-    is.setstate( std::ios::failbit );
+    is.setstate(std::ios::failbit);
     return is;
   }
 

@@ -61,15 +61,15 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
   is.clear();
 
   // skip spaces
-  while((is >> c) && isspace(c)) {}
+  while(bool(is >> c) && isspace(c)) {}
 
   if(c!='(') {
     is.seekg(pos);
-    is.setstate( std::ios::failbit );
+    is.setstate(std::ios::failbit);
     return is;
   }
 
-  for( unsigned int i=0; i<SIZE; ++i ) {
+  for(unsigned int i=0; i<SIZE; ++i) {
     bool ok;
 
     if (i>0 ) {
@@ -78,7 +78,7 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
 
       if (!ok || c!=',') {
         is.seekg(pos);
-        is.setstate( std::ios::failbit );
+        is.setstate(std::ios::failbit);
         return is;
       }
     }
@@ -87,22 +87,21 @@ std::istream & tlp::operator>> (std::istream &is, tlp::Array<Obj,SIZE> & outA) {
     while((ok = bool(is >> c)) && isspace(c)) {}
 
     is.unget();
-    bool done = true;
-    done = bool( is >> outA.array[i] );
+    bool done = bool(is >> outA.array[i]);
 
     if( !done ) {
       is.seekg(pos);
-      is.setstate( std::ios::failbit );
+      is.setstate(std::ios::failbit);
       return is;
     }
   }
 
   // skip spaces
-  while((is >> c) && isspace(c)) {}
+  while(bool(is >> c) && isspace(c)) {}
 
   if (c!=')' ) {
     is.seekg(pos);
-    is.setstate( std::ios::failbit );
+    is.setstate(std::ios::failbit);
     return is;
   }
 

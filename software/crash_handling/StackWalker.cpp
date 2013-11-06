@@ -464,7 +464,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #include <dbghelp.h>
 
-StackWalkerMSVC::StackWalkerMSVC() {}
+StackWalkerMSVC::StackWalkerMSVC(): context(NULL) {}
 
 StackWalkerMSVC::~StackWalkerMSVC() {}
 
