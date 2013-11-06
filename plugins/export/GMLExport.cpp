@@ -58,7 +58,7 @@ void printSize(ostream &os,const Size &v) {
  */
 class GMLExport:public tlp::ExportModule {
 public:
-  PLUGININFORMATIONS("GML Export","Auber David","31/07/2001","Records a Tulip graph in a file using the GML format (used by Graphlet)","1.0", "File")
+  PLUGININFORMATIONS("GML Export","Auber David","31/07/2001","Exports a Tulip graph in a file using the GML format (used by Graphlet)","1.0", "File")
   std::string fileExtension() const {
     return "gml";
   }
