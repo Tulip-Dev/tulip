@@ -21,7 +21,7 @@
 #ifndef QUADTREE_H
 #define QUADTREE_H
 
-#include <map>
+#include <vector>
 
 #include <tulip/Rectangle.h>
 #include <tulip/Coord.h>
