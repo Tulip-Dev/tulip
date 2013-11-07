@@ -686,18 +686,6 @@ struct WebImport:public ImportModule {
       toVisit.push_back(url);
   }
   //========================================================
-  void addServer(const string &servername) {
-    UrlElement tmpUrl;
-    tmpUrl.server = servername;
-    tmpUrl.setUrl("/");
-    tmpUrl.data = "";
-
-    if (visited.find(tmpUrl)!=visited.end())
-      return;
-
-    toVisit.push_back(tmpUrl);
-  }
-  //========================================================
   void parseUrl (const string &href, UrlElement &starturl) {
     UrlElement newUrl = starturl.parseUrl(href);
 

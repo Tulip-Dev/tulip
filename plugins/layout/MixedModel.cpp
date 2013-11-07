@@ -526,33 +526,6 @@ void MixedModel::initPartition() {
 }
 
 //====================================================
-void afficheCycle(tlp::PlanarConMap* m) {
-  assert(m);
-  tlp::debug()<<"Cycles :"<<endl;
-  Iterator<node>* itn = m->getNodes();
-
-  node n;
-
-  while(itn->hasNext()) {
-    n = itn->next();
-    tlp::debug()<<n.id<<" ( ";
-
-    edge e;
-    Iterator<edge>* ite = m->getInOutEdges(n);
-
-    while(ite->hasNext()) {
-      e = ite->next();
-      tlp::debug()<<e.id<<" ";
-    }
-
-    tlp::debug()<<" )"<<endl;
-    delete ite;
-  }
-
-  delete itn;
-}
-
-//====================================================
 void MixedModel::assignInOutPoints() { // on considère qu'il n'y a pas d'arc double
   assert(carte);
   vector<node> C;  // chemin courant
