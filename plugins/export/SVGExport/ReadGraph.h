@@ -31,25 +31,25 @@
 class RepresentExport;
 
 namespace tlp {
- class Graph;
- class DataSet;
- class PluginProgress;
+class Graph;
+class DataSet;
+class PluginProgress;
 }
 
 // Director
-class ReadGraph{
-    RepresentExport *_representExport;
+class ReadGraph {
+  RepresentExport *_representExport;
 
-    friend std::ostream& operator<<(std::ostream &os, const ReadGraph &r);
-    // This method retrieve the result after the analysis
-    void getExport(std::ostream &os) const;
+  friend std::ostream& operator<<(std::ostream &os, const ReadGraph &r);
+  // This method retrieve the result after the analysis
+  void getExport(std::ostream &os) const;
 
 public:
-    ReadGraph(tlp::Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, RepresentExport *r);
+  ReadGraph(tlp::Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, RepresentExport *r);
 
 private:
-    void treatEdges(tlp::Graph *graph, tlp::PluginProgress *pp, RepresentExport *r,unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::IntegerProperty *srcanchorshape, tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label, tlp::ColorProperty *labelcolor, bool edge_color_interpolation, bool edge_extremities);
-    void treatNodes(tlp::Graph *graph, tlp::PluginProgress *pp, RepresentExport *r, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation, tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor, std::vector<tlp::node> &metanodeVertices);
+  void treatEdges(tlp::Graph *graph, tlp::PluginProgress *pp, RepresentExport *r,unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::IntegerProperty *srcanchorshape, tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label, tlp::ColorProperty *labelcolor, bool edge_color_interpolation, bool edge_extremities);
+  void treatNodes(tlp::Graph *graph, tlp::PluginProgress *pp, RepresentExport *r, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation, tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor, std::vector<tlp::node> &metanodeVertices);
 };
 
 std::ostream& operator<<(std::ostream &os, const ReadGraph &r);

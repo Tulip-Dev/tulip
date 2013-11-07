@@ -101,30 +101,30 @@ struct PageRank : public DoubleAlgorithm {
         node src = eEnds.first;
 
         if(directed) {
-	  node tgt = eEnds.second;
-	  double prev = R2.get(tgt);
-	  R2.set(tgt, prev + R.get(src) / double(graph->outdeg(src)));
+          node tgt = eEnds.second;
+          double prev = R2.get(tgt);
+          R2.set(tgt, prev + R.get(src) / double(graph->outdeg(src)));
         }
         else {
-	  node tgt = eEnds.second;
-	  double prev = R2.get(tgt);
-	  R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
- 
-	  prev = R2.get(src);
-	  R2.set(src, prev + R.get(tgt) / double(graph->deg(tgt)));
+          node tgt = eEnds.second;
+          double prev = R2.get(tgt);
+          R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
+
+          prev = R2.get(src);
+          R2.set(src, prev + R.get(tgt) / double(graph->deg(tgt)));
         }
       }
 
       node n;
       forEach(n, graph->getNodes())
-	R2.set(n, d * R2.get(n));
+      R2.set(n, d * R2.get(n));
 
       double mu = 0.0;
       forEach(n, graph->getNodes())
-	mu += R.get(n) - R2.get(n);
+      mu += R.get(n) - R2.get(n);
 
       forEach(n, graph->getNodes())
-	R2.set(n, R2.get(n) + mu*1.0/nbNodes);
+      R2.set(n, R2.get(n) + mu*1.0/nbNodes);
 
       /*double delta = 0.0;
       forEach(n, graph->getNodes())
@@ -135,7 +135,7 @@ struct PageRank : public DoubleAlgorithm {
       delta += R2.get(n) - R.get(n);*/
 
       forEach(n, graph->getNodes())
-	R.set(n, R2.get(n));
+      R.set(n, R2.get(n));
 
     }
 
