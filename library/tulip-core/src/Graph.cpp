@@ -658,14 +658,6 @@ void Graph::setAttribute(const std::string &name, const DataType* value) {
   notifyAfterSetAttribute(name);
 }
 
-void Graph::addGraphObserver(Observable *gObs) const {
-  addListener(gObs);
-}
-
-void Graph::removeGraphObserver(Observable *gObs) const {
-  removeListener(gObs);
-}
-
 void Graph::notifyAddNode(const node n) {
   if (hasOnlookers())
     sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODE, n));

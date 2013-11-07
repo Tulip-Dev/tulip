@@ -1223,10 +1223,6 @@ public:
                                    PropertyType* result, std::string &msg,
                                    PluginProgress *progress=NULL, DataSet *data=NULL);
 
-  // observation mechanism
-  void _DEPRECATED addGraphObserver(Observable *) const;
-  void _DEPRECATED removeGraphObserver(Observable *) const;
-
   // updates management
   /**
    * @brief Saves the current state of the whole graph hierarchy and allows to revert to this state later on, using pop().
