@@ -101,52 +101,41 @@ struct PageRank : public DoubleAlgorithm {
         node src = eEnds.first;
 
         if(directed) {
-          if (graph->outdeg(src) != 0) {
-            node tgt = eEnds.second;
-            double prev = R2.get(tgt);
-            R2.set(tgt, prev + R.get(src) / double(graph->outdeg(src)));
-          }
+	  node tgt = eEnds.second;
+	  double prev = R2.get(tgt);
+	  R2.set(tgt, prev + R.get(src) / double(graph->outdeg(src)));
         }
         else {
-          if (graph->deg(src) != 0) {
-            node tgt = eEnds.second;
-            double prev = R2.get(tgt);
-            R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
-          }
-
-          node src = eEnds.second;
-
-          if (graph->deg(src) != 0) {
-            node tgt = eEnds.first;
-            double prev = R2.get(tgt);
-            R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
-          }
+	  node tgt = eEnds.second;
+	  double prev = R2.get(tgt);
+	  R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
+ 
+	  prev = R2.get(src);
+	  R2.set(src, prev + R.get(tgt) / double(graph->deg(tgt)));
         }
       }
 
       node n;
       forEach(n, graph->getNodes())
-      R2.set(n, d * R2.get(n));
+	R2.set(n, d * R2.get(n));
 
       double mu = 0.0;
       forEach(n, graph->getNodes())
-      mu += R.get(n);
-      forEach(n, graph->getNodes())
-      mu -= R2.get(n);
-      forEach(n, graph->getNodes())
-      R2.set(n, R2.get(n) + mu*1.0/nbNodes);
+	mu += R.get(n) - R2.get(n);
 
+      forEach(n, graph->getNodes())
+	R2.set(n, R2.get(n) + mu*1.0/nbNodes);
 
-      double delta = 0.0;
+      /*double delta = 0.0;
       forEach(n, graph->getNodes())
 
       if (R.get(n) > R2.get(n))
         delta += R.get(n) - R2.get(n);
       else
-        delta += R2.get(n) - R.get(n);
+      delta += R2.get(n) - R.get(n);*/
 
       forEach(n, graph->getNodes())
-      R.set(n, R2.get(n));
+	R.set(n, R2.get(n));
 
     }
 
@@ -155,10 +144,6 @@ struct PageRank : public DoubleAlgorithm {
       result->setNodeValue(n, R.get(n));
     }
 
-    return true;
-  }
-
-  bool check(string &) {
     return true;
   }
 };
