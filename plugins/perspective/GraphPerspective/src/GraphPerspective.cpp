@@ -230,18 +230,25 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->setupUi(_mainWindow);
   currentGraphChanged(NULL);
   _ui->singleModeButton->setEnabled(false);
+  _ui->singleModeButton->hide();
   _ui->workspace->setSingleModeSwitch(_ui->singleModeButton);
   _ui->splitModeButton->setEnabled(false);
+  _ui->splitModeButton->hide();
   _ui->workspace->setSplitModeSwitch(_ui->splitModeButton);
   _ui->split3ModeButton->setEnabled(false);
+  _ui->split3ModeButton->hide();
   _ui->workspace->setSplit3ModeSwitch(_ui->split3ModeButton);
   _ui->split32ModeButton->setEnabled(false);
+  _ui->split32ModeButton->hide();
   _ui->workspace->setSplit32ModeSwitch(_ui->split32ModeButton);
   _ui->split33ModeButton->setEnabled(false);
+  _ui->split33ModeButton->hide();
   _ui->workspace->setSplit33ModeSwitch(_ui->split33ModeButton);
   _ui->gridModeButton->setEnabled(false);
+  _ui->gridModeButton->hide();
   _ui->workspace->setGridModeSwitch(_ui->gridModeButton);
   _ui->sixModeButton->setEnabled(false);
+  _ui->sixModeButton->hide();
   _ui->workspace->setSixModeSwitch(_ui->sixModeButton);
   _ui->workspace->setPageCountLabel(_ui->pageCountLabel);
   _ui->workspace->setExposeModeSwitch(_ui->exposeModeButton);
@@ -545,6 +552,9 @@ void GraphPerspective::createPanel(tlp::Graph* g) {
   int result = wizard.exec();
 
   if (result == QDialog::Accepted && wizard.panel() != NULL) {
+    // expose mode is not safe to add a new panel
+    // so hide it if needed
+    _ui->workspace->hideExposeMode();
     _ui->workspace->addPanel(wizard.panel());
     _ui->workspace->setActivePanel(wizard.panel());
     wizard.panel()->applySettings();
@@ -934,14 +944,20 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->split33ModeButton->setEnabled(enabled);
   _ui->gridModeButton->setEnabled(enabled);
   _ui->sixModeButton->setEnabled(enabled);
+  _ui->exposeModeButton->setEnabled(enabled);
+  _ui->searchButton->setEnabled(enabled);
+  _ui->pythonButton->setEnabled(enabled);
+  _ui->previousPageButton->setVisible(enabled);
+  _ui->pageCountLabel->setVisible(enabled);
+  _ui->nextPageButton->setVisible(enabled);
 
   if (graph == NULL) {
+    _ui->workspace->switchToStartupMode();
+    _ui->exposeModeButton->setChecked(false);
     _ui->searchButton->setChecked(false);
     _ui->pythonButton->setChecked(false);
     setSearchOutput(false);
-  }
-
-  _ui->searchButton->setEnabled(enabled);
+  } 
 }
 
 void GraphPerspective::CSVImport() {
@@ -990,6 +1006,9 @@ void GraphPerspective::CSVImport() {
 }
 
 void GraphPerspective::showStartPanels(Graph *g) {
+  // expose mode is not safe to add a new panel
+  // so hide it if needed
+  _ui->workspace->hideExposeMode();
   View* firstPanel = NULL;
   View* secondPanel = NULL;
   foreach(QString panelName, QStringList() << "Spreadsheet view" << "Node Link Diagram view") {
@@ -1040,8 +1059,13 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
     if (v->graph() == g || g->isDescendantGraph(v->graph()))
       viewsToDelete+=v;
   }
-  foreach(View* v, viewsToDelete) {
-    _ui->workspace->delView(v);
+  if (!viewsToDelete.empty()) {
+    // expose mode is not safe to add a delete a panel
+    // so hide it if needed
+    _ui->workspace->hideExposeMode();
+    foreach(View* v, viewsToDelete) {
+      _ui->workspace->delView(v);
+    }
   }
 }
 
