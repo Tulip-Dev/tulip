@@ -974,6 +974,10 @@ void GraphPerspective::CSVImport() {
     return;
 
   CSVImportWizard wizard(_mainWindow);
+  if (mustDeleteGraph)
+    wizard.setWindowTitle("Import CSV data into a new graph");
+  else
+    wizard.setWindowTitle(QString("Import CSV data into graph: ") +  g->getName().c_str()); 
   wizard.setGraph(g);
   g->push();
   Observable::holdObservers();
