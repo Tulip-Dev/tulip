@@ -957,7 +957,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
     _ui->searchButton->setChecked(false);
     _ui->pythonButton->setChecked(false);
     setSearchOutput(false);
-  } 
+  }
 }
 
 void GraphPerspective::CSVImport() {
@@ -974,10 +974,12 @@ void GraphPerspective::CSVImport() {
     return;
 
   CSVImportWizard wizard(_mainWindow);
+
   if (mustDeleteGraph)
     wizard.setWindowTitle("Import CSV data into a new graph");
   else
-    wizard.setWindowTitle(QString("Import CSV data into graph: ") +  g->getName().c_str()); 
+    wizard.setWindowTitle(QString("Import CSV data into graph: ") +  g->getName().c_str());
+
   wizard.setGraph(g);
   g->push();
   Observable::holdObservers();
@@ -1063,6 +1065,7 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
     if (v->graph() == g || g->isDescendantGraph(v->graph()))
       viewsToDelete+=v;
   }
+
   if (!viewsToDelete.empty()) {
     // expose mode is not safe to add a delete a panel
     // so hide it if needed

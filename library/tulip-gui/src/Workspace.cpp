@@ -491,7 +491,8 @@ void Workspace::uncheckExposeButton() {
 
 void Workspace::hideExposeMode() {
   if (currentModeWidget() != _ui->exposePage)
-    return;      
+    return;
+
   _ui->exposeButton->setChecked(false);
   QVector<WorkspacePanel*> newPanels = _ui->exposeMode->panels();
   _panels.clear();
