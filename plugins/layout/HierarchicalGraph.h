@@ -48,7 +48,7 @@ public:
 class HierarchicalGraph:public tlp::LayoutAlgorithm {
 
 public:
-  PLUGININFORMATIONS("Hierarchical Graph","David Auber","23/05/2000","Alpha","1.0","Hierarchical")
+  PLUGININFORMATION("Hierarchical Graph","David Auber","23/05/2000","Alpha","1.0","Hierarchical")
   HierarchicalGraph(const tlp::PluginContext* context);
   ~HierarchicalGraph();
   bool run();

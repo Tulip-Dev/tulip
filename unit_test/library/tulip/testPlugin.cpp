@@ -26,7 +26,7 @@ using namespace std;
 
 class Test : public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATIONS("Test","Jezequel","03/11/2004","0","1.0", "")
+  PLUGININFORMATION("Test","Jezequel","03/11/2004","0","1.0", "")
   Test(tlp::PluginContext* context) : tlp::BooleanAlgorithm(context) {
     addDependency("Test", "1.0");
     addInParameter<int>("testParameter", "no help for you :)", "0", false);
@@ -43,7 +43,7 @@ PLUGIN(Test)
 //this plugin is registered with the same identifier as the one above, it should not show up
 class Test3 : public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATIONS("Test","Jezequel","03/11/2004","0","1.0", "")
+  PLUGININFORMATION("Test","Jezequel","03/11/2004","0","1.0", "")
   Test3(tlp::PluginContext *context) : tlp::BooleanAlgorithm(context) {}
   bool run() {
     return false;

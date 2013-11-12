@@ -84,7 +84,7 @@ const char * paramHelp[] = {
 class OGDFDominance : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("Dominance (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
+  PLUGININFORMATION("Dominance (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
   OGDFDominance(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::DominanceLayout()) {
     addInParameter<int>("minimum grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");

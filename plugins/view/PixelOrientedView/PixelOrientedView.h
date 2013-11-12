@@ -76,7 +76,7 @@ class PixelOrientedView : public GlMainView {
 
 public :
 
-  PLUGININFORMATIONS(ViewName::PixelOrientedViewName, "Antoine Lambert", "12/2008",
+  PLUGININFORMATION(ViewName::PixelOrientedViewName, "Antoine Lambert", "12/2008",
                      "<p>The Pixel Oriented view allows to visualize graph properties using pixel oriented visualization techniques.</p>"
                      "<p>This type of visualization aims to use each pixel of the display to visualize one data value and therefore allow the visualization of the largest amount of data possible."
                      "Pixels are mapped so that neighbor pixels in the data are placed close to each other on the screen.</p>"

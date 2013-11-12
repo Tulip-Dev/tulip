@@ -97,7 +97,7 @@ public :
     addInParameter<bool>("connect", "If checked, original graph nodes will be connected to the vertices of their voronoi cell.", "false");
   }
 
-  PLUGININFORMATIONS("Voronoi diagram","Antoine LAMBERT","","","1.0","Triangulation")
+  PLUGININFORMATION("Voronoi diagram","Antoine LAMBERT","","","1.0","Triangulation")
 
   bool run() {
     tlp::Observable::holdObservers();

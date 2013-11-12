@@ -46,7 +46,7 @@ class PythonScriptView : public tlp::ViewWidget {
 
 public :
 
-  PLUGININFORMATIONS("Python Script view", "Antoine Lambert", "04/2010",
+  PLUGININFORMATION("Python Script view", "Antoine Lambert", "04/2010",
                      "<p>This view aims to manipulate and modify a Tulip graph through the use of Python scripts."
                      "Bindings for the Tulip-Core C++ library have been developed in order to offer its features "
                      "to the Python world. The main functionalities have been wrapped, the most important ones being "

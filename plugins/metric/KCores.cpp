@@ -65,7 +65,7 @@ using namespace tlp;
 class KCores:public tlp::DoubleAlgorithm {
 public:
 
-  PLUGININFORMATIONS("K-Cores", "David Auber","28/05/2006","Nodes measure<br/>often used to evaluate the structure of social networks.","2.0", "Graph")
+  PLUGININFORMATION("K-Cores", "David Auber","28/05/2006","Nodes measure<br/>often used to evaluate the structure of social networks.","2.0", "Graph")
 
   KCores(const tlp::PluginContext *context);
   ~KCores();

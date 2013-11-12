@@ -16,7 +16,7 @@ Q_OBJECT
 @endif
 
 public:
-PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
+PLUGININFORMATION("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
 public:
   %ProjectName:c%(const tlp::PluginContext* context = NULL);

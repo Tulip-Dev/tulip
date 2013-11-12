@@ -56,7 +56,7 @@ class SOMPropertiesWidget;
 class SOMView: public GlMainView {
   Q_OBJECT
 
-  PLUGININFORMATIONS(ViewName::SOMViewName, "Dubois Jonathan", "02/2009",
+  PLUGININFORMATION(ViewName::SOMViewName, "Dubois Jonathan", "02/2009",
                      "The Self Organizing Map view allows to generate self organizing map (also called Kohonen map) from graph data.\n"
                      "The model was first described as an artificial neural network by the Finnish professor Teuvo Kohonen.\n"
                      "This view is useful to visualize high-dimensional data in a low-dimensional representation.\n\n"

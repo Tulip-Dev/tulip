@@ -41,7 +41,7 @@ using namespace tlp;
 class GoogleMapsInteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATIONS("GoogleMapsInteractorGetInformation", "Tulip Team", "06/2012", "Google Map Get Information Interactor", "1.0", "Information")
+  PLUGININFORMATION("GoogleMapsInteractorGetInformation", "Tulip Team", "06/2012", "Google Map Get Information Interactor", "1.0", "Information")
   /**
    * Default constructor
    */

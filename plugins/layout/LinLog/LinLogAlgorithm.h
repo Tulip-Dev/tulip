@@ -39,7 +39,7 @@ class LinLogAlgorithm : public tlp::LayoutAlgorithm {
 
 public :
 
-  PLUGININFORMATIONS("LinLog", "B. Renoust","11/02/13","The LinLog layout algorithm</br>an energy model layout.","1.0","Force Directed");
+  PLUGININFORMATION("LinLog", "B. Renoust","11/02/13","The LinLog layout algorithm</br>an energy model layout.","1.0","Force Directed");
 
   LinLogAlgorithm(const tlp::PluginContext *context);
 

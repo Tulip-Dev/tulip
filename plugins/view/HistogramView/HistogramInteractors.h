@@ -43,7 +43,7 @@ class HistogramInteractorNavigation : public HistogramInteractor {
 
 public :
 
-  PLUGININFORMATIONS("HistogramInteractorNavigation", "Tulip Team", "02/04/2009", "Histogram Navigation Interactor", "1.0","Navigation")
+  PLUGININFORMATION("HistogramInteractorNavigation", "Tulip Team", "02/04/2009", "Histogram Navigation Interactor", "1.0","Navigation")
 
   HistogramInteractorNavigation(const PluginContext *);
 
@@ -55,7 +55,7 @@ class HistogramInteractorMetricMapping : public HistogramInteractor {
 
 public :
 
-  PLUGININFORMATIONS("HistogramInteractorColorMapping", "Tulip Team", "02/04/2009", "Histogram Color Mapping Interactor", "1.0", "Information")
+  PLUGININFORMATION("HistogramInteractorColorMapping", "Tulip Team", "02/04/2009", "Histogram Color Mapping Interactor", "1.0", "Information")
 
   HistogramInteractorMetricMapping(const PluginContext *);
 
@@ -67,7 +67,7 @@ class HistogramInteractorStatistics : public HistogramInteractor {
 
 public :
 
-  PLUGININFORMATIONS("HistogramInteractorStatistics", "Tulip Team", "02/04/2009", "Histogram Statistics Interactor", "1.0", "Information")
+  PLUGININFORMATION("HistogramInteractorStatistics", "Tulip Team", "02/04/2009", "Histogram Statistics Interactor", "1.0", "Information")
 
   HistogramInteractorStatistics(const PluginContext *);
   ~HistogramInteractorStatistics();

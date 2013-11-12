@@ -45,7 +45,7 @@ class TableView : public tlp::ViewWidget {
   bool filteringColumns;
 
 public:
-  PLUGININFORMATIONS("Spreadsheet view","Tulip Team","04/17/2012","Spreadsheet view for raw data","4.0","")
+  PLUGININFORMATION("Spreadsheet view","Tulip Team","04/17/2012","Spreadsheet view for raw data","4.0","")
 
   TableView(tlp::PluginContext*);
   virtual ~TableView();

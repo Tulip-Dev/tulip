@@ -58,7 +58,7 @@ class FacebookImport : public QObject, public tlp::ImportModule {
 
 public :
 
-  PLUGININFORMATIONS("Facebook Import","Antoine LAMBERT","19/01/2013","Import the social network from a Facebook account.","1.0","Social networks")
+  PLUGININFORMATION("Facebook Import","Antoine LAMBERT","19/01/2013","Import the social network from a Facebook account.","1.0","Social networks")
 
   FacebookImport(const tlp::PluginContext*  context);
 

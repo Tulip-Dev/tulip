@@ -35,7 +35,7 @@ using namespace tlp;
  **/
 class TreeRadial:public LayoutAlgorithm {
 public:
-  PLUGININFORMATIONS("Tree Radial","Patrick Mary","14/05/2007","Ok","1.0","Tree")
+  PLUGININFORMATION("Tree Radial","Patrick Mary","14/05/2007","Ok","1.0","Tree")
   Graph *tree;
   vector<float> nRadii;
   vector<float> lRadii;

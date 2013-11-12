@@ -55,7 +55,7 @@ using namespace tlp;
 **/
 class LouvainClustering : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Louvain","François Queyroi","25/02/11","Nodes partitioning measure used for community detection.","2.0","Clustering")
+  PLUGININFORMATION("Louvain","François Queyroi","25/02/11","Nodes partitioning measure used for community detection.","2.0","Clustering")
   LouvainClustering(const tlp::PluginContext*);
   ~LouvainClustering();
   bool run();

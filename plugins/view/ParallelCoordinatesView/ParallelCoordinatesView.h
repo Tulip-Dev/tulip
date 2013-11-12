@@ -73,7 +73,7 @@ class ParallelCoordinatesView : public GlMainView {
 
 public :
 
-  PLUGININFORMATIONS(ViewName::ParallelCoordinatesViewName, "Antoine Lambert", "16/04/2008",
+  PLUGININFORMATION(ViewName::ParallelCoordinatesViewName, "Antoine Lambert", "16/04/2008",
                      "<p>The Parallel Coordinates view allows to create a parallel coordinates visualization from graph elements."
                      "Parallel coordinates are a common way of visualizing high-dimensional geometry and analyzing multivariate data.\n"
                      "The basic idea is to visualize a set of points in an n-dimensional space. To do so, the n dimensions are represented by n parallel axis, typically vertical and equally spaced. A point in n-dimensional space is represented as a polyline with vertices on the parallel axis. The position of the vertex on the i-th axis corresponds to the i-th coordinate of the point.</p>"

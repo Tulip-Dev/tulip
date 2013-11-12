@@ -65,7 +65,7 @@ const char * paramHelp[] = {
  */
 class RandomGraph:public ImportModule {
 public:
-  PLUGININFORMATIONS("Random General Graph","Auber","16/06/2002","Imports a new randomly generated graph.","1.0","Graph")
+  PLUGININFORMATION("Random General Graph","Auber","16/06/2002","Imports a new randomly generated graph.","1.0","Graph")
   RandomGraph(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<unsigned int>("nodes",paramHelp[0],"5");
     addInParameter<unsigned int>("edges",paramHelp[1],"9");

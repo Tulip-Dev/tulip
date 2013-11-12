@@ -25,7 +25,7 @@
 
 class QuotientClustering:public tlp::Algorithm {
 public:
-  PLUGININFORMATIONS("Quotient Clustering","David Auber","13/06/2001","OK","1.3", "Clustering")
+  PLUGININFORMATION("Quotient Clustering","David Auber","13/06/2001","OK","1.3", "Clustering")
   QuotientClustering(tlp::PluginContext* context);
   ~QuotientClustering();
   bool run();

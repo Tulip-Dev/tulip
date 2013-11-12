@@ -35,7 +35,7 @@
 */
 class Tutte:public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATIONS("3-Connected (Tutte)","David Auber","06/11/2002","Beta","1.0","Planar")
+  PLUGININFORMATION("3-Connected (Tutte)","David Auber","06/11/2002","Beta","1.0","Planar")
   Tutte(const tlp::PluginContext* context);
   ~Tutte();
 

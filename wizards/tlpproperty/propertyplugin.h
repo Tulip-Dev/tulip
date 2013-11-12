@@ -5,7 +5,7 @@
 
 class %ProjectName:c%:public tlp::%AlgorithmType%Algorithm {
 public:
-  PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
+  PLUGININFORMATION("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
   %ProjectName:c%(tlp::PluginContext* context);
   ~%ProjectName:c%();

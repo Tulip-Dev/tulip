@@ -205,7 +205,7 @@ public:
 
   ~OGDFSugiyama() {}
 
-  PLUGININFORMATIONS("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.5","Hierarchical")
+  PLUGININFORMATION("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.5","Hierarchical")
 
   void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);

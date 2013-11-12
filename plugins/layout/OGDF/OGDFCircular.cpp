@@ -93,7 +93,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 class OGDFCircular : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("Circular (OGDF)","Carsten Gutwenger","13/11/2007","Ok","1.4","Basic")
+  PLUGININFORMATION("Circular (OGDF)","Carsten Gutwenger","13/11/2007","Ok","1.4","Basic")
   OGDFCircular(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
     addInParameter<double> ("minDistCircle", paramHelp[0], "20.0", false);
     addInParameter<double> ("minDistLevel", paramHelp[1], "20.0", false);

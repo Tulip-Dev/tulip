@@ -74,7 +74,7 @@
 class OGDFMMMExampleNoTwistLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("MMM Example No Twist Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel")
+  PLUGININFORMATION("MMM Example No Twist Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel")
   OGDFMMMExampleNoTwistLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleNoTwistLayout()) {}
   ~OGDFMMMExampleNoTwistLayout() {}
 

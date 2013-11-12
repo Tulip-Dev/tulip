@@ -32,7 +32,7 @@
  */
 class SpanningTreeSelection:public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATIONS("Spanning Forest","David Auber","01/12/1999","Alpha","1.0", "Selection")
+  PLUGININFORMATION("Spanning Forest","David Auber","01/12/1999","Alpha","1.0", "Selection")
   SpanningTreeSelection(const tlp::PluginContext* context);
   ~SpanningTreeSelection();
   bool run();

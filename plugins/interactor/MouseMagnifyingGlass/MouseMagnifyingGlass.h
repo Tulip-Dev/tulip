@@ -83,7 +83,7 @@ class MouseMagnifyingGlassInteractor : public GLInteractorComposite {
 
 public :
 
-  PLUGININFORMATIONS("MouseMagnifyingGlassInteractor", "Antoine Lambert", "19/06/2009", "Mouse Magnifying Glass Interactor Interactor", "1.0", "Visualization")
+  PLUGININFORMATION("MouseMagnifyingGlassInteractor", "Antoine Lambert", "19/06/2009", "Mouse Magnifying Glass Interactor Interactor", "1.0", "Visualization")
 
   MouseMagnifyingGlassInteractor(const tlp::PluginContext *);
 
