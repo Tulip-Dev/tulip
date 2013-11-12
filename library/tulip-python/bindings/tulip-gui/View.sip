@@ -77,7 +77,7 @@ public:
 tlpgui.View.viewQFrame()
 
 Dynamically wraps the QFrame enclosing the view into a :class:`PyQt4.QtGui.QFrame` instance.
-The purpose of that method is for developpers that want to integrate a Tulip view in their PyQt4 application.
+The purpose of that method is for developers that want to integrate a Tulip view in their PyQt4 application.
 You need to have PyQt4 install for that feature to work linked against the same version
 of Qt used to build Tulip and using the same version of SIP used to build the Tulip Python bindings
 (meaning, you will surely have to compile Tulip and PyQt4 yourself, otherwise you are lucky).
@@ -113,7 +113,7 @@ of Qt used to build Tulip and using the same version of SIP used to build the Tu
 tlpgui.View.viewQFrame()
 
 Dynamically wraps the QGraphicsView used to display the view content into a :class:`PyQt4.QtGui.QGraphicsView` instance.
-The purpose of that method is for developpers that want to integrate a Tulip view in their PyQt4 application.
+The purpose of that method is for developers that want to integrate a Tulip view in their PyQt4 application.
 You need to have PyQt4 install for that feature to work linked against the same version
 of Qt used to build Tulip and using the same version of SIP used to build the Tulip Python bindings
 (meaning, you will surely have to compile Tulip and PyQt4 yourself, otherwise you are lucky).
