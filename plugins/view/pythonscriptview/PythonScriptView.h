@@ -47,18 +47,18 @@ class PythonScriptView : public tlp::ViewWidget {
 public :
 
   PLUGININFORMATION("Python Script view", "Antoine Lambert", "04/2010",
-                     "<p>This view aims to manipulate and modify a Tulip graph through the use of Python scripts."
-                     "Bindings for the Tulip-Core C++ library have been developed in order to offer its features "
-                     "to the Python world. The main functionalities have been wrapped, the most important ones being "
-                     "graph and properties manipulation (for instance : adding nodes/edges to a graph, creating a property, "
-                     "getting/setting property values associated to graph elements, ...) but also the ability to call "
-                     "algorithms.</p>"
-                     "<p>The view allows to write a script that will operate on the graphs currently loaded in Tulip."
-                     "Its graphical interface contains the following components :<ul>"
-                     "   <li>a nice script editor with syntax highlighting and auto-completion</li>"
-                     "   <li>some buttons to start / stop the current edited script</li>"
-                     "   <li>a console output widget</li></ul>"
-                     , "0.7", "")
+                    "<p>This view aims to manipulate and modify a Tulip graph through the use of Python scripts."
+                    "Bindings for the Tulip-Core C++ library have been developed in order to offer its features "
+                    "to the Python world. The main functionalities have been wrapped, the most important ones being "
+                    "graph and properties manipulation (for instance : adding nodes/edges to a graph, creating a property, "
+                    "getting/setting property values associated to graph elements, ...) but also the ability to call "
+                    "algorithms.</p>"
+                    "<p>The view allows to write a script that will operate on the graphs currently loaded in Tulip."
+                    "Its graphical interface contains the following components :<ul>"
+                    "   <li>a nice script editor with syntax highlighting and auto-completion</li>"
+                    "   <li>some buttons to start / stop the current edited script</li>"
+                    "   <li>a console output widget</li></ul>"
+                    , "0.7", "")
 
   PythonScriptView(tlp::PluginContext *);
   ~PythonScriptView();
