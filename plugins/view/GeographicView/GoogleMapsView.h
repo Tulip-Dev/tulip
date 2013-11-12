@@ -67,9 +67,9 @@ class GoogleMapsView : public View {
   Q_OBJECT
 
   PLUGININFORMATION(ViewName::GoogleMapsViewName, "Antoine Lambert and Mathiaut Morgan", "06/2012",
-                     "<p>The Geographic view allows to visualize a geolocalized Tulip graph on top of Google Maps.</p>"
-                     "<p>If geographic properties are attached to graph nodes (address or latitude/longitude), they are used used to layout the nodes on the map.</p>"
-                     "<p>An interactor for performing selection on graph elements is also bundled with the view.</p>", "2.0","View")
+                    "<p>The Geographic view allows to visualize a geolocalized Tulip graph on top of Google Maps.</p>"
+                    "<p>If geographic properties are attached to graph nodes (address or latitude/longitude), they are used used to layout the nodes on the map.</p>"
+                    "<p>An interactor for performing selection on graph elements is also bundled with the view.</p>", "2.0","View")
 
 public :
 
