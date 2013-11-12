@@ -170,28 +170,31 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   }
 
   QAction* action = menu.exec(QCursor::pos());
-  bool result = false;
 
-  _graph->push();
+  if (action != NULL) {
+    bool result = false;
 
-  if (action == nodesSetAll)
-    result = setAllValues(_contextProperty, true, false);
+    _graph->push();
 
-  if (action == edgesSetAll)
-    result = setAllValues(_contextProperty, false, false);
+    if (action == nodesSetAll)
+      result = setAllValues(_contextProperty, true, false);
 
-  if (action == selectedNodesSetAll)
-    result = setAllValues(_contextProperty, true, true);
+    if (action == edgesSetAll)
+      result = setAllValues(_contextProperty, false, false);
 
-  if (action == selectedEdgesSetAll)
-    result = setAllValues(_contextProperty, false, true);
+    if (action == selectedNodesSetAll)
+      result = setAllValues(_contextProperty, true, true);
 
-  if (action == rename)
-    result = renameProperty(_contextProperty);
+    if (action == selectedEdgesSetAll)
+      result = setAllValues(_contextProperty, false, true);
 
-  if (!result)
-    // edition cancelled
-    _graph->pop();
+    if (action == rename)
+      result = renameProperty(_contextProperty);
+
+    if (!result)
+      // edition cancelled
+      _graph->pop();
+  }
 
   _contextProperty = NULL;
 }

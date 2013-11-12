@@ -186,7 +186,7 @@ color: #595959;</string>
            <string>Add a new local property to the current graph</string>
           </property>
           <property name="text">
-           <string>Add property</string>
+           <string>Add new</string>
           </property>
           <property name="icon">
            <iconset resource="../../../library/tulip-gui/resources/TulipGUIResource.qrc">
