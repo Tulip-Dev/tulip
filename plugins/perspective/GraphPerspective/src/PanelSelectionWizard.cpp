@@ -50,7 +50,7 @@ PanelSelectionWizard::~PanelSelectionWizard() {
 
 void PanelSelectionWizard::panelSelected (const QModelIndex& index) {
   _currentItem = index.data().toString();
-  _ui->panelDescription->setHtml(PluginLister::pluginInformations(_currentItem.toStdString()).info().c_str());
+  _ui->panelDescription->setHtml(PluginLister::pluginInformation(_currentItem.toStdString()).info().c_str());
   // NexButton is temporarily hidden
   // QWizard::HaveNextButtonOnLastPage has been removed
   // from options property in PanelSelectionWizard.ui

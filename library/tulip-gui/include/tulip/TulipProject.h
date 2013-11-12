@@ -40,7 +40,7 @@ class PluginProgress;
 
   @brief The TulipProject object handles the content of a Tulip project.
 
-  All tulip projects contain a set of defined static meta-informations:
+  All tulip projects contain a set of defined static meta-information:
   @list
   @li name (QString): the name of the project
   @li description (QString): Comments about the project
@@ -50,7 +50,7 @@ class PluginProgress;
   @li version (QString): the version of the Tulip project format
   @endlist
 
-  Alongside those informations, one can store any kind of file into a Tulip project. Since a project is meant to be associated to a specific perspective, the responisbility of those file
+  Alongside this information, one can store any kind of file into a Tulip project. Since a project is meant to be associated to a specific perspective, the responisbility of those file
   is left to the perspective.
 
   A TulipProject DOES NOT automatically save to disk. One will have to call the write() method to serialize data.
@@ -346,7 +346,7 @@ private:
   QDir _dataDir;
   QString _projectFile;
 
-  // Meta informations
+  // Meta information
   QString _author;
   QString _name;
   QString _description;

@@ -444,7 +444,7 @@ void GlComplexPolygon::runTesselation() {
   gluTessCallback(tobj, GLU_TESS_COMBINE_DATA, reinterpret_cast<GLUTesselatorFunction>(&combineCallback));
   gluTessCallback(tobj, GLU_TESS_ERROR, reinterpret_cast<GLUTesselatorFunction>(&errorCallback));
 
-  //Compute number of points to compute and create a big tab to store points' informations
+  //Compute number of points to compute and create a big tab to store points' information
   unsigned int numberOfPoints = 0;
 
   for(size_t v = 0 ; v < points.size() ; ++v) {

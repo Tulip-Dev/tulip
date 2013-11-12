@@ -33,7 +33,7 @@ class Event {
 %Docstring
 This class is the base one for representing an event in Tulip.
 Events are objects sent by objects whose classes derives from the :class:`tlp.Observable` one.
-An event is characterized by its type. The base :class:`tlp.Event` class only carries informations as to the type of event, nothing specific :
+An event is characterized by its type. The base :class:`tlp.Event` class only carries information as to the type of event, nothing specific :
 
     * :const:`tlp.Event.TLP_DELETE` : send directly to all observers/listeners, not affected by :meth:`tlp.Observable.holdObservers`.
 

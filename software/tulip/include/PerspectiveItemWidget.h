@@ -22,7 +22,7 @@
 #include <QWidget>
 
 namespace tlp {
-struct PluginInformations;
+struct PluginInformation;
 }
 
 namespace Ui {

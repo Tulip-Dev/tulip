@@ -26,7 +26,7 @@
 
 using namespace tlp;
 
-PluginInformationsListItem::PluginInformationsListItem(PluginInformations infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _infos(infos) {
+PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _infos(infos) {
   _ui->setupUi(this);
   _ui->progressFrame->hide();
   _ui->installFrame->hide();
@@ -34,7 +34,7 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformations infos,
   _ui->rebootFrame->hide();
   _ui->installationControls->hide();
 
-  PluginVersionInformations versionInfos = infos.installedVersion;
+  PluginVersionInformation versionInfos = infos.installedVersion;
 
   if (!versionInfos.isValid) {
     versionInfos = infos.availableVersion;

@@ -152,7 +152,7 @@ void PluginsTest::pluginInformations() {
   CPPUNIT_ASSERT_EQUAL(string("0"), param.getDefaultValue());
   CPPUNIT_ASSERT_EQUAL(string("i"), param.getTypeName());
 
-  const Plugin& factory(PluginLister::instance()->pluginInformations("Test"));
+  const Plugin& factory(PluginLister::instance()->pluginInformation("Test"));
   CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory.author());
   CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory.date());
   CPPUNIT_ASSERT_EQUAL(string(""), factory.group());

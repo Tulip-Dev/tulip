@@ -839,7 +839,7 @@ public:
   virtual Iterator<edge>* getEdgeMetaInfo(const edge metaEdge) const =0;
 
   //================================================================================
-  // Graph, nodes and edges informations about the graph stucture
+  // Graph, nodes and edges information about the graph stucture
   //================================================================================
   /**
    * @brief Gets the unique identifier of the graph.
@@ -1201,7 +1201,7 @@ public:
    * @param result The property in which to put the results. All previous values will be erased.
    * @param errorMessage Stores the error message if the plugin fails.
    * @param progress A means of feedback during the plugin execution. Some plugins support being stopped or cancelled through this.
-   * @param parameters The parameters of the algorithm. Some algorithms use this DataSet to output some additional informations.
+   * @param parameters The parameters of the algorithm. Some algorithms use this DataSet to output some additional information.
    * @return Whether the plugin executed successfully or not. If not, check the error message.
    *
    * @see PluginLister::getPluginParameters() to retrieve the list of default parameters for the pligin.

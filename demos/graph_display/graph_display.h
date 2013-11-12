@@ -4,5 +4,5 @@
 
   In this example, we are making a standalone program that will load a graph file passed as argument to the program and display it into a new window.
 
-  The code contains a step-by-step explanation of the process, please refer to classes documentation for more informations about their usage.
+  The code contains a step-by-step explanation of the process, please refer to classes documentation for more information about their usage.
  **/

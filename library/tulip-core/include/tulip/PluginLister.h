@@ -36,7 +36,7 @@ class PluginContext;
  * @ingroup Plugins
  * @brief The base class for plugin factories.
  *
- * A plugin factory handles the creation process of a tlp::Plugin subclass. This class should never be used directly. See the PLUGIN macro for additional informations.
+ * A plugin factory handles the creation process of a tlp::Plugin subclass. This class should never be used directly. See the PLUGIN macro for additional information.
  * @see PLUGIN
  **/
 class FactoryInterface {
@@ -47,9 +47,9 @@ public:
 /**
  * @ingroup Plugins
  *
- * @brief The PluginLister class is a singleton used to list plugins currently loaded into Tulip and retrieve informations about them.
+ * @brief The PluginLister class is a singleton used to list plugins currently loaded into Tulip and retrieve information about them.
  *
- * This class holds various methods to check informations about plugins currently loaded into Tulip. You can use it to list plugins, get dependencies informations or create an instance of a plugin.
+ * This class holds various methods to check information about plugins currently loaded into Tulip. You can use it to list plugins, get dependencies information or create an instance of a plugin.
  *
  * @note Since a plugin name is unique, Plugins are mainly identified by their name (tlp::Plugin::name()) when interfaced with the plugin lister.
  *
@@ -157,12 +157,21 @@ public:
   }
 
   /**
-   * @brief Gets more detailed informations about one specific plug-in.
+   * @brief Gets more detailed information about one specific plug-in.
    *
-   * @param name The name of the plugin to retrieve informations for.
-   * @return :const Plugin& The informations on the plugin.
+   * @param name The name of the plugin to retrieve information for.
+   * @return :const Plugin& The information on the plugin.
    **/
-  static const Plugin& pluginInformations(const std::string& name);
+  static const Plugin& pluginInformation(const std::string& name);
+
+  /**
+   * @brief Gets more detailed information about one specific plug-in.
+   * @deprecated this function should not be used anymore, please use PluginLister::pluginInformation() instead.
+   *
+   * @param name The name of the plugin to retrieve information for.
+   * @return :const Plugin& The information on the plugin.
+   **/
+  static _DEPRECATED const Plugin& pluginInformations(const std::string& name);
 
   /**
    * @brief Checks if a given name is registered in this factory.

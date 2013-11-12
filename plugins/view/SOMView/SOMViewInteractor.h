@@ -57,7 +57,7 @@ public:
 
 class SOMViewProperties:public SOMViewInteractor {
 
-  PLUGININFORMATIONS("SOMViewProperties", "Dubois Jonathan", "02/04/2009", "Standard show element info with scale","1.0","Informations")
+  PLUGININFORMATIONS("SOMViewProperties", "Dubois Jonathan", "02/04/2009", "Standard show element info with scale","1.0","Information")
 
 public :
 
@@ -69,7 +69,7 @@ public :
 
 class SOMViewThreshold: public SOMViewInteractor {
 
-  PLUGININFORMATIONS("SOMViewThreshold", "Dubois Jonathan", "02/04/2009", "Threshold selection on SOM", "1.0","Informations")
+  PLUGININFORMATIONS("SOMViewThreshold", "Dubois Jonathan", "02/04/2009", "Threshold selection on SOM", "1.0","Information")
 
 public:
 

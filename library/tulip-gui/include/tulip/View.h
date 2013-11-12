@@ -68,7 +68,7 @@ class Interactor;
   Thus, you should never call the View::draw() method. To notify the overleying system that your view needs to be redrawn, emit the View::drawNeeded() signal instead.
 
   A tlp::View subclass automatically inherits from the tlp::Observable interface. The tlp::View interface also automatically listn to its active graph to trigger handling trigger when this graph gets deleted.
-  When the graph associated to a View gets deleted, the View::graphDeleted() callback is triggered. @see graphDeleted() for more informations.
+  When the graph associated to a View gets deleted, the View::graphDeleted() callback is triggered. @see graphDeleted() for more information.
   */
 class TLP_QT_SCOPE View: public QObject, public tlp::Plugin, public tlp::Observable {
   Q_OBJECT

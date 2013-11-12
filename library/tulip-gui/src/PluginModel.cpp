@@ -73,7 +73,7 @@ QVariant SimplePluginListModel::data(const QModelIndex &index, int role) const {
       return name.c_str();
     }
     else if (role == Qt::DecorationRole) {
-      const Plugin& p = PluginLister::pluginInformations(name);
+      const Plugin& p = PluginLister::pluginInformation(name);
       QPixmap pix(p.icon().c_str());
       return pix;
     }

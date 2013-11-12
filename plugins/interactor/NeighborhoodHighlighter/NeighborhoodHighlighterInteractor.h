@@ -39,7 +39,7 @@ class AdditionalGlSceneAnimation;
 /** \file
  *  \brief  Tulip Node Neighbourhood Highlighter
 
- * This interactor plugin allow to get informations regarding the neighbourhood of a node by highlighting
+ * This interactor plugin allow to get information regarding the neighbourhood of a node by highlighting
  * the nodes connected to it. A "Bring and Go" feature is also implemented allowing to navigate
  */
 class NeighborhoodHighlighterInteractor : public GLInteractorComposite {

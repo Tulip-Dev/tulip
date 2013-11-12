@@ -49,7 +49,7 @@ enum ParameterDirection { IN_PARAM=0, OUT_PARAM = 1, INOUT_PARAM = 2 };
  * @ingroup Plugins
  * @brief Describes a plugin's parameter.
  *
- * A plugin parameter consists of the following informations:
+ * A plugin parameter consists of the following information:
  * @list
  * @li A name (std::string) which can be used to retrieve the value of the parameter when running the plugin.
  * @li A type (std::string) which is the C++ typename of the parameter.
@@ -341,7 +341,7 @@ struct TLP_SCOPE WithParameter {
    * @return void
    **/
   template<typename T>
-  void _DEPRECATED addParameter(const std::string &name,
+  _DEPRECATED void addParameter(const std::string &name,
                                 const std::string &help=std::string(),
                                 const std::string &defaultValue = std::string(),
                                 bool isMandatory = true) {

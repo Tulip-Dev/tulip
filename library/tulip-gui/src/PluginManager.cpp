@@ -37,7 +37,7 @@ using namespace tlp;
 const QString PluginManager::STABLE_LOCATION = QString("http://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_RELEASE;
 const QString PluginManager::TESTING_LOCATION = QString("http://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_RELEASE;
 
-QDebug operator<<(QDebug dbg, const PluginVersionInformations &c) {
+QDebug operator<<(QDebug dbg, const PluginVersionInformation &c) {
   dbg.nospace() << "(author " << c.author << ") "
                 << "(version " << c.version << ") "
                 << "(icon " << c.icon << ") "
@@ -49,7 +49,7 @@ QDebug operator<<(QDebug dbg, const PluginVersionInformations &c) {
   return dbg.space();
 }
 
-QDebug operator<<(QDebug dbg, const PluginInformations &c) {
+QDebug operator<<(QDebug dbg, const PluginInformation &c) {
   dbg.nospace() << "(name " << c.name << ") "
                 << "(category " << c.category << ") "
                 << "(installed " << c.installedVersion << ") "
@@ -61,7 +61,7 @@ QDebug operator<<(QDebug dbg, const PluginInformations &c) {
 class PluginServerClient: public YajlParseFacade {
   QString _location;
 
-  PluginManager::PluginInformationsList _result;
+  PluginManager::PluginInformationList _result;
   QString _currentKey;
   QMap<QString,QString> _currentMap;
 
@@ -99,7 +99,7 @@ public:
     tmpOut.remove();
   }
 
-  PluginManager::PluginInformationsList list(const QString& nameFilter, const QString& categoryFilter) {
+  PluginManager::PluginInformationList list(const QString& nameFilter, const QString& categoryFilter) {
     _result.clear();
     QNetworkAccessManager mgr;
     QNetworkRequest request(QUrl(_location + "/list.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_RELEASE + "&name=" + nameFilter + "&category=" + categoryFilter));
@@ -129,11 +129,11 @@ public:
   }
 
   virtual void parseEndMap() {
-    PluginInformations infos;
+    PluginInformation infos;
     infos.name = _currentMap["name"];
     infos.category = _currentMap["category"];
 
-    PluginVersionInformations versionInfos;
+    PluginVersionInformation versionInfos;
     versionInfos.description = _currentMap["desc"];
     versionInfos.libraryLocation = _location;
     versionInfos.version = _currentMap["release"];
@@ -160,14 +160,14 @@ QStringList PluginManager::remoteLocations() {
 
 QStringList PluginManager::_markedForInstallation = QStringList();
 
-PluginManager::PluginInformationsList PluginManager::listPlugins(PluginLocations locations, const QString &nameFilter, const QString &categoryFilter) {
-  QMap<QString,PluginInformations> nameToInfos;
+PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations locations, const QString &nameFilter, const QString &categoryFilter) {
+  QMap<QString,PluginInformation> nameToInfos;
 
   if (locations.testFlag(Local)) {
     std::list<std::string> localResults = PluginLister::instance()->availablePlugins();
 
     for (std::list<std::string>::iterator it = localResults.begin(); it != localResults.end(); ++it) {
-      const Plugin& info = PluginLister::instance()->pluginInformations(*it);
+      const Plugin& info = PluginLister::instance()->pluginInformation(*it);
 
       if (QString(info.category().c_str()).contains(categoryFilter) && QString(info.name().c_str()).contains(nameFilter, Qt::CaseInsensitive)) {
         nameToInfos[info.name().c_str()].fillLocalInfos(info);
@@ -178,8 +178,8 @@ PluginManager::PluginInformationsList PluginManager::listPlugins(PluginLocations
   if (locations.testFlag(Remote)) {
     foreach(QString loc, remoteLocations()) {
       PluginServerClient client(loc);
-      foreach(PluginInformations infos, client.list(nameFilter,categoryFilter)) {
-        PluginInformations storedInfos = nameToInfos[infos.name];
+      foreach(PluginInformation infos, client.list(nameFilter,categoryFilter)) {
+        PluginInformation storedInfos = nameToInfos[infos.name];
         storedInfos.name = infos.name;
         storedInfos.category = infos.category;
         storedInfos.availableVersion = infos.availableVersion;
@@ -188,8 +188,8 @@ PluginManager::PluginInformationsList PluginManager::listPlugins(PluginLocations
     }
   }
 
-  PluginInformationsList result;
-  foreach(PluginInformations i, nameToInfos.values()) {
+  PluginInformationList result;
+  foreach(PluginInformation i, nameToInfos.values()) {
     result.push_back(i);
   }
 
@@ -201,12 +201,12 @@ void PluginManager::markForRemoval(const QString &plugin) {
 }
 
 void PluginManager::markForInstallation(const QString& plugin, QObject* recv, const char *progressSlot) {
-  PluginInformationsList lst = listPlugins(Remote,plugin);
+  PluginInformationList lst = listPlugins(Remote,plugin);
 
   if (lst.size() == 0 || !lst.first().availableVersion.isValid)
     return;
 
-  PluginVersionInformations version = lst.first().availableVersion;
+  PluginVersionInformation version = lst.first().availableVersion;
   PluginServerClient clt(version.libraryLocation);
   clt.fetch(plugin, recv, progressSlot);
   _markedForInstallation.push_back(plugin);
@@ -224,17 +224,17 @@ void PluginManager::unmarkForRemoval(const QString &file) {
   TulipSettings::instance().unmarkPluginForRemoval(file);
 }
 
-PluginInformations::PluginInformations() {
+PluginInformation::PluginInformation() {
 }
 
-PluginInformations::PluginInformations(const PluginInformations &copy) {
+PluginInformation::PluginInformation(const PluginInformation &copy) {
   name = copy.name;
   category = copy.category;
   installedVersion = copy.installedVersion;
   availableVersion = copy.availableVersion;
 }
 
-void PluginInformations::fillLocalInfos(const Plugin& info) {
+void PluginInformation::fillLocalInfos(const Plugin& info) {
   name = info.name().c_str();
   category = info.category().c_str();
   installedVersion.description = info.info().c_str();
@@ -253,10 +253,10 @@ void PluginInformations::fillLocalInfos(const Plugin& info) {
 }
 
 
-PluginVersionInformations::PluginVersionInformations(): isValid(false) {
+PluginVersionInformation::PluginVersionInformation(): isValid(false) {
 }
 
-PluginVersionInformations::PluginVersionInformations(const PluginVersionInformations &copy) {
+PluginVersionInformation::PluginVersionInformation(const PluginVersionInformation &copy) {
   libraryLocation = copy.libraryLocation;
   author = copy.author;
   version = copy.version;

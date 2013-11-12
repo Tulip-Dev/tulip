@@ -191,10 +191,10 @@ background-color: white;
       <item row="2" column="0">
        <widget class="QLabel" name="label_7">
         <property name="toolTip">
-         <string>Some informations about the plugin</string>
+         <string>Some information about the plugin</string>
         </property>
         <property name="text">
-         <string>Informations :</string>
+         <string>Information :</string>
         </property>
        </widget>
       </item>

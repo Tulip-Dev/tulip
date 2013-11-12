@@ -95,7 +95,7 @@ public:
   /**
    * @brief Set stencil number for all composite's children
    *
-   * For more informations on stencil  :
+   * For more information on stencil  :
    * @see GlSimpleEntity
    */
   virtual void setStencil(int stencil) {
