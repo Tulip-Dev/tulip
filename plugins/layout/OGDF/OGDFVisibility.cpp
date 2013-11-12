@@ -83,7 +83,7 @@ const char * paramHelp[] = {
 class OGDFVisibility : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("Visibility (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
+  PLUGININFORMATION("Visibility (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
   OGDFVisibility(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::VisibilityLayout()) {
     addInParameter<int>("minimum grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");

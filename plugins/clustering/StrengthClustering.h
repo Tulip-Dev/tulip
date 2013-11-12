@@ -41,7 +41,7 @@
 */
 class StrengthClustering:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Strength Clustering", "David Auber", "27/01/2003", "Alpha", "2.0","Clustering")
+  PLUGININFORMATION("Strength Clustering", "David Auber", "27/01/2003", "Alpha", "2.0","Clustering")
   StrengthClustering(tlp::PluginContext* context);
   ~StrengthClustering();
   bool run();

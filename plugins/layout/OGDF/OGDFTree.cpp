@@ -127,7 +127,7 @@ const char * paramHelp[] = {
 class OGDFTree : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("Improved Walker (OGDF)","Christoph Buchheim","12/11/2007","Ok","1.5","Tree")
+  PLUGININFORMATION("Improved Walker (OGDF)","Christoph Buchheim","12/11/2007","Ok","1.5","Tree")
   OGDFTree(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::TreeLayout()) {
     addInParameter<double>("siblings distance", paramHelp[0], "20");
     addInParameter<double>("subtrees distance", paramHelp[1], "20");

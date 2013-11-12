@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifndef PLUGININFORMATIONSLISTITEM_H
-#define PLUGININFORMATIONSLISTITEM_H
+#ifndef PLUGININFORMATIONLISTITEM_H
+#define PLUGININFORMATIONLISTITEM_H
 
 #include <QWidget>
 #include <tulip/PluginManager.h>
@@ -53,4 +53,4 @@ protected:
   void focusInEvent(QFocusEvent *);
 };
 
-#endif // PLUGININFORMATIONSLISTITEM_H
+#endif // PLUGININFORMATIONLISTITEM_H

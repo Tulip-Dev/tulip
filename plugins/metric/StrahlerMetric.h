@@ -56,7 +56,7 @@ struct Strahler {
  */
 class StrahlerMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Strahler","David Auber","06/04/2000","Computes the Strahler numbers.","1.0","Graph")
+  PLUGININFORMATION("Strahler","David Auber","06/04/2000","Computes the Strahler numbers.","1.0","Graph")
   StrahlerMetric(const tlp::PluginContext* context);
   bool run();
 

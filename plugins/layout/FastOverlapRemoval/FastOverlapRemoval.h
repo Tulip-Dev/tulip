@@ -42,7 +42,7 @@
 class FastOverlapRemoval:public tlp::LayoutAlgorithm {
 public:
 
-  PLUGININFORMATIONS("Fast Overlap Removal" ,"Daniel Archambault", "08/12/2006", "Remove all nodes overlap.", "1.3", "Misc")
+  PLUGININFORMATION("Fast Overlap Removal" ,"Daniel Archambault", "08/12/2006", "Remove all nodes overlap.", "1.3", "Misc")
 
   FastOverlapRemoval(const tlp::PluginContext *context);
   inline ~FastOverlapRemoval() {}

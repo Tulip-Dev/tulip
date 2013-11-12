@@ -53,7 +53,7 @@ class Grip : public tlp::LayoutAlgorithm {
 
 public:
 
-  PLUGININFORMATIONS("GRIP","Romain Bourqui","01/11/2010","The Graph dRawing with Intelligent Placement layout algorithm.","1.1", "Force Directed")
+  PLUGININFORMATION("GRIP","Romain Bourqui","01/11/2010","The Graph dRawing with Intelligent Placement layout algorithm.","1.1", "Force Directed")
 
   Grip(const tlp::PluginContext *);
   ~Grip();

@@ -22,7 +22,7 @@
 
 class SimpleTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATIONS("Simple", "Tulip team", "18/04/2012", "Tests whether a graph is simple or not.", "1.0", "Topological Test")
+  PLUGININFORMATION("Simple", "Tulip team", "18/04/2012", "Tests whether a graph is simple or not.", "1.0", "Topological Test")
   SimpleTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
@@ -35,7 +35,7 @@ PLUGIN(SimpleTest)
 
 class MakeSimple : public tlp::Algorithm {
 public:
-  PLUGININFORMATIONS("Make Simple", "Tulip team", "18/04/2012", "Makes a graph simple.", "1.0", "Topology Update")
+  PLUGININFORMATION("Make Simple", "Tulip team", "18/04/2012", "Makes a graph simple.", "1.0", "Topology Update")
   MakeSimple(const tlp::PluginContext* context) : tlp::Algorithm(context) {
   }
 

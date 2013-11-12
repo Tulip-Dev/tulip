@@ -34,7 +34,7 @@ public:
 
 class SOMViewNavigation: public SOMViewInteractor {
 
-  PLUGININFORMATIONS("SOMViewNavigation", "Dubois Jonathan", "02/04/2009", "Standard navigation with scale", "1.0","Navigation")
+  PLUGININFORMATION("SOMViewNavigation", "Dubois Jonathan", "02/04/2009", "Standard navigation with scale", "1.0","Navigation")
 
 public:
 
@@ -45,7 +45,7 @@ public:
 
 class SOMViewSelection: public SOMViewInteractor {
 
-  PLUGININFORMATIONS("SOMViewSelection", "Dubois Jonathan", "02/04/2009", "Standard selection with scale","1.0","Selection")
+  PLUGININFORMATION("SOMViewSelection", "Dubois Jonathan", "02/04/2009", "Standard selection with scale","1.0","Selection")
 
 public:
 
@@ -57,7 +57,7 @@ public:
 
 class SOMViewProperties:public SOMViewInteractor {
 
-  PLUGININFORMATIONS("SOMViewProperties", "Dubois Jonathan", "02/04/2009", "Standard show element info with scale","1.0","Information")
+  PLUGININFORMATION("SOMViewProperties", "Dubois Jonathan", "02/04/2009", "Standard show element info with scale","1.0","Information")
 
 public :
 
@@ -69,7 +69,7 @@ public :
 
 class SOMViewThreshold: public SOMViewInteractor {
 
-  PLUGININFORMATIONS("SOMViewThreshold", "Dubois Jonathan", "02/04/2009", "Threshold selection on SOM", "1.0","Information")
+  PLUGININFORMATION("SOMViewThreshold", "Dubois Jonathan", "02/04/2009", "Threshold selection on SOM", "1.0","Information")
 
 public:
 

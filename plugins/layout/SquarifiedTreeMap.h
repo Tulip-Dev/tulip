@@ -60,7 +60,7 @@ class SquarifiedTreeMap: public tlp::LayoutAlgorithm {
   friend class SquarifiedTreeMapUnitTests;
 
 public:
-  PLUGININFORMATIONS("Squarified Tree Map",
+  PLUGININFORMATION("Squarified Tree Map",
                      "Tulip Team",
                      "25/05/2010", "ok", "2.0", "Tree")
   SquarifiedTreeMap(const tlp::PluginContext* context);

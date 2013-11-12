@@ -39,7 +39,7 @@ class MouseLassoNodesSelectorInteractor : public NodeLinkDiagramComponentInterac
 
 public :
 
-  PLUGININFORMATIONS("MouseLassoNodesSelectorInteractor", "Antoine Lambert", "19/06/2009", "Mouse Lasso Nodes Selector Interactor", "1.0", "Modification")
+  PLUGININFORMATION("MouseLassoNodesSelectorInteractor", "Antoine Lambert", "19/06/2009", "Mouse Lasso Nodes Selector Interactor", "1.0", "Modification")
 
   MouseLassoNodesSelectorInteractor(const tlp::PluginContext *);
 

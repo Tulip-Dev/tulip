@@ -33,7 +33,7 @@
  */
 class LoopSelection:public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATIONS("Loop Selection","David Auber","20/01/2003","Alpha","1.0", "Selection")
+  PLUGININFORMATION("Loop Selection","David Auber","20/01/2003","Alpha","1.0", "Selection")
   LoopSelection(const tlp::PluginContext* context);
   bool run();
 };

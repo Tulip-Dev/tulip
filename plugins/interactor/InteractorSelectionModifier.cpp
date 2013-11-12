@@ -34,7 +34,7 @@ using namespace tlp;
 class InteractorSelectionModifier  : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATIONS("InteractorSelectionModifier", "Tulip Team", "01/04/2009", "Selection Modifier Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorSelectionModifier", "Tulip Team", "01/04/2009", "Selection Modifier Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */

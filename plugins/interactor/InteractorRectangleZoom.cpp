@@ -33,7 +33,7 @@ using namespace tlp;
 class InteractorRectangleZoom  : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATIONS("InteractorRectangleZoom", "Tulip Team", "01/04/2009", "Rectangle Zoom Interactor", "1.0", "Navigation")
+  PLUGININFORMATION("InteractorRectangleZoom", "Tulip Team", "01/04/2009", "Rectangle Zoom Interactor", "1.0", "Navigation")
   /**
    * Default constructor
    */

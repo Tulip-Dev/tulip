@@ -53,7 +53,7 @@ typedef struct {
 class PolyominoPacking : public tlp::LayoutAlgorithm {
 
 public :
-  PLUGININFORMATIONS("Connected Component Packing (Polyomino)", "Antoine LAMBERT", "05/05/11", "A connected component packing layout algorithm", "1.0", "Misc")
+  PLUGININFORMATION("Connected Component Packing (Polyomino)", "Antoine LAMBERT", "05/05/11", "A connected component packing layout algorithm", "1.0", "Misc")
   PolyominoPacking(const tlp::PluginContext* context);
 
   ~PolyominoPacking();

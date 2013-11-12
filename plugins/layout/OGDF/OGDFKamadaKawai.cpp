@@ -107,7 +107,7 @@ const char * paramHelp[] = {
 class OGDFKamadaKawai : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("Kamada Kawai (OGDF)","Karsten Klein","12/11/2007","Ok","1.0","Force Directed")
+  PLUGININFORMATION("Kamada Kawai (OGDF)","Karsten Klein","12/11/2007","Ok","1.0","Force Directed")
   OGDFKamadaKawai(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderKK()) {
     addInParameter<double>("stop tolerance", paramHelp[0], "0.001");
     addInParameter<bool>("used layout", paramHelp[1], "true");

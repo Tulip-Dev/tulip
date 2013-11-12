@@ -108,7 +108,7 @@ const char * paramHelp[] = {
 class OGDFPlanarizationGrid : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("Planarization Grid (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.0","Planar")
+  PLUGININFORMATION("Planarization Grid (OGDF)","Carsten Gutwenger","12/11/2007","Ok","1.0","Planar")
   OGDFPlanarizationGrid(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::PlanarizationGridLayout()) {
     addInParameter<double>("page ratio", paramHelp[0], "1.0");
     addInParameter<StringCollection>(ELT_PLANARSUBGRAPH, paramHelp[1], ELT_PLANARSUBGRAPHLIST);

@@ -33,7 +33,7 @@
  */
 class DegreeMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Degree","David Auber","04/10/2001","Assigns its degree to each node.","1.0","Graph")
+  PLUGININFORMATION("Degree","David Auber","04/10/2001","Assigns its degree to each node.","1.0","Graph")
   DegreeMetric(const tlp::PluginContext* context);
   bool run();
   bool check(std::string& errorMsg);

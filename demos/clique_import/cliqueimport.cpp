@@ -6,7 +6,7 @@ using namespace std;
 
 class CliqueImport: public tlp::ImportModule {
 public:
-  PLUGININFORMATIONS("Clique", "Tulip Team", "05/10/2012", "Clique Import Plugin", "1.0", "Graph")
+  PLUGININFORMATION("Clique", "Tulip Team", "05/10/2012", "Clique Import Plugin", "1.0", "Graph")
   CliqueImport(tlp::PluginContext* context);
   ~CliqueImport();
   bool importGraph();

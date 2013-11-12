@@ -46,7 +46,7 @@ class NeighborhoodHighlighterInteractor : public GLInteractorComposite {
 
 public :
 
-  PLUGININFORMATIONS("NeighborhoodHighlighterInteractor", "Antoine Lambert", "19/05/2009", "Node neighborhood highlighter", "1.0", "Navigation")
+  PLUGININFORMATION("NeighborhoodHighlighterInteractor", "Antoine Lambert", "19/05/2009", "Node neighborhood highlighter", "1.0", "Navigation")
 
   NeighborhoodHighlighterInteractor(const PluginContext *);
 

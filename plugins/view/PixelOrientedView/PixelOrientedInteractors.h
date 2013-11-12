@@ -38,7 +38,7 @@ class PixelOrientedInteractorNavigation : public PixelOrientedInteractor {
 
 public :
 
-  PLUGININFORMATIONS("PixelOrientedInteractorNavigation", "Tulip Team", "02/04/2009", "Pixel Oriented Navigation Interactor", "1.0", "Navigation")
+  PLUGININFORMATION("PixelOrientedInteractorNavigation", "Tulip Team", "02/04/2009", "Pixel Oriented Navigation Interactor", "1.0", "Navigation")
 
   PixelOrientedInteractorNavigation(const tlp::PluginContext *);
 

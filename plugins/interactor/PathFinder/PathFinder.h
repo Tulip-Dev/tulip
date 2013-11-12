@@ -53,7 +53,7 @@ class PathFinder: public tlp::GLInteractorComposite {
   Q_OBJECT
 public:
 
-  PLUGININFORMATIONS("PathFinder", "Tulip Team", "03/24/2010", "Path finding interactor", "1.0", "Information")
+  PLUGININFORMATION("PathFinder", "Tulip Team", "03/24/2010", "Path finding interactor", "1.0", "Information")
 
   PathFinder(const tlp::PluginContext *);
   virtual ~PathFinder();

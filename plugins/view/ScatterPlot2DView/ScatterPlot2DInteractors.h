@@ -40,7 +40,7 @@ class ScatterPlot2DInteractorNavigation : public ScatterPlot2DInteractor {
 
 public :
 
-  PLUGININFORMATIONS("ScatterPlot2DInteractorNavigation", "Tulip Team", "02/04/2009", "Scatter Plot 2D Navigation Interactor", "1.0" ,"Navigation")
+  PLUGININFORMATION("ScatterPlot2DInteractorNavigation", "Tulip Team", "02/04/2009", "Scatter Plot 2D Navigation Interactor", "1.0" ,"Navigation")
 
   ScatterPlot2DInteractorNavigation(const tlp::PluginContext *);
 
@@ -52,7 +52,7 @@ class ScatterPlot2DInteractorTrendLine : public ScatterPlot2DInteractor {
 
 public :
 
-  PLUGININFORMATIONS("ScatterPlot2DInteractorTrendLine", "Tulip Team", "02/04/2009", "Scatter Plot 2D Trend Line Interactor", "1.0", "Information")
+  PLUGININFORMATION("ScatterPlot2DInteractorTrendLine", "Tulip Team", "02/04/2009", "Scatter Plot 2D Trend Line Interactor", "1.0", "Information")
 
   ScatterPlot2DInteractorTrendLine(const tlp::PluginContext *);
 
@@ -64,7 +64,7 @@ class ScatterPlot2DInteractorCorrelCoeffSelector : public ScatterPlot2DInteracto
 
 public :
 
-  PLUGININFORMATIONS("ScatterPlot2DInteractorCorrelCoeffSelector", "Tulip Team", "02/04/2009", "Scatter Plot 2D Correlation Coefficient Interactor", "1.0", "Information")
+  PLUGININFORMATION("ScatterPlot2DInteractorCorrelCoeffSelector", "Tulip Team", "02/04/2009", "Scatter Plot 2D Correlation Coefficient Interactor", "1.0", "Information")
 
   ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *);
   ~ScatterPlot2DInteractorCorrelCoeffSelector();

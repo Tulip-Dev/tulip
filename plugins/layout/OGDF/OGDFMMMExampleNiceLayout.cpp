@@ -71,7 +71,7 @@
 class OGDFMMMExampleNiceLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("MMM Example Nice Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel")
+  PLUGININFORMATION("MMM Example Nice Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel")
   OGDFMMMExampleNiceLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleNiceLayout()) {}
   ~OGDFMMMExampleNiceLayout() {}
 

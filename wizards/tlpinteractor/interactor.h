@@ -13,7 +13,7 @@
 class %ProjectName:c%Composite: public tlp::%BaseInteractor%Composite {
   Q_OBJECT
 public:
-  PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
+  PLUGININFORMATION("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
   %ProjectName:c%Composite(const tlp::PluginContext*);
   virtual ~%ProjectName:c%Composite();

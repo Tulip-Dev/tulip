@@ -46,7 +46,7 @@ class InteractorParallelCoordsSelection : public ParallelCoordinatesInteractor {
 
 public:
 
-  PLUGININFORMATIONS("InteractorParallelCoordsSelection", "Tulip Team", "02/04/2009", "Selection Interactor", "1.0", "Selection")
+  PLUGININFORMATION("InteractorParallelCoordsSelection", "Tulip Team", "02/04/2009", "Selection Interactor", "1.0", "Selection")
 
   /**
    * Default constructor
@@ -67,7 +67,7 @@ class InteractorHighLighter  : public ParallelCoordinatesInteractor {
 
 public:
 
-  PLUGININFORMATIONS("InteractorHighLiter", "Tulip Team", "02/04/2009", "Element Highliter Interactor", "1.0", "Information")
+  PLUGININFORMATION("InteractorHighLiter", "Tulip Team", "02/04/2009", "Element Highliter Interactor", "1.0", "Information")
 
   /**
    * Default constructor
@@ -88,7 +88,7 @@ class InteractorAxisSwapper  : public ParallelCoordinatesInteractor {
 
 public:
 
-  PLUGININFORMATIONS("InteractorAxisSwapper", "Tulip Team", "02/04/2009", "Axis Swap Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorAxisSwapper", "Tulip Team", "02/04/2009", "Axis Swap Interactor", "1.0", "Modification")
 
   /**
    * Default constructor
@@ -109,7 +109,7 @@ class InteractorAxisSliders : public ParallelCoordinatesInteractor {
 
 public:
 
-  PLUGININFORMATIONS("InteractorAxisSliders", "Tulip Team", "02/04/2009", "Axis Sliders Interactor", "1.0" ,"Modification")
+  PLUGININFORMATION("InteractorAxisSliders", "Tulip Team", "02/04/2009", "Axis Sliders Interactor", "1.0" ,"Modification")
 
   /**
    * Default constructor
@@ -130,7 +130,7 @@ class InteractorBoxPlot  : public ParallelCoordinatesInteractor {
 
 public:
 
-  PLUGININFORMATIONS("InteractorBoxPlot", "Tulip Team", "02/04/2009", "Box Plot Interactor", "1.0", "Information")
+  PLUGININFORMATION("InteractorBoxPlot", "Tulip Team", "02/04/2009", "Box Plot Interactor", "1.0", "Information")
 
   /**
    * Default constructor
@@ -151,7 +151,7 @@ class InteractorShowElementInfos : public ParallelCoordinatesInteractor {
 
 public :
 
-  PLUGININFORMATIONS( "InteractorShowElementInfos", "Tulip Team", "02/04/2009", "Show Element Infos Interactor", "1.0", "Information")
+  PLUGININFORMATION( "InteractorShowElementInfos", "Tulip Team", "02/04/2009", "Show Element Infos Interactor", "1.0", "Information")
 
   /**
    * Default constructor
@@ -172,7 +172,7 @@ class InteractorAxisSpacer : public ParallelCoordinatesInteractor {
 
 public :
 
-  PLUGININFORMATIONS("InteractorAxisSpacer", "Tulip Team", "02/04/2009", "Axis Spacer Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorAxisSpacer", "Tulip Team", "02/04/2009", "Axis Spacer Interactor", "1.0", "Modification")
 
   /**
    * Default constructor

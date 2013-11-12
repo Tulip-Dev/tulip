@@ -38,7 +38,7 @@
  */
 class ClusterMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATIONS("Cluster","David Auber","26/02/2003","Computes the Cluster metric described in\nY. Chiricota. F.Jourdan, an G.Melancon\n'Software component capture using graph clustering',\nIWPC 2002","1.0","Graph")
+  PLUGININFORMATION("Cluster","David Auber","26/02/2003","Computes the Cluster metric described in\nY. Chiricota. F.Jourdan, an G.Melancon\n'Software component capture using graph clustering',\nIWPC 2002","1.0","Graph")
   ClusterMetric(const tlp::PluginContext* context);
   bool run();
 

@@ -28,7 +28,7 @@
 
 class HierarchicalClustering:public tlp::Algorithm {
 public:
-  PLUGININFORMATIONS("Hierarchical","David Auber","27/01/2000","Alpha","1.0", "Clustering")
+  PLUGININFORMATION("Hierarchical","David Auber","27/01/2000","Alpha","1.0", "Clustering")
   HierarchicalClustering(tlp::PluginContext* context);
   ~HierarchicalClustering();
   bool run();

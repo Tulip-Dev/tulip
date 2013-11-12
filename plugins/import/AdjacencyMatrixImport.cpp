@@ -84,7 +84,7 @@ const char * paramHelp[] = {
  */
 class AdjacencyMatrixImport:public ImportModule {
 public:
-  PLUGININFORMATIONS("Adjacency Matrix", "Auber David", "05/09/2008","Imports a graph from a file coding an adjacency matrix.","1.2","File")
+  PLUGININFORMATION("Adjacency Matrix", "Auber David", "05/09/2008","Imports a graph from a file coding an adjacency matrix.","1.2","File")
   AdjacencyMatrixImport(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<string>("file::filename",paramHelp[0],"");
   }

@@ -6,7 +6,7 @@
 class %ProjectName:c%:public tlp::Algorithm {
 public:
 
-  PLUGININFORMATIONS("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
+  PLUGININFORMATION("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
 
   %ProjectName:c%(tlp::PluginContext* context);
   virtual ~%ProjectName:c%();

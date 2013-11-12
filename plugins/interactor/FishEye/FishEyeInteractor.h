@@ -83,7 +83,7 @@ class FishEyeInteractor : public GLInteractorComposite {
 
 public :
 
-  PLUGININFORMATIONS("FishEyeInteractor", "Antoine Lambert", "29/05/2009", "FishEye Interactor", "1.0", "Visualization")
+  PLUGININFORMATION("FishEyeInteractor", "Antoine Lambert", "29/05/2009", "FishEye Interactor", "1.0", "Visualization")
 
   FishEyeInteractor(const PluginContext *);
   ~FishEyeInteractor();

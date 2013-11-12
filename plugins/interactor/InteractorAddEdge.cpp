@@ -34,7 +34,7 @@ using namespace tlp;
 class InteractorAddEdge  : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATIONS("InteractorAddEdge", "Tulip Team", "01/04/2009", "Add nodes/edges Interactor", "1.0", "Modification")
+  PLUGININFORMATION("InteractorAddEdge", "Tulip Team", "01/04/2009", "Add nodes/edges Interactor", "1.0", "Modification")
   /**
    * Default constructor
    */

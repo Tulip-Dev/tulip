@@ -24,7 +24,7 @@
 
 class DirectedTreeTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATIONS("Directed Tree", "Tulip team", "18/04/2012", "Tests whether a graph is a directed tree or not.", "1.0", "Topological Test")
+  PLUGININFORMATION("Directed Tree", "Tulip team", "18/04/2012", "Tests whether a graph is a directed tree or not.", "1.0", "Topological Test")
   DirectedTreeTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
@@ -37,7 +37,7 @@ PLUGIN(DirectedTreeTest)
 
 class FreeTreeTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATIONS("Free Tree", "Tulip team", "18/04/2012", "Tests whether a graph is a free tree or not.", "1.0", "Topological Test")
+  PLUGININFORMATION("Free Tree", "Tulip team", "18/04/2012", "Tests whether a graph is a free tree or not.", "1.0", "Topological Test")
   FreeTreeTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
@@ -50,7 +50,7 @@ PLUGIN(FreeTreeTest)
 
 class MakeDirectedTree : public tlp::Algorithm {
 public:
-  PLUGININFORMATIONS("Make Directed Tree", "Tulip team", "18/04/2012", "Makes a graph a directed tree.", "1.0", "Topology Update")
+  PLUGININFORMATION("Make Directed Tree", "Tulip team", "18/04/2012", "Makes a graph a directed tree.", "1.0", "Topology Update")
   MakeDirectedTree(const tlp::PluginContext* context) : tlp::Algorithm(context) {
   }
 

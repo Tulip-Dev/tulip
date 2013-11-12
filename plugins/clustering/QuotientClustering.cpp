@@ -138,7 +138,7 @@ public:
 #define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
 class QuotientClustering:public tlp::Algorithm {
 public:
-  PLUGININFORMATIONS("Quotient Clustering","David Auber","13/06/2001","OK","1.3", "Clustering")
+  PLUGININFORMATION("Quotient Clustering","David Auber","13/06/2001","OK","1.3", "Clustering")
 //================================================================================
   QuotientClustering(PluginContext* context):Algorithm(context) {
     addDependency("Circular", "1.1");

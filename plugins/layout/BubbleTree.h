@@ -53,7 +53,7 @@
  */
 class BubbleTree:public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATIONS("Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree")
+  PLUGININFORMATION("Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree")
   BubbleTree(const tlp::PluginContext* context);
   ~BubbleTree();
   bool run();

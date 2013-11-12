@@ -48,7 +48,7 @@
  */
 class Circular:public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATIONS("Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","1.1","Basic")
+  PLUGININFORMATION("Circular","David Auber/ Daniel Archambault","25/11/2004","Ok","1.1","Basic")
   Circular(const tlp::PluginContext* context);
   bool run();
 };

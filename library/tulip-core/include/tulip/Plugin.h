@@ -188,7 +188,7 @@ public:
 
 /**
  * @ingroup Plugins
- * @def PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)
+ * @def PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)
  * @brief Declare meta-information for a plugin
  * This is an helper macro that defines every function related to a plugin meta-information (Plugin name, author, etc).
  * When creating a new plugin, this macro avoids having to define pure-virtual methods located into the Plugin interface and put them on the same line.
@@ -204,7 +204,7 @@ public:
  * @see tlp::Plugin
  * @see PLUGIN
  */
-#define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
+#define PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
 std::string name() const { return NAME; } \
 std::string author() const { return AUTHOR; }\
 std::string date() const { return DATE; }  \
@@ -212,6 +212,9 @@ std::string info() const { return INFO; }  \
 std::string release() const { return RELEASE; }\
 std::string tulipRelease() const { return TULIP_MM_RELEASE; }\
 std::string group() const { return GROUP; }
+
+#define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
+PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)
 }
 
 //This include is here because the PluginLister needs to know the Plugin type, and the PLUGIN macro needs to know the PluginLister.
@@ -229,7 +232,7 @@ namespace tlp {
 // This sample shows a basic skeleton for a plugin class declaration:
 class MyPlugin: public tlp::PluginBase { // tlp::PluginBase is replaced by the acutal Plugin interface (tlp::Algorithm, tlp::View, etc)
   public:
-  PLUGININFORMATIONS("My plugin", "Me", "28/09/2012", "My first plugin example", "1.0", "")
+  PLUGININFORMATION("My plugin", "Me", "28/09/2012", "My first plugin example", "1.0", "")
   // Class declaration and extra methods
 };
 
@@ -237,7 +240,7 @@ PLUGIN(MyPlugin) // Register MyPlugin into Tulip
 @endcode
  *
  * @see tlp::Plugin
- * @see PLUGININFORMATIONS
+ * @see PLUGININFORMATION
  */
 #define PLUGIN(C) \
 class C##Factory : public tlp::FactoryInterface { \

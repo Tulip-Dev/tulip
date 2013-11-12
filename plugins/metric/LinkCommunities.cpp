@@ -50,7 +50,7 @@ using namespace tlp;
 class LinkCommunities : public tlp::DoubleAlgorithm {
 public:
 
-  PLUGININFORMATIONS("Link Communities","François Queyroi","25/02/11","Edges partitioning measure used for community detection.","1.0","Clustering")
+  PLUGININFORMATION("Link Communities","François Queyroi","25/02/11","Edges partitioning measure used for community detection.","1.0","Clustering")
 
   LinkCommunities(const tlp::PluginContext *);
   ~LinkCommunities();

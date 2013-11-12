@@ -64,7 +64,7 @@ class GoogleMapViewInteractorNavigation : public GoogleMapViewInteractor {
 
 public :
 
-  PLUGININFORMATIONS("InteractorNavigationGMV", "Tulip Team", "01/04/2009", " GMV Navigation Interactor", "1.0","Navigation")
+  PLUGININFORMATION("InteractorNavigationGMV", "Tulip Team", "01/04/2009", " GMV Navigation Interactor", "1.0","Navigation")
 
   GoogleMapViewInteractorNavigation(const PluginContext *);
 

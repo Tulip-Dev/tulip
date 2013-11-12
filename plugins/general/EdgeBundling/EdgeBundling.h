@@ -46,7 +46,7 @@
 class EdgeBundling:public tlp::Algorithm {
 public:
   EdgeBundling(const tlp::PluginContext *);
-  PLUGININFORMATIONS("Edge bundling","David Auber/ Romain Bourqui / Antoine Lambert","2010-...","Edges routing algorithm","1.3","")
+  PLUGININFORMATION("Edge bundling","David Auber/ Romain Bourqui / Antoine Lambert","2010-...","Edges routing algorithm","1.3","")
   bool run();
 private:
   tlp::DoubleProperty* computeWeights(tlp::Graph *);

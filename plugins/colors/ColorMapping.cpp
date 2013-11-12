@@ -177,7 +177,7 @@ private:
 
 
 public:
-  PLUGININFORMATIONS("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","2.1", "Color")
+  PLUGININFORMATION("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","2.1", "Color")
   ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
     addInParameter<PropertyInterface*>("input property",paramHelp[1],"viewMetric");

@@ -142,7 +142,7 @@ const char * paramHelp[] = { HTML_HELP_OPEN()
 class OGDFGemFrick : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("GEM Frick (OGDF)","Christoph Buchheim", "15/11/2007","Alpha","1.1", "Force Directed")
+  PLUGININFORMATION("GEM Frick (OGDF)","Christoph Buchheim", "15/11/2007","Alpha","1.1", "Force Directed")
   OGDFGemFrick(const tlp::PluginContext* context);
   ~OGDFGemFrick();
 

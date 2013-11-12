@@ -151,9 +151,9 @@ class InteractorPlugin  : public InteractorComposite {
 public:
   /*
   This macro is here to register information about the plugin
-  PLUGININFORMATIONS(Plugin name, Author, Date, Plugin long name, version, type of plugin (Navigation,Information...))
+  PLUGININFORMATION(Plugin name, Author, Date, Plugin long name, version, type of plugin (Navigation,Information...))
   */
-  PLUGININFORMATIONS("InteractorPlugin", "Tulip Team", "05/10/2012", "Demo Interactor", "1.0", "Information")
+  PLUGININFORMATION("InteractorPlugin", "Tulip Team", "05/10/2012", "Demo Interactor", "1.0", "Information")
 
   /*
   The constructor

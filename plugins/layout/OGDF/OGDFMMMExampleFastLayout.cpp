@@ -72,7 +72,7 @@
 class OGDFMMMExampleFastLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATIONS("MMM Example Fast Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel")
+  PLUGININFORMATION("MMM Example Fast Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel")
   OGDFMMMExampleFastLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleFastLayout()) {}
   ~OGDFMMMExampleFastLayout() {}
 

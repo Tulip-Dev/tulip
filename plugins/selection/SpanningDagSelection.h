@@ -36,7 +36,7 @@ class MutableConatainer;
 class SpanningDagSelection:public tlp::BooleanAlgorithm {
 
 public:
-  PLUGININFORMATIONS("Spanning Dag","David Auber","01/12/1999","Alpha","1.0", "Selection")
+  PLUGININFORMATION("Spanning Dag","David Auber","01/12/1999","Alpha","1.0", "Selection")
   SpanningDagSelection(const tlp::PluginContext* context);
   bool run();
 };
