@@ -131,7 +131,7 @@ public:
   Iterator<edge>* getFaceEdges(const Face);
 
   //================================================================================
-  // Graph, nodes and edges informations about the graph stucture
+  // Graph, nodes and edges information about the graph stucture
   //================================================================================
   ///Return the edge which is the succcessor of an edge in the cycle of a node.
   edge succCycleEdge(const edge, const node) const;

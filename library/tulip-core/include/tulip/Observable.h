@@ -33,7 +33,7 @@ class Observable;
   * @ingroup Observation
   * @brief Event is the base class for all events used in the Observation mechanism.
   *
-  * An Event is characterized by its type. The base Event class only carries informations as to the type of event, nothing specific.
+  * An Event is characterized by its type. The base Event class only carries information as to the type of event, nothing specific.
   *
   * Event::DELETE : send directly to all Observers/Listeners, not affected by Observable::holdObservers().
   * Event::MODIFICATION : sent to all Observers/Listeners. MODIFICATION are first sent to Observers and then to Listeners.
@@ -323,7 +323,7 @@ protected:
   /**
   * @brief use for old observer tulip compatibility
   */
-  void _DEPRECATED notifyObservers();
+  _DEPRECATED void notifyObservers();
 
 private:
   enum OBSERVABLEEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};

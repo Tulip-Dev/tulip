@@ -121,7 +121,7 @@ int main(int argc,char **argv) {
       QDomElement pluginNode = serverDocument.createElement("plugin");
       pluginNode.setAttribute("name",plugin);
       pluginNode.setAttribute("path",component);
-      const Plugin& info = PluginLister::pluginInformations(plugin.toStdString());
+      const Plugin& info = PluginLister::pluginInformation(plugin.toStdString());
       pluginNode.setAttribute("category",info.category().c_str());
       pluginNode.setAttribute("author",info.author().c_str());
       pluginNode.setAttribute("date",info.date().c_str());

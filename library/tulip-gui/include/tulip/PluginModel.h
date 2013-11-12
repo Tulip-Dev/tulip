@@ -82,7 +82,7 @@ class PluginModel : public tlp::TulipModel {
 
     for(std::list<std::string>::iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name = *it;
-      const Plugin& plugin = PluginLister::instance()->pluginInformations(name);
+      const Plugin& plugin = PluginLister::instance()->pluginInformation(name);
       pluginTree[plugin.category().c_str()][plugin.group().c_str()].append(name.c_str());
     }
 
@@ -101,7 +101,7 @@ class PluginModel : public tlp::TulipModel {
 
         foreach(QString alg, pluginTree[cat][group]) {
           const Plugin& plugin =
-            PluginLister::instance()->pluginInformations(alg.toStdString());
+            PluginLister::instance()->pluginInformation(alg.toStdString());
           std::string infos = plugin.info();
 
           // set infos only if they contain more than one word
@@ -193,7 +193,7 @@ public:
       return f;
     }
     else if (role == Qt::DecorationRole && tlp::PluginLister::pluginExists(item->name.toStdString())) {
-      const tlp::Plugin& p = tlp::PluginLister::pluginInformations(item->name.toStdString());
+      const tlp::Plugin& p = tlp::PluginLister::pluginInformation(item->name.toStdString());
       QIcon icon(p.icon().c_str());
       return icon;
     }

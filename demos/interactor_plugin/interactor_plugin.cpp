@@ -25,8 +25,8 @@ public :
 
   /*
   Basic constructor
-  In this constructor we create a label to display informations
-  And a QGraphicsProxyWidget to show informations in Tulip QGraphics system
+  In this constructor we create a label to display information
+  And a QGraphicsProxyWidget to show information in Tulip QGraphics system
   */
   InteractorPluginComponent() {
     _informationLabel=new QLabel();
@@ -52,7 +52,7 @@ public :
 
     /*
     If you have clicked on a node/edge, information widget is visible.
-    And if you use the wheel of the mouse we hide the informations widget
+    And if you use the wheel of the mouse we hide the information widget
     */
     if(_informationWidgetItem->isVisible() && e->type()==QEvent::Wheel) {
       _informationWidgetItem->setVisible(false);
@@ -150,7 +150,7 @@ class InteractorPlugin  : public InteractorComposite {
 
 public:
   /*
-  This macro is here to register informations about the plugin
+  This macro is here to register information about the plugin
   PLUGININFORMATIONS(Plugin name, Author, Date, Plugin long name, version, type of plugin (Navigation,Information...))
   */
   PLUGININFORMATIONS("InteractorPlugin", "Tulip Team", "05/10/2012", "Demo Interactor", "1.0", "Information")
@@ -165,7 +165,7 @@ public:
     This text will be displayed when you click on the name of the plugin
     */
     _configurationLabel=new QLabel(QString("This is a demo interactor.<br>")
-                                   +"You can zoom and pan and display informations if you click on a node/edge.");
+                                   +"You can zoom and pan and display information if you click on a node/edge.");
   }
 
   ~InteractorPlugin() {

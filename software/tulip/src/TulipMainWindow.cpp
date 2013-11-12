@@ -277,5 +277,5 @@ void TulipMainWindow::showErrorMessage(const QString &title, const QString &mess
 
 void TulipMainWindow::pluginErrorMessage(const QString &message) {
   _currentTrayMessage = PluginErrorMessage;
-  showTrayMessage(trUtf8("Error while loading plugins"),message + "\n\n" + trUtf8("Click on this message to see detailed informations"),(uint)QSystemTrayIcon::Critical,10000);
+  showTrayMessage(trUtf8("Error while loading plugins"),message + "\n\n" + trUtf8("Click on this message to see detailed information"),(uint)QSystemTrayIcon::Critical,10000);
 }

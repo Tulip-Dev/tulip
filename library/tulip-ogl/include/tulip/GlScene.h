@@ -181,7 +181,7 @@ public:
   void centerScene();
 
   /**
-   * Compute informations for ajustSceneToSize
+   * Compute information for ajustSceneToSize
    * \param width : request width
    * \param height : request height
    * \param center : the result center will be stored in (if center != NULL)

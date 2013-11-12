@@ -58,7 +58,7 @@ vector<int> GlyphScaleConfigDialog::getSelectedGlyphsId() const {
 
   for (int i = 0 ; i < _ui->tableWidget->rowCount() ; ++i) {
     string glyphName = ((QComboBox *)_ui->tableWidget->cellWidget(i, 0))->currentText().toStdString();
-    ret.push_back(PluginLister::pluginInformations(glyphName).id());
+    ret.push_back(PluginLister::pluginInformation(glyphName).id());
   }
 
   reverse(ret.begin(), ret.end());

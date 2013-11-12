@@ -129,7 +129,7 @@ def registerPluginOfGroup(pluginClassName, pluginName, author, date, info, relea
     :type author: string
     :param date: the date of creation of the plugin
     :type date: string
-    :param info: some informations relative to the plugin
+    :param info: some information relative to the plugin
     :type info: string
     :param release: the version number of the plugin in the form X.Y
     :type release: string
@@ -163,7 +163,7 @@ def registerPlugin(pluginClassName, pluginName, author, date, info, release):
     :type author: string
     :param date: the date of creation of the plugin
     :type date: string
-    :param info: some informations relative to the plugin
+    :param info: some information relative to the plugin
     :type info: string
     :param release: the version number of the plugin in the form X.Y
     :type release: string

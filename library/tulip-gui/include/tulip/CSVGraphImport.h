@@ -69,7 +69,7 @@ private:
 /**
   * @brief Store all the advanced import parameters for the CSV file.
   *
-  * Store the informations about columns and rows to import.
+  * Store the information about columns and rows to import.
   * Use this object to configure the import process of a CSVImportGraph object.
   **/
 class TLP_QT_SCOPE CSVImportParameters {

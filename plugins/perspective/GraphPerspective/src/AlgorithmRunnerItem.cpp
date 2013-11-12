@@ -46,7 +46,7 @@ using namespace tlp;
 AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _localMode(true) {
   _ui->setupUi(this);
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
-  const Plugin& plugin = PluginLister::instance()->pluginInformations(pluginName.toStdString());
+  const Plugin& plugin = PluginLister::instance()->pluginInformation(pluginName.toStdString());
   // split pluginName after the second word if needed
   QStringList words = pluginName.split(' ');
 
@@ -452,7 +452,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   }
 
   QDrag *drag = new QDrag(this);
-  const Plugin& p = PluginLister::pluginInformations(_pluginName.toStdString().c_str());
+  const Plugin& p = PluginLister::pluginInformation(_pluginName.toStdString().c_str());
   QPixmap icon(QPixmap(p.icon().c_str()).scaled(64,64));
   QFont f;
   f.setBold(true);

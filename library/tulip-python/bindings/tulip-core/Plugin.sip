@@ -86,7 +86,7 @@ Returns the creation date of the plugin.
 %Docstring
 tlp.Plugin.category()
 
-Returns some informations about the plugin.
+Returns some information about the plugin.
 
 :rtype: string
 %End

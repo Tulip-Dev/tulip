@@ -441,7 +441,7 @@ public :
         xmlReader.readNext();
       }
 
-      // Store edge extremities informations to add them to the graph once nodes will be parsed
+      // Store edge extremities information to add them to the graph once nodes will be parsed
     }
     else {
       edgesTmp.push_back(make_pair(srcId, tgtId));
@@ -614,7 +614,7 @@ private :
   // map associating GEXF node id to Tulip node
   map<string, node> nodesMap;
 
-  // vector to store edge informations in case edges are declared before nodes in GEXF file
+  // vector to store edge information in case edges are declared before nodes in GEXF file
   vector<pair<string, string> > edgesTmp;
 
   // Visual attributes properties pointers to the graph we are building

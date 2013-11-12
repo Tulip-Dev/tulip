@@ -30,7 +30,7 @@ class BooleanProperty;
 /**
  * @ingroup Checks
  *
- * @brief Stores all the added informations on self loops.
+ * @brief Stores all the added information on self loops.
  *
  * Self loops are removed by adding two nodes and three edges.
  *
