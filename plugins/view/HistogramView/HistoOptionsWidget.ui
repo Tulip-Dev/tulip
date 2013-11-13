@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>Background color :</string>
+        <string>Background color</string>
        </property>
       </widget>
      </item>
@@ -191,7 +191,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Number of histogram bins :</string>
+           <string>Number of histogram bins</string>
           </property>
           <property name="scaledContents">
            <bool>false</bool>
@@ -226,7 +226,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Resulting bin width : </string>
+           <string>Resulting bin width</string>
           </property>
          </widget>
         </item>
@@ -276,7 +276,7 @@
            </font>
           </property>
           <property name="text">
-           <string>X axis graduations count :</string>
+           <string>X axis tick count</string>
           </property>
          </widget>
         </item>
@@ -326,7 +326,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Y axis graduations step:</string>
+           <string>Y axis tick step</string>
           </property>
          </widget>
         </item>
