@@ -276,12 +276,20 @@ void GlLabel::draw(float, Camera *camera) {
   float lod=oldLod;
 
   if(computeLOD) {
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
     Coord test=camera->screenTo3DWorld(Coord(1,1,1))-camera->screenTo3DWorld(Coord(0,0,0));
     test/=test.norm();
     lod=(camera->worldTo2DScreen(test)-camera->worldTo2DScreen(Coord(0,0,0))).norm();
     oldLod=lod;
     oldCamera=*camera;
     oldViewport = camera->getViewport();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
   }
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
