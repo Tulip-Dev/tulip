@@ -6,8 +6,8 @@ Writing Tulip plugins in Python
 ===============================
 
 The Tulip Python bindings offer the possibility to write Tulip plugins in pure Python.
-You can easily develop and test Python plugins from the Tulip GUI through the "Tulip plugin editor" tab
-of the "Python Script view" (see :ref:`Using the bindings from the Tulip Software GUI <usingBindingsInTulipGUI>`).
+You can easily develop and test Python plugins from the Tulip GUI through the "Plugins editor" tab
+of the Tulip plugins editor accessible through de *Develop* button (see :ref:`Using the bindings from the Tulip Software GUI <usingBindingsInTulipGUI>`).
 
 Below is the list of plugins that can be implemented in Python :
 

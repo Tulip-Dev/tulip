@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Tulip-Python'
+project = u'Tulip Python'
 copyright = u'@CurrentYear@, Tulip Team'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -212,7 +212,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'tulippythonbindings', u'Tulip-Python Documentation',
+    ('index', 'tulippythonbindings', u'Tulip Python Documentation',
      [u'Tulip Team'], 1)
 ]
 

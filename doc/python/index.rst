@@ -1,15 +1,15 @@
-.. Tulip-Python documentation master file, created by
+.. Tulip Python documentation master file, created by
    sphinx-quickstart on Sat Apr  2 17:21:15 2011.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
 .. highlight:: python
 
-Welcome to Tulip-Python documentation!
+Welcome to Tulip Python documentation!
 =================================================
 
 Tulip_ is an information visualization framework written in C++ dedicated to the analysis and visualization of graphs.
-Tulip-Python is a set of modules that exposes to Python almost all the content of the Tulip_ C++ API. The bindings
+Tulip Python is a set of modules that exposes to Python almost all the content of the Tulip_ C++ API. The bindings
 has been developed with the SIP_ tool from Riverbank_. The main
 features provided by the bindings are listed below :
 
