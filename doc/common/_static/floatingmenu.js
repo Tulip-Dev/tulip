@@ -10,17 +10,10 @@
   var bgUrl = null;
 
   $(document).ready(function() {
+      // add a pin image to manage the stick/unstick state of the floating menu
       $(".sidebar").prepend('<span id="pin"><img src="_static/unpin.png" title="click here to pin the table of contents"></span>');
-
-      menuYloc = parseInt($(".sidebar").css("top").substring(0,$(".sidebar").css("top").indexOf("px")));
       $(".sidebar").attr("sticked", "false");
-
-      $(window).scroll(function () {
-	  if ($(".sidebar").attr("sticked") != "true") {
-	    offset = menuYloc+$(document).scrollTop()+"px";  
-	    $(".sidebar").animate({top:offset},{duration:500,queue:false});
-	  }
-	});
+      // implement stick/unstick when clicking on the pin image
       $("#pin").click(event, function() {
 	    if ($(".sidebar").attr("sticked") != "true") {
 	      $(".sidebar").attr("sticked", "true");
@@ -31,5 +24,22 @@
 		$("#pin").html('<img src="_static/unpin.png" title="click here to pin the table of contents">');
 	    }
  	});
+
+      // remove unneeded indices and tables section
+      // at the end of the index.html file
+      if ((location.pathname.indexOf("index.html") > 0) &&
+	  ($(".headertitle").html().indexOf("Python") == -1))
+	$("#indices-and-tables").remove();
+
+      // floating menu implementation
+      menuYloc = parseInt($(".sidebar").css("top").substring(0,$(".sidebar").css("top").indexOf("px")));
+
+      $(window).scroll(function () {
+	  // scroll the sidebar if it not sticked
+	  if ($(".sidebar").attr("sticked") != "true") {
+	    offset = menuYloc+$(document).scrollTop()+"px";  
+	    $(".sidebar").animate({top:offset},{duration:500,queue:false});
+	  }
+	});
     })
     })(jQuery);
