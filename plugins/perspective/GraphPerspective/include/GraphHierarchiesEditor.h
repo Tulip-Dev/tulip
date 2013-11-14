@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <QModelIndex>
+#include <QTreeView>
 
 class QAbstractButton;
 
@@ -32,6 +33,27 @@ class Graph;
 namespace Ui {
 class GraphHierarchiesEditorData;
 }
+
+class CustomTreeView : public QTreeView {
+
+    Q_OBJECT
+
+public :
+
+  CustomTreeView(QWidget *parent=0);
+
+  void setModel(QAbstractItemModel * model);
+
+public slots:
+
+  void resizeFirstColumnToContent();
+
+protected:
+
+  int sizeHintForColumn(int col) const;
+  void scrollContentsBy(int dx, int dy);
+
+};
 
 class GraphHierarchiesEditor : public QWidget {
   Q_OBJECT
@@ -56,7 +78,6 @@ protected slots:
   void contextMenuRequested(const QPoint&);
   void doubleClicked(const QModelIndex&);
   void clicked(const QModelIndex&);
-  void resizeFirstColumnToContent();
 
   void addSubGraph();
   void cloneSubGraph();

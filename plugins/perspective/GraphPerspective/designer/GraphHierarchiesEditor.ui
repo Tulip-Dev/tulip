@@ -43,7 +43,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QTreeView" name="hierarchiesTree">
+       <widget class="CustomTreeView" name="hierarchiesTree">
         <property name="contextMenuPolicy">
          <enum>Qt::CustomContextMenu</enum>
         </property>
@@ -146,7 +146,7 @@
          <string>Add panel</string>
         </property>
         <property name="icon">
-         <iconset resource="../resources/GraphPerspective.qrc">
+         <iconset>
           <normaloff>:/tulip/graphperspective/icons/16/view-add.png</normaloff>:/tulip/graphperspective/icons/16/view-add.png</iconset>
         </property>
        </widget>
@@ -173,7 +173,7 @@
   </action>
   <action name="actionDelete_graph">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
    </property>
    <property name="text">
@@ -185,7 +185,7 @@
   </action>
   <action name="actionDelete_All">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
    </property>
    <property name="text">
@@ -200,7 +200,7 @@
   </action>
   <action name="actionCreate_panel">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/view-add.png</normaloff>:/tulip/graphperspective/icons/16/view-add.png</iconset>
    </property>
    <property name="text">
@@ -212,7 +212,7 @@
   </action>
   <action name="actionExport">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/document-export.png</normaloff>:/tulip/graphperspective/icons/16/document-export.png</iconset>
    </property>
    <property name="text">
@@ -229,7 +229,7 @@
   </action>
   <action name="actionSave_to_file">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
    </property>
    <property name="text">
@@ -241,7 +241,7 @@
   </action>
   <action name="actionCreate_induced_sub_graph">
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
+    <iconset>
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
    </property>
    <property name="text">
@@ -262,11 +262,13 @@
    <header>HeaderFrame.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>CustomTreeView</class>
+   <extends>QTreeView</extends>
+   <header location="global">GraphHierarchiesEditor.h</header>
+  </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
-  <include location="../resources/GraphPerspective.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>hierarchiesTree</sender>
