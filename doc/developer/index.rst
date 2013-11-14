@@ -11,7 +11,7 @@ Welcome to the Tulip Developer oriented documentation!
 
 This manual is an help necessary for the developers of an application using **Tulip** libraries and for the developers of the **Tulip** Team.
 
-It explains how to compile the libraries and the software, it does a presentation of the main methods available on the libraries. Chapters relate the programming and documentation guidelines.
+It explains how to compile the libraries and the software, it does a presentation of the main methods available in the libraries. Chapters relate the programming and documentation guidelines.
 
 
 .. _contents:
@@ -32,10 +32,10 @@ Contents:
 
 .. tulip_libogl.
 
-Indices and tables
-==================
+.. Indices and tables
+.. ==================
 
-* :ref:`genindex`
-* :ref:`search`
+.. * :ref:`genindex`
+.. * :ref:`search`
 
 

@@ -25,12 +25,6 @@
 	    }
  	});
 
-      // remove unneeded indices and tables section
-      // at the end of the index.html file
-      if ((location.pathname.indexOf("index.html") > 0) &&
-	  ($(".headertitle").html().indexOf("Python") == -1))
-	$("#indices-and-tables").remove();
-
       // floating menu implementation
       menuYloc = parseInt($(".sidebar").css("top").substring(0,$(".sidebar").css("top").indexOf("px")));
 
