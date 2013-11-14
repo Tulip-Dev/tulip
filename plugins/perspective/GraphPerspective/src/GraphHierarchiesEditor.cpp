@@ -60,7 +60,7 @@ int CustomTreeView::sizeHintForColumn(int col) const {
         }
         index = indexBelow(index);
     }
-    return hint;
+    return qMin(hint, viewport()->rect().width());
 }
 
 void CustomTreeView::scrollContentsBy(int dx, int dy) {
