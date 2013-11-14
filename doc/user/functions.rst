@@ -29,7 +29,7 @@ As an example to illustrate our explanations, we will use the following graph (r
 Subgraph
 ^^^^^^^^
 
-A subgraph is simply a subset of the graph elements: some nodes of the graph, and some edges between them (more informations: `Wikipedia: Subgraphs <http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Subgraphs>`_).
+A subgraph is simply a coherent subset of the graph elements: some nodes of the graph, and some edges between them (more informations: `Wikipedia: Subgraphs <http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Subgraphs>`_).
 
 Specifically, the edge of a subgraph must already be present in the graph just above it in the hierarchical scale. A subgraph does not necessarily contains all the edges of the induced subgraph. For an edge to possibly be in the subgraph, both its endpoints must be in it.
 
@@ -66,7 +66,7 @@ You can enter a node by double-clicking on it
 .. image:: _images/hierarchy_orion_meta_head.png
     :width: 600
 
-The meta-nodes can also be intricated into other meta-nodes, creating nested meta-graphs.
+The meta-nodes can also be embedded into other meta-nodes, creating nested meta-graphs.
 
 .. image:: _images/hierarchy_orion_meta_nested.png
     :width: 600
@@ -80,7 +80,7 @@ The meta-nodes can also be intricated into other meta-nodes, creating nested met
 Meta-graph creation
 ^^^^^^^^^^^^^^^^^^^
 
-When meta-nodes are created, Tulip follows a specific behaviour. With the node regroupement, new subgraphs are created in order to favorise the visualization. If the action is done from the root level of the hierarchy, a first meta-graph, named by default *groups*, will display the whole graph with the appropriate meta-nodes and a second, named in the form *grp_VWXYZ*, will only contains the nodes regrouped. Otherwise, if the action is realized from a lower level in the hierarchy, only the second graph will be created on the same level in the hierarchy.
+When meta-nodes are created, Tulip follows a specific behaviour. With the clustering of nodes, new subgraphs are created in order to improve the visualization. If the action is done from the root level of the hierarchy, a meta-graph, named by default *groups*, will display the whole graph with the appropriate meta-nodes and a subgraph, named in the form *grp_vwxyz*, will only contains the clustered nodes. Otherwise, if the action is realized from a lower level in the hierarchy, only the second subgraph graph will be created at the same level in the hierarchy.
 
 The creation of meta-graph modifies the root graph (here Orion) which represents all nodes (including the meta-nodes and the representation of the subgraph inside it) and all edges (including the meta-edges). So much information overlapping can be displayed unclearly:
 
@@ -121,7 +121,7 @@ Deleting a meta-node removes all nodes in this particular meta-node, but not its
 Modifying subgraphs or meta-nodes
 ---------------------------------
 
-If you move nodes within a subgraph (with the mouse or through a layout algorithm), the same node will be moved in the root graph.
+If you change the position of a node (*viewLayout* property) within a subgraph (with the mouse or through a layout algorithm), the same node will be moved in the root graph, if the *viewLayout* property accessible in the subgraph in the one inherited from the root graph.
 
 If you use a measure algorithm on a subgraph, new local properties are created. Those properties are not applied to the root graph (if properties are not defined on the subgraph, they are inherited).
 
@@ -133,7 +133,7 @@ You can also note that, because of the hierachy, some actions (delete, rename...
 CSV Import
 ==========
 
-Tulip proposes an importation wizard for CSV files. Comma-separated values files are very common to stock statisical datas. The internal file structure is rather simple, consisting of records (one per line usually) containing several fields, separated with a special character (such as a comma, a semi-colon, an hash...).
+Tulip proposes an import wizard for CSV files. Comma-separated values files are very common to store statistical data. The internal file structure is rather simple, consisting of records (one per line usually) containing several fields, separated with a special character (such as a comma, a semi-colon, an hash...).
 
 
 .. _csv_files:
@@ -204,19 +204,19 @@ The first panel allows the user to configure the source file location, the chara
 
 The purpose of each labeled component is explained below:
 
-1. The source file location field : this field indicates the location of the file to parse. To change the source file click on the “...” button and select the file containing the nodes.
+1. The source file location field: this field indicates the location of the file to parse. To change the source file click on the “...” button and select the file containing the nodes.
 
-2. The file encoding selection menu : this drop down menu provides a list of encoding schemes for the characters in the text file. We use a standard UTF-8 in this example as the files does not contain any special character.
+2. The file encoding selection menu: this drop down menu provides a list of encoding schemes for the characters in the text file. We use a standard UTF-8 in this example as the files does not contain any special character.
 
-3. The data orientation : this check-box allows the user to invert rows and columns i.e to treat rows as columns and columns as rows in next steps.
+3. The data orientation: this check-box allows the user to invert rows and columns i.e to treat rows as columns and columns as rows in next steps.
 
-4. The separator selector : this field allows the user to define the characters used to separate data value fields within each row. Select a separator in the list or input a custom separator. For the nodes file, the separator is ";". If a duplication of the separators is possible, you can check the "merge consecutive separators" box.
+4. The separator selector: this field allows the user to define the characters used to separate data value fields within each row. Select a separator in the list or input a custom separator. For the nodes file, the separator is ";". If a duplication of the separators is possible, you can check the "merge consecutive separators" box.
 
-5. The text delimiter selector : this field allows the user to define the characters used as start and end delimiter for data value fields. Select a delimiter in the list or input a custom and press the enter key to validate your input. Separated value files often additionally define a character used to indicate the start and end of a data element which should be considered a single text entry. This strategy allows the inclusion of text entries which include the value separator. 
+5. The text delimiter selector: this field allows the user to define the characters used as start and end delimiter for data value fields. Select a delimiter in the list or input a custom one and press the [Enter] key to validate your input. Separated value files often additionally define a character used to indicate the start and end of a data element which should be considered as a single text entry. This strategy allows the inclusion of text entries which include the value separator. 
 
   For example, a file, which is structured as a comma separated value file, could use the double quotation mark to delimit text values and would then be able to include text values such as: 	'Zoe, Mark, Sally'.
 
-6. The preview area : this area displays a preview of the file as it will be interpreted with these settings.
+6. The preview area : this area displays a preview of the file as it will be interpreted with the current settings.
 
 
 You can click on "Next" to access to the following panel.
@@ -234,7 +234,7 @@ The purpose of each labeled component is explained below:
 
 1. Use first line tokens as column names : use the elements in the first line as default names for the columns. If checked the first line will be skipped during the import process. In any case, you can alter the name of the fields if they do not suit you.
 
-2. The line range spinbuttons : these two spin buttons allow the user to select the start and end rows for the data import. The spin boxes can be used either by typing a new value in the text entry area where the numbers are displayed, or by using the mouse button to click on the up arrow to increase the number and the down arrow to decrease the number.	For instance, if the text file contained a large header area with meta information, this header could be excluded from the data imported by increasing the number of the starting, "From", line.
+2. The line range spinbuttons : these two spin buttons allow the user to select the start and end rows for the data to import. The spin boxes can be used either by typing a new value in the text entry area where the numbers are displayed, or by using the mouse button to click on the upwards arrow to increase the number and the downwards arrow to decrease the number. For instance, if the text file contained a large header area with meta information, this header could be excluded from the data imported by increasing the number of the starting, "From", line.
 
 3. The columns configuration area : this area allows the user to configure each column detected in the file. Any single column can be excluded from the data imported by clicking in the checkbox under its name to remove the check mark. User can rename a column by editing the field containing it's original name. You can't input the same name of another column. The data type of a column can be changed using the combo-box under it's name.
 
@@ -284,7 +284,7 @@ Existing entities (nodes)
 
 Import the data of selected columns on existing entities (node).
 
-For each row we compare the destination entity id to graph entities ids. If there is a correspondence we import the row data on the first matching entity. If there is no entity with such id you can force the creation of a new entity with the “Create missing entities” option.
+For each row we compare the destination entity id to graph entities ids. If there is a correspondence, the row data are imported on the first matching entity. If there is no entity with such id you can force the creation of a new entity with the “Create missing entities” option.
 
 
 Existing relations (edges)
@@ -292,10 +292,10 @@ Existing relations (edges)
 
 Import selected columns on existing relations(edges).
 
-For each row we compare the destination relation id to graph relations ids. If there is a correspondence we import the row data on the first matching relation.
+For each row we compare the destination relation id to graph relations ids. If there is a correspondence, the row data are imported on the first matching relation.
 
 
-The node importation is very straightforward. Very few changes must be made during the process. Is the end, you will obtain a graph containing only the nodes randomly placed in the node link diagram.
+The node import is very straightforward. Very few changes must be made during the process. Is the end, you will obtain a graph containing only the nodes randomly placed in the node link diagram view.
 	
 
 .. _csv_import_edges:
@@ -303,7 +303,7 @@ The node importation is very straightforward. Very few changes must be made duri
 Import the edges
 ----------------
 
-Once we are done with the nodes importation, we can focus on the edges. The steps followed in both of the action are very similar. Start by opening the CSV Import Wizard
+Once we are done with the nodes import, we can focus on the edges. The steps followed in both of the action are very similar. Start by opening the CSV Import Wizard
 
 
 Source file settings
@@ -342,7 +342,7 @@ A small modification in this case is made, we must specify the property against 
 Display the graph
 -----------------
 
-With all of the steps above completed, you can now observe your newly created graph. Why not you trying to apply some algorithms on it to change its layout or its color ?
+With all of the steps above completed, you can now observe your newly created graph. Why not try to apply some algorithms on it to change its layout or its color ?
 
 .. image:: _images/csv_import_final.png
     :width: 600

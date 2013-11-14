@@ -4,7 +4,7 @@
 The Workspace in Detail
 ***********************
 
-As it has been seen in :ref:`gui`, the workspace is where all the visualization views, or panels, are found. 
+As it has been seen in :ref:`gui`, the workspace is where all the visualization views, or panels, take place. 
 
 
 .. _workspace_panel:
@@ -25,31 +25,31 @@ Manage the panels
 .. |icon_list_graph| image:: _images/icon_list_graph.png
     :width: 23
 
-When working on Tulip, you will need several panels to see all the informations you need. In order to easily compare or sort your results, you can find at the bottom of the workspace a toolbar containing three groups of buttons :
+When working on Tulip, you will need several panels to see all the information you need. In order to easily compare or sort your results, you can find at the bottom of the workspace a toolbar containing three groups of buttons :
 
 * |icon_workspace_macros|: here, only the first button, *Expose*, requires our attention. Clicking on it allows us to see icons representing every panel currently open.
 
 .. image:: _images/i_workspace_expose.png
     :width: 600
 
-You can then double-click on a panel icon to open it, click on the cross in the top-right corner of the icon to close it, or click again on the *Expose* button to return to the previously selected view.
+You can then double-click on a panel icon to open it, click on the cross in the top-right corner of the icon to delete it, or click again on the *Expose* button to return to the previously selected view.
 
-* |icon_panel_arrow|: You can simply change the currently seen panels by clicking on the arrows.
+* |icon_panel_arrow|: You can simply change the currently displayed panels by clicking on the arrows.
 
-* |icon_panels|: These icons appear depending of the number of opened panels. Clicking on one of those change the organization of the workspace according to the icon.
+* |icon_panels|: These icons appear depending of the number of opened panels. Clicking on one of those change the tiling of the workspace according to the icon.
 
 .. image:: _images/i_workspace_6panels.png
     :width: 600
 
 On the top-right corner of the workspace window, you will find three different buttons:
 
-* |icon_list_graph|: Clicking on this button will display a list of opened graphs. The current one name is displayed using a bold font. Choosing a new graph will modify the concerned panel and update the visualized informations.
+* |icon_list_graph|: Clicking on this button will display a list of opened graphs. The name of the current one is displayed using a bold font. Choosing an other graph will modify the current panel and update the visualized information.
 
-* |icon_move_panel|: When using the tiled display, you can use this icon to reorganize the panels to yuour convinience. 
+* |icon_move_panel|: When using the tiled display, you can use this icon to reorganize the panels to your convinience. 
 
-* |icon_close_panel|: Clicking on this icon will close the current panel. 
+* |icon_close_panel|: Clicking on this icon will delete the current panel. 
 
-The creation of panels have already been presented earlier. Consult :ref:`workspace_view` for more informations.
+The creation of panels have already been presented earlier. Consult :ref:`workspace_view` for more information.
 
 
 .. _workspace_diagram:
@@ -69,7 +69,7 @@ The Node Link Diagram
 .. |l_blu| image:: _images/legend_blue.png
     :width: 32
 
-This panel gives you the main visualization view of Tulip, displaying graphs and offering you navigating tools to observe your data under every angle.
+This panel gives you the main visualization view of Tulip, displaying graphs and offering you navigation tools to observe your data under different angle.
 
 The view contains three distinctive elements colored differently in the following screen capture:
 
@@ -147,7 +147,7 @@ Main window
 .. |i_workspace_rclick_node| image:: _images/i_workspace_rclick_node.png
     :width: 297
 
-This part of the panel shows the graph. From here, the user can exploit two elements to influence on it.
+This part of the panel shows the graph. From here, the user can exploit two elements to interact with it.
 
 * The first one is the quick access bar located at the bottom of the view:
 
@@ -200,32 +200,32 @@ This part of the panel shows the graph. From here, the user can exploit two elem
 
   * |icon_wsm_label_font_set|: Change the default label font.
 
-  When clicked on, some of these icons will change to adapt to the present situation, by either alterning between two versions for the toogle buttons, or by indicating the color or the font choosed.
+  When clicked on, some of these icons will change to adapt to the current situation, by either alterning between two versions for the toogle buttons, or by indicating the color or the chosen font.
 
-* The second element is the menu displayed with a right-click.
+* The second element is the contextual menu displayed on a right click.
 
   .. image:: _images/i_workspace_rclick.png
     :width: 297
 
-  By default, the options are in two submenus : *View* et *Augmented display*.
+  By default, the options are divided in two parts : *View* et *Augmented display*.
 
-  * *Force redraw*: Update the graph displayed.
+  * *Force redraw*: update the graph displayed.
 
-  * *Center view*: Reset the camera position.
+  * *Center view*: reset the camera position.
 
-  * *Use orthogonal projection*: Switch to orthogonal projection to true perspective.
+  * *Use orthogonal projection*: switch to orthogonal projection to true perspective.
 
-  * *Take snapshot*: Take a screenshot.
+  * *Take snapshot*: take a screenshot.
 
-  * *Show overview*: Display/hide the overview in the upper-left of the window.
+  * *Show overview*: display/hide the overview in the bottom right corner of the window.
 
-  * *Show quick access bar*: Display/Hide the quick access bar.
+  * *Show quick access bar*: display/hide the quick access bar.
 
-  * *Use Z ordering*: Adapt the display priority according to the Z position.
+  * *Use Z ordering*: adapt the display priority according to the Z position.
 
-  * *Grid display parameters*: Open the grid setup wizard.
+  * *Grid display parameters*: open the grid setup wizard.
 
-  When the right-click is done on an edge or a node, a new submenu appears displaying the object name and offers to select the node/edge (*Select*), add it to the current selection (*Toggle selection*) or to delete it (*Delete*).
+  When right clicking is on an edge or a node, an other part appears displaying the object name and offers to select the node/edge (*Select*), add it to the current selection (*Toggle selection*) or to delete it (*Delete*).
 
 
   |i_workspace_rclick_edge|    |i_workspace_rclick_node|
@@ -278,33 +278,33 @@ The second part contains the tools icons:
 .. image:: _images/icon_wst_toolbar.png
     :width: 342
 
-The use of the tools will not be explained in detail here. More informations about their use can be found by selecting the tool and clicking on the configuration panel button.
+The use of the tools will not be explained in detail here. More information about their use can be found by selecting the tool and clicking on the configuration panel button.
 
-* |icon_wst_navigate_graph|: Navigate in graph.
+* |icon_wst_navigate_graph|: navigate in graph.
 
-* |icon_wst_get_edit_infos|: Get/Edit node or edge informations.
+* |icon_wst_get_edit_infos|: get/edit node or edge information.
 
-* |icon_wst_select_rect|: Select nodes/edges in a rectangle.
+* |icon_wst_select_rect|: select nodes/edges in a rectangle.
 
-* |icon_wst_move_reshape|: Move/Reshape rectangle selection.
+* |icon_wst_move_reshape|: move/reshape rectangle selection.
 
-* |icon_wst_select_free|: Select nodes in a freehand drawn region.
+* |icon_wst_select_free|: select nodes in a freehand drawn region.
 
-* |icon_wst_select_short_path|: Select the shortest path between two nodes.
+* |icon_wst_select_short_path|: select the shortest path between two nodes.
 
-* |icon_wst_add_nodes_edges|: Add nodes/edges.
+* |icon_wst_add_nodes_edges|: add nodes/edges.
 
-* |icon_wst_edit_edge_bends|: Edit edges bends.
+* |icon_wst_edit_edge_bends|: edit edges bends.
 
-* |icon_wst_delete_nodes_edges|: Delete nodes or edges.
+* |icon_wst_delete_nodes_edges|: delete nodes or edges.
 
-* |icon_wst_zoom_rect|: Zoom on rectangle.
+* |icon_wst_zoom_rect|: zoom on rectangle.
 
-* |icon_wst_highlight_neighbor|: Highlight node neighborhood.
+* |icon_wst_highlight_neighbor|: highlight node neighborhood.
 
-* |icon_wst_fisheye|: Use the cursor "Fisheye".
+* |icon_wst_fisheye|: use the cursor "Fisheye".
 
-* |icon_wst_magnify_glass|: Use the cursor "Magnifying glass".
+* |icon_wst_magnify_glass|: use the cursor "Magnifying glass".
 
 The final element is a combo box, allowing the user to choose which graph to visualize.
 
@@ -319,23 +319,23 @@ The final element is a combo box, allowing the user to choose which graph to vis
 Scene
 -----
 
-The scene rendering settings can be opened by clicking on the scene tab, in the upper-right corner of the node link diagram panel. The following view appears :
+The scene rendering settings can be opened by clicking on the **Scene** tab, in the top right corner of the node link diagram panel. The following view appears :
 
 .. image:: _images/i_workspace_scene.png
     :width: 452
 
 
-* **Labels**: Manage the labels display by ordering them according to a metric, adapting their size so they can fit into their respective nodes, choosing the number of labels simultaneously displayed and setting their limit size. 
+* **Labels**: manage the labels display by ordering them according to a metric, adapting their size so they can fit into their respective nodes, choosing the number of labels simultaneously displayed and setting their limit size. 
 
-* **Edges**: Manage the edge display by enabling the 3D edges, showing the arrows, enabling the color or the size interpolations.
+* **Edges**: manage the edge display by enabling the 3D edges, showing the arrows, enabling the color or the size interpolations.
 
-* **Colors**: Customize the selection and background colors.
+* **Colors**: customize the selection and background colors.
 
-* **Projection**: Select the orthogonal or classic perspective projection.
+* **Projection**: select the orthogonal or classic perspective projection.
 
-Note that some of the settings mentionned above can be modified through the quick access bar or with the right-click menu in the main window.
+Note that some of the settings mentioned above can be modified through the quick access bar or with the right click menu in the main window.
 
-You might need to click on the refresh button, in the right-upper corner of the tab to apply the changes made in this tab. The tab can be closed by clicking on the cross near the tab's name.
+You might need to click on the refresh button, in the top right corner of the tab to apply the changes made in this tab. The tab can be closed by clicking on the cross near the tab's name.
 	
 
 .. _workspace_diagram_layers:
@@ -343,7 +343,7 @@ You might need to click on the refresh button, in the right-upper corner of the 
 Layers
 ------
 
-The layers settings can be accessed to by clicking on the Layers tab. The following view is displayed:
+The layers settings can be accessed by clicking on the **Layers** tab. The following view is displayed:
 
 .. image:: _images/i_workspace_layers.png
     :width: 450
@@ -378,7 +378,7 @@ The Node-Link Diagram being one of the mostly used view, it is also the one we a
 
 **Edges**
 
-* *I am sure my graph is oriented, but I do not see any arrow displayed, have I forgot something?*
+* *I am sure my graph is oriented, but I do not see any arrow displayed, did I forget something?*
 
   By default, the arrows are not displayed in Tulip. You can address this issue by checking the option *Show arrows* in the scene rendering settings (see :ref:`workspace_diagram_scene`). If your graph is quite large, they may also be too small, in that case, you should try to enlarge them using the |icon_wst_get_edit_infos| interactor.
 
@@ -388,23 +388,23 @@ The Node-Link Diagram being one of the mostly used view, it is also the one we a
 
 * *When I change the size of my edges, the layout stays identical, how should I proceed to modify that?*
 
-  Just like the colour and the arrows issues, the program will not use the size value given for each edge if the size interpolation is enable. To resolve your issue, click on the size interpolation icon (|icon_wsm_edge_size_interpol_en|) in the quick access menu (see :ref:`workspace_diagram_main`) or check/uncheck the *Enable size interpolation* option in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
+  Just like the color and the arrows issues, the program will not use the size value given for each edge if the size interpolation is enable. To resolve your issue, click on the size interpolation icon (|icon_wsm_edge_size_interpol_en|) in the quick access menu (see :ref:`workspace_diagram_main`) or check/uncheck the *Enable size interpolation* option in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
 
-**Colour/Transparancy**
+**Color/Transparancy**
 
-* *I can not see the edges/nodes. Changing their colour is not helping, what happened?*
+* *I can not see the edges/nodes. Changing their color is not helping, what happened?*
 
   Before changing every parameter in your graph, check if the edges/nodes are *visible*. This option can be verified by checking the *Nodes* and *Edges* box in the column *Visible* in the *Layer* panel. For the edges, clicking on |icon_wsm_edge_visible_dis| in the quick access bar will realize the same action.
 
-  If you have change the nodes or edges colour manually, maybe you also have modified the alpha component, changing the colour to be transparent. Selecting the edges or nodes and setting the alpha value to 255 in the color picker should solve the issue. Use the icons |icon_wsm_node_color_set| and |icon_wsm_edge_color_set| to do so.
+  If you have change the nodes or edges color manually, maybe you also have modified the alpha component, changing the color to be transparent. Selecting the edges or nodes and setting the alpha value to 255 in the color picker should solve the issue. Use the icons |icon_wsm_node_color_set| and |icon_wsm_edge_color_set| to do so.
 
-* *I have changed the edge colour but nothing happens, what is the problem?*
+* *I have changed the edge color but nothing happens, what is the problem?*
 
-  Tulip proposes an option to colour the edges using an interpolation. When this option is selected, the edge colour is set to match its in and out nodes colours. You can activate/deactivate this option by clicking on |icon_wsm_edge_color_interpol_en| in the quick access bar (see :ref:`workspace_diagram_main`) or by checking/unchecking the option in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
+  Tulip provides an option to colorize the edges using an interpolation. When this option is selected, the edge color is set to match its in and out nodes colors. You can activate/deactivate this option by clicking on |icon_wsm_edge_color_interpol_en| in the quick access bar (see :ref:`workspace_diagram_main`) or by checking/unchecking the option in the Scene Rendering Settings (see :ref:`workspace_diagram_scene`).
 
-* *I do not like the selection colour or the default node colour, any suggestion ?*
+* *I do not like the selection color or the default node color, any suggestion ?*
 
-  The default colour can actually be customized in the *Settings* window. To open it, go through the *Edit* menu and the *Preferences* element. More informations in :ref:`preferences`.
+  The selection and default color can be customized in the *Settings* window. To open it, go through the *Edit* menu and the *Preferences* element. More information in :ref:`preferences`.
   
 
 
@@ -424,69 +424,74 @@ This panel displays the properties of the nodes and edges of the graph.
 Main window
 -----------
 
-Properties are an important concept in Tulip, they are used to store informations about each node and edge. By convention, the properties used by the rendering engine begin with the “view” prefix but it is possible to define an unlimited number of additional properties to your convinience. 
+Properties are an important concept in Tulip, they are used to store information about each node and edge. By convention, the properties used by the rendering engine begin with the “view” prefix but it is possible to define an unlimited number of additional properties to your convinience. 
 
 Here is the list of all the rendering properties (e : used with edges, n: used with nodes):
 
-* *viewBorderColor*: Border color (e/n).
+* *viewBorderColor*: border color (e/n).
 
-* *viewBorderWidth*: Border width (e/n).
+* *viewBorderWidth*: border width (e/n).
 
-* *viewColor*: Color (e/n).
+* *viewColor*: color (e/n).
 
-* *viewFont*: Font used to render the label (e/n).
+* *viewFont*: font used to render the label (e/n).
 
-* *viewFontSize*: Font size of the label (e/n).
+* *viewFontSize*: font size of the label (e/n).
 
-* *viewLabel*: Label (e/n).
+* *viewLabel*: label (e/n).
 
-* *viewLabelColor*: Label color (e/n).
+* *viewLabelColor*: label color (e/n).
 
-* *viewLabelPosition*: Label position (center, top, bottom, left, right) (e/n).
+* *viewLabelPosition*: label position (center, top, bottom, left, right) (e/n).
 
-* *viewLayout*: Position (x,y,z) of a node, or vector of the bends positions of an edge (e/n).
+* *viewLayout*: position (x,y,z) of a node, or vector of the bends positions of an edge (e/n).
 
-* *viewMetric*: Property used by the algorithms (e/n).
+* *viewMetric*: property used by the algorithms (e/n).
 
-* *viewRotation*: Rotation (n)
+* *viewRotation*: rotation (n)
 
-* *viewSelection*: True if the element is selected, false if not (e/n).
+* *viewSelection*: true if the element is selected, false if not (e/n).
 
-* *viewShape*: Select the shape of a node (circle, square, cube, sphere...) or an edge (Bezier curve, polyline...) (e/n). 
+* *viewShape*: shape of a node (circle, square, cube, sphere...) or an edge (Bezier curve, polyline...) (e/n). 
 
-* *viewSize*: Set the size, for a node: (height, width, depth); for an edge: (width at source, width at end, arrow size). The edge size interpolation must be unchecked for this property to be consider (e/n).
+* *viewSize*: size of a node (height, width, depth) and for an edge, the width at source, width at end, and arrow size. The edge size interpolation must be disabled for this property to be consider (e/n).
 
-* *viewSrcAnchorShape*: Shape of the source anchor of the edge. For this setting to take effect, the option *Show arrow* must be checked (e).
+* *viewSrcAnchorShape*: shape of the source anchor of the edge. For this setting to take effect, the option *Show arrow* must be enabled (e).
 
-* *viewSrcAnchorSize*: Size (along the x, y, z axis) of the source anchor (e).
+* *viewSrcAnchorSize*: size (along the x, y, z axis) of the source anchor (e).
 
-* *viewTexture*: Texture to replace the color (e/n).
+* *viewTexture*: texture, an image file, to replace the color (e/n).
 
-* *viewTgtAnchorShape*: Like *viewSrcAnchorShape* (e). 
+* *viewTgtAnchorShape*: size (along the x, y, z axis) of the target anchor (e).
 
-* *viewTgtAnchorSize*: Size (along the x, y, z axis) of the target anchor (e).
+* *viewTgtAnchorSize*: size (along the x, y, z axis) of the target anchor (e).
 
-The spreadsheet view allows you to select the elements you want to watch by choosing *Nodes* or *Edges* in the *Show* combo box. A filter is available to pick elements depending of their selection in the *node link diagram*, *filtered by* combo box, or to match a given pattern in a specific column.
+The spreadsheet view allows you to select the elements you want to watch by choosing *Nodes* or *Edges* in the *Show* combo box. A filter is available to pick elements depending of their selection in the *node link diagram*, or to match a given pattern in a specific column. The set of displayed columns can be restricted to those whose the name matches a given pattern.
 
-The value stocked in the table can be modified by several ways. A double click on one of the case will offers to enter the value for one property and one element (edge or node). A right-click in one of the case opens the following sub-menu :
+The value stored in the table can be modified by several ways. A double click on one of the cells will offers to enter the value for one property and one element (edge or node). A right click in one of the cells opens the following menu :
 
 .. image:: _images/i_workspace_rclick_elements.png
     :width: 159
 
-Two types of action can be done, the ones concerning the property and the ones concerning the selection of the element. The property value can be set for all nodes, the ones selected (where *viewSelection = true*) or the ones highlighted (current element and the ones clicked on while maintaining *Ctrl* pushed). The values of the present property can also be transfered to *viewLabel* in order to display them in the graph.
+Two types of action can be done, the ones concerning the property values and the ones concerning the selection of the element. The property values can be set for all nodes, the ones selected (where *viewSelection = true*) or the ones highlighted (current element and the ones clicked on while maintaining *Ctrl* pushed). The values of the current property (corresponding to the current cell column) can also be copied into *viewLabel* in order to display them in the graph.
 
+A right click in the column header will open the following menu :
+
+.. image:: _images/i_workspace_rclick_header.png
+
+
+The first set of actions in that menu allows to add a new property or to manage the current property; the *Copy* action allows to copy the property values into an already existing property or a new one, the *Delete* and *Rename* actions cannot be applied to "view" prefixed properties. The second set allows to set the property values.
 
 .. _workspace_spreadsheet_properties:
 
 Properties
 ----------
 
-In the upper right of the panel, you can find the tab *Properties*.
+In the top right of the panel, you can find the tab *Properties*.
 
 .. image:: _images/i_workspace_properties.png
-    :width: 430
 
-Here you can manage the properties. The eye-shaped button makes visible the properties in the table in the main window. A right-click will open a sub-menu offering to create new properties (also realizable with the *Add property* button) and to copy or delete old ones.
+Here you can manage the properties. The eye-shaped check boxes make visible/not visible the properties in the table in the main window. A right click will open a contextual menu offering to create new properties (can also be performed by using the [+ Add new] button) and to *Copy*, *Delete* or *Rename* existing ones.
 
 .. image:: _images/i_workspace_rclick_properties.png
     :width: 248
@@ -497,7 +502,7 @@ Here you can manage the properties. The eye-shaped button makes visible the prop
 Adjacency matrix view
 =====================
 
-This view gives you a general glimpse of the adjacency matrix of your graphe.
+This view gives you a general glimpse of the adjacency matrix of your graph.
 
 .. image:: _images/i_adjacency_matrix.png
     :width: 400
@@ -508,12 +513,12 @@ This view gives you a general glimpse of the adjacency matrix of your graphe.
 Settings
 ----------
 
-By clicking on the tab in the right upper corner, you can open the display settings panel.
+By clicking on the tab in the top right corner, you can open the display settings panel.
 
 .. image:: _images/i_adjacency_settings.png
     :width: 308
 
-As you can notice, several parameters such as the background color, the node ordering and the grid and edges display visibility.
+Several parameters such as the background color, the node ordering and the grid and edges display visibility can be customized.
 
 
 .. _workspace_geographic:
@@ -527,10 +532,10 @@ Geographic view
 
 .. _workspace_geographic_mods:
 
-Map mods
---------
+Map modes
+---------
 
-The geographic view proposes six differents map mods. You can switch between them by clicking on the button in the top left corner. Test them in order to adapt the visualization background to your need.
+The geographic view provides six differents map modes. You can switch between them by clicking on the button in the top left corner. Test them in order to adapt the visualization background to your need.
 
 * Roadmap:
 
@@ -570,19 +575,19 @@ Toolbar
 
 The tools available in this view represent a subset of those introduced in the Node-Link Diagram view earlier. You can recall the following:
 
-* |icon_wst_navigate_graph|: Navigate in graph.
+* |icon_wst_navigate_graph|: navigate in graph.
 
-* |icon_wst_get_edit_infos|: Get/Edit node or edge informations.
+* |icon_wst_get_edit_infos|: get/edit node or edge information.
 
-* |icon_wst_select_rect|: Select nodes/edges in a rectangle.
+* |icon_wst_select_rect|: select nodes/edges in a rectangle.
 
-* |icon_wst_move_reshape|: Move/Reshape rectangle selection.
+* |icon_wst_move_reshape|: move/reshape rectangle selection.
 
-* |icon_wst_add_nodes_edges|: Add nodes/edges.
+* |icon_wst_add_nodes_edges|: add nodes/edges.
 
-* |icon_wst_edit_edge_bends|: Edit edges bends.
+* |icon_wst_edit_edge_bends|: edit edges bends.
 
-Otherwise, the toolbar should be used as usual, the left side containing the tool definition and the instructions on how to use it, whereas the rightside propose a list of all the opened graphs. Just click on one to load it in the concerned view.
+Otherwise, the toolbar should be used as usual, the left side containing the tool definition and the instructions on how to use it, whereas the rightside display a list of all the opened graphs. Just click on one to load it in the concerned view.
 
 
 .. _workspace_geographic_geoloc:
@@ -595,11 +600,11 @@ Geoloc
 
 A geolocalization tool has been embedded in the view, exploiting the Google Maps web service. It is used to appropriatly place the nodes on the map.
 
-You can choose among two methods to place the elements, either by providing a valid address for each node, stocked in a property you will select, or by using the latitude and longitude value, each contained in their respective properties.
+You can choose among two methods to place the elements, either by providing a valid address for each node, stored in a property you will select, or by using the latitude and longitude value, each contained in their respective properties.
 
 The above europe map snapshots for example have been build in such a way, by giving to each node a town name.
 
-Once the service is being querried, you will have to specify the corresponding town/address for the ambiguous choices. With the layout finished, you can choose to keep the result value obtained in complementary properties to ease the possible next computation.
+Once the service is being queried, you will have to specify the corresponding town/address for the ambiguous choices. With the layout finished, you can choose to keep the result value obtained in complementary properties to ease the possible next computation.
 
 The node placement should be instantaneous otherwise, close and reopen the view to update the new layout.
 
@@ -612,7 +617,7 @@ Options
 .. image:: _images/i_geographic_options.png
     :width: 449
 
-The polygon map shape can be switch to your convinience with another one. Choose if you want to use the default shape, or a new one imported through a *csv* or a *poly* file. The *help* button displays additionnal informations concerning the file format and available source addresses.
+The polygon map shape can be switched to your convenience with another one. Choose if you want to use the default shape, or a new one imported through a *csv* or a *poly* file. The *help* button displays additional information concerning the file format and available source addresses.
 
 
 .. _workspace_geographic_scene:
@@ -623,7 +628,7 @@ Scene
 .. image:: _images/i_geographic_scene.png
     :width: 449
 
-The properties proposed in this panel are completely similar to the ones in the Node-Link Diagram's scene rendering panel. Report to :ref:`the concerned section<workspace_diagram_scene>` if you need additional informations.
+The properties displayed in this panel are completely similar to the ones in the Node-Link Diagram's scene rendering panel. Report to :ref:`the concerned section<workspace_diagram_scene>` if you need additional information.
 
 
 .. _workspace_geographic_layers:
@@ -634,7 +639,7 @@ Layers
 .. image:: _images/i_geographic_layers.png
     :width: 449
 
-As for the scene panel, the layers settings behave like the one in the Node Link Diagram view. More informations :ref:`this way<workspace_diagram_layers>`.
+As for the scene panel, the layers settings behave like the one in the Node Link Diagram view. More information :ref:`this way<workspace_diagram_layers>`.
 
 
 .. _workspace_histogram:
@@ -642,7 +647,7 @@ As for the scene panel, the layers settings behave like the one in the Node Link
 Histogram view
 ==============
 
-To illustrate the use of this view, we need an example. You can create one by importing a new grid approximation with 500 nodes and a maximum degree of 40. You will then need to add two new properties using the :ref:`spreadsheet view<workspace_spreadsheet>` (use the *Add property* button in the *Properties* tab): *Degree* and *Betweenness Centrality*. Then, use the appropriate algorithms to fill the properties with the wanted informations. A preprepared document can be found :download:`here <_documents/Histogram.tlpx>`.
+To illustrate the use of this view, we need an example. You can create one by importing a new grid approximation with 500 nodes and a maximum degree of 40. You then add two new properties using the :ref:`spreadsheet view<workspace_spreadsheet>` (use the *Add property* button in the *Properties* tab): *Degree* and *Betweenness Centrality*. Then, use the appropriate algorithms to fill the properties with the needed information. A pre configured document can be found :download:`here <_documents/Histogram.tlpx>`.
 
 Upon opening the file, you will find something similar to the following screenshot:
 
@@ -654,7 +659,7 @@ The view displays several histograms at the same time, double clicking onto one 
 .. image:: _images/i_histogram_main1.png
     :width: 400
 
-When creating the example yourself, a few additionnal steps must be followed in order to obtain such result, let us see how to do so.
+When creating the example yourself, a few additional steps must be followed in order to obtain such result, let us see how to do so.
 
 
 .. _workspace_histogram_properties:
@@ -662,7 +667,7 @@ When creating the example yourself, a few additionnal steps must be followed in 
 Properties
 ----------
 
-In a similar fashion to what we have seen before, you can find tabs in the right-upper corner offering further options:
+In a similar way to what we have seen before, you can find tabs in the top right corner offering further options:
 
 .. image:: _images/i_histogram_properties.png
     :width: 392
@@ -691,11 +696,11 @@ These settings will alter the initial histogram by adapting the discrete interva
 
 * *Resulting bin width*: indicates the width of the intervals on the X axis.
 
-* *X axis graduation count*: 
+* *X axis tick count*: indicates the number of tick marks displayed along the X axis
 
 * *X axis logscale*: applies a logarithm scale on the X axis.
 
-* *Y axis graduation step*:
+* *Y axis tick step*: indicates the step between 2 tick marks along the Y axis
 
 * *Y axis logscale*: applies a logarithm scale on the Y axis.
 
@@ -712,7 +717,7 @@ Toolbar
 .. |icon_his_statistics| image:: ../../plugins/view/HistogramView/i_histo_statistics.png
     :width: 20
 
-The view proposes two exclusive tools, only availables when viewing a sole histogram:
+The view provides two exclusive tools, only available when viewing a sole histogram:
 
 * |icon_his_statistics|: The statistics tool displays augmented markings above the histogram. A few customization can be done in the settings:
 
@@ -721,17 +726,17 @@ The view proposes two exclusive tools, only availables when viewing a sole histo
 
   * **Mean and standard derivation**: Tulip computes the mean and the standard derivation and displays these values on the histogram.
 
-  * **Select nodes in range**: Choose the lower and upper bound and select the nodes inbetween.
+  * **Select nodes in range**: choose the lower and upper bound and select the nodes in between.
 
   * **Density estimation**: Tulip will display a curve representing the distribution according to a given function (Uniform, Gaussian, Triangle, Epanechnikov, Quartic, Cubic or Cosine).
 
   Do not forget to click on *Apply* to commit your changes.
 
-* |icon_his_metric_mapping|: This interactor allows to perform a metric mapping on nodes colors, nodes borders colors, nodes sizes, nodes borders widths or nodes glyphs in a visual way. To select the mapping type, do a right click on the scale located at the left of the histogram vertical axis and pick the one wanted in the popup menu which appears.
+* |icon_his_metric_mapping|: this interactor allows to perform a metric mapping on nodes colors, nodes borders colors, nodes sizes, nodes borders widths or nodes glyphs in a visual way. To select the mapping type, do a right click on the scale located at the left of the histogram vertical axis and pick the one wanted in the popup menu which appears.
 
   .. image:: _images/i_histogram_mappingtype.png
 
-  To configure the metric mapping, double click on the scale located at the left of the histogram vertical axis and use the dialog which appears. The rest of the instructions on how to fully configure the tool can be find in the tool documentation panel.
+  To configure the metric mapping, double click on the scale located at the left of the histogram vertical axis and use the dialog which appears. More detailed instructions about the tool configuration can be found in the tool documentation panel.
 
 
 .. _workspace_parallel:
@@ -741,7 +746,7 @@ Parallel coordinates view
 
 To present this view, we will use a dataset containing car specifications such as the city and highway autonomy, the engine displacement, the retail price, the physical dimensions... This document can be opened in Tulip as a project, available :download:`here <./_documents/Cars_data.tlpx>`, or can be imported with the :download:`original CSV file <./_documents/04cars_data.csv>`. The original file can be found on `this site <http://igva2012.wikispaces.asu.edu/file/detail/04cars.csv>`_.
 
-More informations about the CSV import tool and mechanism can be found in the section :ref:`csv`.
+More information about the CSV import tool and mechanism can be found in the section :ref:`csv`.
 
 .. image:: _images/i_parallel_main.png
     :width: 600
@@ -754,12 +759,12 @@ Once the view is created, you will need to specify the properties you want to co
 Properties
 ----------
 
-This panel provides the list of properties which can be analysed, in the previous example, we choose the three shown in the following screenshot:
+This panel provides the list of properties which can be analyzed, in the previous example, we choose the three shown in the following screenshot:
 
 .. image:: _images/i_parallel_properties.png
     :width: 429
 
-You can specify whether you want to use the nodes or the edges, but also, you can sort the properties according to your taste and needs.
+You can specify whether you want to use nodes or edges, but also, you can sort the properties according to your needs.
 
 
 .. _workspace_parallel_draw:
@@ -767,12 +772,12 @@ You can specify whether you want to use the nodes or the edges, but also, you ca
 Draw
 ----
 
-The second tab proposes advanced options to customize the drawing of the parallel coordinates:
+The second tab displays advanced options to customize the drawing of the view:
 
 .. image:: _images/i_parallel_draw.png
     :width: 428
 
-* **General draw parameters**: set here the background color and the height of the axis
+* **General draw parameters**: set the background color and the height of the axis
 
 * **Lines colors alpha values**: select whether you want to use the usual *viewColor* property or new one, common for each node.
 
@@ -780,7 +785,7 @@ The second tab proposes advanced options to customize the drawing of the paralle
 
 * **viewSize Mapping configuration**: specify the minimum and maximum axis node sizes
 
-* **Apply texture on lines**: select your own texture or choose the one offered by default.
+* **Apply texture on lines**: select your own texture or choose the one provided by default.
 
 
 .. _workspace_parallel_toolbar:
@@ -799,7 +804,7 @@ Toolbar
 .. |icon_par_modify_space_axis| image:: ../../plugins/view/ParallelCoordinatesView/i_axis_spacer.png
     :width: 20
 
-The parallel coordinates view proposes a few exclusif tools which be used to manipulate the axis and to highlight the correspondance between the properties:
+The parallel coordinates view provides a few exclusive tools which can be used to manipulate the axis and to highlight the correspondance between the properties:
 
 * |icon_par_axis_box_plot|: axis boxplot
 * |icon_par_axis_sliders|: axis sliders
@@ -807,7 +812,7 @@ The parallel coordinates view proposes a few exclusif tools which be used to man
 * |icon_par_highlight_elements|: highlight elements
 * |icon_par_modify_space_axis|: modify spaces between consecutive axis
 
-Further informations on each of these tool can be found in their personnal help/configuration panel.
+Further information about each of these tools can be found in their own help/configuration panel.
 
 
 .. _workspace_parallel_special_menu:
@@ -815,7 +820,7 @@ Further informations on each of these tool can be found in their personnal help/
 Special menus
 -------------
 
-A right-click anywhere but on the axis in the view will display the classical right-click menu seen before but with additional options related to the current view. Two fields, *View Setup* and *Options*, are available:
+A right click anywhere but on the axis in the view will display the standard contextual menu seen before but with additional options related to the current view. Two items, *View Setup* and *Options*, are available:
 
 * *View Setup*: 
 
@@ -823,17 +828,17 @@ A right-click anywhere but on the axis in the view will display the classical ri
     :width: 500
 
   * *Layout Type*: choose between the classic layout, where the axis are disposed in parallel, and the circular layout, where the axis are spread regularly over the radius of a circle.
-  * *Lines Type*: switch between the classical straight lines and the curved Catmull-Rom Spline.
+  * *Lines Type*: switch between the classic straight lines and the curved Catmull-Rom Spline.
   * *Lines Thickness*: proposed to map the lines to the viewSize property or use a standard thin line.
 
-* *Options*: The sole option *Tooltips* allows to display directly some informations like the id of the hovered node.
+* *Options*: the sole option *Tooltips* allows to display directly some information like the id of the hovered node.
 
-When you realize a right-click on one of the axis, Tulip proposes to either *Remove  [the] axis* or to enter a configuration panel:
+When you perform a right click on one of the axis, Tulip proposes to either *Remove  [the] axis* or to enter a configuration panel:
 
 .. image:: _images/i_parallel_main_axis_conf.png
     :width: 300
 
-Here you will be able to specify, among others, the number of graduations, the axis order and the use of a logarithm scale.
+Here you will be able to specify, among others, the number of tick marks, the axis order and the use of a logarithm scale.
 
 
 .. _workspace_pixel:
@@ -841,7 +846,7 @@ Here you will be able to specify, among others, the number of graduations, the a
 Pixel oriented view
 ===================
 
-The pixel oriented view gives you four different solutions to sort your nodes depending of the values on a given property. To illustrate its use and its possibilities, we will exploit the dataset introduced previously. It can still be downloaded :download:`here <./_documents/Cars_data.tlpx>` in its Tulip project form, or :download:`here<./_documents/04cars_data.csv>`, in its CSV form.
+The pixel oriented view gives you four different solutions to sort your nodes depending of the values on a given property. To illustrate its use and its capabilities, we will use the dataset introduced previously, which can be downloaded :download:`here <./_documents/Cars_data.tlpx>` in its Tulip project form, or :download:`here<./_documents/04cars_data.csv>`, in its CSV form.
 
 .. image:: _images/i_pixel_main.png
     :width: 600
@@ -851,12 +856,12 @@ The pixel oriented view gives you four different solutions to sort your nodes de
 Properties
 ----------
 
-The first steps to follow in order to use this view is to choose the properties you want to analyse. To do so, open the *Properties* panel and select the appropriate data:
+The first steps to follow in order to use this view is to choose the properties you want to analyze. To do so, open the *Properties* panel and select the appropriate data:
 
 .. image:: _images/i_pixel_properties.png
     :width: 392
 
-Pixel oriented tools usually exploit a layout algorithm, moving the nodes into a specific configuration, following a space-filling curve, and ordering them according to one of the properties. The second parameter will be used to realize a color mapping, similar to the one shown in our example, aiming at underlining the correlation between the two properties.
+Pixel oriented tools usually exploit a layout algorithm, moving the nodes into a specific configuration, following a space-filling curve, and ordering them according to one of the properties. The second parameter will be used to perform a color mapping, similar to the one shown in our example, aiming at underlining the correlation between the two properties.
 
 .. _workspace_pixel_options:
 
@@ -901,7 +906,7 @@ Python script view
 Script editor
 -------------
 
-If you are willing to implement graph manipulation algorithms, directly heading to program a C/C++ module or plug-in can be rather tricky. Instead, Tulip proposes to use the dynamic programming language `Python <http://www.python.org>`_ to easily and interactively try and implement your solutions.
+If you are willing to implement graph manipulation algorithms, directly heading to program a C/C++ module or plug-in can be rather tricky. Instead, Tulip proposes to use the dynamic programming language `Python <http://www.python.org>`_ to easily and interactively try and implement your solutions. The Python Script editor allows to write scripts that can be applied to the graphs currently loaded in Tulip.
 
 .. image:: _images/i_python_script_main.png
     :width: 600
@@ -912,12 +917,12 @@ If you are willing to implement graph manipulation algorithms, directly heading 
 Documentation
 -------------
 
-*Python* is a whole, complete programming language and must be treated as such. A proper initiation is required if you want to fully exploit its possibilities. No such help will be provided here; however, for those who are already familiar with this language, a Tulip-Python integration documentation exists and can be found under the tab *Documentation*.
+*Python* is a whole, complete programming language and must be considered as such. A proper initiation is required if you want to fully exploit its possibilities. No such help will be provided here; however, for those who are already familiar with this language, a Tulip Python integration documentation exists and can be found under the tab *Documentation*.
 
 .. image:: _images/i_python_doc_main.png
     :width: 600
 
-It references and contains help about every existing function translated from the Tulip core library. Do not hesitate to consult it if you need additional informations.
+It references and contains help about every existing function translated from the Tulip core library. Do not hesitate to consult it if you need additional information.
 
 
 .. _workspace_scatterplot:
@@ -925,9 +930,9 @@ It references and contains help about every existing function translated from th
 Scatter plot 2D view
 ====================
 
-The pixel oriented and the parallel coordinates views both aim to underline the corelation between two properties, the first one by displaying a tendency noticable with a coloration, and the second one by showing the relation between two properties for the same element.
+The pixel oriented and the parallel coordinates views both aim to underline the correlation between two properties, the first one by displaying a tendency noticable with a coloration, and the second one by showing the relation between two properties for the same element.
 
-The scatterplot view can be used in a similar fashion. As a list of properties is selected, a plot for each possible couple will be created.
+The scatterplot view can be used in a similar way. As a list of properties is selected, a plot for each possible couple will be created.
 
 .. image:: _images/i_scatterplot_main.png
     :width: 600
@@ -940,7 +945,7 @@ The data repartition allows to visually estimate and to formally compute a corre
 Properties
 ----------
 
-The property tab works like the previously presented view. You have to select a list of properties to analyse. You can sort them with the upper and downer arrows on the right.
+The *Properties* tab works like in the previously presented view. You have to select a list of properties to analyze. You can sort them with the upwards and downwards arrows on the right.
 
 .. image:: _images/i_scatterplot_properties.png
     :width: 392
@@ -953,14 +958,14 @@ Options
 .. image:: _images/i_scatterplot_options.png
     :width: 392
 
-In this tab, you can select the scene and the scatterplots background color. By default, the second one uses a colorscale to indicate whether the plot correlation coefficient detect a link between the two current properties or not.
+In this tab, you can select the scene and the scatterplots background color. By default, the second one uses a colorscale to indicate whether the plot correlation coefficient detects a link between the two current properties or not.
 You can customize the colorscale with a click on the *-1*, *0* and *1* buttons to specify which color to use for each value.
 
 The size mapping options will adapt the size rendering in the plots depending on the initial node size.
 
-The last checkbox will display the edges above the scatterplot if you are willing to.
+The last check box will display the edges above the scatterplot if you are willing to.
 
-In the end, by realizing different mapping type on different properties, you can estimate the correlation between up to four properties (two depending of the plot axis, one with a color mapping and a final one with a size mapping).
+In the end, by performing different mapping types on different properties, you can estimate the correlation between up to four properties (two depending of the plot axis, one with a color mapping and a last one with a size mapping).
 
 
 .. _workspace_selforganizing:
@@ -968,7 +973,7 @@ In the end, by realizing different mapping type on different properties, you can
 Self Organizing Map view
 =========================
 
-As explain in the scatterplot view, we are blocked by the number of perceptible dimensions and the existing mapping when we are looking for a correlation between several different properties.
+As explain in the scatterplot view, we are blocked by the number of perceptible dimensions and the existing mapping when we are looking for a correlation between several properties.
 
 This is where the SOM view comes to our help. 
 
@@ -985,7 +990,7 @@ Dimensions
 .. image:: _images/i_som_dimensions.png
     :width: 395
 
-In a similar fashion to what we have already realized with the pixel oriented tool or with the scatterplot 2D view, the panel called *Dimensions* can allow you to select the properties to use for building the self organizing map.
+In a similar way to what we have already performed with the pixel oriented tool or with the scatterplot 2D view, the panel called *Dimensions* can allow you to select the properties to use for building the self organizing maps.
 
 .. _workspace_selforganizing_learning:
 
@@ -995,7 +1000,7 @@ Learning
 .. image:: _images/i_som_learning.png
     :width: 395
 
-Beside offering the possibility to work on high-dimensionnal data, the Self-Organizing Map are able to use competitive learning. This panel offers to the user to specify the learning coefficient.
+Beside offering the capability to work on high-dimensionnal data, the self organizing maps are able to use competitive learning. This panel offers to the user to specify the learning coefficient.
 
 .. _workspace_selforganizing_diffusion:
 
@@ -1054,19 +1059,19 @@ We can apply some of these new knowledges to a small example aiming at coloring 
   .. image:: _images/tutorial_color-graph_grey.png
     :width: 400
 
-* By default, new Spreadsheet and Node Link Diagram panels will automatically open upon each graph importation. If you are using a previously created graph, you can open these by clicking on |icon_add| or |icon_addsmall| **Add panel** and selecting the appropriate panel types.
+* By default, new Spreadsheet and Node Link Diagram panels will automatically open upon each graph import. If you are using a previously created graph, you can open these by clicking on |icon_add| or |icon_addsmall| **Add panel** and selecting the appropriate panel types.
 
 * In the algorithm panel, search under the category *Measure*, subcategory *Graph*, the *Betweenness Centrality* button.
 
-* Before launching it, check the settings by clicking on the gear on the left of the icon. The parameters should be as follow:
+* Before launching it, check the settings by clicking on the gear on the left of the icon. The parameters should apperars as follow:
 
   |tutorial_color-betweeness_settings|
 
 Once those are correctly set, you can launch the algorithm.
 
-* In the spreadsheet you can notice how the *viewMetric* column values are now changed. 
+* In the spreadsheet view, you can notice that the *viewMetric* column values have changed. 
 
-* In the algorithms, under the category *Coloring*, find the *Color Mapping*. The parameters should be *viewMetric* in the enumerated property, a *linear* progression, the *nodes* as target and any color scale. The results must be send into *viewColor*. Once everything is set, you can launch the color mapping.
+* In the algorithms, under the category *Coloring*, find the *Color Mapping*. The parameters should be *viewMetric* in the enumerated property, a *linear* progression, the *nodes* as target and any color scale. The computed colors must be sored into the *viewColor* property. Once everything is set, you can launch the color mapping.
 
 * Now, we just have to enable the edge color interpolation by clicking on |icon_wsm_edge_color_interpol_dis| in the Node Link Diagram panel.
 
@@ -1079,9 +1084,9 @@ Once those are correctly set, you can launch the algorithm.
 
 |tutorial_color-graph_color2|    |tutorial_color-graph_color3|
 
-* Let us try now to modify the labels. In the algorithms, under the category *Measure*, subcategory *Misc*, select the *Id* button. The parameters should send the results into the *viewMetric* property.
+* Let us try now to modify the labels. In the algorithms, under the category *Measure*, subcategory *Misc*, select the *Id* button. The computed measure values must be stored into the *viewMetric* property.
 
-* In the Spreadsheet view, realize a right click on the *viewMetric* column and select *To labels of → All nodes*.
+* In the Spreadsheet view, perform a right click on the *viewMetric* column and select *To labels of → All nodes*.
 
 * Back in the Node Link Diagram panel, you should now obtain a graph similar to this one :
 
@@ -1101,7 +1106,7 @@ Do not hesitate to try different combinations of algorithm to further discover t
 Complements about the workspace
 ===============================
 
-We had say a few words about the toolbar located at the bottom of the workspace in :ref:`workspace_panel` but we have not yet explained the use of the buttons 2 and 3 : Search and Python.
+We have said a few words about the toolbar located at the bottom of the workspace in :ref:`workspace_panel` but we have not yet explained the use of the buttons 2 and 3 : *Search* and *Python*.
 
 
 .. _workspace_complements_search:
@@ -1112,11 +1117,11 @@ Search
 .. image:: _images/i_workspace_search.png
     :width: 600
 
-The tool Search can be used in parallel of any panel. It proposes a solution of selection according to specific criterias. 
+The tool Search can be used in parallel of any panel. It provides a way of selecting graph's elements according to specific criteria. 
 
-You start by selecting the graph and the elements targeted and by choosing the selection mode. The result (respecting the criteria or not) is stored in a boolean property, *viewSelection* by default. You then choose the values to compare and hit the button *Search* to launch the tool.
+First start by selecting the graph and the elements targeted and by choosing the selection mode. The result (respecting the criteria or not) is stored in a boolean property, *viewSelection* by default. Then choose the values to compare and hit the button *Search* to launch the tool.
 
-If you have choose *viewSelection* as the result storing property, the selected elements can be seen in the node link diagram view.
+If the *viewSelection* has been selected as the result property, the selected elements are automatically enhanced in the node link diagram view.
 
 
 .. _workspace_complements_python:
@@ -1127,6 +1132,6 @@ Python
 .. image:: _images/i_workspace_python.png
     :width: 600
 
-The python prompt provides an interactive mean to treat the data. Consult the Python documentation for more informations.
+The Python console provides an interactive mean to inspect/manage your data. Consult the Python documentation for more information.
 
 
