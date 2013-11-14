@@ -30,22 +30,22 @@ Navigate through the plugins
 .. |icon_interactor| image:: ../../software/tulip/resources/icons/64/plugin_interactor.png
 .. |icon_perspective| image:: ../../software/tulip/resources/icons/64/plugin_controller.png
 
-Upon clicking on the "Plugins center button", located at the top-left of the panel, you will be able to browse the available plugins.
+Upon clicking on the "Plugins center button", located at the top left of the panel, you will be able to browse the available plugins.
 Plugins are sorted by categories :
 
-* |icon_algorithm| **Algorithms**: Here are regrouped the plugins to perform a specific test or layout on your values. Despite an impressive number of proposed algorithms, new or more efficient versions of the already existing ones may be implemented depending of research publications.
+* |icon_algorithm| **Algorithms**: here are regrouped the plugins to perform a specific test or layout on your values. Despite an impressive number of proposed algorithms, new or more efficient versions of the already existing ones may be implemented depending of research publications.
 
-* |icon_import_export| **Import/Export**: These plugins are used for the importation and exportation technics. They can describe a file formalism or specific rules for randomly generating trees or graphs.
+* |icon_import_export| **Import/Export**: these plugins are used for the importation and exportation technics. They can describe a file formalism or specific rules for randomly generating trees or graphs.
 
-* |icon_glyph| **Glyphs**: The glyphs represent the graphic elements located at end end of an edge. Special eges extremities can give more informations about the transition between the two nodes.
+* |icon_glyph| **Glyphs**: the glyphs are the graphic elements representing a node (*viewShape* property) or located at the ends of an edge (*view...Anchorshape* properties). Special edge extremities can give more information about the transition between the two nodes.
 
-* |icon_view| **Views**: The node link diagram and the spreadsheet are not the only available views in Tulip. For instance, the parallel coordinates, pixel oriented and scatter plot 2D views can be used for analysing the correlations between properties. The view defined how you visualize the informations.
+* |icon_view| **Views**: the node link diagram and the spreadsheet are not the only available views in Tulip. For instance, the parallel coordinates, pixel oriented and scatter plot 2D views can be used for analyzing the correlations between properties. The view defined how you visualize the information.
 
-* |icon_interactor| **Interactors**: Interactors can be used to influence your node link diagram view with a selection, a zoom or the addition or removal of nodes and edges.
+* |icon_interactor| **Interactors**: interactors are used to interact with a view or the elements of a view. For example the node link diagram view provides interactors (among others) to deal with nodes/edges selection, addition, removal, or to navigate in the graph.
 
-* |icon_perspective| **Perspectives**: Tulip can have several uses. Perspectives can be developed for a more oriented utilisation and an advanced customization of the proposed functionnalities.
+* |icon_perspective| **Perspectives**: Tulip may have different uses. Perspectives can be developed for a specific domain such as social network analysis or an advanced customization of the provided functionalities for specific tasks such as web sites links analysis.
 
-If you are searching for a specific plugin, the search field will help you to find it.
+If you are looking for a specific plugin, the search field will help you to find it.
 
 
 .. _install_remove:
