@@ -36,7 +36,7 @@ class GraphHierarchiesEditorData;
 
 class CustomTreeView : public QTreeView {
 
-    Q_OBJECT
+  Q_OBJECT
 
 public :
 
