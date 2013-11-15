@@ -682,7 +682,6 @@ Options
 The second tab offers options to adapt the histogram. It can only be used when viewing a specific histogram :
 
 .. image:: _images/i_histogram_options.png
-    :width: 391
 
 These settings will alter the initial histogram by adapting the discrete intervals used.
 
