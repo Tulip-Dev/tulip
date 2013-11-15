@@ -59,7 +59,7 @@ void drawCylinder() {
  */
 class Cylinder: public Glyph {
 public:
-  GLYPHINFORMATIONS("3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0", NodeShape::Cylinder)
+  GLYPHINFORMATION("3D - Cylinder", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder", "1.0", NodeShape::Cylinder)
   Cylinder(const tlp::PluginContext* context = NULL);
   virtual ~Cylinder();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
@@ -121,7 +121,7 @@ Coord Cylinder::getAnchor(const Coord &vector) const {
 
 class EECylinder: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("3D - Cylinder extremity", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder for edge extremities", "1.0", EdgeExtremityShape::Cylinder)
+  GLYPHINFORMATION("3D - Cylinder extremity", "Bertrand Mathieu", "31/07/2002", "Textured Cylinder for edge extremities", "1.0", EdgeExtremityShape::Cylinder)
 
   EECylinder(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
   }

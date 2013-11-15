@@ -64,7 +64,7 @@ void drawCircle(const Color &fillColor,const Color &borderColor,float borderWidt
  */
 class Circle: public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", NodeShape::Circle)
+  GLYPHINFORMATION("2D - Circle", "David Auber", "09/07/2002", "Textured Circle", "1.1", NodeShape::Circle)
   Circle(const tlp::PluginContext* context = NULL);
   virtual ~Circle();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
@@ -99,7 +99,7 @@ void Circle::draw(node n, float lod) {
 static GlCircle *eecircle = NULL;
 class EECircle: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("2D - Circle extremity", "David Auber", "09/07/2002", "Textured Circle for edge extremities", "1.1", EdgeExtremityShape::Circle)
+  GLYPHINFORMATION("2D - Circle extremity", "David Auber", "09/07/2002", "Textured Circle for edge extremities", "1.1", EdgeExtremityShape::Circle)
   EECircle(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if(!eecircle)
       eecircle=new GlCircle(Coord(0,0,0),0.5,Color(0,0,0,255),Color(0,0,0,255),true,true,0.,30);
