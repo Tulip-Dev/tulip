@@ -123,7 +123,7 @@ void drawTree() {
  */
 class ChristmasTree: public Glyph {
 public:
-  GLYPHINFORMATIONS("3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , NodeShape::ChristmasTree)
+  GLYPHINFORMATION("3D - ChristmasTree", "Morgan Mathiaut", "16/12/2008", "Christmas tree", "1.0" , NodeShape::ChristmasTree)
   ChristmasTree(const tlp::PluginContext* context = NULL);
   virtual void draw(node n, float lod);
 };

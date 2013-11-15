@@ -65,7 +65,7 @@ void drawHexagon(const Color &fillColor,const Color &borderColor,float borderWid
  */
 class Hexagon: public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Hexagon", "David Auber", "09/07/2002", "Textured Hexagon", "1.0", NodeShape::Hexagon)
+  GLYPHINFORMATION("2D - Hexagon", "David Auber", "09/07/2002", "Textured Hexagon", "1.0", NodeShape::Hexagon)
   Hexagon(const tlp::PluginContext *context = NULL);
   virtual ~Hexagon();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
@@ -99,7 +99,7 @@ void Hexagon::draw(node n, float lod) {
 
 class EEHexagon: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("2D - Hexagon extremity", "David Auber", "09/07/2002", "Textured Hexagon for edge extremities", "1.0", EdgeExtremityShape::Hexagon)
+  GLYPHINFORMATION("2D - Hexagon extremity", "David Auber", "09/07/2002", "Textured Hexagon for edge extremities", "1.0", EdgeExtremityShape::Hexagon)
 
   EEHexagon(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if (hexagon == NULL)

@@ -165,7 +165,7 @@ const string roundedBoxOutlineGeometryShaderSrc =
 
 class RoundedBox : public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Rounded Box", "Antoine LAMBERT", "02/11/2010", "Rounded Box", "1.0", NodeShape::RoundedBox)
+  GLYPHINFORMATION("2D - Rounded Box", "Antoine LAMBERT", "02/11/2010", "Rounded Box", "1.0", NodeShape::RoundedBox)
   RoundedBox(const tlp::PluginContext *context = NULL);
   ~RoundedBox() {}
   void draw(node n, float lod);

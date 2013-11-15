@@ -34,7 +34,7 @@ namespace tlp {
  */
 class CubeOutLined : public Glyph {
 public:
-  GLYPHINFORMATIONS("3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", NodeShape::CubeOutlined)
+  GLYPHINFORMATION("3D - Cube OutLined", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", NodeShape::CubeOutlined)
   CubeOutLined(tlp::PluginContext* context);
   virtual ~CubeOutLined();
   virtual void draw(node n,float lod);

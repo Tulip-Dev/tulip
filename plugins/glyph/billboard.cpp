@@ -47,7 +47,7 @@ using namespace tlp;
  */
 class Billboard : public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0", NodeShape::Billboard)
+  GLYPHINFORMATION("2D - Billboard", "Gerald Gainant", "08/03/2004", "Textured billboard", "1.0", NodeShape::Billboard)
   Billboard(const tlp::PluginContext* context = NULL);
   virtual ~Billboard();
   virtual void draw(node n,float lod);

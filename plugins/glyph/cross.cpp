@@ -85,7 +85,7 @@ void drawCross(const Color &fillColor,
  */
 class Cross: public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross", "1.0", NodeShape::Cross)
+  GLYPHINFORMATION("2D - Cross", "Patrick Mary", "23/06/2011", "Textured Cross", "1.0", NodeShape::Cross)
   Cross(const tlp::PluginContext* context = NULL);
   virtual ~Cross();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
@@ -160,7 +160,7 @@ Coord Cross::getAnchor(const Coord &vector) const {
 
 class EECross: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("2D - Cross extremity", "Patrick Mary", "23/06/2011", "Textured Cross for edge extremities", "1.0", EdgeExtremityShape::Cross)
+  GLYPHINFORMATION("2D - Cross extremity", "Patrick Mary", "23/06/2011", "Textured Cross for edge extremities", "1.0", EdgeExtremityShape::Cross)
 
   EECross(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     initCross();

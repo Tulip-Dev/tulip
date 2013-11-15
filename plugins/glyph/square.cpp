@@ -69,7 +69,7 @@ void drawGlyph(const Color& glyphColor, const string& texture,
  */
 class Square: public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", NodeShape::Square)
+  GLYPHINFORMATION("2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", NodeShape::Square)
   Square(const tlp::PluginContext *context = NULL);
   virtual ~Square();
   virtual void draw(node n, float lod);
@@ -106,7 +106,7 @@ Coord Square::getAnchor(const Coord &vector) const {
 
 class EESquare: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("2D - Square extremity", "David Auber", "09/07/2002", "Textured square for edge extremities", "1.0", EdgeExtremityShape::Square)
+  GLYPHINFORMATION("2D - Square extremity", "David Auber", "09/07/2002", "Textured square for edge extremities", "1.0", EdgeExtremityShape::Square)
   EESquare(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if(!rect)
       rect = new GlRect(Coord(0,0,0), 1., 1.,Color(0,0,0,255),Color(0,0,0,255));

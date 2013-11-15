@@ -68,7 +68,7 @@ void drawDiamond(const Color &fillColor,
  */
 class Diamond: public Glyph {
 public:
-  GLYPHINFORMATIONS("2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Diamond", "1.0", NodeShape::Diamond)
+  GLYPHINFORMATION("2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Diamond", "1.0", NodeShape::Diamond)
   Diamond(const tlp::PluginContext *context = NULL);
   virtual ~Diamond();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
@@ -132,7 +132,7 @@ Coord Diamond::getAnchor(const Coord &vector) const {
 
 class EEDiamond: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("2D - Diamond extremity", "Patrick Mary", "23/06/2011", "Textured Diamond for edge extremities", "1.0", EdgeExtremityShape::Diamond)
+  GLYPHINFORMATION("2D - Diamond extremity", "Patrick Mary", "23/06/2011", "Textured Diamond for edge extremities", "1.0", EdgeExtremityShape::Diamond)
 
   EEDiamond(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if(!diamond)

@@ -57,7 +57,7 @@ void drawCone() {
  */
 class Cone: public Glyph {
 public:
-  GLYPHINFORMATIONS("3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0", NodeShape::Cone)
+  GLYPHINFORMATION("3D - Cone", "Bertrand Mathieu", "09/07/2002", "Textured cone", "1.0", NodeShape::Cone)
   Cone(const tlp::PluginContext* context = NULL);
   virtual ~Cone();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
@@ -132,7 +132,7 @@ Coord Cone::getAnchor(const Coord &vector) const {
 
 class EECone: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("3D - Cone extremity", "Bertrand Mathieu", "09/07/2002", "Textured cone for edge extremities", "1.0", EdgeExtremityShape::Cone)
+  GLYPHINFORMATION("3D - Cone extremity", "Bertrand Mathieu", "09/07/2002", "Textured cone for edge extremities", "1.0", EdgeExtremityShape::Cone)
 
   EECone(const tlp::PluginContext *context): EdgeExtremityGlyph(context) {
   }

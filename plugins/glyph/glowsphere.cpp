@@ -41,7 +41,7 @@ using namespace tlp;
  */
 class GlowSphere: public Glyph {
 public:
-  GLYPHINFORMATIONS("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0", NodeShape::GlowSphere)
+  GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0", NodeShape::GlowSphere)
   GlowSphere(const tlp::PluginContext *context = NULL) :
     Glyph(context) {
   }
@@ -140,7 +140,7 @@ void GlowSphere::draw(node n, float /* lod */) {
 
 class EEGlowSphere: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("3D - Glow Sphere extremity", "Patrick Mary", "24/01/2012", "Glow Sphere for edge extremities", "1.0", EdgeExtremityShape::GlowSphere)
+  GLYPHINFORMATION("3D - Glow Sphere extremity", "Patrick Mary", "24/01/2012", "Glow Sphere for edge extremities", "1.0", EdgeExtremityShape::GlowSphere)
   EEGlowSphere(const tlp::PluginContext *context = NULL) :
     EdgeExtremityGlyph(context) {
   }

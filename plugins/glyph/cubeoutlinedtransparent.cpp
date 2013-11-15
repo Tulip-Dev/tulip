@@ -63,7 +63,7 @@ void drawBox(const Color &borderColor,float borderWidth,const std::string &textu
  */
 class CubeOutLinedTransparent: public Glyph {
 public:
-  GLYPHINFORMATIONS("3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", NodeShape::CubeOutlinedTransparent)
+  GLYPHINFORMATION("3D - Cube OutLined Transparent", "David Auber", "09/07/2002", "Textured cubeOutLined", "1.0", NodeShape::CubeOutlinedTransparent)
   CubeOutLinedTransparent(const tlp::PluginContext *context = NULL);
   virtual ~CubeOutLinedTransparent();
   virtual void draw(node n, float lod);
@@ -106,7 +106,7 @@ Coord CubeOutLinedTransparent::getAnchor(const Coord & vector) const {
 
 class EECubeOutlinedTransparent: public EdgeExtremityGlyph {
 public:
-  GLYPHINFORMATIONS("3D - Cube OutLined Transparent extremity", "David Auber", "09/07/2002", "Textured cubeOutLined for edge extremities", "1.0", EdgeExtremityShape::CubeOutlinedTransparent)
+  GLYPHINFORMATION("3D - Cube OutLined Transparent extremity", "David Auber", "09/07/2002", "Textured cubeOutLined for edge extremities", "1.0", EdgeExtremityShape::CubeOutlinedTransparent)
 
   EECubeOutlinedTransparent(const tlp::PluginContext* context): EdgeExtremityGlyph(context) {
     if (!box)
