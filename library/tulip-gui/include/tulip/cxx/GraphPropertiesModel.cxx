@@ -58,7 +58,7 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
 }
 
 template<typename PROPTYPE>
-GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null), _checkable(checkable), _removingRows(false) {
+GraphPropertiesModel<PROPTYPE>::GraphPropertiesModel(tlp::Graph* graph, bool checkable, QObject *parent): tlp::TulipModel(parent), _graph(graph), _placeholder(QString::null), _checkable(checkable), _removingRows(false), forcingRedraw(false) {
   if (_graph != NULL) {
     _graph->addListener(this);
     rebuildCache();
