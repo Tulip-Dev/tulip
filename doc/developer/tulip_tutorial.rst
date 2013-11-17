@@ -56,11 +56,11 @@ Let's start with the files we need to include ::
   #include <tulip/TlpTools.h>
   #include <tulip/Graph.h
 
-* *iostream :* This "file" contains the C++ standard declarations for in and out streams. We need it in this tutorial to print the final graph on the standard output.
+* *iostream :* This "file" contains the C++ standard declarations for input and output streams. We need it in this tutorial to print the final graph on the standard output.
         	
 * *tulip/TlpTools.h :* This file gives access to the standard tools for Tulip.
         	
-* *tulip/Graph.h :* This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the Tulip Graph library `documentation <../../doxygen/tulip-lib/Graph_8h.html>`_.
+* *tulip/Graph.h :* This file is the core of the tulip graph API. It provides declarations for graphs (edges, nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the Tulip Graph library `documentation <../../doxygen/tulip-lib/Graph_8h.html>`_.
         	
 The namespaces usage declarations, so that we can omit namespace prefix. ::
 
@@ -70,14 +70,14 @@ The namespaces usage declarations, so that we can omit namespace prefix. ::
 
 .. _code-examples-graphs-import:
 
-2. Importing the plugins
-------------------------
+2. Initialization of the Tulip library
+-------------------------------------------
 
-Before starting using the Tulip functions, we must import the plugins with *initTulipLib(NULL)*. ::
+Before starting using the Tulip functions, we must first initialize the Tulip library with *initTulipLib()*. ::
 
   int main() {
-    //initialize the Tulip libs
-    initTulipLib(NULL);
+    //initialize the Tulip lib
+    initTulipLib();
 
 
 .. _code-examples-graphs-create:
@@ -98,7 +98,7 @@ We then proceed by creating an empty graph with the function *Graph * tlp::newGr
 
 In the following, we are adding three nodes with the member function *node Graph::addNode ()* that will create an instance of a 'node', add it to the graph, and return it.
 
-Using this function, the node is also added in all the graph ancestors to maintain the sub-graph relation between graphs. ::
+Using this function, the node is also added in all the graph ancestors (if any) to maintain the subgraph relation between graphs. ::
 
   //add three nodes
   node n1 = graph->addNode();
@@ -110,11 +110,11 @@ Using this function, the node is also added in all the graph ancestors to mainta
 5. Add edges
 ------------
 
-Now that nodes are created, we can create the edges. To do so, we can use the function *edge Graph::addEdge  ( const node, const node )* that will, add a new edge in the graph and return it.
+Now that nodes are created, we can create the edges. To do so, we can use the function *edge Graph::addEdge  ( const node, const node )* that will add a new edge in the graph and return it.
 
-The edge is also added in all the super-graph of the graph to maintain the sub-graph relation between graphs.
+The edge is also added in all the ancestors of the graph (if any) to maintain the subgraph relation between graphs.
 
-The first parameter is the "source node", and, of course, the second is the "target node" (in tulip, every edge are oriented but you can choose not to consider the orientation). We will see later (TUTORIAL 005) that the edges enumeration order is the one in which they are added. ::
+The first parameter is the "source node", and, of course, the second is the "target node" (in tulip, every edge are directed but you can choose to not consider the direction). We will see later (TUTORIAL 005) that the edges enumeration order is the one in which they are added. ::
   	
   //add three edges
   edge e1 = graph->addEdge(n2,n3);
@@ -133,11 +133,11 @@ Following is a picture of the graph that we just have created. It is being displ
   	
 The Graph class provides member functions to delete edges and nodes.
 
-* *void tlp::Graph::delEdge (const edge)* :
-  delete an edge of the graph. This edge is also removed in all the sub-graphs hierarchy to maintain the sub-graph relation between graphs. The ordering of edges is preserved. 
+* *void tlp::Graph::delEdge (const edge, bool deleteInAncestorGraphs = false)* :
+  delete an edge of the graph. This edge is also removed in all the subgraphs hierarchy to maintain the subgraph relation between graphs; if the second argument is set to *true*, the edge is also removed from the graph ancestors. The ordering of edges is preserved. 
   		
-* *void tlp::Graph::delNode ( const node )* :
-  delete a node of the graph. This node is also removed in all the sub-graph of the graph to maintain the sub-graph relation between graphs. When the node is deleted, all its edges are deleted (in and out edges).
+* *void tlp::Graph::delNode (const node, bool deleteInAncestorGraphs = false)* :
+  delete a node of the graph. This node is also removed in all the subgraph of the graph to maintain the subgraph relation between graphs; if the second argument is set to *true*, the node is also removed from the graph ancestors. When the node is deleted, all its edges are deleted (in and out edges).
   		
 The class Graph implements member functions like *void delAllNode (const node)*, and, *void delAllEdge (const edge)*. ::
 
@@ -179,7 +179,7 @@ Instead of having our graph printed on the standard output, we can save it in a 
 9. Graph deletion
 ------------------
 
-Before exiting the main function, do not forget memory leaks, and delete the graph to free memory usages. ::
+Before exiting the main function, do not forget memory leaks (even it's not important at the end of the program), and delete the graph to free memory usages. ::
 
   //delete the graph
   delete graph;

@@ -4,7 +4,7 @@
 Installation instructions : Ready to compile
 ********************************************
 
-The classic installation details are specified in the *INSTALL.[linux,mac,win]* files available in the tulip sources root directory. However, if you are reading this tutorial/documentation, you may be interested in using Tulip in a more advanced fashion whether by creating new perspectives, plug-ins or algorithms. The following instructions will help you prepare your system by installing the Tulip program ready to be recompiled and modified to your convinience.
+The classic installation details are specified in the *INSTALL.[linux,mac,win]* files available in the tulip source code root directory. However, if you are reading this tutorial/documentation, you may be interested in using Tulip in a more advanced fashion whether by creating new perspectives, plug-ins or algorithms. The following instructions will help you to prepare your system by installing the Tulip program ready to be compiled and modified to your convenience.
 
 
 .. _installation_how_to:
@@ -18,20 +18,20 @@ The installation process is not complicated, it can however take some time depen
 Foreword: Debug and Release mods
 --------------------------------
 
-Tulip can be compiled and thus executed in two different mods. The first one, called *Release*, is the classic Tulip execution mod. The application should be executed this way when you are only using the originaly integrated tool of Tulip or the add-ons included with the plug-in library. Most of the user will only be interested of this mod.
+Tulip can be compiled and thus executed in two different modes. The first one, called *Release*, is the classic Tulip execution mode. The application should be executed this way when you are only using the originaly integrated tool of Tulip or the add-ons included with the plug-in library. Most of the user will only be interested of this mod.
 
-Nevertheless, because Tulip is a research tool, the users testing their algorithms or plug-ins may not be sure of their creation stability. These persons should be more concerned with the second mod available, the *Debug* mod. With it, the whole program will be slightly slower as the execution is monitored with security assertions. If an unexpected behaviour happens and one of the assertion catch it, Tulip will pop an error message expliciting the problem encounter. 
+Nevertheless, because Tulip is a research tool, the users testing their algorithms or plug-ins may not be sure of their code source reliability. These persons should be more concerned with the second mode available, the *Debug* mode. With it, the whole program will be slightly slower as the execution is monitored with sanity assertions. If an unexpected behaviour happens and one of the assertion detect it, Tulip will pop an error message expliciting the problem encounter. 
 
-These mods must be separated as their behaviour are entirely different. A program instance compiled in *Debug* mod can not be used to launch a *Release* version of Tulip and conversely. For instance, a few functionnalities will need assertions only checked in debug mod to run correctly, some of these cases are presented in the :ref:`Tulip library tutorial section <tulip_library_tutorial>`.
+These modes must be separated as their behaviour are entirely different. A program instance compiled in *Debug* mod can not be used to launch a *Release* version of Tulip and vice versa. For instance, a few functionalities will need assertions only checked in debug mode to run correctly, some of these cases are presented in the :ref:`Tulip library tutorial section <tulip_library_tutorial>`.
 
 .. _installation_how_to_setup:
 
 Setting up the system
 ---------------------
 
-If you want to be able to recompile Tulip, you have to organize the different directories which will contain the sources, the libraries and the executables. The disposition we propose here and use in the following steps is just a suggestion. It allows a clear distinction between each directory and there use and gives you the possibility to have several working versions of Tulip at the same time on your station.
+If you want to be able to recompile Tulip, you have to organize the different directories which will contain the source code, the libraries and the executables. The disposition we propose here and use in the following steps is just a suggestion. It allows a clear distinction between each directory and their use and gives you the ability to have several working versions of Tulip at the same time on your computer.
 
-First, select the directory in which you want to set the application (you must have the appropriate permissions from the OS) and create there the directory *Tulip-4.X* (where *X* is adapted to the current version number).
+First, select the directory in which you want to set the application (you must have the appropriate permissions from the OS) and create here the directory *Tulip-4.X* (where *X* is adapted to the current version number).
 Into that folder, create five subdirectories: 
 
 * *tulip-src* : the source files will be kept here
@@ -76,28 +76,24 @@ Plus, one of the following version of the python library:
 * python2.6-dev
 * python2.7-dev
 
-If you have the advanced packaging tool *apt-get* and *sudo* on your system, you can run the commands::
-
-  sudo apt-get install libqt4-dev libfreetype6-dev zlib1g-dev libglew-dev libjpeg-dev libpng12-dev
-  sudo apt-get install build-essential cmake doxygen libxml2-dev qt4-dev-tools python2.7-dev
-
-to install or update directly all the packages you will need to use Tulip. This action will modify your current system so you may need administrator or super-user access and rights on the OS.
+You will have to use system dedicated package installer (apt-get, yum ...)
+to install or update directly all the previously listed packages. This action will modify your current system so you may need administrator or super-user access and rights on the OS.
 
 
 .. _installation_linux_download:
 
-Download the sources
---------------------
+Download the source code
+------------------------
 
-You can obtain the Tulip sources in several ways. The easiest is to pick them directly from the Sourceforge website (by following this `link <http://sourceforge.net/projects/auber/files/tulip/>`_). This method, nevertheless, is not always the best choice. If you want to work actively with Tulip, you will need to keep your project up to date.
+You can obtain the Tulip source code in several ways. The easiest is to pick them directly from the Sourceforge website (by following this `link <http://sourceforge.net/projects/auber/files/tulip/>`_). This method, nevertheless, is not always the best choice. If you want to work actively with Tulip, you will need to keep your project up to date.
 
-The other, slightly more complicated, solution is to use the subversion development repository. This technic allows you to keep Tulip up to date really easily. The Unix/Linux based systems should be able to exploit the `svn tool <http://subversion.apache.org/>`_ with the following commands::
+The other, slightly more complicated, solution is to use the subversion development repository. This allows you to easily keep your Tulip version up to date. The Unix/Linux based systems should be able to run the `svn tool <http://subversion.apache.org/>`_ with the following commands::
 
   cd [...]/Tulip-4.X/
 
   svn checkout svn://svn.code.sf.net/p/auber/code/tulip tulip-src
 
-You can choose the access path and the target dir *tulip-src* according to your preference. Do not forget where the sources are located, you will need the path for completing the compilation and for specifying it to your API.
+You can choose the access path and the target dir *tulip-src* according to your preference. Do not forget where the source code is located, you will need the path for completing the compilation and for specifying it to your API.
 
 Once you have import the source code using *svn*, you can easily update it with the commands::
 
@@ -111,7 +107,7 @@ Once you have import the source code using *svn*, you can easily update it with 
 Generate the MakeFiles
 ----------------------
 
-Tulip uses *cmake* to generate the compilation instructions. In the following instructions we will use *cmake-gui*, offering a compliant graphic interface, to create the appropriate package files.
+Tulip uses *cmake* to generate the build instructions. In the following instructions we will use *cmake-gui*, offering a compliant graphic interface, to create the appropriate package files.
 
 You must start by indicating the source code path and the file in which the binaries will be build:
 
@@ -150,7 +146,7 @@ With the makefiles generated, we just have to execute them. Using your terminal,
 
   make -jY
 
-where Y is the number of core on your processor.
+where Y is not greater than the number of cores on your processor.
 
 This operation can take several minutes, so here comes the time for a well deserved break!
 
@@ -162,13 +158,13 @@ Once the make instruction is finished, you can install Tulip by using the comman
 
   make install
 
-This operation can take a little time too. At the end, your installation path specified to *cmake-gui* will hold the binaries and the libraries of the application. You can now launch Tulip in its *Release* version by using the commands::
+This operation can take a little time too. At the end, your installation path specified to *cmake-gui* will contained the binaries and the libraries of the application. You can now launch Tulip in its *Release* version by using the commands::
 
   cd [...]/Tulip-4.3
 
   install-release/bin/tulip
 
-You now just have to repeat the previously detailled steps while specifying to the appropriate fields the value *debug* instead of *release* to achieve the second build configuration.
+You now just have to repeat the previously detailed steps while specifying to the appropriate fields the value *debug* instead of *release* to achieve the second build configuration.
 
 
 .. _installation_win:
@@ -192,7 +188,7 @@ For a 64-bits build :
 
 * the precompiled **Qt 4.8.5** binaries from the mingw-builds project (`MinGW-x64-Qt-4.8.5 <http://sourceforge.net/projects/mingwbuilds/files/external-binary-packages/Qt-Builds/x64-Qt-4.8.5%2Bqtcreator-2.8.0-RC-%28gcc-4.8.1-seh-rev1%29.7z/download>`_)
 
-* **Python** for 64 bits windows : either version `2.7-x64 <http://python.org/ftp/python/2.7.5/python-2.7.5.amd64.msi>`_ or `3.3-x64 <http://python.org/ftp/python/3.3.2/python-3.3.2.amd64.msi>`_.
+* **Python** for 64 bits windows: either version `2.7-x64 <http://python.org/ftp/python/2.7.5/python-2.7.5.amd64.msi>`_ or `3.3-x64 <http://python.org/ftp/python/3.3.2/python-3.3.2.amd64.msi>`_.
 
 
 For a 32-bits build :
@@ -221,7 +217,7 @@ For both builds :
 Setting up the build environment
 --------------------------------
 
-The installation described on this page can be use on both 32 and 64-bits systems. In order to simplify the documentation, the steps will be explained using an x64 architecture by default. If you are completing this installation on a 32-bits operating system, please change the *64* value in the proposed paths with *32*.
+The installation described on this page can be run on both 32 and 64-bits systems. In order to simplify the documentation, the steps will be explained using an x64 architecture by default. If you are completing this installation on a 32-bits operating system, please change the *64* value in the proposed paths with *32*.
 
 First install **Python**, **CMake** and **NSIS** (use default options). For the last one, you will need to add its root directory to the *PATH* environment variable. This can be achieved in the *System Properties*, tab *Advanced System Parameters*. You will need to click on the *Environment Variables* button and create or modify the user variable named *PATH* by adding the value ::
 
@@ -336,7 +332,7 @@ With *Tortoise SVN*, after a right click on *tulip-src*, select the action *SVN 
 CMake and the build options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-As explained previously, Tulip can be build using two different mods: *Release* and *Debug*. In the current demonstration, we will use the *Release* profile. If you want to use the other one, just adapt the appropriate fields by remplacing the term *Release* with *Debug*.
+As explained previously, Tulip can be build using two different modes: *Release* and *Debug*. In the current demonstration, we will use the *Release* profile. If you want to use the other one, just adapt the appropriate fields by remplacing the term *Release* with *Debug*.
 
 With the *Msys* shell, enter the *build-release* folder ::
 
@@ -420,7 +416,7 @@ Once Tulip is fully compiled, enter the following command to install it ::
 
   mingw32-make.exe install
 
-Once it is finished, you run the executable ::
+Once it is finished, you can run the executable ::
 
   tulip.exe
 

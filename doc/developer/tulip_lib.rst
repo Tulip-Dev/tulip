@@ -17,7 +17,7 @@ Efficient visualization of graphs and their usage for data analysis implies
 * the computation of intrinsic parameters (parameters derived from a graph's structure, e.g. in a filesystem graph (directory tree): number of files in a directory, can be computed by counting outgoing edges)
 * the computation of extrinsic parameters (parameters derived from external information, e.g. in a filesystem graph: file size)
 
-This chapter describes the Tulip data structure that takes into account all the requirement
+This chapter describes the Tulip data structure that takes into account all the requirements
 of a graph visualization system. For each part we describe the general principle and
 then we give examples explaining how to do it with the Tulip library.
 
@@ -27,18 +27,18 @@ then we give examples explaining how to do it with the Tulip library.
 Graphs
 ======
 
-The core of the Tulip library provides an interface for the manipulation of graphs. It enables one to access and modify the structure of a graph. The aim of this library is to be as general as possible and thus it manipulates a general class of graphs called directed pseudo-graphs. In a pseudo graph, there can be more than one edge between two nodes, and loops are permitted. A loop is an edge that links a node to itself. Furthermore, edges are directed, thus an edge u → v is distinct from an edge v→u.
+The core of the Tulip library provides an programming interface for the manipulation of graphs. It enables to access and modify the structure of a graph. The aim of this library is to be as general as possible and thus it manipulates a general class of graphs with directed edges (an edge u → v is distinct from an edge v→u), allowing loops (loop = an edge with the same node as source and target) and multiple edges (it can exist more than one edge between two nodes). In mathematics, and more specifically in graph theory, this class of graphs is often called directed multigraph or pseudograph.
 
-Because we use pseudo-graphs, there can be more than one edge u→v, so it is not possible to distinguish two edges using only source and target (u,v). To make this possible, all the elements in Tulip are entities (C++ objects). Thus, even if two edges have the same source and the same target, they are distinct.    
+Because there can be more than one edge u→v, it is not possible to distinguish two edges using only source and target (u,v). To make this possible, all the elements in Tulip are entities (C++ objects). Thus, even if two edges have the same source and the same target, they are distinct.    
 
-The elements of a graph are encapsulated in the graph. It is therefore not possible to access the graph's structure through elements, all operations must be done by querying the graph. For example, to know the source of an edge e of graph G, one must ask G, not e, what e's source is. This makes the use of the library less intuitive, but it minimizes memory usage for entities and allows to share them between subgraphs. Building a container of elements is cheap, because to handle elements, Tulip uses objects which use the same amount of storage as integers.
+The elements of a graph are encapsulated in the graph. It is therefore not possible to access the graph's structure through elements, all operations must be done by querying the graph. For example, to know the source of an edge e of graph G, one must ask G, not e, what e's source is. This makes the use of the library less intuitive, but it minimizes memory usage for entities and allows to share them between subgraphs. Building a container of elements is cheap, because to handle elements, Tulip uses small objects which use the same amount of storage as integers.
 
 The library supports access and modification of the graph structure. The access to the structure are made by using iterators, one very important point is that the iterator are not persistent. Thus, if one modify the graph structure all the iterators on the graph structure can be invalid. This property enables to prevent from cloning the data structure and thus enables better access to it. For ease of use, Tulip includes mechanism that enables to transform an iterator into stable iterator, one must keep in mind that it corresponds to clone the data structure and thus, it should be use only if it is necessary.
 
-If one uses Tulip only for the manipulation of one graph (no graph hierarchy), the list of available operations on the graph is given afterward. In the next section we will enhance the set of operations and the actions that they perform in order to manage a hierarchy of subgraphs
+If one uses Tulip only for the manipulation of one graph (no graph hierarchy), the list of available operations on the graph is given afterward. In the next section we will present the set of operations that can be preformed in order to manage a hierarchy of subgraphs.
 
 
-List of available modification operations
+List of main modification operations
 -----------------------------------------
 
 * *node addNode()*: creates a new node in the graph and returns its identifier.
@@ -52,8 +52,8 @@ List of available modification operations
 * *void reverse(edge)* : reverses an edge (swaps source and target).
 
 
-List of available access operations
------------------------------------
+List of main access operations
+------------------------------
 
 * *unsigned int deg(node)* : returns the degree of a node (number of edges).
 
@@ -94,8 +94,8 @@ The subgraph relation in the hierarchy is preserved when one modifies a graph. T
 In order to manipulate a hierarchy of graphs, more functions have been added to those introduced above. They provide navigation and modification for the hierarchy. The access to the hierarchy is provided by iterators, which are not persistent and thus, if the hierarchy is modified, the iterators are invalid.
 
 
-List of available modification operations
------------------------------------------
+List of main modification operations
+------------------------------------
 
 * *Graph *addSubGraph()* : returns an empty subgraph of this graph.
 * *Graph *delSubGraph(Graph *)* : deletes a subgraph. Its descendants
@@ -105,8 +105,8 @@ List of available modification operations
 * *void addNode(node)* : adds a node element from another graph in the hierarchy.
 
 
-List of available access operations
------------------------------------
+List of main access operations
+------------------------------
 
 * *Iterator * getSubGraphs()* : returns an iterator on the subgraphs.
 * *Graph * getSuperGraph()* : returns the parent of the graph. If the graph has no parent, it returns the graph itself.
@@ -122,8 +122,8 @@ An attributes is a kind of property that can be associated to a graph. An attrib
 Attributes can be added and accessed with those three following member functions :
 
 * *const DataSet getAttributes()* : returns the attributes of a graph.
-* *template<typename ATTRIBUTETYPE>bool getAttribute(const std::string &name, ATTRIBUTETYPE &value)* : get an attribute.
-* *template<typename ATTRIBUTETYPE>void setAttribute (const std::string &name, const ATTRIBUTETYPE &value)* : set a new attribute value.
+* *template<typename ATTRIBUTETYPE>bool getAttribute(const std::string &name, ATTRIBUTETYPE &value)* : get an attribute associated value.
+* *template<typename ATTRIBUTETYPE>void setAttribute (const std::string &name, const ATTRIBUTETYPE &value)* : set an attribute associated value.
 
 
 .. _tulip_library_properties:
@@ -140,8 +140,8 @@ To access the value of an elements one must query the graph for a property. This
 A property can be seen as an associative table where you can set and get the value for every element. All property operations have a TYPE argument, so there is no need to cast the result of a property query. The standard operations of a property are:
 
 
-List of available modification operations
------------------------------------------
+List of main modification operations
+------------------------------------
 
 * *void setNodeValue(node,TYPE)* : sets the value of a node.
 * *void setAllNodeValue(TYPE)* : sets the value of all nodes.
@@ -149,8 +149,8 @@ List of available modification operations
 * *void setAllEdgeValue(TYPE)* : sets the value of all edges.
 
 
-List of available access operations
------------------------------------
+List of main access operations
+------------------------------
 
 * *TYPE getNodeValue(node)* : returns the value of a node.
 * *TYPE getEdgeValue(edge)* : returns the value of an edge.
@@ -159,17 +159,17 @@ For each property type there is a specific implementation (subclass) that allows
 
 A graph includes a set of functions that enables to obtain/create/delete a property. Because
 the C++ signature of functions does not include the return type, the syntax for this call is not 
-very simple. For instance, if one wants to obtain a property containing double (called DoubleProperty in Tulip) one must use the following syntax : *DoubleProperty *metric=graph->getProperty <DoubleProperty>("name of the property");*
+very simple. For instance, if one wants to obtain a property containing double (called DoubleProperty in Tulip) one must use the following syntax : *DoubleProperty *metric=graph->getProperty<DoubleProperty>("name of the property");*
 
-In the graph each property is identified by its name which is a std::string, when one asks for a property the type of this property is checked using the run time type interrogation mechanism of C++. Warning: This test only happens when one compiles its sources in DEBUG mode (default mode). In order to facilitate the navigation/edition of the set of properties, a set of functions is accessible through the graph interface.
+In the graph each property is identified by its name which is a std::string, when one asks for a property the type of this property is checked using the run time type interrogation mechanism of C++. Warning: This test only happens when one compiles its sources in DEBUG mode (default mode). In order to ease the navigation/edition of the set of properties, a set of functions is accessible through the graph interface.
 
 
-List of available operations
-----------------------------
+List of main operations
+-----------------------
 
-* *Iterator * getLocalProperties()* : returns an iterator on all properties of this graph.
+* *Iterator<std::string> * getLocalProperties()* : returns an iterator on all local properties of this graph.
 * *void delLocalProperty(const std::string&)* : deletes a property.
-* *bool existLocalProperty(const std::string&)* : returns true if the property exists.
+* *bool existLocalProperty(const std::string&)* : returns true if a local property exists.
 * *PropertyType * getLocalProperty (const std::string&)* : returns the property, or creates it if it does not exist.
 
 For the property mechanism described above to work with a hierarchy of graphs, a mechanism have been added to share properties between graphs, which works like this: if a property exists in an ancestor of a graph G, it also exists in the graph G. Thus, properties of graphs are inherited like members of objects in object-oriented languages. In order to facilitate the navigation/edition of properties, a set of function is accessible through the graph interface.
@@ -178,8 +178,9 @@ For the property mechanism described above to work with a hierarchy of graphs, a
 List of available operations
 ----------------------------
 
-* *Iterators * getInheritedProperties()* : returns an iterator on all properties (both inherited and local).
+* *Iterator<std::string> * getInheritedProperties()* : returns an iterator on all inherited properties.
+* *Iterator<std::string> * getProperties()* : returns an iterator on all properties (both inherited and local).
 * *bool existProperty(const std::string&)* : returns true if the property exists (inherited or local).
-* *PropertyType * getProperty(const std::string&)* : returns the property (inherited or local) or creates it if inexistent.
+* *PropertyType * getProperty(const std::string&)* : returns the property (inherited or local) or creates it if does not exist.
 
 

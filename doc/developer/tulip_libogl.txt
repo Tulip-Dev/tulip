@@ -54,7 +54,7 @@ The objective of tulip-ogl's class is to be as modular as possible, giving the u
 Scene and layers
 ~~~~~~~~~~~~~~~~
 
-The Tulip rendering engine follows the lines set by the OpenGL library. The core of a view, the displayed interface, is the scene. It contains OpenGL informations and elements, such as the camera, and hierarchies of GlEntity to display graph and augmented displays: the layers.
+The Tulip rendering engine follows the lines set by the OpenGL library. The core of a view, the displayed interface, is the scene. It contains OpenGL information and elements, such as the camera, and hierarchies of GlEntity to display graph and augmented displays: the layers.
 
 A layer will also contained a hierarchy of GlEntities or GlSimpleEntities, the basic constituent of the scene. If we use the example of the *Node Link Diagram* component, the standard view in Tulip, we can identify three layers : the background (2D layer), the main (graph layer) and the foreground (2D layer). In the main layer we will set the nodes and edges whereas we will use the foreground 2D layer to display the interactors interface.
 
@@ -243,7 +243,7 @@ First comes the creation of a new layer. Because we need it to stay static, its 
   layer2D->set2DMode();
   mainWidget->getScene()->addExistingLayer(layer2D);
 
-To realise the augmented display, some informations concerning the viewport have to be noted. We get the object::
+To realise the augmented display, some information concerning the viewport have to be noted. We get the object::
 
 	Vector<int, 4> viewport;
 	viewport = mainWidget->getScene()->getViewport();

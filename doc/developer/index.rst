@@ -9,7 +9,7 @@ Welcome to the Tulip Developer oriented documentation!
 
 .. _introduction:
 
-This manual is an help necessary for the developers of an application using **Tulip** libraries and for the developers of the **Tulip** Team.
+This manual is a necessary help for the developers of an application using **Tulip** libraries and for the developers of the **Tulip** Team.
 
 It explains how to compile the libraries and the software, it does a presentation of the main methods available in the libraries. Chapters relate the programming and documentation guidelines.
 
