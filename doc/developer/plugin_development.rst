@@ -15,7 +15,7 @@ To develop a plug-in, you need to create a new class that will inherits from a s
 
 * *Generic algorithms:* This kind of plug-ins can be used to modify the entire graph. In other case  it is preferable to use a specific class of algorithms to implement your plug-in. See the section called :ref:`The Algorithm class <plugins_algorithm>`.
 
-* *Importation algorithms:* Plug-ins to import a specific graph. For example a plug-in that will create a graph from a file directory system. See the section called :ref:`Import plug-ins <plugins_import>`.
+* *Import algorithms:* Plug-ins to import a specific graph. For example a plug-in that will create a graph from a file directory system. See the section called :ref:`Import plug-ins <plugins_import>`.
 
 * *Export algorithms:* Plug-ins to save a graph to a specific type of file. See the section called :ref:`Export plug-ins <plugins_export>`.
 
@@ -25,30 +25,31 @@ To develop a plug-in, you need to create a new class that will inherits from a s
 The PropertyAlgorithm class
 ===========================
 
-The PropertyAlgorithm class, is the class which inherits different types of algorithms such as the *BooleanAlgorithm* class or the *LayoutAlgorithm* class. This class is important as most of the specific algorithm developed will have to inherit from it. For example, if you write a plug-in to update the graph layout, your new class will have to inherit from the *LayoutAlgorithm* class which, itself, inherits from the *PropertyAlgorithm* class. 
+The PropertyAlgorithm class (which inherits of the *Algorithm* class), is the ârent class of different types of algorithms such as the *BooleanAlgorithm* class or the *LayoutAlgorithm* class. This class is important as most of the specific algorithms developed will have to inherit from it. For example, if you write a plug-in to update the graph layout, your class will have to inherit from the *LayoutAlgorithm* class which, itself, inherits from the *PropertyAlgorithm* class.
+
+ Following is a table showing the subclasses of PropertyAlgorithm, with the corresponding, class of result property, the default graph property and the 'Algorithms' group in the GUI :
 
 .. csv-table:: 
-   :header: "Class name", "Data member", "Graph property replaced (by default)", "Algorithms GUI submenu"
+   :header: "Class name", "Result class name", "Graph property replaced (by default)", "Algorithms group"
 
    "BooleanAlgorithm",		"BooleanProperty", 	"viewSelection", 	"Selection"
    "ColorAlgorithm", 		"ColorProperty",	"viewColor", 		"Coloring"
    "DoubleAlgorithm", 		"DoubleProperty",	"viewMetric", 		"Measure"
-   "Algorithm", 		"NA", 			"NA", 			"Algorithm"
-   "IntegerAlgorithm", 		"NA",			"NA",	 		"NA"
+   "IntegerAlgorithm", 		"IntegerProperty",	"NA",	 		"Measure"
    "LayoutAlgorithm", 		"LayoutProperty", 	"viewLayout", 		"Layout"
    "SizeAlgorithm", 		"SizeProperty",		"viewSize", 		"Resizing"
    "StringAlgorithm", 		"StringProperty", 	"viewLabel", 		"Labeling"
 
-Each one of the 8 classes presented above has a public member::
+Each one of classes presented above has a public member::
 
-  static const string propertyTypename;
+  *TypeName*Property result;
 
-which is the data member that which have to be updated by your plug-in. After a successful run Tulip will automatically copy this data member into the corresponding property of the graph. Following is a table showing the data member, graph property and 'Algorithms' GUI submenu corresponding to each subclass of Algorithm :
+which is the data member that have to be computed by your plug-in. After a successful run Tulip will automatically copy this data member into the corresponding property of the graph.
 
 
-Note that at anytime, if the user clicks on the "cancel" button (see :ref:`the Plugin Progress class <plugins_pluginprogress>` for more details ), none of your algorithm's actions will changes the graph since the variable *typeName* Result is not copied in the corresponding property.
+Note that at anytime, if the user clicks on the "cancel" button (see :ref:`the Plugin Progress class <plugins_pluginprogress>` for more details ), none of your algorithm's actions will changes the graph since the *result* data member is not copied in the corresponding property.
 
-A quick overview of the functions and data members of the class PropertyAlgorithm is needed in order to have a generic understanding of its 8 derived classes.
+A quick overview of the functions and data members of the class PropertyAlgorithm is needed in order to have a generic understanding of its derived classes.
 
 
 .. _plugins_property_public:
@@ -59,13 +60,13 @@ Public members
 Following is a list of all public members:
 
 * *PropertyAlgorithm (const tlp::PluginContext& context)*: 
-  Even if the constructor is used to initialize the inner variables, it is also the right place to declare the parameters needed by the algorithm and to specify how we are going to use them (consult the :ref:`Parameter section <plugins_parameters>`).
+  Even if the constructor is used to initialize the inner variables, it is also the right place to declare the parameters needed by the algorithm and to specify how we are going to use them (consult the :ref:`Parameter section <plugins_parameters_add>`).
 
-  If needed, some dependencies can also be specified between two algorithms using the *WithDependency* class and its method::
+  If needed, some dependencies can also be specified between two algorithms using the method::
 
     void addDependency(const char *name, const char *release);
 
-  It estabilishs a link between the plugin *release* from which the current plug-in, named *name*, depends.
+  which allows to declare that the current *PropertyAlgorithm* depends (in terms of programming call) from the *release* version of the *Algorithm*  *release* named *name*. .
 * *~PropertyAlgorithm ()*: 
   Destructor of the class.
 
@@ -75,8 +76,8 @@ Following is a list of all public members:
     * It will be called out if the pre-condition method (bool check (..)) returned true.
     * It is the starting point of your algorithm. The returned value must be true if your algorithm succeeded.
 
-* *bool check (std::string& errMsg)*: 
-  This method can be used to check the graph about its topological properties, metric properties on graph elements or any other requirement for the algorithm to run flawlessly.
+* *bool check (std::string& errMsg) {return true;}*: 
+  This method can be used to check the graph about its topological properties, metric properties on graph elements or any other requirement for the algorithm to run flawlessly. The default implementation inherited from the class *PropertyAlgorithm* returns *true*;
 
 
 .. _plugins_property_protected:
@@ -98,20 +99,14 @@ Following is a list of all protected members. Each of those are transmitted to t
 The methods of the *TypeName* Algorithm class, will be redefined in your plug-in as shown in :ref:`the plugin skeleton <plugins_skeleton>`.
 
 
-.. _plugins_parameters:
-
-The WithParameter class
-========================
-
-Your algorithm may need some parameters, for example a boolean or a property name, that must be filled in by the user just before being launched. In this section, we will look at the methods and techniques to do so.
-
-
 .. _plugins_parameters_add:
 
 Adding parameters to an algorithm
 ---------------------------------
 
-The class PropertyAlgorithm inherits (indirectly) from *WithParameters*, and thus is able to call the following methods::
+Your algorithm may need some parameters, for example a boolean or a property name, that must be filled in by the user just before being launched. In this section, we will look at the methods and techniques to do so.
+
+The class PropertyAlgorithm provides the following methods to declare a parameter::
 
   template<typename T>
   void addInParameter(const std::string &name,
@@ -131,9 +126,9 @@ The class PropertyAlgorithm inherits (indirectly) from *WithParameters*, and thu
                          const std::string &defaultValue = std::string(),
                          bool isMandatory = true);
 
-The new parameters added to the plug-in are, by default, IN parameters. The OUT parameters are defined depending of the *PropertyAlgorithm* used. INOUT parameters gives the developer possibilities to extract additionnal informations.
+The new parameters added to the plug-in are, by default, IN parameters. The OUT parameters are defined depending of the *PropertyAlgorithm* used. INOUT parameters gives the developer the abilities to extract additionnal information.
 
-This method has to be called in the constructor of your class. Following is a description of its fields :
+This methods have to be called in the constructor of your class. Following is a description of its fields :
 
 * *name*: Name of the new parameter.
 * *help*: This parameter will be used to add a documentation to the parameter (See example below).
@@ -280,7 +275,7 @@ Following is a list of some Public members:
 Plugin Progress example
 -----------------------
 
-In following small example, we will iterate over all nodes and notify the user of the progression. ::
+In the following small example, we will iterate over all nodes and notify the user of the progression. ::
  
   unsigned int i=0;
   unsigned int nbNodes = graph->numberOfNodes ();
@@ -322,8 +317,8 @@ Following is an example of a dummy color algorithm::
   class MyColorAlgorithm:public ColorAlgorithm { 
   public:
 
-    // This line is used to pass informations about the current plug-in.
-    PLUGININFORMATIONS("Name of the Current Algorithm",
+    // This line is used to pass information about the current plug-in.
+    PLUGININFORMATION("Name of the Current Algorithm",
                        "Name of the Author",
                        "13/13/13",
                        "A few words describing what kind of action the plug-in realizes",
@@ -359,7 +354,7 @@ Following is an example of a dummy color algorithm::
       return true;
     }
   };
-  // This second line will be used to register your algorithm in tulip using the informations given above.
+  // This second line will be used to register your algorithm in tulip using the information given above.
   PLUGIN(MyColorAlgorithm)
 
 The *wizards* directory in the sources also proposes a more dense skeleton in the *tlpalgorithm* folder without all the comments and ready to be transformed into a brand new plugin.
@@ -380,7 +375,7 @@ Public members
 Following is a list of all public members :
 
 * *Algorithm (const PluginContext * context)*:
-  As previously enonced, the constructor is the right place to declare the parameters needed by the algorithm::
+  As previously described, the constructor is the right place to declare the parameters needed by the algorithm::
 
     addInParameter<DoubleProperty>("metric", paramHelp[0], 0);
 
@@ -407,7 +402,7 @@ The methods below, will be redefined in our plugin (See section plug-in skeleton
 Protected members
 -----------------
 
-Following is a list of all protected members, plainly similar to the one found in the *PropertyAlgorithm* class:
+Following is a list of all protected members, similar to the one found in the *PropertyAlgorithm* class:
 
 * *Graph * graph*:
   The graph passed as a parameter containing the data to visualize.
@@ -490,8 +485,8 @@ Code example::
   class MyImportModule:public ImportModule { 
   public:
 
-    // This line is used to pass informations about the current plug-in.
-    PLUGININFORMATIONS("Name of the Current Import Algorithm",
+    // This line is used to pass information about the current plug-in.
+    PLUGININFORMATION("Name of the Current Import Algorithm",
                        "Name of the Author",
                        "13/13/13",
                        "A few words describing what kind of import the plug-in realizes",
@@ -517,7 +512,7 @@ Code example::
       return true;
     }
   };
-  // This second line will be used to register your algorithm in tulip using the informations given above.
+  // This second line will be used to register your algorithm in tulip using the information given above.
   PLUGIN(MyImportModule)
 
 Just like the *PropertyAlgorithm*, you can find a lighten skeleton in the *tlpimport* folder in the sources, under the *wizards* directory.
@@ -593,8 +588,8 @@ Code example::
   class MyExportModule:public ExportModule { 
   public:
   
-  // This line is used to pass informations about the current plug-in.
-  PLUGININFORMATIONS("Name of the Current Export Algorithm",
+  // This line is used to pass information about the current plug-in.
+  PLUGININFORMATION("Name of the Current Export Algorithm",
                      "Name of the Author",
                      "13/13/13",
                      "A few words describing what kind of export the plug-in realizes",
@@ -620,7 +615,8 @@ Code example::
       return true;
     }
   };
-  // This second line will be used to register your algorithm in tulip using the informations given above.
+  // This second line will be used to register your algorithm in tulip
+  // using the information given above.
   PLUGIN(MyExportModule)
 
 A smaller skeleton can be found in the *tlpexport* folder in the sources, in the *wizards* directory.

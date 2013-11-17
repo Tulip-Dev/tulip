@@ -11,7 +11,7 @@
 /**
  * Tutorial 008
  *
- * Create a graph and realize a few tests on it.
+ * Create a graph and perform a few tests on it.
  * 
  */
 
