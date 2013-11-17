@@ -192,7 +192,7 @@ public:
  * @brief Declare meta-information for a plugin
  * This is an helper macro that defines every function related to a plugin meta-information (Plugin name, author, etc).
  * When creating a new plugin, this macro avoids having to define pure-virtual methods located into the Plugin interface and put them on the same line.
- * @note PLUGINIFORMATIONS should be declared into the Plugin's class body into the public scope
+ * @note PLUGINIFORMATION should be declared into the Plugin's class body into the public scope
  *
  * @param NAME The plugin name as it will be registered into the plugins system (tlp::Plugin::name())
  * @param AUTHOR The author of the plugin (tlp::Plugin::author())
