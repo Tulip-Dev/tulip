@@ -111,18 +111,14 @@ public :
 
   void draw();
   void refresh();
-  // inherited from GlMainView
-  virtual void centerView(bool) {
-    // call the Qt slot declared below
-    centerView();
-  }
 
 public slots:
 
   void graphChanged(Graph *graph);
   void init();
   void applySettings();
-  void centerView();
+  // inherited from GlMainView
+  virtual void centerView(bool = false);
 
 private :
 
@@ -143,9 +139,6 @@ private :
   ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;
 
   pocore::PixelOrientedMediator *pixelOrientedMediator;
-
-  QMenu *menuOptions;
-  QAction *centerViewAction;
 
   std::map<std::string, pocore::LayoutFunction *> layoutFunctionsMap;
 

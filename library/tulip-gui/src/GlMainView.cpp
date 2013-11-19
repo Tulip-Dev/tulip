@@ -121,7 +121,10 @@ GlMainWidget* GlMainView::getGlMainWidget() const {
 }
 
 void GlMainView::centerView(bool graphChanged) {
-  getGlMainWidget()->centerScene(graphChanged);
+  float gvWidth = (float) graphicsView()->width();
+  // we apply a zoom factor to preserve a 50 px margin width
+  // to ensure the scene will not be drawn under the configuration tabs title
+  getGlMainWidget()->centerScene(graphChanged, (gvWidth - 50) / gvWidth);
 
   if(isOverviewVisible)
     drawOverview(graphChanged);

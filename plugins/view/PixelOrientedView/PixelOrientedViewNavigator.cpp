@@ -87,6 +87,7 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
       pixelView->switchFromDetailViewToSmallMultiples();
       QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, pixelView->getSmallMultiplesViewBoundingBox());
       zoomAndPanAnimator.animateZoomAndPan();
+      pixelView->centerView();
     }
 
     return true;

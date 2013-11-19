@@ -45,6 +45,7 @@
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"
 
 #include <QMenu>
+#include <QGraphicsView>
 
 using namespace std;
 using namespace pocore;
@@ -75,7 +76,7 @@ PLUGIN(PixelOrientedView)
 PixelOrientedView::PixelOrientedView(const PluginContext *) :
   pixelOrientedGraph(NULL), graphComposite(NULL), mainLayer(NULL),
   overviewsComposite(NULL), optionsWidget(NULL), propertiesSelectionWidget(NULL),
-  pixelOrientedMediator(NULL), menuOptions(NULL), centerViewAction(NULL),
+  pixelOrientedMediator(NULL),
   lastNbNodes(0), overviewWidth(0), overviewHeight(0), minWidth(0), refSize(0), hilbertLayout(NULL), squareLayout(NULL), spiralLayout(new SpiralLayout()),
   zorderLayout(NULL), tulipNodeColorMapping(NULL), smallMultiplesView(true), sceneRadiusBak(0.0), zoomFactorBak(0.0), detailViewLabel(NULL), detailOverview(NULL),
   newGraphSet(false), smallMultiplesNeedUpdate(false), lastViewWindowWidth(0), lastViewWindowHeight(0), center(false), interactorsActivated(false),isConstruct(false)  {
@@ -166,13 +167,6 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     connect(optionsWidget, SIGNAL(applySettingsSignal()), this, SLOT(applySettings()));
     layoutFunctionsMap["Spiral"] = spiralLayout;
     setOverviewVisible(true);
-
-    menuOptions = new QMenu(tr("Options"));
-    centerViewAction = new QAction("Center view", this);
-    connect(centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
-    menuOptions->addAction(centerViewAction);
-    getGlMainWidget()->setContextMenuPolicy(Qt::ActionsContextMenu);
-    getGlMainWidget()->addAction(menuOptions->menuAction());
   }
 
   Graph *lastGraph = this->pixelOrientedGraph;
@@ -579,7 +573,7 @@ Color PixelOrientedView::getTextColor() const {
   return textColor;
 }
 
-void PixelOrientedView::centerView() {
+void PixelOrientedView::centerView(bool) {
   if (!getGlMainWidget()->isVisible()) {
     if (lastViewWindowWidth != 0 && lastViewWindowHeight != 0) {
       getGlMainWidget()->getScene()->ajustSceneToSize(lastViewWindowWidth, lastViewWindowHeight);
@@ -592,6 +586,10 @@ void PixelOrientedView::centerView() {
     getGlMainWidget()->getScene()->ajustSceneToSize(getGlMainWidget()->width(), getGlMainWidget()->height());
   }
 
+  // we apply a zoom factor to preserve a 50 px margin width
+  // to ensure the scene will not be drawn under the configuration tabs title
+  float glWidth = (float) graphicsView()->width();
+  getGlMainWidget()->getScene()->zoomFactor((glWidth - 50)/ glWidth);
   getGlMainWidget()->draw();
 }
 

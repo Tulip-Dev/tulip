@@ -122,18 +122,11 @@ public :
 
   void updateHistograms(Histogram *detailOverview = NULL);
 
-  // inherited from glMainView
-  virtual void centerView(bool) {
-    // call the Qt slot declared below
-    centerView();
-  }
-
 public slots :
 
   void viewConfigurationChanged();
   void draw();
   void refresh();
-  void centerView();
   void applySettings();
 
 protected slots :
