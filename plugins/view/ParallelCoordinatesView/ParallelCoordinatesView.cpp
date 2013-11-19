@@ -485,10 +485,6 @@ void ParallelCoordinatesView::draw() {
 
   needDraw=false;
 }
-void ParallelCoordinatesView::centerView() {
-  getGlMainWidget()->getScene()->centerScene();
-  getGlMainWidget()->draw();
-}
 
 void ParallelCoordinatesView::refresh() {
   if(!needDraw)

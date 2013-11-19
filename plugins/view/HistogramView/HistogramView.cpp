@@ -626,11 +626,6 @@ void HistogramView::destroyHistogramsIfNeeded() {
   }
 }
 
-void HistogramView::centerView() {
-  getGlMainWidget()->getScene()->centerScene();
-  getGlMainWidget()->draw();
-}
-
 void HistogramView::switchFromSmallMultiplesToDetailedView(Histogram *histogramToDetail) {
   if(!histogramToDetail)
     return;

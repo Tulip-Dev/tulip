@@ -117,21 +117,13 @@ public :
 
   void draw();
   void refresh();
-  // inherited from GlMainView
-  virtual void centerView(bool) {
-    // call the Qt slot declared below
-    centerView();
-  }
 
 public slots :
 
   void init();
-  void centerView();
+  // inherited from GlMainView
+  void centerView(bool graphChanged = false);
   void applySettings();
-
-protected slots :
-
-  void fillContextMenu(QMenu *menu, const QPointF &point);
 
 private :
 
@@ -164,8 +156,6 @@ private :
   Coord eyesBak;
   Coord centerBak;
   Coord upBak;
-  QMenu *optionsMenu;
-  QAction *centerViewAction;
   Interactor *scatterPlotViewNavigator;
   bool matrixUpdateNeeded;
   bool newGraphSet;

@@ -546,8 +546,10 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
   return QImage(resultImage.bits(),resultImage.width(),resultImage.height(),QImage::Format_ARGB32).convertToFormat(QImage::Format_RGB32);
 }
 
-void GlMainWidget::centerScene(bool graphChanged) {
+  void GlMainWidget::centerScene(bool graphChanged, float zf) {
   scene.centerScene();
+  if (zf != 1)
+    scene.zoomFactor(zf);
   draw(graphChanged);
 }
 

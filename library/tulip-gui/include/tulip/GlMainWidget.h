@@ -320,14 +320,15 @@ public slots:
   void closeEvent(QCloseEvent *e);
 
   /**
-   * @brief Convenience function that call center function on the current scene and draw the view.
+   * @brief Convenience function that call center function on the current scene, apply a zoom (if needed) and draw the view.
    * Same thing than
    * @code
    * getScene()->centerScene();
+   * getScene()->zoomFactor();
    * draw();
    * @endcode
   **/
-  void centerScene(bool graphChanged = false);
+  void centerScene(bool graphChanged = false, float zoomFactor = 1.0);
 
   void emitGraphChanged();
 

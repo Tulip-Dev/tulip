@@ -27,6 +27,7 @@
 
 #include <QTime>
 #include <QMenu>
+#include <QGraphicsView>
 
 #include "ScatterPlot2DView.h"
 #include "ScatterPlot2DOptionsWidget.h"
@@ -73,7 +74,7 @@ ScatterPlot2DView::ScatterPlot2DView(const PluginContext *) :
   propertiesSelectionWidget(NULL), optionsWidget(NULL),
   scatterPlotGraph(NULL), emptyGraph(NULL), mainLayer(NULL), glGraphComposite(NULL), scatterPlotSize(NULL),
   matrixComposite(NULL), axisComposite(NULL), labelsComposite(NULL), detailedScatterPlot(NULL), detailedScatterPlotPropertyName(make_pair("","")), center(false),
-  matrixView(true), sceneRadiusBak(0.0), zoomFactorBak(0.0), optionsMenu(NULL), centerViewAction(NULL), scatterPlotViewNavigator(NULL), matrixUpdateNeeded(false), newGraphSet(false), lastViewWindowWidth(0),
+  matrixView(true), sceneRadiusBak(0.0), zoomFactorBak(0.0), scatterPlotViewNavigator(NULL), matrixUpdateNeeded(false), newGraphSet(false), lastViewWindowWidth(0),
   lastViewWindowHeight(0), interactorsActivated(false),initialized(false) {}
 
 ScatterPlot2DView::~ScatterPlot2DView() {
@@ -137,10 +138,6 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     propertiesSelectionWidget->enableEdgesButton(false);
     optionsWidget = new ScatterPlot2DOptionsWidget();
     connect(optionsWidget, SIGNAL(applySettingsSignal()), this, SLOT(draw()));
-    optionsMenu = new QMenu(tr("Options"));
-    centerViewAction = new QAction(tr("Center view"), this);
-    connect(centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
-    optionsMenu->addAction(centerViewAction);
     ++scatterplotViewInstancesCount;
     initialized=true;
   }
@@ -249,11 +246,6 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
   registerTriggers();
 
-}
-
-void ScatterPlot2DView::fillContextMenu(QMenu *menu, const QPointF &point) {
-  menu->addAction(optionsMenu->menuAction());
-  GlMainView::fillContextMenu(menu,point);
 }
 
 DataSet ScatterPlot2DView::state() const {
@@ -560,7 +552,7 @@ void ScatterPlot2DView::draw() {
   }
 }
 
-void ScatterPlot2DView::centerView() {
+void ScatterPlot2DView::centerView(bool) {
   if (!getGlMainWidget()->isVisible()) {
     if (lastViewWindowWidth != 0 && lastViewWindowHeight != 0) {
       getGlMainWidget()->getScene()->ajustSceneToSize(lastViewWindowWidth, lastViewWindowHeight);
@@ -573,6 +565,10 @@ void ScatterPlot2DView::centerView() {
     getGlMainWidget()->getScene()->ajustSceneToSize(getGlMainWidget()->width(), getGlMainWidget()->height());
   }
 
+  // we apply a zoom factor to preserve a 50 px margin width
+  // to ensure the scene will not be drawn under the configuration tabs title
+  float glWidth = (float) graphicsView()->width();
+  getGlMainWidget()->getScene()->zoomFactor((glWidth - 50)/ glWidth);
   getGlMainWidget()->draw();
 }
 
