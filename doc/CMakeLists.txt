@@ -10,18 +10,13 @@ IF(BUILD_DOC)
       MESSAGE("Sphinx not found: unable to generate the documentation.")
     ENDIF(SPHINX_FOUND)
   ENDIF(PYTHONINTERP_FOUND AND SIP_OK)
- 
+
   IF(LINUX)
     FIND_PACKAGE(Doxygen)
     IF(DOXYGEN_FOUND)
-## ========================================================
-## Custom target for doxygen documentation
-## ========================================================
-ADD_CUSTOM_TARGET(doc
-  ${CMAKE_COMMAND} -E remove_directory ${CMAKE_SOURCE_DIR}/doc/html
-  COMMAND doxygen tulip.Doxyfile
-  COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/doc/doxygen/style/navtree.css ${CMAKE_SOURCE_DIR}/doc/html
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} VERBATIM)
+      ADD_SUBDIRECTORY(doxygen)
+    ELSE(DOXYGEN_FOUND)
+      MESSAGE("doxygen not found: unable to generate the documentation.")
     ENDIF(DOXYGEN_FOUND)
   ENDIF(LINUX)
 ENDIF(BUILD_DOC)
