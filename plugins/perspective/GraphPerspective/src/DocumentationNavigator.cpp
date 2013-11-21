@@ -20,8 +20,7 @@
 #include "DocumentationNavigator.h"
 
 #include <QFile>
-#include <QFrame>
-#include <QHBoxLayout>
+#include <QToolBar>
 #include <QVBoxLayout>
 #include <QWebHistory>
 
@@ -35,36 +34,33 @@ DocumentationNavigator::DocumentationNavigator(): QDialog() {
   QVBoxLayout* vLayout = new QVBoxLayout(this);
   tabWidget = new QTabWidget(this);
   vLayout->addWidget(tabWidget);
-  QFrame* trWidget = new QFrame();
-  QHBoxLayout* hLayout = new QHBoxLayout(trWidget);
+  QToolBar* tb = new QToolBar();
 
   // create back button
   QIcon backIcon;
   backIcon.addFile(QString::fromUtf8(":/tulip/graphperspective/icons/16/back.png"), QSize(), QIcon::Normal, QIcon::Off);
   backButton = new QToolButton();
-  backButton->setMinimumSize(QSize(20, 20));
-  backButton->setMaximumSize(QSize(20, 20));
+  backButton->setMinimumSize(QSize(16, 16));
+  backButton->setMaximumSize(QSize(16, 16));
   backButton->setIcon(backIcon);
-  backButton->setIconSize(QSize(16, 16));
   backButton->setToolTip("Go Back a page");
   connect(backButton, SIGNAL(clicked()), this, SLOT(goBack()));
-  hLayout->addWidget(backButton);
+  tb->addWidget(backButton);
 
   // create forward button
   QIcon forwardIcon;
   forwardIcon.addFile(QString::fromUtf8(":/tulip/graphperspective/icons/16/forward.png"), QSize(), QIcon::Normal, QIcon::Off);
   forwardButton = new QToolButton();
-  forwardButton->setMinimumSize(QSize(20, 20));
-  forwardButton->setMaximumSize(QSize(20, 20));
+  forwardButton->setMinimumSize(QSize(16, 16));
+  forwardButton->setMaximumSize(QSize(16, 16));
   forwardButton->setIcon(forwardIcon);
-  forwardButton->setIconSize(QSize(16, 16));
   forwardButton->setToolTip("Move forward a page");
   connect(forwardButton, SIGNAL(clicked()), this, SLOT(goForward()));
-  hLayout->addWidget(forwardButton);
+  tb->addWidget(forwardButton);
 
-  // put the widget with the back & forward buttons
+  // put the toolbar with the back & forward buttons
   // in the top right corner of the tab widget
-  tabWidget->setCornerWidget(trWidget);
+  tabWidget->setCornerWidget(tb);
 
   // create 3 doc views
   // for User handbook
