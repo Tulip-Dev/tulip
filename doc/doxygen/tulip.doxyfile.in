@@ -4,7 +4,7 @@
 
 DOXYFILE_ENCODING      = UTF-8
 PROJECT_NAME           = Tulip
-PROJECT_NUMBER         = 4.3.0
+PROJECT_NUMBER         = @TulipVersion@
 PROJECT_BRIEF          = "Better Visualization Through Research"
 PROJECT_LOGO           = software/bitmaps/welcomelogo.bmp
 OUTPUT_DIRECTORY       = doc
@@ -154,8 +154,8 @@ HTML_OUTPUT            = html
 HTML_FILE_EXTENSION    = .html
 HTML_HEADER            =
 HTML_FOOTER            =
-HTML_STYLESHEET        = doc/doxygen/style/doxygen.css
-HTML_EXTRA_STYLESHEET  = doc/doxygen/style/tabs.css
+HTML_STYLESHEET        = doxygen.css
+HTML_EXTRA_STYLESHEET  = tabs.css
 HTML_EXTRA_FILES       =
 
 HTML_COLORSTYLE_HUE    = 206
