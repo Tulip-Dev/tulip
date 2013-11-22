@@ -388,7 +388,7 @@ ENDIF(NSIS_OK)
 ENDIF(WIN32)
 
 IF(APPLE)
-	CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac/mac_bundle.sh.in" "${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac/mac_bundle.sh")
+	CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac/mac_bundle.sh.in" "${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac/mac_bundle.sh" @ONLY)
         ADD_CUSTOM_TARGET(bundle
                           COMMAND cmake -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
                           COMMAND sh mac_bundle.sh ${CMAKE_INSTALL_PREFIX} ${CMAKE_CURRENT_BINARY_DIR} ${TulipVersion}
