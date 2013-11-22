@@ -9,51 +9,51 @@ then
         usage $0
         exit 1
 fi
-TULIP_DIR="@CMAKE_INSTALL_PREFIX@"
-DEST_DIR="$1"
-SRC_DIR="@tulip_SOURCE_DIR@/bundlers/mac"
+TULIP_DIR=@CMAKE_INSTALL_PREFIX@
+DEST_DIR=$1
+SRC_DIR=@tulip_SOURCE_DIR@/bundlers/mac
 
-if [ ! -d $TULIP_DIR ]
+if [ ! -d ${TULIP_DIR} ]
 then
 	echo "Error : the specified Tulip installation directory does not exist"
 	exit 1
 fi
 
-echo 'Wiping previous bundles into '$DEST_DIR
-rm -rf $DEST_DIR/application 2>/dev/null
-rm -f $DEST_DIR/Tulip-@TulipVersion@.dmg 2>/dev/null
-mkdir -p $DEST_DIR/application
-cd $DEST_DIR/application
+echo "Wiping previous bundles into ${DEST_DIR}"
+rm -rf "${DEST_DIR}/application" 2>/dev/null
+rm -f "${DEST_DIR}/Tulip-@TulipVersion@.dmg" 2>/dev/null
+mkdir -p "${DEST_DIR}/application"
+cd "${DEST_DIR}/application"
 mkdir .background
-cp $SRC_DIR/background.png .background/
+cp "${SRC_DIR}/background.png" .background/
 rm -rf * 2>/dev/null
 
 echo 'Creating base directories'
-cd $DEST_DIR/application
+cd "${DEST_DIR}/application"
 mkdir -p Tulip.app/Contents/{MacOS,Resources,Frameworks}
 cd Tulip.app/Contents
-cp $SRC_DIR/Info.plist .
-cp $SRC_DIR/tulip.icns Resources/
+cp "${SRC_DIR}/Info.plist" .
+cp "${SRC_DIR}/tulip.icns" Resources/
 
 echo 'Copying binaries'
-cd $DEST_DIR/application/Tulip.app/Contents/
-cp -r $TULIP_DIR/* .
+cd "${DEST_DIR}/application/Tulip.app/Contents/"
+cp -r "${TULIP_DIR}"/* .
 mv lib/*.dylib Frameworks/
 
 chmod +x MacOS/tulip_launcher
 
 echo 'Copying license'
-cd $DEST_DIR/application
-cp $SRC_DIR/../../COPYING .
+cd "${DEST_DIR}/application"
+cp "${SRC_DIR}/../../COPYING" .
 
 QT_LIB_DIR="@QT_QTCORE_LIBRARY@/.."
 echo 'Copying Frameworks'
-cd $DEST_DIR/application/Tulip.app/Contents/Frameworks/
-for cmp in QtOpenGL QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore phonon QtScript QtHelp QtDBus QtDeclarative QtSql QtSvg; do
-  echo Copying $QT_LIB_DIR/$cmp.framework/$cmp to $(pwd)
-  cp $QT_LIB_DIR/$cmp.framework/$cmp .
+cd "${DEST_DIR}/application/Tulip.app/Contents/Frameworks/"
+for QT_LIB in QtOpenGL QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore phonon QtScript QtHelp QtDBus QtDeclarative QtSql QtSvg; do
+  echo Copying "${QT_LIB_DIR}/${QT_LIB}.framework/${QT_LIB}" to $(pwd)
+  cp "${QT_LIB_DIR}/${QT_LIB}.framework/${QT_LIB}" .
 done
-cp -r $QT_LIB_DIR/QtGui.framework/Resources/qt_menu.nib ../Resources
+cp -r "${QT_LIB_DIR}/QtGui.framework/Resources/qt_menu.nib" ../Resources
 cp -r "@QT_PLUGINS_DIR@/imageformats" ../
 cp "@QT_QTCLUCENE_LIBRARY@" .
 
@@ -79,9 +79,9 @@ for lib in libGLEW libfreetype libz libstdc++; do
 done
 
 echo 'Generating DMG'
-cd $DEST_DIR
-sh $SRC_DIR/make_dmg.sh Tulip "@TulipVersion@" $DEST_DIR/application
+cd "${DEST_DIR}"
+sh "${SRC_DIR}/make_dmg.sh" Tulip "@TulipVersion@" "${DEST_DIR}/application"
 
-rm -rf $DEST_DIR/application 2>/dev/null
+rm -rf "${DEST_DIR}/application" 2>/dev/null
 
-echo "Tulip-@TulipVersion@.dmg has been correctly generated in $DEST_DIR"
+echo "Tulip-@TulipVersion@.dmg has been correctly generated in ${DEST_DIR}"
