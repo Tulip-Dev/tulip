@@ -1,6 +1,7 @@
 #!/bin/sh
 
 wd="${0%/*}"
+cd "$wd/.."
 
 # Host system is Snow Leopard or lower
 if [ ! -e /usr/lib/libpython2.7.dylib ]
@@ -10,17 +11,18 @@ then
 	if [ -d /Library/Frameworks/Python.framework/Versions/2.7 ]
 	then
 		# Force to use Python framework installed on the system by renaming the one included in the bundle
-		mv "$wd/../Frameworks/libpython2.7.dylib" "$wd/../Frameworks/pythonlib" 2>/dev/null
-		mv "$wd/../Frameworks/Python" "$wd/../Frameworks/nohtyP" 2>/dev/null
+		mv Frameworks/libpython2.7.dylib Frameworks/pythonlib 2>/dev/null
+		mv Frameworks/Python Frameworks/nohtyP 2>/dev/null
 	else
-		mv "$wd/../Frameworks/pythonlib" "$wd/../Frameworks/libpython2.7.dylib" 2>/dev/null
-		mv "$wd/../Frameworks/nohtyP" "$wd/../Frameworks/Python" 2>/dev/null
+		mv Frameworks/pythonlib Frameworks/libpython2.7.dylib 2>/dev/null
+		mv Frameworks/nohtyP Frameworks/Python 2>/dev/null
 	fi
 else
 	# Force to use Python framework installed on the system by renaming the one included in the bundle
-	mv "$wd/../Frameworks/libpython2.7.dylib" "$wd/../Frameworks/pythonlib" 2>/dev/null	
-	mv "$wd/../Frameworks/Python" "$wd/../Frameworks/nohtyP" 2>/dev/null	
+	mv Frameworks/libpython2.7.dylib Frameworks/pythonlib 2>/dev/null	
+	mv Frameworks/Python Frameworks/nohtyP 2>/dev/null	
 fi
 
-cd "$wd/../bin"
-DYLD_LIBRARY_PATH="$wd/../Frameworks/" DYLD_FRAMEWORK_PATH="$wd/../Frameworks" ./tulip
+export DYLD_LIBRARY_PATH="$(pwd)/Frameworks/"
+export DYLD_FRAMEWORK_PATH="$(pwd)/Frameworks"
+"$(pwd)"/bin/tulip
