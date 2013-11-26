@@ -35,10 +35,11 @@ cd Tulip.app/Contents
 cp "${SRC_DIR}/Info.plist" .
 cp "${SRC_DIR}/tulip.icns" Resources/
 
-echo 'Copying binaries'
+echo 'Copying binaries & libraries'
 cd "${DEST_DIR}/application/Tulip.app/Contents/"
 cp -r "${TULIP_DIR}"/* .
 mv lib/*.dylib Frameworks/
+rm -rf include
 
 chmod +x MacOS/tulip_launcher
 
@@ -47,14 +48,9 @@ cd "${DEST_DIR}/application"
 cp "${SRC_DIR}/../../COPYING" .
 
 QT_LIB_DIR="@QT_QTCORE_LIBRARY@/.."
-echo 'Copying Frameworks'
+echo 'Copying Resources'
 cd "${DEST_DIR}/application/Tulip.app/Contents/Frameworks/"
-for QT_LIB in QtOpenGL QtWebKit QtXmlPatterns QtGui QtTest QtXml QtNetwork QtCore phonon QtScript QtHelp QtDBus QtDeclarative QtSql QtSvg; do
-  echo Copying "${QT_LIB_DIR}/${QT_LIB}.framework/${QT_LIB}" to $(pwd)
-  cp "${QT_LIB_DIR}/${QT_LIB}.framework/${QT_LIB}" .
-done
 cp -r "${QT_LIB_DIR}/QtGui.framework/Resources/qt_menu.nib" ../Resources
-cp -r "@QT_PLUGINS_DIR@/imageformats" ../
 cp "@QT_QTCLUCENE_LIBRARY@" .
 
 # Case when we build the bundle on Snow Leopard or lower version of MacOS with Python 2.7
@@ -71,12 +67,28 @@ then
     find ../lib/python2.7 \( -iname \*\.pyc -o -iname \*\.pyo \) -print0 | xargs -0 rm -f     
 fi
 
-echo 'Copying libraries'
+echo 'Copying more libraries'
 for lib in libGLEW libfreetype libz libstdc++; do
   for search_path in /usr/lib /opt/local/lib ; do
-    [ "$(ls $search_path/$lib*.dylib 2> /dev/null)" != "" ] && cp $search_path/$lib*.dylib .
+    [ "$(ls $search_path/$lib.*.dylib 2> /dev/null)" != "" ] && cp $search_path/$lib.*.dylib .
   done
 done
+
+# use macdeployqt to configure exe & libraries
+cd ..
+cp bin/tulip MacOS
+# configure tulip
+@QT_BINARY_DIR@/macdeployqt ${DEST_DIR}/application/Tulip.app -no-plugins
+mv MacOS/tulip bin/tulip
+# configure tulip_perpective
+cp bin/tulip_perspective MacOS/tulip
+@QT_BINARY_DIR@/macdeployqt ${DEST_DIR}/application/Tulip.app
+# copy exe and libraries
+mv MacOS/tulip bin/tulip_perspective
+cp Frameworks/*.dylib lib
+mv Plugins/imageformats .
+# remove unneeded stuff
+rm -rf Plugins Resources/qt.conf
 
 echo 'Generating DMG'
 cd "${DEST_DIR}"
