@@ -153,7 +153,7 @@ void TableView::setupWidget() {
   // use a push button instead of a combobox (see matchPropertyCombo)
   // waiting for a fix for combobox in QGraphicsItem
   connect(_ui->matchPropertyButton, SIGNAL(pressed()), this, SLOT(setMatchProperty()));
-  // colmuns/properties filtering
+  // columns/properties filtering
   filteringColumns = false;
   connect(_ui->columnsFilterEdit,SIGNAL(textChanged(QString)),this,SLOT(setColumnsFilter(QString)));
   connect(propertiesEditor->getPropertiesFilterEdit(),SIGNAL(textChanged(QString)),this,SLOT(setPropertiesFilter(QString)));
@@ -177,7 +177,8 @@ void TableView::graphChanged(tlp::Graph* g) {
 
   propertiesEditor->setGraph(g);
 
-  _ui->frame->hide();
+  _ui->table->horizontalHeader()->show();
+  _ui->table->verticalHeader()->show();
 
   //Show all the properties whose name starts with 'view'
   if (_model != NULL) {
@@ -285,7 +286,8 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
     }
   }
 
-  _ui->frame->setVisible(visible);
+  _ui->table->horizontalHeader()->setVisible(visible);
+  _ui->table->verticalHeader()->setVisible(visible);
 }
 
 void TableView::setMatchProperty() {
