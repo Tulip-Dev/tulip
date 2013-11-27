@@ -100,7 +100,8 @@ public:
     }
 
     delete itN;
-    label->setNodeValue(mN, label->getNodeValue(viewMetricMaxNode));
+    if (viewMetricMaxNode.isValid())
+      label->setNodeValue(mN, label->getNodeValue(viewMetricMaxNode));
   }
 };
 
