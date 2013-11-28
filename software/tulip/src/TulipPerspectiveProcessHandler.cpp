@@ -172,6 +172,11 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
   f.close();
   f.remove();
 
+  // it may happens that there is nothing to show
+  // (perhaps if our signal handler was not called)
+  if (stackTrace.isEmpty())
+    return;
+
   crashHandler.setEnvData(envInfos[&plateform],envInfos[&arch],envInfos[&compiler],envInfos[&version],stackTrace);
   crashHandler.setPerspectiveData(infos);
   crashHandler.exec();
