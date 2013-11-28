@@ -147,6 +147,7 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
       ++result;
     }
 
+    _graph->push();
     return GraphModel::setNodeValue(_id,prop,value);
   }
 
@@ -171,6 +172,7 @@ bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &va
       ++result;
     }
 
+    _graph->push();
     return GraphModel::setEdgeValue(_id,prop,value);
   }
 
