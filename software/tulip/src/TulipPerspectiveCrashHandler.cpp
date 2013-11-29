@@ -33,23 +33,18 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
   : QDialog(parent), _ui(new Ui::TulipPerspectiveCrashHandlerData), _isDetailedView(false) {
   _ui->setupUi(this);
   setDetailedView(false);
-  adjustHeight();
   connect(_ui->detailsLink,SIGNAL(linkActivated(QString)),this,SLOT(toggleDetailedView()));
   connect(_ui->sendReportButton,SIGNAL(clicked()),this,SLOT(sendReport()));
-  connect(_ui->saveButton,SIGNAL(clicked()),this,SLOT(saveData()));
+  //connect(_ui->saveButton,SIGNAL(clicked()),this,SLOT(saveData()));
+  _ui->saveButton->hide();
+  _ui->commentsEdit->moveCursor(QTextCursor::End);
 }
 
 void TulipPerspectiveCrashHandler::setDetailedView(bool f) {
   _isDetailedView = f;
+  _ui->detailsLink->setText(f ? "<a href=\"Hide details\">Hide details</a>" :
+			    "<a href=\"Show details\">View details</a> <span style=\"font-size:small\"><i>(sent with to your comments)</i></span>");
   _ui->detailsFrame->setVisible(f);
-  adjustHeight();
-}
-
-void TulipPerspectiveCrashHandler::adjustHeight() {
-  setFixedSize(QWIDGETSIZE_MAX,QWIDGETSIZE_MAX);
-  int w = width();
-  adjustSize();
-  resize(w,height());
 }
 
 void TulipPerspectiveCrashHandler::toggleDetailedView() {
@@ -131,12 +126,12 @@ void TulipPerspectiveCrashHandler::setEnvData(const QString &plateform, const QS
   _ui->dumpEdit->setPlainText(stackTrace);
 }
 
-void TulipPerspectiveCrashHandler::setPerspectiveData(PerspectiveProcessInfos infos) {
+void TulipPerspectiveCrashHandler::setPerspectiveData(const PerspectiveProcessInfos& infos) {
   _perspectiveInfos = infos;
   _ui->perspectiveNameValue->setText(infos.name);
   QString args;
   QString a;
   foreach(a,infos.args.keys())
-  args += "--" + a + "=" + infos.args[a].toString() + " ";
+    args += "--" + a + "=" + infos.args[a].toString() + " ";
   _ui->perspectiveArgumentsValue->setText(args);
 }
