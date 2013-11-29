@@ -3446,9 +3446,18 @@ edges from the metanode to the other nodes.
 %End
 
 // For code-compatibility with Tulip 3.X
-    tlp::node createMetaNode(const std::vector<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+       tlp::node createMetaNode(const std::vector<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
 %MethodCode
-    sipRes = new tlp::node(sipCpp->createMetaNode(std::set<tlp::node>(a0->begin(), a0->end()), a1, a2));
+    std::vector<tlp::node>::const_iterator it = a0->begin();
+    for (; it != a0->end() ; ++it) {
+      if (!sipCpp->isElement(*it)) {
+          sipIsErr = throwInvalidNodeException(sipCpp, *it);
+          break;
+       }
+    }
+    if (sipIsErr != -1) {
+       sipRes = new tlp::node(sipCpp->createMetaNode(std::set<tlp::node>(a0->begin(), a0->end()), a1, a2));
+    }
 %End
 
 //===========================================================================================	
