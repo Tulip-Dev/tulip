@@ -3797,7 +3797,6 @@ Returns :const:`True` if the graph has been successfully saved.
     bool ok = false;
     std::string tlpFilePath;
     if (a0->attributeExist("file")) {
-      std::string tlpFilePath;
       a0->getAttribute("file", tlpFilePath);
       std::string ext = tlpFilePath.substr(tlpFilePath.rfind("tlp"));
       if (ext == "tlp" || ext == "tlp.gz") {
@@ -3805,7 +3804,7 @@ Returns :const:`True` if the graph has been successfully saved.
       }
     }
     if (ok) {
-      tlp::saveGraph(a0, tlpFilePath);
+      sipRes = tlp::saveGraph(a0, tlpFilePath);
     } else {
       sipIsErr = -1;
       std::string msg = "No tlp (or tlp.gz) file attached to the graph \"";
