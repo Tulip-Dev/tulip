@@ -3774,7 +3774,45 @@ successfully saved.
 :param filename: the path to the destination file
 :type filename: string
 :rtype: boolean
+%End
 
+//===========================================================================================
+
+bool saveGraph(tlp::Graph *graph);
+%Docstring
+tlp.saveGraph(graph)
+
+.. versionadded:: 4.5
+
+Saves a graph in the tlp or tlp.gz format to the same file from which it has been loaded.
+Returns :const:`True` if the graph has been successfully saved.
+
+:param graph: the graph to export
+:type graph: :class:`tlp.Graph`
+:rtype: boolean
+:throws: an exception if there is no tlp (or tlp.gz) file attached to the graph
+%End
+
+%MethodCode
+    bool ok = false;
+    std::string tlpFilePath;
+    if (a0->attributeExist("file")) {
+      std::string tlpFilePath;
+      a0->getAttribute("file", tlpFilePath);
+      std::string ext = tlpFilePath.substr(tlpFilePath.rfind("tlp"));
+      if (ext == "tlp" || ext == "tlp.gz") {
+         ok = true;
+      }
+    }
+    if (ok) {
+      tlp::saveGraph(a0, tlpFilePath);
+    } else {
+      sipIsErr = -1;
+      std::string msg = "No tlp (or tlp.gz) file attached to the graph \"";
+      msg += a0->getName();
+      msg += "\".";
+      PyErr_SetString(PyExc_Exception, msg.c_str());
+    }
 %End
 
 //===========================================================================================
@@ -3800,7 +3838,7 @@ Returns a new graph or None if the import fails.
 	if (pluginExists<tlp::ImportModule>(*a0)) {
 		sipRes = tlp::importGraph(*a0, *a1, 0);
 	} else {
-        sipIsErr = -1;
+		sipIsErr = -1;
 		std::string msg = "No Tulip import plugin named  ";
 		msg += *a0;
 		msg += ".";
