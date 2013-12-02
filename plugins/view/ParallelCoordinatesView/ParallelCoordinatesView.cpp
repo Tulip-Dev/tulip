@@ -434,9 +434,9 @@ void ParallelCoordinatesView::removeEmptyViewLabel() {
   GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
 
   if (noDimsLabel != NULL) {
-      mainLayer->deleteGlEntity(noDimsLabel);
-      delete noDimsLabel;
-      mainLayer->deleteGlEntity(noDimsLabel1);
+    mainLayer->deleteGlEntity(noDimsLabel);
+    delete noDimsLabel;
+    mainLayer->deleteGlEntity(noDimsLabel1);
     delete noDimsLabel1;
     mainLayer->deleteGlEntity(noDimsLabel2);
     delete noDimsLabel2;
