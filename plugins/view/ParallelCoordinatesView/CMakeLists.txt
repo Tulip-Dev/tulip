@@ -5,7 +5,6 @@ SET(LIB_SRCS
       ParallelCoordinatesDrawing.cpp
       ParallelCoordinatesGraphProxy.cpp
       ParallelAxis.cpp
-      ParallelCoordinatesConfigDialog.cpp
       NominalParallelAxis.cpp
       AxisConfigDialogs.cpp 
       QuantitativeParallelAxis.cpp
@@ -25,14 +24,12 @@ SET(LIB_SRCS
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
-    ParallelCoordinatesConfigDialog.ui
     ParallelCoordsDrawConfigWidget.ui
     ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.ui
 )
 
 QTX_WRAP_CPP(LIB_MOC_SRCS
       ParallelCoordinatesView.h
-      ParallelCoordinatesConfigDialog.h
       AxisConfigDialogs.h
       ParallelCoordsDrawConfigWidget.h 
       ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h

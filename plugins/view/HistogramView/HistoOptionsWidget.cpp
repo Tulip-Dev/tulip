@@ -30,7 +30,6 @@ HistoOptionsWidget::HistoOptionsWidget(QWidget *parent) : QWidget(parent),oldVal
   _ui->setupUi(this);
   setBackgroundColor(Color(255,255,255));
   connect(_ui->backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
-  connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
 }
 
 HistoOptionsWidget::~HistoOptionsWidget() {

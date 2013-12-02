@@ -176,9 +176,6 @@ void HistogramView::setState(const DataSet &dataSet) {
     histoOptionsWidget = new HistoOptionsWidget();
     propertiesSelectionWidget->setWidgetEnabled(true);
     histoOptionsWidget->setWidgetEnabled(false);
-    connect(propertiesSelectionWidget,SIGNAL(applySettingsSignal()),this,SLOT(applySettings()));
-    connect(histoOptionsWidget,SIGNAL(applySettingsSignal()),this,SLOT(applySettings()));
-
     optionsMenu = new QMenu(tr("Options"));
     centerViewAction = new QAction(tr("Center view"), this);
     optionsMenu->addAction(centerViewAction);

@@ -147,9 +147,7 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     getGlMainWidget()->installEventFilter(this);
 
     dataConfigWidget = new ViewGraphPropertiesSelectionWidget();
-    connect(dataConfigWidget, SIGNAL(applySettingsSignal()), this, SLOT(applySettings()));
     drawConfigWidget = new ParallelCoordsDrawConfigWidget();
-    connect(drawConfigWidget, SIGNAL(applySettingsSignal()), this, SLOT(applySettings()));
 
     if (linesTextureId == 0) {
       GlMainWidget::getFirstQGLWidget()->makeCurrent();
