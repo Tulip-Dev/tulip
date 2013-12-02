@@ -368,17 +368,21 @@ void HistogramView::addEmptyViewLabel() {
   }
 
   if (noDimsLabel == NULL) {
-    noDimsLabel = new GlLabel(Coord(0,0,0), Size(400,200), foregroundColor);
-    noDimsLabel->setText("No graph properties selected.");
+    noDimsLabel = new GlLabel(Coord(0,0,0), Size(200,200), foregroundColor);
+    noDimsLabel->setText(ViewName::HistogramViewName);
+    noDimsLabel1 = new GlLabel(Coord(0,-50,0), Size(400,200), foregroundColor);
+    noDimsLabel1->setText("No graph properties selected.");
     noDimsLabel2 = new GlLabel(Coord(0,-100,0), Size(700,200), foregroundColor);
     noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
   }
   else {
     noDimsLabel->setColor(foregroundColor);
+    noDimsLabel1->setColor(foregroundColor);
     noDimsLabel2->setColor(foregroundColor);
   }
 
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
+  mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
   mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
 }
 

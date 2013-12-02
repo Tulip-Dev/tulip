@@ -447,9 +447,12 @@ void PixelOrientedView::destroyData() {
 
 void PixelOrientedView::addEmptyViewLabel() {
   Color textColor = getTextColor();
-  GlLabel *noDimsLabel = new GlLabel(Coord(0,0,0), Size(400,200), textColor);
-  noDimsLabel->setText("No graph properties selected.");
+  GlLabel *noDimsLabel = new GlLabel(Coord(0,0,0), Size(200,200), textColor);
+  noDimsLabel->setText(ViewName::PixelOrientedViewName);
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
+  GlLabel *noDimsLabel1 = new GlLabel(Coord(0,0,0), Size(400,200), textColor);
+  noDimsLabel1->setText("No graph properties selected.");
+  mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
   GlLabel *noDimsLabel2 = new GlLabel(Coord(0,-100,0), Size(700,200), textColor);
   noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
   mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
@@ -457,11 +460,14 @@ void PixelOrientedView::addEmptyViewLabel() {
 
 void PixelOrientedView::removeEmptyViewLabel() {
   GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
+  GlSimpleEntity *noDimsLabel1 = mainLayer->findGlEntity("no dimensions label 1");
   GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
 
   if (noDimsLabel != NULL) {
     mainLayer->deleteGlEntity(noDimsLabel);
     delete noDimsLabel;
+    mainLayer->deleteGlEntity(noDimsLabel1);
+    delete noDimsLabel1;
     mainLayer->deleteGlEntity(noDimsLabel2);
     delete noDimsLabel2;
   }

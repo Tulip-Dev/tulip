@@ -473,9 +473,13 @@ void ScatterPlot2DView::addEmptyViewLabel() {
     foregroundColor = Color(0,0,0);
   }
 
-  GlLabel *noDimsLabel = new GlLabel(Coord(0.0f, 0.0f, 0.0f), Size(400.0f, 200.0f), foregroundColor);
-  noDimsLabel->setText("Select at least two graph properties.");
+
+  GlLabel *noDimsLabel= new GlLabel(Coord(0.0f, 0.0f, 0.0f), Size(200.0f, 200.0f), foregroundColor);
+  noDimsLabel->setText(ViewName::ScatterPlot2DViewName);
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
+  GlLabel *noDimsLabel1= new GlLabel(Coord(0.0f, -50.0f, 0.0f), Size(400.0f, 200.0f), foregroundColor);
+  noDimsLabel1->setText("Select at least two graph properties.");
+  mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
   GlLabel *noDimsLabel2 = new GlLabel(Coord(0.0f, -100.0f, 0.0f), Size(700.0f, 200.0f), foregroundColor);
   noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
   mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
@@ -483,11 +487,14 @@ void ScatterPlot2DView::addEmptyViewLabel() {
 
 void ScatterPlot2DView::removeEmptyViewLabel() {
   GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
+  GlSimpleEntity *noDimsLabel1 = mainLayer->findGlEntity("no dimensions label 1");
   GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
 
   if (noDimsLabel != NULL) {
     mainLayer->deleteGlEntity(noDimsLabel);
     delete noDimsLabel;
+    mainLayer->deleteGlEntity(noDimsLabel1);
+    delete noDimsLabel1;
     mainLayer->deleteGlEntity(noDimsLabel2);
     delete noDimsLabel2;
   }

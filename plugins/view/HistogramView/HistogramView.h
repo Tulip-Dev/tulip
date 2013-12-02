@@ -170,7 +170,7 @@ private :
   Coord centerBak;
   Coord upBak;
 
-  GlLabel *noDimsLabel;
+  GlLabel *noDimsLabel, *noDimsLabel1;
   GlLabel *noDimsLabel2;
   GlRect *emptyRect;
   GlRect *emptyRect2;

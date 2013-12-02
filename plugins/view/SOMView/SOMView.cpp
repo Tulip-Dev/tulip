@@ -1129,11 +1129,14 @@ void SOMView::dimensionUpdated() {
 
 void SOMView::addEmptyViewLabel() {
   GlLayer *mainLayer = previewWidget->getScene()->getLayer("Main");
-  GlLabel *noDimsLabel = new GlLabel(Coord(0,0,0), Size(400,100), Color(0,0,0));
-  noDimsLabel->setText("No dimension selected.");
+  GlLabel *noDimsLabel = new GlLabel(Coord(0,0,0), Size(200,100), Color(0,0,0));
+  noDimsLabel->setText(ViewName::SOMViewName);
+  GlLabel *noDimsLabel1 = new GlLabel(Coord(0,-50,0), Size(400,100), Color(0,0,0));
+  noDimsLabel1->setText("No dimension selected.");
   GlLabel *noDimsLabel2 = new GlLabel(Coord(0,-100,0), Size(700,200), Color(0,0,0));
   noDimsLabel2->setText("Go to the \"Dimensions\" tab in top right corner.");
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
+  mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
   mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
   BoundingBox bbox(noDimsLabel->getBoundingBox());
   bbox.expand(noDimsLabel2->getBoundingBox()[0]);
@@ -1144,10 +1147,12 @@ void SOMView::addEmptyViewLabel() {
 void SOMView::removeEmptyViewLabel() {
   GlLayer *mainLayer = previewWidget->getScene()->getLayer("Main");
   GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
+  GlSimpleEntity *noDimsLabel1 = mainLayer->findGlEntity("no dimensions label 1");
   GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
 
   if (noDimsLabel) {
     mainLayer->deleteGlEntity(noDimsLabel);
+    mainLayer->deleteGlEntity(noDimsLabel1);
     mainLayer->deleteGlEntity(noDimsLabel2);
   }
 }
