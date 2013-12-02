@@ -201,19 +201,24 @@ bool BooleanType::read(istream& is, RealType & v) {
 
   c = ::tolower(c);
 
-  if (c != 't' && c != 'f')
-    return false;
-
   string s;
 
   if (c == 't') {
     s.append("true");
     v = true;
   }
-  else {
+  else if (c == 'f') {
     s.append("false");
     v = false;
   }
+  else if(c == '1') {
+    s.append("1");
+    v = true;
+  } else if (c == '0') {
+    s.append("0");
+    v = false;
+  } else
+    return false;
 
   for(unsigned int i = 1; i < s.size(); ++i) {
     if (!(is >> c))
@@ -222,6 +227,14 @@ bool BooleanType::read(istream& is, RealType & v) {
     c = ::tolower(c);
 
     if (c != s[i])
+      return false;
+  }
+  // check the end of the token
+  if (bool(is >> c)) {
+    if (isspace(c)) {
+      is.unget();
+      return true;
+    } else
       return false;
   }
 
