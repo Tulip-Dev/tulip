@@ -214,10 +214,12 @@ bool BooleanType::read(istream& is, RealType & v) {
   else if(c == '1') {
     s.append("1");
     v = true;
-  } else if (c == '0') {
+  }
+  else if (c == '0') {
     s.append("0");
     v = false;
-  } else
+  }
+  else
     return false;
 
   for(unsigned int i = 1; i < s.size(); ++i) {
@@ -229,12 +231,14 @@ bool BooleanType::read(istream& is, RealType & v) {
     if (c != s[i])
       return false;
   }
+
   // check the end of the token
   if (bool(is >> c)) {
     if (isspace(c)) {
       is.unget();
       return true;
-    } else
+    }
+    else
       return false;
   }
 
