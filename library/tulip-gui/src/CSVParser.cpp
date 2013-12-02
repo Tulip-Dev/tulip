@@ -254,7 +254,7 @@ string CSVSimpleParser::treatToken(const string& token, int, int) {
     }
   }
 
-  //Treat string to remove special characters from it's beginning and its end.
+  //Treat string to remove special characters from its beginning and its end.
   string rejectedChars = defaultRejectedChars;
   rejectedChars.push_back(_textDelimiter);
   return removeQuotesIfAny(currentToken,rejectedChars);
@@ -306,7 +306,7 @@ void CSVInvertMatrixParser::end(unsigned int , unsigned int ) {
   //Fill the line wiht
   for(unsigned int line = 0 ; line < maxLineSize ; ++line) {
     for(unsigned int i = 0 ; i < columns.size() ; ++i ) {
-      //Check if the column is great enough
+      //Check if the column is large enough
       tokens[i]=columns[i].size() > line ? columns[i][line] : string();
     }
 

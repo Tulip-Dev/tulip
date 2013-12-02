@@ -55,14 +55,6 @@ public :
 
   bool configurationChanged();
 
-signals :
-
-  void applySettingsSignal();
-
-public slots:
-
-  void applySettings();
-
 private :
 
   Ui::ViewGraphPropertiesSelectionWidgetData *_ui;

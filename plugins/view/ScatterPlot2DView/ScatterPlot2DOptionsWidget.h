@@ -77,10 +77,6 @@ private :
   void updateColorScale();
   Color getButtonColor(QPushButton *button) const;
 
-signals :
-
-  void applySettingsSignal();
-
 private :
 
   bool oldValuesInitialized;

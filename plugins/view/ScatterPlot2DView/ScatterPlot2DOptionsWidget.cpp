@@ -39,7 +39,6 @@ ScatterPlot2DOptionsWidget::ScatterPlot2DOptionsWidget(QWidget *parent) : QWidge
   connect(_ui->oneColorButton, SIGNAL(clicked()), this, SLOT(pressOneColorButton()));
   connect(_ui->minSizeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(minSizeSpinBoxValueChanged(int)));
   connect(_ui->maxSizeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(maxSizeSpinBoxValueChanged(int)));
-  connect(_ui->applyButton,SIGNAL(clicked()),this,SIGNAL(applySettingsSignal()));
 }
 
 ScatterPlot2DOptionsWidget::~ScatterPlot2DOptionsWidget() {

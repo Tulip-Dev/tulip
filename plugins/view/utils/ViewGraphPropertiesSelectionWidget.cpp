@@ -28,7 +28,6 @@ namespace tlp {
 
 ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::ViewGraphPropertiesSelectionWidgetData),graph(NULL) {
   _ui->setupUi(this);
-  connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
 }
 
 ViewGraphPropertiesSelectionWidget::~ViewGraphPropertiesSelectionWidget() {
@@ -95,8 +94,6 @@ vector<string> ViewGraphPropertiesSelectionWidget::getSelectedGraphProperties() 
 
 void ViewGraphPropertiesSelectionWidget::setWidgetEnabled(const bool enabled) {
   _ui->groupBox->setEnabled(enabled);
-  _ui->groupBox2->setEnabled(enabled);
-  _ui-> applyButton->setEnabled(enabled);
 }
 
 void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> selectedProperties) {
@@ -196,10 +193,6 @@ bool ViewGraphPropertiesSelectionWidget::configurationChanged() {
   }
 
   return false;
-}
-
-void ViewGraphPropertiesSelectionWidget::applySettings() {
-  emit(applySettingsSignal());
 }
 
 }
