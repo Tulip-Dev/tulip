@@ -62,7 +62,7 @@ margin: 2
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;You are editing multiple values that will be stored into an array.&lt;br&gt;
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;You are editing multiple values that will be stored into a vector.&lt;br&gt;
 To &lt;b&gt;add&lt;/b&gt; a value, click on the &lt;img src=&quot;:/tulip/gui/icons/64/list-add.png&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; button&lt;br&gt;
 To &lt;b&gt;remove&lt;/b&gt; a value, click on the &lt;img src=&quot;:/tulip/gui/icons/16/list-del.png&quot; width=&quot;20&quot; height=&quot;20&quot;/&gt; button
 &lt;/body&gt;
