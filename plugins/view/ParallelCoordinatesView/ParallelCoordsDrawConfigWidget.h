@@ -67,17 +67,7 @@ private slots :
   void minAxisPointSizeValueChanged(int newValue);
   void maxAxisPointSizeValueChanged(int newValue);
 
-public slots :
-
-  void applySettings() {
-    emit(applySettingsSignal());
-  }
-
-signals :
-
-  void applySettingsSignal();
-
-private :
+private:
 
   bool oldValuesInitialized;
   unsigned int oldAxisHeight;

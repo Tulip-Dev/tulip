@@ -44,8 +44,6 @@ ParallelCoordsDrawConfigWidget::ParallelCoordsDrawConfigWidget(QWidget *parent) 
     _ui->bgColorButton->setDialogParent(Perspective::instance()->mainWindow());
   }
 
-  //connect(_ui->bgColorButton,SIGNAL(clicked()),this,SLOT(pressColorButton()));
-  connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
 }
 
 ParallelCoordsDrawConfigWidget::~ParallelCoordsDrawConfigWidget() {

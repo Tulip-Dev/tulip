@@ -79,16 +79,6 @@ private slots :
   void enableOrDisableNbXGraduationsSP(int uniQuantState);
   void pressBackgroundColorButton();
 
-public slots :
-
-  void applySettings() {
-    emit(applySettingsSignal());
-  }
-
-signals :
-
-  void applySettingsSignal();
-
 private :
 
   bool oldValueInitialized;

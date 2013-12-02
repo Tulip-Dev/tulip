@@ -134,10 +134,8 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
   if(!initialized) {
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
-    connect(propertiesSelectionWidget, SIGNAL(applySettingsSignal()), this, SLOT(draw()));
     propertiesSelectionWidget->enableEdgesButton(false);
     optionsWidget = new ScatterPlot2DOptionsWidget();
-    connect(optionsWidget, SIGNAL(applySettingsSignal()), this, SLOT(draw()));
     ++scatterplotViewInstancesCount;
     initialized=true;
   }
