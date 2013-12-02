@@ -414,9 +414,13 @@ void ParallelCoordinatesView::addEmptyViewLabel() {
     foregroundColor = Color(0,0,0);
   }
 
-  GlLabel *noDimsLabel = new GlLabel(Coord(0.0f,0.0f,0.0f), Size(400.0f,200.0f), foregroundColor);
-  noDimsLabel->setText("No graph properties selected.");
+
+  GlLabel *noDimsLabel = new GlLabel(Coord(0,0,0), Size(200,200), foregroundColor);
+  noDimsLabel->setText(ViewName::ParallelCoordinatesViewName);
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
+  GlLabel *noDimsLabel1 = new GlLabel(Coord(0.0f,-50.0f,0.0f), Size(400.0f,200.0f), foregroundColor);
+  noDimsLabel1->setText("No graph properties selected.");
+  mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
   GlLabel *noDimsLabel2 = new GlLabel(Coord(0.0f,-100.0f,0.0f), Size(700.0f,200.0f), foregroundColor);
   noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
   mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
@@ -426,11 +430,14 @@ void ParallelCoordinatesView::addEmptyViewLabel() {
 
 void ParallelCoordinatesView::removeEmptyViewLabel() {
   GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
+  GlSimpleEntity *noDimsLabel1 = mainLayer->findGlEntity("no dimensions label 1");
   GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
 
   if (noDimsLabel != NULL) {
-    mainLayer->deleteGlEntity(noDimsLabel);
-    delete noDimsLabel;
+      mainLayer->deleteGlEntity(noDimsLabel);
+      delete noDimsLabel;
+      mainLayer->deleteGlEntity(noDimsLabel1);
+    delete noDimsLabel1;
     mainLayer->deleteGlEntity(noDimsLabel2);
     delete noDimsLabel2;
 
