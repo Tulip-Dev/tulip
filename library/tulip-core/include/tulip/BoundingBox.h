@@ -75,7 +75,7 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   * Validity is checked in debug mode by an assert.
   *
   * @param min The lower left closest point of the box.
-  * @param max The higher left most farther point of the box.
+  * @param max The higher right most farther point of the box.
   **/
   BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max);
 
