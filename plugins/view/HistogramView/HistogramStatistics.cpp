@@ -30,14 +30,11 @@
 #include "HistoStatsConfigWidget.h"
 #include "HistogramView.h"
 
-#ifndef _MSC_VER
-#include <ext/functional>
-#define compose_fn stdext::compose2
-#else
+#if defined(_MSC_VER) || (defined(__clang_major__) && __clang_major__ > 4)
 
 #include <functional>
 
-// Visual Studio lacks compose2, use implementation from boost
+// when compose2 is missing, use implementation from boost
 
 /* class for the compose_f_gx_hx adapter
  */
@@ -71,6 +68,11 @@ compose_f_gx_hx (const OP1& o1, const OP2& o2, const OP3& o3) {
 }
 
 #define compose_fn compose_f_gx_hx
+
+#else
+
+#include <ext/functional>
+#define compose_fn stdext::compose2
 
 #endif
 

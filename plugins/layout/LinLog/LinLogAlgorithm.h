@@ -48,7 +48,6 @@ public :
   bool run();
 
 private :
-  tlp::LayoutProperty* layout;
   LinLogLayout* linlog;
 };
 

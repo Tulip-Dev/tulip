@@ -34,7 +34,7 @@ static const string PERCENT_ID = "percent label";
 namespace tlp {
 
 GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height, const Color &color) :
-  width(width), height(height), color(color), percentLabelAndFrameColor(color) {
+  color(color), percentLabelAndFrameColor(color) {
 
 
   if (percentLabelAndFrameColor.getH() >= 180) {

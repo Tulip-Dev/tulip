@@ -110,7 +110,6 @@ private:
   tlp::DoubleProperty *externalWeight;                 //Sum of External edges weights
 
   tlp::NumericProperty *metric;                        //Edge Weights
-  bool noparam;
   double m;                                      //Sum of edge weights for the original graph
 };
 /*@}*/
@@ -346,7 +345,7 @@ const char * paramHelp[] = {
 };
 }
 //========================================================================================
-LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleAlgorithm(context), quotient(NULL), internalWeight(NULL), externalWeight(NULL), metric(NULL), noparam(false), m(0.0) {
+LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleAlgorithm(context), quotient(NULL), internalWeight(NULL), externalWeight(NULL), metric(NULL), m(0.0) {
   addInParameter<NumericProperty*>("metric",paramHelp[0], "",false);
 }
 //========================================================================================

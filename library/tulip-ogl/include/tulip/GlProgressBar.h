@@ -59,7 +59,6 @@ protected:
 
 private :
 
-  float width, height;
   Color color, percentLabelAndFrameColor;
   float progressBarMaxWidth, progressBarHeight;
   float commentWidth, commentHeight;
