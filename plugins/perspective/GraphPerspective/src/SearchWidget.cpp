@@ -48,7 +48,7 @@ protected:
   tlp::PropertyInterface* _b;
 
 public:
-  SearchOperator():casesensitive(false), _a(NULL), _b(NULL){}
+  SearchOperator():casesensitive(false), _a(NULL), _b(NULL) {}
   virtual void setProperties(tlp::PropertyInterface* a, tlp::PropertyInterface* b) {
     _a = a;
     _b = b;
@@ -56,9 +56,11 @@ public:
 
   virtual bool compare(tlp::node n)=0;
   virtual bool compare(tlp::edge e)=0;
-  void setCaseSensitive(const bool sensitive){ casesensitive=sensitive;}
+  void setCaseSensitive(const bool sensitive) {
+    casesensitive=sensitive;
+  }
   Qt::CaseSensitivity getCaseSensitive() const {
-      return (casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive);
+    return (casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive);
   }
 
   tlp::BooleanProperty* run(tlp::Graph* g, bool onNodes, bool onEdges) {
@@ -150,7 +152,7 @@ QVector<SearchOperator*> SearchWidget::NUMERIC_OPERATORS = QVector<SearchOperato
     << new MatchesOperator;
 
 QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator*>()
-        << new StringEqualsOperator
+    << new StringEqualsOperator
     << new StringDifferentOperator
     << NULL
     << NULL
