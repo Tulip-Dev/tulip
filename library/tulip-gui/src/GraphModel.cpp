@@ -250,8 +250,7 @@ void GraphModel::treatEvent(const Event& ev) {
   MACRO(GraphProperty,tlp::Graph*);\
   MACRO(IntegerProperty,int);\
   MACRO(IntegerVectorProperty,std::vector<int>);\
-  MACRO(BooleanProperty,bool);\
-  MACRO(BooleanVectorProperty,std::vector<bool>);
+  MACRO(BooleanProperty,bool);
 
 #define STANDARD_EDGE_CHECKS(MACRO) \
   MACRO(DoubleProperty,double);\
@@ -267,8 +266,7 @@ void GraphModel::treatEvent(const Event& ev) {
   MACRO(CoordVectorProperty,std::vector<tlp::Coord>);\
   MACRO(IntegerProperty,int);\
   MACRO(IntegerVectorProperty,std::vector<int>);\
-  MACRO(BooleanProperty,bool);\
-  MACRO(BooleanVectorProperty,std::vector<bool>);
+  MACRO(BooleanProperty,bool);
 
 
 #define GET_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) return QVariant::fromValue< TYPE >(static_cast<PROP*>(prop)->getNodeValue(n))
@@ -283,6 +281,8 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface * prop) {
     return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str()),TulipFileDescriptor::File));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty*>(prop)->getNodeValue(n)));
+  else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
+    return QVariant::fromValue<QVector<bool> >(QVector<bool>::fromStdVector(static_cast<BooleanVectorProperty*>(prop)->getNodeValue(n)));
 
   STANDARD_NODE_CHECKS(GET_NODE_VALUE)
   return QVariant();
@@ -297,6 +297,8 @@ QVariant GraphModel::nodeDefaultValue(PropertyInterface * prop) {
     return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str()),TulipFileDescriptor::File));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty*>(prop)->getNodeDefaultValue()));
+  else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
+    return QVariant::fromValue<QVector<bool> >(QVector<bool>::fromStdVector(static_cast<BooleanVectorProperty*>(prop)->getNodeDefaultValue()));
 
   STANDARD_NODE_CHECKS(GET_NODE_DEFAULT_VALUE)
   return QVariant();
@@ -311,6 +313,8 @@ bool GraphModel::setAllNodeValue(PropertyInterface * prop, QVariant v) {
     static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipFileDescriptor>().absolutePath.toUtf8().data()));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<LabelPosition::LabelPositions>());
+  else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
+    static_cast<BooleanVectorProperty*>(prop)->setAllNodeValue(v.value<QVector<bool> >().toStdVector());
 
   STANDARD_NODE_CHECKS(SET_ALL_NODE_VALUE)
   else
@@ -330,6 +334,8 @@ bool GraphModel::setNodeValue(unsigned int id, PropertyInterface * prop, QVarian
     static_cast<StringProperty*>(prop)->setNodeValue(n,std::string(v.value<TulipFileDescriptor>().absolutePath.toUtf8().data()));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     static_cast<IntegerProperty*>(prop)->setNodeValue(n,v.value<LabelPosition::LabelPositions>());
+  else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
+    static_cast<BooleanVectorProperty*>(prop)->setNodeValue(n,v.value<QVector<bool> >().toStdVector());
 
   STANDARD_NODE_CHECKS(SET_NODE_VALUE)
   else
@@ -354,6 +360,8 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface * prop) {
     return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(QString::fromUtf8(static_cast<StringProperty*>(prop)->getEdgeValue(e).c_str()),TulipFileDescriptor::File));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty*>(prop)->getEdgeValue(e)));
+  else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
+    return QVariant::fromValue<QVector<bool> >(QVector<bool>::fromStdVector(static_cast<BooleanVectorProperty*>(prop)->getEdgeValue(e)));
 
   STANDARD_EDGE_CHECKS(GET_EDGE_VALUE)
   return QVariant();
@@ -372,6 +380,8 @@ QVariant GraphModel::edgeDefaultValue(PropertyInterface * prop) {
     return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(QString::fromUtf8(static_cast<StringProperty*>(prop)->getEdgeDefaultValue().c_str()),TulipFileDescriptor::File));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty*>(prop)->getEdgeDefaultValue()));
+  else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
+    return QVariant::fromValue<QVector<bool> >(QVector<bool>::fromStdVector(static_cast<BooleanVectorProperty*>(prop)->getEdgeDefaultValue()));
 
   STANDARD_EDGE_CHECKS(GET_EDGE_DEFAULT_VALUE)
   return QVariant();
@@ -392,6 +402,8 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface* prop, QVariant
     static_cast<StringProperty*>(prop)->setEdgeValue(e,std::string(v.value<TulipFileDescriptor>().absolutePath.toUtf8().data()));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     static_cast<IntegerProperty*>(prop)->setEdgeValue(e,v.value<LabelPosition::LabelPositions>());
+  else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
+    static_cast<BooleanVectorProperty*>(prop)->setEdgeValue(e, v.value<QVector<bool> >().toStdVector());
 
   STANDARD_EDGE_CHECKS(SET_EDGE_VALUE)
   else
@@ -413,6 +425,8 @@ bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v) {
     static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<TulipFileDescriptor>().absolutePath.toUtf8().data()));
   else if (dynamic_cast<IntegerProperty*>(prop) != NULL && prop->getName() == "viewLabelPosition")
     static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<LabelPosition::LabelPositions>());
+  else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
+    static_cast<BooleanVectorProperty*>(prop)->setAllEdgeValue(v.value<QVector<bool> >().toStdVector());
 
   STANDARD_EDGE_CHECKS(SET_ALL_EDGE_VALUE)
   else

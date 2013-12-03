@@ -729,6 +729,64 @@ QString EdgeSetEditorCreator::displayText(const QVariant& var) const {
   return ss.str().c_str();
 }
 
+QWidget* QVectorBoolEditorCreator::createWidget(QWidget*) const {
+  VectorEditionWidget* w = new VectorEditionWidget(NULL);
+  w->setWindowFlags(Qt::Dialog);
+  w->setWindowModality(Qt::ApplicationModal);
+  return w;
+}
+
+void QVectorBoolEditorCreator::setEditorData(QWidget* editor, const QVariant& v,bool,tlp::Graph*) {
+  QVector<QVariant> editorData;
+  QVector<bool> vect = v.value<QVector<bool> >();
+
+  for (int i=0; i < vect.size(); ++i)  {
+    editorData.push_back(QVariant::fromValue<bool>(vect[i]));
+  }
+
+  static_cast<VectorEditionWidget*>(editor)->setVector(editorData,qMetaTypeId<bool>());
+
+  static_cast<VectorEditionWidget*>(editor)->move(QCursor::pos());
+}
+
+QVariant QVectorBoolEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
+  QVector<bool> result;
+  QVector<QVariant> editorData = static_cast<VectorEditionWidget*>(editor)->vector();
+  foreach(QVariant v, editorData)
+  result.push_back(v.value<bool>());
+  return QVariant::fromValue<QVector<bool> >(result);
+}
+
+QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
+  std::vector<bool> v = data.value<QVector<bool> >().toStdVector();
+
+  if (v.empty())
+    return QString();
+
+  // use a DataTypeSerializer if any
+  DataTypeSerializer* dts =
+    DataSet::typenameToSerializer(std::string(typeid(v).name()));
+
+  if (dts) {
+    DisplayVectorDataType<bool> dt(&v);
+
+    std::stringstream sstr;
+    dts->writeData(sstr, &dt);
+
+    std::string str = sstr.str();
+
+    if (str.size() > 45)
+      str.replace(str.begin() + 41, str.end(), " ...)");
+
+    return QString::fromUtf8(str.c_str());
+  }
+
+  if (v.size() == 1)
+    return QString("1 element");
+
+  return QString::number(v.size()) + QObject::trUtf8(" elements");
+}
+
 //QStringEditorCreator
 QWidget* QStringEditorCreator::createWidget(QWidget *parent) const {
   return new QLineEdit(parent);
