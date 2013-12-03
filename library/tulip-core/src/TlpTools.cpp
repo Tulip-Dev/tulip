@@ -257,9 +257,9 @@ void tlp::initTulipLib(const char* appDirPath) {
 #include <cxxabi.h>
 std::string tlp::demangleClassName(const char* className,
                                    bool hideTlp) {
-  static char demangleBuffer[256];
+  static char demangleBuffer[1024];
   int status;
-  size_t length = 256;
+  size_t length = 1024;
   abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
                       &length, &status);
 
