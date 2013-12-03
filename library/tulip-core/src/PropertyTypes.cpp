@@ -232,16 +232,6 @@ bool BooleanType::read(istream& is, RealType & v) {
       return false;
   }
 
-  // check the end of the token
-  if (bool(is >> c)) {
-    if (isspace(c)) {
-      is.unget();
-      return true;
-    }
-    else
-      return false;
-  }
-
   return true;
 }
 
