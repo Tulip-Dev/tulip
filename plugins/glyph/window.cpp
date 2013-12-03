@@ -49,7 +49,6 @@ public:
 private:
   Color _rectColor;
   Color _textColor;
-  const float _titleBarSize;
   const float _borderWidth;
   GlPolyQuad _border;
   GlQuad _center;
@@ -77,7 +76,6 @@ Window::Window(const tlp::PluginContext* context):
   Glyph(context),
   _rectColor(205, 205, 205, 255),
   _textColor(205, 205, 205, 255),
-  _titleBarSize(0.1f),
   _borderWidth(0.02f),
   _border(texture) {
 

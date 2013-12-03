@@ -33,6 +33,8 @@ using namespace std;
 using namespace tlp;
 
 namespace {
+
+/*
 void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v ) {
   float theMin, theMax, delta;
   theMin = std::min(std::min(r, g), b); //MIN( MIN( r, g) , b );
@@ -116,6 +118,7 @@ void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
     break;
   }
 }
+*/
 
 const char * paramHelp[] = {
   // type

@@ -48,7 +48,6 @@ private :
   float initialSelectedAxisRotAngle;
   bool dragStarted;
   int x,y;
-  GlRect *axisHighlightRect;
   bool mouseMove;
   bool axisSwapStarted;
 };
