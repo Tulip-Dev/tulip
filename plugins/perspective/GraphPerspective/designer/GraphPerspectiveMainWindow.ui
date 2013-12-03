@@ -733,10 +733,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>Switch to expose mode</string>
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle expose mode (Ctrl + E)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="shortcut">
-                  <string>Shift+E</string>
+                  <string>Ctrl+E</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -761,7 +761,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>Show/Hide the graph's elements search panel</string>
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show/hide graph's elements search panel (Crtl + F)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+F</string>
@@ -789,10 +789,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>Show/Hide the Python interpreter</string>
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show/hide interactive Python interpreter window (Ctrl + P)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="shortcut">
-                  <string>Ctrl+F</string>
+                  <string>Ctrl+P</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -1070,7 +1070,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
