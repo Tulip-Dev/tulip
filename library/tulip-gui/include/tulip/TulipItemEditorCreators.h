@@ -191,6 +191,13 @@ public:
   virtual QString displayText(const QVariant &data) const;
 };
 
+class QVectorBoolEditorCreator : public tlp::TulipItemEditorCreator {
+public:
+  QWidget* createWidget(QWidget* parent) const;
+  virtual void setEditorData(QWidget* editor, const QVariant& data,bool,tlp::Graph*);
+  virtual QVariant editorData(QWidget* editor,tlp::Graph*);
+  virtual QString displayText(const QVariant &data) const;
+};
 
 class TLP_QT_SCOPE TulipFontEditorCreator: public tlp::TulipItemEditorCreator {
 public:

@@ -69,7 +69,8 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<NodeShape::NodeShapes>(new NodeShapeEditorCreator);
   registerCreator<EdgeShape::EdgeShapes>(new EdgeShapeEditorCreator);
   registerCreator<EdgeExtremityShape::EdgeExtremityShapes>(new EdgeExtremityShapeEditorCreator);
-  registerCreator<std::vector<bool> >(new VectorEditorCreator<bool>);
+  //registerCreator<std::vector<bool> >(new VectorEditorCreator<bool>);
+  registerCreator<QVector<bool> >(new QVectorBoolEditorCreator);
   registerCreator<std::vector<Color> >(new VectorEditorCreator<Color>);
   registerCreator<std::vector<Coord> >(new VectorEditorCreator<Coord>);
   registerCreator<std::vector<double> >(new VectorEditorCreator<double>);

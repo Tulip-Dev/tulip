@@ -21,6 +21,8 @@
 #ifndef TULIPMETATYPES_H
 #define TULIPMETATYPES_H
 
+#include <QVector>
+
 #include <tulip/DataSet.h>
 #include <tulip/Graph.h>
 #include <tulip/Color.h>
@@ -92,7 +94,8 @@ Q_DECLARE_METATYPE(std::vector<int>)
 
 Q_DECLARE_METATYPE(tlp::BooleanProperty*)
 Q_DECLARE_METATYPE(tlp::BooleanVectorProperty*)
-Q_DECLARE_METATYPE(std::vector<bool>)
+//Q_DECLARE_METATYPE(std::vector<bool>)
+Q_DECLARE_METATYPE(QVector<bool>)
 
 Q_DECLARE_METATYPE(std::set<tlp::edge>)
 

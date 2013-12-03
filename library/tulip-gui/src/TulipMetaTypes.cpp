@@ -80,7 +80,9 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::UnsignedIntegerType::RealType);
   CHECK_QVARIANT(tlp::LongType::RealType);
   CHECK_QVARIANT(tlp::BooleanType::RealType);
-  CHECK_QVARIANT(tlp::BooleanVectorType::RealType);
+  //CHECK_QVARIANT(tlp::BooleanVectorType::RealType);
+  if (v.userType() == qMetaTypeId<QVector<bool> >())
+    return new TypedData<tlp::BooleanVectorType::RealType>(new tlp::BooleanVectorType::RealType(v.value<QVector<bool> >().toStdVector()));
   CHECK_QVARIANT(tlp::PointType::RealType);
   CHECK_QVARIANT(tlp::SizeType::RealType);
   CHECK_QVARIANT(tlp::StringType::RealType);
@@ -145,7 +147,16 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   CHECK_DATATYPE(tlp::UnsignedIntegerType::RealType);
   CHECK_DATATYPE(tlp::LongType::RealType);
   CHECK_DATATYPE(tlp::BooleanType::RealType);
-  CHECK_DATATYPE(tlp::BooleanVectorType::RealType);
+  //CHECK_DATATYPE(tlp::BooleanVectorType::RealType);
+  if (type.compare(typeid(tlp::BooleanVectorType::RealType).name()) == 0) {
+    tlp::BooleanVectorType::RealType result;
+
+    if (dm)
+      result = *((tlp::BooleanVectorType::RealType*)dm->value);
+
+    return QVariant::fromValue<QVector<bool> >(QVector<bool>::fromStdVector(result));
+  }
+
   CHECK_DATATYPE(tlp::PointType::RealType);
   CHECK_DATATYPE(tlp::SizeType::RealType);
   CHECK_DATATYPE(tlp::StringType::RealType);
