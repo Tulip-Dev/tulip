@@ -40,10 +40,15 @@ using namespace tlp;
 using namespace std;
 
 class SearchOperator {
+private:
+  bool casesensitive;
+
 protected:
   tlp::PropertyInterface* _a;
   tlp::PropertyInterface* _b;
+
 public:
+  SearchOperator():casesensitive(false), _a(NULL), _b(NULL){}
   virtual void setProperties(tlp::PropertyInterface* a, tlp::PropertyInterface* b) {
     _a = a;
     _b = b;
@@ -51,7 +56,10 @@ public:
 
   virtual bool compare(tlp::node n)=0;
   virtual bool compare(tlp::edge e)=0;
-  virtual void setCaseSensitive(bool ){}
+  void setCaseSensitive(const bool sensitive){ casesensitive=sensitive;}
+  Qt::CaseSensitivity getCaseSensitive() const {
+      return (casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive);
+  }
 
   tlp::BooleanProperty* run(tlp::Graph* g, bool onNodes, bool onEdges) {
     tlp::BooleanProperty* prop = new BooleanProperty(g);
@@ -101,30 +109,21 @@ public:
 
 #define STRING_CMP(NAME,CMP) class NAME : public StringSearchOperator { \
 public:\
-   NAME():casesensitive(false){}\
-   bool compareStrings(const QString &a, const QString &b) { return (CMP); }\
-   void setCaseSensitive(bool sensitive){ casesensitive=sensitive;}\
-private:\
-   bool casesensitive;\
+   bool compareStrings(const QString &a, const QString &b) { return CMP; }\
 };
-STRING_CMP(StringEqualsOperator,(a.compare(b, casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive)==0))
-STRING_CMP(StringDifferentOperator,(a.compare(b, casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive)!=0))
-STRING_CMP(StartsWithOperator,a.startsWith(b, casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive))
-STRING_CMP(EndsWithOperator,a.endsWith(b, casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive))
-STRING_CMP(ContainsOperator,a.contains(b, casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive))
+STRING_CMP(StringEqualsOperator,(a.compare(b, getCaseSensitive())==0))
+STRING_CMP(StringDifferentOperator,(a.compare(b, getCaseSensitive())!=0))
+STRING_CMP(StartsWithOperator,a.startsWith(b, getCaseSensitive()))
+STRING_CMP(EndsWithOperator,a.endsWith(b, getCaseSensitive()))
+STRING_CMP(ContainsOperator,a.contains(b, getCaseSensitive()))
 
 class MatchesOperator: public StringSearchOperator {
 public:
   bool compareStrings(const QString &a, const QString &b) {
     QRegExp regexp(b);
-    regexp.setCaseSensitivity(casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive);
+    regexp.setCaseSensitivity(getCaseSensitive());
     return regexp.exactMatch(a);
   }
-
- void setCaseSensitive(bool sensitive){ casesensitive=sensitive;}
-
-private:
-   bool casesensitive;
 };
 
 #define NUM_CMP(NAME,CMP) class NAME : public NumericSearchOperator { \
