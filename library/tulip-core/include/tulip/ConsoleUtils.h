@@ -269,11 +269,11 @@ static void escapeAnsiCode(std::ostream &os, const std::string &ansiCode, const 
   static const char *stdErrNoAnsiEscapes = getenv("STDERR_NO_ANSI_ESCAPES");
 #ifndef WIN32
 
-  if ((os == std::cout && !stdOutNoAnsiEscapes && isatty(fileno(stdout))) ||
-      (os == std::cerr && !stdErrNoAnsiEscapes && isatty(fileno(stderr))))
+  if ((&os == &std::cout && !stdOutNoAnsiEscapes && isatty(fileno(stdout))) ||
+      (&os == &std::cerr && !stdErrNoAnsiEscapes && isatty(fileno(stderr))))
 #else
-  if ((os == std::cout && !stdOutNoAnsiEscapes) ||
-      (os == std::cerr && !stdErrNoAnsiEscapes))
+  if ((&os == &std::cout && !stdOutNoAnsiEscapes) ||
+      (&os == &std::cerr && !stdErrNoAnsiEscapes))
 #endif
     os << "\x1b[" << ansiCode << endEscape;
 }
@@ -301,7 +301,7 @@ static void escapeAnsiCode(std::ostream &os, const std::string &ansiCode, const 
  */
 
 inline std::ostream& defaultTextColor(std::ostream &s) {
-  if (s == std::cout || s == std::cerr) {
+  if (&s == &std::cout || &s == &std::cerr) {
 #ifndef WIN32
     escapeAnsiCode(s, "0");
     escapeAnsiCode(s, "39");
@@ -328,7 +328,7 @@ inline std::ostream& defaultTextColor(std::ostream &s) {
 }
 
 inline std::ostream& operator<<(std::ostream &s, const TextFgColorSetup &tgfcs) {
-  if (s == std::cout || s == std::cerr) {
+  if (&s == &std::cout || &s == &std::cerr) {
 #ifndef WIN32
     escapeAnsiCode(s, ansiFgColors[tgfcs.color]);
 #else
@@ -351,7 +351,7 @@ inline std::ostream& operator<<(std::ostream &s, const TextFgColorSetup &tgfcs) 
 }
 
 inline std::ostream& operator<<(std::ostream &s, const TextBgColorSetup &tbgcs) {
-  if (s == std::cout || s == std::cerr) {
+  if (&s == &std::cout || &s == &std::cerr) {
 #ifndef WIN32
     escapeAnsiCode(s, ansiBgColors[tbgcs.color]);
 #else
@@ -388,7 +388,7 @@ inline void setEffects(std::ostream &s, const int &effect) {
 }
 
 inline std::ostream& operator<<(std::ostream &s, const TextEffectSetup &tes) {
-  if (s == std::cout || s == std::cerr) {
+  if (&s == &std::cout || &s == &std::cerr) {
 #ifndef WIN32
     setEffects(s, tes.effect);
 #else
@@ -494,7 +494,7 @@ inline std::ostream& lightCyan(std::ostream& s) {
 inline std::ostream& fillToEndOfLine(std::ostream& s) {
 #ifndef WIN32
 
-  if (processInForeground() && ((s == std::cout && isatty(fileno(stdout))) || (s == std::cerr && isatty(fileno(stderr))))) {
+  if (processInForeground() && ((&s == &std::cout && isatty(fileno(stdout))) || (&s == &std::cerr && isatty(fileno(stderr))))) {
 #endif
     std::pair<int, int> cursorPos = getConsoleCursorPosition();
     std::pair<int, int> consoleSize = getConsoleSize();
@@ -513,7 +513,7 @@ inline std::ostream& fillToEndOfLine(std::ostream& s) {
 
 #endif
 
-  if ((s == std::cout && !isatty(fileno(stdout))) || (s == std::cerr && !isatty(fileno(stderr)))) {
+  if ((&s == &std::cout && !isatty(fileno(stdout))) || (&s == &std::cerr && !isatty(fileno(stderr)))) {
     s << std::endl;
   }
 
