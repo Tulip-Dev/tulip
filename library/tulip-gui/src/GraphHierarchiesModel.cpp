@@ -627,7 +627,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         QModelIndex index = indexOf(sg);
         assert(index.isValid());
 #ifndef NDEBUG
-	QModelIndex parentIndex = indexOf(parentGraph);
+        QModelIndex parentIndex = indexOf(parentGraph);
         assert(parentIndex.isValid());
 #endif
 
