@@ -51,7 +51,7 @@ struct GMLTokenParser {
     bool endOfStream=false,strGet=false,slashMode=false,started=false,stop=false;
     char ch;
 
-    while ( (!stop) && (endOfStream=is.get(ch))) {
+    while ( (!stop) && (endOfStream=bool(is.get(ch)))) {
       curChar++;
 
       if (strGet)
