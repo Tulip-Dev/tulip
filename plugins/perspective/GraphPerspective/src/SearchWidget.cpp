@@ -117,8 +117,14 @@ class MatchesOperator: public StringSearchOperator {
 public:
   bool compareStrings(const QString &a, const QString &b) {
     QRegExp regexp(b);
+    regexp.setCaseSensitivity(casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive);
     return regexp.exactMatch(a);
   }
+
+ void setCaseSensitive(bool sensitive){ casesensitive=sensitive;}
+
+private:
+   bool casesensitive;
 };
 
 #define NUM_CMP(NAME,CMP) class NAME : public NumericSearchOperator { \
