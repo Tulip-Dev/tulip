@@ -34,6 +34,7 @@
 #include <QDebug>
 #include <QStandardItemModel>
 #include <QDragEnterEvent>
+#include <QRegExp>
 
 using namespace tlp;
 using namespace std;
@@ -50,6 +51,7 @@ public:
 
   virtual bool compare(tlp::node n)=0;
   virtual bool compare(tlp::edge e)=0;
+  virtual void setCaseSensitive(bool ){}
 
   tlp::BooleanProperty* run(tlp::Graph* g, bool onNodes, bool onEdges) {
     tlp::BooleanProperty* prop = new BooleanProperty(g);
@@ -99,13 +101,17 @@ public:
 
 #define STRING_CMP(NAME,CMP) class NAME : public StringSearchOperator { \
 public:\
-  bool compareStrings(const QString &a, const QString &b) { return CMP ; }\
+   NAME():casesensitive(false){}\
+   bool compareStrings(const QString &a, const QString &b) { return (CMP); }\
+   void setCaseSensitive(bool sensitive){ casesensitive=sensitive;}\
+private:\
+   bool casesensitive;\
 };
-STRING_CMP(StringEqualsOperator,a == b)
-STRING_CMP(StringDifferentOperator,a != b)
-STRING_CMP(StartsWithOperator,a.startsWith(b))
-STRING_CMP(EndsWithOperator,a.endsWith(b))
-STRING_CMP(ContainsOperator,a.contains(b))
+STRING_CMP(StringEqualsOperator,(a.compare(b, casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive)==0))
+STRING_CMP(StringDifferentOperator,(a.compare(b, casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive)!=0))
+STRING_CMP(StartsWithOperator,a.startsWith(b, casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive))
+STRING_CMP(EndsWithOperator,a.endsWith(b, casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive))
+STRING_CMP(ContainsOperator,a.contains(b, casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive))
 
 class MatchesOperator: public StringSearchOperator {
 public:
@@ -139,7 +145,7 @@ QVector<SearchOperator*> SearchWidget::NUMERIC_OPERATORS = QVector<SearchOperato
     << new MatchesOperator;
 
 QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator*>()
-    << new StringEqualsOperator
+        << new StringEqualsOperator
     << new StringDifferentOperator
     << NULL
     << NULL
@@ -462,8 +468,11 @@ SearchOperator *SearchWidget::searchOperator() {
 
   if (isNumericComparison())
     op = NUMERIC_OPERATORS[_ui->operatorCombo->currentIndex()];
-  else
+  else {
     op = STRING_OPERATORS[_ui->operatorCombo->currentIndex()];
+    op->setCaseSensitive(_ui->caseSensitivityCheck->isChecked());
+  }
+
 
   return op;
 }
