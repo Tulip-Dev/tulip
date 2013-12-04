@@ -201,6 +201,8 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
     noShaderGlyphs.insert(NodeShape::GlowSphere);
     noShaderGlyphs.insert(NodeShape::HalfCylinder);
     noShaderGlyphs.insert(NodeShape::Sphere);
+    noShaderGlyphs.insert(NodeShape::Cube);
+    noShaderGlyphs.insert(NodeShape::CubeOutlined);
   }
 
   int glyph = data->getElementShape()->getNodeValue(n);
