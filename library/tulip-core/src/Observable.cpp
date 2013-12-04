@@ -311,8 +311,8 @@ void Observable::unholdObservers() {
       for( it = backupEvents.begin(); it != backupEvents.end(); ++it) {
         if (Observable::_oAlive[it->first] && Observable::_oAlive[it->second]) {
           // schedule a new Event
-	  _oEventsToTreat[it->second] += 1;
-	  Observable *sender = static_cast<Observable *>(Observable::_oPointer[it->first]);
+          _oEventsToTreat[it->second] += 1;
+          Observable *sender = static_cast<Observable *>(Observable::_oPointer[it->first]);
           preparedEvents[it->second].push_back(Event(*sender, Event::TLP_MODIFICATION));
         }
       }
@@ -321,8 +321,9 @@ void Observable::unholdObservers() {
         map<node, vector<Event> >::const_iterator it;
 
         for (it = preparedEvents.begin(); it!=preparedEvents.end(); ++it) {
-	  // treat scheduled events
-	  _oEventsToTreat[it->first] -= it->second.size();
+          // treat scheduled events
+          _oEventsToTreat[it->first] -= it->second.size();
+
           if (_oAlive[it->first]) {
             Observable *obs  = static_cast<Observable *>(_oPointer[it->first]);
 #ifndef NDEBUG
@@ -460,12 +461,12 @@ void Observable::sendEvent(const Event &message) {
 
       if ((_oType[e] & OBSERVER) && (message.type() != Event::TLP_INFORMATION)) {
         if (_oHoldCounter == 0  || message.type() == Event::TLP_DELETE) {
-	  // schedule event
-	  _oEventsToTreat[backn] += 1;
-	  _oEventsToTreat[src] += 1;
+          // schedule event
+          _oEventsToTreat[backn] += 1;
+          _oEventsToTreat[src] += 1;
           observerTonotify.push_back(pair<Observable*, node>(obs, src));
         }
-	else if (!queuedEvent) {
+        else if (!queuedEvent) {
           delayedEventAdded = true;
 #ifdef _OPENMP
           #pragma omp critical(ObservableGraphUpdate)
@@ -477,10 +478,10 @@ void Observable::sendEvent(const Event &message) {
       }
 
       if (_oType[e] & LISTENER) {
- 	// schedule event
-	_oEventsToTreat[backn] += 1;
-	_oEventsToTreat[src] += 1;
-	listenerTonotify.push_back(pair<Observable*, node>(obs, src));
+        // schedule event
+        _oEventsToTreat[backn] += 1;
+        _oEventsToTreat[src] += 1;
+        listenerTonotify.push_back(pair<Observable*, node>(obs, src));
       }
 
     }
@@ -497,19 +498,21 @@ void Observable::sendEvent(const Event &message) {
     for(itobs = listenerTonotify.begin(); itobs != listenerTonotify.end(); ++itobs) {
       if (itobs->second == backn && message.type() == Event::TLP_DELETE) {
         tlp::debug() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
-	// treat scheduled event
-	_oEventsToTreat[backn] -= 2;
+        // treat scheduled event
+        _oEventsToTreat[backn] -= 2;
         continue;
       }
 
       // treat scheduled event
       _oEventsToTreat[itobs->second] -= 1;
+
       if (_oAlive[itobs->second]) { //other listeners/observers could be destroyed during the treat event
 #ifndef NDEBUG
         ++(itobs->first->received);
 #endif
         itobs->first->treatEvent(message);
       }
+
       // we decrement after treating event
       // to prevent reuse of backn
       _oEventsToTreat[backn] -= 1;
@@ -530,19 +533,21 @@ void Observable::sendEvent(const Event &message) {
     for(itobs = observerTonotify.begin(); itobs != observerTonotify.end(); ++itobs) {
       if (itobs->second == backn && message.type() == Event::TLP_DELETE) {
         tlp::debug() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
-	// treat scheduled event
-	_oEventsToTreat[backn] -= 2;
+        // treat scheduled event
+        _oEventsToTreat[backn] -= 2;
         continue;
       }
 
       // treat scheduled event
       _oEventsToTreat[itobs->second] -= 1;
+
       if (_oAlive[itobs->second]) { //other listeners/observers could be destroyed during the treat event
 #ifndef NDEBUG
         ++(itobs->first->received);
 #endif
         itobs->first->treatEvents(tmp);
       }
+
       // we decrement after treating event
       // to prevent reuse of backn
       _oEventsToTreat[backn] -= 1;
@@ -573,9 +578,10 @@ void Observable::updateObserverGraph() {
 #endif
     {
       for( itNodes = _oDelayedDelNode.begin(); itNodes != _oDelayedDelNode.end(); ++itNodes) {
-	  node toDel = *itNodes;
-	  if (_oEventsToTreat[toDel] == 0)
-	    _oGraph.delNode(toDel);
+        node toDel = *itNodes;
+
+        if (_oEventsToTreat[toDel] == 0)
+          _oGraph.delNode(toDel);
       }
     }
     _oDelayedDelNode.clear();
