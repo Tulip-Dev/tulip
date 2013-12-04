@@ -425,6 +425,13 @@ private:
   static tlp::NodeProperty<bool> _oAlive;
 
   /**
+   * @brief _oEventsToTreat the count of events scheduled to be treated by an object
+   * the object's associated node is deleted only when this count is null
+   * in order to prevent the node reuse and ensure the _oAlive associated value
+   */
+  static tlp::NodeProperty<unsigned int> _oEventsToTreat;
+
+  /**
    * @brief _oType the type of relation between two Observable Objects
    */
   static tlp::EdgeProperty<unsigned char> _oType;

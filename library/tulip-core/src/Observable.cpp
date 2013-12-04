@@ -77,7 +77,8 @@ unsigned int                Observable::_oNotifying   = 0;
 unsigned int                Observable::_oUnholding   = 0;
 unsigned int                Observable::_oHoldCounter = 0;
 NodeProperty<Observable *>  Observable::_oPointer;
-NodeProperty<bool >         Observable::_oAlive;
+NodeProperty<bool>          Observable::_oAlive;
+NodeProperty<unsigned int>  Observable::_oEventsToTreat;
 EdgeProperty<unsigned char> Observable::_oType;
 std::set<std::pair<tlp::node, tlp::node> > Observable::_oDelayedEvents = std::set<std::pair<tlp::node, tlp::node> >();
 vector<node>              Observable::_oDelayedDelNode;
@@ -103,6 +104,7 @@ node Observable::getBoundNode() {
     _n = _oGraph.addNode();
     _oPointer[_n] = this;
     _oAlive[_n] = true;
+    _oEventsToTreat[_n] = 0;
   }
 
   return _n;
@@ -138,6 +140,7 @@ Observable* Observable::getObject(node n) {
 bool Observable::init() {
   Observable::_oGraph.alloc(Observable::_oPointer);
   Observable::_oGraph.alloc(Observable::_oAlive);
+  Observable::_oGraph.alloc(Observable::_oEventsToTreat);
   Observable::_oGraph.alloc(Observable::_oType);
 
   objectAlive.alive = Observable::_oAlive;
@@ -237,9 +240,10 @@ Observable::~Observable() {
     //tlp::debug() << "[Observable node] destructor:" << n.id  << "::" << this << endl;
     _oAlive[_n] = false;
 
-    bool noDelay = _oNotifying == 0 && _oUnholding == 0 && _oHoldCounter == 0;
+    bool noDelay =
+      (_oNotifying == 0) && (_oUnholding == 0) && (_oHoldCounter == 0);
 
-    if (noDelay == false) {
+    if ((noDelay == false) &&  (_oEventsToTreat[_n] == 0)) {
       // _n cannot be deleted only if it is observed
       // then its deletion is delayed until the observers are unhold
       noDelay = true;
@@ -253,12 +257,13 @@ Observable::~Observable() {
     }
 
     if (noDelay) {
+      assert(_oEventsToTreat[_n] == 0);
       _oGraph.delNode(_n);
-      //tlp::debug() << "[Observable node] deleted:" << n.id << "::" << this << endl;
+      //tlp::debug() << "[Observable node] deleted:" << _n.id << "::" << this << endl;
     }
     else {
       _oDelayedDelNode.push_back(_n);
-      //tlp::debug() << "[Observable node] delayed delete:" << n.id << "::" << this << endl;
+      //tlp::debug() << "[Observable node] delayed delete:" << _n.id << "::" << this << endl;
       _oGraph.delEdges(_n);
     }
   }
@@ -305,7 +310,9 @@ void Observable::unholdObservers() {
 
       for( it = backupEvents.begin(); it != backupEvents.end(); ++it) {
         if (Observable::_oAlive[it->first] && Observable::_oAlive[it->second]) {
-          Observable *sender = static_cast<Observable *>(Observable::_oPointer[it->first]);
+          // schedule a new Event
+	  _oEventsToTreat[it->second] += 1;
+	  Observable *sender = static_cast<Observable *>(Observable::_oPointer[it->first]);
           preparedEvents[it->second].push_back(Event(*sender, Event::TLP_MODIFICATION));
         }
       }
@@ -314,6 +321,8 @@ void Observable::unholdObservers() {
         map<node, vector<Event> >::const_iterator it;
 
         for (it = preparedEvents.begin(); it!=preparedEvents.end(); ++it) {
+	  // treat scheduled events
+	  _oEventsToTreat[it->first] -= it->second.size();
           if (_oAlive[it->first]) {
             Observable *obs  = static_cast<Observable *>(_oPointer[it->first]);
 #ifndef NDEBUG
@@ -450,9 +459,13 @@ void Observable::sendEvent(const Event &message) {
       assert(obs != NULL);
 
       if ((_oType[e] & OBSERVER) && (message.type() != Event::TLP_INFORMATION)) {
-        if (_oHoldCounter == 0  || message.type() == Event::TLP_DELETE)
+        if (_oHoldCounter == 0  || message.type() == Event::TLP_DELETE) {
+	  // schedule event
+	  _oEventsToTreat[backn] += 1;
+	  _oEventsToTreat[src] += 1;
           observerTonotify.push_back(pair<Observable*, node>(obs, src));
-        else if (!queuedEvent) {
+        }
+	else if (!queuedEvent) {
           delayedEventAdded = true;
 #ifdef _OPENMP
           #pragma omp critical(ObservableGraphUpdate)
@@ -463,8 +476,12 @@ void Observable::sendEvent(const Event &message) {
         }
       }
 
-      if (_oType[e] & LISTENER)
-        listenerTonotify.push_back(pair<Observable*, node>(obs, src));
+      if (_oType[e] & LISTENER) {
+ 	// schedule event
+	_oEventsToTreat[backn] += 1;
+	_oEventsToTreat[src] += 1;
+	listenerTonotify.push_back(pair<Observable*, node>(obs, src));
+      }
 
     }
   }
@@ -478,17 +495,24 @@ void Observable::sendEvent(const Event &message) {
     vector< pair<Observable *, node> >::const_iterator itobs;
 
     for(itobs = listenerTonotify.begin(); itobs != listenerTonotify.end(); ++itobs) {
-      if (itobs->second == _n && message.type() == Event::TLP_DELETE) {
+      if (itobs->second == backn && message.type() == Event::TLP_DELETE) {
         tlp::debug() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
+	// treat scheduled event
+	_oEventsToTreat[backn] -= 2;
         continue;
       }
 
+      // treat scheduled event
+      _oEventsToTreat[itobs->second] -= 1;
       if (_oAlive[itobs->second]) { //other listeners/observers could be destroyed during the treat event
 #ifndef NDEBUG
         ++(itobs->first->received);
 #endif
         itobs->first->treatEvent(message);
       }
+      // we decrement after treating event
+      // to prevent reuse of backn
+      _oEventsToTreat[backn] -= 1;
 
       assert(_oAlive[backn]);
 
@@ -504,17 +528,24 @@ void Observable::sendEvent(const Event &message) {
     vector< pair<Observable *, node> >::const_iterator itobs;
 
     for(itobs = observerTonotify.begin(); itobs != observerTonotify.end(); ++itobs) {
-      if (itobs->second == _n && message.type() == Event::TLP_DELETE) {
+      if (itobs->second == backn && message.type() == Event::TLP_DELETE) {
         tlp::debug() << "[Observable info]: An observable onlook itself Event::DELETE msg can't be sent to it." << endl;
+	// treat scheduled event
+	_oEventsToTreat[backn] -= 2;
         continue;
       }
 
+      // treat scheduled event
+      _oEventsToTreat[itobs->second] -= 1;
       if (_oAlive[itobs->second]) { //other listeners/observers could be destroyed during the treat event
 #ifndef NDEBUG
         ++(itobs->first->received);
 #endif
         itobs->first->treatEvents(tmp);
       }
+      // we decrement after treating event
+      // to prevent reuse of backn
+      _oEventsToTreat[backn] -= 1;
 
       assert(_oAlive[backn]);
 
@@ -542,7 +573,9 @@ void Observable::updateObserverGraph() {
 #endif
     {
       for( itNodes = _oDelayedDelNode.begin(); itNodes != _oDelayedDelNode.end(); ++itNodes) {
-        _oGraph.delNode(*itNodes);
+	  node toDel = *itNodes;
+	  if (_oEventsToTreat[toDel] == 0)
+	    _oGraph.delNode(toDel);
       }
     }
     _oDelayedDelNode.clear();
