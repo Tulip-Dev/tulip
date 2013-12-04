@@ -29,6 +29,8 @@ using namespace tlp;
 
 CPPUNIT_TEST_SUITE_REGISTRATION( ObservableGraphTest );
 
+tlp::Graph* ObservableGraphTest::graph = NULL;
+
 // these classes will capture
 // everything that will happen to our properties
 // synchronously or asynchronously
@@ -164,6 +166,11 @@ public:
   vector<edge> edges;
   string pName;
   string spName;
+  bool deleteBug747;
+
+  GraphObserverTest() {
+    deleteBug747 = false;
+  }
 
   Graph* getObservedGraph() {
     assert(graphs.size() == 1);
@@ -356,13 +363,22 @@ public:
       }
     }
     else {
-    Graph* graph =
-      // From my point of view the use of dynamic_cast should be correct
-      // but it fails, so I use reinterpret_cast (pm)
-      reinterpret_cast<Graph *>(evt.sender());
+      Graph* graph =
+	// From my point of view the use of dynamic_cast should be correct
+	// but it fails, so I use reinterpret_cast (pm)
+	reinterpret_cast<Graph *>(evt.sender());
 
-    if (graph && evt.type() == Event::TLP_DELETE)
-      destroy(graph);
+      if (graph && evt.type() == Event::TLP_DELETE) {
+	if (deleteBug747) {
+	  delete observer;
+	  GraphObserverTest* obs = new GraphObserverTest();
+	  addListener(obs);
+	  observer = NULL;
+	  ObservableGraphTest::setGraph(NULL);
+	}
+	else
+	  destroy(graph);
+      }
     }
   }
 };
@@ -425,7 +441,7 @@ void ObservableGraphTest::testAddDel() {
   //  qWarning() << __PRETTY_FUNCTION__ << endl;
   vector<node> nodes;
   vector<edge> edges;
-  unsigned int NB_NODES = 100;
+  unsigned int NB_NODES = 2;
 
   for (unsigned int i=0; i<NB_NODES; ++i) {
     gObserver->reset();
@@ -1005,3 +1021,14 @@ void ObservableGraphTest::testNotifyDelInheritedPropertyIsSendWhenLocalPropertyI
 
 }
 
+void ObservableGraphTest::testDeleteBug747() {
+  CPPUNIT_ASSERT(observer != NULL);
+  CPPUNIT_ASSERT(graph != NULL);
+
+  gObserver->deleteBug747 = true;
+  delete graph;
+
+  CPPUNIT_ASSERT(observer == NULL);
+  CPPUNIT_ASSERT(graph == NULL);
+}
+  
