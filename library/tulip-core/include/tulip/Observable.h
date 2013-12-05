@@ -221,12 +221,12 @@ public:
   /**
    * @brief isAlive Internal function for debugging.
    *
-   * If there is no hold curretly applied, or no update ongoing, always returns true.
+   * If there is no hold currently applied, or no update ongoing, always returns true.
    * Checks if the object represented by the node has been deleted.
    * @param n The node to check for life signs.
    * @return Whether the node is dead, Jim.
   **/
-  static bool  isAlive(tlp::node n);
+  static bool isAlive(tlp::node n);
 
   /**
    * @brief getObject Internal function for debugging.
@@ -237,6 +237,22 @@ public:
    * @return The object represented by the node.
   **/
   static Observable* getObject(tlp::node n);
+
+  /**
+   * @brief getObject Internal function for debugging.
+   * getScheduled get the number of scheduled events for this Observable.
+   * @param n The node of an Observable object
+   * @return the number of scheduled events involving this Observable as sender or receiver.
+   */
+  static unsigned int getScheduled(tlp::node n);
+
+  /**
+   * @brief getNode Internal function for debugging
+   * Get the node representing this object in the Observable Graph.
+   * @param obs the Observable object
+   * @return the node of the Observable object in the Observable Graph.
+   */
+  static tlp::node getNode(const tlp::Observable* obs);
 
   /**
    * @brief getObservableGraph Gets the observation graph.
@@ -403,7 +419,7 @@ private:
   void removeOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) const;
 
   /**
-   * @brief getNode Getys the node representing this object in the ObservableGraph.
+   * @brief getNode Get the node representing this object in the ObservableGraph.
    * @return the node representing that ObservableObject in the ObservableGraph.
    */
   tlp::node getNode() const;

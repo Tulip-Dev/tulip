@@ -128,6 +128,10 @@ bool Observable::isAlive(tlp::node n) {
   return _oAlive[n];
 }
 //----------------------------------
+unsigned int Observable::getScheduled(tlp::node n) {
+  return _oEventsToTreat[n];
+}
+//----------------------------------
 Observable* Observable::getObject(node n) {
   assert(_oAlive[n]);
 
@@ -135,6 +139,10 @@ Observable* Observable::getObject(node n) {
     throw ObservableException("That object has been deleted it is no more accessbile");
 
   return _oPointer[n];
+}
+//----------------------------------
+tlp::node Observable::getNode(const Observable* obs) {
+  return obs->getNode();
 }
 //----------------------------------
 bool Observable::init() {
