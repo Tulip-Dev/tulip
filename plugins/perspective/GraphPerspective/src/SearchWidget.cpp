@@ -40,15 +40,10 @@ using namespace tlp;
 using namespace std;
 
 class SearchOperator {
-private:
-  bool casesensitive;
-
 protected:
   tlp::PropertyInterface* _a;
   tlp::PropertyInterface* _b;
-
 public:
-  SearchOperator():casesensitive(false), _a(NULL), _b(NULL) {}
   virtual void setProperties(tlp::PropertyInterface* a, tlp::PropertyInterface* b) {
     _a = a;
     _b = b;
@@ -56,12 +51,6 @@ public:
 
   virtual bool compare(tlp::node n)=0;
   virtual bool compare(tlp::edge e)=0;
-  void setCaseSensitive(const bool sensitive) {
-    casesensitive=sensitive;
-  }
-  Qt::CaseSensitivity getCaseSensitive() const {
-    return (casesensitive?Qt::CaseSensitive:Qt::CaseInsensitive);
-  }
 
   tlp::BooleanProperty* run(tlp::Graph* g, bool onNodes, bool onEdges) {
     tlp::BooleanProperty* prop = new BooleanProperty(g);
@@ -111,19 +100,31 @@ public:
 
 #define STRING_CMP(NAME,CMP) class NAME : public StringSearchOperator { \
 public:\
-   bool compareStrings(const QString &a, const QString &b) { return CMP; }\
+  bool compareStrings(const QString &a, const QString &b) { return CMP ; }\
 };
-STRING_CMP(StringEqualsOperator,(a.compare(b, getCaseSensitive())==0))
-STRING_CMP(StringDifferentOperator,(a.compare(b, getCaseSensitive())!=0))
-STRING_CMP(StartsWithOperator,a.startsWith(b, getCaseSensitive()))
-STRING_CMP(EndsWithOperator,a.endsWith(b, getCaseSensitive()))
-STRING_CMP(ContainsOperator,a.contains(b, getCaseSensitive()))
+STRING_CMP(StringEqualsOperator,a == b)
+STRING_CMP(StringDifferentOperator,a != b)
+STRING_CMP(StartsWithOperator,a.startsWith(b))
+STRING_CMP(EndsWithOperator,a.endsWith(b))
+STRING_CMP(ContainsOperator,a.contains(b))
+STRING_CMP(NoCaseStringEqualsOperator, a.compare(b, Qt::CaseInsensitive) == 0)
+STRING_CMP(NoCaseStringDifferentOperator, a.compare(b, Qt::CaseInsensitive) != 0)
+STRING_CMP(NoCaseStartsWithOperator,a.startsWith(b, Qt::CaseInsensitive))
+STRING_CMP(NoCaseEndsWithOperator,a.endsWith(b, Qt::CaseInsensitive))
+STRING_CMP(NoCaseContainsOperator,a.contains(b, Qt::CaseInsensitive))
 
 class MatchesOperator: public StringSearchOperator {
 public:
   bool compareStrings(const QString &a, const QString &b) {
     QRegExp regexp(b);
-    regexp.setCaseSensitivity(getCaseSensitive());
+    return regexp.exactMatch(a);
+  }
+};
+
+class NoCaseMatchesOperator: public StringSearchOperator {
+public:
+  bool compareStrings(const QString &a, const QString &b) {
+    QRegExp regexp(b, Qt::CaseInsensitive);
     return regexp.exactMatch(a);
   }
 };
@@ -162,6 +163,18 @@ QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator
     << new EndsWithOperator
     << new ContainsOperator
     << new MatchesOperator;
+
+QVector<SearchOperator*> SearchWidget::NOCASE_STRING_OPERATORS = QVector<SearchOperator*>()
+    << new NoCaseStringEqualsOperator
+    << new NoCaseStringDifferentOperator
+    << NULL
+    << NULL
+    << NULL
+    << NULL
+    << new NoCaseStartsWithOperator
+    << new NoCaseEndsWithOperator
+    << new NoCaseContainsOperator
+    << new NoCaseMatchesOperator;
 
 SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SearchWidget) {
   _ui->setupUi(this);
@@ -475,11 +488,10 @@ SearchOperator *SearchWidget::searchOperator() {
 
   if (isNumericComparison())
     op = NUMERIC_OPERATORS[_ui->operatorCombo->currentIndex()];
-  else {
-    op = STRING_OPERATORS[_ui->operatorCombo->currentIndex()];
-    op->setCaseSensitive(_ui->caseSensitivityCheck->isChecked());
-  }
-
+  else
+    op = _ui->caseSensitivityCheck->isChecked() ?
+      NOCASE_STRING_OPERATORS[_ui->operatorCombo->currentIndex()] :
+      STRING_OPERATORS[_ui->operatorCombo->currentIndex()];
 
   return op;
 }
