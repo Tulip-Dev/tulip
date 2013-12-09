@@ -225,8 +225,8 @@ Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
     algName = "JSON Import";*/
 
   dataSet.set("file::filename", filename);
-  Graph *sg = tlp::importGraph(algName, dataSet,progress);
-  return sg;
+  Graph *graph = tlp::importGraph(algName, dataSet,progress);
+  return graph;
 }
 //=========================================================
 bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *progress) {
@@ -245,7 +245,7 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
   return result;
 }
 //=========================================================
-Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress, Graph *newGraph) {
+Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress, Graph *graph) {
 
   if (!PluginLister::pluginExists(format)) {
     tlp::warning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
@@ -255,8 +255,8 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 
   bool newGraphP=false;
 
-  if (newGraph==NULL) {
-    newGraph=new GraphImpl();
+  if (graph==NULL) {
+    graph=tlp::newGraph();
     newGraphP=true;
   }
 
@@ -269,7 +269,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   }
   else tmpProgress=progress;
 
-  AlgorithmContext* tmp = new AlgorithmContext(newGraph, &dataSet, tmpProgress);
+  AlgorithmContext* tmp = new AlgorithmContext(graph, &dataSet, tmpProgress);
   ImportModule *newImportModule = PluginLister::instance()->getPluginObject<ImportModule>(format, tmp);
   assert(newImportModule!=NULL);
 
@@ -277,13 +277,14 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 
   //If the import failed and we created the graph then delete the graph
   if (!importSucessfull && newGraphP) {
-    delete newGraph;
+    delete graph;
+    graph = NULL;
   }
   else {
     std::string filename;
 
     if (dataSet.get("file::filename", filename)) {
-      newGraph->setAttribute("file", filename);
+      graph->setAttribute("file", filename);
     }
   }
 
@@ -292,15 +293,10 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   delete newImportModule;
   dataSet = *tmp->dataSet;
 
-  if (importSucessfull) {
-    setViewPropertiesDefaults(newGraph);
-    return newGraph;
-  }
-  else
-    return NULL;
+  return graph;
 }
 //=========================================================
-bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &format,
+bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format,
                       DataSet &dataSet, PluginProgress *progress) {
   if (!PluginLister::pluginExists(format)) {
     tlp::warning() << "libtulip: " << __FUNCTION__ << ": export plugin \"" << format
@@ -318,13 +314,13 @@ bool tlp::exportGraph(Graph *sg, std::ostream &outputStream, const std::string &
   }
   else tmpProgress=progress;
 
-  AlgorithmContext* context = new AlgorithmContext(sg, &dataSet, tmpProgress);
+  AlgorithmContext* context = new AlgorithmContext(graph, &dataSet, tmpProgress);
   ExportModule *newExportModule=PluginLister::instance()->getPluginObject<ExportModule>(format, context);
   assert(newExportModule!=NULL);
   std::string filename;
 
   if (dataSet.get("file", filename)) {
-    sg->setAttribute("file", filename);
+    graph->setAttribute("file", filename);
   }
 
   result=newExportModule->exportGraph(outputStream);
@@ -694,77 +690,77 @@ void Graph::notifyAfterSetEnds(const edge e) {
     sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_SET_ENDS, e));
 }
 
-void Graph::notifyBeforeAddSubGraph(const Graph* sg) {
+void Graph::notifyBeforeAddSubGraph(const Graph* graph) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_SUBGRAPH, sg));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_SUBGRAPH, graph));
 
   Graph *g = this;
 
   while (g != getRoot()) {
-    g->notifyBeforeAddDescendantGraph(sg);
+    g->notifyBeforeAddDescendantGraph(graph);
     g = g->getSuperGraph();
   }
 
-  getRoot()->notifyBeforeAddDescendantGraph(sg);
+  getRoot()->notifyBeforeAddDescendantGraph(graph);
 }
 
-void Graph::notifyAfterAddSubGraph(const Graph* sg) {
+void Graph::notifyAfterAddSubGraph(const Graph* graph) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_ADD_SUBGRAPH, sg));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_ADD_SUBGRAPH, graph));
 
   Graph *g = this;
 
   while (g != getRoot()) {
-    g->notifyAfterAddDescendantGraph(sg);
+    g->notifyAfterAddDescendantGraph(graph);
     g = g->getSuperGraph();
   }
 
-  getRoot()->notifyAfterAddDescendantGraph(sg);
+  getRoot()->notifyAfterAddDescendantGraph(graph);
 }
 
-void Graph::notifyBeforeDelSubGraph(const Graph* sg) {
+void Graph::notifyBeforeDelSubGraph(const Graph* graph) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_SUBGRAPH, sg));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_SUBGRAPH, graph));
 
   Graph *g = this;
 
   while (g != getRoot()) {
-    g->notifyBeforeDelDescendantGraph(sg);
+    g->notifyBeforeDelDescendantGraph(graph);
     g = g->getSuperGraph();
   }
 
-  getRoot()->notifyBeforeDelDescendantGraph(sg);
+  getRoot()->notifyBeforeDelDescendantGraph(graph);
 }
-void Graph::notifyAfterDelSubGraph(const Graph* sg) {
+void Graph::notifyAfterDelSubGraph(const Graph* graph) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_SUBGRAPH, sg));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_SUBGRAPH, graph));
 
   Graph *g = this;
 
   while (g != getRoot()) {
-    g->notifyAfterDelDescendantGraph(sg);
+    g->notifyAfterDelDescendantGraph(graph);
     g = g->getSuperGraph();
   }
 
-  getRoot()->notifyAfterDelDescendantGraph(sg);
+  getRoot()->notifyAfterDelDescendantGraph(graph);
 }
 
-void Graph::notifyBeforeAddDescendantGraph(const Graph* sg) {
+void Graph::notifyBeforeAddDescendantGraph(const Graph* graph) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH, sg));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH, graph));
 }
-void Graph::notifyAfterAddDescendantGraph(const Graph* sg) {
+void Graph::notifyAfterAddDescendantGraph(const Graph* graph) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH, sg));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH, graph));
 }
 
-void Graph::notifyBeforeDelDescendantGraph(const Graph* sg) {
+void Graph::notifyBeforeDelDescendantGraph(const Graph* graph) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH, sg));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH, graph));
 }
-void Graph::notifyAfterDelDescendantGraph(const Graph* sg) {
+void Graph::notifyAfterDelDescendantGraph(const Graph* graph) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH, sg));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH, graph));
 }
 
 void Graph::notifyBeforeAddLocalProperty(const std::string& propName) {
