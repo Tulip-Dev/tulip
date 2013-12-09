@@ -490,8 +490,8 @@ SearchOperator *SearchWidget::searchOperator() {
     op = NUMERIC_OPERATORS[_ui->operatorCombo->currentIndex()];
   else
     op = _ui->caseSensitivityCheck->isChecked() ?
-      NOCASE_STRING_OPERATORS[_ui->operatorCombo->currentIndex()] :
-      STRING_OPERATORS[_ui->operatorCombo->currentIndex()];
+         NOCASE_STRING_OPERATORS[_ui->operatorCombo->currentIndex()] :
+         STRING_OPERATORS[_ui->operatorCombo->currentIndex()];
 
   return op;
 }
