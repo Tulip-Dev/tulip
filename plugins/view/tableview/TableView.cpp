@@ -238,6 +238,8 @@ void TableView::readSettings() {
       _ui->table->setColumnHidden(i, true);
   }
 
+  // reset columns filtering
+  _ui->columnsFilterEdit->setText("");
 }
 
 void TableView::dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight) {
