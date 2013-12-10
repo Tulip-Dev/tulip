@@ -180,11 +180,11 @@ void TableView::graphChanged(tlp::Graph* g) {
   _ui->table->horizontalHeader()->show();
   _ui->table->verticalHeader()->show();
 
-  //Show all the properties whose name starts with 'view'
+  //Show all the properties
   if (_model != NULL) {
     for(int i=0; i < _model->columnCount(); ++i) {
       QString propName = _model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
-      bool checked = propName.startsWith("view");
+      bool checked = true;
 
       if (!visibleProperties.isEmpty()) {
         checked = visibleProperties.contains(propName);
