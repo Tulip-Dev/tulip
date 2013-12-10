@@ -273,12 +273,11 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   ImportModule *newImportModule = PluginLister::instance()->getPluginObject<ImportModule>(format, tmp);
   assert(newImportModule!=NULL);
 
-  bool importSucessfull = newImportModule->importGraph();
-
   //If the import failed and we created the graph then delete the graph
-  if (!importSucessfull && newGraphP) {
-    delete graph;
+  if (!newImportModule->importGraph()) {
     graph = NULL;
+    if (newGraphP)
+      delete graph;
   }
   else {
     std::string filename;
