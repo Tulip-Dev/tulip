@@ -733,7 +733,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle expose mode (Ctrl + E)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Toggle expose mode (Ctrl+E)</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+E</string>
@@ -761,7 +761,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show/hide graph's elements search panel (Crtl + F)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Show/hide graph's elements search panel (Crtl+F)</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+F</string>
@@ -789,7 +789,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show/hide interactive Python interpreter window (Ctrl + P)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Show/hide Python interpreter panel (Ctrl+P)</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+P</string>
