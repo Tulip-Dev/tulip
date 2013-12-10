@@ -484,7 +484,9 @@ QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &opt
   }
 
   const int pixmapWidth = 32;
+
   QFontMetrics fontMetrics(option.font);
+
   return QSize(pixmapWidth+fontMetrics.boundingRect(text).width(), pixmapWidth);
 }
 

@@ -346,6 +346,7 @@ typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::
 
   switch (state) {
   case VECT:
+
     if (i>maxIndex || i<minIndex)
       return StoredType<TYPE>::get(defaultValue);
     else
@@ -401,6 +402,7 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(c
 
   switch (state) {
   case VECT:
+
     if (i>maxIndex || i<minIndex) {
       notDefault = false;
       return StoredType<TYPE>::get(defaultValue);

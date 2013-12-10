@@ -126,11 +126,15 @@ void SOMAlgorithm::train(SOMMap* map, InputSample& inputSample, unsigned int max
 
     const DynamicVector<double>& currentInputVector = inputSample.getWeight(
           nodeIterator->next());
+
     node bmu = findBMU(map, currentInputVector, dist);
+
     //Environment modification
     assert(map->isElement(bmu));
+
     propagateModification(map, currentInputVector, bmu, currentIteration, maxIteration,
                           inputSample.getSampleSize());
+
     //Next Iteration
     ++currentIteration;
 

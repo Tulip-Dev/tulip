@@ -217,7 +217,9 @@ void EdgeBundling::fixEdgeType() {
     }
 
     const pair<node, node>& ends = graph->ends(e);
+
     bool inSrc = oriGraph->isElement(ends.first);
+
     bool inTgt = oriGraph->isElement(ends.second);
 
     if(!inSrc && !inTgt)

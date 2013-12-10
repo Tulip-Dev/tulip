@@ -193,6 +193,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         if (result) {
           switch(selectedEntity.getEntityType()) {
           case SelectedEntity::NODE_SELECTED:
+
             if(_mode == EdgesAndNodes || _mode == NodesOnly) {
               result = selection->getNodeValue(node(selectedEntity.getComplexEntityId()));
 
@@ -209,6 +210,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
             break;
 
           case SelectedEntity::EDGE_SELECTED:
+
             if(_mode == EdgesAndNodes || _mode == EdgesOnly) {
               result = selection->getEdgeValue(edge(selectedEntity.getComplexEntityId()));
 

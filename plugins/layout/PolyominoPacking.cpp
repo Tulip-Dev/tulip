@@ -450,8 +450,11 @@ bool PolyominoPacking::polyominoFits(Polyomino& poly, int x, int y) {
   const BoundingBox &ccBB = poly.ccBB;
 
   Vec2i LL = vec3fToVec2i(ccBB[0]);
+
   Vec2i place;
+
   place[0] = gridStepSize * x - LL[0];
+
   place[1] = gridStepSize * y - LL[1];
 
   newPlaces[poly.cc] = place;

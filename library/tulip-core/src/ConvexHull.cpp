@@ -145,7 +145,9 @@ void tlp::convexHull(const std::vector<Coord> &points,
     }
 
     const Coord &point = points[hull.back()];
+
     const Coord &nextPoint = points[hull.front()];
+
     signedArea += (point[0] * nextPoint[1] - nextPoint[0] * point[1]);
 
     // hull points are in clockwise order, reverse the points vector in that case

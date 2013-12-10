@@ -210,18 +210,21 @@ bool KCores::run() {
 
   switch(degreeTypes.getCurrent()) {
   case INOUT:
+
     while (subgraph->numberOfNodes()>0)
       peel(subgraph, metric, wdeg);
 
     break;
 
   case IN:
+
     while (subgraph->numberOfNodes()>0)
       peelIn(subgraph, metric, wdeg);
 
     break;
 
   case OUT:
+
     while (subgraph->numberOfNodes()>0)
       peelOut(subgraph, metric, wdeg);
 
