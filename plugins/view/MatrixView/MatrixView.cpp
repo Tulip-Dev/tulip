@@ -310,14 +310,21 @@ void MatrixView::addEdge(tlp::Graph *g, const tlp::edge e) {
   }
 
   const std::pair<node, node>& eEnds = g->ends(e);
+
   node dispSrc = node(_graphEntitiesToDisplayedNodes->getNodeValue(eEnds.first)[0]);
+
   node dispTgt = node(_graphEntitiesToDisplayedNodes->getNodeValue(eEnds.second)[0]);
+
   edge dispEdge = _matrixGraph->addEdge(dispSrc,dispTgt);
+
   _edgesMap[e] = dispEdge;
+
   _displayedEdgesToGraphEdges->setEdgeValue(dispEdge, e.id);
 
   ColorProperty* originalColors = graph()->getProperty<ColorProperty>("viewColor");
+
   ColorProperty* colors = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementColor();
+
   colors->setEdgeValue(dispEdge,originalColors->getEdgeValue(e));
 }
 

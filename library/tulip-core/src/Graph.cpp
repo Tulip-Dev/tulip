@@ -276,6 +276,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   //If the import failed and we created the graph then delete the graph
   if (!newImportModule->importGraph()) {
     graph = NULL;
+
     if (newGraphP)
       delete graph;
   }

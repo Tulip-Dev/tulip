@@ -825,6 +825,7 @@ void ParallelCoordinatesView::highlightDataUnderPointer(const int x, const int y
   }
 
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
+
   set<unsigned int>::iterator it;
 
   for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
@@ -840,6 +841,7 @@ void ParallelCoordinatesView::highlightDataInRegion(const int x, const int y, co
   }
 
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, width, height));
+
   set<unsigned int>::iterator it;
 
   for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
