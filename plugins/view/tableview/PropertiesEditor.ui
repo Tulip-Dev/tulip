@@ -163,7 +163,7 @@ color: #595959;</string>
            <string>Show all  properties</string>
           </property>
           <property name="checked">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
          </widget>
         </item>

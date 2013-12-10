@@ -212,9 +212,14 @@ void PropertiesEditor::setPropsVisibility(int state) {
     static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
   }
 
-  for(int i=0; i<_sourceModel->rowCount(); ++i)
-    _sourceModel->setData(_sourceModel->index(i,0), state,
-                          Qt::CheckStateRole);
+  bool showVisualP = _ui->visualPropertiesCheck->isChecked();
+  for(int i=0; i<_sourceModel->rowCount(); ++i) {
+    if (_sourceModel->index(i,0).data().toString().indexOf("view") == 0)
+      setPropertyChecked(i, showVisualP);
+    else
+      _sourceModel->setData(_sourceModel->index(i,0), state,
+			    Qt::CheckStateRole);
+  }
 }
 
 void PropertiesEditor::setPropsNotVisibleExcept() {
@@ -230,17 +235,13 @@ void PropertiesEditor::showVisualProperties(bool f) {
   // reset property name filter
   _ui->propertiesFilterEdit->setText(QString());
 
-  if (f) {
-    static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
+  static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
 
-    // ensure all visual properties are shown
-    for(int i=0; i<_sourceModel->rowCount(); ++i) {
-      if (_sourceModel->index(i,0).data().toString().indexOf("view") == 0)
-        setPropertyChecked(i, true);
-    }
+  // ensure all visual properties are shown/hidden
+  for(int i=0; i<_sourceModel->rowCount(); ++i) {
+    if (_sourceModel->index(i,0).data().toString().indexOf("view") == 0)
+      setPropertyChecked(i, f);
   }
-  else
-    static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp("^(?!view).*");
 }
 
 // properties inserted when filtering
