@@ -66,8 +66,9 @@ bool QuadTreeBundle::isIn(const Coord &p, const Coord &a, const Coord &b) {
 void QuadTreeBundle::elmentSplitting(const Coord &a, const Coord &b, const vector<node> &input,
                                      vector<node> &in, vector<node> &out
                                     ) {
-  assert(a[0]  < b[0]);
-  assert(a[1]  < b[1]);
+  if (!((a[0] < b[0]) && (a[1] < b[1])))
+    throw TulipException("2 nodes have the same position.\nTry to apply the \"Fast Overlap Removal\" algorithm before.");
+
   in.clear();
   out.clear();
   vector<node>::const_iterator it = input.begin();
