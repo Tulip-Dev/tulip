@@ -23,6 +23,7 @@
 #define MAX_THREADS 1
 #endif
 
+#include <tulip/TulipException.h>
 #include <tulip/GraphTools.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/StableIterator.h>
@@ -325,24 +326,31 @@ bool EdgeBundling::run() {
   std::vector<tlp::edge> removedEdges;
   tlp::SimpleTest::makeSimple(oriGraph, removedEdges);
 
-  // Grid graph computation first step : generate quad-tree/octree
-  if (layout3D) {
-    OctreeBundle::compute(graph, splitRatio, layout, size);
-    edge e;
-    stableForEach(e, graph->getEdges()) {
-      if(oriGraph->isElement(e)) continue;
+  try {
+    // Grid graph computation first step : generate quad-tree/octree
+    if (layout3D) {
+      OctreeBundle::compute(graph, splitRatio, layout, size);
+      edge e;
+      stableForEach(e, graph->getEdges()) {
+	if(oriGraph->isElement(e)) continue;
 
-      graph->delEdge(e);
+	graph->delEdge(e);
+      }
+
+      if (sphereLayout) {
+	centerOnOriginAndScale(graph, layout, dist*2.);
+	addSphereGraph(graph, dist+0.5*dist);
+	addSphereGraph(graph, dist-0.2*dist);
+      }
     }
-
-    if (sphereLayout) {
-      centerOnOriginAndScale(graph, layout, dist*2.);
-      addSphereGraph(graph, dist+0.5*dist);
-      addSphereGraph(graph, dist-0.2*dist);
+    else {
+      QuadTreeBundle::compute(graph, splitRatio, layout, size);
     }
   }
-  else {
-    QuadTreeBundle::compute(graph, splitRatio, layout, size);
+  catch(tlp::TulipException& e) {
+    string errorMsg(e.what());
+    pluginProgress->setError(errorMsg);
+    return false;
   }
 
   // Grid graph computation second step : generate a voronoi diagram
