@@ -43,7 +43,7 @@
 
 using namespace tlp;
 
-AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _localMode(true) {
+AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(NULL), _localMode(true) {
   _ui->setupUi(this);
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
   const Plugin& plugin = PluginLister::instance()->pluginInformation(pluginName.toStdString());
