@@ -332,15 +332,15 @@ bool EdgeBundling::run() {
       OctreeBundle::compute(graph, splitRatio, layout, size);
       edge e;
       stableForEach(e, graph->getEdges()) {
-	if(oriGraph->isElement(e)) continue;
+        if(oriGraph->isElement(e)) continue;
 
-	graph->delEdge(e);
+        graph->delEdge(e);
       }
 
       if (sphereLayout) {
-	centerOnOriginAndScale(graph, layout, dist*2.);
-	addSphereGraph(graph, dist+0.5*dist);
-	addSphereGraph(graph, dist-0.2*dist);
+        centerOnOriginAndScale(graph, layout, dist*2.);
+        addSphereGraph(graph, dist+0.5*dist);
+        addSphereGraph(graph, dist-0.2*dist);
       }
     }
     else {
