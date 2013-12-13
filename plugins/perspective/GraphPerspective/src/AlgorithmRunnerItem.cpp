@@ -352,6 +352,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
   // set preview handler if needed
   if (!outPropertyParams.empty())
     progress->setPreviewHandler(new AlgorithmPreviewHandler(g, outPropertyParams));
+  else
+    progress->showPreview(false);
 
   // take time before run
   QDateTime start = QDateTime::currentDateTime();
