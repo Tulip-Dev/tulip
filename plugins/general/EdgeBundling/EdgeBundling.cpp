@@ -444,7 +444,7 @@ bool EdgeBundling::run() {
     {
       node n;
       forEach(n, vertexCoverGraph->getNodes())
-	orderedNodes.insert(n);
+      orderedNodes.insert(n);
 
     }
 
