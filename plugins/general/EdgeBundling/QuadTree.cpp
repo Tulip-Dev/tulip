@@ -40,8 +40,9 @@ node QuadTreeBundle::splitEdge(node a, node b) {
   tmp[0] = center[0];
   tmp[1] = center[1];
 
-  if (mapN.find(tmp) != mapN.end()) {
-    return mapN[tmp];
+  MapVecNode::const_iterator itn = mapN.find(tmp);
+  if (itn != mapN.end()) {
+    return itn->second;
   }
 
   node n  = graph->addNode();
@@ -91,8 +92,8 @@ void QuadTreeBundle::recQuad(const node a, const node b, const node c, const nod
                             ) {
 
 
-  Coord cA = layout->getNodeValue(a);
-  Coord cC = layout->getNodeValue(c);
+  const Coord& cA = layout->getNodeValue(a);
+  const Coord& cC = layout->getNodeValue(c);
 
 //  if (input.size() == 0) { // && (cA - cC).norm() < (minSize/splitRatio)) {
 //    //node n = graph->addNode();
@@ -127,9 +128,9 @@ void QuadTreeBundle::recQuad(const node a, const node b, const node c, const nod
 
 
 
-  Coord cF = layout->getNodeValue(f);
-  Coord cG = layout->getNodeValue(g);
-  Coord cI = layout->getNodeValue(i);
+  const Coord& cF = layout->getNodeValue(f);
+  const Coord& cG = layout->getNodeValue(g);
+  const Coord& cI = layout->getNodeValue(i);
 
   //create nodes
   /**

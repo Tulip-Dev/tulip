@@ -163,12 +163,13 @@ DoubleProperty * EdgeBundling::computeWeights(Graph *graph) {
   edge e;
   forEach(e, graph->getEdges()) {
     const pair<node, node>& ends = graph->ends(e);
-    Coord a = layout->getNodeValue(ends.first);
-    Coord b = layout->getNodeValue(ends.second);
-    double initialWeight = pow((double) (a-b).norm(), longEdges);
+    const Coord& a = layout->getNodeValue(ends.first);
+    const Coord& b = layout->getNodeValue(ends.second);
+    double abNorm = (double) (a-b).norm();
+    double initialWeight = pow(abNorm, longEdges);
 
     if (ntype->getEdgeValue(e) == 2 && !edgeNodeOverlap)
-      initialWeight = (a-b).norm();
+      initialWeight = abNorm;
 
     weights->setEdgeValue(e, initialWeight );
   }
@@ -371,7 +372,7 @@ bool EdgeBundling::run() {
     stableForEach(n, graph->getNodes()) {
       if(oriGraph->isElement(n)) continue;
 
-      Coord c = layout->getNodeValue(n);
+      const Coord& c = layout->getNodeValue(n);
 
       if(c.norm() < 0.9 * dist) {
         graph->delNode(n, true);
@@ -391,10 +392,11 @@ bool EdgeBundling::run() {
       pair<node, node> ends = graph->ends(e);
       const Coord &a = layout->getNodeValue(ends.first);
       const Coord &b = layout->getNodeValue(ends.second);
-      double initialWeight = pow((double) (a-b).norm(), longEdges);
+      double abNorm = (double) (a-b).norm();
+      double initialWeight = pow(abNorm, longEdges);
 
       if (ntype->getEdgeValue(e) == 2 && !edgeNodeOverlap)
-        initialWeight = (a-b).norm();
+        initialWeight = abNorm;
 
       mWeights.set(e.id, initialWeight);
       mWeightsInit.set(e.id, initialWeight);
@@ -442,7 +444,7 @@ bool EdgeBundling::run() {
     {
       node n;
       forEach(n, vertexCoverGraph->getNodes())
-      orderedNodes.insert(n);
+	orderedNodes.insert(n);
 
     }
 
