@@ -73,7 +73,7 @@ private:
                        std::vector<tlp::node> &out);
   //=====================================
   void recQuad(const tlp::Coord fr[4], const tlp::Coord ba[4], const std::vector<tlp::node> &input);
-  tlp::node addNode(const tlp::Coord pos);
+  tlp::node addNode(const tlp::Coord& pos);
   void cleanNode(const tlp::node n);
   std::vector<std::pair<tlp::node, tlp::node> > unvalidEdges;
 };
