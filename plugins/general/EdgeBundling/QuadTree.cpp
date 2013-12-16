@@ -41,6 +41,7 @@ node QuadTreeBundle::splitEdge(node a, node b) {
   tmp[1] = center[1];
 
   MapVecNode::const_iterator itn = mapN.find(tmp);
+
   if (itn != mapN.end()) {
     return itn->second;
   }
