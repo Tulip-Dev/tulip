@@ -178,7 +178,7 @@ void Camera::initLight() {
   GLuint error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    tlp::warning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << " begin" << endl;
+    tlp::warning() << "[OpenGL Error] => " << glGetErrorDescription(error).c_str() << endl << "\tin : " << __PRETTY_FUNCTION__ << " begin" << endl;
 
 #endif
 
@@ -222,7 +222,7 @@ void Camera::initLight() {
   error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    tlp::warning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << "end" << endl;
+    tlp::warning() << "[OpenGL Error] => " << glGetErrorDescription(error).c_str() << endl << "\tin : " << __PRETTY_FUNCTION__ << "end" << endl;
 
 #endif
 }
@@ -287,7 +287,7 @@ void Camera::initProjection(const Vector<int, 4>& viewport,bool reset) {
   GLenum error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    tlp::warning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+    tlp::warning() << "[OpenGL Error] => " << glGetErrorDescription(error).c_str() << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
 
 #endif
 }
@@ -325,7 +325,7 @@ void Camera::initModelView() {
   GLenum error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    tlp::warning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+    tlp::warning() << "[OpenGL Error] => " << glGetErrorDescription(error).c_str() << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
 
 #endif
 }

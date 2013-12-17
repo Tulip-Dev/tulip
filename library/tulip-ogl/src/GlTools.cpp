@@ -17,18 +17,8 @@
  *
  */
 
-#ifndef NDEBUG
-
 #ifdef WIN32
 #include <windows.h>
-#endif
-
-#ifdef __APPLE__
-#include <OpenGL/glu.h>
-#else
-#include <GL/glu.h>
-#endif
-
 #endif
 
 #include <tulip/Rectangle.h>
@@ -39,6 +29,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <climits>
 
 using namespace std;
 namespace tlp {
@@ -89,6 +80,38 @@ static char hullVertexTable[][7] = {
   {6,1,2,3,7,4,5}//42
 };
 
+
+// simple structure to embed an error code and its description
+struct glErrorStruct {
+  GLuint code;
+  const std::string description;
+};
+
+// the known gl errors
+static const struct glErrorStruct glErrorStructs[] = {
+   {GL_NO_ERROR, "no error"},
+   {GL_INVALID_ENUM, "invalid enumerant"},
+   {GL_INVALID_VALUE, "invalid value"},
+   {GL_INVALID_OPERATION, "invalid operation"},
+   {GL_STACK_OVERFLOW, "stack overflow"},
+   {GL_STACK_UNDERFLOW, "stack underflow"},
+   {GL_OUT_OF_MEMORY, "out of memory"},
+#ifdef GL_EXT_framebuffer_object
+   {GL_INVALID_FRAMEBUFFER_OPERATION_EXT, "invalid framebuffer operation"},
+#endif
+   {GL_TABLE_TOO_LARGE, "table too large"},
+   {UINT_MAX, "unknow error"} /* end of list indicator */
+};
+
+ // the function to retrieve 
+const std::string& glGetErrorDescription(GLuint errorCode) {
+  unsigned int i = 0;
+  while(glErrorStructs[i].code != errorCode &&
+	glErrorStructs[i].code != UINT_MAX)
+    ++i;
+  return glErrorStructs[i].description;
+}
+
 //====================================================
 void glTest(const string &message) {
 #ifndef NDEBUG
@@ -104,7 +127,7 @@ void glTest(const string &message) {
     if (i==1)
       errorStream << "[OpenGL ERROR] : " << message << endl;
 
-    errorStream << "[" << i << "] ========> : " << gluErrorString(error) <<  endl;
+    errorStream << "[" << i << "] ========> : " << glGetErrorDescription(error).c_str() <<  endl;
     error = glGetError();
     ++i;
   }

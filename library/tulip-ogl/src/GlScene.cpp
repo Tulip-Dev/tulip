@@ -146,7 +146,7 @@ void GlScene::initGlParameters() {
   GLenum error = glGetError();
 
   if ( error != GL_NO_ERROR)
-    tlp::warning() << "[OpenGL Error] => " << gluErrorString(error) << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
+    tlp::warning() << "[OpenGL Error] => " << glGetErrorDescription(error).c_str() << endl << "\tin : " << __PRETTY_FUNCTION__ << endl;
 
 #endif
 }
