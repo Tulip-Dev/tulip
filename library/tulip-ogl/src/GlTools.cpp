@@ -89,26 +89,28 @@ struct glErrorStruct {
 
 // the known gl errors
 static const struct glErrorStruct glErrorStructs[] = {
-   {GL_NO_ERROR, "no error"},
-   {GL_INVALID_ENUM, "invalid enumerant"},
-   {GL_INVALID_VALUE, "invalid value"},
-   {GL_INVALID_OPERATION, "invalid operation"},
-   {GL_STACK_OVERFLOW, "stack overflow"},
-   {GL_STACK_UNDERFLOW, "stack underflow"},
-   {GL_OUT_OF_MEMORY, "out of memory"},
+  {GL_NO_ERROR, "no error"},
+  {GL_INVALID_ENUM, "invalid enumerant"},
+  {GL_INVALID_VALUE, "invalid value"},
+  {GL_INVALID_OPERATION, "invalid operation"},
+  {GL_STACK_OVERFLOW, "stack overflow"},
+  {GL_STACK_UNDERFLOW, "stack underflow"},
+  {GL_OUT_OF_MEMORY, "out of memory"},
 #ifdef GL_EXT_framebuffer_object
-   {GL_INVALID_FRAMEBUFFER_OPERATION_EXT, "invalid framebuffer operation"},
+  {GL_INVALID_FRAMEBUFFER_OPERATION_EXT, "invalid framebuffer operation"},
 #endif
-   {GL_TABLE_TOO_LARGE, "table too large"},
-   {UINT_MAX, "unknow error"} /* end of list indicator */
+  {GL_TABLE_TOO_LARGE, "table too large"},
+  {UINT_MAX, "unknow error"} /* end of list indicator */
 };
 
- // the function to retrieve 
+// the function to retrieve
 const std::string& glGetErrorDescription(GLuint errorCode) {
   unsigned int i = 0;
+
   while(glErrorStructs[i].code != errorCode &&
-	glErrorStructs[i].code != UINT_MAX)
+        glErrorStructs[i].code != UINT_MAX)
     ++i;
+
   return glErrorStructs[i].description;
 }
 

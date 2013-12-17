@@ -42,7 +42,7 @@ namespace tlp {
 struct BoundingBox;
 
 typedef Matrix<float, 4> MatrixGL;
- TLP_GL_SCOPE const std::string& glGetErrorDescription(GLuint errorCode);
+TLP_GL_SCOPE const std::string& glGetErrorDescription(GLuint errorCode);
 TLP_GL_SCOPE void glTest(const std::string &message = std::string("(no description)"));
 TLP_GL_SCOPE void setColor(const Color &c);
 TLP_GL_SCOPE void setColor(GLfloat *);
