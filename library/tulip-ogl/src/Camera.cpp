@@ -303,10 +303,44 @@ void Camera::initModelView() {
   glLoadIdentity();
 
   if(d3) {
+    /* original code was
     gluLookAt(eyes[0], eyes[1], eyes[2],
               center[0], center[1], center[2],
               up[0], up[1], up[2]);
+    */
+    // but gluLookAt is deprecated on MacOSX 10.9
+    // so we prefer to reimplement it
+    // from http://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml
+    Coord f(center);
+    f -= eyes;
+    // normalize
+    f /= f.norm();
 
+    Coord up2(up);
+    // normalize
+    up2 /= up.norm();
+
+    Coord s(f);
+    s ^= up2;
+
+    up2 = s/s.norm() ^ f;
+
+    Matrix<float, 4> m;
+    m[0][0] = s[0];
+    m[1][0] = s[1];
+    m[2][0] = s[2];
+    m[0][3] = m[1][3] = m[2][3] = 0.0;
+    m[0][1] = up2[0];
+    m[1][1] = up2[1];
+    m[2][1] = up2[2];
+    m[0][2] = -f[0];
+    m[1][2] = -f[1];
+    m[2][2] = -f[2];
+    m[3][0] = m[3][1] = m[3][2] = 0.0;
+    m[3][3] = 1.0;
+
+    glMultMatrixf((GLfloat*)&m);
+    glTranslatef(-eyes[0], -eyes[1], -eyes[2]);
   }
 
   glGetFloatv (GL_MODELVIEW_MATRIX, (GLfloat*)&modelviewMatrix);
