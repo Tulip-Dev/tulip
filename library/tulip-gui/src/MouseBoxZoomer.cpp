@@ -171,7 +171,7 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
-  gluOrtho2D(0.0, (GLdouble)glw->width(), 0.0, (GLdouble)glw->height());
+  glOrtho(0.0, (GLdouble)glw->width(), 0.0, (GLdouble)glw->height(), -1, 1);
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
