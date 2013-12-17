@@ -294,7 +294,7 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget) {
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity ();
-  gluOrtho2D (0.0, (GLdouble) glMainWidget->width(), 0.0, (GLdouble) glMainWidget->height());
+  glOrtho(0.0, (GLdouble) glMainWidget->width(), 0.0, (GLdouble) glMainWidget->height(), -1, 1);
   glMatrixMode(GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
