@@ -302,7 +302,8 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   glBindTexture(GL_TEXTURE_2D, textureId);
 
   if (generateMipMaps)
-   glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, buff);
 
   return textureId;
