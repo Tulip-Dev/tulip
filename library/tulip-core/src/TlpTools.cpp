@@ -175,6 +175,7 @@ void tlp::initTulipLib(const char* appDirPath) {
       else
 #endif
         TulipLibDir.append("lib");
+
 #endif
     }
     else {
