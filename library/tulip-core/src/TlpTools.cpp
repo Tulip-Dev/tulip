@@ -73,8 +73,7 @@ const char tlp::PATH_DELIMITER = ':';
 // A function that retrieves the Tulip libraries directory based on
 // the path of the loaded shared library libtulip-core-X.Y.[dll, so, dylib]
 extern "C" {
-
-  std::string getTulipLibDir() {
+  char* getTulipLibDir(char* buf) {
     std::string tulipLibDir;
     std::string libTulipName;
 
@@ -120,7 +119,7 @@ extern "C" {
     }
 
 #endif
-    return tulipLibDir;
+    return strcpy(buf, tulipLibDir.c_str());
   }
 
 }
@@ -176,12 +175,12 @@ void tlp::initTulipLib(const char* appDirPath) {
       else
 #endif
         TulipLibDir.append("lib");
-
 #endif
     }
     else {
+      char buf[1024];
       // if no appDirPath is provided, retrieve dynamically the Tulip lib dir
-      TulipLibDir = getTulipLibDir();
+      TulipLibDir = getTulipLibDir(buf);
 
       // if no results (should not happen with a clean Tulip install), fall back in the default value provided during compilation
       if (TulipLibDir.empty())
