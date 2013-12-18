@@ -63,9 +63,52 @@ struct EntityWithDistance {
 struct entityWithDistanceCompare {
   static const GlGraphInputData *inputData;
   bool operator()(const EntityWithDistance &e1, const EntityWithDistance &e2 ) const {
+
+    // opaque objects have to be drawn first
+    if (e1.isComplexEntity && e2.isComplexEntity) {
+      Color e1Color, e2Color;
+      if (e1.isNode) {
+        e1Color = inputData->getElementColor()->getNodeValue(node(static_cast<ComplexEntityLODUnit*>(e1.entity)->id));
+      } else {
+        e1Color = inputData->getElementColor()->getEdgeValue(edge(static_cast<ComplexEntityLODUnit*>(e1.entity)->id));
+      }
+      if (e2.isNode) {
+        e2Color = inputData->getElementColor()->getNodeValue(node(static_cast<ComplexEntityLODUnit*>(e2.entity)->id));
+      } else {
+        e2Color = inputData->getElementColor()->getEdgeValue(edge(static_cast<ComplexEntityLODUnit*>(e2.entity)->id));
+      }
+      if (e1Color[3] == 255 && e2Color[3] == 255) {
+        return e1.distance < e2.distance;
+      }
+      if (e1Color[3] == 255 && e2Color[3] < 255) {
+        return true;
+      }
+      if (e2Color[3] == 255 && e1Color[3] < 255) {
+        return false;
+      }
+    }
+
+    // transparent objects ordering
+
+    // if e2 bounding box is contained in e1 bounding box,
+    // e2 must be drawn before e1
+    if (e1.entity->boundingBox.contains(e2.entity->boundingBox)) {
+      return false;
+    }
+
+    // if e1 bounding box is contained in e2 bounding box,
+    // e1 must be drawn before e2
+    if (e2.entity->boundingBox.contains(e1.entity->boundingBox)) {
+      return true;
+    }
+
+    // if e1 is further from the viewer than e2,
+    // e1 must be drawn before e2
     if(e1.distance>e2.distance)
       return true;
 
+    // if e2 is further from the viewer than e1,
+    // e2 must be drawn before e2
     if(e1.distance<e2.distance)
       return false;
 
@@ -330,13 +373,15 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     entityWithDistanceCompare::inputData=inputData;
     multiset<EntityWithDistance,entityWithDistanceCompare> entitiesSet;
     Coord camPos=camera->getEyes();
+
     BoundingBox bb;
     double dist;
 
     if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingNodes)!=0)) {
       // Colect complex entities
       for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
-        if(it->lod<0)
+
+        if (it->lod<0)
           continue;
 
         if(filteringProperty) {
@@ -379,7 +424,15 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
 
       if(it->isNode) {
+
         if(displayNodes || ((displayMetaNodes || displayMetaNodesLabel) && graph->isMetaNode(node(entity->id)))) {
+
+          // All opaque elements have been drawn, turn the depth buffer read-only
+          // in order for a transparent object to not occlude another transparent object
+          if (inputData->getElementColor()->getNodeValue(node(entity->id)).getA() < 255) {
+            glDepthMask(GL_FALSE);
+          }
+
           if(selectionDrawActivate) {
             if((selectionType & RenderingNodes)==0)
               continue;
@@ -401,6 +454,12 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
         if(!displayEdges)
           continue;
 
+        // All opaque elements have been drawn, turn the depth buffer read-only
+        // in order for a transparent object to not occlude another transparent object
+        if (inputData->getElementColor()->getEdgeValue(edge(entity->id)).getA() < 255) {
+          glDepthMask(GL_FALSE);
+        }
+
         if(selectionDrawActivate) {
           if((selectionType & RenderingEdges)==0)
             continue;
@@ -414,6 +473,9 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
         glEdge.draw(entity->lod,inputData,camera);
       }
     }
+
+    glDepthMask(GL_TRUE);
+
   }
 
   if(!selectionDrawActivate) {
