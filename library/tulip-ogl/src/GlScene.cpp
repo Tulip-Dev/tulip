@@ -25,6 +25,7 @@
 
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
+#include <tulip/GlTools.h>
 #include <tulip/GlXMLTools.h>
 #include <tulip/GlLODSceneVisitor.h>
 #include <tulip/GlCPULODCalculator.h>
