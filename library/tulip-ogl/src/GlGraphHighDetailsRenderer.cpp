@@ -67,22 +67,29 @@ struct entityWithDistanceCompare {
     // opaque objects have to be drawn first
     if (e1.isComplexEntity && e2.isComplexEntity) {
       Color e1Color, e2Color;
+
       if (e1.isNode) {
         e1Color = inputData->getElementColor()->getNodeValue(node(static_cast<ComplexEntityLODUnit*>(e1.entity)->id));
-      } else {
+      }
+      else {
         e1Color = inputData->getElementColor()->getEdgeValue(edge(static_cast<ComplexEntityLODUnit*>(e1.entity)->id));
       }
+
       if (e2.isNode) {
         e2Color = inputData->getElementColor()->getNodeValue(node(static_cast<ComplexEntityLODUnit*>(e2.entity)->id));
-      } else {
+      }
+      else {
         e2Color = inputData->getElementColor()->getEdgeValue(edge(static_cast<ComplexEntityLODUnit*>(e2.entity)->id));
       }
+
       if (e1Color[3] == 255 && e2Color[3] == 255) {
         return e1.distance < e2.distance;
       }
+
       if (e1Color[3] == 255 && e2Color[3] < 255) {
         return true;
       }
+
       if (e2Color[3] == 255 && e1Color[3] < 255) {
         return false;
       }

@@ -784,18 +784,18 @@ void GlEdge::getEdgeAnchor(const GlGraphInputData *data,const node &source,const
 
 float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
                               const Size &edgeSize,Camera *camera) {
-    Matrix<float, 4u> projectionMatrix;
-    Matrix<float, 4u> modelviewMatrix;
-    camera->getProjectionMatrix(projectionMatrix);
-    camera->getModelviewMatrix(modelviewMatrix);
+  Matrix<float, 4u> projectionMatrix;
+  Matrix<float, 4u> modelviewMatrix;
+  camera->getProjectionMatrix(projectionMatrix);
+  camera->getModelviewMatrix(modelviewMatrix);
 
-    if (edgeSize[0] != edgeSize[1]) {
-      return std::max(std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,camera->getViewport())),
-                      std::abs(projectSize(edgeCoord, Size(edgeSize[1], edgeSize[1], edgeSize[1]), projectionMatrix, modelviewMatrix,camera->getViewport())));
-    }
-    else {
-      return std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,camera->getViewport()));
-    }
+  if (edgeSize[0] != edgeSize[1]) {
+    return std::max(std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,camera->getViewport())),
+                    std::abs(projectSize(edgeCoord, Size(edgeSize[1], edgeSize[1], edgeSize[1]), projectionMatrix, modelviewMatrix,camera->getViewport())));
+  }
+  else {
+    return std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,camera->getViewport()));
+  }
 }
 
 void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data,
