@@ -169,8 +169,6 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
 
   LayersLODVector &layersLODVector = lodCalculator->getResult();
 
-  GlEdge::clearEdgeWidthLodSystem();
-
   bool vertexArrayManagerActivated=inputData->getGlVertexArrayManager()->isActivated();
 
   if(vertexArrayManagerActivated) {

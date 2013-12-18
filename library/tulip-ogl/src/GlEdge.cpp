@@ -53,8 +53,6 @@
 
 
 tlp::GlLabel* tlp::GlEdge::label=0;
-bool tlp::GlEdge::haveToComputeEdgeWidthBaseLod=true;
-float tlp::GlEdge::edgeWidthBaseLod=0.;
 
 using namespace std;
 
@@ -120,6 +118,7 @@ void GlEdge::acceptVisitor(GlSceneVisitor *visitor) {
 }
 
 void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
+
   edge e = edge(id);
 
   const std::pair<node, node>& eEnds = data->graph->ends(e);
@@ -785,27 +784,6 @@ void GlEdge::getEdgeAnchor(const GlGraphInputData *data,const node &source,const
 
 float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
                               const Size &edgeSize,Camera *camera) {
-  if(!camera->getScene()->isViewOrtho()) {
-    if(haveToComputeEdgeWidthBaseLod) {
-      Vector<int, 4> viewport = camera->getViewport();
-      Matrix<float, 4> transformMatrix;
-
-      camera->getTransformMatrix(viewport,transformMatrix);
-
-      edgeWidthBaseLod=((projectPoint(Coord(1,0,0), transformMatrix, viewport) - Coord(viewport[0], viewport[1]))
-                        -(projectPoint(Coord(0,0,0), transformMatrix, viewport) - Coord(viewport[0], viewport[1]))).norm();
-
-      haveToComputeEdgeWidthBaseLod=false;
-    }
-
-    float size=edgeSize[0];
-
-    if(edgeSize[1]>edgeSize[0])
-      size=edgeSize[1];
-
-    return edgeWidthBaseLod*size;
-  }
-  else {
     Matrix<float, 4u> projectionMatrix;
     Matrix<float, 4u> modelviewMatrix;
     camera->getProjectionMatrix(projectionMatrix);
@@ -818,7 +796,6 @@ float GlEdge::getEdgeWidthLod(const Coord &edgeCoord,
     else {
       return std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), projectionMatrix, modelviewMatrix,camera->getViewport()));
     }
-  }
 }
 
 void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data,

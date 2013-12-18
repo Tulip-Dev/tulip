@@ -105,21 +105,11 @@ public:
    */
   void getEdgeAnchor(const GlGraphInputData *data,const node &source,const node &target,const LineType::RealType &bends,const Coord &srcCoord,const Coord &tgtCoord,const Size &srcSize,const Size &tgtSize, Coord &srcAnchor, Coord &tgtAnchor);
 
-  /**
-   * This function must be called before each graph rendering
-   * This function clears previously compute edgeWidthLod
-   */
-  static void clearEdgeWidthLodSystem() {
-    haveToComputeEdgeWidthBaseLod=true;
-  }
-
   unsigned int id;
 
 private :
 
   static GlLabel *label;
-  static bool haveToComputeEdgeWidthBaseLod;
-  static float edgeWidthBaseLod;
 
   /**
    * Draw the Edge : this function is used by draw function
