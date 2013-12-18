@@ -19,6 +19,13 @@
 
 #ifdef WIN32
 #include <windows.h>
+#ifndef GL_TABLE_TOO_LARGE
+#ifdef GL_TABLE_TOO_LARGE_EXT
+#define GL_TABLE_TOO_LARGE GL_TABLE_TOO_LARGE_EXT
+#else
+#define GL_TABLE_TOO_LARGE 0x8031
+#endif
+#endif
 #endif
 
 #include <tulip/Rectangle.h>
