@@ -150,6 +150,13 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   bool contains(const tlp::Vec3f& coord) const;
 
   /**
+  * @brief Checks if the given bounding box is inside the current bounding box. If one of the bounding boxes is invalid the result is always false.
+  * @param boundingBox The bounding box to test inclusion
+  * @return bool Wether boundingBox is in the bounding box.
+  **/
+  bool contains(const tlp::BoundingBox& boundingBox) const;
+
+  /**
   * @brief Checks if the given bounding box intersect the current one. If one of the bounding box is invalid return false.
   * @param boundingBox The bounding box to compare with.
   * @return bool Wether the bounding boxes intersect.
