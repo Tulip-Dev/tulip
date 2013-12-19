@@ -197,9 +197,8 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
     if(_graphs->needsSaving()) {
       QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified, do you want to save your changes ?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
 
-      if(answer == QMessageBox::Yes)
-        save();
-      else if(answer == QMessageBox::Cancel) {
+      if ((answer == QMessageBox::Yes && !save()) ||
+	  (answer == QMessageBox::Cancel)) {
         ev->ignore();
         return true;
       }
@@ -574,11 +573,11 @@ void GraphPerspective::focusedPanelGraphSet(Graph* g) {
   _graphs->setCurrentGraph(g);
 }
 
-void GraphPerspective::save() {
-  saveAs(_project->projectFile());
+bool GraphPerspective::save() {
+  return saveAs(_project->projectFile());
 }
 
-void GraphPerspective::saveAs(const QString& path) {
+bool GraphPerspective::saveAs(const QString& path) {
   if (path.isEmpty()) {
     QString path = QFileDialog::getSaveFileName(_mainWindow,trUtf8("Save project"),QString(),"Tulip Project (*.tlpx)");
 
@@ -586,10 +585,10 @@ void GraphPerspective::saveAs(const QString& path) {
       if (!path.endsWith(".tlpx"))
         path+=".tlpx";
 
-      saveAs(path);
+      return saveAs(path);
     }
 
-    return;
+    return false;
   }
 
   SimplePluginProgressDialog progress(_mainWindow);
@@ -599,6 +598,8 @@ void GraphPerspective::saveAs(const QString& path) {
   _ui->workspace->writeProject(_project,rootIds,&progress);
   _project->write(path,&progress);
   TulipSettings::instance().addToRecentDocuments(path);
+
+  return true;
 }
 
 void GraphPerspective::open(QString fileName) {
