@@ -198,7 +198,7 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
       QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified, do you want to save your changes ?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
 
       if ((answer == QMessageBox::Yes && !save()) ||
-	  (answer == QMessageBox::Cancel)) {
+          (answer == QMessageBox::Cancel)) {
         ev->ignore();
         return true;
       }
