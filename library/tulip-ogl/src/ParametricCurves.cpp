@@ -331,7 +331,9 @@ Coord computeCatmullRomPoint(const vector<Coord> &controlPoints, const float t, 
 }
 
 void computeCatmullRomPoints(const vector<Coord> &controlPoints, vector<Coord> &curvePoints, const bool closedCurve, const unsigned int nbCurvePoints, const float alpha) {
-  assert(controlPoints.size() > 2);
+  //assert(controlPoints.size() > 2);
+    if(controlPoints.size()<=2)
+        return;
   vector<float> globalParameter;
   vector<Coord> controlPointsCp(controlPoints);
 
