@@ -17,11 +17,11 @@ DMG=$NAME-$VERSION
 
 SIZE=$(du -ms $SRC_DIR | cut -f 1)
 SIZE=$((SIZE + 20))
-hdiutil create -srcfolder "$SRC_DIR" -volname "$NAME" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW -megabytes ${SIZE} pack.temp.dmg
+hdiutil create -srcfolder "$SRC_DIR" -volname "$DMG" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW -megabytes ${SIZE} pack.temp.dmg
 device=$(hdiutil attach -readwrite -noverify -noautoopen "pack.temp.dmg" | egrep '^/dev/' | sed 1q | awk '{print $1}')
 echo '
    tell application "Finder"
-     tell disk "'${NAME}'"
+     tell disk "'${DMG}'"
            open
            set current view of container window to icon view
            set toolbar visible of container window to false
@@ -32,7 +32,7 @@ echo '
            set icon size of theViewOptions to 72
            set background picture of theViewOptions to file ".background:background.png"
            make new alias file at container window to POSIX file "/Applications" with properties {name:"Applications"}
-           set position of item "Tulip" of container window to {100, 100}
+           set position of item "'${DMG}'" of container window to {100, 100}
            set position of item "Applications" of container window to {375, 100}
            update without registering applications
            delay 5
@@ -40,7 +40,7 @@ echo '
      end tell
    end tell
 ' | osascript
-chmod -Rf go-w /Volumes/"${NAME}"
+chmod -Rf go-w /Volumes/"${DMG}"
 sync
 sync
 hdiutil detach ${device}

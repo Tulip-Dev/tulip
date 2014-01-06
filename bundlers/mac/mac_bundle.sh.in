@@ -1,14 +1,22 @@
 #!/bin/sh
 
 function usage {
-        echo "Usage : $0 <Bundle Destination Dir>"
+        echo "Usage : $0 <Bundle Destination Dir> [<Application Name>=Tulip]"
 }
 
-if [ $# -ne 1 ]
+APP_NAME=Tulip
+
+if [ $# -eq 2 ]
 then
+    APP_NAME=$2
+else
+    if [ $# -ne 1 ]
+    then
         usage $0
         exit 1
+    fi
 fi
+
 TULIP_DIR=@CMAKE_INSTALL_PREFIX@
 DEST_DIR=$1
 SRC_DIR=@tulip_SOURCE_DIR@/bundlers/mac
@@ -21,7 +29,7 @@ fi
 
 echo "Wiping previous bundles into ${DEST_DIR}"
 rm -rf "${DEST_DIR}/application" 2>/dev/null
-rm -f "${DEST_DIR}/Tulip-@TulipVersion@.dmg" 2>/dev/null
+rm -f "${DEST_DIR}/${APP_NAME}-@TulipVersion@.dmg" 2>/dev/null
 mkdir -p "${DEST_DIR}/application"
 cd "${DEST_DIR}/application"
 mkdir .background
@@ -89,11 +97,13 @@ cp Frameworks/*.dylib lib
 mv Plugins/imageformats .
 # remove unneeded stuff
 rm -rf Plugins Resources/qt.conf
+# rename
+mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@TulipVersion@.app
 
 echo 'Generating DMG'
 cd "${DEST_DIR}"
-sh "${SRC_DIR}/make_dmg.sh" Tulip "@TulipVersion@" "${DEST_DIR}/application"
+sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@TulipVersion@" "${DEST_DIR}/application"
 
 rm -rf "${DEST_DIR}/application" 2>/dev/null
 
-echo "Tulip-@TulipVersion@.dmg has been correctly generated in ${DEST_DIR}"
+echo "${APP_NAME}-@TulipVersion@.dmg has been correctly generated in ${DEST_DIR}"
