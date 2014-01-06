@@ -36,6 +36,7 @@
 //# endif
 #endif
 
+#include <map>
 #include <tulip/GlSimpleEntity.h>
 #include <tulip/Color.h>
 

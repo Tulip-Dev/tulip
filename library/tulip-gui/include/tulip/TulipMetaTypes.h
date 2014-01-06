@@ -22,6 +22,8 @@
 #define TULIPMETATYPES_H
 
 #include <QVector>
+#include <QStringList>
+#include <QVariant>
 
 #include <tulip/DataSet.h>
 #include <tulip/Graph.h>

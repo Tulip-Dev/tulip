@@ -27,6 +27,7 @@
 #include <tulip/TulipViewSettings.h>
 
 #include <QtCore/QFileInfo>
+#include <QtCore/QStringList>
 
 using namespace tlp;
 using namespace std;
