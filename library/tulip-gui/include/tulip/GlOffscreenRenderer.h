@@ -35,6 +35,7 @@
 #include <GL/gl.h>
 #endif
 
+#include <QImage>
 class QGLFramebufferObject;
 
 namespace tlp {
