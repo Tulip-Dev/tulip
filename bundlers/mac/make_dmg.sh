@@ -17,7 +17,7 @@ DMG=$NAME-$VERSION
 
 SIZE=$(du -ms $SRC_DIR | cut -f 1)
 SIZE=$((SIZE + 20))
-hdiutil create -srcfolder "$SRC_DIR" -volname "$DMG" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW -megabytes ${SIZE} pack.temp.dmg
+hdiutil create -srcfolder "${SRC_DIR}" -volname "${DMG}" -fs HFS+ -fsargs "-c c=64,a=16,e=16" -format UDRW -megabytes ${SIZE} pack.temp.dmg
 device=$(hdiutil attach -readwrite -noverify -noautoopen "pack.temp.dmg" | egrep '^/dev/' | sed 1q | awk '{print $1}')
 echo '
    tell application "Finder"
