@@ -33,7 +33,7 @@ class GlSimpleEntity;
 class TLP_QT_SCOPE GlSimpleEntityItemEditor {
 public:
 
- GlSimpleEntityItemEditor(GlSimpleEntity* ent):entity(ent) {}
+  GlSimpleEntityItemEditor(GlSimpleEntity* ent):entity(ent) {}
 
   /**
    * @brief Return properties names for this entity
@@ -72,7 +72,7 @@ protected :
 
   GlSimpleEntity *entity;
 };
-   
+
 
 class TLP_QT_SCOPE GlSimpleEntityItemModel : public QAbstractItemModel {
   Q_OBJECT

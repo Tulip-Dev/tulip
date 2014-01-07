@@ -194,9 +194,10 @@ bool GoogleMapsShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
             title->setText(selectedEntity.getSimpleEntity()->getParent()->findKey(selectedEntity.getSimpleEntity()).c_str());
 
 
-	    if (_editor)
-	      delete _editor;
-	    _editor = new GlComplexPolygonItemEditor(polygon);
+            if (_editor)
+              delete _editor;
+
+            _editor = new GlComplexPolygonItemEditor(polygon);
 
             tableView()->setModel(new GlSimpleEntityItemModel(_editor, _informationsWidget));
             int size = title->height()+_informationsWidget->layout()->spacing()+tableView()->rowHeight(0)+tableView()->rowHeight(1)+10;
