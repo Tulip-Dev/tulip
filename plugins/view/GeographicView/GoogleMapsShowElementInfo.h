@@ -29,6 +29,8 @@ class QTableView;
 namespace tlp {
 
 class View;
+class GlComplexPolygonItemEditor;
+
 /**
  * We define a specific interactor to show element graph infos in eltProperties
  */
@@ -48,6 +50,7 @@ protected:
   GoogleMapsView *_view;
   QWidget *_informationsWidget;
   QGraphicsProxyWidget *_informationsWidgetItem;
+  GlComplexPolygonItemEditor *_editor;
 
   QTableView* tableView() const;
 };
