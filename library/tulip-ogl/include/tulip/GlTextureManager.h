@@ -59,10 +59,6 @@ class TLP_GL_SCOPE GlTextureManager {
 public:
 
   /**
-   * Create the texture manager singleton
-   */
-  static void createInst();
-  /**
    * Return the texture manager singleton, il singleton doesn't exist this function create it
    */
   static GlTextureManager &getInst() {
