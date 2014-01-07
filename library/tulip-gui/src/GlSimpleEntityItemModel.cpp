@@ -25,7 +25,18 @@
 
 namespace tlp {
 
-GlSimpleEntityItemModel::GlSimpleEntityItemModel(GlSimpleEntity *entity, QObject *parent): QAbstractItemModel(parent),_entity(entity) {
+QStringList GlSimpleEntityItemEditor::propertiesNames() const {
+  return QStringList();
+}
+
+QVariantList GlSimpleEntityItemEditor::propertiesQVariant() const {
+  return QVariantList();
+}
+
+void GlSimpleEntityItemEditor::setProperty(const QString &, const QVariant &) {
+}
+
+GlSimpleEntityItemModel::GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent): QAbstractItemModel(parent),editor(itemEditor) {
 }
 
 GlSimpleEntityItemModel::~GlSimpleEntityItemModel() {
@@ -35,7 +46,7 @@ int GlSimpleEntityItemModel::rowCount(const QModelIndex &parent) const {
   if (parent.isValid())
     return 0;
 
-  return _entity->propertiesNames().size();
+  return editor->propertiesNames().size();
 }
 
 int GlSimpleEntityItemModel::columnCount(const QModelIndex &parent) const {
@@ -57,7 +68,7 @@ QVariant GlSimpleEntityItemModel::headerData(int section, Qt::Orientation orient
       return Qt::AlignCenter;
   }
   else if(role==Qt::DisplayRole) {
-    return _entity->propertiesNames()[section];
+    return editor->propertiesNames()[section];
   }
 
   if (orientation == Qt::Horizontal && role == Qt::FontRole) {
@@ -79,7 +90,7 @@ QModelIndex GlSimpleEntityItemModel::index(int row, int column,const QModelIndex
 
 QVariant GlSimpleEntityItemModel::data(const QModelIndex &index, int role) const {
   if (role == Qt::DisplayRole) {
-    return _entity->propertiesQVariant()[index.row()];
+    return editor->propertiesQVariant()[index.row()];
   }
 
   return QVariant();
@@ -87,7 +98,7 @@ QVariant GlSimpleEntityItemModel::data(const QModelIndex &index, int role) const
 
 bool GlSimpleEntityItemModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if(role==Qt::EditRole) {
-    _entity->setProperty(_entity->propertiesNames()[index.row()],value);
+    editor->setProperty(editor->propertiesNames()[index.row()],value);
     return true;
   }
 

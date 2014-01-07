@@ -27,18 +27,12 @@
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlXMLTools.h>
 
-#include <QStringList>
-#include <QVariantList>
-
-// FIXME The line below is duplicated of tulip-gui/TulipMetaTypes.h
-Q_DECLARE_METATYPE(tlp::Color)
-
 #ifdef __APPLE_CC__
 #if __APPLE_CC__ < 5400 && ( !defined(__GNUC__) || __GNUC_MINOR__ <= 2)
 // Tiger
 typedef GLvoid (*GLUTesselatorFunction)(...);
 #else
-// Leopard
+// Leopard and higher
 typedef GLvoid (*GLUTesselatorFunction)();
 #endif
 #elif defined( __mips ) || defined( __linux__ ) || defined( __FreeBSD_kernel__) || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun ) || defined (__CYGWIN__)
@@ -649,21 +643,6 @@ void GlComplexPolygon::draw(float,Camera *) {
   glDisableClientState(GL_VERTEX_ARRAY);
 
   glTest(__PRETTY_FUNCTION__);
-}
-//===========================================================
-QStringList GlComplexPolygon::propertiesNames() const {
-  return QStringList() << "fillColor" << "outlineColor";
-}
-//===========================================================
-QVariantList GlComplexPolygon::propertiesQVariant() const {
-  return QVariantList() << QVariant::fromValue<Color>(getFillColor()) << QVariant::fromValue<Color>(getOutlineColor());
-}
-//===========================================================
-void GlComplexPolygon::setProperty(const QString &name, const QVariant &value) {
-  if(name=="fillColor")
-    setFillColor(value.value<Color>());
-  else if(name=="outlineColor")
-    setOutlineColor(value.value<Color>());
 }
 //===========================================================
 void GlComplexPolygon::translate(const Coord& vec) {

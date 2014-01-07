@@ -226,12 +226,6 @@ public:
    */
   void desactivateQuadBorder(const int polygonId = 0);
 
-  QStringList propertiesNames() const;
-
-  QVariantList propertiesQVariant() const;
-
-  void setProperty(const QString &name, const QVariant &value);
-
   /**
    * @brief Translate entity
    */

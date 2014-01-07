@@ -34,9 +34,35 @@
 
 #include <QPropertyAnimation>
 #include <QLayout>
+#include <QStringList>
+#include <QVariantList>
 
 using namespace std;
 using namespace tlp;
+
+// this class is needed to allow interactive settings
+// of some GlComplexPolygon rendering properties
+class tlp::GlComplexPolygonItemEditor :public GlSimpleEntityItemEditor {
+public:
+
+  GlComplexPolygonItemEditor(GlComplexPolygon* poly): GlSimpleEntityItemEditor(poly) {}
+
+  // redefined inherited methods from GlSimpleEntityItemEditor
+  QStringList propertiesNames() const {
+    return QStringList() << "fillColor" << "outlineColor";
+  }
+
+  QVariantList propertiesQVariant() const  {
+    return QVariantList() << QVariant::fromValue<Color>(((GlComplexPolygon *) entity)->getFillColor()) << QVariant::fromValue<Color>(((GlComplexPolygon *) entity)->getOutlineColor());
+  }
+
+  void setProperty(const QString &name, const QVariant &value) {
+    if(name=="fillColor")
+      ((GlComplexPolygon *) entity)->setFillColor(value.value<Color>());
+    else if(name=="outlineColor")
+      ((GlComplexPolygon *) entity)->setOutlineColor(value.value<Color>());
+  }
+};
 
 class GoogleMapsInteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
 
@@ -67,7 +93,7 @@ public:
 
 PLUGIN(GoogleMapsInteractorGetInformation)
 
-GoogleMapsShowElementInfo::GoogleMapsShowElementInfo() {
+GoogleMapsShowElementInfo::GoogleMapsShowElementInfo(): _editor(NULL) {
   Ui::ElementInformationsWidget* ui = new Ui::ElementInformationsWidget;
   _informationsWidget=new QWidget();
   _informationsWidget->installEventFilter(this);
@@ -168,7 +194,11 @@ bool GoogleMapsShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
             title->setText(selectedEntity.getSimpleEntity()->getParent()->findKey(selectedEntity.getSimpleEntity()).c_str());
 
 
-            tableView()->setModel(new GlSimpleEntityItemModel(polygon,_informationsWidget));
+	    if (_editor)
+	      delete _editor;
+	    _editor = new GlComplexPolygonItemEditor(polygon);
+
+            tableView()->setModel(new GlSimpleEntityItemModel(_editor, _informationsWidget));
             int size = title->height()+_informationsWidget->layout()->spacing()+tableView()->rowHeight(0)+tableView()->rowHeight(1)+10;
             _informationsWidget->setMaximumHeight(size);
 
