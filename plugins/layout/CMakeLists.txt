@@ -5,9 +5,22 @@ ADD_SUBDIRECTORY(LinLog)
 
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude})
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+
+SET(LayoutUtils_SRCS 
+  DatasetTools.cpp
+  OrientableCoord.cpp
+  OrientableLayout.cpp
+  OrientableSize.cpp
+  OrientableSizeProxy.cpp
+  Orientation.cpp
+)
+
+ADD_LIBRARY(LayoutUtils STATIC ${LayoutUtils_SRCS})
+
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(MixedModel-${TulipVersion} SHARED MixedModel.cpp DatasetTools.cpp)
-TARGET_LINK_LIBRARIES(MixedModel-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(MixedModel-${TulipVersion} SHARED MixedModel.cpp)
+TARGET_LINK_LIBRARIES(MixedModel-${TulipVersion} LayoutUtils ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(ConnectedComponentPacking_SRCS 
@@ -16,10 +29,9 @@ SET(ConnectedComponentPacking_SRCS
   RectanglePacking.cpp
   rectanglePackingFonctions.cpp
   RectangleRelativePositionList.cpp
-  DatasetTools.cpp
 )
 ADD_LIBRARY(ConnectedComponentPacking-${TulipVersion} SHARED ${ConnectedComponentPacking_SRCS})
-TARGET_LINK_LIBRARIES(ConnectedComponentPacking-${TulipVersion} ${LibTulipCoreName})
+TARGET_LINK_LIBRARIES(ConnectedComponentPacking-${TulipVersion} LayoutUtils ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(Random-${TulipVersion} SHARED Random.cpp)
@@ -30,73 +42,44 @@ ADD_LIBRARY(GemLayout-${TulipVersion} SHARED GEMLayout.cpp)
 TARGET_LINK_LIBRARIES(GemLayout-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(TreeReingoldAndTilforExtended_SRCS 
-  TreeReingoldAndTilfordExtended.cpp
-  DatasetTools.cpp)
-ADD_LIBRARY(TreeReingoldAndTilforExtended-${TulipVersion} SHARED ${TreeReingoldAndTilforExtended_SRCS})
-TARGET_LINK_LIBRARIES(TreeReingoldAndTilforExtended-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(TreeReingoldAndTilforExtended-${TulipVersion} SHARED TreeReingoldAndTilfordExtended.cpp)
+TARGET_LINK_LIBRARIES(TreeReingoldAndTilforExtended-${TulipVersion} LayoutUtils ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(ConeTreeExtended-${TulipVersion} SHARED ConeTreeExtended.cpp DatasetTools.cpp)
-TARGET_LINK_LIBRARIES(ConeTreeExtended-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(ConeTreeExtended-${TulipVersion} SHARED ConeTreeExtended.cpp)
+TARGET_LINK_LIBRARIES(ConeTreeExtended-${TulipVersion} LayoutUtils ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(TreeRadial-${TulipVersion} SHARED TreeRadial.cpp DatasetTools.cpp)
 TARGET_LINK_LIBRARIES(TreeRadial-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(TreeLeaf_SRCS 
-  TreeLeaf.cpp
-  DatasetTools.cpp
-  OrientableCoord.cpp
-  OrientableLayout.cpp
-  OrientableSize.cpp
-  OrientableSizeProxy.cpp)
-
-ADD_LIBRARY(TreeLeaf-${TulipVersion} SHARED ${TreeLeaf_SRCS})
-TARGET_LINK_LIBRARIES(TreeLeaf-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(TreeLeaf-${TulipVersion} SHARED TreeLeaf.cpp)
+TARGET_LINK_LIBRARIES(TreeLeaf-${TulipVersion} LayoutUtils ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(BubbleTree-${TulipVersion} SHARED BubbleTree.cpp DatasetTools.cpp)
-TARGET_LINK_LIBRARIES(BubbleTree-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(BubbleTree-${TulipVersion} SHARED BubbleTree.cpp)
+TARGET_LINK_LIBRARIES(BubbleTree-${TulipVersion} LayoutUtils ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(Circular-${TulipVersion} SHARED Circular.cpp DatasetTools.cpp)
-TARGET_LINK_LIBRARIES(Circular-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(Circular-${TulipVersion} SHARED Circular.cpp)
+TARGET_LINK_LIBRARIES(Circular-${TulipVersion} LayoutUtils ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(HierarchicalGraph-${TulipVersion} SHARED HierarchicalGraph.cpp DatasetTools.cpp)
-TARGET_LINK_LIBRARIES(HierarchicalGraph-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(HierarchicalGraph-${TulipVersion} SHARED HierarchicalGraph.cpp)
+TARGET_LINK_LIBRARIES(HierarchicalGraph-${TulipVersion} LayoutUtils ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(Tutte-${TulipVersion} SHARED Tutte.cpp)
 TARGET_LINK_LIBRARIES(Tutte-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(Dendrogram_SRCS 
-  DatasetTools.cpp
-  OrientableCoord.cpp
-  OrientableLayout.cpp
-  OrientableSize.cpp
-  OrientableSizeProxy.cpp
-  Orientation.cpp
-  Dendrogram.cpp)
-
-ADD_LIBRARY(Dendrogram-${TulipVersion} SHARED ${Dendrogram_SRCS})
-TARGET_LINK_LIBRARIES(Dendrogram-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(Dendrogram-${TulipVersion} SHARED Dendrogram.cpp)
+TARGET_LINK_LIBRARIES(Dendrogram-${TulipVersion} LayoutUtils ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-SET(ImprovedWalker_SRCS 
-  DatasetTools.cpp
-  ImprovedWalker.cpp
-  OrientableCoord.cpp
-  OrientableLayout.cpp
-  OrientableSize.cpp
-  OrientableSizeProxy.cpp
-  Orientation.cpp)
-
-ADD_LIBRARY(ImprovedWalker-${TulipVersion} SHARED ${ImprovedWalker_SRCS})
-TARGET_LINK_LIBRARIES(ImprovedWalker-${TulipVersion} ${LibTulipCoreName})
+ADD_LIBRARY(ImprovedWalker-${TulipVersion} SHARED ImprovedWalker.cpp)
+TARGET_LINK_LIBRARIES(ImprovedWalker-${TulipVersion} LayoutUtils ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(SquarifiedTreeMap-${TulipVersion} SHARED SquarifiedTreeMap.cpp)
