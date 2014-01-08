@@ -5,7 +5,9 @@ ADD_SUBDIRECTORY(LinLog)
 
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude})
 
+IF(UNIX)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+ENDIF(UNIX)
 
 SET(LayoutUtils_SRCS 
   DatasetTools.cpp
