@@ -52,7 +52,7 @@ struct GlTexture {
  *  \brief Class to load textures
  */
 class TLP_GL_SCOPE GlTextureLoader {
- public:
+public:
   /**
    * Load a texture from a file
    * in the default implementation only bmp, jpeg and png files
@@ -74,9 +74,9 @@ class TLP_GL_SCOPE GlTextureManager {
 
 public:
 
-   /**
-   * Return the texture manager singleton, il singleton doesn't exist this function create it
-   */
+  /**
+  * Return the texture manager singleton, il singleton doesn't exist this function create it
+  */
   static GlTextureManager &getInst() {
     if(!inst)
       inst=new GlTextureManager();
@@ -170,6 +170,7 @@ public:
   static void setTextureLoader(GlTextureLoader* texLoader) {
     if (loader)
       delete loader;
+
     loader = texLoader;
   }
 
