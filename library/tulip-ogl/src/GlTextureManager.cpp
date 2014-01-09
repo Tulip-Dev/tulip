@@ -17,7 +17,8 @@
  *
  */
 
-#include <stdio.h>
+#include <cstdio>
+#include <cstring>
 #include <jpeglib.h>
 #include <png.h>
 #include <GL/glew.h>
