@@ -48,6 +48,22 @@ struct GlTexture {
   unsigned int spriteNumber;
 };
 
+/**
+ *  \brief Class to load textures
+ */
+class TLP_GL_SCOPE GlTextureLoader {
+ public:
+  /**
+   * Load a texture from a file
+   * in the default implementation only bmp, jpeg and png files
+   * can be loaded.
+   * Return false if an error occurs
+   */
+  virtual bool loadTexture(const std::string& filename, GlTexture& texture);
+
+  virtual ~GlTextureLoader() {}
+};
+
 /** \brief Class to manage textures
  * Singleton class to load/store textures need by OpenGL rendering
  */
@@ -58,7 +74,7 @@ class TLP_GL_SCOPE GlTextureManager {
 
 public:
 
-  /**
+   /**
    * Return the texture manager singleton, il singleton doesn't exist this function create it
    */
   static GlTextureManager &getInst() {
@@ -141,6 +157,22 @@ public:
    */
   void registerExternalTexture(const std::string &textureName, const GLuint textureId);
 
+  /**
+   * Get Texture loader
+   */
+  static GlTextureLoader* getTextureLoader() {
+    return loader ? loader : (loader = new GlTextureLoader());
+  }
+
+  /**
+   * Set Texture loader
+   */
+  static void setTextureLoader(GlTextureLoader* texLoader) {
+    if (loader)
+      delete loader;
+    loader = texLoader;
+  }
+
 private:
 
   /**
@@ -149,6 +181,7 @@ private:
   GlTextureManager();
 
   static GlTextureManager* inst;
+  static GlTextureLoader* loader;
 
   uintptr_t currentContext;
 
