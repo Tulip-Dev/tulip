@@ -93,6 +93,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   systemTrayMenu->addAction(trUtf8("About us"),this,SLOT(showAboutCenter()));
   systemTrayMenu->addSeparator();
   connect(systemTrayMenu->addAction(trUtf8("Exit")), SIGNAL(triggered()),this, SLOT(closeApp()));
+  connect(_ui->exitButton, SIGNAL(released()), this, SLOT(closeApp()));
   _systemTrayIcon->setContextMenu(systemTrayMenu);
   connect(_systemTrayIcon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this,SLOT(systemTrayRequest(QSystemTrayIcon::ActivationReason)));
   connect(_systemTrayIcon,SIGNAL(messageClicked()),this,SLOT(systemTrayMessageClicked()));

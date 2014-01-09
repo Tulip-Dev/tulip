@@ -167,6 +167,13 @@ p, li { white-space: pre-wrap; }
          </property>
         </spacer>
        </item>
+       <item>
+        <widget class="QPushButton" name="exitButton">
+         <property name="text">
+          <string>Exit</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
