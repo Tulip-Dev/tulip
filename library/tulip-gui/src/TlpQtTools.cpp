@@ -26,6 +26,8 @@
 #include <QColorDialog>
 #include <QAbstractButton>
 #include <QMessageBox>
+#include <QImage>
+#include <QGLWidget>
 
 #include <QDir>
 #include <QApplication>
@@ -54,8 +56,8 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlTextureManager.h>
 #include <tulip/TulipMetaTypes.h>
-
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -165,6 +167,120 @@ QString localPluginsPath() {
 #endif
 }
 
+// we define a specific GlTextureLoader allowing to load a GlTexture
+// from a QImage
+class GlTextureFromQImageLoader :public GlTextureLoader {
+public:
+  // redefine the inherited method
+  bool loadTexture(const std::string& filename, GlTexture& glTexture) {
+    QImage image(QString::fromUtf8(filename.c_str()));
+
+    if (image.isNull()) {
+      if (!QFile(QString::fromUtf8(filename.c_str())).exists())
+	tlp::error() << "Error when loading texture, the file named \"" << filename.c_str() << "\" does not exist" << std::endl;
+      else
+	tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
+      return false;
+    }
+
+    unsigned int width=image.width();
+    unsigned int height=image.height();
+
+    bool isSprite=false;
+
+    if(width!=height) {
+      bool widthPowerOfTwo=false;
+      bool heightPowerOfTwo=false;
+
+      for(unsigned int i=1; i<=width; i*=2) {
+	if(i==width)
+	  widthPowerOfTwo=true;
+      }
+
+      for(unsigned int i=1; i<=height; i*=2) {
+	if(i==height)
+	  heightPowerOfTwo=true;
+      }
+
+      if(widthPowerOfTwo && heightPowerOfTwo) {
+	isSprite=true;
+      }
+    }
+
+    int spriteNumber=1;
+
+    if(isSprite) {
+      if(width>height) {
+	spriteNumber=width/height;
+      }
+      else {
+	spriteNumber=height/width;
+      }
+    }
+
+    GLuint* textureNum = new GLuint[spriteNumber];
+
+    image = QGLWidget::convertToGLFormat(image);
+
+    glTexture.width=width;
+    glTexture.height=height;
+    glTexture.spriteNumber=spriteNumber;
+    glTexture.id=new GLuint[spriteNumber];
+
+    glGenTextures(spriteNumber, textureNum);  //FIXME: handle case where no memory is available to load texture
+
+    if(!isSprite) {
+      glBindTexture(GL_TEXTURE_2D, textureNum[0]);
+
+      glTexture.id[0]=textureNum[0];
+
+      int GLFmt = image.hasAlphaChannel() ? GL_RGBA : GL_RGB;
+      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, image.bits());
+
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+    else {
+      QImage *images=new QImage[spriteNumber];
+
+      if(width>height) {
+	QRect rect(0,0,height,height);
+
+	for(int i=0; i<spriteNumber; i++) {
+	  images[i]=image.copy(rect);
+	  rect.translate(height,0);
+	}
+      }
+      else {
+	QRect rect(0,0,width,width);
+
+	for(int i=0; i<spriteNumber; i++) {
+	  images[i]=image.copy(rect);
+	  rect.translate(0,width);
+	}
+      }
+
+      width=images[0].width();
+      height=images[0].height();
+
+      for(int i=0; i<spriteNumber; i++) {
+	glBindTexture(GL_TEXTURE_2D, textureNum[i]);
+
+	glTexture.id[i]=textureNum[i];
+
+	int GLFmt = images[i].hasAlphaChannel() ? GL_RGBA : GL_RGB;
+	glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, images[i].bits());
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      }
+
+      delete[] images;
+    }
+    return true;
+  }
+};
+
 void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   QLocale::setDefault(QLocale(QLocale::English));
   TulipSettings::instance().applyProxySettings();
@@ -193,6 +309,9 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
 
   tlp::initTulipLib();
   initQTypeSerializers();
+  // initialize Texture loader
+  GlTextureManager::setTextureLoader(new GlTextureFromQImageLoader());
+
   tlp::TulipPluginsPath = std::string((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toUtf8().data()) +
                           tlp::PATH_DELIMITER +
                           tlp::TulipPluginsPath +
