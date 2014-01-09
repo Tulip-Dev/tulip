@@ -292,8 +292,8 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
 }
 
 static bool generateTexture(const std::string &filename,
-			    const TextureInfo &texti,
-			    GlTexture &glTexture) {
+                            const TextureInfo &texti,
+                            GlTexture &glTexture) {
   int GLFmt = texti.hasAlpha ? GL_RGBA : GL_RGB;
 
   bool spriteOnWidth=false;
@@ -330,7 +330,7 @@ static bool generateTexture(const std::string &filename,
       }
 
       if(!formatOk) {
-	tlp::error() << "Texture loader error: invalid size\ntexture width should be a power of 2\nfor file: " << filename << std::endl;
+        tlp::error() << "Texture loader error: invalid size\ntexture width should be a power of 2\nfor file: " << filename << std::endl;
         return false;
       }
 
@@ -342,7 +342,7 @@ static bool generateTexture(const std::string &filename,
       }
 
       if(!formatOk) {
-	tlp::error() << "Texture loader error: invalid size\ntexture height should be a power of 2\nfor file: " << filename << std::endl;
+        tlp::error() << "Texture loader error: invalid size\ntexture height should be a power of 2\nfor file: " << filename << std::endl;
         return false;
       }
     }
@@ -410,8 +410,8 @@ static bool generateTexture(const std::string &filename,
   return true;
 }
 //====================================================================
-  bool GlTextureLoader::loadTexture(const string& filename,
-				    GlTexture &texture) {
+bool GlTextureLoader::loadTexture(const string& filename,
+                                  GlTexture &texture) {
   string extension = filename.substr(filename.find_last_of('.') + 1);
 
   for (int i=0; i < (int)extension.length(); ++i)
@@ -427,6 +427,7 @@ static bool generateTexture(const std::string &filename,
   }
 
   TextureInfo texti;
+
   if ((loader == NULL) || !(*loader)(filename, &texti)) {
     return false;
   }
@@ -467,6 +468,7 @@ bool GlTextureManager::loadTexture(const string& filename) {
     return true;
 
   GlTexture texture;
+
   if (!getTextureLoader()->loadTexture(filename, texture))
     return false;
 

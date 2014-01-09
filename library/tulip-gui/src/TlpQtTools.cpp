@@ -177,9 +177,10 @@ public:
 
     if (image.isNull()) {
       if (!QFile(QString::fromUtf8(filename.c_str())).exists())
-	tlp::error() << "Error when loading texture, the file named \"" << filename.c_str() << "\" does not exist" << std::endl;
+        tlp::error() << "Error when loading texture, the file named \"" << filename.c_str() << "\" does not exist" << std::endl;
       else
-	tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
+        tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
+
       return false;
     }
 
@@ -193,17 +194,17 @@ public:
       bool heightPowerOfTwo=false;
 
       for(unsigned int i=1; i<=width; i*=2) {
-	if(i==width)
-	  widthPowerOfTwo=true;
+        if(i==width)
+          widthPowerOfTwo=true;
       }
 
       for(unsigned int i=1; i<=height; i*=2) {
-	if(i==height)
-	  heightPowerOfTwo=true;
+        if(i==height)
+          heightPowerOfTwo=true;
       }
 
       if(widthPowerOfTwo && heightPowerOfTwo) {
-	isSprite=true;
+        isSprite=true;
       }
     }
 
@@ -211,10 +212,10 @@ public:
 
     if(isSprite) {
       if(width>height) {
-	spriteNumber=width/height;
+        spriteNumber=width/height;
       }
       else {
-	spriteNumber=height/width;
+        spriteNumber=height/width;
       }
     }
 
@@ -244,39 +245,40 @@ public:
       QImage *images=new QImage[spriteNumber];
 
       if(width>height) {
-	QRect rect(0,0,height,height);
+        QRect rect(0,0,height,height);
 
-	for(int i=0; i<spriteNumber; i++) {
-	  images[i]=image.copy(rect);
-	  rect.translate(height,0);
-	}
+        for(int i=0; i<spriteNumber; i++) {
+          images[i]=image.copy(rect);
+          rect.translate(height,0);
+        }
       }
       else {
-	QRect rect(0,0,width,width);
+        QRect rect(0,0,width,width);
 
-	for(int i=0; i<spriteNumber; i++) {
-	  images[i]=image.copy(rect);
-	  rect.translate(0,width);
-	}
+        for(int i=0; i<spriteNumber; i++) {
+          images[i]=image.copy(rect);
+          rect.translate(0,width);
+        }
       }
 
       width=images[0].width();
       height=images[0].height();
 
       for(int i=0; i<spriteNumber; i++) {
-	glBindTexture(GL_TEXTURE_2D, textureNum[i]);
+        glBindTexture(GL_TEXTURE_2D, textureNum[i]);
 
-	glTexture.id[i]=textureNum[i];
+        glTexture.id[i]=textureNum[i];
 
-	int GLFmt = images[i].hasAlphaChannel() ? GL_RGBA : GL_RGB;
-	glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, images[i].bits());
+        int GLFmt = images[i].hasAlphaChannel() ? GL_RGBA : GL_RGB;
+        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, images[i].bits());
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
       }
 
       delete[] images;
     }
+
     return true;
   }
 };
