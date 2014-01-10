@@ -169,7 +169,7 @@ tlpgui.closeAllViews()
 
 .. versionadded:: 4.4
 
-Closes and destroys all opened views.
+Closes and destroys all opened views (except the Python Script ones).
 %End
 
 %MethodCode

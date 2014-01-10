@@ -177,7 +177,12 @@ void TulipViewsManager::closeAllViews() {
   tlp::Workspace *workspace = tlpWorkspace();
 
   if (workspace) {
-    workspace->closeAll();
+    QList<tlp::View*> views = workspace->panels();
+    for (int i = 0 ; i < views.size() ; ++i) {
+      if (views.at(i)->name() != "Python Script view") {
+        workspace->delView(views.at(i));
+      }
+    }
   }
   else {
     std::vector<tlp::View*> openedViewsCp(openedViews);
