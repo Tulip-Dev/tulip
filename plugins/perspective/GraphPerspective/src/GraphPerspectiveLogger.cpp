@@ -84,7 +84,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
 
   _logCount++;
   _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)),
-					       QString::fromUtf8(msg)));
+                           QString::fromUtf8(msg)));
 }
 #endif
 
