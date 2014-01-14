@@ -34,9 +34,8 @@
 #include <tulip/PluginLoaderTxt.h>
 #endif
 #include <tulip/PluginLibraryLoader.h>
-#include <QApplication>
 
-int main(int argc, char **argv) {
+int main(int /* arg */, char ** /* argv */) {
 #if defined(_GLIBCXX_HAVE_SETENV)
   std::string tlpdir("@prefix@");
   // check for lib64
@@ -53,10 +52,6 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 #endif
-  // many plugins are qt dependent so they need a QApplication
-  // which must be created before the call to initTulipLib
-  // to avoid any reset of LC_NUMERIC inited by this call
-  QApplication app(argc, argv);
   tlp::initTulipLib();
   tlp::PluginLoader* pLoader = NULL;
 #ifndef NDEBUG

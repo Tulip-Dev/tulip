@@ -9,12 +9,8 @@ SET(TULIP_PLUGINS_TESTS_SRCS
   basiclayouttest.cpp
   pluginstest.cpp)
 
-IF(USE_QT5)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
-ENDIF(USE_QT5)
-
 ADD_EXECUTABLE(tulip_plugins_tests  ${TULIP_PLUGINS_TESTS_SRCS})
-TARGET_LINK_LIBRARIES(tulip_plugins_tests ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} cppunit)
+TARGET_LINK_LIBRARIES(tulip_plugins_tests ${LibTulipCoreName} cppunit)
 
 ADD_CUSTOM_TARGET(copy_data ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/data ${CMAKE_CURRENT_BINARY_DIR}/data VERBATIM)
 
