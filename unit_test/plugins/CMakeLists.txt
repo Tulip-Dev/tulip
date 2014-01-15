@@ -10,7 +10,10 @@ SET(TULIP_PLUGINS_TESTS_SRCS
   pluginstest.cpp)
 
 ADD_EXECUTABLE(tulip_plugins_tests  ${TULIP_PLUGINS_TESTS_SRCS})
-TARGET_LINK_LIBRARIES(tulip_plugins_tests ${LibTulipCoreName} cppunit)
+
+# link against tulip-ogl and tulip-gui libraries
+# to ensure correct loading of some of the tested plugins
+TARGET_LINK_LIBRARIES(tulip_plugins_tests ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} cppunit)
 
 ADD_CUSTOM_TARGET(copy_data ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/data ${CMAKE_CURRENT_BINARY_DIR}/data VERBATIM)
 
