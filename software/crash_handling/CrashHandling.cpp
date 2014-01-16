@@ -38,7 +38,9 @@ void setDumpPath(string s) {
 /*
   Linux/MacOS-specific handling
  */
-#if defined(__linux) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
+
+# if defined(__i386__) || defined(__amd64__)
 
 #include "UnixSignalInterposer.h"
 
@@ -118,6 +120,11 @@ void start_crash_handler() {
   installSignalHandler(SIGILL, &dumpStack);
   installSignalHandler(SIGBUS, &dumpStack);
 }
+
+# else
+// architecture not supported
+void start_crash_handler() {}
+# endif
 
 /*
   MinGW-specific handling
