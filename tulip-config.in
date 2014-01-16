@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 thisdir=$(dirname "$0")
 if test "$thisdir" = "." ; then
