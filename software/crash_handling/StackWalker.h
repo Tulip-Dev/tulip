@@ -86,7 +86,7 @@ public:
 
 };
 
-#if defined(__linux) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
 
 #include <map>
 
