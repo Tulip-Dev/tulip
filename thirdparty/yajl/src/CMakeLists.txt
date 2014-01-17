@@ -36,10 +36,10 @@ SET (incDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/include/yajl)
 
 #ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
 
-ADD_LIBRARY(yajl SHARED ${SRCS} ${HDRS} ${PUB_HDRS})
+ADD_LIBRARY(${YajlLibrary} SHARED ${SRCS} ${HDRS} ${PUB_HDRS})
 
 #### setup shared library version number
-SET_TARGET_PROPERTIES(yajl PROPERTIES
+SET_TARGET_PROPERTIES(${YajlLibrary} PROPERTIES
                       DEFINE_SYMBOL YAJL_SHARED
                       SOVERSION ${YAJL_MAJOR}
                       VERSION ${YAJL_MAJOR}.${YAJL_MINOR}.${YAJL_MICRO})
@@ -47,7 +47,7 @@ SET_TARGET_PROPERTIES(yajl PROPERTIES
 #### ensure a .dylib has correct absolute installation paths upon installation
 IF(APPLE)
   MESSAGE("INSTALL_NAME_DIR: ${CMAKE_INSTALL_PREFIX}/lib")
-  SET_TARGET_PROPERTIES(yajl PROPERTIES
+  SET_TARGET_PROPERTIES(${YajlLibrary} PROPERTIES
                         INSTALL_NAME_DIR "@executable_path/../lib")
 ENDIF(APPLE)
 
@@ -81,7 +81,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 #  INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl COMPONENT yajl)
 #  INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl COMPONENT yajl)
 #ELSE()
-  INSTALL(TARGETS yajl
+  INSTALL(TARGETS ${YajlLibrary}
        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT yajl
        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT yajl)
 #ENDIF()

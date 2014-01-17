@@ -20,7 +20,7 @@ TARGET_LINK_LIBRARIES(packagePlugins
                       ${LibTulipOGDFName}
                       ${OGDFLibrary}
                       ${QT_LIBRARIES}
-                      quazip)
+                      ${QuazipLibrary})
 
 IF(NOT WIN32)
   TARGET_LINK_LIBRARIES(packagePlugins pthread)
