@@ -201,7 +201,7 @@ void TulipMainWindow::showPluginsCenter() {
     setVisible(true);
 
   raise();
-#if !defined(__linux)
+#if defined(__APPLE__) || defined(_WIN32)
   _ui->pages->setCurrentWidget(_ui->pluginsPage);
 #endif
 }

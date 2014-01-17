@@ -354,7 +354,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
 
-#if defined(__linux) // Hide plugins center features on linux
+#if !defined(__APPLE__) && !defined(_WIN32)
+  // Hide plugins center when not on MacOS or Windows
   _ui->pluginsButton->hide();
   _ui->menuHelp->removeAction(_ui->actionPlugins_Center);
 #endif

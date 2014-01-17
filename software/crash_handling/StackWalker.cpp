@@ -23,7 +23,7 @@
 #include <sstream>
 #include <cstring>
 
-#if defined(__linux) || defined(__APPLE__)
+#if defined(__unix__) || defined(__APPLE__)
 
 #include <cxxabi.h>
 #ifndef __APPLE__
