@@ -34,9 +34,6 @@
 using namespace tlp;
 using namespace std;
 
-const string texture(TulipBitmapDir + "halfCylinderTexture.png");
-const string gradient(TulipBitmapDir + "titlebarGradient.png");
-
 class Window : public Glyph {
 public:
   GLYPHINFORMATION("2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", NodeShape::Window)
@@ -77,7 +74,7 @@ Window::Window(const tlp::PluginContext* context):
   _rectColor(205, 205, 205, 255),
   _textColor(205, 205, 205, 255),
   _borderWidth(0.02f),
-  _border(texture) {
+  _border(TulipBitmapDir + "halfCylinderTexture.png") {
 
   const float textheight = 0.05f;
 
@@ -108,7 +105,7 @@ Window::Window(const tlp::PluginContext* context):
   _titleRec.setPosition(1, v[5]);
   _titleRec.setPosition(2, v[8]);
   _titleRec.setPosition(3, v[9]);
-  _titleRec.setTextureName(gradient);
+  _titleRec.setTextureName(TulipBitmapDir + "titlebarGradient.png");
 
 
   _textbb.expand(v[4]);
