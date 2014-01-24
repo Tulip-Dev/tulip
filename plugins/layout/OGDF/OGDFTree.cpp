@@ -87,56 +87,56 @@ public:
   PLUGININFORMATION("Improved Walker (OGDF)","Christoph Buchheim","12/11/2007","Ok","1.5","Tree")
   OGDFTree(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::TreeLayout()) {
     addInParameter<double>("siblings distance",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The minimal required horizontal distance between siblings."
-			   HTML_HELP_CLOSE(),
-			   "20");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The minimal required horizontal distance between siblings."
+                           HTML_HELP_CLOSE(),
+                           "20");
     addInParameter<double>("subtrees distance",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The minimal required horizontal distance between subtrees."
-			   HTML_HELP_CLOSE(),
-			   "20");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The minimal required horizontal distance between subtrees."
+                           HTML_HELP_CLOSE(),
+                           "20");
     addInParameter<double>("levels distance",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The minimal required vertical distance between levels."
-			   HTML_HELP_CLOSE(),
-			   "50");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The minimal required vertical distance between levels."
+                           HTML_HELP_CLOSE(),
+                           "50");
     addInParameter<double>("trees distance",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The minimal required horizontal distance between trees in the forest."
-			   HTML_HELP_CLOSE(),
-			   "50");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The minimal required horizontal distance between trees in the forest."
+                           HTML_HELP_CLOSE(),
+                           "50");
     addInParameter<bool>("orthogonal layout",
-			 HTML_HELP_OPEN()
-			 HTML_HELP_DEF( "type", "bool" )
-			 HTML_HELP_BODY()
-			 "Indicates whether orthogonal edge routing style is used or not."
-			 HTML_HELP_CLOSE(),
-			 "false");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_BODY()
+                         "Indicates whether orthogonal edge routing style is used or not."
+                         HTML_HELP_CLOSE(),
+                         "false");
     addInParameter<StringCollection>(ELT_ORIENTATION,
-				     HTML_HELP_DEF( "type", "StringCollection")
-				     HTML_HELP_DEF("values", "- topToBottom <i>(Edges are oriented from top to bottom)</i><br/>- bottomToTop <i>(Edges are oriented from bottom to top)</i><br>- leftToRight <i>(Edges are oriented from left to right)</i><br/>- rightToLeft <i>(Edges are oriented from right to left)</i>")
-				     HTML_HELP_DEF( "default", "topToBottom " )
-				     HTML_HELP_BODY()
-				     "This parameter indicates the orientation of the layout."
-				     HTML_HELP_CLOSE(),
-				     ELT_ORIENTATIONLIST);
+                                     HTML_HELP_DEF( "type", "StringCollection")
+                                     HTML_HELP_DEF("values", "- topToBottom <i>(Edges are oriented from top to bottom)</i><br/>- bottomToTop <i>(Edges are oriented from bottom to top)</i><br>- leftToRight <i>(Edges are oriented from left to right)</i><br/>- rightToLeft <i>(Edges are oriented from right to left)</i>")
+                                     HTML_HELP_DEF( "default", "topToBottom " )
+                                     HTML_HELP_BODY()
+                                     "This parameter indicates the orientation of the layout."
+                                     HTML_HELP_CLOSE(),
+                                     ELT_ORIENTATIONLIST);
     addInParameter<StringCollection>(ELT_ROOTSELECTION,
-				     HTML_HELP_DEF( "type", "StringCollection")
-				     HTML_HELP_DEF("values", "- rootIsSource <i>(Select a source in the graph)</i><br>- rootIsSink <i>(Select a sink in the graph)</i><br/>- rootByCoord <i>(Use the coordinates, e.g., select the topmost node if orientation is topToBottom)</i>")
-				     HTML_HELP_DEF( "default", "rootIsSource " )
-				     HTML_HELP_BODY()
-				     "This parameter that indicates how the root is selected."
-				     HTML_HELP_CLOSE(),
-				     ELT_ROOTSELECTIONLIST);
+                                     HTML_HELP_DEF( "type", "StringCollection")
+                                     HTML_HELP_DEF("values", "- rootIsSource <i>(Select a source in the graph)</i><br>- rootIsSink <i>(Select a sink in the graph)</i><br/>- rootByCoord <i>(Use the coordinates, e.g., select the topmost node if orientation is topToBottom)</i>")
+                                     HTML_HELP_DEF( "default", "rootIsSource " )
+                                     HTML_HELP_BODY()
+                                     "This parameter that indicates how the root is selected."
+                                     HTML_HELP_CLOSE(),
+                                     ELT_ROOTSELECTIONLIST);
   }
 
   ~OGDFTree() {}

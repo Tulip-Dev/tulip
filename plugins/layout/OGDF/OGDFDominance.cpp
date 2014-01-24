@@ -71,19 +71,19 @@ public:
   PLUGININFORMATION("Dominance (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
   OGDFDominance(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::DominanceLayout()) {
     addInParameter<int>("minimum grid distance",
-			HTML_HELP_OPEN()
-			HTML_HELP_DEF( "type", "int" )
-			HTML_HELP_BODY()
-			"The minimum grid distance."
-			HTML_HELP_CLOSE(),
-			"1");
+                        HTML_HELP_OPEN()
+                        HTML_HELP_DEF( "type", "int" )
+                        HTML_HELP_BODY()
+                        "The minimum grid distance."
+                        HTML_HELP_CLOSE(),
+                        "1");
     addInParameter<bool>("transpose",
-			 HTML_HELP_OPEN()
-			 HTML_HELP_DEF( "type", "bool" )
-			 HTML_HELP_BODY()
-			 "The parameter for transposing the layout vertically ."
-			 HTML_HELP_CLOSE(),
-			 "false");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_BODY()
+                         "The parameter for transposing the layout vertically ."
+                         HTML_HELP_CLOSE(),
+                         "false");
   }
   ~OGDFDominance() {}
 
