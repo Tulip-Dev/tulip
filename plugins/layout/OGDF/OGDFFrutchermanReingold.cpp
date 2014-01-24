@@ -21,63 +21,6 @@
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 #include <tulip/StringCollection.h>
 
-namespace {
-
-const char * paramHelp[] = { HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "int" )
-                             HTML_HELP_BODY()
-                             "Sets the number of iterations to i."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "Sets the parameter noise. "
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "set the use of node weights given in metric.  "
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "NumericProperty" )
-                             HTML_HELP_BODY()
-                             "metric containing nodes weights.  "
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "StringCollection")
-                             HTML_HELP_DEF("values", "Factor <BR> Logarithmic")
-                             HTML_HELP_DEF( "default", "Factor" )
-                             HTML_HELP_BODY()
-                             "Sets the parameter cooling function"
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The ideal edge length."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The minimal distance between connected components."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The page ratio used for packing connected components."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "check convergence option. "
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "convergence tolerance parameter."
-                             HTML_HELP_CLOSE()
-                           };
-}
-
 #define ELT_COOLING "Cooling function"
 #define ELT_COOLINGLIST "Factor;Logarithmic"
 #define ELT_FACTOR 0
@@ -144,16 +87,77 @@ PLUGIN(OGDFFrutchermanReingold)
 
 OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext* context) :
   OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderFRExact()) {
-  addInParameter<int>("iterations", paramHelp[0], "1000");
-  addInParameter<bool>("noise", paramHelp[1], "true");
-  addInParameter<bool>("use node weights", paramHelp[2], "false");
-  addInParameter<NumericProperty*>("node weights", paramHelp[3], "viewMetric");
-  addInParameter<StringCollection>(ELT_COOLING, paramHelp[4], ELT_COOLINGLIST);
-  addInParameter<double>("ideal edge length", paramHelp[5], "10.0");
-  addInParameter<double>("minDistCC", paramHelp[6], "20.0");
-  addInParameter<double>("pageRatio", paramHelp[7], "1.0");
-  addInParameter<bool>("check convergence", paramHelp[8], "true");
-  addInParameter<double>("convergence tolerance", paramHelp[9], "0.01");
+  addInParameter<int>("iterations",
+		      HTML_HELP_OPEN()
+		      HTML_HELP_DEF( "type", "int" )
+		      HTML_HELP_BODY()
+		      "The number of iterations."
+		      HTML_HELP_CLOSE(),
+		      "1000");
+  addInParameter<bool>("noise",
+		       HTML_HELP_OPEN()
+		       HTML_HELP_DEF( "type", "bool" )
+		       HTML_HELP_BODY()
+		       "Sets the parameter noise. "
+		       HTML_HELP_CLOSE(),
+		       "true");
+  addInParameter<bool>("use node weights",
+		       HTML_HELP_OPEN()
+		       HTML_HELP_DEF( "type", "bool" )
+		       HTML_HELP_BODY()
+		       "Indicates if the node weights have to be used."
+		       HTML_HELP_CLOSE(),
+		       "false");
+  addInParameter<NumericProperty*>("node weights",
+				   HTML_HELP_OPEN()
+				   HTML_HELP_DEF( "type", "NumericProperty" )
+				   HTML_HELP_BODY()
+				   "The metric containing nodes weights.  "
+				   HTML_HELP_CLOSE(),
+				   "viewMetric");
+  addInParameter<StringCollection>(ELT_COOLING,
+				   HTML_HELP_OPEN()
+				   HTML_HELP_DEF( "type", "StringCollection")
+				   HTML_HELP_DEF("values", "Factor<br/>Logarithmic")
+				   HTML_HELP_DEF( "default", "Factor" )
+				   HTML_HELP_BODY()
+				   "Sets the parameter cooling function"
+				   HTML_HELP_CLOSE(),
+				   ELT_COOLINGLIST);
+  addInParameter<double>("ideal edge length",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The ideal edge length."
+			 HTML_HELP_CLOSE(),
+			 "10.0");
+  addInParameter<double>("minDistCC",HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The minimal distance between connected components."
+			 HTML_HELP_CLOSE(),
+			 "20.0");
+  addInParameter<double>("pageRatio",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The page ratio used for packing connected components."
+			 HTML_HELP_CLOSE(),
+			 "1.0");
+  addInParameter<bool>("check convergence",
+		       HTML_HELP_OPEN()
+		       HTML_HELP_DEF( "type", "bool" )
+		       HTML_HELP_BODY()
+		       "Indicates if the convergence has to be checked."
+		       HTML_HELP_CLOSE(),
+		       "true");
+  addInParameter<double>("convergence tolerance",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The convergence tolerance parameter."
+			 HTML_HELP_CLOSE(),
+			 "0.01");
 }
 
 OGDFFrutchermanReingold::~OGDFFrutchermanReingold() {}

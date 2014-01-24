@@ -23,75 +23,6 @@
 
 #include <tulip/StringCollection.h>
 
-namespace {
-
-const char * paramHelp[] = { HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "int" )
-                             HTML_HELP_BODY()
-                             "the maximal number of rounds per node."
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "the minimal temperature ."
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "Sets the initial temperature to x; must be >= minimalTemperature."
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "gravitational constant parameter."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Sets the desired edge length to x; must be >= 0."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Sets the maximal disturbance to x; must be >= 0."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Sets the opening angle for rotations to x (0 <= x <= pi / 2)."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Sets the opening angle for oscillations to x (0 <= x <= pi / 2)."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Sets the rotation sensitivity to x (0 <= x <= 1)."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "Sets the oscillation sensitivity to x (0 <= x <= 1)."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "StringCollection")
-                             HTML_HELP_DEF("values", "Fruchterman/Reingold <BR> GEM")
-                             HTML_HELP_DEF( "default", "Fruchterman/Reingold" )
-                             HTML_HELP_BODY()
-                             "sets the formula for attraction. "
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The minimal distance between connected components."
-                             HTML_HELP_CLOSE(),
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The page ratio used for packing connected components."
-                             HTML_HELP_CLOSE()
-                           };
-}
-
 #define ELT_ATTRACTIONFORMULA "Attraction formula"
 #define ELT_ATTRACTIONFORMULALIST "Fruchterman/Reingold;GEM"
 
@@ -154,20 +85,99 @@ public:
 PLUGIN(OGDFGemFrick)
 
 OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext* context) : OGDFLayoutPluginBase(context,new ogdf::GEMLayout()) {
-  addInParameter<int>("number of rounds", paramHelp[0], "30000");
-  addInParameter<double>("minimal temperature", paramHelp[1], "0.005");
-  addInParameter<double>("initial temperature", paramHelp[2], "12.0");
-  addInParameter<double>("gravitational constant", paramHelp[3], "0.0625");
-  addInParameter<double>("desired length", paramHelp[4], "5.0");
-  addInParameter<double>("maximal disturbance", paramHelp[5], "0.0");
-  addInParameter<double>("rotation angle", paramHelp[6], "1.04719755");
-  addInParameter<double>("oscillation angle", paramHelp[7], "1.57079633");
-  addInParameter<double>("rotation sensitivity", paramHelp[8], "0.01");
-  addInParameter<double>("oscillation sensitivity", paramHelp[9], "0.3");
-  addInParameter<StringCollection>(ELT_ATTRACTIONFORMULA, paramHelp[10], ELT_ATTRACTIONFORMULALIST);
-  addInParameter<double>("minDistCC", paramHelp[11], "20");
-  addInParameter<double>("pageRatio", paramHelp[12], "1.0");
-
+  addInParameter<int>("number of rounds",
+		      HTML_HELP_OPEN()
+		      HTML_HELP_DEF( "type", "int" )
+		      HTML_HELP_BODY()
+		      "The maximal number of rounds per node."
+		      HTML_HELP_CLOSE(),
+		      "30000");
+  addInParameter<double>("minimal temperature",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "the minimal temperature ."
+			 HTML_HELP_CLOSE(),
+			 "0.005");
+  addInParameter<double>("initial temperature",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "bool" )
+			 HTML_HELP_BODY()
+			 "The initial temperature to x; must be >= minimalTemperature."
+			 HTML_HELP_CLOSE(),
+			 "12.0");
+  addInParameter<double>("gravitational constant",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "Gravitational constant parameter."
+			 HTML_HELP_CLOSE(),
+			 "0.0625");
+  addInParameter<double>("desired length",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The desired edge length to x; must be >= 0."
+			 HTML_HELP_CLOSE(),
+			 "5.0");
+  addInParameter<double>("maximal disturbance",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The maximal disturbance to x; must be >= 0."
+			 HTML_HELP_CLOSE(),
+			 "0.0");
+  addInParameter<double>("rotation angle",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The opening angle for rotations to x (0 <= x <= pi / 2)."
+			 HTML_HELP_CLOSE(),
+			 "1.04719755");
+  addInParameter<double>("oscillation angle",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "Sets the opening angle for oscillations to x (0 <= x <= pi / 2)."
+			 HTML_HELP_CLOSE(),
+			 "1.57079633");
+  addInParameter<double>("rotation sensitivity",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The rotation sensitivity to x (0 <= x <= 1)."
+			 HTML_HELP_CLOSE(),
+			 "0.01");
+  addInParameter<double>("oscillation sensitivity",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The oscillation sensitivity to x (0 <= x <= 1)."
+			 HTML_HELP_CLOSE(),
+			 "0.3");
+  addInParameter<StringCollection>(ELT_ATTRACTIONFORMULA,
+				   HTML_HELP_OPEN()
+				   HTML_HELP_DEF( "type", "StringCollection")
+				   HTML_HELP_DEF("values", "- Fruchterman/Reingold<br/>- GEM")
+				   HTML_HELP_DEF( "default", "Fruchterman/Reingold" )
+				   HTML_HELP_BODY()
+				   "The formula for attraction. "
+				   HTML_HELP_CLOSE(),
+				   ELT_ATTRACTIONFORMULALIST);
+  addInParameter<double>("minDistCC",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The minimal distance between connected components."
+			 HTML_HELP_CLOSE(),
+			 "20");
+  addInParameter<double>("pageRatio",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "double" )
+			 HTML_HELP_BODY()
+			 "The page ratio used for packing connected components."
+			 HTML_HELP_CLOSE(),
+			 "1.0");
 }
 
 OGDFGemFrick::~OGDFGemFrick() {
