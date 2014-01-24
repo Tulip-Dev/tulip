@@ -107,109 +107,109 @@ public:
 
   OGDFSugiyama(const tlp::PluginContext *context) :OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()) {
     addInParameter<int>("fails",
-			HTML_HELP_OPEN()
-			HTML_HELP_DEF( "type", "int" )
-			HTML_HELP_BODY()
-			"Sets the option fails to nFails."
-			HTML_HELP_CLOSE(),
-			"4");
+                        HTML_HELP_OPEN()
+                        HTML_HELP_DEF( "type", "int" )
+                        HTML_HELP_BODY()
+                        "Sets the option fails to nFails."
+                        HTML_HELP_CLOSE(),
+                        "4");
     addInParameter<int>("runs",
-			HTML_HELP_OPEN()
-			HTML_HELP_DEF( "type", "int" )
-			HTML_HELP_BODY()
-			"Sets the option runs to nRuns."
-			HTML_HELP_CLOSE(),
-			"15");
+                        HTML_HELP_OPEN()
+                        HTML_HELP_DEF( "type", "int" )
+                        HTML_HELP_BODY()
+                        "Sets the option runs to nRuns."
+                        HTML_HELP_CLOSE(),
+                        "15");
     addInParameter<double>("node distance",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The minimal distance between two nodes on the same layer."
-			   HTML_HELP_CLOSE(),
-			   "3");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The minimal distance between two nodes on the same layer."
+                           HTML_HELP_CLOSE(),
+                           "3");
     addInParameter<double>("layer distance",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The minimal distance between two layers."
-			   HTML_HELP_CLOSE(),
-			   "3");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The minimal distance between two layers."
+                           HTML_HELP_CLOSE(),
+                           "3");
     addInParameter<bool>("fixed layer distance",
-			 HTML_HELP_OPEN()
-			 HTML_HELP_DEF( "type", "bool" )
-			 HTML_HELP_BODY()
-			 "If false, adjust the distance of each layer to the longest edge (only for FastHierarchyLayout)."
-			 HTML_HELP_CLOSE(),
-			 "true");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_BODY()
+                         "If false, adjust the distance of each layer to the longest edge (only for FastHierarchyLayout)."
+                         HTML_HELP_CLOSE(),
+                         "true");
     addInParameter<bool>("transpose",
-			 HTML_HELP_OPEN()
-			 HTML_HELP_DEF( "type", "bool" )
-			 HTML_HELP_BODY()
-			 "Sets the option for transposing layout vertically ."
-			 HTML_HELP_CLOSE(),
-			 "true");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_BODY()
+                         "Sets the option for transposing layout vertically ."
+                         HTML_HELP_CLOSE(),
+                         "true");
     addInParameter<bool>("arrangeCCs",
-			 HTML_HELP_OPEN()
-			 HTML_HELP_DEF( "type", "bool" )
-			 HTML_HELP_BODY()
-			 "Sets the options arrangeCCs."
-			 HTML_HELP_CLOSE(),
-			 "true");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_BODY()
+                         "Sets the options arrangeCCs."
+                         HTML_HELP_CLOSE(),
+                         "true");
     addInParameter<double>("minDistCC",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The minimal distance between connected components."
-			   HTML_HELP_CLOSE(),
-			   "20");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The minimal distance between connected components."
+                           HTML_HELP_CLOSE(),
+                           "20");
     addInParameter<double>("pageRatio",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The page ratio used for packing connected components."
-			   HTML_HELP_CLOSE(),
-			   "1.0");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The page ratio used for packing connected components."
+                           HTML_HELP_CLOSE(),
+                           "1.0");
     addInParameter<bool>("alignBaseClasses",
-			 HTML_HELP_OPEN()
-			 HTML_HELP_DEF( "type", "bool" )
-			 HTML_HELP_BODY()
-			 "Sets the option alignBaseClasses."
-			 HTML_HELP_CLOSE(),
-			 "false");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_BODY()
+                         "Sets the option alignBaseClasses."
+                         HTML_HELP_CLOSE(),
+                         "false");
     addInParameter<bool>("alignSiblings",
-			 HTML_HELP_OPEN()
-			 HTML_HELP_DEF( "type", "bool" )
-			 HTML_HELP_BODY()
-			 "Sets the option alignSiblings."
-			 HTML_HELP_CLOSE(),
-			 "false");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_BODY()
+                         "Sets the option alignSiblings."
+                         HTML_HELP_CLOSE(),
+                         "false");
     addInParameter<StringCollection>(ELT_RANKING,
-				     HTML_HELP_OPEN()
-				     HTML_HELP_DEF( "type", "StringCollection")
-				     HTML_HELP_DEF("values", "- CoffmanGrahamRanking <i>(The coffman graham ranking algorithm)</i><br/>- LongestPathRanking <i>(the well-known longest-path ranking algorithm)</i><br/>- OptimalRanking <i>(the LP-based algorithm for computing a node ranking with minimal edge lengths)</i>")
-				     HTML_HELP_DEF( "default", "LongestPathRanking " )
-				     HTML_HELP_BODY()
-				     "Sets the option for the node ranking (layer assignment)."
-				     HTML_HELP_CLOSE(),
-				     ELT_RANKINGLIST);
+                                     HTML_HELP_OPEN()
+                                     HTML_HELP_DEF( "type", "StringCollection")
+                                     HTML_HELP_DEF("values", "- CoffmanGrahamRanking <i>(The coffman graham ranking algorithm)</i><br/>- LongestPathRanking <i>(the well-known longest-path ranking algorithm)</i><br/>- OptimalRanking <i>(the LP-based algorithm for computing a node ranking with minimal edge lengths)</i>")
+                                     HTML_HELP_DEF( "default", "LongestPathRanking " )
+                                     HTML_HELP_BODY()
+                                     "Sets the option for the node ranking (layer assignment)."
+                                     HTML_HELP_CLOSE(),
+                                     ELT_RANKINGLIST);
     addInParameter<StringCollection>(ELT_TWOLAYERCROSS,
-				     HTML_HELP_OPEN()
-				     HTML_HELP_DEF( "type", "StringCollection")
-				     HTML_HELP_DEF("values", "- BarycenterHeuristic <i>(the barycenter heuristic for 2-layer crossing minimization)</i><br/>- GreedyInsertHeuristic <i>(The greedy-insert heuristic for 2-layer crossing minimization)</i><br/>- GreedySwitchHeuristic <i>(The greedy-switch heuristic for 2-layer crossing minimization</i><br/>- MedianHeuristic <i>(the median heuristic for 2-layer crossing minimization)</i><br/>- SiftingHeuristic <i>(The sifting heuristic for 2-layer crossing minimization)</i><br/>- SplitHeuristic <i>(the split heuristic for 2-layer crossing minimization)</i>")
-				     HTML_HELP_DEF( "default", "BarycenterHeuristic " )
-				     HTML_HELP_BODY()
-				     "Sets the module option for the two-layer crossing minimization."
-				     HTML_HELP_CLOSE(),
-				     ELT_TWOLAYERCROSSLIST);
+                                     HTML_HELP_OPEN()
+                                     HTML_HELP_DEF( "type", "StringCollection")
+                                     HTML_HELP_DEF("values", "- BarycenterHeuristic <i>(the barycenter heuristic for 2-layer crossing minimization)</i><br/>- GreedyInsertHeuristic <i>(The greedy-insert heuristic for 2-layer crossing minimization)</i><br/>- GreedySwitchHeuristic <i>(The greedy-switch heuristic for 2-layer crossing minimization</i><br/>- MedianHeuristic <i>(the median heuristic for 2-layer crossing minimization)</i><br/>- SiftingHeuristic <i>(The sifting heuristic for 2-layer crossing minimization)</i><br/>- SplitHeuristic <i>(the split heuristic for 2-layer crossing minimization)</i>")
+                                     HTML_HELP_DEF( "default", "BarycenterHeuristic " )
+                                     HTML_HELP_BODY()
+                                     "Sets the module option for the two-layer crossing minimization."
+                                     HTML_HELP_CLOSE(),
+                                     ELT_TWOLAYERCROSSLIST);
     addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT,
-				     HTML_HELP_OPEN()
-				     HTML_HELP_DEF( "type", "StringCollection")
-				     HTML_HELP_DEF("values", "- FastHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.)</i><br/>- FastSimpleHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf)</i>")
-				     HTML_HELP_DEF( "default", "FastHierarchyLayout" )
-				     HTML_HELP_BODY()
-				     "The hierarchy layout module that computes the final layout."
-				     HTML_HELP_CLOSE(),
-				     ELT_HIERARCHYLAYOUTLIST);
+                                     HTML_HELP_OPEN()
+                                     HTML_HELP_DEF( "type", "StringCollection")
+                                     HTML_HELP_DEF("values", "- FastHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.)</i><br/>- FastSimpleHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf)</i>")
+                                     HTML_HELP_DEF( "default", "FastHierarchyLayout" )
+                                     HTML_HELP_BODY()
+                                     "The hierarchy layout module that computes the final layout."
+                                     HTML_HELP_CLOSE(),
+                                     ELT_HIERARCHYLAYOUTLIST);
   }
 
   ~OGDFSugiyama() {}

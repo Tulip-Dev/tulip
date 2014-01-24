@@ -71,12 +71,12 @@ public:
   PLUGININFORMATION("Fast Multipole Multilevel Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Multilevel")
   OGDFFastMultipoleMultiLevelEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleMultilevelEmbedder()) {
     addInParameter<int>("number of threads",
-			HTML_HELP_OPEN()
-			HTML_HELP_DEF( "type", "int" )
-			HTML_HELP_BODY()
-			"The number of threads to use during the computation of the layout."
-			HTML_HELP_CLOSE(),
-			"2");
+                        HTML_HELP_OPEN()
+                        HTML_HELP_DEF( "type", "int" )
+                        HTML_HELP_BODY()
+                        "The number of threads to use during the computation of the layout."
+                        HTML_HELP_CLOSE(),
+                        "2");
   }
 
   ~OGDFFastMultipoleMultiLevelEmbedder() {}

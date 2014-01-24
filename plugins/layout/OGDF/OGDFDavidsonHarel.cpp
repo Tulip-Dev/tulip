@@ -94,37 +94,37 @@ public:
   PLUGININFORMATION("Davidson Harel (OGDF)","Rene Weiskircher","12/11/2007","Ok","1.3","Force Directed")
   OGDFDavidsonHarel(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::DavidsonHarelLayout()) {
     addInParameter<StringCollection>(ELT_SETTINGS,
-				     HTML_HELP_OPEN()
-				     HTML_HELP_DEF( "type", "String Collection" )
-				     HTML_HELP_DEF("values", "- Standard<br/>- Repulse<br/>- Planar")
-				     HTML_HELP_DEF( "default", "Standard" )
-				     HTML_HELP_BODY()
-				     "Easy way to set fixed costs. "
-				     HTML_HELP_CLOSE(),
-				     ELT_SETTINGSLIST);
+                                     HTML_HELP_OPEN()
+                                     HTML_HELP_DEF( "type", "String Collection" )
+                                     HTML_HELP_DEF("values", "- Standard<br/>- Repulse<br/>- Planar")
+                                     HTML_HELP_DEF( "default", "Standard" )
+                                     HTML_HELP_BODY()
+                                     "Easy way to set fixed costs. "
+                                     HTML_HELP_CLOSE(),
+                                     ELT_SETTINGSLIST);
     addInParameter<StringCollection>(ELT_SPEED,
-				     HTML_HELP_OPEN()
-				     HTML_HELP_DEF( "type", "String Collection" )
-				     HTML_HELP_DEF("values", "- Fast<br/>- Medium<br/>- HQ")
-				     HTML_HELP_DEF( "default", "Medium" )
-				     HTML_HELP_BODY()
-				     "Easy way to set temperature and iterations. "
-				     HTML_HELP_CLOSE(),
-				     ELT_SPEEDLIST);
+                                     HTML_HELP_OPEN()
+                                     HTML_HELP_DEF( "type", "String Collection" )
+                                     HTML_HELP_DEF("values", "- Fast<br/>- Medium<br/>- HQ")
+                                     HTML_HELP_DEF( "default", "Medium" )
+                                     HTML_HELP_BODY()
+                                     "Easy way to set temperature and iterations. "
+                                     HTML_HELP_CLOSE(),
+                                     ELT_SPEEDLIST);
     addInParameter<double>("preferredEdgeLength",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "the preferred edge length. "
-			   HTML_HELP_CLOSE(),
-			   "0");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "the preferred edge length. "
+                           HTML_HELP_CLOSE(),
+                           "0");
     addInParameter<double>("preferredEdgeLengthMultiplier",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The preferred edge length multiplier for attraction. "
-			   HTML_HELP_CLOSE(),
-			   "2.0");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The preferred edge length multiplier for attraction. "
+                           HTML_HELP_CLOSE(),
+                           "2.0");
 
   }
 

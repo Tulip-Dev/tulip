@@ -72,12 +72,12 @@ public:
   PLUGININFORMATION("Balloon (OGDF)","Karsten Klein","13/11/2007","Ok","1.3","Hierarchical")
   OGDFBalloon(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::BalloonLayout()) {
     addInParameter<bool> ("Even angles",
-			  HTML_HELP_OPEN()
-			  HTML_HELP_DEF( "type", "bool" )
-			  HTML_HELP_BODY()
-			  "Subtrees may be assigned even angles or angles depending on their size."
-			  HTML_HELP_CLOSE(),
-			  "false", false);
+                          HTML_HELP_OPEN()
+                          HTML_HELP_DEF( "type", "bool" )
+                          HTML_HELP_BODY()
+                          "Subtrees may be assigned even angles or angles depending on their size."
+                          HTML_HELP_CLOSE(),
+                          "false", false);
   }
   ~OGDFBalloon() {}
 

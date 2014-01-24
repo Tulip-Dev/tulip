@@ -167,172 +167,172 @@ PLUGIN(OGDFFm3)
 OGDFFm3::OGDFFm3(const tlp::PluginContext* context) :
   OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
   addInParameter<NumericProperty*> ("Edge Length Property",
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "NumericProperty" )
-				    HTML_HELP_BODY()
-				    "A double property containing unit edge length to use."
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "NumericProperty" )
+                                    HTML_HELP_BODY()
+                                    "A double property containing unit edge length to use."
+                                    HTML_HELP_CLOSE(),
                                     "viewMetric", false);
   addInParameter<SizeProperty> ("Node Size",
-				HTML_HELP_OPEN()
-				HTML_HELP_DEF( "type", "SizeProperty" )
-				HTML_HELP_BODY()
-				"The nodes size."
-				HTML_HELP_CLOSE(),
-				"viewSize", false);
+                                HTML_HELP_OPEN()
+                                HTML_HELP_DEF( "type", "SizeProperty" )
+                                HTML_HELP_BODY()
+                                "The nodes size."
+                                HTML_HELP_CLOSE(),
+                                "viewSize", false);
   addInParameter<double> ("Unit edge length",
-			  HTML_HELP_OPEN()
-			  HTML_HELP_DEF( "type", "double" )
-			  HTML_HELP_BODY()
-			  "The unit edge length."
-			  HTML_HELP_CLOSE(),
-			  "10.0", false);
+                          HTML_HELP_OPEN()
+                          HTML_HELP_DEF( "type", "double" )
+                          HTML_HELP_BODY()
+                          "The unit edge length."
+                          HTML_HELP_CLOSE(),
+                          "10.0", false);
   addInParameter<bool> ("New initial placement",
-			HTML_HELP_OPEN()
-			HTML_HELP_DEF( "type", "bool" )
-			HTML_HELP_BODY()
-			"Indicates the initial placement before running algorithm."
-			HTML_HELP_CLOSE(),
-			"true");
+                        HTML_HELP_OPEN()
+                        HTML_HELP_DEF( "type", "bool" )
+                        HTML_HELP_BODY()
+                        "Indicates the initial placement before running algorithm."
+                        HTML_HELP_CLOSE(),
+                        "true");
   addInParameter<int>("Fixed iterations",
-		      HTML_HELP_OPEN()
-		      HTML_HELP_DEF( "type", "int" )
-		      HTML_HELP_BODY()
-		      "The fixed number of iterations for the stop criterion."
-		      HTML_HELP_CLOSE(),
-		      "30");
+                      HTML_HELP_OPEN()
+                      HTML_HELP_DEF( "type", "int" )
+                      HTML_HELP_BODY()
+                      "The fixed number of iterations for the stop criterion."
+                      HTML_HELP_CLOSE(),
+                      "30");
   addInParameter<double>("Threshold",
-			 HTML_HELP_OPEN()
-			 HTML_HELP_DEF( "type", "double" )
-			 HTML_HELP_BODY()
-			 "The threshold for the stop criterion."
-			 HTML_HELP_CLOSE(),
-			 "0.01");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "double" )
+                         HTML_HELP_BODY()
+                         "The threshold for the stop criterion."
+                         HTML_HELP_CLOSE(),
+                         "0.01");
   addInParameter<StringCollection> (ELT_PAGEFORMAT,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- Portrait <i>(A4 portrait page)</i><br/>- Landscape <i>(A4 landscape page)</i><br>- Square <i>(Square format)</i>")
-				    HTML_HELP_DEF( "default", "Square" )
-				    HTML_HELP_BODY()
-				    "Possible page formats."
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- Portrait <i>(A4 portrait page)</i><br/>- Landscape <i>(A4 landscape page)</i><br>- Square <i>(Square format)</i>")
+                                    HTML_HELP_DEF( "default", "Square" )
+                                    HTML_HELP_BODY()
+                                    "Possible page formats."
+                                    HTML_HELP_CLOSE(),
                                     ELT_PAGEFORMATLIST);
   addInParameter<StringCollection> (ELT_QUALITYVSSPEED,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- GorgeousAndEfficient <i>(Best quality)</i><br/>- BeautifulAndFast <i>(Medium quality and speed)</i><br/>- NiceAndIncredibleSpeed <i>(Best speed</i>")
-				    HTML_HELP_DEF( "default", "BeautifulAndFast" )
-				    HTML_HELP_BODY()
-				    "Trade-off between run-time and quality."
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- GorgeousAndEfficient <i>(Best quality)</i><br/>- BeautifulAndFast <i>(Medium quality and speed)</i><br/>- NiceAndIncredibleSpeed <i>(Best speed</i>")
+                                    HTML_HELP_DEF( "default", "BeautifulAndFast" )
+                                    HTML_HELP_BODY()
+                                    "Trade-off between run-time and quality."
+                                    HTML_HELP_CLOSE(),
                                     ELT_QUALITYVSSPEEDLIST);
   addInParameter<StringCollection> (ELT_EDGELENGTHMEASUREMENT,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- Midpoint <i>(Measure from center point of edge end points)</i><br>- BoundingCircle <i>(Measure from border of circle surrounding edge end points)</i>")
-				    HTML_HELP_DEF( "default", "BoundingCircle" )
-				    HTML_HELP_BODY()
-				    "Specifies how the length of an edge is measured."
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- Midpoint <i>(Measure from center point of edge end points)</i><br>- BoundingCircle <i>(Measure from border of circle surrounding edge end points)</i>")
+                                    HTML_HELP_DEF( "default", "BoundingCircle" )
+                                    HTML_HELP_BODY()
+                                    "Specifies how the length of an edge is measured."
+                                    HTML_HELP_CLOSE(),
                                     ELT_EDGELENGTHMEASUREMENTLIST);
   addInParameter<StringCollection> (ELT_ALLOWEDPOSITIONS,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- All<br/>- Integer<br/>- Exponent")
-				    HTML_HELP_DEF( "default", "Integer" )
-				    HTML_HELP_BODY()
-				    "Specifies which positions for a node are allowed."
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- All<br/>- Integer<br/>- Exponent")
+                                    HTML_HELP_DEF( "default", "Integer" )
+                                    HTML_HELP_BODY()
+                                    "Specifies which positions for a node are allowed."
+                                    HTML_HELP_CLOSE(),
                                     ELT_ALLOWEDPOSITIONSLIST);
   addInParameter<StringCollection> (ELT_TIPOVER,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- None<br/>- NoGrowingRow<br/>- Always")
-				    HTML_HELP_DEF( "default", "NoGrowingRow" )
-				    HTML_HELP_BODY()
-				    "Specifies in which case it is allowed to tip over drawings of connected components."
-				    HTML_HELP_CLOSE(),
-				    ELT_TIPOVERLIST);
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- None<br/>- NoGrowingRow<br/>- Always")
+                                    HTML_HELP_DEF( "default", "NoGrowingRow" )
+                                    HTML_HELP_BODY()
+                                    "Specifies in which case it is allowed to tip over drawings of connected components."
+                                    HTML_HELP_CLOSE(),
+                                    ELT_TIPOVERLIST);
   addInParameter<StringCollection> (ELT_PRESORT,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- None <i>(Do not presort)</i><br/>- DecreasingHeight <i>(Presort by decreasing height of components)</i><br/>- DecreasingWidth <i>(Presort by decreasing width of components)</i>")
-				    HTML_HELP_DEF( "default", "DecreasingHeight" )
-				    HTML_HELP_BODY()
-				    "Specifies how connected components are sorted before the packing algorithm is applied."
-				    HTML_HELP_CLOSE(),
-				    ELT_PRESORTLIST);
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- None <i>(Do not presort)</i><br/>- DecreasingHeight <i>(Presort by decreasing height of components)</i><br/>- DecreasingWidth <i>(Presort by decreasing width of components)</i>")
+                                    HTML_HELP_DEF( "default", "DecreasingHeight" )
+                                    HTML_HELP_BODY()
+                                    "Specifies how connected components are sorted before the packing algorithm is applied."
+                                    HTML_HELP_CLOSE(),
+                                    ELT_PRESORTLIST);
   addInParameter<StringCollection> (ELT_GALAXYCHOICE,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "-UniformProb<br>- NonUniformProbLowerMass<br/>- NonUniformProbHigherMass")
-				    HTML_HELP_DEF( "default", "NonUniformProbLowerMass" )
-				    HTML_HELP_BODY()
-				    "Specifies how sun nodes of galaxies are selected. "
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "-UniformProb<br>- NonUniformProbLowerMass<br/>- NonUniformProbHigherMass")
+                                    HTML_HELP_DEF( "default", "NonUniformProbLowerMass" )
+                                    HTML_HELP_BODY()
+                                    "Specifies how sun nodes of galaxies are selected. "
+                                    HTML_HELP_CLOSE(),
                                     ELT_GALAXYCHOICELIST);
   addInParameter<StringCollection> (ELT_MAXITERCHANGE,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- Constant<br/>- LinearlyDecreasing<br/>- RapidlyDecreasing")
-				    HTML_HELP_DEF( "default", "LinearlyDecreasing" )
-				    HTML_HELP_BODY()
-				    "Specifies how MaxIterations is changed in subsequent multilevels. "
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- Constant<br/>- LinearlyDecreasing<br/>- RapidlyDecreasing")
+                                    HTML_HELP_DEF( "default", "LinearlyDecreasing" )
+                                    HTML_HELP_BODY()
+                                    "Specifies how MaxIterations is changed in subsequent multilevels. "
+                                    HTML_HELP_CLOSE(),
                                     ELT_MAXITERCHANGELIST);
   addInParameter<StringCollection> (ELT_INITIALPLACEMENTMULT,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- Simple<br/>- Advanced")
-				    HTML_HELP_DEF( "default", "Advanced" )
-				    HTML_HELP_BODY()
-				    "Specifies how the initial placement is generated."
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- Simple<br/>- Advanced")
+                                    HTML_HELP_DEF( "default", "Advanced" )
+                                    HTML_HELP_BODY()
+                                    "Specifies how the initial placement is generated."
+                                    HTML_HELP_CLOSE(),
                                     ELT_INITIALPLACEMENTMULTLIST);
   addInParameter<StringCollection> (ELT_FORCEMODEL,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- FruchtermanReingold <i>(The force-model by Fruchterman, Reingold)</i><br/>- Eades <i>(The force-model by Eades)</i><br/>- New <i>(The new force-model)</i>")
-				    HTML_HELP_DEF( "default", "New" )
-				    HTML_HELP_BODY()
-				    "Specifies the force model. "
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- FruchtermanReingold <i>(The force-model by Fruchterman, Reingold)</i><br/>- Eades <i>(The force-model by Eades)</i><br/>- New <i>(The new force-model)</i>")
+                                    HTML_HELP_DEF( "default", "New" )
+                                    HTML_HELP_BODY()
+                                    "Specifies the force model. "
+                                    HTML_HELP_CLOSE(),
                                     ELT_FORCEMODELLIST);
   addInParameter<StringCollection> (ELT_REPULSIVEFORCEMETHOD,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- Exact <i>(Exact calculation)</i><br/>- GridApproximation <i>(Grid approximation)</i><br/>- NMM <i>(Calculation as for new multipole method)</i>")
-				    HTML_HELP_DEF( "default", "NMM" )
-				    HTML_HELP_BODY()
-				    "Specifies how to calculate repulsive forces."
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- Exact <i>(Exact calculation)</i><br/>- GridApproximation <i>(Grid approximation)</i><br/>- NMM <i>(Calculation as for new multipole method)</i>")
+                                    HTML_HELP_DEF( "default", "NMM" )
+                                    HTML_HELP_BODY()
+                                    "Specifies how to calculate repulsive forces."
+                                    HTML_HELP_CLOSE(),
                                     ELT_REPULSIVEFORCEMETHODLIST);
   addInParameter<StringCollection> (ELT_INITIALPLACEMENTFORCES,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- UniformGrid <i>(Uniform placement on a grid)</i><br/>- RandomTime <i>(Random placement, based on current time)</i><br/>- RandomRandIterNr <i>(Random placement, based on randIterNr())</i><br/>- KeepPositions <i>(No change in placement)</i>")
-				    HTML_HELP_DEF( "default", "RandomRandIterNr" )
-				    HTML_HELP_BODY()
-				    "Specifies how the initial placement is done. "
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- UniformGrid <i>(Uniform placement on a grid)</i><br/>- RandomTime <i>(Random placement, based on current time)</i><br/>- RandomRandIterNr <i>(Random placement, based on randIterNr())</i><br/>- KeepPositions <i>(No change in placement)</i>")
+                                    HTML_HELP_DEF( "default", "RandomRandIterNr" )
+                                    HTML_HELP_BODY()
+                                    "Specifies how the initial placement is done. "
+                                    HTML_HELP_CLOSE(),
                                     ELT_INITIALPLACEMENTFORCESLIST);
   addInParameter<StringCollection> (ELT_REDUCEDTREECONSTRCUCTION,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- PathByPath<br/>- SubtreeBySubtree")
-				    HTML_HELP_DEF( "default", "Advanced" )
-				    HTML_HELP_BODY()
-				    "Specifies how the reduced bucket quadtree is constructed."
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- PathByPath<br/>- SubtreeBySubtree")
+                                    HTML_HELP_DEF( "default", "Advanced" )
+                                    HTML_HELP_BODY()
+                                    "Specifies how the reduced bucket quadtree is constructed."
+                                    HTML_HELP_CLOSE(),
                                     ELT_REDUCEDTREECONSTRCUCTIONLIST);
   addInParameter<StringCollection> (ELT_SMALLESTCELLFINDING,
-				    HTML_HELP_OPEN()
-				    HTML_HELP_DEF( "type", "String Collection" )
-				    HTML_HELP_DEF("values", "- Iteratively <i>(Iteratively, in constant time)</i><br/>- Aluru <i>(According to formula by Aluru et al., in constant time)</i>")
-				    HTML_HELP_DEF( "default", "Advanced" )
-				    HTML_HELP_BODY()
-				    "Specifies how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
-				    HTML_HELP_CLOSE(),
+                                    HTML_HELP_OPEN()
+                                    HTML_HELP_DEF( "type", "String Collection" )
+                                    HTML_HELP_DEF("values", "- Iteratively <i>(Iteratively, in constant time)</i><br/>- Aluru <i>(According to formula by Aluru et al., in constant time)</i>")
+                                    HTML_HELP_DEF( "default", "Advanced" )
+                                    HTML_HELP_BODY()
+                                    "Specifies how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
+                                    HTML_HELP_CLOSE(),
                                     ELT_SMALLESTCELLFINDINGLIST);
 }
 

@@ -70,47 +70,47 @@ public:
   PLUGININFORMATION("Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Force Directed")
   OGDFFastMultipoleEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleEmbedder()) {
     addInParameter<int>("number of iterations",
-			HTML_HELP_OPEN()
-			HTML_HELP_DEF( "type", "int" )
-			HTML_HELP_BODY()
-			"The maximum number of iterations."
-			HTML_HELP_CLOSE(),
-			"100");
+                        HTML_HELP_OPEN()
+                        HTML_HELP_DEF( "type", "int" )
+                        HTML_HELP_BODY()
+                        "The maximum number of iterations."
+                        HTML_HELP_CLOSE(),
+                        "100");
     addInParameter<int>("number of coefficients",
-			HTML_HELP_OPEN()
-			HTML_HELP_DEF( "type", "int" )
-			HTML_HELP_BODY()
-			"The number of coefficients for the expansions."
-			HTML_HELP_CLOSE(),
-			"5");
+                        HTML_HELP_OPEN()
+                        HTML_HELP_DEF( "type", "int" )
+                        HTML_HELP_BODY()
+                        "The number of coefficients for the expansions."
+                        HTML_HELP_CLOSE(),
+                        "5");
     addInParameter<bool>("randomize layout",
-			 HTML_HELP_OPEN()
-			 HTML_HELP_DEF( "type", "bool" )
-			 HTML_HELP_BODY()
-			 "If true, the initial layout will be randomized."
-			 HTML_HELP_CLOSE(),
-			 "true");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_BODY()
+                         "If true, the initial layout will be randomized."
+                         HTML_HELP_CLOSE(),
+                         "true");
     addInParameter<double>("default node size",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The default node size."
-			   HTML_HELP_CLOSE(),
-			   "20.0");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The default node size."
+                           HTML_HELP_CLOSE(),
+                           "20.0");
     addInParameter<double>("default edge length",
-			   HTML_HELP_OPEN()
-			   HTML_HELP_DEF( "type", "double" )
-			   HTML_HELP_BODY()
-			   "The default edge length. "
-			   HTML_HELP_CLOSE(),
-			   "40.0");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_BODY()
+                           "The default edge length. "
+                           HTML_HELP_CLOSE(),
+                           "40.0");
     addInParameter<int>("number of threads",
-			HTML_HELP_OPEN()
-			HTML_HELP_DEF( "type", "int" )
-			HTML_HELP_BODY()
-			"The number of threads to use during the computation of the layout."
-			HTML_HELP_CLOSE(),
-			"3");
+                        HTML_HELP_OPEN()
+                        HTML_HELP_DEF( "type", "int" )
+                        HTML_HELP_BODY()
+                        "The number of threads to use during the computation of the layout."
+                        HTML_HELP_CLOSE(),
+                        "3");
   }
 
   ~OGDFFastMultipoleEmbedder() {}

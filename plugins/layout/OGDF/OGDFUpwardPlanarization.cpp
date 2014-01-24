@@ -68,12 +68,12 @@ public:
   PLUGININFORMATION("Upward Planarization (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
   OGDFUpwardPlanarization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::UpwardPlanarizationLayout()) {
     addInParameter<bool>("transpose",
-			 HTML_HELP_OPEN()
-			 HTML_HELP_DEF( "type", "bool" )
-			 HTML_HELP_BODY()
-			 "The option for transposing layout vertically ."
-			 HTML_HELP_CLOSE(),
-			 "false");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_BODY()
+                         "The option for transposing layout vertically ."
+                         HTML_HELP_CLOSE(),
+                         "false");
   }
 
   ~OGDFUpwardPlanarization() {}

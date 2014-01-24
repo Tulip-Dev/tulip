@@ -70,40 +70,40 @@ public:
   PLUGININFORMATION("Circular (OGDF)","Carsten Gutwenger","13/11/2007","Ok","1.4","Basic")
   OGDFCircular(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
     addInParameter<double> ("minDistCircle",
-			    HTML_HELP_OPEN()
-			    HTML_HELP_DEF( "type", "double" )
-			    HTML_HELP_BODY()
-			    "The minimal distance between nodes on a circle."
-			    HTML_HELP_CLOSE(),
-			    "20.0", false);
+                            HTML_HELP_OPEN()
+                            HTML_HELP_DEF( "type", "double" )
+                            HTML_HELP_BODY()
+                            "The minimal distance between nodes on a circle."
+                            HTML_HELP_CLOSE(),
+                            "20.0", false);
     addInParameter<double> ("minDistLevel",
-			    HTML_HELP_OPEN()
-			    HTML_HELP_DEF( "type", "double" )
-			    HTML_HELP_BODY()
-			    "The minimal distance between father and child circle. "
-			    HTML_HELP_CLOSE(),
-			    "20.0", false);
+                            HTML_HELP_OPEN()
+                            HTML_HELP_DEF( "type", "double" )
+                            HTML_HELP_BODY()
+                            "The minimal distance between father and child circle. "
+                            HTML_HELP_CLOSE(),
+                            "20.0", false);
     addInParameter<double> ("minDistSibling",
-			    HTML_HELP_OPEN()
-			    HTML_HELP_DEF( "type", "double" )
-			    HTML_HELP_BODY()
-			    "The minimal distance between circles on same level. "
-			    HTML_HELP_CLOSE(),
-			    "10.0", false);
+                            HTML_HELP_OPEN()
+                            HTML_HELP_DEF( "type", "double" )
+                            HTML_HELP_BODY()
+                            "The minimal distance between circles on same level. "
+                            HTML_HELP_CLOSE(),
+                            "10.0", false);
     addInParameter<double> ("minDistCC",
-			    HTML_HELP_OPEN()
-			    HTML_HELP_DEF( "type", "double" )
-			    HTML_HELP_BODY()
-			    "The minimal distance between connected components."
-			    HTML_HELP_CLOSE(),
-			    "20.0", false);
+                            HTML_HELP_OPEN()
+                            HTML_HELP_DEF( "type", "double" )
+                            HTML_HELP_BODY()
+                            "The minimal distance between connected components."
+                            HTML_HELP_CLOSE(),
+                            "20.0", false);
     addInParameter<double> ("pageRatio",
-			    HTML_HELP_OPEN()
-			    HTML_HELP_DEF( "type", "double" )
-			    HTML_HELP_BODY()
-			    "The page ratio used for packing connected components."
-			    HTML_HELP_CLOSE(),
-			    "1.0", false);
+                            HTML_HELP_OPEN()
+                            HTML_HELP_DEF( "type", "double" )
+                            HTML_HELP_BODY()
+                            "The page ratio used for packing connected components."
+                            HTML_HELP_CLOSE(),
+                            "1.0", false);
   }
   ~OGDFCircular() {}
 
