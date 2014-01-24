@@ -20,32 +20,6 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
-namespace {
-
-const char * paramHelp[] = { HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The minimal distance between nodes on a circle."
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The minimal distance between father and child circle. "
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The minimal distance between circles on same level. "
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The minimal distance between connected components."
-                             HTML_HELP_CLOSE(), HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The page ratio used for packing connected components."
-                             HTML_HELP_CLOSE()
-                           };
-}
-
 // comments below have been extracted from OGDF/src/misclayout/CircularLayout.cpp
 
 /// An implementation of the circular layout
@@ -95,11 +69,41 @@ class OGDFCircular : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATION("Circular (OGDF)","Carsten Gutwenger","13/11/2007","Ok","1.4","Basic")
   OGDFCircular(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
-    addInParameter<double> ("minDistCircle", paramHelp[0], "20.0", false);
-    addInParameter<double> ("minDistLevel", paramHelp[1], "20.0", false);
-    addInParameter<double> ("minDistSibling", paramHelp[2], "10.0", false);
-    addInParameter<double> ("minDistCC", paramHelp[3], "20.0", false);
-    addInParameter<double> ("pageRatio", paramHelp[4], "1.0", false);
+    addInParameter<double> ("minDistCircle",
+			    HTML_HELP_OPEN()
+			    HTML_HELP_DEF( "type", "double" )
+			    HTML_HELP_BODY()
+			    "The minimal distance between nodes on a circle."
+			    HTML_HELP_CLOSE(),
+			    "20.0", false);
+    addInParameter<double> ("minDistLevel",
+			    HTML_HELP_OPEN()
+			    HTML_HELP_DEF( "type", "double" )
+			    HTML_HELP_BODY()
+			    "The minimal distance between father and child circle. "
+			    HTML_HELP_CLOSE(),
+			    "20.0", false);
+    addInParameter<double> ("minDistSibling",
+			    HTML_HELP_OPEN()
+			    HTML_HELP_DEF( "type", "double" )
+			    HTML_HELP_BODY()
+			    "The minimal distance between circles on same level. "
+			    HTML_HELP_CLOSE(),
+			    "10.0", false);
+    addInParameter<double> ("minDistCC",
+			    HTML_HELP_OPEN()
+			    HTML_HELP_DEF( "type", "double" )
+			    HTML_HELP_BODY()
+			    "The minimal distance between connected components."
+			    HTML_HELP_CLOSE(),
+			    "20.0", false);
+    addInParameter<double> ("pageRatio",
+			    HTML_HELP_OPEN()
+			    HTML_HELP_DEF( "type", "double" )
+			    HTML_HELP_BODY()
+			    "The page ratio used for packing connected components."
+			    HTML_HELP_CLOSE(),
+			    "1.0", false);
   }
   ~OGDFCircular() {}
 

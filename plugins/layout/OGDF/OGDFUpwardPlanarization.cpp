@@ -19,16 +19,6 @@
 #include <ogdf/upward/UpwardPlanarizationLayout.h>
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
-namespace {
-const char * paramHelp[] = {
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "Sets the option for transposing layout vertically ."
-  HTML_HELP_CLOSE()
-};
-}
-
 // comments below have been extracted from OGDF/src/upward/UpwardPlanarizationLayout.h
 /** \addtogroup layout */
 
@@ -77,7 +67,13 @@ class OGDFUpwardPlanarization : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATION("Upward Planarization (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
   OGDFUpwardPlanarization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::UpwardPlanarizationLayout()) {
-    addInParameter<bool>("transpose", paramHelp[0], "false");
+    addInParameter<bool>("transpose",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "bool" )
+			 HTML_HELP_BODY()
+			 "The option for transposing layout vertically ."
+			 HTML_HELP_CLOSE(),
+			 "false");
   }
 
   ~OGDFUpwardPlanarization() {}

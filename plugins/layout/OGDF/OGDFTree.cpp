@@ -22,49 +22,6 @@
 
 #include <tulip/StringCollection.h>
 
-namespace {
-
-const char * paramHelp[] = {
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "The minimal required horizontal distance between siblings."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "The minimal required horizontal distance between subtrees."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "the minimal required vertical distance between levels."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "Returns the minimal required horizontal distance between trees in the forest."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "Set whether orthogonal edge routing style is used or not."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_DEF( "type", "StringCollection")
-  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> topToBottom : <FONT COLOR=\"black\"> Edges are oriented from top to bottom. <BR> <FONT COLOR=\"red\"> bottomToTop : <FONT COLOR=\"black\">  Edges are oriented from bottom to top. <BR> <FONT COLOR=\"red\"> leftToRight : <FONT COLOR=\"black\"> Edges are oriented from left to right. <BR> <FONT COLOR=\"red\"> rightToLeft : <FONT COLOR=\"black\"> Edges are oriented from right to left.")
-  HTML_HELP_DEF( "default", "topToBottom " )
-  HTML_HELP_BODY()
-  "The option that determines the orientation of the layout."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_DEF( "type", "StringCollection")
-  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> rootIsSource  : <FONT COLOR=\"black\"> Select a source in the graph.  <BR> <FONT COLOR=\"red\"> rootIsSink : <FONT COLOR=\"black\"> Select a sink in the graph. <BR> <FONT COLOR=\"red\"> rootByCoord : <FONT COLOR=\"black\"> Use the coordinates, e.g., select the topmost node if orientation is topToBottom.")
-  HTML_HELP_DEF( "default", "rootIsSource " )
-  HTML_HELP_BODY()
-  "The option that determines how the root is selected."
-  HTML_HELP_CLOSE()
-};
-}
-
 #define ELT_ORIENTATION "Orientation"
 #define ELT_ORIENTATIONLIST "topToBottom;bottomToTop;leftToRight;rightToLeft"
 #define ELT_TOPTOBOTTOM 0
@@ -129,13 +86,57 @@ class OGDFTree : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATION("Improved Walker (OGDF)","Christoph Buchheim","12/11/2007","Ok","1.5","Tree")
   OGDFTree(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::TreeLayout()) {
-    addInParameter<double>("siblings distance", paramHelp[0], "20");
-    addInParameter<double>("subtrees distance", paramHelp[1], "20");
-    addInParameter<double>("levels distance", paramHelp[2], "50");
-    addInParameter<double>("trees distance", paramHelp[3], "50");
-    addInParameter<bool>("orthogonal layout", paramHelp[4], "false");
-    addInParameter<StringCollection>(ELT_ORIENTATION, paramHelp[5], ELT_ORIENTATIONLIST);
-    addInParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[6], ELT_ROOTSELECTIONLIST);
+    addInParameter<double>("siblings distance",
+			   HTML_HELP_OPEN()
+			   HTML_HELP_DEF( "type", "double" )
+			   HTML_HELP_BODY()
+			   "The minimal required horizontal distance between siblings."
+			   HTML_HELP_CLOSE(),
+			   "20");
+    addInParameter<double>("subtrees distance",
+			   HTML_HELP_OPEN()
+			   HTML_HELP_DEF( "type", "double" )
+			   HTML_HELP_BODY()
+			   "The minimal required horizontal distance between subtrees."
+			   HTML_HELP_CLOSE(),
+			   "20");
+    addInParameter<double>("levels distance",
+			   HTML_HELP_OPEN()
+			   HTML_HELP_DEF( "type", "double" )
+			   HTML_HELP_BODY()
+			   "The minimal required vertical distance between levels."
+			   HTML_HELP_CLOSE(),
+			   "50");
+    addInParameter<double>("trees distance",
+			   HTML_HELP_OPEN()
+			   HTML_HELP_DEF( "type", "double" )
+			   HTML_HELP_BODY()
+			   "The minimal required horizontal distance between trees in the forest."
+			   HTML_HELP_CLOSE(),
+			   "50");
+    addInParameter<bool>("orthogonal layout",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "bool" )
+			 HTML_HELP_BODY()
+			 "Indicates whether orthogonal edge routing style is used or not."
+			 HTML_HELP_CLOSE(),
+			 "false");
+    addInParameter<StringCollection>(ELT_ORIENTATION,
+				     HTML_HELP_DEF( "type", "StringCollection")
+				     HTML_HELP_DEF("values", "- topToBottom <i>(Edges are oriented from top to bottom)</i><br/>- bottomToTop <i>(Edges are oriented from bottom to top)</i><br>- leftToRight <i>(Edges are oriented from left to right)</i><br/>- rightToLeft <i>(Edges are oriented from right to left)</i>")
+				     HTML_HELP_DEF( "default", "topToBottom " )
+				     HTML_HELP_BODY()
+				     "This parameter indicates the orientation of the layout."
+				     HTML_HELP_CLOSE(),
+				     ELT_ORIENTATIONLIST);
+    addInParameter<StringCollection>(ELT_ROOTSELECTION,
+				     HTML_HELP_DEF( "type", "StringCollection")
+				     HTML_HELP_DEF("values", "- rootIsSource <i>(Select a source in the graph)</i><br>- rootIsSink <i>(Select a sink in the graph)</i><br/>- rootByCoord <i>(Use the coordinates, e.g., select the topmost node if orientation is topToBottom)</i>")
+				     HTML_HELP_DEF( "default", "rootIsSource " )
+				     HTML_HELP_BODY()
+				     "This parameter that indicates how the root is selected."
+				     HTML_HELP_CLOSE(),
+				     ELT_ROOTSELECTIONLIST);
   }
 
   ~OGDFTree() {}

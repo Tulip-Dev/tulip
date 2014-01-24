@@ -21,52 +21,6 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
-namespace {
-
-const char * paramHelp[] = {
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "int" )
-  HTML_HELP_BODY()
-  "Sets a fixed number of iterations for stress majorization in main step."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_BODY()
-  "Sets the value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "If set to true, the given layout is used for the initial positions."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "f set to true, number of iterations is computed depending on G."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "int" )
-  HTML_HELP_BODY()
-  "Sets the number of global iterations to i."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "int" )
-  HTML_HELP_BODY()
-  "Sets the number of local iterations to i."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "If set to true, radial constraints are added."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_BODY()
-  "If set to true, upward constraints are added. "
-  HTML_HELP_CLOSE(),
-};
-}
-
 // comments below have been extracted from OGDF/src/energybased/StressMajorizationSimple.cpp
 /** \addtogroup layout */
 
@@ -115,14 +69,62 @@ class OGDFStressMajorization : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATION("Stress Majorization (OGDF)","Karsten Klein","12/11/2007","Ok","1.0","Force Directed")
   OGDFStressMajorization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::StressMajorization()) {
-    addInParameter<int>("iterations", paramHelp[0], "300");
-    addInParameter<double>("stop tolerance", paramHelp[1], "0.001");
-    addInParameter<bool>("used layout", paramHelp[2], "false");
-    addInParameter<bool>("compute max iterations", paramHelp[3], "true");
-    addInParameter<int>("global iterations", paramHelp[4], "50");
-    addInParameter<int>("local iterations", paramHelp[5], "50");
-    addInParameter<bool>("radial", paramHelp[6], "false");
-    addInParameter<bool>("upward", paramHelp[7], "false");
+    addInParameter<int>("iterations",
+			HTML_HELP_OPEN()
+			HTML_HELP_DEF( "type", "int" )
+			HTML_HELP_BODY()
+			"Sets a fixed number of iterations for stress majorization in main step."
+			HTML_HELP_CLOSE(),
+			"300");
+    addInParameter<double>("stop tolerance",
+			   HTML_HELP_OPEN()
+			   HTML_HELP_DEF( "type", "double" )
+			   HTML_HELP_BODY()
+			   "The value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
+			   HTML_HELP_CLOSE(),
+			   "0.001");
+    addInParameter<bool>("used layout",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "bool" )
+			 HTML_HELP_BODY()
+			 "If set to true, the given layout is used for the initial positions."
+			 HTML_HELP_CLOSE(),
+			 "false");
+    addInParameter<bool>("compute max iterations",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "bool" )
+			 HTML_HELP_BODY()
+			 "If set to true, number of iterations is computed depending on G."
+			 HTML_HELP_CLOSE(),
+			 "true");
+    addInParameter<int>("global iterations",
+			HTML_HELP_OPEN()
+			HTML_HELP_DEF( "type", "int" )
+			HTML_HELP_BODY()
+			"The number of global iterations."
+			HTML_HELP_CLOSE(),
+			"50");
+    addInParameter<int>("local iterations",
+			HTML_HELP_OPEN()
+			HTML_HELP_DEF( "type", "int" )
+			HTML_HELP_BODY()
+			"The number of local iterations."
+			HTML_HELP_CLOSE(),
+			"50");
+    addInParameter<bool>("radial",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "bool" )
+			 HTML_HELP_BODY()
+			 "If set to true, radial constraints are added."
+			 HTML_HELP_CLOSE(),
+			 "false");
+    addInParameter<bool>("upward",
+			 HTML_HELP_OPEN()
+			 HTML_HELP_DEF( "type", "bool" )
+			 HTML_HELP_BODY()
+			 "If set to true, upward constraints are added. "
+			 HTML_HELP_CLOSE(),
+			 "false");
   }
   ~OGDFStressMajorization() {}
 

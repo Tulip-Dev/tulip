@@ -20,16 +20,6 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
-namespace {
-
-const char * paramHelp[] = { HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "bool" )
-                             HTML_HELP_BODY()
-                             "Subtrees may be assigned even angles or angles depending on their size."
-                             HTML_HELP_CLOSE()
-                           };
-}
-
 // comments below have been extracted from OGDF/src/misclayout/BallonLayout.cpp
 /** \addtogroup layout */
 /// Layout for trees that can also be applied to general graphs.
@@ -81,7 +71,13 @@ class OGDFBalloon : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATION("Balloon (OGDF)","Karsten Klein","13/11/2007","Ok","1.3","Hierarchical")
   OGDFBalloon(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::BalloonLayout()) {
-    addInParameter<bool> ("Even angles", paramHelp[0], "false", false);
+    addInParameter<bool> ("Even angles",
+			  HTML_HELP_OPEN()
+			  HTML_HELP_DEF( "type", "bool" )
+			  HTML_HELP_BODY()
+			  "Subtrees may be assigned even angles or angles depending on their size."
+			  HTML_HELP_CLOSE(),
+			  "false", false);
   }
   ~OGDFBalloon() {}
 
