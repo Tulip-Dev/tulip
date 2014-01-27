@@ -62,7 +62,7 @@
 void sendUsageStatistics() {
   QNetworkAccessManager* mgr = new QNetworkAccessManager;
   QObject::connect(mgr,SIGNAL(finished(QNetworkReply*)),mgr,SLOT(deleteLater()));
-  mgr->get(QNetworkRequest(QUrl(QString("http://tulip.labri.fr/TulipStats/tulip_stats.php?tulip=") + TULIP_RELEASE + "&os=" + OS_PLATFORM)));
+  mgr->get(QNetworkRequest(QUrl(QString("http://tulip.labri.fr/TulipStats/tulip_stats.php?tulip=") + TULIP_VERSION + "&os=" + OS_PLATFORM)));
 }
 
 bool sendAgentMessage(int port, const QString& message) {
@@ -127,10 +127,10 @@ int main(int argc, char **argv) {
   QString name("Tulip ");
 
   // show patch number only if needed
-  if (TULIP_INT_RELEASE % 10)
-    name += TULIP_RELEASE;
+  if (TULIP_INT_VERSION % 10)
+    name += TULIP_VERSION;
   else
-    name += TULIP_MM_RELEASE;
+    name += TULIP_MM_VERSION;
 
   // the applicationName below is used to identify the location
   // of downloaded plugins, so it must be the same as in

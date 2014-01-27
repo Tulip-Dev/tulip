@@ -184,7 +184,7 @@ public:\
   std::string date() const { return std::string(DATE); }  \
   std::string info() const { return std::string(DESCRIPTION); }  \
   std::string release() const { return std::string(VERSION); }\
-  std::string tulipRelease() const { return std::string(TULIP_RELEASE); }\
+  std::string tulipRelease() const { return std::string(TULIP_VERSION); }\
   std::string group() const { return getComponent()->group(); }\
   CLASS_NAME(const PluginContext *):_component(NULL) {}\
   bool isCompatible(const std::string& viewName) const { return viewName == VIEW_STRING_NAME; }\
@@ -223,7 +223,7 @@ public:\
   std::string date() const { return std::string(DATE); }  \
   std::string info() const { return std::string(DESCRIPTION); }  \
   std::string release() const { return std::string(VERSION); }\
-  std::string tulipRelease() const { return std::string(TULIP_RELEASE); }\
+  std::string tulipRelease() const { return std::string(TULIP_VERSION); }\
   std::string group() const { return getComponent()->group(); }\
   CLASS_NAME(const PluginContext *):_component(NULL) {}\
   bool isCompatible(const std::string& viewName) const { return viewName == VIEW_STRING_NAME; }\

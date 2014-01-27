@@ -79,9 +79,9 @@ extern "C" {
 
 #ifdef _WIN32
 #ifdef __MINGW32__
-    libTulipName = "libtulip-core-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dll";
+    libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dll";
 #else
-    libTulipName = "tulip-core-" + getMajor(TULIP_RELEASE) + "_" + getMinor(TULIP_RELEASE) + ".dll";
+    libTulipName = "tulip-core-" + getMajor(TULIP_VERSION) + "_" + getMinor(TULIP_VERSION) + ".dll";
 #endif
     HMODULE hmod = GetModuleHandle(libTulipName.c_str());
 
@@ -98,9 +98,9 @@ extern "C" {
 
 #else
 #ifdef __APPLE__
-    libTulipName = "libtulip-core-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".dylib";
+    libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dylib";
 #else
-    libTulipName = "libtulip-core-" + getMajor(TULIP_RELEASE) + "." + getMinor(TULIP_RELEASE) + ".so";
+    libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".so";
 #endif
     void *ptr;
     Dl_info info;

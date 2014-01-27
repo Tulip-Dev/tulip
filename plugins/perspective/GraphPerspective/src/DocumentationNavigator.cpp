@@ -29,7 +29,7 @@
 
 DocumentationNavigator::DocumentationNavigator(): QDialog() {
   setWindowIcon(QIcon(":/logo32x32.ico"));
-  setWindowTitle(QString("Tulip ") + TULIP_MM_RELEASE + " documentation");
+  setWindowTitle(QString("Tulip ") + TULIP_MM_VERSION + " documentation");
 
   QVBoxLayout* vLayout = new QVBoxLayout(this);
   tabWidget = new QTabWidget(this);

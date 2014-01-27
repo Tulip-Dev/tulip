@@ -161,7 +161,7 @@ void PluginsTest::pluginInformations() {
   CPPUNIT_ASSERT_EQUAL(string("0"), factory.minor());
   CPPUNIT_ASSERT_EQUAL(string("Test"), factory.name());
   CPPUNIT_ASSERT_EQUAL(string("1.0"), factory.release());
-  CPPUNIT_ASSERT_EQUAL(tlp::getMajor(TULIP_RELEASE), factory.tulipMajor());
-  CPPUNIT_ASSERT_EQUAL(tlp::getMinor(TULIP_RELEASE), factory.tulipMinor());
-  CPPUNIT_ASSERT_EQUAL(string(TULIP_MM_RELEASE), factory.tulipRelease());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMajor(TULIP_VERSION), factory.tulipMajor());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMinor(TULIP_VERSION), factory.tulipMinor());
+  CPPUNIT_ASSERT_EQUAL(string(TULIP_MM_VERSION), factory.tulipRelease());
 }
