@@ -1,0 +1,1792 @@
+####################################
+#         System information       #
+####################################
+# Date:                   2014:01:27 
+# Time:                   07:38:23 
+# Xnee program:           cnee 
+# Xnee version:           3.11 
+# Xnee home:              http://www.gnu.org/software/xnee/ 
+# Xnee info mailing list: info-xnee@gnu.org 
+# Xnee bug mailing list:  bug-xnee@gnu.org 
+# X version:              11 
+# X revision:             0 
+# X vendor:               The X.Org Foundation 
+# X vendor release:       11103000 
+# Record version major:   1
+# Record version minor:   13
+# OS name:                Linux 
+# OS Release:             3.2.0-58-generic 
+# OS Version:             #88-Ubuntu SMP Tue Dec 3 17:37:58 UTC 2013 
+# Machine:                x86_64 
+# Nodename:               pm-Precision-M4600 
+# Display name:           :0.0
+# Dimension:              1920x1080
+
+
+
+##############################################
+#      Xnee application arguments            #
+##############################################
+#  /usr/bin/cnee -rec -etr -1 --keyboard --mouse -sk End -o layout_linlog.xns 
+
+
+##############################################
+#      Displays                              #
+##############################################
+# display :0.0
+# distribute
+
+
+##############################################
+#      Files                                 #
+##############################################
+# out-file layout_linlog.xns
+# err-file stderr
+
+
+##############################################
+#      Key Grabs                             #
+##############################################
+# stop-key         End
+# pause-key        0
+# resume-key       0
+# insert-key       0
+# exec-key         0
+# exec-program-key         xnee-exec-no-program
+
+
+##############################################
+#      Recording limits etc                  #
+##############################################
+
+events-to-record        -1
+data-to-record          -1
+seconds-to-record       -1
+# first-last
+
+# Record  all (including current) clients or only future ones
+all-clients
+# future-clients
+
+# Store the starting mouse position 
+# store-mouse-position
+
+
+##############################################
+#      Resolution                            #
+##############################################
+
+# Resolution
+#recorded-resolution  1920x1080
+#replay-resolution  1x1
+#resolution-adjustment  0
+
+
+##############################################
+#      Speed                                 #
+##############################################
+
+# Speed
+#speed-percent  100
+
+
+##############################################
+#      Replaying limits etc                  #
+##############################################
+
+max-threshold 20 
+min-threshold 20 
+tot-threshold 40 
+
+
+##############################################
+#      Feedback                              #
+##############################################
+#feedback-none
+#feedback-stderr
+feedback-xosd
+ 
+
+
+##############################################
+#      Various                               #
+##############################################
+
+# Plugin file 
+
+# Modes (currently not used)
+# synchronised-replay
+
+# Replay offset
+#replay-offset 0x0
+
+# Human printout of X11 data (instead of Xnee format)
+# human-printout  
+
+# Delay before starting record/replay
+# time 0
+
+# No recording of ReparentNotify
+# no-reparent-recording 
+
+# Various
+#########################################
+#          Record settings              #
+#########################################
+#   data_flags          7
+#   rState              0x21f2010
+#   xids[0]             3
+#   xids[1]             0
+# Number of Ranges      2
+# RecordRange[0]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         21-21 
+device-event-range            2-6 
+error-range                   0-0 
+# RecordRange[1]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         0-0 
+device-event-range            100-105 
+error-range                   0-0 
+7,6,253,142,0,0,0,1761388,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,252,140,0,0,0,1761388
+6,6,252,140,0,0,0,1761388,2,'Virtual core pointer'
+7,6,252,140,0,0,0,1761398,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,251,136,0,0,0,1761398
+6,6,251,136,0,0,0,1761398,2,'Virtual core pointer'
+7,6,251,136,0,0,0,1761407,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,249,134,0,0,0,1761407
+6,6,249,134,0,0,0,1761407,2,'Virtual core pointer'
+7,6,249,134,0,0,0,1761418,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,248,131,0,0,0,1761418
+6,6,248,131,0,0,0,1761418,2,'Virtual core pointer'
+7,6,248,131,0,0,0,1761427,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,248,130,0,0,0,1761427
+6,6,248,130,0,0,0,1761427,2,'Virtual core pointer'
+7,6,248,130,0,0,0,1761437,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,247,130,0,0,0,1761437
+6,6,247,130,0,0,0,1761437,2,'Virtual core pointer'
+7,6,247,130,0,0,0,1761447,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,247,130,0,0,0,1761447
+6,6,247,130,0,0,0,1761447,2,'Virtual core pointer'
+7,6,247,130,0,0,0,1761466,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,247,130,0,0,0,1761467
+6,6,247,130,0,0,0,1761467,2,'Virtual core pointer'
+7,6,247,130,0,0,0,1761496,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,246,130,0,0,0,1761496
+6,6,246,130,0,0,0,1761496,2,'Virtual core pointer'
+7,6,246,130,0,0,0,1761965,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,246,129,0,0,0,1761965
+6,6,246,129,0,0,0,1761965,2,'Virtual core pointer'
+7,6,246,129,0,0,0,1761975,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,246,128,0,0,0,1761975
+6,6,246,128,0,0,0,1761975,2,'Virtual core pointer'
+7,6,246,128,0,0,0,1761985,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,246,127,0,0,0,1761985
+6,6,246,127,0,0,0,1761985,2,'Virtual core pointer'
+7,6,246,127,0,0,0,1762160,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,246,127,0,0,0,1762161
+6,6,246,127,0,0,0,1762161,2,'Virtual core pointer'
+7,6,246,127,0,0,0,1762170,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,246,130,0,0,0,1762171
+6,6,246,130,0,0,0,1762171,2,'Virtual core pointer'
+7,6,246,130,0,0,0,1762180,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,246,133,0,0,0,1762180
+6,6,246,133,0,0,0,1762180,2,'Virtual core pointer'
+7,6,246,133,0,0,0,1762190,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,244,135,0,0,0,1762190
+6,6,244,135,0,0,0,1762190,2,'Virtual core pointer'
+7,6,244,135,0,0,0,1762200,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,242,138,0,0,0,1762200
+6,6,242,138,0,0,0,1762200,2,'Virtual core pointer'
+7,6,242,138,0,0,0,1762209,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,241,140,0,0,0,1762209
+6,6,241,140,0,0,0,1762209,2,'Virtual core pointer'
+7,6,241,140,0,0,0,1762219,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,240,142,0,0,0,1762219
+6,6,240,142,0,0,0,1762219,2,'Virtual core pointer'
+7,6,240,142,0,0,0,1762229,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,239,143,0,0,0,1762229
+6,6,239,143,0,0,0,1762229,2,'Virtual core pointer'
+7,6,239,143,0,0,0,1762239,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,238,143,0,0,0,1762239
+6,6,238,143,0,0,0,1762239,2,'Virtual core pointer'
+7,6,238,143,0,0,0,1762249,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,238,143,0,0,0,1762249
+6,6,238,143,0,0,0,1762249,2,'Virtual core pointer'
+7,6,238,143,0,0,0,1762288,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,143,0,0,0,1762288
+6,6,237,143,0,0,0,1762288,2,'Virtual core pointer'
+7,6,237,143,0,0,0,1762307,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,144,0,0,0,1762307
+6,6,237,144,0,0,0,1762307,2,'Virtual core pointer'
+7,6,237,144,0,0,0,1762318,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,144,0,0,0,1762318
+6,6,237,144,0,0,0,1762318,2,'Virtual core pointer'
+7,6,237,144,0,0,0,1762327,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,144,0,0,0,1762327
+6,6,237,144,0,0,0,1762327,2,'Virtual core pointer'
+7,6,237,144,0,0,0,1762336,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,144,0,0,0,1762336
+6,6,237,144,0,0,0,1762336,2,'Virtual core pointer'
+7,6,237,144,0,0,0,1762356,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,145,0,0,0,1762356
+6,6,237,145,0,0,0,1762356,2,'Virtual core pointer'
+7,6,237,145,0,0,0,1762366,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,145,0,0,0,1762366
+6,6,237,145,0,0,0,1762366,2,'Virtual core pointer'
+7,6,237,145,0,0,0,1762405,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,145,0,0,0,1762405
+6,6,237,145,0,0,0,1762405,2,'Virtual core pointer'
+7,6,237,145,0,0,0,1762943,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,145,0,0,0,1762943
+6,6,237,145,0,0,0,1762943,2,'Virtual core pointer'
+7,6,237,145,0,0,0,1762953,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,144,0,0,0,1762953
+6,6,237,144,0,0,0,1762953,2,'Virtual core pointer'
+7,6,237,144,0,0,0,1762962,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,144,0,0,0,1762962
+6,6,237,144,0,0,0,1762962,2,'Virtual core pointer'
+7,6,237,144,0,0,0,1763011,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,144,0,0,0,1763011
+6,6,237,144,0,0,0,1763011,2,'Virtual core pointer'
+7,6,237,144,0,0,0,1763265,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,143,0,0,0,1763265
+6,6,237,143,0,0,0,1763265,2,'Virtual core pointer'
+7,6,237,143,0,0,0,1763275,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,143,0,0,0,1763275
+6,6,237,143,0,0,0,1763275,2,'Virtual core pointer'
+7,4,0,0,1,0,0,1763469,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,4,0,0,1,0,0,1763469
+6,4,0,0,1,0,0,1763469,2,Virtual core pointer
+7,5,0,0,1,0,0,1763519,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,5,0,0,1,0,0,1763520
+6,5,0,0,1,0,0,1763519,2,Virtual core pointer
+7,6,237,143,0,0,0,1763823,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,138,0,0,0,1763823
+6,6,237,138,0,0,0,1763823,2,'Virtual core pointer'
+7,6,237,138,0,0,0,1763832,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,130,0,0,0,1763832
+6,6,237,130,0,0,0,1763832,2,'Virtual core pointer'
+7,2,0,0,0,46,0,1764450,10,AT Translated Set 2 keyboard
+0,2,0,0,0,46,0,1764450
+6,2,0,0,0,46,0,1764450,3,Virtual core keyboard
+7,3,0,0,0,46,0,1764540,10,AT Translated Set 2 keyboard
+0,3,0,0,0,46,0,1764540
+6,3,0,0,0,46,0,1764540,3,Virtual core keyboard
+7,2,0,0,0,31,0,1764701,10,AT Translated Set 2 keyboard
+0,2,0,0,0,31,0,1764701
+6,2,0,0,0,31,0,1764701,3,Virtual core keyboard
+7,3,0,0,0,31,0,1764771,10,AT Translated Set 2 keyboard
+0,3,0,0,0,31,0,1764771
+6,3,0,0,0,31,0,1764771,3,Virtual core keyboard
+7,2,0,0,0,57,0,1764951,10,AT Translated Set 2 keyboard
+0,2,0,0,0,57,0,1764952
+6,2,0,0,0,57,0,1764952,3,Virtual core keyboard
+7,3,0,0,0,57,0,1765032,10,AT Translated Set 2 keyboard
+0,3,0,0,0,57,0,1765032
+6,3,0,0,0,57,0,1765032,3,Virtual core keyboard
+7,2,0,0,0,46,0,1765293,10,AT Translated Set 2 keyboard
+0,2,0,0,0,46,0,1765293
+6,2,0,0,0,46,0,1765293,3,Virtual core keyboard
+7,3,0,0,0,46,0,1765373,10,AT Translated Set 2 keyboard
+0,3,0,0,0,46,0,1765373
+6,3,0,0,0,46,0,1765373,3,Virtual core keyboard
+7,2,0,0,0,32,0,1765513,10,AT Translated Set 2 keyboard
+0,2,0,0,0,32,0,1765514
+6,2,0,0,0,32,0,1765514,3,Virtual core keyboard
+7,3,0,0,0,32,0,1765584,10,AT Translated Set 2 keyboard
+0,3,0,0,0,32,0,1765584
+6,3,0,0,0,32,0,1765584,3,Virtual core keyboard
+7,2,0,0,0,42,0,1765774,10,AT Translated Set 2 keyboard
+0,2,0,0,0,42,0,1765774
+6,2,0,0,0,42,0,1765774,3,Virtual core keyboard
+7,6,237,130,0,0,0,1765804,11,'DualPoint Stick'
+0,6,237,129,0,0,0,1765804
+6,6,237,129,0,0,0,1765804,2,'Virtual core pointer'
+7,6,237,129,0,0,0,1765817,11,'DualPoint Stick'
+0,6,237,128,0,0,0,1765817
+6,6,237,128,0,0,0,1765817,2,'Virtual core pointer'
+7,3,0,0,0,42,0,1765855,10,AT Translated Set 2 keyboard
+0,3,0,0,0,42,0,1765855
+6,3,0,0,0,42,0,1765855,3,Virtual core keyboard
+7,6,237,128,0,0,0,1766696,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,131,0,0,0,1766696
+6,6,237,131,0,0,0,1766696,2,'Virtual core pointer'
+7,6,237,131,0,0,0,1766706,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,135,0,0,0,1766706
+6,6,237,135,0,0,0,1766706,2,'Virtual core pointer'
+7,6,237,135,0,0,0,1766716,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,137,0,0,0,1766716
+6,6,237,137,0,0,0,1766716,2,'Virtual core pointer'
+7,6,237,137,0,0,0,1766726,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,236,138,0,0,0,1766726
+6,6,236,138,0,0,0,1766726,2,'Virtual core pointer'
+7,6,236,138,0,0,0,1766736,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,234,140,0,0,0,1766737
+6,6,234,140,0,0,0,1766737,2,'Virtual core pointer'
+7,6,234,140,0,0,0,1766745,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,232,142,0,0,0,1766745
+6,6,232,142,0,0,0,1766745,2,'Virtual core pointer'
+7,6,232,142,0,0,0,1766755,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,231,143,0,0,0,1766755
+6,6,231,143,0,0,0,1766755,2,'Virtual core pointer'
+7,6,231,143,0,0,0,1766765,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,230,145,0,0,0,1766765
+6,6,230,145,0,0,0,1766765,2,'Virtual core pointer'
+7,6,230,145,0,0,0,1766775,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,228,147,0,0,0,1766775
+6,6,228,147,0,0,0,1766775,2,'Virtual core pointer'
+7,6,228,147,0,0,0,1766784,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,226,149,0,0,0,1766784
+6,6,226,149,0,0,0,1766784,2,'Virtual core pointer'
+7,6,226,149,0,0,0,1766794,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,226,151,0,0,0,1766794
+6,6,226,151,0,0,0,1766794,2,'Virtual core pointer'
+7,6,226,151,0,0,0,1766804,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,224,153,0,0,0,1766804
+6,6,224,153,0,0,0,1766804,2,'Virtual core pointer'
+7,6,224,153,0,0,0,1766814,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,223,155,0,0,0,1766814
+6,6,223,155,0,0,0,1766814,2,'Virtual core pointer'
+7,6,223,155,0,0,0,1766825,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,223,156,0,0,0,1766825
+6,6,223,156,0,0,0,1766825,2,'Virtual core pointer'
+7,6,223,156,0,0,0,1766834,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,222,158,0,0,0,1766834
+6,6,222,158,0,0,0,1766834,2,'Virtual core pointer'
+7,6,222,158,0,0,0,1766843,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,221,160,0,0,0,1766843
+6,6,221,160,0,0,0,1766843,2,'Virtual core pointer'
+7,6,221,160,0,0,0,1766853,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,220,162,0,0,0,1766853
+6,6,220,162,0,0,0,1766853,2,'Virtual core pointer'
+7,6,220,162,0,0,0,1766863,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,219,164,0,0,0,1766863
+6,6,219,164,0,0,0,1766863,2,'Virtual core pointer'
+7,6,219,164,0,0,0,1766872,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,219,166,0,0,0,1766872
+6,6,219,166,0,0,0,1766872,2,'Virtual core pointer'
+7,6,219,166,0,0,0,1766883,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,218,168,0,0,0,1766883
+6,6,218,168,0,0,0,1766883,2,'Virtual core pointer'
+7,6,218,168,0,0,0,1766892,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,218,169,0,0,0,1766892
+6,6,218,169,0,0,0,1766892,2,'Virtual core pointer'
+7,6,218,169,0,0,0,1766902,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,217,171,0,0,0,1766902
+6,6,217,171,0,0,0,1766902,2,'Virtual core pointer'
+7,6,217,171,0,0,0,1766913,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,217,173,0,0,0,1766913
+6,6,217,173,0,0,0,1766913,2,'Virtual core pointer'
+7,6,217,173,0,0,0,1766921,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,216,175,0,0,0,1766921
+6,6,216,175,0,0,0,1766921,2,'Virtual core pointer'
+7,6,216,175,0,0,0,1766931,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,216,177,0,0,0,1766931
+6,6,216,177,0,0,0,1766931,2,'Virtual core pointer'
+7,6,216,177,0,0,0,1766941,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,216,179,0,0,0,1766941
+6,6,216,179,0,0,0,1766941,2,'Virtual core pointer'
+7,6,216,179,0,0,0,1766951,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,215,180,0,0,0,1766951
+6,6,215,180,0,0,0,1766951,2,'Virtual core pointer'
+7,6,215,180,0,0,0,1766961,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,215,181,0,0,0,1766961
+6,6,215,181,0,0,0,1766961,2,'Virtual core pointer'
+7,6,215,181,0,0,0,1766971,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,214,183,0,0,0,1766971
+6,6,214,183,0,0,0,1766971,2,'Virtual core pointer'
+7,6,214,183,0,0,0,1766980,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,214,184,0,0,0,1766980
+6,6,214,184,0,0,0,1766980,2,'Virtual core pointer'
+7,6,214,184,0,0,0,1766990,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,214,185,0,0,0,1766990
+6,6,214,185,0,0,0,1766990,2,'Virtual core pointer'
+7,6,214,185,0,0,0,1767000,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,214,187,0,0,0,1767000
+6,6,214,187,0,0,0,1767000,2,'Virtual core pointer'
+7,6,214,187,0,0,0,1767009,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,213,188,0,0,0,1767009
+6,6,213,188,0,0,0,1767009,2,'Virtual core pointer'
+7,6,213,188,0,0,0,1767019,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,213,189,0,0,0,1767019
+6,6,213,189,0,0,0,1767019,2,'Virtual core pointer'
+7,6,213,189,0,0,0,1767029,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,213,190,0,0,0,1767029
+6,6,213,190,0,0,0,1767029,2,'Virtual core pointer'
+7,6,213,190,0,0,0,1767039,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,213,191,0,0,0,1767039
+6,6,213,191,0,0,0,1767039,2,'Virtual core pointer'
+7,6,213,191,0,0,0,1767049,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,213,193,0,0,0,1767049
+6,6,213,193,0,0,0,1767049,2,'Virtual core pointer'
+7,6,213,193,0,0,0,1767059,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,213,196,0,0,0,1767059
+6,6,213,196,0,0,0,1767059,2,'Virtual core pointer'
+7,6,213,196,0,0,0,1767068,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,213,198,0,0,0,1767068
+6,6,213,198,0,0,0,1767068,2,'Virtual core pointer'
+7,6,213,198,0,0,0,1767078,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,213,202,0,0,0,1767078
+6,6,213,202,0,0,0,1767078,2,'Virtual core pointer'
+7,6,213,202,0,0,0,1767088,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,212,206,0,0,0,1767088
+6,6,212,206,0,0,0,1767088,2,'Virtual core pointer'
+7,6,212,206,0,0,0,1767097,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,211,209,0,0,0,1767097
+6,6,211,209,0,0,0,1767097,2,'Virtual core pointer'
+7,6,211,209,0,0,0,1767107,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,210,212,0,0,0,1767107
+6,6,210,212,0,0,0,1767107,2,'Virtual core pointer'
+7,6,210,212,0,0,0,1767117,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,210,214,0,0,0,1767117
+6,6,210,214,0,0,0,1767117,2,'Virtual core pointer'
+7,6,210,214,0,0,0,1767127,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,209,216,0,0,0,1767127
+6,6,209,216,0,0,0,1767127,2,'Virtual core pointer'
+7,6,209,216,0,0,0,1767137,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,217,0,0,0,1767137
+6,6,208,217,0,0,0,1767137,2,'Virtual core pointer'
+7,6,208,217,0,0,0,1767146,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,217,0,0,0,1767147
+6,6,208,217,0,0,0,1767147,2,'Virtual core pointer'
+7,6,208,217,0,0,0,1767156,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,218,0,0,0,1767156
+6,6,208,218,0,0,0,1767156,2,'Virtual core pointer'
+7,6,208,218,0,0,0,1767254,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,218,0,0,0,1767254
+6,6,208,218,0,0,0,1767254,2,'Virtual core pointer'
+7,6,208,218,0,0,0,1767264,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,219,0,0,0,1767264
+6,6,208,219,0,0,0,1767264,2,'Virtual core pointer'
+7,6,208,219,0,0,0,1767273,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,219,0,0,0,1767273
+6,6,208,219,0,0,0,1767273,2,'Virtual core pointer'
+7,6,208,219,0,0,0,1767283,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,220,0,0,0,1767283
+6,6,208,220,0,0,0,1767283,2,'Virtual core pointer'
+7,6,208,220,0,0,0,1767361,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,220,0,0,0,1767361
+6,6,208,220,0,0,0,1767361,2,'Virtual core pointer'
+7,6,208,220,0,0,0,1767381,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,220,0,0,0,1767381
+6,6,208,220,0,0,0,1767381,2,'Virtual core pointer'
+7,6,208,220,0,0,0,1767400,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,221,0,0,0,1767400
+6,6,208,221,0,0,0,1767400,2,'Virtual core pointer'
+7,6,208,221,0,0,0,1767410,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,221,0,0,0,1767410
+6,6,208,221,0,0,0,1767410,2,'Virtual core pointer'
+7,6,208,221,0,0,0,1767420,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,222,0,0,0,1767420
+6,6,208,222,0,0,0,1767420,2,'Virtual core pointer'
+7,6,208,222,0,0,0,1767430,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,207,222,0,0,0,1767430
+6,6,207,222,0,0,0,1767430,2,'Virtual core pointer'
+7,6,207,222,0,0,0,1767441,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,207,222,0,0,0,1767441
+6,6,207,222,0,0,0,1767441,2,'Virtual core pointer'
+7,6,207,222,0,0,0,1767449,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,207,223,0,0,0,1767449
+6,6,207,223,0,0,0,1767449,2,'Virtual core pointer'
+7,6,207,223,0,0,0,1767518,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,207,223,0,0,0,1767518
+6,6,207,223,0,0,0,1767518,2,'Virtual core pointer'
+7,6,207,223,0,0,0,1767696,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,207,223,0,0,0,1767696
+6,6,207,223,0,0,0,1767696,2,'Virtual core pointer'
+7,4,0,0,1,0,0,1767897,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,4,0,0,1,0,0,1767897
+6,4,0,0,1,0,0,1767897,2,Virtual core pointer
+7,5,0,0,1,0,0,1767919,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,5,0,0,1,0,0,1767919
+6,5,0,0,1,0,0,1767919,2,Virtual core pointer
+7,6,207,223,0,0,0,1768202,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,207,223,0,0,0,1768202
+6,6,207,223,0,0,0,1768202,2,'Virtual core pointer'
+7,6,207,223,0,0,0,1768222,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,206,223,0,0,0,1768222
+6,6,206,223,0,0,0,1768222,2,'Virtual core pointer'
+7,6,206,223,0,0,0,1768242,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,206,223,0,0,0,1768242
+6,6,206,223,0,0,0,1768242,2,'Virtual core pointer'
+7,6,206,223,0,0,0,1768251,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,205,220,0,0,0,1768251
+6,6,205,220,0,0,0,1768251,2,'Virtual core pointer'
+7,6,205,220,0,0,0,1769327,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,205,222,0,0,0,1769327
+6,6,205,222,0,0,0,1769327,2,'Virtual core pointer'
+7,6,205,222,0,0,0,1769337,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,205,225,0,0,0,1769337
+6,6,205,225,0,0,0,1769337,2,'Virtual core pointer'
+7,6,205,225,0,0,0,1769347,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,205,227,0,0,0,1769347
+6,6,205,227,0,0,0,1769347,2,'Virtual core pointer'
+7,6,205,227,0,0,0,1769356,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,206,229,0,0,0,1769356
+6,6,206,229,0,0,0,1769356,2,'Virtual core pointer'
+7,6,206,229,0,0,0,1769365,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,208,231,0,0,0,1769366
+6,6,208,231,0,0,0,1769366,2,'Virtual core pointer'
+7,6,208,231,0,0,0,1769375,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,210,233,0,0,0,1769375
+6,6,210,233,0,0,0,1769375,2,'Virtual core pointer'
+7,6,210,233,0,0,0,1769385,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,212,235,0,0,0,1769385
+6,6,212,235,0,0,0,1769385,2,'Virtual core pointer'
+7,6,212,235,0,0,0,1769395,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,214,237,0,0,0,1769395
+6,6,214,237,0,0,0,1769395,2,'Virtual core pointer'
+7,6,214,237,0,0,0,1769406,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,216,239,0,0,0,1769406
+6,6,216,239,0,0,0,1769406,2,'Virtual core pointer'
+7,6,216,239,0,0,0,1769415,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,218,241,0,0,0,1769415
+6,6,218,241,0,0,0,1769415,2,'Virtual core pointer'
+7,6,218,241,0,0,0,1769424,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,220,242,0,0,0,1769424
+6,6,220,242,0,0,0,1769424,2,'Virtual core pointer'
+7,6,220,242,0,0,0,1769434,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,223,244,0,0,0,1769434
+6,6,223,244,0,0,0,1769434,2,'Virtual core pointer'
+7,6,223,244,0,0,0,1769444,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,225,246,0,0,0,1769444
+6,6,225,246,0,0,0,1769444,2,'Virtual core pointer'
+7,6,225,246,0,0,0,1769453,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,228,249,0,0,0,1769453
+6,6,228,249,0,0,0,1769453,2,'Virtual core pointer'
+7,6,228,249,0,0,0,1769464,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,230,250,0,0,0,1769464
+6,6,230,250,0,0,0,1769464,2,'Virtual core pointer'
+7,6,230,250,0,0,0,1769473,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,233,253,0,0,0,1769473
+6,6,233,253,0,0,0,1769473,2,'Virtual core pointer'
+7,6,233,253,0,0,0,1769483,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,235,255,0,0,0,1769483
+6,6,235,255,0,0,0,1769483,2,'Virtual core pointer'
+7,6,235,255,0,0,0,1769494,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,237,258,0,0,0,1769494
+6,6,237,258,0,0,0,1769494,2,'Virtual core pointer'
+7,6,237,258,0,0,0,1769502,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,239,260,0,0,0,1769502
+6,6,239,260,0,0,0,1769502,2,'Virtual core pointer'
+7,6,239,260,0,0,0,1769512,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,242,263,0,0,0,1769512
+6,6,242,263,0,0,0,1769512,2,'Virtual core pointer'
+7,6,242,263,0,0,0,1769522,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,244,265,0,0,0,1769522
+6,6,244,265,0,0,0,1769522,2,'Virtual core pointer'
+7,6,244,265,0,0,0,1769532,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,248,267,0,0,0,1769532
+6,6,248,267,0,0,0,1769532,2,'Virtual core pointer'
+7,6,248,267,0,0,0,1769542,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,251,270,0,0,0,1769542
+6,6,251,270,0,0,0,1769542,2,'Virtual core pointer'
+7,6,251,270,0,0,0,1769551,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,255,272,0,0,0,1769551
+6,6,255,272,0,0,0,1769551,2,'Virtual core pointer'
+7,6,255,272,0,0,0,1769561,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,259,275,0,0,0,1769561
+6,6,259,275,0,0,0,1769561,2,'Virtual core pointer'
+7,6,259,275,0,0,0,1769571,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,264,277,0,0,0,1769571
+6,6,264,277,0,0,0,1769571,2,'Virtual core pointer'
+7,6,264,277,0,0,0,1769581,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,268,279,0,0,0,1769581
+6,6,268,279,0,0,0,1769581,2,'Virtual core pointer'
+7,6,268,279,0,0,0,1769591,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,271,281,0,0,0,1769591
+6,6,271,281,0,0,0,1769591,2,'Virtual core pointer'
+7,6,271,281,0,0,0,1769600,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,283,0,0,0,1769600
+6,6,275,283,0,0,0,1769600,2,'Virtual core pointer'
+7,6,275,283,0,0,0,1769610,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,278,285,0,0,0,1769610
+6,6,278,285,0,0,0,1769610,2,'Virtual core pointer'
+7,6,278,285,0,0,0,1769620,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,280,287,0,0,0,1769620
+6,6,280,287,0,0,0,1769620,2,'Virtual core pointer'
+7,6,280,287,0,0,0,1769630,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,282,290,0,0,0,1769630
+6,6,282,290,0,0,0,1769630,2,'Virtual core pointer'
+7,6,282,290,0,0,0,1769640,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,284,292,0,0,0,1769640
+6,6,284,292,0,0,0,1769640,2,'Virtual core pointer'
+7,6,284,292,0,0,0,1769649,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,285,294,0,0,0,1769649
+6,6,285,294,0,0,0,1769649,2,'Virtual core pointer'
+7,6,285,294,0,0,0,1769659,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,287,296,0,0,0,1769659
+6,6,287,296,0,0,0,1769659,2,'Virtual core pointer'
+7,6,287,296,0,0,0,1769669,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,289,298,0,0,0,1769669
+6,6,289,298,0,0,0,1769669,2,'Virtual core pointer'
+7,6,289,298,0,0,0,1769679,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,291,300,0,0,0,1769679
+6,6,291,300,0,0,0,1769679,2,'Virtual core pointer'
+7,6,291,300,0,0,0,1769688,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,292,303,0,0,0,1769688
+6,6,292,303,0,0,0,1769688,2,'Virtual core pointer'
+7,6,292,303,0,0,0,1769701,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,294,305,0,0,0,1769701
+6,6,294,305,0,0,0,1769701,2,'Virtual core pointer'
+7,6,294,305,0,0,0,1769717,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,296,308,0,0,0,1769717
+6,6,296,308,0,0,0,1769717,2,'Virtual core pointer'
+7,6,296,308,0,0,0,1769718,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,299,311,0,0,0,1769718
+6,6,299,311,0,0,0,1769718,2,'Virtual core pointer'
+7,6,299,311,0,0,0,1769728,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,301,314,0,0,0,1769728
+6,6,301,314,0,0,0,1769728,2,'Virtual core pointer'
+7,6,301,314,0,0,0,1769737,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,303,316,0,0,0,1769737
+6,6,303,316,0,0,0,1769737,2,'Virtual core pointer'
+7,6,303,316,0,0,0,1769752,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,304,318,0,0,0,1769752
+6,6,304,318,0,0,0,1769752,2,'Virtual core pointer'
+7,6,304,318,0,0,0,1769757,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,305,321,0,0,0,1769757
+6,6,305,321,0,0,0,1769757,2,'Virtual core pointer'
+7,6,305,321,0,0,0,1769767,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,307,323,0,0,0,1769767
+6,6,307,323,0,0,0,1769767,2,'Virtual core pointer'
+7,6,307,323,0,0,0,1769776,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,308,326,0,0,0,1769777
+6,6,308,326,0,0,0,1769777,2,'Virtual core pointer'
+7,6,308,326,0,0,0,1769786,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,311,329,0,0,0,1769786
+6,6,311,329,0,0,0,1769786,2,'Virtual core pointer'
+7,6,311,329,0,0,0,1769796,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,313,333,0,0,0,1769796
+6,6,313,333,0,0,0,1769796,2,'Virtual core pointer'
+7,6,313,333,0,0,0,1769806,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,315,337,0,0,0,1769806
+6,6,315,337,0,0,0,1769806,2,'Virtual core pointer'
+7,6,315,337,0,0,0,1769816,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,317,341,0,0,0,1769816
+6,6,317,341,0,0,0,1769816,2,'Virtual core pointer'
+7,6,317,341,0,0,0,1769825,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,320,345,0,0,0,1769825
+6,6,320,345,0,0,0,1769825,2,'Virtual core pointer'
+7,6,320,345,0,0,0,1769835,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,322,350,0,0,0,1769835
+6,6,322,350,0,0,0,1769835,2,'Virtual core pointer'
+7,6,322,350,0,0,0,1769845,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,325,354,0,0,0,1769845
+6,6,325,354,0,0,0,1769845,2,'Virtual core pointer'
+7,6,325,354,0,0,0,1769855,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,327,359,0,0,0,1769855
+6,6,327,359,0,0,0,1769855,2,'Virtual core pointer'
+7,6,327,359,0,0,0,1769864,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,330,364,0,0,0,1769865
+6,6,330,364,0,0,0,1769865,2,'Virtual core pointer'
+7,6,330,364,0,0,0,1769874,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,332,368,0,0,0,1769874
+6,6,332,368,0,0,0,1769874,2,'Virtual core pointer'
+7,6,332,368,0,0,0,1769884,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,333,373,0,0,0,1769884
+6,6,333,373,0,0,0,1769884,2,'Virtual core pointer'
+7,6,333,373,0,0,0,1769894,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,335,378,0,0,0,1769894
+6,6,335,378,0,0,0,1769894,2,'Virtual core pointer'
+7,6,335,378,0,0,0,1769903,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,338,382,0,0,0,1769903
+6,6,338,382,0,0,0,1769903,2,'Virtual core pointer'
+7,6,338,382,0,0,0,1769913,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,340,387,0,0,0,1769913
+6,6,340,387,0,0,0,1769913,2,'Virtual core pointer'
+7,6,340,387,0,0,0,1769923,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,343,393,0,0,0,1769923
+6,6,343,393,0,0,0,1769923,2,'Virtual core pointer'
+7,6,343,393,0,0,0,1769933,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,347,398,0,0,0,1769933
+6,6,347,398,0,0,0,1769933,2,'Virtual core pointer'
+7,6,347,398,0,0,0,1769944,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,351,404,0,0,0,1769944
+6,6,351,404,0,0,0,1769944,2,'Virtual core pointer'
+7,6,351,404,0,0,0,1769953,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,356,410,0,0,0,1769953
+6,6,356,410,0,0,0,1769953,2,'Virtual core pointer'
+7,6,356,410,0,0,0,1769962,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,360,416,0,0,0,1769962
+6,6,360,416,0,0,0,1769962,2,'Virtual core pointer'
+7,6,360,416,0,0,0,1769972,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,368,422,0,0,0,1769972
+6,6,368,422,0,0,0,1769972,2,'Virtual core pointer'
+7,6,368,422,0,0,0,1769981,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,377,427,0,0,0,1769981
+6,6,377,427,0,0,0,1769981,2,'Virtual core pointer'
+7,6,377,427,0,0,0,1769992,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,386,434,0,0,0,1769992
+6,6,386,434,0,0,0,1769992,2,'Virtual core pointer'
+7,6,386,434,0,0,0,1770001,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,394,440,0,0,0,1770001
+6,6,394,440,0,0,0,1770001,2,'Virtual core pointer'
+7,6,394,440,0,0,0,1770011,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,402,447,0,0,0,1770011
+6,6,402,447,0,0,0,1770011,2,'Virtual core pointer'
+7,6,402,447,0,0,0,1770021,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,410,452,0,0,0,1770021
+6,6,410,452,0,0,0,1770021,2,'Virtual core pointer'
+7,6,410,452,0,0,0,1770031,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,416,457,0,0,0,1770031
+6,6,416,457,0,0,0,1770031,2,'Virtual core pointer'
+7,6,416,457,0,0,0,1770040,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,421,460,0,0,0,1770040
+6,6,421,460,0,0,0,1770040,2,'Virtual core pointer'
+7,6,421,460,0,0,0,1770050,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,423,462,0,0,0,1770050
+6,6,423,462,0,0,0,1770050,2,'Virtual core pointer'
+7,6,423,462,0,0,0,1770060,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,424,463,0,0,0,1770060
+6,6,424,463,0,0,0,1770060,2,'Virtual core pointer'
+7,6,424,463,0,0,0,1770069,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,465,0,0,0,1770069
+6,6,426,465,0,0,0,1770069,2,'Virtual core pointer'
+7,6,426,465,0,0,0,1770079,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,427,465,0,0,0,1770079
+6,6,427,465,0,0,0,1770079,2,'Virtual core pointer'
+7,6,427,465,0,0,0,1770412,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,465,0,0,0,1770412
+6,6,426,465,0,0,0,1770412,2,'Virtual core pointer'
+7,6,426,465,0,0,0,1770451,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,465,0,0,0,1770451
+6,6,426,465,0,0,0,1770451,2,'Virtual core pointer'
+7,6,426,465,0,0,0,1770480,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,466,0,0,0,1770480
+6,6,426,466,0,0,0,1770480,2,'Virtual core pointer'
+7,6,426,466,0,0,0,1770500,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,466,0,0,0,1770500
+6,6,426,466,0,0,0,1770500,2,'Virtual core pointer'
+7,6,426,466,0,0,0,1770510,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,467,0,0,0,1770510
+6,6,426,467,0,0,0,1770510,2,'Virtual core pointer'
+7,6,426,467,0,0,0,1770520,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,467,0,0,0,1770520
+6,6,426,467,0,0,0,1770520,2,'Virtual core pointer'
+7,6,426,467,0,0,0,1770529,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,468,0,0,0,1770529
+6,6,426,468,0,0,0,1770529,2,'Virtual core pointer'
+7,6,426,468,0,0,0,1770539,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,468,0,0,0,1770539
+6,6,426,468,0,0,0,1770539,2,'Virtual core pointer'
+7,6,426,468,0,0,0,1770549,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,469,0,0,0,1770549
+6,6,426,469,0,0,0,1770549,2,'Virtual core pointer'
+7,6,426,469,0,0,0,1770559,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,469,0,0,0,1770559
+6,6,426,469,0,0,0,1770559,2,'Virtual core pointer'
+7,6,426,469,0,0,0,1770568,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,470,0,0,0,1770568
+6,6,426,470,0,0,0,1770568,2,'Virtual core pointer'
+7,6,426,470,0,0,0,1770578,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,470,0,0,0,1770578
+6,6,426,470,0,0,0,1770578,2,'Virtual core pointer'
+7,6,426,470,0,0,0,1770588,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,471,0,0,0,1770588
+6,6,426,471,0,0,0,1770588,2,'Virtual core pointer'
+7,6,426,471,0,0,0,1770598,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,471,0,0,0,1770598
+6,6,426,471,0,0,0,1770598,2,'Virtual core pointer'
+7,6,426,471,0,0,0,1770607,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,471,0,0,0,1770607
+6,6,426,471,0,0,0,1770607,2,'Virtual core pointer'
+7,6,426,471,0,0,0,1770617,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,472,0,0,0,1770617
+6,6,426,472,0,0,0,1770617,2,'Virtual core pointer'
+7,6,426,472,0,0,0,1770647,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,472,0,0,0,1770647
+6,6,426,472,0,0,0,1770647,2,'Virtual core pointer'
+7,6,426,472,0,0,0,1770707,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,472,0,0,0,1770707
+6,6,426,472,0,0,0,1770707,2,'Virtual core pointer'
+7,6,426,472,0,0,0,1770734,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,473,0,0,0,1770735
+6,6,426,473,0,0,0,1770735,2,'Virtual core pointer'
+7,6,426,473,0,0,0,1770744,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,475,0,0,0,1770744
+6,6,426,475,0,0,0,1770744,2,'Virtual core pointer'
+7,6,426,475,0,0,0,1770754,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,476,0,0,0,1770754
+6,6,426,476,0,0,0,1770754,2,'Virtual core pointer'
+7,6,426,476,0,0,0,1770862,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,476,0,0,0,1770862
+6,6,426,476,0,0,0,1770862,2,'Virtual core pointer'
+7,6,426,476,0,0,0,1770891,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,426,477,0,0,0,1770891
+6,6,426,477,0,0,0,1770891,2,'Virtual core pointer'
+7,4,0,0,1,0,0,1771230,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,4,0,0,1,0,0,1771230
+6,4,0,0,1,0,0,1771230,2,Virtual core pointer
+7,5,0,0,1,0,0,1771288,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,5,0,0,1,0,0,1771289
+6,5,0,0,1,0,0,1771288,2,Virtual core pointer
+7,2,0,0,0,65,0,1773010,10,AT Translated Set 2 keyboard
+0,2,0,0,0,65,0,1773010
+6,2,0,0,0,65,0,1773010,3,Virtual core keyboard
+7,3,0,0,0,65,0,1773100,10,AT Translated Set 2 keyboard
+0,3,0,0,0,65,0,1773100
+6,3,0,0,0,65,0,1773100,3,Virtual core keyboard
+7,2,0,0,0,116,0,1773752,10,AT Translated Set 2 keyboard
+0,2,0,0,0,116,0,1773753
+6,2,0,0,0,116,0,1773753,3,Virtual core keyboard
+7,3,0,0,0,116,0,1773883,10,AT Translated Set 2 keyboard
+0,3,0,0,0,116,0,1773883
+6,3,0,0,0,116,0,1773883,3,Virtual core keyboard
+7,2,0,0,0,36,0,1774565,10,AT Translated Set 2 keyboard
+0,2,0,0,0,36,0,1774565
+6,2,0,0,0,36,0,1774565,3,Virtual core keyboard
+7,3,0,0,0,36,0,1774648,10,AT Translated Set 2 keyboard
+0,3,0,0,0,36,0,1774648
+6,3,0,0,0,36,0,1774648,3,Virtual core keyboard
+7,6,426,477,0,0,0,1775643,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,423,477,0,0,0,1775643
+6,6,423,477,0,0,0,1775643,2,'Virtual core pointer'
+7,6,423,477,0,0,0,1775653,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,421,477,0,0,0,1775653
+6,6,421,477,0,0,0,1775653,2,'Virtual core pointer'
+7,6,421,477,0,0,0,1775662,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,421,477,0,0,0,1775662
+6,6,421,477,0,0,0,1775662,2,'Virtual core pointer'
+7,6,421,477,0,0,0,1775672,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,421,477,0,0,0,1775672
+6,6,421,477,0,0,0,1775672,2,'Virtual core pointer'
+7,6,421,477,0,0,0,1775682,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,420,477,0,0,0,1775682
+6,6,420,477,0,0,0,1775682,2,'Virtual core pointer'
+7,6,420,477,0,0,0,1775691,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,419,477,0,0,0,1775691
+6,6,419,477,0,0,0,1775691,2,'Virtual core pointer'
+7,6,419,477,0,0,0,1775701,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,418,477,0,0,0,1775701
+6,6,418,477,0,0,0,1775701,2,'Virtual core pointer'
+7,6,418,477,0,0,0,1775711,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,417,476,0,0,0,1775711
+6,6,417,476,0,0,0,1775711,2,'Virtual core pointer'
+7,6,417,476,0,0,0,1775724,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,417,473,0,0,0,1775724
+6,6,417,473,0,0,0,1775724,2,'Virtual core pointer'
+7,6,417,473,0,0,0,1775731,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,416,471,0,0,0,1775731
+6,6,416,471,0,0,0,1775731,2,'Virtual core pointer'
+7,6,416,471,0,0,0,1775741,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,416,468,0,0,0,1775741
+6,6,416,468,0,0,0,1775741,2,'Virtual core pointer'
+7,6,416,468,0,0,0,1775750,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,415,467,0,0,0,1775750
+6,6,415,467,0,0,0,1775750,2,'Virtual core pointer'
+7,6,415,467,0,0,0,1775760,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,414,466,0,0,0,1775760
+6,6,414,466,0,0,0,1775760,2,'Virtual core pointer'
+7,6,414,466,0,0,0,1775769,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,414,464,0,0,0,1775769
+6,6,414,464,0,0,0,1775769,2,'Virtual core pointer'
+7,6,414,464,0,0,0,1775779,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,413,463,0,0,0,1775779
+6,6,413,463,0,0,0,1775779,2,'Virtual core pointer'
+7,6,413,463,0,0,0,1775789,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,411,462,0,0,0,1775789
+6,6,411,462,0,0,0,1775789,2,'Virtual core pointer'
+7,6,411,462,0,0,0,1775799,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,411,461,0,0,0,1775799
+6,6,411,461,0,0,0,1775799,2,'Virtual core pointer'
+7,6,411,461,0,0,0,1775809,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,410,459,0,0,0,1775809
+6,6,410,459,0,0,0,1775809,2,'Virtual core pointer'
+7,6,410,459,0,0,0,1775819,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,409,457,0,0,0,1775819
+6,6,409,457,0,0,0,1775819,2,'Virtual core pointer'
+7,6,409,457,0,0,0,1775828,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,407,455,0,0,0,1775828
+6,6,407,455,0,0,0,1775828,2,'Virtual core pointer'
+7,6,407,455,0,0,0,1775838,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,406,453,0,0,0,1775838
+6,6,406,453,0,0,0,1775838,2,'Virtual core pointer'
+7,6,406,453,0,0,0,1775848,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,404,450,0,0,0,1775848
+6,6,404,450,0,0,0,1775848,2,'Virtual core pointer'
+7,6,404,450,0,0,0,1775858,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,403,447,0,0,0,1775858
+6,6,403,447,0,0,0,1775858,2,'Virtual core pointer'
+7,6,403,447,0,0,0,1775869,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,401,444,0,0,0,1775869
+6,6,401,444,0,0,0,1775869,2,'Virtual core pointer'
+7,6,401,444,0,0,0,1775877,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,399,441,0,0,0,1775877
+6,6,399,441,0,0,0,1775877,2,'Virtual core pointer'
+7,6,399,441,0,0,0,1775887,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,397,437,0,0,0,1775887
+6,6,397,437,0,0,0,1775887,2,'Virtual core pointer'
+7,6,397,437,0,0,0,1775897,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,395,433,0,0,0,1775897
+6,6,395,433,0,0,0,1775897,2,'Virtual core pointer'
+7,6,395,433,0,0,0,1775907,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,392,429,0,0,0,1775907
+6,6,392,429,0,0,0,1775907,2,'Virtual core pointer'
+7,6,392,429,0,0,0,1775916,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,389,426,0,0,0,1775916
+6,6,389,426,0,0,0,1775916,2,'Virtual core pointer'
+7,6,389,426,0,0,0,1775926,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,386,423,0,0,0,1775926
+6,6,386,423,0,0,0,1775926,2,'Virtual core pointer'
+7,6,386,423,0,0,0,1775936,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,383,419,0,0,0,1775936
+6,6,383,419,0,0,0,1775936,2,'Virtual core pointer'
+7,6,383,419,0,0,0,1775946,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,380,415,0,0,0,1775946
+6,6,380,415,0,0,0,1775946,2,'Virtual core pointer'
+7,6,380,415,0,0,0,1775955,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,376,410,0,0,0,1775955
+6,6,376,410,0,0,0,1775955,2,'Virtual core pointer'
+7,6,376,410,0,0,0,1775965,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,372,405,0,0,0,1775965
+6,6,372,405,0,0,0,1775965,2,'Virtual core pointer'
+7,6,372,405,0,0,0,1775975,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,368,400,0,0,0,1775975
+6,6,368,400,0,0,0,1775975,2,'Virtual core pointer'
+7,6,368,400,0,0,0,1775985,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,365,394,0,0,0,1775985
+6,6,365,394,0,0,0,1775985,2,'Virtual core pointer'
+7,6,365,394,0,0,0,1775994,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,361,387,0,0,0,1775995
+6,6,361,387,0,0,0,1775995,2,'Virtual core pointer'
+7,6,361,387,0,0,0,1776004,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,357,380,0,0,0,1776004
+6,6,357,380,0,0,0,1776004,2,'Virtual core pointer'
+7,6,357,380,0,0,0,1776014,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,354,374,0,0,0,1776014
+6,6,354,374,0,0,0,1776014,2,'Virtual core pointer'
+7,6,354,374,0,0,0,1776024,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,352,369,0,0,0,1776024
+6,6,352,369,0,0,0,1776024,2,'Virtual core pointer'
+7,6,352,369,0,0,0,1776034,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,348,364,0,0,0,1776034
+6,6,348,364,0,0,0,1776034,2,'Virtual core pointer'
+7,6,348,364,0,0,0,1776043,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,345,359,0,0,0,1776043
+6,6,345,359,0,0,0,1776043,2,'Virtual core pointer'
+7,6,345,359,0,0,0,1776053,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,342,355,0,0,0,1776053
+6,6,342,355,0,0,0,1776053,2,'Virtual core pointer'
+7,6,342,355,0,0,0,1776063,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,338,352,0,0,0,1776063
+6,6,338,352,0,0,0,1776063,2,'Virtual core pointer'
+7,6,338,352,0,0,0,1776073,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,335,348,0,0,0,1776073
+6,6,335,348,0,0,0,1776073,2,'Virtual core pointer'
+7,6,335,348,0,0,0,1776082,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,331,345,0,0,0,1776082
+6,6,331,345,0,0,0,1776082,2,'Virtual core pointer'
+7,6,331,345,0,0,0,1776093,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,328,341,0,0,0,1776093
+6,6,328,341,0,0,0,1776093,2,'Virtual core pointer'
+7,6,328,341,0,0,0,1776102,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,325,337,0,0,0,1776102
+6,6,325,337,0,0,0,1776102,2,'Virtual core pointer'
+7,6,325,337,0,0,0,1776112,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,321,333,0,0,0,1776112
+6,6,321,333,0,0,0,1776112,2,'Virtual core pointer'
+7,6,321,333,0,0,0,1776122,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,319,329,0,0,0,1776122
+6,6,319,329,0,0,0,1776122,2,'Virtual core pointer'
+7,6,319,329,0,0,0,1776131,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,316,325,0,0,0,1776131
+6,6,316,325,0,0,0,1776131,2,'Virtual core pointer'
+7,6,316,325,0,0,0,1776141,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,313,321,0,0,0,1776141
+6,6,313,321,0,0,0,1776141,2,'Virtual core pointer'
+7,6,313,321,0,0,0,1776151,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,311,317,0,0,0,1776151
+6,6,311,317,0,0,0,1776151,2,'Virtual core pointer'
+7,6,311,317,0,0,0,1776161,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,309,315,0,0,0,1776161
+6,6,309,315,0,0,0,1776161,2,'Virtual core pointer'
+7,6,309,315,0,0,0,1776170,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,307,312,0,0,0,1776170
+6,6,307,312,0,0,0,1776170,2,'Virtual core pointer'
+7,6,307,312,0,0,0,1776180,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,305,309,0,0,0,1776180
+6,6,305,309,0,0,0,1776180,2,'Virtual core pointer'
+7,6,305,309,0,0,0,1776190,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,304,306,0,0,0,1776190
+6,6,304,306,0,0,0,1776190,2,'Virtual core pointer'
+7,6,304,306,0,0,0,1776200,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,301,304,0,0,0,1776200
+6,6,301,304,0,0,0,1776200,2,'Virtual core pointer'
+7,6,301,304,0,0,0,1776210,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,300,301,0,0,0,1776210
+6,6,300,301,0,0,0,1776210,2,'Virtual core pointer'
+7,6,300,301,0,0,0,1776220,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,299,298,0,0,0,1776220
+6,6,299,298,0,0,0,1776220,2,'Virtual core pointer'
+7,6,299,298,0,0,0,1776229,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,297,295,0,0,0,1776229
+6,6,297,295,0,0,0,1776229,2,'Virtual core pointer'
+7,6,297,295,0,0,0,1776239,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,296,293,0,0,0,1776239
+6,6,296,293,0,0,0,1776239,2,'Virtual core pointer'
+7,6,296,293,0,0,0,1776249,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,294,292,0,0,0,1776249
+6,6,294,292,0,0,0,1776249,2,'Virtual core pointer'
+7,6,294,292,0,0,0,1776259,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,294,290,0,0,0,1776259
+6,6,294,290,0,0,0,1776259,2,'Virtual core pointer'
+7,6,294,290,0,0,0,1776269,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,293,288,0,0,0,1776269
+6,6,293,288,0,0,0,1776269,2,'Virtual core pointer'
+7,6,293,288,0,0,0,1776278,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,291,286,0,0,0,1776278
+6,6,291,286,0,0,0,1776278,2,'Virtual core pointer'
+7,6,291,286,0,0,0,1776288,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,290,283,0,0,0,1776288
+6,6,290,283,0,0,0,1776288,2,'Virtual core pointer'
+7,6,290,283,0,0,0,1776298,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,288,281,0,0,0,1776298
+6,6,288,281,0,0,0,1776298,2,'Virtual core pointer'
+7,6,288,281,0,0,0,1776307,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,287,278,0,0,0,1776307
+6,6,287,278,0,0,0,1776307,2,'Virtual core pointer'
+7,6,287,278,0,0,0,1776317,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,286,276,0,0,0,1776317
+6,6,286,276,0,0,0,1776317,2,'Virtual core pointer'
+7,6,286,276,0,0,0,1776327,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,285,275,0,0,0,1776327
+6,6,285,275,0,0,0,1776327,2,'Virtual core pointer'
+7,6,285,275,0,0,0,1776337,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,283,273,0,0,0,1776337
+6,6,283,273,0,0,0,1776337,2,'Virtual core pointer'
+7,6,283,273,0,0,0,1776347,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,283,271,0,0,0,1776347
+6,6,283,271,0,0,0,1776347,2,'Virtual core pointer'
+7,6,283,271,0,0,0,1776356,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,281,269,0,0,0,1776356
+6,6,281,269,0,0,0,1776356,2,'Virtual core pointer'
+7,6,281,269,0,0,0,1776366,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,281,268,0,0,0,1776366
+6,6,281,268,0,0,0,1776366,2,'Virtual core pointer'
+7,6,281,268,0,0,0,1776376,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,280,266,0,0,0,1776376
+6,6,280,266,0,0,0,1776376,2,'Virtual core pointer'
+7,6,280,266,0,0,0,1776386,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,280,265,0,0,0,1776386
+6,6,280,265,0,0,0,1776386,2,'Virtual core pointer'
+7,6,280,265,0,0,0,1776395,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,280,264,0,0,0,1776395
+6,6,280,264,0,0,0,1776395,2,'Virtual core pointer'
+7,6,280,264,0,0,0,1776405,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,263,0,0,0,1776405
+6,6,279,263,0,0,0,1776405,2,'Virtual core pointer'
+7,6,279,263,0,0,0,1776415,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,261,0,0,0,1776415
+6,6,279,261,0,0,0,1776415,2,'Virtual core pointer'
+7,6,279,261,0,0,0,1776425,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,278,259,0,0,0,1776425
+6,6,278,259,0,0,0,1776425,2,'Virtual core pointer'
+7,6,278,259,0,0,0,1776435,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,278,257,0,0,0,1776435
+6,6,278,257,0,0,0,1776435,2,'Virtual core pointer'
+7,6,278,257,0,0,0,1776444,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,254,0,0,0,1776444
+6,6,277,254,0,0,0,1776444,2,'Virtual core pointer'
+7,6,277,254,0,0,0,1776454,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,251,0,0,0,1776454
+6,6,277,251,0,0,0,1776454,2,'Virtual core pointer'
+7,6,277,251,0,0,0,1776464,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,248,0,0,0,1776464
+6,6,276,248,0,0,0,1776464,2,'Virtual core pointer'
+7,6,276,248,0,0,0,1776473,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,246,0,0,0,1776473
+6,6,276,246,0,0,0,1776473,2,'Virtual core pointer'
+7,6,276,246,0,0,0,1776484,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,244,0,0,0,1776484
+6,6,276,244,0,0,0,1776484,2,'Virtual core pointer'
+7,6,276,244,0,0,0,1776493,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,243,0,0,0,1776493
+6,6,275,243,0,0,0,1776493,2,'Virtual core pointer'
+7,6,275,243,0,0,0,1776503,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,243,0,0,0,1776503
+6,6,275,243,0,0,0,1776503,2,'Virtual core pointer'
+7,6,275,243,0,0,0,1776523,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,243,0,0,0,1776523
+6,6,275,243,0,0,0,1776523,2,'Virtual core pointer'
+7,6,275,243,0,0,0,1776552,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,243,0,0,0,1776552
+6,6,275,243,0,0,0,1776552,2,'Virtual core pointer'
+7,6,275,243,0,0,0,1776581,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,242,0,0,0,1776581
+6,6,275,242,0,0,0,1776581,2,'Virtual core pointer'
+7,6,275,242,0,0,0,1776591,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,242,0,0,0,1776591
+6,6,275,242,0,0,0,1776591,2,'Virtual core pointer'
+7,6,275,242,0,0,0,1776601,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,242,0,0,0,1776601
+6,6,275,242,0,0,0,1776601,2,'Virtual core pointer'
+7,6,275,242,0,0,0,1776620,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,242,0,0,0,1776620
+6,6,275,242,0,0,0,1776620,2,'Virtual core pointer'
+7,6,275,242,0,0,0,1776679,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,241,0,0,0,1776679
+6,6,275,241,0,0,0,1776679,2,'Virtual core pointer'
+7,6,275,241,0,0,0,1776708,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,241,0,0,0,1776708
+6,6,275,241,0,0,0,1776708,2,'Virtual core pointer'
+7,6,275,241,0,0,0,1776729,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,240,0,0,0,1776729
+6,6,275,240,0,0,0,1776729,2,'Virtual core pointer'
+7,6,275,240,0,0,0,1776737,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,240,0,0,0,1776737
+6,6,275,240,0,0,0,1776737,2,'Virtual core pointer'
+7,6,275,240,0,0,0,1776747,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,239,0,0,0,1776747
+6,6,275,239,0,0,0,1776747,2,'Virtual core pointer'
+7,6,275,239,0,0,0,1776757,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,239,0,0,0,1776757
+6,6,275,239,0,0,0,1776757,2,'Virtual core pointer'
+7,6,275,239,0,0,0,1776767,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,239,0,0,0,1776767
+6,6,275,239,0,0,0,1776767,2,'Virtual core pointer'
+7,6,275,239,0,0,0,1776777,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,238,0,0,0,1776777
+6,6,275,238,0,0,0,1776777,2,'Virtual core pointer'
+7,6,275,238,0,0,0,1776786,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,238,0,0,0,1776786
+6,6,275,238,0,0,0,1776786,2,'Virtual core pointer'
+7,6,275,238,0,0,0,1776796,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,238,0,0,0,1776796
+6,6,275,238,0,0,0,1776796,2,'Virtual core pointer'
+7,6,275,238,0,0,0,1776806,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,237,0,0,0,1776807
+6,6,275,237,0,0,0,1776807,2,'Virtual core pointer'
+7,6,275,237,0,0,0,1776826,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,237,0,0,0,1776826
+6,6,275,237,0,0,0,1776826,2,'Virtual core pointer'
+7,6,275,237,0,0,0,1776836,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,237,0,0,0,1776836
+6,6,275,237,0,0,0,1776836,2,'Virtual core pointer'
+7,6,275,237,0,0,0,1776855,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,236,0,0,0,1776855
+6,6,275,236,0,0,0,1776855,2,'Virtual core pointer'
+7,6,275,236,0,0,0,1776865,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,235,0,0,0,1776865
+6,6,275,235,0,0,0,1776865,2,'Virtual core pointer'
+7,6,275,235,0,0,0,1776875,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,233,0,0,0,1776875
+6,6,275,233,0,0,0,1776875,2,'Virtual core pointer'
+7,6,275,233,0,0,0,1776884,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,232,0,0,0,1776884
+6,6,275,232,0,0,0,1776884,2,'Virtual core pointer'
+7,6,275,232,0,0,0,1776894,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,231,0,0,0,1776894
+6,6,275,231,0,0,0,1776894,2,'Virtual core pointer'
+7,6,275,231,0,0,0,1776904,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,230,0,0,0,1776904
+6,6,275,230,0,0,0,1776904,2,'Virtual core pointer'
+7,6,275,230,0,0,0,1776914,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,230,0,0,0,1776914
+6,6,275,230,0,0,0,1776914,2,'Virtual core pointer'
+7,6,275,230,0,0,0,1776924,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,230,0,0,0,1776924
+6,6,275,230,0,0,0,1776924,2,'Virtual core pointer'
+7,6,275,230,0,0,0,1776953,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,230,0,0,0,1776953
+6,6,275,230,0,0,0,1776953,2,'Virtual core pointer'
+7,6,275,230,0,0,0,1776963,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,229,0,0,0,1776963
+6,6,275,229,0,0,0,1776963,2,'Virtual core pointer'
+7,6,275,229,0,0,0,1776973,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,229,0,0,0,1776973
+6,6,275,229,0,0,0,1776973,2,'Virtual core pointer'
+7,6,275,229,0,0,0,1777002,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,229,0,0,0,1777002
+6,6,275,229,0,0,0,1777002,2,'Virtual core pointer'
+7,6,275,229,0,0,0,1777011,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,228,0,0,0,1777011
+6,6,275,228,0,0,0,1777011,2,'Virtual core pointer'
+7,4,0,0,1,0,0,1777418,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,4,0,0,1,0,0,1777418
+6,4,0,0,1,0,0,1777418,2,Virtual core pointer
+7,5,0,0,1,0,0,1777461,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,5,0,0,1,0,0,1777461
+6,5,0,0,1,0,0,1777461,2,Virtual core pointer
+0,21,0,0,0,0,0,1777492
+NEW-WINDOW:650,328:52429037,52429037,12585287,0,0,0:0x0+500+66:0,0:LinLog
+0,21,0,0,0,0,0,1777492
+0,21,0,0,0,0,0,1777492
+0,21,0,0,0,0,0,1777492
+7,6,275,228,0,0,0,1778537,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,228,0,0,0,1778537
+6,6,275,228,0,0,0,1778537,2,'Virtual core pointer'
+7,6,275,228,0,0,0,1778546,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,228,0,0,0,1778546
+6,6,276,228,0,0,0,1778546,2,'Virtual core pointer'
+7,6,276,228,0,0,0,1778556,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,228,0,0,0,1778556
+6,6,276,228,0,0,0,1778556,2,'Virtual core pointer'
+7,6,276,228,0,0,0,1781059,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,229,0,0,0,1781059
+6,6,276,229,0,0,0,1781059,2,'Virtual core pointer'
+7,6,276,229,0,0,0,1781069,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,230,0,0,0,1781069
+6,6,276,230,0,0,0,1781069,2,'Virtual core pointer'
+7,6,276,230,0,0,0,1781079,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,230,0,0,0,1781080
+6,6,276,230,0,0,0,1781080,2,'Virtual core pointer'
+7,6,276,230,0,0,0,1781098,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,230,0,0,0,1781098
+6,6,276,230,0,0,0,1781098,2,'Virtual core pointer'
+7,6,276,230,0,0,0,1781108,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,230,0,0,0,1781108
+6,6,276,230,0,0,0,1781108,2,'Virtual core pointer'
+7,6,276,230,0,0,0,1781118,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,231,0,0,0,1781118
+6,6,276,231,0,0,0,1781118,2,'Virtual core pointer'
+7,6,276,231,0,0,0,1781128,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,232,0,0,0,1781128
+6,6,276,232,0,0,0,1781128,2,'Virtual core pointer'
+7,6,276,232,0,0,0,1781137,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,234,0,0,0,1781137
+6,6,276,234,0,0,0,1781137,2,'Virtual core pointer'
+7,6,276,234,0,0,0,1781147,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,238,0,0,0,1781147
+6,6,276,238,0,0,0,1781147,2,'Virtual core pointer'
+7,6,276,238,0,0,0,1781157,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,242,0,0,0,1781157
+6,6,276,242,0,0,0,1781157,2,'Virtual core pointer'
+7,6,276,242,0,0,0,1781166,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,249,0,0,0,1781167
+6,6,276,249,0,0,0,1781167,2,'Virtual core pointer'
+7,6,276,249,0,0,0,1781176,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,256,0,0,0,1781176
+6,6,276,256,0,0,0,1781176,2,'Virtual core pointer'
+7,6,276,256,0,0,0,1781186,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,262,0,0,0,1781186
+6,6,276,262,0,0,0,1781186,2,'Virtual core pointer'
+7,6,276,262,0,0,0,1781196,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,268,0,0,0,1781196
+6,6,276,268,0,0,0,1781196,2,'Virtual core pointer'
+7,6,276,268,0,0,0,1781206,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,274,0,0,0,1781206
+6,6,276,274,0,0,0,1781206,2,'Virtual core pointer'
+7,6,276,274,0,0,0,1781215,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,280,0,0,0,1781216
+6,6,276,280,0,0,0,1781216,2,'Virtual core pointer'
+7,6,276,280,0,0,0,1781225,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,286,0,0,0,1781225
+6,6,276,286,0,0,0,1781225,2,'Virtual core pointer'
+7,6,276,286,0,0,0,1781235,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,292,0,0,0,1781235
+6,6,276,292,0,0,0,1781235,2,'Virtual core pointer'
+7,6,276,292,0,0,0,1781245,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,297,0,0,0,1781245
+6,6,276,297,0,0,0,1781245,2,'Virtual core pointer'
+7,6,276,297,0,0,0,1781254,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,302,0,0,0,1781254
+6,6,276,302,0,0,0,1781254,2,'Virtual core pointer'
+7,6,276,302,0,0,0,1781264,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,307,0,0,0,1781264
+6,6,276,307,0,0,0,1781264,2,'Virtual core pointer'
+7,6,276,307,0,0,0,1781274,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,313,0,0,0,1781274
+6,6,276,313,0,0,0,1781274,2,'Virtual core pointer'
+7,6,276,313,0,0,0,1781284,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,319,0,0,0,1781284
+6,6,276,319,0,0,0,1781284,2,'Virtual core pointer'
+7,6,276,319,0,0,0,1781294,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,326,0,0,0,1781294
+6,6,276,326,0,0,0,1781294,2,'Virtual core pointer'
+7,6,276,326,0,0,0,1781303,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,334,0,0,0,1781303
+6,6,276,334,0,0,0,1781303,2,'Virtual core pointer'
+7,6,276,334,0,0,0,1781313,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,343,0,0,0,1781313
+6,6,276,343,0,0,0,1781313,2,'Virtual core pointer'
+7,6,276,343,0,0,0,1781323,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,352,0,0,0,1781323
+6,6,276,352,0,0,0,1781323,2,'Virtual core pointer'
+7,6,276,352,0,0,0,1781333,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,361,0,0,0,1781333
+6,6,276,361,0,0,0,1781333,2,'Virtual core pointer'
+7,6,276,361,0,0,0,1781343,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,370,0,0,0,1781343
+6,6,276,370,0,0,0,1781343,2,'Virtual core pointer'
+7,6,276,370,0,0,0,1781352,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,378,0,0,0,1781352
+6,6,276,378,0,0,0,1781352,2,'Virtual core pointer'
+7,6,276,378,0,0,0,1781362,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,386,0,0,0,1781362
+6,6,276,386,0,0,0,1781362,2,'Virtual core pointer'
+7,6,276,386,0,0,0,1781372,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,392,0,0,0,1781372
+6,6,276,392,0,0,0,1781372,2,'Virtual core pointer'
+7,6,276,392,0,0,0,1781381,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,397,0,0,0,1781382
+6,6,275,397,0,0,0,1781382,2,'Virtual core pointer'
+7,6,275,397,0,0,0,1781392,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,403,0,0,0,1781392
+6,6,275,403,0,0,0,1781392,2,'Virtual core pointer'
+7,6,275,403,0,0,0,1781401,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,409,0,0,0,1781401
+6,6,275,409,0,0,0,1781401,2,'Virtual core pointer'
+7,6,275,409,0,0,0,1781411,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,415,0,0,0,1781411
+6,6,275,415,0,0,0,1781411,2,'Virtual core pointer'
+7,6,275,415,0,0,0,1781421,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,424,0,0,0,1781421
+6,6,274,424,0,0,0,1781421,2,'Virtual core pointer'
+7,6,274,424,0,0,0,1781431,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,433,0,0,0,1781431
+6,6,274,433,0,0,0,1781431,2,'Virtual core pointer'
+7,6,274,433,0,0,0,1781440,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,442,0,0,0,1781440
+6,6,274,442,0,0,0,1781440,2,'Virtual core pointer'
+7,6,274,442,0,0,0,1781450,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,451,0,0,0,1781450
+6,6,274,451,0,0,0,1781450,2,'Virtual core pointer'
+7,6,274,451,0,0,0,1781460,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,462,0,0,0,1781460
+6,6,274,462,0,0,0,1781460,2,'Virtual core pointer'
+7,6,274,462,0,0,0,1781470,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,474,0,0,0,1781470
+6,6,274,474,0,0,0,1781470,2,'Virtual core pointer'
+7,6,274,474,0,0,0,1781479,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,486,0,0,0,1781479
+6,6,274,486,0,0,0,1781479,2,'Virtual core pointer'
+7,6,274,486,0,0,0,1781489,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,499,0,0,0,1781490
+6,6,274,499,0,0,0,1781490,2,'Virtual core pointer'
+7,6,274,499,0,0,0,1781499,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,512,0,0,0,1781499
+6,6,274,512,0,0,0,1781499,2,'Virtual core pointer'
+7,6,274,512,0,0,0,1781508,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,525,0,0,0,1781509
+6,6,274,525,0,0,0,1781509,2,'Virtual core pointer'
+7,6,274,525,0,0,0,1781519,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,273,537,0,0,0,1781519
+6,6,273,537,0,0,0,1781519,2,'Virtual core pointer'
+7,6,273,537,0,0,0,1781528,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,272,548,0,0,0,1781528
+6,6,272,548,0,0,0,1781528,2,'Virtual core pointer'
+7,6,272,548,0,0,0,1781538,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,271,560,0,0,0,1781538
+6,6,271,560,0,0,0,1781538,2,'Virtual core pointer'
+7,6,271,560,0,0,0,1781548,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,271,570,0,0,0,1781548
+6,6,271,570,0,0,0,1781548,2,'Virtual core pointer'
+7,6,271,570,0,0,0,1781558,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,271,581,0,0,0,1781558
+6,6,271,581,0,0,0,1781558,2,'Virtual core pointer'
+7,6,271,581,0,0,0,1781567,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,271,592,0,0,0,1781567
+6,6,271,592,0,0,0,1781567,2,'Virtual core pointer'
+7,6,271,592,0,0,0,1781578,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,271,604,0,0,0,1781578
+6,6,271,604,0,0,0,1781578,2,'Virtual core pointer'
+7,6,271,604,0,0,0,1781588,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,270,614,0,0,0,1781588
+6,6,270,614,0,0,0,1781588,2,'Virtual core pointer'
+7,6,270,614,0,0,0,1781597,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,270,625,0,0,0,1781597
+6,6,270,625,0,0,0,1781597,2,'Virtual core pointer'
+7,6,270,625,0,0,0,1781607,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,270,635,0,0,0,1781607
+6,6,270,635,0,0,0,1781607,2,'Virtual core pointer'
+7,6,270,635,0,0,0,1781616,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,270,644,0,0,0,1781616
+6,6,270,644,0,0,0,1781616,2,'Virtual core pointer'
+7,6,270,644,0,0,0,1781626,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,270,649,0,0,0,1781626
+6,6,270,649,0,0,0,1781626,2,'Virtual core pointer'
+7,6,270,649,0,0,0,1781900,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,270,651,0,0,0,1781900
+6,6,270,651,0,0,0,1781900,2,'Virtual core pointer'
+7,6,270,651,0,0,0,1781910,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,270,655,0,0,0,1781910
+6,6,270,655,0,0,0,1781910,2,'Virtual core pointer'
+7,6,270,655,0,0,0,1781919,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,270,660,0,0,0,1781919
+6,6,270,660,0,0,0,1781919,2,'Virtual core pointer'
+7,6,270,660,0,0,0,1781929,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,270,666,0,0,0,1781929
+6,6,270,666,0,0,0,1781929,2,'Virtual core pointer'
+7,6,270,666,0,0,0,1781940,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,271,670,0,0,0,1781940
+6,6,271,670,0,0,0,1781940,2,'Virtual core pointer'
+7,6,271,670,0,0,0,1781949,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,272,674,0,0,0,1781949
+6,6,272,674,0,0,0,1781949,2,'Virtual core pointer'
+7,6,272,674,0,0,0,1781958,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,272,676,0,0,0,1781958
+6,6,272,676,0,0,0,1781958,2,'Virtual core pointer'
+7,6,272,676,0,0,0,1781968,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,272,677,0,0,0,1781968
+6,6,272,677,0,0,0,1781968,2,'Virtual core pointer'
+7,6,272,677,0,0,0,1781978,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,272,677,0,0,0,1781978
+6,6,272,677,0,0,0,1781978,2,'Virtual core pointer'
+7,6,272,677,0,0,0,1781988,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,272,678,0,0,0,1781988
+6,6,272,678,0,0,0,1781988,2,'Virtual core pointer'
+7,6,272,678,0,0,0,1782007,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,273,678,0,0,0,1782007
+6,6,273,678,0,0,0,1782007,2,'Virtual core pointer'
+7,6,273,678,0,0,0,1782017,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,274,679,0,0,0,1782017
+6,6,274,679,0,0,0,1782017,2,'Virtual core pointer'
+7,6,274,679,0,0,0,1782027,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,275,681,0,0,0,1782027
+6,6,275,681,0,0,0,1782027,2,'Virtual core pointer'
+7,6,275,681,0,0,0,1782037,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,682,0,0,0,1782037
+6,6,276,682,0,0,0,1782037,2,'Virtual core pointer'
+7,6,276,682,0,0,0,1782046,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,684,0,0,0,1782046
+6,6,276,684,0,0,0,1782046,2,'Virtual core pointer'
+7,6,276,684,0,0,0,1782056,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,686,0,0,0,1782056
+6,6,276,686,0,0,0,1782056,2,'Virtual core pointer'
+7,6,276,686,0,0,0,1782066,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,276,688,0,0,0,1782066
+6,6,276,688,0,0,0,1782066,2,'Virtual core pointer'
+7,6,276,688,0,0,0,1782076,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,690,0,0,0,1782076
+6,6,277,690,0,0,0,1782076,2,'Virtual core pointer'
+7,6,277,690,0,0,0,1782086,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,692,0,0,0,1782087
+6,6,277,692,0,0,0,1782087,2,'Virtual core pointer'
+7,6,277,692,0,0,0,1782095,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,693,0,0,0,1782096
+6,6,277,693,0,0,0,1782096,2,'Virtual core pointer'
+7,6,277,693,0,0,0,1782105,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,694,0,0,0,1782105
+6,6,277,694,0,0,0,1782105,2,'Virtual core pointer'
+7,6,277,694,0,0,0,1782115,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,695,0,0,0,1782115
+6,6,277,695,0,0,0,1782115,2,'Virtual core pointer'
+7,6,277,695,0,0,0,1782125,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,695,0,0,0,1782125
+6,6,277,695,0,0,0,1782125,2,'Virtual core pointer'
+7,6,277,695,0,0,0,1782134,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,695,0,0,0,1782135
+6,6,277,695,0,0,0,1782135,2,'Virtual core pointer'
+7,6,277,695,0,0,0,1782144,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,696,0,0,0,1782144
+6,6,277,696,0,0,0,1782144,2,'Virtual core pointer'
+7,6,277,696,0,0,0,1782154,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,277,698,0,0,0,1782154
+6,6,277,698,0,0,0,1782154,2,'Virtual core pointer'
+7,6,277,698,0,0,0,1782164,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,278,699,0,0,0,1782164
+6,6,278,699,0,0,0,1782164,2,'Virtual core pointer'
+7,6,278,699,0,0,0,1782175,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,278,701,0,0,0,1782175
+6,6,278,701,0,0,0,1782175,2,'Virtual core pointer'
+7,6,278,701,0,0,0,1782183,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,278,702,0,0,0,1782183
+6,6,278,702,0,0,0,1782183,2,'Virtual core pointer'
+7,6,278,702,0,0,0,1782193,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,278,704,0,0,0,1782193
+6,6,278,704,0,0,0,1782193,2,'Virtual core pointer'
+7,6,278,704,0,0,0,1782203,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,706,0,0,0,1782203
+6,6,279,706,0,0,0,1782203,2,'Virtual core pointer'
+7,6,279,706,0,0,0,1782213,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,707,0,0,0,1782213
+6,6,279,707,0,0,0,1782213,2,'Virtual core pointer'
+7,6,279,707,0,0,0,1782222,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,709,0,0,0,1782222
+6,6,279,709,0,0,0,1782222,2,'Virtual core pointer'
+7,6,279,709,0,0,0,1782233,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,710,0,0,0,1782233
+6,6,279,710,0,0,0,1782233,2,'Virtual core pointer'
+7,6,279,710,0,0,0,1782242,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,710,0,0,0,1782242
+6,6,279,710,0,0,0,1782242,2,'Virtual core pointer'
+7,6,279,710,0,0,0,1782252,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,711,0,0,0,1782252
+6,6,279,711,0,0,0,1782252,2,'Virtual core pointer'
+7,6,279,711,0,0,0,1782262,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,711,0,0,0,1782262
+6,6,279,711,0,0,0,1782262,2,'Virtual core pointer'
+7,6,279,711,0,0,0,1782379,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,711,0,0,0,1782379
+6,6,279,711,0,0,0,1782379,2,'Virtual core pointer'
+7,6,279,711,0,0,0,1782399,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,712,0,0,0,1782399
+6,6,279,712,0,0,0,1782399,2,'Virtual core pointer'
+7,6,279,712,0,0,0,1782535,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,279,712,0,0,0,1782535
+6,6,279,712,0,0,0,1782535,2,'Virtual core pointer'
+7,6,279,712,0,0,0,1782574,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,280,712,0,0,0,1782575
+6,6,280,712,0,0,0,1782575,2,'Virtual core pointer'
+7,6,280,712,0,0,0,1782584,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,281,712,0,0,0,1782584
+6,6,281,712,0,0,0,1782584,2,'Virtual core pointer'
+7,6,281,712,0,0,0,1782604,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,281,711,0,0,0,1782604
+6,6,281,711,0,0,0,1782604,2,'Virtual core pointer'
+7,4,0,0,3,0,0,1783368,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,4,0,0,3,0,0,1783368
+6,4,0,0,3,0,0,1783368,2,Virtual core pointer
+7,5,0,0,3,0,0,1783418,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,5,0,0,3,0,0,1783418
+6,5,0,0,3,0,0,1783418,2,Virtual core pointer
+7,6,281,711,0,0,0,1783943,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,281,712,0,0,0,1783943
+6,6,281,712,0,0,0,1783943,2,'Virtual core pointer'
+7,6,281,712,0,0,0,1783953,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,281,713,0,0,0,1783953
+6,6,281,713,0,0,0,1783953,2,'Virtual core pointer'
+7,6,281,713,0,0,0,1783963,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,281,714,0,0,0,1783963
+6,6,281,714,0,0,0,1783963,2,'Virtual core pointer'
+7,6,281,714,0,0,0,1783972,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,281,714,0,0,0,1783972
+6,6,281,714,0,0,0,1783972,2,'Virtual core pointer'
+7,6,281,714,0,0,0,1783982,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,281,715,0,0,0,1783982
+6,6,281,715,0,0,0,1783982,2,'Virtual core pointer'
+7,6,281,715,0,0,0,1783992,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,282,716,0,0,0,1783992
+6,6,282,716,0,0,0,1783992,2,'Virtual core pointer'
+7,6,282,716,0,0,0,1784001,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,284,717,0,0,0,1784001
+6,6,284,717,0,0,0,1784001,2,'Virtual core pointer'
+7,6,284,717,0,0,0,1784011,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,285,718,0,0,0,1784011
+6,6,285,718,0,0,0,1784011,2,'Virtual core pointer'
+7,6,285,718,0,0,0,1784022,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,286,720,0,0,0,1784022
+6,6,286,720,0,0,0,1784022,2,'Virtual core pointer'
+7,6,286,720,0,0,0,1784031,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,286,721,0,0,0,1784031
+6,6,286,721,0,0,0,1784031,2,'Virtual core pointer'
+7,6,286,721,0,0,0,1784041,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,287,723,0,0,0,1784041
+6,6,287,723,0,0,0,1784041,2,'Virtual core pointer'
+7,6,287,723,0,0,0,1784051,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,289,724,0,0,0,1784051
+6,6,289,724,0,0,0,1784051,2,'Virtual core pointer'
+7,6,289,724,0,0,0,1784060,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,289,726,0,0,0,1784060
+6,6,289,726,0,0,0,1784060,2,'Virtual core pointer'
+7,6,289,726,0,0,0,1784070,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,290,728,0,0,0,1784070
+6,6,290,728,0,0,0,1784070,2,'Virtual core pointer'
+7,6,290,728,0,0,0,1784080,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,292,730,0,0,0,1784080
+6,6,292,730,0,0,0,1784080,2,'Virtual core pointer'
+7,6,292,730,0,0,0,1784090,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,292,731,0,0,0,1784090
+6,6,292,731,0,0,0,1784090,2,'Virtual core pointer'
+7,6,292,731,0,0,0,1784100,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,294,732,0,0,0,1784100
+6,6,294,732,0,0,0,1784100,2,'Virtual core pointer'
+7,6,294,732,0,0,0,1784109,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,295,734,0,0,0,1784109
+6,6,295,734,0,0,0,1784109,2,'Virtual core pointer'
+7,6,295,734,0,0,0,1784119,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,296,734,0,0,0,1784119
+6,6,296,734,0,0,0,1784119,2,'Virtual core pointer'
+7,6,296,734,0,0,0,1784129,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,296,735,0,0,0,1784129
+6,6,296,735,0,0,0,1784129,2,'Virtual core pointer'
+7,6,296,735,0,0,0,1784138,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,297,736,0,0,0,1784138
+6,6,297,736,0,0,0,1784138,2,'Virtual core pointer'
+7,6,297,736,0,0,0,1784148,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,297,736,0,0,0,1784148
+6,6,297,736,0,0,0,1784148,2,'Virtual core pointer'
+7,6,297,736,0,0,0,1784158,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,298,737,0,0,0,1784158
+6,6,298,737,0,0,0,1784158,2,'Virtual core pointer'
+7,6,298,737,0,0,0,1784168,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,299,738,0,0,0,1784168
+6,6,299,738,0,0,0,1784168,2,'Virtual core pointer'
+7,6,299,738,0,0,0,1784178,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,299,738,0,0,0,1784178
+6,6,299,738,0,0,0,1784178,2,'Virtual core pointer'
+7,6,299,738,0,0,0,1784188,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,300,739,0,0,0,1784188
+6,6,300,739,0,0,0,1784188,2,'Virtual core pointer'
+7,6,300,739,0,0,0,1784197,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,300,739,0,0,0,1784197
+6,6,300,739,0,0,0,1784197,2,'Virtual core pointer'
+7,6,300,739,0,0,0,1784207,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,301,739,0,0,0,1784207
+6,6,301,739,0,0,0,1784207,2,'Virtual core pointer'
+7,6,301,739,0,0,0,1784216,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,301,739,0,0,0,1784216
+6,6,301,739,0,0,0,1784216,2,'Virtual core pointer'
+7,6,301,739,0,0,0,1784226,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,302,739,0,0,0,1784226
+6,6,302,739,0,0,0,1784226,2,'Virtual core pointer'
+7,6,302,739,0,0,0,1784236,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,302,740,0,0,0,1784236
+6,6,302,740,0,0,0,1784236,2,'Virtual core pointer'
+7,6,302,740,0,0,0,1784246,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,303,740,0,0,0,1784246
+6,6,303,740,0,0,0,1784246,2,'Virtual core pointer'
+7,6,303,740,0,0,0,1784257,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,304,740,0,0,0,1784257
+6,6,304,740,0,0,0,1784257,2,'Virtual core pointer'
+7,6,304,740,0,0,0,1784266,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,304,741,0,0,0,1784266
+6,6,304,741,0,0,0,1784266,2,'Virtual core pointer'
+7,6,304,741,0,0,0,1784275,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,305,742,0,0,0,1784275
+6,6,305,742,0,0,0,1784275,2,'Virtual core pointer'
+7,6,305,742,0,0,0,1784286,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,305,742,0,0,0,1784286
+6,6,305,742,0,0,0,1784286,2,'Virtual core pointer'
+7,6,305,742,0,0,0,1784295,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,306,742,0,0,0,1784295
+6,6,306,742,0,0,0,1784295,2,'Virtual core pointer'
+7,6,306,742,0,0,0,1784304,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,306,742,0,0,0,1784304
+6,6,306,742,0,0,0,1784304,2,'Virtual core pointer'
+7,6,306,742,0,0,0,1784315,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,306,743,0,0,0,1784315
+6,6,306,743,0,0,0,1784315,2,'Virtual core pointer'
+7,6,306,743,0,0,0,1784324,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,307,743,0,0,0,1784324
+6,6,307,743,0,0,0,1784324,2,'Virtual core pointer'
+7,6,307,743,0,0,0,1784501,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,307,743,0,0,0,1784501
+6,6,307,743,0,0,0,1784501,2,'Virtual core pointer'
+7,4,0,0,1,0,0,1784526,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,4,0,0,1,0,0,1784526
+6,4,0,0,1,0,0,1784526,2,Virtual core pointer
+7,6,307,743,0,0,0,1784569,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,307,743,0,0,0,1784569
+6,6,307,743,0,0,0,1784569,2,'Virtual core pointer'
+7,5,0,0,1,0,0,1784569,12,AlpsPS/2 ALPS DualPoint TouchPad
+0,5,0,0,1,0,0,1784569
+6,5,0,0,1,0,0,1784569,2,Virtual core pointer
+0,21,0,0,0,0,0,1784609
+NEW-WINDOW:461,197:52429062,52429062,12585326,0,0,0:0x0+879+458:0,0:Export of graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false           "
+0,21,0,0,0,0,0,1784609
+0,21,0,0,0,0,0,1784609
+0,21,0,0,0,0,0,1784609
+7,6,307,743,0,0,0,1784745,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,308,743,0,0,0,1784745
+6,6,308,743,0,0,0,1784745,2,'Virtual core pointer'
+7,6,308,743,0,0,0,1784757,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,309,743,0,0,0,1784757
+6,6,309,743,0,0,0,1784757,2,'Virtual core pointer'
+7,6,309,743,0,0,0,1784764,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,310,743,0,0,0,1784764
+6,6,310,743,0,0,0,1784764,2,'Virtual core pointer'
+7,6,310,743,0,0,0,1784774,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,311,743,0,0,0,1784774
+6,6,311,743,0,0,0,1784774,2,'Virtual core pointer'
+7,6,311,743,0,0,0,1784784,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,6,312,740,0,0,0,1784784
+6,6,312,740,0,0,0,1784784,2,'Virtual core pointer'
+7,2,0,0,0,28,0,1786106,10,AT Translated Set 2 keyboard
+0,2,0,0,0,28,0,1786107
+6,2,0,0,0,28,0,1786107,3,Virtual core keyboard
+7,3,0,0,0,28,0,1786177,10,AT Translated Set 2 keyboard
+0,3,0,0,0,28,0,1786177
+6,3,0,0,0,28,0,1786177,3,Virtual core keyboard
+7,2,0,0,0,26,0,1786347,10,AT Translated Set 2 keyboard
+0,2,0,0,0,26,0,1786348
+6,2,0,0,0,26,0,1786348,3,Virtual core keyboard
+7,3,0,0,0,26,0,1786408,10,AT Translated Set 2 keyboard
+0,3,0,0,0,26,0,1786408
+6,3,0,0,0,26,0,1786408,3,Virtual core keyboard
+7,2,0,0,0,39,0,1786558,10,AT Translated Set 2 keyboard
+0,2,0,0,0,39,0,1786558
+6,2,0,0,0,39,0,1786558,3,Virtual core keyboard
+7,3,0,0,0,39,0,1786618,10,AT Translated Set 2 keyboard
+0,3,0,0,0,39,0,1786618
+6,3,0,0,0,39,0,1786618,3,Virtual core keyboard
+7,2,0,0,0,28,0,1786779,10,AT Translated Set 2 keyboard
+0,2,0,0,0,28,0,1786779
+6,2,0,0,0,28,0,1786779,3,Virtual core keyboard
+7,3,0,0,0,28,0,1786839,10,AT Translated Set 2 keyboard
+0,3,0,0,0,28,0,1786839
+6,3,0,0,0,28,0,1786839,3,Virtual core keyboard
+7,2,0,0,0,17,0,1786950,10,AT Translated Set 2 keyboard
+0,2,0,0,0,17,0,1786950
+6,2,0,0,0,17,0,1786950,3,Virtual core keyboard
+7,3,0,0,0,17,0,1787030,10,AT Translated Set 2 keyboard
+0,3,0,0,0,17,0,1787030
+6,3,0,0,0,17,0,1787030,3,Virtual core keyboard
+7,2,0,0,0,42,0,1787321,10,AT Translated Set 2 keyboard
+0,2,0,0,0,42,0,1787321
+6,2,0,0,0,42,0,1787321,3,Virtual core keyboard
+7,2,0,0,0,30,0,1787381,10,AT Translated Set 2 keyboard
+0,2,0,0,0,30,0,1787381
+6,2,0,0,0,30,0,1787381,3,Virtual core keyboard
+7,3,0,0,0,42,0,1787391,10,AT Translated Set 2 keyboard
+0,3,0,0,0,42,0,1787391
+6,3,0,0,0,42,0,1787391,3,Virtual core keyboard
+7,2,0,0,0,31,0,1787471,10,AT Translated Set 2 keyboard
+0,2,0,0,0,31,0,1787472
+6,2,0,0,0,31,0,1787472,3,Virtual core keyboard
+7,3,0,0,0,30,0,1787532,10,AT Translated Set 2 keyboard
+0,3,0,0,0,30,0,1787532
+6,3,0,0,0,30,0,1787532,3,Virtual core keyboard
+7,3,0,0,0,31,0,1787592,10,AT Translated Set 2 keyboard
+0,3,0,0,0,31,0,1787592
+6,3,0,0,0,31,0,1787592,3,Virtual core keyboard
+7,2,0,0,0,62,0,1788104,10,AT Translated Set 2 keyboard
+0,2,0,0,0,62,0,1788104
+6,2,0,0,0,62,0,1788104,3,Virtual core keyboard
+7,2,0,0,0,59,0,1788385,10,AT Translated Set 2 keyboard
+0,2,0,0,0,59,0,1788385
+6,2,0,0,0,59,0,1788385,3,Virtual core keyboard
+7,3,0,0,0,59,0,1788455,10,AT Translated Set 2 keyboard
+0,3,0,0,0,59,0,1788455
+6,3,0,0,0,59,0,1788455,3,Virtual core keyboard
+7,3,0,0,0,62,0,1788546,10,AT Translated Set 2 keyboard
+0,3,0,0,0,62,0,1788546
+6,3,0,0,0,62,0,1788546,3,Virtual core keyboard
+7,2,0,0,0,28,0,1788770,10,AT Translated Set 2 keyboard
+0,2,0,0,0,28,0,1788770
+6,2,0,0,0,28,0,1788770,3,Virtual core keyboard
+7,3,0,0,0,28,0,1788827,10,AT Translated Set 2 keyboard
+0,3,0,0,0,28,0,1788827
+6,3,0,0,0,28,0,1788827,3,Virtual core keyboard
+7,2,0,0,0,46,0,1788887,10,AT Translated Set 2 keyboard
+0,2,0,0,0,46,0,1788887
+6,2,0,0,0,46,0,1788887,3,Virtual core keyboard
+7,3,0,0,0,46,0,1789118,10,AT Translated Set 2 keyboard
+0,3,0,0,0,46,0,1789118
+6,3,0,0,0,46,0,1789118,3,Virtual core keyboard
+7,2,0,0,0,33,0,1789198,10,AT Translated Set 2 keyboard
+0,2,0,0,0,33,0,1789198
+6,2,0,0,0,33,0,1789198,3,Virtual core keyboard
+7,3,0,0,0,33,0,1789359,10,AT Translated Set 2 keyboard
+0,3,0,0,0,33,0,1789359
+6,3,0,0,0,33,0,1789359,3,Virtual core keyboard
+7,2,0,0,0,36,0,1790222,10,AT Translated Set 2 keyboard
+0,2,0,0,0,36,0,1790222
+6,2,0,0,0,36,0,1790222,3,Virtual core keyboard
+0,21,0,0,0,0,0,1790278
+NEW-WINDOW:650,337:52429070,52429070,12585350,0,0,0:0x0+500+37:0,0:TLP Export
+0,21,0,0,0,0,0,1790278
+0,21,0,0,0,0,0,1790278
+0,21,0,0,0,0,0,1790278
+7,3,0,0,0,36,0,1790313,10,AT Translated Set 2 keyboard
+0,3,0,0,0,36,0,1790313
+6,3,0,0,0,36,0,1790313,3,Virtual core keyboard
+0,21,0,0,0,0,0,1790359
+NEW-WINDOW:460,169:52429062,52429062,746,0,0,0:460x169+879+458:0,0:Export of graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false           "
+0,21,0,0,0,0,0,1790359
+0,21,0,0,0,0,0,1790359
+0,21,0,0,0,0,0,1790359
+0,21,0,0,0,0,0,1790359
