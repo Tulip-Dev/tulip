@@ -34,8 +34,8 @@
 
 using namespace tlp;
 
-const QString PluginManager::STABLE_LOCATION = QString("http://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_RELEASE;
-const QString PluginManager::TESTING_LOCATION = QString("http://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_RELEASE;
+const QString PluginManager::STABLE_LOCATION = QString("http://tulip.labri.fr/pluginserver/stable/") + TULIP_MM_VERSION;
+const QString PluginManager::TESTING_LOCATION = QString("http://tulip.labri.fr/pluginserver/testing/") + TULIP_MM_VERSION;
 
 QDebug operator<<(QDebug dbg, const PluginVersionInformation &c) {
   dbg.nospace() << "(author " << c.author << ") "
@@ -73,7 +73,7 @@ public:
     QNetworkAccessManager mgr;
 
     QNetworkReply* reply = NULL;
-    QUrl url(_location + "/fetch.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_RELEASE + "&name=" + name);
+    QUrl url(_location + "/fetch.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_VERSION + "&name=" + name);
 
     do {
       QNetworkRequest request(url);
@@ -102,7 +102,7 @@ public:
   PluginManager::PluginInformationList list(const QString& nameFilter, const QString& categoryFilter) {
     _result.clear();
     QNetworkAccessManager mgr;
-    QNetworkRequest request(QUrl(_location + "/list.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_RELEASE + "&name=" + nameFilter + "&category=" + categoryFilter));
+    QNetworkRequest request(QUrl(_location + "/list.php?os=" + OS_PLATFORM + "&arch=" + OS_ARCHITECTURE + "&tulip=" + TULIP_MM_VERSION + "&name=" + nameFilter + "&category=" + categoryFilter));
     QNetworkReply* reply = mgr.get(request);
 
     while (!reply->isFinished()) {

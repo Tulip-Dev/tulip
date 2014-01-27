@@ -135,10 +135,10 @@ int main(int argc,char **argv) {
   QString iconPath;
 
   // show patch number only if needed
-  if (TULIP_INT_RELEASE % 10)
-    appName += TULIP_RELEASE;
+  if (TULIP_INT_VERSION % 10)
+    appName += TULIP_VERSION;
   else
-    appName += TULIP_MM_RELEASE;
+    appName += TULIP_MM_VERSION;
 
   QApplication tulip_perspective(argc, argv);
   // the applicationName below is used to identify the location

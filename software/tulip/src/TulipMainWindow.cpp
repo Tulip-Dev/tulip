@@ -68,10 +68,10 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   QString title("Tulip ");
 
   // show patch number only if needed
-  if (TULIP_INT_RELEASE % 10)
-    title += TULIP_RELEASE;
+  if (TULIP_INT_VERSION % 10)
+    title += TULIP_VERSION;
   else
-    title += TULIP_MM_RELEASE;
+    title += TULIP_MM_VERSION;
 
   setWindowTitle(title);
   _ui->mainTitle->setText(QString("<html><head/><body><p align=\"center\"><span style=\" font-family:'MS Shell Dlg 2'; font-size:18pt; font-weight:600;\">") +

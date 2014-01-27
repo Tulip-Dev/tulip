@@ -43,7 +43,7 @@ const QString TulipSettings::DefaultSizeConfigEntry = "graph/defaults/size/";
 const QString TulipSettings::DefaultShapeConfigEntry = "graph/defaults/shape/";
 const QString TulipSettings::DefaultSelectionColorEntry = "graph/defaults/selectioncolor/";
 const QString TulipSettings::FavoriteAlgorithmsEntry = "app/algorithms/favorites";
-const QString TulipSettings::FirstRunEntry = QString("app/") + TULIP_MM_RELEASE + "/firstRun";
+const QString TulipSettings::FirstRunEntry = QString("app/") + TULIP_MM_VERSION + "/firstRun";
 
 const QString TulipSettings::ProxyEnabledEntry = "app/proxy/enabled";
 const QString TulipSettings::ProxyTypeEntry = "app/proxy/type";

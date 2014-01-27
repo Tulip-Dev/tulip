@@ -158,7 +158,7 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
 const QString PythonInterpreter::pythonPluginsPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "tulip/python/");
 
-const QString PythonInterpreter::pythonPluginsPathHome(QDir::homePath()+"/.Tulip-"+TULIP_MM_RELEASE+"/plugins/python");
+const QString PythonInterpreter::pythonPluginsPathHome(QDir::homePath()+"/.Tulip-"+TULIP_MM_VERSION+"/plugins/python");
 
 const char PythonInterpreter::pythonReservedCharacters[] = {
   '#', '%', '/', '+', '-', '&', '*', '<', '>',

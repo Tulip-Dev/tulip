@@ -96,7 +96,7 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
   os << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
      << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
      << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-     << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+     << TLP_VERSION_HEADER << " " << TULIP_VERSION  << std::endl;
 
   os << "Caught signal " << sig << " (" << strsignal(sig) << ")" << std::endl;
 
@@ -149,7 +149,7 @@ exception_filter(LPEXCEPTION_POINTERS info) {
   os << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
      << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
      << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-     << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+     << TLP_VERSION_HEADER << " " << TULIP_VERSION  << std::endl;
   os << TLP_STACK_BEGIN_HEADER << std::endl;
   sw.printCallStack(os, 50);
   os << std::endl << TLP_STACK_END_HEADER << std::endl;
@@ -184,7 +184,7 @@ exception_filter(LPEXCEPTION_POINTERS info) {
   os << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
      << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
      << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-     << TLP_VERSION_HEADER << " " << TULIP_RELEASE  << std::endl;
+     << TLP_VERSION_HEADER << " " << TULIP_VERSION  << std::endl;
   os << TLP_STACK_BEGIN_HEADER << std::endl;
   sw.printCallStack(os, 50);
   os << std::endl << TLP_STACK_END_HEADER << std::endl;

@@ -112,7 +112,7 @@ int main(int argc,char **argv) {
   serverDocument.appendChild(rootNode);
   rootNode.setAttribute("serverName", destinationDir);
   rootNode.setAttribute("lastUpdate", QDateTime::currentDateTime().toString(Qt::ISODate));
-  rootNode.setAttribute("release",TULIP_RELEASE);
+  rootNode.setAttribute("release",TULIP_VERSION);
   QDomElement pluginsListNode = serverDocument.createElement("plugins");
 
   foreach(QString component, collector._directoryPlugins.keys()) {

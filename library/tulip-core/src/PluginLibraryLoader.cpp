@@ -199,7 +199,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
       size_t idx = lib.rfind('-');
 
       if (idx != std::string::npos) {
-        std::string tulip_release(TULIP_MM_RELEASE);
+        std::string tulip_release(TULIP_MM_VERSION);
 
         if (lib.find(tulip_release, idx) == idx + 1) {
           if (loader)
@@ -209,7 +209,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
         }
         else if (loader)
           loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not compatible with Tulip "
-                          + TULIP_RELEASE);
+                          + TULIP_VERSION);
       }
       else if (loader)
         loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
@@ -250,8 +250,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
     unsigned long idx = lib.rfind('-', lib.rfind('.') - 1);
 
     if (idx != std::string::npos) {
-      std::string tulip_release(TULIP_RELEASE);
-      tulip_release = tulip_release.substr(0, tulip_release.rfind('.') + 1);
+      std::string tulip_release(TULIP_MM_VERSION);
 
       if (lib.find(tulip_release, idx) == idx + 1) {
         if (loader!=NULL)
@@ -287,7 +286,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
             }
 
             if (isNumber && loader) {
-              loader->aborted(currentPluginLibrary,  currentPluginLibrary + " is not compatible with Tulip " + TULIP_RELEASE);
+              loader->aborted(currentPluginLibrary,  currentPluginLibrary + " is not compatible with Tulip " + TULIP_VERSION);
               return n > 0;
             }
           }
