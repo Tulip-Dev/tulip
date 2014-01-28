@@ -46,6 +46,8 @@ IF(WIN32)
   INSTALL_EXTERNAL_LIB("*zlib*.dll" zlib)
   INSTALL_EXTERNAL_LIB("*glew*.dll" glew)
   INSTALL_EXTERNAL_LIB("*freetype*.dll" freetype)
+  INSTALL_EXTERNAL_LIB("*jpeg*.dll" jpeg)
+  INSTALL_EXTERNAL_LIB("*png*.dll" png)
   
   IF(USE_QT4)
 	INSTALL_EXTERNAL_LIB("QtCore4.dll" qt)
