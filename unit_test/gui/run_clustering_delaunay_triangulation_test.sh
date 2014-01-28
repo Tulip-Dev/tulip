@@ -1,0 +1,1 @@
+sh tulip_run_test.sh clustering_delaunay_triangulation grid_approximation.tlp
