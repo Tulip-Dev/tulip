@@ -280,7 +280,7 @@ public:
    * @brief Creates and returns a subgraph that contains all the elements of this graph.
    *
    * @param name The name of the newly created subgraph. Defaults to "unnamed".
-   * @param addSibling if true the clone subgraph will be a sibling of this graph, if false (the default) it will be a subgraph of this graph 
+   * @param addSibling if true the clone subgraph will be a sibling of this graph, if false (the default) it will be a subgraph of this graph
    * @return :Graph* The newly created clone subgraph. NULL will be returned if addSibling is set to true and this graph is a root graph.
    **/
   virtual Graph* addCloneSubGraph(std::string name = "unnamed", bool addSibling = false);

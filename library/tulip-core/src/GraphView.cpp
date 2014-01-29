@@ -48,8 +48,10 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 
   if (it == NULL) {
     Graph *graphToFilter = filter->getGraph();
+
     if (graphToFilter == NULL)
       graphToFilter = supergraph;
+
     iteN =graphToFilter->getNodes();
   }
   else
@@ -57,6 +59,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 
   while (iteN->hasNext()) {
     node n=iteN->next();
+
     if (filter->getNodeValue(n)) addNode(n);
   }
 
@@ -68,8 +71,10 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 
   if (it == NULL) {
     Graph *graphToFilter = filter->getGraph();
+
     if (graphToFilter == NULL)
       graphToFilter = supergraph;
+
     iteE = graphToFilter->getEdges();
   }
   else
@@ -77,6 +82,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 
   while (iteE->hasNext()) {
     edge e = iteE->next();
+
     if (filter->getEdgeValue(e)) addEdge(e);
   }
 

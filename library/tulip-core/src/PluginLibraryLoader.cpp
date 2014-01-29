@@ -154,7 +154,7 @@ int __tulip_select_libs(struct dirent *ent) {
 bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
   std::string tulip_mm_version(TULIP_MM_VERSION);
   std::string tulip_version(TULIP_VERSION);
-  
+
 #if defined(_WIN32)
 
   HANDLE hFind;

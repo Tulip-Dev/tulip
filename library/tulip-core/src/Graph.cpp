@@ -1034,12 +1034,15 @@ Graph* Graph::addCloneSubGraph(std::string name, bool addSibling) {
   selection.setAllNodeValue(true);
   selection.setAllEdgeValue(true);
   Graph* parentSubGraph = this;
+
   if (addSibling) {
     parentSubGraph = getSuperGraph();
+
     if (this == parentSubGraph)
       // cannot add sibling of root graph
       return NULL;
   }
+
   return parentSubGraph->addSubGraph(&selection, name);
 }
 //=========================================================
