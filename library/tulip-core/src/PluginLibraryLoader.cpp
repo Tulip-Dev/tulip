@@ -152,6 +152,9 @@ int __tulip_select_libs(struct dirent *ent) {
 #endif
 
 bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
+  std::string tulip_mm_version(TULIP_MM_VERSION);
+  std::string tulip_version(TULIP_VERSION);
+  
 #if defined(_WIN32)
 
   HANDLE hFind;
@@ -196,12 +199,11 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
     while (success) {
       std::string currentPluginLibrary = pluginPath +"/"+ findData.cFileName;
       std::string lib(findData.cFileName);
-      size_t idx = lib.rfind('-');
+      // looking for a suffix matching -A.B.C.dll
+      size_t idx = lib.rfind('.');
 
       if (idx != std::string::npos) {
-        std::string tulip_release(TULIP_MM_VERSION);
-
-        if (lib.find(tulip_release, idx) == idx + 1) {
+        if (idx == (lib.find(tulip_mm_version) + tulip_version.size())) {
           if (loader)
             loader->loading(findData.cFileName);
 
@@ -246,13 +248,11 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
       free(namelist);
 
     std::string currentPluginLibrary = pluginPath +"/"+ lib;
-    // looking for a suffix matching -A.B.C
-    unsigned long idx = lib.rfind('-', lib.rfind('.') - 1);
+    // looking for a suffix matching -A.B.C.(so/dylib)
+    unsigned long idx = lib.rfind('.');
 
     if (idx != std::string::npos) {
-      std::string tulip_release(TULIP_MM_VERSION);
-
-      if (lib.find(tulip_release, idx) == idx + 1) {
+      if (idx == (lib.find(tulip_mm_version) + tulip_version.size())) {
         if (loader!=NULL)
           loader->loading(lib);
 
