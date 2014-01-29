@@ -599,7 +599,7 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::Graph*, "tlp::Graph*")
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::DataSet, "tlp::DataSet")
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::ColorScale, "tlp::ColorScale")
-  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::StringCollection, "tlp::StringCollection*")
+  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::StringCollection, "tlp::StringCollection")
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::BooleanProperty*, "tlp::BooleanProperty*")
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::ColorProperty*, "tlp::ColorProperty*")
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::DoubleProperty*, "tlp::DoubleProperty*")
