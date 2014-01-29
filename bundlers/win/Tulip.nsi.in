@@ -4,11 +4,11 @@
 !include "x64.nsh"
 
 !if ${ARCH} == "64"
-InstallDir "$PROGRAMFILES64\Tulip"
-Name "Tulip (x64)"
+InstallDir "$PROGRAMFILES64\Tulip-@TulipVersion@"
+Name "Tulip-@TulipVersion@ (x64)"
 !else
-InstallDir $PROGRAMFILES\Tulip
-Name "Tulip"
+InstallDir $PROGRAMFILES\Tulip-@TulipVersion@
+Name "Tulip-@TulipVersion@"
 !endif
 
 !define MUI_ICON "files\share\tulip\bitmaps\logo32x32.ico"
@@ -40,7 +40,7 @@ Function CheckAndInstallPython
   ${EndIf}
   IfErrors install end
   install:
-        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ installed.$\n$\nIt is now required to run Tulip.$\n$\nPress OK to download Python @PYTHON_VERSION@ and install it."
+        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ installed.$\n$\nIt is now required to run Tulip-@TulipVersion@.$\n$\nPress OK to download Python @PYTHON_VERSION@ and install it."
         NSISdl::download http://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi python-@PYTHON_VERSION_WITH_PATCH@.msi
         ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.msi"'
         Delete python-@PYTHON_VERSION_WITH_PATCH@.msi
@@ -52,7 +52,7 @@ Function CheckAndInstallPython64
   ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
   IfErrors install end
   install:
-        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x64) installed.$\n$\nIt is now required to run Tulip.$\n$\nPress OK to download Python @PYTHON_VERSION@ (x64) and install it."
+        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x64) installed.$\n$\nIt is now required to run Tulip-@TulipVersion@.$\n$\nPress OK to download Python @PYTHON_VERSION@ (x64) and install it."
         NSISdl::download http://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi
         ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi"'
         Delete python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi
@@ -73,24 +73,24 @@ Section "Tulip"
   File /r /x *.dll.a /x Qt*d4.dll /x phonond4.dll /x Qt5*d.dll files\*.*
   
 !if ${ARCH} == "64"  
-  CreateDirectory "$SMPROGRAMS\Tulip (x64)"
-  CreateShortCut "$SMPROGRAMS\Tulip (x64)\Tulip agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  CreateShortCut "$SMPROGRAMS\Tulip (x64)\Tulip (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  CreateShortCut "$SMPROGRAMS\Tulip (x64)\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-  CreateShortCut "$DESKTOP\Tulip agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  CreateShortCut "$DESKTOP\Tulip (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip" "DisplayName" "Tulip (x64)"
+  CreateDirectory "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "DisplayName" "Tulip-@TulipVersion@ (x64)"
 !else
-  CreateDirectory "$SMPROGRAMS\Tulip"
-  CreateShortCut "$SMPROGRAMS\Tulip\Tulip agent.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  CreateShortCut "$SMPROGRAMS\Tulip\Tulip.lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  CreateShortCut "$SMPROGRAMS\Tulip\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-  CreateShortCut "$DESKTOP\Tulip agent.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  CreateShortCut "$DESKTOP\Tulip.lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip" "DisplayName" "Tulip"
+  CreateDirectory "$SMPROGRAMS\Tulip-@TulipVersion@"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Tulip-@TulipVersion@ agent.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Tulip-@TulipVersion@.lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ agent.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@.lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "DisplayName" "Tulip-@TulipVersion@"
 !endif
   
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip" "UninstallString" "$INSTDIR\Uninstall.exe"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "UninstallString" "$INSTDIR\Uninstall.exe"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 SectionEnd
 
@@ -98,15 +98,15 @@ Section "Uninstall"
   SetShellVarContext all
 !if ${ARCH} == "64"
   SetRegView 64
-  Delete "$DESKTOP\Tulip agent (x64).lnk"	
-  Delete "$DESKTOP\Tulip (x64).lnk"	
-  RMDir /r "$SMPROGRAMS\Tulip (x64)"
+  Delete "$DESKTOP\Tulip-@TulipVersion@ agent (x64).lnk"	
+  Delete "$DESKTOP\Tulip-@TulipVersion@ (x64).lnk"	
+  RMDir /r "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)"
 !else
-  Delete "$DESKTOP\Tulip agent.lnk"
-  Delete "$DESKTOP\Tulip.lnk"	
-  RMDir /r "$SMPROGRAMS\Tulip"
+  Delete "$DESKTOP\Tulip-@TulipVersion@ agent.lnk"
+  Delete "$DESKTOP\Tulip-@TulipVersion@.lnk"	
+  RMDir /r "$SMPROGRAMS\Tulip-@TulipVersion@"
 !endif
   RMDir /r "$INSTDIR"
   Delete $INSTDIR\Uninstall.exe
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip"
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@"
 SectionEnd
