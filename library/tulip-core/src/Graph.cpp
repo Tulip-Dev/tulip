@@ -1029,11 +1029,18 @@ Graph* Graph::addSubGraph(std::string name) {
   return g;
 }
 //=========================================================
-Graph* Graph::addCloneSubGraph(std::string name) {
+Graph* Graph::addCloneSubGraph(std::string name, bool addSibling) {
   BooleanProperty selection(this);
   selection.setAllNodeValue(true);
   selection.setAllEdgeValue(true);
-  return addSubGraph(&selection, name);
+  Graph* parentSubGraph = this;
+  if (addSibling) {
+    parentSubGraph = getSuperGraph();
+    if (this == parentSubGraph)
+      // cannot add sibling of root graph
+      return NULL;
+  }
+  return parentSubGraph->addSubGraph(&selection, name);
 }
 //=========================================================
 Graph * Graph::inducedSubGraph(const std::set<node> &nodes,

@@ -277,19 +277,20 @@ public:
   Graph *addSubGraph(std::string name);
 
   /**
-   * @brief Creates and returns a subgraph of this graph that contains all its elements.
+   * @brief Creates and returns a subgraph that contains all the elements of this graph.
    *
    * @param name The name of the newly created subgraph. Defaults to "unnamed".
-   * @return :Graph* The newly created clone subgraph.
+   * @param addSibling if true the clone subgraph will be a sibling of this graph, if false (the default) it will be a subgraph of this graph 
+   * @return :Graph* The newly created clone subgraph. NULL will be returned if addSibling is set to true and this graph is a root graph.
    **/
-  virtual Graph* addCloneSubGraph(std::string name = "unnamed");
+  virtual Graph* addCloneSubGraph(std::string name = "unnamed", bool addSibling = false);
 
   /**
    * @brief Creates and returns a new sub-graph of the graph induced by a set of nodes.
    * Every node contained in the given set of nodes is added to the subgraph.
    * Every edge connecting any two nodes in the set of given nodes is also added.
    * @param nodeSet The nodes to add to the subgraph. All the edges between these nodes are added too.
-   * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the Graph this method is called on.
+   * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
    * @return The newly created subgraph.
    */
   Graph *inducedSubGraph(const std::set<node>& nodeSet,

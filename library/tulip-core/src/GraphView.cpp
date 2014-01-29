@@ -39,21 +39,24 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
   inDegree.setAll(0);
   outDegree.setAll(0);
 
-  if (filter == 0) return;
+  if (filter == NULL) return;
 
-  Iterator<unsigned int> *it=0;
+  Iterator<unsigned int> *it = NULL;
   it = filter->nodeProperties.findAll(true);
 
   Iterator<node> *iteN;
 
-  if (it==0)
-    iteN =getSuperGraph()->getNodes();
+  if (it == NULL) {
+    Graph *graphToFilter = filter->getGraph();
+    if (graphToFilter == NULL)
+      graphToFilter = supergraph;
+    iteN =graphToFilter->getNodes();
+  }
   else
     iteN = new UINTIterator<node>(it);
 
   while (iteN->hasNext()) {
     node n=iteN->next();
-
     if (filter->getNodeValue(n)) addNode(n);
   }
 
@@ -63,14 +66,17 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 
   Iterator<edge> *iteE;
 
-  if (it==0)
-    iteE = getSuperGraph()->getEdges();
+  if (it == NULL) {
+    Graph *graphToFilter = filter->getGraph();
+    if (graphToFilter == NULL)
+      graphToFilter = supergraph;
+    iteE = graphToFilter->getEdges();
+  }
   else
     iteE = new UINTIterator<edge>(it);
 
   while (iteE->hasNext()) {
-    edge e=iteE->next();
-
+    edge e = iteE->next();
     if (filter->getEdgeValue(e)) addEdge(e);
   }
 
