@@ -72,6 +72,7 @@ Perspective::~Perspective() {
 
 PluginProgress* Perspective::progress(ProgressOptions options)  {
   SimplePluginProgressDialog* dlg = new SimplePluginProgressDialog(_mainWindow);
+  dlg->setWindowIcon(_mainWindow->windowIcon());
   dlg->showPreview(options.testFlag(IsPreviewable));
   dlg->setCancelButtonVisible(options.testFlag(IsCancellable));
   dlg->setStopButtonVisible(options.testFlag(IsStoppable));

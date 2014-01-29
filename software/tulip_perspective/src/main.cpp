@@ -333,6 +333,7 @@ int main(int argc,char **argv) {
 
   delete progress;
 
+  mainWindow->setWindowIcon(icon);
   mainWindow->show();
 
   // the delay of geometry update until perspective execution
