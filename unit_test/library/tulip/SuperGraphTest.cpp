@@ -182,8 +182,11 @@ void SuperGraphTest::testDegree() {
   build(100, 100);
   degreeCheck(graph);
   Graph *gr = graph->addCloneSubGraph();
-  Graph *gr1 = graph->addCloneSubGraph();
+  CPPUNIT_ASSERT_EQUAL(graph, gr->getSuperGraph());
+  Graph *gr1 = gr->addCloneSubGraph("gr1", true);
+  CPPUNIT_ASSERT_EQUAL(graph, gr1->getSuperGraph());
   Graph *gr2 = gr1->addCloneSubGraph();
+  CPPUNIT_ASSERT_EQUAL(gr1, gr2->getSuperGraph());
 
   degreeCheck(graph);
   degreeCheck(gr);
@@ -211,6 +214,10 @@ void SuperGraphTest::testDegree() {
   degreeCheck(gr);
   degreeCheck(gr1);
   degreeCheck(gr2);
+
+  gr1->delSubGraph(gr2);
+  graph->delSubGraph(gr1);
+  graph->delSubGraph(gr);
 
   graph->clear();
   gr1 = graph->addCloneSubGraph();
