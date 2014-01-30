@@ -190,16 +190,18 @@ Creates and returns a new named sub-graph of this graph.
 
 //===========================================================================================
 
- 	tlp::Graph* addCloneSubGraph(std::string name = "unnamed");
+ 	tlp::Graph* addCloneSubGraph(std::string name = "unnamed", bool addSibling = false);
 %Docstring
-tlp.Graph.addCloneSubGraph(name = "unnamed")
+tlp.Graph.addCloneSubGraph(name = "unnamed", addSibling = false)
 
-.. versionadded:: 3.7
+.. versionadded:: 4.5
 
-Creates and returns a subgraph of this graph that contains all its elements.
+Creates and returns a subgraph of this graph (or the parent of this graph) that contains all its elements.
 
 :param name: The name of the newly created subgraph. Defaults to "unnamed".
 :type name: string
+:param addSibling: if true a sibling of this graph will be created; a subgraph of this graph if not. Defaults to false
+:type addSibling: bool
 :rtype: :class:`tlp.Graph`
 %End 	
  
