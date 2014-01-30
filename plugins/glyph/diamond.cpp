@@ -40,10 +40,10 @@ namespace tlp {
 
 static GlRegularPolygon *diamond = NULL;
 static void drawDiamond(const Color &fillColor,
-			const Color &borderColor,
-			float borderWidth,
-			const std::string &textureName,
-			float lod) {
+                        const Color &borderColor,
+                        float borderWidth,
+                        const std::string &textureName,
+                        float lod) {
 
   diamond->setFillColor(fillColor);
 

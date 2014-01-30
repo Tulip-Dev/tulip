@@ -130,7 +130,7 @@ static void generateBuffers(int space) {
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexCount*2*sizeof(GLushort), indices, GL_STATIC_DRAW);
 }
 static void drawGlyph(const Color& glyphColor, const string& texture,
-		      const string& texturePath, float) {
+                      const string& texturePath, float) {
   bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
   int space = 9;
