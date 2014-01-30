@@ -40,8 +40,8 @@ namespace tlp {
 
 static GlStar *star = NULL;
 static void drawStar(const Color &fillColor,const Color &borderColor,
-		     float borderWidth,const std::string &textureName,
-		     float lod) {
+                     float borderWidth,const std::string &textureName,
+                     float lod) {
   star->setFillColor(fillColor);
 
   if (borderWidth > 0) {
