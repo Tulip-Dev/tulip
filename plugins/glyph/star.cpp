@@ -36,8 +36,12 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 static GlStar *star = NULL;
-void drawStar(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
+static void drawStar(const Color &fillColor,const Color &borderColor,
+		     float borderWidth,const std::string &textureName,
+		     float lod) {
   star->setFillColor(fillColor);
 
   if (borderWidth > 0) {
@@ -119,3 +123,5 @@ public:
   }
 };
 PLUGIN(EEStar)
+
+} // end of namespace tlp

@@ -30,6 +30,8 @@
 using namespace tlp;
 using namespace std;
 
+namespace tlp {
+
 const string roundedBoxFragmentShaderSrc =
   "uniform float boxWidth;"
   "uniform float boxHeight;"
@@ -417,4 +419,5 @@ Coord RoundedBox::getAnchor(const Coord &vector) const {
 
 PLUGIN(RoundedBox)
 
+} // end of namespace tlp
 

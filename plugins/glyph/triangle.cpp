@@ -36,6 +36,8 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 class Triangle : public Glyph {
 public:
   GLYPHINFORMATION("2D - Triangle", "David Auber", "09/07/2002", "Textured Triangle", "1.0", NodeShape::Triangle)
@@ -96,3 +98,5 @@ void Triangle::draw(node n,float lod) {
   triangle->draw(lod,NULL);
 }
 //=====================================================
+
+} // end of namespace tlp

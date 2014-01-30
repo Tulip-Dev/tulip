@@ -34,7 +34,9 @@
 using namespace std;
 using namespace tlp;
 
-void drawCylinder() {
+namespace tlp {
+
+static void drawCylinder() {
   GLUquadricObj *quadratic;
   quadratic = gluNewQuadric();
   gluQuadricNormals(quadratic, GLU_SMOOTH);
@@ -152,3 +154,4 @@ public:
 
 PLUGIN(EECylinder)
 
+} // end of namespace tlp

@@ -33,6 +33,8 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 /** \addtogroup glyph */
 /*@{*/
 /// A 3D glyph.
@@ -156,3 +158,5 @@ public:
 };
 
 PLUGIN(EEGlowSphere)
+
+} // end of namespace tlp

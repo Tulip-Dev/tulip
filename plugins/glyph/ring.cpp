@@ -39,7 +39,9 @@
 using namespace std;
 using namespace tlp;
 
-void drawRing() {
+namespace tlp {
+
+static void drawRing() {
   GLUquadricObj *quadratic;
   quadratic = gluNewQuadric();
   gluQuadricNormals(quadratic, GLU_SMOOTH);
@@ -50,7 +52,7 @@ void drawRing() {
   gluDisk(quadratic, 0.2f, 0.5f, 30, 1);
   gluDeleteQuadric(quadratic);
 }
-void drawRingBorder() {
+static void drawRingBorder() {
   glBegin(GL_LINE_LOOP);
   double alpha = M_PI / 2.;
   double delta = 2. * M_PI / 30.0;
@@ -71,9 +73,9 @@ void drawRingBorder() {
 
   glEnd();
 }
-void drawGlyph(const Color& glyohColor, const string& texture,
-               const string& texturePath, double borderWidth,
-               const Color& borderColor, float lod) {
+static void drawGlyph(const Color& glyohColor, const string& texture,
+		      const string& texturePath, double borderWidth,
+		      const Color& borderColor, float lod) {
 
   if (GlDisplayListManager::getInst().beginNewDisplayList("Ring_ring")) {
     drawRing();
@@ -168,3 +170,4 @@ public:
 };
 PLUGIN(EERing)
 
+} // end of namespace tlp

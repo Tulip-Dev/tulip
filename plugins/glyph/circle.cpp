@@ -36,9 +36,11 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 static GlCircle *circle = NULL;
 
-void drawCircle(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
+static void drawCircle(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
   circle->setFillColor(fillColor);
 
   if (borderWidth > 0) {
@@ -118,4 +120,7 @@ public:
                lod);
   }
 };
+
 PLUGIN(EECircle)
+
+} // end of namespace tlp

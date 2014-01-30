@@ -33,6 +33,8 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 /** \addtogroup glyph */
 /// A 3D glyph.
 /**
@@ -121,4 +123,6 @@ Coord HalfCylinder::getAnchor(const Coord &vector) const {
   return Coord(x,y,z);
 }
 //=================================================================================================
+
+} // end of namespace tlp
 

@@ -34,7 +34,9 @@
 using namespace std;
 using namespace tlp;
 
-void drawCone() {
+namespace tlp {
+
+static void drawCone() {
   GLUquadricObj *quadratic;
   quadratic = gluNewQuadric();
   gluQuadricNormals(quadratic, GLU_SMOOTH);
@@ -163,3 +165,5 @@ public:
 };
 
 PLUGIN(EECone)
+
+} // end of namespace tlp

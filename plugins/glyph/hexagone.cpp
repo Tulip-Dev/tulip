@@ -36,9 +36,11 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 static GlHexagon *hexagon = NULL;
 
-void drawHexagon(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
+static void drawHexagon(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
 
   hexagon->setFillColor(fillColor);
 
@@ -126,4 +128,4 @@ public:
 };
 PLUGIN(EEHexagon)
 
-
+} // end of namespace tlp
