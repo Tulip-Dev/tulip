@@ -35,8 +35,10 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 static GlBox* box = NULL;
-void drawBox(const Color &fillColor, const Color &outlineColor, const float outlineSize, const std::string &textureName, float lod, GlGraphInputData *glGraphInputData) {
+static void drawBox(const Color &fillColor, const Color &outlineColor, const float outlineSize, const std::string &textureName, float lod, GlGraphInputData *glGraphInputData) {
   if (textureName.size() != 0) {
     const string& texturePath=glGraphInputData->parameters->getTexturePath();
     box->setTextureName(texturePath+textureName);
@@ -114,3 +116,5 @@ public:
 };
 
 PLUGIN(EECube)
+
+} // end of namespace tlp

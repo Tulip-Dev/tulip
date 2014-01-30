@@ -37,13 +37,15 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 static GLuint buffers[] = { 0, 0, 0 };
 
 static GLfloat *vertex;
 static GLfloat *texturesCoord;
 static GLushort *indices;
 
-void generateBuffers(int space) {
+static void generateBuffers(int space) {
   int vertexCount = (90 / space) * (360 / space) * 4;
 
   glGenBuffers(3, buffers);
@@ -127,8 +129,8 @@ void generateBuffers(int space) {
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexCount*2*sizeof(GLushort), indices, GL_STATIC_DRAW);
 }
-void drawGlyph(const Color& glyphColor, const string& texture,
-               const string& texturePath, float) {
+static void drawGlyph(const Color& glyphColor, const string& texture,
+		      const string& texturePath, float) {
   bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
   int space = 9;
@@ -250,3 +252,5 @@ public:
   }
 };
 PLUGIN(EESphere)
+
+} // end of namespace tlp

@@ -36,12 +36,14 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 static GlRegularPolygon *diamond = NULL;
-void drawDiamond(const Color &fillColor,
-                 const Color &borderColor,
-                 float borderWidth,
-                 const std::string &textureName,
-                 float lod) {
+static void drawDiamond(const Color &fillColor,
+			const Color &borderColor,
+			float borderWidth,
+			const std::string &textureName,
+			float lod) {
 
   diamond->setFillColor(fillColor);
 
@@ -159,3 +161,5 @@ public:
 };
 
 PLUGIN(EEDiamond)
+
+} // end of namespace tlp

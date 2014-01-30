@@ -34,6 +34,8 @@
 using namespace tlp;
 using namespace std;
 
+namespace tlp {
+
 class Window : public Glyph {
 public:
   GLYPHINFORMATION("2D - Window", "David Auber", "28/05/2010", "Window with a title bar", "1.0", NodeShape::Window)
@@ -159,5 +161,7 @@ Coord Window::getAnchor(const Coord &vector) const {
   else
     return v;
 }
+
+} // end of namespace tlp
 
 #endif // WINDOWGLYPH_H

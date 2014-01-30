@@ -36,8 +36,10 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 static GlPentagon *pentagon = NULL;
-void drawPentagon(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
+static void drawPentagon(const Color &fillColor,const Color &borderColor,float borderWidth,const std::string &textureName, float lod) {
 
   pentagon->setFillColor(fillColor);
 
@@ -120,3 +122,5 @@ public:
   }
 };
 PLUGIN(EEPentagon)
+
+} // end of namespace tlp

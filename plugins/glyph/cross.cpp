@@ -34,8 +34,10 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 static GlComplexPolygon *cross = NULL;
-void initCross() {
+static void initCross() {
   if(!cross) {
     float bWidth = 0.1f;
     vector<Coord> points;
@@ -184,3 +186,4 @@ public:
 };
 PLUGIN(EECross)
 
+} // end of namespace tlp

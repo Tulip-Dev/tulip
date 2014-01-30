@@ -35,6 +35,8 @@
 using namespace std;
 using namespace tlp;
 
+namespace tlp {
+
 /** \addtogroup glyph */
 
 /// A 2D glyph.
@@ -134,3 +136,4 @@ Coord Billboard::getAnchor(const Coord & vector ) const {
 }
 //========================================================
 
+} // end of namespace tlp
