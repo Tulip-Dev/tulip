@@ -1,7 +1,7 @@
 PROJECT(tulip)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR})
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR})
 
 ## ========================================================
 ## Build type detection
