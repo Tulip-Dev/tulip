@@ -30,7 +30,7 @@ RequestExecutionLevel admin
 ; Language
 !insertmacro MUI_LANGUAGE "English"
 
-OutFile "tulip_setup.exe"
+OutFile "tulip-@TulipVersion@_setup.exe"
 
 Function CheckAndInstallPython 
   ${If} ${RunningX64} 
@@ -70,8 +70,8 @@ Section "Tulip"
   Call CheckAndInstallPython
 !endif
 
-  File /r /x *.dll.a /x Qt*d4.dll /x phonond4.dll /x Qt5*d.dll files\*.*
-  
+File /r files\*.*
+
 !if ${ARCH} == "64"  
   CreateDirectory "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)"
   CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
