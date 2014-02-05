@@ -172,6 +172,9 @@ border: 1px solid #C9C9C9;
         <property name="checked">
          <bool>true</bool>
         </property>
+	<property name="toolTip">
+	 <string>Hide contents</string>
+        </property>
        </widget>
       </item>
      </layout>
