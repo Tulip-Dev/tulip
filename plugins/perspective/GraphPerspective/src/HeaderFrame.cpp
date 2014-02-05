@@ -117,6 +117,8 @@ void HeaderFrame::setExpanded(bool e) {
   pw->setMinimumSize(pw->minimumWidth(),minH);
   pw->setMaximumSize(pw->maximumWidth(),maxH);
 
+  _ui->expandButton->setToolTip(e ? "Hide contents" : "Show contents");
+
   emit expanded(e);
 }
 
