@@ -43,8 +43,6 @@ public:
   }
   QWidget *takeWidget();
 
-signals:
-
 public slots:
   void setExpanded(bool e);
   void setWidget(QWidget *);

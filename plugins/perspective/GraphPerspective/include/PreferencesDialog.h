@@ -34,8 +34,6 @@ public:
   explicit PreferencesDialog(QWidget *parent = 0);
   ~PreferencesDialog();
 
-signals:
-
 public slots:
   void writeSettings();
   void readSettings();

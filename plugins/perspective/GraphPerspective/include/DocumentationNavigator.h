@@ -34,12 +34,9 @@ class DocumentationNavigator : public QDialog {
   QToolButton* forwardButton;
 
 public:
-
   explicit DocumentationNavigator();
   static bool hasDocumentation();
   static void showDocumentation();
-
-signals:
 
 public slots:
   void goBack();
