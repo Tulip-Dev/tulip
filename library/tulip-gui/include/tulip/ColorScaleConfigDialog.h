@@ -44,7 +44,7 @@ public :
   ColorScaleConfigDialog(const ColorScale &colorScale = ColorScale(), QWidget *parent = NULL);
   ~ColorScaleConfigDialog();
   void setColorScale(const ColorScale &colorScale);
-  ColorScale getColorScale() const;
+  const ColorScale& getColorScale() const;
 
 protected :
 
