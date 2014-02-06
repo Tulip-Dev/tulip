@@ -150,6 +150,7 @@ void ColorScale::setColorMap(const map<float, Color>& newColorMap) {
   colorScaleSet = false;
 
   colorMap.clear();
+
   // insert all values in [0, 1]
   for(map<float, Color>::const_iterator it = newColorMap.begin();
       it != newColorMap.end(); ++it) {
