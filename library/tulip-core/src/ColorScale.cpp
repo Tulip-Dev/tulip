@@ -39,15 +39,13 @@ ColorScale::ColorScale(const std::vector<Color> &colors, const bool gradient) :
 }
 
 ColorScale::ColorScale(const ColorScale& scale) : Observable() {
-  colorMap = scale.colorMap;
+  setColorMap(scale.colorMap);
   gradient = scale.gradient;
-  colorScaleSet = scale.colorScaleSet;
 }
 
 ColorScale& ColorScale::operator=(const ColorScale& scale) {
-  colorMap = scale.colorMap;
+  setColorMap(scale.colorMap);
   gradient = scale.gradient;
-  colorScaleSet = scale.colorScaleSet;
   return *this;
 }
 
@@ -149,18 +147,16 @@ Color ColorScale::getColorAtPos(const float pos) const {
 }
 
 void ColorScale::setColorMap(const map<float, Color>& newColorMap) {
-  colorMap = newColorMap;
   colorScaleSet = false;
 
-  //Erase invalid values i.e < 0 and > 1
-  for(map<float, Color>::iterator it = colorMap.begin() ; it != colorMap.end() ; ) {
-    if( (*it).first < 0.f || (*it).first > 1.f) {
-      //Erasing in a map does not devalidate iterator.
-      colorMap.erase(it++);
-    }
-    else {
-      ++it;
-    }
+  colorMap.clear();
+  // insert all values in [0, 1]
+  for(map<float, Color>::const_iterator it = newColorMap.begin();
+      it != newColorMap.end(); ++it) {
+    if ((*it).first < 0.f || (*it).first > 1.f)
+      continue;
+    else
+      colorMap[(*it).first] = (*it).second;
   }
 
   if(!colorMap.empty()) {
