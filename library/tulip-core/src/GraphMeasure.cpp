@@ -29,16 +29,16 @@
 using namespace std;
 using namespace tlp;
 namespace {
-inline Iterator<node> *getIt(const Graph *sg, node n, EDGE_TYPE direction) {
+inline Iterator<node> *getIt(const Graph *graph, node n, EDGE_TYPE direction) {
   switch(direction) {
   case DIRECTED:
-    return sg->getOutNodes(n);
+    return graph->getOutNodes(n);
 
   case INV_DIRECTED:
-    return sg->getInNodes(n);
+    return graph->getInNodes(n);
 
   case UNDIRECTED:
-    return sg->getInOutNodes(n);
+    return graph->getInOutNodes(n);
 
   default:
     tlp::warning() << __PRETTY_FUNCTION__ << "serious bug..." << std::endl;
@@ -49,7 +49,7 @@ inline Iterator<node> *getIt(const Graph *sg, node n, EDGE_TYPE direction) {
 }
 }
 //================================================================
-unsigned int tlp::maxDistance(const Graph *sg, const node n,
+unsigned int tlp::maxDistance(const Graph *graph, const node n,
                               MutableContainer<unsigned int> &distance,
                               EDGE_TYPE direction) {
   deque<node> fifo;
@@ -63,7 +63,7 @@ unsigned int tlp::maxDistance(const Graph *sg, const node n,
     fifo.pop_front();
     unsigned int nDist = distance.get(current.id) + 1;
     Iterator<node>* itn;
-    itn = getIt(sg, current, direction);
+    itn = getIt(graph, current, direction);
 
     while (itn->hasNext()) {
       node n = itn->next();
@@ -153,36 +153,32 @@ double tlp::averagePathLength(const Graph *graph,
   return result;
 }
 //================================================================
-double tlp::averageClusteringCoefficient(const Graph *sg,
-    PluginProgress * pluginProgress) {
+double tlp::averageClusteringCoefficient(const Graph *graph,
+					 PluginProgress * pluginProgress) {
   double sum=0;
   MutableContainer<double> clusters;
-  tlp::clusteringCoefficient(sg, clusters, UINT_MAX, pluginProgress);
+  tlp::clusteringCoefficient(graph, clusters, UINT_MAX, pluginProgress);
   node n;
-  forEach(n, sg->getNodes())
+  forEach(n, graph->getNodes())
   sum += clusters.get(n.id);
-  return sum / double(sg->numberOfNodes());
+  return sum / double(graph->numberOfNodes());
 }
 //================================================================
-unsigned int tlp::maxDegree(const Graph *sg) {
+unsigned int tlp::maxDegree(const Graph *graph) {
   unsigned int maxdeg = 0;
-  Iterator<node> *itN=sg->getNodes();
+  node n;
+  forEach(n, graph->getNodes())
+    maxdeg = std::max(maxdeg, graph->deg(n));
 
-  while (itN->hasNext())
-    maxdeg = std::max(maxdeg , sg->deg(itN->next()));
-
-  delete itN;
   return maxdeg;
 }
 //================================================================
-unsigned int tlp::minDegree(const Graph *sg) {
-  unsigned int mindeg = sg->numberOfNodes();
-  Iterator<node> *itN=sg->getNodes();
+unsigned int tlp::minDegree(const Graph *graph) {
+  unsigned int mindeg = graph->numberOfNodes();
+  node n;
+  forEach(n, graph->getNodes())
+    mindeg = std::min(mindeg, graph->deg(n));
 
-  while (itN->hasNext())
-    mindeg = std::min(mindeg , sg->deg(itN->next()));
-
-  delete itN;
   return mindeg;
 }
 //================================================================
@@ -220,32 +216,6 @@ void tlp::reachableNodes(const Graph *graph, const node startNode,
     }
   }
 }
-//=================================================
-/*static double clusterGetNodeValue(Graph *graph, const node n, unsigned int maxDepth) {
-  set<node> reachables;
-  reachableNodes(graph, n, reachables, maxDepth);
-  double nbEdge=0; //e(N_v)*2$
-  for (set<node>::iterator itSN=reachables.begin();
-       itSN!=reachables.end();++itSN) {
-    node itn=*itSN;
-    Iterator<edge> *itE=graph->getInOutEdges(itn);
-    while (itE->hasNext()) {
-      pair<node, node> eEnds = graph->ends(itE->next());
-      if ( (reachables.find(eEnds.first)!=reachables.end()) &&
-     (reachables.find(eEnds.second)!=reachables.end())) {
-  nbEdge++;
-      }
-    } delete itE;
-  }
-
-  double nNode= reachables.size(); //$|N_v|$
-  if (reachables.size()>1) {
-    double result = double(nbEdge)/(nNode*(nNode-1));
-    return result; //$e(N_v)/(\frac{k*(k-1)}{2}}$
-  }
-  else
-    return 0;
-    }*/
 //=================================================
 void tlp::clusteringCoefficient(const Graph *graph,
                                 MutableContainer<double>& clusters,
@@ -316,6 +286,4 @@ void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
       }
     }
   }
-
-  //==============================================
 }
