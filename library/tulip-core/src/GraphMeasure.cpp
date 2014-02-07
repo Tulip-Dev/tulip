@@ -154,7 +154,7 @@ double tlp::averagePathLength(const Graph *graph,
 }
 //================================================================
 double tlp::averageClusteringCoefficient(const Graph *graph,
-					 PluginProgress * pluginProgress) {
+    PluginProgress * pluginProgress) {
   double sum=0;
   MutableContainer<double> clusters;
   tlp::clusteringCoefficient(graph, clusters, UINT_MAX, pluginProgress);
@@ -168,7 +168,7 @@ unsigned int tlp::maxDegree(const Graph *graph) {
   unsigned int maxdeg = 0;
   node n;
   forEach(n, graph->getNodes())
-    maxdeg = std::max(maxdeg, graph->deg(n));
+  maxdeg = std::max(maxdeg, graph->deg(n));
 
   return maxdeg;
 }
@@ -177,7 +177,7 @@ unsigned int tlp::minDegree(const Graph *graph) {
   unsigned int mindeg = graph->numberOfNodes();
   node n;
   forEach(n, graph->getNodes())
-    mindeg = std::min(mindeg, graph->deg(n));
+  mindeg = std::min(mindeg, graph->deg(n));
 
   return mindeg;
 }
