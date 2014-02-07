@@ -23,19 +23,13 @@
    </size>
   </property>
   <property name="styleSheet">
-   <string notr="true">#mainFrame, .QWidget {
+   <string notr="true">#mainFrame, QToolButton, QPushButton, .QWidget {
 border-image:none;
 background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 stop: 0 #838383,
 stop: 0.4 #707070,
 stop: 0.401 #636363,
 stop: 1 #4a4a4a);
-border: 0px;
-color: white;
-}
-QComboBox, QToolButton, QPushButton {
-border-image:none;
-background-color: transparent;
 border: 0px;
 color: white;
 }

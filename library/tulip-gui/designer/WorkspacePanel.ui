@@ -21,27 +21,59 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QFrame" name="headerFrame">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>25</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>36</height>
-      </size>
-     </property>
+    <widget class="QFrame" name="borderFrame">
      <property name="styleSheet">
-      <string notr="true">QFrame[header = &quot;true&quot;], QComboBox, QLabel, QToolButton, QPushButton, #interactorsFrame {
+      <string notr="true">QFrame[border = &quot;true&quot;] {
+border-image:none;
+background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+stop: 0 #838383,
+stop: 0.4 #707070,
+stop: 0.401 #636363,
+stop: 1 #4a4a4a);
+color: white;
+}</string>
+     </property>
+     <property name="border" stdset="0">
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout" name="borderLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>2</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QFrame" name="headerFrame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>36</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame[header = &quot;true&quot;], QComboBox, QLabel, QToolButton, QPushButton, #interactorsFrame {
 border-image:none;
 background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
 stop: 0 #838383,
@@ -99,257 +131,260 @@ background-color: white;
 color: black;
 border: 1px solid #C9C9C9;
 }</string>
-     </property>
-     <property name="header" stdset="0">
-      <bool>true</bool>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="spacing">
-       <number>4</number>
-      </property>
-      <property name="margin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="Line" name="sep1">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>22</height>
-         </size>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>1</width>
-          <height>16777215</height>
-         </size>
+        <property name="header" stdset="0">
+         <bool>true</bool>
         </property>
-        <property name="styleSheet">
-         <string notr="true">#sep1 {
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="spacing">
+          <number>4</number>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="Line" name="sep1">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>1</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">#sep1 {
 background-color: #A9A9A9;
 }</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="currentInteractorButton">
-        <property name="minimumSize">
-         <size>
-          <width>130</width>
-          <height>22</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>130</width>
-          <height>22</height>
-         </size>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="toolTip">
-         <string>Active tool&lt;br/&gt;&lt;i&gt;click to show/hide its configuration panel.&lt;/i&gt;</string>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#currentInteractorButton {
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="currentInteractorButton">
+           <property name="minimumSize">
+            <size>
+             <width>130</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>130</width>
+             <height>22</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="toolTip">
+            <string>Active tool&lt;br/&gt;&lt;i&gt;click to show/hide its configuration panel.&lt;/i&gt;</string>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">#currentInteractorButton {
 font: bold 10px;
 }</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="checkable">
-         <bool>true</bool>
-        </property>
-        <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="sep4">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="interactorsLeft">
-        <property name="minimumSize">
-         <size>
-          <width>15</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>15</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/gui/ui/left_arrow-white.png</normaloff>:/tulip/gui/ui/left_arrow-white.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QScrollArea" name="scrollArea">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="interactorsFrame">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>76</width>
-           <height>25</height>
-          </rect>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>25</height>
-          </size>
-         </property>
-        </widget>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="interactorsRight">
-        <property name="minimumSize">
-         <size>
-          <width>15</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>15</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/gui/ui/right_arrow-white.png</normaloff>:/tulip/gui/ui/right_arrow-white.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="sep2">
-        <property name="maximumSize">
-         <size>
-          <width>1</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#sep2 {
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="sep4">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="interactorsLeft">
+           <property name="minimumSize">
+            <size>
+             <width>15</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>15</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>:/tulip/gui/ui/left_arrow-white.png</normaloff>:/tulip/gui/ui/left_arrow-white.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QScrollArea" name="scrollArea">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::NoFrame</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="horizontalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOff</enum>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="interactorsFrame">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>76</width>
+              <height>25</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="interactorsRight">
+           <property name="minimumSize">
+            <size>
+             <width>15</width>
+             <height>25</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>15</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>:/tulip/gui/ui/right_arrow-white.png</normaloff>:/tulip/gui/ui/right_arrow-white.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="sep2">
+           <property name="maximumSize">
+            <size>
+             <width>1</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">#sep2 {
 background-color: #A9A9A9;
 }</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="TreeViewComboBox" name="graphCombo">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Select a graph to display</string>
-        </property>
-        <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToContents</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="Line" name="sep3">
-        <property name="maximumSize">
-         <size>
-          <width>1</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">#sep3 {
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="TreeViewComboBox" name="graphCombo">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Select a graph to display</string>
+           </property>
+           <property name="sizeAdjustPolicy">
+            <enum>QComboBox::AdjustToContents</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="sep3">
+           <property name="maximumSize">
+            <size>
+             <width>1</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">#sep3 {
 background-color: #A9A9A9;
 }</string>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="tlp::DragHandle" name="dragHandle">
-        <property name="toolTip">
-         <string>Press here to begin dragging this view</string>
-        </property>
-        <property name="pixmap">
-         <pixmap>:/tulip/gui/ui/lightdragbutton.png</pixmap>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="closeButton">
-        <property name="toolTip">
-         <string>Close</string>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/gui/ui/lightclosebutton.png</normaloff>:/tulip/gui/ui/lightclosebutton.png</iconset>
-        </property>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="tlp::DragHandle" name="dragHandle">
+           <property name="toolTip">
+            <string>Press here to begin dragging this view</string>
+           </property>
+           <property name="pixmap">
+            <pixmap>:/tulip/gui/ui/lightdragbutton.png</pixmap>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="closeButton">
+           <property name="toolTip">
+            <string>Close</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>:/tulip/gui/ui/lightclosebutton.png</normaloff>:/tulip/gui/ui/lightclosebutton.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>

@@ -74,6 +74,7 @@ public slots:
   void setGraphsModel(tlp::GraphHierarchiesModel*);
   void viewGraphSet(tlp::Graph*);
   void setOverlayMode(bool);
+  void setHighlightMode(bool);
 
 signals:
   void drawNeeded();
