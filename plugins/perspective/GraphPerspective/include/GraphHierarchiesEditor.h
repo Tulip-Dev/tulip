@@ -69,7 +69,7 @@ public:
   void setModel(tlp::GraphHierarchiesModel *model);
   bool synchronized() const;
 
- signals:
+signals:
   void changeSynchronization(bool);
 
 public slots:

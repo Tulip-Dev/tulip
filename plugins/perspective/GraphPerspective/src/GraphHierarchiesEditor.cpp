@@ -294,6 +294,7 @@ void GraphHierarchiesEditor::toggleSynchronization(bool f) {
     _linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/unlink.png"));
     _linkButton->setToolTip(trUtf8("Click here to enable synchronization\nwith workspace active panel"));
   }
+
   emit changeSynchronization(f);
 }
 

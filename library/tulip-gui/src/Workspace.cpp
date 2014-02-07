@@ -183,6 +183,7 @@ void Workspace::delView(tlp::View* view) {
 
 void Workspace::panelDestroyed(QObject* obj) {
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(obj);
+
   if (panel == _focusedPanel)
     _focusedPanel = NULL;
 
@@ -701,9 +702,12 @@ void Workspace::setFocusedPanelHighlighting(bool h) {
 void Workspace::setFocusedPanel(WorkspacePanel* panel) {
   if (_focusedPanel && _focusedPanelHighlighting)
     _focusedPanel->setHighlightMode(false);
+
   _focusedPanel = panel;
+
   if (_focusedPanelHighlighting)
     _focusedPanel->setHighlightMode(true);
+
   emit panelFocused(panel->view());
 }
 
