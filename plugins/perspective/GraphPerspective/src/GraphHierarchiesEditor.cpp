@@ -98,7 +98,7 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent)
   QToolButton* linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
   linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/link.png"));
-  linkButton->setToolTip(trUtf8("Synchronize with workspace active panel"));
+  linkButton->setToolTip(trUtf8("Click here to disable synchronization\nwith workspace active panel"));
   linkButton->setIconSize(QSize(22,22));
   linkButton->setMinimumSize(25,25);
   linkButton->setMaximumSize(25,25);
@@ -106,6 +106,8 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent)
   linkButton->setChecked(true);
   _ui->header->insertWidget(linkButton);
   _linkButton = linkButton;
+  connect(linkButton, SIGNAL(toggled(bool)),
+          this, SLOT(toggleSynchronization(bool)));
   _ui->hierarchiesTree->installEventFilter(this);
 
   connect(_ui->hierarchiesTree, SIGNAL(clicked(const QModelIndex &)),
@@ -283,8 +285,16 @@ void GraphHierarchiesEditor::saveGraphHierarchyInTlpFile() {
   tlp::Perspective::typedInstance<GraphPerspective>()->saveGraphHierarchyInTlpFile(_contextGraph);
 }
 
-void GraphHierarchiesEditor::setSynchronized(bool f) {
-  _linkButton->setChecked(f);
+void GraphHierarchiesEditor::toggleSynchronization(bool f) {
+  if (f) {
+    _linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/link.png"));
+    _linkButton->setToolTip(trUtf8("Click here to disable the synchronization\nwith workspace active panel"));
+  }
+  else {
+    _linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/unlink.png"));
+    _linkButton->setToolTip(trUtf8("Click here to enable synchronization\nwith workspace active panel"));
+  }
+  emit changeSynchronization(f);
 }
 
 void GraphHierarchiesEditor::setSynchronizeButtonVisible(bool f) {

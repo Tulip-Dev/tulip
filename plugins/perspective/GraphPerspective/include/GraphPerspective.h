@@ -134,6 +134,7 @@ protected slots:
   void addNewGraph();
   void newProject();
   void openRecentFile();
+  void changeSynchronization(bool);
 
 protected:
   bool eventFilter(QObject *, QEvent *);

@@ -46,7 +46,7 @@ using namespace tlp;
   Helper storage class to ensure synchronization between panels list and model passed down to opened panels
   */
 Workspace::Workspace(QWidget *parent)
-  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _model(NULL), _pageCountLabel(NULL) {
+  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _oldWorkspaceMode(NULL), _focusedPanel(NULL), _focusedPanelHighlighting(false), _model(NULL), _pageCountLabel(NULL) {
   _ui->setupUi(this);
   _ui->startupMainFrame->hide();
   _pageCountLabel = _ui->pagesLabel;
@@ -166,9 +166,9 @@ int Workspace::addPanel(tlp::View* view) {
     updatePanels();
   }
 
-  // Force the first panel's graph combo box update when underleying model has been updated.
+  // Force the first panel's graph combo box update when underlaying model has been updated.
   panel->viewGraphSet(view->graph());
-  emit panelFocused(view);
+  setFocusedPanel(panel);
   return _panels.size()-1;
 }
 
@@ -183,6 +183,9 @@ void Workspace::delView(tlp::View* view) {
 
 void Workspace::panelDestroyed(QObject* obj) {
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(obj);
+  if (panel == _focusedPanel)
+    _focusedPanel = NULL;
+
   int removeCount = _panels.removeAll(panel);
 
   if (removeCount==0)
@@ -421,7 +424,7 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
   else if (ev->type() == QEvent::FocusIn) {
     if (dynamic_cast<QGraphicsView*>(obj) != NULL) {
       tlp::WorkspacePanel* panel = static_cast<tlp::WorkspacePanel*>(obj->parent());
-      emit panelFocused(panel->view());
+      setFocusedPanel(panel);
     }
   }
 
@@ -684,5 +687,23 @@ void Workspace::updateStartupMode() {
     _ui->startupImportFrame->setVisible(_model->empty());
     _ui->startupMainFrame->setVisible(!_model->empty());
   }
-
 }
+
+// enable/disable highlight of focused panel
+void Workspace::setFocusedPanelHighlighting(bool h) {
+  _focusedPanelHighlighting = h;
+
+  if (_focusedPanel)
+    _focusedPanel->setHighlightMode(h);
+}
+
+// update focused panel
+void Workspace::setFocusedPanel(WorkspacePanel* panel) {
+  if (_focusedPanel && _focusedPanelHighlighting)
+    _focusedPanel->setHighlightMode(false);
+  _focusedPanel = panel;
+  if (_focusedPanelHighlighting)
+    _focusedPanel->setHighlightMode(true);
+  emit panelFocused(panel->view());
+}
+

@@ -69,8 +69,10 @@ public:
   void setModel(tlp::GraphHierarchiesModel *model);
   bool synchronized() const;
 
+ signals:
+  void changeSynchronization(bool);
+
 public slots:
-  void setSynchronized(bool);
   void setSynchronizeButtonVisible(bool);
   void setAddPanelButtonVisible(bool);
 
@@ -88,6 +90,7 @@ protected slots:
   void exportGraph();
   void renameGraph();
   void saveGraphHierarchyInTlpFile();
+  void toggleSynchronization(bool);
 };
 
 #endif // GRAPHHIERARCHIESEDITOR_H

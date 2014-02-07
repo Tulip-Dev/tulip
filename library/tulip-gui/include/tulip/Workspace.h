@@ -54,6 +54,8 @@ class TLP_QT_SCOPE Workspace: public QWidget {
   QList<WorkspacePanel*> _panels;
   int _currentPanelIndex;
   QWidget* _oldWorkspaceMode;
+  WorkspacePanel* _focusedPanel;
+  bool _focusedPanelHighlighting;
 
   QMap<QWidget*,QVector<PlaceHolderWidget*> > _modeToSlots;
   QMap<QWidget*,QWidget*> _modeSwitches;
@@ -112,6 +114,8 @@ public slots:
 
   void setAutoCenterPanelsOnDraw(bool);
 
+  void setFocusedPanelHighlighting(bool);
+
 signals:
   void panelFocused(tlp::View*);
   void addPanelRequest(tlp::Graph* g = NULL);
@@ -143,6 +147,8 @@ protected:
   QWidget* currentModeWidget() const;
   QVector<PlaceHolderWidget*> currentModeSlots() const;
   unsigned int currentSlotsCount() const;
+
+  void setFocusedPanel(WorkspacePanel* panel);
 };
 }
 

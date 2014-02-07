@@ -231,6 +231,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->singleModeButton->setEnabled(false);
   _ui->singleModeButton->hide();
   _ui->workspace->setSingleModeSwitch(_ui->singleModeButton);
+  _ui->workspace->setFocusedPanelHighlighting(true);
   _ui->splitModeButton->setEnabled(false);
   _ui->splitModeButton->hide();
   _ui->workspace->setSplitModeSwitch(_ui->splitModeButton);
@@ -274,6 +275,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),_ui->algorithmRunner,SLOT(setGraph(tlp::Graph*)));
+  connect(_ui->graphHierarchiesEditor,SIGNAL(changeSynchronization(bool)),this,SLOT(changeSynchronization(bool)));
 
   // Connect actions
   connect(_ui->actionMessages_log,SIGNAL(triggered()),this,SLOT(showLogger()));
@@ -570,6 +572,11 @@ void GraphPerspective::panelFocused(tlp::View* view) {
   connect(view,SIGNAL(graphSet(tlp::Graph*)),this,SLOT(focusedPanelGraphSet(tlp::Graph*)));
   focusedPanelGraphSet(view->graph());
 }
+
+void GraphPerspective::changeSynchronization(bool s) {
+  _ui->workspace->setFocusedPanelHighlighting(s);
+}
+
 void GraphPerspective::focusedPanelGraphSet(Graph* g) {
   _graphs->setCurrentGraph(g);
 }
