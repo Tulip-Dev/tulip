@@ -77,16 +77,18 @@ TLP_SCOPE unsigned int maxDegree(const Graph *);
 // returns the minimum value of the degree of the graph's nodes
 TLP_SCOPE unsigned int minDegree(const Graph *);
 /*
- * computes the shortest distance from n to all the other nodes of graph
+ * computes the maximum distance from n to all the other nodes of graph
  * and store it into distance, (stored value is UINT_MAX for non connected nodes),
- * if direction is set to 2 use undirected graph, 0 use directed graph
- * and 1 use reverse directed graph (ie. all edges are reversed)
+ * if direction is set to UNDIRECTED use undirected graph, DIRECTED use directed graph
+ * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  * all the edge's weight is set to 1. (it uses a bfs thus the complexity is o(m), m = |E|).
  */
 TLP_SCOPE unsigned int maxDistance(const Graph *graph, const node n, MutableContainer<unsigned int> &distance, EDGE_TYPE direction = UNDIRECTED);
 /*
  * adds to a result set, all the nodes, according to direction,
- * at distance less or equal to maxDistance of startNode
+ * at distance less or equal to maxDistance of startNode.
+ * If direction is set to UNDIRECTED use undirected graph, DIRECTED use directed graph
+ * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  */
 TLP_SCOPE void reachableNodes(const Graph *graph, const node startNode, std::set<node> &result, unsigned int maxDistance, EDGE_TYPE direction = UNDIRECTED);
 }
