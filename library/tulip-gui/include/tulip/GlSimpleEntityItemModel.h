@@ -34,7 +34,7 @@ class TLP_QT_SCOPE GlSimpleEntityItemEditor {
 public:
 
   GlSimpleEntityItemEditor(GlSimpleEntity* ent):entity(ent) {}
-  virtual ~GlSimpleEntityItemEditor(){}
+  virtual ~GlSimpleEntityItemEditor() {}
 
   /**
    * @brief Return properties names for this entity
