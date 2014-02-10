@@ -43,7 +43,7 @@
 
 using namespace tlp;
 
-AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(NULL), _localMode(true) {
+AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(NULL), _storeResultAsLocal(true) {
   _ui->setupUi(this);
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
   const Plugin& plugin = PluginLister::instance()->pluginInformation(pluginName.toStdString());
@@ -160,7 +160,8 @@ void asLocal(QVariant var, DataSet& data, Graph* g) {
     data.set("result",local);
   }
 }
-void copyToLocal(DataSet& data, Graph* g) {
+
+static void copyToLocal(DataSet& data, Graph* g) {
   if (!data.exist("result"))
     return;
 
@@ -261,7 +262,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   g->push();
 
-  if (_localMode)
+  if (_storeResultAsLocal)
     copyToLocal(dataSet, g);
 
   std::string algorithm = _pluginName.toStdString();
@@ -437,8 +438,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
     Observable::unholdObservers();
 }
 
-void AlgorithmRunnerItem::setLocalMode(bool m) {
-  _localMode = m;
+void AlgorithmRunnerItem::setStoreResultAsLocal(bool m) {
+  _storeResultAsLocal = m;
 }
 
 void AlgorithmRunnerItem::mousePressEvent(QMouseEvent *ev) {

@@ -36,7 +36,7 @@ class AlgorithmRunnerItem: public QWidget {
   Ui::AlgorithmRunnerItem* _ui;
   QString _pluginName;
   tlp::Graph* _graph;
-  bool _localMode;
+  bool _storeResultAsLocal;
   QPointF _dragStartPosition;
   tlp::DataSet _initData;
 
@@ -58,7 +58,7 @@ protected:
 public slots:
   void setGraph(tlp::Graph*);
   void setData(const tlp::DataSet& data);
-  void setLocalMode(bool);
+  void setStoreResultAsLocal(bool);
 
   void run(tlp::Graph* g = NULL);
 
