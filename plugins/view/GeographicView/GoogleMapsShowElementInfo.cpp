@@ -194,8 +194,7 @@ bool GoogleMapsShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
             title->setText(selectedEntity.getSimpleEntity()->getParent()->findKey(selectedEntity.getSimpleEntity()).c_str());
 
 
-            if (_editor)
-              delete _editor;
+            delete _editor;
 
             _editor = new GlComplexPolygonItemEditor(polygon);
 
