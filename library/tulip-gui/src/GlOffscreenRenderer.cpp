@@ -126,7 +126,10 @@ void GlOffscreenRenderer::clearScene() {
 void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
-  antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
+  // Don't activate antialiasing on frame buffer object with Intel OpenGL drivers as that feature is not stable (lots of crashes on Windows)
+  static string glVendor(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
+  static bool glIntel = glVendor.find("Intel") != string::npos;
+  antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit() &&!glIntel;
 #endif
 
   if (glFrameBuf != NULL && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
