@@ -49,6 +49,9 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new 
   connect(_ui->labelSizesSpanSlider, SIGNAL(lowerValueChanged(int)), this, SLOT(updateSliderRangeLabels()));
   connect(_ui->labelSizesSpanSlider, SIGNAL(upperValueChanged(int)), this, SLOT(updateSliderRangeLabels()));
 
+  _ui->selectionColorButton->setDialogTitle("Choose the color of selected nodes or edges");
+  _ui->backgroundColorButton->setDialogTitle("Choose the color of the backagroud");
+
   if (Perspective::instance() != NULL && Perspective::instance()->mainWindow() != NULL) {
     _ui->selectionColorButton->setDialogParent(Perspective::instance()->mainWindow());
     _ui->backgroundColorButton->setDialogParent(Perspective::instance()->mainWindow());

@@ -45,6 +45,7 @@ public:
 protected:
   QColor _color;
   QWidget* _dialogParent;
+  QString _dialogTitle;
 
 signals:
   void colorChanged(QColor);
@@ -53,6 +54,7 @@ signals:
 public slots:
   void setColor(const QColor&);
   void setTulipColor(const Color&);
+  void setDialogTitle(const QString&);
 
 protected slots:
   void chooseColor();

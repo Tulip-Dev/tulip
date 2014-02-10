@@ -27,7 +27,6 @@
 #include <QFileDialog>
 
 #include <tulip/TlpQtTools.h>
-#include <tulip/ColorButton.h>
 #include <tulip/ColorScaleButton.h>
 #include <tulip/TulipFileDescriptorWidget.h>
 #include <tulip/CoordEditor.h>
