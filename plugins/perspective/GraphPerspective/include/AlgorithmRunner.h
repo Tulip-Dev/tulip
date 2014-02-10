@@ -56,7 +56,7 @@ public:
   explicit AlgorithmRunner(QWidget* parent = NULL);
   virtual ~AlgorithmRunner();
 
- signals:
+signals:
   void setStoreResultAsLocal(bool);
 
 public slots:
