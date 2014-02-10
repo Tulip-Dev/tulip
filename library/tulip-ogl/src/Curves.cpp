@@ -260,7 +260,7 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
   float newSize=size;
   float angle = 0;
 
-  if (!result.empty() && !lastPoint && bi_xu_xv.norm() < 0.003f) {
+  if (!result.empty() && !lastPoint && bi_xu_xv.norm() < 1e-3) {
     return inversion;
   }
 
@@ -268,10 +268,9 @@ static int computeExtrusion(const Coord &pBefore, const Coord &pCurrent, const C
     bi_xu_xv /= bi_xu_xv.norm();
   }
 
-  angle=static_cast<float>(M_PI-acos(u.dotProduct(v)/(u.norm()*v.norm())));
+  angle=static_cast<float>(M_PI-atan2((u^v).norm(), u.dotProduct(v)));
 
   bool angleOk = true;
-
 
   if(isnan(angle) || fabs(angle) < 1e-3) {
     angleOk = false;
