@@ -27,7 +27,7 @@
 
 using namespace tlp;
 
-ChooseColorButton::ChooseColorButton(QWidget *parent): QPushButton(parent), _color(Qt::black), _dialogParent(parent) {
+ChooseColorButton::ChooseColorButton(QWidget *parent): QPushButton(parent), _color(Qt::black), _dialogParent(parent), _dialogTitle((char *) NULL) {
   connect(this,SIGNAL(clicked()),this,SLOT(chooseColor()));
   setFocusPolicy(Qt::WheelFocus);
 }
@@ -38,6 +38,10 @@ QColor ChooseColorButton::color() const {
 
 void ChooseColorButton::setDialogParent(QWidget *w) {
   _dialogParent = w;
+}
+
+void ChooseColorButton::setDialogTitle(const QString& title) {
+  _dialogTitle = title;
 }
 
 tlp::Color ChooseColorButton::tulipColor() const {
@@ -56,7 +60,11 @@ void ChooseColorButton::setTulipColor(const tlp::Color& c) {
 }
 
 void ChooseColorButton::chooseColor() {
-  QColor c = QColorDialog::getColor(_color,_dialogParent,trUtf8("Choose a color"),QColorDialog::ShowAlphaChannel);
+  QColor c = QColorDialog::getColor(_color, _dialogParent,
+				    _dialogTitle.isNull()
+				    ? QString("Choose a color")
+				    : _dialogTitle,
+				    QColorDialog::ShowAlphaChannel);
 
   if (c.isValid())
     setColor(c);

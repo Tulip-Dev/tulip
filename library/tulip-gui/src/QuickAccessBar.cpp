@@ -98,6 +98,12 @@ using namespace tlp;
 QuickAccessBar::QuickAccessBar(QGraphicsItem *quickAccessBarItem, QWidget *parent)
   : QWidget(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), _mainView(NULL), delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1),_captionsInitialized(false) {
   _ui->setupUi(this);
+  _ui->backgroundColorButton->setDialogTitle("Choose the background color");
+  _ui->nodeColorButton->setDialogTitle("Choose the node's default color");
+  _ui->edgeColorButton->setDialogTitle("Choose the edge's default color");
+  _ui->nodeBorderColorButton->setDialogTitle("Choose the default color for the border of nodes");
+  _ui->edgeBorderColorButton->setDialogTitle("Choose the default color for the border of edges");
+  _ui->labelColorButton->setDialogTitle("Choose the default color for the label of nodes or edges");
 }
 
 QuickAccessBar::~QuickAccessBar() {
