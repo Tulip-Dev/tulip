@@ -42,7 +42,9 @@ class AlgorithmRunner: public QWidget {
 
   Ui::AlgorithmRunner* _ui;
   tlp::Graph* _graph;
-  QToolButton* _localModeButton;
+  QToolButton* _storeResultAsLocalButton;
+  QAction* _resultAsLocalPropAction;
+  QAction* _resultAsPredefinedPropAction;
 
   QList<AlgorithmRunnerItem*> _favorites;
 
@@ -53,6 +55,9 @@ class AlgorithmRunner: public QWidget {
 public:
   explicit AlgorithmRunner(QWidget* parent = NULL);
   virtual ~AlgorithmRunner();
+
+ signals:
+  void setStoreResultAsLocal(bool);
 
 public slots:
   void setGraph(tlp::Graph*);
@@ -65,6 +70,7 @@ protected slots:
   void addFavorite(const QString& algName, const tlp::DataSet& data=tlp::DataSet());
   void removeFavorite(const QString& algName);
   void favorized(bool);
+  void setStoreResultAsLocal(QAction*);
 
 protected:
   bool eventFilter(QObject *, QEvent *);

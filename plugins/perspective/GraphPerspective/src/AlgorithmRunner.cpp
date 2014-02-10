@@ -24,6 +24,7 @@
 #include <QDropEvent>
 #include <QPainter>
 #include <QToolButton>
+#include <QMenu>
 
 #include <tulip/TulipMimes.h>
 #include <tulip/TulipSettings.h>
@@ -70,7 +71,7 @@ void AlgorithmRunner::buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model
     }
     else {
       AlgorithmRunnerItem* item = new AlgorithmRunnerItem(name);
-      QObject::connect(_localModeButton,SIGNAL(clicked(bool)),item,SLOT(setLocalMode(bool)));
+      QObject::connect(this,SIGNAL(setStoreResultAsLocal(bool)),item,SLOT(setStoreResultAsLocal(bool)));
       w->layout()->addWidget(item);
     }
   }
@@ -123,7 +124,7 @@ void AlgorithmRunner::insertItem(QWidget* w, const QString& name) {
   }
 
   AlgorithmRunnerItem* item = new AlgorithmRunnerItem(name);
-  QObject::connect(_localModeButton,SIGNAL(clicked(bool)),item,SLOT(setLocalMode(bool)));
+  QObject::connect(_storeResultAsLocalButton,SIGNAL(clicked(bool)),item,SLOT(setLocalMode(bool)));
   QObject::connect(item,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
   QVBoxLayout *groupLayout = static_cast<QVBoxLayout*>(groupBox->widget()->layout());
   int index = 0;
@@ -180,15 +181,33 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   _ui->favoritesBox->widget()->installEventFilter(this);
 
   _ui->contents->setEnabled(false);
-  _localModeButton = new QToolButton(_ui->header);
-  _localModeButton->setMaximumSize(25,25);
-  _localModeButton->setMinimumSize(25,25);
-  _localModeButton->setCheckable(true);
-  _localModeButton->setChecked(true);
-  _localModeButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
-  _localModeButton->setIconSize(QSize(22,22));
-  _localModeButton->setToolTip(trUtf8("Always store result in local property"));
-  _ui->header->mainFrame()->layout()->addWidget(_localModeButton);
+  _storeResultAsLocalButton = new QToolButton(_ui->header);
+  _storeResultAsLocalButton->setMaximumSize(25,25);
+  _storeResultAsLocalButton->setMinimumSize(25,25);
+  _storeResultAsLocalButton->setCheckable(true);
+  _storeResultAsLocalButton->setChecked(true);
+  _storeResultAsLocalButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
+  _storeResultAsLocalButton->setIconSize(QSize(22,22));
+  _storeResultAsLocalButton->setToolTip(trUtf8("Choose the storage policy for the result of property algorithms\nWhen they are applied to a subgraph, this result can be stored either\n- in a local subgraph property (created on the fly if needed),\nor\n- in a property already existing in the ascendant hierarchy (inherited or local)."));
+  _ui->header->mainFrame()->layout()->addWidget(_storeResultAsLocalButton);
+  QMenu* resultMenu = new QMenu(this);
+  _resultAsLocalPropAction =
+    resultMenu->addAction(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"),
+			  QString("Always store result in a local property"));
+  _resultAsLocalPropAction->setIconVisibleInMenu(true);
+  _resultAsLocalPropAction->setCheckable(true);
+  _resultAsPredefinedPropAction =
+    resultMenu->addAction(QIcon(":/tulip/graphperspective/icons/16/no_hierarchy_add.png"),
+			  QString("Store result in an hierarchy existing property"));
+  _resultAsPredefinedPropAction->setIconVisibleInMenu(true);
+  _resultAsPredefinedPropAction->setCheckable(true);
+  QActionGroup* resultGroup = new QActionGroup(resultMenu);
+  resultGroup->addAction(_resultAsLocalPropAction);
+  resultGroup->addAction(_resultAsPredefinedPropAction);
+  _resultAsLocalPropAction->setChecked(true);
+  _storeResultAsLocalButton->setMenu(resultMenu);
+  _storeResultAsLocalButton->setPopupMode(QToolButton::InstantPopup);
+  connect(resultMenu, SIGNAL(triggered(QAction*)), this, SLOT(setStoreResultAsLocal(QAction*)));
 
   PluginModel<tlp::Algorithm> model;
   buildTreeUi(_ui->contents, &model, QModelIndex(), true);
@@ -384,4 +403,9 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
     if (i != item && i->name() == algName)
       i->setFavorite(true);
   }
+}
+
+void AlgorithmRunner::setStoreResultAsLocal(QAction* action) {
+  _storeResultAsLocalButton->setIcon(action->icon());
+  emit setStoreResultAsLocal(action == _resultAsLocalPropAction);
 }
