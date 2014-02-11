@@ -81,7 +81,7 @@ void ColorScaleButton::paintEvent(QPaintEvent *event) {
 
 void ColorScaleButton::editColorScale(const ColorScale& cs) {
   ColorScaleConfigDialog dlg(cs, this);
- 
+
   if (dlg.exec() == QDialog::Accepted)
     _colorScale = dlg.getColorScale();
   else if (&cs != &_colorScale)
