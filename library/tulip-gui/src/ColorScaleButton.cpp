@@ -20,6 +20,7 @@
 
 #include <QPainter>
 #include <QPaintEvent>
+#include <QApplication>
 
 
 #include <tulip/TlpQtTools.h>
@@ -47,22 +48,13 @@ void ColorScaleButton::paintScale(QPainter *painter, const QRect &baseRect, cons
   painter->drawRect(rect);
 }
 
-ColorScaleButton::ColorScaleButton(ColorScale colorScale, QWidget* parent): QPushButton(parent), _colorScale(colorScale), _dlg(NULL) {
-  connect(this,SIGNAL(clicked()),this,SLOT(showDialog()));
+ColorScaleButton::ColorScaleButton(ColorScale colorScale, QWidget* parent):
+  QPushButton(parent), _colorScale(colorScale) {
+  connect(this,SIGNAL(clicked()),this,SLOT(editColorScale()));
 }
 
-ColorScaleButton::~ColorScaleButton() {
-}
-
-ColorScale ColorScaleButton::colorScale() const {
+const ColorScale& ColorScaleButton::colorScale() const {
   return _colorScale;
-}
-
-void ColorScaleButton::setColorScale(const ColorScale& colorScale) {
-  _colorScale = colorScale;
-
-  if (_dlg)
-    _dlg->setColorScale(colorScale);
 }
 
 void ColorScaleButton::paintEvent(QPaintEvent *event) {
@@ -87,10 +79,15 @@ void ColorScaleButton::paintEvent(QPaintEvent *event) {
   painter.drawRect(rect);
 }
 
-void ColorScaleButton::showDialog() {
-  _dlg = new ColorScaleConfigDialog(_colorScale,this);
-  _dlg->exec();
-  _colorScale = _dlg->getColorScale();
-  delete _dlg;
-  _dlg = NULL;
+void ColorScaleButton::editColorScale(const ColorScale& cs) {
+  ColorScaleConfigDialog dlg(cs, this);
+ 
+  if (dlg.exec() == QDialog::Accepted)
+    _colorScale = dlg.getColorScale();
+  else if (&cs != &_colorScale)
+    _colorScale = cs;
+}
+
+void ColorScaleButton::editColorScale() {
+  editColorScale(_colorScale);
 }

@@ -25,6 +25,7 @@
 #include <QColorDialog>
 #include <QMainWindow>
 #include <QFileDialog>
+#include <QHBoxLayout>
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/ColorScaleButton.h>
@@ -274,8 +275,9 @@ QString NumericPropertyEditorCreator::displayText(const QVariant& v) const {
 /*
   ColorScaleEditorCreator
 */
+
 QWidget* ColorScaleEditorCreator::createWidget(QWidget* parent) const {
-  return new ColorScaleButton(ColorScale(),parent);
+  return new ColorScaleButton(ColorScale(), parent);
 }
 
 bool ColorScaleEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& var) const {
@@ -285,7 +287,7 @@ bool ColorScaleEditorCreator::paint(QPainter* painter, const QStyleOptionViewIte
 }
 
 void ColorScaleEditorCreator::setEditorData(QWidget* w, const QVariant& var,bool,tlp::Graph*) {
-  static_cast<ColorScaleButton*>(w)->setColorScale(var.value<ColorScale>());
+  static_cast<ColorScaleButton*>(w)->editColorScale(var.value<ColorScale>());
 }
 
 QVariant ColorScaleEditorCreator::editorData(QWidget* w,tlp::Graph*) {
