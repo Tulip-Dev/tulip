@@ -44,7 +44,6 @@ class AlgorithmRunner: public QWidget {
   tlp::Graph* _graph;
   QToolButton* _storeResultAsLocalButton;
   QAction* _resultAsLocalPropAction;
-  QAction* _resultAsPredefinedPropAction;
 
   QList<AlgorithmRunnerItem*> _favorites;
 

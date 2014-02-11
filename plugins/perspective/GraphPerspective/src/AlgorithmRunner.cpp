@@ -184,8 +184,6 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   _storeResultAsLocalButton = new QToolButton(_ui->header);
   _storeResultAsLocalButton->setMaximumSize(25,25);
   _storeResultAsLocalButton->setMinimumSize(25,25);
-  _storeResultAsLocalButton->setCheckable(true);
-  _storeResultAsLocalButton->setChecked(true);
   _storeResultAsLocalButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
   _storeResultAsLocalButton->setIconSize(QSize(22,22));
   _storeResultAsLocalButton->setToolTip(trUtf8("Choose the storage policy for the result of property algorithms\nWhen they are applied to a subgraph, this result can be stored either\n- in a local subgraph property (created on the fly if needed),\nor\n- in a property already existing in the ascendant hierarchy (inherited or local)."));
@@ -196,14 +194,14 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
                           QString("Always store result in a local property"));
   _resultAsLocalPropAction->setIconVisibleInMenu(true);
   _resultAsLocalPropAction->setCheckable(true);
-  _resultAsPredefinedPropAction =
+  QAction* resultAsPredefinedPropAction =
     resultMenu->addAction(QIcon(":/tulip/graphperspective/icons/16/no_hierarchy_add.png"),
                           QString("Store result in an hierarchy existing property"));
-  _resultAsPredefinedPropAction->setIconVisibleInMenu(true);
-  _resultAsPredefinedPropAction->setCheckable(true);
+  resultAsPredefinedPropAction->setIconVisibleInMenu(true);
+  resultAsPredefinedPropAction->setCheckable(true);
   QActionGroup* resultGroup = new QActionGroup(resultMenu);
   resultGroup->addAction(_resultAsLocalPropAction);
-  resultGroup->addAction(_resultAsPredefinedPropAction);
+  resultGroup->addAction(resultAsPredefinedPropAction);
   _resultAsLocalPropAction->setChecked(true);
   _storeResultAsLocalButton->setMenu(resultMenu);
   _storeResultAsLocalButton->setPopupMode(QToolButton::InstantPopup);
