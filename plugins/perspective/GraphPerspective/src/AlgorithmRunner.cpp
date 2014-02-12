@@ -216,6 +216,7 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   foreach(QString a, TulipSettings::instance().favoriteAlgorithms()) {
     addFavorite(a);
   }
+  connect(_ui->header, SIGNAL(expanded(bool)),this,SLOT(expanded(bool)));
 }
 
 AlgorithmRunner::~AlgorithmRunner() {
@@ -406,4 +407,12 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
 void AlgorithmRunner::setStoreResultAsLocal(QAction* action) {
   _storeResultAsLocalButton->setIcon(action->icon());
   emit setStoreResultAsLocal(action == _resultAsLocalPropAction);
+}
+
+void AlgorithmRunner::expanded(bool) {
+  // There is a strange and unexplainable side effect
+  // which displays the _storeResultAsLocalButton->menu()
+  // when this panel is expanding.
+  // So we add the code below to prevent this
+  _storeResultAsLocalButton->menu()->hide();
 }
