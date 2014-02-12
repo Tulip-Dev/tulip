@@ -70,6 +70,7 @@ protected slots:
   void removeFavorite(const QString& algName);
   void favorized(bool);
   void setStoreResultAsLocal(QAction*);
+  void expanded(bool);
 
 protected:
   bool eventFilter(QObject *, QEvent *);
