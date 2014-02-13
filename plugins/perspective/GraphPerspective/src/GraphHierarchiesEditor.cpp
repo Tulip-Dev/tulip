@@ -126,7 +126,7 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   _ui->hierarchiesTree->header()->resizeSection(0,100);
 
   connect(_ui->hierarchiesTree->selectionModel(),
-	  SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+          SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
           this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
 }
 
@@ -182,18 +182,19 @@ void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
 }
 
 void GraphHierarchiesEditor::currentChanged(const QModelIndex& index,
-					    const QModelIndex& previous) {
+    const QModelIndex& previous) {
   if (synchronized() && index.isValid() && index.internalPointer()) {
     if (index == previous)
       return;
+
     _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
     disconnect(_ui->hierarchiesTree->selectionModel(),
-	       SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-	       this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
+               SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+               this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
     _model->setCurrentGraph(_contextGraph);
     connect(_ui->hierarchiesTree->selectionModel(),
-	    SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-	    this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
+            SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+            this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
     _contextGraph = NULL;
   }
 }
