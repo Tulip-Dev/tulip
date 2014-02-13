@@ -709,18 +709,20 @@ void Workspace::setFocusedPanel(WorkspacePanel* panel) {
   if (_focusedPanel) {
     if (_focusedPanelHighlighting)
       _focusedPanel->setHighlightMode(false);
+
     disconnect(_focusedPanel, SIGNAL(changeGraphSynchronization(bool)),
-	       this, SLOT(changeFocusedPanelSynchronization(bool)));
+               this, SLOT(changeFocusedPanelSynchronization(bool)));
   }
 
   _focusedPanel = panel;
   connect(_focusedPanel, SIGNAL(changeGraphSynchronization(bool)),
-	  this, SLOT(changeFocusedPanelSynchronization(bool)));
+          this, SLOT(changeFocusedPanelSynchronization(bool)));
 
   if (_focusedPanelHighlighting)
     _focusedPanel->setHighlightMode(true);
 
   emit panelFocused(panel->view());
+
   if (_focusedPanel->isGraphSynchronized())
     emit focusedPanelSynchronized();
 }
@@ -728,7 +730,7 @@ void Workspace::setFocusedPanel(WorkspacePanel* panel) {
 void Workspace::changeFocusedPanelSynchronization(bool s) {
   if (s)
     emit focusedPanelSynchronized();
-}    
+}
 
-  
+
 

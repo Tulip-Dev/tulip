@@ -117,7 +117,7 @@ public slots:
   void setFocusedPanelHighlighting(bool);
 
   void setGraphForFocusedPanel(tlp::Graph*);
-  
+
 signals:
   void panelFocused(tlp::View*);
   void focusedPanelSynchronized();

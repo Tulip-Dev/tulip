@@ -975,7 +975,8 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
     _ui->searchButton->setChecked(false);
     _ui->pythonButton->setChecked(false);
     setSearchOutput(false);
-  } else {
+  }
+  else {
     _ui->workspace->setGraphForFocusedPanel(graph);
   }
 }
