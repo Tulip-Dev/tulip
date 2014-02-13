@@ -75,10 +75,12 @@ public slots:
   void viewGraphSet(tlp::Graph*);
   void setOverlayMode(bool);
   void setHighlightMode(bool);
+  bool isGraphSynchronized() const;
 
 signals:
   void drawNeeded();
   void swapWithPanels(WorkspacePanel* panel);
+  void changeGraphSynchronization(bool);
 
 protected slots:
   void hideConfigurationTab();
@@ -92,9 +94,9 @@ protected slots:
   void scrollInteractorsLeft();
   void resetInteractorsScrollButtonsVisibility();
   void refreshInteractorsToolbar();
+  void toggleSynchronization(bool);
 
 protected:
-
 
   void resizeEvent(QResizeEvent *);
 

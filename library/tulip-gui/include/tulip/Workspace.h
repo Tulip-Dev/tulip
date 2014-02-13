@@ -116,8 +116,11 @@ public slots:
 
   void setFocusedPanelHighlighting(bool);
 
+  void setGraphForFocusedPanel(tlp::Graph*);
+  
 signals:
   void panelFocused(tlp::View*);
+  void focusedPanelSynchronized();
   void addPanelRequest(tlp::Graph* g = NULL);
   void importGraphRequest();
 
@@ -133,6 +136,7 @@ protected slots:
   WorkspacePanel* panelForScene(QObject* obj);
   void swapPanelsRequested(WorkspacePanel* panel);
   void updateStartupMode();
+  void changeFocusedPanelSynchronization(bool);
 
 protected:
 

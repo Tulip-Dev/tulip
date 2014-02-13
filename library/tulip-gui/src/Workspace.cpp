@@ -401,6 +401,12 @@ void Workspace::setActivePanel(tlp::View* view) {
   updatePanels();
 }
 
+void Workspace::setGraphForFocusedPanel(tlp::Graph* g) {
+  if (_focusedPanel && _focusedPanel->isGraphSynchronized() &&
+      _focusedPanel->view()->graph() != g)
+    _focusedPanel->view()->setGraph(g);
+}
+
 WorkspacePanel* Workspace::panelForScene(QObject *obj) {
   WorkspacePanel* p = NULL;
   foreach(WorkspacePanel* panel, _panels) {
@@ -700,14 +706,29 @@ void Workspace::setFocusedPanelHighlighting(bool h) {
 
 // update focused panel
 void Workspace::setFocusedPanel(WorkspacePanel* panel) {
-  if (_focusedPanel && _focusedPanelHighlighting)
-    _focusedPanel->setHighlightMode(false);
+  if (_focusedPanel) {
+    if (_focusedPanelHighlighting)
+      _focusedPanel->setHighlightMode(false);
+    disconnect(_focusedPanel, SIGNAL(changeGraphSynchronization(bool)),
+	       this, SLOT(changeFocusedPanelSynchronization(bool)));
+  }
 
   _focusedPanel = panel;
+  connect(_focusedPanel, SIGNAL(changeGraphSynchronization(bool)),
+	  this, SLOT(changeFocusedPanelSynchronization(bool)));
 
   if (_focusedPanelHighlighting)
     _focusedPanel->setHighlightMode(true);
 
   emit panelFocused(panel->view());
+  if (_focusedPanel->isGraphSynchronized())
+    emit focusedPanelSynchronized();
 }
+
+void Workspace::changeFocusedPanelSynchronization(bool s) {
+  if (s)
+    emit focusedPanelSynchronized();
+}    
+
+  
 

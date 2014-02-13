@@ -80,6 +80,7 @@ protected slots:
   void contextMenuRequested(const QPoint&);
   void doubleClicked(const QModelIndex&);
   void clicked(const QModelIndex&);
+  void currentChanged(const QModelIndex&, const QModelIndex&);
 
   void addSubGraph();
   void cloneSubGraph();

@@ -115,6 +115,7 @@ protected slots:
   void refreshDockExpandControls();
   void panelFocused(tlp::View*);
   void focusedPanelGraphSet(tlp::Graph*);
+  void focusedPanelSynchronized();
   void deleteSelectedElements();
   void invertSelection();
   void cancelSelection();
