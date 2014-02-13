@@ -97,8 +97,8 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent)
 
   QToolButton* linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
-  linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/link.png"));
-  linkButton->setToolTip(trUtf8("Click here to disable synchronization\nwith workspace active panel"));
+  linkButton->setIcon(QIcon(":/tulip/gui/icons/16/link.png"));
+  linkButton->setToolTip("Click here to disable the synchronization with workspace active panel.\nWhen synchronization is enabled, the graph currently displayed\nin the active panel, becomes the current one in the Graphs panel.");
   linkButton->setIconSize(QSize(22,22));
   linkButton->setMinimumSize(25,25);
   linkButton->setMaximumSize(25,25);
@@ -124,6 +124,10 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   proxyModel->setSourceModel(model);
   _ui->hierarchiesTree->setModel(proxyModel);
   _ui->hierarchiesTree->header()->resizeSection(0,100);
+
+  connect(_ui->hierarchiesTree->selectionModel(),
+	  SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+          this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
 }
 
 GraphHierarchiesEditor::~GraphHierarchiesEditor() {
@@ -175,6 +179,23 @@ void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
   _model->setCurrentGraph(_contextGraph);
   createPanel();
   _contextGraph = NULL;
+}
+
+void GraphHierarchiesEditor::currentChanged(const QModelIndex& index,
+					    const QModelIndex& previous) {
+  if (synchronized() && index.isValid() && index.internalPointer()) {
+    if (index == previous)
+      return;
+    _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+    disconnect(_ui->hierarchiesTree->selectionModel(),
+	       SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+	       this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
+    _model->setCurrentGraph(_contextGraph);
+    connect(_ui->hierarchiesTree->selectionModel(),
+	    SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
+	    this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
+    _contextGraph = NULL;
+  }
 }
 
 void GraphHierarchiesEditor::addSubGraph() {
@@ -287,12 +308,12 @@ void GraphHierarchiesEditor::saveGraphHierarchyInTlpFile() {
 
 void GraphHierarchiesEditor::toggleSynchronization(bool f) {
   if (f) {
-    _linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/link.png"));
-    _linkButton->setToolTip(trUtf8("Click here to disable the synchronization\nwith workspace active panel"));
+    _linkButton->setIcon(QIcon(":/tulip/gui/icons/16/link.png"));
+    _linkButton->setToolTip("Click here to disable the synchronization with workspace active panel.\nWhen synchronization is enabled, the graph currently displayed\nin the active panel, becomes the current one in the Graphs panel.");
   }
   else {
-    _linkButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/unlink.png"));
-    _linkButton->setToolTip(trUtf8("Click here to enable synchronization\nwith workspace active panel"));
+    _linkButton->setIcon(QIcon(":/tulip/gui/icons/16/unlink.png"));
+    _linkButton->setToolTip("Click here to enable the synchronization with workspace active panel.\nWhen synchronization is enabled, the graph currently displayed\nin the active panel, becomes the current one in the Graphs panel.");
   }
 
   emit changeSynchronization(f);

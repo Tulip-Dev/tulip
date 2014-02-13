@@ -273,6 +273,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 #endif
 
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
+  connect(_ui->workspace,SIGNAL(focusedPanelSynchronized()),this,SLOT(focusedPanelSynchronized()));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),_ui->algorithmRunner,SLOT(setGraph(tlp::Graph*)));
   connect(_ui->graphHierarchiesEditor,SIGNAL(changeSynchronization(bool)),this,SLOT(changeSynchronization(bool)));
@@ -579,6 +580,10 @@ void GraphPerspective::changeSynchronization(bool s) {
 
 void GraphPerspective::focusedPanelGraphSet(Graph* g) {
   _graphs->setCurrentGraph(g);
+}
+
+void GraphPerspective::focusedPanelSynchronized() {
+  _ui->workspace->setGraphForFocusedPanel(_graphs->currentGraph());
 }
 
 bool GraphPerspective::save() {
@@ -970,6 +975,8 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
     _ui->searchButton->setChecked(false);
     _ui->pythonButton->setChecked(false);
     setSearchOutput(false);
+  } else {
+    _ui->workspace->setGraphForFocusedPanel(graph);
   }
 }
 
@@ -1162,8 +1169,8 @@ void GraphPerspective::openRecentFile() {
   open(action->text());
 }
 
-void GraphPerspective::treatEvent(const tlp::Event &message) {
-  if (dynamic_cast<const tlp::PluginEvent*>(&message)) {
+void GraphPerspective::treatEvent(const tlp::Event &ev) {
+  if (dynamic_cast<const tlp::PluginEvent*>(&ev)) {
     pluginsListChanged();
   }
 }

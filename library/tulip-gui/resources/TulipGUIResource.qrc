@@ -33,6 +33,8 @@
         <file>ui/split_screen.png</file>
         <file>icons/64/list-add.png</file>
         <file>icons/16/media-playback-start.png</file>
+        <file>icons/16/link.png</file>
+        <file>icons/16/unlink.png</file>
         <file>icons/20/labels.png</file>
         <file>icons/20/labels_disabled.png</file>
         <file>icons/20/labels_enabled.png</file>
