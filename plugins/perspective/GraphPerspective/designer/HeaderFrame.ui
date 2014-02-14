@@ -26,10 +26,10 @@
    <string notr="true">#mainFrame, QToolButton, QPushButton, .QWidget {
 border-image:none;
 background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #838383,
-stop: 0.4 #707070,
-stop: 0.401 #636363,
-stop: 1 #4a4a4a);
+stop: 0 #939393,
+stop: 0.4 #808080,
+stop: 0.401 #737373,
+stop: 1 #5a5a5a);
 border: 0px;
 color: white;
 }

@@ -191,12 +191,12 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   QMenu* resultMenu = new QMenu(this);
   _resultAsLocalPropAction =
     resultMenu->addAction(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"),
-                          QString("Always store result in a local property"));
+                          QString("Always store result in a local property of the graph"));
   _resultAsLocalPropAction->setIconVisibleInMenu(true);
   _resultAsLocalPropAction->setCheckable(true);
   QAction* resultAsPredefinedPropAction =
     resultMenu->addAction(QIcon(":/tulip/graphperspective/icons/16/no_hierarchy_add.png"),
-                          QString("Store result in an hierarchy existing property"));
+                          QString("Store result in an existing property of the graphs hierarchy"));
   resultAsPredefinedPropAction->setIconVisibleInMenu(true);
   resultAsPredefinedPropAction->setCheckable(true);
   QActionGroup* resultGroup = new QActionGroup(resultMenu);
