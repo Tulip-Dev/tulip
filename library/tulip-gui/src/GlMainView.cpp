@@ -293,3 +293,4 @@ bool GlMainView::eventFilter(QObject* obj, QEvent* event) {
   // standard event processing
   return ViewWidget::eventFilter(obj, event);
 }
+

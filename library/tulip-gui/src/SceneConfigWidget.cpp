@@ -130,6 +130,12 @@ void SceneConfigWidget::resetChanges() {
   else
     _ui->centralRadioButton->setChecked(true);
 
+  // GRAPH CHANGING
+  if (_glMainWidget->keepScenePointOfViewOnSubgraphChanging())
+    _ui->keepSceneRadioButton->setChecked(true);
+  else
+     _ui->centerSceneRadioButton->setChecked(true);
+  
 //  QApplication::processEvents();
   _resetting = false;
 }
@@ -187,6 +193,10 @@ void SceneConfigWidget::applySettings() {
 
   // PROJECTION
   _glMainWidget->getScene()->setViewOrtho(_ui->orthoRadioButton->isChecked());
+
+  // GRAPH CHANGINS
+  _glMainWidget->setKeepScenePointOfViewOnSubgraphChanging(_ui->keepSceneRadioButton->isChecked());
+
   _glMainWidget->draw();
   emit settingsApplied();
 }
