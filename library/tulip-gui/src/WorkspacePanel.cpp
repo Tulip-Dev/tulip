@@ -564,11 +564,11 @@ bool WorkspacePanel::isGraphSynchronized() const {
 void WorkspacePanel::toggleSynchronization(bool f) {
   if (f) {
     _ui->linkButton->setIcon(QIcon(":/tulip/gui/icons/16/link.png"));
-    _ui->linkButton->setToolTip("Click here to disable the synchronization with Graphs panel.\nWhen synchronization is enabled, the current graph of the Graphs panel,\nbecomes the one currently displayed in the workspace active panel.");
+    _ui->linkButton->setToolTip("Click here to disable the synchronization with the Graphs panel.\nWhen synchronization is enabled, the current graph of the Graphs panel,\nbecomes the current one in the workspace active panel.");
   }
   else {
     _ui->linkButton->setIcon(QIcon(":/tulip/gui/icons/16/unlink.png"));
-    _ui->linkButton->setToolTip("Click here to enable the synchronization with Graphs panel.\nWhen synchronization is enabled, the current graph of the Graphs panel,\nbecomes the one currently displayed in the workspace active panel.");
+    _ui->linkButton->setToolTip("Click here to enable the synchronization with the Graphs panel.\nWhen synchronization is enabled, the current graph of the Graphs panel,\nbecomes the current one in the workspace active panel.");
   }
 
   emit changeGraphSynchronization(f);
