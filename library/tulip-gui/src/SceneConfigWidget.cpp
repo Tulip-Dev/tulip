@@ -134,8 +134,8 @@ void SceneConfigWidget::resetChanges() {
   if (_glMainWidget->keepScenePointOfViewOnSubgraphChanging())
     _ui->keepSceneRadioButton->setChecked(true);
   else
-     _ui->centerSceneRadioButton->setChecked(true);
-  
+    _ui->centerSceneRadioButton->setChecked(true);
+
 //  QApplication::processEvents();
   _resetting = false;
 }
