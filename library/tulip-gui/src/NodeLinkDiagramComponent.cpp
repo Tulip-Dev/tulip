@@ -224,10 +224,12 @@ void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
   Graph* oldGraph = composite ? composite->getGraph() : NULL;
   loadGraphOnScene(graph);
   registerTriggers();
+
   if (oldGraph == NULL || graph == NULL ||
       (oldGraph->getRoot() != graph->getRoot()) ||
       getGlMainWidget()->keepScenePointOfViewOnSubgraphChanging() == false)
     centerView();
+
   emit drawNeeded();
   drawOverview();
 }
@@ -237,7 +239,7 @@ tlp::DataSet NodeLinkDiagramComponent::state() const {
   data.set("overviewVisible",overviewVisible());
   data.set("quickAccessBarVisible",quickAccessBarVisible());
   data.set("keepScenePointOfViewOnSubgraphChanging",
-	   getGlMainWidget()->keepScenePointOfViewOnSubgraphChanging());
+           getGlMainWidget()->keepScenePointOfViewOnSubgraphChanging());
   return data;
 }
 
