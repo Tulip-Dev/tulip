@@ -204,6 +204,10 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
     data.get<bool>("quickAccessBarVisible",quickAccessBarVisible);
   }
 
+  bool keepSPOV = false;
+  data.get<bool>("keepScenePointOfViewOnSubgraphChanging", keepSPOV);
+  getGlMainWidget()->setKeepScenePointOfViewOnSubgraphChanging(keepSPOV);
+
   createScene(graph(), data);
   registerTriggers();
   setOverviewVisible(overviewVisible);
@@ -215,9 +219,15 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
+  GlGraphComposite* composite =
+    getGlMainWidget()->getScene()->getGlGraphComposite();
+  Graph* oldGraph = composite ? composite->getGraph() : NULL;
   loadGraphOnScene(graph);
   registerTriggers();
-  centerView();
+  if (oldGraph == NULL || graph == NULL ||
+      (oldGraph->getRoot() != graph->getRoot()) ||
+      getGlMainWidget()->keepScenePointOfViewOnSubgraphChanging() == false)
+    centerView();
   emit drawNeeded();
   drawOverview();
 }
@@ -226,6 +236,8 @@ tlp::DataSet NodeLinkDiagramComponent::state() const {
   DataSet data=sceneData();
   data.set("overviewVisible",overviewVisible());
   data.set("quickAccessBarVisible",quickAccessBarVisible());
+  data.set("keepScenePointOfViewOnSubgraphChanging",
+	   getGlMainWidget()->keepScenePointOfViewOnSubgraphChanging());
   return data;
 }
 

@@ -128,7 +128,7 @@ void GlMainWidget::doSelect(const int x, const int y,
 
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent,View *view):
-  QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view),widthStored(0),heightStored(0), useFramebufferObject(false), glFrameBuf(NULL) {
+  QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view),widthStored(0),heightStored(0), useFramebufferObject(false), glFrameBuf(NULL), keepPointOfViewOnSubgraphChanging(false) {
   assert(this->isValid());
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true);
@@ -557,6 +557,15 @@ void GlMainWidget::centerScene(bool graphChanged, float zf) {
 
 void GlMainWidget::emitGraphChanged() {
   emit graphChanged();
+}
+
+
+void GlMainWidget::setKeepScenePointOfViewOnSubgraphChanging(bool k) {
+  keepPointOfViewOnSubgraphChanging = k;
+}
+
+bool GlMainWidget::keepScenePointOfViewOnSubgraphChanging() const {
+  return keepPointOfViewOnSubgraphChanging;
 }
 
 }

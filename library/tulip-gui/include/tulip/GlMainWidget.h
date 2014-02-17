@@ -285,6 +285,17 @@ public:
     **/
   void render(RenderingOptions options=RenderingOptions(RenderScene|SwapBuffers), bool checkVisibility=true);
 
+  /**
+   * @brief Specify if the scene point of view must be kept
+   * when changing between graphs belonging to the same hierarchy
+   */
+  void setKeepScenePointOfViewOnSubgraphChanging(bool);
+  /**
+   * @brief Returns if the scene point of view must be kept
+   * when changing between graphs belonging to the same hierarchy
+   */
+  bool keepScenePointOfViewOnSubgraphChanging() const;
+
 private:
 
   void  setupOpenGlContext();
@@ -301,6 +312,7 @@ private:
   QGLFramebufferObject *glFrameBuf;
   static bool inRendering;
   int renderingNumber;
+  bool keepPointOfViewOnSubgraphChanging;
 
 public slots:
   /**
