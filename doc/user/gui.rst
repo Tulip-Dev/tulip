@@ -21,9 +21,9 @@ Here are the components of Tulip Perspective's main window:
 
 |l_red| Menus and toolbar
 
-|l_yel| Algorithm panel
+|l_yel| Algorithms panel
 
-|l_pur| Graph list
+|l_pur| Graphs panel
 
 |l_blu| Workspace view
 
@@ -82,18 +82,42 @@ The vertical toolbar, on the left of the main window, contains 6 buttons:
 
 .. _algo_window:
 
-Algorithm list
-==============
+Algorithms panel
+================
 
 .. |icon_algorithm_fav| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/favorite.png
 .. |icon_algorithm_unfav| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/favorite-empty.png
 .. |icon_algorithm_properties| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/preferences-other.png
 .. |icon_algorithm_launch| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/media-playback-start.png
+.. |icon_link| image:: _images/i_link.png
+.. |icon_unlink| image:: _images/i_unlink.png
 
 Tulip proposes several ready-to-use algorithms, offering - among others - coloration, labeling and presentation solutions.
 
 .. image:: _images/i_algorithm.png
     :width: 300
+
+In the right corner of the title bar of this panel, you will find two buttons.
+
+The left button allows to expand/contract the contents of this panel:
+
+* |icon_hide_contents|: When this icon is displayed, clicking on this button will hide the contents of the panel.
+
+* |icon_show_contents|: When this icon is displayed, clicking on this button will show the contents of the panel.
+
+Clicking on the right button displays a menu.
+
+.. image:: _images/menu_result.png
+
+This menu allows to choose the storage policy for the result of property algorithms (such as measures or layout algorithms). When they are applied to a subgraph, this result can be stored:
+
+* either in a local subgraph property (created on the fly if needed),
+
+* or in a property already existing in the ascendant hierarchy (inherited or local).
+
+
+
+Here are the description of the contents of the Algorithms panel:
 
 * *Filter*: A search field to find the algorithms whose name or (sub) group match a given pattern.
 
@@ -106,13 +130,32 @@ Tulip proposes several ready-to-use algorithms, offering - among others - colora
 
 .. _graph_list:
 
-Graph list
-==========
+Graphs panel
+============
 
-This window gives information about the currently opened graphs.
+.. |icon_hide_contents| image:: _images/i_hide_contents.png
+.. |icon_show_contents| image:: _images/i_show_contents.png
+
+This panel gives information about the currently opened graphs.
 
 .. image:: _images/i_graphs.png
     :width: 300
+
+|
+
+In the right corner of this title bar of this panel, you will find two buttons.
+
+The left button allows to expand/contract the contents of this panel:
+
+* |icon_hide_contents|: When this icon is displayed, clicking on this button will hide the contents of the panel.
+
+* |icon_show_contents|: When this icon is displayed, clicking on this button will show the contents of the panel.
+
+Clicking on right button allows to specify the synchronization policy of the Graphs panel with the workspace active panel:
+
+* |icon_link|: When this icon is displayed, it indicates that the selection of the active graph in the Graphs panel is synchronized with the selection of the graph in the workspace active panel. This means that when selecting a graph to display for this panel, it also becomes the active graph in the Graphs list and then the graph on which algoritms will applied.
+
+* |icon_unlink|: When this icon is displayed, it indicates that the selection of the active graph in the Graphs panel is not synchronized with the selection of the graph in the workspace active panel. 
 
 Users can right-click on the desired graph to open a menu proposing new options such as renaming the graph, deleting it, saving or exporting it (more in :ref:`first_save`).
 
