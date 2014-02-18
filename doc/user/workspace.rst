@@ -13,17 +13,13 @@ Manage the panels
 =================
 
 .. |icon_workspace_macros| image:: _images/icon_workspace_macros.png
-    :width: 384
 .. |icon_panel_arrow| image:: _images/icon_panel_arrow.png
-    :width: 89
 .. |icon_panels| image:: _images/icon_panels.png
-    :width: 173
 .. |icon_close_panel| image:: _images/icon_close_panel.png
-    :width: 21
 .. |icon_move_panel| image:: _images/icon_move_panel.png
-    :width: 19
 .. |icon_list_graph| image:: _images/icon_list_graph.png
-    :width: 23
+.. |icon_link| image:: _images/i_link.png
+.. |icon_unlink| image:: _images/i_unlink.png
 
 When working on Tulip, you will need several panels to see all the information you need. In order to easily compare or sort your results, you can find at the bottom of the workspace a toolbar containing three groups of buttons :
 
@@ -41,15 +37,23 @@ You can then double-click on a panel icon to open it, click on the cross in the 
 .. image:: _images/i_workspace_6panels.png
     :width: 600
 
-On the top-right corner of the workspace window, you will find three different buttons:
+|
+
+In the title bar of a workspace panel, you will find different buttons:
 
 * |icon_list_graph|: Clicking on this button will display a list of opened graphs. The name of the current one is displayed using a bold font. Choosing an other graph will modify the current panel and update the visualized information.
 
-* |icon_move_panel|: When using the tiled display, you can use this icon to reorganize the panels to your convinience. 
+* |icon_unlink|: When this icon is displayed, it indicates that the selection of the current graph in this workspace panel, is not synchronized with the selection of the active graph in the Graphs panel. Clicking on the button displaying this icon will enable the synchronization.
 
-* |icon_close_panel|: Clicking on this icon will delete the current panel. 
+* |icon_link|: When this icon is displayed, it indicates that the selection of the current graph in this workspace panel, is synchronized with the selection of the active graph in the Graphs panel. This means that when selecting a graph in the Graphs panel, it will be automatically the current one in this workspace panel if it is the active panel. Clicking on the button displaying this icon will disable the synchronization.
 
-The creation of panels have already been presented earlier. Consult :ref:`workspace_view` for more information.
+* |icon_move_panel|: When using the tiled display, you can press on this icon to move a panel and exchange its place with the one of another displayed panel. 
+
+* |icon_close_panel|: Clicking on this icon will delete the current panel.
+
+The title bar of the currently active workspace panel is highlited with a top green line.
+
+The creation of panels have already been presented in the previous section. Consult :ref:`workspace_view` for more information.
 
 
 .. _workspace_diagram:
@@ -319,7 +323,7 @@ The final element is a combo box, allowing the user to choose which graph to vis
 Scene
 -----
 
-The scene rendering settings can be opened by clicking on the **Scene** tab, in the top right corner of the node link diagram panel. The following view appears :
+The scene rendering settings can be opened by clicking on the **Scene** tab, in the top right corner of the node link diagram panel. The following tab then appears :
 
 .. image:: _images/i_workspace_scene.png
     :width: 452
@@ -333,6 +337,8 @@ The scene rendering settings can be opened by clicking on the **Scene** tab, in 
 
 * **Projection**: select the orthogonal or classic perspective projection.
 
+* **Graph changing**: specify if the scene point of view must change when switching the graph to display.
+
 Note that some of the settings mentioned above can be modified through the quick access bar or with the right click menu in the main window.
 
 You might need to click on the refresh button, in the top right corner of the tab to apply the changes made in this tab. The tab can be closed by clicking on the cross near the tab's name.
@@ -343,7 +349,7 @@ You might need to click on the refresh button, in the top right corner of the ta
 Layers
 ------
 
-The layers settings can be accessed by clicking on the **Layers** tab. The following view is displayed:
+The layers settings can be accessed by clicking on the **Layers** tab. The following tab is then is displayed:
 
 .. image:: _images/i_workspace_layers.png
     :width: 450
@@ -424,7 +430,7 @@ This panel displays the properties of the nodes and edges of the graph.
 Main window
 -----------
 
-Properties are an important concept in Tulip, they are used to store information about each node and edge. By convention, the properties used by the rendering engine begin with the “view” prefix but it is possible to define an unlimited number of additional properties to your convinience. 
+Properties are an important concept in Tulip, they are used to store information about each node and edge. By convention, the properties used by the rendering engine begin with the “view” prefix but it is possible to define an unlimited number of additional properties to your convenience. 
 
 Here is the list of all the rendering properties (e : used with edges, n: used with nodes):
 
