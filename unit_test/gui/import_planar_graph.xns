@@ -3180,6 +3180,12 @@ NEW-WINDOW:761,259:73400621,73400621,12611712,0,0,0:0x0+278+273:0,0:Set nodes va
 7,3,0,0,0,37,0,27688098,10,AT Translated Set 2 keyboard
 0,3,0,0,0,37,0,27688098
 6,3,0,0,0,37,0,27688098,3,Virtual core keyboard
+7,2,0,0,0,36,0,27688150,10,AT Translated Set 2 keyboard
+0,2,0,0,0,36,0,27688150
+6,2,0,0,0,36,0,27688150,3,Virtual core keyboard
+7,3,0,0,0,36,0,27688200,10,AT Translated Set 2 keyboard
+0,3,0,0,0,36,0,27688200
+6,3,0,0,0,36,0,27688200,3,Virtual core keyboard
 7,6,734,337,0,0,0,27688428,14,'USB Optical Mouse'
 0,6,737,338,0,0,0,27688428
 6,6,737,338,0,0,0,27688428,2,'Virtual core pointer'
