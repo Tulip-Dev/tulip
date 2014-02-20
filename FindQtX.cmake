@@ -27,6 +27,7 @@ IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
    ${Qt5WebKit_FOUND} AND ${Qt5WebKitWidgets_FOUND})
 
     SET(USE_QT5 true)
+	SET(QT_VERSION ${Qt5Widgets_VERSION_STRING})
 
     IF(WIN32)
         GET_TARGET_PROPERTY(QtCore_location Qt5::Core LOCATION)
@@ -88,6 +89,8 @@ ELSE(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
     SET(QT_USE_QTDBUS false)
     INCLUDE(${QT_USE_FILE})
 
+	SET(QT_VERSION "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
+	
      # define aliases for Qt macros
     MACRO(QTX_WRAP_CPP outfiles )
       QT4_WRAP_CPP(${outfiles} ${ARGN})
