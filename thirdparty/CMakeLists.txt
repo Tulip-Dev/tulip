@@ -91,8 +91,7 @@ IF(WIN32)
 	INSTALL_EXTERNAL_LIB("Qt5Sql.dll" qt)
 	INSTALL_EXTERNAL_LIB("Qt5Quick.dll" qt)
 	INSTALL_EXTERNAL_LIB("Qt5Qml.dll" qt)
-	INSTALL_EXTERNAL_LIB("Qt5V8.dll" qt)
-	
+
 	INSTALL_EXTERNAL_LIB("Qt5Cored.dll" qt)
 	INSTALL_EXTERNAL_LIB("Qt5Guid.dll" qt)
 	INSTALL_EXTERNAL_LIB("Qt5Networkd.dll" qt)
@@ -108,11 +107,19 @@ IF(WIN32)
 	INSTALL_EXTERNAL_LIB("Qt5Sqld.dll" qt)
 	INSTALL_EXTERNAL_LIB("Qt5Quickd.dll" qt)
 	INSTALL_EXTERNAL_LIB("Qt5Qmld.dll" qt)
-	INSTALL_EXTERNAL_LIB("Qt5V8d.dll" qt)
-	
+
         INSTALL_EXTERNAL_LIB("icuin*.dll" qt)
         INSTALL_EXTERNAL_LIB("icuuc*.dll" qt)
         INSTALL_EXTERNAL_LIB("icudt*.dll" qt)
+
+        IF(QT_VERSION VERSION_LESS 5.2)
+            INSTALL_EXTERNAL_LIB("Qt5V8.dll" qt)
+            INSTALL_EXTERNAL_LIB("Qt5V8d.dll" qt)
+        ELSE(QT_VERSION VERSION_LESS 5.2)
+            INSTALL_EXTERNAL_LIB("Qt5Positioning.dll" qt)
+            INSTALL_EXTERNAL_LIB("Qt5Positioningd.dll" qt)
+        ENDIF(QT_VERSION VERSION_LESS 5.2)
+
   ENDIF(USE_QT5)
   
 ENDIF(WIN32)
