@@ -64,7 +64,7 @@
 #include <malloc.h>
 #endif
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW64__)
 #include <intrin.h>
 
 #elif defined(OGDF_SYSTEM_UNIX) || (defined(__MINGW32__) && !defined(__MINGW64__))
