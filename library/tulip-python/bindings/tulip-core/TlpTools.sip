@@ -27,7 +27,7 @@
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLoaderTxt.h>
-#include <tulip/PythonInterpreter.h>
+#include <tulip/TlpTools.h>
 %End
 
 namespace tlp {
@@ -121,7 +121,10 @@ Loads C++ and Python plugins installed in a specific directory.
         tlp::PluginLibraryLoader::loadPlugins(&pluginLoader);
     }
     tlp::TulipPluginsPath = oldTlpPluginsPath;
-    tlp::PythonInterpreter::getInstance()->loadTulipPythonPluginsFromDir(a0->c_str());
+    std::string importPythonPlugins = "loadTulipPythonPluginsFromDir(\"";
+    importPythonPlugins += (*a0 + "\")");
+    PyObject *pyRet = evalPythonStatement(importPythonPlugins);
+    Py_XDECREF(pyRet);
 %End
 
 //=====================================================================
@@ -148,7 +151,11 @@ Returns :const:`True` if the plugin was correctly loaded.
             sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, &pluginLoader);
         }
     } else {
-        sipRes = tlp::PythonInterpreter::getInstance()->loadTulipPythonPlugin(a0->c_str());
+        std::string importPythonPlugin = "loadTulipPythonPlugin(\"";
+        importPythonPlugin += (*a0 + "\")");
+        PyObject *pyRet = evalPythonStatement(importPythonPlugin);
+        sipRes = (pyRet == Py_True);
+        Py_XDECREF(pyRet);
     }
 %End
 

@@ -45,6 +45,49 @@
     PyObject *tlpVec3f = PyObject_GetAttrString(tlpClass, "Vec3f");
     PyObject_SetAttrString(tlpClass, "Coord", tlpVec3f);
     PyObject_SetAttrString(tlpClass, "Size", tlpVec3f);
+
+    std::string pluginLoaderFuncs =
+    "import os\n"
+    "import sys\n"
+
+    "def loadTulipPythonPlugin(pluginFilePath):\n"
+    "        if not os.path.isfile(pluginFilePath) or not pluginFilePath.endswith(\".py\"):\n"
+    "                return False\n"
+
+    "        try:\n"
+    "                pluginFile = open(pluginFilePath)\n"
+    "                pluginFileContent = pluginFile.read()\n"
+    "        except:\n"
+    "                return False\n"
+
+    "        if not \"tulipplugins.register\" in pluginFileContent:\n"
+    "                return False\n"
+
+    "        modulePath = os.path.dirname(pluginFilePath)\n"
+    "        moduleName = os.path.basename(pluginFilePath)[:-3]\n"
+
+    "        if not modulePath in sys.path:\n"
+    "                sys.path.append(modulePath)\n"
+
+    "        try:\n"
+    "                mod = __import__(moduleName)\n"
+    "        except ImportError:\n"
+    "                return False\n"
+
+    "        return True\n"
+
+    "def loadTulipPythonPluginsFromDir(pluginsDirPath):\n"
+    "        if not os.path.exists(pluginsDirPath):\n"
+    "                return False\n"
+
+    "        files = os.listdir(pluginsDirPath)\n"
+
+    "        for file in files:\n"
+    "                loadTulipPythonPlugin(pluginsDirPath+\"/\"+file)\n"
+
+    "        return True\n"
+    ;
+    PyRun_SimpleString(pluginLoaderFuncs.c_str());
 %End
 
 %ModuleHeaderCode
@@ -96,6 +139,8 @@ extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
 extern void replaceAll(std::string &s, const std::string& replaceWhat, const std::string& replaceWithWhat);
 
 extern bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty *selection);
+
+extern PyObject* evalPythonStatement(const std::string &pythonStatement);
 
 #if PY_MAJOR_VERSION >= 3
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
@@ -178,6 +223,26 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
     return ret;
 }
 #endif
+
+PyObject* evalPythonStatement(const std::string &pythonStatement) {
+#if PY_MAJOR_VERSION >= 3
+  PyObject *pName = PyUnicode_FromString("__main__");
+#else
+  PyObject *pName = PyString_FromString("__main__");
+#endif
+  PyObject *pMainModule = PyImport_Import(pName);
+  Py_XDECREF(pName);
+  PyObject *pMainDict = PyModule_GetDict(pMainModule);
+
+  PyObject *ret = PyRun_String(pythonStatement.c_str(), Py_eval_input, pMainDict, pMainDict);
+
+  if (PyErr_Occurred()) {
+    PyErr_Print();
+    PyErr_Clear();
+  }
+
+  return ret;
+}
 
 %End
 
