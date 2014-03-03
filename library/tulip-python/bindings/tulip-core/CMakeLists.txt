@@ -79,13 +79,17 @@ SET_SOURCE_FILES_PROPERTIES(siptuliptlpIteratorGraph.cpp
                             PROPERTIES COMPILE_DEFINITIONS ITERATOR_NO_COPY)
                             
 SET_SOURCE_FILES_PROPERTIES(siptuliptlpBooleanProperty.cpp 
-							siptuliptlpBooleanVectorProperty.cpp
-							siptuliptlpDoubleProperty.cpp
-							siptuliptlpDoubleVectorProperty.cpp
-							siptuliptlpIntegerProperty.cpp
-							siptuliptlpIntegerVectorProperty.cpp	
+                            siptuliptlpBooleanVectorProperty.cpp
+                            siptuliptlpDoubleProperty.cpp
+                            siptuliptlpDoubleVectorProperty.cpp
+                            siptuliptlpIntegerProperty.cpp
+                            siptuliptlpIntegerVectorProperty.cpp
                             PROPERTIES COMPILE_DEFINITIONS PROPERTY_BASE_TYPE)                            
  
+SET(TULIP_PYTHON_BINDINGS_SRC
+    ${TULIP_PYTHON_BINDINGS_SRC}
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../src/PythonCppTypesConverter.cpp)
+
 ADD_LIBRARY(${LibTulipCorePythonBindingsName} SHARED ${TULIP_PYTHON_BINDINGS_SRC})
 
 IF(NOT SYSTEM_SIP)
@@ -104,7 +108,7 @@ SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
 ENDIF(WIN32)
 
 TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${LibTulipCoreName})
-TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${LibTulipPythonName})
+TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${PYTHON_LIBRARY})
 
 ADD_CUSTOM_TARGET(touchTulipPythonCMakeLists ALL
                   COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_LIST_FILE}
