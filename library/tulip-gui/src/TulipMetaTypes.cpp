@@ -194,4 +194,5 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
 
 void tlp::initQTypeSerializers() {
   DataSet::registerDataTypeSerializer<QStringListType::RealType>(KnownTypeSerializer<QStringListType>("qstringlist"));
+  DataSet::registerDataTypeSerializer<QStringType::RealType>(KnownTypeSerializer<QStringType>("qstring"));
 }
