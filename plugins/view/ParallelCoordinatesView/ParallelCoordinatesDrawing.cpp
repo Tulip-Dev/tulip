@@ -588,6 +588,12 @@ vector<ParallelAxis *> ParallelCoordinatesDrawing::getAllAxis() {
   for (size_t i = 0 ; i < axisOrder.size() ; ++i) {
     ParallelAxis *pa = parallelAxis[axisOrder[i]];
 
+    if (pa == NULL) {
+      // on the fly clean up for deleted properties
+      parallelAxis.erase(axisOrder[i]);
+      continue;
+    }
+
     if (!pa->isHidden()) {
       axis.push_back(pa);
     }
