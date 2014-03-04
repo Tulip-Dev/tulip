@@ -673,13 +673,13 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
 
   GlLODCalculator *selectLODCalculator;
 
-  //check if the layer is in scene
+  //check if the layer is in the scene
   bool layerInScene=true;
 
   if(layer) {
     layerInScene=false;
 
-    for(vector<pair<string,GlLayer *> >::iterator it=layersList.begin(); it!=layersList.end() && layerInScene; ++it) {
+    for(vector<pair<string,GlLayer *> >::const_iterator it=layersList.begin(); it!=layersList.end() && layerInScene; ++it) {
       if(it->second==layer)
         layerInScene=true;
     }
@@ -693,10 +693,9 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
   }
 
   selectLODCalculator->setRenderingEntitiesFlag((RenderingEntitiesFlag)(RenderingAll | RenderingWithoutRemove));
-
   selectLODCalculator->clear();
 
-  //Collect entities if need
+  //Collect entities if needed
   GlLODSceneVisitor *lodVisitor=new GlLODSceneVisitor(selectLODCalculator,NULL);
 
   if(layerInScene) {
@@ -725,14 +724,13 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
   LayersLODVector &layersLODVector=selectLODCalculator->getResult();
 
   for(vector<LayerLODUnit>::iterator itLayer=layersLODVector.begin(); itLayer!=layersLODVector.end(); ++itLayer) {
-    Camera *camera=(Camera*)((*itLayer).camera);
+    Camera *camera=itLayer->camera;
 
     vector<GlGraphComposite*> compositesToRender;
 
     Vector<int, 4> viewport = camera->getViewport();
 
-    unsigned int size;
-    size=(*itLayer).simpleEntitiesLODVector.size();
+    unsigned int size=itLayer->simpleEntitiesLODVector.size();
 
     if(size==0)
       continue;
@@ -740,7 +738,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
     glPushAttrib(GL_ALL_ATTRIB_BITS); //save previous attributes
     glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS); //save previous attributes
 
-    //Allocate memory to store the result oh the selection
+    //Allocate memory to store the result of the selection
     GLuint (*selectBuf)[4] = new GLuint[size][4];
     glSelectBuffer(size*4 , (GLuint *)selectBuf);
     //Activate Open Gl Selection mode
@@ -773,10 +771,8 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
     map<unsigned int, SelectedEntity> idToEntity;
     unsigned int id=1;
 
-    if((type & RenderingSimpleEntities)!=0) {
-      vector<SimpleEntityLODUnit>::iterator it;
-
-      for(it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
+    if(type & RenderingSimpleEntities) {
+      for(vector<SimpleEntityLODUnit>::const_iterator it = itLayer->simpleEntitiesLODVector.begin(); it!=itLayer->simpleEntitiesLODVector.end(); ++it) {
         if(it->lod<0)
           continue;
 
@@ -787,10 +783,8 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
       }
     }
 
-    if(((type & RenderingNodes)!=0) || ((type & RenderingEdges)!=0)) {
-      vector<SimpleEntityLODUnit>::iterator it;
-
-      for(it = (*itLayer).simpleEntitiesLODVector.begin(); it!=(*itLayer).simpleEntitiesLODVector.end(); ++it) {
+    if((type & RenderingNodes) || (type & RenderingEdges)) {
+      for(vector<SimpleEntityLODUnit>::const_iterator it = itLayer->simpleEntitiesLODVector.begin(); it!=itLayer->simpleEntitiesLODVector.end(); ++it) {
         if(it->lod<0)
           continue;
 
@@ -812,7 +806,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
 
     delete[] selectBuf;
 
-    for(vector<GlGraphComposite*>::iterator it=compositesToRender.begin(); it!=compositesToRender.end(); ++it) {
+    for(vector<GlGraphComposite*>::const_iterator it=compositesToRender.begin(); it!=compositesToRender.end(); ++it) {
       (*it)->selectEntities(camera,type,x,y,w,h,selectedEntities);
     }
 
