@@ -27,7 +27,15 @@ using namespace std;
 namespace tlp {
 PLUGIN(ConvolutionClustering)
 
-ConvolutionClustering::ConvolutionClustering(PluginContext* context):DoubleAlgorithm(context) {}
+ConvolutionClustering::ConvolutionClustering(PluginContext* context):DoubleAlgorithm(context), metric(NULL) {
+  addInParameter<NumericProperty*>("metric",
+				   HTML_HELP_OPEN()			\
+				   HTML_HELP_DEF( "type", "NumericProperty" ) \
+				   HTML_HELP_DEF( "value", "An existing node metric" ) \
+				   HTML_HELP_BODY()			\
+				   "An existing node metric property"	\
+				   HTML_HELP_CLOSE(), "viewMetric", false);
+}
 
 //convolution function, build a triangular function center in 0 with a width width and a
 double g(int k,double width,double amplitude) {
@@ -67,10 +75,13 @@ list<int> ConvolutionClustering::getLocalMinimum() {
   vector<double> &discretHisto = *getHistogram();
   list<int> localMinimum;
   localMinimum.push_back(0);
-  bool slopeSens = !(discretHisto[0]>discretHisto[1]); //false descent
+  double previous = discretHisto[0];
+  double current = discretHisto[1];
+  bool slopeSens = !(previous > current); //false descent
 
   for (unsigned int i = 1; i < discretHisto.size(); ++i) {
-    bool newSlopeSens = !(discretHisto[i-1]>discretHisto[i]);
+    current = discretHisto[i];
+    bool newSlopeSens = !(previous > current);
 
     if (newSlopeSens != slopeSens) {
       //new Local minimum
@@ -84,9 +95,9 @@ list<int> ConvolutionClustering::getLocalMinimum() {
         else
           localMinimum.push_back(i);
       }
-
       slopeSens=newSlopeSens;
     }
+    previous = current;
   }
 
   return localMinimum;
@@ -99,7 +110,7 @@ void ConvolutionClustering::autoSetParameter() {
 
   while (itN->hasNext()) {
     node itn=itN->next();
-    double tmp = metric->getNodeValue(itn);
+    double tmp = metric->getNodeDoubleValue(itn);
 
     if (histo.find(tmp)==histo.end())
       histo[tmp]=1;
@@ -122,16 +133,18 @@ void ConvolutionClustering::autoSetParameter() {
   ++itMap;
 
   for (; itMap!=histo.end(); ++itMap) {
-    deltaSum+=itMap->first-lastValue;
+    double delta = itMap->first-lastValue;
+    deltaSum+=delta;
 
-    if (itMap->first-lastValue>deltaXMax) deltaXMax=itMap->first-lastValue;
-
-    if (itMap->first-lastValue<deltaXMin ||  deltaXMin<0 ) deltaXMin=itMap->first-lastValue;
+    if (delta > deltaXMax)
+      deltaXMax = delta;
+    else if (delta < deltaXMin ||  deltaXMin < 0 )
+      deltaXMin = delta;
 
     lastValue=(*itMap).first;
   }
 
-  histosize=(int)((metric->getNodeMax()-metric->getNodeMin())/deltaXMin);
+  histosize=(int)((metric->getNodeDoubleMax()-metric->getNodeDoubleMin())/deltaXMin);
 
   if (histosize > 16384) histosize = 16384; //histosize = histosize <? 16384;
 
@@ -143,33 +156,31 @@ void ConvolutionClustering::autoSetParameter() {
   //width=(int)(deltaXMax*histosize/(metric->getNodeMax()-metric->getNodeMin()));
   //width=(int)(deltaXMin*histosize/(metric->getNodeMax()-metric->getNodeMin()));
   deltaSum /= histo.size();
-  width=(int)(deltaSum*histosize/(metric->getNodeMax()-metric->getNodeMin()));
+  width=(int)(deltaSum*histosize/(metric->getNodeDoubleMax()-metric->getNodeDoubleMin()));
   //===============================================================================
   //Find good threshold
   //make the average of all local minimum
   vector<double> &discretHisto=*getHistogram();
-  list <double> localMinimum;
   double sum=0;
   int nbElement=1;
-  bool slopeSens;
 
-  if (discretHisto[0]>discretHisto[1]) slopeSens=false;
-  else slopeSens=true;
+  if (discretHisto.size() > 1) {
+    double previous = discretHisto[0];
+    double current = discretHisto[1];
+    bool slopeSens = !(previous > current);
 
-  for (unsigned int i=1; i<discretHisto.size(); ++i) {
-    bool newSlopeSens;
+    for (unsigned int i=1; i<discretHisto.size(); ++i) {
+      double current = discretHisto[i];
+      bool newSlopeSens = !(previous > current);
 
-    if (discretHisto[i-1]>discretHisto[i]) newSlopeSens=false;
-    else newSlopeSens=true;
-
-    if (newSlopeSens!=slopeSens) {
-      //new Local minimum
-      localMinimum.push_back(discretHisto[i]);
-      nbElement++;
-      sum+=(discretHisto[i]+discretHisto[i-1])/ 2;
+      if (newSlopeSens != slopeSens) {
+	//new Local minimum
+	nbElement++;
+	sum+=(current + previous)/ 2;
+	slopeSens = newSlopeSens;
+      }
+      previous = current;
     }
-
-    slopeSens=newSlopeSens;
   }
 
   threshold=(int)(sum/nbElement);
@@ -178,12 +189,13 @@ void ConvolutionClustering::autoSetParameter() {
 vector<double> *ConvolutionClustering::getHistogram() {
   //building of the histogram of values
   histogramOfValues.clear();
-  Iterator<node> *itN=graph->getNodes();
+  double minVal = metric->getNodeDoubleMin();
+  double maxMinRange = metric->getNodeDoubleMax() - minVal;
 
-  while (itN->hasNext()) {
-    node itn=itN->next();
-    int tmp=(int)( (metric->getNodeValue(itn) - metric->getNodeMin() ) * (double)histosize /
-                   (metric->getNodeMax() - metric->getNodeMin()));
+  node n;
+  forEach(n, graph->getNodes()) {
+    int tmp=(int)((metric->getNodeDoubleValue(n) - minVal) * (double)histosize /
+                   maxMinRange);
 
     if (histogramOfValues.find(tmp) == histogramOfValues.end())
       histogramOfValues[tmp]=1;
@@ -191,14 +203,13 @@ vector<double> *ConvolutionClustering::getHistogram() {
       histogramOfValues[tmp]+=1;
   }
 
-  delete itN;
-
   //Apply the convolution on the histogram of values
   //Convolution parameter, this version work only with integer
   smoothHistogram.clear();
   smoothHistogram.resize(histosize);
 
-  for (int pos=0; pos<histosize; ++pos) smoothHistogram[pos]=0;
+  for (int pos=0; pos<histosize; ++pos)
+    smoothHistogram[pos]=0;
 
   map<int,int>::iterator itMap;
 
@@ -215,63 +226,33 @@ vector<double> *ConvolutionClustering::getHistogram() {
   return &smoothHistogram;
 }
 //================================================================================
-//void ConvolutionClustering::buildSubGraphs(const vector<int>& ranges){
-//  //  tlp::warning() << __PRETTY_FUNCTION__ << "...." << flush;
-//  //build the empty graphs
-//  vector<Graph *> newGraphs(ranges.size()-1);
-//  for (unsigned int i=0; i< ranges.size()-1; ++i) {
-//    stringstream sstr;
-//    sstr << "Cluster_" << i;
-//    newGraphs[i] = tlp::newSubGraph(graph,sstr.str());
-//  }
-
-//  //Fill the graphs with nodes
-//  Iterator<node> *itN=graph->getNodes();
-//  while (itN->hasNext()) {
-//    node itn=itN->next();
-//    int tmp = getInterval((int)( (metric->getNodeValue(itn) - metric->getNodeMin() ) *
-//         (double)histosize / (metric->getNodeMax()-metric->getNodeMin()))
-//        ,ranges);
-//    newGraphs[tmp]->addNode(itn);
-//  } delete itN;
-
-//  //Fill the graphs with edges
-//  for (unsigned int i=0; i< ranges.size()-1; ++i) {
-//    Iterator<edge> *itE=graph->getEdges();
-//    while (itE->hasNext()) {
-//      edge ite=itE->next();
-//      if (newGraphs[i]->isElement(graph->source(ite)) && newGraphs[i]->isElement(graph->target(ite)) )
-//  newGraphs[i]->addEdge(ite);
-//    } delete itE;
-//  }
-//  for (unsigned int i=0; i< ranges.size()-1; ++i) {
-//    if (newGraphs[i]->numberOfNodes()==0) {
-//      graph->delSubGraph(newGraphs[i]);
-//    }
-//  }
-//  //  tlp::warning() << " end." << endl;
-//}
-//================================================================================
 void ConvolutionClustering::getClusters(const std::vector<int> &ranges) {
   node n;
+  double minVal = metric->getNodeDoubleMin();
+  double maxMinRange = metric->getNodeDoubleMax() - minVal;
   forEach(n,graph->getNodes()) {
-    int tmp = getInterval((int)( (metric->getNodeValue(n) - metric->getNodeMin() )*(double)histosize / (metric->getNodeMax()-metric->getNodeMin())),ranges);
+    int tmp = getInterval((int)((metric->getNodeDoubleValue(n) - minVal)*(double)histosize / maxMinRange), ranges);
     result->setNodeValue(n,tmp);
   }
 }
-
 //================================================================================
 bool ConvolutionClustering::run() {
   histosize=128;
 
-  metric=graph->getProperty<DoubleProperty>("viewMetric");
+  if (dataSet != NULL)
+    dataSet->get("metric", metric);
+  if (metric == NULL)
+    metric=graph->getProperty<DoubleProperty>("viewMetric");
   autoSetParameter();
   getHistogram();
   ConvolutionClusteringSetup *mysetup = new ConvolutionClusteringSetup(this);
   bool setupResult = mysetup->exec();
   delete mysetup;
 
-  if (setupResult==QDialog::Rejected) return false;
+  if (setupResult==QDialog::Rejected) {
+    pluginProgress->setError("user cancellation");
+    return false;
+  }
 
   vector<int> ranges;
   ranges.push_back(0);
@@ -284,7 +265,6 @@ bool ConvolutionClustering::run() {
 
   ranges.push_back(histosize);
   //Ensure that there is elements inside each intervals.
-//  buildSubGraphs(ranges);
   getClusters(ranges);
   return true;
 }
@@ -293,7 +273,7 @@ bool ConvolutionClustering::run() {
 bool ConvolutionClustering::check(std::string& errorMsg) {
   metric=graph->getProperty<DoubleProperty>("viewMetric");
 
-  if (metric->getNodeMax() == metric->getNodeMin()) {
+  if (metric->getNodeDoubleMax() == metric->getNodeDoubleMin()) {
     errorMsg = "All metric values are the same";
     return false;
   }
