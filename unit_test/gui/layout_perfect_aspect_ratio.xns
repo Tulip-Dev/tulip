@@ -452,12 +452,6 @@ error-range                   0-0
 7,3,0,0,0,54,0,1947912,10,AT Translated Set 2 keyboard
 0,3,0,0,0,54,0,1947912
 6,3,0,0,0,54,0,1947912,3,Virtual core keyboard
-7,2,0,0,0,28,0,1948746,10,AT Translated Set 2 keyboard
-0,2,0,0,0,28,0,1948746
-6,2,0,0,0,28,0,1948746,3,Virtual core keyboard
-7,3,0,0,0,28,0,1948816,10,AT Translated Set 2 keyboard
-0,3,0,0,0,28,0,1948816
-6,3,0,0,0,28,0,1948816,3,Virtual core keyboard
 7,6,248,134,0,0,0,1949725,12,'AlpsPS/2 ALPS DualPoint TouchPad'
 0,6,248,136,0,0,0,1949725
 6,6,248,136,0,0,0,1949725,2,'Virtual core pointer'
