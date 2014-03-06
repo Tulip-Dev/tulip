@@ -18,10 +18,12 @@
  */
 #include <tulip/GlMainView.h>
 
+#include <QApplication>
 #include <QGraphicsProxyWidget>
 #include <QGraphicsView>
 #include <QAction>
 #include <QMenu>
+#include <QTimer>
 
 #include <tulip/GlMainWidgetGraphicsItem.h>
 #include <tulip/GlMainWidget.h>
@@ -121,6 +123,14 @@ GlMainWidget* GlMainView::getGlMainWidget() const {
 }
 
 void GlMainView::centerView(bool graphChanged) {
+  if (QApplication::activeWindow() == NULL) {
+    // the view may not have the correct size
+    // if the call occurs before the first window activation
+    // so we ensure it happens when everything is ok
+    QTimer::singleShot(100, this, SLOT(delayedCenterView()));
+    return;
+  }
+
   float gvWidth = (float) graphicsView()->width();
   // we apply a zoom factor to preserve a 50 px margin width
   // to ensure the scene will not be drawn under the configuration tabs title
@@ -128,6 +138,10 @@ void GlMainView::centerView(bool graphChanged) {
 
   if(isOverviewVisible)
     drawOverview(graphChanged);
+}
+
+void GlMainView::delayedCenterView() {
+  centerView();
 }
 
 void GlMainView::glMainViewDrawn(bool graphChanged) {
