@@ -84,19 +84,19 @@ public:
  * Each class that wishes to send or receive notifications needs to inherit from Observable.
  *
  * Tulip has two separate mechanisms of observation, Observers and Listeners.
- * These two mechanisms work through the same class, the difference lies in the way an Observer of Listener is attached to
- * the object whose events it will receive.
+ * These two mechanisms work through the same class, the difference lies
+ * in the way an Observer or a Listener is attached to the object whose events
+ * it will receive.
  *
  * The Listener is closer to the original pattern, where events are sent directly to the recipient.
- * The Observer is a twist for performance purposes, it can receive the events in a delayed fashion, and cannot know
- * if the event was just sent or was delayed.
+ * The Observer is a twist for performance purposes, it can receive the events in a delayed fashion, and cannot know if the event was just sent or was delayed.
  *
  * The purpose of this twist is to allow algorithms that perform a high number of modifications (e.g. creating a grid to route edges,
  *  creating multiple subgraphs with metrics or layouts) to run smoothly without overcrowding the event queue.
- * As events are sent for every graph modification  (e.g. adding a node, deleting a node, setting a value on a node), the
- * sheer quantity of events sent by these algortithms would cause a big performance hit.
+ * As events are sent for every graph modification (e.g. adding a node, deleting a node, setting a value on a node), the sheer quantity of events sent by these
+ * algorithms would cause a big performance hit.
  *
- * This is avoided by using Observable::holdObservers().
+ * This can be avoided by using Observable::holdObservers().
  * This holds all events in a queue and only sends them when Observable::unholdObservers() is called.
  *
  * The only exception to this mechanism is the Event::DELETE kind of event, that is never held back.
@@ -106,7 +106,7 @@ public:
  *
  * The Listener however is not affected by the use of Observable::holdObservers() and Observable::unholdObservers().
  *
- * The observables Observers and Listeners are internally stocked in a Graph structure, allowing to visualize the connections easily.
+ * The observable Observers and Listeners are internally store in a Graph structure, allowing to easily visualize their connections.
  * This eases debugging of Observation-related bugs.
  *
  * Events are always sent to Listeners first, and then to Observers, even when there is no hold.
@@ -114,10 +114,10 @@ public:
  * If you wish to receive events, you must inherit from Observable, and implement one of two virtual functions.
  *
  * If you need to received events without delay, you will be a Listener, and need to implement treatEvent().
- * You will attach to the object you wish to receive events from using addObserver().
+ * You will attach to the object you wish to receive events from using addListener().
  *
  * If you can receive events after a delay, you will be an Observer, and need to implement treatEvents().
- * You will attach to the object you wish to receive events from using addListener().
+ * You will attach to the object you wish to receive events from using addObserver().
  *
  **/
 class  TLP_SCOPE Observable {
@@ -162,7 +162,7 @@ public:
   }
 
   /**
-   * @brief addObserver Adds an Observer to this object.
+   * @brief Adds an Observer to this object.
    *
    * The observer will receive events sent by this object, if there is no hold applied.
    * @param observer The object that will receive events.
@@ -170,7 +170,7 @@ public:
   void addObserver(Observable * const observer) const;
 
   /**
-   * @brief addListener Adds a Listener to this object.
+   * @brief Adds a Listener to this object.
    *
    * The Listener will receive events regardless of the state of holdObservers() and unholdObservers().
    * @param listener The object that will receive events.
@@ -178,7 +178,7 @@ public:
   void addListener(Observable * const listener) const;
 
   /**
-   * @brief removeObserver Removes an observer from this object.
+   * @brief Removes an observer from this object.
    *
    * The observer will no longer receive events from this object.
    * @param observer The observer to remove from this object.
@@ -186,7 +186,7 @@ public:
   void  removeObserver(Observable  * const observerver) const;
 
   /**
-   * @brief removeListener Removes a listener from this object.
+   * @brief Removes a listener from this object.
    *
    * The listener will no longer receive events from this object.
    * @param listener The listener to remove from this object.
@@ -194,43 +194,41 @@ public:
   void  removeListener(Observable  * const listener) const;
 
   /**
-   * @brief getSent gets the number of sent events.
-   * @return the number of sent events
+   * @brief gets the number of sent events.
+   * @return the number of sent events (0 when compiling with -DNDEBUG).
    */
   unsigned int getSent() const;
   \
   /**
-   * @brief getReceived get the number of received events.
-   * @return the number of received events.
+   * @brief get the number of received events.
+   * @return the number of received events (0 when compiling with -DNDEBUG).
    */
   unsigned int getReceived() const;
 
   /**
-   * @brief countObservers gets the number of observers attached to this object.
+   * @brief gets the number of observers attached to this object.
    * @return the number of observers attached to this object.
    */
   unsigned int countObservers() const;
 
   /**
-   * @brief countListeners gets the number of listeners attached to this object.
+   * @brief gets the number of listeners attached to this object.
    * @return the number of listeners attached to this object.
    */
   unsigned int countListeners() const;
 
 public:
   /**
-   * @brief isAlive Internal function for debugging.
-   *
+   * @brief internal function for debugging purpose
    * If there is no hold currently applied, or no update ongoing, always returns true.
    * Checks if the object represented by the node has been deleted.
    * @param n The node to check for life signs.
-   * @return Whether the node is dead, Jim.
+   * @return Whether the node is dead.
   **/
   static bool isAlive(tlp::node n);
 
   /**
-   * @brief getObject Internal function for debugging.
-   *
+   * @brief internal function for debugging purpose
    * If called during an update, it is possible the pointed object has been deleted.
    * use isAlive() to check for this and avoid a crash.
    * @param n The node representing the object to retrieve.
@@ -239,7 +237,7 @@ public:
   static Observable* getObject(tlp::node n);
 
   /**
-   * @brief getObject Internal function for debugging.
+   * @brief internal function for debugging purpose
    * getScheduled get the number of scheduled events for this Observable.
    * @param n The node of an Observable object
    * @return the number of scheduled events involving this Observable as sender or receiver.
@@ -247,7 +245,7 @@ public:
   static unsigned int getScheduled(tlp::node n);
 
   /**
-   * @brief getNode Internal function for debugging
+   * @brief internal function for debugging purpose
    * Get the node representing this object in the Observable Graph.
    * @param obs the Observable object
    * @return the node of the Observable object in the Observable Graph.
@@ -255,7 +253,7 @@ public:
   static tlp::node getNode(const tlp::Observable* obs);
 
   /**
-   * @brief getObservableGraph Gets the observation graph.
+   * @brief Gets the observation graph.
    * @return The graph containing a node for each Observable/Observer/Listener, and an edge between connected objects.
    */
   static const tlp::VectorGraph& getObservableGraph();
@@ -267,7 +265,7 @@ protected:
   Observable& operator=(const Observable &);
 
   /**
-   * @brief sendEvent Sends an event to all the Observers/Listeners.
+   * @brief Sends an event to all the Observers/Listeners.
    * It is higly recommended to check if there are observers/listeners to send the event to before actually sending it
    * to avoid the overhead of creating too many objects.
    *
@@ -284,7 +282,7 @@ protected:
   void sendEvent(const Event &message);
 
   /**
-   * @brief treatEvents This function is called when events are sent to Observers, and Observers only.
+   * @brief This function is called when events are sent to Observers, and Observers only.
    *
    * It is passed a vector of all the events that happened since the last call.
    * If events were held, this vector can be pretty large, and if events were not held it is likely it only contains a single element.
@@ -294,7 +292,7 @@ protected:
   virtual void treatEvents(const std::vector<Event> &events);
 
   /**
-   * @brief treatEvent This function is called when events are sent to the Listeners, and Listeners only.
+   * @brief This function is called when events are sent to the Listeners, and Listeners only.
    *
    * Is it passed a reference to the event that just happened.
    *
@@ -312,13 +310,13 @@ protected:
   * To achieve this, you can call this function in your destructor, and the DELETE event will be sent.
   * This will allow your Listeners/Observers to access your members one last time before deletion.
   *
-  * @warning This function must be called one time only per object.
+  * @warning This function must be called only once per object.
   * Make sure no other class in the inheritance tree calls this function before adding this call to your destructor.
   */
   void observableDeleted();
 
   /**
-   * @brief hasOnlookers Checks whether there are Observers/Listeners attached to this object.
+   * @brief Checks whether there are Observers/Listeners attached to this object.
    *
    * Using this function avoids the creation of events that no-one will see :
    * @code
