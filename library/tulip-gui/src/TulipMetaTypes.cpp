@@ -85,10 +85,18 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   if (v.userType() == qMetaTypeId<QVector<bool> >())
     return new TypedData<tlp::BooleanVectorType::RealType>(new tlp::BooleanVectorType::RealType(v.value<QVector<bool> >().toStdVector()));
 
+
   CHECK_QVARIANT(tlp::PointType::RealType);
   CHECK_QVARIANT(tlp::SizeType::RealType);
   CHECK_QVARIANT(tlp::StringType::RealType);
   CHECK_QVARIANT(tlp::ColorType::RealType);
+  CHECK_QVARIANT(tlp::ColorVectorType::RealType);
+  CHECK_QVARIANT(tlp::CoordVectorType::RealType);
+  CHECK_QVARIANT(tlp::DoubleVectorType::RealType);
+  CHECK_QVARIANT(tlp::IntegerVectorType::RealType);
+  // same as tlp::CoordVectorType::RealType
+  //CHECK_QVARIANT(tlp::SizeVectorType::RealType);
+  CHECK_QVARIANT(tlp::StringVectorType::RealType);
 
   CHECK_QVARIANT(tlp::BooleanProperty*);
   CHECK_QVARIANT(tlp::DoubleProperty*);
@@ -164,6 +172,13 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   CHECK_DATATYPE(tlp::SizeType::RealType);
   CHECK_DATATYPE(tlp::StringType::RealType);
   CHECK_DATATYPE(tlp::ColorType::RealType);
+  CHECK_DATATYPE(tlp::ColorVectorType::RealType);
+  CHECK_DATATYPE(tlp::CoordVectorType::RealType);
+  CHECK_DATATYPE(tlp::DoubleVectorType::RealType);
+  CHECK_DATATYPE(tlp::IntegerVectorType::RealType);
+  // same as tlp::CoordVectorType::RealType
+  //CHECK_DATATYPE(tlp::SizeVectorType::RealType);
+  CHECK_DATATYPE(tlp::StringVectorType::RealType);
 
   CHECK_DATATYPE(tlp::BooleanProperty*);
   CHECK_DATATYPE(tlp::DoubleProperty*);
