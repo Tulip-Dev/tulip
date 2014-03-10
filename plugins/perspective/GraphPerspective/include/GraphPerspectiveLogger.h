@@ -33,10 +33,8 @@ class GraphPerspectiveLogger: public QFrame {
 
   QtMsgType _logSeverity;
   unsigned int _logCount;
-
   Ui::GraphPerspectiveLogger* _ui;
 
-  QString iconForType(QtMsgType);
 public:
   GraphPerspectiveLogger(QWidget* parent = NULL);
   ~GraphPerspectiveLogger();
