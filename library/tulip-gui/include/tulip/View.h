@@ -288,8 +288,8 @@ public slots:
 
 signals:
   /**
-    @brief Inform the overleying subsystem that this view needs to be drawn.
-    @note Dependeing on the overlying implementation, a subsequent call to draw might not be immediate.
+    @brief Inform the overlying subsystem that this view needs to be drawn.
+    @note Depending on the overlying implementation, a subsequent call to draw might not be immediate.
     */
   void drawNeeded();
 

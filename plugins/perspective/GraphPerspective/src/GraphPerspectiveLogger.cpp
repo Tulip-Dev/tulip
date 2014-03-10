@@ -32,25 +32,27 @@ GraphPerspectiveLogger::~GraphPerspectiveLogger() {
   delete _ui;
 }
 
-QString GraphPerspectiveLogger::iconForType(QtMsgType type) {
+static QString iconForType(QtMsgType type) {
   QString pxUrl(":/tulip/graphperspective/icons/16/logger-");
 
   switch (type) {
   case QtDebugMsg:
-    pxUrl+="info.png";
+    pxUrl+="info";
     break;
 
   case QtWarningMsg:
-    pxUrl+="danger.png";
+    pxUrl+="danger";
     break;
 
   case QtCriticalMsg:
-    pxUrl+="error.png";
+  case QtFatalMsg:
+      pxUrl+="error";
     break;
 
-  default:
-    break;
+
   }
+
+  pxUrl += ".png";
 
   return pxUrl;
 }

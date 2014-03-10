@@ -143,7 +143,6 @@ void GraphPerspective::log(QtMsgType type, const QMessageLogContext &context, co
 #else
 
 void graphPerspectiveLogger(QtMsgType type, const char* msg) {
-  std::cerr << msg << std::endl;
   static_cast<GraphPerspective*>(Perspective::instance())->log(type,msg);
 }
 

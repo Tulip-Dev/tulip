@@ -671,8 +671,6 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
   if(h==0)
     h=1;
 
-  GlLODCalculator *selectLODCalculator;
-
   //check if the layer is in the scene
   bool layerInScene=true;
 
@@ -685,12 +683,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
     }
   }
 
-  if(layerInScene) {
-    selectLODCalculator=lodCalculator;
-  }
-  else {
-    selectLODCalculator=lodCalculator->clone();
-  }
+  GlLODCalculator *selectLODCalculator= layerInScene?lodCalculator:lodCalculator->clone();
 
   selectLODCalculator->setRenderingEntitiesFlag((RenderingEntitiesFlag)(RenderingAll | RenderingWithoutRemove));
   selectLODCalculator->clear();
@@ -723,7 +716,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
 
   LayersLODVector &layersLODVector=selectLODCalculator->getResult();
 
-  for(vector<LayerLODUnit>::iterator itLayer=layersLODVector.begin(); itLayer!=layersLODVector.end(); ++itLayer) {
+  for(vector<LayerLODUnit>::const_iterator itLayer=layersLODVector.begin(); itLayer!=layersLODVector.end(); ++itLayer) {
     Camera *camera=itLayer->camera;
 
     vector<GlGraphComposite*> compositesToRender;
@@ -779,7 +772,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
         idToEntity[id]=SelectedEntity(it->entity);
         glLoadName(id);
         id++;
-        ((it->entity))->draw(20.,camera);
+        it->entity->draw(20.,camera);
       }
     }
 
