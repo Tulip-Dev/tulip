@@ -52,15 +52,15 @@ public:
    */
   virtual void beginNewCamera(Camera* camera);
   /**
-   * This function is call by GlLODSceneVisitor when a simple entitie is found
+   * This function is called by GlLODSceneVisitor when a simple entity is found
    */
   virtual void addSimpleEntityBoundingBox(GlSimpleEntity * entity, const BoundingBox& bb);
   /**
-   * This function is call by GlLODSceneVisitor when a node is found
+   * This function is called by GlLODSceneVisitor when a node is found
    */
   virtual void addNodeBoundingBox(unsigned int id,const BoundingBox& bb);
   /**
-   * This function is call by GlLODSceneVisitor when an edge is found
+   * This function is called by GlLODSceneVisitor when an edge is found
    */
   virtual void addEdgeBoundingBox(unsigned int id,const BoundingBox& bb);
 
@@ -76,10 +76,10 @@ public:
 
   /**
    * Compute all bounding boxes
-   * If you want to compute LOD for a simple scene, you just have to call this function with same value on globalViewport and currentViewport
-   * But if you want to perform a sub screen part selection you have to call this function with : globalViewport the viewport of the visualisation and currentViewport the viewport of the selection
+   * If you want to compute LOD for a simple scene, you just have to call this function with the same value for globalViewport and currentViewport
+   * But if you want to perform a sub screen part selection you have to call this function with: globalViewport the viewport of the visualisation and currentViewport the viewport of the selection
    * \param globalViewport is used to compute LOD
-   * \param currentViewport : return -1 for all entities outside this viewport
+   * \param currentViewport return -1 for all entities outside this viewport
    */
   virtual void compute(const Vector<int,4>& globalViewport,const Vector<int,4>& currentViewport);
 
@@ -94,14 +94,14 @@ public:
    * Set if the edge LOD must be calculated
    * \Warning If not calcultated, the default edge LOD is 10.
    */
-  void setComputeEdgesLOD(bool state) {
+  inline void setComputeEdgesLOD(bool state) {
     computeEdgesLOD=state;
   }
 
   /**
    * Set if the LOD is computed for out screen entities
    */
-  void setComputeOutScreenLOD(bool state) {
+  inline void setComputeOutScreenLOD(bool state) {
     computeOutScreenLOD=state;
   }
 
