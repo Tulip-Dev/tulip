@@ -95,15 +95,13 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
         if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
           if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
               selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
-            _informationsWidgetItem->setVisible(true);
 
-            QLabel* title = _informationsWidget->findChild<QLabel*>();
+              QLabel* title = _informationsWidget->findChild<QLabel*>();
 
             ElementType eltType = selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED?NODE:EDGE;
 
             tableView()->setModel(buildModel(eltType,selectedEntity.getComplexEntityId(),_informationsWidget));
             title->setText(elementName(eltType,selectedEntity.getComplexEntityId()));
-
 
             QPoint position=qMouseEv->pos();
 
@@ -114,6 +112,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
               position.setY(qMouseEv->pos().y()-_informationsWidgetItem->rect().height());
 
             _informationsWidgetItem->setPos(position);
+            _informationsWidgetItem->setVisible(true);
             QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "opacity");
             animation->setDuration(100);
             animation->setStartValue(0.);
