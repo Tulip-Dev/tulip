@@ -110,9 +110,7 @@ void PushPopTest::testAddDel() {
   graph->reverse(e1);
   CPPUNIT_ASSERT_EQUAL(e1, graph->existEdge(n3, n2));
 
-  StlIterator<edge, std::vector<edge>::const_iterator> ite(edges.begin(),
-      edges.end());
-  graph->delEdges(&ite);
+  graph->delEdges(edges);
   CPPUNIT_ASSERT(!graph->isElement(edges[0]));
   CPPUNIT_ASSERT(!graph->isElement(edges[1]));
   CPPUNIT_ASSERT(!graph->isElement(edges[2]));
@@ -575,15 +573,15 @@ void PushPopTest::testCopyProperty() {
 void PushPopTest::testSubgraph() {
   Graph *g1, *g2, *g3, *g4;
 
-  node n0 = graph->addNode();
-  node n1 = graph->addNode();
+  vector<node> n;
+  n.push_back(graph->addNode());
+  n.push_back(graph->addNode());
 
-  edge e0 = graph->addEdge(n0, n1);
+  edge e0 = graph->addEdge(n[0], n[1]);
 
   g1 = graph->addSubGraph();
   g2 = graph->addSubGraph();
-  g2->addNode(n0);
-  g2->addNode(n1);
+  g2->addNodes(n);
   g2->addEdge(e0);
 
   graph->push();
@@ -660,11 +658,11 @@ void PushPopTest::testSubgraph() {
   CPPUNIT_ASSERT(graph->isElement(n3));
   CPPUNIT_ASSERT(graph->isElement(e));
 
-  graph->delNode(n0);
+  graph->delNode(n[0]);
 
-  CPPUNIT_ASSERT(!g2->isElement(n0));
+  CPPUNIT_ASSERT(!g2->isElement(n[0]));
   CPPUNIT_ASSERT(!g2->isElement(e0));
-  CPPUNIT_ASSERT(!graph->isElement(n0));
+  CPPUNIT_ASSERT(!graph->isElement(n[0]));
   CPPUNIT_ASSERT(!graph->isElement(e0));
 
   graph->pop();
@@ -673,9 +671,9 @@ void PushPopTest::testSubgraph() {
   CPPUNIT_ASSERT(!g2->isElement(e));
   CPPUNIT_ASSERT(!graph->isElement(n3));
   CPPUNIT_ASSERT(!graph->isElement(e));
-  CPPUNIT_ASSERT(g2->isElement(n0));
+  CPPUNIT_ASSERT(g2->isElement(n[0]));
   CPPUNIT_ASSERT(g2->isElement(e0));
-  CPPUNIT_ASSERT(graph->isElement(n0));
+  CPPUNIT_ASSERT(graph->isElement(n[0]));
   CPPUNIT_ASSERT(graph->isElement(e0));
 
   graph->unpop();
@@ -686,40 +684,40 @@ void PushPopTest::testSubgraph() {
   CPPUNIT_ASSERT(!g2->isElement(e));
   CPPUNIT_ASSERT(graph->isElement(n3));
   CPPUNIT_ASSERT(graph->isElement(e));
-  CPPUNIT_ASSERT(!g2->isElement(n0));
+  CPPUNIT_ASSERT(!g2->isElement(n[0]));
   CPPUNIT_ASSERT(!g2->isElement(e0));
-  CPPUNIT_ASSERT(!graph->isElement(n0));
+  CPPUNIT_ASSERT(!graph->isElement(n[0]));
   CPPUNIT_ASSERT(!graph->isElement(e0));
 
-  g3->addNode(n1);
-  e = g3->addEdge(n1, n2);
+  g3->addNode(n[1]);
+  e = g3->addEdge(n[1], n2);
   CPPUNIT_ASSERT(g3->isElement(e));
-  CPPUNIT_ASSERT(g3->isElement(n1));
+  CPPUNIT_ASSERT(g3->isElement(n[1]));
   CPPUNIT_ASSERT(g3->isElement(n2));
   CPPUNIT_ASSERT(g2->isElement(e));
-  CPPUNIT_ASSERT(g2->isElement(n1));
+  CPPUNIT_ASSERT(g2->isElement(n[1]));
   CPPUNIT_ASSERT(g2->isElement(n2));
   CPPUNIT_ASSERT(graph->isElement(e));
-  CPPUNIT_ASSERT(graph->isElement(n1));
+  CPPUNIT_ASSERT(graph->isElement(n[1]));
   CPPUNIT_ASSERT(graph->isElement(n2));
 
   graph->pop();
   CPPUNIT_ASSERT(!g2->isElement(e));
-  CPPUNIT_ASSERT(g2->isElement(n1));
+  CPPUNIT_ASSERT(g2->isElement(n[1]));
   CPPUNIT_ASSERT(!g2->isElement(n2));
   CPPUNIT_ASSERT(!graph->isElement(e));
-  CPPUNIT_ASSERT(graph->isElement(n1));
+  CPPUNIT_ASSERT(graph->isElement(n[1]));
   CPPUNIT_ASSERT(!graph->isElement(n2));
 
   graph->unpop();
   CPPUNIT_ASSERT(g3->isElement(e));
-  CPPUNIT_ASSERT(g3->isElement(n1));
+  CPPUNIT_ASSERT(g3->isElement(n[1]));
   CPPUNIT_ASSERT(g3->isElement(n2));
   CPPUNIT_ASSERT(g2->isElement(e));
-  CPPUNIT_ASSERT(g2->isElement(n1));
+  CPPUNIT_ASSERT(g2->isElement(n[1]));
   CPPUNIT_ASSERT(g2->isElement(n2));
   CPPUNIT_ASSERT(graph->isElement(e));
-  CPPUNIT_ASSERT(graph->isElement(n1));
+  CPPUNIT_ASSERT(graph->isElement(n[1]));
   CPPUNIT_ASSERT(graph->isElement(n2));
 
   graph->push();
@@ -743,7 +741,7 @@ void PushPopTest::testSubgraph() {
   delete it;
 
   CPPUNIT_ASSERT(g3->isElement(e));
-  CPPUNIT_ASSERT(g3->isElement(n1));
+  CPPUNIT_ASSERT(g3->isElement(n[1]));
   CPPUNIT_ASSERT(g3->isElement(n2));
 
   g2->delSubGraph(g4);

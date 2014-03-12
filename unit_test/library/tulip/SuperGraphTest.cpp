@@ -307,9 +307,7 @@ void SuperGraphTest::testAddDel() {
 
   CPPUNIT_ASSERT_EQUAL(NB_ADD, graph->numberOfNodes());
 
-  StlIterator<node, std::vector<node>::const_iterator> itn(nodes.begin(),
-      nodes.end());
-  graph->delNodes(&itn);
+  graph->delNodes(nodes);
 
   CPPUNIT_ASSERT_EQUAL(0u, graph->numberOfNodes());
 
