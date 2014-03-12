@@ -23,10 +23,12 @@
 
 #include <tulip/ExportModule.h>
 #include <tulip/Graph.h>
+#include <tulip/GraphProperty.h>
 #include <tulip/TlpTools.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/StringCollection.h>
 #include <tulip/TulipRelease.h>
+#include <tulip/PropertyTypes.h>
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
 
@@ -308,10 +310,7 @@ public:
       tmp << "Saving Property [" << prop->getName() << "]";
       pluginProgress->setComment(tmp.str());
 
-      if (graph->getSuperGraph()==graph)
-        os << "(property " << " 0 " << prop->getTypename() << " " ;
-      else
-        os << "(property " << " " << graph->getId() << " " << prop->getTypename() << " " ;
+      os << "(property " << " " << graph->getId() << " " << prop->getTypename() << " " ;
 
       os << "\"" << convert(prop->getName()) << "\"" << endl;
       string nDefault = prop->getNodeDefaultStringValue();
@@ -360,30 +359,54 @@ public:
 
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
 
-      while (itE->hasNext()) {
-        if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
+      if (prop->getTypename() == GraphProperty::propertyTypename) {
+	while (itE->hasNext()) {
+	  if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
+	    pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
+	  ++progress;
 
-          pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
-
-        ++progress;
-        edge ite = itE->next();
-        // replace real path with symbolic one using TulipBitmapDir
-        string tmp = prop->getEdgeStringValue(ite);
-
-        if (prop->getName() == string("viewFont") ||
-            prop->getName() == string("viewTexture")) {
-          size_t pos = tmp.find(TulipBitmapDir);
-
-          if (pos != string::npos)
-            tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-        }
-
-        if(convertToOldEEId) {
-          tmp = convertNewEdgeExtremitiesValueToOld(tmp);
-        }
-
-        os << "(edge " << getEdge(ite).id << " \"" << convert(tmp) << "\")" << endl ;
+	  // for GraphProperty we must ensure the reindexing
+	  // of embedded edges
+	  edge ite = itE->next();
+	  const set<edge>& edges = ((GraphProperty*)prop)->getEdgeValue(ite);
+	  set<edge> rEdges;
+	  set<edge>::const_iterator its;
+	  for (its = edges.begin(); its != edges.end(); ++its) {
+	    rEdges.insert(getEdge(*its));
+	  }
+	  // finally save the vector
+	  os << "(edge " << getEdge(ite).id << " \"";
+	  EdgeSetType::write(os, rEdges);
+	  os << "\")" << endl ;
+	}
       }
+      else
+	{
+	  while (itE->hasNext()) {
+	    if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
+
+	      pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
+
+	    ++progress;
+	    edge ite = itE->next();
+	    // replace real path with symbolic one using TulipBitmapDir
+	    string tmp = prop->getEdgeStringValue(ite);
+
+	    if (prop->getName() == string("viewFont") ||
+		prop->getName() == string("viewTexture")) {
+	      size_t pos = tmp.find(TulipBitmapDir);
+
+	      if (pos != string::npos)
+		tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+	    }
+
+	    if(convertToOldEEId) {
+	      tmp = convertNewEdgeExtremitiesValueToOld(tmp);
+	    }
+
+	    os << "(edge " << getEdge(ite).id << " \"" << convert(tmp) << "\")" << endl ;
+	  }
+	}
 
       delete itE;
       os << ")" << endl;
