@@ -787,7 +787,7 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 
     if (sipIsErr == 0) {
         sItEdges.restart();
-        sipCpp->delEdges(&sItEdges);
+        sipCpp->addEdges(&sItEdges);
     }
 %End
 //===========================================================================================
