@@ -522,6 +522,17 @@ public:
    */
   virtual void addNodes(Iterator<node>* nodes)=0;
 
+    /**
+   * @brief Adds existing nodes in the graph. The nodes are also added in all the ancestor graphs.
+   * as with addNode(const tlp::node), the nodes must exist in the graph hierarchy and thus exist in the root graph,
+   * and nodes cannot be added this way to the root graph.
+
+   * @warning Using this method on the root graph will display a warning on the console.
+   *
+   * @param nodes a vector of nodes to add to this subgraph.
+   */
+  void addNodes(const std::vector<node>& nodes);
+
   /**
    * @brief Deletes a node in the graph.
    * This node is also removed in the sub-graphs hierarchy of the current graph.
@@ -533,13 +544,23 @@ public:
 
   /**
    * @brief Deletes nodes in the graph.
-   * Thess nodes are also removed in the sub-graphs hierarchy of the current graph.
+   * These nodes are also removed in the sub-graphs hierarchy of the current graph.
    * @warning the graph does not take ownership of the Iterator.
    * @param it The nodes to delete.
    * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
    * @see delNode() to remove a single node.
    */
   virtual void delNodes(Iterator<node>* it, bool deleteInAllGraphs = false)=0;
+
+  /**
+   * @brief Deletes nodes in the graph.
+   * These nodes are also removed in the sub-graphs hierarchy of the current graph.
+   * @warning the graph does not take ownership of the Iterator.
+   * @param nodes a vector of the nodes to delete.
+   * @param deleteInAllGraphs Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
+   * @see delNode() to remove a single node.
+   */
+  void delNodes(const std::vector<node>& nodes, bool deleteInAllGraphs = false);
 
   /**
    * @brief Adds a new edge in the graph
@@ -589,6 +610,16 @@ public:
   virtual void addEdges(Iterator<edge>* edges)=0;
 
   /**
+   * @brief Adds existing edges in the graph. The edges are also added in all
+   * the ancestor graphs.
+   * The added edges must be elements of the graph hierarchy,
+   * thus they must be elements of the root graph.
+   * @warning Using this method on the root graph will display a warning on the console.
+   * @param edges a vector of the edges to add on this subgraph.
+   */
+  void addEdges(const std::vector<edge>& edges);
+
+  /**
    * @brief Deletes an edge in the graph. The edge is also removed in
    * the sub-graphs hierarchy.
    * The ordering of remaining edges is preserved.
@@ -605,6 +636,15 @@ public:
    * @param deleteInAllGraphs  Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
    */
   virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false)=0;
+
+  /**
+   * @brief Deletes edges in the graph. These edges are also removed in the sub-graphs hierarchy.
+   * The ordering of remaining edges is preserved.
+   * @warning The graph does not take ownership of the Iterator.
+   * @param edges a vector of the edges to delete
+   * @param deleteInAllGraphs  Whether to delete in all its parent graphs or only in this graph. By default only removes in the current graph.
+   */
+  void delEdges(const std::vector<edge>& edges, bool deleteInAllGraphs = false);
 
   /**
    * @brief Sets the order of the edges around a node.

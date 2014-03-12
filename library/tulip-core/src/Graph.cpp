@@ -21,6 +21,7 @@
 #include <fstream>
 
 #include <tulip/ForEach.h>
+#include <tulip/StlIterator.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
@@ -1639,3 +1640,22 @@ const std::string& GraphEvent::getPropertyName() const {
   return *(info.name);
 }
 
+void Graph::addNodes(const std::vector<node>& nodes) {
+  StlIterator<node, vector<node>::const_iterator> vIterator(nodes.begin(), nodes.end());
+  addNodes(&vIterator);
+}
+
+void Graph::delNodes(const std::vector<node>& nodes, bool deleteInAllGraphs) {
+  StlIterator<node, vector<node>::const_iterator> vIterator(nodes.begin(), nodes.end());
+  delNodes(&vIterator, deleteInAllGraphs);
+}
+
+void Graph::addEdges(const std::vector<edge>& edges) {
+  StlIterator<edge, vector<edge>::const_iterator> vIterator(edges.begin(), edges.end());
+  addEdges(&vIterator);
+}
+
+void Graph::delEdges(const std::vector<edge>& edges, bool deleteInAllGraphs) {
+  StlIterator<edge, vector<edge>::const_iterator> vIterator(edges.begin(), edges.end());
+  delEdges(&vIterator, deleteInAllGraphs);
+}
