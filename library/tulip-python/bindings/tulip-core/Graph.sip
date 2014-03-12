@@ -574,6 +574,39 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
+        void addNodes(const std::vector<tlp::node>& nodes);
+%Docstring
+tlp.Graph.addNodes(nodes)
+
+.. versionadded:: 4.5
+
+Adds existing nodes in the graph. The nodes are also added in all
+the graph ancestors to maintain the sub-graph relation between graphs.
+
+:param nodes: a vector of nodes to add
+:type nodes: a list of :class:`tlp.node` objects
+:throws: an exception if one of the node to add is not an element of the root graph.
+
+.. warning:: The added nodes must be elements of the graph hierarchy, thus they must be elements of the root graph.
+
+.. warning:: One can't add existing nodes to the root graph.
+
+%End
+
+%MethodCode
+      for (size_t i = 0 ; i < a0->size() ; ++i) {
+	if (!sipCpp->getRoot()->isElement((*a0)[i])) {
+          sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), (*a0)[i]);
+          break;
+        }
+      }
+      if (sipIsErr == 0) {
+        sipCpp->addNodes(*a0);
+      }
+%End
+
+//===========================================================================================
+
 	void delNode(const tlp::node node, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delNode(node[, deleteInAllGraphs = False])
@@ -598,7 +631,7 @@ to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-        virtual void delNodes(tlp::Iterator<tlp::node>* itN /Transfer/, bool deleteInAllGraphs = false)=0;
+        void delNodes(tlp::Iterator<tlp::node>* itN /Transfer/, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delNodes(itNodes[, deleteInAllGraphs=False])
 
@@ -631,6 +664,39 @@ the sub-graph relation between graphs.
         sItNodes.restart();
         sipCpp->delNodes(&sItNodes, a1);
     }
+%End
+
+//===========================================================================================
+
+        void delNodes(const std::vector<tlp::node>& nodes, bool deleteInAllGraphs = false);
+%Docstring
+tlp.Graph.delNodes(nodes[, deleteInAllGraphs=False])
+
+.. versionadded:: 4.5
+
+Deletes nodes in the graph. These nodes are also removed in
+the sub-graphs hierarchy of the current graph to maintain
+the sub-graph relation between graphs.
+
+:param nodes: a vector of nodes to add
+:type nodes: a list of :class:`tlp.node` objects
+:type itNodes: a Tulip iterator on :class:`tlp.node` objects
+:param deleteInAllGraphs: if :const:`True`, these nodes are  deleted in the whole hierarchy of graphs.
+:type deleteInAllGraphs: boolean
+:throws: an exception if one of the node to delete is not an element of the graph.
+
+%End
+
+%MethodCode
+      for (size_t i = 0 ; i < a0->size() ; ++i) {
+	if (!sipCpp->isElement((*a0)[i])) {
+          sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), (*a0)[i]);
+          break;
+        }
+      }
+      if (sipIsErr == 0) {
+        sipCpp->delNodes(*a0, a1);
+      }
 %End
 
 //===========================================================================================
@@ -683,9 +749,11 @@ The new edges are also added in all the graph ancestors to maintain the sub-grap
       for (size_t i = 0 ; i < a0->size() ; ++i) {
         if (!sipCpp->isElement((*a0)[i].first)) {
             sipIsErr = throwInvalidNodeException(sipCpp, (*a0)[i].first);
-        }
+            break;
+	}
         if (!sipCpp->isElement((*a0)[i].second)) {
             sipIsErr = throwInvalidNodeException(sipCpp, (*a0)[i].second);
+            break;
         }
       }
       if (sipIsErr == 0) {
@@ -792,6 +860,57 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %End
 //===========================================================================================
 
+        void addEdges(const std::vector<tlp::edge>& edges);
+%Docstring
+tlp.Graph.addEdges(edges)
+
+.. versionadded:: 4.5
+
+Adds existing edges in the graph. The edges are also added in all
+the graph ancestors to maintain the sub-graph relation between graphs.
+
+:param edges: a vector of edges to add
+:type edges: a list of :class:`tlp.edge` objects
+:throws: an exception if one of the edge to add is not an element of the root graph or if one of the edges extremities is not an element of the graph.
+
+.. warning:: The added edges must be elements of the graph hierarchy, thus they must be elements of the root graph.
+
+.. warning:: One can't add existing edges to the root graph.
+
+%End
+
+%MethodCode
+      for (size_t i = 0 ; i < a0->size() ; ++i) {
+        tlp::edge e = (*a0)[i];
+	if (!sipCpp->getRoot()->isElement(e)) {
+                sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), e);
+                break;
+        } else {
+            if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
+                std::ostringstream oss;
+                oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+                    << "because the graph does not contain its source node.";
+                printErrorMessage(oss.str());
+                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
+                break;
+            }
+            if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
+                std::ostringstream oss;
+                oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+                    << "because the graph does not contain its target node.";
+                printErrorMessage(oss.str());
+                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
+                break;
+            }
+        }
+      }
+      if (sipIsErr == 0) {
+        sipCpp->addEdges(*a0);
+      }
+%End
+
+//===========================================================================================
+
 	 void delEdge(const tlp::edge edge, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delEdge(edge[, deleteInAllGraphs = False])
@@ -847,6 +966,38 @@ The ordering of remaining edges is preserved.
     if (sipIsErr == 0) {
         sItEdges.restart();
         sipCpp->delEdges(&sItEdges, a1);
+    }
+%End
+
+//===========================================================================================
+
+        void delEdges(const std::vector<tlp::edge>& edges, bool deleteInAllGraphs = false);
+%Docstring
+tlp.Graph.delEdges(edges[, deleteInAllGraphs=False])
+
+.. versionadded:: 4.5
+
+Deletes edges in the graph. These edges are also removed in
+the sub-graphs hierarchy of the current graph to maintain
+the sub-graph relation between graphs.
+
+:param edges: a vector of edges to add
+:type edges: a list of :class:`tlp.edge` objects
+:type itEdges: a Tulip iterator on :class:`tlp.edge` objects
+:param deleteInAllGraphs: if :const:`True`, these edges are  deleted in the whole hierarchy of graphs.
+:type deleteInAllGraphs: boolean
+:throws: an exception if one of the edge to delete is not an element of the graph
+%End
+
+%MethodCode
+    for (size_t i = 0 ; i < a0->size() ; ++i) {
+       if (!sipCpp->isElement((*a0)[i])) {
+          sipIsErr = throwInvalidEdgeException(sipCpp, (*a0)[i]);
+          break;
+       }
+    }
+    if (sipIsErr == 0) {
+        sipCpp->delEdges(*a0, a1);
     }
 %End
 
