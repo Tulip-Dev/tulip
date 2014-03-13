@@ -522,15 +522,15 @@ public:
    */
   virtual void addNodes(Iterator<node>* nodes)=0;
 
-    /**
-   * @brief Adds existing nodes in the graph. The nodes are also added in all the ancestor graphs.
-   * as with addNode(const tlp::node), the nodes must exist in the graph hierarchy and thus exist in the root graph,
-   * and nodes cannot be added this way to the root graph.
+  /**
+  * @brief Adds existing nodes in the graph. The nodes are also added in all the ancestor graphs.
+  * as with addNode(const tlp::node), the nodes must exist in the graph hierarchy and thus exist in the root graph,
+  * and nodes cannot be added this way to the root graph.
 
-   * @warning Using this method on the root graph will display a warning on the console.
-   *
-   * @param nodes a vector of nodes to add to this subgraph.
-   */
+  * @warning Using this method on the root graph will display a warning on the console.
+  *
+  * @param nodes a vector of nodes to add to this subgraph.
+  */
   void addNodes(const std::vector<node>& nodes);
 
   /**

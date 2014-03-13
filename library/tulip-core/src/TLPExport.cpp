@@ -360,53 +360,55 @@ public:
       Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
 
       if (prop->getTypename() == GraphProperty::propertyTypename) {
-	while (itE->hasNext()) {
-	  if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
-	    pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
-	  ++progress;
+        while (itE->hasNext()) {
+          if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
+            pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
-	  // for GraphProperty we must ensure the reindexing
-	  // of embedded edges
-	  edge ite = itE->next();
-	  const set<edge>& edges = ((GraphProperty*)prop)->getEdgeValue(ite);
-	  set<edge> rEdges;
-	  set<edge>::const_iterator its;
-	  for (its = edges.begin(); its != edges.end(); ++its) {
-	    rEdges.insert(getEdge(*its));
-	  }
-	  // finally save the vector
-	  os << "(edge " << getEdge(ite).id << " \"";
-	  EdgeSetType::write(os, rEdges);
-	  os << "\")" << endl ;
-	}
+          ++progress;
+
+          // for GraphProperty we must ensure the reindexing
+          // of embedded edges
+          edge ite = itE->next();
+          const set<edge>& edges = ((GraphProperty*)prop)->getEdgeValue(ite);
+          set<edge> rEdges;
+          set<edge>::const_iterator its;
+
+          for (its = edges.begin(); its != edges.end(); ++its) {
+            rEdges.insert(getEdge(*its));
+          }
+
+          // finally save the vector
+          os << "(edge " << getEdge(ite).id << " \"";
+          EdgeSetType::write(os, rEdges);
+          os << "\")" << endl ;
+        }
       }
-      else
-	{
-	  while (itE->hasNext()) {
-	    if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
+      else {
+        while (itE->hasNext()) {
+          if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
 
-	      pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
+            pluginProgress->progress(progress, nonDefaultvaluatedElementCount);
 
-	    ++progress;
-	    edge ite = itE->next();
-	    // replace real path with symbolic one using TulipBitmapDir
-	    string tmp = prop->getEdgeStringValue(ite);
+          ++progress;
+          edge ite = itE->next();
+          // replace real path with symbolic one using TulipBitmapDir
+          string tmp = prop->getEdgeStringValue(ite);
 
-	    if (prop->getName() == string("viewFont") ||
-		prop->getName() == string("viewTexture")) {
-	      size_t pos = tmp.find(TulipBitmapDir);
+          if (prop->getName() == string("viewFont") ||
+              prop->getName() == string("viewTexture")) {
+            size_t pos = tmp.find(TulipBitmapDir);
 
-	      if (pos != string::npos)
-		tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-	    }
+            if (pos != string::npos)
+              tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+          }
 
-	    if(convertToOldEEId) {
-	      tmp = convertNewEdgeExtremitiesValueToOld(tmp);
-	    }
+          if(convertToOldEEId) {
+            tmp = convertNewEdgeExtremitiesValueToOld(tmp);
+          }
 
-	    os << "(edge " << getEdge(ite).id << " \"" << convert(tmp) << "\")" << endl ;
-	  }
-	}
+          os << "(edge " << getEdge(ite).id << " \"" << convert(tmp) << "\")" << endl ;
+        }
+      }
 
       delete itE;
       os << ")" << endl;

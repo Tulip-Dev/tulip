@@ -295,7 +295,7 @@ void SearchWidget::search() {
       if(tulipData == NULL) {
         qCritical() << "could not convert this type correctly " << _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole) << ", please report this as a bug";
 #ifdef NDEBUG
-	return;
+        return;
 #endif
       }
 
@@ -304,7 +304,7 @@ void SearchWidget::search() {
       if(serializer == NULL) {
         qCritical() << QString::fromUtf8("no type serializer found for ") << tlp::tlpStringToQString(tulipData->getTypeName()) << ", please report this as a bug";
 #ifdef NDEBUG
-	return;
+        return;
 #endif
       }
 
