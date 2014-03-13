@@ -96,7 +96,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
           if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
               selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
 
-              QLabel* title = _informationsWidget->findChild<QLabel*>();
+            QLabel* title = _informationsWidget->findChild<QLabel*>();
 
             ElementType eltType = selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED?NODE:EDGE;
 

@@ -46,7 +46,7 @@ static QString iconForType(QtMsgType type) {
 
   case QtCriticalMsg:
   case QtFatalMsg:
-      pxUrl+="error";
+    pxUrl+="error";
     break;
 
 

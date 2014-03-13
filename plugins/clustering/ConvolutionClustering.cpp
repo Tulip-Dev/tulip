@@ -29,12 +29,12 @@ PLUGIN(ConvolutionClustering)
 
 ConvolutionClustering::ConvolutionClustering(PluginContext* context):DoubleAlgorithm(context), metric(NULL) {
   addInParameter<NumericProperty*>("metric",
-				   HTML_HELP_OPEN()			\
-				   HTML_HELP_DEF( "type", "NumericProperty" ) \
-				   HTML_HELP_DEF( "value", "An existing node metric" ) \
-				   HTML_HELP_BODY()			\
-				   "An existing node metric property"	\
-				   HTML_HELP_CLOSE(), "viewMetric", false);
+                                   HTML_HELP_OPEN()     \
+                                   HTML_HELP_DEF( "type", "NumericProperty" ) \
+                                   HTML_HELP_DEF( "value", "An existing node metric" ) \
+                                   HTML_HELP_BODY()     \
+                                   "An existing node metric property" \
+                                   HTML_HELP_CLOSE(), "viewMetric", false);
 }
 
 //convolution function, build a triangular function center in 0 with a width width and a
@@ -95,8 +95,10 @@ list<int> ConvolutionClustering::getLocalMinimum() {
         else
           localMinimum.push_back(i);
       }
+
       slopeSens=newSlopeSens;
     }
+
     previous = current;
   }
 
@@ -174,11 +176,12 @@ void ConvolutionClustering::autoSetParameter() {
       bool newSlopeSens = !(previous > current);
 
       if (newSlopeSens != slopeSens) {
-	//new Local minimum
-	nbElement++;
-	sum+=(current + previous)/ 2;
-	slopeSens = newSlopeSens;
+        //new Local minimum
+        nbElement++;
+        sum+=(current + previous)/ 2;
+        slopeSens = newSlopeSens;
       }
+
       previous = current;
     }
   }
@@ -195,7 +198,7 @@ vector<double> *ConvolutionClustering::getHistogram() {
   node n;
   forEach(n, graph->getNodes()) {
     int tmp=(int)((metric->getNodeDoubleValue(n) - minVal) * (double)histosize /
-                   maxMinRange);
+                  maxMinRange);
 
     if (histogramOfValues.find(tmp) == histogramOfValues.end())
       histogramOfValues[tmp]=1;
@@ -241,8 +244,10 @@ bool ConvolutionClustering::run() {
 
   if (dataSet != NULL)
     dataSet->get("metric", metric);
+
   if (metric == NULL)
     metric=graph->getProperty<DoubleProperty>("viewMetric");
+
   autoSetParameter();
   getHistogram();
   ConvolutionClusteringSetup *mysetup = new ConvolutionClusteringSetup(this);
