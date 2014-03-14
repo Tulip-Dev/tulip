@@ -131,10 +131,12 @@ public:
   }
   static bool readb(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v) {
     unsigned int vSize;
+
     if (bool(iss.read((char *) &vSize, sizeof(vSize)))) {
       v.resize(vSize);
       return bool(iss.read((char *) v.data(), vSize * sizeof(VT)));
     }
+
     return false;
   }
   static unsigned int valueSize() {

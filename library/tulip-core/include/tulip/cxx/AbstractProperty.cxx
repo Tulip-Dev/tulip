@@ -170,7 +170,7 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::writeNodeDefaultValue(std::ostrea
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 void tlp::AbstractProperty<Tnode,Tedge,Tprop>::writeNodeValue(std::ostream& oss,
-							      node n) const {
+    node n) const {
   assert(n.isValid());
   Tnode::writeb(oss, nodeProperties.get(n.id));
 }
@@ -181,17 +181,20 @@ bool tlp::AbstractProperty<Tnode,Tedge,Tprop>::readNodeDefaultValue(std::istream
     nodeProperties.setAll(nodeDefaultValue);
     return true;
   }
+
   return false;
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 bool tlp::AbstractProperty<Tnode,Tedge,Tprop>::readNodeValue(std::istream& iss,
-							     node n) {
+    node n) {
   typename Tnode::RealType val;
+
   if (Tnode::readb(iss, val)) {
     nodeProperties.set(n.id, val);
     return true;
   }
+
   return false;
 }
 //============================================================
@@ -226,7 +229,7 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::writeEdgeDefaultValue(std::ostrea
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 void tlp::AbstractProperty<Tnode,Tedge,Tprop>::writeEdgeValue(std::ostream& oss,
-							      edge e) const {
+    edge e) const {
   assert(e.isValid());
   Tedge::writeb(oss, edgeProperties.get(e.id));
 }
@@ -237,17 +240,20 @@ bool tlp::AbstractProperty<Tnode,Tedge,Tprop>::readEdgeDefaultValue(std::istream
     edgeProperties.setAll(edgeDefaultValue);
     return true;
   }
+
   return false;
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 bool tlp::AbstractProperty<Tnode,Tedge,Tprop>::readEdgeValue(std::istream& iss,
-							     edge e) {
+    edge e) {
   typename Tedge::RealType val;
+
   if (Tedge::readb(iss, val)) {
     edgeProperties.set(e.id, val);
     return true;
   }
+
   return false;
 }
 //============================================================

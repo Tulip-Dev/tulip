@@ -124,6 +124,7 @@ bool EdgeSetType::readb(istream& iss, RealType & s) {
   s.clear();
 
   unsigned int size;
+
   // get the set size
   if (!bool(iss.read((char *) &size, sizeof(unsigned int))))
     return false;
@@ -311,6 +312,7 @@ void BooleanVectorType::writeb(ostream& oss, const RealType & v) {
 
   // loop to write boolean as char
   char* data = vc.data();
+
   for(unsigned int i = 0; i < vSize; ++i, ++data) {
     *data = v[i] ? 1 : 0;
   }
@@ -360,6 +362,7 @@ bool BooleanVectorType::read(istream& is,  RealType & v) {
 
 bool BooleanVectorType::readb(istream& iss, RealType & v) {
   unsigned int vSize = v.size();
+
   // read the size of the vector
   if (!iss.read((char *) &vSize, sizeof(vSize)))
     return false;
@@ -369,6 +372,7 @@ bool BooleanVectorType::readb(istream& iss, RealType & v) {
 
   // loop to write boolean as char
   char* data = vc.data();
+
   if (!bool(iss.read(data, vSize)))
     return false;
 
@@ -612,6 +616,7 @@ bool StringType::read(istream& is, RealType & v) {
 bool StringType::readb(istream& iss, RealType & str) {
   // read size of str
   unsigned int size;
+
   if (!bool(iss.read((char *)&size, sizeof(size))))
     return false;
 
@@ -704,6 +709,7 @@ bool StringVectorType::read(istream& is, RealType & v) {
 bool StringVectorType::readb(istream& iss, RealType & v) {
   // read size of vector
   unsigned int size;
+
   if (!bool(iss.read((char *) &size, sizeof(size))))
     return size;
 
@@ -714,6 +720,7 @@ bool StringVectorType::readb(istream& iss, RealType & v) {
     if (!StringType::readb(iss, v[i]))
       return false;
   }
+
   return true;
 }
 
