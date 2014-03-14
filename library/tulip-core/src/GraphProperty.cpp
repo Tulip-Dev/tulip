@@ -212,3 +212,22 @@ void GraphProperty::treatEvent(const Event& evt) {
     }
   }
 }
+
+bool GraphProperty::readNodeDefaultValue(std::istream& iss) {
+  // must read 0 (see GraphType::writeb)
+  unsigned int id = 0;
+  if (!bool(iss.read((char *) &id, sizeof(id))))
+    return false;
+  assert(id == 0);
+  return id == 0;
+}
+
+bool GraphProperty::readNodeValue(std::istream& iss, node n) {
+  // must read the id of a subgraph
+  unsigned int id = 0;
+  if (!bool(iss.read((char *) &id, sizeof(id))))
+    return false;
+  Graph* sg = graph->getRoot()->getDescendantGraph(id);
+  setNodeValue(n, sg);
+  return true;
+}

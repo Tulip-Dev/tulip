@@ -21,6 +21,7 @@
 #define PROPERTY_INTERFACE_H
 
 #include <string>
+#include <iostream>
 #include <tulip/tulipconf.h>
 #include <tulip/Observable.h>
 #include <tulip/Node.h>
@@ -305,6 +306,13 @@ public:
   virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* = NULL) const = 0;
 
   /**
+   * @brief Returns the number of nodes with a non default value.
+   * @return the number of nodes with a non default value.
+   *
+   */
+  virtual unsigned int numberOfNonDefaultValuatedNodes() const = 0;
+
+  /**
    * @brief Gets an Iterator on all non-default valuated edges.
    * When given a Graph as parameter, only edges belonging to this graph are iterated over.
    * @return An Iterator over edges whose value is not default.
@@ -312,6 +320,75 @@ public:
    * @warning The ownership of the iterator is given to the caller.
    */
   virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* = NULL) const = 0;
+
+  /**
+   * @brief Returns the number of edges with a non default value.
+   * @return the number of edges with a non default value.
+   *
+   */
+  virtual unsigned int numberOfNonDefaultValuatedEdges() const = 0;
+
+  /**
+   * @brief Returns the size in bytes of a node's value.
+   * @return the size of a node's value (0 means the size is not fixed)
+   *
+   */
+  virtual unsigned int nodeValueSize() const = 0;
+
+  /**
+   * @brief Writes the nodes default value
+   *
+   */
+  virtual void writeNodeDefaultValue(std::ostream&) const = 0;
+
+  /**
+   * @brief Writes the value of a node
+   *
+   */
+  virtual void writeNodeValue(std::ostream&, node) const = 0;
+
+   /**
+   * @brief Reads the nodes default value
+   *
+   */
+  virtual bool readNodeDefaultValue(std::istream&) = 0;
+
+   /**
+   * @brief Reads the value of a node
+   *
+   */
+  virtual bool readNodeValue(std::istream&, node) = 0;
+
+  /**
+   * @brief Returns the size in bytes of an edge's value.
+   * @return the size of a node's value (0 means the size is not fixed)
+   *
+   */
+  virtual unsigned int edgeValueSize() const = 0;
+
+  /**
+   * @brief Writes the edges default value
+   *
+   */
+  virtual void writeEdgeDefaultValue(std::ostream&) const = 0;
+
+  /**
+   * @brief Writes the value of an edge
+   *
+   */
+  virtual void writeEdgeValue(std::ostream&, edge) const = 0;
+
+   /**
+   * @brief Reads the edges default value
+   *
+   */
+  virtual bool readEdgeDefaultValue(std::istream&) = 0;
+
+   /**
+   * @brief Reads the value of an edge
+   *
+   */
+  virtual bool readEdgeValue(std::istream&, edge) = 0;
 
   /**
    * @brief Sets the value of the metanode to a computed value.

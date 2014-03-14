@@ -261,7 +261,19 @@ public:
     return true;
   }
   virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = NULL) const;
+  virtual unsigned int numberOfNonDefaultValuatedNodes() const;
+  virtual unsigned int nodeValueSize() const;
+  virtual void writeNodeDefaultValue(std::ostream&) const;
+  virtual void writeNodeValue(std::ostream&, node) const;
+  virtual bool readNodeDefaultValue(std::istream&);
+  virtual bool readNodeValue(std::istream&, node);
   virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* g = NULL) const;
+  virtual unsigned int numberOfNonDefaultValuatedEdges() const;
+  virtual unsigned int edgeValueSize() const;
+  virtual void writeEdgeDefaultValue(std::ostream&) const;
+  virtual void writeEdgeValue(std::ostream&, edge) const;
+  virtual bool readEdgeDefaultValue(std::istream&);
+  virtual bool readEdgeValue(std::istream&, edge);
   virtual bool copy(const node destination, const node source, PropertyInterface *property,
                     bool ifNotDefault = false) {
     if (property == NULL)

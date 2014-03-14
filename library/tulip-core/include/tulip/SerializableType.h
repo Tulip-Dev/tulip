@@ -121,8 +121,24 @@ public:
   static void write(std::ostream& oss, const typename TypeInterface<std::vector<VT> >::RealType& v) {
     writeVector(oss, v);
   }
+  static void writeb(std::ostream& oss, const typename TypeInterface<std::vector<VT> >::RealType& v) {
+    unsigned int vSize = v.size();
+    oss.write((char *) &vSize, sizeof(vSize));
+    oss.write((char *) v.data(), vSize * sizeof(VT));
+  }
   static bool read(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v) {
     return readVector(iss, v);
+  }
+  static bool readb(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v) {
+    unsigned int vSize;
+    if (bool(iss.read((char *) &vSize, sizeof(vSize)))) {
+      v.resize(vSize);
+      return bool(iss.read((char *) v.data(), vSize * sizeof(VT)));
+    }
+    return false;
+  }
+  static unsigned int valueSize() {
+    return 0; // means is not fixed
   }
   FORWARD_STRING_METHODS(typename TypeInterface<std::vector<VT> >)
 };

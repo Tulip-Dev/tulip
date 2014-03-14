@@ -90,6 +90,10 @@ public:
    * whose value is equal to the default value.
    */
   Iterator<unsigned int>* findAll(const TYPE &value, bool equal = true) const;
+  /**
+   * return the number of non default values
+   */
+  unsigned int numberOfNonDefaultValues() const;
 private:
   MutableContainer(const MutableContainer<TYPE> &) {}
   void operator=(const MutableContainer<TYPE> &) {}
