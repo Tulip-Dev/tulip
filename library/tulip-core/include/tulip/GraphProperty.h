@@ -60,6 +60,11 @@ public :
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const GraphType::RealType& g);
   virtual void setAllNodeValue(const GraphType::RealType& g);
+  virtual bool readNodeDefaultValue(std::istream& iss);
+  virtual bool readNodeValue(std::istream& iss, node n);
+  virtual unsigned int edgeValueSize() const {
+    return 0;
+  }
 
   // for optimizations purpose
   bool hasNonDefaultValue(const node n) const {

@@ -48,14 +48,18 @@ public:
   static RealType undefinedValue();
   static RealType defaultValue();
   static void write(std::ostream &oss, const RealType &v);
+  static void writeb(std::ostream &oss, const RealType &v);
   static bool read(std::istream& iss, RealType& v);
+  static bool readb(std::istream& iss, RealType& v);
   FORWARD_STRING_METHODS(GraphType)
 };
 
 class TLP_SCOPE EdgeSetType: public TypeInterface<std::set<tlp::edge> > {
 public:
   static void write(std::ostream &oss, const RealType &v);
+  static void writeb(std::ostream &oss, const RealType &v);
   static bool read(std::istream& iss, RealType& v);
+  static bool readb(std::istream& iss, RealType& v);
   FORWARD_STRING_METHODS(EdgeSetType)
 };
 
@@ -111,7 +115,9 @@ public:
 class TLP_SCOPE BooleanVectorType: public TypeInterface<std::vector<bool> > {
 public:
   static void write(std::ostream&, const RealType&);
+  static void writeb(std::ostream&, const RealType&);
   static bool read(std::istream&, RealType&);
+  static bool readb(std::istream&, RealType&);
   FORWARD_STRING_METHODS(BooleanVectorType)
 };
 
@@ -147,7 +153,9 @@ public:
   static RealType defaultValue();
 
   static void write(std::ostream&, const RealType&);
+  static void writeb(std::ostream&, const RealType&);
   static bool read(std::istream&, RealType&);
+  static bool readb(std::istream&, RealType&);
 
   static std::string toString(const RealType &v);
   static bool fromString(RealType &v, const std::string &s);
@@ -156,7 +164,9 @@ public:
 class TLP_SCOPE StringVectorType: public TypeInterface<std::vector<std::string> > {
 public:
   static void write(std::ostream&, const RealType&);
+  static void writeb(std::ostream& oss, const RealType& vStr);
   static bool read(std::istream&, RealType&);
+  static bool readb(std::istream& iss, RealType& vStr);
   FORWARD_STRING_METHODS(StringVectorType)
 };
 

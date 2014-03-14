@@ -435,6 +435,11 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(c
 }
 //===================================================================
 template <typename TYPE>
+unsigned int tlp::MutableContainer<TYPE>::numberOfNonDefaultValues() const {
+  return elementInserted;
+}
+//===================================================================
+template <typename TYPE>
 void tlp::MutableContainer<TYPE>::vecttohash() {
   hData=new TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>(elementInserted);
 

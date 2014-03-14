@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <iostream>
 #include <cstdlib>
 
 template <class Tnode, class Tedge, class Tprop>
@@ -155,6 +154,48 @@ tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNonDefaul
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
+unsigned int tlp::AbstractProperty<Tnode,Tedge,Tprop>::numberOfNonDefaultValuatedNodes() const {
+  return nodeProperties.numberOfNonDefaultValues();
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+unsigned int tlp::AbstractProperty<Tnode,Tedge,Tprop>::nodeValueSize() const {
+  return Tnode::valueSize();
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::writeNodeDefaultValue(std::ostream& oss) const {
+  Tnode::writeb(oss, nodeDefaultValue);
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::writeNodeValue(std::ostream& oss,
+							      node n) const {
+  assert(n.isValid());
+  Tnode::writeb(oss, nodeProperties.get(n.id));
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+bool tlp::AbstractProperty<Tnode,Tedge,Tprop>::readNodeDefaultValue(std::istream& iss) {
+  if (Tnode::readb(iss, nodeDefaultValue)) {
+    nodeProperties.setAll(nodeDefaultValue);
+    return true;
+  }
+  return false;
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+bool tlp::AbstractProperty<Tnode,Tedge,Tprop>::readNodeValue(std::istream& iss,
+							     node n) {
+  typename Tnode::RealType val;
+  if (Tnode::readb(iss, val)) {
+    nodeProperties.set(n.id, val);
+    return true;
+  }
+  return false;
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
 tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNonDefaultValuatedEdges(const Graph* g) const {
   tlp::Iterator<tlp::edge>* it =
     new tlp::UINTIterator<tlp::edge>(edgeProperties.findAll(edgeDefaultValue, false));
@@ -166,6 +207,48 @@ tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNonDefaul
     return new GraphEltIterator<tlp::edge>(g != NULL ? g : Tprop::graph, it);
 
   return ((g == NULL) || (g == Tprop::graph)) ? it : new GraphEltIterator<tlp::edge>(g, it);
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+unsigned int tlp::AbstractProperty<Tnode,Tedge,Tprop>::numberOfNonDefaultValuatedEdges() const {
+  return edgeProperties.numberOfNonDefaultValues();
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+unsigned int tlp::AbstractProperty<Tnode,Tedge,Tprop>::edgeValueSize() const {
+  return Tedge::valueSize();
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::writeEdgeDefaultValue(std::ostream& oss) const {
+  Tedge::writeb(oss, edgeDefaultValue);
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::writeEdgeValue(std::ostream& oss,
+							      edge e) const {
+  assert(e.isValid());
+  Tedge::writeb(oss, edgeProperties.get(e.id));
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+bool tlp::AbstractProperty<Tnode,Tedge,Tprop>::readEdgeDefaultValue(std::istream& iss) {
+  if (Tedge::readb(iss, edgeDefaultValue)) {
+    edgeProperties.setAll(edgeDefaultValue);
+    return true;
+  }
+  return false;
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+bool tlp::AbstractProperty<Tnode,Tedge,Tprop>::readEdgeValue(std::istream& iss,
+							     edge e) {
+  typename Tedge::RealType val;
+  if (Tedge::readb(iss, val)) {
+    edgeProperties.set(e.id, val);
+    return true;
+  }
+  return false;
 }
 //============================================================
 template <typename vectType, typename eltType, typename propType>

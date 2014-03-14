@@ -28,6 +28,7 @@ INSTALL(FILES
   tulip/FaceIterator.h
   tulip/filteriterator.h
   tulip/ForEach.h
+  tulip/GraphAbstract.h
   tulip/GraphDecorator.h
   tulip/Graph.h
   tulip/GraphTest.h

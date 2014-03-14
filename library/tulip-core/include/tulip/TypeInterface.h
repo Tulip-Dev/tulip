@@ -41,9 +41,20 @@ public:
     return T();
   }
 
+  static unsigned int valueSize() {
+    return sizeof(T);
+  }
+
   static void write(std::ostream&, const RealType&) {}
+  static void writeb(std::ostream& oss, const RealType& v) {
+    oss.write((char *) &v, sizeof(v));
+  }
+
   static bool read(std::istream&, RealType&) {
     return false;
+  }
+  static bool readb(std::istream& iss, RealType& v) {
+    return bool(iss.read((char *) &v, sizeof(v)));
   }
 
   static std::string toString(const RealType &) {

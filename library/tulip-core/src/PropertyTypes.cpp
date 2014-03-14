@@ -39,6 +39,11 @@ void GraphType::write(ostream &oss, const RealType &v) {
     oss << v->getId();
 }
 
+void GraphType::writeb(ostream &oss, const RealType &v) {
+  unsigned int id = v ? v->getId() : 0;
+  oss.write((char *) &id, sizeof(id));
+}
+
 bool GraphType::read(istream& iss, RealType& v) {
   uintptr_t lv = 0;
   bool ok = bool(iss >> lv);
@@ -51,6 +56,14 @@ bool GraphType::read(istream& iss, RealType& v) {
   return ok;
 }
 
+bool GraphType::readb(istream &, RealType &) {
+  // should not be called
+  // must be intercepted by GraphProperty::readNodeValue
+  assert(false);
+  tlp::error() << __PRETTY_FUNCTION__ << " should not be called" << std::endl;
+  return false;
+}
+
 // EdgeSetType
 void EdgeSetType::write(ostream& os, const RealType & v ) {
   os << '(';
@@ -60,6 +73,18 @@ void EdgeSetType::write(ostream& os, const RealType & v ) {
     os << (*it).id << ' ';
 
   os << ')';
+}
+
+void EdgeSetType::writeb(ostream& oss, const RealType & v ) {
+  unsigned int vSize = v.size();
+  // write the size of the set
+  oss.write((char *) &vSize, sizeof(vSize));
+
+  set<edge>::const_iterator it;
+
+  // loop to write the edges
+  for(it = v.begin() ; it != v.end() ; ++it)
+    oss.write((char *) &(it->id), sizeof(unsigned int));
 }
 
 bool EdgeSetType::read(istream& is, RealType & v) {
@@ -93,6 +118,33 @@ bool EdgeSetType::read(istream& is, RealType & v) {
 
     v.insert( e );
   }
+}
+
+bool EdgeSetType::readb(istream& iss, RealType & s) {
+  s.clear();
+
+  unsigned int size;
+  // get the set size
+  if (!bool(iss.read((char *) &size, sizeof(unsigned int))))
+    return false;
+
+  // use a vector to get the edges
+  vector<edge> v;
+  v.resize(size);
+  edge* data = v.data();
+
+  // get the edges in one read
+  if (!bool(iss.read((char *) v.data(), size * sizeof(unsigned int))))
+    return false;
+
+  // insert edges in the set
+  while(size) {
+    s.insert(*data);
+    ++data;
+    --size;
+  }
+
+  return true;
 }
 
 // DoubleType
@@ -249,6 +301,23 @@ void BooleanVectorType::write(ostream& os, const RealType & v) {
   os << ')';
 }
 
+void BooleanVectorType::writeb(ostream& oss, const RealType & v) {
+  unsigned int vSize = v.size();
+  // write the size of the vector
+  oss.write((char *) &vSize, sizeof(vSize));
+
+  vector<char> vc;
+  vc.resize(vSize);
+
+  // loop to write boolean as char
+  char* data = vc.data();
+  for(unsigned int i = 0; i < vSize; ++i, ++data) {
+    *data = v[i] ? 1 : 0;
+  }
+
+  oss.write(vc.data(), vSize);
+}
+
 bool BooleanVectorType::read(istream& is,  RealType & v) {
   v.clear();
 
@@ -287,6 +356,27 @@ bool BooleanVectorType::read(istream& is,  RealType & v) {
     v.push_back(val);
     firstVal = false;
   }
+}
+
+bool BooleanVectorType::readb(istream& iss, RealType & v) {
+  unsigned int vSize = v.size();
+  // read the size of the vector
+  if (!iss.read((char *) &vSize, sizeof(vSize)))
+    return false;
+
+  vector<char> vc;
+  vc.resize(vSize);
+
+  // loop to write boolean as char
+  char* data = vc.data();
+  if (!bool(iss.read(data, vSize)))
+    return false;
+
+  for(unsigned int i = 0; i < vSize; ++i, ++data) {
+    v[i] = *data ? true : false;
+  }
+
+  return true;
 }
 
 // LineType
@@ -470,6 +560,15 @@ void StringType::write(ostream& os, const RealType & v ) {
   os << '"';
 }
 
+void StringType::writeb(ostream& os, const RealType & str) {
+  // write size of str
+  unsigned int size = str.size();
+  os.write((char *) &size, sizeof(size));
+
+  // then write c_str()
+  os.write((char *) str.c_str(), size);
+}
+
 string StringType::toString( const RealType & v ) {
   return v;
 }
@@ -510,6 +609,17 @@ bool StringType::read(istream& is, RealType & v) {
   return true;
 }
 
+bool StringType::readb(istream& iss, RealType & str) {
+  // read size of str
+  unsigned int size;
+  if (!bool(iss.read((char *)&size, sizeof(size))))
+    return false;
+
+  // then read chars
+  str.resize(size);
+  return bool(iss.read((char *) str.c_str(), size));
+}
+
 bool StringType::fromString( RealType & v, const string & s ) {
   v = s;
   return true;
@@ -527,6 +637,16 @@ void StringVectorType::write(ostream& os, const RealType & v) {
   }
 
   os << ')';
+}
+
+void StringVectorType::writeb(ostream& os, const RealType & v) {
+  // write size of vector
+  unsigned int size = v.size();
+  os.write((char *) &size, sizeof(size));
+
+  // loop to write strings
+  for(unsigned int i = 0; i < size; ++i)
+    StringType::writeb(os, v[i]);
 }
 
 bool StringVectorType::read(istream& is, RealType & v) {
@@ -579,6 +699,22 @@ bool StringVectorType::read(istream& is, RealType & v) {
         return false;
     }
   }
+}
+
+bool StringVectorType::readb(istream& iss, RealType & v) {
+  // read size of vector
+  unsigned int size;
+  if (!bool(iss.read((char *) &size, sizeof(size))))
+    return size;
+
+  v.resize(size);
+
+  // loop to read strings
+  for(unsigned int i = 0; i < size; ++i) {
+    if (!StringType::readb(iss, v[i]))
+      return false;
+  }
+  return true;
 }
 
 // ColorType
