@@ -582,8 +582,10 @@ node GraphStorage::addNode() {
  */
 void GraphStorage::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
   addedNodes.clear();
+
   if (nb == 0)
     return;
+
   unsigned int first = nodeIds.getFirstOfRange(nb);
   unsigned int last = first + nb - 1;
   nodes.reserve(last + 1);
@@ -709,8 +711,10 @@ void GraphStorage::addEdges(const std::vector<std::pair<node, node> >& ends,
   addedEdges.clear();
 
   unsigned int nb = ends.size();
+
   if (nb == 0)
     return;
+
   unsigned int first = edgeIds.getFirstOfRange(nb);
   edges.reserve(first + nb);
 
