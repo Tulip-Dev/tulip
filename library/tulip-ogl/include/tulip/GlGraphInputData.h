@@ -100,13 +100,6 @@ public:
   void setMetaNodeRenderer(GlMetaNodeRenderer *renderer,bool deleteOldMetaNodeRenderer=true);
 
   /**
-   * Set if the meta node renderer must be deleted at destructor
-   */
-  void setDeleteMetaNodeRendererAtDestructor(bool deleteAtDestructor) {
-    _deleteMetaNodeRendererAtDestructor=deleteAtDestructor;
-  }
-
-  /**
    * Return metaNode renderer
    */
   GlMetaNodeRenderer *getMetaNodeRenderer() const {
@@ -129,13 +122,6 @@ public:
    */
   void setGlVertexArrayManager(GlVertexArrayManager * manager) {
     _glVertexArrayManager=manager;
-  }
-
-  /**
-   * Set if GlVertexArrayManager must be deleted in destructor
-   */
-  void deleteGlVertexArrayManagerInDestructor(bool del) {
-    _deleteGlVertexArrayManager=del;
   }
 
   /**
@@ -472,12 +458,9 @@ protected:
 
   std::set<PropertyInterface*> _properties;
 
-  bool _deleteGlVertexArrayManager;
-
   PropertyInterface* _propertiesMap[NB_PROPS];
   static std::map<std::string,PropertyName> _propertiesNameMap;
 
-  bool _deleteMetaNodeRendererAtDestructor;
   GlMetaNodeRenderer *_metaNodeRenderer;
   GlVertexArrayManager *_glVertexArrayManager;
   GlGlyphRenderer *_glGlyphRenderer;
