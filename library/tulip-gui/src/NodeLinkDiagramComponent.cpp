@@ -360,6 +360,7 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
 
   GlGraphRenderingParameters param=oldGraphComposite->getRenderingParameters();
   GlMetaNodeRenderer *metaNodeRenderer=oldGraphComposite->getInputData()->getMetaNodeRenderer();
+  // prevent deletion of MetaNodeRenderer when deleting oldGraphComposite
   oldGraphComposite->getInputData()->setMetaNodeRenderer(NULL,false);
   GlGraphComposite* graphComposite=new GlGraphComposite(graph);
   graphComposite->setRenderingParameters(param);
@@ -369,11 +370,9 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
   graphComposite->getInputData()->setMetaNodeRenderer(metaNodeRenderer);
 
   if(oldGraphComposite->getInputData()->graph==graph) {
-    oldGraphComposite->getInputData()->deleteGlVertexArrayManagerInDestructor(false);
     delete graphComposite->getInputData()->getGlVertexArrayManager();
     graphComposite->getInputData()->setGlVertexArrayManager(oldGraphComposite->getInputData()->getGlVertexArrayManager());
-    // prevent deletion of GlVertexArrayManager
-    // when deleting oldGraphComposite
+    // prevent deletion of GlVertexArrayManager when deleting oldGraphComposite
     oldGraphComposite->getInputData()->setGlVertexArrayManager(NULL);
     graphComposite->getInputData()->getGlVertexArrayManager()->setInputData(graphComposite->getInputData());
   }

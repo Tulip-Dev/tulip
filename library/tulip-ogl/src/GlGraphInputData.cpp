@@ -17,9 +17,7 @@
  *
  */
 #include <tulip/GlGraphInputData.h>
-
 #include <tulip/Graph.h>
-
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GlVertexArrayManager.h>
@@ -28,10 +26,7 @@
 
 namespace tlp {
 GlGraphInputData::GlGraphInputData(Graph* graph,GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer):
-  graph(graph),
-  parameters(parameters),
-  _deleteGlVertexArrayManager(true),
-  _deleteMetaNodeRendererAtDestructor(true) {
+  graph(graph), parameters(parameters) {
 
   reloadGraphProperties();
 
@@ -63,13 +58,9 @@ void GlGraphInputData::setMetaNodeRenderer(GlMetaNodeRenderer *renderer,bool del
 
 GlGraphInputData::~GlGraphInputData() {
   delete _glVertexArrayManager;
-
   GlyphManager::getInst().clearGlyphList(&this->graph, this, glyphs);
-  EdgeExtremityGlyphManager::getInst().clearGlyphList(&this->graph, this,
-      extremityGlyphs);
-
+  EdgeExtremityGlyphManager::getInst().clearGlyphList(&this->graph, this, extremityGlyphs);
   delete _metaNodeRenderer;
-
   delete _glGlyphRenderer;
 }
 
