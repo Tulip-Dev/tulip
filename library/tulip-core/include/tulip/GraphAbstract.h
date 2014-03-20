@@ -37,7 +37,7 @@ class PropertyManager;
 class GraphProperty;
 
 ///Abstract class for default graph operations.
-class GraphAbstract:public Graph {
+class TLP_SCOPE GraphAbstract:public Graph {
   friend class PropertyManager;
 protected:
   GraphAbstract(Graph *supergraph, unsigned int id);
