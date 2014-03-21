@@ -92,14 +92,16 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   connect(_ui->mainScriptsTabWidget, SIGNAL(filesReloaded()), _ui->modulesTabWidget, SLOT(reloadCodeInEditorsIfNeeded()));
   connect(_ui->modulesTabWidget, SIGNAL(tabAboutToBeDeleted(int)), this, SLOT(closeModuleTabRequested(int)));
   connect(_ui->mainScriptsTabWidget, SIGNAL(tabAboutToBeDeleted(int)), this, SLOT(closeScriptTabRequested(int)));
- }
+}
 
 PythonScriptViewWidget::~PythonScriptViewWidget() {
   // ensure all updated scripts have been saved
   for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i)
     closeScriptTabRequested(i);
+
   for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i)
     closeModuleTabRequested(i);
+
   delete _ui;
 }
 
@@ -286,18 +288,20 @@ void PythonScriptViewWidget::currentTabChanged(int index) {
 
 void PythonScriptViewWidget::closeEditorTabRequested(PythonEditorsTabWidget* tabWidget, int idx) {
   QString curTabText = tabWidget->tabText(idx);
+
   if (curTabText == "")
     return;
 
   if (!curTabText.contains("no file") && curTabText[curTabText.size() -1] == '*') {
     PythonCodeEditor* editor = tabWidget->getEditor(idx);
+
     if (QMessageBox::question(QApplication::activeWindow(),
-			      QString("Save edited Python code"),
-			      QString("The code of ") +
-			      editor->getFileName() + QString("\n has been edited but has not been saved.\nDo you want to save it ?"),
-			      QMessageBox::Save | QMessageBox::Discard,
-			      QMessageBox::Save) ==
-	QMessageBox::Save)
+                              QString("Save edited Python code"),
+                              QString("The code of ") +
+                              editor->getFileName() + QString("\n has been edited but has not been saved.\nDo you want to save it ?"),
+                              QMessageBox::Save | QMessageBox::Discard,
+                              QMessageBox::Save) ==
+        QMessageBox::Save)
       editor->saveCodeToFile();
   }
 }
