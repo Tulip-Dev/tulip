@@ -332,7 +332,7 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
             else
               _viewWidget->setScriptEditorTabText(mainScriptId, "[no file]");
 
-            _viewWidget->setScriptEditorTabToolTip(mainScriptId, "string main script, don't forget to save the current graph or\n save the script to a file to not lose modifications to source code.");
+            _viewWidget->setScriptEditorTabToolTip(mainScriptId, "string main script, don't forget to save the current graph or\n save the script to a file to not lose your source code modifications.");
           }
         }
 
@@ -367,12 +367,12 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
           else
             _viewWidget->setScriptEditorTabText(0, "[no file]");
 
-          _viewWidget->setScriptEditorTabToolTip(0, "string main script, don't forget to save the current graph or\n save the script to a file to not lose modifications to source code.");
+          _viewWidget->setScriptEditorTabToolTip(0, "string main script, don't forget to save the current graph or\n save the script to a file to not lose your source code modifications.");
         }
         else {
           codeEditor->setPlainText(getDefaultScriptCode(_pythonInterpreter->getPythonVersionStr(), _graph));
           _viewWidget->setScriptEditorTabText(0, "[no file]");
-          _viewWidget->setScriptEditorTabToolTip(0, "string main script, don't forget to save the current graph or\n save the script to a file to not lose modifications to source code.");
+          _viewWidget->setScriptEditorTabToolTip(0, "string main script, don't forget to save the current graph or\n save the script to a file to not lose your source code modifications.");
         }
       }
 
@@ -593,7 +593,7 @@ void PythonScriptView::newScript() {
   int editorId = _viewWidget->addMainScriptEditor();
   _viewWidget->getMainScriptEditor(editorId)->setPlainText(getDefaultScriptCode(_pythonInterpreter->getPythonVersionStr(), _graph));
   _viewWidget->setScriptEditorTabText(editorId, "[no file]");
-  _viewWidget->setScriptEditorTabToolTip(editorId, "string main script, don't forget to save the current graph or\n save the script to a file to not lose modifications to source code.");
+  _viewWidget->setScriptEditorTabToolTip(editorId, "string main script, don't forget to save the current graph or\n save the script to a file to not lose your source code modifications.");
 }
 
 void PythonScriptView::loadScript() {
@@ -783,7 +783,7 @@ bool PythonScriptView::loadModuleFromSrcCode(const QString &moduleName, const QS
   codeEditor->setPlainText(moduleSrcCode);
 
   _viewWidget->setModuleEditorTabText(editorId, moduleName);
-  _viewWidget->setModuleEditorTabToolTip(editorId, "string module, don't forget to save the current graph or\n save the module to a file to not lose modifications to source code.");
+  _viewWidget->setModuleEditorTabToolTip(editorId, "string module, don't forget to save the current graph or\n save the module to a file to not lose your source code modifications.");
 
   bool ret = _pythonInterpreter->registerNewModuleFromString(QString(moduleName).replace(".py", ""),  moduleSrcCode);
 
@@ -832,7 +832,7 @@ void PythonScriptView::newStringModule() {
 
     int editorId = _viewWidget->addModuleEditor(moduleName);
     _viewWidget->getModuleEditor(editorId)->setFileName(moduleName);
-    _viewWidget->setModuleEditorTabToolTip(editorId, "string module, don't forget to save the current graph or\n save module to file to not lose modifications to source code.");
+    _viewWidget->setModuleEditorTabToolTip(editorId, "string module, don't forget to save the current graph or\n save module to file to not lose your source code modifications.");
   }
 }
 
