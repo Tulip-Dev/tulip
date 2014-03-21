@@ -113,6 +113,9 @@ public slots :
   void increaseFontSize();
   void resizeToolBars();
   void currentTabChanged(int index);
+  void closeEditorTabRequested(tlp::PythonEditorsTabWidget* tabWidget, int index);
+  void closeModuleTabRequested(int index);
+  void closeScriptTabRequested(int index);
   void scrollToEditorLine(const QUrl & link);
 
 };
