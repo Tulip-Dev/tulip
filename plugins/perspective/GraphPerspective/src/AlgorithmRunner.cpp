@@ -124,7 +124,7 @@ void AlgorithmRunner::insertItem(QWidget* w, const QString& name) {
   }
 
   AlgorithmRunnerItem* item = new AlgorithmRunnerItem(name);
-  QObject::connect(_storeResultAsLocalButton,SIGNAL(clicked(bool)),item,SLOT(setLocalMode(bool)));
+  QObject::connect(_storeResultAsLocalButton,SIGNAL(clicked(bool)),item,SLOT(setStoreResultAsLocal(bool)));
   QObject::connect(item,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
   QVBoxLayout *groupLayout = static_cast<QVBoxLayout*>(groupBox->widget()->layout());
   int index = 0;
