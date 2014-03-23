@@ -123,18 +123,22 @@ FUNCTION(ADD_EXECUTABLE name)
 ENDFUNCTION()
 
 ## ========================================================
+## Profiling
+## ========================================================
+SET(BUILD_CODE_COVERAGE OFF CACHE BOOL "Do you want to build for code coverage ? [OFF|ON]")
+
+## ========================================================
 ## Compiler-specific options
 ## ========================================================
 STRING(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG)
 
 SET_COMPILER_OPTIONS()
 
-IF(BUILD_TESTS)
+IF(BUILD_CODE_COVERAGE)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
   SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
   SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
   SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
-  INCLUDE(CTest)
 ENDIF()
 
 ## ========================================================
@@ -310,6 +314,10 @@ ENDIF(LINUX)
 ## Unit tests
 ## ========================================================
 SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
+
+IF(BUILD_TESTS)
+  INCLUDE(CTest)
+ENDIF(BUILD_TESTS)
 
 ## ========================================================
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
