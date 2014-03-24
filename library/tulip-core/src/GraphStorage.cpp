@@ -582,6 +582,7 @@ node GraphStorage::addNode() {
  */
 void GraphStorage::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
   bool addedIsNonNullRef = &addedNodes != NULL;
+
   if (addedIsNonNullRef)
     addedNodes.clear();
 
@@ -715,6 +716,7 @@ edge GraphStorage::addEdge(node src, node tgt) {
 void GraphStorage::addEdges(const std::vector<std::pair<node, node> >& ends,
                             std::vector<edge>& addedEdges) {
   bool addedIsNonNullRef = &addedEdges != NULL;
+
   if (addedIsNonNullRef)
     addedEdges.clear();
 
@@ -752,6 +754,7 @@ void GraphStorage::addEdges(const std::vector<std::pair<node, node> >& ends,
     edge e(first);
     ctnr.edges.push_back(e);
     nodes[tgt.id].edges.push_back(e);
+
     if (addedIsNonNullRef)
       addedEdges.push_back(e);
   }
