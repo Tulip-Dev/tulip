@@ -76,6 +76,11 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
 }
 #else
 void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
+  // on some windows systems
+  // "No errors." messages may be logged coming from QGLShader::link
+  // we try to avoid them
+  if (QString(msg).indexOf("No errors."))
+    return;
   if (type == QtFatalMsg) {
     std::cerr<<msg<<std::endl;
     abort();
