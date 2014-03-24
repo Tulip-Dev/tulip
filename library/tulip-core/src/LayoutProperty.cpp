@@ -79,10 +79,12 @@ MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::
       minV(minT, tmpCoord);
     }
   }
+
   delete itE;
 
 
   unsigned int sgi = sg->getId();
+
   // graph observation is now delayed
   // until we need to do some minmax computation
   if (minMaxNode.find(sgi) == minMaxNode.end()) {
@@ -100,6 +102,7 @@ MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue) {
   MINMAX_MAP(tlp::PointType)::const_iterator it = minMaxNode.begin();
+
   if (it != minMaxNode.end()) {
     const std::vector<Coord>& oldV = this->getEdgeValue(e);
 
@@ -150,12 +153,13 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::ed
 
         // reset bounding box if needed
         if (reset) {
-	  minMaxNode.clear();
+          minMaxNode.clear();
           break;
         }
       }
     }
   }
+
   // we need to observe the graph as soon as there is an edge
   // with bends
   if (!needGraphListener && (needGraphListener = newValue.size() > 1) &&
