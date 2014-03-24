@@ -33,7 +33,7 @@ template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue);
 
 template <>
-void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg);
+MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg);
 
 class PropertyContext;
 class Graph;
@@ -47,7 +47,7 @@ typedef MinMaxProperty<tlp::PointType, tlp::LineType> LayoutMinMaxProperty;
  */
 class TLP_SCOPE LayoutProperty : public LayoutMinMaxProperty {
 public:
-  LayoutProperty(Graph *graph, std::string name="", bool updateOnEdgeReversal=true);
+  LayoutProperty(Graph *graph, std::string name=""/*, bool updateOnEdgeReversal=true*/);
 
   // override some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
@@ -281,7 +281,7 @@ public:
   * Returns the number of crossings in the layout
   **/
   //methods removed until we have a working implementation
-//  unsigned int crossingNumber() const;
+  //unsigned int crossingNumber() const;
 
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node, const Coord &v);
@@ -290,7 +290,6 @@ public:
   virtual void setAllEdgeValue(const std::vector<Coord> &v);
 
 protected:
-
   virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &);
 
 private:

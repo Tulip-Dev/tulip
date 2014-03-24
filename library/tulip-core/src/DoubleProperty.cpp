@@ -218,10 +218,8 @@ static DoublePropertyPredefinedCalculator avgCalculator;
 
 //==============================
 ///Constructeur d'un DoubleProperty
-DoubleProperty::DoubleProperty (Graph *sg, std::string n) : DoubleMinMaxProperty(sg, n, -DBL_MAX, DBL_MAX, -DBL_MAX, DBL_MAX) {
-  assert(sg!=NULL);
-  // the property observes the graph
-  sg->addListener(this);
+DoubleProperty::DoubleProperty (Graph *g, std::string n) : DoubleMinMaxProperty(g, n, -DBL_MAX, DBL_MAX, -DBL_MAX, DBL_MAX) {
+  assert(g!=NULL);
   // the computed meta value will be the average value
   setMetaValueCalculator(&avgCalculator);
 }
@@ -257,12 +255,8 @@ void DoubleProperty::edgesUniformQuantification(unsigned int k) {
 //====================================================================
 void DoubleProperty::clone_handler(AbstractProperty< DoubleType, DoubleType, tlp::NumericProperty>& proxyC) {
   DoubleProperty *proxy=(DoubleProperty *)&proxyC;
-  nodeValueUptodate = proxy->nodeValueUptodate;
-  edgeValueUptodate = proxy->edgeValueUptodate;
-  minNode = proxy->minNode;
-  maxNode = proxy->maxNode;
-  minEdge = proxy->minEdge;
-  maxEdge = proxy->maxEdge;
+  minMaxNode = proxy->minMaxNode;
+  minMaxEdge = proxy->minMaxEdge;
 }
 //=================================================================================
 void DoubleProperty::setNodeValue(const node n, const double &v) {

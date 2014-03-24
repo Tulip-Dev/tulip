@@ -24,6 +24,9 @@
 #include <tulip/Observable.h>
 #include <tulip/AbstractProperty.h>
 
+#define MINMAX_PAIR(TYPE) std::pair<typename TYPE::RealType, typename TYPE::RealType>
+#define MINMAX_MAP(TYPE) typename TLP_HASH_MAP<unsigned int, MINMAX_PAIR(TYPE) >
+
 namespace tlp {
 
 /**
@@ -121,18 +124,21 @@ public:
   void updateAllEdgesValues(typename edgeType::RealType newValue);
 
 protected:
-  TLP_HASH_MAP<unsigned int, typename nodeType::RealType> maxNode, minNode;
-  TLP_HASH_MAP<unsigned int, typename edgeType::RealType> maxEdge, minEdge;
-  TLP_HASH_MAP<unsigned int, bool> nodeValueUptodate;
-  TLP_HASH_MAP<unsigned int, bool> edgeValueUptodate;
+  MINMAX_MAP(nodeType) minMaxNode;
+  MINMAX_MAP(edgeType) minMaxEdge;
 
   typename nodeType::RealType _nodeMin;
   typename nodeType::RealType _nodeMax;
   typename edgeType::RealType _edgeMin;
   typename edgeType::RealType _edgeMax;
 
-  void computeMinMaxNode(Graph* graph);
-  void computeMinMaxEdge(Graph* graph);
+  // this will indicate if we can stop propType::graph observation
+  bool needGraphListener; // default is false
+
+  MINMAX_PAIR(nodeType) computeMinMaxNode(Graph* graph);
+  MINMAX_PAIR(edgeType) computeMinMaxEdge(Graph* graph);
+  void removeListenersAndClearNodeMap();
+  void removeListenersAndClearEdgeMap();
 };
 
 }

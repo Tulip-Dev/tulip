@@ -29,20 +29,14 @@ const string IntegerVectorProperty::propertyTypename="vector<int>";
 
 //==============================
 ///Constructeur d'un IntegerProperty
-IntegerProperty::IntegerProperty (Graph *sg, std::string n):IntegerMinMaxProperty(sg, n, -INT_MAX, INT_MAX, -INT_MAX, INT_MAX) {
-  // the property observes the graph
-  sg->addListener(this);
+IntegerProperty::IntegerProperty (Graph *g, std::string n):IntegerMinMaxProperty(g, n, -INT_MAX, INT_MAX, -INT_MAX, INT_MAX) {
 }
 //====================================================================
 void IntegerProperty::clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> &proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     IntegerProperty *proxy=(IntegerProperty *)&proxyC;
-    nodeValueUptodate = proxy->nodeValueUptodate;
-    edgeValueUptodate = proxy->edgeValueUptodate;
-    minNode = proxy->minNode;
-    maxNode = proxy->maxNode;
-    minEdge = proxy->minEdge;
-    maxEdge = proxy->maxEdge;
+    minMaxNode = proxy->minMaxNode;
+    minMaxEdge = proxy->minMaxEdge;
   }
 }
 //=================================================================================
@@ -131,5 +125,3 @@ void IntegerProperty::edgesUniformQuantification(unsigned int k) {
 
   delete itE;
 }
-
-

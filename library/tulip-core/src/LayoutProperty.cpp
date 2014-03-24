@@ -42,7 +42,7 @@ void minV(tlp::Coord &res, const tlp::Coord &cmp) {
  * @brief This template specialization provides specific computation for min and max values of Layout properties (they are specific in that they use the control points of the edges)
  **/
 template <>
-void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg) {
+MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg) {
 #ifndef NDEBUG
   tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
 #endif
@@ -79,12 +79,19 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph
       minV(minT, tmpCoord);
     }
   }
-
   delete itE;
+
+
   unsigned int sgi = sg->getId();
-  nodeValueUptodate[sgi] = true;
-  minNode[sgi] = minT;
-  maxNode[sgi] = maxT;
+  // graph observation is now delayed
+  // until we need to do some minmax computation
+  if (minMaxNode.find(sgi) == minMaxNode.end()) {
+    // launch graph hierarchy observation
+    graph->addListener(this);
+  }
+
+  MINMAX_PAIR(tlp::PointType) minmax(minT, maxT);
+  return minMaxNode[sgi] = minmax;
 }
 
 /**
@@ -92,17 +99,15 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph
  **/
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue) {
-  TLP_HASH_MAP<unsigned int, bool>::const_iterator it = nodeValueUptodate.begin();
-
-  if (it != nodeValueUptodate.end()) {
+  MINMAX_MAP(tlp::PointType)::const_iterator it = minMaxNode.begin();
+  if (it != minMaxNode.end()) {
     const std::vector<Coord>& oldV = this->getEdgeValue(e);
 
     if (newValue != oldV) {
       // loop on subgraph min/max
-      for(; it != nodeValueUptodate.end(); ++it) {
-        unsigned int gid = (*it).first;
-        const Coord& minV = minNode[gid];
-        const Coord& maxV = maxNode[gid];
+      for(; it != minMaxNode.end(); ++it) {
+        const Coord& minV = it->second.first;
+        const Coord& maxV = it->second.second;
         bool reset = false;
 
         // check if min has to be updated
@@ -145,16 +150,18 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::ed
 
         // reset bounding box if needed
         if (reset) {
-          nodeValueUptodate.clear();
-          minNode.clear();
-          maxNode.clear();
+	  minMaxNode.clear();
           break;
         }
       }
     }
   }
+  // we need to observe the graph as soon as there is an edge
+  // with bends
+  if (!needGraphListener && (needGraphListener = newValue.size() > 1) &&
+      (minMaxNode.find(graph->getId()) == minMaxNode.end()))
+    graph->addListener(this);
 }
-
 }
 
 inline double sqr(double x) {
@@ -198,12 +205,7 @@ public:
 static LayoutMetaValueCalculator mvLayoutCalculator;
 
 //======================================================
-LayoutProperty::LayoutProperty(Graph *sg, std::string n, bool updateOnEdgeReversal) : LayoutMinMaxProperty(sg, n,
-      Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()) {
-// if needed the property observes the graph (see reverseEdge)
-  if (updateOnEdgeReversal)
-    graph->addListener(this);
-
+LayoutProperty::LayoutProperty(Graph *sg, std::string n) : LayoutMinMaxProperty(sg, n, Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()) {
   // set default MetaValueCalculator
   setMetaValueCalculator(&mvLayoutCalculator);
 }
@@ -516,16 +518,13 @@ void LayoutProperty::perfectAspectRatio() {
 void LayoutProperty::clone_handler(AbstractProperty<tlp::PointType, tlp::LineType>& proxyC) {
   if (typeid(this)==typeid(&proxyC)) {
     LayoutProperty *proxy=(LayoutProperty *)&proxyC;
-    nodeValueUptodate = proxy->nodeValueUptodate;
-    minNode = proxy->minNode;
-    maxNode = proxy->maxNode;
+    minMaxNode = proxy->minMaxNode;
   }
 }
 //=================================================================================
 void LayoutProperty::resetBoundingBox() {
-  nodeValueUptodate.clear();
-  minNode.clear();
-  minEdge.clear();
+  minMaxNode.clear();
+  minMaxEdge.clear();
 }
 //================================================================================
 void LayoutProperty::setNodeValue(const node n, const Coord& v) {
@@ -830,11 +829,6 @@ void LayoutProperty::treatEvent(const Event& evt) {
     switch(graphEvent->getType()) {
     case GraphEvent::TLP_ADD_NODE:
     case GraphEvent::TLP_DEL_NODE:
-    case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
-    case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
-      // ignore TLP_ADD_EDGE and TLP_DEL_EDGE
-      // because edges are not taken into account
-      // during bounding box computation
       LayoutMinMaxProperty::treatEvent(evt);
       break;
 
