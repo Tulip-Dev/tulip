@@ -123,7 +123,8 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(_ui->hierarchiesTree);
   proxyModel->setSourceModel(model);
   _ui->hierarchiesTree->setModel(proxyModel);
-  _ui->hierarchiesTree->header()->resizeSection(0,100);
+  _ui->hierarchiesTree->header()->resizeSection(0, 100);
+  _ui->hierarchiesTree->header()->setResizeMode(0, QHeaderView::Interactive);
 
   connect(_ui->hierarchiesTree->selectionModel(),
           SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
