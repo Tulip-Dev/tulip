@@ -179,10 +179,12 @@ node GraphImpl::addNode() {
 }
 //----------------------------------------------------------------
 void GraphImpl::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
-  storage.addNodes(nb, addedNodes);
+  if (nb) {
+    storage.addNodes(nb, addedNodes);
 
-  if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, addedNodes));
+    if (hasOnlookers())
+      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, addedNodes));
+  }
 }
 //----------------------------------------------------------------
 void GraphImpl::addNode(const node) {
