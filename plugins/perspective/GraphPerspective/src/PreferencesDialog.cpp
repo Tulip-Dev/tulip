@@ -80,6 +80,7 @@ void PreferencesDialog::writeSettings() {
 
   TulipSettings::instance().applyProxySettings();
 
+  TulipSettings::instance().setDisplayDefaultViews(_ui->displayDefaultViews->isChecked());
   TulipSettings::instance().setAutomaticMapMetric(_ui->colorMappingCheck->isChecked());
   TulipSettings::instance().setAutomaticRatio(_ui->aspectRatioCheck->isChecked());
   TulipSettings::instance().setViewOrtho(_ui->viewOrthoCheck->isChecked());
@@ -95,7 +96,6 @@ void PreferencesDialog::readSettings() {
     _ui->networkFrame1->setEnabled(true);
     _ui->networkFrame2->setEnabled(true);
   }
-
 
   switch(TulipSettings::instance().proxyType()) {
   case QNetworkProxy::Socks5Proxy:
@@ -143,6 +143,7 @@ void PreferencesDialog::readSettings() {
   // edges selection color is not editable
   //_ui->graphDefaultsTable->item(3,2)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
+  _ui->displayDefaultViews->setChecked(TulipSettings::instance().displayDefaultViews());
   _ui->aspectRatioCheck->setChecked(TulipSettings::instance().isAutomaticRatio());
   _ui->viewOrthoCheck->setChecked(TulipSettings::instance().isViewOrtho());
   _ui->colorMappingCheck->setChecked(TulipSettings::instance().isAutomaticMapMetric());

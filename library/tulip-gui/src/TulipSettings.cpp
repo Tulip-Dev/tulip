@@ -53,6 +53,7 @@ const QString TulipSettings::ProxyUseAuthEntry = "app/proxy/user";
 const QString TulipSettings::ProxyUsernameEntry = "app/proxy/useAuth";
 const QString TulipSettings::ProxyPasswordEntry = "app/proxy/passwd";
 
+const QString TulipSettings::AutomaticDisplayDefaultViews = "graph/auto/defaultViews";
 const QString TulipSettings::AutomaticPerfectAspectRatioEntry = "graph/auto/ratio";
 const QString TulipSettings::ViewOrthoEntry = "graph/auto/ortho";
 const QString TulipSettings::AutomaticMapMetricEntry = "graph/auto/colors";
@@ -321,6 +322,14 @@ bool TulipSettings::isFirstRun() const {
 
 void TulipSettings::setFirstRun(bool f) {
   setValue(FirstRunEntry,f);
+}
+
+bool TulipSettings::displayDefaultViews() const {
+  return value(AutomaticDisplayDefaultViews, true).toBool();
+}
+
+void TulipSettings::setDisplayDefaultViews(bool f) {
+  setValue(AutomaticDisplayDefaultViews,f);
 }
 
 bool TulipSettings::isAutomaticMapMetric() const {
