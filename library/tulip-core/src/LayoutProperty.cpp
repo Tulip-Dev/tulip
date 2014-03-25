@@ -106,6 +106,7 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::ed
 #else
   MINMAX_MAP(tlp::PointType)::const_iterator it = minMaxNode.begin();
 #endif
+
   if (it != minMaxNode.end()) {
     const std::vector<Coord>& oldV = this->getEdgeValue(e);
 

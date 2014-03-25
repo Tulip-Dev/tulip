@@ -1034,6 +1034,7 @@ void GraphPerspective::CSVImport() {
 void GraphPerspective::showStartPanels(Graph *g) {
   if (TulipSettings::instance().displayDefaultViews() == false)
     return;
+
   // expose mode is not safe to add a new panel
   // so hide it if needed
   _ui->workspace->hideExposeMode();
