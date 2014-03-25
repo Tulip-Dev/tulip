@@ -61,6 +61,7 @@ public:
   static const QString ProxyUsernameEntry;
   static const QString ProxyPasswordEntry;
 
+  static const QString AutomaticDisplayDefaultViews;
   static const QString AutomaticPerfectAspectRatioEntry;
   static const QString ViewOrthoEntry;
   static const QString AutomaticMapMetricEntry;
@@ -165,6 +166,9 @@ public:
 
   bool isFirstRun() const;
   void setFirstRun(bool);
+
+  bool displayDefaultViews() const;
+  void setDisplayDefaultViews(bool);
 
   bool isAutomaticMapMetric() const;
   void setAutomaticMapMetric(bool);
