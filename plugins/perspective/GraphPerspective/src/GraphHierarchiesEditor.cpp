@@ -124,8 +124,11 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   proxyModel->setSourceModel(model);
   _ui->hierarchiesTree->setModel(proxyModel);
   _ui->hierarchiesTree->header()->resizeSection(0, 100);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  _ui->hierarchiesTree->header()->setSectionResizeMode(0, QHeaderView::Interactive);
+#else
   _ui->hierarchiesTree->header()->setResizeMode(0, QHeaderView::Interactive);
-
+#endif
   connect(_ui->hierarchiesTree->selectionModel(),
           SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
           this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
