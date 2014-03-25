@@ -101,8 +101,11 @@ MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::
  **/
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue) {
+#if defined(_MSC_VER)
+  TLP_HASH_MAP<unsigned int, MINMAX_PAIR(tlp::PointType) >::const_iterator it = minMaxNode.begin();
+#else
   MINMAX_MAP(tlp::PointType)::const_iterator it = minMaxNode.begin();
-
+#endif
   if (it != minMaxNode.end()) {
     const std::vector<Coord>& oldV = this->getEdgeValue(e);
 
