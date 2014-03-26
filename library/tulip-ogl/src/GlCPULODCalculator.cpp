@@ -22,6 +22,17 @@
 
 #ifdef _OPENMP
 #include <omp.h>
+// _OPENMP is supposed to be defined as an integer
+//  representing the year/month of the supported version
+#if _OPENMP < 200805
+// only signed integer types are supported
+// for OpenMP < 3.0
+#define OMP_ITER_TYPE int
+#else
+#define OMP_ITER_TYPE size_t
+#endif
+#else
+#define OMP_ITER_TYPE size_t
 #endif
 
 #include <tulip/Camera.h>
@@ -116,7 +127,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
     const Matrix<float, 4> transformMatrix,
     const Vector<int,4>& globalViewport,
     const Vector<int,4>& currentViewport) {
-  size_t nb=layerLODUnit->simpleEntitiesLODVector.size();
+  OMP_ITER_TYPE nb=layerLODUnit->simpleEntitiesLODVector.size();
 
 #ifdef _OPENMP
   omp_set_num_threads(omp_get_num_procs());
@@ -128,7 +139,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
   #pragma omp parallel for
 #endif
 
-  for(size_t i = 0 ; i < nb ; ++i) {
+  for(OMP_ITER_TYPE i = 0 ; i < nb ; ++i) {
     layerLODUnit->simpleEntitiesLODVector[i].lod=calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
   }
 
@@ -137,7 +148,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
   #pragma omp parallel for
 #endif
 
-  for(size_t i = 0 ; i < nb ; ++i) {
+  for(OMP_ITER_TYPE i = 0 ; i < nb ; ++i) {
     layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
   }
 
@@ -148,7 +159,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
     #pragma omp parallel for
 #endif
 
-    for(size_t i = 0 ; i < nb ; ++i) {
+    for(OMP_ITER_TYPE i = 0 ; i < nb ; ++i) {
       layerLODUnit->edgesLODVector[i].lod=calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
     }
   }
@@ -157,7 +168,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
     #pragma omp parallel for
 #endif
 
-    for(size_t i = 0 ; i < nb ; ++i) {
+    for(OMP_ITER_TYPE i = 0 ; i < nb ; ++i) {
       layerLODUnit->edgesLODVector[i].lod=10;
     }
   }
