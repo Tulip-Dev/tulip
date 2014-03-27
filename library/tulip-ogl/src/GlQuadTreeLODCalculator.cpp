@@ -284,7 +284,7 @@ void GlQuadTreeLODCalculator::compute(const Vector<int,4>& globalViewport,const 
 
 void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
     const Coord &eye,
-    const Matrix<float, 4> transformMatrix,
+    const Matrix<float, 4>& transformMatrix,
     const Vector<int,4>& globalViewport,
     const Vector<int,4>& currentViewport) {
 
