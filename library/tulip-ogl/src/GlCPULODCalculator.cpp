@@ -124,7 +124,7 @@ void GlCPULODCalculator::compute(const Vector<int,4>& globalViewport,const Vecto
 
 void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
     const Coord &eye,
-    const Matrix<float, 4> transformMatrix,
+    const Matrix<float, 4>& transformMatrix,
     const Vector<int,4>& globalViewport,
     const Vector<int,4>& currentViewport) {
   OMP_ITER_TYPE nb=layerLODUnit->simpleEntitiesLODVector.size();
