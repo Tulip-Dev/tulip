@@ -644,9 +644,9 @@ void SOMView::computeMapping() {
   mappingTab.clear();
   algorithm.computeMapping(som, inputSample, mappingTab, medDist, maxSize);
 
-  float marginCoef = 0.1;
-  float spacingCoef = 0.2;
-  float minElementSizeCoef = 0.2;
+  float marginCoef = 0.1f;
+  float spacingCoef = 0.2f;
+  float minElementSizeCoef = 0.2f;
 
   SizeProperty *realGraphSizeProperty = graph()->getProperty<SizeProperty> ("viewSize");
 

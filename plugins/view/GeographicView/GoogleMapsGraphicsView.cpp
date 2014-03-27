@@ -134,7 +134,7 @@ GlComposite *readPolyFile(QString fileName) {
     }
 
     if(lat==90.)
-      lat=89.999;
+      lat=89.999f;
 
     double mercatorLatitude=lat*2./360.*M_PI;
     mercatorLatitude=sin(abs(mercatorLatitude));

@@ -508,8 +508,8 @@ void HistogramView::buildHistograms() {
     return;
   }
 
-  float spaceBetweenOverviews = OVERVIEW_SIZE / 10.;
-  float labelHeight = OVERVIEW_SIZE / 6;
+  float spaceBetweenOverviews = OVERVIEW_SIZE / 10.f;
+  float labelHeight = OVERVIEW_SIZE / 6.0f;
 
   float squareRoot = sqrt(double(selectedProperties.size()));
   const unsigned int N =  (unsigned int) squareRoot + (fmod((float) selectedProperties.size(), squareRoot) == 0. ? 0 : 1);
@@ -553,7 +553,7 @@ void HistogramView::buildHistograms() {
     histogramsComposite->addGlEntity(histogramsMap[selectedProperties[i]], oss.str());
 
     GlLabel *propertyLabel = new GlLabel(Coord(overviewBLCorner.getX() + OVERVIEW_SIZE / 2, overviewBLCorner.getY() - labelHeight / 2, 0),
-                                         Size((8./10.) * OVERVIEW_SIZE, labelHeight), foregroundColor);
+                                         Size((8.f/10.f) * OVERVIEW_SIZE, labelHeight), foregroundColor);
     propertyLabel->setText(selectedProperties[i]);
     propertiesLabels.push_back(propertyLabel);
 

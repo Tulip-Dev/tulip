@@ -107,7 +107,7 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
       float scale = min(size_meta_node.width()/(metagraphbb.width()*1.4),size_meta_node.height()/(metagraphbb.height()*1.4));
 
       if (scale >= 1)
-        scale *= 0.64;
+        scale *= 0.64f;
 
       // We compute the transformation on X and add him to our vertice
       transformationVertices.push_back(-graphbb.center().getX() + graphbb.width()/2 - metagraphbb.center().getX()*(scale-1) + coord_meta_node.getX() - metagraphbb.center().getX());

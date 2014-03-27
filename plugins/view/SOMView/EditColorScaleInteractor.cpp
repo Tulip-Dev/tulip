@@ -37,7 +37,7 @@ using namespace tlp;
 using namespace std;
 
 EditColorScaleInteractor::EditColorScaleInteractor() :
-  currentProperty(NULL), colorScale(NULL), widthPercent(.80), heightPercent(.1), heightPosition(.1),glMainWidgetWidth(0),glMainWidgetHeight(0),selectionLayer(new GlLayer("SelectionLayer")) {
+  currentProperty(NULL), colorScale(NULL), widthPercent(.80f), heightPercent(.1f), heightPosition(.1f),glMainWidgetWidth(0),glMainWidgetHeight(0),selectionLayer(new GlLayer("SelectionLayer")) {
 }
 
 EditColorScaleInteractor::~EditColorScaleInteractor() {

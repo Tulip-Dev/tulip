@@ -82,11 +82,11 @@ void PreviewItem::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
     painter->drawPixmap(_closePixmapRect,*_closeButtonPixmap);
   }
 }
-void PreviewItem::hoverEnterEvent(QGraphicsSceneHoverEvent */*event*/) {
+void PreviewItem::hoverEnterEvent(QGraphicsSceneHoverEvent* /*event*/) {
   _hovered = true;
   prepareGeometryChange();
 }
-void PreviewItem::hoverLeaveEvent(QGraphicsSceneHoverEvent */*event*/) {
+void PreviewItem::hoverLeaveEvent(QGraphicsSceneHoverEvent* /*event*/) {
   _hovered = false;
   prepareGeometryChange();
 }
@@ -98,7 +98,7 @@ void PreviewItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event) {
     update();
   }
 }
-void PreviewItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent */*event*/) {
+void PreviewItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* /*event*/) {
   emit opened();
 }
 bool PreviewItem::shouldClose(const QPointF& p) {
@@ -148,7 +148,7 @@ void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels, int
   updatePositions();
 }
 
-void WorkspaceExposeWidget::resizeEvent(QResizeEvent */*event*/) {
+void WorkspaceExposeWidget::resizeEvent(QResizeEvent* /*event*/) {
   updatePositions();
 }
 

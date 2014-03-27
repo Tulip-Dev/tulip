@@ -168,19 +168,19 @@ bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
       switch(((QKeyEvent *) e)->key()) {
       case Qt::Key_Left:
-        angle2=-0.05;
+        angle2=-0.05f;
         break;
 
       case Qt::Key_Right:
-        angle2=0.05;
+        angle2=0.05f;
         break;
 
       case Qt::Key_Up:
-        angle1=0.05;
+        angle1=0.05f;
         break;
 
       case Qt::Key_Down:
-        angle1=-0.05;
+        angle1=-0.05f;
         break;
       }
 

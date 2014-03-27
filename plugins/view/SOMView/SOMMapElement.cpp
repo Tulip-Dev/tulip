@@ -100,7 +100,7 @@ void SOMMapElement::buildMainComposite(tlp::Coord basePos, tlp::Size gridSize,
         n = map->getNodeAt(j, i);
         Color c = Color(255, 255, 255, 0);
         tlp::GlCircle *hex = new tlp::GlCircle(center, r, c, c, true, false,
-                                               M_PI / 2, 6);
+                                               M_PI / 2.0f, 6);
         oss.str("");
         oss << j << "," << i;
         addGlEntity(hex, oss.str());
