@@ -276,7 +276,7 @@ public :
       }
 
       // check other parameters
-      Size nSize(0.1,0.1,0);
+      Size nSize(0.1f, 0.1f, 0);
 
       for(; i < nbTokens; ++i) {
         if (tokens[i] == "x_fact") {
@@ -393,7 +393,7 @@ public :
     // because when node's layout is provided
     // x,y,z coordinates are restricted to [0.0, 1.0]
     // arbitrary set default size for nodes to (0.01, 0.01, 0)
-    sizes->setAllNodeValue(Size(0.01, 0.01, 0.0));
+    sizes->setAllNodeValue(Size(0.01f, 0.01f, 0.0f));
 
     stringstream errors;
     size_t lineNumber = 0;

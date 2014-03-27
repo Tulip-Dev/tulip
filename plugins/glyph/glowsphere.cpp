@@ -60,8 +60,8 @@ public:
 PLUGIN(GlowSphere)
 
 void GlowSphere::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
-  boundingBox[0] = Coord(-0.35, -0.35, -0.35);
-  boundingBox[1] = Coord(0.35, 0.35, 0.35);
+  boundingBox[0] = Coord(-0.35f, -0.35f, -0.35f);
+  boundingBox[1] = Coord(0.35f, 0.35f, 0.35f);
 }
 
 void GlowSphere::drawSphere() {

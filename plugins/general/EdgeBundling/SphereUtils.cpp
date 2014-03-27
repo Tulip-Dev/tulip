@@ -36,7 +36,7 @@ float centerOnOriginAndScale(Graph* graph, LayoutProperty * layout, float dist) 
   float ray = (move_coord - bb[1]).norm();
   float  scaleFactor = dist / ray;
   layout->scale(Coord(scaleFactor, scaleFactor, scaleFactor), graph);
-  graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(0.1,0.1,0.1));
+  graph->getProperty<SizeProperty>("viewSize")->setAllNodeValue(Size(0.1f, 0.1f, 0.1f));
   return sqrt( ray*ray / 2.);
 }
 

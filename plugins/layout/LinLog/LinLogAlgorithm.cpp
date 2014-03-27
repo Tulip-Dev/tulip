@@ -112,7 +112,7 @@ bool LinLogAlgorithm::run() {
   tlp::BooleanProperty* skipNodes = NULL;
   float aExp = 1.0;
   float rExp = 0.0;
-  float gFac = 0.9;
+  float gFac = 0.9f;
   LayoutProperty* layout = NULL;
 
   if ( dataSet!=NULL ) {

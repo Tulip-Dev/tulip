@@ -121,7 +121,7 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
       float dx = nodeBB[1][0] - nodeBB[0][0];
       float dy = nodeBB[1][1] - nodeBB[0][1];
       float dz = nodeBB[1][2] - nodeBB[0][2];
-      const float f = 0.2;
+      const float f = 0.2f;
       nodeBB[0][0] = nodeBB[0][0] + f * dx;
       nodeBB[0][1] = nodeBB[0][1] + f * dy;
       nodeBB[0][2] = nodeBB[0][2] + f * dz;
