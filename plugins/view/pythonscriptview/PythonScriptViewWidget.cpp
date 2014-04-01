@@ -328,7 +328,10 @@ void PythonScriptViewWidget::setGraph(tlp::Graph *graph) {
 void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
   QStringList strList = link.toString().split(":");
   QString file = strList.at(0);
-  int line = strList.at(1).toInt()-1;
+  for (int i = 1 ; i < strList.size() - 1 ; ++i) {
+      file += (":" + strList.at(i));
+  }
+  int line = strList.at(strList.size() - 1).toInt()-1;
 
   if (file == "<unnamed script>") {
     _ui->tabWidget->setCurrentIndex(0);
