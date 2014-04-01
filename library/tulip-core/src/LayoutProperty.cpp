@@ -166,7 +166,7 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::ed
 
   // we need to observe the graph as soon as there is an edge
   // with bends
-  if (!needGraphListener && (needGraphListener = newValue.size() > 1) &&
+  if (!needGraphListener && (needGraphListener = newValue.size() > 0) &&
       (minMaxNode.find(graph->getId()) == minMaxNode.end()))
     graph->addListener(this);
 }
