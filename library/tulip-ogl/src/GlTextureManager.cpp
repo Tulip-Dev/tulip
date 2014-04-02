@@ -401,11 +401,17 @@ static bool generateTexture(const std::string &filename,
         glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, dataForWidthSpriteTexture[i]);
       else
         glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, dataForWidthSpriteTexture[i]);
+
+      delete [] dataForWidthSpriteTexture[i];
     }
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
   }
+
+  delete [] textureNum;
+  delete [] dataForWidthSpriteTexture;
 
   return true;
 }
@@ -491,8 +497,8 @@ void GlTextureManager::deleteTexture(const string& name) {
 
     if(it2!=it->second.end()) {
       for(unsigned int i=0; i<it2->second.spriteNumber; ++i)
-        glDeleteTextures(1,&(it2->second.id[i]));
-
+        glDeleteTextures(1,&(it2->second.id[i]));  
+      delete [] it2->second.id;
       it->second.erase(name);
     }
   }
