@@ -76,9 +76,9 @@ MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::
       LineType::RealType::const_iterator itCoord;
 
       for (itCoord=value.begin(); itCoord!=value.end(); ++itCoord) {
-	const Coord& tmpCoord = *itCoord;
-	maxV(maxT, tmpCoord);
-	minV(minT, tmpCoord);
+        const Coord& tmpCoord = *itCoord;
+        maxV(maxT, tmpCoord);
+        minV(minT, tmpCoord);
       }
     }
 
@@ -109,8 +109,9 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::ed
 #else
   MINMAX_MAP(tlp::PointType)::const_iterator it = minMaxNode.begin();
 #endif
-  
+
   const std::vector<Coord>& oldV = this->getEdgeValue(e);
+
   if (newValue == oldV)
     return;
 
@@ -125,47 +126,47 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::ed
 
       // check if min has to be updated
       for(unsigned i = 0; i < newValue.size(); ++i) {
-	if (minV > newValue[i]) {
-	  reset = true;
-	  break;
-	}
+        if (minV > newValue[i]) {
+          reset = true;
+          break;
+        }
       }
 
       if (!reset) {
-	// check if max has to be updated
-	for(unsigned i = 0; i < newValue.size(); ++i) {
-	  if (maxV < newValue[i]) {
-	    reset = true;
-	    break;
-	  }
-	}
+        // check if max has to be updated
+        for(unsigned i = 0; i < newValue.size(); ++i) {
+          if (maxV < newValue[i]) {
+            reset = true;
+            break;
+          }
+        }
       }
 
       if (!reset) {
-	// check if minV belongs to oldV
-	for(unsigned i = 0; i < oldV.size(); ++i) {
-	  if (minV == oldV[i]) {
-	    reset = false;
-	    break;
-	  }
-	}
+        // check if minV belongs to oldV
+        for(unsigned i = 0; i < oldV.size(); ++i) {
+          if (minV == oldV[i]) {
+            reset = false;
+            break;
+          }
+        }
       }
 
       if (!reset) {
-	// check if maxV belongs to oldV
-	for(unsigned i = 0; i < oldV.size(); ++i) {
-	  if (maxV == oldV[i]) {
-	    reset = false;
-	    break;
-	  }
-	}
+        // check if maxV belongs to oldV
+        for(unsigned i = 0; i < oldV.size(); ++i) {
+          if (maxV == oldV[i]) {
+            reset = false;
+            break;
+          }
+        }
       }
 
       // reset bounding box if needed
       if (reset) {
-	needGraphListener = (((LayoutProperty*) this)->nbBendedEdges > 0);
-	removeListenersAndClearNodeMap();
-	return;
+        needGraphListener = (((LayoutProperty*) this)->nbBendedEdges > 0);
+        removeListenersAndClearNodeMap();
+        return;
       }
     }
   }
@@ -429,7 +430,8 @@ void LayoutProperty::translate(const tlp::Vec3f& v, Iterator<node> *itN, Iterato
           *itCoord += *(Coord*)&v;
           ++itCoord;
         }
-	// minimize computation time
+
+        // minimize computation time
         LayoutMinMaxProperty::setEdgeValue(ite,tmp);
       }
     }

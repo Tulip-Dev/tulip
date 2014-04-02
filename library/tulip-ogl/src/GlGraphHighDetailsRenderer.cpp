@@ -255,8 +255,10 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   if(!selectionDrawActivate) {
     Iterator<node> *nonDefaultLayoutNodes = inputData->getElementLayout()->getNonDefaultValuatedNodes();
     Iterator<node> *nonDefaultSizeNodes = inputData->getElementSize()->getNonDefaultValuatedNodes();
+
     if(!nonDefaultLayoutNodes->hasNext() && !nonDefaultSizeNodes->hasNext())
       renderOnlyOneNode=true;
+
     delete nonDefaultLayoutNodes;
     delete nonDefaultSizeNodes;
   }
