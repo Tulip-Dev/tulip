@@ -297,6 +297,10 @@ private:
   void rotate(const double& alpha, int rot, Iterator<node> *, Iterator<edge> *);
   // override Observable::treatEvent
   void treatEvent(const Event&);
+
+ public:
+  // the number of edges with bends
+  unsigned int nbBendedEdges;
 };
 
 /**

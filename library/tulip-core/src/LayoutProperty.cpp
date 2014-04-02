@@ -66,21 +66,24 @@ MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::
   }
 
   delete itN;
-  tlp::Iterator<edge> *itE = sg->getEdges();
 
-  while (itE->hasNext()) {
-    edge ite=itE->next();
-    const LineType::RealType& value = this->getEdgeValue(ite);
-    LineType::RealType::const_iterator itCoord;
+  if (((LayoutProperty *) this)->nbBendedEdges > 0) {
+    tlp::Iterator<edge> *itE = sg->getEdges();
 
-    for (itCoord=value.begin(); itCoord!=value.end(); ++itCoord) {
-      const Coord& tmpCoord = *itCoord;
-      maxV(maxT, tmpCoord);
-      minV(minT, tmpCoord);
+    while (itE->hasNext()) {
+      edge ite=itE->next();
+      const LineType::RealType& value = this->getEdgeValue(ite);
+      LineType::RealType::const_iterator itCoord;
+
+      for (itCoord=value.begin(); itCoord!=value.end(); ++itCoord) {
+	const Coord& tmpCoord = *itCoord;
+	maxV(maxT, tmpCoord);
+	minV(minT, tmpCoord);
+      }
     }
-  }
 
-  delete itE;
+    delete itE;
+  }
 
 
   unsigned int sgi = sg->getId();
@@ -106,71 +109,75 @@ void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::ed
 #else
   MINMAX_MAP(tlp::PointType)::const_iterator it = minMaxNode.begin();
 #endif
+  
+  const std::vector<Coord>& oldV = this->getEdgeValue(e);
+  if (newValue == oldV)
+    return;
+
+  ((LayoutProperty*) this)->nbBendedEdges += (newValue.empty() ? 0 : 1) - (oldV.empty() ? 0 : 1);
 
   if (it != minMaxNode.end()) {
-    const std::vector<Coord>& oldV = this->getEdgeValue(e);
+    // loop on subgraph min/max
+    for(; it != minMaxNode.end(); ++it) {
+      const Coord& minV = it->second.first;
+      const Coord& maxV = it->second.second;
+      bool reset = false;
 
-    if (newValue != oldV) {
-      // loop on subgraph min/max
-      for(; it != minMaxNode.end(); ++it) {
-        const Coord& minV = it->second.first;
-        const Coord& maxV = it->second.second;
-        bool reset = false;
+      // check if min has to be updated
+      for(unsigned i = 0; i < newValue.size(); ++i) {
+	if (minV > newValue[i]) {
+	  reset = true;
+	  break;
+	}
+      }
 
-        // check if min has to be updated
-        for(unsigned i = 0; i < newValue.size(); ++i) {
-          if (minV > newValue[i]) {
-            reset = true;
-            break;
-          }
-        }
+      if (!reset) {
+	// check if max has to be updated
+	for(unsigned i = 0; i < newValue.size(); ++i) {
+	  if (maxV < newValue[i]) {
+	    reset = true;
+	    break;
+	  }
+	}
+      }
 
-        if (!reset) {
-          // check if max has to be updated
-          for(unsigned i = 0; i < newValue.size(); ++i) {
-            if (maxV < newValue[i]) {
-              reset = true;
-              break;
-            }
-          }
-        }
+      if (!reset) {
+	// check if minV belongs to oldV
+	for(unsigned i = 0; i < oldV.size(); ++i) {
+	  if (minV == oldV[i]) {
+	    reset = false;
+	    break;
+	  }
+	}
+      }
 
-        if (!reset) {
-          // check if minV belongs to oldV
-          for(unsigned i = 0; i < oldV.size(); ++i) {
-            if (minV == oldV[i]) {
-              reset = false;
-              break;
-            }
-          }
-        }
+      if (!reset) {
+	// check if maxV belongs to oldV
+	for(unsigned i = 0; i < oldV.size(); ++i) {
+	  if (maxV == oldV[i]) {
+	    reset = false;
+	    break;
+	  }
+	}
+      }
 
-        if (!reset) {
-          // check if maxV belongs to oldV
-          for(unsigned i = 0; i < oldV.size(); ++i) {
-            if (maxV == oldV[i]) {
-              reset = false;
-              break;
-            }
-          }
-        }
-
-        // reset bounding box if needed
-        if (reset) {
-          minMaxNode.clear();
-          break;
-        }
+      // reset bounding box if needed
+      if (reset) {
+	needGraphListener = (((LayoutProperty*) this)->nbBendedEdges > 0);
+	removeListenersAndClearNodeMap();
+	return;
       }
     }
   }
 
   // we need to observe the graph as soon as there is an edge
   // with bends
-  if (!needGraphListener && (needGraphListener = newValue.size() > 0) &&
+  if (!needGraphListener && (needGraphListener = (((LayoutProperty*) this)->nbBendedEdges > 0)) &&
       (minMaxNode.find(graph->getId()) == minMaxNode.end()))
     graph->addListener(this);
 }
 }
+
 
 inline double sqr(double x) {
   return (x*x);
@@ -213,7 +220,7 @@ public:
 static LayoutMetaValueCalculator mvLayoutCalculator;
 
 //======================================================
-LayoutProperty::LayoutProperty(Graph *sg, std::string n) : LayoutMinMaxProperty(sg, n, Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()) {
+LayoutProperty::LayoutProperty(Graph *sg, std::string n) : LayoutMinMaxProperty(sg, n, Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()), nbBendedEdges(0) {
   // set default MetaValueCalculator
   setMetaValueCalculator(&mvLayoutCalculator);
 }
@@ -388,17 +395,28 @@ void LayoutProperty::scale(const tlp::Vec3f& v, Graph *sg) {
 }
 //=================================================================================
 void LayoutProperty::translate(const tlp::Vec3f& v, Iterator<node> *itN, Iterator<edge> *itE) {
+
+  // nothing to do if it is the null vector
+  // or if there is no nodes or bends of edges to translate
+  if ((v == tlp::Vec3f(0.0f)) ||
+      (itE == NULL && itN == NULL))
+    return;
+
   Observable::holdObservers();
+
+  // invalidate the previously existing min/max computation
+  resetBoundingBox();
 
   if (itN != NULL)
     while (itN->hasNext()) {
       node itn = itN->next();
       Coord tmpCoord(getNodeValue(itn));
       tmpCoord += *(Coord*)&v;
-      setNodeValue(itn,tmpCoord);
+      // minimize computation time
+      LayoutMinMaxProperty::setNodeValue(itn,tmpCoord);
     }
 
-  if (itE != NULL)
+  if (itE != NULL && (nbBendedEdges > 0))
     while (itE->hasNext()) {
       edge ite=itE->next();
 
@@ -411,14 +429,10 @@ void LayoutProperty::translate(const tlp::Vec3f& v, Iterator<node> *itN, Iterato
           *itCoord += *(Coord*)&v;
           ++itCoord;
         }
-
-        setEdgeValue(ite,tmp);
+	// minimize computation time
+        LayoutMinMaxProperty::setEdgeValue(ite,tmp);
       }
     }
-
-  if (itE != NULL || itN != NULL) {
-    resetBoundingBox();
-  }
 
   Observable::unholdObservers();
 }
@@ -449,7 +463,6 @@ void LayoutProperty::center(Graph *sg) {
   Coord tr=getMax(sg)+getMin(sg);
   tr /= -2.0;
   translate(tr, sg);
-  resetBoundingBox();
   Observable::unholdObservers();
 }
 //=================================================================================
@@ -463,7 +476,6 @@ void LayoutProperty::center(const Vec3f &newCenter, Graph *sg) {
   Observable::holdObservers();
   Coord curCenter=(getMax(sg)+getMin(sg))/2.0f;
   translate(newCenter-curCenter, sg);
-  resetBoundingBox();
   Observable::unholdObservers();
 }
 //=================================================================================
