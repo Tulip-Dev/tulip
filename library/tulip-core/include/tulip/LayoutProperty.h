@@ -298,7 +298,7 @@ private:
   // override Observable::treatEvent
   void treatEvent(const Event&);
 
- public:
+public:
   // the number of edges with bends
   unsigned int nbBendedEdges;
 };

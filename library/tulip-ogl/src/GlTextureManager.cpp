@@ -497,7 +497,8 @@ void GlTextureManager::deleteTexture(const string& name) {
 
     if(it2!=it->second.end()) {
       for(unsigned int i=0; i<it2->second.spriteNumber; ++i)
-        glDeleteTextures(1,&(it2->second.id[i]));  
+        glDeleteTextures(1,&(it2->second.id[i]));
+
       delete [] it2->second.id;
       it->second.erase(name);
     }
