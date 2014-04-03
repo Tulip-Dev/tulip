@@ -59,7 +59,7 @@ template<class itType> struct Iterator {
   /**
   * @brief Tells if the sequence is at its end.
   *
-  * @return bool Whether there are more elements to iterate on.
+  * @return bool Whether there are more elements to iterate.
   **/
   virtual bool hasNext()=0;
 };

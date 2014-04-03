@@ -28,9 +28,9 @@
 namespace tlp {
 /**
   * @class StableIterator
-  * @brief Stores the elements of an iterator and iterates on a copy.
+  * @brief Stores the elements of an iterator and iterates a copy.
   *
-  * THis Iterator stores all the elements accessible by another Iterator into an internal data
+  * This Iterator stores all the elements accessible by another Iterator into an internal data
   * structure (created at the construction), and then uses this structure for the iteration.
   * Iteration order is the same.
   *
@@ -99,7 +99,7 @@ struct StableIterator : public Iterator<itType> {
   //=============================
 protected :
   /**
-  * @brief A copy of the sequence of elements to iterate on.
+  * @brief A copy of the sequence of the elements to iterate.
   **/
   std::vector<itType> sequenceCopy;
 

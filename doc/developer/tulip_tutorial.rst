@@ -206,10 +206,10 @@ You can download the source by clicking on this :download:`link <./_documents/tu
 
 .. _tulip_library_tutorial_002:
 
-TUTORIAL 002 : Iterating over a graph (class Iterator and the macro forEach)
+TUTORIAL 002 : Iterating the structures of a graph (class Iterator and the macro forEach)
 ============================================================================
 
-In this tutorial, we will, display on the standard output, all the structure using iterators. For each node, we will display its ancestors, successors, neighbors, and, its incoming and outgoing edges.
+In this tutorial, we will, display on the standard output, all the structures using iterators. For each node, we will display its ancestors, successors, neighbors, and, its incoming and outgoing edges.
 
 In this tutorial, the graph created is the same that in Tutorial 1 (after the 3 edges were added) see the following picture :
 
@@ -232,7 +232,7 @@ Let's start with the files we need to include ::
         	
 * *tulip/Graph.h* : This file is the core of the tulip graph API. It provides declarations for graphs (edges , nodes) and functions to load one from a file, to save one, and a lot more. You can find a list in the Tulip Graph library `documentation <../../doxygen/tulip-lib/Graph_8h.html>`_.
         	
-As you can see, we just need the "Graph.h" header file to create a graph and iterate over its nodes, even though the declaration of the abstract class "Iterator" is in Iterator.h
+As you can see, we just need the "Graph.h" header file to create a graph and iterate its nodes, even though the declaration of the abstract class "Iterator" is in Iterator.h
 
 
 .. _code-examples-iterator-allnode:
@@ -240,13 +240,13 @@ As you can see, we just need the "Graph.h" header file to create a graph and ite
 2. Iterating over all nodes
 ---------------------------
 
-To iterate over all nodes, we need to create an Iterator on the graph nodes with the member function *Iterator * Graph::getNodes () const*, we will make it point on the graphs nodes. ::
+To iterate all the nodes, we need to create an Iterator over the graph nodes with the member function *Iterator<node> * Graph::getNodes () const*, we will make it point on the graphs nodes. ::
 
   Iterator<node> *itNodes = graph->getNodes();
 
 The documentation of the interface Iterator can be found `here <http://tulip.labri.fr/doxygen/tulip-lib/structtlp_1_1Iterator.html>`_.
 
-With the functions *template <class itType> bool tlp::Iterator<itType>::hasNext ( )* and *node next ( )*, we can iterate through our graph nodes with a simple while ::
+With the functions *template <class itType> bool tlp::Iterator<itType>::hasNext ( )* and *node next ( )*, we can iterate our graph nodes with a simple while ::
 
   while(itNodes->hasNext()) {
     node n = itNodes->next();
@@ -279,13 +279,13 @@ Following is the output of this simple while loop ::
 
 .. _code-example-graphit-pred:
 
-3. Iterating through a node predecessors
+3. Iterating the predecessors of a node
 ----------------------------------------
 
-To iterate through the predecessors of node, we use the same type of Iterator, but, instead of using the function getNodes() of the class Graph, we will use the function *Iterator<node> * getInNodes (const node) const* that will return an iterator on the predecessors of a node. ::
+To iterate the predecessors of a node, we use the same type of Iterator, but, instead of using the function getNodes() of the class Graph, we will use the function *Iterator<node> * getInNodes (const node) const* that will return an iterator over the predecessors of a node. ::
     		
     //===========================
-    //iterate all predecessors of a node
+    //iterate all the predecessors of a node
     cout << " predecessors: {";
     Iterator<node> *itN=graph->getInNodes(n);
     while(itN->hasNext()) {
@@ -297,13 +297,13 @@ To iterate through the predecessors of node, we use the same type of Iterator, b
 
 .. _code-example-graphit_succs:
 
-4. Iterating through a node successors
+4. Iterating the successors of a node
 --------------------------------------
 
-To iterate through the successors of a node, we just need to use the function *Iterator<node> * Graph::getOutNodes (const node) const* to have an Iterator on its successors. ::
+To iterate the successors of a node, we just need to use the function *Iterator<node> * Graph::getOutNodes (const node) const* to have an Iterator over its successors. ::
     		
     //===========================
-    //iterate all successors of a node
+    //iterate all the successors of a node
     cout << " successors: {";
     itN = graph->getOutNodes(n);
     while (itN->hasNext()) {
@@ -315,10 +315,10 @@ To iterate through the successors of a node, we just need to use the function *I
 
 .. _code-example-graphit-all:
 
-5. Iterating through a node neighbors (predecessors and successors)
+5. Iterating the neighbors of a node (predecessors and successors)
 -------------------------------------------------------------------
 
-For neighbors, we will use the function *Iterator<node> * Graph::getInOutNodes (const node) const* to have an Iterator on its neighbors. ::
+For neighbors, we will use the function *Iterator<node> * Graph::getInOutNodes (const node) const* to have an Iterator over its neighbors. ::
     		
     //===========================
     //iterate the neighborhood of a node
@@ -333,10 +333,10 @@ For neighbors, we will use the function *Iterator<node> * Graph::getInOutNodes (
 
 .. _code-example-graphit-inedges:
 
-6. Iterating through a node incoming edges
+6. Iterating the incoming edges of a node
 ------------------------------------------
 
-For incoming edges, we will use an Iterator on edges with the member function *Iterator<edge> * Graph::getInEdges (const node) const*. ::
+For incoming edges, we will use an Iterator over edges with the member function *Iterator<edge> * Graph::getInEdges (const node) const*. ::
     		
     //===========================
     //iterate the incoming edges
@@ -352,13 +352,13 @@ For incoming edges, we will use an Iterator on edges with the member function *I
 
 .. _code-example-graphit-outedges:
 
-7. Iterating through a node outgoing edges
+7. Iterating the outcoming edges of a node
 ------------------------------------------
 
 For outgoing edges, we will use the function *Iterator<edge> * Graph::getOutEdges (const node) const*. ::
     		
     //===========================
-    //iterate the outcomming edges
+    //iterate the outcoming edges
     itE = graph->getOutEdges(n);
     while(itE->hasNext()) {
       cout << itE->next().id;
@@ -369,7 +369,7 @@ For outgoing edges, we will use the function *Iterator<edge> * Graph::getOutEdge
 
 .. _code-example-graphit:
 
-8. Iterating through a node adjacent edges
+8. Iterating the adjacent edges of a node
 ------------------------------------------
 
 For adjacent edges, we will use the function *Iterator<edge> * Graph::getInOutEdges (const node) const*. ::
@@ -398,13 +398,13 @@ As we are still in the first while (iterating through all nodes) we need to dele
 
 .. _code-example-graphit-edges:
 
-9. Iterating on edges (all edges)
+9. Iterating the edges (all edges)
 ---------------------------------
 
-Some times it can be useful to iterate on edges, for example in the algorithm of Kruskal. That is why the graph class owns the function *Iterator<edge> * Graph::getEdges (const node) const*, that return a pointer on an Iterator of type edge. Following is an exemple of its use. ::
+Some times it can be useful to iterate all the edges, for example in the algorithm of Kruskal. That is why the graph class owns the function *Iterator<edge> * Graph::getEdges (const node) const*, that return a pointer on an Iterator of type edge. Following is an exemple of its use. ::
     		 
   //===========================
-  //Iterate all edges
+  //Iterate all the edges
   Iterator<edge> * itEdges=graph->getEdges();
   while(itEdges->hasNext()) {
     edge e = itEdges->next();
@@ -565,10 +565,10 @@ Following is the display (in the tulip GUI) of the list of a node associated val
 
 .. _code-example-iter-props:
 
-4. Iterating over properties
+4. Iterating the properties
 ----------------------------
 
-Once again, iteration is made with Iterators. The class graph has a member function *Iterator <std::string> * getLocalProperties ()* that returns an iterator on the local properties.
+Once again, iteration is made with Iterators. The class graph has a member function *Iterator <std::string> * getLocalProperties ()* that returns an iterator over the local properties.
         	
 Following is an example::
 
@@ -636,9 +636,9 @@ Following is the hierarchy we have just created, displayed with tulip :
 
 .. image:: _images/tuto_004_subgraph_1.png
 
-We can verify it by iterating on our graph's subgraphs using the function *Iterator< Graph *> * Graph::getSubGraphs()*::
+We can verify it by iterating our graph's subgraphs using the function *Iterator< Graph *> * Graph::getSubGraphs()*::
 
-  //iterate subgraph (0 and 1 normally) and output them
+  //iterate subgraphs (0 and 1 normally) and output them
   Iterator<Graph *> *itS=graph->getSubGraphs();
   while (itS->hasNext())
     cout << itS->next() << endl;
@@ -663,7 +663,7 @@ Pick the source file :download:`here <./_documents/tutorial004.cpp>`.
 TUTORIAL 005 : Properties and subgraphs
 =======================================
 
-In this tutorial, we will show you how to use properties with subgraphs, how to deal with properties in a big hierarchy. To do so, we will create a graph with some properties, several subgraphs with other properties and iterate over local and inherited properties.
+In this tutorial, we will show you how to use properties with subgraphs, how to deal with properties in a big hierarchy. To do so, we will create a graph with some properties, several subgraphs with other properties and iterate the local and inherited properties.
 
 
 .. _code-example-propertiessub-intro:
@@ -719,7 +719,7 @@ The property "firstMetric" will be redefined but not the two other ones.
 2. Properties of subgraph1
 --------------------------
 
-A good way to see what we have created is to iterate over the local properties of subgraph1 and in a second time iterate over inherited properties. Following is a sample and its output that enables the iteration over local properties::
+A good way to see what we have created is to iterate the local properties of subgraph1 and in a second time iterate the inherited properties. Following is a sample and its output that enables the iteration of the local properties::
 
   cout << "List of the local properties present in the subgraph1:" << endl;
   string s;
@@ -734,7 +734,7 @@ Output::
   secondMetric
 
 As you can see the only local properties that has subgraph1 are "firstMetric" and "secondMetric". Indeed, "firstMetric" has been redefined, and, "thirdMetric" has been created with subgraph2.
-Following is a sample and its output that enables the iteration over inherited properties::
+Following is a sample and its output that enables the iteration of the inherited properties::
 
   cout << endl << "List of inherited properties present in the subgraph1:" << endl;
   forEach(s,subgraph1->getInheritedProperties()) {
@@ -770,8 +770,8 @@ Output::
 3. Properties of subgraph2
 --------------------------
 
-As we did with subgraph1, we will now iterate over the local properties of subgraph2 in a first time and in a second time iterate over its inherited properties. 
-Following is a sample and its output that enables the iteration over local properties::
+As we did with subgraph1, we will now iterate the local properties of subgraph2 in a first time and in a second time iterate its inherited properties. 
+Following is a sample and its output that enables the iteration of the local properties::
 
   cout << endl << "List of the local properties present in the subgraph2:" << endl;
   forEach(s,subgraph2->getLocalProperties()) {
@@ -784,7 +784,7 @@ Output::
   thirdMetric
 
 The only local properties that has subgraph1 is thirdMetric.
-Following is a sample and its output that enables the iteration over inherited properties::
+Following is a sample and its output that enables the iteration of the inherited properties::
 
   cout << endl << "List of inherited properties present in the subgraph2:" << endl;
   forEach(s,subgraph2->getInheritedProperties()) {
