@@ -547,7 +547,24 @@ void SuperGraphTest::testSubgraph() {
   CPPUNIT_ASSERT_EQUAL(graph, g3->getRoot());
   CPPUNIT_ASSERT_EQUAL(graph, g4->getRoot());
 
-  Iterator<Graph *> *it= g2->getSubGraphs();
+  // graph's descendant graphs loop
+  Iterator<Graph *>* it = graph->getDescendantGraphs();
+  CPPUNIT_ASSERT(it->hasNext());
+  set<Graph*> dg;
+  dg.insert(g1);
+  dg.insert(g2);
+  dg.insert(g3);
+  dg.insert(g4);
+  while(it->hasNext())  {
+    Graph *g = it->next();
+    set<Graph*>::iterator itdg = dg.find(g);
+    CPPUNIT_ASSERT(itdg != dg.end());
+    dg.erase(itdg);
+  }
+  delete it;
+  CPPUNIT_ASSERT(dg.empty());
+
+  it= g2->getSubGraphs();
   Graph *a,*b;
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();

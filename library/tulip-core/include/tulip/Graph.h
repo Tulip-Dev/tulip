@@ -120,30 +120,6 @@ TLP_SCOPE Graph* newGraph();
 
 /**
  * @ingroup Graph
- * @brief Creates and returns an empty subgraph of the given graph.
- *
- * @deprecated this function should not be used anymore, please use Graph::addSubGraph() instead.
- *
- * @param graph The graph to add an empty subgraph to.
- * @param name The name of the new subgraph. Defaults to "unnamed".
- * @return :Graph* The newly created subgraph.
- **/
-TLP_SCOPE _DEPRECATED Graph* newSubGraph(Graph *graph, std::string name = "unnamed");
-
-/**
- * @ingroup Graph
- * @brief Creates and returns a subgraph of the graph that is equal to root (a clone subgraph).
- *
- * @deprecated this function should not be used anymore, please use Graph::addCloneSubGraph() instead.
- *
- * @param graph The Graph on which to create a clone subgraph.
- * @param name The name of the newly created subgraph. Defaults to "unnamed".
- * @return :Graph* The newly created clone subgraph.
- **/
-TLP_SCOPE _DEPRECATED Graph* newCloneSubGraph(Graph *graph, std::string name = "unnamed");
-
-/**
- * @ingroup Graph
  * Appends the selected part of the graph inG (properties, nodes and edges) into the graph outG.
  * If no selection is done (inSel=NULL), the whole inG graph is appended.
  * The output selection is used to select the appended nodes & edges
@@ -360,8 +336,8 @@ public:
   virtual void setSuperGraph(Graph *)=0;
 
   /**
-   * @brief Gets an iterator on all the sub-graphs of the graph.
-   * For instance, in the followong graph hierarchy:
+   * @brief Gets an iterator over all the sub-graphs of the graph.
+   * For instance, in the following graph hierarchy:
    ** root
    * / \
    * A  B
@@ -397,7 +373,7 @@ public:
 
   /**
    * @brief Return the number of direct sub-graphs.
-   * For instance, in the followong graph hierarchy:
+   * For instance, in the following graph hierarchy:
    * root
    * / \
    * A  B
@@ -413,7 +389,7 @@ public:
 
   /**
    * @brief Return the number of descendant sub-graphs.
-   * For instance, in the followong graph hierarchy:
+   * For instance, in the following graph hierarchy:
    * root
    * / \
    * A  B
@@ -478,6 +454,22 @@ public:
    * @see getSubGraph(const std::string &) to search only in direct subgraphs.
    */
   virtual Graph* getDescendantGraph(const std::string &name) const=0;
+
+  /**
+   * @brief Gets an iterator over all the descendant sub-graphs of the graph.
+   * For instance, in the following graph hierarchy:
+   ** root
+   * / \
+   * A  B
+   *    /|\
+   *   C D E
+   *
+   * @codeline root->getSubGraphs(); @endcode
+   * Will return an iterator over A B, C, D and E.
+   * @return An iterator over this graph's descendant subgraphs.
+   */
+  Iterator<Graph *> * getDescendantGraphs() const;
+
   //==============================================================================
   // Modification of the graph structure
   //==============================================================================
@@ -1252,17 +1244,6 @@ public:
                               std::string &errorMessage,
                               PluginProgress *progress=NULL,
                               DataSet *parameters=NULL);
-  /**
-   * @cond DOXYGEN_HIDDEN
-   *
-   * @deprecated Use applyPropertyAlgorithm() instead.
-   *
-   * @endcond
-   */
-  template<typename PropertyType>
-  _DEPRECATED bool computeProperty(const std::string &algorithm,
-                                   PropertyType* result, std::string &msg,
-                                   PluginProgress *progress=NULL, DataSet *data=NULL);
 
   // updates management
   /**
