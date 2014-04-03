@@ -19,6 +19,7 @@
 
 #include <iomanip>
 #include <fstream>
+#include <stack>
 
 #include <tulip/ForEach.h>
 #include <tulip/StlIterator.h>
@@ -208,14 +209,6 @@ Graph * tlp::newGraph() {
   Graph *g = new GraphImpl();
   setViewPropertiesDefaults(g);
   return g;
-}
-//=========================================================
-Graph * tlp::newSubGraph(Graph *graph, std::string name) {
-  return graph->addSubGraph(NULL, name);
-}
-//=========================================================
-Graph * tlp::newCloneSubGraph(Graph *graph, std::string name) {
-  return graph->addCloneSubGraph(name);
 }
 //=========================================================
 Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
@@ -1658,4 +1651,65 @@ void Graph::addEdges(const std::vector<edge>& edges) {
 void Graph::delEdges(const std::vector<edge>& edges, bool deleteInAllGraphs) {
   StlIterator<edge, vector<edge>::const_iterator> vIterator(edges.begin(), edges.end());
   delEdges(&vIterator, deleteInAllGraphs);
+}
+
+struct DescendantGraphsIterator :public Iterator<Graph*> {
+  // use a stack to store non empty iterators
+  stack<Iterator<Graph *>*> iterators;
+  // the current one
+  Iterator<Graph *>* current;
+
+  DescendantGraphsIterator(const Graph *g) {
+    current = g->getSubGraphs();
+    if (!current->hasNext()) {
+      delete current;
+      current = NULL;
+    }      
+  }
+
+  ~DescendantGraphsIterator() {
+    if (current)
+      delete current;
+    while(!iterators.empty()) {
+      delete iterators.top();
+      iterators.pop();
+    }
+  }
+
+  bool hasNext() {
+    return current != NULL;
+  }
+
+  Graph* next() {
+    if (current) {
+      Graph* g = current->next();
+      Iterator<Graph *>* itg = g->getSubGraphs();
+      if (itg->hasNext()) {
+	if (current->hasNext())
+	  // pushed iterators are always non empty
+	  iterators.push(current);
+	else
+	  delete current;
+	current = itg;
+      }
+      else {
+	delete itg;
+	if (!current->hasNext()) {
+	  delete current;
+	  if (!iterators.empty()) {
+	    current = iterators.top();
+	    iterators.pop();
+	  }
+	  else
+	    current = NULL;
+	}
+      }
+      return g;
+    }
+    return NULL;
+  }
+};
+
+Iterator<Graph*>* Graph::getDescendantGraphs() const {
+  return new DescendantGraphsIterator(this);
 }

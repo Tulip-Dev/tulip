@@ -476,6 +476,21 @@ Returns the number of descendant graphs.
 %End  	
 
 //===========================================================================================
+	
+	tlp::IteratorGraph *getDescendantGraphs() const /TransferBack/;
+%Docstring
+tlp.Graph.getDescendantGraphs()
+
+Returns an iterator over all the descendant graphs of the graph.
+
+:rtype: a Tulip iterator on :class:`tlp.Graph` objects
+%End
+	
+%MethodCode
+	sipRes = new tlp::StableIterator<tlp::Graph *>(sipCpp->getDescendantGraphs());
+%End		
+
+//===========================================================================================
 
 	tlp::node addNode();
 %Docstring
@@ -2706,60 +2721,6 @@ Returns an iterator on the names of all the properties attached to the graph.
 	
 //===========================================================================================	
 	
-	bool computeIntegerProperty(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
-%Docstring
-tlp.Graph.computeIntegerProperty(algoName, result[, dataSet = None])
-
-.. deprecated:: 3.8 use :meth:`tlp.Graph.applyIntegerAlgorithm` instead
-
-Computes an integer property on the current graph 
-using an external named integer algorithm (plugin).
-Integer algorithm plugins are objects
-implementing the tlp::IntegerAlgorithm interface in C++ or 
-the :class:`tlp.IntegerAlgorithm` interface in Python.
-The computed values will be stored in result. 
-Parameters can be transmit to the algorithm
-using a :class:`tlp.DataSet` . In some cases, algorithms 
-can use this :class:`tlp.DataSet` in order to return some external information 
-(not stored in result).
-To determine a plugin's parameters, you can either:
-    
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
-
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
-which can contain an error message.
-
-:param algoName: the name of the integer algorithm to call
-:type algoName: string
-:param result: an integer property in which result of the algorithm will be stored
-:type result: :class:`tlp.IntegerProperty`
-:param dataSet: a data set containing some parameters to transmit to the algorithm
-:type dataSet: :class:`tlp.DataSet`
-:rtype: (boolean, string)
-:throws: an exception if the requested integer algorithm plugin is not registered in the plugins database.
-
-.. warning:: Previous values stored in result will be deleted.
-
-%End	
-
-%MethodCode
-	if (pluginExists<tlp::IntegerAlgorithm>(*a0)) {
-		tlp::IntegerProperty tmp(sipCpp);
-		sipRes = sipCpp->computeProperty<tlp::IntegerProperty>(*a0, &tmp, *a2, NULL, a3);
-		*a1 = tmp;
-	} else {
-		sipIsErr = -1;
-		std::string msg = "No Tulip integer algorithm plugin named ";
-		msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}
-%End
-
-//===========================================================================================	
-	
 	bool applyIntegerAlgorithm(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.applyIntegerAlgorithm(algoName, result[, dataSet = None])
@@ -2819,60 +2780,6 @@ which can contain an error message.
 
 //===========================================================================================
 
-	bool computeDoubleProperty(const std::string &algoName, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
-%Docstring
-tlp.Graph.computeDoubleProperty(algoName, result[, dataSet = None])
-
-.. deprecated:: 3.8 use :meth:`tlp.Graph.applyDoubleAlgorithm` instead
-
-Computes a double property on the current graph 
-using an external named double algorithm (plugin).
-Double algorithm plugins are objects
-implementing the tlp::DoubleAlgorithm interface in C++ or 
-the :class:`tlp.DoubleAlgorithm` interface in Python.
-The computed values will be stored in result. 
-Parameters can be transmit to the algorithm
-using a :class:`tlp.DataSet` . In some cases, algorithms 
-can use this :class:`tlp.DataSet` in order to return some external information 
-(not stored in result).
-To determine a plugin's parameters, you can either:
-    
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
-
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
-which can contain an error message.
-
-:param algoName: the name of the double algorithm to call
-:type algoName: string
-:param result: a double property in which result of the algorithm will be stored
-:type result: :class:`tlp.DoublrProperty`
-:param dataSet: a data set containing some parameters to transmit to the algorithm
-:type dataSet: :class:`tlp.DataSet`
-:rtype: (boolean, string)
-:throws: an exception if the requested double algorithm plugin is not registered in the plugins database.
-
-.. warning:: Previous values stored in result will be deleted.
-
-%End
-	
-%MethodCode
-	if (pluginExists<tlp::DoubleAlgorithm>(*a0)) {
-		tlp::DoubleProperty tmp(sipCpp);
-		sipRes = sipCpp->computeProperty<tlp::DoubleProperty>(*a0, &tmp, *a2, NULL, a3);
-		*a1 = tmp;
-	} else {
-		sipIsErr = -1;
-		std::string msg = "No Tulip double algorithm plugin named ";
-		msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}	
-%End
-
-//===========================================================================================
-
 	bool applyDoubleAlgorithm(const std::string &algoName, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.applyDoubleAlgorithm(algoName, result[, dataSet = None])
@@ -2923,60 +2830,6 @@ which can contain an error message.
 	} else {
 		sipIsErr = -1;
 		std::string msg = "No Tulip double algorithm plugin named  ";
-		msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}	
-%End
-
-//===========================================================================================
-
-	bool computeLayoutProperty(const std::string &algoName, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
-%Docstring
-tlp.Graph.computeLayoutProperty(algoName, result[, dataSet = None])
-
-.. deprecated:: 3.8 use :meth:`tlp.Graph.applyLayoutAlgorithm` instead
-
-Computes a layout property on the current graph 
-using an external named layout algorithm (plugin).
-Layout algorithm plugins are objects
-implementing the tlp::LayoutAlgorithm interface in C++ or 
-the :class:`tlp.LayoutAlgorithm` interface in Python.
-The computed values will be stored in result. 
-Parameters can be transmit to the algorithm
-using a :class:`tlp.DataSet` . In some cases, algorithms 
-can use this :class:`tlp.DataSet` in order to return some external information 
-(not stored in result).
-To determine a plugin's parameters, you can either:
-    
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
-
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
-which can contain an error message.
-
-:param algoName: the name of the layout algorithm to call
-:type algoName: string
-:param result: a layout property in which result of the algorithm will be stored
-:type result: :class:`tlp.LayoutProperty`
-:param dataSet: a data set containing some parameters to transmit to the algorithm
-:type dataSet: :class:`tlp.DataSet`
-:rtype: (boolean, string)
-:throws: an exception if the requested layout algorithm plugin is not registered in the plugins database.
-
-.. warning:: Previous values stored in result will be deleted.
-
-%End
-	
-%MethodCode
-	if (pluginExists<tlp::LayoutAlgorithm>(*a0)) {
-		tlp::LayoutProperty tmp(sipCpp);
-		sipRes = sipCpp->computeProperty<tlp::LayoutProperty>(*a0, &tmp, *a2, NULL, a3);
-		*a1 = tmp;
-	} else {
-		sipIsErr = -1;
-		std::string msg = "No Tulip layout algorithm plugin named ";
 		msg += *a0;
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
@@ -3043,60 +2896,6 @@ which can contain an error message.
 
 //===========================================================================================
 
-	bool computeBooleanProperty(const std::string &algoName, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
-%Docstring
-tlp.Graph.computeBooleanProperty(algoName, result[, dataSet = None])
-
-.. deprecated:: 3.8 use :meth:`tlp.Graph.applyBooleanAlgorithm` instead
-
-Computes a boolean property on the current graph 
-using an external named boolean algorithm (plugin).
-Boolean algorithm plugins are objects
-implementing the tlp::BooleanAlgorithm interface in C++ or 
-the :class:`tlp.BooleanAlgorithm` interface in Python.
-The computed values will be stored in result. 
-Parameters can be transmit to the algorithm
-using a :class:`tlp.DataSet` . In some cases, algorithms 
-can use this :class:`tlp.DataSet` in order to return some external information 
-(not stored in result).
-To determine a plugin's parameters, you can either:
-    
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
-
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
-which can contain an error message.
-
-:param algoName: the name of the boolean algorithm to call
-:type algoName: string
-:param result: a boolean property in which result of the algorithm will be stored
-:type result: :class:`tlp.BooleanProperty`
-:param dataSet: a data set containing some parameters to transmit to the algorithm
-:type dataSet: :class:`tlp.DataSet`
-:rtype: (boolean, string)
-:throws: an exception if the requested boolean algorithm plugin is not registered in the plugins database.
-
-.. warning:: Previous values stored in result will be deleted.
-
-%End
-	
-%MethodCode
-	if (pluginExists<tlp::BooleanAlgorithm>(*a0)) {
-		tlp::BooleanProperty tmp(sipCpp);
-		sipRes = sipCpp->computeProperty<tlp::BooleanProperty>(*a0, &tmp, *a2, NULL, a3);
-		*a1 = tmp;
-	} else {
-		sipIsErr = -1;
-		std::string msg = "No Tulip boolean algorithm plugin named ";
-		msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}
-%End
-
-//===========================================================================================
-
 	bool applyBooleanAlgorithm(const std::string &algoName, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.applyBooleanAlgorithm(algoName, result[, dataSet = None])
@@ -3152,60 +2951,6 @@ which can contain an error message.
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
 	}
-%End
-
-//===========================================================================================
-
-	bool computeSizeProperty(const std::string &algoName, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
-%Docstring
-tlp.Graph.computeSizeProperty(algoName, result[, dataSet = None])
-
-.. deprecated:: 3.8 use :meth:`tlp.Graph.applySizeAlgorithm` instead
-
-Computes a size property on the current graph 
-using an external named size algorithm (plugin).
-Size algorithm plugins are objects
-implementing the tlp::SizeAlgorithm interface in C++ or 
-the :class:`tlp.SizeAlgorithm` interface in Python.
-The computed values will be stored in result. 
-Parameters can be transmit to the algorithm
-using a :class:`tlp.DataSet` . In some cases, algorithms 
-can use this :class:`tlp.DataSet` in order to return some external information 
-(not stored in result).
-To determine a plugin's parameters, you can either:
-    
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
-
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
-which can contain an error message.
-
-:param algoName: the name of the size algorithm to call
-:type algoName: string
-:param result: a size property in which result of the algorithm will be stored
-:type result: :class:`tlp.SizeProperty`
-:param dataSet: a data set containing some parameters to transmit to the algorithm
-:type dataSet: :class:`tlp.DataSet`
-:rtype: (boolean, string)
-:throws: an exception if the requested size algorithm plugin is not registered in the plugins database.
-
-.. warning:: Previous values stored in result will be deleted.
-
-%End
-	
-%MethodCode
-	if (pluginExists<tlp::SizeAlgorithm>(*a0)) {
-		tlp::SizeProperty tmp(sipCpp);
-		sipRes = sipCpp->computeProperty<tlp::SizeProperty>(*a0, &tmp, *a2, NULL, a3);
-		*a1 = tmp;
-	} else {
-		sipIsErr = -1;
-		std::string msg = "No Tulip size algorithm plugin named ";
-		msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}	
 %End
 
 //===========================================================================================
@@ -3270,60 +3015,6 @@ which can contain an error message.
 
 //===========================================================================================
 
-bool computeColorProperty(const std::string &algoName, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
-%Docstring
-tlp.Graph.computeColorProperty(algoName, result[, dataSet = None])
-
-.. deprecated:: 3.8 use :meth:`tlp.Graph.applyColorAlgorithm` instead
-
-Computes a color property on the current graph 
-using an external named color algorithm (plugin).
-Color algorithm plugins are objects
-implementing the tlp::ColorAlgorithm interface in C++ or 
-the :class:`tlp.ColorAlgorithm` interface in Python.
-The computed values will be stored in result. 
-Parameters can be transmit to the algorithm
-using a :class:`tlp.DataSet` . In some cases, algorithms 
-can use this :class:`tlp.DataSet` in order to return some external information 
-(not stored in result).
-To determine a plugin's parameters, you can either:
-    
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
-
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
-which can contain an error message.
-
-:param algoName: the name of the color algorithm to call
-:type algoName: string
-:param result: a color property in which result of the algorithm will be stored
-:type result: :class:`tlp.ColorProperty`
-:param dataSet: a data set containing some parameters to transmit to the algorithm
-:type dataSet: :class:`tlp.DataSet`
-:rtype: (boolean, string)
-:throws: an exception if the requested color algorithm plugin is not registered in the plugins database.
-
-.. warning:: Previous values stored in result will be deleted.
-
-%End
-
-%MethodCode
-	if (pluginExists<tlp::ColorAlgorithm>(*a0)) {
-		tlp::ColorProperty tmp(sipCpp);
-		sipRes = sipCpp->computeProperty<tlp::ColorProperty>(*a0, &tmp, *a2, NULL, a3);
-		*a1 = tmp;
-	} else {
-		sipIsErr = -1;
-		std::string msg = "No Tulip color algorithm plugin named ";
-		msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}	
-%End
-
-//===========================================================================================
-
 bool applyColorAlgorithm(const std::string &algoName, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
 %Docstring
 tlp.Graph.applyColorAlgorithm(algoName, result[, dataSet = None])
@@ -3378,60 +3069,6 @@ which can contain an error message.
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
 	}	
-%End
-
-//===========================================================================================
-
-bool computeStringProperty(const std::string &algoName, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
-%Docstring
-tlp.Graph.computeStringProperty(algoName, result[, dataSet = None])
-
-.. deprecated:: 3.8 use :meth:`tlp.Graph.applyStringAlgorithm` instead
-
-Computes a string property on the current graph 
-using an external named string algorithm (plugin).
-String algorithm plugins are objects
-implementing the tlp::StringAlgorithm interface in C++ or 
-the :class:`tlp.StringAlgorithm` interface in Python.
-The computed values will be stored in result. 
-Parameters can be transmit to the algorithm
-using a :class:`tlp.DataSet` . In some cases, algorithms 
-can use this :class:`tlp.DataSet` in order to return some external information 
-(not stored in result).
-To determine a plugin's parameters, you can either:
-    
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
-
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
-which can contain an error message.
-
-:param algoName: the name of the string algorithm to call
-:type algoName: string
-:param result: a string property in which result of the algorithm will be stored
-:type result: :class:`tlp.StringProperty`
-:param dataSet: a data set containing some parameters to transmit to the algorithm
-:type dataSet: :class:`tlp.DataSet`
-:rtype: (boolean, string)
-:throws: an exception if the requested string algorithm plugin is not registered in the plugins database.
-
-.. warning:: Previous values stored in result will be deleted.
-
-%End
-
-%MethodCode
-      if (pluginExists<tlp::StringAlgorithm>(*a0)) {
-		tlp::StringProperty tmp(sipCpp);
-		sipRes = sipCpp->computeProperty<tlp::StringProperty>(*a0, &tmp, *a2, NULL, a3);
-		*a1 = tmp;
-	} else {
-		sipIsErr = -1;
-		std::string msg = "No Tulip string algorithm plugin named ";
-		msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}
 %End
 
 //===========================================================================================
@@ -4080,40 +3717,6 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
 		msg += ".";
 		PyErr_SetString(PyExc_Exception, msg.c_str());
 	}	
-%End
-
-//===========================================================================================
-
-tlp::Graph *newSubGraph(tlp::Graph *root, std::string name = "unnamed");
-%Docstring
-tlp.newSubGraph(root[, name = "unnamed"])
-
-.. deprecated:: 3.7 use :meth:`tlp.Graph.addSubGraph` instead
-
-Creates and returns an empty subgraph of a graph.
-
-:param root: the graph on which the subgraph will be created
-:type root: :class:`tlp.Graph`
-:param name: the subgraph name
-:type name: string
-:rtype: :class:`tlp.Graph`
-%End
-
-//===========================================================================================
-
-tlp::Graph *newCloneSubGraph(tlp::Graph *root, std::string name = "unnamed");
-%Docstring
-tlp.newCloneSubGraph(root[, name = "unnamed"])
-
-.. deprecated:: 3.7 use :meth:`tlp.Graph.addCloneSubGraph` instead
-
-Creates and returns a subgraph of a graph root that is equal to that graph (a clone subgraph).
-
-:param root: the graph on which the subgraph will be created
-:type root: :class:`tlp.Graph`
-:param name: the subgraph name
-:type name: string
-:rtype: :class:`tlp.Graph`
 %End
 
 //===========================================================================================

@@ -19,10 +19,6 @@ Graph management
 
 .. autofunction:: tulip::tlp.exportGraph
 
-.. autofunction:: tulip::tlp.newSubGraph
-
-.. autofunction:: tulip::tlp.newCloneSubGraph
-
 .. autofunction:: tulip::tlp.copyToGraph
 
 .. autofunction:: tulip::tlp.removeFromGraph
@@ -227,6 +223,8 @@ Creation and Modification of the sub-graphs hierarchy
 
 .. automethod:: tulip::tlp.Graph.numberOfDescendantGraphs
 
+.. automethod:: tulip::tlp.Graph.getDescendantGraphs
+
 .. _graph-class.iterators:
 
 Iterators on the graph structure
@@ -417,20 +415,6 @@ Application of algorithms
 .. automethod:: tulip::tlp.Graph.applySizeAlgorithm
 
 .. automethod:: tulip::tlp.Graph.applyStringAlgorithm
-
-.. automethod:: tulip::tlp.Graph.computeBooleanProperty
-
-.. automethod:: tulip::tlp.Graph.computeColorProperty
-
-.. automethod:: tulip::tlp.Graph.computeDoubleProperty
-
-.. automethod:: tulip::tlp.Graph.computeIntegerProperty
-
-.. automethod:: tulip::tlp.Graph.computeLayoutProperty
-
-.. automethod:: tulip::tlp.Graph.computeSizeProperty
-
-.. automethod:: tulip::tlp.Graph.computeStringProperty
 
 Update management
 ^^^^^^^^^^^^^^^^^
