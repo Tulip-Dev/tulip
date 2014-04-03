@@ -1661,15 +1661,17 @@ struct DescendantGraphsIterator :public Iterator<Graph*> {
 
   DescendantGraphsIterator(const Graph *g) {
     current = g->getSubGraphs();
+
     if (!current->hasNext()) {
       delete current;
       current = NULL;
-    }      
+    }
   }
 
   ~DescendantGraphsIterator() {
     if (current)
       delete current;
+
     while(!iterators.empty()) {
       delete iterators.top();
       iterators.pop();
@@ -1684,28 +1686,34 @@ struct DescendantGraphsIterator :public Iterator<Graph*> {
     if (current) {
       Graph* g = current->next();
       Iterator<Graph *>* itg = g->getSubGraphs();
+
       if (itg->hasNext()) {
-	if (current->hasNext())
-	  // pushed iterators are always non empty
-	  iterators.push(current);
-	else
-	  delete current;
-	current = itg;
+        if (current->hasNext())
+          // pushed iterators are always non empty
+          iterators.push(current);
+        else
+          delete current;
+
+        current = itg;
       }
       else {
-	delete itg;
-	if (!current->hasNext()) {
-	  delete current;
-	  if (!iterators.empty()) {
-	    current = iterators.top();
-	    iterators.pop();
-	  }
-	  else
-	    current = NULL;
-	}
+        delete itg;
+
+        if (!current->hasNext()) {
+          delete current;
+
+          if (!iterators.empty()) {
+            current = iterators.top();
+            iterators.pop();
+          }
+          else
+            current = NULL;
+        }
       }
+
       return g;
     }
+
     return NULL;
   }
 };
