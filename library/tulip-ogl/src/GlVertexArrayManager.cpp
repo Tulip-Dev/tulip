@@ -664,14 +664,13 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
   const Color &tgtColor = colorProperty->getNodeValue(tgt);
   const Color &borderColor = borderColorProperty->getEdgeValue(e);
 
-  if(toComputeAll || toComputeLayout) {
+  if(toComputeLayout) {
 
     size_t lastIndex=linesCoordsArray.size();
     gledge->getVertices(inputData,linesCoordsArray);
     size_t numberOfVertices=linesCoordsArray.size()-lastIndex;
 
     vector<Coord> vertices;
-    vector<Color> colors;
 
     if(numberOfVertices!=0) {
       edgeToLineIndexVector[gledge->id]=pair<unsigned int,unsigned int>(linesIndexArray.size(),linesIndexCountArray.size());
@@ -681,12 +680,10 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
         vertices.push_back(linesCoordsArray[lastIndex+i]);
       }
 
-      gledge->getColors(inputData, vertices,colors);
-      linesColorsArray.insert(linesColorsArray.end(), colors.begin(), colors.end());
       linesIndexCountArray.push_back(numberOfVertices);
 
       pointsCoordsArray.push_back(linesCoordsArray[lastIndex]);
-      pointsColorsArray.push_back(linesColorsArray[lastIndex]);
+
       edgeToPointIndexVector[gledge->id]=pointsCoordsArray.size()-1;
 
       Size edgeSize;
@@ -717,36 +714,16 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
       vector<Coord> quadVertices;
       buildCurvePoints(vertices, edgeSizes, layoutProperty->getNodeValue(src), layoutProperty->getNodeValue(tgt), quadVertices);
 
-      vector<Coord> centerLine;
-      centerLine.reserve(quadVertices.size()/2);
       vector<GLuint> quadBottomOutlineIndices;
       vector<GLuint> quadTopOutlineIndices;
 
       for (size_t i = 0 ; i < quadVertices.size() / 2 ; ++i) {
-        centerLine.push_back((quadVertices[2*i]+quadVertices[2*i+1])/2.f);
         quadBottomOutlineIndices.push_back(lastQuadIndex+2*i);
         quadTopOutlineIndices.push_back(lastQuadIndex+2*i+1);
       }
 
       quadsBottomOutlineIndexArray.push_back(quadBottomOutlineIndices);
       quadsTopOutlineIndexArray.push_back(quadTopOutlineIndices);
-
-      vector<Color> colors;
-      getColors(&centerLine[0], centerLine.size(), srcColor, tgtColor,colors);
-
-      for (size_t i = 0 ; i < colors.size() ; ++i) {
-        if (inputData->parameters->isEdgeColorInterpolate()) {
-          quadsColorsArray.push_back(colors[i]);
-          quadsColorsArray.push_back(colors[i]);
-        }
-        else {
-          quadsColorsArray.push_back(edgeColor);
-          quadsColorsArray.push_back(edgeColor);
-        }
-
-        quadsOutlineColorsArray.push_back(borderColor);
-        quadsOutlineColorsArray.push_back(borderColor);
-      }
 
       quadsCoordsArray.insert(quadsCoordsArray.end(), quadVertices.begin(), quadVertices.end());
       quadsIndexCountArray.push_back(quadVertices.size());
@@ -767,7 +744,8 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
     }
 
   }
-  else {
+
+  if (toComputeColor) {
     size_t lastIndex=linesColorsArray.size();
     pair<unsigned int,unsigned int> index=edgeToLineIndexVector[gledge->id];
     pair<unsigned int,unsigned int> indexQuad=edgeToQuadIndexVector[gledge->id];
@@ -811,11 +789,13 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
 }
 
 void GlVertexArrayManager::addNode(GlNode *node) {
-  if(toComputeAll || toComputeLayout) {
-    node->getPointAndColor(inputData,pointsCoordsArray,pointsColorsArray);
+  if(toComputeLayout) {
+    vector<Color> tmp;
+    node->getPointAndColor(inputData,pointsCoordsArray, tmp);
     nodeToPointIndexVector[node->id]=pointsCoordsArray.size()-1;
   }
-  else {
+
+  if (toComputeColor) {
     node->getColor(inputData,pointsColorsArray);
   }
 }
@@ -970,52 +950,45 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
 
 void GlVertexArrayManager::clearLayoutData() {
   toComputeLayout=true;
+  verticesUploadNeeded=true;
+
   linesCoordsArray.clear();
   pointsCoordsArray.clear();
   quadsCoordsArray.clear();
-  vectorLayoutSizeInit=false;
-  verticesUploadNeeded=true;
-}
 
-void GlVertexArrayManager::clearColorData() {
-  toComputeColor=true;
-  colorsUploadNeeded=true;
-  linesColorsArray.clear();
-  pointsColorsArray.clear();
-  quadsColorsArray.clear();
-  quadsOutlineColorsArray.clear();
-  vectorColorSizeInit=false;
-}
-
-void GlVertexArrayManager::clearData() {
-  toComputeAll=true;
-  verticesUploadNeeded=true;
-  colorsUploadNeeded=true;
-  linesCoordsArray.clear();
-  linesColorsArray.clear();
   linesIndexArray.clear();
   linesIndexCountArray.clear();
   edgeToLineIndexVector.clear();
   edgeToQuadIndexVector.clear();
   edgeToTopOutlineIndexVector.clear();
   edgeToBottomOulineIndexVector.clear();
-
-  quadsCoordsArray.clear();
-  quadsColorsArray.clear();
-  quadsOutlineColorsArray.clear();
   quadsIndexArray.clear();
   quadsIndexCountArray.clear();
   quadsTopOutlineIndexArray.clear();
   quadsBottomOutlineIndexArray.clear();
-
-  pointsCoordsArray.clear();
-  pointsColorsArray.clear();
   edgeToPointIndexVector.clear();
   nodeToPointIndexVector.clear();
 
   vectorLayoutSizeInit=false;
-  vectorColorSizeInit=false;
   vectorIndexSizeInit=false;
+}
+
+void GlVertexArrayManager::clearColorData() {
+  toComputeColor=true;
+  colorsUploadNeeded=true;
+
+  linesColorsArray.clear();
+  pointsColorsArray.clear();
+  quadsColorsArray.clear();
+  quadsOutlineColorsArray.clear();
+
+  vectorColorSizeInit=false;
+}
+
+void GlVertexArrayManager::clearData() {
+  toComputeAll=true;
+  clearLayoutData();
+  clearColorData();
 }
 
 void GlVertexArrayManager::initObservers() {
