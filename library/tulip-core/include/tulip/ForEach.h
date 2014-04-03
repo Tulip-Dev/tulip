@@ -61,10 +61,10 @@ inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
 #endif //DOXYGEN_NOTFOR_DEVEL
 
 /**
- * @brief Allows to iterate on the nodes or edges of a Graph in a clear and concise way.
+ * @brief Allows to iterate the nodes or edges of a Graph in a clear and concise way.
  * It also avoid having to manage a tulip Iterator, whose deletion is often forgotten.
  *
- * This code shows how forEach can be used instead of an Iterator to iterate over a Graph's nodes
+ * This code shows how forEach can be used instead of an Iterator to iterate a Graph's nodes
  * @code
  * node n;
  * forEach(n, graph->getNodes()) {
@@ -78,7 +78,7 @@ inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
 for(tlp::_TLP_IT<TYPEOF(A) > _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
 
 /**
- * @brief Allows to iterate on the nodes or edges of a copy of a Graph in a clear and concise way.
+ * @brief Allows to iterate the nodes or edges of a copy of a Graph in a clear and concise way.
  * The stable Iterator creates a copy of the Graph, and iterates on the said copy.
  * It allows deletion operations to be performed without invalidating the iterator.
  * It also avoid having to manage a tulip Iterator, whose deletion is often forgotten.

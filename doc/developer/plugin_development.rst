@@ -275,7 +275,7 @@ Following is a list of some Public members:
 Plugin Progress example
 -----------------------
 
-In the following small example, we will iterate over all nodes and notify the user of the progression. ::
+In the following small example, we will iterate all the nodes and notify the user of the progression. ::
  
   unsigned int i=0;
   unsigned int nbNodes = graph->numberOfNodes ();
