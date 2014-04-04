@@ -241,10 +241,14 @@ QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) cons
 
     std::string str = sstr.str();
 
-    if (str.size() > 45)
-      str.replace(str.begin() + 41, str.end(), " ...)");
+   QString qstr = QString::fromUtf8(str.c_str());
 
-    return QString::fromUtf8(str.c_str());
+   if (qstr.size() > 45) {
+     qstr.truncate(41);
+     qstr.append(" ...");
+   }
+
+   return qstr;
   }
 
   if (v.size() == 1)
