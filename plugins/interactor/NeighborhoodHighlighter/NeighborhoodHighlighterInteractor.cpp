@@ -527,6 +527,7 @@ void NeighborhoodHighlighter::updateGlNeighborhoodGraph() {
   glNeighborhoodGraphInputData->setElementColor(neighborhoodGraphColors);
   glNeighborhoodGraphInputData->setElementLabel(originalInputData->getElementLabel());
   glNeighborhoodGraphInputData->setElementLabelColor(originalInputData->getElementLabelColor());
+  glNeighborhoodGraphInputData->setElementLabelBorderColor(originalInputData->getElementLabelBorderColor());
   glNeighborhoodGraphInputData->setElementLabelPosition(originalInputData->getElementLabelPosition());
   glNeighborhoodGraphInputData->setElementLayout(neighborhoodGraphLayout);
   glNeighborhoodGraphInputData->setElementRotation(originalInputData->getElementRotation());
