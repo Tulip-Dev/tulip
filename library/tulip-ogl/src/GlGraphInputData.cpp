@@ -76,6 +76,7 @@ public:
   }
   void treatEvent(const Event& evt) {
     Graph* g = dynamic_cast<Graph *>(evt.sender());
+
     if (g && (graph == g) && evt.type() == Event::TLP_DELETE) {
       delete this;
     }
