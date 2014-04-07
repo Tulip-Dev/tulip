@@ -33,7 +33,8 @@ GlyphRenderer* GlyphRenderer::_instance=NULL;
 GlyphRenderer::GlyphRenderer():_graph(newGraph()),_node(_graph->addNode()) {
   //Init graph parameters.
   GlGraphRenderingParameters parameters;
-  { // need a block to ensure inputData
+  {
+    // need a block to ensure inputData
     // will be destroyed before _graph
     GlGraphInputData inputData(_graph,&parameters);
     inputData.getElementSize()->setAllNodeValue(Size(1,1,1));
