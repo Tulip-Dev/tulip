@@ -62,6 +62,9 @@ GlGraphInputData::~GlGraphInputData() {
   EdgeExtremityGlyphManager::getInst().clearGlyphList(&this->graph, this, extremityGlyphs);
   delete _metaNodeRenderer;
   delete _glGlyphRenderer;
+  // the viewAnimationFrame property is not attached to the graph
+  // (see reloadGraphProperties) so it is not automatically deleted
+  delete getElementAnimationFrame();
 }
 
 std::map<std::string, GlGraphInputData::PropertyName> GlGraphInputData::_propertiesNameMap;
