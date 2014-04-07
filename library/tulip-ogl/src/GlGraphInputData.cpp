@@ -64,6 +64,28 @@ GlGraphInputData::~GlGraphInputData() {
   delete _glGlyphRenderer;
 }
 
+// add this class to ensure proper deletion of the viewAnimationFrame property
+// as the property is referenced in other structure as View::_triggers
+// it must remain alive until graph destruction
+class GlViewAnimationFrameProperty: public IntegerProperty {
+public:
+  GlViewAnimationFrameProperty(Graph* g):
+    IntegerProperty(g, "viewAnimationFrame") {
+    needGraphListener = true;
+    graph->addListener(this);
+  }
+  void treatEvent(const Event& evt) {
+    Graph* g = dynamic_cast<Graph *>(evt.sender());
+    if (g && (graph == g) && evt.type() == Event::TLP_DELETE) {
+      delete this;
+    }
+    else {
+      needGraphListener = true;
+      IntegerMinMaxProperty::treatEvent(evt);
+    }
+  }
+};
+
 std::map<std::string, GlGraphInputData::PropertyName> GlGraphInputData::_propertiesNameMap;
 
 void GlGraphInputData::reloadGraphProperties() {
@@ -133,7 +155,7 @@ void GlGraphInputData::reloadGraphProperties() {
     _properties.insert(_propertiesMap[VIEW_TGTANCHORSHAPE]);
     _propertiesMap[VIEW_TGTANCHORSIZE]=graph->getProperty<SizeProperty>("viewTgtAnchorSize");
     _properties.insert(_propertiesMap[VIEW_TGTANCHORSIZE]);
-    _propertiesMap[VIEW_ANIMATIONFRAME]=new IntegerProperty(graph,"viewAnimationFrame");
+    _propertiesMap[VIEW_ANIMATIONFRAME]=new GlViewAnimationFrameProperty(graph);
     _properties.insert(_propertiesMap[VIEW_ANIMATIONFRAME]);
   }
 }
