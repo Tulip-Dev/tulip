@@ -18,10 +18,12 @@
  */
 
 #include <tulip/GlyphRenderer.h>
+#include <tulip/GlyphManager.h>
 #include <tulip/Graph.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlGraphComposite.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/EdgeExtremityGlyph.h>
 
 using namespace tlp;
 using namespace std;
@@ -31,16 +33,32 @@ GlyphRenderer* GlyphRenderer::_instance=NULL;
 GlyphRenderer::GlyphRenderer():_graph(newGraph()),_node(_graph->addNode()) {
   //Init graph parameters.
   GlGraphRenderingParameters parameters;
-  GlGraphInputData inputData(_graph,&parameters);
-  inputData.getElementSize()->setAllNodeValue(Size(1,1,1));
-  inputData.getElementColor()->setAllNodeValue(Color(192,192,192));
-  inputData.getElementBorderColor()->setAllNodeValue(Color(0,0,0));
-  inputData.getElementBorderWidth()->setAllNodeValue(1);
+  { // need a block to ensure inputData
+    // will be destroyed before _graph
+    GlGraphInputData inputData(_graph,&parameters);
+    inputData.getElementSize()->setAllNodeValue(Size(1,1,1));
+    inputData.getElementColor()->setAllNodeValue(Color(192,192,192));
+    inputData.getElementBorderColor()->setAllNodeValue(Color(0,0,0));
+    inputData.getElementBorderWidth()->setAllNodeValue(1);
 
+    // init previews
+    std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<Glyph>());
+
+    for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
+      std::string glyphName(*it);
+      int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
+      //Create the glyph preview
+      render(glyphIndex);
+    }
+  }
+
+  // _graph is no longer needed
+  delete _graph;
+  _graph = NULL;
 }
 
 GlyphRenderer::~GlyphRenderer() {
-  delete _graph;
+  assert(_graph = NULL);
 }
 
 GlyphRenderer& GlyphRenderer::getInst() {
@@ -91,10 +109,25 @@ EdgeExtremityGlyphRenderer::EdgeExtremityGlyphRenderer():_graph(newGraph()) {
 
   inputData.getElementSrcAnchorShape()->setAllEdgeValue(EdgeExtremityShape::None);
   inputData.getElementTgtAnchorSize()->setAllEdgeValue(Size(2,2,1));
+
+  // init previews
+  std::list<std::string> glyphs(PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
+
+  for(std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
+    std::string glyphName(*it);
+    const tlp::Plugin& infos = PluginLister::pluginInformation(glyphName);
+    int glyphIndex = infos.id();
+    //Create the glyph preview
+    render(glyphIndex);
+  }
+
+  // _graph is no longer needed
+  delete _graph;
+  _graph = NULL;
 }
 
 EdgeExtremityGlyphRenderer::~EdgeExtremityGlyphRenderer() {
-  delete _graph;
+  assert(_graph == NULL);
 }
 
 EdgeExtremityGlyphRenderer & EdgeExtremityGlyphRenderer::getInst() {
