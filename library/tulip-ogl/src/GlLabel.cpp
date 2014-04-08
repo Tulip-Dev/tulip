@@ -42,23 +42,27 @@ using namespace std;
 
 namespace tlp {
 
-// FTGL fonts must be cached to avoid to much memory consumption 
+// FTGL fonts must be cached to avoid to much memory consumption
 static TLP_HASH_MAP<std::string, FTPolygonFont*> PolygonFonts;
 static TLP_HASH_MAP<std::string, FTGLOutlineFont*> OutlineFonts;
 
 static FTPolygonFont* getPolygonFont(const std::string& name) {
   TLP_HASH_MAP<std::string, FTPolygonFont*>::iterator itf =
     PolygonFonts.find(name);
+
   if (itf != PolygonFonts.end())
     return itf->second;
+
   return PolygonFonts[name] = new FTPolygonFont(name.c_str());
 }
 
 static FTGLOutlineFont* getOutlineFont(const std::string& name) {
   TLP_HASH_MAP<std::string, FTGLOutlineFont*>::iterator itf =
     OutlineFonts.find(name);
+
   if (itf != OutlineFonts.end())
     return itf->second;
+
   return OutlineFonts[name] = new FTGLOutlineFont(name.c_str());
 }
 
