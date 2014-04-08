@@ -64,11 +64,11 @@ void GlQuantitativeAxis::setAxisParameters(const double minV, const double maxV,
 }
 
 
-void GlQuantitativeAxis::setAxisParameters(const int minV, const int maxV, const unsigned int incrementStepV,
+void GlQuantitativeAxis::setAxisParameters(const long long minV, const long long maxV, const unsigned long long incrementStepV,
     const LabelPosition &axisGradsLabelsPos, const bool firstLabel) {
   integerScale = true;
   min = minV;
-  int maxVCp = maxV;
+  long long maxVCp = maxV;
 
   if (incrementStepV)
     while (((maxVCp - minV)%incrementStepV) != 0) ++maxVCp;

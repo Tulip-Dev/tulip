@@ -63,7 +63,7 @@ public :
                          const LabelPosition &axisGradsLabelsPosition = LEFT_OR_BELOW, const bool drawFirstLabel = true);
 
 
-  void setAxisParameters(const int min, const int max, const unsigned int incrementStep,
+  void setAxisParameters(const long long min, const long long max, const unsigned long long incrementStep,
                          const LabelPosition &axisGradsLabelsPosition = LEFT_OR_BELOW, const bool drawFirstLabel = true);
 
 
@@ -138,7 +138,7 @@ private :
   bool logScale;
   unsigned int logBase;
   bool integerScale;
-  unsigned int incrementStep;
+  unsigned long long incrementStep;
   bool minMaxSet;
 
 };
