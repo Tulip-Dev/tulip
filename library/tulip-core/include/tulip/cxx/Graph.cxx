@@ -36,12 +36,9 @@ void tlp::Graph::setAttribute(const std::string &name,const ATTRIBUTETYPE&value)
 template<typename PropertyType>
 PropertyType* tlp::Graph::getLocalProperty(const std::string &name) {
   if (existLocalProperty(name)) {
-    PropertyType* prop = dynamic_cast<PropertyType *>(getProperty(name));
-    if (!prop) {
-      tlp::error() << "Error: a property named \"" << name.c_str() << "\" already exists but with an other type." << std::endl;
-    }
-    assert(prop);
-    return prop;
+    PropertyInterface* prop = getProperty(name);
+    assert (dynamic_cast<PropertyType *>(prop)!=NULL);
+    return dynamic_cast<PropertyType *>(prop);
   }
   else {
     PropertyType* prop = new PropertyType(this, name);
@@ -53,12 +50,9 @@ PropertyType* tlp::Graph::getLocalProperty(const std::string &name) {
 template<typename PropertyType>
 PropertyType* tlp::Graph::getProperty(const std::string &name) {
   if (existProperty(name)) {
-    PropertyType* prop = dynamic_cast<PropertyType *>(getProperty(name));
-    if (!prop) {
-      tlp::error() << "Error: a property named " << name.c_str() << " already exists but with an other type." << std::endl;
-    }
-    assert(prop);
-    return prop;
+    tlp::PropertyInterface* prop = getProperty(name);
+    assert (dynamic_cast<PropertyType *>(prop)!=NULL);
+    return dynamic_cast<PropertyType *>(prop);
   }
   else {
     return getLocalProperty<PropertyType>(name);
