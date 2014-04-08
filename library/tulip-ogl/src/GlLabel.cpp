@@ -42,6 +42,26 @@ using namespace std;
 
 namespace tlp {
 
+// FTGL fonts must be cached to avoid to much memory consumption 
+static TLP_HASH_MAP<std::string, FTPolygonFont*> PolygonFonts;
+static TLP_HASH_MAP<std::string, FTGLOutlineFont*> OutlineFonts;
+
+static FTPolygonFont* getPolygonFont(const std::string& name) {
+  TLP_HASH_MAP<std::string, FTPolygonFont*>::iterator itf =
+    PolygonFonts.find(name);
+  if (itf != PolygonFonts.end())
+    return itf->second;
+  return PolygonFonts[name] = new FTPolygonFont(name.c_str());
+}
+
+static FTGLOutlineFont* getOutlineFont(const std::string& name) {
+  TLP_HASH_MAP<std::string, FTGLOutlineFont*>::iterator itf =
+    OutlineFonts.find(name);
+  if (itf != OutlineFonts.end())
+    return itf->second;
+  return OutlineFonts[name] = new FTGLOutlineFont(name.c_str());
+}
+
 static const int SpaceBetweenLine=5;
 
 GlLabel::GlLabel():oldCamera(NULL) {
@@ -52,16 +72,14 @@ GlLabel::GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign):
 }
 
 GlLabel::~GlLabel() {
-  delete font;
-  delete borderFont;
 }
 //============================================================
 void GlLabel::init() {
   fontName=TulipBitmapDir + "font.ttf";
-  font=new FTPolygonFont(fontName.c_str());
+  font=getPolygonFont(fontName);
 
   if(font->Error()==0) { //no error
-    borderFont=new FTGLOutlineFont(fontName.c_str());
+    borderFont=getOutlineFont(fontName);
     fontSize=20;
     font->FaceSize(fontSize);
     borderFont->FaceSize(fontSize);
@@ -206,10 +224,8 @@ void GlLabel::setFontName(const std::string &name) {
 
   fontName=name;
 
-  delete font;
-  delete borderFont;
-  font=new FTGLPolygonFont(fontName.c_str());
-  borderFont=new FTOutlineFont(fontName.c_str());
+  font=getPolygonFont(fontName);
+  borderFont=getOutlineFont(fontName);
 
   if(font->Error() || borderFont->Error()) {
     if(fontName=="")
@@ -217,11 +233,8 @@ void GlLabel::setFontName(const std::string &name) {
     else
       tlp::warning() << "Error in font loading: " << fontName << " cannot be loaded" << endl;
 
-    delete font;
-    delete borderFont;
-
-    font=new FTPolygonFont((TulipBitmapDir + "font.ttf").c_str());
-    borderFont=new FTGLOutlineFont((TulipBitmapDir + "font.ttf").c_str());
+    font=getPolygonFont((TulipBitmapDir + "font.ttf"));
+    borderFont=getOutlineFont((TulipBitmapDir + "font.ttf"));
   }
 }
 //============================================================
