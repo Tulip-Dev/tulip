@@ -46,7 +46,8 @@ using namespace tlp;
   Helper storage class to ensure synchronization between panels list and model passed down to opened panels
   */
 Workspace::Workspace(QWidget *parent)
-  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _oldWorkspaceMode(NULL), _focusedPanel(NULL), _focusedPanelHighlighting(false), _model(NULL), _pageCountLabel(NULL) {
+  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _oldWorkspaceMode(NULL), _focusedPanel(NULL),
+    _focusedPanelHighlighting(false), _model(NULL), _pageCountLabel(NULL), _autoCenterViews(false) {
   _ui->setupUi(this);
   _ui->startupMainFrame->hide();
   _pageCountLabel = _ui->pagesLabel;
