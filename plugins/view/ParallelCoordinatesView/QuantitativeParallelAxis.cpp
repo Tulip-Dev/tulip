@@ -73,9 +73,9 @@ void QuantitativeParallelAxis::setAxisLabels() {
     integerScale = false;
   }
   else {
-    int min = static_cast<int>(axisMinValue);
-    int max = static_cast<int>(axisMaxValue);
-    int incrementStep = (max - min) / DEFAULT_NB_AXIS_GRAD;
+    long long min = static_cast<long long>(axisMinValue);
+    long long max = static_cast<long long>(axisMaxValue);
+    unsigned long long incrementStep = (max - min) / DEFAULT_NB_AXIS_GRAD;
 
     if (incrementStep < 1) incrementStep = 1;
 

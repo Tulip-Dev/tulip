@@ -457,13 +457,18 @@ void Histogram::createAxis() {
   }
   else {
     if (integerScale) {
-      int axisMin = (int) min;
-      int axisMax = (int) max;
-      int incrementStep = (int) ((max - min) / nbXGraduations);
+      long long axisMin = (long long) min;
+      long long axisMax = (long long) max;
+      // check the [min, max] double values range
+      // fit in a long long range
+      if (axisMax != LLONG_MIN) {
+	long long incrementStep = (long long) ((max - min) / nbXGraduations);
 
-      if (incrementStep <1) incrementStep = 1;
+	if (incrementStep <1) incrementStep = 1;
 
-      xAxis->setAxisParameters(axisMin, axisMax, incrementStep, GlAxis::LEFT_OR_BELOW, true);
+	xAxis->setAxisParameters(axisMin, axisMax, incrementStep, GlAxis::LEFT_OR_BELOW, true);
+      } else
+	xAxis->setAxisParameters(min ,max, nbXGraduations, GlAxis::LEFT_OR_BELOW, true);
     }
     else {
       xAxis->setAxisParameters(min ,max, nbXGraduations, GlAxis::LEFT_OR_BELOW, true);
