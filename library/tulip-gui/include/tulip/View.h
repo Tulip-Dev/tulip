@@ -209,7 +209,7 @@ public slots:
     @brief defines the list of interactors available on this View
     @note Calling this will trigger the View::interactorsInstalled() callback for custom handling.
   */
-  void setInteractors(const QList<tlp::Interactor*>&);
+  virtual void setInteractors(const QList<tlp::Interactor*>&);
 
   /**
     @brief defines the active interactor that will receive user inputs.
