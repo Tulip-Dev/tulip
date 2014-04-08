@@ -62,6 +62,12 @@ fi
 # run the test
 sh tulip_replay.sh $TEST_NAME.xns $TLP_INPUT_FILE
 
+# check for a crash
+if [ ! -f tulip.pid ]; then
+  echo "$TEST_NAME test failed: tulip_perspective execution aborted"
+  exit
+fi
+
 # move data/test_gui.tlp if it exist
 if [ -f data/test_gui.tlp ]; then
     mv data/test_gui.tlp .
