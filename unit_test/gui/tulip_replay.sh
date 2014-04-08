@@ -33,11 +33,6 @@ TLP_INPUT_FILE=$2
 sh  ./launch_tulip.sh $TULIP $TLP_INPUT_FILE  > /dev/null 2>&1 &
 
 sleep 5
-# check for a crash
-if [ ! -f tulip.pid ]; then
-  exit
-fi
-
 # replay events
 echo "Replaying events from $CNEE_INPUT_FILE"
 $CNEE -rep --file $CNEE_INPUT_FILE -fcr -fp -e /tmp/$CNEE_INPUT_FILE.log > /dev/null 2>&1
