@@ -703,6 +703,7 @@ void HistogramMetricMapping::initInteractor() {
   if (colorScaleConfigDialog == NULL) {
     colorScaleConfigDialog = new ColorScaleConfigDialog(colorScale, histoView->getGlMainWidget());
     *colorScale=colorScaleConfigDialog->getColorScale();
+    colorScale->setColorMapTransparency(200);
   }
 
   if (sizeScaleConfigDialog == NULL) {
@@ -1077,6 +1078,8 @@ bool HistogramMetricMapping::pointerUnderScale(const Coord &sceneCoords) {
 void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty *histogramLayout) {
 
   *colorScale=colorScaleConfigDialog->getColorScale();
+  colorScale->setColorMapTransparency(200);
+  glColorScale->setColorScale(colorScale);
 
   if ((mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING) && !colorScale->colorScaleInitialized()) {
     return;
