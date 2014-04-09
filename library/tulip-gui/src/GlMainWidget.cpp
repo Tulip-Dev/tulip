@@ -188,11 +188,18 @@ void GlMainWidget::createRenderingStore(int width, int height) {
     delete glFrameBuf;
     glFrameBuf=new QGLFramebufferObject(width,height);
     useFramebufferObject=glFrameBuf->isValid();
+    widthStored=width;
+    heightStored=height;
   }
 
-  if (!useFramebufferObject && (!renderingStore || width != widthStored || height != heightStored)) {
-    delete [] renderingStore;
-    renderingStore=new char[width*height*4];
+  if (!useFramebufferObject) {
+    unsigned int size = width*height;
+    if (!renderingStore || (size > (widthStored*heightStored))) {
+      delete [] renderingStore;
+      renderingStore=new char[size * 4];
+      widthStored=width;
+      heightStored=height;
+    }
   }
 }
 //==================================================
@@ -217,9 +224,6 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
 
     if(options.testFlag(RenderScene)) {
       createRenderingStore(width,height);
-
-      widthStored=width;
-      heightStored=height;
 
       //Render the graph in the back buffer.
       scene.draw();
