@@ -133,6 +133,11 @@ public:
   bool isGradient() const {
     return gradient;
   }
+  /**
+    * @brief Set the transparency of all the colors in the map
+    *
+    **/
+  void setColorMapTransparency(unsigned char transparency);
 
 protected:
 
