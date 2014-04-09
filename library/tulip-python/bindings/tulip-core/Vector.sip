@@ -397,6 +397,8 @@ Computes and returns the dot product (scalar product) of the vector with another
 
 };
 
+tlp::Vec3f operator*(const float &, const tlp::Vec3f &) const;
+
 class Vec4f  {
 
 %Docstring
@@ -526,6 +528,8 @@ Convenient method. Returns the fourth component of the vector.
 
 };
 
+tlp::Vec4f operator*(const float &, const tlp::Vec4f &) const;
+
 class Vec4i  {
 
 %Docstring
@@ -599,6 +603,8 @@ public:
 %End
 
 };
+
+tlp::Vec4i operator*(const int &, const tlp::Vec4i &) const;
 
 };
 
