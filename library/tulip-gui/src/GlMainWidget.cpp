@@ -194,6 +194,7 @@ void GlMainWidget::createRenderingStore(int width, int height) {
 
   if (!useFramebufferObject) {
     unsigned int size = width*height;
+
     if (!renderingStore || (size > (widthStored*heightStored))) {
       delete [] renderingStore;
       renderingStore=new char[size * 4];
