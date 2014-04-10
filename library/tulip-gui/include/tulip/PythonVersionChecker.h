@@ -31,6 +31,9 @@ public:
   static QString installedVersion();
   static QString compiledVersion();
   static bool isPythonVersionMatching();
+#ifdef WIN32
+  static QString getPythonHome();
+#endif
 };
 }
 
