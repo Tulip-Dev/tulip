@@ -28,6 +28,7 @@
 #include <QTime>
 #include <QMenu>
 #include <QGraphicsView>
+#include <QApplication>
 
 #include "ScatterPlot2DView.h"
 #include "ScatterPlot2DOptionsWidget.h"
@@ -398,6 +399,10 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
     matrixComposite->addGlEntity(grid,"grid");
     matrixComposite->addGlEntity(labelsComposite, "labels composite");
 
+    // needed to improve further feedback
+    /*centerView();
+      QApplication::processEvents();*/
+
     for (size_t i = 0 ; i  < selectedGraphProperties.size() ; ++i) {
 
 
@@ -448,6 +453,9 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
           matrixComposite->addGlEntity(scatterOverview, selectedGraphProperties[i] + "_" + selectedGraphProperties[j]);
           scatterOverview->setSizeProperty(scatterPlotSize);
         }
+	// add some feedback
+	/*if ((i + 1) * (j + 1) % 10 == 0)
+	  QApplication::processEvents();*/
       }
     }
   }
@@ -676,15 +684,16 @@ void ScatterPlot2DView::generateScatterPlots() {
   Coord centerBak = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
   Coord upBak = getGlMainWidget()->getScene()->getGraphCamera().getUp();
 
-  GlProgressBar *progressBar = new GlProgressBar(Coord(0.0f, 0.0f, 0.0f), 600.0f, 100.0f, Color(0,0,255));
+  GlProgressBar *progressBar =
+    new GlProgressBar(Coord(0.0f, 0.0f, 0.0f), 600.0f, 100.0f,
+		      // use same green color as the highlighting one
+		      // in workspace panel
+		      Color(0xCB, 0xDE, 0x5D)); 
   progressBar->setComment("Updating scatter plot matrix ...");
   progressBar->progress(currentStep, nbOverviews);
   mainLayer->addGlEntity(progressBar, "progress bar");
   centerView();
   getGlMainWidget()->draw();
-
-  QTime timer;
-  timer.start();
 
   for (size_t i = 0 ; i < selectedGraphProperties.size() - 1 ; ++i) {
     for (size_t j = 0 ; j < selectedGraphProperties.size() ; ++j) {
@@ -696,22 +705,12 @@ void ScatterPlot2DView::generateScatterPlots() {
       overview->generateOverview();
       scatterPlotsGenMap[make_pair(selectedGraphProperties[i], selectedGraphProperties[j])] = true;
 
-      progressBar->progress(++currentStep, nbOverviews);
-      /*ScatterPlot2D *overviewReverse = scatterPlotsMap[make_pair(selectedGraphProperties[j], selectedGraphProperties[i])];
-
-      if (scatterPlotsGenMap[make_pair(selectedGraphProperties[i], selectedGraphProperties[j])]) {
-        overviewReverse->generateOverview(NULL, overview->getScatterPlotLayout());
-      } else {
-        overviewReverse->generateOverview();
-      }
-      scatterPlotsGenMap[make_pair(selectedGraphProperties[j], selectedGraphProperties[i])] = true;*/
-
-      progressBar->progress(++currentStep, nbOverviews);
-
-      if (timer.elapsed() >= 50) {
+      currentStep += 2;
+      progressBar->progress(currentStep, nbOverviews);
+      // needed to display progressBar
+      if ((i + 1) * (j + 1) % 10 == 0)
         getGlMainWidget()->draw();
-        timer.start();
-      }
+	QApplication::processEvents();
     }
   }
 
