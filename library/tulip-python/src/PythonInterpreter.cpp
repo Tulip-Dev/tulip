@@ -327,14 +327,13 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       runString("import sys;"
                 "import consoleutils;"
                 "import tuliputils;"
-                "sys.stdout = consoleutils.ConsoleOutput(False);"
-                "sys.stderr = consoleutils.ConsoleOutput(True);"
-                "sys.stdin = consoleutils.ConsoleInput()\n");
+                "sys.stdout = None;"
+                "sys.stderr = None;"
+                "sys.stdin = None\n");
 
       // Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
       // and if the site module is not present on the host system
       // Disable output while trying to import the module to not confuse the user
-      outputActivated = false;
       runString("import site");
 #if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3
       runString("site.main()");
@@ -343,7 +342,6 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       runString("from tulip import *");
       runString("from tulipogl import *");
       runString("from tulipgui import *");
-      outputActivated = true;
 
 #ifndef _MSC_VER
       loadTulipPythonPluginsFromDefaultDirs();
@@ -351,6 +349,11 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 
       runString(printObjectDictFunction);
       runString(printObjectClassFunction);
+
+      runString("sys.stdout = consoleutils.ConsoleOutput(False);"
+                "sys.stderr = consoleutils.ConsoleOutput(True);"
+                "sys.stdin = consoleutils.ConsoleInput()\n");
+
     }
 
     PyEval_SetTrace(tracefunc, NULL);
