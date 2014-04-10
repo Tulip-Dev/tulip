@@ -45,6 +45,8 @@ public :
   ~ColorScaleConfigDialog();
   void setColorScale(const ColorScale &colorScale);
   const ColorScale& getColorScale() const;
+  static ColorScale getColorScaleFromImageFile(const std::string& imageFilePath,
+					       bool gradient = true);
 
 protected :
 
@@ -78,7 +80,7 @@ private :
 
   static std::map<QString, std::vector<Color> > tulipImageColorScales;
   static void loadTulipImageColorScales();
-  static std::vector<Color> getColorScaleFromImage(const QString &imageFilePath);
+  static std::vector<Color> getColorScaleFromImageFile(const QString &imageFilePath);
 };
 
 }
