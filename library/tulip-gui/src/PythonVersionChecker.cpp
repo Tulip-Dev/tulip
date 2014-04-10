@@ -29,23 +29,55 @@ using namespace tlp;
 using namespace std;
 
 #ifdef WIN32
+#include <windows.h>
+
 static const char *pythonVersion[]  = {
-  "3.3", "3.2", "3.1", "3.0", "2.7", "2.6", "2.5", 0
+  "3.4", "3.3", "3.2", "3.1", "3.0", "2.7", "2.6", "2.5", 0
 };
 
-static bool isPythonVersionInstalled(const QString &pythonVersion) {
-  QString win32RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-  QString win64RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-  QSettings win32Settings(win32RegKey, QSettings::NativeFormat);
-  QSettings win64Settings(win64RegKey, QSettings::NativeFormat);
-  return win32Settings.value("Default").toString() != "" || win64Settings.value("Default").toString() != "";
+#ifndef I64
+// function to check if a 32 bits program run on a 64 bits system
+static bool isWow64() {
+  BOOL bIsWow64 = FALSE;
+
+  typedef BOOL (APIENTRY *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
+
+  LPFN_ISWOW64PROCESS fnIsWow64Process;
+
+  HMODULE module = GetModuleHandle(TEXT("kernel32"));
+  const char funcName[] = "IsWow64Process";
+  fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(module, funcName);
+
+  if (fnIsWow64Process != NULL) {
+    fnIsWow64Process(GetCurrentProcess(),&bIsWow64);
+  }
+  return bIsWow64 != FALSE;
+}
+#endif
+
+static QString pythonHome(const QString &pythonVersion) {
+#ifndef I64
+  if (isWow64()) {
+      QString win64RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+      QSettings win64Settings(win64RegKey, QSettings::NativeFormat);
+      return win64Settings.value("Default").toString().replace("\\", "/");
+  } else {
+      QString win32RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+      QSettings win32Settings(win32RegKey, QSettings::NativeFormat);
+      return win32Settings.value("Default").toString().replace("\\", "/");
+  }
+#else
+    QString win64RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+    QSettings win64Settings(win64RegKey, QSettings::NativeFormat);
+    return win64Settings.value("Default").toString().replace("\\", "/");
+#endif
 }
 
 static QString getInstalledPythonVersionIfAny() {
   int i = 0;
 
   while (pythonVersion[i]) {
-    if (isPythonVersionInstalled(pythonVersion[i])) {
+    if (!pythonHome(pythonVersion[i]).isEmpty()) {
       return pythonVersion[i];
     }
 
@@ -90,7 +122,7 @@ QString PythonVersionChecker::installedVersion() {
 
 #else
 
-  if (isPythonVersionInstalled(compiledVersion())) {
+  if (!pythonHome(compiledVersion()).isEmpty()) {
     return compiledVersion();
   }
 
@@ -112,3 +144,12 @@ QString PythonVersionChecker::compiledVersion() {
 bool PythonVersionChecker::isPythonVersionMatching() {
   return compiledVersion() == installedVersion();
 }
+
+#ifdef WIN32
+QString PythonVersionChecker::getPythonHome() {
+    if (isPythonVersionMatching()) {
+        return pythonHome(compiledVersion());
+    }
+    return "";
+}
+#endif
