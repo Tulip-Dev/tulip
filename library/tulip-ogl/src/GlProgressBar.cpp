@@ -33,17 +33,11 @@ static const string PERCENT_ID = "percent label";
 
 namespace tlp {
 
-GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height, const Color &color) :
-  color(color), percentLabelAndFrameColor(color) {
-
-
-  if (percentLabelAndFrameColor.getH() >= 180) {
-    percentLabelAndFrameColor.setH(percentLabelAndFrameColor.getH() - 180);
-  }
-  else {
-    percentLabelAndFrameColor.setH(percentLabelAndFrameColor.getH() + 180);
-  }
-
+GlProgressBar::GlProgressBar(const Coord &centerPosition,
+			     const unsigned int width,
+			     const unsigned int height,
+			     const Color &pbColor, const Color& commColor) :
+  progressBarColor(pbColor), commentColor(commColor) {
   Coord globalFrameVertice1 = Coord(centerPosition.getX() - (width / 2.), centerPosition.getY() + (height/2.));
   Coord globalFrameVertice2 = Coord(centerPosition.getX() + (width / 2.), centerPosition.getY() + (height/2.));
   Coord globalFrameVertice3 = Coord(centerPosition.getX() + (width / 2.), centerPosition.getY() - (height/2.));
@@ -56,10 +50,10 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
   globalFrameCoords.push_back(globalFrameVertice4);
 
   vector<Color> globalFrameColors;
-  globalFrameColors.push_back(color);
-  globalFrameColors.push_back(color);
-  globalFrameColors.push_back(color);
-  globalFrameColors.push_back(color);
+  globalFrameColors.push_back(commentColor);
+  globalFrameColors.push_back(commentColor);
+  globalFrameColors.push_back(commentColor);
+  globalFrameColors.push_back(commentColor);
 
   addGlEntity(new GlPolygon(globalFrameCoords, globalFrameColors, globalFrameColors, false, true), "global frame");
 
@@ -83,10 +77,10 @@ GlProgressBar::GlProgressBar(const Coord &centerPosition, const unsigned int wid
   progressBarFrameCoords.push_back(progressBarFrameVertice4);
 
   vector<Color> progressBarFrameColors;
-  progressBarFrameColors.push_back(percentLabelAndFrameColor);
-  progressBarFrameColors.push_back(percentLabelAndFrameColor);
-  progressBarFrameColors.push_back(percentLabelAndFrameColor);
-  progressBarFrameColors.push_back(percentLabelAndFrameColor);
+  progressBarFrameColors.push_back(commentColor);
+  progressBarFrameColors.push_back(commentColor);
+  progressBarFrameColors.push_back(commentColor);
+  progressBarFrameColors.push_back(commentColor);
 
   addGlEntity(new GlPolygon(progressBarFrameCoords, progressBarFrameColors, progressBarFrameColors, false, true), "progress bar frame");
 }
@@ -127,14 +121,14 @@ void GlProgressBar::progress_handler(int step, int max_step) {
   progressBarCoords[1] = progressBarCoords[0] + Coord(progressBarWidth, 0, 0);
   progressBarCoords[2] = progressBarCoords[1] + Coord(0, -progressBarHeight, 0);
   progressBarCoords[3] = progressBarCoords[2] + Coord(-progressBarWidth, 0, 0);
-  GlQuad *progressBarQuad = new GlQuad(progressBarCoords[0], progressBarCoords[1], progressBarCoords[2], progressBarCoords[3], color);
+  GlQuad *progressBarQuad = new GlQuad(progressBarCoords[0], progressBarCoords[1], progressBarCoords[2], progressBarCoords[3], progressBarColor);
   progressBarQuad->setTextureName(TulipBitmapDir + SLIDER_TEXTURE_NAME);
 
-  GlLabel *commentLabel = new GlLabel(commentLabelCenter, Size(commentWidth, commentHeight, 0), color);
+  GlLabel *commentLabel = new GlLabel(commentLabelCenter, Size(commentWidth, commentHeight, 0), commentColor);
   commentLabel->setText(comment);
 
   GlLabel *percentLabel = new GlLabel(Coord(progressBarTLCorner.getX() + (progressBarMaxWidth / 2.), progressBarTLCorner.getY() - (progressBarHeight / 2.), 0),
-                                      Size(((1./10.) * progressBarMaxWidth), ((8./10.) * progressBarHeight), 0), percentLabelAndFrameColor);
+                                      Size(((1./10.) * progressBarMaxWidth), ((8./10.) * progressBarHeight), 0), commentColor);
   stringstream str;
   str << currentPercent << " %";
   percentLabel->setText(str.str());

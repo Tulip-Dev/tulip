@@ -42,9 +42,11 @@ public :
    * \param centerPosition the position of the center of the frame containing the progress bar
    * \param width the width of the frame containing the progress bar
    * \param height the height of the frame containing the progress bar
-   * \param color the color of the progress bar
+   * \param progressBarColor the color of the progress bar
+   * \param commentColor the color of the comment and the frame
    */
-  GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height, const Color &color);
+  GlProgressBar(const Coord &centerPosition, const unsigned int width, const unsigned int height, const Color& progressBarcolor, const Color& commentColor = Color(0, 0, 0));
+
   ~GlProgressBar();
 
   /**
@@ -59,7 +61,7 @@ protected:
 
 private :
 
-  Color color, percentLabelAndFrameColor;
+  Color progressBarColor, commentColor;
   float progressBarMaxWidth, progressBarHeight;
   float commentWidth, commentHeight;
   Coord progressBarTLCorner;
