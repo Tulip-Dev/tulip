@@ -46,7 +46,7 @@ public :
   void setColorScale(const ColorScale &colorScale);
   const ColorScale& getColorScale() const;
   static ColorScale getColorScaleFromImageFile(const std::string& imageFilePath,
-					       bool gradient = true);
+      bool gradient = true);
 
 protected :
 

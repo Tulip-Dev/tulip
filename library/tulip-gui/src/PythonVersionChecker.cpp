@@ -51,25 +51,29 @@ static bool isWow64() {
   if (fnIsWow64Process != NULL) {
     fnIsWow64Process(GetCurrentProcess(),&bIsWow64);
   }
+
   return bIsWow64 != FALSE;
 }
 #endif
 
 static QString pythonHome(const QString &pythonVersion) {
 #ifndef I64
+
   if (isWow64()) {
-      QString win64RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-      QSettings win64Settings(win64RegKey, QSettings::NativeFormat);
-      return win64Settings.value("Default").toString().replace("\\", "/");
-  } else {
-      QString win32RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-      QSettings win32Settings(win32RegKey, QSettings::NativeFormat);
-      return win32Settings.value("Default").toString().replace("\\", "/");
-  }
-#else
-    QString win64RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+    QString win64RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
     QSettings win64Settings(win64RegKey, QSettings::NativeFormat);
     return win64Settings.value("Default").toString().replace("\\", "/");
+  }
+  else {
+    QString win32RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+    QSettings win32Settings(win32RegKey, QSettings::NativeFormat);
+    return win32Settings.value("Default").toString().replace("\\", "/");
+  }
+
+#else
+  QString win64RegKey = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+  QSettings win64Settings(win64RegKey, QSettings::NativeFormat);
+  return win64Settings.value("Default").toString().replace("\\", "/");
 #endif
 }
 
@@ -147,9 +151,10 @@ bool PythonVersionChecker::isPythonVersionMatching() {
 
 #ifdef WIN32
 QString PythonVersionChecker::getPythonHome() {
-    if (isPythonVersionMatching()) {
-        return pythonHome(compiledVersion());
-    }
-    return "";
+  if (isPythonVersionMatching()) {
+    return pythonHome(compiledVersion());
+  }
+
+  return "";
 }
 #endif

@@ -571,6 +571,7 @@ void HistogramView::buildHistograms() {
     if (selectedProperties.size() == 1 || (detailedHistogramPropertyName == selectedProperties[i])) {
       detailedHistogram = histogramsMap[selectedProperties[i]];
     }
+
     // add some feedback
     if (i % 10 == 0)
       QApplication::processEvents();

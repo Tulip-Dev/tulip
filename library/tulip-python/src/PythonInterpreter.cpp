@@ -229,15 +229,17 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 // So reset correct one to be able to debug it.
 #ifdef __MINGW32__
     QString pythonHome = PythonVersionChecker::getPythonHome();
+
     if (!pythonHome.isEmpty()) {
 #if PY_MAJOR_VERSION >= 3
-        static std::wstring pythonHomeWString = pythonHome.toStdWString();
-        Py_SetPythonHome(const_cast<wchar_t*>(pythonHomeWString.c_str()));
+      static std::wstring pythonHomeWString = pythonHome.toStdWString();
+      Py_SetPythonHome(const_cast<wchar_t*>(pythonHomeWString.c_str()));
 #else
-        static std::string pythonHomeString = pythonHome.toStdString();
-        Py_SetPythonHome(const_cast<char*>(pythonHomeString.c_str()));
+      static std::string pythonHomeString = pythonHome.toStdString();
+      Py_SetPythonHome(const_cast<char*>(pythonHomeString.c_str()));
 #endif
     }
+
 #endif
 
     Py_InitializeEx(0);

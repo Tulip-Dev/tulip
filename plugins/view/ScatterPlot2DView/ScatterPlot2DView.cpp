@@ -453,9 +453,10 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
           matrixComposite->addGlEntity(scatterOverview, selectedGraphProperties[i] + "_" + selectedGraphProperties[j]);
           scatterOverview->setSizeProperty(scatterPlotSize);
         }
-	// add some feedback
-	/*if ((i + 1) * (j + 1) % 10 == 0)
-	  QApplication::processEvents();*/
+
+        // add some feedback
+        /*if ((i + 1) * (j + 1) % 10 == 0)
+          QApplication::processEvents();*/
       }
     }
   }
@@ -686,9 +687,9 @@ void ScatterPlot2DView::generateScatterPlots() {
 
   GlProgressBar *progressBar =
     new GlProgressBar(Coord(0.0f, 0.0f, 0.0f), 600.0f, 100.0f,
-		      // use same green color as the highlighting one
-		      // in workspace panel
-		      Color(0xCB, 0xDE, 0x5D)); 
+                      // use same green color as the highlighting one
+                      // in workspace panel
+                      Color(0xCB, 0xDE, 0x5D));
   progressBar->setComment("Updating scatter plot matrix ...");
   progressBar->progress(currentStep, nbOverviews);
   mainLayer->addGlEntity(progressBar, "progress bar");
@@ -707,10 +708,12 @@ void ScatterPlot2DView::generateScatterPlots() {
 
       currentStep += 2;
       progressBar->progress(currentStep, nbOverviews);
+
       // needed to display progressBar
       if ((i + 1) * (j + 1) % 10 == 0)
         getGlMainWidget()->draw();
-	QApplication::processEvents();
+
+      QApplication::processEvents();
     }
   }
 
