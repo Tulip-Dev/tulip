@@ -121,7 +121,7 @@ void ColorScaleConfigDialog::accept() {
   QDialog::accept();
 }
 
-vector<Color> ColorScaleConfigDialog::getColorScaleFromImage(const QString &imageFilePath) {
+vector<Color> ColorScaleConfigDialog::getColorScaleFromImageFile(const QString &imageFilePath) {
   QImage gradientImage(imageFilePath);
   unsigned int imageHeight = gradientImage.height();
 
@@ -148,6 +148,10 @@ vector<Color> ColorScaleConfigDialog::getColorScaleFromImage(const QString &imag
   return colors;
 }
 
+ColorScale ColorScaleConfigDialog::getColorScaleFromImageFile(const std::string &imageFilePath, bool gradient) {
+  return ColorScale(getColorScaleFromImageFile(QString::fromUtf8(imageFilePath.c_str())), gradient);
+}
+
 void ColorScaleConfigDialog::loadTulipImageColorScales() {
   QFileInfo colorscaleDirectory(tlpStringToQString(TulipBitmapDir)+QString("colorscales"));
 
@@ -158,7 +162,7 @@ void ColorScaleConfigDialog::loadTulipImageColorScales() {
 
     for (int i = 0; i < list.size(); ++i) {
       QFileInfo fileInfo = list.at(i);
-      tulipImageColorScales[fileInfo.fileName()] = getColorScaleFromImage(fileInfo.absoluteFilePath());
+      tulipImageColorScales[fileInfo.fileName()] = getColorScaleFromImageFile(fileInfo.absoluteFilePath());
     }
   }
 }
@@ -171,7 +175,7 @@ void ColorScaleConfigDialog::importColorScaleFromImageFile() {
   if (imageFilePath.isEmpty())
     return;
 
-  vector<Color> colorsList = getColorScaleFromImage(imageFilePath);
+  vector<Color> colorsList = getColorScaleFromImageFile(imageFilePath);
 
   if (!colorsList.empty()) {
     ColorScale scaleTmp(colorsList, true);
