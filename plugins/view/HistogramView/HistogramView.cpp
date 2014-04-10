@@ -571,11 +571,15 @@ void HistogramView::buildHistograms() {
     if (selectedProperties.size() == 1 || (detailedHistogramPropertyName == selectedProperties[i])) {
       detailedHistogram = histogramsMap[selectedProperties[i]];
     }
+    // add some feedback
+    if (i % 10 == 0)
+      QApplication::processEvents();
   }
 
   for(vector<GlLabel *>::iterator it=propertiesLabels.begin(); it!=propertiesLabels.end(); ++it) {
     (*it)->setSize(Size((*it)->getSize()[0],minSize));
   }
+
 }
 
 void HistogramView::updateHistograms(Histogram *detailOverview) {
