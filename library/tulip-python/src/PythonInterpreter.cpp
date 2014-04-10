@@ -34,6 +34,7 @@
 
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>
+#include <tulip/PythonVersionChecker.h>
 
 #include <cstdio>
 #ifndef WIN32
@@ -220,6 +221,25 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 
     Py_OptimizeFlag = 1;
     Py_NoSiteFlag = 1;
+
+// Fix for GDB debugging on windows when compiling with MinGW.
+// GDB contains an embedded Python interpreter that messes up Python Home value.
+// When Tulip is compiled with a version of Python different from the one embedded in GDB,
+// it crashes at startup when running it through GDB.
+// So reset correct one to be able to debug it.
+#ifdef __MINGW32__
+    QString pythonHome = PythonVersionChecker::getPythonHome();
+    if (!pythonHome.isEmpty()) {
+#if PY_MAJOR_VERSION >= 3
+        static std::wstring pythonHomeWString = pythonHome.toStdWString();
+        Py_SetPythonHome(const_cast<wchar_t*>(pythonHomeWString.c_str()));
+#else
+        static std::string pythonHomeString = pythonHome.toStdString();
+        Py_SetPythonHome(const_cast<char*>(pythonHomeString.c_str()));
+#endif
+    }
+#endif
+
     Py_InitializeEx(0);
 
     PySys_SetArgv(argc, argv);
