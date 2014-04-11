@@ -74,7 +74,7 @@ ParallelCoordinatesDrawing::~ParallelCoordinatesDrawing() {
 }
 
 void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
-					    GlProgressBar* progressBar) {
+    GlProgressBar* progressBar) {
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
 
@@ -233,7 +233,8 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
       parallelAxis[*it] = axis;
       ++pos;
     }
-    if (progressBar){
+
+    if (progressBar) {
       progressBar->progress(pos, selectedProperties.size());
       glWidget->draw();
       // needed to display progressBar
@@ -257,7 +258,7 @@ void ParallelCoordinatesDrawing::destroyAxisIfNeeded() {
 }
 
 void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget,
-					     GlProgressBar *progressBar) {
+    GlProgressBar *progressBar) {
   Color color;
   computeResizeFactor();
 
@@ -530,12 +531,13 @@ void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWitho
 
   // needed to have some feedback
   GlProgressBar *progressBar = NULL;
+
   if (!updateWithoutProgressBar) {
     progressBar =
       new GlProgressBar(Coord(0.0f, 0.0f, 0.0f), 600, 100,
-			// use same green color as the highlighting one
-			// in workspace panel
-			Color(0xCB, 0xDE, 0x5D));
+                        // use same green color as the highlighting one
+                        // in workspace panel
+                        Color(0xCB, 0xDE, 0x5D));
     progressBar->setComment("Updating parallel coordinates ...");
     progressBar->progress(0, graphProxy->numberOfNodes());
     addGlEntity(progressBar, "progress bar");
@@ -551,7 +553,7 @@ void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWitho
 
   eraseDataPlot();
   plotAllData(glWidget, progressBar);
-  
+
   if (progressBar != NULL) {
     deleteGlEntity(progressBar);
     delete progressBar;

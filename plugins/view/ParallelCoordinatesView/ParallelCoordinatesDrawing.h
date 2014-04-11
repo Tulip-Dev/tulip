@@ -35,7 +35,7 @@
 namespace tlp {
 
 class GlMainWidget;
- class GlProgressBar;
+class GlProgressBar;
 
 class ParallelCoordinatesDrawing : public GlComposite, public Observable {
 
