@@ -38,7 +38,7 @@ const std::string SLIDER_TEXTURE_NAME = "parallel_sliders_texture";
 
 // data count threshold from which a progress bar is displayed on screen
 // when creating or refreshing the view
-const unsigned int PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD = 20000;
+const unsigned int PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD = 5000;
 
 const unsigned int DEFAULT_LINES_COLOR_ALPHA_VALUE = 200;
 
