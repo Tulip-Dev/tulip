@@ -387,16 +387,13 @@ void ParallelCoordinatesView::updateWithoutProgressBar() {
 
 void ParallelCoordinatesView::updateWithProgressBar() {
   if (parallelCoordsDrawing) {
-    //overviewWidget->setObservedView(NULL, NULL);
+    setOverviewVisible(false);
     toggleGraphView(glGraphComposite, false);
-    Interactor *currentInteractor = this->currentInteractor();
-    setCurrentInteractor(NULL);
     parallelCoordsDrawing->update(getGlMainWidget());
     toggleGraphView(glGraphComposite, true);
     centerView();
-    //overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
-    setCurrentInteractor(currentInteractor);
     getGlMainWidget()->draw();
+    setOverviewVisible(true);
   }
 }
 

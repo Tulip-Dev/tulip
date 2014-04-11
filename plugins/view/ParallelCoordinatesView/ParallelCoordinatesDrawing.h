@@ -35,6 +35,7 @@
 namespace tlp {
 
 class GlMainWidget;
+ class GlProgressBar;
 
 class ParallelCoordinatesDrawing : public GlComposite, public Observable {
 
@@ -111,9 +112,9 @@ public :
 private :
 
   void computeResizeFactor();
-  void createAxis();
+  void createAxis(GlMainWidget *glWidget, GlProgressBar* progressBar);
   void destroyAxisIfNeeded();
-  void plotAllData(GlMainWidget *glWidget, bool updateWithoutProgressBar);
+  void plotAllData(GlMainWidget *glWidget, GlProgressBar* progressBar);
   void plotData(const unsigned int dataIdx, const Color &color);
 
   void erase();

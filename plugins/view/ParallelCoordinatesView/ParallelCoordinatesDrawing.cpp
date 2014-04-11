@@ -17,6 +17,8 @@
  *
  */
 
+#include <QApplication>
+
 #include <tulip/BooleanProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -71,7 +73,8 @@ ParallelCoordinatesDrawing::ParallelCoordinatesDrawing(ParallelCoordinatesGraphP
 ParallelCoordinatesDrawing::~ParallelCoordinatesDrawing() {
 }
 
-void ParallelCoordinatesDrawing::createAxis() {
+void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
+					    GlProgressBar* progressBar) {
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
 
@@ -88,6 +91,15 @@ void ParallelCoordinatesDrawing::createAxis() {
   }
 
   static vector<Coord> lastAxisCoord;
+
+  if (progressBar) {
+    progressBar->setComment("Creating parallel axes ...");
+    progressBar->progress(0, selectedProperties.size());
+    glWidget->draw();
+    // needed to display progressBar
+    QApplication::processEvents();
+  }
+
 
   if (layoutType == PARALLEL) {
     lastAxisCoord.clear();
@@ -221,6 +233,12 @@ void ParallelCoordinatesDrawing::createAxis() {
       parallelAxis[*it] = axis;
       ++pos;
     }
+    if (progressBar){
+      progressBar->progress(pos, selectedProperties.size());
+      glWidget->draw();
+      // needed to display progressBar
+      QApplication::processEvents();
+    }
   }
 
   resetAxisLayout = false;
@@ -238,22 +256,21 @@ void ParallelCoordinatesDrawing::destroyAxisIfNeeded() {
   }
 }
 
-void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget, bool updateWithoutProgressBar) {
+void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget,
+					     GlProgressBar *progressBar) {
   Color color;
   computeResizeFactor();
 
-  GlProgressBar *progressBar = NULL;
   int currentStep = 0;
   int maxStep = graphProxy->numberOfNodes();
   int drawStep = maxStep / 20;
 
-  if (updateWithoutProgressBar) {
-    progressBar = new GlProgressBar(Coord(0.0f, 0.0f, 0.0f), 600, 100, Color(0,0,255));
+  if (progressBar) {
     progressBar->setComment("Updating parallel coordinates ...");
     progressBar->progress(0, graphProxy->numberOfNodes());
-    addGlEntity(progressBar, "progress bar");
-    //glWidget->getScene()->centerScene();
     glWidget->draw();
+    // needed to display progressBar
+    QApplication::processEvents();
   }
 
   Iterator<unsigned int> *dataUnselIt = graphProxy->getDataIterator();
@@ -276,20 +293,17 @@ void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget, bool update
     plotData(dataId, color);
     ++currentStep;
 
-    if (!updateWithoutProgressBar && currentStep % drawStep == 0) {
+    if (progressBar && currentStep % drawStep == 0) {
       progressBar->progress(currentStep, maxStep);
       glWidget->draw();
+      // needed to display progressBar
+      QApplication::processEvents();
     }
   }
 
   delete dataUnselIt;
 
   lastHighlightedElements = graphProxy->getHighlightedElts();
-
-  if (progressBar != NULL) {
-    deleteGlEntity(progressBar);
-    delete progressBar;
-  }
 }
 
 void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color &color) {
@@ -514,13 +528,34 @@ void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWitho
 
   destroyAxisIfNeeded();
 
+  // needed to have some feedback
+  GlProgressBar *progressBar = NULL;
+  if (!updateWithoutProgressBar) {
+    progressBar =
+      new GlProgressBar(Coord(0.0f, 0.0f, 0.0f), 600, 100,
+			// use same green color as the highlighting one
+			// in workspace panel
+			Color(0xCB, 0xDE, 0x5D));
+    progressBar->setComment("Updating parallel coordinates ...");
+    progressBar->progress(0, graphProxy->numberOfNodes());
+    addGlEntity(progressBar, "progress bar");
+    glWidget->draw();
+    // needed to display progressBar
+    QApplication::processEvents();
+  }
+
   if (createAxisFlag) {
     axisPlotComposite->reset(false);
-    createAxis();
+    createAxis(glWidget, progressBar);
   }
 
   eraseDataPlot();
-  plotAllData(glWidget, updateWithoutProgressBar);
+  plotAllData(glWidget, progressBar);
+  
+  if (progressBar != NULL) {
+    deleteGlEntity(progressBar);
+    delete progressBar;
+  }
 
   createAxisFlag = true;
 
