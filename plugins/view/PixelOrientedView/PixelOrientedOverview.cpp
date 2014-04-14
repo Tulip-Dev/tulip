@@ -153,9 +153,12 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   unsigned int width = pixelOrientedMediator->getImageWidth();
   unsigned int height = pixelOrientedMediator->getImageHeight();
 
-  GlProgressBar *glProgressBar = new GlProgressBar(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), width, height, Color(0,0,255));
-  glProgressBar->setComment("Generating overview ...");
-  addGlEntity(glProgressBar, "progress bar");
+  GlProgressBar *glProgressBar = NULL;
+  if (glWidget != NULL) {
+    glProgressBar = new GlProgressBar(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), width, height, Color(0,0,255));
+    glProgressBar->setComment("Generating overview ...");
+    addGlEntity(glProgressBar, "progress bar");
+  }
   unsigned int currentStep = 0;
   unsigned int maxStep = graph->numberOfNodes();
   unsigned int drawStep = maxStep / 10;
@@ -199,10 +202,11 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   if (glWidget != NULL) {
     glProgressBar->progress(maxStep, maxStep);
     glWidget->draw();
+
+    deleteGlEntity(glProgressBar);
+    delete glProgressBar;
   }
 
-  deleteGlEntity(glProgressBar);
-  delete glProgressBar;
 
   GLuint textureId = glOffscreenRenderer->getGLTexture(true);
   GlTextureManager::getInst().deleteTexture(textureName);
