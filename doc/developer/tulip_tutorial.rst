@@ -207,7 +207,7 @@ You can download the source by clicking on this :download:`link <./_documents/tu
 .. _tulip_library_tutorial_002:
 
 TUTORIAL 002 : Iterating the structures of a graph (class Iterator and the macro forEach)
-============================================================================
+=========================================================================================
 
 In this tutorial, we will, display on the standard output, all the structures using iterators. For each node, we will display its ancestors, successors, neighbors, and, its incoming and outgoing edges.
 
@@ -399,7 +399,7 @@ As we are still in the first while (iterating through all nodes) we need to dele
 .. _code-example-graphit-edges:
 
 9. Iterating the edges (all edges)
----------------------------------
+----------------------------------
 
 Some times it can be useful to iterate all the edges, for example in the algorithm of Kruskal. That is why the graph class owns the function *Iterator<edge> * Graph::getEdges (const node) const*, that return a pointer on an Iterator of type edge. Following is an exemple of its use. ::
     		 
