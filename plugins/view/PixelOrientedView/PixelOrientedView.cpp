@@ -621,9 +621,9 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
 
   GlProgressBar *progressBar =
     new GlProgressBar(Coord(0, 0, 0), 600, 100,
-		      // use same green color as the highlighting one
-		      // in workspace panel
-		      Color(0xCB, 0xDE, 0x5D));
+                      // use same green color as the highlighting one
+                      // in workspace panel
+                      Color(0xCB, 0xDE, 0x5D));
   progressBar->setComment("Updating pixel oriented view ...");
   progressBar->progress(currentStep, nbOverviews);
   mainLayer->addGlEntity(progressBar, "progress bar");

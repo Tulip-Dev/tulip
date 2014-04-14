@@ -46,7 +46,7 @@ QList<Interactor*> View::interactors() const {
 void View::setInteractors(const QList<tlp::Interactor *> &inters) {
   _interactors = inters;
   foreach(Interactor* i,inters)
-      i->setView(this);
+  i->setView(this);
   interactorsInstalled(inters);
 }
 Interactor* View::currentInteractor() const {
