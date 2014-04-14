@@ -20,6 +20,15 @@
 
 using namespace tlp;
 
+GraphDecorator::GraphDecorator(Graph* s):graph_component(s) {
+  assert(s);
+}
+
+GraphDecorator::~GraphDecorator() {
+  notifyDestroy();
+}
+
+
 //============================================================
 void GraphDecorator::clear() {
   graph_component->clear();
@@ -78,6 +87,19 @@ void GraphDecorator::delAllSubGraphs(Graph *s) {
 //============================================================
 Graph* GraphDecorator::getSuperGraph()const {
   return graph_component->getSuperGraph();
+}
+
+//============================================================
+node GraphDecorator::createMetaNode(const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {
+    return graph_component->createMetaNode(nodeSet, multiEdges, delAllEdge);
+}
+
+void GraphDecorator::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, std::vector<node>& metaNodes) {
+    graph_component->createMetaNodes(itS, quotientGraph, metaNodes);
+}
+
+node GraphDecorator::createMetaNode(Graph* subGraph, bool multiEdges, bool delAllEdge) {
+    return graph_component->createMetaNode(subGraph, multiEdges, delAllEdge);
 }
 
 //============================================================
