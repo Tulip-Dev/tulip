@@ -27,15 +27,10 @@
 
 namespace tlp {
 
-class TLP_SCOPE GraphDecorator : public Graph {  // non-orienté, planaire
+class TLP_SCOPE GraphDecorator : public Graph {
 public:
-  GraphDecorator(Graph* s) {
-    assert(s);
-    graph_component = s;
-  }
-  virtual ~GraphDecorator() {
-    notifyDestroy();
-  }
+  GraphDecorator(Graph* s);
+  virtual ~GraphDecorator();
 
   virtual void clear();
   virtual Graph *addSubGraph(BooleanProperty *selection=0,
@@ -73,6 +68,11 @@ public:
   virtual unsigned int indeg(const node n)const;
   virtual unsigned int outdeg(const node n)const;
   virtual Graph* getNodeMetaInfo(const node n)const;
+
+  //============================================================
+  virtual node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+  virtual void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, std::vector<node>& metaNodes);
+  virtual node createMetaNode(Graph* subGraph, bool multiEdges = true, bool delAllEdge = true);
 
   //============================================================
   virtual node getOneNode() const;

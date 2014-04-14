@@ -46,7 +46,7 @@ QList<Interactor*> View::interactors() const {
 void View::setInteractors(const QList<tlp::Interactor *> &inters) {
   _interactors = inters;
   foreach(Interactor* i,inters)
-  i->setView(this);
+      i->setView(this);
   interactorsInstalled(inters);
 }
 Interactor* View::currentInteractor() const {
@@ -63,7 +63,7 @@ void View::setCurrentInteractor(tlp::Interactor *i) {
   _currentInteractor = i;
   currentInteractorChanged(i);
 
-  //We need a refresh here to clear last interactor displayed arnd init the next one
+  //We need a refresh here to clear last interactor displayed and init the next one
   refresh();
 }
 void View::currentInteractorChanged(tlp::Interactor *i) {
