@@ -44,6 +44,7 @@
 
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"
 
+#include <QApplication>
 #include <QMenu>
 #include <QGraphicsView>
 
@@ -450,7 +451,7 @@ void PixelOrientedView::addEmptyViewLabel() {
   GlLabel *noDimsLabel = new GlLabel(Coord(0,0,0), Size(200,200), textColor);
   noDimsLabel->setText(ViewName::PixelOrientedViewName);
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
-  GlLabel *noDimsLabel1 = new GlLabel(Coord(0,0,0), Size(400,200), textColor);
+  GlLabel *noDimsLabel1 = new GlLabel(Coord(0,-50, 0), Size(400,200), textColor);
   noDimsLabel1->setText("No graph properties selected.");
   mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
   GlLabel *noDimsLabel2 = new GlLabel(Coord(0,-100,0), Size(700,200), textColor);
@@ -618,12 +619,17 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
   Coord centerBak = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
   Coord upBak = getGlMainWidget()->getScene()->getGraphCamera().getUp();
 
-  GlProgressBar *progressBar = new GlProgressBar(Coord(0, 0, 0), 600, 100, Color(0,0,255));
+  GlProgressBar *progressBar =
+    new GlProgressBar(Coord(0, 0, 0), 600, 100,
+		      // use same green color as the highlighting one
+		      // in workspace panel
+		      Color(0xCB, 0xDE, 0x5D));
   progressBar->setComment("Updating pixel oriented view ...");
   progressBar->progress(currentStep, nbOverviews);
   mainLayer->addGlEntity(progressBar, "progress bar");
-  getGlMainWidget()->getScene()->centerScene();
   getGlMainWidget()->draw();
+  // needed to display progressBar
+  QApplication::processEvents();
 
   for (map<string, PixelOrientedOverview *>::iterator it = overviewsMap.begin() ; it != overviewsMap.end() ; ++it) {
     if (std::find(selectedGraphProperties.begin(), selectedGraphProperties.end(), it->first) != selectedGraphProperties.end()) {
@@ -634,6 +640,8 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
 
       progressBar->progress(++currentStep, nbOverviews);
       getGlMainWidget()->draw();
+      // needed to display progressBar
+      QApplication::processEvents();
     }
   }
 
