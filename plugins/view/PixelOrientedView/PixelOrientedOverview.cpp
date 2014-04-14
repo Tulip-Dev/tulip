@@ -154,11 +154,13 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   unsigned int height = pixelOrientedMediator->getImageHeight();
 
   GlProgressBar *glProgressBar = NULL;
+
   if (glWidget != NULL) {
     glProgressBar = new GlProgressBar(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), width, height, Color(0,0,255));
     glProgressBar->setComment("Generating overview ...");
     addGlEntity(glProgressBar, "progress bar");
   }
+
   unsigned int currentStep = 0;
   unsigned int maxStep = graph->numberOfNodes();
   unsigned int drawStep = maxStep / 10;
