@@ -399,10 +399,6 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
     matrixComposite->addGlEntity(grid,"grid");
     matrixComposite->addGlEntity(labelsComposite, "labels composite");
 
-    // needed to improve further feedback
-    /*centerView();
-      QApplication::processEvents();*/
-
     for (size_t i = 0 ; i  < selectedGraphProperties.size() ; ++i) {
 
 
