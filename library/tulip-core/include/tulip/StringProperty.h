@@ -43,7 +43,12 @@ public :
   std::string getTypename() const {
     return propertyTypename;
   }
-
+  virtual unsigned int nodeValueSize() const {
+    return 0;
+  }
+  virtual unsigned int edgeValueSize() const {
+    return 0;
+  }
   int compare(const node n1,const node n2)const;
   int compare(const edge e1,const edge e2)const;
 };
