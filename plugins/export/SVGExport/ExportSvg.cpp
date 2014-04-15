@@ -133,10 +133,11 @@ void ExportSvg::addLabel(const string &type, const string &label, const Color &l
   if(!label.empty()) {
     _res.writeStartElement("text");
     _res.writeAttribute("x", QString::number(coord.getX()));
+
     if (type == "node")
       // empirically adjust to font-size/3 to ensure centering
       _res.writeAttribute("y", QString::number(-(coord.getY() -
-						 (size.getW() * 1.2)/ (3 * label.length()))));
+                          (size.getW() * 1.2)/ (3 * label.length()))));
     else
       _res.writeAttribute("y", QString::number(-coord.getY()));
 
