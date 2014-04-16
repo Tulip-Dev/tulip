@@ -20,12 +20,17 @@
 #define _EqualValueClustering_H
 
 #include <tulip/TulipPluginHeaders.h>
+#include <tulip/NumericProperty.h>
 
 class EqualValueClustering:public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Equal Value","David Auber","20/05/2008","Beta","1.1", "Clustering")
+  PLUGININFORMATION("Equal Value","Patrick Mary","16/04/2014","Performs a graph clusterization<br>putting in the same cluster the nodes or edges<br/>having the same value for a given property.","1.1", "Clustering")
   EqualValueClustering(tlp::PluginContext* context);
   bool run();
+  bool computeClusters(tlp::NumericProperty* prop,
+		       bool onNodes, bool connected);
+  bool computeClusters(tlp::PropertyInterface* prop,
+		       bool onNodes, bool connected);
 };
 
 #endif
