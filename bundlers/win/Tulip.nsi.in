@@ -40,13 +40,13 @@ Function CheckAndInstallPython
   ${EndIf}
   IfErrors install end
   install:
-        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ installed.$\n$\nIt is now required to run Tulip-@TulipVersion@.$\n$\nPress OK to download http://legacy.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi$\n$\nand install Python @PYTHON_VERSION@."
-        NSISdl::download http://legacy.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi python-@PYTHON_VERSION_WITH_PATCH@.msi
+        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi$\n$\nand install Python @PYTHON_VERSION@ (x86)."
+        inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi" "python-@PYTHON_VERSION_WITH_PATCH@.msi"
         ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.msi"' $0
         Delete python-@PYTHON_VERSION_WITH_PATCH@.msi
 		${If} $0 != 0
 		   DetailPrint "MSI return code was $0"
-		   MessageBox MB_OK "Python installation failed. Tulip @TulipVersion@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ is installed."
+		   MessageBox MB_OK "Python @PYTHON_VERSION@ (x86) installation failed. Tulip @TulipVersion@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ (x86) is installed."
 		${EndIf}
   end:  
 FunctionEnd
@@ -56,13 +56,13 @@ Function CheckAndInstallPython64
   ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
   IfErrors install end
   install:
-        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x64) installed.$\n$\nIt is now required to run Tulip-@TulipVersion@.$\n$\nPress OK to download http://legacy.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msiPython$\n$\nand install Python @PYTHON_VERSION@ (x64)."
-        NSISdl::download http://legacy.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi
-        ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi"'
+        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86-64) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi$\n$\nand install Python @PYTHON_VERSION@ (x86-64)."
+        inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi" "python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi"
+        ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi"' $0
         Delete python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi
 		${If} $0 != 0
 		   DetailPrint "MSI return code was $0"
-		   MessageBox MB_OK "Python installation failed. Tulip @TulipVersion@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ is installed."
+		   MessageBox MB_OK "Python @PYTHON_VERSION@ (x86-64) installation failed. Tulip @TulipVersion@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ (x86-64) is installed."
 		${EndIf}
   end:  
 FunctionEnd

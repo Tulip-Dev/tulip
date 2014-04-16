@@ -1,7 +1,8 @@
 @echo off
-set TULIP_DIR=%1
-set DEST_DIR=%2
-set DEBUG_MODE=%3
+set NSIS_PATH=%1
+set TULIP_DIR=%2
+set DEST_DIR=%3
+set DEBUG_MODE=%4
 set SRC_DIR=%cd%
 
 echo 'Wiping destination directory'
@@ -31,6 +32,7 @@ copy "%SRC_DIR%\\COPYING" "%DEST_DIR%\\"
 
 echo 'Running NSIS installer generator'
 cd "%DEST_DIR%"
+set PATH=%NSIS_PATH%;%PATH%
 makensis Tulip.nsi
 
 echo 'NSIS installer generator completed !'

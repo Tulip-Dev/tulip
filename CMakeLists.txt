@@ -261,7 +261,6 @@ IF(PYTHONINTERP_FOUND)
   ENDIF(PYTHONLIBS_FOUND)
 ENDIF(PYTHONINTERP_FOUND)
 
-
 ## ========================================================
 ## Include paths
 ## ========================================================
@@ -388,31 +387,59 @@ ENDIF(OPENMP_FOUND)
 ENDIF(MSVC)
 
 IF(WIN32)
+
 INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/imageformats DESTINATION ${TulipBinInstallDir})
-EXECUTE_PROCESS(COMMAND makensis RESULT_VARIABLE NSIS_RESULT OUTPUT_QUIET)
-STRING(COMPARE EQUAL "${NSIS_RESULT}" "1" NSIS_OK)
-IF(NSIS_OK)
-        STRING(REPLACE "/" "\\" BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
-        STRING(REPLACE "/" "\\" TLP_DIR "${CMAKE_INSTALL_PREFIX}")
-        STRING(REPLACE "/" "\\" QTX_PLUGINS_DIR "${QT_PLUGINS_DIR}")
 
-        ADD_CUSTOM_TARGET(bundle
-                          COMMAND cmake -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
-                          COMMAND cmake -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/win_bundle.bat ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/win_bundle.bat
-                          COMMAND cmake -E copy ${CMAKE_CURRENT_SOURCE_DIR}/COPYING ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/COPYING
-                          COMMAND cmd /C win_bundle.bat ${TLP_DIR} ${BINARY_DIR} ${QTX_PLUGINS_DIR}
-                          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win)
+GET_FILENAME_COMPONENT(NSIS_PATH "[HKEY_LOCAL_MACHINE\\SOFTWARE\\NSIS]" ABSOLUTE)
+STRING(COMPARE EQUAL "${NSIS_PATH}" "" NSIS_PATH_EMPTY)
+IF(NSIS_PATH_EMPTY)
+GET_FILENAME_COMPONENT(NSIS_PATH "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\NSIS]" ABSOLUTE)
+STRING(COMPARE EQUAL "${NSIS_PATH}" "" NSIS_PATH_EMPTY)
+ENDIF(NSIS_PATH_EMPTY)
 
-ELSE(NSIS_OK)
-        MESSAGE("Nullsoft Scriptable Install System does not seem present on your system (or the \"makensis.exe\" command is not in your PATH environment variable)")
+IF(NOT NSIS_PATH_EMPTY)
+
+        IF(EXISTS "${NSIS_PATH}/Plugins/inetc.dll")
+
+            STRING(REPLACE "/" "\\" NSIS_PATH "${NSIS_PATH}")
+            STRING(REPLACE "/" "\\" BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+            STRING(REPLACE "/" "\\" TLP_DIR "${CMAKE_INSTALL_PREFIX}")
+            STRING(REPLACE "/" "\\" QTX_PLUGINS_DIR "${QT_PLUGINS_DIR}")
+
+            IF(TulipBuildIsRelease)
+                SET(DEBUG_MODE "FALSE")
+            ELSE(TulipBuildIsRelease)
+                SET(DEBUG_MODE "TRUE")
+            ENDIF(TulipBuildIsRelease)
+
+            ADD_CUSTOM_TARGET(bundle
+                              COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
+                              COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/win_bundle.bat ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/win_bundle.bat
+                              COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/COPYING ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/COPYING
+                              COMMAND cmd /C win_bundle.bat ${NSIS_PATH} ${TLP_DIR} ${BINARY_DIR} ${DEBUG_MODE}
+                              WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win)
+
+        ELSE(EXISTS "${NSIS_PATH}/Plugins/inetc.dll")
+
+            MESSAGE("NSIS Inetc plugin is required to build the Tulip installer.")
+            MESSAGE("Download the plugin archive from http://nsis.sourceforge.net/Inetc_plug-in and extract it in ${NSIS_PATH}.")
+
+        ENDIF(EXISTS "${NSIS_PATH}/Plugins/inetc.dll")
+
+ELSE(NOT NSIS_PATH_EMPTY)
+
+        MESSAGE("Nullsoft Scriptable Install System is not installed on your system")
         MESSAGE("Tulip installer can not be generated without Nullsoft NSIS.")
-ENDIF(NSIS_OK)
+
+ENDIF(NOT NSIS_PATH_EMPTY)
+
 ENDIF(WIN32)
 
 IF(APPLE)
+
 	CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac/mac_bundle.sh.in" "${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac/mac_bundle.sh" @ONLY)
         ADD_CUSTOM_TARGET(bundle
-                          COMMAND cmake -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
+                          COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
                           COMMAND sh mac_bundle.sh ${CMAKE_CURRENT_BINARY_DIR}
                           WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac)
 
