@@ -28,9 +28,9 @@ public:
   EqualValueClustering(tlp::PluginContext* context);
   bool run();
   bool computeClusters(tlp::NumericProperty* prop,
-		       bool onNodes, bool connected);
+                       bool onNodes, bool connected);
   bool computeClusters(tlp::PropertyInterface* prop,
-		       bool onNodes, bool connected);
+                       bool onNodes, bool connected);
 };
 
 #endif
