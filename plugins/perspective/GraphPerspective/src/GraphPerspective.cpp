@@ -995,10 +995,14 @@ void GraphPerspective::CSVImport() {
 
   CSVImportWizard wizard(_mainWindow);
 
-  if (mustDeleteGraph)
+  if (mustDeleteGraph) {
     wizard.setWindowTitle("Import CSV data into a new graph");
-  else
-    wizard.setWindowTitle(QString("Import CSV data into graph: ") +  g->getName().c_str());
+    wizard.setButtonText(QWizard::FinishButton, QString("Import into a new graph"));
+  }
+  else {
+    wizard.setWindowTitle(QString("Import CSV data into current graph: ") +  g->getName().c_str());
+    wizard.setButtonText(QWizard::FinishButton, QString("Import into current graph"));
+  }
 
   wizard.setGraph(g);
   g->push();
