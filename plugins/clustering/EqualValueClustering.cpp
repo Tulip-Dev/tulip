@@ -265,13 +265,15 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
             // if it has the same value
             if (!visited.get(curEdge.id) &&
                 curValue == prop->getEdgeDoubleValue(curEdge)) {
-	      node neighbour = graph->opposite(curEdge, curNode);
-	      if (neighbour != curNode) {
-		// add neighbour in cluster
-		sg->addNode(neighbour);
-		// and push it for further deeper exploration
-		nodesToVisit.push_back(neighbour);
-	      }
+              node neighbour = graph->opposite(curEdge, curNode);
+
+              if (neighbour != curNode) {
+                // add neighbour in cluster
+                sg->addNode(neighbour);
+                // and push it for further deeper exploration
+                nodesToVisit.push_back(neighbour);
+              }
+
               // add edge in cluster
               sg->addEdge(curEdge);
               visited.set(curEdge.id, true);
@@ -470,13 +472,15 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
             // if it has the same value
             if (!visited.get(curEdge.id) &&
                 curValue == prop->getEdgeStringValue(curEdge)) {
-	      node neighbour = graph->opposite(curEdge, curNode);
-	      if (neighbour != curNode) {
-		// add neighbour in cluster
-		sg->addNode(neighbour);
-		// and push it for further deeper exploration
-		nodesToVisit.push_back(neighbour);
-	      }
+              node neighbour = graph->opposite(curEdge, curNode);
+
+              if (neighbour != curNode) {
+                // add neighbour in cluster
+                sg->addNode(neighbour);
+                // and push it for further deeper exploration
+                nodesToVisit.push_back(neighbour);
+              }
+
               // add edge in cluster
               sg->addEdge(curEdge);
               visited.set(curEdge.id, true);
