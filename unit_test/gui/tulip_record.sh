@@ -31,7 +31,7 @@ CNEE_OUTPUT_FILE=$1
 TLP_INPUT_FILE=$2
 
 # launch tulip gui
-sh  ./launch_tulip.sh $TULIP $TLP_INPUT_FILE &
+sh  ./launch_tulip.sh $TULIP $TLP_INPUT_FILE > /dev/null 2>&1 &
 
 sleep 5
 echo "Recording events in $CNEE_OUTPUT_FILE"
