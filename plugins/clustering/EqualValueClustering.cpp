@@ -145,7 +145,7 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
         // add curNode in the cluster
         sg->addNode(curNode);
 
-        if (pluginProgress && (++step % 1000 == 0)) {
+        if (pluginProgress && (++step % 50 == 1)) {
           pluginProgress->progress(step, maxSteps);
 
           if (pluginProgress->state() !=TLP_CONTINUE)
@@ -181,7 +181,7 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
               visited.set(neighbour.id, true);
               nodesToVisit.push_back(neighbour);
 
-              if (pluginProgress && (++step % 1000 == 0)) {
+              if (pluginProgress && (++step % 50 == 1)) {
                 pluginProgress->progress(step, maxSteps);
 
                 if (pluginProgress->state() !=TLP_CONTINUE)
@@ -244,7 +244,7 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
         sg->addNode(ends.second);
         sg->addEdge(curEdge);
 
-        if (pluginProgress && (++step % 1000 == 0)) {
+        if (pluginProgress && (++step % 50 == 1)) {
           pluginProgress->progress(step, maxSteps);
 
           if (pluginProgress->state() !=TLP_CONTINUE)
@@ -265,27 +265,23 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
             // if it has the same value
             if (!visited.get(curEdge.id) &&
                 curValue == prop->getEdgeDoubleValue(curEdge)) {
+	      node neighbour = graph->opposite(curEdge, curNode);
+	      if (neighbour != curNode) {
+		// add neighbour in cluster
+		sg->addNode(neighbour);
+		// and push it for further deeper exploration
+		nodesToVisit.push_back(neighbour);
+	      }
               // add edge in cluster
               sg->addEdge(curEdge);
               visited.set(curEdge.id, true);
 
-              if (pluginProgress && (++step % 1000 == 0)) {
+              if (pluginProgress && (++step % 50 == 1)) {
                 pluginProgress->progress(step, maxSteps);
 
                 if (pluginProgress->state() !=TLP_CONTINUE)
                   return pluginProgress->state()!= TLP_CANCEL;
               }
-
-              node neighbour = graph->opposite(curEdge, curNode);
-
-              if (neighbour == curNode)
-                // nothing to do if it is a loop
-                continue;
-
-              // add neighbour in cluster
-              sg->addNode(neighbour);
-              // and push it for further deeper exploration
-              nodesToVisit.push_back(neighbour);
             }
           }
         }
@@ -353,7 +349,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
         // add curNode in cluster
         sg->addNode(curNode);
 
-        if (pluginProgress && (++step % 1000 == 0)) {
+        if (pluginProgress && (++step % 50 == 1)) {
           pluginProgress->progress(step, maxSteps);
 
           if (pluginProgress->state() !=TLP_CONTINUE)
@@ -389,7 +385,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
               visited.set(neighbour.id, true);
               nodesToVisit.push_back(neighbour);
 
-              if (pluginProgress && (++step % 1000 == 0)) {
+              if (pluginProgress && (++step % 50 == 1)) {
                 pluginProgress->progress(step, maxSteps);
 
                 if (pluginProgress->state() !=TLP_CONTINUE)
@@ -453,7 +449,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
         sg->addNode(ends.second);
         sg->addEdge(curEdge);
 
-        if (pluginProgress && (++step % 1000 == 0)) {
+        if (pluginProgress && (++step % 50 == 1)) {
           pluginProgress->progress(step, maxSteps);
 
           if (pluginProgress->state() !=TLP_CONTINUE)
@@ -474,27 +470,23 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
             // if it has the same value
             if (!visited.get(curEdge.id) &&
                 curValue == prop->getEdgeStringValue(curEdge)) {
+	      node neighbour = graph->opposite(curEdge, curNode);
+	      if (neighbour != curNode) {
+		// add neighbour in cluster
+		sg->addNode(neighbour);
+		// and push it for further deeper exploration
+		nodesToVisit.push_back(neighbour);
+	      }
               // add edge in cluster
               sg->addEdge(curEdge);
               visited.set(curEdge.id, true);
 
-              if (pluginProgress && (++step % 1000 == 0)) {
+              if (pluginProgress && (++step % 50 == 1)) {
                 pluginProgress->progress(step, maxSteps);
 
                 if (pluginProgress->state() !=TLP_CONTINUE)
                   return pluginProgress->state()!= TLP_CANCEL;
               }
-
-              node neighbour = graph->opposite(curEdge, curNode);
-
-              if (neighbour == curNode)
-                // nothing to do if it is a loop
-                continue;
-
-              // add neighbour in cluster
-              sg->addNode(neighbour);
-              // and push it for further deeper exploration
-              nodesToVisit.push_back(neighbour);
             }
           }
         }
