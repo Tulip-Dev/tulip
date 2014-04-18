@@ -93,26 +93,30 @@ MINMAX_PAIR(nodeType) tlp::MinMaxProperty<nodeType, edgeType, propType>::compute
 
   typename nodeType::RealType maxN2 = _nodeMin, minN2 = _nodeMax;
 
-  Iterator<node>* nodeIterator = graph->getNodes();
+  if (AbstractProperty<nodeType,edgeType,propType>::numberOfNonDefaultValuatedNodes() == 0)
+    maxN2 = minN2 = AbstractProperty<nodeType,edgeType,propType>::nodeDefaultValue;
+  else {
+    Iterator<node>* nodeIterator = graph->getNodes();
 
-  while (nodeIterator->hasNext()) {
-    node n=nodeIterator->next();
-    typename nodeType::RealType tmp = this->getNodeValue(n);
+    while (nodeIterator->hasNext()) {
+      node n=nodeIterator->next();
+      typename nodeType::RealType tmp = this->getNodeValue(n);
 
-    if (tmp > maxN2) {
-      maxN2 = tmp;
+      if (tmp > maxN2) {
+	maxN2 = tmp;
+      }
+
+      if (tmp < minN2) {
+	minN2 = tmp;
+      }
     }
 
-    if (tmp < minN2) {
-      minN2 = tmp;
-    }
+    delete nodeIterator;
+
+    // be careful to empty graph
+    if (maxN2 < minN2)
+      minN2 = maxN2;
   }
-
-  delete nodeIterator;
-
-  // be careful to empty graph
-  if (maxN2 < minN2)
-    minN2 = maxN2;
 
   unsigned int sgi = graph->getId();
 
@@ -133,24 +137,28 @@ template<typename nodeType, typename edgeType, typename propType>
 MINMAX_PAIR(edgeType) tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxEdge(Graph* graph) {
   typename edgeType::RealType maxE2 = _edgeMin, minE2 = _edgeMax;
 
-  Iterator<edge>* edgeIterator = graph->getEdges();
+  if (AbstractProperty<nodeType,edgeType,propType>::numberOfNonDefaultValuatedEdges() == 0)
+    maxE2 = minE2 = AbstractProperty<nodeType,edgeType,propType>::edgeDefaultValue;
+  else {
+    Iterator<edge>* edgeIterator = graph->getEdges();
 
-  while (edgeIterator->hasNext()) {
-    edge ite=edgeIterator->next();
-    typename edgeType::RealType tmp = this->getEdgeValue(ite);
+    while (edgeIterator->hasNext()) {
+      edge ite=edgeIterator->next();
+      typename edgeType::RealType tmp = this->getEdgeValue(ite);
 
-    if (tmp>maxE2)
-      maxE2 = tmp;
+      if (tmp>maxE2)
+	maxE2 = tmp;
 
-    if (tmp<minE2)
-      minE2 = tmp;
+      if (tmp<minE2)
+	minE2 = tmp;
+    }
+
+    delete edgeIterator;
+
+    // be careful to no edges graph
+    if (maxE2 < minE2)
+      minE2 = maxE2;
   }
-
-  delete edgeIterator;
-
-  // be careful to no edges graph
-  if (maxE2 < minE2)
-    minE2 = maxE2;
 
   unsigned int sgi = graph->getId();
 
