@@ -328,7 +328,7 @@ void WorkspacePanel::refreshInteractorsToolbar() {
   }
 
   delete _ui->interactorsFrame->layout();
-  bool interactorsUiShown = compatibleInteractors.size() > 0;
+  bool interactorsUiShown = !compatibleInteractors.isEmpty();
   _ui->currentInteractorButton->setVisible(interactorsUiShown);
   _ui->interactorsFrame->setVisible(interactorsUiShown);
   _ui->sep1->setVisible(interactorsUiShown);

@@ -58,7 +58,7 @@ public :
   GraphNodeElementModel(Graph *graph, unsigned int id, QObject *parent=NULL):GraphElementModel(graph,id,parent) {}
 
   QString headerText(unsigned int id) const {
-    return QString("node : ") + QString::number(id);
+    return QString("node: ") + QString::number(id);
   }
 
   QVariant value(unsigned int id, PropertyInterface *prop) const {
@@ -75,7 +75,7 @@ public :
   GraphEdgeElementModel(Graph *graph, unsigned int id, QObject *parent=NULL):GraphElementModel(graph,id,parent) {}
 
   QString headerText(unsigned int id) const {
-    return QString("edge : ") + QString::number(id);
+    return QString("edge: ") + QString::number(id);
   }
 
   QVariant value(unsigned int id, PropertyInterface *prop) const {
