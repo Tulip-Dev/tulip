@@ -103,11 +103,11 @@ MINMAX_PAIR(nodeType) tlp::MinMaxProperty<nodeType, edgeType, propType>::compute
       typename nodeType::RealType tmp = this->getNodeValue(n);
 
       if (tmp > maxN2) {
-	maxN2 = tmp;
+        maxN2 = tmp;
       }
 
       if (tmp < minN2) {
-	minN2 = tmp;
+        minN2 = tmp;
       }
     }
 
@@ -147,10 +147,10 @@ MINMAX_PAIR(edgeType) tlp::MinMaxProperty<nodeType, edgeType, propType>::compute
       typename edgeType::RealType tmp = this->getEdgeValue(ite);
 
       if (tmp>maxE2)
-	maxE2 = tmp;
+        maxE2 = tmp;
 
       if (tmp<minE2)
-	minE2 = tmp;
+        minE2 = tmp;
     }
 
     delete edgeIterator;
