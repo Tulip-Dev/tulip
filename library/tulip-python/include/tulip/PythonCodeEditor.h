@@ -236,6 +236,8 @@ public :
     return _autoCompletionDb;
   }
 
+  void setPlainText(const QString &text);
+
 protected:
 
   void resizeEvent(QResizeEvent *event);
