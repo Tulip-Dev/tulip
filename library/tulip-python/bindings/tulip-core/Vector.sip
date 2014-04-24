@@ -100,29 +100,39 @@ public:
 	
 	Vec3f(const float a0);
 	
-    Vec3f(const float a0, const float a1, const float a2=0);
+  Vec3f(const float a0, const float a1, const float a2=0);
 	
 	Vec3f(const tlp::Vec3f &);
 	
 	float operator[](const unsigned int i) const;
-	
+%MethodCode
+  if (a0 < 3) {
+    sipRes = (*sipCpp)[a0];
+  } else {
+    sipIsErr = -1;
+    PyErr_SetNone(PyExc_IndexError);
+  }
+%End
+
 	void __setitem__(int i, const float &value);
 %MethodCode
-	if (a0 < 3)
+  if (a0 < 3) {
 		(*sipCpp)[a0] = a1;
-	else
-		sipIsErr = 1;	
+  } else {
+    sipIsErr = -1;
+    PyErr_SetNone(PyExc_IndexError);
+  }
 %End
 	
 	tlp::Vec3f & operator*=(const float &);
-    tlp::Vec3f & operator*=(const tlp::Vec3f &);
-    tlp::Vec3f & operator/=(const float &);
-    tlp::Vec3f & operator/=(const tlp::Vec3f &);
-    tlp::Vec3f & operator+=(const float &);
-    tlp::Vec3f & operator+=(const tlp::Vec3f &);
-    tlp::Vec3f & operator-=(const float &);
-    tlp::Vec3f & operator-=(const tlp::Vec3f &);
-    tlp::Vec3f & operator^=(const tlp::Vec3f &);
+  tlp::Vec3f & operator*=(const tlp::Vec3f &);
+  tlp::Vec3f & operator/=(const float &);
+  tlp::Vec3f & operator/=(const tlp::Vec3f &);
+  tlp::Vec3f & operator+=(const float &);
+  tlp::Vec3f & operator+=(const tlp::Vec3f &);
+  tlp::Vec3f & operator-=(const float &);
+  tlp::Vec3f & operator-=(const tlp::Vec3f &);
+  tlp::Vec3f & operator^=(const tlp::Vec3f &);
 
 	tlp::Vec3f operator*(const  tlp::Vec3f &) const;
 	tlp::Vec3f operator*(const float &) const;
@@ -134,12 +144,12 @@ public:
 	tlp::Vec3f operator/(const float &) const;
 	tlp::Vec3f operator^(const  tlp::Vec3f &) const;
     
-    bool operator>(const tlp::Vec3f &) const;
-    bool operator<(const tlp::Vec3f &) const;
-    bool operator!=(const tlp::Vec3f &) const;
-    bool operator==(const tlp::Vec3f &) const;
+  bool operator>(const tlp::Vec3f &) const;
+  bool operator<(const tlp::Vec3f &) const;
+  bool operator!=(const tlp::Vec3f &) const;
+  bool operator==(const tlp::Vec3f &) const;
     
-    void set(const float x=0,const float y=0, const float z=0);
+  void set(const float x=0,const float y=0, const float z=0);
 %Docstring
 tlp.Vec3f.set(x, y, z)
 
@@ -153,7 +163,7 @@ Sets each component of the vector.
 :type z: float
 %End
 
-    void set(const tlp::Vec3f& v);
+  void set(const tlp::Vec3f& v);
 %Docstring
 tlp.Vec3f.set(v)
 
@@ -163,7 +173,7 @@ Sets each component of the vector from another one.
 :type c: :class:`tlp.Vec3f`
 %End
 
-    void setX(float x);
+  void setX(float x);
 %Docstring
 tlp.Vec3f.setX(x)
 
@@ -173,7 +183,7 @@ Convenient method. Sets the first component of the vector.
 :type x: float
 %End
 
-    void setY(float y);
+  void setY(float y);
 %Docstring
 tlp.Vec3f.setY(y)
 
@@ -183,7 +193,7 @@ Convenient method. Sets the second component of the vector.
 :type y: float
 %End
 
-    void setZ(float z);
+  void setZ(float z);
 %Docstring
 tlp.Vec3f.setZ(z)
 
@@ -193,7 +203,7 @@ Convenient method. Sets the third component of the vector.
 :type z: float
 %End
 
-    float getX() const;
+  float getX() const;
 %Docstring
 tlp.Vec3f.getX()
 
@@ -202,7 +212,7 @@ Convenient method. Returns the first component of the vector.
 :rtype: float
 %End
 
-    float getY() const;
+  float getY() const;
 %Docstring
 tlp.Vec3f.getY()
 
@@ -211,7 +221,7 @@ Convenient method. Returns the second component of the vector.
 :rtype: float
 %End
 
-    float getZ() const;
+  float getZ() const;
 %Docstring
 tlp.Vec3f.getZ()
 
@@ -220,7 +230,7 @@ Convenient method. Returns the third component of the vector.
 :rtype: float
 %End
 
-    float x() const;
+  float x() const;
 %Docstring
 tlp.Vec3f.x()
 
@@ -229,7 +239,7 @@ Convenient method. Returns the first component of the vector.
 :rtype: float
 %End
 
-    float y() const;
+  float y() const;
 %Docstring
 tlp.Vec3f.y()
 
@@ -238,7 +248,7 @@ Convenient method. Returns the second component of the vector.
 :rtype: float
 %End
 
-    float z() const;
+  float z() const;
 %Docstring
 tlp.Vec3f.z()
 
@@ -247,7 +257,7 @@ Convenient method. Returns the third component of the vector.
 :rtype: float
 %End
 
-    void setW(const float width);
+  void setW(const float width);
 %Docstring
 tlp.Vec3f.setW(width)
 
@@ -257,7 +267,7 @@ Convenient method. Sets the first component of the vector.
 :type width: float
 %End
 
-    void setH(const float height);
+  void setH(const float height);
 %Docstring
 tlp.Vec3f.setH(height)
 
@@ -267,7 +277,7 @@ Convenient method. Sets the second component of the vector.
 :type height: float
 %End
 
-    void setD(const float depth);
+  void setD(const float depth);
 %Docstring
 tlp.Vec3f.setD(depth)
 
@@ -277,7 +287,7 @@ Convenient method. Sets the third component of the vector.
 :type depth: float
 %End
 
-    float getW() const;
+  float getW() const;
 %Docstring
 tlp.Vec3f.getW()
 
@@ -286,7 +296,7 @@ Convenient method. Returns the first component of the vector.
 :rtype: float
 %End
 
-    float getH() const;
+  float getH() const;
 %Docstring
 tlp.Vec3f.getH()
 
@@ -295,7 +305,7 @@ Convenient method. Returns the second component of the vector.
 :rtype: float
 %End
 
-    float getD() const;
+  float getD() const;
 %Docstring
 tlp.Vec3f.getD()
 
@@ -304,7 +314,7 @@ Convenient method. Returns the third component of the vector.
 :rtype: float
 %End
 
-    float width() const;
+  float width() const;
 %Docstring
 tlp.Vec3f.width()
 
@@ -313,7 +323,7 @@ Convenient method. Returns the first component of the vector.
 :rtype: float
 %End
 
-    float height() const;
+  float height() const;
 %Docstring
 tlp.Vec3f.height()
 
@@ -322,7 +332,7 @@ Convenient method. Returns the second component of the vector.
 :rtype: float
 %End
 
-    float depth() const;
+  float depth() const;
 %Docstring
 tlp.Vec3f.depth()
 
@@ -331,7 +341,7 @@ Convenient method. Returns the third component of the vector.
 :rtype: float
 %End
 
-    void get(float & /Out/, float & /Out/, float & /Out/) const;
+  void get(float & /Out/, float & /Out/, float & /Out/) const;
 %Docstring
 tlp.Vec3f.get()
 
@@ -340,7 +350,7 @@ Returns the vector as a tuple.
 :rtype: (float, float, float)
 %End
 
-    tlp::Vec3f & fill(const float &obj);
+  tlp::Vec3f & fill(const float &obj);
 %Docstring
 tlp.Vec3f.fill(val)
 
@@ -350,7 +360,7 @@ Set the same value to each component of the vector.
 :type val: float
 %End
     
-    float norm () const;
+  float norm () const;
 %Docstring
 tlp.Vec3f.norm()
 
@@ -359,7 +369,7 @@ Computes and returns the euclidean norm of the vector.
 :rtype: float
 %End    
     
-    float dist (const tlp::Vec3f &) const;
+  float dist (const tlp::Vec3f &) const;
 %Docstring
 tlp.Vec3f.dist(v)
 
@@ -370,7 +380,7 @@ Computes and returns the distance between the vector (3d point) and another one.
 :rtype: float
 %End    
     
-    float dotProduct(const tlp::Vec3f &) const;
+  float dotProduct(const tlp::Vec3f &) const;
 %Docstring
 tlp.Vec3f.dotProduct(v)
 
@@ -381,17 +391,17 @@ Computes and returns the dot product (scalar product) of the vector with another
 :rtype: float
 %End
    
-    SIP_PYOBJECT __repr__() const;
+  SIP_PYOBJECT __repr__() const;
 %MethodCode
-		std::ostringstream oss;
-		oss << *sipCpp;
-		std::string s = oss.str();
-		s[0] = '[';
-        s[s.size() - 1] = ']';
+  std::ostringstream oss;
+  oss << *sipCpp;
+  std::string s = oss.str();
+  s[0] = '[';
+  s[s.size() - 1] = ']';
 #if PY_MAJOR_VERSION >= 3
-        sipRes = PyUnicode_FromString(s.c_str());
+  sipRes = PyUnicode_FromString(s.c_str());
 #else
-        sipRes = PyString_FromString(s.c_str());
+  sipRes = PyString_FromString(s.c_str());
 #endif
 %End
 
@@ -412,33 +422,43 @@ public:
 	
 	Vec4f(const float a0);
 
-    Vec4f(const float a0, const float a1);
+  Vec4f(const float a0, const float a1);
 
-    Vec4f(const float a0, const float a1, const float a2);
+  Vec4f(const float a0, const float a1, const float a2);
 
 	Vec4f(const float a0, const float a1, const float a2, const float a3);
 	
 	Vec4f(const tlp::Vec4f &);
 	
 	float operator[](const unsigned int i) const;
-	
+%MethodCode
+  if (a0 < 4) {
+    sipRes = (*sipCpp)[a0];
+  } else {
+    sipIsErr = -1;
+    PyErr_SetNone(PyExc_IndexError);
+  }
+%End
+
 	void __setitem__(int i, const float &value);
 %MethodCode
-	if (a0 < 4)
+  if (a0 < 4) {
 		(*sipCpp)[a0] = a1;
-	else
-		sipIsErr = 1;	
+  } else {
+    sipIsErr = -1;
+    PyErr_SetNone(PyExc_IndexError);
+  }
 %End
 	
 	tlp::Vec4f & operator*=(const float &);
-    tlp::Vec4f & operator*=(const tlp::Vec4f &);
-    tlp::Vec4f & operator/=(const float &);
-    tlp::Vec4f & operator/=(const tlp::Vec4f &);
-    tlp::Vec4f & operator+=(const float &);
-    tlp::Vec4f & operator+=(const tlp::Vec4f &);
-    tlp::Vec4f & operator-=(const float &);
-    tlp::Vec4f & operator-=(const tlp::Vec4f &);
-    tlp::Vec4f & operator^=(const tlp::Vec4f &);
+  tlp::Vec4f & operator*=(const tlp::Vec4f &);
+  tlp::Vec4f & operator/=(const float &);
+  tlp::Vec4f & operator/=(const tlp::Vec4f &);
+  tlp::Vec4f & operator+=(const float &);
+  tlp::Vec4f & operator+=(const tlp::Vec4f &);
+  tlp::Vec4f & operator-=(const float &);
+  tlp::Vec4f & operator-=(const tlp::Vec4f &);
+  tlp::Vec4f & operator^=(const tlp::Vec4f &);
 
 	tlp::Vec4f operator*(const  tlp::Vec4f &) const;
 	tlp::Vec4f operator*(const tlp::Mat4f &mat) const;
@@ -451,34 +471,34 @@ public:
 	tlp::Vec4f operator/(const float &) const;
 	tlp::Vec4f operator^(const  tlp::Vec4f &) const;
     
-    bool operator>(const tlp::Vec4f &) const;
-    bool operator<(const tlp::Vec4f &) const;
-    bool operator!=(const tlp::Vec4f &) const;
-    bool operator==(const tlp::Vec4f &) const;
+  bool operator>(const tlp::Vec4f &) const;
+  bool operator<(const tlp::Vec4f &) const;
+  bool operator!=(const tlp::Vec4f &) const;
+  bool operator==(const tlp::Vec4f &) const;
     
-    void set(const float x=0,const float y=0, const float z=0, const float w=0);
+  void set(const float x=0,const float y=0, const float z=0, const float w=0);
 
-    void set(const tlp::Vec4f& v);
+  void set(const tlp::Vec4f& v);
 
-    void setX(float x);
+  void setX(float x);
 
-    void setY(float y);
+  void setY(float y);
 
-    void setZ(float z);
+  void setZ(float z);
 
-    float getX() const;
+  float getX() const;
 
-    float getY() const;
+  float getY() const;
 
-    float getZ() const;
+  float getZ() const;
 
-    float x() const;
+  float x() const;
 
-    float y() const;
+  float y() const;
 
-    float z() const;
+  float z() const;
 
-    float w() const;
+  float w() const;
 %Docstring
 tlp.Vec4f.w()
 
@@ -487,42 +507,42 @@ Convenient method. Returns the fourth component of the vector.
 :rtype: float
 %End
 
-    void setW(const float width);
+  void setW(const float width);
 
-    void setH(const float height);
+  void setH(const float height);
 
-    void setD(const float depth);
+  void setD(const float depth);
 
-    float getW() const;
+  float getW() const;
 
-    float getH() const;
+  float getH() const;
 
-    float getD() const;
+  float getD() const;
 
-    float width() const;
+  float width() const;
 
-    float height() const;
+  float height() const;
 
-    float depth() const;
+  float depth() const;
 
-    void get(float & /Out/, float & /Out/, float & /Out/, float & /Out/) const;
+  void get(float & /Out/, float & /Out/, float & /Out/, float & /Out/) const;
 
-    tlp::Vec4f & fill(const float &obj);
-    float norm () const;
-    float dist (const tlp::Vec4f &) const;
-    float dotProduct(const tlp::Vec4f &) const;
+  tlp::Vec4f & fill(const float &obj);
+  float norm () const;
+  float dist (const tlp::Vec4f &) const;
+  float dotProduct(const tlp::Vec4f &) const;
    
-    SIP_PYOBJECT __repr__() const;
+  SIP_PYOBJECT __repr__() const;
 %MethodCode
-		std::ostringstream oss;
-		oss << *sipCpp;
-		std::string s = oss.str();
-		s[0] = '[';
-        s[s.size() - 1] = ']';
+  std::ostringstream oss;
+  oss << *sipCpp;
+  std::string s = oss.str();
+  s[0] = '[';
+  s[s.size() - 1] = ']';
 #if PY_MAJOR_VERSION >= 3
-        sipRes = PyUnicode_FromString(s.c_str());
+  sipRes = PyUnicode_FromString(s.c_str());
 #else
-        sipRes = PyString_FromString(s.c_str());
+  sipRes = PyString_FromString(s.c_str());
 #endif
 %End
 
@@ -543,33 +563,43 @@ public:
 	
 	Vec4i(const int a0);
 	
-    Vec4i(const int a0, const int a1);
+  Vec4i(const int a0, const int a1);
 
-    Vec4i(const int a0, const int a1, const int a2);
+  Vec4i(const int a0, const int a1, const int a2);
 
 	Vec4i(const int a0, const int a1, const int a2, const int a3);
 	
 	Vec4i(const tlp::Vec4i &);
 	
 	int operator[](const unsigned int i) const;
-	
+%MethodCode
+  if (a0 < 4) {
+    sipRes = (*sipCpp)[a0];
+  } else {
+    sipIsErr = -1;
+    PyErr_SetNone(PyExc_IndexError);
+  }
+%End
+
 	void __setitem__(int i, const int &value);
 %MethodCode
-	if (a0 < 4)
+  if (a0 < 4) {
 		(*sipCpp)[a0] = a1;
-	else
-		sipIsErr = 1;	
+  } else {
+    sipIsErr = -1;
+    PyErr_SetNone(PyExc_IndexError);
+  }
 %End
 	
 	tlp::Vec4i & operator*=(const int &);
-    tlp::Vec4i & operator*=(const tlp::Vec4i &);
-    tlp::Vec4i & operator/=(const int &);
-    tlp::Vec4i & operator/=(const tlp::Vec4i &);
-    tlp::Vec4i & operator+=(const int &);
-    tlp::Vec4i & operator+=(const tlp::Vec4i &);
-    tlp::Vec4i & operator-=(const int &);
-    tlp::Vec4i & operator-=(const tlp::Vec4i &);
-    tlp::Vec4i & operator^=(const tlp::Vec4i &);
+  tlp::Vec4i & operator*=(const tlp::Vec4i &);
+  tlp::Vec4i & operator/=(const int &);
+  tlp::Vec4i & operator/=(const tlp::Vec4i &);
+  tlp::Vec4i & operator+=(const int &);
+  tlp::Vec4i & operator+=(const tlp::Vec4i &);
+  tlp::Vec4i & operator-=(const int &);
+  tlp::Vec4i & operator-=(const tlp::Vec4i &);
+  tlp::Vec4i & operator^=(const tlp::Vec4i &);
 
 	tlp::Vec4i operator*(const  tlp::Vec4i &) const;
 	tlp::Vec4i operator*(const int &) const;
@@ -581,24 +611,24 @@ public:
 	tlp::Vec4i operator/(const int &) const;
 	tlp::Vec4i operator^(const  tlp::Vec4i &) const;
     
-    bool operator>(const tlp::Vec4i &) const;
-    bool operator<(const tlp::Vec4i &) const;
-    bool operator!=(const tlp::Vec4i &) const;
-    bool operator==(const tlp::Vec4i &) const;
+  bool operator>(const tlp::Vec4i &) const;
+  bool operator<(const tlp::Vec4i &) const;
+  bool operator!=(const tlp::Vec4i &) const;
+  bool operator==(const tlp::Vec4i &) const;
     
-    tlp::Vec4i & fill(const int &obj);
+  tlp::Vec4i & fill(const int &obj);
     
-    SIP_PYOBJECT __repr__() const;
+  SIP_PYOBJECT __repr__() const;
 %MethodCode
-		std::ostringstream oss;
-		oss << *sipCpp;
-		std::string s = oss.str();
-		s[0] = '[';
-        s[s.size() - 1] = ']';
+  std::ostringstream oss;
+  oss << *sipCpp;
+  std::string s = oss.str();
+  s[0] = '[';
+  s[s.size() - 1] = ']';
 #if PY_MAJOR_VERSION >= 3
-        sipRes = PyUnicode_FromString(s.c_str());
+  sipRes = PyUnicode_FromString(s.c_str());
 #else
-        sipRes = PyString_FromString(s.c_str());
+  sipRes = PyString_FromString(s.c_str());
 #endif
 %End
 

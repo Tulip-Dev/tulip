@@ -148,6 +148,14 @@ Returns the number of strings in the collection.
 // ===========================================================================
   
   std::string operator[](const unsigned int i) const;
+%MethodCode
+    if (a0 < sipCpp->size()) {
+      sipRes = new std::string((*sipCpp)[a0]);
+    } else {
+      sipIsErr = -1;
+      PyErr_SetNone(PyExc_IndexError);
+    }
+%End
   
   void __setitem__(int i, const std::string &value);
 %MethodCode
