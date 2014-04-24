@@ -1578,3 +1578,14 @@ void PythonCodeEditor::scrollToLine(int line) {
   setTextCursor(QTextCursor(block));
   centerCursor();
 }
+
+void PythonCodeEditor::setPlainText(const QString &text) {
+  QPlainTextEdit::setPlainText(text);
+  QTextCursor cursor = textCursor();
+  selectAll();
+  QTextCharFormat format = currentCharFormat();
+  format.setFont(_currentFont);
+  setCurrentCharFormat(format);
+  setTextCursor(cursor);
+  updateTabStopWidth();
+}
