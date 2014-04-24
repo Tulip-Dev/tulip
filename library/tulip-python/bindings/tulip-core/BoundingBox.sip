@@ -50,11 +50,11 @@ A bounding box can be instantiated and manipulated the following ways::
 	max = bb2[1]
 %End
 
-      BoundingBox();
+  BoundingBox();
       
-      BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max);
+  BoundingBox(const tlp::Vec3f& min, const tlp::Vec3f& max);
       
-      tlp::Vec3f center() const;
+  tlp::Vec3f center() const;
 %Docstring
 tlp.BoundingBox.center()
 
@@ -63,7 +63,7 @@ Returns the geometrical center of the bounding box.
 :rtype: :class:`tlp.Vec3f` 
 %End
 
-	  float width() const;
+  float width() const;
 %Docstring
 tlp.BoundingBox.width()
 
@@ -72,7 +72,7 @@ Returns the width of the bounding box.
 :rtype: float
 %End	  
 	  
-	  float height() const;	
+  float height() const;
 %Docstring
 tlp.BoundingBox.height()
 
@@ -81,7 +81,7 @@ Returns the height of the bounding box.
 :rtype: float
 %End
 
-	  float depth() const;	
+  float depth() const;
 %Docstring
 tlp.BoundingBox.depth()
 
@@ -90,7 +90,7 @@ Returns the depth of the bounding box.
 :rtype: float
 %End
 
-      void expand(const tlp::Vec3f& point);
+  void expand(const tlp::Vec3f& point);
 %Docstring
 tlp.BoundingBox.expand(point)
 
@@ -102,7 +102,7 @@ If the vector is inside the bounding box, it remains unchanged.
 %End
 
 
-      void translate(const tlp::Vec3f& displacement);
+  void translate(const tlp::Vec3f& displacement);
 %Docstring
 tlp.BoundingBox.translate(displacement)
 
@@ -112,7 +112,7 @@ Translates the bounding box by the displacement given by the vector passed as pa
 :type displacement: :class:`tlp.Vec3f`
 %End
 
-      void scale(const tlp::Vec3f& factor);
+  void scale(const tlp::Vec3f& factor);
 %Docstring
 tlp.BoundingBox.scale(factor)
 
@@ -124,7 +124,7 @@ Scales the bounding box, i.e. multiplying its components by a factor vector.
 :type factor: :class:`tlp.Vec3f`
 %End
 
-      bool isValid() const;
+  bool isValid() const;
 %Docstring
 tlp.BoundingBox.isValid()
 
@@ -134,7 +134,7 @@ Checks whether the bounding box's lowest point is less than it's highest point.
 :rtype: boolean
 %End      
       
-      bool contains(const tlp::Vec3f& coord) const;
+  bool contains(const tlp::Vec3f& coord) const;
 %Docstring
 tlp.BoundingBox.contains(point)
 
@@ -148,7 +148,7 @@ If the bounding box is invalid the result is always :const:`False`.
 :rtype: boolean
 %End
 
-      bool intersect(const tlp::BoundingBox &boundingBox) const;
+  bool intersect(const tlp::BoundingBox &boundingBox) const;
 %Docstring
 tlp.BoundingBox.intersect(boundingBox)
 
@@ -162,7 +162,7 @@ If one of the bounding boxes is invalid returns :const:`False`.
 :rtype: boolean
 %End
 
-      bool intersect(const tlp::Vec3f &segStart, const tlp::Vec3f &segEnd) const;
+  bool intersect(const tlp::Vec3f &segStart, const tlp::Vec3f &segEnd) const;
 %Docstring
 tlp.BoundingBox.intersect(segStart, segEnd)
 
@@ -178,32 +178,42 @@ If the bounding box is invalid the result is always :const:`False`.
 :rtype: boolean
 %End
 
-      tlp::Vec3f& operator[](const unsigned int i) const /NoCopy/;
-
-      void __setitem__(int i, const tlp::Vec3f &value);
+  tlp::Vec3f& operator[](const unsigned int i) const /NoCopy/;
 %MethodCode
-	if (a0 < 2)
+  if (a0 < 2) {
+    sipRes = &(*sipCpp)[a0];
+  } else {
+    sipIsErr = -1;
+    PyErr_SetNone(PyExc_IndexError);
+  }
+%End
+
+  void __setitem__(int i, const tlp::Vec3f &value);
+%MethodCode
+  if (a0 < 2) {
 		(*sipCpp)[a0] = *a1;
-	else
-		sipIsErr = 1;	
+  } else {
+    sipIsErr = -1;
+    PyErr_SetNone(PyExc_IndexError);
+  }
 %End
 
 	SIP_PYOBJECT __repr__() const;
 %MethodCode
-		std::ostringstream oss;
-		oss << *sipCpp;
-		std::string s = oss.str();
-		for (size_t i = 0 ; i < s.length() ; ++i) {
-			if (s[i] == '(') {
-				s[i] = '[';
-			} else if (s[i] == ')') {
-				s[i] = ']';
-			}
-		}
+  std::ostringstream oss;
+  oss << *sipCpp;
+  std::string s = oss.str();
+  for (size_t i = 0 ; i < s.length() ; ++i) {
+    if (s[i] == '(') {
+      s[i] = '[';
+    } else if (s[i] == ')') {
+      s[i] = ']';
+    }
+  }
 #if PY_MAJOR_VERSION >= 3
-        sipRes = PyUnicode_FromString(s.c_str());
+  sipRes = PyUnicode_FromString(s.c_str());
 #else
-        sipRes = PyString_FromString(s.c_str());
+  sipRes = PyString_FromString(s.c_str());
 #endif
 %End
 
