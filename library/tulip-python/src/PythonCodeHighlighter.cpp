@@ -46,7 +46,7 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   rule.format = _classFormat;
   _highlightingRules.append(rule);
 
-  rule.pattern = QRegExp("tlp\\.[A-Za-z0-9_.]+");
+  rule.pattern = QRegExp("tlp.*\\.[A-Za-z0-9_.]+");
   rule.format = _tlpApiFormat;
   _highlightingRules.append(rule);
 
