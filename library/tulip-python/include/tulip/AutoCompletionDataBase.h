@@ -54,6 +54,7 @@ class TLP_PYTHON_SCOPE AutoCompletionDataBase {
   QSet<QString> getGraphPropertiesListIfContext(const QString &context, const QString &editedFunction) const ;
   QSet<QString> getPluginParametersListIfContext(const QString &context, const QString &editedFunction) const;
   QString getClassAttributeType(const QString &className, const QString &classAttribute) const;
+  QSet<QString> getGraphsAttributesListIfContext(const QString &context, const QString &editedFunction) const;
 
   tlp::Graph *_graph;
   APIDataBase *_apiDb;
