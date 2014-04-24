@@ -414,6 +414,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           _varToType[fullName][varName] = types.at(0);
         }
       }
+
       _globalAutoCompletionList.insert(funcName);
     }
 
@@ -961,9 +962,11 @@ QSet<QString> AutoCompletionDataBase::getSubGraphsListIfContext(const QString &c
 static QSet<QString> getAllGraphsAttributesFromRoot(Graph *rootGraph, const QString &prefix) {
   QSet<QString> ret;
   tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = rootGraph->getAttributes().getValues();
+
   while (it->hasNext()) {
     ret.insert("\"" + QString::fromUtf8(it->next().first.c_str()) + "\"");
   }
+
   delete it;
   tlp::Graph *sg=NULL;
   forEach(sg, rootGraph->getSubGraphs()) {
