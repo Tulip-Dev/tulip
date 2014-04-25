@@ -28,8 +28,8 @@ namespace tlp {
  * @ingroup Graph
  * @brief The edge struct represents an edge in a Graph object.
  *
- * This structure only contains an identifier, and a function to check if the node is valid.
- * A node is considered invalid when its id has the UINT_MAX value.
+ * This structure only contains an identifier, and a function to check if the edge is valid.
+ * A edge is considered invalid when its id has the UINT_MAX value.
  *
  * Most operations performed on an edge (getting the source, target, etc) are available into the tlp::Graph object.
  *
