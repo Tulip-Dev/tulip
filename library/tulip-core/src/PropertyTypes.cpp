@@ -595,7 +595,8 @@ bool StringType::read(istream& is, RealType & v, char openCloseChar) {
   for(;;) {
     if ( !(is >> c) ) {
       if (!openCloseChar)
-	break;
+        break;
+
       return false;
     }
 
@@ -934,16 +935,20 @@ struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> 
   void write(ostream& os, const StringCollection& sc) {
     os << '"';
     std::vector<std::string> values = sc.getValues();
+
     for(unsigned int i = 0; i < values.size(); ++i) {
       if (i)
-	os << ';';
+        os << ';';
+
       StringType::write(os, values[i], 0);
     }
+
     os << '"';
   }
 
   bool read(istream& is, StringCollection& sc) {
     char c = ' ';
+
     // go to first '"'
     while((is >> c) && isspace(c)) {}
 
@@ -951,20 +956,22 @@ struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> 
       return false;
 
     string str;
+
     for( ;; ) {
       if( !(is >> c) )
-	return false;
+        return false;
+
       if( c == '"' ) {
-	sc.push_back(str);
-	return true;
+        sc.push_back(str);
+        return true;
       }
 
       if (c == ';') {
-	sc.push_back(str);
-	str.clear();
+        sc.push_back(str);
+        str.clear();
       }
       else
-	str.push_back(c);
+        str.push_back(c);
     }
   }
 
@@ -979,8 +986,9 @@ struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> 
       lastPos = val.find_first_not_of(";", pos);
       pos = val.find_first_of(";", lastPos);
     }
+
     dts.set(prop, col);
-    
+
     return true;
   }
 };
