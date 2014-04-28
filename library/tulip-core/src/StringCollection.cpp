@@ -95,11 +95,12 @@ StringCollection::StringCollection(const std::vector<string>& vectorParam,
 }
 
 
-std::string StringCollection::getCurrentString() const {
+const std::string& StringCollection::getCurrentString() const {
   if (current < _data.size())
     return _data.at(current);
 
-  return string();
+  static std::string emptyString;
+  return emptyString;
 }
 
 
@@ -127,6 +128,6 @@ int StringCollection::getCurrent() const {
   return current;
 }
 
-vector<string> StringCollection::getValues()const {
+const vector<string>& StringCollection::getValues()const {
   return _data;
 }
