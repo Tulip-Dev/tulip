@@ -106,21 +106,6 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
         dataSet.set(name, ColorScale(colors));
         continue;
       }
-
-      if (type.compare(typeid(tlp::StringCollection).name()) == 0) {
-        StringCollection col;
-        string::size_type lastPos = defaultValue.find_first_not_of(";");
-        string::size_type pos = defaultValue.find_first_of(";", lastPos);
-
-        while (string::npos != pos || string::npos != lastPos) {
-          col.push_back(defaultValue.substr(lastPos, pos - lastPos));
-          lastPos = defaultValue.find_first_not_of(";", pos);
-          pos = defaultValue.find_first_of(";", lastPos);
-        }
-
-        dataSet.set(name,col);
-        continue;
-      }
     }
 
     CHECK_PROPERTY(tlp::BooleanProperty);

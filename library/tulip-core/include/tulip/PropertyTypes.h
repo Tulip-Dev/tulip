@@ -152,9 +152,9 @@ public:
   static RealType undefinedValue();
   static RealType defaultValue();
 
-  static void write(std::ostream&, const RealType&);
+  static void write(std::ostream&, const RealType&, char openCloseChar = '"');
   static void writeb(std::ostream&, const RealType&);
-  static bool read(std::istream&, RealType&);
+  static bool read(std::istream&, RealType&, char openCloseChar = '"');
   static bool readb(std::istream&, RealType&);
 
   static std::string toString(const RealType &v);
