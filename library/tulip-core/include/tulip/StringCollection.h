@@ -77,12 +77,12 @@ public:
   /**
   * Returns all the selectable string entries.
   **/
-  std::vector<std::string> getValues()const;
+  const std::vector<std::string>& getValues()const;
 
   /**
    * Returns the current selected string value.
    */
-  std::string getCurrentString() const;
+  const std::string& getCurrentString() const;
 
   /**
    * Sets the current selected string index.
