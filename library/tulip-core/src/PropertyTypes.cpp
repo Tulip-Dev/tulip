@@ -550,8 +550,9 @@ string StringType::defaultValue() {
   return string("");
 }
 
-void StringType::write(ostream& os, const RealType & v ) {
-  os << '"';
+void StringType::write(ostream& os, const RealType & v, char openCloseChar) {
+  if (openCloseChar)
+    os << openCloseChar;
 
   for(char* str = (char *) v.c_str(); *str; ++str) {
     char c = *str;
@@ -562,7 +563,8 @@ void StringType::write(ostream& os, const RealType & v ) {
     os << c;
   }
 
-  os << '"';
+  if (openCloseChar)
+    os << openCloseChar;
 }
 
 void StringType::writeb(ostream& os, const RealType & str) {
@@ -578,21 +580,24 @@ string StringType::toString( const RealType & v ) {
   return v;
 }
 
-bool StringType::read(istream& is, RealType & v) {
+bool StringType::read(istream& is, RealType & v, char openCloseChar) {
   char c= ' ';
 
   // go to first '"'
   while((is >> c) && isspace(c)) {}
 
-  if (c != '"')
+  if (openCloseChar && c != openCloseChar)
     return false;
 
   bool bslashFound = false;
   string str;
 
   for(;;) {
-    if ( !(is >> c) )
+    if ( !(is >> c) ) {
+      if (!openCloseChar)
+	break;
       return false;
+    }
 
     if (bslashFound) {
       str.push_back(c);
@@ -602,7 +607,7 @@ bool StringType::read(istream& is, RealType & v) {
       if (c == '\\')
         bslashFound = true;
       else {
-        if (c == '"')
+        if (openCloseChar && c == openCloseChar)
           break;
 
         str.push_back(c);
@@ -927,16 +932,56 @@ struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> 
   }
 
   void write(ostream& os, const StringCollection& sc) {
-    StringVectorType::write(os, sc.getValues());
+    os << '"';
+    std::vector<std::string> values = sc.getValues();
+    for(unsigned int i = 0; i < values.size(); ++i) {
+      if (i)
+	os << ';';
+      StringType::write(os, values[i], 0);
+    }
+    os << '"';
   }
 
   bool read(istream& is, StringCollection& sc) {
-    return StringVectorType::read(is, (vector<std::string>&)sc.getValues());
+    char c = ' ';
+    // go to first '"'
+    while((is >> c) && isspace(c)) {}
+
+    if (c != '"')
+      return false;
+
+    string str;
+    for( ;; ) {
+      if( !(is >> c) )
+	return false;
+      if( c == '"' ) {
+	sc.push_back(str);
+	return true;
+      }
+
+      if (c == ';') {
+	sc.push_back(str);
+	str.clear();
+      }
+      else
+	str.push_back(c);
+    }
   }
 
-  bool setData(tlp::DataSet&, const string&, const string&) {
-    // no sense
-    return false;
+  bool setData(tlp::DataSet& dts, const string& prop, const string& val) {
+    StringCollection col;
+
+    string::size_type lastPos = val.find_first_not_of(";");
+    string::size_type pos = val.find_first_of(";", lastPos);
+
+    while (string::npos != pos || string::npos != lastPos) {
+      col.push_back(val.substr(lastPos, pos - lastPos));
+      lastPos = val.find_first_not_of(";", pos);
+      pos = val.find_first_of(";", lastPos);
+    }
+    dts.set(prop, col);
+    
+    return true;
   }
 };
 
