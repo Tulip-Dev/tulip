@@ -19,6 +19,7 @@
 
 #include <tulip/PropertyTypes.h>
 #include <tulip/Graph.h>
+#include <tulip/StringCollection.h>
 
 #include <stdint.h>
 
@@ -918,6 +919,27 @@ struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge> > {
 
 };
 
+struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> {
+  StringCollectionSerializer():TypedDataSerializer<StringCollection>("StringCollection") {}
+
+  DataTypeSerializer* clone() const {
+    return new StringCollectionSerializer();
+  }
+
+  void write(ostream& os, const StringCollection& sc) {
+    StringVectorType::write(os, sc.getValues());
+  }
+
+  bool read(istream& is, StringCollection& sc) {
+    return StringVectorType::read(is, (vector<std::string>&)sc.getValues());
+  }
+
+  bool setData(tlp::DataSet&, const string&, const string&) {
+    // no sense
+    return false;
+  }
+};
+
 void tlp::initTypeSerializers() {
   DataSet::registerDataTypeSerializer<EdgeSetType::RealType>(KnownTypeSerializer<EdgeSetType>("edgeset"));
 
@@ -960,5 +982,7 @@ void tlp::initTypeSerializers() {
   DataSet::registerDataTypeSerializer<edge>(EdgeTypeSerializer());
 
   DataSet::registerDataTypeSerializer<vector<edge> >(EdgeVectorTypeSerializer());
+
+  DataSet::registerDataTypeSerializer<StringCollection>(StringCollectionSerializer());
 
 }
