@@ -28,6 +28,7 @@
 #include <tulip/Size.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
+#include <tulip/TlpTools.h>
 
 #include <tulip/DataSet.h>
 
@@ -140,7 +141,7 @@ void DataSet::registerDataTypeSerializer(const std::string& typeName,
     serializerContainer.tnTodts.find(typeName);
 
   if (it != serializerContainer.tnTodts.end())
-    tlp::warning() << "Warning: a data type serializer is already registered for mangled type " << typeName << std::endl;
+    tlp::warning() << "Warning: a data type serializer is already registered for type " << demangleClassName(typeName.c_str()).c_str() << std::endl;
 
   it = serializerContainer.otnTodts.find(dts->outputTypeName);
 
@@ -159,7 +160,7 @@ void DataSet::writeData(std::ostream& os, const std::string& prop,
     serializerContainer.tnTodts.find(dt->getTypeName());
 
   if (it == serializerContainer.tnTodts.end()) {
-    tlp::warning() << "Write error: No data type serializer found for mangled type " << dt->getTypeName() << std::endl;
+    tlp::warning() << "Write error: No data serializer found for type " << demangleClassName(dt->getTypeName().c_str()).c_str() << std::endl;
     return;
   }
 
