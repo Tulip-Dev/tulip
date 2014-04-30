@@ -32,7 +32,7 @@ namespace pocore {
 
 map<Graph *, unsigned int> TulipGraphDimension::graphDimensionsMap;
 
-TulipGraphDimension::TulipGraphDimension(Graph *graph, string dimName) : graph(graph), dimName(dimName) {
+TulipGraphDimension::TulipGraphDimension(Graph *graph, const string& dimName) : graph(graph), dimName(dimName) {
   nodeSorter = TulipNodeMetricSorter::getInstance(graph);
   nodeSorter->sortNodesForProperty(dimName);
   propertyType = graph->getProperty(dimName)->getTypename();

@@ -242,7 +242,7 @@ public:
     * @return :Graph* The newly created subgraph.
     **/
   virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
-                             std::string name = "unnamed")=0;
+                             const std::string& name = "unnamed")=0;
 
   /**
    * @brief Creates and returns a new named sub-graph of this graph.
@@ -250,7 +250,7 @@ public:
    * @param name The name of the newly created subgraph.
    * @return :Graph* The newly created subgraph.
    **/
-  Graph *addSubGraph(std::string name);
+  Graph *addSubGraph(const std::string& name);
 
   /**
    * @brief Creates and returns a subgraph that contains all the elements of this graph.
@@ -259,7 +259,7 @@ public:
    * @param addSibling if true the clone subgraph will be a sibling of this graph, if false (the default) it will be a subgraph of this graph
    * @return :Graph* The newly created clone subgraph. NULL will be returned if addSibling is set to true and this graph is a root graph.
    **/
-  virtual Graph* addCloneSubGraph(std::string name = "unnamed", bool addSibling = false);
+  virtual Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false);
 
   /**
    * @brief Creates and returns a new sub-graph of the graph induced by a set of nodes.

@@ -65,7 +65,7 @@ static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
   glGraph->setRenderingParameters (param);
 }
 
-ScatterPlot2D::ScatterPlot2D(Graph *graph, string xDim, string yDim, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor)
+ScatterPlot2D::ScatterPlot2D(Graph *graph, const string& xDim, const string& yDim, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor)
   : xDim(xDim), yDim(yDim), blCorner(blCorner), size(size), graph(graph), xAxis(NULL), yAxis(NULL), overviewGen(false), backgroundColor(backgroundColor),
     foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false), displayEdges(false) {
   glGraphComposite = new GlGraphComposite(graph);

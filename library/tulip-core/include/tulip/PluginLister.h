@@ -253,7 +253,7 @@ public:
   };
 
   // constructor for node/edge events
-  PluginEvent(PluginEventType pluginEvtType, std::string pluginName)
+  PluginEvent(PluginEventType pluginEvtType, const std::string& pluginName)
     : Event(*(tlp::PluginLister::instance()), Event::TLP_MODIFICATION),
       evtType(pluginEvtType), pluginName(pluginName) {}
 

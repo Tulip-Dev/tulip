@@ -68,7 +68,7 @@ public:
 
   ~GMLExport() {}
 
-  string convert(string tmp) {
+  string convert(const string& tmp) {
     string newStr;
 
     for (unsigned int i=0; i<tmp.length(); i++) {

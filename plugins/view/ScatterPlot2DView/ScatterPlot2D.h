@@ -39,7 +39,7 @@ class ScatterPlot2D : public GlComposite {
 
 public :
 
-  ScatterPlot2D(Graph *graph, std::string xDim, std::string yDim, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
+  ScatterPlot2D(Graph *graph, const std::string& xDim, const std::string& yDim, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
   ~ScatterPlot2D();
 
   void setBLCorner(const Coord &blCorner);
@@ -57,10 +57,10 @@ public :
     return overviewGen;
   }
 
-  std::string getXDim() const {
+  const std::string& getXDim() const {
     return xDim;
   }
-  std::string getYDim() const {
+  const std::string& getYDim() const {
     return yDim;
   }
   Coord getOverviewCenter() const;

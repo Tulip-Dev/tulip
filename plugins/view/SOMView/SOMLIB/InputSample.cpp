@@ -394,7 +394,7 @@ void InputSample::updateAllSDValues() {
 }
 
 
-double InputSample::getMeanProperty(std::string propertyName) {
+double InputSample::getMeanProperty(const std::string& propertyName) {
   unsigned int i = findIndexForProperty(propertyName);
 
   if(i<meanProperties.size())
@@ -403,7 +403,7 @@ double InputSample::getMeanProperty(std::string propertyName) {
   return 0.0;
 }
 
-double InputSample::getSDProperty(std::string propertyName) {
+double InputSample::getSDProperty(const std::string& propertyName) {
   unsigned int i = findIndexForProperty(propertyName);
 
   if(i<sdProperties.size())

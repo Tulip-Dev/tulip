@@ -36,10 +36,10 @@ public:
   static std::string labelPositionNames[];
 
   static std::string edgeShapeName(int id);
-  static int edgeShapeId(std::string name);
+  static int edgeShapeId(const std::string& name);
 
   static std::string labelPositionName(int id);
-  static int labelPositionId(std::string name);
+  static int labelPositionId(const std::string& name);
 
 };
 

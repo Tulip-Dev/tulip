@@ -34,11 +34,11 @@ class PropertyContext;
  */
 class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::BooleanType> {
 public :
-  BooleanProperty (Graph *g, std::string n="") :AbstractProperty<BooleanType,BooleanType>(g, n) {}
+  BooleanProperty (Graph *g, const std::string& n="") :AbstractProperty<BooleanType,BooleanType>(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   static const std::string propertyTypename;
-  std::string getTypename() const {
+  const std::string& getTypename() const {
     return propertyTypename;
   }
 
@@ -75,11 +75,11 @@ public :
  */
 class TLP_SCOPE BooleanVectorProperty:public AbstractVectorProperty<tlp::BooleanVectorType, tlp::BooleanType> {
 public :
-  BooleanVectorProperty(Graph *g, std::string n="") :AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {}
+  BooleanVectorProperty(Graph *g, const std::string& n="") :AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {}
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   static const std::string propertyTypename;
-  std::string getTypename() const {
+  const std::string& getTypename() const {
     return propertyTypename;
   }
 

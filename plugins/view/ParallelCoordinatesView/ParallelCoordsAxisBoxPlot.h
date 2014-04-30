@@ -52,7 +52,7 @@ public :
 
 private :
 
-  void drawLabel(Coord position, std::string labelName, Camera *camera);
+  void drawLabel(const Coord& position, const std::string& labelName, Camera *camera);
 
   QuantitativeParallelAxis *axis;
   Coord bottomOutlierCoord;

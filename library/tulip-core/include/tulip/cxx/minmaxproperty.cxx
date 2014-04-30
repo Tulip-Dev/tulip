@@ -20,7 +20,7 @@
 #include <tulip/Coord.h>
 
 template<typename nodeType, typename edgeType, typename propType>
-tlp::MinMaxProperty<nodeType, edgeType, propType>::MinMaxProperty(tlp::Graph* graph, std::string name, typename nodeType::RealType NodeMin,
+tlp::MinMaxProperty<nodeType, edgeType, propType>::MinMaxProperty(tlp::Graph* graph, const std::string& name, typename nodeType::RealType NodeMin,
     typename nodeType::RealType NodeMax, typename edgeType::RealType EdgeMin, typename edgeType::RealType EdgeMax)
   : AbstractProperty<nodeType, edgeType, propType>(graph, name), _nodeMin(NodeMin), _nodeMax(NodeMax), _edgeMin(EdgeMin), _edgeMax(EdgeMax), needGraphListener(false) {
 }

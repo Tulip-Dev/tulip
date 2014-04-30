@@ -43,11 +43,11 @@ typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty>
 class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 
 public :
-  IntegerProperty(Graph *, std::string n = "");
+  IntegerProperty(Graph *, const std::string& n = "");
 
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
-  std::string getTypename() const {
+  const std::string& getTypename() const {
     return propertyTypename;
   }
   virtual void setNodeValue(const node n, const int &v);
@@ -109,11 +109,11 @@ private:
  */
 class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {
 public :
-  IntegerVectorProperty(Graph *g, std::string n =""):AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
+  IntegerVectorProperty(Graph *g, const std::string& n =""):AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
-  std::string getTypename() const {
+  const std::string& getTypename() const {
     return propertyTypename;
   }
 

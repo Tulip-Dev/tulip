@@ -221,7 +221,7 @@ public:
 static LayoutMetaValueCalculator mvLayoutCalculator;
 
 //======================================================
-LayoutProperty::LayoutProperty(Graph *sg, std::string n) : LayoutMinMaxProperty(sg, n, Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()), nbBendedEdges(0) {
+LayoutProperty::LayoutProperty(Graph *sg, const std::string& n) : LayoutMinMaxProperty(sg, n, Coord(FLT_MAX, FLT_MAX, FLT_MAX), Coord(-FLT_MAX, -FLT_MAX, -FLT_MAX), tlp::LineType::RealType(), tlp::LineType::RealType()), nbBendedEdges(0) {
   // set default MetaValueCalculator
   setMetaValueCalculator(&mvLayoutCalculator);
 }

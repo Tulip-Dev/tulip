@@ -110,7 +110,7 @@ from the default value.
 	
 //===========================================================================================	
 	
-	virtual std::string getTypename() const = 0;
+	virtual const std::string& getTypename() const = 0;
 %Docstring
 tlp.PropertyInterface.getTypename()
 

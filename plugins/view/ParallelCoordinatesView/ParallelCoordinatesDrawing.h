@@ -80,7 +80,7 @@ public :
   void setLinesColorAlphaValue(const unsigned int linesColorAlphaValue) {
     this->linesColorAlphaValue = linesColorAlphaValue;
   }
-  void setLineTextureFilename(std::string lineTextureFilename) {
+  void setLineTextureFilename(const std::string& lineTextureFilename) {
     this->lineTextureFilename = lineTextureFilename;
   }
   void setBackgroundColor(const Color &backgroundColor) {

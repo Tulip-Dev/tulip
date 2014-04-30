@@ -69,7 +69,7 @@ public :
    *
    * \param value the string value we want to retrieve axis point coordinates
    */
-  Coord getAxisPointCoordForValue(std::string value);
+  Coord getAxisPointCoordForValue(const std::string& value);
 
   /**
    * Method to get the string value associated to an axis point. Return "" if there is not.

@@ -38,7 +38,7 @@ typedef AbstractProperty<tlp::SizeType, tlp::SizeType> AbstractSizeProperty;
 class TLP_SCOPE SizeProperty:public AbstractSizeProperty {
 
 public :
-  SizeProperty (Graph *, std::string n="");
+  SizeProperty (Graph *, const std::string& n="");
 
   Size getMax(Graph *sg=NULL);
   Size getMin(Graph *sg=NULL);
@@ -48,7 +48,7 @@ public :
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
-  std::string getTypename() const {
+  const std::string& getTypename() const {
     return propertyTypename;
   }
 
@@ -74,12 +74,12 @@ private:
  */
 class TLP_SCOPE SizeVectorProperty:public AbstractVectorProperty<tlp::SizeVectorType, tlp::SizeType> {
 public :
-  SizeVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<SizeVectorType, SizeType>(g, n) {}
+  SizeVectorProperty(Graph *g, const std::string& n=""):AbstractVectorProperty<SizeVectorType, SizeType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
-  std::string getTypename() const {
+  const std::string& getTypename() const {
     return propertyTypename;
   }
 

@@ -628,7 +628,7 @@ GlGraphComposite *GoogleMapsGraphicsView::getGlGraphComposite() const {
 
 }
 
-void GoogleMapsGraphicsView::createLayoutWithAddresses(string addressPropertyName, bool createLatAndLngProps) {
+void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressPropertyName, bool createLatAndLngProps) {
   geocodingActive = true;
   nodeLatLng.clear();
   Observable::holdObservers();
@@ -761,7 +761,7 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(string addressPropertyNam
   geocodingActive = false;
 }
 
-void GoogleMapsGraphicsView::createLayoutWithLatLngs(std::string latitudePropertyName, std::string longitudePropertyName) {
+void GoogleMapsGraphicsView::createLayoutWithLatLngs(const std::string& latitudePropertyName, const std::string& longitudePropertyName) {
   nodeLatLng.clear();
   pair<double, double> latLng;
 

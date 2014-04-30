@@ -448,7 +448,7 @@ void MatrixView::setBackgroundColor(QColor c) {
   emit drawNeeded();
 }
 
-void MatrixView::setOrderingMetric(std::string name) {
+void MatrixView::setOrderingMetric(const std::string& name) {
   if (name != "" && !graph()->existProperty(name))
     return;
 

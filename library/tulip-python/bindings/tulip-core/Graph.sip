@@ -146,7 +146,7 @@ Remove all nodes, edges and subgraphs from the graph .
 
 //===========================================================================================
 
-	tlp::Graph *addSubGraph(tlp::BooleanProperty *selection=0, std::string name = "unnamed");
+	tlp::Graph *addSubGraph(tlp::BooleanProperty *selection=0, const std::string& name = "unnamed");
 %Docstring
 tlp.Graph.addSubGraph([selection = None, name = "unnamed"])
 
@@ -175,7 +175,7 @@ selected in the selection. If there is no selection an empty sub-graph is return
 
 //===========================================================================================
 
-	tlp::Graph *addSubGraph(std::string name);
+	tlp::Graph *addSubGraph(const std::string& name);
 %Docstring
 tlp.Graph.addSubGraph(name)
 
@@ -190,7 +190,7 @@ Creates and returns a new named sub-graph of this graph.
 
 //===========================================================================================
 
- 	tlp::Graph* addCloneSubGraph(std::string name = "unnamed", bool addSibling = false);
+ 	tlp::Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false);
 %Docstring
 tlp.Graph.addCloneSubGraph(name = "unnamed", addSibling = false)
 

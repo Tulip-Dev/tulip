@@ -279,7 +279,7 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-	virtual std::string getTypename() const ;
+	virtual const std::string& getTypename() const ;
 
 //===========================================================================================
 
@@ -952,7 +952,7 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
-	virtual std::string getTypename() const ;
+	virtual const std::string& getTypename() const ;
 
 //===========================================================================================
 

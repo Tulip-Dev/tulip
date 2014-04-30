@@ -32,8 +32,8 @@ namespace tlp {
 
 const std::string GlCompositeHierarchyManager::temporaryPropertyValue = "temporaryPropertyFromGlCompositeHierarchyManager";
 
-GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, std::string layerName, LayoutProperty *layout,
-    SizeProperty *size, DoubleProperty *rotation, bool visible, std::string namingProperty, std::string subCompositeSuffix)
+GlCompositeHierarchyManager::GlCompositeHierarchyManager(Graph* graph, GlLayer* layer, const std::string& layerName, LayoutProperty *layout,
+    SizeProperty *size, DoubleProperty *rotation, bool visible, const std::string& namingProperty, const std::string& subCompositeSuffix)
   :_shouldRecreate(false), _currentColor(0), _graph(graph), _layer(layer), _composite(new GlHierarchyMainComposite(this)), _layout(layout), _size(size), _rotation(rotation), _layerName(layerName),
    _isVisible(visible), _subCompositesSuffix(subCompositeSuffix), _nameAttribute(namingProperty) {
   this->_layer->addGlEntity(this->_composite, this->_layerName);

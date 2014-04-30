@@ -1018,12 +1018,12 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   }
 }
 //=========================================================
-Graph* Graph::addSubGraph(std::string name) {
+Graph* Graph::addSubGraph(const std::string& name) {
   Graph* g = addSubGraph(NULL, name);
   return g;
 }
 //=========================================================
-Graph* Graph::addCloneSubGraph(std::string name, bool addSibling) {
+Graph* Graph::addCloneSubGraph(const std::string& name, bool addSibling) {
   BooleanProperty selection(this);
   selection.setAllNodeValue(true);
   selection.setAllEdgeValue(true);

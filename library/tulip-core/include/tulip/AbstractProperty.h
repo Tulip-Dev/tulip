@@ -56,7 +56,7 @@ class TLP_SCOPE AbstractProperty : public Tprop {
   friend class GraphView;
 
 public:
-  AbstractProperty(Graph *, std::string n = "");
+  AbstractProperty(Graph *, const std::string& n = "");
 
   /**
    * @brief Gets the default node value of the property.
@@ -421,7 +421,7 @@ protected:
 template <typename vectType,typename eltType,typename propType=PropertyInterface>
 class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectType, propType> {
 public:
-  AbstractVectorProperty(Graph *, std::string name = "");
+  AbstractVectorProperty(Graph *, const std::string& name = "");
 
   /**
    * @brief Sets the value for node n, at index i, to v, and notify the observers of a modification.
