@@ -50,11 +50,11 @@ class TLP_QT_SCOPE GlCompositeHierarchyManager : private Observable {
 
 public:
   GlCompositeHierarchyManager(Graph* graph, GlLayer* layer,
-			      const std::string& layerName,
-			      LayoutProperty* layout, SizeProperty* size,
+                              const std::string& layerName,
+                              LayoutProperty* layout, SizeProperty* size,
                               DoubleProperty* rotation, bool visible = false,
-			      const std::string& namingProperty = "name",
-			      const std::string& subCompositeSuffix = " sub-hulls");
+                              const std::string& namingProperty = "name",
+                              const std::string& subCompositeSuffix = " sub-hulls");
 
   void setGraph(tlp::Graph* graph);
   DataSet getData();

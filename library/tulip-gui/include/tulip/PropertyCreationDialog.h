@@ -96,8 +96,8 @@ public:
     * @param graph The graph to use as parent for the properties to create.
     **/
   static PropertyInterface* createNewProperty(tlp::Graph* graph,
-					      QWidget* parent=NULL,
-					      const std::string& selectedType = "");
+      QWidget* parent=NULL,
+      const std::string& selectedType = "");
 private slots:
   void checkValidity();
 private:
