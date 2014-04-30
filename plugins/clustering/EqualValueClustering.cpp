@@ -88,7 +88,7 @@ bool EqualValueClustering::run() {
 }
 
 bool EqualValueClustering::computeClusters(NumericProperty* prop,
-    bool onNodes, bool connected) {
+					   bool onNodes, bool connected) {
   unsigned int step = 0;
   unsigned int maxSteps;
 
@@ -170,23 +170,29 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
               continue;
             }
 
-            // check if neighbour has not been visited AND
-            // if it has the same value
-            if (!visited.get(neighbour.id) &&
-                curValue == prop->getNodeDoubleValue(neighbour)) {
-              // add neighbour and edge in cluster
-              sg->addNode(neighbour);
-              sg->addEdge(curEdge);
-              // push it for further deeper exploration
-              visited.set(neighbour.id, true);
-              nodesToVisit.push_back(neighbour);
+            // 
+            // check if neighbour has the same value
+            if (curValue == prop->getNodeDoubleValue(neighbour)) {
+	      // check if neighbour has not been visited
+	      if (!visited.get(neighbour.id)) {
+		// add neighbour and edge in cluster
+		sg->addNode(neighbour);
+		sg->addEdge(curEdge);
+		// push it for further deeper exploration
+		visited.set(neighbour.id, true);
+		nodesToVisit.push_back(neighbour);
 
-              if (pluginProgress && (++step % 50 == 1)) {
-                pluginProgress->progress(step, maxSteps);
+		if (pluginProgress && (++step % 50 == 1)) {
+		  pluginProgress->progress(step, maxSteps);
 
-                if (pluginProgress->state() !=TLP_CONTINUE)
-                  return pluginProgress->state()!= TLP_CANCEL;
-              }
+		  if (pluginProgress->state() !=TLP_CONTINUE)
+		    return pluginProgress->state()!= TLP_CANCEL;
+		}
+	      } else {
+		// check if curEdge already exist in cluster
+		if (!sg->isElement(curEdge))
+		  sg->addEdge(curEdge);
+	      }
             }
           }
         }
@@ -295,7 +301,7 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
 }
 
 bool EqualValueClustering::computeClusters(PropertyInterface* prop,
-    bool onNodes, bool connected) {
+					   bool onNodes, bool connected) {
   unsigned int step = 0;
   unsigned int maxSteps;
 
@@ -376,23 +382,29 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
               continue;
             }
 
-            // check if neighbour has not been visited AND
-            // if it has the same value
-            if (!visited.get(neighbour.id) &&
-                curValue == prop->getNodeStringValue(neighbour)) {
-              // add neighbour and edge in cluster
-              sg->addNode(neighbour);
-              sg->addEdge(curEdge);
-              // push it for further deeper exploration
-              visited.set(neighbour.id, true);
-              nodesToVisit.push_back(neighbour);
+	    // check if neighbour has the same value
+            if (curValue == prop->getNodeStringValue(neighbour)) {
+	      // check if neighbour has not been visited
+	      if (!visited.get(neighbour.id)) {
+		// add neighbour and edge in cluster
+		sg->addNode(neighbour);
+		sg->addEdge(curEdge);
+		// push it for further deeper exploration
+		visited.set(neighbour.id, true);
+		nodesToVisit.push_back(neighbour);
+		
+		if (pluginProgress && (++step % 50 == 1)) {
+		  pluginProgress->progress(step, maxSteps);
 
-              if (pluginProgress && (++step % 50 == 1)) {
-                pluginProgress->progress(step, maxSteps);
-
-                if (pluginProgress->state() !=TLP_CONTINUE)
-                  return pluginProgress->state()!= TLP_CANCEL;
-              }
+		  if (pluginProgress->state() !=TLP_CONTINUE)
+		    return pluginProgress->state()!= TLP_CANCEL;
+		}
+	      }
+	      else {
+		// check if curEdge already exist in cluster
+		if (!sg->isElement(curEdge))
+		  sg->addEdge(curEdge);
+	      }
             }
           }
         }
