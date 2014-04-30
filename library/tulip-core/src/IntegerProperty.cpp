@@ -29,7 +29,7 @@ const string IntegerVectorProperty::propertyTypename="vector<int>";
 
 //==============================
 ///Constructeur d'un IntegerProperty
-IntegerProperty::IntegerProperty (Graph *g, std::string n):IntegerMinMaxProperty(g, n, -INT_MAX, INT_MAX, -INT_MAX, INT_MAX) {
+IntegerProperty::IntegerProperty (Graph *g, const std::string& n):IntegerMinMaxProperty(g, n, -INT_MAX, INT_MAX, -INT_MAX, INT_MAX) {
 }
 //====================================================================
 void IntegerProperty::clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> &proxyC) {

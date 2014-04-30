@@ -19,7 +19,7 @@
 #include <cstdlib>
 
 template <class Tnode, class Tedge, class Tprop>
-tlp::AbstractProperty<Tnode,Tedge,Tprop>::AbstractProperty(tlp::Graph *sg, std::string n) {
+tlp::AbstractProperty<Tnode,Tedge,Tprop>::AbstractProperty(tlp::Graph *sg, const std::string& n) {
   Tprop::graph = sg;
   Tprop::name = n;
   nodeDefaultValue = Tnode::defaultValue();
@@ -258,7 +258,7 @@ bool tlp::AbstractProperty<Tnode,Tedge,Tprop>::readEdgeValue(std::istream& iss,
 }
 //============================================================
 template <typename vectType, typename eltType, typename propType>
-tlp::AbstractVectorProperty<vectType, eltType, propType>::AbstractVectorProperty(tlp::Graph* g, std::string name) :AbstractProperty<vectType, vectType>(g, name) {}
+tlp::AbstractVectorProperty<vectType, eltType, propType>::AbstractVectorProperty(tlp::Graph* g, const std::string& name) :AbstractProperty<vectType, vectType>(g, name) {}
 //============================================================
 template <typename vectType, typename eltType, typename propType>
 void tlp::AbstractVectorProperty<vectType, eltType, propType>::setNodeEltValue(const node n, unsigned int i, typename tlp::StoredType<typename eltType::RealType>::ReturnedConstValue v) {

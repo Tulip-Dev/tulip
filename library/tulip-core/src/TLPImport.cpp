@@ -722,7 +722,7 @@ struct TLPFileInfoBuilder: public TLPFalse {
   TLPGraphBuilder *graphBuilder;
   std::string name;
 
-  TLPFileInfoBuilder(TLPGraphBuilder *graphBuilder, std::string infoName):
+  TLPFileInfoBuilder(TLPGraphBuilder *graphBuilder, const std::string& infoName):
     graphBuilder(graphBuilder), name(infoName) {
   }
   virtual ~TLPFileInfoBuilder() {

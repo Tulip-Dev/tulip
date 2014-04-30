@@ -35,7 +35,9 @@ public :
   enum NeighborNodesType {IN_NEIGHBORS, OUT_NEIGHBORS, IN_OUT_NEIGHBORS};
 
   NodeNeighborhoodView(Graph *graph, node n, NeighborNodesType neighborsNodesType = IN_OUT_NEIGHBORS,
-                       unsigned int neighborhoodDist = 1, bool computeReachableSubGraph = false, std::string propertyName = "", int nbNodes = 0);
+                       unsigned int neighborhoodDist = 1,
+		       bool computeReachableSubGraph = false,
+		       const std::string& propertyName = "", int nbNodes = 0);
 
   void updateWithDistance(const unsigned int dist);
 

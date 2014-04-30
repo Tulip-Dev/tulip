@@ -656,7 +656,7 @@ void GraphPerspective::open(QString fileName) {
     QFileInfo fileInfo(fileName);
     _lastOpenLocation = fileInfo.absolutePath();
 
-    foreach(std::string extension, modules.keys()) {
+    foreach(const std::string& extension, modules.keys()) {
       if (fileName.endsWith(".tlpx")) {
         openProjectFile(fileName);
         TulipSettings::instance().addToRecentDocuments(fileInfo.absoluteFilePath());

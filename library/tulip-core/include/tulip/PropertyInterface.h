@@ -115,7 +115,7 @@ public:
    * @brief Gets a string describing the type of the property (e.g. "graph", "double", "layout", "string", "integer", "color", "size").
    * @return The name of this property's type.
    */
-  virtual std::string getTypename() const = 0;
+  virtual const std::string& getTypename() const = 0;
 
   /**
    * @brief Gets the name of the property (e.g. viewLayout).

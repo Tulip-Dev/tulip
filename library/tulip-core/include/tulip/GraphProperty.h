@@ -40,7 +40,7 @@ class TLP_SCOPE GraphProperty : public AbstractGraphProperty {
   friend class GraphAbstract;
 
 public :
-  GraphProperty (Graph *, std::string n="");
+  GraphProperty (Graph *, const std::string& n="");
   virtual ~GraphProperty();
   // override Observable::treatEvent
   void treatEvent(const Event&);
@@ -52,7 +52,7 @@ public :
   bool setEdgeStringValue( const edge e, const std::string & v);
   bool setAllEdgeStringValue(const std::string & v);
   static const std::string propertyTypename;
-  std::string getTypename() const {
+  const std::string& getTypename() const {
     return propertyTypename;
   }
 

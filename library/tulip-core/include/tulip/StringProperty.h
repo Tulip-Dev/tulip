@@ -35,12 +35,12 @@ typedef AbstractProperty<tlp::StringType, tlp::StringType> AbstractStringPropert
  */
 class TLP_SCOPE StringProperty:public AbstractStringProperty {
 public :
-  StringProperty (Graph *g, std::string n="") :AbstractStringProperty(g, n) {}
+  StringProperty (Graph *g, const std::string& n="") :AbstractStringProperty(g, n) {}
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
-  std::string getTypename() const {
+  const std::string& getTypename() const {
     return propertyTypename;
   }
   virtual unsigned int nodeValueSize() const {
@@ -59,12 +59,12 @@ public :
  */
 class TLP_SCOPE StringVectorProperty:public AbstractVectorProperty<tlp::StringVectorType, tlp::StringType> {
 public :
-  StringVectorProperty(Graph *g, std::string n=""):AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
+  StringVectorProperty(Graph *g, const std::string& n=""):AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string& );
   static const std::string propertyTypename;
-  std::string getTypename() const {
+  const std::string& getTypename() const {
     return propertyTypename;
   }
 

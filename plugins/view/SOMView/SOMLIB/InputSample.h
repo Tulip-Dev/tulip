@@ -72,8 +72,8 @@ public:
   void delNode(tlp::Graph *, const tlp::node);
   void delLocalProperty(tlp::Graph*, const std::string&);
 
-  double getMeanProperty(std::string propertyName);
-  double getSDProperty(std::string propertyName);
+  double getMeanProperty(const std::string& propertyName);
+  double getSDProperty(const std::string& propertyName);
 
   bool isUsingNormalizedValues() const;
   void setUsingNormalizedValues(bool);

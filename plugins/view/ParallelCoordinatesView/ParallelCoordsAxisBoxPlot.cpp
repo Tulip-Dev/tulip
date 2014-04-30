@@ -249,7 +249,7 @@ void GlAxisBoxPlot::setHighlightRangeIfAny(Coord sceneCoords) {
 
 
 
-void GlAxisBoxPlot::drawLabel(Coord position, string labelName, Camera *camera) {
+void GlAxisBoxPlot::drawLabel(const Coord& position, const string& labelName, Camera *camera) {
   float labelHeight = axis->getLabelHeight();
 
   float heightRef;

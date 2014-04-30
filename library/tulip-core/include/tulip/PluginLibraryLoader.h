@@ -67,7 +67,7 @@ public:
   * @param pluginPath A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
   *
   **/
-  static void loadPlugins(PluginLoader *loader = NULL, std::string pluginPath = "");
+  static void loadPlugins(PluginLoader *loader = NULL, const std::string& pluginPath = "");
 
   /**
    * @brief Loads a single plugin library.

@@ -43,8 +43,8 @@ public :
   ~GoogleMapsGraphicsView();
 
   void setGraph(Graph *graph);
-  void createLayoutWithAddresses(std::string addressPropertyName, bool createLatAndLngProps);
-  void createLayoutWithLatLngs(std::string latitudePropertyName, std::string longitudePropertyName);
+  void createLayoutWithAddresses(const std::string& addressPropertyName, bool createLatAndLngProps);
+  void createLayoutWithLatLngs(const std::string& latitudePropertyName, const std::string& longitudePropertyName);
 
   GlGraphComposite *getGlGraphComposite() const;
 

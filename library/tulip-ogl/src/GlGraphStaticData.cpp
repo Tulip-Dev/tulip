@@ -50,7 +50,7 @@ string GlGraphStaticData::edgeShapeName(int id) {
   }
 }
 
-int GlGraphStaticData::edgeShapeId(string name) {
+int GlGraphStaticData::edgeShapeId(const string& name) {
   if (name == edgeShapeName(EdgeShape::Polyline))
     return EdgeShape::Polyline;
 
@@ -76,7 +76,7 @@ string GlGraphStaticData::labelPositionName(int id) {
   return string("invalid label position id");
 }
 
-int GlGraphStaticData::labelPositionId(string name) {
+int GlGraphStaticData::labelPositionId(const string& name) {
   for (int i = 0; i < 5; i++) {
     if (name == labelPositionNames[i])
       return i;

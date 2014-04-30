@@ -50,7 +50,7 @@ private :
 };
 
 NodeNeighborhoodView::NodeNeighborhoodView(Graph *graph, node n, NeighborNodesType neighborsNodesType,
-    unsigned int neighborhoodDist, bool computeReachableSubGraph, std::string propertyName, int nbNodes)
+    unsigned int neighborhoodDist, bool computeReachableSubGraph, const std::string& propertyName, int nbNodes)
   : GraphDecorator(graph), centralNode(n), neighborsType(neighborsNodesType), currentDist(neighborhoodDist), computeReachableSubGraph(computeReachableSubGraph), nbNodes(nbNodes), property(NULL) {
   if(!propertyName.empty()) {
     property = graph->getProperty<DoubleProperty>(propertyName);

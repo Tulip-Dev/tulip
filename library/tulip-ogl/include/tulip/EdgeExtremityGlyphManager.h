@@ -55,7 +55,7 @@ public:
   /**
    * Return the id if glyph with given name
    */
-  int glyphId(std::string name);
+  int glyphId(const std::string& name);
   /**
    * Load glyphs plugins
    */

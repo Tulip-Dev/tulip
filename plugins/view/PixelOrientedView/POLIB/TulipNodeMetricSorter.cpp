@@ -45,7 +45,7 @@ TulipNodeMetricSorter::~TulipNodeMetricSorter() {
   instances.erase(graph);
 }
 
-void TulipNodeMetricSorter::sortNodesForProperty(string propertyName) {
+void TulipNodeMetricSorter::sortNodesForProperty(const string& propertyName) {
   cleanupSortNodesForProperty(propertyName);
   Iterator<node> *nodeIt = graph->getNodes();
 
@@ -55,7 +55,7 @@ void TulipNodeMetricSorter::sortNodesForProperty(string propertyName) {
 
   delete nodeIt;
 
-  string propertyType = graph->getProperty(propertyName)->getTypename();
+  const string& propertyType = graph->getProperty(propertyName)->getTypename();
 
   if (propertyType == "double") {
     sort(nodeSortingMap[propertyName].begin(), nodeSortingMap[propertyName].end(), NodeMetricPropertyOrderRelation<DoubleType, DoubleProperty>(graph, propertyName));
@@ -65,11 +65,11 @@ void TulipNodeMetricSorter::sortNodesForProperty(string propertyName) {
   }
 }
 
-void TulipNodeMetricSorter::cleanupSortNodesForProperty(std::string propertyName) {
+void TulipNodeMetricSorter::cleanupSortNodesForProperty(const std::string& propertyName) {
   nodeSortingMap.erase(propertyName);
 }
 
-node TulipNodeMetricSorter::getNodeAtRankForProperty(const unsigned int rank, string propertyName) {
+node TulipNodeMetricSorter::getNodeAtRankForProperty(const unsigned int rank, const string& propertyName) {
   if (nodeSortingMap.find(propertyName) == nodeSortingMap.end()) {
     sortNodesForProperty(propertyName);
   }
@@ -77,10 +77,10 @@ node TulipNodeMetricSorter::getNodeAtRankForProperty(const unsigned int rank, st
   return nodeSortingMap[propertyName][rank];
 }
 
-unsigned int TulipNodeMetricSorter::getNbValuesForProperty(string propertyName)  {
+unsigned int TulipNodeMetricSorter::getNbValuesForProperty(const string& propertyName)  {
   if (nbValuesPropertyMap.find(propertyName) == nbValuesPropertyMap.end()) {
     unsigned int count = 0;
-    string propertyType = graph->getProperty(propertyName)->getTypename();
+    const string& propertyType = graph->getProperty(propertyName)->getTypename();
 
     if (propertyType == "double") {
       set<double> sd;
@@ -115,7 +115,7 @@ void TulipNodeMetricSorter::reset() {
   nodeSortingMap.clear();
 }
 
-unsigned int TulipNodeMetricSorter::getNodeRankForProperty(tlp::node n, string propertyName) {
+unsigned int TulipNodeMetricSorter::getNodeRankForProperty(tlp::node n, const string& propertyName) {
   if (nodeSortingMap.find(propertyName) == nodeSortingMap.end()) {
     sortNodesForProperty(propertyName);
   }

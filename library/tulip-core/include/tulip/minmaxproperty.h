@@ -48,7 +48,7 @@ public:
    * @param EdgeMin The minimal value the property can take for edges (e.g. INT_MIN)
    * @param EdgeMax The maximal value the property can take for edges (e.g. INT_MIN)
    **/
-  MinMaxProperty(tlp::Graph* graph, std::string name, typename nodeType::RealType NodeMin,
+  MinMaxProperty(tlp::Graph* graph, const std::string& name, typename nodeType::RealType NodeMin,
                  typename nodeType::RealType NodeMax, typename edgeType::RealType EdgeMin, typename edgeType::RealType EdgeMax);
 
   virtual void treatEvent(const tlp::Event& ev);

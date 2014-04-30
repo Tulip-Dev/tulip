@@ -34,7 +34,7 @@ PropertyCreationDialog::PropertyCreationDialog(QWidget *parent) :
 }
 
 PropertyCreationDialog::PropertyCreationDialog(Graph* graph, QWidget *parent,
-    std::string selectedType):
+					       const std::string& selectedType):
   QDialog(parent),
   ui(new Ui::PropertyCreationDialog),_graph(graph),_createdProperty(NULL) {
   initGui();
@@ -112,7 +112,7 @@ void PropertyCreationDialog::accept() {
   QDialog::accept();
 }
 
-PropertyInterface* PropertyCreationDialog::createNewProperty(tlp::Graph* graph,QWidget* parent, std::string selectedType) {
+PropertyInterface* PropertyCreationDialog::createNewProperty(tlp::Graph* graph,QWidget* parent, const std::string& selectedType) {
   PropertyCreationDialog *dialog = new PropertyCreationDialog(graph,parent,selectedType);
   PropertyInterface* result = NULL;
 

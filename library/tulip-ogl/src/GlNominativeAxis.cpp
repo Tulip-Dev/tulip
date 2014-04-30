@@ -46,7 +46,7 @@ void GlNominativeAxis::buildAxisGraduations() {
   }
 }
 
-Coord GlNominativeAxis::getAxisPointCoordForValue(string value)  {
+Coord GlNominativeAxis::getAxisPointCoordForValue(const string& value)  {
   Coord ret;
 
   if (labelsCoord.find(value) != labelsCoord.end()) {

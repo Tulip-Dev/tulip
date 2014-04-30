@@ -83,7 +83,7 @@ public:
 
 private slots:
   void setBackgroundColor(QColor);
-  void setOrderingMetric(std::string);
+  void setOrderingMetric(const std::string&);
   void setGridDisplayMode();
   void applySettings();
   void showEdges(bool);

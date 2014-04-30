@@ -34,7 +34,7 @@ class TulipGraphDimension : public DimensionBase {
 
 public :
 
-  TulipGraphDimension(tlp::Graph *graph, std::string dimensionName);
+  TulipGraphDimension(tlp::Graph *graph, const std::string& dimensionName);
   ~TulipGraphDimension();
 
   unsigned int numberOfItems() const;

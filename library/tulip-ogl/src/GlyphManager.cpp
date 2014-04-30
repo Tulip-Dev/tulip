@@ -45,7 +45,7 @@ string GlyphManager::glyphName(int id) {
   }
 }
 //====================================================
-int GlyphManager::glyphId(string name) {
+int GlyphManager::glyphId(const string& name) {
   if (nameToGlyphId.find(name)!=nameToGlyphId.end()) {
     return nameToGlyphId[name];
   }

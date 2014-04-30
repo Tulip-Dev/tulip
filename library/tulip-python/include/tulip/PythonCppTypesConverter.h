@@ -55,10 +55,10 @@ class TLP_PYTHON_SCOPE ValueSetter {
 
 public:
 
-  ValueSetter(tlp::DataSet *dataSet, std::string key) :
+  ValueSetter(tlp::DataSet *dataSet, const std::string& key) :
     dataSet(dataSet), graph(NULL), key(key) {}
 
-  ValueSetter(tlp::Graph *graph, std::string key) :
+  ValueSetter(tlp::Graph *graph, const std::string& key) :
     dataSet(NULL), graph(graph), key(key) {}
 
   template <typename T>

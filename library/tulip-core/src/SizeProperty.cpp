@@ -55,7 +55,7 @@ const string SizeProperty::propertyTypename="size";
 const string SizeVectorProperty::propertyTypename="vector<size>";
 
 //==============================
-SizeProperty::SizeProperty (Graph *sg, std::string n):
+SizeProperty::SizeProperty (Graph *sg, const std::string& n):
   AbstractProperty<SizeType,SizeType>(sg, n) {
   // the computed meta value will be the average value
   setMetaValueCalculator(&mvSizeCalculator);

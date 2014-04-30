@@ -45,12 +45,12 @@ public:
   virtual ~GraphAbstract();
   virtual void clear();
   virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
-                             std::string name = "unnamed");
+                             const std::string& name = "unnamed");
   // used to force the id of the newly created subgraph
   // when importing (tlp/tlpjson)
   Graph *addSubGraph(unsigned int id,
                      BooleanProperty *selection=NULL,
-                     std::string name = "");
+                     const std::string& name = "");
   virtual void delSubGraph(Graph *);
   virtual void delAllSubGraphs(Graph *);
   virtual Graph* getSuperGraph()const;
@@ -59,7 +59,7 @@ public:
   virtual bool isSubGraph(const Graph* sg) const;
   virtual bool isDescendantGraph(const Graph* sg) const;
   virtual Graph* getSubGraph(unsigned int id) const;
-  virtual Graph* getSubGraph(const std::string &name) const;
+  virtual Graph* getSubGraph(const std::string& name) const;
   virtual Graph* getDescendantGraph(unsigned int id) const;
   virtual Graph* getDescendantGraph(const std::string &name) const;
   virtual Graph *getNthSubGraph(unsigned int n) const;

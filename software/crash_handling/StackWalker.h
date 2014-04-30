@@ -44,7 +44,7 @@ public:
     printCallStack(std::cerr, maxDepth);
   }
 
-  virtual void printFrameInfos(std::ostream &os, unsigned int frameId, int64_t pcAddress, std::string moduleName, std::string funcName="", int64_t symbolOffset=0, std::string fileName="", unsigned int line=0) {
+  virtual void printFrameInfos(std::ostream &os, unsigned int frameId, int64_t pcAddress, const std::string& moduleName, const std::string& funcName="", int64_t symbolOffset=0, const std::string& fileName="", unsigned int line=0) {
 
     if (frameId%2 == 0)
       os << setTextBackgroundColor(DARK_GRAY);
