@@ -208,10 +208,11 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
     int width = contentsRect().width();
     int height = contentsRect().height();
 
-    #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-      width *= this->windowHandle()->devicePixelRatio();
-      height *= this->windowHandle()->devicePixelRatio();
-    #endif
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    width *= this->windowHandle()->devicePixelRatio();
+    height *= this->windowHandle()->devicePixelRatio();
+#endif
+
     //If the rendering store is not valid need to regenerate new one force the RenderGraph flag.
     if(widthStored!=width || heightStored!=height) {
       options |= RenderScene;
@@ -318,10 +319,11 @@ void GlMainWidget::resizeGL(int w, int h) {
 
   int width = contentsRect().width();
   int height = contentsRect().height();
-  #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-    width *= this->windowHandle()->devicePixelRatio();
-    height *= this->windowHandle()->devicePixelRatio(); 
-  #endif
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+  width *= this->windowHandle()->devicePixelRatio();
+  height *= this->windowHandle()->devicePixelRatio();
+#endif
+
   if(glFrameBuf) {
     delete glFrameBuf;
     glFrameBuf=NULL;
