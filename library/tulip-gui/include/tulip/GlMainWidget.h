@@ -311,7 +311,6 @@ private:
   bool useFramebufferObject;
   QGLFramebufferObject *glFrameBuf;
   static bool inRendering;
-  int renderingNumber;
   bool keepPointOfViewOnSubgraphChanging;
 
 public slots:

@@ -22,7 +22,9 @@
 #include <QGLPixelBuffer>
 #include <QGLFramebufferObject>
 #include <QGLFormat>
-
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QWindow>
+#endif
 #include <tulip/TulipSettings.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
@@ -137,16 +139,6 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
   grabGesture(Qt::SwipeGesture);
   renderingStore=NULL;
   getScene()->setViewOrtho(TulipSettings::instance().isViewOrtho());
-#if defined(__APPLE__) && defined(QT_MAC_USE_COCOA)
-  // This code is here to bug fix black screen problem on MACOSX with Qt 4.7
-  // When we do the first redraw we don't use frame backup but we draw the view
-  // We have to test with next version of Qt to check if the problem exist
-  // (It seems to no exist when Qt is built with Carbon)
-  renderingNumber=0;
-#if (QT_VERSION > QT_VERSION_CHECK(4, 7, 1))
-#warning Qt fix must be tested with this version of Qt, see GlMainWidget.cpp l.106
-#endif
-#endif
   OpenGlConfigManager::getInst().initExtensions();
 }
 //==================================================
@@ -216,6 +208,10 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
     int width = contentsRect().width();
     int height = contentsRect().height();
 
+    #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+      width *= this->windowHandle()->devicePixelRatio();
+      height *= this->windowHandle()->devicePixelRatio();
+    #endif
     //If the rendering store is not valid need to regenerate new one force the RenderGraph flag.
     if(widthStored!=width || heightStored!=height) {
       options |= RenderScene;
@@ -272,36 +268,12 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
 }
 //==================================================
 void GlMainWidget::redraw() {
-
-#ifdef __APPLE__
-
-  if (isVisible() && !inRendering) {
-    // This code is here to bug fix black screen problem on MACOSX with Qt 4.7
-    // When we do the first redraw we don't use frame backup but we draw the view
-    // We have to test with next version of Qt to check if the problem exist
-    if(renderingNumber<=4) {
-      return draw(false);
-    }
-  }
-
-#endif
   render(SwapBuffers);
   emit viewRedrawn(this);
 }
 //==================================================
 void GlMainWidget::draw(bool graphChanged) {
   render(RenderingOptions(RenderScene|SwapBuffers));
-#ifdef __APPLE__
-
-  // This code is here to bug fix black screen problem on MACOSX with Qt 4.7
-  // When we do the first redraw we don't use frame backup but we draw the view
-  // We have to test with next version of Qt to check if the problem exist
-  if (isVisible() && !inRendering) {
-    if(renderingNumber<=4)
-      renderingNumber++;
-  }
-
-#endif
   emit viewDrawn(this,graphChanged);
 }
 //==================================================
@@ -346,7 +318,10 @@ void GlMainWidget::resizeGL(int w, int h) {
 
   int width = contentsRect().width();
   int height = contentsRect().height();
-
+  #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    width *= this->windowHandle()->devicePixelRatio();
+    height *= this->windowHandle()->devicePixelRatio(); 
+  #endif
   if(glFrameBuf) {
     delete glFrameBuf;
     glFrameBuf=NULL;
