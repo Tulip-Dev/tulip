@@ -41,6 +41,7 @@ SET(SRCS
   SimplePluginProgressWidget.cpp
   SimpleStringsListSelectionWidget.cpp
   StringsListSelectionWidget.cpp
+  StringsListSelectionDialog.cpp
   TlpQtTools.cpp
   TulipProject.cpp
   TulipSettings.cpp
@@ -111,6 +112,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/RenamePropertyDialog.ui
   ../designer/SimplePluginProgressWidget.ui
   ../designer/SimpleStringsListSelectionWidget.ui
+  ../designer/StringsListSelectionDialog.ui
   ../designer/SizeEditor.ui
   ../designer/WorkspacePanel.ui
   ../designer/Workspace.ui
@@ -145,6 +147,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/RenamePropertyDialog.h
   ../include/tulip/SimplePluginProgressWidget.h
   ../include/tulip/SimpleStringsListSelectionWidget.h
+  ../include/tulip/StringsListSelectionDialog.h
   ../include/tulip/TulipProject.h
   ../include/tulip/Animation.h
   ../include/tulip/ColorButton.h

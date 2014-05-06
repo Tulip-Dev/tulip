@@ -40,6 +40,7 @@ INSTALL(FILES
   tulip/SimpleStringsListSelectionWidget.h
   tulip/StringsListSelectionWidget.h
   tulip/StringsListSelectionWidgetInterface.h
+  tulip/StringsListSelectionDialog.h
   tulip/TlpQtTools.h
   tulip/TulipProject.h
   tulip/TulipSettings.h
