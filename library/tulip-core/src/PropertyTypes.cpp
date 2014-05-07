@@ -321,30 +321,35 @@ void BooleanVectorType::writeb(ostream& oss, const RealType & v) {
   oss.write(vc.data(), vSize);
 }
 
-bool BooleanVectorType::read(istream& is,  RealType & v) {
+bool BooleanVectorType::read(istream& is,  RealType & v, char openChar,
+			     char sepChar, char closeChar) {
   v.clear();
 
   char c =' ';
   bool firstVal = true;
 
-  // go to first '('
+  // go to first non space char
   while((is >> c) && isspace(c)) {}
 
-  if (c != '(')
-    return false;
+  if (openChar) {
+    if (c != openChar)
+      return false;
+  }
+  else
+    is.unget();
 
   for(;;) {
     if( !(is >> c) )
-      return false;
+      return !closeChar;
 
     if (isspace(c))
       continue;
 
-    if(c == ')') {
+    if(c == closeChar) {
       return true;
     }
 
-    if (c == ',') {
+    if (c == sepChar) {
       if (firstVal)
         return false;
     }
@@ -385,15 +390,15 @@ bool BooleanVectorType::readb(istream& iss, RealType & v) {
 }
 
 // LineType
-bool LineType::read(istream& is, RealType& v) {
+bool LineType::read(istream& is, RealType& v, char openChar,
+		    char sepChar, char closeChar) {
   v.clear();
 
   char c =' ';
   bool firstVal = true;
   bool dbqFound = false;
 
-  // go to first '('
-  // skip space chars
+  // go to first non space char
   while((is >> c) && isspace(c)) {}
 
   // value may have been enclosed by double quotes
@@ -405,17 +410,21 @@ bool LineType::read(istream& is, RealType& v) {
     while((is >> c) && isspace(c)) {}
   }
 
-  if (c != '(')
-    return false;
+  if (openChar) {
+    if (c != openChar)
+      return false;
+  }
+  else
+    is.unget();
 
   for(;;) {
     if( !(is >> c) )
-      return false;
+      return !closeChar;
 
     if (isspace(c))
       continue;
 
-    if(c == ')') {
+    if(c == closeChar) {
       if (dbqFound) {
         // expect it is the next non space char
         while((is >> c) && isspace(c)) {}
@@ -424,10 +433,10 @@ bool LineType::read(istream& is, RealType& v) {
           return false;
       }
 
-      return true;
+      return openChar;
     }
 
-    if (c == ',') {
+    if (c == sepChar) {
       if (firstVal)
         return false;
 
@@ -580,21 +589,24 @@ string StringType::toString( const RealType & v ) {
   return v;
 }
 
-bool StringType::read(istream& is, RealType & v, char openCloseChar) {
+bool StringType::read(istream& is, RealType & v, char openChar,
+		      char closeChar) {
   char c= ' ';
 
-  // go to first '"'
+  // go to first non space char
   while((is >> c) && isspace(c)) {}
 
-  if (openCloseChar && c != openCloseChar)
+  if (openChar && c != openChar)
     return false;
+  if (!openChar)
+    is.unget();
 
   bool bslashFound = false;
   string str;
 
   for(;;) {
     if ( !(is >> c) ) {
-      if (!openCloseChar)
+      if (!openChar || !closeChar)
         break;
 
       return false;
@@ -608,7 +620,7 @@ bool StringType::read(istream& is, RealType & v, char openCloseChar) {
       if (c == '\\')
         bslashFound = true;
       else {
-        if (openCloseChar && c == openCloseChar)
+        if (closeChar && c == closeChar)
           break;
 
         str.push_back(c);
@@ -616,6 +628,11 @@ bool StringType::read(istream& is, RealType & v, char openCloseChar) {
     }
   }
 
+  // remove trailing space chars
+  std::size_t found = str.find_last_not_of(" \t\f\v\n\r");
+  if (found != std::string::npos)
+    str.erase(found+1);
+  
   v = str;
   return true;
 }
@@ -661,15 +678,20 @@ void StringVectorType::writeb(ostream& os, const RealType & v) {
     StringType::writeb(os, v[i]);
 }
 
-bool StringVectorType::read(istream& is, RealType & v) {
+bool StringVectorType::read(istream& is, RealType & v, char openChar,
+			    char sepChar, char closeChar) {
   v.clear();
   char c = ' ';
 
-  // go to first '('
+  // go to first non space char
   while((is >> c) && isspace(c)) {}
 
-  if (c != '(')
-    return false;
+  if (openChar) {
+    if (c != openChar)
+      return false;
+  }
+  else
+    is.unget();
 
   is.unsetf(ios_base::skipws);
   bool firstVal = true;
@@ -677,33 +699,37 @@ bool StringVectorType::read(istream& is, RealType & v) {
 
   for( ;; ) {
     if( !(is >> c) )
-      return false;
+      return (!sepFound && !closeChar);
 
     if (isspace(c))
       continue;
 
-    if( c == ')' ) {
-      if (sepFound)
+    if( c == closeChar) {
+      if (!closeChar || sepFound)
         return false;
 
       return true;
     }
 
-    if (c == ',') {
+    if (c == sepChar) {
       if (sepFound)
         return false;
 
       sepFound = true;
     }
     else {
-      if ((firstVal || sepFound) && c == '"') {
+      if ((firstVal || sepFound) && (!openChar || c == '"')) {
         string str;
         is.unget();
 
-        if (!StringType::read(is, str))
+        if (!(openChar ? StringType::read(is, str) :
+	      StringType::read(is, str, '\0', sepChar)))
           return false;
 
         v.push_back(str);
+	if (!openChar)
+	  // last read char was sepChar
+	  is.unget();
         firstVal = false;
         sepFound = false;
       }
