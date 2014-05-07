@@ -52,7 +52,7 @@ public:
 template<typename VT, int openParen>
 class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<VT> > {
   static bool readVector(std::istream& is, std::vector<VT>& v,
-			 char openChar, char sepChar, char closeChar) {
+                         char openChar, char sepChar, char closeChar) {
     v.clear();
 
     char c =' ';
@@ -65,14 +65,14 @@ class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<VT> > {
 
     if (openChar) {
       if (c != openChar)
-	return false;
+        return false;
     }
     else
       is.unget();
 
     for(;;) {
       if( !(is >> c) )
-	return (!sepFound && !closeChar);
+        return (!sepFound && !closeChar);
 
       if (isspace(c))
         continue;
