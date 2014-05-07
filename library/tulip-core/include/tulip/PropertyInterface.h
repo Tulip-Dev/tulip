@@ -472,7 +472,7 @@ protected:
  *
  */
 class TLP_SCOPE VectorPropertyInterface: public PropertyInterface {
-  public:
+public:
   VectorPropertyInterface(): PropertyInterface() {}
 
   ~VectorPropertyInterface() {}

@@ -117,7 +117,7 @@ public:
   static void write(std::ostream&, const RealType&);
   static void writeb(std::ostream&, const RealType&);
   static bool read(std::istream&, RealType&, char openChar = '(',
-		   char sepChar = ',', char closeChar = ')');
+                   char sepChar = ',', char closeChar = ')');
   static bool readb(std::istream&, RealType&);
   FORWARD_STRING_METHODS(BooleanVectorType)
 };
@@ -125,7 +125,7 @@ public:
 class TLP_SCOPE LineType: public SerializableVectorType<tlp::Coord,false> {
 public:
   static bool read(std::istream&, RealType&, char openChar = '(',
-		   char sepChar = ',', char closeChar = ')');
+                   char sepChar = ',', char closeChar = ')');
   FORWARD_STRING_METHODS(LineType)
 };
 
@@ -157,7 +157,7 @@ public:
   static void write(std::ostream&, const RealType&, char openCloseChar = '"');
   static void writeb(std::ostream&, const RealType&);
   static bool read(std::istream&, RealType&,
-		   char openChar = '"', char closeChar = '"');
+                   char openChar = '"', char closeChar = '"');
   static bool readb(std::istream&, RealType&);
 
   static std::string toString(const RealType &v);
@@ -169,7 +169,7 @@ public:
   static void write(std::ostream&, const RealType&);
   static void writeb(std::ostream& oss, const RealType& vStr);
   static bool read(std::istream&, RealType&, char openChar = '(',
-		   char sepchar = ',', char closeChar = ')');
+                   char sepchar = ',', char closeChar = ')');
   static bool readb(std::istream& iss, RealType& vStr);
   FORWARD_STRING_METHODS(StringVectorType)
 };

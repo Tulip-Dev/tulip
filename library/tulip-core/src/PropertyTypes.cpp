@@ -322,7 +322,7 @@ void BooleanVectorType::writeb(ostream& oss, const RealType & v) {
 }
 
 bool BooleanVectorType::read(istream& is,  RealType & v, char openChar,
-			     char sepChar, char closeChar) {
+                             char sepChar, char closeChar) {
   v.clear();
 
   char c =' ';
@@ -391,7 +391,7 @@ bool BooleanVectorType::readb(istream& iss, RealType & v) {
 
 // LineType
 bool LineType::read(istream& is, RealType& v, char openChar,
-		    char sepChar, char closeChar) {
+                    char sepChar, char closeChar) {
   v.clear();
 
   char c =' ';
@@ -590,7 +590,7 @@ string StringType::toString( const RealType & v ) {
 }
 
 bool StringType::read(istream& is, RealType & v, char openChar,
-		      char closeChar) {
+                      char closeChar) {
   char c= ' ';
 
   // go to first non space char
@@ -598,6 +598,7 @@ bool StringType::read(istream& is, RealType & v, char openChar,
 
   if (openChar && c != openChar)
     return false;
+
   if (!openChar)
     is.unget();
 
@@ -630,9 +631,10 @@ bool StringType::read(istream& is, RealType & v, char openChar,
 
   // remove trailing space chars
   std::size_t found = str.find_last_not_of(" \t\f\v\n\r");
+
   if (found != std::string::npos)
     str.erase(found+1);
-  
+
   v = str;
   return true;
 }
@@ -679,7 +681,7 @@ void StringVectorType::writeb(ostream& os, const RealType & v) {
 }
 
 bool StringVectorType::read(istream& is, RealType & v, char openChar,
-			    char sepChar, char closeChar) {
+                            char sepChar, char closeChar) {
   v.clear();
   char c = ' ';
 
@@ -723,13 +725,15 @@ bool StringVectorType::read(istream& is, RealType & v, char openChar,
         is.unget();
 
         if (!(openChar ? StringType::read(is, str) :
-	      StringType::read(is, str, '\0', sepChar)))
+              StringType::read(is, str, '\0', sepChar)))
           return false;
 
         v.push_back(str);
-	if (!openChar)
-	  // last read char was sepChar
-	  is.unget();
+
+        if (!openChar)
+          // last read char was sepChar
+          is.unget();
+
         firstVal = false;
         sepFound = false;
       }

@@ -425,10 +425,10 @@ public:
 
   // 2 methods inherited from VectorPropertyInterface
   bool setNodeStringValueAsVector(const node, const std::string&,
-				  char, char, char);
+                                  char, char, char);
 
   bool setEdgeStringValueAsVector(const edge, const std::string&,
-				  char, char, char);
+                                  char, char, char);
 
   /**
    * @brief Sets the value for node n, at index i, to v, and notify the observers of a modification.

@@ -267,7 +267,7 @@ bool tlp::AbstractVectorProperty<vectType, eltType, propType>::setNodeStringValu
 
   if (!vectType::read(iss, v, openChar, sepChar, closeChar))
     return false;
-  
+
   setNodeValue(n, v);
   return true;
 }
@@ -279,7 +279,7 @@ bool tlp::AbstractVectorProperty<vectType, eltType, propType>::setEdgeStringValu
 
   if (!vectType::read(iss, v, openChar, sepChar, closeChar))
     return false;
-  
+
   setEdgeValue(e, v);
   return true;
 }
