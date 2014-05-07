@@ -116,14 +116,16 @@ class TLP_SCOPE BooleanVectorType: public TypeInterface<std::vector<bool> > {
 public:
   static void write(std::ostream&, const RealType&);
   static void writeb(std::ostream&, const RealType&);
-  static bool read(std::istream&, RealType&);
+  static bool read(std::istream&, RealType&, char openChar = '(',
+		   char sepChar = ',', char closeChar = ')');
   static bool readb(std::istream&, RealType&);
   FORWARD_STRING_METHODS(BooleanVectorType)
 };
 
 class TLP_SCOPE LineType: public SerializableVectorType<tlp::Coord,false> {
 public:
-  static bool read(std::istream&, RealType&);
+  static bool read(std::istream&, RealType&, char openChar = '(',
+		   char sepChar = ',', char closeChar = ')');
   FORWARD_STRING_METHODS(LineType)
 };
 
@@ -154,7 +156,8 @@ public:
 
   static void write(std::ostream&, const RealType&, char openCloseChar = '"');
   static void writeb(std::ostream&, const RealType&);
-  static bool read(std::istream&, RealType&, char openCloseChar = '"');
+  static bool read(std::istream&, RealType&,
+		   char openChar = '"', char closeChar = '"');
   static bool readb(std::istream&, RealType&);
 
   static std::string toString(const RealType &v);
@@ -165,7 +168,8 @@ class TLP_SCOPE StringVectorType: public TypeInterface<std::vector<std::string> 
 public:
   static void write(std::ostream&, const RealType&);
   static void writeb(std::ostream& oss, const RealType& vStr);
-  static bool read(std::istream&, RealType&);
+  static bool read(std::istream&, RealType&, char openChar = '(',
+		   char sepchar = ',', char closeChar = ')');
   static bool readb(std::istream& iss, RealType& vStr);
   FORWARD_STRING_METHODS(StringVectorType)
 };
@@ -191,8 +195,8 @@ DECL_STORED_STRUCT(tlp::IntegerVectorType::RealType)
 DECL_STORED_STRUCT(tlp::BooleanVectorType::RealType)
 DECL_STORED_STRUCT(tlp::LineType::RealType)
 DECL_STORED_STRUCT(tlp::PointType::RealType)
-//DECL_STORED_STRUCT(tlp::SizeType::RealType)
-//DECL_STORED_STRUCT(tlp::SizeVectorType::RealType)
+//DECL_STORED_STRUCT(tlp::SizeType::RealType) <=> PointType::RealType
+//DECL_STORED_STRUCT(tlp::SizeVectorType::RealType) <=> LineType::RealType
 DECL_STORED_STRUCT(tlp::StringType::RealType)
 DECL_STORED_STRUCT(tlp::StringVectorType::RealType)
 DECL_STORED_STRUCT(tlp::ColorVectorType::RealType)

@@ -418,10 +418,17 @@ protected:
   typename Tedge::RealType edgeDefaultValue;
 };
 
-template <typename vectType,typename eltType,typename propType=PropertyInterface>
+template <typename vectType,typename eltType,typename propType=VectorPropertyInterface>
 class TLP_SCOPE AbstractVectorProperty : public AbstractProperty<vectType, vectType, propType> {
 public:
   AbstractVectorProperty(Graph *, const std::string& name = "");
+
+  // 2 methods inherited from VectorPropertyInterface
+  bool setNodeStringValueAsVector(const node, const std::string&,
+				  char, char, char);
+
+  bool setEdgeStringValueAsVector(const edge, const std::string&,
+				  char, char, char);
 
   /**
    * @brief Sets the value for node n, at index i, to v, and notify the observers of a modification.

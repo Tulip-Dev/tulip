@@ -467,6 +467,40 @@ protected:
 };
 
 /**
+ * @ingroup Graph
+ * @brief VectorPropertyInterface describes the interface of a graph property whose holded value is a vector (std::vector)
+ *
+ */
+class TLP_SCOPE VectorPropertyInterface: public PropertyInterface {
+  public:
+  VectorPropertyInterface(): PropertyInterface() {}
+
+  ~VectorPropertyInterface() {}
+
+  /**
+   * @brief Sets a new vector described by the string parameter as the node value.
+   * @param n The node on which to set the new value.
+   * @param value A string listing the elements of the vector to set on the node.
+   * @param openChar an optional character opening the list of elements. Default value is '('; when set to '\0' it indicates that there is no opening character.
+   * @param sepChar an optional character separing the elements of the list. Default value is ','.
+   * @param closeChar an optional character closing the list of elements. Default value is ')'; when set to '\0' it indicates that there is no opening character.
+   * @return Whether the string was a correct representation for this property's type. If not, the value is not set.
+   */
+  virtual bool setNodeStringValueAsVector(const node n, const std::string & value, char openChar = '(', char sepChar = ',', char closeChar = ')') = 0;
+
+  /**
+   * @brief Sets a new vector described by the string parameter as the edge value.
+   * @param e The edge on which to set value on.
+   * @param value A string listing the elements of the vector to set on the edge.
+   * @param openChar an optional character opening the list of elements. Default value is '('; when set to '\0' it indicates that there is no opening character.
+   * @param sepChar an optional character separing the elements of the list. Default value is ','.
+   * @param closeChar an optional character closing the list of elements. Default value is ')'; when set to '\0' it indicates that there is no opening character.
+   * @return Whether the string was a correct representation for this property's type. If not, the value is not set.
+   */
+  virtual bool setEdgeStringValueAsVector(const edge e, const std::string & value, char openChar = '(', char sepChar = ',', char closeChar = ')') = 0;
+};
+
+/**
  * @ingroup Observation
  * @brief Contains additional information about events on a property,
  * such as the property it happened on, the node/edge eventually concerned and such.

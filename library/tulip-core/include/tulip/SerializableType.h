@@ -51,7 +51,8 @@ public:
 
 template<typename VT, int openParen>
 class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<VT> > {
-  static bool readVector(std::istream& is, std::vector<VT>& v) {
+  static bool readVector(std::istream& is, std::vector<VT>& v,
+			 char openChar, char sepChar, char closeChar) {
     v.clear();
 
     char c =' ';
@@ -59,27 +60,31 @@ class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<VT> > {
     bool firstVal = true;
     bool sepFound = false;
 
-    // go to first '('
+    // go to first non space char
     while((is >> c) && isspace(c)) {}
 
-    if (c != '(')
-      return false;
+    if (openChar) {
+      if (c != openChar)
+	return false;
+    }
+    else
+      is.unget();
 
     for(;;) {
       if( !(is >> c) )
-        return false;
+	return (!sepFound && !closeChar);
 
       if (isspace(c))
         continue;
 
-      if(c == ')') {
-        if (sepFound)
+      if(c == closeChar) {
+        if (!openChar || sepFound)
           return false;
 
         return true;
       }
 
-      if (c == ',') {
+      if (c == sepChar) {
         if (firstVal || sepFound)
           return false;
 
@@ -126,8 +131,8 @@ public:
     oss.write((char *) &vSize, sizeof(vSize));
     oss.write((char *) v.data(), vSize * sizeof(VT));
   }
-  static bool read(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v) {
-    return readVector(iss, v);
+  static bool read(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v, char openChar = '(', char sepChar = ',', char closeChar = ')') {
+    return readVector(iss, v, openChar, sepChar, closeChar);
   }
   static bool readb(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v) {
     unsigned int vSize;
