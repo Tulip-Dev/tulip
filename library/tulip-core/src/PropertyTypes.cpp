@@ -248,7 +248,7 @@ void BooleanType::write(ostream& os, const RealType &v) {
     os << "false";
 }
 
-bool BooleanType::read(istream& is, RealType & v) {
+bool BooleanType::read(istream& is, RealType & v, bool untilEnd) {
   char c = ' ';
 
   while((is >> c) && isspace(c)) {}
@@ -286,7 +286,23 @@ bool BooleanType::read(istream& is, RealType & v) {
       return false;
   }
 
+  if (untilEnd) {
+    // check if there is only space char until the end
+    for(;;) {
+      if( !(is >> c) )
+	return true;
+      if (!isspace(c))
+	return false;
+    }
+  }
+
   return true;
+}
+
+bool BooleanType::fromString(RealType &v, const std::string &s,
+			     bool untilEnd) {
+  std::istringstream iss(s);
+  return read(iss, v, untilEnd);
 }
 
 // BooleanVectorType

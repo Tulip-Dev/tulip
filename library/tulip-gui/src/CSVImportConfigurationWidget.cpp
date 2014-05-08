@@ -561,6 +561,11 @@ string CSVImportConfigurationWidget::combinePropertyDataType(const string previo
 
 string CSVImportConfigurationWidget::guessDataType(const string data) const {
   bool b;
+  if(BooleanType::fromString(b,data,true)) {
+    //The type is boolean
+    return BooleanProperty::propertyTypename;
+  }
+
   //Qt framework is the best way to detect numerals in string.
   QString str = QString::fromUtf8(data.c_str());
   bool isInt=false;
@@ -577,11 +582,6 @@ string CSVImportConfigurationWidget::guessDataType(const string data) const {
   //The type is double
   if(isDouble) {
     return DoubleProperty::propertyTypename;
-  }
-
-  if(BooleanType::fromString(b,data)) {
-    //The type is boolean
-    return BooleanProperty::propertyTypename;
   }
   else {
     //All the other case are treated as string.

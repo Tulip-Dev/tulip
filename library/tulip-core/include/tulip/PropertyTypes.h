@@ -108,8 +108,9 @@ public:
   static RealType undefinedValue();
   static RealType defaultValue();
   static void write(std::ostream&, const RealType&);
-  static bool read(std::istream&, RealType&);
-  FORWARD_STRING_METHODS(BooleanType)
+  static bool read(std::istream&, RealType&, bool untilEnd = false);
+  static bool fromString(RealType &, const std::string &, bool untilEnd = false);
+  FORWARD_TOSTRING(BooleanType)
 };
 
 class TLP_SCOPE BooleanVectorType: public TypeInterface<std::vector<bool> > {
