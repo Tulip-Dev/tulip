@@ -290,9 +290,10 @@ bool BooleanType::read(istream& is, RealType & v, bool untilEnd) {
     // check if there is only space char until the end
     for(;;) {
       if( !(is >> c) )
-	return true;
+        return true;
+
       if (!isspace(c))
-	return false;
+        return false;
     }
   }
 
@@ -300,7 +301,7 @@ bool BooleanType::read(istream& is, RealType & v, bool untilEnd) {
 }
 
 bool BooleanType::fromString(RealType &v, const std::string &s,
-			     bool untilEnd) {
+                             bool untilEnd) {
   std::istringstream iss(s);
   return read(iss, v, untilEnd);
 }
