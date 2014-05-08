@@ -565,6 +565,7 @@ string CSVImportConfigurationWidget::combinePropertyDataType(const string previo
 
 string CSVImportConfigurationWidget::guessDataType(const string data) const {
   bool b;
+
   if(BooleanType::fromString(b,data,true)) {
     //The type is boolean
     return BooleanProperty::propertyTypename;
