@@ -163,6 +163,9 @@ FIND_PACKAGE(OpenGL REQUIRED)
 # Glew
 FIND_PACKAGE(GLEW REQUIRED)
 
+#quazip
+find_package(QuaZip)
+
 # OpenMP
 IF(NOT CLANG)
 FIND_PACKAGE(Threads)
@@ -266,8 +269,14 @@ ENDIF(PYTHONINTERP_FOUND)
 ## ========================================================
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
 SET(GZStreamLibrary gzstream-tulip-${TulipMMVersion})
-SET(QuazipInclude ${PROJECT_SOURCE_DIR}/thirdparty/quazip)
-SET(QuazipLibrary quazip-tulip-${TulipMMVersion})
+if(QUAZIP_FOUND)
+    SET(QuazipInclude ${QUAZIP_INCLUDE_DIR})
+    SET(QuazipLibrary ${QUAZIP_LIBRARIES})
+else(QUAZIP_FOUND)
+    SET(QuazipInclude ${PROJECT_SOURCE_DIR}/thirdparty/quazip/)
+    SET(QuazipLibrary quazip-tulip-${TulipMMVersion})
+endif(QUAZIP_FOUND)
+
 SET(QxtInclude ${PROJECT_SOURCE_DIR}/thirdparty/qxt/src)
 SET(QxtLibrary qxt-tulip-${TulipMMVersion})
 SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
