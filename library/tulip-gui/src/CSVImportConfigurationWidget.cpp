@@ -238,7 +238,7 @@ void CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& l
     for(size_t column = 0 ; column < lineTokens.size() ; ++column) {
       //A new column was created set its label and it's configuration widget.
       if(propertyWidgets.size()<=column) {
-        QString columnName = genrateColumnName(column);
+        QString columnName = generateColumnName(column);
         ui->previewTableWidget->setHorizontalHeaderItem(column,new QTableWidgetItem(columnName));
         //Store the first token type
         columnHeaderType.push_back(guessDataType(lineTokens[column]));
@@ -261,7 +261,7 @@ void CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& l
 void CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int) {
   maxLineNumber = rowNumber;
 
-  bool firstLineIsHeader = false;
+  /*bool firstLineIsHeader = false;
 
   //Try to guess if the first line is used as header.
   for(unsigned int i = 0 ; i< columnHeaderType.size() ; ++i) {
@@ -269,9 +269,9 @@ void CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int) {
     if(columnHeaderType[i] != columnType[i]) {
       firstLineIsHeader = true;
     }
-  }
+    }*/
 
-  setUseFirstLineAsPropertyName(firstLineIsHeader);
+  setUseFirstLineAsPropertyName(/*firstLineIsHeader*/ true);
 
   //Force the table to correctly update.
   useFirstLineAsHeaderUpdated();
@@ -327,12 +327,13 @@ unsigned int CSVImportConfigurationWidget::rowCount()const {
 unsigned int CSVImportConfigurationWidget::columnCount()const {
   return ui->previewTableWidget->columnCount();
 }
+
 void CSVImportConfigurationWidget::updateTableHeaders() {
   QStringList itemsLabels;
 
   for(unsigned int i=0 ; i< columnCount(); ++i) {
     //Update the column name
-    QString columnName = genrateColumnName(i);
+    QString columnName = generateColumnName(i);
     itemsLabels<<columnName;
     propertyWidgets[i]->getNameLineEdit()->setText(columnName);
     //Update the column type.
@@ -351,7 +352,8 @@ void CSVImportConfigurationWidget::updateTableHeaders() {
 
   ui->previewTableWidget->setVerticalHeaderLabels(itemsLabels);
 }
-QString CSVImportConfigurationWidget::genrateColumnName(unsigned int col)const {
+
+QString CSVImportConfigurationWidget::generateColumnName(unsigned int col)const {
   if(useFirstLineAsPropertyName()) {
     QTableWidgetItem *item = ui->previewTableWidget->item(0,col);
 
@@ -437,6 +439,7 @@ void CSVImportConfigurationWidget::addPropertyToPropertyList(const string& prope
   ui->gridLayout->addWidget(propertyConfigurationWidget,0,propertyWidgets.size());
   propertyWidgets.push_back(propertyConfigurationWidget);
 }
+
 PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigurationWidget(
   unsigned int propertyNumber, const QString& propertyName, bool isEditable,
   const string& propertyType, QWidget* parent) {
@@ -449,6 +452,7 @@ PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigu
   propertyConfigurationWidget->installEventFilter(this);
   return propertyConfigurationWidget;
 }
+
 void CSVImportConfigurationWidget::propertyNameChanged(QString newName) {
   //Update headers
   PropertyConfigurationWidget *widget = qobject_cast<PropertyConfigurationWidget*>(sender());

@@ -238,7 +238,7 @@ protected:
   /**
     * @brief Compute the name of the column. Return the first token fo the column if the first lline is used as header r Column_x xhere x is the column index.
     **/
-  QString genrateColumnName(unsigned int col)const;
+  QString generateColumnName(unsigned int col)const;
   /**
     * @brief Compute the column data type. Take in account the first row only if it is not used as column label
     **/
