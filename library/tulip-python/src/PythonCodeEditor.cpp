@@ -1534,7 +1534,7 @@ bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
   QString scriptCode;
 
   while (!file.atEnd()) {
-    scriptCode += file.readLine();
+    scriptCode += QString::fromUtf8(file.readLine().data());
   }
 
   file.close();
@@ -1563,6 +1563,7 @@ bool PythonCodeEditor::saveCodeToFile() {
 
   if (getFileName() == fileInfo.absoluteFilePath() && file.open(QIODevice::WriteOnly | QIODevice::Text)) {
     QTextStream out(&file);
+    out.setCodec("UTF-8");
     out << getCleanCode();
     file.close();
     QFileInfo fileInfo(file);
