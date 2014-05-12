@@ -517,7 +517,7 @@ bool PythonInterpreter::importModule(const QString &moduleName) {
 bool PythonInterpreter::registerNewModuleFromString(const QString &moduleName, const QString &moduleSrcCode) {
   bool ret = true;
   holdGIL();
-  PyObject *pycomp = Py_CompileString(moduleSrcCode.toStdString().c_str(),QString(moduleName + ".py").toStdString().c_str(), Py_file_input);
+  PyObject *pycomp = Py_CompileString(moduleSrcCode.toUtf8().data(), QString(moduleName + ".py").toStdString().c_str(), Py_file_input);
 
   if (pycomp == NULL) {
     PyErr_Print();
