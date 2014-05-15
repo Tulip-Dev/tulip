@@ -3,6 +3,8 @@ file(GLOB SRCS "*.c" "*.cpp")
 # Must be added to enable export macro
 ADD_DEFINITIONS(-DQUAZIP_BUILD)
 
+INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
+
 QTX_WRAP_CPP(MOC_SRCS quazipfile.h quaziodevice.h quagzipfile.h)
 set(SRCS ${SRCS} ${MOC_SRCS})
 
