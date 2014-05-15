@@ -80,11 +80,11 @@ protected:
 private:
   Ui::CSVGraphMappingConfigurationWidget *ui;
   void selectColumns(const QString& title,
-		     std::vector<unsigned int>& columnIds,
-		     QPushButton* button);
+                     std::vector<unsigned int>& columnIds,
+                     QPushButton* button);
   void selectProperties(const QString& title,
-			std::vector<std::string>& selProperties,
-			QPushButton* button);
+                        std::vector<std::string>& selProperties,
+                        QPushButton* button);
 
 private slots:
   void createNewProperty();
