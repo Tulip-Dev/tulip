@@ -22,6 +22,8 @@
 #define CSVGRAPHMAPPINGCONFIGURATIONWIDGET_H
 
 #include <QComboBox>
+#include <QPushButton>
+#include <QString>
 
 #include <tulip/tulipconf.h>
 
@@ -35,69 +37,6 @@ class Graph;
 class CSVGraphImport;
 class CSVImportParameters;
 class CSVToGraphDataMapping;
-
-/**
-  * @brief Combo box used to select a CSV column.
-  **/
-class TLP_QT_SCOPE CSVColumnComboBox : public QComboBox {
-public:
-  CSVColumnComboBox(QWidget* parent=NULL);
-  /**
-    * @brief Fill the combobox with the CSV parameters.
-    *
-    * The first item is not a valid choice it's just a label.
-    **/
-  void setCsvProperties(const CSVImportParameters& csvProperties);
-  /**
-    * @brief Get column selected by user or UINT_MAX if no valid column is selected.
-    * @return The column selected by the user.
-    *
-    **/
-  unsigned int getSelectedColumnIndex()const;
-  /**
-    * @brief Allow user to define it's default text.
-    **/
-  void setDefaultText(const QString& newDefaultText);
-private:
-  QString defaultText;
-};
-
-/**
-  * @brief Combo box for property selection and creation in a graph.
-  *
-  * If the combo box is editable and if user enter the name of a property that does not exist this will create it.
-  * A popup will querry user for the type of the property to create.
-  * There is no way to delete a created property in this widget.
-  **/
-class TLP_QT_SCOPE GraphPropertiesSelectionComboBox : public QComboBox {
-  Q_OBJECT
-public:
-  GraphPropertiesSelectionComboBox(QWidget* parent=NULL);
-  /**
-    * @brief Fill the combobox with the properties in the given graph.
-    **/
-  void setGraph(tlp::Graph*);
-  /**
-    * @brief return the name of the property selected by the user. If the label is selected an empty string will be returned.
-    * @return The name of the selected property or an empty string if no valid property is selected.
-    **/
-  std::string getSelectedGraphProperty()const;
-
-  /**
-    * @brief Select the property with the given name in the list
-    **/
-  void selectProperty(const std::string& propertyName);
-  /**
-    * @brief Allow user to define it's default text.
-    **/
-  void setDefaultText(const QString& newDefaultText);
-
-private:
-  tlp::Graph *currentGraph;
-  QString defaultText;
-
-};
-
 
 /**
   * @brief Widget generating the CSVToGraphDataMapping object.
@@ -128,12 +67,35 @@ public:
 
 protected:
   tlp::Graph* graph;
+  std::vector<std::string> columns;
+  std::vector<unsigned int> nodeColumnIds;
+  std::vector<std::string> nodeProperties;
+  std::vector<unsigned int> edgeColumnIds;
+  std::vector<std::string> edgeProperties;
+  std::vector<unsigned int> srcColumnIds;
+  std::vector<unsigned int> tgtColumnIds;
+  std::vector<std::string> srcProperties;
+  std::vector<std::string> tgtProperties;
 
 private:
   Ui::CSVGraphMappingConfigurationWidget *ui;
+  void selectColumns(const QString& title,
+		     std::vector<unsigned int>& columnIds,
+		     QPushButton* button);
+  void selectProperties(const QString& title,
+			std::vector<std::string>& selProperties,
+			QPushButton* button);
 
 private slots:
   void createNewProperty();
+  void selectNodeColumns();
+  void selectEdgeColumns();
+  void selectSrcColumns();
+  void selectTgtColumns();
+  void selectSrcProperties();
+  void selectTgtProperties();
+  void selectNodeProperties();
+  void selectEdgeProperties();
 
 signals:
   void mappingChanged();
