@@ -142,8 +142,8 @@ public:
 class TLP_QT_SCOPE AbstractCSVToGraphDataMapping : public CSVToGraphDataMapping {
 public:
   AbstractCSVToGraphDataMapping(tlp::Graph* graph,tlp::ElementType type,
-				const std::vector<unsigned int>& columnIds,
-				const std::vector<std::string>& propertyNames);
+                                const std::vector<unsigned int>& columnIds,
+                                const std::vector<std::string>& propertyNames);
   virtual ~AbstractCSVToGraphDataMapping() {}
 
   void init(unsigned int rowNumber);
@@ -154,7 +154,7 @@ protected:
     * @return Return the graph element id or UINT_MAX if no new element is created.
     **/
   virtual unsigned int buildIndexForRow(unsigned int row,
-					const std::vector<std::string>& keys)=0;
+                                        const std::vector<std::string>& keys)=0;
 
 protected:
   TLP_HASH_MAP<std::string,unsigned int> valueToId;
@@ -191,13 +191,13 @@ public:
     * @param createNode If set to true if there is no node for an id in the CSV file a new node will be created for this id.
     **/
   CSVToGraphNodeIdMapping(tlp::Graph* graph,
-			  const std::vector<unsigned int>& columnIds,
-			  const std::vector<std::string>& propertyNames,
-			  bool createNode=false);
+                          const std::vector<unsigned int>& columnIds,
+                          const std::vector<std::string>& propertyNames,
+                          bool createNode=false);
   void init(unsigned int rowNumber);
 protected:
   unsigned int buildIndexForRow(unsigned int row,
-				const std::vector<std::string>& keys);
+                                const std::vector<std::string>& keys);
 private:
   bool createMissingNodes;
 };
@@ -216,11 +216,11 @@ public:
   * @param lastRow The last row to search ids.
   **/
   CSVToGraphEdgeIdMapping(tlp::Graph* graph,
-			  const std::vector<unsigned int>& columnIds,
-			  const std::vector<std::string>& propertyNames);
+                          const std::vector<unsigned int>& columnIds,
+                          const std::vector<std::string>& propertyNames);
 protected:
   unsigned int buildIndexForRow(unsigned int row,
-				const std::vector<std::string>& keys);
+                                const std::vector<std::string>& keys);
 };
 
 /**
@@ -241,11 +241,11 @@ public:
   * @param createMissinElements If true create source node, destination node if one of them is not found in the graph.
   **/
   CSVToGraphEdgeSrcTgtMapping(tlp::Graph* graph,
-			      const std::vector<unsigned int>& srcColumnIds,
-			      const std::vector<unsigned int>& tgtColumnIds,
-			      const std::vector<std::string>& srcPropNames,
-			      const std::vector<std::string>& tgtPropNames,
-			      bool createMissinElements=false);
+                              const std::vector<unsigned int>& srcColumnIds,
+                              const std::vector<unsigned int>& tgtColumnIds,
+                              const std::vector<std::string>& srcPropNames,
+                              const std::vector<std::string>& tgtPropNames,
+                              bool createMissinElements=false);
   std::pair<tlp::ElementType,unsigned int> getElementForRow(unsigned int row);
   void init(unsigned int lineNumbers);
   std::pair<tlp::ElementType, std::vector<unsigned int> > getElementsForRow(const std::vector<std::string>& tokens, const std::vector<PropertyInterface*> props);
