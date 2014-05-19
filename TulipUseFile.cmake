@@ -128,10 +128,13 @@ ENDMACRO()
 
 # External libraries macros
 IF(WIN32)
-
+  IF(MINGW)
+    # get path to MINGW binaries and dll
+    STRING(REPLACE "ar.exe" "" MINGW_BIN_PATH ${CMAKE_AR})
+  ENDIF(MINGW)
 MACRO(INSTALL_EXTERNAL_LIB pattern component)
   UNSET(results)
-  FOREACH(win_path $ENV{CMAKE_LIBRARY_PATH} ${CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR})
+  FOREACH(win_path $ENV{CMAKE_LIBRARY_PATH} ${MINGW_BIN_PATH} ${CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR})
     STRING(REPLACE "\\" "/" cmake_path "${win_path}")
     FILE(GLOB match "${cmake_path}/${pattern}")
     IF(match)
