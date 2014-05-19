@@ -51,12 +51,9 @@ IF(MINGW)
 
   IF(HAVE_BFD)
     TARGET_LINK_LIBRARIES(crash_handling iberty)
-	# don't need to link against libintl when using MinGW 4.4
-    IF(GCXX_VERSION VERSION_GREATER 4.5 OR GCXX_VERSION VERSION_EQUAL 4.5)
-        IF(GCXX_VERSION VERSION_LESS 4.8)
-            TARGET_LINK_LIBRARIES(crash_handling intl)
-        ENDIF(GCXX_VERSION VERSION_LESS 4.8)
-    ENDIF()
+    # MINGW build environments may differ about the need to link
+    # against the intl library
+    TARGET_LINK_LIBRARIES(crash_handling intl)
   ENDIF(HAVE_BFD)
 
 ELSEIF(MSVC)
