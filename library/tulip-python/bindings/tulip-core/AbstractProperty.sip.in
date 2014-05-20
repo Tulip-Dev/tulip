@@ -23,8 +23,6 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%Include PropertyInterface.sip
-
 namespace tlp {
 
 class @PROPERTY_TYPE@Property : tlp::PropertyInterface /NoDefaultCtors/ {
