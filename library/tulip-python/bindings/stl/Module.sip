@@ -53,13 +53,13 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
 #define getSipType(sipTypename) (sipResolveTypedef(sipTypename) ? sipFindType(sipResolveTypedef(sipTypename)) : sipFindType(sipTypename))
 %End
 
-%Include list.sip
-%Include pair.sip
-%Include set.sip
-%Include string.sip
-%Include vector.sip
-%Include map.sip
-%Include ostream.sip
+%Include std_list.sip
+%Include std_pair.sip
+%Include std_set.sip
+%Include std_string.sip
+%Include std_vector.sip
+%Include std_map.sip
+%Include std_ostream.sip
 
 typedef std::vector<std::string> vectorStringType;
 typedef std::list<std::string> listStringType;

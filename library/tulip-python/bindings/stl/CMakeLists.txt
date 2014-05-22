@@ -2,14 +2,14 @@ IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
 SET(STL_SIP_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/list.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/map.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/std_list.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/std_map.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/pair.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/set.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/string.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/vector.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/ostream.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/std_pair.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/std_set.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/std_string.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/std_vector.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/std_ostream.sip
     CACHE INTERNAL ""
 )
 
