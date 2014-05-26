@@ -227,13 +227,18 @@ ENDIF(NOT CLANG)
 # If not, compile the SIP version located in thirdparty.
 FIND_PACKAGE(PythonInterp REQUIRED)
 IF(PYTHONINTERP_FOUND)
-  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version ERROR_VARIABLE PYTHON_VERSION_RAW)
+  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version OUTPUT_VARIABLE PYTHON_VERSION_RAW ERROR_VARIABLE PYTHON_VERSION_RAW)
   STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
   STRING(REGEX MATCH "[0-9]\\.[0-9]" PYTHON_VERSION "${PYTHON_VERSION_RAW}")
   STRING(REGEX MATCH "[0-9]\\.[0-9]\\.[0-9]" PYTHON_VERSION_WITH_PATCH "${PYTHON_VERSION_RAW}")
 
+  # Unset the previous values of the CMake cache variables related to Python libraries
+  # in case the value of PYTHON_EXECUTABLE CMake variable changed
+  UNSET(PYTHON_LIBRARY CACHE)
+  UNSET(PYTHON_INCLUDE_DIR CACHE)
+
   # Find the Python library with the same version as the interpreter
-  # Starting Python 3.2, the library is suffixed by mu, also handle that case
+  # Python 3.2 library is suffixed by mu on some systems, also handle that case
   SET(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION}mu ${PYTHON_VERSION})
   FIND_PACKAGE(PythonLibs REQUIRED)
 
@@ -258,9 +263,14 @@ IF(PYTHONINTERP_FOUND)
         SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-4.14/siplib/)
       ENDIF(SIP_OK)
     ENDIF(SIP_OK)
+
+    # Unset the previous values of the CMake cache variable SPHINX_EXECUTABLE
+    # in case the value of PYTHON_EXECUTABLE CMake variable changed
+    UNSET(SPHINX_EXECUTABLE CACHE)
     SET(Sphinx_DIR ${CMAKE_CURRENT_SOURCE_DIR}/doc/python)
     MARK_AS_ADVANCED(Sphinx_DIR)
     FIND_PACKAGE(Sphinx)
+
   ENDIF(PYTHONLIBS_FOUND)
 ENDIF(PYTHONINTERP_FOUND)
 
