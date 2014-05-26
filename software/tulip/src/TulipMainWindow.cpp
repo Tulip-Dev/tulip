@@ -112,20 +112,45 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openProjectWith(QString,QString)),this,SLOT(openProjectWith(QString,QString)));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openPerspective(QString)),this,SLOT(createPerspective(QString)));
 
-  QString installedPython = PythonVersionChecker::installedVersion();
+  checkPython();
 
-  if (installedPython.isNull()) {
-    showErrorMessage(trUtf8("Python"),trUtf8("Failed to retrieve python version\n\nCheck your python installation"));
-  }
-  else if (PythonVersionChecker::compiledVersion() != PythonVersionChecker::installedVersion()) {
-    showErrorMessage(trUtf8("Python"),trUtf8("Python version mismatch. Please install python ")
-                     + PythonVersionChecker::compiledVersion()
-                     + trUtf8(" for bindings to work properly.\n\nDetected version is ")
-                     + installedPython);
-  }
 }
 
 TulipMainWindow::~TulipMainWindow() {
+}
+
+void TulipMainWindow::checkPython() {
+  if (!PythonVersionChecker::isPythonVersionMatching()) {
+
+    QStringList installedPythons = PythonVersionChecker::installedVersions();
+
+    QString requiredPython = "Python " + PythonVersionChecker::compiledVersion();
+  #ifdef I64
+    requiredPython += " (64 bit)";
+  #else
+    requiredPython += " (32 bit)";
+  #endif
+
+    QString errorMessage;
+    if (installedPythons.isEmpty()) {
+        errorMessage = requiredPython + " does not seem installed on your system.\nPlease install it in order to use Tulip.";
+    } else {
+        errorMessage = "Python version mismatch. Please install " + requiredPython + " in order to use Tulip.\n";
+        if (installedPythons.size() == 1) {
+            errorMessage += "Detected version is " + installedPythons.at(0) + ".";
+        } else {
+            errorMessage += "Detected versions are ";
+            for (int i = 0 ; i < installedPythons.size() ; ++i) {
+                errorMessage += installedPythons.at(i);
+                if (i < installedPythons.size() - 1) {
+                    errorMessage += ", ";
+                }
+            }
+            errorMessage += " .";
+        }
+    }
+    showErrorMessage("Python", errorMessage);
+  }
 }
 
 void TulipMainWindow::closeApp() {

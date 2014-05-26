@@ -22,13 +22,14 @@
 #define PYTHONVERSIONCHECKER_H
 
 #include <QString>
+#include <QStringList>
 
 #include <tulip/tulipconf.h>
 
 namespace tlp {
 class TLP_QT_SCOPE PythonVersionChecker {
 public:
-  static QString installedVersion();
+  static QStringList installedVersions();
   static QString compiledVersion();
   static bool isPythonVersionMatching();
 #ifdef WIN32

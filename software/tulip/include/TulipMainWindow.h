@@ -87,6 +87,9 @@ protected slots:
   void pageSwitched(int);
 
 private:
+
+  void checkPython();
+
   enum SystemTrayMessage {
     NoMessage,
     PluginErrorMessage
