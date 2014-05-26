@@ -60,6 +60,7 @@ SET(TULIP_SIP_FILES
 # Then, generate a SIP build file and parse its content to retrieve source files list
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -DWORKING_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 EXECUTE_PROCESS(COMMAND ${SIP_EXE} -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -b ${CMAKE_CURRENT_BINARY_DIR}/tulip.sbf ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
 FILE(READ ${CMAKE_CURRENT_BINARY_DIR}/tulip.sbf TULIP_SBF)
 STRING(REGEX MATCHALL "[0-9A-Za-z_]*\\.cpp" TULIP_PYTHON_BINDINGS_SRC ${TULIP_SBF})
 
@@ -78,13 +79,13 @@ SET_SOURCE_FILES_PROPERTIES(siptuliptlpIteratorGraph.cpp
                             siptulipIteratorObservable.cpp
                             PROPERTIES COMPILE_DEFINITIONS ITERATOR_NO_COPY)
                             
-SET_SOURCE_FILES_PROPERTIES(siptuliptlpBooleanProperty.cpp 
+SET_SOURCE_FILES_PROPERTIES(siptuliptlpBooleanProperty.cpp
                             siptuliptlpBooleanVectorProperty.cpp
                             siptuliptlpDoubleProperty.cpp
                             siptuliptlpDoubleVectorProperty.cpp
                             siptuliptlpIntegerProperty.cpp
                             siptuliptlpIntegerVectorProperty.cpp
-                            PROPERTIES COMPILE_DEFINITIONS PROPERTY_BASE_TYPE)                            
+                            PROPERTIES COMPILE_DEFINITIONS PROPERTY_BASE_TYPE)
  
 SET(TULIP_PYTHON_BINDINGS_SRC
     ${TULIP_PYTHON_BINDINGS_SRC}
@@ -97,14 +98,14 @@ ADD_DEPENDENCIES(${LibTulipCorePythonBindingsName} ${SIP_LIB})
 ENDIF(NOT SYSTEM_SIP)
 
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
-		      PROPERTIES OUTPUT_NAME tulip PREFIX "")
+                      PROPERTIES OUTPUT_NAME tulip PREFIX "")
 
 IF(WIN32)
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
-		      PROPERTIES SUFFIX ".pyd")
+                      PROPERTIES SUFFIX ".pyd")
 ELSE(WIN32)
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
-		      PROPERTIES SUFFIX ".so")		      
+                      PROPERTIES SUFFIX ".so")
 ENDIF(WIN32)
 
 TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${LibTulipCoreName})
@@ -128,12 +129,14 @@ INSTALL(TARGETS ${LibTulipCorePythonBindingsName}
 ENDIF()
 
 ADD_CUSTOM_COMMAND(TARGET ${LibTulipCorePythonBindingsName}
-	           POST_BUILD
+                   POST_BUILD
                    COMMAND ${SIP_EXE} -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -a ${CMAKE_CURRENT_BINARY_DIR}/tulip.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
                    COMMENT "Generating QScintilla API file for Tulip Python bindings"
-		   VERBATIM)
+                   VERBATIM)
 				   
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
+
+SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulip.sbf;tulip.api;sipAPItulip.h;BooleanProperty.sip;ColorProperty.sip;DoubleProperty.sip;IntegerProperty.sip;LayoutProperty.sip;SizeProperty.sip;StringProperty.sip")
 
 #IF(NOT UBUNTU_PPA_BUILD)
 #INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
