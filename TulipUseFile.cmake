@@ -129,8 +129,11 @@ ENDMACRO()
 # External libraries macros
 IF(WIN32)
   IF(MINGW)
-    # get path to MINGW binaries and dll
+    # get paths to MINGW binaries, libraries and headers
     STRING(REPLACE "ar.exe" "" MINGW_BIN_PATH ${CMAKE_AR})
+    SET(MINGW_LIB_PATH ${MINGW_BIN_PATH}/../lib)
+    SET(MINGW_LIB64_PATH ${MINGW_BIN_PATH}/../lib64)
+    SET(MINGW_INCLUDE_PATH ${MINGW_BIN_PATH}/../include)
   ENDIF(MINGW)
 MACRO(INSTALL_EXTERNAL_LIB pattern component)
   UNSET(results)
