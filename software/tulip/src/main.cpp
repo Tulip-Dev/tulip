@@ -39,6 +39,7 @@
 #include <tulip/PluginManager.h>
 #include <tulip/QuaZIPFacade.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/PythonVersionChecker.h>
 
 #include <CrashHandling.h>
 
@@ -53,6 +54,10 @@
 #if defined(__APPLE__)
 #include <sys/types.h>
 #include <signal.h>
+#endif
+
+#ifdef WIN32
+#include <windows.h>
 #endif
 
 #ifdef interface
@@ -121,8 +126,6 @@ void checkTulipRunning(const QString& perspName, const QString& fileToOpen) {
 int main(int argc, char **argv) {
   start_crash_handler();
 
-
-
   QApplication tulip_agent(argc, argv);
   QString name("Tulip ");
 
@@ -140,6 +143,15 @@ int main(int argc, char **argv) {
 #if defined(__APPLE__)
   // allows to load qt imageformats plugin
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
+#endif
+
+#ifdef WIN32
+  // Python on windows can be installed for current user only.
+  // In that case, the Python dll is not located in system path but in the Python home directory.
+  // So add the Python home directory in the Dll search paths in order to be able to load plugins depending on Python.
+  if (tlp::PythonVersionChecker::isPythonVersionMatching()) {
+    SetDllDirectory(tlp::PythonVersionChecker::getPythonHome().toStdString().c_str());
+  }
 #endif
 
   // Parse arguments

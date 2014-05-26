@@ -21,6 +21,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QMessageBox>
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QStandardPaths>
 #else
@@ -49,10 +50,15 @@
 #include <tulip/View.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/PythonVersionChecker.h>
 
 #include "TulipPerspectiveMainWindow.h"
 
 #include <iostream>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 #ifdef interface
 #undef interface
@@ -151,6 +157,15 @@ int main(int argc,char **argv) {
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
 #endif
 
+#ifdef WIN32
+  // Python on windows can be installed for current user only.
+  // In that case, the Python dll is not located in system path but in the Python home directory.
+  // So add the Python home directory in the Dll search paths in order to be able to load plugins depending on Python.
+  if (PythonVersionChecker::isPythonVersionMatching()) {
+    SetDllDirectory(PythonVersionChecker::getPythonHome().toStdString().c_str());
+  }
+#endif
+
   // Check arguments
   QString perspectiveName,projectFilePath;
   QVariantMap extraParams;
@@ -229,6 +244,8 @@ int main(int argc,char **argv) {
   progress->setComment(QString("Initializing ") + title);
   progress->setWindowTitle(title);
   progress->progress(0,100);
+
+
 
   initTulipLib(QApplication::applicationDirPath().toUtf8().data());
   QIcon icon = progress->windowIcon();
