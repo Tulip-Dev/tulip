@@ -268,17 +268,17 @@ private:
   /**
     * @brief Try to guess the property datatype in function of the type of the previous tokens and the type of the current token.
     **/
-  std::string guessPropertyDataType(const std::string data,const std::string previousType)const;
+  std::string guessPropertyDataType(const std::string& data,const std::string& previousType)const;
 
   /**
     * @brief Return the type of the column in function of the old and new type.
     **/
-  std::string combinePropertyDataType(const std::string previousType,const std::string newType)const;
+  std::string combinePropertyDataType(const std::string& previousType,const std::string& newType)const;
   /**
     * @brief Try to guess the type of the data. Can recognize int, double, boolean or string. If the type is other return string.
     * @return The property typename of the type
     **/
-  std::string guessDataType(const std::string data)const;
+  std::string guessDataType(const std::string& data)const;
 
   void columnSizeChanged(unsigned int i);
 
