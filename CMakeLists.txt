@@ -145,6 +145,13 @@ ENDIF()
 ## Required packages
 ## ========================================================
 
+IF(MINGW)
+# Set some common libraries and headers search paths for MinGW
+SET(CMAKE_LIBRARY_PATH "${MINGW_LIB_PATH};${MINGW_LIB64_PATH};${MINGW_BIN_PATH};${CMAKE_LIBRARY_PATH}")
+SET(CMAKE_INCLUDE_PATH "${MINGW_INCLUDE_PATH};${MINGW_INCLUDE_PATH}/freetype2;${MINGW_INCLUDE_PATH}/libpng*;${CMAKE_INCLUDE_PATH}")
+
+ENDIF(MINGW)
+
 # Qt
 FIND_PACKAGE(QtX)
 
