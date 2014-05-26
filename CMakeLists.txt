@@ -243,6 +243,24 @@ IF(PYTHONINTERP_FOUND)
   FIND_PACKAGE(PythonLibs REQUIRED)
 
   IF(PYTHONLIBS_FOUND)
+
+    # Python 64bits does not provide a dll import library for MinGW.
+    # Fortunately, we can directly link to the Python dll with that compiler.
+    # So find the location of that dll and overwrite the PYTHON_LIBRARY CMake cache variable with it
+    IF(MINGW AND X64)
+        STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
+        GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${PYTHON_EXECUTABLE} PATH)
+        STRING(REPLACE "." "" PYTHON_VERSION_NO_DOT ${PYTHON_VERSION})
+        # Check if the Python dll is located in the Python home directory (when Python is installed for current user only)
+        IF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+            SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+        # If not, the Python dll is located in %WINDIR%/System32 (when Python is installed for all users)
+        ELSE(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+            SET(PYTHON_LIBRARY ${WINDIR}/System32/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+        ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+    ENDIF(MINGW AND X64)
+
+
     SET(SIP_OK FALSE CACHE INTERNAL "")
     FIND_PACKAGE(SIP)
     SET(SIP_OK ${SIP_FOUND})
