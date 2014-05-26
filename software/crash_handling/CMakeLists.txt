@@ -51,9 +51,10 @@ IF(MINGW)
 
   IF(HAVE_BFD)
     TARGET_LINK_LIBRARIES(crash_handling iberty)
-    # MINGW build environments may differ about the need to link
-    # against the intl library
-    TARGET_LINK_LIBRARIES(crash_handling intl)
+    # MinGW build environments may differ about the need to link against the intl library
+    IF(LIBINTL_FOUND)
+        TARGET_LINK_LIBRARIES(crash_handling intl)
+    ENDIF(LIBINTL_FOUND)
   ENDIF(HAVE_BFD)
 
 ELSEIF(MSVC)
