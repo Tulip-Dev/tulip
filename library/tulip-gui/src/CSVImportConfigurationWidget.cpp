@@ -561,7 +561,8 @@ string CSVImportConfigurationWidget::combinePropertyDataType(const string& previ
   else if( (previousType == IntegerProperty::propertyTypename && newType == BooleanProperty::propertyTypename) || (previousType == BooleanProperty::propertyTypename && newType == IntegerProperty::propertyTypename) ) {
     //If both types are numeric return the more generic numeric type : integer
     return IntegerProperty::propertyTypename;
-  } else {
+  }
+  else {
     return StringProperty::propertyTypename;
   }
 }

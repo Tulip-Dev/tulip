@@ -82,6 +82,7 @@ static QString pythonHome(const QString &pythonVersion) {
     QSettings win32SettingsCurrentUser(win32RegKeyCurrentUser, QSettings::NativeFormat);
     return win32SettingsAllUsers.value("Default").toString().replace("\\", "/")+win32SettingsCurrentUser.value("Default").toString().replace("\\", "/");
   }
+
 // 64 bit Python
 #else
   QString win64RegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
@@ -117,6 +118,7 @@ static QString getDefaultPythonVersionIfAny() {
       defaultPythonVersion = versionRegexp.cap(1);
     }
   }
+
   return defaultPythonVersion;
 }
 
@@ -144,11 +146,13 @@ QStringList PythonVersionChecker::installedVersions() {
     if (runPython(pythonVersion[i])) {
       ret.append(pythonVersion[i]);
     }
+
     ++i;
   }
 
   // Also try to run python executable
   QString defaultPythonVersion = getDefaultPythonVersionIfAny();
+
   if (!defaultPythonVersion.isEmpty() && !ret.contains(defaultPythonVersion)) {
     ret.append(defaultPythonVersion);
   }
@@ -156,17 +160,18 @@ QStringList PythonVersionChecker::installedVersions() {
 // On windows, we check the presence of Python by looking into the registry
 #else
 
-    int i = 0;
+  int i = 0;
 
-    while (pythonVersion[i]) {
-      if (!pythonHome(pythonVersion[i]).isEmpty()) {
-        ret.append(pythonVersion[i]);
-      }
-      ++i;
+  while (pythonVersion[i]) {
+    if (!pythonHome(pythonVersion[i]).isEmpty()) {
+      ret.append(pythonVersion[i]);
     }
 
+    ++i;
+  }
+
 #endif
-    return ret;
+  return ret;
 }
 
 QString PythonVersionChecker::compiledVersion() {
