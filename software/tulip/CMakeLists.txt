@@ -60,7 +60,7 @@ ELSE()
   SET_TARGET_PROPERTIES(tulip PROPERTIES INSTALL_RPATH "$ORIGIN")
 ENDIF()
 
-TARGET_LINK_LIBRARIES(tulip ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES} crash_handling ${QxtLibrary})
+TARGET_LINK_LIBRARIES(tulip crash_handling ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES} ${QxtLibrary})
 
 INSTALL(TARGETS tulip
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app
