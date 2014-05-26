@@ -146,12 +146,14 @@ int main(int argc, char **argv) {
 #endif
 
 #ifdef WIN32
+
   // Python on windows can be installed for current user only.
   // In that case, the Python dll is not located in system path but in the Python home directory.
   // So add the Python home directory in the Dll search paths in order to be able to load plugins depending on Python.
   if (tlp::PythonVersionChecker::isPythonVersionMatching()) {
     SetDllDirectory(tlp::PythonVersionChecker::getPythonHome().toStdString().c_str());
   }
+
 #endif
 
   // Parse arguments

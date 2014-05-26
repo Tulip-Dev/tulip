@@ -125,30 +125,38 @@ void TulipMainWindow::checkPython() {
     QStringList installedPythons = PythonVersionChecker::installedVersions();
 
     QString requiredPython = "Python " + PythonVersionChecker::compiledVersion();
-  #ifdef I64
+#ifdef I64
     requiredPython += " (64 bit)";
-  #else
+#else
     requiredPython += " (32 bit)";
-  #endif
+#endif
 
     QString errorMessage;
+
     if (installedPythons.isEmpty()) {
-        errorMessage = requiredPython + " does not seem installed on your system.\nPlease install it in order to use Tulip.";
-    } else {
-        errorMessage = "Python version mismatch. Please install " + requiredPython + " in order to use Tulip.\n";
-        if (installedPythons.size() == 1) {
-            errorMessage += "Detected version is " + installedPythons.at(0) + ".";
-        } else {
-            errorMessage += "Detected versions are ";
-            for (int i = 0 ; i < installedPythons.size() ; ++i) {
-                errorMessage += installedPythons.at(i);
-                if (i < installedPythons.size() - 1) {
-                    errorMessage += ", ";
-                }
-            }
-            errorMessage += " .";
-        }
+      errorMessage = requiredPython + " does not seem installed on your system.\nPlease install it in order to use Tulip.";
     }
+    else {
+      errorMessage = "Python version mismatch. Please install " + requiredPython + " in order to use Tulip.\n";
+
+      if (installedPythons.size() == 1) {
+        errorMessage += "Detected version is " + installedPythons.at(0) + ".";
+      }
+      else {
+        errorMessage += "Detected versions are ";
+
+        for (int i = 0 ; i < installedPythons.size() ; ++i) {
+          errorMessage += installedPythons.at(i);
+
+          if (i < installedPythons.size() - 1) {
+            errorMessage += ", ";
+          }
+        }
+
+        errorMessage += " .";
+      }
+    }
+
     showErrorMessage("Python", errorMessage);
   }
 }
