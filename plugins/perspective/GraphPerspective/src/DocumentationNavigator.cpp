@@ -27,11 +27,12 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>
 
-DocumentationNavigator::DocumentationNavigator(): QDialog() {
+DocumentationNavigator::DocumentationNavigator(): QDialog(NULL, Qt::Window) {
   setWindowIcon(QIcon(":/logo32x32.ico"));
   setWindowTitle(QString("Tulip ") + TULIP_MM_VERSION + " documentation");
 
   QVBoxLayout* vLayout = new QVBoxLayout(this);
+  vLayout->setContentsMargins(0,0,0,0);
   tabWidget = new QTabWidget(this);
   vLayout->addWidget(tabWidget);
   QToolBar* tb = new QToolBar();
