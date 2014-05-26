@@ -10,7 +10,7 @@ Functionalities
 Hierarchy
 =========
 
-Tulip supports graphs hierarchies. The navigation among the tree of subgraphs can be done in the graph list view.
+Tulip supports graphs hierarchies. The navigation in the tree of subgraphs can be performed in the graph list view.
 
 
 .. _hierarchy_definition:
@@ -31,9 +31,9 @@ Subgraph
 
 A subgraph is simply a coherent subset of the graph elements: some nodes of the graph, and some edges between them (more informations: `Wikipedia: Subgraphs <http://en.wikipedia.org/wiki/Glossary_of_graph_theory#Subgraphs>`_).
 
-Specifically, the edge of a subgraph must already be present in the graph just above it in the hierarchical scale. A subgraph does not necessarily contains all the edges of the induced subgraph. For an edge to possibly be in the subgraph, both its endpoints must be in it.
+Specifically, the edge of a subgraph must already be present in the graph just above it in the hierarchical scale. A subgraph does not necessarily contains all the edges of the induced subgraph. If an edge belongs to a subgraph, its ends belong to the subgraph too.
 
-For instance, here is a subgraph containing the nodes consisting in the bottom half of Orion (but not all edges between them):
+For instance, here is a subgraph containing the nodes in the lower half of Orion (but not all edges between them):
 
 .. image:: _images/hierarchy_orion_partial_bot.png
     :width: 600
@@ -111,7 +111,7 @@ Removing / ungrouping a subgraph or meta-node
 
 You can delete a subgraph or a meta-node by selecting the appropriate option proposed in the menu opened with a right click on the graph name in the list.
 
-The removal of a subgraph is pretty straight forward. If *Delete* is chosen, only the current subgraph is removed, letting its subgraphs going one step up in the hierarchical scale. If *Delete all* is chosen, all the subgraphs are removed of the project.
+The removal of a subgraph is pretty straight forward. If *Delete* is chosen, only the current subgraph is removed, letting its subgraphs going one step up in the graphs hierarchy; its direct subgraphs become subgraphs of its parent graph. If *Delete all* is chosen, all the subgraphs are removed from the hierarchy.
 
 Deleting a meta-node removes all nodes in this particular meta-node, but not its representation in the other graphs. To properly delete the meta-node, you first need to ungroup it. By doing so, all the edges will resume to their old anchor nodes. This modification propagates through the hierarchy tree, up to the root. The subgraphs created with the meta-node are not deleted, however, the meta-node disappears as it is removed and the ungrouped nodes does not remplace it.
 
@@ -332,9 +332,9 @@ In the  current application, we want to import the edges on new relations (or ed
 .. image:: _images/csv_import_new_edges.png
     :width: 600
 
-A relation is defined by it's source entity id and it's destination entity id. For each row we compare source and destination ids to graph entities ids. If the source and destination ids correspond to existing entities ids a new relation is created between those entities. If there is no entities in the graph with such ids you can force the creation of missing entities with the “Create missing entities” option.
+A relation is specified by a source identifier and a destination identifier. Both identifiers are defined by the values in the source and destination columns. For each row we compare the values in the source and destination columns, to the values in the source and destination properties for all the existing node entities. If the source and destination identifiers correspond to existing node entities a new relation is created between those entities. If there is no entities in the graph with such identifier you can force the creation of missing entities with the “Create missing entities” option.
 
-A small modification in this case is made, we must specify the property against which we will map the target and source fields, in this example, the property is "node_id". Furthermore, during the importation and if the nodes and the edges share common properties names, you must allow the merging of the two fields. 
+In our example, instead of the "viewLabel" default property, we specify the previously created "node_id" property as the one against which we will map the "Source" and "Target" fields.
 
 
 .. _csv_import_final:
