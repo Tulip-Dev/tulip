@@ -325,7 +325,7 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
             // TLPParser seems to replace the tab character with four white spaces when reading the content of the TLP file, don't know why
             // Anyway, replace the original tab character in order to have a correct indentation when setting the script text to the code editor
             replaceAll(mainScriptSrc, "    ", "\t");
-            codeEditor->setPlainText(QString::fromStdString(mainScriptSrc));
+            codeEditor->setPlainText(QString::fromUtf8(mainScriptSrc.c_str()));
 
             if (mainScript != "")
               _viewWidget->setScriptEditorTabText(mainScriptId, fileInfo.fileName());
