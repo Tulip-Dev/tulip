@@ -537,7 +537,7 @@ QValidator::State PropertyNameValidator::validate(QString & input, int&) const {
   return count<=1?QValidator::Acceptable:QValidator::Invalid;
 }
 
-string CSVImportConfigurationWidget::guessPropertyDataType(const string data,const string previousType) const {
+string CSVImportConfigurationWidget::guessPropertyDataType(const string& data,const string& previousType) const {
   //If there is no data skip the token
   if(data.empty()) {
     return previousType;
@@ -547,7 +547,7 @@ string CSVImportConfigurationWidget::guessPropertyDataType(const string data,con
   return combinePropertyDataType(previousType,dataType);
 }
 
-string CSVImportConfigurationWidget::combinePropertyDataType(const string previousType,const string newType) const {
+string CSVImportConfigurationWidget::combinePropertyDataType(const string& previousType, const string& newType) const {
   if(previousType.empty()) {
     return newType;
   }
@@ -558,12 +558,15 @@ string CSVImportConfigurationWidget::combinePropertyDataType(const string previo
     //If both types are numeric return the more generic numeric type : double
     return DoubleProperty::propertyTypename;
   }
-  else {
+  else if( (previousType == IntegerProperty::propertyTypename && newType == BooleanProperty::propertyTypename) || (previousType == BooleanProperty::propertyTypename && newType == IntegerProperty::propertyTypename) ) {
+    //If both types are numeric return the more generic numeric type : integer
+    return IntegerProperty::propertyTypename;
+  } else {
     return StringProperty::propertyTypename;
   }
 }
 
-string CSVImportConfigurationWidget::guessDataType(const string data) const {
+string CSVImportConfigurationWidget::guessDataType(const string& data) const {
   bool b;
 
   if(BooleanType::fromString(b,data,true)) {
