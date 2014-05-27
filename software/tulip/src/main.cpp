@@ -148,12 +148,14 @@ int main(int argc, char **argv) {
 #ifdef WIN32
   // MS stated that SetDllDirectory only exists since WinXP SP1
 #if (_WIN32_WINNT >= 0x0502)
+
   // Python on windows can be installed for current user only.
   // In that case, the Python dll is not located in system path but in the Python home directory.
   // So add the Python home directory in the Dll search paths in order to be able to load plugins depending on Python.
   if (tlp::PythonVersionChecker::isPythonVersionMatching()) {
     SetDllDirectory(tlp::PythonVersionChecker::getPythonHome().toStdString().c_str());
   }
+
 #endif
 #endif
 
