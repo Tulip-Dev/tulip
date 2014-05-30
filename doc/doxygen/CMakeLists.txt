@@ -1,5 +1,13 @@
-# this doc is only build & installed on linux
+# this doc is only build & installed on linux or MacOSX
 # when doxygen is available
+# check for dot to enable the generation of class diagrams
+IF(DOXYGEN_DOT_FOUND)
+  SET(DOXY_HAVE_DOT "YES")
+ELSE(DOXYGEN_DOT_FOUND)
+  SET(DOXY_HAVE_DOT "NO")
+  MESSAGE(AUTHOR_WARNING "dot tool not found: doxygen diagrams and graphs will not be generated")
+ENDIF(DOXYGEN_DOT_FOUND)
+
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/tulip.doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/tulip.doxyfile)
 
 ADD_CUSTOM_TARGET(doxydoc ALL
