@@ -1187,7 +1187,7 @@
 (default "(1,1,0)" "(0.25,0.25,0.25)")
 )
 (graph_attributes 0 
-(string "name" "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false           ")
+(string "name" "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false")
 (string "file" "grid_approximation.tlp")
 )
 )
