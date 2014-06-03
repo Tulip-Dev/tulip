@@ -56,7 +56,7 @@ struct dfsStruct {
   }*/
 //=======================================================================
 double PathLengthMetric::getNodeValue(tlp::node current,
-				      tlp::DoubleProperty* leafMetric) {
+                                      tlp::DoubleProperty* leafMetric) {
   if (graph->outdeg(current) == 0) return 0.0;
 
   double value = result->getNodeValue(current);
@@ -139,7 +139,7 @@ bool PathLengthMetric::run() {
 
   node _n;
   forEach(_n, graph->getNodes())
-    getNodeValue(_n, &leafMetric);
+  getNodeValue(_n, &leafMetric);
   return true;
 }
 //=======================================
