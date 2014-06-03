@@ -385,18 +385,22 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
     if (depth < 0)
       break;
 
-    IMAGEHLP_SYMBOL *symbol = (IMAGEHLP_SYMBOL *)symbol_buffer;
+    IMAGEHLP_SYMBOL *symbol = reinterpret_cast<IMAGEHLP_SYMBOL *>(symbol_buffer);
     symbol->SizeOfStruct = (sizeof *symbol) + 255;
     symbol->MaxNameLength = 254;
 
+#ifndef I64
     DWORD module_base = SymGetModuleBase(process, frame.AddrPC.Offset);
+#else
+    DWORD64 module_base = SymGetModuleBase(process, frame.AddrPC.Offset);
+#endif
 
     int64_t symbolOffset = frame.AddrPC.Offset - module_base  - 0x1000 - 1;
 
     const char * module_name = "[unknown module]";
 
     if (module_base &&
-        GetModuleFileNameA((HINSTANCE)module_base, module_name_raw, MAX_PATH)) {
+        GetModuleFileNameA(reinterpret_cast<HMODULE>(module_base), module_name_raw, MAX_PATH)) {
       module_name = module_name_raw;
     }
 
