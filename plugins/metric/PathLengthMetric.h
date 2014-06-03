@@ -29,8 +29,7 @@ public:
   bool run();
   bool check(std::string &);
 private:
-  double getNodeValue(const tlp::node n);
-  tlp::DoubleProperty* leafMetric;
+  double getNodeValue(const tlp::node n, tlp::DoubleProperty* leafMetric);
 };
 
 #endif

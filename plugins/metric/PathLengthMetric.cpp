@@ -25,7 +25,7 @@ using namespace std;
 using namespace tlp;
 
 //=======================================
-PathLengthMetric::PathLengthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), leafMetric(NULL) {
+PathLengthMetric::PathLengthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
   // Leaf metric needed
   addDependency("Leaf", "1.0");
 }
@@ -55,7 +55,8 @@ struct dfsStruct {
   return res;
   }*/
 //=======================================================================
-double PathLengthMetric::getNodeValue(tlp::node current) {
+double PathLengthMetric::getNodeValue(tlp::node current,
+				      tlp::DoubleProperty* leafMetric) {
   if (graph->outdeg(current) == 0) return 0.0;
 
   double value = result->getNodeValue(current);
@@ -128,18 +129,17 @@ double PathLengthMetric::getNodeValue(tlp::node current) {
 bool PathLengthMetric::run() {
   result->setAllNodeValue(0);
   result->setAllEdgeValue(0);
-  leafMetric = new DoubleProperty(graph);
-  string erreurMsg;
+  DoubleProperty leafMetric(graph);
+  string errorMsg;
 
-  if (!graph->applyPropertyAlgorithm("Leaf", leafMetric, erreurMsg)) {
-    tlp::warning() << erreurMsg << endl;
+  if (!graph->applyPropertyAlgorithm("Leaf", &leafMetric, errorMsg)) {
+    tlp::warning() << errorMsg << endl;
     return false;
   }
 
   node _n;
   forEach(_n, graph->getNodes())
-  getNodeValue(_n);
-  delete leafMetric;
+    getNodeValue(_n, &leafMetric);
   return true;
 }
 //=======================================
