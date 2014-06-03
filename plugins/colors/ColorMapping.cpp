@@ -127,11 +127,11 @@ const char * paramHelp[] = {
   HTML_HELP_DEF("values", "linear <BR> uniform <BR> enumerated") \
   HTML_HELP_DEF( "default", "linear" )   \
   HTML_HELP_BODY() \
-  "If linear, the input property must be a Double or Integer property. The minimum value is mapped to one end of the color scale," \
+  "If linear, the input property must be a <b>Double or Integer</b> property. The minimum value is mapped to one end of the color scale," \
   "the maximum value is mapped to the other end, and a linear interpolation is used between both.<BR>"          \
   "If uniform, this is the same except for the interpolation: the value are sorted, numbered, and a linear interpolation is used on those numbers" \
   "(in other words, only the order is taken into account, not the actual values).<BR>" \
-  "Finally, if enumerated, the input property can be of any type. Each possible value is mapped to a distinct color in no specific order." \
+  "Finally, if enumerated, the input property can be of <b>any type</b>. Each possible value is mapped to a distinct color without specific any order." \
   HTML_HELP_CLOSE(),
   // property
   HTML_HELP_OPEN() \
