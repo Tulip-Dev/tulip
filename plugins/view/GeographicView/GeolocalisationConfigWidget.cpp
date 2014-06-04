@@ -26,7 +26,7 @@
 using namespace std;
 using namespace tlp;
 
-const string viewPropertiesName[] = {"viewBorderColor", "viewBorderWidth", "viewColor", "viewLabel",
+const string viewPropertiesName[] = {"viewBorderColor", "viewBorderWidth", "viewColor", "viewFont",
                                      "viewLabelColor", "viewLabelPosition", "viewLayout", "viewMetaGraph",
                                      "viewRotation", "viewSelection", "viewShape", "viewSize",
                                      "viewTexture", "viewMetric"
