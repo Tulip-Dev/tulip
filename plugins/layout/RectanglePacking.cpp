@@ -306,8 +306,8 @@ int RectanglePacking::calculOfNumberOptimalRepositionnedRectangles(const char * 
 void RectanglePacking::defaultPositionRestOfRectangles(vector<Rectangle<float> >::iterator itlim, vector<Rectangle<float> >::iterator itend) {
 
   vector<Rectangle<float> >::iterator itr;
-  bool boolWidth;
-  bool boolHeight;
+  bool boolWidth = false;
+  bool boolHeight = false;
   float heightTemp = 0;
   float widthTemp = 0;
 
