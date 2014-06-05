@@ -41,5 +41,6 @@
 #include <tulip/SimpleTest.h>
 #include <tulip/TreeTest.h>
 #include <tulip/ForEach.h>
+#include <tulip/StringCollection.h>
 #endif
 ///@endcond
