@@ -703,7 +703,7 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
         }
         else {
           progressWidget->hide();
-          QMessageBox::warning(NULL, "Geolocalisation failed", "No results were found for address : \n" + QString::fromUtf8(addr.c_str()));
+          QMessageBox::warning(NULL, "Geolocation failed", "No results were found for address : \n" + QString::fromUtf8(addr.c_str()));
           progressWidget->show();
         }
 
@@ -990,6 +990,9 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   GlLayer *layer=glMainWidget->getScene()->getLayer("Main");
 
+  if (geoLayout == graph->getProperty<LayoutProperty>("viewLayout"))
+    graph->push();
+
   Observable::holdObservers();
 
   if(switchToGoogleMap) {
@@ -1024,15 +1027,17 @@ void GoogleMapsGraphicsView::switchViewType() {
     node n;
 
     forEach(n, graph->getNodes()) {
-      const Size &nodeSize = viewSize->getNodeValue(n);
-      geoViewSize->setNodeValue(n, nodeSize);
+      if (viewSize != geoViewSize) {
+	const Size &nodeSize = viewSize->getNodeValue(n);
+	geoViewSize->setNodeValue(n, nodeSize);
+      }
 
       if (nodeLatLng.find(n) != nodeLatLng.end()) {
         geoLayout->setNodeValue(n, Coord(nodeLatLng[n].second*2., latitudeToMercator(nodeLatLng[n].first*2.),0));
       }
-      else {
+      /*else {
         geoLayout->setNodeValue(n, Coord(0,0,0));
-      }
+	}*/
     }
 
     if (edgeBendsLatLng.size() > 0) {
@@ -1056,8 +1061,7 @@ void GoogleMapsGraphicsView::switchViewType() {
     GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
     sceneZoomAndPan.zoomAndPanAnimationStep(1);
   }
-
-  if(viewType==GoogleMapsView::Globe) {
+  else {
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
     node n;
     edge e;
@@ -1070,8 +1074,10 @@ void GoogleMapsGraphicsView::switchViewType() {
     geoViewShape->setAllEdgeValue(EdgeShape::CubicBSplineCurve);
 
     forEach(n, graph->getNodes()) {
-      const Size &nodeSize = viewSize->getNodeValue(n);
-      geoViewSize->setNodeValue(n, nodeSize);
+      if (viewSize != geoViewSize) {
+	const Size &nodeSize = viewSize->getNodeValue(n);
+	geoViewSize->setNodeValue(n, nodeSize);
+      }
 
       if (nodeLatLng.find(n) != nodeLatLng.end()) {
         Coord tmp(nodeLatLng[n].first*2./360.*M_PI,nodeLatLng[n].second*2./360.*M_PI,0);
@@ -1091,9 +1097,9 @@ void GoogleMapsGraphicsView::switchViewType() {
                   50. * cos(phi));
         geoLayout->setNodeValue(n, tmp);
       }
-      else {
+      /*else {
         geoLayout->setNodeValue(n, Coord(0,0,0));
-      }
+	}*/
     }
 
     forEach(e, graph->getEdges()) {
