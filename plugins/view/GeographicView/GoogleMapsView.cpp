@@ -216,6 +216,8 @@ void GoogleMapsView::computeGeoLayout() {
   }
 
   googleMapsGraphicsView->centerView();
+  // refresh drawing
+  googleMapsGraphicsView->switchViewType();
 }
 
 void GoogleMapsView::centerView() {
