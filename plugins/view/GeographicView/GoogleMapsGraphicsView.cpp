@@ -1028,16 +1028,17 @@ void GoogleMapsGraphicsView::switchViewType() {
 
     forEach(n, graph->getNodes()) {
       if (viewSize != geoViewSize) {
-	const Size &nodeSize = viewSize->getNodeValue(n);
-	geoViewSize->setNodeValue(n, nodeSize);
+        const Size &nodeSize = viewSize->getNodeValue(n);
+        geoViewSize->setNodeValue(n, nodeSize);
       }
 
       if (nodeLatLng.find(n) != nodeLatLng.end()) {
         geoLayout->setNodeValue(n, Coord(nodeLatLng[n].second*2., latitudeToMercator(nodeLatLng[n].first*2.),0));
       }
+
       /*else {
         geoLayout->setNodeValue(n, Coord(0,0,0));
-	}*/
+      }*/
     }
 
     if (edgeBendsLatLng.size() > 0) {
@@ -1075,8 +1076,8 @@ void GoogleMapsGraphicsView::switchViewType() {
 
     forEach(n, graph->getNodes()) {
       if (viewSize != geoViewSize) {
-	const Size &nodeSize = viewSize->getNodeValue(n);
-	geoViewSize->setNodeValue(n, nodeSize);
+        const Size &nodeSize = viewSize->getNodeValue(n);
+        geoViewSize->setNodeValue(n, nodeSize);
       }
 
       if (nodeLatLng.find(n) != nodeLatLng.end()) {
@@ -1097,9 +1098,10 @@ void GoogleMapsGraphicsView::switchViewType() {
                   50. * cos(phi));
         geoLayout->setNodeValue(n, tmp);
       }
+
       /*else {
         geoLayout->setNodeValue(n, Coord(0,0,0));
-	}*/
+      }*/
     }
 
     forEach(e, graph->getEdges()) {
