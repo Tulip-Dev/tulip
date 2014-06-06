@@ -381,6 +381,8 @@ double mercatorToLatitude(double mercator) {
 }
 
 
+QGraphicsProxyWidget *proxyGM = NULL;
+
 GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, QGraphicsScene *graphicsScene, QWidget *parent) :
   QGraphicsView(graphicsScene, parent),
   _googleMapsView(googleMapsView), graph(NULL), googleMaps(NULL),
@@ -410,7 +412,8 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   googleMaps->setProgressWidget(progressWidget);
   googleMaps->setAdresseSelectionDialog(addressSelectionDialog,addresseSelectionProxy);
 
-  scene()->addWidget(googleMaps);
+  QGraphicsProxyWidget *proxyGM = scene()->addWidget(googleMaps);
+  proxyGM->setPos(0,0);
 
   while (!googleMaps->pageInit()) {
     QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
