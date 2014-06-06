@@ -216,7 +216,10 @@ void GoogleMapsView::computeGeoLayout() {
   }
 
   googleMapsGraphicsView->centerView();
-  // refresh drawing
+  // check for shared properties
+  // before computing view layout
+  updateSharedProperties();
+  // compute view layout
   googleMapsGraphicsView->switchViewType();
 }
 
