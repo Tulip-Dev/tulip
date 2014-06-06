@@ -598,15 +598,15 @@ Otherwise, the toolbar should be used as usual, the left side containing the too
 
 .. _workspace_geographic_geoloc:
 
-Geoloc
-------
+Geolocation
+-----------
 
 .. image:: _images/i_geographic_geoloc.png
     :width: 450
 
-A geolocalization tool has been embedded in the view, exploiting the Google Maps web service. It is used to appropriatly place the nodes on the map.
+A geolocation tool has been embedded in the view, exploiting the Google Maps web service. It can appropriatly place the nodes on the map.
 
-You can choose among two methods to place the elements, either by providing a valid address for each node, stored in a property you will select, or by using the latitude and longitude value, each contained in their respective properties.
+You can choose among two methods to place the elements, either by providing a valid address for each node, stored in a property you will select, or by using the already computed latitude and longitude values, each contained in their respective properties.
 
 The above europe map snapshots for example have been build in such a way, by giving to each node a town name.
 
@@ -623,7 +623,7 @@ Options
 .. image:: _images/i_geographic_options.png
     :width: 449
 
-The polygon map shape can be switched to your convenience with another one. Choose if you want to use the default shape, or a new one imported through a *csv* or a *poly* file. The *help* button displays additional information concerning the file format and available source addresses.
+The polygon map shape can be switched to your convenience with another one. Choose if you want to use the default shape, or a new one imported through a *csv* or a *poly* file. The *help* button displays additional information about the file format and the available source addresses.
 
 
 .. _workspace_geographic_scene:
@@ -634,7 +634,7 @@ Scene
 .. image:: _images/i_geographic_scene.png
     :width: 449
 
-The properties displayed in this panel are completely similar to the ones in the Node-Link Diagram's scene rendering panel. Report to :ref:`the concerned section<workspace_diagram_scene>` if you need additional information.
+The properties displayed in this panel are completely similar to the ones in the Node-Link Diagram's scene rendering panel. Report to :ref:`the Scene dedicated section<workspace_diagram_scene>` if you need additional information.
 
 
 .. _workspace_geographic_layers:
@@ -645,7 +645,7 @@ Layers
 .. image:: _images/i_geographic_layers.png
     :width: 449
 
-As for the scene panel, the layers settings behave like the one in the Node Link Diagram view. More information :ref:`this way<workspace_diagram_layers>`.
+As for the scene panel, the layers settings behave like the one in the Node Link Diagram view. More information :ref:`Layers dedicated section<workspace_diagram_layers>`.
 
 
 .. _workspace_histogram:
