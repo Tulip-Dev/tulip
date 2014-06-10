@@ -654,7 +654,9 @@ struct TLPDataSetBuilder: public TLPFalse {
   virtual ~TLPDataSetBuilder() {
   }
   bool close() {
-    if (dataSetName) {
+    // no need to keep old
+    // DISPLAYING, VIEWS or CONTROLLER datasets
+    /* if (dataSetName) {
       // handle old displaying properties
       // to ensure compatibility
       bool b = false;
@@ -706,7 +708,7 @@ struct TLPDataSetBuilder: public TLPFalse {
         dataSet.set("fontType", ui);
 
       graphBuilder->dataSet->set(dataSetName, dataSet);
-    }
+      } */
 
     return true;
   }
