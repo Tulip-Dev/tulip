@@ -673,7 +673,8 @@ void ParallelCoordinatesView::setupAndDrawView() {
 
   registerTriggers();
   needDraw=true;
-  emit drawNeeded();
+  draw();
+  drawOverview(true);
 }
 
 ParallelCoordinatesDrawing::LayoutType ParallelCoordinatesView::getLayoutType() const {
