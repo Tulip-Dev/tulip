@@ -306,7 +306,7 @@ void GraphHierarchiesEditor::exportGraph() {
 void GraphHierarchiesEditor::renameGraph() {
   QModelIndex nameIndex =
     _ui->hierarchiesTree->model()->index(_contextIndex.row(), 0,
-					 _contextIndex.parent());
+                                         _contextIndex.parent());
   _ui->hierarchiesTree->edit(nameIndex);
 }
 
