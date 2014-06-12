@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include<stack>
+
 #include <tulip/Graph.h>
 #include <tulip/StableIterator.h>
 #include <tulip/BiconnectedTest.h>
@@ -27,6 +29,96 @@ using namespace tlp;
 //=================================================================
 BiconnectedTest * BiconnectedTest::instance = NULL;
 //=================================================================
+// structure below is used to implement dfs loop
+struct dfsBiconnectStruct {
+  node from, u, first;
+  unsigned int depth;
+  Iterator<node>* inOutNodes;
+
+  dfsBiconnectStruct(Graph* graph, node n, unsigned int d = 0, node u = node(), node first = node()):
+    from(n), u(u), first(first), depth(d), inOutNodes(new StableIterator<node>(graph->getInOutNodes(from))) {}
+};
+
+static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
+  // the graph is already connected
+  // so get any node to begin
+  node from = graph->getOneNode();
+  if (!from.isValid())
+    return;
+  MutableContainer<int> low;
+  MutableContainer<int> depth;
+  depth.setAll(-1);
+  MutableContainer<node> supergraph;
+  supergraph.setAll(node());
+
+  // dfs loop
+  stack<dfsBiconnectStruct> dfsLevels;
+  dfsBiconnectStruct dfsParams(graph, from);
+  dfsLevels.push(dfsParams);
+  depth.set(from.id, 0);
+  low.set(from.id, 0);
+
+  while(!dfsLevels.empty()) {  
+    dfsParams = dfsLevels.top();
+    from = dfsParams.from;
+    node u = dfsParams.first;
+
+    //for every node connected to from
+    Iterator<node>* itN = dfsParams.inOutNodes;
+
+    while (itN->hasNext()) {
+      node to = itN->next();
+
+      //if there is a loop, ignore it
+      if (from == to) {
+	continue;
+      }
+
+      if (!u.isValid()) {
+	dfsLevels.top().first = u = to;
+      }
+
+      //if the destination node has not been visited, visit it
+      if (depth.get(to.id) == -1) {
+	supergraph.set(to.id, from);
+	dfsParams.from = to;
+	dfsParams.first = node();
+	dfsParams.u = u;
+	unsigned int currentDepth = dfsParams.depth + 1;
+	dfsParams.depth = currentDepth;
+	depth.set(to.id, currentDepth);
+	low.set(to.id, currentDepth);
+	dfsParams.inOutNodes = new StableIterator<node>(graph->getInOutNodes(to));
+	break;
+      }
+      else {
+	low.set(from.id, std::min(low.get(from.id), depth.get(to.id)));
+      }
+    }
+    if (from != dfsParams.from) {
+      dfsLevels.push(dfsParams);
+      continue;
+    }
+    delete itN;
+
+    // pop the current dfsParams
+    node to = dfsParams.from;
+    from = supergraph.get(to.id);
+    u = dfsParams.u;
+    if (low.get(to.id) == depth.get(from.id)) {
+      if (to == u && supergraph.get(from.id).isValid())
+	addedEdges.push_back(graph->addEdge(to, supergraph.get(from.id)));
+
+      if (to != u)
+	addedEdges.push_back(graph->addEdge(u, to));
+    }
+
+    low.set(from.id, std::min(low.get(from.id), low.get(to.id)));
+    
+    dfsLevels.pop();
+  }
+}
+
 void makeBiconnectedDFS(Graph *graph, node from,
                         MutableContainer<int> &low,
                         MutableContainer<int> &depth,
@@ -145,17 +237,7 @@ void BiconnectedTest::makeBiconnected(Graph *graph, vector<edge> &addedEdges) {
 //=================================================================
 void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
   ConnectedTest::makeConnected(graph, addedEdges);
-  MutableContainer<int> low;
-  MutableContainer<int> dfsNumber;
-  dfsNumber.setAll(-1);
-  MutableContainer<node> supergraph;
-  supergraph.setAll(node());
-  node root = graph->getOneNode();
-
-  if (root.isValid()) {
-    unsigned int count = 0;
-    makeBiconnectedDFS(graph, root, low, dfsNumber, supergraph, count, addedEdges);
-  }
+  makeBiconnectedDFS(graph, addedEdges);
 }
 //=================================================================
 bool BiconnectedTest::compute(const tlp::Graph* graph) {
