@@ -43,8 +43,10 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
   // the graph is already connected
   // so get any node to begin
   node from = graph->getOneNode();
+
   if (!from.isValid())
     return;
+
   MutableContainer<int> low;
   MutableContainer<int> depth;
   depth.setAll(-1);
@@ -58,7 +60,7 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
   depth.set(from.id, 0);
   low.set(from.id, 0);
 
-  while(!dfsLevels.empty()) {  
+  while(!dfsLevels.empty()) {
     dfsParams = dfsLevels.top();
     from = dfsParams.from;
     node u = dfsParams.first;
@@ -71,50 +73,53 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
 
       //if there is a loop, ignore it
       if (from == to) {
-	continue;
+        continue;
       }
 
       if (!u.isValid()) {
-	dfsLevels.top().first = u = to;
+        dfsLevels.top().first = u = to;
       }
 
       //if the destination node has not been visited, visit it
       if (depth.get(to.id) == -1) {
-	supergraph.set(to.id, from);
-	dfsParams.from = to;
-	dfsParams.first = node();
-	dfsParams.u = u;
-	unsigned int currentDepth = dfsParams.depth + 1;
-	dfsParams.depth = currentDepth;
-	depth.set(to.id, currentDepth);
-	low.set(to.id, currentDepth);
-	dfsParams.inOutNodes = new StableIterator<node>(graph->getInOutNodes(to));
-	break;
+        supergraph.set(to.id, from);
+        dfsParams.from = to;
+        dfsParams.first = node();
+        dfsParams.u = u;
+        unsigned int currentDepth = dfsParams.depth + 1;
+        dfsParams.depth = currentDepth;
+        depth.set(to.id, currentDepth);
+        low.set(to.id, currentDepth);
+        dfsParams.inOutNodes = new StableIterator<node>(graph->getInOutNodes(to));
+        break;
       }
       else {
-	low.set(from.id, std::min(low.get(from.id), depth.get(to.id)));
+        low.set(from.id, std::min(low.get(from.id), depth.get(to.id)));
       }
     }
+
     if (from != dfsParams.from) {
       dfsLevels.push(dfsParams);
       continue;
     }
+
     delete itN;
 
     // pop the current dfsParams
     node to = dfsParams.from;
     from = supergraph.get(to.id);
     u = dfsParams.u;
+
     if (low.get(to.id) == depth.get(from.id)) {
       if (to == u && supergraph.get(from.id).isValid())
-	addedEdges.push_back(graph->addEdge(to, supergraph.get(from.id)));
+        addedEdges.push_back(graph->addEdge(to, supergraph.get(from.id)));
 
       if (to != u)
-	addedEdges.push_back(graph->addEdge(u, to));
+        addedEdges.push_back(graph->addEdge(u, to));
     }
 
     low.set(from.id, std::min(low.get(from.id), low.get(to.id)));
-    
+
     dfsLevels.pop();
   }
 }
