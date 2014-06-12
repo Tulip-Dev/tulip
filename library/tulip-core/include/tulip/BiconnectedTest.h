@@ -60,8 +60,6 @@ private:
 
   /**
    * @brief Makes the graph biconnected.
-   * Starts by making the graph connected (using ConnectgedTest::makeConnected()),
-   * then calls another function that will visit the graph using a recursive dfs algorithm and make it biconnected.
    *
    * @param graph The graph to make biconnected.
    * @param addedEdges The edges that were added to make it biconnected.
