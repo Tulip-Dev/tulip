@@ -31,7 +31,7 @@ static const char* paramHelp[] = {
   // layout
   HTML_HELP_OPEN()
   HTML_HELP_DEF( "type", "String Collection" )
-  HTML_HELP_DEF("values", "<FONT COLOR=\"red\"> X-Y : <FONT COLOR=\"black\"> Remove overlaps in both X and Y directions. <BR> <FONT COLOR=\"red\"> X : <FONT COLOR=\"black\"> 	Remove overlaps only in X direction. <BR> <FONT COLOR=\"red\"> Y : <FONT COLOR=\"black\"> Remove overlaps only in Y direction.")
+  HTML_HELP_DEF("values", "X-Y <i>(Remove overlaps in both X and Y directions)</i><br/>X <i>(Remove overlaps only in X direction)</i><br/>Y <i>(Remove overlaps only in Y direction)</i>")
   HTML_HELP_DEF( "default", "X-Y" )
   HTML_HELP_BODY()
   "Overlaps removal type."
