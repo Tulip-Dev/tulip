@@ -44,7 +44,6 @@ extern TLP_SCOPE std::string TulipShareDir;
  */
 extern TLP_SCOPE void initTulipLib(const char* appDirPath = NULL);
 
-#ifndef EMSCRIPTEN
 /**
  * @ingroup Plugins
  *
@@ -67,7 +66,6 @@ TLP_SCOPE std::string demangleClassName(const char *className,
 inline std::string demangleTlpClassName(const char *className) {
   return demangleClassName(className, true);
 }
-#endif // EMSCRIPTEN
 
 /**
  * @brief Returns an istream to read from a gzipped file (uses gzstream lib).

@@ -288,6 +288,15 @@ std::string tlp::demangleClassName(const char* className,
 #else
 #error define symbols demangling function
 #endif
+
+#else // EMSCRIPTEN
+
+void initTulipLib(const char*) {}
+
+std::string tlp::demangleClassName(const char* className, bool) {
+  return std::string(className);
+}
+
 #endif // EMSCRIPTEN
 
 //=========================================================
