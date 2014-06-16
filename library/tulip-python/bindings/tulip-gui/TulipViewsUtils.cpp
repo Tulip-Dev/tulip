@@ -103,6 +103,9 @@ tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *g
     workspace->addPanel(view);
   }
   else {
+
+    graph->addListener(this);
+
     model->addGraph(graph);
 
     view = PluginLister::instance()->getPluginObject<View>(viewName,NULL);
@@ -122,6 +125,9 @@ tlp::View *TulipViewsManager::addView(const std::string &viewName, tlp::Graph *g
     setViewVisible(view, show);
     view->draw();
     QApplication::processEvents();
+
+
+
   }
 
   connect(view, SIGNAL(destroyed(QObject *)), this, SLOT(viewDestroyed(QObject*)));
@@ -287,5 +293,12 @@ void TulipViewsManager::setViewPos(tlp::View *view, int x, int y) {
   if (!workspace) {
     viewToWindow[view]->move(x, y);
     QApplication::processEvents();
+  }
+}
+
+void TulipViewsManager::treatEvent(const tlp::Event& ev) {
+  if (ev.type() == Event::TLP_DELETE) {
+    Graph *g = static_cast<Graph*>(ev.sender());
+    closeViewsRelatedToGraph(g);
   }
 }

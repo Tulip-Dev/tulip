@@ -62,7 +62,7 @@ public :
 
 };
 
-class TulipViewsManager : public QObject {
+class TulipViewsManager : public QObject, public tlp::Observable {
 
   Q_OBJECT
 
@@ -99,6 +99,8 @@ public :
   }
 
   tlp::Workspace *tlpWorkspace();
+
+  void treatEvent(const tlp::Event& ev);
 
 public slots:
 

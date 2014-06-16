@@ -167,6 +167,9 @@ Sets the graph for the view. The current parameters will be kept.
 
 %MethodCode
     tvm.graphModel()->addGraph(a0);
+    if (!tvm.tlpWorkspace()) {
+      a0->addListener(&tvm);
+    }
     sipCpp->setGraph(a0);
 %End
 
