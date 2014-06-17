@@ -102,7 +102,7 @@ void checkTulipRunning(const QString& perspName, const QString& fileToOpen) {
     int n_agentPort = agentPort.toInt(&ok);
 
     if (ok && sendAgentMessage(n_agentPort,"SHOW_AGENT\tPROJECTS")) {
-      
+
       QMessageBox::warning(NULL, "Warning", "An instance of Tulip agent is already running,\ndisplaying it...");
 
       // if a file was passed as argument, forward it to the running instance
