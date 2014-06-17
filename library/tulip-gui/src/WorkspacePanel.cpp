@@ -226,6 +226,7 @@ void WorkspacePanel::setCurrentInteractor(tlp::Interactor *i) {
   _ui->currentInteractorButton->setText(i->action()->text());
   _ui->currentInteractorButton->setIcon(i->action()->icon());
   _ui->currentInteractorButton->setChecked(false);
+  _ui->currentInteractorButton->setToolTip(QString("Active tool:<br/><b>") + i->action()->text() + QString("</b><br/><i>click to show/hide its configuration panel.</i>"));
 }
 
 void WorkspacePanel::setCurrentInteractorConfigurationVisible(bool toggle) {
