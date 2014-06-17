@@ -175,16 +175,13 @@ void System::init()
 		s_numberOfProcessors = (int)value;
 	else
 		s_numberOfProcessors = 1;
-
+#endif
 #elif defined(OGDF_SYSTEM_UNIX)
 	s_pageSize = sysconf(_SC_PAGESIZE);
 	s_numberOfProcessors = (int)sysconf(_SC_NPROCESSORS_CONF);
-
 #else
 	s_pageSize = 0; // just a placeholder!!!
 	s_numberOfProcessors = 1; // just a placeholder!!!
-#endif
-
 #endif
 }
 
