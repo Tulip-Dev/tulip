@@ -27,14 +27,22 @@ namespace tlp {
 
 enum ProgressState{TLP_CONTINUE, TLP_CANCEL , TLP_STOP };
 
+class PluginProgress /Abstract/ {
 %TypeHeaderCode
 #include <tulip/PluginProgress.h>
 %End
-class PluginProgress /Abstract/ {
 public:
 
 %Docstring
 This interface allows to notify and control the progression of a process.
+%End
+
+%ConvertToSubClassCode
+  if (dynamic_cast<tlp::SimplePluginProgress*>(sipCpp)) {
+    sipType = sipFindType("tlp::SimplePluginProgress");
+  } else {
+    sipType = NULL;
+  }
 %End
 
 	PluginProgress();
@@ -140,5 +148,25 @@ Changes the comment about the process progression.
 :type msg: string
 %End	
 
+};
+
+class SimplePluginProgress : tlp::PluginProgress {
+%TypeHeaderCode
+#include <tulip/SimplePluginProgress.h>
+%End
+
+  public:
+    SimplePluginProgress();
+    virtual tlp::ProgressState progress(int step, int max_step);
+    virtual void cancel();
+    virtual void stop();
+    virtual bool isPreviewMode() const ;
+    virtual void setPreviewMode(bool);
+    virtual void showPreview(bool);
+    virtual tlp::ProgressState state() const;
+    virtual std::string getError();
+    virtual void setError(const std::string& error);
+    virtual void setComment(const std::string&);
+    virtual void setTitle(const std::string&);
 };
 };
