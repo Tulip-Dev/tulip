@@ -40,7 +40,7 @@ public:
    */
   InteractorEditEdgeBends(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_bends.png","Edit edge bends") {
     setPriority(StandardInteractorPriority::EditEdgeBends);
-    setConfigurationWidgetText(QString("<h3>Edit edge bends interactor</h3>")+
+    setConfigurationWidgetText(QString("<h3>Edit edge bends</h3>")+
                                "Modify edge bends<br/><br/>"+
                                "Select edge: <ul><li>use rectangle selection</li></ul>" +
                                "Translate bend: <ul><li><b>Mouse left</b> down on a selected bend + moves</li></ul>" +

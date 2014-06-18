@@ -43,7 +43,7 @@ using namespace std;
 PLUGIN(PathFinder)
 
 PathFinder::PathFinder(const tlp::PluginContext *) :
-  GLInteractorComposite(QIcon(":/pathfinder.png"), "Select the shortest path between two nodes"), weightMetric(NO_METRIC), selectAllPaths(false), edgeOrientation(DEFAULT_ORIENTATION),
+  GLInteractorComposite(QIcon(":/pathfinder.png"), "Select the path(s) between two nodes"), weightMetric(NO_METRIC), selectAllPaths(false), edgeOrientation(DEFAULT_ORIENTATION),
   pathsTypes(DEFAULT_PATHS_TYPE), toleranceActivated(DEFAULT_TOLERANCE_ACTIVATION), tolerance(DEFAULT_TOLERANCE), _configurationWidget(NULL), highlightersListWidget(NULL), configureHighlighterBtn(NULL) {
 
   edgeOrientationLabels[PathAlgorithm::Oriented] = "Consider edges as oriented";
@@ -51,7 +51,7 @@ PathFinder::PathFinder(const tlp::PluginContext *) :
   edgeOrientationLabels[PathAlgorithm::Reversed] = "Consider edges as reversed";
   pathsTypesLabels[PathAlgorithm::AllPaths] = "Select all the paths";
   pathsTypesLabels[PathAlgorithm::AllShortest] = "Select all the shortest paths";
-  pathsTypesLabels[PathAlgorithm::OneShortest] = "Select only one shortest path";
+  pathsTypesLabels[PathAlgorithm::OneShortest] = "Select one of the shortest paths";
 }
 
 PathFinder::~PathFinder() {

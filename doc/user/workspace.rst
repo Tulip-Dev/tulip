@@ -294,7 +294,7 @@ The use of the tools will not be explained in detail here. More information abou
 
 * |icon_wst_select_free|: select nodes in a freehand drawn region.
 
-* |icon_wst_select_short_path|: select the shortest path between two nodes.
+* |icon_wst_select_short_path|: select path(s) between two nodes.
 
 * |icon_wst_add_nodes_edges|: add nodes/edges.
 
