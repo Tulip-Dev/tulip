@@ -6,6 +6,7 @@ import sys
 import traceback
 if sys.version_info[0] == 3:
     from imp import reload
+
 from tulip import *
 pluginFactory = {}
 pluginModules = {}
@@ -67,6 +68,10 @@ def runPlugin(plugin):
     except:
         if plugin.pluginProgress:
             plugin.pluginProgress.setError(traceback.format_exc())
+        # Case where the plugin execution has not been launched through the Tulip GUI, so print the stack trace to stderr
+        if type(plugin.pluginProgress) == tlp.SimplePluginProgress:
+            sys.stdout.write("There was an error when running Python plugin named \"" + plugin.name() + "\". See stack trace below.\n")
+            traceback.print_exc()
     setProcessQtEvents(False)
     return ret
 
@@ -78,6 +83,10 @@ def importGraph(plugin):
     except:
         if plugin.pluginProgress:
             plugin.pluginProgress.setError(traceback.format_exc())
+        # Case where the plugin execution has not been launched through the Tulip GUI, so print the stack trace to stderr    
+        if type(plugin.pluginProgress) == tlp.SimplePluginProgress:
+            sys.stdout.write("There was an error when running Python plugin named \"" + plugin.name() + "\". See stack trace below.\n")
+            traceback.print_exc()
     setProcessQtEvents(False)
     return ret
 
@@ -89,6 +98,10 @@ def exportGraph(plugin, os):
     except:
         if plugin.pluginProgress:
             plugin.pluginProgress.setError(traceback.format_exc())
+        # Case where the plugin execution has not been launched through the Tulip GUI, so print the stack trace to stderr    
+        if type(plugin.pluginProgress) == tlp.SimplePluginProgress:
+            sys.stdout.write("There was an error when running Python plugin named \"" + plugin.name() + "\". See stack trace below.\n")
+            traceback.print_exc()
     setProcessQtEvents(False)
     return ret
 
