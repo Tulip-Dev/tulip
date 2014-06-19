@@ -588,18 +588,7 @@ double LayoutProperty::averageAngularResolution(const Graph *sg) const {
 #ifndef DOXYGEN_NOTFOR_DEVEL
 struct AngularOrder {
   bool operator() (const Coord &c1, const Coord &c2) {
-    //if the vectors have not the same direction on y-coordiantes
-    //the result is direct.
-    if (c1[1]>=0 && c2[1]<0) return false;
-
-    if (c2[1]>=0 && c1[1]<0) return true;
-
-    //If the vectors have the same size on the y-coordinates, we compare
-    //their x-coordinates
-    if (c2[1]>=0 && c1[1]>=0)
-      return c1[0]>c2[0];
-    else
-      return c1[0]<c2[0];
+      return atan2(c1[1], c1[0]) < atan2(c2[1], c2[0]);
   }
   bool operator() (const pair<Coord, edge> &c1, const pair<Coord, edge> &c2) {
     return this->operator()(c1.first, c2.first);
@@ -653,32 +642,24 @@ void LayoutProperty::computeEmbedding(const node n, Graph *sg) {
 
   delete itE;
 
-  //Compute normalized vectors associated to incident edges.
-  const Coord& center=getNodeValue(n);
+  const Coord& center = getNodeValue(n);
   list<pCE>::iterator it;
-
   for (it=adjCoord.begin(); it!=adjCoord.end();) {
     it->first  -= center;
     float norm = it->first.norm();
-
-    if (norm) {
-      it->first /= norm;
-      ++it;
+    if (norm < 1E-5) {
+        it = adjCoord.erase(it);
+        cerr << "[ERROR]:" << __PRETTY_FUNCTION__ << " :: norms are too small for node:" << n << endl;
     }
-    else   // remove null vector
-      it = adjCoord.erase(it);
+    else
+        ++it;
   }
 
-  //Sort the vector to compute angles between two edges
-  //Correctly.
   adjCoord.sort(AngularOrder());
-  //Compute the angles
   vector<edge> tmpOrder;
-
   for (it = adjCoord.begin(); it != adjCoord.end(); ++it) {
     tmpOrder.push_back(it->second);
   }
-
   sg->setEdgeOrder(n, tmpOrder);
 }
 //=================================================================================
