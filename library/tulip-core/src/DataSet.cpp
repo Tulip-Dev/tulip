@@ -160,7 +160,9 @@ void DataSet::writeData(std::ostream& os, const std::string& prop,
     serializerContainer.tnTodts.find(dt->getTypeName());
 
   if (it == serializerContainer.tnTodts.end()) {
+#ifndef EMSCRIPTEN
     tlp::warning() << "Write error: No data serializer found for type " << demangleClassName(dt->getTypeName().c_str()).c_str() << std::endl;
+#endif
     return;
   }
 
