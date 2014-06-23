@@ -30,6 +30,8 @@
 using namespace tlp;
 using namespace std;
 
+QString CSVParserConfigurationWidget::lastOpenedFile;
+
 CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent) :
   QWidget(parent),
   ui(new Ui::CSVParserConfigurationWidget) {
@@ -49,10 +51,12 @@ CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent) :
   connect(ui->textDelimiterComboBox,SIGNAL(currentIndexChanged ( int)),this,SIGNAL(parserChanged()));
   connect(ui->mergesep,SIGNAL(stateChanged(int)),this,SIGNAL(parserChanged()));
   connect(ui->othersep,SIGNAL(textEdited(const QString &)), this, SIGNAL(parserChanged()));
-
-  //File change
   connect(ui->fileChooserPushButton,SIGNAL(clicked(bool)),this,SLOT(changeFileNameButtonPressed()));
+}
 
+void CSVParserConfigurationWidget::initWithLastOpenedFile() {
+  if (QFile::exists(lastOpenedFile))
+    setFileToOpen(lastOpenedFile);
 }
 
 CSVParserConfigurationWidget::~CSVParserConfigurationWidget() {
@@ -121,7 +125,11 @@ QString CSVParserConfigurationWidget::getSeparator()const {
 }
 
 void CSVParserConfigurationWidget::changeFileNameButtonPressed() {
-  QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CSV file"), QString(), tr(
+  QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a CSV file"),
+						  lastOpenedFile.isEmpty() ?
+						  QString() :
+						  QFileInfo(lastOpenedFile).absoluteDir().absolutePath(),
+						  tr(
                        "CSV files (*.csv);;Text files (*.txt);;All files (*)"));
   setFileToOpen(fileName);
 }
@@ -131,39 +139,38 @@ void CSVParserConfigurationWidget::setFileToOpen(const QString& fileToOpen) {
     ui->fileLineEdit->setText(fileToOpen);
 
     //Try to autodetect separator
-    if(QFile::exists(ui->fileLineEdit->text())) {
-      QFile file(ui->fileLineEdit->text());
+    QFile file(fileToOpen);
 
-      if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        //Read the first line
-        QByteArray firstLine = file.readLine();
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      //Read the first line
+      QByteArray firstLine = file.readLine();
 
-        if(!firstLine.isEmpty()) {
-          QString line(firstLine);
-          //Search for the best matching separator in the default list
-          QVector<int> separatorOccurence(ui->separatorComboBox->count());
+      if(!firstLine.isEmpty()) {
+	QString line(firstLine);
+	//Search for the best matching separator in the default list
+	QVector<int> separatorOccurence(ui->separatorComboBox->count());
+	
+	for(int i=0; i<ui->separatorComboBox->count(); ++i) {
+	  QString separator = getSeparator(i);
+	  //Count the number of occurence for this separator
+	  separatorOccurence[i] = line.count(separator);
+	}
 
-          for(int i=0; i<ui->separatorComboBox->count(); ++i) {
-            QString separator = getSeparator(i);
-            //Count the number of occurence for this separator
-            separatorOccurence[i] = line.count(separator);
-          }
-
-          int currentMaxOccurence = -1;
-
-          for(int i = 0 ; i< ui->separatorComboBox->count() ; ++i) {
-            if(separatorOccurence[i] > currentMaxOccurence) {
-              currentMaxOccurence = separatorOccurence[i];
-              //Set as separator the one with the greatest occurence number.
-              ui->separatorComboBox->setCurrentIndex(i);
-            }
-          }
-        }
-
-        file.close();
+	int currentMaxOccurence = -1;
+	
+	for(int i = 0 ; i< ui->separatorComboBox->count() ; ++i) {
+	  if(separatorOccurence[i] > currentMaxOccurence) {
+	    currentMaxOccurence = separatorOccurence[i];
+	    //Set as separator the one with the greatest occurence number.
+	    ui->separatorComboBox->setCurrentIndex(i);
+	  }
+	}
       }
-    }
 
+      file.close();
+    }
+ 
+    lastOpenedFile = fileToOpen;
     emit parserChanged();
   }
 }
