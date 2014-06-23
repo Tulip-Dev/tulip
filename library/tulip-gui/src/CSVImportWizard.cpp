@@ -46,6 +46,9 @@ CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage ( QWidget
   noteWidget->setWordWrap(true);
   noteWidget->setText(" <em>Note: several (node and/or edge) import operations using the same source file may be required to get all data to be imported and inserted into a same graph.</em>");
   layout()->addWidget(noteWidget);
+
+  // init with last opened file if possible
+  parserConfigurationWidget->initWithLastOpenedFile();
 }
 
 bool CSVParsingConfigurationQWizardPage::isComplete() const {

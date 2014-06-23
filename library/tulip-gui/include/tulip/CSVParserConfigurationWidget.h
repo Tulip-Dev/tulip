@@ -51,6 +51,7 @@ public:
   std::string getEncoding()const;
   bool invertMatrix()const;
   bool getMergeSeparator() const;
+  void initWithLastOpenedFile();
 
 public slots:
   void setFileToOpen(const QString& fileToOpen);
@@ -67,6 +68,7 @@ private:
   QString getSeparator(int index)const;
 
   Ui::CSVParserConfigurationWidget *ui;
+  static QString lastOpenedFile;
 
 signals:
   void parserChanged();
