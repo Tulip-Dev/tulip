@@ -66,7 +66,7 @@ TulipProject *TulipProject::newProject() {
 }
 
 bool TulipProject::openProjectFile(const QString &file,
-				   tlp::PluginProgress *progress) {
+                                   tlp::PluginProgress *progress) {
   if(!QFileInfo(file).exists()) {
     _isValid = false;
     _lastError = "File "+file+" not found";
@@ -74,6 +74,7 @@ bool TulipProject::openProjectFile(const QString &file,
   }
 
   bool deleteProgress = false;
+
   if (!progress) {
     progress = new tlp::SimplePluginProgress;
     deleteProgress = true;
@@ -82,8 +83,10 @@ bool TulipProject::openProjectFile(const QString &file,
   if (!QuaZIPFacade::unzip(_rootDir.absolutePath(),file,progress)) {
     _isValid = false;
     _lastError = "Failed to unzip project.";
+
     if (deleteProgress)
       delete progress;
+
     return false;
   }
 

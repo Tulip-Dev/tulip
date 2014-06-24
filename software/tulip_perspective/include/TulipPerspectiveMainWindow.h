@@ -36,7 +36,7 @@ class TulipPerspectiveProcessMainWindow : public QMainWindow {
 
 public:
   explicit TulipPerspectiveProcessMainWindow(QString title,
-					     QWidget *parent = NULL);
+      QWidget *parent = NULL);
   void setProject(tlp::TulipProject* project);
 
 signals:

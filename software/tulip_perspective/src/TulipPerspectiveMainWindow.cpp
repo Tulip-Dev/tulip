@@ -61,9 +61,9 @@ void TulipPerspectiveProcessMainWindow::closeEvent(QCloseEvent* event) {
 }
 
 void TulipPerspectiveProcessMainWindow::setProject(tlp::TulipProject* project) {
-    _project = project;
-    connect(project, SIGNAL(projectFileChanged(const QString&)),
-	    this, SLOT(projectFileChanged(const QString&)));
+  _project = project;
+  connect(project, SIGNAL(projectFileChanged(const QString&)),
+          this, SLOT(projectFileChanged(const QString&)));
 }
 
 void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString& projectFile) {
@@ -72,7 +72,7 @@ void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString& projec
   wTitle += QString(" [") + _project->perspective() + "]";
 
   if (!_project->name().isEmpty())
-      wTitle += QString(" - ") + _project->name();
+    wTitle += QString(" - ") + _project->name();
   else if (!projectFile.isEmpty())
     wTitle += QString(" - ") + projectFile;
 
