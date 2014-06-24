@@ -326,7 +326,7 @@ public:
     */
   QString toAbsolutePath(const QString &relativePath);
 
- signals:
+signals:
   void projectFileChanged(const QString& projectFile);
 
 public slots:
