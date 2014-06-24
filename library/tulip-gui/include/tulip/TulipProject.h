@@ -86,7 +86,7 @@ public:
   static TulipProject *newProject();
 
   /**
-    @brief Opens a previously saved tulip project file
+    @brief Opens a previously saved tulip project file and returns the corresponding project
 
     This method will unpack a tulip project file into some directory and allow the user to manipulate the files.
     @see TulipProject::save()
@@ -95,6 +95,17 @@ public:
     @return a pointer to a TulipProject object.
     */
   static TulipProject *openProject(const QString &file, tlp::PluginProgress *progress=NULL);
+
+  /**
+    @brief Opens a previously saved tulip project file
+
+    This method will unpack a tulip project file into some directory and allow the user to manipulate the files.
+    @see TulipProject::save()
+    @param file The file to open.
+    @param progress A progress handler.
+    @return true if the file has been successfully opened
+    */
+  bool openProjectFile(const QString &file, tlp::PluginProgress *progress=NULL);
 
   /**
     @brief Restores a project which has already been extracted into path
