@@ -121,6 +121,7 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
     delete progress;
 
   _projectFile = file;
+  emit projectFileChanged(file);
   return true;
 }
 

@@ -237,7 +237,7 @@ int main(int argc,char **argv) {
   }
 
   // Create perspective's window
-  TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow();
+  TulipPerspectiveProcessMainWindow *mainWindow = new TulipPerspectiveProcessMainWindow(title);
   mainWindow->setVisible(false);
 
   // Progress bar dialog
@@ -332,26 +332,11 @@ int main(int argc,char **argv) {
   }
 
   Perspective::setInstance(perspective);
-  mainWindow->setPerspective(perspective);
-
-  title += QString(" [") + perspectiveName + "]";
-
-  if (project) {
-    if (!project->name().isEmpty())
-      title += QString(" - ") + project->name();
-    else if (!projectFilePath.isEmpty())
-      title += QString(" - ") + projectFilePath;
-  }
-
-#ifndef NDEBUG
-  title += " - [ Debug mode ]";
-#endif
+  mainWindow->setProject(project);
 
   perspective->start(progress);
 
-  if (mainWindow->windowTitle() == "") {
-    mainWindow->setWindowTitle(title);
-  }
+  mainWindow->projectFileChanged(projectFilePath);
 
   delete progress;
 

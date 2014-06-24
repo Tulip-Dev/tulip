@@ -22,7 +22,7 @@
 #include <QMainWindow>
 
 namespace tlp {
-class Perspective;
+class TulipProject;
 }
 
 /*
@@ -31,19 +31,20 @@ class Perspective;
   */
 class TulipPerspectiveProcessMainWindow : public QMainWindow {
   Q_OBJECT
-  tlp::Perspective* _perspective;
+  tlp::TulipProject* _project;
+  QString _title;
 
 public:
-  explicit TulipPerspectiveProcessMainWindow(QWidget *parent = NULL);
-  void setPerspective(tlp::Perspective* perspective) {
-    _perspective = perspective;
-  }
+  explicit TulipPerspectiveProcessMainWindow(QString title,
+					     QWidget *parent = NULL);
+  void setProject(tlp::TulipProject* project);
 
 signals:
 
 public slots:
   void clearMemoryChecker();
   void printMemoryChecker();
+  void projectFileChanged(const QString& projectFile);
 
 protected:
   void closeEvent(QCloseEvent *);

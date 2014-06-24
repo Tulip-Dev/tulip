@@ -22,8 +22,9 @@
 #include <QShortcut>
 #include <QAction>
 #include <tulip/Perspective.h>
+#include <tulip/TulipProject.h>
 
-TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QWidget *parent): QMainWindow(parent) {
+TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent): QMainWindow(parent), _title(title) {
 #ifdef MEMORYCHECKER_ON
   QAction* a1 = new QAction(this);
   a1->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_C));
@@ -52,9 +53,31 @@ void TulipPerspectiveProcessMainWindow::clearMemoryChecker() {
 }
 
 void TulipPerspectiveProcessMainWindow::closeEvent(QCloseEvent* event) {
-  if (_perspective->terminated()) {
+  if (tlp::Perspective::instance()->terminated()) {
     QMainWindow::closeEvent(event);
   }
   else
     event->ignore();
+}
+
+void TulipPerspectiveProcessMainWindow::setProject(tlp::TulipProject* project) {
+    _project = project;
+    connect(project, SIGNAL(projectFileChanged(const QString&)),
+	    this, SLOT(projectFileChanged(const QString&)));
+}
+
+void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString& projectFile) {
+  QString wTitle(_title);
+
+  wTitle += QString(" [") + _project->perspective() + "]";
+
+  if (!_project->name().isEmpty())
+      wTitle += QString(" - ") + _project->name();
+  else if (!projectFile.isEmpty())
+    wTitle += QString(" - ") + projectFile;
+
+#ifndef NDEBUG
+  wTitle += " - [ Debug mode ]";
+#endif
+  setWindowTitle(wTitle);
 }
