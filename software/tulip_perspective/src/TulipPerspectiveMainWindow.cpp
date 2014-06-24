@@ -24,7 +24,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/TulipProject.h>
 
-TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent): QMainWindow(parent), _title(title) {
+TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent): QMainWindow(parent), _project(NULL), _title(title) {
 #ifdef MEMORYCHECKER_ON
   QAction* a1 = new QAction(this);
   a1->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_C));
