@@ -65,37 +65,45 @@ TulipProject *TulipProject::newProject() {
   return new TulipProject(rootPath);
 }
 
-TulipProject *TulipProject::openProject(const QString &file, tlp::PluginProgress *progress) {
-  bool deleteProgress = false;
+bool TulipProject::openProjectFile(const QString &file,
+				   tlp::PluginProgress *progress) {
+  if(!QFileInfo(file).exists()) {
+    _isValid = false;
+    _lastError = "File "+file+" not found";
+    return false;
+  }
 
+  bool deleteProgress = false;
   if (!progress) {
     progress = new tlp::SimplePluginProgress;
     deleteProgress = true;
   }
 
+  if (!QuaZIPFacade::unzip(_rootDir.absolutePath(),file,progress)) {
+    _isValid = false;
+    _lastError = "Failed to unzip project.";
+    if (deleteProgress)
+      delete progress;
+    return false;
+  }
+
+  readMetaInfos();
+
+  if (deleteProgress)
+    delete progress;
+
+  _projectFile = file;
+  emit projectFileChanged(file);
+  return true;
+}
+
+TulipProject *TulipProject::openProject(const QString &file, tlp::PluginProgress *progress) {
   TulipProject *project = TulipProject::newProject();
 
   if (!project->isValid())
     return project;
 
-  if(!QFileInfo(file).exists()) {
-    project->_isValid = false;
-    project->_lastError = "File "+file+" not found";
-    return project;
-  }
-
-  if (!QuaZIPFacade::unzip(project->_rootDir.absolutePath(),file,progress)) {
-    project->_isValid = false;
-    project->_lastError = "Failed to unzip project.";
-    return project;
-  }
-
-  project->readMetaInfos();
-
-  if (deleteProgress)
-    delete progress;
-
-  project->_projectFile = file;
+  project->openProjectFile(file, progress);
   return project;
 }
 

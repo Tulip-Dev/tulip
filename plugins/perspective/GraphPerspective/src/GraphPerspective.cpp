@@ -677,8 +677,7 @@ void GraphPerspective::open(QString fileName) {
 void GraphPerspective::openProjectFile(const QString &path) {
   if (_graphs->empty()) {
     PluginProgress* prg = progress(NoProgressOption);
-    delete _project;
-    _project = TulipProject::openProject(path,prg);
+    _project->openProjectFile(path,prg);
     QMap<QString,tlp::Graph*> rootIds = _graphs->readProject(_project,prg);
     _ui->workspace->readProject(_project,rootIds,prg);
     _ui->developFrame->setProject(_project);
