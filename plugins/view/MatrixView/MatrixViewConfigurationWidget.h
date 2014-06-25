@@ -52,6 +52,8 @@ public:
   void setDisplayEdges(const bool state);
   int orderingProperty() const;
   void setOrderingProperty(int index);
+  void setAscendingOrder(const bool state);
+  bool ascendingOrder() const;
 
 protected slots:
   void orderingMetricComboIndexChanged(int i);
@@ -61,6 +63,7 @@ signals:
   void changeBackgroundColor(QColor);
   void setGridDisplayMode();
   void showEdges(bool);
+  void ascendingOrderChanged(bool);
 
 private:
   bool _modifyingMetricList;
