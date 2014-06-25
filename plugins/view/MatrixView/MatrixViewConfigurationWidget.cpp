@@ -36,6 +36,7 @@ MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent): Q
   connect(_ui->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this, SIGNAL(changeBackgroundColor(QColor)));
   connect(_ui->gridDisplayCombo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(setGridDisplayMode()));
   connect(_ui->showedgesbox, SIGNAL(clicked(bool)), this, SIGNAL(showEdges(bool)));
+  connect(_ui->ascendingOrderCBox, SIGNAL(clicked(bool)), this, SIGNAL(setAscendingOrder(bool)));
 
   if (Perspective::instance())
     _ui->backgroundColorBtn->setDialogParent(Perspective::instance()->mainWindow());
@@ -53,6 +54,14 @@ void MatrixViewConfigurationWidget::setDisplayEdges(const bool state) {
   _ui->showedgesbox->setChecked(state);
 }
 
+void MatrixViewConfigurationWidget::setAscendingOrder(const bool state) {
+  _ui->ascendingOrderCBox->setChecked(state);
+}
+
+bool MatrixViewConfigurationWidget::ascendingOrder() const {
+  return _ui->ascendingOrderCBox->isChecked();
+}
+
 void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
   QString firstString = _ui->orderingMetricCombo->itemText(0);
   QString currentString = _ui->orderingMetricCombo->currentText();
@@ -65,7 +74,7 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
   forEach (s, g->getProperties()) {
     string type = g->getProperty(s)->getTypename();
 
-    if (type != "double" && type != "int")
+    if (type != "double" && type != "int" && type != "string")
       continue;
 
     _ui->orderingMetricCombo->addItem(tlpStringToQString(s));

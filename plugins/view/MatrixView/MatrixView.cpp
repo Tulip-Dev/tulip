@@ -75,10 +75,13 @@ void MatrixView::setState(const DataSet &ds) {
   initDisplayedGraph();
   registerTriggers();
 
-  bool displayEdges=true;
-  ds.get("show Edges",displayEdges);
-  showEdges(displayEdges);
-  _configurationWidget->setDisplayEdges(displayEdges);
+  bool status=true;
+  ds.get("show Edges", status);
+  showEdges(status);
+  _configurationWidget->setDisplayEdges(status);
+
+  ds.get("ascending order", status);
+  _configurationWidget->setAscendingOrder(status);
 
   Color c=getGlMainWidget()->getScene()->getBackgroundColor();
   ds.get("Background Color", c);
@@ -106,6 +109,7 @@ void MatrixView::graphChanged(Graph *) {
 DataSet MatrixView::state() const {
   DataSet ds;
   ds.set("show Edges", getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isDisplayEdges());
+  ds.set("ascending order", _configurationWidget->ascendingOrder());
   ds.set("Grid mode", _configurationWidget->gridDisplayMode());
   ds.set("Background Color", getGlMainWidget()->getScene()->getBackgroundColor());
   ds.set("ordering", _configurationWidget->orderingProperty());
@@ -352,10 +356,28 @@ void MatrixView::delEdge(tlp::Graph *,const tlp::edge e) {
 }
 
 template<typename PROPTYPE>
-struct PropertySorter {
+struct AscendingPropertySorter {
   PROPTYPE *prop;
+  AscendingPropertySorter(PropertyInterface *_prop) :
+    prop(static_cast<PROPTYPE*>(_prop)) {}
   bool operator()(node a,node b) {
     return prop->getNodeValue(a) < prop->getNodeValue(b);
+  }
+};
+
+template<typename PROPTYPE>
+struct DescendingPropertySorter {
+  PROPTYPE *prop;
+  DescendingPropertySorter(PropertyInterface *_prop) :
+    prop(static_cast<PROPTYPE*>(_prop)) {}
+  bool operator()(node a,node b) {
+    return prop->getNodeValue(a) > prop->getNodeValue(b);
+  }
+};
+
+struct DescendingIdSorter {
+  bool operator()(node a, node b) {
+    return a.id > b.id;
   }
 };
 
@@ -365,22 +387,39 @@ void MatrixView::updateNodesOrder() {
   int i=0;
   node n;
   forEach(n, graph()->getNodes())
-  _orderedNodes[i++] = n;
+    _orderedNodes[i++] = n;
 
   if (graph()->existProperty(_orderingMetricName)) {
     PropertyInterface *pi = graph()->getProperty(_orderingMetricName);
 
     if (pi->getTypename() == "double") {
-      PropertySorter<DoubleProperty> sorter;
-      sorter.prop = static_cast<DoubleProperty *>(pi);
-      sort(_orderedNodes.begin(), _orderedNodes.end(), sorter);
+      if (_configurationWidget->ascendingOrder())
+	sort(_orderedNodes.begin(), _orderedNodes.end(),
+	     AscendingPropertySorter<DoubleProperty>(pi));
+      else
+	sort(_orderedNodes.begin(), _orderedNodes.end(),
+	     DescendingPropertySorter<DoubleProperty>(pi));
+	
     }
     else if (pi->getTypename() == "int") {
-      PropertySorter<IntegerProperty> sorter;
-      sorter.prop = static_cast<IntegerProperty *>(pi);
-      sort(_orderedNodes.begin(), _orderedNodes.end(), sorter);
+      if (_configurationWidget->ascendingOrder())
+	sort(_orderedNodes.begin(), _orderedNodes.end(),
+	     AscendingPropertySorter<IntegerProperty>(pi));
+      else
+	sort(_orderedNodes.begin(), _orderedNodes.end(),
+	     DescendingPropertySorter<IntegerProperty>(pi));
     }
-  }
+    else if (pi->getTypename() == "string") {
+      if (_configurationWidget->ascendingOrder())
+	sort(_orderedNodes.begin(), _orderedNodes.end(),
+	     AscendingPropertySorter<StringProperty>(pi));
+      else
+	sort(_orderedNodes.begin(), _orderedNodes.end(),
+	     DescendingPropertySorter<StringProperty>(pi));
+    }
+  } else if (!_configurationWidget->ascendingOrder())
+    sort(_orderedNodes.begin(), _orderedNodes.end(),
+	 DescendingIdSorter());
 }
 
 void MatrixView::updateLayout() {
