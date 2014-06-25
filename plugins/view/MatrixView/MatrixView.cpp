@@ -387,39 +387,40 @@ void MatrixView::updateNodesOrder() {
   int i=0;
   node n;
   forEach(n, graph()->getNodes())
-    _orderedNodes[i++] = n;
+  _orderedNodes[i++] = n;
 
   if (graph()->existProperty(_orderingMetricName)) {
     PropertyInterface *pi = graph()->getProperty(_orderingMetricName);
 
     if (pi->getTypename() == "double") {
       if (_configurationWidget->ascendingOrder())
-	sort(_orderedNodes.begin(), _orderedNodes.end(),
-	     AscendingPropertySorter<DoubleProperty>(pi));
+        sort(_orderedNodes.begin(), _orderedNodes.end(),
+             AscendingPropertySorter<DoubleProperty>(pi));
       else
-	sort(_orderedNodes.begin(), _orderedNodes.end(),
-	     DescendingPropertySorter<DoubleProperty>(pi));
-	
+        sort(_orderedNodes.begin(), _orderedNodes.end(),
+             DescendingPropertySorter<DoubleProperty>(pi));
+
     }
     else if (pi->getTypename() == "int") {
       if (_configurationWidget->ascendingOrder())
-	sort(_orderedNodes.begin(), _orderedNodes.end(),
-	     AscendingPropertySorter<IntegerProperty>(pi));
+        sort(_orderedNodes.begin(), _orderedNodes.end(),
+             AscendingPropertySorter<IntegerProperty>(pi));
       else
-	sort(_orderedNodes.begin(), _orderedNodes.end(),
-	     DescendingPropertySorter<IntegerProperty>(pi));
+        sort(_orderedNodes.begin(), _orderedNodes.end(),
+             DescendingPropertySorter<IntegerProperty>(pi));
     }
     else if (pi->getTypename() == "string") {
       if (_configurationWidget->ascendingOrder())
-	sort(_orderedNodes.begin(), _orderedNodes.end(),
-	     AscendingPropertySorter<StringProperty>(pi));
+        sort(_orderedNodes.begin(), _orderedNodes.end(),
+             AscendingPropertySorter<StringProperty>(pi));
       else
-	sort(_orderedNodes.begin(), _orderedNodes.end(),
-	     DescendingPropertySorter<StringProperty>(pi));
+        sort(_orderedNodes.begin(), _orderedNodes.end(),
+             DescendingPropertySorter<StringProperty>(pi));
     }
-  } else if (!_configurationWidget->ascendingOrder())
+  }
+  else if (!_configurationWidget->ascendingOrder())
     sort(_orderedNodes.begin(), _orderedNodes.end(),
-	 DescendingIdSorter());
+         DescendingIdSorter());
 }
 
 void MatrixView::updateLayout() {
