@@ -108,6 +108,7 @@ void SceneConfigWidget::resetChanges() {
     _ui->labelsOrderingCombo->setCurrentIndex(model->rowOf(renderingParameters->getElementOrderingProperty()));
 
   _ui->labelsFitCheck->setChecked(renderingParameters->isLabelScaled());
+  _ui->labelsBillboardedCheck->setChecked(renderingParameters->getLabelsAreBillboarded());
   _ui->fixedFontSizeRB->setChecked(renderingParameters->isLabelFixedFontSize());
   _ui->dynamicFontSizeRB->setChecked(!renderingParameters->isLabelFixedFontSize());
   _ui->labelsDensitySlider->setValue(renderingParameters->getLabelsDensity());
@@ -176,6 +177,7 @@ void SceneConfigWidget::applySettings() {
   }
 
   renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());
+  renderingParameters->setLabelsAreBillboarded(_ui->labelsBillboardedCheck->isChecked());
   renderingParameters->setLabelFixedFontSize(_ui->fixedFontSizeRB->isChecked());
   renderingParameters->setLabelsDensity(_ui->labelsDensitySlider->value());
   renderingParameters->setMinSizeOfLabel(_ui->labelSizesSpanSlider->lowerValue());
