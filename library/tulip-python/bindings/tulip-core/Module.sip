@@ -49,6 +49,7 @@
     std::string pluginLoaderFuncs =
     "import os\n"
     "import sys\n"
+    "import traceback\n"
 
     "def loadTulipPythonPlugin(pluginFilePath):\n"
     "        if not os.path.isfile(pluginFilePath) or not pluginFilePath.endswith(\".py\"):\n"
@@ -72,6 +73,8 @@
     "        try:\n"
     "                mod = __import__(moduleName)\n"
     "        except ImportError:\n"
+    "                sys.stdout.write(\"There was an error when trying to load the Tulip Python plugin from the file \" + pluginFilePath + \". See stack trace below.\\n\")\n"
+    "                traceback.print_exc()\n"
     "                return False\n"
 
     "        return True\n"
