@@ -973,6 +973,20 @@ bool TLPGraphBuilder::addStruct(const std::string& structName,TLPBuilder*&newBui
 }
 //================================================================================
 
+// Function to retrieve the original size of a file compressed with gzip.
+// The uncompressed file size (modulo 2^32) is stored in the last four bytes of a Gzip file.
+// So that method is unreliable if the original file size was greater than 4GB (which is pretty rare for TLP files ...).
+static int getUncompressedSizeOfGzipFile(const std::string &gzipFilePath) {
+  std::ifstream is(gzipFilePath.c_str(), std::ifstream::binary);
+  is.seekg (-4, is.end);
+  int uncompressedSize = 0;
+  is.read(reinterpret_cast<char*>(&uncompressedSize), 4);
+  is.close();
+  return uncompressedSize;
+}
+
+//================================================================================
+
 namespace {
 const char * paramHelp[] = {
   // filename
@@ -1039,8 +1053,8 @@ public:
       size=infoEntry.st_size;
 
       if (filename.rfind(".gz") == (filename.length() - 3)) {
+        size = getUncompressedSizeOfGzipFile(filename);
         input = tlp::getIgzstream(filename.c_str());
-        size *= 4;
       }
       else
         input = new std::ifstream(filename.c_str(),
