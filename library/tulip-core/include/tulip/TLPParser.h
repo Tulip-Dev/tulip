@@ -468,6 +468,9 @@ struct TLPParser {
       }
     }
 
+    if (pluginProgress)
+      pluginProgress->progress(fileSize,fileSize);
+
     return true;
   }
 };
