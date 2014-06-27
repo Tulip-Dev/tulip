@@ -792,16 +792,20 @@ QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
 
 //QStringEditorCreator
 QWidget* QStringEditorCreator::createWidget(QWidget *parent) const {
-  return new QLineEdit(parent);
+  QTextEdit *edit = new QTextEdit(parent);
+  edit->setFocusPolicy(Qt::StrongFocus);
+  edit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  edit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  return edit;
 }
 
-void QStringEditorCreator::setEditorData(QWidget* w, const QVariant& var, bool, tlp::Graph*) {
-  static_cast<QLineEdit*>(w)->setText(var.toString());
-  static_cast<QLineEdit*>(w)->selectAll();
+void QStringEditorCreator::setEditorData(QWidget* editor, const QVariant& var, bool, tlp::Graph*) {
+  static_cast<QTextEdit*>(editor)->setPlainText(var.toString());
+  static_cast<QTextEdit*>(editor)->selectAll();
 }
 
-QVariant QStringEditorCreator::editorData(QWidget* w,tlp::Graph*) {
-  return static_cast<QLineEdit*>(w)->text();
+QVariant QStringEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
+  return static_cast<QTextEdit*>(editor)->toPlainText();
 }
 
 QString QStringEditorCreator::displayText(const QVariant& var) const {
