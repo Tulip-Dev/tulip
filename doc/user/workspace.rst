@@ -341,7 +341,7 @@ The scene rendering settings can be opened by clicking on the **Scene** tab, in 
 
 Note that some of the settings mentioned above can be modified through the quick access bar or with the right click menu in the main window.
 
-You might need to click on the refresh button, in the top right corner of the tab to apply the changes made in this tab. The tab can be closed by clicking on the cross near the tab's name.
+The tab can be closed by clicking on the cross near the tab's name.
 	
 
 .. _workspace_diagram_layers:
@@ -349,12 +349,12 @@ You might need to click on the refresh button, in the top right corner of the ta
 Layers
 ------
 
-The layers settings can be accessed by clicking on the **Layers** tab. The following tab is then is displayed:
+The layers settings can be accessed by clicking on the **Layers** tab. The following tab is then displayed:
 
 .. image:: _images/i_workspace_layers.png
     :width: 450
 
-The first column, *Visible*, authorizes you to select the elements you want to display in the graph. The second column, *Stencil*, gives you another level of visibility by setting the objects on the foreground. 
+The first column, *Visible*, allows you to select the elements you want to display in the graph. The second column, *Stencil*, gives you another level of visibility by setting the objects on the foreground. 
 
 
 .. _workspace_diagram_faq:
@@ -410,7 +410,7 @@ The Node-Link Diagram being one of the mostly used view, it is also the one we a
 
 * *I do not like the selection color or the default node color, any suggestion ?*
 
-  The selection and default color can be customized in the *Settings* window. To open it, go through the *Edit* menu and the *Preferences* element. More information in :ref:`preferences`.
+  The selection and default color can be customized in the *Preferences* window. To open it, go through the *Edit* menu and the *Preferences* element. More information in :ref:`preferences`.
   
 
 
@@ -522,7 +522,6 @@ Settings
 By clicking on the tab in the top right corner, you can open the display settings panel.
 
 .. image:: _images/i_adjacency_settings.png
-    :width: 308
 
 Several parameters such as the background color, the node ordering and the grid and edges display visibility can be customized.
 
@@ -602,7 +601,6 @@ Geolocation
 -----------
 
 .. image:: _images/i_geographic_geoloc.png
-    :width: 450
 
 A geolocation tool has been embedded in the view, exploiting the Google Maps web service. It can appropriatly place the nodes on the map.
 
@@ -621,7 +619,6 @@ Options
 -------
 
 .. image:: _images/i_geographic_options.png
-    :width: 449
 
 The polygon map shape can be switched to your convenience with another one. Choose if you want to use the default shape, or a new one imported through a *csv* or a *poly* file. The *help* button displays additional information about the file format and the available source addresses.
 
@@ -631,19 +628,13 @@ The polygon map shape can be switched to your convenience with another one. Choo
 Scene
 -----
 
-.. image:: _images/i_geographic_scene.png
-    :width: 449
-
-The properties displayed in this panel are completely similar to the ones in the Node-Link Diagram's scene rendering panel. Report to :ref:`the Scene dedicated section<workspace_diagram_scene>` if you need additional information.
+The settings displayed in this panel are completely similar to the ones in the Node-Link Diagram's scene rendering panel. Report to :ref:`the Scene dedicated section<workspace_diagram_scene>` if you need additional information.
 
 
 .. _workspace_geographic_layers:
 
 Layers
 ------
-
-.. image:: _images/i_geographic_layers.png
-    :width: 449
 
 As for the scene panel, the layers settings behave like the one in the Node Link Diagram view. More information :ref:`Layers dedicated section<workspace_diagram_layers>`.
 
@@ -676,7 +667,6 @@ Properties
 In a similar way to what we have seen before, you can find tabs in the top right corner offering further options:
 
 .. image:: _images/i_histogram_properties.png
-    :width: 392
 
 In this panel, you can select the properties you are interested in. The nodes or edges presenting identical features will then be grouped, creating one new histogram for each property selected. This panel is only available when you are in the view presenting every histogram, the fields will be disabled otherwise.
 
@@ -767,7 +757,6 @@ Properties
 This panel provides the list of properties which can be analyzed, in the previous example, we choose the three shown in the following screenshot:
 
 .. image:: _images/i_parallel_properties.png
-    :width: 429
 
 You can specify whether you want to use nodes or edges, but also, you can sort the properties according to your needs.
 
@@ -780,7 +769,6 @@ Draw
 The second tab displays advanced options to customize the drawing of the view:
 
 .. image:: _images/i_parallel_draw.png
-    :width: 428
 
 * **General draw parameters**: set the background color and the height of the axis
 
@@ -864,7 +852,6 @@ Properties
 The first steps to follow in order to use this view is to choose the properties you want to analyze. To do so, open the *Properties* panel and select the appropriate data:
 
 .. image:: _images/i_pixel_properties.png
-    :width: 392
 
 Pixel oriented tools usually exploit a layout algorithm, moving the nodes into a specific configuration, following a space-filling curve, and ordering them according to one of the properties. The second parameter will be used to perform a color mapping, similar to the one shown in our example, aiming at underlining the correlation between the two properties.
 
@@ -876,7 +863,6 @@ Options
 This second tab proposes to choose among four space-filling curve implementations.
 
 .. image:: _images/i_pixel_options.png
-    :width: 391
 
 The nodes disposition will be arranged to match the chosen representation.
 
@@ -953,7 +939,6 @@ Properties
 The *Properties* tab works like in the previously presented view. You have to select a list of properties to analyze. You can sort them with the upwards and downwards arrows on the right.
 
 .. image:: _images/i_scatterplot_properties.png
-    :width: 392
 
 .. _workspace_scatterplot_faq:
 
@@ -961,7 +946,6 @@ Options
 -------
 
 .. image:: _images/i_scatterplot_options.png
-    :width: 392
 
 In this tab, you can select the scene and the scatterplots background color. By default, the second one uses a colorscale to indicate whether the plot correlation coefficient detects a link between the two current properties or not.
 You can customize the colorscale with a click on the *-1*, *0* and *1* buttons to specify which color to use for each value.
