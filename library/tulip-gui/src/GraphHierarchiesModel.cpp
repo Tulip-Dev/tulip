@@ -413,7 +413,6 @@ QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const
 }
 
 // Graphs collection
-
 QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
   std::string name = graph->getName();
 
@@ -468,6 +467,14 @@ void GraphHierarchiesModel::initIndexCache(tlp::Graph *root) {
   }
 }
 
+static void addListenerToWholeGraphHierarchy(Graph *root, Observable *listener) {
+  Graph *sg = NULL;
+  forEach(sg, root->getSubGraphs()) {
+    addListenerToWholeGraphHierarchy(sg, listener);
+  }
+  root->addListener(listener);
+}
+
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   if (_graphs.contains(g) || g == NULL)
     return;
@@ -487,7 +494,9 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   g->getProperty<SizeProperty>("viewSize")->setMetaValueCalculator(&vSizeCalc);
   g->getProperty<DoubleProperty>("viewBorderWidth")->setMetaValueCalculator(&vWidthCalc);
 
-  g->addListener(this);
+  // listen events on the whole hierarchy
+  // in order to keep track of subgraphs names, number of nodes and edges
+  addListenerToWholeGraphHierarchy(g, this);
 
   if (_graphs.size() == 1)
     setCurrentGraph(g);
@@ -549,6 +558,10 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
       static bool removeOnAdd = false;
 
       if (ge->getType() == GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH) {
+        // that event must only be treated on a root graph
+        if (ge->getGraph() != ge->getGraph()->getRoot()) {
+          return;
+        }
         const Graph* sg = ge->getSubGraph();
         Graph* parentGraph = sg->getSuperGraph();
         QModelIndex parentIndex = indexOf(parentGraph);
@@ -571,6 +584,10 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         }
       }
       else if (ge->getType() == GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH) {
+        // that event must only be treated on a root graph
+        if (ge->getGraph() != ge->getGraph()->getRoot()) {
+          return;
+        }
         const Graph* sg = ge->getSubGraph();
         Graph* parentGraph = sg->getSuperGraph();
         QModelIndex parentIndex = indexOf(parentGraph);
@@ -598,10 +615,17 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         }
 
         removeOnAdd = false;
+
+        sg->addListener(this);
+
         emit layoutChanged();
 
       }
       else if (ge->getType() == GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH) {
+        // that event must only be treated on a root graph
+        if (ge->getGraph() != ge->getGraph()->getRoot()) {
+          return;
+        }
         const Graph* sg = ge->getSubGraph();
         Graph* parentGraph = sg->getSuperGraph();
         QModelIndex index = indexOf(sg);
@@ -622,6 +646,10 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
       }
       else if (ge->getType() == GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH) {
+        // that event must only be treated on a root graph
+        if (ge->getGraph() != ge->getGraph()->getRoot()) {
+          return;
+        }
         const Graph* sg = ge->getSubGraph();
         Graph* parentGraph = sg->getSuperGraph();
         QModelIndex index = indexOf(sg);
@@ -653,8 +681,35 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
           endRemoveRows();
         }
 
+        sg->removeListener(this);
+
         emit layoutChanged();
+      } else if (ge->getType() == GraphEvent::TLP_ADD_NODE || ge->getType() == GraphEvent::TLP_ADD_NODES ||
+                 ge->getType() == GraphEvent::TLP_DEL_NODE) {
+        const Graph *graph = ge->getGraph();
+        QModelIndex graphIndex = indexOf(graph);
+        QModelIndex graphNodesIndex = graphIndex.sibling(graphIndex.row(), NODES_SECTION);
+        emit dataChanged(graphNodesIndex, graphNodesIndex);
+
+      } else if (ge->getType() == GraphEvent::TLP_ADD_EDGE || ge->getType() == GraphEvent::TLP_ADD_EDGES ||
+                 ge->getType() == GraphEvent::TLP_DEL_EDGE) {
+        const Graph *graph = ge->getGraph();
+        QModelIndex graphIndex = indexOf(graph);
+        QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);
+        emit dataChanged(graphEdgesIndex, graphEdgesIndex);
       }
     }
+  } else if (e.type() == Event::TLP_INFORMATION) {
+    const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
+
+    if (!ge)
+      return;
+
+    if (ge->getType() == GraphEvent::TLP_AFTER_SET_ATTRIBUTE && ge->getAttributeName() == "name") {
+      const Graph *graph = ge->getGraph();
+      QModelIndex graphIndex = indexOf(graph);
+      emit dataChanged(graphIndex, graphIndex);
+    }
+
   }
 }
