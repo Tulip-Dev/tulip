@@ -23,10 +23,35 @@
 #define TREEVIEWCOMBOBOX_H
 
 #include <QComboBox>
+#include <QTreeView>
+#include <QMap>
+#include <QPair>
 
 #include <tulip/tulipconf.h>
 
-class QTreeView;
+class QTimer;
+
+class TLP_QT_SCOPE DeferredUpdateTreeView : public QTreeView {
+
+  Q_OBJECT
+
+public:
+
+  DeferredUpdateTreeView(QWidget *parent = 0);
+
+  ~DeferredUpdateTreeView();
+
+protected slots:
+
+  void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
+
+  void callDataChanged();
+
+private:
+
+  QMap<QPair<QModelIndex, QModelIndex>, QTimer *> _updateTimers;
+
+};
 
 class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
 

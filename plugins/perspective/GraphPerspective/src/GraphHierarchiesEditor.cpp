@@ -35,7 +35,7 @@
 #include <tulip/GraphHierarchiesModel.h>
 #include "ui_GraphHierarchiesEditor.h"
 
-CustomTreeView::CustomTreeView(QWidget *parent) : QTreeView(parent) {
+CustomTreeView::CustomTreeView(QWidget *parent) : DeferredUpdateTreeView(parent) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 #else
