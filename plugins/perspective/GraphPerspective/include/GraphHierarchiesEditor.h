@@ -19,9 +19,10 @@
 #ifndef GRAPHHIERARCHIESEDITOR_H
 #define GRAPHHIERARCHIESEDITOR_H
 
+#include <tulip/TreeViewComboBox.h>
+
 #include <QWidget>
 #include <QModelIndex>
-#include <QTreeView>
 
 class QAbstractButton;
 
@@ -34,7 +35,7 @@ namespace Ui {
 class GraphHierarchiesEditorData;
 }
 
-class CustomTreeView : public QTreeView {
+class CustomTreeView : public DeferredUpdateTreeView {
 
   Q_OBJECT
 
