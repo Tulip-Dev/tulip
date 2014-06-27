@@ -958,20 +958,27 @@ void GlVertexArrayManager::clearLayoutData() {
 
   linesIndexArray.clear();
   linesIndexCountArray.clear();
+
   if (!edgeToLineIndexVector.empty())
     edgeToLineIndexVector.clear();
+
   if (!edgeToQuadIndexVector.empty())
     edgeToQuadIndexVector.clear();
+
   if (!edgeToTopOutlineIndexVector.empty())
     edgeToTopOutlineIndexVector.clear();
+
   if (!edgeToBottomOulineIndexVector.empty())
     edgeToBottomOulineIndexVector.clear();
+
   quadsIndexArray.clear();
   quadsIndexCountArray.clear();
   quadsTopOutlineIndexArray.clear();
   quadsBottomOutlineIndexArray.clear();
+
   if (!edgeToPointIndexVector.empty())
     edgeToPointIndexVector.clear();
+
   if (!nodeToPointIndexVector.empty())
     nodeToPointIndexVector.clear();
 
