@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Settings</string>
+   <string>Options</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QPushButton, QComboBox {
@@ -106,7 +106,7 @@ padding-top: 5px;
 		 color: #595959;</string>
         </property>
         <property name="text">
-         <string>&lt;font size=&quot;5&quot;&gt;Matrix display settings&lt;/font&gt;</string>
+         <string>&lt;font size=&quot;5&quot;&gt;Matrix display options&lt;/font&gt;</string>
         </property>
        </widget>
       </item>
@@ -285,7 +285,7 @@ background-color: rgb(160, 160, 160);</string>
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Nodes can be ordered according the values of a graph's property. You can choose any numeric or string property attached to the graph as the ordering property.</string>
+             <string>Nodes are ordered according a graph's metric (a numeric or string property) you can choose.                      any numeric or string property attached to the graph as the ordering property.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -307,7 +307,7 @@ background-color: rgb(160, 160, 160);</string>
              <item>
               <widget class="QLabel" name="label">
                <property name="text">
-                <string>Ordering property</string>
+                <string>Metric</string>
                </property>
               </widget>
              </item>
