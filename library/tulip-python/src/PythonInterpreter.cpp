@@ -63,40 +63,40 @@ static PyThreadState*  mainThreadState;
 static PyGILState_STATE gilState;
 
 static const QString printObjectDictFunction =
-  "def printObjectDict(obj):\n"
-  "     if hasattr(obj, \"__dict__\"):\n"
-  "         for k in obj.__dict__.keys():\n"
-#if PY_MAJOR_VERSION >= 3
-  "             print(k)\n"
-#else
-  "             print k\n"
-#endif
-  "     if hasattr(obj, \"__bases__\"):\n"
-  "         for k in obj.__bases__:\n"
-  "             printObjectDict(k)\n"
-  "     if hasattr(obj, \"__class__\") and obj.__class__ != type(type):\n"
-  "         printObjectDict(obj.__class__)\n"
-  ""
-  ;
+    "def printObjectDict(obj):\n"
+    "     if hasattr(obj, \"__dict__\"):\n"
+    "         for k in obj.__dict__.keys():\n"
+    #if PY_MAJOR_VERSION >= 3
+    "             print(k)\n"
+    #else
+    "             print k\n"
+    #endif
+    "     if hasattr(obj, \"__bases__\"):\n"
+    "         for k in obj.__bases__:\n"
+    "             printObjectDict(k)\n"
+    "     if hasattr(obj, \"__class__\") and obj.__class__ != type(type):\n"
+    "         printObjectDict(obj.__class__)\n"
+    ""
+    ;
 
 static const QString printObjectClassFunction =
-  "def printObjectClass(obj):\n"
-  "	type = \"\"\n"
-  "	if obj and hasattr(obj, \"__class__\"):\n"
-  "		if hasattr(obj.__class__, \"__module__\"):\n"
-  "			mod = obj.__class__.__module__\n"
-  "			if mod == \"tulip\":"
-  "				mod = \"tlp\"\n"
-  "			type = mod + \".\"\n"
-  "		if hasattr(obj.__class__, \"__name__\"):\n"
-  "			type = type + obj.__class__.__name__\n"
-#if PY_MAJOR_VERSION >= 3
-  "		print(type)\n"
-#else
-  "		print type\n"
-#endif
-  ""
-  ;
+    "def printObjectClass(obj):\n"
+    "	type = \"\"\n"
+    "	if obj and hasattr(obj, \"__class__\"):\n"
+    "		if hasattr(obj.__class__, \"__module__\"):\n"
+    "			mod = obj.__class__.__module__\n"
+    "			if mod == \"tulip\":"
+    "				mod = \"tlp\"\n"
+    "			type = mod + \".\"\n"
+    "		if hasattr(obj.__class__, \"__name__\"):\n"
+    "			type = type + obj.__class__.__name__\n"
+    #if PY_MAJOR_VERSION >= 3
+    "		print(type)\n"
+    #else
+    "		print type\n"
+    #endif
+    ""
+    ;
 
 #if PY_MAJOR_VERSION >= 3
 static QString convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
@@ -178,27 +178,27 @@ PythonInterpreter PythonInterpreter::_instance;
 
 #ifdef _MSC_VER
 extern "C" {
-  BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
-    switch (ul_reason_for_call) {
-    case DLL_PROCESS_ATTACH:
+BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
+  switch (ul_reason_for_call) {
+  case DLL_PROCESS_ATTACH:
 
-      if (QApplication::instance()) {
-        PythonInterpreter::getInstance()->initConsoleOutput();
-        PythonInterpreter::getInstance()->loadTulipPythonPluginsFromDefaultDirs();
-      }
-
-      break;
-
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-      break;
-
-    case DLL_PROCESS_DETACH:
-      break;
+    if (QApplication::instance()) {
+      PythonInterpreter::getInstance()->initConsoleOutput();
+      PythonInterpreter::getInstance()->loadTulipPythonPluginsFromDefaultDirs();
     }
 
-    return TRUE;
+    break;
+
+  case DLL_THREAD_ATTACH:
+  case DLL_THREAD_DETACH:
+    break;
+
+  case DLL_PROCESS_DETACH:
+    break;
   }
+
+  return TRUE;
+}
 }
 #endif
 
@@ -222,11 +222,11 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
     Py_OptimizeFlag = 1;
     Py_NoSiteFlag = 1;
 
-// Fix for GDB debugging on windows when compiling with MinGW.
-// GDB contains an embedded Python interpreter that messes up Python Home value.
-// When Tulip is compiled with a version of Python different from the one embedded in GDB,
-// it crashes at startup when running it through GDB.
-// So reset correct one to be able to debug it.
+    // Fix for GDB debugging on windows when compiling with MinGW.
+    // GDB contains an embedded Python interpreter that messes up Python Home value.
+    // When Tulip is compiled with a version of Python different from the one embedded in GDB,
+    // it crashes at startup when running it through GDB.
+    // So reset correct one to be able to debug it.
 #ifdef __MINGW32__
     QString pythonHome = PythonVersionChecker::getPythonHome();
 
@@ -414,20 +414,22 @@ PythonInterpreter::~PythonInterpreter() {
     consoleOuputString = "";
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-    // This is a hack to prevent segfaults when the PyQt4 module has been imported
-    // during the Python session. Seems there is some garbage collection issue
-    // on Qt objects wrapped by SIP. After looking at the SIP source code, the
-    // segfault is raised when the sipQtSupport->qt_find_sipslot function is called.
-    // So reset the sipQtSupport pointer to NULL, this way the problematic function will no
-    // more be called when the Python interpreter is finalized.
-    setOutputEnabled(false);
-    runString("sys.stdout.write(sip.__file__)");
-    QString sipModulePath = consoleOuputString;
-    sipQtAPI **sipQtSupport = reinterpret_cast<sipQtAPI **>(QLibrary::resolve(sipModulePath, "sipQtSupport"));
+    if (QApplication::instance()) {
 
-    if (sipQtSupport)
-      *sipQtSupport = NULL;
+      // This is a hack to prevent segfaults when the PyQt4 module has been imported
+      // during the Python session. Seems there is some garbage collection issue
+      // on Qt objects wrapped by SIP. After looking at the SIP source code, the
+      // segfault is raised when the sipQtSupport->qt_find_sipslot function is called.
+      // So reset the sipQtSupport pointer to NULL, this way the problematic function will no
+      // more be called when the Python interpreter is finalized.
+      setOutputEnabled(false);
+      runString("import sip; sys.stdout.write(sip.__file__)");
+      QString sipModulePath = consoleOuputString;
+      sipQtAPI **sipQtSupport = reinterpret_cast<sipQtAPI **>(QLibrary::resolve(sipModulePath, "sipQtSupport"));
 
+      if (sipQtSupport)
+        *sipQtSupport = NULL;
+    }
 #endif
 
     runString("sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__; sys.stdin = sys.__stdin__\n");
