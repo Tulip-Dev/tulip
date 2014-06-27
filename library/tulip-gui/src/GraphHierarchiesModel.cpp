@@ -562,9 +562,13 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         if (ge->getGraph() != ge->getGraph()->getRoot()) {
           return;
         }
+
         const Graph* sg = ge->getSubGraph();
+
         Graph* parentGraph = sg->getSuperGraph();
+
         QModelIndex parentIndex = indexOf(parentGraph);
+
         assert(parentIndex.isValid());
 
         if (hasIndex(parentIndex.row(), parentIndex.column(), parentIndex.parent())) {
@@ -588,16 +592,22 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         if (ge->getGraph() != ge->getGraph()->getRoot()) {
           return;
         }
+
         const Graph* sg = ge->getSubGraph();
+
         Graph* parentGraph = sg->getSuperGraph();
+
         QModelIndex parentIndex = indexOf(parentGraph);
 
         // update index cache for subgraphs of parent graph and added sub-graphs
         Graph* sg2 = NULL;
+
         int i = 0;
+
         forEach(sg2, parentGraph->getSubGraphs()) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);
         }
+
         i = 0;
         forEach(sg2, sg->getSubGraphs()) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);
@@ -626,11 +636,17 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         if (ge->getGraph() != ge->getGraph()->getRoot()) {
           return;
         }
+
         const Graph* sg = ge->getSubGraph();
+
         Graph* parentGraph = sg->getSuperGraph();
+
         QModelIndex index = indexOf(sg);
+
         assert(index.isValid());
+
         QModelIndex parentIndex = indexOf(parentGraph);
+
         assert(parentIndex.isValid());
 
         int nbRowsToAdd = sg->numberOfSubGraphs() - 1;
@@ -650,20 +666,29 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         if (ge->getGraph() != ge->getGraph()->getRoot()) {
           return;
         }
+
         const Graph* sg = ge->getSubGraph();
+
         Graph* parentGraph = sg->getSuperGraph();
+
         QModelIndex index = indexOf(sg);
+
         assert(index.isValid());
+
 #ifndef NDEBUG
         QModelIndex parentIndex = indexOf(parentGraph);
+
         assert(parentIndex.isValid());
+
 #endif
 
         emit layoutAboutToBeChanged();
 
         // update index cache for subgraphs of parent graph
         Graph* sg2 = NULL;
+
         int i = 0;
+
         forEach(sg2, parentGraph->getSubGraphs()) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);
         }
@@ -684,22 +709,25 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         sg->removeListener(this);
 
         emit layoutChanged();
-      } else if (ge->getType() == GraphEvent::TLP_ADD_NODE || ge->getType() == GraphEvent::TLP_ADD_NODES ||
-                 ge->getType() == GraphEvent::TLP_DEL_NODE) {
+      }
+      else if (ge->getType() == GraphEvent::TLP_ADD_NODE || ge->getType() == GraphEvent::TLP_ADD_NODES ||
+               ge->getType() == GraphEvent::TLP_DEL_NODE) {
         const Graph *graph = ge->getGraph();
         QModelIndex graphIndex = indexOf(graph);
         QModelIndex graphNodesIndex = graphIndex.sibling(graphIndex.row(), NODES_SECTION);
         emit dataChanged(graphNodesIndex, graphNodesIndex);
 
-      } else if (ge->getType() == GraphEvent::TLP_ADD_EDGE || ge->getType() == GraphEvent::TLP_ADD_EDGES ||
-                 ge->getType() == GraphEvent::TLP_DEL_EDGE) {
+      }
+      else if (ge->getType() == GraphEvent::TLP_ADD_EDGE || ge->getType() == GraphEvent::TLP_ADD_EDGES ||
+               ge->getType() == GraphEvent::TLP_DEL_EDGE) {
         const Graph *graph = ge->getGraph();
         QModelIndex graphIndex = indexOf(graph);
         QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);
         emit dataChanged(graphEdgesIndex, graphEdgesIndex);
       }
     }
-  } else if (e.type() == Event::TLP_INFORMATION) {
+  }
+  else if (e.type() == Event::TLP_INFORMATION) {
     const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
 
     if (!ge)

@@ -54,6 +54,7 @@ DeferredUpdateTreeView::DeferredUpdateTreeView(QWidget *parent) : QTreeView(pare
 
 DeferredUpdateTreeView::~DeferredUpdateTreeView() {
   QMap<QPair<QModelIndex, QModelIndex>, QTimer *>::iterator it = _updateTimers.begin();
+
   for( ; it != _updateTimers.end() ; ++it) {
     delete it.value();
   }
@@ -61,11 +62,13 @@ DeferredUpdateTreeView::~DeferredUpdateTreeView() {
 
 void DeferredUpdateTreeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight) {
   QPair<QModelIndex, QModelIndex> p = qMakePair(topLeft, bottomRight);
+
   if (_updateTimers.find(p) == _updateTimers.end()) {
     _updateTimers[p] = new TreeViewUpdateTimer(topLeft, bottomRight);
     _updateTimers[p]->setSingleShot(true);
     connect(_updateTimers[p], SIGNAL(timeout()), this, SLOT(callDataChanged()));
   }
+
   _updateTimers[p]->start(50);
 }
 
