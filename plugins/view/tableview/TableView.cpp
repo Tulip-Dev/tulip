@@ -662,8 +662,6 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   if (!Perspective::instance()->isReservedPropertyName(propName.c_str()))
     renameProp = contextMenu.addAction("Rename");
 
-  contextMenu.addSeparator();
-
   QMenu* subMenu = contextMenu.addMenu(trUtf8("Set values of "));
   QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes"));
   QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges"));
@@ -695,12 +693,38 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
       highlightedToLabels = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
   }
 
+  contextMenu.addSeparator();
+  QAction* sortById = contextMenu.addAction("Sort by id");
+  contextMenu.addSeparator();
+
   // display the menu with the mouse inside to allow
   // keyboard navigation
   action = contextMenu.exec(QCursor::pos() - QPoint(5,5));
 
   if (!action)
     return;
+
+  if (action == sortById) {
+    if (_ui->table->horizontalHeader()->sortIndicatorSection() != -1) {
+      _ui->table->horizontalHeader()->setSortIndicator(-1, Qt::AscendingOrder);
+      GraphSortFilterProxyModel* sortModel = static_cast<GraphSortFilterProxyModel*>(_ui->table->model());
+      QAbstractItemModel* model = sortModel->sourceModel();
+      sortModel->setSourceModel(NULL);
+      sortModel->setSourceModel(model);
+      sortModel->setFilterProperty(getFilteringProperty());
+
+      QSet<tlp::PropertyInterface*> visibleProperties = propertiesEditor->visibleProperties();
+
+      for (int i=0; i <model->columnCount(); ++i) {
+	PropertyInterface* pi =
+	  _model->headerData(i, Qt::Horizontal, TulipModel::PropertyRole).value<tlp::PropertyInterface*>();
+
+	if (!visibleProperties.contains(pi))
+	  _ui->table->setColumnHidden(i, true);
+      }
+    }
+    return;
+  }
 
   // hold/unhold observers
   tlp::ObserverHolder oh;
