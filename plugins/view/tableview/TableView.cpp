@@ -716,13 +716,14 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
       QSet<tlp::PropertyInterface*> visibleProperties = propertiesEditor->visibleProperties();
 
       for (int i=0; i <model->columnCount(); ++i) {
-	PropertyInterface* pi =
-	  _model->headerData(i, Qt::Horizontal, TulipModel::PropertyRole).value<tlp::PropertyInterface*>();
+        PropertyInterface* pi =
+          _model->headerData(i, Qt::Horizontal, TulipModel::PropertyRole).value<tlp::PropertyInterface*>();
 
-	if (!visibleProperties.contains(pi))
-	  _ui->table->setColumnHidden(i, true);
+        if (!visibleProperties.contains(pi))
+          _ui->table->setColumnHidden(i, true);
       }
     }
+
     return;
   }
 

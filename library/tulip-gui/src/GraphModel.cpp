@@ -494,7 +494,7 @@ void NodesGraphModel::setGraph(Graph* g) {
   int i=0;
   node n;
   forEach(n,graph()->getNodes())
-    _elements[i++] = n.id;
+  _elements[i++] = n.id;
   // we ensure the ids are ascendingly sorted
   // to ease the display of nodes/edges
   qSort(_elements);
