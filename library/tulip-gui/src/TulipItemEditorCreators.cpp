@@ -359,14 +359,11 @@ QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
 void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
   TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
   QFileDialog* dlg = static_cast<QFileDialog*>(w);
-  QString path;
 
-  if (desc.absolutePath.isEmpty())
-    path = QDir::currentPath();
-  else
-    path = QFileInfo(desc.absolutePath).absolutePath();
-
-  dlg->setDirectory(path);
+  // force the dialog initial directory
+  // only if there is a non empty absolute path
+  if (!desc.absolutePath.isEmpty())
+    dlg->setDirectory(QFileInfo(desc.absolutePath).absolutePath());
 
   if (desc.type == TulipFileDescriptor::Directory) {
     dlg->setFileMode(QFileDialog::Directory);
