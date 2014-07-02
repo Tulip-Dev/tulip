@@ -140,10 +140,11 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   // First, we set up some hack to provide custom types for string data whose name starts with file:: or dir::
   QString name(paramName.c_str());
 
-  if (type.compare(typeid(std::string).name()) == 0 && (name.startsWith("file::") || name.startsWith("dir::"))) {
+  if (type.compare(typeid(std::string).name()) == 0 && (name.startsWith("file::") || name.startsWith("anyfile::") || name.startsWith("dir::"))) {
     TulipFileDescriptor desc;
     desc.absolutePath = tlpStringToQString(*(std::string*)dm->value);
     desc.type = name.startsWith("dir::")?TulipFileDescriptor::Directory:TulipFileDescriptor::File;
+    desc.mustExist = !name.startsWith("any");
     return QVariant::fromValue<TulipFileDescriptor>(desc);
   }
 

@@ -50,13 +50,16 @@ struct TulipFileDescriptor {
   enum FileType {File,Directory};
 
   TulipFileDescriptor() {}
-  TulipFileDescriptor(const QString& absolutePath,FileType fileType):absolutePath(absolutePath),type(fileType) {}
+TulipFileDescriptor(const QString& absolutePath,FileType fileType, bool existing = true):absolutePath(absolutePath),type(fileType),mustExist(existing) {}
   TulipFileDescriptor(const TulipFileDescriptor& d) {
     absolutePath = d.absolutePath;
     type = d.type;
+    mustExist = d.mustExist;
   }
   QString absolutePath;
   FileType type;
+  // indicate if the file or dir must exist
+  bool mustExist;
   QString fileFilterPattern;
 };
 
