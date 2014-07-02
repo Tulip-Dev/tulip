@@ -370,7 +370,7 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant&
     dlg->setOption(QFileDialog::ShowDirsOnly);
   }
   else
-    dlg->setFileMode(QFileDialog::ExistingFile);
+    dlg->setFileMode(desc.mustExist ? QFileDialog::ExistingFile : QFileDialog::AnyFile);
 
   dlg->setModal(true);
   dlg->move(QCursor::pos() - QPoint(150, 200));
