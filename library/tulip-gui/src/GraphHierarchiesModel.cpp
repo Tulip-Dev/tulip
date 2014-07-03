@@ -425,6 +425,7 @@ QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
 }
 
 void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
+
   bool inHierarchy = false;
   foreach(Graph *i,_graphs) {
     if (i->isDescendantGraph(g) || g == i) {
@@ -439,8 +440,8 @@ void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
   Graph* oldGraph = _currentGraph;
   _currentGraph = g;
 
-  if (oldGraph != NULL) {
-    QModelIndex oldRow1 = indexOf(_currentGraph);
+  if (oldGraph != NULL && oldGraph != _currentGraph) {
+    QModelIndex oldRow1 = indexOf(oldGraph);
     QModelIndex oldRow2 = createIndex(oldRow1.row(),columnCount()-1);
     emit dataChanged(oldRow1,oldRow2);
   }
@@ -479,14 +480,16 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   if (_graphs.contains(g) || g == NULL)
     return;
 
-  _saveNeeded[g] = new GraphNeedsSavingObserver(g);
-
-  beginInsertRows(QModelIndex(),rowCount(),rowCount());
   Graph *i;
   foreach(i,_graphs) {
     if (i->isDescendantGraph(g))
       return;
   }
+
+  beginInsertRows(QModelIndex(),rowCount(),rowCount());
+
+  _saveNeeded[g] = new GraphNeedsSavingObserver(g);
+
   _graphs.push_back(g);
   g->getProperty<ColorProperty>("viewColor")->setMetaValueCalculator(&vColorCalc);
   g->getProperty<StringProperty>("viewLabel")->setMetaValueCalculator(&vLabelCalc);
@@ -533,6 +536,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
   if (e.type() == Event::TLP_DELETE && _graphs.contains(g)) { // A root graph has been deleted
     int pos = _graphs.indexOf(g);
     beginRemoveRows(QModelIndex(),pos,pos);
+
     _graphs.removeAll(g);
     GraphNeedsSavingObserver *s= _saveNeeded.take(g);
     delete s;
