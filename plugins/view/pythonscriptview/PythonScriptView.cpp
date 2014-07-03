@@ -157,7 +157,7 @@ QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
     cleanPropName.replace("\"", "\\\"");
 
     if (dynamic_cast<DoubleProperty *>(prop)) {
-        oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " =  graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " =  graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<LayoutProperty *>(prop)) {
