@@ -47,7 +47,13 @@ protected slots:
 
   void callDataChanged();
 
+  void rowsAboutToBeRemoved(const QModelIndex & parent, int start, int end);
+
+  void rowsInserted(const QModelIndex & parent, int start, int end);
+
 private:
+
+  void cancelUpdates(const QModelIndex &parent);
 
   QMap<QPair<QModelIndex, QModelIndex>, QTimer *> _updateTimers;
 
