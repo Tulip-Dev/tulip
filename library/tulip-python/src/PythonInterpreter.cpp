@@ -164,7 +164,7 @@ const QString PythonInterpreter::pythonPluginsPathHome(QDir::homePath()+"/.Tulip
 const char PythonInterpreter::pythonReservedCharacters[] = {
   '#', '%', '/', '+', '-', '&', '*', '<', '>',
   '|', '~', '^', '=', '!', '\'', '\"', '{', '}',
-  '(', ')', '[', ']', '.', 0
+    '(', ')', '[', ']', '.', ':', '@', 0
 };
 
 const char *PythonInterpreter::pythonKeywords[] = {
