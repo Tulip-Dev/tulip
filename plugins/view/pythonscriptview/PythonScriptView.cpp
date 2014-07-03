@@ -79,6 +79,7 @@ const QString runGraphScriptFunc =
 QString cleanPropertyName(const QString &propertyName) {
   QString ret(propertyName);
   ret.replace(' ', '_');
+  ret.replace(":", "_"); //reserved character in Python
   int i = 0;
 
   while (PythonInterpreter::pythonReservedCharacters[i]) {
