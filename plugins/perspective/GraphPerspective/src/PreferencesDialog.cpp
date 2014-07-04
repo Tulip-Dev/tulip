@@ -92,8 +92,10 @@ void PreferencesDialog::writeSettings() {
     bool ok = true;
     unsigned int seed = _ui->randomSeedEdit->text().toUInt(&ok);
     tlp::setSeedOfRandomSequence(seed);
-  } else
+  }
+  else
     tlp::setSeedOfRandomSequence();
+
   TulipSettings::instance().setSeedOfRandomSequence(tlp::getSeedOfRandomSequence());
 }
 

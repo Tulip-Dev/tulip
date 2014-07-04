@@ -32,10 +32,10 @@ bool RandomMetric::run() {
 
   node n;
   forEach(n, graph->getNodes())
-    result->setNodeValue(n, (double)rand() / double(RAND_MAX));
+  result->setNodeValue(n, (double)rand() / double(RAND_MAX));
   edge e;
   forEach(e, graph->getEdges())
-    result->setEdgeValue(e, (double)rand() / double(RAND_MAX));
+  result->setEdgeValue(e, (double)rand() / double(RAND_MAX));
   return true;
 }
 //===========================================

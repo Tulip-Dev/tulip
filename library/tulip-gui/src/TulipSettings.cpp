@@ -381,7 +381,7 @@ void TulipSettings::setRunningTimeComputed(bool f) {
 
 unsigned int TulipSettings::seedOfRandomSequence() const {
   return value(SeedForRandomSequenceEntry,
-	       tlp::getSeedOfRandomSequence()).toUInt();
+               tlp::getSeedOfRandomSequence()).toUInt();
 }
 
 void TulipSettings::setSeedOfRandomSequence(unsigned int seed) {

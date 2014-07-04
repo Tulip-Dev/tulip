@@ -48,6 +48,7 @@ bool Random::run() {
   tlp::initRandomSequence();
 
   Iterator<node> *itN=graph->getNodes();
+
   while (itN->hasNext()) {
     node itn=itN->next();
 
