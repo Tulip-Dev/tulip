@@ -28,6 +28,7 @@
 #include <tulip/ColorProperty.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/ForEach.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 using namespace std;
@@ -53,7 +54,6 @@ SOMAlgorithm::~SOMAlgorithm() {
 }
 
 #define RANDNUM(max) (int)(max*(rand()/(RAND_MAX+1.0)))
-#define RANDINIT(seed) srand(seed)
 
 void SOMAlgorithm::run(SOMMap* map, InputSample& inputSample, unsigned int nTimes,
                        tlp::PluginProgress *pluginProgress) {
@@ -78,8 +78,9 @@ void SOMAlgorithm::run(SOMMap* map, InputSample& inputSample, unsigned int nTime
  */
 void SOMAlgorithm::initMap(SOMMap* map, InputSample& inputSample,
                            tlp::PluginProgress *pluginProgress) {
-  //Random init
-  RANDINIT(time(NULL));
+  // initialize a random sequence according the given seed
+  tlp::initRandomSequence();
+
   node n;
   int numberOfNode = map->numberOfNodes();
   int currentNumberOfNode = 0;

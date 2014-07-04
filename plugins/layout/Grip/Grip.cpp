@@ -135,6 +135,9 @@ bool Grip::run() {
       }
     }
     else {
+      // initialize a random sequence according the given seed
+      tlp::initRandomSequence();
+
       misf = new MISFiltering(currentGraph);
       computeOrdering();
       init();

@@ -27,12 +27,15 @@ RandomMetric::RandomMetric(const tlp::PluginContext* context):DoubleAlgorithm(co
 {}
 //===========================================
 bool RandomMetric::run() {
+  // initialize a random sequence according the given seed
+  tlp::initRandomSequence();
+
   node n;
   forEach(n, graph->getNodes())
-  result->setNodeValue(n, (double)rand() / double(RAND_MAX));
+    result->setNodeValue(n, (double)rand() / double(RAND_MAX));
   edge e;
   forEach(e, graph->getEdges())
-  result->setEdgeValue(e, (double)rand() / double(RAND_MAX));
+    result->setEdgeValue(e, (double)rand() / double(RAND_MAX));
   return true;
 }
 //===========================================

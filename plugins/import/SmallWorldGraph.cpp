@@ -103,7 +103,9 @@ public:
 
     double maxDistance = sqrt(double(avgDegree)*double(WIDTH)*double(HEIGHT)
                               / (double (nbNodes) * M_PI));
-    srand(clock());
+    // initialize a random sequence according the given seed
+    tlp::initRandomSequence();
+
     LayoutProperty *newLayout=graph->getLocalProperty<LayoutProperty>("viewLayout");
     vector<node> sg(nbNodes);
 

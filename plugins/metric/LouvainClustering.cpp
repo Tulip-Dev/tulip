@@ -361,8 +361,8 @@ bool LouvainClustering::run() {
   if(dataSet!=NULL)
     dataSet->get("metric",metric);
 
-  //Init RNG seed
-  srand ((time(NULL)));
+  // initialize a random sequence according the given seed
+  tlp::initRandomSequence();
   //Init Quotient graph
   createQuotient();
 

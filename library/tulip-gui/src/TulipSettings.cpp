@@ -25,6 +25,7 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/TlpTools.h>
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QStringList>
@@ -61,6 +62,8 @@ const QString TulipSettings::AutomaticMapMetricEntry = "graph/auto/colors";
 const QString TulipSettings::ResultPropertyStoredEntry = "graph/auto/result";
 
 const QString TulipSettings::RunningTimeComputedEntry = "graph/auto/time";
+
+const QString TulipSettings::SeedForRandomSequenceEntry = "graph/auto/seed";
 
 const QString TulipSettings::WarnUserAboutGraphicsCardEntry = "app/warn_about_graphics_card";
 
@@ -374,6 +377,15 @@ bool TulipSettings::isRunningTimeComputed() const {
 
 void TulipSettings::setRunningTimeComputed(bool f) {
   setValue(RunningTimeComputedEntry,f);
+}
+
+unsigned int TulipSettings::seedOfRandomSequence() const {
+  return value(SeedForRandomSequenceEntry,
+	       tlp::getSeedOfRandomSequence()).toUInt();
+}
+
+void TulipSettings::setSeedOfRandomSequence(unsigned int seed) {
+  setValue(SeedForRandomSequenceEntry, seed);
 }
 
 bool TulipSettings::warnUserAboutGraphicsCard() const {

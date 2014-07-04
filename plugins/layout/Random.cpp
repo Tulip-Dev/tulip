@@ -44,8 +44,10 @@ bool Random::run() {
   }
 
   result->setAllEdgeValue(vector<Coord>(0));
-  Iterator<node> *itN=graph->getNodes();
+  // initialize a random sequence according the given seed
+  tlp::initRandomSequence();
 
+  Iterator<node> *itN=graph->getNodes();
   while (itN->hasNext()) {
     node itn=itN->next();
 

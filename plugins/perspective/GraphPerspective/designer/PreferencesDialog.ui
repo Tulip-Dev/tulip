@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>780</width>
-    <height>615</height>
+    <height>707</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -524,16 +524,16 @@ border: 0px;
    </item>
    <item>
     <widget class="QFrame" name="automaticFrame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="section" stdset="0">
       <bool>true</bool>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_7">
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_8">
       <item>
        <widget class="QLabel" name="automaticTitle">
         <property name="sizePolicy">
@@ -557,10 +557,7 @@ border: 0px;
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="automaticContents">
-        <property name="spacing">
-         <number>0</number>
-        </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QCheckBox" name="displayDefaultViews">
           <property name="text">
@@ -598,7 +595,7 @@ border: 0px;
            <string>The contents of the result property of an algorithm (viewMetric for example) will be stored in a new property automatically named using the values of the parameters of the algorithm</string>
           </property>
           <property name="text">
-           <string>Store computed result property of an algorithm in a specific property</string>
+           <string>Store computed result property of an algorithm in a dedicated property</string>
           </property>
          </widget>
         </item>
@@ -612,9 +609,54 @@ border: 0px;
           </property>
          </widget>
         </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QCheckBox" name="randomSeedCheck">
+            <property name="toolTip">
+             <string>When checked,  each random sequence will be initialized with the given value.
+If not, a new random seed will be set to initialize each new random sequence.</string>
+            </property>
+            <property name="text">
+             <string>Give seed for random sequence</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="randomSeedEdit">
+            <property name="toolTip">
+             <string>The seed value must be a positive integer</string>
+            </property>
+            <property name="text">
+             <string>0</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
        </layout>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
     </widget>
    </item>
    <item>
@@ -737,6 +779,22 @@ border: 0px;
     <hint type="destinationlabel">
      <x>538</x>
      <y>173</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>randomSeedCheck</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>randomSeedEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>641</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>514</x>
+     <y>642</y>
     </hint>
    </hints>
   </connection>

@@ -21,6 +21,7 @@
 
 #include "ui_PreferencesDialog.h"
 
+#include <tulip/TlpTools.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/TulipMetaTypes.h>
@@ -87,6 +88,13 @@ void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setResultPropertyStored(_ui->resultPropertyStoredCheck->isChecked());
   TulipSettings::instance().setRunningTimeComputed(_ui->runningTimeComputedCheck->isChecked());
 
+  if (_ui->randomSeedCheck->isChecked()) {
+    bool ok = true;
+    unsigned int seed = _ui->randomSeedEdit->text().toUInt(&ok);
+    tlp::setSeedOfRandomSequence(seed);
+  } else
+    tlp::setSeedOfRandomSequence();
+  TulipSettings::instance().setSeedOfRandomSequence(tlp::getSeedOfRandomSequence());
 }
 
 void PreferencesDialog::readSettings() {
@@ -148,6 +156,15 @@ void PreferencesDialog::readSettings() {
   _ui->viewOrthoCheck->setChecked(TulipSettings::instance().isViewOrtho());
   _ui->colorMappingCheck->setChecked(TulipSettings::instance().isAutomaticMapMetric());
   _ui->runningTimeComputedCheck->setChecked(TulipSettings::instance().isRunningTimeComputed());
+
+  // initialize seed according to settings
+  unsigned int seed;
+  tlp::setSeedOfRandomSequence(seed = TulipSettings::instance().seedOfRandomSequence());
+  // UINT_MAX seed value means the seed is random
+  bool isSeedRandom = seed == UINT_MAX;
+  _ui->randomSeedCheck->setChecked(!isSeedRandom);
+  _ui->randomSeedEdit->setEnabled(!isSeedRandom);
+  _ui->randomSeedEdit->setText(QString::number(isSeedRandom ? 0 : seed));
 }
 
 void PreferencesDialog::cellChanged(int row, int column) {
