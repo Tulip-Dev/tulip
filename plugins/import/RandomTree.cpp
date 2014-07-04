@@ -89,7 +89,9 @@ public:
   }
 
   bool importGraph() {
-    srand(time(NULL));
+    // initialize a random sequence according the given seed
+    tlp::initRandomSequence();
+
     unsigned int minSize  = 100;
     unsigned int maxSize  = 1000;
     bool needLayout = false;

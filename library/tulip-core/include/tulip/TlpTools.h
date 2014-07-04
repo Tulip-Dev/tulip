@@ -21,6 +21,7 @@
 #define _TLPTOOLS_H
 
 #include <iostream>
+#include <climits>
 #include <tulip/tulipconf.h>
 
 namespace tlp {
@@ -86,6 +87,26 @@ TLP_SCOPE std::istream *getIgzstream(const char *name, int open_mode = std::ios:
  */
 TLP_SCOPE std::ostream *getOgzstream(const char *name, int open_mode = std::ios::out);
 
+/**
+ * @brief give the value of the seed used for further initialization
+ * of a random sequence (with further calls to rand() or rand_r(...)).
+ * @param seed the value of the seed.
+ * Set seed to UINT_MAX if you need a random choice of the seed.
+ */
+TLP_SCOPE void setSeedOfRandomSequence(unsigned int seed = UINT_MAX);
+
+/**
+ * @brief return the value of the seed used for further initialization
+ * of a random sequence
+ */
+TLP_SCOPE unsigned int getSeedOfRandomSequence();
+
+/**
+ * @brief initialize a random sequence with the seed previously set
+ * Further calls to rand() or rand_r(...) will return the elements of
+ * that sequence
+ */
+TLP_SCOPE void initRandomSequence();
 }
 
 #endif

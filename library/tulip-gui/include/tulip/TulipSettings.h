@@ -67,6 +67,7 @@ public:
   static const QString AutomaticMapMetricEntry;
   static const QString ResultPropertyStoredEntry;
   static const QString RunningTimeComputedEntry;
+  static const QString SeedForRandomSequenceEntry;
 
   static const QString WarnUserAboutGraphicsCardEntry;
 
@@ -184,6 +185,9 @@ public:
 
   bool isRunningTimeComputed() const;
   void setRunningTimeComputed(bool);
+
+  unsigned int seedOfRandomSequence() const;
+  void setSeedOfRandomSequence(unsigned int);
 
   bool warnUserAboutGraphicsCard() const;
   void setWarnUserAboutGraphicsCard(bool);

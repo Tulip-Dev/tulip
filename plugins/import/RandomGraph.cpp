@@ -74,7 +74,9 @@ public:
   }
 
   bool importGraph() {
-    srand(time(NULL));
+    // initialize a random sequence according the given seed
+    tlp::initRandomSequence();
+
     unsigned int nbNodes  = 5;
     unsigned int nbEdges  = 9;
 

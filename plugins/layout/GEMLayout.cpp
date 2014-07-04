@@ -394,7 +394,11 @@ bool GEMLayout::run() {
 
   _nbNodes = graph->numberOfNodes();
 
+  // no bends
   result->setAllEdgeValue(vector<Coord>(0));
+
+  // initialize a random sequence according the given seed
+  tlp::initRandomSequence();
 
   if (max_iter == 0)
     max_iter = std::max(a_maxiter * _nbNodes * _nbNodes, MIN_ITER);

@@ -38,7 +38,6 @@ MISFiltering::MISFiltering(Graph *g) {
 MISFiltering::~MISFiltering() {}
 //========================================
 void MISFiltering::computeFiltering() {
-  srand(g_copy->numberOfNodes() * g_copy->numberOfEdges());
   DoubleProperty * metric = g_copy->getProperty<DoubleProperty>("misf");
   metric->setAllNodeValue(0);
 

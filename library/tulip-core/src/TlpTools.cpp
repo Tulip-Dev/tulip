@@ -18,6 +18,7 @@
  */
 
 #include <cstring>
+#include <ctime>
 #include <string>
 #include <sstream>
 #include <locale.h>
@@ -306,5 +307,22 @@ std::istream *tlp::getIgzstream(const char *name, int open_mode) {
 
 std::ostream *tlp::getOgzstream(const char *name, int open_mode) {
   return new ogzstream(name, open_mode);
+}
+
+// random sequence management
+static unsigned int randomSeed = UINT_MAX;
+void tlp::setSeedOfRandomSequence(unsigned int seed) {
+  randomSeed = seed;
+}
+
+unsigned int tlp::getSeedOfRandomSequence() {
+  return randomSeed;
+}
+
+void tlp::initRandomSequence() {
+  if (randomSeed == UINT_MAX)
+    srand((unsigned int) time(NULL));
+  else
+    srand(randomSeed);
 }
 
