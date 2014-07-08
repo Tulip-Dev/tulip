@@ -85,7 +85,7 @@ GlVertexArrayManager::~GlVertexArrayManager() {
   clearData();
   static bool canUseVBO = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_vertex_buffer_object");
 
-  if (canUseVBO) {
+  if (canUseVBO && pointsVerticesVBO != 0) {
     glDeleteBuffers(1, &pointsVerticesVBO);
     glDeleteBuffers(1, &pointsColorsVBO);
     glDeleteBuffers(1, &linesVerticesVBO);
