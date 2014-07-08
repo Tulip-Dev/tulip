@@ -24,7 +24,7 @@ ADD_CUSTOM_TARGET(copyScript ALL ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE
 
 ENABLE_TESTING()
 
-# UNIT_TEST(importexporttest.cpp)
+UNIT_TEST(importexporttest.cpp)
 UNIT_TEST(ExistEdgeTest.cpp)
 UNIT_TEST(ExtendedClusterOperationTest.cpp)
 UNIT_TEST(VectorTest.cpp)

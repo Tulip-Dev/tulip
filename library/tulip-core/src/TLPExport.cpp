@@ -271,13 +271,16 @@ public:
   void saveLocalProperties(ostream &os, Graph *graph) {
     pluginProgress->setComment("Saving Graph Properties");
     progress = 0;
-    Iterator<PropertyInterface *> *itP = graph->getLocalObjectProperties();
-    //we count the properties for the progress bar
-//     int propertiesNumber = 0;
+    Iterator<PropertyInterface *> *itP = NULL;
+    if (graph->getSuperGraph() == graph) {
+      itP = graph->getObjectProperties();
+    } else {
+      itP = graph->getLocalObjectProperties();
+    }
+
     int nonDefaultvaluatedElementCount = 1;
 
     while (itP->hasNext()) {
-//       ++propertiesNumber;
       PropertyInterface *prop = itP->next();
 
       Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
@@ -301,7 +304,12 @@ public:
 
     delete itP;
 
-    itP=graph->getLocalObjectProperties();
+    if (graph->getSuperGraph() == graph) {
+      itP = graph->getObjectProperties();
+    } else {
+      itP = graph->getLocalObjectProperties();
+    }
+
     PropertyInterface *prop;
 
     while (itP->hasNext()) {
@@ -310,7 +318,11 @@ public:
       tmp << "Saving Property [" << prop->getName() << "]";
       pluginProgress->setComment(tmp.str());
 
-      os << "(property " << " " << graph->getId() << " " << prop->getTypename() << " " ;
+      if (graph->getSuperGraph()==graph) {
+        os << "(property " << " 0 " << prop->getTypename() << " " ;
+      } else {
+        os << "(property " << " " << graph->getId() << " " << prop->getTypename() << " " ;
+      }
 
       os << "\"" << convert(prop->getName()) << "\"" << endl;
       string nDefault = prop->getNodeDefaultStringValue();
@@ -508,7 +520,12 @@ public:
         }
       }
 
-      os << "(graph_attributes " << graph->getId() << " ";
+      if (graph->getSuperGraph() == graph) {
+        os << "(graph_attributes 0 ";
+      } else {
+        os << "(graph_attributes " << graph->getId() << " ";
+      }
+
       DataSet::write(os, attributes);
       os << ")" << endl;
     }
@@ -529,7 +546,12 @@ public:
   }
 
   bool exportGraph(ostream &os) {
-    graph=graph->getRoot();
+
+    // change graph parent in hierarchy temporarily to itself as
+    // it will be the new root of the exported hierarchy
+    Graph *superGraph = graph->getSuperGraph();
+    graph->setSuperGraph(graph);
+
     string format(TLP_FILE_VERSION);
 
     // reindex nodes/edges
@@ -588,6 +610,9 @@ public:
       saveController(os, controller);
 
     os << ')' << endl; // end of (tlp ...
+
+    // restore original parent in hierarchy
+    graph->setSuperGraph(superGraph);
     return true;
   }
 };
