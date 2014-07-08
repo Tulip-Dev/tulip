@@ -58,6 +58,13 @@ GlGraphInputData *GlMetaNodeRenderer::getInputData() const {
 
 void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
 
+  bool viewMeta = _inputData->renderingParameters()->isDisplayMetaNodes();//Checks if user wants to see metanode content
+  bool viewMetaLabels = _inputData->renderingParameters()->isViewMetaLabel();//Checks if user wants to see metanode content labels
+
+  if (!viewMeta && !viewMetaLabels) {
+    return;
+  }
+
   GLint renderMode;
   glGetIntegerv(GL_RENDER_MODE,&renderMode);
 
@@ -78,8 +85,6 @@ void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
   }
 
   scene->getGlGraphComposite()->setRenderingParameters(*(_inputData->renderingParameters()));
-  bool viewMeta = _inputData->renderingParameters()->isDisplayMetaNodes();//Checks if user wants to see metanode content
-  bool viewMetaLabels = _inputData->renderingParameters()->isViewMetaLabel();//Checks if user wants to see metanode content labels
   int metaStencil = _inputData->renderingParameters()->getMetaNodesStencil();
   int metaSelectedStencil = _inputData->renderingParameters()->getSelectedMetaNodesStencil();
   int metaLabelStencil = _inputData->renderingParameters()->getMetaNodesLabelStencil();
