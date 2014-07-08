@@ -38,8 +38,10 @@
 
 using namespace tlp;
 
-GlMainView::GlMainView(): _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true), _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL), _sceneLayersConfigurationWidget(NULL), _overviewPosition(OVERVIEW_BOTTOM_RIGHT) {
-}
+GlMainView::GlMainView():
+    _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true),
+    _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL),
+    _sceneLayersConfigurationWidget(NULL), _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {}
 
 GlMainView::~GlMainView() {
   delete _sceneConfigurationWidget;
@@ -64,6 +66,18 @@ void GlMainView::setOverviewPosition(const OverviewPosition &position) {
   drawOverview();
 }
 
+GlMainView::OverviewPosition GlMainView::overviewPosition() const {
+  return _overviewPosition;
+}
+
+void GlMainView::setUpdateOverview(bool updateOverview) {
+  _updateOverview = updateOverview;
+}
+
+bool GlMainView::updateOverview() const {
+  return _updateOverview;
+}
+
 void GlMainView::drawOverview(bool generatePixmap) {
   if(_overviewItem == NULL) {
     _overviewItem=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
@@ -72,8 +86,9 @@ void GlMainView::drawOverview(bool generatePixmap) {
     // used to set the overview at the right place
     sceneRectChanged(QRectF(QPoint(0, 0), graphicsView()->size()));
   }
-
-  _overviewItem->draw(generatePixmap);
+  if (_updateOverview) {
+    _overviewItem->draw(generatePixmap);
+  }
 }
 
 void GlMainView::assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOldGlMainWidget) {
