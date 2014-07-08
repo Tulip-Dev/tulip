@@ -86,7 +86,12 @@ public:
   virtual QList<QWidget*> configurationWidgets() const;
   bool overviewVisible() const;
   QPixmap snapshot(const QSize &outputSize=QSize()) const;
+
   void setOverviewPosition(const OverviewPosition &position);
+  OverviewPosition overviewPosition() const;
+
+  void setUpdateOverview(bool updateOverview);
+  bool updateOverview() const;
 
 public slots:
   /**
@@ -153,6 +158,8 @@ protected:
   tlp::GlOverviewGraphicsItem* overviewItem() const;
 
   OverviewPosition _overviewPosition;
+
+  bool _updateOverview;
 };
 }
 
