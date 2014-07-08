@@ -14,7 +14,7 @@
    <string>Export</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+   <iconset>
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
@@ -68,7 +68,7 @@ border: 0px;
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;Exports the currently selected graph in the &lt;b&gt;Graphs&lt;/b&gt; list using one of the export methods listed below. &lt;br/&gt;When using the TLP method, the whole hierarchy (from the root graph) is exported.&lt;br/&gt;Once you're done, click &lt;span style=&quot; font-weight:600;&quot;&gt;Finish&lt;/span&gt; to export your graph.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;Exports the currently selected graph in the &lt;span style=&quot; font-weight:600;&quot;&gt;Graphs&lt;/span&gt; list using one of the export methods listed below.&lt;br/&gt;Once you're done, click &lt;span style=&quot; font-weight:600;&quot;&gt;Finish&lt;/span&gt; to export your graph.&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -93,7 +93,7 @@ border: 0px;
          </size>
         </property>
         <property name="icon">
-         <iconset resource="../resources/GraphPerspective.qrc">
+         <iconset>
           <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
         </property>
        </widget>
@@ -118,7 +118,16 @@ border: 0px;
           <property name="spacing">
            <number>10</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -185,7 +194,16 @@ border: 0px;
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="margin">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
            <number>0</number>
           </property>
           <item>
@@ -204,7 +222,16 @@ border: 0px;
               <property name="spacing">
                <number>10</number>
               </property>
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
@@ -292,10 +319,7 @@ background-color: white;
    <header location="global">tulip/ClearableLineEdit.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../resources/GraphPerspective.qrc"/>
-  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>ExportWizard</sender>
