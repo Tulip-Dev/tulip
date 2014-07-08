@@ -64,7 +64,7 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* pr
 
 /**
  * @ingroup Graph
- * @brief Saves the corresponding root graph and all its subgraphs to a file using the tlp format. Extension of the file can be either .tlp (human-readable text file) or .tlp.gz (gzipped text file).
+ * @brief Saves the corresponding graph and all its subgraphs to a file using the tlp format. Extension of the file can be either .tlp (human-readable text file) or .tlp.gz (gzipped text file).
  *
  * This function checks the file name for the '.gz' extension and uses a compressed output if found.
  *
