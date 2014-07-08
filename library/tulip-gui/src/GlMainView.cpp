@@ -39,9 +39,9 @@
 using namespace tlp;
 
 GlMainView::GlMainView():
-    _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true),
-    _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL),
-    _sceneLayersConfigurationWidget(NULL), _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {}
+  _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true),
+  _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL),
+  _sceneLayersConfigurationWidget(NULL), _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {}
 
 GlMainView::~GlMainView() {
   delete _sceneConfigurationWidget;
@@ -86,6 +86,7 @@ void GlMainView::drawOverview(bool generatePixmap) {
     // used to set the overview at the right place
     sceneRectChanged(QRectF(QPoint(0, 0), graphicsView()->size()));
   }
+
   if (_updateOverview) {
     _overviewItem->draw(generatePixmap);
   }
