@@ -272,9 +272,11 @@ public:
     pluginProgress->setComment("Saving Graph Properties");
     progress = 0;
     Iterator<PropertyInterface *> *itP = NULL;
+
     if (graph->getSuperGraph() == graph) {
       itP = graph->getObjectProperties();
-    } else {
+    }
+    else {
       itP = graph->getLocalObjectProperties();
     }
 
@@ -306,7 +308,8 @@ public:
 
     if (graph->getSuperGraph() == graph) {
       itP = graph->getObjectProperties();
-    } else {
+    }
+    else {
       itP = graph->getLocalObjectProperties();
     }
 
@@ -320,7 +323,8 @@ public:
 
       if (graph->getSuperGraph()==graph) {
         os << "(property " << " 0 " << prop->getTypename() << " " ;
-      } else {
+      }
+      else {
         os << "(property " << " " << graph->getId() << " " << prop->getTypename() << " " ;
       }
 
@@ -522,7 +526,8 @@ public:
 
       if (graph->getSuperGraph() == graph) {
         os << "(graph_attributes 0 ";
-      } else {
+      }
+      else {
         os << "(graph_attributes " << graph->getId() << " ";
       }
 

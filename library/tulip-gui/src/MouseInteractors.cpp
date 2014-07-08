@@ -48,6 +48,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::Wheel) {
     QWheelEvent *we = static_cast<QWheelEvent*>(e);
+
     if (we->orientation() == Qt::Vertical && we->modifiers() == Qt::NoModifier) {
       g->getScene()->zoomXY(we->delta() / WHEEL_DELTA, we->x(), we->y());
       g->draw(false);
@@ -445,6 +446,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
+
     if (qMouseEv->buttons() == Qt::LeftButton) {
       oldCursor=glmainwidget->cursor();
       InteractorComponent *currentMouse;
@@ -487,6 +489,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::KeyPress) {
     QKeyEvent *ke = static_cast<QKeyEvent*>(e);
     int delta = (ke->isAutoRepeat() ? 3 : 1);
+
     switch(ke->key()) {
     case Qt::Key_Left:
       glmainwidget->getScene()->translateCamera(delta * 2,0,0);
@@ -538,6 +541,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
   if (e->type() == QEvent::KeyRelease) {
     QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+
     switch(ke->key()) {
     case Qt::Key_Left:
     case Qt::Key_Right:
