@@ -393,97 +393,6 @@ void GlVertexArrayManager::endRendering() {
 
   glEnableClientState(GL_VERTEX_ARRAY);
 
-  //============ Selected graph elements rendering ============================
-
-  Color selectionColor=inputData->parameters->getSelectionColor();
-  glColor4ubv(reinterpret_cast<const GLubyte *>(&selectionColor));
-
-  // Selected edges point rendering
-  glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
-  glPointSize(2);
-
-  if (!pointsEdgesSelectedRenderingIndexArray.empty()) {
-    if (canUseVBO && pointsVerticesUploaded) {
-      glBindBuffer(GL_ARRAY_BUFFER, pointsVerticesVBO);
-      glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
-    }
-    else {
-      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
-    }
-
-    glDrawElements(GL_POINTS, pointsEdgesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(pointsEdgesSelectedRenderingIndexArray));
-
-    if (canUseVBO) {
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-  }
-
-  // Selected nodes point rendering
-  glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedNodesStencil(), 0xFFFF);
-  glPointSize(4);
-
-  if (!pointsNodesSelectedRenderingIndexArray.empty()) {
-    if (canUseVBO && pointsVerticesUploaded) {
-      glBindBuffer(GL_ARRAY_BUFFER, pointsVerticesVBO);
-      glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
-    }
-    else {
-      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
-    }
-
-    glDrawElements(GL_POINTS, pointsNodesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(pointsNodesSelectedRenderingIndexArray));
-
-    if (canUseVBO) {
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-  }
-
-  // Selected edges polyline rendering
-  glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
-  glLineWidth(4);
-
-  if (!linesSelectedRenderingIndicesArray.empty()) {
-    if (canUseVBO && linesVerticesUploaded) {
-      glBindBuffer(GL_ARRAY_BUFFER, linesVerticesVBO);
-      glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
-    }
-    else {
-      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
-    }
-
-    glDrawElements(GL_LINES, linesSelectedRenderingIndicesArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(linesSelectedRenderingIndicesArray));
-
-    if (canUseVBO) {
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-  }
-
-  // Selected edges quad rendering
-  if (!quadsSelectedRenderingIndicesArray.empty()) {
-    if (canUseVBO && quadsVerticesUploaded) {
-      glBindBuffer(GL_ARRAY_BUFFER, quadsVerticesVBO);
-      glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
-    }
-    else {
-      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(quadsCoordsArray));
-    }
-
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
-    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-    glDrawElements(GL_TRIANGLES, quadsSelectedRenderingIndicesArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(quadsSelectedRenderingIndicesArray));
-    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
-    for (map<float, vector<GLuint> >::iterator it = quadsSelectedOutlineRenderingIndicesArray.begin(); it != quadsSelectedOutlineRenderingIndicesArray.end() ; ++it) {
-      glLineWidth(it->first);
-      glDrawElements(GL_LINES, it->second.size(), GL_UNSIGNED_INT, VECTOR_DATA(it->second));
-    }
-
-    if (canUseVBO) {
-      glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-  }
-
   //============ Graph elements rendering ============================
 
   OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
@@ -632,6 +541,98 @@ void GlVertexArrayManager::endRendering() {
   }
 
   glDisableClientState(GL_COLOR_ARRAY);
+
+  //============ Selected graph elements rendering ============================
+
+  Color selectionColor=inputData->parameters->getSelectionColor();
+  glColor4ubv(reinterpret_cast<const GLubyte *>(&selectionColor));
+
+  // Selected edges point rendering
+  glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
+  glPointSize(2);
+
+  if (!pointsEdgesSelectedRenderingIndexArray.empty()) {
+    if (canUseVBO && pointsVerticesUploaded) {
+      glBindBuffer(GL_ARRAY_BUFFER, pointsVerticesVBO);
+      glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
+    }
+    else {
+      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
+    }
+
+    glDrawElements(GL_POINTS, pointsEdgesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(pointsEdgesSelectedRenderingIndexArray));
+
+    if (canUseVBO) {
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+  }
+
+  // Selected nodes point rendering
+  glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedNodesStencil(), 0xFFFF);
+  glPointSize(4);
+
+  if (!pointsNodesSelectedRenderingIndexArray.empty()) {
+    if (canUseVBO && pointsVerticesUploaded) {
+      glBindBuffer(GL_ARRAY_BUFFER, pointsVerticesVBO);
+      glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
+    }
+    else {
+      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(pointsCoordsArray));
+    }
+
+    glDrawElements(GL_POINTS, pointsNodesSelectedRenderingIndexArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(pointsNodesSelectedRenderingIndexArray));
+
+    if (canUseVBO) {
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+  }
+
+  // Selected edges polyline rendering
+  glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
+  glLineWidth(4);
+
+  if (!linesSelectedRenderingIndicesArray.empty()) {
+    if (canUseVBO && linesVerticesUploaded) {
+      glBindBuffer(GL_ARRAY_BUFFER, linesVerticesVBO);
+      glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
+    }
+    else {
+      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(linesCoordsArray));
+    }
+
+    glDrawElements(GL_LINES, linesSelectedRenderingIndicesArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(linesSelectedRenderingIndicesArray));
+
+    if (canUseVBO) {
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+  }
+
+  // Selected edges quad rendering
+  if (!quadsSelectedRenderingIndicesArray.empty()) {
+    if (canUseVBO && quadsVerticesUploaded) {
+      glBindBuffer(GL_ARRAY_BUFFER, quadsVerticesVBO);
+      glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
+    }
+    else {
+      glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(quadsCoordsArray));
+    }
+
+    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
+    glDrawElements(GL_TRIANGLES, quadsSelectedRenderingIndicesArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(quadsSelectedRenderingIndicesArray));
+    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
+    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+
+    for (map<float, vector<GLuint> >::iterator it = quadsSelectedOutlineRenderingIndicesArray.begin(); it != quadsSelectedOutlineRenderingIndicesArray.end() ; ++it) {
+      glLineWidth(it->first);
+      glDrawElements(GL_LINES, it->second.size(), GL_UNSIGNED_INT, VECTOR_DATA(it->second));
+    }
+
+    if (canUseVBO) {
+      glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+  }
+
   glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
   glDisableClientState(GL_VERTEX_ARRAY);
   glPointSize(1);
