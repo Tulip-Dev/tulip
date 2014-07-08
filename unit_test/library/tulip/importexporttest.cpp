@@ -31,8 +31,8 @@ using namespace std;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ImportExportTest);
 
-// ImportExportTest::ImportExportTest() :importAlgorithm("TLP Import"), exportAlgorithm("TLP Export") {
-ImportExportTest::ImportExportTest() :importAlgorithm("JSON Import"), exportAlgorithm("JSON Export") {
+ImportExportTest::ImportExportTest() :importAlgorithm("TLP Import"), exportAlgorithm("TLP Export") {
+//ImportExportTest::ImportExportTest() :importAlgorithm("JSON Import"), exportAlgorithm("JSON Export") {
 }
 
 void ImportExportTest::setUp() {
@@ -118,6 +118,9 @@ void ImportExportTest::testSubGraphsImportExport() {
   }
 
   importExportGraph(original);
+  importExportGraph(sub1);
+  importExportGraph(sub2);
+  importExportGraph(subsub);
 }
 
 Graph* ImportExportTest::createSimpleGraph() const {
@@ -145,8 +148,14 @@ Graph* ImportExportTest::createSimpleGraph() const {
   }
 
   DoubleProperty* id = original->getProperty<DoubleProperty>("id");
-  string msg;
-  original->applyPropertyAlgorithm("Id", id, msg);
+  node n;
+  forEach(n, original->getNodes()) {
+    id->setNodeValue(n, n.id);
+  }
+  edge e;
+  forEach(e, original->getEdges()) {
+    id->setEdgeValue(e, e.id);
+  }
 
   return original;
 }
@@ -171,6 +180,7 @@ void ImportExportTest::testGraphsAreEqual(Graph* first, Graph* second) {
 
   testGraphsTopologiesAreEqual(first, second);
   testGraphAttributesAreEqual(first, second);
+  testGraphPropertiesAreEqual(first, second);
 
   CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphs have different number of subgraphs", first->numberOfSubGraphs(), second->numberOfSubGraphs());
 
@@ -181,9 +191,10 @@ void ImportExportTest::testGraphsAreEqual(Graph* first, Graph* second) {
     Graph* firstSub = firstSubGraphs->next();
     Graph* secondSub = secondSubGraphs->next();
 
-    testGraphsTopologiesAreEqual(firstSub, secondSub);
-    testGraphAttributesAreEqual(firstSub, secondSub);
+    testGraphsAreEqual(firstSub, secondSub);
   }
+  delete firstSubGraphs;
+  delete secondSubGraphs;
 }
 
 void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph* second) {
@@ -211,37 +222,59 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
 void ImportExportTest::testGraphPropertiesAreEqual(Graph* first, Graph* second) {
   unsigned int firstPropertiesCount = 0;
   unsigned int secondPropertiesCount = 0;
-  unsigned int firstLocalPropertiesCount = 0;
-  unsigned int secondLocalPropertiesCount = 0;
 
   PropertyInterface* firstProperty;
   PropertyInterface* secondProperty;
   forEach(firstProperty, first->getObjectProperties()) {
     ++firstPropertiesCount;
   }
-  forEach(firstProperty, first->getLocalObjectProperties()) {
-    ++firstLocalPropertiesCount;
-  }
   forEach(secondProperty, second->getObjectProperties()) {
     ++secondPropertiesCount;
   }
-  forEach(secondProperty, second->getLocalObjectProperties()) {
-    ++secondLocalPropertiesCount;
-  }
 
   CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphs have different number of properties", firstPropertiesCount, secondPropertiesCount);
-  CPPUNIT_ASSERT_EQUAL_MESSAGE("Graphs have different number of local properties", firstLocalPropertiesCount, secondLocalPropertiesCount);
 
-  Iterator<string>* firstIt = first->getProperties();
+  Iterator<string>* firstPropIt = first->getProperties();
 
-  while(firstIt->hasNext()) {
-    string firstPropertyName = firstIt->next();
+  while(firstPropIt->hasNext()) {
+    string firstPropertyName = firstPropIt->next();
     firstProperty = first->getProperty(firstPropertyName);
 
     stringstream message;
     message << "the property " << firstPropertyName << " does not exist in the second graph !";
     CPPUNIT_ASSERT_MESSAGE(message.str(), second->existProperty(firstPropertyName));
+
+    secondProperty = second->getProperty(firstPropertyName);
+
+    message.str("");
+    message << "a node value for property " << firstPropertyName << " in the first graph is not equal to the one in the second graph";
+
+    node n1, n2;
+    Iterator<node>* firstNodeIt = first->getNodes();
+    Iterator<node>* secondNodeIt = second->getNodes();
+    while (firstNodeIt->hasNext()) {
+      n1 = firstNodeIt->next();
+      n2 = secondNodeIt->next();
+      CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), firstProperty->getNodeStringValue(n1), secondProperty->getNodeStringValue(n2));
+    }
+    delete firstNodeIt;
+    delete secondNodeIt;
+
+    message.str("");
+    message << "an edge value for property " << firstPropertyName << " in the first graph is not equal to the one in the second graph";
+
+    edge e1, e2;
+    Iterator<edge>* firstEdgeIt = first->getEdges();
+    Iterator<edge>* secondEdgeIt = second->getEdges();
+    while (firstEdgeIt->hasNext()) {
+      e1 = firstEdgeIt->next();
+      e2 = secondEdgeIt->next();
+      CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), firstProperty->getEdgeStringValue(e1), secondProperty->getEdgeStringValue(e2));
+    }
+    delete firstEdgeIt;
+    delete secondEdgeIt;
   }
+  delete firstPropIt;
 }
 
 void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Graph* second) {
@@ -255,37 +288,66 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Grap
   CPPUNIT_ASSERT_EQUAL_MESSAGE(nodesMessage.str(), first->numberOfNodes(), second->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL_MESSAGE(edgesMessage.str(), first->numberOfEdges(), second->numberOfEdges());
 
-  Iterator<node>* firstIt = first->getNodes();
-  Iterator<node>* secondIt = second->getNodes();
+  CPPUNIT_ASSERT_MESSAGE("id control property does not exists on original graph, please add it before testing if graphs are equal.", first->existProperty("id"));
+  CPPUNIT_ASSERT_MESSAGE("id control property does not exists on imported graph", second->existProperty("id"));
 
-  while(firstIt->hasNext() && secondIt->hasNext()) {
-    node firstNode = firstIt->next();
-    node secondNode = secondIt->next();
+  DoubleProperty* firstIdProperty = first->getProperty<DoubleProperty>("id");
+  DoubleProperty* secondIdProperty = second->getProperty<DoubleProperty>("id");
 
-    CPPUNIT_ASSERT_MESSAGE("id control property does not exists on original graph, please add it before testing if graphs are equal.", first->existProperty("id"));
-    CPPUNIT_ASSERT_MESSAGE("id control property does not exists on imported graph", second->existProperty("id"));
+  CPPUNIT_ASSERT_MESSAGE("layout property does not exists on original graph", first->existProperty("viewLayout"));
+  CPPUNIT_ASSERT_MESSAGE("layout property does not exists on imported graph", second->existProperty("viewLayout"));
 
-    DoubleProperty* firstIdProperty = first->getProperty<DoubleProperty>("id");
-    DoubleProperty* secondIdProperty = second->getProperty<DoubleProperty>("id");
+  LayoutProperty* firstLayout = first->getProperty<LayoutProperty>("viewLayout");
+  LayoutProperty* secondLayout = second->getProperty<LayoutProperty>("viewLayout");
 
-    double firstId = firstIdProperty->getNodeValue(firstNode);
-    double secondId = secondIdProperty->getNodeValue(secondNode);
+  Iterator<node>* firstNodeIt = first->getNodes();
+  Iterator<node>* secondNodeIt = second->getNodes();
 
-    CPPUNIT_ASSERT_MESSAGE("layout property does not exists on original graph", first->existProperty("viewLayout"));
-    CPPUNIT_ASSERT_MESSAGE("layout property does not exists on imported graph", second->existProperty("viewLayout"));
+  while(firstNodeIt->hasNext() && secondNodeIt->hasNext()) {
+    node firstNode = firstNodeIt->next();
+    node secondNode = secondNodeIt->next();
 
-    LayoutProperty* firstLayout = first->getProperty<LayoutProperty>("viewLayout");
-    LayoutProperty* secondLayout = second->getProperty<LayoutProperty>("viewLayout");
+    double firstNodeId = firstIdProperty->getNodeValue(firstNode);
+    double secondNodeId = secondIdProperty->getNodeValue(secondNode);
 
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("nodes are not in the same order, this test is a failure by design. ITERATE !!", firstId, secondId);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("nodes are not in the same order", firstNodeId, secondNodeId);
 
     CPPUNIT_ASSERT_EQUAL_MESSAGE("nodes do not have same degree", first->deg(firstNode), second->deg(secondNode));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("nodes are not at the same position", firstLayout->getNodeStringValue(firstNode), secondLayout->getNodeStringValue(secondNode));
+
   }
 
-  CPPUNIT_ASSERT_MESSAGE("all nodes of the first graph have not been iterated upon", !firstIt->hasNext());
-  CPPUNIT_ASSERT_MESSAGE("all nodes of the second graph have not been iterated upon", !secondIt->hasNext());
+  CPPUNIT_ASSERT_MESSAGE("all nodes of the first graph have not been iterated upon", !firstNodeIt->hasNext());
+  CPPUNIT_ASSERT_MESSAGE("all nodes of the second graph have not been iterated upon", !secondNodeIt->hasNext());
 
-  delete firstIt;
-  delete secondIt;
+  delete firstNodeIt;
+  delete secondNodeIt;
+
+  Iterator<edge>* firstEdgeIt = first->getEdges();
+  Iterator<edge>* secondEdgeIt = second->getEdges();
+
+  while(firstEdgeIt->hasNext() && secondEdgeIt->hasNext()) {
+    edge firstEdge = firstEdgeIt->next();
+    edge secondEdge = secondEdgeIt->next();
+
+    double firstEdgeId = firstIdProperty->getEdgeValue(firstEdge);
+    double secondEdgeId = secondIdProperty->getEdgeValue(secondEdge);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("edges are not in the same order", firstEdgeId, secondEdgeId);
+
+    node firstEdgeSrc = first->source(firstEdge);
+    node firstEdgeTgt = first->target(firstEdge);
+    node secondEdgeSrc = second->source(secondEdge);
+    node secondEdgeTgt = second->target(secondEdge);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("an edge from the second graph does not have the same source node as in the first graph", firstIdProperty->getNodeValue(firstEdgeSrc), secondIdProperty->getNodeValue(secondEdgeSrc));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("an edge from the second graph does not have the same target node as in the first graph", firstIdProperty->getNodeValue(firstEdgeTgt), secondIdProperty->getNodeValue(secondEdgeTgt));
+  }
+
+  CPPUNIT_ASSERT_MESSAGE("all edges of the first graph have not been iterated upon", !firstEdgeIt->hasNext());
+  CPPUNIT_ASSERT_MESSAGE("all edges of the second graph have not been iterated upon", !secondEdgeIt->hasNext());
+
+  delete firstEdgeIt;
+  delete secondEdgeIt;
+
 }
