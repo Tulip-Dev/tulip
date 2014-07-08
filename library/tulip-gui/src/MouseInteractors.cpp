@@ -46,17 +46,17 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 #define WHEEL_DELTA 120
   GlMainWidget *g = static_cast<GlMainWidget *>(widget);
 
-  if (e->type() == QEvent::Wheel &&
-      (((QWheelEvent *) e)->orientation() == Qt::Vertical)) {
-
-    g->getScene()->zoomXY(((QWheelEvent *) e)->delta() / WHEEL_DELTA,
-                          ((QWheelEvent *) e)->x(), ((QWheelEvent *) e)->y());
-    g->draw(false);
-    return true;
+  if (e->type() == QEvent::Wheel) {
+    QWheelEvent *we = static_cast<QWheelEvent*>(e);
+    if (we->orientation() == Qt::Vertical && we->modifiers() == Qt::NoModifier) {
+      g->getScene()->zoomXY(we->delta() / WHEEL_DELTA, we->x(), we->y());
+      g->draw(false);
+      return true;
+    }
   }
 
   if(e->type() == QEvent::Gesture) {
-    QGestureEvent* gesture = (QGestureEvent*)e;
+    QGestureEvent* gesture = static_cast<QGestureEvent*>(e);
     QPointF center;
     //swipe events and pan events are never fired, known Qt bug
     /*if(gesture->gesture(Qt::SwipeGesture)) {
@@ -67,7 +67,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
     }*/
 
     if(gesture->gesture(Qt::PinchGesture)) {
-      QPinchGesture* pinch = (QPinchGesture*)gesture->gesture(Qt::PinchGesture);
+      QPinchGesture* pinch = static_cast<QPinchGesture*>(gesture->gesture(Qt::PinchGesture));
       Camera& camera = g->getScene()->getGraphCamera();
 
       //store the camera scale factor when starting the gesture
@@ -105,7 +105,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
       }
 
       if(gesture->gesture(Qt::PanGesture)) {
-        QPanGesture* pan = (QPanGesture*)gesture->gesture(Qt::PanGesture);
+        QPanGesture* pan = static_cast<QPanGesture*>(gesture->gesture(Qt::PanGesture));
 
         if(pan->state() == Qt::GestureStarted) {
           isGesturing = true;
@@ -129,11 +129,11 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 
 //===============================================================
 bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
-  QMouseEvent *qMouseEv = (QMouseEvent *) e;
+  QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
   if(qMouseEv != NULL) {
     SelectedEntity selectedEntity;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if(e->type() == QEvent::MouseMove) {
       if (glMainWidget->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
@@ -176,7 +176,7 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
 }
 
 void MouseElementDeleter::clear() {
-  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
+  GlMainView *glMainView=static_cast<GlMainView*>(view());
   glMainView->getGlMainWidget()->setCursor(QCursor());
 }
 //===============================================================
@@ -190,14 +190,15 @@ public:
 
 bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
-    x = ((QMouseEvent *) e)->x();
-    y = ((QMouseEvent *) e)->y();
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
+    x = qMouseEv->x();
+    y = qMouseEv->y();
     return true;
   }
 
   if (e->type() == QEvent::MouseMove) {
-    QMouseEvent *qMouseEv = (QMouseEvent *) e;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
     int deltaX,deltaY;
     deltaX=qMouseEv->x()-x;
     deltaY=qMouseEv->y()-y;
@@ -231,16 +232,17 @@ public:
 
 bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
-    x = ((QMouseEvent *) e)->x();
-    y = ((QMouseEvent *) e)->y();
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
+    x = qMouseEv->x();
+    y = qMouseEv->y();
     inRotation=false;
     inZoom=false;
     return true;
   }
 
   if (e->type() == QEvent::MouseMove) {
-    QMouseEvent *qMouseEv = (QMouseEvent *) e;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
     int deltaX,deltaY;
 
     if(!inRotation && !inZoom) {
@@ -294,14 +296,15 @@ public:
 
 bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonPress) {
-    x = ((QMouseEvent *) e)->x();
-    y = ((QMouseEvent *) e)->y();
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
+    x = qMouseEv->x();
+    y = qMouseEv->y();
     return true;
   }
 
   if (e->type() == QEvent::MouseMove) {
-    QMouseEvent *qMouseEv = (QMouseEvent *) e;
-    GlMainWidget *glMainWidget = (GlMainWidget *) widget;
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
+    GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (qMouseEv->x() != x)
       glMainWidget->getScene()->translateCamera(qMouseEv->x()-x,0,0);
@@ -441,13 +444,14 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonPress) {
-    if (((QMouseEvent *) e)->buttons() == Qt::LeftButton) {
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
+    if (qMouseEv->buttons() == Qt::LeftButton) {
       oldCursor=glmainwidget->cursor();
       InteractorComponent *currentMouse;
       // give focus so we can catch key events
       glmainwidget->setFocus();
 
-      if (((QMouseEvent *) e)->modifiers() &
+      if (qMouseEv->modifiers() &
 #if defined(__APPLE__)
           Qt::AltModifier
 #else
@@ -455,7 +459,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 #endif
          )
         currentMouse = new MouseZoomRotZ();
-      else if (((QMouseEvent *) e)->modifiers() & Qt::ShiftModifier)
+      else if (qMouseEv->modifiers() & Qt::ShiftModifier)
         currentMouse = new MouseRotXRotY();
       else {
         currentMouse = new MouseMove();
@@ -481,10 +485,9 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::KeyPress) {
-    int delta = (((QKeyEvent *) e)->isAutoRepeat() ? 3 : 1);
-
-
-    switch(((QKeyEvent *) e)->key()) {
+    QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+    int delta = (ke->isAutoRepeat() ? 3 : 1);
+    switch(ke->key()) {
     case Qt::Key_Left:
       glmainwidget->getScene()->translateCamera(delta * 2,0,0);
       break;
@@ -534,7 +537,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::KeyRelease) {
-    switch(((QKeyEvent *) e)->key()) {
+    QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+    switch(ke->key()) {
     case Qt::Key_Left:
     case Qt::Key_Right:
     case Qt::Key_Up:
@@ -558,9 +562,8 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 void MouseNKeysNavigator::viewChanged(View *view) {
-  nldc=(NodeLinkDiagramComponent*)view;
+  nldc=static_cast<NodeLinkDiagramComponent*>(view);
 }
 
-void MouseNKeysNavigator::clear() {
-}
+void MouseNKeysNavigator::clear() {}
 
