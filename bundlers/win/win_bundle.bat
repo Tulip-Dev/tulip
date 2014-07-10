@@ -22,6 +22,8 @@ del /Q /F /S "%DEST_DIR%\\files\\bin\\imageformats\\libq*.a" >nul 2>&1
 del /Q /F /S "%DEST_DIR%\\files\\bin\\imageformats\\q*d4.pdb" >nul 2>&1
 del /Q /F /S "%DEST_DIR%\\files\\bin\\imageformats\\q*d.dll" >nul 2>&1
 del /Q /F /S "%DEST_DIR%\\files\\bin\\imageformats\\q*d.pdb" >nul 2>&1
+del /Q /F /S "%DEST_DIR%\\files\\bin\\platforms\\q*d.dll" >nul 2>&1
+del /Q /F /S "%DEST_DIR%\\files\\bin\\platforms\\q*d.pdb" >nul 2>&1
 )
 echo 'Removing shared libs archives'
 del /Q /F /S "%DEST_DIR%\\files\\lib\\lib*.dll.a" >nul 2>&1
