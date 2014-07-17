@@ -126,7 +126,7 @@ void SimplePluginProgressWidget::stopClicked() {
 // DIALOG
 // ===================
 
-SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent): QDialog(parent), _progress(new SimplePluginProgressWidget(this)) {
+SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent): QDialog(parent,Qt::WindowTitleHint | Qt::CustomizeWindowHint), _progress(new SimplePluginProgressWidget(this)) {
   setModal(true);
   QVBoxLayout *mainLayout = new QVBoxLayout(this);
   mainLayout->setContentsMargins(0,0,0,0);
