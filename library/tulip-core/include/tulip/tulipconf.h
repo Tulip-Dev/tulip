@@ -54,6 +54,7 @@
 #if defined(DLL_TULIP) || defined(DLL_TULIP_GL) || defined(DLL_TULIP_QT) || defined(DLL_TULIP_QT2)
 #pragma warning(disable: 4996) //deprecated functions
 #endif
+
 //MSVC 2010 has a different keyword for typeof, and deprecated
 #  if _MSC_VER >= 1600
 #    define _DEPRECATED __declspec(deprecated)
@@ -65,46 +66,61 @@
 #    define TYPEOF BOOST_TYPEOF
 #  endif
 
-//MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
+#  define __PRETTY_FUNCTION__ __FUNCTION__ //MSVC has a different name for pretty_function
+#  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround
+
 #include <cmath>
-#include <cstdlib>
-static double sqrt(int i) {
-  return sqrt((double)i);
+
+static double fabs(int i) {
+  return std::fabs(static_cast<double>(i));
 }
+
+#  if _MSC_VER < 1800 // Visual Studio 2013 improved C99 support, no need to redefine some cmath functions
+
+// MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
+#include <cstdlib>
+
+static double sqrt(int i) {
+  return std::sqrt(static_cast<double>(i));
+}
+
 static double sqrt(unsigned int i) {
-  return sqrt((double)i);
+  return std::sqrt(static_cast<double>(i));
 }
 
 static double log(int i) {
-  return log((double)i);
+  return std::log(static_cast<double>(i));
 }
+
 static double log(unsigned int i) {
-  return log((double)i);
+  return std::log(static_cast<double>(i));
 }
 
 static double floor(int i) {
-  return floor((double)i);
+  return std::floor(static_cast<double>(i));
 }
+
 static double floor(unsigned int i) {
-  return floor((double)i);
+  return std::floor(static_cast<double>(i));
 }
 
 static double round(double d) {
-  return floor(d + 0.5);
-}
-
-static double fabs(int i) {
-  return fabs((double)i);
+  return std::floor(d + 0.5);
 }
 
 static float strtof(const char* cptr, char** endptr) {
-  return strtod(cptr, endptr);
+  return std::strtod(cptr, endptr);
 }
 
-#  define __PRETTY_FUNCTION__ __FUNCTION__ //MSVC has a different name for pretty_function
-#  define strcasecmp stricmp  //strcasecmp does not exists for VC, workaround
-#  define isnan(x) ((x) != (x)) //you guessed it, this is a C99 feature, and VC++ does not support C99. workaroud this.
-#  define rint(arg) arg > 0 ? (int)std::floor((double)arg) : (int)std::ceil((double)arg) //Hey, nother C99 feature !
+#define isnan(x) ((x) != (x)) //you guessed it, this is a C99 feature, and VC++ does not support C99. workaroud this.
+#define rint(arg) arg > 0 ? static_cast<int>(std::floor(static_cast<double>(arg))) : static_cast<int>(std::ceil(static_cast<double>(arg))) //Hey, nother C99 feature !
+
+#  else // _MSC_VER < 1800
+
+// for std::min and std::max
+#include <algorithm>
+
+#  endif // _MSC_VER < 1800
 
 //clang does not define __GNUC_MINOR__, thus having a separate clang #elif seems cleaner than adding defined() in the #else
 #elif __clang__
