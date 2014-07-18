@@ -359,7 +359,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
   DWORD machine = IMAGE_FILE_MACHINE_AMD64;
   frame.AddrPC.Offset    = context->Rip;
   frame.AddrStack.Offset = context->Rsp;
-  frame.AddrFrame.Offset = context->Rsp;
+  frame.AddrFrame.Offset = context->Rbp;
 #endif
 
   frame.AddrPC.Mode      = AddrModeFlat;
@@ -490,6 +490,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 #else
   DWORD             displacement = 0;
 #endif
+  
   DWORD         displacement2 = 0;
 
   memset( &stack, 0, sizeof( STACKFRAME ) );
@@ -506,7 +507,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   DWORD machine = IMAGE_FILE_MACHINE_AMD64;
   stack.AddrPC.Offset    = context->Rip;
   stack.AddrStack.Offset = context->Rsp;
-  stack.AddrFrame.Offset = context->Rsp;
+  stack.AddrFrame.Offset = context->Rbp;
 #endif
 
   stack.AddrPC.Mode      = AddrModeFlat;
@@ -541,17 +542,21 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
     std::string file_name = "";
     int line = 0;
 
+#ifndef I64
     DWORD module_base = SymGetModuleBase(process, stack.AddrPC.Offset);
+#else
+    DWORD64 module_base = SymGetModuleBase(process, stack.AddrPC.Offset);
+#endif
 
     if (SymGetModuleInfo(process,stack.AddrPC.Offset, &image_module)) {
       module_name = image_module.ImageName;
     }
 
-    if (SymGetSymFromAddr( process, ( ULONG )stack.AddrPC.Offset, &displacement, symbol )) {
+    if (SymGetSymFromAddr( process, stack.AddrPC.Offset, &displacement, symbol )) {
       symbol_name = symbol->Name;
     }
 
-    if (SymGetLineFromAddr( process, ( ULONG )stack.AddrPC.Offset - 1, &displacement2, &image_line )) {
+    if (SymGetLineFromAddr( process, stack.AddrPC.Offset - 1, &displacement2, &image_line )) {
       file_name = image_line.FileName;
       line = image_line.LineNumber;
     }
