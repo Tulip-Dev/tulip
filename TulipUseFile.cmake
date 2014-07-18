@@ -57,6 +57,10 @@ MACRO(SET_COMPILER_OPTIONS)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_USE_MATH_DEFINES")
       # Prevents VS to define min and max macros (name clash with std::min and std::max)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOMINMAX")
+      # Don't warn about the use of unsafe function
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_CRT_SECURE_NO_WARNINGS")
+      # Disable some annoying compiler warnings
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4251 /wd4267 /wd4275 /wd4244 /wd4355 /wd4800 /wd4503 /wd4344")
 
       SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMT")
       SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBCMTD")
@@ -90,29 +94,29 @@ ENDMACRO(SET_COMPILER_OPTIONS)
 FUNCTION(INSTALL)
   IF(TULIP_GENERATE_PLUGINSERVER)
 
-    cmake_parse_arguments(PLUGIN "" "DESTINATION;COMPONENT" "TARGETS" ${ARGN})
+    CMAKE_PARSE_ARGUMENTS(PLUGIN "" "DESTINATION;COMPONENT" "TARGETS" ${ARGN})
     IF(PLUGIN_UNPARSED_ARGUMENTS)
-      cmake_parse_arguments(PLUGIN "" "DESTINATION;COMPONENT" "FILES" ${ARGN})
+      CMAKE_PARSE_ARGUMENTS(PLUGIN "" "DESTINATION;COMPONENT" "FILES" ${ARGN})
       STRING(REPLACE ${TULIP_DIR} "" DEST ${PLUGIN_DESTINATION})
       SET(PLUGIN_DESTINATION "${CMAKE_BINARY_DIR}/pluginserver/${PLUGIN_COMPONENT}/${DEST}")
 
       IF(PLUGIN_UNPARSED_ARGUMENTS)
-        cmake_parse_arguments(PLUGIN "" "DESTINATION;COMPONENT" "DIRECTORY" ${ARGN})
+        CMAKE_PARSE_ARGUMENTS(PLUGIN "" "DESTINATION;COMPONENT" "DIRECTORY" ${ARGN})
         STRING(REPLACE ${TULIP_DIR} "" DEST ${PLUGIN_DESTINATION})
         SET(PLUGIN_DESTINATION "${CMAKE_BINARY_DIR}/pluginserver/${PLUGIN_COMPONENT}/${DEST}")
-        _install(DIRECTORY ${PLUGIN_DIRECTORY} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
+        _INSTALL(DIRECTORY ${PLUGIN_DIRECTORY} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
       ENDIF()
-      _install(FILES ${PLUGIN_FILES} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
+      _INSTALL(FILES ${PLUGIN_FILES} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
     ELSE()
       STRING(REPLACE ${TULIP_DIR} "" DEST ${PLUGIN_DESTINATION})
       SET(PLUGIN_DESTINATION "${CMAKE_BINARY_DIR}/pluginserver/${PLUGIN_COMPONENT}/${DEST}")
       FOREACH(TARGET ${PLUGIN_TARGETS})
-        _install(TARGETS ${PLUGIN_TARGETS} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
+        _INSTALL(TARGETS ${PLUGIN_TARGETS} COMPONENT ${PLUGIN_COMPONENT} DESTINATION ${PLUGIN_DESTINATION})
       ENDFOREACH()
     ENDIF()
 
   ELSE(TULIP_GENERATE_PLUGINSERVER)
-    _install(${ARGN})
+    _INSTALL(${ARGN})
   ENDIF()
 ENDFUNCTION(INSTALL)
 
@@ -128,6 +132,7 @@ ENDMACRO()
 
 # External libraries macros
 IF(WIN32)
+
   IF(MINGW)
     # get paths to MINGW binaries, libraries and headers
     STRING(REPLACE "ar.exe" "" MINGW_BIN_PATH ${CMAKE_AR})
@@ -135,29 +140,91 @@ IF(WIN32)
     SET(MINGW_LIB64_PATH ${MINGW_BIN_PATH}/../lib64)
     SET(MINGW_INCLUDE_PATH ${MINGW_BIN_PATH}/../include)
   ENDIF(MINGW)
-MACRO(INSTALL_EXTERNAL_LIB pattern component)
-  UNSET(results)
-  FOREACH(win_path $ENV{CMAKE_LIBRARY_PATH} ${MINGW_BIN_PATH} ${CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR})
-    STRING(REPLACE "\\" "/" cmake_path "${win_path}")
-    FILE(GLOB match "${cmake_path}/${pattern}")
-    IF(match)
-      SET(results ${results} ${match})
-    ENDIF(match)
-  ENDFOREACH()
 
-  IF(NOT results)
-    MESSAGE("[CPack] ${pattern} could not be located and will not be installed with package")
-  ELSE(NOT results)
-    FOREACH(F ${results})
+  # Try to locate a dll whose name matches the regular expression passed as argument
+  # by looking in the following directories :
+  #    * those stored in the CMAKE_LIBRARY_PATH environment variable
+  #    * those stored in the CMAKE_LIBRARY_PATH CMake variable
+  #    * the MinGW binaries directory
+  #    * the Qt binaries directory
+  # If a dll is found, install it in the application binaries directory
+  MACRO(INSTALL_EXTERNAL_LIB pattern component)
+
+    UNSET(results)
+    FOREACH(win_path $ENV{CMAKE_LIBRARY_PATH} ${MINGW_BIN_PATH} ${CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR})
+      STRING(REPLACE "\\" "/" cmake_path "${win_path}")
+      FILE(GLOB match "${cmake_path}/${pattern}")
+      IF(match)
+        SET(results ${results} ${match})
+      ENDIF(match)
+    ENDFOREACH()
+
+    IF(NOT results)
+      MESSAGE("${pattern} could not be located and will not be installed in the binary directory of the application.\n"
+              "That library is required to run the application. Please add its path in the CMAKE_LIBRARY_PATH variable in order to install it automatically.")
+    ELSE(NOT results)
+      FOREACH(F ${results})
         INSTALL(FILES ${F} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
-    ENDFOREACH(F ${results})
-  ENDIF(NOT results)
-ENDMACRO(INSTALL_EXTERNAL_LIB)
+      ENDFOREACH(F ${results})
+    ENDIF(NOT results)
+
+  ENDMACRO(INSTALL_EXTERNAL_LIB)
+
+  # That macro checks if an external library has to be installed in the application directory.
+  # It first checks if the library provided as argument is an import library or a static library (for MinGW and MSVC).
+  # For MinGW, it also checks if the provided library is a dll (as that compiler allows to directly link with such a library).
+  # If the library is static, it does not need to be installed in the application directory.
+  # If the library is an import one, the name of the associated dll is retrieved from it and then provided as parameter to the INSTALL_EXTERNAL_LIB macro.
+  # If the library is a dll, its name is provided as parameter to the INSTALL_EXTERNAL_LIB macro.
+  MACRO(INSTALL_EXTERNAL_LIB_IF_NEEDED library component)
+
+    IF(MINGW)
+      STRING(REGEX MATCH ".*dll\\.a" IMPORT_LIBRARY ${library})
+      STRING(REGEX MATCH ".*dll" DLL_LIBRARY ${library})
+      # If an import library is used, we can easily retrieve the dll name with the dlltool utility
+      IF(IMPORT_LIBRARY)
+        EXECUTE_PROCESS(COMMAND ${MINGW_BIN_PATH}/dlltool.exe -I ${library} OUTPUT_VARIABLE DLL_NAME)
+        STRING(REPLACE "\n" "" DLL_NAME ${DLL_NAME})
+        INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
+      # If a dll is directly used, just extract its name from its path
+      ELSEIF(DLL_LIBRARY)
+        GET_FILENAME_COMPONENT(DLL_DIRECTORY ${library} DIRECTORY)
+        GET_FILENAME_COMPONENT(DLL_NAME ${library} NAME)
+        SET(CMAKE_LIBRARY_PATH "${DLL_DIRECTORY} ${CMAKE_LIBRARY_PATH}")
+        INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
+      ENDIF()
+    ENDIF(MINGW)
+
+    IF(MSVC)
+      # Get path of MSVC compiler
+      GET_FILENAME_COMPONENT(COMPILER_DIRECTORY ${CMAKE_CXX_COMPILER} DIRECTORY)
+      # Get root path of Visual Studio
+      IF(MSVC12)
+        GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\12.0\\Setup\\VS;ProductDir] REALPATH)
+      ELSEIF(MSVC11)
+        GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\11.0\\Setup\\VS;ProductDir] REALPATH)
+      ELSEIF(MSVC10)
+        GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\10.0\\Setup\\VS;ProductDir] REALPATH)
+      ELSEIF(MSVC90)
+        GET_FILENAME_COMPONENT(VS_DIR [HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\VisualStudio\\9.0\\Setup\\VS;ProductDir] REALPATH)
+      ENDIF()
+      # Add temporarily some paths to the PATH environment variable in order to locate some dlls needed to run lib.exe command (mspdb*.dll)
+      SET(VS_IDE_DIR "${VS_DIR}/Common7/IDE")
+      SET(VS_VC_BIN_DIR "${VS_DIR}/VC/bin")
+      SET(PATH_BACKUP "$ENV{PATH}")
+      SET(ENV{PATH} "${VS_IDE_DIR};${VS_VC_BIN_DIR};$ENV{PATH}")
+      # Run the lib.exe command to list the content of the library file
+      EXECUTE_PROCESS(COMMAND ${COMPILER_DIRECTORY}/lib.exe /list ${library} OUTPUT_VARIABLE LIBRARY_CONTENTS)
+      # If the library is an import library, lib.exe outputs the associated dll name instead of the object files for a static libary
+      STRING(REGEX MATCH "[^\r?\n]+\\.dll" DLL_NAME ${LIBRARY_CONTENTS})
+      # If we found a dll name in the output of lib.exe /list, we need to install that dll
+      IF(DLL_NAME)
+        INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
+      ENDIF(DLL_NAME)
+      # Restore original PATH environement variable value
+      SET(ENV{PATH} "${PATH_BACKUP}")
+    ENDIF(MSVC)
+
+  ENDMACRO(INSTALL_EXTERNAL_LIB_IF_NEEDED)
 
 ENDIF(WIN32)
-
-IF(APPLE)
-ENDIF(APPLE)
-
-IF(LINUX)
-ENDIF(LINUX)
