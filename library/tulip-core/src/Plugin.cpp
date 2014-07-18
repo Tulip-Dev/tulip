@@ -24,10 +24,12 @@ using namespace std;
 std::string tlp::getMinor(const std::string &release) {
 #ifdef _MSC_VER
   char sep = '_';
+
   // handle the case where the version number separator is not an underscore (e.g. for Tulip plugins)
   if (release.find(sep) == std::string::npos) {
     sep = '.';
   }
+
 #else
   char sep = '.';
 #endif
@@ -50,10 +52,12 @@ std::string tlp::getMinor(const std::string &release) {
 std::string tlp::getMajor(const std::string &release) {
 #ifdef _MSC_VER
   char sep = '_';
+
   // handle the case where the version number separator is not an underscore (e.g. for Tulip plugins)
   if (release.find(sep) == std::string::npos) {
     sep = '.';
   }
+
 #else
   char sep = '.';
 #endif
