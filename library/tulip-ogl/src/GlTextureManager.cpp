@@ -19,6 +19,11 @@
 
 #include <cstdio>
 #include <cstring>
+#if defined(_MSC_VER)
+// need to include that header with Visual Studio to fix a typedef conflict
+// with latest version of jpeg lib (9a)
+#include <basetsd.h>
+#endif
 #include <jpeglib.h>
 #include <png.h>
 #include <GL/glew.h>
