@@ -490,7 +490,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 #else
   DWORD             displacement = 0;
 #endif
-  
+
   DWORD         displacement2 = 0;
 
   memset( &stack, 0, sizeof( STACKFRAME ) );
