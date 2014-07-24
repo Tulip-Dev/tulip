@@ -23,6 +23,7 @@
 #include <QProcess>
 #include <QSettings>
 
+#include <cstdlib>
 #include <iostream>
 
 using namespace tlp;
@@ -39,7 +40,7 @@ static const char *pythonVersion[]  = {
 #include <windows.h>
 
 #ifndef I64
-// function to Process if a 32 bits program run on a 64 bits system
+// function to check if a 32 bits program run on a 64 bits system
 static bool isWow64() {
   BOOL bIsWow64 = FALSE;
 
@@ -96,32 +97,6 @@ static QString pythonHome(const QString &pythonVersion) {
 // Linux and Mac OS specific
 #else
 
-// Function to get the default Python version if any by running the python process.
-static QString getDefaultPythonVersionIfAny() {
-  QString defaultPythonVersion;
-  QProcess pythonProcess;
-  // Before Python 3.4, the version number was printed on the standard error output.
-  // Starting Python 3.4 the version number is printed on the standard output.
-  // So merge the output channels of the process.
-  pythonProcess.setReadChannelMode(QProcess::MergedChannels);
-  pythonProcess.setReadChannel(QProcess::StandardOutput);
-  pythonProcess.start(QString("python3.4"),QStringList() << "--version");
-  pythonProcess.waitForFinished(-1);
-
-  if (pythonProcess.exitStatus() == QProcess::NormalExit) {
-
-    QString result = pythonProcess.readAll();
-
-    QRegExp versionRegexp(".*([0-9]*\\.[0-9]*)\\..*");
-
-    if (versionRegexp.exactMatch(result)) {
-      defaultPythonVersion = versionRegexp.cap(1);
-    }
-  }
-
-  return defaultPythonVersion;
-}
-
 // Function which tries to run a specific version of the python interpreter.
 static bool runPython(const QString &version) {
   QProcess pythonProcess;
@@ -131,47 +106,116 @@ static bool runPython(const QString &version) {
 
 #endif
 
+// Function to get the default Python version if any by running the python process.
+static QString getDefaultPythonVersionIfAny() {
+  QString defaultPythonVersion;
+  QProcess pythonProcess;
+
+  QString pythonCommand = "python";
+
+// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python 3.X installed in a non standard way.
+#ifdef __MINGW32__
+  char *pythonDirEv = getenv("PYTHONDIR");
+  if (pythonDirEv) {
+      pythonCommand = QString(pythonDirEv) + "/" + pythonCommand;
+  }
+#endif
+
+  // Before Python 3.4, the version number was printed on the standard error output.
+  // Starting Python 3.4 the version number is printed on the standard output.
+  // So merge the output channels of the process.
+  pythonProcess.setReadChannelMode(QProcess::MergedChannels);
+  pythonProcess.setReadChannel(QProcess::StandardOutput);
+  pythonProcess.start(pythonCommand, QStringList() << "--version");
+  pythonProcess.waitForFinished(-1);
+
+  if (pythonProcess.exitStatus() == QProcess::NormalExit) {  
+
+    QString result = pythonProcess.readAll();
+
+    QRegExp versionRegexp(".*([0-9]*\\.[0-9]*)\\..*");
+
+    if (versionRegexp.exactMatch(result)) {
+      defaultPythonVersion = versionRegexp.cap(1);
+
+// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python 3.X installed in a non standard way.
+#ifdef __MINGW32__
+      if (pythonDirEv) {
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        env.insert("PYTHONHOME", QString(pythonDirEv));
+        pythonProcess.setProcessEnvironment(env);
+      }
+#endif
+
+      // Check the binary type of the python executable (32 or 64 bits)
+      pythonProcess.start(pythonCommand, QStringList() << "-c" << "import struct;import sys;sys.stdout.write(str(struct.calcsize('P')*8))");
+      pythonProcess.waitForFinished(-1);
+      QString arch = pythonProcess.readAll();
+
+#ifdef I64
+      if (arch != "64") {
+        defaultPythonVersion = "";
+      }
+#else
+      if (arch != "32") {
+        defaultPythonVersion = "";
+      }
+#endif
+
+    }
+  }
+  
+  return defaultPythonVersion;
+}
+
+QStringList PythonVersionChecker::_installedVersions;
+bool PythonVersionChecker::_installedVersionsChecked(false);
 
 QStringList PythonVersionChecker::installedVersions() {
-  QStringList ret;
+
+  if (!_installedVersionsChecked) {
 
 // On Linux and Mac OS, we check the presence of Python by trying to
 // run the interpreter on a separate process
 #ifndef WIN32
 
-  int i = 0;
+    int i = 0;
 
-  // Try to run pythonX.Y executable
-  while (pythonVersion[i]) {
-    if (runPython(pythonVersion[i])) {
-      ret.append(pythonVersion[i]);
+    // Try to run pythonX.Y executable
+    while (pythonVersion[i]) {
+      if (runPython(pythonVersion[i])) {
+        _installedVersions.append(pythonVersion[i]);
+      }
+
+      ++i;
     }
-
-    ++i;
-  }
-
-  // Also try to run python executable
-  QString defaultPythonVersion = getDefaultPythonVersionIfAny();
-
-  if (!defaultPythonVersion.isEmpty() && !ret.contains(defaultPythonVersion)) {
-    ret.append(defaultPythonVersion);
-  }
 
 // On windows, we check the presence of Python by looking into the registry
 #else
 
-  int i = 0;
+    int i = 0;
 
-  while (pythonVersion[i]) {
-    if (!pythonHome(pythonVersion[i]).isEmpty()) {
-      ret.append(pythonVersion[i]);
+    while (pythonVersion[i]) {
+      if (!pythonHome(pythonVersion[i]).isEmpty()) {
+        _installedVersions.append(pythonVersion[i]);
+      }
+      ++i;
     }
 
-    ++i;
+#endif
+
+    // Also try to run python executable
+    QString defaultPythonVersion = getDefaultPythonVersionIfAny();
+
+    if (!defaultPythonVersion.isEmpty() && !_installedVersions.contains(defaultPythonVersion)) {
+      _installedVersions.append(defaultPythonVersion);
+    }
+
+    _installedVersionsChecked = true;
+
   }
 
-#endif
-  return ret;
+  return _installedVersions;
 }
 
 QString PythonVersionChecker::compiledVersion() {
@@ -185,9 +229,18 @@ bool PythonVersionChecker::isPythonVersionMatching() {
 #ifdef WIN32
 QString PythonVersionChecker::getPythonHome() {
   if (isPythonVersionMatching()) {
-    return pythonHome(compiledVersion());
+    QString pythonHomeDir = pythonHome(compiledVersion());
+// This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python 3.X installed in a non standard way.
+#ifdef __MINGW32__
+    if (pythonHomeDir.isEmpty()) {
+      char *pythonDirEv = getenv("PYTHONDIR");
+      if (pythonDirEv) {
+        return QString(pythonDirEv);
+      }
+    }
+#endif
+    return pythonHomeDir;
   }
-
   return "";
 }
 #endif

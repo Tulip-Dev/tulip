@@ -35,6 +35,9 @@ public:
 #ifdef WIN32
   static QString getPythonHome();
 #endif
+private:
+  static QStringList _installedVersions;
+  static bool _installedVersionsChecked;
 };
 }
 
