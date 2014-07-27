@@ -116,9 +116,11 @@ static QString getDefaultPythonVersionIfAny() {
 // This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python 3.X installed in a non standard way.
 #ifdef __MINGW32__
   char *pythonDirEv = getenv("PYTHONDIR");
+
   if (pythonDirEv) {
-      pythonCommand = QString(pythonDirEv) + "/" + pythonCommand;
+    pythonCommand = QString(pythonDirEv) + "/" + pythonCommand;
   }
+
 #endif
 
   // Before Python 3.4, the version number was printed on the standard error output.
@@ -129,7 +131,7 @@ static QString getDefaultPythonVersionIfAny() {
   pythonProcess.start(pythonCommand, QStringList() << "--version");
   pythonProcess.waitForFinished(-1);
 
-  if (pythonProcess.exitStatus() == QProcess::NormalExit) {  
+  if (pythonProcess.exitStatus() == QProcess::NormalExit) {
 
     QString result = pythonProcess.readAll();
 
@@ -140,11 +142,13 @@ static QString getDefaultPythonVersionIfAny() {
 
 // This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python 3.X installed in a non standard way.
 #ifdef __MINGW32__
+
       if (pythonDirEv) {
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
         env.insert("PYTHONHOME", QString(pythonDirEv));
         pythonProcess.setProcessEnvironment(env);
       }
+
 #endif
 
       // Check the binary type of the python executable (32 or 64 bits)
@@ -153,18 +157,22 @@ static QString getDefaultPythonVersionIfAny() {
       QString arch = pythonProcess.readAll();
 
 #ifdef I64
+
       if (arch != "64") {
         defaultPythonVersion = "";
       }
+
 #else
+
       if (arch != "32") {
         defaultPythonVersion = "";
       }
+
 #endif
 
     }
   }
-  
+
   return defaultPythonVersion;
 }
 
@@ -199,6 +207,7 @@ QStringList PythonVersionChecker::installedVersions() {
       if (!pythonHome(pythonVersion[i]).isEmpty()) {
         _installedVersions.append(pythonVersion[i]);
       }
+
       ++i;
     }
 
@@ -232,15 +241,19 @@ QString PythonVersionChecker::getPythonHome() {
     QString pythonHomeDir = pythonHome(compiledVersion());
 // This is a hack for MinGW to allow the debugging of Tulip through GDB when compiled with Python 3.X installed in a non standard way.
 #ifdef __MINGW32__
+
     if (pythonHomeDir.isEmpty()) {
       char *pythonDirEv = getenv("PYTHONDIR");
+
       if (pythonDirEv) {
         return QString(pythonDirEv);
       }
     }
+
 #endif
     return pythonHomeDir;
   }
+
   return "";
 }
 #endif
