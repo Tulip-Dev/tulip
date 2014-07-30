@@ -866,7 +866,7 @@ void GraphPerspective::group() {
     changeGraph = true;
   }
 
-  graph->createMetaNode(groupedNodes);
+  graph->createMetaNode(groupedNodes, false);
 
   selection->setAllNodeValue(false);
   selection->setAllEdgeValue(false);
