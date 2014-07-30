@@ -19,9 +19,6 @@
 #ifndef DATASETTEST
 #define DATASETTEST
 
-#include <string>
-#include <tulip/Graph.h>
-#include <tulip/DataSet.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -35,6 +32,7 @@ class DataSetTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testSetGetInt);
   CPPUNIT_TEST(testSetGetString);
   CPPUNIT_TEST(testSetGetStruct);
+  CPPUNIT_TEST(testDataSetSerialization);
   CPPUNIT_TEST_SUITE_END();
 public:
   void setUp() {}
@@ -44,6 +42,8 @@ public:
   void testSetGetInt();
   void testSetGetString();
   void testSetGetStruct();
+  void testDataSetSerialization();
+
 };
 
 }
