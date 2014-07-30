@@ -64,7 +64,10 @@ PluginLister.cpp
 tulipconf.cpp
 TulipException.cpp
 PluginProgress.cpp
-TulipViewSettings.cpp)
+TulipViewSettings.cpp
+TlpJsonExport.cpp
+TlpJsonImport.cpp
+)
 
 IF(CHECK_MEMORY)
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} MemoryChecker.cpp)
