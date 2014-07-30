@@ -85,6 +85,11 @@ public:
   }
 
   virtual void parseStartArray() {
+
+    if(!_parsingSubgraph.empty() && !_parsingNodesIds && !_parsingEdgesIds && !_parsingAttributes) {
+      ++_parsingSubgraph.top();
+    }
+
     if(_parsingEdges)  {
       _newEdge = true;
     }
@@ -99,6 +104,18 @@ public:
   }
 
   virtual void parseEndArray() {
+
+    if(!_parsingSubgraph.empty() && !_parsingNodesIds && !_parsingEdgesIds && !_parsingAttributes && !_parsingInterval) {
+      --_parsingSubgraph.top();
+
+      //finished parsing the subgraphs
+      if(_parsingSubgraph.top() == 0) {
+        setGraphPropertiesValues();
+        _parsingSubgraph.pop();
+        _graph = _graph->getSuperGraph();
+      }
+    }
+
     //if the current array was not an edge but was the array of edges, we are done parsing edges
     if(!_newEdge && _parsingEdges)  {
       _parsingEdges = false;
@@ -178,12 +195,11 @@ public:
   }
 
   virtual void parseStartMap() {
-    if(!_parsingSubgraph.empty()) {
-      ++_parsingSubgraph.top();
-    }
+
   }
 
   virtual void parseEndMap() {
+
     if(!_currentProperty && _propertyName.empty()) {
       _parsingProperties = false;
     }
@@ -217,16 +233,7 @@ public:
       _parsingEdges = false;
     }
 
-    if(!_parsingSubgraph.empty()) {
-      --_parsingSubgraph.top();
 
-      //finished parsing the subgraphs
-      if(_parsingSubgraph.top() == 0) {
-        setGraphPropertiesValues();
-        _parsingSubgraph.pop();
-        _graph = _graph->getSuperGraph();
-      }
-    }
   }
 
   virtual void parseInteger(long long integerVal) {
@@ -385,11 +392,10 @@ public:
         }
         else {
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
-          _currentAttributeTypeName = string();
-
           if(!result) {
             tlp::error() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str() << std::endl;
           }
+          _currentAttributeTypeName = string();
         }
       }
     }

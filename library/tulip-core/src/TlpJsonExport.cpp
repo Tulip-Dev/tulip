@@ -96,7 +96,9 @@ public:
     node n;
     int i = 0;
     // the export only works for the root graph
-    forEach(n, graph->getRoot()->getNodes()) {
+    Graph *superGraph = graph->getSuperGraph();
+    graph->setSuperGraph(graph);
+    forEach(n, graph->getNodes()) {
       _newNodeId.set(n.id, i++);
     }
 
@@ -109,12 +111,14 @@ public:
 
     _writer.writeString(GraphToken);
     _writer.writeMapOpen(); //graph hierarchy map
-    saveGraph_V4(graph->getRoot());
+    saveGraph_V4(graph);
     _writer.writeMapClose(); // graph hierarchy map
 
     _writer.writeMapClose(); // top-level map
 
     fileOut << _writer.generatedString();
+
+    graph->setSuperGraph(superGraph);
 
     return true;
   }
@@ -152,10 +156,14 @@ public:
     edge e;
 
     _writer.writeString(GraphIDToken);
-    _writer.writeInteger(graph->getId());
+    if (graph->getSuperGraph() == graph) {
+      _writer.writeInteger(0);
+    } else {
+      _writer.writeInteger(graph->getId());
+    }
 
     //we need to save all nodes and edges on the root graph
-    if(graph == graph->getRoot()) {
+    if(graph->getSuperGraph() == graph) {
       //saving nodes only requires knowing how many of them there are
       _writer.writeString(NodesNumberToken);
       _writer.writeInteger(graph->numberOfNodes());
@@ -190,8 +198,14 @@ public:
     _writer.writeString(PropertiesToken);
     _writer.writeMapOpen();
     //saving properties
+    Iterator<PropertyInterface*> *itP = NULL;
+    if (graph->getSuperGraph() == graph) {
+      itP = graph->getObjectProperties();
+    } else {
+      itP = graph->getLocalObjectProperties();
+    }
     PropertyInterface* property;
-    forEach(property, graph->getLocalObjectProperties()) {
+    forEach(property, itP) {
       _writer.writeString(property->getName());
       _writer.writeMapOpen();
 
@@ -204,18 +218,10 @@ public:
       _writer.writeString(EdgeDefaultToken);
       _writer.writeString(property->getEdgeDefaultStringValue());
 
-      //TODO instead of this hack, add PropertyInterface::hasNonDefaultValuatedNodes and PropertyInterface::hasNonDefaultValuatedEdges
-      Iterator<node>* nodeIt = property->getNonDefaultValuatedNodes();
-      Iterator<edge>* edgeIt = property->getNonDefaultValuatedEdges();
-      bool hasNonDefaultValuatedNodes = nodeIt->hasNext();
-      bool hasNonDefaultValuatedEdges = edgeIt->hasNext();
-      delete edgeIt;
-      delete nodeIt;
-
-      if(hasNonDefaultValuatedNodes) {
+      if(property->numberOfNonDefaultValuatedNodes() > 0) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
-        forEach(n, property->getNonDefaultValuatedNodes()) {
+        forEach(n, property->getNonDefaultValuatedNodes(graph)) {
           stringstream temp;
           temp << _newNodeId.get(n.id);
           _writer.writeString(temp.str());
@@ -224,10 +230,10 @@ public:
         _writer.writeMapClose();
       }
 
-      if(hasNonDefaultValuatedEdges) {
+      if(property->numberOfNonDefaultValuatedEdges() > 0) {
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
-        forEach(e, property->getNonDefaultValuatedEdges()) {
+        forEach(e, property->getNonDefaultValuatedEdges(graph)) {
           stringstream temp;
           temp << _newEdgeId.get(e.id);
           _writer.writeString(temp.str());
@@ -286,12 +292,14 @@ public:
 
     //saving subgraphs
     _writer.writeString(SubgraphsToken);
-    _writer.writeMapOpen();
+    _writer.writeArrayOpen();
     Graph* sub;
     forEach(sub, graph->getSubGraphs()) {
+      _writer.writeMapOpen();
       saveGraph_V4(sub);
+      _writer.writeMapClose();
     }
-    _writer.writeMapClose();
+    _writer.writeArrayClose();
   }
 
   /**
@@ -310,6 +318,7 @@ public:
     unsigned int intervalEnd = UINT_MAX;
     unsigned int previousId = UINT_MAX;
     unsigned int currentId = UINT_MAX;
+    unsigned int nbIdsIterated = 0;
     forEach(currentId, iterator) {
       //we don't need/want to do all this on the first time we loop
       if(previousId != UINT_MAX) {
@@ -353,7 +362,14 @@ public:
       }
 
       previousId = currentId;
+      ++nbIdsIterated;
     }
+
+    // handle the case where there is only one id to write
+    if (nbIdsIterated == 1) {
+      _writer.writeInteger(currentId);
+    }
+
     _writer.writeArrayClose();
   }
 
