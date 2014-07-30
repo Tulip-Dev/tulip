@@ -228,8 +228,9 @@ bool DataSet::read(std::istream& is, DataSet& ds) {
   for(;;) {
     char c;
 
-    if( !(is >> c) )
-      return false;
+    if( !(is >> c) ) {
+      return is.eof();
+    }
 
     if (isspace(c))
       continue;
@@ -297,6 +298,7 @@ bool DataSet::read(std::istream& is, DataSet& ds) {
 
       if (c != ')')
         return false;
+
     }
     else
       return false;
