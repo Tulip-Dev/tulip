@@ -25,15 +25,13 @@
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
 #include <tulip/PluginLoaderTxt.h>
+#include <tulip/StringCollection.h>
 
 using namespace tlp;
 using namespace std;
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ImportExportTest);
-
-ImportExportTest::ImportExportTest() :importAlgorithm("TLP Import"), exportAlgorithm("TLP Export") {
-//ImportExportTest::ImportExportTest() :importAlgorithm("JSON Import"), exportAlgorithm("JSON Export") {
-}
+ImportExportTest::ImportExportTest(const string &importAlgorithm, const string &exportAlgorithm) :
+  importAlgorithm(importAlgorithm), exportAlgorithm(exportAlgorithm) {}
 
 void ImportExportTest::setUp() {
   CppUnit::TestFixture::setUp();
@@ -52,8 +50,94 @@ void ImportExportTest::testAttributes() {
   Graph* original = createSimpleGraph();
 
   const string originalName = "rootGraph";
+  const bool b = true;
+  const double d = 3.14;
+  const float f = 0.2f;
+  const int i = 33;
+  const unsigned int ui = 256;
+  const long l = 56845725;
+  const Coord c(1,2,3);
+  const Coord c2(10,20,30);
+  const Color col = Color::Azure;
+  const Size s(4,5,6);
+  vector<string> vs;
+  vs.push_back("foo");
+  vs.push_back("bar");
+  vector<double> vd;
+  vd.push_back(12.56);
+  vd.push_back(45.85);
+  vector<int> vi;
+  vi.push_back(45);
+  vi.push_back(-120);
+  vector<bool> vb;
+  vb.push_back(true);
+  vb.push_back(false);
+  vector<Coord> vc;
+  vc.push_back(c);
+  vc.push_back(c2);
+  set<edge> setEdge;
+  vector<edge> vectorEdge;
+  vector<node> vectorNode;
+  node n;
+  edge e;
+  forEach(n, original->getNodes()) {
+    vectorNode.push_back(n);
+  }
+  forEach(e, original->getEdges()) {
+    vectorEdge.push_back(e);
+    setEdge.insert(e);
+  }
+  n = original->getOneNode();
+  e = original->getOneEdge();
+  StringCollection sc;
+  sc.push_back("foo");
+  sc.push_back("bar");
+
+  DataSet dataSet;
+  dataSet.set("name", originalName);
+  dataSet.set("boolean", b);
+  dataSet.set("double", d);
+  dataSet.set("float", f);
+  dataSet.set("integer", i);
+  dataSet.set("unsigned integer", ui);
+  dataSet.set("long", l);
+  dataSet.set("tlp::Coord", c);
+  dataSet.set("tlp::Size", s);
+  dataSet.set("tlp::Color", col);
+  dataSet.set("tlp::node", n);
+  dataSet.set("tlp::edge", e);
+  dataSet.set("tlp::StringCollection", sc);
+  dataSet.set("vector<string>", vs);
+  dataSet.set("vector<double>", vd);
+  dataSet.set("vector<int>", vi);
+  dataSet.set("vector<bool>", vb);
+  dataSet.set("vector<node>", vectorNode);
+  dataSet.set("vector<edge>", vectorEdge);
+  dataSet.set("vector<Coord>", vc);
+  dataSet.set("set<edge>", setEdge);
+
   original->setAttribute("name", originalName);
-  //TODO test attributes of type int, double, Coord, Size, ...
+  original->setAttribute("boolean", b);
+  original->setAttribute("double", d);
+  original->setAttribute("float", f);
+  original->setAttribute("integer", i);
+  original->setAttribute("unsigned integer", ui);
+  original->setAttribute("long", l);
+  original->setAttribute("tlp::Coord", c);
+  original->setAttribute("tlp::Size", s);
+  original->setAttribute("tlp::Color", col);
+  original->setAttribute("tlp::node", n);
+  original->setAttribute("tlp::edge", e);
+  original->setAttribute("tlp::StringCollection", sc);
+  original->setAttribute("vector<string>", vs);
+  original->setAttribute("vector<double>", vd);
+  original->setAttribute("vector<int>", vi);
+  original->setAttribute("vector<bool>", vb);
+  original->setAttribute("vector<node>", vectorNode);
+  original->setAttribute("vector<edge>", vectorEdge);
+  original->setAttribute("vector<Coord>", vc);
+  original->setAttribute("set<edge>", setEdge);
+  original->setAttribute("tlp::DataSet", dataSet);
 
   importExportGraph(original);
 }
@@ -161,15 +245,15 @@ Graph* ImportExportTest::createSimpleGraph() const {
 }
 
 void ImportExportTest::importExportGraph(tlp::Graph* original) {
-  const string tlpFileName = "subout.tlp";
-  ofstream os(tlpFileName.c_str());
+  const string exportFilename = "graph_export";
+  ofstream os(exportFilename.c_str());
   DataSet set;
   tlp::exportGraph(original, os, exportAlgorithm, set);
 
   os.close();
 
   DataSet input;
-  input.set<string>("file::filename", tlpFileName);
+  input.set<string>("file::filename", exportFilename);
   Graph* imported = tlp::importGraph(importAlgorithm, input);
 
   testGraphsAreEqual(original, imported);
@@ -201,7 +285,8 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
   std::pair<std::string, tlp::DataType*> attribute;
   forEach(attribute, first->getAttributes().getValues()) {
     stringstream attributeNameMessage;
-    attributeNameMessage << "attribute \"" << attribute.first << "\" does not exists on imported graph. Should be: " << *(std::string*)attribute.second->value;
+
+    attributeNameMessage << "attribute \"" << attribute.first << "\" does not exists on imported graph.";
     CPPUNIT_ASSERT_MESSAGE(attributeNameMessage.str(), second->attributeExist(attribute.first));
 
     stringstream attributeTypeMessage;
@@ -215,6 +300,7 @@ void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph
     stringstream secondValue;
     serializer->writeData(firstValue, attribute.second);
     serializer->writeData(secondValue, second->getAttribute(attribute.first));
+
     CPPUNIT_ASSERT_EQUAL_MESSAGE(attributeValueMessage.str(), firstValue.str(), secondValue.str());
   }
 }
@@ -349,5 +435,12 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Grap
 
   delete firstEdgeIt;
   delete secondEdgeIt;
-
 }
+
+CPPUNIT_TEST_SUITE_REGISTRATION(TlpImportExportTest);
+
+TlpImportExportTest::TlpImportExportTest() : ImportExportTest("TLP Import", "TLP Export") {}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(JsonImportExportTest);
+
+JsonImportExportTest::JsonImportExportTest() : ImportExportTest("JSON Import", "JSON Export") {}

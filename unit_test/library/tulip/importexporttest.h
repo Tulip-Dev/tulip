@@ -27,13 +27,9 @@ class Graph;
 }
 
 class ImportExportTest : public CppUnit::TestFixture {
-  CPPUNIT_TEST_SUITE(ImportExportTest);
-  CPPUNIT_TEST(testgridImportExport);
-  CPPUNIT_TEST(testAttributes);
-  CPPUNIT_TEST(testSubGraphsImportExport);
-  CPPUNIT_TEST_SUITE_END();
+
 public:
-  ImportExportTest();
+  ImportExportTest(const std::string &importAlgorithm, const std::string &exportAlgorithm);
   void setUp();
   void testgridImportExport();
   void testSubGraphsImportExport();
@@ -50,5 +46,26 @@ private:
   const std::string importAlgorithm;
   const std::string exportAlgorithm;
 };
+
+class TlpImportExportTest : public ImportExportTest {
+  CPPUNIT_TEST_SUITE(TlpImportExportTest);
+  CPPUNIT_TEST(testgridImportExport);
+  CPPUNIT_TEST(testAttributes);
+  CPPUNIT_TEST(testSubGraphsImportExport);
+  CPPUNIT_TEST_SUITE_END();
+public:
+  TlpImportExportTest();
+};
+
+class JsonImportExportTest : public ImportExportTest {
+  CPPUNIT_TEST_SUITE(JsonImportExportTest);
+  CPPUNIT_TEST(testgridImportExport);
+  CPPUNIT_TEST(testAttributes);
+  CPPUNIT_TEST(testSubGraphsImportExport);
+  CPPUNIT_TEST_SUITE_END();
+public:
+  JsonImportExportTest();
+};
+
 
 #endif // IMPORTEXPORTTEST_H
