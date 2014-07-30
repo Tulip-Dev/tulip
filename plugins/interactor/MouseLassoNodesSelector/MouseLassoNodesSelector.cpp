@@ -174,10 +174,10 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
 
     for (unsigned int i = 0 ; i < selectedNodes.size() ; ++i) {
       for (unsigned int j = i+1 ; j < selectedNodes.size() ; ++j) {
-        edge e = graph->existEdge(selectedNodes[i], selectedNodes[j], false);
+        vector<edge> edges = graph->getEdges(selectedNodes[i], selectedNodes[j], false);
 
-        if (e.isValid()) {
-          viewSelection->setEdgeValue(e, true);
+        for (size_t i = 0 ; i < edges.size() ; ++i) {
+          viewSelection->setEdgeValue(edges[i], true);
         }
       }
     }
