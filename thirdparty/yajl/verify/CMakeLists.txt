@@ -1,4 +1,4 @@
-# Copyright (c) 2007-2011, Lloyd Hilaiel <lloyd@hilaiel.com>
+# Copyright (c) 2007-2014, Lloyd Hilaiel <me@lloyd.io>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -32,8 +32,6 @@ TARGET_LINK_LIBRARIES(json_verify yajl_s)
 GET_TARGET_PROPERTY(binPath json_verify LOCATION)
 
 ADD_CUSTOM_COMMAND(TARGET json_verify POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir} VERBATIM)
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${binPath} ${binDir})
 
-IF (NOT WIN32)
-  INSTALL(TARGETS json_verify RUNTIME DESTINATION bin)
-ENDIF ()
+INSTALL(TARGETS json_verify RUNTIME DESTINATION bin)

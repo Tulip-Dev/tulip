@@ -1,5 +1,5 @@
 **********************************************************************
-        This is YAJL 2, for the legacy version of YAJL.  see
+        This is YAJL 2.  For the legacy version of YAJL see
               https://github.com/lloyd/yajl/tree/1.x
 **********************************************************************
 
@@ -20,7 +20,7 @@ unable to find one that satisfies my requirements.  Those are,
 7. simple to use
 8. tiny
 
-Numbers 3, 5, 6, and 7 where particularly hard to find, and were what 
+Numbers 3, 5, 6, and 7 were particularly hard to find, and were what 
 caused me to ultimately create YAJL.  This document is a tour of some
 of the more important aspects of YAJL.
 

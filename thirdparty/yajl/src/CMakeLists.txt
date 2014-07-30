@@ -1,4 +1,4 @@
-# Copyright (c) 2007-2011, Lloyd Hilaiel <lloyd@hilaiel.com>
+# Copyright (c) 2007-2014, Lloyd Hilaiel <me@lloyd.io>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -28,11 +28,12 @@ SET (PUB_HDRS api/yajl_parse.h api/yajl_gen.h api/yajl_common.h api/yajl_tree.h)
 ADD_DEFINITIONS(-DYAJL_BUILD)
 
 # set up some paths
-#SET (libDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)
+SET (libDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/lib)
 SET (incDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/include/yajl)
+SET (shareDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/share/pkgconfig)
 
 # set the output path for libraries
-#SET(LIBRARY_OUTPUT_PATH ${libDir})
+SET(LIBRARY_OUTPUT_PATH ${libDir})
 
 #ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
 
@@ -48,40 +49,41 @@ SET_TARGET_PROPERTIES(${YajlLibrary} PROPERTIES
 IF(APPLE)
   MESSAGE("INSTALL_NAME_DIR: ${CMAKE_INSTALL_PREFIX}/lib")
   SET_TARGET_PROPERTIES(${YajlLibrary} PROPERTIES
-                        INSTALL_NAME_DIR "@executable_path/../lib")
+                        INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 ENDIF(APPLE)
 
 #### build up an sdk as a post build step
 
 # create some directories
-#FILE(MAKE_DIRECTORY ${libDir})
-#FILE(MAKE_DIRECTORY ${incDir})
+FILE(MAKE_DIRECTORY ${libDir})
+FILE(MAKE_DIRECTORY ${incDir})
 
 # generate build-time source
+SET(dollar $)
 CONFIGURE_FILE(api/yajl_version.h.cmake ${incDir}/yajl_version.h)
+CONFIGURE_FILE(yajl.pc.cmake ${shareDir}/yajl.pc)
 
-## copy public headers to output directory
+# copy public headers to output directory
 FOREACH (header ${PUB_HDRS})
- SET (header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
+  SET (header ${CMAKE_CURRENT_SOURCE_DIR}/${header})
 
- EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir} OUTPUT_QUIET ERROR_QUIET)
+  EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy_if_different ${header} ${incDir} OUTPUT_QUIET ERROR_QUIET)
 
- # ADD_CUSTOM_COMMAND(TARGET yajl_s POST_BUILD
-     # COMMAND ${CMAKE_COMMAND} -E copy_if_different "${header}" "${incDir}")
-ENDFOREACH (header ${PUB_HDRS} VERBATIM)
+ENDFOREACH (header ${PUB_HDRS})
 
-INCLUDE_DIRECTORIES(${incDir}/.. ${incDir})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${incDir}/..)
 
-#IF(NOT WIN32)
-  # at build time you may specify the cmake variable LIB_SUFFIX to handle
-  # 64-bit systems which use 'lib64'
-#  INSTALL(TARGETS yajl LIBRARY DESTINATION lib${LIB_SUFFIX} COMPONENT yajl)
-#  INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib${LIB_SUFFIX} COMPONENT yajl)
-#  INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl COMPONENT yajl)
-#  INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl COMPONENT yajl)
-#ELSE()
-  INSTALL(TARGETS ${YajlLibrary}
-       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT yajl
-       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT yajl)
-#ENDIF()
+# at build time you may specify the cmake variable LIB_SUFFIX to handle
+# 64-bit systems which use 'lib64'
+#INSTALL(TARGETS yajl
+#        RUNTIME DESTINATION lib${LIB_SUFFIX}
+#        LIBRARY DESTINATION lib${LIB_SUFFIX}
+#        ARCHIVE DESTINATION lib${LIB_SUFFIX})
+#INSTALL(TARGETS yajl_s ARCHIVE DESTINATION lib${LIB_SUFFIX})
+#INSTALL(FILES ${PUB_HDRS} DESTINATION include/yajl)
+#INSTALL(FILES ${incDir}/yajl_version.h DESTINATION include/yajl)
+#INSTALL(FILES ${shareDir}/yajl.pc DESTINATION share/pkgconfig)
+
+INSTALL(TARGETS ${YajlLibrary}
+        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT yajl
+        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT yajl)
