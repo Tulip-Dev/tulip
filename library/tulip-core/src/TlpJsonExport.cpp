@@ -156,9 +156,11 @@ public:
     edge e;
 
     _writer.writeString(GraphIDToken);
+
     if (graph->getSuperGraph() == graph) {
       _writer.writeInteger(0);
-    } else {
+    }
+    else {
       _writer.writeInteger(graph->getId());
     }
 
@@ -199,11 +201,14 @@ public:
     _writer.writeMapOpen();
     //saving properties
     Iterator<PropertyInterface*> *itP = NULL;
+
     if (graph->getSuperGraph() == graph) {
       itP = graph->getObjectProperties();
-    } else {
+    }
+    else {
       itP = graph->getLocalObjectProperties();
     }
+
     PropertyInterface* property;
     forEach(property, itP) {
       _writer.writeString(property->getName());
