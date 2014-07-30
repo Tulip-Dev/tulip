@@ -82,6 +82,7 @@ static int parse_map_key(void *ctx, const unsigned char * stringVal, size_t stri
   char * str = (char *) malloc(stringLen + 1);
   str[stringLen] = 0;
   memcpy(str, stringVal, stringLen);
+
   std::string key((char*)str);
 
   facade->parseMapKey(key);
@@ -225,8 +226,8 @@ void YajlParseFacade::parseString(const std::string&) {
 YajlWriteFacade::YajlWriteFacade() {
   _generator = yajl_gen_alloc(NULL);
   yajl_gen_config(_generator, yajl_gen_validate_utf8, 1);
-  yajl_gen_config(_generator, yajl_gen_beautify, 1);
-  yajl_gen_config(_generator, yajl_gen_indent_string, " ");
+  //yajl_gen_config(_generator, yajl_gen_beautify, 1);
+  //yajl_gen_config(_generator, yajl_gen_indent_string, "  ");
 }
 
 YajlWriteFacade::~YajlWriteFacade() {
@@ -246,7 +247,7 @@ void YajlWriteFacade::writeNumber(const char* str, size_t len) {
 }
 
 void YajlWriteFacade::writeString(const std::string& text) {
-  yajl_gen_string(_generator, (unsigned char*)text.data(), text.size());
+  yajl_gen_string(_generator, (unsigned char*)text.c_str(), text.size());
 }
 
 void YajlWriteFacade::writeNull() {
