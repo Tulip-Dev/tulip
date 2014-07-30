@@ -284,6 +284,7 @@ PyObject* evalPythonStatement(const std::string &pythonStatement) {
 %Include SizeProperty.sip
 %Include IntegerProperty.sip
 %Include LayoutProperty.sip
+%Include NumericProperty.sip
 
 %Include GraphProperty.sip
 

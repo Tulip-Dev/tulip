@@ -26,7 +26,7 @@
 
 namespace tlp {
 
-class DoubleProperty;
+class NumericProperty;
 class BooleanProperty;
 
 /**
@@ -319,14 +319,14 @@ public:
    * @param property The property to use to order the elements.
    * @return void
    **/
-  void setElementOrderingProperty(tlp::DoubleProperty* property);
+  void setElementOrderingProperty(tlp::NumericProperty* property);
 
   /**
    * @brief Gets the property used for element ordering. Setting it to NULL will use viewMetric if the ordering is enabled.
    *
-   * @return :DoubleProperty* The Property curretly used.
+   * @return :NumericProperty* The Property currently used.
    **/
-  tlp::DoubleProperty* getElementOrderingProperty() const;
+  tlp::NumericProperty* getElementOrderingProperty() const;
 
   /**
    * @brief If true node and edges are ordered according to the distance with camera
@@ -523,7 +523,7 @@ private:
   bool _feedbackRender;
   Color _selectionColor;
   BooleanProperty *_displayFilteringProperty;
-  DoubleProperty* _elementOrderingProperty;
+  NumericProperty* _elementOrderingProperty;
 };
 
 /** \brief Class to get the default selection color

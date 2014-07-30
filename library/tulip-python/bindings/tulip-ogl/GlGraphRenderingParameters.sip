@@ -581,7 +581,7 @@ Returns the state of the ordered rendering of graph elements.
 
 // =============================================================================================
 
-  void setElementOrderingProperty(tlp::DoubleProperty* property /AllowNone/);
+  void setElementOrderingProperty(tlp::NumericProperty* property /AllowNone/);
 %Docstring
 tlpogl.GlGraphRenderingParameters.setElementOrderingProperty(property)
 
@@ -589,18 +589,18 @@ Defines which property should be used for the ordered rendering of graph element
 Setting it to :const:`None` will use the "viewMetric" property if the ordering is enabled.
 
 :param property: the property to use to order the rendering of graph elements
-:type property: :class:`tulip.tlp.DoubleProperty`
+:type property: :class:`tulip.tlp.NumericProperty`
 %End
 
 // =============================================================================================
 
-  tlp::DoubleProperty* getElementOrderingProperty() const;
+  tlp::NumericProperty* getElementOrderingProperty() const;
 %Docstring
 tlpogl.GlGraphRenderingParameters.getElementOrderingProperty()
 
 Returns the double property used for the ordered rendering of graph elements.
 
-:rtype: :class:`tulip.tlp.DoubleProperty`
+:rtype: :class:`tulip.tlp.NumericProperty`
 %End
 
 // =============================================================================================

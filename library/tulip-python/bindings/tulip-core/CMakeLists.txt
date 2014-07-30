@@ -31,6 +31,7 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Matrix.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Node.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/NumericProperty.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Observable.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/OuterPlanarTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PlanarityTest.sip
