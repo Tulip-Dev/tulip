@@ -1,9 +1,9 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${CppUnit_INCLUDE_DIRS})
 
 MACRO(UNIT_TEST file)
   STRING(REPLACE ".cpp" "" TEST_NAME ${file})
   ADD_EXECUTABLE(${TEST_NAME} ${file} tuliplibtest.cpp )
-  TARGET_LINK_LIBRARIES(${TEST_NAME} ${LibTulipCoreName} cppunit)
+  TARGET_LINK_LIBRARIES(${TEST_NAME} ${LibTulipCoreName} ${CppUnit_LIBRARIES})
   ADD_TEST(NAME ${TEST_NAME} COMMAND ${TEST_NAME} ${TEST_NAME})
 ENDMACRO(UNIT_TEST)
 
