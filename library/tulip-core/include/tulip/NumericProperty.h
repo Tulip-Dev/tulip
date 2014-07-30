@@ -105,7 +105,7 @@ public:
 
   /**
    * @brief Creates a property of the same type (e.g. tlp::DoubleProperty)
-   * The new property will not a copy of this property's values for all
+   * The new property will be a copy of this property's values for all
    * the elements of the graph
    * @param graph The Graph in which to create the new property.
    * @return The newly created property.
