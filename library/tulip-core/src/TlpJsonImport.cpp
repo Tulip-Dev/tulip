@@ -392,9 +392,11 @@ public:
         }
         else {
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
+
           if(!result) {
             tlp::error() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str() << std::endl;
           }
+
           _currentAttributeTypeName = string();
         }
       }
