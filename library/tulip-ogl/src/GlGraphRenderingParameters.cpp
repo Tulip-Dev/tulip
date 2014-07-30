@@ -464,10 +464,10 @@ void GlGraphRenderingParameters::setMaxSizeOfLabel(int size) {
   _labelMaxSize=size;
 }
 //====================================================
-void GlGraphRenderingParameters::setElementOrderingProperty(tlp::DoubleProperty* property) {
+void GlGraphRenderingParameters::setElementOrderingProperty(tlp::NumericProperty* property) {
   _elementOrderingProperty = property;
 }
-tlp::DoubleProperty* GlGraphRenderingParameters::getElementOrderingProperty() const {
+tlp::NumericProperty* GlGraphRenderingParameters::getElementOrderingProperty() const {
   return _elementOrderingProperty;
 }
 //====================================================

@@ -19,7 +19,7 @@
 #include <tulip/GlGraphHighDetailsRenderer.h>
 #include <tulip/ForEach.h>
 #include <tulip/GraphProperty.h>
-#include <tulip/DoubleProperty.h>
+#include <tulip/NumericProperty.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlLODSceneVisitor.h>
@@ -137,9 +137,9 @@ const GlGraphInputData *entityWithDistanceCompare::inputData=NULL;
  */
 class GreatThanNode {
 public:
-  DoubleProperty *metric;
+  NumericProperty *metric;
   bool operator() (pair<node,float> n1,pair<node,float> n2)  {
-    return (metric->getNodeValue(n1.first) > metric->getNodeValue(n2.first));
+    return (metric->getNodeDoubleValue(n1.first) > metric->getNodeDoubleValue(n2.first));
   }
 };
 /** \brief Comparator to order entities with metric to display labels with metric ordering
@@ -147,9 +147,9 @@ public:
  */
 class GreatThanEdge {
 public:
-  DoubleProperty *metric;
+  NumericProperty *metric;
   bool operator() (pair<edge,float> e1,pair<edge,float> e2) {
-    return (metric->getEdgeValue(e1.first) > metric->getEdgeValue(e2.first));
+    return (metric->getEdgeDoubleValue(e1.first) > metric->getEdgeDoubleValue(e2.first));
   }
 };
 
@@ -241,7 +241,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   }
 
   BooleanProperty *filteringProperty = inputData->parameters->getDisplayFilteringProperty();
-  DoubleProperty *metric=inputData->parameters->getElementOrderingProperty();
+  NumericProperty *metric=inputData->parameters->getElementOrderingProperty();
   bool displayNodes = inputData->parameters->isDisplayNodes();
   bool displayMetaNodes = inputData->parameters->isDisplayMetaNodes();
   bool displayMetaNodesLabel = inputData->parameters->isViewMetaLabel();
@@ -574,7 +574,7 @@ void GlGraphHighDetailsRenderer::drawLabelsForComplexEntities(bool drawSelected,
   Graph *graph=inputData->getGraph();
   BooleanProperty *selectionProperty=inputData->getElementSelected();
   bool viewOutScreenLabel=inputData->parameters->isViewOutScreenLabel();
-  DoubleProperty *metric=inputData->parameters->getElementOrderingProperty();
+  NumericProperty *metric=inputData->parameters->getElementOrderingProperty();
   BooleanProperty *filteringProperty = inputData->parameters->getDisplayFilteringProperty();
 
   vector<pair<node,float> > nodesMetricOrdered;

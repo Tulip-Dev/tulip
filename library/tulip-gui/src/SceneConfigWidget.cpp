@@ -99,7 +99,7 @@ void SceneConfigWidget::resetChanges() {
 
   // NODES
   delete _ui->labelsOrderingCombo->model();
-  GraphPropertiesModel<DoubleProperty>* model = new GraphPropertiesModel<DoubleProperty>(trUtf8("Disable ordering"),graph);
+  GraphPropertiesModel<NumericProperty>* model = new GraphPropertiesModel<NumericProperty>(trUtf8("Disable ordering"),graph);
   _ui->labelsOrderingCombo->setModel(model);
 
   if (renderingParameters->getElementOrderingProperty() == NULL)
@@ -172,8 +172,8 @@ void SceneConfigWidget::applySettings() {
   if (_ui->labelsOrderingCombo->currentIndex()==0)
     renderingParameters->setElementOrderingProperty(NULL);
   else {
-    GraphPropertiesModel<DoubleProperty>* model = static_cast<GraphPropertiesModel<DoubleProperty> *>(_ui->labelsOrderingCombo->model());
-    renderingParameters->setElementOrderingProperty(dynamic_cast<DoubleProperty*>(model->index(_ui->labelsOrderingCombo->currentIndex(),0).data(TulipModel::PropertyRole).value<PropertyInterface*>()));
+    GraphPropertiesModel<NumericProperty>* model = static_cast<GraphPropertiesModel<NumericProperty> *>(_ui->labelsOrderingCombo->model());
+    renderingParameters->setElementOrderingProperty(dynamic_cast<NumericProperty*>(model->index(_ui->labelsOrderingCombo->currentIndex(),0).data(TulipModel::PropertyRole).value<PropertyInterface*>()));
   }
 
   renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());
