@@ -109,6 +109,8 @@ bool EdgeSetType::read(istream& is, RealType & v) {
     if( !(is >> c) )
       return false;
 
+    if (isspace(c)) continue;
+
     if( c == ')' )
       return true;
 
