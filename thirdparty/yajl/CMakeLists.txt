@@ -1,4 +1,4 @@
-# Copyright (c) 2007-2011, Lloyd Hilaiel <lloyd@hilaiel.com>
+# Copyright (c) 2007-2014, Lloyd Hilaiel <me@lloyd.io>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -17,8 +17,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(YetAnotherJSONParser C)
 
 SET (YAJL_MAJOR 2)
-SET (YAJL_MINOR 0)
-SET (YAJL_MICRO 1)
+SET (YAJL_MINOR 1)
+SET (YAJL_MICRO 0)
 
 SET (YAJL_DIST_NAME "yajl-${YAJL_MAJOR}.${YAJL_MINOR}.${YAJL_MICRO}")
 
@@ -28,7 +28,7 @@ ENDIF (NOT CMAKE_BUILD_TYPE)
 
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 
-IF (MSVC)
+IF (WIN32)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /W4")
   ADD_DEFINITIONS(-DWIN32)
   SET(linkFlags "/PDB:NONE /INCREMENTAL:NO /OPT:NOREF /OPT:NOICF")
@@ -46,7 +46,7 @@ IF (MSVC)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4996 /wd4255 /wd4130 /wd4100 /wd4711")
   SET(CMAKE_C_FLAGS_DEBUG "/D DEBUG /Od /Z7")
   SET(CMAKE_C_FLAGS_RELEASE "/D NDEBUG /O2")
-ELSE (MSVC)
+ELSE (WIN32)
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
   IF(CMAKE_COMPILER_IS_GNUCC)
     INCLUDE(CheckCCompilerFlag)
@@ -60,20 +60,22 @@ ELSE (MSVC)
 
   SET(CMAKE_C_FLAGS_DEBUG "-DDEBUG -g")
   SET(CMAKE_C_FLAGS_RELEASE "-DNDEBUG -O2 -Wuninitialized")
-ENDIF (MSVC)
+ENDIF (WIN32)
 
 
 ADD_SUBDIRECTORY(src)
-# ADD_SUBDIRECTORY(test)
-# ADD_SUBDIRECTORY(reformatter)
-# ADD_SUBDIRECTORY(verify)
-# ADD_SUBDIRECTORY(example)
-# ADD_SUBDIRECTORY(perf)
+#ADD_SUBDIRECTORY(test)
+#ADD_SUBDIRECTORY(reformatter)
+#ADD_SUBDIRECTORY(verify)
+#ADD_SUBDIRECTORY(example)
+#ADD_SUBDIRECTORY(perf)
 
-# INCLUDE(YAJLDoc.cmake)
+#INCLUDE(YAJLDoc.cmake)
 
-# a test target
-# ADD_CUSTOM_TARGET(test
-#                   ./run_tests.sh ${CMAKE_CURRENT_BINARY_DIR}/test/yajl_test
-#                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test)
+## a test target
+#ADD_CUSTOM_TARGET(test
+#                  ./run_tests.sh ${CMAKE_CURRENT_BINARY_DIR}/test/parsing/yajl_test
+#                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/test/parsing)
 
+#ADD_CUSTOM_TARGET(test-api ${CMAKE_CURRENT_SOURCE_DIR}/test/api/run_tests.sh
+#                  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test/api)

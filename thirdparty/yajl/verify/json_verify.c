@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2007-2011, Lloyd Hilaiel <lloyd@hilaiel.com>
+ * Copyright (c) 2007-2014, Lloyd Hilaiel <me@lloyd.io>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -25,8 +25,9 @@ usage(const char * progname)
 {
     fprintf(stderr, "%s: validate json from stdin\n"
                     "usage: json_verify [options]\n"
-                    "    -q quiet mode\n"
                     "    -c allow comments\n"
+                    "    -q quiet mode\n"
+                    "    -s verify a stream of multiple json entities\n"
                     "    -u allow invalid utf8 inside strings\n",
             progname);
     exit(1);
@@ -59,6 +60,9 @@ main(int argc, char ** argv)
                     break;
                 case 'u':
                     yajl_config(hand, yajl_dont_validate_strings, 1);
+                    break;
+                case 's':
+                    yajl_config(hand, yajl_allow_multiple_values, 1);
                     break;
                 default:
                     fprintf(stderr, "unrecognized option: '%c'\n\n", argv[a][i]);
