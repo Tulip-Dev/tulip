@@ -26,7 +26,9 @@
 #include "yajl_parser.h"
 
 #if defined(_WIN32) || defined(WIN32)
+#if defined(_MSC_VER)
 #define snprintf sprintf_s
+#endif
 #endif
 
 #define STATUS_CONTINUE 1
