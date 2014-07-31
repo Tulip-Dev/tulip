@@ -242,9 +242,11 @@ void GEMLayout::insert() {
     //
     _particules[v].in = 1;
     node vNode = _particules[v].n;
+
     // nothing to do if vNode is a fixed node
     if (fixedNodes && fixedNodes->getNodeValue(vNode))
       continue;
+
     node uNode;
     //remove one to non-visited nodes
     forEach(uNode, graph->getInOutNodes(vNode)) {
@@ -322,6 +324,7 @@ void GEMLayout::a_round() {
   for (unsigned int i = 0; i < _nbNodes; ++i) {
     unsigned int v = this->select();
     node vNode = _particules[v].n;
+
     // nothing to do if vNode is a fixed node
     if (fixedNodes && fixedNodes->getNodeValue(vNode))
       continue;
@@ -402,6 +405,7 @@ bool GEMLayout::run() {
     _useLength = dataSet->get("edge length", metric) && metric!=NULL;
     dataSet->get("max iterations", max_iter);
     initLayout = !dataSet->get("initial layout", layout);
+
     if (initLayout)
       dataSet->get("unmovable nodes", fixedNodes);
   }
