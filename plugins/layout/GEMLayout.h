@@ -164,6 +164,7 @@ private:
   unsigned int _nbNodes; //number of nodes in the graph
   bool _useLength; //if we manage edge length
   tlp::NumericProperty* metric; //metric for edge length
+  tlp::BooleanProperty* fixedNodes; //selection of not movable nodes
   unsigned int max_iter; // the max number of iterations
 
 };
