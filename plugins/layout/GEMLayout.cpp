@@ -44,6 +44,12 @@ static const char * paramHelp[] = {
   HTML_HELP_BODY() \
   "The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm." \
   HTML_HELP_CLOSE(),
+  // selection of unmovable nodes
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "BooleanProperty" ) \
+  HTML_HELP_BODY() \
+  "This property is used to indicate the unmovable nodes, the ones for which a new position will not be computed by the algorithm. This property is taken into account only if a layout property has been given to get the initial position of the unmovable nodes." \
+  HTML_HELP_CLOSE(),
   // max iterations
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "unsigned integer" ) \
@@ -91,11 +97,12 @@ GEMLayout::GEMLayout(const tlp::PluginContext* context) : LayoutAlgorithm(contex
   i_maxtemp(IMAXTEMPDEF), a_maxtemp(AMAXTEMPDEF), i_starttemp(ISTARTTEMPDEF),
   a_starttemp(ASTARTTEMPDEF), i_finaltemp(IFINALTEMPDEF), a_finaltemp(AFINALTEMPDEF), i_maxiter(IMAXITERDEF), a_maxiter(AMAXITERDEF), i_gravity(IGRAVITYDEF),
   a_gravity(AGRAVITYDEF), i_oscillation(IOSCILLATIONDEF), a_oscillation(AOSCILLATIONDEF), i_rotation(IROTATIONDEF), a_rotation(AROTATIONDEF), i_shake(ISHAKEDEF),
-  a_shake(ASHAKEDEF), _dim(2), _nbNodes(0), _useLength(false), metric(NULL), max_iter(0) {
+  a_shake(ASHAKEDEF), _dim(2), _nbNodes(0), _useLength(false), metric(NULL), fixedNodes(NULL), max_iter(0) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addInParameter<NumericProperty*>("edge length", paramHelp[1], "", false);
   addInParameter<LayoutProperty>("initial layout", paramHelp[2], "", false);
-  addInParameter<unsigned int>("max iterations", paramHelp[3], "0");
+  addInParameter<BooleanProperty>("unmovable nodes", paramHelp[3], "", false);
+  addInParameter<unsigned int>("max iterations", paramHelp[4], "0");
   addDependency("Connected Component Packing", "1.0");
 }
 //=========================================================
@@ -235,6 +242,9 @@ void GEMLayout::insert() {
     //
     _particules[v].in = 1;
     node vNode = _particules[v].n;
+    // nothing to do if vNode is a fixed node
+    if (fixedNodes && fixedNodes->getNodeValue(vNode))
+      continue;
     node uNode;
     //remove one to non-visited nodes
     forEach(uNode, graph->getInOutNodes(vNode)) {
@@ -311,6 +321,11 @@ void GEMLayout::displace(unsigned int v, Coord imp) {
 void GEMLayout::a_round() {
   for (unsigned int i = 0; i < _nbNodes; ++i) {
     unsigned int v = this->select();
+    node vNode = _particules[v].n;
+    // nothing to do if vNode is a fixed node
+    if (fixedNodes && fixedNodes->getNodeValue(vNode))
+      continue;
+
     Coord force = computeForces(v, a_shake, a_gravity, false);
     this->displace(v, force );
     Iteration++;
@@ -387,6 +402,8 @@ bool GEMLayout::run() {
     _useLength = dataSet->get("edge length", metric) && metric!=NULL;
     dataSet->get("max iterations", max_iter);
     initLayout = !dataSet->get("initial layout", layout);
+    if (initLayout)
+      dataSet->get("unmovable nodes", fixedNodes);
   }
 
   if (is3D) _dim = 3;
