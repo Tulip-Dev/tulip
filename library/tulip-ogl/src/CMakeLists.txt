@@ -77,7 +77,7 @@ SET(tulip-ogl_LIB_SRCS
   ParametricCurves.cpp
 )
 
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${FTGLInclude} ${FREETYPE_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${FTGLInclude} ${FREETYPE_INCLUDE_DIRS} ${UTF8CppInclude})
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${JPEG_INCLUDE_DIR} ${PNG_INCLUDE_DIR})
 
 ADD_LIBRARY (${LibTulipOglName} SHARED ${tulip-ogl_LIB_SRCS})
