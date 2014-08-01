@@ -142,9 +142,13 @@ IF(BUILD_CODE_COVERAGE)
 ENDIF()
 
 ## ========================================================
+## GUI
+## ========================================================
+SET(BUILD_CORE_ONLY OFF CACHE BOOL "Do you want a minimal build of Tulip ? [ON|OFF]")
+
+## ========================================================
 ## Required packages
 ## ========================================================
-
 IF(MINGW)
 # Set some common libraries and headers search paths for MinGW
 SET(CMAKE_LIBRARY_PATH "${MINGW_BIN_PATH};${MINGW_LIB_PATH};${MINGW_LIB64_PATH};${CMAKE_LIBRARY_PATH}")
@@ -154,32 +158,12 @@ SET(CMAKE_INCLUDE_PATH "${MINGW_INCLUDE_PATH};${MINGW_INCLUDE_PATH}/freetype2;${
 FIND_LIBRARY(LIBINTL_FOUND intl PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
 ENDIF(MINGW)
 
-# Qt
-FIND_PACKAGE(QtX)
-
-# Freetype
-FIND_PACKAGE(Freetype REQUIRED)
 
 # ZLIB
 FIND_PACKAGE(ZLIB REQUIRED)
 
 # Yajl
 SET(YAJL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/api ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/yajl/yajl-2.1.0/include)
-
-# OpenGL
-FIND_PACKAGE(OpenGL REQUIRED)
-
-# Glew
-FIND_PACKAGE(GLEW REQUIRED)
-
-# Jpeg
-FIND_PACKAGE(JPEG REQUIRED)
-
-# Png
-FIND_PACKAGE(PNG REQUIRED)
-
-# Quazip
-FIND_PACKAGE(QuaZip)
 
 # OpenMP
 IF(NOT CLANG)
@@ -236,6 +220,29 @@ IF(ENABLE_OPENMP)
     ENDIF(OPENMP_FOUND)
 ENDIF(ENABLE_OPENMP)
 ENDIF(NOT CLANG)
+
+IF(NOT BUILD_CORE_ONLY)
+
+# OpenGL
+FIND_PACKAGE(OpenGL REQUIRED)
+
+# Glew
+FIND_PACKAGE(GLEW REQUIRED)
+
+# Jpeg
+FIND_PACKAGE(JPEG REQUIRED)
+
+# Png
+FIND_PACKAGE(PNG REQUIRED)
+
+# Freetype
+FIND_PACKAGE(Freetype REQUIRED)
+
+# Qt
+FIND_PACKAGE(QtX)
+
+# Quazip
+FIND_PACKAGE(QuaZip)
 
 # Python
 # After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
@@ -310,11 +317,14 @@ IF(PYTHONINTERP_FOUND)
   ENDIF(PYTHONLIBS_FOUND)
 ENDIF(PYTHONINTERP_FOUND)
 
+ENDIF(NOT BUILD_CORE_ONLY)
+
 ## ========================================================
 ## Include paths
 ## ========================================================
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
 SET(GZStreamLibrary gzstream-tulip-${TulipMMVersion})
+IF(NOT BUILD_CORE_ONLY)
 if(QUAZIP_FOUND)
     SET(QuazipInclude ${QUAZIP_INCLUDE_DIR})
     SET(QuazipLibrary ${QUAZIP_LIBRARIES})
@@ -327,7 +337,8 @@ SET(QxtInclude ${PROJECT_SOURCE_DIR}/thirdparty/qxt/src)
 SET(QxtLibrary qxt-tulip-${TulipMMVersion})
 SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
 SET(FTGLLibrary ftgl-tulip-${TulipMMVersion})
-SET(qscintilla2Include ${PROJECT_SOURCE_DIR}/thirdparty/QScintilla-gpl-2.5.1/Qt4/)
+ENDIF(NOT BUILD_CORE_ONLY)
+
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF)
 SET(OGDFLibrary OGDF-tulip-${TulipMMVersion})
 SET(QHULLInclude ${PROJECT_SOURCE_DIR}/thirdparty)
@@ -388,16 +399,20 @@ CONFIGURE_FILE("library/tulip-core/include/tulip/TulipRelease.h.in" "library/tul
 
 ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
-ADD_SUBDIRECTORY(software)
-ADD_SUBDIRECTORY(plugins)
-ADD_SUBDIRECTORY(textures)
-ADD_SUBDIRECTORY(externalplugins)
+IF(NOT BUILD_CORE_ONLY)
 ADD_SUBDIRECTORY(doc)
+ADD_SUBDIRECTORY(software)
+ADD_SUBDIRECTORY(textures)
+ENDIF(NOT BUILD_CORE_ONLY)
+ADD_SUBDIRECTORY(plugins)
+ADD_SUBDIRECTORY(externalplugins)
 ADD_SUBDIRECTORY(demos)
 ADD_SUBDIRECTORY(tlpscripten)
 IF(BUILD_TESTS)
   ADD_SUBDIRECTORY(unit_test)
 ENDIF()
+
+IF(NOT BUILD_CORE_ONLY)
 ADD_SUBDIRECTORY(bundlers)
 
 ## ========================================================
@@ -506,3 +521,5 @@ IF(APPLE)
                           WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac)
 
 ENDIF(APPLE)
+
+ENDIF(NOT BUILD_CORE_ONLY)

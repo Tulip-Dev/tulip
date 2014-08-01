@@ -19,6 +19,7 @@ ADD_LIBRARY(HierarchicalClustering-${TulipVersion} SHARED ${HierarchicalClusteri
 TARGET_LINK_LIBRARIES(HierarchicalClustering-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+IF(NOT BUILD_CORE_ONLY)
 QTX_WRAP_UI(ConvolutionClustering_UI_SRCS
   ConvolutionClusteringSetup.ui)
 
@@ -33,7 +34,7 @@ SET(ConvolutionClustering_SRCS
 
 ADD_LIBRARY(ConvolutionClustering-${TulipVersion} SHARED ${ConvolutionClustering_SRCS} ${ConvolutionClustering_UI_SRCS} ${ConvolutionClustering_MOC_SRCS})
 TARGET_LINK_LIBRARIES(ConvolutionClustering-${TulipVersion} ${LibTulipCoreName} ${QT_LIBRARIES})
-
+ENDIF(NOT BUILD_CORE_ONLY)
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(EqualValueClustering_SRCS
   EqualValueClustering.h
@@ -53,6 +54,8 @@ TARGET_LINK_LIBRARIES(QuotientClustering-${TulipVersion} ${LibTulipCoreName})
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL(TARGETS StrengthClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
 INSTALL(TARGETS HierarchicalClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT HierarchicalClustering)
+IF(NOT BUILD_CORE_ONLY)
 INSTALL(TARGETS ConvolutionClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ConvolutionClustering)
+ENDIF(NOT BUILD_CORE_ONLY)
 INSTALL(TARGETS EqualValueClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT EqualValueClustering)
 INSTALL(TARGETS QuotientClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT QuotientClustering)
