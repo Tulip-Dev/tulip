@@ -354,6 +354,7 @@ ENDIF(NOT BUILD_CORE_ONLY)
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF)
 SET(OGDFLibrary OGDF-tulip-${TulipMMVersion})
 SET(QHULLInclude ${PROJECT_SOURCE_DIR}/thirdparty)
+SET(UTF8CppInclude ${PROJECT_SOURCE_DIR}/thirdparty/utf8-cpp/source)
 SET(YajlLibrary yajl-tulip-${TulipMMVersion})
 
 SET(TulipCoreInclude ${PROJECT_SOURCE_DIR}/library/tulip-core/include/)
