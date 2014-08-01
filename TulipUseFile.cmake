@@ -130,6 +130,14 @@ MACRO(DISABLE_COMPILER_WARNINGS)
   ENDIF(MSVC)
 ENDMACRO()
 
+MACRO(GET_FILE_DIRECTORY file_path file_dir_var_name)
+  IF(CMAKE_VERSION VERSION_LESS "2.8.12")
+    GET_FILENAME_COMPONENT(${file_dir_var_name} ${file_path} PATH)
+  ELSE()
+    GET_FILENAME_COMPONENT(${file_dir_var_name} ${file_path} DIRECTORY)
+  ENDIF()
+ENDMACRO(GET_FILE_DIRECTORY)
+
 # External libraries macros
 IF(WIN32)
 
@@ -141,6 +149,22 @@ IF(WIN32)
     SET(MINGW_INCLUDE_PATH ${MINGW_BIN_PATH}/../include)
   ENDIF(MINGW)
 
+  MACRO(FIND_EXTERNAL_LIB pattern result_var_name)
+    UNSET(${result_var_name})
+    UNSET(found_paths)
+    FOREACH(win_path $ENV{CMAKE_LIBRARY_PATH} ${MINGW_BIN_PATH} ${CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR})
+      STRING(REPLACE "\\" "/" cmake_path "${win_path}")
+      FILE(GLOB match "${cmake_path}/${pattern}")
+      IF(match)
+        SET(found_paths ${found_paths} ${match})
+      ENDIF(match)
+    ENDFOREACH()
+    IF(found_paths)
+      LIST(REMOVE_DUPLICATES found_paths)
+      SET(${result_var_name} ${found_paths})
+    ENDIF(found_paths)
+  ENDMACRO(FIND_EXTERNAL_LIB)
+
   # Try to locate a dll whose name matches the regular expression passed as argument
   # by looking in the following directories :
   #    * those stored in the CMAKE_LIBRARY_PATH environment variable
@@ -149,16 +173,7 @@ IF(WIN32)
   #    * the Qt binaries directory
   # If a dll is found, install it in the application binaries directory
   MACRO(INSTALL_EXTERNAL_LIB pattern component)
-
-    UNSET(results)
-    FOREACH(win_path $ENV{CMAKE_LIBRARY_PATH} ${MINGW_BIN_PATH} ${CMAKE_LIBRARY_PATH} ${QT_BINARY_DIR})
-      STRING(REPLACE "\\" "/" cmake_path "${win_path}")
-      FILE(GLOB match "${cmake_path}/${pattern}")
-      IF(match)
-        SET(results ${results} ${match})
-      ENDIF(match)
-    ENDFOREACH()
-
+    FIND_EXTERNAL_LIB(${pattern} results)
     IF(NOT results)
       MESSAGE("${pattern} could not be located and will not be installed in the binary directory of the application.\n"
               "That library is required to run the application. Please add its path in the CMAKE_LIBRARY_PATH variable in order to install it automatically.")
@@ -167,42 +182,18 @@ IF(WIN32)
         INSTALL(FILES ${F} DESTINATION ${TulipBinInstallDir} COMPONENT ${component})
       ENDFOREACH(F ${results})
     ENDIF(NOT results)
-
   ENDMACRO(INSTALL_EXTERNAL_LIB)
 
-  # That macro checks if an external library has to be installed in the application directory.
-  # It first checks if the library provided as argument is an import library or a static library (for MinGW and MSVC).
-  # For MinGW, it also checks if the provided library is a dll (as that compiler allows to directly link with such a library).
-  # If the library is static, it does not need to be installed in the application directory.
-  # If the library is an import one, the name of the associated dll is retrieved from it and then provided as parameter to the INSTALL_EXTERNAL_LIB macro.
-  # If the library is a dll, its name is provided as parameter to the INSTALL_EXTERNAL_LIB macro.
-  MACRO(INSTALL_EXTERNAL_LIB_IF_NEEDED library component)
-
+  MACRO(GET_DLL_NAME_FROM_IMPORT_LIBRARY import_library dll_name)
+    UNSET(${dll_name})
     IF(MINGW)
-      STRING(REGEX MATCH ".*dll\\.a" IMPORT_LIBRARY ${library})
-      STRING(REGEX MATCH ".*dll" DLL_LIBRARY ${library})
-      # If an import library is used, we can easily retrieve the dll name with the dlltool utility
-      IF(IMPORT_LIBRARY)
-        EXECUTE_PROCESS(COMMAND ${MINGW_BIN_PATH}/dlltool.exe -I ${library} OUTPUT_VARIABLE DLL_NAME ERROR_VARIABLE DLLTOOL_ERROR)
-        IF(DLLTOOL_ERROR)
-          MESSAGE("${library} is not a valid import library (likely a copy of the associated dll). Please provide a valid one in order to determine the dll the application depends to.")
-        ELSE(DLLTOOL_ERROR)
-          STRING(REPLACE "\n" "" DLL_NAME ${DLL_NAME})
-          INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
-        ENDIF(DLLTOOL_ERROR)
-      # If a dll is directly used, just extract its name from its path
-      ELSEIF(DLL_LIBRARY)
-	IF(CMAKE_VERSION VERSION_LESS "2.8.12")
-          GET_FILENAME_COMPONENT(DLL_DIRECTORY ${library} PATH)
-        ELSE()
-          GET_FILENAME_COMPONENT(DLL_DIRECTORY ${library} DIRECTORY)
-        ENDIF()
-        GET_FILENAME_COMPONENT(DLL_NAME ${library} NAME)
-        SET(CMAKE_LIBRARY_PATH "${DLL_DIRECTORY} ${CMAKE_LIBRARY_PATH}")
-        INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
-      ENDIF()
+      EXECUTE_PROCESS(COMMAND ${MINGW_BIN_PATH}/dlltool.exe -I ${import_library} OUTPUT_VARIABLE DLL_FILENAME ERROR_VARIABLE DLLTOOL_ERROR)
+      IF(DLLTOOL_ERROR)
+        MESSAGE("${import_library} is not a valid import library (likely a copy of the associated dll). Please provide a valid one in order to determine the dll the application depends to.")
+      ELSE(DLLTOOL_ERROR)
+        STRING(REPLACE "\n" "" ${dll_name} ${DLL_FILENAME})
+      ENDIF(DLLTOOL_ERROR)
     ENDIF(MINGW)
-
     IF(MSVC)
       # Get path of MSVC compiler
       IF(CMAKE_VERSION VERSION_LESS "2.8.12")
@@ -226,15 +217,46 @@ IF(WIN32)
       SET(PATH_BACKUP "$ENV{PATH}")
       SET(ENV{PATH} "${VS_IDE_DIR};${VS_VC_BIN_DIR};$ENV{PATH}")
       # Run the lib.exe command to list the content of the library file
-      EXECUTE_PROCESS(COMMAND ${COMPILER_DIRECTORY}/lib.exe /list ${library} OUTPUT_VARIABLE LIBRARY_CONTENTS)
+      EXECUTE_PROCESS(COMMAND ${COMPILER_DIRECTORY}/lib.exe /list ${import_library} OUTPUT_VARIABLE LIBRARY_CONTENTS)
       # If the library is an import library, lib.exe outputs the associated dll name instead of the object files for a static libary
-      STRING(REGEX MATCH "[^\r?\n]+\\.dll" DLL_NAME ${LIBRARY_CONTENTS})
-      # If we found a dll name in the output of lib.exe /list, we need to install that dll
+      STRING(REGEX MATCH "[^\r?\n]+\\.dll" ${dll_name} ${LIBRARY_CONTENTS})
+      # Restore original PATH environement variable value
+      SET(ENV{PATH} "${PATH_BACKUP}")
+    ENDIF(MSVC)
+  ENDMACRO(GET_DLL_NAME_FROM_IMPORT_LIBRARY)
+
+  # That macro checks if an external library has to be installed in the application directory.
+  # It first checks if the library provided as argument is an import library or a static library (for MinGW and MSVC).
+  # For MinGW, it also checks if the provided library is a dll (as that compiler allows to directly link with such a library).
+  # If the library is static, it does not need to be installed in the application directory.
+  # If the library is an import one, the name of the associated dll is retrieved from it and then provided as parameter to the INSTALL_EXTERNAL_LIB macro.
+  # If the library is a dll, its name is provided as parameter to the INSTALL_EXTERNAL_LIB macro.
+  MACRO(INSTALL_EXTERNAL_LIB_IF_NEEDED library component)
+
+    IF(MINGW)
+      STRING(REGEX MATCH ".*dll\\.a" IMPORT_LIBRARY ${library})
+      STRING(REGEX MATCH ".*dll" DLL_LIBRARY ${library})
+      # If an import library is used, we can easily retrieve the dll name with the dlltool utility
+      IF(IMPORT_LIBRARY)
+         GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
+         IF(DLL_NAME)
+           INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
+         ENDIF(DLL_NAME)
+      # If a dll is directly used, just extract its name from its path
+      ELSEIF(DLL_LIBRARY)
+        GET_FILE_DIRECTORY(${library} DLL_DIRECTORY)
+        GET_FILENAME_COMPONENT(DLL_NAME ${library} NAME)
+        SET(CMAKE_LIBRARY_PATH "${DLL_DIRECTORY} ${CMAKE_LIBRARY_PATH}")
+        INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
+      ENDIF()
+    ENDIF(MINGW)
+
+    IF(MSVC)
+      GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
+      # If we found a dll name, we need to install that dll
       IF(DLL_NAME)
         INSTALL_EXTERNAL_LIB(${DLL_NAME} ${component})
       ENDIF(DLL_NAME)
-      # Restore original PATH environement variable value
-      SET(ENV{PATH} "${PATH_BACKUP}")
     ENDIF(MSVC)
 
   ENDMACRO(INSTALL_EXTERNAL_LIB_IF_NEEDED)
