@@ -20,6 +20,7 @@
 #include <QTextCodec>
 
 #include <tulip/CSVParser.h>
+#include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/PluginProgress.h>
 
@@ -47,19 +48,19 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
   }
 
   handler->begin();
-  ifstream csvFile(_fileName.c_str(),ifstream::in|ifstream::binary);
+  istream *csvFile = tlp::getInputFileStream(_fileName.c_str(),ifstream::in|ifstream::binary);
 
-  if (csvFile) {
+  if (*csvFile) {
     //Real row number used to
     unsigned int row = 0;
     //Read row number
     unsigned int columnMax = 0;
 
-    csvFile.seekg(0, std::ios_base::end);
+    csvFile->seekg(0, std::ios_base::end);
     // get position = file size
-    unsigned long fileSize = csvFile.tellg(), readSize = 0;
+    unsigned long fileSize = csvFile->tellg(), readSize = 0;
     // reset position
-    csvFile.seekg(0, std::ios_base::beg);
+    csvFile->seekg(0, std::ios_base::beg);
     string line;
     vector<string> tokens;
 
@@ -76,7 +77,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
       progress->progress(0, 100);
     }
 
-    while (multiplatformgetline(csvFile, line) && row <=_lastLine) {
+    while (multiplatformgetline(*csvFile, line) && row <=_lastLine) {
 
       if (progress) {
         readSize += line.size();
@@ -118,9 +119,11 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
     }
 
     handler->end(row, columnMax);
+    delete csvFile;
     return true;
   }
   else {
+    delete csvFile;
     return false;
   }
 }

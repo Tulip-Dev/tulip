@@ -65,6 +65,31 @@ gzstreambuf* gzstreambuf::open( const char* name, int open_mode) {
     return this;
 }
 
+#if defined(WIN32) && ZLIB_VERNUM >= 0x1270
+gzstreambuf* gzstreambuf::open( const wchar_t* name, int open_mode) {
+    if ( is_open())
+        return (gzstreambuf*)0;
+    mode = open_mode;
+    // no append nor read/write mode
+    if ((mode & std::ios::ate) || (mode & std::ios::app)
+        || ((mode & std::ios::in) && (mode & std::ios::out)))
+        return (gzstreambuf*)0;
+    char  fmode[10];
+    char* fmodeptr = fmode;
+    if ( mode & std::ios::in)
+        *fmodeptr++ = 'r';
+    else if ( mode & std::ios::out)
+        *fmodeptr++ = 'w';
+    *fmodeptr++ = 'b';
+    *fmodeptr = '\0';
+    file = gzopen_w( name, fmode);
+    if (file == 0)
+        return (gzstreambuf*)0;
+    opened = 1;
+    return this;
+}
+#endif
+
 gzstreambuf * gzstreambuf::close() {
     if ( is_open()) {
         sync();
@@ -142,6 +167,13 @@ gzstreambase::gzstreambase( const char* name, int mode) {
     open( name, mode);
 }
 
+#if defined(WIN32) && ZLIB_VERNUM >= 0x1270
+gzstreambase::gzstreambase( const wchar_t* name, int mode) {
+    init( &buf);
+    open( name, mode);
+}
+#endif
+
 gzstreambase::~gzstreambase() {
     buf.close();
 }
@@ -150,6 +182,13 @@ void gzstreambase::open( const char* name, int open_mode) {
     if ( ! buf.open( name, open_mode))
         clear( rdstate() | std::ios::badbit);
 }
+
+#if defined(WIN32) && ZLIB_VERNUM >= 0x1270
+void gzstreambase::open( const wchar_t* name, int open_mode) {
+    if ( ! buf.open( name, open_mode))
+        clear( rdstate() | std::ios::badbit);
+}
+#endif
 
 void gzstreambase::close() {
     if ( buf.is_open())

@@ -20,7 +20,6 @@
 #include <string>
 #include <vector>
 #include <errno.h>
-#include <sys/stat.h>
 
 #include <tulip/GraphAbstract.h>
 #include <tulip/BooleanProperty.h>
@@ -977,11 +976,11 @@ bool TLPGraphBuilder::addStruct(const std::string& structName,TLPBuilder*&newBui
 // The uncompressed file size (modulo 2^32) is stored in the last four bytes of a Gzip file.
 // So that method is unreliable if the original file size was greater than 4GB (which is pretty rare for TLP files ...).
 static int getUncompressedSizeOfGzipFile(const std::string &gzipFilePath) {
-  std::ifstream is(gzipFilePath.c_str(), std::ifstream::binary);
-  is.seekg (-4, is.end);
+  std::istream *is = tlp::getInputFileStream(gzipFilePath.c_str(), std::ifstream::binary);
+  is->seekg (-4, is->end);
   int uncompressedSize = 0;
-  is.read(reinterpret_cast<char*>(&uncompressedSize), 4);
-  is.close();
+  is->read(reinterpret_cast<char*>(&uncompressedSize), 4);
+  delete is;
   return uncompressedSize;
 }
 
@@ -1039,8 +1038,8 @@ public:
 
     if(dataSet->exist("file::filename")) {
       dataSet->get<std::string>("file::filename", filename);
-      struct stat infoEntry;
-      result = (stat(filename.c_str(),&infoEntry) == 0);
+      tlp_stat_t infoEntry;
+      result = (statPath(filename, &infoEntry) == 0);
 
       if (!result) {
         std::stringstream ess;
@@ -1054,15 +1053,15 @@ public:
 
       if (filename.rfind(".gz") == (filename.length() - 3)) {
         size = getUncompressedSizeOfGzipFile(filename);
-        input = tlp::getIgzstream(filename.c_str());
+        input = tlp::getIgzstream(filename);
       }
       else
-        input = new std::ifstream(filename.c_str(),
-                                  std::ifstream::in |
-                                  // consider file has binary
-                                  // to avoid pb using tellg
-                                  // on the input stream
-                                  std::ifstream::binary );
+        input = tlp::getInputFileStream(filename,
+                                        std::ifstream::in |
+                                        // consider file has binary
+                                        // to avoid pb using tellg
+                                        // on the input stream
+                                        std::ifstream::binary );
     }
     else {
       dataSet->get<std::string>("file::data", data);

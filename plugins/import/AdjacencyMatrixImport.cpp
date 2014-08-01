@@ -16,15 +16,16 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <sys/stat.h>
-#include <sys/types.h>
+
 #include <cerrno>
 #include <fstream>
 #include <sstream>
 #include <cmath>
-#include <tulip/TulipPluginHeaders.h>
 #include <vector>
 #include <cstring>
+
+#include <tulip/TulipPluginHeaders.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -111,27 +112,22 @@ public:
           dataSet->get("file::name", name2)))
       return false;
 
-    struct stat infoEntry;
-    int result;
-#ifdef _WIN32
-    result = stat(name2.c_str(), &infoEntry);
-#else
-    result = lstat(name2.c_str(), &infoEntry);
-#endif
+    tlp_stat_t infoEntry;
+    int result = statPath(name2, &infoEntry);
 
     if (result == -1) {
       pluginProgress->setError(strerror(errno));
       return false;
     }
 
-    std::ifstream in(name2.c_str());
+    std::istream *in = tlp::getInputFileStream(name2.c_str());
     unsigned int curLine = 0;
     DoubleProperty *metric = graph->getProperty<DoubleProperty>("viewMetric");
     StringProperty *stringP = graph->getProperty<StringProperty>("viewLabel");
 
     std::string line;
 
-    while (!in.eof() && std::getline(in, line)) {
+    while (!in->eof() && std::getline(*in, line)) {
       stringstream lines(line);
       unsigned int curNode = 0;
       edge e;
@@ -239,6 +235,7 @@ public:
 
       ++curLine;
     }
+    delete in;
 
     // final check:
     // number of lines must be equal to number of nodes

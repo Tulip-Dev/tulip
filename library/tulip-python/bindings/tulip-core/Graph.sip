@@ -3699,9 +3699,9 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
 
 %MethodCode
     if (pluginExists<tlp::ExportModule>(*a0)) {
-        std::ofstream ofs((*a2).c_str());
-		if (ofs.is_open()) {
-            sipRes = tlp::exportGraph(a1, ofs, *a0, *a3);
+        std::ostream *ofs = tlp::getOutputFileStream((*a2).c_str());
+        if (ofs->good()) {
+            sipRes = tlp::exportGraph(a1, *ofs, *a0, *a3);
 		} else {
 			std::string msg = "Export error : The specified file path (";
             msg += *a2;
@@ -3709,7 +3709,7 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
 			printErrorMessage(msg);
 			sipRes = false;
 		}
-		
+        delete ofs;
 	} else {
         sipIsErr = -1;
 		std::string msg = "No Tulip export plugin named  ";

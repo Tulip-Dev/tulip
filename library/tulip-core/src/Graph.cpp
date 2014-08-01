@@ -227,9 +227,9 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
   ostream *os;
 
   if (filename.rfind(".gz") == (filename.length() - 3))
-    os =  tlp::getOgzstream(filename.c_str());
+    os =  tlp::getOgzstream(filename);
   else
-    os = new ofstream(filename.c_str());
+    os = tlp::getOutputFileStream(filename);
 
   bool result;
   DataSet data;
