@@ -346,11 +346,11 @@ void tlp::initRandomSequence() {
 
 int tlp::statPath(const std::string &pathname, tlp_stat_t *buf) {
 #ifndef WIN32
-    return stat(pathname.c_str(), buf);
+  return stat(pathname.c_str(), buf);
 #else
-    std::wstring utf16pathname;
-    utf8::utf8to16(pathname.begin(), pathname.end(), std::back_inserter(utf16pathname));
-    return _wstat(utf16pathname.c_str(), buf);
+  std::wstring utf16pathname;
+  utf8::utf8to16(pathname.begin(), pathname.end(), std::back_inserter(utf16pathname));
+  return _wstat(utf16pathname.c_str(), buf);
 #endif
 }
 
@@ -359,71 +359,83 @@ int tlp::statPath(const std::string &pathname, tlp_stat_t *buf) {
 #if defined(WIN32) && defined(__GLIBCXX__)
 // function to get the string representation of the bitwise combination of std::ios_base::openmode flags
 static std::wstring openmodeToWString(std::ios_base::openmode mode) {
-    std::wstring ret;
-    bool testb = (mode & std::ios_base::binary) == std::ios_base::binary;
-    bool testi = (mode & std::ios_base::in) == std::ios_base::in;
-    bool testo = (mode & std::ios_base::out) == std::ios_base::out;
-    bool testt = (mode & std::ios_base::trunc) == std::ios_base::trunc;
-    bool testa = (mode & std::ios_base::app) == std::ios_base::app;
+  std::wstring ret;
+  bool testb = (mode & std::ios_base::binary) == std::ios_base::binary;
+  bool testi = (mode & std::ios_base::in) == std::ios_base::in;
+  bool testo = (mode & std::ios_base::out) == std::ios_base::out;
+  bool testt = (mode & std::ios_base::trunc) == std::ios_base::trunc;
+  bool testa = (mode & std::ios_base::app) == std::ios_base::app;
 
-    if (!testi && testo && !testt && !testa)
-      ret = L"w";
-    if (!testi && testo && !testt && testa)
-      ret = L"a";
-    if (!testi && testo && testt && !testa)
-      ret = L"w";
-    if (testi && !testo && !testt && !testa)
-      ret = L"r";
-    if (testi && testo && !testt && !testa)
-      ret = L"r+";
-    if (testi && testo && testt && !testa)
-      ret = L"w+";
-    if (testb)
-      ret += L"b";
+  if (!testi && testo && !testt && !testa)
+    ret = L"w";
 
-    return ret;
+  if (!testi && testo && !testt && testa)
+    ret = L"a";
+
+  if (!testi && testo && testt && !testa)
+    ret = L"w";
+
+  if (testi && !testo && !testt && !testa)
+    ret = L"r";
+
+  if (testi && testo && !testt && !testa)
+    ret = L"r+";
+
+  if (testi && testo && testt && !testa)
+    ret = L"w+";
+
+  if (testb)
+    ret += L"b";
+
+  return ret;
 }
 
 // class to open a file for reading whose path contains non ascii characters (MinGW only)
 class wifilestream : public std::istream {
 public:
-    wifilestream(const std::wstring &wfilename, std::ios_base::openmode mode) : fp(NULL), buffer(NULL) {
-        fp = _wfopen(wfilename.c_str(), openmodeToWString(mode).c_str());
-        if (fp) {
-          buffer = new __gnu_cxx::stdio_filebuf<char>(fp, mode, 1);
-        }
-        init(buffer);
+  wifilestream(const std::wstring &wfilename, std::ios_base::openmode mode) : fp(NULL), buffer(NULL) {
+    fp = _wfopen(wfilename.c_str(), openmodeToWString(mode).c_str());
+
+    if (fp) {
+      buffer = new __gnu_cxx::stdio_filebuf<char>(fp, mode, 1);
     }
-    ~wifilestream() {
-      delete buffer;
-      if (fp) {
-        fclose(fp);
-      }
+
+    init(buffer);
+  }
+  ~wifilestream() {
+    delete buffer;
+
+    if (fp) {
+      fclose(fp);
     }
+  }
 private:
-    FILE *fp;
-    __gnu_cxx::stdio_filebuf<char>* buffer;
+  FILE *fp;
+  __gnu_cxx::stdio_filebuf<char>* buffer;
 };
 
 // class to open a file for writing whose path contains non ascii characters (MinGW only)
 class wofilestream : public std::ostream {
 public:
-    wofilestream(const std::wstring &wfilename, std::ios_base::openmode open_mode) : fp(NULL), buffer(NULL) {
-        fp = _wfopen(wfilename.c_str(), openmodeToWString(open_mode).c_str());
-        if (fp) {
-          buffer = new __gnu_cxx::stdio_filebuf<char>(fp, open_mode, 1);
-        }
-        init(buffer);
+  wofilestream(const std::wstring &wfilename, std::ios_base::openmode open_mode) : fp(NULL), buffer(NULL) {
+    fp = _wfopen(wfilename.c_str(), openmodeToWString(open_mode).c_str());
+
+    if (fp) {
+      buffer = new __gnu_cxx::stdio_filebuf<char>(fp, open_mode, 1);
     }
-    ~wofilestream() {
-      delete buffer;
-      if (fp) {
-        fclose(fp);
-      }
+
+    init(buffer);
+  }
+  ~wofilestream() {
+    delete buffer;
+
+    if (fp) {
+      fclose(fp);
     }
+  }
 private:
-    FILE *fp;
-    __gnu_cxx::stdio_filebuf<char>* buffer;
+  FILE *fp;
+  __gnu_cxx::stdio_filebuf<char>* buffer;
 };
 #endif
 
@@ -431,21 +443,21 @@ private:
 
 std::istream *tlp::getInputFileStream(const std::string &filename, std::ios_base::openmode mode) {
 #ifndef WIN32
-    // On Linux and Mac OS, UTF-8 encoded paths are supported by std::ifstream
-    return new std::ifstream(filename.c_str(), mode);
+  // On Linux and Mac OS, UTF-8 encoded paths are supported by std::ifstream
+  return new std::ifstream(filename.c_str(), mode);
 #else
-    // On Windows, the path name (possibly containing non ascii characters) has to be converted to UTF-16 in order to open a stream
-    std::wstring utf16filename;
-    utf8::utf8to16(filename.begin(), filename.end(), std::back_inserter(utf16filename));
+  // On Windows, the path name (possibly containing non ascii characters) has to be converted to UTF-16 in order to open a stream
+  std::wstring utf16filename;
+  utf8::utf8to16(filename.begin(), filename.end(), std::back_inserter(utf16filename));
 #ifdef __GLIBCXX__
-    // With MinGW, it's a little bit tricky to get an input stream
-    return new wifilestream(utf16filename,mode);
+  // With MinGW, it's a little bit tricky to get an input stream
+  return new wifilestream(utf16filename,mode);
 #elif defined(_MSC_VER)
-    // Visual Studio has wide char version of std::ifstream
-    return new std::ifstream(utf16filename.c_str(), mode);
+  // Visual Studio has wide char version of std::ifstream
+  return new std::ifstream(utf16filename.c_str(), mode);
 #else
-    // Fallback
-    return new std::ifstream(filename.c_str(), mode);
+  // Fallback
+  return new std::ifstream(filename.c_str(), mode);
 #endif
 #endif
 }
@@ -454,21 +466,21 @@ std::istream *tlp::getInputFileStream(const std::string &filename, std::ios_base
 
 std::ostream *tlp::getOutputFileStream(const std::string &filename, std::ios_base::openmode open_mode) {
 #ifndef WIN32
-    // On Linux and Mac OS, UTF-8 encoded paths are supported by std::ofstream
-    return new std::ofstream(filename.c_str(), open_mode);
+  // On Linux and Mac OS, UTF-8 encoded paths are supported by std::ofstream
+  return new std::ofstream(filename.c_str(), open_mode);
 #else
-    // On Windows, the path name (possibly containing non ascii characters) has to be converted to UTF-16 in order to open a stream
-    std::wstring utf16filename;
-    utf8::utf8to16(filename.begin(), filename.end(), std::back_inserter(utf16filename));
+  // On Windows, the path name (possibly containing non ascii characters) has to be converted to UTF-16 in order to open a stream
+  std::wstring utf16filename;
+  utf8::utf8to16(filename.begin(), filename.end(), std::back_inserter(utf16filename));
 #ifdef __GLIBCXX__
-    // With MinGW, it's a little bit tricky to get an output stream
-    return new wofilestream(utf16filename, open_mode);
+  // With MinGW, it's a little bit tricky to get an output stream
+  return new wofilestream(utf16filename, open_mode);
 #elif defined(_MSC_VER)
-    // Visual Studio has wide char version of std::ofstream
-    return new std::ofstream(utf16filename.c_str(), open_mode);
+  // Visual Studio has wide char version of std::ofstream
+  return new std::ofstream(utf16filename.c_str(), open_mode);
 #else
-    // Fallback
-    return new std::ofstream(filename.c_str(), open_mode);
+  // Fallback
+  return new std::ofstream(filename.c_str(), open_mode);
 #endif
 #endif
 }
