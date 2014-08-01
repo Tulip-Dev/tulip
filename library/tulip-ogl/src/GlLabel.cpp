@@ -18,6 +18,8 @@
  */
 #include <FTGL/ftgl.h>
 
+#include <utf8.h>
+
 #include <tulip/GlLabel.h>
 #include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
@@ -114,6 +116,7 @@ void GlLabel::init() {
 }
 //============================================================
 void GlLabel::setText(const string& text) {
+
   this->text=text;
 
   if (font->Error())
@@ -131,12 +134,18 @@ void GlLabel::setText(const string& text) {
   size_t pos=text.find_first_of("\n");
 
   while(pos!=string::npos) {
-    textVector.push_back(text.substr(lastPos,pos-lastPos));
+    string s = text.substr(lastPos,pos-lastPos);
+    wstring ws;
+    utf8::utf8to32(s.begin(), s.end(), back_inserter(ws));
+    textVector.push_back(ws);
     lastPos=pos+1;
     pos=text.find_first_of("\n",pos+1);
   }
 
-  textVector.push_back(text.substr(lastPos)+" ");
+  string s = text.substr(lastPos)+" ";
+  wstring ws;
+  utf8::utf8to32(s.begin(), s.end(), back_inserter(ws));
+  textVector.push_back(ws);
 
   //Text bounding box computation
   textBoundingBox=BoundingBox();
@@ -153,7 +162,7 @@ void GlLabel::setText(const string& text) {
   font->BBox(strstr.str().c_str(),x1,y1,z1,x2,y2,z2);
 
   // After we compute width of text
-  for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
+  for(vector<wstring>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
     font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
     textWidthVector.push_back(x2-x1);
 
@@ -676,7 +685,7 @@ void GlLabel::draw(float, Camera *camera) {
     font->BBox("|",x1,y1,z1,x2,y2,z2);
     vector<float>::iterator itW=textWidthVector.begin();
 
-    for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
+    for(vector<wstring>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
       font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
 
       FTPoint shift(-(textBoundingBox[1][0]-textBoundingBox[0][0])/2.-x1+((textBoundingBox[1][0]-textBoundingBox[0][0])-(*itW))*xAlignFactor+(textBoundingBox[1][0]-textBoundingBox[0][0])*xShiftFactor,
