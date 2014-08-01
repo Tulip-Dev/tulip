@@ -393,10 +393,6 @@ ENDIF(LINUX)
 ## ========================================================
 SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
 
-IF(BUILD_TESTS)
-  INCLUDE(CTest)
-ENDIF(BUILD_TESTS)
-
 ## ========================================================
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
 ## ========================================================
@@ -422,8 +418,16 @@ ADD_SUBDIRECTORY(demos)
 ADD_SUBDIRECTORY(tlpscripten)
 
 IF(BUILD_TESTS)
+  INCLUDE(CTest)
+  ENABLE_TESTING()
   ADD_SUBDIRECTORY(unit_test)
-ENDIF()
+  IF(CMAKE_CONFIGURATION_TYPES)
+    ADD_CUSTOM_TARGET(runTests COMMAND ${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure --build-config "$<CONFIGURATION>")
+  ELSE(CMAKE_CONFIGURATION_TYPES)
+    ADD_CUSTOM_TARGET(runTests COMMAND ${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure)
+  ENDIF(CMAKE_CONFIGURATION_TYPES)
+ENDIF(BUILD_TESTS)
+
 
 IF(NOT BUILD_CORE_ONLY)
 ADD_SUBDIRECTORY(bundlers)

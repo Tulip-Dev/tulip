@@ -17,5 +17,4 @@ TARGET_LINK_LIBRARIES(tulip_plugins_tests ${LibTulipCoreName} ${LibTulipOglName}
 
 ADD_CUSTOM_TARGET(copy_data ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/data ${CMAKE_CURRENT_BINARY_DIR}/data VERBATIM)
 
-ENABLE_TESTING()
 ADD_TEST(TulipPluginsTestSuite tulip_plugins_tests)
