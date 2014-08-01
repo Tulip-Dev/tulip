@@ -141,8 +141,9 @@ void DoublePropertyTest::testDoublePropertySubGraphMax() {
   CPPUNIT_ASSERT(doubleProperty->getNodeMax() == 9);
 }
 
-void DoublePropertyTest::testDoublePropertyInfValue() {
-  double infValue = 1.0/0.0;
+void DoublePropertyTest::testDoublePropertyInfValue() { 
+  double zero = 0.0;
+  double infValue = 1.0/zero;
 
   CPPUNIT_ASSERT(infValue == std::numeric_limits<double>::infinity());
   CPPUNIT_ASSERT(-infValue == -std::numeric_limits<double>::infinity());
