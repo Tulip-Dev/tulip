@@ -383,7 +383,7 @@ public :
       return false;
     }
 
-    std::ifstream in(filename.c_str());
+    std::istream *in = tlp::getInputFileStream(filename.c_str());
 
     labels   = graph->getProperty<StringProperty>("viewLabel");
     weights  = graph->getProperty<DoubleProperty>("weights");
@@ -405,7 +405,7 @@ public :
 
     string line;
 
-    while (!in.eof() && std::getline(in, line)) {
+    while (!in->eof() && std::getline(*in, line)) {
 
       ++lineNumber;
 
@@ -416,15 +416,18 @@ public :
         if (pluginProgress) {
           pluginProgress->setError(errors.str());
         }
-
+        delete in;
         return false;
       }
 
       if (pluginProgress && ((lineNumber % 100) == 0) &&
-          (pluginProgress->progress(lineNumber, 3 * nbNodes) != TLP_CONTINUE))
+          (pluginProgress->progress(lineNumber, 3 * nbNodes) != TLP_CONTINUE)) {
+        delete in;
         return false;
+      }
     }
 
+    delete in;
     return true;
   }
 };

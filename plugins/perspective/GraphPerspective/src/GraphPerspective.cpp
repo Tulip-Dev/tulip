@@ -418,9 +418,9 @@ void GraphPerspective::exportGraph(Graph* g) {
   std::string filename = (exportFile = wizard.outputFile()).toUtf8().data();
 
   if (filename.rfind(".gz") == (filename.length() - 3))
-    os = tlp::getOgzstream(filename.c_str());
+    os = tlp::getOgzstream(filename);
   else
-    os = new std::ofstream(filename.c_str());
+    os = tlp::getOutputFileStream(filename);
 
   if (os->fail()) {
     QMessageBox::critical(_mainWindow,trUtf8("File error"),trUtf8("Cannot open output file for writing: ") + wizard.outputFile());
@@ -463,13 +463,13 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
     std::ostream *os;
 
     if (filename.rfind(".tlp.gz") == (filename.length() - 7))
-      os = tlp::getOgzstream(filename.c_str());
+      os = tlp::getOgzstream(filename);
     else {
       if (filename.rfind(".tlp") == std::string::npos)
         // force file extension
         filename += ".tlp";
 
-      os = new std::ofstream(filename.c_str());
+      os = tlp::getOutputFileStream(filename);
     }
 
     if (os->fail()) {

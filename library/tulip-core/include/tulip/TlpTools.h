@@ -22,7 +22,15 @@
 
 #include <iostream>
 #include <climits>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <tulip/tulipconf.h>
+
+#ifdef WIN32
+typedef struct _stat tlp_stat_t;
+#else
+typedef struct stat tlp_stat_t;
+#endif
 
 namespace tlp {
 extern TLP_SCOPE const char PATH_DELIMITER;
@@ -75,7 +83,7 @@ inline std::string demangleTlpClassName(const char *className) {
  * @param open_mode The mode to open the file with. Defaults to std::ios::in.
  * @return istream gzipped input stream from a file.
  */
-TLP_SCOPE std::istream *getIgzstream(const char *name, int open_mode = std::ios::in);
+TLP_SCOPE std::istream *getIgzstream(const std::string &name, int open_mode = std::ios::in);
 
 /**
  * @brief Returns an ostream to write to a gzipped file (uses gzstream lib).
@@ -85,7 +93,7 @@ TLP_SCOPE std::istream *getIgzstream(const char *name, int open_mode = std::ios:
  * @param open_mode The mode to open the file with. Defaults to std::ios::out.
  * @return ostream gzipped output stream to a file.
  */
-TLP_SCOPE std::ostream *getOgzstream(const char *name, int open_mode = std::ios::out);
+TLP_SCOPE std::ostream *getOgzstream(const std::string &name, int open_mode = std::ios::out);
 
 /**
  * @brief give the value of the seed used for further initialization
@@ -107,6 +115,31 @@ TLP_SCOPE unsigned int getSeedOfRandomSequence();
  * that sequence
  */
 TLP_SCOPE void initRandomSequence();
+
+/**
+ * @brief Cross-platform function to stat a path on a filesystem. Its purpose is to support
+ * paths on windows platform containing non-ascii characters.
+ * @param pathname an utf-8 encoded string containing the path name to stat
+ * @param buf a pointer to a tlp_stat_t structure (a typedef for struct stat)
+ */
+TLP_SCOPE int statPath(const std::string &pathname, tlp_stat_t *buf);
+
+/**
+ * @brief Cross-platform function to get an input file stream. Its purpose is to support
+ * paths on windows platform containing non-ascii characters.
+ * @param filename an utf-8 encoded string containing the path of the file to open for performing input operations
+ * @param open_mode the stream opening mode flags (bitwise combination of std::ios_base::openmode constants).
+ */
+TLP_SCOPE std::istream *getInputFileStream(const std::string &filename, std::ios_base::openmode open_mode = std::ios::in);
+
+/**
+ * @brief Cross-platform function to get an output file stream. Its purpose is to support
+ * paths on windows platform containing non-ascii characters.
+ * @param filename an utf-8 encoded string containing the path of the file to open for performing output operations
+ * @param open_mode the stream opening mode flags (bitwise combination of std::ios_base::openmode constants).
+ */
+TLP_SCOPE std::ostream *getOutputFileStream(const std::string &filename, std::ios_base::openmode open_mode = std::ios::out);
+
 }
 
 #endif

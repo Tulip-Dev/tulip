@@ -16,12 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <sys/stat.h>
-#include <sys/types.h>
+
 #include <cerrno>
 #include <fstream>
+
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/AbstractProperty.h>
+#include <tulip/TlpTools.h>
+
 #include "GMLParser.h"
 
 #define NODE "node"
@@ -561,22 +563,18 @@ public:
     if (!dataSet->get<string>("file::filename", filename))
       return false;
 
-    struct stat infoEntry;
-    int result;
-#ifdef _WIN32
-    result = stat(filename.c_str(),&infoEntry);
-#else
-    result = lstat(filename.c_str(),&infoEntry);
-#endif
+    tlp_stat_t infoEntry;
+    int result = statPath(filename, &infoEntry);
 
     if (result == -1) {
       pluginProgress->setError(strerror(errno));
       return false;
     }
 
-    ifstream myFile(filename.c_str());
-    GMLParser<true> myParser(myFile,new GMLGraphBuilder(graph));
+    istream *myFile = tlp::getInputFileStream(filename.c_str());
+    GMLParser<true> myParser(*myFile,new GMLGraphBuilder(graph));
     myParser.parse();
+    delete myFile;
     return true;
   }
 };

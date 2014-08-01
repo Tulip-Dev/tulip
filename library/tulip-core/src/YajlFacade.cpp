@@ -18,13 +18,13 @@
  */
 
 #include <tulip/YajlFacade.h>
+#include <tulip/TlpTools.h>
 
 extern "C" {
 #include <yajl/yajl_parse.h>
 #include <yajl/yajl_gen.h>
 }
 #include <errno.h>
-#include <sys/stat.h>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
@@ -115,8 +115,8 @@ static int parse_end_array(void *ctx) {
 
 void YajlParseFacade::parse(std::string filename) {
   // check if file exists
-  struct stat infoEntry;
-  bool result = (stat(filename.c_str(),&infoEntry) == 0);
+  tlp_stat_t infoEntry;
+  bool result = (tlp::statPath(filename,&infoEntry) == 0);
 
   if (!result) {
     std::stringstream ess;
@@ -127,24 +127,24 @@ void YajlParseFacade::parse(std::string filename) {
   }
 
   // open a stream
-  std::ifstream ifs(filename.c_str(),
-                    std::ifstream::in |
-                    // consider file is binary
-                    // to avoid pb using tellg
-                    // on the input stream
-                    std::ifstream::binary);
+  std::istream *ifs = tlp::getInputFileStream(filename.c_str(),
+                                              std::ifstream::in |
+                                              // consider file is binary
+                                              // to avoid pb using tellg
+                                              // on the input stream
+                                              std::ifstream::binary);
 
   // get length of file:
-  ifs.seekg (0, std::ios::end);
-  int fileLength = ifs.tellg();
-  ifs.seekg (0, std::ios::beg);
+  ifs->seekg (0, std::ios::end);
+  int fileLength = ifs->tellg();
+  ifs->seekg (0, std::ios::beg);
 
   // allocate memory:
   char* fileData = new char[fileLength];
 
   // read data as a block:
-  ifs.read (fileData, fileLength);
-  ifs.close();
+  ifs->read (fileData, fileLength);
+  delete ifs;
 
   parse((const unsigned char *) fileData, fileLength);
 

@@ -74,6 +74,9 @@ public:
     }
     int is_open() { return opened; }
     gzstreambuf* open( const char* name, int open_mode);
+#if defined(WIN32) && ZLIB_VERNUM >= 0x1270
+    gzstreambuf* open( const wchar_t* name, int open_mode);
+#endif
     gzstreambuf* close();
     ~gzstreambuf() { close(); }
     
@@ -88,8 +91,14 @@ protected:
 public:
     gzstreambase() { init(&buf); }
     gzstreambase( const char* name, int open_mode);
+#if defined(WIN32) && ZLIB_VERNUM >= 0x1270
+    gzstreambase( const wchar_t* name, int open_mode);
+#endif
     ~gzstreambase();
     void open( const char* name, int open_mode);
+#if defined(WIN32) && ZLIB_VERNUM >= 0x1270
+    void open( const wchar_t* name, int open_mode);
+#endif
     void close();
     gzstreambuf* rdbuf() { return &buf; }
 };
@@ -105,10 +114,19 @@ public:
     igzstream() : std::istream( &buf) {} 
     igzstream( const char* name, int open_mode = std::ios::in)
         : gzstreambase( name, open_mode), std::istream( &buf) {}  
+#if defined(WIN32) && ZLIB_VERNUM >= 0x1270
+    igzstream( const wchar_t* name, int open_mode = std::ios::in)
+        : gzstreambase( name, open_mode), std::istream( &buf) {}
+#endif
     gzstreambuf* rdbuf() { return gzstreambase::rdbuf(); }
     void open( const char* name, int open_mode = std::ios::in) {
         gzstreambase::open( name, open_mode);
     }
+#if defined(WIN32) && ZLIB_VERNUM >= 0x1270
+    void open( const wchar_t* name, int open_mode = std::ios::in) {
+        gzstreambase::open( name, open_mode);
+    }
+#endif
 };
 
 class GZSTREAM_SCOPE ogzstream : public gzstreambase, public std::ostream {
@@ -116,10 +134,19 @@ public:
     ogzstream() : std::ostream( &buf) {}
     ogzstream( const char* name, int mode = std::ios::out)
         : gzstreambase( name, mode), std::ostream( &buf) {}  
+#if defined(WIN32) && ZLIB_VERNUM >= 0x1270
+    ogzstream( const wchar_t* name, int mode = std::ios::out)
+        : gzstreambase( name, mode), std::ostream( &buf) {}
+#endif
     gzstreambuf* rdbuf() { return gzstreambase::rdbuf(); }
     void open( const char* name, int open_mode = std::ios::out) {
         gzstreambase::open( name, open_mode);
     }
+#if defined(WIN32) && ZLIB_VERNUM >= 0x1270
+    void open( const wchar_t* name, int open_mode = std::ios::out) {
+        gzstreambase::open( name, open_mode);
+    }
+#endif
 };
 
 #ifdef GZSTREAM_NAMESPACE

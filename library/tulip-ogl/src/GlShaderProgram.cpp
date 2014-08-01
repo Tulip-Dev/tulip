@@ -25,6 +25,7 @@
 
 #include <tulip/GlShaderProgram.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 
@@ -59,23 +60,23 @@ static void getInfoLog(GLuint obj, ObjectType objectType, string &logStr) {
 }
 
 static void readShaderSourceFile(const string &vertexShaderSourceFilePath, char **shader) {
-  ifstream ifs;
-  ifs.open(vertexShaderSourceFilePath.c_str());
+  istream *ifs = tlp::getInputFileStream(vertexShaderSourceFilePath.c_str());
 
-  if (!ifs.is_open()) {
+  if (!ifs->good()) {
+    delete ifs;
     tlp::warning() << "Error opening file : " << vertexShaderSourceFilePath << endl;
     return;
   }
 
-  ifs.seekg (0, ios::end);
-  unsigned int length = static_cast<unsigned int>(ifs.tellg());
-  ifs.seekg (0, ios::beg);
+  ifs->seekg (0, ios::end);
+  unsigned int length = static_cast<unsigned int>(ifs->tellg());
+  ifs->seekg (0, ios::beg);
 
   *shader = new char[length+1];
 
-  ifs.read ((char *)*shader,length);
+  ifs->read ((char *)*shader,length);
   (*shader)[length] = '\0';
-  ifs.close();
+  delete ifs;
 }
 
 namespace tlp {
