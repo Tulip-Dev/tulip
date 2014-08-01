@@ -150,7 +150,11 @@ void PluginsTest::pluginInformations() {
   CPPUNIT_ASSERT_EQUAL(string("testParameter"), param.getName());
   CPPUNIT_ASSERT_MESSAGE("test parameter should not be mandatory", !param.isMandatory());
   CPPUNIT_ASSERT_EQUAL(string("0"), param.getDefaultValue());
+#ifndef _MSC_VER
   CPPUNIT_ASSERT_EQUAL(string("i"), param.getTypeName());
+#else
+  CPPUNIT_ASSERT_EQUAL(string("int"), param.getTypeName());
+#endif
 
   const Plugin& factory(PluginLister::instance()->pluginInformation("Test"));
   CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory.author());
