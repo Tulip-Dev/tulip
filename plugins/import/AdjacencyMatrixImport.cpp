@@ -235,6 +235,7 @@ public:
 
       ++curLine;
     }
+
     delete in;
 
     // final check:

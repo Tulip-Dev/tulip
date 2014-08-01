@@ -416,6 +416,7 @@ public :
         if (pluginProgress) {
           pluginProgress->setError(errors.str());
         }
+
         delete in;
         return false;
       }
