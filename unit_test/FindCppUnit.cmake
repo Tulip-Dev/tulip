@@ -26,7 +26,12 @@ IF(WIN32) #Windows
         /opt/lib
   )
   FIND_PATH(CppUnit_INCLUDE_DIRS cppunit/Test.h ${CppUnit_INCLUDE_SEARCH_DIRS})
-  FIND_LIBRARY(CppUnit_LIBRARIES cppunit PATHS ${CppUnit_LIBRARY_SEARCH_DIRS})
+  IF(MSVC)
+    # prefer the cppunit dll with Visual Studio
+    FIND_LIBRARY(CppUnit_LIBRARIES cppunit_dll PATHS ${CppUnit_LIBRARY_SEARCH_DIRS})
+  ELSE(MSVC)
+    FIND_LIBRARY(CppUnit_LIBRARIES cppunit PATHS ${CppUnit_LIBRARY_SEARCH_DIRS})
+  ENDIF(MSVC)
 ELSE(WIN32) #Unix
   CMAKE_MINIMUM_REQUIRED(VERSION 2.4.7 FATAL_ERROR)
   FIND_PACKAGE(PkgConfig)
