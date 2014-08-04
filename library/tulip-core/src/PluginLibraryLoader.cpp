@@ -159,9 +159,9 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
 
   HANDLE hFind;
   WIN32_FIND_DATA findData;
-  TCHAR currentDirectory[256];
+  TCHAR currentDirectory[FILENAME_MAX];
   DWORD dwRet;
-  dwRet = GetCurrentDirectory(256, currentDirectory);
+  dwRet = GetCurrentDirectory(FILENAME_MAX, currentDirectory);
 
   if(dwRet == 0) {
     message = pluginPath + " - Scandir error";
@@ -218,6 +218,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
 
       success = FindNextFile (hFind, &findData);
     }
+    SetCurrentDirectory(currentDirectory);
   }
 
 #else
