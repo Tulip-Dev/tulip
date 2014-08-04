@@ -218,6 +218,7 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
 
       success = FindNextFile (hFind, &findData);
     }
+
     SetCurrentDirectory(currentDirectory);
   }
 
