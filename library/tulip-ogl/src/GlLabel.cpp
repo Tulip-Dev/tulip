@@ -42,6 +42,26 @@
 
 using namespace std;
 
+// Function that processes an utf8 string to display with FTGL.
+// It first replaces any invalid utf8 characters by the Unicode 'REPLACEMENT CHARACTER' (codepoint = U+FFFD).
+// It then filters out any character outside the Unicode Basic Multilingual Plane (codepoints > U+FFFF)
+// as FTGL only supports characters located in it.
+static void processUtf8StringToDisplay(std::string &str) {
+  std::string temp;
+  utf8::replace_invalid(str.begin(), str.end(), back_inserter(temp));
+  std::vector<unsigned int> utf32Str;
+  utf8::utf8to32(temp.begin(), temp.end(), back_inserter(utf32Str));
+  std::vector<unsigned int> utf32StrBMPOnly;
+  utf32StrBMPOnly.reserve(utf32Str.size());
+  for (size_t i = 0 ; i < utf32Str.size() ; ++i) {
+    if (utf32Str[i] <= 0xFFFF) {
+      utf32StrBMPOnly.push_back(utf32Str[i]);
+    }
+  }
+  str.clear();
+  utf8::utf32to8(utf32StrBMPOnly.begin(), utf32StrBMPOnly.end(), back_inserter(str));
+}
+
 namespace tlp {
 
 // FTGL fonts must be cached to avoid to much memory consumption
@@ -119,6 +139,9 @@ void GlLabel::setText(const string& text) {
 
   this->text=text;
 
+  // ensure the string can be displayed with FTGL
+  processUtf8StringToDisplay(this->text);
+
   if (font->Error())
     return;
 
@@ -131,21 +154,17 @@ void GlLabel::setText(const string& text) {
   textVector.clear();
   textWidthVector.clear();
   size_t lastPos=0;
-  size_t pos=text.find_first_of("\n");
+  size_t pos=this->text.find_first_of("\n");
 
   while(pos!=string::npos) {
-    string s = text.substr(lastPos,pos-lastPos);
-    wstring ws;
-    utf8::utf8to32(s.begin(), s.end(), back_inserter(ws));
-    textVector.push_back(ws);
+    string s = this->text.substr(lastPos,pos-lastPos);
+    textVector.push_back(s);
     lastPos=pos+1;
-    pos=text.find_first_of("\n",pos+1);
+    pos=this->text.find_first_of("\n",pos+1);
   }
 
-  string s = text.substr(lastPos)+" ";
-  wstring ws;
-  utf8::utf8to32(s.begin(), s.end(), back_inserter(ws));
-  textVector.push_back(ws);
+  string s = this->text.substr(lastPos)+" ";
+  textVector.push_back(s);
 
   //Text bounding box computation
   textBoundingBox=BoundingBox();
@@ -162,7 +181,7 @@ void GlLabel::setText(const string& text) {
   font->BBox(strstr.str().c_str(),x1,y1,z1,x2,y2,z2);
 
   // After we compute width of text
-  for(vector<wstring>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
+  for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
     font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
     textWidthVector.push_back(x2-x1);
 
@@ -685,7 +704,7 @@ void GlLabel::draw(float, Camera *camera) {
     font->BBox("|",x1,y1,z1,x2,y2,z2);
     vector<float>::iterator itW=textWidthVector.begin();
 
-    for(vector<wstring>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
+    for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
       font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
 
       FTPoint shift(-(textBoundingBox[1][0]-textBoundingBox[0][0])/2.-x1+((textBoundingBox[1][0]-textBoundingBox[0][0])-(*itW))*xAlignFactor+(textBoundingBox[1][0]-textBoundingBox[0][0])*xShiftFactor,
