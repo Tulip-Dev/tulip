@@ -452,7 +452,7 @@ private :
   float oldLod;
   Vec4i oldViewport;
 
-  std::vector<std::wstring> textVector;
+  std::vector<std::string> textVector;
   std::vector<float> textWidthVector;
   BoundingBox textBoundingBox;
 };
