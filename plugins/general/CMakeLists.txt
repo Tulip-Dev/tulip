@@ -1,2 +1,4 @@
+ADD_CORE_FILES(.)
+
 ADD_SUBDIRECTORY(ReverseEdges)
 ADD_SUBDIRECTORY(EdgeBundling)

@@ -1,3 +1,5 @@
+ADD_CORE_FILES(CMakeLists.txt)
+
 ADD_SUBDIRECTORY(tulip-core)
 ADD_SUBDIRECTORY(tulip-ogdf)
 IF(NOT BUILD_CORE_ONLY)

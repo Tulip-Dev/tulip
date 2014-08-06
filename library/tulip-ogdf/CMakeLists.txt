@@ -1,3 +1,5 @@
+ADD_CORE_FILES(.)
+
 INCLUDE_DIRECTORIES(${OGDFInclude} ${TulipCoreInclude} ${TulipCoreBuildInclude})
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOGDF_DLL")
