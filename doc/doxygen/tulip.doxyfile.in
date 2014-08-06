@@ -110,7 +110,7 @@ WARN_LOGFILE           = doc/warnings.txt
 # configuration options related to the input files
 #---------------------------------------------------------------------------
 
-INPUT                  = library doc/doxygen/ demos
+INPUT                  = library/tulip-core/include library/tulip-ogl/include library/tulip-gui/include doc/doxygen/ demos
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS           = *.h *.cxx
 RECURSIVE              = YES
