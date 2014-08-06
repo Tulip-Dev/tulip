@@ -154,9 +154,59 @@ IF(BUILD_CODE_COVERAGE)
 ENDIF()
 
 ## ========================================================
-## GUI
+## CORE ONLY
+## this used to have a minimal build of Tulip without
+## any of the opengl, qt or python components
 ## ========================================================
+IF(NOT EXISTS ${PROJECT_SOURCE_DIR}/FindQtX.cmake)
+  SET(BUILD_CORE_ONLY ON)
+  MESSAGE("You can only configure a core build of Tulip.")
+ELSE()
 SET(BUILD_CORE_ONLY OFF CACHE BOOL "Do you want a minimal build of Tulip ? [ON|OFF]")
+ENDIF()
+
+IF(BUILD_CORE_ONLY AND LINUX)
+# the macro ADD_CORE_FILES will be used
+# to collect the files needed to build a minimal Tulip
+# in the directory pointed by CMAKE_CURRENT_SOURCE_DIR
+  macro(ADD_CORE_FILES files)
+    set(CURRENT_SOURCE_DIR ".")
+    if(${CMAKE_CURRENT_SOURCE_DIR} STRGREATER ${PROJECT_SOURCE_DIR})
+      execute_process(COMMAND echo -n ${CMAKE_CURRENT_SOURCE_DIR}
+	COMMAND sed "s,${PROJECT_SOURCE_DIR}/,,"
+	OUTPUT_VARIABLE CURRENT_SOURCE_DIR)
+    endif()
+    if(${files} STREQUAL ".")
+      SET(ENV{CORE_FILES} "$ENV{CORE_FILES} \$(find ${CURRENT_SOURCE_DIR} -path \"*/.svn\" -prune -o -type f -print)")
+    else()
+      foreach(core_file ${ARGV})
+	SET(ENV{CORE_FILES} "$ENV{CORE_FILES} ${CURRENT_SOURCE_DIR}/${core_file}")
+      endforeach()
+    endif()
+  endmacro()
+  ADD_CORE_FILES(CMakeLists.txt cmake_uninstall.cmake.in TulipUseFile.cmake)
+# the macro ADD_CORE_DIRECTORY_EXCEPT will be used
+# to exclude the files not needed to build a minimal Tulip
+# in the directory pointed by CMAKE_CURRENT_SOURCE_DIR
+  macro(ADD_CORE_DIRECTORY_EXCEPT files)
+    set(CURRENT_SOURCE_DIR ".")
+    if(${CMAKE_CURRENT_SOURCE_DIR} STRGREATER ${PROJECT_SOURCE_DIR})
+      execute_process(COMMAND echo -n ${CMAKE_CURRENT_SOURCE_DIR}
+	COMMAND sed "s,${PROJECT_SOURCE_DIR}/,,"
+	OUTPUT_VARIABLE CURRENT_SOURCE_DIR)
+    endif()
+    SET(find_command "\$(find ${CURRENT_SOURCE_DIR} -path \"*/.svn\" -prune -o -type f")
+    foreach(exclude_file ${ARGV})
+      SET(find_command "${find_command} -a ! -name \"${exclude_file}\"")
+    endforeach()
+    SET(ENV{CORE_FILES} "$ENV{CORE_FILES} ${find_command} -print)")
+  endmacro()
+ELSE()
+  macro(ADD_CORE_FILES files)
+  endmacro()
+  macro(ADD_CORE_DIRECTORY_EXCEPT files)
+  endmacro()
+ENDIF()
 
 ## ========================================================
 ## Required packages
@@ -392,7 +442,11 @@ ENDIF(LINUX)
 ## ========================================================
 ## Unit tests
 ## ========================================================
-SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
+IF(EXISTS ${CMAKE_SOURCE_DIR}/unit_test/CMakeLists.txt)
+  SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
+ELSE()
+  SET(BUILD_TESTS OFF)
+ENDIF()
 
 ## ========================================================
 ## Create library/tulip/include/tulip/TulipRelease.h base on TulipRelease.h.in
@@ -412,10 +466,10 @@ IF(NOT BUILD_CORE_ONLY)
 ADD_SUBDIRECTORY(doc)
 ADD_SUBDIRECTORY(software)
 ADD_SUBDIRECTORY(textures)
-ENDIF(NOT BUILD_CORE_ONLY)
-ADD_SUBDIRECTORY(plugins)
 ADD_SUBDIRECTORY(externalplugins)
 ADD_SUBDIRECTORY(demos)
+ENDIF(NOT BUILD_CORE_ONLY)
+ADD_SUBDIRECTORY(plugins)
 ADD_SUBDIRECTORY(tlpscripten)
 
 IF(BUILD_TESTS)
@@ -539,5 +593,19 @@ IF(APPLE)
                           WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac)
 
 ENDIF(APPLE)
+ELSEIF(LINUX)
+# generate script to make a tar archive of minimal set of tulip core files
+  SET(make_tar_file ${PROJECT_BINARY_DIR}/tar-tulip-${TulipVersion}-corefiles.sh)
+  execute_process(COMMAND rm ${make_tar_file} OUTPUT_QUIET ERROR_QUIET)
+  execute_process(COMMAND echo "#!/bin/sh
+if [ $# -eq 0 ]; then
+TAR_FILE=${PROJECT_BINARY_DIR}/tulip-${TulipVersion}-corefiles.tar.gz
+else
+TAR_FILE=$1
+fi
+cd ${PROJECT_SOURCE_DIR}
+tar zcvf \${TAR_FILE} $ENV{CORE_FILES}
+echo archive \${TAR_FILE} successfully generated" OUTPUT_FILE ${make_tar_file})
 
+message(STATUS "${make_tar_file} successfully generated")
 ENDIF(NOT BUILD_CORE_ONLY)

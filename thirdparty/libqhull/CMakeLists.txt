@@ -1,3 +1,4 @@
+ADD_CORE_FILES(.)
 
 SET(QHULL_LIB_SRCS
     libqhull.h
@@ -28,7 +29,7 @@ SET(QHULL_LIB_SRCS
     user.c
     rboxlib.c
     userprintf_rbox.c
-) 
+)
 
 IF(UNIX)
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")

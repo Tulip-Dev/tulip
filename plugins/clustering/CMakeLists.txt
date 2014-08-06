@@ -1,3 +1,5 @@
+ADD_CORE_DIRECTORY_EXCEPT(ConvolutionClustering*.*)
+
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${CMAKE_CURRENT_BINARY_DIR})
 
 ADD_SUBDIRECTORY(Delaunay)

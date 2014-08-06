@@ -1,5 +1,7 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
+ADD_CORE_FILES(.)
+
 FILE(GLOB_RECURSE OGDF_SOURCES "src/*.cpp")
 
 IF(CMAKE_DEBUG_MODE)
