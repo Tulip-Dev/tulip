@@ -339,10 +339,12 @@ void SearchWidget::search() {
   edge e;
 
   QString searchOpDescription;
+
   if (_ui->selectionModeCombo->currentIndex() == 0) {// replace current selection
     output->copy(result);
     searchOpDescription = "found";
-  } else if (_ui->selectionModeCombo->currentIndex() == 1) { // add to current selection
+  }
+  else if (_ui->selectionModeCombo->currentIndex() == 1) {   // add to current selection
     if (onNodes) {
       forEach(n,result->getNodesEqualTo(true)) {
         output->setNodeValue(n,true);
@@ -354,6 +356,7 @@ void SearchWidget::search() {
         output->setEdgeValue(e,true);
       }
     }
+
     searchOpDescription = "added to selection";
   }
   else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
@@ -368,6 +371,7 @@ void SearchWidget::search() {
         output->setEdgeValue(e,false);
       }
     }
+
     searchOpDescription = "removed from selection";
   }
   else if (_ui->selectionModeCombo->currentIndex() == 3) { // no modification
