@@ -56,11 +56,13 @@ static void processUtf8StringToDisplay(std::string &str) {
   utf8::utf8to32(temp.begin(), temp.end(), back_inserter(utf32Str));
   std::vector<unsigned int> utf32StrBMPOnly;
   utf32StrBMPOnly.reserve(utf32Str.size());
+
   for (size_t i = 0 ; i < utf32Str.size() - 1 ; ++i) {
     if (utf32Str[i] <= 0xFFFF) {
       utf32StrBMPOnly.push_back(utf32Str[i]);
     }
   }
+
   str.clear();
   utf8::utf32to8(utf32StrBMPOnly.begin(), utf32StrBMPOnly.end(), back_inserter(str));
 }
