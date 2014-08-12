@@ -18,8 +18,6 @@
  */
 #include <FTGL/ftgl.h>
 
-#include <utf8.h>
-
 #include <tulip/GlLabel.h>
 #include <tulip/Coord.h>
 #include <tulip/LayoutProperty.h>
@@ -41,31 +39,6 @@
 #include <tulip/TlpTools.h>
 
 using namespace std;
-
-// Function that processes an utf8 string to display with FTGL.
-// It first replaces any invalid utf8 characters by the Unicode 'REPLACEMENT CHARACTER' (codepoint = U+FFFD).
-// It then filters out any character outside the Unicode Basic Multilingual Plane (codepoints > U+FFFF)
-// as FTGL only supports characters located in it.
-static void processUtf8StringToDisplay(std::string &str) {
-  // utf8::replace_invalid throws an exception if the last character is not a valid utf8 one (bug ?)
-  // add a space to the end of the string as a workaround (it will then be filter out)
-  str += " ";
-  std::string temp;
-  utf8::replace_invalid(str.begin(), str.end(), back_inserter(temp));
-  std::vector<unsigned int> utf32Str;
-  utf8::utf8to32(temp.begin(), temp.end(), back_inserter(utf32Str));
-  std::vector<unsigned int> utf32StrBMPOnly;
-  utf32StrBMPOnly.reserve(utf32Str.size());
-
-  for (size_t i = 0 ; i < utf32Str.size() - 1 ; ++i) {
-    if (utf32Str[i] <= 0xFFFF) {
-      utf32StrBMPOnly.push_back(utf32Str[i]);
-    }
-  }
-
-  str.clear();
-  utf8::utf32to8(utf32StrBMPOnly.begin(), utf32StrBMPOnly.end(), back_inserter(str));
-}
 
 namespace tlp {
 
@@ -143,9 +116,6 @@ void GlLabel::init() {
 void GlLabel::setText(const string& text) {
 
   this->text=text;
-
-  // ensure the string can be displayed with FTGL
-  processUtf8StringToDisplay(this->text);
 
   if (font->Error())
     return;
