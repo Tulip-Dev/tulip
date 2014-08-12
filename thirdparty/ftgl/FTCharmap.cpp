@@ -29,7 +29,6 @@
 #include "FTFace.h"
 #include "FTCharmap.h"
 
-
 FTCharmap::FTCharmap(FTFace* face)
 :   ftFace(*(face->Face())),
     err(0)
@@ -57,7 +56,9 @@ FTCharmap::FTCharmap(FTFace* face)
 
 FTCharmap::~FTCharmap()
 {
-    charMap.clear();
+     for (unsigned int i = 0 ; i < FTCharmap::MAX_UNICODE_PLANES ; ++i) {
+        charMaps[i].clear();
+     }
 }
 
 
@@ -74,7 +75,9 @@ bool FTCharmap::CharMap(FT_Encoding encoding)
     if(!err)
     {
         ftEncoding = encoding;
-        charMap.clear();
+        for (unsigned int i = 0 ; i < FTCharmap::MAX_UNICODE_PLANES ; ++i) {
+           charMaps[i].clear();
+        }
     }
 
     return !err;
@@ -83,7 +86,9 @@ bool FTCharmap::CharMap(FT_Encoding encoding)
 
 unsigned int FTCharmap::GlyphListIndex(const unsigned int characterCode)
 {
-    return charMap.find(characterCode);
+    // First, compute the Unicode plane where the character is located
+    div_t pos = div(characterCode, FTCharmap::UNICODE_PLANE_SIZE);
+    return charMaps[pos.quot].find(pos.rem);
 }
 
 
@@ -101,6 +106,8 @@ unsigned int FTCharmap::FontIndex(const unsigned int characterCode)
 void FTCharmap::InsertIndex(const unsigned int characterCode,
                             const size_t containerIndex)
 {
-    charMap.insert(characterCode, static_cast<FTCharToGlyphIndexMap::GlyphIndex>(containerIndex));
+    // First, compute the Unicode plane where the character is located
+    div_t pos = div(characterCode, FTCharmap::UNICODE_PLANE_SIZE);
+    charMaps[pos.quot].insert(pos.rem, static_cast<FTCharToGlyphIndexMap::GlyphIndex>(containerIndex));
 }
 
