@@ -872,9 +872,21 @@ void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data,
     // edge extremity glyph is in the viewport
     if (lod > 0) {
 
+      // Some glyphs can not benefit from the shader rendering optimization
+      // due to the use of quadrics or modelview matrix modification or lighting effect
+      static set<int> noShaderGlyphs;
+
+      if (noShaderGlyphs.empty()) {
+        noShaderGlyphs.insert(EdgeExtremityShape::Cone);
+        noShaderGlyphs.insert(EdgeExtremityShape::Cylinder);
+        noShaderGlyphs.insert(EdgeExtremityShape::GlowSphere);
+        noShaderGlyphs.insert(EdgeExtremityShape::Sphere);
+        noShaderGlyphs.insert(EdgeExtremityShape::Cube);
+      }
+
       Color borderColor = data->parameters->isEdgeColorInterpolate() ? color : data->getElementBorderColor()->getEdgeValue(e);
 
-      if (data->getGlGlyphRenderer()->renderingHasStarted()) {
+      if (data->getGlGlyphRenderer()->renderingHasStarted() && noShaderGlyphs.find(extremityGlyph->id()) == noShaderGlyphs.end()) {
         data->getGlGlyphRenderer()->addEdgeExtremityGlyphRendering(extremityGlyph, e, source, color, borderColor, 100., beginTmpAnchor, srcAnchor, size, selected);
       }
       else {
