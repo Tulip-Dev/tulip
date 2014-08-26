@@ -257,11 +257,14 @@ bool tlp::computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line
 //======================================================================================================
 
 Coord tlp::computePolygonCentroid(const vector<Coord> &points) {
-  vector<Coord> pointsCp(points);
-  pointsCp.push_back(points[0]);
-  float A = 0;
-  float Cx = 0;
-  float Cy = 0;
+  vector<Vec3d> pointsCp;
+  for (size_t i = 0 ; i < points.size() ; ++i) {
+    pointsCp.push_back(Vec3d(points[i][0], points[i][1], 0.0));
+  }
+  pointsCp.push_back(Vec3d(points[0][0], points[0][1], 0.0));
+  double A = 0.0;
+  double Cx = 0.0;
+  double Cy = 0.0;
 
   for (size_t i = 0 ; i < pointsCp.size() - 1 ; ++i) {
     A += (pointsCp[i][0] * pointsCp[i+1][1] - pointsCp[i+1][0] * pointsCp[i][1]);
@@ -269,10 +272,10 @@ Coord tlp::computePolygonCentroid(const vector<Coord> &points) {
     Cy += (pointsCp[i][1] + pointsCp[i+1][1])*(pointsCp[i][0]*pointsCp[i+1][1] - pointsCp[i+1][0]*pointsCp[i][1]);
   }
 
-  A *= 0.5f;
-  Cx *= 1.0f / (6*A);
-  Cy *= 1.0f / (6*A);
-  return Coord(Cx, Cy);
+  A *= 0.5;
+  Cx *= 1.0 / (6.0*A);
+  Cy *= 1.0 / (6.0*A);
+  return Coord(static_cast<float>(Cx), static_cast<float>(Cy));
 }
 
 //======================================================================================================
