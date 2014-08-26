@@ -519,9 +519,9 @@ void polyQuad(const vector<Coord> &vertices,
 
     if (i == 0) {
       texCoords[0]=0;
-      texCoords[1]=0;
+      texCoords[1]=1;
       texCoords[2]=0;
-      texCoords[3]=1;
+      texCoords[3]=0;
     }
     else {
       Coord p1_0 = quadVertices[2*(i-1)];
@@ -530,9 +530,9 @@ void polyQuad(const vector<Coord> &vertices,
       Coord p2_1 = quadVertices[2*i+1];
       length += ((p1_1+p2_1)/2.f-(p1_0+p2_0)/2.f).norm()/(p1_0-p2_0).norm();
       texCoords[i*4]=length;
-      texCoords[i*4+1]=0;
+      texCoords[i*4+1]=1;
       texCoords[i*4+2]=length;
-      texCoords[i*4+3]=1;
+      texCoords[i*4+3]=0;
     }
   }
 
