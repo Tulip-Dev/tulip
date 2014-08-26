@@ -130,6 +130,7 @@ public:
 
   void draw(edge, node n, const Color& glyphColor, const Color&, float) {
     glEnable(GL_LIGHTING);
+    glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 
     if (GlDisplayListManager::getInst().beginNewDisplayList("Cylinder_cylinder")) {
       drawCylinder();
