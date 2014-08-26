@@ -142,6 +142,7 @@ public:
 
   virtual void draw(edge e, node /*n*/, const Color& glyphColor,const Color &/*borderColor*/, float /*lod*/) {
     glEnable(GL_LIGHTING);
+    glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 
     if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
       drawCone();
