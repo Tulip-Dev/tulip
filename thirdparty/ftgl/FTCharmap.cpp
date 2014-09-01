@@ -87,7 +87,7 @@ bool FTCharmap::CharMap(FT_Encoding encoding)
 unsigned int FTCharmap::GlyphListIndex(const unsigned int characterCode)
 {
     // First, compute the Unicode plane where the character is located
-    div_t pos = div(characterCode, FTCharmap::UNICODE_PLANE_SIZE);
+  div_t pos = div((int) characterCode, (int) FTCharmap::UNICODE_PLANE_SIZE);
     return charMaps[pos.quot].find(pos.rem);
 }
 
@@ -107,7 +107,7 @@ void FTCharmap::InsertIndex(const unsigned int characterCode,
                             const size_t containerIndex)
 {
     // First, compute the Unicode plane where the character is located
-    div_t pos = div(characterCode, FTCharmap::UNICODE_PLANE_SIZE);
+  div_t pos = div((int) characterCode, (int) FTCharmap::UNICODE_PLANE_SIZE);
     charMaps[pos.quot].insert(pos.rem, static_cast<FTCharToGlyphIndexMap::GlyphIndex>(containerIndex));
 }
 
