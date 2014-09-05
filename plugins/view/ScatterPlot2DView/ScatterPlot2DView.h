@@ -112,7 +112,7 @@ public :
   }
   void generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWidget *glWidget = NULL);
 
-  void switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot);
+  void switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot, bool center);
   void switchFromDetailViewToMatrixView();
 
   void draw();
