@@ -207,7 +207,6 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     Color backgroundColor;
     dataSet.get("background color", backgroundColor);
     optionsWidget->setBackgroundColor(backgroundColor);
-    emit drawNeeded();
     DataSet generatedScatterPlotDataSet;
     dataSet.get("generated scatter plots", generatedScatterPlotDataSet);
 
@@ -240,7 +239,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
       scatterPlotsGenMap[x_y] = true;
     }
 
-    switchFromMatrixToDetailView(scatterPlotsMap[make_pair(detailScatterPlotX, detailScatterPlotY)]);
+    switchFromMatrixToDetailView(scatterPlotsMap[make_pair(detailScatterPlotX, detailScatterPlotY)], true);
   }
 
   registerTriggers();
@@ -461,7 +460,8 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
     detailedScatterPlot = scatterPlotsMap[detailedScatterPlotPropertyName];
   }
 
-  centerView();
+  if (center) 
+    centerView();
 }
 
 void ScatterPlot2DView::addEmptyViewLabel() {
@@ -540,7 +540,7 @@ void ScatterPlot2DView::draw() {
     matrixUpdateNeeded = true;
 
     if (newGraphSet) {
-      switchFromMatrixToDetailView(detailedScatterPlot);
+      switchFromMatrixToDetailView(detailedScatterPlot, center);
       newGraphSet = false;
     }
   }
@@ -555,7 +555,6 @@ void ScatterPlot2DView::draw() {
 
   if (center) {
     centerView();
-    center = false;
   }
   else {
     getGlMainWidget()->draw();
@@ -580,6 +579,7 @@ void ScatterPlot2DView::centerView(bool) {
   float glWidth = (float) graphicsView()->width();
   getGlMainWidget()->getScene()->zoomFactor((glWidth - 50)/ glWidth);
   getGlMainWidget()->draw();
+  center = false;
 }
 
 void ScatterPlot2DView::applySettings() {
@@ -745,7 +745,7 @@ void ScatterPlot2DView::generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWi
   scatterPlotsGenMap[make_pair(scatterPlot->getXDim(), scatterPlot->getYDim())] = true;
 }
 
-void ScatterPlot2DView::switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot) {
+  void ScatterPlot2DView::switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot, bool recenter) {
 
   sceneRadiusBak = getGlMainWidget()->getScene()->getGraphCamera().getSceneRadius();
   zoomFactorBak = getGlMainWidget()->getScene()->getGraphCamera().getZoomFactor();
@@ -771,7 +771,8 @@ void ScatterPlot2DView::switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot)
   detailedScatterPlot = scatterPlot;
   detailedScatterPlotPropertyName = make_pair(scatterPlot->getXDim(), scatterPlot->getYDim());
   propertiesSelectionWidget->setEnabled(false);
-  centerView();
+  if (recenter)
+    centerView();
 }
 
 void ScatterPlot2DView::switchFromDetailViewToMatrixView() {

@@ -71,7 +71,7 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     else if (selectedScatterPlotOverview != NULL && scatterPlot2dView->matrixViewSet()) {
       QtGlSceneZoomAndPanAnimator zoomAndPanAnimator(glWidget, selectedScatterPlotOverview->getBoundingBox());
       zoomAndPanAnimator.animateZoomAndPan();
-      scatterPlot2dView->switchFromMatrixToDetailView(selectedScatterPlotOverview);
+      scatterPlot2dView->switchFromMatrixToDetailView(selectedScatterPlotOverview, true);
       selectedScatterPlotOverview = NULL;
     }
     else if (!scatterPlot2dView->matrixViewSet()) {
