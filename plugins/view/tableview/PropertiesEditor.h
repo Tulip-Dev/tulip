@@ -60,7 +60,7 @@ public:
 
   void setPropertyChecked(int index, bool state);
   void setPropertyChecked(const QString& pName, bool state);
-  
+
   QLineEdit* getPropertiesFilterEdit();
   void toLabels(tlp::PropertyInterface* prop,
                 bool nodes, bool edges, bool selectedOnly = false);
