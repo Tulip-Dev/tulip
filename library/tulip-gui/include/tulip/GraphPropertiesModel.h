@@ -141,6 +141,8 @@ public:
 
   int rowOf(PROPTYPE*) const;
 
+  int rowOf(const QString& pName) const;
+
   Qt::ItemFlags flags(const QModelIndex &index) const {
     Qt::ItemFlags result = QAbstractItemModel::flags(index);
 

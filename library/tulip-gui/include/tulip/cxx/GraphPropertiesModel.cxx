@@ -167,6 +167,15 @@ int GraphPropertiesModel<PROPTYPE>::rowOf(PROPTYPE* pi) const {
 }
 
 template<typename PROPTYPE>
+int GraphPropertiesModel<PROPTYPE>::rowOf(const QString& pName) const {
+  for(int i = 0; i < _properties.size(); ++i) {
+    if (pName == QString::fromUtf8(_properties[i]->getName().c_str()))
+      return i;
+  }
+  return -1;
+} 
+
+template<typename PROPTYPE>
 QVariant tlp::GraphPropertiesModel<PROPTYPE>::headerData(int section, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole) {
