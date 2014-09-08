@@ -38,11 +38,12 @@ public :
   StringProperty (Graph *g, const std::string& n="") :AbstractStringProperty(g, n) {}
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   static const std::string propertyTypename;
   const std::string& getTypename() const {
     return propertyTypename;
   }
+  // the value size of a StringVectorProperty is not fixed
   virtual unsigned int nodeValueSize() const {
     return 0;
   }
@@ -62,12 +63,18 @@ public :
   StringVectorProperty(Graph *g, const std::string& n=""):AbstractVectorProperty<StringVectorType, tlp::StringType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  PropertyInterface* clonePrototype(Graph *, const std::string&);
   static const std::string propertyTypename;
   const std::string& getTypename() const {
     return propertyTypename;
   }
-
+  // the value size of a StringVectorProperty is not fixed
+  virtual unsigned int nodeValueSize() const {
+    return 0;
+  }
+  virtual unsigned int edgeValueSize() const {
+    return 0;
+  }
 };
 /*\@}*/
 }

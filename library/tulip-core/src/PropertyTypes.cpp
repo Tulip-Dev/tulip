@@ -767,7 +767,7 @@ bool StringVectorType::readb(istream& iss, RealType & v) {
   unsigned int size;
 
   if (!bool(iss.read((char *) &size, sizeof(size))))
-    return size;
+    return false;
 
   v.resize(size);
 
