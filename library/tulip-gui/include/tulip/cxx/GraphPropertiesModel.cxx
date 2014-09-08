@@ -172,8 +172,9 @@ int GraphPropertiesModel<PROPTYPE>::rowOf(const QString& pName) const {
     if (pName == QString::fromUtf8(_properties[i]->getName().c_str()))
       return i;
   }
+
   return -1;
-} 
+}
 
 template<typename PROPTYPE>
 QVariant tlp::GraphPropertiesModel<PROPTYPE>::headerData(int section, Qt::Orientation orientation, int role) const {

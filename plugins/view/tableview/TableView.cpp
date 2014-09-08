@@ -167,6 +167,7 @@ QList<QWidget*> TableView::configurationWidgets() const {
 void TableView::graphChanged(tlp::Graph* g) {
   isNewGraph = true;
   QSet<QString> visibleProperties;
+
   if (g && propertiesEditor->getGraph() &&
       (g->getRoot() == propertiesEditor->getGraph()->getRoot())) {
     foreach(tlp::PropertyInterface* pi, propertiesEditor->visibleProperties()) {
@@ -188,7 +189,7 @@ void TableView::graphChanged(tlp::Graph* g) {
     for(int i=0; i < _model->columnCount(); ++i) {
       QString propName = _model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
       bool checked = !visibleProperties.isEmpty() ?
-	visibleProperties.contains(propName) : true;
+                     visibleProperties.contains(propName) : true;
 
       propertiesEditor->setPropertyChecked(propName, checked);
     }
