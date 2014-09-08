@@ -167,8 +167,11 @@ QList<QWidget*> TableView::configurationWidgets() const {
 void TableView::graphChanged(tlp::Graph* g) {
   isNewGraph = true;
   QSet<QString> visibleProperties;
-  foreach(tlp::PropertyInterface* pi, propertiesEditor->visibleProperties()) {
-    visibleProperties.insert(QString::fromUtf8(pi->getName().c_str()));
+  if (g && propertiesEditor->getGraph() &&
+      (g->getRoot() == propertiesEditor->getGraph()->getRoot())) {
+    foreach(tlp::PropertyInterface* pi, propertiesEditor->visibleProperties()) {
+      visibleProperties.insert(QString::fromUtf8(pi->getName().c_str()));
+    }
   }
 
   GraphPropertiesModel<BooleanProperty>* model = new GraphPropertiesModel<BooleanProperty>(trUtf8("no selection"),g,false,_ui->filteringPropertyCombo);
@@ -184,13 +187,10 @@ void TableView::graphChanged(tlp::Graph* g) {
   if (_model != NULL) {
     for(int i=0; i < _model->columnCount(); ++i) {
       QString propName = _model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
-      bool checked = true;
+      bool checked = !visibleProperties.isEmpty() ?
+	visibleProperties.contains(propName) : true;
 
-      if (!visibleProperties.isEmpty()) {
-        checked = visibleProperties.contains(propName);
-      }
-
-      propertiesEditor->setPropertyChecked(i, checked);
+      propertiesEditor->setPropertyChecked(propName, checked);
     }
   }
 

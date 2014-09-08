@@ -407,6 +407,12 @@ void PropertiesEditor::setPropertyChecked(int index, bool state) {
   _sourceModel->setData(_sourceModel->index(index,0),state ? Qt::Checked : Qt::Unchecked,Qt::CheckStateRole);
 }
 
+void PropertiesEditor::setPropertyChecked(const QString& pName, bool state) {
+  int index = _sourceModel->rowOf(pName);
+  if (index != -1)
+    _sourceModel->setData(_sourceModel->index(index,0),state ? Qt::Checked : Qt::Unchecked,Qt::CheckStateRole);
+}
+
 PropertyInterface *PropertiesEditor::contextProperty() const {
   return _contextProperty;
 }

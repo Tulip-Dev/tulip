@@ -53,10 +53,14 @@ public:
   virtual ~PropertiesEditor();
 
   void setGraph(tlp::Graph* g);
+  tlp::Graph* getGraph() {
+    return _graph;
+  }
   QSet<tlp::PropertyInterface*> visibleProperties() const;
 
-
   void setPropertyChecked(int index, bool state);
+  void setPropertyChecked(const QString& pName, bool state);
+  
   QLineEdit* getPropertiesFilterEdit();
   void toLabels(tlp::PropertyInterface* prop,
                 bool nodes, bool edges, bool selectedOnly = false);
