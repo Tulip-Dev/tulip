@@ -97,7 +97,7 @@ static const string rangeMetricErrorMsg = "All values are the same";
 static const string AREA_PROPORTIONAL = "Area Proportional";
 /** \addtogroup size */
 
-/// Metric Mapping - Compute size of elements according to a metric.
+/// Size Mapping - Compute size of elements according to a metric.
 /** This plugin enables to set the size of the graph's elements
  *  according to a metric.
  *
@@ -105,7 +105,7 @@ static const string AREA_PROPORTIONAL = "Area Proportional";
  */
 class MetricSizeMapping:public SizeAlgorithm {
 public:
-  PLUGININFORMATION("Metric Mapping","Auber","08/08/2003","","2.0", "Size")
+  PLUGININFORMATION("Size Mapping","Auber","08/08/2003","","2.0", "Size")
   MetricSizeMapping(const PluginContext* context):SizeAlgorithm(context),
     entryMetric(NULL), entrySize(NULL), xaxis(true), yaxis(true), zaxis(true),
     mappingType(true), min(1), max(10), range(0), shift(0), nodeoredge(true) {

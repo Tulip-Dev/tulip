@@ -346,7 +346,7 @@ void BasicPluginsTest::testMetricSizeMapping() {
 
   SizeProperty size(graph);
   ds.set("property", &metric);
-  result = graph->applyPropertyAlgorithm("Metric Mapping", &size,
+  result = graph->applyPropertyAlgorithm("Size Mapping", &size,
                                          errorMsg, NULL, &ds);
   CPPUNIT_ASSERT(result);
 }
