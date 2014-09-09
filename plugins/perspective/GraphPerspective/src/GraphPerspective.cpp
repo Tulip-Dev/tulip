@@ -534,8 +534,7 @@ void GraphPerspective::importGraph() {
 
   if (wizard.exec() == QDialog::Accepted) {
     DataSet data = wizard.parameters();
-    std::string importPluginName = wizard.algorithm().toStdString();
-    importGraph(importPluginName, data);
+    importGraph(tlp::QStringToTlpString(wizard.algorithm()), data);
   }
 }
 

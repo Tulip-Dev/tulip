@@ -83,7 +83,7 @@ class PluginModel : public tlp::TulipModel {
     for(std::list<std::string>::iterator it = plugins.begin(); it != plugins.end(); ++it) {
       std::string name = *it;
       const Plugin& plugin = PluginLister::instance()->pluginInformation(name);
-      pluginTree[plugin.category().c_str()][plugin.group().c_str()].append(name.c_str());
+      pluginTree[tlp::tlpStringToQString(plugin.category())][tlp::tlpStringToQString(plugin.group())].append(tlp::tlpStringToQString(name));
     }
 
     foreach(QString cat, pluginTree.keys()) {
@@ -101,12 +101,12 @@ class PluginModel : public tlp::TulipModel {
 
         foreach(QString alg, pluginTree[cat][group]) {
           const Plugin& plugin =
-            PluginLister::instance()->pluginInformation(alg.toStdString());
+            PluginLister::instance()->pluginInformation(tlp::QStringToTlpString(alg));
           std::string infos = plugin.info();
 
           // set infos only if they contain more than one word
           if (infos.find(' ') != std::string::npos)
-            groupItem->addChild(alg, infos.c_str());
+            groupItem->addChild(alg, tlp::tlpStringToQString(infos));
           else
             groupItem->addChild(alg);
         }
@@ -192,9 +192,9 @@ public:
       f.setBold(true);
       return f;
     }
-    else if (role == Qt::DecorationRole && tlp::PluginLister::pluginExists(item->name.toStdString())) {
-      const tlp::Plugin& p = tlp::PluginLister::pluginInformation(item->name.toStdString());
-      QIcon icon(p.icon().c_str());
+    else if (role == Qt::DecorationRole && tlp::PluginLister::pluginExists(tlp::QStringToTlpString(item->name))) {
+      const tlp::Plugin& p = tlp::PluginLister::pluginInformation(tlp::QStringToTlpString(item->name));
+      QIcon icon(tlp::tlpStringToQString(p.icon()));
       return icon;
     }
 
@@ -207,7 +207,7 @@ public:
     if(index.isValid()) {
       TreeItem* item = (TreeItem*)index.internalPointer();
 
-      if (!PluginLister::instance()->pluginExists<PLUGIN>(item->name.toStdString()))
+      if (!PluginLister::instance()->pluginExists<PLUGIN>(tlp::QStringToTlpString(item->name)))
         result = Qt::ItemIsEnabled;
     }
 

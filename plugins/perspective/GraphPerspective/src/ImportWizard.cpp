@@ -68,8 +68,8 @@ void ImportWizard::algorithmSelected(const QModelIndex& index) {
   QAbstractItemModel* oldModel = _ui->parametersList->model();
   QAbstractItemModel* newModel = NULL;
 
-  if (PluginLister::pluginExists(alg.toStdString())) {
-    newModel = new ParameterListModel(PluginLister::getPluginParameters(alg.toStdString()));
+  if (PluginLister::pluginExists(tlp::QStringToTlpString(alg))) {
+    newModel = new ParameterListModel(PluginLister::getPluginParameters(tlp::QStringToTlpString(alg)));
   }
 
   _ui->parametersList->setModel(newModel);

@@ -70,11 +70,11 @@ QVariant SimplePluginListModel::data(const QModelIndex &index, int role) const {
     std::string name(_list[index.row()]);
 
     if(role == Qt::DisplayRole) {
-      return name.c_str();
+      return tlp::tlpStringToQString(name);
     }
     else if (role == Qt::DecorationRole) {
       const Plugin& p = PluginLister::pluginInformation(name);
-      QPixmap pix(p.icon().c_str());
+      QPixmap pix(tlp::tlpStringToQString(p.icon()));
       return pix;
     }
   }
