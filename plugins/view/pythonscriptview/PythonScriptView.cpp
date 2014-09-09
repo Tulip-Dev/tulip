@@ -703,6 +703,11 @@ void PythonScriptView::saveImportAllScripts() {
 }
 
 QString PythonScriptView::findFile(const QString &filePath) {
+  // We first check if filePath is empty to avoid a warning
+  // output in the call of FileInfo::absolutePath()
+  if (filePath.isEmpty())
+    return "";
+
   QFileInfo fileInfo(filePath);
   QString filepath = fileInfo.absolutePath();
   QString filename = fileInfo.fileName();
