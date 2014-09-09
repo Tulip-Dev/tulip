@@ -538,7 +538,7 @@ void GraphPerspective::importGraph() {
 }
 
 void GraphPerspective::createPanel(tlp::Graph* g) {
-    if (_graphs->empty())
+  if (_graphs->empty())
     return;
 
   PanelSelectionWizard wizard(_graphs,_mainWindow);

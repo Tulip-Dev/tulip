@@ -416,11 +416,12 @@ QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const
 // Graphs collection
 QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
   std::string name = graph->getName();
+
   if (name.empty()) {
-      stringstream ss;
-      ss << "graph_" << graph->getId();
-      name = ss.str();
-      graph->setName(name);
+    stringstream ss;
+    ss << "graph_" << graph->getId();
+    name = ss.str();
+    graph->setName(name);
   }
 
   return tlp::tlpStringToQString(name);
