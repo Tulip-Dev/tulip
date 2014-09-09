@@ -514,10 +514,9 @@ void GraphPerspective::importGraph(const std::string& module,
     std::string name;
 
     if (!g->getAttribute<std::string>("name", name)) {
-      QString n = QString(module.c_str()) + " - " +
-                  QString::fromUtf8(data.toString().c_str());
+      QString n = tlp::tlpStringToQString(module) + " - " + tlp::tlpStringToQString(data.toString());
       n.replace(QRegExp("[\\w]*::"),""); // remove words before "::"
-      g->setAttribute<std::string>("name", std::string(n.toUtf8().data()));
+      g->setName(tlp::QStringToTlpString(n));
     }
   }
   else {
@@ -539,7 +538,7 @@ void GraphPerspective::importGraph() {
 }
 
 void GraphPerspective::createPanel(tlp::Graph* g) {
-  if (_graphs->size() == 0)
+    if (_graphs->empty())
     return;
 
   PanelSelectionWizard wizard(_graphs,_mainWindow);
