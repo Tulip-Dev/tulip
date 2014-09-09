@@ -23,7 +23,7 @@ Contents:
    :maxdepth: 2
 
    installation
-   IDE
+  .. IDE
    tulip_lib
    tulip_tutorial
    graph_format
