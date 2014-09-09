@@ -63,7 +63,6 @@ signals:
   void changeBackgroundColor(QColor);
   void setGridDisplayMode();
   void showEdges(bool);
-  void ascendingOrderChanged(bool);
 
 private:
   bool _modifyingMetricList;
