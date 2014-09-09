@@ -20,6 +20,7 @@
 #include "ui_PluginInformationsListItem.h"
 
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QPainter>
 #include <QNetworkReply>
@@ -34,7 +35,7 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, 
   _ui->rebootFrame->hide();
   _ui->installationControls->hide();
 
-  PluginVersionInformation versionInfos = infos.installedVersion;
+  PluginVersionInformation versionInfos(infos.installedVersion);
 
   if (!versionInfos.isValid) {
     versionInfos = infos.availableVersion;

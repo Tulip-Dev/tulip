@@ -235,14 +235,14 @@ PluginInformation::PluginInformation(const PluginInformation &copy) {
 }
 
 void PluginInformation::fillLocalInfos(const Plugin& info) {
-  name = info.name().c_str();
-  category = info.category().c_str();
-  installedVersion.description = info.info().c_str();
-  installedVersion.icon = info.icon().c_str();
+  name = tlp::tlpStringToQString(info.name());
+  category = tlp::tlpStringToQString(info.category());
+  installedVersion.description = tlp::tlpStringToQString(info.info());
+  installedVersion.icon = tlp::tlpStringToQString(info.icon());
   installedVersion.version = info.release().c_str();
   installedVersion.date = info.date().c_str();
-  installedVersion.author = info.author().c_str();
-  installedVersion.libraryLocation = PluginLister::getPluginLibrary(info.name()).c_str();
+  installedVersion.author = tlp::tlpStringToQString(info.author());
+  installedVersion.libraryLocation = tlp::tlpStringToQString(PluginLister::getPluginLibrary(info.name()));
   std::list<tlp::Dependency> dependencies = PluginLister::instance()->getPluginDependencies(info.name());
 
   for (std::list<tlp::Dependency>::iterator it = dependencies.begin(); it != dependencies.end(); ++it) {

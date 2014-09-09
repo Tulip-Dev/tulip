@@ -36,6 +36,7 @@
 #include <tulip/DrawingTools.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GraphNeedsSavingObserver.h>
+#include <tulip/TlpQtTools.h>
 
 #include <fstream>
 
@@ -415,13 +416,14 @@ QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const
 // Graphs collection
 QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
   std::string name = graph->getName();
-
-  if (name == "") {
-    name = (trUtf8("graph_") + QString::number(graph->getId())).toStdString();
-    graph->setName(name);
+  if (name.empty()) {
+      stringstream ss;
+      ss << "graph_" << graph->getId();
+      name = ss.str();
+      graph->setName(name);
   }
 
-  return QString::fromUtf8(name.c_str());
+  return tlp::tlpStringToQString(name);
 }
 
 void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
