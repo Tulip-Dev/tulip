@@ -36,7 +36,6 @@ MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent): Q
   connect(_ui->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this, SIGNAL(changeBackgroundColor(QColor)));
   connect(_ui->gridDisplayCombo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(setGridDisplayMode()));
   connect(_ui->showedgesbox, SIGNAL(clicked(bool)), this, SIGNAL(showEdges(bool)));
-  connect(_ui->ascendingOrderCBox, SIGNAL(clicked(bool)), this, SIGNAL(setAscendingOrder(bool)));
 
   if (Perspective::instance())
     _ui->backgroundColorBtn->setDialogParent(Perspective::instance()->mainWindow());
