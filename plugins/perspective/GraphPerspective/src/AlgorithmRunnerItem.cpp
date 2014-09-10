@@ -75,7 +75,7 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
 
   // show infos in tooltip only if it contains more than one word
   if (infos.find(' ') != std::string::npos)
-    _ui->playButton->setToolTip(QString("<table><tr><td>%1:</td></tr><tr><td><i>%2</i></td></tr></table>").arg(tooltip).arg(infos.c_str()));
+    _ui->playButton->setToolTip(QString("<table><tr><td>%1:</td></tr><tr><td><i>%2</i></td></tr></table>").arg(tooltip).arg(tlp::tlpStringToQString(infos)));
   else
     _ui->playButton->setToolTip(tooltip);
 
@@ -310,7 +310,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
           g->pop();
           Observable::holdObservers();
           QString message("Mandatory property parameter '");
-          message += desc.getName().c_str();
+          message += tlp::tlpStringToQString(desc.getName());
           message += "'<br/> cannot be null";
           qCritical() << message;
           QMessageBox::critical(parentWidget(), name(), message);
@@ -531,12 +531,12 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
     if (result) {
       qDebug() << sstr.str().c_str();
       QMessageBox::information(parentWidget(), "Tulip test result",
-                               sstr.str().c_str());
+                               tlp::tlpStringToQString(sstr.str()));
     }
     else {
       qWarning() << sstr.str().c_str();
       QMessageBox::warning(parentWidget(), "Tulip test result",
-                           sstr.str().c_str());
+                           tlp::tlpStringToQString(sstr.str()));
     }
   }
 }
