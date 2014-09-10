@@ -364,6 +364,12 @@ void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant&
   // only if there is a non empty absolute path
   if (!desc.absolutePath.isEmpty())
     dlg->setDirectory(QFileInfo(desc.absolutePath).absolutePath());
+  // or if we are in gui testing mode
+  // where we must ensure that choosing the file is relative to
+  // the current directory to allow to run the gui tests
+  // from any relative unit_test/gui directory
+  else if (inGuiTestingMode())
+    dlg->setDirectory(QDir::currentPath());
 
   if (desc.type == TulipFileDescriptor::Directory) {
     dlg->setFileMode(QFileDialog::Directory);
