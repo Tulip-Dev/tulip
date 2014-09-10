@@ -127,6 +127,9 @@ public :
 public slots :
 
   void mapToPolygon();
+  void zoomIn();
+  void zoomOut();
+  void currentZoomChanged();
 
 protected :
 
@@ -162,6 +165,9 @@ private :
   GlMainWidget *glMainWidget;
   GlMainWidgetGraphicsItem *glWidgetItem;
   QComboBox *viewTypeComboBox;
+  QPushButton* zoomOutButton;
+  QPushButton* zoomInButton;
+  
   GlComposite *polygonEntity;
   GlSimpleEntity *planisphereEntity;
 

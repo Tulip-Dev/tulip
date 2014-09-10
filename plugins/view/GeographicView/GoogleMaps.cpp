@@ -298,6 +298,7 @@ static int clamp(int i, int minVal, int maxVal) {
 void GoogleMaps::setCurrentZoom(int zoom) {
   QString code = "map.setZoom(%1);";
   frame->evaluateJavaScript(code.arg(clamp(zoom, 0, 20)));
+  emit currentZoomChanged();
 }
 
 pair<double, double> GoogleMaps::getCurrentMapCenter() {

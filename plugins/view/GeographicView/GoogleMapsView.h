@@ -156,6 +156,10 @@ public slots :
 
   void viewTypeChanged(QString viewTypeName);
 
+  void zoomIn();
+  void zoomOut();
+  void currentZoomChanged();
+
 protected slots:
 
   void fillContextMenu(QMenu *, const QPointF &);

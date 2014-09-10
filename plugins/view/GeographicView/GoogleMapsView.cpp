@@ -71,9 +71,6 @@ void GoogleMapsView::setupUi() {
   sceneLayersConfigurationWidget=new SceneLayersConfigWidget();
   sceneLayersConfigurationWidget->setGlMainWidget(googleMapsGraphicsView->getGlMainWidget());
 
-
-  googleMapsGraphicsView->setContextMenuPolicy(Qt::ActionsContextMenu);
-
   centerViewAction = new QAction("Center view", this);
   connect(centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
 
@@ -121,6 +118,12 @@ void GoogleMapsView::viewTypeChanged(QString viewTypeName) {
 
 void GoogleMapsView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addAction(centerViewAction);
+  QAction* action = new QAction("Zoom +", this);
+  connect(action,SIGNAL(triggered()), this, SLOT(zoomOut()));
+  menu->addAction(action);
+  action = new QAction("Zoom -", this);
+  connect(action,SIGNAL(triggered()), this, SLOT(zoomIn()));
+  menu->addAction(action);
 }
 
 void GoogleMapsView::setState(const DataSet &dataSet) {
@@ -132,7 +135,7 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
   if (graph()->existProperty("latitude") && graph()->existProperty("longitude")) {
     geolocalisationConfigWidget->setLatLngGeoLocMethod();
     computeGeoLayout();
-  }
+   }
 
   QTimeLine timeLine(500);
   timeLine.start();
@@ -181,7 +184,6 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
   registerTriggers();
 }
 
-
 DataSet GoogleMapsView::state() const {
   DataSet dataSet;
   DataSet configurationWidget=googleMapsViewConfigWidget->state();
@@ -225,6 +227,18 @@ void GoogleMapsView::computeGeoLayout() {
 
 void GoogleMapsView::centerView() {
   googleMapsGraphicsView->centerView();
+}
+
+void GoogleMapsView::zoomIn() {
+  googleMapsGraphicsView->zoomIn();
+}
+
+void GoogleMapsView::zoomOut() {
+  googleMapsGraphicsView->zoomOut();
+}
+
+void GoogleMapsView::currentZoomChanged() {
+  googleMapsGraphicsView->currentZoomChanged();
 }
 
 QList<QWidget*> GoogleMapsView::configurationWidgets() const {
