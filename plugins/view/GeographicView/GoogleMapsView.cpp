@@ -135,7 +135,7 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
   if (graph()->existProperty("latitude") && graph()->existProperty("longitude")) {
     geolocalisationConfigWidget->setLatLngGeoLocMethod();
     computeGeoLayout();
-   }
+  }
 
   QTimeLine timeLine(500);
   timeLine.start();

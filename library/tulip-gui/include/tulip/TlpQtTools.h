@@ -130,7 +130,7 @@ TLP_QT_SCOPE void redirectErrorOutputToQCritical();
 // Gui test mode
 TLP_QT_SCOPE bool inGuiTestingMode();
 
-TLP_QT_SCOPE void setGuiTestingMode(bool); 
+TLP_QT_SCOPE void setGuiTestingMode(bool);
 
 }
 

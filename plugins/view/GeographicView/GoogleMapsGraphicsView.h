@@ -167,7 +167,7 @@ private :
   QComboBox *viewTypeComboBox;
   QPushButton* zoomOutButton;
   QPushButton* zoomInButton;
-  
+
   GlComposite *polygonEntity;
   GlSimpleEntity *planisphereEntity;
 
