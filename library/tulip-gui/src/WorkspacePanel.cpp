@@ -140,7 +140,7 @@ void WorkspacePanel::setView(tlp::View* view) {
   delete _view;
 
   _view = view;
-  _viewName = view->name().c_str();
+  _viewName = tlp::tlpStringToQString(view->name());
 
   QList<Interactor*> compatibleInteractors;
   QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
@@ -395,7 +395,7 @@ void WorkspacePanel::viewGraphSet(tlp::Graph* g) {
 #ifndef NDEBUG
 
   if(g) {
-    qDebug() << "Setting graph " << g->getName() << " for panel " << windowTitle();
+    qDebug() << "Setting graph " << tlp::tlpStringToQString(g->getName()) << " for panel " << windowTitle();
   }
 
 #endif // NDEBUG
@@ -414,7 +414,7 @@ void WorkspacePanel::graphComboIndexChanged() {
 #ifndef NDEBUG
 
   if (g != NULL) {
-    qDebug() << "selecting graph " << g->getName() << " in view";
+    qDebug() << "selecting graph " << tlp::tlpStringToQString(g->getName()) << " in view";
   }
 
 #endif /* NDEBUG */
