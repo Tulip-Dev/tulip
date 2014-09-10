@@ -414,7 +414,7 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   googleMaps->setAdresseSelectionDialog(addressSelectionDialog,addresseSelectionProxy);
 
   connect(googleMaps, SIGNAL(currentZoomChanged()),
-	  _googleMapsView, SLOT(currentZoomChanged()));
+          _googleMapsView, SLOT(currentZoomChanged()));
 
   QGraphicsProxyWidget *proxyGM = scene()->addWidget(googleMaps);
   proxyGM->setPos(0,0);
@@ -853,13 +853,14 @@ void GoogleMapsGraphicsView::paintEvent (QPaintEvent * event) {
       BoundingBox bb;
       Coord rightCoord = googleMaps->getPixelPosOnScreenForLatLng(180,180);
       Coord leftCoord = googleMaps->getPixelPosOnScreenForLatLng(0,0);
+
       if (rightCoord[0] - leftCoord[0]) {
-	float mapWidth=(width()/(rightCoord - leftCoord)[0])*180.;
-	float middleLng=googleMaps->getLatLngForPixelPosOnScreen(width()/2.,height()/2.).second*2.;
-	bb.expand(Coord(middleLng-mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(0,0).first*2.),0));
-	bb.expand(Coord(middleLng+mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(width(),height()).first*2.),0));
-	GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
-	sceneZoomAndPan.zoomAndPanAnimationStep(1);
+        float mapWidth=(width()/(rightCoord - leftCoord)[0])*180.;
+        float middleLng=googleMaps->getLatLngForPixelPosOnScreen(width()/2.,height()/2.).second*2.;
+        bb.expand(Coord(middleLng-mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(0,0).first*2.),0));
+        bb.expand(Coord(middleLng+mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(width(),height()).first*2.),0));
+        GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
+        sceneZoomAndPan.zoomAndPanAnimationStep(1);
       }
     }
 
@@ -1091,6 +1092,7 @@ void GoogleMapsGraphicsView::switchViewType() {
     BoundingBox bb;
     Coord rightCoord = googleMaps->getPixelPosOnScreenForLatLng(180,180);
     Coord leftCoord = googleMaps->getPixelPosOnScreenForLatLng(0,0);
+
     if (rightCoord[0] - leftCoord[0]) {
       float mapWidth=(width()/(rightCoord - leftCoord)[0])*180.;
       float middleLng=googleMaps->getLatLngForPixelPosOnScreen(width()/2.,height()/2.).second*2.;

@@ -68,6 +68,7 @@ using namespace std;
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(NULL), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(NULL) {
   Q_INIT_RESOURCE(GraphPerspective);
+
   if (c && ((PerspectiveContext *) c)->parameters.contains("gui_testing")) {
     tlp::setGuiTestingMode(true);
     // we must ensure that choosing a file is relative to
@@ -659,6 +660,7 @@ void GraphPerspective::open(QString fileName) {
 
   if(!fileName.isEmpty()) {
     QFileInfo fileInfo(fileName);
+
     // we must ensure that choosing a file is relative to
     // the current directory to allow to run the gui tests
     // from any relative unit_test/gui directory
