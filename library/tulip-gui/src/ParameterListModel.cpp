@@ -19,6 +19,7 @@
 #include <tulip/ParameterListModel.h>
 #include <tulip/ForEach.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QColor>
 #include <QModelIndex>
@@ -69,9 +70,9 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
   const ParameterDescription& infos = _params[index.row()];
 
   if (role == Qt::ToolTipRole)
-    return infos.getHelp().c_str();
+    return tlp::tlpStringToQString(infos.getHelp());
   else if (role == Qt::WhatsThisRole)
-    return infos.getHelp().c_str();
+    return tlp::tlpStringToQString(infos.getHelp());
   else if (role == Qt::BackgroundRole) {
     if (infos.isMandatory())
       return QColor(255, 255, 222);
@@ -123,7 +124,7 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
         return QColor(222, 255, 222);
     }
     else if (role == Qt::ToolTipRole)
-      return infos.getHelp().c_str();
+      return tlp::tlpStringToQString(infos.getHelp());
   }
 
   return TulipModel::headerData(section,orientation,role);
