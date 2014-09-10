@@ -94,6 +94,9 @@ public :
     this->addresseSelectionProxy=addresseSelectionProxy;
   }
 
+signals:
+  void currentZoomChanged();
+
 private slots :
 
   void triggerLoading();

@@ -29,6 +29,7 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/TulipViewSettings.h>
 
+#include <QPushButton>
 #include <QTextStream>
 #include <QTimeLine>
 #include <QMessageBox>
@@ -412,6 +413,9 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   googleMaps->setProgressWidget(progressWidget);
   googleMaps->setAdresseSelectionDialog(addressSelectionDialog,addresseSelectionProxy);
 
+  connect(googleMaps, SIGNAL(currentZoomChanged()),
+	  _googleMapsView, SLOT(currentZoomChanged()));
+
   QGraphicsProxyWidget *proxyGM = scene()->addWidget(googleMaps);
   proxyGM->setPos(0,0);
 
@@ -428,17 +432,27 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
 
   scene()->addItem(glWidgetItem);
 
+  // combo box to choose the map type
   viewTypeComboBox=new QComboBox;
   viewTypeComboBox->addItems(QStringList()<<"RoadMap"<<"RoadMap"<<"Satellite" << "Terrain" << "Hybrid" <<"Polygon" << "Globe");
   viewTypeComboBox->insertSeparator(1);
-  QGraphicsProxyWidget *viewTypeProxyWidget=new QGraphicsProxyWidget;
-  viewTypeProxyWidget->setWidget(viewTypeComboBox);
-  viewTypeProxyWidget->setPos(20,20);
-  scene()->addItem(viewTypeProxyWidget);
+  scene()->addWidget(viewTypeComboBox)->setPos(20,20);
   connect(viewTypeComboBox,SIGNAL(currentIndexChanged(QString)),_googleMapsView,SLOT(viewTypeChanged(QString)));
+
+  // 2 push buttons
+  // zoom +
+  zoomInButton = new QPushButton(QIcon(":/zoom+.png"), "");
+  zoomInButton->setFixedSize(29, 27);
+  zoomInButton->setContentsMargins(0, 0, 0, 0);
+  connect(zoomInButton, SIGNAL(pressed()), _googleMapsView, SLOT(zoomIn()));
+  scene()->addWidget(zoomInButton)->setPos(20, 50);
+  // zoom -
+  zoomOutButton = new QPushButton(QIcon(":/zoom-.png"), "");
+  zoomOutButton->setFixedSize(29, 27);
+  zoomOutButton->setContentsMargins(0, 0, 0, 0);
+  connect(zoomOutButton, SIGNAL(pressed()), _googleMapsView, SLOT(zoomOut()));
+  scene()->addWidget(zoomOutButton)->setPos(20, 76);
 }
-
-
 
 GoogleMapsGraphicsView::~GoogleMapsGraphicsView() {
   if (geocodingActive) {
@@ -624,6 +638,19 @@ void GoogleMapsGraphicsView::mapToPolygon() {
   }
 
   delete nodesIt;
+}
+
+void GoogleMapsGraphicsView::zoomIn() {
+  googleMaps->setCurrentZoom(googleMaps->getCurrentMapZoom()+1);
+}
+
+void GoogleMapsGraphicsView::zoomOut() {
+  googleMaps->setCurrentZoom(googleMaps->getCurrentMapZoom()-1);
+}
+
+void GoogleMapsGraphicsView::currentZoomChanged() {
+  zoomInButton->setEnabled(googleMaps->getCurrentMapZoom() != 20);
+  zoomOutButton->setEnabled(googleMaps->getCurrentMapZoom() != 0);
 }
 
 GlGraphComposite *GoogleMapsGraphicsView::getGlGraphComposite() const {
@@ -824,12 +851,16 @@ void GoogleMapsGraphicsView::paintEvent (QPaintEvent * event) {
       currentMapZoom = mapZoom;
 
       BoundingBox bb;
-      float mapWidth=(width()/(googleMaps->getPixelPosOnScreenForLatLng(180,180)-googleMaps->getPixelPosOnScreenForLatLng(0,0))[0])*180.;
-      float middleLng=googleMaps->getLatLngForPixelPosOnScreen(width()/2.,height()/2.).second*2.;
-      bb.expand(Coord(middleLng-mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(0,0).first*2.),0));
-      bb.expand(Coord(middleLng+mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(width(),height()).first*2.),0));
-      GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
-      sceneZoomAndPan.zoomAndPanAnimationStep(1);
+      Coord rightCoord = googleMaps->getPixelPosOnScreenForLatLng(180,180);
+      Coord leftCoord = googleMaps->getPixelPosOnScreenForLatLng(0,0);
+      if (rightCoord[0] - leftCoord[0]) {
+	float mapWidth=(width()/(rightCoord - leftCoord)[0])*180.;
+	float middleLng=googleMaps->getLatLngForPixelPosOnScreen(width()/2.,height()/2.).second*2.;
+	bb.expand(Coord(middleLng-mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(0,0).first*2.),0));
+	bb.expand(Coord(middleLng+mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(width(),height()).first*2.),0));
+	GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
+	sceneZoomAndPan.zoomAndPanAnimationStep(1);
+      }
     }
 
     glWidgetItem->setRedrawNeeded(true);
@@ -1058,12 +1089,16 @@ void GoogleMapsGraphicsView::switchViewType() {
     }
 
     BoundingBox bb;
-    float mapWidth=(width()/(googleMaps->getPixelPosOnScreenForLatLng(180,180)-googleMaps->getPixelPosOnScreenForLatLng(0,0))[0])*180.;
-    float middleLng=googleMaps->getLatLngForPixelPosOnScreen(width()/2.,height()/2.).second*2.;
-    bb.expand(Coord(middleLng-mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(0,0).first*2.),0));
-    bb.expand(Coord(middleLng+mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(width(),height()).first*2.),0));
-    GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
-    sceneZoomAndPan.zoomAndPanAnimationStep(1);
+    Coord rightCoord = googleMaps->getPixelPosOnScreenForLatLng(180,180);
+    Coord leftCoord = googleMaps->getPixelPosOnScreenForLatLng(0,0);
+    if (rightCoord[0] - leftCoord[0]) {
+      float mapWidth=(width()/(rightCoord - leftCoord)[0])*180.;
+      float middleLng=googleMaps->getLatLngForPixelPosOnScreen(width()/2.,height()/2.).second*2.;
+      bb.expand(Coord(middleLng-mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(0,0).first*2.),0));
+      bb.expand(Coord(middleLng+mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(width(),height()).first*2.),0));
+      GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
+      sceneZoomAndPan.zoomAndPanAnimationStep(1);
+    }
   }
   else {
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
