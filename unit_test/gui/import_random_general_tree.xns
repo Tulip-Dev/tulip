@@ -278,6 +278,12 @@ NEW-WINDOW:461,197:56623140,56623140,14704677,0,0,0:0x0+879+458:0,0:Import
 7,3,0,0,0,116,0,20176454,10,AT Translated Set 2 keyboard
 0,3,0,0,0,116,0,20176454
 6,3,0,0,0,116,0,20176454,3,Virtual core keyboard
+7,2,0,0,0,116,0,20176545,10,AT Translated Set 2 keyboard
+0,2,0,0,0,116,0,20176545
+6,2,0,0,0,116,0,20176545,3,Virtual core keyboard
+7,3,0,0,0,116,0,20176554,10,AT Translated Set 2 keyboard
+0,3,0,0,0,116,0,20176554
+6,3,0,0,0,116,0,20176554,3,Virtual core keyboard
 7,2,0,0,0,36,0,20177543,10,AT Translated Set 2 keyboard
 0,2,0,0,0,36,0,20177543
 6,2,0,0,0,36,0,20177543,3,Virtual core keyboard
