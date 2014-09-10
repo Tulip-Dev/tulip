@@ -468,4 +468,15 @@ void redirectErrorOutputToQCritical() {
   tlp::setErrorOutput(*qErrorStream);
 }
 
+// Gui Test mode
+bool GuiTestingMode = false;
+
+bool inGuiTestingMode() {
+  return GuiTestingMode;
 }
+
+void setGuiTestingMode(bool enabled) {
+  GuiTestingMode = enabled;
+}
+
+} // namespace tlp
