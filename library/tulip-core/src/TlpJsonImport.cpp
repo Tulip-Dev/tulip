@@ -504,6 +504,10 @@ public:
     addInParameter<std::string>("file::filename", "","");
   }
 
+  std::string icon() const {
+    return ":/tulip/gui/icons/json32x32.png";
+  }
+  
   virtual bool importGraph() {
     Observable::holdObservers();
     std::string filename;
