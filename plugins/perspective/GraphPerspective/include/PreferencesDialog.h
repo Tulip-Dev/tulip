@@ -38,7 +38,7 @@ public slots:
   void writeSettings();
   void readSettings();
   void cellChanged(int row, int column);
-
+  void randomSeedCheckChanged(int);
 };
 
 #endif // PREFERENCESDIALOG_H
