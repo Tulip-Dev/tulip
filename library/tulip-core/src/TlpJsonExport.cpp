@@ -83,6 +83,10 @@ public:
     return "json";
   }
 
+    std::string icon() const {
+    return ":/tulip/gui/icons/json32x32.png";
+  }
+
   /**
    * @brief Mandatory constructor to initialize the AlgorithmContext.
    *
