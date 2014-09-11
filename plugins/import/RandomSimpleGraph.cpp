@@ -145,6 +145,7 @@ public:
     graph->addNodes(nbNodes, tmpVect);
 
     graph->reserveEdges(myGraph.size());
+
     for (set<edgeS>::iterator it=myGraph.begin(); it!=myGraph.end(); ++it)   {
       graph->addEdge(tmpVect[it->source],tmpVect[it->target]);
     }
