@@ -188,6 +188,7 @@ public:
 
   unsigned int seedOfRandomSequence() const;
   void setSeedOfRandomSequence(unsigned int);
+  void initSeedOfRandomSequence();
 
   bool warnUserAboutGraphicsCard() const;
   void setWarnUserAboutGraphicsCard(bool);

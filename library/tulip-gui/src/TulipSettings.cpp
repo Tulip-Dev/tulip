@@ -388,6 +388,10 @@ void TulipSettings::setSeedOfRandomSequence(unsigned int seed) {
   setValue(SeedForRandomSequenceEntry, seed);
 }
 
+void TulipSettings::initSeedOfRandomSequence() {
+  tlp::setSeedOfRandomSequence(seedOfRandomSequence());
+}
+
 bool TulipSettings::warnUserAboutGraphicsCard() const {
   return value(WarnUserAboutGraphicsCardEntry,true).toBool();
 }

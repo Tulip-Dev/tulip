@@ -286,6 +286,7 @@ public:
 void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   QLocale::setDefault(QLocale(QLocale::English));
   TulipSettings::instance().applyProxySettings();
+  TulipSettings::instance().initSeedOfRandomSequence();
 
   if (TulipSettings::instance().isFirstRun()) {
     TulipSettings::instance().setFirstRun(false);

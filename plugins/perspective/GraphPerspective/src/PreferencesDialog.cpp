@@ -32,6 +32,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent): QDialog(parent), _ui(new 
   _ui->setupUi(this);
   _ui->graphDefaultsTable->setItemDelegate(new tlp::TulipItemDelegate(_ui->graphDefaultsTable));
   connect(_ui->graphDefaultsTable, SIGNAL(cellChanged(int, int)), this, SLOT(cellChanged(int, int)));
+  connect(_ui->randomSeedCheck, SIGNAL(stateChanged(int)), this, SLOT(randomSeedCheckChanged(int)));
 }
 
 PreferencesDialog::~PreferencesDialog() {
@@ -163,10 +164,10 @@ void PreferencesDialog::readSettings() {
   unsigned int seed;
   tlp::setSeedOfRandomSequence(seed = TulipSettings::instance().seedOfRandomSequence());
   // UINT_MAX seed value means the seed is random
-  bool isSeedRandom = seed == UINT_MAX;
+  bool isSeedRandom = (seed == UINT_MAX);
   _ui->randomSeedCheck->setChecked(!isSeedRandom);
   _ui->randomSeedEdit->setEnabled(!isSeedRandom);
-  _ui->randomSeedEdit->setText(QString::number(isSeedRandom ? 0 : seed));
+  _ui->randomSeedEdit->setText(isSeedRandom ? QString() : QString::number(seed));
 }
 
 void PreferencesDialog::cellChanged(int row, int column) {
@@ -177,3 +178,7 @@ void PreferencesDialog::cellChanged(int row, int column) {
   }
 }
 
+void PreferencesDialog::randomSeedCheckChanged(int state) {
+  if (state == Qt::Checked && _ui->randomSeedEdit->text().isEmpty())
+    _ui->randomSeedEdit->setText("1");
+}
