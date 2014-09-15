@@ -152,6 +152,61 @@ void BasicPluginsTest::testExportGml() {
   CPPUNIT_ASSERT(exportGraph(graph, os, "GML Export", ds, NULL));
 }
 //==========================================================
+void BasicPluginsTest::testImportTLP() {
+  DataSet ds;
+  ds.set("file::filename", string("data/toto.tlp"));
+  Graph* g = importGraph("TLP Import", ds, NULL, graph);
+  CPPUNIT_ASSERT(g == NULL);
+  ds.set("file::filename", string("data/tlp_importexport_test.tlp"));
+  g = importGraph("TLP Import", ds, NULL, graph);
+  CPPUNIT_ASSERT(g == graph);
+}
+//==========================================================
+void BasicPluginsTest::testExportTLP() {
+  DataSet ds;
+  ds.set("file::filename", string("data/tlp_importexport_test.tlp"));
+  Graph* g = importGraph("TLP Import", ds, NULL, graph);
+  CPPUNIT_ASSERT(g == graph);
+  std::stringstream os;
+  CPPUNIT_ASSERT(exportGraph(graph, os, "TLP Export", ds, NULL));
+}
+//==========================================================
+void BasicPluginsTest::testExportImportTLPB() {
+  DataSet ds;
+  ds.set("file::filename", string("data/tlp_importexport_test.tlp"));
+  Graph* g = importGraph("TLP Import", ds, NULL, graph);
+  CPPUNIT_ASSERT(g == graph);
+  std::ofstream os("tlpb_importexport_test.tlpb");
+  CPPUNIT_ASSERT(exportGraph(graph, os, "TLPB Export", ds, NULL));
+  os.close();
+  tearDown();
+  setUp();
+  ds.set("file::filename", string("data/toto.tlpb"));
+  g = importGraph("TLPB Import", ds, NULL, graph);
+  CPPUNIT_ASSERT(g == NULL);
+  ds.set("file::filename", string("tlpb_importexport_test.tlpb"));
+  g = importGraph("TLPB Import", ds, NULL, graph);
+  CPPUNIT_ASSERT(g == graph);
+}
+//==========================================================
+void BasicPluginsTest::testExportImportJSON() {
+  DataSet ds;
+  ds.set("file::filename", string("data/tlp_importexport_test.tlp"));
+  Graph* g = importGraph("TLP Import", ds, NULL, graph);
+  CPPUNIT_ASSERT(g == graph);
+  std::ofstream os("json_importexport_test.json");
+  CPPUNIT_ASSERT(exportGraph(graph, os, "JSON Export", ds, NULL));
+  os.close();
+  tearDown();
+  setUp();
+  ds.set("file::filename", string("data/toto.json"));
+  g = importGraph("JSON Import", ds, NULL, graph);
+  CPPUNIT_ASSERT(g == NULL);
+  ds.set("file::filename", string("json_importexport_test.json"));
+  g = importGraph("JSON Import", ds, NULL, graph);
+  CPPUNIT_ASSERT(g == graph);
+}
+//==========================================================
 void BasicPluginsTest::testImportFileSystem() {
   DataSet ds;
   ds.set("dir::directory", string("toto"));
