@@ -42,6 +42,10 @@ class BasicPluginsTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testImportGEXF);
   CPPUNIT_TEST(testImportGml);
   CPPUNIT_TEST(testExportGml);
+  CPPUNIT_TEST(testImportTLP);
+  CPPUNIT_TEST(testExportTLP);
+  CPPUNIT_TEST(testExportImportTLPB);
+  CPPUNIT_TEST(testExportImportJSON);
   CPPUNIT_TEST(testImportFileSystem);
   CPPUNIT_TEST(testImportAdjacencyMatrix);
   CPPUNIT_TEST(testImportPajek);
@@ -83,6 +87,10 @@ public:
   void testImportGEXF();
   void testImportGml();
   void testExportGml();
+  void testImportTLP();
+  void testExportTLP();
+  void testExportImportTLPB();
+  void testExportImportJSON();
   void testImportFileSystem();
   void testImportAdjacencyMatrix();
   void testImportPajek();
