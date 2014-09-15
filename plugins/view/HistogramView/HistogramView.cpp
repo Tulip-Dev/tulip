@@ -71,7 +71,7 @@ HistogramView::HistogramView(const PluginContext *) :
   emptyGlGraphComposite(NULL), histogramsComposite(NULL), labelsComposite(NULL), axisComposite(NULL), smallMultiplesView(true), mainLayer(NULL), detailedHistogram(NULL),
   sceneRadiusBak(0), zoomFactorBak(0),
   noDimsLabel(NULL), noDimsLabel2(NULL), emptyRect(NULL), emptyRect2(NULL), lastViewWindowWidth(0),
-  lastViewWindowHeight(0), interactorsActivated(false), optionsMenu(NULL), centerViewAction(NULL), isConstruct(false), lastNbHistograms(0), dataLocation(NODE),needUpdateHistogram(false)  {
+  lastViewWindowHeight(0), interactorsActivated(false), isConstruct(false), lastNbHistograms(0), dataLocation(NODE),needUpdateHistogram(false)  {
   ++histoViewInstancesCount;
 }
 
@@ -176,10 +176,6 @@ void HistogramView::setState(const DataSet &dataSet) {
     histoOptionsWidget = new HistoOptionsWidget();
     propertiesSelectionWidget->setWidgetEnabled(true);
     histoOptionsWidget->setWidgetEnabled(false);
-    optionsMenu = new QMenu(tr("Options"));
-    centerViewAction = new QAction(tr("Center view"), this);
-    optionsMenu->addAction(centerViewAction);
-    connect(centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
   }
 
   if (binTextureId == 0) {
@@ -322,12 +318,6 @@ DataSet HistogramView::state() const {
 
   dataSet.set("histo detailed name", histoDetailedNamed);
   return dataSet;
-}
-
-void HistogramView::fillContextMenu(QMenu *menu, const QPointF &point) {
-  menu->addAction(optionsMenu->menuAction());
-  menu->addSeparator();
-  GlMainView::fillContextMenu(menu,point);
 }
 
 bool HistogramView::eventFilter(QObject *object, QEvent *event) {

@@ -131,8 +131,6 @@ public slots :
 
 protected slots :
 
-  void fillContextMenu(QMenu *menu, const QPointF &point);
-
 private :
 
   void interactorsInstalled(const QList<tlp::Interactor*>&);
@@ -178,9 +176,6 @@ private :
   int lastViewWindowWidth, lastViewWindowHeight;
 
   bool interactorsActivated;
-
-  QMenu *optionsMenu;
-  QAction *centerViewAction;
 
   static GLuint binTextureId;
   static unsigned int histoViewInstancesCount;
