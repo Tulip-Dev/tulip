@@ -41,7 +41,6 @@ void TLPBExport::writeAttributes(ostream &os, Graph *g) {
   const DataSet& attributes = g->getAttributes();
 
   if (!attributes.empty()) {
-
     // If nodes and edges are stored as graph attributes
     // we need to update their ids before serializing them
     // as nodes and edges have been reindexed
@@ -260,7 +259,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
   }
   // write properties
   {
-    pluginProgress->setComment("writing subgraphs...");
+    pluginProgress->setComment("writing properties...");
     unsigned int numProperties = 0;
     std::vector<PropertyInterface*> props;
     PropertyInterface* prop;
