@@ -54,6 +54,8 @@ StringCollection.cpp
 StringProperty.cpp
 TLPExport.cpp
 TLPImport.cpp
+TLPBExport.cpp
+TLPBImport.cpp
 TlpTools.cpp
 TreeTest.cpp
 TriconnectedTest.cpp
