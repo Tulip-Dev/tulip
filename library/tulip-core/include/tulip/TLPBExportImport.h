@@ -65,7 +65,7 @@ public:
   std::string fileExtension() const {
     return "tlpb";
   }
-  
+
   TLPBExport(const tlp::PluginContext *context) :ExportModule(context) {}
   ~TLPBExport() {}
 
@@ -100,7 +100,7 @@ public:
 class TLPBImport:public tlp::ImportModule {
 public:
   PLUGININFORMATION("TLPB Import", "David Auber, Patrick Mary", "13/07/2012",
-		    "Reads a graph in Tulip binary format", "1.0", "File")
+                    "Reads a graph in Tulip binary format", "1.0", "File")
 
   TLPBImport(tlp::PluginContext* context);
   ~TLPBImport() {}
@@ -112,7 +112,7 @@ public:
   std::list<std::string> fileExtensions() const {
     return std::list<std::string>(1, "tlpb");
   }
-  
+
   bool importGraph();
 };
 
@@ -132,12 +132,12 @@ struct TLPBHeader {
   unsigned int numEdges;
 
   TLPBHeader(unsigned int nbN = 0, unsigned int nbE = 0)
-  : magicNumber(TLPB_MAGIC_NUMBER), major(TLPB_MAJOR), minor(TLPB_MINOR), numNodes(nbN), numEdges(nbE) {}
+    : magicNumber(TLPB_MAGIC_NUMBER), major(TLPB_MAJOR), minor(TLPB_MINOR), numNodes(nbN), numEdges(nbE) {}
 
   bool checkCompatibility() {
     return ((magicNumber == TLPB_MAGIC_NUMBER) &&
-	    (major == TLPB_MAJOR) &&
-	    (minor <= TLPB_MINOR));
+            (major == TLPB_MAJOR) &&
+            (minor <= TLPB_MINOR));
   }
 };
 

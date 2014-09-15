@@ -523,16 +523,16 @@ public:
 
       struct stat infoEntry;
       bool result = (stat(filename.c_str(),&infoEntry) == 0);
-    
+
       if (!result) {
-	std::stringstream ess;
-	ess << filename.c_str() << ": " << strerror(errno);
-	pluginProgress->setError(ess.str());
-	tlp::error() << pluginProgress->getError() << std::endl;
-	return false;
+        std::stringstream ess;
+        ess << filename.c_str() << ": " << strerror(errno);
+        pluginProgress->setError(ess.str());
+        tlp::error() << pluginProgress->getError() << std::endl;
+        return false;
       }
-      
-     _proxy = new YajlParseFacade(_progress);
+
+      _proxy = new YajlParseFacade(_progress);
       parse(filename);
     }
 
