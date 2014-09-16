@@ -332,9 +332,12 @@ public:
       string nDefault = prop->getNodeDefaultStringValue();
       string eDefault = prop->getEdgeDefaultStringValue();
 
+      bool isPathViewProp =
+	(prop->getName() == string("viewFont") ||
+	 prop->getName() == string("viewTexture"));
+
       // replace real path with symbolic one using TulipBitmapDir
-      if (prop->getName() == string("viewFont") ||
-          prop->getName() == string("viewTexture")) {
+      if (isPathViewProp) {
         size_t pos = nDefault.find(TulipBitmapDir);
 
         if(pos != string::npos)
@@ -360,8 +363,7 @@ public:
         string tmp = prop->getNodeStringValue(itn);
 
         // replace real path with symbolic one using TulipBitmapDir
-        if (prop->getName() == string("viewFont") ||
-            prop->getName() == string("viewTexture")) {
+        if (isPathViewProp) {
           size_t pos = tmp.find(TulipBitmapDir);
 
           if (pos != string::npos)
@@ -410,8 +412,7 @@ public:
           // replace real path with symbolic one using TulipBitmapDir
           string tmp = prop->getEdgeStringValue(ite);
 
-          if (prop->getName() == string("viewFont") ||
-              prop->getName() == string("viewTexture")) {
+          if (isPathViewProp) {
             size_t pos = tmp.find(TulipBitmapDir);
 
             if (pos != string::npos)
