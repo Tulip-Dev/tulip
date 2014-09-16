@@ -333,8 +333,8 @@ public:
       string eDefault = prop->getEdgeDefaultStringValue();
 
       bool isPathViewProp =
-	(prop->getName() == string("viewFont") ||
-	 prop->getName() == string("viewTexture"));
+        (prop->getName() == string("viewFont") ||
+         prop->getName() == string("viewTexture"));
 
       // replace real path with symbolic one using TulipBitmapDir
       if (isPathViewProp) {

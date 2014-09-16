@@ -204,7 +204,7 @@ struct TLPGraphBuilder:public TLPTrue {
                                     const std::string& propertyType,
                                     const std::string& propertyName,
                                     bool& isGraphProperty,
-				    bool& isPathViewProperty) {
+                                    bool& isPathViewProperty) {
     Graph* g = clusterId ? getSubGraph(clusterId) : _graph;
 
     if (g == NULL)
@@ -237,7 +237,7 @@ struct TLPGraphBuilder:public TLPTrue {
 
     if (propertyType==STRING) {
       isPathViewProperty =
-	((propertyName == "viewFont") || (propertyName == "viewTexture"));
+        ((propertyName == "viewFont") || (propertyName == "viewTexture"));
       return g->getLocalProperty<StringProperty>(propertyName);
     }
 
@@ -735,7 +735,7 @@ struct TLPPropertyBuilder:public TLPFalse {
     assert(property == NULL);
     property = graphBuilder->createProperty(clusterId, propertyType,
                                             propertyName, isGraphProperty,
-					    isPathViewProperty);
+                                            isPathViewProperty);
   }
   bool addInt(const int id)  {
     assert(id != INT_MAX);

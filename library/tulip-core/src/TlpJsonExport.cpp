@@ -224,26 +224,30 @@ public:
 
       _writer.writeString(NodeDefaultToken);
       bool writingPathViewProperty =
-	(property->getName() == string("viewFont") ||
-	 property->getName() == string("viewTexture"));
+        (property->getName() == string("viewFont") ||
+         property->getName() == string("viewTexture"));
 
       string dsValue = property->getNodeDefaultStringValue();
-      if (writingPathViewProperty) {
-	size_t pos = dsValue.find(TulipBitmapDir);
 
-	if(pos != string::npos)
+      if (writingPathViewProperty) {
+        size_t pos = dsValue.find(TulipBitmapDir);
+
+        if(pos != string::npos)
           dsValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
       }
+
       _writer.writeString(dsValue);
 
       _writer.writeString(EdgeDefaultToken);
       dsValue = property->getEdgeDefaultStringValue();
-      if (writingPathViewProperty) {
-	size_t pos = dsValue.find(TulipBitmapDir);
 
-	if(pos != string::npos)
+      if (writingPathViewProperty) {
+        size_t pos = dsValue.find(TulipBitmapDir);
+
+        if(pos != string::npos)
           dsValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
       }
+
       _writer.writeString(dsValue);
 
       if(property->numberOfNonDefaultValuatedNodes() > 0) {
@@ -253,13 +257,15 @@ public:
           stringstream temp;
           temp << _newNodeId.get(n.id);
           _writer.writeString(temp.str());
-	  string sValue = property->getNodeStringValue(n);
-	  if (writingPathViewProperty) {
-	    size_t pos = sValue.find(TulipBitmapDir);
+          string sValue = property->getNodeStringValue(n);
 
-	    if(pos != string::npos)
-	      sValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-	  }
+          if (writingPathViewProperty) {
+            size_t pos = sValue.find(TulipBitmapDir);
+
+            if(pos != string::npos)
+              sValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+          }
+
           _writer.writeString(sValue);
         }
         _writer.writeMapClose();
@@ -272,13 +278,15 @@ public:
           stringstream temp;
           temp << _newEdgeId.get(e.id);
           _writer.writeString(temp.str());
-	  string sValue = property->getEdgeStringValue(e);
-	  if (writingPathViewProperty) {
-	    size_t pos = sValue.find(TulipBitmapDir);
+          string sValue = property->getEdgeStringValue(e);
 
-	    if(pos != string::npos)
-	      sValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-	  }
+          if (writingPathViewProperty) {
+            size_t pos = sValue.find(TulipBitmapDir);
+
+            if(pos != string::npos)
+              sValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+          }
+
           _writer.writeString(sValue);
         }
         _writer.writeMapClose();

@@ -334,9 +334,9 @@ public:
         }
 
         _currentProperty = _graph->getLocalProperty(_propertyName, value);
-	_parsingPathViewProperty =
-	  (_propertyName == std::string("viewFont") ||
-	   _propertyName == std::string("viewTexture"));
+        _parsingPathViewProperty =
+          (_propertyName == std::string("viewFont") ||
+           _propertyName == std::string("viewTexture"));
 
         if(value == "graph") {
           _graphProperties[_graph] = TemporaryGraphProperty();
@@ -350,38 +350,40 @@ public:
 
       if(_currentProperty) {
         if(_parsingPropertyDefaultNodeValue) {
-	  if (_parsingPathViewProperty) {
-	    // if needed replace symbolic path by real path
-	    size_t pos = value.find("TulipBitmapDir/");
+          if (_parsingPathViewProperty) {
+            // if needed replace symbolic path by real path
+            size_t pos = value.find("TulipBitmapDir/");
 
-	    if (pos!=std::string::npos) {
-	      string dValue(value);
-	      dValue.replace(pos, 15, TulipBitmapDir);
-	      _currentProperty->setAllNodeStringValue(dValue);
-	    }
-	    else
-	      _currentProperty->setAllNodeStringValue(value);
-	  }
-	  else
-	    _currentProperty->setAllNodeStringValue(value);
+            if (pos!=std::string::npos) {
+              string dValue(value);
+              dValue.replace(pos, 15, TulipBitmapDir);
+              _currentProperty->setAllNodeStringValue(dValue);
+            }
+            else
+              _currentProperty->setAllNodeStringValue(value);
+          }
+          else
+            _currentProperty->setAllNodeStringValue(value);
+
           _parsingPropertyDefaultNodeValue = false;
         }
 
         if(_parsingPropertyDefaultEdgeValue) {
-	  if (_parsingPathViewProperty) {
-	    // if needed replace symbolic path by real path
-	    size_t pos = value.find("TulipBitmapDir/");
+          if (_parsingPathViewProperty) {
+            // if needed replace symbolic path by real path
+            size_t pos = value.find("TulipBitmapDir/");
 
-	    if (pos!=std::string::npos) {
-	      string dValue(value);
-	      dValue.replace(pos, 15, TulipBitmapDir);
-	      _currentProperty->setAllEdgeStringValue(dValue);
-	    }
-	    else
-	      _currentProperty->setAllEdgeStringValue(value);
-	  }
-	  else
-	    _currentProperty->setAllEdgeStringValue(value);
+            if (pos!=std::string::npos) {
+              string dValue(value);
+              dValue.replace(pos, 15, TulipBitmapDir);
+              _currentProperty->setAllEdgeStringValue(dValue);
+            }
+            else
+              _currentProperty->setAllEdgeStringValue(value);
+          }
+          else
+            _currentProperty->setAllEdgeStringValue(value);
+
           _parsingPropertyDefaultEdgeValue = false;
         }
 
@@ -394,40 +396,42 @@ public:
           assert(_currentIdentifier != UINT_MAX);
           assert(_currentProperty);
           node n(_currentIdentifier);
-	  if (_parsingPathViewProperty) {
-	    // if needed replace symbolic path by real path
-	    size_t pos = value.find("TulipBitmapDir/");
 
-	    if (pos!=std::string::npos) {
-	      string nValue(value);
-	      nValue.replace(pos, 15, TulipBitmapDir);
-	      _currentProperty->setNodeStringValue(n, nValue);
-	    }
-	    else
-	    _currentProperty->setNodeStringValue(n, value);
-	  }
-	  else
-	    _currentProperty->setNodeStringValue(n, value);
+          if (_parsingPathViewProperty) {
+            // if needed replace symbolic path by real path
+            size_t pos = value.find("TulipBitmapDir/");
+
+            if (pos!=std::string::npos) {
+              string nValue(value);
+              nValue.replace(pos, 15, TulipBitmapDir);
+              _currentProperty->setNodeStringValue(n, nValue);
+            }
+            else
+              _currentProperty->setNodeStringValue(n, value);
+          }
+          else
+            _currentProperty->setNodeStringValue(n, value);
         }
 
         if(_parsingPropertyEdgeValues) {
           assert(_currentIdentifier != UINT_MAX);
           assert(_currentProperty);
           edge e(_currentIdentifier);
-	  if (_parsingPathViewProperty) {
-	    // if needed replace symbolic path by real path
-	    size_t pos = value.find("TulipBitmapDir/");
 
-	    if (pos!=std::string::npos) {
-	      string eValue(value);
-	      eValue.replace(pos, 15, TulipBitmapDir);
-	      _currentProperty->setEdgeStringValue(e, eValue);
-	    }
-	    else
-	    _currentProperty->setEdgeStringValue(e, value);
-	  }
-	  else
-	    _currentProperty->setEdgeStringValue(e, value);
+          if (_parsingPathViewProperty) {
+            // if needed replace symbolic path by real path
+            size_t pos = value.find("TulipBitmapDir/");
+
+            if (pos!=std::string::npos) {
+              string eValue(value);
+              eValue.replace(pos, 15, TulipBitmapDir);
+              _currentProperty->setEdgeStringValue(e, eValue);
+            }
+            else
+              _currentProperty->setEdgeStringValue(e, value);
+          }
+          else
+            _currentProperty->setEdgeStringValue(e, value);
         }
       }
       else {
@@ -447,7 +451,7 @@ public:
           tlp::error() << "attribute '" << _currentAttributeName << "' already exists" << std::endl;
         }
         else {
-	  stringstream data(value);
+          stringstream data(value);
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
 
           if(!result) {
