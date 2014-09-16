@@ -25,6 +25,7 @@
 #include <tulip/Graph.h>
 #include <tulip/DataSet.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/TlpTools.h>
 #include <tulip/YajlFacade.h>
 #include <tulip/JsonTokens.h>
 
@@ -222,10 +223,28 @@ public:
       _writer.writeString(property->getTypename());
 
       _writer.writeString(NodeDefaultToken);
-      _writer.writeString(property->getNodeDefaultStringValue());
+      bool writingPathViewProperty =
+	(property->getName() == string("viewFont") ||
+	 property->getName() == string("viewTexture"));
+
+      string dsValue = property->getNodeDefaultStringValue();
+      if (writingPathViewProperty) {
+	size_t pos = dsValue.find(TulipBitmapDir);
+
+	if(pos != string::npos)
+          dsValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+      }
+      _writer.writeString(dsValue);
 
       _writer.writeString(EdgeDefaultToken);
-      _writer.writeString(property->getEdgeDefaultStringValue());
+      dsValue = property->getEdgeDefaultStringValue();
+      if (writingPathViewProperty) {
+	size_t pos = dsValue.find(TulipBitmapDir);
+
+	if(pos != string::npos)
+          dsValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+      }
+      _writer.writeString(dsValue);
 
       if(property->numberOfNonDefaultValuatedNodes() > 0) {
         _writer.writeString(NodesValuesToken);
@@ -234,7 +253,14 @@ public:
           stringstream temp;
           temp << _newNodeId.get(n.id);
           _writer.writeString(temp.str());
-          _writer.writeString(property->getNodeStringValue(n));
+	  string sValue = property->getNodeStringValue(n);
+	  if (writingPathViewProperty) {
+	    size_t pos = sValue.find(TulipBitmapDir);
+
+	    if(pos != string::npos)
+	      sValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+	  }
+          _writer.writeString(sValue);
         }
         _writer.writeMapClose();
       }
@@ -246,7 +272,14 @@ public:
           stringstream temp;
           temp << _newEdgeId.get(e.id);
           _writer.writeString(temp.str());
-          _writer.writeString(property->getEdgeStringValue(e));
+	  string sValue = property->getEdgeStringValue(e);
+	  if (writingPathViewProperty) {
+	    size_t pos = sValue.find(TulipBitmapDir);
+
+	    if(pos != string::npos)
+	      sValue.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+	  }
+          _writer.writeString(sValue);
         }
         _writer.writeMapClose();
       }

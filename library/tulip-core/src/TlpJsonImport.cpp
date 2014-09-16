@@ -27,6 +27,7 @@
 #include <tulip/ImportModule.h>
 #include <tulip/PropertyInterface.h>
 #include <tulip/ForEach.h>
+#include <tulip/TlpTools.h>
 #include <tulip/JsonTokens.h>
 #include <tulip/YajlFacade.h>
 #include <tulip/GraphProperty.h>
@@ -65,6 +66,7 @@ public:
     _parsingPropertyEdgeValues(false),
     _parsingPropertyDefaultEdgeValue(false),
     _parsingPropertyDefaultNodeValue(false),
+    _parsingPathViewProperty(false),
     _waitingForGraphId(false) {
   }
 
@@ -332,6 +334,9 @@ public:
         }
 
         _currentProperty = _graph->getLocalProperty(_propertyName, value);
+	_parsingPathViewProperty =
+	  (_propertyName == std::string("viewFont") ||
+	   _propertyName == std::string("viewTexture"));
 
         if(value == "graph") {
           _graphProperties[_graph] = TemporaryGraphProperty();
@@ -345,12 +350,38 @@ public:
 
       if(_currentProperty) {
         if(_parsingPropertyDefaultNodeValue) {
-          _currentProperty->setAllNodeStringValue(value);
+	  if (_parsingPathViewProperty) {
+	    // if needed replace symbolic path by real path
+	    size_t pos = value.find("TulipBitmapDir/");
+
+	    if (pos!=std::string::npos) {
+	      string dValue(value);
+	      dValue.replace(pos, 15, TulipBitmapDir);
+	      _currentProperty->setAllNodeStringValue(dValue);
+	    }
+	    else
+	      _currentProperty->setAllNodeStringValue(value);
+	  }
+	  else
+	    _currentProperty->setAllNodeStringValue(value);
           _parsingPropertyDefaultNodeValue = false;
         }
 
         if(_parsingPropertyDefaultEdgeValue) {
-          _currentProperty->setAllEdgeStringValue(value);
+	  if (_parsingPathViewProperty) {
+	    // if needed replace symbolic path by real path
+	    size_t pos = value.find("TulipBitmapDir/");
+
+	    if (pos!=std::string::npos) {
+	      string dValue(value);
+	      dValue.replace(pos, 15, TulipBitmapDir);
+	      _currentProperty->setAllEdgeStringValue(dValue);
+	    }
+	    else
+	      _currentProperty->setAllEdgeStringValue(value);
+	  }
+	  else
+	    _currentProperty->setAllEdgeStringValue(value);
           _parsingPropertyDefaultEdgeValue = false;
         }
 
@@ -363,14 +394,40 @@ public:
           assert(_currentIdentifier != UINT_MAX);
           assert(_currentProperty);
           node n(_currentIdentifier);
-          _currentProperty->setNodeStringValue(n, value);
+	  if (_parsingPathViewProperty) {
+	    // if needed replace symbolic path by real path
+	    size_t pos = value.find("TulipBitmapDir/");
+
+	    if (pos!=std::string::npos) {
+	      string nValue(value);
+	      nValue.replace(pos, 15, TulipBitmapDir);
+	      _currentProperty->setNodeStringValue(n, nValue);
+	    }
+	    else
+	    _currentProperty->setNodeStringValue(n, value);
+	  }
+	  else
+	    _currentProperty->setNodeStringValue(n, value);
         }
 
         if(_parsingPropertyEdgeValues) {
           assert(_currentIdentifier != UINT_MAX);
           assert(_currentProperty);
           edge e(_currentIdentifier);
-          _currentProperty->setEdgeStringValue(e, value);
+	  if (_parsingPathViewProperty) {
+	    // if needed replace symbolic path by real path
+	    size_t pos = value.find("TulipBitmapDir/");
+
+	    if (pos!=std::string::npos) {
+	      string eValue(value);
+	      eValue.replace(pos, 15, TulipBitmapDir);
+	      _currentProperty->setEdgeStringValue(e, eValue);
+	    }
+	    else
+	    _currentProperty->setEdgeStringValue(e, value);
+	  }
+	  else
+	    _currentProperty->setEdgeStringValue(e, value);
         }
       }
       else {
@@ -384,15 +441,13 @@ public:
         _currentAttributeTypeName = value;
       }
       else {
-        stringstream data;
-        data << value;
-
         string oldValue;
 
         if(_dataSet->get(_currentAttributeName, oldValue)) {
           tlp::error() << "attribute '" << _currentAttributeName << "' already exists" << std::endl;
         }
         else {
+	  stringstream data(value);
           bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
 
           if(!result) {
@@ -439,6 +494,7 @@ private:
   bool _parsingPropertyEdgeValues;
   bool _parsingPropertyDefaultEdgeValue;
   bool _parsingPropertyDefaultNodeValue;
+  bool _parsingPathViewProperty;
 
   bool _waitingForGraphId;
 
