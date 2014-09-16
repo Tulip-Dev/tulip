@@ -35,29 +35,23 @@ if [ "$TLP_INPUT_FILE" != "" ]; then
 fi
 
 # $TEST_NAME.xns must exist
-if [ ! -f $TEST_NAME.xns ]; then
+if [ ! -f ${TEST_NAME}.xns ]; then
     echo "$TEST_NAME test failed: $TEST_NAME.xns does not exist"
     exit
 fi
 
-# $TEST_NAME.tlp must exist
+# $TLP_OUTPUT_FILE must exist
 if [ "$TLP_OUTPUT_FILE" = "" ]; then
-  if [ ! -f $TEST_NAME.tlp ]; then
-    echo "$TEST_NAME test failed: $TEST_NAME.tlp does not exist"
-    exit
-  fi
-  TLP_OUTPUT_FILE=$TEST_NAME.tlp
+  TLP_OUTPUT_FILE=${TEST_NAME}.tlp
+fi
+  
+if [ ! -f ${TLP_OUTPUT_FILE} ]; then
+  echo "$TEST_NAME test failed: $TLP_OUTPUT_FILE does not exist"
+  exit
 fi
 
-# remove test_gui.tlp which is always
-# the name of the result graph file
-if [ -f test_gui.tlp ]; then
-    rm test_gui.tlp
-fi
-
-if [ -f data/test_gui.tlp ]; then
-    rm data/test_gui.tlp
-fi
+# remove remaining test_gui.* files
+rm -f test_gui.* data/test_gui.*
 
 # run the test
 sh tulip_replay.sh $TEST_NAME.xns $TLP_INPUT_FILE

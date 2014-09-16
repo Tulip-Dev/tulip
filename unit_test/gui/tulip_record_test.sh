@@ -25,11 +25,8 @@ if [ "$TLP_INPUT_FILE" != "" ]; then
   fi
 fi
 
-# remove test_gui.tlp which is always
-# the name of the result graph file
-if [ -f test_gui.tlp ]; then
-    rm test_gui.tlp
-fi
+# remove remaining test_gui.* files if any
+rm -f test_gui.*
 
 if [ -f data/test_gui.tlp ]; then
     rm data/test_gui.tlp
