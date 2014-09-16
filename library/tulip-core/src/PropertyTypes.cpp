@@ -615,6 +615,10 @@ bool StringType::read(istream& is, RealType & v, char openChar,
   // go to first non space char
   while((is >> c) && isspace(c)) {}
 
+  // ensure space chars are not skipped
+  // in the string to extract
+  is.unsetf(ios_base::skipws);
+
   if (openChar && c != openChar)
     return false;
 
