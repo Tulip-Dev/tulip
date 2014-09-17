@@ -581,24 +581,18 @@ public:
     if(dataSet->exist("file::filename")) {
       dataSet->get<string>("file::filename", filename);
 
-      struct stat infoEntry;
-      bool result = (stat(filename.c_str(),&infoEntry) == 0);
-
-      if (!result) {
-        std::stringstream ess;
-        ess << filename.c_str() << ": " << strerror(errno);
-        pluginProgress->setError(ess.str());
-        tlp::error() << pluginProgress->getError() << std::endl;
-        return false;
-      }
-
       _proxy = new YajlParseFacade(_progress);
       parse(filename);
     }
 
-    pluginProgress->setError(_proxy->errorMessage());
     Observable::unholdObservers();
-    return _proxy->parsingSucceeded();
+
+    if (!_proxy->parsingSucceeded()) {
+      _parsingSucceeded = false;
+      _errorMessage = _proxy->errorMessage();
+    }
+    pluginProgress->setError(_errorMessage);
+    return _parsingSucceeded;
   }
 
   virtual void parseMapKey(const std::string& value) {
