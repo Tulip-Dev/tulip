@@ -591,6 +591,7 @@ public:
       _parsingSucceeded = false;
       _errorMessage = _proxy->errorMessage();
     }
+
     pluginProgress->setError(_errorMessage);
     return _parsingSucceeded;
   }
