@@ -1,0 +1,730 @@
+####################################
+#         System information       #
+####################################
+# Date:                   2014:09:17 
+# Time:                   16:56:24 
+# Xnee program:           cnee 
+# Xnee version:           3.11 
+# Xnee home:              http://www.gnu.org/software/xnee/ 
+# Xnee info mailing list: info-xnee@gnu.org 
+# Xnee bug mailing list:  bug-xnee@gnu.org 
+# X version:              11 
+# X revision:             0 
+# X vendor:               The X.Org Foundation 
+# X vendor release:       11103000 
+# Record version major:   1
+# Record version minor:   13
+# OS name:                Linux 
+# OS Release:             3.2.0-68-generic 
+# OS Version:             #102-Ubuntu SMP Tue Aug 12 22:02:15 UTC 2014 
+# Machine:                x86_64 
+# Nodename:               pm-Precision-M4600 
+# Display name:           :0.0
+# Dimension:              1920x1080
+
+
+
+##############################################
+#      Xnee application arguments            #
+##############################################
+#  /usr/bin/cnee -rec -etr -1 --keyboard --mouse -sk End -o open_tlpb_file.xns 
+
+
+##############################################
+#      Displays                              #
+##############################################
+# display :0.0
+# distribute
+
+
+##############################################
+#      Files                                 #
+##############################################
+# out-file open_tlpb_file.xns
+# err-file stderr
+
+
+##############################################
+#      Key Grabs                             #
+##############################################
+# stop-key         End
+# pause-key        0
+# resume-key       0
+# insert-key       0
+# exec-key         0
+# exec-program-key         xnee-exec-no-program
+
+
+##############################################
+#      Recording limits etc                  #
+##############################################
+
+events-to-record        -1
+data-to-record          -1
+seconds-to-record       -1
+# first-last
+
+# Record  all (including current) clients or only future ones
+all-clients
+# future-clients
+
+# Store the starting mouse position 
+# store-mouse-position
+
+
+##############################################
+#      Resolution                            #
+##############################################
+
+# Resolution
+#recorded-resolution  1920x1080
+#replay-resolution  1x1
+#resolution-adjustment  0
+
+
+##############################################
+#      Speed                                 #
+##############################################
+
+# Speed
+#speed-percent  100
+
+
+##############################################
+#      Replaying limits etc                  #
+##############################################
+
+max-threshold 20 
+min-threshold 20 
+tot-threshold 40 
+
+
+##############################################
+#      Feedback                              #
+##############################################
+#feedback-none
+#feedback-stderr
+feedback-xosd
+ 
+
+
+##############################################
+#      Various                               #
+##############################################
+
+# Plugin file 
+
+# Modes (currently not used)
+# synchronised-replay
+
+# Replay offset
+#replay-offset 0x0
+
+# Human printout of X11 data (instead of Xnee format)
+# human-printout  
+
+# Delay before starting record/replay
+# time 0
+
+# No recording of ReparentNotify
+# no-reparent-recording 
+
+# Various
+#########################################
+#          Record settings              #
+#########################################
+#   data_flags          7
+#   rState              0x101f010
+#   xids[0]             3
+#   xids[1]             0
+# Number of Ranges      2
+# RecordRange[0]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         21-21 
+device-event-range            2-6 
+error-range                   0-0 
+# RecordRange[1]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         0-0 
+device-event-range            100-105 
+error-range                   0-0 
+7,2,0,0,0,37,0,18161656,11,AT Translated Set 2 keyboard
+0,2,0,0,0,37,0,18161656
+6,2,0,0,0,37,0,18161656,3,Virtual core keyboard
+7,2,0,0,0,32,0,18161864,11,AT Translated Set 2 keyboard
+0,2,0,0,0,32,0,18161864
+6,2,0,0,0,32,0,18161864,3,Virtual core keyboard
+0,21,0,0,0,0,0,18161916
+NEW-WINDOW:583,206:54525990,54525990,12589512,0,0,0:0x0+635+430:0,0:Open graph
+0,21,0,0,0,0,0,18161916
+0,21,0,0,0,0,0,18161916
+0,21,0,0,0,0,0,18161916
+0,21,0,0,0,0,0,18161916
+7,3,0,0,0,32,0,18161947,11,AT Translated Set 2 keyboard
+0,3,0,0,0,32,0,18161947
+6,3,0,0,0,32,0,18161947,3,Virtual core keyboard
+7,3,0,0,0,37,0,18162062,11,AT Translated Set 2 keyboard
+0,3,0,0,0,37,0,18162062
+6,3,0,0,0,37,0,18162062,3,Virtual core keyboard
+7,2,0,0,0,40,0,18163607,11,AT Translated Set 2 keyboard
+0,2,0,0,0,40,0,18163608
+6,2,0,0,0,40,0,18163608,3,Virtual core keyboard
+7,3,0,0,0,40,0,18163637,11,AT Translated Set 2 keyboard
+0,3,0,0,0,40,0,18163637
+6,3,0,0,0,40,0,18163637,3,Virtual core keyboard
+7,2,0,0,0,24,0,18163806,11,AT Translated Set 2 keyboard
+0,2,0,0,0,24,0,18163806
+6,2,0,0,0,24,0,18163806,3,Virtual core keyboard
+7,3,0,0,0,24,0,18163865,11,AT Translated Set 2 keyboard
+0,3,0,0,0,24,0,18163865
+6,3,0,0,0,24,0,18163865,3,Virtual core keyboard
+7,2,0,0,0,28,0,18164113,11,AT Translated Set 2 keyboard
+0,2,0,0,0,28,0,18164113
+6,2,0,0,0,28,0,18164113,3,Virtual core keyboard
+7,3,0,0,0,28,0,18164162,11,AT Translated Set 2 keyboard
+0,3,0,0,0,28,0,18164162
+6,3,0,0,0,28,0,18164162,3,Virtual core keyboard
+7,2,0,0,0,24,0,18164380,11,AT Translated Set 2 keyboard
+0,2,0,0,0,24,0,18164380
+6,2,0,0,0,24,0,18164380,3,Virtual core keyboard
+7,3,0,0,0,24,0,18164420,11,AT Translated Set 2 keyboard
+0,3,0,0,0,24,0,18164420
+6,3,0,0,0,24,0,18164420,3,Virtual core keyboard
+7,2,0,0,0,62,0,18165084,11,AT Translated Set 2 keyboard
+0,2,0,0,0,62,0,18165084
+6,2,0,0,0,62,0,18165084,3,Virtual core keyboard
+7,2,0,0,0,60,0,18165430,11,AT Translated Set 2 keyboard
+0,2,0,0,0,60,0,18165430
+6,2,0,0,0,60,0,18165430,3,Virtual core keyboard
+7,3,0,0,0,60,0,18165529,11,AT Translated Set 2 keyboard
+0,3,0,0,0,60,0,18165529
+6,3,0,0,0,60,0,18165529,3,Virtual core keyboard
+7,3,0,0,0,62,0,18165638,11,AT Translated Set 2 keyboard
+0,3,0,0,0,62,0,18165638
+6,3,0,0,0,62,0,18165638,3,Virtual core keyboard
+7,2,0,0,0,31,0,18166133,11,AT Translated Set 2 keyboard
+0,2,0,0,0,31,0,18166133
+6,2,0,0,0,31,0,18166133,3,Virtual core keyboard
+7,3,0,0,0,31,0,18166203,11,AT Translated Set 2 keyboard
+0,3,0,0,0,31,0,18166203
+6,3,0,0,0,31,0,18166203,3,Virtual core keyboard
+7,2,0,0,0,47,0,18166341,11,AT Translated Set 2 keyboard
+0,2,0,0,0,47,0,18166341
+6,2,0,0,0,47,0,18166341,3,Virtual core keyboard
+7,3,0,0,0,47,0,18166411,11,AT Translated Set 2 keyboard
+0,3,0,0,0,47,0,18166411
+6,3,0,0,0,47,0,18166411,3,Virtual core keyboard
+7,2,0,0,0,33,0,18166599,11,AT Translated Set 2 keyboard
+0,2,0,0,0,33,0,18166599
+6,2,0,0,0,33,0,18166599,3,Virtual core keyboard
+7,2,0,0,0,32,0,18166718,11,AT Translated Set 2 keyboard
+0,2,0,0,0,32,0,18166718
+6,2,0,0,0,32,0,18166718,3,Virtual core keyboard
+7,3,0,0,0,33,0,18166737,11,AT Translated Set 2 keyboard
+0,3,0,0,0,33,0,18166737
+6,3,0,0,0,33,0,18166737,3,Virtual core keyboard
+7,3,0,0,0,32,0,18166817,11,AT Translated Set 2 keyboard
+0,3,0,0,0,32,0,18166817
+6,3,0,0,0,32,0,18166817,3,Virtual core keyboard
+7,2,0,0,0,27,0,18166955,11,AT Translated Set 2 keyboard
+0,2,0,0,0,27,0,18166955
+6,2,0,0,0,27,0,18166955,3,Virtual core keyboard
+7,3,0,0,0,27,0,18167015,11,AT Translated Set 2 keyboard
+0,3,0,0,0,27,0,18167015
+6,3,0,0,0,27,0,18167015,3,Virtual core keyboard
+7,2,0,0,0,28,0,18167124,11,AT Translated Set 2 keyboard
+0,2,0,0,0,28,0,18167124
+6,2,0,0,0,28,0,18167124,3,Virtual core keyboard
+7,3,0,0,0,28,0,18167213,11,AT Translated Set 2 keyboard
+0,3,0,0,0,28,0,18167213
+6,3,0,0,0,28,0,18167213,3,Virtual core keyboard
+7,2,0,0,0,17,0,18167282,11,AT Translated Set 2 keyboard
+0,2,0,0,0,17,0,18167282
+6,2,0,0,0,17,0,18167282,3,Virtual core keyboard
+7,3,0,0,0,17,0,18167363,11,AT Translated Set 2 keyboard
+0,3,0,0,0,17,0,18167363
+6,3,0,0,0,17,0,18167363,3,Virtual core keyboard
+7,2,0,0,0,28,0,18167995,11,AT Translated Set 2 keyboard
+0,2,0,0,0,28,0,18167995
+6,2,0,0,0,28,0,18167995,3,Virtual core keyboard
+7,3,0,0,0,28,0,18168065,11,AT Translated Set 2 keyboard
+0,3,0,0,0,28,0,18168065
+6,3,0,0,0,28,0,18168065,3,Virtual core keyboard
+7,2,0,0,0,46,0,18168094,11,AT Translated Set 2 keyboard
+0,2,0,0,0,46,0,18168095
+6,2,0,0,0,46,0,18168095,3,Virtual core keyboard
+7,2,0,0,0,33,0,18168194,11,AT Translated Set 2 keyboard
+0,2,0,0,0,33,0,18168194
+6,2,0,0,0,33,0,18168194,3,Virtual core keyboard
+7,3,0,0,0,46,0,18168203,11,AT Translated Set 2 keyboard
+0,3,0,0,0,46,0,18168203
+6,3,0,0,0,46,0,18168203,3,Virtual core keyboard
+7,3,0,0,0,33,0,18168293,11,AT Translated Set 2 keyboard
+0,3,0,0,0,33,0,18168293
+6,3,0,0,0,33,0,18168293,3,Virtual core keyboard
+7,2,0,0,0,56,0,18168520,11,AT Translated Set 2 keyboard
+0,2,0,0,0,56,0,18168521
+6,2,0,0,0,56,0,18168521,3,Virtual core keyboard
+7,3,0,0,0,56,0,18168600,11,AT Translated Set 2 keyboard
+0,3,0,0,0,56,0,18168600
+6,3,0,0,0,56,0,18168600,3,Virtual core keyboard
+7,2,0,0,0,116,0,18169877,11,AT Translated Set 2 keyboard
+0,2,0,0,0,116,0,18169878
+6,2,0,0,0,116,0,18169878,3,Virtual core keyboard
+7,3,0,0,0,116,0,18169996,11,AT Translated Set 2 keyboard
+0,3,0,0,0,116,0,18169996
+6,3,0,0,0,116,0,18169996,3,Virtual core keyboard
+7,2,0,0,0,36,0,18170551,11,AT Translated Set 2 keyboard
+0,2,0,0,0,36,0,18170551
+6,2,0,0,0,36,0,18170551,3,Virtual core keyboard
+0,21,0,0,0,0,0,18170552
+NEW-WINDOW:728880435,32610:54525998,54525998,746,0,0,1:0x0+17181320+0:0,0:
+0,21,0,0,0,0,0,18170552
+0,21,0,0,0,0,0,18170552
+0,21,0,0,0,0,0,18170552
+0,21,0,0,0,0,0,18170552
+0,21,0,0,0,0,0,18170552
+0,21,0,0,0,0,0,18170552
+0,21,0,0,0,0,0,18170552
+0,21,0,0,0,0,0,18170552
+0,21,0,0,0,0,0,18170552
+7,3,0,0,0,36,0,18170610,11,AT Translated Set 2 keyboard
+0,3,0,0,0,36,0,18170610
+6,3,0,0,0,36,0,18170610,3,Virtual core keyboard
+0,21,0,0,0,0,0,18170626
+NEW-WINDOW:650,337:54526007,54526007,12589551,0,0,0:0x0+500+37:0,0:TLPB Import
+0,21,0,0,0,0,0,18170626
+0,21,0,0,0,0,0,18170626
+0,21,0,0,0,0,0,18170626
+0,21,0,0,0,0,0,18170626
+0,21,0,0,0,0,0,18171019
+NEW-WINDOW:17161952,0:54526044,54526044,746,0,0,0:0x0+17181320+0:0,0:
+0,21,0,0,0,0,0,18171019
+0,21,0,0,0,0,0,18171019
+0,21,0,0,0,0,0,18171019
+0,21,0,0,0,0,0,18171019
+0,21,0,0,0,0,0,18171019
+0,21,0,0,0,0,0,18171019
+0,21,0,0,0,0,0,18171019
+0,21,0,0,0,0,0,18171019
+0,21,0,0,0,0,0,18171019
+0,21,0,0,0,0,0,18171097
+NEW-WINDOW:17161952,0:54526050,54526050,746,0,0,0:0x0+17181320+0:0,0:
+0,21,0,0,0,0,0,18171097
+0,21,0,0,0,0,0,18171097
+0,21,0,0,0,0,0,18171097
+0,21,0,0,0,0,0,18171097
+0,21,0,0,0,0,0,18171097
+0,21,0,0,0,0,0,18171097
+0,21,0,0,0,0,0,18171097
+0,21,0,0,0,0,0,18171097
+0,21,0,0,0,0,0,18171097
+0,21,0,0,0,0,0,18171097
+NEW-WINDOW:0,0:54526053,54526053,54526075,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,18171097
+NEW-WINDOW:0,0:54526055,54526055,54526075,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,18171097
+NEW-WINDOW:0,0:54526059,54526059,54526075,0,0,0:0x0+960+432:0,0:
+0,21,0,0,0,0,0,18171132
+NEW-WINDOW:0,0:54526085,54526085,746,0,0,0:0x0+1172+848:0,0:Spreadsheet view
+0,21,0,0,0,0,0,18171132
+0,21,0,0,0,0,0,18171132
+0,21,0,0,0,0,0,18171132
+0,21,0,0,0,0,0,18171132
+0,21,0,0,0,0,0,18171132
+0,21,0,0,0,0,0,18171132
+0,21,0,0,0,0,0,18171132
+0,21,0,0,0,0,0,18171132
+0,21,0,0,0,0,0,18171132
+0,21,0,0,0,0,0,18171147
+NEW-WINDOW:0,0:54526070,54526070,746,0,0,0:0x0+943+595:0,0:Node Link Diagram view
+0,21,0,0,0,0,0,18171147
+0,21,0,0,0,0,0,18171147
+0,21,0,0,0,0,0,18171147
+0,21,0,0,0,0,0,18171147
+0,21,0,0,0,0,0,18171147
+0,21,0,0,0,0,0,18171147
+0,21,0,0,0,0,0,18171147
+0,21,0,0,0,0,0,18171147
+0,21,0,0,0,0,0,18171147
+0,21,0,0,0,0,0,18171178
+NEW-WINDOW:1117,103:54526073,54526073,54526174,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,18171178
+NEW-WINDOW:1117,103:54526075,54526075,54526174,0,0,0:0x0+960+432:0,0:
+7,6,323,826,0,0,0,18172651,10,'PIXART USB OPTICAL MOUSE'
+0,6,324,825,0,0,0,18172651
+6,6,324,825,0,0,0,18172651,2,'Virtual core pointer'
+7,6,324,825,0,0,0,18172659,10,'PIXART USB OPTICAL MOUSE'
+0,6,324,822,0,0,0,18172659
+6,6,324,822,0,0,0,18172659,2,'Virtual core pointer'
+7,6,324,822,0,0,0,18172667,10,'PIXART USB OPTICAL MOUSE'
+0,6,324,817,0,0,0,18172667
+6,6,324,817,0,0,0,18172667,2,'Virtual core pointer'
+7,6,324,817,0,0,0,18172675,10,'PIXART USB OPTICAL MOUSE'
+0,6,324,810,0,0,0,18172675
+6,6,324,810,0,0,0,18172675,2,'Virtual core pointer'
+7,6,324,810,0,0,0,18172683,10,'PIXART USB OPTICAL MOUSE'
+0,6,323,803,0,0,0,18172683
+6,6,323,803,0,0,0,18172683,2,'Virtual core pointer'
+7,6,323,803,0,0,0,18172691,10,'PIXART USB OPTICAL MOUSE'
+0,6,321,795,0,0,0,18172691
+6,6,321,795,0,0,0,18172691,2,'Virtual core pointer'
+7,6,321,795,0,0,0,18172699,10,'PIXART USB OPTICAL MOUSE'
+0,6,317,788,0,0,0,18172699
+6,6,317,788,0,0,0,18172699,2,'Virtual core pointer'
+7,6,317,788,0,0,0,18172715,10,'PIXART USB OPTICAL MOUSE'
+0,6,309,779,0,0,0,18172715
+6,6,309,779,0,0,0,18172715,2,'Virtual core pointer'
+7,6,309,779,0,0,0,18172723,10,'PIXART USB OPTICAL MOUSE'
+0,6,305,773,0,0,0,18172723
+6,6,305,773,0,0,0,18172723,2,'Virtual core pointer'
+7,6,305,773,0,0,0,18172731,10,'PIXART USB OPTICAL MOUSE'
+0,6,301,767,0,0,0,18172731
+6,6,301,767,0,0,0,18172731,2,'Virtual core pointer'
+7,6,301,767,0,0,0,18172739,10,'PIXART USB OPTICAL MOUSE'
+0,6,297,763,0,0,0,18172739
+6,6,297,763,0,0,0,18172739,2,'Virtual core pointer'
+7,6,297,763,0,0,0,18172747,10,'PIXART USB OPTICAL MOUSE'
+0,6,295,759,0,0,0,18172747
+6,6,295,759,0,0,0,18172747,2,'Virtual core pointer'
+7,6,295,759,0,0,0,18172755,10,'PIXART USB OPTICAL MOUSE'
+0,6,293,755,0,0,0,18172755
+6,6,293,755,0,0,0,18172755,2,'Virtual core pointer'
+7,6,293,755,0,0,0,18172763,10,'PIXART USB OPTICAL MOUSE'
+0,6,291,751,0,0,0,18172763
+6,6,291,751,0,0,0,18172763,2,'Virtual core pointer'
+7,6,291,751,0,0,0,18172771,10,'PIXART USB OPTICAL MOUSE'
+0,6,289,747,0,0,0,18172771
+6,6,289,747,0,0,0,18172771,2,'Virtual core pointer'
+7,6,289,747,0,0,0,18172779,10,'PIXART USB OPTICAL MOUSE'
+0,6,289,743,0,0,0,18172779
+6,6,289,743,0,0,0,18172779,2,'Virtual core pointer'
+7,6,289,743,0,0,0,18172803,10,'PIXART USB OPTICAL MOUSE'
+0,6,289,742,0,0,0,18172803
+6,6,289,742,0,0,0,18172803,2,'Virtual core pointer'
+7,6,289,742,0,0,0,18172835,10,'PIXART USB OPTICAL MOUSE'
+0,6,288,741,0,0,0,18172835
+6,6,288,741,0,0,0,18172835,2,'Virtual core pointer'
+7,6,288,741,0,0,0,18172843,10,'PIXART USB OPTICAL MOUSE'
+0,6,287,740,0,0,0,18172843
+6,6,287,740,0,0,0,18172843,2,'Virtual core pointer'
+7,6,287,740,0,0,0,18172859,10,'PIXART USB OPTICAL MOUSE'
+0,6,286,739,0,0,0,18172859
+6,6,286,739,0,0,0,18172859,2,'Virtual core pointer'
+7,6,286,739,0,0,0,18172955,10,'PIXART USB OPTICAL MOUSE'
+0,6,284,737,0,0,0,18172955
+6,6,284,737,0,0,0,18172955,2,'Virtual core pointer'
+7,6,284,737,0,0,0,18172963,10,'PIXART USB OPTICAL MOUSE'
+0,6,283,737,0,0,0,18172963
+6,6,283,737,0,0,0,18172963,2,'Virtual core pointer'
+7,6,283,737,0,0,0,18172971,10,'PIXART USB OPTICAL MOUSE'
+0,6,281,736,0,0,0,18172971
+6,6,281,736,0,0,0,18172971,2,'Virtual core pointer'
+7,6,281,736,0,0,0,18172979,10,'PIXART USB OPTICAL MOUSE'
+0,6,278,735,0,0,0,18172979
+6,6,278,735,0,0,0,18172979,2,'Virtual core pointer'
+7,6,278,735,0,0,0,18172987,10,'PIXART USB OPTICAL MOUSE'
+0,6,274,732,0,0,0,18172987
+6,6,274,732,0,0,0,18172987,2,'Virtual core pointer'
+7,6,274,732,0,0,0,18172995,10,'PIXART USB OPTICAL MOUSE'
+0,6,270,731,0,0,0,18172995
+6,6,270,731,0,0,0,18172995,2,'Virtual core pointer'
+7,6,270,731,0,0,0,18173003,10,'PIXART USB OPTICAL MOUSE'
+0,6,262,729,0,0,0,18173003
+6,6,262,729,0,0,0,18173003,2,'Virtual core pointer'
+7,6,262,729,0,0,0,18173011,10,'PIXART USB OPTICAL MOUSE'
+0,6,253,725,0,0,0,18173011
+6,6,253,725,0,0,0,18173011,2,'Virtual core pointer'
+7,6,253,725,0,0,0,18173019,10,'PIXART USB OPTICAL MOUSE'
+0,6,242,720,0,0,0,18173019
+6,6,242,720,0,0,0,18173019,2,'Virtual core pointer'
+7,6,242,720,0,0,0,18173027,10,'PIXART USB OPTICAL MOUSE'
+0,6,232,716,0,0,0,18173027
+6,6,232,716,0,0,0,18173027,2,'Virtual core pointer'
+7,6,232,716,0,0,0,18173035,10,'PIXART USB OPTICAL MOUSE'
+0,6,222,714,0,0,0,18173035
+6,6,222,714,0,0,0,18173035,2,'Virtual core pointer'
+7,6,222,714,0,0,0,18173043,10,'PIXART USB OPTICAL MOUSE'
+0,6,213,712,0,0,0,18173043
+6,6,213,712,0,0,0,18173043,2,'Virtual core pointer'
+7,6,213,712,0,0,0,18173051,10,'PIXART USB OPTICAL MOUSE'
+0,6,205,709,0,0,0,18173051
+6,6,205,709,0,0,0,18173051,2,'Virtual core pointer'
+7,6,205,709,0,0,0,18173059,10,'PIXART USB OPTICAL MOUSE'
+0,6,198,707,0,0,0,18173059
+6,6,198,707,0,0,0,18173059,2,'Virtual core pointer'
+7,6,198,707,0,0,0,18173067,10,'PIXART USB OPTICAL MOUSE'
+0,6,192,705,0,0,0,18173067
+6,6,192,705,0,0,0,18173067,2,'Virtual core pointer'
+7,6,192,705,0,0,0,18173075,10,'PIXART USB OPTICAL MOUSE'
+0,6,186,702,0,0,0,18173075
+6,6,186,702,0,0,0,18173075,2,'Virtual core pointer'
+7,6,186,702,0,0,0,18173083,10,'PIXART USB OPTICAL MOUSE'
+0,6,180,700,0,0,0,18173083
+6,6,180,700,0,0,0,18173083,2,'Virtual core pointer'
+7,6,180,700,0,0,0,18173091,10,'PIXART USB OPTICAL MOUSE'
+0,6,176,700,0,0,0,18173091
+6,6,176,700,0,0,0,18173091,2,'Virtual core pointer'
+7,6,176,700,0,0,0,18173099,10,'PIXART USB OPTICAL MOUSE'
+0,6,175,699,0,0,0,18173099
+6,6,175,699,0,0,0,18173099,2,'Virtual core pointer'
+7,6,175,699,0,0,0,18173267,10,'PIXART USB OPTICAL MOUSE'
+0,6,176,699,0,0,0,18173267
+6,6,176,699,0,0,0,18173267,2,'Virtual core pointer'
+7,6,176,699,0,0,0,18173275,10,'PIXART USB OPTICAL MOUSE'
+0,6,178,700,0,0,0,18173275
+6,6,178,700,0,0,0,18173275,2,'Virtual core pointer'
+7,6,178,700,0,0,0,18173283,10,'PIXART USB OPTICAL MOUSE'
+0,6,180,703,0,0,0,18173283
+6,6,180,703,0,0,0,18173283,2,'Virtual core pointer'
+7,6,180,703,0,0,0,18173291,10,'PIXART USB OPTICAL MOUSE'
+0,6,181,706,0,0,0,18173291
+6,6,181,706,0,0,0,18173291,2,'Virtual core pointer'
+7,6,181,706,0,0,0,18173299,10,'PIXART USB OPTICAL MOUSE'
+0,6,183,710,0,0,0,18173299
+6,6,183,710,0,0,0,18173299,2,'Virtual core pointer'
+7,6,183,710,0,0,0,18173307,10,'PIXART USB OPTICAL MOUSE'
+0,6,185,715,0,0,0,18173307
+6,6,185,715,0,0,0,18173307,2,'Virtual core pointer'
+7,6,185,715,0,0,0,18173315,10,'PIXART USB OPTICAL MOUSE'
+0,6,187,719,0,0,0,18173315
+6,6,187,719,0,0,0,18173315,2,'Virtual core pointer'
+7,6,187,719,0,0,0,18173323,10,'PIXART USB OPTICAL MOUSE'
+0,6,191,723,0,0,0,18173323
+6,6,191,723,0,0,0,18173323,2,'Virtual core pointer'
+7,6,191,723,0,0,0,18173331,10,'PIXART USB OPTICAL MOUSE'
+0,6,192,724,0,0,0,18173331
+6,6,192,724,0,0,0,18173331,2,'Virtual core pointer'
+7,6,192,724,0,0,0,18173339,10,'PIXART USB OPTICAL MOUSE'
+0,6,193,725,0,0,0,18173339
+6,6,193,725,0,0,0,18173339,2,'Virtual core pointer'
+7,6,193,725,0,0,0,18173347,10,'PIXART USB OPTICAL MOUSE'
+0,6,194,727,0,0,0,18173347
+6,6,194,727,0,0,0,18173347,2,'Virtual core pointer'
+7,6,194,727,0,0,0,18173363,10,'PIXART USB OPTICAL MOUSE'
+0,6,195,728,0,0,0,18173363
+6,6,195,728,0,0,0,18173363,2,'Virtual core pointer'
+7,6,195,728,0,0,0,18173371,10,'PIXART USB OPTICAL MOUSE'
+0,6,196,728,0,0,0,18173371
+6,6,196,728,0,0,0,18173371,2,'Virtual core pointer'
+7,6,196,728,0,0,0,18173403,10,'PIXART USB OPTICAL MOUSE'
+0,6,197,728,0,0,0,18173403
+6,6,197,728,0,0,0,18173403,2,'Virtual core pointer'
+7,6,197,728,0,0,0,18173435,10,'PIXART USB OPTICAL MOUSE'
+0,6,198,728,0,0,0,18173435
+6,6,198,728,0,0,0,18173435,2,'Virtual core pointer'
+7,6,198,728,0,0,0,18173451,10,'PIXART USB OPTICAL MOUSE'
+0,6,199,727,0,0,0,18173451
+6,6,199,727,0,0,0,18173451,2,'Virtual core pointer'
+7,6,199,727,0,0,0,18173459,10,'PIXART USB OPTICAL MOUSE'
+0,6,200,726,0,0,0,18173459
+6,6,200,726,0,0,0,18173459,2,'Virtual core pointer'
+7,6,200,726,0,0,0,18173515,10,'PIXART USB OPTICAL MOUSE'
+0,6,201,725,0,0,0,18173515
+6,6,201,725,0,0,0,18173515,2,'Virtual core pointer'
+7,6,201,725,0,0,0,18173531,10,'PIXART USB OPTICAL MOUSE'
+0,6,202,724,0,0,0,18173531
+6,6,202,724,0,0,0,18173531,2,'Virtual core pointer'
+7,6,202,724,0,0,0,18173555,10,'PIXART USB OPTICAL MOUSE'
+0,6,203,723,0,0,0,18173555
+6,6,203,723,0,0,0,18173555,2,'Virtual core pointer'
+7,6,203,723,0,0,0,18173563,10,'PIXART USB OPTICAL MOUSE'
+0,6,204,721,0,0,0,18173563
+6,6,204,721,0,0,0,18173563,2,'Virtual core pointer'
+7,6,204,721,0,0,0,18173571,10,'PIXART USB OPTICAL MOUSE'
+0,6,206,719,0,0,0,18173571
+6,6,206,719,0,0,0,18173571,2,'Virtual core pointer'
+7,6,206,719,0,0,0,18173579,10,'PIXART USB OPTICAL MOUSE'
+0,6,207,718,0,0,0,18173579
+6,6,207,718,0,0,0,18173579,2,'Virtual core pointer'
+7,6,207,718,0,0,0,18173587,10,'PIXART USB OPTICAL MOUSE'
+0,6,208,717,0,0,0,18173587
+6,6,208,717,0,0,0,18173587,2,'Virtual core pointer'
+7,6,208,717,0,0,0,18173595,10,'PIXART USB OPTICAL MOUSE'
+0,6,208,716,0,0,0,18173595
+6,6,208,716,0,0,0,18173595,2,'Virtual core pointer'
+7,6,208,716,0,0,0,18173603,10,'PIXART USB OPTICAL MOUSE'
+0,6,209,714,0,0,0,18173603
+6,6,209,714,0,0,0,18173603,2,'Virtual core pointer'
+7,6,209,714,0,0,0,18173619,10,'PIXART USB OPTICAL MOUSE'
+0,6,211,712,0,0,0,18173619
+6,6,211,712,0,0,0,18173619,2,'Virtual core pointer'
+7,6,211,712,0,0,0,18173627,10,'PIXART USB OPTICAL MOUSE'
+0,6,212,710,0,0,0,18173627
+6,6,212,710,0,0,0,18173627,2,'Virtual core pointer'
+7,6,212,710,0,0,0,18173635,10,'PIXART USB OPTICAL MOUSE'
+0,6,213,708,0,0,0,18173635
+6,6,213,708,0,0,0,18173635,2,'Virtual core pointer'
+7,6,213,708,0,0,0,18173643,10,'PIXART USB OPTICAL MOUSE'
+0,6,213,707,0,0,0,18173643
+6,6,213,707,0,0,0,18173643,2,'Virtual core pointer'
+7,6,213,707,0,0,0,18173651,10,'PIXART USB OPTICAL MOUSE'
+0,6,214,706,0,0,0,18173651
+6,6,214,706,0,0,0,18173651,2,'Virtual core pointer'
+7,6,214,706,0,0,0,18173667,10,'PIXART USB OPTICAL MOUSE'
+0,6,216,704,0,0,0,18173667
+6,6,216,704,0,0,0,18173667,2,'Virtual core pointer'
+7,6,216,704,0,0,0,18173675,10,'PIXART USB OPTICAL MOUSE'
+0,6,217,702,0,0,0,18173675
+6,6,217,702,0,0,0,18173675,2,'Virtual core pointer'
+7,6,217,702,0,0,0,18173683,10,'PIXART USB OPTICAL MOUSE'
+0,6,217,701,0,0,0,18173683
+6,6,217,701,0,0,0,18173683,2,'Virtual core pointer'
+7,6,217,701,0,0,0,18173707,10,'PIXART USB OPTICAL MOUSE'
+0,6,218,699,0,0,0,18173707
+6,6,218,699,0,0,0,18173707,2,'Virtual core pointer'
+7,6,218,699,0,0,0,18173939,10,'PIXART USB OPTICAL MOUSE'
+0,6,218,700,0,0,0,18173939
+6,6,218,700,0,0,0,18173939,2,'Virtual core pointer'
+7,6,218,700,0,0,0,18173947,10,'PIXART USB OPTICAL MOUSE'
+0,6,218,701,0,0,0,18173947
+6,6,218,701,0,0,0,18173947,2,'Virtual core pointer'
+7,6,218,701,0,0,0,18173955,10,'PIXART USB OPTICAL MOUSE'
+0,6,218,702,0,0,0,18173955
+6,6,218,702,0,0,0,18173955,2,'Virtual core pointer'
+7,6,218,702,0,0,0,18173971,10,'PIXART USB OPTICAL MOUSE'
+0,6,218,703,0,0,0,18173971
+6,6,218,703,0,0,0,18173971,2,'Virtual core pointer'
+7,6,218,703,0,0,0,18173987,10,'PIXART USB OPTICAL MOUSE'
+0,6,218,705,0,0,0,18173987
+6,6,218,705,0,0,0,18173987,2,'Virtual core pointer'
+7,6,218,705,0,0,0,18174027,10,'PIXART USB OPTICAL MOUSE'
+0,6,218,706,0,0,0,18174027
+6,6,218,706,0,0,0,18174027,2,'Virtual core pointer'
+7,4,0,0,3,0,0,18174603,10,PIXART USB OPTICAL MOUSE
+0,4,0,0,3,0,0,18174603
+6,4,0,0,3,0,0,18174603,2,Virtual core pointer
+7,5,0,0,3,0,0,18174843,10,PIXART USB OPTICAL MOUSE
+0,5,0,0,3,0,0,18174843
+6,5,0,0,3,0,0,18174843,2,Virtual core pointer
+7,2,0,0,0,116,0,18175929,11,AT Translated Set 2 keyboard
+0,2,0,0,0,116,0,18175929
+6,2,0,0,0,116,0,18175929,3,Virtual core keyboard
+7,3,0,0,0,116,0,18176038,11,AT Translated Set 2 keyboard
+0,3,0,0,0,116,0,18176038
+6,3,0,0,0,116,0,18176038,3,Virtual core keyboard
+7,2,0,0,0,116,0,18176840,11,AT Translated Set 2 keyboard
+0,2,0,0,0,116,0,18176840
+6,2,0,0,0,116,0,18176840,3,Virtual core keyboard
+7,3,0,0,0,116,0,18176949,11,AT Translated Set 2 keyboard
+0,3,0,0,0,116,0,18176949
+6,3,0,0,0,116,0,18176949,3,Virtual core keyboard
+7,2,0,0,0,36,0,18177553,11,AT Translated Set 2 keyboard
+0,2,0,0,0,36,0,18177553
+6,2,0,0,0,36,0,18177553,3,Virtual core keyboard
+0,21,0,0,0,0,0,18177627
+NEW-WINDOW:461,197:54526188,54526188,12589604,0,0,0:0x0+879+458:0,0:Export of graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
+0,21,0,0,0,0,0,18177627
+0,21,0,0,0,0,0,18177627
+0,21,0,0,0,0,0,18177628
+0,21,0,0,0,0,0,18177628
+7,3,0,0,0,36,0,18177642,11,AT Translated Set 2 keyboard
+0,3,0,0,0,36,0,18177642
+6,3,0,0,0,36,0,18177642,3,Virtual core keyboard
+7,2,0,0,0,28,0,18178831,11,AT Translated Set 2 keyboard
+0,2,0,0,0,28,0,18178831
+6,2,0,0,0,28,0,18178831,3,Virtual core keyboard
+7,3,0,0,0,28,0,18178890,11,AT Translated Set 2 keyboard
+0,3,0,0,0,28,0,18178890
+6,3,0,0,0,28,0,18178890,3,Virtual core keyboard
+7,2,0,0,0,26,0,18179068,11,AT Translated Set 2 keyboard
+0,2,0,0,0,26,0,18179069
+6,2,0,0,0,26,0,18179069,3,Virtual core keyboard
+7,3,0,0,0,26,0,18179128,11,AT Translated Set 2 keyboard
+0,3,0,0,0,26,0,18179128
+6,3,0,0,0,26,0,18179128,3,Virtual core keyboard
+7,2,0,0,0,39,0,18179286,11,AT Translated Set 2 keyboard
+0,2,0,0,0,39,0,18179287
+6,2,0,0,0,39,0,18179287,3,Virtual core keyboard
+7,3,0,0,0,39,0,18179356,11,AT Translated Set 2 keyboard
+0,3,0,0,0,39,0,18179356
+6,3,0,0,0,39,0,18179356,3,Virtual core keyboard
+7,2,0,0,0,28,0,18179514,11,AT Translated Set 2 keyboard
+0,2,0,0,0,28,0,18179514
+6,2,0,0,0,28,0,18179514,3,Virtual core keyboard
+7,3,0,0,0,28,0,18179574,11,AT Translated Set 2 keyboard
+0,3,0,0,0,28,0,18179574
+6,3,0,0,0,28,0,18179574,3,Virtual core keyboard
+7,2,0,0,0,17,0,18179653,11,AT Translated Set 2 keyboard
+0,2,0,0,0,17,0,18179653
+6,2,0,0,0,17,0,18179653,3,Virtual core keyboard
+7,3,0,0,0,17,0,18179732,11,AT Translated Set 2 keyboard
+0,3,0,0,0,17,0,18179732
+6,3,0,0,0,17,0,18179732,3,Virtual core keyboard
+7,2,0,0,0,42,0,18180059,11,AT Translated Set 2 keyboard
+0,2,0,0,0,42,0,18180059
+6,2,0,0,0,42,0,18180059,3,Virtual core keyboard
+7,2,0,0,0,30,0,18180109,11,AT Translated Set 2 keyboard
+0,2,0,0,0,30,0,18180109
+6,2,0,0,0,30,0,18180109,3,Virtual core keyboard
+7,3,0,0,0,42,0,18180128,11,AT Translated Set 2 keyboard
+0,3,0,0,0,42,0,18180128
+6,3,0,0,0,42,0,18180128,3,Virtual core keyboard
+7,2,0,0,0,31,0,18180208,11,AT Translated Set 2 keyboard
+0,2,0,0,0,31,0,18180208
+6,2,0,0,0,31,0,18180208,3,Virtual core keyboard
+7,3,0,0,0,30,0,18180228,11,AT Translated Set 2 keyboard
+0,3,0,0,0,30,0,18180228
+6,3,0,0,0,30,0,18180228,3,Virtual core keyboard
+7,3,0,0,0,31,0,18180307,11,AT Translated Set 2 keyboard
+0,3,0,0,0,31,0,18180307
+6,3,0,0,0,31,0,18180307,3,Virtual core keyboard
+7,2,0,0,0,62,0,18180852,11,AT Translated Set 2 keyboard
+0,2,0,0,0,62,0,18180852
+6,2,0,0,0,62,0,18180852,3,Virtual core keyboard
+7,2,0,0,0,59,0,18181099,11,AT Translated Set 2 keyboard
+0,2,0,0,0,59,0,18181100
+6,2,0,0,0,59,0,18181100,3,Virtual core keyboard
+7,3,0,0,0,59,0,18181159,11,AT Translated Set 2 keyboard
+0,3,0,0,0,59,0,18181159
+6,3,0,0,0,59,0,18181159,3,Virtual core keyboard
+7,3,0,0,0,62,0,18181238,11,AT Translated Set 2 keyboard
+0,3,0,0,0,62,0,18181238
+6,3,0,0,0,62,0,18181238,3,Virtual core keyboard
+7,2,0,0,0,28,0,18181694,11,AT Translated Set 2 keyboard
+0,2,0,0,0,28,0,18181694
+6,2,0,0,0,28,0,18181694,3,Virtual core keyboard
+7,3,0,0,0,28,0,18181757,11,AT Translated Set 2 keyboard
+0,3,0,0,0,28,0,18181757
+6,3,0,0,0,28,0,18181757,3,Virtual core keyboard
+7,2,0,0,0,46,0,18181783,11,AT Translated Set 2 keyboard
+0,2,0,0,0,46,0,18181783
+6,2,0,0,0,46,0,18181783,3,Virtual core keyboard
+7,2,0,0,0,33,0,18181912,11,AT Translated Set 2 keyboard
+0,2,0,0,0,33,0,18181912
+6,2,0,0,0,33,0,18181912,3,Virtual core keyboard
+7,3,0,0,0,46,0,18181941,11,AT Translated Set 2 keyboard
+0,3,0,0,0,46,0,18181941
+6,3,0,0,0,46,0,18181941,3,Virtual core keyboard
+7,3,0,0,0,33,0,18182040,11,AT Translated Set 2 keyboard
+0,3,0,0,0,33,0,18182040
+6,3,0,0,0,33,0,18182040,3,Virtual core keyboard
+7,2,0,0,0,36,0,18182595,11,AT Translated Set 2 keyboard
+0,2,0,0,0,36,0,18182595
+6,2,0,0,0,36,0,18182595,3,Virtual core keyboard
+0,21,0,0,0,0,0,18182637
+NEW-WINDOW:650,337:54526196,54526196,12589625,0,0,0:0x0+500+37:0,0:TLP Export
+0,21,0,0,0,0,0,18182637
+0,21,0,0,0,0,0,18182637
+0,21,0,0,0,0,0,18182637
+0,21,0,0,0,0,0,18182637
+7,3,0,0,0,36,0,18182674,11,AT Translated Set 2 keyboard
+0,3,0,0,0,36,0,18182674
+6,3,0,0,0,36,0,18182674,3,Virtual core keyboard
+0,21,0,0,0,0,0,18182706
+NEW-WINDOW:460,169:54526188,54526188,746,0,0,0:460x169+879+458:0,0:Export of graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
+0,21,0,0,0,0,0,18182706
+0,21,0,0,0,0,0,18182706
+0,21,0,0,0,0,0,18182706
+0,21,0,0,0,0,0,18182706
+0,21,0,0,0,0,0,18182706
