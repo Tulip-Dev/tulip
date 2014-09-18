@@ -1,6 +1,6 @@
 ADD_CORE_FILES(CMakeLists.txt *Tree*.cpp *Graph.cpp AdjacencyMatrixImport.cpp dotImport*.* EmptyGraph.cpp GML*.* Grid.cpp GEXFImport.cpp Import*.cpp)
 
-INCLUDE_DIRECTORIES(./ ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipGUIInclude})
+INCLUDE_DIRECTORIES(./ ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipGUIInclude} ${UTF8CppInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(PlanarGraph_SRCS PlanarGraph.cpp)

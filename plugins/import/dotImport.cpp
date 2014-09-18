@@ -27,6 +27,7 @@ using namespace tlp;
 
 #ifdef _WIN32
 #define uint unsigned int
+#include <utf8.h>
 #endif
 
 namespace {
@@ -82,7 +83,13 @@ public:
     // Open input stream
     string fn;
     dataSet->get( "file::filename", fn );
+#ifndef WIN32
     FILE * fd = fopen( fn.c_str(), "r" );
+#else
+    wstring wfn;
+    utf8::utf8to16(fn.begin(), fn.end(), back_inserter(wfn));
+    FILE * fd = _wfopen( wfn.c_str(), L"r" );
+#endif
 
     if( !fd ) {
       if (pluginProgress)
