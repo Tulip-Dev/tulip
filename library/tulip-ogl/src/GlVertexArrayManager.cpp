@@ -551,6 +551,8 @@ void GlVertexArrayManager::endRendering() {
   glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
   glPointSize(2);
 
+  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+
   if (!pointsEdgesSelectedRenderingIndexArray.empty()) {
     if (canUseVBO && pointsVerticesUploaded) {
       glBindBuffer(GL_ARRAY_BUFFER, pointsVerticesVBO);
@@ -618,6 +620,7 @@ void GlVertexArrayManager::endRendering() {
     }
 
     OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+
     OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
     glDrawElements(GL_TRIANGLES, quadsSelectedRenderingIndicesArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(quadsSelectedRenderingIndicesArray));
     OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
