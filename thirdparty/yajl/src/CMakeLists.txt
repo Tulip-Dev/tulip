@@ -33,7 +33,7 @@ SET (incDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/include/yajl)
 SET (shareDir ${CMAKE_CURRENT_BINARY_DIR}/../${YAJL_DIST_NAME}/share/pkgconfig)
 
 # set the output path for libraries
-SET(LIBRARY_OUTPUT_PATH ${libDir})
+# SET(LIBRARY_OUTPUT_PATH ${libDir})
 
 #ADD_LIBRARY(yajl_s STATIC ${SRCS} ${HDRS} ${PUB_HDRS})
 
