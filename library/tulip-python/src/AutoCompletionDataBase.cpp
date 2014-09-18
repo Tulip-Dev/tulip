@@ -956,6 +956,7 @@ QSet<QString> AutoCompletionDataBase::getSubGraphsListIfContext(const QString &c
         QString prefix = cleanContext.mid(cleanContext.lastIndexOf(sgExprs[j])+sgExprs[j].size());
         ret = getAllSubGraphsNamesFromRoot(_graph->getRoot(), prefix);
       }
+
       break;
     }
   }
