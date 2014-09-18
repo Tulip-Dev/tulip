@@ -934,25 +934,29 @@ QSet<QString> AutoCompletionDataBase::getSubGraphsListIfContext(const QString &c
   QString cleanContext = context;
   QSet<QString> ret;
 
-  QString sgExpr = ".getSubGraph(";
+  QStringList sgExprs;
+  sgExprs << ".getSubGraph(" << ".getDescendantGraph(";
 
-  if (_graph && cleanContext.lastIndexOf(sgExpr) != -1) {
-    int i = 0;
+  for (int j = 0 ; j < sgExprs.count() ; ++j) {
+    if (_graph && cleanContext.lastIndexOf(sgExprs[j]) != -1) {
+      int i = 0;
 
-    while (sepChar[i]) {
-      if (sepChar[i] != '(' && cleanContext.lastIndexOf(sepChar[i]) != -1) {
-        cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i])+1);
+      while (sepChar[i]) {
+        if (sepChar[i] != '(' && cleanContext.lastIndexOf(sepChar[i]) != -1) {
+          cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i])+1);
+        }
+
+        ++i;
       }
 
-      ++i;
-    }
+      QString expr = cleanContext.mid(0, cleanContext.lastIndexOf(sgExprs[j]));
+      QString type = findTypeForExpr(expr, editedFunction);
 
-    QString expr = cleanContext.mid(0, cleanContext.lastIndexOf(sgExpr));
-    QString type = findTypeForExpr(expr, editedFunction);
-
-    if (type == "tlp.Graph") {
-      QString prefix = cleanContext.mid(cleanContext.lastIndexOf(sgExpr)+sgExpr.size());
-      ret = getAllSubGraphsNamesFromRoot(_graph->getRoot(), prefix);
+      if (type == "tlp.Graph") {
+        QString prefix = cleanContext.mid(cleanContext.lastIndexOf(sgExprs[j])+sgExprs[j].size());
+        ret = getAllSubGraphsNamesFromRoot(_graph->getRoot(), prefix);
+      }
+      break;
     }
   }
 
