@@ -49,7 +49,12 @@ def launchAvatarDlThread(url, directory, name):
     global maxThreadsDl
     global runThread
     runThread = True
-    ext = url[len(url)-4:]
+    ohPos = url.find("?oh")
+    if ohPos != -1:
+      urlImg = url[:ohPos]
+      ext = urlImg[len(urlImg)-4:]
+    else:
+      ext = url[len(url)-4:]
     fileName = directory+"/"+name+ext
     threadJobs.put((url, fileName))
     if (nbThreadsDl < maxThreadsDl):
