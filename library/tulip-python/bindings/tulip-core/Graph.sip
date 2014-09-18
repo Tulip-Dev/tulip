@@ -3761,6 +3761,14 @@ If no selection is done, the whole graph is reseted to default value.
 %End
 
 //===========================================================================================
+tlp::IteratorGraph *getRootGraphs();
+%Docstring
+tlp.getRootGraphs()
+
+Returns an iterator on all the currently existing root graphs.
+
+:rtype: a Tulip iterator on :class:`tlp.Graph` objects
+%End
 
 };
 

@@ -135,6 +135,15 @@ TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSel
  */
 TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=NULL);
 
+
+/**
+ * @ingroup Graph
+ * Gets an iterator over the root graphs. That is all the currently existing graphs which have been created using the tlp::newGraph, tlp::loadGraph or tlp::importGraph functions and are the root graphs of an existing graph hierarchy.
+ * @return An iterator over all the root graphs. The caller of this function is responsible of the deletion of the returned iterator.
+ */
+TLP_SCOPE Iterator<Graph*>* getRootGraphs();
+
+
 /**
  * @ingroup Graph
  * The class Graph is the interface of a Graph in the Tulip Library.
