@@ -492,7 +492,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
 class RootGraphsIterator :public tlp::Iterator<tlp::Graph *> {
   std::vector<Graph *> roots;
   Iterator<Graph *>* rootsIterator;
-  
+
 public:
   RootGraphsIterator() {
     const VectorGraph& ovg = tlp::Observable::getObservableGraph();
@@ -502,16 +502,16 @@ public:
     Graph* g;
     forEach(n, ovg.getNodes()) {
       if (tlp::Observable::isAlive(n) &&
-	  (g = dynamic_cast<Graph*>(tlp::Observable::getObject(n)))) {
-	// check if g is a root graph
-	if (g->getRoot() == g)
-	  roots.push_back(g);
+          (g = dynamic_cast<Graph*>(tlp::Observable::getObject(n)))) {
+        // check if g is a root graph
+        if (g->getRoot() == g)
+          roots.push_back(g);
       }
     }
 
     rootsIterator =
       new StlIterator<Graph*, std::vector<tlp::Graph*>::iterator>(roots.begin(),
-								  roots.end());
+          roots.end());
   }
 
   ~RootGraphsIterator() {
