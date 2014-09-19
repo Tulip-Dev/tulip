@@ -294,7 +294,8 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
   if (generateMipMaps && canUseMipmaps) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-  } else {
+  }
+  else {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   }
 

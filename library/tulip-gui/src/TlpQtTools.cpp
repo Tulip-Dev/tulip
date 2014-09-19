@@ -250,7 +250,8 @@ public:
       if (canUseMipmaps) {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glGenerateMipmap(GL_TEXTURE_2D);
-      } else {
+      }
+      else {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       }
 
@@ -291,7 +292,8 @@ public:
         if (canUseMipmaps) {
           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
           glGenerateMipmap(GL_TEXTURE_2D);
-        } else {
+        }
+        else {
           glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         }
 

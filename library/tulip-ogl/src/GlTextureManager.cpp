@@ -395,6 +395,7 @@ static bool generateTexture(const std::string &filename,
   glGenTextures(spriteNumber, textureNum);  //FIXME: handle case where no memory is available to load texture
 
   glEnable(GL_TEXTURE_2D);
+
   for(unsigned int i=0; i<spriteNumber; ++i) {
     glBindTexture(GL_TEXTURE_2D, textureNum[i]);
 
@@ -420,11 +421,13 @@ static bool generateTexture(const std::string &filename,
     if (canUseMipmaps) {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
       glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
+    }
+    else {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     }
 
   }
+
   glDisable(GL_TEXTURE_2D);
 
   delete [] textureNum;
