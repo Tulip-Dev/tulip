@@ -29,6 +29,7 @@
 #include <GL/glew.h>
 
 #include <tulip/GlTextureManager.h>
+#include <tulip/OpenGlConfigManager.h>
 
 //====================================================
 tlp::GlTextureManager* tlp::GlTextureManager::inst=NULL;
@@ -324,7 +325,7 @@ static bool generateTexture(const std::string &filename,
       }
     }
 
-    static bool canUseNpotTextures = glewIsSupported("GL_ARB_texture_non_power_of_two") == GL_TRUE;
+    bool canUseNpotTextures = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_non_power_of_two");
 
     if (!canUseNpotTextures) {
       bool formatOk=false;
@@ -352,6 +353,9 @@ static bool generateTexture(const std::string &filename,
       }
     }
   }
+
+  bool canUseMipmaps = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
+                       OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_object");
 
   GLuint* textureNum = new GLuint[spriteNumber];
 
@@ -390,6 +394,7 @@ static bool generateTexture(const std::string &filename,
 
   glGenTextures(spriteNumber, textureNum);  //FIXME: handle case where no memory is available to load texture
 
+  glEnable(GL_TEXTURE_2D);
   for(unsigned int i=0; i<spriteNumber; ++i) {
     glBindTexture(GL_TEXTURE_2D, textureNum[i]);
 
@@ -410,10 +415,17 @@ static bool generateTexture(const std::string &filename,
       delete [] dataForWidthSpriteTexture[i];
     }
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    if (canUseMipmaps) {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+      glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    }
+
   }
+  glDisable(GL_TEXTURE_2D);
 
   delete [] textureNum;
   delete [] dataForWidthSpriteTexture;
