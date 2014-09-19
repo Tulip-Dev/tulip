@@ -393,7 +393,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       if (find) {
         Graph *metaGraph=graph->getNodeMetaInfo(metaNode);
 
-        if (metaGraph) {
+        if (metaGraph && nldc) {
           graphHierarchy.push_back(graph);
           nodeHierarchy.push_back(metaNode);
           cameraHierarchy.push_back(nldc->goInsideItem(metaNode));
@@ -405,7 +405,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
       return true;
     }
     else {
-      if(!graphHierarchy.empty()) {
+      if(!graphHierarchy.empty() && nldc) {
         Graph * oldGraph=graphHierarchy.back();
         graphHierarchy.pop_back();
         Camera camera=cameraHierarchy.back();

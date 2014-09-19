@@ -59,7 +59,7 @@ private:
 
   QCursor oldCursor;
 public:
-  MouseNKeysNavigator() : currentSpecInteractorComponent(NULL) {}
+  MouseNKeysNavigator() : currentSpecInteractorComponent(NULL), nldc(NULL) {}
   ~MouseNKeysNavigator() {}
   bool eventFilter(QObject *, QEvent *);
   void clear();
