@@ -18,6 +18,7 @@
  */
 
 #include <tulip/TulipPluginHeaders.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QStack>
 #include <QPair>
@@ -50,7 +51,6 @@ public:
     _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL), _sizes(NULL) {
     addInParameter<std::string>("dir::directory", paramHelp[0],"");
   }
-  ~FileSystem() {}
 
   bool importGraph() {
     if (dataSet == NULL)
@@ -62,7 +62,7 @@ public:
 
     if (!rootInfo.exists()) {
 #ifndef NDEBUG
-      tlp::warning() << "Provided directory " << rootInfo.absoluteFilePath().toStdString() << " does not exist." << std::endl;
+      tlp::warning() << "Provided directory " << tlp::QStringToTlpString(rootInfo.absoluteFilePath()) << " does not exist." << std::endl;
 #endif
       return false;
     }
@@ -89,7 +89,7 @@ public:
 
     if (pluginProgress != NULL) {
       pluginProgress->progress(0,0);
-      pluginProgress->setComment((QObject::trUtf8("Importing ") + rootInfo.absoluteFilePath()).toStdString());
+      pluginProgress->setComment("Importing "+tlp::QStringToTlpString(rootInfo.absoluteFilePath()));
     }
 
     QStack<QPair<QString,tlp::node> > fsStack;
@@ -118,19 +118,19 @@ public:
 private:
   tlp::node addFileNode(const QFileInfo &infos, tlp::Graph *g) {
     tlp::node n = g->addNode();
-    _absolutePaths->setNodeValue(n,infos.absoluteFilePath().toStdString());
-    _baseNames->setNodeValue(n,infos.baseName().toStdString());
-    _createdDates->setNodeValue(n,infos.created().toString().toStdString());
-    _fileNames->setNodeValue(n,infos.fileName().toStdString());
+    _absolutePaths->setNodeValue(n,tlp::QStringToTlpString(infos.absoluteFilePath()));
+    _baseNames->setNodeValue(n,tlp::QStringToTlpString(infos.baseName()));
+    _createdDates->setNodeValue(n,tlp::QStringToTlpString(infos.created().toString()));
+    _fileNames->setNodeValue(n,tlp::QStringToTlpString(infos.fileName()));
     _isExecutable->setNodeValue(n,infos.isExecutable());
     _isReadable->setNodeValue(n,infos.isReadable());
     _isSymlink->setNodeValue(n,infos.isSymLink());
     _isWritable->setNodeValue(n,infos.isWritable());
-    _lastModifiedDates->setNodeValue(n,infos.lastModified().toString().toStdString());
-    _lastReadDates->setNodeValue(n,infos.lastRead().toString().toStdString());
-    _owners->setNodeValue(n,infos.owner().toStdString());
+    _lastModifiedDates->setNodeValue(n,tlp::QStringToTlpString(infos.lastModified().toString()));
+    _lastReadDates->setNodeValue(n,tlp::QStringToTlpString(infos.lastRead().toString()));
+    _owners->setNodeValue(n,tlp::QStringToTlpString(infos.owner()));
     _permissions->setNodeValue(n,(int)(infos.permissions()));
-    _suffixes->setNodeValue(n,infos.suffix().toStdString());
+    _suffixes->setNodeValue(n,tlp::QStringToTlpString(infos.suffix()));
     _sizes->setNodeValue(n,infos.size());
     return n;
   }
