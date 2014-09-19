@@ -207,7 +207,7 @@ CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(Graph* graph,
   graph(graph),srcColumnIds(srcColIds),tgtColumnIds(tgtColIds),sameSrcTgtProperties(srcPropNames.size() == tgtPropNames.size()),buildMissingElements(createMissinNodes) {
   assert(graph != NULL);
 
-  
+
   for (unsigned int i = 0; i < srcPropNames.size(); ++i) {
     assert(graph->existProperty(srcPropNames[i]));
     srcProperties.push_back(graph->getProperty(srcPropNames[i]));
@@ -217,7 +217,7 @@ CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(Graph* graph,
     assert(graph->existProperty(tgtPropNames[i]));
     tgtProperties.push_back(graph->getProperty(tgtPropNames[i]));
     sameSrcTgtProperties = sameSrcTgtProperties &&
-      (tgtPropNames[i] == srcPropNames[i]);
+                           (tgtPropNames[i] == srcPropNames[i]);
   }
 }
 
@@ -236,7 +236,7 @@ void CSVToGraphEdgeSrcTgtMapping::init(unsigned int rowNumber) {
       key.clear();
 
       for (unsigned int i = 0; i < tgtProperties.size(); ++i)
-	key.append(tgtProperties[i]->getNodeStringValue(n));
+        key.append(tgtProperties[i]->getNodeStringValue(n));
 
       tgtValueToId[key]=n.id;
     }
