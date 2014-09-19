@@ -204,9 +204,10 @@ unsigned int CSVToGraphEdgeIdMapping::buildIndexForRow(unsigned int, const vecto
 CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(Graph* graph,
     const vector<unsigned int>& srcColIds, const vector<unsigned int>& tgtColIds,const vector<string>& srcPropNames, const vector<string>& tgtPropNames,
     bool createMissinNodes):
-  graph(graph),srcColumnIds(srcColIds),tgtColumnIds(tgtColIds),buildMissingElements(createMissinNodes) {
+  graph(graph),srcColumnIds(srcColIds),tgtColumnIds(tgtColIds),sameSrcTgtProperties(srcPropNames.size() == tgtPropNames.size()),buildMissingElements(createMissinNodes) {
   assert(graph != NULL);
 
+  
   for (unsigned int i = 0; i < srcPropNames.size(); ++i) {
     assert(graph->existProperty(srcPropNames[i]));
     srcProperties.push_back(graph->getProperty(srcPropNames[i]));
@@ -215,6 +216,8 @@ CSVToGraphEdgeSrcTgtMapping::CSVToGraphEdgeSrcTgtMapping(Graph* graph,
   for (unsigned int i = 0; i < tgtPropNames.size(); ++i) {
     assert(graph->existProperty(tgtPropNames[i]));
     tgtProperties.push_back(graph->getProperty(tgtPropNames[i]));
+    sameSrcTgtProperties = sameSrcTgtProperties &&
+      (tgtPropNames[i] == srcPropNames[i]);
   }
 }
 
@@ -228,12 +231,15 @@ void CSVToGraphEdgeSrcTgtMapping::init(unsigned int rowNumber) {
       key.append(srcProperties[i]->getNodeStringValue(n));
 
     srcValueToId[key]=n.id;
-    key.clear();
 
-    for (unsigned int i = 0; i < tgtProperties.size(); ++i)
-      key.append(tgtProperties[i]->getNodeStringValue(n));
+    if (!sameSrcTgtProperties) {
+      key.clear();
 
-    tgtValueToId[key]=n.id;
+      for (unsigned int i = 0; i < tgtProperties.size(); ++i)
+	key.append(tgtProperties[i]->getNodeStringValue(n));
+
+      tgtValueToId[key]=n.id;
+    }
   }
 
   //Reserve memory
@@ -436,6 +442,9 @@ pair<ElementType, vector<unsigned int> > CSVToGraphEdgeSrcTgtMapping::getElement
       }
     }
 
+    TLP_HASH_MAP<string,unsigned int>& valueToId =
+      sameSrcTgtProperties ? srcValueToId : tgtValueToId;
+
     for(unsigned int i = 0; i < tokens.size(); ++i) {
       // because column values may be of type vector
       // we can have several target entities
@@ -444,11 +453,10 @@ pair<ElementType, vector<unsigned int> > CSVToGraphEdgeSrcTgtMapping::getElement
       for (unsigned int j = 0; j < tokens[i].size(); ++j)
         key.append(tokens[i][j]);
 
-      TLP_HASH_MAP<string,unsigned int>::iterator it =
-        tgtValueToId.find(key);
+      TLP_HASH_MAP<string,unsigned int>::iterator it = valueToId.find(key);
 
       //token exists in the map
-      if (it != tgtValueToId.end()) {
+      if (it != valueToId.end()) {
         tgts.push_back(node(it->second));
       }
       else if (buildMissingElements &&
@@ -459,7 +467,7 @@ pair<ElementType, vector<unsigned int> > CSVToGraphEdgeSrcTgtMapping::getElement
         for (unsigned int j = 0;  j < tokens[i].size(); ++j)
           tgtProperties[j]->setNodeStringValue(tgt, tokens[i][j]);
 
-        tgtValueToId[key] = tgt.id;
+        valueToId[key] = tgt.id;
       }
     }
   }

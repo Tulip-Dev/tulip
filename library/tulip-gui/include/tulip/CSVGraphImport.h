@@ -257,6 +257,7 @@ private:
   std::vector<unsigned int> tgtColumnIds;
   std::vector<tlp::PropertyInterface*> srcProperties;
   std::vector<tlp::PropertyInterface*> tgtProperties;
+  bool sameSrcTgtProperties;
   bool buildMissingElements;
 };
 
