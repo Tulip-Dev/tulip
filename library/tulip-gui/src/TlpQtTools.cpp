@@ -17,6 +17,8 @@
  *
  */
 
+#include <GL/glew.h>
+
 #include <tulip/TlpQtTools.h>
 
 #include <ostream>
@@ -184,6 +186,9 @@ public:
       return false;
     }
 
+    bool canUseMipmaps = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
+                         OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_object");
+
     unsigned int width=image.width();
     unsigned int height=image.height();
 
@@ -230,6 +235,8 @@ public:
 
     glGenTextures(spriteNumber, textureNum);  //FIXME: handle case where no memory is available to load texture
 
+    glEnable(GL_TEXTURE_2D);
+
     if(!isSprite) {
       glBindTexture(GL_TEXTURE_2D, textureNum[0]);
 
@@ -238,8 +245,15 @@ public:
       int GLFmt = image.hasAlphaChannel() ? GL_RGBA : GL_RGB;
       glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, image.bits());
 
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+      if (canUseMipmaps) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glGenerateMipmap(GL_TEXTURE_2D);
+      } else {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      }
+
     }
     else {
       QImage *images=new QImage[spriteNumber];
@@ -272,12 +286,22 @@ public:
         int GLFmt = images[i].hasAlphaChannel() ? GL_RGBA : GL_RGB;
         glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, images[i].bits());
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        if (canUseMipmaps) {
+          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+          glGenerateMipmap(GL_TEXTURE_2D);
+        } else {
+          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        }
+
       }
 
       delete[] images;
     }
+
+    glDisable(GL_TEXTURE_2D);
+
 
     return true;
   }

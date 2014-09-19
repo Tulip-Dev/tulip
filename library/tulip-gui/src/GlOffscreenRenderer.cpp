@@ -30,6 +30,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlGraphComposite.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include <sstream>
 
@@ -283,31 +284,37 @@ QImage GlOffscreenRenderer::getImage() {
 
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
+  bool canUseMipmaps = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
+                       OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_object");
+
   GLuint textureId = 0;
   glGenTextures(1, &textureId);
+  glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, textureId);
 
-  if (generateMipMaps) {
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-  }
-  else {
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  if (generateMipMaps && canUseMipmaps) {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  } else {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   }
 
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
   QImage image = getImage().mirrored();
   unsigned char *buff = image.bits();
 
   glBindTexture(GL_TEXTURE_2D, textureId);
 
-  if (generateMipMaps)
-    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, getViewportWidth(), getViewportHeight(), 0, GL_BGRA, GL_UNSIGNED_BYTE, buff);
+
+  if (generateMipMaps && canUseMipmaps) {
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
+
+  glDisable(GL_TEXTURE_2D);
 
   return textureId;
 
