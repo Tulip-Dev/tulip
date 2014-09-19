@@ -305,7 +305,7 @@ bool GlMainView::eventFilter(QObject* obj, QEvent* event) {
     // same for the configuration widgets
     QList<QWidget *> list = configurationWidgets();
 
-    if(!list.isEmpty()) {   //test if the current view has a configuration widget
+    if(!list.isEmpty() && list.first()->parentWidget()) {   //test if the current view has a configuration widget
       QWidget *pqw = list.first()->parentWidget()->parentWidget();
       QSize sSize = pqw->size();
       sSize.setHeight(resizeEvent->size().height() - 50);
