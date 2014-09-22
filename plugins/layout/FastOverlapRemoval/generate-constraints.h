@@ -18,7 +18,7 @@ class Rectangle {
   friend std::ostream& operator <<(std::ostream &os, const Rectangle &r);
 public:
   Rectangle(double x, double X, double y, double Y,
-	    const double& xBorder, const double& yBorder);
+            const double& xBorder, const double& yBorder);
   double getMaxX() const {
     return maxX+xBorder;
   }
@@ -109,9 +109,9 @@ class ConstraintsGenerator {
   Event **events;
   const unsigned int n;
 
- public:
+public:
 
- ConstraintsGenerator(unsigned int nbRectangles): n(nbRectangles) {
+  ConstraintsGenerator(unsigned int nbRectangles): n(nbRectangles) {
     events = new Event*[2*n];
   }
 

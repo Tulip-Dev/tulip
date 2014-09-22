@@ -27,9 +27,9 @@ std::ostream& operator <<(std::ostream &os, const Rectangle &r) {
   return os;
 }
 
-  Rectangle::Rectangle(double x, double X, double y, double Y,
-		       const double& xb, const double& yb)
-    : minX(x),maxX(X),minY(y),maxY(Y),xBorder(xb),yBorder(yb) {
+Rectangle::Rectangle(double x, double X, double y, double Y,
+                     const double& xb, const double& yb)
+  : minX(x),maxX(X),minY(y),maxY(Y),xBorder(xb),yBorder(yb) {
   assert(x<=X);
   assert(y<=Y);
 }
@@ -181,7 +181,7 @@ int compare_events(const void *a, const void *b) {
  * useNeighbourLists determines whether or not a heuristic is used to deciding whether to resolve
  * all overlap in the x pass, or leave some overlaps for the y pass.
  */
-  int ConstraintsGenerator::generateXConstraints(Rectangle** rs, Variable** vars, Constraint** &cs, const bool useNeighbourLists) {
+int ConstraintsGenerator::generateXConstraints(Rectangle** rs, Variable** vars, Constraint** &cs, const bool useNeighbourLists) {
   unsigned int i,m,ctr=0;
 
   for(i=0; i<n; i++) {
@@ -281,7 +281,7 @@ int compare_events(const void *a, const void *b) {
 /**
  * Prepares constraints in order to apply VPSC vertically to remove ALL overlap.
  */
-  int ConstraintsGenerator::generateYConstraints(Rectangle** rs, Variable** vars, Constraint** &cs) {
+int ConstraintsGenerator::generateYConstraints(Rectangle** rs, Variable** vars, Constraint** &cs) {
   unsigned int ctr=0,i,m;
 
   for(i=0; i<n; i++) {
