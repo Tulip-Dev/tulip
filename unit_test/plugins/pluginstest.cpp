@@ -55,6 +55,7 @@ int main(int /* arg */, char ** /* argv */) {
     loadTulipPluginsFromDir(tulipBuildDir + "/plugins/export", pLoader);
     loadTulipPluginsFromDir(tulipBuildDir + "/plugins/import", pLoader);
     loadTulipPluginsFromDir(tulipBuildDir + "/plugins/layout", pLoader);
+    loadTulipPluginsFromDir(tulipBuildDir + "/plugins/layout/FastOverlapRemoval", pLoader);
     loadTulipPluginsFromDir(tulipBuildDir + "/plugins/metric", pLoader);
     loadTulipPluginsFromDir(tulipBuildDir + "/plugins/selection", pLoader);
     loadTulipPluginsFromDir(tulipBuildDir + "/plugins/sizes", pLoader);
