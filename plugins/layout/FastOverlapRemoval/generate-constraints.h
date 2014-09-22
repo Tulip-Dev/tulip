@@ -17,8 +17,8 @@ namespace vpsc {
 class Rectangle {
   friend std::ostream& operator <<(std::ostream &os, const Rectangle &r);
 public:
-  static double xBorder,yBorder;
-  Rectangle(double x, double X, double y, double Y);
+  Rectangle(double x, double X, double y, double Y,
+	    const double& xBorder, const double& yBorder);
   double getMaxX() const {
     return maxX+xBorder;
   }
@@ -48,12 +48,6 @@ public:
   }
   double height() const {
     return getMaxY()-minY;
-  }
-  static void setXBorder(double x) {
-    xBorder=x;
-  }
-  static void setYBorder(double y) {
-    yBorder=y;
   }
   void moveCentreX(double x) {
     moveMinX(x-width()/2.0);
@@ -89,15 +83,46 @@ public:
   }
 private:
   double minX,maxX,minY,maxY;
+  const double& xBorder;
+  const double& yBorder;
 };
 
 
 class Variable;
 class Constraint;
+class Node;
 
-// returns number of constraints generated
-int generateXConstraints(const int n, Rectangle** rs, Variable** vars, Constraint** &cs, const bool useNeighbourLists);
-int generateYConstraints(const int n, Rectangle** rs, Variable** vars, Constraint** &cs);
+typedef enum {Open, Close} EventType;
+struct Event {
+  EventType type;
+  Node *v;
+  double pos;
+  Event(EventType t, Node *v, double p) : type(t),v(v),pos(p) {};
+  void init(EventType t, Node *n, double p) {
+    type = t;
+    v = n;
+    pos = p;
+  }
+};
+
+class ConstraintsGenerator {
+  Event **events;
+  const unsigned int n;
+
+ public:
+
+ ConstraintsGenerator(unsigned int nbRectangles): n(nbRectangles) {
+    events = new Event*[2*n];
+  }
+
+  ~ConstraintsGenerator() {
+    delete [] events;
+  }
+
+  // returns number of constraints generated
+  int generateXConstraints(Rectangle** rs, Variable** vars, Constraint** &cs, const bool useNeighbourLists);
+  int generateYConstraints(Rectangle** rs, Variable** vars, Constraint** &cs);
+};
 
 }
 

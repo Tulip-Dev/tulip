@@ -48,13 +48,13 @@ static inline bool compareConstraints(Constraint *const &l, Constraint *const &r
 
   if(sl==sr) {
     // arbitrary choice based on id
-    if(l->left->id==r->left->id) {
-      if(l->right->id<r->right->id) return true;
+    if(l->left->id()==r->left->id()) {
+      if(l->right->id()<r->right->id()) return true;
 
       return false;
     }
 
-    if(l->left->id<r->left->id) return true;
+    if(l->left->id()<r->left->id()) return true;
 
     return false;
   }

@@ -26,8 +26,6 @@ using std::endl;
 #define EXTRA_GAP 0.0001
 using namespace vpsc;
 
-double Rectangle::xBorder=0;
-double Rectangle::yBorder=0;
 /**
  * Takes an array of n rectangles and moves them as little as possible
  * such that rectangles are separated by at least xBorder horizontally
@@ -40,20 +38,20 @@ double Rectangle::yBorder=0;
  *    x-positions - this corrects the case where rectangles were moved
  *    too much in the first pass.
  */
-void removeRectangleOverlap(unsigned n, Rectangle *rs[], double xBorder, double yBorder) {
+void removeRectangleOverlap(unsigned n, Rectangle *rs[], double& xBorder, double& yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
-    Rectangle::setXBorder(xBorder+EXTRA_GAP);
-    Rectangle::setYBorder(yBorder+EXTRA_GAP);
+    xBorder+=EXTRA_GAP;
+    yBorder+=EXTRA_GAP;
     Variable **vs=new Variable*[n];
 
     for(unsigned i=0; i<n; i++) {
-      vs[i]=new Variable(i,0,1);
+      vs[i]=new Variable(0,1);
     }
 
     Constraint **cs;
     double *oldX = new double[n];
-    unsigned m=generateXConstraints(n,rs,vs,cs,true);
+    unsigned m=ConstraintsGenerator(n).generateXConstraints(rs,vs,cs,true);
 
     for(unsigned i=0; i<n; i++) {
       oldX[i]=vs[i]->desiredPosition;
@@ -78,8 +76,8 @@ void removeRectangleOverlap(unsigned n, Rectangle *rs[], double xBorder, double 
     delete [] cs;
     // Removing the extra gap here ensures things that were moved to be adjacent to
     // one another above are not considered overlapping
-    Rectangle::setXBorder(Rectangle::xBorder-EXTRA_GAP);
-    m=generateYConstraints(n,rs,vs,cs);
+    xBorder-=EXTRA_GAP;
+    m = ConstraintsGenerator(n).generateYConstraints(rs,vs,cs);
     Solver vpsc_y(n,vs,m,cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     f.open(LOGFILE,ios::app);
@@ -100,8 +98,8 @@ void removeRectangleOverlap(unsigned n, Rectangle *rs[], double xBorder, double 
     }
 
     delete [] cs;
-    Rectangle::setYBorder(Rectangle::yBorder-EXTRA_GAP);
-    m=generateXConstraints(n,rs,vs,cs,false);
+    yBorder-=EXTRA_GAP;
+    m=ConstraintsGenerator(n).generateXConstraints(rs,vs,cs,false);
     Solver vpsc_x2(n,vs,m,cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     f.open(LOGFILE,ios::app);
@@ -132,19 +130,19 @@ void removeRectangleOverlap(unsigned n, Rectangle *rs[], double xBorder, double 
   }
 }
 
-void removeRectangleOverlapX(unsigned n, Rectangle *rs[], double xBorder) {
+void removeRectangleOverlapX(unsigned n, Rectangle *rs[],
+			     double& xBorder, double& yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
-    Rectangle::setXBorder(xBorder+EXTRA_GAP);
-    Rectangle::setYBorder(xBorder+EXTRA_GAP);
+    yBorder = (xBorder+=EXTRA_GAP);
     Variable **vs=new Variable*[n];
 
     for(unsigned i=0; i<n; i++) {
-      vs[i]=new Variable(i,0,1);
+      vs[i]=new Variable(0,1);
     }
 
     Constraint **cs;
-    unsigned m=generateXConstraints(n,rs,vs,cs,false);
+    unsigned m=ConstraintsGenerator(n).generateXConstraints(rs,vs,cs,false);
     Solver vpsc_x(n,vs,m,cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     ofstream f(LOGFILE,ios::app);
@@ -173,18 +171,18 @@ void removeRectangleOverlapX(unsigned n, Rectangle *rs[], double xBorder) {
   }
 }
 
-void removeRectangleOverlapY(unsigned n, Rectangle *rs[], double yBorder) {
+void removeRectangleOverlapY(unsigned n, Rectangle *rs[], double& yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
-    Rectangle::setYBorder(yBorder+EXTRA_GAP);
+    yBorder+=EXTRA_GAP;
     Variable **vs=new Variable*[n];
 
     for(unsigned i=0; i<n; i++) {
-      vs[i]=new Variable(i,0,1);
+      vs[i]=new Variable(0,1);
     }
 
     Constraint **cs;
-    unsigned int m=generateYConstraints(n,rs,vs,cs);
+    unsigned int m=ConstraintsGenerator(n).generateYConstraints(rs,vs,cs);
     Solver vpsc_y(n,vs,m,cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
     f.open(LOGFILE,ios::app);

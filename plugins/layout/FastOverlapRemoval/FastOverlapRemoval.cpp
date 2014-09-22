@@ -138,7 +138,7 @@ bool FastOverlapRemoval::run () {
   result->setAllEdgeValue(viewLayout->getEdgeDefaultValue());
   edge e;
   forEach(e, viewLayout->getNonDefaultValuatedEdges())
-  result->setEdgeValue(e, viewLayout->getEdgeValue(e));
+    result->setEdgeValue(e, viewLayout->getEdgeValue(e));
 
   SizeProperty size(graph);
 
@@ -168,7 +168,7 @@ bool FastOverlapRemoval::run () {
       double minY = pos.getY() - rotSize.getH()/2.0;
 
       nodeRectangles[nodeCounter] =
-        new vpsc::Rectangle (minX, maxX, minY, maxY);
+        new vpsc::Rectangle (minX, maxX, minY, maxY, xBorder, yBorder);
       nodeOrder[nodeCounter] = curNode;
       ++nodeCounter;
     }//end forEach
@@ -189,7 +189,7 @@ bool FastOverlapRemoval::run () {
 #else
                               nodeRectangles.data(),
 #endif
-                              xBorder);
+                              xBorder, yBorder);
     }
     else {
       removeRectangleOverlapY(graph->numberOfNodes(),
