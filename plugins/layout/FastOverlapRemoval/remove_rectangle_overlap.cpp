@@ -131,7 +131,7 @@ void removeRectangleOverlap(unsigned n, Rectangle *rs[], double& xBorder, double
 }
 
 void removeRectangleOverlapX(unsigned n, Rectangle *rs[],
-			     double& xBorder, double& yBorder) {
+                             double& xBorder, double& yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
     yBorder = (xBorder+=EXTRA_GAP);
