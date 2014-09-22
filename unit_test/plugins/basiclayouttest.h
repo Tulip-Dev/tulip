@@ -46,6 +46,7 @@ class BasicLayoutTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testTutte);
   CPPUNIT_TEST(testInducedSubGraphSelection);
   CPPUNIT_TEST(testKruskal);
+  CPPUNIT_TEST(testFastOverlapRemoval);
   CPPUNIT_TEST_SUITE_END();
 private:
   tlp::Graph *graph;
@@ -74,6 +75,7 @@ public:
   void testTutte();
   void testInducedSubGraphSelection();
   void testKruskal();
+  void testFastOverlapRemoval();
 };
 
 #endif // BASICLAYOUTTEST_H

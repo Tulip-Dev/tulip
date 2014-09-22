@@ -194,3 +194,14 @@ void BasicLayoutTest::testKruskal() {
         CPPUNIT_ASSERT(selection.getNodeValue(n));
     }
 }
+//==========================================================
+void BasicLayoutTest::testFastOverlapRemoval() {
+    initializeGraph("Planar Graph");
+    DataSet ds;
+    LayoutProperty layout(graph);
+    ds.set("layout", &layout);
+    string errorMsg;
+    bool result =
+            graph->applyPropertyAlgorithm("Fast Overlap Removal", &layout, errorMsg, NULL, &ds);
+    CPPUNIT_ASSERT(result);
+}
