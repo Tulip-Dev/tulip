@@ -46,11 +46,6 @@ public:
 
   FastOverlapRemoval(const tlp::PluginContext *context);
   inline ~FastOverlapRemoval() {}
-  inline bool check (std::string &errMsg) {
-    errMsg = "";
-    return true;
-  }
-  inline void reset () {}
   bool run();
 };
 /*@}*/

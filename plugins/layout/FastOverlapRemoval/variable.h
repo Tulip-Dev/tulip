@@ -21,7 +21,6 @@ typedef std::vector<Constraint*> Constraints;
 class Variable {
   friend std::ostream& operator <<(std::ostream &os, const Variable &v);
 public:
-  const int id; // useful in log files
   double desiredPosition;
   const double weight;
   double offset;
@@ -30,9 +29,8 @@ public:
   Constraints in;
   Constraints out;
   char *toString();
-  inline Variable(const int id, const double desiredPos, const double weight)
-    : id(id)
-    , desiredPosition(desiredPos)
+  inline Variable(const double desiredPos = 0, const double weight = 1)
+    : desiredPosition(desiredPos)
     , weight(weight)
     , offset(0)
     , block(NULL)
@@ -45,6 +43,10 @@ public:
   ~Variable(void) {
     in.clear();
     out.clear();
+  }
+
+  size_t id() const {
+    return (size_t) this;
   }
 };
 }
