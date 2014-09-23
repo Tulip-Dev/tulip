@@ -44,9 +44,8 @@ class BasicPluginsTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testExportGml);
   CPPUNIT_TEST(testImportTLP);
   CPPUNIT_TEST(testExportTLP);
-#if !defined(WIN32) || !defined(I64)
+#if !defined(WIN32)
   // do not know yet why it crashes
-  // on a Window 64 bits
   CPPUNIT_TEST(testExportImportTLPB);
 #endif
   CPPUNIT_TEST(testExportImportJSON);
