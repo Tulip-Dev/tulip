@@ -3,6 +3,25 @@
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
+
+/*
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
  *
  * Tulip is free software; you can redistribute it and/or modify
@@ -39,8 +58,8 @@ class NumericProperty;
 /**
  *  This ordering was first introduced by C. Gutwenger and P. Mutzel in \n
  *  "Grid embeddings of biconnected planar graphs", \n
- *  "Extended Abstract, Max-Planck-Institut für Informatik," \n
- *  "Saarbrücken, Germany, 1997" \n
+ *  "Extended Abstract, Max-Planck-Institut fÃ¼r Informatik," \n
+ *  "SaarbrÃ¼cken, Germany, 1997" \n
  *  Let n be the number of nodes, the original algorithm complexity is in O(n).\n
  *  But the implementation of the canonical ordering has not been made in O(n).\n
  */
