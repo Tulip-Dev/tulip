@@ -3,6 +3,25 @@
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
+
+/*
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
  * from LaBRI, University of Bordeaux
  *
  * Tulip is free software; you can redistribute it and/or modify
@@ -218,7 +237,7 @@ public:
   * @param e the graph edge on which to compute its length
   *
   * @warning this function only measure the length of the polyline between bends,
-  * when using curves like Bézier etc... the result will not be the length of the curve.
+  * when using curves like BÃ©zier etc... the result will not be the length of the curve.
   **/
   double edgeLength(const edge e) const;
 
