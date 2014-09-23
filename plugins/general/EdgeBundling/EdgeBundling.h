@@ -3,7 +3,7 @@
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ * from LaBRI, University of Bordeaux
  *
  * This plug-in is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License

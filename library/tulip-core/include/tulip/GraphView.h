@@ -3,7 +3,7 @@
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ * from LaBRI, University of Bordeaux
  *
  * Tulip is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
@@ -18,16 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
-/*
- Author: David Auber
- Email : auber@labri.fr
- Last modification : 20/08/2001
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-*/
 
 #ifndef Tulip_SUPERGRAPHVIEW_H
 #define Tulip_SUPERGRAPHVIEW_H

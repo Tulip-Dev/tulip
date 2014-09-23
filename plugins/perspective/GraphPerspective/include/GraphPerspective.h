@@ -3,7 +3,7 @@
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ * from LaBRI, University of Bordeaux
  *
  * Tulip is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
@@ -59,7 +59,7 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
 public:
   GraphPerspectiveLogger* _logger;
 
-  PLUGININFORMATION("Tulip", "Ludwig Fiolka", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "")
+  PLUGININFORMATION("Tulip", "Tulip Team", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "")
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/desktop.png";
   }
