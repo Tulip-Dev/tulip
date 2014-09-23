@@ -54,8 +54,6 @@ StringCollection.cpp
 StringProperty.cpp
 TLPExport.cpp
 TLPImport.cpp
-TLPBExport.cpp
-TLPBImport.cpp
 TlpTools.cpp
 TreeTest.cpp
 TriconnectedTest.cpp
@@ -70,6 +68,10 @@ TulipViewSettings.cpp
 TlpJsonExport.cpp
 TlpJsonImport.cpp
 )
+
+IF(NOT WIN32)
+SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} TLPBExport.cpp TLPBImport.cpp)
+ENDIF()
 
 IF(CHECK_MEMORY)
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} MemoryChecker.cpp)
