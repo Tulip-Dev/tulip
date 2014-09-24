@@ -317,7 +317,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       os.write((char *) &size, sizeof(size));
       os.write((char *) nameOrType.data(), size);
 
-      if (pnViewProp) {
+      if (pnViewProp && !TulipBitmapDir.empty()) {
         string defVal = prop->getNodeDefaultStringValue();
         size_t pos = defVal.find(TulipBitmapDir);
 
@@ -366,7 +366,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           size = getNode(n).id;
           vs.write((char *) &size, sizeof(size));
 
-          if (pnViewProp) { // viewFont || viewTexture
+          if (pnViewProp && !TulipBitmapDir.empty()) { // viewFont || viewTexture
             string sVal = prop->getNodeStringValue(n);
             size_t pos = sVal.find(TulipBitmapDir);
 
@@ -454,7 +454,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             // finally save set
             EdgeSetType::writeb(vs, rEdges);
           }
-          else if (pnViewProp) {   // viewFont || viewTexture
+          else if (pnViewProp && !TulipBitmapDir.empty()) {   // viewFont || viewTexture
             string sVal = prop->getEdgeStringValue(e);
             size_t pos = sVal.find(TulipBitmapDir);
 
