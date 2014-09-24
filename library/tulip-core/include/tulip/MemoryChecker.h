@@ -18,7 +18,7 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef NDEBUG
+#if !defined(NDEBUG) && !defined(__EMSCRIPTEN__)
 
 #ifndef MEMORYCHECKER_ON
 #define MEMORYCHECKER_ON
