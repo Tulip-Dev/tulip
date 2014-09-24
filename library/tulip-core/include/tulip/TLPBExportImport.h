@@ -43,6 +43,15 @@
 #include <tulip/ExportModule.h>
 #include <tulip/ImportModule.h>
 
+// some compilation environments define major and minor as preprocessor macros
+// undefine them in that case
+#ifdef major
+#undef major
+#endif
+
+#ifdef minor
+#undef minor
+#endif
 
 /**
  * The plugins below export/import a Tulip graph

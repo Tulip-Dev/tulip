@@ -16,6 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#if !defined(NDEBUG) && !defined(__EMSCRIPTEN__)
+
 #include "tulip/tulipconf.h"
 #include "tulip/MemoryChecker.h"
 #include <cstring>
@@ -112,3 +115,5 @@ void memory_checker_clear_report() {
   memory_checker->clear();
   block_inserts = false;
 }
+
+#endif
