@@ -26,7 +26,16 @@ background-color: #A9A9A9;
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -42,7 +51,7 @@ background-color: white;
 }</string>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>5</number>
      </property>
      <widget class="QWidget" name="startupPage">
       <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -111,7 +120,16 @@ p, li { white-space: pre-wrap; }
           <property name="spacing">
            <number>20</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
            <number>10</number>
           </property>
           <item>
@@ -168,7 +186,16 @@ p, li { white-space: pre-wrap; }
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -218,7 +245,16 @@ p, li { white-space: pre-wrap; }
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -239,7 +275,16 @@ p, li { white-space: pre-wrap; }
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -259,12 +304,49 @@ p, li { white-space: pre-wrap; }
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="splitPageHorizontal">
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="splitPageHorizontalSplitter">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <widget class="PlaceHolderWidget" name="splitPageHorizontalPanel1" native="true"/>
+         <widget class="PlaceHolderWidget" name="splitPageHorizontalPanel2" native="true"/>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="gridPage">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -307,7 +389,16 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="split3Page">
       <layout class="QVBoxLayout" name="verticalLayout_5">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -335,7 +426,16 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="split32Page">
       <layout class="QVBoxLayout" name="verticalLayout_6">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -363,7 +463,16 @@ p, li { white-space: pre-wrap; }
      </widget>
      <widget class="QWidget" name="split33Page">
       <layout class="QVBoxLayout" name="verticalLayout_16">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -412,7 +521,16 @@ p, li { white-space: pre-wrap; }
       <property name="spacing">
        <number>4</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -617,6 +735,44 @@ p, li { white-space: pre-wrap; }
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="splitHorizontalModeButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>2 panels per page</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/split_screen_horizontal.png</normaloff>:/tulip/gui/ui/split_screen_horizontal.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+F2</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="split32ModeButton">
         <property name="minimumSize">
          <size>
@@ -785,8 +941,8 @@ p, li { white-space: pre-wrap; }
    <slot>switchToGridMode()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1074</x>
-     <y>623</y>
+     <x>1057</x>
+     <y>634</y>
     </hint>
     <hint type="destinationlabel">
      <x>543</x>
@@ -801,8 +957,8 @@ p, li { white-space: pre-wrap; }
    <slot>switchToSplitMode()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1046</x>
-     <y>623</y>
+     <x>917</x>
+     <y>634</y>
     </hint>
     <hint type="destinationlabel">
      <x>543</x>
@@ -817,8 +973,8 @@ p, li { white-space: pre-wrap; }
    <slot>switchToSingleMode()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1018</x>
-     <y>623</y>
+     <x>889</x>
+     <y>634</y>
     </hint>
     <hint type="destinationlabel">
      <x>543</x>
@@ -833,8 +989,8 @@ p, li { white-space: pre-wrap; }
    <slot>nextPage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>555</x>
-     <y>623</y>
+     <x>510</x>
+     <y>634</y>
     </hint>
     <hint type="destinationlabel">
      <x>543</x>
@@ -849,8 +1005,8 @@ p, li { white-space: pre-wrap; }
    <slot>previousPage()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>517</x>
-     <y>623</y>
+     <x>470</x>
+     <y>634</y>
     </hint>
     <hint type="destinationlabel">
      <x>543</x>
@@ -881,8 +1037,8 @@ p, li { white-space: pre-wrap; }
    <slot>switchToSplit3Mode()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1046</x>
-     <y>623</y>
+     <x>1029</x>
+     <y>634</y>
     </hint>
     <hint type="destinationlabel">
      <x>543</x>
@@ -897,8 +1053,8 @@ p, li { white-space: pre-wrap; }
    <slot>switchToSplit32Mode()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1019</x>
-     <y>624</y>
+     <x>973</x>
+     <y>634</y>
     </hint>
     <hint type="destinationlabel">
      <x>543</x>
@@ -938,6 +1094,22 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>splitHorizontalModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSplitHorizontalMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>933</x>
+     <y>622</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>542</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>delView(tlp::View*)</slot>
@@ -952,5 +1124,6 @@ p, li { white-space: pre-wrap; }
   <slot>switchToSplit32Mode()</slot>
   <slot>switchToSplit33Mode()</slot>
   <slot>switchToSixMode()</slot>
+  <slot>switchToSplitHorizontalMode()</slot>
  </slots>
 </ui>

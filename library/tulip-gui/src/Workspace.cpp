@@ -60,6 +60,7 @@ Workspace::Workspace(QWidget *parent)
   _modeToSlots[_ui->startupPage] = QVector<PlaceHolderWidget*>();
   _modeToSlots[_ui->singlePage] = QVector<PlaceHolderWidget*>() << _ui->singlePage;
   _modeToSlots[_ui->splitPage] = QVector<PlaceHolderWidget*>() << _ui->splitPagePanel1 << _ui->splitPagePanel2;
+  _modeToSlots[_ui->splitPageHorizontal] = QVector<PlaceHolderWidget*>() << _ui->splitPageHorizontalPanel1 << _ui->splitPageHorizontalPanel2;
   _modeToSlots[_ui->split3Page] = QVector<PlaceHolderWidget*>() << _ui->split3PagePanel1 << _ui->split3PagePanel2 << _ui->split3PagePanel3;
   _modeToSlots[_ui->split32Page] = QVector<PlaceHolderWidget*>() << _ui->split32Panel1 << _ui->split32Panel2 << _ui->split32Panel3;
   _modeToSlots[_ui->split33Page] = QVector<PlaceHolderWidget*>() << _ui->split33Panel1 << _ui->split33Panel2 << _ui->split33Panel3;
@@ -69,6 +70,7 @@ Workspace::Workspace(QWidget *parent)
   // This map allows us to know which widget can toggle a mode
   _modeSwitches[_ui->singlePage] = _ui->singleModeButton;
   _modeSwitches[_ui->splitPage] = _ui->splitModeButton;
+  _modeSwitches[_ui->splitPageHorizontal] = _ui->splitHorizontalModeButton;
   _modeSwitches[_ui->split3Page] = _ui->split3ModeButton;
   _modeSwitches[_ui->split32Page] = _ui->split32ModeButton;
   _modeSwitches[_ui->split33Page] = _ui->split33ModeButton;
@@ -231,6 +233,7 @@ void Workspace::switchToSingleMode() {
 void Workspace::setSingleModeSwitch(QWidget* w) {
   _modeSwitches[_ui->singlePage] = w;
 }
+
 void Workspace::switchToSplitMode() {
   switchWorkspaceMode(_ui->splitPage);
 }
@@ -238,6 +241,15 @@ void Workspace::switchToSplitMode() {
 void Workspace::setSplitModeSwitch(QWidget *w) {
   _modeSwitches[_ui->splitPage] = w;
 }
+
+void Workspace::switchToSplitHorizontalMode() {
+  switchWorkspaceMode(_ui->splitPageHorizontal);
+}
+
+void Workspace::setSplitHorizontalModeSwitch(QWidget *w) {
+  _modeSwitches[_ui->splitPageHorizontal] = w;
+}
+
 void Workspace::switchToSplit3Mode() {
   switchWorkspaceMode(_ui->split3Page);
 }
