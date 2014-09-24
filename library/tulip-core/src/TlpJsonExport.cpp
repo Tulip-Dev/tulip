@@ -229,7 +229,7 @@ public:
 
       string dsValue = property->getNodeDefaultStringValue();
 
-      if (writingPathViewProperty) {
+      if (writingPathViewProperty && !TulipBitmapDir.empty()) {
         size_t pos = dsValue.find(TulipBitmapDir);
 
         if(pos != string::npos)
@@ -241,7 +241,7 @@ public:
       _writer.writeString(EdgeDefaultToken);
       dsValue = property->getEdgeDefaultStringValue();
 
-      if (writingPathViewProperty) {
+      if (writingPathViewProperty && !TulipBitmapDir.empty()) {
         size_t pos = dsValue.find(TulipBitmapDir);
 
         if(pos != string::npos)
@@ -259,7 +259,7 @@ public:
           _writer.writeString(temp.str());
           string sValue = property->getNodeStringValue(n);
 
-          if (writingPathViewProperty) {
+          if (writingPathViewProperty && !TulipBitmapDir.empty()) {
             size_t pos = sValue.find(TulipBitmapDir);
 
             if(pos != string::npos)
@@ -280,7 +280,7 @@ public:
           _writer.writeString(temp.str());
           string sValue = property->getEdgeStringValue(e);
 
-          if (writingPathViewProperty) {
+          if (writingPathViewProperty && !TulipBitmapDir.empty()) {
             size_t pos = sValue.find(TulipBitmapDir);
 
             if(pos != string::npos)
