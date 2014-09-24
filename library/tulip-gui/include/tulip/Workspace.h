@@ -82,6 +82,8 @@ public slots:
   void setSingleModeSwitch(QWidget*);
   void switchToSplitMode();
   void setSplitModeSwitch(QWidget*);
+  void switchToSplitHorizontalMode();
+  void setSplitHorizontalModeSwitch(QWidget*);
   void switchToSplit3Mode();
   void setSplit3ModeSwitch(QWidget*);
   void switchToSplit32Mode();
