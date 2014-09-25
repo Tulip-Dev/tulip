@@ -73,6 +73,7 @@ void CoordEditor::coordUpdated() {
 void CoordEditor::done(int r) {
   if (r == QDialog::Accepted)
     currentCoord = Coord(ui->xLineEdit->text().toFloat(),ui->yLineEdit->text().toFloat(),ui->zLineEdit->text().toFloat());
+
   QDialog::done(r);
 }
 

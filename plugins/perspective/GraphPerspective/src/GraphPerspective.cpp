@@ -434,7 +434,7 @@ void GraphPerspective::exportGraph(Graph* g) {
   else {
     if (exportPluginName == "TLPB Export")
       os = tlp::getOutputFileStream(filename,
-				    std::ios::out | std::ios::binary);
+                                    std::ios::out | std::ios::binary);
     else
       os = tlp::getOutputFileStream(filename);
   }

@@ -762,7 +762,7 @@ QVariant QVectorBoolEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
   QVector<bool> result;
   QVector<QVariant> editorData = static_cast<VectorEditor*>(editor)->vector();
   foreach(QVariant v, editorData)
-    result.push_back(v.value<bool>());
+  result.push_back(v.value<bool>());
   return QVariant::fromValue<QVector<bool> >(result);
 }
 
