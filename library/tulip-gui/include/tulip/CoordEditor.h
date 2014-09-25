@@ -40,6 +40,8 @@ class TLP_QT_SCOPE CoordEditor : public QDialog {
   Q_PROPERTY(Coord coord READ coord WRITE setCoord NOTIFY coordChanged)
 
   Ui::CoordEditor *ui;
+  Coord currentCoord;
+
 public:
   explicit CoordEditor(QWidget *parent = 0, bool editSize = false);
   ~CoordEditor();
@@ -49,15 +51,17 @@ public:
   // redefinition to ensure it is shown in the center of its parent
   void showEvent(QShowEvent* ev);
 
+
 public slots:
   void setCoord(const tlp::Coord& s);
+  // redefinition to ensure to catch the end of input
+  void done(int r);
 
 signals:
   void coordChanged(tlp::Coord coord);
 
 private slots:
   void coordUpdated();
-
 };
 }
 

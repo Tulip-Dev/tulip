@@ -54,9 +54,10 @@ CoordEditor::~CoordEditor() {
 }
 
 Coord CoordEditor::coord()const {
-  return Coord(ui->xLineEdit->text().toFloat(),ui->yLineEdit->text().toFloat(),ui->zLineEdit->text().toFloat());
+  return currentCoord;
 }
 void CoordEditor::setCoord(const Coord& coord) {
+  currentCoord = coord;
   blockSignals(true);
   ui->xLineEdit->setText(QString::number(coord[0]));
   ui->yLineEdit->setText(QString::number(coord[1]));
@@ -67,6 +68,12 @@ void CoordEditor::setCoord(const Coord& coord) {
 
 void CoordEditor::coordUpdated() {
   emit(coordChanged(coord()));
+}
+
+void CoordEditor::done(int r) {
+  if (r == QDialog::Accepted)
+    currentCoord = Coord(ui->xLineEdit->text().toFloat(),ui->yLineEdit->text().toFloat(),ui->zLineEdit->text().toFloat());
+  QDialog::done(r);
 }
 
 // to ensure it is shown in the center of its parent
