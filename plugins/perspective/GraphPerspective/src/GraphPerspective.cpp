@@ -427,11 +427,17 @@ void GraphPerspective::exportGraph(Graph* g) {
 
   std::ostream *os;
   std::string filename = (exportFile = wizard.outputFile()).toUtf8().data();
+  std::string exportPluginName = wizard.algorithm().toStdString();
 
   if (filename.rfind(".gz") == (filename.length() - 3))
     os = tlp::getOgzstream(filename);
-  else
-    os = tlp::getOutputFileStream(filename);
+  else {
+    if (exportPluginName == "TLPB Export")
+      os = tlp::getOutputFileStream(filename,
+				    std::ios::out | std::ios::binary);
+    else
+      os = tlp::getOutputFileStream(filename);
+  }
 
   if (os->fail()) {
     QMessageBox::critical(_mainWindow,trUtf8("File error"),trUtf8("Cannot open output file for writing: ") + wizard.outputFile());
@@ -441,7 +447,6 @@ void GraphPerspective::exportGraph(Graph* g) {
 
   DataSet data = wizard.parameters();
   PluginProgress* prg = progress(NoProgressOption);
-  std::string exportPluginName = wizard.algorithm().toStdString();
   prg->setTitle(exportPluginName);
   bool result = tlp::exportGraph(g,*os,exportPluginName,data,prg);
   delete os;

@@ -67,11 +67,9 @@ PluginProgress.cpp
 TulipViewSettings.cpp
 TlpJsonExport.cpp
 TlpJsonImport.cpp
+TLPBExport.cpp
+TLPBImport.cpp
 )
-
-IF(NOT WIN32)
-SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} TLPBExport.cpp TLPBImport.cpp)
-ENDIF()
 
 IF(CHECK_MEMORY)
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} MemoryChecker.cpp)
