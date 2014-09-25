@@ -25,7 +25,7 @@
 
 using namespace tlp;
 
-VectorEditionWidget::VectorEditionWidget(QWidget *parent): QWidget(parent), _ui(new Ui::VectorEditionWidget), _userType(0) {
+VectorEditionWidget::VectorEditionWidget(QWidget *parent): QDialog(parent), _ui(new Ui::VectorEditionWidget), _userType(0) {
   _ui->setupUi(this);
   _ui->list->setItemDelegate(new TulipItemDelegate(_ui->list));
 }
@@ -45,17 +45,7 @@ void VectorEditionWidget::setVector(const QVector<QVariant> &d, int userType) {
     _ui->list->addItem(i);
   }
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
-}
-
-QVector<QVariant> VectorEditionWidget::vector() const {
-  QVector<QVariant> result;
-  QAbstractItemModel* model = _ui->list->model();
-
-  for (int i=0; i<model->rowCount(); ++i) {
-    result.push_back(model->data(model->index(i,0)));
-  }
-
-  return result;
+  currentVector = d;
 }
 
 void VectorEditionWidget::add() {
@@ -70,4 +60,15 @@ void VectorEditionWidget::remove() {
   foreach(QListWidgetItem* i, _ui->list->selectedItems())
   delete i;
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
+}
+
+void VectorEditionWidget::done(int r) {
+  if (r == QDialog::Accepted) {
+    QAbstractItemModel* model = _ui->list->model();
+    currentVector.clear();
+    for (int i=0; i<model->rowCount(); ++i) {
+      currentVector.push_back(model->data(model->index(i,0)));
+    }
+  }
+  QDialog::done(r);
 }

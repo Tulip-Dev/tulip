@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>VectorEditionWidget</class>
- <widget class="QWidget" name="VectorEditionWidget">
+ <widget class="QDialog" name="VectorEditionWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -191,7 +191,7 @@ height: 30;
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
-      <set>QDialogButtonBox::Ok</set>
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
    </item>
@@ -235,13 +235,29 @@ height: 30;
   </connection>
   <connection>
    <sender>buttonBox</sender>
-   <signal>clicked(QAbstractButton*)</signal>
+   <signal>accepted()</signal>
    <receiver>VectorEditionWidget</receiver>
-   <slot>close()</slot>
+   <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>249</x>
-     <y>229</y>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>124</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>VectorEditionWidget</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>249</x>
+     <y>227</y>
     </hint>
     <hint type="destinationlabel">
      <x>249</x>
