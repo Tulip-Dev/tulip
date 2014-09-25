@@ -336,6 +336,8 @@ public:
   }
   ~TulipFileDialog() {}
   int ok;
+  TulipFileDescriptor previousFileDescriptor;
+
   void done(int res) {
     ok = res;
     QFileDialog::done(res);
@@ -358,7 +360,8 @@ QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
 
 void TulipFileDescriptorEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
   TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
-  QFileDialog* dlg = static_cast<QFileDialog*>(w);
+  TulipFileDialog* dlg = static_cast<TulipFileDialog*>(w);
+  dlg->previousFileDescriptor = desc;
 
   // force the dialog initial directory
   // only if there is a non empty absolute path
@@ -388,7 +391,7 @@ QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   int result = dlg->ok;
 
   if (result == QDialog::Rejected)
-    return QVariant();
+    return QVariant::fromValue<TulipFileDescriptor>(dlg->previousFileDescriptor);
 
   if (dlg->fileMode() == QFileDialog::Directory) {
     return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor(dlg->directory().absolutePath(),TulipFileDescriptor::Directory));
@@ -759,7 +762,7 @@ QVariant QVectorBoolEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
   QVector<bool> result;
   QVector<QVariant> editorData = static_cast<VectorEditionWidget*>(editor)->vector();
   foreach(QVariant v, editorData)
-  result.push_back(v.value<bool>());
+    result.push_back(v.value<bool>());
   return QVariant::fromValue<QVector<bool> >(result);
 }
 
