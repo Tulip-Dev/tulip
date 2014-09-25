@@ -56,7 +56,6 @@ SET(SRCS
   TulipParallelAnimationGroup.cpp
   ColorButton.cpp
   TulipModel.cpp
-  SizeEditor.cpp
   ColorScaleButton.cpp
   View.cpp
   GlMainWidgetGraphicsItem.cpp
@@ -80,7 +79,7 @@ SET(SRCS
   ScrollPopupButton.cpp
   WorkspaceExposeWidget.cpp
   GraphTableItemDelegate.cpp
-  VectorEditionWidget.cpp
+  VectorEditor.cpp
   GlyphRenderer.cpp
   TulipFontWidget.cpp
   ClearableLineEdit.cpp
@@ -113,14 +112,13 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/SimplePluginProgressWidget.ui
   ../designer/SimpleStringsListSelectionWidget.ui
   ../designer/StringsListSelectionDialog.ui
-  ../designer/SizeEditor.ui
   ../designer/WorkspacePanel.ui
   ../designer/Workspace.ui
   ../designer/CoordEditor.ui
   ../designer/SceneConfigWidget.ui
   ../designer/QuickAccessBar.ui
   ../designer/TulipFontDialog.ui
-  ../designer/VectorEditionWidget.ui
+  ../designer/VectorEditor.ui
   ../designer/TulipFontWidget.ui
   ../designer/GridOptionsWidget.ui
   ../designer/ElementInformationsWidget.ui
@@ -152,7 +150,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/Animation.h
   ../include/tulip/ColorButton.h
   ../include/tulip/TulipModel.h
-  ../include/tulip/SizeEditor.h
   ../include/tulip/ColorScaleButton.h
   ../include/tulip/TulipSettings.h
   ../include/tulip/View.h
@@ -177,7 +174,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/ScrollPopupButton.h
   ../include/tulip/WorkspaceExposeWidget.h  
   ../include/tulip/GraphTableItemDelegate.h
-  ../include/tulip/VectorEditionWidget.h
+  ../include/tulip/VectorEditor.h
   ../include/tulip/TulipFontWidget.h
   ../include/tulip/CaptionItem.h
   ../include/tulip/CaptionGraphicsItem.h

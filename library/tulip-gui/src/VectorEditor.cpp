@@ -17,24 +17,24 @@
  *
  */
 
-#include <tulip/VectorEditionWidget.h>
+#include <tulip/VectorEditor.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/TulipMetaTypes.h>
 
-#include "ui_VectorEditionWidget.h"
+#include "ui_VectorEditor.h"
 
 using namespace tlp;
 
-VectorEditionWidget::VectorEditionWidget(QWidget *parent): QDialog(parent), _ui(new Ui::VectorEditionWidget), _userType(0) {
+VectorEditor::VectorEditor(QWidget *parent): QDialog(parent), _ui(new Ui::VectorEditor), _userType(0) {
   _ui->setupUi(this);
   _ui->list->setItemDelegate(new TulipItemDelegate(_ui->list));
 }
 
-VectorEditionWidget::~VectorEditionWidget() {
+VectorEditor::~VectorEditor() {
   delete _ui;
 }
 
-void VectorEditionWidget::setVector(const QVector<QVariant> &d, int userType) {
+void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
   _userType = userType;
   _ui->list->clear();
 
@@ -48,7 +48,7 @@ void VectorEditionWidget::setVector(const QVector<QVariant> &d, int userType) {
   currentVector = d;
 }
 
-void VectorEditionWidget::add() {
+void VectorEditor::add() {
   QListWidgetItem* i = new QListWidgetItem();
   i->setData(Qt::DisplayRole,QVariant(_userType,(const void*)NULL));
   i->setFlags(i->flags() | Qt::ItemIsEditable);
@@ -56,13 +56,13 @@ void VectorEditionWidget::add() {
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
 }
 
-void VectorEditionWidget::remove() {
+void VectorEditor::remove() {
   foreach(QListWidgetItem* i, _ui->list->selectedItems())
   delete i;
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
 }
 
-void VectorEditionWidget::done(int r) {
+void VectorEditor::done(int r) {
   if (r == QDialog::Accepted) {
     QAbstractItemModel* model = _ui->list->model();
     currentVector.clear();

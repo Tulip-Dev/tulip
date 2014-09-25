@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>VectorEditionWidget</class>
- <widget class="QDialog" name="VectorEditionWidget">
+ <class>VectorEditor</class>
+ <widget class="QDialog" name="VectorEditor">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -204,7 +204,7 @@ height: 30;
   <connection>
    <sender>addButton</sender>
    <signal>clicked()</signal>
-   <receiver>VectorEditionWidget</receiver>
+   <receiver>VectorEditor</receiver>
    <slot>add()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -220,7 +220,7 @@ height: 30;
   <connection>
    <sender>removeButton</sender>
    <signal>clicked()</signal>
-   <receiver>VectorEditionWidget</receiver>
+   <receiver>VectorEditor</receiver>
    <slot>remove()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -236,7 +236,7 @@ height: 30;
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>VectorEditionWidget</receiver>
+   <receiver>VectorEditor</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -252,7 +252,7 @@ height: 30;
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>VectorEditionWidget</receiver>
+   <receiver>VectorEditor</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
