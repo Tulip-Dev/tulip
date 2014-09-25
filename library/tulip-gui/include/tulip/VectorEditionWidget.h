@@ -22,7 +22,8 @@
 #ifndef VECTOREDITIONWIDGET_H
 #define VECTOREDITIONWIDGET_H
 
-#include <QWidget>
+#include <QDialog>
+#include <QAbstractButton>
 
 #include <tulip/tulipconf.h>
 
@@ -30,21 +31,25 @@ namespace Ui {
 class VectorEditionWidget;
 }
 
-class TLP_QT_SCOPE VectorEditionWidget:public QWidget {
+class TLP_QT_SCOPE VectorEditionWidget:public QDialog {
   Q_OBJECT
   Ui::VectorEditionWidget* _ui;
 
   int _userType;
+  QVector<QVariant> currentVector;
 
 public:
   explicit VectorEditionWidget(QWidget* parent=0);
   ~VectorEditionWidget();
   void setVector(const QVector<QVariant>& d, int userType);
-  QVector<QVariant> vector() const;
+  const QVector<QVariant>& vector() const {
+    return currentVector;
+  }
 
 public slots:
   void add();
   void remove();
+  void done(int r);
 };
 
 #endif // VECTOREDITIONWIDGET_H
