@@ -44,5 +44,12 @@ $CNEE -rep --file $CNEE_INPUT_FILE -fcr -fp -e /tmp/$CNEE_INPUT_FILE.log > /dev/
 xset r
 echo "Replay finished"
 
+# stop recordmydesktop if needed
+if [ "$TLP_RECORDMYDESKTOP" = "1" ]; then
+# send a TERM signal
+  PID=$(ps -ef | grep recordmydesktop | grep -v grep | awk '{print $2}')
+  kill -15 $PID
+fi
+
 # stop tulip if it is still running
 . ./stop_tulip.sh
