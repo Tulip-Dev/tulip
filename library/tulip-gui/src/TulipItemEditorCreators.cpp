@@ -739,7 +739,7 @@ QString EdgeSetEditorCreator::displayText(const QVariant& var) const {
 }
 
 QWidget* QVectorBoolEditorCreator::createWidget(QWidget*) const {
-  VectorEditionWidget* w = new VectorEditionWidget(NULL);
+  VectorEditor* w = new VectorEditor(NULL);
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;
@@ -753,14 +753,14 @@ void QVectorBoolEditorCreator::setEditorData(QWidget* editor, const QVariant& v,
     editorData.push_back(QVariant::fromValue<bool>(vect[i]));
   }
 
-  static_cast<VectorEditionWidget*>(editor)->setVector(editorData,qMetaTypeId<bool>());
+  static_cast<VectorEditor*>(editor)->setVector(editorData,qMetaTypeId<bool>());
 
-  static_cast<VectorEditionWidget*>(editor)->move(QCursor::pos());
+  static_cast<VectorEditor*>(editor)->move(QCursor::pos());
 }
 
 QVariant QVectorBoolEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
   QVector<bool> result;
-  QVector<QVariant> editorData = static_cast<VectorEditionWidget*>(editor)->vector();
+  QVector<QVariant> editorData = static_cast<VectorEditor*>(editor)->vector();
   foreach(QVariant v, editorData)
     result.push_back(v.value<bool>());
   return QVariant::fromValue<QVector<bool> >(result);
@@ -819,7 +819,7 @@ QString QStringEditorCreator::displayText(const QVariant& var) const {
 }
 
 QWidget *QStringListEditorCreator::createWidget(QWidget *) const {
-  VectorEditionWidget* w = new VectorEditionWidget(NULL);
+  VectorEditor* w = new VectorEditor(NULL);
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;
@@ -833,11 +833,11 @@ void QStringListEditorCreator::setEditorData(QWidget *w, const QVariant &var, bo
   foreach(QString s, strList) {
     vect[i++] = s;
   }
-  static_cast<VectorEditionWidget*>(w)->setVector(vect,qMetaTypeId<QString>());
+  static_cast<VectorEditor*>(w)->setVector(vect,qMetaTypeId<QString>());
 }
 
 QVariant QStringListEditorCreator::editorData(QWidget* w, Graph*) {
-  QVector<QVariant> vect = static_cast<VectorEditionWidget*>(w)->vector();
+  QVector<QVariant> vect = static_cast<VectorEditor*>(w)->vector();
   QStringList lst;
   foreach(QVariant v, vect)
   lst.push_back(v.toString());

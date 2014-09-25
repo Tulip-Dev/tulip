@@ -80,7 +80,7 @@ INSTALL(FILES
   tulip/ScrollPopupButton.h
   tulip/WorkspaceExposeWidget.h
   tulip/GraphTableItemDelegate.h
-  tulip/VectorEditionWidget.h
+  tulip/VectorEditor.h
   tulip/GlyphRenderer.h
   tulip/ClearableLineEdit.h
   tulip/GraphPropertiesModel.h

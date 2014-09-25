@@ -19,8 +19,8 @@
 ///@cond DOXYGEN_HIDDEN
 
 
-#ifndef VECTOREDITIONWIDGET_H
-#define VECTOREDITIONWIDGET_H
+#ifndef VECTOREDITOR_H
+#define VECTOREDITOR_H
 
 #include <QDialog>
 #include <QAbstractButton>
@@ -28,19 +28,19 @@
 #include <tulip/tulipconf.h>
 
 namespace Ui {
-class VectorEditionWidget;
+class VectorEditor;
 }
 
-class TLP_QT_SCOPE VectorEditionWidget:public QDialog {
+class TLP_QT_SCOPE VectorEditor:public QDialog {
   Q_OBJECT
-  Ui::VectorEditionWidget* _ui;
+  Ui::VectorEditor* _ui;
 
   int _userType;
   QVector<QVariant> currentVector;
 
 public:
-  explicit VectorEditionWidget(QWidget* parent=0);
-  ~VectorEditionWidget();
+  explicit VectorEditor(QWidget* parent=0);
+  ~VectorEditor();
   void setVector(const QVector<QVariant>& d, int userType);
   const QVector<QVariant>& vector() const {
     return currentVector;

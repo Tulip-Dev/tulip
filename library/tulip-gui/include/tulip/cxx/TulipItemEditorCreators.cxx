@@ -25,7 +25,7 @@
 
 #include <tulip/ForEach.h>
 #include <tulip/DataSet.h>
-#include <tulip/VectorEditionWidget.h>
+#include <tulip/VectorEditor.h>
 #include <tulip/GraphPropertiesModel.h>
 
 
@@ -176,7 +176,7 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
 
 template<typename ElementType>
 QWidget* VectorEditorCreator<ElementType>::createWidget(QWidget*) const {
-  VectorEditionWidget* w = new VectorEditionWidget(NULL);
+  VectorEditor* w = new VectorEditor(NULL);
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;
@@ -192,17 +192,17 @@ void VectorEditorCreator<ElementType>::setEditorData(QWidget* editor, const QVar
     editorData.push_back(QVariant::fromValue<ElementType>(vect[i]));
   }
 
-  static_cast<VectorEditionWidget*>(editor)->setVector(editorData,qMetaTypeId<ElementType>());
+  static_cast<VectorEditor*>(editor)->setVector(editorData,qMetaTypeId<ElementType>());
 
-  static_cast<VectorEditionWidget*>(editor)->move(QCursor::pos());
+  static_cast<VectorEditor*>(editor)->move(QCursor::pos());
 }
 
 template<typename ElementType>
 QVariant VectorEditorCreator<ElementType>::editorData(QWidget* editor,tlp::Graph*) {
   std::vector<ElementType> result;
-  QVector<QVariant> editorData = static_cast<VectorEditionWidget*>(editor)->vector();
+  QVector<QVariant> editorData = static_cast<VectorEditor*>(editor)->vector();
   foreach(QVariant v, editorData)
-  result.push_back(v.value<ElementType>());
+    result.push_back(v.value<ElementType>());
   return QVariant::fromValue<std::vector<ElementType> >(result);
 }
 
