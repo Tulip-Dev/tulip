@@ -66,9 +66,11 @@ void VectorEditor::done(int r) {
   if (r == QDialog::Accepted) {
     QAbstractItemModel* model = _ui->list->model();
     currentVector.clear();
+
     for (int i=0; i<model->rowCount(); ++i) {
       currentVector.push_back(model->data(model->index(i,0)));
     }
   }
+
   QDialog::done(r);
 }

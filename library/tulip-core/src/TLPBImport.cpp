@@ -86,7 +86,7 @@ bool TLPBImport::importGraph() {
     }
 
     is = tlp::getInputFileStream(filename, std::ifstream::in |
-				 std::ifstream::binary);
+                                 std::ifstream::binary);
   }
   else {
     pluginProgress->setError("No file to open: 'file::filename' parameter is missing");
@@ -132,7 +132,7 @@ bool TLPBImport::importGraph() {
 
       // read a bunch of edges
       if (!bool(is->read((char *) vEdges.data(),
-                        edgesToRead * sizeof(vEdges[0]))))
+                         edgesToRead * sizeof(vEdges[0]))))
         return (delete is, errorTrap());
 
       if (pluginProgress->progress(header.numEdges - nbEdges,
@@ -189,7 +189,7 @@ bool TLPBImport::importGraph() {
 
           // read a bunch of ranges
           if (!bool(is->read((char *) vRanges.data(),
-                            rangesToRead * sizeof(vRanges[0]))))
+                             rangesToRead * sizeof(vRanges[0]))))
             return (delete is, errorTrap());
 
           // loop to add nodes
@@ -220,7 +220,7 @@ bool TLPBImport::importGraph() {
 
           // read a bunch of ranges
           if (!bool(is->read((char *) vRanges.data(),
-                            rangesToRead * sizeof(vRanges[0]))))
+                             rangesToRead * sizeof(vRanges[0]))))
             return (delete is, errorTrap());
 
           // loop to add edges
