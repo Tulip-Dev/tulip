@@ -28,6 +28,7 @@
 #include <QGraphicsPixmapItem>
 #include <QClipboard>
 #include <QGraphicsScene>
+#include <QPixmap>
 
 #include <tulip/View.h>
 
@@ -184,16 +185,22 @@ void SnapshotDialog::fileNameTextChanged(const QString &text) {
 
 void SnapshotDialog::sizeSpinBoxValueChanged() {
 
+  if (ui->widthSpinBox->value() < 10 || ui->heightSpinBox->value() < 10) {
+    return;
+  }
+
   float viewRatio=((float)ui->graphicsView->width())/((float)ui->graphicsView->height());
   float imageRatio=((float)ui->widthSpinBox->value())/((float)ui->heightSpinBox->value());
 
   QPixmap pixmap;
 
   if(viewRatio>imageRatio) {
-    pixmap=view->snapshot(QSize((ui->graphicsView->height()-2)*imageRatio,ui->graphicsView->height()-7));
+    pixmap=view->snapshot(QSize((view->centralItem()->scene()->sceneRect().height()-2)*imageRatio,view->centralItem()->scene()->sceneRect().height()-2));
+    pixmap = pixmap.scaled((ui->graphicsView->height()-2)*imageRatio, ui->graphicsView->height()-2, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
   }
   else {
-    pixmap=view->snapshot(QSize(ui->graphicsView->width()-2,(ui->graphicsView->width()-2)/imageRatio));
+    pixmap=view->snapshot(QSize(view->centralItem()->scene()->sceneRect().width()-2,(view->centralItem()->scene()->sceneRect().width()-2)/imageRatio));
+    pixmap = pixmap.scaled(ui->graphicsView->width()-2, (ui->graphicsView->width()-2)/imageRatio, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
   }
 
   ratio=((float)ui->widthSpinBox->value())/((float)ui->heightSpinBox->value());
