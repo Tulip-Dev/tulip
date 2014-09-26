@@ -67,6 +67,8 @@ QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height) {
 
   QGLFormat format=QGLFormat::defaultFormat();
   format.setAlpha(true);
+  format.setSampleBuffers(true);
+  format.setSamples(8);
   QGLPixelBuffer *glPixelBuffer=new QGLPixelBuffer(width,height,format,GlMainWidget::getFirstQGLWidget());
 
   if(!glPixelBuffer->isValid()) {
@@ -93,7 +95,7 @@ QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height) {
       bufferToWidthHeight.erase(bufferToRemove);
 
       delete glPixelBuffer;
-      glPixelBuffer=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),GlMainWidget::getFirstQGLWidget());
+      glPixelBuffer=new QGLPixelBuffer(width,height,format,GlMainWidget::getFirstQGLWidget());
     }
 
     // Code to allocate smaller buffer
@@ -102,7 +104,7 @@ QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height) {
       height=height/2;
 
       delete glPixelBuffer;
-      glPixelBuffer=new QGLPixelBuffer(width,height,QGLFormat::defaultFormat(),GlMainWidget::getFirstQGLWidget());
+      glPixelBuffer=new QGLPixelBuffer(width,height,format,GlMainWidget::getFirstQGLWidget());
     }
   }
 
