@@ -28,7 +28,6 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
@@ -135,13 +134,11 @@ ChristmasTree::ChristmasTree(const tlp::PluginContext* context) :
 void ChristmasTree::draw(node n, float) {
   drawTree();
   glRotatef(-90., 1., 0., 0.);
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
   GlDisplayListManager::getInst().callDisplayList("ChristmasTree_tree");
   setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
   GlDisplayListManager::getInst().callDisplayList("ChristmasTree_sphere");
   setMaterial(Color(255, 255, 255, 50));
   GlDisplayListManager::getInst().callDisplayList("ChristmasTree_outsphere");
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 }
 
 

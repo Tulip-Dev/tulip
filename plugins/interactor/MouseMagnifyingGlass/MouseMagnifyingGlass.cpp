@@ -28,7 +28,6 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/GlTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
-#include <tulip/OpenGlConfigManager.h>
 
 #include <QGLFramebufferObject>
 #include <QEvent>
@@ -151,7 +150,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(con
       fboFormat.setSamples(8);
     }
 
-    fbo = new QGLFramebufferObject(fboSize, fboSize, QGLFramebufferObject::CombinedDepthStencil);
+    fbo = new QGLFramebufferObject(fboSize, fboSize, fboFormat);
 
     if (antialiased) {
       fbo2 = new QGLFramebufferObject(fboSize, fboSize);
@@ -271,7 +270,6 @@ bool MouseMagnifyingGlassInteractorComponent::draw(GlMainWidget *glWidget) {
     outlineColor = Color(0,0,0);
   }
 
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
   setMaterial(outlineColor);
   glEnable(GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -286,7 +284,6 @@ bool MouseMagnifyingGlassInteractorComponent::draw(GlMainWidget *glWidget) {
   }
 
   glEnd();
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
   glLineWidth(1);
   glPopMatrix();
   drawInteractor = false;

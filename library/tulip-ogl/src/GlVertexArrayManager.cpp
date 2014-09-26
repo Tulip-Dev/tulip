@@ -83,7 +83,7 @@ GlVertexArrayManager::GlVertexArrayManager(GlGraphInputData *i):inputData(i),gra
 GlVertexArrayManager::~GlVertexArrayManager() {
   clearObservers();
   clearData();
-  static bool canUseVBO = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_vertex_buffer_object");
+  bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
   if (canUseVBO && pointsVerticesVBO != 0) {
     glDeleteBuffers(1, &pointsVerticesVBO);
@@ -341,7 +341,7 @@ void GlVertexArrayManager::endRendering() {
 
   isBegin=false;
 
-  static bool canUseVBO = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_vertex_buffer_object");
+  static bool canUseVBO = OpenGlConfigManager::getInst().hasVertexBufferObject();
 
   if (canUseVBO && quadsVerticesVBO == 0) {
     glGenBuffers(1, &pointsVerticesVBO);
@@ -384,8 +384,6 @@ void GlVertexArrayManager::endRendering() {
     colorsUploadNeeded = false;
   }
 
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
   glDisable(GL_LIGHTING);
   glDisable(GL_CULL_FACE);
   glDepthFunc(GL_LEQUAL);
@@ -394,8 +392,6 @@ void GlVertexArrayManager::endRendering() {
   glEnableClientState(GL_VERTEX_ARRAY);
 
   //============ Graph elements rendering ============================
-
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
   glEnableClientState(GL_COLOR_ARRAY);
 
@@ -483,8 +479,6 @@ void GlVertexArrayManager::endRendering() {
     }
   }
 
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
-
   // Edges quad rendering
   if (!quadsRenderingIndicesArray.empty()) {
     if (canUseVBO && quadsVerticesUploaded) {
@@ -514,14 +508,10 @@ void GlVertexArrayManager::endRendering() {
       }
     }
 
-    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
     for (map<float, vector<GLuint> >::const_iterator it = quadsOutlineRenderingIndicesArray.begin(); it != quadsOutlineRenderingIndicesArray.end() ; ++it) {
       glLineWidth(it->first);
       glDrawElements(GL_LINES, it->second.size(), GL_UNSIGNED_INT, VECTOR_DATA(it->second));
     }
-
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
     if (canUseVBO && quadsColorsUploaded) {
       glBindBuffer(GL_ARRAY_BUFFER, quadsColorsVBO);
@@ -531,9 +521,7 @@ void GlVertexArrayManager::endRendering() {
       glColorPointer(4, GL_UNSIGNED_BYTE, 0, VECTOR_DATA(quadsColorsArray));
     }
 
-    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
     glDrawElements(GL_TRIANGLES, quadsRenderingIndicesArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(quadsRenderingIndicesArray));
-    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
     if (canUseVBO) {
       glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -550,8 +538,6 @@ void GlVertexArrayManager::endRendering() {
   // Selected edges point rendering
   glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
   glPointSize(2);
-
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
   if (!pointsEdgesSelectedRenderingIndexArray.empty()) {
     if (canUseVBO && pointsVerticesUploaded) {
@@ -619,12 +605,7 @@ void GlVertexArrayManager::endRendering() {
       glVertexPointer(3, GL_FLOAT, 0, VECTOR_DATA(quadsCoordsArray));
     }
 
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
-
-    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
     glDrawElements(GL_TRIANGLES, quadsSelectedRenderingIndicesArray.size(), GL_UNSIGNED_INT, VECTOR_DATA(quadsSelectedRenderingIndicesArray));
-    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
     for (map<float, vector<GLuint> >::iterator it = quadsSelectedOutlineRenderingIndicesArray.begin(); it != quadsSelectedOutlineRenderingIndicesArray.end() ; ++it) {
       glLineWidth(it->first);

@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Graph.h>
 #include <tulip/Glyph.h>
@@ -98,8 +97,6 @@ void GlowSphere::drawGlyph(const Color& glyphColor,
     GlDisplayListManager::getInst().endNewDisplayList();
   }
 
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-
   if (texture != "") {
     GlTextureManager::getInst().activateTexture(texturePath + texture);
   }
@@ -130,7 +127,6 @@ void GlowSphere::drawGlyph(const Color& glyphColor,
   GlDisplayListManager::getInst().callDisplayList("glow_ring");
   GlTextureManager::getInst().desactivateTexture();
   glPopMatrix();
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 }
 
 void GlowSphere::draw(node n, float /* lod */) {

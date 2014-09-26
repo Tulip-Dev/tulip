@@ -29,6 +29,7 @@
 #include <tulip/GlVertexArrayVisitor.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
 #include <tulip/OcclusionTest.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 
@@ -144,6 +145,10 @@ void GlGraphLowDetailsRenderer::initNodesArray() {
 //===================================================================
 void GlGraphLowDetailsRenderer::draw(float ,Camera*) {
 
+  if (!inputData->renderingParameters()->isAntialiased()) {
+    OpenGlConfigManager::getInst().desactivateAntiAliasing();
+  }
+
   if (buildVBO) {
     initEdgesArray();
     initNodesArray();
@@ -189,6 +194,9 @@ void GlGraphLowDetailsRenderer::draw(float ,Camera*) {
   //glDrawElements(GL_QUADS, quad_indices.size(), GL_UNSIGNED_INT, &quad_indices[0]);
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
+
+  OpenGlConfigManager::getInst().activateAntiAliasing();
+
 }
 
 void GlGraphLowDetailsRenderer::addObservers() {

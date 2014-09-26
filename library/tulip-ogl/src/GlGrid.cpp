@@ -17,7 +17,6 @@
  *
  */
 #include <tulip/GlGrid.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlXMLTools.h>
 #include <tulip/GlTools.h>
 
@@ -45,8 +44,6 @@ void GlGrid::draw(float,Camera *) {
 
   glDisable(GL_COLOR_MATERIAL);
   setMaterial(color);
-
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
   glLineWidth(1);
   glBegin(GL_LINES);
@@ -109,8 +106,6 @@ void GlGrid::draw(float,Camera *) {
   }
 
   glEnd();
-
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 }
 //============================================================
 void GlGrid::getDisplayDim(bool displayDim[3]) const {

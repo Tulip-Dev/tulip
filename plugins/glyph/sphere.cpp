@@ -159,8 +159,6 @@ static void drawGlyph(const Color& glyphColor, const string& texture,
     GlTextureManager::getInst().activateTexture(texturePath + texture);
   }
 
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-
   if (canUseVBO) {
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
@@ -191,8 +189,6 @@ static void drawGlyph(const Color& glyphColor, const string& texture,
   else {
     GlDisplayListManager::getInst().callDisplayList("Sphere_sphere");
   }
-
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
   GlTextureManager::getInst().desactivateTexture();
 }

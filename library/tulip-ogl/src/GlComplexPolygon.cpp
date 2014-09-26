@@ -23,7 +23,6 @@
 #include <tulip/GlTools.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/ParametricCurves.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlXMLTools.h>
 
@@ -539,8 +538,6 @@ void GlComplexPolygon::draw(float,Camera *) {
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-
   setMaterial(fillColor);
 
   for (set<GLenum>::iterator it = primitivesSet.begin() ; it != primitivesSet.end() ; ++it) {
@@ -551,8 +548,6 @@ void GlComplexPolygon::draw(float,Camera *) {
       glDrawArrays(*it, startIndicesMap[*it][i], verticesCountMap[*it][i]);
     }
   }
-
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -569,14 +564,10 @@ void GlComplexPolygon::draw(float,Camera *) {
     glLineWidth(lineWidth);
     setMaterial(outlineColor);
 
-    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
     for(size_t v = 0 ; v < points.size() ; ++v) {
       glVertexPointer(3, GL_FLOAT, 3 * sizeof(GLfloat), &points[v][0]);
       glDrawArrays(GL_LINE_LOOP, 0, points[v].size());
     }
-
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
   }
 
 
@@ -597,8 +588,6 @@ void GlComplexPolygon::draw(float,Camera *) {
         }
 
         if (outlineExtrusionShader->isLinked()) {
-
-          OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
           outlineExtrusionShader->activate();
 
@@ -630,8 +619,6 @@ void GlComplexPolygon::draw(float,Camera *) {
           }
 
           outlineExtrusionShader->desactivate();
-
-          OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
         }
       }

@@ -18,8 +18,6 @@
  */
 
 #include <GL/glew.h>
-
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/AbstractGlCurve.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/Curves.h>
@@ -802,7 +800,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
     if (lineCurve) {
       glLineWidth(curveLineWidth);
-      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
       if (vboOk) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[2]);
@@ -812,7 +809,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
         glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][1]);
       }
 
-      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
     }
     else {
       if (texture != "") {
@@ -829,8 +825,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         GlTextureManager::getInst().activateTexture(TulipBitmapDir+"cylinderTexture.png");
       }
-
-      OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
       if (vboOk) {
         if (geometryShaderActivated) {
@@ -850,8 +844,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
           glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][0]);
         }
       }
-
-      OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
       if (billboardCurve) {
         glActiveTexture(GL_TEXTURE1);
@@ -913,8 +905,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
         glLineWidth(curveQuadBordersWidth);
 
-        OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
         if (vboOk) {
           glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo[3]);
 
@@ -957,8 +947,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
             glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, curveVertexBuffersIndices[nbCurvePoints][3]);
           }
         }
-
-        OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
       }
     }
 

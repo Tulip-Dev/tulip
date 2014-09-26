@@ -19,7 +19,6 @@
 
 #include <tulip/GlLine.h>
 #include <tulip/GlTools.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlXMLTools.h>
 
 using namespace std;
@@ -68,8 +67,6 @@ tlp::Color& GlLine::color(const unsigned int i) {
 //=====================================================
 void GlLine::draw(float,Camera *) {
 
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
   glDisable(GL_LIGHTING);
   glLineWidth(width);
 
@@ -85,8 +82,6 @@ void GlLine::draw(float,Camera *) {
   glDrawArrays(GL_LINE_STRIP, 0, _points.size());
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
-
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
   if(pattern!=0)
     glDisable(GL_LINE_STIPPLE);

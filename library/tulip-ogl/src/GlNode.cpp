@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/OpenGlConfigManager.h>
 
 #include <tulip/GlNode.h>
 
@@ -164,7 +163,6 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
         pointColor = data->getElementBorderColor()->getNodeValue(n);
       }
 
-      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
       glDisable(GL_LIGHTING);
       setColor(selected ? colorSelect2 : pointColor);
       glPointSize(4);
@@ -172,7 +170,6 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
       glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.);
       glEnd();
       glEnable(GL_LIGHTING);
-      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
     }
 
     return;
@@ -221,11 +218,9 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
     glScalef(nodeSize[0], nodeSize[1],nodeSize[2]);
 
     if (selected) {
-      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
       selectionBox->setStencil(data->parameters->getSelectedNodesStencil()-1);
       selectionBox->setOutlineColor(colorSelect2);
       selectionBox->draw(10,NULL);
-      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
     }
 
     data->glyphs.get(data->getElementShape()->getNodeValue(n))->draw(n,lod);

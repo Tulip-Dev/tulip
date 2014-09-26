@@ -110,15 +110,7 @@ void GlScene::initGlParameters() {
 
   glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
 
-  bool antialiased = true;
-
-  if(glGraphComposite) {
-    antialiased=glGraphComposite->getInputData()->parameters->isAntialiased();
-  }
-
-  OpenGlConfigManager::getInst().setAntiAliasing(antialiased);
-
-  glDisable(GL_POINT_SMOOTH);
+  glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glLineWidth(1.0);
   glPointSize(1.0);
@@ -130,7 +122,6 @@ void GlScene::initGlParameters() {
   glDepthFunc(GL_LEQUAL );
   glPolygonMode(GL_FRONT, GL_FILL);
   glColorMask(1, 1, 1, 1);
-  glEnable(GL_BLEND);
   glIndexMask(UINT_MAX);
   glClearStencil(0xFFFF);
   glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
@@ -159,6 +150,12 @@ void GlScene::draw() {
   inDraw=true;
 
   initGlParameters();
+
+  if (OpenGlConfigManager::getInst().antiAliasing()) {
+    OpenGlConfigManager::getInst().activateAntiAliasing();
+  } else {
+    OpenGlConfigManager::getInst().desactivateAntiAliasing();
+  }
 
   /**********************************************************************
   LOD Compute
@@ -242,6 +239,9 @@ void GlScene::draw() {
   }
 
   inDraw=false;
+
+  OpenGlConfigManager::getInst().desactivateAntiAliasing();
+
 }
 
 /******************************************************************************

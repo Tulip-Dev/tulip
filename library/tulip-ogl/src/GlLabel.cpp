@@ -27,7 +27,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/GlDisplayListManager.h>
@@ -618,12 +617,10 @@ void GlLabel::draw(float, Camera *camera) {
     else
       setMaterial(Color(outlineColor[0],outlineColor[1],outlineColor[2],outlineColor[3]));
 
-    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
     glBegin(GL_LINES);
     glVertex3f(-w/2.+wAlign,hAlign,0);
     glVertex3f(w/2.+wAlign,hAlign,0);
     glEnd();
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
     glLineWidth(1);
   }
   else {
@@ -691,9 +688,7 @@ void GlLabel::draw(float, Camera *camera) {
       setMaterial(color);
 
       if (screenH > 6 || outlineColor.getA()==0 || outlineSize==0) {
-        OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
         font->Render((*it).c_str(),-1,shift);
-        OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
       }
 
       if(textureName!="")
@@ -709,9 +704,7 @@ void GlLabel::draw(float, Camera *camera) {
 
         setMaterial(outlineColor);
 
-        OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
         borderFont->Render((*it).c_str(),-1,shift);
-        OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
       }
 
       yShift-=fontSize+5;
