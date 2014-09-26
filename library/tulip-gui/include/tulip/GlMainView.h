@@ -69,6 +69,7 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
 
   QAction *_centerViewAction;
   QAction *_forceRedrawAction;
+  QAction* _advAntiAliasingAction;
 
 protected :
 
@@ -141,6 +142,11 @@ public slots:
 
   void undoCallback();
 
+  void setAntiAliasing(bool);
+
+  void setAdvancedAntiAliasing(bool);
+
+
 protected slots:
   virtual void glMainViewDrawn(bool graphChanged);
   virtual void sceneRectChanged(const QRectF&);
@@ -160,6 +166,7 @@ protected:
   OverviewPosition _overviewPosition;
 
   bool _updateOverview;
+
 };
 }
 

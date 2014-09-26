@@ -34,6 +34,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/SnapshotDialog.h>
 #include <tulip/Gl2DRect.h>
+#include <tulip/OpenGlConfigManager.h>
 
 
 using namespace tlp;
@@ -130,8 +131,14 @@ void GlMainView::setupWidget() {
   _centerViewAction->setShortcut(tr("Ctrl+Shift+C"));
   _centerViewAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
+  _advAntiAliasingAction = new QAction(trUtf8("Advanced anti-aliasing"), this);
+  _advAntiAliasingAction->setCheckable(true);
+  _advAntiAliasingAction->setChecked(_glMainWidget->advancedAntiAliasingActivated());
+  connect(_advAntiAliasingAction,SIGNAL(triggered(bool)),this,SLOT(setAdvancedAntiAliasing(bool)));
+
   graphicsView()->addAction(_centerViewAction);
   graphicsView()->addAction(_forceRedrawAction);
+  graphicsView()->addAction(_advAntiAliasingAction);
 }
 
 GlMainWidget* GlMainView::getGlMainWidget() const {
@@ -278,6 +285,13 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   viewOrtho->setChecked(_glMainWidget->getScene()->isViewOrtho());
   connect(viewOrtho,SIGNAL(triggered(bool)),this,SLOT(setViewOrtho(bool)));
 
+  QAction* antiAliasing = menu->addAction(trUtf8("Anti-aliasing"));
+  antiAliasing->setCheckable(true);
+  antiAliasing->setChecked(OpenGlConfigManager::getInst().antiAliasing());
+  connect(antiAliasing,SIGNAL(triggered(bool)),this,SLOT(setAntiAliasing(bool)));
+
+  menu->addAction(_advAntiAliasingAction);
+
   menu->addAction(trUtf8("Take snapshot"),this,SLOT(openSnapshotDialog()));
 
   menu->addSeparator();
@@ -295,6 +309,21 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
 
 void GlMainView::applySettings() {
   _sceneConfigurationWidget->applySettings();
+}
+
+void GlMainView::setAntiAliasing(bool aa) {
+  OpenGlConfigManager::getInst().setAntiAliasing(aa);
+  _advAntiAliasingAction->setEnabled(aa);
+  if (_advAntiAliasingAction->isChecked()) {
+    _advAntiAliasingAction->setChecked(false);
+  } else {
+    draw();
+  }
+}
+
+void GlMainView::setAdvancedAntiAliasing(bool aaa) {
+  _glMainWidget->setAdvancedAntiAliasing(aaa);
+  draw();
 }
 
 bool GlMainView::eventFilter(QObject* obj, QEvent* event) {
