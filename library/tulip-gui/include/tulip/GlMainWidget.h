@@ -296,22 +296,42 @@ public:
    */
   bool keepScenePointOfViewOnSubgraphChanging() const;
 
+  /**
+   * @brief Specify if an advanced technique for better scene anti-aliasing has to be activated
+   *
+   * That option allows to obtain a better scene antialiasing through the use of offscreen rendering and sampling.
+   * The result rendering will look better while the performance will be slightly altered.
+   * That option is desactivated by default. Use it with caution as it could cause crashes with some buggy OpenGL drivers.
+   */
+  void setAdvancedAntiAliasing(bool advancedAntiAliasing) {
+    this->advancedAntiAliasing = advancedAntiAliasing;
+  }
+
+  /**
+   * Returns the advanced anti-aliasing technique state
+   */
+  bool advancedAntiAliasingActivated() const {
+    return advancedAntiAliasing;
+  }
+
 private:
 
   void  setupOpenGlContext();
   void createRenderingStore(int width, int height);
+  void deleteRenderingStore();
 
   tlp::GlScene scene;
   QRegion _visibleArea;
   View *view;
   int widthStored;
   int heightStored;
-  char *renderingStore;
+  unsigned char *renderingStore;
   bool frameBufferStored;
   bool useFramebufferObject;
-  QGLFramebufferObject *glFrameBuf;
+  QGLFramebufferObject *glFrameBuf, *glFrameBuf2;
   static bool inRendering;
   bool keepPointOfViewOnSubgraphChanging;
+  bool advancedAntiAliasing;
 
 public slots:
   /**

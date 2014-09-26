@@ -72,6 +72,7 @@ static QGLFormat GlInit() {
   tmpFormat.setOverlay(false);
   tmpFormat.setStereo(false);
   tmpFormat.setSampleBuffers(true);
+  tmpFormat.setSamples(8);
   return tmpFormat;
 }
 
@@ -130,7 +131,9 @@ void GlMainWidget::doSelect(const int x, const int y,
 
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent,View *view):
-  QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view),widthStored(0),heightStored(0), useFramebufferObject(false), glFrameBuf(NULL), keepPointOfViewOnSubgraphChanging(false) {
+  QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view),
+  widthStored(0),heightStored(0), useFramebufferObject(false), glFrameBuf(NULL), glFrameBuf2(NULL),
+  keepPointOfViewOnSubgraphChanging(false), advancedAntiAliasing(false) {
   assert(this->isValid());
   setFocusPolicy(Qt::StrongFocus);
   setMouseTracking(true);
@@ -175,10 +178,16 @@ void GlMainWidget::setupOpenGlContext() {
 //==================================================
 void GlMainWidget::createRenderingStore(int width, int height) {
 
+  useFramebufferObject = advancedAntiAliasing && QGLFramebufferObject::hasOpenGLFramebufferBlit();
+
   if (useFramebufferObject && (!glFrameBuf || glFrameBuf->size().width()!=width || glFrameBuf->size().height()!=height)) {
     makeCurrent();
-    delete glFrameBuf;
-    glFrameBuf=new QGLFramebufferObject(width,height);
+    deleteRenderingStore();
+    QGLFramebufferObjectFormat fboFormat;
+    fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+    fboFormat.setSamples(8);
+    glFrameBuf=new QGLFramebufferObject(width,height, fboFormat);
+    glFrameBuf2=new QGLFramebufferObject(width,height);
     useFramebufferObject=glFrameBuf->isValid();
     widthStored=width;
     heightStored=height;
@@ -188,13 +197,23 @@ void GlMainWidget::createRenderingStore(int width, int height) {
     int size = width*height;
 
     if (renderingStore==NULL || (size > (widthStored*heightStored))) {
-      delete [] renderingStore;
-      renderingStore=new char[size * 4];
+      deleteRenderingStore();
+      renderingStore=new unsigned char[width*height*4];
       widthStored=width;
       heightStored=height;
     }
   }
 }
+//==================================================
+void GlMainWidget::deleteRenderingStore() {
+  delete glFrameBuf;
+  glFrameBuf=NULL;
+  delete glFrameBuf2;
+  glFrameBuf2=NULL;
+  delete[] renderingStore;
+  renderingStore=NULL;
+}
+
 //==================================================
 void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
   if ((isVisible() || !checkVisibility) && !inRendering) {
@@ -222,9 +241,15 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
 
     if(options.testFlag(RenderScene)) {
       createRenderingStore(width,height);
-
-      //Render the graph in the back buffer.
+      if (useFramebufferObject) {
+        glFrameBuf->bind();
+      }
+      //Render the graph in the frame buffer.
       scene.draw();
+      if (useFramebufferObject) {
+        glFrameBuf->release();
+        QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,width, height), glFrameBuf, QRect(0,0,width, height));
+      }
     }
     else {
       scene.initGlParameters();
@@ -236,18 +261,21 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
     glDisable(GL_BLEND);
     glDisable(GL_LIGHTING);
 
-
-    if(options.testFlag(RenderScene)) {
-      //Copy the back buffer (containing the graph render) in the rendering store to reuse it later.
-      glReadBuffer(GL_BACK);
-      glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-      glFlush();
-    }
-    else {
-      //Copy the rendering store into the back buffer : restore the last graph render.
-      glDrawBuffer(GL_BACK);
-      setRasterPosition(0,0);
-      glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+    if (useFramebufferObject) {
+      QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), glFrameBuf2, QRect(0,0,width, height));
+    } else {
+      if(options.testFlag(RenderScene)) {
+        //Copy the back buffer (containing the graph render) in the rendering store to reuse it later.
+        glReadBuffer(GL_BACK);
+        glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+        glFlush();
+      }
+      else {
+        //Copy the rendering store into the back buffer : restore the last graph render.
+        glDrawBuffer(GL_BACK);
+        setRasterPosition(0,0);
+        glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
+      }
     }
 
     glEnable(GL_DEPTH_TEST);
@@ -324,12 +352,7 @@ void GlMainWidget::resizeGL(int w, int h) {
   height *= this->windowHandle()->devicePixelRatio();
 #endif
 
-  if(glFrameBuf) {
-    delete glFrameBuf;
-    glFrameBuf=NULL;
-    delete[] renderingStore;
-    renderingStore=NULL;
-  }
+  deleteRenderingStore();
 
   scene.setViewport(0,0,width,height);
 
@@ -499,10 +522,32 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
   glFrameBuf->makeCurrent();
 
   computeInteractors();
+
+  QGLFramebufferObject *frameBuf=NULL;
+  QGLFramebufferObject *frameBuf2=NULL;
+
+  if (useFramebufferObject) {
+    QGLFramebufferObjectFormat fboFormat;
+    fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+    fboFormat.setSamples(8);
+    frameBuf=new QGLFramebufferObject(width,height, fboFormat);
+    frameBuf2=new QGLFramebufferObject(width,height);
+    frameBuf->bind();
+  }
+
   scene.draw();
   drawInteractors();
 
+  if (useFramebufferObject) {
+    frameBuf->release();
+    QGLFramebufferObject::blitFramebuffer(frameBuf2, QRect(0,0,width, height), frameBuf, QRect(0,0,width, height));
+    QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), frameBuf2, QRect(0,0,width, height));
+  }
+
   resultImage=glFrameBuf->toImage();
+
+  delete frameBuf;
+  delete frameBuf2;
 
   scene.setViewport(0,0,oldWidth,oldHeight);
 
