@@ -73,6 +73,16 @@ bool OpenGlConfigManager::hasVertexBufferObject() {
   return isExtensionSupported("GL_ARB_vertex_buffer_object");
 }
 
+void OpenGlConfigManager::activateAntiAliasing() {
+  if (antialiased) {
+    glEnable(GL_MULTISAMPLE);
+  }
+}
+
+void OpenGlConfigManager::desactivateAntiAliasing() {
+  glDisable(GL_MULTISAMPLE);
+}
+
 void OpenGlConfigManager::activateLineAndPointAntiAliasing() {
   if (antialiased) {
     glDisable(GL_MULTISAMPLE);

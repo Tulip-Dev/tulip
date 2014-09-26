@@ -20,7 +20,6 @@
 
 #include <tulip/GlLines.h>
 #include <tulip/GlTools.h>
-#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -29,7 +28,6 @@ using namespace tlp;
 void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const double width, const unsigned int stippleType,
                          const Color &startColor, const Color &endColor,
                          const bool, const double, const double) {
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
   GlLines::glEnableLineStipple(stippleType);
   glLineWidth(width);
   glBegin(GL_LINES);
@@ -39,7 +37,6 @@ void GlLines::glDrawLine(const Coord &startPoint, const Coord &endPoint, const d
   glVertex3f(endPoint[0],endPoint[1],endPoint[2]);
   glEnd();
   GlLines::glDisableLineStipple(stippleType);
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 }
 //=============================================================
 void GlLines::glDrawCurve(const Coord &startPoint, const vector<Coord> &bends, const Coord &endPoint, const double width,
@@ -62,7 +59,6 @@ void GlLines::glDrawCurve(const Coord &startPoint, const vector<Coord> &bends, c
   for (int i=0; i<4; i++)
     colorDelta[i] = (colorEnd[i]-colorStart[i])/(bends.size()+2);
 
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
   glBegin(GL_LINE_STRIP);
   setColor(colorStart);
   glVertex3f(startPoint[0],startPoint[1],startPoint[2]);
@@ -81,7 +77,6 @@ void GlLines::glDrawCurve(const Coord &startPoint, const vector<Coord> &bends, c
   setColor(colorEnd);
   glVertex3f(endPoint[0],endPoint[1],endPoint[2]);
   glEnd();
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
   delete [] colorStart;
   delete [] colorEnd;
   GlLines::glDisableLineStipple(stippleType);
@@ -111,7 +106,7 @@ void GlLines::glDrawBezierCurve(const Coord &startPoint,const vector<Coord> &ben
   delete [] colorEnd;
   glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, bends.size()+2, bendsCoordinates);
   glEnable(GL_MAP1_VERTEX_3);
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
+
   glBegin(GL_LINE_STRIP);
 
   for (unsigned int i = 0; i <= steps; i++) {
@@ -123,7 +118,7 @@ void GlLines::glDrawBezierCurve(const Coord &startPoint,const vector<Coord> &ben
   }
 
   glEnd();
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
+
   glDisable(GL_MAP1_VERTEX_3);
   delete [] bendsCoordinates;
   delete [] colorStart;
@@ -139,7 +134,6 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
     return;
   }
 
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
   GlLines::glEnableLineStipple(stippleType);
   glLineWidth(width);
 
@@ -275,7 +269,6 @@ void GlLines::glDrawSplineCurve(const Coord &startPoint,const vector<Coord> &ben
   }
   delete [] colorStart;
   GlLines::glDisableLineStipple(stippleType);
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 }
 //=============================================================
 void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &bends,const Coord &endPoint,
@@ -375,13 +368,11 @@ void GlLines::glDrawSpline2Curve(const Coord &startPoint,const vector<Coord> &be
 }
 //=============================================================
 void GlLines::glDrawPoint(const Coord &p) {
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
   glPointSize(5.0);
   setColor(Color(255,255,0,255));
   glBegin(GL_POINTS);
   glVertex3f(p[0],p[1],p[2]);
   glEnd();
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 }
 //=============================================================
 void GlLines::glDisableLineStipple(unsigned int stippleType) {

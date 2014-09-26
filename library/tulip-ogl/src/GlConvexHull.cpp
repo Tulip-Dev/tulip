@@ -23,7 +23,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlConvexHull.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlXMLTools.h>
 
 using namespace std;
@@ -68,7 +67,6 @@ void GlConvexHull::draw(float,Camera *) {
   glEnable(GL_BLEND);
 
   if (_filled) {
-    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
 
     if (_points.size() == 3)
       glBegin(GL_TRIANGLES);
@@ -87,11 +85,9 @@ void GlConvexHull::draw(float,Camera *) {
     }
 
     glEnd();
-    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
   }
 
   if (_outlined) {
-    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
     glBegin(GL_LINE_LOOP);
 
     for(unsigned int i=0; i < _points.size(); ++i) {
@@ -104,7 +100,6 @@ void GlConvexHull::draw(float,Camera *) {
     }
 
     glEnd();
-    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
   }
 
   glTest(__PRETTY_FUNCTION__);

@@ -255,8 +255,6 @@ void GlBox::draw(float lod,Camera *) {
       }
     }
 
-    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-
     if(canUseVBO) {
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
       glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
@@ -264,8 +262,6 @@ void GlBox::draw(float lod,Camera *) {
     else {
       glDrawElements(GL_QUADS, 24, GL_UNSIGNED_BYTE, cubeIndices);
     }
-
-    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
     glDisableClientState(GL_NORMAL_ARRAY);
 
@@ -282,8 +278,6 @@ void GlBox::draw(float lod,Camera *) {
       glColor4ub(outlineColors[0][0],outlineColors[0][1],outlineColors[0][2],outlineColors[0][3]);
       glLineWidth(outlineSize);
 
-      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
       if(canUseVBO) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[4]);
         glDrawElements(GL_LINES, 24, GL_UNSIGNED_BYTE, BUFFER_OFFSET(0));
@@ -291,8 +285,6 @@ void GlBox::draw(float lod,Camera *) {
       else {
         glDrawElements(GL_LINES, 24, GL_UNSIGNED_BYTE, cubeOutlineIndices);
       }
-
-      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
       glEnable(GL_LIGHTING);
     }

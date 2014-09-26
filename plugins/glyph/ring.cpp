@@ -29,7 +29,6 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
@@ -93,9 +92,7 @@ static void drawGlyph(const Color& glyohColor, const string& texture,
     GlTextureManager::getInst().activateTexture(texturePath + texture);
   }
 
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
   GlDisplayListManager::getInst().callDisplayList("Ring_ring");
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
   GlTextureManager::getInst().desactivateTexture();
 
@@ -105,9 +102,7 @@ static void drawGlyph(const Color& glyohColor, const string& texture,
 
     glDisable(GL_LIGHTING);
     setColor(borderColor);
-    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
     GlDisplayListManager::getInst().callDisplayList("Ring_ringborder");
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
     glEnable(GL_LIGHTING);
   }
 }

@@ -46,7 +46,6 @@
 #include <tulip/GlLabel.h>
 #include <tulip/ParametricCurves.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlScene.h>
 #include <tulip/GlGlyphRenderer.h>
 #include <tulip/TulipViewSettings.h>
@@ -157,15 +156,11 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
       Color srcCol, tgtCol;
       getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
 
-      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
       setColor(srcCol);
       glPointSize(1);
       glBegin(GL_POINTS);
       glVertex3f(srcCoord[0], srcCoord[1], srcCoord[2]);
       glEnd();
-
-      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
     }
 

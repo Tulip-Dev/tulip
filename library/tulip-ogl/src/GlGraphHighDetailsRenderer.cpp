@@ -34,6 +34,7 @@
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGlyphRenderer.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 
@@ -177,6 +178,10 @@ GlGraphHighDetailsRenderer::~GlGraphHighDetailsRenderer() {
 }
 //===================================================================
 void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
+
+  if (!inputData->renderingParameters()->isAntialiased()) {
+    OpenGlConfigManager::getInst().desactivateAntiAliasing();
+  }
 
   Graph *graph=inputData->getGraph();
 
@@ -499,6 +504,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   else {
     selectionDrawActivate=false;
     inputData->getGlVertexArrayManager()->activate(true);
+    OpenGlConfigManager::getInst().activateAntiAliasing();
     return;
   }
 
@@ -528,6 +534,9 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   }
 
   selectionDrawActivate=false;
+
+  OpenGlConfigManager::getInst().activateAntiAliasing();
+
 }
 //===================================================================
 void GlGraphHighDetailsRenderer::selectEntities(Camera *camera,RenderingEntitiesFlag type, int x, int y, int w, int h, vector<SelectedEntity> &selectedEntities) {

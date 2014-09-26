@@ -23,7 +23,6 @@
 #include <tulip/TlpTools.h>
 #include <tulip/Curves.h>
 #include <tulip/GlTextureManager.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlTools.h>
 
@@ -458,8 +457,6 @@ void polyLine(const vector<Coord> &vertices,
   vector<Color> colors;
   getColors(vertices,c1,c2,colors);
 
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
   glVertexPointer(3, GL_FLOAT, 0, &vertices[0]);
@@ -467,8 +464,6 @@ void polyLine(const vector<Coord> &vertices,
   glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
   glDisableClientState(GL_VERTEX_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
-
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 }
 //=============================================
 void polyQuad(const vector<Coord> &vertices,
@@ -551,8 +546,6 @@ void polyQuad(const vector<Coord> &vertices,
     GlTextureManager::getInst().activateTexture(textureName);
   }
 
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-
   glEnableClientState(GL_VERTEX_ARRAY);
   glEnableClientState(GL_COLOR_ARRAY);
   glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -563,8 +556,6 @@ void polyQuad(const vector<Coord> &vertices,
 
   glDrawArrays(GL_QUAD_STRIP, 0, quadVertices.size());
 
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-
   if(textureName!="") {
     GlTextureManager::getInst().desactivateTexture();
   }
@@ -574,8 +565,6 @@ void polyQuad(const vector<Coord> &vertices,
   if (outlineWidth > 0) {
     glLineWidth(outlineWidth);
 
-    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
     if(!colorInterpolate) {
       glDisableClientState(GL_COLOR_ARRAY);
       glColor4ubv(((const GLubyte *)&borderColor));
@@ -583,8 +572,6 @@ void polyQuad(const vector<Coord> &vertices,
 
     glDrawElements(GL_LINE_STRIP, bottomOutlineIndices.size(), GL_UNSIGNED_INT, &bottomOutlineIndices[0]);
     glDrawElements(GL_LINE_STRIP, topOutlineIndices.size(), GL_UNSIGNED_INT, &topOutlineIndices[0]);
-
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
     glLineWidth(1.0);
   }
@@ -684,8 +671,6 @@ void simpleQuad(const vector<Coord> &vertices,
   GlTextureManager::getInst().activateTexture(newTextureName1);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-
   float length = 0;
   glBegin(GL_QUAD_STRIP);
 
@@ -718,8 +703,6 @@ void simpleQuad(const vector<Coord> &vertices,
 
   glEnd();
 
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-
   glActiveTexture(GL_TEXTURE1);
   glDisable(GL_TEXTURE_2D);
   glActiveTexture(GL_TEXTURE0);
@@ -728,8 +711,6 @@ void simpleQuad(const vector<Coord> &vertices,
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     GlTextureManager::getInst().desactivateTexture();
   }
-
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
 
   glBegin(GL_LINE_STRIP);
 
@@ -758,8 +739,6 @@ void simpleQuad(const vector<Coord> &vertices,
   }
 
   glEnd();
-
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
   delete [] points;
 }
@@ -815,8 +794,6 @@ void bezierQuad(const vector<Coord> &vertices,
           size*3, 2, pointsIt );
   glEnable(GL_MAP2_VERTEX_3);
 
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-
   glBegin(GL_QUAD_STRIP);
   glNormal3f(0.0f, 0.0f, 1.0f);
 
@@ -836,10 +813,6 @@ void bezierQuad(const vector<Coord> &vertices,
 
   glEnd();
 
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
-
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
   color=baseColor;
   glBegin(GL_LINE_STRIP);
 
@@ -862,8 +835,6 @@ void bezierQuad(const vector<Coord> &vertices,
   }
 
   glEnd();
-
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
   glDisable(GL_MAP2_VERTEX_3);
   delete [] points;
@@ -918,8 +889,6 @@ void bezierLine(const vector<Coord> &vertices,
   glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, vertices.size(), data);
   glEnable(GL_MAP1_VERTEX_3);
 
-  OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
   glBegin(GL_LINE_STRIP);
 
   for (unsigned int i = 0; i <= steps; ++i) {
@@ -929,8 +898,6 @@ void bezierLine(const vector<Coord> &vertices,
   }
 
   glEnd();
-
-  OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
   glDisable(GL_MAP1_VERTEX_3);
   delete [] data;

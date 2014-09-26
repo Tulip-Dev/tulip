@@ -53,6 +53,8 @@ public:
    */
   std::string getOpenGLVendor();
 
+  void initExtensions();
+
   /**
    * Checks if an OpenGL extension is supported by the driver installed on the host system.
    * \param extensionName the name of the OpenGL extension to check in the form "GL_.*" (for instance "GL_ARB_vertex_buffer_object")
@@ -72,29 +74,46 @@ public:
   }
 
   /**
+   * Returns the anti-aliasing state
+   */
+  bool antiAliasing() const {
+    return antialiased;
+  }
+
+  /**
+   * Activates anti-aliasing
+   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   */
+  void activateAntiAliasing();
+
+  /**
+   * Desactivates anti-aliasing
+   * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
+   */
+  void desactivateAntiAliasing();
+
+  /**
    * Activates the anti-aliasing of lines and points primitives.
    * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
    */
-  void activateLineAndPointAntiAliasing();
+  _DEPRECATED void activateLineAndPointAntiAliasing();
 
   /**
    * Desactivates the anti-aliasing of lines and points primitives.
    * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
    */
-  void desactivateLineAndPointAntiAliasing();
+  _DEPRECATED void desactivateLineAndPointAntiAliasing();
 
   /**
    * Activates the anti-aliasing of polygons primitives.
    * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
    */
-  void activatePolygonAntiAliasing();
+  _DEPRECATED void activatePolygonAntiAliasing();
   /**
    * Desactivates the anti-aliasing of polygons primitives.
    * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
    */
-  void desactivatePolygonAntiAliasing();
-
-  void initExtensions();
+  _DEPRECATED void desactivatePolygonAntiAliasing();
 
 private:
 

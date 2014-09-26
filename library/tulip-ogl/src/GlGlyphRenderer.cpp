@@ -1,7 +1,6 @@
 #include <tulip/GlGlyphRenderer.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlShaderProgram.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
@@ -51,7 +50,7 @@ static string glyphShaderSrc =
 
   "void main() {"
   "   gl_Position = gl_ModelViewProjectionMatrix * translationMatrix() * rotationMatrix() * scaleMatrix() * gl_Vertex;"
-  "	gl_FrontColor = gl_Color;"
+  "	  gl_FrontColor = gl_Color;"
   "   gl_TexCoord[0] = gl_MultiTexCoord0;"
   "}"
   ;
@@ -123,11 +122,9 @@ void GlGlyphRenderer::endRendering() {
     _glyphShader->setUniformFloat("rotAngle", glyphData.nodeRot);
 
     if (glyphData.selected) {
-      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
       _selectionBox->setStencil(_inputData->parameters->getSelectedNodesStencil()-1);
       _selectionBox->setOutlineColor(colorSelect);
       _selectionBox->draw(10,NULL);
-      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
     }
 
     glyphData.glyph->draw(glyphData.n, glyphData.lod);

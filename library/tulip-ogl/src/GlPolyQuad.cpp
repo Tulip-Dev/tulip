@@ -21,7 +21,6 @@
 #include <tulip/GlXMLTools.h>
 #include <tulip/GlPolyQuad.h>
 #include <tulip/Vector.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlShaderProgram.h>
 
 using namespace std;
@@ -181,17 +180,12 @@ void GlPolyQuad::draw(float, Camera *) {
   glTexCoordPointer(2, GL_FLOAT, 2 * sizeof(float), &texCoordsArray[0]);
   glColorPointer(4, GL_FLOAT, 4 * sizeof(float), &colorsArray[0][0]);
 
-
-  OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-
   if (nbSubdivisionsPerSegment > 1) {
     glDrawElements(GL_QUAD_STRIP, vertexArray.size(), GL_UNSIGNED_SHORT, &quadIndices[0]);
   }
   else {
     glDrawElements(GL_QUAD_STRIP, polyQuadEdges.size(), GL_UNSIGNED_SHORT, &quadIndices[0]);
   }
-
-  OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
   glDisableClientState(GL_COLOR_ARRAY);
@@ -201,7 +195,6 @@ void GlPolyQuad::draw(float, Camera *) {
   }
 
   if (outlined) {
-    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
     glLineWidth(outlineWidth);
     setMaterial(outlineColor);
 
@@ -215,8 +208,6 @@ void GlPolyQuad::draw(float, Camera *) {
     if (outlineWidth != 1) {
       glLineWidth(1);
     }
-
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
   }
 
   glDisableClientState(GL_VERTEX_ARRAY);

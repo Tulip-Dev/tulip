@@ -365,10 +365,6 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
     }
     }
 
-    OpenGlConfigManager::getInst().activatePolygonAntiAliasing();
-
-
-
     // Draw
     if(canUseVBO) {
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[5]);
@@ -378,8 +374,6 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
     else {
       glDrawElements(fillMode, points.size(), GL_UNSIGNED_BYTE, indices);
     }
-
-    OpenGlConfigManager::getInst().desactivatePolygonAntiAliasing();
 
     // Disable
     glDisableClientState(GL_NORMAL_ARRAY);
@@ -416,8 +410,6 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
         glColor4ub(outlineColors[0][0],outlineColors[0][1],outlineColors[0][2],outlineColors[0][3]);
       }
 
-      OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
-
       // Draw
       if(polygonMode!=QUAD_STRIP) {
         if(canUseVBO) {
@@ -437,8 +429,6 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
           glDrawElements(GL_LINE_LOOP, points.size(), GL_UNSIGNED_BYTE, auxIndices);
         }
       }
-
-      OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
       // Disable
       glDisableClientState(GL_COLOR_ARRAY);

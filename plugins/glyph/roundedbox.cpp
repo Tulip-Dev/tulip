@@ -23,7 +23,6 @@
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlGraphInputData.h>
-#include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlTools.h>
 #include <tulip/TulipViewSettings.h>
 
@@ -392,13 +391,11 @@ void RoundedBox::draw(node n, float lod) {
 
     glVertexPointer(2, GL_FLOAT, 2 * sizeof(float), outlineVeticesData);
 
-    OpenGlConfigManager::getInst().activateLineAndPointAntiAliasing();
     roundedBoxOutlineShader->activate();
     roundedBoxOutlineShader->setUniformFloat("boxWidth", size[0]);
     roundedBoxOutlineShader->setUniformFloat("boxHeight", size[1]);
     glDrawArrays(GL_LINE_STRIP_ADJACENCY_EXT, 0, 4);
     roundedBoxOutlineShader->desactivate();
-    OpenGlConfigManager::getInst().desactivateLineAndPointAntiAliasing();
 
     glDisableClientState(GL_VERTEX_ARRAY);
   }
