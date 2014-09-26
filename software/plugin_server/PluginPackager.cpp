@@ -45,7 +45,7 @@ using namespace tlp;
 struct PluginInformationsCollector : public PluginLoader {
 
   virtual void loaded(const tlp::Plugin* info, const std::list< Dependency >&) {
-    _directoryPlugins[_currentDirectory].push_back(info->name().c_str());
+    _directoryPlugins[_currentDirectory].push_back(tlp::tlpStringToQString(info->name()));
   }
 
   virtual void aborted(const std::string& plugin, const std::string& message) {
@@ -75,7 +75,7 @@ int main(int argc,char **argv) {
   QDir::home().mkpath(destInfo.absoluteFilePath());
 
   // First we initialize Tulip with basic plugins to ensure dependencies consistency
-  tlp::initTulipLib(QApplication::applicationDirPath().toUtf8().data());
+  tlp::initTulipLib(tlp::QStringToTlpString(QApplication::applicationDirPath()).c_str());
   tlp::TulipPluginsPath = tlp::TulipPluginsPath;
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginLister::checkLoadedPluginsDependencies(0);
@@ -102,7 +102,7 @@ int main(int argc,char **argv) {
     pluginDir.cd("tulip");
     foreach(QFileInfo pluginFile, pluginDir.entryInfoList(QDir::Files | QDir::NoSymLinks)) {
       if (QLibrary::isLibrary(pluginFile.absoluteFilePath())) {
-        PluginLibraryLoader::loadPluginLibrary(pluginFile.absoluteFilePath().toStdString(),&collector);
+        PluginLibraryLoader::loadPluginLibrary(tlp::QStringToTlpString(pluginFile.absoluteFilePath()), &collector);
       }
     }
   }
@@ -121,11 +121,11 @@ int main(int argc,char **argv) {
       QDomElement pluginNode = serverDocument.createElement("plugin");
       pluginNode.setAttribute("name",plugin);
       pluginNode.setAttribute("path",component);
-      const Plugin& info = PluginLister::pluginInformation(plugin.toStdString());
+      const Plugin& info = PluginLister::pluginInformation(tlp::QStringToTlpString(plugin));
       pluginNode.setAttribute("category",info.category().c_str());
-      pluginNode.setAttribute("author",info.author().c_str());
+      pluginNode.setAttribute("author", tlp::tlpStringToQString(info.author()));
       pluginNode.setAttribute("date",info.date().c_str());
-      pluginNode.setAttribute("desc",info.info().c_str());
+      pluginNode.setAttribute("desc", tlp::tlpStringToQString(info.info()));
       pluginNode.setAttribute("release",info.release().c_str());
       pluginNode.setAttribute("tulip",info.tulipRelease().c_str());
       QDomElement depsNode = serverDocument.createElement("dependencies");
@@ -133,7 +133,7 @@ int main(int argc,char **argv) {
 
       for(std::list<Dependency>::iterator it = deps.begin(); it != deps.end(); ++it) {
         QDomElement dep = serverDocument.createElement("dependency");
-        dep.setAttribute("name",it->pluginName.c_str());
+        dep.setAttribute("name", tlp::tlpStringToQString(it->pluginName));
         depsNode.appendChild(dep);
       }
 
