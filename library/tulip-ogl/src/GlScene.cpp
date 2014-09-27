@@ -153,7 +153,8 @@ void GlScene::draw() {
 
   if (OpenGlConfigManager::getInst().antiAliasing()) {
     OpenGlConfigManager::getInst().activateAntiAliasing();
-  } else {
+  }
+  else {
     OpenGlConfigManager::getInst().desactivateAntiAliasing();
   }
 
