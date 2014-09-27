@@ -176,9 +176,11 @@ void BasicPluginsTest::testExportImportTLPB() {
   ds.set("file::filename", string("data/tlp_importexport_test.tlp"));
   Graph* g = importGraph("TLP Import", ds, NULL, graph);
   CPPUNIT_ASSERT(g == graph);
-  std::ofstream os("tlpb_importexport_test.tlpb");
-  CPPUNIT_ASSERT(exportGraph(graph, os, "TLPB Export", ds, NULL));
-  os.close();
+  std::ostream *os =
+    tlp::getOutputFileStream("tlpb_importexport_test.tlpb",
+			     std::ios::out | std::ios::binary);
+  CPPUNIT_ASSERT(exportGraph(graph, *os, "TLPB Export", ds, NULL));
+  delete os;
   tearDown();
   setUp();
   ds.set("file::filename", string("data/toto.tlpb"));
