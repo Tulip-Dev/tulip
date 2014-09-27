@@ -314,9 +314,11 @@ void GlMainView::applySettings() {
 void GlMainView::setAntiAliasing(bool aa) {
   OpenGlConfigManager::getInst().setAntiAliasing(aa);
   _advAntiAliasingAction->setEnabled(aa);
+
   if (_advAntiAliasingAction->isChecked()) {
     _advAntiAliasingAction->setChecked(false);
-  } else {
+  }
+  else {
     draw();
   }
 }

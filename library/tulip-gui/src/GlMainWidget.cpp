@@ -241,11 +241,14 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
 
     if(options.testFlag(RenderScene)) {
       createRenderingStore(width,height);
+
       if (useFramebufferObject) {
         glFrameBuf->bind();
       }
+
       //Render the graph in the frame buffer.
       scene.draw();
+
       if (useFramebufferObject) {
         glFrameBuf->release();
         QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,width, height), glFrameBuf, QRect(0,0,width, height));
@@ -263,7 +266,8 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
 
     if (useFramebufferObject) {
       QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), glFrameBuf2, QRect(0,0,width, height));
-    } else {
+    }
+    else {
       if(options.testFlag(RenderScene)) {
         //Copy the back buffer (containing the graph render) in the rendering store to reuse it later.
         glReadBuffer(GL_BACK);
