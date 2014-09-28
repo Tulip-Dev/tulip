@@ -219,6 +219,10 @@ This part of the panel shows the graph. From here, the user can exploit two elem
 
   * *Use orthogonal projection*: switch to orthogonal projection to true perspective.
 
+  * *Anti-aliasing*: enable/disable the anti-aliasing (smooth stairstep-like lines).
+
+  * *Advanced anti-aliasing*: enable/disable a better but more expensive technique of anti-aliasing (needs off screen rendering).
+
   * *Take snapshot*: take a screenshot.
 
   * *Show overview*: display/hide the overview in the bottom right corner of the window.
@@ -229,7 +233,7 @@ This part of the panel shows the graph. From here, the user can exploit two elem
 
   * *Grid display parameters*: open the grid setup wizard.
 
-  When right clicking is on an edge or a node, an other part appears displaying the object name and offers to select the node/edge (*Select*), add it to the current selection (*Toggle selection*) or to delete it (*Delete*).
+  When right clicking on an edge or a node, an other part appears, displaying the object name and offering to select the node/edge (*Select*), to add/remove it to/from the current selection (*Toggle selection*), to delete it (*Delete*) or to edit one of the main draw properties (*Edit* color, label, shape or size)
 
 
   |i_workspace_rclick_edge|    |i_workspace_rclick_node|
