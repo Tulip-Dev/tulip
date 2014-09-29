@@ -166,9 +166,10 @@ void HistogramView::cleanupGlScene() {
 
 void HistogramView::setState(const DataSet &dataSet) {
 
+    GlMainWidget *gl = getGlMainWidget();
   if(!isConstruct) {
     isConstruct=true;
-    getGlMainWidget()->installEventFilter(this);
+    gl->installEventFilter(this);
 
     setOverviewVisible(true);
 
@@ -179,8 +180,8 @@ void HistogramView::setState(const DataSet &dataSet) {
   }
 
   if (binTextureId == 0) {
-    getGlMainWidget()->makeCurrent();
-    binTextureId = getGlMainWidget()->bindTexture(QPixmap(":/histo_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
+    gl->makeCurrent();
+    binTextureId = gl->bindTexture(QPixmap(":/histo_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
     GlTextureManager::getInst().registerExternalTexture(BIN_RECT_TEXTURE, binTextureId);
   }
 
@@ -275,7 +276,7 @@ void HistogramView::setState(const DataSet &dataSet) {
 
   }
 
-  getGlMainWidget()->centerScene();
+  gl->centerScene();
   draw();
 
   registerTriggers();
@@ -419,13 +420,11 @@ void HistogramView::viewConfigurationChanged() {
   }
 
   updateHistograms(detailedHistogram);
-  getGlMainWidget()->centerScene();
+  drawOverview(true);
   draw();
 }
 
 void HistogramView::draw() {
-
-
   if (detailedHistogram != NULL) {
     needUpdateHistogram=true;
     detailedHistogram->update();
@@ -450,8 +449,9 @@ void HistogramView::draw() {
 
     removeEmptyViewLabel();
     addEmptyViewLabel();
-    getGlMainWidget()->getScene()->centerScene();
-    getGlMainWidget()->draw();
+    GlMainWidget *gl = getGlMainWidget();
+    gl->centerScene();
+    gl->draw();
     return;
   }
 
@@ -707,16 +707,17 @@ void HistogramView::switchFromDetailedViewToSmallMultiples() {
 
   detailedHistogram = NULL;
   detailedHistogramPropertyName = "";
-
+  GlMainWidget *gl = getGlMainWidget();
   xAxisDetail = NULL;
   yAxisDetail = NULL;
   mainLayer->addGlEntity(histogramsComposite, "overviews composite");
   mainLayer->addGlEntity(labelsComposite, "labels composite");
-  getGlMainWidget()->getScene()->getGraphCamera().setSceneRadius(sceneRadiusBak);
-  getGlMainWidget()->getScene()->getGraphCamera().setZoomFactor(zoomFactorBak);
-  getGlMainWidget()->getScene()->getGraphCamera().setEyes(eyesBak);
-  getGlMainWidget()->getScene()->getGraphCamera().setCenter(centerBak);
-  getGlMainWidget()->getScene()->getGraphCamera().setUp(upBak);
+  Camera &cam = gl->getScene()->getGraphCamera();
+  cam.setSceneRadius(sceneRadiusBak);
+  cam.setZoomFactor(zoomFactorBak);
+  cam.setEyes(eyesBak);
+  cam.setCenter(centerBak);
+  cam.setUp(upBak);
 
   smallMultiplesView = true;
 
@@ -724,7 +725,7 @@ void HistogramView::switchFromDetailedViewToSmallMultiples() {
   propertiesSelectionWidget->setWidgetEnabled(true);
   histoOptionsWidget->setWidgetEnabled(false);
 
-  getGlMainWidget()->draw();
+  gl->draw();
 }
 
 void HistogramView::updateDetailedHistogramAxis() {
@@ -757,12 +758,6 @@ BoundingBox HistogramView::getSmallMultiplesBoundingBox() const {
   labelsComposite->acceptVisitor(&glBBSV);
   return glBBSV.getBoundingBox();
 }
-
-/*void HistogramView::setInteractors(const std::list<Interactor *> &interactors) {
-  for(QList)
-  View::setInteractors(interactors);
-  toggleInteractors(false);
-}*/
 
 void HistogramView::registerTriggers() {
   foreach (tlp::Observable* obs, triggers()) {
