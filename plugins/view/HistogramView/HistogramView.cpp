@@ -25,6 +25,7 @@
 #include <tulip/GlLabel.h>
 #include <tulip/GlRect.h>
 #include <tulip/GlTextureManager.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QToolTip>
 #include <QHelpEvent>
@@ -334,7 +335,7 @@ bool HistogramView::eventFilter(QObject *object, QEvent *event) {
         sceneCoords.getY() > xAxisBB[0][1] && sceneCoords.getY() < xAxisBB[1][1]) {
       double val = xAxisDetail->getValueForAxisPoint(sceneCoords);
       string valStr(getStringFromNumber(val));
-      QToolTip::showText(he->globalPos(), QString(valStr.c_str()));
+      QToolTip::showText(he->globalPos(), tlp::tlpStringToQString(valStr));
     }
 
     return true;
