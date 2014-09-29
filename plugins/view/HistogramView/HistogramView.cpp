@@ -167,7 +167,8 @@ void HistogramView::cleanupGlScene() {
 
 void HistogramView::setState(const DataSet &dataSet) {
 
-    GlMainWidget *gl = getGlMainWidget();
+  GlMainWidget *gl = getGlMainWidget();
+
   if(!isConstruct) {
     isConstruct=true;
     gl->installEventFilter(this);
