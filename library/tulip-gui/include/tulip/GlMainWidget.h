@@ -339,7 +339,7 @@ public slots:
    */
   void draw(bool graphChanged=true);
   /**
-   * That function is given for optimisation purpose. If the hardware enable it,
+   * This function is given for optimisation purpose only. If the hardware enable it,
    * it enables to redraw only the Augmented display and the interactors and not the graph
    * it is really usefull for interactors such as zoom box etc..
    * Warning, if you change the graph or the porperties of element (Colors, size, etc...)
