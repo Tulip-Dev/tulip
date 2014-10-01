@@ -39,8 +39,12 @@ if [ ! -f tulip.pid ]; then
 fi
 
 # replay events
+if [ "$TLP_REPLAY_SPEED" != "" ]; then
+  SPEED="-sp $TLP_REPLAY_SPEED"
+fi
+
 echo "Replaying events from $CNEE_INPUT_FILE"
-$CNEE -rep --file $CNEE_INPUT_FILE -fcr -fp -e /tmp/$CNEE_INPUT_FILE.log > /dev/null 2>&1
+$CNEE -rep $SPEED --file $CNEE_INPUT_FILE -fcr -fp -e /tmp/$CNEE_INPUT_FILE.log > /dev/null 2>&1
 xset r
 echo "Replay finished"
 
