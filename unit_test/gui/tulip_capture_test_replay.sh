@@ -4,21 +4,25 @@
 
 if [ $# -lt 1 ]; then
     echo "$0 running test failed"
-    echo "usage: $0 <test_script>"
+    echo "usage: $0 <test_script> [percent speed replay]"
     exit
 fi
 
 TEST_SCRIPT=$1
-
 
 if [ ! -f $TEST_SCRIPT ]; then
   echo "$TEST_NAME does not exist"
   exit
 fi
 
-# set an evnt variable to ensure recordmydesktop
+# set an env variable to ensure recordmydesktop
 # will be stopped at the end of the replay
 export TLP_RECORDMYDESKTOP=1
+
+# set speed if any
+if [ $# -eq 2 ]; then
+    export TLP_REPLAY_SPEED=$2
+fi
 
 # launch the replay
 sh $1 &
