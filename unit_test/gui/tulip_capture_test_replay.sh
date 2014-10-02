@@ -27,6 +27,8 @@ fi
 # launch the replay
 sh $1 &
 
+REPLAY_PID=$!
+
 sleep 3
 
 # check for a crash
@@ -35,3 +37,6 @@ if [ ! -f tulip.pid ]; then
 fi
 
 recordmydesktop --windowid $(xwininfo -root -tree | grep "\[Tulip\]" | awk '{print $1}') --no-sound --on-the-fly-encoding -o /tmp/${TEST_SCRIPT} --stop-shortcut Control+s
+
+# wait for the end of the test replay
+wait $REPLAY_PID
