@@ -392,11 +392,11 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   delete progress;
 
-  // copy or cleanup out properties
-  std::vector<OutPropertyParam>::const_iterator it = outPropertyParams.begin();
+  if (result) {
+    // copy or cleanup out properties
+    std::vector<OutPropertyParam>::const_iterator it = outPropertyParams.begin();
 
-  for (; it != outPropertyParams.end(); ++it) {
-    if (result) {
+    for (; it != outPropertyParams.end(); ++it) {
       // copy computed property in the original output property
       it->dest->copy(it->tmp);
       // restore it in the dataset
@@ -406,15 +406,15 @@ void AlgorithmRunnerItem::run(Graph *g) {
           TulipSettings::instance().isResultPropertyStored()) {
         // store the result property values in an automatically named property
         std::string storedResultName = algoAndParams
-                                       + "(" + it->dest->getName() + ")";
+	  + "(" + it->dest->getName() + ")";
         PropertyInterface* storedResultProp =
           it->dest->clonePrototype(it->dest->getGraph(),
                                    storedResultName);
         storedResultProp->copy(it->tmp);
       }
-    }
 
-    delete it->tmp;
+      delete it->tmp;
+    }
   }
 
   afterRun(g, dataSet);
@@ -487,7 +487,8 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
     if (TulipSettings::instance().isAutomaticRatio()) {
       LayoutProperty* prop = NULL;
       dataSet.get<LayoutProperty*>("result",prop);
-      prop->perfectAspectRatio();
+      if (prop)
+	prop->perfectAspectRatio();
     }
 
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
