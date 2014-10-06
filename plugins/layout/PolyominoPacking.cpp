@@ -79,7 +79,7 @@ private :
 
   float width;
   float gridCenter;
-  std::vector<bool> pointSet;
+  TLP_HASH_MAP<tlp::Vec2i, bool> pointsSet;
   std::map<tlp::Graph*, tlp::Vec2i> newPlaces;
 
   tlp::LayoutProperty *viewLayout;
@@ -135,27 +135,35 @@ bool PolyominoPacking::run() {
   viewRotation = graph->getProperty<DoubleProperty>("viewRotation");
   viewShape = graph->getProperty<IntegerProperty>("viewShape");
 
+  if (pluginProgress) {
+    pluginProgress->setComment("Computing connected components ...");
+  }
+
   vector< set<node> > connectedComponents;
   tlp::ConnectedTest::computeConnectedComponents(graph, connectedComponents);
 
-  vector<Graph *> connectedComponentsSgs;
-
-  for (size_t i = 0 ; i < connectedComponents.size() ; ++i) {
-    connectedComponentsSgs.push_back(graph->inducedSubGraph(connectedComponents[i]));
-  }
-
-  if (connectedComponentsSgs.size() <= 1)
+  if (connectedComponents.size() <= 1)
     return true;
 
-  polyominos.reserve(connectedComponentsSgs.size());
+  // work on a graph copy to avoid costly GUI update when creating subraphs associated to connected components
+  Graph *graphCp = tlp::newGraph();
+  copyToGraph(graphCp, graph);
 
-  for (size_t i = 0; i < connectedComponentsSgs.size() ; ++i) {
-    Graph *cc = connectedComponentsSgs[i];
+  vector<Graph *> connectedComponentsSgs;
+  connectedComponentsSgs.reserve(connectedComponents.size());
+  polyominos.reserve(connectedComponents.size());
+
+  for (size_t i = 0 ; i < connectedComponents.size() ; ++i) {
+    Graph *cc = graphCp->inducedSubGraph(connectedComponents[i]);
+    connectedComponentsSgs.push_back(cc);
     BoundingBox ccBB = tlp::computeBoundingBox(cc, viewLayout, viewSize, viewRotation);
     Polyomino info;
     info.cc = cc;
     info.ccBB = ccBB;
     polyominos.push_back(info);
+    if (pluginProgress) {
+      pluginProgress->progress(i+1, connectedComponents.size());
+    }
   }
 
   gridStepSize = computeGridStep();
@@ -163,29 +171,30 @@ bool PolyominoPacking::run() {
   if (gridStepSize <= 0)
     return true;
 
+  if (pluginProgress) {
+    pluginProgress->setComment("Generating polyominos ...");
+    pluginProgress->progress(0, polyominos.size());
+  }
+
   for (size_t i = 0; i < polyominos.size() ; ++i) {
     genPolyomino(polyominos[i]);
+    if (pluginProgress) {
+      pluginProgress->progress(i+1, polyominos.size());
+    }
   }
-
-  float maxW = 0;
-  float maxH = 0;
-  gridCenter = 0;
-
-  for(size_t i = 0; i < polyominos.size(); ++i) {
-    maxW += polyominos[i].ccBB.width();
-    maxH += polyominos[i].ccBB.height();
-  }
-
-  width = std::max(maxW, maxH);
-  gridCenter = width;
-  width *= 2;
-
-  pointSet = std::vector<bool>(pow(width, 2.f), false);
 
   std::sort(polyominos.begin(), polyominos.end(), polyPerimOrdering());
 
+  if (pluginProgress) {
+    pluginProgress->setComment("Packing polyominos ...");
+    pluginProgress->progress(0, polyominos.size());
+  }
+
   for (size_t i = 0 ; i < polyominos.size() ; ++i) {
     placePolyomino(i, polyominos[i]);
+    if (pluginProgress) {
+      pluginProgress->progress(i+1, polyominos.size());
+    }
   }
 
   for (size_t i = 0 ; i < polyominos.size() ; ++i) {
@@ -204,8 +213,9 @@ bool PolyominoPacking::run() {
 
       result->setEdgeValue(e, bends);
     }
-    graph->delSubGraph(polyominos[i].cc);
   }
+
+  delete graphCp;
 
   return true;
 }
@@ -434,27 +444,19 @@ void PolyominoPacking::fillLine(const Coord &p, const Coord &q, std::vector<Vec2
 
 bool PolyominoPacking::polyominoFits(Polyomino& poly, int x, int y) {
   std::vector<Vec2i> &cells = poly.cells;
+  const BoundingBox &ccBB = poly.ccBB;
 
   for (size_t i = 0; i < cells.size() ; ++i) {
     Vec2i cell = cells[i];
     cell[0] += x;
     cell[1] += y;
-
-    assert(cell[0]+gridCenter +  width * (cell[1] +gridCenter) > 0);
-    assert(cell[0]+gridCenter +  width * (cell[1] +gridCenter) < pointSet.size());
-
-    if (pointSet[cell[0]+gridCenter +  width * (cell[1] +gridCenter)])
+    if (pointsSet.find(cell) != pointsSet.end())
       return false;
   }
 
-  const BoundingBox &ccBB = poly.ccBB;
-
   Vec2i LL = vec3fToVec2i(ccBB[0]);
-
   Vec2i place;
-
   place[0] = gridStepSize * x - LL[0];
-
   place[1] = gridStepSize * y - LL[1];
 
   newPlaces[poly.cc] = place;
@@ -463,7 +465,7 @@ bool PolyominoPacking::polyominoFits(Polyomino& poly, int x, int y) {
     Vec2i cell = cells[i];
     cell[0] += x;
     cell[1] += y;
-    pointSet[cell[0]+gridCenter +  width * (cell[1] +gridCenter)] = true;
+    pointsSet[cell] = true;
   }
 
   return true;
