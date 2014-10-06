@@ -161,6 +161,7 @@ bool PolyominoPacking::run() {
     info.cc = cc;
     info.ccBB = ccBB;
     polyominos.push_back(info);
+
     if (pluginProgress) {
       pluginProgress->progress(i+1, connectedComponents.size());
     }
@@ -178,6 +179,7 @@ bool PolyominoPacking::run() {
 
   for (size_t i = 0; i < polyominos.size() ; ++i) {
     genPolyomino(polyominos[i]);
+
     if (pluginProgress) {
       pluginProgress->progress(i+1, polyominos.size());
     }
@@ -192,6 +194,7 @@ bool PolyominoPacking::run() {
 
   for (size_t i = 0 ; i < polyominos.size() ; ++i) {
     placePolyomino(i, polyominos[i]);
+
     if (pluginProgress) {
       pluginProgress->progress(i+1, polyominos.size());
     }
@@ -450,6 +453,7 @@ bool PolyominoPacking::polyominoFits(Polyomino& poly, int x, int y) {
     Vec2i cell = cells[i];
     cell[0] += x;
     cell[1] += y;
+
     if (pointsSet.find(cell) != pointsSet.end())
       return false;
   }
