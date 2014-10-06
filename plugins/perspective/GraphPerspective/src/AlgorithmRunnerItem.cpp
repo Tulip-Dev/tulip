@@ -406,7 +406,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
           TulipSettings::instance().isResultPropertyStored()) {
         // store the result property values in an automatically named property
         std::string storedResultName = algoAndParams
-	  + "(" + it->dest->getName() + ")";
+                                       + "(" + it->dest->getName() + ")";
         PropertyInterface* storedResultProp =
           it->dest->clonePrototype(it->dest->getGraph(),
                                    storedResultName);
@@ -487,8 +487,9 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
     if (TulipSettings::instance().isAutomaticRatio()) {
       LayoutProperty* prop = NULL;
       dataSet.get<LayoutProperty*>("result",prop);
+
       if (prop)
-	prop->perfectAspectRatio();
+        prop->perfectAspectRatio();
     }
 
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
