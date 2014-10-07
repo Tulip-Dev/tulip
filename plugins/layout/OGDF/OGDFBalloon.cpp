@@ -92,6 +92,15 @@ public:
     }
   }
 
+  bool check(string& error) {
+    if (!tlp::ConnectedTest::isConnected(graph)) {
+      error += "graph is not connected";
+      return false;
+    }
+
+    return true;
+  }
+
 };
 
 
