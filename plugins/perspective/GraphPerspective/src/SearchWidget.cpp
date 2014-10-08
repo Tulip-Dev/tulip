@@ -504,9 +504,7 @@ SearchOperator *SearchWidget::searchOperator() {
   if (isNumericComparison())
     op = NUMERIC_OPERATORS[_ui->operatorCombo->currentIndex()];
   else
-    op = _ui->caseSensitivityCheck->isChecked() ?
-         NOCASE_STRING_OPERATORS[_ui->operatorCombo->currentIndex()] :
-         STRING_OPERATORS[_ui->operatorCombo->currentIndex()];
+    op = _ui->caseSensitivityCheck->isChecked() ? STRING_OPERATORS[_ui->operatorCombo->currentIndex()] : NOCASE_STRING_OPERATORS[_ui->operatorCombo->currentIndex()];
 
   return op;
 }
