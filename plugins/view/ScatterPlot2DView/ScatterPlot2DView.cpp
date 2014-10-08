@@ -519,6 +519,8 @@ void ScatterPlot2DView::draw() {
   if (selectedGraphProperties.size() < 2) {
     destroyOverviews();
     removeEmptyViewLabel();
+    matrixUpdateNeeded = false;
+    switchFromDetailViewToMatrixView();
     addEmptyViewLabel();
     getGlMainWidget()->getScene()->centerScene();
     getGlMainWidget()->draw();
