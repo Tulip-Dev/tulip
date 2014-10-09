@@ -21,55 +21,72 @@
 
 %PreInitialisationCode
 
-    bool initQt = true;
+bool initQt = true;
 
 // test if there is an X server running on linux
 // special case for PPA build, otherwise Python documentation is not generated
 #if defined(__linux)
-    char *display = getenv("DISPLAY");
-    initQt = (display != NULL);
+char *display = getenv("DISPLAY");
+initQt = (display != NULL);
 #endif
 
-    // If there is no QApplication instance, it means that we are working from the classical Python shell
-    // or we are executing a script with the interpreter.
-    // Instantiate a QApplication but don't run its event loop continually through the exec method.
-    // Instead use the same hack as in PyQt4 in order to process qt events when the Python shell
-    // is waiting for input.
-    if (!QApplication::instance() && initQt) {
-        installQtInputHook();
-        new QApplication(argc, argv);
-        tlp::initTulipSoftware();
+// If there is no QApplication instance, it means that we are working from the classical Python shell
+// or we are executing a script with the interpreter.
+// Instantiate a QApplication but don't run its event loop continually through the exec method.
+// Instead use the same hack as in PyQt4 in order to process qt events when the Python shell
+// is waiting for input.
+if (!QApplication::instance() && initQt) {
+    installQtInputHook();
+    new QApplication(argc, argv);
 
-        std::string resetSIGINTHandler =
+    // fix an ubuntu bug when using the nvidia driver,
+    // when the python interpreter dynamically loads the GL library,
+    // it ends up loading the mesa one instead of the nvidia one.
+    // The use of the tulipgui module through the classical python intrepreter
+    // was quite unusable because of that ...
+    // Apply the workaround proposed here : https://bugs.launchpad.net/ubuntu/+source/python-qt4/+bug/941826
+    std::string fixUbuntuGl =
+            "import os\n"
+            "if hasattr(os, 'uname'):\n"
+            "  if os.uname()[3].lower().find('ubuntu') != -1:\n"
+            "    import ctypes.util\n"
+            "    ctypes.CDLL(ctypes.util.find_library('GL'), ctypes.RTLD_GLOBAL)\n"
+            ;
+    PyRun_SimpleString(fixUbuntuGl.c_str());
+
+    tlp::initTulipSoftware();
+
+    std::string resetSIGINTHandler =
             "import signal\n"
             "signal.signal(signal.SIGINT, signal.SIG_DFL)\n";
 
-        PyRun_SimpleString(resetSIGINTHandler.c_str());
+    PyRun_SimpleString(resetSIGINTHandler.c_str());
 
-        // Check if we are in script execution mode (sys.ps1 is not defined in that case)
-        // If so, register an exit callback that will run the Qt event loop if some widgets are
-        // still in a visible state
-        PyObject *ps1 = PySys_GetObject("ps1");
-        if (!ps1 && !Py_InteractiveFlag) {
-            std::string installExitFunc =
+    // Check if we are in script execution mode (sys.ps1 is not defined in that case)
+    // If so, register an exit callback that will run the Qt event loop if some widgets are
+    // still in a visible state
+    PyObject *ps1 = PySys_GetObject("ps1");
+    if (!ps1 && !Py_InteractiveFlag) {
+        std::string installExitFunc =
                 "def tulipguiExitFunc():\n"
                 "   import tulipgui\n"
                 "   tulipgui.tlpgui.runQtMainLoop()\n"
                 "import atexit\n"
-                "atexit.register(tulipguiExitFunc)\n";
-            PyRun_SimpleString(installExitFunc.c_str());
-        }
-
+                "atexit.register(tulipguiExitFunc)\n"
+                ;
+        PyRun_SimpleString(installExitFunc.c_str());
     }
+
+}
 
 %End
 
 %PostInitialisationCode
-    // rename tlp namespace into tlpgui
-    PyObject *moduleDict = PyModule_GetDict(sipModule);
-    PyObject *tlpClass = PyDict_GetItemString(moduleDict, "tlp");
-    PyDict_DelItemString(moduleDict, "tlp");
-    PyDict_SetItemString(moduleDict, "tlpgui", tlpClass);
+// rename tlp namespace into tlpgui
+PyObject *moduleDict = PyModule_GetDict(sipModule);
+PyObject *tlpClass = PyDict_GetItemString(moduleDict, "tlp");
+PyDict_DelItemString(moduleDict, "tlp");
+PyDict_SetItemString(moduleDict, "tlpgui", tlpClass);
 %End
 
 %ModuleHeaderCode
@@ -100,7 +117,7 @@ extern void removeQtInputHook();
 
 void printErrorMessage(const std::string &errMsg) {
     std::string pythonCode = "import sys\n"
-                             "sys.stderr.write(\"";
+            "sys.stderr.write(\"";
     pythonCode += errMsg;
     pythonCode += "\\n\")";
     PyRun_SimpleString(pythonCode.c_str());
