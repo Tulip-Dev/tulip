@@ -28,8 +28,8 @@ static void stream_flush_data(png_structp);
 
 namespace tlprender {
 PNGWriter::PNGWriter(const GLubyte *imagebuffer, const int width, const int height):
-  ImageWriter(imagebuffer, width, height)
-{}
+  ImageWriter(imagebuffer, width, height) {
+}
 
 bool PNGWriter::writeImage(std::ostream &os) const {
   png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);

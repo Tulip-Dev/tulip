@@ -25,8 +25,8 @@ using namespace std;
 using namespace tlp;
 
 //====================================================================
-NodeMetric::NodeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context)
-{}
+NodeMetric::NodeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
+}
 
 // structure below is used to implement dfs loop
 struct dfsStruct {

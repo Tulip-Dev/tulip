@@ -63,8 +63,8 @@ public:
     return "gml";
   }
 
-  GMLExport(tlp::PluginContext* context) : tlp::ExportModule(context)
-  {}
+  GMLExport(tlp::PluginContext* context) : tlp::ExportModule(context) {
+  }
 
   ~GMLExport() {}
 

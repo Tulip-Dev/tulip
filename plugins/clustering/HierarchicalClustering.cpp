@@ -25,11 +25,11 @@ using namespace tlp;
 PLUGIN(HierarchicalClustering)
 
 //================================================================================
-HierarchicalClustering::HierarchicalClustering(PluginContext* context):Algorithm(context)
-{}
+HierarchicalClustering::HierarchicalClustering(PluginContext* context):Algorithm(context) {
+}
 //================================================================================
-HierarchicalClustering::~HierarchicalClustering()
-{}
+HierarchicalClustering::~HierarchicalClustering() {
+}
 //================================================================================
 
 class LessThan {

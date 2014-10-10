@@ -30,8 +30,8 @@ GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart):
 #endif
   updatesReverted(false),
   restartAllowed(allowRestart),
-  newValuesRecorded(false), oldIdsState(NULL), newIdsState(NULL)
-{}
+  newValuesRecorded(false), oldIdsState(NULL), newIdsState(NULL) {
+}
 
 GraphUpdatesRecorder::~GraphUpdatesRecorder() {
   deleteDeletedObjects();

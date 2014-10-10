@@ -347,7 +347,9 @@ struct augmentableAndNodes_ Ordering::getAugAndNodes(Face f) {
     nod = nod2;
     nod2 = right.get(nod.id);
     pos++;
-  } delete it;
+  }
+
+  delete it;
 
   while(nod2 != v1[1]) {
     if(nod2 == n_f && !found_ff)

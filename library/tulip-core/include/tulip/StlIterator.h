@@ -63,8 +63,8 @@ template<typename KEY, typename VALUE>
 struct StlMapIterator:public Iterator< std::pair<KEY,VALUE> > {
   StlMapIterator(typename std::map<KEY,VALUE>::const_iterator startIt, typename std::map<KEY,VALUE>::const_iterator endIt):
     it(startIt),
-    itEnd(endIt)
-  {}
+    itEnd(endIt) {
+  }
   std::pair<KEY,VALUE> next();
   bool hasNext();
 private:
@@ -89,8 +89,8 @@ template<typename KEY, typename VALUE>
 struct StlMapKeyIterator : public tlp::Iterator<KEY> {
   StlMapKeyIterator(typename std::map<KEY,VALUE>::const_iterator startIt, typename std::map<KEY,VALUE>::const_iterator endIt):
     it(startIt),
-    itEnd(endIt)
-  {}
+    itEnd(endIt) {
+  }
   KEY next() {
     const KEY tmp = it->first;
     ++it;

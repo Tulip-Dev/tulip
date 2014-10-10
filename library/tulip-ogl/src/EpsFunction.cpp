@@ -409,7 +409,7 @@ void tlp::spewSortedFeedback(FILE * file, GLint size, GLfloat * buffer) {
 }
 //====================================================
 #define EPS_GOURAUD_THRESHOLD 0.5  /* Lower for better (slower)
-
+ 
 smooth shading. */
 
 void tlp::spewWireFrameEPS(FILE * file, int doSort, GLint size, GLfloat * buffer, char *creator) {

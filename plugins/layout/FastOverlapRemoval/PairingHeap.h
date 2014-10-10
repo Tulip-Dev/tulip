@@ -54,8 +54,8 @@ class PairNode {
 
   PairNode( const T & theElement ) :
     element( theElement ),
-    leftChild(NULL), nextSibling(NULL), prev(NULL)
-  { }
+    leftChild(NULL), nextSibling(NULL), prev(NULL) {
+  }
   friend class PairingHeap<T>;
 };
 

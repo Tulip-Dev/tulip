@@ -26,8 +26,8 @@ PLUGIN(SpanningTreeSelection)
 using namespace std;
 using namespace tlp;
 
-SpanningTreeSelection::SpanningTreeSelection(const tlp::PluginContext* context):BooleanAlgorithm(context)
-{}
+SpanningTreeSelection::SpanningTreeSelection(const tlp::PluginContext* context):BooleanAlgorithm(context) {
+}
 
 SpanningTreeSelection::~SpanningTreeSelection() {}
 
