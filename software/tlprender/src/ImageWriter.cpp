@@ -42,8 +42,8 @@ ImageWriter::ImageWriter(const GLubyte *imagebuffer, const int width, const int 
   buffer(imagebuffer),
   width(width), height(height),
   title(""), software(""), source(""), layout(""), comment(""),
-  titleState(false), softwareState(false), sourceState(false), layoutState(false), commentState(false)
-{}
+  titleState(false), softwareState(false), sourceState(false), layoutState(false), commentState(false) {
+}
 
 ImageWriter *ImageWriter::getImageWriter(string &type, const GLubyte *buffer, const int width, const int height) {
 #ifdef HAVE_LIBPNG

@@ -25,8 +25,8 @@ TulipViewSettings::TulipViewSettings() :
   _defaultEdgeExtremitySrcSize(Size(1,1,0)),
   _defaultEdgeExtremityTgtSize(Size(1,1,0)),
   _defaultFontFile(tlp::TulipBitmapDir + "font.ttf"),
-  _defaultFontSize(18)
-{}
+  _defaultFontSize(18) {
+}
 
 TulipViewSettings &TulipViewSettings::instance() {
   if (!_instance) {

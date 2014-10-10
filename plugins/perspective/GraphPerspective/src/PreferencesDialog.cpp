@@ -33,6 +33,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent): QDialog(parent), _ui(new 
   _ui->graphDefaultsTable->setItemDelegate(new tlp::TulipItemDelegate(_ui->graphDefaultsTable));
   connect(_ui->graphDefaultsTable, SIGNAL(cellChanged(int, int)), this, SLOT(cellChanged(int, int)));
   connect(_ui->randomSeedCheck, SIGNAL(stateChanged(int)), this, SLOT(randomSeedCheckChanged(int)));
+
   // disable edition for title items (in column 0)
   for (int i = 0; i < 4; ++i)
     _ui->graphDefaultsTable->item(i, 0)->setFlags(Qt::ItemIsEnabled);

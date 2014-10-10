@@ -172,8 +172,8 @@ struct GMLNodeBuilder:public GMLBuilder {
 
   GMLNodeBuilder(GMLGraphBuilder *graphBuilder):
     graphBuilder(graphBuilder),
-    idSet(-1)
-  {}
+    idSet(-1) {
+  }
 
   bool addInt(const string &st,const int id) {
     if (st==ID) {
@@ -245,8 +245,8 @@ struct GMLNodeGraphicsBuilder:public GMLTrue {
     nodeBuilder(nodeBuilder),
     coord(Coord(0,0,0)),
     size(Size(1,1,1)),
-    color(Color(0,0,0,255))
-  {}
+    color(Color(0,0,0,255)) {
+  }
 
   bool addInt(const string &st,const int integer) {
     if (st=="x") coord.setX(integer);
@@ -412,8 +412,8 @@ struct GMLEdgeGraphicsBuilder:public GMLTrue {
   GMLEdgeGraphicsBuilder(GMLEdgeBuilder *edgeBuilder):
     edgeBuilder(edgeBuilder),
     size(Size(0,0,0)),
-    color(Color(0,0,0,0))
-  {}
+    color(Color(0,0,0,0)) {
+  }
   bool addString(const string &,const string &) {
     return true;
   }
@@ -430,8 +430,8 @@ struct GMLEdgeGraphicsLineBuilder:public GMLTrue {
   GMLEdgeGraphicsBuilder *edgeGraphicsBuilder;
   LineType::RealType lCoord;
   GMLEdgeGraphicsLineBuilder(GMLEdgeGraphicsBuilder *edgeGraphicsBuilder):
-    edgeGraphicsBuilder(edgeGraphicsBuilder)
-  {}
+    edgeGraphicsBuilder(edgeGraphicsBuilder) {
+  }
   virtual ~GMLEdgeGraphicsLineBuilder() {}
   bool addStruct(const string& structName,GMLBuilder*&newBuilder);
   void addPoint(const Coord &coord) {
@@ -448,8 +448,8 @@ struct GMLEdgeGraphicsLinePointBuilder:public GMLTrue {
   Coord coord;
   GMLEdgeGraphicsLinePointBuilder(GMLEdgeGraphicsLineBuilder *edgeGraphicsLineBuilder):
     edgeGraphicsLineBuilder(edgeGraphicsLineBuilder),
-    coord(0,0,0)
-  {}
+    coord(0,0,0) {
+  }
   bool addInt(const string &st,const int integer) {
     if (st=="x") coord.setX(integer);
 

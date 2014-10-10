@@ -70,8 +70,8 @@ protected:
 public:
   FactorNodeIterator(const Graph *sG,const MutableContainer<bool>& filter):
     _parentGraph(sG->getSuperGraph()),
-    _filter(filter)
-  {}
+    _filter(filter) {
+  }
 };
 
 class FactorEdgeIterator
@@ -87,8 +87,8 @@ protected:
 public:
   FactorEdgeIterator(const Graph *sG,const MutableContainer<bool>& filter):
     _parentGraph(sG->getSuperGraph()),
-    _filter(filter)
-  {}
+    _filter(filter) {
+  }
 };
 //============================================================
 ///Node iterator for GraphView

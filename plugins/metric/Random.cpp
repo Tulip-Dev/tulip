@@ -23,8 +23,8 @@ using namespace tlp;
 PLUGIN(RandomMetric)
 
 //===========================================
-RandomMetric::RandomMetric(const tlp::PluginContext* context):DoubleAlgorithm(context)
-{}
+RandomMetric::RandomMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
+}
 //===========================================
 bool RandomMetric::run() {
   // initialize a random sequence according the given seed
