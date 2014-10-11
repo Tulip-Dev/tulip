@@ -116,8 +116,8 @@ public:
 /*
   ColorEditorCreator
 */
-QWidget* ColorEditorCreator::createWidget(QWidget *) const {
-  TulipColorDialog *colorDialog = new TulipColorDialog(Perspective::instance()->mainWindow());
+QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
+  TulipColorDialog *colorDialog = new TulipColorDialog(parent);
   colorDialog->setOptions(colorDialog->options() | QColorDialog::ShowAlphaChannel);
   colorDialog->setModal(true);
   return colorDialog;
@@ -174,8 +174,8 @@ QString BooleanEditorCreator::displayText(const QVariant& v) const {
 /*
   CoordEditorCreator
 */
-QWidget* CoordEditorCreator::createWidget(QWidget* /*parent*/) const {
-  return new CoordEditor(Perspective::instance()->mainWindow(), editSize);
+QWidget* CoordEditorCreator::createWidget(QWidget *parent) const {
+  return new CoordEditor(parent, editSize);
 }
 
 void CoordEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
@@ -347,8 +347,8 @@ public:
 /*
   TulipFileDescriptorEditorCreator
   */
-QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget*) const {
-  QFileDialog* dlg = new TulipFileDialog(Perspective::instance()->mainWindow());
+QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget *parent) const {
+  QFileDialog* dlg = new TulipFileDialog(parent);
 #if defined(__APPLE__)
   dlg->setOption(QFileDialog::DontUseNativeDialog, true);
 #else

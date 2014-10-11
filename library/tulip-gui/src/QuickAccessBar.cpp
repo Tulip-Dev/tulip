@@ -125,14 +125,12 @@ void QuickAccessBar::setGlMainView(GlMainView* v) {
 void QuickAccessBar::reset() {
   _resetting = true;
 
-  if (tlp::Perspective::instance()) {
-    _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-    _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-    _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-    _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-    _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-    _ui->labelColorButton->setDialogParent(tlp::Perspective::instance()->mainWindow());
-  }
+  _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
+  _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
+  _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
+  _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
+  _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
+  _ui->labelColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
 
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
@@ -324,21 +322,19 @@ void QuickAccessBar::setEdgeColor(const QColor& c) {
 }
 
 void QuickAccessBar::setNodeBorderColor(const QColor& c) {
-  setAllColorValues(NODE, inputData()->getElementBorderColor(),
-                    QColorToColor(c));
+  setAllColorValues(NODE, inputData()->getElementBorderColor(), QColorToColor(c));
 }
 
 void QuickAccessBar::setEdgeBorderColor(const QColor& c) {
-  setAllColorValues(EDGE, inputData()->getElementBorderColor(),
-                    QColorToColor(c));
+  setAllColorValues(EDGE, inputData()->getElementBorderColor(), QColorToColor(c));
 }
 
 void QuickAccessBar::setAllValues(unsigned int eltType,
                                   PropertyInterface* prop) {
   QVariant val =
-    TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
-                                        prop, _mainView->graph(),
-                                        delegate, _mainView->getGlMainWidget());
+      TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
+                                          prop, _mainView->graph(),
+                                          delegate, _mainView->getGlMainWidget());
 
   // Check if edition has been cancelled
   if (!val.isValid())
