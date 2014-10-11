@@ -332,9 +332,9 @@ void QuickAccessBar::setEdgeBorderColor(const QColor& c) {
 void QuickAccessBar::setAllValues(unsigned int eltType,
                                   PropertyInterface* prop) {
   QVariant val =
-      TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
-                                          prop, _mainView->graph(),
-                                          delegate, _mainView->getGlMainWidget());
+    TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
+                                        prop, _mainView->graph(),
+                                        delegate, _mainView->getGlMainWidget());
 
   // Check if edition has been cancelled
   if (!val.isValid())

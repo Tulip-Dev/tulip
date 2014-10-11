@@ -374,26 +374,26 @@ void GlMainWidget::makeCurrent() {
 }
 //==================================================
 bool GlMainWidget::pickGlEntities(const int x, const int y,
-                  const int width, const int height,
-                  std::vector<SelectedEntity> &pickedEntities,
-                  GlLayer* layer) {
+                                  const int width, const int height,
+                                  std::vector<SelectedEntity> &pickedEntities,
+                                  GlLayer* layer) {
   makeCurrent();
   return scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),x, y,
-                width, height,
-                layer,
-                pickedEntities);
+                              width, height,
+                              layer,
+                              pickedEntities);
 }
 //==================================================
 bool GlMainWidget::pickGlEntities(const int x, const int y,
-                  std::vector <SelectedEntity> &pickedEntities,
-                  GlLayer* layer) {
+                                  std::vector <SelectedEntity> &pickedEntities,
+                                  GlLayer* layer) {
   return pickGlEntities(x,y,2,2,pickedEntities,layer);
 }
 //==================================================
 void GlMainWidget::pickNodesEdges(const int x, const int y,
-                  const int width , const int height,
-                  std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
-                  GlLayer* layer, bool pickNodes, bool pickEdges) {
+                                  const int width , const int height,
+                                  std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
+                                  GlLayer* layer, bool pickNodes, bool pickEdges) {
   makeCurrent();
 
   if (pickNodes) {
@@ -531,8 +531,10 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
     }
 
     scene.setViewport(0,0,width,height);
+
     if(center)
       scene.ajustSceneToSize(width,height);
+
     computeInteractors();
     scene.draw();
     drawInteractors();
