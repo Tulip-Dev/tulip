@@ -84,7 +84,7 @@ the available views, use function :func:`tlpgui.getAvailableViews`.
 
             tlp::View *createView(const std::string &viewName, tlp::Graph *graph, tlp::DataSet dataSet = tlp::DataSet(), bool show = true);
 %Docstring
-        tlpgui.addView(viewName, graph[, dataSet = tlp.DataSet(), show = True])
+tlpgui.createView(viewName, graph[, dataSet = tlp.DataSet(), show = True])
 
 .. versionadded:: 4.4
 
@@ -99,6 +99,8 @@ Returns an instance of the newly created view.
 :type graph: :class:`tulip.tlp.Graph`
 :param dataSet: the optional parameters of the view
 :type dataSet: :class:`tulip.tlp.DataSet`
+:param show: show the view if :const:`True`
+:type show: boolean
 :rtype: :class:`tlpgui.View`
 %End
 
@@ -125,7 +127,7 @@ Returns an instance of the newly created view.
 
 tlp::NodeLinkDiagramComponent *createNodeLinkDiagramView(tlp::Graph *graph, tlp::DataSet dataSet = tlp::DataSet(), bool show = true);
 %Docstring
-tlpgui.addNodeLinkDiagramView(graph)
+tlpgui.createNodeLinkDiagramView(graph[, dataSet = tlp.DataSet(), show = True])
 
 .. versionadded:: 4.4
 
@@ -136,6 +138,10 @@ Its call is equivalent to::
 
 :param graph: the graph to visualize
 :type graph: :class:`tulip.tlp.Graph`
+:param dataSet: the optional parameters of the view
+:type dataSet: :class:`tulip.tlp.DataSet`
+:param show: show the view if :const:`True`
+:type show: boolean
 :rtype: :class:`tlpgui.NodeLinkDiagramComponent`
 %End
 
