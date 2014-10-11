@@ -25,13 +25,13 @@
 
 namespace tlp {
 
-class @PROPERTY_TYPE@Property : tlp::PropertyInterface /NoDefaultCtors/ {
+class @PROPERTY_TYPE@Property : tlp::@BASE_CLASS@ /NoDefaultCtors/ {
 %TypeHeaderCode
 #include <tulip/@PROPERTY_TYPE@Property.h>
 %End
 
 %Docstring
-Bases: :class:`tlp.PropertyInterface`
+Bases: :class:tlp.`@BASE_CLASS`
 %End
 
 public :
