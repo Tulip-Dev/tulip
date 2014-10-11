@@ -54,14 +54,6 @@ Using the module with the classical Python interpreter
 The :mod:`tulipgui` module can also be used with the classical Python interpreter and shell.
 Tulip interactive visualizations will be displayed in separate windows once they have been created.
 
-.. warning:: On Ubuntu systems with proprietary NVIDIA drivers installed from the "nvidia-current" package,
-             there is an installation issue that prevents Qt OpenGL stack to work properly from Python.
-             Tulip visualizations are displayed but not the configurations widgets and there is some
-             annoying messages displayed on the error output. To fix that issue, remove the "nvidia-current"
-             package and manually install the NVIDIA proprietary driver from the install script downloadable
-             through the NVIDIA website.
-
-
 Interactive mode
 ^^^^^^^^^^^^^^^^^
 
@@ -122,11 +114,11 @@ the script execution). :ref:`Figure 1<fig1a>` introduces a screenshot of the cre
     graph.applyDoubleAlgorithm("Degree", degree, degreeParams)
 
     # Map the node sizes to their degree
-    sizeMappingParams = tlp.getDefaultPluginParameters("Metric Mapping", graph)
+    sizeMappingParams = tlp.getDefaultPluginParameters("Size Mapping", graph)
     sizeMappingParams["property"] = degree
     sizeMappingParams["min size"] = 10
     sizeMappingParams["max size"] = 30
-    graph.applySizeAlgorithm("Metric Mapping", viewSize, sizeMappingParams)
+    graph.applySizeAlgorithm("Size Mapping", viewSize, sizeMappingParams)
 
     # Apply an FM^3 layout on it
     fm3pParams = tlp.getDefaultPluginParameters("FM^3 (OGDF)", graph)
