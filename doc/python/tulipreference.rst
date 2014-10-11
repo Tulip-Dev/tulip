@@ -587,12 +587,20 @@ tlp.ColorProperty
         :members: copy, copy, copy, getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue,
 	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue	          	
 
+tlp.NumericProperty
+^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: tulip::tlp.NumericProperty
+        :members:
+                  uniformQuantification, nodesUniformQuantification, edgesUniformQuantification,
+                  getEdgeDoubleMin, getEdgeDoubleMax, getNodeDoubleMin, getNodeDoubleMax,
+                  getEdgeDoubleDefaultValue, getEdgeDoubleValue, getNodeDoubleDefaultValue, getNodeDoubleValue
+
 tlp.DoubleProperty
 ^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.DoubleProperty
         :members: copy, copy, copy, getNodeMin, getNodeMax, getEdgeMin, getEdgeMax,
-	          uniformQuantification, nodesUniformQuantification, edgesUniformQuantification, 
 	          getEdgeDefaultValue, getEdgeValue, getNodeDefaultValue, getNodeValue, 
 	          setAllEdgeValue, setAllNodeValue, setEdgeValue, setNodeValue
 
