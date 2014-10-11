@@ -92,7 +92,7 @@ void GlMainWidget::clearFirstQGLWidget() {
 
 bool GlMainWidget::doSelect(const int x, const int y,
                             ElementType &type,
-                            node &n,edge &e,
+                            node &n, edge &e,
                             GlLayer* layer) {
   SelectedEntity entity;
   bool foundEntity=pickNodesEdges(x,y,entity,layer);
@@ -374,26 +374,26 @@ void GlMainWidget::makeCurrent() {
 }
 //==================================================
 bool GlMainWidget::pickGlEntities(const int x, const int y,
-                                  const int width, const int height,
-                                  std::vector<SelectedEntity> &pickedEntities,
-                                  GlLayer* layer) {
+                  const int width, const int height,
+                  std::vector<SelectedEntity> &pickedEntities,
+                  GlLayer* layer) {
   makeCurrent();
   return scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),x, y,
-                              width, height,
-                              layer,
-                              pickedEntities);
+                width, height,
+                layer,
+                pickedEntities);
 }
 //==================================================
 bool GlMainWidget::pickGlEntities(const int x, const int y,
-                                  std::vector <SelectedEntity> &pickedEntities,
-                                  GlLayer* layer) {
+                  std::vector <SelectedEntity> &pickedEntities,
+                  GlLayer* layer) {
   return pickGlEntities(x,y,2,2,pickedEntities,layer);
 }
 //==================================================
 void GlMainWidget::pickNodesEdges(const int x, const int y,
-                                  const int width , const int height,
-                                  std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
-                                  GlLayer* layer, bool pickNodes, bool pickEdges) {
+                  const int width , const int height,
+                  std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
+                  GlLayer* layer, bool pickNodes, bool pickEdges) {
   makeCurrent();
 
   if (pickNodes) {
@@ -466,6 +466,7 @@ QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName
   assert(glFrameBuf->size()==QSize(width,height));
 
   glFrameBuf->bind();
+
   scene.draw();
   glFrameBuf->release();
 
@@ -501,78 +502,71 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 //=====================================================
 QImage GlMainWidget::createPicture(int width, int height,bool center) {
 
-  int oldWidth=scene.getViewport()[2];
-  int oldHeight=scene.getViewport()[3];
-  vector<Camera> oldCameras;
-  const vector<pair<string, GlLayer*> > &layersList=scene.getLayersList();
-
-  if(center) {
-    for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-      if(!(*it).second->useSharedCamera())
-        oldCameras.push_back((*it).second->getCamera());
-    }
-  }
-
   QImage resultImage;
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
-  scene.setViewport(0,0,width,height);
-
-  if(center)
-    scene.ajustSceneToSize(width,height);
-
-  QGLPixelBuffer *glFrameBuf=QGlPixelBufferManager::getInst().getPixelBuffer(width,height);
-
-  glFrameBuf->makeCurrent();
-
-  computeInteractors();
 
   QGLFramebufferObject *frameBuf=NULL;
   QGLFramebufferObject *frameBuf2=NULL;
 
-  if (useFramebufferObject) {
-    QGLFramebufferObjectFormat fboFormat;
-    fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-    fboFormat.setSamples(8);
-    frameBuf=new QGLFramebufferObject(width,height, fboFormat);
-    frameBuf2=new QGLFramebufferObject(width,height);
+  QGLFramebufferObjectFormat fboFormat;
+  fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+  fboFormat.setSamples(8);
+  frameBuf=new QGLFramebufferObject(width,height, fboFormat);
+  frameBuf2=new QGLFramebufferObject(width,height);
+
+  if (frameBuf->isValid() && frameBuf2->isValid()) {
     frameBuf->bind();
-  }
 
-  scene.draw();
-  drawInteractors();
+    int oldWidth=scene.getViewport()[2];
+    int oldHeight=scene.getViewport()[3];
+    vector<Camera> oldCameras;
+    const vector<pair<string, GlLayer*> > &layersList=scene.getLayersList();
 
-  if (useFramebufferObject) {
+    if(center) {
+      for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
+        if(!(*it).second->useSharedCamera())
+          oldCameras.push_back((*it).second->getCamera());
+      }
+    }
+
+    scene.setViewport(0,0,width,height);
+    if(center)
+      scene.ajustSceneToSize(width,height);
+    computeInteractors();
+    scene.draw();
+    drawInteractors();
     frameBuf->release();
-    QGLFramebufferObject::blitFramebuffer(frameBuf2, QRect(0,0,width, height), frameBuf, QRect(0,0,width, height));
-    QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), frameBuf2, QRect(0,0,width, height));
-  }
 
-  resultImage=glFrameBuf->toImage();
+    QGLFramebufferObject::blitFramebuffer(frameBuf2, QRect(0,0,width, height), frameBuf, QRect(0,0,width, height));
+
+    resultImage=frameBuf2->toImage();
+
+    scene.setViewport(0,0,oldWidth,oldHeight);
+
+    if(center) {
+      int i=0;
+
+      for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
+        if(!(*it).second->useSharedCamera()) {
+          Camera &camera=(*it).second->getCamera();
+          camera.setCenter(oldCameras[i].getCenter());
+          camera.setEyes(oldCameras[i].getEyes());
+          camera.setSceneRadius(oldCameras[i].getSceneRadius());
+          camera.setUp(oldCameras[i].getUp());
+          camera.setZoomFactor(oldCameras[i].getZoomFactor());
+        }
+
+        i++;
+      }
+    }
+
+  }
 
   delete frameBuf;
   delete frameBuf2;
 
-  scene.setViewport(0,0,oldWidth,oldHeight);
-
-  if(center) {
-    int i=0;
-
-    for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-      if(!(*it).second->useSharedCamera()) {
-        Camera &camera=(*it).second->getCamera();
-        camera.setCenter(oldCameras[i].getCenter());
-        camera.setEyes(oldCameras[i].getEyes());
-        camera.setSceneRadius(oldCameras[i].getSceneRadius());
-        camera.setUp(oldCameras[i].getUp());
-        camera.setZoomFactor(oldCameras[i].getZoomFactor());
-      }
-
-      i++;
-    }
-  }
-
-  //The QGlPixelBuffer returns the wrong image format QImage::Format_ARGB32_Premultiplied. We need to create an image from original data with the right format QImage::Format_ARGB32.
+  //The QGLFramebufferObject returns the wrong image format QImage::Format_ARGB32_Premultiplied. We need to create an image from original data with the right format QImage::Format_ARGB32.
   //We need to clone the data as when the image var will be destroy at the end of the function it's data will be destroyed too and the newly created image object will have invalid data pointer.
   return QImage(resultImage.bits(),resultImage.width(),resultImage.height(),QImage::Format_ARGB32).convertToFormat(QImage::Format_RGB32);
 }
