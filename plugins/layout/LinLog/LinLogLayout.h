@@ -46,7 +46,7 @@ private:
 
   tlp::NumericProperty* edgeWeight;
   tlp::LayoutProperty* layoutResult;
-  tlp::DoubleProperty *linLogWeight;
+  tlp::DoubleProperty* linLogWeight;
   tlp::BooleanProperty* skipNodes;
   tlp::Graph* graph;
 

@@ -170,7 +170,6 @@ void OGDFFrutchermanReingold::beforeCall() {
     double dval = 0;
     bool bval = false;
     StringCollection sc;
-    NumericProperty *metric = NULL;
 
     if (dataSet->get("iterations", ival))
       sefr->iterations(ival);
@@ -196,6 +195,7 @@ void OGDFFrutchermanReingold::beforeCall() {
     if (dataSet->get("use node weights", bval)) {
       sefr->nodeWeights(bval);
 
+      NumericProperty *metric = NULL;
       if (bval && dataSet->get("node weights", metric)) {
         tlpToOGDF->copyTlpNumericPropertyToOGDFNodeWeight(metric);
       }

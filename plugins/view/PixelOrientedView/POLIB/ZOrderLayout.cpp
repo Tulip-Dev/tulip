@@ -30,13 +30,12 @@ using namespace pocore;
 namespace {
 inline Vec2i zorderPoint(const unsigned int key, const unsigned char order) {
   //  cerr << "========" << endl;
-  unsigned char bits;
   Vec2i point;
   point.fill(0);
 
   for (char i = order - 1; i >= 0; --i) {
     //read two bits;
-    bits = (key >> (i << 1))  & 3;
+    unsigned char bits = (key >> (i << 1))  & 3;
     point[1] += (bits & 1) << i;
     point[0] += ((bits >> 1) ) << i;
   }
@@ -47,11 +46,10 @@ inline Vec2i zorderPoint(const unsigned int key, const unsigned char order) {
 inline unsigned int zorderKey(const Vec2i &p, const unsigned char order) {
   //  cerr << "========" << endl;
   unsigned int key = 0;
-  unsigned char bits;
 
   for (char i = order - 1; i >= 0; --i) {
     //read two bits;
-    bits = (p[1] >> i)  & 1;
+    unsigned char bits = (p[1] >> i)  & 1;
     bits += ((p[0] >> i)  & 1) << 1;
     key += bits << (i << 1);
   }

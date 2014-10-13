@@ -349,8 +349,6 @@ public:
           eDefault.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
       }
 
-      bool convertToOldEEId = false;
-
       os <<"(default \"" << convert(nDefault) << "\" \"" << convert(eDefault) << "\")" << endl;
       Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
 
@@ -417,10 +415,6 @@ public:
 
             if (pos != string::npos)
               tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-          }
-
-          if(convertToOldEEId) {
-            tmp = convertNewEdgeExtremitiesValueToOld(tmp);
           }
 
           os << "(edge " << getEdge(ite).id << " \"" << convert(tmp) << "\")" << endl ;

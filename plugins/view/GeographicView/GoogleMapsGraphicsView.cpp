@@ -56,9 +56,6 @@ static QGLFormat GlInit() {
 }
 
 GlComposite *readPolyFile(QString fileName) {
-
-  map<string,vector<vector<Coord> > > clearPolygons;
-
   GlComposite *composite=new GlComposite;
 
   QFile file(fileName);
@@ -123,7 +120,6 @@ GlComposite *readPolyFile(QString fileName) {
 
         if(!datas.empty()) {
 
-          clearPolygons[polygonName]=datas;
           composite->addGlEntity(new GlComplexPolygon(datas,Color(0,0,0,50),Color(0,0,0,255)),polygonName);
           datas.clear();
           currentVector.clear();
@@ -154,7 +150,6 @@ GlComposite *readPolyFile(QString fileName) {
     if(!currentVector.empty())
       datas.push_back(currentVector);
 
-    clearPolygons[polygonName]=datas;
     composite->addGlEntity(new GlComplexPolygon(datas,Color(0,0,0,50),Color(0,0,0,255)),polygonName);
   }
 
@@ -1052,10 +1047,7 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   planisphereEntity->setVisible(enablePlanisphere);
 
-  if(enableGoogleMap)
-    layer->setCamera(new Camera(glMainWidget->getScene()));
-  else
-    layer->setCamera(new Camera(glMainWidget->getScene()));
+  layer->setCamera(new Camera(glMainWidget->getScene()));
 
   if(viewType!=GoogleMapsView::Globe) {
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
@@ -1076,7 +1068,7 @@ void GoogleMapsGraphicsView::switchViewType() {
       }*/
     }
 
-    if (edgeBendsLatLng.size() > 0) {
+    if (!edgeBendsLatLng.empty()) {
       edge e;
       forEach(e, graph->getEdges()) {
         vector<Coord> edgeBendsCoords;

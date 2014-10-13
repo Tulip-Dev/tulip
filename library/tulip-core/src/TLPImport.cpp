@@ -499,11 +499,11 @@ struct TLPNodesBuilder:public TLPFalse {
 struct TLPEdgeBuilder:public TLPFalse {
   TLPGraphBuilder *graphBuilder;
   int nbParameter;
-  int parameter[3];
+  std::vector<int> parameters;
   TLPEdgeBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder), nbParameter(0) {}
   bool addInt(const int id)  {
     if (nbParameter<3) {
-      parameter[nbParameter]=id;
+      parameters.push_back(id);
       nbParameter++;
       return true;
     }
@@ -512,7 +512,7 @@ struct TLPEdgeBuilder:public TLPFalse {
   }
   bool close()  {
     if (nbParameter==3) {
-      return graphBuilder->addEdge(parameter[0],parameter[1],parameter[2]);
+      return graphBuilder->addEdge(parameters[0],parameters[1],parameters[2]);
     }
     else
       return false;

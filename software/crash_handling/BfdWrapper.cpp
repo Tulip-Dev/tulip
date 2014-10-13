@@ -121,11 +121,9 @@ static void tokenize(const string& str, vector<string>& tokens, const string& de
 static bool bfdInit = false;
 
 BfdWrapper::BfdWrapper(const char *dsoName) :
-  abfd(NULL), textSection(NULL), symbolTable(NULL),
+  filePath(dsoName), abfd(NULL), textSection(NULL), symbolTable(NULL),
   nSymbols(0), symbolSize(0), isMini(true), isDynamic(false),
   scratchSymbol(NULL), relocationOffset(-1) {
-
-  filePath = dsoName;
 
 #ifndef __MINGW32__
 

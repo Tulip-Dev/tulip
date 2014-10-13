@@ -333,8 +333,7 @@ std::istream & operator>>(std::istream &is, DynamicVector<T> & outA) {
       return is;
     }
 
-    bool done = true;
-    done = (is >> outA.array[i]);
+    bool done = (is >> outA.array[i]);
 
     if (!done) {
       is.seekg(pos);

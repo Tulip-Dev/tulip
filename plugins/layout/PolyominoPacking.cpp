@@ -224,17 +224,14 @@ bool PolyominoPacking::run() {
 }
 
 int PolyominoPacking::computeGridStep() {
-
-  double W = 0.0, H = 0.0;
-
   double a = C * polyominos.size() - 1.0;
   double b = 0.0;
   double c = 0.0;
 
   for (size_t i = 0; i < polyominos.size() ; ++i) {
     const BoundingBox &ccBB = polyominos[i].ccBB;
-    W = ccBB[1][0] - ccBB[0][0] + 2 * margin;
-    H = ccBB[1][1] - ccBB[0][1] + 2 * margin;
+    double W = ccBB[1][0] - ccBB[0][0] + 2 * margin;
+    double H = ccBB[1][1] - ccBB[0][1] + 2 * margin;
     b -= (W + H);
     c -= (W * H);
   }

@@ -302,7 +302,7 @@ ThresholdInteractor::ThresholdInteractor() :
 
 ThresholdInteractor::~ThresholdInteractor() {
   if (!textureName.empty()) {
-    ((SOMView*)view())->getMapWidget()->deleteTexture(textureId);
+    static_cast<SOMView*>(view())->getMapWidget()->deleteTexture(textureId);
     GlTextureManager::getInst().deleteTexture(textureName);
   }
 
@@ -456,7 +456,6 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
 void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *it) {
   BooleanProperty* selection = view->graph()->getProperty<BooleanProperty> ("viewSelection");
   set<node> mask;
-  double nodeValue;
   map<node, set<node> > &mappingTab = view->getMappingTab();
   Observable::holdObservers();
   selection->setAllNodeValue(false);
@@ -469,7 +468,7 @@ void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *i
 
   node n;
   forEach(n,it) {
-    nodeValue = currentProperty->getNodeValue(n);
+  double nodeValue = currentProperty->getNodeValue(n);
 
     if (nodeValue <=  rightSliderRealValue && nodeValue >= leftSliderRealValue) {
       if (mappingTab.find(n) != mappingTab.end()) {

@@ -89,7 +89,6 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
   int token;
   int nvertices, i;
   GLfloat red, green, blue;
-  int smooth;
   GLfloat dx, dy, dr, dg, db, absR, absG, absB, colormax;
   int steps;
   Feedback3Dcolor *vertex;
@@ -185,7 +184,7 @@ GLfloat *tlp::spewPrimitiveEPS(FILE * file, GLfloat * loc) {
       red = vertex[0].red;
       green = vertex[0].green;
       blue = vertex[0].blue;
-      smooth = 0;
+      int smooth = 0;
 
       for (i = 1; i < nvertices; i++) {
         if (red != vertex[i].red || green != vertex[i].green || blue != vertex[i].blue) {
@@ -486,12 +485,11 @@ void tlp::print3DcolorVertex(GLint size, GLint * count, GLfloat * buffer) {
 //====================================================
 void tlp::printBuffer(GLint size, GLfloat * buffer) {
   GLint count;
-  int token, nvertices;
 
   count = size;
 
   while (count) {
-    token = (int)buffer[size - count];
+    int token = (int)buffer[size - count];
     count--;
 
     switch (token) {
@@ -520,7 +518,7 @@ void tlp::printBuffer(GLint size, GLfloat * buffer) {
 
     case GL_POLYGON_TOKEN:
       printf("GL_POLYGON_TOKEN\n");
-      nvertices = (int)buffer[size - count];
+      int nvertices = (int)buffer[size - count];
       count--;
 
       for (; nvertices > 0; nvertices--) {

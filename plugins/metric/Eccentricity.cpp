@@ -124,9 +124,10 @@ bool EccentricityMetric::run() {
 //  omp_set_num_threads(4);
 
   size_t nbElem = vecNodes.size();
-  unsigned int nbThreads = 1;
 #ifdef _OPENMP
-  nbThreads = omp_get_num_procs();
+  int nbThreads = omp_get_num_procs();
+#else
+  unsigned int nbThreads = 1;
 #endif
 
 //  double t1 = omp_get_wtime();

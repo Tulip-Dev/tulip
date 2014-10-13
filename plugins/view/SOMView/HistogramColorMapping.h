@@ -103,7 +103,7 @@ public:
   ColorScale(const ColorScale& scale);
   virtual ~ColorScale();
 
-  virtual void setColorScale(const std::vector<Color> colors);
+  virtual void setColorScale(const std::vector<Color>& colors);
   void setColorScaleFromImage(const std::string &imageFile);
   Color getColorAtLen(const float pos) const;
 

@@ -70,7 +70,6 @@ bool Grip::run() {
   DataSet tmp;
   tmp.set("Property", &connectedComponent);
   graph->applyAlgorithm("Equal Value", err, &tmp);
-  vector<edge> edge_planar;
   unsigned int nbComp = 0;
 
   stableForEach(currentGraph , graph->getSubGraphs()) {

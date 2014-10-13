@@ -150,7 +150,7 @@ float Dendrogram::setAllNodesCoordX(tlp::node n, float rightMargin,
 void Dendrogram::setAllNodesCoordY(OrientableLayout *oriLayout,
                                    OrientableSizeProxy *oriSize) {
   float maxYLeaf         = -FLT_MAX;
-  setCoordY(root, &maxYLeaf, oriLayout, oriSize);
+  setCoordY(root, maxYLeaf, oriLayout, oriSize);
 
   Iterator<node>* itNode = tree->getNodes();
 
@@ -213,23 +213,20 @@ inline void Dendrogram::setNodePosition(tlp::node n, float x, float y,
 }
 
 //====================================================================
-void Dendrogram::setCoordY(tlp::node n, float* maxYLeaf,
+void Dendrogram::setCoordY(tlp::node n, float& maxYLeaf,
                            OrientableLayout *oriLayout, OrientableSizeProxy *oriSize) {
-  float nodeY;
-
   if (tree->indeg(n) != 0) {
     node fatherNode             = tree->getInNode(n, 1);
     OrientableCoord coord       = oriLayout->getNodeValue(n);
     OrientableCoord coordFather = oriLayout->getNodeValue(fatherNode);
-    nodeY                       = coordFather.getY() + spacing;
+    float nodeY                 = coordFather.getY() + spacing;
 
     coord.setY(nodeY);
     oriLayout->setNodeValue(n, coord);
 
     if (isLeaf(tree, n)) {
-      (*maxYLeaf)         = max((*maxYLeaf), nodeY);
+      maxYLeaf = max(maxYLeaf, nodeY);
     }
-
   }
 
   Iterator<node> *itNode = tree->getOutNodes(n);

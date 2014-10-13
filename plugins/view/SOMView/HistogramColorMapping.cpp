@@ -343,15 +343,9 @@ void GlEditableCurve::updateSize(const Coord &newMinPoint,
   endPoint.setX(maxPoint.getX());
 }
 
-ColorScale::ColorScale() {
-
-}
-ColorScale::ColorScale(const ColorScale& scale) {
-  colorMap = scale.colorMap;
-}
-ColorScale::~ColorScale() {
-
-}
+ColorScale::ColorScale() {}
+ColorScale::ColorScale(const ColorScale& scale): colorMap(scale.colorMap) {}
+ColorScale::~ColorScale() {}
 
 void ColorScale::setColorScale(const std::vector<Color>& colors) {
   colorMap.clear();

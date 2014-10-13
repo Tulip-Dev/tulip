@@ -516,7 +516,7 @@ bool ParallelCoordinatesView::eventFilter(QObject *obj,QEvent *event) {
     if (parallelCoordsDrawing != NULL) {
       const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(he->x(), he->y(), 1, 1));
 
-      if (dataUnderPointer.size() > 0) {
+      if (!dataUnderPointer.empty()) {
         QString ttip(graphProxy->getToolTipTextforData(*(dataUnderPointer.begin())).c_str());
         QToolTip::showText(he->globalPos(), ttip);
       }
@@ -782,7 +782,7 @@ void ParallelCoordinatesView::deleteDataUnderPointer(const int x, const int y) {
 bool ParallelCoordinatesView::getDataUnderPointerProperties(const int x, const int y,SelectedEntity &selectedEntity) {
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
 
-  if (dataUnderPointer.size() > 0) {
+  if (!dataUnderPointer.empty()) {
     unsigned int dataId;
 
     if (!graphProxy->highlightedEltsSet()) {
@@ -917,7 +917,7 @@ bool ParallelCoordinatesView::highlightedElementsSet() const {
 void ParallelCoordinatesView::highlightDataInAxisBoxPlotRange(QuantitativeParallelAxis *axis) {
   const set<unsigned int> &eltToHighlight(axis->getDataBetweenBoxPlotBounds());
 
-  if (eltToHighlight.size() > 0) {
+  if (!eltToHighlight.empty()) {
     graphProxy->resetHighlightedElts(eltToHighlight);
     graphProxy->colorDataAccordingToHighlightedElts();
     updateAxisSlidersPosition();

@@ -892,11 +892,8 @@ void PythonScriptView::saveModule(int tabIdx, const bool reload) {
 }
 
 void PythonScriptView::saveAllModules() {
-  map<int, string>::const_iterator it;
-
   for (int i = 0 ; i < _viewWidget->numberOfModulesEditors() ; ++i) {
     saveModule(i);
-
   }
 }
 
@@ -930,9 +927,10 @@ bool PythonScriptView::reloadAllModules() const {
 }
 
 bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
-  Qt::KeyboardModifiers modifier = Qt::ControlModifier;
 #ifdef __APPLE__
-  modifier = Qt::MetaModifier;
+  Qt::KeyboardModifiers modifier = Qt::MetaModifier;
+#else
+  Qt::KeyboardModifiers modifier = Qt::ControlModifier;
 #endif
 
   if (event->type() == QEvent::KeyPress) {
