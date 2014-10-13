@@ -766,6 +766,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
 
     if(type & RenderingSimpleEntities) {
       unsigned int id=1;
+
       for(vector<SimpleEntityLODUnit>::const_iterator it = itLayer->simpleEntitiesLODVector.begin(); it!=itLayer->simpleEntitiesLODVector.end(); ++it) {
         if(it->lod<0)
           continue;

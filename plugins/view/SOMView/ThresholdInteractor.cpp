@@ -468,7 +468,7 @@ void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *i
 
   node n;
   forEach(n,it) {
-  double nodeValue = currentProperty->getNodeValue(n);
+    double nodeValue = currentProperty->getNodeValue(n);
 
     if (nodeValue <=  rightSliderRealValue && nodeValue >= leftSliderRealValue) {
       if (mappingTab.find(n) != mappingTab.end()) {

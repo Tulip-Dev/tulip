@@ -351,6 +351,7 @@ double LinLogLayout::addRepulsionDir (node u, double* dir, OctTree* tree) {
 
   if (tree->childCount > 0 && dist < 2.0 * tree->width()) {
     double dir2 = 0.0;
+
     for (unsigned int i = 0; i < tree->childCount; ++i) {
       dir2 += addRepulsionDir(u, dir, (tree->_children)[i]);
     }
@@ -853,16 +854,16 @@ void LinLogLayout::initWeights () {
   }
   else
     forEach(u, graph->getNodes()) {
-      double weight = 0.0;
-      edge e;
-      forEach(e,  graph->getInOutEdges(u)) {
-	double tmpweight = edgeWeight->getEdgeDoubleValue(e)*100.0+1.0;
-	weight+= tmpweight ;
-	linLogWeight->setEdgeValue(e,tmpweight);
-      }
-
-      linLogWeight->setNodeValue (u, weight);
+    double weight = 0.0;
+    edge e;
+    forEach(e,  graph->getInOutEdges(u)) {
+      double tmpweight = edgeWeight->getEdgeDoubleValue(e)*100.0+1.0;
+      weight+= tmpweight ;
+      linLogWeight->setEdgeValue(e,tmpweight);
     }
+
+    linLogWeight->setNodeValue (u, weight);
+  }
 }
 
 
