@@ -31,7 +31,10 @@ public :
   }
 
   bool operator()(const node u, const node v) {
-    return graph->deg(u)>graph->deg(v);
+    unsigned int du = graph->deg(u), dv = graph->deg(v);
+    if (du == dv)
+      return u.id > v.id;
+    return du > dv;
   }
 };
 
