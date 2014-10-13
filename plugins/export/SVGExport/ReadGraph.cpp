@@ -146,8 +146,8 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
   unsigned int id_tgt_shape = 0;
   unsigned int id_src_grad = 0;
   unsigned int id_tgt_grad = 0;
-  unsigned int& id_src_gradient = id_src_grad;
-  unsigned int& id_tgt_gradient = id_tgt_grad;
+  /*unsigned int& id_src_gradient = id_src_grad;
+    unsigned int& id_tgt_gradient = id_tgt_grad;*/
   tlp::GlGraphRenderingParameters rp;
   tlp::GlGraphInputData inputData(graph, &rp);
   GlEdge glEdge(0);
@@ -172,7 +172,7 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
     }
 
     if(src_anchor_shape_type != EdgeExtremityShape::None || tgt_anchor_shape_type != EdgeExtremityShape::None) {
-      r->exportEdgeExtremity(id_src_shape, id_tgt_shape, src_anchor_shape_type, tgt_anchor_shape_type, colors->getEdgeValue(e), id_src_gradient, id_tgt_gradient, edgeVertices[0], edgeVertices[edgeVertices.size() - 1], sizes->getNodeValue(ends.first), sizes->getNodeValue(ends.second));
+      r->exportEdgeExtremity(id_src_shape, id_tgt_shape, src_anchor_shape_type, tgt_anchor_shape_type, colors->getEdgeValue(e), id_src_grad, id_tgt_grad, edgeVertices[0], edgeVertices[edgeVertices.size() - 1], sizes->getNodeValue(ends.first), sizes->getNodeValue(ends.second));
     }
 
     // Get edge type
@@ -208,22 +208,22 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
     r->endEdge();
 
     if(src_anchor_shape_type != EdgeExtremityShape::None)
-      id_src_shape ++;
+      ++id_src_shape;
 
     if(tgt_anchor_shape_type != EdgeExtremityShape::None)
-      id_tgt_shape ++;
+      ++id_tgt_shape;
 
     if(src_anchor_shape_type == EdgeExtremityShape::Sphere)
-      id_src_gradient ++;
+      ++id_src_grad;
 
     if(src_anchor_shape_type == EdgeExtremityShape::GlowSphere)
-      id_src_gradient +=2;
+      id_src_grad +=2;
 
     if(tgt_anchor_shape_type == EdgeExtremityShape::Sphere)
-      id_tgt_gradient ++;
+      ++id_tgt_grad;
 
     if(tgt_anchor_shape_type == EdgeExtremityShape::GlowSphere)
-      id_tgt_gradient +=2;
+      id_tgt_grad +=2;
   }
 
   // Ending the group of edges

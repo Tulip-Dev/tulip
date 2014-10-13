@@ -25,16 +25,12 @@
 
 LinLogLayout::LinLogLayout (tlp::Graph* _graph,
                             tlp::PluginProgress* _pluginProgress):
-  pluginProgress(_pluginProgress) {
+  edgeWeight(NULL), layoutResult(NULL), linLogWeight(NULL), skipNodes(NULL),
+  graph(_graph), pluginProgress(_pluginProgress), _dim(2), _nbNodes(0) {
 
   if (_graph == NULL)
     std::cerr<<"graph is Null\n";
 
-  layoutResult = NULL;
-  edgeWeight = NULL;
-
-  graph = _graph;
-  _dim = 2;
   useOctTree = true;
 
   /** Exponent of the Euclidean distance in the repulsion energy. */
@@ -116,12 +112,11 @@ bool LinLogLayout::startAlgo () {
  */
 void LinLogLayout::initEnergyFactors () {
   node u;
-  double u_weight;
   double repuSum = 0.0;
   double attrSum = 0.0;
 
   forEach(u, graph->getNodes()) {
-    u_weight = linLogWeight->getNodeValue(u);
+    double u_weight = linLogWeight->getNodeValue(u);
     repuSum += u_weight;
     edge e;
     forEach(e,  graph->getInOutEdges(u)) {
@@ -205,11 +200,11 @@ double LinLogLayout::getRepulsionEnergy (node u, OctTree* tree) {
 
   if (u_weight == 0.0) return 0.0;
 
-  double energy = 0.0;
-
   double dist = getDist(layoutResult->getNodeValue(u), tree->position);
 
   if (tree->childCount > 0 && dist < 2.0 * tree->width()) {
+    double energy = 0.0;
+
     for (unsigned int i = 0; i < tree->childCount; ++i)
       energy += getRepulsionEnergy(u, (tree->_children)[i]);
 
@@ -350,12 +345,12 @@ double LinLogLayout::addRepulsionDir (node u, double* dir, OctTree* tree) {
 
   const Coord& position = layoutResult->getNodeValue(u);
 
-  double dir2 = 0.0;
   double dist = getDist(position, tree->position);
 
   if (dist == 0.0) return 0.0;
 
   if (tree->childCount > 0 && dist < 2.0 * tree->width()) {
+    double dir2 = 0.0;
     for (unsigned int i = 0; i < tree->childCount; ++i) {
       dir2 += addRepulsionDir(u, dir, (tree->_children)[i]);
     }
@@ -840,11 +835,9 @@ void LinLogLayout::initWeights () {
   linLogWeight->setAllNodeValue(0.0);
   linLogWeight->setAllEdgeValue(0.0);
 
-  double weight = 0.0;
   node u;
 
   if (edgeWeight == NULL) {
-    //weight = 0.0;
     edge e;
     forEach(e,  graph->getEdges()) {
       const std::pair<node, node>& eEnds = graph->ends(e);
@@ -860,16 +853,16 @@ void LinLogLayout::initWeights () {
   }
   else
     forEach(u, graph->getNodes()) {
-    weight = 0.0;
-    edge e;
-    forEach(e,  graph->getInOutEdges(u)) {
-      double tmpweight = edgeWeight->getEdgeDoubleValue(e)*100.0+1.0;
-      weight+= tmpweight ;
-      linLogWeight->setEdgeValue(e,tmpweight);
-    }
+      double weight = 0.0;
+      edge e;
+      forEach(e,  graph->getInOutEdges(u)) {
+	double tmpweight = edgeWeight->getEdgeDoubleValue(e)*100.0+1.0;
+	weight+= tmpweight ;
+	linLogWeight->setEdgeValue(e,tmpweight);
+      }
 
-    linLogWeight->setNodeValue (u, weight);
-  }
+      linLogWeight->setNodeValue (u, weight);
+    }
 }
 
 

@@ -117,7 +117,9 @@ public:
   ColorEditorCreator
 */
 QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
-  TulipColorDialog *colorDialog = new TulipColorDialog(parent);
+  TulipColorDialog *colorDialog = new TulipColorDialog(tlp::Perspective::instance()
+                                                       ? tlp::Perspective::instance()->mainWindow()
+                                                       : parent);
   colorDialog->setOptions(colorDialog->options() | QColorDialog::ShowAlphaChannel);
   colorDialog->setModal(true);
   return colorDialog;
@@ -174,8 +176,10 @@ QString BooleanEditorCreator::displayText(const QVariant& v) const {
 /*
   CoordEditorCreator
 */
-QWidget* CoordEditorCreator::createWidget(QWidget *parent) const {
-  return new CoordEditor(parent, editSize);
+QWidget* CoordEditorCreator::createWidget(QWidget* parent) const {
+  return new CoordEditor(Perspective::instance()
+                         ? Perspective::instance()->mainWindow()
+                         : parent, editSize);
 }
 
 void CoordEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
@@ -347,8 +351,10 @@ public:
 /*
   TulipFileDescriptorEditorCreator
   */
-QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget *parent) const {
-  QFileDialog* dlg = new TulipFileDialog(parent);
+QWidget* TulipFileDescriptorEditorCreator::createWidget(QWidget* parent) const {
+  QFileDialog* dlg = new TulipFileDialog(Perspective::instance()
+                                         ? Perspective::instance()->mainWindow()
+                                         : parent);
 #if defined(__APPLE__)
   dlg->setOption(QFileDialog::DontUseNativeDialog, true);
 #else
@@ -628,8 +634,10 @@ QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
 }
 
 //TulipFontEditorCreator
-QWidget* TulipFontEditorCreator::createWidget(QWidget*) const {
-  return new TulipFontDialog(Perspective::instance()->mainWindow());
+QWidget* TulipFontEditorCreator::createWidget(QWidget* parent) const {
+  return new TulipFontDialog(Perspective::instance()
+			     ? Perspective::instance()->mainWindow()
+			     : parent);
 }
 void TulipFontEditorCreator::setEditorData(QWidget*editor, const QVariant&data,bool,tlp::Graph*) {
   TulipFont font =data.value<TulipFont>();

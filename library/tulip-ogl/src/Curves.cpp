@@ -104,6 +104,12 @@ struct CurvePoints {
   CurvePoints(unsigned int size):size(size) {
     data = new GLfloat[2*size*3];
   }
+  CurvePoints(const CurvePoints& cp) {
+    delete data;
+    size = cp.size;
+    data = new GLfloat[2*size*3];
+    memcpy(data, cp.data, sizeof(GLfloat)*size*6);
+  }    
   void addPoint() {
     GLfloat *newData=new GLfloat[2*(size+1)*3];
     memcpy(newData,data,sizeof(GLfloat)*size*3);

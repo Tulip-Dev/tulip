@@ -38,10 +38,8 @@ GlComposite::~GlComposite() {
 void GlComposite::addLayerParent(GlLayer *layer) {
   layerParents.push_back(layer);
 
-  GlComposite *composite;
-
   for(list<GlSimpleEntity *>::iterator it = _sortedElements.begin(); it != _sortedElements.end(); ++it) {
-    composite=dynamic_cast<GlComposite*>(*it);
+    GlComposite* composite=dynamic_cast<GlComposite*>(*it);
 
     if(composite)
       composite->addLayerParent(layer);
@@ -56,10 +54,8 @@ void GlComposite::removeLayerParent(GlLayer *layer) {
     }
   }
 
-  GlComposite *composite;
-
   for(list<GlSimpleEntity *>::iterator it = _sortedElements.begin(); it != _sortedElements.end(); ++it) {
-    composite=dynamic_cast<GlComposite*>(*it);
+    GlComposite* composite=dynamic_cast<GlComposite*>(*it);
 
     if(composite)
       composite->removeLayerParent(layer);

@@ -998,11 +998,10 @@ void MixedModel::computeCoords() {
     node Z0 = V[k][0];
     co = nodeSize.get(Z0.id);
     int max_y_taille = (int) ((inr[Z0]<co.getY()/2.) ? co.getY()/2. : inr[Z0]);
-    int taille_tmp;
 
     for(unsigned int i = 0; i<p; ++i) {
       co = nodeSize.get((V[k][i]).id);
-      taille_tmp = (int) ((inr[V[k][i]]<co.getY()/2.) ? co.getY()/2. : inr[V[k][i]]);
+      int taille_tmp = (int) ((inr[V[k][i]]<co.getY()/2.) ? co.getY()/2. : inr[V[k][i]]);
 
       if(taille_tmp > max_y_taille)
         max_y_taille = taille_tmp;
@@ -1065,12 +1064,12 @@ void MixedModel::computeCoords() {
       }
     }
     else {
-      int out_l = 0, out_r = 0, out_r_moins1 = 0;
+      int out_r = 0, out_r_moins1 = 0;
       float somme = 0;
 
       // assign x(zi)
       for(unsigned int i = 0; i<p; ++i) {
-        out_l = outl[V[k][i]];
+        int out_l = outl[V[k][i]];
         out_r = outr[V[k][i]];
         Coord co2 = nodeSize.get((V[k][i]).id);
         double x;

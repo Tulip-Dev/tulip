@@ -86,7 +86,7 @@ static const char * paramHelp[] = {
 
 PLUGIN(LinLogAlgorithm)
 
-LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
+LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context) : LayoutAlgorithm(context), linlog(NULL) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addInParameter<bool>("octtree", paramHelp[1], "true");
   addInParameter<NumericProperty*>("edge weight", paramHelp[2], "", false);

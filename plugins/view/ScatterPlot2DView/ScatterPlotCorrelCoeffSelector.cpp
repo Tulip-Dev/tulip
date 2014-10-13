@@ -187,7 +187,8 @@ ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(ScatterPlotCorrel
 }
 
 ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(const ScatterPlotCorrelCoeffSelector &scatterPlotCorrelCoeffSelector) :
-  selectedPolygon(NULL), selectedPolygonPoint(NULL), dragStarted(false), x(0), y(0) {
+  scatterView(NULL), selectedPolygon(NULL), selectedPolygonPoint(NULL),
+  dragStarted(false), x(0), y(0) {
   optionsWidget = scatterPlotCorrelCoeffSelector.optionsWidget;
   basicCircle.resizePoints(30);
   basicCircle.setFillMode(true);

@@ -763,16 +763,16 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type,int x, int y, int w, int
     glDisable(GL_STENCIL_TEST);
 
     map<unsigned int, SelectedEntity> idToEntity;
-    unsigned int id=1;
 
     if(type & RenderingSimpleEntities) {
+      unsigned int id=1;
       for(vector<SimpleEntityLODUnit>::const_iterator it = itLayer->simpleEntitiesLODVector.begin(); it!=itLayer->simpleEntitiesLODVector.end(); ++it) {
         if(it->lod<0)
           continue;
 
         idToEntity[id]=SelectedEntity(it->entity);
         glLoadName(id);
-        id++;
+        ++id;
         it->entity->draw(20.,camera);
       }
     }

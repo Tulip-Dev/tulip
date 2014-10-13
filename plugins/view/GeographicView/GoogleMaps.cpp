@@ -330,7 +330,7 @@ void GoogleMaps::setMapBounds(Graph *graph, const map<node, pair<double, double>
 
   code = "setMapBounds(mapBounds);";
 
-  if (nodesLatLngs.size() > 0) {
+  if (!nodesLatLngs.empty()) {
     frame->evaluateJavaScript(code);
   }
 }

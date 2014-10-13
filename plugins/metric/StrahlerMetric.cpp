@@ -155,13 +155,12 @@ Strahler StrahlerMetric::topSortStrahler(tlp::node n, int &curPref,
 
   result.stacks=result.stacks+result.usedStack;
   //evaluation of tree strahler
-  int tmpDbl;
   int additional=0;
   int available=0;
   strahlerResult.sort();
 
   while (!strahlerResult.empty()) {
-    tmpDbl=strahlerResult.back();
+    int tmpDbl=strahlerResult.back();
     strahlerResult.pop_back();
 
     if (tmpDbl>available) {

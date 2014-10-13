@@ -128,9 +128,7 @@ OctTree::addNode (tlp::node newNode,
   }
   */
 
-  double nnWeight=0.0;
-  //  if (newNode != NULL)
-  nnWeight = linLogWeight->getNodeValue(newNode);
+  double nnWeight = linLogWeight->getNodeValue(newNode);
 
   if (nnWeight == 0.0) {
     //std::cerr<<"assert: new node has a null weight, cannot add\n";
@@ -324,8 +322,7 @@ void OctTree::removeNode (tlp::node oldNode,
     return;
   }
 
-  double onWeight = 0.0;
-  onWeight = linLogWeight->getNodeValue(oldNode);
+  double onWeight = linLogWeight->getNodeValue(oldNode);
 
   if (onWeight == 0.0) {
     //std::cerr<<"assert: removing a node with a weight of 0\n";
@@ -481,10 +478,8 @@ int
 OctTree::getHeight () {
   int height = -1;
 
-  OctTree* aChild = NULL;
-
   for (unsigned int i=0; i<childCount; ++i) {
-    aChild = _children[i];
+    OctTree* aChild = _children[i];
 
     if (aChild != NULL) {
       height = std::max(height, aChild->getHeight());

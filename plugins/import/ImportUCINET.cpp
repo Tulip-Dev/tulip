@@ -983,7 +983,7 @@ public :
 
   bool importGraph() {
     string filename;
-    string coord;
+
     dataSet->get<string>("file::filename", filename);
     dataSet->get<string>("Default metric", defaultMetric);
 

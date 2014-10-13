@@ -70,12 +70,11 @@ TLPBImport::TLPBImport(tlp::PluginContext* context):ImportModule(context) {
 bool TLPBImport::importGraph() {
   std::string filename;
   std::istream* is = NULL;
-  bool result = false;
 
   if (dataSet->exist("file::filename")) {
     dataSet->get<std::string>("file::filename", filename);
     struct stat infoEntry;
-    result = (stat(filename.c_str(),&infoEntry) == 0);
+    bool result = (stat(filename.c_str(),&infoEntry) == 0);
 
     if (!result) {
       std::stringstream ess;

@@ -37,7 +37,6 @@ namespace tlp {
 
 // Computes the Linear regression function of a graph on two metrics (y = ax +b)
 void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoubleProperty *yk, float &a, float &b) {
-  float nodeValx, nodeValy;
   float sxk, syk, sxkxk, sxkyk;
   sxk   = 0.0f;
   syk   = 0.0f;
@@ -49,8 +48,7 @@ void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoublePro
 
   while(itN->hasNext()) {
     node n = itN->next();
-    nodeValx = xk->getNodeValue(n);
-    nodeValy = yk->getNodeValue(n);
+    float nodeValx = xk->getNodeValue(n), nodeValy = yk->getNodeValue(n);
     sxk   += nodeValx;
     sxkxk += (nodeValx * nodeValx);
     syk   += nodeValy;
@@ -66,7 +64,8 @@ void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoublePro
   b = (syk / n) - a * (sxk / n);
 }
 
-ScatterPlotTrendLine::ScatterPlotTrendLine() : a(0.0f), b(0.0f) {}
+  ScatterPlotTrendLine::ScatterPlotTrendLine() :
+    scatterView(NULL), a(0.0f), b(0.0f) {}
 
 ScatterPlotTrendLine:: ~ScatterPlotTrendLine() {}
 

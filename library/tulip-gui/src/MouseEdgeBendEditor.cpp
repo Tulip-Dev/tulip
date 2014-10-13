@@ -393,7 +393,6 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
       coordinates.push_back(worldLocation);
 
     if(!firstSeg && !lastSeg && !firstLastSeg) {
-      bool midSeg;
       vector<Coord>::iterator CoordIt=coordinates.begin();
       last=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
       ++CoordIt;
@@ -401,7 +400,7 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
       while(CoordIt!=coordinates.end()) {
         first=last;
         last=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
-        midSeg=belong(first, last, screenClick, glMainWidget);
+        bool midSeg=belong(first, last, screenClick, glMainWidget);
 
         if(midSeg) {
           coordinates.insert(CoordIt, worldLocation);
