@@ -118,8 +118,8 @@ public:
 */
 QWidget* ColorEditorCreator::createWidget(QWidget *parent) const {
   TulipColorDialog *colorDialog = new TulipColorDialog(tlp::Perspective::instance()
-                                                       ? tlp::Perspective::instance()->mainWindow()
-                                                       : parent);
+      ? tlp::Perspective::instance()->mainWindow()
+      : parent);
   colorDialog->setOptions(colorDialog->options() | QColorDialog::ShowAlphaChannel);
   colorDialog->setModal(true);
   return colorDialog;
@@ -636,8 +636,8 @@ QString EdgeShapeEditorCreator::displayText(const QVariant &data) const {
 //TulipFontEditorCreator
 QWidget* TulipFontEditorCreator::createWidget(QWidget* parent) const {
   return new TulipFontDialog(Perspective::instance()
-			     ? Perspective::instance()->mainWindow()
-			     : parent);
+                             ? Perspective::instance()->mainWindow()
+                             : parent);
 }
 void TulipFontEditorCreator::setEditorData(QWidget*editor, const QVariant&data,bool,tlp::Graph*) {
   TulipFont font =data.value<TulipFont>();

@@ -361,8 +361,10 @@ struct DegreeSort {
   DegreeSort(VectorGraph &g):g(g) {}
   bool operator()(node a, node b) {
     unsigned int da = g.deg(a), db = g.deg(b);
+
     if (da == db)
       return a.id > b.id;
+
     return da > db;
   }
   VectorGraph &g;

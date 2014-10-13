@@ -64,8 +64,8 @@ void computeLinearRegressionFunction(Graph *graph, DoubleProperty *xk, DoublePro
   b = (syk / n) - a * (sxk / n);
 }
 
-  ScatterPlotTrendLine::ScatterPlotTrendLine() :
-    scatterView(NULL), a(0.0f), b(0.0f) {}
+ScatterPlotTrendLine::ScatterPlotTrendLine() :
+  scatterView(NULL), a(0.0f), b(0.0f) {}
 
 ScatterPlotTrendLine:: ~ScatterPlotTrendLine() {}
 
