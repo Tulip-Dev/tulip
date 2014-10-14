@@ -126,6 +126,13 @@ void GlScene::initGlParameters() {
   glClearStencil(0xFFFF);
   glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
 
+  if (OpenGlConfigManager::getInst().antiAliasing()) {
+    OpenGlConfigManager::getInst().activateAntiAliasing();
+  }
+  else {
+    OpenGlConfigManager::getInst().desactivateAntiAliasing();
+  }
+
   if (clearBufferAtDraw) {
     glClearColor(backgroundColor.getRGL(), backgroundColor.getGGL(), backgroundColor.getBGL(), backgroundColor.getAGL());
     glClear(GL_COLOR_BUFFER_BIT);
@@ -150,13 +157,6 @@ void GlScene::draw() {
   inDraw=true;
 
   initGlParameters();
-
-  if (OpenGlConfigManager::getInst().antiAliasing()) {
-    OpenGlConfigManager::getInst().activateAntiAliasing();
-  }
-  else {
-    OpenGlConfigManager::getInst().desactivateAntiAliasing();
-  }
 
   /**********************************************************************
   LOD Compute
