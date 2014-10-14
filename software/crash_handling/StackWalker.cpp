@@ -447,8 +447,6 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
       func = "";
     }
 
-    std::pair<const char *, unsigned int> infos = std::make_pair("", 0);
-
 #ifdef HAVE_BFD
     std::pair<const char *, unsigned int> infos =
       bfdMap[moduleNameStr]->getFileAndLineForAddress(frame.AddrPC.Offset);
