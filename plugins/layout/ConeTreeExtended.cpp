@@ -57,7 +57,7 @@ void ConeTreeExtended::computeYCoodinates(tlp::node root) {
   yCoordinates[0] = 0;
 
   for (unsigned int i = 1; i < levelSize.size(); ++i) {
-    yCoordinates[i] = yCoordinates[i-1] + levelSize[i] / 2.0f + levelSize[i-1] / 2.0f;
+    yCoordinates[i] = yCoordinates[i-1] + levelSize[i] / 2.0f + levelSize[i-1] / 2.0f + spaceBetweenLevels;
   }
 }
 //===============================================================
@@ -160,14 +160,21 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "default", "horizontal" )   \
   HTML_HELP_BODY() \
   "This parameter enables to choose the orientation of the drawing" \
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "float" ) \
+  HTML_HELP_DEF( "default", "1.0" )   \
+  HTML_HELP_BODY() \
+    "This parameter enables to add extra spacing between the different levels of the tree" \
   HTML_HELP_CLOSE()
 };
 }
 #define ORIENTATION "vertical;horizontal;"
 //===============================================================
-ConeTreeExtended::ConeTreeExtended(const tlp::PluginContext* context):LayoutAlgorithm(context) {
+ConeTreeExtended::ConeTreeExtended(const tlp::PluginContext* context):LayoutAlgorithm(context), spaceBetweenLevels(10) {
   addNodeSizePropertyParameter(this);
   addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
+  addInParameter<float>("space between levels", paramHelp[1], "1.0");
 }
 //===============================================================
 ConeTreeExtended::~ConeTreeExtended() {}
@@ -183,6 +190,10 @@ bool ConeTreeExtended::run() {
     if (dataSet->get("orientation", tmp)) {
       orientation = tmp.getCurrentString();
     }
+
+    dataSet->get("space between levels", spaceBetweenLevels);
+    // no negative spacing
+    spaceBetweenLevels = std::max(spaceBetweenLevels, 0.f);
   }
 
   if (!nodeSize)
