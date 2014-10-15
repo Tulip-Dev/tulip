@@ -110,12 +110,14 @@ void GlScene::initGlParameters() {
   OpenGlConfigManager::getInst().initExtensions();
 
   glViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+  glScissor(viewport[0],viewport[1],viewport[2],viewport[3]);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glLineWidth(1.0);
   glPointSize(1.0);
   glEnable(GL_CULL_FACE);
+  glEnable(GL_SCISSOR_TEST);
   glDepthFunc(GL_LEQUAL);
   glEnable(GL_DEPTH_TEST);
   glClearStencil(0xFFFF);
