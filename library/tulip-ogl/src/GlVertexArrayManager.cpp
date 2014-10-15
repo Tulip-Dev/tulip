@@ -617,7 +617,6 @@ void GlVertexArrayManager::endRendering() {
     }
   }
 
-  glStencilFunc(GL_LEQUAL, inputData->parameters->getSelectedEdgesStencil(), 0xFFFF);
   glDisableClientState(GL_VERTEX_ARRAY);
   glPointSize(1);
   glLineWidth(1);

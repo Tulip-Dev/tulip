@@ -102,18 +102,10 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
   node n=node(id);
 
-  if (data->getElementSelected()->getNodeValue(n)) {
-    glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil(),0xFFFF);
-  }
-  else {
-    glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
-  }
-
   ColorProperty *colP=data->getElementColor();
 
   if(data->getGraph()->isMetaNode(n)) {
-    if(!(((colP->getNodeValue(n))[3]==255) && (data->parameters->getNodesStencil()==0xFFFF)))
-      data->getMetaNodeRenderer()->render(n,lod,camera);
+    data->getMetaNodeRenderer()->render(n,lod,camera);
   }
 
   const Coord &nodeCoord = data->getElementLayout()->getNodeValue(n);
@@ -210,6 +202,13 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
   }
   else {
 
+    if (data->getElementSelected()->getNodeValue(n)) {
+      glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil(),0xFFFF);
+    }
+    else {
+      glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
+    }
+
     //draw a glyph or make recursive call for meta nodes
     glPushMatrix();
     glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
@@ -227,10 +226,6 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
     glPopMatrix();
 
-  }
-
-  if (selected) {
-    glStencilFunc(GL_LEQUAL,data->parameters->getNodesStencil(),0xFFFF);
   }
 
   GlTextureManager::getInst().setAnimationFrame(0);

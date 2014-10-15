@@ -87,7 +87,8 @@ struct entityWithDistanceCompare {
 //====================================================
 
 GlScene::GlScene(GlLODCalculator *calculator)
-  :backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL),graphLayer(NULL), clearBufferAtDraw(true),inDraw(false) {
+  : backgroundColor(255, 255, 255, 255),viewOrtho(true),glGraphComposite(NULL),
+    graphLayer(NULL), clearBufferAtDraw(true), inDraw(false), clearDepthBufferAtDraw(true), clearStencilBufferAtDraw(true) {
 
   if(calculator!=NULL)
     lodCalculator=calculator;
@@ -115,16 +116,17 @@ void GlScene::initGlParameters() {
   glLineWidth(1.0);
   glPointSize(1.0);
   glEnable(GL_CULL_FACE);
+  glDepthFunc(GL_LEQUAL);
   glEnable(GL_DEPTH_TEST);
+  glClearStencil(0xFFFF);
+  glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
   glEnable(GL_STENCIL_TEST);
   glEnable(GL_NORMALIZE);
   glShadeModel(GL_SMOOTH);
-  glDepthFunc(GL_LEQUAL );
   glPolygonMode(GL_FRONT, GL_FILL);
   glColorMask(1, 1, 1, 1);
   glIndexMask(UINT_MAX);
-  glClearStencil(0xFFFF);
-  glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+
 
   if (OpenGlConfigManager::getInst().antiAliasing()) {
     OpenGlConfigManager::getInst().activateAntiAliasing();
@@ -138,7 +140,14 @@ void GlScene::initGlParameters() {
     glClear(GL_COLOR_BUFFER_BIT);
   }
 
-  glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+  if (clearDepthBufferAtDraw) {
+    glClear(GL_DEPTH_BUFFER_BIT);
+  }
+
+  if (clearStencilBufferAtDraw) {
+    glClear(GL_STENCIL_BUFFER_BIT);
+  }
+
   glDisable(GL_TEXTURE_2D);
 
 #ifndef NDEBUG

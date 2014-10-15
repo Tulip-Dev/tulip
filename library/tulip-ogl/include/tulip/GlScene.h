@@ -490,6 +490,34 @@ public:
     return clearBufferAtDraw;
   }
 
+  /**
+   * @brief Set if OpenGL depth buffer will be cleared at draw
+   */
+  void setClearDepthBufferAtDraw(bool clear) {
+    clearDepthBufferAtDraw = clear;
+  }
+
+  /**
+   * @brief If false, depth buffer will not be cleared before drawing the scene.
+   */
+  bool getClearDepthBufferAtDraw() const {
+    return clearDepthBufferAtDraw;
+  }
+
+  /**
+   * @brief Set if OpenGL stencil buffer will be cleared at draw
+   */
+  void setClearStencilBufferAtDraw(bool clear) {
+    clearStencilBufferAtDraw = clear;
+  }
+
+  /**
+   * @brief If false, color buffer will not be cleared before drawing the scene.
+   */
+  bool getClearStencilBufferAtDraw() const {
+    return clearStencilBufferAtDraw;
+  }
+
 private:
 
   std::vector<std::pair<std::string,GlLayer *> > layersList;
@@ -504,6 +532,10 @@ private:
   bool clearBufferAtDraw;
 
   bool inDraw;
+
+  bool clearDepthBufferAtDraw;
+
+  bool clearStencilBufferAtDraw;
 
 public:
 
