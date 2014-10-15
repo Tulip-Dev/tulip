@@ -404,6 +404,7 @@ bool Solver::constraintGraphIsCyclic(const unsigned n, Variable* const vs[]) {
   return false;
 }
 
+#ifndef NDEBUG
 // useful in debugging - cycles would be BAD
 bool Solver::blockGraphIsCyclic() {
   map<Block*, node*> bmap;
@@ -473,4 +474,5 @@ bool Solver::blockGraphIsCyclic() {
 
   return false;
 }
+#endif
 }
