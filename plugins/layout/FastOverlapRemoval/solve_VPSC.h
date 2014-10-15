@@ -55,7 +55,9 @@ protected:
 private:
   void refine();
   bool constraintGraphIsCyclic(const unsigned n, Variable* const vs[]);
+#ifndef NDEBUG
   bool blockGraphIsCyclic();
+#endif
 };
 
 class IncSolver : public Solver {

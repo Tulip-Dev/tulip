@@ -499,8 +499,8 @@ public:
 
     // we iterate the observable graph nodes
     node n;
-    Graph* g;
     forEach(n, ovg.getNodes()) {
+      Graph* g;
       if (tlp::Observable::isAlive(n) &&
           (g = dynamic_cast<Graph*>(tlp::Observable::getObject(n)))) {
         // check if g is a root graph

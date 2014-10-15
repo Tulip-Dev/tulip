@@ -501,7 +501,7 @@ void GlScene::computeAjustSceneToSize(int width, int height, Coord *center, Coor
   }
 
   if ((dx==0) && (dy==0) && (dz==0))
-    dx = dy = dz = 10.0;
+    dx = dy = /*dz =*/ 10.0;
 
   double wdx=width/dxZoomed;
   double hdy=height/dyZoomed;

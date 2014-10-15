@@ -72,7 +72,7 @@ public:
   bool run();
   void inflate(double r, unsigned int k, node n, bool);
   void pruneK(node n, unsigned int k);
-  void pruneT(node n);
+  //void pruneT(node n);
   void makeStoc(node n);
   void bfs(node n, double value);
   double connectedComponnent();
@@ -179,7 +179,7 @@ void MCLClustering::pruneK(node n, unsigned int k) {
 
 }
 //==================================================
-void MCLClustering::pruneT(node n) {
+/*void MCLClustering::pruneT(node n) {
   double maxV = 0.;
   //double sum = 0.;
   edge   e;
@@ -198,7 +198,7 @@ void MCLClustering::pruneT(node n) {
       g.delEdge(e);
     }
   }
-}
+  }*/
 //=================================================
 void MCLClustering::inflate(double r, unsigned int k, node n, bool noprune) {
   edge e;

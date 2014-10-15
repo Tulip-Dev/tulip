@@ -428,53 +428,6 @@ public:
     delete itP;
   }
   //=====================================================
-  /**
-     * @brief Convert the id of a edge extremity glyph from the new numerotation system to the old one.
-     * @param oldValue The old glyph value.
-     * @return The new glyph value or the old value if no change are needed.
-     */
-  string convertNewEdgeExtremitiesValueToOld(const string& oldValue ) {
-    if(oldValue == string("-1")) {
-      return "0";
-    }
-    else if(oldValue == string("0")) {
-      return "1";
-    }
-    else if(oldValue == string("2")) {
-      return "3";
-    }
-    else if(oldValue == string("3")) {
-      return "4";
-    }
-    else if(oldValue == string("4")) {
-      return "5";
-    }
-    else if(oldValue == string("6")) {
-      return "7";
-    }
-    else if(oldValue == string("9")) {
-      return "10";
-    }
-    else if(oldValue == string("12")) {
-      return "13";
-    }
-    else if(oldValue == string("13")) {
-      return "14";
-    }
-    else if(oldValue == string("14")) {
-      return "15";
-    }
-    else if(oldValue == string("15")) {
-      return "16";
-    }
-    else if(oldValue == string("28")) {
-      return "29";
-    }
-    else {
-      return oldValue;
-    }
-  }
-  //=====================================================
   void saveProperties(ostream &os,Graph *graph) {
     saveLocalProperties(os,graph);
     Iterator<Graph *> *itS=graph->getSubGraphs();

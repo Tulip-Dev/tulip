@@ -404,9 +404,8 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
       module_name = module_name_raw;
     }
 
-    std::string moduleNameStr(module_name);
-
 #ifdef HAVE_BFD
+    std::string moduleNameStr(module_name);
 
     if (bfdMap.find(moduleNameStr) == bfdMap.end()) {
       bfdMap[moduleNameStr] = new BfdWrapper(module_name);

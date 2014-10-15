@@ -58,7 +58,6 @@ static bool loadBMP(const string &filename, TextureInfo *texture) {
   short int biBitCount;
   long int biSizeImage;
   int i;
-  unsigned char temp;
   /* make sure the file is there and open it read-only (binary) */
 #ifndef _MSC_VER
   file = fopen(filename.c_str(), "rb");
@@ -152,7 +151,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture) {
 
   /* swap red and blue (bgr -> rgb) */
   for (i = 0; i < biSizeImage; i += 3) {
-    temp = texture->data[i];
+    unsigned char temp = texture->data[i];
     texture->data[i] = texture->data[i + 2];
     texture->data[i + 2] = temp;
   }
@@ -408,10 +407,7 @@ static bool generateTexture(const std::string &filename,
         glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, texti.data + (width*height*3*i));
     }
     else {
-      if(texti.hasAlpha)
-        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, dataForWidthSpriteTexture[i]);
-      else
-        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, dataForWidthSpriteTexture[i]);
+      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, dataForWidthSpriteTexture[i]);
 
       delete [] dataForWidthSpriteTexture[i];
     }
