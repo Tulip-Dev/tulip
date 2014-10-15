@@ -138,6 +138,8 @@ void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
 
   scene->setViewport(viewport[0],viewport[1],viewport[2],viewport[3]);
   scene->setClearBufferAtDraw(false);
+  scene->setClearDepthBufferAtDraw(false);
+  scene->setClearStencilBufferAtDraw(false);
   scene->centerScene();
 
   float baseNorm=(scene->getGraphLayer()->getCamera().getEyes()-scene->getGraphLayer()->getCamera().getCenter()).norm();
@@ -151,13 +153,22 @@ void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
   newCamera.setZoomFactor(newCamera.getZoomFactor()*0.5);
   scene->getGraphLayer()->setSharedCamera(&newCamera);
 
+  // small hack to avoid z-fighting between the rendering of the metanode content
+  // and the rendering of the metanode that occurs afterwards
+  glDepthRange(0.1, 1);
   scene->draw();
+  // restore default depth range
+  glDepthRange(0, 1);
 
   scene->getGraphLayer()->setCamera(oldCamera);
 
   camera->getScene()->setClearBufferAtDraw(false);
+  camera->getScene()->setClearDepthBufferAtDraw(false);
+  camera->getScene()->setClearStencilBufferAtDraw(false);
   camera->getScene()->initGlParameters();
   camera->getScene()->setClearBufferAtDraw(true);
+  camera->getScene()->setClearDepthBufferAtDraw(true);
+  camera->getScene()->setClearStencilBufferAtDraw(true);
   camera->initGl();
 }
 
