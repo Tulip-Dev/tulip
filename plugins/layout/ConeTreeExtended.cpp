@@ -165,7 +165,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "float" ) \
   HTML_HELP_DEF( "default", "1.0" )   \
   HTML_HELP_BODY() \
-    "This parameter enables to add extra spacing between the different levels of the tree" \
+  "This parameter enables to add extra spacing between the different levels of the tree" \
   HTML_HELP_CLOSE()
 };
 }
