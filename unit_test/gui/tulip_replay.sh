@@ -1,7 +1,7 @@
 #!/bin/sh
 # This script simply replays a scenario of interaction with the tulip gui.
-# The first argument is the cnee recorded events file
-# The optional second argument is the tlp file to be used with tulip
+# The mandatory first argument is the cnee recorded events file
+# The optional second argument is the tlp file to be used when launching tulip
 
 MUST_EXIT=0
 
@@ -23,7 +23,7 @@ if [ $# -gt 2 -o $# -lt 1 ]; then
 fi
 
 if [ $MUST_EXIT -eq 1 ]; then
-    exit
+    exit 1
 fi
 
 CNEE_INPUT_FILE=$1
@@ -35,7 +35,7 @@ sh  ./launch_tulip.sh $TULIP $TLP_INPUT_FILE  > /dev/null 2>&1 &
 sleep 5
 # check for a crash
 if [ ! -f tulip.pid ]; then
-  exit
+  exit 1
 fi
 
 # replay events
@@ -45,6 +45,7 @@ fi
 
 echo "Replaying events from $CNEE_INPUT_FILE"
 $CNEE -rep $SPEED --file $CNEE_INPUT_FILE -fcr -fp -e /tmp/$CNEE_INPUT_FILE.log > /dev/null 2>&1
+#reset auto repeat
 xset r
 echo "Replay finished"
 
@@ -57,3 +58,5 @@ fi
 
 # stop tulip if it is still running
 . ./stop_tulip.sh
+
+exit 0
