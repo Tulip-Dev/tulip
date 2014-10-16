@@ -26,7 +26,7 @@ echo "Check Tulip launch ..."
 TULIP=`which tulip_perspective`
 if [ $? -eq 1 ]; then
     echo 'tulip executable not found';
-    exit
+    exit 1
 fi
 sh  ./launch_tulip.sh $TULIP > /dev/null 2>&1 &
 sleep 10
@@ -59,4 +59,5 @@ if [ $NB_FAILURES -ne 0 ]; then
     echo
     echo "$NB_FAILURES failures"
     grep "test failed" --binary-files=text all_tests_run.log
+    exit 1
 fi
