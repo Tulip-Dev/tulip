@@ -186,9 +186,10 @@ QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
 
     if (dynamic_cast<GraphProperty *>(prop)) {
 #ifdef NDEBUG
-        if(cleanPropName!="viewMetaGraph")
+
+      if(cleanPropName!="viewMetaGraph")
 #endif
-            oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " =  graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
+        oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " =  graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<DoubleVectorProperty *>(prop)) {
