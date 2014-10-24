@@ -31,7 +31,7 @@
 #include <QTcpSocket>
 #include <tulip/TulipProject.h>
 
-#include <time.h>
+#include <ctime>
 #include <iostream>
 #include <CrashHandling.h>
 
@@ -197,7 +197,7 @@ void TulipPerspectiveProcessHandler::acceptConnection() {
 
 void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
   QTcpSocket* socket = static_cast<QTcpSocket*>(sender());
-  QString data = socket->readAll();
+  QString data(QString::fromUtf8(socket->readAll()));
   QStringList tokens = data.split("\t");
   QString args = QString(data).remove(0,tokens[0].length()+1); // arguments except first one
   QString args2 = QString(args).remove(0,tokens[1].length()+1); // arguments except two firsts
