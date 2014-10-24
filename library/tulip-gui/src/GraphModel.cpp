@@ -279,7 +279,7 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface * prop) {
 
     if (prop->getName() == "viewLabelPosition")
       return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty*>(prop)->getNodeValue(n)));
-    
+
     return QVariant::fromValue<int>(static_cast<IntegerProperty*>(prop)->getNodeValue(n));
   }
   else if (dynamic_cast<StringProperty*>(prop) != NULL) {
