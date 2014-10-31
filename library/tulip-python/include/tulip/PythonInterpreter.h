@@ -208,6 +208,8 @@ public :
 
   PyObject* evalPythonStatement(const QString &pythonStatement);
 
+  void clearTracebacks();
+
 };
 
 #include "PythonInterpreter.cxx"
