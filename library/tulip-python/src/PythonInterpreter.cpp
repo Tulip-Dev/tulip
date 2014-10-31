@@ -696,6 +696,8 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
 
   holdGIL();
 
+  clearTracebacks();
+
   bool ret = true;
   scriptPaused = false;
 
@@ -1116,4 +1118,10 @@ QString PythonInterpreter::readLineFromConsole() {
   }
 
   return "";
+}
+
+void PythonInterpreter::clearTracebacks() {
+  runString("import sys\n"
+            "sys.exc_clear()\n"
+            "sys.exc_traceback = sys.last_traceback = None");
 }
