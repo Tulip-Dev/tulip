@@ -1121,7 +1121,11 @@ QString PythonInterpreter::readLineFromConsole() {
 }
 
 void PythonInterpreter::clearTracebacks() {
-  runString("import sys\n"
-            "sys.exc_clear()\n"
-            "sys.exc_traceback = sys.last_traceback = None");
+  QString pythonCode = "import sys\n";
+#if PY_MAJOR_VERSION < 3
+  pythonCode += "sys.exc_clear()\n";
+  pythonCode += "sys.exc_traceback = None\n";
+#endif
+  pythonCode += "sys.last_traceback = None\n";
+  runString(pythonCode);
 }
