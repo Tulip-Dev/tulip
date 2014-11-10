@@ -31,7 +31,7 @@ using namespace std;
 using namespace tlp;
 
 const string defaultRejectedChars = " \r\n";
-const string spaceChars = " \t\r\n";
+const string spaceChars = " \t";
 CSVSimpleParser::CSVSimpleParser(const string& fileName,const QString& separator, const bool mergesep, char textDelimiter,const string& fileEncoding,unsigned int firstLine,unsigned int lastLine):_fileName(fileName),_separator(separator),_textDelimiter(textDelimiter),_fileEncoding(fileEncoding),_firstLine(firstLine),_lastLine(lastLine),_mergesep(mergesep) {
 }
 
@@ -136,24 +136,28 @@ bool CSVSimpleParser::multiplatformgetline ( istream& is, string& str ) {
   str.clear();
   str.reserve(2048);
   char c;
+  bool tdlm = false;
 
   while(is.get(c)) {
+    if (c == _textDelimiter) {
+      tdlm = !tdlm;
+      str.push_back(c);
+      continue;
+    }
     //Carriage return Windows and mac
     if(c=='\r') {
-      //Check if the next character is /n and remove it.
+      //Check if the next character is \n and remove it.
       if(is.get(c) && c != '\n') {
-        is.unget();
+	is.unget();
       }
-
-      break;
+      if (!tdlm)
+	break;
     }
-    else if(c=='\n') {
-      break;
+    else if(c=='\n' && !tdlm) {
+	break;
     }
-    else {
-      //Push the character
-      str.push_back(c);
-    }
+    //Push the character
+    str.push_back(c);
   }
 
   //End of line reading.
@@ -252,7 +256,8 @@ string CSVSimpleParser::treatToken(const string& token, int, int) {
       }
 
       // replace multiple space chars
-      currentToken.replace(beginPos, endPos - beginPos, 1, ' ');
+      if (endPos - beginPos > 1)
+	currentToken.replace(beginPos, endPos - beginPos, 1, ' ');
       beginPos = currentToken.find_first_of(spaceChars, beginPos + 1);
     }
   }
