@@ -387,4 +387,39 @@ the :class:`tlp.StringAlgorithm` interface in Python.
         sipRes = new std::list<std::string>(tlp::PluginLister::instance()->availablePlugins<tlp::StringAlgorithm>());
 %End
 
+//=====================================================================
+
+unsigned int getSeedOfRandomSequence();
+%Docstring
+tlp.getSeedOfRandomSequence()
+
+Return the value of the seed used for further initialization of a random sequence
+
+:rtype: integer
+%End
+
+//=====================================================================
+
+void setSeedOfRandomSequence(unsigned int seed);
+%Docstring
+tlp.setSeedOfRandomSequence(seed)
+
+Give the value of the seed used for further initialization of a random sequence (with further calls to rand() or rand_r(...)).
+Set seed to UINT_MAX if you need a random choice of the seed.
+
+:param seed: the value of the seed
+:type seed: integer
+%End
+
+//=====================================================================
+
+void initRandomSequence();
+%Docstring
+tlp.initRandomSequence()
+
+Initialize a random sequence with the seed previously set.
+Further calls to rand() or rand_r(...) will return the elements of that sequence
+
+%End
+
 };
