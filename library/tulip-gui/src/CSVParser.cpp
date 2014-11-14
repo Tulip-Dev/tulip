@@ -144,18 +144,21 @@ bool CSVSimpleParser::multiplatformgetline ( istream& is, string& str ) {
       str.push_back(c);
       continue;
     }
+
     //Carriage return Windows and mac
     if(c=='\r') {
       //Check if the next character is \n and remove it.
       if(is.get(c) && c != '\n') {
-	is.unget();
+        is.unget();
       }
+
       if (!tdlm)
-	break;
+        break;
     }
     else if(c=='\n' && !tdlm) {
-	break;
+      break;
     }
+
     //Push the character
     str.push_back(c);
   }
@@ -257,7 +260,8 @@ string CSVSimpleParser::treatToken(const string& token, int, int) {
 
       // replace multiple space chars
       if (endPos - beginPos > 1)
-	currentToken.replace(beginPos, endPos - beginPos, 1, ' ');
+        currentToken.replace(beginPos, endPos - beginPos, 1, ' ');
+
       beginPos = currentToken.find_first_of(spaceChars, beginPos + 1);
     }
   }
