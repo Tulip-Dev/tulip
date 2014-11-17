@@ -106,8 +106,12 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
   }
 
   _numberFormat.setForeground(Qt::darkCyan);
-  rule.pattern = QRegExp("\\b[0-9]+[.]*[O-9]*\\b");
+  rule.pattern = QRegExp("\\b[0-9]+[lL]?\\b");
   rule.format = _numberFormat;
+  _highlightingRules.append(rule);
+  rule.pattern = QRegExp("\\b0[xX][0-9A-Fa-f]+[lL]?\\b");
+  _highlightingRules.append(rule);
+  rule.pattern = QRegExp("\\b[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?\\b");
   _highlightingRules.append(rule);
 
   _quotationFormat.setForeground(Qt::darkMagenta);
@@ -168,6 +172,16 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
   for (int i = 0 ; i < text.length() ; ++i) {
     if (text[i] == '"' && (i == 0 || text[i-1] != '\\')) {
+      // don't treat multiline strings here (enclosed in """)
+      if ((i+1) < text.length() && (i+2) < text.length() && text[i+1] == '"' && text[i+2] == '"') {
+        continue;
+      }
+      if ((i-1) > 0 && (i+1) < text.length() && text[i-1] == '"' && text[i+1] == '"') {
+        continue;
+      }
+      if ((i-1) > 0 && (i-2) > 0 && text[i-1] == '"' && text[i-2] == '"') {
+        continue;
+      }
       if (quoteStartPos == -1) {
         quoteStartPos = i;
       }
@@ -182,6 +196,16 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
   for (int i = 0 ; i < text.length() ; ++i) {
     if (text[i] == '\'' && (i == 0 || text[i-1] != '\\')) {
+      // don't treat multiline strings here (enclosed in ''')
+      if ((i+1) < text.length() && (i+2) < text.length() && text[i+1] == '\'' && text[i+2] == '\'') {
+        continue;
+      }
+      if ((i-1) > 0 && (i+1) < text.length() && text[i-1] == '\'' && text[i+1] == '\'') {
+        continue;
+      }
+      if ((i-1) > 0 && (i-2) > 0 && text[i-1] == '\'' && text[i-2] == '\'') {
+        continue;
+      }
       if (quoteStartPos == -1) {
         quoteStartPos = i;
       }
@@ -218,4 +242,42 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
     index = qtApiRegexp.indexIn(text, index + length);
   }
 
+  setCurrentBlockState(0);
+
+  static QRegExp triSingleQuote("'''");
+  static QRegExp triDoubleQuote("\"\"\"");
+
+  // highlight multi-line strings
+  bool isInMultilne = highlightMultilineString(text, triSingleQuote, 1, _quotationFormat);
+  if (!isInMultilne)
+    highlightMultilineString(text, triDoubleQuote, 2, _quotationFormat);
+
+}
+
+bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState, const QTextCharFormat &style) {
+  int start = -1;
+  int add = -1;
+  int end = -1;
+  int length = 0;
+  if (previousBlockState() == inState) {
+    start = 0;
+    add = 0;
+  } else {
+    start = delimiter.indexIn(text);
+    add = delimiter.matchedLength();
+  }
+  while (start >= 0) {
+    end = delimiter.indexIn(text, start + add);
+    if (end >= add) {
+      length = end - start + add + delimiter.matchedLength();
+      setCurrentBlockState(0);
+    } else {
+      setCurrentBlockState(inState);
+      length = text.length() - start + add;
+    }
+    setFormat(start, length, style);
+    start = delimiter.indexIn(text, start + length);
+    add = delimiter.matchedLength();
+  }
+  return (currentBlockState() == inState);
 }
