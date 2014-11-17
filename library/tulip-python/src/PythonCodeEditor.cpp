@@ -449,6 +449,7 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), _h
   setCommentShortcutsActivated(true);
   setIndentShortcutsActivated(true);
   setWordWrapMode(QTextOption::NoWrap);
+  setFocusPolicy(Qt::ClickFocus);
   QTextCharFormat format = currentCharFormat();
 #if defined(WIN32)
   _currentFont.setFamily("Courier New");
@@ -966,6 +967,7 @@ void PythonCodeEditor::highlightErrors() {
 }
 
 void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
+
 #ifdef __APPLE__
   Qt::KeyboardModifiers modifier = Qt::MetaModifier;
 #else
