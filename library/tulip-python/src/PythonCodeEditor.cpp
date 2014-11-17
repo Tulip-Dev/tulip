@@ -205,6 +205,7 @@ void AutoCompletionList::insertSelectedItem() {
       }
     }
   }
+
   _codeEditor->setFocus();
 }
 
