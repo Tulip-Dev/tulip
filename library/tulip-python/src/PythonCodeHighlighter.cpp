@@ -176,12 +176,15 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
       if ((i+1) < text.length() && (i+2) < text.length() && text[i+1] == '"' && text[i+2] == '"') {
         continue;
       }
+
       if ((i-1) > 0 && (i+1) < text.length() && text[i-1] == '"' && text[i+1] == '"') {
         continue;
       }
+
       if ((i-1) > 0 && (i-2) > 0 && text[i-1] == '"' && text[i-2] == '"') {
         continue;
       }
+
       if (quoteStartPos == -1) {
         quoteStartPos = i;
       }
@@ -200,12 +203,15 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
       if ((i+1) < text.length() && (i+2) < text.length() && text[i+1] == '\'' && text[i+2] == '\'') {
         continue;
       }
+
       if ((i-1) > 0 && (i+1) < text.length() && text[i-1] == '\'' && text[i+1] == '\'') {
         continue;
       }
+
       if ((i-1) > 0 && (i-2) > 0 && text[i-1] == '\'' && text[i-2] == '\'') {
         continue;
       }
+
       if (quoteStartPos == -1) {
         quoteStartPos = i;
       }
@@ -249,6 +255,7 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
   // highlight multi-line strings
   bool isInMultilne = highlightMultilineString(text, triSingleQuote, 1, _quotationFormat);
+
   if (!isInMultilne)
     highlightMultilineString(text, triDoubleQuote, 2, _quotationFormat);
 
@@ -259,25 +266,32 @@ bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const 
   int add = -1;
   int end = -1;
   int length = 0;
+
   if (previousBlockState() == inState) {
     start = 0;
     add = 0;
-  } else {
+  }
+  else {
     start = delimiter.indexIn(text);
     add = delimiter.matchedLength();
   }
+
   while (start >= 0) {
     end = delimiter.indexIn(text, start + add);
+
     if (end >= add) {
       length = end - start + add + delimiter.matchedLength();
       setCurrentBlockState(0);
-    } else {
+    }
+    else {
       setCurrentBlockState(inState);
       length = text.length() - start + add;
     }
+
     setFormat(start, length, style);
     start = delimiter.indexIn(text, start + length);
     add = delimiter.matchedLength();
   }
+
   return (currentBlockState() == inState);
 }
