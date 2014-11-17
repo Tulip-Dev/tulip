@@ -414,16 +414,16 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   QGraphicsProxyWidget *proxyGM = scene()->addWidget(googleMaps);
   proxyGM->setPos(0,0);
 
-  while (!googleMaps->pageInit()) {
-    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
-  }
-
   glMainWidget = new GlMainWidget(0, googleMapsView);
   glMainWidget->getScene()->setCalculator(new GlCPULODCalculator());
   glMainWidget->getScene()->setBackgroundColor(Color(255,255,255,0));
 
   glWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, 512, 512);
   glWidgetItem->setPos(0,0);
+
+  while (!googleMaps->pageInit()) {
+    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+  }
 
   scene()->addItem(glWidgetItem);
 
