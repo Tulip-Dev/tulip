@@ -205,6 +205,7 @@ void AutoCompletionList::insertSelectedItem() {
       }
     }
   }
+  _codeEditor->setFocus();
 }
 
 void AutoCompletionList::showEvent (QShowEvent * event) {
@@ -216,6 +217,7 @@ void AutoCompletionList::showEvent (QShowEvent * event) {
 void AutoCompletionList::hideEvent (QHideEvent * event) {
   QListWidget::hideEvent(event);
   releaseKeyboard();
+  _codeEditor->setFocus();
   _activated = false;
 }
 
