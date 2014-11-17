@@ -77,6 +77,8 @@ protected:
 
   void highlightBlock(const QString &text);
 
+  bool highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState, const QTextCharFormat &style);
+
 };
 
 #endif /* PYTHONCODEHIGHLIGHTER_H_ */
