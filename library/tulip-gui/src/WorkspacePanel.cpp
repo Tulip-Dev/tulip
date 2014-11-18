@@ -73,6 +73,35 @@ public:
   }
 };
 
+#ifdef WIN32
+
+class CustomTabBar : public QTabBar {
+
+public:
+
+    CustomTabBar(QWidget *parent = 0) : QTabBar(parent) {}
+
+protected:
+
+    QSize tabSizeHint(int index) const {
+      int width = QTabBar::tabSizeHint(index).width();
+      return QSize(width, fontMetrics().width(tabText(index))*2 + iconSize().width());
+    }
+
+};
+
+class CustomTabWidget : public QTabWidget {
+
+public:
+
+    CustomTabWidget(QWidget *parent=0) : QTabWidget(parent) {
+        setTabBar(new CustomTabBar());
+    }
+
+};
+
+#endif
+
 // ========================
 
 WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
@@ -166,7 +195,11 @@ void WorkspacePanel::setView(tlp::View* view) {
   if (_view->configurationWidgets().empty())
     return;
 
+#ifdef WIN32
+  QTabWidget* viewConfigurationTabs = new CustomTabWidget();
+#else
   QTabWidget* viewConfigurationTabs = new QTabWidget();
+#endif
   viewConfigurationTabs->setTabsClosable(true);
   connect(viewConfigurationTabs,SIGNAL(tabCloseRequested(int)),this,SLOT(hideConfigurationTab()));
   viewConfigurationTabs->setTabPosition(QTabWidget::West);
@@ -179,6 +212,7 @@ void WorkspacePanel::setView(tlp::View* view) {
     w->resize(w->width(),w->sizeHint().height());
     viewConfigurationTabs->addTab(w,w->windowTitle());
   }
+
 
   _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());
   _viewConfigurationWidgets->installEventFilter(this);
