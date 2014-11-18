@@ -67,6 +67,7 @@ void GoogleMapsView::setupUi() {
   connect(geolocalisationConfigWidget, SIGNAL(computeGeoLayout()), this, SLOT(computeGeoLayout()));
 
   sceneConfigurationWidget=new SceneConfigWidget();
+  sceneConfigurationWidget->setGlMainWidget(googleMapsGraphicsView->getGlMainWidget());
 
   sceneLayersConfigurationWidget=new SceneLayersConfigWidget();
   sceneLayersConfigurationWidget->setGlMainWidget(googleMapsGraphicsView->getGlMainWidget());
@@ -130,7 +131,7 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
   geolocalisationConfigWidget->setGraph(graph());
   googleMapsGraphicsView->setGraph(graph());
 
-  updatePoly();
+  updatePoly(true);
 
   if (graph()->existProperty("latitude") && graph()->existProperty("longitude")) {
     geolocalisationConfigWidget->setLatLngGeoLocMethod();
@@ -155,7 +156,9 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
   loadStoredPolyInformations(dataSet);
 
   if(dataSet.exist("viewType")) {
-    dataSet.get("viewType",(int&)(_viewType));
+    int viewType = 0;
+    dataSet.get("viewType", viewType);
+    _viewType = static_cast<ViewType>(viewType);
   }
 
   string viewTypeName="RoadMap";
@@ -179,9 +182,11 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
     googleMapsGraphicsView->getGlMainWidget()->getScene()->setWithXML(cameras,graph());
   }
 
+  sceneLayersConfigurationWidget->setGlMainWidget(googleMapsGraphicsView->getGlMainWidget());
   sceneConfigurationWidget->setGlMainWidget(googleMapsGraphicsView->getGlMainWidget());
 
   registerTriggers();
+
 }
 
 DataSet GoogleMapsView::state() const {
@@ -283,8 +288,8 @@ void GoogleMapsView::updateSharedProperties() {
   inputData->getGlVertexArrayManager()->setHaveToComputeAll(true);
 }
 
-void GoogleMapsView::updatePoly() {
-  if(googleMapsViewConfigWidget->polyOptionsChanged()) {
+void GoogleMapsView::updatePoly(bool force) {
+  if(googleMapsViewConfigWidget->polyOptionsChanged() || force) {
     switch(googleMapsViewConfigWidget->polyFileType()) {
     case GoogleMapsViewConfigWidget::CsvFile: {
       googleMapsGraphicsView->loadCsvFile(googleMapsViewConfigWidget->getCsvFile());

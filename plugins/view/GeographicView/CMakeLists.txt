@@ -22,6 +22,7 @@ QTX_WRAP_UI(LIB_UI_HEADERS
 
 QTX_WRAP_CPP(LIB_MOC_SRCS
     GoogleMapsView.h
+    GoogleMapsGraphicsView.h
     ProgressWidgetGraphicsProxy.h
     GoogleMapsViewConfigWidget.h
     GeolocalisationConfigWidget.h

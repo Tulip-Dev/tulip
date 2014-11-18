@@ -116,7 +116,7 @@ bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     return false;
   }
-  else {
+  else if (googleMapsView->viewType()==GoogleMapsView::Globe) {
     if (e->type() == QEvent::Wheel &&
         (((QWheelEvent *) e)->orientation() == Qt::Vertical)) {
 #define WHEEL_DELTA 120
@@ -198,6 +198,8 @@ bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     }
 
     return false;
+  } else {
+    return MouseNKeysNavigator::eventFilter(widget, e);
   }
 }
 
