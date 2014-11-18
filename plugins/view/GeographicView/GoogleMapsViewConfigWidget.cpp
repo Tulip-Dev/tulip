@@ -159,10 +159,13 @@ bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
 
 void GoogleMapsViewConfigWidget::setState(const DataSet &dataSet) {
   {
-    PolyFileType type;
+    PolyFileType polyFileType;
+    int type = 0;
 
-    if (dataSet.get("polyFileType",(int&)type))
-      setPolyFileType(type);
+    if (dataSet.get("polyFileType",type)) {
+      polyFileType = static_cast<PolyFileType>(type);
+      setPolyFileType(polyFileType);
+    }
   }
 
   if(dataSet.exist("csvFileName")) {

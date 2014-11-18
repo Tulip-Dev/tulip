@@ -37,6 +37,8 @@ class GoogleMapsView;
 
 class GoogleMapsGraphicsView : public QGraphicsView, public Observable {
 
+  Q_OBJECT
+
 public :
 
   GoogleMapsGraphicsView(GoogleMapsView *_googleMapsView, QGraphicsScene *graphicsScene, QWidget *parent = 0);
@@ -61,6 +63,7 @@ public :
   }
 
   void draw() {
+    glWidgetItem->setRedrawNeeded(true);
     scene()->update();
   }
 
@@ -130,6 +133,8 @@ public slots :
   void zoomIn();
   void zoomOut();
   void currentZoomChanged();
+  void queueMapRefresh();
+  void refreshMap();
 
 protected :
 
@@ -176,6 +181,10 @@ private :
   ProgressWidgetGraphicsProxy *progressWidget;
 
   bool firstGlobeSwitch;
+
+  std::pair<double, double> prevMapCenter;
+  int prevMapZoom;
+
 };
 
 }

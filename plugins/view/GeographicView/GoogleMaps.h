@@ -95,7 +95,9 @@ public :
   }
 
 signals:
+
   void currentZoomChanged();
+  void refreshMap();
 
 private slots :
 

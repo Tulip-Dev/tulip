@@ -37,7 +37,7 @@ const string htmlMap = ""
                        "var mapBounds;"
                        "function MapProjectionAccessor(map) {"
                        "    this.setMap(map);"
-                       "  }"
+                       "}"
                        "MapProjectionAccessor.prototype = new google.maps.OverlayView();"
                        "MapProjectionAccessor.prototype.onAdd = function() {};"
                        "MapProjectionAccessor.prototype.onRemove = function() {};"
@@ -51,11 +51,14 @@ const string htmlMap = ""
                        "	return latLng.toString();"
                        "};"
                        "function init(lat, lng) { "
-                       "       map = new google.maps.Map(document.getElementById(\"map_canvas\"), { zoom: 5, center: new google.maps.LatLng(lat, lng), mapTypeControl: false,"
-                       "		mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},"
-                       "		disableDefaultUI: true,"
-                       "       mapTypeId: google.maps.MapTypeId.ROADMAP  });"
-                       "       mapProjectionAccessor = new MapProjectionAccessor(map);"
+                       "    map = new google.maps.Map(document.getElementById(\"map_canvas\"), { zoom: 5, center: new google.maps.LatLng(lat, lng), mapTypeControl: false,"
+                       "		      mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},"
+                       "		      disableDefaultUI: true,"
+                       "          mapTypeId: google.maps.MapTypeId.ROADMAP  });"
+                       "    google.maps.event.addListener(map, 'idle', function(evt) {"
+                       "      googleMapsQObject.refreshMap();"
+                       "    });"
+                       "    mapProjectionAccessor = new MapProjectionAccessor(map);"
                        "		geocoder = new google.maps.Geocoder();"
                        "		geocoder.results = null;"
                        "		geocoder.done = false;"
@@ -123,16 +126,20 @@ const string htmlMap = ""
                        "	}"
                        "}"
                        "function switchToSatelliteView() {"
-                       " map.setMapTypeId(google.maps.MapTypeId.SATELLITE);"
+                       "  map.setMapTypeId(google.maps.MapTypeId.SATELLITE);"
+                       "  googleMapsQObject.refreshMap();"
                        "}"
                        "function switchToRoadMapView() {"
-                       " map.setMapTypeId(google.maps.MapTypeId.ROADMAP);"
+                       "  map.setMapTypeId(google.maps.MapTypeId.ROADMAP);"
+                       "  googleMapsQObject.refreshMap();"
                        "}"
                        "function switchToHybridView() {"
-                       " map.setMapTypeId(google.maps.MapTypeId.HYBRID);"
+                       "  map.setMapTypeId(google.maps.MapTypeId.HYBRID);"
+                       "  googleMapsQObject.refreshMap();"
                        "}"
                        "function switchToTerrainView() {"
-                       " map.setMapTypeId(google.maps.MapTypeId.TERRAIN);"
+                       "  map.setMapTypeId(google.maps.MapTypeId.TERRAIN);"
+                       "  googleMapsQObject.refreshMap();"
                        "}"
                        "</script>"
                        "</head>"
@@ -152,6 +159,7 @@ GoogleMaps::GoogleMaps(QWidget *parent) : QWebView(parent), init(false) {
 }
 
 void GoogleMaps::triggerLoading() {
+  frame->addToJavaScriptWindowObject("googleMapsQObject", this);
   QString code = "init(44.8084000, -0.5968050)";
   frame->evaluateJavaScript(code);
   init = true;
@@ -317,20 +325,28 @@ pair<double, double> GoogleMaps::getCurrentMapCenter() {
 }
 
 void GoogleMaps::setMapBounds(Graph *graph, const map<node, pair<double, double> > &nodesLatLngs) {
-  QString code = "mapBounds = [];";
-  frame->evaluateJavaScript(code);
-  map<node, pair<double, double> >::const_iterator it;
-
-  for (it = nodesLatLngs.begin() ; it != nodesLatLngs.end() ; ++it) {
-    if (graph->isElement(it->first)) {
-      code = "mapBounds.push(new google.maps.LatLng(%1, %2));";
-      frame->evaluateJavaScript(code.arg((it->second).first).arg((it->second).second));
-    }
-  }
-
-  code = "setMapBounds(mapBounds);";
 
   if (!nodesLatLngs.empty()) {
+
+    pair<double, double> minLatLng = make_pair(90, 180);
+    pair<double, double> maxLatLng = make_pair(-90, -180);
+
+    map<node, pair<double, double> >::const_iterator it;
+    for (it = nodesLatLngs.begin() ; it != nodesLatLngs.end() ; ++it) {
+      if (graph->isElement(it->first)) {
+        minLatLng.first = std::min(minLatLng.first, (it->second).first);
+        minLatLng.second = std::min(minLatLng.second, (it->second).second);
+        maxLatLng.first = std::max(maxLatLng.first, (it->second).first);
+        maxLatLng.second = std::max(maxLatLng.second, (it->second).second);
+      }
+    }
+
+    QString code = "mapBounds = [];";
+    frame->evaluateJavaScript(code);
+    code = "mapBounds.push(new google.maps.LatLng(%1, %2));";
+    frame->evaluateJavaScript(code.arg(minLatLng.first).arg(minLatLng.second));
+    frame->evaluateJavaScript(code.arg(maxLatLng.first).arg(maxLatLng.second));
+    code = "setMapBounds(mapBounds);";
     frame->evaluateJavaScript(code);
   }
 }

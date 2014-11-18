@@ -35,6 +35,9 @@
 #include <QMessageBox>
 #include <QFile>
 #include <QApplication>
+#include <QImage>
+#include <QPainter>
+#include <QTimer>
 
 using namespace std;
 
@@ -408,8 +411,9 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   googleMaps->setProgressWidget(progressWidget);
   googleMaps->setAdresseSelectionDialog(addressSelectionDialog,addresseSelectionProxy);
 
-  connect(googleMaps, SIGNAL(currentZoomChanged()),
-          _googleMapsView, SLOT(currentZoomChanged()));
+  connect(googleMaps, SIGNAL(currentZoomChanged()), _googleMapsView, SLOT(currentZoomChanged()));
+  connect(googleMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
+
 
   QGraphicsProxyWidget *proxyGM = scene()->addWidget(googleMaps);
   proxyGM->setPos(0,0);
@@ -417,6 +421,7 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   glMainWidget = new GlMainWidget(0, googleMapsView);
   glMainWidget->getScene()->setCalculator(new GlCPULODCalculator());
   glMainWidget->getScene()->setBackgroundColor(Color(255,255,255,0));
+  glMainWidget->getScene()->setClearBufferAtDraw(false);
 
   glWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, 512, 512);
   glWidgetItem->setPos(0,0);
@@ -485,11 +490,18 @@ void GoogleMapsGraphicsView::cleanup() {
 
 void GoogleMapsGraphicsView::setGraph(Graph *graph) {
   if (this->graph != graph) {
+
+    GlGraphRenderingParameters rp;
+    if (this->graph) {
+      rp = glMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+    }
+
     cleanup();
     this->graph = graph;
 
     GlScene *scene=glMainWidget->getScene();
     GlGraphComposite *graphComposite=new GlGraphComposite(graph);
+    graphComposite->setRenderingParameters(rp);
     GlLayer *layer=scene->createLayer("Main");
     planisphereEntity = buildPlanisphereEntity(glMainWidget);
     layer->addGlEntity(planisphereEntity,"globeMap");
@@ -821,14 +833,16 @@ void GoogleMapsGraphicsView::resizeEvent(QResizeEvent *event) {
 }
 
 void GoogleMapsGraphicsView::paintEvent (QPaintEvent * event) {
-  pair<double, double> mapCenter = googleMaps->getCurrentMapCenter();
-  unsigned int mapZoom = googleMaps->getCurrentMapZoom();
 
   Observable::holdObservers();
 
   if (graph && !geocodingActive) {
 
-    if(googleMaps->isVisible()) {
+    if(googleMaps->isVisible() && (prevMapCenter != googleMaps->getCurrentMapCenter() || prevMapZoom != googleMaps->getCurrentMapZoom())) {
+
+      prevMapCenter = googleMaps->getCurrentMapCenter();
+      prevMapZoom = googleMaps->getCurrentMapZoom();
+
       float worldWidth = googleMaps->getWorldWidth();
       static const double maxLat = 85.05113f;
       Coord swPos = googleMaps->getPixelPosOnScreenForLatLng(-maxLat, 0.0);
@@ -836,14 +850,14 @@ void GoogleMapsGraphicsView::paintEvent (QPaintEvent * event) {
       Coord nePos = googleMaps->getPixelPosOnScreenForLatLng(maxLat, 0.0);
       nePos[1]=height() - nePos[1];
 
-      Coord mapCenterCoord = googleMaps->getPixelPosOnScreenForLatLng(mapCenter.first, mapCenter.second);
-      float westToMapCenterDist = ((mapCenter.second + 180.0) * worldWidth) / 360.0;
+      Coord mapCenterCoord = googleMaps->getPixelPosOnScreenForLatLng(prevMapCenter.first, prevMapCenter.second);
+      float westToMapCenterDist = ((prevMapCenter.second + 180.0) * worldWidth) / 360.0;
       swPos.setX(mapCenterCoord.getX() - westToMapCenterDist);
       nePos.setX(swPos.getX() + worldWidth);
 
-      currentMapCenter = mapCenter;
+      currentMapCenter = prevMapCenter;
       lastSceneRect = sceneRect();
-      currentMapZoom = mapZoom;
+      currentMapZoom = prevMapZoom;
 
       BoundingBox bb;
       Coord rightCoord = googleMaps->getPixelPosOnScreenForLatLng(180,180);
@@ -857,17 +871,24 @@ void GoogleMapsGraphicsView::paintEvent (QPaintEvent * event) {
         GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
         sceneZoomAndPan.zoomAndPanAnimationStep(1);
       }
-    }
 
-    glWidgetItem->setRedrawNeeded(true);
-    glMainWidget->getScene()->setBackgroundColor(Color(255,255,255,0));
-    glMainWidget->getScene()->setClearBufferAtDraw(false);
+      glWidgetItem->setRedrawNeeded(true);
+
+    }
   }
 
   Observable::unholdObservers();
 
   QGraphicsView::paintEvent(event);
+}
 
+void GoogleMapsGraphicsView::queueMapRefresh() {
+  QTimer::singleShot(500, this, SLOT(refreshMap()));
+}
+
+void GoogleMapsGraphicsView::refreshMap() {
+  glWidgetItem->setRedrawNeeded(true);
+  scene()->update();
 }
 
 void GoogleMapsGraphicsView::setMapTranslationBlocked(const bool translationBlocked) {
@@ -991,6 +1012,7 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   case GoogleMapsView::Polygon: {
     enablePolygon=true;
+    glWidgetItem->setRedrawNeeded(true);
     break;
   }
 
