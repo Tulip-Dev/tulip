@@ -198,7 +198,8 @@ bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     }
 
     return false;
-  } else {
+  }
+  else {
     return MouseNKeysNavigator::eventFilter(widget, e);
   }
 }
