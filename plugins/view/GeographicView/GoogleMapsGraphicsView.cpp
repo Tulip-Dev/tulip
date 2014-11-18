@@ -492,6 +492,7 @@ void GoogleMapsGraphicsView::setGraph(Graph *graph) {
   if (this->graph != graph) {
 
     GlGraphRenderingParameters rp;
+
     if (this->graph) {
       rp = glMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
     }

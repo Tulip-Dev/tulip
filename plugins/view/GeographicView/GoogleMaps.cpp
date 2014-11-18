@@ -332,6 +332,7 @@ void GoogleMaps::setMapBounds(Graph *graph, const map<node, pair<double, double>
     pair<double, double> maxLatLng = make_pair(-90, -180);
 
     map<node, pair<double, double> >::const_iterator it;
+
     for (it = nodesLatLngs.begin() ; it != nodesLatLngs.end() ; ++it) {
       if (graph->isElement(it->first)) {
         minLatLng.first = std::min(minLatLng.first, (it->second).first);

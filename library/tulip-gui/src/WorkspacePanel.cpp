@@ -79,14 +79,14 @@ class CustomTabBar : public QTabBar {
 
 public:
 
-    CustomTabBar(QWidget *parent = 0) : QTabBar(parent) {}
+  CustomTabBar(QWidget *parent = 0) : QTabBar(parent) {}
 
 protected:
 
-    QSize tabSizeHint(int index) const {
-      int width = QTabBar::tabSizeHint(index).width();
-      return QSize(width, fontMetrics().width(tabText(index))*2 + iconSize().width());
-    }
+  QSize tabSizeHint(int index) const {
+    int width = QTabBar::tabSizeHint(index).width();
+    return QSize(width, fontMetrics().width(tabText(index))*2 + iconSize().width());
+  }
 
 };
 
@@ -94,9 +94,9 @@ class CustomTabWidget : public QTabWidget {
 
 public:
 
-    CustomTabWidget(QWidget *parent=0) : QTabWidget(parent) {
-        setTabBar(new CustomTabBar());
-    }
+  CustomTabWidget(QWidget *parent=0) : QTabWidget(parent) {
+    setTabBar(new CustomTabBar());
+  }
 
 };
 
