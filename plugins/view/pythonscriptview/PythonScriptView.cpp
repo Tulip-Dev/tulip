@@ -555,6 +555,9 @@ void PythonScriptView::indicateErrors() const {
 
       if (rx2.cap(3) != "tlpimporthook") {
         QString file = rx.cap(1);
+#ifdef WIN32
+        file.replace("\\", "/");
+#endif
         int line = rx.cap(2).toInt();
         errorLines[file].push_back(line);
       }
