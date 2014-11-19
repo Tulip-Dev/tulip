@@ -326,7 +326,11 @@ void PythonScriptViewWidget::setGraph(tlp::Graph *graph) {
 }
 
 void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
-  QStringList strList = link.toString().split(":");
+  QString linkStr = QUrl::fromPercentEncoding(link.toEncoded());
+#ifdef WIN32
+  linkStr.replace("\\", "/");
+#endif
+  QStringList strList = linkStr.split(":");
   QString file = strList.at(0);
 
   for (int i = 1 ; i < strList.size() - 1 ; ++i) {
@@ -340,6 +344,12 @@ void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
     getCurrentMainScriptEditor()->scrollToLine(line);
     return;
   }
+
+// Qt5 on windows sets the drive letter as lowercase when converting the url to a string
+// Resets it to uppercase as it was originally
+#if defined(WIN32) && (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+   file[0] = file[0].toUpper();
+#endif
 
   for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
     PythonCodeEditor *codeEditor = getMainScriptEditor(i);
