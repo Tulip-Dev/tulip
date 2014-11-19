@@ -122,6 +122,7 @@ void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   _model = model;
   QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(_ui->hierarchiesTree);
   proxyModel->setSourceModel(model);
+  proxyModel->setDynamicSortFilter(false);
   _ui->hierarchiesTree->setModel(proxyModel);
   _ui->hierarchiesTree->header()->resizeSection(0, 100);
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
