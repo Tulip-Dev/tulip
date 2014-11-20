@@ -31,6 +31,8 @@ namespace tlp {
 DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const std::vector<std::string> &firstValues,const std::vector<Color> &secondValues,QWidget *parent) : QDialog(parent),_ui(new Ui::DoubleStringsListRelationDialogData) {
   _ui->setupUi(this);
 
+  setWindowTitle("Associate colors to values");
+
   for(vector<string>::const_iterator it=firstValues.begin(); it!=firstValues.end(); ++it) {
     _ui->firstListWidget->addItem((*it).c_str());
   }
@@ -43,6 +45,8 @@ DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const std::vect
 
   connect(_ui->upButton,SIGNAL(clicked()),this,SLOT(upButtonClicked()));
   connect(_ui->downButton,SIGNAL(clicked()),this,SLOT(downButtonClicked()));
+  connect(_ui->upButtonColor,SIGNAL(clicked()),this,SLOT(upButtonColorClicked()));
+  connect(_ui->downButtonColor,SIGNAL(clicked()),this,SLOT(downButtonColorClicked()));
   connect(_ui->okButton,SIGNAL(clicked()),this,SLOT(accept()));
   connect(_ui->cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
   connect(((QAbstractSlider*)(_ui->firstListWidget->verticalScrollBar())),SIGNAL(valueChanged(int)),this,SLOT(scrollBarValueChanged(int)));
@@ -80,6 +84,28 @@ void DoubleStringsListRelationDialog::downButtonClicked() {
   QListWidgetItem *item=_ui->firstListWidget->takeItem(currentRow);
   _ui->firstListWidget->insertItem(currentRow+1,item);
   _ui->firstListWidget->setCurrentItem(item);
+}
+
+void DoubleStringsListRelationDialog::upButtonColorClicked() {
+  int currentRow=_ui->secondListWidget->currentRow();
+
+  if(currentRow==0)
+    return;
+
+  QListWidgetItem *item=_ui->secondListWidget->takeItem(currentRow);
+  _ui->secondListWidget->insertItem(currentRow-1,item);
+  _ui->secondListWidget->setCurrentItem(item);
+}
+
+void DoubleStringsListRelationDialog::downButtonColorClicked() {
+  int currentRow=_ui->secondListWidget->currentRow();
+
+  if(currentRow==_ui->secondListWidget->count()+1)
+    return;
+
+  QListWidgetItem *item=_ui->secondListWidget->takeItem(currentRow);
+  _ui->secondListWidget->insertItem(currentRow+1,item);
+  _ui->secondListWidget->setCurrentItem(item);
 }
 
 void DoubleStringsListRelationDialog::scrollBarValueChanged(int value) {
