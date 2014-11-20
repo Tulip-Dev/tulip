@@ -29,7 +29,7 @@
 #if PY_MAJOR_VERSION >= 3
         return PyUnicode_Check(sipPy);
 #else
-        return PyString_Check(sipPy);
+        return PyString_Check(sipPy) || PyUnicode_Check(sipPy);
 #endif
 	}
 
@@ -40,7 +40,11 @@
 #if PY_MAJOR_VERSION >= 3
     *sipCppPtr = new std::string(convertPythonUnicodeObjectToStdString(sipPy));
 #else
-    *sipCppPtr = new std::string(PyString_AS_STRING(sipPy));
+    if (PyString_Check(sipPy)) {
+        *sipCppPtr = new std::string(PyString_AS_STRING(sipPy));
+    } else {
+        *sipCppPtr = new std::string(convertPythonUnicodeObjectToStdString(sipPy));
+    }
 #endif
 	return 1;
 %End
