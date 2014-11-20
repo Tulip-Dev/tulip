@@ -24,9 +24,8 @@
 
 extern void printErrorMessage(const std::string &errMsg);
 
-#if PY_MAJOR_VERSION >= 3
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
-#endif
+
 %End
 
 %ModuleCode
@@ -39,14 +38,12 @@ void printErrorMessage(const std::string &errMsg) {
     PyRun_SimpleString(pythonCode.c_str());
 }
 
-#if PY_MAJOR_VERSION >= 3
 std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
     PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
     std::string ret(PyBytes_AsString(utf8Str));
     Py_DECREF(utf8Str);
     return ret;
 }
-#endif
 %End
 
 %ExportedHeaderCode
