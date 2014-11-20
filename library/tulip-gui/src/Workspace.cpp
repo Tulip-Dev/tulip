@@ -319,6 +319,7 @@ unsigned int Workspace::currentSlotsCount() const {
 void Workspace::updateAvailableModes() {
   foreach(QWidget* page, _modeSwitches.keys()) {
     _modeSwitches[page]->setVisible(_panels.size() >= _modeToSlots[page].size());
+    _modeSwitches[page]->setEnabled(_panels.size() >= _modeToSlots[page].size());
   }
 
   bool enableNavigation = !_panels.empty();
@@ -373,7 +374,7 @@ void Workspace::updatePanels() {
     return;
   }
 
-  if (!_modeSwitches[currentModeWidget()]->isVisible()) {
+  if (!_modeSwitches[currentModeWidget()]->isEnabled()) {
     int maxSize = 0;
     QWidget* fallbackMode = _ui->startupPage;
 
@@ -586,6 +587,17 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
   QDomElement root = doc.createElement("workspace");
   root.setAttribute("current",_currentPanelIndex);
   root.setAttribute("mode",currentSlotsCount());
+  if (currentModeWidget() == _ui->splitPage) {
+    root.setAttribute("modeWidget","splitPage");
+  } else if (currentModeWidget() == _ui->splitPageHorizontal) {
+    root.setAttribute("modeWidget","splitPageHorizontal");
+  } else if (currentModeWidget() == _ui->split3Page) {
+    root.setAttribute("modeWidget","split3Page");
+  } else if (currentModeWidget() == _ui->split32Page) {
+    root.setAttribute("modeWidget","split32Page");
+  } else if (currentModeWidget() == _ui->split33Page) {
+    root.setAttribute("modeWidget","split33Page");
+  }
   doc.appendChild(root);
   project->removeFile("/workspace.xml");
   QIODevice* workspaceXml = project->fileStream("/workspace.xml");
@@ -663,7 +675,22 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
       if (current > 0 && current < _panels.size())
         setActivePanel(_panels[current]->view());
 
-      switchWorkspaceMode(modeWidget);
+      QString modeWidgetName = root.attribute("modeWidget");
+      if (!modeWidgetName.isEmpty() && (mode == 2 || mode ==3)) {
+        if (modeWidgetName == "splitPage") {
+          switchToSplitMode();
+        } else if (modeWidgetName == "splitPageHorizontal") {
+          switchToSplitHorizontalMode();
+        } else if (modeWidgetName == "split3Page") {
+          switchToSplit3Mode();
+        } else if (modeWidgetName == "split32Page") {
+          switchToSplit32Mode();
+        } else {
+          switchToSplit33Mode();
+        }
+      } else {
+        switchWorkspaceMode(modeWidget);
+      }
     }
   }
 }
