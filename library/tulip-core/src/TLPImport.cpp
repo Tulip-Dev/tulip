@@ -731,18 +731,19 @@ struct TLPPropertyBuilder:public TLPFalse {
 
   virtual ~TLPPropertyBuilder() {}
   TLPPropertyBuilder(TLPGraphBuilder *graphBuilder):graphBuilder(graphBuilder), clusterId(INT_MAX), propertyType(std::string()), propertyName(std::string()), property(NULL), isGraphProperty(false), isPathViewProperty(false) {}
-  void getProperty() {
+  bool getProperty() {
     assert(property == NULL);
     property = graphBuilder->createProperty(clusterId, propertyType,
                                             propertyName, isGraphProperty,
                                             isPathViewProperty);
+    return property != NULL;
   }
   bool addInt(const int id)  {
     assert(id != INT_MAX);
     clusterId = id;
 
     if (!propertyType.empty() && !propertyName.empty())
-      getProperty();
+      return getProperty();
 
     return true;
   }
@@ -754,7 +755,7 @@ struct TLPPropertyBuilder:public TLPFalse {
       propertyName=str;
 
       if (clusterId != INT_MAX)
-        getProperty();
+        return getProperty();
     }
     else
       return false;
