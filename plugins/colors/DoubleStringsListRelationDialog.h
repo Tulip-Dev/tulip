@@ -45,6 +45,8 @@ public :
 private slots:
   void upButtonClicked();
   void downButtonClicked();
+  void upButtonColorClicked();
+  void downButtonColorClicked();
   void scrollBarValueChanged(int value);
 };
 

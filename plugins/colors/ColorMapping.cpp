@@ -366,10 +366,13 @@ public:
         enumeratedValues.push_back((*it).first);
       }
 
+      std::map<float, Color> colorMap = colorScale.getColorMap();
+
       vector<Color> enumeratedColors;
 
-      for(unsigned int i=0; i<enumeratedValues.size(); ++i) {
-        enumeratedColors.push_back(colorScale.getColorAtPos(((float)i)/((float)((enumeratedValues.size()-1)))));
+      for(std::map<float, Color>::iterator it = colorMap.begin() ; it != colorMap.end() ; ++it) {
+        if (enumeratedColors.empty() || it->second != enumeratedColors.back())
+          enumeratedColors.push_back(it->second);
       }
 
       DoubleStringsListRelationDialog dialog(enumeratedValues,enumeratedColors);
