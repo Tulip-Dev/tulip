@@ -35,15 +35,13 @@ void ColorScaleButton::paintScale(QPainter *painter, const QRect &baseRect, cons
   rect.setWidth(rect.width()-4);
   rect.setHeight(rect.height()-4);
 
-  if (colorScale.isGradient()) {
-    QLinearGradient grad(QPointF(rect.x(),rect.y()),QPointF(rect.x()+rect.width(),rect.y()));
-    std::map<float,Color> stops = colorScale.getColorMap();
+  QLinearGradient grad(QPointF(rect.x(),rect.y()),QPointF(rect.x()+rect.width(),rect.y()));
+  std::map<float,Color> stops = colorScale.getColorMap();
 
-    for (std::map<float,Color>::iterator it = stops.begin(); it != stops.end(); ++it)
-      grad.setColorAt(it->first,colorToQColor(it->second));
+  for (std::map<float,Color>::iterator it = stops.begin(); it != stops.end(); ++it)
+    grad.setColorAt(it->first,colorToQColor(it->second));
 
-    painter->setBrush(QBrush(grad));
-  }
+  painter->setBrush(QBrush(grad));
 
   painter->drawRect(rect);
 }
@@ -60,23 +58,7 @@ const ColorScale& ColorScaleButton::colorScale() const {
 void ColorScaleButton::paintEvent(QPaintEvent *event) {
   QPushButton::paintEvent(event);
   QPainter painter(this);
-  QRect rect = event->rect();
-  rect.setX(rect.x()+2);
-  rect.setY(rect.y()+2);
-  rect.setWidth(rect.width()-4);
-  rect.setHeight(rect.height()-4);
-
-  if (colorScale().isGradient()) {
-    QLinearGradient grad(QPointF(rect.x(),rect.y()),QPointF(rect.x()+rect.width(),rect.y()));
-    std::map<float,Color> stops = colorScale().getColorMap();
-
-    for (std::map<float,Color>::iterator it = stops.begin(); it != stops.end(); ++it)
-      grad.setColorAt(it->first,colorToQColor(it->second));
-
-    painter.setBrush(QBrush(grad));
-  }
-
-  painter.drawRect(rect);
+  paintScale(&painter, event->rect(), colorScale());
 }
 
 void ColorScaleButton::editColorScale(const ColorScale& cs) {
