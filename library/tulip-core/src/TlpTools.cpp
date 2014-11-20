@@ -397,7 +397,7 @@ public:
     fp = _wfopen(wfilename.c_str(), openmodeToWString(mode).c_str());
 
     if (fp) {
-      buffer = new __gnu_cxx::stdio_filebuf<char>(fp, mode, 1);
+      buffer = new __gnu_cxx::stdio_filebuf<char>(fp, mode);
     }
 
     init(buffer);
@@ -421,7 +421,7 @@ public:
     fp = _wfopen(wfilename.c_str(), openmodeToWString(open_mode).c_str());
 
     if (fp) {
-      buffer = new __gnu_cxx::stdio_filebuf<char>(fp, open_mode, 1);
+      buffer = new __gnu_cxx::stdio_filebuf<char>(fp, open_mode);
     }
 
     init(buffer);
