@@ -54,12 +54,15 @@ struct TLPTokenParser {
   bool newLine(char ch, int &curPos) {
     if (ch != '\n') {
       is.get(ch);
+
       if (ch != '\n') {
-	is.unget();
-	return false;
+        is.unget();
+        return false;
       }
+
       ++curPos;
     }
+
     ++curLine;
     return true;
   }
@@ -76,8 +79,9 @@ struct TLPTokenParser {
         switch (ch) {
         case 13 :
         case '\n':
-	  if (!newLine(ch, curPos))
-	    break;
+          if (!newLine(ch, curPos))
+            break;
+
           val.str+=ch;
           break;
 
@@ -128,8 +132,9 @@ struct TLPTokenParser {
         case 13 :
         case '\n':
           if (!newLine(ch, curPos))
-	    break;
-	  stop=true;
+            break;
+
+          stop=true;
           return COMMENTTOKEN;
           break;
 
@@ -147,8 +152,9 @@ struct TLPTokenParser {
 
         case 13 :
         case '\n':
-	  if (!newLine(ch, curPos))
-	    break;
+          if (!newLine(ch, curPos))
+            break;
+
           if (started) stop=true;
 
           break;
@@ -366,7 +372,7 @@ struct TLPParser {
   bool formatError(const std::string& value) {
     std::stringstream ess;
     ess << "Error when parsing '" << value.c_str()
-	<< "' at line " << tokenParser->curLine + 1;
+        << "' at line " << tokenParser->curLine + 1;
 
     if (errno)
       ess << std::endl << strerror(errno);

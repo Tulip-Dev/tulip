@@ -587,17 +587,23 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
   QDomElement root = doc.createElement("workspace");
   root.setAttribute("current",_currentPanelIndex);
   root.setAttribute("mode",currentSlotsCount());
+
   if (currentModeWidget() == _ui->splitPage) {
     root.setAttribute("modeWidget","splitPage");
-  } else if (currentModeWidget() == _ui->splitPageHorizontal) {
+  }
+  else if (currentModeWidget() == _ui->splitPageHorizontal) {
     root.setAttribute("modeWidget","splitPageHorizontal");
-  } else if (currentModeWidget() == _ui->split3Page) {
+  }
+  else if (currentModeWidget() == _ui->split3Page) {
     root.setAttribute("modeWidget","split3Page");
-  } else if (currentModeWidget() == _ui->split32Page) {
+  }
+  else if (currentModeWidget() == _ui->split32Page) {
     root.setAttribute("modeWidget","split32Page");
-  } else if (currentModeWidget() == _ui->split33Page) {
+  }
+  else if (currentModeWidget() == _ui->split33Page) {
     root.setAttribute("modeWidget","split33Page");
   }
+
   doc.appendChild(root);
   project->removeFile("/workspace.xml");
   QIODevice* workspaceXml = project->fileStream("/workspace.xml");
@@ -676,19 +682,25 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
         setActivePanel(_panels[current]->view());
 
       QString modeWidgetName = root.attribute("modeWidget");
+
       if (!modeWidgetName.isEmpty() && (mode == 2 || mode ==3)) {
         if (modeWidgetName == "splitPage") {
           switchToSplitMode();
-        } else if (modeWidgetName == "splitPageHorizontal") {
+        }
+        else if (modeWidgetName == "splitPageHorizontal") {
           switchToSplitHorizontalMode();
-        } else if (modeWidgetName == "split3Page") {
+        }
+        else if (modeWidgetName == "split3Page") {
           switchToSplit3Mode();
-        } else if (modeWidgetName == "split32Page") {
+        }
+        else if (modeWidgetName == "split32Page") {
           switchToSplit32Mode();
-        } else {
+        }
+        else {
           switchToSplit33Mode();
         }
-      } else {
+      }
+      else {
         switchWorkspaceMode(modeWidget);
       }
     }
