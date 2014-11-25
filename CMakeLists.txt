@@ -208,6 +208,8 @@ ELSE()
   endmacro()
 ENDIF()
 
+SET(BUILD_PYTHON_COMPONENTS ON CACHE BOOL "Do you want to build Tulip Python components ? [ON|OFF]")
+
 ## ========================================================
 ## Required packages
 ## ========================================================
@@ -306,6 +308,7 @@ FIND_PACKAGE(QtX)
 # Quazip
 FIND_PACKAGE(QuaZip)
 
+IF(BUILD_PYTHON_COMPONENTS)
 # Python
 # After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
 # If not, compile the SIP version located in thirdparty.
@@ -368,16 +371,9 @@ IF(PYTHONINTERP_FOUND)
       ENDIF(SIP_OK)
     ENDIF(SIP_OK)
 
-
-    # Unset the previous values of the CMake cache variable SPHINX_EXECUTABLE
-    # in case the value of PYTHON_EXECUTABLE CMake variable changed
-    UNSET(SPHINX_EXECUTABLE CACHE)
-    SET(Sphinx_DIR ${CMAKE_CURRENT_SOURCE_DIR}/doc/python)
-    MARK_AS_ADVANCED(Sphinx_DIR)
-    FIND_PACKAGE(Sphinx)
-
   ENDIF(PYTHONLIBS_FOUND)
 ENDIF(PYTHONINTERP_FOUND)
+ENDIF(BUILD_PYTHON_COMPONENTS)
 
 ENDIF(NOT BUILD_CORE_ONLY)
 

@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 SET(LIB_SRCS
 src/AbstractFiltersManagerItem.cpp
@@ -21,9 +21,6 @@ src/ImportWizard.cpp
 src/OutputPanelButton.cpp
 src/PanelSelectionWizard.cpp
 src/PreferencesDialog.cpp
-src/PythonPanel.cpp
-src/PythonPluginCreationDialog.cpp
-src/PythonPluginsIDE.cpp
 src/SearchWidget.cpp
 )
 
@@ -48,9 +45,6 @@ designer/ImportWizard.ui
 designer/ExportWizard.ui
 designer/PanelSelectionWizard.ui
 designer/PreferencesDialog.ui
-designer/PythonPanel.ui
-designer/PythonPluginCreationDialog.ui
-designer/PythonPluginsIDE.ui
 designer/SearchWidget.ui
 )
 
@@ -74,18 +68,45 @@ include/ImportWizard.h
 include/OutputPanelButton.h
 include/PanelSelectionWizard.h
 include/PreferencesDialog.h
+include/SearchWidget.h
+)
+
+IF(BUILD_PYTHON_COMPONENTS)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBUILD_PYTHON_COMPONENTS")
+
+INCLUDE_DIRECTORIES(${TulipPythonInclude})
+
+SET(LIB_SRCS
+${LIB_SRCS}
+src/PythonPanel.cpp
+src/PythonPluginCreationDialog.cpp
+src/PythonPluginsIDE.cpp
+)
+
+QTX_WRAP_UI(UI_SRCS
+designer/PythonPanel.ui
+designer/PythonPluginCreationDialog.ui
+designer/PythonPluginsIDE.ui
+)
+
+QTX_WRAP_CPP(MOC_SRCS
 include/PythonPanel.h
 include/PythonPluginCreationDialog.h
 include/PythonPluginsIDE.h
-include/SearchWidget.h
 )
+
+ENDIF(BUILD_PYTHON_COMPONENTS)
 
 SET(QT_USE_QTWEBKIT true)
 
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 
-TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${LibTulipPythonName})
+TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${QT_LIBRARIES})
+IF(BUILD_PYTHON_COMPONENTS)
+TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipPythonName})
+ENDIF(BUILD_PYTHON_COMPONENTS)
 
 INSTALL(TARGETS GraphPerspective-${TulipVersion} DESTINATION ${TulipPerspectivePluginsInstallDir} COMPONENT GraphPerspective)
 

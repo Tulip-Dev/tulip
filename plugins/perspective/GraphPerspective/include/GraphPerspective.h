@@ -24,7 +24,6 @@
 #include <tulip/Perspective.h>
 #include <tulip/Observable.h>
 
-
 class QAction;
 class QHeaderView;
 
@@ -40,6 +39,11 @@ class BooleanProperty;
 namespace Ui {
 class GraphPerspectiveMainWindowData;
 }
+
+#ifdef BUILD_PYTHON_COMPONENTS
+class PythonPanel;
+class PythonPluginsIDE;
+#endif
 
 class GraphPerspective : public tlp::Perspective, tlp::Observable {
   Q_OBJECT
@@ -140,6 +144,13 @@ protected slots:
 protected:
   bool eventFilter(QObject *, QEvent *);
   void importGraph(const std::string& module, tlp::DataSet& data);
+
+
+#ifdef BUILD_PYTHON_COMPONENTS
+  PythonPanel *_pythonPanel;
+  PythonPluginsIDE *_developFrame;
+#endif
+
 };
 
 #endif // GRAPHPERSPECTIVE_H
