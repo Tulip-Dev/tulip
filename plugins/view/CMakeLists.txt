@@ -1,9 +1,7 @@
 #Commented until SIP bindings are updated to fit with latest Tulip API changes
-IF(PYTHONLIBS_FOUND)
-IF(SIP_OK)
+IF(BUILD_PYTHON_COMPONENTS)
 ADD_SUBDIRECTORY(pythonscriptview)
-ENDIF(SIP_OK)
-ENDIF(PYTHONLIBS_FOUND)
+ENDIF(BUILD_PYTHON_COMPONENTS)
 ADD_SUBDIRECTORY(HistogramView)
 ADD_SUBDIRECTORY(GeographicView)
 ADD_SUBDIRECTORY(MatrixView)

@@ -1,3 +1,5 @@
+IF(PYTHONINTERP_FOUND AND SIP_OK)
+
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_SOURCE_DIR}/conf.py)
 
 # On windows, it is required that the paths to the dll dependencies (e.g. zlib, libpng, ...) are contained
@@ -19,5 +21,7 @@ ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${S
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "doc;doctrees") 
 
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html 
-  DESTINATION ${TulipShareInstallDir}/doc/tulip-python
-  COMPONENT tulip_python_doc)
+        DESTINATION ${TulipShareInstallDir}/doc/tulip-python
+        COMPONENT tulip_python_doc)
+
+ENDIF(PYTHONINTERP_FOUND AND SIP_OK)

@@ -148,6 +148,7 @@ int main(int argc, char **argv) {
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
 #endif
 
+#ifdef BUILD_PYTHON_COMPONENTS
 #ifdef WIN32
   // MS stated that SetDllDirectory only exists since WinXP SP1
 #if (_WIN32_WINNT >= 0x0502)
@@ -159,6 +160,7 @@ int main(int argc, char **argv) {
     SetDllDirectory(tlp::PythonVersionChecker::getPythonHome().toStdString().c_str());
   }
 
+#endif
 #endif
 #endif
 

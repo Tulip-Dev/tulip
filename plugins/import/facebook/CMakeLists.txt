@@ -1,3 +1,5 @@
+IF(PYTHONLIBS_FOUND)
+IF(SIP_OK)
 INCLUDE_DIRECTORIES(${TulipPythonInclude})
 QTX_WRAP_CPP(FacebookImport_MOC_SRCS FacebookImport.h)
 QTX_WRAP_UI(FacebookImport_UI_SRCS FacebookImport.ui)
@@ -15,3 +17,5 @@ INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulip_facebook.py DESTINATION ${TulipL
 ENDIF()
 
 INSTALL(TARGETS FacebookImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT FacebookImport)
+ENDIF(SIP_OK)
+ENDIF(PYTHONLIBS_FOUND)

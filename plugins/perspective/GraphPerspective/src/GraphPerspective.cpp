@@ -18,7 +18,12 @@
  *
  */
 
+#ifdef BUILD_PYTHON_COMPONENTS
 #include <tulip/PythonInterpreter.h>
+#include <tulip/APIDataBase.h>
+#include "PythonPanel.h"
+#include "PythonPluginsIDE.h"
+#endif
 
 #include "GraphPerspective.h"
 #include "DocumentationNavigator.h"
@@ -50,7 +55,6 @@
 #include <tulip/PluginLister.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipProject.h>
-#include <tulip/APIDataBase.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -234,6 +238,21 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
+#ifdef BUILD_PYTHON_COMPONENTS
+  _pythonPanel = new PythonPanel();
+  QVBoxLayout *layout = new QVBoxLayout();
+  layout->addWidget(_pythonPanel);
+  layout->setContentsMargins(0,0,0,0);
+  _ui->pythonPanel->setLayout(layout);
+  _developFrame = new PythonPluginsIDE();
+  layout = new QVBoxLayout();
+  layout->addWidget(_developFrame);
+  layout->setContentsMargins(0,0,0,0);
+  _ui->developFrame->setLayout(layout);
+#else
+  _ui->pythonButton->setVisible(false);
+  _ui->developButton->setVisible(false);
+#endif
   currentGraphChanged(NULL);
   _ui->singleModeButton->setEnabled(false);
   _ui->singleModeButton->hide();
@@ -317,9 +336,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionNewProject, SIGNAL(triggered()), this, SLOT(newProject()));
   connect(_ui->actionPreferences,SIGNAL(triggered()),this,SLOT(openPreferences()));
   connect(_ui->searchButton,SIGNAL(clicked(bool)),this,SLOT(setSearchOutput(bool)));
-  connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonPanel(bool)));
   connect(_ui->workspace,SIGNAL(importGraphRequest()),this,SLOT(importGraph()));
-  connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
   connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(setWorkspaceMode()));
   connect(_ui->action_Close_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
 
@@ -331,10 +348,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     connect(_ui->actionShowDocumentation,SIGNAL(triggered()),this,SLOT(showDocumentation()));
   else
     _ui->actionShowDocumentation->setVisible(false);
-
-
-  tlp::PluginLister::instance()->addListener(this);
-  PythonInterpreter::getInstance()->setDefaultConsoleWidget(_ui->pythonPanel->consoleWidget());
 
   // Setting initial sizes for splitters
   _ui->mainSplitter->setSizes(QList<int>() << 350 << 850);
@@ -355,9 +368,29 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->workspace->setModel(_graphs);
   _ui->workspace->readProject(_project,rootIds,progress);
   _ui->searchPanel->setModel(_graphs);
-  _ui->pythonPanel->setModel(_graphs);
-  _ui->developFrame->setProject(_project);
-  _ui->pythonPanel->setPanelButton(_ui->pythonButton);
+
+#ifdef BUILD_PYTHON_COMPONENTS
+  connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonPanel(bool)));
+  connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
+  _pythonPanel->setModel(_graphs);
+  _developFrame->setProject(_project);
+  _pythonPanel->setPanelButton(_ui->pythonButton);
+  tlp::PluginLister::instance()->addListener(this);
+  PythonInterpreter::getInstance()->setDefaultConsoleWidget(_pythonPanel->consoleWidget());
+
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipgui.api");
+
+  PythonInterpreter::getInstance()->setOutputEnabled(false);
+
+  if (PythonInterpreter::getInstance()->runString("import PyQt4")) {
+    APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/PyQt4.api");
+  }
+
+  PythonInterpreter::getInstance()->setOutputEnabled(true);
+#endif
 
   if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
     open(_externalFile);
@@ -375,19 +408,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   // fill menu with recent documents
   buildRecentDocumentsMenu();
-
-  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
-  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
-  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
-  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipgui.api");
-
-  PythonInterpreter::getInstance()->setOutputEnabled(false);
-
-  if (PythonInterpreter::getInstance()->runString("import PyQt4")) {
-    APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/PyQt4.api");
-  }
-
-  PythonInterpreter::getInstance()->setOutputEnabled(true);
 
   showTrayMessage("GraphPerspective started");
 }
@@ -699,8 +719,9 @@ void GraphPerspective::openProjectFile(const QString &path) {
     _project->openProjectFile(path,prg);
     QMap<QString,tlp::Graph*> rootIds = _graphs->readProject(_project,prg);
     _ui->workspace->readProject(_project,rootIds,prg);
-    _ui->developFrame->setProject(_project);
-
+#ifdef BUILD_PYTHON_COMPONENTS
+    _developFrame->setProject(_project);
+#endif
     for (QMap<QString,tlp::Graph*>::iterator it = rootIds.begin(); it != rootIds.end() ; ++it) {
       it.value()->setAttribute("file", std::string(path.toUtf8().data()));
     }

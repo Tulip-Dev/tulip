@@ -721,7 +721,7 @@ border: 0px;
                  </widget>
                  <widget class="QStackedWidget" name="outputFrame">
                   <widget class="SearchWidget" name="searchPanel"/>
-                  <widget class="PythonPanel" name="pythonPanel"/>
+                  <widget class="QWidget" name="pythonPanel"/>
                  </widget>
                 </widget>
                </item>
@@ -1141,7 +1141,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
             </item>
            </layout>
           </widget>
-          <widget class="PythonPluginsIDE" name="developFrame"/>
+          <widget class="QWidget" name="developFrame"/>
          </widget>
         </widget>
        </item>
@@ -1156,7 +1156,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -1642,18 +1642,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <class>OutputPanelButton</class>
    <extends>QPushButton</extends>
    <header>OutputPanelButton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>PythonPanel</class>
-   <extends>QWidget</extends>
-   <header location="global">PythonPanel.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>PythonPluginsIDE</class>
-   <extends>QWidget</extends>
-   <header location="global">PythonPluginsIDE.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
