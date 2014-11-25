@@ -452,6 +452,9 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   zoomOutButton->setContentsMargins(0, 0, 0, 0);
   connect(zoomOutButton, SIGNAL(pressed()), _googleMapsView, SLOT(zoomOut()));
   scene()->addWidget(zoomOutButton)->setPos(20, 76);
+
+  setAcceptDrops(false);
+
 }
 
 GoogleMapsGraphicsView::~GoogleMapsGraphicsView() {
