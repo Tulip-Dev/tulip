@@ -78,6 +78,7 @@ DocumentationNavigator::DocumentationNavigator(): QDialog(NULL, Qt::Window) {
 
   currentDocView = docView;
 
+#ifdef BUILD_PYTHON_COMPONENTS
   // for Python doc
   docView = new QWebView();
   docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html";
@@ -89,6 +90,7 @@ DocumentationNavigator::DocumentationNavigator(): QDialog(NULL, Qt::Window) {
   connect(docView, SIGNAL(loadFinished(bool)), this, SLOT(updateButtons()));
   // add python docview to tab widget
   tabWidget->addTab(docView, "Python documentation");
+#endif
 
   // for Developer handbook
   docView = new QWebView();
@@ -110,7 +112,7 @@ DocumentationNavigator::DocumentationNavigator(): QDialog(NULL, Qt::Window) {
 
 bool DocumentationNavigator::hasDocumentation() {
   return QFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) +
-               "doc/tulip-python/html/index.html").exists();
+               "doc/tulip-user/html/index.html").exists();
 }
 
 void DocumentationNavigator::showDocumentation() {
