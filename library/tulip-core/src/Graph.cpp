@@ -562,6 +562,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   }
 
   delete newAlgo;
+  delete context;
 
   if (deletePluginProgress)
     delete tmpProgress;
