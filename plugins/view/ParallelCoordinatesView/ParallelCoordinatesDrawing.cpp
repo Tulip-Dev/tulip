@@ -78,7 +78,6 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
 
-  string propertyName;
   unsigned int pos = 0;
   vector<string> selectedProperties(graphProxy->getSelectedProperties());
   vector<string>::iterator it;

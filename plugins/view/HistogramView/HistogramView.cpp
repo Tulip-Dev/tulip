@@ -71,7 +71,8 @@ HistogramView::HistogramView(const PluginContext *) :
   propertiesSelectionWidget(NULL), histoOptionsWidget(NULL), xAxisDetail(NULL), yAxisDetail(NULL), _histoGraph(NULL), emptyGraph(NULL),
   emptyGlGraphComposite(NULL), histogramsComposite(NULL), labelsComposite(NULL), axisComposite(NULL), smallMultiplesView(true), mainLayer(NULL), detailedHistogram(NULL),
   sceneRadiusBak(0), zoomFactorBak(0),
-  noDimsLabel(NULL), noDimsLabel2(NULL), emptyRect(NULL), emptyRect2(NULL), lastViewWindowWidth(0),
+  noDimsLabel(NULL), noDimsLabel1(NULL), noDimsLabel2(NULL), emptyRect(NULL),
+  emptyRect2(NULL), lastViewWindowWidth(0),
   lastViewWindowHeight(0), interactorsActivated(false), isConstruct(false), lastNbHistograms(0), dataLocation(NODE),needUpdateHistogram(false)  {
   ++histoViewInstancesCount;
 }

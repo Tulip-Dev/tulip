@@ -82,10 +82,8 @@ void GlComposite::reset(bool deleteElems) {
     else {
       (*it)->removeParent(this);
 
-      GlComposite *composite;
-
       for(vector<GlLayer*>::iterator itLayers=layerParents.begin(); itLayers!=layerParents.end(); ++itLayers) {
-        composite=dynamic_cast<GlComposite*>(*it);
+	GlComposite *composite=dynamic_cast<GlComposite*>(*it);
 
         if(composite)
           composite->removeLayerParent(*itLayers);
