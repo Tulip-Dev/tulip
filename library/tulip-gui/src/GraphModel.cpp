@@ -243,12 +243,12 @@ void GraphModel::treatEvent(const Event& ev) {
   MACRO(ColorVectorProperty,std::vector<tlp::Color>);\
   MACRO(SizeProperty,tlp::Size);\
   MACRO(SizeVectorProperty,std::vector<tlp::Size>);\
-  MACRO(StringProperty,std::string);\
+  /*MACRO(StringProperty,std::string);*/		\
   MACRO(StringVectorProperty,std::vector<std::string>);\
   MACRO(LayoutProperty,tlp::Coord);\
   MACRO(CoordVectorProperty,std::vector<tlp::Coord>);\
   MACRO(GraphProperty,tlp::Graph*);\
-  MACRO(IntegerProperty,int);\
+  /*MACRO(IntegerProperty,int);*/			\
   MACRO(IntegerVectorProperty,std::vector<int>);\
   MACRO(BooleanProperty,bool);
 
@@ -260,11 +260,11 @@ void GraphModel::treatEvent(const Event& ev) {
   MACRO(ColorVectorProperty,std::vector<tlp::Color>);\
   MACRO(SizeProperty,tlp::Size);\
   MACRO(SizeVectorProperty,std::vector<tlp::Size>);\
-  MACRO(StringProperty,std::string);\
+  /*MACRO(StringProperty,std::string);*/		\
   MACRO(StringVectorProperty,std::vector<std::string>);\
   MACRO(LayoutProperty,std::vector<tlp::Coord>);\
   MACRO(CoordVectorProperty,std::vector<tlp::Coord>);\
-  MACRO(IntegerProperty,int);\
+  /*MACRO(IntegerProperty,int);*/		     \
   MACRO(IntegerVectorProperty,std::vector<int>);\
   MACRO(BooleanProperty,bool);
 

@@ -583,17 +583,17 @@ HistogramMetricMapping::HistogramMetricMapping() :
 }
 
 HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &histoMetricMapping)
-  : curveDragStarted(false), glColorScale(NULL), glSizeScale(NULL), glGlyphScale(NULL),
-    glyphMappingGraph(newGraph()), glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
-    popupMenu(NULL) {
+  : curve(NULL), curveDragStarted(false), selectedAnchor(NULL),
+    colorScale(NULL), glColorScale(NULL), glSizeScale(NULL), glGlyphScale(NULL),
+    histoXAxis(NULL), mappinqPolyQuad(NULL), scaleAxisOffset(0), glyphMappingGraph(newGraph()),
+    glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
+    popupMenu(NULL), colorMappingMenu(NULL), viewColorMappingAction(NULL),
+    viewBorderColorMappingAction(NULL), sizeMapping(NULL), glyphMapping(NULL) {
 
   GlEditableCurve *lastCurve = histoMetricMapping.curve;
 
   if (lastCurve != NULL) {
     curve = new GlEditableCurve(*lastCurve);
-  }
-  else {
-    curve = NULL;
   }
 
   Coord *lastSelectedAnchor = histoMetricMapping.selectedAnchor;
@@ -601,17 +601,11 @@ HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &his
   if (lastSelectedAnchor != NULL) {
     selectedAnchor = new Coord(*lastSelectedAnchor);
   }
-  else {
-    selectedAnchor = NULL;
-  }
 
   ColorScale *lastColorScale = histoMetricMapping.colorScale;
 
   if (lastColorScale != NULL) {
     colorScale = new ColorScale(*lastColorScale);
-  }
-  else {
-    colorScale = NULL;
   }
 
   colorScaleConfigDialog = histoMetricMapping.colorScaleConfigDialog;
@@ -626,9 +620,6 @@ HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &his
 
   if (lastColorMappingPolyQuad != NULL) {
     mappinqPolyQuad = new GlPolyQuad(*lastColorMappingPolyQuad);
-  }
-  else {
-    mappinqPolyQuad = NULL;
   }
 
   lastXAxisLength = histoMetricMapping.lastXAxisLength;

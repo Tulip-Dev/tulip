@@ -23,6 +23,7 @@ namespace pocore {
 
 PixelOrientedMediator::PixelOrientedMediator(LayoutFunction *layout, ColorFunction *color)
   : layout(layout), color(color), trans1(new FishEyesScreen()), trans2(new UniformDeformationScreen()),
+    zoomBak(1), translationXBak(0), translationYBak(0), fishEyeRadiusBak(0),
     centerItem((unsigned int) (-1)) {
   zoom = 1.0;
   totalMove[0] = 0;
