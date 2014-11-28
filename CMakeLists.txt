@@ -158,7 +158,7 @@ ENDIF()
 ## this used to have a minimal build of Tulip without
 ## any of the opengl, qt or python components
 ## ========================================================
-IF(NOT EXISTS ${PROJECT_SOURCE_DIR}/FindQtX.cmake)
+IF(NOT EXISTS ${PROJECT_SOURCE_DIR}/FindQtX.cmake OR EMSCRIPTEN)
   SET(BUILD_CORE_ONLY ON)
   MESSAGE("You can only configure a core build of Tulip.")
 ELSE()
@@ -479,6 +479,7 @@ IF(BUILD_TESTS)
   ADD_SUBDIRECTORY(unit_test)
 ENDIF(BUILD_TESTS)
 
+INSTALL(FILES FindTULIP.cmake FindGLEW.cmake TulipUseFile.cmake DESTINATION ${TulipShareInstallDir})
 
 IF(NOT BUILD_CORE_ONLY)
 ADD_SUBDIRECTORY(bundlers)
@@ -506,7 +507,6 @@ SET(QT_LDFLAGS "${QT_QTCORE_LIBRARY_RELEASE} ${QT_QTGUI_LIBRARY_RELEASE} ${QT_QT
 CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 
 INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir})
-INSTALL(FILES FindTULIP.cmake FindGLEW.cmake TulipUseFile.cmake DESTINATION ${TulipShareInstallDir})
 INSTALL(DIRECTORY wizards DESTINATION ${TulipShareInstallDir}
   PATTERN ".svn" EXCLUDE)
 
