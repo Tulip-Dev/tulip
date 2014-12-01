@@ -1,4 +1,5 @@
 !define ARCH "@PROCESSOR_ARCHITECTURE@"
+!define CHECK_PYTHON "@BUILD_PYTHON_COMPONENTS@"
 
 !include "MUI.nsh"
 !include "x64.nsh"
@@ -70,12 +71,14 @@ FunctionEnd
 Section "Tulip"
   SetShellVarContext all
   SetOutPath $INSTDIR
-  
+
+!if ${CHECK_PYTHON} == "ON"
 !if ${ARCH} == "64"
   SetRegView 64
   Call CheckAndInstallPython64
 !else
   Call CheckAndInstallPython
+!endif
 !endif
 
 File /r files\*.*
