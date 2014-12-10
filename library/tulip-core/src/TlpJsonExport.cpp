@@ -94,9 +94,17 @@ public:
    * @param context The context this export algorithm will be initialized with.
    **/
   TlpJsonExport(tlp::PluginContext* context) : ExportModule(context) {
+    addInParameter<bool>("Beautify JSON string", "If true, generate a JSON string with indentation and line breaks.", "false");
   }
 
   virtual bool exportGraph(ostream& fileOut) {
+
+    if (dataSet && dataSet->exist("Beautify JSON string")) {
+      bool beautify = false;
+      dataSet->get("Beautify JSON string", beautify);
+      _writer.beautifyString(beautify);
+    }
+
     //initialization of the maps from old ID to new ID here, before entering saveGraph (as it is recursive).
     node n;
     int i = 0;

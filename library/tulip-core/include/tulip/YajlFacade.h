@@ -89,6 +89,9 @@ public:
   void writeMapClose();
   void writeArrayOpen();
   void writeArrayClose();
+
+  void beautifyString(bool beautify);
+
 protected:
   yajl_gen_t* _generator;
 };
