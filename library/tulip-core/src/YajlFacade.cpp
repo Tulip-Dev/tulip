@@ -66,25 +66,14 @@ static int parse_double(void *ctx, double doubleVal) {
 
 static int parse_string(void *ctx, const unsigned char * stringVal, size_t stringLen) {
   YajlParseFacade* facade = (YajlParseFacade*) ctx;
-
-  char * str = (char *) malloc(stringLen + 1);
-  str[stringLen] = 0;
-  memcpy(str, stringVal, stringLen);
-  std::string key((char*)str);
-
+  std::string key((char*)stringVal, stringLen);
   facade->parseString(key);
   return 1;
 }
 
 static int parse_map_key(void *ctx, const unsigned char * stringVal, size_t stringLen) {
   YajlParseFacade* facade = (YajlParseFacade*) ctx;
-
-  char * str = (char *) malloc(stringLen + 1);
-  str[stringLen] = 0;
-  memcpy(str, stringVal, stringLen);
-
-  std::string key((char*)str);
-
+  std::string key((char*)stringVal, stringLen);
   facade->parseMapKey(key);
   return 1;
 }
@@ -226,8 +215,15 @@ void YajlParseFacade::parseString(const std::string&) {
 YajlWriteFacade::YajlWriteFacade() {
   _generator = yajl_gen_alloc(NULL);
   yajl_gen_config(_generator, yajl_gen_validate_utf8, 1);
-  //yajl_gen_config(_generator, yajl_gen_beautify, 1);
-  //yajl_gen_config(_generator, yajl_gen_indent_string, "  ");
+}
+
+void YajlWriteFacade::beautifyString(bool beautify) {
+  yajl_gen_config(_generator, yajl_gen_beautify, beautify);
+  if (beautify) {
+    yajl_gen_config(_generator, yajl_gen_indent_string, "  ");
+  } else {
+    yajl_gen_config(_generator, yajl_gen_indent_string, "");
+  }
 }
 
 YajlWriteFacade::~YajlWriteFacade() {
