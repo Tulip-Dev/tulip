@@ -219,9 +219,11 @@ YajlWriteFacade::YajlWriteFacade() {
 
 void YajlWriteFacade::beautifyString(bool beautify) {
   yajl_gen_config(_generator, yajl_gen_beautify, beautify);
+
   if (beautify) {
     yajl_gen_config(_generator, yajl_gen_indent_string, "  ");
-  } else {
+  }
+  else {
     yajl_gen_config(_generator, yajl_gen_indent_string, "");
   }
 }
