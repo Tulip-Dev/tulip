@@ -31,7 +31,20 @@ RequestExecutionLevel admin
 ; Language
 !insertmacro MUI_LANGUAGE "English"
 
+; Setup file
+!if ${CHECK_PYTHON} == "ON"
+!if ${ARCH} == "64"
+OutFile "tulip-@TulipVersion@_x64_setup.exe"
+!else
 OutFile "tulip-@TulipVersion@_setup.exe"
+!endif
+!else
+!if ${ARCH} == "64"
+OutFile "tulip-@TulipVersion@_x64_no_python_setup.exe"
+!else
+OutFile "tulip-@TulipVersion@_no_python_setup.exe"
+!endif
+!endif
 
 Function CheckAndInstallPython 
   ${If} ${RunningX64} 
