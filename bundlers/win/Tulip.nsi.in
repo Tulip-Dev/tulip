@@ -6,10 +6,18 @@
 
 !if ${ARCH} == "64"
 InstallDir "$PROGRAMFILES64\Tulip-@TulipVersion@"
+!if ${CHECK_PYTHON} == "ON"
 Name "Tulip-@TulipVersion@ (x64)"
 !else
+Name "Tulip-@TulipVersion@ (x64 without Python Components)"
+!endif
+!else
 InstallDir $PROGRAMFILES\Tulip-@TulipVersion@
+!if ${CHECK_PYTHON} == "ON"
 Name "Tulip-@TulipVersion@"
+!else
+Name "Tulip-@TulipVersion@ (without Python Components)"
+!endif
 !endif
 
 !define MUI_ICON "files\share\tulip\bitmaps\logo32x32.ico"
