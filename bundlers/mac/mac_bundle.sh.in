@@ -20,6 +20,7 @@ fi
 TULIP_DIR=@CMAKE_INSTALL_PREFIX@
 DEST_DIR=$1
 SRC_DIR=@tulip_SOURCE_DIR@/bundlers/mac
+PYTHON_BUILD=@BUILD_PYTHON_COMPONENTS@
 
 if [ ! -d ${TULIP_DIR} ]
 then
@@ -61,6 +62,8 @@ cd "${DEST_DIR}/application/Tulip.app/Contents/Frameworks/"
 cp -r "${QT_LIB_DIR}/QtGui.framework/Resources/qt_menu.nib" ../Resources
 cp "@QT_QTCLUCENE_LIBRARY@" .
 
+if [ "$PYTHON_BUILD" = "ON" ]
+then
 # Case when we build the bundle on Snow Leopard or lower version of MacOS with Python 2.7
 # Python 2.7 has to be manually installed for building Tulip
 # We include the Python Framework in the bundle in order for Tulip to run
@@ -75,6 +78,7 @@ then
     cp /Library/Frameworks/Python.framework/Versions/2.7/Python .
     cp -r /Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7 ../lib/ 
     find ../lib/python2.7 \( -iname \*\.pyc -o -iname \*\.pyo \) -print0 | xargs -0 rm -f     
+fi
 fi
 
 echo 'Copying more libraries'
@@ -108,4 +112,10 @@ sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@TulipVersion@" "${DEST_DIR}/applicatio
 
 rm -rf "${DEST_DIR}/application" 2>/dev/null
 
+if [ "$PYTHON_BUILD" = "ON" ]
+then
 echo "${APP_NAME}-@TulipVersion@.dmg has been correctly generated in ${DEST_DIR}"
+else
+echo "${APP_NAME}-@TulipVersion@_no_python.dmg has been correctly generated in ${DEST_DIR}"
+mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_no_python.dmg
+fi
