@@ -14,8 +14,8 @@
    <string>Tulip</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
+   <iconset resource="../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <normaloff>:/tulip/gui/icons/tulip.ico</normaloff>:/tulip/gui/icons/tulip.ico</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">QToolButton, QPushButton, QComboBox {
@@ -71,7 +71,16 @@ font: bold;
     <property name="spacing">
      <number>0</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -240,7 +249,16 @@ QToolButton:pressed {
        <property name="spacing">
         <number>0</number>
        </property>
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item>
@@ -343,6 +361,8 @@ QToolButton:pressed {
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections/>
 </ui>
