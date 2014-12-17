@@ -1,5 +1,3 @@
-SET_SOURCE_FILES_PROPERTIES(PythonVersionChecker.cpp
-                            PROPERTIES COMPILE_DEFINITIONS TLP_PYTHON="${PYTHON_VERSION}")
 
 SET(SRCS
   ColorScaleConfigDialog.cpp
@@ -94,10 +92,16 @@ SET(SRCS
   SceneLayersConfigWidget.cpp
   TreeViewComboBox.cpp
   GlSimpleEntityItemModel.cpp
-  PythonVersionChecker.cpp
   PluginModel.cpp
   GraphNeedsSavingObserver.cpp
 )
+
+IF(BUILD_PYTHON_COMPONENTS)
+  SET(SRCS ${SRCS} PythonVersionChecker.cpp)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBUILD_PYTHON_COMPONENTS")
+  SET_SOURCE_FILES_PROPERTIES(PythonVersionChecker.cpp
+                              PROPERTIES COMPILE_DEFINITIONS TLP_PYTHON="${PYTHON_VERSION}")
+ENDIF(BUILD_PYTHON_COMPONENTS)
 
 QTX_WRAP_UI(UI_HEADERS
   ../designer/ColorScaleConfigDialog.ui

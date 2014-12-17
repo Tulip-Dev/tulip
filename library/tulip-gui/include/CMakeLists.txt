@@ -95,12 +95,19 @@ INSTALL(FILES
   tulip/SceneConfigWidget.h
   tulip/SceneLayersConfigWidget.h
   tulip/GlSimpleEntityItemModel.h
-  tulip/PythonVersionChecker.h
   tulip/QuaZIPFacade.h
   tulip/CoordEditor.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
+
+IF(BUILD_PYTHON_COMPONENTS)
+INSTALL(FILES
+  tulip/PythonVersionChecker.h
+DESTINATION ${TulipIncludeInstallDir}/tulip/
+COMPONENT tulip_gui_dev
+)
+ENDIF(BUILD_PYTHON_COMPONENTS)
 
 INSTALL(FILES
   tulip/cxx/TulipItemDelegate.cxx

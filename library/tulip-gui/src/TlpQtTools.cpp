@@ -60,6 +60,7 @@
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/PythonVersionChecker.h>
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -310,6 +311,7 @@ public:
 };
 
 void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
+
   QLocale::setDefault(QLocale(QLocale::English));
   TulipSettings::instance().applyProxySettings();
   TulipSettings::instance().initSeedOfRandomSequence();
@@ -326,6 +328,20 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
 #if defined(__APPLE__)
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../");
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
+#endif
+
+#ifdef BUILD_PYTHON_COMPONENTS
+// MS stated that SetDllDirectory only exists since WinXP SP1
+#if defined(WIN32) && (_WIN32_WINNT >= 0x0502)
+
+  // Python on windows can be installed for current user only.
+  // In that case, the Python dll is not located in system path but in the Python home directory.
+  // So add the Python home directory in the Dll search paths in order to be able to load plugins depending on Python.
+  if (tlp::PythonVersionChecker::isPythonVersionMatching()) {
+    SetDllDirectory(tlp::PythonVersionChecker::getPythonHome().toStdString().c_str());
+  }
+
+#endif
 #endif
 
   if (removeDiscardedPlugins) {

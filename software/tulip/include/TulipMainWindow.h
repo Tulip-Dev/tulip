@@ -88,7 +88,9 @@ protected slots:
 
 private:
 
+#ifdef BUILD_PYTHON_COMPONENTS
   void checkPython();
+#endif
 
   enum SystemTrayMessage {
     NoMessage,
