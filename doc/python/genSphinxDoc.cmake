@@ -19,6 +19,7 @@ IF(WIN32)
                          "${QT_BIN_DIR}")
 
   SET(ENV{PATH} "${DEPENDENCIES_PATHS};$ENV{PATH}")
+  SET(ENV{QT_QPA_PLATFORM_PLUGIN_PATH} "${QT_BIN_DIR}/../plugins/platforms")
 
 ENDIF(WIN32)
 
