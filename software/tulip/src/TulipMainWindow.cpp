@@ -120,6 +120,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
 TulipMainWindow::~TulipMainWindow() {
 }
 
+#ifdef BUILD_PYTHON_COMPONENTS
 void TulipMainWindow::checkPython() {
   if (!PythonVersionChecker::isPythonVersionMatching()) {
 
@@ -161,6 +162,7 @@ void TulipMainWindow::checkPython() {
     showErrorMessage("Python", errorMessage);
   }
 }
+#endif
 
 void TulipMainWindow::closeApp() {
   _systemTrayIcon->hide();
