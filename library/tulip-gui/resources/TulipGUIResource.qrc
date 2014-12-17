@@ -14,6 +14,7 @@
         <file>icons/logo32x32.png</file>
         <file>icons/json32x32.png</file>
         <file>icons/tlpb32x32.png</file>
+	<file>icons/tulip.ico</file>
         <file>ui/arrowdown.png</file>
         <file>ui/arrowup.png</file>
         <file>ui/btn_26.png</file>

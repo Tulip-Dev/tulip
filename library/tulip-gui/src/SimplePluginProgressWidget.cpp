@@ -131,7 +131,7 @@ SimplePluginProgressDialog::SimplePluginProgressDialog(QWidget *parent): QDialog
   QVBoxLayout *mainLayout = new QVBoxLayout(this);
   mainLayout->setContentsMargins(0,0,0,0);
   mainLayout->addWidget(_progress);
-  setWindowIcon(QIcon(":/tulip/gui/icons/logo32x32.png"));
+  setWindowIcon(QIcon(":/tulip/gui/icons/tulip.ico"));
   resize(500,height());
 }
 

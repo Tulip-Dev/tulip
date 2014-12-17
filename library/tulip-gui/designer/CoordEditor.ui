@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>488</width>
-    <height>67</height>
+    <height>73</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../resources/TulipGUIResource.qrc">
-    <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
+    <normaloff>:/tulip/gui/icons/tulip.ico</normaloff>:/tulip/gui/icons/tulip.ico</iconset>
   </property>
   <property name="modal">
    <bool>true</bool>
