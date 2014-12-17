@@ -20,8 +20,8 @@ Name "Tulip-@TulipVersion@ (without Python Components)"
 !endif
 !endif
 
-!define MUI_ICON "files\share\tulip\bitmaps\logo32x32.ico"
-!define MUI_UNICON "files\share\tulip\bitmaps\logo32x32.ico"
+!define MUI_ICON "files\share\tulip\bitmaps\tulip.ico"
+!define MUI_UNICON "files\share\tulip\bitmaps\tulip.ico"
 
 RequestExecutionLevel admin
 
@@ -106,19 +106,19 @@ File /r files\*.*
 
 !if ${ARCH} == "64"  
   CreateDirectory "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)"
-  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
   CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "DisplayName" "Tulip-@TulipVersion@ (x64)"
 !else
   CreateDirectory "$SMPROGRAMS\Tulip-@TulipVersion@"
-  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Tulip-@TulipVersion@ agent.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Tulip-@TulipVersion@.lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Tulip-@TulipVersion@ agent.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Tulip-@TulipVersion@.lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
   CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
-  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ agent.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
-  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@.lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\logo32x32.ico"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ agent.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@.lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "DisplayName" "Tulip-@TulipVersion@"
 !endif
   
