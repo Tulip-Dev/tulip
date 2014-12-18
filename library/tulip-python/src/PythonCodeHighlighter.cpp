@@ -252,10 +252,11 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
     if (nbQuotes%2 == 0 && nbDblQuotes%2 == 0) {
       if (previousBlockState() <= 0 ||
-         (previousBlockState() == 1 && triSingleQuote.indexIn(text) < index) ||
-         (previousBlockState() == 2 && triDoubleQuote.indexIn(text) < index))
-      setFormat(index, length, _commentFormat);
+          (previousBlockState() == 1 && triSingleQuote.indexIn(text) < index) ||
+          (previousBlockState() == 2 && triDoubleQuote.indexIn(text) < index))
+        setFormat(index, length, _commentFormat);
     }
+
     index = commentRegexp.indexIn(text, index+length);
   }
 }
