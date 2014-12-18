@@ -93,7 +93,7 @@ public slots :
           formt = cursor.charFormat();
           formt.setAnchor(true);
           formt.setUnderlineStyle(QTextCharFormat::SingleUnderline);
-          formt.setAnchorHref(rx.cap(1) + ":" + rx.cap(2));
+          formt.setAnchorHref(QUrl::toPercentEncoding(rx.cap(1) + ":" + rx.cap(2)));
           cursor.setCharFormat(formt);
         }
 
