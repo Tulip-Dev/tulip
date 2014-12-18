@@ -126,37 +126,6 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
     }
   }
 
-  QRegExp commentRegexp("#[^\n]*");
-  bool comments = false;
-  int index = commentRegexp.indexIn(text);
-
-  if (index >= 0) {
-    int nbQuotes = 0;
-
-    for (int j = index - 1 ; j > 0 ; --j) {
-      if (text[j] == '\'') {
-        ++nbQuotes;
-      }
-    }
-
-    int nbDblQuotes = 0;
-
-    for (int j = index - 1 ; j > 0 ; --j) {
-      if (text[j] == '"') {
-        ++nbDblQuotes;
-      }
-    }
-
-    if (nbQuotes%2 == 0 && nbDblQuotes%2 == 0) {
-      int length = commentRegexp.matchedLength();
-      setFormat(index, length, _commentFormat);
-      comments = true;
-    }
-  }
-
-  if (comments)
-    return;
-
   foreach (const HighlightingRule &rule, _highlightingRules) {
     QRegExp expression(rule.pattern);
     int index = expression.indexIn(text);
@@ -223,7 +192,7 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
   }
 
   QRegExp qtApiRegexp("\\bQ[A-Za-z_.]+\\b");
-  index = qtApiRegexp.indexIn(text);
+  int index = qtApiRegexp.indexIn(text);
 
   while (index >= 0) {
     int length = qtApiRegexp.matchedLength();
@@ -259,12 +228,43 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
   if (!isInMultilne)
     highlightMultilineString(text, triDoubleQuote, 2, _quotationFormat);
 
+  QRegExp commentRegexp("#[^\n]*");
+  index = commentRegexp.indexIn(text);
+
+  while (index >= 0 && currentBlockState() == 0) {
+    int nbQuotes = 0;
+
+    for (int j = index - 1 ; j >= 0 ; --j) {
+      if (text[j] == '\'') {
+        ++nbQuotes;
+      }
+    }
+
+    int nbDblQuotes = 0;
+
+    for (int j = index - 1 ; j >= 0 ; --j) {
+      if (text[j] == '"') {
+        ++nbDblQuotes;
+      }
+    }
+
+    int length = commentRegexp.matchedLength();
+
+    if (nbQuotes%2 == 0 && nbDblQuotes%2 == 0) {
+      if (previousBlockState() <= 0 ||
+         (previousBlockState() == 1 && triSingleQuote.indexIn(text) < index) ||
+         (previousBlockState() == 2 && triDoubleQuote.indexIn(text) < index))
+      setFormat(index, length, _commentFormat);
+    }
+    index = commentRegexp.indexIn(text, index+length);
+  }
 }
 
 bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState, const QTextCharFormat &style) {
   int start = -1;
   int add = -1;
   int length = 0;
+  int commentPos = -1;
 
   if (previousBlockState() == inState) {
     start = 0;
@@ -273,23 +273,28 @@ bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const 
   else {
     start = delimiter.indexIn(text);
     add = delimiter.matchedLength();
+    commentPos = text.indexOf('#');
   }
 
-  while (start >= 0) {
-    int end = delimiter.indexIn(text, start + add);
+  if (commentPos < 0 || commentPos > start) {
 
-    if (end >= add) {
-      length = end - start + add + delimiter.matchedLength();
-      setCurrentBlockState(0);
-    }
-    else {
-      setCurrentBlockState(inState);
-      length = text.length() - start + add;
+    while (start >= 0) {
+      int end = delimiter.indexIn(text, start + add);
+
+      if (end >= add) {
+        length = end - start + add + delimiter.matchedLength();
+        setCurrentBlockState(0);
+      }
+      else {
+        setCurrentBlockState(inState);
+        length = text.length() - start + add;
+      }
+
+      setFormat(start, length, style);
+      start = delimiter.indexIn(text, start + length);
+      add = delimiter.matchedLength();
     }
 
-    setFormat(start, length, style);
-    start = delimiter.indexIn(text, start + length);
-    add = delimiter.matchedLength();
   }
 
   return (currentBlockState() == inState);
