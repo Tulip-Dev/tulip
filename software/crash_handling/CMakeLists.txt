@@ -38,9 +38,7 @@ ENDIF(UNIX)
 
 ADD_LIBRARY(crash_handling STATIC ${LIB_SRCS})
 
-IF(UNIX)
-	TARGET_LINK_LIBRARIES(crash_handling dl)
-ENDIF(UNIX)
+TARGET_LINK_LIBRARIES(crash_handling ${CMAKE_DL_LIBS})
 
 IF(HAVE_BFD)
     TARGET_LINK_LIBRARIES(crash_handling bfd)
