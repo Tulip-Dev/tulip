@@ -50,7 +50,16 @@ void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
 
 void VectorEditor::add() {
   QListWidgetItem* i = new QListWidgetItem();
-  i->setData(Qt::DisplayRole,QVariant(_userType,(const void*)NULL));
+  if (_userType == qMetaTypeId<std::string>()) {
+    // workaround to indicate there is a new string to edit
+    // because the height of the line if very small with an empty string
+    std::string str("edit this string");
+    i->setData(Qt::DisplayRole, QVariant(_userType, &str));
+  }
+  else
+    i->setData(Qt::DisplayRole, QVariant(_userType,(const void*)NULL));
+  // needed for color
+  i->setSizeHint(QSize(i->sizeHint().width(), 15));
   i->setFlags(i->flags() | Qt::ItemIsEditable);
   _ui->list->addItem(i);
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
