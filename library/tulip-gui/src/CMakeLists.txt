@@ -77,6 +77,7 @@ SET(SRCS
   ScrollPopupButton.cpp
   WorkspaceExposeWidget.cpp
   GraphTableItemDelegate.cpp
+  StringEditor.cpp
   VectorEditor.cpp
   GlyphRenderer.cpp
   TulipFontWidget.cpp

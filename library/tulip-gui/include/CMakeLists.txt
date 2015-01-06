@@ -97,6 +97,7 @@ INSTALL(FILES
   tulip/GlSimpleEntityItemModel.h
   tulip/QuaZIPFacade.h
   tulip/CoordEditor.h
+  tulip/StringEditor.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

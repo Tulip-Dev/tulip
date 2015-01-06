@@ -238,6 +238,10 @@ public:
   void setEditorData(QWidget*w, const QVariant&var, bool, tlp::Graph*);
   QVariant editorData(QWidget*,tlp::Graph*);
   QString displayText(const QVariant &) const;
+  void setPropertyToEdit(tlp::PropertyInterface* prop);
+
+protected:
+  std::string propName;
 };
 
 class TLP_QT_SCOPE QStringListEditorCreator: public tlp::TulipItemEditorCreator {

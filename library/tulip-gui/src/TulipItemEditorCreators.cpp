@@ -31,6 +31,7 @@
 #include <tulip/ColorScaleButton.h>
 #include <tulip/TulipFileDescriptorWidget.h>
 #include <tulip/CoordEditor.h>
+#include <tulip/StringEditor.h>
 #include <tulip/GlyphRenderer.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/EdgeExtremityGlyph.h>
@@ -806,24 +807,36 @@ QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
 
 //QStringEditorCreator
 QWidget* QStringEditorCreator::createWidget(QWidget *parent) const {
-  QTextEdit *edit = new QTextEdit(parent);
-  edit->setFocusPolicy(Qt::StrongFocus);
-  edit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  edit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  return edit;
+  StringEditor* editor =
+    new StringEditor(tlp::Perspective::instance()
+		     ? tlp::Perspective::instance()->mainWindow()
+		     : parent);
+  editor->setWindowTitle(QString("Set ") + propName.c_str() + " value");
+  editor->setMinimumSize(QSize(250, 250));
+  return editor;
 }
 
-void QStringEditorCreator::setEditorData(QWidget* editor, const QVariant& var, bool, tlp::Graph*) {
-  static_cast<QTextEdit*>(editor)->setPlainText(var.toString());
-  static_cast<QTextEdit*>(editor)->selectAll();
+void QStringEditorCreator::setEditorData(QWidget* editor, const QVariant& var,
+					 bool, tlp::Graph*) {
+  static_cast<StringEditor*>(editor)->setString(var.toString());
 }
 
-QVariant QStringEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
-  return static_cast<QTextEdit*>(editor)->toPlainText();
+QVariant QStringEditorCreator::editorData(QWidget* editor, tlp::Graph*) {
+  return static_cast<StringEditor*>(editor)->getString();
 }
 
 QString QStringEditorCreator::displayText(const QVariant& var) const {
-  return var.toString();
+  QString qstr = var.toString();
+  if (qstr.size() > 45) {
+    qstr.truncate(41);
+    qstr.append(" ...");
+  }
+
+  return qstr;
+}
+
+void QStringEditorCreator::setPropertyToEdit(tlp::PropertyInterface* prop) {
+  propName = prop->getName();
 }
 
 QWidget *QStringListEditorCreator::createWidget(QWidget *) const {
