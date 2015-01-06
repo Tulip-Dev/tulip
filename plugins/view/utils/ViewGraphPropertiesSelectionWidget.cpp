@@ -94,6 +94,7 @@ vector<string> ViewGraphPropertiesSelectionWidget::getSelectedGraphProperties() 
 
 void ViewGraphPropertiesSelectionWidget::setWidgetEnabled(const bool enabled) {
   _ui->groupBox->setEnabled(enabled);
+  _ui->groupBox2->setEnabled(enabled);
 }
 
 void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> selectedProperties) {
@@ -146,6 +147,7 @@ void ViewGraphPropertiesSelectionWidget::setDataLocation(const ElementType locat
     _ui->edgesButton->setChecked(true);
     _ui->nodesButton->setChecked(false);
   }
+  lastDataLocation = location;
 }
 
 void ViewGraphPropertiesSelectionWidget::treatEvent(const Event &evt) {
@@ -168,6 +170,12 @@ void ViewGraphPropertiesSelectionWidget::treatEvent(const Event &evt) {
 }
 
 bool ViewGraphPropertiesSelectionWidget::configurationChanged() {
+  ElementType dataLocation = getDataLocation();
+  if (lastDataLocation != dataLocation) {
+    lastDataLocation = dataLocation;
+    return true;
+  }
+
   vector<string> selectedProperties=getSelectedGraphProperties();
 
   if(selectedProperties.size()!=lastSelectedProperties.size()) {

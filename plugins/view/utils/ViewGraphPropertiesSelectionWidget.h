@@ -61,7 +61,8 @@ private :
   Graph *graph;
   std::vector<std::string> graphPropertiesTypesFilter;
   std::vector<std::string> lastSelectedProperties;
-
+  ElementType lastDataLocation;
+  
 };
 
 }
