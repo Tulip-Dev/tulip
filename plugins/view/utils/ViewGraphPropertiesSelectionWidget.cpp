@@ -147,6 +147,7 @@ void ViewGraphPropertiesSelectionWidget::setDataLocation(const ElementType locat
     _ui->edgesButton->setChecked(true);
     _ui->nodesButton->setChecked(false);
   }
+
   lastDataLocation = location;
 }
 
@@ -171,6 +172,7 @@ void ViewGraphPropertiesSelectionWidget::treatEvent(const Event &evt) {
 
 bool ViewGraphPropertiesSelectionWidget::configurationChanged() {
   ElementType dataLocation = getDataLocation();
+
   if (lastDataLocation != dataLocation) {
     lastDataLocation = dataLocation;
     return true;

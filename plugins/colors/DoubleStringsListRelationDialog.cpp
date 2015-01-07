@@ -59,7 +59,7 @@ DoubleStringsListRelationDialog::~DoubleStringsListRelationDialog() {
 
 void DoubleStringsListRelationDialog::getResult(std::vector<std::pair<std::string,Color> > &result) {
   for(int i=0; (i<_ui->firstListWidget->count()) &&
-	(i < _ui->secondListWidget->count()) ; ++i) {
+      (i < _ui->secondListWidget->count()) ; ++i) {
     QColor color=_ui->secondListWidget->item(i)->background().color();
     result.push_back(pair<string,Color>(_ui->firstListWidget->item(i)->text().toStdString(), QColorToColor(color)));
   }
