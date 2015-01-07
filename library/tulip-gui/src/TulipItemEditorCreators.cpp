@@ -809,15 +809,15 @@ QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
 QWidget* QStringEditorCreator::createWidget(QWidget *parent) const {
   StringEditor* editor =
     new StringEditor(tlp::Perspective::instance()
-		     ? tlp::Perspective::instance()->mainWindow()
-		     : parent);
+                     ? tlp::Perspective::instance()->mainWindow()
+                     : parent);
   editor->setWindowTitle(QString("Set ") + propName.c_str() + " value");
   editor->setMinimumSize(QSize(250, 250));
   return editor;
 }
 
 void QStringEditorCreator::setEditorData(QWidget* editor, const QVariant& var,
-					 bool, tlp::Graph*) {
+    bool, tlp::Graph*) {
   static_cast<StringEditor*>(editor)->setString(var.toString());
 }
 
@@ -827,6 +827,7 @@ QVariant QStringEditorCreator::editorData(QWidget* editor, tlp::Graph*) {
 
 QString QStringEditorCreator::displayText(const QVariant& var) const {
   QString qstr = var.toString();
+
   if (qstr.size() > 45) {
     qstr.truncate(41);
     qstr.append(" ...");
