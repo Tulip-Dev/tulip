@@ -23,15 +23,11 @@
 #include <tulip/Curves.h>
 #include <tulip/TlpTools.h>
 #include <tulip/GlShaderProgram.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include <sstream>
 
 using namespace std;
-
-static bool checkVboSupport() {
-  static bool vboOk = glewIsSupported("GL_ARB_vertex_buffer_object") == GL_TRUE;
-  return vboOk;
-}
 
 namespace tlp {
 
@@ -135,14 +131,11 @@ static string curveVertexShaderGeometryNormalMainSrc =
   "uniform vec4 startColor;"
   "uniform vec4 endColor;"
 
-
-  "varying float size;"
-
   "vec3 computeCurvePoint(float t);"
 
   "void main () {"
   "	float t = gl_Vertex.x;"
-  "	size = mix(startSize, endSize, t);"
+  "	gl_BackColor.r = mix(startSize, endSize, t);"
   "	gl_Position = vec4(computeCurvePoint(t), t);"
   "	gl_FrontColor =  mix(startColor, endColor, t);"
   "}"
@@ -160,8 +153,6 @@ static const string curveExtrusionGeometryShaderSrc =
   "uniform int nbCurvePoints;"
   "uniform float texCoordFactor;"
   "uniform bool fisheye;"
-
-  "varying in float size[4];"
 
   "uniform vec4 center;"
   "uniform float radius;"
@@ -272,17 +263,17 @@ static const string curveExtrusionGeometryShaderSrc =
 
   "	if (gl_PositionIn[0].w == 0.0) {"
   "		gl_FrontColor = gl_FrontColorIn[0];"
-  "		computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz - (gl_PositionIn[1].xyz - gl_PositionIn[0].xyz), gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, size[0], gl_PositionIn[0].w);"
+  "		computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz - (gl_PositionIn[1].xyz - gl_PositionIn[0].xyz), gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_BackColorIn[0].r, gl_PositionIn[0].w);"
   "	}"
 
   "	gl_FrontColor = gl_FrontColorIn[1];"
-  "	computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, size[1], gl_PositionIn[1].w);"
+  "	computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_BackColorIn[1].r, gl_PositionIn[1].w);"
   "	gl_FrontColor = gl_FrontColorIn[2];"
-  "	computeExtrusionAndEmitVertices(gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, size[2], gl_PositionIn[2].w);"
+  "	computeExtrusionAndEmitVertices(gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, gl_BackColorIn[2].r, gl_PositionIn[2].w);"
 
   "	if (gl_PositionIn[3].w == 1.0) {"
   "		gl_FrontColor = gl_FrontColorIn[3];"
-  "		computeExtrusionAndEmitVertices(gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, gl_PositionIn[3].xyz + (gl_PositionIn[3].xyz - gl_PositionIn[2].xyz), size[3], gl_PositionIn[3].w);"
+  "		computeExtrusionAndEmitVertices(gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, gl_PositionIn[3].xyz + (gl_PositionIn[3].xyz - gl_PositionIn[2].xyz), gl_BackColorIn[3].r, gl_PositionIn[3].w);"
   "	}"
   "}"
   ;
@@ -300,8 +291,6 @@ static const string curveExtrusionBillboardGeometryShaderSrc =
   "uniform float texCoordFactor;"
   "uniform bool fisheye;"
   "uniform vec3 lookDir;"
-
-  "varying in float size[4];"
 
   "uniform vec4 center;"
   "uniform float radius;"
@@ -382,17 +371,17 @@ static const string curveExtrusionBillboardGeometryShaderSrc =
 
   "	if (gl_PositionIn[0].w == 0.0) {"
   "		gl_FrontColor = gl_FrontColorIn[0];"
-  "		computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz - (gl_PositionIn[1].xyz - gl_PositionIn[0].xyz), gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, size[0], gl_PositionIn[0].w);"
+  "		computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz - (gl_PositionIn[1].xyz - gl_PositionIn[0].xyz), gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_BackColorIn[0].r, gl_PositionIn[0].w);"
   "	}"
 
   "	gl_FrontColor = gl_FrontColorIn[1];"
-  "	computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, size[1], gl_PositionIn[1].w);"
+  "	computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_BackColorIn[1].r, gl_PositionIn[1].w);"
   "	gl_FrontColor = gl_FrontColorIn[2];"
-  "	computeExtrusionAndEmitVertices(gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, size[2], gl_PositionIn[2].w);"
+  "	computeExtrusionAndEmitVertices(gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, gl_BackColorIn[2].r, gl_PositionIn[2].w);"
 
   "	if (gl_PositionIn[3].w == 1.0) {"
   "		gl_FrontColor = gl_FrontColorIn[3];"
-  "		computeExtrusionAndEmitVertices(gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, gl_PositionIn[3].xyz + (gl_PositionIn[3].xyz - gl_PositionIn[2].xyz), size[3], gl_PositionIn[3].w);"
+  "		computeExtrusionAndEmitVertices(gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, gl_PositionIn[3].xyz + (gl_PositionIn[3].xyz - gl_PositionIn[2].xyz), gl_BackColorIn[3].r, gl_PositionIn[3].w);"
   "	}"
   "}"
 
@@ -457,6 +446,26 @@ static string curveVertexShaderBillboardMainSrc =
   "}"
   ;
 
+static string curveFragmentShaderSrc =
+  "#version 120\n"
+
+  "uniform sampler2D texture;"
+  "uniform sampler2D texture3d;"
+
+  "uniform bool useTexture;"
+  "uniform bool billboard;"
+
+  "void main() {"
+  "  gl_FragColor = gl_Color;"
+  "  if (useTexture) {"
+  "    gl_FragColor *= texture2D(texture, gl_TexCoord[0].st);"
+  "  }"
+  "  if (billboard) {"
+  "    gl_FragColor *= texture2D(texture3d, gl_TexCoord[0].st);"
+  "  }"
+  "}"
+;
+
 map<unsigned int, GLfloat *> AbstractGlCurve::curveVertexBuffersData;
 map<unsigned int, vector<GLushort *> > AbstractGlCurve::curveVertexBuffersIndices;
 map<unsigned int, GLuint* > AbstractGlCurve::curveVertexBuffersObject;
@@ -465,6 +474,7 @@ map<string, GlShaderProgram *> AbstractGlCurve::curvesBillboardShadersMap;
 GlShader *AbstractGlCurve::fisheyeDistortionVertexShader(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderNormalMain(NULL);
 GlShader *AbstractGlCurve::curveVertexShaderBillboardMain(NULL);
+GlShader *AbstractGlCurve::curveFragmentShader(NULL);
 bool AbstractGlCurve::canUseGeometryShader = false;
 std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > AbstractGlCurve::curvesGeometryShadersMap;
 GlShader *AbstractGlCurve::curveVertexGeometryShaderNormalMain(NULL);
@@ -543,9 +553,12 @@ void AbstractGlCurve::draw(float, Camera *) {
 }
 
 void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std::string &curveSpecificShaderCode) {
-  // restrict shaders compilation on compatible hardware, crashs can happened when using the Mesa software rasterizer
-  static string glVendor(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
-  static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) || (glVendor.find("ATI")!=string::npos);
+  // restrict shaders compilation on compatible hardware, crashs can happen
+  // when using a software implementation of OpenGL
+  static string glVendor = OpenGlConfigManager::getInst().getOpenGLVendor();
+  static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) ||
+                           (glVendor.find("ATI")!=string::npos) ||
+                           (glVendor.find("Intel")!=string::npos);
 
   if (glVendorOk && GlShaderProgram::shaderProgramsSupported()) {
 
@@ -569,11 +582,17 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
       curveVertexGeometryShaderNormalMain->compileFromSourceCode(curveVertexShaderGeometryNormalMainSrc);
     }
 
+    if (curveFragmentShader == NULL) {
+      curveFragmentShader = new GlShader(Fragment);
+      curveFragmentShader->compileFromSourceCode(curveFragmentShaderSrc);
+    }
+
     if (curvesShadersMap.find(shaderProgramName) == curvesShadersMap.end()) {
       curvesShadersMap[shaderProgramName] = new GlShaderProgram(shaderProgramName);
       curvesShadersMap[shaderProgramName]->addShaderFromSourceCode(Vertex, genCommonUniformVariables() + curveSpecificShaderCode);
       curvesShadersMap[shaderProgramName]->addShader(curveVertexShaderNormalMain);
       curvesShadersMap[shaderProgramName]->addShader(fisheyeDistortionVertexShader);
+      curvesShadersMap[shaderProgramName]->addShader(curveFragmentShader);
       curvesShadersMap[shaderProgramName]->link();
       curvesShadersMap[shaderProgramName]->printInfoLog();
     }
@@ -584,6 +603,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
       polygonShader->addShader(curveVertexGeometryShaderNormalMain);
       polygonShader->addGeometryShaderFromSourceCode(curveExtrusionGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_TRIANGLE_STRIP);
       polygonShader->setMaxGeometryShaderOutputVertices(6);
+      polygonShader->addShader(curveFragmentShader);
       polygonShader->link();
       polygonShader->printInfoLog();
 
@@ -597,6 +617,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
       lineShader->addShader(curveVertexGeometryShaderNormalMain);
       lineShader->addGeometryShaderFromSourceCode(curveExtrusionGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
       lineShader->setMaxGeometryShaderOutputVertices(6);
+      lineShader->addShader(curveFragmentShader);
       lineShader->link();
       lineShader->printInfoLog();
 
@@ -614,6 +635,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
 
       curvesBillboardShadersMap[shaderProgramName]->addShader(curveVertexShaderBillboardMain);
       curvesBillboardShadersMap[shaderProgramName]->addShader(fisheyeDistortionVertexShader);
+      curvesBillboardShadersMap[shaderProgramName]->addShader(curveFragmentShader);
       curvesBillboardShadersMap[shaderProgramName]->link();
       curvesBillboardShadersMap[shaderProgramName]->printInfoLog();
     }
@@ -624,6 +646,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
       polygonShader->addShader(curveVertexGeometryShaderNormalMain);
       polygonShader->addGeometryShaderFromSourceCode(curveExtrusionBillboardGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_TRIANGLE_STRIP);
       polygonShader->setMaxGeometryShaderOutputVertices(6);
+      polygonShader->addShader(curveFragmentShader);
       polygonShader->link();
       polygonShader->printInfoLog();
 
@@ -637,6 +660,7 @@ void AbstractGlCurve::initShader(const std::string &shaderProgramName, const std
       lineShader->addShader(curveVertexGeometryShaderNormalMain);
       lineShader->addGeometryShaderFromSourceCode(curveExtrusionBillboardGeometryShaderSrc, GL_LINES_ADJACENCY_EXT, GL_LINE_STRIP);
       lineShader->setMaxGeometryShaderOutputVertices(6);
+      lineShader->addShader(curveFragmentShader);
       lineShader->link();
       lineShader->printInfoLog();
 
@@ -684,19 +708,19 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     curveShaderProgram = curveShaderProgramNormal;
   }
 
-  pair<GlShaderProgram *, GlShaderProgram *> geometryShaders = std::make_pair((GlShaderProgram*)NULL,(GlShaderProgram*)NULL);
-  pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders = std::make_pair((GlShaderProgram*)NULL,(GlShaderProgram*)NULL);
-
-  if (canUseGeometryShader && curvesGeometryShadersMap.find(curveShaderProgram->getName()) != curvesGeometryShadersMap.end()) {
-    geometryShaders = curvesGeometryShadersMap[curveShaderProgram->getName()];
-    geometryBillboardShaders = curvesBillboardGeometryShadersMap[curveShaderProgram->getName()];
-  }
-
-  static bool canUseFloatTextures = (glewIsSupported("GL_ARB_texture_float") == GL_TRUE);
+  static bool canUseFloatTextures = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_texture_float");
 
   if (curveShaderProgram != NULL && canUseFloatTextures && renderMode != GL_SELECT) {
 
-    static bool vboOk = checkVboSupport();
+    static bool vboOk = OpenGlConfigManager::getInst().hasVertexBufferObject();
+
+    pair<GlShaderProgram *, GlShaderProgram *> geometryShaders = std::make_pair((GlShaderProgram*)NULL,(GlShaderProgram*)NULL);
+    pair<GlShaderProgram *, GlShaderProgram *> geometryBillboardShaders = std::make_pair((GlShaderProgram*)NULL,(GlShaderProgram*)NULL);
+
+    if (canUseGeometryShader && curvesGeometryShadersMap.find(curveShaderProgram->getName()) != curvesGeometryShadersMap.end()) {
+      geometryShaders = curvesGeometryShadersMap[curveShaderProgram->getName()];
+      geometryBillboardShaders = curvesBillboardGeometryShadersMap[curveShaderProgram->getName()];
+    }
 
     if (curveVertexBuffersData.find(nbCurvePoints) == curveVertexBuffersData.end()) {
       buildCurveVertexBuffers(nbCurvePoints, vboOk);
@@ -736,11 +760,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     glBindTexture(GL_TEXTURE_1D, 0);
     glDisable(GL_TEXTURE_1D);
 
-
-    glActiveTexture(GL_TEXTURE3);
-    glBindTexture(GL_TEXTURE_1D, controlPointsTexId);
-
-
     bool geometryShaderActivated = false;
 
     if (canUseGeometryShader && nbCurvePoints > 3 && !lineCurve && geometryShaders.first) {
@@ -762,6 +781,11 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
     curveShaderProgram->setUniformFloat("endSize", endSize);
     curveShaderProgram->setUniformColor("startColor", startColor);
     curveShaderProgram->setUniformColor("endColor", endColor);
+    curveShaderProgram->setUniformTextureSampler("texture", 0);
+    curveShaderProgram->setUniformTextureSampler("texture3d", 1);
+    curveShaderProgram->setUniformBool("useTexture", texture != "" && !lineCurve);
+    curveShaderProgram->setUniformBool("billboard", billboardCurve && !lineCurve);
+
 
     if (!geometryShaderActivated) {
       curveShaderProgram->setUniformFloat("step", 1.0f / (static_cast<float>(nbCurvePoints) - 1.0f));
@@ -815,9 +839,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
         glActiveTexture(GL_TEXTURE0);
         GlTextureManager::getInst().activateTexture(texture);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
-        glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-        glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GL_MODULATE);
       }
 
       if (billboardCurve) {
@@ -825,6 +846,9 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         GlTextureManager::getInst().activateTexture(TulipBitmapDir+"cylinderTexture.png");
       }
+
+      glActiveTexture(GL_TEXTURE3);
+      glBindTexture(GL_TEXTURE_1D, controlPointsTexId);
 
       if (vboOk) {
         if (geometryShaderActivated) {
@@ -852,7 +876,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
 
       if (texture != "") {
         glActiveTexture(GL_TEXTURE0);
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         GlTextureManager::getInst().desactivateTexture();
       }
 

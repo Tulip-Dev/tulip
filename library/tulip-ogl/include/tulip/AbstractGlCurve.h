@@ -131,6 +131,7 @@ protected:
   static GlShader *curveVertexShaderNormalMain;
   static GlShader *curveVertexShaderBillboardMain;
   static GlShader *fisheyeDistortionVertexShader;
+  static GlShader *curveFragmentShader;
   static bool canUseGeometryShader;
   static std::map<std::string, std::pair<GlShaderProgram *, GlShaderProgram *> > curvesGeometryShadersMap;
   static GlShader *curveVertexGeometryShaderNormalMain;
