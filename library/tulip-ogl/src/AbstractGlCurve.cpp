@@ -464,7 +464,7 @@ static string curveFragmentShaderSrc =
   "    gl_FragColor *= texture2D(texture3d, gl_TexCoord[0].st);"
   "  }"
   "}"
-;
+  ;
 
 map<unsigned int, GLfloat *> AbstractGlCurve::curveVertexBuffersData;
 map<unsigned int, vector<GLushort *> > AbstractGlCurve::curveVertexBuffersIndices;
