@@ -122,7 +122,7 @@ public:
   virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;
   //============================================================
   template<typename PropertyType>
-    PropertyType* getProperty(const std::string &name);
+  PropertyType* getProperty(const std::string &name);
   virtual PropertyInterface* getProperty(const std::string &name) const;
   virtual bool existProperty(const std::string&name) const;
   virtual bool existLocalProperty(const std::string&name) const;
