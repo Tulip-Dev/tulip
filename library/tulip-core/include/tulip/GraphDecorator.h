@@ -121,6 +121,8 @@ public:
   virtual Iterator<edge>* getInEdges(const node n) const;
   virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;
   //============================================================
+  template<typename PropertyType>
+    PropertyType* getProperty(const std::string &name);
   virtual PropertyInterface* getProperty(const std::string &name) const;
   virtual bool existProperty(const std::string&name) const;
   virtual bool existLocalProperty(const std::string&name) const;
@@ -168,6 +170,19 @@ protected:
   virtual bool renameLocalProperty(PropertyInterface* prop,
                                    const std::string& newName);
 };
+
+//====================================================================================
+template<typename PropertyType>
+PropertyType* GraphDecorator::getProperty(const std::string &name) {
+  if (graph_component->existProperty(name)) {
+    tlp::PropertyInterface* prop = graph_component->getProperty(name);
+    assert (dynamic_cast<PropertyType *>(prop)!=NULL);
+    return dynamic_cast<PropertyType *>(prop);
+  }
+  else {
+    return graph_component->getLocalProperty<PropertyType>(name);
+  }
+}
 
 }
 
