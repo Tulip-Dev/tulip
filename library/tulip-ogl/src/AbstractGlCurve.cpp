@@ -822,6 +822,9 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
       glVertexPointer(2, GL_FLOAT, 2 * sizeof(GLfloat), curveVertexBuffersData[nbCurvePoints]);
     }
 
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_1D, controlPointsTexId);
+
     if (lineCurve) {
       glLineWidth(curveLineWidth);
 
@@ -846,9 +849,6 @@ void AbstractGlCurve::drawCurve(std::vector<Coord> &controlPoints, const Color &
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         GlTextureManager::getInst().activateTexture(TulipBitmapDir+"cylinderTexture.png");
       }
-
-      glActiveTexture(GL_TEXTURE3);
-      glBindTexture(GL_TEXTURE_1D, controlPointsTexId);
 
       if (vboOk) {
         if (geometryShaderActivated) {
