@@ -267,6 +267,9 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   ImportModule *newImportModule = PluginLister::instance()->getPluginObject<ImportModule>(format, tmp);
   assert(newImportModule!=NULL);
 
+  // ensure that the parsing of float or double does not depend on locale
+  setlocale(LC_NUMERIC, "C");
+
   //If the import failed and we created the graph then delete the graph
   if (!newImportModule->importGraph()) {
     graph = NULL;
