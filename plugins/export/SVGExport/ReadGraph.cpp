@@ -161,6 +161,9 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
     std::vector<Coord> edgeVertices;
     glEdge.getVertices(&inputData, edgeVertices);
 
+    // nothing to do if current edge is a loop with no bends
+    if (edgeVertices.empty())
+      continue;
 
     // Edges extremities
     EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type = EdgeExtremityShape::None;
