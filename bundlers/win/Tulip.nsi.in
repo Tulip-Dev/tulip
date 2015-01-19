@@ -5,19 +5,35 @@
 !include "x64.nsh"
 
 !if ${ARCH} == "64"
-InstallDir "$PROGRAMFILES64\Tulip-@TulipVersion@"
-!if ${CHECK_PYTHON} == "ON"
-Name "Tulip-@TulipVersion@ (x64)"
+Function .onInit
+  ${If} ${RunningX64}
+   Goto Yes
+  ${Else}
+    MessageBox MB_OK "You cannot install the 64 bit version of Tulip @TulipVersion@ on a Windows 32 bit system. Use the 32 bit version of Tulip @TulipVersion@ instead."
+    Abort
+  ${Endif}
+Yes:
+FunctionEnd
+  InstallDir "$PROGRAMFILES64\Tulip-@TulipVersion@"
+  !if ${CHECK_PYTHON} == "ON"
+    Name "Tulip-@TulipVersion@ (x64)"
+  !else
+    Name "Tulip-@TulipVersion@ (x64 without Python Components)"
+  !endif
 !else
-Name "Tulip-@TulipVersion@ (x64 without Python Components)"
-!endif
-!else
-InstallDir $PROGRAMFILES\Tulip-@TulipVersion@
-!if ${CHECK_PYTHON} == "ON"
-Name "Tulip-@TulipVersion@"
-!else
-Name "Tulip-@TulipVersion@ (without Python Components)"
-!endif
+Function .onInit
+  ${If} ${RunningX64}
+    MessageBox MB_YESNO "You are trying to install the 32 bit version of Tulip @TulipVersion@ on a Windows 64 bit system. But the 64 bit version of Tulip @TulipVersion@ is available too. Continue ?" IFYES NoAbort
+    Abort
+NoAbort:
+  ${Endif}
+FunctionEnd
+  InstallDir $PROGRAMFILES\Tulip-@TulipVersion@
+  !if ${CHECK_PYTHON} == "ON"
+    Name "Tulip-@TulipVersion@"
+  !else
+    Name "Tulip-@TulipVersion@ (without Python Components)"
+  !endif
 !endif
 
 !define MUI_ICON "files\share\tulip\bitmaps\tulip.ico"
@@ -54,6 +70,7 @@ OutFile "tulip-@TulipVersion@_no_python_setup.exe"
 !endif
 !endif
 
+!if ${CHECK_PYTHON} == "ON"
 Function CheckAndInstallPython 
   ${If} ${RunningX64} 
 	ReadRegStr $0 HKLM SOFTWARE\Wow6432Node\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
@@ -88,6 +105,7 @@ Function CheckAndInstallPython64
 		${EndIf}
   end:  
 FunctionEnd
+!endif
 
 Section "Tulip"
   SetShellVarContext all
