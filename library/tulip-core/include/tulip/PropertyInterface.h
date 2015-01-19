@@ -97,8 +97,9 @@ public:
                     bool ifNotDefault = false) =0;
 
   /**
-   * @brief Copies the values of the passed property to this property.
+   * @brief Copies the values of the source property to this property.
    * @param source The property from which to copy values.
+   * @warning Be careful when using this method, if you are interested by observing the updates of the values of the current property, because no event is sent for nodes/edges whose value is the default value of the source property.
    */
   virtual void copy(PropertyInterface* source) = 0;
 
