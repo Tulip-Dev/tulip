@@ -23,7 +23,7 @@ FunctionEnd
 !else
 Function .onInit
   ${If} ${RunningX64}
-    MessageBox MB_YESNO "You are trying to install the 32 bit version of Tulip @TulipVersion@ on a Windows 64 bit system. But the 64 bit version of Tulip @TulipVersion@ is available too. Continue ?" IFYES NoAbort
+    MessageBox MB_YESNO "You are trying to install the 32 bit version of Tulip @TulipVersion@ on a Windows 64 bit system. But the 64 bit version of Tulip @TulipVersion@ is available too. Continue ?" IDYES NoAbort
     Abort
 NoAbort:
   ${Endif}
