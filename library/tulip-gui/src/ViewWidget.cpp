@@ -34,6 +34,8 @@ struct MyGraphicsView: public QGraphicsView {
 
   MyGraphicsView(): QGraphicsView(new QGraphicsScene()), _centralItem(NULL) {
     setAcceptDrops(false);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   }
 
   void resizeEvent(QResizeEvent *event) {
