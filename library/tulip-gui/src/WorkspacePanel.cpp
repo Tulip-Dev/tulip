@@ -43,7 +43,6 @@
 #include <tulip/TulipMimes.h>
 #include <tulip/TlpQtTools.h>
 
-
 using namespace tlp;
 
 // helper class
@@ -213,13 +212,49 @@ void WorkspacePanel::setView(tlp::View* view) {
     viewConfigurationTabs->addTab(w,w->windowTitle());
   }
 
-
   _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());
   _viewConfigurationWidgets->installEventFilter(this);
   _viewConfigurationWidgets->setWidget(viewConfigurationTabs);
   _viewConfigurationWidgets->setZValue(DBL_MAX);
   _view->graphicsView()->scene()->installEventFilter(this);
   resetInteractorsScrollButtonsVisibility();
+}
+
+void WorkspacePanel::showEvent(QShowEvent *event) {
+  QFrame::showEvent(event);
+// Workaround to avoid a Qt5 bug :
+// After the panels containing QGraphicsView objects were rearranged in the workspace,
+// some events were no more sent to the QGraphicsWidget objects embedded in the asoociated QGraphicScene objects.
+// Those events are necessary for important parts of the view GUI (context menu, keyboard focus) to work correctly.
+// So add a hack that, each time a view is shown, creates a new QGraphicsScene object
+// and refill it with QGraphicsItem objects contained in the previous one.
+// Seems to be the only way to workaround that issue.
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  if (_view->graphicsView()->scene()) {
+    // first remove central item of the scene and its children
+    _view->graphicsView()->scene()->removeItem(_view->centralItem());
+    // get remaining items (if any) that were not descendant of the central item
+    // and remove it from the scene
+    QList<QGraphicsItem *> items = _view->graphicsView()->scene()->items();
+    for (int i = 0 ; i < items.size() ; ++i) {
+        _view->graphicsView()->scene()->removeItem(items.at(i));
+    }
+    // get old scene pointer for further deletion
+    QGraphicsScene *oldScene = _view->graphicsView()->scene();
+    // create a new QGraphicsScene and set it in the QGraphicsView
+    _view->graphicsView()->setScene(new QGraphicsScene());
+    // restore central item and its children in the new scene
+    _view->graphicsView()->scene()->addItem(_view->centralItem());
+    // restore remaining items in the new scene
+    for (int i = 0 ; i < items.size() ; ++i) {
+        _view->graphicsView()->scene()->addItem(items.at(i));
+    }
+    // set event filter for the new scene
+    _view->graphicsView()->scene()->installEventFilter(this);
+    // delete old scene
+    delete oldScene;
+  }
+#endif
 }
 
 bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
