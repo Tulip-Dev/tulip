@@ -107,6 +107,8 @@ protected:
   bool handleDragEnterEvent(QEvent* e, const QMimeData* mimedata);
   bool handleDropEvent(const QMimeData* mimedata);
 
+  void showEvent(QShowEvent *event);
+
 };
 
 }

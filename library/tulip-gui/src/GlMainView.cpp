@@ -110,7 +110,6 @@ void GlMainView::assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOl
   _sceneConfigurationWidget->setGlMainWidget(_glMainWidget);
 
   connect(glMainWidgetGraphicsItem,SIGNAL(widgetPainted(bool)),this,SLOT(glMainViewDrawn(bool)));
-  connect(graphicsView()->scene(),SIGNAL(sceneRectChanged(QRectF)),this,SLOT(sceneRectChanged(QRectF)));
 }
 
 GlOverviewGraphicsItem *GlMainView::overviewItem() const {
@@ -240,6 +239,8 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
       _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, 0);
   }
 
+
+
   GlLayer *fgLayer = getGlMainWidget()->getScene()->getLayer("Foreground");
 
   if (fgLayer) {
@@ -335,6 +336,8 @@ bool GlMainView::eventFilter(QObject* obj, QEvent* event) {
     graphicsView()->viewport()->setFixedSize(resizeEvent->size());
     // same for the configuration widgets
     QList<QWidget *> list = configurationWidgets();
+
+    sceneRectChanged(QRectF(QPoint(0, 0), graphicsView()->size()));
 
     if(!list.isEmpty() && list.first()->parentWidget()) {   //test if the current view has a configuration widget
       QWidget *pqw = list.first()->parentWidget()->parentWidget();
