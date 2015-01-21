@@ -30,6 +30,9 @@
 #include <QMessageBox>
 #include <QImage>
 #include <QGLWidget>
+#include <QEvent>
+#include <QMetaEnum>
+
 
 #include <QDir>
 #include <QApplication>
@@ -116,6 +119,22 @@ static map<QString,string> buildPropertyTypeLabelToPropertyTypeMap() {
 }
 //Property type label to property type conversion map
 static const map<QString,string> propertyTypeLabelToPropertyTypeMap = buildPropertyTypeLabelToPropertyTypeMap();
+
+// Allow to print a human readable representation of Qt events,
+// for debugging purpose (through the use of qDebug() )
+QDebug operator<<(QDebug str, const QEvent * ev) {
+   static int eventEnumIndex = QEvent::staticMetaObject.indexOfEnumerator("Type");
+   str << "QEvent";
+   if (ev) {
+      QString name = QEvent::staticMetaObject.enumerator(eventEnumIndex).valueToKey(ev->type());
+      if (!name.isEmpty()) {
+          str << name;
+      }  else {
+          str << ev->type();
+      }
+   }
+   return str.maybeSpace();
+}
 
 namespace tlp {
 
