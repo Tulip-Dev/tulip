@@ -230,30 +230,36 @@ void WorkspacePanel::showEvent(QShowEvent *event) {
 // and refill it with QGraphicsItem objects contained in the previous one.
 // Seems to be the only way to workaround that issue.
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+
   if (_view->graphicsView()->scene()) {
     // first remove central item of the scene and its children
     _view->graphicsView()->scene()->removeItem(_view->centralItem());
     // get remaining items (if any) that were not descendant of the central item
     // and remove it from the scene
     QList<QGraphicsItem *> items = _view->graphicsView()->scene()->items();
+
     for (int i = 0 ; i < items.size() ; ++i) {
-        _view->graphicsView()->scene()->removeItem(items.at(i));
+      _view->graphicsView()->scene()->removeItem(items.at(i));
     }
+
     // get old scene pointer for further deletion
     QGraphicsScene *oldScene = _view->graphicsView()->scene();
     // create a new QGraphicsScene and set it in the QGraphicsView
     _view->graphicsView()->setScene(new QGraphicsScene());
     // restore central item and its children in the new scene
     _view->graphicsView()->scene()->addItem(_view->centralItem());
+
     // restore remaining items in the new scene
     for (int i = 0 ; i < items.size() ; ++i) {
-        _view->graphicsView()->scene()->addItem(items.at(i));
+      _view->graphicsView()->scene()->addItem(items.at(i));
     }
+
     // set event filter for the new scene
     _view->graphicsView()->scene()->installEventFilter(this);
     // delete old scene
     delete oldScene;
   }
+
 #endif
 }
 
