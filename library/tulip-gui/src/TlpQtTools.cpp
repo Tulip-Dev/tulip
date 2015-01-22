@@ -123,17 +123,21 @@ static const map<QString,string> propertyTypeLabelToPropertyTypeMap = buildPrope
 // Allow to print a human readable representation of Qt events,
 // for debugging purpose (through the use of qDebug() )
 QDebug operator<<(QDebug str, const QEvent * ev) {
-   static int eventEnumIndex = QEvent::staticMetaObject.indexOfEnumerator("Type");
-   str << "QEvent";
-   if (ev) {
-      QString name = QEvent::staticMetaObject.enumerator(eventEnumIndex).valueToKey(ev->type());
-      if (!name.isEmpty()) {
-          str << name;
-      }  else {
-          str << ev->type();
-      }
-   }
-   return str.maybeSpace();
+  static int eventEnumIndex = QEvent::staticMetaObject.indexOfEnumerator("Type");
+  str << "QEvent";
+
+  if (ev) {
+    QString name = QEvent::staticMetaObject.enumerator(eventEnumIndex).valueToKey(ev->type());
+
+    if (!name.isEmpty()) {
+      str << name;
+    }
+    else {
+      str << ev->type();
+    }
+  }
+
+  return str.maybeSpace();
 }
 
 namespace tlp {
