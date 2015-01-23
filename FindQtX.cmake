@@ -8,8 +8,46 @@ SET(Qt5Network_FOUND false)
 SET(Qt5WebKit_FOUND false)
 SET(Qt5WebKitWidgets_FOUND false)
 
-# If asked, use Qt5
+# If requested, use Qt5 to build the project
+# In order for CMake to find and configure a Qt5 build, the root directory
+# of the Qt5 installation must be provided in the CMAKE_PREFIX_PATH variable
 IF(USE_QT5_IF_INSTALLED)
+
+    # Unset related CMake variables in order to change the Qt5 version (by modifying the root Qt5 directory through the CMAKE_PREFIX_PATH variable)
+    # without having to delete the current CMake cache
+    UNSET(Qt5Core_FOUND CACHE)
+    UNSET(Qt5Gui_FOUND CACHE)
+    UNSET(Qt5Widgets_FOUND CACHE)
+    UNSET(Qt5OpenGL_FOUND CACHE)
+    UNSET(Qt5Xml_FOUND CACHE)
+    UNSET(Qt5XmlPatterns_FOUND CACHE)
+    UNSET(Qt5Network_FOUND CACHE)
+    UNSET(Qt5WebKit_FOUND CACHE)
+    UNSET(Qt5WebKitWidgets_FOUND CACHE)
+    UNSET(Qt5Multimedia_FOUND CACHE)
+    UNSET(Qt5MultimediaWidgets_FOUND CACHE)
+    UNSET(Qt5Positioning_FOUND CACHE)
+    UNSET(Qt5PrintSupport_FOUND CACHE)
+    UNSET(Qt5Qml_FOUND CACHE)
+    UNSET(Qt5Quick_FOUND CACHE)
+    UNSET(Qt5Sensors_FOUND CACHE)
+
+    UNSET(Qt5Core_DIR CACHE)
+    UNSET(Qt5Gui_DIR CACHE)
+    UNSET(Qt5Widgets_DIR CACHE)
+    UNSET(Qt5OpenGL_DIR CACHE)
+    UNSET(Qt5Xml_DIR CACHE)
+    UNSET(Qt5XmlPatterns_DIR CACHE)
+    UNSET(Qt5Network_DIR CACHE)
+    UNSET(Qt5WebKit_DIR CACHE)
+    UNSET(Qt5WebKitWidgets_DIR CACHE)
+    UNSET(Qt5Multimedia_DIR CACHE)
+    UNSET(Qt5MultimediaWidgets_DIR CACHE)
+    UNSET(Qt5Positioning_DIR CACHE)
+    UNSET(Qt5PrintSupport_DIR CACHE)
+    UNSET(Qt5Qml_DIR CACHE)
+    UNSET(Qt5Quick_DIR CACHE)
+    UNSET(Qt5Sensors_DIR CACHE)
 
     FIND_PACKAGE(Qt5Widgets)
     FIND_PACKAGE(Qt5OpenGL)
