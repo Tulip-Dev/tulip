@@ -127,7 +127,23 @@ public:
 	tlp::Vec3f & operator*=(const float &);
   tlp::Vec3f & operator*=(const tlp::Vec3f &);
   tlp::Vec3f & operator/=(const float &);
+%MethodCode
+  if (a0 != 0) {
+            sipCpp->tlp::Vec3f::operator/=(a0);
+} else {
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_ZeroDivisionError, "division of a float vector[3] by zero");
+  }
+%End
   tlp::Vec3f & operator/=(const tlp::Vec3f &);
+%MethodCode
+  if ((*a0)[0] && (*a0)[1] && (*a0)[2]) {
+            sipCpp->tlp::Vec3f::operator/=(*a0);
+  } else {
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_ZeroDivisionError, "division of a float vector[3] by a float vector[3] with a zero element");
+  }
+%End
   tlp::Vec3f & operator+=(const float &);
   tlp::Vec3f & operator+=(const tlp::Vec3f &);
   tlp::Vec3f & operator-=(const float &);
@@ -141,7 +157,23 @@ public:
 	tlp::Vec3f operator-(const  tlp::Vec3f &) const;
 	tlp::Vec3f operator-(const float &) const; 
 	tlp::Vec3f operator/(const  tlp::Vec3f &) const;
+%MethodCode
+  if ((*a1)[0] && (*a1)[1] && (*a1)[2]) {
+    sipRes = new tlp::Vec3f((*a0 / *a1));
+  } else {
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_ZeroDivisionError, "division of a float vector[3] by a float vector[3] with a zero element");
+  }
+%End
 	tlp::Vec3f operator/(const float &) const;
+%MethodCode
+  if (a1 != 0) {
+    sipRes = new tlp::Vec3f((*a0 / a1));
+  } else {
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_ZeroDivisionError, "division of a float vector[3] by zero");
+  }
+%End
 	tlp::Vec3f operator^(const  tlp::Vec3f &) const;
     
   bool operator>(const tlp::Vec3f &) const;
@@ -453,7 +485,23 @@ public:
 	tlp::Vec4f & operator*=(const float &);
   tlp::Vec4f & operator*=(const tlp::Vec4f &);
   tlp::Vec4f & operator/=(const float &);
+%MethodCode
+  if (a0 != 0) {
+            sipCpp->tlp::Vec4f::operator/=(a0);
+} else {
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_ZeroDivisionError, "division of a float vector[4] by zero");
+  }
+%End
   tlp::Vec4f & operator/=(const tlp::Vec4f &);
+%MethodCode
+  if ((*a0)[0] && (*a0)[1] && (*a0)[2] && (*a0)[3]) {
+            sipCpp->tlp::Vec4f::operator/=(*a0);
+  } else {
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_ZeroDivisionError, "division of a float vector[4] by a float vector[4] with a zero element");
+  }
+%End
   tlp::Vec4f & operator+=(const float &);
   tlp::Vec4f & operator+=(const tlp::Vec4f &);
   tlp::Vec4f & operator-=(const float &);
@@ -468,7 +516,23 @@ public:
 	tlp::Vec4f operator-(const  tlp::Vec4f &) const;
 	tlp::Vec4f operator-(const float &) const; 
 	tlp::Vec4f operator/(const  tlp::Vec4f &) const;
+%MethodCode
+  if ((*a1)[0] && (*a1)[1] && (*a1)[2] && (*a1)[3]) {
+    sipRes = new tlp::Vec4f((*a0 / *a1));
+  } else {
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_ZeroDivisionError, "division of a float vector[4] by a float vector[4] with a zero element");
+  }
+%End
 	tlp::Vec4f operator/(const float &) const;
+%MethodCode
+  if (a1 != 0) {
+    sipRes = new tlp::Vec4f((*a0 / a1));
+  } else {
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_ZeroDivisionError, "division of a float vector[4] by zero");
+  }
+%End
 	tlp::Vec4f operator^(const  tlp::Vec4f &) const;
     
   bool operator>(const tlp::Vec4f &) const;
