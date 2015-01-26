@@ -124,12 +124,9 @@ bool PythonEditorsTabWidget::eventFilter(QObject *obj, QEvent *event) {
     }
   }
   else if (event->type() == QEvent::FocusIn && !_dontTreatFocusIn) {
-
     _dontTreatFocusIn = true;
     reloadCodeInEditorsIfNeeded();
     _dontTreatFocusIn = false;
-
-    return true;
   }
 
   return false;
