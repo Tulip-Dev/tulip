@@ -109,12 +109,24 @@ bool Perspective::isReservedPropertyName(QString s) {
   return _reservedProperties.contains(s);
 }
 
-void Perspective::sendAgentMessage(const QString& msg) {
-  if (_agentSocket == NULL)
-    return;
+bool Perspective::checkSocketConnected() {
+    if(_agentSocket != NULL) {
+        if(_agentSocket->state()!=QAbstractSocket::UnconnectedState)
+            return true;
+        else {
+            _agentSocket->deleteLater();
+            _agentSocket = NULL;
+            qWarning("Tulip lauchner closed, now running in standalone mode");
+        }
+    }
+    return false;
+}
 
-  _agentSocket->write(msg.toUtf8());
-  _agentSocket->flush();
+void Perspective::sendAgentMessage(const QString& msg) {
+  if(checkSocketConnected()) {
+      _agentSocket->write(msg.toUtf8());
+      _agentSocket->flush();
+  }
 }
 
 void Perspective::showPluginsCenter() {
@@ -138,17 +150,17 @@ void Perspective::showErrorMessage(const QString &title, const QString &s) {
 }
 
 void Perspective::openProjectFile(const QString &path) {
-  if (_agentSocket != NULL) {
-    sendAgentMessage("OPEN_PROJECT\t" + path);
-  }
-  else { // on standalone mode, spawn a new standalone perspective
-    QProcess::startDetached(QApplication::applicationFilePath(),QStringList() << path);
-  }
+    if(checkSocketConnected()) {
+        sendAgentMessage("OPEN_PROJECT\t" + path);
+    }
+    else { // on standalone mode, spawn a new standalone perspective
+        QProcess::startDetached(QApplication::applicationFilePath(),QStringList() << path);
+    }
 }
 
 void Perspective::createPerspective(const QString &name) {
-  if (_agentSocket != NULL) {
-    sendAgentMessage("CREATE_PERSPECTIVE\t" + name);
+    if(checkSocketConnected()) {
+        sendAgentMessage("CREATE_PERSPECTIVE\t" + name);
   }
   else { // on standalone mode, spawn a new standalone perspective
     QProcess::startDetached(QApplication::applicationFilePath(),QStringList() << "--perspective=" + name);
