@@ -18,7 +18,7 @@
  */
 
 #ifndef HILBERTLAYOUT_H
-#define HILBERLAYOUT_H
+#define HILBERTLAYOUT_H
 
 #include <string>
 
