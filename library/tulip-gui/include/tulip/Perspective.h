@@ -77,6 +77,7 @@ class TLP_QT_SCOPE Perspective : public QObject, public tlp::Plugin {
   bool _maximised;
   void sendAgentMessage(const QString&);
   void notifyProjectLocation(const QString& path);
+  bool checkSocketConnected();
 
 protected:
   /**
