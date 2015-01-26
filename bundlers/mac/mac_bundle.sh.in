@@ -21,11 +21,17 @@ TULIP_DIR=@CMAKE_INSTALL_PREFIX@
 DEST_DIR=$1
 SRC_DIR=@tulip_SOURCE_DIR@/bundlers/mac
 PYTHON_BUILD=@BUILD_PYTHON_COMPONENTS@
+QT_BINARY_DIR=@QT_BINARY_DIR@
+
+if [ "${QT_BINARY_DIR}" = "" ]
+then
+    QT_BINARY_DIR=@_qt5Gui_install_prefix@/bin
+fi
 
 if [ ! -d ${TULIP_DIR} ]
 then
-	echo "Error : the specified Tulip installation directory does not exist"
-	exit 1
+    echo "Error : the specified Tulip installation directory does not exist"
+    exit 1
 fi
 
 echo "Wiping previous bundles into ${DEST_DIR}"
@@ -92,11 +98,11 @@ done
 cd ..
 cp bin/tulip MacOS
 # configure tulip
-@QT_BINARY_DIR@/macdeployqt ${DEST_DIR}/application/Tulip.app -no-plugins
+${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -no-plugins
 mv MacOS/tulip bin/tulip
 # configure tulip_perpective
 cp bin/tulip_perspective MacOS/tulip
-@QT_BINARY_DIR@/macdeployqt ${DEST_DIR}/application/Tulip.app
+${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app
 # copy exe and libraries
 mv MacOS/tulip bin/tulip_perspective
 cp Frameworks/*.dylib lib
