@@ -160,19 +160,26 @@ void FastMultipoleEmbedder::run(__uint32 numIterations)
 
 	m_pOptions->maxNumIterations = numIterations;
 	m_pOptions->stopCritForce = (((float)m_pGraph->numNodes())*((float)m_pGraph->numNodes())*m_pGraph->avgNodeSize()) / m_pOptions->stopCritConstSq;
+
+#ifndef __EMSCRIPTEN__
 	if (m_pGraph->numNodes() < 100)
 		runSingle();
 	else
 		runMultipole();
+#else
+  runSingle();
+#endif
 }
 
 
+#ifndef __EMSCRIPTEN__
 void FastMultipoleEmbedder::runMultipole()
 {
 	FMEGlobalContext* pGlobalContext = FMEMultipoleKernel::allocateContext(m_pGraph, m_pOptions, m_threadPool->numThreads());
 	m_threadPool->runKernel<FMEMultipoleKernel>(pGlobalContext);
 	FMEMultipoleKernel::deallocateContext(pGlobalContext);
 }
+#endif
 
 
 void FastMultipoleEmbedder::runSingle()
@@ -187,6 +194,7 @@ void FastMultipoleEmbedder::allocate(__uint32 numNodes, __uint32 numEdges)
 	m_pOptions = new FMEGlobalOptions();
 	m_pGraph = new ArrayGraph(numNodes, numEdges);
 	initOptions();
+#ifndef __EMSCRIPTEN__
 	if (!m_maxNumberOfThreads)
 	{
 		__uint32 availableThreads = System::numberOfProcessors();
@@ -203,12 +211,15 @@ void FastMultipoleEmbedder::allocate(__uint32 numNodes, __uint32 numEdges)
 		m_numberOfThreads = prevPowerOfTwo(min<__uint32>(m_numberOfThreads, availableThreads));
 	}
 	m_threadPool = new FMEThreadPool(m_numberOfThreads);
+#endif
 }
 
 
 void FastMultipoleEmbedder::deallocate()
 {
+#ifndef __EMSCRIPTEN__
 	delete m_threadPool;
+#endif
 	delete m_pGraph;
 	delete m_pOptions;
 }
