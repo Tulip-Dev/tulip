@@ -96,7 +96,7 @@ private:
   /**
   * @brief Compute the partition of dual node for the given threshold value
   **/
-  std::vector<std::set<tlp::node> > computeNodePartition(double);
+  void computeNodePartition(double, std::vector<std::set<tlp::node> >&);
 
   tlp::VectorGraph dual; // Dual Node -> Graph Edges; Duag Edge -> indicates that the linked Graph Edges have a same end.
   tlp::MutableContainer<tlp::edge> mapDNtoE;
@@ -162,7 +162,6 @@ bool LinkCommunities::run() {
     dataSet->get("Number of steps",nb_steps);
   }
 
-  dual= VectorGraph();
   createDualGraph();
 
   dual.alloc(similarity);
@@ -172,7 +171,8 @@ bool LinkCommunities::run() {
   result->setAllEdgeValue(0);
   double th = findBestThreshold(nb_steps);
 
-  std::vector<std::set<tlp::node> > best_part= computeNodePartition(th);
+  std::vector<std::set<tlp::node> > best_part;
+  computeNodePartition(th, best_part);
 
   for(unsigned int i=0; i<best_part.size(); ++i) {
     //Isthmus are gathered in community 0
@@ -244,16 +244,18 @@ void LinkCommunities::computeSimilarities() {
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
-
-    for(int i=0; i<(int)dual.numberOfEdges(); ++i) //use int for MSVS2010 compilation
-      similarity[dual(i)]=getSimilarity(dual(i));
+    for(int i=0; i<(int)dual.numberOfEdges(); ++i) { //use int for MSVS2010 compilation
+      edge e = dual(i);
+      similarity[e]=getSimilarity(e);
+    }
   }
   else
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
     for(int i=0; i<(int)dual.numberOfEdges(); ++i) { //use int for MSVS2010 compilation
-      similarity[dual(i)]=getWeightedSimilarity(dual(i));
+      edge e = dual(i);
+      similarity[e]=getWeightedSimilarity(e);
     }
 }
 //==============================================================================================================
@@ -410,12 +412,14 @@ double LinkCommunities::getAverageDensity(vector<set<node> >& partition) {
   return 2.0*d/(graph->numberOfEdges());
 }
 //==============================================================================================================
-vector< set<node> > LinkCommunities::computeNodePartition(double threshold) {
-  vector< set<node > > result;
+void LinkCommunities::computeNodePartition(double threshold,
+					   vector<set<node> >& result) {
   tlp::MutableContainer<bool> visited;
   visited.setAll(false);
-  node curNode;
-  forEach(curNode,dual.getNodes()) {
+
+  unsigned int sz = dual.numberOfNodes();
+  for(unsigned int i = 0; i < sz; ++i) {
+    node curNode = dual[i];
     if(!(visited.get(curNode.id))) {
       result.push_back(std::set<node>());
       set<node>& component = result.back();
@@ -427,8 +431,10 @@ vector< set<node> > LinkCommunities::computeNodePartition(double threshold) {
       while(!nodesToVisit.empty()) {
         curNode=nodesToVisit.front();
         nodesToVisit.pop_front();
-        edge e;
-        forEach(e,dual.getInOutEdges(curNode)) {
+	const std::vector<edge>& curEdges = dual.star(curNode);
+	unsigned int eSz = curEdges.size();
+	for(unsigned int j = 0; j < eSz; ++j) {
+	  edge e = curEdges[j];
           if(similarity[e]>threshold) {
             node neighbour = dual.opposite(e,curNode);
 
@@ -442,7 +448,6 @@ vector< set<node> > LinkCommunities::computeNodePartition(double threshold) {
       }
     }
   }
-  return result;
 }
 //==============================================================================================================
 double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
@@ -451,28 +456,37 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
 
   double min = 1.1;
   double max = -1.0;
-  edge e;
-  forEach(e,dual.getEdges()) {
-    if(similarity[e]<min)
-      min = similarity[e];
 
-    if(similarity[e]>max)
-      max = similarity[e];
-  }
-  double deltaThreshold = (max-min)/double(numberOfSteps);
-  double step = min;
+  int sz = dual.numberOfEdges();
 #ifdef _OPENMP
   #pragma omp parallel for
 #endif
-
-  for (int i=0; i<(int)numberOfSteps; i++) {    //use int for msvs2010 compilation
-    vector< set<node > > tmp;
-    tmp = computeNodePartition(step);
-    double d = getAverageDensity(tmp);
+  for(int i = 0; i < sz; ++i) {
+    double value = similarity[dual(i)];
 #ifdef _OPENMP
     #pragma omp critical
 #endif
+    {
+      if (value < min)
+      min = value;
+      else if (value > max)
+	max = value;
+    }
+  }
+  double deltaThreshold = (max-min)/double(numberOfSteps);
+  double step = min;
 
+#ifdef _OPENMP
+  #pragma omp parallel for
+#endif
+  for (int i=0; i<(int)numberOfSteps; i++) {    //use int for msvs2010 compilation
+    vector<set<node> > tmp;
+    computeNodePartition(step, tmp);
+    double d = getAverageDensity(tmp);
+
+#ifdef _OPENMP
+    #pragma omp critical
+#endif
     if ( d > maxD) {
       threshold=step;
       maxD=d;
