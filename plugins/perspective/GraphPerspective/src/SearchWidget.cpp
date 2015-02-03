@@ -284,8 +284,8 @@ void SearchWidget::search() {
 
     if (isNumericComparison()) {
       DoubleProperty* doubleProp = new DoubleProperty(g);
-      doubleProp->setAllNodeValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toInt());
-      doubleProp->setAllEdgeValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toInt());
+      doubleProp->setAllNodeValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toDouble());
+      doubleProp->setAllEdgeValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toDouble());
       b = doubleProp;
     }
     else {
