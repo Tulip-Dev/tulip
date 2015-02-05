@@ -18,7 +18,7 @@
  */
 
 #include <tulip/GraphElementModel.h>
-
+#include <tulip/TulipMetaTypes.h>
 #include <QFont>
 
 #include <tulip/ForEach.h>
@@ -113,6 +113,8 @@ QModelIndex GraphElementModel::index(int row, int column,const QModelIndex &pare
 QVariant GraphElementModel::data(const QModelIndex &index, int role) const {
   if (role == Qt::DisplayRole)
     return value(_id,(PropertyInterface*)(index.internalPointer()));
+  if (role == TulipModel::PropertyRole)
+    return QVariant::fromValue<PropertyInterface *>((PropertyInterface*)(index.internalPointer()));
 
   return QVariant();
 }

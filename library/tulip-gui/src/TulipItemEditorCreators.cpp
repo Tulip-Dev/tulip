@@ -837,7 +837,10 @@ QString QStringEditorCreator::displayText(const QVariant& var) const {
 }
 
 void QStringEditorCreator::setPropertyToEdit(tlp::PropertyInterface* prop) {
-  propName = prop->getName();
+  assert(prop);
+  // we should have a property but this can avoid a crash
+  if (prop)
+    propName = prop->getName();
 }
 
 QWidget *QStringListEditorCreator::createWidget(QWidget *) const {
