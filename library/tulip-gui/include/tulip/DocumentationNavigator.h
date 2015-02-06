@@ -36,7 +36,10 @@ class DocumentationNavigator : public QDialog {
 public:
   explicit DocumentationNavigator();
   static bool hasDocumentation();
-  static void showDocumentation();
+  static void showDocumentation(const char* docRelativePath = NULL,
+				const char* tabName = NULL);
+  void newDocTab(const char* docRelativePath, const char* tabName);
+  void connectTab();
 
 public slots:
   void goBack();
