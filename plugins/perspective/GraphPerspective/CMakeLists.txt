@@ -5,7 +5,6 @@ src/AbstractFiltersManagerItem.cpp
 src/AlgorithmRunner.cpp
 src/AlgorithmRunnerItem.cpp
 src/ControlFrame.cpp
-src/DocumentationNavigator.cpp
 src/ExpandableGroupBox.cpp
 src/ExportWizard.cpp
 src/GraphPerspectiveLogger.cpp
@@ -51,7 +50,6 @@ designer/SearchWidget.ui
 QTX_WRAP_CPP(MOC_SRCS
 include/AlgorithmRunner.h
 include/AlgorithmRunnerItem.h
-include/DocumentationNavigator.h
 include/ExpandableGroupBox.h
 include/ExportWizard.h
 include/FiltersManager.h

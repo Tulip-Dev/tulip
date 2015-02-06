@@ -17,13 +17,12 @@
  *
  */
 
-#include "DocumentationNavigator.h"
-
 #include <QFile>
 #include <QToolBar>
 #include <QVBoxLayout>
 #include <QWebHistory>
 
+#include <tulip/DocumentationNavigator.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>
 
@@ -63,51 +62,26 @@ DocumentationNavigator::DocumentationNavigator(): QDialog(NULL, Qt::Window) {
   // in the top right corner of the tab widget
   tabWidget->setCornerWidget(tb);
 
-  // create 3 doc views
-  // for User handbook
-  QWebView* docView = new QWebView();
-  QString docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-user/html/index.html";
-#ifdef WIN32
-  docView->load(QUrl("file:///"+docRootPath));
-#else
-  docView->load(QUrl("file://"+docRootPath));
-#endif
-  connect(docView, SIGNAL(loadFinished(bool)), this, SLOT(updateButtons()));
-  // add user handbook doc view to tab widget
-  tabWidget->addTab(docView, "User handbook");
-
-  currentDocView = docView;
-
-#ifdef BUILD_PYTHON_COMPONENTS
-  // for Python doc
-  docView = new QWebView();
-  docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html";
-#ifdef WIN32
-  docView->load(QUrl("file:///"+docRootPath));
-#else
-  docView->load(QUrl("file://"+docRootPath));
-#endif
-  connect(docView, SIGNAL(loadFinished(bool)), this, SLOT(updateButtons()));
-  // add python docview to tab widget
-  tabWidget->addTab(docView, "Python documentation");
-#endif
-
-  // for Developer handbook
-  docView = new QWebView();
-  docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-dev/html/index.html";
-#ifdef WIN32
-  docView->load(QUrl("file:///"+docRootPath));
-#else
-  docView->load(QUrl("file://"+docRootPath));
-#endif
-  connect(docView, SIGNAL(loadFinished(bool)), this, SLOT(updateButtons()));
-  // add developer doc view to tab widget
-  tabWidget->addTab(docView, "Developer handbook");
-
-  connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(setCurrentDocView(int)));
-
+  currentDocView = new QWebView();
+   
   resize(1200, 700);
   updateButtons();
+}
+
+void DocumentationNavigator::newDocTab(const char* docRelativePath,
+				       const char* tabName)
+{
+  QWebView* docView = new QWebView();
+  QString docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + docRelativePath;
+#ifdef WIN32
+  docView->load(QUrl("file:///" + docRootPath));
+#else
+  docView->load(QUrl("file://" + docRootPath));
+#endif
+  connect(docView, SIGNAL(loadFinished(bool)), this, SLOT(updateButtons()));
+  // add "tabName" doc view to tab widget
+  tabWidget->addTab(docView, tabName);
+  currentDocView = docView;
 }
 
 bool DocumentationNavigator::hasDocumentation() {
@@ -115,14 +89,34 @@ bool DocumentationNavigator::hasDocumentation() {
                "doc/tulip-user/html/index.html").exists();
 }
 
-void DocumentationNavigator::showDocumentation() {
+void DocumentationNavigator::showDocumentation(const char* docRelativePath, const char* tabName) {
   // use a singleton
   static DocumentationNavigator* navigator = NULL;
 
-  if (navigator == NULL)
+  if (navigator == NULL) {
+    // Specific documentation: for customized perspectives
     navigator = new DocumentationNavigator();
-
+    if (tabName)
+      // specific documentation
+      navigator->newDocTab(docRelativePath, tabName);
+    else {
+      // Default documentation: create 3 doc views
+      // for User handbook
+      navigator->newDocTab("doc/tulip-user/html/index.html","User HandBook");
+      // for Developer handbook
+      navigator->newDocTab("doc/tulip-dev/html/index.html","Developer HandBook");
+#ifdef BUILD_PYTHON_COMPONENTS
+      // for Python doc
+      navigator->newDocTab("doc/tulip-python/html/index.html","Python Documentation");
+#endif
+    }
+    navigator->connectTab();
+  }
   navigator->show();
+}
+
+void DocumentationNavigator::connectTab() {
+  connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(setCurrentDocView(int)));
 }
 
 void DocumentationNavigator::goBack() {

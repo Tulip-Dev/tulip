@@ -9,6 +9,7 @@ INSTALL(FILES
   tulip/CSVImportWizard.h
   tulip/CSVParserConfigurationWidget.h
   tulip/CSVParser.h
+  tulip/DocumentationNavigator.h
   tulip/DoubleStringsListSelectionWidget.h
   tulip/DownloadManager.h
   tulip/GlCompositeHierarchyManager.h

@@ -26,7 +26,6 @@
 #endif
 
 #include "GraphPerspective.h"
-#include "DocumentationNavigator.h"
 
 #include <QMessageBox>
 #include <QFileDialog>
@@ -45,6 +44,7 @@
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/CSVImportWizard.h>
+#include <tulip/DocumentationNavigator.h>
 #include <tulip/GraphModel.h>
 #include <tulip/GraphTableItemDelegate.h>
 #include <tulip/GraphPropertiesModel.h>
