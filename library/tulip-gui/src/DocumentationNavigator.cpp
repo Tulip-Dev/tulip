@@ -63,14 +63,13 @@ DocumentationNavigator::DocumentationNavigator(): QDialog(NULL, Qt::Window) {
   tabWidget->setCornerWidget(tb);
 
   currentDocView = new QWebView();
-   
+
   resize(1200, 700);
   updateButtons();
 }
 
 void DocumentationNavigator::newDocTab(const char* docRelativePath,
-				       const char* tabName)
-{
+                                       const char* tabName) {
   QWebView* docView = new QWebView();
   QString docRootPath = QString::fromUtf8(tlp::TulipShareDir.c_str()) + docRelativePath;
 #ifdef WIN32
@@ -96,6 +95,7 @@ void DocumentationNavigator::showDocumentation(const char* docRelativePath, cons
   if (navigator == NULL) {
     // Specific documentation: for customized perspectives
     navigator = new DocumentationNavigator();
+
     if (tabName)
       // specific documentation
       navigator->newDocTab(docRelativePath, tabName);
@@ -110,8 +110,10 @@ void DocumentationNavigator::showDocumentation(const char* docRelativePath, cons
       navigator->newDocTab("doc/tulip-python/html/index.html","Python Documentation");
 #endif
     }
+
     navigator->connectTab();
   }
+
   navigator->show();
 }
 
