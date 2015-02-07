@@ -84,6 +84,10 @@ bool TLPBImport::importGraph() {
       return errorTrap();
     }
 
+    if (filename.rfind(".gz") == (filename.length() - 3)) {
+      is = tlp::getIgzstream(filename);
+    }
+    else
     is = tlp::getInputFileStream(filename, std::ifstream::in |
                                  std::ifstream::binary);
   }
