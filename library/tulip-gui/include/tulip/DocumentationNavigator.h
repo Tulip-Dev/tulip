@@ -25,7 +25,9 @@
 #include <QToolButton>
 #include <QWebView>
 
-class DocumentationNavigator : public QDialog {
+#include <tulip/tulipconf.h>
+
+class TLP_QT_SCOPE DocumentationNavigator : public QDialog {
   Q_OBJECT
 
   QTabWidget* tabWidget;
