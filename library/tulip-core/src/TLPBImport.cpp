@@ -88,8 +88,8 @@ bool TLPBImport::importGraph() {
       is = tlp::getIgzstream(filename);
     }
     else
-    is = tlp::getInputFileStream(filename, std::ifstream::in |
-                                 std::ifstream::binary);
+      is = tlp::getInputFileStream(filename, std::ifstream::in |
+                                   std::ifstream::binary);
   }
   else {
     pluginProgress->setError("No file to open: 'file::filename' parameter is missing");
