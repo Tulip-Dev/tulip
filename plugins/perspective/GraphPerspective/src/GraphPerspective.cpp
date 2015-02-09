@@ -449,8 +449,14 @@ void GraphPerspective::exportGraph(Graph* g) {
   std::string filename = (exportFile = wizard.outputFile()).toUtf8().data();
   std::string exportPluginName = wizard.algorithm().toStdString();
 
-  if (filename.rfind(".gz") == (filename.length() - 3))
+  if (filename.rfind(".gz") == (filename.length() - 3)) {
+    if (exportPluginName == "TLPB Export") {
+      QMessageBox::critical(_mainWindow, QString("File error"),
+			    QString("TLPB Export does not support on the fly compression\n(induced by .gz extension) for " + exportFile));
+      return;
+    }
     os = tlp::getOgzstream(filename);
+  }
   else {
     if (exportPluginName == "TLPB Export")
       os = tlp::getOutputFileStream(filename,
@@ -472,7 +478,7 @@ void GraphPerspective::exportGraph(Graph* g) {
   delete os;
 
   if (!result) {
-    QMessageBox::critical(_mainWindow,trUtf8("Export error"),trUtf8("Failed to export to format") + wizard.algorithm());
+    QMessageBox::critical(_mainWindow,trUtf8("Export error"),trUtf8("Failed to export to format ") + wizard.algorithm());
   }
   else {
     addRecentDocument(wizard.outputFile());
