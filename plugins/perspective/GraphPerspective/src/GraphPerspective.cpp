@@ -452,9 +452,10 @@ void GraphPerspective::exportGraph(Graph* g) {
   if (filename.rfind(".gz") == (filename.length() - 3)) {
     if (exportPluginName == "TLPB Export") {
       QMessageBox::critical(_mainWindow, QString("File error"),
-			    QString("TLPB Export does not support on the fly compression\n(induced by .gz extension) for " + exportFile));
+                            QString("TLPB Export does not support on the fly compression\n(induced by .gz extension) for " + exportFile));
       return;
     }
+
     os = tlp::getOgzstream(filename);
   }
   else {
