@@ -574,24 +574,10 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
   if (!selectedNodes.empty()) {
     string xDim(scatterView->getDetailedScatterPlot()->getXDim());
     string yDim(scatterView->getDetailedScatterPlot()->getYDim());
-    string xType(graph->getProperty(xDim)->getTypename());
-    string yType(graph->getProperty(yDim)->getTypename());
-    DoubleProperty *xDoubleProp = NULL, *yDoubleProp = NULL;
-    IntegerProperty *xIntProp = NULL, *yIntProp = NULL;
+    NumericProperty *xProp = NULL, *yProp = NULL;
 
-    if (xType == "double") {
-      xDoubleProp = graph->getProperty<DoubleProperty>(xDim);
-    }
-    else {
-      xIntProp = graph->getProperty<IntegerProperty>(xDim);
-    }
-
-    if (yType == "double") {
-      yDoubleProp = graph->getProperty<DoubleProperty>(yDim);
-    }
-    else {
-      yIntProp = graph->getProperty<IntegerProperty>(yDim);
-    }
+    xProp = (NumericProperty *) graph->getProperty(xDim);
+    yProp = (NumericProperty *) graph->getProperty(yDim);
 
     double sumxiyi = 0, sumxi = 0, sumyi = 0, sumxi2 = 0, sumyi2 = 0;
 
@@ -599,22 +585,12 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
       node n = selectedNodes[i];
       double xValue = 0, yValue = 0;
 
-      if (xDoubleProp) {
-        xValue = xDoubleProp->getNodeValue(n);
-      }
-      else {
-        xValue = static_cast<double>(xIntProp->getNodeValue(n));
-      }
+      xValue = xProp->getNodeDoubleValue(n);
 
       sumxi += xValue;
       sumxi2 += (xValue * xValue);
 
-      if (yDoubleProp) {
-        yValue = yDoubleProp->getNodeValue(n);
-      }
-      else {
-        yValue = static_cast<double>(yIntProp->getNodeValue(n));
-      }
+      yValue = yProp->getNodeDoubleValue(n);
 
       sumyi += yValue;
       sumyi2 += (yValue * yValue);
