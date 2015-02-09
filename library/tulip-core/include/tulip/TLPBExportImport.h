@@ -138,7 +138,10 @@ public:
   }
 
   std::list<std::string> fileExtensions() const {
-    return std::list<std::string>(1, "tlpb");
+    std::list<std::string> l;
+    l.push_back("tlpb");
+    l.push_back("tlpb.gz");
+    return l;
   }
 
   bool importGraph();
