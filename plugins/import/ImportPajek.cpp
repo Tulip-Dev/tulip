@@ -194,6 +194,7 @@ public :
         if (nbTokens > 1) {
           graph->setName(tokens[1]);
         }
+
         return true;
       }
 
