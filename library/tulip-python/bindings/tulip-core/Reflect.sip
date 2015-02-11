@@ -144,6 +144,7 @@ Returns the list of keys associated to the values stored in the data set.
             std::vector<std::string> values = sc->getValues();
             if (std::find(values.begin(), values.end(), entry) != values.end()) {
                 sc->setCurrent(entry);
+                sipCpp->set(*a0, *sc);
             } else {
                 sipIsErr = 1;
                 std::string msg = "Value \"";
