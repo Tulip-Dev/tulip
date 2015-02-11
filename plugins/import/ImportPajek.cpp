@@ -189,6 +189,14 @@ public :
       return true;
 
     if (c == '*') {
+
+      if (tokens[0] == "*Network" || tokens[0] == "*network") {
+        if (nbTokens > 1) {
+          graph->setName(tokens[1]);
+        }
+        return true;
+      }
+
       if (tokens[0] == "*Vertices" || tokens[0] == "*vertices") {
         // next token is the number of vertices
         if (nbTokens < 2)
