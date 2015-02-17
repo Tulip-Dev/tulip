@@ -91,9 +91,7 @@ public :
 
   void setupUi();
 
-  QPixmap snapshot(const QSize&) const {
-    return QPixmap();
-  }
+  QPixmap snapshot(const QSize&) const;
 
   void setState(const DataSet &dataSet);
   DataSet state() const;
@@ -159,6 +157,8 @@ public slots :
   void zoomIn();
   void zoomOut();
   void currentZoomChanged();
+
+  void openSnapshotDialog();
 
 protected slots:
 
