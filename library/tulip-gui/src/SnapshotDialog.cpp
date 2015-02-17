@@ -51,6 +51,7 @@ public :
 
   void setAlwaysLocked(bool alwaysLocked) {
     this->alwaysLocked = alwaysLocked;
+
     if (alwaysLocked) {
       setPixmap(QPixmap(":/tulip/gui/icons/i_locked.png"));
     }
@@ -243,7 +244,7 @@ void SnapshotDialog::copyClicked() {
   clipboard->setPixmap(pixmap);
 }
 
-void SnapshotDialog::setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio){
+void SnapshotDialog::setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio) {
   lockLabel->setAlwaysLocked(snapshotHasViewSizeRatio);
 }
 
