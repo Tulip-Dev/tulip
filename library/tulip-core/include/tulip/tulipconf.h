@@ -128,6 +128,10 @@ static float strtof(const char* cptr, char** endptr) {
 #  define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef type deprecated_type _DEPRECATED
 #  define stdext __gnu_cxx
 
+// disable some specific C++11 warnings with clang
+#pragma clang diagnostic ignored "-Wdeprecated-register"
+#pragma clang diagnostic ignored "-Wtautological-undefined-compare"
+
 //for GCC 4.X
 #else
 #    define _DEPRECATED __attribute__ ((deprecated))

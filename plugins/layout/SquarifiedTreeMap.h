@@ -17,7 +17,7 @@
  *
  */
 #ifndef SQUARIFIEDTREEMAP_H
-#define SQUARIFIEDTREEMAP_h
+#define SQUARIFIEDTREEMAP_H
 
 #include <vector>
 #include <utility>

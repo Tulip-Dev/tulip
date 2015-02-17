@@ -65,7 +65,6 @@ static const char * paramHelp[] = {
  */
 
 static const float EDGELENGTH = 10;
-static const float EDGELENGTHSQR = EDGELENGTH * EDGELENGTH;
 static const float MAXATTRACT = 8192;
 
 /*
