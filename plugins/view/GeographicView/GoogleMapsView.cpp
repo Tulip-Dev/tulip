@@ -28,6 +28,7 @@
 #include <tulip/DataSet.h>
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlComplexPolygon.h>
+#include <tulip/SnapshotDialog.h>
 
 #include <QMenu>
 #include <QWebFrame>
@@ -37,6 +38,7 @@
 #include <QXmlDefaultHandler>
 #include <QTimeLine>
 #include <QApplication>
+#include <QGLFramebufferObject>
 
 #include <iostream>
 
@@ -120,6 +122,9 @@ void GoogleMapsView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addAction(action);
   action = new QAction("Zoom -", this);
   connect(action,SIGNAL(triggered()), this, SLOT(zoomIn()));
+  menu->addAction(action);
+  action = new QAction("Take snapshot", this);
+  connect(action,SIGNAL(triggered()), this, SLOT(openSnapshotDialog()));
   menu->addAction(action);
 }
 
@@ -358,6 +363,52 @@ void GoogleMapsView::registerTriggers() {
   for(std::set<tlp::PropertyInterface*>::iterator it = properties.begin(); it != properties.end(); ++it) {
     addRedrawTrigger(*it);
   }
+}
+
+QPixmap GoogleMapsView::snapshot(const QSize &size) const {
+
+  // hide the graphics widget used to configure the view
+  // before taking a snapshot
+  QList<QGraphicsProxyWidget*> gWidgetsToRestore;
+  QList<QGraphicsItem*> sceneItems = googleMapsGraphicsView->scene()->items();
+  for (int i = 0 ; i < sceneItems.size() ; ++i) {
+      QGraphicsProxyWidget *gWidget = dynamic_cast<QGraphicsProxyWidget*>(sceneItems.at(i));
+      if (gWidget && gWidget->isVisible()) {
+          gWidget->hide();
+          gWidgetsToRestore.push_back(gWidget);
+      }
+  }
+
+  QGLFramebufferObjectFormat fboFormat;
+  fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
+  fboFormat.setSamples(8);
+
+  int width = googleMapsGraphicsView->width();
+  int height = googleMapsGraphicsView->height();
+
+  QGLFramebufferObject renderFbo(width, height, fboFormat);
+  QGLFramebufferObject renderFbo2(width, height);
+
+  QPainter fboPainter(&renderFbo);
+  fboPainter.setRenderHint(QPainter::Antialiasing);
+  fboPainter.setRenderHint(QPainter::HighQualityAntialiasing);
+  googleMapsGraphicsView->scene()->render(&fboPainter);
+  fboPainter.end();
+
+  QGLFramebufferObject::blitFramebuffer(&renderFbo2, QRect(0,0,width, height), &renderFbo, QRect(0,0,width, height));
+
+  // restore the graphics widgets previously hidden
+  for (int i = 0 ; i < gWidgetsToRestore.size() ; ++i) {
+      gWidgetsToRestore.at(i)->show();
+  }
+
+  return QPixmap::fromImage(renderFbo2.toImage()).scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+}
+
+void GoogleMapsView::openSnapshotDialog() {
+  SnapshotDialog dlg(this);
+  dlg.setSnapshotHasViewSizeRatio(true);
+  dlg.exec();
 }
 
 PLUGIN(GoogleMapsView)
