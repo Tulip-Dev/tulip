@@ -60,8 +60,6 @@ using namespace tlp;
 #endif
 #endif
 
-static const char *TULIP_PLUGINS_PATH_VARIABLE="TLP_PLUGINS_PATH";
-
 string tlp::TulipLibDir;
 string tlp::TulipPluginsPath;
 string tlp::TulipBitmapDir;

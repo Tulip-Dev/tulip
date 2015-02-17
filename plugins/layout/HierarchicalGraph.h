@@ -17,7 +17,7 @@
  *
  */
 #ifndef Tulip_HierarchicalGraph_H
-#define Tulip_Hierarchical_H
+#define Tulip_HierarchicalGraph_H
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 

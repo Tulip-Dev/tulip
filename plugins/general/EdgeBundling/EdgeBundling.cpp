@@ -46,8 +46,6 @@
 using namespace std;
 using namespace tlp;
 
-const double MAX_VAL = DBL_MAX;
-
 //============================================
 
 static const char* paramHelp[] = {

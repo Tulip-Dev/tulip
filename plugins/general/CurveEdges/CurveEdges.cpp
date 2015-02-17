@@ -126,8 +126,8 @@ public:
     float factor = curveRoundness;
     const tlp::Coord &srcCoord = layout->getNodeValue(graph->source(e));
     const tlp::Coord &tgtCoord = layout->getNodeValue(graph->target(e));
-    float dx = abs(srcCoord[0] - tgtCoord[0]);
-    float dy = abs(srcCoord[1] - tgtCoord[1]);
+    float dx = std::abs(srcCoord[0] - tgtCoord[0]);
+    float dy = std::abs(srcCoord[1] - tgtCoord[1]);
 
     if (curveType == CURVE_TYPE_QUADRATIC_DISCRETE || curveType == CURVE_TYPE_QUADRATIC_DIAGONALCROSS) {
       if (dx < dy) {
