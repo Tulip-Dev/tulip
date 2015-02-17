@@ -371,12 +371,14 @@ QPixmap GoogleMapsView::snapshot(const QSize &size) const {
   // before taking a snapshot
   QList<QGraphicsProxyWidget*> gWidgetsToRestore;
   QList<QGraphicsItem*> sceneItems = googleMapsGraphicsView->scene()->items();
+
   for (int i = 0 ; i < sceneItems.size() ; ++i) {
-      QGraphicsProxyWidget *gWidget = dynamic_cast<QGraphicsProxyWidget*>(sceneItems.at(i));
-      if (gWidget && gWidget->isVisible()) {
-          gWidget->hide();
-          gWidgetsToRestore.push_back(gWidget);
-      }
+    QGraphicsProxyWidget *gWidget = dynamic_cast<QGraphicsProxyWidget*>(sceneItems.at(i));
+
+    if (gWidget && gWidget->isVisible()) {
+      gWidget->hide();
+      gWidgetsToRestore.push_back(gWidget);
+    }
   }
 
   QGLFramebufferObjectFormat fboFormat;
@@ -399,7 +401,7 @@ QPixmap GoogleMapsView::snapshot(const QSize &size) const {
 
   // restore the graphics widgets previously hidden
   for (int i = 0 ; i < gWidgetsToRestore.size() ; ++i) {
-      gWidgetsToRestore.at(i)->show();
+    gWidgetsToRestore.at(i)->show();
   }
 
   return QPixmap::fromImage(renderFbo2.toImage()).scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
