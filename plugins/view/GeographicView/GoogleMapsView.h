@@ -172,7 +172,6 @@ private :
 
   void saveStoredPolyInformations(DataSet &dataset) const;
 
-  QGraphicsRectItem* _placeholderItem;
   GoogleMapsGraphicsView *googleMapsGraphicsView;
   GoogleMapsViewConfigWidget *googleMapsViewConfigWidget;
   GeolocalisationConfigWidget *geolocalisationConfigWidget;

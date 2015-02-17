@@ -415,8 +415,14 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   connect(googleMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
 
 
+  _placeholderItem = new QGraphicsRectItem(0,0,1,1);
+  _placeholderItem->setBrush(Qt::transparent);
+  _placeholderItem->setPen(QPen(Qt::transparent));
+  scene()->addItem(_placeholderItem);
+
   QGraphicsProxyWidget *proxyGM = scene()->addWidget(googleMaps);
   proxyGM->setPos(0,0);
+  proxyGM->setParentItem(_placeholderItem);
 
   glMainWidget = new GlMainWidget(0, googleMapsView);
   glMainWidget->getScene()->setCalculator(new GlCPULODCalculator());
@@ -431,12 +437,16 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   }
 
   scene()->addItem(glWidgetItem);
+  glWidgetItem->setParentItem(_placeholderItem);
 
   // combo box to choose the map type
   viewTypeComboBox=new QComboBox;
   viewTypeComboBox->addItems(QStringList()<<"RoadMap"<<"RoadMap"<<"Satellite" << "Terrain" << "Hybrid" <<"Polygon" << "Globe");
   viewTypeComboBox->insertSeparator(1);
-  scene()->addWidget(viewTypeComboBox)->setPos(20,20);
+  QGraphicsProxyWidget *comboBoxProxy = scene()->addWidget(viewTypeComboBox);
+  comboBoxProxy->setParentItem(_placeholderItem);
+  comboBoxProxy->setPos(20,20);
+
   connect(viewTypeComboBox,SIGNAL(currentIndexChanged(QString)),_googleMapsView,SLOT(viewTypeChanged(QString)));
 
   // 2 push buttons
@@ -445,13 +455,18 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   zoomInButton->setFixedSize(29, 27);
   zoomInButton->setContentsMargins(0, 0, 0, 0);
   connect(zoomInButton, SIGNAL(pressed()), _googleMapsView, SLOT(zoomIn()));
-  scene()->addWidget(zoomInButton)->setPos(20, 50);
+  QGraphicsProxyWidget *buttonProxy = scene()->addWidget(zoomInButton);
+  buttonProxy->setParentItem(_placeholderItem);
+  buttonProxy->setPos(20, 50);
+
   // zoom -
   zoomOutButton = new QPushButton(QIcon(":/zoom-.png"), "");
   zoomOutButton->setFixedSize(29, 27);
   zoomOutButton->setContentsMargins(0, 0, 0, 0);
   connect(zoomOutButton, SIGNAL(pressed()), _googleMapsView, SLOT(zoomOut()));
-  scene()->addWidget(zoomOutButton)->setPos(20, 76);
+  buttonProxy = scene()->addWidget(zoomOutButton);
+  buttonProxy->setParentItem(_placeholderItem);
+  buttonProxy->setPos(20, 76);
 
   setAcceptDrops(false);
 
