@@ -75,10 +75,6 @@ void GoogleMapsView::setupUi() {
   centerViewAction = new QAction("Center view", this);
   connect(centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
 
-  _placeholderItem = new QGraphicsRectItem(0,0,1,1);
-  _placeholderItem->setBrush(Qt::transparent);
-  _placeholderItem->setPen(QPen(Qt::transparent));
-  googleMapsGraphicsView->scene()->addItem(_placeholderItem);
 }
 
 void GoogleMapsView::viewTypeChanged(QString viewTypeName) {
@@ -347,7 +343,7 @@ void GoogleMapsView::saveStoredPolyInformations(DataSet &dataset) const {
 }
 
 QGraphicsItem *GoogleMapsView::centralItem() const {
-  return _placeholderItem;
+  return googleMapsGraphicsView->getPlaceHolderItem();
 }
 
 void GoogleMapsView::registerTriggers() {

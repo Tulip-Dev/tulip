@@ -113,6 +113,10 @@ public :
     return glWidgetItem;
   }
 
+  QGraphicsRectItem *getPlaceHolderItem() const {
+    return _placeholderItem;
+  }
+
   void switchViewType();
 
   void loadDefaultMap();
@@ -184,6 +188,7 @@ private :
 
   std::pair<double, double> prevMapCenter;
   int prevMapZoom;
+  QGraphicsRectItem* _placeholderItem;
 
 };
 
