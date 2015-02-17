@@ -90,7 +90,7 @@ private:
 
 class Variable;
 class Constraint;
-class Node;
+struct Node;
 
 typedef enum {Open, Close} EventType;
 struct Event {
