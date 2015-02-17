@@ -48,6 +48,8 @@ public :
   SnapshotDialog(const View *v,QWidget *parent=NULL);
   ~SnapshotDialog();
 
+  void setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio);
+
 public slots :
 
   void accept();
