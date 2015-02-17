@@ -69,6 +69,7 @@ protected :
   Ui::SnapshotDialogData *ui;
   const View *view;
 
+  QPixmap snapshot;
   QGraphicsScene *scene;
   QGraphicsPixmapItem *pixmapItem;
   LockLabel *lockLabel;
