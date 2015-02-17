@@ -443,9 +443,11 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   viewTypeComboBox=new QComboBox;
   viewTypeComboBox->addItems(QStringList()<<"RoadMap"<<"RoadMap"<<"Satellite" << "Terrain" << "Hybrid" <<"Polygon" << "Globe");
   viewTypeComboBox->insertSeparator(1);
+
   QGraphicsProxyWidget *comboBoxProxy = scene()->addWidget(viewTypeComboBox);
   comboBoxProxy->setParentItem(_placeholderItem);
   comboBoxProxy->setPos(20,20);
+  comboBoxProxy->setZValue(1);
 
   connect(viewTypeComboBox,SIGNAL(currentIndexChanged(QString)),_googleMapsView,SLOT(viewTypeChanged(QString)));
 
