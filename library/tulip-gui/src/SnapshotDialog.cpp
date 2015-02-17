@@ -17,6 +17,8 @@
  *
  */
 
+#include <GL/glew.h>
+
 #include "tulip/SnapshotDialog.h"
 #include "ui_SnapshotDialog.h"
 
@@ -38,18 +40,25 @@ namespace tlp {
 
 class LockLabel : public QLabel {
 public :
-  LockLabel():QLabel(),locked(true) {
+  LockLabel():QLabel(),locked(true),alwaysLocked(false) {
     installEventFilter(this);
     setPixmap(QPixmap(":/tulip/gui/icons/i_locked.png"));
   }
 
   bool isLocked() {
-    return locked;
+    return locked || alwaysLocked;
+  }
+
+  void setAlwaysLocked(bool alwaysLocked) {
+    this->alwaysLocked = alwaysLocked;
+    if (alwaysLocked) {
+      setPixmap(QPixmap(":/tulip/gui/icons/i_locked.png"));
+    }
   }
 
 protected :
   bool eventFilter(QObject *, QEvent *event) {
-    if(event->type() == QEvent::MouseButtonRelease) {
+    if(event->type() == QEvent::MouseButtonRelease && !alwaysLocked) {
       if(locked) {
         setPixmap(QPixmap(":/tulip/gui/icons/i_unlocked.png"));
         locked=false;
@@ -66,17 +75,23 @@ protected :
   }
 
   bool locked;
+  bool alwaysLocked;
 
 };
 
 
-  SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
+SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(v),scene(NULL),pixmapItem(NULL),ratio(-1),inSizeSpinBoxValueChanged(false) {
   ui->setupUi(this);
+
+  int maxTextureSize = 0;
+  glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+
+  // restrict snapshot width and height to the half of the GL_MAX_TEXTURE_SIZE value
+  ui->widthSpinBox->setMaximum(maxTextureSize/2);
+  ui->heightSpinBox->setMaximum(maxTextureSize/2);
 
   ui->widthSpinBox->setValue(view->centralItem()->scene()->sceneRect().width());
   ui->heightSpinBox->setValue(view->centralItem()->scene()->sceneRect().height());
-
-  sizeSpinBoxValueChanged();
 
   connect(ui->widthSpinBox,SIGNAL(valueChanged(int)),this,SLOT(widthSpinBoxValueChanged(int)));
   connect(ui->heightSpinBox,SIGNAL(valueChanged(int)),this,SLOT(heightSpinBoxValueChanged(int)));
@@ -92,7 +107,6 @@ protected :
 
 SnapshotDialog::~SnapshotDialog() {
   delete ui;
-  delete pixmapItem;
   delete scene;
 }
 
@@ -136,7 +150,7 @@ void SnapshotDialog::accept() {
 
   this->setEnabled(false);
 
-  QPixmap pixmap = snapshot.scaled(QSize(ui->widthSpinBox->value(), ui->heightSpinBox->value()));
+  QPixmap pixmap=view->snapshot(QSize(ui->widthSpinBox->value(),ui->heightSpinBox->value()));
 
   QImage image(pixmap.toImage());
 
@@ -182,7 +196,7 @@ void SnapshotDialog::heightSpinBoxValueChanged(int value) {
 }
 
 void SnapshotDialog::fileNameTextChanged(const QString &text) {
-  ui->okButton->setEnabled(text.isEmpty()?false:true);
+  ui->okButton->setEnabled(!text.isEmpty());
 }
 
 void SnapshotDialog::sizeSpinBoxValueChanged() {
@@ -191,37 +205,46 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
     return;
   }
 
-  // because the view may take a quite long time when taking a snapshot,
-  // we must ensure it is taken only once,
-  // just before the dialog is displayed on the screen
-  if (snapshot.isNull())
-    snapshot = view->snapshot(QSize(view->centralItem()->scene()->sceneRect().width(), view->centralItem()->scene()->sceneRect().height()));
+  float viewRatio = static_cast<float>(ui->graphicsView->width()) / static_cast<float>(ui->graphicsView->height());
+  float imageRatio = static_cast<float>(ui->widthSpinBox->value()) / static_cast<float>(ui->heightSpinBox->value());
 
-  float viewRatio=((float)ui->graphicsView->width())/((float)ui->graphicsView->height());
-  ratio=((float)ui->widthSpinBox->value())/((float)ui->heightSpinBox->value());
+  // regenerate preview pixmap only if the aspect ratio changed
+  if (imageRatio != ratio) {
 
-  QPixmap pixmap;
-  if (viewRatio > ratio)
-    pixmap=snapshot.scaled((ui->graphicsView->height() - 2) * ratio, (ui->graphicsView->height() - 2), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-  else
-    pixmap=snapshot.scaled((ui->graphicsView->width() - 2), (ui->graphicsView->width() - 2)/ratio, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QPixmap pixmap;
 
-  if (pixmapItem != NULL) {
-    delete pixmapItem;
-    delete scene;
+    if(viewRatio>imageRatio) {
+      pixmap = view->snapshot(QSize((view->centralItem()->scene()->sceneRect().height()-2)*imageRatio,view->centralItem()->scene()->sceneRect().height()-2));
+      pixmap = pixmap.scaled((ui->graphicsView->height()-2)*imageRatio, ui->graphicsView->height()-2, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    }
+    else {
+      pixmap = view->snapshot(QSize(view->centralItem()->scene()->sceneRect().width()-2,(view->centralItem()->scene()->sceneRect().width()-2)/imageRatio));
+      pixmap = pixmap.scaled(ui->graphicsView->width()-2, (ui->graphicsView->width()-2)/imageRatio, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    }
+
+    ratio = static_cast<float>(ui->widthSpinBox->value())/ static_cast<float>(ui->heightSpinBox->value());
+
+    if (pixmapItem != NULL) {
+      delete scene;
+    }
+
+    scene=new QGraphicsScene();
+    scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
+    ui->graphicsView->setScene(scene);
+    pixmapItem=scene->addPixmap(pixmap);
+    pixmapItem->setPos(ui->graphicsView->sceneRect().center()-pixmapItem->boundingRect().center());
+
   }
-
-  scene=new QGraphicsScene();
-  scene->setBackgroundBrush(QApplication::palette().color(QPalette::Midlight));
-  ui->graphicsView->setScene(scene);
-  pixmapItem=scene->addPixmap(pixmap);
-  pixmapItem->setPos(ui->graphicsView->sceneRect().center()-pixmapItem->boundingRect().center());
 }
 
 void SnapshotDialog::copyClicked() {
-  QPixmap pixmap = snapshot.scaled(QSize(ui->widthSpinBox->value(),ui->heightSpinBox->value()));
+  QPixmap pixmap=view->snapshot(QSize(ui->widthSpinBox->value(),ui->heightSpinBox->value()));
+  QClipboard *clipboard = QApplication::clipboard();
+  clipboard->setPixmap(pixmap);
+}
 
-  QApplication::clipboard()->setPixmap(pixmap);
+void SnapshotDialog::setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio){
+  lockLabel->setAlwaysLocked(snapshotHasViewSizeRatio);
 }
 
 }
