@@ -70,7 +70,7 @@ protected :
 };
 
 
-SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
+  SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(v),scene(NULL),pixmapItem(NULL),inSizeSpinBoxValueChanged(false) {
   ui->setupUi(this);
 
   ui->widthSpinBox->setValue(view->centralItem()->scene()->sceneRect().width());
@@ -92,6 +92,8 @@ SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent):QDialog(parent),u
 
 SnapshotDialog::~SnapshotDialog() {
   delete ui;
+  delete pixmapItem;
+  delete scene;
 }
 
 void SnapshotDialog::resizeEvent(QResizeEvent *) {
@@ -134,7 +136,7 @@ void SnapshotDialog::accept() {
 
   this->setEnabled(false);
 
-  QPixmap pixmap=view->snapshot(QSize(ui->widthSpinBox->value(),ui->heightSpinBox->value()));
+  QPixmap pixmap = snapshot.scaled(QSize(ui->widthSpinBox->value(), ui->heightSpinBox->value()));
 
   QImage image(pixmap.toImage());
 
@@ -189,23 +191,22 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
     return;
   }
 
+  // because the view may take a quite long time when taking a snapshot,
+  // we must ensure it is taken only once,
+  // just before the dialog is displayed on the screen
+  if (snapshot.isNull())
+    snapshot = view->snapshot(QSize(view->centralItem()->scene()->sceneRect().width(), view->centralItem()->scene()->sceneRect().height()));
+
   float viewRatio=((float)ui->graphicsView->width())/((float)ui->graphicsView->height());
-  float imageRatio=((float)ui->widthSpinBox->value())/((float)ui->heightSpinBox->value());
-
-  QPixmap pixmap;
-
-  if(viewRatio>imageRatio) {
-    pixmap=view->snapshot(QSize((view->centralItem()->scene()->sceneRect().height()-2)*imageRatio,view->centralItem()->scene()->sceneRect().height()-2));
-    pixmap = pixmap.scaled((ui->graphicsView->height()-2)*imageRatio, ui->graphicsView->height()-2, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-  }
-  else {
-    pixmap=view->snapshot(QSize(view->centralItem()->scene()->sceneRect().width()-2,(view->centralItem()->scene()->sceneRect().width()-2)/imageRatio));
-    pixmap = pixmap.scaled(ui->graphicsView->width()-2, (ui->graphicsView->width()-2)/imageRatio, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-  }
-
   ratio=((float)ui->widthSpinBox->value())/((float)ui->heightSpinBox->value());
 
-  if(pixmapItem==NULL) {
+  QPixmap pixmap;
+  if (viewRatio > ratio)
+    pixmap=snapshot.scaled((ui->graphicsView->height() - 2) * ratio, (ui->graphicsView->height() - 2), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+  else
+    pixmap=snapshot.scaled((ui->graphicsView->width() - 2), (ui->graphicsView->width() - 2)/ratio, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+  if (pixmapItem != NULL) {
     delete pixmapItem;
     delete scene;
   }
@@ -218,10 +219,9 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
 }
 
 void SnapshotDialog::copyClicked() {
-  QPixmap pixmap=view->snapshot(QSize(ui->widthSpinBox->value(),ui->heightSpinBox->value()));
+  QPixmap pixmap = snapshot.scaled(QSize(ui->widthSpinBox->value(),ui->heightSpinBox->value()));
 
-  QClipboard *clipboard = QApplication::clipboard();
-  clipboard->setPixmap(pixmap);
+  QApplication::clipboard()->setPixmap(pixmap);
 }
 
 }
