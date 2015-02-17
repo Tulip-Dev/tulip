@@ -244,8 +244,10 @@ void WorkspacePanel::showEvent(QShowEvent *event) {
 
     // get old scene pointer for further deletion
     QGraphicsScene *oldScene = _view->graphicsView()->scene();
+    QGraphicsScene *newScene = new QGraphicsScene();
+    newScene->setSceneRect(oldScene->sceneRect());
     // create a new QGraphicsScene and set it in the QGraphicsView
-    _view->graphicsView()->setScene(new QGraphicsScene());
+    _view->graphicsView()->setScene(newScene);
     // restore central item and its children in the new scene
     _view->graphicsView()->scene()->addItem(_view->centralItem());
 
