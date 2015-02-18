@@ -118,10 +118,10 @@ void GoogleMapsView::viewTypeChanged(QString viewTypeName) {
 void GoogleMapsView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addAction(centerViewAction);
   QAction* action = new QAction("Zoom +", this);
-  connect(action,SIGNAL(triggered()), this, SLOT(zoomOut()));
+  connect(action,SIGNAL(triggered()), this, SLOT(zoomIn()));
   menu->addAction(action);
   action = new QAction("Zoom -", this);
-  connect(action,SIGNAL(triggered()), this, SLOT(zoomIn()));
+  connect(action,SIGNAL(triggered()), this, SLOT(zoomOut()));
   menu->addAction(action);
   action = new QAction("Take snapshot", this);
   connect(action,SIGNAL(triggered()), this, SLOT(openSnapshotDialog()));
