@@ -233,7 +233,6 @@ void MatrixView::initDisplayedGraph() {
   GlGraphRenderingParameters *renderingParameters = getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer();
   renderingParameters->setLabelScaled(true);
   renderingParameters->setLabelsDensity(100);
-  renderingParameters->setAntialiasing(false);
 
   _configurationWidget->setBackgroundColor(colorToQColor(getGlMainWidget()->getScene()->getBackgroundColor()));
   addGridBackground();
