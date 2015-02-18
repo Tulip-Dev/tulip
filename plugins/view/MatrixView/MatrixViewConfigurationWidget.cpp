@@ -36,6 +36,7 @@ MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent): Q
   connect(_ui->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this, SIGNAL(changeBackgroundColor(QColor)));
   connect(_ui->gridDisplayCombo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(setGridDisplayMode()));
   connect(_ui->showedgesbox, SIGNAL(clicked(bool)), this, SIGNAL(showEdges(bool)));
+  connect(_ui->ascendingOrderCBox, SIGNAL(toggled(bool)), this, SLOT(orderingDirectionChanged()));
 
   if (Perspective::instance())
     _ui->backgroundColorBtn->setDialogParent(Perspective::instance()->mainWindow());
@@ -97,6 +98,10 @@ void MatrixViewConfigurationWidget::orderingMetricComboIndexChanged(int i) {
     name = QStringToTlpString(_ui->orderingMetricCombo->itemText(i));
 
   emit metricSelected(name);
+}
+
+void MatrixViewConfigurationWidget::orderingDirectionChanged() {
+  orderingMetricComboIndexChanged(_ui->orderingMetricCombo->currentIndex());
 }
 
 GridDisplayMode MatrixViewConfigurationWidget::gridDisplayMode() const {

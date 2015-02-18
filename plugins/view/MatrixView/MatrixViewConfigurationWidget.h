@@ -57,6 +57,7 @@ public:
 
 protected slots:
   void orderingMetricComboIndexChanged(int i);
+  void orderingDirectionChanged();
 
 signals:
   void metricSelected(std::string);
