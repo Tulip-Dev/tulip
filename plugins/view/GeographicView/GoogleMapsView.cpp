@@ -404,7 +404,11 @@ QPixmap GoogleMapsView::snapshot(const QSize &size) const {
     gWidgetsToRestore.at(i)->show();
   }
 
-  return QPixmap::fromImage(renderFbo2.toImage()).scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+  QImage snapshotImage = renderFbo2.toImage();
+  snapshotImage = QImage(snapshotImage.bits(),snapshotImage.width(),snapshotImage.height(),QImage::Format_ARGB32).convertToFormat(QImage::Format_RGB32);
+
+  return QPixmap::fromImage(snapshotImage).scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
 }
 
 void GoogleMapsView::openSnapshotDialog() {
