@@ -75,7 +75,7 @@ public:
   //void pruneT(node n);
   void makeStoc(node n);
   void bfs(node n, double value);
-  double connectedComponnent();
+  double connectedComponent();
 
   bool equal();
   void init();
@@ -267,8 +267,9 @@ void MCLClustering::init() {
   }
   edge e;
   forEach(e, graph->getEdges()) {
-    node src = nodeMapping.get(graph->source(e).id);
-    node tgt = nodeMapping.get(graph->target(e).id);
+    const std::pair<node, node> &eEnds = graph->ends(e);
+    node src = nodeMapping.get(eEnds.first.id);
+    node tgt = nodeMapping.get(eEnds.second.id);
     edge tmp = g.addEdge(src, tgt);
     existEdge[pair<unsigned int, unsigned int>(src.id, tgt.id)] = tmp;
     edgeMapping.set(e.id, tmp);
@@ -281,14 +282,20 @@ void MCLClustering::init() {
     }
   }
   //add reverse edges
-  stableForEach(e, g.getEdges()) {
+  // new edges of g are added at the end of its edges underlying vector
+  // so there is no need of a costly stableForEach
+  unsigned int nbEdges = g.numberOfEdges();
+  for (unsigned int i = 0; i < nbEdges; ++i) {
+    e = g(i);
     const std::pair<node, node>& eEnds = g.ends(e);
     edge tmp = g.addEdge(eEnds.second, eEnds.first);
     existEdge[pair<unsigned int, unsigned int>(eEnds.second.id, eEnds.first.id)] = tmp;
     inW[tmp] = inW[e];
   }
   //add loops (Set the maximum of out-edges weights to self-loops weight)
-  forEach(n, g.getNodes()) {
+  unsigned int nbNodes = g.numberOfNodes();
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    n = g[i];
     edge tmp = g.addEdge(n, n);
     existEdge[pair<unsigned int, unsigned int>(n.id, n.id)] = tmp;
     edge e;
@@ -296,22 +303,25 @@ void MCLClustering::init() {
     inW[tmp]=1.;
 
     if(weights!=0) {
-      inW[tmp]=0.;
+      double tmpVal = inW[tmp]=0.;
       forEach(e, g.getOutEdges(n)) {
-        sum += inW[e];
-        inW[tmp] = inW[e] > inW[tmp] ?  inW[e] : inW[tmp];
+	double eVal = inW[e];
+        sum += eVal;
+	if (eVal > tmpVal)
+	  tmpVal = eVal;
       }
-      sum += inW[tmp];
+      sum += (inW[tmp] = tmpVal);
     }
     else
       sum=double(g.outdeg(n));
 
     forEach(e, g.getOutEdges(n))
-    inW[e] /= sum;
+      inW[e] /= sum;
   }
 
-  forEach(e, g.getEdges()) {
-    outW[e] = 0.;
+  nbEdges = g.numberOfEdges();
+  for (unsigned int i = 0; i < nbEdges; ++i) {
+    outW[g(i)] = 0.;
   }
 
 }
@@ -327,28 +337,26 @@ void MCLClustering::bfs(node n, double value) {
     node n = fifo.front();
     resultN[n] = value;
     fifo.pop_front();
-    Iterator<node> *it = g.getInOutNodes(n);
-
-    while (it->hasNext()) {
-      node ni = it->next();
-
+    const std::vector<node> &neighbours = g.adj(n);
+    unsigned int nbNeighbours = neighbours.size();
+    for (unsigned int i = 0; i <  nbNeighbours; ++i) {
+      node ni = neighbours[i];
       if(!flag.get(ni)) {
         fifo.push_back(ni);
         flag.set(ni, true);
       }
     }
-
-    delete it;
   }
 }
 //================================================================================
-double MCLClustering::connectedComponnent() {
-  node n;
-  forEach(n, g.getNodes()) {
-    resultN[n] = -1.;
+double MCLClustering::connectedComponent() {
+  unsigned int nbNodes = g.numberOfNodes();
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    resultN[g[i]] = -1.;
   }
   double curVal = 0.;
-  forEach(n, g.getNodes()) {
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    node n = g[i];
     if (resultN[n] < 0) {
       bfs(n, curVal);
       curVal += 1.;
@@ -388,6 +396,7 @@ bool MCLClustering::run() {
   }
 
   init();
+  unsigned int nbNodes = g.numberOfNodes();
 
   edge e;
   //output for mcl
@@ -400,8 +409,8 @@ bool MCLClustering::run() {
   int iteration = 15. * log(g.numberOfNodes() + 1);
 
   while(iteration-- > 0) {
-    node n;
-    forEach(n, g.getNodes()) {
+    for (unsigned int i = 0; i < nbNodes; ++i) {
+      node n = g[i];
       power(n);
       // comment the next line to have exact MCL
       inflate(_r, _k,  n, false);
@@ -424,15 +433,14 @@ bool MCLClustering::run() {
 
     if (equal()) break;
 
-    edge e;
-    forEach(e, g.getEdges())
-    outW[e] = 0.;
+    unsigned int nbEdges = g.numberOfEdges();
+    for (unsigned int i = 0; i < nbEdges; ++i)
+      outW[g(i)] = 0.;
   }
 
   outW = inW;
-  node n;
-  forEach(n, g.getNodes()) {
-    pruneK(n, 1);
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    pruneK(g[i], 1);
   }
 
   stableForEach(e, g.getEdges()) {
@@ -441,19 +449,18 @@ bool MCLClustering::run() {
     }
   }
 
-
-
   DegreeSort sortFunc(g);
   g.sortNodes(sortFunc); //sort nodes in decreasing order of their degree
   //node n;
   g.alloc(resultN);
-  connectedComponnent();
+  connectedComponent();
 //    cout << "#clust : " << connectedComponnent() << endl << flush;
 
 
   //compute clusters
   //double piv = 0;
-  forEach(n, g.getNodes()) {
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    node n = g[i];
     //if(g.deg(n) > 1) piv += 1.;
 
     result->setNodeValue(tlpNodes[n], resultN[n]);
