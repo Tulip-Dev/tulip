@@ -23,6 +23,7 @@
 #include <cctype>
 #include <cstdlib>
 #include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
 
 
 /** \file
@@ -125,12 +126,13 @@ public :
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("net");
+    l.push_back("paj");
     return l;
   }
 
   ImportPajek(const tlp::PluginContext* context):
     ImportModule(context), nbNodes(0), weights(NULL), labels(NULL),
-    layout(NULL), sizes(NULL), expectedLine(NET_UNKNOWN) {
+    layout(NULL), sizes(NULL), expectedLine(NET_UNKNOWN), partition(NULL) {
     addInParameter<string>("file::filename", paramHelp[0],"");
   }
 
@@ -146,8 +148,12 @@ public :
   StringProperty *labels;
   LayoutProperty *layout;
   SizeProperty *sizes;
-  enum TypeOfLine {NET_UNKNOWN = 0, NET_NODE, NET_EDGE, NET_EDGESLIST};
+  enum TypeOfLine {NET_UNKNOWN = 0, NET_NODE, NET_EDGE, NET_EDGESLIST, NET_PARTITION, NET_VECTOR, NET_MATRIX};
   TypeOfLine expectedLine;
+  Graph *partition;
+  unsigned int curNodeId;
+  map<string, set<node> > parts;
+  DoubleProperty *vectorProp;
 
   bool getUnsignedInt(unsigned int& i, const string& str) {
     const char* ptr = str.c_str();
@@ -173,6 +179,13 @@ public :
   }
 
   bool treatLine(string& str) {
+
+
+
+    // empty line or comment line found
+    if (str.empty() || str[0] == '%')
+      return true;
+
     vector<string> tokens;
 
     if (!tokenize(str, tokens, " \r\t"))
@@ -183,22 +196,31 @@ public :
 
     unsigned int nbTokens = tokens.size();
     char c = tokens[0][0];
-
-    if (c == '%')
-      // comment line found
-      return true;
+    string lineWoFirstToken;
+    for (size_t i = 1 ; i < nbTokens ; ++i) {
+      lineWoFirstToken += tokens[i];
+      if (i != nbTokens - 1) {
+        lineWoFirstToken += " ";
+      }
+    }
 
     if (c == '*') {
 
       if (tokens[0] == "*Network" || tokens[0] == "*network") {
         if (nbTokens > 1) {
-          graph->setName(tokens[1]);
+          graph->setName(lineWoFirstToken);
         }
 
         return true;
       }
 
       if (tokens[0] == "*Vertices" || tokens[0] == "*vertices") {
+
+        if (expectedLine == NET_PARTITION || expectedLine == NET_VECTOR) {
+          // currently parsing a partition or a vector, don't treat that line
+          return true;
+        }
+
         // next token is the number of vertices
         if (nbTokens < 2)
           return false;
@@ -214,18 +236,51 @@ public :
         return true;
       }
 
+      if (tokens[0] == "*Arcslist" || tokens[0] == "*arcslist" ||
+          tokens[0] == "*Edgeslist" || tokens[0] == "*edgeslist") {
+        expectedLine = NET_EDGESLIST;
+        // no more token for this line
+        return true;
+      }
+
       if (tokens[0] == "*Arcs" || tokens[0] == "*arcs" ||
           tokens[0] == "*Edges" || tokens[0] == "*edges") {
         expectedLine = NET_EDGE;
         // no more token for this line
-        return (nbTokens == 1);
+        return true;
       }
 
-      if (tokens[0] == "*Arcslist" || tokens[0] == "*arcslist" ||
-          tokens[0] == "*Edgeslist" || tokens[0] == "*edgeslist") {
-        expectedLine = NET_EDGE;
+      if (tokens[0] == "*Partition" || tokens[0] == "*partition") {
+
+        if (nbTokens < 2)
+          return false;
+
+        expectedLine = NET_PARTITION;
+        curNodeId = 0;
+
+        partition = graph->addCloneSubGraph(lineWoFirstToken);
+        parts.clear();
+
         // no more token for this line
-        return (nbTokens == 1);
+        return true;
+      }
+
+      if (tokens[0] == "*Vector" || tokens[0] == "*vector" || tokens[0] == "*Permutation" || tokens[0] == "*permutation") {
+
+        if (nbTokens < 2)
+          return false;
+
+        expectedLine = NET_VECTOR;
+        curNodeId = 0;
+        vectorProp = graph->getProperty<DoubleProperty>(lineWoFirstToken);
+
+        return true;
+      }
+
+      if (tokens[0] == "*Matrix" || tokens[0] == "*matrix") {
+          expectedLine = NET_MATRIX;
+          curNodeId = 0;
+          return true;
       }
 
       return false;
@@ -233,6 +288,44 @@ public :
 
     if (expectedLine == NET_UNKNOWN)
       return false;
+
+    if (expectedLine == NET_MATRIX) {
+
+      for (size_t i = 0 ; i < tokens.size() ; ++i) {
+        double val = 0;
+        getDouble(val, tokens[i]);
+        if (val > 0) {
+          edge e = graph->addEdge(nodes[curNodeId], nodes[i]);
+          weights->setEdgeValue(e, val);
+        }
+      }
+
+      ++curNodeId;
+
+      return true;
+    }
+
+    if (expectedLine == NET_PARTITION) {
+      parts[tokens[0]].insert(nodes[curNodeId++]);
+      if (curNodeId == graph->numberOfNodes()) {
+          map<string, set<node> >::iterator it = parts.begin();
+          for (; it != parts.end() ; ++it) {
+            Graph *part = partition->inducedSubGraph(it->second);
+            part->setName(it->first);
+          }
+      }
+      return true;
+    }
+
+    if (expectedLine == NET_VECTOR) {
+      double val = 0;
+      if (!getDouble(val, tokens[0])) {
+        return false;
+      } else {
+        vectorProp->setNodeValue(nodes[curNodeId++], val);
+        return true;
+      }
+    }
 
     // first token is always the # of a vertex
     unsigned int first;
