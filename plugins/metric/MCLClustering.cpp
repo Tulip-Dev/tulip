@@ -285,6 +285,7 @@ void MCLClustering::init() {
   // new edges of g are added at the end of its edges underlying vector
   // so there is no need of a costly stableForEach
   unsigned int nbEdges = g.numberOfEdges();
+
   for (unsigned int i = 0; i < nbEdges; ++i) {
     e = g(i);
     const std::pair<node, node>& eEnds = g.ends(e);
@@ -292,8 +293,10 @@ void MCLClustering::init() {
     existEdge[pair<unsigned int, unsigned int>(eEnds.second.id, eEnds.first.id)] = tmp;
     inW[tmp] = inW[e];
   }
+
   //add loops (Set the maximum of out-edges weights to self-loops weight)
   unsigned int nbNodes = g.numberOfNodes();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     n = g[i];
     edge tmp = g.addEdge(n, n);
@@ -305,10 +308,11 @@ void MCLClustering::init() {
     if(weights!=0) {
       double tmpVal = inW[tmp]=0.;
       forEach(e, g.getOutEdges(n)) {
-	double eVal = inW[e];
+        double eVal = inW[e];
         sum += eVal;
-	if (eVal > tmpVal)
-	  tmpVal = eVal;
+
+        if (eVal > tmpVal)
+          tmpVal = eVal;
       }
       sum += (inW[tmp] = tmpVal);
     }
@@ -316,10 +320,11 @@ void MCLClustering::init() {
       sum=double(g.outdeg(n));
 
     forEach(e, g.getOutEdges(n))
-      inW[e] /= sum;
+    inW[e] /= sum;
   }
 
   nbEdges = g.numberOfEdges();
+
   for (unsigned int i = 0; i < nbEdges; ++i) {
     outW[g(i)] = 0.;
   }
@@ -339,8 +344,10 @@ void MCLClustering::bfs(node n, double value) {
     fifo.pop_front();
     const std::vector<node> &neighbours = g.adj(n);
     unsigned int nbNeighbours = neighbours.size();
+
     for (unsigned int i = 0; i <  nbNeighbours; ++i) {
       node ni = neighbours[i];
+
       if(!flag.get(ni)) {
         fifo.push_back(ni);
         flag.set(ni, true);
@@ -351,17 +358,22 @@ void MCLClustering::bfs(node n, double value) {
 //================================================================================
 double MCLClustering::connectedComponent() {
   unsigned int nbNodes = g.numberOfNodes();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     resultN[g[i]] = -1.;
   }
+
   double curVal = 0.;
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = g[i];
+
     if (resultN[n] < 0) {
       bfs(n, curVal);
       curVal += 1.;
     }
   }
+
   return curVal;
 }
 //================================================================================
@@ -415,6 +427,7 @@ bool MCLClustering::run() {
       // comment the next line to have exact MCL
       inflate(_r, _k,  n, false);
     }
+
     /* exact MCL should inflate after because we share the same graphs tructure,
     * or we should only remove edges created during the power and delay the
     * deletion of edge that does exist in the previous graph
@@ -434,11 +447,13 @@ bool MCLClustering::run() {
     if (equal()) break;
 
     unsigned int nbEdges = g.numberOfEdges();
+
     for (unsigned int i = 0; i < nbEdges; ++i)
       outW[g(i)] = 0.;
   }
 
   outW = inW;
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     pruneK(g[i], 1);
   }
@@ -465,6 +480,7 @@ bool MCLClustering::run() {
 
     result->setNodeValue(tlpNodes[n], resultN[n]);
   }
+
 //    cout << "#pivot : " << piv << endl << flush;
 
   return true;
