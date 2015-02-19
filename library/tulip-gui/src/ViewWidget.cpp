@@ -66,9 +66,7 @@ ViewWidget::ViewWidget()
   : View(), _graphicsView(NULL), _centralWidget(NULL), _centralWidgetItem(NULL) {
 }
 
-ViewWidget::~ViewWidget() {
-  delete _centralWidgetItem;
-}
+ViewWidget::~ViewWidget() {}
 
 QGraphicsView* ViewWidget::graphicsView() const {
   return _graphicsView;
@@ -93,7 +91,6 @@ void ViewWidget::graphDeleted(Graph *parentGraph) {
 void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
   assert(w);
   QGraphicsItem *oldCentralItem = _centralWidgetItem;
-  QWidget *oldCentralWidget = _centralWidget;
 
   if (currentInteractor())
     currentInteractor()->uninstall();
@@ -136,7 +133,6 @@ void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
 
   if(deleteOldCentralWidget) {
     delete oldCentralItem;
-    delete oldCentralWidget;
   }
 }
 
