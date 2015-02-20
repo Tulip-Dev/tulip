@@ -197,8 +197,10 @@ public :
     unsigned int nbTokens = tokens.size();
     char c = tokens[0][0];
     string lineWoFirstToken;
+
     for (size_t i = 1 ; i < nbTokens ; ++i) {
       lineWoFirstToken += tokens[i];
+
       if (i != nbTokens - 1) {
         lineWoFirstToken += " ";
       }
@@ -278,9 +280,9 @@ public :
       }
 
       if (tokens[0] == "*Matrix" || tokens[0] == "*matrix") {
-          expectedLine = NET_MATRIX;
-          curNodeId = 0;
-          return true;
+        expectedLine = NET_MATRIX;
+        curNodeId = 0;
+        return true;
       }
 
       return false;
@@ -294,6 +296,7 @@ public :
       for (size_t i = 0 ; i < tokens.size() ; ++i) {
         double val = 0;
         getDouble(val, tokens[i]);
+
         if (val > 0) {
           edge e = graph->addEdge(nodes[curNodeId], nodes[i]);
           weights->setEdgeValue(e, val);
@@ -307,21 +310,26 @@ public :
 
     if (expectedLine == NET_PARTITION) {
       parts[tokens[0]].insert(nodes[curNodeId++]);
+
       if (curNodeId == graph->numberOfNodes()) {
-          map<string, set<node> >::iterator it = parts.begin();
-          for (; it != parts.end() ; ++it) {
-            Graph *part = partition->inducedSubGraph(it->second);
-            part->setName(it->first);
-          }
+        map<string, set<node> >::iterator it = parts.begin();
+
+        for (; it != parts.end() ; ++it) {
+          Graph *part = partition->inducedSubGraph(it->second);
+          part->setName(it->first);
+        }
       }
+
       return true;
     }
 
     if (expectedLine == NET_VECTOR) {
       double val = 0;
+
       if (!getDouble(val, tokens[0])) {
         return false;
-      } else {
+      }
+      else {
         vectorProp->setNodeValue(nodes[curNodeId++], val);
         return true;
       }
