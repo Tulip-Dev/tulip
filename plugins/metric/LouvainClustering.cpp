@@ -165,7 +165,7 @@ void LouvainClustering::createQuotient() {
     forEach(e,graph->getEdges()) {
       const std::pair<node, node>& eEnds = graph->ends(e);
       edge ne = quotient.addEdge(nodeMapping.get(eEnds.first.id),
-				 nodeMapping.get(eEnds.second.id));
+                                 nodeMapping.get(eEnds.second.id));
       edgeEW[ne] = metric->getEdgeDoubleValue(e);
       m+=metric->getEdgeDoubleValue(e);
     }
@@ -174,7 +174,7 @@ void LouvainClustering::createQuotient() {
     forEach(e,graph->getEdges()) {
       const std::pair<node, node>& eEnds = graph->ends(e);
       edge ne = quotient.addEdge(nodeMapping.get(eEnds.first.id),
-				 nodeMapping.get(eEnds.second.id));
+                                 nodeMapping.get(eEnds.second.id));
       edgeEW[ne] = 1.0;
       m+=1.0;
     }
@@ -195,9 +195,10 @@ void LouvainClustering::updateQuotient() {
   EdgeProperty<bool> subEdges;
   quotient.alloc(subNodes);
   quotient.alloc(subEdges);
-  
+
   edge e;
   unsigned int nbElts = quotient.numberOfEdges();
+
   for (unsigned int i = nbElts; i > 0;) {
     edge e = quotient(--i);
     const std::pair<node, node>& eEnds = quotient.ends(e);
@@ -219,13 +220,16 @@ void LouvainClustering::updateQuotient() {
       }
 
       edge me = quotient.existEdge(qsrc, qtgt, false);
+
       if (!me.isValid() || subEdges[me] == false) {
-	me = quotient.addEdge(qsrc, qtgt);
-	edgeEW[me] = edgeEW[e];
-	subEdges[me] = true;
-      } else
-	edgeEW[me] = edgeEW[me] + edgeEW[e];
+        me = quotient.addEdge(qsrc, qtgt);
+        edgeEW[me] = edgeEW[e];
+        subEdges[me] = true;
+      }
+      else
+        edgeEW[me] = edgeEW[me] + edgeEW[e];
     }
+
     quotient.delEdge(e);
   }
 
@@ -266,6 +270,7 @@ void LouvainClustering::clustersNeighborhood(const node &toMove, map<node,double
   neigh.insert(make_pair(comm,0.0));
   const std::vector<edge> neighEdges = quotient.star(toMove);
   unsigned int nbNeigh = neighEdges.size();
+
   for (unsigned int i = 0; i < nbNeigh; ++i) {
     edge e = neighEdges[i];
     node qn = quotient.opposite(e, toMove);
@@ -283,6 +288,7 @@ double LouvainClustering::oneLevel() {
   const std::vector<node>& nodes = quotient.nodes();
   unsigned int nbNodes = quotient.numberOfNodes();
   std::vector<node> random_nodes(nbNodes);
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = random_nodes[i] = nodes[i];
     qclusters.set(n.id, n);
