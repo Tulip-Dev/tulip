@@ -57,7 +57,6 @@ class LouvainClustering : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION("Louvain","François Queyroi","25/02/11","Nodes partitioning measure used for community detection.","2.0","Clustering")
   LouvainClustering(const tlp::PluginContext*);
-  ~LouvainClustering();
   bool run();
 private:
   /**
@@ -93,21 +92,23 @@ private:
   * \return std::map<tlp::node,double> a map with Clusters representative nodes as keys
   * and the weight of the relations as values
   **/
-  std::map<tlp::node,double> clustersNeighborhood(const tlp::node &toMove) const;
+  void clustersNeighborhood(const tlp::node &toMove, std::map<tlp::node,double>&) const;
   /**
   * Performs an local modularity optimisation of the quotient graph
   * \return double the new Q modularity
   */
   double oneLevel();
 
-  tlp::Graph* quotient;                          //A quotient graph of the original graph
+  VectorGraph quotient;                          //A quotient graph of the original graph
+
   std::map<tlp::node,std::pair<double,double> > comToInfo;      //Clusters representative node to Internal and Total edges weights
 
   tlp::MutableContainer<tlp::node> nodeMapping;  //Original graph nodes to Clusters representative  in quotient
-  tlp::MutableContainer<tlp::node> qclusters;         //Quortient graph nodes to Clusters representative nodes
+  tlp::MutableContainer<tlp::node> qclusters;         //Quotient graph nodes to Clusters representative nodes
 
-  tlp::DoubleProperty *internalWeight;                 //Sum of Internal edges weights
-  tlp::DoubleProperty *externalWeight;                 //Sum of External edges weights
+  NodeProperty<double> iW;                 //Sum of Internal edges weights
+  NodeProperty<double> nodeEW;             //Sum of External edges weights
+  EdgeProperty<double> edgeEW;             //Sum of External edges weights
 
   tlp::NumericProperty *metric;                        //Edge Weights
   double m;                                      //Sum of edge weights for the original graph
@@ -120,15 +121,16 @@ static double precision = 0.000001;
 PLUGIN(LouvainClustering)
 //========================================================================================
 void LouvainClustering::createQuotient() {
-  quotient = tlp::newGraph();
-  internalWeight = new DoubleProperty(quotient);
-  externalWeight = new DoubleProperty(quotient);
+  quotient.alloc(iW);
+  quotient.alloc(nodeEW);
+  quotient.alloc(edgeEW);
 
   //Copy the graph into quotient graph
   node n;
   forEach(n,graph->getNodes()) {
-    node t = quotient->addNode();
-    nodeMapping.set(n.id,t);
+    node t = quotient.addNode();
+    iW[t] = 0.0;
+    nodeMapping.set(n.id, t);
     //Sum of weights on adjacents edges and test for self-loops
     double deg=0.0;
     edge e;
@@ -136,7 +138,7 @@ void LouvainClustering::createQuotient() {
     if (metric) {
       forEach(e,graph->getInOutEdges(n)) {
         if(graph->opposite(e,n)==n)
-          internalWeight->setNodeValue(t, metric->getEdgeDoubleValue(e));
+          iW[t] = metric->getEdgeDoubleValue(e);
         else
           deg+=metric->getEdgeDoubleValue(e);
       }
@@ -144,15 +146,15 @@ void LouvainClustering::createQuotient() {
     else {
       forEach(e,graph->getInOutEdges(n)) {
         if(graph->opposite(e,n)==n)
-          internalWeight->setNodeValue(t, 1.0);
+          iW[t] = 1.0;
         else
           deg+=1.0;
       }
     }
 
-    externalWeight->setNodeValue(t,deg);
+    nodeEW[t] = deg;
     //Update comToInfo for modularity computing
-    comToInfo.insert(make_pair(t,make_pair(internalWeight->getNodeValue(t),2.0*internalWeight->getNodeValue(t)+deg)));
+    comToInfo.insert(make_pair(t, make_pair(iW[t], 2.0*iW[t] + deg)));
   }
 
   //Copy Edges and the sum of edge weights
@@ -162,18 +164,18 @@ void LouvainClustering::createQuotient() {
   if (metric) {
     forEach(e,graph->getEdges()) {
       const std::pair<node, node>& eEnds = graph->ends(e);
-      edge ne = quotient->addEdge(nodeMapping.get(eEnds.first.id),
-                                  nodeMapping.get(eEnds.second.id));
-      externalWeight->setEdgeValue(ne,metric->getEdgeDoubleValue(e));
+      edge ne = quotient.addEdge(nodeMapping.get(eEnds.first.id),
+				 nodeMapping.get(eEnds.second.id));
+      edgeEW[ne] = metric->getEdgeDoubleValue(e);
       m+=metric->getEdgeDoubleValue(e);
     }
   }
   else {
     forEach(e,graph->getEdges()) {
       const std::pair<node, node>& eEnds = graph->ends(e);
-      edge ne = quotient->addEdge(nodeMapping.get(eEnds.first.id),
-                                  nodeMapping.get(eEnds.second.id));
-      externalWeight->setEdgeValue(ne, 1.0);
+      edge ne = quotient.addEdge(nodeMapping.get(eEnds.first.id),
+				 nodeMapping.get(eEnds.second.id));
+      edgeEW[ne] = 1.0;
       m+=1.0;
     }
   }
@@ -189,48 +191,55 @@ void LouvainClustering::trackClustering() {
 
 //========================================================================================
 void LouvainClustering::updateQuotient() {
-  Graph* sub = quotient->addSubGraph();
+  NodeProperty<bool> subNodes;
+  EdgeProperty<bool> subEdges;
+  quotient.alloc(subNodes);
+  quotient.alloc(subEdges);
+  
   edge e;
-  stableForEach(e,quotient->getEdges()) {
-    const std::pair<node, node>& eEnds = quotient->ends(e);
+  unsigned int nbElts = quotient.numberOfEdges();
+  for (unsigned int i = nbElts; i > 0;) {
+    edge e = quotient(--i);
+    const std::pair<node, node>& eEnds = quotient.ends(e);
     node qsrc = qclusters.get(eEnds.first.id);
 
-    if(!sub->isElement(qsrc)) {
-      sub->addNode(qsrc);
-      internalWeight->setNodeValue(qsrc,comToInfo[qsrc].first);
-      externalWeight->setNodeValue(qsrc,comToInfo[qsrc].second-comToInfo[qsrc].first*2.0);
+    if (subNodes[qsrc.id] == false) {
+      subNodes[qsrc.id] = true;
+      iW[qsrc] = comToInfo[qsrc].first;
+      nodeEW[qsrc] = comToInfo[qsrc].second-comToInfo[qsrc].first*2.0;
     }
 
     node qtgt = qclusters.get(eEnds.second.id);
 
-    if(qsrc!=qtgt) {
-      if(!sub->isElement(qtgt)) {
-        sub->addNode(qtgt);
-        internalWeight->setNodeValue(qtgt,comToInfo[qtgt].first);
-        externalWeight->setNodeValue(qtgt,comToInfo[qtgt].second-comToInfo[qtgt].first*2.0);
+    if (qsrc!=qtgt) {
+      if (subNodes[qtgt.id] == false) {
+        subNodes[qsrc.id] = true;
+        iW[qtgt] = comToInfo[qtgt].first;
+        nodeEW[qtgt] = comToInfo[qtgt].second-comToInfo[qtgt].first*2.0;
       }
 
-      edge me = sub->existEdge(qsrc,qtgt,false);
-
-      if(!me.isValid())
-        me = sub->addEdge(qsrc,qtgt);
-
-      externalWeight->setEdgeValue(me,externalWeight->getEdgeValue(me)+externalWeight->getEdgeValue(e));
+      edge me = quotient.existEdge(qsrc, qtgt, false);
+      if (!me.isValid() || subEdges[me] == false) {
+	me = quotient.addEdge(qsrc, qtgt);
+	edgeEW[me] = edgeEW[e];
+	subEdges[me] = true;
+      } else
+	edgeEW[me] = edgeEW[me] + edgeEW[e];
     }
-
-    quotient->delEdge(e);
+    quotient.delEdge(e);
   }
 
   node n;
-  stableForEach(n,quotient->getNodes()) {
-    if(!sub->isElement(n))
-      quotient->delNode(n);
+  stableForEach(n, quotient.getNodes()) {
+    if (subNodes[n.id] == false)
+      quotient.delNode(n);
   }
-  quotient->delSubGraph(sub);
+  quotient.free(subNodes);
+  quotient.free(subEdges);
 }
 //========================================================================================
 double LouvainClustering::measure_gain(const node &toMove,const node &dest,double interWeight) const {
-  double deg = 2.0*internalWeight->getNodeValue(toMove)+externalWeight->getNodeValue(toMove);
+  double deg = 2.0*iW[toMove]+ nodeEW[toMove];
   double degtot = (comToInfo.find(dest)->second).second;
   return (interWeight - degtot*deg/(2.0*m)) ;
 }
@@ -251,34 +260,32 @@ double LouvainClustering::modularity() const {
   return q;
 }
 //========================================================================================
-map<node,double> LouvainClustering::clustersNeighborhood(const node &toMove) const {
-  map<node,double> neigh;
+void LouvainClustering::clustersNeighborhood(const node &toMove, map<node,double>& neigh) const {
   //Insert node's own clusters
   node comm = qclusters.get(toMove.id);
   neigh.insert(make_pair(comm,0.0));
-  edge e;
-  forEach(e,quotient->getInOutEdges(toMove)) {
-    node qn = quotient->opposite(e,toMove);
+  const std::vector<edge> neighEdges = quotient.star(toMove);
+  unsigned int nbNeigh = neighEdges.size();
+  for (unsigned int i = 0; i < nbNeigh; ++i) {
+    edge e = neighEdges[i];
+    node qn = quotient.opposite(e, toMove);
     node cInd = qclusters.get(qn.id);
 
     if(neigh.find(cInd)==neigh.end())
       neigh.insert(make_pair(cInd,0.0));
 
-    neigh[cInd]+=externalWeight->getEdgeValue(e);
+    neigh[cInd]+= edgeEW[e];
   }
-  return neigh;
 }
 //========================================================================================
 double LouvainClustering::oneLevel() {
   //Random schuffle of the quotient nodes
-  vector<node> random_nodes;
-  random_nodes.resize(quotient->numberOfNodes());
-  unsigned int i=0;
-  node n;
-  forEach(n,quotient->getNodes()) {
-    random_nodes[i]=n;
-    i++;
-    qclusters.set(n.id,n);
+  const std::vector<node>& nodes = quotient.nodes();
+  unsigned int nbNodes = quotient.numberOfNodes();
+  std::vector<node> random_nodes(nbNodes);
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    node n = random_nodes[i] = nodes[i];
+    qclusters.set(n.id, n);
   }
 
   random_shuffle(random_nodes.begin(),random_nodes.end());
@@ -294,13 +301,14 @@ double LouvainClustering::oneLevel() {
     qimprove = false;
 
     for(unsigned int i=0; i<random_nodes.size(); ++i) {
-      n  = random_nodes[i];
-      node best_comm        = qclusters.get(n.id);
+      node n  = random_nodes[i];
+      node best_comm = qclusters.get(n.id);
       //Compute reachable clusters
-      map<node,double> neigh = clustersNeighborhood(n);
+      map<node,double> neigh;
+      clustersNeighborhood(n, neigh);
       //Remove n from its own community
-      comToInfo[best_comm].first -= (neigh.find(best_comm))->second+internalWeight->getNodeValue(n);
-      comToInfo[best_comm].second-= internalWeight->getNodeValue(n)*2.+externalWeight->getNodeValue(n);
+      comToInfo[best_comm].first -= (neigh.find(best_comm))->second+iW[n];
+      comToInfo[best_comm].second-= iW[n]*2.+nodeEW[n];
 
       double best_increase = 0.;
       node previous_com = best_comm;
@@ -316,9 +324,9 @@ double LouvainClustering::oneLevel() {
       }
 
       //Insert n in its new cluster
-      comToInfo[best_comm].first  += (neigh.find(best_comm))->second+internalWeight->getNodeValue(n);
-      comToInfo[best_comm].second += internalWeight->getNodeValue(n)*2.+externalWeight->getNodeValue(n);
-      qclusters.set(n.id,best_comm);
+      comToInfo[best_comm].first  += (neigh.find(best_comm))->second+iW[n];
+      comToInfo[best_comm].second += iW[n]*2.+nodeEW[n];
+      qclusters.set(n.id, best_comm);
 
       if (best_comm!=previous_com) {
         qimprove=true;
@@ -345,16 +353,8 @@ const char * paramHelp[] = {
 };
 }
 //========================================================================================
-LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleAlgorithm(context), quotient(NULL), internalWeight(NULL), externalWeight(NULL), metric(NULL), m(0.0) {
+LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleAlgorithm(context), metric(NULL), m(0.0) {
   addInParameter<NumericProperty*>("metric",paramHelp[0], "",false);
-}
-//========================================================================================
-LouvainClustering::~LouvainClustering() {
-  if(quotient) {
-    delete quotient;
-    delete internalWeight;
-    delete externalWeight;
-  }
 }
 //========================================================================================
 bool LouvainClustering::run() {
