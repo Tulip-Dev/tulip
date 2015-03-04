@@ -431,9 +431,10 @@ public:
   }
 
   QIcon getFontAwesomeIcon(const QString &iconName) {
-      if (qtAwesome.fontName().isEmpty())
-        qtAwesome.initFontAwesome(tlpStringToQString(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation()));
-      return qtAwesome.icon(static_cast<fa::iconCodePoint>(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName.toStdString())));
+    if (qtAwesome.fontName().isEmpty())
+      qtAwesome.initFontAwesome(tlpStringToQString(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation()));
+
+    return qtAwesome.icon(static_cast<fa::iconCodePoint>(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName.toStdString())));
   }
 
 private:

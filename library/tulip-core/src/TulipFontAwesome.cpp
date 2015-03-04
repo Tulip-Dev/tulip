@@ -1226,6 +1226,7 @@ static void initFontAwesomeIconCodePoints() {
   addIconCodePoint(TulipFontAwesome::YoutubeSquare, 0xf166);
 
   map<string, vector<unsigned int> >::iterator it = fontAwesomeIconCodePoint.begin();
+
   for ( ; it != fontAwesomeIconCodePoint.end() ; ++it) {
     fontAwesomeIconsNames.push_back(it->first);
   }
@@ -1239,6 +1240,7 @@ bool TulipFontAwesome::isFontAwesomeIconSupported(const string &iconName) {
   if (fontAwesomeIconCodePoint.empty()) {
     initFontAwesomeIconCodePoints();
   }
+
   return std::find(fontAwesomeIconsNames.begin(), fontAwesomeIconsNames.end(), iconName) != fontAwesomeIconsNames.end();
 }
 
@@ -1246,6 +1248,7 @@ const vector<string> &TulipFontAwesome::getSupportedFontAwesomeIcons() {
   if (fontAwesomeIconCodePoint.empty()) {
     initFontAwesomeIconCodePoints();
   }
+
   return fontAwesomeIconsNames;
 }
 
@@ -1253,6 +1256,7 @@ std::string TulipFontAwesome::getFontAwesomeIconUtf8String(const string &iconNam
   if (fontAwesomeIconCodePoint.empty()) {
     initFontAwesomeIconCodePoints();
   }
+
   std::string iconString;
   utf8::utf32to8(fontAwesomeIconCodePoint[iconName].begin(), fontAwesomeIconCodePoint[iconName].end(), back_inserter(iconString));
   return iconString;
@@ -1262,9 +1266,11 @@ unsigned int TulipFontAwesome::getFontAwesomeIconCodePoint(const std::string &ic
   if (fontAwesomeIconCodePoint.empty()) {
     initFontAwesomeIconCodePoints();
   }
+
   if (fontAwesomeIconCodePoint.find(iconName) != fontAwesomeIconCodePoint.end()) {
     return fontAwesomeIconCodePoint[iconName][0];
-  } else {
+  }
+  else {
     return 0;
   }
 }
