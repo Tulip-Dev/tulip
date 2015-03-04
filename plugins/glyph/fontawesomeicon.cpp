@@ -42,9 +42,11 @@ public:
   void draw(node n, float) {
     StringProperty *viewFontAwesomeIcon = glGraphInputData->getElementFontAwesomeIcon();
     string iconName = viewFontAwesomeIcon->getNodeValue(n);
+
     if (iconName.empty() || !TulipFontAwesome::isFontAwesomeIconSupported(iconName)) {
       iconName = defaultIcon;
     }
+
     const tlp::Color &nodeColor = glGraphInputData->getElementColor()->getNodeValue(n);
     const tlp::Color &nodeBorderColor = glGraphInputData->getElementBorderColor()->getNodeValue(n);
     float nodeBorderWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
@@ -68,9 +70,11 @@ public:
   void draw(edge e, node, const Color& glyphColor,const Color &borderColor, float) {
     StringProperty *viewFontAwesomeIcon = edgeExtGlGraphInputData->getElementFontAwesomeIcon();
     string iconName = viewFontAwesomeIcon->getEdgeValue(e);
+
     if (iconName.empty() || !TulipFontAwesome::isFontAwesomeIconSupported(iconName)) {
       iconName = defaultIcon;
     }
+
     string edgeTexture = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
     float borderWidth = edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e);
 
