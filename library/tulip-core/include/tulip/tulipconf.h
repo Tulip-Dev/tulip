@@ -129,8 +129,12 @@ static float strtof(const char* cptr, char** endptr) {
 #  define stdext __gnu_cxx
 
 // disable some specific C++11 warnings with clang
+#if __clang_major__ >= 3 && __clang_minor__ >= 4
 #pragma clang diagnostic ignored "-Wdeprecated-register"
+#endif
+#if __clang_major__ >= 3 && __clang_minor__ >= 5
 #pragma clang diagnostic ignored "-Wtautological-undefined-compare"
+#endif
 
 //for GCC 4.X
 #else
