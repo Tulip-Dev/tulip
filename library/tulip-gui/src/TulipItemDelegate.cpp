@@ -81,6 +81,7 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<LabelPosition::LabelPositions>(new TulipLabelPositionEditorCreator);
   registerCreator<Graph*>(new GraphEditorCreator);
   registerCreator<std::set<tlp::edge> >(new EdgeSetEditorCreator);
+  registerCreator<TulipFontAwesomeIcon>(new TulipFontAwesomeIconCreator);
 }
 
 TulipItemDelegate::~TulipItemDelegate() {

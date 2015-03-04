@@ -74,6 +74,7 @@ public:
     VIEW_TGTANCHORSHAPE, /**< shape of target arrow edge extremity */
     VIEW_TGTANCHORSIZE, /**< size of target arrow edge extremity */
     VIEW_ANIMATIONFRAME, /**< animation frame */
+    VIEW_FONTAWESOMEICON, /**< font awesome icon name for the font awesome icon glyph*/
     NB_PROPS /** must be the last, give the number of enum props */
   };
 
@@ -418,6 +419,19 @@ public:
    */
   void setElementAnimationFrame(IntegerProperty *property) {
     setProperty(VIEW_ANIMATIONFRAME,property);
+  }
+
+  /**
+   * Return a pointer on the property used to elementFontAwesomeIcon
+   */
+  StringProperty *getElementFontAwesomeIcon() const {
+    return getProperty<StringProperty>(VIEW_FONTAWESOMEICON);
+  }
+  /**
+   * Set the pointer on the property used to elementFontAwesomeIcon
+   */
+  void setElementFontAwesomeIcon(StringProperty *property) {
+    setProperty(VIEW_FONTAWESOMEICON,property);
   }
 
   std::set<tlp::PropertyInterface*> properties() const {

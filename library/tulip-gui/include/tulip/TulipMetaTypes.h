@@ -63,6 +63,16 @@ struct TulipFileDescriptor {
   QString fileFilterPattern;
 };
 
+struct TulipFontAwesomeIcon {
+
+  TulipFontAwesomeIcon() {}
+
+  TulipFontAwesomeIcon(const QString &iconName) : iconName(iconName) {}
+
+  QString iconName;
+
+};
+
 //Declare tulip type compatible with QVariant
 Q_DECLARE_METATYPE(tlp::DataSet)
 
@@ -113,6 +123,7 @@ Q_DECLARE_METATYPE(tlp::ColorScale)
 Q_DECLARE_METATYPE(tlp::StringCollection)
 
 Q_DECLARE_METATYPE(TulipFileDescriptor)
+Q_DECLARE_METATYPE(TulipFontAwesomeIcon)
 
 Q_DECLARE_METATYPE(tlp::NodeShape::NodeShapes)
 Q_DECLARE_METATYPE(tlp::EdgeShape::EdgeShapes)

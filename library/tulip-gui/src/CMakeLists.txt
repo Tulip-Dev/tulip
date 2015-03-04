@@ -202,9 +202,9 @@ QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
 ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 
-INCLUDE_DIRECTORIES(../include ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${QuazipInclude} ${QxtInclude})
+INCLUDE_DIRECTORIES(../include ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${QuazipInclude} ${QxtInclude} ${QtAwesomeInclude})
 ADD_LIBRARY(${LibTulipGUIName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
-TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglName} ${QuazipLibrary} ${QxtLibrary})
+TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglName} ${QuazipLibrary} ${QxtLibrary} ${QtAwesomeLibrary})
 
 INSTALL(TARGETS ${LibTulipGUIName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_gui

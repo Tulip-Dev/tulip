@@ -877,6 +877,7 @@ void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data,
         noShaderGlyphs.insert(EdgeExtremityShape::GlowSphere);
         noShaderGlyphs.insert(EdgeExtremityShape::Sphere);
         noShaderGlyphs.insert(EdgeExtremityShape::Cube);
+        noShaderGlyphs.insert(EdgeExtremityShape::FontAwesomeIcon);
       }
 
       Color borderColor = data->parameters->isEdgeColorInterpolate() ? color : data->getElementBorderColor()->getEdgeValue(e);
