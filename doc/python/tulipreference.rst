@@ -849,3 +849,11 @@ tlp.TriconnectedTest
 .. autoclass:: tulip::tlp.TriconnectedTest
 	:members:
 
+Miscellaneous
+-------------
+
+tlp.TulipFontAwesome
+^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: tulip::tlp.TulipFontAwesome
+    :members:

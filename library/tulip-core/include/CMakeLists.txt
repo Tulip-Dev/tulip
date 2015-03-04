@@ -81,6 +81,7 @@ INSTALL(FILES
   tulip/TriconnectedTest.h
   tulip/tulipconf.h
   tulip/TulipException.h
+  tulip/TulipFontAwesome.h
   tulip/tuliphash.h
   tulip/TulipPluginHeaders.h
   tulip/TulipViewSettings.h

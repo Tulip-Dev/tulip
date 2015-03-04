@@ -67,7 +67,7 @@ static FTGLOutlineFont* getOutlineFont(const std::string& name) {
 
 static const int SpaceBetweenLine=5;
 
-GlLabel::GlLabel():oldCamera(NULL) {
+GlLabel::GlLabel(): leftAlign(false), oldCamera(NULL) {
   init();
 }
 GlLabel::GlLabel(Coord centerPosition,Size size,Color fontColor,bool leftAlign):centerPosition(centerPosition),size(size),color(fontColor),leftAlign(leftAlign),oldCamera(NULL) {
@@ -143,20 +143,11 @@ void GlLabel::setText(const string& text) {
   //Text bounding box computation
   textBoundingBox=BoundingBox();
 
-  float x1,y1,z1,x2,y2,z2,w1,w2;
-
-  //Here we compute height of the text based on the char |
-  stringstream strstr;
-  strstr << "|" ;
-
-  for(unsigned int i=0; i<textVector.size(); ++i)
-    strstr << endl << "|" ;
-
-  font->BBox(strstr.str().c_str(),x1,y1,z1,x2,y2,z2);
+  float x1,y1,z1,x2,y2,z2;
 
   // After we compute width of text
   for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
-    font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
+    font->BBox((*it).c_str(),x1,y1,z1,x2,y2,z2);
     textWidthVector.push_back(x2-x1);
 
     if(it==textVector.begin()) {
@@ -285,7 +276,7 @@ void GlLabel::draw(float, Camera *camera) {
   if(oldLod==-1) {
     computeLOD=true;
   }
-  else {
+  else if (camera) {
     computeLOD=camera->getEyes()!=oldCamera.getEyes() ||
                camera->getCenter()!=oldCamera.getCenter() ||
                camera->getZoomFactor()!=oldCamera.getZoomFactor() ||
@@ -294,7 +285,7 @@ void GlLabel::draw(float, Camera *camera) {
 
   float lod=oldLod;
 
-  if(computeLOD) {
+  if(computeLOD && camera) {
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glMatrixMode(GL_PROJECTION);
@@ -687,7 +678,7 @@ void GlLabel::draw(float, Camera *camera) {
 
       setMaterial(color);
 
-      if (screenH > 6 || outlineColor.getA()==0 || outlineSize==0) {
+      if (!useLOD || screenH > 6 || outlineColor.getA()==0 || outlineSize==0) {
         font->Render((*it).c_str(),-1,shift);
       }
 
@@ -695,7 +686,7 @@ void GlLabel::draw(float, Camera *camera) {
         GlTextureManager::getInst().desactivateTexture();
 
       if (outlineSize > 0) {
-        if (screenH > 25) {
+        if (!useLOD || screenH > 25) {
           glLineWidth(outlineSize);
         }
         else {

@@ -51,7 +51,8 @@ public:
         Square=4,
         Triangle=11,
         Window=17,
-        Star=19
+        Star=19,
+        FontAwesomeIcon=20
     };
 };
 
@@ -93,7 +94,8 @@ public:
         Ring=15,
         Sphere=2 ,
         Square=4,
-        Star=19
+        Star=19,
+        FontAwesomeIcon=20
     };
 };
 

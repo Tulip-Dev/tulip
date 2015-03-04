@@ -314,6 +314,7 @@ PyObject* evalPythonStatement(const std::string &pythonStatement) {
 %Include TulipViewSettings.sip
 %Include Delaunay.sip
 %Include ConvexHull.sip
+%Include TulipFontAwesome.sip
 
 // force generation of wrappers for specialized template classes
 typedef std::vector<tlp::Graph*> vectorGraphType;

@@ -235,6 +235,7 @@ Below is the exhaustive list of the constants for nodes shapes:
     * :const:`tlp.NodeShape.Star`
     * :const:`tlp.NodeShape.Triangle`
     * :const:`tlp.NodeShape.Window`
+    * :const:`tlp.NodeShape.FontAwesomeIcon` (see :class:`tlp.TulipFontAwesome`)
 
 Below is the exhaustive list of the constants for edges shapes:
 
@@ -263,6 +264,7 @@ Constants are also available for code readability, here is the exhaustive list :
     * :const:`tlp.EdgeExtremityShape.Sphere`
     * :const:`tlp.EdgeExtremityShape.Square`
     * :const:`tlp.EdgeExtremityShape.Star`
+    * :const:`tlp.EdgeExtremityShape.FontAwesomeIcon` (see :class:`tlp.TulipFontAwesome`)
 
 The sample code below set the shape of the selected nodes to a circle::
 

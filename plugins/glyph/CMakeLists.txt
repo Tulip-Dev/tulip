@@ -29,6 +29,7 @@ GLYPH(Diamond diamond.cpp)
 GLYPH(Cross cross.cpp)
 GLYPH(GlowSphere glowsphere.cpp)
 GLYPH(Star star.cpp)
+GLYPH(FontAwesomeIcon fontawesomeicon.cpp)
 
 ## radialGradientTexture.png is used in glowsphere.cpp
 INSTALL(FILES

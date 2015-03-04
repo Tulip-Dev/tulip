@@ -1,6 +1,7 @@
 INSTALL(FILES
   fontb.ttf
   font.ttf 
+  fontawesome-webfont.ttf
   halfCylinderTexture.png
   cylinderTexture.png
   roundTexture.png

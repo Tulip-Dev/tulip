@@ -981,7 +981,7 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       break;
     }
 
-    case EdgeExtremityShape::None:
+    default:
       break;
     }
 
@@ -1386,7 +1386,7 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       break;
     }
 
-    case EdgeExtremityShape::None:
+    default:
       break;
     }
 

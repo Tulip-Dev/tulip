@@ -406,6 +406,9 @@ SET(OGDFLibrary OGDF-tulip-${TulipMMVersion})
 SET(QHULLInclude ${PROJECT_SOURCE_DIR}/thirdparty)
 SET(UTF8CppInclude ${PROJECT_SOURCE_DIR}/thirdparty/utf8-cpp/source)
 SET(YajlLibrary yajl-tulip-${TulipMMVersion})
+SET(QtAwesomeLibrary QtAwesome)
+SET(QtAwesomeInclude ${PROJECT_SOURCE_DIR}/thirdparty/QtAwesome)
+
 
 SET(TulipCoreInclude ${PROJECT_SOURCE_DIR}/library/tulip-core/include/)
 SET(TulipCoreBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-core/include/)
