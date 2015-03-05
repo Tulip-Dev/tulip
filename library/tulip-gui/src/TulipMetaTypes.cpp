@@ -126,6 +126,7 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
     TulipFileDescriptor desc = v.value<TulipFileDescriptor>();
     return new TypedData<std::string>(new std::string(QStringToTlpString(desc.absolutePath)));
   }
+
   if (v.userType() == qMetaTypeId<TulipFontAwesomeIcon>())
     return new TypedData<std::string>(new std::string(QStringToTlpString(v.value<TulipFontAwesomeIcon>().iconName)));
 

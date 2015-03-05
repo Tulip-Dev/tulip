@@ -52,38 +52,44 @@ static const char * paramHelp[] = {
 }
 
 static const char* commonTextFilesExtArray[] = {"log", "msg", "odt", "pages", "rtf", "json",
-                                                "tex", "txt", "wpd", "wps", "srt", "nfo"};
+                                                "tex", "txt", "wpd", "wps", "srt", "nfo"
+                                               };
 static const std::vector<std::string> commonTextFilesExt(commonTextFilesExtArray, commonTextFilesExtArray +
-                                                         sizeof(commonTextFilesExtArray) / sizeof(commonTextFilesExtArray[0]));
+    sizeof(commonTextFilesExtArray) / sizeof(commonTextFilesExtArray[0]));
 
 static const char* commonAudioFilesExtArray[] = {"aif", "iff", "m3u", "m4a", "mid", "mp3",
-                                                 "mpa", "ogg", "ra", "wav", "wma", "flac"};
+                                                 "mpa", "ogg", "ra", "wav", "wma", "flac"
+                                                };
 static const std::vector<std::string> commonAudioFilesExt(commonAudioFilesExtArray, commonAudioFilesExtArray +
-                                                          sizeof(commonAudioFilesExtArray) / sizeof(commonAudioFilesExtArray[0]));
+    sizeof(commonAudioFilesExtArray) / sizeof(commonAudioFilesExtArray[0]));
 
 static const char* commonVideoFilesExtArray[] = {"3g2", "3gp", "asf", "asx", "avi", "flv",
                                                  "m4v", "mkv", "mov", "mp4", "mpg", "rm", "swf",
-                                                 "vob", "wmv"};
+                                                 "vob", "wmv"
+                                                };
 static const std::vector<std::string> commonVideoFilesExt(commonVideoFilesExtArray, commonVideoFilesExtArray +
-                                                          sizeof(commonVideoFilesExtArray) / sizeof(commonVideoFilesExtArray[0]));
+    sizeof(commonVideoFilesExtArray) / sizeof(commonVideoFilesExtArray[0]));
 
 static const char* commonImageFilesExtArray[] = {"bmp", "dds", "gif", "jpg", "jpeg", "png", "psd",
                                                  "pspimage", "tga", "thm", "tif", "tiff", "yuv",
-                                                 "ai", "eps", "ps", "svg"};
+                                                 "ai", "eps", "ps", "svg"
+                                                };
 static const std::vector<std::string> commonImageFilesExt(commonImageFilesExtArray, commonImageFilesExtArray +
-                                                          sizeof(commonImageFilesExtArray) / sizeof(commonImageFilesExtArray[0]));
+    sizeof(commonImageFilesExtArray) / sizeof(commonImageFilesExtArray[0]));
 
 static const char* commonArchiveFilesExtArray[] = {"7z", "cbr", "deb", "gz", "pkg", "rar", "rpm",
-                                                   "sitx", "tar", "zip", "zipx", "bz2", "lzma"};
+                                                   "sitx", "tar", "zip", "zipx", "bz2", "lzma"
+                                                  };
 static const std::vector<std::string> commonArchiveFilesExt(commonArchiveFilesExtArray, commonArchiveFilesExtArray +
-                                                            sizeof(commonArchiveFilesExtArray) / sizeof(commonArchiveFilesExtArray[0]));
+    sizeof(commonArchiveFilesExtArray) / sizeof(commonArchiveFilesExtArray[0]));
 
 static const char* commonDevFilesExtArray[] = {"c", "cc", "class", "cpp", "cs", "dtd", "fla", "h",
                                                "hh", "hpp", "java", "lua", "m", "pl", "py", "sh",
                                                "sln", "swift", "vcxproj", "xcodeproj", "css", "js",
-                                               "html", "xml", "htm", "php", "xhtml"};
+                                               "html", "xml", "htm", "php", "xhtml"
+                                              };
 static const std::vector<std::string> commonDevFilesExt(commonDevFilesExtArray, commonDevFilesExtArray +
-                                                        sizeof(commonDevFilesExtArray) / sizeof(commonDevFilesExtArray[0]));
+    sizeof(commonDevFilesExtArray) / sizeof(commonDevFilesExtArray[0]));
 
 static tlp::DataSet getDefaultAlgorithmParameters(const std::string &algoName, tlp::Graph *graph) {
   tlp::DataSet result;
@@ -166,6 +172,7 @@ public:
       QFileInfoList entries(currentDir.entryInfoList(QDir::NoDot | QDir::NoDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
 
       int i = 0;
+
       if (pluginProgress) {
         pluginProgress->setComment("Reading contents of " + tlp::QStringToTlpString(currentDir.absolutePath()));
         pluginProgress->progress(i, entries.count());
@@ -220,28 +227,39 @@ private:
 
     if (_useIcons) {
       std::string extension = infos.suffix().toStdString();
+
       if (infos.isDir()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FolderO);
-      } else if (std::find(commonTextFilesExt.begin(), commonTextFilesExt.end(), extension) != commonTextFilesExt.end()) {
+      }
+      else if (std::find(commonTextFilesExt.begin(), commonTextFilesExt.end(), extension) != commonTextFilesExt.end()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileTextO);
-      } else if (std::find(commonArchiveFilesExt.begin(), commonArchiveFilesExt.end(), extension) != commonArchiveFilesExt.end()) {
+      }
+      else if (std::find(commonArchiveFilesExt.begin(), commonArchiveFilesExt.end(), extension) != commonArchiveFilesExt.end()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileArchiveO);
-      } else if (std::find(commonAudioFilesExt.begin(), commonAudioFilesExt.end(), extension) != commonAudioFilesExt.end()) {
+      }
+      else if (std::find(commonAudioFilesExt.begin(), commonAudioFilesExt.end(), extension) != commonAudioFilesExt.end()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileAudioO);
-      } else if (std::find(commonImageFilesExt.begin(), commonImageFilesExt.end(), extension) != commonImageFilesExt.end()) {
+      }
+      else if (std::find(commonImageFilesExt.begin(), commonImageFilesExt.end(), extension) != commonImageFilesExt.end()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileImageO);
-      } else if (std::find(commonVideoFilesExt.begin(), commonVideoFilesExt.end(), extension) != commonVideoFilesExt.end()) {
+      }
+      else if (std::find(commonVideoFilesExt.begin(), commonVideoFilesExt.end(), extension) != commonVideoFilesExt.end()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileVideoO);
-      } else if (std::find(commonDevFilesExt.begin(), commonDevFilesExt.end(), extension) != commonDevFilesExt.end()) {
+      }
+      else if (std::find(commonDevFilesExt.begin(), commonDevFilesExt.end(), extension) != commonDevFilesExt.end()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileCodeO);
-      } else if (extension == "pdf") {
+      }
+      else if (extension == "pdf") {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FilePdfO);
-      } else if (extension == "doc" || extension == "doc") {
+      }
+      else if (extension == "doc" || extension == "doc") {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileWordO);
-      } else if (extension == "xls" || extension == "xlsx") {
-         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileExcelO);
-      } else if (extension == "ppt" || extension == "pptx") {
-         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FilePowerpointO);
+      }
+      else if (extension == "xls" || extension == "xlsx") {
+        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileExcelO);
+      }
+      else if (extension == "ppt" || extension == "pptx") {
+        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FilePowerpointO);
       }
     }
 
