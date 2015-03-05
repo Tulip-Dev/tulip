@@ -10,9 +10,15 @@ if [ -f tlp_diff_arg2.tlp ]; then
     rm tlp_diff_arg2.tlp
 fi
 
-# remove tlp, date, comments
-sed -e '/(tlp /,/Tulip.")/d' -e '/(string "file" "/,0d' $1 > tlp_diff_arg1.tlp
-sed -e '/(tlp /,/Tulip.")/d' -e '/(string "file" "/,0d' $2 > tlp_diff_arg2.tlp
+# remove tlp, date, comments and viewFontAwesomeIcon property
+sed -e '/(tlp /,/Tulip.")/d' -e '/(property  0 string "viewFontAwesomeIcon"/ {
+N
+N
+d}' -e '/(string "file" "/,0d' $1 > tlp_diff_arg1.tlp
+sed -e '/(tlp /,/Tulip.")/d' -e '/(property  0 string "viewFontAwesomeIcon"/ {
+N
+N
+d}' -e '/(string "file" "/,0d' $2 > tlp_diff_arg2.tlp
 
 # and controller description if needed
 if [ "$TLP_DIFF_CONTROLLER" = "NO" ]; then
