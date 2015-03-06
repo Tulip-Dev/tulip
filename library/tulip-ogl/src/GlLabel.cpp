@@ -618,6 +618,7 @@ void GlLabel::draw(float, Camera *camera) {
     //Draw labels
 
     glDisable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
 
     // For left and right alignment
     float xAlignFactor=.5;
@@ -663,12 +664,11 @@ void GlLabel::draw(float, Camera *camera) {
     // space between lines
     float yShift=0.;
 
-    float x1,y1,z1,x2,y2,z2,w1,w2;
-    font->BBox("|",x1,y1,z1,x2,y2,z2);
+    float x1,y1,z1,x2,y2,z2;
     vector<float>::iterator itW=textWidthVector.begin();
 
     for(vector<string>::iterator it=textVector.begin(); it!=textVector.end(); ++it) {
-      font->BBox((*it).c_str(),x1,w1,z1,x2,w2,z2);
+      font->BBox((*it).c_str(),x1,y1,z1,x2,y2,z2);
 
       FTPoint shift(-(textBoundingBox[1][0]-textBoundingBox[0][0])/2.-x1+((textBoundingBox[1][0]-textBoundingBox[0][0])-(*itW))*xAlignFactor+(textBoundingBox[1][0]-textBoundingBox[0][0])*xShiftFactor,
                     -textBoundingBox[1][1]+(textBoundingBox[1][1]-textBoundingBox[0][1])/2.+yShift+(textBoundingBox[1][1]-textBoundingBox[0][1])*yShiftFactor);
