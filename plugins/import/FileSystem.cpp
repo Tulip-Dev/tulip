@@ -48,6 +48,20 @@ static const char * paramHelp[] = {
   HTML_HELP_BODY()                  \
   "If true, apply the Bubble Tree layout algorithm on the imported graph."        \
   HTML_HELP_CLOSE(),
+  // directory color
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "color" ) \
+  HTML_HELP_DEF( "default", "red" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicated the color used to display directory." \
+  HTML_HELP_CLOSE(),
+  // other color
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "color" ) \
+  HTML_HELP_DEF( "default", "blue" ) \
+  HTML_HELP_BODY() \
+  "This parameter indicated the color used to display other files." \
+  HTML_HELP_CLOSE(),
 };
 }
 
@@ -108,11 +122,13 @@ class FileSystem:public tlp::ImportModule {
 public:
   PLUGININFORMATION( "File System Directory", "Auber", "16/12/2002", "Imports a tree representation of a file system directory.", "2.2", "Misc")
   FileSystem(tlp::PluginContext* context):ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
-    _fileNames(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL),
-    _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL), _sizes(NULL), _useIcons(true), _treeLayout(true) {
+    _fileNames(NULL), _isDir(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL),
+    _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL), _sizes(NULL), _useIcons(true), _treeLayout(true), dirColor(255, 255, 127, 128) {
     addInParameter<std::string>("dir::directory", paramHelp[0],"");
     addInParameter<bool>("icons", paramHelp[1],"true");
     addInParameter<bool>("tree layout", paramHelp[2],"true");
+    addInParameter<tlp::Color>("directory color",paramHelp[3],"(255, 255, 127, 128)");
+    addInParameter<tlp::Color>("other color",paramHelp[4],"(85, 170, 255,128)");
   }
 
   bool importGraph() {
@@ -125,6 +141,9 @@ public:
 
     dataSet->get("icons", _useIcons);
     dataSet->get("tree layout", _treeLayout);
+    dataSet->get("directory color", dirColor);
+    tlp::Color otherColor(85, 170, 255,128);
+    dataSet->get("other color", otherColor);
 
 
     if (!rootInfo.exists()) {
@@ -138,6 +157,7 @@ public:
     _baseNames = graph->getProperty<tlp::StringProperty>("Base name");
     _createdDates = graph->getProperty<tlp::StringProperty>("Creation date");
     _fileNames = graph->getProperty<tlp::StringProperty>("File name");
+    _isDir = graph->getProperty<tlp::BooleanProperty>("Is directory");
     _isExecutable = graph->getProperty<tlp::BooleanProperty>("Is executable");
     _isReadable = graph->getProperty<tlp::BooleanProperty>("Is readable");
     _isSymlink = graph->getProperty<tlp::BooleanProperty>("Is symbolic link");
@@ -155,6 +175,9 @@ public:
       viewShape->setAllNodeValue(tlp::NodeShape::FontAwesomeIcon);
       _fontAwesomeIcon->setAllNodeValue(tlp::TulipFontAwesome::FileO);
     }
+
+    tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
+    viewColor->setAllNodeValue(otherColor);
 
     tlp::node rootNode = addFileNode(rootInfo,graph);
 
@@ -214,6 +237,7 @@ private:
     _baseNames->setNodeValue(n,tlp::QStringToTlpString(infos.baseName()));
     _createdDates->setNodeValue(n,tlp::QStringToTlpString(infos.created().toString()));
     _fileNames->setNodeValue(n,tlp::QStringToTlpString(infos.fileName()));
+    _isDir->setNodeValue(n,infos.isDir());
     _isExecutable->setNodeValue(n,infos.isExecutable());
     _isReadable->setNodeValue(n,infos.isReadable());
     _isSymlink->setNodeValue(n,infos.isSymLink());
@@ -230,6 +254,8 @@ private:
 
       if (infos.isDir()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FolderO);
+	tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
+	viewColor->setNodeValue(n, dirColor);
       }
       else if (std::find(commonTextFilesExt.begin(), commonTextFilesExt.end(), extension) != commonTextFilesExt.end()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileTextO);
@@ -270,6 +296,7 @@ private:
   tlp::StringProperty *_baseNames;
   tlp::StringProperty *_createdDates;
   tlp::StringProperty *_fileNames;
+  tlp::BooleanProperty *_isDir;
   tlp::BooleanProperty *_isExecutable;
   tlp::BooleanProperty *_isReadable;
   tlp::BooleanProperty *_isSymlink;
@@ -283,6 +310,7 @@ private:
   tlp::StringProperty *_fontAwesomeIcon;
   bool _useIcons;
   bool _treeLayout;
+  tlp::Color dirColor;
 };
 
 PLUGIN(FileSystem)
