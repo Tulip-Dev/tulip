@@ -254,8 +254,8 @@ private:
 
       if (infos.isDir()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FolderO);
-	tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
-	viewColor->setNodeValue(n, dirColor);
+        tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
+        viewColor->setNodeValue(n, dirColor);
       }
       else if (std::find(commonTextFilesExt.begin(), commonTextFilesExt.end(), extension) != commonTextFilesExt.end()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileTextO);
