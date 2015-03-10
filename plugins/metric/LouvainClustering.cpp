@@ -372,8 +372,11 @@ bool LouvainClustering::run() {
   //Init Quotient graph
   createQuotient();
 
-  //Test if there is ane edges in the graph
-  if(m==0) return false;
+  //Test if there is an edge in the graph
+  if(m==0) {
+      pluginProgress->setError("Graph contains no edges");
+      return false;
+  }
 
   //Compute initial modularity
   double mod=modularity();
