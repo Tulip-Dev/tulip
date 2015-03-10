@@ -25,10 +25,10 @@ using namespace tlp;
 
 /// AutoSize.cpp - Compute size in order to prevent node-node overlapping
 /**
- * This plug-ins compute size of nodes and edges such that, node-node overlapping do not exists (if it is possible).
- * and sizes of edges are proportional to size of nodes.
+ * This plugin compute the size of nodes and edges such that node-node overlapping does not exist (if it is possible).
+ * and edge sizes are proportional to node sizes.
  *
- *  \author David Auber University Bordeaux I France: Email:auber@tulip-software.org
+ *  \author David Auber Bordeaux University France: Email:auber@tulip-software.org
  */
 class AutoSize:public SizeAlgorithm {
 public:
