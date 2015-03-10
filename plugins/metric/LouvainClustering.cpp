@@ -374,8 +374,8 @@ bool LouvainClustering::run() {
 
   //Test if there is an edge in the graph
   if(m==0) {
-      pluginProgress->setError("Graph contains no edges");
-      return false;
+    pluginProgress->setError("Graph contains no edges");
+    return false;
   }
 
   //Compute initial modularity

@@ -1262,15 +1262,17 @@ std::string TulipFontAwesome::getFontAwesomeIconUtf8String(const std::string& ic
   return iconString;
 }
 
-  unsigned int TulipFontAwesome::getFontAwesomeIconCodePoint(const std::string &iconName) {
+unsigned int TulipFontAwesome::getFontAwesomeIconCodePoint(const std::string &iconName) {
   if (fontAwesomeIconCodePoint.empty()) {
     initFontAwesomeIconCodePoints();
   }
 
   map<const char*, vector<unsigned int> >::iterator it =
     fontAwesomeIconCodePoint.find(iconName.c_str());
+
   if (it != fontAwesomeIconCodePoint.end())
     return (it->second[0]);
+
   return 0;
 }
 
