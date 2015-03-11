@@ -19,9 +19,7 @@
 #include <math.h>
 #include <sstream>
 #include <string>
-#include <list>
 #include <map>
-#include <tulip/tuliphash.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
@@ -86,7 +84,7 @@ public:
   EdgeProperty<double> inW, outW;
   NodeProperty<node> tlpNodes;
   NodeProperty<double> resultN;
-  map< pair<unsigned int, unsigned int>, edge > existEdge;
+  map<pair<node, node>, edge > existEdge;
   MutableContainer<node> nodeMapping;
   MutableContainer<edge> edgeMapping;
   NumericProperty *weights;
@@ -100,10 +98,10 @@ PLUGIN(MCLClustering)
 const double epsilon = 1E-9;
 //=================================================
 edge MCLClustering::getEdge(node src, node tgt) {
-  pair<unsigned int, unsigned int> e(src.id, tgt.id);
-
-  if (existEdge.find(e) != existEdge.end())
-    return existEdge[e];
+  pair<node, node> e(src, tgt);
+  map<pair<node, node>, edge>::const_iterator ite = existEdge.find(e);
+  if (ite != existEdge.end())
+    return ite->second;
   else {
     edge ne = g.addEdge(src, tgt);
     existEdge[e] = ne;
@@ -168,15 +166,12 @@ void MCLClustering::pruneK(node n, unsigned int k) {
   double t = *it;
   stableForEach(e, g.getOutEdges(n)) {
     if (outW[e] < t) {
-      const std::pair<node, node>& eEnds = g.ends(e);
-      pair<unsigned int, unsigned int> edgeM(eEnds.first.id, eEnds.second.id);
-      existEdge.erase(edgeM);
+      existEdge.erase(g.ends(e));
       inW[e]  = 0.;
       outW[e] = 0.;
       g.delEdge(e);
     }
   }
-
 }
 //==================================================
 /*void MCLClustering::pruneT(node n) {
@@ -271,7 +266,7 @@ void MCLClustering::init() {
     node src = nodeMapping.get(eEnds.first.id);
     node tgt = nodeMapping.get(eEnds.second.id);
     edge tmp = g.addEdge(src, tgt);
-    existEdge[pair<unsigned int, unsigned int>(src.id, tgt.id)] = tmp;
+    existEdge[eEnds] = tmp;
     edgeMapping.set(e.id, tmp);
 
     if (weights != NULL) {
@@ -290,7 +285,7 @@ void MCLClustering::init() {
     e = g(i);
     const std::pair<node, node>& eEnds = g.ends(e);
     edge tmp = g.addEdge(eEnds.second, eEnds.first);
-    existEdge[pair<unsigned int, unsigned int>(eEnds.second.id, eEnds.first.id)] = tmp;
+    existEdge[pair<node, node>(eEnds.second, eEnds.first)] = tmp;
     inW[tmp] = inW[e];
   }
 
@@ -300,7 +295,7 @@ void MCLClustering::init() {
   for (unsigned int i = 0; i < nbNodes; ++i) {
     n = g[i];
     edge tmp = g.addEdge(n, n);
-    existEdge[pair<unsigned int, unsigned int>(n.id, n.id)] = tmp;
+    existEdge[pair<node, node>(n, n)] = tmp;
     edge e;
     double sum = 0.;
     inW[tmp]=1.;
