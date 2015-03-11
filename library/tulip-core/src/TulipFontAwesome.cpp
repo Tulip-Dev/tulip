@@ -629,7 +629,7 @@ struct cmpCharPtr {
     return strcmp(s1, s2) < 0;
   }
 };
-  static map<const char*, vector<unsigned int>, cmpCharPtr> fontAwesomeIconCodePoint;
+static map<const char*, vector<unsigned int>, cmpCharPtr> fontAwesomeIconCodePoint;
 static vector<std::string> fontAwesomeIconsNames;
 
 static void addIconCodePoint(const char *iconName, unsigned int codePoint) {
