@@ -100,6 +100,7 @@ const double epsilon = 1E-9;
 edge MCLClustering::getEdge(node src, node tgt) {
   pair<node, node> e(src, tgt);
   map<pair<node, node>, edge>::const_iterator ite = existEdge.find(e);
+
   if (ite != existEdge.end())
     return ite->second;
   else {
