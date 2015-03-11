@@ -17,6 +17,7 @@
  *
  */
 
+#include <cstring>
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TlpTools.h>
 
@@ -623,7 +624,12 @@ const char* TulipFontAwesome::Youtube = "youtube";
 const char* TulipFontAwesome::YoutubePlay = "youtube-play";
 const char* TulipFontAwesome::YoutubeSquare = "youtube-square";
 
-static map<const char*, vector<unsigned int> > fontAwesomeIconCodePoint;
+struct cmpCharPtr {
+  bool operator()(const char *s1, const char *s2) {
+    return strcmp(s1, s2) < 0;
+  }
+};
+  static map<const char*, vector<unsigned int>, cmpCharPtr> fontAwesomeIconCodePoint;
 static vector<std::string> fontAwesomeIconsNames;
 
 static void addIconCodePoint(const char *iconName, unsigned int codePoint) {
@@ -1225,7 +1231,7 @@ static void initFontAwesomeIconCodePoints() {
   addIconCodePoint(TulipFontAwesome::YoutubePlay, 0xf16a);
   addIconCodePoint(TulipFontAwesome::YoutubeSquare, 0xf166);
 
-  map<const char*, vector<unsigned int> >::iterator it = fontAwesomeIconCodePoint.begin();
+  map<const char*, vector<unsigned int>, cmpCharPtr>::iterator it = fontAwesomeIconCodePoint.begin();
 
   for ( ; it != fontAwesomeIconCodePoint.end() ; ++it) {
     fontAwesomeIconsNames.push_back(std::string(it->first));
@@ -1267,7 +1273,7 @@ unsigned int TulipFontAwesome::getFontAwesomeIconCodePoint(const std::string &ic
     initFontAwesomeIconCodePoints();
   }
 
-  map<const char*, vector<unsigned int> >::iterator it =
+  map<const char*, vector<unsigned int>, cmpCharPtr>::iterator it =
     fontAwesomeIconCodePoint.find(iconName.c_str());
 
   if (it != fontAwesomeIconCodePoint.end())
