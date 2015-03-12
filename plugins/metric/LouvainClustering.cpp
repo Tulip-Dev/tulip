@@ -216,7 +216,7 @@ void LouvainClustering::updateQuotient() {
     if (qsrc!=qtgt) {
       if (subNodes[qtgt.id] == false) {
         subNodes[qsrc.id] = true;
-	std::pair<double, double>& weights = comToInfo[qtgt];
+        std::pair<double, double>& weights = comToInfo[qtgt];
         iW[qtgt] = weights.first;
         nodeEW[qtgt] = weights.second - 2 * weights.first;
       }

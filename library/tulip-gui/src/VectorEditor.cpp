@@ -41,10 +41,12 @@ void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
 
   foreach(QVariant v, d) {
     QListWidgetItem* i = new QListWidgetItem();
+
     if (_userType == qMetaTypeId<std::string>())
       i->setData(Qt::DisplayRole, QVariant::fromValue(tlpStringToQString(v.value<std::string>())));
     else
-      i->setData(Qt::DisplayRole,v);      
+      i->setData(Qt::DisplayRole,v);
+
     i->setFlags(i->flags() | Qt::ItemIsEditable);
     _ui->list->addItem(i);
   }
@@ -72,7 +74,7 @@ void VectorEditor::add() {
 
 void VectorEditor::remove() {
   foreach(QListWidgetItem* i, _ui->list->selectedItems())
-    delete i;
+  delete i;
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
 }
 
@@ -83,12 +85,12 @@ void VectorEditor::done(int r) {
 
     if (_userType == qMetaTypeId<std::string>()) {
       for (int i=0; i<model->rowCount(); ++i) {
-	currentVector.push_back(QVariant::fromValue(QStringToTlpString(model->data(model->index(i,0)).toString())));
+        currentVector.push_back(QVariant::fromValue(QStringToTlpString(model->data(model->index(i,0)).toString())));
       }
     }
     else {
       for (int i=0; i<model->rowCount(); ++i) {
-	currentVector.push_back(model->data(model->index(i,0)));
+        currentVector.push_back(model->data(model->index(i,0)));
       }
     }
   }
