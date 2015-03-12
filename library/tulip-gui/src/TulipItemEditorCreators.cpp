@@ -957,9 +957,8 @@ QString QStringEditorCreator::displayText(const QVariant& var) const {
 }
 
 void QStringEditorCreator::setPropertyToEdit(tlp::PropertyInterface* prop) {
-  assert(prop);
-
-  // we should have a property but this can avoid a crash
+  // we should have a property
+  // but it cannot be the case when editing a string vector element
   if (prop)
     propName = prop->getName();
 }

@@ -20,6 +20,7 @@
 #include <tulip/VectorEditor.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/TlpQtTools.h>
 
 #include "ui_VectorEditor.h"
 
@@ -40,7 +41,10 @@ void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
 
   foreach(QVariant v, d) {
     QListWidgetItem* i = new QListWidgetItem();
-    i->setData(Qt::DisplayRole,v);
+    if (_userType == qMetaTypeId<std::string>())
+      i->setData(Qt::DisplayRole, QVariant::fromValue(tlpStringToQString(v.value<std::string>())));
+    else
+      i->setData(Qt::DisplayRole,v);      
     i->setFlags(i->flags() | Qt::ItemIsEditable);
     _ui->list->addItem(i);
   }
@@ -54,8 +58,7 @@ void VectorEditor::add() {
   if (_userType == qMetaTypeId<std::string>()) {
     // workaround to indicate there is a new string to edit
     // because the height of the line if very small with an empty string
-    std::string str("edit this string");
-    i->setData(Qt::DisplayRole, QVariant(_userType, &str));
+    i->setData(Qt::DisplayRole, QVariant::fromValue(QString("edit this string")));
   }
   else
     i->setData(Qt::DisplayRole, QVariant(_userType,(const void*)NULL));
@@ -69,7 +72,7 @@ void VectorEditor::add() {
 
 void VectorEditor::remove() {
   foreach(QListWidgetItem* i, _ui->list->selectedItems())
-  delete i;
+    delete i;
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
 }
 
@@ -78,8 +81,15 @@ void VectorEditor::done(int r) {
     QAbstractItemModel* model = _ui->list->model();
     currentVector.clear();
 
-    for (int i=0; i<model->rowCount(); ++i) {
-      currentVector.push_back(model->data(model->index(i,0)));
+    if (_userType == qMetaTypeId<std::string>()) {
+      for (int i=0; i<model->rowCount(); ++i) {
+	currentVector.push_back(QVariant::fromValue(QStringToTlpString(model->data(model->index(i,0)).toString())));
+      }
+    }
+    else {
+      for (int i=0; i<model->rowCount(); ++i) {
+	currentVector.push_back(model->data(model->index(i,0)));
+      }
     }
   }
 
