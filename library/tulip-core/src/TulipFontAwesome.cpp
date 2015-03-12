@@ -625,7 +625,7 @@ const char* TulipFontAwesome::YoutubePlay = "youtube-play";
 const char* TulipFontAwesome::YoutubeSquare = "youtube-square";
 
 struct cmpCharPtr {
-  bool operator()(const char *s1, const char *s2) {
+  bool operator()(const char *s1, const char *s2) const {
     return strcmp(s1, s2) < 0;
   }
 };
