@@ -17,7 +17,7 @@
  *
  */
 #include <ctime>
-#include <map>
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
@@ -89,10 +89,10 @@ private:
   /**
   * Get the differents clusters in the neighborhood of a given node (and its own clusters)
   * \param tlp::node toMove
-  * \return std::map<tlp::node,double> a map with Clusters representative nodes as keys
+  * \param TLP_HASH_MAP<tlp::node,double> a map with Clusters representative nodes as keys
   * and the weight of the relations as values
   **/
-  void clustersNeighborhood(const tlp::node &toMove, std::map<tlp::node,double>&) const;
+  void clustersNeighborhood(const tlp::node &toMove, TLP_HASH_MAP<tlp::node,double>&) const;
   /**
   * Performs an local modularity optimisation of the quotient graph
   * \return double the new Q modularity
@@ -101,7 +101,7 @@ private:
 
   VectorGraph quotient;                          //A quotient graph of the original graph
 
-  std::map<tlp::node, std::pair<double,double> > comToInfo;      //Clusters representative node to Internal and Total edges weights
+  TLP_HASH_MAP<tlp::node, std::pair<double,double> > comToInfo;      //Clusters representative node to Internal and Total edges weights
 
   tlp::MutableContainer<tlp::node> nodeMapping;  //Original graph nodes to Clusters representative  in quotient
   tlp::MutableContainer<tlp::node> qclusters;         //Quotient graph nodes to Clusters representative nodes
@@ -183,9 +183,10 @@ void LouvainClustering::createQuotient() {
 //========================================================================================
 void LouvainClustering::trackClustering() {
   node n;
-  forEach(n,graph->getNodes()) {
-    result->setNodeValue(n,qclusters.get(nodeMapping.get(n.id)).id);
-    nodeMapping.set(n.id,qclusters.get(nodeMapping.get(n.id)));
+  forEach(n, graph->getNodes()) {
+    node ncluster = qclusters.get(nodeMapping.get(n.id));
+    result->setNodeValue(n, ncluster.id);
+    nodeMapping.set(n.id, ncluster);
   }
 }
 
@@ -253,7 +254,7 @@ inline double LouvainClustering::measure_gain(double deg, tlp::node dest, double
 double LouvainClustering::modularity() const {
   double q=0.;
 
-  for (map<node,pair<double,double> >::const_iterator it=comToInfo.begin() ; it!=comToInfo.end() ; ++it) {
+  for (TLP_HASH_MAP<node,pair<double,double> >::const_iterator it=comToInfo.begin() ; it!=comToInfo.end() ; ++it) {
     double in=(it->second).first;
     double tot=(it->second).second;
 
@@ -265,7 +266,7 @@ double LouvainClustering::modularity() const {
   return q;
 }
 //========================================================================================
-void LouvainClustering::clustersNeighborhood(const node &toMove, map<node,double>& neigh) const {
+void LouvainClustering::clustersNeighborhood(const node &toMove, TLP_HASH_MAP<node,double>& neigh) const {
   //Insert node's own clusters
   node comm = qclusters.get(toMove.id);
   neigh.insert(make_pair(comm,0.0));
@@ -311,7 +312,7 @@ double LouvainClustering::oneLevel() {
       node n  = random_nodes[i];
       node best_comm = qclusters.get(n.id);
       //Compute reachable clusters
-      map<node,double> neigh;
+      TLP_HASH_MAP<node,double> neigh;
       clustersNeighborhood(n, neigh);
       //Remove n from its own community
       std::pair<double, double> *weights = &comToInfo[best_comm];
@@ -324,7 +325,7 @@ double LouvainClustering::oneLevel() {
       node previous_com = best_comm;
 
       //Find the best move among node clusters neighborhood
-      for (map<node,double>::iterator it=neigh.begin(); it!=neigh.end(); ++it) {
+      for (TLP_HASH_MAP<node,double>::iterator it=neigh.begin(); it!=neigh.end(); ++it) {
         double increase = measure_gain(deg, it->first, it->second);
 
         if (increase > best_increase) {
@@ -400,7 +401,7 @@ bool LouvainClustering::run() {
   }
 
   //Rename cluster indexes
-  map<unsigned int,unsigned int> mapIndex;
+  TLP_HASH_MAP<unsigned int,unsigned int> mapIndex;
   node n;
   unsigned int ind=0;
   forEach(n,graph->getNodes()) {
