@@ -36,12 +36,12 @@ using namespace std;
 size_t max_node_id = 0;
 
 TLP_BEGIN_HASH_NAMESPACE {
-template<>
-struct hash<std::pair<node, node> > {
-  size_t operator()(const std::pair<node, node>& p) const {
-    return max_node_id * p.first + p.second;
-  }
-};
+  template<>
+  struct hash<std::pair<node, node> > {
+    size_t operator()(const std::pair<node, node>& p) const {
+      return max_node_id * p.first + p.second;
+    }
+  };
 } TLP_END_HASH_NAMESPACE
 
 

@@ -74,8 +74,8 @@ double EccentricityMetric::compute(node n, const std::vector<node> &nodes) {
   MutableContainer<unsigned int> distance;
   distance.setAll(0);
   double val = directed ?
-    tlp::maxDistance(graph, n, distance, DIRECTED) :
-    tlp::maxDistance(graph, n, distance, UNDIRECTED);
+               tlp::maxDistance(graph, n, distance, DIRECTED) :
+               tlp::maxDistance(graph, n, distance, UNDIRECTED);
 
   if(!allPaths)
     return val;
@@ -83,9 +83,11 @@ double EccentricityMetric::compute(node n, const std::vector<node> &nodes) {
   double nbAcc = 0.;
   val = 0.;
   unsigned int nbNodes = nodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n2 = nodes[i];
     unsigned int d = distance.get(n2.id);
+
     if (d < nbNodes) {
       nbAcc += 1.;
 
@@ -156,7 +158,7 @@ bool EccentricityMetric::run() {
     }
 
 #endif
-	res[ni] = compute(vecNodes[ni], vecNodes);
+    res[ni] = compute(vecNodes[ni], vecNodes);
 
     if(!allPaths && norm)
 #ifdef _OPENMP
