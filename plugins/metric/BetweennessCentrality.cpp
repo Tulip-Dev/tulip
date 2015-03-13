@@ -47,7 +47,7 @@ static const char * paramHelp[] = {
 
 /** \addtogroup metric */
 
-/** This plugin is an implementation of betweeness centrality parameter.
+/** This plugin is an implementation of betweenness centrality parameter.
  *  (see http://en.wikipedia.org/wiki/Centrality#Betweenness_centrality for more details)
  *
  *  Algorithm published by:
@@ -59,7 +59,7 @@ static const char * paramHelp[] = {
  *  volume 25, \n
  *  pages 163-177
  *
- *  The edge betweeness centrality is also computed, it is described in :
+ *  The edge betweenness centrality is also computed, it is described in :
  *
  *  Newman, M. E. J. and Girvan, M. \n
  *  "Finding and evaluating community structure in networks",  \n
@@ -71,14 +71,14 @@ static const char * paramHelp[] = {
  *  \note The complexity of the algorithm is O(|V| * |E|) in time
  *  <b>HISTORY</b>
  *
- *  - 16/02/11 Version 1.2: Edge betweeness computation added
+ *  - 16/02/11 Version 1.2: Edge betweenness computation added
  *  - 08/02/11 Version 1.1: Normalisation option added
  *  - 03/01/05 Version 1.0: Initial release
  *
  */
 class BetweennessCentrality:public DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Betweenness Centrality","David Auber","03/01/2005","Computes the betweeness centrality.","1.2","Graph")
+  PLUGININFORMATION("Betweenness Centrality","David Auber","03/01/2005","Computes the betweenness centrality.","1.2","Graph")
   BetweennessCentrality(const PluginContext* context):DoubleAlgorithm(context) {
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
