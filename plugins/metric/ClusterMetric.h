@@ -41,11 +41,6 @@ public:
   PLUGININFORMATION("Cluster","David Auber","26/02/2003","Computes the Cluster metric described in\nY. Chiricota. F.Jourdan, an G.Melancon\n'Software component capture using graph clustering',\nIWPC 2002","1.0","Graph")
   ClusterMetric(const tlp::PluginContext* context);
   bool run();
-
-private:
-  double getNodeValue(const tlp::node n);
-  double getEdgeValue(const tlp::edge n);
-  void buildSubGraph(tlp::node n, tlp::node startNode,std::set<tlp::node> &selected,unsigned int depth);
 };
 
 #endif
