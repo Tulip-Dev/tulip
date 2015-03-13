@@ -117,8 +117,8 @@ public:
 
       while(!Q.empty()) {
         node v = Q.front();
-	int vd = d.get(v.id);
-	int vs = sigma.get(v.id);
+        int vd = d.get(v.id);
+        int vs = sigma.get(v.id);
         Q.pop();
         S.push(v);
         Iterator<node> *it2;
@@ -130,7 +130,7 @@ public:
 
         while (it2->hasNext()) {
           node w = it2->next();
-	  int wd = d.get(w.id);
+          int wd = d.get(w.id);
 
           if (wd < 0) {
             Q.push(w);
@@ -142,6 +142,7 @@ public:
             P[w].push_back(v);
           }
         }
+
         delete it2;
       }
 
@@ -150,14 +151,14 @@ public:
 
       while (!S.empty()) {
         node w = S.top();
-	double wD = delta.get(w.id);
+        double wD = delta.get(w.id);
         S.pop();
         list<node>::const_iterator itn = P[w].begin();
 
         for (; itn!=P[w].end(); ++itn) {
           node v = *itn;
-	  double vd =
-	    double(sigma.get(v.id))/double(sigma.get(w.id)) * (1.0 + wD);
+          double vd =
+            double(sigma.get(v.id))/double(sigma.get(w.id)) * (1.0 + wD);
           delta.add(v.id, vd);
           edge e = graph->existEdge(v,w,directed);
 
@@ -166,7 +167,7 @@ public:
         }
 
         if (w != s)
-	  result->setNodeValue(w, result->getNodeValue(w) + wD);
+          result->setNodeValue(w, result->getNodeValue(w) + wD);
       }
     }
 
