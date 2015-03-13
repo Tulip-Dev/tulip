@@ -117,6 +117,8 @@ public:
 
       while(!Q.empty()) {
         node v = Q.front();
+	int vd = d.get(v.id);
+	int vs = sigma.get(v.id);
         Q.pop();
         S.push(v);
         Iterator<node> *it2;
@@ -128,39 +130,43 @@ public:
 
         while (it2->hasNext()) {
           node w = it2->next();
+	  int wd = d.get(w.id);
 
-          if (d.get(w.id)<0) {
+          if (wd < 0) {
             Q.push(w);
-            d.set(w.id, d.get(v.id)+1);
+            d.set(w.id, wd = vd + 1);
           }
 
-          if (d.get(w.id) == d.get(v.id)+1) {
-            sigma.add(w.id, sigma.get(v.id));
+          if (wd == vd + 1) {
+            sigma.add(w.id, vs);
             P[w].push_back(v);
           }
         }
-
         delete it2;
       }
 
       MutableContainer<double> delta;
       delta.setAll(0.0);
 
-      while(!S.empty()) {
+      while (!S.empty()) {
         node w = S.top();
+	double wD = delta.get(w.id);
         S.pop();
         list<node>::const_iterator itn = P[w].begin();
 
         for (; itn!=P[w].end(); ++itn) {
           node v = *itn;
-          delta.add(v.id, (double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id))));
-          edge e  = graph->existEdge(v,w,directed);
+	  double vd =
+	    double(sigma.get(v.id))/double(sigma.get(w.id)) * (1.0 + wD);
+          delta.add(v.id, vd);
+          edge e = graph->existEdge(v,w,directed);
 
           if(e.isValid())
-            result->setEdgeValue(e, result->getEdgeValue(e) + double(sigma.get(v.id)) / double(sigma.get(w.id)) * (1.0 + delta.get(w.id)));
+            result->setEdgeValue(e, result->getEdgeValue(e) + vd);
         }
 
-        if (w != s) result->setNodeValue(w, result->getNodeValue(w) + delta.get(w.id));
+        if (w != s)
+	  result->setNodeValue(w, result->getNodeValue(w) + wD);
       }
     }
 

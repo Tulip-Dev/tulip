@@ -69,28 +69,28 @@ EccentricityMetric::EccentricityMetric(const tlp::PluginContext* context):Double
 EccentricityMetric::~EccentricityMetric() {
 }
 //====================================================================
-double EccentricityMetric::compute(node n) {
+double EccentricityMetric::compute(node n, const std::vector<node> &nodes) {
 
   MutableContainer<unsigned int> distance;
   distance.setAll(0);
-  double val;
-
-  val = directed ?
-        tlp::maxDistance(graph, n, distance, DIRECTED) :
-        tlp::maxDistance(graph, n, distance, UNDIRECTED);
+  double val = directed ?
+    tlp::maxDistance(graph, n, distance, DIRECTED) :
+    tlp::maxDistance(graph, n, distance, UNDIRECTED);
 
   if(!allPaths)
     return val;
 
   double nbAcc = 0.;
-  node n2;
   val = 0.;
-  forEach(n2, graph->getNodes()) {
-    if (distance.get(n2.id) < graph->numberOfNodes()) {
+  unsigned int nbNodes = nodes.size();
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    node n2 = nodes[i];
+    unsigned int d = distance.get(n2.id);
+    if (d < nbNodes) {
       nbAcc += 1.;
 
-      if(n2!=n)
-        val += double(distance.get(n2.id)) ;
+      if (n2!=n)
+        val += d;
     }
   }
 
@@ -123,7 +123,7 @@ bool EccentricityMetric::run() {
   }
 //  omp_set_num_threads(4);
 
-  size_t nbElem = vecNodes.size();
+  size_t nbNodes = vecNodes.size();
 #ifdef _OPENMP
   int nbThreads = omp_get_num_procs();
 #else
@@ -137,7 +137,7 @@ bool EccentricityMetric::run() {
   #pragma omp parallel for
 #endif
 
-  for (int ni = 0; ni < static_cast<int>(nbElem) ; ++ni) {
+  for (int ni = 0; ni < static_cast<int>(nbNodes) ; ++ni) {
     if (stopfor) continue;
 
 #ifdef _OPENMP
@@ -156,7 +156,7 @@ bool EccentricityMetric::run() {
     }
 
 #endif
-    res[ni] = compute(vecNodes[ni]);
+	res[ni] = compute(vecNodes[ni], vecNodes);
 
     if(!allPaths && norm)
 #ifdef _OPENMP
@@ -168,30 +168,12 @@ bool EccentricityMetric::run() {
     }
   }
 
-  for (size_t ni = 0; ni < nbElem; ++ni) {
+  for (size_t ni = 0; ni < nbNodes; ++ni) {
     if(!allPaths && norm)
       result->setNodeValue(vecNodes[ni], res[ni]/diameter);
     else
       result->setNodeValue(vecNodes[ni], res[ni]);
   }
 
-  /*
-    double t2 = omp_get_wtime();
-    for (size_t ni = 0; ni < nbElem; ++ni) {
-      double val = compute(vecNodes[ni]);
-      result->setNodeValue(vecNodes[ni], val);
-    }
-    double t3 = omp_get_wtime();
-    tlp::debug() << "omp : " << t2 - t1 << "s" << endl << flush;
-    tlp::debug() << "sng : " << t3 - t2 << "s" << endl << flush;
-  */
-  /*
-  Iterator<node> *itN = graph->getNodes();
-  for (unsigned int i=0; itN->hasNext(); ++i) {
-    if (pluginProgress->progress(i, graph->numberOfNodes())!=TLP_CONTINUE) break;
-    node n = itN->next();
-    result->setNodeValue(n, compute(n));
-  }
-  */
   return pluginProgress->state()!=TLP_CANCEL;
 }
