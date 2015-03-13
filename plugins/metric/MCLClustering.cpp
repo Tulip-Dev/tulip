@@ -279,9 +279,9 @@ void MCLClustering::init() {
 
   edge e;
   forEach(e, graph->getEdges()) {
-    const std::pair<node, node> &eEnds = graph->ends(e);
-    node src = nodeMapping.get(eEnds.first.id);
-    node tgt = nodeMapping.get(eEnds.second.id);
+    std::pair<node, node> eEnds = graph->ends(e);
+    node src = eEnds.first = nodeMapping.get(eEnds.first.id);
+    node tgt = eEnds.second = nodeMapping.get(eEnds.second.id);
     edge tmp = g.addEdge(src, tgt);
     existEdge[eEnds] = tmp;
     edgeMapping.set(e.id, tmp);
