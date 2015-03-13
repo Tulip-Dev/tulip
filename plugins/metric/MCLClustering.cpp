@@ -19,7 +19,7 @@
 #include <math.h>
 #include <sstream>
 #include <string>
-#include <map>
+#include <tulip/tuliphash.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
@@ -32,6 +32,18 @@
 
 using namespace tlp;
 using namespace std;
+
+size_t max_node_id = 0;
+
+TLP_BEGIN_HASH_NAMESPACE {
+template<>
+struct hash<std::pair<node, node> > {
+  size_t operator()(const std::pair<node, node>& p) const {
+    return max_node_id * p.first + p.second;
+  }
+};
+} TLP_END_HASH_NAMESPACE
+
 
 /** \addtogroup clustering */
 /*@{*/
@@ -84,7 +96,7 @@ public:
   EdgeProperty<double> inW, outW;
   NodeProperty<node> tlpNodes;
   NodeProperty<double> resultN;
-  map<pair<node, node>, edge > existEdge;
+  TLP_HASH_MAP<pair<node, node>, edge > existEdge;
   MutableContainer<node> nodeMapping;
   MutableContainer<edge> edgeMapping;
   NumericProperty *weights;
@@ -96,10 +108,11 @@ public:
 PLUGIN(MCLClustering)
 
 const double epsilon = 1E-9;
+
 //=================================================
 edge MCLClustering::getEdge(node src, node tgt) {
   pair<node, node> e(src, tgt);
-  map<pair<node, node>, edge>::const_iterator ite = existEdge.find(e);
+  TLP_HASH_MAP<pair<node, node>, edge>::const_iterator ite = existEdge.find(e);
 
   if (ite != existEdge.end())
     return ite->second;
@@ -256,11 +269,14 @@ MCLClustering::~MCLClustering() {
 //================================================================================
 void MCLClustering::init() {
   node n;
+  node newNode;
   forEach(n, graph->getNodes()) {
-    node newNode = g.addNode();
+    newNode = g.addNode();
     nodeMapping.set(n.id, newNode);
     tlpNodes[newNode] = n;
   }
+  max_node_id = newNode.id;
+
   edge e;
   forEach(e, graph->getEdges()) {
     const std::pair<node, node> &eEnds = graph->ends(e);
