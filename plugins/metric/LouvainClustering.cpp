@@ -332,10 +332,10 @@ double LouvainClustering::oneLevel() {
           best_increase = increase;
           best_comm = it->first;
         }
-	// as enumeration ordering in TLP_HASH_MAP is not predicatable
-	// keep the best cluster with the minimum id
-	else if (increase == best_increase && it->first < best_comm)
-	  best_comm = it->first;
+        // as enumeration ordering in TLP_HASH_MAP is not predicatable
+        // keep the best cluster with the minimum id
+        else if (increase == best_increase && it->first < best_comm)
+          best_comm = it->first;
       }
 
       //Insert n in its new cluster
