@@ -15,6 +15,27 @@ IF(USE_QT5)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 ENDIF(USE_QT5)
 
+IF(WIN32)
+
+STRING(TIMESTAMP CURRENT_YEAR "%Y")
+
+INCLUDE(generate_product_version)
+generate_product_version(
+   VersionFiles
+   NAME "Tulip Perspective launcher"
+   ICON ${PROJECT_SOURCE_DIR}/library/tulip-gui/resources/icons/tulip.ico
+   VERSION_MAJOR ${TulipMajorVersion}
+   VERSION_MINOR ${TulipMinorVersion}
+   VERSION_PATCH ${TulipReleaseVersion}
+   COMPANY_NAME "LaBRI, University of Bordeaux"
+   COMPANY_COPYRIGHT "(C) Copyright ${CURRENT_YEAR} David Auber and the Tulip development Team"
+   ORIGINAL_FILENAME "tulip_perspective.exe"
+)
+
+SET(SRCS ${SRCS} ${VersionFiles})
+
+ENDIF(WIN32)
+
 ADD_EXECUTABLE(tulip_perspective ${SRCS} ${MOC_SRCS})
 
 IF(LINUX)

@@ -212,3 +212,4 @@ INSTALL(TARGETS ${LibTulipGUIName}
   ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_gui)
 
 INSTALL(FILES ../resources/icons/tulip.ico DESTINATION ${TulipBitmapInstallDir})
+INSTALL(FILES ../resources/icons/tulip-file-icon.ico DESTINATION ${TulipBitmapInstallDir})

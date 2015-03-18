@@ -56,6 +56,27 @@ IF(BUILD_PYTHON_COMPONENTS)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBUILD_PYTHON_COMPONENTS")
 ENDIF(BUILD_PYTHON_COMPONENTS)
 
+IF(WIN32)
+
+STRING(TIMESTAMP CURRENT_YEAR "%Y")
+
+INCLUDE(generate_product_version)
+generate_product_version(
+   VersionFiles
+   NAME "Tulip Agent"
+   ICON ${PROJECT_SOURCE_DIR}/library/tulip-gui/resources/icons/tulip.ico
+   VERSION_MAJOR ${TulipMajorVersion}
+   VERSION_MINOR ${TulipMinorVersion}
+   VERSION_PATCH ${TulipReleaseVersion}
+   COMPANY_NAME "LaBRI, University of Bordeaux"
+   COMPANY_COPYRIGHT "(C) Copyright ${CURRENT_YEAR} David Auber and the Tulip development Team"
+   ORIGINAL_FILENAME "tulip.exe"
+)
+
+SET(SRCS ${SRCS} ${VersionFiles})
+
+ENDIF(WIN32)
+
 ADD_EXECUTABLE(tulip ${SRCS} ${UI_HEADERS} ${MOC_SRCS} ${RCC_SRCS})
 
 IF(LINUX OR APPLE)

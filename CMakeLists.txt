@@ -552,32 +552,33 @@ ENDIF(NSIS_PATH_EMPTY)
 
 IF(NOT NSIS_PATH_EMPTY)
 
-        IF(EXISTS "${NSIS_PATH}/Plugins/inetc.dll")
+        IF(NOT BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
             STRING(REPLACE "/" "\\" NSIS_PATH "${NSIS_PATH}")
             STRING(REPLACE "/" "\\" BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
             STRING(REPLACE "/" "\\" TLP_DIR "${CMAKE_INSTALL_PREFIX}")
             STRING(REPLACE "/" "\\" QTX_PLUGINS_DIR "${QT_PLUGINS_DIR}")
 
-            IF(TulipBuildIsRelease)
+            IF(TulipBuildIsRelease OR MSVC)
                 SET(DEBUG_MODE "FALSE")
-            ELSE(TulipBuildIsRelease)
+            ELSE(TulipBuildIsRelease OR MSVC)
                 SET(DEBUG_MODE "TRUE")
-            ENDIF(TulipBuildIsRelease)
+            ENDIF(TulipBuildIsRelease OR MSVC)
 
             ADD_CUSTOM_TARGET(bundle
                               COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_install.cmake
                               COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/win_bundle.bat ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/win_bundle.bat
+                              COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/win/FileAssociation.nsh ${CMAKE_CURRENT_BINARY_DIR}/FileAssociation.nsh
                               COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/COPYING ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win/COPYING
                               COMMAND cmd /C win_bundle.bat ${NSIS_PATH} ${TLP_DIR} ${BINARY_DIR} ${DEBUG_MODE}
                               WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win)
 
-        ELSE(EXISTS "${NSIS_PATH}/Plugins/inetc.dll")
+        ELSE(NOT BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
             MESSAGE("NSIS Inetc plugin is required to build the Tulip installer.")
             MESSAGE("Download the plugin archive from http://nsis.sourceforge.net/Inetc_plug-in and extract it in ${NSIS_PATH}.")
 
-        ENDIF(EXISTS "${NSIS_PATH}/Plugins/inetc.dll")
+        ENDIF(NOT BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
 ELSE(NOT NSIS_PATH_EMPTY)
 
