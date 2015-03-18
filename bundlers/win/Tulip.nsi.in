@@ -3,6 +3,7 @@
 
 !include "MUI.nsh"
 !include "x64.nsh"
+!include "FileAssociation.nsh"
 
 !if ${ARCH} == "64"
 Function .onInit
@@ -107,6 +108,21 @@ Function CheckAndInstallPython64
 FunctionEnd
 !endif
 
+!define SHCNE_ASSOCCHANGED 0x08000000
+!define SHCNF_IDLIST 0
+
+Function RefreshShellIcons
+  ; By jerome tremblay - april 2003
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v \
+  (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
+FunctionEnd
+
+Function un.RefreshShellIcons
+  ; By jerome tremblay - april 2003
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v \
+  (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
+FunctionEnd
+
 Section "Tulip"
   SetShellVarContext all
   SetOutPath $INSTDIR
@@ -142,6 +158,13 @@ File /r files\*.*
   
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "UninstallString" "$INSTDIR\Uninstall.exe"
   WriteUninstaller "$INSTDIR\Uninstall.exe"
+
+ ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlp" "Tulip.File" "Tulip Graph File" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
+ ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlpb" "Tulip.BinaryFile" "Tulip Graph Binary File" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
+ ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlpx" "Tulip.ProjectFile" "Tulip Project File" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
+
+ Call RefreshShellIcons
+
 SectionEnd
 
 Section "Uninstall"
@@ -159,4 +182,11 @@ Section "Uninstall"
   RMDir /r "$INSTDIR"
   Delete $INSTDIR\Uninstall.exe
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@"
+
+ ${unregisterExtension} ".tlp" "Tulip.File"
+ ${unregisterExtension} ".tlpb" "Tulip.BinaryFile"
+ ${unregisterExtension} ".tlpx" "Tulip.ProjectFile"
+
+ Call un.RefreshShellIcons
+
 SectionEnd
