@@ -747,7 +747,7 @@ void GlVertexArrayManager::addEdge(GlEdge *gledge) {
       centerLine.reserve(numberQuadVertices/2);
 
       for (int i = 0 ; i < numberQuadVertices / 2 ; ++i) {
-        centerLine.push_back((quadsCoordsArray[baseQuadIndex+2*i]+quadsCoordsArray[2*i+1])/2.f);
+        centerLine.push_back((quadsCoordsArray[baseQuadIndex+2*i]+quadsCoordsArray[baseQuadIndex+2*i+1])/2.f);
       }
 
       colors.clear();
