@@ -66,7 +66,12 @@ ViewWidget::ViewWidget()
   : View(), _graphicsView(NULL), _centralWidget(NULL), _centralWidgetItem(NULL) {
 }
 
-ViewWidget::~ViewWidget() {}
+ViewWidget::~ViewWidget() {
+  if (_centralWidgetItem) {
+    _graphicsView->scene()->removeItem(_centralWidgetItem);
+    delete _centralWidgetItem;
+  }
+}
 
 QGraphicsView* ViewWidget::graphicsView() const {
   return _graphicsView;
