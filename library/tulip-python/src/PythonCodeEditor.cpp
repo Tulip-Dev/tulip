@@ -93,6 +93,9 @@ AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent) : QListWidget(p
   installEventFilter(&keyboardFocusEventFilter);
   _activated = false;
   _wasActivated = false;
+  setToolTip("Use up and down arrow keys to navigate through the list (or use the mouse wheel).\n"
+             "Hit Enter key to insert the current selected item (or double click on it).\n"
+             "Hit Escape key to cancel the autocompletion list and hide it.");
 }
 
 void AutoCompletionList::keyPressEvent(QKeyEvent *e) {
@@ -1267,10 +1270,7 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
   }
   _autoCompletionList->sortItems();
 
-  if (_autoCompletionList->count() == 0)
-    _autoCompletionList->hide();
-  else
-    _autoCompletionList->setCurrentRow(0);
+  _autoCompletionList->setCurrentRow(0);
 
 }
 
