@@ -187,7 +187,8 @@ NeighborhoodHighlighterInteractor::~NeighborhoodHighlighterInteractor() {
 bool NeighborhoodHighlighterInteractor::isCompatible(const std::string &viewName) const {
   return ((viewName==NodeLinkDiagramComponent::viewName)
           ||(viewName==ViewName::HistogramViewName)
-          ||(viewName==ViewName::MatrixViewName)
+          //Interactor does not work
+          //||(viewName==ViewName::MatrixViewName)
           ||(viewName==ViewName::ScatterPlot2DViewName)
          );
 }
