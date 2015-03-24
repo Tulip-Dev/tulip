@@ -95,7 +95,7 @@ const double epsilon = 1E-9;
 //=================================================
 void MCLClustering::power(node n) {
   edge e1;
-  
+
   stableForEach(e1, g.getOutEdges(n)) {
     double v1 = inW[e1];
 
@@ -105,15 +105,16 @@ void MCLClustering::power(node n) {
         double v2 = inW[e2] * v1;
 
         if (v2 > epsilon) {
-	  node tgt = g.target(e2);
+          node tgt = g.target(e2);
           edge ne = g.existEdge(n, tgt, true);
-	  if (ne.isValid())
-	    outW[ne] += v2;
-	  else {
-	    ne = g.addEdge(n, tgt);
-	    inW[ne] = 0.;
-	    outW[ne] = v2;
-	  }
+
+          if (ne.isValid())
+            outW[ne] += v2;
+          else {
+            ne = g.addEdge(n, tgt);
+            inW[ne] = 0.;
+            outW[ne] = v2;
+          }
         }
       }
     }
@@ -122,13 +123,14 @@ void MCLClustering::power(node n) {
 //==================================================
 struct pvectCmp {
   bool operator()(const std::pair<double, edge>& p1,
-		  const std::pair<double, edge>& p2) {
+                  const std::pair<double, edge>& p2) {
     return p1.first < p2.first;
-  }   
+  }
 };
 
 void MCLClustering::prune(node n) {
   unsigned int outdeg = g.outdeg(n);
+
   if (outdeg == 0) return;
 
   // we use a specific vector to hold out edges needed infos
@@ -145,15 +147,17 @@ void MCLClustering::prune(node n) {
 
   std::sort(pvect.begin(), pvect.end(), pvectCmp());
   double t = pvect[outdeg - 1].first;
+
   for (unsigned int i = 0; i < outdeg; ++i) {
     pair<double, edge>& p = pvect[i];
+
     if (p.first < t || inW[p.second] < epsilon)
       g.delEdge(p.second);
   }
 }
 //=================================================
 bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
-			    /*, bool noprune */) {
+                            /*, bool noprune */) {
   unsigned int sz = g.outdeg(n);
   // we use a specific vector to hold out edges needed infos
   // in order to
@@ -186,12 +190,14 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   double t = pvect[sz - 1].first;
   --k;
   unsigned int outdeg = sz;
+
   for (int i = sz - 2; i > 0; --i) {
     pair<double, edge>& p = pvect[i];
+
     if (k) {
       if (p.first < t) {
-	--k;
-	t = p.first;
+        --k;
+        t = p.first;
       }
     }
     else if (p.first < t) {
@@ -209,8 +215,10 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
 
   // makeStoc step
   sum = 0.;
+
   for (unsigned int i = 0; i < sz; ++i) {
     pair<double, edge>& p = pvect[i];
+
     if (p.second.isValid())
       sum += p.first;
   }
@@ -219,11 +227,13 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
     for (unsigned int i = 0; i < sz; ++i) {
       pair<double, edge>& p = pvect[i];
       e = p.second;
+
       if (e.isValid()) {
-	double outVal = outW[e] = p.first / sum;
-	if (equal && (fabs(outVal - inW[e]) > epsilon))
-	  // more iteration needed
-	  equal = false;
+        double outVal = outW[e] = p.first / sum;
+
+        if (equal && (fabs(outVal - inW[e]) > epsilon))
+          // more iteration needed
+          equal = false;
       }
     }
   }
@@ -231,14 +241,17 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
     for (unsigned int i = 0; i < sz; ++i) {
       pair<double, edge>& p = pvect[i];
       e = p.second;
+
       if (e.isValid()) {
-	double outVal = outW[e] = 1. / double(outdeg);
-	if (equal && (fabs(outVal - inW[e]) > epsilon))
-	  // more iteration needed
-	  equal = false;
+        double outVal = outW[e] = 1. / double(outdeg);
+
+        if (equal && (fabs(outVal - inW[e]) > epsilon))
+          // more iteration needed
+          equal = false;
       }
     }
   }
+
   return equal;
 }
 //=================================================
@@ -298,6 +311,7 @@ void MCLClustering::init() {
 
   // add loops (Set the maximum of out-edges weights to self-loops weight)
   unsigned int nbNodes = g.numberOfNodes();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     n = g[i];
     edge tmp = g.addEdge(n, n);
@@ -322,7 +336,7 @@ void MCLClustering::init() {
     }
 
     forEach(e, g.getOutEdges(n))
-      inW[e] /= sum;
+    inW[e] /= sum;
   }
 }
 //================================================================================
@@ -371,12 +385,14 @@ bool MCLClustering::run() {
 
   while(iteration-- > 0) {
     bool equal = true;
+
     for (unsigned int i = 0; i < nbNodes; ++i) {
       node n = g[i];
       power(n);
+
       // comment the next line to have exact MCL
       if (inflate(_r, _k,  n, equal /*, false*/) == false)
-	equal = false;
+        equal = false;
     }
 
     /* exact MCL should inflate after because we share the same graphs tructure,
@@ -402,7 +418,7 @@ bool MCLClustering::run() {
 
   // outW is no longer needed
   g.free(outW);
-  
+
   outW = inW;
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
@@ -417,8 +433,9 @@ bool MCLClustering::run() {
   visited.setAll(false);
 
   double curVal = 0.;
+
   // connected component loop
-  // set the same value to all connected nodes 
+  // set the same value to all connected nodes
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = g[i];
 
@@ -428,21 +445,22 @@ bool MCLClustering::run() {
       visited[n] = true;
 
       while(!fifo.empty()) {
-	node n = fifo.front();
-	result->setNodeValue(tlpNodes[n], curVal);
-	fifo.pop();
-	const std::vector<node> &neighbours = g.adj(n);
-	unsigned int nbNeighbours = neighbours.size();
+        node n = fifo.front();
+        result->setNodeValue(tlpNodes[n], curVal);
+        fifo.pop();
+        const std::vector<node> &neighbours = g.adj(n);
+        unsigned int nbNeighbours = neighbours.size();
 
-	for (unsigned int i = 0; i <  nbNeighbours; ++i) {
-	  node ni = neighbours[i];
+        for (unsigned int i = 0; i <  nbNeighbours; ++i) {
+          node ni = neighbours[i];
 
-	  if(!visited[ni]) {
-	    fifo.push(ni);
-	    visited[ni] = true;
-	  }
-	}
+          if(!visited[ni]) {
+            fifo.push(ni);
+            visited[ni] = true;
+          }
+        }
       }
+
       curVal += 1.;
     }
   }
