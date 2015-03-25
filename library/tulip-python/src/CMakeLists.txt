@@ -30,6 +30,7 @@ SET(${LibTulipPythonName}_MOC
     ../include/tulip/PythonShellWidget.h
     ../include/tulip/PythonCodeEditor.h
     ../include/tulip/PythonEditorsTabWidget.h
+    ../include/tulip/PythonInterpreter.h
 )
 
 QTX_WRAP_UI(${LibTulipPythonName}_UI_SRCS ${${LibTulipPythonName}_UI})

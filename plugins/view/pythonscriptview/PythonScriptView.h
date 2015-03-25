@@ -95,6 +95,7 @@ public :
 public slots:
 
   void pauseCurrentScript();
+  void currentScriptPaused();
 
 private slots :
 
