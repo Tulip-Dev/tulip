@@ -1057,6 +1057,7 @@ void PythonInterpreter::clearOutputBuffers() {
 void PythonInterpreter::pauseCurrentScript(const bool pause) {
   bool wasPaused = scriptPaused;
   scriptPaused = pause;
+
   if (!wasPaused && scriptPaused) {
     emit scriptExecutionPaused();
   }

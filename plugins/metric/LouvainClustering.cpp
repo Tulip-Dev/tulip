@@ -221,7 +221,7 @@ void LouvainClustering::updateQuotient() {
     if (qsrc!=qtgt) {
       if (subNodes[qtgt.id] == false) {
         subNodes[qsrc.id] = true;
-	++nbSubNodes;
+        ++nbSubNodes;
         std::pair<double, double>& weights = comToInfo[qtgt];
         iW[qtgt] = weights.first;
         nodeEW[qtgt] = weights.second - 2 * weights.first;
@@ -246,13 +246,17 @@ void LouvainClustering::updateQuotient() {
   unsigned int nbNodes = quotient.numberOfNodes();
   std::vector<node> nodesToDel;
   nodesToDel.reserve(nbNodes - nbSubNodes);
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = quotient[i];
+
     if (subNodes[n] == false)
       nodesToDel.push_back(n);
   }
+
   // delete non sub nodes
   nbNodes = nodesToDel.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i)
     quotient.delNode(nodesToDel[i]);
 
@@ -291,13 +295,14 @@ void LouvainClustering::clustersNeighborhood(const node toMove, TLP_HASH_MAP<nod
   for (unsigned int i = 0; i < nbNeigh; ++i) {
     edge e = neighEdges[i];
     node qn = quotient.opposite(e, toMove);
+
     if (qn != toMove) {
       node cInd = qclusters.get(qn.id);
 
       if (neigh.find(cInd)==neigh.end())
-	neigh[cInd] = edgeEW[e];
+        neigh[cInd] = edgeEW[e];
       else
-	neigh[cInd]+= edgeEW[e];
+        neigh[cInd]+= edgeEW[e];
     }
   }
 }
