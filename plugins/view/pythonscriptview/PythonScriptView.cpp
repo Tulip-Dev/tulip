@@ -238,13 +238,11 @@ PythonScriptView::PythonScriptView(tlp::PluginContext *) : _viewWidget(NULL), _p
   _graph(NULL), _scriptStopped(false), _runningScript(false) {
 }
 
-PythonScriptView::~PythonScriptView() {
-  //  delete _viewWidget;
-}
+PythonScriptView::~PythonScriptView() {}
 
 void PythonScriptView::setupWidget() {
-
   _viewWidget = new PythonScriptViewWidget(this);
+  connect(_pythonInterpreter, SIGNAL(scriptExecutionPaused()), this, SLOT(currentScriptPaused()));
   setCentralWidget(_viewWidget);
   _pythonInterpreter->runString(updateVisualizationFunc);
   _pythonInterpreter->runString(pauseScriptFunc);
@@ -449,6 +447,7 @@ void PythonScriptView::executeCurrentScript() {
     Observable::holdObservers();
     _pythonInterpreter->pauseCurrentScript(false);
     _viewWidget->runScriptButton()->setEnabled(false);
+    _viewWidget->runScriptButton()->setToolTip("Run script (Ctrl + Return)");
     _viewWidget->pauseScriptButton()->setEnabled(true);
     _viewWidget->scriptStatusLabel()->setText("Executing script ...");
     _viewWidget->progressBar()->setRange(0,0);
@@ -588,10 +587,14 @@ void PythonScriptView::stopCurrentScript() {
 }
 
 void PythonScriptView::pauseCurrentScript() {
-  Observable::unholdObservers();
   _pythonInterpreter->pauseCurrentScript();
+}
+
+void PythonScriptView::currentScriptPaused() {
+  Observable::unholdObservers();
   _viewWidget->pauseScriptButton()->setEnabled(false);
   _viewWidget->runScriptButton()->setEnabled(true);
+  _viewWidget->runScriptButton()->setToolTip("Resume script (Ctrl + Return)");
   _viewWidget->progressBar()->setRange(0,100);
   _viewWidget->progressBar()->reset();
   _viewWidget->scriptStatusLabel()->setText("Script execution is paused.");

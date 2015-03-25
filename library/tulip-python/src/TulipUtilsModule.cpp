@@ -44,6 +44,7 @@ tuliputils_updateVisualization(PyObject *, PyObject *args) {
 
 static PyObject *
 tuliputils_pauseRunningScript(PyObject *, PyObject *) {
+  PythonInterpreter::getInstance()->pauseCurrentScript();
   Py_RETURN_NONE;
 }
 

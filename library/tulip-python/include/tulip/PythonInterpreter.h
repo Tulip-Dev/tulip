@@ -47,6 +47,7 @@ typedef _object PyObject;
 #include <tulip/PythonCppTypesConverter.h>
 #include <tulip/Graph.h>
 
+#include <QObject>
 #include <QVector>
 #include <QSet>
 #include <QString>
@@ -57,7 +58,9 @@ class QTextBrowser;
 
 namespace tlp {
 
-class TLP_PYTHON_SCOPE PythonInterpreter {
+class TLP_PYTHON_SCOPE PythonInterpreter : public QObject {
+
+  Q_OBJECT
 
   PythonInterpreter();
   ~PythonInterpreter();
@@ -209,6 +212,10 @@ public :
   PyObject* evalPythonStatement(const QString &pythonStatement);
 
   void clearTracebacks();
+
+signals:
+
+  void scriptExecutionPaused();
 
 };
 
