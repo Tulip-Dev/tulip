@@ -76,19 +76,16 @@ void GlComposite::reset(bool deleteElems) {
         (*it2)->getScene()->notifyDeletedEntity(*it);
     }
 
-    if (deleteElems) {
+    (*it)->removeParent(this);
+
+    for(vector<GlLayer*>::iterator itLayers=layerParents.begin(); itLayers!=layerParents.end(); ++itLayers) {
+      GlComposite *composite=dynamic_cast<GlComposite*>(*it);
+
+      if(composite)
+	composite->removeLayerParent(*itLayers);
+    }
+    if (deleteElems)
       delete (*it);
-    }
-    else {
-      (*it)->removeParent(this);
-
-      for(vector<GlLayer*>::iterator itLayers=layerParents.begin(); itLayers!=layerParents.end(); ++itLayers) {
-        GlComposite *composite=dynamic_cast<GlComposite*>(*it);
-
-        if(composite)
-          composite->removeLayerParent(*itLayers);
-      }
-    }
   }
 
   elements.clear();
