@@ -18,6 +18,8 @@
  */
 
 #include <tulip/GlLine.h>
+#include <tulip/GlPolygon.h>
+#include <tulip/GlTriangle.h>
 
 #include <sstream>
 #include <algorithm>
@@ -263,70 +265,56 @@ double GlQuantitativeAxis::getValueForAxisPoint(const Coord &axisPointCoord) {
 }
 
 void GlQuantitativeAxis::addArrowDrawing() {
-  GlLine *arrowLine1 = new GlLine();
-  GlLine *arrowLine2 = new GlLine();
-  GlLine *arrowLine3 = new GlLine();
-  arrowLine1->setStencil(1);
-  arrowLine1->setLineWidth(2.0);
-  arrowLine2->setStencil(1);
-  arrowLine2->setLineWidth(2.0);
-  arrowLine3->setStencil(1);
-  arrowLine3->setLineWidth(2.0);
+  GlLine *arrowLine = new GlLine();
+  GlTriangle *arrow;
+
+  arrowLine->setStencil(1);
+  arrowLine->setLineWidth(2.0);
   float axisExtensionLength = captionOffset;
-  float arrowWidth = axisGradsWidth;
-  float arrowLength = (1./2.) * axisExtensionLength;
+  float arrowOrientation;
+  float pi = 3.141592654;
   Coord arrowEndCoord;
+  Size arrowSize = Size(axisLength/50, axisLength/50, 0);
 
   if (axisOrientation == HORIZONTAL_AXIS) {
     if (ascendingOrder) {
       arrowEndCoord = Coord(axisBaseCoord.getX() + axisLength + axisExtensionLength, axisBaseCoord.getY());
-      arrowLine1->addPoint(Coord(axisBaseCoord.getX() + axisLength, axisBaseCoord.getY()), axisColor);
-      arrowLine1->addPoint(arrowEndCoord, axisColor);
-      arrowLine2->addPoint(arrowEndCoord, axisColor);
-      arrowLine2->addPoint(Coord(axisBaseCoord.getX() + axisLength + (axisExtensionLength - arrowLength), axisBaseCoord.getY() + arrowWidth / 2), axisColor);
-      arrowLine3->addPoint(arrowEndCoord, axisColor);
-      arrowLine3->addPoint(Coord(axisBaseCoord.getX() + axisLength + (axisExtensionLength - arrowLength) , axisBaseCoord.getY() - arrowWidth / 2), axisColor);
+      arrowOrientation = 0.0;
+      arrowLine->addPoint(Coord(axisBaseCoord.getX() + axisLength, axisBaseCoord.getY()), axisColor);
+      arrowLine->addPoint(arrowEndCoord, axisColor);
     }
     else {
       arrowEndCoord = Coord(axisBaseCoord.getX() - axisExtensionLength, axisBaseCoord.getY());
-      arrowLine1->addPoint(axisBaseCoord, axisColor);
-      arrowLine1->addPoint(arrowEndCoord, axisColor);
-      arrowLine2->addPoint(arrowEndCoord, axisColor);
-      arrowLine2->addPoint(Coord(axisBaseCoord.getX() - (axisExtensionLength - arrowLength), axisBaseCoord.getY() + arrowWidth / 2), axisColor);
-      arrowLine3->addPoint(arrowEndCoord, axisColor);
-      arrowLine3->addPoint(Coord(axisBaseCoord.getX() - (axisExtensionLength - arrowLength), axisBaseCoord.getY() - arrowWidth / 2), axisColor);
+      arrowOrientation = pi;
+      arrowLine->addPoint(axisBaseCoord, axisColor);
+      arrowLine->addPoint(arrowEndCoord, axisColor);
     }
   }
-  else if (axisOrientation == VERTICAL_AXIS) {
+  else {
+    assert(axisOrientation == VERTICAL_AXIS);
     if (ascendingOrder) {
       arrowEndCoord = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength + axisExtensionLength);
-      arrowLine1->addPoint(Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength), axisColor);
-      arrowLine1->addPoint(arrowEndCoord, axisColor);
-      arrowLine2->addPoint(arrowEndCoord, axisColor);
-      arrowLine2->addPoint(Coord(axisBaseCoord.getX() + arrowWidth / 2, axisBaseCoord.getY() + axisLength + (axisExtensionLength - arrowLength)), axisColor);
-      arrowLine3->addPoint(arrowEndCoord, axisColor);
-      arrowLine3->addPoint(Coord(axisBaseCoord.getX() - arrowWidth / 2, axisBaseCoord.getY() + axisLength + (axisExtensionLength - arrowLength)), axisColor);
+      arrowOrientation = 1./2.*pi;
+      arrowLine->addPoint(Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength), axisColor);
+      arrowLine->addPoint(arrowEndCoord, axisColor);
     }
     else {
       arrowEndCoord = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() - axisExtensionLength);
-      arrowLine1->addPoint(axisBaseCoord, axisColor);
-      arrowLine1->addPoint(arrowEndCoord, axisColor);
-      arrowLine2->addPoint(arrowEndCoord, axisColor);
-      arrowLine2->addPoint(Coord(axisBaseCoord.getX() + arrowWidth / 2, axisBaseCoord.getY() - (axisExtensionLength - arrowLength)), axisColor);
-      arrowLine3->addPoint(arrowEndCoord, axisColor);
-      arrowLine3->addPoint(Coord(axisBaseCoord.getX() - arrowWidth / 2, axisBaseCoord.getY() - (axisExtensionLength - arrowLength)), axisColor);
+      arrowOrientation = -1./2.*pi;
+      arrowLine->addPoint(axisBaseCoord, axisColor);
+      arrowLine->addPoint(arrowEndCoord, axisColor);
     }
   }
+  arrow = new GlTriangle(arrowEndCoord, arrowSize, axisColor, axisColor, true, true);
+  arrow->setStartAngle(arrowOrientation);
+  arrow->setStencil(1);
 
   ostringstream oss;
-  oss << axisName << " axis arrow line 1";
-  axisLinesComposite->addGlEntity(arrowLine1, oss.str());
+  oss << axisName << " axis arrow line";
+  axisLinesComposite->addGlEntity(arrowLine, oss.str());
   oss.str("");
-  oss << axisName << " axis arrow line 2";
-  axisLinesComposite->addGlEntity(arrowLine2, oss.str());
-  oss.str("");
-  oss << axisName << " axis arrow line 3";
-  axisLinesComposite->addGlEntity(arrowLine3, oss.str());
+  oss << axisName << " axis arrow";
+  axisLinesComposite->addGlEntity(arrow, oss.str());
   computeBoundingBox();
 }
 
