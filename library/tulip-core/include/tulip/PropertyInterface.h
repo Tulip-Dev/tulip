@@ -176,17 +176,17 @@ public:
   virtual std::string getEdgeStringValue( const edge e ) const = 0;
 
   /**
-   * @brief Sets a new value on the node, described by the string parameter.
+   * @brief Sets a new value on the node, represented by the string parameter.
    * @param n The node on which to set the new value.
-   * @param value A string describing the value to set on the node.
+   * @param value A string representing the value to set on the node.
    * @return Whether the string was a correct representation for this property's type. If not, the value is not set.
    */
   virtual bool setNodeStringValue( const node n, const std::string & value ) = 0;
 
   /**
-   * @brief Sets a new value on the edge, described by the string parameter.
+   * @brief Sets a new value on the edge, represented by the string parameter.
    * @param e The edge on which to set value on.
-   * @param value A string describing the value to set on the edge.
+   * @param value A string representing the value to set on the edge.
    * @return Whether the string was a correct representation for this property's type. If not, the value is not set.
    */
   virtual bool setEdgeStringValue( const edge e, const std::string & value ) = 0;
@@ -204,17 +204,17 @@ public:
   virtual std::string getEdgeDefaultStringValue() const = 0;
 
   /**
-   * @brief Sets all the nodes value to the value described by the string. For some types, some parsing will be necessary (e.g. LayoutPorperty).
-   * All previous values are lost.
-   * @param value A string describing the new value to set on all the nodes.
+   * @brief Sets all the nodes value to the value represented by the string. For some types, some parsing will be necessary (e.g. LayoutPorperty).
+   * All previous values are lost and the represented value is assigned as the default one to the future added nodes.
+   * @param value A string representing the new value to set on all the nodes.
    * @return Whether the given string was a correct representation for this property's type. If not, the values are not set.
    */
   virtual bool setAllNodeStringValue( const std::string & value ) = 0;
 
   /**
-   * @brief Sets all the edges value to the value described by the string. For some types, some parsing will be necessary (e.g. LayoutPorperty).
-   * All previous values are lost.
-   * @param value A string describing the new value to set on all the edges.
+   * @brief Sets all the edges value to the value represented by the string. For some types, some parsing will be necessary (e.g. LayoutPorperty).
+   * All previous values are lost and the represented value is assigned as the default one to the future added edges.
+   * @param value A string representing the new value to set on all the edges.
    * @return Whether the given string was a correct representation for this property's type. If not, the values are not set.
    */
   virtual bool setAllEdgeStringValue( const std::string & value ) = 0;
@@ -479,7 +479,7 @@ public:
   ~VectorPropertyInterface() {}
 
   /**
-   * @brief Sets a new vector described by the string parameter as the node value.
+   * @brief Sets a new vector represented by the string parameter as the node value.
    * @param n The node on which to set the new value.
    * @param value A string listing the elements of the vector to set on the node.
    * @param openChar an optional character opening the list of elements. Default value is '('; when set to '\0' it indicates that there is no opening character.
@@ -490,7 +490,7 @@ public:
   virtual bool setNodeStringValueAsVector(const node n, const std::string & value, char openChar = '(', char sepChar = ',', char closeChar = ')') = 0;
 
   /**
-   * @brief Sets a new vector described by the string parameter as the edge value.
+   * @brief Sets a new vector represented by the string parameter as the edge value.
    * @param e The edge on which to set value on.
    * @param value A string listing the elements of the vector to set on the edge.
    * @param openChar an optional character opening the list of elements. Default value is '('; when set to '\0' it indicates that there is no opening character.
