@@ -292,6 +292,7 @@ void GlQuantitativeAxis::addArrowDrawing() {
   }
   else {
     assert(axisOrientation == VERTICAL_AXIS);
+
     if (ascendingOrder) {
       arrowEndCoord = Coord(axisBaseCoord.getX(), axisBaseCoord.getY() + axisLength + axisExtensionLength);
       arrowOrientation = 1./2.*pi;
@@ -305,6 +306,7 @@ void GlQuantitativeAxis::addArrowDrawing() {
       arrowLine->addPoint(arrowEndCoord, axisColor);
     }
   }
+
   arrow = new GlTriangle(arrowEndCoord, arrowSize, axisColor, axisColor, true, true);
   arrow->setStartAngle(arrowOrientation);
   arrow->setStencil(1);
