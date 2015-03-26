@@ -163,6 +163,7 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
 
     menu.addAction(_ui->actionDelete_All);
     menu.exec(_ui->hierarchiesTree->viewport()->mapToGlobal(p));
+    _contextIndex = QModelIndex();
     _contextGraph = NULL;
   }
 }
@@ -305,10 +306,17 @@ void GraphHierarchiesEditor::exportGraph() {
 }
 
 void GraphHierarchiesEditor::renameGraph() {
-  QModelIndex nameIndex =
-    _ui->hierarchiesTree->model()->index(_contextIndex.row(), 0,
-                                         _contextIndex.parent());
-  _ui->hierarchiesTree->edit(nameIndex);
+  if (_contextIndex.isValid() &&
+      _ui->hierarchiesTree->selectionModel()->selectedRows(0).size() == 1) {
+    // Qt bug workaround
+    // there is a potential pb when calling
+    // _ui->hierarchiesTree->model()->index(_contextIndex.row(), 0, _contextIndex.parent())
+    // to get the index of the name to edit
+    // because the call to _contextIndex.parent() may cause a crash
+    // same pb if using _contextIndex.sibling(__contextIndex.row(), 0) instead
+    // It seems safer to use an index build from the selectionModel()
+    _ui->hierarchiesTree->edit(_ui->hierarchiesTree->selectionModel()->selectedRows(0)[0]);
+  }
 }
 
 void GraphHierarchiesEditor::saveGraphHierarchyInTlpFile() {
