@@ -53,7 +53,7 @@ public:
   virtual ~GlRegularPolygon();
 
   /**
-   * @brief Set the start angle in degree
+   * @brief Set the start angle in radian
    *
    * If the start angle is 0 : the regular polygon begin at the top middle point
    */
