@@ -106,6 +106,7 @@ public:
 
   /**
    * @brief Sets the value of all nodes and notify the observers.
+   * All previous values are lost and the given value is assigned as the default one to the future added nodes.
    *
    * @param v The value to set to all nodes.
    *
@@ -114,6 +115,7 @@ public:
 
   /**
    * @brief Sets the value of all edges and notify the observers.
+   * All previous values are lost and the given value is assigned as the default one to the future added edges.
    *
    * @param v The value to set to all edges.
    *
