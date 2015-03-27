@@ -1010,9 +1010,11 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   double divW = size[0] / width;
   double divH = size[1] / height;
   double scale = 1.0;
+
   if (divH * width > size[0]) {
     scale = divW;
-  } else {
+  }
+  else {
     scale = divH;
   }
 

@@ -232,6 +232,7 @@ bool AutoCompletionList::eventFilter(QObject *obj, QEvent *event) {
   if (obj != _codeEditor && obj != _codeEditor->mainWindow()) {
     return false;
   }
+
   if (!_wasActivated && (event->type() == QEvent::WindowDeactivate || event->type() == QEvent::Hide)) {
     _wasActivated = _activated;
     hide();
@@ -496,7 +497,8 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), _h
   // window activate/desactivate events
   if (Perspective::instance()) {
     _mainWindow = Perspective::instance()->mainWindow();
-  } else {
+  }
+  else {
     QWidget *parente = dynamic_cast<QWidget*>(this->parent());
 
     while (parente) {
