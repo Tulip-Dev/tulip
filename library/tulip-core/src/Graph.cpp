@@ -996,11 +996,9 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   SizeProperty  *clusterSize   = cluster->getProperty<SizeProperty>(sizeProperty);
   DoubleProperty *clusterRot = cluster->getProperty<DoubleProperty>(rotationProperty);
   BoundingBox box = tlp::computeBoundingBox(cluster, clusterLayout, clusterSize, clusterRot);
-  Coord maxL(box[1]);
-  Coord minL(box[0]);
-  double width  = maxL[0] - minL[0];
-  double height = maxL[1] - minL[1];
-  double depth =  maxL[2] - minL[2];
+  double width  = box.width();
+  double height = box.height();
+  double depth =  box.depth();
 
   if (width<0.0001) width=1.0;
 
@@ -1008,12 +1006,21 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
 
   if (depth<0.0001) depth=1.0;
 
-  Coord center = (maxL + minL) / -2.0f;
-  clusterLayout->translate(center, cluster);
+  // keep aspect ratio of content layout when opening a meta-node
+  double divW = size[0] / width;
+  double divH = size[1] / height;
+  double scale = 1.0;
+  if (divH * width > size[0]) {
+    scale = divW;
+  } else {
+    scale = divH;
+  }
+
+  clusterLayout->translate(-box.center(), cluster);
   clusterLayout->rotateZ(graphRot->getNodeValue(metanode), cluster);
-  clusterLayout->scale(Coord(size[0]/width, size[1]/height, size[2]/depth), cluster);
+  clusterLayout->scale(Coord(scale, scale, size[2]/depth), cluster);
   clusterLayout->translate(pos, cluster);
-  clusterSize->scale(Size(size[0]/width, size[1]/height, size[2]/depth), cluster);
+  clusterSize->scale(Size(scale, scale, size[2]/depth), cluster);
 
   Iterator<node> *itN = cluster->getNodes();
 
@@ -1034,8 +1041,6 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   }
 
   delete itE;
-
-
 
   // propagate all cluster local properties
   PropertyInterface* property;
