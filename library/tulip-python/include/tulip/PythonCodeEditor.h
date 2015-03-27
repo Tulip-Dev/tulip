@@ -53,6 +53,8 @@ class FindReplaceDialogData;
 class PythonCodeHighlighter;
 class ParenMatcherHighlighter;
 
+class QMainWindow;
+
 namespace tlp {
 
 class PythonCodeEditor;
@@ -238,6 +240,10 @@ public :
 
   void setPlainText(const QString &text);
 
+  QMainWindow *mainWindow() const {
+    return _mainWindow;
+  }
+
 protected:
 
   void resizeEvent(QResizeEvent *event);
@@ -308,6 +314,8 @@ protected:
 
   bool _shellWidget;
   bool _moduleEditor;
+
+  QMainWindow *_mainWindow;
 
 };
 

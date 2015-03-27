@@ -22,6 +22,8 @@
 #include "tulip/PythonCodeHighlighter.h"
 #include "tulip/ParenMatcherHighlighter.h"
 
+#include <tulip/Perspective.h>
+
 #include <QTextStream>
 #include <QPainter>
 #include <QTextBlock>
@@ -226,7 +228,10 @@ void AutoCompletionList::hideEvent (QHideEvent * event) {
 }
 
 
-bool AutoCompletionList::eventFilter(QObject *, QEvent *event) {
+bool AutoCompletionList::eventFilter(QObject *obj, QEvent *event) {
+  if (obj != _codeEditor && obj != _codeEditor->mainWindow()) {
+    return false;
+  }
   if (!_wasActivated && (event->type() == QEvent::WindowDeactivate || event->type() == QEvent::Hide)) {
     _wasActivated = _activated;
     hide();
@@ -489,20 +494,24 @@ PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), _h
   // Hack to get a pointer on the main window
   // in order for the autocompletion dialog to catch
   // window activate/desactivate events
-  QMainWindow *mainWindow = NULL;
-  QWidget *parente = dynamic_cast<QWidget*>(this->parent());
+  if (Perspective::instance()) {
+    _mainWindow = Perspective::instance()->mainWindow();
+  } else {
+    QWidget *parente = dynamic_cast<QWidget*>(this->parent());
 
-  while (parente) {
-    mainWindow = dynamic_cast<QMainWindow *>(parente);
+    while (parente) {
+      _mainWindow = dynamic_cast<QMainWindow *>(parente);
 
-    if (mainWindow)
-      break;
+      if (_mainWindow)
+        break;
 
-    parente = dynamic_cast<QWidget *>(parente->parent());
+      parente = dynamic_cast<QWidget *>(parente->parent());
+    }
   }
 
-  if (mainWindow)
-    mainWindow->installEventFilter(_autoCompletionList);
+  if (_mainWindow) {
+    _mainWindow->installEventFilter(_autoCompletionList);
+  }
 
   installEventFilter(_autoCompletionList);
 
