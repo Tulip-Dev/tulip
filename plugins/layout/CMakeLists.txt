@@ -102,7 +102,7 @@ TARGET_LINK_LIBRARIES(PerfectLayout-${TulipVersion} ${LibTulipCoreName})
 IF(NOT BUILD_CORE_ONLY)
 INCLUDE_DIRECTORIES(${TulipOGLInclude})
 ADD_LIBRARY(PolyominoPacking-${TulipVersion} SHARED PolyominoPacking.cpp)
-TARGET_LINK_LIBRARIES(PolyominoPacking-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName})
+TARGET_LINK_LIBRARIES(PolyominoPacking-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LayoutUtilsLibraryName})
 INSTALL(TARGETS PolyominoPacking-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT PolyominoPacking)
 ENDIF(NOT BUILD_CORE_ONLY)
 ##----------------------------------------------------------------------------------------------------------------------------
