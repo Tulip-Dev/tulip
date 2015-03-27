@@ -40,8 +40,31 @@
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/TulipViewSettings.h>
 
+#include "DatasetTools.h"
+
 using namespace std;
 using namespace tlp;
+
+namespace {
+const char* paramHelp[] = {
+//LayoutAlgorithm
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF("Type", "LayoutProperty") \
+  HTML_HELP_DEF("Values", "Any layout property") \
+  HTML_HELP_DEF("Default", "viewLayout") \
+  HTML_HELP_BODY() \
+  "Input coordinates of nodes and edges" \
+  HTML_HELP_CLOSE(),
+//Rotation
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF("Type", "DoubleProperty") \
+  HTML_HELP_DEF("Values", "Any double property used for rotation of nodes on z-axis") \
+  HTML_HELP_DEF("Default", "viewRotation") \
+  HTML_HELP_BODY() \
+  "Input rotation of nodes on z-axis" \
+  HTML_HELP_CLOSE()
+};
+}
 
 typedef struct {
   tlp::Graph *cc; // the connected component associated to that polyomino
@@ -105,6 +128,9 @@ public :
 PLUGIN(PolyominoPacking)
 
 PolyominoPacking::PolyominoPacking( const PluginContext* context ) : LayoutAlgorithm(context) {
+  addInParameter<LayoutProperty> ("coordinates",paramHelp[0],"viewLayout");
+  addNodeSizePropertyParameter(this);
+  addInParameter<DoubleProperty> ("rotation",paramHelp[1],"viewRotation");
   addInParameter<unsigned int>("margin", "", "1");
   addInParameter<unsigned int>("increment", HTML_HELP_OPEN()                            \
                                HTML_HELP_DEF( "type", "unsigned int" )               \
@@ -116,42 +142,95 @@ PolyominoPacking::PolyominoPacking( const PluginContext* context ) : LayoutAlgor
                                "1");
 }
 
-PolyominoPacking::~PolyominoPacking() {
-
-}
+PolyominoPacking::~PolyominoPacking() {}
 
 bool PolyominoPacking::run() {
 
+  LayoutProperty *layout = NULL;
+  SizeProperty *size = NULL;
+  DoubleProperty *rotation = NULL;
   margin = 1;
   bndIncrement = 1;
 
   if(dataSet != NULL) {
+    dataSet->get("coordinates", layout);
+    getNodeSizePropertyParameter(dataSet, size);
+    dataSet->get("rotation", rotation);
     dataSet->get("margin", margin);
     dataSet->get("increment", bndIncrement);
   }
-
-  viewLayout = graph->getProperty<LayoutProperty>("viewLayout");
-  viewSize = graph->getProperty<SizeProperty>("viewSize");
-  viewRotation = graph->getProperty<DoubleProperty>("viewRotation");
-  viewShape = graph->getProperty<IntegerProperty>("viewShape");
-
-  if (pluginProgress) {
-    pluginProgress->setComment("Computing connected components ...");
-  }
-
-  vector< set<node> > connectedComponents;
-  tlp::ConnectedTest::computeConnectedComponents(graph, connectedComponents);
-
-  if (connectedComponents.size() <= 1)
-    return true;
 
   // work on a graph copy to avoid costly GUI update when creating subraphs associated to connected components
   Graph *graphCp = tlp::newGraph();
   copyToGraph(graphCp, graph);
 
+  TLP_HASH_MAP<node, node> nodesMapping;
+  TLP_HASH_MAP<edge, edge> edgesMapping;
+
+  Iterator<node> *gNodes = graph->getNodes();
+  Iterator<node> *gCpNodes = graphCp->getNodes();
+  while (gNodes->hasNext()) {
+    nodesMapping[gCpNodes->next()] = gNodes->next();
+  }
+  delete gNodes;
+  delete gCpNodes;
+
+  Iterator<edge> *gEdges = graph->getEdges();
+  Iterator<edge> *gCpEdges = graphCp->getEdges();
+  while (gEdges->hasNext()) {
+    edgesMapping[gCpEdges->next()] = gEdges->next();
+  }
+  delete gEdges;
+  delete gCpEdges;
+
+  if (pluginProgress) {
+    pluginProgress->setComment("Computing connected components ...");
+  }
+  vector< set<node> > connectedComponents;
+  tlp::ConnectedTest::computeConnectedComponents(graphCp, connectedComponents);
+
+  if (connectedComponents.size() <= 1) {
+    delete graphCp;
+    return true;
+  }
+
+  viewLayout = graphCp->getProperty<LayoutProperty>("viewLayout");
+  viewSize = graphCp->getProperty<SizeProperty>("viewSize");
+  viewRotation = graphCp->getProperty<DoubleProperty>("viewRotation");
+
+  if (layout || size || rotation) {
+    node n;
+    forEach(n, graphCp->getNodes()) {
+      if (layout) {
+        viewLayout->setNodeValue(n, layout->getNodeValue(nodesMapping[n]));
+      }
+      if (size) {
+        viewSize->setNodeValue(n, size->getNodeValue(nodesMapping[n]));
+      }
+      if (rotation) {
+        viewRotation->setNodeValue(n, rotation->getNodeValue(nodesMapping[n]));
+      }
+    }
+    edge e;
+    forEach(e, graphCp->getEdges()) {
+      if (layout) {
+        viewLayout->setEdgeValue(e, layout->getEdgeValue(edgesMapping[e]));
+      }
+      if (size) {
+        viewSize->setEdgeValue(e, size->getEdgeValue(edgesMapping[e]));
+      }
+      if (rotation) {
+        viewRotation->setEdgeValue(e, rotation->getEdgeValue(edgesMapping[e]));
+      }
+    }
+  }
+
+  viewShape = graphCp->getProperty<IntegerProperty>("viewShape");
+
   vector<Graph *> connectedComponentsSgs;
   connectedComponentsSgs.reserve(connectedComponents.size());
   polyominos.reserve(connectedComponents.size());
+
 
   for (size_t i = 0 ; i < connectedComponents.size() ; ++i) {
     Graph *cc = graphCp->inducedSubGraph(connectedComponents[i]);
@@ -204,7 +283,7 @@ bool PolyominoPacking::run() {
     Coord move = Coord(newPlaces[polyominos[i].cc][0], newPlaces[polyominos[i].cc][1]);
     node n;
     forEach(n, (polyominos[i].cc)->getNodes()) {
-      result->setNodeValue(n, viewLayout->getNodeValue(n) + move);
+      result->setNodeValue(nodesMapping[n], viewLayout->getNodeValue(n) + move);
     }
     edge e;
     forEach(e, (polyominos[i].cc)->getEdges()) {
@@ -214,7 +293,7 @@ bool PolyominoPacking::run() {
         bends[j] += move;
       }
 
-      result->setEdgeValue(e, bends);
+      result->setEdgeValue(edgesMapping[e], bends);
     }
   }
 
