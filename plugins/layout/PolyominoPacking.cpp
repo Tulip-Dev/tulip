@@ -169,23 +169,28 @@ bool PolyominoPacking::run() {
 
   Iterator<node> *gNodes = graph->getNodes();
   Iterator<node> *gCpNodes = graphCp->getNodes();
+
   while (gNodes->hasNext()) {
     nodesMapping[gCpNodes->next()] = gNodes->next();
   }
+
   delete gNodes;
   delete gCpNodes;
 
   Iterator<edge> *gEdges = graph->getEdges();
   Iterator<edge> *gCpEdges = graphCp->getEdges();
+
   while (gEdges->hasNext()) {
     edgesMapping[gCpEdges->next()] = gEdges->next();
   }
+
   delete gEdges;
   delete gCpEdges;
 
   if (pluginProgress) {
     pluginProgress->setComment("Computing connected components ...");
   }
+
   vector< set<node> > connectedComponents;
   tlp::ConnectedTest::computeConnectedComponents(graphCp, connectedComponents);
 
@@ -204,9 +209,11 @@ bool PolyominoPacking::run() {
       if (layout) {
         viewLayout->setNodeValue(n, layout->getNodeValue(nodesMapping[n]));
       }
+
       if (size) {
         viewSize->setNodeValue(n, size->getNodeValue(nodesMapping[n]));
       }
+
       if (rotation) {
         viewRotation->setNodeValue(n, rotation->getNodeValue(nodesMapping[n]));
       }
@@ -216,9 +223,11 @@ bool PolyominoPacking::run() {
       if (layout) {
         viewLayout->setEdgeValue(e, layout->getEdgeValue(edgesMapping[e]));
       }
+
       if (size) {
         viewSize->setEdgeValue(e, size->getEdgeValue(edgesMapping[e]));
       }
+
       if (rotation) {
         viewRotation->setEdgeValue(e, rotation->getEdgeValue(edgesMapping[e]));
       }
