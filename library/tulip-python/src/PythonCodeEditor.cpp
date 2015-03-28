@@ -82,11 +82,11 @@ private:
 
 AutoCompletionList::AutoCompletionList(PythonCodeEditor *parent) : QListWidget(parent), _codeEditor(parent) {
 #if defined(__APPLE__)
-  setWindowFlags(Qt::Popup|Qt::FramelessWindowHint);
+  setWindowFlags((Qt::WindowFlags) Qt::Popup|Qt::FramelessWindowHint);
 #elif QT_VERSION >= 0x040500
-  setWindowFlags(Qt::ToolTip);
+  setWindowFlags((Qt::WindowFlags) Qt::ToolTip);
 #else
-  setWindowFlags(Qt::Tool|Qt::FramelessWindowHint);
+  setWindowFlags((Qt::WindowFlags) Qt::Tool|Qt::FramelessWindowHint);
 #endif
   setAttribute(Qt::WA_StaticContents);
   setFrameShape(StyledPanel);
