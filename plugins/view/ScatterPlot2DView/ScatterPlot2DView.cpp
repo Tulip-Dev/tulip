@@ -90,13 +90,16 @@ ScatterPlot2DView::~ScatterPlot2DView() {
 
   if(propertiesSelectionWidget!=NULL)
     delete propertiesSelectionWidget;
+
   if(optionsWidget!=NULL)
     delete optionsWidget;
 
   if(glGraphComposite!=NULL)
     delete glGraphComposite;
+
   if(matrixComposite!=NULL)
     delete matrixComposite;
+
   if(axisComposite!=NULL)
     delete axisComposite;
 
@@ -207,17 +210,22 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   dataSet.get("lastViewWindowHeight", lastViewWindowHeight);
 
   bool showedges=false;
+
   if (dataSet.get("display graph edges", showedges))
     optionsWidget->setDisplayGraphEdges(showedges);
 
   Color backgroundColor;
+
   if (dataSet.get("background color", backgroundColor))
     optionsWidget->setBackgroundColor(backgroundColor);
 
   int minSizeMap = 0;
+
   if (dataSet.get("min Size Mapping", minSizeMap))
     optionsWidget->setMinSizeMapping(static_cast<float>(minSizeMap));
+
   int maxSizeMap = 0;
+
   if (dataSet.get("max Size Mapping", maxSizeMap))
     optionsWidget->setMaxSizeMapping(static_cast<float>(maxSizeMap));
 
@@ -446,39 +454,39 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
       }
 
       for (size_t j = i+1 ; j  < selectedGraphProperties.size() ; ++j) {
-          pair<string, string> overviewsMapKey = make_pair(selectedGraphProperties[i], selectedGraphProperties[j]);
-          ScatterPlot2D *scatterOverview = NULL;
-          Coord overviewBlCorner(i * (OVERVIEWS_SIZE + OFFSET_BETWEEN_PREVIEWS), (selectedGraphProperties.size() - j - 1.0f) * (OVERVIEWS_SIZE + OFFSET_BETWEEN_PREVIEWS));
-          map<pair<string, string>, ScatterPlot2D *>::iterator it = scatterPlotsMap.find(overviewsMapKey);
+        pair<string, string> overviewsMapKey = make_pair(selectedGraphProperties[i], selectedGraphProperties[j]);
+        ScatterPlot2D *scatterOverview = NULL;
+        Coord overviewBlCorner(i * (OVERVIEWS_SIZE + OFFSET_BETWEEN_PREVIEWS), (selectedGraphProperties.size() - j - 1.0f) * (OVERVIEWS_SIZE + OFFSET_BETWEEN_PREVIEWS));
+        map<pair<string, string>, ScatterPlot2D *>::iterator it = scatterPlotsMap.find(overviewsMapKey);
 
-          if (it != scatterPlotsMap.end() && it->second) {
-            scatterOverview = (it->second);
+        if (it != scatterPlotsMap.end() && it->second) {
+          scatterOverview = (it->second);
 
-            if(!scatterOverview)
-              continue;
+          if(!scatterOverview)
+            continue;
 
-            scatterOverview->setDataLocation(dataLocation);
-            scatterOverview->setBLCorner(overviewBlCorner);
-            scatterOverview->setUniformBackgroundColor(backgroundColor);
-            scatterOverview->setForegroundColor(foregroundColor);
+          scatterOverview->setDataLocation(dataLocation);
+          scatterOverview->setBLCorner(overviewBlCorner);
+          scatterOverview->setUniformBackgroundColor(backgroundColor);
+          scatterOverview->setForegroundColor(foregroundColor);
+        }
+        else {
+          scatterOverview = new ScatterPlot2D(scatterPlotGraph, selectedGraphProperties[i], selectedGraphProperties[j], dataLocation, overviewBlCorner, OVERVIEWS_SIZE, backgroundColor, foregroundColor);
+          scatterPlotsMap[overviewsMapKey] = scatterOverview;
+
+          if (scatterPlotsGenMap.find(overviewsMapKey) == scatterPlotsGenMap.end()) {
+            scatterPlotsGenMap[overviewsMapKey] = false;
           }
-          else {
-            scatterOverview = new ScatterPlot2D(scatterPlotGraph, selectedGraphProperties[i], selectedGraphProperties[j], dataLocation, overviewBlCorner, OVERVIEWS_SIZE, backgroundColor, foregroundColor);
-            scatterPlotsMap[overviewsMapKey] = scatterOverview;
+        }
 
-            if (scatterPlotsGenMap.find(overviewsMapKey) == scatterPlotsGenMap.end()) {
-              scatterPlotsGenMap[overviewsMapKey] = false;
-            }
-          }
+        scatterOverview->setDisplayGraphEdges(optionsWidget->displayGraphEdges());
 
-          scatterOverview->setDisplayGraphEdges(optionsWidget->displayGraphEdges());
+        if (!optionsWidget->uniformBackground()) {
+          scatterOverview->mapBackgroundColorToCorrelCoeff(true, optionsWidget->getMinusOneColor(), optionsWidget->getZeroColor(), optionsWidget->getOneColor());
+        }
 
-          if (!optionsWidget->uniformBackground()) {
-            scatterOverview->mapBackgroundColorToCorrelCoeff(true, optionsWidget->getMinusOneColor(), optionsWidget->getZeroColor(), optionsWidget->getOneColor());
-          }
-
-          matrixComposite->addGlEntity(scatterOverview, selectedGraphProperties[i] + "_" + selectedGraphProperties[j]);
-          scatterOverview->setSizeProperty(scatterPlotSize);
+        matrixComposite->addGlEntity(scatterOverview, selectedGraphProperties[i] + "_" + selectedGraphProperties[j]);
+        scatterOverview->setSizeProperty(scatterPlotSize);
 
 
         // add some feedback

@@ -50,10 +50,10 @@ PropertyValuesDispatcher::PropertyValuesDispatcher(tlp::Graph *source, tlp::Grap
   Observable::holdObservers();
   string s;
   forEach (s, source->getProperties())
-    addLocalProperty(source, s);
+  addLocalProperty(source, s);
 
   forEach (s, target->getProperties())
-    addLocalProperty(target, s);
+  addLocalProperty(target, s);
 
   Observable::unholdObservers();
 
@@ -83,12 +83,13 @@ void PropertyValuesDispatcher::afterSetNodeValue(tlp::PropertyInterface *sourceP
       targetProp->setNodeStringValue(node(id), sourceProp->getNodeStringValue(n));
       // update the other node
       vector<int> vect = _graphEntitiesToDisplayedNodes->getNodeValue(node(id));
+
       for(vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)  {
         node n1(*it);
 
         if (n1 != n)
           sourceProp->setNodeStringValue(n1, sourceProp->getNodeStringValue(n));
-      }      
+      }
     }
     else {
       targetProp->setEdgeStringValue(edge(id), sourceProp->getNodeStringValue(n));
@@ -123,6 +124,7 @@ void PropertyValuesDispatcher::afterSetEdgeValue(tlp::PropertyInterface *sourceP
       targetProp->setNodeStringValue(node(*it), strVal);
 
     edge ee = _edgesMap[e];
+
     // corresponding edge may not exist if e
     // has been added after the build of the MatrixView
     if (ee.isValid())
@@ -181,11 +183,11 @@ void PropertyValuesDispatcher::addLocalProperty(tlp::Graph *g, const std::string
     afterSetAllEdgeValue(sourceProp);
     node n;
     forEach(n, sourceProp->getNonDefaultValuatedNodes())
-      afterSetNodeValue(sourceProp,n);
+    afterSetNodeValue(sourceProp,n);
 
     edge e;
     forEach(e, sourceProp->getNonDefaultValuatedEdges())
-      afterSetEdgeValue(sourceProp, e);
+    afterSetEdgeValue(sourceProp, e);
     Observable::unholdObservers();
 
     sourceProp->addListener(this);

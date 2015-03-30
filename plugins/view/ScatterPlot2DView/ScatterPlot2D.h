@@ -36,8 +36,7 @@ class GlLabel;
 class GlProgressBar;
 class Graph;
 
-class ScatterPlot2D : public GlComposite, public Observable
-{
+class ScatterPlot2D : public GlComposite, public Observable {
 
 public :
 
@@ -80,41 +79,41 @@ public :
   }
 
   bool getXAxisScaleDefined() const {
-      return xAxisScaleDefined;
+    return xAxisScaleDefined;
   }
   void setXAxisScaleDefined(const bool value) {
-      xAxisScaleDefined = value;
+    xAxisScaleDefined = value;
   }
   bool getYAxisScaleDefined() const {
-      return yAxisScaleDefined;
+    return yAxisScaleDefined;
   }
   void setYAxisScaleDefined(const bool value) {
-      yAxisScaleDefined = value;
+    yAxisScaleDefined = value;
   }
   std::pair<double,double> getXAxisScale() const {
-      return xAxisScale;
+    return xAxisScale;
   }
   void setXAxisScale(const std::pair<double, double> value) {
-      xAxisScale = value;
+    xAxisScale = value;
   }
   std::pair<double, double> getYAxisScale() const {
-      return yAxisScale;
+    return yAxisScale;
   }
   void setYAxisScale(const std::pair<double, double> value) {
-      yAxisScale = value;
+    yAxisScale = value;
   }
 
   std::pair<double, double> getInitXAxisScale() const {
-      return initXAxisScale;
+    return initXAxisScale;
   }
   void setInitXAxisScale(const std::pair<double, double> value) {
-      initXAxisScale = value;
+    initXAxisScale = value;
   }
   std::pair<double, double> getInitYAxisScale() const {
-      return initYAxisScale;
+    return initYAxisScale;
   }
   void setInitYAxisScale(const std::pair<double, double> value) {
-      initYAxisScale = value;
+    initYAxisScale = value;
   }
 
   double getCorrelationCoefficient() const {

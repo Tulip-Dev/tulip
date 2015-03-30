@@ -122,32 +122,35 @@ void MatrixView::setOriented(bool flag) {
   if (flag != _isOriented) {
     _isOriented = flag;
     Observable::holdObservers();
+
     if (_isOriented) {
       edge e;
       forEach(e, graph()->getEdges()) {
-	// delete the second node mapping the current edge
-	vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
-	_matrixGraph->delNode(node(edgeNodes[1]));
-	edgeNodes.resize(1);
-	_graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
+        // delete the second node mapping the current edge
+        vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
+        _matrixGraph->delNode(node(edgeNodes[1]));
+        edgeNodes.resize(1);
+        _graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
       }
     }
     else {
       edge e;
       forEach(e, graph()->getEdges()) {
-	// must add the symetric node
-	vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
-	edgeNodes.push_back(_matrixGraph->addNode().id);
-	_graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
-	// layout and shape will be updated in updataLayout method
-	// but other view properties must be set now
-	for (set<string>::iterator it = _sourceToTargetProperties.begin(); it != _sourceToTargetProperties.end(); ++it) {
-	  PropertyInterface *prop = _matrixGraph->getProperty(*it);
-	  prop->setNodeStringValue(node(edgeNodes[1]),
-				   prop->getNodeStringValue(node(edgeNodes[0])));
-	}
+        // must add the symetric node
+        vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
+        edgeNodes.push_back(_matrixGraph->addNode().id);
+        _graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
+
+        // layout and shape will be updated in updataLayout method
+        // but other view properties must be set now
+        for (set<string>::iterator it = _sourceToTargetProperties.begin(); it != _sourceToTargetProperties.end(); ++it) {
+          PropertyInterface *prop = _matrixGraph->getProperty(*it);
+          prop->setNodeStringValue(node(edgeNodes[1]),
+                                   prop->getNodeStringValue(node(edgeNodes[0])));
+        }
       }
     }
+
     Observable::unholdObservers();
     emit drawNeeded();
   }
@@ -262,11 +265,11 @@ void MatrixView::initDisplayedGraph() {
   Observable::holdObservers();
   node n;
   forEach(n, graph()->getNodes())
-    addNode(graph(), n);
+  addNode(graph(), n);
 
   edge e;
   forEach(e, graph()->getEdges())
-    addEdge(graph(), e);
+  addEdge(graph(), e);
   Observable::unholdObservers();
 
   GlGraphInputData *inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
@@ -334,12 +337,14 @@ void MatrixView::addNode(tlp::Graph *, const tlp::node n) {
 
   vector<int> nodeToDisplayedNodes;
   nodeToDisplayedNodes.reserve(2);
+
   for (int i=0; i < 2; ++i) {
     node dispNode = _matrixGraph->addNode();
     nodeToDisplayedNodes.push_back(dispNode);
     _displayedNodesToGraphEntities->setNodeValue(dispNode, n.id);
     _displayedNodesAreNodes->setNodeValue(dispNode, true);
   }
+
   _graphEntitiesToDisplayedNodes->setNodeValue(n, nodeToDisplayedNodes);
 }
 
@@ -349,12 +354,14 @@ void MatrixView::addEdge(tlp::Graph *g, const tlp::edge e) {
 
   vector<int> edgeToDisplayedNodes;
   edgeToDisplayedNodes.reserve(2);
+
   for (int i = 0; i < 2; ++i) {
     node dispEdge = _matrixGraph->addNode();
     edgeToDisplayedNodes.push_back(dispEdge);
     _displayedNodesToGraphEntities->setNodeValue(dispEdge, e.id);
     _displayedNodesAreNodes->setNodeValue(dispEdge, false);
   }
+
   _graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeToDisplayedNodes);
 
   const std::pair<node, node>& eEnds = g->ends(e);
@@ -499,6 +506,7 @@ void MatrixView::updateLayout() {
 
     layout->setNodeValue(node(edgeNodes[0]), Coord(tgt0[0], src1[1], 0));
     shapes->setNodeValue(node(edgeNodes[0]),shape);
+
     if (_isOriented == false) {
       layout->setNodeValue(node(edgeNodes[1]), Coord(src0[0], tgt1[1], 0));
       shapes->setNodeValue(node(edgeNodes[1]),shape);
