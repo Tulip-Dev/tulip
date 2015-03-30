@@ -36,6 +36,8 @@ MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent): Q
   connect(_ui->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this, SIGNAL(changeBackgroundColor(QColor)));
   connect(_ui->gridDisplayCombo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(setGridDisplayMode()));
   connect(_ui->showedgesbox, SIGNAL(clicked(bool)), this, SIGNAL(showEdges(bool)));
+  connect(_ui->enableColorInterpolationCBox, SIGNAL(clicked(bool)), this, SIGNAL(enableEdgeColorInterpolation(bool)));
+  connect(_ui->orientedCBox, SIGNAL(clicked(bool)), this, SIGNAL(updateOriented(bool)));
   connect(_ui->ascendingOrderCBox, SIGNAL(toggled(bool)), this, SLOT(orderingDirectionChanged()));
 
   if (Perspective::instance())
@@ -54,12 +56,20 @@ void MatrixViewConfigurationWidget::setDisplayEdges(const bool state) {
   _ui->showedgesbox->setChecked(state);
 }
 
+void MatrixViewConfigurationWidget::setEdgeColorInterpolation(const bool state) {
+  _ui->enableColorInterpolationCBox->setChecked(state);
+}
+
 void MatrixViewConfigurationWidget::setAscendingOrder(const bool state) {
   _ui->ascendingOrderCBox->setChecked(state);
 }
 
 bool MatrixViewConfigurationWidget::ascendingOrder() const {
   return _ui->ascendingOrderCBox->isChecked();
+}
+
+void MatrixViewConfigurationWidget::setOriented(const bool state) {
+  _ui->orientedCBox->setChecked(state);
 }
 
 void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {

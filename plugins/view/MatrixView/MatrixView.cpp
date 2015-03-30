@@ -44,7 +44,7 @@ using namespace std;
 MatrixView::MatrixView(const PluginContext *):
   NodeLinkDiagramComponent(),
   _matrixGraph(NULL), _graphEntitiesToDisplayedNodes(NULL), _displayedNodesToGraphEntities(NULL), _displayedEdgesToGraphEdges(NULL), _displayedNodesAreNodes(NULL), _dispatcher(NULL),
-  _configurationWidget(NULL), _mustUpdateSizes(false), _mustUpdateLayout(false), _orderingMetricName("") {
+  _configurationWidget(NULL), _mustUpdateSizes(false), _mustUpdateLayout(false), _isOriented(false), _orderingMetricName("") {
 }
 
 MatrixView::~MatrixView() {
@@ -63,6 +63,8 @@ void MatrixView::setState(const DataSet &ds) {
     connect(_configurationWidget, SIGNAL(metricSelected(std::string)), this, SLOT(setOrderingMetric(std::string)));
     connect(_configurationWidget, SIGNAL(setGridDisplayMode()), this, SLOT(setGridDisplayMode()));
     connect(_configurationWidget, SIGNAL(showEdges(bool)), this, SLOT(showEdges(bool)));
+    connect(_configurationWidget, SIGNAL(enableEdgeColorInterpolation(bool)), this, SLOT(enableEdgeColorInterpolation(bool)));
+    connect(_configurationWidget, SIGNAL(updateOriented(bool)), this, SLOT(setOriented(bool)));
 
     QAction* centerAction = new QAction(trUtf8("Center"),this);
     centerAction->setShortcut(trUtf8("Ctrl+Shift+C"));
@@ -95,11 +97,60 @@ void MatrixView::setState(const DataSet &ds) {
   ds.get("ordering", orderingindex);
   _configurationWidget->setOrderingProperty(orderingindex);
 
+  status = false;
+  ds.get("oriented", status);
+  _isOriented = status;
+  _configurationWidget->setOriented(status);
+  status = false;
+
+  ds.get("edge color interpolation", status);
+  enableEdgeColorInterpolation(status);
+  _configurationWidget->setEdgeColorInterpolation(status);
 }
 
 void MatrixView::showEdges(bool show) {
   getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setDisplayEdges(show);
   emit drawNeeded();
+}
+
+void MatrixView::enableEdgeColorInterpolation(bool flag) {
+  getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setEdgeColorInterpolate(flag);
+  emit drawNeeded();
+}
+
+void MatrixView::setOriented(bool flag) {
+  if (flag != _isOriented) {
+    _isOriented = flag;
+    Observable::holdObservers();
+    if (_isOriented) {
+      edge e;
+      forEach(e, graph()->getEdges()) {
+	// delete the second node mapping the current edge
+	vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
+	_matrixGraph->delNode(node(edgeNodes[1]));
+	edgeNodes.resize(1);
+	_graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
+      }
+    }
+    else {
+      edge e;
+      forEach(e, graph()->getEdges()) {
+	// must add the symetric node
+	vector<int> edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
+	edgeNodes.push_back(_matrixGraph->addNode().id);
+	_graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeNodes);
+	// layout and shape will be updated in updataLayout method
+	// but other view properties must be set now
+	for (set<string>::iterator it = _sourceToTargetProperties.begin(); it != _sourceToTargetProperties.end(); ++it) {
+	  PropertyInterface *prop = _matrixGraph->getProperty(*it);
+	  prop->setNodeStringValue(node(edgeNodes[1]),
+				   prop->getNodeStringValue(node(edgeNodes[0])));
+	}
+      }
+    }
+    Observable::unholdObservers();
+    emit drawNeeded();
+  }
 }
 
 void MatrixView::graphChanged(Graph *) {
@@ -109,10 +160,12 @@ void MatrixView::graphChanged(Graph *) {
 DataSet MatrixView::state() const {
   DataSet ds;
   ds.set("show Edges", getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isDisplayEdges());
+  ds.set("edge color interpolation", getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isEdgeColorInterpolate());
   ds.set("ascending order", _configurationWidget->ascendingOrder());
   ds.set("Grid mode", _configurationWidget->gridDisplayMode());
   ds.set("Background Color", getGlMainWidget()->getScene()->getBackgroundColor());
   ds.set("ordering", _configurationWidget->orderingProperty());
+  ds.set("oriented", _isOriented);
   return ds;
 }
 
@@ -192,11 +245,13 @@ void MatrixView::initDisplayedGraph() {
 
   deleteDisplayedGraph();
 
-  _matrixGraph = newGraph();
-
   if(!graph()) {
     return;
   }
+
+  _matrixGraph = newGraph();
+  _matrixGraph->reserveNodes(2 * (graph()->numberOfNodes() + graph()->numberOfEdges()));
+  _matrixGraph->reserveEdges(graph()->numberOfEdges());
 
   _graphEntitiesToDisplayedNodes = new IntegerVectorProperty(graph());
   _displayedNodesAreNodes = new BooleanProperty(_matrixGraph);
@@ -207,11 +262,11 @@ void MatrixView::initDisplayedGraph() {
   Observable::holdObservers();
   node n;
   forEach(n, graph()->getNodes())
-  addNode(graph(), n);
+    addNode(graph(), n);
 
   edge e;
   forEach(e, graph()->getEdges())
-  addEdge(graph(), e);
+    addEdge(graph(), e);
   Observable::unholdObservers();
 
   GlGraphInputData *inputData = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
@@ -277,40 +332,30 @@ void MatrixView::addNode(tlp::Graph *, const tlp::node n) {
   _mustUpdateLayout = true;
   _mustUpdateSizes=true;
 
-  for (int i=0; i <= 1; ++i) {
+  vector<int> nodeToDisplayedNodes;
+  nodeToDisplayedNodes.reserve(2);
+  for (int i=0; i < 2; ++i) {
     node dispNode = _matrixGraph->addNode();
-    {
-      vector<int> vect = _graphEntitiesToDisplayedNodes->getNodeValue(n);
-      vect.push_back(dispNode.id);
-      _graphEntitiesToDisplayedNodes->setNodeValue(n, vect);
-    }
+    nodeToDisplayedNodes.push_back(dispNode);
     _displayedNodesToGraphEntities->setNodeValue(dispNode, n.id);
     _displayedNodesAreNodes->setNodeValue(dispNode, true);
-    getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLabelPosition()->setNodeValue(dispNode, (i == 1 ? LabelPosition::Center : LabelPosition::Top));
-
-    for (set<string>::iterator it = _sourceToTargetProperties.begin(); it != _sourceToTargetProperties.end(); ++it)
-      _matrixGraph->getProperty(*it)->setNodeStringValue(dispNode, graph()->getProperty(*it)->getNodeStringValue(n));
-
   }
+  _graphEntitiesToDisplayedNodes->setNodeValue(n, nodeToDisplayedNodes);
 }
 
 void MatrixView::addEdge(tlp::Graph *g, const tlp::edge e) {
   _mustUpdateLayout = true;
   _mustUpdateSizes=true;
 
-  for (int i=0; i <= 1; ++i) {
+  vector<int> edgeToDisplayedNodes;
+  edgeToDisplayedNodes.reserve(2);
+  for (int i = 0; i < 2; ++i) {
     node dispEdge = _matrixGraph->addNode();
-    {
-      vector<int> vect = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
-      vect.push_back(dispEdge.id);
-      _graphEntitiesToDisplayedNodes->setEdgeValue(e, vect);
-    }
+    edgeToDisplayedNodes.push_back(dispEdge);
     _displayedNodesToGraphEntities->setNodeValue(dispEdge, e.id);
     _displayedNodesAreNodes->setNodeValue(dispEdge, false);
-
-    for (set<string>::iterator it = _sourceToTargetProperties.begin(); it != _sourceToTargetProperties.end(); ++it)
-      _matrixGraph->getProperty(*it)->setNodeStringValue(dispEdge, graph()->getProperty(*it)->getEdgeStringValue(e));
   }
+  _graphEntitiesToDisplayedNodes->setEdgeValue(e, edgeToDisplayedNodes);
 
   const std::pair<node, node>& eEnds = g->ends(e);
 
@@ -325,7 +370,6 @@ void MatrixView::addEdge(tlp::Graph *g, const tlp::edge e) {
   _displayedEdgesToGraphEdges->setEdgeValue(dispEdge, e.id);
 
   ColorProperty* originalColors = graph()->getProperty<ColorProperty>("viewColor");
-
   ColorProperty* colors = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementColor();
 
   colors->setEdgeValue(dispEdge,originalColors->getEdgeValue(e));
@@ -428,11 +472,14 @@ void MatrixView::updateLayout() {
 
   LayoutProperty *layout = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLayout();
   Coord horiz(1,0,0), vert(0,-1,0);
+  IntegerProperty* position = getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->getElementLabelPosition();
 
   for (vector<node>::iterator it = _orderedNodes.begin(); it != _orderedNodes.end(); ++it) {
     vector<int> dispNodes = _graphEntitiesToDisplayedNodes->getNodeValue(node(*it));
     layout->setNodeValue(node(dispNodes[0]), horiz);
+    position->setNodeValue(node(dispNodes[0]), LabelPosition::Top);
     layout->setNodeValue(node(dispNodes[1]), vert);
+    position->setNodeValue(node(dispNodes[1]), LabelPosition::Left);
     horiz[0]+=1;
     vert[1]-=1;
   }
@@ -441,7 +488,7 @@ void MatrixView::updateLayout() {
   int shape = GlyphManager::getInst().glyphId("2D - Square");
   edge e;
   forEach (e, graph()->getEdges()) {
-    const std::pair<node, node>& eEnds = graph()->ends(e);
+    const std::pair<node, node> eEnds = graph()->ends(e);
     vector<int> srcNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.first),
                 tgtNodes = _graphEntitiesToDisplayedNodes->getNodeValue(eEnds.second),
                 edgeNodes = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
@@ -450,14 +497,16 @@ void MatrixView::updateLayout() {
     Coord src0 = layout->getNodeValue(node(srcNodes[0])), tgt0 = layout->getNodeValue(node(tgtNodes[0])),
           src1 = layout->getNodeValue(node(srcNodes[1])), tgt1 = layout->getNodeValue(node(tgtNodes[1]));
 
-    layout->setNodeValue(node(edgeNodes[0]), Coord(src0[0], tgt1[1], 0));
-    layout->setNodeValue(node(edgeNodes[1]), Coord(tgt0[0], src1[1], 0));
+    layout->setNodeValue(node(edgeNodes[0]), Coord(tgt0[0], src1[1], 0));
     shapes->setNodeValue(node(edgeNodes[0]),shape);
-    shapes->setNodeValue(node(edgeNodes[1]),shape);
+    if (_isOriented == false) {
+      layout->setNodeValue(node(edgeNodes[1]), Coord(src0[0], tgt1[1], 0));
+      shapes->setNodeValue(node(edgeNodes[1]),shape);
+    }
   }
 
   forEach(e, _matrixGraph->getEdges()) {
-    const std::pair<node, node>& eEnds = _matrixGraph->ends(e);
+    const std::pair<node, node> eEnds = _matrixGraph->ends(e);
     node src = eEnds.first;
     node tgt = eEnds.second;
 

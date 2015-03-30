@@ -50,10 +50,10 @@ PropertyValuesDispatcher::PropertyValuesDispatcher(tlp::Graph *source, tlp::Grap
   Observable::holdObservers();
   string s;
   forEach (s, source->getProperties())
-  addLocalProperty(source, s);
+    addLocalProperty(source, s);
 
   forEach (s, target->getProperties())
-  addLocalProperty(target, s);
+    addLocalProperty(target, s);
 
   Observable::unholdObservers();
 
@@ -69,17 +69,27 @@ void PropertyValuesDispatcher::afterSetNodeValue(tlp::PropertyInterface *sourceP
 
   if (sourceProp->getGraph()->getRoot() == _source->getRoot()) {
     PropertyInterface *targetProp = _target->getProperty(sourceProp->getName());
+    std::string strVal = sourceProp->getNodeStringValue(n);
     vector<int> vect = _graphEntitiesToDisplayedNodes->getNodeValue(n);
 
     for(vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)
-      targetProp->setNodeStringValue(node(*it), sourceProp->getNodeStringValue(n));
+      targetProp->setNodeStringValue(node(*it), strVal);
   }
   else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
     unsigned int id = _displayedNodesToGraphEntities->getNodeValue(n);
 
-    if (_displayedNodesAreNodes->getNodeValue(n))
+    if (_displayedNodesAreNodes->getNodeValue(n)) {
       targetProp->setNodeStringValue(node(id), sourceProp->getNodeStringValue(n));
+      // update the other node
+      vector<int> vect = _graphEntitiesToDisplayedNodes->getNodeValue(node(id));
+      for(vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)  {
+        node n1(*it);
+
+        if (n1 != n)
+          sourceProp->setNodeStringValue(n1, sourceProp->getNodeStringValue(n));
+      }      
+    }
     else {
       targetProp->setEdgeStringValue(edge(id), sourceProp->getNodeStringValue(n));
       sourceProp->setEdgeStringValue(_edgesMap[edge(id)], sourceProp->getNodeStringValue(n));
@@ -106,23 +116,28 @@ void PropertyValuesDispatcher::afterSetEdgeValue(tlp::PropertyInterface *sourceP
 
   if (sourceProp->getGraph()->getRoot() == _source->getRoot()) {
     PropertyInterface *targetProp = _target->getProperty(sourceProp->getName());
+    std::string strVal = sourceProp->getEdgeStringValue(e);
     vector<int> vect = _graphEntitiesToDisplayedNodes->getEdgeValue(e);
 
     for(vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)
-      targetProp->setNodeStringValue(node(*it), sourceProp->getEdgeStringValue(e));
+      targetProp->setNodeStringValue(node(*it), strVal);
 
-    targetProp->setEdgeStringValue(_edgesMap[e], sourceProp->getEdgeStringValue(e));
+    edge ee = _edgesMap[e];
+    // corresponding edge may not exist if e
+    // has been added after the build of the MatrixView
+    if (ee.isValid())
+      targetProp->setEdgeStringValue(_edgesMap[e], sourceProp->getEdgeStringValue(e));
   }
   else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
     unsigned int id = _displayedEdgesToGraphEdges->getEdgeValue(e);
-
-    targetProp->setEdgeStringValue(edge(id), sourceProp->getEdgeStringValue(e));
+    std::string strVal = sourceProp->getEdgeStringValue(e);
+    targetProp->setEdgeStringValue(edge(id), strVal);
 
     vector<int> vect = _graphEntitiesToDisplayedNodes->getEdgeValue(edge(id));
 
     for(vector<int>::iterator it = vect.begin(); it != vect.end(); ++it)
-      sourceProp->setNodeStringValue(node(*it), sourceProp->getEdgeStringValue(e));
+      sourceProp->setNodeStringValue(node(*it), strVal);
   }
 
   _modifying = false;
@@ -166,11 +181,11 @@ void PropertyValuesDispatcher::addLocalProperty(tlp::Graph *g, const std::string
     afterSetAllEdgeValue(sourceProp);
     node n;
     forEach(n, sourceProp->getNonDefaultValuatedNodes())
-    afterSetNodeValue(sourceProp,n);
+      afterSetNodeValue(sourceProp,n);
 
     edge e;
     forEach(e, sourceProp->getNonDefaultValuatedEdges())
-    afterSetEdgeValue(sourceProp, e);
+      afterSetEdgeValue(sourceProp, e);
     Observable::unholdObservers();
 
     sourceProp->addListener(this);
