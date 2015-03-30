@@ -254,6 +254,13 @@ protected:
   std::string propName;
 };
 
+class TLP_QT_SCOPE StdStringEditorCreator: public QStringEditorCreator {
+public:
+  void setEditorData(QWidget*w, const QVariant&var, bool, tlp::Graph*);
+  QVariant editorData(QWidget*,tlp::Graph*);
+  QString displayText(const QVariant &) const;
+};
+
 class TLP_QT_SCOPE QStringListEditorCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget* parent) const;
