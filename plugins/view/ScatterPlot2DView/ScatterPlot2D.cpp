@@ -68,10 +68,10 @@ static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
 ScatterPlot2D::ScatterPlot2D(Graph *graph, const string& xDim, const string& yDim, const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor)
   : xDim(xDim), yDim(yDim), blCorner(blCorner), size(size), graph(graph), scatterLayout(new LayoutProperty(graph)), xAxis(NULL), yAxis(NULL), overviewGen(false), backgroundColor(backgroundColor),
     foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false), edgeAsNodeGraph(newGraph()), dataLocation(dataLocation), xAxisScaleDefined(false), yAxisScaleDefined(false),
-  xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)), displayEdges(false) {
+    xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)), displayEdges(false) {
   edge e;
   LayoutProperty *edgeAsNodeGraphLayout = edgeAsNodeGraph->getProperty<LayoutProperty>("viewLayout");
-    SizeProperty *edgeAsNodeGraphSize = edgeAsNodeGraph->getProperty<SizeProperty>("viewSize");
+  SizeProperty *edgeAsNodeGraphSize = edgeAsNodeGraph->getProperty<SizeProperty>("viewSize");
 
   ColorProperty* edgeAsNodeGraphColor = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
   ColorProperty* graphColor = graph->getProperty<ColorProperty>("viewColor");
@@ -92,7 +92,8 @@ ScatterPlot2D::ScatterPlot2D(Graph *graph, const string& xDim, const string& yDi
     glGraphComposite = new GlGraphComposite(graph);
     GlGraphInputData *glGraphInputData = glGraphComposite->getInputData();
     glGraphInputData->setElementLayout(scatterLayout);
-  } else {
+  }
+  else {
     glGraphComposite = new GlGraphComposite(edgeAsNodeGraph);
   }
 
@@ -246,36 +247,44 @@ void ScatterPlot2D::createAxis() {
     xMax = xProp->getNodeDoubleMax(graph);
     yMin = yProp->getNodeDoubleMin(graph);
     yMax = yProp->getNodeDoubleMax(graph);
-  } else {
+  }
+  else {
     xMin = xProp->getEdgeDoubleMin(graph);
     xMax = xProp->getEdgeDoubleMax(graph);
     yMin = yProp->getEdgeDoubleMin(graph);
     yMax = yProp->getEdgeDoubleMax(graph);
   }
+
   initXAxisScale = make_pair(xMin, xMax);
   initYAxisScale = make_pair(yMin, yMax);
 
   if (xAxisScaleDefined) {
     if (xMin > xAxisScale.first)
-        xMin = xAxisScale.first;
+      xMin = xAxisScale.first;
+
     if (xMax < xAxisScale.second)
-        xMax = xAxisScale.second;
+      xMax = xAxisScale.second;
   }
+
   xAxisScale.first = xMin;
   xAxisScale.second = xMax;
+
   if (xMin == xMax)
-      xMax++;
+    xMax++;
 
   if (yAxisScaleDefined) {
     if (yMin > yAxisScale.first)
-        yMin = yAxisScale.first;
+      yMin = yAxisScale.first;
+
     if (yMax < yAxisScale.second)
-        yMax = yAxisScale.second;
+      yMax = yAxisScale.second;
   }
+
   yAxisScale.first = yMin;
   yAxisScale.second = yMax;
+
   if (yMin == yMax)
-      yMax++;
+    yMax++;
 
   xAxis = new GlQuantitativeAxis(xDim, Coord(0.0f, 0.0f, 0.0f), DEFAULT_AXIS_LENGTH, GlAxis::HORIZONTAL_AXIS, foregroundColor, true);
 
@@ -340,10 +349,12 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
     if(dataLocation == NODE) {
       xValue = xProp->getNodeDoubleValue(n);
       yValue = yProp->getNodeDoubleValue(n);
-    } else { //EDGE
+    }
+    else {   //EDGE
       xValue = xProp->getEdgeDoubleValue(nodeToEdge[n]);
       yValue = yProp->getEdgeDoubleValue(nodeToEdge[n]);
     }
+
     sumxi += xValue;
     sumxi2 += (xValue * xValue);
 
@@ -362,9 +373,10 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
     }
 
     if (dataLocation == NODE) {
-        scatterLayout->setNodeValue(n, nodeCoord);
-    } else {
-        edgeAsNodeGraphLayout->setNodeValue(n, nodeCoord);
+      scatterLayout->setNodeValue(n, nodeCoord);
+    }
+    else {
+      edgeAsNodeGraphLayout->setNodeValue(n, nodeCoord);
     }
 
     ++currentStep;
@@ -463,6 +475,7 @@ void ScatterPlot2D::afterSetNodeValue(PropertyInterface *p, const node n) {
     viewSelection->addListener(this);
     return;
   }
+
   afterSetAllNodeValue(p);
 }
 
