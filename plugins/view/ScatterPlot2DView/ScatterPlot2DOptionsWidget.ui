@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>269</width>
-    <height>337</height>
+    <width>320</width>
+    <height>566</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -31,7 +31,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Scene background color :</string>
+        <string>Scene background color</string>
        </property>
       </widget>
      </item>
@@ -141,9 +141,12 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Scatterplots background color :</string>
+      <string>Scatterplot background color</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
@@ -160,8 +163,11 @@
       </item>
       <item>
        <widget class="QRadioButton" name="mapBackgroundColorRB">
+        <property name="toolTip">
+         <string>use a color scale to show the computed plot correlation between the current properties</string>
+        </property>
         <property name="text">
-         <string>Map background color to 
+         <string>map background color to 
 correlation coefficient value</string>
         </property>
         <property name="checked">
@@ -180,6 +186,9 @@ correlation coefficient value</string>
               <width>40</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>select the color to display when the correlation coefficient is -1</string>
             </property>
             <property name="text">
              <string>-1</string>
@@ -207,6 +216,9 @@ correlation coefficient value</string>
               <height>16777215</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>select the color to display when the correlation coefficient is  0</string>
+            </property>
             <property name="text">
              <string>0</string>
             </property>
@@ -232,6 +244,9 @@ correlation coefficient value</string>
               <width>40</width>
               <height>16777215</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>select the color to display when the correlation coefficient is 1</string>
             </property>
             <property name="text">
              <string>1</string>
@@ -260,12 +275,24 @@ correlation coefficient value</string>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">
+     <property name="toolTip">
+      <string>adapt the size rendering in the plots depending on the initial node size</string>
+     </property>
      <property name="title">
       <string>Size mapping</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <property name="margin">
+      <property name="leftMargin">
        <number>9</number>
+      </property>
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
       </property>
       <item row="0" column="0">
        <widget class="QLabel" name="label_4">
@@ -337,15 +364,197 @@ correlation coefficient value</string>
     </widget>
    </item>
    <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QCheckBox" name="showEdgesCB">
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-      </font>
+     <property name="toolTip">
+      <string>allow to display the edges above the scatterplot</string>
      </property>
      <property name="text">
       <string>Show graph edges above scatterplot</string>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="xAxisGroupBox">
+     <property name="title">
+      <string>X axis</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QCheckBox" name="useXScaleCheckBox">
+        <property name="toolTip">
+         <string>indicates a specific range of values along the X axis</string>
+        </property>
+        <property name="text">
+         <string>use custom range</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <item>
+         <widget class="QLabel" name="useXMinLabel">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>min</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="useXMinSpinBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimum">
+           <double>-99990000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>99990000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="useXMaxLabel">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>max</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="useXMaxSpinBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimum">
+           <double>-99990000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>99990000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+     <zorder>useXScaleCheckBox</zorder>
+     <zorder></zorder>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="yAxisGroupBox">
+     <property name="title">
+      <string>Y axis</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QCheckBox" name="useYScaleCheckBox">
+        <property name="toolTip">
+         <string>indicates a specific range of values along the Y axis</string>
+        </property>
+        <property name="text">
+         <string>use custom range</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_10">
+        <item>
+         <widget class="QLabel" name="useYMinLabel">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>min</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="useYMinSpinBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimum">
+           <double>-99990000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>99990000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="useYMaxLabel">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>30</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>max</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="useYMaxSpinBox">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimum">
+           <double>-99990000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>99990000.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>

@@ -75,12 +75,10 @@ ScatterPlot2DView::ScatterPlot2DView(const PluginContext *) :
   propertiesSelectionWidget(NULL), optionsWidget(NULL),
   scatterPlotGraph(NULL), emptyGraph(NULL), mainLayer(NULL), glGraphComposite(NULL), scatterPlotSize(NULL),
   matrixComposite(NULL), axisComposite(NULL), labelsComposite(NULL), detailedScatterPlot(NULL), detailedScatterPlotPropertyName(make_pair("","")), center(false),
-  matrixView(true), sceneRadiusBak(0.0), zoomFactorBak(0.0), scatterPlotViewNavigator(NULL), matrixUpdateNeeded(false), newGraphSet(false), lastViewWindowWidth(0),
+  matrixView(true), sceneRadiusBak(0.0), zoomFactorBak(0.0), matrixUpdateNeeded(false), newGraphSet(false), lastViewWindowWidth(0),
   lastViewWindowHeight(0), interactorsActivated(false),initialized(false) {}
 
 ScatterPlot2DView::~ScatterPlot2DView() {
-  delete optionsWidget;
-  delete propertiesSelectionWidget;
 
   if(initialized)
     --scatterplotViewInstancesCount;
@@ -90,7 +88,20 @@ ScatterPlot2DView::~ScatterPlot2DView() {
     backgroundTextureId = 0;
   }
 
-  delete emptyGraph;
+  if(propertiesSelectionWidget!=NULL)
+    delete propertiesSelectionWidget;
+  if(optionsWidget!=NULL)
+    delete optionsWidget;
+
+  if(glGraphComposite!=NULL)
+    delete glGraphComposite;
+  if(matrixComposite!=NULL)
+    delete matrixComposite;
+  if(axisComposite!=NULL)
+    delete axisComposite;
+
+  if(emptyGraph!=NULL)
+    delete emptyGraph;
 }
 
 void ScatterPlot2DView::initGlWidget(Graph*) {
@@ -103,10 +114,7 @@ void ScatterPlot2DView::initGlWidget(Graph*) {
 
   mainLayer = layer;
 
-  if (glGraphComposite != NULL) {
-    Graph *theGraph = glGraphComposite->getInputData()->getGraph();
-    theGraph->removeListener(glGraphComposite);
-  }
+  cleanupGlScene();
 
   if (emptyGraph == NULL) {
     emptyGraph = newGraph();
@@ -117,7 +125,6 @@ void ScatterPlot2DView::initGlWidget(Graph*) {
   if (matrixComposite == NULL) {
     matrixComposite = new GlComposite();
     mainLayer->addGlEntity(matrixComposite, "matrix composite");
-    labelsComposite = new GlComposite();
   }
 
   if (axisComposite == NULL) {
@@ -125,6 +132,26 @@ void ScatterPlot2DView::initGlWidget(Graph*) {
     mainLayer->addGlEntity(axisComposite, "axis composite");
   }
 
+  if (labelsComposite == NULL) {
+    labelsComposite = new GlComposite();
+  }
+
+}
+
+void ScatterPlot2DView::cleanupGlScene() {
+
+  if (axisComposite != NULL) {
+    axisComposite->reset(false);
+  }
+
+  if (labelsComposite != NULL) {
+    labelsComposite->reset(true);
+  }
+
+  if (matrixComposite != NULL) {
+    matrixComposite->reset(true);
+    scatterPlotsMap.clear();
+  }
 }
 
 QList<QWidget *> ScatterPlot2DView::configurationWidgets() const {
@@ -135,13 +162,13 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
   if(!initialized) {
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
-    propertiesSelectionWidget->enableEdgesButton(false);
+    //propertiesSelectionWidget->enableEdgesButton(false);
     optionsWidget = new ScatterPlot2DOptionsWidget();
+    optionsWidget->setWidgetEnabled(false);
     ++scatterplotViewInstancesCount;
     initialized=true;
+    setOverviewVisible(true);
   }
-
-  setOverviewVisible(true);
 
   if (backgroundTextureId == 0) {
     getGlMainWidget()->makeCurrent();
@@ -153,9 +180,10 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   scatterPlotGraph = graph();
   propertiesSelectionWidget->setWidgetParameters(scatterPlotGraph, propertiesTypesFilter);
 
-  if (lastGraph != scatterPlotGraph) {
+  if (lastGraph == NULL || lastGraph != scatterPlotGraph) {
     newGraphSet = true;
     initGlWidget(scatterPlotGraph);
+    detailedScatterPlot = NULL;
     destroyOverviews();
   }
 
@@ -178,6 +206,23 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   dataSet.get("lastViewWindowWidth", lastViewWindowWidth);
   dataSet.get("lastViewWindowHeight", lastViewWindowHeight);
 
+  bool showedges=false;
+  if (dataSet.get("display graph edges", showedges))
+    optionsWidget->setDisplayGraphEdges(showedges);
+
+  Color backgroundColor;
+  if (dataSet.get("background color", backgroundColor))
+    optionsWidget->setBackgroundColor(backgroundColor);
+
+  int minSizeMap = 0;
+  if (dataSet.get("min Size Mapping", minSizeMap))
+    optionsWidget->setMinSizeMapping(static_cast<float>(minSizeMap));
+  int maxSizeMap = 0;
+  if (dataSet.get("max Size Mapping", maxSizeMap))
+    optionsWidget->setMaxSizeMapping(static_cast<float>(maxSizeMap));
+
+  optionsWidget->configurationChanged();
+
   DataSet selectedGraphPropertiesDataSet;
 
   if (dataSet.get("selected graph properties", selectedGraphPropertiesDataSet)) {
@@ -195,18 +240,6 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     }
 
     propertiesSelectionWidget->setSelectedProperties(selectedGraphProperties);
-    int minSizeMap = 0;
-    int maxSizeMap = 0;
-    dataSet.get("min Size Mapping", minSizeMap);
-    dataSet.get("max Size Mapping", maxSizeMap);
-    optionsWidget->setMinSizeMapping(static_cast<float>(minSizeMap));
-    optionsWidget->setMaxSizeMapping(static_cast<float>(maxSizeMap));
-    bool showedges=false;
-    dataSet.get("display graph edges", showedges);
-    optionsWidget->setDisplayGraphEdges(showedges);
-    Color backgroundColor;
-    dataSet.get("background color", backgroundColor);
-    optionsWidget->setBackgroundColor(backgroundColor);
     DataSet generatedScatterPlotDataSet;
     dataSet.get("generated scatter plots", generatedScatterPlotDataSet);
 
@@ -219,7 +252,6 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
         }
       }
     }
-
   }
 
   draw();
@@ -284,7 +316,6 @@ void ScatterPlot2DView::graphChanged(Graph *) {
   setState(DataSet());
 }
 
-
 void ScatterPlot2DView::toggleInteractors(const bool activate) {
   QList<Interactor *> interactorsList = interactors();
 
@@ -345,6 +376,7 @@ void ScatterPlot2DView::computeNodeSizes() {
 
 void ScatterPlot2DView::buildScatterPlotsMatrix() {
 
+  dataLocation = propertiesSelectionWidget->getDataLocation();
   Color backgroundColor(optionsWidget->getUniformBackgroundColor());
   getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
 
@@ -413,8 +445,7 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
         labelsComposite->addGlEntity(yLabel, selectedGraphProperties[i] + "y label");
       }
 
-      for (size_t j = 0 ; j  < selectedGraphProperties.size() ; ++j) {
-        if (i < j) {
+      for (size_t j = i+1 ; j  < selectedGraphProperties.size() ; ++j) {
           pair<string, string> overviewsMapKey = make_pair(selectedGraphProperties[i], selectedGraphProperties[j]);
           ScatterPlot2D *scatterOverview = NULL;
           Coord overviewBlCorner(i * (OVERVIEWS_SIZE + OFFSET_BETWEEN_PREVIEWS), (selectedGraphProperties.size() - j - 1.0f) * (OVERVIEWS_SIZE + OFFSET_BETWEEN_PREVIEWS));
@@ -426,12 +457,13 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
             if(!scatterOverview)
               continue;
 
+            scatterOverview->setDataLocation(dataLocation);
             scatterOverview->setBLCorner(overviewBlCorner);
             scatterOverview->setUniformBackgroundColor(backgroundColor);
             scatterOverview->setForegroundColor(foregroundColor);
           }
           else {
-            scatterOverview = new ScatterPlot2D(scatterPlotGraph, selectedGraphProperties[i], selectedGraphProperties[j], overviewBlCorner, OVERVIEWS_SIZE, backgroundColor, foregroundColor);
+            scatterOverview = new ScatterPlot2D(scatterPlotGraph, selectedGraphProperties[i], selectedGraphProperties[j], dataLocation, overviewBlCorner, OVERVIEWS_SIZE, backgroundColor, foregroundColor);
             scatterPlotsMap[overviewsMapKey] = scatterOverview;
 
             if (scatterPlotsGenMap.find(overviewsMapKey) == scatterPlotsGenMap.end()) {
@@ -447,7 +479,7 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
 
           matrixComposite->addGlEntity(scatterOverview, selectedGraphProperties[i] + "_" + selectedGraphProperties[j]);
           scatterOverview->setSizeProperty(scatterPlotSize);
-        }
+
 
         // add some feedback
         /*if ((i + 1) * (j + 1) % 10 == 0)
@@ -503,6 +535,26 @@ void ScatterPlot2DView::removeEmptyViewLabel() {
     mainLayer->deleteGlEntity(noDimsLabel2);
     delete noDimsLabel2;
   }
+}
+
+void ScatterPlot2DView::viewConfigurationChanged() {
+  getGlMainWidget()->getScene()->setBackgroundColor(optionsWidget->getUniformBackgroundColor());
+  bool dataLocationChanged = propertiesSelectionWidget->getDataLocation() != dataLocation;
+
+  if (dataLocationChanged) {
+    detailedScatterPlot = NULL;
+    buildScatterPlotsMatrix();
+  }
+
+  if (detailedScatterPlot != NULL) {
+
+    detailedScatterPlot->setXAxisScaleDefined(optionsWidget->useCustomXAxisScale());
+    detailedScatterPlot->setXAxisScale(optionsWidget->getXAxisScale());
+    detailedScatterPlot->setYAxisScaleDefined(optionsWidget->useCustomYAxisScale());
+    detailedScatterPlot->setYAxisScale(optionsWidget->getYAxisScale());
+  }
+
+  draw();
 }
 
 void ScatterPlot2DView::draw() {
@@ -586,8 +638,7 @@ void ScatterPlot2DView::centerView(bool) {
 
 void ScatterPlot2DView::applySettings() {
   if(propertiesSelectionWidget->configurationChanged() || optionsWidget->configurationChanged()) {
-    buildScatterPlotsMatrix();
-    draw();
+    viewConfigurationChanged();
   }
 }
 
@@ -596,17 +647,8 @@ void ScatterPlot2DView::destroyOverviewsIfNeeded() {
   vector<string> propertiesToRemove;
 
   for (size_t i = 0 ; i  < selectedGraphProperties.size() ; ++i) {
-    bool toRemove=false;
 
-    if(!scatterPlotGraph) {
-      toRemove=true;
-    }
-    else {
-      if (!scatterPlotGraph->existProperty(selectedGraphProperties[i]))
-        toRemove=true;
-    }
-
-    if (toRemove) {
+    if(!scatterPlotGraph || !scatterPlotGraph->existProperty(selectedGraphProperties[i])) {
       propertiesToRemove.push_back(selectedGraphProperties[i]);
 
       if (detailedScatterPlotPropertyName.first == selectedGraphProperties[i] || detailedScatterPlotPropertyName.second == selectedGraphProperties[i]) {
@@ -772,7 +814,15 @@ void ScatterPlot2DView::switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot,
   matrixView = false;
   detailedScatterPlot = scatterPlot;
   detailedScatterPlotPropertyName = make_pair(scatterPlot->getXDim(), scatterPlot->getYDim());
-  propertiesSelectionWidget->setEnabled(false);
+  propertiesSelectionWidget->setWidgetEnabled(false);
+  optionsWidget->setWidgetEnabled(true);
+  optionsWidget->useCustomXAxisScale(detailedScatterPlot->getXAxisScaleDefined());
+  optionsWidget->setXAxisScale(detailedScatterPlot->getXAxisScale());
+  optionsWidget->useCustomYAxisScale(detailedScatterPlot->getYAxisScaleDefined());
+  optionsWidget->setYAxisScale(detailedScatterPlot->getYAxisScale());
+  optionsWidget->setInitXAxisScale(detailedScatterPlot->getInitXAxisScale());
+  optionsWidget->setInitYAxisScale(detailedScatterPlot->getInitYAxisScale());
+  optionsWidget->configurationChanged();
 
   if (recenter)
     centerView();
@@ -799,7 +849,9 @@ void ScatterPlot2DView::switchFromDetailViewToMatrixView() {
   matrixView = true;
   detailedScatterPlot = NULL;
   detailedScatterPlotPropertyName = make_pair("","");
-  propertiesSelectionWidget->setEnabled(true);
+  propertiesSelectionWidget->setWidgetEnabled(true);
+  optionsWidget->setWidgetEnabled(false);
+  optionsWidget->resetAxisScale();
   toggleInteractors(false);
   getGlMainWidget()->draw();
 }

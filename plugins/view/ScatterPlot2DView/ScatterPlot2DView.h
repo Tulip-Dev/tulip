@@ -20,6 +20,7 @@
 #ifndef SCATTERPLOT2DVIEW_H_
 #define SCATTERPLOT2DVIEW_H_
 
+#include <tulip/Graph.h>
 #include <tulip/GlMainView.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/Coord.h>
@@ -88,32 +89,43 @@ public :
   std::string icon() const {
     return ":/scatter_plot2d_view.png";
   }
+
   void setState(const DataSet &dataSet);
   DataSet state() const;
-  Graph *getScatterPlotGraph();
   void graphChanged(Graph *graph);
-  void toggleInteractors(const bool activate);
-  bool interactorsEnabled() const {
-    return interactorsActivated;
-  }
+  Graph *getScatterPlotGraph();
+
   QList<QWidget *> configurationWidgets() const;
-  void computeNodeSizes();
-  void buildScatterPlotsMatrix();
+
   std::vector<ScatterPlot2D *> getSelectedScatterPlots() const;
-  ScatterPlot2D *getDetailedScatterPlot() const {
-    return detailedScatterPlot;
-  }
-  BoundingBox getMatrixBoundingBox();
   bool matrixViewSet() const {
     return matrixView;
   }
   void setMatrixView(const bool matrixView) {
     this->matrixView = matrixView;
   }
-  void generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWidget *glWidget = NULL);
 
   void switchFromMatrixToDetailView(ScatterPlot2D *scatterPlot, bool center);
   void switchFromDetailViewToMatrixView();
+  BoundingBox getMatrixBoundingBox();
+  ScatterPlot2D *getDetailedScatterPlot() const {
+    return detailedScatterPlot;
+  }
+
+  void toggleInteractors(const bool activate);
+  bool interactorsEnabled() const {
+    return interactorsActivated;
+  }
+
+  ElementType getDataLocation() const {
+    return dataLocation;
+  }
+
+  void generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWidget *glWidget = NULL);
+
+  //
+  void computeNodeSizes();
+  void buildScatterPlotsMatrix();
 
   void draw();
   void refresh();
@@ -121,6 +133,8 @@ public :
 public slots :
 
   void init();
+  void viewConfigurationChanged();
+
   // inherited from GlMainView
   void centerView(bool graphChanged = false);
   void applySettings();
@@ -128,11 +142,12 @@ public slots :
 private :
 
   void interactorsInstalled(const QList<tlp::Interactor*>&);
-  void generateScatterPlots();
   void initGlWidget(Graph *graph);
+  void generateScatterPlots();
+
   void destroyOverviewsIfNeeded();
   void destroyOverviews();
-  void cleanScene();
+  void cleanupGlScene();
   void addEmptyViewLabel();
   void removeEmptyViewLabel();
 
@@ -156,7 +171,6 @@ private :
   Coord eyesBak;
   Coord centerBak;
   Coord upBak;
-  Interactor *scatterPlotViewNavigator;
   bool matrixUpdateNeeded;
   bool newGraphSet;
 
@@ -168,6 +182,7 @@ private :
   static GLuint backgroundTextureId;
   static unsigned int scatterplotViewInstancesCount;
 
+  ElementType dataLocation;
 };
 
 }

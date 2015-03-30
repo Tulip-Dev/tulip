@@ -65,14 +65,38 @@ static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
   glGraph->setRenderingParameters (param);
 }
 
-ScatterPlot2D::ScatterPlot2D(Graph *graph, const string& xDim, const string& yDim, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor)
-  : xDim(xDim), yDim(yDim), blCorner(blCorner), size(size), graph(graph), xAxis(NULL), yAxis(NULL), overviewGen(false), backgroundColor(backgroundColor),
-    foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false), displayEdges(false) {
-  glGraphComposite = new GlGraphComposite(graph);
-  scatterLayout = new LayoutProperty(graph);
-  GlGraphInputData *glGraphInputData = glGraphComposite->getInputData();
-  glGraphInputData->setElementLayout(scatterLayout);
-  setGraphView(glGraphComposite, displayEdges);
+ScatterPlot2D::ScatterPlot2D(Graph *graph, const string& xDim, const string& yDim, const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor)
+  : xDim(xDim), yDim(yDim), blCorner(blCorner), size(size), graph(graph), scatterLayout(new LayoutProperty(graph)), xAxis(NULL), yAxis(NULL), overviewGen(false), backgroundColor(backgroundColor),
+    foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false), edgeAsNodeGraph(newGraph()), dataLocation(dataLocation), xAxisScaleDefined(false), yAxisScaleDefined(false),
+  xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)), displayEdges(false) {
+  edge e;
+  LayoutProperty *edgeAsNodeGraphLayout = edgeAsNodeGraph->getProperty<LayoutProperty>("viewLayout");
+    SizeProperty *edgeAsNodeGraphSize = edgeAsNodeGraph->getProperty<SizeProperty>("viewSize");
+
+  ColorProperty* edgeAsNodeGraphColor = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
+  ColorProperty* graphColor = graph->getProperty<ColorProperty>("viewColor");
+  BooleanProperty* edgeAsNodeGraphSelection = edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
+  BooleanProperty* graphSelection = graph->getProperty<BooleanProperty>("viewSelection");
+  StringProperty* edgeAsNodeGraphLabel = edgeAsNodeGraph->getProperty<StringProperty>("viewLabel");
+  StringProperty* graphLabel = graph->getProperty<StringProperty>("viewLabel");
+  forEach(e, graph->getEdges()) {
+    node n = edgeToNode[e] = edgeAsNodeGraph->addNode();
+    nodeToEdge[edgeToNode[e]] = e;
+    edgeAsNodeGraphColor->setNodeValue(n, graphColor->getEdgeValue(e));
+    edgeAsNodeGraphSelection->setNodeValue(n, graphSelection->getEdgeValue(e));
+    edgeAsNodeGraphLabel->setNodeValue(n, graphLabel->getEdgeValue(e));
+  }
+  edgeAsNodeGraph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(NodeShape::Circle);
+
+  if (dataLocation == NODE) {
+    glGraphComposite = new GlGraphComposite(graph);
+    GlGraphInputData *glGraphInputData = glGraphComposite->getInputData();
+    glGraphInputData->setElementLayout(scatterLayout);
+  } else {
+    glGraphComposite = new GlGraphComposite(edgeAsNodeGraph);
+  }
+
+  setGraphView(glGraphComposite, (dataLocation == NODE) ? displayEdges : false);
   backgroundRect = new GlRect(Coord(blCorner.getX(), blCorner.getY() + size), Coord(blCorner.getX() + size, blCorner.getY()), backgroundColor, backgroundColor, true, false);
   addGlEntity(backgroundRect, "background rect");
   clickLabel = new GlLabel(Coord(blCorner.getX() + size / 2.0f, blCorner.getY() + size / 2.0f), Size(size, size / 4.0f), foregroundColor);
@@ -81,12 +105,23 @@ ScatterPlot2D::ScatterPlot2D(Graph *graph, const string& xDim, const string& yDi
   computeBoundingBox();
   overviewId = overviewCpt++;
   textureName = xDim + "_" + yDim + " " + getStringFromNumber(overviewId);
+
+  graph->addListener(this);
+  graph->getProperty(xDim)->addListener(this);
+  graph->getProperty(yDim)->addListener(this);
+  graph->getProperty("viewColor")->addListener(this);
+  graph->getProperty("viewLabel")->addListener(this);
+  graph->getProperty("viewSize")->addListener(this);
+  graph->getProperty("viewShape")->addListener(this);
+  graph->getProperty("viewSelection")->addListener(this);
+  graph->getProperty("viewTexture")->addListener(this);
 }
 
 ScatterPlot2D::~ScatterPlot2D() {
   clean();
   delete glGraphComposite;
   delete scatterLayout;
+  delete edgeAsNodeGraph;
   GlTextureManager::getInst().deleteTexture(textureName);
 }
 
@@ -99,6 +134,25 @@ void ScatterPlot2D::setBLCorner(const Coord &blCorner) {
   GlComposite::translate(blCorner - this->blCorner);
   this->blCorner = blCorner;
   computeBoundingBox();
+}
+
+void ScatterPlot2D::setDataLocation(const ElementType &dataLocation) {
+  if (dataLocation != this->dataLocation) {
+    delete glGraphComposite;
+    xAxisScaleDefined = false;
+    yAxisScaleDefined = false;
+
+    if (dataLocation == NODE) {
+      glGraphComposite = new GlGraphComposite(graph);
+      GlGraphInputData *glGraphInputData = glGraphComposite->getInputData();
+      glGraphInputData->setElementLayout(scatterLayout);
+    }
+    else {
+      glGraphComposite = new GlGraphComposite(edgeAsNodeGraph);
+    }
+  }
+
+  this->dataLocation = dataLocation;
 }
 
 void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *reverseLayout) {
@@ -187,10 +241,41 @@ void ScatterPlot2D::createAxis() {
 
   double xMin, xMax, yMin, yMax;
 
-  xMin = xProp->getNodeDoubleMin(graph);
-  xMax = xProp->getNodeDoubleMax(graph);
-  yMin = yProp->getNodeDoubleMin(graph);
-  yMax = yProp->getNodeDoubleMax(graph);
+  if(dataLocation == NODE) {
+    xMin = xProp->getNodeDoubleMin(graph);
+    xMax = xProp->getNodeDoubleMax(graph);
+    yMin = yProp->getNodeDoubleMin(graph);
+    yMax = yProp->getNodeDoubleMax(graph);
+  } else {
+    xMin = xProp->getEdgeDoubleMin(graph);
+    xMax = xProp->getEdgeDoubleMax(graph);
+    yMin = yProp->getEdgeDoubleMin(graph);
+    yMax = yProp->getEdgeDoubleMax(graph);
+  }
+  initXAxisScale = make_pair(xMin, xMax);
+  initYAxisScale = make_pair(yMin, yMax);
+
+  if (xAxisScaleDefined) {
+    if (xMin > xAxisScale.first)
+        xMin = xAxisScale.first;
+    if (xMax < xAxisScale.second)
+        xMax = xAxisScale.second;
+  }
+  xAxisScale.first = xMin;
+  xAxisScale.second = xMax;
+  if (xMin == xMax)
+      xMax++;
+
+  if (yAxisScaleDefined) {
+    if (yMin > yAxisScale.first)
+        yMin = yAxisScale.first;
+    if (yMax < yAxisScale.second)
+        yMax = yAxisScale.second;
+  }
+  yAxisScale.first = yMin;
+  yAxisScale.second = yMax;
+  if (yMin == yMax)
+      yMax++;
 
   xAxis = new GlQuantitativeAxis(xDim, Coord(0.0f, 0.0f, 0.0f), DEFAULT_AXIS_LENGTH, GlAxis::HORIZONTAL_AXIS, foregroundColor, true);
 
@@ -229,8 +314,12 @@ void ScatterPlot2D::createAxis() {
 }
 
 void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutProperty *reverseLayout) {
+  Graph *_graph = glGraphComposite->getGraph();
   double sumxiyi = 0.0, sumxi = 0.0, sumyi = 0.0, sumxi2 = 0.0, sumyi2 = 0.0;
-  unsigned int nbGraphNodes = graph->numberOfNodes();
+  unsigned int nbGraphNodes = _graph->numberOfNodes();
+
+  LayoutProperty *edgeAsNodeGraphLayout = edgeAsNodeGraph->getProperty<LayoutProperty>("viewLayout");
+
   node n;
   currentStep = 0;
   maxStep = nbGraphNodes;
@@ -244,20 +333,25 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
   NumericProperty* xProp = (NumericProperty *) graph->getProperty(xDim);
   NumericProperty* yProp = (NumericProperty *) graph->getProperty(yDim);
 
-  forEach(n, graph->getNodes()) {
+  forEach(n, _graph->getNodes()) {
     Coord nodeCoord;
     double xValue, yValue;
 
-    xValue = xProp->getNodeDoubleValue(n);
+    if(dataLocation == NODE) {
+      xValue = xProp->getNodeDoubleValue(n);
+      yValue = yProp->getNodeDoubleValue(n);
+    } else { //EDGE
+      xValue = xProp->getEdgeDoubleValue(nodeToEdge[n]);
+      yValue = yProp->getEdgeDoubleValue(nodeToEdge[n]);
+    }
     sumxi += xValue;
     sumxi2 += (xValue * xValue);
 
-    yValue = yProp->getNodeDoubleValue(n);
     sumyi += yValue;
     sumyi2 += (yValue * yValue);
     sumxiyi += (xValue * yValue);
 
-    if (reverseLayout == NULL) {
+    if (reverseLayout == NULL || dataLocation != NODE) {
       Coord xValueAxisCoord = xAxis->getAxisPointCoordForValue(xValue);
       Coord yValueAxisCoord = yAxis->getAxisPointCoordForValue(yValue);
       nodeCoord = Coord(xValueAxisCoord.getX(), yValueAxisCoord.getY(), 0.0f);
@@ -267,7 +361,12 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
       nodeCoord = Coord(nodeCoordReverse.getY(), nodeCoordReverse.getX(), 0.0f);
     }
 
-    scatterLayout->setNodeValue(n, nodeCoord);
+    if (dataLocation == NODE) {
+        scatterLayout->setNodeValue(n, nodeCoord);
+    } else {
+        edgeAsNodeGraphLayout->setNodeValue(n, nodeCoord);
+    }
+
     ++currentStep;
 
     if (glWidget != NULL && currentStep % drawStep == 0) {
@@ -314,6 +413,132 @@ void ScatterPlot2D::setForegroundColor(const Color &foregroundColor) {
   if (clickLabel != NULL) {
     clickLabel->setColor(foregroundColor);
   }
+}
+
+void ScatterPlot2D::treatEvent(const Event &message) {
+  if (typeid(message) == typeid(GraphEvent)) {
+    const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&message);
+
+    if(graphEvent) {
+      if(graphEvent->getType()==GraphEvent::TLP_ADD_NODE)
+        addNode(graphEvent->getGraph(),graphEvent->getNode());
+
+      if(graphEvent->getType()==GraphEvent::TLP_ADD_EDGE)
+        addEdge(graphEvent->getGraph(),graphEvent->getEdge());
+
+      if(graphEvent->getType()==GraphEvent::TLP_DEL_NODE)
+        delNode(graphEvent->getGraph(),graphEvent->getNode());
+
+      if(graphEvent->getType()==GraphEvent::TLP_DEL_EDGE)
+        delEdge(graphEvent->getGraph(),graphEvent->getEdge());
+    }
+  }
+
+  if(typeid(message) == typeid(PropertyEvent)) {
+    const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&message);
+
+    if(propertyEvent) {
+      if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_NODE_VALUE)
+        afterSetNodeValue(propertyEvent->getProperty(),propertyEvent->getNode());
+
+      if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_EDGE_VALUE)
+        afterSetEdgeValue(propertyEvent->getProperty(),propertyEvent->getEdge());
+
+      if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE)
+        afterSetAllNodeValue(propertyEvent->getProperty());
+
+      if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE)
+        afterSetAllEdgeValue(propertyEvent->getProperty());
+
+    }
+  }
+}
+
+void ScatterPlot2D::afterSetNodeValue(PropertyInterface *p, const node n) {
+  if (p->getGraph() == edgeAsNodeGraph && p->getName() == "viewSelection") {
+    BooleanProperty *edgeAsNodeGraphSelection = static_cast<BooleanProperty*>(p);
+    BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
+    viewSelection->removeListener(this);
+    viewSelection->setEdgeValue(nodeToEdge[n], edgeAsNodeGraphSelection->getNodeValue(n));
+    viewSelection->addListener(this);
+    return;
+  }
+  afterSetAllNodeValue(p);
+}
+
+void ScatterPlot2D::afterSetEdgeValue(PropertyInterface *p, const edge e) {
+  if (edgeToNode.find(e) == edgeToNode.end())
+    return;
+
+  if (p->getName() == "viewColor") {
+    ColorProperty *edgeAsNodeGraphColors = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
+    ColorProperty *viewColor = static_cast<ColorProperty*>(p);
+    edgeAsNodeGraphColors->setNodeValue(edgeToNode[e], viewColor->getEdgeValue(e));
+  }
+  else if (p->getName() == "viewLabel") {
+    StringProperty *edgeAsNodeGraphLabels = edgeAsNodeGraph->getProperty<StringProperty>("viewLabel");
+    StringProperty *viewLabel = static_cast<StringProperty*>(p);
+    edgeAsNodeGraphLabels->setNodeValue(edgeToNode[e], viewLabel->getEdgeValue(e));
+  }
+  else if (p->getName() == "viewSelection") {
+    BooleanProperty *edgeAsNodeGraphSelection = edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
+    BooleanProperty *viewSelection = static_cast<BooleanProperty*>(p);
+    edgeAsNodeGraphSelection->removeListener(this);
+
+    if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) != viewSelection->getEdgeValue(e))
+      edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
+
+    edgeAsNodeGraphSelection->addListener(this);
+  }
+}
+
+void ScatterPlot2D::afterSetAllNodeValue(PropertyInterface *p) {
+  if (p->getName() == "viewSelection") {
+    if (p->getGraph() == edgeAsNodeGraph) {
+      BooleanProperty *edgeAsNodeGraphSelection = static_cast<BooleanProperty*>(p);
+      BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
+      viewSelection->setAllEdgeValue(edgeAsNodeGraphSelection->getNodeValue(edgeAsNodeGraph->getOneNode()));
+    }
+  }
+}
+
+void ScatterPlot2D::afterSetAllEdgeValue(PropertyInterface *p) {
+
+  if (p->getName() == "viewColor") {
+    ColorProperty *edgeAsNodeGraphColors = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
+    ColorProperty *viewColor = static_cast<ColorProperty*>(p);
+    edgeAsNodeGraphColors->setAllNodeValue(viewColor->getEdgeValue(graph->getOneEdge()));
+  }
+  else if (p->getName() == "viewLabel") {
+    StringProperty *edgeAsNodeGraphLabels = edgeAsNodeGraph->getProperty<StringProperty>("viewLabel");
+    StringProperty *viewLabel = static_cast<StringProperty*>(p);
+    edgeAsNodeGraphLabels->setAllNodeValue(viewLabel->getEdgeValue(graph->getOneEdge()));
+  }
+  else if (p->getName() == "viewSelection") {
+    BooleanProperty *edgeAsNodeGraphSelection = edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
+    BooleanProperty *viewSelection = static_cast<BooleanProperty*>(p);
+    edge e;
+    forEach(e, graph->getEdges()) {
+      if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) != viewSelection->getEdgeValue(e)) {
+        edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
+      }
+    }
+  }
+}
+
+void ScatterPlot2D::addNode(Graph *, const node ) {
+}
+
+void ScatterPlot2D::addEdge(Graph *, const edge e) {
+  edgeToNode[e] = edgeAsNodeGraph->addNode();
+}
+
+void ScatterPlot2D::delNode(Graph *,const node ) {
+}
+
+void ScatterPlot2D::delEdge(Graph *,const edge e) {
+  edgeAsNodeGraph->delNode(edgeToNode[e]);
+  edgeToNode.erase(e);
 }
 
 }
