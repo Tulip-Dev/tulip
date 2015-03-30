@@ -963,6 +963,28 @@ void QStringEditorCreator::setPropertyToEdit(tlp::PropertyInterface* prop) {
     propName = prop->getName();
 }
 
+//StdStringEditorCreator
+void StdStringEditorCreator::setEditorData(QWidget* editor, const QVariant& var,
+    bool, tlp::Graph*) {
+  static_cast<StringEditor*>(editor)->setString(tlpStringToQString(var.value<std::string>()));
+}
+
+QVariant StdStringEditorCreator::editorData(QWidget* editor, tlp::Graph*) {
+  return QVariant::fromValue<std::string>(QStringToTlpString(static_cast<StringEditor*>(editor)->getString()));
+}
+
+QString StdStringEditorCreator::displayText(const QVariant& var) const {
+  QString qstr = tlpStringToQString(var.value<std::string>());
+
+  if (qstr.size() > 45) {
+    qstr.truncate(41);
+    qstr.append(" ...");
+  }
+
+  return qstr;
+}
+
+//QStringListEditorCreator
 QWidget *QStringListEditorCreator::createWidget(QWidget *) const {
   VectorEditor* w = new VectorEditor(NULL);
   w->setWindowFlags(Qt::Dialog);
@@ -970,7 +992,6 @@ QWidget *QStringListEditorCreator::createWidget(QWidget *) const {
   return w;
 }
 
-//QStringListEditorCreator
 void QStringListEditorCreator::setEditorData(QWidget *w, const QVariant &var, bool, Graph *) {
   QStringList strList = var.toStringList();
   QVector<QVariant> vect(strList.length());
