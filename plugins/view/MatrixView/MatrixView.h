@@ -87,6 +87,8 @@ private slots:
   void setGridDisplayMode();
   void applySettings();
   void showEdges(bool);
+  void enableEdgeColorInterpolation(bool);
+  void setOriented(bool);
 
 private:
 
@@ -106,6 +108,7 @@ private:
 
   bool _mustUpdateSizes;
   bool _mustUpdateLayout;
+  bool _isOriented;
 
   std::set<std::string> _sourceToTargetProperties;
   std::string _orderingMetricName;
