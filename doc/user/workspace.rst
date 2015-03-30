@@ -527,7 +527,7 @@ By clicking on the tab in the top right corner, you can open the display setting
 
 .. image:: _images/i_adjacency_settings.png
 
-Several parameters such as the background color, the node ordering and the grid and edges display visibility can be customized.
+Several parameters such as the background color, the node ordering, the grid or edges visibility can be customized.
 
 
 .. _workspace_geographic:
