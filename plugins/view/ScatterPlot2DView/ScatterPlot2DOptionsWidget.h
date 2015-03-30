@@ -42,6 +42,7 @@ public :
   ScatterPlot2DOptionsWidget(QWidget *parent = 0);
   ~ScatterPlot2DOptionsWidget();
 
+  void setWidgetEnabled(const bool enabled);
   bool uniformBackground() const;
   Color getUniformBackgroundColor() const;
   Color getMinusOneColor() const;
@@ -52,6 +53,24 @@ public :
   Size getMaxSizeMapping() const;
   void setMinSizeMapping(const float minSize);
   void setMaxSizeMapping(const float maxSize);
+
+  bool useCustomXAxisScale() const ;
+  void useCustomXAxisScale(const bool value);
+
+  bool useCustomYAxisScale() const;
+  void useCustomYAxisScale(const bool value);
+
+  std::pair<double, double> getXAxisScale() const;
+  void setXAxisScale(const std::pair<double, double> value);
+
+  std::pair<double, double> getYAxisScale() const;
+  void setYAxisScale(const std::pair<double, double> value);
+
+  void setInitXAxisScale(const std::pair<double, double> value);
+  void setInitYAxisScale(const std::pair<double, double> value);
+
+  void resetAxisScale();
+
   bool displayGraphEdges() const;
   void setDisplayGraphEdges(const bool showEdges);
 
@@ -69,6 +88,8 @@ private slots :
   void pressOneColorButton();
   void minSizeSpinBoxValueChanged(int);
   void maxSizeSpinBoxValueChanged(int);
+  void pressXScaleCheckBox(bool checked);
+  void pressYScaleCheckBox(bool checked);
 
 private :
 
@@ -88,6 +109,10 @@ private :
   Size oldMinSizeMapping;
   Size oldMaxSizeMapping;
   bool oldDisplayGraphEdges;
+  bool oldUseCustomXAxisScale;
+  bool oldUseCustomYAxisScale;
+  std::pair <double, double> oldXAxisScale, oldYAxisScale; //<min, max>
+  std::pair <double, double> initXAxisScale, initYAxisScale;
   Ui::ScatterPlot2DOptionsWidgetData* _ui;
 
 };

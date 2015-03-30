@@ -22,6 +22,7 @@
 
 #include <tulip/GlComposite.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
+#include <tulip/Graph.h>
 
 namespace tlp {
 
@@ -35,11 +36,12 @@ class GlLabel;
 class GlProgressBar;
 class Graph;
 
-class ScatterPlot2D : public GlComposite {
+class ScatterPlot2D : public GlComposite, public Observable
+{
 
 public :
 
-  ScatterPlot2D(Graph *graph, const std::string& xDim, const std::string& yDim, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
+  ScatterPlot2D(Graph *graph, const std::string& xDim, const std::string& yDim, const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
   ~ScatterPlot2D();
 
   void setBLCorner(const Coord &blCorner);
@@ -77,6 +79,44 @@ public :
     return yAxis;
   }
 
+  bool getXAxisScaleDefined() const {
+      return xAxisScaleDefined;
+  }
+  void setXAxisScaleDefined(const bool value) {
+      xAxisScaleDefined = value;
+  }
+  bool getYAxisScaleDefined() const {
+      return yAxisScaleDefined;
+  }
+  void setYAxisScaleDefined(const bool value) {
+      yAxisScaleDefined = value;
+  }
+  std::pair<double,double> getXAxisScale() const {
+      return xAxisScale;
+  }
+  void setXAxisScale(const std::pair<double, double> value) {
+      xAxisScale = value;
+  }
+  std::pair<double, double> getYAxisScale() const {
+      return yAxisScale;
+  }
+  void setYAxisScale(const std::pair<double, double> value) {
+      yAxisScale = value;
+  }
+
+  std::pair<double, double> getInitXAxisScale() const {
+      return initXAxisScale;
+  }
+  void setInitXAxisScale(const std::pair<double, double> value) {
+      initXAxisScale = value;
+  }
+  std::pair<double, double> getInitYAxisScale() const {
+      return initYAxisScale;
+  }
+  void setInitYAxisScale(const std::pair<double, double> value) {
+      initYAxisScale = value;
+  }
+
   double getCorrelationCoefficient() const {
     return correlationCoeff;
   }
@@ -87,6 +127,19 @@ public :
   void setDisplayGraphEdges(const bool displayGraphEdges) {
     displayEdges = displayGraphEdges;
   }
+  void setDataLocation(const ElementType &dataLocation);
+
+  void treatEvent(const Event &message);
+
+  void afterSetNodeValue(PropertyInterface*, const node);
+  void afterSetEdgeValue(PropertyInterface*, const edge);
+  void afterSetAllNodeValue(PropertyInterface*);
+  void afterSetAllEdgeValue(PropertyInterface*);
+
+  virtual void addNode(Graph *, const node );
+  virtual void addEdge(Graph *, const edge );
+  virtual void delNode(Graph *,const node );
+  virtual void delEdge(Graph *,const edge );
 
 private :
 
@@ -107,8 +160,7 @@ private :
   Graph *graph;
   GlGraphComposite *glGraphComposite;
   LayoutProperty *scatterLayout;
-  GlQuantitativeAxis *xAxis;
-  GlQuantitativeAxis *yAxis;
+  GlQuantitativeAxis *xAxis, *yAxis;
   std::string textureName;
   GlProgressBar *glProgressBar;
   int currentStep;
@@ -121,6 +173,14 @@ private :
 
   bool mapBackgroundColorToCoeff;
   Color minusOneColor, zeroColor, oneColor;
+
+  Graph *edgeAsNodeGraph;
+  std::map<edge, node> edgeToNode;
+  std::map<node, edge> nodeToEdge;
+  ElementType dataLocation;
+  bool xAxisScaleDefined, yAxisScaleDefined;
+  std::pair<double, double> xAxisScale, yAxisScale;
+  std::pair<double, double> initXAxisScale, initYAxisScale;
 
   double correlationCoeff;
 
