@@ -105,6 +105,7 @@ private :
   TLP_HASH_MAP<tlp::Vec2i, bool> pointsSet;
   std::map<tlp::Graph*, tlp::Vec2i> newPlaces;
 
+  tlp::Graph *graphCp;
   tlp::LayoutProperty *viewLayout;
   tlp::SizeProperty *viewSize;
   tlp::DoubleProperty *viewRotation;
@@ -160,8 +161,12 @@ bool PolyominoPacking::run() {
     dataSet->get("increment", bndIncrement);
   }
 
+  bool layoutNeedCopy = layout && layout != graph->getProperty<LayoutProperty>("viewLayout");
+  bool sizeNeedCopy = size && size != graph->getProperty<SizeProperty>("viewSize");
+  bool rotationNeedCopy = rotation && rotation != graph->getProperty<DoubleProperty>("viewRotation");
+
   // work on a graph copy to avoid costly GUI update when creating subraphs associated to connected components
-  Graph *graphCp = tlp::newGraph();
+  graphCp = tlp::newGraph();
   copyToGraph(graphCp, graph);
 
   TLP_HASH_MAP<node, node> nodesMapping;
@@ -187,6 +192,41 @@ bool PolyominoPacking::run() {
   delete gEdges;
   delete gCpEdges;
 
+  viewLayout = graphCp->getProperty<LayoutProperty>("viewLayout");
+  viewSize = graphCp->getProperty<SizeProperty>("viewSize");
+  viewRotation = graphCp->getProperty<DoubleProperty>("viewRotation");
+
+  if (layoutNeedCopy || sizeNeedCopy || rotationNeedCopy) {
+    node n;
+    forEach(n, graphCp->getNodes()) {
+      if (layoutNeedCopy) {
+        viewLayout->setNodeValue(n, layout->getNodeValue(nodesMapping[n]));
+      }
+
+      if (sizeNeedCopy) {
+        viewSize->setNodeValue(n, size->getNodeValue(nodesMapping[n]));
+      }
+
+      if (rotationNeedCopy) {
+        viewRotation->setNodeValue(n, rotation->getNodeValue(nodesMapping[n]));
+      }
+    }
+    edge e;
+    forEach(e, graphCp->getEdges()) {
+      if (layoutNeedCopy) {
+        viewLayout->setEdgeValue(e, layout->getEdgeValue(edgesMapping[e]));
+      }
+
+      if (sizeNeedCopy) {
+        viewSize->setEdgeValue(e, size->getEdgeValue(edgesMapping[e]));
+      }
+
+      if (rotationNeedCopy) {
+        viewRotation->setEdgeValue(e, rotation->getEdgeValue(edgesMapping[e]));
+      }
+    }
+  }
+
   if (pluginProgress) {
     pluginProgress->setComment("Computing connected components ...");
   }
@@ -195,43 +235,16 @@ bool PolyominoPacking::run() {
   tlp::ConnectedTest::computeConnectedComponents(graphCp, connectedComponents);
 
   if (connectedComponents.size() <= 1) {
-    delete graphCp;
-    return true;
-  }
-
-  viewLayout = graphCp->getProperty<LayoutProperty>("viewLayout");
-  viewSize = graphCp->getProperty<SizeProperty>("viewSize");
-  viewRotation = graphCp->getProperty<DoubleProperty>("viewRotation");
-
-  if (layout || size || rotation) {
     node n;
     forEach(n, graphCp->getNodes()) {
-      if (layout) {
-        viewLayout->setNodeValue(n, layout->getNodeValue(nodesMapping[n]));
-      }
-
-      if (size) {
-        viewSize->setNodeValue(n, size->getNodeValue(nodesMapping[n]));
-      }
-
-      if (rotation) {
-        viewRotation->setNodeValue(n, rotation->getNodeValue(nodesMapping[n]));
-      }
+      result->setNodeValue(nodesMapping[n], viewLayout->getNodeValue(n));
     }
     edge e;
     forEach(e, graphCp->getEdges()) {
-      if (layout) {
-        viewLayout->setEdgeValue(e, layout->getEdgeValue(edgesMapping[e]));
-      }
-
-      if (size) {
-        viewSize->setEdgeValue(e, size->getEdgeValue(edgesMapping[e]));
-      }
-
-      if (rotation) {
-        viewRotation->setEdgeValue(e, rotation->getEdgeValue(edgesMapping[e]));
-      }
+      result->setEdgeValue(edgesMapping[e], viewLayout->getEdgeValue(e));
     }
+    delete graphCp;
+    return true;
   }
 
   viewShape = graphCp->getProperty<IntegerProperty>("viewShape");
@@ -239,7 +252,6 @@ bool PolyominoPacking::run() {
   vector<Graph *> connectedComponentsSgs;
   connectedComponentsSgs.reserve(connectedComponents.size());
   polyominos.reserve(connectedComponents.size());
-
 
   for (size_t i = 0 ; i < connectedComponents.size() ; ++i) {
     Graph *cc = graphCp->inducedSubGraph(connectedComponents[i]);
@@ -412,8 +424,8 @@ void PolyominoPacking::fillEdge(edge e, Vec2i p, std::vector<Vec2i> &cells, int 
 
   Coord pf(p[0], p[1]);
 
-  node src = graph->source(e);
-  node tgt = graph->target(e);
+  node src = graphCp->source(e);
+  node tgt = graphCp->target(e);
   const Coord &srcCoord = viewLayout->getNodeValue(src);
   Coord tgtCoord = viewLayout->getNodeValue(tgt);
   std::vector<Coord> bends = viewLayout->getEdgeValue(e);
