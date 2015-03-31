@@ -132,7 +132,8 @@ public :
 
   ImportPajek(const tlp::PluginContext* context):
     ImportModule(context), nbNodes(0), weights(NULL), labels(NULL),
-    layout(NULL), sizes(NULL), expectedLine(NET_UNKNOWN), partition(NULL) {
+    layout(NULL), sizes(NULL), expectedLine(NET_UNKNOWN), partition(NULL),
+    curNodeId(0), vectorProp(NULL) {
     addInParameter<string>("file::filename", paramHelp[0],"");
   }
 
