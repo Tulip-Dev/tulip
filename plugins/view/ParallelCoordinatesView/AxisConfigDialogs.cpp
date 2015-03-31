@@ -45,15 +45,15 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
   nbGrads = new QSpinBox();
   okButton = new QPushButton("OK");
   axisOrder = new QComboBox();
-  log10Scale = new QCheckBox("Logarithmic scale (base 10)");
+  log10Scale = new QCheckBox("use log scale (base 10)");
   log10Scale->setChecked(axis->hasLog10Scale());
 
   nbGrads->setRange(10, axis->getAxisHeight());
   nbGrads->setValue(axis->getNbAxisGrad());
-  nbGradsLayout->addWidget(new QLabel("Number of graduations : "));
+  nbGradsLayout->addWidget(new QLabel("Number of ticks"));
   nbGradsLayout->addWidget(nbGrads);
 
-  axisMinLayout->addWidget(new QLabel("Axis min value : "));
+  axisMinLayout->addWidget(new QLabel("Axis min value"));
 
   if (axis->getAxisDataTypeName() == "int") {
     intAxisMinValue = new QSpinBox();
@@ -70,7 +70,7 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
     axisMinLayout->addWidget(doubleAxisMinValue);
   }
 
-  axisMaxLayout->addWidget(new QLabel("Axis max value : "));
+  axisMaxLayout->addWidget(new QLabel("Axis max value"));
 
   if (axis->getAxisDataTypeName() == "int") {
     intAxisMaxValue = new QSpinBox();
@@ -97,7 +97,7 @@ QuantitativeAxisConfigDialog::QuantitativeAxisConfigDialog(QuantitativeParallelA
     axisOrder->setCurrentIndex(1);
   }
 
-  axisOrderLayout->addWidget(new QLabel("Axis order : "));
+  axisOrderLayout->addWidget(new QLabel("Axis order"));
   axisOrderLayout->addWidget(axisOrder);
 
   dialogLayout->addLayout(nbGradsLayout);
@@ -155,7 +155,7 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
   labelsOrderLayout->addWidget(axisLabelsOrder);
   labelsOrderLayout->addLayout(buttonsUpDownLayout);
 
-  dialogLayout->addWidget(new QLabel(tr("Axis Labels Order :")));
+  dialogLayout->addWidget(new QLabel(tr("Axis Labels Order")));
   dialogLayout->addLayout(labelsOrderLayout);
   okButtonLayout->addStretch(1);
   okButtonLayout->addWidget(okButton);

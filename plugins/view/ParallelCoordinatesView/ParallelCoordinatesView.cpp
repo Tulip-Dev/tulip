@@ -534,29 +534,25 @@ bool ParallelCoordinatesView::eventFilter(QObject *obj,QEvent *event) {
 
 void ParallelCoordinatesView::buildContextMenu() {
 
-  viewSetupMenu = new QMenu(tr("View Setup"));
-  viewSetupMenu->addAction("&Redraw View", this, SLOT(draw()), tr("Ctrl+Shift+R"));
-  viewSetupMenu->addAction("&Center View", this, SLOT(centerView()), tr("Ctrl+Shift+C"));
-  viewSetupMenu->addSeparator();
-
-  viewSetupMenu->addAction(tr("Layout Type"))->setEnabled(false);
+  viewSetupMenu = new QMenu(tr("View setup"));
+  viewSetupMenu->addAction(tr("Layout type"))->setEnabled(false);
   QActionGroup *layoutActionGroup = new QActionGroup(this);
-  classicLayout = viewSetupMenu->addAction(tr("Classic Layout"),this, SLOT(centerSetupAndDrawView()));
+  classicLayout = viewSetupMenu->addAction(tr("Classic layout"),this, SLOT(centerSetupAndDrawView()));
   classicLayout->setCheckable(true);
   classicLayout->setChecked(true);
   layoutActionGroup->addAction(classicLayout);
-  circularLayout = viewSetupMenu->addAction(tr("Circular Layout"),this, SLOT(centerSetupAndDrawView()));
+  circularLayout = viewSetupMenu->addAction(tr("Circular layout"),this, SLOT(centerSetupAndDrawView()));
   circularLayout->setCheckable(true);
   layoutActionGroup->addAction(circularLayout);
   viewSetupMenu->addSeparator();
 
-  viewSetupMenu->addAction(tr("Lines Type"))->setEnabled(false);
+  viewSetupMenu->addAction(tr("Lines type"))->setEnabled(false);
   QActionGroup *lineTypeActionGroup = new QActionGroup(this);
   straightLinesType = viewSetupMenu->addAction(tr("Straight"),this, SLOT(setupAndDrawView()));
   straightLinesType->setCheckable(true);
   straightLinesType->setChecked(true);
   lineTypeActionGroup->addAction(straightLinesType);
-  catmullRomSplineLinesType = viewSetupMenu->addAction(tr("Catmull-Rom Spline"),this, SLOT(setupAndDrawView()));
+  catmullRomSplineLinesType = viewSetupMenu->addAction(tr("Catmull-Rom spline"),this, SLOT(setupAndDrawView()));
   catmullRomSplineLinesType->setCheckable(true);
   lineTypeActionGroup->addAction(catmullRomSplineLinesType);
   cubicBSplineInterpolationLinesType = viewSetupMenu->addAction(tr("Cubic B-spline interpolation"),this, SLOT(setupAndDrawView()));
@@ -564,7 +560,7 @@ void ParallelCoordinatesView::buildContextMenu() {
   lineTypeActionGroup->addAction(catmullRomSplineLinesType);
   viewSetupMenu->addSeparator();
 
-  viewSetupMenu->addAction(tr("Lines Thickness"))->setEnabled(false);
+  viewSetupMenu->addAction(tr("Lines thickness"))->setEnabled(false);
   QActionGroup *lineActionGroup = new QActionGroup(this);
   thickLines = viewSetupMenu->addAction(tr("Map to viewSize"),this, SLOT(setupAndDrawView()));
   thickLines->setCheckable(true);
@@ -581,22 +577,24 @@ void ParallelCoordinatesView::buildContextMenu() {
 
   axisMenuSeparator=new QAction(NULL);
   axisMenuSeparator->setSeparator(true);
-  axisConfiguration=new QAction(tr("Axis Configuration"),NULL);
+  axisConfiguration=new QAction(tr("Axis configuration"),NULL);
   connect(axisConfiguration,SIGNAL(triggered()),this,SLOT(axisConfigurationSlot()));
-  removeAxisAction=new QAction(tr("Remove Axis"),NULL);
+  removeAxisAction=new QAction(tr("Remove axis"),NULL);
   connect(removeAxisAction,SIGNAL(triggered()),this,SLOT(removeAxisSlot()));
   highlightMenuSeparator=new QAction(NULL);
   highlightMenuSeparator->setSeparator(true);
-  selectHighlightedElements=new QAction(tr("Select Highlighted Elements"),NULL);
+  selectHighlightedElements=new QAction(tr("Select highlighted elements"),NULL);
   connect(selectHighlightedElements,SIGNAL(triggered()),this,SLOT(selectHighlightedElementsSlot()));
-  resetHightlightedElements=new QAction(tr("Reset Highlighted Elements"),NULL);
+  resetHightlightedElements=new QAction(tr("Reset highlighted elements"),NULL);
   connect(resetHightlightedElements,SIGNAL(triggered()),this,SLOT(resetHightlightedElementsSlot()));
 }
 
 void ParallelCoordinatesView::fillContextMenu(QMenu *menu, const QPointF &point) {
   GlMainView::fillContextMenu(menu,point);
   menu->addAction(viewSetupMenu->menuAction());
+  viewSetupMenu->setStyleSheet(menu->styleSheet());
   menu->addAction(optionsMenu->menuAction());
+  optionsMenu->setStyleSheet(menu->styleSheet());
 
   axisUnderPointer = getAxisUnderPointer(point.x(), point.y());
 
