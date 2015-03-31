@@ -233,7 +233,7 @@ This part of the panel shows the graph. From here, the user can exploit two elem
 
   * *Grid display parameters*: open the grid setup wizard.
 
-  When right clicking on an edge or a node, an other part appears, displaying the object name and offering to select the node/edge (*Select*), to add/remove it to/from the current selection (*Toggle selection*), to delete it (*Delete*) or to edit one of the main draw properties (*Edit* color, label, shape or size)
+  When right clicking on an edge or a node, an other part appears, displaying the object name and offering to select the node/edge (*Select*), to add/remove it to/from the current selection (*Toggle selection*), to delete it (*Delete*) or to update (*Edit*) one of the main draw properties (color, label, shape or size)
 
 
   |i_workspace_rclick_edge|    |i_workspace_rclick_node|
@@ -685,25 +685,29 @@ The second tab offers options to adapt the histogram. It can only be used when v
 
 These settings will alter the initial histogram by adapting the discrete intervals used.
 
-* *Background color*: changes the background color.
+* **Background color**: changes the background color.
 
-* *Uniform quantification*: adapts the intervals on the X axis to obtain a uniform quantification on the Y axis.
+* **Uniform quantification**: adapts the intervals on the X axis to obtain a uniform quantification on the Y axis.
 
-* *Cumulative frequencies histogram*: cumulates the values obtained from one interval to the next.
+* **Cumulative frequencies histogram**: cumulates the values obtained from one interval to the next.
 
-* *Number of histogram bins*: controls in how many intervals the X axis repartition is distributed.
+* **Number of histogram bins**: controls in how many intervals the X axis repartition is distributed.
 
-* *Resulting bin width*: indicates the width of the intervals on the X axis.
+* **Resulting bin width**: indicates the width of the small intervals on the X axis.
 
-* *X axis tick count*: indicates the number of tick marks displayed along the X axis
+* **Show graph edges above histogram**: displays the edges existing between each bin.
 
-* *X axis logscale*: applies a logarithm scale on the X axis.
+* **X axis - tick count**: indicates the number of tick marks displayed along the X axis
 
-* *Y axis tick step*: indicates the step between 2 tick marks along the Y axis
+* **X axis - use custom range**: indicates a specific range of values along the X axis
 
-* *Y axis logscale*: applies a logarithm scale on the Y axis.
+* **X axis - use log scale**: applies a logarithm scale on the X axis.
 
-* *Show graph edges above histogram*: displays the edges existing between each bin.
+* **Y axis - tick step**: indicates the step between 2 tick marks along the Y axis
+
+* **Y axis - use custom range**: indicates a specific range of values along the Y axis
+
+* **Y axis - use log scale**: applies a logarithm scale on the Y axis.
 
 
 .. _workspace_histogram_toolbar:
@@ -723,7 +727,7 @@ The view provides two exclusive tools, only available when viewing a sole histog
   .. image:: _images/i_histogram_statistics.png
       :width: 280
 
-  * **Mean and standard derivation**: Tulip computes the mean and the standard derivation and displays these values on the histogram.
+  * **Mean and standard deviation**: Tulip computes the mean and the standard deviation and displays these values on the histogram.
 
   * **Select nodes in range**: choose the lower and upper bound and select the nodes in between.
 
@@ -822,18 +826,16 @@ A right click anywhere but on the axis in the view will display the standard con
 * *View Setup*: 
 
   .. image:: _images/i_parallel_main_rightclick.png
-    :width: 500
 
-  * *Layout Type*: choose between the classic layout, where the axis are disposed in parallel, and the circular layout, where the axis are spread regularly over the radius of a circle.
-  * *Lines Type*: switch between the classic straight lines and the curved Catmull-Rom Spline.
-  * *Lines Thickness*: proposed to map the lines to the viewSize property or use a standard thin line.
+  * *Layout type*: choose between the classic layout, where the axis are disposed in parallel, and the circular layout, where the axis are spread regularly over the radius of a circle.
+  * *Lines type*: switch between the classic straight lines and the curved Catmull-Rom Spline.
+  * *Lines thickness*: proposed to map the lines to the viewSize property or use a standard thin line.
 
 * *Options*: the sole option *Tooltips* allows to display directly some information like the id of the hovered node.
 
 When you perform a right click on one of the axis, Tulip proposes to either *Remove  [the] axis* or to enter a configuration panel:
 
 .. image:: _images/i_parallel_main_axis_conf.png
-    :width: 300
 
 Here you will be able to specify, among others, the number of tick marks, the axis order and the use of a logarithm scale.
 
@@ -927,12 +929,12 @@ Scatter plot 2D view
 
 The pixel oriented and the parallel coordinates views both aim to underline the correlation between two properties, the first one by displaying a tendency noticable with a coloration, and the second one by showing the relation between two properties for the same element.
 
-The scatterplot view can be used in a similar way. As a list of properties is selected, a plot for each possible couple will be created.
+The scatterplot view can be used in a similar way. As a list of properties is selected, a plot for each couple of distinct properties will be created.
 
 .. image:: _images/i_scatterplot_main.png
     :width: 600
 
-The data repartition allows to visually estimate and to formally compute a correlation coefficient.
+The data distribution allows to visually estimate and to formally compute a correlation coefficient.
 
 
 .. _workspace_scatterplot_properties:
@@ -951,12 +953,14 @@ Options
 
 .. image:: _images/i_scatterplot_options.png
 
-In this tab, you can select the scene and the scatterplots background color. By default, the second one uses a colorscale to indicate whether the plot correlation coefficient detects a link between the two current properties or not.
+In this tab, you can select the scene and the scatterplots background color. By default, the second one uses a color scale to indicate whether the plot correlation coefficient detects a link between the two current properties or not.
 You can customize the colorscale with a click on the *-1*, *0* and *1* buttons to specify which color to use for each value.
 
 The size mapping options will adapt the size rendering in the plots depending on the initial node size.
 
-The last check box will display the edges above the scatterplot if you are willing to.
+The next check box allow to display the edges above the scatterplot.
+
+Then you can customize the range of values to display along the X/Y axes.
 
 In the end, by performing different mapping types on different properties, you can estimate the correlation between up to four properties (two depending of the plot axis, one with a color mapping and a last one with a size mapping).
 
