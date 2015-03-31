@@ -61,13 +61,13 @@ public :
   void useCustomYAxisScale(const bool value);
 
   std::pair<double, double> getXAxisScale() const;
-  void setXAxisScale(const std::pair<double, double> value);
+  void setXAxisScale(const std::pair<double, double>& value);
 
   std::pair<double, double> getYAxisScale() const;
-  void setYAxisScale(const std::pair<double, double> value);
+  void setYAxisScale(const std::pair<double, double>& value);
 
-  void setInitXAxisScale(const std::pair<double, double> value);
-  void setInitYAxisScale(const std::pair<double, double> value);
+  void setInitXAxisScale(const std::pair<double, double>& value);
+  void setInitYAxisScale(const std::pair<double, double>& value);
 
   void resetAxisScale();
 
