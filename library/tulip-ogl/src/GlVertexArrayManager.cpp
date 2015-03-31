@@ -354,32 +354,46 @@ void GlVertexArrayManager::endRendering() {
   }
 
   if (canUseVBO && verticesUploadNeeded) {
-    glBindBuffer(GL_ARRAY_BUFFER, pointsVerticesVBO);
-    glBufferData(GL_ARRAY_BUFFER, pointsCoordsArray.size() * 3 * sizeof(float), VECTOR_DATA(pointsCoordsArray), GL_STATIC_DRAW);
-    pointsVerticesUploaded = !isOpenGlOutOfMemory();
-    glBindBuffer(GL_ARRAY_BUFFER, linesVerticesVBO);
-    glBufferData(GL_ARRAY_BUFFER, linesCoordsArray.size() * 3 * sizeof(float), VECTOR_DATA(linesCoordsArray), GL_STATIC_DRAW);
-    linesVerticesUploaded = !isOpenGlOutOfMemory();
-    glBindBuffer(GL_ARRAY_BUFFER, quadsVerticesVBO);
-    glBufferData(GL_ARRAY_BUFFER, quadsCoordsArray.size() * 3 * sizeof(float), VECTOR_DATA(quadsCoordsArray), GL_STATIC_DRAW);
-    quadsVerticesUploaded = !isOpenGlOutOfMemory();
+    if (!pointsCoordsArray.empty()) {
+      glBindBuffer(GL_ARRAY_BUFFER, pointsVerticesVBO);
+      glBufferData(GL_ARRAY_BUFFER, pointsCoordsArray.size() * 3 * sizeof(float), VECTOR_DATA(pointsCoordsArray), GL_STATIC_DRAW);
+      pointsVerticesUploaded = !isOpenGlOutOfMemory();
+    }
+    if (!linesCoordsArray.empty()) {
+      glBindBuffer(GL_ARRAY_BUFFER, linesVerticesVBO);
+      glBufferData(GL_ARRAY_BUFFER, linesCoordsArray.size() * 3 * sizeof(float), VECTOR_DATA(linesCoordsArray), GL_STATIC_DRAW);
+      linesVerticesUploaded = !isOpenGlOutOfMemory();
+    }
+    if (!quadsCoordsArray.empty()) {
+      glBindBuffer(GL_ARRAY_BUFFER, quadsVerticesVBO);
+      glBufferData(GL_ARRAY_BUFFER, quadsCoordsArray.size() * 3 * sizeof(float), VECTOR_DATA(quadsCoordsArray), GL_STATIC_DRAW);
+      quadsVerticesUploaded = !isOpenGlOutOfMemory();
+    }
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     verticesUploadNeeded = false;
   }
 
   if (canUseVBO && colorsUploadNeeded) {
-    glBindBuffer(GL_ARRAY_BUFFER, pointsColorsVBO);
-    glBufferData(GL_ARRAY_BUFFER, pointsColorsArray.size() * 4 * sizeof(unsigned char), VECTOR_DATA(pointsColorsArray), GL_STATIC_DRAW);
-    pointsColorsUploaded = !isOpenGlOutOfMemory();
-    glBindBuffer(GL_ARRAY_BUFFER, linesColorsVBO);
-    glBufferData(GL_ARRAY_BUFFER, linesColorsArray.size() * 4 * sizeof(unsigned char), VECTOR_DATA(linesColorsArray), GL_STATIC_DRAW);
-    linesColorsUploaded = !isOpenGlOutOfMemory();
-    glBindBuffer(GL_ARRAY_BUFFER, quadsColorsVBO);
-    glBufferData(GL_ARRAY_BUFFER, quadsColorsArray.size() * 4 * sizeof(unsigned char), VECTOR_DATA(quadsColorsArray), GL_STATIC_DRAW);
-    quadsColorsUploaded = !isOpenGlOutOfMemory();
-    glBindBuffer(GL_ARRAY_BUFFER, quadsOutlineColorsVBO);
-    glBufferData(GL_ARRAY_BUFFER, quadsOutlineColorsArray.size() * 4 * sizeof(unsigned char), VECTOR_DATA(quadsOutlineColorsArray), GL_STATIC_DRAW);
-    quadsOutlineColorsUploaded = !isOpenGlOutOfMemory();
+    if (!pointsColorsArray.empty()) {
+      glBindBuffer(GL_ARRAY_BUFFER, pointsColorsVBO);
+      glBufferData(GL_ARRAY_BUFFER, pointsColorsArray.size() * 4 * sizeof(unsigned char), VECTOR_DATA(pointsColorsArray), GL_STATIC_DRAW);
+      pointsColorsUploaded = !isOpenGlOutOfMemory();
+    }
+    if (!linesColorsArray.empty()) {
+      glBindBuffer(GL_ARRAY_BUFFER, linesColorsVBO);
+      glBufferData(GL_ARRAY_BUFFER, linesColorsArray.size() * 4 * sizeof(unsigned char), VECTOR_DATA(linesColorsArray), GL_STATIC_DRAW);
+      linesColorsUploaded = !isOpenGlOutOfMemory();
+    }
+    if (!quadsColorsArray.empty()) {
+      glBindBuffer(GL_ARRAY_BUFFER, quadsColorsVBO);
+      glBufferData(GL_ARRAY_BUFFER, quadsColorsArray.size() * 4 * sizeof(unsigned char), VECTOR_DATA(quadsColorsArray), GL_STATIC_DRAW);
+      quadsColorsUploaded = !isOpenGlOutOfMemory();
+    }
+    if (!quadsOutlineColorsArray.empty()) {
+      glBindBuffer(GL_ARRAY_BUFFER, quadsOutlineColorsVBO);
+      glBufferData(GL_ARRAY_BUFFER, quadsOutlineColorsArray.size() * 4 * sizeof(unsigned char), VECTOR_DATA(quadsOutlineColorsArray), GL_STATIC_DRAW);
+      quadsOutlineColorsUploaded = !isOpenGlOutOfMemory();
+    }
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     colorsUploadNeeded = false;
   }
