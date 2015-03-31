@@ -72,7 +72,8 @@ Histogram::Histogram(Graph *graph, const std::string& propertyName, const Elemen
   graph(graph), propertyName(propertyName), blCorner(blCorner), size(size), nbHistogramBins(100), xAxis(NULL), yAxis(NULL),
   xAxisLogScale(false), yAxisLogScale(false), nbXGraduations(15), yAxisIncrementStep(0), histogramLayout(new LayoutProperty(graph)), histogramSize(new SizeProperty(graph)), histoBinsComposite(new GlComposite()), uniformQuantification(false),
   cumulativeFreqHisto(false), lastCumulHisto(false), edgeAsNodeGraph(newGraph()), backgroundColor(backgroundColor), textColor(textColor), integerScale(false),
-  dataLocation(dataLocation), displayEdges(false), layoutUpdateNeeded(true),sizesUpdateNeeded(true), textureUpdateNeeded(true) {
+  dataLocation(dataLocation), displayEdges(false), layoutUpdateNeeded(true),sizesUpdateNeeded(true), textureUpdateNeeded(true), xAxisScaleDefined(false), yAxisScaleDefined(false),
+  xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)) {
 
   edge e;
   forEach(e, graph->getEdges()) {
@@ -126,6 +127,8 @@ Histogram::~Histogram() {
 void Histogram::setDataLocation(const ElementType &dataLocation) {
   if (dataLocation != this->dataLocation) {
     delete graphComposite;
+    xAxisScaleDefined = false;
+    yAxisScaleDefined = false;
 
     if (dataLocation == NODE) {
       graphComposite = new GlGraphComposite(graph);
@@ -172,7 +175,16 @@ void Histogram::computeHistogram() {
       max = (double) graph->getProperty<IntegerProperty>(propertyName)->getEdgeMax(graph);
     }
   }
+  initXAxisScale = make_pair(min, max);
 
+  if (xAxisScaleDefined) {
+    if (min > xAxisScale.first)
+      min = xAxisScale.first;
+    if (max < xAxisScale.second)
+      max = xAxisScale.second;
+  }
+  xAxisScale.first = min;
+  xAxisScale.second = max;
   if (min == max)
     max += 1;
 
@@ -394,7 +406,7 @@ void Histogram::createAxis() {
 
   const float axisLength = DEFAULT_AXIS_LENGTH;
 
-  unsigned int maxAxisValue;
+  unsigned int maxAxisValue, minAxisValue = 0;
 
   if (cumulativeFreqHisto) {
     if (dataLocation == NODE) {
@@ -408,11 +420,19 @@ void Histogram::createAxis() {
     maxAxisValue = maxBinSize;
   }
 
-  if (yAxisIncrementStep == 0) {
-    yAxisIncrementStep = maxAxisValue / 10;
+  initYAxisScale = make_pair(minAxisValue, maxAxisValue);
 
-    if (yAxisIncrementStep < 1) yAxisIncrementStep = 1;
+  if (yAxisScaleDefined) {
+    if (yAxisScale.first < (double)minAxisValue)
+      minAxisValue = (unsigned int)yAxisScale.first;
+    if (yAxisScale.second > (double)maxAxisValue)
+      maxAxisValue = (unsigned int)yAxisScale.second;
   }
+  yAxisScale.first = (double)minAxisValue;
+  yAxisScale.second = (double)maxAxisValue;
+
+  yAxisIncrementStep = maxAxisValue / 10;
+  if (yAxisIncrementStep < 1) yAxisIncrementStep = 1;
 
   if (lastCumulHisto != cumulativeFreqHisto) {
     unsigned int n;
@@ -435,7 +455,7 @@ void Histogram::createAxis() {
   }
 
   yAxis = new GlQuantitativeAxis((dataLocation == NODE ? "number of nodes" : "number of edges"), Coord(0,0,0), axisLength, GlAxis::VERTICAL_AXIS, textColor);
-  yAxis->setAxisParameters((int) 0 ,(int) maxAxisValue, yAxisIncrementStep, GlAxis::LEFT_OR_BELOW, true);
+  yAxis->setAxisParameters((int) minAxisValue ,(int) maxAxisValue, yAxisIncrementStep, GlAxis::LEFT_OR_BELOW, true);
   yAxis->setLogScale(yAxisLogScale);
   float yAxisGradsWidth = axisLength / 20;
   yAxis->setAxisGradsWidth(yAxisGradsWidth);

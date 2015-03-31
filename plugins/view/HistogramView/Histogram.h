@@ -120,6 +120,44 @@ public :
     return nbXGraduations;
   }
 
+  bool getXAxisScaleDefined() const {
+      return xAxisScaleDefined;
+  }
+  void setXAxisScaleDefined(const bool value) {
+      xAxisScaleDefined = value;
+  }
+  bool getYAxisScaleDefined() const {
+      return yAxisScaleDefined;
+  }
+  void setYAxisScaleDefined(const bool value) {
+      yAxisScaleDefined = value;
+  }
+  std::pair<double,double> getXAxisScale() const {
+      return xAxisScale;
+  }
+  void setXAxisScale(const std::pair<double, double> value) {
+      xAxisScale = value;
+  }
+  std::pair<double, double> getYAxisScale() const {
+      return yAxisScale;
+  }
+  void setYAxisScale(const std::pair<double, double> value) {
+      yAxisScale = value;
+  }
+
+  std::pair<double, double> getInitXAxisScale() const {
+      return initXAxisScale;
+  }
+  void setInitXAxisScale(const std::pair<double, double> value) {
+      initXAxisScale = value;
+  }
+  std::pair<double, double> getInitYAxisScale() const {
+      return initYAxisScale;
+  }
+  void setInitYAxisScale(const std::pair<double, double> value) {
+      initYAxisScale = value;
+  }
+
   void setBLCorner(const Coord &blCorner);
 
   void setLayoutUpdateNeeded();
@@ -201,6 +239,10 @@ private :
   bool layoutUpdateNeeded;
   bool sizesUpdateNeeded;
   bool textureUpdateNeeded;
+
+  bool xAxisScaleDefined, yAxisScaleDefined;
+  std::pair<double, double> xAxisScale, yAxisScale;
+  std::pair<double, double> initXAxisScale, initYAxisScale;
 
   int overviewId;
   static int overviewCpt;

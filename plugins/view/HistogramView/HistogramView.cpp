@@ -275,6 +275,24 @@ void HistogramView::setState(const DataSet &dataSet) {
       if (histogramParametersMap[selectedProperties[j]].get("y axis logscale", yAxisLogScale)) {
         histogramsMap[selectedProperties[j]]->setYAxisLogScale(yAxisLogScale);
       }
+
+      bool useCustomAxisScale = false;
+
+      if (histogramParametersMap[selectedProperties[j]].get("x axis custom scale", useCustomAxisScale)) {
+        histogramsMap[selectedProperties[j]]->setXAxisScaleDefined(useCustomAxisScale);
+      }
+      if (histogramParametersMap[selectedProperties[j]].get("y axis custom scale", useCustomAxisScale)) {
+        histogramsMap[selectedProperties[j]]->setYAxisScaleDefined(useCustomAxisScale);
+      }
+
+      std::pair<double, double> axisScale;
+
+      if (histogramParametersMap[selectedProperties[j]].get("x axis scale", axisScale)) {
+        histogramsMap[selectedProperties[j]]->setXAxisScale(axisScale);
+      }
+      if (histogramParametersMap[selectedProperties[j]].get("y axis scale", axisScale)) {
+        histogramsMap[selectedProperties[j]]->setYAxisScale(axisScale);
+      }
     }
 
   }
@@ -308,12 +326,16 @@ DataSet HistogramView::state() const {
     histogramParameters.set("uniform quantification", histogramsMapTmp[selectedPropertiesTmp[i]]->uniformQuantificationHistogram());
     histogramParameters.set("x axis logscale", histogramsMapTmp[selectedPropertiesTmp[i]]->xAxisLogScaleSet());
     histogramParameters.set("y axis logscale", histogramsMapTmp[selectedPropertiesTmp[i]]->yAxisLogScaleSet());
+    histogramParameters.set("x axis custom scale", histogramsMapTmp[selectedPropertiesTmp[i]]->getXAxisScaleDefined());
+    histogramParameters.set("x axis scale", histogramsMapTmp[selectedPropertiesTmp[i]]->getXAxisScale());
+    histogramParameters.set("y axis custom scale", histogramsMapTmp[selectedPropertiesTmp[i]]->getYAxisScaleDefined());
+    histogramParameters.set("y axis scale", histogramsMapTmp[selectedPropertiesTmp[i]]->getYAxisScale());
     dataSet.set("histo"+ss.str(), histogramParameters);
   }
 
   dataSet.set("lastViewWindowWidth",  getGlMainWidget()->width());
   dataSet.set("lastViewWindowHeight",  getGlMainWidget()->height());
-  dataSet.set("backgroundColor", histoOptionsWidget->getBackgroundColor());
+  dataSet.set("backgroundColor", getGlMainWidget()->getScene()->getBackgroundColor());
   string histoDetailedNamed = "";
 
   if (detailedHistogram != NULL) {
@@ -415,6 +437,10 @@ void HistogramView::viewConfigurationChanged() {
     detailedHistogram->setCumulativeHistogram(histoOptionsWidget->cumulativeFrequenciesHisto());
     detailedHistogram->setUniformQuantification(histoOptionsWidget->uniformQuantification());
     detailedHistogram->setDisplayGraphEdges(histoOptionsWidget->showGraphEdges());
+    detailedHistogram->setXAxisScaleDefined(histoOptionsWidget->useCustomXAxisScale());
+    detailedHistogram->setXAxisScale(histoOptionsWidget->getXAxisScale());
+    detailedHistogram->setYAxisScaleDefined(histoOptionsWidget->useCustomYAxisScale());
+    detailedHistogram->setYAxisScale(histoOptionsWidget->getYAxisScale());
     detailedHistogram->setLayoutUpdateNeeded();
     detailedHistogram->update();
     histoOptionsWidget->setBinWidth(detailedHistogram->getHistogramBinsWidth());
@@ -487,6 +513,7 @@ void HistogramView::refresh() {
 
 void HistogramView::graphChanged(Graph *) {
   setState(DataSet());
+  drawOverview();
 }
 
 void HistogramView::buildHistograms() {
@@ -687,6 +714,12 @@ void HistogramView::switchFromSmallMultiplesToDetailedView(Histogram *histogramT
   histoOptionsWidget->setXAxisLogScale(detailedHistogram->xAxisLogScaleSet());
   histoOptionsWidget->setCumulativeFrequenciesHistogram(detailedHistogram->cumulativeFrequenciesHistogram());
   histoOptionsWidget->setShowGraphEdges(detailedHistogram->displayGraphEdges());
+  histoOptionsWidget->useCustomXAxisScale(detailedHistogram->getXAxisScaleDefined());
+  histoOptionsWidget->setXAxisScale(detailedHistogram->getXAxisScale());
+  histoOptionsWidget->useCustomYAxisScale(detailedHistogram->getYAxisScaleDefined());
+  histoOptionsWidget->setYAxisScale(detailedHistogram->getYAxisScale());
+  histoOptionsWidget->setInitXAxisScale(detailedHistogram->getInitXAxisScale());
+  histoOptionsWidget->setInitYAxisScale(detailedHistogram->getInitYAxisScale());
 
   getGlMainWidget()->draw();
 }
@@ -727,6 +760,7 @@ void HistogramView::switchFromDetailedViewToSmallMultiples() {
   toggleInteractors(false);
   propertiesSelectionWidget->setWidgetEnabled(true);
   histoOptionsWidget->setWidgetEnabled(false);
+  histoOptionsWidget->resetAxisScale();
 
   gl->draw();
 }
