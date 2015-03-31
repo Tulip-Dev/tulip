@@ -155,22 +155,22 @@ void ScatterPlot2DOptionsWidget::useCustomYAxisScale(const bool value) {
 std::pair<double, double> ScatterPlot2DOptionsWidget::getXAxisScale() const {
   return std::make_pair(_ui->useXMinSpinBox->value(), _ui->useXMaxSpinBox->value());
 }
-void ScatterPlot2DOptionsWidget::setXAxisScale(const std::pair<double, double> value) {
+void ScatterPlot2DOptionsWidget::setXAxisScale(const std::pair<double, double>& value) {
   _ui->useXMinSpinBox->setValue(value.first);
   _ui->useXMaxSpinBox->setValue(value.second);
 }
 std::pair<double, double> ScatterPlot2DOptionsWidget::getYAxisScale() const {
   return std::make_pair(_ui->useYMinSpinBox->value(), _ui->useYMaxSpinBox->value());
 }
-void ScatterPlot2DOptionsWidget::setYAxisScale(const std::pair<double, double> value) {
+void ScatterPlot2DOptionsWidget::setYAxisScale(const std::pair<double, double>& value) {
   _ui->useYMinSpinBox->setValue(value.first);
   _ui->useYMaxSpinBox->setValue(value.second);
 }
 
-void ScatterPlot2DOptionsWidget::setInitXAxisScale(const std::pair<double, double> value) {
+void ScatterPlot2DOptionsWidget::setInitXAxisScale(const std::pair<double, double>& value) {
   initXAxisScale = value;
 }
-void ScatterPlot2DOptionsWidget::setInitYAxisScale(const std::pair<double, double> value) {
+void ScatterPlot2DOptionsWidget::setInitYAxisScale(const std::pair<double, double>& value) {
   initYAxisScale = value;
 }
 

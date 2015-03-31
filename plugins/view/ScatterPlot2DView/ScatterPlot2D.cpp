@@ -70,9 +70,6 @@ ScatterPlot2D::ScatterPlot2D(Graph *graph, const string& xDim, const string& yDi
     foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false), edgeAsNodeGraph(newGraph()), dataLocation(dataLocation), xAxisScaleDefined(false), yAxisScaleDefined(false),
     xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)), displayEdges(false) {
   edge e;
-  LayoutProperty *edgeAsNodeGraphLayout = edgeAsNodeGraph->getProperty<LayoutProperty>("viewLayout");
-  SizeProperty *edgeAsNodeGraphSize = edgeAsNodeGraph->getProperty<SizeProperty>("viewSize");
-
   ColorProperty* edgeAsNodeGraphColor = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
   ColorProperty* graphColor = graph->getProperty<ColorProperty>("viewColor");
   BooleanProperty* edgeAsNodeGraphSelection = edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
