@@ -281,6 +281,7 @@ void HistogramView::setState(const DataSet &dataSet) {
       if (histogramParametersMap[selectedProperties[j]].get("x axis custom scale", useCustomAxisScale)) {
         histogramsMap[selectedProperties[j]]->setXAxisScaleDefined(useCustomAxisScale);
       }
+
       if (histogramParametersMap[selectedProperties[j]].get("y axis custom scale", useCustomAxisScale)) {
         histogramsMap[selectedProperties[j]]->setYAxisScaleDefined(useCustomAxisScale);
       }
@@ -290,6 +291,7 @@ void HistogramView::setState(const DataSet &dataSet) {
       if (histogramParametersMap[selectedProperties[j]].get("x axis scale", axisScale)) {
         histogramsMap[selectedProperties[j]]->setXAxisScale(axisScale);
       }
+
       if (histogramParametersMap[selectedProperties[j]].get("y axis scale", axisScale)) {
         histogramsMap[selectedProperties[j]]->setYAxisScale(axisScale);
       }

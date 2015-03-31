@@ -175,16 +175,20 @@ void Histogram::computeHistogram() {
       max = (double) graph->getProperty<IntegerProperty>(propertyName)->getEdgeMax(graph);
     }
   }
+
   initXAxisScale = make_pair(min, max);
 
   if (xAxisScaleDefined) {
     if (min > xAxisScale.first)
       min = xAxisScale.first;
+
     if (max < xAxisScale.second)
       max = xAxisScale.second;
   }
+
   xAxisScale.first = min;
   xAxisScale.second = max;
+
   if (min == max)
     max += 1;
 
@@ -425,13 +429,16 @@ void Histogram::createAxis() {
   if (yAxisScaleDefined) {
     if (yAxisScale.first < (double)minAxisValue)
       minAxisValue = (unsigned int)yAxisScale.first;
+
     if (yAxisScale.second > (double)maxAxisValue)
       maxAxisValue = (unsigned int)yAxisScale.second;
   }
+
   yAxisScale.first = (double)minAxisValue;
   yAxisScale.second = (double)maxAxisValue;
 
   yAxisIncrementStep = maxAxisValue / 10;
+
   if (yAxisIncrementStep < 1) yAxisIncrementStep = 1;
 
   if (lastCumulHisto != cumulativeFreqHisto) {

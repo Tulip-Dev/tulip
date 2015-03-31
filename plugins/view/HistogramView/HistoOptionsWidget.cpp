@@ -105,51 +105,51 @@ bool HistoOptionsWidget::yAxisLogScaleSet() const {
 }
 
 bool HistoOptionsWidget::useCustomXAxisScale() const {
-    return _ui->useXScaleCheckBox->isChecked();
+  return _ui->useXScaleCheckBox->isChecked();
 }
 
 void HistoOptionsWidget::useCustomXAxisScale(const bool value) {
-    _ui->useXScaleCheckBox->setChecked(value);
+  _ui->useXScaleCheckBox->setChecked(value);
 }
 
 bool HistoOptionsWidget::useCustomYAxisScale() const {
-    return _ui->useYScaleCheckBox->isChecked();
+  return _ui->useYScaleCheckBox->isChecked();
 }
 
 void HistoOptionsWidget::useCustomYAxisScale(const bool value) {
-    _ui->useYScaleCheckBox->setChecked(value);
+  _ui->useYScaleCheckBox->setChecked(value);
 }
 
 std::pair<double, double> HistoOptionsWidget::getXAxisScale() const {
-    return make_pair(_ui->useXMinSpinBox->value(), _ui->useXMaxSpinBox->value());
+  return make_pair(_ui->useXMinSpinBox->value(), _ui->useXMaxSpinBox->value());
 }
 void HistoOptionsWidget::setXAxisScale(const std::pair<double, double> value) {
-    _ui->useXMinSpinBox->setValue(value.first);
-    _ui->useXMaxSpinBox->setValue(value.second);
+  _ui->useXMinSpinBox->setValue(value.first);
+  _ui->useXMaxSpinBox->setValue(value.second);
 }
 std::pair<double, double> HistoOptionsWidget::getYAxisScale() const {
-    return std::make_pair(_ui->useYMinSpinBox->value(), _ui->useYMaxSpinBox->value());
+  return std::make_pair(_ui->useYMinSpinBox->value(), _ui->useYMaxSpinBox->value());
 }
 void HistoOptionsWidget::setYAxisScale(const std::pair<double, double> value) {
-    _ui->useYMinSpinBox->setValue(value.first);
-    _ui->useYMaxSpinBox->setValue(value.second);
+  _ui->useYMinSpinBox->setValue(value.first);
+  _ui->useYMaxSpinBox->setValue(value.second);
 }
 
 void HistoOptionsWidget::setInitXAxisScale(const std::pair<double, double> value) {
-    initXAxisScale = value;
+  initXAxisScale = value;
 }
 void HistoOptionsWidget::setInitYAxisScale(const std::pair<double, double> value) {
-    initYAxisScale = value;
+  initYAxisScale = value;
 }
 
 void HistoOptionsWidget::resetAxisScale() {
-    std::pair<double, double> tmp_pair = make_pair(0,0);
-    setXAxisScale(tmp_pair);
-    setYAxisScale(tmp_pair);
-    useCustomXAxisScale(false);
-    useCustomYAxisScale(false);
-    setInitXAxisScale(tmp_pair);
-    setInitYAxisScale(tmp_pair);
+  std::pair<double, double> tmp_pair = make_pair(0,0);
+  setXAxisScale(tmp_pair);
+  setYAxisScale(tmp_pair);
+  useCustomXAxisScale(false);
+  useCustomYAxisScale(false);
+  setInitXAxisScale(tmp_pair);
+  setInitYAxisScale(tmp_pair);
 }
 
 void HistoOptionsWidget::setBinWidth(const double width) {
@@ -233,9 +233,11 @@ bool HistoOptionsWidget::configurationChanged() {
     if (oldXAxisScale!=getXAxisScale()) {
       confChanged = useCustomXAxisScale();
     }
+
     if (oldYAxisScale!=getYAxisScale()) {
       confChanged = confChanged || useCustomYAxisScale();
     }
+
     if(oldNbOfHistogramBins!=getNbOfHistogramBins() ||
         oldNbXGraduations!=getNbXGraduations() ||
         oldYAxisIncrementStep!=getYAxisIncrementStep() ||
@@ -271,13 +273,16 @@ bool HistoOptionsWidget::configurationChanged() {
     oldYAxisScale=getYAxisScale();
 
     if (_ui->useXMinSpinBox->value() > initXAxisScale.first)
-        _ui->useXMinSpinBox->setValue(initXAxisScale.first);
+      _ui->useXMinSpinBox->setValue(initXAxisScale.first);
+
     if (_ui->useXMaxSpinBox->value() < initXAxisScale.second)
-        _ui->useXMaxSpinBox->setValue(initXAxisScale.second);
+      _ui->useXMaxSpinBox->setValue(initXAxisScale.second);
+
     if (_ui->useYMinSpinBox->value() > initYAxisScale.first)
-        _ui->useYMinSpinBox->setValue(initYAxisScale.first);
+      _ui->useYMinSpinBox->setValue(initYAxisScale.first);
+
     if (_ui->useYMaxSpinBox->value() < initYAxisScale.second)
-        _ui->useYMaxSpinBox->setValue(initYAxisScale.second);
+      _ui->useYMaxSpinBox->setValue(initYAxisScale.second);
   }
 
   return confChanged;
