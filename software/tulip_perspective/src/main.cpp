@@ -244,6 +244,7 @@ int main(int argc,char **argv) {
 #endif
 
   QIcon icon = progress->windowIcon();
+
   if (! iconPath.isEmpty()) {
     QString iconFullPath = QString::fromUtf8(TulipBitmapDir.c_str()) + iconPath;
     QIcon tmp(iconFullPath);
