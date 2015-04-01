@@ -15,4 +15,4 @@ TARGET_LINK_LIBRARIES(GMLExport-${TulipVersion} ${LibTulipCoreName})
 ADD_CORE_FILES(CMakeLists.txt GMLExport.cpp)
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS GMLExport-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT GMLExport)
+INSTALL(TARGETS GMLExport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT GMLExport)
