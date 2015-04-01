@@ -3537,6 +3537,27 @@ Creates and returns a new empty graph.
 
 //===========================================================================================
 
+tlp::Graph *loadGraph(const std::string &filename, tlp::Graph *newGraph);
+%Docstring
+tlp.loadGraph(filename[, graph = None])
+
+Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
+Returns the graph (a new graph if none is provided) or :const:`None` if the import fails.
+
+:param filename: the path to the tlp file
+:type filename: string
+:param graph: if provided, import new graph elements in that already existing graph
+:type newGraph: :class:`tlp.Graph`
+:rtype: :class:`tlp.Graph`
+%End
+%MethodCode
+	tlp::DataSet dataSet;
+	dataSet.set<std::string>("file::filename", *a0);
+	sipRes = tlp::importGraph("TLP Import", dataSet, 0, a1);
+%End
+
+//===========================================================================================
+
 tlp::Graph *loadGraph(const std::string &filename) /TransferBack/;
 %Docstring
 tlp.loadGraph(filename)
@@ -3634,7 +3655,6 @@ Returns a new graph or None if the import fails.
 		PyErr_SetString(PyExc_Exception, msg.c_str());
 	}	
 %End
-
 
 //===========================================================================================
 
