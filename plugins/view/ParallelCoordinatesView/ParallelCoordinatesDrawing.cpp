@@ -257,17 +257,17 @@ void ParallelCoordinatesDrawing::destroyAxisIfNeeded() {
 }
 
 void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget,
-    GlProgressBar *progressBar) {
+					     GlProgressBar *progressBar) {
   Color color;
   computeResizeFactor();
 
   int currentStep = 0;
-  int maxStep = graphProxy->numberOfNodes();
-  int drawStep = maxStep / 20;
+  int maxStep = graphProxy->getDataCount();
+  int drawStep = maxStep / 100;
 
   if (progressBar) {
     progressBar->setComment("Updating parallel coordinates ...");
-    progressBar->progress(0, graphProxy->numberOfNodes());
+    progressBar->progress(0, maxStep);
     glWidget->draw();
     // needed to display progressBar
     QApplication::processEvents();
@@ -291,9 +291,8 @@ void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget,
     }
 
     plotData(dataId, color);
-    ++currentStep;
 
-    if (progressBar && currentStep % drawStep == 0) {
+    if (progressBar && (++currentStep % drawStep == 0)) {
       progressBar->progress(currentStep, maxStep);
       glWidget->draw();
       // needed to display progressBar
