@@ -11,7 +11,7 @@ ADD_LIBRARY(Planarity-${TulipVersion} SHARED ${Planarity_SRCS})
 TARGET_LINK_LIBRARIES(Planarity-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS Planarity-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
+INSTALL(TARGETS Planarity-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
 
 
 ##----------------------------------------------------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ ADD_LIBRARY(Simple-${TulipVersion} SHARED ${Simple_SRCS})
 TARGET_LINK_LIBRARIES(Simple-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS Simple-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
+INSTALL(TARGETS Simple-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Tree_SRCS
@@ -34,7 +34,7 @@ ADD_LIBRARY(Tree-${TulipVersion} SHARED ${Tree_SRCS})
 TARGET_LINK_LIBRARIES(Tree-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS Tree-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
+INSTALL(TARGETS Tree-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Connected_SRCS
@@ -45,7 +45,7 @@ ADD_LIBRARY(Connected-${TulipVersion} SHARED ${Connected_SRCS})
 TARGET_LINK_LIBRARIES(Connected-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS Connected-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
+INSTALL(TARGETS Connected-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Biconnected_SRCS
@@ -56,7 +56,7 @@ ADD_LIBRARY(Biconnected-${TulipVersion} SHARED ${Biconnected_SRCS})
 TARGET_LINK_LIBRARIES(Biconnected-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS Biconnected-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
+INSTALL(TARGETS Biconnected-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Triconnected_SRCS
@@ -67,7 +67,7 @@ ADD_LIBRARY(Triconnected-${TulipVersion} SHARED ${Triconnected_SRCS})
 TARGET_LINK_LIBRARIES(Triconnected-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS Triconnected-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
+INSTALL(TARGETS Triconnected-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Outerplanar_SRCS
@@ -78,7 +78,7 @@ ADD_LIBRARY(Outerplanar-${TulipVersion} SHARED ${Outerplanar_SRCS})
 TARGET_LINK_LIBRARIES(Outerplanar-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS Outerplanar-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
+INSTALL(TARGETS Outerplanar-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Acyclic_SRCS
@@ -89,4 +89,4 @@ ADD_LIBRARY(Acyclic-${TulipVersion} SHARED ${Acyclic_SRCS})
 TARGET_LINK_LIBRARIES(Acyclic-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS Acyclic-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
+INSTALL(TARGETS Acyclic-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)

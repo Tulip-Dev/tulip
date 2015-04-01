@@ -42,4 +42,4 @@ ParallelResource.qrc
 ADD_LIBRARY(ParallelCoordinatesView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
 TARGET_LINK_LIBRARIES(ParallelCoordinatesView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
-INSTALL(TARGETS ParallelCoordinatesView-${TulipVersion} DESTINATION ${TulipViewPluginsInstallDir} COMPONENT ParallelCoordinatesView)
+INSTALL(TARGETS ParallelCoordinatesView-${TulipVersion} RUNTIME DESTINATION ${TulipViewPluginsInstallDir} COMPONENT ParallelCoordinatesView)
