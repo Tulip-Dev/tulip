@@ -10,4 +10,4 @@ SET(LIB_SRCS
 ADD_LIBRARY(EdgeBundling-${TulipVersion} SHARED ${LIB_SRCS})
 TARGET_LINK_LIBRARIES(EdgeBundling-${TulipVersion} ${LibTulipCoreName})
 
-INSTALL(TARGETS EdgeBundling-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT EdgeBundling)
+INSTALL(TARGETS EdgeBundling-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT EdgeBundling)

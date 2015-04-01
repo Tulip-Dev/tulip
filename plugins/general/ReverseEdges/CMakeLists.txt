@@ -11,5 +11,5 @@ SET(PLUGIN_SRCS
 ADD_LIBRARY(${PLUGIN_NAME}-${TulipVersion} SHARED ${PLUGIN_SRCS})
 TARGET_LINK_LIBRARIES(${PLUGIN_NAME}-${TulipVersion} ${LibTulipCoreName})
 
-INSTALL(TARGETS ${PLUGIN_NAME}-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir})
+INSTALL(TARGETS ${PLUGIN_NAME}-${TulipVersion} DESTINATION ${TulipPluginsInstallDir})
 
