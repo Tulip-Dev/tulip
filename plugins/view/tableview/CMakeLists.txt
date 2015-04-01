@@ -23,5 +23,5 @@ ADD_LIBRARY(TableView-${TulipVersion} SHARED ${LIB_SRCS} ${MOC_SRCS} ${UI_SRCS} 
 
 TARGET_LINK_LIBRARIES(TableView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
-INSTALL(TARGETS TableView-${TulipVersion} DESTINATION ${TulipViewPluginsInstallDir} COMPONENT TableView)
+INSTALL(TARGETS TableView-${TulipVersion} RUNTIME DESTINATION ${TulipViewPluginsInstallDir} COMPONENT TableView)
 

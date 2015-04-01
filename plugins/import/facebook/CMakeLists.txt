@@ -16,6 +16,6 @@ INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/facebook.py DESTINATION ${TulipLibInst
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulip_facebook.py DESTINATION ${TulipLibInstallDir}/python COMPONENT FacebookImport)
 ENDIF()
 
-INSTALL(TARGETS FacebookImport-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT FacebookImport)
+INSTALL(TARGETS FacebookImport-${TulipVersion} RUNTIME DESTINATION ${TulipPluginsInstallDir} COMPONENT FacebookImport)
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)
