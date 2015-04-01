@@ -257,7 +257,7 @@ void ParallelCoordinatesDrawing::destroyAxisIfNeeded() {
 }
 
 void ParallelCoordinatesDrawing::plotAllData(GlMainWidget *glWidget,
-					     GlProgressBar *progressBar) {
+    GlProgressBar *progressBar) {
   Color color;
   computeResizeFactor();
 

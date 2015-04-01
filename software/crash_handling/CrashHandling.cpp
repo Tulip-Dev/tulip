@@ -40,7 +40,7 @@ void setDumpPath(string s) {
 static std::string SYMBOLS_SEARCH_PATHS = "";
 
 void setExtraSymbolsSearchPaths(const std::string &searchPaths) {
- SYMBOLS_SEARCH_PATHS = searchPaths;
+  SYMBOLS_SEARCH_PATHS = searchPaths;
 }
 
 #endif

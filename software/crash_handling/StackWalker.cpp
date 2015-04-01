@@ -479,6 +479,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   HANDLE thread = GetCurrentThread();
 
   SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_UNDNAME);
+
   if (!SymInitialize(process, NULL, TRUE)) {
     std::cerr << "Failed to init symbol context" << std::endl;
     return;
@@ -486,10 +487,11 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
   const int bufferSize = 2048;
   char searchPaths[bufferSize];
+
   if (!extraSymbolsSearchPaths.empty() && SymGetSearchPath(process, searchPaths, bufferSize)) {
-      std::string searchPathsStr(searchPaths);
-      searchPathsStr = extraSymbolsSearchPaths + ";" + searchPathsStr;
-      SymSetSearchPath(process, searchPathsStr.c_str());
+    std::string searchPathsStr(searchPaths);
+    searchPathsStr = extraSymbolsSearchPaths + ";" + searchPathsStr;
+    SymSetSearchPath(process, searchPathsStr.c_str());
   }
 
   STACKFRAME        stack;
