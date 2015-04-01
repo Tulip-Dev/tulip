@@ -35,6 +35,16 @@ void setDumpPath(string s) {
   TULIP_DUMP_FILE = s;
 }
 
+#ifdef _MSC_VER
+
+static std::string SYMBOLS_SEARCH_PATHS = "";
+
+void setExtraSymbolsSearchPaths(const std::string &searchPaths) {
+ SYMBOLS_SEARCH_PATHS = searchPaths;
+}
+
+#endif
+
 /*
   Linux/MacOS-specific handling
  */
@@ -159,7 +169,6 @@ exception_filter(LPEXCEPTION_POINTERS info) {
   return 1;
 }
 
-
 void start_crash_handler() {
   SetUnhandledExceptionFilter(exception_filter);
 }
@@ -169,6 +178,7 @@ void start_crash_handler() {
 static LONG WINAPI
 exception_filter(LPEXCEPTION_POINTERS info) {
   StackWalkerMSVC sw;
+  sw.setExtraSymbolsSearchPaths(SYMBOLS_SEARCH_PATHS);
   sw.setContext(info->ContextRecord);
 
   std::ofstream os;

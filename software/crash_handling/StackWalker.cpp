@@ -479,8 +479,18 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   HANDLE thread = GetCurrentThread();
 
   SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_UNDNAME);
-  SymInitialize(process, NULL, TRUE);
+  if (!SymInitialize(process, NULL, TRUE)) {
+    std::cerr << "Failed to init symbol context" << std::endl;
+    return;
+  }
 
+  const int bufferSize = 2048;
+  char searchPaths[bufferSize];
+  if (!extraSymbolsSearchPaths.empty() && SymGetSearchPath(process, searchPaths, bufferSize)) {
+      std::string searchPathsStr(searchPaths);
+      searchPathsStr = extraSymbolsSearchPaths + ";" + searchPathsStr;
+      SymSetSearchPath(process, searchPathsStr.c_str());
+  }
 
   STACKFRAME        stack;
   ULONG               frame;
@@ -556,7 +566,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       symbol_name = symbol->Name;
     }
 
-    if (SymGetLineFromAddr( process, stack.AddrPC.Offset - 1, &displacement2, &image_line )) {
+    if (SymGetLineFromAddr( process, stack.AddrPC.Offset, &displacement2, &image_line )) {
       file_name = image_line.FileName;
       line = image_line.LineNumber;
     }

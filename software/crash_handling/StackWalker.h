@@ -144,12 +144,16 @@ public:
   ~StackWalkerMSVC();
 
   void printCallStack(std::ostream &os, unsigned int maxDepth = 50);
+  void setExtraSymbolsSearchPaths(const std::string &searchPaths) {
+    extraSymbolsSearchPaths = searchPaths;
+  }
   void setContext(CONTEXT *context) {
     this->context = context;
   }
 
 private :
   CONTEXT *context;
+  std::string extraSymbolsSearchPaths;
 };
 
 #endif
