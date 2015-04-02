@@ -1,6 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
-SET(PLUGIN_NAME reverseedges)
+SET(PLUGIN_NAME ReverseEdges)
 
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipGUIInclude})
 
