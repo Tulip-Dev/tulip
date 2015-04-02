@@ -267,3 +267,13 @@ IF(WIN32)
   ENDMACRO(INSTALL_EXTERNAL_LIB_IF_NEEDED)
 
 ENDIF(WIN32)
+
+# Tulip Plugin install macro (its purpose is to disable the installation of MinGW import libraries)
+MACRO(INSTALL_TULIP_PLUGIN plugin_target destination)
+SET(COMPONENT_NAME ${plugin_target})
+STRING(REPLACE "-${TulipVersion}" "" COMPONENT_NAME "${COMPONENT_NAME}")
+INSTALL(TARGETS ${plugin_target}
+        RUNTIME DESTINATION ${destination}
+        LIBRARY DESTINATION ${destination}
+        COMPONENT ${COMPONENT_NAME})
+ENDMACRO(INSTALL_TULIP_PLUGIN)

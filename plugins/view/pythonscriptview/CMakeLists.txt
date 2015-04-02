@@ -36,7 +36,7 @@ TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${QT_LIBRARIES})
 TARGET_LINK_LIBRARIES(pythonscriptview-${TulipVersion} ${PYTHON_LIBRARY})
 
 
-INSTALL(TARGETS pythonscriptview-${TulipVersion} DESTINATION ${TulipViewPluginsInstallDir} COMPONENT tulip_python)
+INSTALL_TULIP_PLUGIN(pythonscriptview-${TulipVersion} ${TulipViewPluginsInstallDir})
 
 
 ENDIF(SIP_OK)

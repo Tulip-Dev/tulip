@@ -54,10 +54,10 @@ ADD_LIBRARY(QuotientClustering-${TulipVersion} SHARED ${QuotientClustering_SRCS}
 TARGET_LINK_LIBRARIES(QuotientClustering-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-INSTALL(TARGETS StrengthClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT StrengthClustering)
-INSTALL(TARGETS HierarchicalClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT HierarchicalClustering)
+INSTALL_TULIP_PLUGIN(StrengthClustering-${TulipVersion} ${TulipPluginsInstallDir})
+INSTALL_TULIP_PLUGIN(HierarchicalClustering-${TulipVersion} ${TulipPluginsInstallDir})
 IF(NOT BUILD_CORE_ONLY)
-INSTALL(TARGETS ConvolutionClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT ConvolutionClustering)
+INSTALL_TULIP_PLUGIN(ConvolutionClustering-${TulipVersion} ${TulipPluginsInstallDir})
 ENDIF(NOT BUILD_CORE_ONLY)
-INSTALL(TARGETS EqualValueClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT EqualValueClustering)
-INSTALL(TARGETS QuotientClustering-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT QuotientClustering)
+INSTALL_TULIP_PLUGIN(EqualValueClustering-${TulipVersion} ${TulipPluginsInstallDir})
+INSTALL_TULIP_PLUGIN(QuotientClustering-${TulipVersion} ${TulipPluginsInstallDir})

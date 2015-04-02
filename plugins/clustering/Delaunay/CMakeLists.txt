@@ -6,5 +6,5 @@ TARGET_LINK_LIBRARIES(Delaunay-${TulipVersion} ${LibTulipCoreName})
 ADD_LIBRARY(Voronoi-${TulipVersion} SHARED VoronoiDiagram.cpp)
 TARGET_LINK_LIBRARIES(Voronoi-${TulipVersion} ${LibTulipCoreName})
 
-INSTALL(TARGETS Delaunay-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT DelaunayTriangulation)
-INSTALL(TARGETS Voronoi-${TulipVersion} DESTINATION ${TulipPluginsInstallDir} COMPONENT VoronoiDiagram)
+INSTALL_TULIP_PLUGIN(Delaunay-${TulipVersion} ${TulipPluginsInstallDir})
+INSTALL_TULIP_PLUGIN(Voronoi-${TulipVersion} ${TulipPluginsInstallDir})
