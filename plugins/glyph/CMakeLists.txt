@@ -3,7 +3,7 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclu
 MACRO(GLYPH name source)
   ADD_LIBRARY(${name}-${TulipVersion} SHARED ${source})
   TARGET_LINK_LIBRARIES(${name}-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName})
-  INSTALL(TARGETS ${name}-${TulipVersion} DESTINATION ${TulipGlyphPluginsInstallDir} COMPONENT ${name})
+  INSTALL_TULIP_PLUGIN(${name}-${TulipVersion} ${TulipGlyphPluginsInstallDir})
 ENDMACRO(GLYPH)
 
 GLYPH(Cone cone.cpp)

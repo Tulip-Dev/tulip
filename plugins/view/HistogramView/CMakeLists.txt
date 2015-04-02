@@ -39,4 +39,4 @@ HistogramResource.qrc
 ADD_LIBRARY(HistogramView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
 TARGET_LINK_LIBRARIES(HistogramView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY})
 
-INSTALL(TARGETS HistogramView-${TulipVersion} DESTINATION ${TulipViewPluginsInstallDir} COMPONENT HistogramView)
+INSTALL_TULIP_PLUGIN(HistogramView-${TulipVersion} ${TulipViewPluginsInstallDir})
