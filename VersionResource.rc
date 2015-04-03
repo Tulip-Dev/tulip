@@ -6,10 +6,12 @@
  * Report bugs and download new versions at https://github.com/halex2005/CMakeHelpers
  */
 
-#include "VersionInfo.h"
+#include "@VERSION_HEADER@"
 #include <windows.h>
 
+#if defined(APP_HAS_ICON)
 IDI_ICON1               ICON                    PRODUCT_ICON
+#endif
 
 LANGUAGE LANG_ENGLISH, SUBLANG_DEFAULT
 
