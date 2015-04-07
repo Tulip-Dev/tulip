@@ -123,7 +123,7 @@ public:
   PLUGININFORMATION( "File System Directory", "Auber", "16/12/2002", "Imports a tree representation of a file system directory.", "2.2", "Misc")
   FileSystem(tlp::PluginContext* context):ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
     _fileNames(NULL), _isDir(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL),
-    _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL), _sizes(NULL), _useIcons(true), _treeLayout(true), _fontAwesomeIcon(NULL), dirColor(255, 255, 127, 128) {
+    _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL), _sizes(NULL), _fontAwesomeIcon(NULL), _useIcons(true), _treeLayout(true), dirColor(255, 255, 127, 128) {
     addInParameter<std::string>("dir::directory", paramHelp[0],"");
     addInParameter<bool>("icons", paramHelp[1],"true");
     addInParameter<bool>("tree layout", paramHelp[2],"true");
