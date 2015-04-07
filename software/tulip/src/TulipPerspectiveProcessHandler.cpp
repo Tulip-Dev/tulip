@@ -68,7 +68,7 @@ TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
 
 QProcess *TulipPerspectiveProcessHandler::fromId(unsigned int id) {
   foreach(QProcess* k, _processInfos.keys()) {
-    if (_processInfos[k]._perspectiveId == id)
+    if (_processInfos[k]._perspectiveId == (time_t) id)
       return k;
   }
   return NULL;
