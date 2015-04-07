@@ -60,8 +60,8 @@ ENDIF(APPLE)
 ## Tulip version variables
 ## ========================================================
 SET(TulipMajorVersion 4)
-SET(TulipMinorVersion 6)
-SET(TulipReleaseVersion 1)
+SET(TulipMinorVersion 7)
+SET(TulipReleaseVersion 0)
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
   SET(TulipVersionSeparator _)
