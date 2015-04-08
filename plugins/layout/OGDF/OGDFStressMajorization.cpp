@@ -19,7 +19,7 @@
 
 #include <ogdf/energybased/StressMajorizationSimple.h>
 
-#include <tulip/tulip2ogdf/OGDFLayoutPluginBase.h>
+#include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 // comments below have been extracted from OGDF/src/energybased/StressMajorizationSimple.cpp
 /** \addtogroup layout */

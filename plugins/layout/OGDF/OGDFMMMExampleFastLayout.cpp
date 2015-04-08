@@ -18,7 +18,7 @@
  */
 #include <ogdf/energybased/multilevelmixer/MMMExampleFastLayout.h>
 
-#include <tulip/tulip2ogdf/OGDFLayoutPluginBase.h>
+#include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 // comments below have been extracted from OGDF/src/energybased/multilevelmixer/MMEExampleFastLayout.cpp
 /** \addtogroup layout */

@@ -23,7 +23,7 @@ INSTALL(TARGETS ${LibTulipOGDFName}
        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_ogdf)
 
 INSTALL(FILES
-  tulip/tulip2ogdf/OGDFLayoutPluginBase.h
-  tulip/tulip2ogdf/TulipToOGDF.h
-DESTINATION ${TulipIncludeInstallDir}/tulip/tulip2ogdf/
+  tulip2ogdf/OGDFLayoutPluginBase.h
+  tulip2ogdf/TulipToOGDF.h
+DESTINATION ${TulipIncludeInstallDir}/tulip2ogdf/
 COMPONENT tulip_ogdf_dev)

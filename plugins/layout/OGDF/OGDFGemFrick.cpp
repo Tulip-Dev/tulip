@@ -19,7 +19,7 @@
 
 #include <ogdf/energybased/GEMLayout.h>
 
-#include <tulip/tulip2ogdf/OGDFLayoutPluginBase.h>
+#include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 #include <tulip/StringCollection.h>
 
