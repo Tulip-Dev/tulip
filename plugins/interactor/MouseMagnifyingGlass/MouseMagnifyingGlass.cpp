@@ -40,8 +40,6 @@
 using namespace std;
 using namespace tlp;
 
-const float boxHalfSize = 200;
-
 MouseMagnifyingGlassInteractor::MouseMagnifyingGlassInteractor(const tlp::PluginContext*) : GLInteractorComposite(QIcon(":/i_magnifying_glass.png"), "Magnifying glass") {}
 
 void MouseMagnifyingGlassInteractor::construct() {
