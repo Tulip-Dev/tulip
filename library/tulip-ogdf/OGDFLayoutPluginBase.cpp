@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "tulip/tulip2ogdf/OGDFLayoutPluginBase.h"
+#include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 #include <vector>
 #include <tulip/DrawingTools.h>
@@ -32,7 +32,7 @@ OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PluginContext* context, og
 }
 
 OGDFLayoutPluginBase::~OGDFLayoutPluginBase() {
-  delete tlpToOGDF;
+    delete tlpToOGDF;
   delete ogdfLayoutAlgo;
 }
 

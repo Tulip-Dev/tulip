@@ -17,7 +17,7 @@
  *
  */
 #include <ogdf/upward/UpwardPlanarizationLayout.h>
-#include <tulip/tulip2ogdf/OGDFLayoutPluginBase.h>
+#include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 // comments below have been extracted from OGDF/src/upward/UpwardPlanarizationLayout.h
 /** \addtogroup layout */

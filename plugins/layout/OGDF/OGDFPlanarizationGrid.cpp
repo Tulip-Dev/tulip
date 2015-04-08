@@ -22,7 +22,7 @@
 #include <ogdf/planarity/FixedEmbeddingInserter.h>
 #include <ogdf/planarity/VariableEmbeddingInserter.h>
 
-#include <tulip/tulip2ogdf/OGDFLayoutPluginBase.h>
+#include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 #include <tulip/StringCollection.h>
 
