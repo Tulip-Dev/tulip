@@ -20,7 +20,7 @@
 
 #include <tulip/StringCollection.h>
 
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
+#include <tulip/tulip2ogdf/OGDFLayoutPluginBase.h>
 
 #define ELT_SETTINGS "Settings"
 #define ELT_SETTINGSLIST "Standard;Repulse;Planar"

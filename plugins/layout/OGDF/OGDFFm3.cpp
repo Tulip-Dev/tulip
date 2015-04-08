@@ -20,7 +20,7 @@
 #include <tulip/ForEach.h>
 #include <tulip/StringCollection.h>
 
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
+#include <tulip/tulip2ogdf/OGDFLayoutPluginBase.h>
 #include <ogdf/energybased/FMMMLayout.h>
 
 using namespace std;

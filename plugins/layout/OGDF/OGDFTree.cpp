@@ -18,7 +18,7 @@
  */
 #include <ogdf/tree/TreeLayout.h>
 
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
+#include <tulip/tulip2ogdf/OGDFLayoutPluginBase.h>
 
 #include <tulip/StringCollection.h>
 

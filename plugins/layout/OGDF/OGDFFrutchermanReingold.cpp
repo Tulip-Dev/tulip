@@ -18,7 +18,7 @@
  */
 
 #include <ogdf/energybased/SpringEmbedderFRExact.h>
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
+#include <tulip/tulip2ogdf/OGDFLayoutPluginBase.h>
 #include <tulip/StringCollection.h>
 
 #define ELT_COOLING "Cooling function"

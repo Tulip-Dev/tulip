@@ -17,7 +17,7 @@
  *
  */
 
-#include "tulip2ogdf/TulipToOGDF.h"
+#include "tulip/tulip2ogdf/TulipToOGDF.h"
 #include <tulip/PropertyTypes.h>
 #include <tulip/LayoutProperty.h>
 #include <ogdf/basic/geometry.h>
