@@ -32,7 +32,7 @@ OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PluginContext* context, og
 }
 
 OGDFLayoutPluginBase::~OGDFLayoutPluginBase() {
-    delete tlpToOGDF;
+  delete tlpToOGDF;
   delete ogdfLayoutAlgo;
 }
 
