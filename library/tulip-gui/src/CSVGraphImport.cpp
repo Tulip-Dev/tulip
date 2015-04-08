@@ -26,8 +26,6 @@
 using namespace tlp;
 using namespace std;
 
-static const char minusChar = '-';
-
 CSVImportParameters::CSVImportParameters(unsigned int fromLine,unsigned int toLine,const vector<CSVColumn>& columns):fromLine(fromLine),toLine(toLine),columns(columns) {
 }
 

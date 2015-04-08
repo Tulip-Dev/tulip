@@ -46,7 +46,7 @@ using namespace std;
 using namespace tlp;
 
 namespace {
-const char* paramHelp[] = {
+static const char* paramHelp[] = {
 //LayoutAlgorithm
   HTML_HELP_OPEN() \
   HTML_HELP_DEF("Type", "LayoutProperty") \
@@ -100,8 +100,6 @@ private :
 
   int gridStepSize;
 
-  float width;
-  float gridCenter;
   TLP_HASH_MAP<tlp::Vec2i, bool> pointsSet;
   std::map<tlp::Graph*, tlp::Vec2i> newPlaces;
 

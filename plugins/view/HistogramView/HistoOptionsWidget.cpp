@@ -123,22 +123,22 @@ void HistoOptionsWidget::useCustomYAxisScale(const bool value) {
 std::pair<double, double> HistoOptionsWidget::getXAxisScale() const {
   return make_pair(_ui->useXMinSpinBox->value(), _ui->useXMaxSpinBox->value());
 }
-void HistoOptionsWidget::setXAxisScale(const std::pair<double, double> value) {
+void HistoOptionsWidget::setXAxisScale(const std::pair<double, double>& value) {
   _ui->useXMinSpinBox->setValue(value.first);
   _ui->useXMaxSpinBox->setValue(value.second);
 }
 std::pair<double, double> HistoOptionsWidget::getYAxisScale() const {
   return std::make_pair(_ui->useYMinSpinBox->value(), _ui->useYMaxSpinBox->value());
 }
-void HistoOptionsWidget::setYAxisScale(const std::pair<double, double> value) {
+void HistoOptionsWidget::setYAxisScale(const std::pair<double, double>& value) {
   _ui->useYMinSpinBox->setValue(value.first);
   _ui->useYMaxSpinBox->setValue(value.second);
 }
 
-void HistoOptionsWidget::setInitXAxisScale(const std::pair<double, double> value) {
+void HistoOptionsWidget::setInitXAxisScale(const std::pair<double, double>& value) {
   initXAxisScale = value;
 }
-void HistoOptionsWidget::setInitYAxisScale(const std::pair<double, double> value) {
+void HistoOptionsWidget::setInitYAxisScale(const std::pair<double, double>& value) {
   initYAxisScale = value;
 }
 

@@ -59,8 +59,6 @@ MouseLassoNodesSelectorInteractorComponent::MouseLassoNodesSelectorInteractorCom
 
 MouseLassoNodesSelectorInteractorComponent::~MouseLassoNodesSelectorInteractorComponent() {}
 
-const float POINT_RADIUS = 3.;
-
 // found on http://local.wasp.uwa.edu.au/~pbourke/geometry/insidepoly/
 bool pointInsidePolygon(const vector<Coord> &polygon, const Coord &point) {
   unsigned int i, j;
