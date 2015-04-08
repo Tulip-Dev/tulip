@@ -33,7 +33,7 @@
 
 #include <tulip/StringCollection.h>
 
-#include "tulip2ogdf/OGDFLayoutPluginBase.h"
+#include <tulip/tulip2ogdf/OGDFLayoutPluginBase.h>
 
 #define ELT_RANKING "Ranking"
 #define ELT_RANKINGLIST "LongestPathRanking;OptimalRanking;CoffmanGrahamRanking"

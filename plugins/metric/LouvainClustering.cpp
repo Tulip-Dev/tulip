@@ -115,7 +115,7 @@ private:
 };
 /*@}*/
 
-static double precision = 0.000001;
+static const double precision = 0.000001;
 
 //========================================================================================
 PLUGIN(LouvainClustering)
