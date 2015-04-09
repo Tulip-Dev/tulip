@@ -568,7 +568,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       symbol_name = symbol->Name;
     }
 
-    if (SymGetLineFromAddr( process, stack.AddrPC.Offset, &displacement2, &image_line )) {
+    if (SymGetLineFromAddr( process, stack.AddrPC.Offset - 1, &displacement2, &image_line )) {
       file_name = image_line.FileName;
       line = image_line.LineNumber;
     }
