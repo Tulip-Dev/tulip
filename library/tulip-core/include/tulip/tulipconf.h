@@ -143,8 +143,10 @@ static float strtof(const char* cptr, char** endptr) {
 #    define stdext __gnu_cxx
 #  if  (__GNUC_MINOR__ < 4 && __GNUC__ < 4)
 #    include <ext/stl_hash_fun.h>
-#  elif (__GNUC_MINOR__ < 3)
+#  elif (__GNUC_MINOR__ < 3 && __GNUC__ <= 4)
 #    include <ext/hash_fun.h>
+#  elif (__GNUC_MINOR__ > 3 && __GNUC__ >= 4)
+#    include <backward/hash_fun.h>
 #  endif
 #endif
 
