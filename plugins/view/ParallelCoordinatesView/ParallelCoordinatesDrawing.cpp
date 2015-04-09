@@ -98,7 +98,7 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
     float glWidth = (float) glWidget->getScene()->getBoundingBox().width();
     glWidget->getScene()->zoomFactor((glWidth - 50)/ glWidth);
     glWidget->draw();
-   // needed to display progressBar
+    // needed to display progressBar
     QApplication::processEvents();
   }
 
