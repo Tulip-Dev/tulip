@@ -245,6 +245,7 @@ void LouvainClustering::updateQuotient() {
   // to avoid a costly stableForEach
   unsigned int nbNodes = quotient.numberOfNodes();
   std::vector<node> nodesToDel;
+
   if (nbNodes > nbSubNodes)
     nodesToDel.reserve(nbNodes - nbSubNodes);
 
