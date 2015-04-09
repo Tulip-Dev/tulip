@@ -386,7 +386,7 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "NumericProperty" )       \
   HTML_HELP_DEF( "value", "An existing edge metric" )                 \
   HTML_HELP_BODY()              \
-  "An existing edge metric property"\
+  "An existing edge weight metric property. If it is not defined all edges have a weight of 1.0."\
   HTML_HELP_CLOSE()
 };
 }
@@ -406,7 +406,7 @@ bool LouvainClustering::run() {
 
   //Test if there is an edge in the graph
   if(m==0) {
-    pluginProgress->setError("Graph contains no edges");
+    pluginProgress->setError("Graph contains no usable edges");
     return false;
   }
 
