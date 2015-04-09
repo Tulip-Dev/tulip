@@ -94,8 +94,11 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
   if (progressBar) {
     progressBar->setComment("Creating parallel axes ...");
     progressBar->progress(0, selectedProperties.size());
+    glWidget->getScene()->centerScene();
+    float glWidth = (float) glWidget->getScene()->getBoundingBox().width();
+    glWidget->getScene()->zoomFactor((glWidth - 50)/ glWidth);
     glWidget->draw();
-    // needed to display progressBar
+   // needed to display progressBar
     QApplication::processEvents();
   }
 
