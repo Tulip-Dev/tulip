@@ -153,6 +153,11 @@ void ScatterPlot2DView::cleanupGlScene() {
 
   if (matrixComposite != NULL) {
     matrixComposite->reset(true);
+    // labelsComposite was added as a GlEntity of matrixComposite
+    // in buildScatterPlotsMatrix() (see below)
+    // so it has been deleted by the previous call and then
+    // we must ensure to use a new one if needed
+    labelsComposite = NULL;
     scatterPlotsMap.clear();
   }
 }
