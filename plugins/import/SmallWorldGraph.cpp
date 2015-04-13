@@ -142,8 +142,8 @@ public:
       }
 
       if (((i % 100) == 0) &&
-	  (pluginProgress->progress(i, nbNodes - 1)!=TLP_CONTINUE))
-	break;
+          (pluginProgress->progress(i, nbNodes - 1)!=TLP_CONTINUE))
+        break;
     }
 
     return  pluginProgress->state()!=TLP_CANCEL;

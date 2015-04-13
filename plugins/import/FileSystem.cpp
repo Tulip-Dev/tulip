@@ -207,8 +207,8 @@ public:
         if (fileInfos.isDir())
           fsStack.push_back(QPair<QString,tlp::node>(fileInfos.absoluteFilePath(),fileNode));
 
-	if ((++i % 100) == 0)
-	  pluginProgress->progress(i, entries.count());
+        if ((++i % 100) == 0)
+          pluginProgress->progress(i, entries.count());
       }
     }
 

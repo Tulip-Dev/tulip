@@ -451,9 +451,10 @@ bool EdgeBundling::run() {
       strm << "Computing iteration " << iteration + 1 << "/" << MAX_ITER;
       pluginProgress->setComment(strm.str());
       unsigned int i =
-	oriGraph->numberOfEdges() - vertexCoverGraph->numberOfEdges();
+        oriGraph->numberOfEdges() - vertexCoverGraph->numberOfEdges();
+
       if ((i % 10) == 0)
-	pluginProgress->progress(i, oriGraph->numberOfEdges());
+        pluginProgress->progress(i, oriGraph->numberOfEdges());
 
       //====================================
       //Select the destination nodes. We do not have to compute
