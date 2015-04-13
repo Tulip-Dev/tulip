@@ -131,10 +131,16 @@ WorkspacePanel::~WorkspacePanel() {
   }
 
   delete _ui;
+  // because of possible mis-synchronization of Qt events
+  // set it to NULL
+  // to avoid any invalid read in the eventFilter method
+  _ui = NULL;
 
   if (_view != NULL) {
     disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
     delete _view;
+    // same as above
+    _view = NULL;
   }
 }
 void WorkspacePanel::viewDestroyed() {
@@ -282,16 +288,20 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
     }
   }
 
-  if (obj == _ui->interactorsFrame && ev->type() == QEvent::Wheel) {
-    if (static_cast<QWheelEvent*>(ev)->delta()>0)
-      scrollInteractorsLeft();
-    else
-      scrollInteractorsRight();
-  }
+  // we must check _ui has not been deleted
+  // because of possible mis-synchronization of Qt events
+  if (_ui) {
+    if (obj == _ui->interactorsFrame && ev->type() == QEvent::Wheel) {
+      if (static_cast<QWheelEvent*>(ev)->delta()>0)
+	scrollInteractorsLeft();
+      else
+	scrollInteractorsRight();
+    }
 
 
-  if (obj == _ui->graphCombo && ev->type() == QEvent::Wheel) {
-    return true;
+    if (obj == _ui->graphCombo && ev->type() == QEvent::Wheel) {
+      return true;
+    }
   }
 
   return QWidget::eventFilter(obj,ev);
