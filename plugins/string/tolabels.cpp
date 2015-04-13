@@ -81,7 +81,8 @@ public:
       node n;
       forEach(n, selection ? selection->getNonDefaultValuatedNodes() : graph->getNodes()) {
         if ((++step % 100) == 0)
-	  pluginProgress->progress(step, max_step);
+          pluginProgress->progress(step, max_step);
+
         result->setNodeValue(n,input->getNodeStringValue(n));
       }
     }
@@ -92,7 +93,8 @@ public:
       edge e;
       forEach(e, selection ? selection->getNonDefaultValuatedEdges() : graph->getEdges()) {
         if ((++step % 100) == 0)
-	  pluginProgress->progress(step, max_step);
+          pluginProgress->progress(step, max_step);
+
         result->setEdgeValue(e,input->getEdgeStringValue(e));
       }
     }

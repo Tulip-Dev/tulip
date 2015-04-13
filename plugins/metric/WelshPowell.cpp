@@ -75,8 +75,9 @@ public:
   bool hasNeighbourColoredWith(const node n, const int color) {
     node u;
     forEach(u, graph->getInOutNodes(n))
-      if (result->getNodeValue(u) == color)
-	return true;
+
+    if (result->getNodeValue(u) == color)
+      return true;
 
     return false;
   }
@@ -86,7 +87,7 @@ public:
     node n;
     unsigned int i = 0;
     forEach(n,graph->getNodes())
-      toSort[i++]=n;
+    toSort[i++]=n;
     CompNodes cmp(graph);
     sort(toSort.begin(),toSort.end(),cmp);
 
@@ -101,27 +102,31 @@ public:
       cout << "nbColored :"  << numberOfColoredNodes << endl;
 #endif
       unsigned int nextMaxIndex = minIndex;
+
       for(unsigned int i= minIndex; i < maxIndex; ++i) {
 #ifndef NDEBUG
         cout << "i:" <<  i << endl;
 #endif
-	node n = toSort[i];
+        node n = toSort[i];
+
         if (result->getNodeValue(n) == -1) {
-	  if (!hasNeighbourColoredWith(n, currentColor)) {
+          if (!hasNeighbourColoredWith(n, currentColor)) {
 #ifndef NDEBUG
-	    cout << "new node found color : " << currentColor << endl;
+            cout << "new node found color : " << currentColor << endl;
 #endif
-	    result->setNodeValue(toSort[i], currentColor);
-	    ++numberOfColoredNodes;
-	    if (i == minIndex)
-	      ++minIndex;
-	  }
-	  else
-	    nextMaxIndex = i + 1;
-	}
-	else if (i == minIndex)
-	    ++minIndex;
+            result->setNodeValue(toSort[i], currentColor);
+            ++numberOfColoredNodes;
+
+            if (i == minIndex)
+              ++minIndex;
+          }
+          else
+            nextMaxIndex = i + 1;
+        }
+        else if (i == minIndex)
+          ++minIndex;
       }
+
       maxIndex = nextMaxIndex;
       ++currentColor;
     }

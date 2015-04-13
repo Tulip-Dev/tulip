@@ -154,6 +154,7 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
   forEach(e, graph->getEdges()) {
     if ((++i % 100) == 0)
       pp->progress(i,nb_elements);
+
     const pair<node, node>& ends = graph->ends(e);
     r->startEdge(e.id);
     Size s = sizes->getEdgeValue(e);
@@ -245,8 +246,10 @@ void ReadGraph::treatNodes(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
 
     Coord c = layout->getNodeValue(n);
     Size s = sizes->getNodeValue(n);
+
     if ((++i % 100) == 0)
       pp->progress(i,nb_elements);
+
     // Never change the call order of the methods below
     r->startNode(n.id);
     r->addColor(colors->getNodeValue(n));

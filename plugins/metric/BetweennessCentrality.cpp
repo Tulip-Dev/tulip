@@ -105,8 +105,8 @@ public:
 
     while(it->hasNext()) {
       if (((++count % 50) == 0) &&
-	  (pluginProgress->progress(count, nbNodes)!=TLP_CONTINUE))
-	break;
+          (pluginProgress->progress(count, nbNodes)!=TLP_CONTINUE))
+        break;
 
       node s = it->next();
       stack<node> S;

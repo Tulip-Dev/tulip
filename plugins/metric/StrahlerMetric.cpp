@@ -252,7 +252,7 @@ bool StrahlerMetric::run() {
 
     if (allNodes) {
       if (pluginProgress && ((++i % 100) == 0) &&
-	  (pluginProgress->progress(i, graph->numberOfNodes())!=TLP_CONTINUE)) break;
+          (pluginProgress->progress(i, graph->numberOfNodes())!=TLP_CONTINUE)) break;
 
       switch(computationTypes.getCurrent()) {
       case ALL:

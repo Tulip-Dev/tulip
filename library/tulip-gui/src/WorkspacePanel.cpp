@@ -293,9 +293,9 @@ bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
   if (_ui) {
     if (obj == _ui->interactorsFrame && ev->type() == QEvent::Wheel) {
       if (static_cast<QWheelEvent*>(ev)->delta()>0)
-	scrollInteractorsLeft();
+        scrollInteractorsLeft();
       else
-	scrollInteractorsRight();
+        scrollInteractorsRight();
     }
 
 
