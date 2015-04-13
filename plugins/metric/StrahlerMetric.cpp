@@ -239,6 +239,9 @@ bool StrahlerMetric::run() {
   Iterator<node> *itN=graph->getNodes();
   unsigned int i = 0;
 
+  if (pluginProgress)
+    pluginProgress->showPreview(false);
+
   while (itN->hasNext()) {
     node itn = itN->next();
     tofree[itn] = 0;
@@ -248,7 +251,8 @@ bool StrahlerMetric::run() {
     }
 
     if (allNodes) {
-      if (pluginProgress->progress(i++, graph->numberOfNodes())!=TLP_CONTINUE) break;
+      if (pluginProgress && ((++i % 100) == 0) &&
+	  (pluginProgress->progress(i, graph->numberOfNodes())!=TLP_CONTINUE)) break;
 
       switch(computationTypes.getCurrent()) {
       case ALL:

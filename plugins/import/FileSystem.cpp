@@ -196,10 +196,8 @@ public:
 
       int i = 0;
 
-      if (pluginProgress) {
-        pluginProgress->setComment("Reading contents of " + tlp::QStringToTlpString(currentDir.absolutePath()));
-        pluginProgress->progress(i, entries.count());
-      }
+      pluginProgress->setComment("Reading contents of " + tlp::QStringToTlpString(currentDir.absolutePath()));
+      pluginProgress->progress(i, entries.count());
 
       for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
         QFileInfo fileInfos(*it);
@@ -209,10 +207,8 @@ public:
         if (fileInfos.isDir())
           fsStack.push_back(QPair<QString,tlp::node>(fileInfos.absoluteFilePath(),fileNode));
 
-        if (pluginProgress) {
-          pluginProgress->progress(++i, entries.count());
-        }
-
+	if ((++i % 100) == 0)
+	  pluginProgress->progress(i, entries.count());
       }
     }
 

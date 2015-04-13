@@ -192,16 +192,14 @@ bool StrengthMetric::run() {
   if (maxSteps < 10)
     maxSteps = 10;
 
-  if (pluginProgress) {
-    pluginProgress->showPreview(false);
-    pluginProgress->setComment("Computing Strength metric on edges...");
-  }
+  pluginProgress->showPreview(false);
+  pluginProgress->setComment("Computing Strength metric on edges...");
 
   forEach(e, graph->getEdges()) {
     result->setEdgeValue(e, getEdgeValue(e));
 
-    if (pluginProgress && ((++steps % (maxSteps / 10)) == 0)) {
-      pluginProgress->progress(++steps, maxSteps);
+    if ((++steps % (maxSteps / 10)) == 0) {
+      pluginProgress->progress(steps, maxSteps);
 
       if (pluginProgress->state() !=TLP_CONTINUE)
         return pluginProgress->state()!= TLP_CANCEL;
@@ -218,8 +216,8 @@ bool StrengthMetric::run() {
   forEach(n, graph->getNodes()) {
     result->setNodeValue(n, getNodeValue(n));
 
-    if (pluginProgress && ((++steps % (maxSteps / 10)) == 0)) {
-      pluginProgress->progress(++steps, maxSteps);
+    if ((++steps % (maxSteps / 10)) == 0) {
+      pluginProgress->progress(steps, maxSteps);
 
       if (pluginProgress->state() !=TLP_CONTINUE)
         return pluginProgress->state()!= TLP_CANCEL;

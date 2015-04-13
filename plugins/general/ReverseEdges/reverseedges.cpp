@@ -45,10 +45,12 @@ bool ReverseEdges::run() {
   Iterator<edge>* ite =
     selection ? selection->getEdgesEqualTo(true) : graph->getEdges();
 
+  pluginProgress->showPreview(false);
+
   int step = 0, max_step = graph->numberOfEdges();
   edge e;
   forEach(e, ite) {
-    if (pluginProgress && ((++step % 10) == 0)) {
+    if ((++step % 100) == 0) {
       ProgressState state = pluginProgress->progress(step, max_step);
 
       if (state != TLP_CONTINUE)

@@ -72,51 +72,57 @@ public:
 
   WelshPowell(const tlp::PluginContext *context):DoubleAlgorithm(context) {}
 
-  bool hasNeightboColoredWith(const node n ,const int color, const MutableContainer<int> &colors) {
+  bool hasNeighbourColoredWith(const node n, const int color) {
     node u;
     forEach(u, graph->getInOutNodes(n))
-
-    if(colors.get(u.id) == color)
-      return true;
+      if (result->getNodeValue(u) == color)
+	return true;
 
     return false;
   }
 
   void colorize() {
-
     vector<node> toSort(graph->numberOfNodes());
     node n;
     unsigned int i = 0;
     forEach(n,graph->getNodes())
-    toSort[i++]=n;
+      toSort[i++]=n;
     CompNodes cmp(graph);
     sort(toSort.begin(),toSort.end(),cmp);
 
-    MutableContainer<int> colors;
-    colors.setAll(-1);
+    result->setAllNodeValue(-1);
     int currentColor = 0;
     unsigned int numberOfColoredNodes = 0;
+    unsigned int minIndex = 0;
+    unsigned int maxIndex = toSort.size();
 
-    while(numberOfColoredNodes != graph->numberOfNodes()) {
+    while (numberOfColoredNodes != graph->numberOfNodes()) {
 #ifndef NDEBUG
-      cerr << "nbColored :"  << numberOfColoredNodes << endl;
+      cout << "nbColored :"  << numberOfColoredNodes << endl;
 #endif
-
-      for(unsigned int i=0; i < toSort.size(); ++i) {
+      unsigned int nextMaxIndex = minIndex;
+      for(unsigned int i= minIndex; i < maxIndex; ++i) {
 #ifndef NDEBUG
-        cerr << "i:" <<  i << endl;
+        cout << "i:" <<  i << endl;
 #endif
-
-        if((colors.get(toSort[i].id) == -1) && (!hasNeightboColoredWith(toSort[i], currentColor, colors))) {
+	node n = toSort[i];
+        if (result->getNodeValue(n) == -1) {
+	  if (!hasNeighbourColoredWith(n, currentColor)) {
 #ifndef NDEBUG
-          cerr << "new node found color : " << currentColor << endl;
+	    cout << "new node found color : " << currentColor << endl;
 #endif
-          colors.set(toSort[i].id, currentColor);
-          result->setNodeValue(toSort[i], currentColor);
-          ++numberOfColoredNodes;
-        }
+	    result->setNodeValue(toSort[i], currentColor);
+	    ++numberOfColoredNodes;
+	    if (i == minIndex)
+	      ++minIndex;
+	  }
+	  else
+	    nextMaxIndex = i + 1;
+	}
+	else if (i == minIndex)
+	    ++minIndex;
       }
-
+      maxIndex = nextMaxIndex;
       ++currentColor;
     }
   }
