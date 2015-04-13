@@ -94,6 +94,7 @@ void GraphPerspective::reserveDefaultProperties() {
   registerReservedProperty("viewRotation");
   registerReservedProperty("viewSelection");
   registerReservedProperty("viewFont");
+  registerReservedProperty("viewFontAwesomeIcon");
   registerReservedProperty("viewFontSize");
   registerReservedProperty("viewTexture");
   registerReservedProperty("viewBorderColor");
