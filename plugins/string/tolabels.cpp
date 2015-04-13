@@ -73,12 +73,15 @@ public:
       dataSet->get("edges",onEdges);
     }
 
+    pluginProgress->showPreview(false);
+
     if (onNodes) {
       pluginProgress->setComment("Copying nodes values");
       int step=0,max_step = graph->numberOfNodes();
       node n;
       forEach(n, selection ? selection->getNonDefaultValuatedNodes() : graph->getNodes()) {
-        pluginProgress->progress(step++,max_step);
+        if ((++step % 100) == 0)
+	  pluginProgress->progress(step, max_step);
         result->setNodeValue(n,input->getNodeStringValue(n));
       }
     }
@@ -88,7 +91,8 @@ public:
       int step=0,max_step = graph->numberOfEdges();
       edge e;
       forEach(e, selection ? selection->getNonDefaultValuatedEdges() : graph->getEdges()) {
-        pluginProgress->progress(step++,max_step);
+        if ((++step % 100) == 0)
+	  pluginProgress->progress(step, max_step);
         result->setEdgeValue(e,input->getEdgeStringValue(e));
       }
     }

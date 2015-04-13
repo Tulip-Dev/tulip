@@ -221,7 +221,7 @@ public:
 
         result->setNodeValue(itn, size);
 
-        if ((iter % 100 == 0) &&
+        if ((++iter % 500 == 0) &&
             (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
           delete itN;
 
@@ -229,8 +229,6 @@ public:
 
           return false;
         }
-
-        ++iter;
       }
 
       delete itN;
@@ -239,14 +237,12 @@ public:
       forEach(e, graph->getEdges()) {
         result->setEdgeValue(e, entrySize->getEdgeValue(e));
 
-        if ((iter % 100 == 0) &&
+        if ((++iter % 500 == 0) &&
             (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
           if (!mappingType) delete tmp;
 
           return false;
         }
-
-        ++iter;
       }
     }
     else {
@@ -263,7 +259,7 @@ public:
         size[1] = static_cast<float>(sizos);
         result->setEdgeValue(ite, size);
 
-        if ((iter % 100 == 0) &&
+        if ((++iter % 500 == 0) &&
             (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
           delete itE;
 
@@ -271,8 +267,6 @@ public:
 
           return pluginProgress->state()!=TLP_CANCEL;
         }
-
-        ++iter;
       }
 
       delete itE;
@@ -281,14 +275,12 @@ public:
       forEach(n, graph->getNodes()) {
         result->setNodeValue(n, entrySize->getNodeValue(n));
 
-        if ((iter % 100 == 0) &&
+        if ((++iter % 500 == 0) &&
             (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
           if (!mappingType) delete tmp;
 
           return pluginProgress->state()!=TLP_CANCEL;
         }
-
-        ++iter;
       }
     }
 

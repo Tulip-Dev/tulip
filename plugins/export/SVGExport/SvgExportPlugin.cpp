@@ -163,6 +163,7 @@ public:
 
   bool exportGraph(ostream &os) {
 
+    pluginProgress->showPreview(false);
     RepresentExport *svg = new ExportSvg(); // We call our first concrete builder
     ReadGraph gr1(graph, dataSet, pluginProgress, svg); // We analyse the graph
     os << gr1; // We retrieve the result

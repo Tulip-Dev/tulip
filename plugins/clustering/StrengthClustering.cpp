@@ -390,7 +390,7 @@ bool StrengthClustering::run() {
       values->setEdgeValue(e, values->getEdgeValue(e)*(mult->getEdgeDoubleValue(e) + 1));
 
       if (pluginProgress && ((++steps % (maxSteps / 10) == 0))) {
-        pluginProgress->progress(++steps, maxSteps);
+        pluginProgress->progress(steps, maxSteps);
 
         if (pluginProgress->state() !=TLP_CONTINUE)
           return pluginProgress->state()!= TLP_CANCEL;

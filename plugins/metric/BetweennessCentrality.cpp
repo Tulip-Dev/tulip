@@ -98,10 +98,15 @@ public:
     if(graph->numberOfNodes()<=2) return true;
 
     Iterator<node> *it = graph->getNodes();
+    unsigned int nbNodes = graph->numberOfNodes();
     unsigned int count = 0;
 
+    pluginProgress->showPreview(false);
+
     while(it->hasNext()) {
-      if (pluginProgress->progress(count++,graph->numberOfNodes())!=TLP_CONTINUE) break;
+      if (((++count % 50) == 0) &&
+	  (pluginProgress->progress(count, nbNodes)!=TLP_CONTINUE))
+	break;
 
       node s = it->next();
       stack<node> S;
