@@ -33,10 +33,10 @@
 class DepthMetric :public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION("Depth","David Auber","15/02/2001",
-		    "For each node n on an acyclic graph,"
-		    "it computes the maximum path length between n and the other node."
-		    "<br><b>The graph must be acyclic<b>.",
-		    "1.1","Hierarchical")
+                    "For each node n on an acyclic graph,"
+                    "it computes the maximum path length between n and the other node."
+                    "<br><b>The graph must be acyclic<b>.",
+                    "1.1","Hierarchical")
   DepthMetric(const tlp::PluginContext* context);
   bool run();
   bool check(std::string &);

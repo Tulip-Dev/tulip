@@ -40,10 +40,10 @@ class LinLogAlgorithm : public tlp::LayoutAlgorithm {
 public :
 
   PLUGININFORMATION("LinLog", "B. Renoust","11/02/13",
-		    "Implements the LinLog layout algorithm, an energy model layout algorithm, first published as:<br/>"
-		    "<b>Energy Models for Graph Clustering</b>, Andreas Noack., "
-		    "Journal of Graph Algorithms and Applications 11(2):453-480, 2007.",
-		    "1.0","Force Directed");
+                    "Implements the LinLog layout algorithm, an energy model layout algorithm, first published as:<br/>"
+                    "<b>Energy Models for Graph Clustering</b>, Andreas Noack., "
+                    "Journal of Graph Algorithms and Applications 11(2):453-480, 2007.",
+                    "1.0","Force Directed");
 
   LinLogAlgorithm(const tlp::PluginContext *context);
 

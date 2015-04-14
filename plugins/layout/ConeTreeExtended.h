@@ -50,9 +50,9 @@
 class ConeTreeExtended:public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Cone Tree","David Auber","01/04/2001",
-		    "Implements an extension of the Cone tree layout algorithm first published as:<br/>"
-		    "<b>Interacting with Huge Hierarchies: Beyond Cone Trees </b>, A. FJ. Carriere and R. Kazman, InfoViz'95, IEEE Symposium on Information Visualization pages 74--78 (1995).",
-		    "1.0","Tree")
+                    "Implements an extension of the Cone tree layout algorithm first published as:<br/>"
+                    "<b>Interacting with Huge Hierarchies: Beyond Cone Trees </b>, A. FJ. Carriere and R. Kazman, InfoViz'95, IEEE Symposium on Information Visualization pages 74--78 (1995).",
+                    "1.0","Tree")
   ConeTreeExtended(const tlp::PluginContext* context);
   ~ConeTreeExtended();
   bool run();

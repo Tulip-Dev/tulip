@@ -33,7 +33,7 @@
 class SpanningTreeSelection:public tlp::BooleanAlgorithm {
 public:
   PLUGININFORMATION("Spanning Forest","David Auber","01/12/1999",
-		    "Selects a subgraph of a graph that is a forest (a set of trees).","1.0", "Selection")
+                    "Selects a subgraph of a graph that is a forest (a set of trees).","1.0", "Selection")
   SpanningTreeSelection(const tlp::PluginContext* context);
   ~SpanningTreeSelection();
   bool run();

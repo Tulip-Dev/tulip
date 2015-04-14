@@ -47,9 +47,9 @@ class EdgeBundling:public tlp::Algorithm {
 public:
   EdgeBundling(const tlp::PluginContext *);
   PLUGININFORMATION("Edge bundling","David Auber/ Romain Bourqui / Antoine Lambert","2010-...",
-		    "Edges routing algorithm, implementing the intuitive Edge Bundling technique published in :<br/>"
-		    "<b>Winding Roads: Routing edges into bundles</b>, Antoine Lambert, Romain Bourqui and David Auber, Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC Symposium on Visualization, pages 853-862 (2010).",
-		    "1.3","")
+                    "Edges routing algorithm, implementing the intuitive Edge Bundling technique published in :<br/>"
+                    "<b>Winding Roads: Routing edges into bundles</b>, Antoine Lambert, Romain Bourqui and David Auber, Computer Graphics Forum special issue on 12th Eurographics/IEEE-VGTC Symposium on Visualization, pages 853-862 (2010).",
+                    "1.3","")
   bool run();
 private:
   tlp::DoubleProperty* computeWeights(tlp::Graph *);
