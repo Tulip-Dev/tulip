@@ -101,10 +101,7 @@ PixelOrientedView::~PixelOrientedView() {
       delete zorderLayout;
     }
 
-    if (tulipNodeColorMapping != NULL) {
-      delete tulipNodeColorMapping;
-    }
-
+    delete tulipNodeColorMapping;
     delete pixelOrientedMediator;
     delete propertiesSelectionWidget;
     delete optionsWidget;
@@ -162,10 +159,8 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     isConstruct=true;
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
     propertiesSelectionWidget->enableEdgesButton(false);
-    connect(propertiesSelectionWidget, SIGNAL(applySettingsSignal()), this, SLOT(applySettings()));
     pixelOrientedMediator = new PixelOrientedMediator(spiralLayout, NULL);
     optionsWidget = new PixelOrientedOptionsWidget();
-    connect(optionsWidget, SIGNAL(applySettingsSignal()), this, SLOT(applySettings()));
     layoutFunctionsMap["Spiral"] = spiralLayout;
     setOverviewVisible(true);
   }
@@ -327,7 +322,6 @@ void PixelOrientedView::initLayoutFunctions() {
     delete hilbertLayout;
     delete squareLayout;
     delete zorderLayout;
-
   }
 
   hilbertLayout = new HilbertLayout((int) ceil(log(pixelOrientedGraph->numberOfNodes())/ log(4)));
@@ -624,7 +618,7 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
                       // use same green color as the highlighting one
                       // in workspace panel
                       Color(0xCB, 0xDE, 0x5D));
-  progressBar->setComment("Updating pixel oriented view ...");
+  progressBar->setComment("Updating pixel oriented view...");
   progressBar->progress(currentStep, nbOverviews);
   mainLayer->addGlEntity(progressBar, "progress bar");
   getGlMainWidget()->draw();
@@ -782,12 +776,12 @@ void PixelOrientedView::registerTriggers() {
     PropertyInterface *property=graph()->getProperty(it->next());
     addRedrawTrigger(property);
   }
+  delete it;
 }
 
 void PixelOrientedView::applySettings() {
   if(propertiesSelectionWidget->configurationChanged() || optionsWidget->configurationChanged()) {
     updateOverviews(true);
-    getGlMainWidget()->centerScene();
     draw();
   }
 }
