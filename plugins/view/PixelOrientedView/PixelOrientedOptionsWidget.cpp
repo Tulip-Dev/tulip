@@ -29,8 +29,7 @@ PixelOrientedOptionsWidget::PixelOrientedOptionsWidget(QWidget *parent) : QWidge
   _ui->setupUi(this);
   setBackgroundColor(Color(255,255,255));
   connect(_ui->backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
-  connect(_ui->applyButton,SIGNAL(clicked()),this,SLOT(applySettings()));
-}
+ }
 
 PixelOrientedOptionsWidget::~PixelOrientedOptionsWidget() {
   delete _ui;
