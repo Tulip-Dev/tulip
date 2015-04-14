@@ -52,16 +52,6 @@ private slots :
 
   void pressBackgroundColorButton();
 
-public slots :
-
-  void applySettings() {
-    emit(applySettingsSignal());
-  }
-
-signals :
-
-  void applySettingsSignal();
-
 private :
 
   bool oldValuesInitialized;
