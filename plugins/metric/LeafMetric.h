@@ -33,9 +33,9 @@
 class LeafMetric:public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION("Leaf","David Auber","20/12/1999",
-		    "Computes the number of leaves in the subtree induced by each node.<br/>"
-		    "<b>The graph must be acyclic</b>.",
-		    "1.0","Hierarchical")
+                    "Computes the number of leaves in the subtree induced by each node.<br/>"
+                    "<b>The graph must be acyclic</b>.",
+                    "1.0","Hierarchical")
   LeafMetric(const tlp::PluginContext* context);
   bool check(std::string &);
   bool run();

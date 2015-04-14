@@ -54,9 +54,9 @@ public:
                      "Yashvin Nababsing, Sebastien Leclerc, "
                      "Thibault Ruchon, Eric Dauchier",
                      "11/11/04",
-		     "It is a linear implementation of the Walker's tree layout improved algorithm described in<br/>"
-		     "<b>Improving Walker's Algorithm to Run in Linear Time</b>, Christoph Buchheim and Michael Junger and Sebastian Leipert (2002).",
-		     "1.0", "Tree")
+                     "It is a linear implementation of the Walker's tree layout improved algorithm described in<br/>"
+                     "<b>Improving Walker's Algorithm to Run in Linear Time</b>, Christoph Buchheim and Michael Junger and Sebastian Leipert (2002).",
+                     "1.0", "Tree")
   ImprovedWalker(const tlp::PluginContext* context);
   ~ImprovedWalker();
 

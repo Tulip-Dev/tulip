@@ -34,8 +34,8 @@
 class LoopSelection:public tlp::BooleanAlgorithm {
 public:
   PLUGININFORMATION("Loop Selection","David Auber","20/01/2003",
-		    "Selects loops in a graph.<br/>A loop is an edge that has the same source and target.",
-		    "1.0", "Selection")
+                    "Selects loops in a graph.<br/>A loop is an edge that has the same source and target.",
+                    "1.0", "Selection")
   LoopSelection(const tlp::PluginContext* context);
   bool run();
 };

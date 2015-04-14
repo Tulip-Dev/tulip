@@ -49,9 +49,9 @@ class HierarchicalGraph:public tlp::LayoutAlgorithm {
 
 public:
   PLUGININFORMATION("Hierarchical Graph","David Auber","23/05/2000",
-		    "Implements the hierarchical layout algorithm  first published as:<br/>"
-		    "<b>Tulip - A Huge Graph Visualization Framework</b>, D. Auber, Book. Graph Drawing Software. (Ed. Michael Junger & Petra Mutzel) pages 105--126. (2004).",
-		    "1.0","Hierarchical")
+                    "Implements the hierarchical layout algorithm  first published as:<br/>"
+                    "<b>Tulip - A Huge Graph Visualization Framework</b>, D. Auber, Book. Graph Drawing Software. (Ed. Michael Junger & Petra Mutzel) pages 105--126. (2004).",
+                    "1.0","Hierarchical")
   HierarchicalGraph(const tlp::PluginContext* context);
   ~HierarchicalGraph();
   bool run();

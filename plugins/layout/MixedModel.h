@@ -45,9 +45,9 @@
 class MixedModel : public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Mixed Model","Romain BOURQUI ","09/11/2005",
-		    "Implements the planar polyline graph drawing algorithm, the mixed model algorithm, first published as:<br/>"
-		    "<b>Planar Polyline Drawings with Good Angular Resolution</b>, C. Gutwenger and P. Mutzel, LNCS, Vol. 1547 pages 167--182 (1998).",
-		    "1.0","Planar")
+                    "Implements the planar polyline graph drawing algorithm, the mixed model algorithm, first published as:<br/>"
+                    "<b>Planar Polyline Drawings with Good Angular Resolution</b>, C. Gutwenger and P. Mutzel, LNCS, Vol. 1547 pages 167--182 (1998).",
+                    "1.0","Planar")
   MixedModel(const tlp::PluginContext* context);
   ~MixedModel();
   bool run();

@@ -66,11 +66,11 @@ class KCores:public tlp::DoubleAlgorithm {
 public:
 
   PLUGININFORMATION("K-Cores", "David Auber","28/05/2006",
-		    "Node partitioning measure based on the K-core decomposition of a graph.<br/>"
-		    "K-cores were first introduced in:<br/><b>Network structure and minimum degree</b>, S. B. Seidman, Social Networks 5:269-287 (1983).<br/>"
-		    "This is a method for simplifying a graph topology which helps in analysis and visualization of social networks.<br>"
-		    "<b>Note</b>: use the default parameters to compute simple K-Cores (undirected and unweighted).",
-		    "2.0", "Graph")
+                    "Node partitioning measure based on the K-core decomposition of a graph.<br/>"
+                    "K-cores were first introduced in:<br/><b>Network structure and minimum degree</b>, S. B. Seidman, Social Networks 5:269-287 (1983).<br/>"
+                    "This is a method for simplifying a graph topology which helps in analysis and visualization of social networks.<br>"
+                    "<b>Note</b>: use the default parameters to compute simple K-Cores (undirected and unweighted).",
+                    "2.0", "Graph")
 
   KCores(const tlp::PluginContext *context);
   ~KCores();
