@@ -30,6 +30,8 @@
 
 #include <algorithm>
 
+using namespace tlp;
+
 static const char * paramHelp[] = {
   // directory
   HTML_HELP_OPEN()            \
@@ -207,6 +209,12 @@ public:
 
         if ((++i % 100) == 0)
           pluginProgress->progress(i, entries.count());
+        if(pluginProgress->state()!=TLP_CANCEL) {
+            pluginProgress->setError("Import cancelled by user.");
+            return false;
+        }
+        if(pluginProgress->state()==TLP_STOP)
+            break;
       }
     }
 
