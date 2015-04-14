@@ -30,7 +30,6 @@
 
 #include <algorithm>
 
-namespace {
 static const char * paramHelp[] = {
   // directory
   HTML_HELP_OPEN()            \
@@ -41,7 +40,7 @@ static const char * paramHelp[] = {
   HTML_HELP_OPEN()            \
   HTML_HELP_DEF( "type", "boolean" )       \
   HTML_HELP_BODY()                  \
-  "If true, set icons as nodes shapes according to files mime type."        \
+  "If true, set icons as node shapes according to file mime types."        \
   HTML_HELP_CLOSE(),
   HTML_HELP_OPEN()            \
   HTML_HELP_DEF( "type", "boolean" )       \
@@ -53,17 +52,16 @@ static const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "red" ) \
   HTML_HELP_BODY() \
-  "This parameter indicated the color used to display directory." \
+  "This parameter indicates the color used to display directories." \
   HTML_HELP_CLOSE(),
   // other color
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "color" ) \
   HTML_HELP_DEF( "default", "blue" ) \
   HTML_HELP_BODY() \
-  "This parameter indicated the color used to display other files." \
+  "This parameter indicates the color used to display other files." \
   HTML_HELP_CLOSE(),
 };
-}
 
 static const char* commonTextFilesExtArray[] = {"log", "msg", "odt", "pages", "rtf", "json",
                                                 "tex", "txt", "wpd", "wps", "srt", "nfo"
