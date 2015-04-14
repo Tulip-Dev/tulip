@@ -43,7 +43,7 @@ namespace tlp {
 /** \file
  *  \brief  Tulip Scatter Plot view
 
- * This view plugin allows to create 2d scatter plots of graph nodes from graph properties (supported types are Metric and Integer).
+ * This view plugin allows to create 2D scatter plots with numerical properties attached to graph nodes or edges.
  * A scatter plot is a type of mathematical diagram using Cartesian coordinates to display values for two variables for a set of data.
  * The data is displayed as a collection of points, each having the value of one variable determining the position
  * on the horizontal axis and the value of the other variable determining the position on the vertical axis.
