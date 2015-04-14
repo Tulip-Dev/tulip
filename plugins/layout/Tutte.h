@@ -35,7 +35,10 @@
 */
 class Tutte:public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("3-Connected (Tutte)","David Auber","06/11/2002","Beta","1.0","Planar")
+  PLUGININFORMATION("3-Connected (Tutte)","David Auber","06/11/2002",
+		    "Implements the Tutte layout for 3-Connected graph algorithm first published as:<br/>"
+		    "<b>How to Draw a Graph</b>, W.T. Tutte, Proc. London Math. Soc. pages 743--768 (1963).",
+		    "1.0","Planar")
   Tutte(const tlp::PluginContext* context);
   ~Tutte();
 

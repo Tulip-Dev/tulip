@@ -35,7 +35,9 @@
  */
 class NodeMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Node","David Auber","20/12/1999","Computes the number of nodes in the subtree\ninduced by each node of an acyclic graph.","1.0","Hierarchical")
+  PLUGININFORMATION("Node","David Auber","20/12/1999",
+		    "Computes the number of nodes in the subtree induced by each node.<br/>"
+		    "<b>The graph must be acyclic</b>.","1.0","Hierarchical")
   NodeMetric(const tlp::PluginContext* context);
   bool run();
   bool check(std::string &);

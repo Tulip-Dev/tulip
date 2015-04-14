@@ -53,7 +53,10 @@
  */
 class BubbleTree:public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Bubble Tree","D.Auber/S.Grivet","16/05/2003","Stable","1.0","Tree")
+  PLUGININFORMATION("Bubble Tree","D.Auber/S.Grivet","16/05/2003",
+		    "Implement the bubble tree drawing algorithm first published as:<br/>"
+		    "<b>Bubble Tree Drawing Algorithm</b>, D. Auber and S. Grivet and J-P Domenger and Guy Melancon, ICCVG, pages 633-641 (2004).",
+		    "1.0","Tree")
   BubbleTree(const tlp::PluginContext* context);
   ~BubbleTree();
   bool run();

@@ -43,10 +43,10 @@ class OrientableSizeProxy;
 class Dendrogram: public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Dendrogram",
-                    "Julien Testut, Antony Durand, Pascal Ollier, "
-                    "Yashvin Nababsing, Sebastien Leclerc, "
-                    "Thibault Ruchon, Eric Dauchier",
-                    "03/12/04", "ok", "1.0","Tree")
+                    "Julien Testut, Antony Durand, Pascal Ollier, Yashvin Nababsing, Sebastien Leclerc, Thibault Ruchon, Eric Dauchier",
+                    "03/12/04",
+		    "This is an implementation of a dendrogram, an extended implementation of a <b>Bio representation</b> which includes variable orientation and variable node sizelayout.",
+		    "1.0","Tree")
   Dendrogram(const tlp::PluginContext* context);
   ~Dendrogram();
 
