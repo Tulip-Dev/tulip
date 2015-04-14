@@ -75,7 +75,10 @@
 
 class GEMLayout : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("GEM (Frick)","Tulip Team","16/10/2008","Stable","1.2","Force Directed")
+  PLUGININFORMATION("GEM (Frick)","Tulip Team","16/10/2008",
+		    "Implements the GEM-2d layout algorithm first published as:<br/>"
+		    " <b>A fast, adaptive layout algorithm for undirected graphs</b>, A. Frick, A. Ludwig, and H. Mehldau, Graph Drawing'94, Volume 894 of Lecture Notes in Computer Science (1995).",
+		    "1.2","Force Directed")
   GEMLayout(const tlp::PluginContext* context);
   ~GEMLayout();
   bool run();

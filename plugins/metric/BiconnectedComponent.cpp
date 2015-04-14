@@ -199,21 +199,19 @@ using namespace tlp;
 /** This plugin is an implementation of a biconnected component decomposition algorithm. It assigns
  *  the same value to all the edges in the same component.
  *
- *  \note This algorithm assigns to each node a value defined as following : If two nodes are in the same
- *  connected component they have the same value else they have a
- *  different value.
- *
  */
 class BiconnectedComponent:public DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Biconnected Component","David Auber","03/01/2005","Implements a biconnected component decomposition.","1.0","Component")
+  PLUGININFORMATION("Biconnected Component","David Auber","03/01/2005",
+		    "Implements a biconnected component decomposition."
+		    "It assigns the same value to all the edges in the same component.",
+		    "1.0","Component")
   BiconnectedComponent(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
   bool run() {
     MutableContainer<int> compo;
     compo.setAll(-1);
     biconnectedComponents(*graph, compo);
     result->setAllEdgeValue(-1);
-    result->setAllNodeValue(-1);
     Iterator<edge> *it = graph->getEdges();
 
     while(it->hasNext()) {

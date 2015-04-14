@@ -36,7 +36,8 @@ class MutableConatainer;
 class SpanningDagSelection:public tlp::BooleanAlgorithm {
 
 public:
-  PLUGININFORMATION("Spanning Dag","David Auber","01/12/1999","Alpha","1.0", "Selection")
+  PLUGININFORMATION("Spanning Dag","David Auber","01/12/1999",
+		    "Selects an acyclic subgraph of a graph.","1.0", "Selection")
   SpanningDagSelection(const tlp::PluginContext* context);
   bool run();
 };

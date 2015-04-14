@@ -53,7 +53,10 @@ class Grip : public tlp::LayoutAlgorithm {
 
 public:
 
-  PLUGININFORMATION("GRIP","Romain Bourqui","01/11/2010","The Graph dRawing with Intelligent Placement layout algorithm.","1.1", "Force Directed")
+  PLUGININFORMATION("GRIP","Romain Bourqui","01/11/2010",
+		    "Implements a force directed graph drawing algorithm first published as:<br/>"
+		    "<b>GRIP: Graph dRawing with Intelligent Placement</b>, P. Gajer and S.G. Kobourov, Journal Graph Algorithm and Applications, vol. 6, no. 3, pages 203--224, (2002).",
+		    "1.1", "Force Directed")
 
   Grip(const tlp::PluginContext *);
   ~Grip();

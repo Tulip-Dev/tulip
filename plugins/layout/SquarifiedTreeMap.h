@@ -62,7 +62,12 @@ class SquarifiedTreeMap: public tlp::LayoutAlgorithm {
 public:
   PLUGININFORMATION("Squarified Tree Map",
                     "Tulip Team",
-                    "25/05/2010", "ok", "2.0", "Tree")
+                    "25/05/2010",
+		    "Implements a TreeMap and Squarified Treemap layout.<br/>"
+		    "For Treemap see:<br/><b>Tree visualization with treemaps: a 2-d space-filling approach</b> , Shneiderman B., ACM Transactions on Graphics, vol. 11, 1 pages 92-99 (1992).<br/>"
+		    " For Squarified Treemaps see:<br/> Bruls, M., Huizing, K., & van Wijk, J. J."
+		    " Proc. of Joint Eurographics and IEEE TCVG Symp. on Visualization (TCVG 2000) IEEE Press, pp. 33-42.",
+		    "2.0", "Tree")
   SquarifiedTreeMap(const tlp::PluginContext* context);
   ~SquarifiedTreeMap();
 

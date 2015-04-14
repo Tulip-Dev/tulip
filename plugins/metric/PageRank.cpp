@@ -69,7 +69,10 @@ static const char * paramHelp[] = {
 /*@}*/
 struct PageRank : public DoubleAlgorithm {
 
-  PLUGININFORMATION("Page Rank","Mohamed Bouklit & David Auber","16/12/10", "Nodes measure<br/>used for links analysis.","2.0","Graph")
+  PLUGININFORMATION("Page Rank","Mohamed Bouklit & David Auber","16/12/10",
+		    "Nodes measure used for links analysis.<br/>"
+		    "First designed by Larry Page and Sergey Brin, it is a link analysis algorithm that assigns a measure to each node of an 'hyperlinked' graph.",
+		    "2.0","Graph")
 
   PageRank(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<double>("d", paramHelp[0], "0.85");
