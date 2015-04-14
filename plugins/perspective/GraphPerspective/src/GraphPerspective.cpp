@@ -543,7 +543,7 @@ void GraphPerspective::importGraph(const std::string& module,
   Graph* g;
 
   if (!module.empty()) {
-    PluginProgress* prg = progress(NoProgressOption);
+    PluginProgress* prg = progress(IsStoppable | IsCancellable);
     prg->setTitle(module);
     g = tlp::importGraph(module,data,prg);
 
@@ -555,9 +555,8 @@ void GraphPerspective::importGraph(const std::string& module,
     }
 
     delete prg;
-    std::string name;
 
-    if (!g->getAttribute<std::string>("name", name)) {
+    if (g->getName().empty()) {
       QString n = tlp::tlpStringToQString(module) + " - " + tlp::tlpStringToQString(data.toString());
       n.replace(QRegExp("[\\w]*::"),""); // remove words before "::"
       g->setName(tlp::QStringToTlpString(n));
