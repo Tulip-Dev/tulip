@@ -44,6 +44,8 @@ MouseLassoNodesSelectorInteractor::MouseLassoNodesSelectorInteractor(const tlp::
 bool MouseLassoNodesSelectorInteractor::isCompatible(const std::string &viewName) const {
   return ((viewName==NodeLinkDiagramComponent::viewName)
           ||(viewName==ViewName::ScatterPlot2DViewName)
+          ||(viewName==ViewName::HistogramViewName)
+          ||(viewName==ViewName::PixelOrientedViewName)
          );
 }
 
@@ -185,7 +187,7 @@ void MouseLassoNodesSelectorInteractorComponent::selectGraphElementsUnderPolygon
 
 
 bool MouseLassoNodesSelectorInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
-  GlMainWidget *glWidget=(GlMainWidget *)(obj);
+  GlMainWidget *glWidget=static_cast<GlMainWidget *>(obj);
 
   if (!glWidget->hasMouseTracking()) {
     glWidget->setMouseTracking(true);
