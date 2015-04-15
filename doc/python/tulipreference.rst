@@ -23,6 +23,8 @@ Graph management
 
 .. autofunction:: tulip::tlp.removeFromGraph
 
+.. autofunction:: tulip::tlp.getRootGraphs
+
 Graph measures and functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
