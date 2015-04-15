@@ -36,9 +36,8 @@
 using namespace std;
 using namespace tlp;
 
-MouseLassoNodesSelectorInteractor::MouseLassoNodesSelectorInteractor(const tlp::PluginContext *):NodeLinkDiagramComponentInteractor(":/i_lasso.png", "Select nodes in a freehand drawn region") {
+MouseLassoNodesSelectorInteractor::MouseLassoNodesSelectorInteractor(const tlp::PluginContext *):NodeLinkDiagramComponentInteractor(":/i_lasso.png", "Select nodes in a freehand drawn region", StandardInteractorPriority::FreeHandSelection) {
   setConfigurationWidgetText(QString("<h3>Select nodes in a freehand drawn region</h3>")+ "<b>Mouse left</b> down begins the freehand drawing of the selection region,<br/><b>Mouse left</b> up ends the drawing of the region.<br/>All the nodes enclosed in the region are selected and the edges linking them too.");
-  setPriority(StandardInteractorPriority::FreeHandSelection);
 }
 
 bool MouseLassoNodesSelectorInteractor::isCompatible(const std::string &viewName) const {
@@ -46,6 +45,8 @@ bool MouseLassoNodesSelectorInteractor::isCompatible(const std::string &viewName
           ||(viewName==ViewName::ScatterPlot2DViewName)
           ||(viewName==ViewName::HistogramViewName)
           ||(viewName==ViewName::PixelOrientedViewName)
+          ||(viewName==ViewName::MatrixViewName)
+          ||(viewName==ViewName::ParallelCoordinatesViewName)
          );
 }
 
