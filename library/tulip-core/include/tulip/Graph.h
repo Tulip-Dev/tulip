@@ -161,7 +161,7 @@ TLP_SCOPE Iterator<Graph*>* getRootGraphs();
  * This is also true of properties; every property in a graph exist in all of its subgraphs, except if it has been replaced
  * by a local property.
  *
- * For instance, ig you have the following graph hierarchy:
+ * For instance, if you have the following graph hierarchy:
  * root
  *  / \
  * A   B
