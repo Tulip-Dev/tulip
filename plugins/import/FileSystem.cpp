@@ -210,7 +210,7 @@ public:
         if ((++i % 100) == 0)
           pluginProgress->progress(i, entries.count());
 
-        if(pluginProgress->state()!=TLP_CANCEL) {
+        if(pluginProgress->state()==TLP_CANCEL) {
           pluginProgress->setError("Import cancelled by user.");
           return false;
         }
