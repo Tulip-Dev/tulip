@@ -64,7 +64,7 @@ class CurveEdges : public tlp::Algorithm {
 
 public:
 
-  PLUGININFORMATION("Curve edges", "Antoine Lambert", "16/01/2015", "Compute quadratic or cubic bezier paths for edges", "1.0", "")
+  PLUGININFORMATION("Curve edges", "Antoine Lambert", "16/01/2015", "Computes quadratic or cubic bezier paths for edges", "1.0", "")
 
   CurveEdges(tlp::PluginContext* context) : tlp::Algorithm(context), curveType(0), curveRoundness(0.5), bezierEdges(true) {
     addInParameter<tlp::LayoutProperty>("layout", "the input layout of the graph", "viewLayout");

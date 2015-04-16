@@ -139,7 +139,7 @@ bool PathLengthMetric::run() {
 
   node _n;
   forEach(_n, graph->getNodes())
-  getNodeValue(_n, &leafMetric);
+    getNodeValue(_n, &leafMetric);
   return true;
 }
 //=======================================

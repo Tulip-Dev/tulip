@@ -67,7 +67,7 @@
 class OGDFCircular : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Circular (OGDF)","Carsten Gutwenger","13/11/2007","Ok","1.4","Basic")
+  PLUGININFORMATION("Circular (OGDF)","Carsten Gutwenger","13/11/2007","Implements a circular layout.","1.4","Basic")
   OGDFCircular(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::CircularLayout()) {
     addInParameter<double> ("minDistCircle",
                             HTML_HELP_OPEN()

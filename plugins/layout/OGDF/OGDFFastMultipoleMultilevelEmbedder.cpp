@@ -68,7 +68,7 @@
 class OGDFFastMultipoleMultiLevelEmbedder : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Fast Multipole Multilevel Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Multilevel")
+  PLUGININFORMATION("Fast Multipole Multilevel Embedder (OGDF)","Martin Gronemann","12/11/2007","The FMME layout algorithm is a variant of multilevel, force-directed layout, which utilizes various tools to speed up the computation.","1.0","Multilevel")
   OGDFFastMultipoleMultiLevelEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleMultilevelEmbedder()) {
     addInParameter<int>("number of threads",
                         HTML_HELP_OPEN()

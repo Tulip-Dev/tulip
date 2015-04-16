@@ -48,7 +48,7 @@ class OrientableSizeProxy;
 
 class TreeLeaf:public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Tree Leaf","David Auber","01/12/1999","Implements simple level-based tree layout.","1.1","Tree")
+  PLUGININFORMATION("Tree Leaf","David Auber","01/12/1999","Implements a simple level-based tree layout.","1.1","Tree")
   TreeLeaf(const tlp::PluginContext* context);
   ~TreeLeaf();
   bool run();

@@ -87,7 +87,8 @@ public :
     addInParameter<bool>("simplices", "If checked, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d).", "false");
   }
 
-  PLUGININFORMATION("Delaunay triangulation","Antoine LAMBERT","","","1.0","Triangulation")
+  PLUGININFORMATION("Delaunay triangulation", "Antoine Lambert","",
+		    "Performs a Delaunay triangulation, in considering the positions of the graph nodes as a set of points. The building of simplices (triangles in 2D or tetrahedrons in 3D) consits in adding edges between adjacent nodes.","1.0","Triangulation")
 
   bool run() {
     tlp::Observable::holdObservers();

@@ -67,7 +67,8 @@
 class OGDFStressMajorization : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Stress Majorization (OGDF)","Karsten Klein","12/11/2007","Ok","1.0","Force Directed")
+  PLUGININFORMATION("Stress Majorization (OGDF)","Karsten Klein","12/11/2007",
+		    "Implements an alternative to force-directed layout which is a distance-based layout realized by the stress majorization approach. ","1.0","Force Directed")
   OGDFStressMajorization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::StressMajorization()) {
     addInParameter<int>("iterations",
                         HTML_HELP_OPEN()

@@ -152,7 +152,7 @@ class OGDFFm3: public OGDFLayoutPluginBase {
   tlp::StringCollection stringCollection;
 
 public:
-  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Alpha", "1.2" ,"Force Directed")
+  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Implements the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, force-directed layout algorithm that can be applied to very large graphs.", "1.2" ,"Force Directed")
   OGDFFm3(const tlp::PluginContext* context);
   ~OGDFFm3();
   void beforeCall();

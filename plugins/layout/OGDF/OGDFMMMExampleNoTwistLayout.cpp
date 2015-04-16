@@ -74,7 +74,9 @@
 class OGDFMMMExampleNoTwistLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("MMM Example No Twist Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel")
+  PLUGININFORMATION("MMM Example No Twist Layout (OGDF)","Gereon Bartel","01/09/2010",
+		    "Implements a multilevel graph layout with using the OGDF modular multilevel-mixer. It is tuned to reduce twists in the final drawing and uses LocalBiconnectedMerger and BarycenterPlacer as merging and placement strategies.",
+		    "1.0","Multilevel")
   OGDFMMMExampleNoTwistLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleNoTwistLayout()) {}
   ~OGDFMMMExampleNoTwistLayout() {}
 

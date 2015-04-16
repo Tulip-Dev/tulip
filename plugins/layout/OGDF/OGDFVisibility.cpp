@@ -67,7 +67,8 @@
 class OGDFVisibility : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Visibility (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
+  PLUGININFORMATION("Visibility (OGDF)","Hoi-Ming Wong","12/11/2007",
+		    "Implements a simple upward drawing algorithm based on visibility representations (horizontal segments for nodes, vectical segments for edges).","1.0","Hierarchical")
   OGDFVisibility(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::VisibilityLayout()) {
     addInParameter<int>("minimum grid distance",
                         HTML_HELP_OPEN()
