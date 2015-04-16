@@ -338,9 +338,11 @@ int main(int argc,char **argv) {
   // are taken into account
   if (windowGeometry.isValid())
     mainWindow->setGeometry(windowGeometry);
+
 #ifdef WIN32
   else
     mainWindow->move(0,0);
+
 #endif
 
   int result = tulip_perspective.exec();

@@ -66,7 +66,7 @@ class OGDFUpwardPlanarization : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Upward Planarization (OGDF)","Hoi-Ming Wong","12/11/2007",
-		    "Implements an alternative to the classical Sugiyama approach. It adapts the planarization approach for hierarchical graphs and produces significantly less crossings than Sugiyama layout.","1.0","Hierarchical")
+                    "Implements an alternative to the classical Sugiyama approach. It adapts the planarization approach for hierarchical graphs and produces significantly less crossings than Sugiyama layout.","1.0","Hierarchical")
   OGDFUpwardPlanarization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::UpwardPlanarizationLayout()) {
     addInParameter<bool>("transpose",
                          HTML_HELP_OPEN()
