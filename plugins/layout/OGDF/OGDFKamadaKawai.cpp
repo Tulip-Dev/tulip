@@ -66,7 +66,7 @@
 class OGDFKamadaKawai : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Kamada Kawai (OGDF)","Karsten Klein","12/11/2007","Ok","1.0","Force Directed")
+  PLUGININFORMATION("Kamada Kawai (OGDF)","Karsten Klein","12/11/2007","Implements the Kamada-Kawai layout algorithm.<br/>It is a force-directed layout algorithm that tries to place vertices with a distance corresponding to their graph theoretic distance. ","1.0","Force Directed")
   OGDFKamadaKawai(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderKK()) {
     addInParameter<double>("stop tolerance",
                            HTML_HELP_OPEN()

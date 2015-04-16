@@ -69,7 +69,8 @@
 class OGDFBalloon : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Balloon (OGDF)","Karsten Klein","13/11/2007","Ok","1.3","Hierarchical")
+  PLUGININFORMATION("Balloon (OGDF)","Karsten Klein","13/11/2007",
+		    "Computes a radial (balloon) layout based on a spanning tree.<br/>The algorithm is partially based on the paper <b>On Balloon Drawings of Rooted Trees</b> by Lin and Yen and on <b>Interacting with Huge Hierarchies: Beyond Cone Trees</b> by Carriere and Kazman. ","1.3","Hierarchical")
   OGDFBalloon(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::BalloonLayout()) {
     addInParameter<bool> ("Even angles",
                           HTML_HELP_OPEN()

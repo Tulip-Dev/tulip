@@ -67,7 +67,7 @@ class OGDFFastMultipoleEmbedder : public OGDFLayoutPluginBase {
 
 public:
 
-  PLUGININFORMATION("Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Ok","1.0","Force Directed")
+  PLUGININFORMATION("Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Implements the fast multipole embedder layout algorithm of Martin Gronemann.","1.0","Force Directed")
   OGDFFastMultipoleEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleEmbedder()) {
     addInParameter<int>("number of iterations",
                         HTML_HELP_OPEN()

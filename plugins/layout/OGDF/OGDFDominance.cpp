@@ -68,7 +68,7 @@
 class OGDFDominance : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Dominance (OGDF)","Hoi-Ming Wong","12/11/2007","Ok","1.0","Hierarchical")
+  PLUGININFORMATION("Dominance (OGDF)","Hoi-Ming Wong","12/11/2007","Implements a simple upward drawing algorithm based on dominance drawings of st-digraphs.","1.0","Hierarchical")
   OGDFDominance(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::DominanceLayout()) {
     addInParameter<int>("minimum grid distance",
                         HTML_HELP_OPEN()

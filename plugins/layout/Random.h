@@ -37,7 +37,7 @@
  */
 class Random:public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Random layout","David Auber","01/12/1999","Ok","1.1","Basic")
+  PLUGININFORMATION("Random layout","David Auber","01/12/1999","The positions of the graph nodes are randomly selected.","1.1","Basic")
   Random(const tlp::PluginContext* context);
 
   bool run();

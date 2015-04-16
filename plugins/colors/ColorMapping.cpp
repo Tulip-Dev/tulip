@@ -127,9 +127,9 @@ const char * paramHelp[] = {
   HTML_HELP_DEF("values", "linear <BR> uniform <BR> enumerated") \
   HTML_HELP_DEF( "default", "linear" )   \
   HTML_HELP_BODY() \
-  "If linear, the input property must be a <b>Double or Integer</b> property. The minimum value is mapped to one end of the color scale," \
+  "If linear, the input property must be a <b>numeric</b> property. The minimum value is mapped to one end of the color scale," \
   "the maximum value is mapped to the other end, and a linear interpolation is used between both.<BR>"          \
-  "If uniform, this is the same except for the interpolation: the value are sorted, numbered, and a linear interpolation is used on those numbers" \
+  "If uniform, this is the same except for the interpolation: the values are sorted, numbered, and a linear interpolation is used on those numbers" \
   "(in other words, only the order is taken into account, not the actual values).<BR>" \
   "Finally, if enumerated, the input property can be of <b>any type</b>. Each possible value is mapped to a distinct color without specific any order." \
   HTML_HELP_CLOSE(),
@@ -180,7 +180,7 @@ private:
 
 
 public:
-  PLUGININFORMATION("Color Mapping","Mathiaut","16/09/2010","Color mapping plugin","2.1", "Color")
+  PLUGININFORMATION("Color Mapping","Mathiaut","16/09/2010","Colorizes the nodes or edges of a graph according to the values of a given property.","2.1", "Color")
   ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
     addInParameter<PropertyInterface*>("input property",paramHelp[1],"viewMetric");

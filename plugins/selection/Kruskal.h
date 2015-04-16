@@ -40,9 +40,9 @@ class Kruskal:public tlp::BooleanAlgorithm {
 
 public:
   PLUGININFORMATION("Kruskal","Anthony DON","14/04/03",
-                    "Implements the so called Kruskal algorithm to select a minimum spanning tree in a connected graph."
-                    "Only works on undirected graphs, (ie. the orientation of edges is omitted).",
-                    "1.0", "Selection")
+		    "Implements the classical Kruskal algorithm to select a minimum spanning tree in a connected graph."
+		    "Only works on undirected graphs, (ie. the orientation of edges is omitted).",
+		    "1.0", "Selection")
   Kruskal(const tlp::PluginContext* context);
   ~Kruskal();
   bool run();

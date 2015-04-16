@@ -40,7 +40,7 @@ namespace tlp {
 
 class ConvolutionClustering:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Convolution","David Auber","14/08/2001","Discretization and filtering of the distribution of a node metric using a convolution","2.1","Clustering")
+  PLUGININFORMATION("Convolution","David Auber","14/08/2001","Discretization and filtering of the distribution of a node metric using a convolution.","2.1","Clustering")
   ConvolutionClustering(tlp::PluginContext* context);
   bool run();
   bool check(std::string&);

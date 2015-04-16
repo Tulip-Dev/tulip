@@ -24,7 +24,7 @@
 /** \addtogroup selection */
 
 /**
- * This selection plugin enables to find all nodes and edges at a fixed distance of a set of nodes.
+ * This selection plugin enables to find all nodes and edges at a given distance of one of the node of a given set of nodes.
  * It takes three parameters :
  * - <b>int</b> distance
  * - <b>StringCollection</b> edge direction : output edges , input edges , all edges
@@ -37,7 +37,7 @@
 class ReachableSubGraphSelection:public tlp::BooleanAlgorithm {
 public:
   PLUGININFORMATION("Reachable Sub-Graph","David Auber","01/12/1999",
-                    "Selects all nodes and edges at a fixed distance of a set of nodes.","1.0", "Selection")
+		    "Selects all the nodes and edges at a maximum distance of one of the node of a given set of selected nodes.","1.0", "Selection")
   ReachableSubGraphSelection(const tlp::PluginContext* context);
   ~ReachableSubGraphSelection();
   bool run();

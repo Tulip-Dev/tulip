@@ -32,7 +32,7 @@ using namespace tlp;
  */
 class AutoSize:public SizeAlgorithm {
 public:
-  PLUGININFORMATION("Auto Sizing","Auber","04/05/2001","","1.0", "Size")
+  PLUGININFORMATION("Auto Sizing","Auber","04/05/2001","Resize the nodes and edges of a graph so that the graph gets easy to read. The size of a node will depend on the number of its sons.","1.0", "Size")
   AutoSize(const tlp::PluginContext* context):SizeAlgorithm(context) {}
 
   bool run() {

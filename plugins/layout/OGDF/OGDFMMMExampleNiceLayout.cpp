@@ -71,7 +71,9 @@
 class OGDFMMMExampleNiceLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("MMM Example Nice Layout (OGDF)","Gereon Bartel","01/09/2010","Ok","1.0","Multilevel")
+  PLUGININFORMATION("MMM Example Nice Layout (OGDF)","Gereon Bartel","01/09/2010",
+		    "Implements a nice multilevel graph layout using the OGDF modular multilevel-mixer. EdgeCoverMerger and BarycenterPlacer are used as merging and placement strategies.",
+		    "1.0","Multilevel")
   OGDFMMMExampleNiceLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleNiceLayout()) {}
   ~OGDFMMMExampleNiceLayout() {}
 

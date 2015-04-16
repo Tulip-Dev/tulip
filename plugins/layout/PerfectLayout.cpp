@@ -22,7 +22,7 @@
 
 class PerfectLayout: public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Perfect aspect ratio","Tulip team","09/19/2010","","1.0","")
+  PLUGININFORMATION("Perfect aspect ratio","Tulip team","09/19/2010","Scales the graph layout to get an aspect ratio of 1.","1.0","")
 
   PerfectLayout(const tlp::PluginContext* context): LayoutAlgorithm(context) {
     addInParameter<tlp::LayoutProperty>("layout",
