@@ -85,7 +85,7 @@ class OGDFTree : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Improved Walker (OGDF)","Christoph Buchheim","12/11/2007",
-		    "Implements a linear-time tree layout algorithm with straight-line or orthogonal edge routing.","1.5","Tree")
+                    "Implements a linear-time tree layout algorithm with straight-line or orthogonal edge routing.","1.5","Tree")
   OGDFTree(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::TreeLayout()) {
     addInParameter<double>("siblings distance",
                            HTML_HELP_OPEN()

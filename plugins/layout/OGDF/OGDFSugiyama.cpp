@@ -215,7 +215,7 @@ public:
   ~OGDFSugiyama() {}
 
   PLUGININFORMATION("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007",
-		    "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It is a layer-based approach for producing upward drawings.","1.5","Hierarchical")
+                    "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It is a layer-based approach for producing upward drawings.","1.5","Hierarchical")
 
   void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
