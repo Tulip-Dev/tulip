@@ -174,9 +174,9 @@ int main(int argc,char **argv) {
 
   QStringList args = QApplication::arguments();
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-  QString dumpPath = QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0)).filePath("tulip_perspective-0.log");
+  QString dumpPath = QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0)).filePath("tulip_perspective-" + QString::number(QApplication::applicationPid()) + ".log");
 #else
-  QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-0.log");
+  QString dumpPath = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).filePath("tulip_perspective-" + QString::number(QApplication::applicationPid()) + ".log");
 #endif
   setDumpPath(dumpPath.toStdString());
 
@@ -338,6 +338,10 @@ int main(int argc,char **argv) {
   // are taken into account
   if (windowGeometry.isValid())
     mainWindow->setGeometry(windowGeometry);
+#ifdef WIN32
+  else
+    mainWindow->move(0,0);
+#endif
 
   int result = tulip_perspective.exec();
   delete perspective;
