@@ -99,12 +99,10 @@ ADD_LIBRARY(PerfectLayout-${TulipVersion} SHARED PerfectLayout.cpp)
 TARGET_LINK_LIBRARIES(PerfectLayout-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-IF(NOT BUILD_CORE_ONLY)
-INCLUDE_DIRECTORIES(${TulipOGLInclude})
 ADD_LIBRARY(PolyominoPacking-${TulipVersion} SHARED PolyominoPacking.cpp)
-TARGET_LINK_LIBRARIES(PolyominoPacking-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LayoutUtilsLibraryName})
+TARGET_LINK_LIBRARIES(PolyominoPacking-${TulipVersion} ${LayoutUtilsLibraryName} ${LibTulipCoreName})
 INSTALL_TULIP_PLUGIN(PolyominoPacking-${TulipVersion} ${TulipPluginsInstallDir})
-ENDIF(NOT BUILD_CORE_ONLY)
+
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL_TULIP_PLUGIN(MixedModel-${TulipVersion} ${TulipPluginsInstallDir})
 INSTALL_TULIP_PLUGIN(ConnectedComponentPacking-${TulipVersion} ${TulipPluginsInstallDir})

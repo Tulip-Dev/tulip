@@ -34,7 +34,7 @@ namespace tlp {
  * \param n the number of Pascal triangle rows to compute
  * \param pascalTriangle a vector of vector of double to store the result. If that vector already contains m Pascal triangle rows and n > m, the first m row are not recomputed and the vector is expanded to store the new rows.
  */
-TLP_GL_SCOPE void buildPascalTriangle(unsigned int n, std::vector<std::vector<double> > &pascalTriangle);
+TLP_SCOPE void buildPascalTriangle(unsigned int n, std::vector<std::vector<double> > &pascalTriangle);
 
 /**
  * Compute the position of a point 'p' at t (0 <= t <= 1)
@@ -43,7 +43,7 @@ TLP_GL_SCOPE void buildPascalTriangle(unsigned int n, std::vector<std::vector<do
  * \param controlPoints a vector of control points
  * \param t curve parameter value (0 <= t <= 1)
  */
-TLP_GL_SCOPE Coord computeBezierPoint(const std::vector<Coord> &controlPoints, const float t);
+TLP_SCOPE Coord computeBezierPoint(const std::vector<Coord> &controlPoints, const float t);
 
 /** Compute a set of points approximating a Bézier curve
  *
@@ -51,7 +51,7 @@ TLP_GL_SCOPE Coord computeBezierPoint(const std::vector<Coord> &controlPoints, c
  *  \param curvePoints an empty vector to store the computed points
  *  \param nbCurvePoints number of points to generate
  */
-TLP_GL_SCOPE void computeBezierPoints(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, const unsigned int nbCurvePoints = 100);
+TLP_SCOPE void computeBezierPoints(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, const unsigned int nbCurvePoints = 100);
 
 
 /**
@@ -67,7 +67,7 @@ TLP_GL_SCOPE void computeBezierPoints(const std::vector<Coord> &controlPoints, s
  * \param closedCurve if true, the curve will be closed, meaning a Bézier segment will connect the last and first control point
  * \param alpha curve parameterization parameter (0 <= alpha <= 1), alpha = 0 -> uniform parameterization, alpha = 0.5 -> centripetal parameterization, alpha = 1.0 -> chord-length parameterization
  */
-TLP_GL_SCOPE Coord computeCatmullRomPoint(const std::vector<Coord> &controlPoints, const float t, const bool closedCurve = false, const float alpha = 0.5);
+TLP_SCOPE Coord computeCatmullRomPoint(const std::vector<Coord> &controlPoints, const float t, const bool closedCurve = false, const float alpha = 0.5);
 
 /** Compute a set of points approximating a Catmull-Rom curve
  *
@@ -77,7 +77,7 @@ TLP_GL_SCOPE Coord computeCatmullRomPoint(const std::vector<Coord> &controlPoint
  *  \param alpha curve parameterization parameter (0 <= alpha <= 1), alpha = 0 -> uniform parameterization, alpha = 0.5 -> centripetal parameterization, alpha = 1.0 -> chord-length parameterization
  *  \param nbCurvePoints number of points to generate
  */
-TLP_GL_SCOPE void computeCatmullRomPoints(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, const bool closedCurve = false, const unsigned int nbCurvePoints = 100, const float alpha = 0.5);
+TLP_SCOPE void computeCatmullRomPoints(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, const bool closedCurve = false, const unsigned int nbCurvePoints = 100, const float alpha = 0.5);
 
 /**
   * Compute the position of a point 'p' at t (0 <= t <= 1)
@@ -93,7 +93,7 @@ TLP_GL_SCOPE void computeCatmullRomPoints(const std::vector<Coord> &controlPoint
   */
 
 
-TLP_GL_SCOPE Coord computeOpenUniformBsplinePoint(const std::vector<Coord> &controlPoints, const float t, const unsigned int curveDegree = 3);
+TLP_SCOPE Coord computeOpenUniformBsplinePoint(const std::vector<Coord> &controlPoints, const float t, const unsigned int curveDegree = 3);
 
 /** Compute a set of points approximating an open uniform B-spline curve
  *
@@ -102,7 +102,7 @@ TLP_GL_SCOPE Coord computeOpenUniformBsplinePoint(const std::vector<Coord> &cont
  *  \param curveDegree the B-spline degree
  *  \param nbCurvePoints number of points to generate
  */
-TLP_GL_SCOPE void computeOpenUniformBsplinePoints(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, const unsigned int curveDegree = 3, const unsigned int nbCurvePoints = 100);
+TLP_SCOPE void computeOpenUniformBsplinePoints(const std::vector<Coord> &controlPoints, std::vector<Coord> &curvePoints, const unsigned int curveDegree = 3, const unsigned int nbCurvePoints = 100);
 
 
 }
