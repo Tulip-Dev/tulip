@@ -678,9 +678,7 @@ void GlLabel::draw(float, Camera *camera) {
 
       setMaterial(color);
 
-      if (!useLOD || screenH > 6 || outlineColor.getA()==0 || outlineSize==0) {
-        font->Render((*it).c_str(),-1,shift);
-      }
+      font->Render((*it).c_str(),-1,shift);
 
       if(textureName!="")
         GlTextureManager::getInst().desactivateTexture();
