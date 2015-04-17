@@ -35,6 +35,7 @@
 #include <QDropEvent>
 #include <QUrl>
 #include <QMimeData>
+#include <QTimer>
 
 #include <tulip/TlpTools.h>
 #include <tulip/ImportModule.h>
@@ -394,7 +395,15 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 #endif
 
   if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
+// There is a bug with Qt5 on windows that leads to incorrect viewport size for OpenGL views
+// when starting Tulip with a file to open. Seems something is not correctly initialized from
+// the Qt side when the views are created.
+// As a workaround, delay the opening of the file from one second.
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) && defined(WIN32)
+    QTimer::singleShot(1000, this, SLOT(openExternalFile()));
+#else
     open(_externalFile);
+#endif
   }
 
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
@@ -411,6 +420,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   buildRecentDocumentsMenu();
 
   showTrayMessage("GraphPerspective started");
+}
+
+void GraphPerspective::openExternalFile() {
+  open(_externalFile);
 }
 
 tlp::GraphHierarchiesModel* GraphPerspective::model() const {
