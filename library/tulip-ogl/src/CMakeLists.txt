@@ -74,7 +74,6 @@ SET(tulip-ogl_LIB_SRCS
   Glyph.cpp
   GlyphManager.cpp
   OpenGlConfigManager.cpp
-  ParametricCurves.cpp
 )
 
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${FTGLInclude} ${FREETYPE_INCLUDE_DIRS} ${UTF8CppInclude})

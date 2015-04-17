@@ -33,6 +33,7 @@ MapIterator.cpp
 Observable.cpp
 Ordering.cpp
 OuterPlanarTest.cpp
+ParametricCurves.cpp
 PlanarConMap.cpp
 PlanarityTest.cpp
 PlanarityTestEmbed.cpp

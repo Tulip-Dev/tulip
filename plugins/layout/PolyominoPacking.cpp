@@ -37,7 +37,6 @@
 #include <tulip/ConnectedTest.h>
 #include <tulip/ForEach.h>
 #include <tulip/ParametricCurves.h>
-#include <tulip/GlGraphStaticData.h>
 #include <tulip/TulipViewSettings.h>
 
 #include "DatasetTools.h"

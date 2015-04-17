@@ -49,6 +49,7 @@ INSTALL(FILES
   tulip/Observable.h
   tulip/Ordering.h
   tulip/OuterPlanarTest.h
+  tulip/ParametricCurves.h
   tulip/PlanarConMap.h
   tulip/PlanarityTest.h
   tulip/PluginContext.h
