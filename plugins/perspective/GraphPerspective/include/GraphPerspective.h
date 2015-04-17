@@ -140,6 +140,7 @@ protected slots:
   void newProject();
   void openRecentFile();
   void changeSynchronization(bool);
+  void openExternalFile();
 
 protected:
   bool eventFilter(QObject *, QEvent *);
