@@ -431,10 +431,9 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
         glmainwidget->getScene()->getLayer("Main")->getCamera().setZoomFactor(camera.getZoomFactor());
         glmainwidget->draw(false);
 
-        GlBoundingBoxSceneVisitor *visitor;
-        visitor=new GlBoundingBoxSceneVisitor(glmainwidget->getScene()->getGlGraphComposite()->getInputData());
-        glmainwidget->getScene()->getLayer("Main")->acceptVisitor(visitor);
-        BoundingBox boundingBox=visitor->getBoundingBox();
+        GlBoundingBoxSceneVisitor visitor(glmainwidget->getScene()->getGlGraphComposite()->getInputData());
+        glmainwidget->getScene()->getLayer("Main")->acceptVisitor(&visitor);
+        BoundingBox boundingBox(visitor.getBoundingBox());
 
         MyQtGlSceneZoomAndPanAnimator navigator(glmainwidget,nldc,boundingBox,oldGraph,n,alphaOrigin);
         navigator.animateZoomAndPan();
