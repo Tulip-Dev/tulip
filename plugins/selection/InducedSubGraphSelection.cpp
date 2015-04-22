@@ -49,10 +49,13 @@ bool InducedSubGraphSelection::run() {
   if (entrySelection == NULL)
     entrySelection = graph->getProperty<BooleanProperty>("viewSelection");
 
+  BooleanProperty entrySelectionCp(graph);
   // as the input property and the result property can be the same one,
   // make a copy of the input property to avoid its content to be reseted to false below
-  BooleanProperty entrySelectionCp(graph);
-  entrySelectionCp = *entrySelection;
+  if (result == entrySelection) {
+    entrySelectionCp = *entrySelection;
+    entrySelection = &entrySelectionCp;
+  }
 
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
@@ -60,13 +63,13 @@ bool InducedSubGraphSelection::run() {
   node itn;
   forEach(itn, graph->getNodes()) {
 
-    if (entrySelectionCp.getNodeValue(itn)) {
+    if (entrySelection->getNodeValue(itn)) {
       result->setNodeValue(itn, true);
       edge e;
       forEach(e, graph->getOutEdges(itn)) {
         node target = graph->target(e);
 
-        if (entrySelectionCp.getNodeValue(target))
+        if (entrySelection->getNodeValue(target))
           result->setEdgeValue(e, true);
       }
     }
