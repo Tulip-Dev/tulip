@@ -41,8 +41,6 @@ InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext* con
 }
 //=================================================================================
 bool InducedSubGraphSelection::run() {
-  result->setAllNodeValue(false);
-  result->setAllEdgeValue(false);
   BooleanProperty *entrySelection = NULL;
 
   if (dataSet!=NULL)
@@ -51,28 +49,29 @@ bool InducedSubGraphSelection::run() {
   if (entrySelection == NULL)
     entrySelection = graph->getProperty<BooleanProperty>("viewSelection");
 
-  Iterator<node> *itN = graph->getNodes();
+  // as the input property and the result property can be the same one,
+  // make a copy of the input property to avoid its content to be reseted to false below
+  BooleanProperty entrySelectionCp(graph);
+  entrySelectionCp = *entrySelection;
 
-  while (itN->hasNext()) {
-    node itn=itN->next() ;
+  result->setAllNodeValue(false);
+  result->setAllEdgeValue(false);
 
-    if (entrySelection->getNodeValue(itn)) {
+  node itn;
+  forEach(itn, graph->getNodes()) {
+
+    if (entrySelectionCp.getNodeValue(itn)) {
       result->setNodeValue(itn, true);
-      Iterator<edge> *itE = graph->getOutEdges(itn);
-
-      while (itE->hasNext()) {
-        edge e = itE->next();
+      edge e;
+      forEach(e, graph->getOutEdges(itn)) {
         node target = graph->target(e);
 
-        if (entrySelection->getNodeValue(target))
+        if (entrySelectionCp.getNodeValue(target))
           result->setEdgeValue(e, true);
       }
-
-      delete itE;
     }
   }
 
-  delete itN;
   return true;
 }
 //=================================================================================
