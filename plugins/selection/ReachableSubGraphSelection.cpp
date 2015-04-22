@@ -119,22 +119,23 @@ bool ReachableSubGraphSelection::run() {
     dataSet->get("startingnodes", startNodes);
   }
 
-  result->setAllEdgeValue(false);
-  result->setAllNodeValue(false);
-
   if (startNodes) {
-    Iterator<node>* itN = startNodes->getNodesEqualTo(true);
+    // as the input selection property and the result property can be the same one,
+    // use a stable iterator to keep a copy of the input selected nodes as all values
+    // of the result property are reseted to false below
+    Iterator<node>* itN = new StableIterator<tlp::node>(startNodes->getNodesEqualTo(true));
     std::set<node> reachables;
 
+    result->setAllEdgeValue(false);
+    result->setAllNodeValue(false);
+
     // iterate on startNodes add them and their reachables
-    while (itN->hasNext()) {
-      node current = itN->next();
+    node current;
+    forEach(current, itN) {
       reachables.insert(current);
       reachableNodes(graph, current, reachables, maxDistance,
                      edgeDirection);
     }
-
-    delete itN;
 
     std::set<node>::const_iterator itr = reachables.begin();
     std::set<node>::const_iterator ite = reachables.end();
@@ -146,10 +147,8 @@ bool ReachableSubGraphSelection::run() {
     }
 
     // select corresponding edges
-    Iterator<edge> *itE = graph->getEdges();
-
-    while(itE->hasNext()) {
-      edge e = itE->next();
+    edge e;
+    forEach(e, graph->getEdges()) {
       const std::pair<node, node>& ends = graph->ends(e);
 
       if (result->getNodeValue(ends.first) &&
@@ -157,9 +156,10 @@ bool ReachableSubGraphSelection::run() {
         result->setEdgeValue(e, true);
     }
 
-    delete itE;
+  } else {
+    result->setAllEdgeValue(false);
+    result->setAllNodeValue(false);
   }
-
   return true;
 }
 
