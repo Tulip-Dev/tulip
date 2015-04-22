@@ -49,29 +49,25 @@ bool InducedSubGraphSelection::run() {
   if (entrySelection == NULL)
     entrySelection = graph->getProperty<BooleanProperty>("viewSelection");
 
-  BooleanProperty entrySelectionCp(graph);
-  // as the input property and the result property can be the same one,
-  // make a copy of the input property to avoid its content to be reseted to false below
-  if (result == entrySelection) {
-    entrySelectionCp = *entrySelection;
-    entrySelection = &entrySelectionCp;
-  }
+  // as the input selection property and the result property can be the same one,
+  // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
+  // of the result property are reseted to false below
+  Iterator<node>* itN = (result == entrySelection) ?
+    new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true)) :
+    entrySelection->getNodesEqualTo(true);
 
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
 
-  node itn;
-  forEach(itn, graph->getNodes()) {
+  node current;
+  forEach(current, itN) {
+    result->setNodeValue(current, true);
+    edge e;
+    forEach(e, graph->getOutEdges(current)) {
+      node target = graph->target(e);
 
-    if (entrySelection->getNodeValue(itn)) {
-      result->setNodeValue(itn, true);
-      edge e;
-      forEach(e, graph->getOutEdges(itn)) {
-        node target = graph->target(e);
-
-        if (entrySelection->getNodeValue(target))
-          result->setEdgeValue(e, true);
-      }
+      if (entrySelection->getNodeValue(target))
+	result->setEdgeValue(e, true);
     }
   }
 
