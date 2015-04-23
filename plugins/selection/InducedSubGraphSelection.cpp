@@ -25,14 +25,14 @@ PLUGIN(InducedSubGraphSelection)
 
 //=================================================================================
 namespace {
-const char * paramHelp[] = {
-  // selectedNodes
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Selection" ) \
-  HTML_HELP_BODY() \
-  "Set of nodes for which the induced sub-graph is computed." \
-  HTML_HELP_CLOSE(),
-};
+  const char * paramHelp[] = {
+    // selectedNodes
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "Selection" ) \
+    HTML_HELP_BODY() \
+    "Set of nodes for which the induced sub-graph is computed." \
+    HTML_HELP_CLOSE(),
+  };
 }
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext* context):
@@ -53,21 +53,23 @@ bool InducedSubGraphSelection::run() {
   // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
   // of the result property are reseted to false below
   Iterator<node>* itN = (result == entrySelection) ?
-    new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true)) :
-    entrySelection->getNodesEqualTo(true);
+                          new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true)) :
+                          entrySelection->getNodesEqualTo(true);
 
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
 
+  // add input selected nodes to result selection
   node current;
   forEach(current, itN) {
     result->setNodeValue(current, true);
-    edge e;
-    forEach(e, graph->getOutEdges(current)) {
-      node target = graph->target(e);
+  }
 
-      if (entrySelection->getNodeValue(target))
-	result->setEdgeValue(e, true);
+  // now add edges whose extremities are selected to result selection
+  edge e;
+  forEach(e, graph->getEdges()) {
+    if (result->getNodeValue(graph->source(e)) && result->getNodeValue(graph->target(e))) {
+      result->setEdgeValue(e, true);
     }
   }
 
