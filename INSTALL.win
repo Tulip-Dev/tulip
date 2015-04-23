@@ -1,0 +1,60 @@
+How to build Tulip on windows platform
+--------------------------------------
+
+2- Install MinGW and MSYS - Or use Visual Studio 2008 or later (express version included)
+-------------------------
+Download the latest versions of MinGW-*.exe, MSYS-*.exe, msysDTK-*.exe
+from http://prdownloads.sourceforge.net/mingw. Install them as listed above,
+and accept the proposed mount point during the installation process of MSYS.
+
+2- Install the last Qt 4.Y.Z Windows LGPL Edition
+-------------------------------------------------
+You have to download and install Qt from the official download page
+http://qt.nokia.com/downloads/
+
+3- Install the needed librairies
+--------------------------------
+To simplify compiling Tulip on Windows, we provide a zip archive on our website containing all the necessary dependencies, binaries and includes.
+
+Alternatively, you can hunt them yourself on the gnuwin32 sourceforge project:
+http://prdownloads.sourceforge.net/gnuwin32.
+
+The complete list is: 
+freetype, jpeg, png, zlib, 
+iconv and xml2 can be downloaded from
+http://www.zlatkovic.com/pub/libxml/
+
+You can install them in the MinGW directory, or in an independent directory,
+though you will have to tell CMake where to find these using CMAKE_LIBRARY_PATH and CMAKE_INCLUDE_PATH
+if you choose the latter.
+
+4- Configure Tulip with CMake
+-----------------------------
+Using the CMake GUI, find the tulip source directory, create a build directory, and hit configure.
+You will be presented with a dialog asking what kind of generator you want to use.
+Choose MSYS makefiles or Visual Studio, depending on what toolchain you are using.
+
+5a- Build Tulip with MinGW
+--------------------------
+run
+> make
+then
+> make install
+
+5b- Build Tulip with Visual Studio
+----------------------------------
+Open the tulip.sln file with visual studio, then generate the solution by right clicking on the solution and clicking 'generate solution'.
+
+6- Build windows installer for Tulip
+------------------------------------
+If you want to build a windows installer, you first have to download
+and install NSIS from http://nsis.sourceforge.net/Download.
+After installing NSIS, update the PATH variable adding the NSIS
+installation directory in order to find the makensis.exe program needed
+to build the Tulip windows installer.
+Then run
+
+> make package
+
+Using Visual Studio, right-click on the 'package' project, and click 'generate'.
+

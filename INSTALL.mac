@@ -1,0 +1,41 @@
+How to build Tulip on MacOSX platform
+-------------------------------------
+
+1- Install last Qt 4.Y.Z Mac SDK LGPL Edition
+---------------------------------------------
+Download the last Qt 4.Y.Z SDK for Mac from Qt official download page
+http://qt.nokia.com/downloads/
+then follow the installation instructions
+
+2 - Install GLEW library
+------------------------
+Download the last source of the OpenGL Extension Wrangler Library from
+http://glew.sourceforge.net/
+Follow the installation instructions at http://glew.sourceforge.net/install.html
+
+3- Install libjpeg
+------------------
+Ease your installation in downloading the MacOS X ports of these libraries
+from http://ethan.tira-thompson.com/Mac%20OS%20X%20Ports.html
+
+4- Configure Tulip with CMake
+-----------------------------
+run
+> cmake -i <tulip_source_install_path>
+and configure the compilation mode (Relase, Debug ...), the install prefix
+and more options
+
+5- Build Tulip
+--------------
+run
+> make
+then
+> make install
+
+6- Build a downloadable Tulip Mac bundle
+----------------------------------------
+If you want to build a self sufficient downloadable Tulip Mac bundle,
+just run
+> make package
+this will produce a tulip-<release number>-Darwin.dmg which is a disk image
+of a Tulip mac bundle which can be downloaded as is from the Internet.

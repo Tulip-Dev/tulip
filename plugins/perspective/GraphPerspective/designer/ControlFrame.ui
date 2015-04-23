@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ControlFrame</class>
+ <widget class="QFrame" name="ControlFrame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>89</width>
+    <height>28</height>
+   </rect>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">* {
+color: white;
+font: bold 11px;
+}
+
+QFrame{
+border-top: 1px solid rgba(117,117,117,255);
+border-bottom: 1px solid rgba(117,117,117,255);
+border-right: 1px solid rgba(117,117,117,255);
+border-left: 0px;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(75,75,75),
+stop:1 rgb(60, 60, 60));
+}
+
+QPushButton {
+border: 0px;
+border-image: none;
+}
+
+QPushButton:hover {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(85,85,85),
+stop:1 rgb(70, 70, 70));
+}
+
+QPushButton:pressed, QPushButton:checked {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(65,65,65),
+stop:1 rgb(50, 50, 50));
+}</string>
+  </property>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

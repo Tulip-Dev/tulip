@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/" >
+	<file>i_histo_color_mapping.png</file>
+	<file>i_histo_statistics.png</file>
+	<file>histo_texture.png</file>
+	<file>histogram_view.png</file>
+	<file>HistoColorMapping.png</file>
+	<file>ColorScaleConfigDialog.png</file>
+	<file>ColorScaleConfigDialog2.png</file>
+	<file>SizeScaleConfigDialog.png</file>
+	<file>GlyphScaleConfigDialog.png</file>
+    </qresource>
+</RCC>

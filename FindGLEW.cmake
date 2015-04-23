@@ -1,0 +1,14 @@
+# - Try to find GLEW
+# Once done this will define
+#  
+#  GLEW_FOUND        - system has GLEW
+#  GLEW_INCLUDE_DIR  - the GLEW include directory
+#  GLEW_LIBRARY      - Link these to use GLEW
+
+FIND_LIBRARY(GLEW_LIBRARY NAMES glew GLEW glew32)
+FIND_PATH(GLEW_INCLUDE_DIR NAMES GL/glew.h GL/wglew.h glew.h wglew.h)
+IF(GLEW_INCLUDE_DIR AND GLEW_LIBRARY)
+  SET(GLEW_FOUND TRUE)
+ELSE(GLEW_INCLUDE_DIR AND GLEW_LIBRARY)
+   SET(GLEW_FOUND FALSE)
+ENDIF(GLEW_INCLUDE_DIR AND GLEW_LIBRARY)

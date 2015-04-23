@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wizard version="1" kind="project" class="qt4project" firstpage="10" id="Tulip.Property" category="Tulip">
+  <icon>logo.png</icon>
+  <description>Creates a tulip plugin that operates on a single graph property</description>
+  <displayname>Property algorithm</displayname>;
+  <displaycategory>Tulip Project</displaycategory>
+  <files>
+    <file source="propertyplugin.h"   target="%ProjectName:l%.%CppHeaderSuffix%" openeditor="true"/>
+    <file source="propertyplugin.cpp" target="%ProjectName:l%.%CppSourceSuffix%" openeditor="true"/>
+    <file source="property.cmake"     target="CMakeLists.txt" openproject="true" openeditor="false"/>
+  </files>
+
+  <!-- Create a 2nd wizard page with parameters -->
+  <fieldpagetitle>Plugin settings</fieldpagetitle>
+  <fields>
+    <field name="TulipPath">
+      <fieldcontrol class="Utils::PathChooser"/>
+      <fielddescription>Tulip installation directory: </fielddescription>
+    </field>
+
+    <field name="AlgorithmType">
+      <fielddescription>Algorithm type: </fielddescription>
+      <fieldcontrol class="QComboBox">
+        <comboentries>
+          <comboentry value="Color">
+            <comboentrytext>Coloring</comboentrytext>
+          </comboentry>
+
+          <comboentry value="String">
+            <comboentrytext>Labeling</comboentrytext>
+          </comboentry>
+
+          <comboentry value="Layout">
+            <comboentrytext>Layout</comboentrytext>
+          </comboentry>
+
+          <comboentry value="Double">
+            <comboentrytext>Metric (double)</comboentrytext>
+          </comboentry>
+
+          <comboentry value="Integer">
+            <comboentrytext>Metric (integer)</comboentrytext>
+          </comboentry>
+
+          <comboentry value="Size">
+            <comboentrytext>Resizing</comboentrytext>
+          </comboentry>
+
+          <comboentry value="Boolean">
+            <comboentrytext>Selection</comboentrytext>
+          </comboentry>
+
+        </comboentries>
+      </fieldcontrol>
+    </field>
+
+    <field name="PluginName">
+      <fieldcontrol class="QLineEdit" defaulttext="My Algorithm" />
+      <fielddescription>Plugin identifier (used to call the plugin): </fielddescription>
+    </field>
+
+    <field name="Author">
+      <fieldcontrol class="QLineEdit" defaulttext="Author" />
+      <fielddescription>Author: </fielddescription>
+    </field>
+
+    <field name="Date">
+      <fieldcontrol class="QLineEdit" validator="^[0-9/]+$" defaulttext="07/01/2011" />
+      <fielddescription>Date: </fielddescription>
+    </field>
+
+    <field name="Informations">
+      <fieldcontrol class="QLineEdit" defaulttext="Simple Plugin" />
+      <fielddescription>Plugin Description: </fielddescription>
+    </field>
+
+    <field name="Version">
+      <fieldcontrol class="QLineEdit" validator="^[0-9\.]+$" defaulttext="0.1" />
+      <fielddescription>Version: </fielddescription>
+    </field>
+
+    <field name="Group">
+      <fieldcontrol class="QLineEdit" defaulttext="" />
+      <fielddescription>Group: </fielddescription>
+    </field>
+
+  </fields>
+
+</wizard>

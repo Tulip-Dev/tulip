@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wizard version="1" kind="project" class="qt4project" firstpage="10" id="Tulip.Main" category="Tulip">
+  <icon>logo.png</icon>
+  <description>Creates an application based on Tulip libraries</description>
+  <displayname>Tulip application</displayname>;
+  <displaycategory>Tulip Project</displaycategory>
+  <files>
+    <file source="main.cpp"   target="main.cpp" openeditor="true"/>
+    <file source="main.cmake" target="CMakeLists.txt" openproject="true" openeditor="false"/>
+  </files>
+
+  <!-- Create a 2nd wizard page with parameters -->
+  <fieldpagetitle>Project settings</fieldpagetitle>
+  <fields>
+    <field name="TulipPath">
+      <fieldcontrol class="Utils::PathChooser"/>
+      <fielddescription>Tulip installation directory: </fielddescription>
+    </field>
+  </fields>
+
+</wizard>

@@ -1,0 +1,1 @@
+INSTALL(FILES tulip_launcher DESTINATION MacOS COMPONENT macos)

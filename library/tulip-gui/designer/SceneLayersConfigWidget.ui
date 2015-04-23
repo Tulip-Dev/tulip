@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SceneLayersConfigWidget</class>
+ <widget class="QWidget" name="SceneLayersConfigWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>420</width>
+    <height>540</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Layers</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton, QComboBox {
+border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+}
+QPushButton::flat {
+border-image: none;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+background-color: transparent;
+}
+QPushButton, QComboBox, QLabel {
+color: black;
+}
+QPushButton:hover, QComboBox:hover {
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+}
+QPushButton:disabled, QComboBox::disabled {
+color:gray;
+}
+QPushButton:pressed{
+border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
+}
+QPushButton::menu-indicator{
+subcontrol-origin: margin;
+subcontrol-position: center right;
+right: 4px;
+}
+QPushButton {
+outline: none;
+margin: 2
+}
+QComboBox::down-arrow {
+image: url(:/tulip/gui/ui/combobox_arrow.png);
+}
+QComboBox:drop-down {
+subcontrol-origin: padding;
+subcontrol-position: top right;
+border-left-style: none; 
+border-top-right-radius: 1px;
+border-bottom-right-radius: 1px;
+}
+#scrollArea, #scrollAreaWidgetContents {
+background-color: white;
+border: 0px;
+}
+QScrollArea {
+border: 0px;
+}
+QFrame[ section=&quot;true&quot; ] {
+border-top: 1px solid #D9D9D9;
+padding-top: 20px;
+}
+QFrame[ subsection = &quot;true&quot; ] {
+border-top: 1px solid #D9D9D9;
+padding-top: 5px;
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="margin">
+    <number>10</number>
+   </property>
+   <item>
+     <widget class="QFrame" name="horizontalFrame_2">
+       <property name="sizePolicy">
+	 <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+	 </sizepolicy>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+	 <item>
+           <widget class="QLabel" name="title">
+	     <property name="minimumSize">
+	       <size>
+		 <width>0</width>
+		 <height>36</height>
+	       </size>
+	     </property>
+	     <property name="styleSheet">
+	       <string notr="true">font-weight: bold;
+	       color: #595959;</string>
+	     </property>
+	     <property name="text">
+	       <string>&lt;font size=&quot;5&quot;&gt;Layers settings&lt;/font&gt;</string>
+	     </property>
+           </widget>
+	 </item>
+       </layout>
+     </widget>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
+     <property name="widgetResizable">
+      <bool>false</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>400</width>
+        <height>511</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>400</width>
+        <height>0</height>
+       </size>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>20</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QTreeView" name="treeView">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::AllEditTriggers</set>
+         </property>
+         <property name="section" stdset="0">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../resources/TulipGUIResource.qrc"/>
+ </resources>
+ <connections/>
+ <slots>
+  <slot>settingsChanged()</slot>
+  <slot>applySettings()</slot>
+ </slots>
+</ui>

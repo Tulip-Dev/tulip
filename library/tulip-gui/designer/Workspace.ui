@@ -1,0 +1,1129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Workspace</class>
+ <widget class="QWidget" name="Workspace">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1086</width>
+    <height>635</height>
+   </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>true</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#Workspace {
+border: 0px;
+}
+
+QSplitter::handle {
+background-color: #A9A9A9;
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QStackedWidget" name="workspaceContents">
+     <property name="styleSheet">
+      <string notr="true">#workspaceContents {
+border: 0px;
+background-color: white;
+}
+
+PlaceHolderWidget {
+background-color: white;
+}</string>
+     </property>
+     <property name="currentIndex">
+      <number>5</number>
+     </property>
+     <widget class="QWidget" name="startupPage">
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <widget class="QFrame" name="startupImportFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QPushButton" name="importButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>:/tulip/gui/icons/64/document-import.png</normaloff>:/tulip/gui/icons/64/document-import.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>64</width>
+                <height>64</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;There is no graph currently loaded into the workspace.&lt;br /&gt;Create a new graph from the import wizard by clicking on the button above&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="startupMainFrame">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <layout class="QVBoxLayout" name="startupLayout">
+          <property name="spacing">
+           <number>20</number>
+          </property>
+          <property name="leftMargin">
+           <number>10</number>
+          </property>
+          <property name="topMargin">
+           <number>10</number>
+          </property>
+          <property name="rightMargin">
+           <number>10</number>
+          </property>
+          <property name="bottomMargin">
+           <number>10</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QPushButton" name="startupButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>:/tulip/gui/icons/64/list-add.png</normaloff>:/tulip/gui/icons/64/list-add.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>64</width>
+                <height>64</height>
+               </size>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="startupMessageLabel">
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'DejaVu Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;There is no view currently loaded into the workspace.&lt;br /&gt;Add a new panel by clicking on the button above&lt;br/&gt;or using the [+ Add panel] button&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="sixPage">
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="splitter_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="handleWidth">
+          <number>3</number>
+         </property>
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
+          </property>
+          <widget class="PlaceHolderWidget" name="sixMode1" native="true"/>
+          <widget class="PlaceHolderWidget" name="sixMode2" native="true"/>
+         </widget>
+         <widget class="QSplitter" name="splitter_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
+          </property>
+          <widget class="PlaceHolderWidget" name="sixMode3" native="true"/>
+          <widget class="PlaceHolderWidget" name="sixMode4" native="true"/>
+         </widget>
+         <widget class="QSplitter" name="splitter_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
+          </property>
+          <widget class="PlaceHolderWidget" name="sixMode5" native="true"/>
+          <widget class="PlaceHolderWidget" name="sixMode6" native="true"/>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="exposePage">
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="tlp::WorkspaceExposeWidget" name="exposeMode">
+         <property name="styleSheet">
+          <string notr="true">border: 0px;</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="PlaceHolderWidget" name="singlePage"/>
+     <widget class="QWidget" name="splitPage">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="splitPageSplitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="handleWidth">
+          <number>3</number>
+         </property>
+         <property name="childrenCollapsible">
+          <bool>true</bool>
+         </property>
+         <widget class="PlaceHolderWidget" name="splitPagePanel1" native="true"/>
+         <widget class="PlaceHolderWidget" name="splitPagePanel2" native="true"/>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="splitPageHorizontal">
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="splitPageHorizontalSplitter">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <widget class="PlaceHolderWidget" name="splitPageHorizontalPanel1" native="true"/>
+         <widget class="PlaceHolderWidget" name="splitPageHorizontalPanel2" native="true"/>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="gridPage">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="gridPageVerticalSplitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="handleWidth">
+          <number>3</number>
+         </property>
+         <widget class="QSplitter" name="gridPageHorizontalSplitter1">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
+          </property>
+          <property name="childrenCollapsible">
+           <bool>false</bool>
+          </property>
+          <widget class="PlaceHolderWidget" name="gridPagePanel1" native="true"/>
+          <widget class="PlaceHolderWidget" name="gridPagePanel2" native="true"/>
+         </widget>
+         <widget class="QSplitter" name="gridPageHorizontalSplitter2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
+          </property>
+          <property name="childrenCollapsible">
+           <bool>false</bool>
+          </property>
+          <widget class="PlaceHolderWidget" name="gridPagePanel3" native="true"/>
+          <widget class="PlaceHolderWidget" name="gridPagePanel4" native="true"/>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="split3Page">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="split3PageHorizontalSplitter">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="handleWidth">
+          <number>3</number>
+         </property>
+         <widget class="QSplitter" name="split3PageVerticalSplitter">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
+          </property>
+          <widget class="PlaceHolderWidget" name="split3PagePanel1" native="true"/>
+          <widget class="PlaceHolderWidget" name="split3PagePanel2" native="true"/>
+         </widget>
+         <widget class="PlaceHolderWidget" name="split3PagePanel3" native="true"/>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="split32Page">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="split32HorizontalSplitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="handleWidth">
+          <number>3</number>
+         </property>
+         <widget class="PlaceHolderWidget" name="split32Panel1" native="true"/>
+         <widget class="QSplitter" name="split32VerticalSplitter">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
+          </property>
+          <widget class="PlaceHolderWidget" name="split32Panel2" native="true"/>
+          <widget class="PlaceHolderWidget" name="split32Panel3" native="true"/>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="split33Page">
+      <layout class="QVBoxLayout" name="verticalLayout_16">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="split33HorizontalSplitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="handleWidth">
+          <number>3</number>
+         </property>
+         <widget class="QSplitter" name="split33VerticalSplitter">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
+          </property>
+          <widget class="PlaceHolderWidget" name="split33Panel1" native="true"/>
+          <widget class="PlaceHolderWidget" name="split33Panel2" native="true"/>
+         </widget>
+         <widget class="PlaceHolderWidget" name="split33Panel3" native="true"/>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="bottomFrame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="bottomFrame" stdset="0">
+      <bool>true</bool>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>4</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="exposeButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Toggle expose mode</string>
+        </property>
+        <property name="text">
+         <string>Expose</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/expose.png</normaloff>:/tulip/gui/ui/expose.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+E</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="previousPageButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Previous</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+Left</string>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="pagesLabel"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="nextPageButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Next</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+Right</string>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="singleModeButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>1 panel per page</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+F1</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="splitModeButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>2 panels per page</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/split_screen.png</normaloff>:/tulip/gui/ui/split_screen.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+F2</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="splitHorizontalModeButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>2 panels per page</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/split_screen_horizontal.png</normaloff>:/tulip/gui/ui/split_screen_horizontal.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+F2</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="split32ModeButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/split3_2_screen.png</normaloff>:/tulip/gui/ui/split3_2_screen.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+F3</string>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="split33ModeButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/split3_3_screen.png</normaloff>:/tulip/gui/ui/split3_3_screen.png</iconset>
+        </property>
+        <property name="autoExclusive">
+         <bool>false</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="split3ModeButton">
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>3 panels per page</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/split3_screen.png</normaloff>:/tulip/gui/ui/split3_screen.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+F4</string>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="gridModeButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>4 panels per page</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+F5</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="sixModeButton">
+        <property name="minimumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/gui/ui/six_screen.png</normaloff>:/tulip/gui/ui/six_screen.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Shift+F6</string>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlaceHolderWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">tulip/PlaceHolderWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tlp::WorkspaceExposeWidget</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">tulip/WorkspaceExposeWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>gridModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToGridMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1057</x>
+     <y>634</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>splitModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSplitMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>917</x>
+     <y>634</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>singleModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSingleMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>889</x>
+     <y>634</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextPageButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>nextPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>510</x>
+     <y>634</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>previousPageButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>previousPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>470</x>
+     <y>634</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exposeButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>Workspace</receiver>
+   <slot>expose(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>32</x>
+     <y>623</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>split3ModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSplit3Mode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1029</x>
+     <y>634</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>split32ModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSplit32Mode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>973</x>
+     <y>634</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sixModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSixMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1075</x>
+     <y>624</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>543</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>split33ModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSplit33Mode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>989</x>
+     <y>622</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>542</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>splitHorizontalModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Workspace</receiver>
+   <slot>switchToSplitHorizontalMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>933</x>
+     <y>622</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>542</x>
+     <y>317</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>delView(tlp::View*)</slot>
+  <slot>switchToStartupMode()</slot>
+  <slot>switchToSingleMode()</slot>
+  <slot>switchToSplitMode()</slot>
+  <slot>switchToGridMode()</slot>
+  <slot>nextPage()</slot>
+  <slot>previousPage()</slot>
+  <slot>expose(bool)</slot>
+  <slot>switchToSplit3Mode()</slot>
+  <slot>switchToSplit32Mode()</slot>
+  <slot>switchToSplit33Mode()</slot>
+  <slot>switchToSixMode()</slot>
+  <slot>switchToSplitHorizontalMode()</slot>
+ </slots>
+</ui>

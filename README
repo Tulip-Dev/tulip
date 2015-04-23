@@ -1,0 +1,28 @@
+This software is under LGPL licence, (see COPYING.LESSER file).
+It has been designed and implemented by David Auber and the Tulip dev team.
+
+Requirements:
+
+- cmake >= 2.8.3
+- freetype2
+- zlib
+- libjpeg
+- libpng
+- Qt 4.7.0 or higher
+- OpenGl 2.0
+- glew 1.4 or higher
+- gcc, g++ >= 4.5.0, clang or MS Visual Studio
+- pyhton >=2.5
+- sphinx and doxygen to generate the documentation
+
+
+The installation procedure is described in the files
+INSTALL.linux, INSTALL.mac, INSTALL.win
+
+Join the Tulip Team:
+
+If you want to support our project, all new plug-ins and bug fixes are
+welcome.
+
+For bug reports, use http://www.tulip-software.org (Support => Bug Report)
+

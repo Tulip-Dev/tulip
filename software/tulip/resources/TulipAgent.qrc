@@ -1,0 +1,34 @@
+<RCC>
+    <qresource prefix="/tulip/app">
+        <file>icons/arrow-left.png</file>
+        <file>icons/arrow-right.png</file>
+        <file>icons/16/list-add.png</file>
+        <file>icons/16/package-upgrade.png</file>
+        <file>icons/16/package-purge.png</file>
+        <file>icons/16/start.png</file>
+        <file>icons/16/edit-delete.png</file>
+        <file>icons/16/emblem-downloads.png</file>
+        <file>icons/16/package-installed-updated.png</file>
+        <file>icons/16/help-contents.png</file>
+        <file>icons/64/plugin_algorithm.png</file>
+        <file>icons/64/plugin_controller.png</file>
+        <file>icons/64/plugin_glyph.png</file>
+        <file>icons/64/plugin_import_export.png</file>
+        <file>icons/64/plugin_interactor.png</file>
+        <file>icons/64/plugin_view.png</file>
+        <file>icons/16/plugin_view.png</file>
+        <file>icons/16/plugin_algorithm.png</file>
+        <file>icons/16/plugin_controller.png</file>
+        <file>icons/16/plugin_glyph.png</file>
+        <file>icons/16/plugin_import_export.png</file>
+        <file>icons/16/plugin_interactor.png</file>
+        <file>icons/16/error.png</file>
+        <file>icons/16/view-refresh.png</file>
+        <file>icons/16/list-del.png</file>
+        <file>icons/icon-quote.gif</file>
+        <file>icons/forums.png</file>
+        <file>icons/irc.png</file>
+        <file>icons/tutorials.png</file>
+        <file>icons/16/dialog-error.png</file>
+    </qresource>
+</RCC>

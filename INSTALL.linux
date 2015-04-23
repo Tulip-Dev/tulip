@@ -1,0 +1,48 @@
+
+Dependencies List - Ubuntu
+==========================
+libqt4-dev libfreetype6-dev zlib1g-dev libglew-dev libjpeg-dev libpng12-dev build-essential cmake doxygen libxml2-dev 
+
+optional:
+  python-qt4-dev
+and one of:
+  python2.5-dev python2.6-dev python2.7-dev
+To build the doc:
+  qt4-dev-tools
+
+Basic Installation
+==================
+
+   These are generic installation instructions.
+
+   Tulip uses CMake as its main buildsystem, and the configure scripts along with all the autoconf/automake tools are deprecated and may not work.
+   
+The simplest way to compile this package is:
+
+  1. `cd' to the directory containing the package's source code, and create a `build` directory.
+     Enter this `build` folder, and type `cmake ..`. This will check for all of Tulip's dependencies, and warn if some are missing.
+    If you want to build with debug information, or with optimisations, you need to tell CMake to do so.
+    You can either use `cmake -i`, which will ask you what kind of build you want (Debug/Release), or invoke cmake like this: 
+    `cmake .. -DCMAKE_BUILD_TYPE=Release` (or Debug).
+
+  2. Type `make' to compile the package. (if you have more than one core, use `-jX` where X is your number of cores + 1.
+
+  4. Type `make install' to install the programs and any data files and
+     documentation.
+
+  5. You can remove the program binaries and object files from the
+     source code directory by typing `make clean'.
+
+Compilers and Options
+=====================
+
+   You can pass options to cmake, either by using `cmake .. -i` or `cmake-gui ..`, which will provide you with some control over the build.
+   You can change the build type (Debug Vs. Release) and compilation options.
+
+Installation Names
+==================
+
+   By default, `make install' will install the package's files in
+`/usr/local/bin', `/usr/local/man', etc.  You can specify an
+installation prefix other than `/usr/local' by giving cmake' the
+option `-DCMAKE_INSTALL_PREFIX=PATH'.

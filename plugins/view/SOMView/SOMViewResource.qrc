@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/" >
+	<file>sliderTexture.png</file>	
+	<file>i_slider.png</file>
+	<file>arrow-up.png</file>
+	<file>som_view.png</file>
+    </qresource>
+</RCC>

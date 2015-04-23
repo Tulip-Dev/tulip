@@ -1,0 +1,11 @@
+	dl n = 4
+		format = lowerhalf
+	labels:
+	Sanders,Skvoretz
+		S.Smith,T.Smith
+	data:
+		2
+	1 2
+	1 1 2
+	0 1 0 2
+

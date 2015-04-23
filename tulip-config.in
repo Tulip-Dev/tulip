@@ -1,0 +1,140 @@
+#!/bin/bash
+
+thisdir=$(dirname "$0")
+if test "$thisdir" = "." ; then
+  thisdir=$PWD
+fi
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+includedir=@includedir@
+libdir=@libdir@
+sharedir=${prefix}/share
+libversion=@libversion@
+libextension=so
+plugincxxflags="-fPIC -DPIC"
+pluginldflags=-shared
+pluginpath=${prefix}/lib/tulip
+
+WINNT=$(sh -c 'uname -s | grep -q MINGW32_NT; echo $?')
+MACOSX=$(sh -c 'uname -s | grep -q Darwin; echo $?')
+LINUX=$(sh -c 'uname -s | grep -q Linux; echo $?')
+
+# check for MacOS or Windows installation
+if [ $MACOSX -eq 0 ] ; then
+  libextension=dylib
+  pluginldflags="-bundle -Wl,-bind_at_load -flat_namespace"
+  if [ -e $(dirname $thisdir)/Frameworks/QtCore ] ; then
+# MacOS bundle
+    includedir=$(dirname $thisdir)/include
+    libdir=$(dirname $thisdir)/Frameworks
+    pluginpath=$(dirname $thisdir)/lib/tulip
+  fi
+fi
+if [ $WINNT -eq 0 ] ; then
+  libversion=@WIN_VERSION@
+  libextension=dll
+  plugincxxflags=-DPIC
+  if [ -f "$thisdir/../Uninstall.exe" ] ; then
+#   Windows installation
+    drive=`echo ${thisdir} | awk -F / '{print $2}'`
+    ndir=${thisdir/\/$drive\//$drive:/}
+    if [ -d ${ndir} ]; then
+      thisdir=${ndir}
+    fi
+    includedir=${thisdir}/../include
+    libdir=${thisdir}/../bin
+    pluginpath=${thisdir}/../lib/tulip
+  else
+    pluginpath=${prefix}/lib/tulip
+    libdir=${prefix}/bin
+  fi
+fi
+
+usage()
+{
+    cat <<EOF
+Usage: tulip-config [OPTIONS]
+Options:
+	--version (return the current version of Tulip)
+	--libs (return the whole Tulip libs)
+	--lib_tulip (return the Tulip core lib)
+	--lib_ogl (return the Tulip OpenGL lib)
+	--cxxflags (return the Tulip needed cxx flags)
+	--glincludes (return the OpenGL includes)
+	--gllibs (return the OpenGL libs)
+	--plugincxxflags (return the Tulip plugin cxx flags)
+	--pluginextension (return the plugin file extension)
+	--pluginldflags (return the plugin loader flags)
+        --pluginpath (return the path for installation of Tulip plugins)
+        --qtincludes (return the Qt includes)
+        --qtlibs (return the Qt libs needed by Tulip)
+        --sharepath (return the path where share data are installed)
+	
+EOF
+    exit $1
+}
+
+if test $# -eq 0; then
+	usage 1 1>&2
+fi
+
+OUTPUT=
+while test $# -gt 0; do
+  case "$1" in
+  -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) optarg= ;;
+  esac
+
+  case $1 in
+    --version)
+      OUTPUT=`echo ${OUTPUT} @VERSION@`
+      ;;
+    --cxxflags)
+      OUTPUT=`echo ${OUTPUT} -I${includedir} @QT_CPPFLAGS@`
+      ;;
+    --glincludes)
+      OUTPUT=`echo ${OUTPUT} @GL_INCLUDES@`
+      ;;
+    --gllibs)
+      OUTPUT=`echo ${OUTPUT} @GL_LDFLAGS@ @LIB_GL@`
+      ;;
+    --libs)
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/lib@FTGLLibrary@.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} ${libdir}/lib@QuazipLibrary@.${libextension} ${libdir}/lib@QxtLibrary@.${libextension} @OPENMP_CXXFLAGS@`
+      ;;
+    --lib_tulip)
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} @OPENMP_CXXFLAGS@`
+      ;;
+    --lib_ogl)
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-ogl-${libversion}.${libextension}  ${libdir}/lib@FTGLLibrary@.${libextension}`
+      ;;
+    --plugincxxflags)
+      OUTPUT=`echo ${OUTPUT} ${plugincxxflags}`
+      ;;
+    --pluginldflags)
+      OUTPUT=`echo ${OUTPUT} ${pluginldflags}`
+      ;;
+    --pluginextension)
+      OUTPUT=`echo ${OUTPUT} ${libextension}`
+      ;;
+    --pluginpath)
+      OUTPUT=`echo ${OUTPUT} ${pluginpath}`
+      ;;
+    --qtlibs)
+      OUTPUT=`echo ${OUTPUT} @QT_LDFLAGS@ @LIB_QT@`
+      ;;
+    --qtincludes)
+      OUTPUT=`echo ${OUTPUT} -I@QT_INCLUDE_DIR@`
+      ;;
+    --sharepath)
+      OUTPUT=`echo ${OUTPUT} ${sharedir}`
+      ;;
+    *)
+      usage
+      ;;
+  esac
+  shift
+done
+
+echo ${OUTPUT}
+
+exit 0

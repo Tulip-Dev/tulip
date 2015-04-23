@@ -1,0 +1,57 @@
+QTabWidget {
+  background-color: transparent;
+}
+
+QTabWidget::pane {
+  background-color: white;
+  border: 1px solid #C9C9C9;
+}
+
+QTabBar::tab {
+  border-image:none;
+  border: 1px solid #C9C9C9;
+  border-right: 0px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  min-height: 15ex;
+  padding: 2px;
+  font: bold;
+}
+
+QTabBar::tab:!selected {
+  margin-left: 1px;
+}
+
+QTabBar::tab:!selected {
+  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+  stop: 0 #ffffff,
+  stop: 0.4 #eeeeee,
+  stop: 0.401 #e2e2e2,
+  stop: 1 #dddddd);
+  color: black;
+}
+
+QTabBar::tab:!selected:hover {
+  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+  stop: 0 #ffffff,
+  stop: 0.4 #fefefe,
+  stop: 0.401 #f2f2f2,
+  stop: 1 #ededed);
+}
+
+QTabBar::tab:selected {
+  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+  stop: 0 #838383,
+  stop: 0.4 #707070,
+  stop: 0.401 #636363,
+  stop: 1 #4a4a4a);
+  color: white;
+}
+
+QTabBar::tab:selected:hover {
+  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+  stop: 0 #939393,
+  stop: 0.4 #808080,
+  stop: 0.401 #737373,
+  stop: 1 #5a5a5a);
+}

@@ -1,0 +1,10 @@
+	dl n = 4
+		format = lowerhalf
+		diagonal = absent
+	labels:
+	Sanders,Skvoretz
+		S.Smith,T.Smith
+	data:
+	1 
+	1 1
+	0 1 0  

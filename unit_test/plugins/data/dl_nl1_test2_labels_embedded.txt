@@ -1,0 +1,9 @@
+Dl n = 4 
+format = nodelist1
+labels:
+Alfred, Betty, Chuck, David
+Labels embedded
+Data:
+Betty chuck alfred
+Alfred chuck david
+David chuck betty

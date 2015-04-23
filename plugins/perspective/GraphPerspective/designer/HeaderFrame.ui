@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HeaderFrameData</class>
+ <widget class="QWidget" name="HeaderFrameData">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>717</width>
+    <height>25</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>25</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>25</height>
+   </size>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#mainFrame, QToolButton, QPushButton, .QWidget {
+border-image:none;
+background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+stop: 0 #939393,
+stop: 0.4 #808080,
+stop: 0.401 #737373,
+stop: 1 #5a5a5a);
+border: 0px;
+color: white;
+}
+QLabel {
+border-image:none;
+border: 0px;
+color: white;
+}
+QComboBox:hover, QToolButton:hover, QPushButton:hover {
+border-image:none;
+background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+stop: 0 #8F8F8F,
+stop: 0.4 #7C7C7C,
+stop: 0.401 #6F6F6F,
+stop: 1 #565656);
+border: 0px;
+color: white;
+}
+QToolButton:pressed, QPushButton:pressed {
+border-image:none;
+background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+stop: 0 #777777,
+stop: 0.4 #646464,
+stop: 0.401 #575757,
+stop: 1 #3e3e3e);
+border: 0px;
+color: white;
+}
+
+#expandButton {
+image: url(&quot;:/tulip/gui/ui/arrowup.png&quot;);
+}
+#expandButton::checked {
+image: url(&quot;:/tulip/gui/ui/arrowdown.png&quot;);
+}
+
+QComboBox::down-arrow {
+image: url(&quot;:/tulip/gui/ui/down_arrow-white.png&quot;);
+}
+QComboBox:drop-down {
+subcontrol-origin: padding;
+subcontrol-position: top right;
+border-left-style: none; 
+border-top-right-radius: 1px;
+border-bottom-right-radius: 1px;
+}
+QComboBox QAbstractItemView {
+background-color: white;
+color: black;
+border: 1px solid #C9C9C9;
+}</string>
+  </property>
+  <property name="title" stdset="0">
+   <string/>
+  </property>
+  <property name="header" stdset="0">
+   <bool>true</bool>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="mainFrame">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QComboBox" name="menusCombo">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="titleLabel">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="expandButton">
+        <property name="minimumSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>25</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+	<property name="toolTip">
+	 <string>Hide contents</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

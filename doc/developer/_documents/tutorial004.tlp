@@ -1,0 +1,45 @@
+(tlp "2.3"
+(date "06-14-2013")
+(comments "")
+(nb_nodes 12)
+;(nodes <node_id> <node_id> ...)
+(nodes 0..11)
+(nb_edges 12)
+;(edge <edge_id> <source_id> <target_id>)
+(edge 0 1 2)
+(edge 1 0 1)
+(edge 2 2 0)
+(edge 3 4 5)
+(edge 4 3 4)
+(edge 5 5 3)
+(edge 6 7 8)
+(edge 7 6 7)
+(edge 8 8 6)
+(edge 9 10 11)
+(edge 10 9 10)
+(edge 11 11 9)
+(cluster 1
+(nodes 3..5)
+(edges 3..5)
+)
+(cluster 2
+(nodes 6..11)
+(edges 6..11)
+(cluster 3
+(nodes 9..11)
+(edges 9..11)
+)
+)
+(graph_attributes 0 
+(string "file" "tutorial004.tlp")
+)
+(graph_attributes 1 
+(string "name" "unnamed")
+)
+(graph_attributes 2 
+(string "name" "unnamed")
+)
+(graph_attributes 3 
+(string "name" "unnamed")
+)
+)

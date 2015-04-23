@@ -1,0 +1,41 @@
+dl nr=37, nc=30 format = nodelist2
+row labels embedded
+column labels embedded
+data:
+s01 Gramsci Lukacs Malinowski Quetelet
+s02 DuBois Ferguson Lukacs Park Sorokin Tocqueville Tonnies Veblen Ward
+s03 Ferguson Lukacs Marx Pareto Quetelet Ward
+s04 Lukacs Tocqueville
+s05 Ferguson Gramsci Pareto Park Schutz Thomas
+s06 DuBois Ferguson Mannheim Michels Quetelet Simmel Spencer Tonnies Ward
+s07 Mannheim Michels Schutz Simmel
+s08 Ferguson Lukacs Marx Michels Pareto Schutz Spencer
+s09 Lukacs Mannheim Pareto Quetelet Schutz Sorokin Ward
+s10 Durkheim Ferguson Gramsci Malinowski Thomas
+s11 Ferguson Halbwachs Lukacs Mead Sain-Simon Schutz Spencer Tocqueville Veblen
+s12 Mannheim Mead Tocqueville Ward
+s13 Malinowski Mauss Michels Pareto Park Sorokin Tonnies
+s14 DuBois Gramsci Tonnies Ward
+s15 Ferguson Lukacs Quetelet Rousseau Schutz Tocqueville
+s16 Lukacs Marx Mauss Michels Rousseau Schutz
+s17 Ferguson Malinowski Mannheim Mead Michels Pareto Quetelet Schutz Sorokin
+s18 Pareto Quetelet Simmel Spencer
+s19 Addams Ferguson Lukacs Mauss Rousseau Sain-Simon Simmel Tonnies
+s20 DuBois Durkheim Ferguson Gramsci Lukacs Marx Michels Pareto Quetelet Rousseau Schutz Simmel Ward
+s21 Ferguson Lukacs Schutz
+s22 Comte DuBois Park Simmel
+s23 Gramsci Lukacs Malinowski Pareto Quetelet Smith
+s24 Lukacs Marx Simmel Smith Spencer Tocqueville Tonnies
+s25 DuBois Lukacs Malthus Mannheim Mead Simmel
+s26 Durkheim
+s27 Gramsci Lukacs Malinowski Mauss Michels Rousseau Tocqueville
+s28 Durkheim Ferguson Lukacs Malthus Mannheim Mauss Mead Pareto Rousseau Schutz Tonnies Ward
+s29 Lukacs Malthus Tocqueville
+s30 Marx Pareto Spencer Tonnies
+s31 DuBois Ferguson Lukacs Malinowski Mannheim Marx Mauss Michels Quetelet Rousseau Schutz Tocqueville Ward
+s32 Mead Schutz
+s33 Gramsci Lukacs Marx Pareto Schutz Ward
+s34 Lukacs Mannheim Michels Sorokin Thomas Tocqueville Veblen
+s35 Lukacs Marx Michels Rousseau Simmel Smith Tonnies
+s36 Lukacs Mannheim Quetelet Ward
+s37 Simmel Spencer

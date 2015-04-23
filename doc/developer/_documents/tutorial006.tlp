@@ -1,0 +1,16 @@
+(tlp "2.3"
+(date "06-14-2013")
+(comments "")
+(nb_nodes 4)
+;(nodes <node_id> <node_id> ...)
+(nodes 0..3)
+(nb_edges 4)
+;(edge <edge_id> <source_id> <target_id>)
+(edge 0 1 2)
+(edge 1 0 1)
+(edge 2 2 0)
+(edge 3 3 0)
+(graph_attributes 0 
+(string "file" "tutorial006.tlp")
+)
+)

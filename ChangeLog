@@ -1,0 +1,96 @@
+Release 2.0.2 :
+	Tulip library :
+	OpenGL rendering :
+	Plug-ins :
+	HCI :
+	General :
+
+Release 2.0.1 :
+	Tulip library :
+	OpenGL rendering :
+	Plug-ins :
+	HCI :
+	General :
+
+Release 2.0.0 :
+	New version of Tulip, not compatible with 1.2 version
+	Tulip library :
+	- hierarchy of graph have been simplified and optimized.
+	- Optimization of the property storage
+	- New plugin call mechanism
+	OpenGL rendering :
+	- New label density management in bitmap mode
+	- New font rendering engine have been added
+	- Lot of optimization of the incremental rendering
+	- Remove dependency with glut library.
+	Plug-ins :
+	- new reflexion mechanism to manage parameters.
+	- new tree drawing algorithm (bubble tree)
+	HCI :
+	- new Overview window
+	- new MDI interface
+	- new Cut/paste.
+	- new morphing.
+	- new dialog for plug-in parameters.
+	General :
+	- Code cleaning
+	- Code refactoring
+	- Code documentation
+	
+Release 1.2.5 :
+	This is a maintenance release, fix of several bugs.
+	Plugin : Add the ACE graph drawing algorithm
+	Lib tulip : fix a bug in the computation of the degree 
+	of nodes in a subgraph, fix a bug when erasing a property, 
+	fix a bug in the isTree() function.
+	Software Tulip : fix a bug during snapshot when two windows overlap.
+	Lib tulip-qt : fix core dump during the preview of a GlGraphWidget in 
+	QT-designer.
+	
+Release 1.2.4 
+	This is a maintenance release, fix of several bugs (for large graph) and 
+	compilation problems. fix lighting problem, fix selection problem, split 
+	in several libraries, fix centering problem, code cleaning and refactoring. 
+	
+Release 1.2.3 Tulip
+	-Made separate library for openGL displaying stuff
+	-Corrected several displaying bugs, such as connexion between arrow and edges
+	-tlprender now effectively uses PNG by default
+	-Plugins are now looked up in installation directory AND additionnally in
+	 user's home dir
+	-Made configure and build process more robust: fix uses of --with-gl[...]
+	 parameters in configure, can build on systems without the "sstream" header,
+	 corrected several inclusions in source files, disable compilation of
+	 tlprender if libOSMesa is not found or is unusable.
+
+Release 1.2.2 Tulip
+	This release includes a new mouse interactor for easy navigation, 
+	a glyph plug-in mechanism to enable the easy extension of shapes 
+	associated to a graphs elements, support for textures and extrusion 
+	in the 3D renderer that enables images to be displayed on nodes and 
+	edges using swept surfaces, the enhancement of the Import/export format 
+	for saving camera positions, and the enhancement of several graph drawing algorithms. 
+
+Release 1.2.1 Tulip
+	A new rendering method ("Fan rendering") has been added in order to 
+	navigate in trees. Support of meta nodes (nodes containing a graph) 
+	has been added in the the library and in the OpenGl renderer, and a 
+	progress bar mechanism has been added in order to interrupt the algorithm. 
+	There were other bugfixes and enhancements. 
+
+Release 1.2.0 Tulip
+	This release adds Qt-3.x support, spline and bezier curves support, a 
+	hierarchical drawing enhancement, automake support, textured fonts, 
+	output images (BMP, JPEG, etc.), box selection with OpenGl alpha blending, 
+	new plugins, a new color mapping model, and a lot of other bugfixes and enhancements. 
+
+Release 1.1.0 Tulip
+	The GTL library has been removed. The 3D graph viewer now supports lights. 
+	The display of 3D labels was improved. Saving is now supported by a plug-in 
+	mechanism. The new Tulip Logo was added. The GEM layout plug-in was added. 
+	Several metric plug-ins, several clustering plug-ins, four import plug-ins, 
+	and some export plug-ins were added. A lot of other fixes and improvements 
+	were made. 
+	
+Release 1.0.0 Tulip
+	Initial release. 

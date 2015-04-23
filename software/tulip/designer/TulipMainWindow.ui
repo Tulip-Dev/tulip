@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TulipMainWindowData</class>
+ <widget class="QMainWindow" name="TulipMainWindowData">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>886</width>
+    <height>651</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Tulip</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <normaloff>:/tulip/gui/icons/tulip.ico</normaloff>:/tulip/gui/icons/tulip.ico</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QToolButton, QPushButton, QComboBox {
+border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+}
+QToolButton, QPushButton, QComboBox, QLabel {
+color: black;
+}
+QToolButton:hover, QPushButton:hover, QComboBox:hover {
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+}
+QToolButton:disabled, QPushButton:disabled, QComboBox::disabled {
+color:gray;
+}
+QToolButton:pressed, QPushButton:pressed{
+border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
+}
+QPushButton::menu-indicator{
+subcontrol-origin: margin;
+subcontrol-position: center right;
+right: 4px;
+}
+QPushButton{
+outline: none;
+margin: 2
+}
+QComboBox::down-arrow {
+image: url(:/tulip/gui/ui/combobox_arrow.png);
+}
+QComboBox:drop-down{
+subcontrol-origin: padding;
+subcontrol-position: top right;
+border-left-style: none; 
+border-top-right-radius: 1px;
+border-bottom-right-radius: 1px;
+}
+QStatusBar QLabel {
+color: rgb(210,29,33);
+font: bold;
+}</string>
+  </property>
+  <property name="toolButtonStyle">
+   <enum>Qt::ToolButtonTextBesideIcon</enum>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::Rounded</enum>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="titleFrame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">  background-color: qlineargradient(spread:pad, 
+  x1:0, y1:0, x2:0, y2:1, 
+  stop:0 #ffffff, 
+  stop:1 #dddddd);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>20</number>
+       </property>
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="topMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="mainLogo">
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>70</height>
+          </size>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap>../share/tulip/bitmaps/welcomelogo.bmp</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="indent">
+          <number>0</number>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="mainTitle">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600;&quot;&gt;Tulip 4.1&lt;/span&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="exitButton">
+         <property name="text">
+          <string>Exit</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="pageChoosers">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QToolButton {
+	border-image:none;
+	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+	stop: 0 #838383,
+	stop: 0.4 #707070,
+	stop: 0.401 #636363,
+	stop: 1 #4a4a4a);
+	border: 0px solid black;
+	border-top: 1px solid #303030;
+	border-bottom: 1px solid #202020;
+	color: white;
+	height:20px;
+}
+
+QToolButton:hover {
+	border-image:none;
+	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+	stop: 0 #909090,
+	stop: 0.4 #808080,
+	stop: 0.401 #707070,
+	stop: 1 #555555);
+}
+
+QToolButton:checked, QToolButton:checked:pressed {
+	border-image:none;
+	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+	stop: 0 #ffffff,
+	stop: 0.4 #eeeeee,
+	stop: 0.401 #e2e2e2,
+	stop: 1 #dddddd);
+	color: black;
+	border-top: 1px solid #606060;
+	border-bottom: 1px solid #404040;
+}
+
+QToolButton:pressed {
+	border-image:none;
+	background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+	stop: 0 #383838,
+	stop: 0.2 #404040,
+	stop: 0.201 #484848,
+	stop: 1 #505050);
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QToolButton" name="welcomePageChooser">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Projects</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <property name="autoExclusive">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="pluginsPageChooser">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Plugins center</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="autoExclusive">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="aboutPageChooser">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>About us</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="autoExclusive">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QStackedWidget" name="pages">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="TulipWelcomePage" name="welcomePage"/>
+      <widget class="PluginsCenter" name="pluginsPage"/>
+      <widget class="AboutTulipPage" name="aboutPage"/>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>TulipWelcomePage</class>
+   <extends>QWidget</extends>
+   <header>TulipWelcomePage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>PluginsCenter</class>
+   <extends>QWidget</extends>
+   <header>PluginsCenter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AboutTulipPage</class>
+   <extends>QWidget</extends>
+   <header>AboutTulipPage.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

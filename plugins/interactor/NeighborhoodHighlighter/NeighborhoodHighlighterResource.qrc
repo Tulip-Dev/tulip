@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/" >
+	<file>i_neighborhood_highlighter.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
+<plist version="1.0">
+<dict>
+
+  <key>CFBundleIdentifier</key>
+  <string>org.TulipSoftware.tulip</string>
+
+  <key>CFBundleExecutable</key>
+  <string>tulip_launcher</string>
+
+  <key>CFBundleGetInfoString</key>
+  <string>Tulip from www.tulip-software.org</string>
+
+  <key>CFBundleIconFile</key>
+  <string>tulip.icns</string>
+
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+
+  <key>CFBundleSignature</key>
+  <string>tlps</string>
+
+  <key>CFBundleShortVersionString</key>
+  <string>4.0</string>
+
+  <key>NOTE</key>
+  <string>Created by LaBRI Visualization Team</string>
+
+</dict>
+</plist>

@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>MAPAGR4.txt</file>
+        <file>planisphere.jpg</file>
+        <file>help-contents.png</file>
+        <file>geographic_view.png</file>
+        <file>zoom+.png</file>
+        <file>zoom-.png</file>
+    </qresource>
+</RCC>

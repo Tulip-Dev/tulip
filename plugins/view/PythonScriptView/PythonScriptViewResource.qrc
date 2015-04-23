@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/round_minus.png</file>
+        <file>icons/round_plus.png</file>
+        <file>icons/doc_export.png</file>
+        <file>icons/doc_import.png</file>
+        <file>icons/doc_new.png</file>
+        <file>icons/playback_play.png</file>
+        <file>icons/playback_pause.png</file>
+        <file>icons/playback_stop.png</file>
+        <file>icons/save.png</file>
+        <file>icons/wrench_plus_2.png</file>
+        <file>icons/info.png</file>
+        <file>icons/doc_plus.png</file>
+        <file>icons/dialog-error.png</file>
+        <file>icons/python.png</file>
+    </qresource>
+</RCC>

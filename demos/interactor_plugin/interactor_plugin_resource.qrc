@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>i_interactor_plugin.png</file>
+    </qresource>
+</RCC>

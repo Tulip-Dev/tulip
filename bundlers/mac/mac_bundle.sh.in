@@ -1,0 +1,127 @@
+#!/bin/sh
+
+function usage {
+        echo "Usage : $0 <Bundle Destination Dir> [<Application Name>=Tulip]"
+}
+
+APP_NAME=Tulip
+
+if [ $# -eq 2 ]
+then
+    APP_NAME=$2
+else
+    if [ $# -ne 1 ]
+    then
+        usage $0
+        exit 1
+    fi
+fi
+
+TULIP_DIR=@CMAKE_INSTALL_PREFIX@
+DEST_DIR=$1
+SRC_DIR=@tulip_SOURCE_DIR@/bundlers/mac
+PYTHON_BUILD=@BUILD_PYTHON_COMPONENTS@
+QT_BINARY_DIR=@QT_BINARY_DIR@
+
+if [ "${QT_BINARY_DIR}" = "" ]
+then
+    QT_BINARY_DIR=@_qt5Gui_install_prefix@/bin
+fi
+
+if [ ! -d ${TULIP_DIR} ]
+then
+    echo "Error : the specified Tulip installation directory does not exist"
+    exit 1
+fi
+
+echo "Wiping previous bundles into ${DEST_DIR}"
+rm -rf "${DEST_DIR}/application" 2>/dev/null
+rm -f "${DEST_DIR}/${APP_NAME}-@TulipVersion@.dmg" 2>/dev/null
+mkdir -p "${DEST_DIR}/application"
+cd "${DEST_DIR}/application"
+mkdir .background
+cp "${SRC_DIR}/background.png" .background/
+rm -rf * 2>/dev/null
+
+echo 'Creating base directories'
+cd "${DEST_DIR}/application"
+mkdir -p Tulip.app/Contents/{MacOS,Resources,Frameworks}
+cd Tulip.app/Contents
+cp "${SRC_DIR}/Info.plist" .
+cp "${SRC_DIR}/tulip.icns" Resources/
+
+echo 'Copying binaries & libraries'
+cd "${DEST_DIR}/application/Tulip.app/Contents/"
+cp -r "${TULIP_DIR}"/* .
+mv lib/*.dylib Frameworks/
+rm -rf include
+
+chmod +x MacOS/tulip_launcher
+
+echo 'Copying license'
+cd "${DEST_DIR}/application"
+cp "${SRC_DIR}/../../COPYING" .
+
+QT_LIB_DIR="@QT_QTCORE_LIBRARY@/.."
+echo 'Copying Resources'
+cd "${DEST_DIR}/application/Tulip.app/Contents/Frameworks/"
+cp -r "${QT_LIB_DIR}/QtGui.framework/Resources/qt_menu.nib" ../Resources
+cp "@QT_QTCLUCENE_LIBRARY@" .
+
+if [ "$PYTHON_BUILD" = "ON" ]
+then
+# Case when we build the bundle on Snow Leopard or lower version of MacOS with Python 2.7
+# Python 2.7 has to be manually installed for building Tulip
+# We include the Python Framework in the bundle in order for Tulip to run
+# when Python 2.7 is not installed on the system (Snow Leopard and Leopard)
+MAJOR_KERNEL_VERSION=$(uname -r | awk -F '.' '{print $1}')
+# last kernel release of Snow Leopard is 10.8.0
+if [ ${MAJOR_KERNEL_VERSION} -lt 11 -a -d /Library/Frameworks/Python.framework/Versions/2.7 ]
+then
+    echo "Copying /Library/Frameworks/Python.framework" to $(pwd)
+    # Copy the whole Python framework
+    cp /Library/Frameworks/Python.framework/Versions/2.7/lib/libpython2.7.dylib .
+    cp /Library/Frameworks/Python.framework/Versions/2.7/Python .
+    cp -r /Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7 ../lib/ 
+    find ../lib/python2.7 \( -iname \*\.pyc -o -iname \*\.pyo \) -print0 | xargs -0 rm -f     
+fi
+fi
+
+echo 'Copying more libraries'
+for lib in libGLEW libfreetype libz libstdc++; do
+  for search_path in /usr/lib /opt/local/lib ; do
+    [ "$(ls $search_path/$lib.*.dylib 2> /dev/null)" != "" ] && cp $search_path/$lib.*.dylib .
+  done
+done
+
+# use macdeployqt to configure exe & libraries
+cd ..
+cp bin/tulip MacOS
+# configure tulip
+${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -no-plugins
+mv MacOS/tulip bin/tulip
+# configure tulip_perpective
+cp bin/tulip_perspective MacOS/tulip
+${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app
+# copy exe and libraries
+mv MacOS/tulip bin/tulip_perspective
+cp Frameworks/*.dylib lib
+mv Plugins/imageformats .
+# remove unneeded stuff
+rm -rf Plugins Resources/qt.conf
+# rename
+mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@TulipVersion@.app
+
+echo 'Generating DMG'
+cd "${DEST_DIR}"
+sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@TulipVersion@" "${DEST_DIR}/application"
+
+rm -rf "${DEST_DIR}/application" 2>/dev/null
+
+if [ "$PYTHON_BUILD" = "ON" ]
+then
+echo "${APP_NAME}-@TulipVersion@.dmg has been correctly generated in ${DEST_DIR}"
+else
+echo "${APP_NAME}-@TulipVersion@_no_python.dmg has been correctly generated in ${DEST_DIR}"
+mv ${APP_NAME}-@TulipVersion@.dmg ${APP_NAME}-@TulipVersion@_no_python.dmg
+fi

@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GraphHierarchiesEditorData</class>
+ <widget class="QWidget" name="GraphHierarchiesEditorData">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>597</width>
+    <height>417</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="HeaderFrame" name="header" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title" stdset="0">
+      <string>Graphs</string>
+     </property>
+     <property name="expandable" stdset="0">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="treeFrame">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="CustomTreeView" name="hierarchiesTree">
+        <property name="contextMenuPolicy">
+         <enum>Qt::CustomContextMenu</enum>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::EditKeyPressed</set>
+        </property>
+        <property name="dragEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="dragDropMode">
+         <enum>QAbstractItemView::DragOnly</enum>
+        </property>
+        <property name="defaultDropAction">
+         <enum>Qt::CopyAction</enum>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="indentation">
+         <number>10</number>
+        </property>
+        <property name="uniformRowHeights">
+         <bool>true</bool>
+        </property>
+        <property name="sortingEnabled">
+         <bool>true</bool>
+        </property>
+        <property name="allColumnsShowFocus">
+         <bool>true</bool>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+        <attribute name="headerDefaultSectionSize">
+         <number>50</number>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="bottomFrame">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>27</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>27</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="bottomFrame" stdset="0">
+      <bool>true</bool>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="margin">
+       <number>0</number>
+      </property>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>24</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="addPanelButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="toolTip">
+         <string>Add a new panel into the workspace&lt;br/&gt;for the data of a graph to select.</string>
+        </property>
+        <property name="text">
+         <string>Add panel</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/tulip/graphperspective/icons/16/view-add.png</normaloff>:/tulip/graphperspective/icons/16/view-add.png</iconset>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+  <action name="actionAdd_sub_graph">
+   <property name="text">
+    <string>Create empty sub-graph</string>
+   </property>
+   <property name="toolTip">
+    <string>Create an empty sub-graph</string>
+   </property>
+  </action>
+  <action name="actionClone_subgraph">
+   <property name="text">
+    <string>Clone subgraph</string>
+   </property>
+   <property name="toolTip">
+    <string>Clone the selected graph into a sub-graph</string>
+   </property>
+  </action>
+  <action name="actionDelete_graph">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Deletes the selected graph</string>
+   </property>
+  </action>
+  <action name="actionDelete_All">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete All</string>
+   </property>
+   <property name="toolTip">
+    <string>Deletes the selected graph and its subgraphs</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+Del</string>
+   </property>
+  </action>
+  <action name="actionCreate_panel">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/view-add.png</normaloff>:/tulip/graphperspective/icons/16/view-add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add panel</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a new visualization panel</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/document-export.png</normaloff>:/tulip/graphperspective/icons/16/document-export.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export</string>
+   </property>
+   <property name="toolTip">
+    <string>Export the graph</string>
+   </property>
+  </action>
+  <action name="actionRename">
+   <property name="text">
+    <string>Rename</string>
+   </property>
+  </action>
+  <action name="actionSave_to_file">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Writes the whole hierarchy (from the root graph) into a file using the tlp format</string>
+   </property>
+  </action>
+  <action name="actionCreate_induced_sub_graph">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create sub-graph from selection</string>
+   </property>
+   <property name="toolTip">
+    <string>Creates a subgraph from the selected elements</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+G</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HeaderFrame</class>
+   <extends>QWidget</extends>
+   <header>HeaderFrame.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>CustomTreeView</class>
+   <extends>QTreeView</extends>
+   <header location="global">GraphHierarchiesEditor.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>hierarchiesTree</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>contextMenuRequested(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>213</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAdd_sub_graph</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>addSubGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClone_subgraph</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>cloneSubGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDelete_graph</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>delGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDelete_All</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>delAllGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCreate_panel</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>createPanel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addPanelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>createPanel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>191</x>
+     <y>403</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExport</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>exportGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRename</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>renameGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>hierarchiesTree</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>doubleClicked(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>199</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave_to_file</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>saveGraphHierarchyInTlpFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionCreate_induced_sub_graph</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>addInducedSubGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>activeGraphSelected(QModelIndex)</slot>
+  <slot>contextMenuRequested(QPoint)</slot>
+  <slot>addSubGraph()</slot>
+  <slot>delGraph()</slot>
+  <slot>cloneSubGraph()</slot>
+  <slot>delAllGraph()</slot>
+  <slot>createPanel()</slot>
+  <slot>exportGraph()</slot>
+  <slot>renameGraph()</slot>
+  <slot>doubleClicked(QModelIndex)</slot>
+  <slot>saveGraphToFile()</slot>
+  <slot>addInducedSubGraph()</slot>
+ </slots>
+</ui>

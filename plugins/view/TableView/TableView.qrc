@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>spreadsheet_view.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pixel_oriented_view.png</file>
+    </qresource>
+</RCC>

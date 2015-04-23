@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/tulip/python">
+        <file>python-logo.png</file>
+        <file>python-logo-small.png</file>
+    </qresource>
+</RCC>

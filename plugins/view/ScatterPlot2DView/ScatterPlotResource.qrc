@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/" >
+	<file>i_scatter_trendline.png</file>
+	<file>background_texture.png</file>
+	<file>scatter_plot2d_view.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,22 @@
+ADD_CORE_FILES(.)
+
+SET(gzstream_SRCS
+    gzstream.cpp 
+    gzstream.h
+)
+
+INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+
+IF(MSVC)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGZSTREAM_DLL")
+ENDIF(MSVC)
+
+ADD_LIBRARY(${GZStreamLibrary} SHARED ${gzstream_SRCS})
+SET_TARGET_PROPERTIES(${GZStreamLibrary} PROPERTIES
+                      SOVERSION 0)
+TARGET_LINK_LIBRARIES(${GZStreamLibrary} ${ZLIB_LIBRARY})
+
+INSTALL(TARGETS ${GZStreamLibrary}
+       RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT gzstream
+       LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT gzstream
+       ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT gzstream)

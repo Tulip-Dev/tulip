@@ -1,0 +1,1136 @@
+####################################
+#         System information       #
+####################################
+# Date:                   2014:10:14 
+# Time:                   07:31:15 
+# Xnee program:           cnee 
+# Xnee version:           3.19 
+# Xnee home:              http://www.gnu.org/software/xnee/ 
+# Xnee info mailing list: info-xnee@gnu.org 
+# Xnee bug mailing list:  bug-xnee@gnu.org 
+# X version:              11 
+# X revision:             0 
+# X vendor:               The X.Org Foundation 
+# X vendor release:       11501000 
+# Record version major:   1
+# Record version minor:   13
+# OS name:                Linux 
+# OS Release:             3.13.0-37-generic 
+# OS Version:             #64-Ubuntu SMP Mon Sep 22 21:28:38 UTC 2014 
+# Machine:                x86_64 
+# Nodename:               pm-Precision-M4600 
+# Display name:           :0.0
+# Dimension:              1920x1080
+
+
+
+##############################################
+#      Xnee application arguments            #
+##############################################
+#  /home/pm/xnee-3.19/cnee/src//cnee -rec -etr -1 --keyboard --mouse -sk End -o import_ucinet_file.xns 
+
+
+##############################################
+#      Displays                              #
+##############################################
+# display :0.0
+# distribute
+
+
+##############################################
+#      Files                                 #
+##############################################
+# out-file import_ucinet_file.xns
+# err-file stderr
+
+
+##############################################
+#      Key Grabs                             #
+##############################################
+# stop-key         End
+# pause-key        0
+# resume-key       0
+# insert-key       0
+# exec-key         0
+# exec-program-key         xnee-exec-no-program
+
+
+##############################################
+#      Recording limits etc                  #
+##############################################
+
+events-to-record        -1
+data-to-record          -1
+seconds-to-record       -1
+# first-last
+
+# Record  all (including current) clients or only future ones
+all-clients
+# future-clients
+
+# Store the starting mouse position 
+# store-mouse-position
+
+
+##############################################
+#      Resolution                            #
+##############################################
+
+# Resolution
+#recorded-resolution  1920x1080
+#replay-resolution  1x1
+#resolution-adjustment  0
+
+
+##############################################
+#      Speed                                 #
+##############################################
+
+# Speed
+#speed-percent  100
+
+
+##############################################
+#      Replaying limits etc                  #
+##############################################
+
+max-threshold 20 
+min-threshold 20 
+tot-threshold 40 
+
+
+##############################################
+#      Feedback                              #
+##############################################
+#feedback-none
+#feedback-stderr
+feedback-xosd
+ 
+
+
+##############################################
+#      Various                               #
+##############################################
+
+# Plugin file 
+
+# Modes (currently not used)
+# synchronised-replay
+
+# Replay offset
+#replay-offset 0x0
+
+# Human printout of X11 data (instead of Xnee format)
+# human-printout  
+
+# Delay before starting record/replay
+# time 0
+
+# No recording of ReparentNotify
+# no-reparent-recording 
+
+# Various
+#########################################
+#          Record settings              #
+#########################################
+#   data_flags          7
+#   rState              0x19cd020
+#   xids[0]             3
+#   xids[1]             0
+# Number of Ranges      2
+# RecordRange[0]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         21-21 
+device-event-range            2-6 
+error-range                   0-0 
+# RecordRange[1]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         0-0 
+device-event-range            66-71 
+error-range                   0-0 
+7,2,0,0,0,37,0,1259002,10,AT Translated Set 2 keyboard
+6,2,0,0,0,37,0,1259003,3,Virtual core keyboard
+7,2,0,0,0,50,0,1259163,10,AT Translated Set 2 keyboard
+6,2,0,0,0,50,0,1259163,3,Virtual core keyboard
+7,2,0,0,0,32,0,1259402,10,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,1259403,3,Virtual core keyboard
+0,21,0,0,0,0,0,1259446
+NEW-WINDOW:462,253:58720300,58720300,25177061,0,0,0:1x28+879+458:0,0:Import
+0,21,0,0,0,0,0,1259446
+0,21,0,0,0,0,0,1259446
+7,3,0,0,0,32,0,1259502,10,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,1259502,3,Virtual core keyboard
+7,3,0,0,0,50,0,1259542,10,AT Translated Set 2 keyboard
+6,3,0,0,0,50,0,1259542,3,Virtual core keyboard
+7,3,0,0,0,37,0,1259582,10,AT Translated Set 2 keyboard
+6,3,0,0,0,37,0,1259582,3,Virtual core keyboard
+7,2,0,0,0,116,0,1260711,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1260711,3,Virtual core keyboard
+7,3,0,0,0,116,0,1260811,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1260811,3,Virtual core keyboard
+7,2,0,0,0,116,0,1260931,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1260931,3,Virtual core keyboard
+7,3,0,0,0,116,0,1261031,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1261031,3,Virtual core keyboard
+7,2,0,0,0,116,0,1261160,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1261161,3,Virtual core keyboard
+7,3,0,0,0,116,0,1261234,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1261234,3,Virtual core keyboard
+7,2,0,0,0,116,0,1261350,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1261350,3,Virtual core keyboard
+7,3,0,0,0,116,0,1261440,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1261440,3,Virtual core keyboard
+7,2,0,0,0,116,0,1261580,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1261580,3,Virtual core keyboard
+7,3,0,0,0,116,0,1261670,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1261670,3,Virtual core keyboard
+7,2,0,0,0,116,0,1261810,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1261810,3,Virtual core keyboard
+7,3,0,0,0,116,0,1261900,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1261900,3,Virtual core keyboard
+7,2,0,0,0,116,0,1262020,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1262020,3,Virtual core keyboard
+7,3,0,0,0,116,0,1262109,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1262109,3,Virtual core keyboard
+7,2,0,0,0,116,0,1262233,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1262233,3,Virtual core keyboard
+7,3,0,0,0,116,0,1262309,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1262309,3,Virtual core keyboard
+7,2,0,0,0,116,0,1262439,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1262439,3,Virtual core keyboard
+7,3,0,0,0,116,0,1262559,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1262559,3,Virtual core keyboard
+7,2,0,0,0,116,0,1262919,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1262919,3,Virtual core keyboard
+7,3,0,0,0,116,0,1263028,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1263028,3,Virtual core keyboard
+7,6,316,743,0,0,0,1265235,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,315,742,0,0,0,1265322,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,316,742,0,0,0,1265332,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,317,742,0,0,0,1265342,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,319,742,0,0,0,1265351,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,320,741,0,0,0,1265361,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,322,741,0,0,0,1265371,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,323,741,0,0,0,1265381,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,324,741,0,0,0,1265391,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,325,741,0,0,0,1265401,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,325,741,0,0,0,1265411,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,326,741,0,0,0,1265420,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,326,741,0,0,0,1265430,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,327,740,0,0,0,1265439,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,328,739,0,0,0,1265449,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,329,739,0,0,0,1265460,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,330,738,0,0,0,1265469,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,332,737,0,0,0,1265478,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,333,736,0,0,0,1265489,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,334,736,0,0,0,1265498,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,336,735,0,0,0,1265508,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,338,734,0,0,0,1265518,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,339,734,0,0,0,1265527,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,341,733,0,0,0,1265538,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,342,733,0,0,0,1265547,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,344,731,0,0,0,1265557,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,347,730,0,0,0,1265567,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,349,728,0,0,0,1265577,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,351,727,0,0,0,1265586,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,353,725,0,0,0,1265596,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,357,723,0,0,0,1265606,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,360,721,0,0,0,1265616,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,364,718,0,0,0,1265625,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,367,715,0,0,0,1265636,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,371,713,0,0,0,1265645,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,375,710,0,0,0,1265655,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,378,708,0,0,0,1265665,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,382,706,0,0,0,1265674,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,385,704,0,0,0,1265684,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,389,702,0,0,0,1265694,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,392,701,0,0,0,1265704,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,396,699,0,0,0,1265713,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,400,697,0,0,0,1265723,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,404,696,0,0,0,1265733,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,409,694,0,0,0,1265743,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,414,693,0,0,0,1265753,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,419,691,0,0,0,1265762,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,424,689,0,0,0,1265773,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,429,687,0,0,0,1265782,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,434,686,0,0,0,1265792,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,440,684,0,0,0,1265801,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,446,682,0,0,0,1265812,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,453,679,0,0,0,1265821,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,460,676,0,0,0,1265830,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,468,674,0,0,0,1265841,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,474,671,0,0,0,1265851,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,481,669,0,0,0,1265860,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,488,666,0,0,0,1265870,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,495,663,0,0,0,1265880,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,502,659,0,0,0,1265890,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,509,655,0,0,0,1265899,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,517,651,0,0,0,1265910,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,525,647,0,0,0,1265919,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,535,641,0,0,0,1265929,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,545,633,0,0,0,1265938,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,557,624,0,0,0,1265947,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,571,613,0,0,0,1265958,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,587,600,0,0,0,1265968,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,603,587,0,0,0,1265977,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,622,572,0,0,0,1265987,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,642,556,0,0,0,1265997,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,659,539,0,0,0,1266007,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,675,524,0,0,0,1266017,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,689,511,0,0,0,1266026,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,700,503,0,0,0,1266036,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,710,498,0,0,0,1266046,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,714,498,0,0,0,1266340,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,714,498,0,0,0,1266349,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,720,498,0,0,0,1266359,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,728,496,0,0,0,1266369,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,737,492,0,0,0,1266378,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,746,489,0,0,0,1266388,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,756,486,0,0,0,1266398,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,763,485,0,0,0,1266408,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,769,484,0,0,0,1266418,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,774,484,0,0,0,1266427,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,777,484,0,0,0,1266437,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,779,484,0,0,0,1266447,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,780,484,0,0,0,1266457,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,782,484,0,0,0,1266466,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,783,484,0,0,0,1266476,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,785,484,0,0,0,1266486,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,786,484,0,0,0,1266496,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,787,484,0,0,0,1266507,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,788,484,0,0,0,1266515,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,789,484,0,0,0,1266525,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,791,484,0,0,0,1266535,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,793,484,0,0,0,1266545,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,796,484,0,0,0,1266554,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,799,484,0,0,0,1266564,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,802,482,0,0,0,1266574,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,805,481,0,0,0,1266584,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,807,479,0,0,0,1266594,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,809,479,0,0,0,1266603,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,811,478,0,0,0,1266613,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,812,477,0,0,0,1266623,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,813,476,0,0,0,1266633,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,815,475,0,0,0,1266642,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,816,474,0,0,0,1266653,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,818,473,0,0,0,1266662,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,820,471,0,0,0,1266672,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,821,470,0,0,0,1266682,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,823,468,0,0,0,1266692,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,825,466,0,0,0,1266701,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,827,463,0,0,0,1266711,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,828,461,0,0,0,1266721,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,829,459,0,0,0,1266731,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,831,458,0,0,0,1266741,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,832,456,0,0,0,1266750,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,833,455,0,0,0,1266759,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,835,454,0,0,0,1266770,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,836,452,0,0,0,1266779,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,837,451,0,0,0,1266789,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,839,450,0,0,0,1266799,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,839,450,0,0,0,1266809,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,840,448,0,0,0,1266818,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,841,448,0,0,0,1266829,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,842,447,0,0,0,1266838,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,842,447,0,0,0,1266848,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,842,446,0,0,0,1266858,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,843,446,0,0,0,1266867,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,844,445,0,0,0,1266877,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,845,443,0,0,0,1266888,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,443,0,0,0,1266897,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,442,0,0,0,1266906,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,441,0,0,0,1266916,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,441,0,0,0,1266935,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,847,441,0,0,0,1266955,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,847,441,0,0,0,1267063,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,4,0,0,1,0,0,1267323,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,4,0,0,1,0,0,1267323,2,Virtual core pointer
+7,5,0,0,1,0,0,1267346,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,5,0,0,1,0,0,1267346,2,Virtual core pointer
+0,21,0,0,0,0,0,1267406
+NEW-WINDOW:699,269:58720309,58720309,25177125,0,0,0:1x28+507+400:0,0:Open
+0,21,0,0,0,0,0,1267406
+0,21,0,0,0,0,0,1267406
+7,6,848,441,0,0,0,1267845,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,441,0,0,0,1268011,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,441,0,0,0,1268070,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,441,0,0,0,1268090,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,441,0,0,0,1268109,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,441,0,0,0,1268139,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,850,441,0,0,0,1268187,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,850,441,0,0,0,1268745,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,2,0,0,0,40,0,1269241,10,AT Translated Set 2 keyboard
+6,2,0,0,0,40,0,1269241,3,Virtual core keyboard
+7,3,0,0,0,40,0,1269301,10,AT Translated Set 2 keyboard
+6,3,0,0,0,40,0,1269301,3,Virtual core keyboard
+7,2,0,0,0,24,0,1269461,10,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,1269461,3,Virtual core keyboard
+7,3,0,0,0,24,0,1269531,10,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,1269531,3,Virtual core keyboard
+7,2,0,0,0,28,0,1269831,10,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,1269831,3,Virtual core keyboard
+7,3,0,0,0,28,0,1269881,10,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,1269881,3,Virtual core keyboard
+7,2,0,0,0,24,0,1270290,10,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,1270290,3,Virtual core keyboard
+7,3,0,0,0,24,0,1270390,10,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,1270390,3,Virtual core keyboard
+7,6,850,442,0,0,0,1271121,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,850,445,0,0,0,1271131,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,850,449,0,0,0,1271140,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,454,0,0,0,1271150,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,458,0,0,0,1271161,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,463,0,0,0,1271170,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,468,0,0,0,1271180,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,472,0,0,0,1271189,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,477,0,0,0,1271199,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,482,0,0,0,1271209,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,488,0,0,0,1271221,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,493,0,0,0,1271228,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,500,0,0,0,1271238,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,507,0,0,0,1271248,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,513,0,0,0,1271258,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,520,0,0,0,1271267,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,525,0,0,0,1271278,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,531,0,0,0,1271287,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,849,537,0,0,0,1271297,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,541,0,0,0,1271308,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,546,0,0,0,1271317,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,550,0,0,0,1271326,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,554,0,0,0,1271336,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,556,0,0,0,1271346,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,558,0,0,0,1271356,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,559,0,0,0,1271366,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,561,0,0,0,1271375,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,563,0,0,0,1271385,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,564,0,0,0,1271395,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,567,0,0,0,1271405,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,569,0,0,0,1271413,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,572,0,0,0,1271424,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,574,0,0,0,1271434,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,576,0,0,0,1271443,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,578,0,0,0,1271453,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,579,0,0,0,1271463,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,579,0,0,0,1271483,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,579,0,0,0,1271492,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,580,0,0,0,1271502,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,580,0,0,0,1271522,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,582,0,0,0,1271532,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,585,0,0,0,1271541,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,588,0,0,0,1271551,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,847,590,0,0,0,1271561,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,847,592,0,0,0,1271571,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,595,0,0,0,1271580,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,597,0,0,0,1271590,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,597,0,0,0,1271600,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,597,0,0,0,1271610,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,598,0,0,0,1271718,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,599,0,0,0,1271727,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,599,0,0,0,1271737,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,600,0,0,0,1271796,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,600,0,0,0,1271806,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,601,0,0,0,1271815,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,601,0,0,0,1271825,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,601,0,0,0,1271835,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,602,0,0,0,1271844,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,603,0,0,0,1271854,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,604,0,0,0,1271865,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,604,0,0,0,1271874,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,605,0,0,0,1271884,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,606,0,0,0,1271893,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,606,0,0,0,1271903,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,606,0,0,0,1271913,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,607,0,0,0,1271923,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,4,0,0,1,0,0,1272154,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,4,0,0,1,0,0,1272154,2,Virtual core pointer
+7,5,0,0,1,0,0,1272167,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,5,0,0,1,0,0,1272167,2,Virtual core pointer
+7,6,846,607,0,0,0,1272539,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,607,0,0,0,1272548,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,607,0,0,0,1272558,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,2,0,0,0,40,0,1273187,10,AT Translated Set 2 keyboard
+6,2,0,0,0,40,0,1273187,3,Virtual core keyboard
+7,3,0,0,0,40,0,1273247,10,AT Translated Set 2 keyboard
+6,3,0,0,0,40,0,1273247,3,Virtual core keyboard
+7,2,0,0,0,24,0,1273407,10,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,1273407,3,Virtual core keyboard
+7,3,0,0,0,24,0,1273457,10,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,1273457,3,Virtual core keyboard
+7,2,0,0,0,28,0,1273697,10,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,1273697,3,Virtual core keyboard
+7,3,0,0,0,28,0,1273717,10,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,1273717,3,Virtual core keyboard
+7,2,0,0,0,24,0,1274296,10,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,1274296,3,Virtual core keyboard
+7,3,0,0,0,24,0,1274306,10,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,1274306,3,Virtual core keyboard
+7,2,0,0,0,62,0,1275045,10,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,1275045,3,Virtual core keyboard
+7,2,0,0,0,60,0,1276304,10,AT Translated Set 2 keyboard
+6,2,0,0,0,60,0,1276305,3,Virtual core keyboard
+7,3,0,0,0,60,0,1276384,10,AT Translated Set 2 keyboard
+6,3,0,0,0,60,0,1276384,3,Virtual core keyboard
+7,3,0,0,0,62,0,1276564,10,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,1276564,3,Virtual core keyboard
+7,2,0,0,0,41,0,1277873,10,AT Translated Set 2 keyboard
+6,2,0,0,0,41,0,1277873,3,Virtual core keyboard
+7,3,0,0,0,41,0,1277943,10,AT Translated Set 2 keyboard
+6,3,0,0,0,41,0,1277943,3,Virtual core keyboard
+7,2,0,0,0,24,0,1281239,10,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,1281239,3,Virtual core keyboard
+7,3,0,0,0,24,0,1281299,10,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,1281299,3,Virtual core keyboard
+7,2,0,0,0,116,0,1282867,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1282868,3,Virtual core keyboard
+7,3,0,0,0,116,0,1283037,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1283037,3,Virtual core keyboard
+7,2,0,0,0,36,0,1285485,10,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,1285485,3,Virtual core keyboard
+0,21,0,0,0,0,0,1285490
+NEW-WINDOW:0,0:58720323,58720323,747,0,0,1:0x0+1656421647+32767:1656421688,1656421688:
+0,21,0,0,0,0,0,1285491
+0,21,0,0,0,0,0,1285491
+0,21,0,0,0,0,0,1285497
+NEW-WINDOW:0,0:58720309,58720309,747,698,241,0:0x0+1656421647+32767:1656421688,1656421688:
+0,21,0,0,0,0,0,1285497
+0,21,0,0,0,0,0,1285497
+0,21,0,0,0,0,0,1285497
+0,21,0,0,0,0,0,1285497
+7,3,0,0,0,36,0,1285564,10,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,1285564,3,Virtual core keyboard
+7,2,0,0,0,36,0,1286613,10,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,1286613,3,Virtual core keyboard
+0,21,0,0,0,0,0,1286623
+NEW-WINDOW:461,225:58720300,58720300,747,461,225,0:461x225+879+458:0,0:Import
+0,21,0,0,0,0,0,1286623
+0,21,0,0,0,0,0,1286623
+0,21,0,0,0,0,0,1286623
+0,21,0,0,0,0,0,1286623
+0,21,0,0,0,0,0,1286637
+NEW-WINDOW:461,225:58720332,58720332,25177280,0,0,0:461x225+879+458:0,0:
+0,21,0,0,0,0,0,1286637
+0,21,0,0,0,0,0,1286637
+7,3,0,0,0,36,0,1286683,10,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,1286683,3,Virtual core keyboard
+0,21,0,0,0,0,0,1286861
+NEW-WINDOW:8384,0:58720369,58720369,747,0,0,0:27331704x0+27317024+0:27312336,27312336:
+0,21,0,0,0,0,0,1286861
+0,21,0,0,0,0,0,1286861
+0,21,0,0,0,0,0,1286919
+NEW-WINDOW:8384,0:58720375,58720375,747,0,0,0:27331704x0+27317024+0:27312336,27312336:
+0,21,0,0,0,0,0,1286919
+0,21,0,0,0,0,0,1286919
+0,21,0,0,0,0,0,1286919
+NEW-WINDOW:0,0:58720378,58720378,58720400,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,1286919
+NEW-WINDOW:0,0:58720380,58720380,58720400,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,1286919
+NEW-WINDOW:0,0:58720384,58720384,58720400,0,0,0:0x0+960+432:0,0:
+0,21,0,0,0,0,0,1286961
+NEW-WINDOW:0,0:58720410,58720410,747,0,0,0:0x0+1172+848:0,0:Spreadsheet view
+0,21,0,0,0,0,0,1286961
+0,21,0,0,0,0,0,1286961
+0,21,0,0,0,0,0,1286978
+NEW-WINDOW:0,0:58720395,58720395,747,0,0,0:0x0+943+595:0,0:Node Link Diagram view
+0,21,0,0,0,0,0,1286978
+0,21,0,0,0,0,0,1286978
+0,21,0,0,0,0,0,1287122
+NEW-WINDOW:1117,103:58720398,58720398,58720501,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,1287122
+NEW-WINDOW:1117,103:58720400,58720400,58720501,0,0,0:0x0+960+432:0,0:
+7,6,848,607,0,0,0,1289100,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,609,0,0,0,1289109,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,610,0,0,0,1289119,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,610,0,0,0,1289139,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,848,610,0,0,0,1289148,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,846,610,0,0,0,1289158,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,843,610,0,0,0,1289168,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,840,610,0,0,0,1289178,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,837,610,0,0,0,1289189,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,833,608,0,0,0,1289201,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,829,604,0,0,0,1289207,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,823,598,0,0,0,1289218,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,815,591,0,0,0,1289227,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,803,584,0,0,0,1289237,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,790,575,0,0,0,1289247,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,779,566,0,0,0,1289257,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,765,557,0,0,0,1289266,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,750,548,0,0,0,1289276,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,737,538,0,0,0,1289286,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,723,528,0,0,0,1289296,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,709,519,0,0,0,1289305,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,694,508,0,0,0,1289315,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,679,496,0,0,0,1289325,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,665,485,0,0,0,1289335,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,651,472,0,0,0,1289344,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,635,457,0,0,0,1289354,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,619,444,0,0,0,1289364,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,603,431,0,0,0,1289374,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,585,420,0,0,0,1289385,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,567,407,0,0,0,1289393,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,549,394,0,0,0,1289403,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,532,382,0,0,0,1289413,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,514,371,0,0,0,1289423,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,497,358,0,0,0,1289432,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,481,347,0,0,0,1289442,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,467,336,0,0,0,1289452,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,455,326,0,0,0,1289462,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,443,315,0,0,0,1289471,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,435,306,0,0,0,1289483,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,430,298,0,0,0,1289491,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,426,293,0,0,0,1289501,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,423,289,0,0,0,1289511,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,423,286,0,0,0,1289520,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,423,284,0,0,0,1289814,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,422,284,0,0,0,1289824,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,418,280,0,0,0,1289833,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,413,276,0,0,0,1289843,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,409,272,0,0,0,1289853,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,405,268,0,0,0,1289863,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,402,265,0,0,0,1289873,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,399,261,0,0,0,1289882,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,396,258,0,0,0,1289892,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,393,255,0,0,0,1289902,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,390,252,0,0,0,1289912,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,387,249,0,0,0,1289921,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,383,246,0,0,0,1289931,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,379,243,0,0,0,1289941,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,376,240,0,0,0,1289950,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,371,238,0,0,0,1289960,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,366,237,0,0,0,1289971,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,362,234,0,0,0,1289980,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,359,232,0,0,0,1289989,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,355,229,0,0,0,1290000,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,353,226,0,0,0,1290010,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,350,224,0,0,0,1290019,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,348,221,0,0,0,1290029,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,346,218,0,0,0,1290039,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,344,215,0,0,0,1290049,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,342,211,0,0,0,1290058,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,339,208,0,0,0,1290068,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,337,205,0,0,0,1290078,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,334,202,0,0,0,1290088,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,332,200,0,0,0,1290097,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,331,197,0,0,0,1290107,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,329,194,0,0,0,1290117,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,327,192,0,0,0,1290127,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,325,190,0,0,0,1290136,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,324,188,0,0,0,1290146,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,323,186,0,0,0,1290156,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,322,185,0,0,0,1290166,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,321,184,0,0,0,1290175,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,320,183,0,0,0,1290185,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,319,181,0,0,0,1290195,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,318,180,0,0,0,1290205,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,317,179,0,0,0,1290215,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,316,177,0,0,0,1290224,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,315,176,0,0,0,1290235,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,313,173,0,0,0,1290244,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,311,171,0,0,0,1290254,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,310,168,0,0,0,1290264,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,308,166,0,0,0,1290273,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,306,164,0,0,0,1290284,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,162,0,0,0,1290293,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,303,160,0,0,0,1290302,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,302,158,0,0,0,1290312,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,156,0,0,0,1290323,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,155,0,0,0,1290332,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,299,153,0,0,0,1290342,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,299,153,0,0,0,1290352,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,298,152,0,0,0,1290361,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,298,151,0,0,0,1290371,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,151,0,0,0,1290382,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,151,0,0,0,1290401,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,151,0,0,0,1290537,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,151,0,0,0,1290547,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,151,0,0,0,1290558,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,150,0,0,0,1290588,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,150,0,0,0,1290606,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,150,0,0,0,1290616,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,149,0,0,0,1290625,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,148,0,0,0,1290636,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,148,0,0,0,1290645,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,147,0,0,0,1290655,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,147,0,0,0,1290665,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,146,0,0,0,1290675,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,146,0,0,0,1290685,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,146,0,0,0,1290694,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,145,0,0,0,1290704,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,145,0,0,0,1290714,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,144,0,0,0,1290723,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,143,0,0,0,1290732,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,143,0,0,0,1290743,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,142,0,0,0,1290753,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,142,0,0,0,1290763,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,141,0,0,0,1290772,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,141,0,0,0,1290801,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,140,0,0,0,1290811,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,140,0,0,0,1290840,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,140,0,0,0,1290870,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,139,0,0,0,1290928,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,4,0,0,1,0,0,1291103,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,4,0,0,1,0,0,1291103,2,Virtual core pointer
+7,5,0,0,1,0,0,1291134,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,5,0,0,1,0,0,1291134,2,Virtual core pointer
+7,6,296,139,0,0,0,1291163,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,139,0,0,0,1291320,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,140,0,0,0,1291340,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,140,0,0,0,1291349,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,140,0,0,0,1291359,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,141,0,0,0,1291369,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,141,0,0,0,1291379,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,142,0,0,0,1291388,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,142,0,0,0,1291398,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,142,0,0,0,1291408,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,143,0,0,0,1291418,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,143,0,0,0,1291476,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,2,0,0,0,40,0,1292128,10,AT Translated Set 2 keyboard
+6,2,0,0,0,40,0,1292128,3,Virtual core keyboard
+7,3,0,0,0,40,0,1292201,10,AT Translated Set 2 keyboard
+6,3,0,0,0,40,0,1292201,3,Virtual core keyboard
+7,2,0,0,0,26,0,1292697,10,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,1292697,3,Virtual core keyboard
+7,2,0,0,0,57,0,1292777,10,AT Translated Set 2 keyboard
+6,2,0,0,0,57,0,1292777,3,Virtual core keyboard
+7,3,0,0,0,26,0,1292778,10,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,1292778,3,Virtual core keyboard
+7,3,0,0,0,57,0,1292847,10,AT Translated Set 2 keyboard
+6,3,0,0,0,57,0,1292847,3,Virtual core keyboard
+7,2,0,0,0,40,0,1293746,10,AT Translated Set 2 keyboard
+6,2,0,0,0,40,0,1293746,3,Virtual core keyboard
+7,3,0,0,0,40,0,1293826,10,AT Translated Set 2 keyboard
+6,3,0,0,0,40,0,1293826,3,Virtual core keyboard
+7,2,0,0,0,27,0,1293986,10,AT Translated Set 2 keyboard
+6,2,0,0,0,27,0,1293986,3,Virtual core keyboard
+7,3,0,0,0,27,0,1294066,10,AT Translated Set 2 keyboard
+6,3,0,0,0,27,0,1294066,3,Virtual core keyboard
+7,2,0,0,0,32,0,1294199,10,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,1294199,3,Virtual core keyboard
+7,3,0,0,0,32,0,1294316,10,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,1294316,3,Virtual core keyboard
+7,2,0,0,0,42,0,1294785,10,AT Translated Set 2 keyboard
+6,2,0,0,0,42,0,1294785,3,Virtual core keyboard
+7,3,0,0,0,42,0,1294855,10,AT Translated Set 2 keyboard
+6,3,0,0,0,42,0,1294855,3,Virtual core keyboard
+7,6,297,143,0,0,0,1295308,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,145,0,0,0,1295319,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,145,0,0,0,1295328,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,148,0,0,0,1295338,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,150,0,0,0,1295348,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,153,0,0,0,1295358,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,156,0,0,0,1295367,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,160,0,0,0,1295378,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,164,0,0,0,1295387,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,168,0,0,0,1295397,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,172,0,0,0,1295407,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,176,0,0,0,1295417,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,298,180,0,0,0,1295426,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,298,182,0,0,0,1295436,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,299,183,0,0,0,1295446,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,299,184,0,0,0,1295456,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,299,185,0,0,0,1295465,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,187,0,0,0,1295475,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,189,0,0,0,1295484,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,193,0,0,0,1295495,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,196,0,0,0,1295504,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,200,0,0,0,1295514,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,204,0,0,0,1295524,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,208,0,0,0,1295534,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,211,0,0,0,1295543,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,213,0,0,0,1295553,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,213,0,0,0,1295563,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,214,0,0,0,1295573,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,214,0,0,0,1295612,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,215,0,0,0,1295641,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,215,0,0,0,1295651,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,216,0,0,0,1295661,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,218,0,0,0,1295671,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,219,0,0,0,1295680,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,220,0,0,0,1295690,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,221,0,0,0,1295700,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,221,0,0,0,1295710,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,221,0,0,0,1295730,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,221,0,0,0,1295769,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,222,0,0,0,1295779,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,222,0,0,0,1295797,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,223,0,0,0,1295808,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,223,0,0,0,1295817,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,224,0,0,0,1295837,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,224,0,0,0,1295847,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,225,0,0,0,1295856,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,225,0,0,0,1295866,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,226,0,0,0,1295877,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,226,0,0,0,1295896,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,226,0,0,0,1295906,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,226,0,0,0,1295935,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,227,0,0,0,1295945,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,227,0,0,0,1295954,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,227,0,0,0,1295965,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,228,0,0,0,1295974,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,302,228,0,0,0,1295984,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,302,229,0,0,0,1295994,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,302,229,0,0,0,1296013,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,302,229,0,0,0,1296023,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,302,229,0,0,0,1296032,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,302,229,0,0,0,1296052,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,303,229,0,0,0,1296082,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,303,229,0,0,0,1296111,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,303,230,0,0,0,1296139,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,304,230,0,0,0,1296209,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,4,0,0,1,0,0,1296333,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,4,0,0,1,0,0,1296333,2,Virtual core pointer
+7,5,0,0,1,0,0,1296365,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,5,0,0,1,0,0,1296365,2,Virtual core pointer
+0,21,0,0,0,0,0,1296374
+NEW-WINDOW:651,384:58720509,58720509,25177325,0,0,0:1x28+500+66:0,0:Dendrogram
+0,21,0,0,0,0,0,1296374
+0,21,0,0,0,0,0,1296374
+7,6,304,230,0,0,0,1296414,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+0,21,0,0,0,0,0,1296470
+NEW-WINDOW:8384,0:58720509,58720509,747,650,356,0:3835x0+27331704+0:1656421688,1656421688:
+0,21,0,0,0,0,0,1296470
+0,21,0,0,0,0,0,1296470
+0,21,0,0,0,0,0,1296470
+0,21,0,0,0,0,0,1296470
+7,6,304,230,0,0,0,1298291,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,230,0,0,0,1298849,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,227,0,0,0,1298858,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,226,0,0,0,1298878,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,226,0,0,0,1298887,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,225,0,0,0,1299074,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,227,0,0,0,1299084,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,229,0,0,0,1299093,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,231,0,0,0,1299103,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,232,0,0,0,1299113,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,305,235,0,0,0,1299122,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,304,237,0,0,0,1299132,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,304,239,0,0,0,1299143,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,303,241,0,0,0,1299152,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,302,245,0,0,0,1299161,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,248,0,0,0,1299172,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,301,251,0,0,0,1299181,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,300,255,0,0,0,1299194,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,299,259,0,0,0,1299201,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,298,264,0,0,0,1299210,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,269,0,0,0,1299221,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,297,273,0,0,0,1299230,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,296,277,0,0,0,1299240,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,295,281,0,0,0,1299249,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,294,285,0,0,0,1299260,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,293,288,0,0,0,1299269,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,292,291,0,0,0,1299279,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,292,293,0,0,0,1299289,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,291,297,0,0,0,1299299,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,290,301,0,0,0,1299308,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,290,305,0,0,0,1299318,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,289,309,0,0,0,1299328,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,288,314,0,0,0,1299338,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,288,317,0,0,0,1299348,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,287,321,0,0,0,1299357,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,286,326,0,0,0,1299367,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,285,330,0,0,0,1299378,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,285,333,0,0,0,1299387,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,284,337,0,0,0,1299396,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,283,340,0,0,0,1299406,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,283,344,0,0,0,1299416,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,283,348,0,0,0,1299426,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,282,353,0,0,0,1299436,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,281,359,0,0,0,1299445,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,280,366,0,0,0,1299455,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,280,372,0,0,0,1299465,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,280,378,0,0,0,1299475,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,279,383,0,0,0,1299484,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,279,388,0,0,0,1299495,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,279,393,0,0,0,1299504,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,278,397,0,0,0,1299514,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,277,400,0,0,0,1299523,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,277,405,0,0,0,1299533,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,276,409,0,0,0,1299543,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,276,413,0,0,0,1299553,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,275,417,0,0,0,1299562,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,422,0,0,0,1299574,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,427,0,0,0,1299582,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,432,0,0,0,1299592,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,436,0,0,0,1299601,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,440,0,0,0,1299612,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,444,0,0,0,1299621,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,447,0,0,0,1299631,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,451,0,0,0,1299641,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,456,0,0,0,1299651,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,460,0,0,0,1299661,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,465,0,0,0,1299670,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,470,0,0,0,1299680,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,476,0,0,0,1299690,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,482,0,0,0,1299700,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,487,0,0,0,1299709,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,493,0,0,0,1299719,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,499,0,0,0,1299729,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,504,0,0,0,1299739,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,509,0,0,0,1299748,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,513,0,0,0,1299758,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,518,0,0,0,1299768,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,523,0,0,0,1299778,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,530,0,0,0,1299787,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,537,0,0,0,1299797,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,543,0,0,0,1299808,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,549,0,0,0,1299816,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,556,0,0,0,1299826,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,562,0,0,0,1299836,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,567,0,0,0,1299847,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,572,0,0,0,1299856,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,577,0,0,0,1299865,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,582,0,0,0,1299876,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,587,0,0,0,1299886,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,592,0,0,0,1299895,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,598,0,0,0,1299905,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,604,0,0,0,1299914,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,610,0,0,0,1299925,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,615,0,0,0,1299934,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,620,0,0,0,1299944,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,625,0,0,0,1299954,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,629,0,0,0,1299964,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,633,0,0,0,1299974,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,636,0,0,0,1299983,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,639,0,0,0,1299993,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,642,0,0,0,1300003,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,642,0,0,0,1300315,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,643,0,0,0,1300325,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,647,0,0,0,1300335,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,650,0,0,0,1300345,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,653,0,0,0,1300355,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,657,0,0,0,1300364,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,274,661,0,0,0,1300374,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,273,665,0,0,0,1300384,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,272,668,0,0,0,1300394,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,270,672,0,0,0,1300403,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,269,674,0,0,0,1300413,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,268,676,0,0,0,1300424,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,267,678,0,0,0,1300433,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,266,680,0,0,0,1300442,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,265,681,0,0,0,1300453,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,265,681,0,0,0,1300462,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,264,681,0,0,0,1300473,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,263,681,0,0,0,1300482,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,263,682,0,0,0,1300491,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,261,685,0,0,0,1300502,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,258,688,0,0,0,1300511,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,257,691,0,0,0,1300521,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,256,693,0,0,0,1300531,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,255,693,0,0,0,1300541,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,694,0,0,0,1300550,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,694,0,0,0,1300560,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,695,0,0,0,1300580,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,695,0,0,0,1300648,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,695,0,0,0,1300678,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,695,0,0,0,1300687,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,696,0,0,0,1300707,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,697,0,0,0,1300717,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,697,0,0,0,1300726,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,697,0,0,0,1300756,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,698,0,0,0,1300765,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,698,0,0,0,1300776,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,699,0,0,0,1300785,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,700,0,0,0,1300794,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,700,0,0,0,1300804,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,700,0,0,0,1300815,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,701,0,0,0,1300824,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,702,0,0,0,1300834,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,703,0,0,0,1300843,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,704,0,0,0,1300854,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,705,0,0,0,1300863,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,706,0,0,0,1300873,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,707,0,0,0,1300882,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,707,0,0,0,1300893,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,708,0,0,0,1300902,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,708,0,0,0,1300912,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,709,0,0,0,1300922,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,710,0,0,0,1300932,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,710,0,0,0,1300941,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,711,0,0,0,1300951,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,711,0,0,0,1300961,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,712,0,0,0,1300981,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,712,0,0,0,1301010,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,712,0,0,0,1301020,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,713,0,0,0,1301039,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,713,0,0,0,1301049,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,713,0,0,0,1301059,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,714,0,0,0,1301323,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,713,0,0,0,1301333,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,713,0,0,0,1301342,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,713,0,0,0,1301352,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,712,0,0,0,1301362,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,712,0,0,0,1301382,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,712,0,0,0,1301450,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,711,0,0,0,1301460,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,711,0,0,0,1301480,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,710,0,0,0,1301734,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,710,0,0,0,1301774,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,710,0,0,0,1301802,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,709,0,0,0,1301841,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,709,0,0,0,1301861,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,4,0,0,3,0,0,1301985,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,4,0,0,3,0,0,1301985,2,Virtual core pointer
+7,5,0,0,3,0,0,1302046,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,5,0,0,3,0,0,1302046,2,Virtual core pointer
+7,6,254,708,0,0,0,1302594,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,708,0,0,0,1302711,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,708,0,0,0,1302741,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,707,0,0,0,1302789,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,707,0,0,0,1302829,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,707,0,0,0,1302838,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,706,0,0,0,1302849,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,254,706,0,0,0,1302897,11,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,2,0,0,0,116,0,1303707,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1303708,3,Virtual core keyboard
+7,3,0,0,0,116,0,1303807,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1303807,3,Virtual core keyboard
+7,2,0,0,0,116,0,1303967,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1303967,3,Virtual core keyboard
+7,3,0,0,0,116,0,1304067,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1304067,3,Virtual core keyboard
+7,2,0,0,0,116,0,1304207,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1304207,3,Virtual core keyboard
+7,3,0,0,0,116,0,1304307,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1304307,3,Virtual core keyboard
+7,2,0,0,0,116,0,1304517,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1304517,3,Virtual core keyboard
+7,3,0,0,0,116,0,1304666,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1304666,3,Virtual core keyboard
+7,2,0,0,0,36,0,1305316,10,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,1305316,3,Virtual core keyboard
+7,3,0,0,0,36,0,1305436,10,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,1305436,3,Virtual core keyboard
+7,2,0,0,0,62,0,1306235,10,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,1306235,3,Virtual core keyboard
+7,2,0,0,0,30,0,1306585,10,AT Translated Set 2 keyboard
+6,2,0,0,0,30,0,1306585,3,Virtual core keyboard
+7,3,0,0,0,30,0,1306655,10,AT Translated Set 2 keyboard
+6,3,0,0,0,30,0,1306655,3,Virtual core keyboard
+7,2,0,0,0,54,0,1307604,10,AT Translated Set 2 keyboard
+6,2,0,0,0,54,0,1307604,3,Virtual core keyboard
+7,2,0,0,0,31,0,1307694,10,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,1307694,3,Virtual core keyboard
+7,3,0,0,0,54,0,1307704,10,AT Translated Set 2 keyboard
+6,3,0,0,0,54,0,1307704,3,Virtual core keyboard
+7,3,0,0,0,31,0,1307805,10,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,1307805,3,Virtual core keyboard
+7,2,0,0,0,57,0,1308114,10,AT Translated Set 2 keyboard
+6,2,0,0,0,57,0,1308114,3,Virtual core keyboard
+7,3,0,0,0,57,0,1308214,10,AT Translated Set 2 keyboard
+6,3,0,0,0,57,0,1308214,3,Virtual core keyboard
+7,2,0,0,0,26,0,1308364,10,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,1308364,3,Virtual core keyboard
+7,3,0,0,0,26,0,1308424,10,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,1308424,3,Virtual core keyboard
+7,2,0,0,0,28,0,1308574,10,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,1308574,3,Virtual core keyboard
+7,3,0,0,0,28,0,1308653,10,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,1308653,3,Virtual core keyboard
+7,3,0,0,0,62,0,1308833,10,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,1308834,3,Virtual core keyboard
+7,2,0,0,0,36,0,1309533,10,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,1309533,3,Virtual core keyboard
+7,3,0,0,0,36,0,1309603,10,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,1309603,3,Virtual core keyboard
+7,4,0,0,3,0,0,1310813,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,4,0,0,3,0,0,1310813,2,Virtual core pointer
+7,5,0,0,3,0,0,1310854,11,AlpsPS/2 ALPS DualPoint TouchPad
+6,5,0,0,3,0,0,1310854,2,Virtual core pointer
+7,2,0,0,0,116,0,1312201,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1312201,3,Virtual core keyboard
+7,3,0,0,0,116,0,1312280,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1312280,3,Virtual core keyboard
+7,2,0,0,0,116,0,1312600,10,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1312600,3,Virtual core keyboard
+7,3,0,0,0,116,0,1312680,10,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1312680,3,Virtual core keyboard
+7,2,0,0,0,36,0,1313200,10,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,1313200,3,Virtual core keyboard
+0,21,0,0,0,0,0,1313228
+NEW-WINDOW:462,253:58720534,58720534,25177430,0,0,0:1x28+879+458:0,0:Export of graph "UCINET"
+0,21,0,0,0,0,0,1313228
+0,21,0,0,0,0,0,1313228
+7,3,0,0,0,36,0,1313290,10,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,1313290,3,Virtual core keyboard
+7,2,0,0,0,28,0,1314309,10,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,1314309,3,Virtual core keyboard
+7,3,0,0,0,28,0,1314369,10,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,1314369,3,Virtual core keyboard
+7,2,0,0,0,26,0,1314539,10,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,1314539,3,Virtual core keyboard
+7,3,0,0,0,26,0,1314599,10,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,1314599,3,Virtual core keyboard
+7,2,0,0,0,39,0,1314809,10,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,1314809,3,Virtual core keyboard
+7,3,0,0,0,39,0,1314839,10,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,1314839,3,Virtual core keyboard
+7,2,0,0,0,28,0,1315028,10,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,1315029,3,Virtual core keyboard
+7,3,0,0,0,28,0,1315128,10,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,1315128,3,Virtual core keyboard
+7,2,0,0,0,17,0,1316088,10,AT Translated Set 2 keyboard
+6,2,0,0,0,17,0,1316088,3,Virtual core keyboard
+7,3,0,0,0,17,0,1316228,10,AT Translated Set 2 keyboard
+6,3,0,0,0,17,0,1316228,3,Virtual core keyboard
+7,2,0,0,0,42,0,1317057,10,AT Translated Set 2 keyboard
+6,2,0,0,0,42,0,1317057,3,Virtual core keyboard
+7,2,0,0,0,30,0,1317107,10,AT Translated Set 2 keyboard
+6,2,0,0,0,30,0,1317107,3,Virtual core keyboard
+7,2,0,0,0,31,0,1317157,10,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,1317157,3,Virtual core keyboard
+7,3,0,0,0,42,0,1317167,10,AT Translated Set 2 keyboard
+6,3,0,0,0,42,0,1317167,3,Virtual core keyboard
+7,3,0,0,0,30,0,1317207,10,AT Translated Set 2 keyboard
+6,3,0,0,0,30,0,1317207,3,Virtual core keyboard
+7,3,0,0,0,31,0,1317267,10,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,1317267,3,Virtual core keyboard
+7,2,0,0,0,62,0,1317666,10,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,1317667,3,Virtual core keyboard
+7,2,0,0,0,59,0,1317886,10,AT Translated Set 2 keyboard
+6,2,0,0,0,59,0,1317887,3,Virtual core keyboard
+7,3,0,0,0,59,0,1317976,10,AT Translated Set 2 keyboard
+6,3,0,0,0,59,0,1317976,3,Virtual core keyboard
+7,3,0,0,0,62,0,1317996,10,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,1317996,3,Virtual core keyboard
+7,2,0,0,0,28,0,1318180,10,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,1318180,3,Virtual core keyboard
+7,3,0,0,0,28,0,1318266,10,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,1318266,3,Virtual core keyboard
+7,2,0,0,0,46,0,1318336,10,AT Translated Set 2 keyboard
+6,2,0,0,0,46,0,1318336,3,Virtual core keyboard
+7,2,0,0,0,33,0,1318566,10,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,1318566,3,Virtual core keyboard
+7,3,0,0,0,46,0,1318566,10,AT Translated Set 2 keyboard
+6,3,0,0,0,46,0,1318566,3,Virtual core keyboard
+7,3,0,0,0,33,0,1318696,10,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,1318696,3,Virtual core keyboard
+7,2,0,0,0,36,0,1319285,10,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,1319286,3,Virtual core keyboard
+0,21,0,0,0,0,0,1319305
+NEW-WINDOW:461,225:58720534,58720534,747,461,225,0:461x225+879+458:0,0:Export of graph "UCINET"
+0,21,0,0,0,0,0,1319305
+0,21,0,0,0,0,0,1319305
+0,21,0,0,0,0,0,1319305
+0,21,0,0,0,0,0,1319305
+0,21,0,0,0,0,0,1319317
+NEW-WINDOW:651,393:58720543,58720543,25177538,0,0,0:1x28+500+37:0,0:TLP Export
+0,21,0,0,0,0,0,1319317
+0,21,0,0,0,0,0,1319317
+7,3,0,0,0,36,0,1319378,10,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,1319378,3,Virtual core keyboard
+0,21,0,0,0,0,0,1319590
+NEW-WINDOW:8384,0:58720543,58720543,747,650,365,0:6135x0+27331704+0:1656421688,1656421688:
+0,21,0,0,0,0,0,1319590
+0,21,0,0,0,0,0,1319590
+0,21,0,0,0,0,0,1319590
+0,21,0,0,0,0,0,1319590

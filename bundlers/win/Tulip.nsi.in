@@ -1,0 +1,192 @@
+!define ARCH "@PROCESSOR_ARCHITECTURE@"
+!define CHECK_PYTHON "@BUILD_PYTHON_COMPONENTS@"
+
+!include "MUI.nsh"
+!include "x64.nsh"
+!include "FileAssociation.nsh"
+
+!if ${ARCH} == "64"
+Function .onInit
+  ${If} ${RunningX64}
+   Goto Yes
+  ${Else}
+    MessageBox MB_OK "You cannot install the 64 bit version of Tulip @TulipVersion@ on a Windows 32 bit system. Use the 32 bit version of Tulip @TulipVersion@ instead."
+    Abort
+  ${Endif}
+Yes:
+FunctionEnd
+  InstallDir "$PROGRAMFILES64\Tulip-@TulipVersion@"
+  !if ${CHECK_PYTHON} == "ON"
+    Name "Tulip-@TulipVersion@ (x64)"
+  !else
+    Name "Tulip-@TulipVersion@ (x64 without Python Components)"
+  !endif
+!else
+Function .onInit
+  ${If} ${RunningX64}
+    MessageBox MB_YESNO "You are trying to install the 32 bit version of Tulip @TulipVersion@ on a Windows 64 bit system. But the 64 bit version of Tulip @TulipVersion@ is available too. Continue ?" IDYES NoAbort
+    Abort
+NoAbort:
+  ${Endif}
+FunctionEnd
+  InstallDir $PROGRAMFILES\Tulip-@TulipVersion@
+  !if ${CHECK_PYTHON} == "ON"
+    Name "Tulip-@TulipVersion@"
+  !else
+    Name "Tulip-@TulipVersion@ (without Python Components)"
+  !endif
+!endif
+
+!define MUI_ICON "files\share\tulip\bitmaps\tulip.ico"
+!define MUI_UNICON "files\share\tulip\bitmaps\tulip.ico"
+
+RequestExecutionLevel admin
+
+!define MUI_ABORTWARNING
+
+; Installer pages
+!insertmacro MUI_PAGE_LICENSE "COPYING"
+!insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_INSTFILES
+
+; Uninstaller pages
+!insertmacro MUI_UNPAGE_CONFIRM
+!insertmacro MUI_UNPAGE_INSTFILES
+
+; Language
+!insertmacro MUI_LANGUAGE "English"
+
+; Setup file
+!if ${CHECK_PYTHON} == "ON"
+!if ${ARCH} == "64"
+OutFile "tulip-@TulipVersion@_x64_setup.exe"
+!else
+OutFile "tulip-@TulipVersion@_setup.exe"
+!endif
+!else
+!if ${ARCH} == "64"
+OutFile "tulip-@TulipVersion@_x64_no_python_setup.exe"
+!else
+OutFile "tulip-@TulipVersion@_no_python_setup.exe"
+!endif
+!endif
+
+!if ${CHECK_PYTHON} == "ON"
+Function CheckAndInstallPython 
+  ${If} ${RunningX64} 
+	ReadRegStr $0 HKLM SOFTWARE\Wow6432Node\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
+  ${Else}
+	ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
+  ${EndIf}
+  IfErrors install end
+  install:
+        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi$\n$\nand install Python @PYTHON_VERSION@ (x86)."
+        inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi" "python-@PYTHON_VERSION_WITH_PATCH@.msi"
+        ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.msi"' $0
+        Delete python-@PYTHON_VERSION_WITH_PATCH@.msi
+		${If} $0 != 0
+		   DetailPrint "MSI return code was $0"
+		   MessageBox MB_OK "Python @PYTHON_VERSION@ (x86) installation failed. Tulip @TulipVersion@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ (x86) is installed."
+		${EndIf}
+  end:  
+FunctionEnd
+
+Function CheckAndInstallPython64 
+  SetRegView 64
+  ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
+  IfErrors install end
+  install:
+        MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86-64) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi$\n$\nand install Python @PYTHON_VERSION@ (x86-64)."
+        inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi" "python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi"
+        ExecWait '"msiexec" /i "python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi"' $0
+        Delete python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi
+		${If} $0 != 0
+		   DetailPrint "MSI return code was $0"
+		   MessageBox MB_OK "Python @PYTHON_VERSION@ (x86-64) installation failed. Tulip @TulipVersion@ installation will proceed$\n$\nbut Tulip will not work, until Python @PYTHON_VERSION@ (x86-64) is installed."
+		${EndIf}
+  end:  
+FunctionEnd
+!endif
+
+!define SHCNE_ASSOCCHANGED 0x08000000
+!define SHCNF_IDLIST 0
+
+Function RefreshShellIcons
+  ; By jerome tremblay - april 2003
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v \
+  (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
+FunctionEnd
+
+Function un.RefreshShellIcons
+  ; By jerome tremblay - april 2003
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v \
+  (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
+FunctionEnd
+
+Section "Tulip"
+  SetShellVarContext all
+  SetOutPath $INSTDIR
+
+!if ${CHECK_PYTHON} == "ON"
+!if ${ARCH} == "64"
+  SetRegView 64
+  Call CheckAndInstallPython64
+!else
+  Call CheckAndInstallPython
+!endif
+!endif
+
+File /r files\*.*
+
+!if ${ARCH} == "64"  
+  CreateDirectory "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Tulip-@TulipVersion@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ agent (x64).lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ (x64).lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "DisplayName" "Tulip-@TulipVersion@ (x64)"
+!else
+  CreateDirectory "$SMPROGRAMS\Tulip-@TulipVersion@"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Tulip-@TulipVersion@ agent.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Tulip-@TulipVersion@.lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$SMPROGRAMS\Tulip-@TulipVersion@\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@ agent.lnk" "$INSTDIR\bin\tulip.exe" "" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  CreateShortCut "$DESKTOP\Tulip-@TulipVersion@.lnk" "$INSTDIR\bin\tulip_perspective.exe" "-p Tulip" "$INSTDIR\share\tulip\bitmaps\tulip.ico"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "DisplayName" "Tulip-@TulipVersion@"
+!endif
+  
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@" "UninstallString" "$INSTDIR\Uninstall.exe"
+  WriteUninstaller "$INSTDIR\Uninstall.exe"
+
+ ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlp" "Tulip.File" "Tulip Graph File" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
+ ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlpb" "Tulip.BinaryFile" "Tulip Graph Binary File" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
+ ${registerExtension} "$INSTDIR\bin\tulip.exe" ".tlpx" "Tulip.ProjectFile" "Tulip Project File" "$INSTDIR\share\tulip\bitmaps\tulip-file-icon.ico"
+
+ Call RefreshShellIcons
+
+SectionEnd
+
+Section "Uninstall"
+  SetShellVarContext all
+!if ${ARCH} == "64"
+  SetRegView 64
+  Delete "$DESKTOP\Tulip-@TulipVersion@ agent (x64).lnk"	
+  Delete "$DESKTOP\Tulip-@TulipVersion@ (x64).lnk"	
+  RMDir /r "$SMPROGRAMS\Tulip-@TulipVersion@ (x64)"
+!else
+  Delete "$DESKTOP\Tulip-@TulipVersion@ agent.lnk"
+  Delete "$DESKTOP\Tulip-@TulipVersion@.lnk"	
+  RMDir /r "$SMPROGRAMS\Tulip-@TulipVersion@"
+!endif
+  RMDir /r "$INSTDIR"
+  Delete $INSTDIR\Uninstall.exe
+  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tulip-@TulipVersion@"
+
+ ${unregisterExtension} ".tlp" "Tulip.File"
+ ${unregisterExtension} ".tlpb" "Tulip.BinaryFile"
+ ${unregisterExtension} ".tlpx" "Tulip.ProjectFile"
+
+ Call un.RefreshShellIcons
+
+SectionEnd

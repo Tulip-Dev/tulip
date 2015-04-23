@@ -1,0 +1,15 @@
+dl n = 4, nm = 2
+labels:
+GroupA,GroupB,GroupC,GroupD
+matrix labels:
+Marriage,Business
+data:
+0 1 0 1
+1 0 0 0
+0 0 1 0
+1 0 0 1
+
+0 1 1 1
+1 0 0 0
+1 0 0 1
+1 0 1 0

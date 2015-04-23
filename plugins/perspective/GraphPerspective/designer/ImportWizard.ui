@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ImportWizard</class>
+ <widget class="QWizard" name="ImportWizard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>879</width>
+    <height>458</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Import</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWizard {
+background-color: white;
+}
+QListView, QListWidget {
+background-color: white;
+border: 0px;
+}
+
+QListWidget::item {
+padding: 6px;
+}
+
+#categoryFrame,#parametersFrame,#algorithmFrame {
+border: 1px solid #C9C9C9;
+background-color: white;
+}
+
+#categoryLabel,#parametersLabel,#algorithmLabel {
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, 
+stop:1 rgba(0,0,0,0),
+stop:0 #F0F0F0);
+border: 0px;
+}</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <property name="options">
+   <set>QWizard::ExtendedWatermarkPixmap|QWizard::HaveFinishButtonOnEarlyPages|QWizard::NoBackButtonOnStartPage</set>
+  </property>
+  <property name="titleFormat">
+   <enum>Qt::RichText</enum>
+  </property>
+  <property name="subTitleFormat">
+   <enum>Qt::RichText</enum>
+  </property>
+  <widget class="QWizardPage" name="choosePluginPage">
+   <property name="title">
+    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/32/document-import.png&quot; width=32 height=32/&gt; Graph importing Wizard</string>
+   </property>
+   <attribute name="pageId">
+    <string notr="true">0</string>
+   </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_3">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>&lt;br /&gt;Import a graph hierarchy into your project by selecting and parameterizing one of the graph import methods listed below.&lt;br/&gt;Then click &lt;b&gt;Finish&lt;/b&gt; to import your graph and visualize it using the &lt;b&gt;Node Link Diagram&lt;/b&gt; and &lt;b&gt;Spreadsheet&lt;/b&gt; standard views.&lt;br/&gt; </string>
+      </property>
+      <property name="wordWrap">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QFrame" name="categoryFrame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>30</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <layout class="QVBoxLayout" name="leftLayout">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="categoryLabel">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>&lt;b&gt;Category&lt;/b&gt;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTreeView" name="importModules">
+           <property name="styleSheet">
+            <string notr="true"> QTreeView::branch {
+ border-image: url(none.png) 0;
+ }
+
+ QTreeView::branch:has-children:!has-siblings:closed,
+ QTreeView::branch:closed:has-children:has-siblings {
+         border-image: none;
+         image: url(:/tulip/gui/ui/right_arrow-black.png);
+ }
+
+ QTreeView::branch:open:has-children:!has-siblings,
+ QTreeView::branch:open:has-children:has-siblings  {
+         border-image: none;
+         image: url(:/tulip/gui/ui/down_arrow-black.png);
+ }</string>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
+           <property name="lineWidth">
+            <number>0</number>
+           </property>
+           <property name="headerHidden">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="rightFrame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>80</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QSplitter" name="splitter">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="handleWidth">
+            <number>1</number>
+           </property>
+           <property name="childrenCollapsible">
+            <bool>false</bool>
+           </property>
+           <widget class="QFrame" name="parametersFrame">
+            <layout class="QVBoxLayout" name="rLayout2">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="parametersLabel">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>32</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>&lt;b&gt;Settings&lt;b&gt;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTableView" name="parametersList">
+               <property name="styleSheet">
+                <string notr="true">QHeaderView::section {
+background-color: white;
+color: black;
+padding-left: 4px;
+padding-right: 4px;
+margin-bottom: -1px;
+border: 1px solid #C9C9C9;
+border-bottom: 0px;
+font: bold;
+}
+QHeaderView {
+background-color: white;
+}
+QTableView {
+background-color: white;
+}</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <property name="editTriggers">
+                <set>QAbstractItemView::AllEditTriggers</set>
+               </property>
+               <property name="alternatingRowColors">
+                <bool>true</bool>
+               </property>
+               <property name="selectionMode">
+                <enum>QAbstractItemView::SingleSelection</enum>
+               </property>
+               <attribute name="horizontalHeaderVisible">
+                <bool>false</bool>
+               </attribute>
+               <attribute name="horizontalHeaderDefaultSectionSize">
+                <number>200</number>
+               </attribute>
+               <attribute name="horizontalHeaderMinimumSectionSize">
+                <number>150</number>
+               </attribute>
+               <attribute name="horizontalHeaderStretchLastSection">
+                <bool>true</bool>
+               </attribute>
+               <attribute name="verticalHeaderVisible">
+                <bool>true</bool>
+               </attribute>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../resources/GraphPerspective.qrc"/>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>ImportWizard</sender>
+   <signal>currentIdChanged(int)</signal>
+   <receiver>ImportWizard</receiver>
+   <slot>updateFinishButton()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>439</x>
+     <y>228</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>439</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>groupSelected(QString)</slot>
+  <slot>algorithmSelected(QString)</slot>
+  <slot>updateFinishButton()</slot>
+ </slots>
+</ui>

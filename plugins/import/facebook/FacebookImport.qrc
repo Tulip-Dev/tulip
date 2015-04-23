@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/tulip/facebook">
+        <file>facebook-logo.jpg</file>
+    </qresource>
+</RCC>

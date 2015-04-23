@@ -1,0 +1,1293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QuickAccessBar</class>
+ <widget class="QWidget" name="QuickAccessBar">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1100</width>
+    <height>35</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton, QComboBox {
+border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+}
+QPushButton::flat {
+border-image: none;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+background-color: transparent;
+}
+QPushButton, QComboBox, QLabel {
+color: black;
+}
+QPushButton:hover, QComboBox:hover {
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+}
+QPushButton:disabled, QComboBox::disabled {
+color:gray;
+}
+QPushButton:pressed{
+border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
+}
+QPushButton::menu-indicator{
+subcontrol-origin: margin;
+subcontrol-position: center right;
+right: 4px;
+}
+QPushButton {
+outline: none;
+margin: 2
+}
+QComboBox::down-arrow {
+image: url(:/tulip/gui/ui/combobox_arrow.png);
+}
+QComboBox:drop-down {
+subcontrol-origin: padding;
+subcontrol-position: top right;
+border-left-style: none; 
+border-top-right-radius: 1px;
+border-bottom-right-radius: 1px;
+}
+ QComboBox QAbstractItemView {
+subcontrol-origin: padding;
+subcontrol-position: top right;
+ }
+#scrollAreaWidgetContents, #SceneConfigWidget {
+background-color: white;
+border: 0px;
+}
+QScrollArea {
+border: 0px;
+}
+QFrame[ section=&quot;true&quot; ] {
+border-top: 1px solid #D9D9D9;
+padding-top: 20px;
+}
+QFrame[ subsection = &quot;true&quot; ] {
+border-top: 1px solid #D9D9D9;
+padding-top: 5px;
+background-color: #F4F4F4;
+}
+#QuickAccessBar {
+background-color: rgba(255,255,255,100);
+}</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="spacing">
+    <number>4</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QPushButton" name="nodesColorCaptionButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Show/Hide the caption of the nodes color metric mapping</string>
+     </property>
+     <property name="statusTip">
+      <string>Show/Hide nodes color caption</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/node_color_interpolation.png</normaloff>:/tulip/gui/icons/20/node_color_interpolation.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="edgesColorCaptionButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Show/Hide the caption of the edges color metric mapping</string>
+     </property>
+     <property name="statusTip">
+      <string>Show/Hide edges color caption</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/edge_color_interpolation.png</normaloff>:/tulip/gui/icons/20/edge_color_interpolation.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="nodesSizeCaptionButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Show/Hide the caption of the nodes size metric mapping</string>
+     </property>
+     <property name="statusTip">
+      <string>Show/Hide nodes size caption</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/node_size_interpolation.png</normaloff>:/tulip/gui/icons/20/node_size_interpolation.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="edgesSizeCaptionButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Show/Hide the caption of the edges size metric mapping</string>
+     </property>
+     <property name="statusTip">
+      <string>Show/Hide edges size caption</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/edge_size_interpolation.png</normaloff>:/tulip/gui/icons/20/edge_size_interpolation.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="sep1">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="screenshotButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Take a snapshot</string>
+     </property>
+     <property name="statusTip">
+      <string>Save a snapshot of the current graph into an image file</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/camera-photo.png</normaloff>:/tulip/gui/icons/20/camera-photo.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ColorButton" name="backgroundColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set scene background color</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="colorInterpolationToggle">
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Toggle edge color interpolation</string>
+     </property>
+     <property name="statusTip">
+      <string>Toggle interpolation on edges color between source and target node</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/color_interpolation_disabled.png</normaloff>:/tulip/gui/icons/20/color_interpolation_disabled.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="sizeInterpolationToggle">
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Toggle edge size interpolation</string>
+     </property>
+     <property name="statusTip">
+      <string>Toggle interpolation on edges size between source and target node</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/size_interpolation_disabled.png</normaloff>:/tulip/gui/icons/20/size_interpolation_disabled.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="showEdgesToggle">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Show/Hide edges</string>
+     </property>
+     <property name="statusTip">
+      <string>Toggle edges display</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/edges_disabled.png</normaloff>:/tulip/gui/icons/20/edges_disabled.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="showLabelsToggle">
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Show/Hide node labels</string>
+     </property>
+     <property name="statusTip">
+      <string>Toggle labels display</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/labels_disabled.png</normaloff>:/tulip/gui/icons/20/labels_disabled.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="labelsScaledToggle">
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Labels size fit or not to nodes size</string>
+     </property>
+     <property name="statusTip">
+      <string>Labels size fit or not to nodes size</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/labels_scaled_disabled.png</normaloff>:/tulip/gui/icons/20/labels_scaled_disabled.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="sep3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ChooseColorButton" name="nodeColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set color of selected nodes if any, of all nodes if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_node_color.png</normaloff>:/tulip/gui/icons/20/set_node_color.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ChooseColorButton" name="edgeColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set color of selected edges if any, of all edges if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_edge_color.png</normaloff>:/tulip/gui/icons/20/set_edge_color.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ChooseColorButton" name="nodeBorderColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set border color of selected nodes if any, of all nodes if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_node_border_color.png</normaloff>:/tulip/gui/icons/20/set_node_border_color.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ChooseColorButton" name="edgeBorderColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set border color of selected edges if any, of all edges if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_edge_border_color.png</normaloff>:/tulip/gui/icons/20/set_edge_border_color.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="nodeShapeButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set shape of selected nodes if any, of all nodes if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_node_shape.png</normaloff>:/tulip/gui/icons/20/set_node_shape.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="edgeShapeButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set shape of selected edges if any, of all edges if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_edge_shape.png</normaloff>:/tulip/gui/icons/20/set_edge_shape.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="nodeSizeButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set size of selected nodes if any, of all nodes if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_node_size.png</normaloff>:/tulip/gui/icons/20/set_node_size.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="edgeSizeButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set size of selected edges if any, of all edges if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_edge_size.png</normaloff>:/tulip/gui/icons/20/set_edge_size.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="tlp::ChooseColorButton" name="labelColorButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set label color of selected elements if any, of all elements if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_label_color.png</normaloff>:/tulip/gui/icons/20/set_label_color.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="labelPositionButton">
+     <property name="minimumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>26</width>
+       <height>26</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set label position of selected nodes if any, of all nodes if not</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../resources/TulipGUIResource.qrc">
+       <normaloff>:/tulip/gui/icons/20/set_label_position.png</normaloff>:/tulip/gui/icons/20/set_label_position.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="fontButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>200</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="toolTip">
+      <string>Set font of elements labels</string>
+     </property>
+     <property name="statusTip">
+      <string>Change font for labels</string>
+     </property>
+     <property name="text">
+      <string>Aa</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::ColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">tulip/ColorButton.h</header>
+   <slots>
+    <signal>colorChanged(QColor)</signal>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>tlp::ChooseColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">tulip/ColorButton.h</header>
+   <slots>
+    <signal>colorChanged(QColor)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../resources/TulipGUIResource.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>backgroundColorButton</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setBackgroundColor(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>51</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>colorInterpolationToggle</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setColorInterpolation(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sizeInterpolationToggle</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setSizeInterpolation(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelColorButton</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setLabelColor(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>404</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nodesColorCaptionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>showHideNodesColorCaption()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nodesSizeCaptionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>showHideNodesSizeCaption()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edgesColorCaptionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>showHideEdgesColorCaption()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edgesSizeCaptionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>showHideEdgesSizeCaption()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>showEdgesToggle</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setEdgesVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>showLabelsToggle</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setLabelsVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>440</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelsScaledToggle</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setLabelsScaled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>440</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fontButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>selectFont()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>605</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>screenshotButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>takeSnapshot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nodeColorButton</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setNodeColor(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>353</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edgeColorButton</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setEdgeColor(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>353</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nodeBorderColorButton</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setNodeBorderColor(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>353</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edgeBorderColorButton</sender>
+   <signal>colorChanged(QColor)</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setEdgeBorderColor(QColor)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>353</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nodeShapeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setNodeShape()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edgeShapeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setEdgeShape()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nodeSizeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setNodeSize()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>edgeSizeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setEdgeSize()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>15</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelPositionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>QuickAccessBar</receiver>
+   <slot>setNodeLabelPosition()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>605</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>549</x>
+     <y>17</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>showHideNodesColorCaption()</slot>
+  <slot>showHideNodesSizeCaption()</slot>
+  <slot>showHideEdgesColorCaption()</slot>
+  <slot>showHideEdgesSizeCaption()</slot>
+  <slot>takeSnapshot()</slot>
+  <slot>setBackgroundColor(QColor)</slot>
+  <slot>setColorInterpolation(bool)</slot>
+  <slot>scaleFont(int)</slot>
+  <slot>setLabelColor(QColor)</slot>
+  <slot>setNodeColor(QColor)</slot>
+  <slot>setEdgeColor(QColor)</slot>
+  <slot>setNodeBorderColor(QColor)</slot>
+  <slot>setEdgeBorderColor(QColor)</slot>
+  <slot>setNodeShape()</slot>
+  <slot>setEdgeShape()</slot>
+  <slot>setNodeSize()</slot>
+  <slot>setEdgeSize()</slot>
+  <slot>scaleNodes(int)</slot>
+  <slot>setEdgesVisible(bool)</slot>
+  <slot>setLabelsVisible(bool)</slot>
+  <slot>selectFont()</slot>
+ </slots>
+</ui>

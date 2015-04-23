@@ -1,0 +1,28 @@
+#!/bin/sh
+
+wd="${0%/*}"
+cd "$wd/.."
+
+# Host system is Snow Leopard or lower
+if [ ! -e /usr/lib/libpython2.7.dylib ]
+then
+	# Host system has Python 2.7 already installed
+	# Use this version instead of the one provided in the bundle
+	if [ -d /Library/Frameworks/Python.framework/Versions/2.7 ]
+	then
+		# Force to use Python framework installed on the system by renaming the one included in the bundle
+		mv Frameworks/libpython2.7.dylib Frameworks/pythonlib 2>/dev/null
+		mv Frameworks/Python Frameworks/nohtyP 2>/dev/null
+	else
+		mv Frameworks/pythonlib Frameworks/libpython2.7.dylib 2>/dev/null
+		mv Frameworks/nohtyP Frameworks/Python 2>/dev/null
+	fi
+else
+	# Force to use Python framework installed on the system by renaming the one included in the bundle
+	mv Frameworks/libpython2.7.dylib Frameworks/pythonlib 2>/dev/null	
+	mv Frameworks/Python Frameworks/nohtyP 2>/dev/null	
+fi
+
+export DYLD_LIBRARY_PATH="$(pwd)/Frameworks/"
+export DYLD_FRAMEWORK_PATH="$(pwd)/Frameworks"
+"$(pwd)"/bin/tulip

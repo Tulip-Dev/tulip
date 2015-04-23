@@ -1,0 +1,3 @@
+ADD_CORE_FILES(.)
+
+ADD_SUBDIRECTORY(tulip)

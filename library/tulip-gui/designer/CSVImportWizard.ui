@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CSVImportWizard</class>
+ <widget class="QWizard" name="CSVImportWizard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Import CSV data</string>
+  </property>
+  <widget class="tlp::CSVParsingConfigurationQWizardPage" name="parserConfigurationWizardPage">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="title">
+    <string>Source file settings</string>
+   </property>
+   <property name="subTitle">
+    <string>Specify parsing options: source file location, separator, file encoding.</string>
+   </property>
+  </widget>
+  <widget class="tlp::CSVImportConfigurationQWizardPage" name="importConfigurationWizardPage">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="title">
+    <string>Data selection</string>
+   </property>
+   <property name="subTitle">
+    <string>Select data to import: lines, attribute  columns. &lt;br/&gt; All checked columns will be imported.</string>
+   </property>
+  </widget>
+  <widget class="tlp::CSVGraphMappingConfigurationQWizardPage" name="mappingWizardPage">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="title">
+    <string>Import method</string>
+   </property>
+   <property name="subTitle">
+    <string>Choose and configure the import method.</string>
+   </property>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::CSVParsingConfigurationQWizardPage</class>
+   <extends>QWizardPage</extends>
+   <header location="global">tulip/CSVImportWizard.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tlp::CSVImportConfigurationQWizardPage</class>
+   <extends>QWizardPage</extends>
+   <header location="global">tulip/CSVImportWizard.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tlp::CSVGraphMappingConfigurationQWizardPage</class>
+   <extends>QWizardPage</extends>
+   <header location="global">tulip/CSVImportWizard.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

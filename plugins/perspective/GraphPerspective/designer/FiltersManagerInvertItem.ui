@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FiltersManagerInvertItem</class>
+ <widget class="QWidget" name="FiltersManagerInvertItem">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>45</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="topMargin">
+    <number>13</number>
+   </property>
+   <item>
+    <widget class="QComboBox" name="elementCombo">
+     <property name="currentIndex">
+      <number>2</number>
+     </property>
+     <item>
+      <property name="text">
+       <string>On nodes</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>On edges</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>On both</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

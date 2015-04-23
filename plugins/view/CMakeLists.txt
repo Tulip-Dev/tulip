@@ -1,0 +1,12 @@
+#Commented until SIP bindings are updated to fit with latest Tulip API changes
+IF(BUILD_PYTHON_COMPONENTS)
+ADD_SUBDIRECTORY(PythonScriptView)
+ENDIF(BUILD_PYTHON_COMPONENTS)
+ADD_SUBDIRECTORY(HistogramView)
+ADD_SUBDIRECTORY(GeographicView)
+ADD_SUBDIRECTORY(MatrixView)
+ADD_SUBDIRECTORY(ParallelCoordinatesView)
+ADD_SUBDIRECTORY(PixelOrientedView)
+ADD_SUBDIRECTORY(ScatterPlot2DView)
+ADD_SUBDIRECTORY(SOMView)
+ADD_SUBDIRECTORY(TableView)

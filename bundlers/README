@@ -1,0 +1,14 @@
+This directory contains bundlers for Tulip releases vor various target plateforms.
+
+When writing a new bundler, you should stick to the following rules:
+
+ . Write a system-native bash script or executable.
+ . Your executable should take two parameters: The first one is the directory where binaries have been installed by CMake, the second one is the directory where the resulting installer should be put.
+
+As a consequence, running a bundler should be achived by respecting those steps:
+
+ . Run CMake and compile tulip
+ . Run a make install
+ . Run the bundler_script <CMAKE_INSTALL_PREFIX> <dest_dir>
+
+Note: bundler scripts should always be called from within their containing directories.

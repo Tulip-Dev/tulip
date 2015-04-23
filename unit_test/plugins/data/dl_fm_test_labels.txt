@@ -1,0 +1,9 @@
+dl n = 4
+labels:
+  Sanders,Skvoretz,S.Smith,T.Smith
+data:
+0 1 1 0
+1 0 1 1
+1 1 0 0
+0 1 0 0
+ 

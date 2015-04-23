@@ -1,0 +1,816 @@
+####################################
+#         System information       #
+####################################
+# Date:                   2014:10:13 
+# Time:                   16:12:12 
+# Xnee program:           cnee 
+# Xnee version:           3.19 
+# Xnee home:              http://www.gnu.org/software/xnee/ 
+# Xnee info mailing list: info-xnee@gnu.org 
+# Xnee bug mailing list:  bug-xnee@gnu.org 
+# X version:              11 
+# X revision:             0 
+# X vendor:               The X.Org Foundation 
+# X vendor release:       11501000 
+# Record version major:   1
+# Record version minor:   13
+# OS name:                Linux 
+# OS Release:             3.13.0-37-generic 
+# OS Version:             #64-Ubuntu SMP Mon Sep 22 21:28:38 UTC 2014 
+# Machine:                x86_64 
+# Nodename:               pm-Precision-M4600 
+# Display name:           :0.0
+# Dimension:              1920x1080
+
+
+
+##############################################
+#      Xnee application arguments            #
+##############################################
+#  /home/pm/xnee-3.19/cnee/src//cnee -rec -etr -1 --keyboard --mouse -sk End -o import_json_file.xns 
+
+
+##############################################
+#      Displays                              #
+##############################################
+# display :0.0
+# distribute
+
+
+##############################################
+#      Files                                 #
+##############################################
+# out-file import_json_file.xns
+# err-file stderr
+
+
+##############################################
+#      Key Grabs                             #
+##############################################
+# stop-key         End
+# pause-key        0
+# resume-key       0
+# insert-key       0
+# exec-key         0
+# exec-program-key         xnee-exec-no-program
+
+
+##############################################
+#      Recording limits etc                  #
+##############################################
+
+events-to-record        -1
+data-to-record          -1
+seconds-to-record       -1
+# first-last
+
+# Record  all (including current) clients or only future ones
+all-clients
+# future-clients
+
+# Store the starting mouse position 
+# store-mouse-position
+
+
+##############################################
+#      Resolution                            #
+##############################################
+
+# Resolution
+#recorded-resolution  1920x1080
+#replay-resolution  1x1
+#resolution-adjustment  0
+
+
+##############################################
+#      Speed                                 #
+##############################################
+
+# Speed
+#speed-percent  100
+
+
+##############################################
+#      Replaying limits etc                  #
+##############################################
+
+max-threshold 20 
+min-threshold 20 
+tot-threshold 40 
+
+
+##############################################
+#      Feedback                              #
+##############################################
+#feedback-none
+#feedback-stderr
+feedback-xosd
+ 
+
+
+##############################################
+#      Various                               #
+##############################################
+
+# Plugin file 
+
+# Modes (currently not used)
+# synchronised-replay
+
+# Replay offset
+#replay-offset 0x0
+
+# Human printout of X11 data (instead of Xnee format)
+# human-printout  
+
+# Delay before starting record/replay
+# time 0
+
+# No recording of ReparentNotify
+# no-reparent-recording 
+
+# Various
+#########################################
+#          Record settings              #
+#########################################
+#   data_flags          7
+#   rState              0x1860020
+#   xids[0]             3
+#   xids[1]             0
+# Number of Ranges      2
+# RecordRange[0]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         21-21 
+device-event-range            2-6 
+error-range                   0-0 
+# RecordRange[1]
+request-range            0-0
+reply-range                   0-0 
+extension-request-major-range  0-0 
+extension-request-minor-range  0-0 
+extension-reply-major-range   0-0
+extension-reply-minor-range   0-0 
+delivered-event-range         0-0 
+device-event-range            66-71 
+error-range                   0-0 
+7,2,0,0,0,37,0,7383483,11,AT Translated Set 2 keyboard
+6,2,0,0,0,37,0,7383483,3,Virtual core keyboard
+7,2,0,0,0,50,0,7383641,11,AT Translated Set 2 keyboard
+6,2,0,0,0,50,0,7383641,3,Virtual core keyboard
+7,2,0,0,0,32,0,7383889,11,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,7383889,3,Virtual core keyboard
+7,3,0,0,0,50,0,7383908,11,AT Translated Set 2 keyboard
+6,3,0,0,0,50,0,7383908,3,Virtual core keyboard
+0,21,0,0,0,0,0,7383934
+NEW-WINDOW:462,253:56623148,56623148,21000257,0,0,0:1x28+879+458:0,0:Import
+0,21,0,0,0,0,0,7383934
+0,21,0,0,0,0,0,7383934
+0,21,0,0,0,0,0,7383934
+7,3,0,0,0,32,0,7383938,11,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,7383938,3,Virtual core keyboard
+7,3,0,0,0,37,0,7383938,11,AT Translated Set 2 keyboard
+6,3,0,0,0,37,0,7383938,3,Virtual core keyboard
+7,6,365,712,0,0,0,7385098,10,'USB Optical Mouse'
+7,6,366,711,0,0,0,7385106,10,'USB Optical Mouse'
+7,6,368,709,0,0,0,7385114,10,'USB Optical Mouse'
+7,6,372,703,0,0,0,7385122,10,'USB Optical Mouse'
+7,6,376,699,0,0,0,7385130,10,'USB Optical Mouse'
+7,6,380,694,0,0,0,7385138,10,'USB Optical Mouse'
+7,6,384,690,0,0,0,7385146,10,'USB Optical Mouse'
+7,6,384,689,0,0,0,7385154,10,'USB Optical Mouse'
+7,6,386,687,0,0,0,7385162,10,'USB Optical Mouse'
+7,6,387,685,0,0,0,7385170,10,'USB Optical Mouse'
+7,6,389,683,0,0,0,7385178,10,'USB Optical Mouse'
+7,6,391,680,0,0,0,7385186,10,'USB Optical Mouse'
+7,6,392,679,0,0,0,7385194,10,'USB Optical Mouse'
+7,6,393,676,0,0,0,7385202,10,'USB Optical Mouse'
+7,6,394,675,0,0,0,7385210,10,'USB Optical Mouse'
+7,6,395,673,0,0,0,7385218,10,'USB Optical Mouse'
+7,6,397,671,0,0,0,7385226,10,'USB Optical Mouse'
+7,6,399,669,0,0,0,7385234,10,'USB Optical Mouse'
+7,6,400,667,0,0,0,7385242,10,'USB Optical Mouse'
+7,6,402,664,0,0,0,7385250,10,'USB Optical Mouse'
+7,6,402,662,0,0,0,7385258,10,'USB Optical Mouse'
+7,6,403,659,0,0,0,7385266,10,'USB Optical Mouse'
+7,6,404,657,0,0,0,7385274,10,'USB Optical Mouse'
+7,6,405,656,0,0,0,7385282,10,'USB Optical Mouse'
+7,6,406,654,0,0,0,7385290,10,'USB Optical Mouse'
+7,6,408,652,0,0,0,7385298,10,'USB Optical Mouse'
+7,6,409,651,0,0,0,7385306,10,'USB Optical Mouse'
+7,6,410,650,0,0,0,7385314,10,'USB Optical Mouse'
+7,6,411,648,0,0,0,7385322,10,'USB Optical Mouse'
+7,6,412,647,0,0,0,7385330,10,'USB Optical Mouse'
+7,6,413,646,0,0,0,7385338,10,'USB Optical Mouse'
+7,6,414,644,0,0,0,7385346,10,'USB Optical Mouse'
+7,6,414,643,0,0,0,7385354,10,'USB Optical Mouse'
+7,6,415,641,0,0,0,7385362,10,'USB Optical Mouse'
+7,6,416,640,0,0,0,7385370,10,'USB Optical Mouse'
+7,6,417,639,0,0,0,7385378,10,'USB Optical Mouse'
+7,6,418,638,0,0,0,7385386,10,'USB Optical Mouse'
+7,6,419,637,0,0,0,7385394,10,'USB Optical Mouse'
+7,6,420,635,0,0,0,7385410,10,'USB Optical Mouse'
+7,6,421,634,0,0,0,7385418,10,'USB Optical Mouse'
+7,6,425,631,0,0,0,7385426,10,'USB Optical Mouse'
+7,6,428,628,0,0,0,7385434,10,'USB Optical Mouse'
+7,6,431,628,0,0,0,7385442,10,'USB Optical Mouse'
+7,6,433,626,0,0,0,7385450,10,'USB Optical Mouse'
+7,6,435,625,0,0,0,7385458,10,'USB Optical Mouse'
+7,6,438,623,0,0,0,7385466,10,'USB Optical Mouse'
+7,6,440,621,0,0,0,7385474,10,'USB Optical Mouse'
+7,6,444,619,0,0,0,7385482,10,'USB Optical Mouse'
+7,6,449,616,0,0,0,7385490,10,'USB Optical Mouse'
+7,6,453,615,0,0,0,7385498,10,'USB Optical Mouse'
+7,6,455,613,0,0,0,7385506,10,'USB Optical Mouse'
+7,6,459,611,0,0,0,7385514,10,'USB Optical Mouse'
+7,6,463,609,0,0,0,7385522,10,'USB Optical Mouse'
+7,6,464,608,0,0,0,7385530,10,'USB Optical Mouse'
+7,6,467,607,0,0,0,7385538,10,'USB Optical Mouse'
+7,6,468,605,0,0,0,7385546,10,'USB Optical Mouse'
+7,6,470,604,0,0,0,7385554,10,'USB Optical Mouse'
+7,6,473,603,0,0,0,7385562,10,'USB Optical Mouse'
+7,6,475,601,0,0,0,7385570,10,'USB Optical Mouse'
+7,6,476,599,0,0,0,7385578,10,'USB Optical Mouse'
+7,6,478,598,0,0,0,7385586,10,'USB Optical Mouse'
+7,6,479,597,0,0,0,7385594,10,'USB Optical Mouse'
+7,6,482,596,0,0,0,7385602,10,'USB Optical Mouse'
+7,6,484,595,0,0,0,7385610,10,'USB Optical Mouse'
+7,6,487,593,0,0,0,7385618,10,'USB Optical Mouse'
+7,6,489,592,0,0,0,7385626,10,'USB Optical Mouse'
+7,6,492,591,0,0,0,7385634,10,'USB Optical Mouse'
+7,6,495,589,0,0,0,7385642,10,'USB Optical Mouse'
+7,6,498,588,0,0,0,7385650,10,'USB Optical Mouse'
+7,6,501,587,0,0,0,7385658,10,'USB Optical Mouse'
+7,6,503,586,0,0,0,7385666,10,'USB Optical Mouse'
+7,6,505,585,0,0,0,7385674,10,'USB Optical Mouse'
+7,6,507,584,0,0,0,7385682,10,'USB Optical Mouse'
+7,6,509,583,0,0,0,7385690,10,'USB Optical Mouse'
+7,6,512,581,0,0,0,7385698,10,'USB Optical Mouse'
+7,6,513,580,0,0,0,7385706,10,'USB Optical Mouse'
+7,6,515,579,0,0,0,7385714,10,'USB Optical Mouse'
+7,6,517,577,0,0,0,7385722,10,'USB Optical Mouse'
+7,6,520,575,0,0,0,7385730,10,'USB Optical Mouse'
+7,6,522,573,0,0,0,7385738,10,'USB Optical Mouse'
+7,6,525,571,0,0,0,7385746,10,'USB Optical Mouse'
+7,6,529,568,0,0,0,7385754,10,'USB Optical Mouse'
+7,6,531,567,0,0,0,7385762,10,'USB Optical Mouse'
+7,6,534,565,0,0,0,7385770,10,'USB Optical Mouse'
+7,6,536,562,0,0,0,7385778,10,'USB Optical Mouse'
+7,6,539,560,0,0,0,7385786,10,'USB Optical Mouse'
+7,6,541,557,0,0,0,7385794,10,'USB Optical Mouse'
+7,6,543,555,0,0,0,7385802,10,'USB Optical Mouse'
+7,6,545,553,0,0,0,7385810,10,'USB Optical Mouse'
+7,6,546,552,0,0,0,7385818,10,'USB Optical Mouse'
+7,6,548,551,0,0,0,7385826,10,'USB Optical Mouse'
+7,6,549,549,0,0,0,7385834,10,'USB Optical Mouse'
+7,6,550,549,0,0,0,7385842,10,'USB Optical Mouse'
+7,6,552,547,0,0,0,7385850,10,'USB Optical Mouse'
+7,6,554,547,0,0,0,7385858,10,'USB Optical Mouse'
+7,6,555,545,0,0,0,7385866,10,'USB Optical Mouse'
+7,6,555,544,0,0,0,7385874,10,'USB Optical Mouse'
+7,6,556,544,0,0,0,7385882,10,'USB Optical Mouse'
+7,6,557,543,0,0,0,7385890,10,'USB Optical Mouse'
+7,6,558,543,0,0,0,7385898,10,'USB Optical Mouse'
+7,6,558,542,0,0,0,7385914,10,'USB Optical Mouse'
+7,6,559,541,0,0,0,7385930,10,'USB Optical Mouse'
+7,6,560,541,0,0,0,7385938,10,'USB Optical Mouse'
+7,6,560,540,0,0,0,7385962,10,'USB Optical Mouse'
+7,6,561,540,0,0,0,7385970,10,'USB Optical Mouse'
+7,6,562,539,0,0,0,7385978,10,'USB Optical Mouse'
+7,6,563,538,0,0,0,7385994,10,'USB Optical Mouse'
+7,6,564,537,0,0,0,7386010,10,'USB Optical Mouse'
+7,4,0,0,1,0,0,7386306,10,USB Optical Mouse
+6,4,0,0,1,0,0,7386306,2,Virtual core pointer
+7,5,0,0,1,0,0,7386426,10,USB Optical Mouse
+6,5,0,0,1,0,0,7386426,2,Virtual core pointer
+7,6,565,536,0,0,0,7386642,10,'USB Optical Mouse'
+7,6,567,535,0,0,0,7386650,10,'USB Optical Mouse'
+7,6,573,533,0,0,0,7386658,10,'USB Optical Mouse'
+7,6,584,530,0,0,0,7386666,10,'USB Optical Mouse'
+7,6,595,528,0,0,0,7386674,10,'USB Optical Mouse'
+7,6,601,528,0,0,0,7386682,10,'USB Optical Mouse'
+7,6,608,525,0,0,0,7386690,10,'USB Optical Mouse'
+7,6,614,523,0,0,0,7386698,10,'USB Optical Mouse'
+7,6,618,521,0,0,0,7386706,10,'USB Optical Mouse'
+7,6,624,519,0,0,0,7386714,10,'USB Optical Mouse'
+7,6,629,517,0,0,0,7386722,10,'USB Optical Mouse'
+7,6,635,517,0,0,0,7386730,10,'USB Optical Mouse'
+7,6,642,515,0,0,0,7386738,10,'USB Optical Mouse'
+7,6,648,514,0,0,0,7386746,10,'USB Optical Mouse'
+7,6,655,512,0,0,0,7386754,10,'USB Optical Mouse'
+7,6,661,510,0,0,0,7386762,10,'USB Optical Mouse'
+7,6,666,508,0,0,0,7386770,10,'USB Optical Mouse'
+7,6,668,506,0,0,0,7386778,10,'USB Optical Mouse'
+7,6,672,505,0,0,0,7386786,10,'USB Optical Mouse'
+7,6,673,503,0,0,0,7386794,10,'USB Optical Mouse'
+7,6,675,502,0,0,0,7386802,10,'USB Optical Mouse'
+7,6,676,501,0,0,0,7386810,10,'USB Optical Mouse'
+7,6,677,500,0,0,0,7386818,10,'USB Optical Mouse'
+7,6,679,500,0,0,0,7386826,10,'USB Optical Mouse'
+7,6,680,499,0,0,0,7386834,10,'USB Optical Mouse'
+7,6,681,497,0,0,0,7386842,10,'USB Optical Mouse'
+7,6,682,496,0,0,0,7386850,10,'USB Optical Mouse'
+7,6,684,495,0,0,0,7386858,10,'USB Optical Mouse'
+7,6,685,494,0,0,0,7386866,10,'USB Optical Mouse'
+7,6,687,493,0,0,0,7386874,10,'USB Optical Mouse'
+7,6,689,493,0,0,0,7386882,10,'USB Optical Mouse'
+7,6,691,492,0,0,0,7386890,10,'USB Optical Mouse'
+7,6,693,491,0,0,0,7386898,10,'USB Optical Mouse'
+7,6,696,491,0,0,0,7386906,10,'USB Optical Mouse'
+7,6,697,490,0,0,0,7386914,10,'USB Optical Mouse'
+7,6,700,490,0,0,0,7386922,10,'USB Optical Mouse'
+7,6,701,489,0,0,0,7386930,10,'USB Optical Mouse'
+7,6,703,488,0,0,0,7386938,10,'USB Optical Mouse'
+7,6,705,487,0,0,0,7386946,10,'USB Optical Mouse'
+7,6,706,486,0,0,0,7386954,10,'USB Optical Mouse'
+7,6,707,486,0,0,0,7386962,10,'USB Optical Mouse'
+7,6,709,484,0,0,0,7386970,10,'USB Optical Mouse'
+7,6,710,483,0,0,0,7386978,10,'USB Optical Mouse'
+7,6,712,483,0,0,0,7386986,10,'USB Optical Mouse'
+7,6,714,481,0,0,0,7386994,10,'USB Optical Mouse'
+7,6,716,481,0,0,0,7387002,10,'USB Optical Mouse'
+7,6,719,480,0,0,0,7387010,10,'USB Optical Mouse'
+7,6,724,480,0,0,0,7387018,10,'USB Optical Mouse'
+7,6,729,478,0,0,0,7387026,10,'USB Optical Mouse'
+7,6,735,476,0,0,0,7387034,10,'USB Optical Mouse'
+7,6,740,475,0,0,0,7387042,10,'USB Optical Mouse'
+7,6,746,475,0,0,0,7387050,10,'USB Optical Mouse'
+7,6,751,475,0,0,0,7387058,10,'USB Optical Mouse'
+7,6,755,475,0,0,0,7387066,10,'USB Optical Mouse'
+7,6,758,475,0,0,0,7387082,10,'USB Optical Mouse'
+7,6,759,475,0,0,0,7387090,10,'USB Optical Mouse'
+7,6,762,474,0,0,0,7387098,10,'USB Optical Mouse'
+7,6,764,474,0,0,0,7387106,10,'USB Optical Mouse'
+7,6,766,473,0,0,0,7387114,10,'USB Optical Mouse'
+7,6,768,473,0,0,0,7387122,10,'USB Optical Mouse'
+7,6,770,473,0,0,0,7387130,10,'USB Optical Mouse'
+7,6,772,472,0,0,0,7387138,10,'USB Optical Mouse'
+7,6,775,472,0,0,0,7387146,10,'USB Optical Mouse'
+7,6,779,472,0,0,0,7387154,10,'USB Optical Mouse'
+7,6,783,472,0,0,0,7387162,10,'USB Optical Mouse'
+7,6,787,472,0,0,0,7387170,10,'USB Optical Mouse'
+7,6,791,471,0,0,0,7387178,10,'USB Optical Mouse'
+7,6,794,470,0,0,0,7387186,10,'USB Optical Mouse'
+7,6,798,470,0,0,0,7387194,10,'USB Optical Mouse'
+7,6,801,470,0,0,0,7387202,10,'USB Optical Mouse'
+7,6,804,469,0,0,0,7387210,10,'USB Optical Mouse'
+7,6,806,469,0,0,0,7387218,10,'USB Optical Mouse'
+7,6,809,467,0,0,0,7387226,10,'USB Optical Mouse'
+7,6,811,466,0,0,0,7387234,10,'USB Optical Mouse'
+7,6,812,464,0,0,0,7387242,10,'USB Optical Mouse'
+7,6,813,464,0,0,0,7387258,10,'USB Optical Mouse'
+7,6,814,464,0,0,0,7387266,10,'USB Optical Mouse'
+7,6,815,463,0,0,0,7387274,10,'USB Optical Mouse'
+7,6,816,462,0,0,0,7387290,10,'USB Optical Mouse'
+7,6,816,461,0,0,0,7387306,10,'USB Optical Mouse'
+7,6,816,460,0,0,0,7387322,10,'USB Optical Mouse'
+7,6,817,459,0,0,0,7387346,10,'USB Optical Mouse'
+7,6,817,458,0,0,0,7387354,10,'USB Optical Mouse'
+7,6,817,457,0,0,0,7387362,10,'USB Optical Mouse'
+7,6,818,457,0,0,0,7387370,10,'USB Optical Mouse'
+7,6,818,456,0,0,0,7387386,10,'USB Optical Mouse'
+7,6,818,454,0,0,0,7387402,10,'USB Optical Mouse'
+7,6,818,453,0,0,0,7387418,10,'USB Optical Mouse'
+7,6,818,452,0,0,0,7387434,10,'USB Optical Mouse'
+7,6,818,451,0,0,0,7387450,10,'USB Optical Mouse'
+7,6,818,450,0,0,0,7387466,10,'USB Optical Mouse'
+7,6,817,450,0,0,0,7387586,10,'USB Optical Mouse'
+7,6,817,449,0,0,0,7387602,10,'USB Optical Mouse'
+7,6,817,448,0,0,0,7387626,10,'USB Optical Mouse'
+7,4,0,0,1,0,0,7387770,10,USB Optical Mouse
+6,4,0,0,1,0,0,7387770,2,Virtual core pointer
+0,21,0,0,0,0,0,7387868
+NEW-WINDOW:668,275:56623157,56623157,21000321,0,0,0:1x28+546+400:0,0:Open
+0,21,0,0,0,0,0,7387868
+0,21,0,0,0,0,0,7387868
+0,21,0,0,0,0,0,7387868
+7,5,0,0,1,0,0,7387938,10,USB Optical Mouse
+6,5,0,0,1,0,0,7387938,2,Virtual core pointer
+7,6,817,447,0,0,0,7388698,10,'USB Optical Mouse'
+7,6,816,450,0,0,0,7388706,10,'USB Optical Mouse'
+7,6,816,452,0,0,0,7388714,10,'USB Optical Mouse'
+7,6,816,454,0,0,0,7388722,10,'USB Optical Mouse'
+7,6,816,457,0,0,0,7388730,10,'USB Optical Mouse'
+7,6,816,461,0,0,0,7388738,10,'USB Optical Mouse'
+7,6,816,463,0,0,0,7388746,10,'USB Optical Mouse'
+7,6,815,467,0,0,0,7388754,10,'USB Optical Mouse'
+7,6,815,470,0,0,0,7388762,10,'USB Optical Mouse'
+7,6,815,473,0,0,0,7388770,10,'USB Optical Mouse'
+7,6,815,476,0,0,0,7388778,10,'USB Optical Mouse'
+7,6,815,479,0,0,0,7388786,10,'USB Optical Mouse'
+7,6,815,482,0,0,0,7388794,10,'USB Optical Mouse'
+7,6,815,485,0,0,0,7388802,10,'USB Optical Mouse'
+7,6,815,488,0,0,0,7388810,10,'USB Optical Mouse'
+7,6,815,492,0,0,0,7388818,10,'USB Optical Mouse'
+7,6,815,496,0,0,0,7388826,10,'USB Optical Mouse'
+7,6,814,501,0,0,0,7388834,10,'USB Optical Mouse'
+7,6,814,509,0,0,0,7388842,10,'USB Optical Mouse'
+7,6,814,518,0,0,0,7388850,10,'USB Optical Mouse'
+7,6,814,527,0,0,0,7388858,10,'USB Optical Mouse'
+7,6,814,537,0,0,0,7388874,10,'USB Optical Mouse'
+7,6,814,546,0,0,0,7388882,10,'USB Optical Mouse'
+7,6,814,562,0,0,0,7388890,10,'USB Optical Mouse'
+7,6,814,570,0,0,0,7388898,10,'USB Optical Mouse'
+7,6,814,578,0,0,0,7388906,10,'USB Optical Mouse'
+7,6,812,584,0,0,0,7388914,10,'USB Optical Mouse'
+7,6,810,592,0,0,0,7388922,10,'USB Optical Mouse'
+7,6,810,598,0,0,0,7388930,10,'USB Optical Mouse'
+7,6,809,604,0,0,0,7388938,10,'USB Optical Mouse'
+7,6,807,610,0,0,0,7388946,10,'USB Optical Mouse'
+7,6,807,616,0,0,0,7388954,10,'USB Optical Mouse'
+7,6,807,622,0,0,0,7388962,10,'USB Optical Mouse'
+7,6,805,628,0,0,0,7388970,10,'USB Optical Mouse'
+7,6,805,632,0,0,0,7388978,10,'USB Optical Mouse'
+7,6,805,638,0,0,0,7388986,10,'USB Optical Mouse'
+7,6,803,644,0,0,0,7388994,10,'USB Optical Mouse'
+7,6,803,648,0,0,0,7389002,10,'USB Optical Mouse'
+7,6,803,649,0,0,0,7389010,10,'USB Optical Mouse'
+7,6,802,650,0,0,0,7389162,10,'USB Optical Mouse'
+7,6,801,649,0,0,0,7389170,10,'USB Optical Mouse'
+7,6,799,645,0,0,0,7389178,10,'USB Optical Mouse'
+7,6,798,642,0,0,0,7389186,10,'USB Optical Mouse'
+7,6,797,639,0,0,0,7389194,10,'USB Optical Mouse'
+7,6,797,637,0,0,0,7389202,10,'USB Optical Mouse'
+7,6,797,636,0,0,0,7389210,10,'USB Optical Mouse'
+7,6,797,635,0,0,0,7389218,10,'USB Optical Mouse'
+7,6,797,634,0,0,0,7389226,10,'USB Optical Mouse'
+7,6,797,633,0,0,0,7389234,10,'USB Optical Mouse'
+7,6,797,631,0,0,0,7389242,10,'USB Optical Mouse'
+7,6,797,630,0,0,0,7389250,10,'USB Optical Mouse'
+7,6,797,629,0,0,0,7389258,10,'USB Optical Mouse'
+7,6,797,628,0,0,0,7389266,10,'USB Optical Mouse'
+7,6,797,627,0,0,0,7389274,10,'USB Optical Mouse'
+7,6,797,626,0,0,0,7389290,10,'USB Optical Mouse'
+7,6,797,625,0,0,0,7389338,10,'USB Optical Mouse'
+7,6,797,624,0,0,0,7389346,10,'USB Optical Mouse'
+7,6,797,623,0,0,0,7389354,10,'USB Optical Mouse'
+7,6,797,622,0,0,0,7389362,10,'USB Optical Mouse'
+7,6,797,621,0,0,0,7389370,10,'USB Optical Mouse'
+7,6,797,620,0,0,0,7389378,10,'USB Optical Mouse'
+7,6,797,619,0,0,0,7389394,10,'USB Optical Mouse'
+7,6,797,618,0,0,0,7389410,10,'USB Optical Mouse'
+7,6,797,617,0,0,0,7389418,10,'USB Optical Mouse'
+7,6,797,616,0,0,0,7389434,10,'USB Optical Mouse'
+7,4,0,0,1,0,0,7389626,10,USB Optical Mouse
+6,4,0,0,1,0,0,7389626,2,Virtual core pointer
+7,5,0,0,1,0,0,7389794,10,USB Optical Mouse
+6,5,0,0,1,0,0,7389794,2,Virtual core pointer
+7,2,0,0,0,40,0,7390554,11,AT Translated Set 2 keyboard
+6,2,0,0,0,40,0,7390555,3,Virtual core keyboard
+7,3,0,0,0,40,0,7390614,11,AT Translated Set 2 keyboard
+6,3,0,0,0,40,0,7390614,3,Virtual core keyboard
+7,2,0,0,0,24,0,7390743,11,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,7390743,3,Virtual core keyboard
+7,3,0,0,0,24,0,7390842,11,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,7390842,3,Virtual core keyboard
+7,2,0,0,0,28,0,7391080,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,7391080,3,Virtual core keyboard
+7,3,0,0,0,28,0,7391149,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,7391149,3,Virtual core keyboard
+7,2,0,0,0,24,0,7391317,11,AT Translated Set 2 keyboard
+6,2,0,0,0,24,0,7391317,3,Virtual core keyboard
+7,3,0,0,0,24,0,7391407,11,AT Translated Set 2 keyboard
+6,3,0,0,0,24,0,7391407,3,Virtual core keyboard
+7,2,0,0,0,62,0,7391912,11,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,7391912,3,Virtual core keyboard
+7,2,0,0,0,60,0,7392100,11,AT Translated Set 2 keyboard
+6,2,0,0,0,60,0,7392100,3,Virtual core keyboard
+7,3,0,0,0,60,0,7392209,11,AT Translated Set 2 keyboard
+6,3,0,0,0,60,0,7392209,3,Virtual core keyboard
+7,3,0,0,0,62,0,7392239,11,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,7392239,3,Virtual core keyboard
+7,2,0,0,0,31,0,7392566,11,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,7392566,3,Virtual core keyboard
+7,3,0,0,0,31,0,7392625,11,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,7392625,3,Virtual core keyboard
+7,2,0,0,0,47,0,7392813,11,AT Translated Set 2 keyboard
+6,2,0,0,0,47,0,7392813,3,Virtual core keyboard
+7,3,0,0,0,47,0,7392912,11,AT Translated Set 2 keyboard
+6,3,0,0,0,47,0,7392912,3,Virtual core keyboard
+7,2,0,0,0,33,0,7393120,11,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,7393121,3,Virtual core keyboard
+7,2,0,0,0,32,0,7393239,11,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,7393239,3,Virtual core keyboard
+7,3,0,0,0,33,0,7393259,11,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,7393259,3,Virtual core keyboard
+7,3,0,0,0,32,0,7393368,11,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,7393368,3,Virtual core keyboard
+7,2,0,0,0,27,0,7393754,11,AT Translated Set 2 keyboard
+6,2,0,0,0,27,0,7393754,3,Virtual core keyboard
+7,3,0,0,0,27,0,7393814,11,AT Translated Set 2 keyboard
+6,3,0,0,0,27,0,7393814,3,Virtual core keyboard
+7,2,0,0,0,28,0,7393943,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,7393943,3,Virtual core keyboard
+7,3,0,0,0,28,0,7394002,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,7394002,3,Virtual core keyboard
+7,2,0,0,0,17,0,7394547,11,AT Translated Set 2 keyboard
+6,2,0,0,0,17,0,7394547,3,Virtual core keyboard
+7,3,0,0,0,17,0,7394616,11,AT Translated Set 2 keyboard
+6,3,0,0,0,17,0,7394616,3,Virtual core keyboard
+7,2,0,0,0,44,0,7395042,11,AT Translated Set 2 keyboard
+6,2,0,0,0,44,0,7395042,3,Virtual core keyboard
+7,3,0,0,0,44,0,7395122,11,AT Translated Set 2 keyboard
+6,3,0,0,0,44,0,7395122,3,Virtual core keyboard
+7,2,0,0,0,39,0,7395458,11,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,7395458,3,Virtual core keyboard
+7,3,0,0,0,39,0,7395547,11,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,7395547,3,Virtual core keyboard
+7,2,0,0,0,32,0,7395567,11,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,7395567,3,Virtual core keyboard
+7,3,0,0,0,32,0,7395666,11,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,7395666,3,Virtual core keyboard
+7,2,0,0,0,57,0,7395815,11,AT Translated Set 2 keyboard
+6,2,0,0,0,57,0,7395815,3,Virtual core keyboard
+7,3,0,0,0,57,0,7395894,11,AT Translated Set 2 keyboard
+6,3,0,0,0,57,0,7395894,3,Virtual core keyboard
+7,2,0,0,0,116,0,7396618,11,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,7396618,3,Virtual core keyboard
+7,3,0,0,0,116,0,7396726,11,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,7396726,3,Virtual core keyboard
+7,2,0,0,0,36,0,7397103,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,7397103,3,Virtual core keyboard
+0,21,0,0,0,0,0,7397108
+NEW-WINDOW:0,0:56623171,56623171,747,0,0,1:0x0+1539779743+32767:1539779784,1539779784:
+0,21,0,0,0,0,0,7397108
+0,21,0,0,0,0,0,7397109
+0,21,0,0,0,0,0,7397109
+0,21,0,0,0,0,0,7397109
+0,21,0,0,0,0,0,7397115
+NEW-WINDOW:667,247:56623157,56623157,747,667,247,0:667x247+546+400:0,0:Open
+0,21,0,0,0,0,0,7397115
+0,21,0,0,0,0,0,7397115
+0,21,0,0,0,0,0,7397115
+0,21,0,0,0,0,0,7397115
+0,21,0,0,0,0,0,7397115
+7,3,0,0,0,36,0,7397222,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,7397222,3,Virtual core keyboard
+7,2,0,0,0,36,0,7398678,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,7398678,3,Virtual core keyboard
+0,21,0,0,0,0,0,7398686
+NEW-WINDOW:461,225:56623148,56623148,747,461,225,0:461x225+879+458:0,0:Import
+0,21,0,0,0,0,0,7398686
+0,21,0,0,0,0,0,7398686
+0,21,0,0,0,0,0,7398686
+0,21,0,0,0,0,0,7398686
+0,21,0,0,0,0,0,7398686
+0,21,0,0,0,0,0,7398704
+NEW-WINDOW:8384,0:56623180,56623180,21000583,0,0,0:1661x0+25837224+0:1539779784,1539779784:
+0,21,0,0,0,0,0,7398704
+0,21,0,0,0,0,0,7398704
+0,21,0,0,0,0,0,7398704
+7,3,0,0,0,36,0,7398727,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,7398727,3,Virtual core keyboard
+0,21,0,0,0,0,0,7398930
+NEW-WINDOW:8384,0:56623217,56623217,747,0,0,0:25837224x0+25821984+0:25817296,25817296:
+0,21,0,0,0,0,0,7398930
+0,21,0,0,0,0,0,7398930
+0,21,0,0,0,0,0,7398930
+0,21,0,0,0,0,0,7398930
+0,21,0,0,0,0,0,7398991
+NEW-WINDOW:8384,0:56623223,56623223,747,0,0,0:25837224x0+25821984+0:25817296,25817296:
+0,21,0,0,0,0,0,7398991
+0,21,0,0,0,0,0,7398992
+0,21,0,0,0,0,0,7398992
+0,21,0,0,0,0,0,7398992
+0,21,0,0,0,0,0,7398992
+NEW-WINDOW:0,0:56623226,56623226,56623248,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,7398992
+NEW-WINDOW:0,0:56623228,56623228,56623248,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,7398992
+NEW-WINDOW:0,0:56623232,56623232,56623248,0,0,0:0x0+960+432:0,0:
+0,21,0,0,0,0,0,7399025
+NEW-WINDOW:0,0:56623258,56623258,747,0,0,0:0x0+1172+848:0,0:Spreadsheet view
+0,21,0,0,0,0,0,7399025
+0,21,0,0,0,0,0,7399025
+0,21,0,0,0,0,0,7399025
+0,21,0,0,0,0,0,7399025
+0,21,0,0,0,0,0,7399042
+NEW-WINDOW:0,0:56623243,56623243,747,0,0,0:0x0+943+595:0,0:Node Link Diagram view
+0,21,0,0,0,0,0,7399042
+0,21,0,0,0,0,0,7399042
+0,21,0,0,0,0,0,7399042
+0,21,0,0,0,0,0,7399042
+0,21,0,0,0,0,0,7399072
+NEW-WINDOW:1117,103:56623246,56623246,56623349,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,7399072
+NEW-WINDOW:1117,103:56623248,56623248,56623349,0,0,0:0x0+960+432:0,0:
+7,6,797,615,0,0,0,7400082,10,'USB Optical Mouse'
+7,6,793,615,0,0,0,7400090,10,'USB Optical Mouse'
+7,6,788,615,0,0,0,7400098,10,'USB Optical Mouse'
+7,6,778,615,0,0,0,7400106,10,'USB Optical Mouse'
+7,6,767,617,0,0,0,7400114,10,'USB Optical Mouse'
+7,6,759,617,0,0,0,7400122,10,'USB Optical Mouse'
+7,6,750,619,0,0,0,7400130,10,'USB Optical Mouse'
+7,6,746,619,0,0,0,7400138,10,'USB Optical Mouse'
+7,6,742,619,0,0,0,7400146,10,'USB Optical Mouse'
+7,6,734,619,0,0,0,7400154,10,'USB Optical Mouse'
+7,6,725,621,0,0,0,7400162,10,'USB Optical Mouse'
+7,6,715,623,0,0,0,7400170,10,'USB Optical Mouse'
+7,6,705,624,0,0,0,7400178,10,'USB Optical Mouse'
+7,6,695,624,0,0,0,7400186,10,'USB Optical Mouse'
+7,6,689,626,0,0,0,7400194,10,'USB Optical Mouse'
+7,6,687,626,0,0,0,7400202,10,'USB Optical Mouse'
+7,6,685,626,0,0,0,7400210,10,'USB Optical Mouse'
+7,6,683,627,0,0,0,7400226,10,'USB Optical Mouse'
+7,6,680,628,0,0,0,7400234,10,'USB Optical Mouse'
+7,6,674,631,0,0,0,7400242,10,'USB Optical Mouse'
+7,6,671,632,0,0,0,7400250,10,'USB Optical Mouse'
+7,6,669,632,0,0,0,7400258,10,'USB Optical Mouse'
+7,6,667,633,0,0,0,7400266,10,'USB Optical Mouse'
+7,6,666,634,0,0,0,7400274,10,'USB Optical Mouse'
+7,6,663,635,0,0,0,7400282,10,'USB Optical Mouse'
+7,6,660,636,0,0,0,7400290,10,'USB Optical Mouse'
+7,6,657,637,0,0,0,7400298,10,'USB Optical Mouse'
+7,6,653,638,0,0,0,7400306,10,'USB Optical Mouse'
+7,6,650,640,0,0,0,7400314,10,'USB Optical Mouse'
+7,6,645,641,0,0,0,7400322,10,'USB Optical Mouse'
+7,6,642,643,0,0,0,7400330,10,'USB Optical Mouse'
+7,6,637,643,0,0,0,7400338,10,'USB Optical Mouse'
+7,6,632,645,0,0,0,7400346,10,'USB Optical Mouse'
+7,6,625,647,0,0,0,7400354,10,'USB Optical Mouse'
+7,6,618,648,0,0,0,7400362,10,'USB Optical Mouse'
+7,6,611,650,0,0,0,7400370,10,'USB Optical Mouse'
+7,6,604,650,0,0,0,7400378,10,'USB Optical Mouse'
+7,6,597,652,0,0,0,7400386,10,'USB Optical Mouse'
+7,6,589,652,0,0,0,7400394,10,'USB Optical Mouse'
+7,6,581,652,0,0,0,7400402,10,'USB Optical Mouse'
+7,6,572,654,0,0,0,7400410,10,'USB Optical Mouse'
+7,6,562,656,0,0,0,7400418,10,'USB Optical Mouse'
+7,6,552,658,0,0,0,7400426,10,'USB Optical Mouse'
+7,6,542,660,0,0,0,7400434,10,'USB Optical Mouse'
+7,6,532,662,0,0,0,7400442,10,'USB Optical Mouse'
+7,6,522,662,0,0,0,7400450,10,'USB Optical Mouse'
+7,6,512,664,0,0,0,7400458,10,'USB Optical Mouse'
+7,6,502,666,0,0,0,7400466,10,'USB Optical Mouse'
+7,6,491,666,0,0,0,7400474,10,'USB Optical Mouse'
+7,6,479,666,0,0,0,7400482,10,'USB Optical Mouse'
+7,6,468,666,0,0,0,7400490,10,'USB Optical Mouse'
+7,6,460,668,0,0,0,7400498,10,'USB Optical Mouse'
+7,6,451,668,0,0,0,7400506,10,'USB Optical Mouse'
+7,6,443,670,0,0,0,7400514,10,'USB Optical Mouse'
+7,6,434,670,0,0,0,7400522,10,'USB Optical Mouse'
+7,6,426,672,0,0,0,7400530,10,'USB Optical Mouse'
+7,6,417,672,0,0,0,7400538,10,'USB Optical Mouse'
+7,6,409,672,0,0,0,7400546,10,'USB Optical Mouse'
+7,6,401,672,0,0,0,7400554,10,'USB Optical Mouse'
+7,6,393,672,0,0,0,7400562,10,'USB Optical Mouse'
+7,6,385,672,0,0,0,7400570,10,'USB Optical Mouse'
+7,6,377,673,0,0,0,7400578,10,'USB Optical Mouse'
+7,6,369,673,0,0,0,7400586,10,'USB Optical Mouse'
+7,6,361,675,0,0,0,7400594,10,'USB Optical Mouse'
+7,6,353,675,0,0,0,7400602,10,'USB Optical Mouse'
+7,6,345,677,0,0,0,7400610,10,'USB Optical Mouse'
+7,6,338,679,0,0,0,7400618,10,'USB Optical Mouse'
+7,6,332,679,0,0,0,7400626,10,'USB Optical Mouse'
+7,6,326,681,0,0,0,7400634,10,'USB Optical Mouse'
+7,6,319,684,0,0,0,7400642,10,'USB Optical Mouse'
+7,6,311,685,0,0,0,7400650,10,'USB Optical Mouse'
+7,6,304,687,0,0,0,7400658,10,'USB Optical Mouse'
+7,6,296,689,0,0,0,7400666,10,'USB Optical Mouse'
+7,6,288,690,0,0,0,7400674,10,'USB Optical Mouse'
+7,6,281,690,0,0,0,7400682,10,'USB Optical Mouse'
+7,6,273,692,0,0,0,7400690,10,'USB Optical Mouse'
+7,6,265,692,0,0,0,7400698,10,'USB Optical Mouse'
+7,6,259,692,0,0,0,7400706,10,'USB Optical Mouse'
+7,6,253,694,0,0,0,7400714,10,'USB Optical Mouse'
+7,6,249,695,0,0,0,7400722,10,'USB Optical Mouse'
+7,6,246,695,0,0,0,7400738,10,'USB Optical Mouse'
+7,6,244,695,0,0,0,7400746,10,'USB Optical Mouse'
+7,6,242,697,0,0,0,7400754,10,'USB Optical Mouse'
+7,6,241,698,0,0,0,7400762,10,'USB Optical Mouse'
+7,6,240,698,0,0,0,7400770,10,'USB Optical Mouse'
+7,6,239,698,0,0,0,7400778,10,'USB Optical Mouse'
+7,6,237,698,0,0,0,7400794,10,'USB Optical Mouse'
+7,6,236,698,0,0,0,7400826,10,'USB Optical Mouse'
+7,6,235,699,0,0,0,7400842,10,'USB Optical Mouse'
+7,6,235,700,0,0,0,7400858,10,'USB Optical Mouse'
+7,6,234,701,0,0,0,7400866,10,'USB Optical Mouse'
+7,6,233,701,0,0,0,7400874,10,'USB Optical Mouse'
+7,6,232,701,0,0,0,7400882,10,'USB Optical Mouse'
+7,6,231,701,0,0,0,7400898,10,'USB Optical Mouse'
+7,6,231,702,0,0,0,7400906,10,'USB Optical Mouse'
+7,6,229,702,0,0,0,7400922,10,'USB Optical Mouse'
+7,6,228,702,0,0,0,7400930,10,'USB Optical Mouse'
+7,6,227,702,0,0,0,7400938,10,'USB Optical Mouse'
+7,6,225,703,0,0,0,7400954,10,'USB Optical Mouse'
+7,6,225,704,0,0,0,7400962,10,'USB Optical Mouse'
+7,6,224,704,0,0,0,7400994,10,'USB Optical Mouse'
+7,4,0,0,3,0,0,7402138,10,USB Optical Mouse
+6,4,0,0,3,0,0,7402138,2,Virtual core pointer
+7,5,0,0,3,0,0,7402338,10,USB Optical Mouse
+6,5,0,0,3,0,0,7402338,2,Virtual core pointer
+7,6,224,705,0,0,0,7402770,10,'USB Optical Mouse'
+7,6,225,706,0,0,0,7402778,10,'USB Optical Mouse'
+7,6,227,708,0,0,0,7402786,10,'USB Optical Mouse'
+7,6,231,710,0,0,0,7402794,10,'USB Optical Mouse'
+7,6,233,714,0,0,0,7402802,10,'USB Optical Mouse'
+7,6,234,715,0,0,0,7402810,10,'USB Optical Mouse'
+7,6,235,716,0,0,0,7402818,10,'USB Optical Mouse'
+7,6,236,716,0,0,0,7402826,10,'USB Optical Mouse'
+7,6,236,717,0,0,0,7402834,10,'USB Optical Mouse'
+7,6,237,718,0,0,0,7402842,10,'USB Optical Mouse'
+7,6,238,719,0,0,0,7402850,10,'USB Optical Mouse'
+7,6,239,720,0,0,0,7402858,10,'USB Optical Mouse'
+7,6,240,721,0,0,0,7402874,10,'USB Optical Mouse'
+7,6,241,721,0,0,0,7403042,10,'USB Optical Mouse'
+7,6,242,723,0,0,0,7403050,10,'USB Optical Mouse'
+7,6,243,723,0,0,0,7403058,10,'USB Optical Mouse'
+7,6,243,724,0,0,0,7403066,10,'USB Optical Mouse'
+7,6,244,725,0,0,0,7403074,10,'USB Optical Mouse'
+7,6,245,726,0,0,0,7403082,10,'USB Optical Mouse'
+7,6,245,727,0,0,0,7403090,10,'USB Optical Mouse'
+7,6,246,728,0,0,0,7403106,10,'USB Optical Mouse'
+7,6,247,729,0,0,0,7403114,10,'USB Optical Mouse'
+7,6,247,730,0,0,0,7403122,10,'USB Optical Mouse'
+7,6,248,731,0,0,0,7403130,10,'USB Optical Mouse'
+7,6,248,732,0,0,0,7403138,10,'USB Optical Mouse'
+7,6,249,732,0,0,0,7403146,10,'USB Optical Mouse'
+7,6,249,733,0,0,0,7403154,10,'USB Optical Mouse'
+7,4,0,0,1,0,0,7403370,10,USB Optical Mouse
+6,4,0,0,1,0,0,7403370,2,Virtual core pointer
+7,5,0,0,1,0,0,7403514,10,USB Optical Mouse
+6,5,0,0,1,0,0,7403514,2,Virtual core pointer
+0,21,0,0,0,0,0,7403542
+NEW-WINDOW:462,253:56623373,56623373,21000688,0,0,0:1x28+879+458:0,0:Export of graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
+0,21,0,0,0,0,0,7403542
+0,21,0,0,0,0,0,7403542
+0,21,0,0,0,0,0,7403542
+7,2,0,0,0,28,0,7404701,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,7404701,3,Virtual core keyboard
+7,3,0,0,0,28,0,7404780,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,7404780,3,Virtual core keyboard
+7,2,0,0,0,26,0,7404939,11,AT Translated Set 2 keyboard
+6,2,0,0,0,26,0,7404939,3,Virtual core keyboard
+7,3,0,0,0,26,0,7405008,11,AT Translated Set 2 keyboard
+6,3,0,0,0,26,0,7405008,3,Virtual core keyboard
+7,2,0,0,0,39,0,7405176,11,AT Translated Set 2 keyboard
+6,2,0,0,0,39,0,7405177,3,Virtual core keyboard
+7,3,0,0,0,39,0,7405256,11,AT Translated Set 2 keyboard
+6,3,0,0,0,39,0,7405256,3,Virtual core keyboard
+7,2,0,0,0,28,0,7405424,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,7405424,3,Virtual core keyboard
+7,3,0,0,0,28,0,7405523,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,7405523,3,Virtual core keyboard
+7,2,0,0,0,17,0,7405583,11,AT Translated Set 2 keyboard
+6,2,0,0,0,17,0,7405583,3,Virtual core keyboard
+7,3,0,0,0,17,0,7405702,11,AT Translated Set 2 keyboard
+6,3,0,0,0,17,0,7405702,3,Virtual core keyboard
+7,2,0,0,0,42,0,7405929,11,AT Translated Set 2 keyboard
+6,2,0,0,0,42,0,7405930,3,Virtual core keyboard
+7,3,0,0,0,42,0,7405989,11,AT Translated Set 2 keyboard
+6,3,0,0,0,42,0,7405989,3,Virtual core keyboard
+7,2,0,0,0,30,0,7405989,11,AT Translated Set 2 keyboard
+6,2,0,0,0,30,0,7405989,3,Virtual core keyboard
+7,2,0,0,0,31,0,7406068,11,AT Translated Set 2 keyboard
+6,2,0,0,0,31,0,7406068,3,Virtual core keyboard
+7,3,0,0,0,30,0,7406128,11,AT Translated Set 2 keyboard
+6,3,0,0,0,30,0,7406128,3,Virtual core keyboard
+7,3,0,0,0,31,0,7406207,11,AT Translated Set 2 keyboard
+6,3,0,0,0,31,0,7406207,3,Virtual core keyboard
+7,2,0,0,0,62,0,7406692,11,AT Translated Set 2 keyboard
+6,2,0,0,0,62,0,7406693,3,Virtual core keyboard
+7,2,0,0,0,59,0,7407059,11,AT Translated Set 2 keyboard
+6,2,0,0,0,59,0,7407059,3,Virtual core keyboard
+7,3,0,0,0,59,0,7407138,11,AT Translated Set 2 keyboard
+6,3,0,0,0,59,0,7407138,3,Virtual core keyboard
+7,3,0,0,0,62,0,7407247,11,AT Translated Set 2 keyboard
+6,3,0,0,0,62,0,7407247,3,Virtual core keyboard
+7,2,0,0,0,28,0,7407654,11,AT Translated Set 2 keyboard
+6,2,0,0,0,28,0,7407654,3,Virtual core keyboard
+7,3,0,0,0,28,0,7407763,11,AT Translated Set 2 keyboard
+6,3,0,0,0,28,0,7407763,3,Virtual core keyboard
+7,2,0,0,0,46,0,7407862,11,AT Translated Set 2 keyboard
+6,2,0,0,0,46,0,7407862,3,Virtual core keyboard
+7,2,0,0,0,33,0,7408000,11,AT Translated Set 2 keyboard
+6,2,0,0,0,33,0,7408001,3,Virtual core keyboard
+7,3,0,0,0,46,0,7408050,11,AT Translated Set 2 keyboard
+6,3,0,0,0,46,0,7408050,3,Virtual core keyboard
+7,3,0,0,0,33,0,7408119,11,AT Translated Set 2 keyboard
+6,3,0,0,0,33,0,7408119,3,Virtual core keyboard
+7,2,0,0,0,36,0,7408634,11,AT Translated Set 2 keyboard
+6,2,0,0,0,36,0,7408635,3,Virtual core keyboard
+0,21,0,0,0,0,0,7408651
+NEW-WINDOW:461,225:56623373,56623373,747,461,225,0:461x225+879+458:0,0:Export of graph "Grid Approximation - 'nodes'=200 'degree'=10 'long edge'=false"
+0,21,0,0,0,0,0,7408652
+0,21,0,0,0,0,0,7408652
+0,21,0,0,0,0,0,7408652
+0,21,0,0,0,0,0,7408652
+0,21,0,0,0,0,0,7408652
+0,21,0,0,0,0,0,7408664
+NEW-WINDOW:651,393:56623382,56623382,21000796,0,0,0:1x28+500+37:0,0:TLP Export
+0,21,0,0,0,0,0,7408664
+0,21,0,0,0,0,0,7408664
+0,21,0,0,0,0,0,7408664
+7,3,0,0,0,36,0,7408704,11,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,7408704,3,Virtual core keyboard
+0,21,0,0,0,0,0,7408754
+NEW-WINDOW:8384,0:56623382,56623382,747,650,365,0:2776x0+25837224+0:1539779784,1539779784:
+0,21,0,0,0,0,0,7408754
+0,21,0,0,0,0,0,7408754
+0,21,0,0,0,0,0,7408754
+0,21,0,0,0,0,0,7408754
+0,21,0,0,0,0,0,7408754

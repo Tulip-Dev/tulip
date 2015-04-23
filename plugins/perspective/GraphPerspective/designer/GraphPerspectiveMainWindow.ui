@@ -1,0 +1,1926 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>GraphPerspectiveMainWindowData</class>
+ <widget class="QMainWindow" name="GraphPerspectiveMainWindowData">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1200</width>
+    <height>695</height>
+   </rect>
+  </property>
+  <property name="contextMenuPolicy">
+   <enum>Qt::NoContextMenu</enum>
+  </property>
+  <property name="windowTitle">
+   <string/>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton, QComboBox {
+border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+}
+
+#mainWidget{
+background-color:white;
+}
+
+QPushButton::flat{
+border-image: none;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+background-color: transparent;
+}
+
+QPushButton, QComboBox, QLabel, QToolButton {
+color: black;
+}
+
+QPushButton:hover, QComboBox:hover, QToolButton:hover {
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+}
+
+QPushButton:disabled, QComboBox::disabled, QToolButton::disabled {
+color:gray;
+}
+
+QPushButton:pressed, QToolButton:pressed{
+border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
+}
+
+QPushButton::menu-indicator{
+subcontrol-origin: margin;
+subcontrol-position: center right;
+right: 4px;
+}
+
+QPushButton {
+outline: none;
+margin: 2
+}
+
+QComboBox::down-arrow {
+image: url(:/tulip/gui/ui/combobox_arrow.png);
+}
+
+QComboBox:drop-down {
+subcontrol-origin: padding;
+subcontrol-position: top right;
+border-left-style: none; 
+border-top-right-radius: 1px;
+border-bottom-right-radius: 1px;
+}
+
+QSplitter::handle {
+background-color: #C0C0C0;
+border-width:0px;
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] * {
+font: bold 11px;
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] {
+border-top: 1px solid black;
+border-bottom: 1px solid rgba(117,117,117,255);
+border-right: 1px solid rgba(117,117,117,255);
+border-left: 0px;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(75,75,75),
+stop:1 rgb(60, 60, 60));
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] QPushButton, QFrame[ bottomFrame = &quot;true&quot; ] QLabel {
+color: white;
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] QPushButton {
+border: 0px;
+border-image: none;
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] QPushButton:hover {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(85,85,85),
+stop:1 rgb(70, 70, 70));
+}
+
+QFrame[ bottomFrame = &quot;true&quot; ] QPushButton:pressed, QFrame[ bottomFrame = &quot;true&quot; ] .QPushButton:checked {
+border: 0px;
+border-image: none;
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, 
+stop:0 rgb(105,105,105),
+stop:1 rgb(90, 90, 90));
+}
+QAbstractItemView {
+background-color: white;
+}</string>
+  </property>
+  <property name="dockNestingEnabled">
+   <bool>true</bool>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AllowNestedDocks|QMainWindow::AnimatedDocks</set>
+  </property>
+  <widget class="QWidget" name="appWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="modeSwitcherPanel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#modeSwitcherPanel {
+	border-top: black;
+	border-bottom: black;
+	border-right: black;
+	border-left: black;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(73, 73, 73, 255), stop:1 rgba(130, 130, 130, 255));
+}
+
+QToolButton {
+	border-image:none;
+	border-top: 1px solid rgba(0,0,0,0);
+	border-bottom: 1px solid rgba(0,0,0,0);
+	border-left: 0px solid rgba(0,0,0,0);
+	border-right: 0px solid rgba(0,0,0,0);
+	color: white;
+	font: bold 10px;
+	height:20px;
+    background-color: rgba(0,0,0,0);
+}
+
+QToolButton:hover {
+	border-image:none;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+    stop:0 rgba(93, 93, 93, 255), 
+    stop:1 rgba(150, 150, 150, 255));
+	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.4 rgba(170,170,170,255),
+	stop: 0.5 rgba(170,170,170,255),
+	stop: 1.0 rgba(0,0,0,0));
+	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.4 rgba(170,170,170,255),
+	stop: 0.5 rgba(170,170,170,255),
+	stop: 1.0 rgba(0,0,0,0));
+}
+
+QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
+	border-image:none;
+	color: black;
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+    stop:0 rgba(198, 198, 198, 255), 
+    stop:1 rgba(255, 255, 255, 255));
+	border-top: 1px solid rgba(70,70,70);
+	border-bottom: 1px solid rgba(70,70,70);
+}
+
+QPushButton::pressed {
+	border-image:none;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(53, 53, 53, 255), stop:1 rgba(120, 120, 120, 255));
+	border-top: 1px solid rgba(70,70,70);
+	border-bottom: 1px solid rgba(70,70,70);
+}
+
+QToolButton:pressed {
+	border-image:none;
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="HeaderFrame" name="modeSwitcherHeader" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="expandable" stdset="0">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="undoButton">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Undo the last current graph's modification</string>
+         </property>
+         <property name="text">
+          <string>Undo</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/tulip/graphperspective/icons/32/undo.png</normaloff>:/tulip/graphperspective/icons/32/undo.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="redoButton">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Redo the last undone modification of the current graph</string>
+         </property>
+         <property name="text">
+          <string>Redo</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/tulip/graphperspective/icons/32/redo.png</normaloff>:/tulip/graphperspective/icons/32/redo.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QToolButton" name="workspaceButton">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Display the existing graph views</string>
+         </property>
+         <property name="text">
+          <string>Workspace</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/tulip/graphperspective/icons/48/desktop.png</normaloff>:/tulip/graphperspective/icons/48/desktop.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="developButton">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Display the Python plugin development framework</string>
+         </property>
+         <property name="text">
+          <string>Develop</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/tulip/graphperspective/icons/48/python.png</normaloff>:/tulip/graphperspective/icons/48/python.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QFrame" name="loggerFrame">
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+font: bold 10px;
+color: white;
+}</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="loggerIcon">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="loggerMessage">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>75</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Show/Hide the Messages log panel</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="modesSeparator">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="csvImportButton">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Add data in the current graph from a CSV file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>CSV</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="importButton">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Display the Graph importing wizard</string>
+         </property>
+         <property name="text">
+          <string>Import</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/tulip/graphperspective/icons/32/document-import.png</normaloff>:/tulip/graphperspective/icons/32/document-import.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="pluginsButton">
+         <property name="minimumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>75</width>
+           <height>75</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Plugins</string>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>:/tulip/graphperspective/icons/32/system-software-install.png</normaloff>:/tulip/graphperspective/icons/32/system-software-install.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>32</width>
+           <height>32</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextUnderIcon</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="mainWidget" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>500</width>
+        <height>0</height>
+       </size>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QSplitter" name="mainSplitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="handleWidth">
+          <number>3</number>
+         </property>
+         <widget class="QWidget" name="docksWidget" native="true">
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QSplitter" name="docksSplitter">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="handleWidth">
+              <number>1</number>
+             </property>
+             <widget class="AlgorithmRunner" name="algorithmRunner" native="true"/>
+             <widget class="GraphHierarchiesEditor" name="graphHierarchiesEditor" native="true"/>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QStackedWidget" name="centralWidget">
+          <widget class="QWidget" name="centralFrame">
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QFrame" name="workspaceFrame">
+              <property name="styleSheet">
+               <string notr="true">#workspaceFrame {
+border: 0px;
+  background-color: white;
+}</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QSplitter" name="splitter">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="handleWidth">
+                  <number>1</number>
+                 </property>
+                 <widget class="tlp::Workspace" name="workspace" native="true">
+                  <property name="bottomFrameVisible" stdset="0">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                 <widget class="QStackedWidget" name="outputFrame">
+                  <widget class="SearchWidget" name="searchPanel"/>
+                  <widget class="QWidget" name="pythonPanel"/>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="bottomFrame">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>27</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">OutputPanelButton{
+border-image: url(:/tulip/graphperspective/ui/panel_button.png) 2 2 2 19;
+border-width: 2px 2px 2px 19px;
+padding-left: -17;
+padding-right: 4;
+}
+OutputPanelButton:checked{
+border-image: url(:/tulip/graphperspective/ui/panel_button_checked.png) 2 2 2 19
+}
+OutputPanelButton::menu-indicator{
+width:0; height:0
+}
+OutputPanelButton:checked:hover{
+border-image: url(:/tulip/graphperspective/ui/panel_button_checked_hover.png) 2 2 2 19
+}
+OutputPanelButton:pressed:hover{
+border-image: url(:/tulip/graphperspective/ui/panel_button_pressed.png) 2 2 2 19
+}
+OutputPanelButton:hover{
+border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
+}</string>
+              </property>
+              <property name="bottomFrame" stdset="0">
+               <bool>true</bool>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <property name="leftMargin">
+                <number>5</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="OutputPanelButton" name="exposeModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>120</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Toggle expose mode (Ctrl+E)</string>
+                 </property>
+                 <property name="shortcut">
+                  <string>Ctrl+E</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
+                 <property name="title" stdset="0">
+                  <string>Expose</string>
+                 </property>
+                 <property name="number" stdset="0">
+                  <number>1</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="OutputPanelButton" name="searchButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>120</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Show/hide graph's elements search panel (Crtl+F)</string>
+                 </property>
+                 <property name="shortcut">
+                  <string>Ctrl+F</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
+                 <property name="number" stdset="0">
+                  <number>2</number>
+                 </property>
+                 <property name="title" stdset="0">
+                  <string>Search</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="OutputPanelButton" name="pythonButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>120</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Show/hide Python interpreter panel (Ctrl+P)</string>
+                 </property>
+                 <property name="shortcut">
+                  <string>Ctrl+P</string>
+                 </property>
+                 <property name="checkable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
+                 <property name="number" stdset="0">
+                  <number>3</number>
+                 </property>
+                 <property name="title" stdset="0">
+                  <string>Python</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="previousPageButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Previous panel</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/tulip/gui/ui/previous.png</normaloff>:/tulip/gui/ui/previous.png</iconset>
+                 </property>
+                 <property name="shortcut">
+                  <string>Shift+Left</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="pageCountLabel"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="nextPageButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Next panel</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/tulip/gui/ui/next.png</normaloff>:/tulip/gui/ui/next.png</iconset>
+                 </property>
+                 <property name="shortcut">
+                  <string>Shift+Right</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="singleModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 1-panel mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/tulip/gui/ui/full_screen.png</normaloff>:/tulip/gui/ui/full_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="splitModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 2-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/tulip/gui/ui/split_screen.png</normaloff>:/tulip/gui/ui/split_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="splitHorizontalModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 2-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/tulip/gui/ui/split_screen_horizontal.png</normaloff>:/tulip/gui/ui/split_screen_horizontal.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="split3ModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 2top-1bottom-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/tulip/gui/ui/split3_screen.png</normaloff>:/tulip/gui/ui/split3_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="split32ModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 1left-2right-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/tulip/gui/ui/split3_2_screen.png</normaloff>:/tulip/gui/ui/split3_2_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="split33ModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 2left-1right-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/tulip/gui/ui/split3_3_screen.png</normaloff>:/tulip/gui/ui/split3_3_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="gridModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 4-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/tulip/gui/ui/grid_screen.png</normaloff>:/tulip/gui/ui/grid_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="sixModeButton">
+                 <property name="minimumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>24</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>Switch to 6-panels mode</string>
+                 </property>
+                 <property name="icon">
+                  <iconset>
+                   <normaloff>:/tulip/gui/ui/six_screen.png</normaloff>:/tulip/gui/ui/six_screen.png</iconset>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="developFrame"/>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1200</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionSelect_All"/>
+    <addaction name="actionInvert_selection"/>
+    <addaction name="actionCancel_selection"/>
+    <addaction name="separator"/>
+    <addaction name="actionGroup_elements"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreate_empty_sub_graph"/>
+    <addaction name="actionCreate_sub_graph"/>
+    <addaction name="actionClone_sub_graph"/>
+    <addaction name="separator"/>
+    <addaction name="actionPreferences"/>
+   </widget>
+   <widget class="QMenu" name="menuWindow">
+    <property name="title">
+     <string>Window</string>
+    </property>
+    <addaction name="actionFull_screen"/>
+    <addaction name="action_Close_All"/>
+    <addaction name="actionMessages_log"/>
+    <addaction name="actionFind_plugins"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionShowDocumentation"/>
+    <addaction name="actionAbout_us"/>
+    <addaction name="actionPlugins_Center"/>
+   </widget>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuOpen_recent_file">
+     <property name="title">
+      <string>Open recent</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>:/tulip/graphperspective/icons/16/document-open-recent.png</normaloff>:/tulip/graphperspective/icons/16/document-open-recent.png</iconset>
+     </property>
+    </widget>
+    <addaction name="actionNewProject"/>
+    <addaction name="actionOpen_Project"/>
+    <addaction name="menuOpen_recent_file"/>
+    <addaction name="actionSave_Project"/>
+    <addaction name="actionSave_Project_as"/>
+    <addaction name="separator"/>
+    <addaction name="actionImport"/>
+    <addaction name="actionImport_CSV"/>
+    <addaction name="actionNew_graph"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuEdit"/>
+   <addaction name="menuWindow"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <action name="actionNewProject">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/document-new.png</normaloff>:/tulip/graphperspective/icons/16/document-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>New project</string>
+   </property>
+   <property name="toolTip">
+    <string>New project</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+N</string>
+   </property>
+  </action>
+  <action name="actionSave_Project">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save project</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_Project_as">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save as</string>
+   </property>
+   <property name="toolTip">
+    <string>Save Project as a new file name</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionImport">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/document-import.png</normaloff>:/tulip/graphperspective/icons/16/document-import.png</iconset>
+   </property>
+   <property name="text">
+    <string>I&amp;mport</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/edit-undo.png</normaloff>:/tulip/graphperspective/icons/16/edit-undo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/edit-redo.png</normaloff>:/tulip/graphperspective/icons/16/edit-redo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
+   </property>
+  </action>
+  <action name="actionCut">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+  </action>
+  <action name="actionCopy">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionPaste">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="actionSelect_All">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Select All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionInvert_selection">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Invert selection</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="actionCancel_selection">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Cancel selection</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
+   </property>
+  </action>
+  <action name="actionGroup_elements">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/group.png</normaloff>:/tulip/graphperspective/icons/16/group.png</iconset>
+   </property>
+   <property name="text">
+    <string>Group elements</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionCreate_sub_graph">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create sub-graph from selection</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+G</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</iconset>
+   </property>
+   <property name="text">
+    <string>Preferences...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+,</string>
+   </property>
+  </action>
+  <action name="actionFull_screen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Full screen</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
+   </property>
+  </action>
+  <action name="actionShowDocumentation">
+   <property name="text">
+    <string>Documentation</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+?</string>
+   </property>
+  </action>
+  <action name="actionAbout_us">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/help-about.png</normaloff>:/tulip/graphperspective/icons/16/help-about.png</iconset>
+   </property>
+   <property name="text">
+    <string>About us</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionPlugins_Center">
+   <property name="text">
+    <string>Plugins Center</string>
+   </property>
+  </action>
+  <action name="actionImport_CSV">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</iconset>
+   </property>
+   <property name="text">
+    <string>Import CSV</string>
+   </property>
+  </action>
+  <action name="actionMessages_log">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/logger-info.png</normaloff>:/tulip/graphperspective/icons/16/logger-info.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Messages log</string>
+   </property>
+   <property name="toolTip">
+    <string>Show the messages log</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+L</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/document-export.png</normaloff>:/tulip/graphperspective/icons/16/document-export.png</iconset>
+   </property>
+   <property name="text">
+    <string>Export</string>
+   </property>
+   <property name="toolTip">
+    <string>Export current graph</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionOpen_Project">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open</string>
+   </property>
+   <property name="toolTip">
+    <string>Open a graph file</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionFind_plugins">
+   <property name="text">
+    <string>Find &amp;Plugins</string>
+   </property>
+   <property name="toolTip">
+    <string>Search in installed plugins</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+H</string>
+   </property>
+  </action>
+  <action name="actionSave_graph_to_file">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save graph to file</string>
+   </property>
+   <property name="toolTip">
+    <string>Writes the graph into a file</string>
+   </property>
+  </action>
+  <action name="actionCreate_empty_sub_graph">
+   <property name="text">
+    <string>Create empty sub-graph</string>
+   </property>
+  </action>
+  <action name="actionClone_sub_graph">
+   <property name="text">
+    <string>Create clone sub-graph</string>
+   </property>
+  </action>
+  <action name="actionNew_graph">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/document-new.png</normaloff>:/tulip/graphperspective/icons/16/document-new.png</iconset>
+   </property>
+   <property name="text">
+    <string>New graph</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="action_Close_All">
+   <property name="text">
+    <string>&amp;Close All</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HeaderFrame</class>
+   <extends>QWidget</extends>
+   <header>HeaderFrame.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>GraphHierarchiesEditor</class>
+   <extends>QWidget</extends>
+   <header>GraphHierarchiesEditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>AlgorithmRunner</class>
+   <extends>QWidget</extends>
+   <header>AlgorithmRunner.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tlp::Workspace</class>
+   <extends>QWidget</extends>
+   <header location="global">tulip/Workspace.h</header>
+   <container>1</container>
+   <slots>
+    <signal>panelFocused(tlp::View*)</signal>
+    <slot>switchToStartupMode()</slot>
+    <slot>switchToSingleMode()</slot>
+    <slot>switchToSplitMode()</slot>
+    <slot>switchToSplit3Mode()</slot>
+    <slot>switchToSplit32Mode()</slot>
+    <slot>switchToGridMode()</slot>
+    <slot>nextPage()</slot>
+    <slot>previousPage()</slot>
+    <slot>expose(bool)</slot>
+    <slot>switchToSixMode()</slot>
+    <slot>switchToSplitHorizontalMode()</slot>
+   </slots>
+  </customwidget>
+  <customwidget>
+   <class>SearchWidget</class>
+   <extends>QWidget</extends>
+   <header>SearchWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>OutputPanelButton</class>
+   <extends>QPushButton</extends>
+   <header>OutputPanelButton.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>importButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionImport</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>584</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pluginsButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionPlugins_Center</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>663</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>csvImportButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionImport_CSV</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>584</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphPerspectiveMainWindowData</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>535</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextPageButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>nextPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>937</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>previousPageButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>previousPage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>913</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>singleModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSingleMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>961</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>split32ModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSplit32Mode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1033</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>split3ModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSplit3Mode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1009</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>splitModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSplitMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>985</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gridModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToGridMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1057</x>
+     <y>698</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>974</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>undoButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionUndo</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>redoButton</sender>
+   <signal>clicked()</signal>
+   <receiver>actionRedo</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>37</x>
+     <y>151</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>sixModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSixMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1057</x>
+     <y>695</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>574</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exposeModeButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>workspace</receiver>
+   <slot>expose(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>144</x>
+     <y>695</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>575</x>
+     <y>343</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>split33ModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSplit33Mode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1130</x>
+     <y>680</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>639</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>splitHorizontalModeButton</sender>
+   <signal>clicked()</signal>
+   <receiver>workspace</receiver>
+   <slot>switchToSplitHorizontalMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1046</x>
+     <y>680</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>639</x>
+     <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>setPythonOutput(bool)</slot>
+  <slot>setSearchOutput(bool)</slot>
+ </slots>
+</ui>

@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PythonScriptViewWidget</class>
+ <widget class="QWidget" name="PythonScriptViewWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>520</width>
+    <height>608</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QTabWidget:pane {
+border: 0px; 
+}
+
+QTabBar::tab {
+   color: #333;
+border: 1px solid #000;
+/*border-top-left-radius: 11px;
+border-top-right-radius: 11px;*/
+border-bottom: none;
+padding: 5px;
+background: qradialgradient(cx: 0.3, cy: -0.4,
+fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #fff, stop: 1 #888);
+min-width:120px;
+height:14px;
+font:bold;
+}
+
+QTabBar::tab:hover {
+    background: qradialgradient(cx: 0.3, cy: -0.4,
+fx: 0.3, fy: -0.4,
+radius: 1.35, stop: 0 #fff, stop: 1 #bbb);
+}
+
+QTabBar::tab:selected {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+    stop: 0 #EFEFEF, stop: 1 #EEEEEE);
+    color: #3c3c3c;
+}
+
+
+
+QSplitter::handle {
+background-color: #C0C0C0;
+border-width:0px;
+}
+
+QPushButton, QComboBox, QToolButton {
+border-image: url(:/tulip/gui/ui/btn_26.png) 4;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+}
+
+QPushButton::flat {
+border-image: none;
+border-width: 4;
+padding: 0px 6px;
+font-size: 12px;
+background-color: transparent;
+}
+
+QPushButton, QComboBox, QLabel, QToolButton {
+color: black;
+}
+
+QPushButton:hover, QComboBox:hover, QToolButton:hover {
+border-image: url(:/tulip/gui/ui/btn_26_hover.png) 4;
+}
+
+QPushButton:disabled, QComboBox::disabled, QToolButton::disabled {
+color:gray;
+}
+
+QPushButton:pressed, QToolButton:pressed{
+border-image: url(:/tulip/gui/ui/btn_26_pressed.png) 4;
+}
+
+QPushButton::menu-indicator{
+subcontrol-origin: margin;
+subcontrol-position: center right;
+right: 4px;
+}
+
+QPushButton, QToolButton {
+outline: none;
+margin: 2
+}
+
+QComboBox::down-arrow {
+image: url(:/tulip/gui/ui/combobox_arrow.png);
+}
+
+QComboBox:drop-down {
+subcontrol-origin: padding;
+subcontrol-position: top right;
+border-left-style: none; 
+border-top-right-radius: 1px;
+border-bottom-right-radius: 1px;
+}
+</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_7">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="styleSheet">
+      <string notr="true">QSplitter, QFrame {
+background-color:#838383;
+}
+
+</string>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="opaqueResize">
+      <bool>true</bool>
+     </property>
+     <property name="handleWidth">
+      <number>5</number>
+     </property>
+     <widget class="PythonTabWidget" name="tabWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTabWidget::pane { /* The tab widget frame */
+     border-top: none;
+
+ }
+
+</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <property name="styleSheet">
+        <string notr="true">#tab {
+    background-color:#838383;
+}
+</string>
+       </property>
+       <attribute name="title">
+        <string>Script editor</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="mainScriptToolBarWidget">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QFrame {
+	border-top: black;
+	border-bottom: black;
+	border-right: black;
+	border-left: black;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(73, 73, 73, 255), stop:1 rgba(130, 130, 130, 255));
+}
+
+QToolButton {
+	border-image:none;
+	border-top: 1px solid rgba(0,0,0,0);
+	border-bottom: 1px solid rgba(0,0,0,0);
+	border-left: 0px solid rgba(0,0,0,0);
+	border-right: 0px solid rgba(0,0,0,0);
+	color: white;
+	font: bold 10px;
+	height:20px;
+    background-color: rgba(0,0,0,0);
+}
+
+QToolButton:hover {
+	border-image:none;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+    stop:0 rgba(93, 93, 93, 255), 
+    stop:1 rgba(150, 150, 150, 255));
+	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.4 rgba(170,170,170,255),
+	stop: 0.5 rgba(170,170,170,255),
+	stop: 1.0 rgba(0,0,0,0));
+	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.4 rgba(170,170,170,255),
+	stop: 0.5 rgba(170,170,170,255),
+	stop: 1.0 rgba(0,0,0,0));
+}
+
+QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
+	border-image:none;
+	color: black;
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+    stop:0 rgba(198, 198, 198, 255), 
+    stop:1 rgba(255, 255, 255, 255));
+	border-top: 1px solid rgba(70,70,70);
+	border-bottom: 1px solid rgba(70,70,70);
+}
+
+QPushButton::pressed {
+	border-image:none;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(53, 53, 53, 255), stop:1 rgba(120, 120, 120, 255));
+	border-top: 1px solid rgba(70,70,70);
+	border-bottom: 1px solid rgba(70,70,70);
+}
+
+QToolButton:pressed {
+	border-image:none;
+}
+
+QToolBar {
+	border: none;
+}</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="tlp::PythonEditorsTabWidget" name="mainScriptsTabWidget">
+          <property name="styleSheet">
+           <string notr="true">QTabBar::tab {
+font:normal;
+}
+
+QTabWidget::pane { /* The tab widget frame */
+     border-top: none;
+ }
+
+
+</string>
+          </property>
+          <property name="tabsClosable">
+           <bool>true</bool>
+          </property>
+          <property name="movable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="tab_5">
+           <attribute name="title">
+            <string>Tab 1</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_6">
+           <attribute name="title">
+            <string>Tab 2</string>
+           </attribute>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <property name="styleSheet">
+        <string notr="true">#tab_2 { /* The tab widget frame */
+     background-color:#838383;
+}</string>
+       </property>
+       <attribute name="title">
+        <string>Modules editor</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="modulesToolBarWidget">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QFrame {
+	border-top: black;
+	border-bottom: black;
+	border-right: black;
+	border-left: black;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(73, 73, 73, 255), stop:1 rgba(130, 130, 130, 255));
+}
+
+QToolButton {
+	border-image:none;
+	border-top: 1px solid rgba(0,0,0,0);
+	border-bottom: 1px solid rgba(0,0,0,0);
+	border-left: 0px solid rgba(0,0,0,0);
+	border-right: 0px solid rgba(0,0,0,0);
+	color: white;
+	font: bold 10px;
+	height:20px;
+    background-color: rgba(0,0,0,0);
+}
+
+QToolButton:hover {
+	border-image:none;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+    stop:0 rgba(93, 93, 93, 255), 
+    stop:1 rgba(150, 150, 150, 255));
+	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.4 rgba(170,170,170,255),
+	stop: 0.5 rgba(170,170,170,255),
+	stop: 1.0 rgba(0,0,0,0));
+	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	stop: 0.0 rgba(0,0,0,0),
+	stop: 0.4 rgba(170,170,170,255),
+	stop: 0.5 rgba(170,170,170,255),
+	stop: 1.0 rgba(0,0,0,0));
+}
+
+QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
+	border-image:none;
+	color: black;
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+    stop:0 rgba(198, 198, 198, 255), 
+    stop:1 rgba(255, 255, 255, 255));
+	border-top: 1px solid rgba(70,70,70);
+	border-bottom: 1px solid rgba(70,70,70);
+}
+
+QPushButton::pressed {
+	border-image:none;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(53, 53, 53, 255), stop:1 rgba(120, 120, 120, 255));
+	border-top: 1px solid rgba(70,70,70);
+	border-bottom: 1px solid rgba(70,70,70);
+}
+
+QToolButton:pressed {
+	border-image:none;
+}
+
+QToolBar {
+	border: none;
+}</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="tlp::PythonEditorsTabWidget" name="modulesTabWidget">
+          <property name="styleSheet">
+           <string notr="true">QTabWidget::pane { /* The tab widget frame */
+     border-top: none;
+ }
+
+QTabBar::tab {
+font:normal;
+}</string>
+          </property>
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <property name="tabsClosable">
+           <bool>true</bool>
+          </property>
+          <property name="movable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="tab_3">
+           <attribute name="title">
+            <string>Tab 1</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_4">
+           <attribute name="title">
+            <string>Tab 2</string>
+           </attribute>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="styleSheet">
+          <string notr="true">background-color:white;
+</string>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="text">
+          <string>Script output :</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextBrowser" name="consoleOutputWidget">
+         <property name="styleSheet">
+          <string notr="true">QFrame {
+background-color: white;
+}</string>
+         </property>
+         <property name="openLinks">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="scriptControlFrame">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>95</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>95</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QFrame {
+background-color: white;
+}</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QToolButton" name="runScriptButton">
+          <property name="toolTip">
+           <string>Run script (Ctrl + Return)</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/playback_play.png</normaloff>:/icons/playback_play.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="pauseScriptButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Pause script</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/playback_pause.png</normaloff>:/icons/playback_pause.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="stopScriptButton">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="toolTip">
+           <string>Stop script</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/playback_stop.png</normaloff>:/icons/playback_stop.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Font size :</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="decreaseFontSizeButton">
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/round_minus.png</normaloff>:/icons/round_minus.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="increaseFontSizeButton">
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/icons/round_plus.png</normaloff>:/icons/round_plus.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="progressBar">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="value">
+         <number>-1</number>
+        </property>
+        <property name="textVisible">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="scriptStatusLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PythonTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header location="global">tulip/PythonTabWidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>tlp::PythonEditorsTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header location="global">tulip/PythonEditorsTabWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
