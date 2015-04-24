@@ -189,7 +189,6 @@ void LouvainClustering::trackClustering() {
   node n;
   forEach(n, graph->getNodes()) {
     node ncluster = qclusters.get(nodeMapping.get(n.id));
-    result->setNodeValue(n, ncluster.id);
     nodeMapping.set(n.id, ncluster);
   }
 }
@@ -432,19 +431,20 @@ bool LouvainClustering::run() {
     new_mod = oneLevel();
   }
 
-  //Rename cluster indexes
+  //Reindex clusters
   TLP_HASH_MAP<unsigned int,unsigned int> mapIndex;
   node n;
   unsigned int ind=0;
   forEach(n,graph->getNodes()) {
-    unsigned int i = result->getNodeValue(n);
-
-    if(mapIndex.find(i)==mapIndex.end()) {
+    unsigned int i = qclusters.get(nodeMapping.get(n.id)).id;
+    TLP_HASH_MAP<unsigned int,unsigned int>::iterator iti = mapIndex.find(i);
+    if (iti == mapIndex.end()) {
+      result->setNodeValue(n, ind);
       mapIndex.insert(make_pair(i,ind));
       ++ind;
     }
-
-    result->setNodeValue(n,mapIndex[i]);
+    else
+      result->setNodeValue(n, iti->second);
   }
 
   return true;
