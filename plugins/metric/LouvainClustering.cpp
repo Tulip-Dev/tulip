@@ -438,6 +438,7 @@ bool LouvainClustering::run() {
   forEach(n,graph->getNodes()) {
     unsigned int i = qclusters.get(nodeMapping.get(n.id)).id;
     TLP_HASH_MAP<unsigned int,unsigned int>::iterator iti = mapIndex.find(i);
+
     if (iti == mapIndex.end()) {
       result->setNodeValue(n, ind);
       mapIndex.insert(make_pair(i,ind));
