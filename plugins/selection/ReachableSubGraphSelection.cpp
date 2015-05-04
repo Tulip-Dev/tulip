@@ -124,8 +124,8 @@ bool ReachableSubGraphSelection::run() {
     // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
     // of the result property are reseted to false below
     Iterator<node>* itN = (result == startNodes) ?
-      new StableIterator<tlp::node>(startNodes->getNodesEqualTo(true)) :
-      startNodes->getNodesEqualTo(true);
+                          new StableIterator<tlp::node>(startNodes->getNodesEqualTo(true)) :
+                          startNodes->getNodesEqualTo(true);
 
     std::set<node> reachables;
 
@@ -159,10 +159,12 @@ bool ReachableSubGraphSelection::run() {
         result->setEdgeValue(e, true);
     }
 
-  } else {
+  }
+  else {
     result->setAllEdgeValue(false);
     result->setAllNodeValue(false);
   }
+
   return true;
 }
 
