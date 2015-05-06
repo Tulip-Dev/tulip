@@ -92,7 +92,6 @@ ADD_LIBRARY(GEXFImport-${TulipVersion} SHARED GEXFImport.cpp)
 TARGET_LINK_LIBRARIES(GEXFImport-${TulipVersion} ${LibTulipCoreName} ${QT_LIBRARIES})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_SUBDIRECTORY(facebook)
 ENDIF(NOT BUILD_CORE_ONLY)
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL_TULIP_PLUGIN(PlanarGraph-${TulipVersion} ${TulipPluginsInstallDir})
