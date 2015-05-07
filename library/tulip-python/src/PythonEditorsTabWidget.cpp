@@ -79,7 +79,7 @@ void PythonEditorsTabWidget::scriptTextChanged() {
   if (curTabText == "")
     return;
 
-  if (!curTabText.contains("no file") && curTabText[curTabText.size() -1] != '*') {
+  if (curTabText[curTabText.size() -1] != '*') {
     curTabText += "*";
     setTabText(currentIndex(), curTabText);
   }
