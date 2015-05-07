@@ -34,6 +34,7 @@ class PythonCodeEditor;
 class PythonScriptViewWidget;
 
 class PythonScriptView : public tlp::ViewWidget {
+  friend class PythonScriptViewWidget;
 
   Q_OBJECT
 
