@@ -17,7 +17,9 @@
  *
  */
 
-#include <QColorDialog>
+#include <QMainWindow>
+
+#include <tulip/Perspective.h>
 
 #include "HistoOptionsWidget.h"
 #include "ui_HistoOptionsWidget.h"
@@ -28,8 +30,9 @@ namespace tlp {
 
 HistoOptionsWidget::HistoOptionsWidget(QWidget *parent) : QWidget(parent),oldValueInitialized(false),_ui(new Ui::HistoOptionsWidgetData) {
   _ui->setupUi(this);
+  _ui->backColorButton->setDialogParent(Perspective::instance()->mainWindow());
+  _ui->backColorButton->setDialogTitle("Choose the background color");
   setBackgroundColor(Color(255,255,255));
-  connect(_ui->backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
   connect(_ui->useXScaleCheckBox, SIGNAL(toggled(bool)), this, SLOT(pressXScaleCheckBox(bool)));
   connect(_ui->useYScaleCheckBox, SIGNAL(toggled(bool)), this, SLOT(pressYScaleCheckBox(bool)));
 }
@@ -157,47 +160,11 @@ void HistoOptionsWidget::setBinWidth(const double width) {
 }
 
 Color HistoOptionsWidget::getBackgroundColor() const {
-  QString buttonStyleSheet(_ui->backColorButton->styleSheet());
-  QString backgroundColorCodeHex(buttonStyleSheet.mid(buttonStyleSheet.indexOf("#") + 1, 6));
-  bool ok;
-  return Color(backgroundColorCodeHex.mid(0, 2).toInt(&ok, 16),
-               backgroundColorCodeHex.mid(2, 2).toInt(&ok, 16),
-               backgroundColorCodeHex.mid(4, 2).toInt(&ok, 16));
-
+    return _ui->backColorButton->tulipColor();
 }
 
 void HistoOptionsWidget::setBackgroundColor(const Color &color) {
-  QString colorStr;
-  QString str;
-  str.setNum(color.getR(),16);
-
-  if(str.size()!=2)
-    str.insert(0,"0");
-
-  colorStr.append(str);
-
-  str.setNum(color.getG(),16);
-
-  if(str.size()!=2)
-    str.insert(0,"0");
-
-  colorStr.append(str);
-
-  str.setNum(color.getB(),16);
-
-  if(str.size()!=2)
-    str.insert(0,"0");
-
-  colorStr.append(str);
-  _ui->backColorButton->setStyleSheet("QPushButton { background-color: #"+colorStr +"}");
-}
-
-void HistoOptionsWidget::pressBackgroundColorButton() {
-  QColor newColor(QColorDialog::getColor(_ui->backColorButton->palette().color(QPalette::Button)));
-
-  if (newColor.isValid()) {
-    setBackgroundColor(Color(newColor.red(), newColor.green(), newColor.blue()));
-  }
+    _ui->backColorButton->setTulipColor(color);
 }
 
 bool HistoOptionsWidget::showGraphEdges() const {
