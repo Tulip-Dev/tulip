@@ -173,8 +173,6 @@ private :
   GlRect *emptyRect;
   GlRect *emptyRect2;
 
-  int lastViewWindowWidth, lastViewWindowHeight;
-
   bool interactorsActivated;
 
   static GLuint binTextureId;

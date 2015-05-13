@@ -72,8 +72,7 @@ HistogramView::HistogramView(const PluginContext *) :
   emptyGlGraphComposite(NULL), histogramsComposite(NULL), labelsComposite(NULL), axisComposite(NULL), smallMultiplesView(true), mainLayer(NULL), detailedHistogram(NULL),
   sceneRadiusBak(0), zoomFactorBak(0),
   noDimsLabel(NULL), noDimsLabel1(NULL), noDimsLabel2(NULL), emptyRect(NULL),
-  emptyRect2(NULL), lastViewWindowWidth(0),
-  lastViewWindowHeight(0), interactorsActivated(false), isConstruct(false), lastNbHistograms(0), dataLocation(NODE),needUpdateHistogram(false)  {
+  emptyRect2(NULL), interactorsActivated(false), isConstruct(false), lastNbHistograms(0), dataLocation(NODE),needUpdateHistogram(false)  {
   ++histoViewInstancesCount;
 }
 
@@ -89,22 +88,11 @@ HistogramView::~HistogramView() {
       binTextureId = 0;
     }
 
-    if (propertiesSelectionWidget!=NULL)
       delete propertiesSelectionWidget;
-
-    if (histoOptionsWidget!=NULL)
       delete histoOptionsWidget;
-
-    if(emptyGlGraphComposite!=NULL)
       delete emptyGlGraphComposite;
-
-    if(labelsComposite!=NULL)
       delete labelsComposite;
-
-    if(emptyGraph!=NULL)
       delete emptyGraph;
-
-    if(axisComposite!=NULL)
       delete axisComposite;
   }
 }
@@ -199,8 +187,6 @@ void HistogramView::setState(const DataSet &dataSet) {
 
   propertiesSelectionWidget->setWidgetParameters(graph(), propertiesTypesFilter);
 
-  dataSet.get("lastViewWindowWidth", lastViewWindowWidth);
-  dataSet.get("lastViewWindowHeight", lastViewWindowHeight);
   dataSet.get("histo detailed name", detailedHistogramPropertyName);
   Color backgroundColor;
 
@@ -299,9 +285,7 @@ void HistogramView::setState(const DataSet &dataSet) {
 
   }
 
-  gl->centerScene();
   draw();
-
   registerTriggers();
 
   if (detailedHistogramPropertyName != "") {
@@ -335,8 +319,6 @@ DataSet HistogramView::state() const {
     dataSet.set("histo"+ss.str(), histogramParameters);
   }
 
-  dataSet.set("lastViewWindowWidth",  getGlMainWidget()->width());
-  dataSet.set("lastViewWindowHeight",  getGlMainWidget()->height());
   dataSet.set("backgroundColor", getGlMainWidget()->getScene()->getBackgroundColor());
   string histoDetailedNamed = "";
 
@@ -451,39 +433,38 @@ void HistogramView::viewConfigurationChanged() {
   }
 
   updateHistograms(detailedHistogram);
-  drawOverview(true);
   draw();
+  drawOverview(true);
 }
 
 void HistogramView::draw() {
-  if (detailedHistogram != NULL) {
-    needUpdateHistogram=true;
-    detailedHistogram->update();
-    updateDetailedHistogramAxis();
-  }
-  else {
-    updateHistograms();
-  }
+    GlMainWidget *gl = getGlMainWidget();
+    if (selectedProperties.empty()) {
+      if (!interactors().empty()) {
+        setCurrentInteractor(interactors().front());
+      }
+
+      if (!smallMultiplesView) {
+        switchFromDetailedViewToSmallMultiples();
+      }
+
+      removeEmptyViewLabel();
+      addEmptyViewLabel();
+      gl->centerScene();
+      return;
+    }
+
+    if (detailedHistogram != NULL) {
+        needUpdateHistogram=true;
+        detailedHistogram->update();
+        updateDetailedHistogramAxis();
+    }
+    else {
+        updateHistograms();
+    }
 
   if (!smallMultiplesView && detailedHistogram != NULL) {
     switchFromSmallMultiplesToDetailedView(detailedHistogram);
-  }
-
-  if (selectedProperties.empty()) {
-    if (!interactors().empty()) {
-      setCurrentInteractor(interactors().front());
-    }
-
-    if (!smallMultiplesView) {
-      switchFromDetailedViewToSmallMultiples();
-    }
-
-    removeEmptyViewLabel();
-    addEmptyViewLabel();
-    GlMainWidget *gl = getGlMainWidget();
-    gl->centerScene();
-    gl->draw();
-    return;
   }
 
   if (!selectedProperties.empty()) {
@@ -505,7 +486,7 @@ void HistogramView::draw() {
     return;
   }
 
-  getGlMainWidget()->draw();
+  gl->draw();
   lastNbHistograms = selectedProperties.size();
 }
 
