@@ -94,7 +94,6 @@ public :
 private slots :
 
   void enableOrDisableNbXGraduationsSP(int uniQuantState);
-  void pressBackgroundColorButton();
   void pressXScaleCheckBox(bool checked);
   void pressYScaleCheckBox(bool checked);
 
