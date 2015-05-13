@@ -50,7 +50,7 @@ tlp::Color ChooseColorButton::tulipColor() const {
 
 void ChooseColorButton::setColor(const QColor& c) {
   _color = c;
-  repaint();
+  update();
   emit colorChanged(_color);
   emit tulipColorChanged(QColorToColor(_color));
 }
