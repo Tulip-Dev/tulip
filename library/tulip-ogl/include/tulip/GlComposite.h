@@ -143,8 +143,8 @@ public:
 
         if(!composite && !(*it)->getBoundingBox().isValid()) {
           for(std::map<std::string, GlSimpleEntity*>::iterator itE=elements.begin(); itE!=elements.end(); ++itE) {
-            if((*itE).second==(*it)) {
-              tlp::warning() << "Invalid bounding box for entity : " << (*itE).first << std::endl;
+            if(itE->second==(*it)) {
+              tlp::warning() << "Invalid bounding box for entity: " << itE->first << std::endl;
               assert(false);
             }
           }
