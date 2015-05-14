@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="title">
-      <string>Pick data location from graph : </string>
+      <string>Pick data location from graph: </string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -89,7 +89,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Select graph properties : </string>
+      <string>Select graph properties: </string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
