@@ -67,7 +67,7 @@ void GlComposite::reset(bool deleteElems) {
 
   for(ITM i = elements.begin(); i != elements.end(); ++i) {
     //Push elements to treat in a vector as deleting elements in the loop invalidate the current iterator.
-    toTreat.push_back((*i).second);
+    toTreat.push_back(i->second);
   }
 
   for(vector<GlSimpleEntity*>::iterator it = toTreat.begin() ; it != toTreat.end() ; ++it) {
