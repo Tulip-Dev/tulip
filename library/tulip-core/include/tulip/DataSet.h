@@ -25,6 +25,7 @@
 #include <tulip/StlIterator.h>
 
 #include <string>
+#include <sstream>
 #include <typeinfo>
 #include <list>
 
@@ -103,6 +104,12 @@ struct DataTypeSerializer {
   virtual DataTypeSerializer* clone() const = 0;
   // write the DataType embedded value into the output stream
   virtual void writeData(std::ostream& os, const DataType *data)=0;
+  // return the DataType embedded value as a std::string
+  virtual std::string toString(const DataType *data) {
+    std::stringstream ss;
+    writeData(ss,data);
+    return ss.str();
+  }
   // build a DataType embedding value read from input stream
   virtual DataType* readData(std::istream &is)=0;
   // set a value into a DataSet
