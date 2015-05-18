@@ -320,7 +320,7 @@ string DataSet::toString() const {
 
     if (serializer) {
       ss << "'" << p.first << "'=";
-      serializer->writeData(ss, p.second);
+      ss << serializer->toString(p.second).c_str();
       ss << " ";
     }
   }
