@@ -161,6 +161,7 @@ void PreferencesDialog::readSettings() {
   _ui->displayDefaultViews->setChecked(TulipSettings::instance().displayDefaultViews());
   _ui->aspectRatioCheck->setChecked(TulipSettings::instance().isAutomaticRatio());
   _ui->viewOrthoCheck->setChecked(TulipSettings::instance().isViewOrtho());
+  _ui->resultPropertyStoredCheck->setChecked(TulipSettings::instance().isResultPropertyStored());
   _ui->colorMappingCheck->setChecked(TulipSettings::instance().isAutomaticMapMetric());
   _ui->runningTimeComputedCheck->setChecked(TulipSettings::instance().isRunningTimeComputed());
 
