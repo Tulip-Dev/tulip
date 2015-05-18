@@ -295,21 +295,22 @@ void PythonScriptViewWidget::closeEditorTabRequested(PythonEditorsTabWidget* tab
   if (curTabText[curTabText.size() -1] == '*') {
     PythonCodeEditor* editor = tabWidget->getEditor(idx);
     QString fileName = editor->getFileName();
+
     if (QMessageBox::question(QApplication::activeWindow(),
                               QString("Save edited Python code"),
                               QString("The code of ") +
-			      // if the editor has not yet a file name
-			      // show the tab text instead
+                              // if the editor has not yet a file name
+                              // show the tab text instead
                               (fileName.isEmpty() ? curTabText : fileName) +
-			      QString("\n has been edited but has not been saved.\nDo you want to save it ?"),
+                              QString("\n has been edited but has not been saved.\nDo you want to save it ?"),
                               QMessageBox::Save | QMessageBox::Discard,
                               QMessageBox::Save) ==
         QMessageBox::Save) {
       if (fileName.isEmpty())
-	// user must choose a file
-	_pythonScriptView->saveScript(idx, false);
+        // user must choose a file
+        _pythonScriptView->saveScript(idx, false);
       else
-	editor->saveCodeToFile();
+        editor->saveCodeToFile();
     }
   }
 }

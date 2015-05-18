@@ -88,12 +88,12 @@ HistogramView::~HistogramView() {
       binTextureId = 0;
     }
 
-      delete propertiesSelectionWidget;
-      delete histoOptionsWidget;
-      delete emptyGlGraphComposite;
-      delete labelsComposite;
-      delete emptyGraph;
-      delete axisComposite;
+    delete propertiesSelectionWidget;
+    delete histoOptionsWidget;
+    delete emptyGlGraphComposite;
+    delete labelsComposite;
+    delete emptyGraph;
+    delete axisComposite;
   }
 }
 
@@ -438,30 +438,31 @@ void HistogramView::viewConfigurationChanged() {
 }
 
 void HistogramView::draw() {
-    GlMainWidget *gl = getGlMainWidget();
-    if (selectedProperties.empty()) {
-      if (!interactors().empty()) {
-        setCurrentInteractor(interactors().front());
-      }
+  GlMainWidget *gl = getGlMainWidget();
 
-      if (!smallMultiplesView) {
-        switchFromDetailedViewToSmallMultiples();
-      }
-
-      removeEmptyViewLabel();
-      addEmptyViewLabel();
-      gl->centerScene();
-      return;
+  if (selectedProperties.empty()) {
+    if (!interactors().empty()) {
+      setCurrentInteractor(interactors().front());
     }
 
-    if (detailedHistogram != NULL) {
-        needUpdateHistogram=true;
-        detailedHistogram->update();
-        updateDetailedHistogramAxis();
+    if (!smallMultiplesView) {
+      switchFromDetailedViewToSmallMultiples();
     }
-    else {
-        updateHistograms();
-    }
+
+    removeEmptyViewLabel();
+    addEmptyViewLabel();
+    gl->centerScene();
+    return;
+  }
+
+  if (detailedHistogram != NULL) {
+    needUpdateHistogram=true;
+    detailedHistogram->update();
+    updateDetailedHistogramAxis();
+  }
+  else {
+    updateHistograms();
+  }
 
   if (!smallMultiplesView && detailedHistogram != NULL) {
     switchFromSmallMultiplesToDetailedView(detailedHistogram);

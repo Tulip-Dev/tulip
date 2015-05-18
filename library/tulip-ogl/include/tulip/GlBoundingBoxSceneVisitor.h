@@ -43,7 +43,7 @@ public:
    * Constructor
    */
   GlBoundingBoxSceneVisitor(GlGraphInputData* inputData):inputData(inputData) {
-      threadSafe = true;
+    threadSafe = true;
   }
 
   /**
