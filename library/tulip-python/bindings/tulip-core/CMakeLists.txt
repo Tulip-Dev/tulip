@@ -83,6 +83,7 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipPythonIn
 
 SET_SOURCE_FILES_PROPERTIES(siptuliptlpIteratorGraph.cpp
                             siptulipIteratorObservable.cpp
+                            siptuliptlpIteratorProperty.cpp
                             PROPERTIES COMPILE_DEFINITIONS ITERATOR_NO_COPY)
                             
 SET_SOURCE_FILES_PROPERTIES(siptuliptlpBooleanProperty.cpp
