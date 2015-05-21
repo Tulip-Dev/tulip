@@ -41,12 +41,12 @@ The edge identifier can be accessed through the **id** class member.
 %End
 
 public:
-    unsigned int id;
-    edge();
-	edge(unsigned int);
-    bool __eq__(const tlp::edge) const;
-    bool __ne__(const tlp::edge) const;
-    bool isValid() const;
+  unsigned int id;
+  edge();
+  edge(unsigned int);
+  bool __eq__(const tlp::edge) const;
+  bool __ne__(const tlp::edge) const;
+  bool isValid() const;
 %Docstring
 tlp.edge.isValid()
 
@@ -55,21 +55,31 @@ Returns :const:`True` if the edge is a valid one, meaning it is attached to a gr
 :rtype: boolean 
 %End
 	
-    SIP_PYOBJECT __repr__() const;
+  SIP_PYOBJECT __repr__() const;
 %MethodCode
-		std::ostringstream oss;
-		oss << "<edge " << sipCpp->id << ">";
-        std::string s = oss.str();
+    std::ostringstream oss;
+    oss << "<edge " << sipCpp->id << ">";
+    std::string s = oss.str();
 #if PY_MAJOR_VERSION >= 3
-        sipRes = PyUnicode_FromString(s.c_str());
+    sipRes = PyUnicode_FromString(s.c_str());
 #else
-        sipRes = PyString_FromString(s.c_str());
+    sipRes = PyString_FromString(s.c_str());
 #endif
 %End
 
-    long __hash__() const;
+  long __hash__() const;
 %MethodCode
-        return static_cast<long>(sipCpp->id);
+    return static_cast<long>(sipCpp->id);
+%End
+
+  SIP_PYOBJECT __copy__() const;
+%MethodCode
+    sipRes = sipConvertFromNewType(new tlp::edge(sipCpp->id), sipFindType("tlp::edge"), NULL);
+%End
+
+  SIP_PYOBJECT __deepcopy__(SIP_PYOBJECT) const;
+%MethodCode
+    sipRes = sipConvertFromNewType(new tlp::edge(sipCpp->id), sipFindType("tlp::edge"), NULL);
 %End
 };
 };
