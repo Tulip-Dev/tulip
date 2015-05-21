@@ -106,8 +106,6 @@ def exportGraph(plugin, os):
     return ret
 
 def createPlugin(context, pluginModule, pluginClassName, pluginName, author, date, info, release, group):
-    globals()[pluginModule] = __import__(pluginModule, globals(), locals(), [], 0)
-
     plugin = eval(pluginModule + "." + pluginClassName + "(context)", globals(), locals())
     if hasattr(plugin, "run"):
         plugin.real_run = plugin.run
@@ -152,14 +150,21 @@ def registerPluginOfGroup(pluginClassName, pluginName, author, date, info, relea
 
     global pluginFactory
     removePlugin(pluginName)
-    if testMode:
-        return
     pluginModule = getCallingModuleName()
-    pluginModules[pluginName] = pluginModule
-    pluginFactory[pluginName] = type(pluginClassName + "Factory", (tlp.FactoryInterface,), { \
-                                     "__init__": (lambda self: initFactory(self)), \
-                                     "createPluginObject" : (lambda self, context: createPlugin(context, pluginModule, pluginClassName, pluginName, author, date, info, release, group))} \
-                                     )()
+    try:
+        globals()[pluginModule] = __import__(pluginModule, globals(), locals(), [], 0)
+        eval(pluginModule + "." + pluginClassName, globals(), locals())
+        if testMode:
+            return
+        pluginModules[pluginName] = pluginModule
+        pluginFactory[pluginName] = type(pluginClassName + "Factory", (tlp.FactoryInterface,), { \
+                                         "__init__": (lambda self: initFactory(self)), \
+                                         "createPluginObject" : (lambda self, context: createPlugin(context, pluginModule, pluginClassName, pluginName, author, date, info, release, group))} \
+                                         )()
+    except:
+        sys.stdout.write("There was an error when registering Python plugin named \"" + pluginName + "\". See stack trace below.\n")
+        raise
+
 
 def registerPlugin(pluginClassName, pluginName, author, date, info, release):
 
