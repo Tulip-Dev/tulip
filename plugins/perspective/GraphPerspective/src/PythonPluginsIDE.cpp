@@ -826,7 +826,11 @@ void PythonPluginsIDE::closePluginTabRequested(int tab) {
 }
 
 void PythonPluginsIDE::scrollToEditorLine(const QUrl & link) {
-  QStringList strList = link.toString().split(":");
+  QString linkStr = QUrl::fromPercentEncoding(link.toEncoded());
+#ifdef WIN32
+  linkStr.replace("\\", "/");
+#endif
+  QStringList strList = linkStr.split(":");
   QString file = strList.at(0);
   int line = strList.at(1).toInt()-1;
 
