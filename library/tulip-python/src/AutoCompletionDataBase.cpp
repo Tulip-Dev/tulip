@@ -1284,7 +1284,8 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
     baseType.replace("tulipqt", "tlp");
     baseType.replace("tulipogl", "tlp");
     baseType.replace("tulip", "tlp");
-    ret += getAllDictForType(baseType, prefix, false);
+    if (baseType != type)
+      ret += getAllDictForType(baseType, prefix, false);
   }
 
   if (_classContents.find(type) != _classContents.end()) {
@@ -1296,7 +1297,8 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
 
   if (_classBases.find(type) != _classBases.end()) {
     foreach(QString baseType, _classBases[type]) {
-      ret += getAllDictForType(baseType, prefix, false);
+      if (baseType != type)
+        ret += getAllDictForType(baseType, prefix, false);
     }
   }
 
@@ -1446,12 +1448,14 @@ QVector<QVector<QString> > AutoCompletionDataBase::getParamTypesForMethodOrFunct
     baseType.replace("tulipqt", "tlp");
     baseType.replace("tulipogl", "tlp");
     baseType.replace("tulip", "tlp");
-    ret += getParamTypesForMethodOrFunction(baseType, funcName);
+    if (baseType != type)
+      ret += getParamTypesForMethodOrFunction(baseType, funcName);
   }
 
   if (_classBases.find(type) != _classBases.end()) {
     foreach(QString baseType, _classBases[type]) {
-      ret += getParamTypesForMethodOrFunction(baseType, funcName);
+      if (baseType != type)
+        ret += getParamTypesForMethodOrFunction(baseType, funcName);
     }
   }
 
@@ -1470,7 +1474,8 @@ QString AutoCompletionDataBase::getReturnTypeForMethodOrFunction(const QString &
       baseType.replace("tulipqt", "tlp");
       baseType.replace("tulipogl", "tlp");
       baseType.replace("tulip", "tlp");
-      ret = getReturnTypeForMethodOrFunction(baseType, funcName);
+      if (baseType != type)
+        ret = getReturnTypeForMethodOrFunction(baseType, funcName);
 
       if (ret != "") {
         break;
@@ -1481,7 +1486,8 @@ QString AutoCompletionDataBase::getReturnTypeForMethodOrFunction(const QString &
   if (ret == "") {
     if (_classBases.find(type) != _classBases.end()) {
       foreach(QString baseType, _classBases[type]) {
-        ret = getReturnTypeForMethodOrFunction(baseType, funcName);
+        if (baseType != type)
+          ret = getReturnTypeForMethodOrFunction(baseType, funcName);
 
         if (ret != "") {
           break;
@@ -1502,10 +1508,12 @@ QString AutoCompletionDataBase::getClassAttributeType(const QString &className, 
 
   if (_classBases.find(className) != _classBases.end()) {
     foreach(QString baseType, _classBases[className]) {
-      QString ret = getClassAttributeType(baseType, classAttribute);
+      if (baseType != className) {
+        QString ret = getClassAttributeType(baseType, classAttribute);
 
-      if (ret != "") {
-        return ret;
+        if (ret != "") {
+          return ret;
+        }
       }
     }
   }
