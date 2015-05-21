@@ -40,6 +40,8 @@ namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
 typedef tlp::Graph* GraphPointer;
 typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
+typedef tlp::PropertyInterface* PropertyPointer;
+typedef tlp::Iterator<tlp::PropertyPointer> IteratorProperty;
 };
 typedef std::pair<tlp::node, tlp::node> pairNodeNode;
 
@@ -67,6 +69,8 @@ namespace tlp {
 typedef tlp::Iterator<std::string> IteratorString;
 typedef tlp::Graph* GraphPointer;
 typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
+typedef tlp::PropertyInterface* PropertyPointer;
+typedef tlp::Iterator<tlp::PropertyPointer> IteratorProperty;
 
 enum ElementType {NODE=0, EDGE};
 
@@ -2718,7 +2722,59 @@ Returns an iterator on the names of all the properties attached to the graph.
 %MethodCode
 	sipRes = new tlp::StableIterator<std::string>(sipCpp->getProperties());
 %End			
-	
+
+//===========================================================================================
+
+	tlp::IteratorProperty* getObjectProperties() /TransferBack/;
+%Docstring
+tlp.Graph.getObjectProperties()
+
+.. versionadded:: 4.8
+
+Returns an iterator over the properties attached to the graph,
+whether they are local or inherited.
+
+:rtype: a Tulip iterator on :class:`tlp.PropertyInterface` objects
+%End
+
+%MethodCode
+        sipRes = new tlp::StableIterator<tlp::PropertyInterface*>(sipCpp->getObjectProperties());
+%End
+
+//===========================================================================================
+
+        tlp::IteratorProperty* getLocalObjectProperties() /TransferBack/;
+%Docstring
+tlp.Graph.getLocalObjectProperties()
+
+.. versionadded:: 4.8
+
+Returns an iterator over the local properties attached to the graph.
+
+:rtype: a Tulip iterator on :class:`tlp.PropertyInterface` objects
+%End
+
+%MethodCode
+        sipRes = new tlp::StableIterator<tlp::PropertyInterface*>(sipCpp->getLocalObjectProperties());
+%End
+
+//===========================================================================================
+
+        tlp::IteratorProperty* getInheritedObjectProperties() /TransferBack/;
+%Docstring
+tlp.Graph.getInheritedObjectProperties()
+
+.. versionadded:: 4.8
+
+Returns an iterator over the inherited properties attached to the graph.
+
+:rtype: a Tulip iterator on :class:`tlp.PropertyInterface` objects
+%End
+
+%MethodCode
+	sipRes = new tlp::StableIterator<tlp::PropertyInterface*>(sipCpp->getInheritedObjectProperties());
+%End
+
 //===========================================================================================	
 	
 	bool applyIntegerAlgorithm(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data=0);
