@@ -1284,6 +1284,7 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
     baseType.replace("tulipqt", "tlp");
     baseType.replace("tulipogl", "tlp");
     baseType.replace("tulip", "tlp");
+
     if (baseType != type)
       ret += getAllDictForType(baseType, prefix, false);
   }
@@ -1448,6 +1449,7 @@ QVector<QVector<QString> > AutoCompletionDataBase::getParamTypesForMethodOrFunct
     baseType.replace("tulipqt", "tlp");
     baseType.replace("tulipogl", "tlp");
     baseType.replace("tulip", "tlp");
+
     if (baseType != type)
       ret += getParamTypesForMethodOrFunction(baseType, funcName);
   }
@@ -1474,6 +1476,7 @@ QString AutoCompletionDataBase::getReturnTypeForMethodOrFunction(const QString &
       baseType.replace("tulipqt", "tlp");
       baseType.replace("tulipogl", "tlp");
       baseType.replace("tulip", "tlp");
+
       if (baseType != type)
         ret = getReturnTypeForMethodOrFunction(baseType, funcName);
 
