@@ -30,29 +30,24 @@ class Iterator /Abstract/ {
 %TypeHeaderCode
 #include <tulip/Iterator.h>
 %End
+
 public:
 
-	Iterator();
+  Iterator();
 
-	TYPE next();
+  TYPE next();
 %MethodCode
-    if (sipCpp->hasNext()) {
-// if iterator is on base types (int, double, pointers, ...),
-// ITERATOR_NO_COPY has to be defined when compiling the generated bindings file    
-#ifdef ITERATOR_NO_COPY
-    	sipRes = sipCpp->next();
-#else
-    	sipRes = new TYPE(sipCpp->next());
-#endif
-    } else {
-        PyErr_SetString(PyExc_Exception, "Iterator : next() has been called but there is no more elements to iterate on.");
-        sipIsErr = -1;
-    }
+  if (sipCpp->hasNext()) {
+    sipRes = copyValue(sipCpp->next());
+  } else {
+    PyErr_SetString(PyExc_Exception, "Iterator : next() has been called but there is no more elements to iterate on.");
+    sipIsErr = -1;
+  }
 %End
 
-	bool hasNext();	
+    bool hasNext();
 
-	 Iterator * __iter__();
+    Iterator * __iter__();
 %MethodCode
     sipRes = sipCpp;
 %End
@@ -60,20 +55,12 @@ public:
     TYPE __next__();
 %MethodCode
     if (sipCpp->hasNext()) {
-// if iterator is on base types (int, double, pointers, ...),
-// ITERATOR_NO_COPY has to be defined when compiling the generated bindings file    
-#ifdef ITERATOR_NO_COPY
-    	sipRes = sipCpp->next();
-#else
-    	sipRes = new TYPE(sipCpp->next());
-#endif
+      sipRes = copyValue(sipCpp->next());
     } else {
-        PyErr_SetNone(PyExc_StopIteration);
-        return NULL;
+      PyErr_SetNone(PyExc_StopIteration);
+      return NULL;
     }
 %End
-
-
 
 };
 
