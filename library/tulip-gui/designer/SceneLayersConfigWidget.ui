@@ -106,7 +106,7 @@ padding-top: 5px;
 	       color: #595959;</string>
 	     </property>
 	     <property name="text">
-	       <string>&lt;font size=&quot;5&quot;&gt;Layers settings&lt;/font&gt;</string>
+	       <string>&lt;font size=&quot;5&quot;&gt;Layer settings&lt;/font&gt;</string>
 	     </property>
            </widget>
 	 </item>
