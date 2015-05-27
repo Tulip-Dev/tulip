@@ -25,16 +25,12 @@
 
 %Module tulip
 
-// Hack to avoid overriding the tlp Python class (containing all the module classes as
-// nested classes and declared in each module : tulip, tulipogl, tulipqt) in the current
-// global namespace when importing the module the following way : from tulipogl import *
-
 // Plus set up type aliases for tlp.Coord and tlp.Size
 %PreInitialisationCode
     // Try to load plugins when importing the module from the Python shell
     if (tlp::TulipPluginsPath.empty()) {
-        tlp::initTulipLib();
-        tlp::PluginLibraryLoader::loadPlugins();
+      tlp::initTulipLib();
+      tlp::PluginLibraryLoader::loadPlugins();
     }
 %End
 
@@ -52,44 +48,45 @@
     "import traceback\n"
 
     "def loadTulipPythonPlugin(pluginFilePath):\n"
-    "        if not os.path.isfile(pluginFilePath) or not pluginFilePath.endswith(\".py\"):\n"
-    "                return False\n"
+    "  if not os.path.isfile(pluginFilePath) or not pluginFilePath.endswith(\".py\"):\n"
+    "    return False\n"
 
-    "        try:\n"
-    "                pluginFile = open(pluginFilePath)\n"
-    "                pluginFileContent = pluginFile.read()\n"
-    "        except:\n"
-    "                return False\n"
+    "  try:\n"
+    "    pluginFile = open(pluginFilePath)\n"
+    "    pluginFileContent = pluginFile.read()\n"
+    "  except:\n"
+    "    return False\n"
 
-    "        if not \"tulipplugins.register\" in pluginFileContent:\n"
-    "                return False\n"
+    "  if not \"tulipplugins.register\" in pluginFileContent:\n"
+    "    return False\n"
 
-    "        modulePath = os.path.dirname(pluginFilePath)\n"
-    "        moduleName = os.path.basename(pluginFilePath)[:-3]\n"
+    "  modulePath = os.path.dirname(pluginFilePath)\n"
+    "  moduleName = os.path.basename(pluginFilePath)[:-3]\n"
 
-    "        if not modulePath in sys.path:\n"
-    "                sys.path.append(modulePath)\n"
+    "  if not modulePath in sys.path:\n"
+    "    sys.path.append(modulePath)\n"
 
-    "        try:\n"
-    "                mod = __import__(moduleName)\n"
-    "        except ImportError:\n"
-    "                sys.stdout.write(\"There was an error when trying to load the Tulip Python plugin from the file \" + pluginFilePath + \". See stack trace below.\\n\")\n"
-    "                traceback.print_exc()\n"
-    "                return False\n"
+    "  try:\n"
+    "    mod = __import__(moduleName)\n"
+    "  except ImportError:\n"
+    "    sys.stdout.write(\"There was an error when trying to load the Tulip Python plugin from the file \" + pluginFilePath + \". See stack trace below.\\n\")\n"
+    "    traceback.print_exc()\n"
+    "    return False\n"
 
-    "        return True\n"
+    "  return True\n"
 
     "def loadTulipPythonPluginsFromDir(pluginsDirPath):\n"
-    "        if not os.path.exists(pluginsDirPath):\n"
-    "                return False\n"
+    "  if not os.path.exists(pluginsDirPath):\n"
+    "    return False\n"
 
-    "        files = os.listdir(pluginsDirPath)\n"
+    "  files = os.listdir(pluginsDirPath)\n"
 
-    "        for file in files:\n"
-    "                loadTulipPythonPlugin(pluginsDirPath+\"/\"+file)\n"
+    "  for file in files:\n"
+    "    loadTulipPythonPlugin(pluginsDirPath+\"/\"+file)\n"
 
-    "        return True\n"
+    "  return True\n"
     ;
+
     PyRun_SimpleString(pluginLoaderFuncs.c_str());
 %End
 
@@ -97,34 +94,67 @@
 #include <tulip/Graph.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PropertyAlgorithm.h>
+#include <tulip/Vector.h>
+#include <tulip/Color.h>
 #include <string>
 #include <sstream>
 #include <iostream>
 
+tlp::PropertyInterface* copyValue(tlp::PropertyInterface* value);
+
+tlp::Graph* copyValue(tlp::Graph* value);
+
+std::string* copyValue(const std::string &value);
+
+std::string getValue(const std::string *value);;
+
+tlp::node* copyValue(const tlp::node &value);
+
+tlp::edge* copyValue(const tlp::edge &value);
+
+int copyValue(const int &value);
+
+int getValue(const int &value);
+
+double copyValue(const double &value);
+
+double getValue(const double &value);
+
+tlp::Vec3f *copyValue(const tlp::Vec3f &value);
+
+tlp::Vec3f getValue(const tlp::Vec3f *value);
+
+tlp::Color *copyValue(const tlp::Color &value);
+
+tlp::Color getValue(const tlp::Color *value);
+
+std::vector<tlp::Vec3f> *copyValue(const std::vector<tlp::Vec3f> &value);
+
+std::vector<tlp::Vec3f> getValue(const std::vector<tlp::Vec3f> *value);
 
 template <typename T>
 bool pluginExists(std::string pluginName) {
-        if (typeid(T).name() == typeid(tlp::Algorithm).name()) {
-            std::list<std::string> algoList = tlp::PluginLister::instance()->availablePlugins<tlp::Algorithm>();
-            std::list<std::string> propAlgoList = tlp::PluginLister::instance()->availablePlugins<tlp::PropertyAlgorithm>();
-            std::list<std::string> realAlgoList;
-            for (std::list<std::string>::iterator it = algoList.begin() ; it != algoList.end() ; ++it) {
-                if (std::find(propAlgoList.begin(), propAlgoList.end(), *it) == propAlgoList.end()) {
-                    realAlgoList.push_back(*it);
-                }
-            }
-            return std::find(realAlgoList.begin(), realAlgoList.end(), pluginName) != realAlgoList.end();
-        } else {
-            return tlp::PluginLister::instance()->pluginExists<T>(pluginName);
-        }
+  if (typeid(T).name() == typeid(tlp::Algorithm).name()) {
+    std::list<std::string> algoList = tlp::PluginLister::instance()->availablePlugins<tlp::Algorithm>();
+    std::list<std::string> propAlgoList = tlp::PluginLister::instance()->availablePlugins<tlp::PropertyAlgorithm>();
+    std::list<std::string> realAlgoList;
+    for (std::list<std::string>::iterator it = algoList.begin() ; it != algoList.end() ; ++it) {
+      if (std::find(propAlgoList.begin(), propAlgoList.end(), *it) == propAlgoList.end()) {
+        realAlgoList.push_back(*it);
+      }
+    }
+    return std::find(realAlgoList.begin(), realAlgoList.end(), pluginName) != realAlgoList.end();
+  } else {
+    return tlp::PluginLister::instance()->pluginExists<T>(pluginName);
+  }
 }
 
 template <typename PROP>
 bool canGetProperty(const tlp::Graph *graph, const std::string &propName) {
-    if (!graph->existProperty(propName)) {
-        return true;
-    }
-    return dynamic_cast<PROP*>(graph->getProperty(propName)) != NULL;
+  if (!graph->existProperty(propName)) {
+    return true;
+  }
+  return dynamic_cast<PROP*>(graph->getProperty(propName)) != NULL;
 }
 
 extern int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n);
@@ -152,50 +182,114 @@ extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj)
 
 %ModuleCode
 
+tlp::PropertyInterface* copyValue(tlp::PropertyInterface* value) {
+  return value;
+}
+
+tlp::Graph* copyValue(tlp::Graph* value) {
+  return value;
+}
+
+std::string* copyValue(const std::string &value) {
+  return new std::string(value);
+}
+
+std::string getValue(const std::string *value) {
+  return *value;
+}
+
+tlp::node* copyValue(const tlp::node &value) {
+  return new tlp::node(value);
+}
+
+tlp::edge* copyValue(const tlp::edge &value) {
+  return new tlp::edge(value);
+}
+
+int copyValue(const int &value) {
+  return value;
+}
+
+int getValue(const int &value) {
+  return value;
+}
+
+double copyValue(const double &value) {
+  return value;
+}
+
+double getValue(const double &value) {
+  return value;
+}
+
+tlp::Vec3f *copyValue(const tlp::Vec3f &value) {
+  return new tlp::Vec3f(value);
+}
+
+tlp::Vec3f getValue(const tlp::Vec3f *value) {
+  return *value;
+}
+
+tlp::Color *copyValue(const tlp::Color &value) {
+  return new tlp::Color(value);
+}
+
+tlp::Color getValue(const tlp::Color *value) {
+  return *value;
+}
+
+std::vector<tlp::Vec3f> *copyValue(const std::vector<tlp::Vec3f> &value) {
+  return new std::vector<tlp::Vec3f>(value);
+}
+
+std::vector<tlp::Vec3f> getValue(const std::vector<tlp::Vec3f> *value) {
+  return *value;
+}
+
 int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n) {
-    std::ostringstream oss;
-    oss << "Node with id " << n.id << " does not belong to graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
-    PyErr_SetString(PyExc_Exception, oss.str().c_str());
-    return -1;
+  std::ostringstream oss;
+  oss << "Node with id " << n.id << " does not belong to graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
+  PyErr_SetString(PyExc_Exception, oss.str().c_str());
+  return -1;
 }
 
 int throwInvalidEdgeException(const tlp::Graph *graph, tlp::edge e) {
-    std::ostringstream oss;
-    oss << "Edge with id " << e.id << " does not belong to graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
-    PyErr_SetString(PyExc_Exception, oss.str().c_str());
-    return -1;
+  std::ostringstream oss;
+  oss << "Edge with id " << e.id << " does not belong to graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
+  PyErr_SetString(PyExc_Exception, oss.str().c_str());
+  return -1;
 }
 
 int throwInvalidSgException(const tlp::Graph *graph, const tlp::Graph *sg) {
-    std::ostringstream oss;
-    oss << "Graph \"" << sg->getName() <<"\" (id " << sg->getId() <<") is not a sub-graph of graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
-    PyErr_SetString(PyExc_Exception, oss.str().c_str());
-    return -1;
+  std::ostringstream oss;
+  oss << "Graph \"" << sg->getName() <<"\" (id " << sg->getId() <<") is not a sub-graph of graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
+  PyErr_SetString(PyExc_Exception, oss.str().c_str());
+  return -1;
 }
 
 int throwPropertyNameExistsException(const tlp::Graph *graph, const std::string &propertyName) {
-    tlp::PropertyInterface *prop = graph->getProperty(propertyName);
-    std::ostringstream oss;
-    oss << "A property named \"" << propertyName << "\" of type " << prop->getTypename() << " already exists in graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
-    PyErr_SetString(PyExc_Exception, oss.str().c_str());
-    return -1;
+  tlp::PropertyInterface *prop = graph->getProperty(propertyName);
+  std::ostringstream oss;
+  oss << "A property named \"" << propertyName << "\" of type " << prop->getTypename() << " already exists in graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
+  PyErr_SetString(PyExc_Exception, oss.str().c_str());
+  return -1;
 }
 
 void printErrorMessage(const std::string &errMsg) {
-    std::string pythonCode = "import sys\n"
-                             "sys.stderr.write(\"";
-    pythonCode += errMsg;
-    pythonCode += "\\n\")";
-    PyRun_SimpleString(pythonCode.c_str());
+  std::string pythonCode = "import sys\n"
+                           "sys.stderr.write(\"";
+  pythonCode += errMsg;
+  pythonCode += "\\n\")";
+  PyRun_SimpleString(pythonCode.c_str());
 }
 
 void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
-    PyObject *pyObj = sipGetPyObject(wrappedCppObject, td);
-    if (pyObj) {
-        sipTransferTo(pyObj, pyObj);
-        sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyObj);
-        sipCommonDtor(wrapper);
-    }
+  PyObject *pyObj = sipGetPyObject(wrappedCppObject, td);
+  if (pyObj) {
+    sipTransferTo(pyObj, pyObj);
+    sipSimpleWrapper *wrapper = reinterpret_cast<sipSimpleWrapper *>(pyObj);
+    sipCommonDtor(wrapper);
+  }
 }
 
 void replaceAll(std::string &s, const std::string& replaceWhat, const std::string& replaceWithWhat) {
@@ -207,23 +301,23 @@ void replaceAll(std::string &s, const std::string& replaceWhat, const std::strin
 }
 
 bool isValidGraphSelection(const tlp::Graph *graph, tlp::BooleanProperty *selection) {
-    tlp::edge e;
-    forEach(e, graph->getEdges()) {
-        if (selection->getEdgeValue(e)) {
-            if (!selection->getNodeValue(graph->source(e)) || !selection->getNodeValue(graph->target(e))) {
-                return false;
-            }
-        }
+  tlp::edge e;
+  forEach(e, graph->getEdges()) {
+    if (selection->getEdgeValue(e)) {
+      if (!selection->getNodeValue(graph->source(e)) || !selection->getNodeValue(graph->target(e))) {
+        return false;
+      }
     }
-    return true;
+  }
+  return true;
 }
 
 #if PY_MAJOR_VERSION >= 3
 std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
-    PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
-    std::string ret(PyBytes_AsString(utf8Str));
-    Py_DECREF(utf8Str);
-    return ret;
+  PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
+  std::string ret(PyBytes_AsString(utf8Str));
+  Py_DECREF(utf8Str);
+  return ret;
 }
 #endif
 

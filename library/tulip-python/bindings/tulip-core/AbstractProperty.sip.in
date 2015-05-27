@@ -38,11 +38,11 @@ public :
 	
 //===========================================================================================
 	
-	@PROPERTY_TYPE@Property(tlp::Graph *graph, std::string name="");
+    @PROPERTY_TYPE@Property(tlp::Graph *graph, std::string name="");
 
 //===========================================================================================
 		
-	void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &val);
+    void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &val);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setAllNodeValue(val)
 
@@ -54,7 +54,7 @@ Sets the same value on the whole set of nodes.
 
 //===========================================================================================
 
-	void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ &val);
+    void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ &val);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setAllEdgeValue(val)
 
@@ -66,7 +66,7 @@ Sets the same value on the whole set of edges.
 	
 //===========================================================================================	
 	
-	@PROPERTY_NODE_TYPE@ getNodeDefaultValue();
+    @PROPERTY_NODE_TYPE@ getNodeDefaultValue();
 %Docstring
 tlp.@PROPERTY_TYPE@Property.getNodeDefaultValue()
 
@@ -77,7 +77,7 @@ Returns the default value associated to the nodes.
 	
 //===========================================================================================	
 	
-	@PROPERTY_EDGE_TYPE@ getEdgeDefaultValue();
+    @PROPERTY_EDGE_TYPE@ getEdgeDefaultValue();
 %Docstring
 tlp.@PROPERTY_TYPE@Property.getEdgeDefaultValue()
 
@@ -88,7 +88,7 @@ Returns the default value associated to the edges.
 
 //===========================================================================================
 
-	const @PROPERTY_NODE_TYPE@ getNodeValue(const tlp::node node);
+    const @PROPERTY_NODE_TYPE@ getNodeValue(const tlp::node node);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.getNodeValue(node)
 
@@ -101,20 +101,16 @@ Returns the value associated to a particular node.
 %End	
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE	
-		sipRes = sipCpp->getNodeValue(*a0);
-#else
-		sipRes = new @PROPERTY_NODE_TYPE@(sipCpp->getNodeValue(*a0));
-#endif		
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipRes = copyValue(sipCpp->getNodeValue(*a0));
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
 
-	const @PROPERTY_EDGE_TYPE@ getEdgeValue(const tlp::edge edge);
+    const @PROPERTY_EDGE_TYPE@ getEdgeValue(const tlp::edge edge);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.getEdgeValue(edge) 
 
@@ -127,20 +123,16 @@ Returns the value associated to a particular edge.
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE	
-		sipRes = sipCpp->getEdgeValue(*a0);
-#else
-		sipRes = new @PROPERTY_EDGE_TYPE@(sipCpp->getEdgeValue(*a0));
-#endif		
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipRes = copyValue(sipCpp->getEdgeValue(*a0));
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
 
-	void setNodeValue(const tlp::node node, const @PROPERTY_NODE_TYPE@ &val);
+    void setNodeValue(const tlp::node node, const @PROPERTY_NODE_TYPE@ &val);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setNodeValue(node, val)
 
@@ -154,20 +146,16 @@ Sets the value of a particular node.
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE	
-		sipCpp->setNodeValue(*a0, a1);
-#else
-		sipCpp->setNodeValue(*a0, *a1);
-#endif		
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->setNodeValue(*a0, getValue(a1));
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
 
-	void setEdgeValue(const tlp::edge edge, const @PROPERTY_EDGE_TYPE@ &val);
+    void setEdgeValue(const tlp::edge edge, const @PROPERTY_EDGE_TYPE@ &val);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setEdgeValue(edge, val)
 
@@ -181,85 +169,64 @@ Sets the value of a particular edge.
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE	
-		sipCpp->setEdgeValue(*a0, a1);
-#else
-		sipCpp->setEdgeValue(*a0, *a1);
-#endif		
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->setEdgeValue(*a0, getValue(a1));
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
 
     @PROPERTY_NODE_TYPE@ __getitem__(const tlp::node node) const;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE		
-        sipRes = sipCpp->getNodeValue(*a0);
-#else
-        sipRes = new @PROPERTY_NODE_TYPE@(sipCpp->getNodeValue(*a0));
-#endif     	
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipRes = copyValue(sipCpp->getNodeValue(*a0));
     } else {
-    	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
     }
 %End
 
 //===========================================================================================
 
-	void __setitem__(const tlp::node node, const @PROPERTY_NODE_TYPE@ &val) const;
+    void __setitem__(const tlp::node node, const @PROPERTY_NODE_TYPE@ &val) const;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE		
-     	sipCpp->setNodeValue(*a0, a1);
-#else
-		sipCpp->setNodeValue(*a0, *a1);
-#endif     	
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->setNodeValue(*a0, getValue(a1));
     } else {
-    	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-    } 
-%End
-
-//===========================================================================================
-
-	@PROPERTY_EDGE_TYPE@ __getitem__(const tlp::edge edge) const;
-%MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE		
-     	sipRes = sipCpp->getEdgeValue(*a0);
-#else
-		sipRes = new @PROPERTY_EDGE_TYPE@(sipCpp->getEdgeValue(*a0));
-#endif     	
-    } else {
-    	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
     }
-     
 %End
 
 //===========================================================================================
 
-	void __setitem__(const tlp::edge edge, const @PROPERTY_EDGE_TYPE@ &val) const;
+    @PROPERTY_EDGE_TYPE@ __getitem__(const tlp::edge edge) const;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {	
-#ifdef PROPERTY_BASE_TYPE	
-     	sipCpp->setEdgeValue(*a0, a1);
-#else
-		sipCpp->setEdgeValue(*a0, *a1);
-#endif     	
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipRes = copyValue(sipCpp->getEdgeValue(*a0));
     } else {
-    	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-    } 
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
+%End
+
+//===========================================================================================
+
+    void __setitem__(const tlp::edge edge, const @PROPERTY_EDGE_TYPE@ &val) const;
+%MethodCode
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->setEdgeValue(*a0, getValue(a1));
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End
 	
 //===========================================================================================	
 	
-	SIP_PYOBJECT __repr__() const;
+    SIP_PYOBJECT __repr__() const;
 %MethodCode
-	std::ostringstream oss;
-	oss << "<@PROPERTY_TYPE@ property " << sipCpp->getName() << ">";
-	std::string s = oss.str();
+    std::ostringstream oss;
+    oss << "<@PROPERTY_TYPE@ property " << sipCpp->getName() << ">";
+    std::string s = oss.str();
 #if PY_MAJOR_VERSION >= 3
     sipRes = PyUnicode_FromString(s.c_str());
 #else
@@ -269,59 +236,59 @@ Sets the value of a particular edge.
 	
 //===========================================================================================	
 	
-	virtual void erase(const tlp::node node) ;
+    virtual void erase(const tlp::node node) ;
 
 //===========================================================================================
 
-	virtual void erase(const tlp::edge edge) ;
+    virtual void erase(const tlp::edge edge) ;
 
 //===========================================================================================
 
-	virtual const std::string& getTypename() const ;
+    virtual const std::string& getTypename() const ;
 
 //===========================================================================================
 
-	const std::string& getName() const;
+    const std::string& getName() const;
 
 //===========================================================================================
 
-	virtual std::string getNodeDefaultStringValue() const ;
+    virtual std::string getNodeDefaultStringValue() const ;
 
 //===========================================================================================
 
-	virtual std::string getEdgeDefaultStringValue() const ;
+    virtual std::string getEdgeDefaultStringValue() const ;
 	
 //===========================================================================================
 
-	virtual std::string getNodeStringValue(const tlp::node node) const ;
+    virtual std::string getNodeStringValue(const tlp::node node) const ;
 
 //===========================================================================================
 
-	virtual std::string getEdgeStringValue(const tlp::edge edge) const ;
+    virtual std::string getEdgeStringValue(const tlp::edge edge) const ;
 
 //===========================================================================================
 
-	virtual bool setNodeStringValue(const tlp::node node, const std::string & strVal);
+    virtual bool setNodeStringValue(const tlp::node node, const std::string & strVal);
 	
 //===========================================================================================
 
-	virtual bool setEdgeStringValue(const tlp::edge edge, const std::string & strVal);
+    virtual bool setEdgeStringValue(const tlp::edge edge, const std::string & strVal);
 
 //===========================================================================================
 
-	virtual bool setAllNodeStringValue(const std::string & strVal);
+    virtual bool setAllNodeStringValue(const std::string & strVal);
 
 //===========================================================================================
 
-	virtual bool setAllEdgeStringValue(const std::string & strVal);
+    virtual bool setAllEdgeStringValue(const std::string & strVal);
 	
 //===========================================================================================
 
-	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const ;
+    virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const ;
 	
 //===========================================================================================
 
-	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const ;
+    virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const ;
 	
 //===========================================================================================
 
@@ -342,7 +309,6 @@ Copies the value hold by a property on a node to another node on this property.
 :param ifNotDefault: whether to ignore default-valuated nodes or not. Defaults to :const:`False`.
 :type ifNotDefault: boolean
 %End
-
 
 //===========================================================================================
 
@@ -398,11 +364,11 @@ public :
 
 //===========================================================================================
 
-	@VEC_PROPERTY_TYPE@VectorProperty (tlp::Graph *graph, std::string name="");
+    @VEC_PROPERTY_TYPE@VectorProperty (tlp::Graph *graph, std::string name="");
   	
 //===========================================================================================	
  
-	const std::vector<@CPP_TYPE@> getNodeDefaultValue();
+    const std::vector<@CPP_TYPE@> getNodeDefaultValue();
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeDefaultValue()
 
@@ -413,7 +379,7 @@ Returns the default list of values associated to the nodes.
 	
 //===========================================================================================	
 	
-	const std::vector<@CPP_TYPE@> getEdgeDefaultValue();
+    const std::vector<@CPP_TYPE@> getEdgeDefaultValue();
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeDefaultValue()
 
@@ -424,7 +390,7 @@ Returns the default list of values associated to the edges.
 
 //===========================================================================================
 
-	const std::vector<@CPP_TYPE@> getNodeValue(const tlp::node node);
+    const std::vector<@CPP_TYPE@> getNodeValue(const tlp::node node);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeValue(node)
 
@@ -437,16 +403,16 @@ Returns the list of values associated to a particular node.
 %End	
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getNodeValue(*a0));
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getNodeValue(*a0));
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End	
 
 //===========================================================================================
 
-	const std::vector<@CPP_TYPE@> getEdgeValue(const tlp::edge edge);
+    const std::vector<@CPP_TYPE@> getEdgeValue(const tlp::edge edge);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeValue(edge)
 
@@ -459,16 +425,16 @@ Returns the list of values associated to a particular edge.
 %End	
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getEdgeValue(*a0));
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getEdgeValue(*a0));
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End	
 
 //===========================================================================================
 
-	void setNodeValue(const tlp::node node, const std::vector<@CPP_TYPE@> &val);
+    void setNodeValue(const tlp::node node, const std::vector<@CPP_TYPE@> &val);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeValue(node, val)
 
@@ -482,16 +448,16 @@ Sets the list of values of a particular node.
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->setNodeValue(*a0, *a1);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->setNodeValue(*a0, *a1);
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End	
 
 //===========================================================================================
 
-	void setEdgeValue(const tlp::edge edge, const std::vector<@CPP_TYPE@> &val);
+    void setEdgeValue(const tlp::edge edge, const std::vector<@CPP_TYPE@> &val);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setEdgeValue(edge, val)
 
@@ -505,16 +471,16 @@ Sets the list of values of a particular edge.
 %End	
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->setEdgeValue(*a0, *a1);
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+            sipCpp->setEdgeValue(*a0, *a1);
+    } else {
+            sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End	
 
 //===========================================================================================
 
-	void setAllNodeValue(const std::vector<@CPP_TYPE@> &val);
+    void setAllNodeValue(const std::vector<@CPP_TYPE@> &val);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllNodeValue(val)
 
@@ -526,7 +492,7 @@ Sets the same list of values on the whole set of nodes.
 
 //===========================================================================================
 
-	void setAllEdgeValue(const std::vector<@CPP_TYPE@> &val);
+    void setAllEdgeValue(const std::vector<@CPP_TYPE@> &val);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllEdgeValue(val)
 
@@ -538,7 +504,7 @@ Sets the same list of values on the whole set of edges.
 	
 //===========================================================================================
 	
-	void setNodeEltValue(const tlp::node node, unsigned int index, const @CPP_TYPE@ &val);
+    void setNodeEltValue(const tlp::node node, unsigned int index, const @CPP_TYPE@ &val);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setNodeEltValue(node, index, val)
 
@@ -554,23 +520,19 @@ Sets the value in the list attached to a particular node at the given index.
 %End	
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		const std::vector<@CPP_TYPE@> &v = sipCpp->getNodeValue(*a0);
-		if (a1 < v.size()) {
-#ifdef PROPERTY_BASE_TYPE		
-			sipCpp->setNodeEltValue(*a0, a1, a2);
-#else
-			sipCpp->setNodeEltValue(*a0, a1, *a2);
-#endif			
-		} else {
-			std::ostringstream oss;
-			oss << "vector associated to node " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
-			PyErr_SetString(PyExc_Exception, oss.str().c_str());
-			sipIsErr = -1;
-		}	
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      const std::vector<@CPP_TYPE@> &v = sipCpp->getNodeValue(*a0);
+      if (a1 < v.size()) {
+        sipCpp->setNodeEltValue(*a0, a1, getValue(a2));
+      } else {
+        std::ostringstream oss;
+        oss << "vector associated to node " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
+        PyErr_SetString(PyExc_Exception, oss.str().c_str());
+        sipIsErr = -1;
+      }
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
@@ -590,28 +552,24 @@ Returns the value in the list attached to a particular node at the given index.
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		const std::vector<@CPP_TYPE@> &v = sipCpp->getNodeValue(*a0);
-		if (a1 < v.size()) {
-#ifdef PROPERTY_BASE_TYPE		
-			sipRes = sipCpp->getNodeEltValue(*a0, a1);
-#else
-			sipRes = new @CPP_TYPE@(sipCpp->getNodeEltValue(*a0, a1));
-#endif			
-		} else {
-			std::ostringstream oss;
-			oss << "vector associated to node " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
-			PyErr_SetString(PyExc_Exception, oss.str().c_str());
-			sipIsErr = -1;
-		}	
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      const std::vector<@CPP_TYPE@> &v = sipCpp->getNodeValue(*a0);
+      if (a1 < v.size()) {
+        sipRes = copyValue(sipCpp->getNodeEltValue(*a0, a1));
+      } else {
+        std::ostringstream oss;
+        oss << "vector associated to node " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
+        PyErr_SetString(PyExc_Exception, oss.str().c_str());
+        sipIsErr = -1;
+      }
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End  
   
 //===========================================================================================  
   
-  	void pushBackNodeEltValue(const tlp::node node, const @CPP_TYPE@& val);
+    void pushBackNodeEltValue(const tlp::node node, const @CPP_TYPE@& val);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.pushBackNodeEltValue(node, val)
 
@@ -625,20 +583,16 @@ Inserts a value at the end of the list attached to a particular node. The size o
 %End
 
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE	
-		sipCpp->pushBackNodeEltValue(*a0, a1);
-#else
-		sipCpp->pushBackNodeEltValue(*a0, *a1);
-#endif			
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->pushBackNodeEltValue(*a0, getValue(a1));
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End
  
 //=========================================================================================== 
  
-	void popBackNodeEltValue(const tlp::node node);
+    void popBackNodeEltValue(const tlp::node node);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.popBackNodeEltValue(node)
 
@@ -650,16 +604,16 @@ Removes the value at the end of the list (if not empty) attached to a particular
 %End	
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->popBackNodeEltValue(*a0);	
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->popBackNodeEltValue(*a0);
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End
 	
 //===========================================================================================	
 	
-	void resizeNodeValue(const tlp::node node, unsigned int size);
+    void resizeNodeValue(const tlp::node node, unsigned int size);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeNodeValue(node, size)
 
@@ -673,16 +627,16 @@ Resizes the list attached to a particular node. A default value will be assigned
 %End	
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->resizeNodeValue(*a0, a1);	
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->resizeNodeValue(*a0, a1);
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End
 	
 //===========================================================================================
 	
-	void resizeNodeValue(const tlp::node node, unsigned int size, @CPP_TYPE@ elt);
+    void resizeNodeValue(const tlp::node node, unsigned int size, @CPP_TYPE@ elt);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeNodeValue(node, size, val)
 
@@ -698,20 +652,16 @@ Resizes the list attached to a particular node. The value given in paramater wil
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE	
-		sipCpp->resizeNodeValue(*a0, a1, a2);
-#else
-		sipCpp->resizeNodeValue(*a0, a1, *a2);
-#endif			
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->resizeNodeValue(*a0, a1, getValue(a2));
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
 	
-	void setEdgeEltValue(const tlp::edge edge, unsigned int index, const @CPP_TYPE@ &val);
+    void setEdgeEltValue(const tlp::edge edge, unsigned int index, const @CPP_TYPE@ &val);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setEdgeEltValue(edge, index, val)
 
@@ -727,23 +677,19 @@ Sets the value in the list attached to a particular edge at the given index.
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		const std::vector<@CPP_TYPE@> &v = sipCpp->getEdgeValue(*a0);
-		if (a1 < v.size()) {
-#ifdef PROPERTY_BASE_TYPE		
-			sipCpp->setEdgeEltValue(*a0, a1, a2);
-#else
-			sipCpp->setEdgeEltValue(*a0, a1, *a2);
-#endif			
-		} else {
-			std::ostringstream oss;
-			oss << "vector associated to edge " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
-			PyErr_SetString(PyExc_Exception, oss.str().c_str());
-			sipIsErr = -1;
-		}	
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      const std::vector<@CPP_TYPE@> &v = sipCpp->getEdgeValue(*a0);
+      if (a1 < v.size()) {
+        sipCpp->setEdgeEltValue(*a0, a1, getValue(a2));
+      } else {
+        std::ostringstream oss;
+        oss << "vector associated to edge " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
+        PyErr_SetString(PyExc_Exception, oss.str().c_str());
+        sipIsErr = -1;
+      }
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End  
   
 //===========================================================================================  
@@ -763,28 +709,24 @@ Returns the value in the list attached to a particular edge at the given index.
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		const std::vector<@CPP_TYPE@> &v = sipCpp->getEdgeValue(*a0);
-		if (a1 < v.size()) {
-#ifdef PROPERTY_BASE_TYPE		
-			sipRes = sipCpp->getEdgeEltValue(*a0, a1);
-#else
-			sipRes = new @CPP_TYPE@(sipCpp->getEdgeEltValue(*a0, a1));
-#endif			
-		} else {
-			std::ostringstream oss;
-			oss << "vector associated to edge " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
-			PyErr_SetString(PyExc_Exception, oss.str().c_str());
-			sipIsErr = -1;
-		}	
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      const std::vector<@CPP_TYPE@> &v = sipCpp->getEdgeValue(*a0);
+      if (a1 < v.size()) {
+        sipRes = copyValue(sipCpp->getEdgeEltValue(*a0, a1));
+      } else {
+        std::ostringstream oss;
+        oss << "vector associated to edge " << a0->id << " for vector property \"" << sipCpp->getName() << "\" has a size of " << v.size() << " and the requested index is " << a1 ;
+        PyErr_SetString(PyExc_Exception, oss.str().c_str());
+        sipIsErr = -1;
+      }
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End  
 
 //===========================================================================================
 
-	void pushBackEdgeEltValue(const tlp::edge edge, const @CPP_TYPE@ &val);
+    void pushBackEdgeEltValue(const tlp::edge edge, const @CPP_TYPE@ &val);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.pushBackEdgeEltValue(edge, val)
 
@@ -798,20 +740,16 @@ Inserts a value at the end of the list attached to a particular edge. The size o
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE	
-		sipCpp->pushBackEdgeEltValue(*a0, a1);
-#else
-		sipCpp->pushBackEdgeEltValue(*a0, *a1);
-#endif			
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->pushBackEdgeEltValue(*a0, getValue(a1));
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End
   
 //=========================================================================================== 
   
-	void popBackEdgeEltValue(const tlp::edge edge);
+    void popBackEdgeEltValue(const tlp::edge edge);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.popBackEdgeEltValue(edge)
 
@@ -823,16 +761,16 @@ Removes the value at the end of the list (if not empty) attached to a particular
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->popBackEdgeEltValue(*a0);	
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->popBackEdgeEltValue(*a0);
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
   
-  	void resizeEdgeValue(const tlp::edge edge, unsigned int size);
+    void resizeEdgeValue(const tlp::edge edge, unsigned int size);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeEdgeValue(edge, size)
 
@@ -846,16 +784,16 @@ Resizes the list attached to a particular edge. A default value will be assigned
 %End
   	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->resizeEdgeValue(*a0, a1);	
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->resizeEdgeValue(*a0, a1);
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End  	
   	
 //===========================================================================================  	
   	
-	void resizeEdgeValue(const tlp::edge edge, unsigned int size, @CPP_TYPE@ val);
+    void resizeEdgeValue(const tlp::edge edge, unsigned int size, @CPP_TYPE@ val);
 %Docstring	
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeEdgeValue(edge, size, val)
 
@@ -871,130 +809,126 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 %End
 	
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-#ifdef PROPERTY_BASE_TYPE	
-		sipCpp->resizeEdgeValue(*a0, a1, a2);
-#else
-		sipCpp->resizeEdgeValue(*a0, a1, *a2);
-#endif			
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->resizeEdgeValue(*a0, a1, getValue(a2));
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End    
     
 //===========================================================================================    
     
-	std::vector<@CPP_TYPE@> __getitem__(const tlp::node node) const;
+    std::vector<@CPP_TYPE@> __getitem__(const tlp::node node) const;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-     	sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getNodeValue(*a0));
-     } else {
-     	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-     }
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getNodeValue(*a0));
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
 
-	void __setitem__(const tlp::node node, const std::vector<@CPP_TYPE@> &val) const;
+    void __setitem__(const tlp::node node, const std::vector<@CPP_TYPE@> &val) const;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-     	sipCpp->setNodeValue(*a0, *a1);
-     } else {
-     	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-     }
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->setNodeValue(*a0, *a1);
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
 
-	std::vector<@CPP_TYPE@> __getitem__(const tlp::edge edge) const;
+    std::vector<@CPP_TYPE@> __getitem__(const tlp::edge edge) const;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-     	sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getEdgeValue(*a0));
-     } else {
-     	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-     }
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipRes = new std::vector<@CPP_TYPE@>(sipCpp->getEdgeValue(*a0));
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
 
-	void __setitem__(const tlp::edge edge, const std::vector<@CPP_TYPE@> &val) const;
+    void __setitem__(const tlp::edge edge, const std::vector<@CPP_TYPE@> &val) const;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-     	sipCpp->setEdgeValue(*a0, *a1);
-     } else {
-     	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-     }
+    if (sipCpp->getGraph()->isElement(*a0)) {
+      sipCpp->setEdgeValue(*a0, *a1);
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+    }
 %End
 
 //===========================================================================================
 
-	SIP_PYOBJECT __repr__() const;
+    SIP_PYOBJECT __repr__() const;
 %MethodCode
-	std::ostringstream oss;
-	oss << "<@VEC_PROPERTY_TYPE@ vector property " << sipCpp->getName() << ">";
-	std::string s = oss.str();
+    std::ostringstream oss;
+    oss << "<@VEC_PROPERTY_TYPE@ vector property " << sipCpp->getName() << ">";
+    std::string s = oss.str();
 #if PY_MAJOR_VERSION >= 3
     sipRes = PyUnicode_FromString(s.c_str());
 #else
-	sipRes = PyString_FromString(s.c_str());
+    sipRes = PyString_FromString(s.c_str());
 #endif
 %End
 
 //===========================================================================================	
 	
-	virtual void erase(const tlp::node node) ;
+    virtual void erase(const tlp::node node) ;
 	
 //===========================================================================================
 
-	virtual void erase(const tlp::edge edge) ;
+    virtual void erase(const tlp::edge edge) ;
 
 //===========================================================================================
 
-	virtual const std::string& getTypename() const ;
+    virtual const std::string& getTypename() const ;
 
 //===========================================================================================
 
-	const std::string& getName() const;
+    const std::string& getName() const;
 
 //===========================================================================================
 
-	virtual std::string getNodeDefaultStringValue() const ;
+    virtual std::string getNodeDefaultStringValue() const ;
 	
 //===========================================================================================
 
-	virtual std::string getEdgeDefaultStringValue() const ;
+    virtual std::string getEdgeDefaultStringValue() const ;
 	
 //===========================================================================================
 
-	virtual std::string getNodeStringValue(const tlp::node node) const ;
+    virtual std::string getNodeStringValue(const tlp::node node) const ;
 
 //===========================================================================================
 
-	virtual std::string getEdgeStringValue(const tlp::edge edge) const ;
+    virtual std::string getEdgeStringValue(const tlp::edge edge) const ;
 
 //===========================================================================================
 
-	virtual bool setNodeStringValue(const tlp::node node, const std::string & val);
+    virtual bool setNodeStringValue(const tlp::node node, const std::string & val);
 
 //===========================================================================================
 
-	virtual bool setEdgeStringValue(const tlp::edge edge, const std::string & val);
+    virtual bool setEdgeStringValue(const tlp::edge edge, const std::string & val);
 
 //===========================================================================================
 
-	virtual bool setAllNodeStringValue(const std::string & val);
+    virtual bool setAllNodeStringValue(const std::string & val);
 
 //===========================================================================================
 
-	virtual bool setAllEdgeStringValue(const std::string & val);
+    virtual bool setAllEdgeStringValue(const std::string & val);
 
 //===========================================================================================
 
-	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const ;
+    virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const ;
 
 //===========================================================================================
 
-	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const ;
+    virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const ;
 	
 //===========================================================================================
 
