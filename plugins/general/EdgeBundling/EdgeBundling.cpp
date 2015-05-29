@@ -179,6 +179,12 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout, const 
   if (nBends.size() < 3)
     return;
 
+  // if source and target nodes are at the same position, don't set bends to avoid visual artifacts
+  // when rendering the graph
+  if (layout->getNodeValue(nBends.front()).dist(layout->getNodeValue(nBends.back())) < 1e-5) {
+    return;
+  }
+
   vector<Coord> bends(nBends.size() - 2);
   bool sens = true;
   int i = 1;
