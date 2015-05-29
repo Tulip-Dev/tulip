@@ -140,6 +140,7 @@ EdgeBundling::EdgeBundling(const PluginContext *context):Algorithm(context) {
   addInParameter<unsigned int>("max_thread", paramHelp[8], "0");
   addInParameter<bool>("edge_node_overlap", paramHelp[9], "false");
   addDependency("Voronoi diagram", "1.0");
+  addDependency("Equal Value", "1.1");
 }
 //============================================
 class SortNodes {
@@ -325,6 +326,8 @@ bool EdgeBundling::run() {
   std::vector<tlp::edge> removedEdges;
   tlp::SimpleTest::makeSimple(oriGraph, removedEdges);
 
+  std::vector<std::vector<tlp::node> > samePositionNodes;
+
   try {
     // Grid graph computation first step : generate quad-tree/octree
     if (layout3D) {
@@ -343,7 +346,42 @@ bool EdgeBundling::run() {
       }
     }
     else {
-      QuadTreeBundle::compute(graph, splitRatio, layout, size);
+      // Preprocess the graph to ensure that two nodes does not have the same position
+      // otherwise the quad tree computation will fail
+
+      // First create a clone subgraph
+      Graph *workGraph = graph->addCloneSubGraph();
+
+      // Apply the 'Equal Value' algorithm on the input layout property
+      DataSet equalValueParams;
+      equalValueParams.set("Property", layout);
+      string err;
+      workGraph->applyAlgorithm("Equal Value", err, &equalValueParams);
+
+      // Iterate on the created clusters
+      Graph *sg = NULL;
+      stableForEach(sg, workGraph->getSubGraphs()) {
+        // At least two nodes have the same position
+        if (sg->numberOfNodes() > 1) {
+          std::vector<tlp::node> nodes;
+          tlp::node n;
+          int i = 0;
+          // keep one of the node in the clone subgraph, remove the others from it
+          // but keep a list of those nodes having the same position
+          stableForEach(n, sg->getNodes()) {
+            if (i++ > 0) {
+              workGraph->delNode(n);
+            }
+            nodes.push_back(n);
+          }
+          samePositionNodes.push_back(nodes);
+        }
+        workGraph->delSubGraph(sg);
+      }
+
+      // Execute the quad tree computation on cleaned subgraph
+      QuadTreeBundle::compute(workGraph, splitRatio, layout, size);
+      graph->delSubGraph(workGraph);
     }
   }
   catch(tlp::TulipException& e) {
@@ -380,6 +418,42 @@ bool EdgeBundling::run() {
 
   fixEdgeType();
 
+  //remove all original graph edges
+  //==========================================================
+  gridGraph = graph->getSubGraph("Voronoi");
+  gridGraph->setName("Grid Graph");
+  edge e;
+  stableForEach(e, gridGraph->getEdges()) {
+    if (ntype->getEdgeValue(e) == 1) {
+      gridGraph->delEdge(e);
+    }
+  }
+
+  // If there was nodes at the same position, the voronoi diagram process
+  // only considers one of them when connecting original graph nodes to
+  // their enclosing cell vertices.
+  // So connect the other ones to the enclosing cell vertices too
+  // in order for the shortest path computation to work
+  for (size_t i = 0 ; i < samePositionNodes.size() ; ++i) {
+    tlp::node rep;
+    // get the nodes that has been connected to the voronoi cell vertices
+    for (size_t j = 0 ; j < samePositionNodes[i].size() ; ++j) {
+      if (gridGraph->deg(samePositionNodes[i][j]) > 0) {
+        rep = samePositionNodes[i][j];
+        break;
+      }
+    }
+    // connect the other nodes to the enclosing voronoi cell vertices
+    tlp::node n;
+    forEach(n, gridGraph->getOutNodes(rep)) {
+      for (size_t j = 0 ; j < samePositionNodes[i].size() ; ++j) {
+        if (samePositionNodes[i][j] == rep) continue;
+        tlp::edge e = gridGraph->addEdge(samePositionNodes[i][j], n);
+        ntype->setEdgeValue(e, 2);
+      }
+    }
+  }
+
   // Initialization of grid edges weights
   //==========================================================
   MutableContainer<double> mWeights;
@@ -401,17 +475,6 @@ bool EdgeBundling::run() {
     }
   }
 
-
-  //remove all original graph edges
-  //==========================================================
-  gridGraph = graph->getSubGraph("Voronoi");
-  gridGraph->setName("Grid Graph");
-  edge e;
-  stableForEach(e, gridGraph->getEdges()) {
-    if (ntype->getEdgeValue(e) == 1) {
-      gridGraph->delEdge(e);
-    }
-  }
 
   //==========================================================
 
