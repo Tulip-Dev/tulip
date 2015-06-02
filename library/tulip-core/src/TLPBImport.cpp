@@ -427,7 +427,7 @@ bool TLPBImport::importGraph() {
 
             if (pnViewProp) {
               std::string value;
-              StringType::readb(*is, value);
+              StringType::read(*is, value);
               // if needed replace symbolic path by real path
               size_t pos = value.find("TulipBitmapDir/");
 
@@ -484,7 +484,7 @@ bool TLPBImport::importGraph() {
 
               if (pnViewProp) {
                 std::string value;
-                StringType::readb(*is, value);
+                StringType::read(*is, value);
                 // if needed replace symbolic path by real path
                 size_t pos = value.find("TulipBitmapDir/");
 
