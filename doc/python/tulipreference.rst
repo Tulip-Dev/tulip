@@ -399,6 +399,12 @@ Create/Access graph properties
 
 .. automethod:: tulip::tlp.Graph.getProperties
 
+.. automethod:: tulip::tlp.Graph.getLocalObjectProperties
+
+.. automethod:: tulip::tlp.Graph.getInheritedObjectProperties
+
+.. automethod:: tulip::tlp.Graph.getObjectProperties
+
 Application of algorithms
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -438,9 +444,9 @@ Meta-nodes management
 
 .. automethod:: tulip::tlp.Graph.createMetaNode
 
-.. automethod:: tulip::tlp.Graph.createMetaNodes
-
 .. automethod:: tulip::tlp.Graph.createMetaNode
+
+.. automethod:: tulip::tlp.Graph.createMetaNodes
 
 .. automethod:: tulip::tlp.Graph.openMetaNode
 

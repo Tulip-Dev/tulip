@@ -161,6 +161,9 @@ def registerPluginOfGroup(pluginClassName, pluginName, author, date, info, relea
                                          "__init__": (lambda self: initFactory(self)), \
                                          "createPluginObject" : (lambda self, context: createPlugin(context, pluginModule, pluginClassName, pluginName, author, date, info, release, group))} \
                                          )()
+        
+        sys.stdout.write('Tulip Python Plug-in "' + pluginName + '" loaded, Author: "' + author + '", Date: "' + date + '", Release: "' + release + '"\n')   
+
     except:
         sys.stdout.write("There was an error when registering Python plugin named \"" + pluginName + "\". See stack trace below.\n")
         raise

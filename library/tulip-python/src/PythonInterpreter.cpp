@@ -184,7 +184,6 @@ extern "C" {
 
       if (QApplication::instance()) {
         PythonInterpreter::getInstance()->initConsoleOutput();
-        PythonInterpreter::getInstance()->loadTulipPythonPluginsFromDefaultDirs();
       }
 
       break;
@@ -346,13 +345,6 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       initconsoleutils();
       inittuliputils();
 
-      runString("import sys;"
-                "import consoleutils;"
-                "import tuliputils;"
-                "sys.stdout = None;"
-                "sys.stderr = None;"
-                "sys.stdin = None\n");
-
       // Try to import site package manually otherwise Py_InitializeEx can crash if Py_NoSiteFlag is not set
       // and if the site module is not present on the host system
       // Disable output while trying to import the module to not confuse the user
@@ -365,14 +357,19 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       runString("from tulipogl import *");
       runString("from tulipgui import *");
 
-#ifndef _MSC_VER
-      loadTulipPythonPluginsFromDefaultDirs();
-#endif
+      // When importing the tulip module, Tulip Python plugins and
+      // startup scripts will be possibly loaded and other Python modules can be loaded as a side effect.
+      // Some external modules (like numpy) overrides the SIGINT handler at import,
+      // so reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
+      setDefaultSIGINTHandler();
 
       runString(printObjectDictFunction);
       runString(printObjectClassFunction);
 
-      runString("sys.stdout = consoleutils.ConsoleOutput(False);"
+      runString("import sys;"
+                "import tuliputils;"
+                "import consoleutils;"
+                "sys.stdout = consoleutils.ConsoleOutput(False);"
                 "sys.stderr = consoleutils.ConsoleOutput(True);"
                 "sys.stdin = consoleutils.ConsoleInput()\n");
 
@@ -458,53 +455,6 @@ void PythonInterpreter::initConsoleOutput() {
   consoleOuputHandler = new ConsoleOutputHandler();
   consoleOuputEmitter = new ConsoleOutputEmitter();
   QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
-}
-
-void PythonInterpreter::loadTulipPythonPluginsFromDefaultDirs() {
-  loadTulipPythonPluginsFromDir(pythonPluginsPath);
-  loadTulipPythonPluginsFromDir(pythonPluginsPathHome);
-}
-
-bool PythonInterpreter::loadTulipPythonPlugin(const QString &pluginPath) {
-  QFileInfo fileInfo(pluginPath);
-
-  if (!fileInfo.exists())
-    return false;
-
-  QString pluginCode;
-  QFile file(fileInfo.absoluteFilePath());
-  file.open(QIODevice::ReadOnly | QIODevice::Text);
-
-  while (!file.atEnd()) {
-    pluginCode += file.readLine();
-  }
-
-  file.close();
-
-  if (pluginCode.contains("tulipplugins.register")) {
-    QString moduleName = fileInfo.fileName();
-    moduleName.replace(".py", "");
-    addModuleSearchPath(fileInfo.absolutePath());
-    return importModule(moduleName);
-  }
-
-  return false;
-}
-
-void PythonInterpreter::loadTulipPythonPluginsFromDir(const QString &pluginsPath) {
-
-  QDir pythonPluginsDir(pluginsPath);
-  QStringList nameFilter;
-  nameFilter << "*.py";
-  QFileInfoList fileList = pythonPluginsDir.entryInfoList(nameFilter);
-
-  for (int i = 0 ; i < fileList.size() ; ++i) {
-    loadTulipPythonPlugin(fileList.at(i).absoluteFilePath());
-  }
-
-  // some external modules (like numpy) overrides the SIGINT handler at import
-  // reinstall the default one, otherwise Tulip can not be interrupted by hitting Ctrl-C in a console
-  setDefaultSIGINTHandler();
 }
 
 bool PythonInterpreter::interpreterInit() {
