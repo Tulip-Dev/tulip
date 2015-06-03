@@ -113,8 +113,7 @@ Loads C++ and Python plugins installed in a specific directory.
 Since Tulip 4.8, the loading of plugins is done recursively,
 each subdirectory will be visited to search for plugins to load.
 
-:param pluginsDir: the root directory path to recursively search for python files (file extension: .py) or shared libraries containing the Tulip plugin
-(file extension : .so on linux, .dylib on mac, .dll on windows)
+:param pluginsDir: the root directory path to recursively search for python files (file extension: .py) or shared libraries containing the Tulip plugin (file extension : .so on linux, .dylib on mac, .dll on windows)
 :type filename: string
 :rtype: boolean
 %End
