@@ -34,6 +34,7 @@ class GraphPerspectiveLogger: public QFrame {
   QtMsgType _logSeverity;
   unsigned int _logCount;
   Ui::GraphPerspectiveLogger* _ui;
+  bool _pythonOutput;
 
 public:
   GraphPerspectiveLogger(QWidget* parent = NULL);

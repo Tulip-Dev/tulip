@@ -22,7 +22,8 @@
 #include "ui_GraphPerspectiveLogger.h"
 #include <iostream>
 
-GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent): QFrame(parent), _logSeverity(QtDebugMsg), _logCount(0), _ui(new Ui::GraphPerspectiveLogger) {
+GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
+  QFrame(parent), _logSeverity(QtDebugMsg), _logCount(0), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
   _ui->setupUi(this);
   setWindowFlags(Qt::Popup);
   connect(_ui->clearButton,SIGNAL(clicked()),this,SLOT(clear()));
@@ -72,7 +73,15 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
     _logSeverity = type;
 
   _logCount++;
-  _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), msg));
+  if (msg.startsWith("[Python")) {
+      // remove quotes around message added by Qt
+     QString msgClean = msg.mid(14).mid(2, msg.length()-17);
+    _ui->listWidget->addItem(new QListWidgetItem(QIcon(":/tulip/graphperspective/icons/16/python.png"), msgClean));
+    _pythonOutput = true;
+  } else {
+    _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), msg));
+    _pythonOutput = false;
+  }
 }
 #else
 void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
@@ -97,7 +106,11 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
 #endif
 
 QPixmap GraphPerspectiveLogger::icon() {
-  return QPixmap(iconForType(_logSeverity));
+  if (!_pythonOutput) {
+    return QPixmap(iconForType(_logSeverity));
+  } else {
+    return QPixmap(":/tulip/graphperspective/icons/16/python.png");
+  }
 }
 
 

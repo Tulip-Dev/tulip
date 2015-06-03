@@ -793,12 +793,9 @@ void PythonInterpreter::setConsoleWidget(QAbstractScrollArea *console) {
 }
 
 void PythonInterpreter::resetConsoleWidget() {
-  if (consoleOuputEmitter)
-    consoleOuputEmitter->setConsoleWidget(NULL);
-
-  if (_defaultConsoleWidget) {
+  if (consoleOuputEmitter) {
     consoleOuputEmitter->setOutputActivated(true);
-    consoleOuputEmitter->setConsoleWidget(_defaultConsoleWidget);
+    consoleOuputEmitter->setConsoleWidget(NULL);
   }
 }
 
@@ -1037,12 +1034,7 @@ void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) 
   bool textOutput = false;
 
   if (consoleOuputEmitter) {
-    if (consoleOuputEmitter->consoleWidget()) {
-      consoleOuputEmitter->sendOutputToConsole(output, stdErr);
-    }
-    else {
-      textOutput = true;
-    }
+    consoleOuputEmitter->sendOutputToConsole(output, stdErr);
   }
   else {
     textOutput = true;
