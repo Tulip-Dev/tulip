@@ -111,10 +111,17 @@ ENDIF(WIN32)
 TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${LibTulipCoreName})
 TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${PYTHON_LIBRARY})
 
+IF(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibTulipCorePythonBindingsName}
         RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python
         LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python
         ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
+ELSE(NOT PYTHON_DIST_PACKAGE)
+INSTALL(TARGETS ${LibTulipCorePythonBindingsName}
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
+ENDIF(NOT PYTHON_DIST_PACKAGE)
 
 ADD_CUSTOM_COMMAND(TARGET ${LibTulipCorePythonBindingsName}
                    POST_BUILD

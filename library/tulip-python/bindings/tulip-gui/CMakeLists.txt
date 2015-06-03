@@ -53,10 +53,18 @@ ENDIF(WIN32)
 
 TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipPythonName} ${PYTHON_LIBRARY} ${QT_LIBRARIES} )
 
+
+IF(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibTulipGUIPythonBindingsName}
         RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python
         LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python
         ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
+ELSE(NOT PYTHON_DIST_PACKAGE)
+INSTALL(TARGETS ${LibTulipGUIPythonBindingsName}
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
+ENDIF(NOT PYTHON_DIST_PACKAGE)
 
 ADD_CUSTOM_COMMAND(
   TARGET ${LibTulipGUIPythonBindingsName}
