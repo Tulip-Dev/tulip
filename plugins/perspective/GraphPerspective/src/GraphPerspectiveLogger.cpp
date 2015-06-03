@@ -85,14 +85,16 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
 }
 #else
 void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
+
+  QString qmsg(msg);
   // on some windows systems
   // "No errors." messages may be logged coming from QGLShader::link
   // we try to avoid them
-  if (QString(msg).indexOf("No errors.") != -1)
+  if (qmsg.indexOf("No errors.") != -1)
     return;
 
   if (type == QtFatalMsg) {
-    std::cerr<<msg<<std::endl;
+    std::cerr << qmsg.toUtf8().data() << std::endl;
     abort();
   }
 
@@ -100,8 +102,15 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
     _logSeverity = type;
 
   _logCount++;
-  _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)),
-                           QString::fromUtf8(msg)));
+  if (qmsg.startsWith("[Python")) {
+      // remove quotes around message added by Qt
+     QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
+    _ui->listWidget->addItem(new QListWidgetItem(QIcon(":/tulip/graphperspective/icons/16/python.png"), msgClean));
+    _pythonOutput = true;
+  } else {
+    _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), qmsg));
+    _pythonOutput = false;
+  }
 }
 #endif
 
