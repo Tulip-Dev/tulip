@@ -167,6 +167,18 @@ void GraphPerspective::log(QtMsgType type, const QMessageLogContext &context, co
 #else
 
 void graphPerspectiveLogger(QtMsgType type, const char* msg) {
+  QString qmsg = msg;
+  if (qmsg.startsWith("[Python")) {
+    // remove quotes around message added by Qt
+    QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
+    if (qmsg.startsWith("[PythonStdOut]")) {
+      std::cout << msgClean.toStdString() << std::endl;
+    } else {
+      std::cerr << msgClean.toStdString() << std::endl;
+    }
+  } else {
+    std::cerr << qmsg.toStdString() << std::endl;
+  }
   static_cast<GraphPerspective*>(Perspective::instance())->log(type,msg);
 }
 
