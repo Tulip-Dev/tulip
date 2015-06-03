@@ -154,16 +154,19 @@ public:
         unsigned int iter = 0;
         double minN = entryMetric->getNodeDoubleMin(graph);
         double maxN = entryMetric->getNodeDoubleMax(graph);
+
         if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
-            maxN = log(1+maxN-minN);
+          maxN = log(1+maxN-minN);
         }
 
         node n;
         forEach(n, graph->getNodes()) {
           double dd=entryMetric->getNodeDoubleValue(n);
+
           if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
             result->setNodeValue(n, getColor(log(dd+(1-minN)), maxN));
-          } else {
+          }
+          else {
             result->setNodeValue(n, getColor(dd-minN, maxN-minN));
           }
 
@@ -184,6 +187,7 @@ public:
         unsigned int iter = 0;
         double minE = entryMetric->getEdgeDoubleMin(graph);
         double maxE = entryMetric->getEdgeDoubleMax(graph);
+
         if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
           maxE = log(1+maxE-minE);
         }
@@ -191,9 +195,11 @@ public:
         edge e;
         forEach(e, graph->getEdges()) {
           double dd=entryMetric->getEdgeDoubleValue(e);
+
           if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
             result->setEdgeValue(e, getColor(log(dd+(1-minE)), maxE));
-          } else {
+          }
+          else {
             result->setEdgeValue(e, getColor(dd-minE, maxE-minE));
           }
 
