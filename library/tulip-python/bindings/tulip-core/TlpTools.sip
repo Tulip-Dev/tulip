@@ -102,29 +102,43 @@ by calling the :func:`tlp.initTulipLib` function.
 
 //=====================================================================
 
-void loadPluginsFromDir(const std::string &pluginsDir, tlp::PluginLoader *plug=0);
+void loadPluginsFromDir(const std::string &pluginsDir, tlp::PluginLoader *plug=0, bool loadPythonPlugins=true);
 %Docstring
 tlp.loadPluginsFromDir(pluginsDir)
 
 .. versionadded:: 4.2
 
 Loads C++ and Python plugins installed in a specific directory.
+
+Since Tulip 4.8, the loading of plugins is done recursively,
+each subdirectory will be visited to search for plugins to load.
+
+:param pluginsDir: the root directory path to recursively search for python files (file extension: .py) or shared libraries containing the Tulip plugin
+(file extension : .so on linux, .dylib on mac, .dll on windows)
+:type filename: string
+:rtype: boolean
 %End
 
 %MethodCode
     std::string oldTlpPluginsPath = tlp::TulipPluginsPath;
     tlp::TulipPluginsPath = *a0;
+    std::string pythonPluginLoader;
     if (a1) {
-        tlp::PluginLibraryLoader::loadPlugins(a1);
+      tlp::PluginLibraryLoader::loadPlugins(a1);
+      // TODO : wrap the plugin loader C++ instance and pass it over to Python
+      pythonPluginLoader = "None";
     } else {
-        tlp::PluginLoaderTxt pluginLoader;
-        tlp::PluginLibraryLoader::loadPlugins(&pluginLoader);
+      tlp::PluginLoaderTxt pluginLoader;
+      tlp::PluginLibraryLoader::loadPlugins(&pluginLoader);
+      pythonPluginLoader = "tlp.PluginLoaderTxt()";
     }
     tlp::TulipPluginsPath = oldTlpPluginsPath;
-    std::string importPythonPlugins = "loadTulipPythonPluginsFromDir(\"";
-    importPythonPlugins += (*a0 + "\")");
-    PyObject *pyRet = evalPythonStatement(importPythonPlugins);
-    Py_XDECREF(pyRet);
+    if (a2) {
+      std::string importPythonPlugins = "loadTulipPluginsFromDir(\"";
+      importPythonPlugins += (*a0 + "\", False, " + pythonPluginLoader + ")");
+      PyObject *pyRet = evalPythonStatement(importPythonPlugins);
+      Py_XDECREF(pyRet);
+    }
 %End
 
 //=====================================================================
@@ -136,7 +150,7 @@ tlp.loadPlugin(filename)
 Loads a C++ plugin or a Python plugin from a specific file (shared library or Python source file).
 Returns :const:`True` if the plugin was correctly loaded.
 
-:param filename: the path to the shared library containing the Tulip plugin (file extension : .so on linux, .dylib on mac, .dll on windows)
+:param filename: the path to the the python file (file extension: .py) or shared library containing the Tulip plugin (file extension : .so on linux, .dylib on mac, .dll on windows)
 :type filename: string
 :rtype: boolean
 %End
@@ -144,12 +158,12 @@ Returns :const:`True` if the plugin was correctly loaded.
 %MethodCode
     std::string ext = a0->substr(a0->length()-3);
     if (ext != ".py") {
-        if (a1) {
-            sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, a1);
-        } else {
-            tlp::PluginLoaderTxt pluginLoader;
-            sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, &pluginLoader);
-        }
+      if (a1) {
+          sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, a1);
+      } else {
+          tlp::PluginLoaderTxt pluginLoader;
+          sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, &pluginLoader);
+      }
     } else {
         std::string importPythonPlugin = "loadTulipPythonPlugin(\"";
         importPythonPlugin += (*a0 + "\")");

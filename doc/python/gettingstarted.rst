@@ -225,3 +225,29 @@ The path to the Tulip binary is given below according to your system:
         * Linux and Windows : <tulip_install_dir>/bin
 
         * Mac OS : <tulip_install_dir>/Contents/MacOS
+
+Customizing the Python environment
+----------------------------------
+
+Since Tulip 4.8, it is possible to customize the Python environment the first time the :mod:`tulip` module
+is imported through the use of a startup scripts hook mechanism.
+
+For instance, that feature could be used to :
+
+        * modify the list of Python import paths, in order to load modules not located in standard directories from then
+
+        * load Tulip plugins not located in default plugins folders
+
+        * add new Python functions and classes to the environment that will be available each time the tulip module is imported
+
+When the tulip module is imported from the first time in the current Python session, the content of the following directories
+will be scan for Python files (.py extension) :
+
+        * <tulip_install_dir>/lib/tulip/python/startup
+
+        * <home_dir>/.Tulip-X.Y/python/startup
+
+Then, for each Python file found, its content will be read and executed in the context of the Python main module
+(the file will not be imported as a Python module).
+
+
