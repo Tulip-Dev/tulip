@@ -71,12 +71,6 @@ public :
 
   bool interpreterInit() ;
 
-  bool loadTulipPythonPlugin(const QString &pluginPath);
-
-  void loadTulipPythonPluginsFromDir(const QString &pluginsPath);
-
-  void loadTulipPythonPluginsFromDefaultDirs();
-
   bool importModule(const QString &moduleName);
 
   bool registerNewModuleFromString(const QString &moduleName, const QString &moduleSrcCode);

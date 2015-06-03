@@ -144,7 +144,17 @@ void GraphPerspective::addRecentDocument(const QString& path) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
-  std::cerr << msg.toStdString() << std::endl;
+  if (msg.startsWith("[Python")) {
+    // remove quotes around message added by Qt
+    QString msgClean = msg.mid(14).mid(2, msg.length()-17);
+    if (msg.startsWith("[PythonStdOut]")) {
+      std::cout << msgClean.toStdString() << std::endl;
+    } else {
+      std::cerr << msgClean.toStdString() << std::endl;
+    }
+  } else {
+    std::cerr << msg.toStdString() << std::endl;
+  }
   static_cast<GraphPerspective*>(Perspective::instance())->log(type, context, msg);
 }
 
@@ -376,9 +386,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
   _pythonPanel->setModel(_graphs);
   _developFrame->setProject(_project);
-  _pythonPanel->setPanelButton(_ui->pythonButton);
   tlp::PluginLister::instance()->addListener(this);
-  PythonInterpreter::getInstance()->setDefaultConsoleWidget(_pythonPanel->consoleWidget());
 
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");

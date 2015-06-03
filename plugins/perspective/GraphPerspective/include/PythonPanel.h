@@ -49,10 +49,6 @@ public :
   ~PythonPanel();
   void setModel(tlp::GraphHierarchiesModel* model);
 
-  void setPanelButton(OutputPanelButton *button);
-
-  QPlainTextEdit *consoleWidget();
-
 protected:
 
   void dragEnterEvent(QDragEnterEvent *);
@@ -61,17 +57,6 @@ protected:
 private slots:
 
   void graphComboIndexChanged();
-
-  void clearConsole();
-
-  void newOutputInConsole();
-
-  void stopButtonAnimation();
-
-private:
-
-  void startButtonAnimation();
-
 };
 
 #endif // PYTHONPANEL_H

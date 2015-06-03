@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QTime>
 #include <QScrollBar>
+#include <QDebug>
 
 #include <iostream>
 
@@ -44,8 +45,14 @@ public slots :
 
   void writeToConsole(QAbstractScrollArea *consoleWidget, const QString &output, bool errorOutput) {
 
-    if (!consoleWidget)
+    if (!consoleWidget) {
+      if (!errorOutput) {
+        qDebug() << "[PythonStdOut]" << output;
+      } else {
+        qWarning() << "[PythonStdErr]" << output;
+      }
       return;
+    }
 
     QTextBrowser *textBrowser = dynamic_cast<QTextBrowser*>(consoleWidget);
     QPlainTextEdit *textEdit = dynamic_cast<QPlainTextEdit*>(consoleWidget);
@@ -78,7 +85,7 @@ public slots :
       cursor = textBrowser->textCursor();
     }
 
-    cursor.insertText(output, formt);
+    cursor.insertText(output+'\n', formt);
 
     if (textBrowser) {
       QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
