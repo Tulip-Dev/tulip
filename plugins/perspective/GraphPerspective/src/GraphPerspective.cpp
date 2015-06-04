@@ -147,14 +147,18 @@ void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, c
   if (msg.startsWith("[Python")) {
     // remove quotes around message added by Qt
     QString msgClean = msg.mid(14).mid(2, msg.length()-17);
+
     if (msg.startsWith("[PythonStdOut]")) {
       std::cout << msgClean.toStdString() << std::endl;
-    } else {
+    }
+    else {
       std::cerr << msgClean.toStdString() << std::endl;
     }
-  } else {
+  }
+  else {
     std::cerr << msg.toStdString() << std::endl;
   }
+
   static_cast<GraphPerspective*>(Perspective::instance())->log(type, context, msg);
 }
 
@@ -168,17 +172,22 @@ void GraphPerspective::log(QtMsgType type, const QMessageLogContext &context, co
 
 void graphPerspectiveLogger(QtMsgType type, const char* msg) {
   QString qmsg = msg;
+
   if (qmsg.startsWith("[Python")) {
     // remove quotes around message added by Qt
     QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
+
     if (qmsg.startsWith("[PythonStdOut]")) {
       std::cout << msgClean.toStdString() << std::endl;
-    } else {
+    }
+    else {
       std::cerr << msgClean.toStdString() << std::endl;
     }
-  } else {
+  }
+  else {
     std::cerr << qmsg.toStdString() << std::endl;
   }
+
   static_cast<GraphPerspective*>(Perspective::instance())->log(type,msg);
 }
 

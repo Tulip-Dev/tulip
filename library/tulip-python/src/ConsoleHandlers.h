@@ -48,9 +48,11 @@ public slots :
     if (!consoleWidget) {
       if (!errorOutput) {
         qDebug() << "[PythonStdOut]" << output;
-      } else {
+      }
+      else {
         qWarning() << "[PythonStdErr]" << output;
       }
+
       return;
     }
 

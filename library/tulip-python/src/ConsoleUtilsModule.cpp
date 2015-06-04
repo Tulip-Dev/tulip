@@ -102,9 +102,11 @@ consoleutils_ConsoleOutput_write(PyObject *self, PyObject *o) {
       currentConcatOutput += output;
 
       QStringList lines = currentConcatOutput.split('\n');
+
       for (int i = 0 ; i < lines.count() - 1 ; ++i) {
         PythonInterpreter::getInstance()->sendOutputToConsole(lines[i], reinterpret_cast<consoleutils_ConsoleOutput *>(self)->stderrflag);
       }
+
       currentConcatOutput = lines[lines.size() - 1];
     }
 
