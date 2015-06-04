@@ -73,12 +73,14 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
     _logSeverity = type;
 
   _logCount++;
+
   if (msg.startsWith("[Python")) {
-      // remove quotes around message added by Qt
-     QString msgClean = msg.mid(14).mid(2, msg.length()-17);
+    // remove quotes around message added by Qt
+    QString msgClean = msg.mid(14).mid(2, msg.length()-17);
     _ui->listWidget->addItem(new QListWidgetItem(QIcon(":/tulip/graphperspective/icons/16/python.png"), msgClean));
     _pythonOutput = true;
-  } else {
+  }
+  else {
     _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), msg));
     _pythonOutput = false;
   }
@@ -87,6 +89,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
 void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
 
   QString qmsg(msg);
+
   // on some windows systems
   // "No errors." messages may be logged coming from QGLShader::link
   // we try to avoid them
@@ -102,12 +105,14 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
     _logSeverity = type;
 
   _logCount++;
+
   if (qmsg.startsWith("[Python")) {
-      // remove quotes around message added by Qt
-     QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
+    // remove quotes around message added by Qt
+    QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
     _ui->listWidget->addItem(new QListWidgetItem(QIcon(":/tulip/graphperspective/icons/16/python.png"), msgClean));
     _pythonOutput = true;
-  } else {
+  }
+  else {
     _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), qmsg));
     _pythonOutput = false;
   }
@@ -117,7 +122,8 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
 QPixmap GraphPerspectiveLogger::icon() {
   if (!_pythonOutput) {
     return QPixmap(iconForType(_logSeverity));
-  } else {
+  }
+  else {
     return QPixmap(":/tulip/graphperspective/icons/16/python.png");
   }
 }
