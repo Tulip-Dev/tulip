@@ -28,7 +28,7 @@ namespace tlp {
  * @brief Interface all numerical properties.
  * Property values are always returned as double
  **/
-class NumericProperty : public PropertyInterface {
+class TLP_SCOPE NumericProperty : public PropertyInterface {
 public:
   /**
    * @brief Returns the value associated with the node n in this property.
