@@ -547,7 +547,9 @@ const char * paramHelp[] = {
  */
 class GMLImport:public ImportModule {
 public:
-  PLUGININFORMATION("GML","Auber","04/07/2001","Imports a new graph from a file (.gml) in the GML input format (used by Graphlet).","1.1","File")
+  PLUGININFORMATION("GML","Auber","04/07/2001",
+		    "Imports a new graph from a file (.gml) in the GML input format (used by Graphlet).<br/>See <b>www.infosun.fmi.uni-passau.de/Graphlet/GML/</b> for details.",
+		    "1.1","File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("gml");

@@ -85,7 +85,32 @@ const char * paramHelp[] = {
  */
 class AdjacencyMatrixImport:public ImportModule {
 public:
-  PLUGININFORMATION("Adjacency Matrix", "Auber David", "05/09/2008","Imports a graph from a file coding an adjacency matrix.","1.2","File")
+  PLUGININFORMATION("Adjacency Matrix", "Auber David", "05/09/2008",
+		    "Imports a graph from a file coding an adjacency matrix.<br/>File format:<br/>\
+The input format of this plugin is an ascii file where each line represents a row of the matrix.\
+In each row, cells must be separated by a space.<br/>Let M(i,j) be a cell of the matrix :<br/>\
+     - if i==j we define the value of a node.<br/>\
+     - if i!=j  we define a directed edge between node[i] and node[j]<br/>\
+If M(i,j) is real value (0, .0, -1, -1.0), it is stored in the viewMetric property of the graph.<br/>\
+If M(i,j) is a string, it is stored in the viewLabel property of the graph.<br/>\
+Use & to set the viewMetric and viewLabel properties of a node or edge in the same time.<br/>\
+If M(i,j) == @ an edge will be created without value<br/>\
+If M(i,j) == # no edge will be created between node[i] and node[j]<br/>\
+EXAMPLE 1 :<br/>\
+A<br/>\
+# B<br/>\
+# # C<br/>\
+Defines a graph with 3 nodes (with labels A B C) and without edge.<br/>\
+EXAMPLE 2 :<br/>\
+A<br/>\
+@ B<br/>\
+@ @ C<br/>\
+Defines a simple complete graph with 3 nodes (with labels A B C) and no label (or value) on its edges<br/>\
+EXAMPLE 3 :<br/>\
+A # E & 5<br/>\
+@ B<br/># @ C<br/>\
+Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E and has the value 5",
+		    "1.2","File")
   AdjacencyMatrixImport(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<string>("file::filename",paramHelp[0],"");
   }
