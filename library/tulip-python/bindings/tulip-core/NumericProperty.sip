@@ -205,6 +205,94 @@ An uniform quantification tries to separate the edges in n classes of equivalent
 
 .. warning:: All previous values on edges will be erased and replaced by the id of the class they belong to.
 %End
+
+
+//===========================================================================================
+
+ tlp::Iterator<tlp::node>* getSortedNodes(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+%Docstring
+tlp.NumericProperty.getSortedNodes([subgraph=None, ascendingOrder=True])
+
+.. versionadded:: 4.8
+
+Gets an iterator sorting nodes according to their values in that numeric property.
+
+:param subgraph: If provided, returns an iterator on the subset of nodes defined by that subgraph
+:type subgraph: :class:`tlp.Graph`
+:param ascendingOrder: defines the sort ordering (ascending or descending)
+:type ascendingOrder: boolean
+:rtype: a Tulip iterator on :class:`tlp.node` objects
+ %End
+
+//===========================================================================================
+
+ tlp::Iterator<tlp::edge>* getSortedEdges(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+%Docstring
+tlp.NumericProperty.getSortedEdges([subgraph=None, ascendingOrder=True])
+
+.. versionadded:: 4.8
+
+Gets an iterator sorting edges according to their values in that numeric property.
+
+:param subgraph: If provided, returns an iterator on the subset of edges defined by that subgraph
+:type subgraph: :class:`tlp.Graph`
+:param ascendingOrder: defines the sort ordering (ascending or descending)
+:type ascendingOrder: boolean
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
+%End
+
+//===========================================================================================
+
+ tlp::Iterator<tlp::edge>* getSortedEdgesBySourceValue(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+%Docstring
+tlp.NumericProperty.getSortedEdgesBySourceValue([subgraph=None, ascendingOrder=True])
+
+.. versionadded:: 4.8
+
+Gets an iterator sorting edges according to the values of their source nodes in that numeric property.
+
+:param subgraph: If provided, returns an iterator on the subset of edges defined by that subgraph
+:type subgraph: :class:`tlp.Graph`
+:param ascendingOrder: defines the sort ordering (ascending or descending)
+:type ascendingOrder: boolean
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
+%End
+
+//===========================================================================================
+
+ tlp::Iterator<tlp::edge>* getSortedEdgesByTargetValue(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+%Docstring
+tlp.NumericProperty.getSortedEdgesByTargetValue([subgraph=None, ascendingOrder=True])
+
+.. versionadded:: 4.8
+
+Gets an iterator sorting edges according to the values of their target nodes in that numeric property.
+
+:param subgraph: If provided, returns an iterator on the subset of edges defined by that subgraph
+:type subgraph: :class:`tlp.Graph`
+:param ascendingOrder: defines the sort ordering (ascending or descending)
+:type ascendingOrder: boolean
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
+%End
+
+//===========================================================================================
+
+ tlp::Iterator<tlp::edge>* getSortedEdgesByExtremitiesValues(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+%Docstring
+tlp.NumericProperty.getSortedEdgesByExtremitiesValues([subgraph=None, ascendingOrder=True])
+
+.. versionadded:: 4.8
+
+Gets an iterator sorting edges according to the values of their extremities in that numeric property.
+Vectors of two numbers (first element being the source node value, second one the target node value) are compared in that case.
+
+:param subgraph: If provided, returns an iterator on the subset of edges defined by that subgraph
+:type subgraph: :class:`tlp.Graph`
+:param ascendingOrder: defines the sort ordering (ascending or descending)
+:type ascendingOrder: boolean
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
+%End
+
 };
 
 };
