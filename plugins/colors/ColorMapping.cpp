@@ -23,11 +23,10 @@
 #include <tulip/Vector.h>
 #include <tulip/ColorScale.h>
 #include <tulip/StringCollection.h>
-#include <tulip/GlComposite.h>
-#include <tulip/GlRect.h>
-#include <tulip/GlLabel.h>
 
+#ifndef BUILD_CORE_ONLY
 #include "DoubleStringsListRelationDialog.h"
+#endif
 
 using namespace std;
 using namespace tlp;
@@ -259,6 +258,8 @@ public:
     if (metric == NULL)
       metric = graph->getProperty<DoubleProperty>("viewMetric");
 
+#ifndef BUILD_CORE_ONLY
+
     if (eltTypes.getCurrent() == ENUMERATED_ELT) {
       if(targetType.getCurrent()==NODES_TARGET) {
 
@@ -310,13 +311,17 @@ public:
       dialog.getResult(enumeratedMappingResultVector);
     }
     else {
+
+#endif
       // check if input property is a NumericProperty
       if (! dynamic_cast<NumericProperty*>(metric)) {
         errorMsg += "For a linear or uniform color mapping,\nthe input property must be a Double or Integer property";
         return false;
       }
-    }
 
+#ifndef BUILD_CORE_ONLY
+    }
+#endif
     return true;
   }
 };
