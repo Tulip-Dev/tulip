@@ -30,6 +30,7 @@ IdManager.cpp
 IntegerProperty.cpp
 LayoutProperty.cpp
 MapIterator.cpp
+NumericProperty.cpp
 Observable.cpp
 Ordering.cpp
 OuterPlanarTest.cpp

@@ -602,7 +602,8 @@ tlp.NumericProperty
         :members:
                   uniformQuantification, nodesUniformQuantification, edgesUniformQuantification,
                   getEdgeDoubleMin, getEdgeDoubleMax, getNodeDoubleMin, getNodeDoubleMax,
-                  getEdgeDoubleDefaultValue, getEdgeDoubleValue, getNodeDoubleDefaultValue, getNodeDoubleValue
+                  getEdgeDoubleDefaultValue, getEdgeDoubleValue, getNodeDoubleDefaultValue, getNodeDoubleValue,
+                  getSortedNodes, getSortedEdges, getSortedEdgesBySourceValue, getSortedEdgesByTargetValue, getSortedEdgesByExtremitiesValues
 
 tlp.DoubleProperty
 ^^^^^^^^^^^^^^^^^^
