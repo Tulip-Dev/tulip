@@ -86,7 +86,7 @@ const char * paramHelp[] = {
 class AdjacencyMatrixImport:public ImportModule {
 public:
   PLUGININFORMATION("Adjacency Matrix", "Auber David", "05/09/2008",
-		    "Imports a graph from a file coding an adjacency matrix.<br/>File format:<br/>\
+                    "Imports a graph from a file coding an adjacency matrix.<br/>File format:<br/>\
 The input format of this plugin is an ascii file where each line represents a row of the matrix.\
 In each row, cells must be separated by a space.<br/>Let M(i,j) be a cell of the matrix :<br/>\
      - if i==j we define the value of a node.<br/>\
@@ -110,7 +110,7 @@ EXAMPLE 3 :<br/>\
 A # E & 5<br/>\
 @ B<br/># @ C<br/>\
 Defines a graph with 3 nodes and 3 edges, the edge between A and C is named E and has the value 5",
-		    "1.2","File")
+                    "1.2","File")
   AdjacencyMatrixImport(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<string>("file::filename",paramHelp[0],"");
   }

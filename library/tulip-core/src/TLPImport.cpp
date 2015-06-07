@@ -956,8 +956,8 @@ namespace tlp {
 class TLPImport:public ImportModule {
 public:
   PLUGININFORMATION("TLP Import","Auber","16/02/2001",
-		    "Imports a graph recorded in a file using the TLP format (Tulip Software Graph Format).<br/>See <b>tulip-software.org->Framework->TLP File Format</b> for description.<br/>Note: When using the Tulip graphical user interface,<br/>choosing <b>File->Import->TLP</b> menu item is the same as using <b>File->Open</b> menu item.",
-		    "1.0", "File")
+                    "Imports a graph recorded in a file using the TLP format (Tulip Software Graph Format).<br/>See <b>tulip-software.org->Framework->TLP File Format</b> for description.<br/>Note: When using the Tulip graphical user interface,<br/>choosing <b>File->Import->TLP</b> menu item is the same as using <b>File->Open</b> menu item.",
+                    "1.0", "File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("tlp");
