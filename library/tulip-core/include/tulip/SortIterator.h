@@ -93,9 +93,11 @@ struct SortNodeIterator : public StableIterator<tlp::node> {
   SortNodeIterator(Iterator<tlp::node> *itIn, tlp::NumericProperty* metric, bool ascendingOrder = true) : StableIterator<tlp::node>(itIn) {
     LessThan tmp(metric);
     sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+
     if (!ascendingOrder) {
       reverse(sequenceCopy.begin(),sequenceCopy.end());
     }
+
     copyIterator=sequenceCopy.begin();
   }
   ///
@@ -110,9 +112,11 @@ struct SortEdgeIterator : public StableIterator<tlp::edge> {
   SortEdgeIterator(Iterator<tlp::edge> *itIn, tlp::NumericProperty* metric, bool ascendingOrder = true) : StableIterator<tlp::edge>(itIn) {
     LessThan tmp(metric);
     sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+
     if (!ascendingOrder) {
       reverse(sequenceCopy.begin(),sequenceCopy.end());
     }
+
     copyIterator=sequenceCopy.begin();
   }
   ///
@@ -127,9 +131,11 @@ struct SortTargetEdgeIterator : public StableIterator<tlp::edge> {
   SortTargetEdgeIterator(Iterator<tlp::edge> *itIn, Graph* sg, tlp::NumericProperty* metric, bool ascendingOrder = true) : StableIterator<tlp::edge>(itIn) {
     LessThanEdgeTargetMetric tmp(sg,metric);
     sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+
     if (!ascendingOrder) {
       reverse(sequenceCopy.begin(),sequenceCopy.end());
     }
+
     copyIterator=sequenceCopy.begin();
   }
   ///
@@ -144,9 +150,11 @@ struct SortSourceEdgeIterator : public StableIterator<tlp::edge> {
   SortSourceEdgeIterator(Iterator<tlp::edge> *itIn, Graph* sg, tlp::NumericProperty* metric, bool ascendingOrder = true) : StableIterator<tlp::edge>(itIn) {
     LessThanEdgeSourceMetric tmp(sg,metric);
     sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+
     if (!ascendingOrder) {
       reverse(sequenceCopy.begin(),sequenceCopy.end());
     }
+
     copyIterator=sequenceCopy.begin();
   }
   ///
@@ -161,9 +169,11 @@ struct SortExtremitiesEdgeIterator : public StableIterator<tlp::edge> {
   SortExtremitiesEdgeIterator(Iterator<tlp::edge> *itIn, Graph* sg, tlp::NumericProperty* metric, bool ascendingOrder = true) : StableIterator<tlp::edge>(itIn) {
     LessThanEdgeExtremitiesMetric tmp(sg,metric);
     sort(sequenceCopy.begin(),sequenceCopy.end(),tmp);
+
     if (!ascendingOrder) {
       reverse(sequenceCopy.begin(),sequenceCopy.end());
     }
+
     copyIterator=sequenceCopy.begin();
   }
   ///

@@ -70,8 +70,8 @@ class TLPBExport: public tlp::ExportModule {
 public:
 
   PLUGININFORMATION("TLPB Export", "David Auber, Patrick Mary","13/07/2012",
-		    "Exports a graph in a file using the Tulip binary format",
-		    "1.0","File")
+                    "Exports a graph in a file using the Tulip binary format",
+                    "1.0","File")
 
   std::string fileExtension() const {
     return "tlpb";

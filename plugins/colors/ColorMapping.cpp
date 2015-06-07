@@ -313,6 +313,7 @@ public:
     else {
 
 #endif
+
       // check if input property is a NumericProperty
       if (! dynamic_cast<NumericProperty*>(metric)) {
         errorMsg += "For a linear or uniform color mapping,\nthe input property must be a Double or Integer property";
@@ -321,6 +322,7 @@ public:
 
 #ifndef BUILD_CORE_ONLY
     }
+
 #endif
     return true;
   }
