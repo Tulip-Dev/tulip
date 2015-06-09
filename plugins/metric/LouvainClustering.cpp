@@ -69,7 +69,7 @@ private:
   // a quotient graph of the original graph
   VectorGraph* quotient;
   // number of nodes in the quotient graph and size of all vectors
-  unsigned int size; 
+  unsigned int size;
 
   // the mapping between the nodes of the original graph
   // and the quotient nodes
@@ -84,18 +84,18 @@ private:
   std::vector<unsigned int> neigh_pos;
   unsigned int neigh_last;
 
-   // community to which each node belongs
+  // community to which each node belongs
   std::vector<unsigned int> n2c;
-   // used to renumber the communities
+  // used to renumber the communities
   std::vector<int> renumber;
-   // used to compute the modularity participation of each community
+  // used to compute the modularity participation of each community
   std::vector<double> in,tot;
 
   // number of pass for one level computation
   // if -1, compute as many pass as needed to increase modularity
   int nb_pass;
 
-  // a new pass is computed if the last one has generated an increase 
+  // a new pass is computed if the last one has generated an increase
   // greater than min_modularity
   // if 0. even a minor increase is enough to go for one more pass
   double min_modularity;
@@ -105,19 +105,21 @@ private:
   void get_weighted_degree_and_selfloops(unsigned int n, double& wdg, double& nsl) {
     wdg = nsl = 0;
     const std::vector<edge>& edges = quotient->star(node(n));
+
     for (unsigned int i = 0; i < edges.size(); ++i) {
       edge e = edges[i];
       double weight = (*weights)[e];
       wdg += weight;
       // self loop must be counted only once
       std::pair<node, node> ends = quotient->ends(e);
+
       if (ends.first == ends.second) {
-	nsl = weight;
-	++i;
+        nsl = weight;
+        ++i;
       }
     }
   }
-  
+
   // compute the gain of modularity if node where inserted in comm
   // given that node has dnodecomm links to comm.  The formula is:
   // [(In(comm)+2d(node,comm))/2m - ((tot(comm)+deg(node))/2m)^2]-
@@ -128,10 +130,10 @@ private:
   //       deg(node)   = node degree
   //       m           = number of links
   double modularity_gain(unsigned int /*node*/, unsigned int comm,
-			 double dnode_comm, double w_degree) {
+                         double dnode_comm, double w_degree) {
     return (dnode_comm - tot[comm] * w_degree/total_weight);
   }
-    
+
 
   // compute the modularity of the current partition
   double modularity()  {
@@ -140,7 +142,7 @@ private:
 
     for (unsigned int i=0 ; i<size ; i++) {
       if (tot[i]>0)
-	q += in[i]/m2 - (tot[i]/m2)*(tot[i]/m2);
+        q += in[i]/m2 - (tot[i]/m2)*(tot[i]/m2);
     }
 
     return q;
@@ -151,6 +153,7 @@ private:
   void neigh_comm(unsigned int n) {
     for (unsigned int i=0 ; i<neigh_last ; i++)
       neigh_weight[neigh_pos[i]]=-1;
+
     neigh_last=0;
 
     neigh_pos[0]=n2c[n];
@@ -159,36 +162,40 @@ private:
 
     const std::vector<edge>& edges = quotient->star(node(n));
     unsigned int nb_edges = edges.size();
+
     for (unsigned int j = 0; j < nb_edges; ++j) {
       edge e = edges[j];
       std::pair<node, node> ends = quotient->ends(e);
       unsigned int neigh = (ends.first == node(n)) ? ends.second : ends.first;
       unsigned int neigh_comm   = n2c[neigh];
       double neigh_w = (*weights)[e];
-    
+
       if (neigh!=n) {
-	if (neigh_weight[neigh_comm]==-1) {
-	  neigh_weight[neigh_comm]=0.;
-	  neigh_pos[neigh_last++]=neigh_comm;
-	}
-	neigh_weight[neigh_comm]+=neigh_w;
+        if (neigh_weight[neigh_comm]==-1) {
+          neigh_weight[neigh_comm]=0.;
+          neigh_pos[neigh_last++]=neigh_comm;
+        }
+
+        neigh_weight[neigh_comm]+=neigh_w;
       }
     }
   }
 
   // generates the quotient graph of communities as computed by one_level
   void partitionToQuotient(VectorGraph* new_quotient,
-			   EdgeProperty<double>* new_weights) {
+                           EdgeProperty<double>* new_weights) {
     // Renumber communities
     vector<int> renumber(size, -1);
+
     for (unsigned int n=0 ; n<size ; n++) {
       renumber[n2c[n]]++;
     }
 
     int final=0;
+
     for (unsigned int i=0 ; i<size ; i++)
       if (renumber[i]!=-1)
-	renumber[i]=final++;
+        renumber[i]=final++;
 
     // update clustering
     for(unsigned int i = 0; i < nb_nodes; ++i) {
@@ -198,9 +205,11 @@ private:
     // Compute weighted graph
     for (int i = 0; i < final; ++i)
       new_quotient->addNode();
+
     total_weight = 0;
     const std::vector<edge>& edges = quotient->edges();
     unsigned int nb_edges = edges.size();
+
     for(unsigned int i = 0; i < nb_edges; ++i) {
       edge e = edges[i];
       std::pair<node, node> ends = quotient->ends(e);
@@ -210,29 +219,35 @@ private:
       unsigned int tgt_comm = renumber[n2c[tgt]];
       double weight = (*weights)[e];
       edge e_comm =
-	new_quotient->existEdge(node(src_comm), node(tgt_comm), false);
+        new_quotient->existEdge(node(src_comm), node(tgt_comm), false);
       total_weight += weight;
       double* weight_comm = NULL;
+
       if (!e_comm.isValid()) {
-	ends = make_pair(src_comm, tgt_comm);
-	e_comm = new_quotient->addEdge(node(src_comm), node(tgt_comm));
-	weight_comm = &((*new_weights)[e_comm]);
-	*weight_comm = weight;
-      } else {
-	ends = new_quotient->ends(e_comm);
-	weight_comm = &((*new_weights)[e_comm]);
-	if (ends.second == node(tgt_comm)) {
-	  *weight_comm += weight;
-	}
+        ends = make_pair(src_comm, tgt_comm);
+        e_comm = new_quotient->addEdge(node(src_comm), node(tgt_comm));
+        weight_comm = &((*new_weights)[e_comm]);
+        *weight_comm = weight;
       }
+      else {
+        ends = new_quotient->ends(e_comm);
+        weight_comm = &((*new_weights)[e_comm]);
+
+        if (ends.second == node(tgt_comm)) {
+          *weight_comm += weight;
+        }
+      }
+
       // self loop are counted only once
       if (src != tgt) {
-	total_weight += weight;
-	if (ends.first == node(tgt_comm)) {
-	  *weight_comm += weight;
-	}
+        total_weight += weight;
+
+        if (ends.first == node(tgt_comm)) {
+          *weight_comm += weight;
+        }
       }
     }
+
     delete quotient;
     delete weights;
     quotient = new_quotient;
@@ -250,9 +265,9 @@ private:
 
     quotient->shuffleNodes();
 
-    // repeat while 
+    // repeat while
     //   there is an improvement of modularity
-    //   or there is an improvement of modularity greater than a given epsilon 
+    //   or there is an improvement of modularity greater than a given epsilon
     //   or a predefined number of pass have been done
     do {
       cur_mod = new_mod;
@@ -263,50 +278,54 @@ private:
       // remove the node from its community
       // and insert it in the best community
       for (unsigned int n = 0 ; n <size ; n++) {
-	unsigned int n_comm     = n2c[n];
-	double n_wdg;
-	double n_nsl;
-	get_weighted_degree_and_selfloops(n, n_wdg, n_nsl);
+        unsigned int n_comm     = n2c[n];
+        double n_wdg;
+        double n_nsl;
+        get_weighted_degree_and_selfloops(n, n_wdg, n_nsl);
 
-	// computation of all neighboring communities of current node
-	neigh_comm(n);
+        // computation of all neighboring communities of current node
+        neigh_comm(n);
 
-	// remove node from its current community
-	tot[n_comm] -= n_wdg;
-	in[n_comm]  -= 2*neigh_weight[n_comm] + n_nsl;
+        // remove node from its current community
+        tot[n_comm] -= n_wdg;
+        in[n_comm]  -= 2*neigh_weight[n_comm] + n_nsl;
 
-	// compute the nearest community for node
-	// default choice for future insertion is the former community
-	unsigned int best_comm        = n_comm;
-	double best_nblinks  = 0.;
-	double best_increase = 0.;
-	for (unsigned int i=0 ; i<neigh_last ; i++) {
-	  double increase =
-	    modularity_gain(n, neigh_pos[i], neigh_weight[neigh_pos[i]], n_wdg);
-	  if (increase>best_increase  ||
-	      // keep the best cluster with the minimum id
-	      (increase == best_increase && neigh_pos[i] > best_comm)) {
-	    best_nblinks  = neigh_weight[neigh_pos[i]];
-	    best_increase = increase;
-	    best_comm = neigh_pos[i];
-	  }
-	}
+        // compute the nearest community for node
+        // default choice for future insertion is the former community
+        unsigned int best_comm        = n_comm;
+        double best_nblinks  = 0.;
+        double best_increase = 0.;
 
-	// insert node in the nearest community
-	tot[best_comm] += n_wdg;
-	in[best_comm]  += 2*best_nblinks + n_nsl;
-	n2c[n] = best_comm;
+        for (unsigned int i=0 ; i<neigh_last ; i++) {
+          double increase =
+            modularity_gain(n, neigh_pos[i], neigh_weight[neigh_pos[i]], n_wdg);
 
-     
-	if (best_comm!=n_comm)
-	  nb_moves++;
+          if (increase>best_increase  ||
+              // keep the best cluster with the minimum id
+              (increase == best_increase && neigh_pos[i] > best_comm)) {
+            best_nblinks  = neigh_weight[neigh_pos[i]];
+            best_increase = increase;
+            best_comm = neigh_pos[i];
+          }
+        }
+
+        // insert node in the nearest community
+        tot[best_comm] += n_wdg;
+        in[best_comm]  += 2*best_nblinks + n_nsl;
+        n2c[n] = best_comm;
+
+
+        if (best_comm!=n_comm)
+          nb_moves++;
       }
 
       new_mod = modularity();
+
       if (nb_moves>0)
-	improvement=true;
-    
-    } while ((nb_moves>0) && ((new_mod-cur_mod)>min_modularity));
+        improvement=true;
+
+    }
+    while ((nb_moves>0) && ((new_mod-cur_mod)>min_modularity));
 
     return improvement;
   }
@@ -358,6 +377,7 @@ LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleA
 //========================================================================================
 bool LouvainClustering::run() {
   NumericProperty* metric = NULL;
+
   if(dataSet!=NULL)
     dataSet->get("metric", metric);
 
@@ -368,6 +388,7 @@ bool LouvainClustering::run() {
   // init clusters
   clusters.resize(nb_nodes);
   quotient = new VectorGraph();
+
   for(unsigned int i = 0; i < nb_nodes; ++i) {
     clusters[i] = i;
     quotient->addNode();
@@ -386,6 +407,7 @@ bool LouvainClustering::run() {
     total_weight += q_src != q_tgt ? 2 * weight : weight;
     // create corresponding edge if needed
     edge qe = quotient->existEdge(q_src, q_tgt, false);
+
     if (!qe.isValid()) {
       qe = quotient->addEdge(q_src, q_tgt);
       (*weights)[qe] = weight;
@@ -401,19 +423,22 @@ bool LouvainClustering::run() {
   double mod = modularity(), new_mod;
   int level = 0;
   bool verbose = false;
+
   do {
     if (verbose) {
       std::cout << "level " << level << ':' << std::endl;
-      std::cout << "  network size: " 
-		<< size << " nodes, " 
-		<< quotient->numberOfEdges() << " links, "
-		<< total_weight << " weight." << endl << std::flush;
+      std::cout << "  network size: "
+                << size << " nodes, "
+                << quotient->numberOfEdges() << " links, "
+                << total_weight << " weight." << endl << std::flush;
     }
+
     improvement = one_level();
     new_mod = modularity();
+
     if (improvement) {
       ++level;
-      
+
       VectorGraph* new_quotient = new VectorGraph();
       EdgeProperty<double>* new_weights = new EdgeProperty<double>();
       new_quotient->alloc(*new_weights);
@@ -421,37 +446,43 @@ bool LouvainClustering::run() {
       partitionToQuotient(new_quotient, new_weights);
 
       if (verbose)
-	std::cout << " modularity increased from " << mod
-		  << " to " << new_mod << endl << std::flush;
+        std::cout << " modularity increased from " << mod
+                  << " to " << new_mod << endl << std::flush;
 
       mod=new_mod;
       init_level();
-    } else {
+    }
+    else {
       if (verbose)
-	std::cout << " modularity increased from " << mod
-		  << " to " << new_mod << endl << std::flush;
+        std::cout << " modularity increased from " << mod
+                  << " to " << new_mod << endl << std::flush;
+
       // update measure
       // Renumber communities
       vector<int> renumber(size, -1);
+
       for (unsigned int n=0 ; n<size ; n++) {
-	renumber[n2c[n]]++;
+        renumber[n2c[n]]++;
       }
 
       int final=0;
+
       for (unsigned int i=0 ; i<size ; i++)
-	if (renumber[i]!=-1)
-	  renumber[i]=final++;
+        if (renumber[i]!=-1)
+          renumber[i]=final++;
 
       // then set measure values
       unsigned int i = 0;
       node n;
       forEach(n, graph->getNodes()) {
-	result->setNodeValue(n, renumber[n2c[clusters[i]]]);
-	++i;
+        result->setNodeValue(n, renumber[n2c[clusters[i]]]);
+        ++i;
       }
       delete quotient;
       delete weights;
     }
-  } while(improvement);
+  }
+  while(improvement);
+
   return true;
 }
