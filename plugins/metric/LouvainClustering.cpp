@@ -38,12 +38,13 @@ using namespace tlp;
 *
 * <b> HISTORY</b>
 *
-* - 25/02/2011 Version 1.0: Initial release
+* - 25/02/2011 Version 1.0: Initial release (François Queyroi)
 * - 13/05/2011 Version 2.0 (Bruno Pinaud): Change plugin type from General Algorithm to DoubleAlgorithm, code cleaning and fix some memory leaks.
+* - 09/06/2015 Version 2.1 (Patrick Mary) full rewrite according the updated version of the original source code available at  https://sites.google.com/site/findcommunities/
 *
 * \note A threshold for modularity improvement is used here, its value is 0.000001
 *
-* \author François QUEYROI, Labri, Email : queyroi@labri.fr
+* \author Patrick Mary, Labri
 *
 *  <b>LICENCE</b>
 *
@@ -55,11 +56,11 @@ using namespace tlp;
 **/
 class LouvainClustering : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Louvain","François Queyroi","25/02/11",
+  PLUGININFORMATION("Louvain","Patrick Mary","09/06/15",
                     "Nodes partitioning measure used for community detection."
                     "This is an implementation of the Louvain clustering algorithm first published as:<br/>"
                     "<b>Fast unfolding of communities in large networks</b>, Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and Lefebvre, E., Journal of Statistical Mechanics: Theory and Experiment, P10008 (2008).",
-                    "2.0", "Clustering")
+                    "2.1", "Clustering")
   LouvainClustering(const tlp::PluginContext*);
   bool run();
 private:
@@ -349,9 +350,6 @@ private:
     }
   }
 
-  // same precision as the original code
-#define PRECISION 0.000001
-
 };
 /*@}*/
 
@@ -367,19 +365,32 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "value", "An existing edge metric" )                 \
   HTML_HELP_BODY()              \
   "An existing edge weight metric property. If it is not defined all edges have a weight of 1.0."\
+  // precision
+  HTML_HELP_CLOSE(),
+  HTML_HELP_OPEN()              \
+  HTML_HELP_DEF( "type", "double" )       \
+  HTML_HELP_BODY()              \
+  "A given pass stops when the modularity is increased by less than precision. Default value is <b>0.000001</b>"\
   HTML_HELP_CLOSE()
 };
 }
 //========================================================================================
+// same precision as the original code
+#define DEFAULT_PRECISION 0.000001
+
 LouvainClustering::LouvainClustering(const tlp::PluginContext* context): DoubleAlgorithm(context) {
-  addInParameter<NumericProperty*>("metric",paramHelp[0], "",false);
+  addInParameter<NumericProperty*>("metric", paramHelp[0], "",false);
+  addInParameter<double>("precision", paramHelp[1], "0.000001",false);
 }
 //========================================================================================
 bool LouvainClustering::run() {
   NumericProperty* metric = NULL;
+  min_modularity = DEFAULT_PRECISION;
 
-  if(dataSet!=NULL)
+  if(dataSet!=NULL) {
     dataSet->get("metric", metric);
+    dataSet->get("precision", min_modularity);
+  }
 
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
