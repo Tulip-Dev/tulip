@@ -119,8 +119,8 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
           string strVal = prop->getNodeStringValue(curNode);
           stringstream sstr;
           sstr << prop->getName().c_str() << ": ";
-	  sstr.width(8);
-	  sstr << curValue;
+          sstr.width(8);
+          sstr << curValue;
 
           if (connected) {
             TLP_HASH_MAP<std::string, unsigned int>::iterator itv =
@@ -221,8 +221,8 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
           string strVal = prop->getEdgeStringValue(curEdge);
           stringstream sstr;
           sstr << prop->getName().c_str() << ": ";
-	  sstr.width(8);
-	  sstr << curValue;
+          sstr.width(8);
+          sstr << curValue;
 
           if (connected) {
             TLP_HASH_MAP<std::string, unsigned int>::iterator itv =
