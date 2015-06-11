@@ -14,8 +14,14 @@ fi
 sed -e '/(tlp /,/Tulip.")/d' -e '/(property  0 string "viewFontAwesomeIcon"/ {
 N
 N
+d}' -e '/(graph_attributes / {
+N
+N
 d}' -e '/(string "file" "/,0d' $1 > tlp_diff_arg1.tlp
 sed -e '/(tlp /,/Tulip.")/d' -e '/(property  0 string "viewFontAwesomeIcon"/ {
+N
+N
+d}' -e '/(graph_attributes / {
 N
 N
 d}' -e '/(string "file" "/,0d' $2 > tlp_diff_arg2.tlp
