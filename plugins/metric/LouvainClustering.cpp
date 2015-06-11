@@ -219,7 +219,7 @@ private:
       double* weight_comm = NULL;
 
       if (!e_comm.isValid()) {
-        ends = make_pair(src_comm, tgt_comm);
+        ends = make_pair(node(src_comm), node(tgt_comm));
         e_comm = new_quotient->addEdge(node(src_comm), node(tgt_comm));
         weight_comm = &((*new_weights)[e_comm]);
         *weight_comm = weight;
