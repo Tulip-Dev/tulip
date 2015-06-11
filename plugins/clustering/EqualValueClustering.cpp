@@ -104,11 +104,8 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
       pluginProgress->setComment("Partitioning nodes...");
 
     // do a bfs traversal for each node
-    StableIterator<node> itN(graph->getNodes());
-
-    while (itN.hasNext()) {
-      node curNode = itN.next();
-
+    node curNode;
+    forEach(curNode, graph->getNodes()) {
       // check if curNode has been already visited
       if (!visited.get(curNode.id)) {
         // get the value of the node
@@ -121,7 +118,9 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
           // set its name
           string strVal = prop->getNodeStringValue(curNode);
           stringstream sstr;
-          sstr << prop->getName().c_str() << ": " << strVal.c_str();
+          sstr << prop->getName().c_str() << ": ";
+	  sstr.width(8);
+	  sstr << curValue;
 
           if (connected) {
             TLP_HASH_MAP<std::string, unsigned int>::iterator itv =
@@ -207,11 +206,8 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
       pluginProgress->setComment("Partitioning edges...");
 
     // do a bfs traversal for each edge
-    StableIterator<edge> itE(graph->getEdges());
-
-    while (itE.hasNext()) {
-      edge curEdge = itE.next();
-
+    edge curEdge;
+    forEach(curEdge, graph->getEdges()) {
       // check if curEdge has been already visited
       if (!visited.get(curEdge.id)) {
         // get the value of the edge
@@ -224,7 +220,9 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
           // set its name
           string strVal = prop->getEdgeStringValue(curEdge);
           stringstream sstr;
-          sstr << prop->getName().c_str() << ": " << strVal.c_str();
+          sstr << prop->getName().c_str() << ": ";
+	  sstr.width(8);
+	  sstr << curValue;
 
           if (connected) {
             TLP_HASH_MAP<std::string, unsigned int>::iterator itv =
