@@ -99,8 +99,7 @@ void TlpImportExportTest::testExport() {
   CPPUNIT_ASSERT(graph != NULL);
   node n;
   forEach(n, graph->getNodes()) {
-    // - 1 is because of delNode
-    CPPUNIT_ASSERT((n == node(n1.id - 1)) || (n == node(n2.id - 1)));
+    CPPUNIT_ASSERT((n == node(n1.id)) || (n == node(n2.id)));
   }
   edge e;
   forEach(e, graph->getEdges()) {
