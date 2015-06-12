@@ -18,6 +18,7 @@
  */
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/StringCollection.h>
+#include <climits>
 
 using namespace std;
 using namespace tlp;
@@ -53,6 +54,7 @@ using namespace tlp;
  *  University Bordeaux I, France
  *  - 2011 Version 2.0: Add In/Out and Weighted computation features
  *  by François Queyroi, LaBRI, University Bordeaux I, France
+ *  - 2015 Performance optimization by Patrick Mary
  *
  *
  */
@@ -69,13 +71,6 @@ public:
   KCores(const tlp::PluginContext *context);
   ~KCores();
   bool run();
-private:
-  bool peel(tlp::Graph* subgraph, tlp::NumericProperty* metric,
-            tlp::DoubleProperty&);
-  bool peelIn(tlp::Graph* subgraph, tlp::NumericProperty* metric,
-              tlp::DoubleProperty&);
-  bool peelOut(tlp::Graph* subgraph, tlp::NumericProperty* metric,
-               tlp::DoubleProperty&);
 };
 
 //========================================================================================
@@ -111,87 +106,6 @@ KCores::KCores(const PluginContext *context):DoubleAlgorithm(context) {
 //========================================================================================
 KCores::~KCores() {}
 //========================================================================================
-bool KCores::peel(Graph* subgraph, NumericProperty* metric,
-                  DoubleProperty& wdeg) {
-  double k= wdeg.getNodeMin();
-  bool modify = true;
-  bool onePeel = false;
-
-  while (modify) {
-    modify = false;
-    node n;
-    stableForEach(n,subgraph->getNodes()) {
-      if (wdeg.getNodeValue(n) <= k) { //Remove n and decrease its In/Out-neighbors' degree
-        result->setNodeValue(n, k);
-        edge ee;
-        forEach(ee,subgraph->getInOutEdges(n)) {
-          node m = subgraph->opposite(ee,n);
-          wdeg.setNodeValue(m, wdeg.getNodeValue(m)-(metric ? metric->getEdgeDoubleValue(ee) : 1.0));
-        }
-        subgraph->delNode(n);
-        modify = true;
-        onePeel = true;
-      }
-    }
-  }
-
-  return onePeel;
-}
-//========================================================================================
-bool KCores::peelIn(Graph* subgraph, NumericProperty* metric,
-                    DoubleProperty& wdeg) {
-  double k= wdeg.getNodeMin();
-  bool modify = true;
-  bool onePeel = false;
-
-  while (modify) {
-    modify = false;
-    node n;
-    stableForEach(n,subgraph->getNodes()) {
-      if (wdeg.getNodeValue(n) <= k) {//Remove n and decrease its Out-neighbors' degree
-        result->setNodeValue(n, k);
-        edge ee;
-        forEach(ee,subgraph->getOutEdges(n)) {
-          node m = subgraph->opposite(ee,n);
-          wdeg.setNodeValue(m, wdeg.getNodeValue(m)- (metric ? metric->getEdgeDoubleValue(ee) : 1.0));
-        }
-        subgraph->delNode(n);
-        modify = true;
-        onePeel = true;
-      }
-    }
-  }
-
-  return onePeel;
-}
-//========================================================================================
-bool KCores::peelOut(Graph* subgraph, NumericProperty* metric,
-                     DoubleProperty& wdeg) {
-  double k= wdeg.getNodeMin();
-  bool modify = true;
-  bool onePeel = false;
-
-  while (modify) {
-    modify = false;
-    node n;
-    stableForEach(n,subgraph->getNodes()) {
-      if (wdeg.getNodeValue(n) <= k) { //Remove n and decrease its In-neighbors' degree
-        result->setNodeValue(n, k);
-        edge ee;
-        forEach(ee,subgraph->getInEdges(n)) {
-          node m = subgraph->opposite(ee,n);
-          wdeg.setNodeValue(m, wdeg.getNodeValue(m)- (metric ? metric->getEdgeDoubleValue(ee) : 1.0));
-        }
-        subgraph->delNode(n);
-        modify = true;
-        onePeel = true;
-      }
-    }
-  }
-
-  return onePeel;
-}
-//========================================================================================
 bool KCores::run() {
   NumericProperty* metric = NULL;
   StringCollection degreeTypes(DEGREE_TYPES);
@@ -201,36 +115,68 @@ bool KCores::run() {
     dataSet->get(DEGREE_TYPE, degreeTypes);
     dataSet->get("metric", metric);
   }
+  unsigned int degree_type = degreeTypes.getCurrent();
 
-  Graph* subgraph = graph->addCloneSubGraph();
-  DoubleProperty wdeg(subgraph);
   string errMsg="";
-  subgraph->applyPropertyAlgorithm("Degree",&wdeg,errMsg,pluginProgress,dataSet);
+  graph->applyPropertyAlgorithm("Degree", result, errMsg,
+				pluginProgress, dataSet);
 
-  switch(degreeTypes.getCurrent()) {
-  case INOUT:
+  // keep track of deleted nodes
+  MutableContainer<bool> deleted;
+  // the number of non deleted nodes
+  unsigned int nbNodes = graph->numberOfNodes();
+  // the famous k
+  double k = result->getNodeMin();
 
-    while (subgraph->numberOfNodes()>0)
-      peel(subgraph, metric, wdeg);
+  // loop on remaining nodes
+  while (nbNodes > 0) {
+    bool modify = true;
+    double next_k = DBL_MAX;
 
-    break;
-
-  case IN:
-
-    while (subgraph->numberOfNodes()>0)
-      peelIn(subgraph, metric, wdeg);
-
-    break;
-
-  case OUT:
-
-    while (subgraph->numberOfNodes()>0)
-      peelOut(subgraph, metric, wdeg);
-
-    break;
+    while (modify) {
+      modify = false;
+      node n;
+      forEach(n, graph->getNodes()) {
+	// nothing to do if the node
+	// has been already deleted
+	if (deleted.get(n.id))
+	  continue;
+	double val = result->getNodeValue(n);
+	if (val <= k) {
+	  result->setNodeValue(n, k);
+	  Iterator<edge>* ite;
+	  switch(degree_type) {
+	  case INOUT:
+	    ite = graph->getInOutEdges(n);
+	    break;
+	  case IN:
+	    ite = graph->getOutEdges(n);
+	    break;
+	  case OUT:
+	  default:
+	    ite = graph->getInEdges(n);
+	  }
+	  // decrease neighbours weighted degree
+	  while(ite->hasNext()) {
+	    edge ee = ite->next();
+	    node m = graph->opposite(ee, n);
+	    if (deleted.get(m.id))
+	      continue;
+	    result->setNodeValue(m, result->getNodeValue(m) -
+				 (metric ? metric->getEdgeDoubleValue(ee) : 1));
+	  }
+	  // mark node as deleted
+	  deleted.set(n.id, true);
+	  --nbNodes;
+	  modify = true;
+	}
+	else if (val < next_k)
+	  // update next k value
+	  next_k = val;
+      }
+    }
+    k = next_k;
   }
-
-  graph->delSubGraph(subgraph);
   return true;
 }
 //========================================================================================
